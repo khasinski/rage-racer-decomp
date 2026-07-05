@@ -178,8 +178,6 @@ segments:
       - [0xCFBC, c, PAL/main/func_8001C7BC]
       - [0xD0F0, c, PAL/main/func_8001C8F0]
       - [0xD174, c, PAL/main/func_8001C974, cc=2.6.3]
-      - [0xD554, c, PAL/main/func_8001CD54, cc=2.6.3]
-      - [0xD7B4, c, PAL/main/func_8001CFB4, cc=2.6.3]
       - [0xDA10, c, PAL/main/func_8001D210]
       - [0xDB0C, c, PAL/main/func_8001D30C]
       - [0xDB38, c, PAL/main/func_8001D338]
