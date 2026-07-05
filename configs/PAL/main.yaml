@@ -930,7 +930,6 @@ segments:
       - [0x62A60, c, PAL/lib/libsnd/SsStopSoundTick]
       - [0x62B10, c, PAL/lib/libsnd/SsSetTableSize]
       - [0x62CF0, c, PAL/lib/libsnd/Snd_SetPlayMode]
-      - [0x62F34, c, PAL/lib/libsnd/_SsSndStop]
       - [0x630F4, c, PAL/lib/libsnd/_SsSndTempo]
       - [0x632D0, c, PAL/lib/libsnd/SsSetReservedVoice]
       - [0x633C0, c, PAL/lib/libsnd/SsVabOpen, cc=2.6.3]

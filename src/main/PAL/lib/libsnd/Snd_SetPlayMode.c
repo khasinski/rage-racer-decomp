@@ -3,3 +3,4 @@
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/Snd_SetPlayMode", Snd_SetPlayMode);
 INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/Snd_SetPlayMode", SsSeqPlay);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/Snd_SetPlayMode", _SsSndStop);
