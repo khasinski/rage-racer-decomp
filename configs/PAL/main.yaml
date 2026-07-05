@@ -525,7 +525,6 @@ segments:
       - [0x38D80, c, PAL/main/func_80048580, cc=2.6.3]
       - [0x38FD8, c, PAL/main/func_800487D8, cc=2.6.3]
       - [0x396D8, c, PAL/main/func_80048ED8, cc=2.6.3]
-      - [0x39C18, c, PAL/main/func_80049418, cc=2.6.3]
       - [0x39EF0, c, PAL/main/func_800496F0, cc=2.7.2]
       - [0x3A97C, c, PAL/main/func_8004A17C, cc=2.6.3]
       - [0x3AA48, c, PAL/main/func_8004A248, cc=2.7.2]
