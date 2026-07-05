@@ -2,8 +2,6 @@
 
 
 INCLUDE_ASM("asm/nonmatchings/PAL/main", SsUtSetReverbType);
-
-#if 0
-void SsUtSetReverbType(void) {
-}
-#endif
+INCLUDE_ASM("asm/nonmatchings/PAL/main", SsUtGetReverbType);
+INCLUDE_ASM("asm/nonmatchings/PAL/main", SsUtSetReverbDepth);
+INCLUDE_ASM("asm/nonmatchings/PAL/main", SsUtSetReverbDelay);
