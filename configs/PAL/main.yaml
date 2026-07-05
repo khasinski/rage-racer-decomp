@@ -948,7 +948,6 @@ segments:
       - [0x64B48, c, PAL/main/func_80074348, cc=2.7.2]
       - [0x65018, c, PAL/main/func_80074818, cc=2.6.3]
       - [0x651B4, c, PAL/lib/libsnd/SpuVmCalculateCurrentPitch, cc=2.6.3]
-      - [0x6526C, c, PAL/lib/libsnd/SpuVmCalculateTonePitch, cc=2.6.3]
       - [0x65368, c, PAL/main/func_80074B68, cc=2.6.3]
       - [0x6550C, c, PAL/main/func_80074D0C]
       - [0x65514, c, PAL/main/func_80074D14]
