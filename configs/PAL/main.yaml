@@ -975,7 +975,6 @@ segments:
       - [0x689C0, c, PAL/lib/libsnd/SsUtChangePitch]
       - [0x68B00, c, PAL/lib/libsnd/SsUtChangeADSR]
       - [0x68BD8, c, PAL/lib/libsnd/SsUtGetDetVVol]
-      - [0x68C30, c, PAL/lib/libsnd/SsUtSetDetVVol]
       - [0x68C9C, c, PAL/lib/libsnd/SsUtGetVVol]
       - [0x68D28, c, PAL/lib/libsnd/SsUtSetVVol]
       - [0x68DB4, c, PAL/lib/libsnd/SsUtVibrate]
