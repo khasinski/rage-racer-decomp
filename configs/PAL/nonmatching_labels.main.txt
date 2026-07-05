@@ -97,6 +97,10 @@ _SsSndStop.s 0x800727F0 func_800727F0
 _SsSndStop.s 0x80072804 func_80072804
 _SsSndStop.s 0x80072814 func_80072814
 _SsSndStop.s 0x8007284C func_8007284C
+_SsSndStop.s 0x800728A0 SsSeqStop
+_SsSndStop.s 0x800728A0 func_800728A0
+_SsSndStop.s 0x800728C8 SsSepStop
+_SsSndStop.s 0x800728C8 func_800728C8
 _spu_init.s 0x80078A30 _spu_init
 _spu_init.s 0x80078A30 func_80078A30
 _spu_init.s 0x80078C5C func_80078C5C
