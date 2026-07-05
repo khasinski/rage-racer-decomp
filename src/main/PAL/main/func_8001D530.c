@@ -1,7 +1,7 @@
 #include "common.h"
 extern u8 D_8007C7CC[];
 void func_8001D4E8(void);
-void func_80065B24(void *arg0, void *arg1);
+void LoadImage(void *arg0, void *arg1) asm("func_80065B24");
 void func_8001D530(u8 *str, s32 len) {
     s16 sp[4];
     func_8001D4E8();
@@ -10,7 +10,7 @@ void func_8001D530(u8 *str, s32 len) {
     sp[2] = 2;
     sp[3] = 8;
     while (len > 0) {
-        func_80065B24(sp, &D_8007C7CC[*str++ << 5]);
+        LoadImage(sp, &D_8007C7CC[*str++ << 5]);
         sp[0] += 2;
         len--;
     }
