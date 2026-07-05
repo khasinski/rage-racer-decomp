@@ -798,7 +798,7 @@ segments:
       - [0x5A7A8, c, PAL/main/func_80069FA8]
       - [0x5A818, c, PAL/main/func_8006A018]
       - [0x5A858, c, PAL/main/StSetRing]
-      - [0x5A888, c, PAL/main/func_8006A088]
+      - [0x5A888, c, PAL/main/CdGetToc]
       - [0x5A8AC, c, PAL/main/func_8006A0AC]
       - [0x5ABD8, c, PAL/main/func_8006A3D8]
       - [0x5ABE8, c, PAL/main/func_8006A3E8]
