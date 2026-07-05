@@ -695,7 +695,7 @@ segments:
       - [0x53AE0, c, PAL/main/GameSeedRandom]
       - [0x53AF0, c, PAL/main/func_800632F0, cc=2.6.3]
       - [0x5434C, c, PAL/main/LibcMemchr]
-      - [0x5439C, c, PAL/main/func_80063B9C]
+      - [0x5439C, c, PAL/main/LibcMemmove]
       - [0x54408, c, PAL/main/LibcStrlen]
       - [0x54438, c, PAL/main/LibcPutString]
       - [0x54488, c, PAL/main/LibcPutChar]
