@@ -9,6 +9,18 @@ extern volatile u32 *D_80099338;
 extern volatile u32 *D_8009933C;
 extern volatile u32 *D_80099340;
 extern volatile u32 *D_80099344;
+extern s32 D_800992E4;
+
+typedef void (*Callback)(s32, void *);
+
+extern Callback D_8009903C;
+extern Callback D_80099040;
+extern u8 D_80099318;
+extern u8 D_80099319;
+extern u8 D_8009BAF0[];
+extern u8 D_8009BAF8[];
+
+s32 func_8006AB5C(void);
 
 s32 CD_getsector2(s32 arg0, u32 arg1) {
     volatile u8 *status;
@@ -41,4 +53,39 @@ s32 CD_getsector2(s32 arg0, u32 arg1) {
 
     *D_80099310 = 0x1325;
     return 0;
+}
+
+void func_8006C16C(s32 arg0) {
+    D_800992E4 = arg0;
+}
+
+void func_8006C17C(void) {
+    register u8 *statusByte asm("$18");
+    s32 status;
+    s32 saved;
+
+    saved = *D_80099300 & 3;
+    statusByte = &D_80099319;
+
+    while ((status = func_8006AB5C()) != 0) {
+        if ((status & 4) != 0) {
+            if (D_80099040 != 0) {
+                D_80099040(*statusByte, D_8009BAF8);
+            }
+        }
+
+        if ((status & 2) != 0) {
+            register Callback doneCallback asm("$3");
+            register u8 *resultByte asm("$2");
+
+            doneCallback = D_8009903C;
+            if (doneCallback != 0) {
+                resultByte = &D_80099318;
+                asm volatile("" : "=r"(resultByte) : "0"(resultByte));
+                doneCallback(*resultByte, D_8009BAF0);
+            }
+        }
+    }
+
+    *D_80099300 = saved;
 }

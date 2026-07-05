@@ -865,8 +865,6 @@ segments:
       - [0x5C268, c, PAL/main/func_8006BA68]
       - [0x5C700, c, PAL/main/func_8006BF00, cc=2.6.3]
       - [0x5C86C, c, PAL/main/func_8006C06C]
-      - [0x5C96C, c, PAL/main/func_8006C16C]
-      - [0x5C97C, c, PAL/main/func_8006C17C]
       - [0x5CA5C, c, PAL/main/func_8006C25C, cc=2.7.2]
       - [0x5CD3C, c, PAL/main/func_8006C53C, cc=2.6.3]
       - [0x5CD60, c, PAL/main/func_8006C560, cc=2.7.2]
