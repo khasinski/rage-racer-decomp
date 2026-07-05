@@ -169,7 +169,6 @@ segments:
       - [0xBDDC, c, PAL/main/func_8001B5DC, cc=2.6.3]
       - [0xC084, c, PAL/main/func_8001B884]
       - [0xC174, c, PAL/main/func_8001B974, cc=2.6.3]
-      - [0xC358, c, PAL/main/func_8001BB58, cc=2.6.3]
       - [0xC694, c, PAL/main/func_8001BE94]
       - [0xC69C, c, PAL/main/func_8001BE9C]
       - [0xC888, c, PAL/main/func_8001C088]
