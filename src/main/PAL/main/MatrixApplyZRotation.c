@@ -7,11 +7,12 @@ extern s16 D_80093B08[];
 extern s16 D_80094308[];
 
 s32 rsin(s32 arg0) asm("func_80068568");
-s32 func_800685A4(s32 arg0);
+s32 rsinCore(s32 arg0) asm("func_800685A4");
 s32 rcos(s32 arg0) asm("func_80068634");
 void func_80069458(Matrix *arg0, Matrix *arg1);
 
-void func_800684B0(Matrix *arg0, s32 arg1) {
+void MatrixApplyZRotation(Matrix *arg0, s32 arg1) asm("func_800684B0");
+void MatrixApplyZRotation(Matrix *arg0, s32 arg1) {
     Matrix sp10;
     register s32 angle asm("$16");
     s32 c;
@@ -47,17 +48,17 @@ s32 rsin(s32 arg0) {
         goto negative;
     }
 
-    ret = func_800685A4(arg0 & 0xFFF);
+    ret = rsinCore(arg0 & 0xFFF);
     goto done;
 
 negative:
-    ret = -func_800685A4(-arg0 & 0xFFF);
+    ret = -rsinCore(-arg0 & 0xFFF);
 
 done:
     return ret;
 }
 
-s32 func_800685A4(s32 arg0) {
+s32 rsinCore(s32 arg0) {
     if (arg0 < 0x801) {
         if (arg0 < 0x401) {
             return D_80094308[arg0];

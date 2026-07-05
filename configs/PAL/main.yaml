@@ -768,7 +768,7 @@ segments:
       - [0x58980, c, PAL/main/MemFill]
       - [0x589F0, c, PAL/main/func_800681F0]
       - [0x58B40, c, PAL/main/func_80068340]
-      - [0x58CB0, c, PAL/main/func_800684B0]
+      - [0x58CB0, c, PAL/main/MatrixApplyZRotation]
       - [0x58ED4, c, PAL/main/func_800686D4]
       - [0x58F38, c, PAL/main/func_80068738]
       - [0x59128, c, PAL/main/func_80068928]
