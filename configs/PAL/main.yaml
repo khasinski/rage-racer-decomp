@@ -372,7 +372,7 @@ segments:
       - [0x23B08, c, PAL/main/func_80033308]
       - [0x23BDC, c, PAL/main/func_800333DC]
       - [0x23D1C, c, PAL/main/func_8003351C, cc=2.7.2]
-      - [0x242A0, c, PAL/main/func_80033AA0]
+      - [0x242A0, c, PAL/main/GameDrawFullscreenFadeTile]
       - [0x2437C, c, PAL/main/func_80033B7C]
       - [0x24418, c, PAL/main/func_80033C18, cc=2.6.3]
       - [0x24550, c, PAL/main/func_80033D50, cc=2.6.3]
