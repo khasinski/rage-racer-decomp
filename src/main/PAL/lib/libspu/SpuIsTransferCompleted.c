@@ -36,3 +36,15 @@ s32 SpuIsTransferCompleted(s32 arg0) {
 
     return ret;
 }
+
+void _spu_setTransferCompletionFlag(s32 arg0) {
+    if (arg0 == 1) {
+        D_8009ABAC = 0;
+    } else {
+        D_8009ABAC = 1;
+    }
+}
+
+u32 _spu_isTransferIdle(void) {
+    return D_8009ABAC == 0;
+}
