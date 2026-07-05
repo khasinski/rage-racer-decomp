@@ -1,9 +1,10 @@
 #include "common.h"
+#include "game/race.h"
 
 extern s32 D_8009B33C;
 extern s32 D_8019C7B8;
 extern s32 D_8019C7C8;
-extern s32 *D_801E4FAC;
+extern GameRaceProgress *D_801E4FAC;
 
 s32 func_8001785C(s32 arg0);
 
@@ -43,12 +44,12 @@ loop_disabled:
             ptr = (u8 *)(offset + D_8019C7C8);
         }
         if (ptr[5] == 0) {
-            if (D_801E4FAC[3] < 4) {
-                if ((D_801E4FAC[3] + 1) < value) {
+            if (D_801E4FAC->progression < 4) {
+                if ((D_801E4FAC->progression + 1) < value) {
                     index--;
                     goto loop_disabled_check;
                 }
-            } else if (D_801E4FAC[3] < value) {
+            } else if (D_801E4FAC->progression < value) {
                 index--;
                 goto loop_disabled_check;
             }

@@ -1,17 +1,13 @@
 #include "common.h"
 #include "game/car.h"
-
-typedef struct {
-    u8 pad0[0xC];
-    s32 progression;
-} RuntimeEntry49B20;
+#include "game/race.h"
 
 extern s32 D_8009B33C;
 extern GameCarEntry *D_8019C7C8;
 extern s16 D_8019CA18;
 extern s16 D_801E41A4;
 extern s32 D_801E4B88;
-extern RuntimeEntry49B20 *D_801E4FAC;
+extern GameRaceProgress *D_801E4FAC;
 
 s32 func_8001785C(s32 arg0);
 
