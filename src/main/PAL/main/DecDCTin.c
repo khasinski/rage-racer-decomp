@@ -1,8 +1,9 @@
 #include "common.h"
 
-void func_800641D0(volatile u32 *arg0, s32 arg1);
+void MDEC_in(volatile u32 *arg0, s32 arg1) asm("func_800641D0");
 
-void func_80063FB0(volatile u32 *arg0, s32 arg1) {
+void DecDCTin(volatile u32 *arg0, s32 arg1) asm("func_80063FB0");
+void DecDCTin(volatile u32 *arg0, s32 arg1) {
     u32 mask;
 
     if (arg1 & 1) {
@@ -18,5 +19,5 @@ void func_80063FB0(volatile u32 *arg0, s32 arg1) {
         arg0[0] &= 0xFDFFFFFF;
     }
 
-    func_800641D0(arg0, *(u16 *)arg0);
+    MDEC_in(arg0, *(u16 *)arg0);
 }

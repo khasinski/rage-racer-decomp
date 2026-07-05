@@ -5,9 +5,10 @@ extern u32 D_800830A0[];
 extern u8 D_8008305C[];
 extern u8 D_800830E0[];
 
-void func_800641D0(volatile u32 *arg0, s32 arg1);
+void MDEC_in(volatile u32 *arg0, s32 arg1) asm("func_800641D0");
 
-u32 *func_80063F08(u32 *arg0) {
+u32 *DecDCTPutEnv(u32 *arg0) asm("func_80063F08");
+u32 *DecDCTPutEnv(u32 *arg0) {
     u32 *ret;
     register u32 *dst asm("$5");
     s32 i;
@@ -24,8 +25,8 @@ u32 *func_80063F08(u32 *arg0) {
         *dst++ = *arg0++;
     }
 
-    func_800641D0((volatile u32 *)D_8008305C, 0x20);
-    func_800641D0((volatile u32 *)D_800830E0, 0x20);
+    MDEC_in((volatile u32 *)D_8008305C, 0x20);
+    MDEC_in((volatile u32 *)D_800830E0, 0x20);
 
     return ret;
 }

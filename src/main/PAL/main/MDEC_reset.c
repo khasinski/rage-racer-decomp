@@ -18,14 +18,15 @@ extern u8 D_80013364[];
 extern u8 D_8008305C[];
 extern u8 D_800830E0[];
 
-s32 func_800642F4(void);
-s32 func_8006438C(void);
-s32 func_80064424(u8 *arg0);
+s32 MDEC_in_sync(void) asm("func_800642F4");
+s32 MDEC_out_sync(void) asm("func_8006438C");
+s32 MDEC_timeout(u8 *arg0) asm("func_80064424");
 void func_8001674C(u8 *arg0, ...);
 
-void func_800641D0(volatile u32 *arg0, s32 arg1);
+void MDEC_in(volatile u32 *arg0, s32 arg1) asm("func_800641D0");
 
-void func_800640D4(s32 arg0) {
+void MDEC_reset(s32 arg0) asm("func_800640D4");
+void MDEC_reset(s32 arg0) {
     register s32 option asm("$5") = arg0;
     register s32 zero asm("$0");
     volatile u32 *inBuffer = (volatile u32 *)D_8008305C;
@@ -43,8 +44,8 @@ zero:
     *D_8008316C = zero;
     *D_80083178 = zero;
     *D_80083198 = 0x60000000;
-    func_800641D0(inBuffer, 0x20);
-    func_800641D0((volatile u32 *)D_800830E0, 0x20);
+    MDEC_in(inBuffer, 0x20);
+    MDEC_in((volatile u32 *)D_800830E0, 0x20);
     return;
 
 one:
@@ -59,8 +60,8 @@ bad:
     func_8001674C(D_800132C8);
 }
 
-void func_800641D0(volatile u32 *arg0, s32 arg1) {
-    func_800642F4();
+void MDEC_in(volatile u32 *arg0, s32 arg1) {
+    MDEC_in_sync();
     *D_8008319C |= 0x88;
     *D_80083164 = (u32)(arg0 + 1);
     *D_80083168 = ((u32)arg1 >> 5 << 16) | 0x20;
@@ -68,8 +69,9 @@ void func_800641D0(volatile u32 *arg0, s32 arg1) {
     *D_8008316C = 0x01000201;
 }
 
-void func_80064264(volatile u32 *arg0, s32 arg1) {
-    func_8006438C();
+void MDEC_out(volatile u32 *arg0, s32 arg1) asm("func_80064264");
+void MDEC_out(volatile u32 *arg0, s32 arg1) {
+    MDEC_out_sync();
     *D_8008319C |= 0x88;
     *D_80083178 = 0;
     *D_80083170 = (u32)arg0;
@@ -77,14 +79,14 @@ void func_80064264(volatile u32 *arg0, s32 arg1) {
     *D_80083178 = 0x01000200;
 }
 
-s32 func_800642F4(void) {
+s32 MDEC_in_sync(void) {
     volatile s32 timeout;
 
     timeout = 0x100000;
     if (*D_80083198 & 0x20000000) {
         do {
             if (--timeout == -1) {
-                func_80064424(D_800132E4);
+                MDEC_timeout(D_800132E4);
                 return -1;
             }
         } while (*D_80083198 & 0x20000000);
@@ -92,14 +94,14 @@ s32 func_800642F4(void) {
     return 0;
 }
 
-s32 func_8006438C(void) {
+s32 MDEC_out_sync(void) {
     volatile s32 timeout;
 
     timeout = 0x100000;
     if (*D_80083178 & 0x01000000) {
         do {
             if (--timeout == -1) {
-                func_80064424(D_800132F4);
+                MDEC_timeout(D_800132F4);
                 return -1;
             }
         } while (*D_80083178 & 0x01000000);
@@ -107,7 +109,7 @@ s32 func_8006438C(void) {
     return 0;
 }
 
-s32 func_80064424(u8 *arg0) {
+s32 MDEC_timeout(u8 *arg0) {
     u32 status;
     register s32 ret asm("$2");
 

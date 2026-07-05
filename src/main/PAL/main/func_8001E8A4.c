@@ -15,7 +15,7 @@ extern s32 D_801E8A90;
 extern char D_80010D30[];
 
 void func_80065860(s32 arg0);
-void func_80063FB0(volatile u32 *arg0, s32 arg1);
+void DecDCTin(volatile u32 *arg0, s32 arg1) asm("func_80063FB0");
 void func_8006402C(volatile u32 *arg0, s32 arg1);
 s32 func_8001ED3C(volatile void *arg0);
 s32 func_8006CF08(void *arg0);
@@ -33,7 +33,7 @@ void func_8001E8A4(void) {
         func_80065860(1);
     }
 
-    func_80063FB0(D_8009AF20[D_8009AF28], 3);
+    DecDCTin(D_8009AF20[D_8009AF28], 3);
     func_8006402C(D_8009AF2C[D_8009AF34], (D_8009AF50 * D_8009AF52) / 2);
 
     {
