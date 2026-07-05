@@ -977,7 +977,6 @@ segments:
       - [0x68BD8, c, PAL/lib/libsnd/SsUtGetDetVVol]
       - [0x68C9C, c, PAL/lib/libsnd/SsUtGetVVol]
       - [0x68DB4, c, PAL/lib/libsnd/SsUtVibrate]
-      - [0x68E08, c, PAL/lib/libsnd/SsUtAutoVolPan]
       - [0x68E5C, c, PAL/lib/libsnd/_SsVmInit]
       - [0x69038, c, PAL/lib/libspu/SpuInit]
       - [0x69058, c, PAL/lib/libspu/_SpuInit]
