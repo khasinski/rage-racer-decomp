@@ -637,7 +637,6 @@ segments:
       - [0x4DEEC, c, PAL/main/func_8005D6EC]
       - [0x4DFD4, c, PAL/main/func_8005D7D4, cc=2.6.3]
       - [0x4E0EC, c, PAL/main/func_8005D8EC]
-      - [0x4E1F8, c, PAL/main/func_8005D9F8]
       - [0x4E3B4, c, PAL/main/func_8005DBB4]
       - [0x4E3D8, c, PAL/main/func_8005DBD8]
       - [0x4E41C, c, PAL/main/func_8005DC1C]
