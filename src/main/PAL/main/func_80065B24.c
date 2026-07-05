@@ -1,4 +1,5 @@
 #include "common.h"
+#include "psyq/gpu.h"
 
 typedef struct LoadImageGpuFuncs {
     u8 pad0[0x8];
@@ -21,12 +22,6 @@ typedef struct MoveImageGpuFuncs {
     u32 moveImage;
 } MoveImageGpuFuncs;
 
-typedef struct RectLike {
-    u32 xy;
-    s16 w;
-    s16 h;
-} RectLike;
-
 extern LoadImageGpuFuncs *g_GpuFuncs asm("D_800941E0");
 extern StoreImageGpuFuncs *g_GpuFuncsStore asm("D_800941E0");
 extern MoveImageGpuFuncs *g_GpuFuncsMove asm("D_800941E0");
@@ -39,21 +34,21 @@ extern char D_80013578[];
 extern char D_80013584[];
 extern char D_80013590[];
 
-void LoadImage(void *arg0, void *arg1) asm("func_80065B24");
-void StoreImage(void *arg0, void *arg1) asm("func_80065B88");
-s32 MoveImage(RectLike *arg0, u32 arg1, u32 arg2) asm("func_80065BEC");
+void LoadImage(Rect *arg0, void *arg1) asm("func_80065B24");
+void StoreImage(Rect *arg0, void *arg1) asm("func_80065B88");
+s32 MoveImage(GpuRectPacked *arg0, u32 arg1, u32 arg2) asm("func_80065BEC");
 
-void LoadImage(void *arg0, void *arg1) {
+void LoadImage(Rect *arg0, void *arg1) {
     CheckPrim(D_80013578, arg0);
     g_GpuFuncs->send(g_GpuFuncs->loadImage, arg0, 8, (u32)arg1);
 }
 
-void StoreImage(void *arg0, void *arg1) {
+void StoreImage(Rect *arg0, void *arg1) {
     CheckPrim(D_80013584, arg0);
     g_GpuFuncsStore->send(g_GpuFuncsStore->storeImage, arg0, 8, (u32)arg1);
 }
 
-s32 MoveImage(RectLike *arg0, u32 arg1, u32 arg2) {
+s32 MoveImage(GpuRectPacked *arg0, u32 arg1, u32 arg2) {
     CheckPrim(D_80013590, arg0);
     if (arg0->w == 0) {
         return -1;

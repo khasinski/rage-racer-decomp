@@ -1,4 +1,5 @@
 #include "common.h"
+#include "psyq/gpu.h"
 
 typedef struct GpuFuncs {
     u8 pad[0x38];

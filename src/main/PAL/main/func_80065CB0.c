@@ -1,4 +1,5 @@
 #include "common.h"
+#include "psyq/gpu.h"
 
 extern u8 g_GraphDebug asm("D_800941EA");
 extern void (*D_800941E4)(char *, ...);

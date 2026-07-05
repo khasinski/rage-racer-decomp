@@ -1,18 +1,5 @@
 #include "common.h"
-
-typedef struct Rect {
-    s16 x;
-    s16 y;
-    u16 w;
-    u16 h;
-} Rect;
-
-typedef struct DrawPacket {
-    u8 pad0[3];
-    u8 code;
-    u32 x0y0;
-    u32 x1y1;
-} DrawPacket;
+#include "psyq/gpu.h"
 
 u32 _get_mode(s32 arg0, s32 arg1, u32 arg2) asm("func_800669F0");
 u32 Gpu_BuildDrawAreaTopLeftCmd(s32 x, s32 y) asm("func_80066A4C");

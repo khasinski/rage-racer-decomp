@@ -1,11 +1,5 @@
 #include "common.h"
-
-typedef struct Rect {
-    s16 x;
-    s16 y;
-    s16 w;
-    s16 h;
-} Rect;
+#include "psyq/gpu.h"
 
 void LoadImage(Rect *arg0, void *arg1) asm("func_80065B24");
 s32 GetClut(s32 arg0, s32 arg1) asm("func_80064C7C");

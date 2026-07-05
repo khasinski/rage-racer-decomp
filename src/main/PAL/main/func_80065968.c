@@ -1,11 +1,5 @@
 #include "common.h"
-
-typedef struct Rect {
-    s16 x;
-    s16 y;
-    s16 w;
-    s16 h;
-} Rect;
+#include "psyq/gpu.h"
 
 extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
 extern u8 g_GraphDebug asm("D_800941EA");
