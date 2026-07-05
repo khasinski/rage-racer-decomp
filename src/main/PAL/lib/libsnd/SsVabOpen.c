@@ -3,6 +3,9 @@
 extern void *D_801F180C[];
 
 s32 SsVabOpenHead(void *arg0, s32 arg1) asm("func_80072C18");
+s32 SsVabOpenHeadWithMode(void *arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80072CB4");
+s32 SsVabOpenHeadSticky(void *arg0, s32 arg1, s32 arg2) asm("func_80072C4C");
+s32 SsVabFakeHead(void *arg0, s32 arg1, s32 arg2) asm("func_80072C80");
 s32 SsVabTransBody(void *arg0, s32 arg1) asm("func_800730BC");
 
 s32 SsVabOpen(void *arg0) asm("func_80072BC0");
@@ -28,3 +31,32 @@ s32 SsVabOpen(void *arg0) {
         : "r"(ret));
     return out;
 }
+
+s32 SsVabOpenHead(void *arg0, s32 arg1) {
+    s32 ret;
+
+    ret = SsVabOpenHeadWithMode(arg0, (s16)arg1, 0, 0);
+    ret = (s16)ret;
+    asm volatile("" : "=r"(ret) : "0"(ret));
+    return ret;
+}
+
+s32 SsVabOpenHeadSticky(void *arg0, s32 arg1, s32 arg2) {
+    s32 ret;
+
+    ret = SsVabOpenHeadWithMode(arg0, (s16)arg1, 1, arg2);
+    ret = (s16)ret;
+    asm volatile("" : "=r"(ret) : "0"(ret));
+    return ret;
+}
+
+s32 SsVabFakeHead(void *arg0, s32 arg1, s32 arg2) {
+    s32 ret;
+
+    ret = SsVabOpenHeadWithMode(arg0, (s16)arg1, 1, arg2);
+    ret = (s16)ret;
+    asm volatile("" : "=r"(ret) : "0"(ret));
+    return ret;
+}
+
+INCLUDE_ASM("asm/nonmatchings/PAL/main", SsVabOpenHeadWithMode);
