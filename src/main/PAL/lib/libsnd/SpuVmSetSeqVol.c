@@ -8,6 +8,9 @@ extern volatile u8 D_8009E0A0[];
 extern u8 D_8009E0C6[];
 
 s16 SpuVmSetSeqVol(s32 arg0, u16 arg1, u16 arg2, s16 arg3) asm("func_80076C58");
+s32 SpuVmGetSeqVol(s32 arg0, s16 *arg1, s16 *arg2) asm("func_80076DCC");
+s16 SpuVmGetSeqVolLeft(s32 arg0) asm("func_80076E38");
+s16 SpuVmGetSeqVolRight(s32 arg0) asm("func_80076E88");
 
 s16 SpuVmSetSeqVol(s32 arg0, u16 arg1, u16 arg2, s16 arg3) {
     register u32 offset asm("$2");
@@ -87,4 +90,49 @@ s16 SpuVmSetSeqVol(s32 arg0, u16 arg1, u16 arg2, s16 arg3) {
     offset = D_801E4BE6;
     __asm__ volatile("addiu $sp,$sp,8" ::: "memory");
     return offset;
+}
+
+s32 SpuVmGetSeqVol(s32 arg0, s16 *arg1, s16 *arg2) {
+    s32 index;
+    register s32 offset asm("$2");
+    register u8 *base asm("$3");
+    register u8 *ptr asm("$2");
+    register s16 *status asm("$7");
+
+    status = &D_801E4BE6;
+    offset = (arg0 & 0xFF) << 2;
+    base = *(u8 **)((u8 *)D_801E79CC + offset);
+    *status = arg0;
+    index = (arg0 & 0xFF00) >> 8;
+
+    ptr = (u8 *)((index * 0xAC) + (s32)base);
+    *arg1 = *(u16 *)(ptr + 0x74);
+    *arg2 = *(u16 *)(ptr + 0x76);
+    return *status;
+}
+
+s16 SpuVmGetSeqVolLeft(s32 arg0) {
+    s32 index;
+    register s32 offset asm("$2");
+    register u8 *ptr asm("$3");
+
+    offset = (arg0 & 0xFF) << 2;
+    ptr = *(u8 **)((u8 *)D_801E79CC + offset);
+    D_801E4BE6 = arg0;
+    index = (arg0 & 0xFF00) >> 8;
+
+    return *(s16 *)(ptr + (index * 0xAC) + 0x74);
+}
+
+s16 SpuVmGetSeqVolRight(s32 arg0) {
+    s32 index;
+    register s32 offset asm("$2");
+    register u8 *ptr asm("$3");
+
+    offset = (arg0 & 0xFF) << 2;
+    ptr = *(u8 **)((u8 *)D_801E79CC + offset);
+    D_801E4BE6 = arg0;
+    index = (arg0 & 0xFF00) >> 8;
+
+    return *(s16 *)(ptr + (index * 0xAC) + 0x76);
 }
