@@ -49,6 +49,8 @@ typedef struct StRingEntry {
 
 char *CdComstr(s32 cmd) asm("func_8006A4CC");
 char *CdIntstr(s32 intr) asm("func_8006A500");
+s32 CdSetDebug(s32 level) asm("func_8006A4B4");
+void CdFlush(void) asm("func_8006A494");
 CdlLOC *CdIntToPos(s32 i, CdlLOC *p) asm("func_8006A9D8");
 s32 CdPosToInt_Local(CdlLOC *loc) asm("func_8006AADC");
 s32 CdGetToc(CdlLOC *toc) asm("func_8006A088");

@@ -804,7 +804,7 @@ segments:
       - [0x5ABE8, c, PAL/main/func_8006A3E8]
       - [0x5ABF8, c, PAL/main/func_8006A3F8]
       - [0x5AC28, c, PAL/main/func_8006A428]
-      - [0x5AC94, c, PAL/main/func_8006A494]
+      - [0x5AC94, c, PAL/main/CdFlush]
       - [0x5ADA4, c, PAL/main/func_8006A5A4, cc=2.6.3]
       - [0x5B008, c, PAL/main/func_8006A808, cc=2.7.2]
       - [0x5B14C, c, PAL/main/func_8006A94C, cc=2.6.3]
