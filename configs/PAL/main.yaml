@@ -917,7 +917,6 @@ segments:
       - [0x620E0, c, PAL/lib/libsnd/SsSeqResume]
       - [0x62148, c, PAL/lib/libsnd/SsSeqClose, cc=2.6.3]
       - [0x622C4, c, PAL/lib/libsnd/SsSeqCloseWrapper]
-      - [0x622E8, c, PAL/lib/libsnd/SsSepCloseWrapper]
       - [0x6230C, c, PAL/lib/libsnd/_SsInitTables]
       - [0x623F4, c, PAL/lib/libsnd/ssinit]
       - [0x62424, c, PAL/lib/libsnd/SsQuit]
