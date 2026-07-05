@@ -35,3 +35,5 @@ Matrix *func_80069CC8(Matrix *src, Matrix *dst) {
     dstp[8] = value0;
     return ret;
 }
+
+INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80069D18);

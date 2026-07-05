@@ -1,10 +1,3 @@
-asm(
-".set noat\n"
-".set noreorder\n"
-".set nomacro\n"
-".section .text, \"ax\"\n"
-".globl func_80068A2C\n"
-"func_80068A2C:\n"
-"    nop\n"
-".set reorder\n"
-);
+#include "common.h"
+
+INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80068A2C);

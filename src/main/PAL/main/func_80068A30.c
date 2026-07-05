@@ -1,9 +1,3 @@
-void func_80068A30(void) asm("func_80068A30");
+#include "common.h"
 
-asm(
-    ".set noat\n"
-    ".set noreorder\n"
-    ".globl func_80068A30\n"
-    "func_80068A30:\n"
-    "    nop\n"
-);
+INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80068A30);
