@@ -850,8 +850,6 @@ segments:
       - [0x5A858, c, PAL/main/func_8006A058]
       - [0x5A888, c, PAL/main/func_8006A088]
       - [0x5A8AC, c, PAL/main/func_8006A0AC]
-      - [0x5AAD0, c, PAL/main/func_8006A2D0]
-      - [0x5AB60, c, PAL/main/func_8006A360]
       - [0x5ABD8, c, PAL/main/func_8006A3D8]
       - [0x5ABE8, c, PAL/main/func_8006A3E8]
       - [0x5ABF8, c, PAL/main/func_8006A3F8]
