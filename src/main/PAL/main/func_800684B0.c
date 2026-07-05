@@ -5,7 +5,13 @@ typedef struct Matrix {
     s32 t[3];
 } Matrix;
 
+extern s16 D_80092B08[];
+extern s16 D_80093308[];
+extern s16 D_80093B08[];
+extern s16 D_80094308[];
+
 s32 rsin(s32 arg0) asm("func_80068568");
+s32 func_800685A4(s32 arg0);
 s32 rcos(s32 arg0) asm("func_80068634");
 void func_80069458(Matrix *arg0, Matrix *arg1);
 
@@ -36,4 +42,59 @@ void func_800684B0(Matrix *arg0, s32 arg1) {
         sp10.t[2] = 0;
         func_80069458(arg0, &sp10);
     }
+}
+
+s32 rsin(s32 arg0) {
+    s32 ret;
+
+    if (arg0 < 0) {
+        goto negative;
+    }
+
+    ret = func_800685A4(arg0 & 0xFFF);
+    goto done;
+
+negative:
+    ret = -func_800685A4(-arg0 & 0xFFF);
+
+done:
+    return ret;
+}
+
+s32 func_800685A4(s32 arg0) {
+    if (arg0 < 0x801) {
+        if (arg0 < 0x401) {
+            return D_80094308[arg0];
+        }
+
+        return D_80094308[0x800 - arg0];
+    }
+
+    if (arg0 < 0xC01) {
+        return -D_80093308[arg0];
+    }
+
+    return -D_80094308[0x1000 - arg0];
+}
+
+s32 rcos(s32 arg0) {
+    if (arg0 < 0) {
+        arg0 = -arg0;
+    }
+
+    arg0 &= 0xFFF;
+
+    if (arg0 < 0x801) {
+        if (arg0 < 0x401) {
+            return D_80094308[0x400 - arg0];
+        }
+
+        return -D_80093B08[arg0];
+    }
+
+    if (arg0 < 0xC01) {
+        return -D_80094308[0xC00 - arg0];
+    }
+
+    return D_80092B08[arg0];
 }
