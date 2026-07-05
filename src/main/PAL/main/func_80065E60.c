@@ -20,3 +20,15 @@ void DrawOTag(void *arg0) {
     }
     g_GpuFuncs->send(g_GpuFuncs->moveImage, arg0, 0, 0);
 }
+
+INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80065ED4);
+
+INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80065F98);
+
+#if 0
+void func_80065ED4(void) {
+}
+
+void func_80065F98(void) {
+}
+#endif
