@@ -1,10 +1,5 @@
 #include "common.h"
-
-typedef struct {
-    u8 pad0[5];
-    u8 enabled;
-    u8 pad6[2];
-} CarEntry49B20;
+#include "game/car.h"
 
 typedef struct {
     u8 pad0[0xC];
@@ -12,7 +7,7 @@ typedef struct {
 } RuntimeEntry49B20;
 
 extern s32 D_8009B33C;
-extern CarEntry49B20 *D_8019C7C8;
+extern GameCarEntry *D_8019C7C8;
 extern s16 D_8019CA18;
 extern s16 D_801E41A4;
 extern s32 D_801E4B88;
@@ -22,7 +17,7 @@ s32 func_8001785C(s32 arg0);
 
 void func_80059320(void) {
     s32 index;
-    CarEntry49B20 *entry;
+    GameCarEntry *entry;
 
     if (D_8009B33C != 0) {
         D_8019CA18 = -1;
