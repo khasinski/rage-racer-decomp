@@ -1,5 +1,25 @@
 #include "common.h"
 
+extern s32 D_8007BED8;
+extern s32 D_8007C704;
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80019580", func_80019580);
+void func_80042C94(void);
 
+s32 func_80019580(void) {
+    register s32 state asm("$16");
+
+    if (D_8007BED8 != 0) {
+        return 1;
+    }
+
+    state = 10;
+    if (D_8007C704 == state) {
+        D_8007C704 = 0;
+        return 0;
+    }
+
+    func_80042C94();
+    D_8007C704 = state;
+    D_8007BED8 = 1;
+    return 1;
+}
