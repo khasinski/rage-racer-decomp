@@ -963,8 +963,6 @@ segments:
       - [0x66B50, c, PAL/main/func_80076350, cc=2.7.2]
       - [0x67140, c, PAL/main/func_80076940, cc=2.6.3]
       - [0x67330, c, PAL/lib/libsnd/SsUtKeyOn]
-      - [0x6741C, c, PAL/lib/libsnd/SsUtKeyOff]
-      - [0x67450, c, PAL/lib/libsnd/SsUtKeyOnV]
       - [0x67458, c, PAL/lib/libsnd/SpuVmSetSeqVol]
       - [0x675CC, c, PAL/lib/libsnd/SpuVmGetSeqVol]
       - [0x67638, c, PAL/lib/libsnd/SpuVmGetSeqVolLeft]
