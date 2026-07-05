@@ -1,0 +1,4 @@
+// Manual symbol overrides for SCES_006.50 (Rage Racer Europe).
+// Populate once function and data labels are identified.
+
+__entry = 0x800630B4; // type:func

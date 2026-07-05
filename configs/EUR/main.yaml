@@ -1,0 +1,66 @@
+name: Main Executable (SCES_006.50) - Rage Racer (Europe)
+sha1: 2913e15648eddef40821c5f666460abc04155ee6
+options:
+  basename: main
+  target_path: assets/EUR/main.exe
+  base_path: ../..
+  platform: psx
+  compiler: GCC
+
+  asm_path: asm/EUR/main
+  src_path: src/main
+  o_path: ../../lib
+  build_path: build/EUR
+
+  ld_script_path: linkers/EUR/main.ld
+
+  migrate_rodata_to_functions: False
+  find_file_boundaries: False
+
+  o_as_suffix: False
+  use_legacy_include_asm: False
+
+  asm_function_macro: glabel
+  asm_jtbl_label_macro: jlabel
+  asm_data_macro: dlabel
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - configs/EUR/sym.main.txt
+  reloc_addrs_path:
+    - configs/EUR/rel.main.txt
+
+  undefined_funcs_auto_path: linkers/EUR/undefined_funcs_auto.main.txt
+  undefined_syms_auto_path: linkers/EUR/undefined_syms_auto.main.txt
+
+  subalign: 4
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  ld_bss_is_noload: True
+
+# PS-X EXE layout for SCES_006.50:
+#   header   0x000000 - 0x000800
+#   .text   @ vram 0x80010000, size 0x8B000, ends @ 0x8009B000
+#   entry PC = 0x800630B4
+#   stack top = 0x801FFFF0
+# data/bss not declared in header; runtime layout still needs investigation.
+segments:
+  - name: header
+    type: header
+    start: 0x0
+
+  - name: main
+    type: code
+    start: 0x800
+    vram: 0x80010000
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0x800, asm, main/exe]
