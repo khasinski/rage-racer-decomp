@@ -979,8 +979,6 @@ segments:
       - [0x68DB4, c, PAL/lib/libsnd/SsUtVibrate]
       - [0x68E5C, c, PAL/lib/libsnd/_SsVmInit]
       - [0x69038, c, PAL/lib/libspu/SpuInit]
-      - [0x69058, c, PAL/lib/libspu/_SpuInit]
-      - [0x69120, c, PAL/lib/libspu/SpuStart]
       - [0x691A4, c, PAL/lib/libspu/_spu_resetTransferControl]
       - [0x69230, c, PAL/lib/libspu/_spu_init, cc=2.6.3]
       - [0x6974C, c, PAL/lib/libspu/func_80078F4C, cc=2.7.2]
