@@ -37,7 +37,8 @@
         out[(dst)] = value;                            \
     } while (0)
 
-void func_80068340(s16 *mtx, s32 *vec, s32 *out) {
+void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) asm("func_80068340");
+void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) {
     register s16 *m asm("$7") = mtx;
     register s32 *v asm("$8") = vec;
 
