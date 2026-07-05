@@ -994,7 +994,6 @@ segments:
       - [0x6AAD0, c, PAL/lib/libspu/SpuSetReverb, cc=2.6.3]
       - [0x6ABA0, c, PAL/lib/libspu/_SpuIsInAllocateArea, cc=2.6.3]
       - [0x6AC88, c, PAL/lib/libspu/SpuSetReverbModeParam, cc=2.6.3]
-      - [0x6B668, c, PAL/lib/libspu/SpuClearReverbWorkArea, cc=2.6.3]
       - [0x6B804, c, PAL/lib/kernel/WaitEvent]
       - [0x6B814, c, PAL/lib/libspu/SpuTransferStatus]
       - [0x6B888, c, PAL/lib/libspu/SpuGetKeyStatus]
