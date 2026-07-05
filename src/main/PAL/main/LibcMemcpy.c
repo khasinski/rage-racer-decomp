@@ -1,6 +1,7 @@
 #include "common.h"
 
-void func_8006CBF4(u8 *dst, u8 *src, s32 count) {
+void LibcMemcpy(u8 *dst, u8 *src, s32 count) asm("func_8006CBF4");
+void LibcMemcpy(u8 *dst, u8 *src, s32 count) {
     u8 scratch[8];
     register s32 i asm("$3");
     register s32 end asm("$6");
@@ -24,7 +25,8 @@ loop:
     }
 }
 
-s32 func_8006CC28(u8 *arg0, u8 *arg1) {
+s32 LibcStrcmp(u8 *arg0, u8 *arg1) asm("func_8006CC28");
+s32 LibcStrcmp(u8 *arg0, u8 *arg1) {
     s32 left;
 
     if ((arg0 == 0) || (arg1 == 0)) {
@@ -47,7 +49,8 @@ s32 func_8006CC28(u8 *arg0, u8 *arg1) {
     return *arg0 - arg1[-1];
 }
 
-s32 func_8006CC8C(u8 *arg0, u8 *arg1, s32 arg2) {
+s32 LibcStrncmp(u8 *arg0, u8 *arg1, s32 arg2) asm("func_8006CC8C");
+s32 LibcStrncmp(u8 *arg0, u8 *arg1, s32 arg2) {
     s32 left;
     s32 right;
 
