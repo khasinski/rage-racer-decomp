@@ -16,6 +16,10 @@ typedef struct GpuRectPacked {
     s16 h;
 } GpuRectPacked;
 
+typedef struct DispEnv {
+    Rect disp;
+} DispEnv;
+
 typedef struct DrawPacket {
     u8 pad0[3];
     u8 code;

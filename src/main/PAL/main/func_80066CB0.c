@@ -1,24 +1,14 @@
 #include "common.h"
+#include "psyq/gpu.h"
 
 typedef unsigned int u_long;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    s16 w;
-    s16 h;
-} RECT;
-
-typedef struct {
-    RECT disp;
-} DISPENV;
 
 extern u8 g_GraphType asm("D_800941E8");
 extern u8 g_GraphReverse asm("D_800941EB");
 
-u_long get_dx(DISPENV *env) asm("func_80066CB0");
+u_long get_dx(DispEnv *env) asm("func_80066CB0");
 
-u_long get_dx(DISPENV *env) {
+u_long get_dx(DispEnv *env) {
     register volatile u8 *modep asm("$2") = &g_GraphType;
     register s32 value asm("$2");
     register s32 mode asm("$3");
