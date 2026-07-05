@@ -1,9 +1,5 @@
 #include "common.h"
-
-typedef struct Matrix {
-    s16 m[3][3];
-    s32 t[3];
-} Matrix;
+#include "psyq/gte.h"
 
 extern s16 D_80092B08[];
 extern s16 D_80093308[];

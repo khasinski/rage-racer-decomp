@@ -1,10 +1,5 @@
 #include "common.h"
-
-typedef struct Matrix {
-    s16 m[3][3];
-    s16 pad;
-    s32 t[3];
-} Matrix;
+#include "psyq/gte.h"
 
 Matrix *func_80069CC8(Matrix *src, Matrix *dst) {
     s16 *srcp = (s16 *)src;
