@@ -872,8 +872,6 @@ segments:
       - [0x5D0E4, c, PAL/main/func_8006C8E4, cc=2.7.2]
       - [0x5D388, c, PAL/main/func_8006CB88]
       - [0x5D3F4, c, PAL/main/func_8006CBF4]
-      - [0x5D428, c, PAL/main/func_8006CC28]
-      - [0x5D48C, c, PAL/main/func_8006CC8C]
       - [0x5D50C, c, PAL/main/func_8006CD0C]
       - [0x5D5A0, c, PAL/main/func_8006CDA0]
       - [0x5D5C0, c, PAL/main/func_8006CDC0]
