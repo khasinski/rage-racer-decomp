@@ -4,14 +4,6 @@
 
 typedef void (*Callback)(void);
 
-typedef struct {
-    s16 state;
-    u8 pad2[6];
-    s32 value;
-    u8 padC[0x10];
-    u8 tail[4];
-} Entry;
-
 extern s32 D_8009DF18;
 extern u8 D_8009DF14[];
 extern s32 D_8009E69C;
@@ -28,7 +20,7 @@ extern s32 D_801E42C8;
 extern s32 D_801E6C74;
 extern s32 D_801E6C84;
 extern s32 D_801E6C98;
-extern Entry *D_801E8AAC;
+extern StRingEntry *D_801E8AAC;
 extern s32 D_801E8274;
 extern s32 D_801F1850;
 extern s32 D_8019CA00;
@@ -88,10 +80,10 @@ void func_8006CE20(void) {
 
 void data_ready_callback(void) {
     register s32 index asm("$2") = D_801E6C84;
-    register Entry *base asm("$3") = D_801E8AAC;
-    register Entry *entry asm("$2");
+    register StRingEntry *base asm("$3") = D_801E8AAC;
+    register StRingEntry *entry asm("$2");
 
-    entry = (Entry *)((index << 5) + (s32)base);
+    entry = (StRingEntry *)((index << 5) + (s32)base);
     entry->state = 2;
     __asm__ volatile(
         "lui    $6,%%hi(D_8009DF14)\n"

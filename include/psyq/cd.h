@@ -38,6 +38,15 @@ typedef struct StHEADER_RR {
     u8 pad8[0x18];
 } StHEADER_RR;
 
+typedef struct StRingEntry {
+    volatile s16 state;
+    u8 pad2[4];
+    s16 nSectors;
+    s32 value;
+    u8 padC[0x10];
+    CdlLOC loc;
+} StRingEntry;
+
 char *CdComstr(s32 cmd) asm("func_8006A4CC");
 char *CdIntstr(s32 intr) asm("func_8006A500");
 CdlLOC *CdIntToPos(s32 i, CdlLOC *p) asm("func_8006A9D8");
