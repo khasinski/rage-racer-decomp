@@ -32,14 +32,15 @@ def parse_subsegments(config: Path) -> list[tuple[int, str, str, int]]:
     return result
 
 
-def parse_wrappers(src_root: Path) -> tuple[set[str], set[str]]:
-    asm: set[str] = set()
+def parse_wrappers(src_root: Path, version: str) -> tuple[dict[str, list[str]], set[str]]:
+    asm_by_unit: dict[str, list[str]] = {}
     rodata: set[str] = set()
     for path in src_root.rglob("*.c"):
         text = path.read_text()
-        asm.update(match.group(1) for match in ASM_WRAP_RE.finditer(text))
+        rel = path.relative_to(src_root).with_suffix("").as_posix()
+        asm_by_unit[f"{version}/{rel}"] = [match.group(1) for match in ASM_WRAP_RE.finditer(text)]
         rodata.update(match.group(1) for match in RODATA_WRAP_RE.finditer(text))
-    return asm, rodata
+    return asm_by_unit, rodata
 
 
 def parse_labels(path: Path) -> dict[str, dict[int, list[str]]]:
@@ -54,6 +55,26 @@ def parse_labels(path: Path) -> dict[str, dict[int, list[str]]]:
         output_file, address, label = line.split(maxsplit=2)
         labels[output_file][int(address, 16)].append(label)
     return labels
+
+
+def parse_label_addresses(labels: dict[str, dict[int, list[str]]]) -> dict[str, int]:
+    addresses: dict[str, int] = {}
+    for output_labels in labels.values():
+        for address, names in output_labels.items():
+            for name in names:
+                addresses.setdefault(name, address)
+    return addresses
+
+
+def fallback_function_address(name: str) -> int | None:
+    match = re.fullmatch(r"func_([0-9A-Fa-f]{8})", name)
+    if not match:
+        return None
+    return int(match.group(1), 16)
+
+
+def function_address(name: str, label_addresses: dict[str, int], segment_vram: int) -> int | None:
+    return label_addresses.get(name) or fallback_function_address(name) or segment_vram
 
 
 def write_words(path: Path, section: str, data: bytes, vram: int, labels: dict[int, list[str]]) -> None:
@@ -98,7 +119,8 @@ def main() -> int:
     if not config.exists() or not target.exists() or not src_root.exists():
         return 0
 
-    asm_wrappers, rodata_wrappers = parse_wrappers(src_root)
+    asm_wrappers_by_unit, rodata_wrappers = parse_wrappers(src_root, args.version)
+    label_addresses = parse_label_addresses(labels)
     target_bytes = target.read_bytes()
 
     generated = 0
@@ -109,16 +131,31 @@ def main() -> int:
         data = target_bytes[start:end]
         stem = Path(name).name
 
-        if kind == "c" and stem in asm_wrappers:
-            output = out_dir / f"{stem}.s"
-            write_words(
-                output,
-                '.section .text, "ax"',
-                data,
-                vram,
-                with_entry_label(labels.get(output.name, {}), vram, stem),
-            )
-            generated += 1
+        if kind == "c":
+            asm_wrappers = asm_wrappers_by_unit.get(name, [])
+            for index, asm_name in enumerate(asm_wrappers):
+                func_vram = function_address(asm_name, label_addresses, vram)
+                if func_vram is None:
+                    continue
+
+                if index + 1 < len(asm_wrappers):
+                    next_vram = function_address(asm_wrappers[index + 1], label_addresses, vram)
+                else:
+                    next_vram = BASE_VRAM + (end - BASE_OFF)
+                if next_vram is None or next_vram <= func_vram:
+                    continue
+
+                func_start = start + (func_vram - vram)
+                func_end = start + (next_vram - vram)
+                output = out_dir / f"{asm_name}.s"
+                write_words(
+                    output,
+                    '.section .text, "ax"',
+                    target_bytes[func_start:func_end],
+                    func_vram,
+                    with_entry_label(labels.get(output.name, {}), func_vram, asm_name),
+                )
+                generated += 1
         elif kind == ".rodata" and f"{stem}_rodata" in rodata_wrappers:
             output = out_dir / f"{stem}_rodata.s"
             write_words(output, '.section .rodata, "a"', data, vram, labels.get(output.name, {}))
