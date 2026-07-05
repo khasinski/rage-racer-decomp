@@ -2,8 +2,6 @@
 
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005EFAC", func_8005EFAC);
-
-#if 0
-void func_8005EFAC(void) {
-}
-#endif
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005EFAC", func_8005F0D4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005EFAC", func_8005F16C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005EFAC", func_8005F204);
