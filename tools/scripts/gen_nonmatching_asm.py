@@ -14,8 +14,8 @@ BASE_OFF = 0x800
 
 
 SUBSEGMENT_RE = re.compile(r"\[0x([0-9A-Fa-f]+),\s*([^,\]]+),\s*([^,\]\s]+)")
-ASM_WRAP_RE = re.compile(r"RAGE_ASM_WRAP\([^,]+,\s*([A-Za-z0-9_]+)\)")
-RODATA_WRAP_RE = re.compile(r"RAGE_RODATA_WRAP\([^,]+,\s*([A-Za-z0-9_]+)\)")
+ASM_WRAP_RE = re.compile(r"INCLUDE_ASM\([^,]+,\s*([A-Za-z0-9_]+)\)")
+RODATA_WRAP_RE = re.compile(r"INCLUDE_RODATA\([^,]+,\s*([A-Za-z0-9_]+)\)")
 
 
 def parse_subsegments(config: Path) -> list[tuple[int, str, str, int]]:

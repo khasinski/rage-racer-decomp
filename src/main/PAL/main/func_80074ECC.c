@@ -1,8 +1,7 @@
 #include "common.h"
 
-#define RAGE_ASM_WRAP(FOLDER, NAME) INCLUDE_ASM(FOLDER, NAME)
 
-RAGE_ASM_WRAP("asm/nonmatchings/PAL/main", func_80074ECC);
+INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80074ECC);
 
 #if 0
 void func_80074ECC(void) {
