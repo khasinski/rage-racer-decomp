@@ -64,7 +64,7 @@ $(BUILD)/src/%.c.o: src/%.c | $(BUILD)
 $(BUILD)/src/main/PAL/main/func_80073748.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8007849C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8006A9D8.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8006A0AC.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/CdGetToc2.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_800728F4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80072734.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/MatrixApplyVectorComponents.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3

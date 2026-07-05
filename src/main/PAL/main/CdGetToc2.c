@@ -17,7 +17,8 @@ void func_8006A3D8(u32 arg0, s32 arg1);
 void func_8002785C(void *arg0);
 void func_8001674C(u8 *arg0, ...);
 
-s32 func_8006A0AC(s32 arg0, u8 *arg1) {
+s32 CdGetToc2(s32 arg0, u8 *arg1) asm("func_8006A0AC");
+s32 CdGetToc2(s32 arg0, u8 *arg1) {
     u8 command[8];
     u8 response[8];
     register u8 *toc asm("$20") = arg1;
@@ -127,7 +128,8 @@ fail:
     return 0;
 }
 
-s32 func_8006A2D0(void) {
+s32 CdInit(void) asm("func_8006A2D0");
+s32 CdInit(void) {
     s32 retries;
 
     retries = 4;
