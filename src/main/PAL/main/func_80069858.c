@@ -1,3 +1,14 @@
 #include "common.h"
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069858);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069958);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069A88);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069AB0);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069AD8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069B14);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069B38);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069B60);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069B88);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069BA8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069BCC);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069C24);
