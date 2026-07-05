@@ -5,7 +5,9 @@
 
 typedef struct GameCarEntry {
     u8 modelVariant;
-    u8 pad1[4];
+    u8 pad1[2];
+    u8 shapeIndex;
+    u8 textureIndex;
     u8 enabled;
     u8 pad6[2];
 } GameCarEntry;
