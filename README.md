@@ -92,19 +92,6 @@ executable, `make build` compiles and links `build/PAL/main.exe`, and
 `make check` verifies its SHA-1 against retail. `make progress` updates
 `docs/PROGRESS.md` and the badge JSON files.
 
-## Reference
-
-The pre-cleanup working repository, including generated artifacts, scratch
-attempts, local rewrite experiments, and dirty worktree state, has been moved
-to:
-
-```text
-~/Projects/rage-pc-reference
-```
-
-Use it only as local historical reference. Do not copy proprietary material,
-generated split output, or local rewrite tooling back into this release tree.
-
 ## License
 
 See [LICENSE.md](LICENSE.md). Game code and data remain the property of their
