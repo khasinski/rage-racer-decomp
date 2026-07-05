@@ -938,7 +938,6 @@ segments:
       - [0x632D0, c, PAL/lib/libsnd/SsSetReservedVoice]
       - [0x633C0, c, PAL/lib/libsnd/SsVabOpen, cc=2.6.3]
       - [0x638BC, c, PAL/lib/libsnd/SsVabTransBody]
-      - [0x6397C, c, PAL/lib/libsnd/SsVabTransCompleted, cc=2.6.3]
       - [0x639A8, c, PAL/lib/libsnd/SpuVmDamper]
       - [0x639CC, c, PAL/lib/libsnd/SsSeqCalledTbyT]
       - [0x63A0C, c, PAL/lib/libsnd/SsUtGetProgAtr]
