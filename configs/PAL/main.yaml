@@ -787,7 +787,6 @@ segments:
       - [0x56290, c, PAL/main/func_80065A90]
       - [0x56324, c, PAL/main/func_80065B24]
       - [0x564B0, c, PAL/main/func_80065CB0]
-      - [0x56568, c, PAL/main/func_80065D68]
       - [0x56600, c, PAL/main/func_80065E00]
       - [0x56660, c, PAL/main/func_80065E60]
       - [0x566D4, c, PAL/main/func_80065ED4]
