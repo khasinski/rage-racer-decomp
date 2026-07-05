@@ -260,8 +260,6 @@ segments:
       - [0x1432C, c, PAL/main/func_80023B2C]
       - [0x143B4, c, PAL/main/func_80023BB4]
       - [0x14570, c, PAL/main/func_80023D70, cc=2.6.3]
-      - [0x147E8, c, PAL/main/func_80023FE8, cc=2.6.3]
-      - [0x14C20, c, PAL/main/func_80024420, cc=2.6.3]
       - [0x14F18, c, PAL/main/func_80024718]
       - [0x15020, c, PAL/main/func_80024820]
       - [0x151A4, c, PAL/main/func_800249A4, cc=2.6.3]
