@@ -1,18 +1,19 @@
 #include "common.h"
+#include "game/race.h"
 
 extern s32 D_801E429C;
 extern s32 D_801E4184;
 extern s32 D_801E42E4;
 extern s16 D_801E4DAC;
 extern s16 D_8019CABC;
-extern s32 *D_801E4FAC;
+extern GameRaceProgress *D_801E4FAC;
 
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_8001B2D4(void);
 
 void func_8001B884(void) {
     s32 value;
-    s32 *ptr;
+    GameRaceProgress *ptr;
 
     value = D_801E429C + 1;
     D_801E429C = value;
@@ -24,8 +25,8 @@ void func_8001B884(void) {
         case 1:
             ptr = D_801E4FAC;
             D_801E4DAC = 1;
-            if (ptr[3] == -1) {
-                ptr[3] = 0;
+            if (ptr->progression == -1) {
+                ptr->progression = 0;
                 D_801E42E4 = 0x1F;
                 D_8019CABC = 0;
             } else {

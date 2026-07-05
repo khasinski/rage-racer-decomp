@@ -6,6 +6,7 @@
 typedef struct GameRaceProgress {
     u8 pad0[0xC];
     s32 progression;
+    s32 elapsedTime;
 } GameRaceProgress;
 
 #endif
