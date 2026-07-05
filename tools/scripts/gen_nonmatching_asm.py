@@ -16,6 +16,10 @@ BASE_OFF = 0x800
 SUBSEGMENT_RE = re.compile(r"\[0x([0-9A-Fa-f]+),\s*([^,\]]+),\s*([^,\]\s]+)")
 ASM_WRAP_RE = re.compile(r"INCLUDE_ASM\([^,]+,\s*([A-Za-z0-9_]+)\)")
 RODATA_WRAP_RE = re.compile(r"INCLUDE_RODATA\([^,]+,\s*([A-Za-z0-9_]+)\)")
+C_FUNC_RE = re.compile(
+    r"^\s*(?:[A-Za-z_][A-Za-z0-9_]*\s+)+(?P<name>func_[0-9A-Fa-f]{8})\s*\([^;]*\)\s*\{",
+    re.MULTILINE,
+)
 
 
 def parse_subsegments(config: Path) -> list[tuple[int, str, str, int]]:
@@ -32,16 +36,22 @@ def parse_subsegments(config: Path) -> list[tuple[int, str, str, int]]:
     return result
 
 
-def parse_wrappers(src_root: Path, version: str) -> tuple[dict[str, list[str]], dict[str, str]]:
+def parse_wrappers(
+    src_root: Path, version: str
+) -> tuple[dict[str, list[str]], dict[str, list[str]], dict[str, str]]:
     asm_by_unit: dict[str, list[str]] = {}
+    c_funcs_by_unit: dict[str, list[str]] = {}
     rodata_by_name: dict[str, str] = {}
     for path in src_root.rglob("*.c"):
         text = path.read_text()
         rel = path.relative_to(src_root).with_suffix("").as_posix()
         asm_by_unit[f"{version}/{rel}"] = [match.group(1) for match in ASM_WRAP_RE.finditer(text)]
+        c_funcs_by_unit[f"{version}/{rel}"] = [
+            match.group("name") for match in C_FUNC_RE.finditer(text)
+        ]
         for match in RODATA_WRAP_RE.finditer(text):
             rodata_by_name[match.group(1)] = rel
-    return asm_by_unit, rodata_by_name
+    return asm_by_unit, c_funcs_by_unit, rodata_by_name
 
 
 def unit_output_path(name: str, version: str) -> str:
@@ -91,9 +101,9 @@ def function_address(
     segment_vram: int,
     output_labels: dict[int, list[str]],
 ) -> int | None:
-    if output_labels:
-        return min(output_labels)
-    return label_addresses.get(name) or fallback_function_address(name) or segment_vram
+    return label_addresses.get(name) or fallback_function_address(name) or (
+        min(output_labels) if output_labels else segment_vram
+    )
 
 
 def write_words(path: Path, section: str, data: bytes, vram: int, labels: dict[int, list[str]]) -> None:
@@ -138,7 +148,7 @@ def main() -> int:
     if not config.exists() or not target.exists() or not src_root.exists():
         return 0
 
-    asm_wrappers_by_unit, rodata_wrappers = parse_wrappers(src_root, args.version)
+    asm_wrappers_by_unit, c_funcs_by_unit, rodata_wrappers = parse_wrappers(src_root, args.version)
     label_addresses = parse_label_addresses(labels)
     target_bytes = target.read_bytes()
 
@@ -152,22 +162,31 @@ def main() -> int:
 
         if kind == "c":
             asm_wrappers = asm_wrappers_by_unit.get(name, [])
+            c_func_boundaries = [
+                function_address(c_func, label_addresses, vram, {})
+                for c_func in c_funcs_by_unit.get(name, [])
+            ]
+            c_func_boundaries = [address for address in c_func_boundaries if address is not None]
             for index, asm_name in enumerate(asm_wrappers):
                 output_labels = labels_for_asm(labels, name, asm_name)
                 func_vram = function_address(asm_name, label_addresses, vram, output_labels)
                 if func_vram is None:
                     continue
 
+                next_boundaries = [address for address in c_func_boundaries if address > func_vram]
                 if index + 1 < len(asm_wrappers):
                     next_name = asm_wrappers[index + 1]
-                    next_vram = function_address(
+                    next_asm_vram = function_address(
                         next_name,
                         label_addresses,
                         vram,
                         labels_for_asm(labels, name, next_name),
                     )
+                    if next_asm_vram is not None:
+                        next_boundaries.append(next_asm_vram)
                 else:
-                    next_vram = BASE_VRAM + (end - BASE_OFF)
+                    next_boundaries.append(BASE_VRAM + (end - BASE_OFF))
+                next_vram = min(next_boundaries) if next_boundaries else None
                 if next_vram is None or next_vram <= func_vram:
                     continue
 
