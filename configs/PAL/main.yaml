@@ -648,8 +648,6 @@ segments:
       - [0x4E574, c, PAL/main/func_8005DD74]
       - [0x4E5B8, c, PAL/main/func_8005DDB8]
       - [0x4E6F0, c, PAL/main/func_8005DEF0, cc=2.6.3]
-      - [0x4E858, c, PAL/main/func_8005E058, cc=2.6.3]
-      - [0x4E9D0, c, PAL/main/func_8005E1D0, cc=2.6.3]
       - [0x4EB64, c, PAL/main/func_8005E364]
       - [0x4ECA4, c, PAL/main/func_8005E4A4]
       - [0x4ECEC, c, PAL/main/func_8005E4EC]
