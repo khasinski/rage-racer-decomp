@@ -60,6 +60,7 @@ int DsSearchFile(void *file, void *name) asm("func_8006C25C");
 int DS_searchdir(s32 type, u8 *name) asm("func_8006C83C");
 void StClearRing(void) asm("func_8006CDC0");
 s32 StGetBackloc(CdlLOC *loc) asm("func_8006CF08");
+void StSetRing(void *base, s32 size) asm("func_8006A058");
 void StSetStream(s32 mode, s32 start_frame, s32 end_frame, s32 callback, s32 user_data) asm("func_8006CF68");
 u32 StFreeRing(u32 *base) asm("func_8006CFF0");
 
