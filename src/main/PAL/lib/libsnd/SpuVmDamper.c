@@ -12,3 +12,5 @@ void SpuVmDamperOff(void) {
 void SpuVmDamperOn(void) {
     D_8019CA68 = 2;
 }
+
+INCLUDE_ASM("asm/nonmatchings/PAL/main", SsSeqCalledTbyT);
