@@ -4,7 +4,9 @@
 #include "common.h"
 
 typedef struct GameRaceProgress {
-    u8 pad0[0xC];
+    s32 state;
+    s32 pad4;
+    s32 lap;
     s32 progression;
     s32 elapsedTime;
 } GameRaceProgress;
