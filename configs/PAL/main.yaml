@@ -816,7 +816,6 @@ segments:
       - [0x58CB0, c, PAL/main/func_800684B0]
       - [0x58ED4, c, PAL/main/func_800686D4]
       - [0x58F38, c, PAL/main/func_80068738]
-      - [0x5908C, c, PAL/main/func_8006888C]
       - [0x59128, c, PAL/main/func_80068928]
       - [0x591A8, c, PAL/main/func_800689A8]
       - [0x5922C, c, PAL/main/func_80068A2C]
