@@ -660,7 +660,6 @@ segments:
       - [0x4F378, c, PAL/main/func_8005EB78]
       - [0x4F3B0, c, PAL/main/func_8005EBB0]
       - [0x4F4E0, c, PAL/main/func_8005ECE0, cc=2.6.3]
-      - [0x4F744, c, PAL/main/func_8005EF44, cc=2.6.3]
       - [0x4F7AC, c, PAL/main/func_8005EFAC]
       - [0x4FAAC, c, PAL/main/func_8005F2AC]
       - [0x4FB04, c, PAL/main/func_8005F304]
