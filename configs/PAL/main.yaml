@@ -957,8 +957,6 @@ segments:
       - [0x65BCC, c, PAL/main/func_800753CC, cc=2.6.3]
       - [0x65F10, c, PAL/main/func_80075710, cc=2.6.3]
       - [0x662E0, c, PAL/lib/libsnd/SpuVmKeyOnWithVol]
-      - [0x66378, c, PAL/lib/libsnd/SpuVmClearFinishedVoices]
-      - [0x66430, c, PAL/lib/libsnd/SpuVmKeyOnWithDefaultVol]
       - [0x664B0, c, PAL/main/func_80075CB0, cc=2.6.3]
       - [0x666B4, c, PAL/lib/libsnd/SpuVmApplyPitchBendByTone]
       - [0x667A4, c, PAL/main/func_80075FA4, cc=2.7.2]
