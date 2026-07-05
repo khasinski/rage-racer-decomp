@@ -1,6 +1,8 @@
 #include "psyq/kernel.h"
 
 extern volatile u16 *D_8009A574;
+extern volatile u32 *D_8009A570;
+extern u32 D_8009A578[];
 
 s32 SetRCnt(s32 arg0, s32 arg1, s32 arg2) {
     register s32 index asm("$8") = arg0 & 0xFFFF;
@@ -48,4 +50,42 @@ s32 SetRCnt(s32 arg0, s32 arg1, s32 arg2) {
     entry = (volatile u16 *)(offset + base);
     entry[2] = flags;
     return ret;
+}
+
+s32 GetRCnt(s32 arg0) {
+    s32 index;
+
+    index = arg0 & 0xFFFF;
+    if (index >= 3) {
+        return 0;
+    }
+    return D_8009A574[index * 8];
+}
+
+s32 StartRCnt(s32 arg0) {
+    s32 index;
+
+    index = arg0 & 0xFFFF;
+    D_8009A570[1] |= D_8009A578[index];
+    return index < 3;
+}
+
+s32 StopRCnt(s32 arg0) {
+    s32 index;
+
+    index = arg0 & 0xFFFF;
+    D_8009A570[1] = ~D_8009A578[index] & D_8009A570[1];
+    asm volatile("" ::: "memory");
+    return 1;
+}
+
+s32 ResetRCnt(s32 arg0) {
+    s32 index;
+
+    index = arg0 & 0xFFFF;
+    if (index >= 3) {
+        return 0;
+    }
+    D_8009A574[index * 8] = 0;
+    return 1;
 }
