@@ -1,7 +1,7 @@
 #include "common.h"
 
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsSeqPause);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsSeqPause", SsSeqPause);
 
 #if 0
 void SsSeqPause(void) {

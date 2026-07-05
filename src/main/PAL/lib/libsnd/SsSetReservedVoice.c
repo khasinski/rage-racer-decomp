@@ -21,4 +21,4 @@ void SsSetStereo(void) {
     D_801E3FB0 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsSetVoiceCount);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsSetReservedVoice", SsSetVoiceCount);

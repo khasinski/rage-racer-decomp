@@ -1,7 +1,7 @@
 #include "common.h"
 
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", StartKernelInterrupts);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/kernel/StartKernelInterrupts", StartKernelInterrupts);
 
 #if 0
 void StartKernelInterrupts(void) {

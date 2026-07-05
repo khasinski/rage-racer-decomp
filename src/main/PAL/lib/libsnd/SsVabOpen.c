@@ -59,4 +59,4 @@ s32 SsVabFakeHead(void *arg0, s32 arg1, s32 arg2) {
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsVabOpenHeadWithMode);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsVabOpen", SsVabOpenHeadWithMode);

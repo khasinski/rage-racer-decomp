@@ -107,4 +107,4 @@ void func_8006BCC4(void) {
     func_8006DF64(2, (void *)func_8006C17C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8006BD14);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8006BA68", func_8006BD14);

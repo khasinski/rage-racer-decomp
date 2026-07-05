@@ -1,3 +1,3 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80068928);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80068928", func_80068928);

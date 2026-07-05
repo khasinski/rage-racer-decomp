@@ -1,7 +1,7 @@
 #include "common.h"
 
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsSeqSetNoteParam2C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsSeqSetNoteParam2C", SsSeqSetNoteParam2C);
 
 #if 0
 void SsSeqSetNoteParam2C(void) {

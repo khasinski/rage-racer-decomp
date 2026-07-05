@@ -1,7 +1,7 @@
 #include "common.h"
 
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", _SsSndStop);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/_SsSndStop", _SsSndStop);
 
 #if 0
 void _SsSndStop(void) {

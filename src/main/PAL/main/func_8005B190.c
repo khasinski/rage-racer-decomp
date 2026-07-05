@@ -1,7 +1,7 @@
 #include "common.h"
 
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8005B190);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B190", func_8005B190);
 
 #if 0
 void func_8005B190(void) {

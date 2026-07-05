@@ -32,15 +32,27 @@ def parse_subsegments(config: Path) -> list[tuple[int, str, str, int]]:
     return result
 
 
-def parse_wrappers(src_root: Path, version: str) -> tuple[dict[str, list[str]], set[str]]:
+def parse_wrappers(src_root: Path, version: str) -> tuple[dict[str, list[str]], dict[str, str]]:
     asm_by_unit: dict[str, list[str]] = {}
-    rodata: set[str] = set()
+    rodata_by_name: dict[str, str] = {}
     for path in src_root.rglob("*.c"):
         text = path.read_text()
         rel = path.relative_to(src_root).with_suffix("").as_posix()
         asm_by_unit[f"{version}/{rel}"] = [match.group(1) for match in ASM_WRAP_RE.finditer(text)]
-        rodata.update(match.group(1) for match in RODATA_WRAP_RE.finditer(text))
-    return asm_by_unit, rodata
+        for match in RODATA_WRAP_RE.finditer(text):
+            rodata_by_name[match.group(1)] = rel
+    return asm_by_unit, rodata_by_name
+
+
+def unit_output_path(name: str, version: str) -> str:
+    prefix = f"{version}/"
+    if name.startswith(prefix):
+        return name[len(prefix) :]
+    return name
+
+
+def labels_for_asm(labels: dict[str, dict[int, list[str]]], unit: str, asm_name: str) -> dict[int, list[str]]:
+    return labels.get(f"{asm_name}.s") or labels.get(f"{Path(unit).name}.s", {})
 
 
 def parse_labels(path: Path) -> dict[str, dict[int, list[str]]]:
@@ -73,7 +85,14 @@ def fallback_function_address(name: str) -> int | None:
     return int(match.group(1), 16)
 
 
-def function_address(name: str, label_addresses: dict[str, int], segment_vram: int) -> int | None:
+def function_address(
+    name: str,
+    label_addresses: dict[str, int],
+    segment_vram: int,
+    output_labels: dict[int, list[str]],
+) -> int | None:
+    if output_labels:
+        return min(output_labels)
     return label_addresses.get(name) or fallback_function_address(name) or segment_vram
 
 
@@ -113,7 +132,7 @@ def main() -> int:
     config = root / "configs" / args.version / f"{args.basename}.yaml"
     target = root / "assets" / args.version / f"{args.basename}.exe"
     src_root = root / "src" / args.basename / args.version
-    out_dir = root / "asm" / "nonmatchings" / args.version / args.basename
+    out_dir = root / "asm" / args.version / args.basename / "nonmatchings"
     labels = parse_labels(root / "configs" / args.version / f"nonmatching_labels.{args.basename}.txt")
 
     if not config.exists() or not target.exists() or not src_root.exists():
@@ -134,12 +153,19 @@ def main() -> int:
         if kind == "c":
             asm_wrappers = asm_wrappers_by_unit.get(name, [])
             for index, asm_name in enumerate(asm_wrappers):
-                func_vram = function_address(asm_name, label_addresses, vram)
+                output_labels = labels_for_asm(labels, name, asm_name)
+                func_vram = function_address(asm_name, label_addresses, vram, output_labels)
                 if func_vram is None:
                     continue
 
                 if index + 1 < len(asm_wrappers):
-                    next_vram = function_address(asm_wrappers[index + 1], label_addresses, vram)
+                    next_name = asm_wrappers[index + 1]
+                    next_vram = function_address(
+                        next_name,
+                        label_addresses,
+                        vram,
+                        labels_for_asm(labels, name, next_name),
+                    )
                 else:
                     next_vram = BASE_VRAM + (end - BASE_OFF)
                 if next_vram is None or next_vram <= func_vram:
@@ -147,17 +173,17 @@ def main() -> int:
 
                 func_start = start + (func_vram - vram)
                 func_end = start + (next_vram - vram)
-                output = out_dir / f"{asm_name}.s"
+                output = out_dir / unit_output_path(name, args.version) / f"{asm_name}.s"
                 write_words(
                     output,
                     '.section .text, "ax"',
                     target_bytes[func_start:func_end],
                     func_vram,
-                    with_entry_label(labels.get(output.name, {}), func_vram, asm_name),
+                    with_entry_label(output_labels, func_vram, asm_name),
                 )
                 generated += 1
         elif kind == ".rodata" and f"{stem}_rodata" in rodata_wrappers:
-            output = out_dir / f"{stem}_rodata.s"
+            output = out_dir / rodata_wrappers[f"{stem}_rodata"] / f"{stem}_rodata.s"
             write_words(output, '.section .rodata, "a"', data, vram, labels.get(output.name, {}))
             generated += 1
 

@@ -34,4 +34,4 @@ char *CdIntstr(s32 arg0) {
     return D_800990E0[arg0];
 }
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8006A534);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8006A494", func_8006A534);

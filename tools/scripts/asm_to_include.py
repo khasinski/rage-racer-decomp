@@ -26,7 +26,7 @@ def tu_name(path: Path, src_root: Path) -> str:
 
 
 def include_asm_path(version: str, basename: str, tu: str, symbol: str) -> str:
-    return f'INCLUDE_ASM("asm/nonmatchings/{version}/{basename}/{tu}", {symbol});'
+    return f'INCLUDE_ASM("asm/{version}/{basename}/nonmatchings/{tu}", {symbol});'
 
 
 def convert(path: Path, src_root: Path, version: str, basename: str) -> list[str]:

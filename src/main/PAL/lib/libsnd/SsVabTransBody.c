@@ -1,5 +1,5 @@
 #include "common.h"
 
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsVabTransBody);
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsVabTransCompleted);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsVabTransBody", SsVabTransBody);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsVabTransBody", SsVabTransCompleted);

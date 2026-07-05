@@ -1,7 +1,7 @@
 #include "common.h"
 
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsUtSetReverbType);
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsUtGetReverbType);
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsUtSetReverbDepth);
-INCLUDE_ASM("asm/nonmatchings/PAL/main", SsUtSetReverbDelay);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsUtSetReverbType", SsUtSetReverbType);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsUtSetReverbType", SsUtGetReverbType);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsUtSetReverbType", SsUtSetReverbDepth);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsUtSetReverbType", SsUtSetReverbDelay);
