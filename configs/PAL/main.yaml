@@ -940,8 +940,6 @@ segments:
       - [0x638BC, c, PAL/lib/libsnd/SsVabTransBody]
       - [0x639A8, c, PAL/lib/libsnd/SpuVmDamper]
       - [0x63A0C, c, PAL/lib/libsnd/SsUtGetProgAtr]
-      - [0x63B14, c, PAL/lib/libsnd/SpuVmVSetUp]
-      - [0x63BD8, c, PAL/lib/libsnd/SsUtGetVagAtr]
       - [0x63E14, c, PAL/lib/libsnd/SsUtSetReverbType]
       - [0x64020, c, PAL/lib/libsnd/SsUtSetVagAtr]
       - [0x641E8, c, PAL/main/func_800739E8, cc=2.6.3]
