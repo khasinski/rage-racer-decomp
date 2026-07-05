@@ -4,7 +4,8 @@
 extern u8 D_80082FD9[];
 extern s32 D_8009B9AC;
 
-void func_80063C88(s32 arg0) {
+void LibcPutChar(s32 arg0) asm("func_80063C88");
+void LibcPutChar(s32 arg0) {
     u8 c;
     register s32 value asm("$3") = arg0;
 
@@ -17,13 +18,13 @@ void func_80063C88(s32 arg0) {
         goto other;
     }
 
-    func_80063C88(13);
+    LibcPutChar(13);
     D_8009B9AC = 0;
     goto output;
 
 tab:
     do {
-        func_80063C88(0x20);
+        LibcPutChar(0x20);
     } while ((D_8009B9AC & 7) != 0);
     return;
 
