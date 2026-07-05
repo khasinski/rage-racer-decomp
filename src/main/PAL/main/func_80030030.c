@@ -3,7 +3,3 @@
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80030030", func_80030030);
 
-#if 0
-void func_80030030(void) {
-}
-#endif

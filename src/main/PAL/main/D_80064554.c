@@ -3,7 +3,3 @@
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/D_80064554", D_80064554);
 
-#if 0
-void D_80064554(void) {
-}
-#endif
