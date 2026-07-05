@@ -106,7 +106,6 @@ segments:
       - [0x868C, c, PAL/main/func_80017E8C]
       - [0x8838, c, PAL/main/func_80018038]
       - [0x88CC, c, PAL/main/func_800180CC]
-      - [0x8AD0, c, PAL/main/func_800182D0]
       - [0x8B44, c, PAL/main/func_80018344]
       - [0x8B9C, c, PAL/main/func_8001839C]
       - [0x8D30, c, PAL/main/func_80018530]
