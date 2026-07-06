@@ -1,15 +1,7 @@
 #include "common.h"
+#include "psyq/gpu.h"
 
 typedef unsigned int u_long;
-
-typedef struct {
-    u8 x;
-    u8 pad1;
-    u8 y;
-    u8 pad3;
-    s16 w;
-    s16 h;
-} RECT;
 
 extern u8 g_GraphType asm("D_800941E8");
 extern u8 g_GraphTypeArray[] asm("D_800941E8");
@@ -20,7 +12,7 @@ u32 _get_mode(s32 arg0, s32 arg1, u32 arg2) asm("func_800669F0");
 u32 Gpu_BuildDrawAreaTopLeftCmd(s32 arg0, s32 arg1) asm("func_80066A4C");
 u32 Gpu_BuildDrawAreaBottomRightCmd(s32 arg0, s32 arg1) asm("func_80066B18");
 u32 Gpu_BuildDrawOffsetCmd(s32 arg0, s32 arg1) asm("func_80066BE4");
-u_long Gpu_BuildTexWindowCmd(RECT *tw) asm("func_80066C2C");
+u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
 
 u32 _get_mode(s32 arg0, s32 arg1, u32 arg2) {
     register volatile u8 *modep asm("$2") = &g_GraphType;
@@ -205,7 +197,7 @@ u32 Gpu_BuildDrawOffsetCmd(s32 arg0, s32 arg1) {
     return y | x;
 }
 
-u_long Gpu_BuildTexWindowCmd(RECT *tw) {
+u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {
     u_long pad[4];
 
     if (tw != 0) {

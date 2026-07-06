@@ -16,6 +16,15 @@ typedef struct GpuRectPacked {
     s16 h;
 } GpuRectPacked;
 
+typedef struct GpuTexWindow {
+    u8 x;
+    u8 pad1;
+    u8 y;
+    u8 pad3;
+    s16 w;
+    s16 h;
+} GpuTexWindow;
+
 typedef struct DispEnv {
     Rect disp;
     Rect screen;
