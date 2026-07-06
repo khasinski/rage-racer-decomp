@@ -153,7 +153,45 @@ s32 func_8005BA20(s32 header, s32 body, u16 *table) {
     return D_801F17B4;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005BB1C);
+s32 func_8005BB1C(s32 header, s32 body, s32 table) {
+    register s32 bodyReg asm("$16") = body;
+    register s32 tableReg asm("$19") = table;
+    register s16 *vabIdPtr asm("$18");
+    register s32 currentVabId asm("$5");
+    register s32 fail asm("$17");
+    register s32 ret asm("$2");
+    register s32 flags asm("$3");
+
+    asm("" : "=r"(bodyReg), "=r"(tableReg) : "0"(bodyReg), "1"(tableReg));
+    ret = func_80072C4C(header, -1, 0x6A000);
+    vabIdPtr = &D_801E6CAE;
+    *vabIdPtr = ret;
+    asm volatile("" : "=r"(ret) : "0"(ret));
+
+    currentVabId = (s16)ret;
+    fail = -1;
+    if (currentVabId == fail) {
+        func_8001674C(D_8001267C);
+        func_80063D9C(1);
+    }
+
+    ret = func_800730BC(bodyReg, currentVabId);
+    *vabIdPtr = ret;
+    if ((s16)ret == fail) {
+        func_8001674C(D_80012694);
+        func_80063D9C(1);
+    }
+
+    func_8007317C(1);
+    if (tableReg != 0) {
+        GameLoadAudioParameterTable((u16 *)tableReg);
+    }
+
+    flags = D_801E6C9C;
+    D_801E6CC0 = 1;
+    D_801E6C9C = flags | 0x20;
+    return 0;
+}
 
 void func_8005BC14(void) {
     register s32 liveSlot asm("$16");
