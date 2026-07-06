@@ -1,11 +1,32 @@
-#include "common.h"
+#include "psyq/snd.h"
+#include "psyq/spu.h"
 
+extern u8 D_801E4CFC[];
+extern u32 D_801E8AB8[];
+extern u32 D_801F17BC[];
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsVabTransBody", SsVabTransBody);
+s16 SsVabTransBody(u8 *addr, s16 vab_id) {
+    s16 id;
+    s32 index;
+    u32 spu_addr;
 
-s16 SsVabTransCompleted(s16 immediate_flag) asm("func_8007317C");
+    if ((u16)vab_id < 17) {
+        id = vab_id;
+        if (D_801E4CFC[id] == 2) {
+            index = id * 4;
+            spu_addr = *(u32 *)((u8 *)D_801F17BC + index);
+            SpuSetTransferMode(0);
+            SpuSetTransferStartAddr(spu_addr);
+            Spu_ReadFromSpu((s32)addr, *(u32 *)((u8 *)D_801E8AB8 + index));
+            D_801E4CFC[id] = 1;
+            return id;
+        }
+    }
+
+    _spu_setTransferCompletionFlag(0);
+    return -1;
+}
+
 s16 SsVabTransCompleted(s16 immediate_flag) {
-    s32 SpuIsTransferCompleted(s32 wait) asm("func_8007B1EC");
-
     return SpuIsTransferCompleted(immediate_flag);
 }
