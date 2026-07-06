@@ -13,8 +13,8 @@ void func_80055454(void) {
     D_8019CA18 = -1;
     index = D_801E40D4 - 1;
     if (index >= 0) {
-        register s32 one asm("a1") = 1;
-        register s32 offset asm("v0") = index * 8;
+        s32 one = 1;
+        s32 offset = index * 8;
         ptr = (GameCarEntry *)(offset + (s32)D_8019C7C8);
         while (index >= 0) {
             if (ptr->enabled == one) {
@@ -29,8 +29,8 @@ void func_80055454(void) {
     D_801E41A4 = -1;
     index = D_801E40D4 + 1;
     if (index < 13) {
-        register s32 one asm("a1") = 1;
-        register s32 offset asm("v0") = index * 8;
+        s32 one = 1;
+        s32 offset = index * 8;
         ptr = (GameCarEntry *)(offset + (s32)D_8019C7C8);
         while (index < 13) {
             if (ptr->enabled == one) {
