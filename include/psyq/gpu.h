@@ -18,7 +18,19 @@ typedef struct GpuRectPacked {
 
 typedef struct DispEnv {
     Rect disp;
+    Rect screen;
+    u8 isinter;
+    u8 isrgb24;
 } DispEnv;
+
+typedef struct DrawEnv {
+    Rect clip;
+    s16 ofs[2];
+    Rect tw;
+    u16 tpage;
+    u8 dtd;
+    u8 dfe;
+} DrawEnv;
 
 typedef struct DrawPacket {
     u8 pad0[3];
