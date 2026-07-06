@@ -15,7 +15,7 @@ void func_80019730(void);
 s32 func_80019844(void);
 
 void func_800265BC(void) {
-    register s32 initialValue asm("$16");
+    s32 initialValue;
 
     func_80065860(0);
     func_8001BE9C(0, 0, 0);

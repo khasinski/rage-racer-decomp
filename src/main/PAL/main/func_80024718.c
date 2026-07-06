@@ -9,7 +9,7 @@ void func_80024420(void);
 void func_80023FE8(void);
 
 void func_80024718(void) {
-    register u16 *buttonPtr asm("$16");
+    u16 *buttonPtr;
     s32 oldCursor;
     u16 buttons;
 

@@ -12,7 +12,7 @@ void func_80024B6C(void);
 void func_8005D6EC(s32 arg0);
 
 void func_80024F28(void) {
-    register u16 *buttonsPtr asm("$16");
+    u16 *buttonsPtr;
     u16 buttons;
     s32 old;
     s32 index;
