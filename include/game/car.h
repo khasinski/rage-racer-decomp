@@ -27,7 +27,9 @@ typedef struct GameCarRuntime {
     s32 field_68;
     s32 field_6C;
     s32 field_70;
-    u8 pad74[8];
+    u8 pad74[4];
+    s16 field_78;
+    s16 field_7A;
     s16 velocityX;
     s16 velocityZ;
     s16 motionActive;
