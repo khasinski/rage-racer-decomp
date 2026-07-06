@@ -22,8 +22,8 @@ u32 func_8005A2CC(s32 arg0) {
         }
         amount = 0;
     } else {
-        register s32 diff asm("$3") = 0x1FC;
-        register s32 product asm("$2");
+        s32 diff = 0x1FC;
+        s32 product;
 
         value = arg0 + D_8009B2EC;
         D_8009B2EC = value;

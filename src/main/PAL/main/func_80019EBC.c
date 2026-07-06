@@ -6,9 +6,9 @@ extern s32 D_801E8AF8;
 extern s32 D_8019CA6C;
 
 void func_80019EBC(void) {
-    register s32 value asm("$4") = 1;
-    register s32 i asm("$3") = 0xFF;
-    register u8 *ptr asm("$2") = &D_801E4CF7;
+    s32 value = 1;
+    s32 i = 0xFF;
+    u8 *ptr = &D_801E4CF7;
 
     do {
         *ptr = value;

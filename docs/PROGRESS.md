@@ -6,4 +6,4 @@ A translation unit counts as decompiled only when it is plain C with no assembly
 
 | Binary | Functions | % | Code bytes | % |
 |---|---:|---:|---:|---:|
-| `SCES_006.50 (main)` | 260/842 | 30.9% | 31552/409116 | 7.7% |
+| `SCES_006.50 (main)` | 262/842 | 31.1% | 31832/409116 | 7.8% |
