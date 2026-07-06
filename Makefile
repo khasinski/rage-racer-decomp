@@ -91,6 +91,7 @@ $(BUILD)/src/main/PAL/main/func_8002FAE8.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8002FBEC.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8002FC84.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8002FD9C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/func_8002F4E4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80024420.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80027A84.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80027D84.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
