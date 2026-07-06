@@ -30,7 +30,7 @@ arg1_done:
         D_801E6CE4 = arg0;
         D_801E6CE8 = arg1;
     } else {
-        register s32 temp asm("$2") = (arg0 + arg1) / 2;
+        s32 temp = (arg0 + arg1) / 2;
 
         D_801E6CE4 = temp;
         D_801E6CE8 = temp;
