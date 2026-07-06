@@ -4,9 +4,8 @@
 extern u32 D_8009B9A8;
 
 s32 GameRandom15(void) {
-    register u32 value asm("$2");
+    u32 value = D_8009B9A8;
 
-    value = D_8009B9A8;
     value *= 0x41C64E6D;
     value += 0x3039;
     D_8009B9A8 = value;
