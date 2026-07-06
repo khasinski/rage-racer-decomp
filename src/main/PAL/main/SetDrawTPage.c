@@ -1,19 +1,18 @@
 #include "common.h"
 
-s32 GetGraphType(void) asm("func_800657E4");
-void SetDrawTPage(u8 *arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_800650E4");
+s32 func_800657E4(void);
 
-void SetDrawTPage(u8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
+void func_800650E4(u8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     register s32 encoded asm("$2");
     s32 mode;
 
     arg0[3] = 1;
-    mode = GetGraphType();
+    mode = func_800657E4();
     if (mode == 1) {
         goto high_mode;
     }
 
-    mode = GetGraphType();
+    mode = func_800657E4();
     if (mode != 2) {
         goto low_mode;
     }
