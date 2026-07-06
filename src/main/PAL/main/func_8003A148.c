@@ -24,11 +24,11 @@ void func_8003A148(GameCarRuntime *car, s32 arg1) {
         register s32 scaled asm("$2");
 
         if (current < 0) {
-            trackIndex = carReg->field_30;
+            trackIndex = carReg->trackPointIndex;
             point = &D_8009E688[trackIndex];
             limit = point->field_10;
         } else {
-            trackIndex = carReg->field_30;
+            trackIndex = carReg->trackPointIndex;
             point = &D_8009E688[trackIndex];
             limit = point->field_12;
         }
@@ -42,11 +42,11 @@ void func_8003A148(GameCarRuntime *car, s32 arg1) {
         register GameTrackPoint *point asm("$2");
 
         if (current < 0) {
-            trackIndex = carReg->field_30;
+            trackIndex = carReg->trackPointIndex;
             point = &D_8009E688[trackIndex];
             limit = (point->field_10 << 2) / 7;
         } else {
-            trackIndex = carReg->field_30;
+            trackIndex = carReg->trackPointIndex;
             point = &D_8009E688[trackIndex];
             limit = (point->field_12 << 2) / 7;
         }

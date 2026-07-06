@@ -22,7 +22,7 @@ typedef struct GameCarRuntime {
     s32 field_24;
     s32 field_28;
     u8 pad2C[4];
-    s32 field_30;
+    s32 trackPointIndex;
     u8 pad34[0x34];
     s32 field_68;
     s32 field_6C;
@@ -48,7 +48,7 @@ typedef struct GameCarRuntime {
     s16 field_9A;
     s16 field_9C;
     s16 field_9E;
-    s32 field_A0;
+    s32 headingAngle;
     s32 field_A4;
     s32 field_A8;
     s16 activeFlag;

@@ -34,7 +34,7 @@ mode1:
     goto final_store;
 
 mode2:
-    value = func_8002FB60(obj->field_30, (s32)arg1);
+    value = func_8002FB60(obj->trackPointIndex, (s32)arg1);
     temp = func_8002A788(value, obj->field_24);
     if (temp >= 0x401) {
         temp = 0x800 - temp;
