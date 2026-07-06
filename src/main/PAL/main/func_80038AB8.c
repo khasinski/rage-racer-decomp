@@ -1,13 +1,13 @@
 #include "common.h"
 #include "game/car.h"
 
-void func_80038AB8(GameCarMotionWindow *arg0) {
+void func_80038AB8(GameCarRuntime *arg0) {
     arg0->field_8A = 0;
-    arg0->mode = 0;
-    arg0->modeTimer = 0;
-    arg0->field_88 = 0;
-    arg0->active = 0;
-    arg0->timer = 0;
+    arg0->motionMode = 0;
+    arg0->motionModeTimer = 0;
+    arg0->motionValue = 0;
+    arg0->motionActive = 0;
+    arg0->motionTimer = 0;
     arg0->velocityX = 0;
     arg0->velocityZ = 0;
     arg0->field_8C = 0;

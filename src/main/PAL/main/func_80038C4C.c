@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/car.h"
 
-void func_80038C4C(GameCarMotionWindow *arg0) {
-    register GameCarMotionWindow *obj asm("$6") = arg0;
+void func_80038C4C(GameCarRuntime *arg0) {
+    register GameCarRuntime *obj asm("$6") = arg0;
     register s32 velX asm("$3");
     register s32 subX asm("$4");
     register s32 subZ asm("$5");
@@ -15,12 +15,12 @@ void func_80038C4C(GameCarMotionWindow *arg0) {
 
     __asm__ volatile("" : "=r"(obj) : "0"(obj));
 
-    if (obj->active != 0) {
-        timer = obj->timer - 1;
-        obj->timer = timer;
+    if (obj->motionActive != 0) {
+        timer = obj->motionTimer - 1;
+        obj->motionTimer = timer;
         if ((s32)(timer << 16) <= 0) {
-            obj->active = 0;
-            obj->timer = 0;
+            obj->motionActive = 0;
+            obj->motionTimer = 0;
         }
 
         velX = obj->velocityX;
