@@ -4,8 +4,7 @@ extern u32 D_80083060[];
 extern u32 D_800830A0[];
 extern u32 D_800830E4[];
 
-u32 *DecDCTGetEnv(u32 *arg0) asm("func_80063E7C");
-u32 *DecDCTGetEnv(u32 *arg0) {
+u32 *func_80063E7C(u32 *arg0) {
     u32 *dst;
     u32 *src;
     s32 i;
