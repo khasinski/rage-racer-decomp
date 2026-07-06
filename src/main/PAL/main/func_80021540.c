@@ -8,7 +8,7 @@ void func_80021540(void) {
     s32 offset;
     s32 current;
     s32 one;
-    register s32 value asm("$2");
+    s32 value;
 
     D_801E4DA8 = 0;
     one = 1;
