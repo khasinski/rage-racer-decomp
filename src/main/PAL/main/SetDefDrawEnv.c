@@ -1,8 +1,6 @@
 #include "common.h"
 
-u8 *SetDefDrawEnv(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_80064B78");
-
-u8 *SetDefDrawEnv(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+u8 *func_80064B78(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     u8 *ret;
 
     ret = arg0;

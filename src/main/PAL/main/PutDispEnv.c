@@ -8,13 +8,11 @@ typedef struct GpuFuncs {
     void (*drawSync)(s32 mode);
 } GpuFuncs;
 
-extern GpuFuncs *g_GpuFuncs asm("D_800941E0");
+extern GpuFuncs *D_800941E0;
 
-void PutDispEnv(u8 *arg0) asm("func_80065E00");
-
-void PutDispEnv(u8 *arg0) {
+void func_80065E00(u8 *arg0) {
     u32 mode = arg0[3];
 
-    g_GpuFuncs->drawSync(0);
-    g_GpuFuncs->putDispEnv(arg0 + 4, mode);
+    D_800941E0->drawSync(0);
+    D_800941E0->putDispEnv(arg0 + 4, mode);
 }
