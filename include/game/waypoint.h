@@ -13,7 +13,7 @@ typedef struct TrackWaypointSeed {
 typedef struct TrackWaypointRuntime {
     s32 active;
     s32 x;
-    s32 code;
+    s32 height;
     s32 y;
     s32 field10;
     s32 scale;
