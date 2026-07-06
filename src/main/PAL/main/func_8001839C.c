@@ -1,14 +1,9 @@
 #include "common.h"
-
-typedef struct AssetTripleHeader {
-    s32 firstOffset;
-    s32 secondOffset;
-    s32 thirdOffset;
-} AssetTripleHeader;
+#include "game/asset.h"
 
 extern s32 D_8007BED8;
 extern s32 D_8007C704;
-extern AssetTripleHeader *D_8019C904;
+extern GameAssetTripleHeader *D_8019C904;
 extern void *D_8019C754;
 extern void *D_801E8AB0;
 extern void *D_801F17A8;
@@ -56,7 +51,7 @@ s32 func_80018410(void) {
 }
 
 void func_80018484(void) {
-    register AssetTripleHeader *header asm("$2");
+    register GameAssetTripleHeader *header asm("$2");
     register s32 firstOffset asm("$3");
     register s32 secondOffset asm("$3");
     register s32 thirdOffset asm("$4");
@@ -75,7 +70,7 @@ void func_80018484(void) {
             __asm__ volatile("" ::: "memory");
             D_8007BED8 = 0;
             secondOffset = (s32)((u8 *)header + secondOffset);
-            header = (AssetTripleHeader *)((u8 *)header + thirdOffset);
+            header = (GameAssetTripleHeader *)((u8 *)header + thirdOffset);
             __asm__ volatile("" ::: "memory");
             D_8019C754 = (void *)secondOffset;
             D_801E8AB0 = header;

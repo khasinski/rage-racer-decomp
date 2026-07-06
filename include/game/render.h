@@ -2,10 +2,28 @@
 #define GAME_RENDER_H
 
 #include "common.h"
+#include "psyq/gte.h"
 
 typedef struct GameRenderAxisMatrix {
     s16 m[3][3];
 } GameRenderAxisMatrix;
+
+typedef struct GameScratchpadRenderState {
+    s32 pad0;
+    void *primData;
+    u8 pad8[0x14];
+    s32 depth;
+    u8 pad20[8];
+    Matrix matrix;
+    u8 pad48[0x20];
+    s32 orderingFlag;
+    s32 mode;
+    u8 pad70[8];
+    s16 x0;
+    s16 y0;
+    s16 x1;
+    s16 y1;
+} GameScratchpadRenderState;
 
 typedef struct GameRenderSourcePoint {
     u16 field_0;

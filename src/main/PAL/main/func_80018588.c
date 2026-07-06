@@ -1,22 +1,11 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/car.h"
-
-typedef struct AssetTripleHeader {
-    s32 firstOffset;
-    s32 secondOffset;
-    s32 thirdOffset;
-} AssetTripleHeader;
-
-typedef struct CarModelAsset {
-    u8 pad0[0x20];
-    s32 modelDataOffset;
-    s32 imageDataOffset;
-} CarModelAsset;
 
 extern s32 D_8007BED8;
 extern u32 D_8009E87C;
-extern CarModelAsset *D_8009E698;
-extern AssetTripleHeader *D_8019CAFC;
+extern GameCarModelAsset *D_8009E698;
+extern GameAssetTripleHeader *D_8019CAFC;
 extern s32 D_8019CA64;
 extern GameCarEntry *D_8019C7C8;
 extern s32 D_801E40D4;
@@ -44,9 +33,9 @@ void func_80018588(void) {
     register s32 state asm("$3") = D_8007BED8;
     register s32 state2 asm("$16");
     register u8 *carModelBase asm("$16");
-    register AssetTripleHeader *header asm("$2");
-    register AssetTripleHeader *headerArg asm("$4");
-    register CarModelAsset *model asm("$2");
+    register GameAssetTripleHeader *header asm("$2");
+    register GameAssetTripleHeader *headerArg asm("$4");
+    register GameCarModelAsset *model asm("$2");
     register GameCarEntry *entry asm("$2");
     register s32 carIndex asm("$4");
     register s32 indexOffset asm("$2");
@@ -83,7 +72,7 @@ state_2:
         if ((func_8005B89C() << 16) != 0) {
             func_8005DBD8();
             D_8007BED8 = 3;
-            D_8019CAFC = (AssetTripleHeader *)D_801E8AB0;
+            D_8019CAFC = (GameAssetTripleHeader *)D_801E8AB0;
         }
         goto done;
 state_3:
@@ -94,7 +83,7 @@ state_3:
                 secondOffset = header->secondOffset;
                 firstOffset = header->firstOffset;
                 secondOffset = (s32)((u8 *)header + secondOffset);
-                header = (AssetTripleHeader *)((u8 *)header + firstOffset);
+                header = (GameAssetTripleHeader *)((u8 *)header + firstOffset);
                 D_8019CA64 = (s32)header;
                 D_801F17A8 = (u8 *)secondOffset;
                 func_80017A6C();

@@ -1,22 +1,5 @@
 #include "common.h"
-#include "psyq/gte.h"
-
-typedef struct ScratchpadRenderState {
-    s32 pad0;
-    void *primData;
-    u8 pad8[0x14];
-    s32 depth;
-    u8 pad20[8];
-    Matrix matrix;
-    u8 pad48[0x20];
-    s32 orderingFlag;
-    s32 mode;
-    u8 pad70[8];
-    s16 x0;
-    s16 y0;
-    s16 x1;
-    s16 y1;
-} ScratchpadRenderState;
+#include "game/render.h"
 
 extern Matrix D_8009AF00;
 extern u8 * volatile D_8019C900;
@@ -29,11 +12,11 @@ void func_80069A58(s32 arg0, s32 arg1);
 void func_80069A78(s32 arg0);
 
 void func_8001ABD8(void) {
-    ScratchpadRenderState *scratch;
+    GameScratchpadRenderState *scratch;
     register s32 v0reg asm("$2");
     register s32 v1reg asm("$3");
 
-    scratch = (ScratchpadRenderState *)0x1F800000;
+    scratch = (GameScratchpadRenderState *)0x1F800000;
 
     func_80069A58(0xA0, 0x78);
     func_80069A78(0x140);
