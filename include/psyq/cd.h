@@ -47,6 +47,12 @@ typedef struct StRingEntry {
     CdlLOC loc;
 } StRingEntry;
 
+typedef struct CdSearchDirEntry {
+    s32 type;
+    u8 pad4[4];
+    u8 name[0x24];
+} CdSearchDirEntry;
+
 char *CdComstr(s32 cmd) asm("func_8006A4CC");
 char *CdIntstr(s32 intr) asm("func_8006A500");
 s32 CdSetDebug(s32 level) asm("func_8006A4B4");
