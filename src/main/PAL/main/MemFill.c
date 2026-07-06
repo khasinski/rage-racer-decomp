@@ -1,9 +1,6 @@
 #include "common.h"
 
-void MemFill(u8 *dst, u8 value, s32 count) asm("func_80068180");
-u8 *MemCopy(u8 *dst, u8 *src, s32 count) asm("func_800681BC");
-
-void MemFill(u8 *dst, u8 value, s32 count) {
+void func_80068180(u8 *dst, u8 value, s32 count) {
     volatile s32 unused;
     s32 i = count - 1;
 
@@ -25,7 +22,7 @@ u32 func_800681AC[4] __attribute__((section(".text"))) = {
     0,
 };
 
-u8 *MemCopy(u8 *dst, u8 *src, s32 count) {
+u8 *func_800681BC(u8 *dst, u8 *src, s32 count) {
     u8 *ret;
 
     if (dst == 0) {
