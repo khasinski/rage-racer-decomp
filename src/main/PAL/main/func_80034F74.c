@@ -15,8 +15,8 @@ void func_80032280(void *arg0);
 void func_8003F0F8(void);
 
 void func_80034F74(void) {
-    register void *primary asm("s0");
-    register void *secondary asm("s1");
+    void *primary;
+    void *secondary;
 
     func_8003F0F8();
 
