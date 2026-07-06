@@ -19,7 +19,7 @@ void func_800394DC(GameCarRuntime *obj, s32 arg1) {
     register s32 raw asm("$2");
     s32 stack[2];
 
-    raw = objReg->field_70;
+    raw = objReg->trackProgress;
     asm volatile("" : : "r"(stack));
     scene = D_801E408C;
     target = raw >> 4;
