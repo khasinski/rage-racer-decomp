@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/car.h"
 
 extern u32 D_801E40B8;
 extern u32 D_8009E694;
@@ -6,7 +7,7 @@ extern s32 D_8009E66C;
 extern u32 D_8009E870;
 extern u32 D_801E4030;
 extern u8 D_801F18CC[];
-extern u8 D_801F1854[];
+extern GameCarRuntime D_801F1854[];
 
 void func_800266D0(void);
 void func_80033AA0(s32 arg0, u32 arg1);
@@ -15,7 +16,7 @@ void func_800268EC(void);
 s32 func_8001A1F0(u32 arg0, s32 arg1);
 void func_8003BB50(void);
 void func_80019EFC(s32 arg0);
-void func_80043BCC(u32 arg0, u8 *arg1);
+void func_80043BCC(u32 arg0, GameCarRuntime *arg1);
 void func_800389F0(void);
 void func_80045CD4(void);
 void func_800418D4(void);
@@ -60,9 +61,7 @@ void func_80026920(void) {
     offset = (((((index * 3) * 4) + index) * 8) - index) * 4;
     func_80019EFC(*(s16 *)&D_801F18CC[offset]);
 
-    func_80043BCC(
-        D_8009E870,
-        &D_801F1854[(((((D_8009E66C * 3) * 4) + D_8009E66C) * 8) - D_8009E66C) * 4]);
+    func_80043BCC(D_8009E870, &D_801F1854[D_8009E66C]);
     func_800389F0();
     func_80045CD4();
     func_800418D4();
