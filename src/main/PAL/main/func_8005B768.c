@@ -6,6 +6,8 @@ s32 func_800731CC(void);
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
+s32 func_8005E4EC(s32 slot, s32 header, s32 body, s32 seq);
+s32 func_8005BA20(s32 header, s32 body, u16 *table);
 s32 func_8005E600(s32 arg0);
 s32 func_8005B948(s32 arg0);
 void func_8001674C(char *arg0);
@@ -22,17 +24,84 @@ void func_80071C24(void);
 
 extern s32 D_801E6C9C;
 extern s32 D_801E6CA0;
+extern s16 D_801E6CA8[];
 extern s16 D_801E6CB0;
 extern s16 D_801E6CB2;
 extern s16 D_801E6CAE;
 extern s32 D_801E6CC0;
 extern s32 D_8009E68C;
 extern s32 D_801F17B4;
+extern s32 D_800125EC[];
 extern s32 D_800125F8;
 extern char D_8001267C[];
 extern char D_80012694[];
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005B768);
+s32 func_8005B768(s32 slot, s32 header, s32 body, s32 table) {
+    register s32 slotReg asm("$16");
+    register s32 bodyReg asm("$17");
+    register s16 *vabIdPtr asm("$16");
+    register s32 currentVabId asm("$5");
+    register s32 ret asm("$2");
+
+    asm("" : "=r"(slotReg) : "0"(slot));
+    bodyReg = body;
+
+    if (slotReg == 3) {
+        ret = func_8005BA20(header, bodyReg, (u16 *)table);
+        return (s16)ret;
+    }
+
+    {
+        register s32 seqSlotArg asm("$4") = slotReg;
+
+        if (slotReg == 1) {
+            goto loadSeq;
+        }
+        if (slotReg != 6) {
+            goto loadVab;
+        }
+
+loadSeq:
+        {
+            asm volatile("" ::: "$6");
+            ret = func_8005E4EC(seqSlotArg, header, bodyReg, table);
+            return (s16)ret;
+        }
+    }
+
+loadVab:
+    D_8009E68C = slotReg;
+    ret = func_80072C4C(header, -1, D_800125EC[slotReg]);
+    {
+        register s16 *vabIdBase asm("$4") = D_801E6CA8;
+        register s32 offset asm("$3") = slotReg * 2;
+        vabIdPtr = (s16 *)((s32)vabIdBase + offset);
+    }
+    *vabIdPtr = ret;
+    asm volatile("" : "=r"(ret) : "0"(ret));
+
+    {
+        register s32 fail asm("$18");
+
+        currentVabId = (s16)ret;
+        fail = -1;
+        if (currentVabId == fail) {
+            func_8001674C(D_8001267C);
+            func_80063D9C(1);
+        }
+
+        ret = func_800730BC(bodyReg, currentVabId);
+        *vabIdPtr = ret;
+        if ((s16)ret == fail) {
+            func_8001674C(D_80012694);
+            func_80063D9C(1);
+        }
+    }
+
+    ret = func_8007317C(0);
+    D_801F17B4 = (s16)ret;
+    return (s16)ret;
+}
 
 s32 func_8005B89C(void) {
     s32 completed;
