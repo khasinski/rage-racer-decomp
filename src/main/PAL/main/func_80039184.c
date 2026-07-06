@@ -1,10 +1,11 @@
 #include "common.h"
+#include "game/car.h"
 
 extern s32 D_801E408C;
 extern s32 D_801E40D8;
 extern u8 *D_801E4150;
 
-s32 func_80039184(u8 *arg0) {
+s32 func_80039184(GameCarRuntime *arg0) {
     register u8 *base asm("t2");
     register s32 pos0 asm("a1");
     register s32 pos1 asm("t0");
@@ -21,13 +22,13 @@ s32 func_80039184(u8 *arg0) {
     register s32 resultOffset asm("v0");
 
     base = D_801E4150;
-    if (*(s32 *)(arg0 + 0xA4) < 0x320) {
+    if (arg0->field_A4 < 0x320) {
         return 0;
     }
 
-    pos0 = *(s32 *)(arg0 + 0x70);
-    pos1 = *(s32 *)(arg0 + 0x74);
-    row = *(s16 *)(arg0 + 0xB8);
+    pos0 = arg0->field_70;
+    pos1 = *(s32 *)&arg0->pad74[0];
+    row = arg0->routeRow;
 
     if (D_801E408C != 0) {
         pos0 = D_801E40D8 - pos0;
