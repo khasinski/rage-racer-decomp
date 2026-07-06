@@ -8,7 +8,8 @@ typedef struct GameTrackPoint {
     s32 z;
     s16 y;
     s16 angle;
-    u8 padC[0xC];
+    u8 padC[0xA];
+    s16 field_16;
 } GameTrackPoint;
 
 #endif
