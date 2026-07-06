@@ -15,10 +15,10 @@ extern s32 D_8009B180;
 void func_80042D10(void);
 
 void func_80042FA0(s32 arg0) {
-    register s32 offset asm("a1");
-    register s32 scale asm("a2");
-    register s32 magic asm("a0");
-    register s32 product asm("v1");
+    s32 offset;
+    s32 scale;
+    s32 magic;
+    s32 product;
     s32 value;
 
     offset = D_8007F5FC;
