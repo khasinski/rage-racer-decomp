@@ -18,7 +18,7 @@ s32 func_8002FD9C(s32 arg0, s32 arg1) {
 
     prev_index = arg0 - 2;
     if (prev_index < 0) {
-        register s32 tmp asm("$2");
+        s32 tmp;
         tmp = D_8009E6A8;
         tmp -= 2;
         prev_index = tmp + arg0;

@@ -14,7 +14,7 @@ void func_80042BF0(void);
 void func_800266D0(void);
 
 void func_80026824(void) {
-    register s32 mode asm("$16");
+    s32 mode;
     u32 timer;
 
     timer = D_801E40B8;
