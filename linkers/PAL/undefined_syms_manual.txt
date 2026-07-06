@@ -1,5 +1,7 @@
 /* Manual PAL linker symbols go here. */
 
+func_8006EAFC = SsSetMVol;
+
 func_80053730 = 0x80053730;
 func_80054C84 = 0x80054C84;
 func_80054D10 = 0x80054D10;
