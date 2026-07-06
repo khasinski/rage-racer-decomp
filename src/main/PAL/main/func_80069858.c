@@ -318,8 +318,31 @@ void func_80069B14(void *arg0, s32 arg1, void *arg2) {
         : "memory");
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069B38);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069B60);
+asm(".globl func_80069B38\n"
+    "func_80069B38:\n"
+    "lwc2 $9,0($4)\n"
+    "lwc2 $10,4($4)\n"
+    "lwc2 $11,8($4)\n"
+    "nop\n"
+    ".word 0x4AA80428\n"
+    "swc2 $25,0($5)\n"
+    "swc2 $26,4($5)\n"
+    "swc2 $27,8($5)\n"
+    "jr $31\n"
+    "move $2,$5");
+
+asm(".globl func_80069B60\n"
+    "func_80069B60:\n"
+    "lwc2 $9,0($4)\n"
+    "lwc2 $10,4($4)\n"
+    "lwc2 $11,8($4)\n"
+    "nop\n"
+    ".word 0x4AA00428\n"
+    "swc2 $25,0($5)\n"
+    "swc2 $26,4($5)\n"
+    "swc2 $27,8($5)\n"
+    "jr $31\n"
+    "move $2,$5");
 
 s32 func_80069B88(s32 arg0, s32 arg1, s32 arg2) {
     register s32 ret asm("$2");
