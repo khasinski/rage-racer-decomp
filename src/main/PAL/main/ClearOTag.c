@@ -14,10 +14,7 @@ typedef struct ClearOTagRGpuFuncs {
 
 extern ClearOTagRGpuFuncs *g_GpuFuncsClearOTagR asm("D_800941E0");
 
-void *ClearOTag(u32 *arg0, s32 count) asm("func_80065CB0");
-void *ClearOTagR(u32 *arg0, s32 arg1) asm("func_80065D68");
-
-void *ClearOTag(u32 *arg0, s32 count) {
+void *func_80065CB0(u32 *arg0, s32 count) {
     register u32 *ptr asm("$16") = arg0;
     register s32 remaining asm("$17") = count;
 
@@ -54,7 +51,7 @@ void *ClearOTag(u32 *arg0, s32 count) {
     return ptr;
 }
 
-void *ClearOTagR(u32 *arg0, s32 arg1) {
+void *func_80065D68(u32 *arg0, s32 arg1) {
     if (g_GraphDebug >= 2) {
         D_800941E4(D_800135B4, arg0, arg1);
     }
