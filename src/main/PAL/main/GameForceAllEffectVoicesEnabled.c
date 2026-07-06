@@ -2,11 +2,9 @@
 #include "game/audio.h"
 
 void GameForceAllEffectVoicesEnabled(s32 arg0) {
-    register s32 value asm("$16") = arg0;
-
-    GameForcePanVoiceEnabled(value);
-    GameForceBasicEffectVoicesEnabled(value);
-    GameForceIndexedEffectVoiceEnabled(value);
-    GameForcePitchEffectVoicesEnabled(value);
-    GameForceSoundSlotVoicePlayback(value);
+    GameForcePanVoiceEnabled(arg0);
+    GameForceBasicEffectVoicesEnabled(arg0);
+    GameForceIndexedEffectVoiceEnabled(arg0);
+    GameForcePitchEffectVoicesEnabled(arg0);
+    GameForceSoundSlotVoicePlayback(arg0);
 }
