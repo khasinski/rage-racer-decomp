@@ -1,5 +1,66 @@
 #include "common.h"
 
+extern u32 D_801E6F2C[];
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8004BAE4", func_8004BAE4);
+void func_8005D6EC(s32 arg0);
 
+void func_8004BAE4(void) {
+    register s32 row asm("$7");
+    register u32 *savePtr asm("$4");
+    register u32 *savePtr2 asm("$10");
+    register u32 *rowBase asm("$8");
+    register s32 offset asm("$9");
+    register s32 col asm("$6");
+    register u32 *base asm("$11");
+    register u32 *base2 asm("$5");
+    register u32 *addr asm("$4");
+    register u32 *cursor asm("$3");
+    u32 saved[64];
+    register u32 value asm("$2");
+    register u32 next asm("$3");
+
+    func_8005D6EC(1);
+
+    row = 0;
+    savePtr = saved;
+    base = D_801E6F2C;
+    cursor = base;
+    do {
+        value = *cursor;
+        cursor += 8;
+        row++;
+        value <<= 28;
+        *savePtr = value;
+        savePtr++;
+    } while (row < 0x40);
+
+    row = 0;
+    savePtr2 = saved;
+    rowBase = base;
+    offset = 0;
+    do {
+        col = 0;
+        base2 = base;
+        do {
+            addr = (u32 *)(offset + (s32)base2);
+            base2++;
+            value = addr[0];
+            next = addr[1];
+            value >>= 4;
+            next <<= 28;
+            value |= next;
+            addr[0] = value;
+            col++;
+        } while (col < 7);
+
+        value = *savePtr2;
+        savePtr2++;
+        offset += 0x20;
+        next = rowBase[7];
+        row++;
+        next >>= 4;
+        next |= value;
+        rowBase[7] = next;
+        rowBase += 8;
+    } while (row < 0x40);
+}
