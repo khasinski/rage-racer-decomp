@@ -53,7 +53,9 @@ typedef struct GameCarRuntime {
     s16 routeRow;
     u8 padBA[2];
     s32 field_BC;
-    u8 padC0[0x40];
+    u8 padC0[0x30];
+    s16 field_F0;
+    u8 padF2[0xE];
     s32 routeIndex;
     u8 pad104[8];
     s16 field_10C;
@@ -75,7 +77,8 @@ typedef struct GameCarRuntime {
     u8 field_14F;
     u8 pad150[0xC];
     s16 field_15C;
-    u8 pad15E[0x3E];
+    s16 field_15E;
+    u8 pad160[0x3C];
 } GameCarRuntime;
 
 typedef struct GameCarRuntimeProgressWindow {
