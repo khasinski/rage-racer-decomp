@@ -51,7 +51,8 @@ typedef struct GpuCallbacks {
     u8 pad24[0x28 - 0x24];
     s32 (*read)(s32 cmd);
     void (*clearImage)(void *rect, s32 rgb);
-    u8 pad30[0x38 - 0x30];
+    u8 pad30[0x34 - 0x30];
+    void (*resetGraph)(s32 mode);
     s32 (*drawSyncStatus)(void);
     void (*drawSync)(s32 mode);
 } GpuCallbacks;
