@@ -1,6 +1,7 @@
 #include "common.h"
 
 s32 func_800731CC(void);
+s32 func_8007317C(s32 arg0);
 s32 func_8005E600(s32 arg0);
 s32 func_8005B948(s32 arg0);
 void func_800736E8(void);
@@ -14,11 +15,47 @@ void func_80072260(void);
 void func_80071C24(void);
 
 extern s32 D_801E6C9C;
+extern s32 D_801E6CA0;
 extern s16 D_801E6CB0;
 extern s16 D_801E6CB2;
+extern s32 D_8009E68C;
+extern s32 D_801F17B4;
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005B768);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005B89C);
+
+s32 func_8005B89C(void) {
+    s32 completed;
+    register s32 *flagsPtr asm("$4");
+    register s32 slot asm("$5");
+    register s32 one asm("$6");
+    register s32 value asm("$3");
+    s32 bit;
+
+    completed = func_8007317C(0);
+    D_801F17B4 = (s16)completed;
+
+    if ((s16)completed != 0) {
+        flagsPtr = &D_801E6C9C;
+        one = 1;
+        slot = D_8009E68C;
+        value = *flagsPtr;
+        bit = (s16)(one << slot);
+        *flagsPtr = bit | value;
+
+        if (slot == 0) {
+            D_801E6CA0 = one;
+        } else if (slot == one) {
+            D_801E6CA0 = slot;
+        } else {
+            value = 2;
+            if ((slot == value) || (slot == 3)) {
+                D_801E6CA0 = value;
+            }
+        }
+    }
+
+    return (s16)D_801F17B4;
+}
 
 s32 func_8005B948(s32 slot) {
     register s32 slotReg asm("$17") = slot;
