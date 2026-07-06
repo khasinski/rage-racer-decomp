@@ -2,10 +2,9 @@
 
 extern u8 D_800132C0[];
 
-void LibcPutChar(s32 arg0) asm("func_80063C88");
+void func_80063C88(s32 arg0);
 
-void LibcPutString(u8 *arg0) asm("func_80063C38");
-void LibcPutString(u8 *arg0) {
+void func_80063C38(u8 *arg0) {
     u8 *ptr;
     s32 value;
 
@@ -15,6 +14,6 @@ void LibcPutString(u8 *arg0) {
     }
 
     while (value = *ptr++, value != 0) {
-        LibcPutChar(value);
+        func_80063C88(value);
     }
 }
