@@ -1,9 +1,7 @@
-#include "common.h"
+#include "psyq/snd.h"
 
 extern s16 D_8019CA68;
-
-void SpuVmDamperOff(void) asm("func_800731A8");
-void SpuVmDamperOn(void) asm("func_800731B8");
+extern volatile s32 D_801E40AC;
 
 void SpuVmDamperOff(void) {
     D_8019CA68 = 0;
@@ -13,4 +11,10 @@ void SpuVmDamperOn(void) {
     D_8019CA68 = 2;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SpuVmDamper", SsSeqCalledTbyT);
+void SsSeqCalledTbyT(void) {
+    if (D_801E40AC != 1) {
+        D_801E40AC = 1;
+        SsUtFlush();
+        D_801E40AC = 0;
+    }
+}
