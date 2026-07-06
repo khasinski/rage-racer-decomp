@@ -1,9 +1,7 @@
 #include "common.h"
 
-extern u32 *g_GpuGp1 asm("D_800942BC");
+extern u32 *D_800942BC;
 
-u32 _status(void) asm("func_80066D6C");
-
-u32 _status(void) {
-    return *g_GpuGp1;
+u32 func_80066D6C(void) {
+    return *D_800942BC;
 }

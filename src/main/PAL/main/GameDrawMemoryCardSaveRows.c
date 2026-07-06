@@ -13,7 +13,7 @@ extern s32 D_80082F54;
 extern s32 D_8009B73C;
 
 void func_80047958(s32, s32, void *, s32, s32, s32, s32, s32);
-void Square_Vsprintf() asm("func_800632F0");
+void func_800632F0();
 
 void GameDrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     char text[16];
@@ -31,7 +31,7 @@ void GameDrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
         if (flags_reg & 1) {
             s32 i;
 
-            Square_Vsprintf(text, D_80012FC8, row_bit);
+            func_800632F0(text, D_80012FC8, row_bit);
             func_80047958(0x48, y, text, 0x7F, color, color, width, height);
 
             for (i = 0; i < row[0]; i++) {
@@ -40,30 +40,30 @@ void GameDrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
             while (i < 7) {
                 text_ptr[i++] = ' ';
             }
-            Square_Vsprintf(text + 6, D_80012FFC);
+            func_800632F0(text + 6, D_80012FFC);
             func_80047958(0x68, y, text, 0x7F, color, color, width, height);
             func_80047958(0xB0, y, GameFormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
         } else if (flags_reg & 0x10000) {
-            Square_Vsprintf(text, D_80012FC8, row_bit);
+            func_800632F0(text, D_80012FC8, row_bit);
             func_80047958(0x48, y, text, 0x7F, color, color, width, height);
             func_80047958(0x88, y, D_80082F9A, 0x7F, color, color, width, height);
         } else if (D_8009B73C == 0) {
             if (D_80082F50 == 0) {
-                Square_Vsprintf(text, D_80013000, row_bit);
+                func_800632F0(text, D_80013000, row_bit);
                 func_80047958(0x48, y, text, 0x7F, color, color, width, height);
             } else if (D_80082F54 == 0) {
-                Square_Vsprintf(text, D_80013000, row_bit);
+                func_800632F0(text, D_80013000, row_bit);
                 func_80047958(0x48, y, text, 0x7F, color, color, width, height);
             } else {
-                Square_Vsprintf(text, D_80012FC8, row_bit);
+                func_800632F0(text, D_80012FC8, row_bit);
                 func_80047958(0x48, y, text, 0x7F, color, color, width, height);
                 func_80047958(0x90, y, D_80082F86, 0x7F, color, color, width, height);
             }
         } else if (D_80082F50 == 0) {
-            Square_Vsprintf(text, D_80013000, row_bit);
+            func_800632F0(text, D_80013000, row_bit);
             func_80047958(0x48, y, text, 0x7F, color, color, width, height);
         } else {
-            Square_Vsprintf(text, D_80012FC8, row_bit);
+            func_800632F0(text, D_80012FC8, row_bit);
             func_80047958(0x48, y, text, 0x7F, color, color, width, height);
             func_80047958(0x90, y, D_80082F7C + (D_80082F54 * 10), 0x7F, color, color, width, height);
         }
