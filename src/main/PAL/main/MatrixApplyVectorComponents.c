@@ -1,8 +1,7 @@
 #include "common.h"
 
-void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) asm("func_800681F0");
-void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) {
-    register s16 *m asm("$8") = mtx;
+void func_800681F0(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) {
+    s16 *m = mtx;
 
     if (*(s32 *)&m[0] == 0x1000 && m[2] == 0) {
         *outX = x;

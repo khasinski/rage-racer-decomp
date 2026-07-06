@@ -1,22 +1,20 @@
 #include "common.h"
 
-s32 GetGraphType(void) asm("func_800657E4");
+s32 func_800657E4(void);
 
 extern char D_80013374[];
 extern void (*D_800941E4)(char *, ...);
 
-void DumpTPage(s32 arg0) asm("func_80064C94");
-
-void DumpTPage(s32 arg0) {
+void func_80064C94(s32 arg0) {
     s32 mode;
-    register u32 value asm("$2");
+    u32 value;
 
-    mode = GetGraphType();
+    mode = func_800657E4();
     if (mode == 1) {
         goto high_mode;
     }
 
-    mode = GetGraphType();
+    mode = func_800657E4();
     if (mode != 2) {
         goto low_mode;
     }
