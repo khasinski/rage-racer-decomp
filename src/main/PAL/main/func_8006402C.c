@@ -21,8 +21,6 @@ void func_8006408C(s32 arg0) {
     func_8006DF94(0, arg0);
 }
 
-asm(".globl func_8006409C\nfunc_8006409C = func_8006408C + 0x10");
-
 void func_800640B0(s32 arg0) {
     func_8006DF94(1, arg0);
 }
