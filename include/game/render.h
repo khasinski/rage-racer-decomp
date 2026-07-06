@@ -3,6 +3,10 @@
 
 #include "common.h"
 
+typedef struct GameRenderAxisMatrix {
+    s16 m[3][3];
+} GameRenderAxisMatrix;
+
 typedef struct GameRenderSourcePoint {
     u16 field_0;
     u8 pad2[2];

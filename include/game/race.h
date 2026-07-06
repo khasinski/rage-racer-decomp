@@ -11,4 +11,10 @@ typedef struct GameRaceProgress {
     s32 elapsedTime;
 } GameRaceProgress;
 
+typedef struct GameRaceRanking {
+    s16 count;
+    u8 pad2[0x1A];
+    s32 values[1];
+} GameRaceRanking;
+
 #endif

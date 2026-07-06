@@ -1,14 +1,11 @@
 #include "common.h"
 #include "game/car.h"
-
-typedef struct {
-    s16 count;
-} UnkFunc8003AE2CCount;
+#include "game/race.h"
 
 extern s32 D_8009E73C;
 extern s32 D_8009E740;
 extern s16 D_8009E834;
-extern UnkFunc8003AE2CCount D_8009E83C;
+extern GameRaceRanking D_8009E83C;
 extern s32 D_801E4364;
 extern GameCarRuntimeProgressWindow D_801F18C0[];
 

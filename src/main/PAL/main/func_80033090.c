@@ -1,15 +1,10 @@
 #include "common.h"
-
-typedef struct UnkRaceList {
-    s16 count;
-    u8 pad2[0x1A];
-    s32 values[1];
-} UnkRaceList;
+#include "game/race.h"
 
 extern u8 *D_8019C900;
 extern s32 D_801E4364;
 extern s32 D_801E4BCC;
-extern UnkRaceList D_8009E83C;
+extern GameRaceRanking D_8009E83C;
 extern s16 D_8009E836;
 
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
@@ -24,7 +19,7 @@ void func_80033090(void) {
     register s32 primOffset __asm("$20");
     register s32 baseOffset __asm("$21");
     register s32 *valuePtr __asm("$18");
-    register UnkRaceList *list __asm("$3");
+    register GameRaceRanking *list __asm("$3");
     register u8 *base __asm("$2");
     register void *ot __asm("$4");
     register void *prim __asm("$5");
