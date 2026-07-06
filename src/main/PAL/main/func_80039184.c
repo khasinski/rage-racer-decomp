@@ -27,7 +27,7 @@ s32 func_80039184(GameCarRuntime *arg0) {
     }
 
     pos0 = arg0->field_70;
-    pos1 = *(s32 *)&arg0->pad74[0];
+    pos1 = arg0->field_74;
     row = arg0->routeRow;
 
     if (D_801E408C != 0) {
