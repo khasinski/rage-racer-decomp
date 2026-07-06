@@ -1,13 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-typedef struct GpuFuncs {
-    u8 pad0[0x8];
-    void (*send)(u32 cmd, void *rect, s32 size, u32 data);
-    u32 cmd0C;
-} GpuFuncs;
-
-extern GpuFuncs *g_GpuFuncs asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 extern char D_8001356C[];
 
 void func_80065968(char *arg0, void *arg1);

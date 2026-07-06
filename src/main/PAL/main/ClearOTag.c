@@ -7,12 +7,7 @@ extern char D_8001359C[];
 extern char D_800135B4[];
 extern u32 D_800942A4;
 
-typedef struct ClearOTagRGpuFuncs {
-    u8 pad0[0x2C];
-    void (*clearImage)(void *rect, s32 rgb);
-} ClearOTagRGpuFuncs;
-
-extern ClearOTagRGpuFuncs *g_GpuFuncsClearOTagR asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncsClearOTagR asm("D_800941E0");
 
 void *func_80065CB0(u32 *arg0, s32 count) {
     register u32 *ptr asm("$16") = arg0;

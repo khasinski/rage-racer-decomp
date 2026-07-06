@@ -1,30 +1,9 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-typedef struct LoadImageGpuFuncs {
-    u8 pad0[0x8];
-    void (*send)(u32 cmd, void *rect, s32 size, u32 data);
-    u8 padC[0x20 - 0xC];
-    u32 loadImage;
-} LoadImageGpuFuncs;
-
-typedef struct StoreImageGpuFuncs {
-    u8 pad0[0x8];
-    void (*send)(u32 cmd, void *rect, s32 size, u32 data);
-    u8 padC[0x1C - 0xC];
-    u32 storeImage;
-} StoreImageGpuFuncs;
-
-typedef struct MoveImageGpuFuncs {
-    u8 pad0[0x8];
-    s32 (*send)(u32 cmd, void *buf, s32 size, u32 data);
-    u8 padC[0x18 - 0xC];
-    u32 moveImage;
-} MoveImageGpuFuncs;
-
-extern LoadImageGpuFuncs *g_GpuFuncs asm("D_800941E0");
-extern StoreImageGpuFuncs *g_GpuFuncsStore asm("D_800941E0");
-extern MoveImageGpuFuncs *g_GpuFuncsMove asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncsStore asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncsMove asm("D_800941E0");
 extern u32 D_80094298;
 extern u32 D_8009429C;
 extern u32 D_800942A0;
@@ -55,7 +34,7 @@ s32 MoveImage(GpuRectPacked *arg0, u32 arg1, u32 arg2) {
     }
     if (arg0->h != 0) {
         register u32 *buf asm("$5");
-        register MoveImageGpuFuncs *gpu asm("$3");
+        register GpuCallbacks *gpu asm("$3");
         register u32 xy asm("$4");
         register s32 size asm("$6");
         register s32 data asm("$7");

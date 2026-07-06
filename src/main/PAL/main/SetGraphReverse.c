@@ -1,14 +1,8 @@
 #include "common.h"
-
-typedef struct DebugCallbacks {
-    s32 pad0[4];
-    void (*submit)(s32);
-    s32 pad14[5];
-    s32 (*read)(s32);
-} DebugCallbacks;
+#include "psyq/gpu.h"
 
 extern void (* volatile GPU_printf)(char *, ...) asm("D_800941E4");
-extern DebugCallbacks *g_GpuFuncs asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 extern u8 g_GraphType asm("D_800941E8");
 extern u8 g_GraphDebug asm("D_800941EA");
 extern u8 g_GraphReverse asm("D_800941EB");
@@ -20,8 +14,8 @@ s32 SetGraphReverse(s32 arg0) {
     register s32 newValue asm("$17") = arg0;
     register u8 *state asm("$16") = &g_GraphReverse;
     register s32 old asm("$18") = *state;
-    DebugCallbacks *callbacks;
-    DebugCallbacks *callbacks2;
+    GpuCallbacks *callbacks;
+    GpuCallbacks *callbacks2;
     s32 value;
     s32 command;
 

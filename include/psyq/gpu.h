@@ -39,4 +39,21 @@ typedef struct DrawPacket {
     u32 x1y1;
 } DrawPacket;
 
+typedef struct GpuCallbacks {
+    u8 pad0[0x8];
+    s32 (*send)(u32 cmd, void *buf, s32 size, u32 data);
+    u32 cmd0C;
+    void (*submit)(s32 cmd);
+    void (*putDispEnv)(void *env, s32 mode);
+    u32 moveImage;
+    u32 storeImage;
+    u32 loadImage;
+    u8 pad24[0x28 - 0x24];
+    s32 (*read)(s32 cmd);
+    void (*clearImage)(void *rect, s32 rgb);
+    u8 pad30[0x38 - 0x30];
+    s32 (*drawSyncStatus)(void);
+    void (*drawSync)(s32 mode);
+} GpuCallbacks;
+
 #endif

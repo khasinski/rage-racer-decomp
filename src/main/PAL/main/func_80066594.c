@@ -1,16 +1,11 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-typedef struct GpuFuncs {
-    u8 pad[0x38];
-    s32 (*drawSync)(void);
-} GpuFuncs;
-
-extern GpuFuncs *D_800941E0;
+extern GpuCallbacks *D_800941E0;
 
 u32 func_80066594(void) {
     u32 ret;
 
-    ret = D_800941E0->drawSync();
+    ret = D_800941E0->drawSyncStatus();
     return ret >> 31;
 }
