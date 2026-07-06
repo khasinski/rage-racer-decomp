@@ -77,4 +77,11 @@ typedef struct GameCarRuntimeProgressWindow {
     u8 pad42[0x15A];
 } GameCarRuntimeProgressWindow;
 
+typedef struct GameCarTrackAngleWindow {
+    u8 pad0[0x30];
+    s32 trackPointIndex;
+    u8 pad34[0x6C];
+    s32 headingAngle;
+} GameCarTrackAngleWindow;
+
 #endif
