@@ -320,7 +320,90 @@ void func_80069B14(void *arg0, s32 arg1, void *arg2) {
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069B38);
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069B60);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069B88);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069BA8);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069BCC);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80069858", func_80069C24);
+
+s32 func_80069B88(s32 arg0, s32 arg1, s32 arg2) {
+    register s32 ret asm("$2");
+
+    asm volatile(
+        "mtc2 $4,$17\n"
+        "mtc2 $5,$18\n"
+        "mtc2 $6,$19\n"
+        "nop\n"
+        "cop2 0x158002d\n"
+        "mfc2 $2,$7"
+        : "=r"(ret)
+        : "r"(arg0), "r"(arg1), "r"(arg2));
+
+    return ret;
+}
+
+s32 func_80069BA8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    register s32 ret asm("$2");
+
+    asm volatile(
+        "mtc2 $4,$16\n"
+        "mtc2 $5,$17\n"
+        "mtc2 $6,$18\n"
+        "mtc2 $7,$19\n"
+        "nop\n"
+        "cop2 0x168002e\n"
+        "mfc2 $2,$7"
+        : "=r"(ret)
+        : "r"(arg0), "r"(arg1), "r"(arg2), "r"(arg3));
+
+    return ret;
+}
+
+void func_80069BCC(void *matrix, void *in, void *out) {
+    asm volatile(
+        "cfc2 $13,$0\n"
+        "cfc2 $14,$2\n"
+        "cfc2 $15,$4\n"
+        "lw $8,0($4)\n"
+        "lw $9,4($4)\n"
+        "lw $10,8($4)\n"
+        "ctc2 $8,$0\n"
+        "ctc2 $9,$2\n"
+        "ctc2 $10,$4\n"
+        "lwc2 $11,8($5)\n"
+        "lwc2 $9,0($5)\n"
+        "lwc2 $10,4($5)\n"
+        "nop\n"
+        "cop2 0x178000c\n"
+        "swc2 $25,0($6)\n"
+        "swc2 $26,4($6)\n"
+        "swc2 $27,8($6)\n"
+        "ctc2 $13,$0\n"
+        "ctc2 $14,$2\n"
+        "ctc2 $15,$4"
+        :
+        : "r"(matrix), "r"(in), "r"(out)
+        : "memory");
+}
+
+void func_80069C24(void *matrix, void *in, void *out) {
+    asm volatile(
+        "cfc2 $13,$0\n"
+        "cfc2 $14,$2\n"
+        "cfc2 $15,$4\n"
+        "lw $8,0($4)\n"
+        "lw $9,4($4)\n"
+        "lw $10,8($4)\n"
+        "ctc2 $8,$0\n"
+        "ctc2 $9,$2\n"
+        "ctc2 $10,$4\n"
+        "lwc2 $11,8($5)\n"
+        "lwc2 $9,0($5)\n"
+        "lwc2 $10,4($5)\n"
+        "nop\n"
+        "cop2 0x170000c\n"
+        "swc2 $25,0($6)\n"
+        "swc2 $26,4($6)\n"
+        "swc2 $27,8($6)\n"
+        "ctc2 $13,$0\n"
+        "ctc2 $14,$2\n"
+        "ctc2 $15,$4"
+        :
+        : "r"(matrix), "r"(in), "r"(out)
+        : "memory");
+}
