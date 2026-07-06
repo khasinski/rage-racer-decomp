@@ -10,17 +10,15 @@ typedef struct GpuFuncs {
 extern GpuFuncs *g_GpuFuncs asm("D_800941E0");
 extern char D_8001356C[];
 
-void CheckPrim(char *arg0, void *arg1) asm("func_80065968");
+void func_80065968(char *arg0, void *arg1);
 
-void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3) asm("func_80065A90");
-
-void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3) {
+void func_80065A90(void *arg0, u32 arg1, u32 arg2, u32 arg3) {
     register void *rect asm("s3") = arg0;
     register u32 b asm("s2") = arg1;
     register u32 g asm("s1") = arg2;
     register u32 r asm("s0") = arg3;
 
-    CheckPrim(D_8001356C, rect);
+    func_80065968(D_8001356C, rect);
 
     {
         register void *rectArg asm("$5") = rect;
