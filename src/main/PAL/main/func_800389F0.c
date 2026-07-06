@@ -1,12 +1,13 @@
 #include "common.h"
+#include "game/car.h"
 
-extern u8 D_801F1854[];
+extern GameCarRuntime D_801F1854[];
 
 void func_80017A10(s32 arg0);
-void func_8001DFC0(void *arg0);
+void func_8001DFC0(GameCarRuntime *arg0);
 
 void func_800389F0(void) {
-    register u8 *base asm("s1");
+    register GameCarRuntime *base asm("s1");
     register s32 i asm("s2");
     register u8 *entry asm("s0");
     register s32 one asm("s3");
@@ -18,7 +19,7 @@ void func_800389F0(void) {
     i = 0;
     minus_one = -1;
     one = 1;
-    entry = base + 0xBC;
+    entry = (u8 *)&base->field_BC;
     do {
         if (*(s16 *)(entry - 0x10) != (i++, minus_one)) {
             if (*(s32 *)entry == one) {
@@ -26,6 +27,6 @@ void func_800389F0(void) {
             }
         }
         entry += 0x19C;
-        base += 0x19C;
+        base++;
     } while (i < 11);
 }
