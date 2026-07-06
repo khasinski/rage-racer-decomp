@@ -4,7 +4,18 @@
 extern s32 D_8009B538[];
 
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005EFAC", func_8005EFAC);
+void func_8005EFAC(void) {
+    EnterCriticalSection();
+    D_8009B538[0] = OpenEvent(0xF4000001, 0x0004, 0x2000, 0);
+    D_8009B538[1] = OpenEvent(0xF4000001, 0x8000, 0x2000, 0);
+    D_8009B538[2] = OpenEvent(0xF4000001, 0x0100, 0x2000, 0);
+    D_8009B538[3] = OpenEvent(0xF4000001, 0x2000, 0x2000, 0);
+    D_8009B538[4] = OpenEvent(0xF0000011, 0x0004, 0x2000, 0);
+    D_8009B538[5] = OpenEvent(0xF0000011, 0x8000, 0x2000, 0);
+    D_8009B538[6] = OpenEvent(0xF0000011, 0x0100, 0x2000, 0);
+    D_8009B538[7] = OpenEvent(0xF0000011, 0x2000, 0x2000, 0);
+    ExitCriticalSection();
+}
 
 void func_8005F0D4(void) {
     EnableEvent(D_8009B538[0]);
