@@ -18,14 +18,14 @@ void func_80019BB8(s32 arg0);
 void func_80019B3C(s32 arg0);
 
 void func_80020B08(void) {
-    register s32 oldValue asm("s0");
+    s32 oldValue;
     GameRaceProgress *ptr;
     s32 *entry;
 
     if (D_801E4B94 != 0) {
         if (D_8019C8EC != 0) {
-            register s32 magic asm("v1");
-            register GameRaceProgress *afterPtr asm("v0");
+            s32 magic;
+            GameRaceProgress *afterPtr;
 
             ptr = D_801E4FAC;
             oldValue = ptr->progression;
@@ -37,10 +37,10 @@ void func_80020B08(void) {
             func_800212F0(0);
             func_80019BB8(0x21);
         } else {
-            register s32 current asm("v0");
-            register s32 next asm("a1");
-            register GameRaceProgress *menuPtr asm("a0");
-            register s32 enabled asm("v1");
+            s32 current;
+            s32 next;
+            GameRaceProgress *menuPtr;
+            s32 enabled;
 
             func_80019B3C(7);
             current = D_8009E6A4;
