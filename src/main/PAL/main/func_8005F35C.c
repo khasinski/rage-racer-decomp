@@ -39,7 +39,33 @@ s32 func_8005F35C(void) {
     return result;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005F35C", func_8005F420);
+s32 func_8005F420(s32 limit) {
+    register s32 i asm("$16");
+    register s32 ready asm("$17");
+    volatile s32 stack[2];
+
+    i = 0;
+    if (limit > 0) {
+        ready = 1;
+        do {
+            if (TestEvent(D_8009B538) == ready) {
+                return 1;
+            }
+            if (TestEvent(D_8009B53C) == ready) {
+                return 2;
+            }
+            if (TestEvent(D_8009B540) == ready) {
+                return 3;
+            }
+            if (TestEvent(D_8009B544) == ready) {
+                return 4;
+            }
+            i++;
+        } while (i < limit);
+    }
+
+    return 0;
+}
 
 s32 func_8005F4D8(void) {
     register s32 ready asm("$16");
