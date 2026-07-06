@@ -19,9 +19,11 @@ typedef struct GameCarRuntime {
     s32 z;
     u8 padC[0x14];
     s32 field_20;
-    u8 pad24[4];
+    s32 field_24;
     s32 field_28;
-    u8 pad2C[0x3C];
+    u8 pad2C[4];
+    s32 field_30;
+    u8 pad34[0x34];
     s32 field_68;
     s32 field_6C;
     s32 field_70;
