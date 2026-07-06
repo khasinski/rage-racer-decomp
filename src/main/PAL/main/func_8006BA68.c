@@ -18,6 +18,10 @@ void func_8006DF34(void);
 void func_8006C17C(void);
 void func_8006DF64(s32 arg0, void *arg1);
 
+asm(".globl func_8006BBD0_entry\nfunc_8006BBD0_entry = func_8006BBD0");
+asm(".globl func_8006BCC4_entry\nfunc_8006BCC4_entry = func_8006BCC4");
+asm(".globl func_8006BD14_entry\nfunc_8006BD14_entry = func_8006BD14");
+
 s32 CD_vol(CdlATV *arg0) {
     *D_80099300 = 2;
     *D_80099308 = arg0->val0;
