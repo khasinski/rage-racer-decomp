@@ -6,12 +6,11 @@ typedef struct GpuFuncs {
     s32 (*drawSync)(void);
 } GpuFuncs;
 
-extern GpuFuncs *g_GpuFuncs asm("D_800941E0");
+extern GpuFuncs *D_800941E0;
 
 u32 func_80066594(void) {
-    register u32 ret asm("$2");
+    u32 ret;
 
-    ret = g_GpuFuncs->drawSync();
-    asm("srl %0,%0,31" : "=r"(ret) : "0"(ret));
-    return ret;
+    ret = D_800941E0->drawSync();
+    return ret >> 31;
 }
