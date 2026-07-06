@@ -25,5 +25,3 @@ void func_80026B88(void) {
     D_801E40B8 = 0;
     D_8009E66C = 3;
 }
-
-asm(".globl func_80026C00\nfunc_80026C00 = func_80026B88 + 0x78");
