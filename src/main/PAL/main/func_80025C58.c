@@ -11,11 +11,11 @@ s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 
 void func_80025C58(void) {
     u8 *base;
-    register s32 arg4 asm("$17");
-    register s32 arg5 asm("$18");
-    register s32 temp asm("$8");
-    register s32 product asm("$2");
-    register s32 value asm("$3");
+    s32 arg4;
+    s32 arg5;
+    s32 temp;
+    s32 product;
+    s32 value;
     s32 next;
 
     base = D_8019C900 + 0xD0;

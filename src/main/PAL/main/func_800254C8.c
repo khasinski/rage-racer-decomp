@@ -18,9 +18,9 @@ void func_8005D6EC(s32 arg0);
 void func_800254C8(void) {
     s32 oldX;
     s32 oldY;
-    register u16 input asm("$2");
-    register u16 confirm asm("$3");
-    register u32 confirmMask asm("$2");
+    u16 input;
+    u16 confirm;
+    u32 confirmMask;
     s32 value;
 
     func_800253A4();
