@@ -47,6 +47,16 @@ typedef struct StRingEntry {
     CdlLOC loc;
 } StRingEntry;
 
+typedef struct StRingEventRecord {
+    volatile u16 state;
+    u8 pad2[0x1E];
+} StRingEventRecord;
+
+typedef struct StRingClearRecord {
+    s32 value;
+    u8 pad4[0x1C];
+} StRingClearRecord;
+
 typedef struct CdSearchDirEntry {
     s32 type;
     u8 pad4[4];
