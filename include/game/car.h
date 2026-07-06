@@ -84,4 +84,29 @@ typedef struct GameCarTrackAngleWindow {
     s32 headingAngle;
 } GameCarTrackAngleWindow;
 
+typedef struct GameCarMotionWindow {
+    s32 x;
+    u8 pad4[4];
+    s32 z;
+    u8 padC[0x70];
+    s16 velocityX;
+    s16 velocityZ;
+    s16 active;
+    u16 timer;
+    s16 mode;
+    s16 modeTimer;
+    s16 field_88;
+    s16 field_8A;
+    s16 field_8C;
+    s16 field_8E;
+    s16 field_90;
+    s16 field_92;
+    s16 field_94;
+    s16 field_96;
+    s16 field_98;
+    s16 field_9A;
+    s16 field_9C;
+    s16 field_9E;
+} GameCarMotionWindow;
+
 #endif

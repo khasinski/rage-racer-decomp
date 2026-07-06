@@ -1,22 +1,23 @@
 #include "common.h"
+#include "game/car.h"
 
-void func_80038AB8(u8 *arg0) {
-    *(s16 *)(arg0 + 0x8A) = 0;
-    *(s16 *)(arg0 + 0x84) = 0;
-    *(s16 *)(arg0 + 0x86) = 0;
-    *(s16 *)(arg0 + 0x88) = 0;
-    *(s16 *)(arg0 + 0x80) = 0;
-    *(s16 *)(arg0 + 0x82) = 0;
-    *(s16 *)(arg0 + 0x7C) = 0;
-    *(s16 *)(arg0 + 0x7E) = 0;
-    *(s16 *)(arg0 + 0x8C) = 0;
-    *(s16 *)(arg0 + 0x8E) = 0;
-    *(s16 *)(arg0 + 0x90) = 0;
-    *(s16 *)(arg0 + 0x92) = 0;
-    *(s16 *)(arg0 + 0x94) = 0;
-    *(s16 *)(arg0 + 0x96) = 0;
-    *(s16 *)(arg0 + 0x98) = 0;
-    *(s16 *)(arg0 + 0x9A) = 0;
-    *(s16 *)(arg0 + 0x9C) = 0;
-    *(s16 *)(arg0 + 0x9E) = 0;
+void func_80038AB8(GameCarMotionWindow *arg0) {
+    arg0->field_8A = 0;
+    arg0->mode = 0;
+    arg0->modeTimer = 0;
+    arg0->field_88 = 0;
+    arg0->active = 0;
+    arg0->timer = 0;
+    arg0->velocityX = 0;
+    arg0->velocityZ = 0;
+    arg0->field_8C = 0;
+    arg0->field_8E = 0;
+    arg0->field_90 = 0;
+    arg0->field_92 = 0;
+    arg0->field_94 = 0;
+    arg0->field_96 = 0;
+    arg0->field_98 = 0;
+    arg0->field_9A = 0;
+    arg0->field_9C = 0;
+    arg0->field_9E = 0;
 }

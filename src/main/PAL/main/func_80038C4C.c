@@ -1,18 +1,8 @@
 #include "common.h"
+#include "game/car.h"
 
-typedef struct {
-    s32 x;
-    u8 pad4[4];
-    s32 z;
-    u8 padC[0x70];
-    s16 velX;
-    s16 velZ;
-    s16 active;
-    u16 timer;
-} Unk2944C;
-
-void func_80038C4C(Unk2944C *arg0) {
-    register Unk2944C *obj asm("$6") = arg0;
+void func_80038C4C(GameCarMotionWindow *arg0) {
+    register GameCarMotionWindow *obj asm("$6") = arg0;
     register s32 velX asm("$3");
     register s32 subX asm("$4");
     register s32 subZ asm("$5");
@@ -33,7 +23,7 @@ void func_80038C4C(Unk2944C *arg0) {
             obj->timer = 0;
         }
 
-        velX = obj->velX;
+        velX = obj->velocityX;
         __asm__ volatile("lh %0, 0x7C(%1)" : "=r"(subX) : "r"(obj));
         __asm__ volatile("lh %0, 0x7E(%1)" : "=r"(subZ) : "r"(obj));
         scaledX = (velX * 8) - velX;
@@ -47,9 +37,9 @@ void func_80038C4C(Unk2944C *arg0) {
         if (scaledX < 0) {
             scaledX += 7;
         }
-        scaledZ = obj->velZ;
+        scaledZ = obj->velocityZ;
         dampX = scaledX >> 3;
-        obj->velX = dampX;
+        obj->velocityX = dampX;
         __asm__ volatile("" ::: "memory");
 
         scaledZ = (scaledZ * 8) - scaledZ;
@@ -57,6 +47,6 @@ void func_80038C4C(Unk2944C *arg0) {
             scaledZ += 7;
         }
         __asm__ volatile("" : "=r"(scaledZ) : "0"(scaledZ));
-        obj->velZ = scaledZ >> 3;
+        obj->velocityZ = scaledZ >> 3;
     }
 }
