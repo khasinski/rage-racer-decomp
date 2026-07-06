@@ -1,16 +1,10 @@
 #include "common.h"
-
-typedef struct UnkFunc80037808 {
-    u8 pad0[4];
-    s32 x;
-    u8 pad8[4];
-    s32 y;
-} UnkFunc80037808;
+#include "game/waypoint.h"
 
 extern s32 D_8009E6D4;
 extern s32 D_8009E6DC;
 
-s32 func_80037808(UnkFunc80037808 *arg0) {
+s32 func_80037808(TrackWaypointRuntime *arg0) {
     s32 center_x = D_8009E6D4;
     s32 x = arg0->x;
     s32 ret = 0;

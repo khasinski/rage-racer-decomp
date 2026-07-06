@@ -15,11 +15,16 @@ typedef struct TrackWaypointRuntime {
     s32 x;
     s32 code;
     s32 y;
-    u8 pad10[4];
-    s32 deltaY;
-    s32 fixedStep;
-    s32 deltaX;
-    u8 pad20[0x18];
+    s32 field10;
+    s32 scale;
+    s32 field18;
+    s32 field1C;
+    s32 field20;
+    s32 velocityX;
+    s32 field28;
+    s32 velocityY;
+    s32 field30;
+    s32 velocityMagnitude;
 } TrackWaypointRuntime;
 
 #endif
