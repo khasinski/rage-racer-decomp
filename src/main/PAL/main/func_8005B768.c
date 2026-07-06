@@ -70,7 +70,22 @@ s32 func_8005B9CC(void) {
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005BA20);
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005BB1C);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005BC14);
+
+void func_8005BC14(void) {
+    register s32 liveSlot asm("$16");
+    register s32 *flagsPtr asm("$4") = &D_801E6C9C;
+    register s32 flags asm("$3") = *flagsPtr;
+    register s32 newFlags asm("$2");
+
+    if (flags & 0x20) {
+        newFlags = flags ^ 0x20;
+        *flagsPtr = newFlags;
+        func_800736E8();
+        func_80073748(0x28, 0x28);
+        func_80078018((s16)liveSlot);
+        func_80072B3C(D_801E6CB2);
+    }
+}
 
 void func_8005BC80(void) {
     register s32 i asm("$16");
