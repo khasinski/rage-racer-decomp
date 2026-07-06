@@ -1,10 +1,49 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsUtSetReverbType", SsUtSetReverbType);
-
 extern SpuReverbAttr D_8019C778;
 extern s16 D_8019C77C;
+
+s32 SsUtSetReverbType(s32 type) asm("func_80073614");
+s32 SsUtSetReverbType(s32 type) {
+    register s32 normalized asm("v1");
+    register s32 negative asm("a1");
+    register s32 mode asm("v0");
+    register s32 result asm("s0");
+
+    negative = 0;
+    normalized = type;
+    if ((s32)(type << 16) < 0) {
+        negative = 1;
+        normalized = -type;
+    }
+
+    if ((u32)(normalized & 0xFFFF) >= 10) {
+        goto fail;
+    }
+
+    D_8019C778.mask = 1;
+    if (negative != 0) {
+        mode = (normalized | 0x100) << 16;
+    } else {
+        mode = normalized << 16;
+    }
+    mode >>= 16;
+    *(s32 *)&D_8019C77C = mode;
+    mode = normalized << 16;
+    result = mode >> 16;
+
+    if (result == 0) {
+        asm volatile(
+            ".word 0x0C01E8B4\n"
+            ".word 0x00002021");
+    }
+    SpuSetReverbModeParam(&D_8019C778);
+    return result;
+
+fail:
+    return -1;
+}
 
 s32 SsUtGetReverbType(void) asm("func_800736B8");
 s32 SsUtGetReverbType(void) {
