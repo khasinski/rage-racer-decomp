@@ -1,13 +1,10 @@
 #include "common.h"
-
-typedef struct SceneAssetHeader {
-    s32 offsets[11];
-} SceneAssetHeader;
+#include "game/asset.h"
 
 extern s32 D_8007BED8;
 extern s32 D_8009E6A4;
 extern s32 D_801E428C;
-extern SceneAssetHeader *D_8019CAFC;
+extern GameSceneAssetHeader *D_8019CAFC;
 extern u8 *D_801F17A8;
 
 s32 func_80017C78(s32 assetIndex, void *dst);
@@ -24,7 +21,7 @@ void func_80034E04(void *arg0);
 void func_80043AC8(void *arg0, s32 arg1);
 
 void func_8001989C(void) {
-    register SceneAssetHeader *header asm("$4");
+    register GameSceneAssetHeader *header asm("$4");
     register void *dst asm("$5");
     register s32 offset asm("$2");
 
@@ -33,7 +30,7 @@ void func_8001989C(void) {
         dst = D_8019CAFC;
         offset = D_801E428C;
         __asm__ volatile("" : "=r"(offset) : "0"(offset));
-        header = (SceneAssetHeader *)D_8009E6A4;
+        header = (GameSceneAssetHeader *)D_8009E6A4;
         if (func_80017C78(((s32)header << 3) + (offset << 1) + 0x58, dst) != 0) {
             header = D_8019CAFC;
             offset = header->offsets[0];

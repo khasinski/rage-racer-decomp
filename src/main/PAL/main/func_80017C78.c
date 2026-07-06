@@ -1,16 +1,12 @@
 #include "common.h"
-
-typedef struct CdLoadEntry {
-    u32 position;
-    u32 size;
-} CdLoadEntry;
+#include "game/asset.h"
 
 extern char D_80010ADC[];
 extern char D_80010AFC[];
 extern char D_80010B08[];
 extern s16 D_8007C700;
 extern char *D_8007C48C[];
-extern CdLoadEntry D_801E6834[];
+extern GameCdLoadEntry D_801E6834[];
 
 void func_8001674C(char *arg0, ...);
 s32 func_80027688(s32 arg0, void *arg1, s32 arg2);
