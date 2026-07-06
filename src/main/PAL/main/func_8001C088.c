@@ -8,7 +8,7 @@ extern u16 D_801E4B9C;
 
 void func_80069A58(s32, s32);
 void func_80069A78(s32);
-void func_80064AA8(void *, s32, s32, s32, s32);
+void *func_80064AA8(void *, s32, s32, s32, s32);
 u8 *SetDefDrawEnv(void *, s32, s32, s32, s32) asm("func_80064B78");
 void func_8001BE94(s32);
 
