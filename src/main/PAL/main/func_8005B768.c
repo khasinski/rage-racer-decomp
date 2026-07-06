@@ -1,9 +1,15 @@
 #include "common.h"
+#include "game/audio.h"
+#include "psyq/snd.h"
 
 s32 func_800731CC(void);
 s32 func_8007317C(s32 arg0);
+s32 func_800730BC(s32 arg0, s32 arg1);
+s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 s32 func_8005E600(s32 arg0);
 s32 func_8005B948(s32 arg0);
+void func_8001674C(char *arg0);
+void func_80063D9C(s32 arg0);
 void func_800736E8(void);
 void func_80073614(s32 arg0);
 void func_80073748(s32 arg0, s32 arg1);
@@ -18,8 +24,13 @@ extern s32 D_801E6C9C;
 extern s32 D_801E6CA0;
 extern s16 D_801E6CB0;
 extern s16 D_801E6CB2;
+extern s16 D_801E6CAE;
+extern s32 D_801E6CC0;
 extern s32 D_8009E68C;
 extern s32 D_801F17B4;
+extern s32 D_800125F8;
+extern char D_8001267C[];
+extern char D_80012694[];
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005B768);
 
@@ -105,7 +116,43 @@ s32 func_8005B9CC(void) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005BA20);
+s32 func_8005BA20(s32 header, s32 body, u16 *table) {
+    register s32 ret asm("$2");
+    register s32 currentVabId asm("$5");
+    register s16 *vabIdPtr asm("$18");
+    register s32 fail asm("$16");
+    register s32 tableReg asm("$19") = (s32)table;
+
+    D_8009E68C = 3;
+    ret = func_80072C4C(header, -1, D_800125F8);
+    vabIdPtr = &D_801E6CAE;
+    *vabIdPtr = ret;
+    asm volatile("" : "=r"(ret) : "0"(ret));
+
+    currentVabId = (s16)ret;
+    fail = -1;
+    if (currentVabId == fail) {
+        func_8001674C(D_8001267C);
+        func_80063D9C(1);
+    }
+
+    ret = func_800730BC(body, currentVabId);
+    *vabIdPtr = ret;
+    if ((s16)ret == fail) {
+        func_8001674C(D_80012694);
+        func_80063D9C(1);
+    }
+
+    if (tableReg != 0) {
+        GameLoadAudioParameterTable((u16 *)tableReg);
+    }
+
+    D_801E6CC0 = 1;
+    ret = func_8007317C(0);
+    D_801F17B4 = (s16)ret;
+    return D_801F17B4;
+}
+
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005B768", func_8005BB1C);
 
 void func_8005BC14(void) {
