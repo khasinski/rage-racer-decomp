@@ -1,7 +1,6 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-
 INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsUtSetReverbType", SsUtSetReverbType);
 
 extern SpuReverbAttr D_8019C778;
@@ -31,5 +30,17 @@ void SsUtSetReverbFeedback(s32 feedback) {
     SpuSetReverbModeParam(&D_8019C778);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsUtSetReverbType", SsUtSetReverbDepth);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/SsUtSetReverbType", SsUtSetReverbDelay);
+void SsUtSetReverbDepth(s32 left, s32 right) asm("func_80073748");
+void SsUtSetReverbDepth(s32 left, s32 right) {
+    D_8019C778.mask = 0x6;
+    D_8019C778.depth.left = ((s16)left * 0x7FFF) / 0x7F;
+    D_8019C778.depth.right = ((s16)right * 0x7FFF) / 0x7F;
+    SpuSetReverbModeParam(&D_8019C778);
+}
+
+void SsUtSetReverbDelay(s32 delay) asm("func_800737E0");
+void SsUtSetReverbDelay(s32 delay) {
+    D_8019C778.mask = 0x8;
+    D_8019C778.delay = (s16)delay;
+    SpuSetReverbModeParam(&D_8019C778);
+}
