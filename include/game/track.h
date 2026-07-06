@@ -12,7 +12,7 @@ typedef struct GameTrackPoint {
     s16 field_10;
     s16 field_12;
     u8 pad14[2];
-    s16 field_16;
+    s16 segmentLength;
 } GameTrackPoint;
 
 #endif
