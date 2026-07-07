@@ -1,5 +1,46 @@
 #include "common.h"
 
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_800692D4", func_800692D4);
-
+void func_800692D4(void) {
+    asm volatile(
+        ".set noreorder\n"
+        ".set noat\n"
+        "lui $14,0x8009\n"
+        "lw $14,0x4CA8($14)\n"
+        "nop\n"
+        ".word 0x1DC0000A\n"
+        "lui $1,0x8009\n"
+        "sw $31,0x4C9C($1)\n"
+        "lui $4,0x8009\n"
+        ".word 0x0C0059D3\n"
+        "addiu $4,$4,0x4F5D\n"
+        "lui $31,0x8009\n"
+        "lw $31,0x4C9C($31)\n"
+        "nop\n"
+        "jr $31\n"
+        "nop\n"
+        "addi $14,$14,-32\n"
+        "lui $1,0x8009\n"
+        "sw $14,0x4CA8($1)\n"
+        "lui $15,0x8009\n"
+        "addu $15,$15,$14\n"
+        "addiu $15,$15,0x4CAC\n"
+        "lw $8,0($15)\n"
+        "lw $9,4($15)\n"
+        "ctc2 $8,$0\n"
+        "ctc2 $9,$1\n"
+        "lw $8,8($15)\n"
+        "lw $9,12($15)\n"
+        "ctc2 $8,$2\n"
+        "ctc2 $9,$3\n"
+        "lw $8,16($15)\n"
+        "nop\n"
+        "ctc2 $8,$4\n"
+        "nop\n"
+        "lw $8,20($15)\n"
+        "lw $9,24($15)\n"
+        "lw $10,28($15)\n"
+        "ctc2 $8,$5\n"
+        "ctc2 $9,$6\n"
+        "ctc2 $10,$7");
+}
