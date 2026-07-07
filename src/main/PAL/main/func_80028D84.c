@@ -1,5 +1,33 @@
 #include "common.h"
 
-
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80028D84", func_80028D84);
-
+asm(
+    ".set noreorder\n"
+    ".set noat\n"
+    ".globl func_80028D84\n"
+    "func_80028D84:\n"
+    ".word 0x30AEFFFF\n"
+    ".word 0x25CFFFFE\n"
+    ".word 0x05E10003\n"
+    ".word 0x8C990084\n"
+    ".word 0x000E7840\n"
+    ".word 0x01F97821\n"
+    ".word 0x000F78C0\n"
+    ".word 0x3C0E8007\n"
+    ".word 0x35CED9F4\n"
+    ".word 0x01CFC821\n"
+    ".word 0x8F2A0000\n"
+    ".word 0x8F2B0004\n"
+    ".word 0x8C880080\n"
+    ".word 0x00054C02\n"
+    ".word 0x81030014\n"
+    ".word 0x00000000\n"
+    ".word 0x30630002\n"
+    ".word 0x1060FCE3\n"
+    ".word 0x00000000\n"
+    ".word 0x010B4021\n"
+    ".word 0x81030014\n"
+    ".word 0x2529FFFF\n"
+    ".word 0x1520FFF9\n"
+    ".word 0xAC880080\n"
+    ".word 0x03E00008\n"
+    ".word 0x00000000\n");
