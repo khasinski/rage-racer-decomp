@@ -1,18 +1,17 @@
 #include "common.h"
 #include "game/car.h"
 
-s32 func_8002FB60(s32 arg0, s32 arg1);
+s32 func_8002FB60(s32 arg0);
 s32 func_8002A788(s32 arg0, s32 arg1);
 s32 func_800632B0(void);
 
 void func_80038F0C(s32 arg0, GameCarRuntime *arg1) {
-    register GameCarRuntime *obj asm("$16");
-    register s32 value asm("$2");
-    register s32 temp asm("$3");
-    register s32 distance asm("$4");
+    GameCarRuntime *obj;
+    s32 value;
+    s32 temp;
+    s32 distance;
 
     obj = arg1;
-    asm("" : "=r"(obj) : "0"(obj));
     value = 1;
     obj->motionMode = arg0;
     if (arg0 == value) {
@@ -34,7 +33,7 @@ mode1:
     goto final_store;
 
 mode2:
-    value = func_8002FB60(obj->trackPointIndex, (s32)arg1);
+    value = func_8002FB60(obj->trackPointIndex);
     temp = func_8002A788(value, obj->field_24);
     if (temp >= 0x401) {
         temp = 0x800 - temp;
@@ -69,5 +68,3 @@ final_store:
         obj->motionValue = value;
     }
 }
-
-asm(".globl func_80038FEC\nfunc_80038FEC = func_80038F0C + 0xE0");

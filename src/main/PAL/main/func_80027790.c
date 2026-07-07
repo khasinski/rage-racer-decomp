@@ -7,17 +7,17 @@ s32 func_8002745C(s32 arg0);
 void func_8006A554(s32 arg0, s32 arg1);
 
 s32 func_80027790(s32 arg0, s32 arg1) {
-    register s32 savedArg0 asm("$18");
-    register s32 savedArg1 asm("$19");
-    register volatile s32 *state asm("$17");
-    register s32 result asm("$16");
+    s32 savedArg0;
+    s32 savedArg1;
+    volatile s32 *state;
+    s32 result;
 
     savedArg0 = arg0;
     savedArg1 = arg1;
     state = &D_8007D7AC;
 
     do {
-        register s32 now asm("$2");
+        s32 now;
 
         now = func_8006DD30(-1);
         if (state[0] + 0x4B0 < now) {
@@ -48,5 +48,3 @@ loop_check:
     func_8006A554(1, savedArg1);
     return result;
 }
-
-asm(".globl func_80027808\nfunc_80027808 = func_80027790 + 0x78");
