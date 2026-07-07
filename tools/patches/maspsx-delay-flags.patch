@@ -111,6 +111,26 @@ index 6ff7f7f..93be536 100644
 +    return _is_store(line) and not uses_at(line)
 +
 +
++def _store_source_reg(line: str) -> str | None:
++    op, rest = _split_op(line)
++    if op not in store_mnemonics:
++        return None
++    parts = [part.strip() for part in rest.split(",", 1)]
++    if len(parts) != 2:
++        return None
++    return parts[0]
++
++
++def _load_dest_reg(line: str) -> str | None:
++    op, rest = _split_op(line)
++    if op not in load_mnemonics:
++        return None
++    parts = [part.strip() for part in rest.split(",", 1)]
++    if len(parts) != 2:
++        return None
++    return parts[0]
++
++
 +def _is_la_tail(line: str) -> bool:
 +    op, rest = _split_op(line)
 +    return op in ("addiu", "ori") and "%lo(" in rest
@@ -216,6 +236,7 @@ index 6ff7f7f..93be536 100644
 +    control_predicate,
 +    movable_predicate,
 +    skip_non_instruction: bool = False,
++    remove_load_delay_nop: bool = False,
 +) -> List[str]:
 +    res = lines[:]
 +    i = 1
@@ -231,6 +252,16 @@ index 6ff7f7f..93be536 100644
 +            res[prev] = res[i]
 +            res[i] = movable
 +            del res[i + 1]
++            if remove_load_delay_nop:
++                nop = _previous_instruction_index(res, prev - 1)
++                load = _previous_instruction_index(res, nop - 1) if nop is not None else None
++                if (
++                    nop is not None
++                    and load is not None
++                    and _is_nop(res[nop])
++                    and _store_source_reg(movable) == _load_dest_reg(res[load])
++                ):
++                    del res[nop]
 +            continue
 +        i += 1
 +    return res
@@ -277,10 +308,16 @@ index 6ff7f7f..93be536 100644
 +        if self.stack_return_delay:
 +            res = _move_previous_into_delay(res, _is_return, _is_stack_adjust)
 +        if self.store_return_delay:
-+            res = _expand_indexed_store_into_delay(res, _is_return)
-+            res = _expand_store_into_delay(res, _is_return)
++            res = _expand_indexed_store_into_delay(
++                res, _is_return, skip_non_instruction=True
++            )
++            res = _expand_store_into_delay(res, _is_return, skip_non_instruction=True)
 +            res = _move_previous_into_delay(
-+                res, _is_return, _is_store_without_at_expansion
++                res,
++                _is_return,
++                _is_store_without_at_expansion,
++                skip_non_instruction=True,
++                remove_load_delay_nop=True,
 +            )
 +        if self.la_return_delay:
 +            res = _expand_la_into_delay(res, _is_return)
