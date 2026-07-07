@@ -27,9 +27,8 @@ The USA executable `SLUS_004.03` is kept as a comparison target with SHA-1
 
 See [docs/PROGRESS.md](docs/PROGRESS.md) for the per-binary table (regenerate
 with `make progress`). A translation unit only counts as decompiled when it is
-plain C with no assembly of any kind; for the main executable that is currently
-28.1% of functions and 7.6% of code bytes. The built executable is
-byte-identical to retail (`make check VERSION=PAL`).
+plain C with no assembly of any kind. The built executable is byte-identical to
+retail (`make check VERSION=PAL`).
 
 The matching policy: every function must eventually match as plain C through
 the stock compiler pipeline. No post-build rewrite passes, no inline assembly;
