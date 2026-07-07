@@ -2,14 +2,11 @@
 #include "psyq/kernel.h"
 
 
-void SpuInit(void) asm("func_80078838");
-void _SsInitTables(void) asm("func_80071B0C");
+void func_80078838(void);
+void func_80071B0C(void);
 
-void ssinit(void) asm("func_80071BF4");
-void ssinit(void) {
+void func_80071BF4(void) {
     KernelCallbackSlot3();
-    SpuInit();
-    _SsInitTables();
+    func_80078838();
+    func_80071B0C();
 }
-
-asm(".globl ssinit\nssinit = func_80071BF4");

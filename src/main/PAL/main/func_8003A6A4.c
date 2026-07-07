@@ -3,9 +3,9 @@
 extern u8 *D_801E40B8[];
 
 void func_8003A6A4(u8 *arg0, s32 arg1) {
-    register u8 *entry asm("$6");
-    register s32 offset asm("$5");
-    register s32 pos0Base asm("$3");
+    u8 *entry;
+    s32 offset;
+    s32 pos0Base;
     s32 pos0;
     s32 pos1;
     s32 value;
@@ -26,5 +26,3 @@ void func_8003A6A4(u8 *arg0, s32 arg1) {
         *(s16 *)(entry + 0x130) = value;
     }
 }
-
-asm(".globl func_8003A6E8\nfunc_8003A6E8 = func_8003A6A4 + 0x44");
