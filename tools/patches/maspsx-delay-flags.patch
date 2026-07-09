@@ -13,6 +13,7 @@ index 121d7d1..b7ebee3 100644
 +    parser.add_argument("--store-call-delay", action="store_true")
 +    parser.add_argument("--store-jump-delay", action="store_true")
 +    parser.add_argument("--store-branch-delay", action="store_true")
++    parser.add_argument("--addiu-branch-delay", action="store_true")
 +    parser.add_argument("--load-dest-temp", action="store_true")
      # decomp.me debugging
      parser.add_argument("--print-output", action="store_true")
@@ -28,6 +29,7 @@ index 121d7d1..b7ebee3 100644
 +        store_call_delay=args.store_call_delay,
 +        store_jump_delay=args.store_jump_delay,
 +        store_branch_delay=args.store_branch_delay,
++        addiu_branch_delay=args.addiu_branch_delay,
 +        load_dest_temp=args.load_dest_temp,
      )
      try:
@@ -109,6 +111,11 @@ index 6ff7f7f..4f27681 100644
 +
 +def _is_store_without_at_expansion(line: str) -> bool:
 +    return _is_store(line) and not uses_at(line)
++
++
++def _is_addiu_without_at_expansion(line: str) -> bool:
++    op, rest = _split_op(line)
++    return op in ("addu", "addiu") and ",$zero," not in rest and not uses_at(line)
 +
 +
 +def _store_source_reg(line: str) -> str | None:
@@ -288,6 +295,7 @@ index 6ff7f7f..4f27681 100644
 +        store_call_delay=False,
 +        store_jump_delay=False,
 +        store_branch_delay=False,
++        addiu_branch_delay=False,
 +        load_dest_temp=False,
      ):
          self.lines = [x.strip() for x in lines]
@@ -303,6 +311,7 @@ index 6ff7f7f..4f27681 100644
 +        self.store_call_delay = store_call_delay
 +        self.store_jump_delay = store_jump_delay
 +        self.store_branch_delay = store_branch_delay
++        self.addiu_branch_delay = addiu_branch_delay
 +        self.load_dest_temp = load_dest_temp
 +
          self.bss_entries: dict[str, int] = {}
@@ -353,6 +362,13 @@ index 6ff7f7f..4f27681 100644
 +                res,
 +                _is_branch,
 +                _is_store_without_at_expansion,
++                skip_non_instruction=True,
++            )
++        if self.addiu_branch_delay:
++            res = _move_previous_into_delay(
++                res,
++                _is_branch,
++                _is_addiu_without_at_expansion,
 +                skip_non_instruction=True,
 +            )
          return res
