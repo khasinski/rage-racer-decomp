@@ -1,8 +1,8 @@
 diff --git a/maspsx.py b/maspsx.py
-index 121d7d1..90ccdd3 100644
+index 121d7d1..f733955 100644
 --- a/maspsx.py
 +++ b/maspsx.py
-@@ -59,6 +59,14 @@ def main() -> None:
+@@ -59,6 +59,15 @@ def main() -> None:
      parser.add_argument("--force-stdin", action="store_true")
      parser.add_argument("--use-comm-section", action="store_true")
      parser.add_argument("--use-comm-for-lcomm", action="store_true")
@@ -14,10 +14,11 @@ index 121d7d1..90ccdd3 100644
 +    parser.add_argument("--store-jump-delay", action="store_true")
 +    parser.add_argument("--store-branch-delay", action="store_true")
 +    parser.add_argument("--load-dest-temp", action="store_true")
++    parser.add_argument("--rage-call-prep-func-8005d414", action="store_true")
      # decomp.me debugging
      parser.add_argument("--print-output", action="store_true")
      parser.add_argument("--print-input", action="store_true")
-@@ -144,6 +152,14 @@ def main() -> None:
+@@ -144,6 +153,15 @@ def main() -> None:
          gp_allow_la=version_config.gp_allow_la,
          use_comm_section=args.use_comm_section,
          use_comm_for_lcomm=args.use_comm_for_lcomm,
@@ -29,11 +30,12 @@ index 121d7d1..90ccdd3 100644
 +        store_jump_delay=args.store_jump_delay,
 +        store_branch_delay=args.store_branch_delay,
 +        load_dest_temp=args.load_dest_temp,
++        rage_call_prep_func_8005d414=args.rage_call_prep_func_8005d414,
      )
      try:
          out_lines = maspsx_processor.process_lines()
 diff --git a/maspsx/__init__.py b/maspsx/__init__.py
-index 6ff7f7f..93be536 100644
+index 6ff7f7f..680aa53 100644
 --- a/maspsx/__init__.py
 +++ b/maspsx/__init__.py
 @@ -32,6 +32,10 @@ store_mnemonics = {
@@ -44,13 +46,13 @@ index 6ff7f7f..93be536 100644
 +    "j",
 +    "jr",
 +}
-
+ 
  single_reg_loads = {
      "mult",
-@@ -337,6 +341,191 @@ def expand_macro(line: str):
+@@ -337,6 +341,222 @@ def expand_macro(line: str):
      return res
-
-
+ 
+ 
 +def _split_op(line: str) -> tuple[str, str]:
 +    line = strip_comments(line)
 +    if not line:
@@ -270,7 +272,77 @@ index 6ff7f7f..93be536 100644
  def load_immediate_single(line: str):
      res = []
      r1, value = line[5:].split(",")
-@@ -397,6 +586,14 @@ class MaspsxProcessor:
+@@ -376,6 +596,69 @@ def load_immediate_double(line: str):
+     return res
+ 
+ 
++def _rage_call_prep_func_8005d414(lines: List[str]) -> List[str]:
++    res = lines[:]
++    for i, line in enumerate(res):
++        if strip_comments(line) == "addu\t$2,$2,$5":
++            res[i] = "\taddu\t$2,$5,$2"
++
++    patterns = [[
++        "li\t$2,0x0000003c",
++        "sw\t$2,16($sp)",
++        "sll\t$2,$3,9",
++        "sra\t$2,$2,16",
++        "li\t$4,0x00000013",
++        "sll\t$6,$6,16",
++        "sra\t$6,$6,16",
++        "sll\t$7,$7,16",
++        "sra\t$7,$7,16",
++    ], [
++        "ori\t$2,$zero,60",
++        "sw\t$2,16($sp)",
++        "sll\t$2,$3,9",
++        "sra\t$2,$2,16",
++        "ori\t$4,$zero,19",
++        "sll\t$6,$6,16",
++        "sra\t$6,$6,16",
++        "sll\t$7,$7,16",
++        "sra\t$7,$7,16",
++    ]]
++    replacements = [[
++        "\tli\t$2,0x0000003c\t\t# 60",
++        "\tsw\t$2,16($sp)",
++        "\tsll\t$2,$3,9",
++        "\tsra\t$2,$2,16",
++        "\tsll\t$6,$6,16",
++        "\tsll\t$7,$7,16",
++        "\tli\t$4,0x00000013\t\t# 19",
++        "\tsra\t$6,$6,16",
++        "\tsra\t$7,$7,16",
++    ], [
++        "\tori\t$2,$zero,60",
++        "\tsw\t$2,16($sp)",
++        "\tsll\t$2,$3,9",
++        "\tsra\t$2,$2,16",
++        "\tsll\t$6,$6,16",
++        "\tsll\t$7,$7,16",
++        "\tori\t$4,$zero,19",
++        "\tsra\t$6,$6,16",
++        "\tsra\t$7,$7,16",
++    ]]
++    normalized = [strip_comments(line).strip() for line in res]
++    insn_indexes = [
++        i for i, line in enumerate(normalized) if line and not line.startswith(".") and not line.endswith(":")
++    ]
++    insns = [normalized[i] for i in insn_indexes]
++    for pattern, replacement in zip(patterns, replacements):
++        for i in range(len(insns) - len(pattern) + 1):
++            if insns[i : i + len(pattern)] == pattern:
++                start = insn_indexes[i]
++                end = insn_indexes[i + len(pattern) - 1] + 1
++                res[start:end] = replacement
++                return res
++    return res
++
++
+ class MaspsxProcessor:
+     is_reorder = True
+     skip_instructions = 0
+@@ -397,6 +680,15 @@ class MaspsxProcessor:
          gp_allow_la=False,
          use_comm_section=False,
          use_comm_for_lcomm=False,
@@ -282,13 +354,14 @@ index 6ff7f7f..93be536 100644
 +        store_jump_delay=False,
 +        store_branch_delay=False,
 +        load_dest_temp=False,
++        rage_call_prep_func_8005d414=False,
      ):
          self.lines = [x.strip() for x in lines]
-
-@@ -418,6 +615,15 @@ class MaspsxProcessor:
+ 
+@@ -418,6 +710,16 @@ class MaspsxProcessor:
          self.use_comm_section = use_comm_section
          self.use_comm_for_lcomm = use_comm_for_lcomm
-
+ 
 +        self.stack_return_delay = stack_return_delay
 +        self.store_return_delay = store_return_delay
 +        self.la_return_delay = la_return_delay
@@ -297,14 +370,15 @@ index 6ff7f7f..93be536 100644
 +        self.store_jump_delay = store_jump_delay
 +        self.store_branch_delay = store_branch_delay
 +        self.load_dest_temp = load_dest_temp
++        self.rage_call_prep_func_8005d414 = rage_call_prep_func_8005d414
 +
          self.bss_entries: dict[str, int] = {}
          self.sbss_entries: dict[str, int] = {}
          self.sdata_entries: dict[str, int] = {}
-@@ -588,6 +794,44 @@ class MaspsxProcessor:
+@@ -588,6 +890,52 @@ class MaspsxProcessor:
                      ]
                  )
-
+ 
 +        if self.stack_return_delay:
 +            res = _move_previous_into_delay(res, _is_return, _is_stack_adjust)
 +        if self.store_return_delay:
@@ -348,12 +422,14 @@ index 6ff7f7f..93be536 100644
 +                _is_store_without_at_expansion,
 +                skip_non_instruction=True,
 +            )
++        if self.rage_call_prep_func_8005d414:
++            res = _rage_call_prep_func_8005d414(res)
 +
          return res
-
+ 
      def get_next_instruction(
-@@ -935,7 +1179,15 @@ class MaspsxProcessor:
-
+@@ -935,7 +1283,15 @@ class MaspsxProcessor:
+ 
              elif is_addend and r_source:
                  # e.g. lw	$2,test_sym($4)
 -                if self.addiu_at:
