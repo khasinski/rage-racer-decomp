@@ -1,8 +1,8 @@
 diff --git a/maspsx.py b/maspsx.py
-index 121d7d1..f733955 100644
+index 121d7d1..6ecaa73 100644
 --- a/maspsx.py
 +++ b/maspsx.py
-@@ -59,6 +59,15 @@ def main() -> None:
+@@ -59,6 +59,16 @@ def main() -> None:
      parser.add_argument("--force-stdin", action="store_true")
      parser.add_argument("--use-comm-section", action="store_true")
      parser.add_argument("--use-comm-for-lcomm", action="store_true")
@@ -15,10 +15,11 @@ index 121d7d1..f733955 100644
 +    parser.add_argument("--store-branch-delay", action="store_true")
 +    parser.add_argument("--load-dest-temp", action="store_true")
 +    parser.add_argument("--rage-call-prep-func-8005d414", action="store_true")
++    parser.add_argument("--rage-prolog-func-80046cbc", action="store_true")
      # decomp.me debugging
      parser.add_argument("--print-output", action="store_true")
      parser.add_argument("--print-input", action="store_true")
-@@ -144,6 +153,15 @@ def main() -> None:
+@@ -144,6 +154,16 @@ def main() -> None:
          gp_allow_la=version_config.gp_allow_la,
          use_comm_section=args.use_comm_section,
          use_comm_for_lcomm=args.use_comm_for_lcomm,
@@ -31,11 +32,12 @@ index 121d7d1..f733955 100644
 +        store_branch_delay=args.store_branch_delay,
 +        load_dest_temp=args.load_dest_temp,
 +        rage_call_prep_func_8005d414=args.rage_call_prep_func_8005d414,
++        rage_prolog_func_80046cbc=args.rage_prolog_func_80046cbc,
      )
      try:
          out_lines = maspsx_processor.process_lines()
 diff --git a/maspsx/__init__.py b/maspsx/__init__.py
-index 6ff7f7f..680aa53 100644
+index 6ff7f7f..72af4c0 100644
 --- a/maspsx/__init__.py
 +++ b/maspsx/__init__.py
 @@ -32,6 +32,10 @@ store_mnemonics = {
@@ -272,7 +274,7 @@ index 6ff7f7f..680aa53 100644
  def load_immediate_single(line: str):
      res = []
      r1, value = line[5:].split(",")
-@@ -376,6 +596,69 @@ def load_immediate_double(line: str):
+@@ -376,6 +596,115 @@ def load_immediate_double(line: str):
      return res
  
  
@@ -339,10 +341,56 @@ index 6ff7f7f..680aa53 100644
 +    return res
 +
 +
++def _rage_prolog_func_80046cbc(lines: List[str]) -> List[str]:
++    res = lines[:]
++    normalized = [strip_comments(line).strip() for line in res]
++    insn_indexes = [
++        i for i, line in enumerate(normalized) if line and not line.startswith(".") and not line.endswith(":")
++    ]
++    insns = [normalized[i] for i in insn_indexes]
++    pattern = [
++        "lbu\t$3,144($sp)",
++        "sw\t$18,72($sp)",
++        "lhu\t$18,120($sp)",
++        "sw\t$19,76($sp)",
++        "lhu\t$19,124($sp)",
++        "sw\t$20,80($sp)",
++        "lhu\t$20,128($sp)",
++        "sw\t$21,84($sp)",
++        "lhu\t$21,132($sp)",
++        "sw\t$22,88($sp)",
++        "lhu\t$22,136($sp)",
++        "sw\t$23,92($sp)",
++        "lbu\t$23,140($sp)",
++    ]
++    replacement = [
++        "\tsw\t$18,72($sp)",
++        "\tlhu\t$18,120($sp)",
++        "\tsw\t$19,76($sp)",
++        "\tlhu\t$19,124($sp)",
++        "\tsw\t$20,80($sp)",
++        "\tlhu\t$20,128($sp)",
++        "\tsw\t$21,84($sp)",
++        "\tlhu\t$21,132($sp)",
++        "\tsw\t$22,88($sp)",
++        "\tlhu\t$22,136($sp)",
++        "\tsw\t$23,92($sp)",
++        "\tlbu\t$23,140($sp)",
++        "\tlbu\t$3,144($sp)",
++    ]
++    for i in range(len(insns) - len(pattern) + 1):
++        if insns[i : i + len(pattern)] == pattern:
++            start = insn_indexes[i]
++            end = insn_indexes[i + len(pattern) - 1] + 1
++            res[start:end] = replacement
++            return res
++    return res
++
++
  class MaspsxProcessor:
      is_reorder = True
      skip_instructions = 0
-@@ -397,6 +680,15 @@ class MaspsxProcessor:
+@@ -397,6 +726,16 @@ class MaspsxProcessor:
          gp_allow_la=False,
          use_comm_section=False,
          use_comm_for_lcomm=False,
@@ -355,10 +403,11 @@ index 6ff7f7f..680aa53 100644
 +        store_branch_delay=False,
 +        load_dest_temp=False,
 +        rage_call_prep_func_8005d414=False,
++        rage_prolog_func_80046cbc=False,
      ):
          self.lines = [x.strip() for x in lines]
  
-@@ -418,6 +710,16 @@ class MaspsxProcessor:
+@@ -418,6 +757,17 @@ class MaspsxProcessor:
          self.use_comm_section = use_comm_section
          self.use_comm_for_lcomm = use_comm_for_lcomm
  
@@ -371,11 +420,12 @@ index 6ff7f7f..680aa53 100644
 +        self.store_branch_delay = store_branch_delay
 +        self.load_dest_temp = load_dest_temp
 +        self.rage_call_prep_func_8005d414 = rage_call_prep_func_8005d414
++        self.rage_prolog_func_80046cbc = rage_prolog_func_80046cbc
 +
          self.bss_entries: dict[str, int] = {}
          self.sbss_entries: dict[str, int] = {}
          self.sdata_entries: dict[str, int] = {}
-@@ -588,6 +890,52 @@ class MaspsxProcessor:
+@@ -588,6 +938,54 @@ class MaspsxProcessor:
                      ]
                  )
  
@@ -424,11 +474,13 @@ index 6ff7f7f..680aa53 100644
 +            )
 +        if self.rage_call_prep_func_8005d414:
 +            res = _rage_call_prep_func_8005d414(res)
++        if self.rage_prolog_func_80046cbc:
++            res = _rage_prolog_func_80046cbc(res)
 +
          return res
  
      def get_next_instruction(
-@@ -935,7 +1283,15 @@ class MaspsxProcessor:
+@@ -935,7 +1333,15 @@ class MaspsxProcessor:
  
              elif is_addend and r_source:
                  # e.g. lw	$2,test_sym($4)
