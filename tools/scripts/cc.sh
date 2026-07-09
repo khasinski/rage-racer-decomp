@@ -77,12 +77,12 @@ if [ ! -f "$MASPSX_DIR/maspsx.py" ]; then
     git clone --depth 1 "$MASPSX_URL" "$MASPSX_DIR" >/dev/null
 fi
 
-if ! "$PYTHON" "$MASPSX_DIR/maspsx.py" --help 2>/dev/null | grep -q -- '--store-branch-delay'; then
+if ! "$PYTHON" "$MASPSX_DIR/maspsx.py" --help 2>/dev/null | grep -q -- '--addiu-branch-delay'; then
     if [ ! -f "$MASPSX_PATCH" ]; then
         echo "rage-pc: missing $MASPSX_PATCH; maspsx delay-slot flags unavailable" >&2
         exit 1
     fi
-    if ! git -C "$MASPSX_DIR" apply "$MASPSX_PATCH"; then
+    if ! git -C "$MASPSX_DIR" apply --recount "$MASPSX_PATCH"; then
         echo "rage-pc: failed to apply maspsx delay-slot patch in $MASPSX_DIR" >&2
         exit 1
     fi
@@ -137,6 +137,9 @@ run_cc1() {
         fi
         if grep -q 'MASPSX_FLAGS:.*--store-branch-delay' "$IN"; then
             maspsx_extra_args+=(--store-branch-delay)
+        fi
+        if grep -q 'MASPSX_FLAGS:.*--addiu-branch-delay' "$IN"; then
+            maspsx_extra_args+=(--addiu-branch-delay)
         fi
         if grep -q 'MASPSX_FLAGS:.*--load-dest-temp' "$IN"; then
             maspsx_extra_args+=(--load-dest-temp)
