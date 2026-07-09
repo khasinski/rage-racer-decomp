@@ -144,6 +144,9 @@ run_cc1() {
         if grep -q 'MASPSX_FLAGS:.*--rage-call-prep-func-8005d414' "$IN"; then
             maspsx_extra_args+=(--rage-call-prep-func-8005d414)
         fi
+        if grep -q 'MASPSX_FLAGS:.*--rage-prolog-func-80046cbc' "$IN"; then
+            maspsx_extra_args+=(--rage-prolog-func-80046cbc)
+        fi
         "$PYTHON" "$MASPSX_DIR/maspsx.py" \
             --expand-div --aspsx-version=2.34 --force-stdin \
             ${maspsx_extra_args[@]+"${maspsx_extra_args[@]}"} \
