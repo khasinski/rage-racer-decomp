@@ -54,17 +54,17 @@ void func_8003CDF4(void *arg0) {
     index = *(s32 *)((s32)base + 0x30);
     track = D_8009E688;
     point = (GameTrackPoint *)((index * 3) << 3);
-    asm("addu %0,%0,%1" : "=r"(point) : "r"(track), "0"(point));
+    point = (GameTrackPoint *)((s32)point + (s32)track);
     D_801E3E14[0] = point->x;
 
     index = *(s32 *)((s32)base + 0x30);
     point = (GameTrackPoint *)((index * 3) << 3);
-    asm("addu %0,%0,%1" : "=r"(point) : "r"(track), "0"(point));
+    point = (GameTrackPoint *)((s32)point + (s32)track);
     D_801E3E1C = point->z;
 
     index = *(s32 *)((s32)base + 0x30);
     point = (GameTrackPoint *)((index * 3) << 3);
-    asm("addu %0,%0,%1" : "=r"(point) : "r"(track), "0"(point));
+    point = (GameTrackPoint *)((s32)point + (s32)track);
     word0 = point->y;
     course = D_8019CABC;
     asm volatile("" : "=r"(word0), "=r"(course) : "0"(word0), "1"(course) : "memory");
@@ -75,7 +75,7 @@ void func_8003CDF4(void *arg0) {
     lastIndex = *(s32 *)((s32)base + 0x30);
     course <<= 11;
     point = (GameTrackPoint *)((lastIndex * 3) << 3);
-    asm("addu %0,%0,%1" : "=r"(point) : "r"(track), "0"(point));
+    point = (GameTrackPoint *)((s32)point + (s32)track);
     course += 0xC00;
     course -= point->angle;
     D_801E3EB4 = course;
