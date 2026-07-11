@@ -39,10 +39,8 @@ s32 func_80059248(s32 arg0) {
     value = (u32)(limit * limit) >> 0xB;
 
 update:
-    asm("sll %0,%1,0x10\n"
-        "sra %0,%0,0x10"
-        : "=r"(amount)
-        : "r"(value));
+    amount = value << 16;
+    amount >>= 16;
     phase = ((u32)D_8009B2E8 >> 2) & 0xFF;
     channel = D_801E40D4;
     func_80052158(amount, phase, channel);

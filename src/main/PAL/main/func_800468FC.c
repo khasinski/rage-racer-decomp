@@ -55,7 +55,7 @@ void func_800468FC(void *ot, s32 x, s32 y, s32 w, s32 h) {
                     rect.h = hReg;
                     func_80066604(packet, &rect);
                     oldPacket = packet;
-                    asm("addiu %0,%0,12" : "=r"(packet) : "0"(packet));
+                    packet += 12;
                     func_80064DDC(otReg, oldPacket);
                     *scratch = packet;
                 }

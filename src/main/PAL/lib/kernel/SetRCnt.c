@@ -46,7 +46,6 @@ s32 SetRCnt(s32 arg0, s32 arg1, s32 arg2) {
     ret = 1;
     asm("" : "=r"(ret) : "0"(ret));
     base = (s32)D_8009A574;
-    asm("nop");
     entry = (volatile u16 *)(offset + base);
     entry[2] = flags;
     return ret;
