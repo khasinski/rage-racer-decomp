@@ -61,6 +61,10 @@ endef
 $(BUILD)/src/%.c.o: src/%.c | $(BUILD)
 	$(call compile_c_object)
 
+$(BUILD)/src/main/PAL/main/func_8003DDAC.c.o: src/main/PAL/main/func_8003DDAC.c | $(BUILD)
+	@mkdir -p $(dir $@)
+	RAGE_CC1_VERSION=2.6.3 MASPSX_DIR=$(ROOT)/tools/maspsx_2E5AC_orbit_update_schedule $(CC_WRAPPER) $< $@
+
 $(BUILD)/src/main/PAL/main/func_80073748.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8007849C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8006A9D8.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
@@ -99,6 +103,7 @@ $(BUILD)/src/main/PAL/main/func_80043598.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80037714.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80032D5C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8003AE2C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/func_8003DDAC.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80046600.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80040F24.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80079BB4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
