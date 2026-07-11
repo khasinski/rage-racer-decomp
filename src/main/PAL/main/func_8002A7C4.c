@@ -22,7 +22,7 @@ s32 func_8002A7C4(s32 arg0, s32 arg1) {
         register s32 ret asm("$2") = diff;
 
         if (!sign) {
-            asm("negu %0,%0" : "=r"(ret) : "0"(ret));
+            ret = -ret;
         }
 
         return ret;
