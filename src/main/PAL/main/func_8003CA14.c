@@ -53,17 +53,17 @@ void func_8003CA14(void *arg0) {
     index = *(s32 *)((s32)base + 0x30);
     track = D_8009E688;
     point = (GameTrackPoint *)((index * 3) << 3);
-    asm("addu %0,%0,%1" : "=r"(point) : "r"(track), "0"(point));
+    point = (GameTrackPoint *)((s32)point + (s32)track);
     D_801E3E14[0] = point->x;
 
     index = *(s32 *)((s32)base + 0x30);
     point = (GameTrackPoint *)((index * 3) << 3);
-    asm("addu %0,%0,%1" : "=r"(point) : "r"(track), "0"(point));
+    point = (GameTrackPoint *)((s32)point + (s32)track);
     D_801E3E1C = point->z;
 
     index = *(s32 *)((s32)base + 0x30);
     point = (GameTrackPoint *)((index * 3) << 3);
-    asm("addu %0,%0,%1" : "=r"(point) : "r"(track), "0"(point));
+    point = (GameTrackPoint *)((s32)point + (s32)track);
     value = D_801E3EB8;
     word0 = point->y;
     value += 0x40;
@@ -75,7 +75,7 @@ void func_8003CA14(void *arg0) {
     lastIndex = *(s32 *)((s32)base + 0x30);
     value <<= 11;
     point = (GameTrackPoint *)((lastIndex * 3) << 3);
-    asm("addu %0,%0,%1" : "=r"(point) : "r"(track), "0"(point));
+    point = (GameTrackPoint *)((s32)point + (s32)track);
     value += 0xC00;
     value -= point->angle;
     D_801E3EB4 = value;

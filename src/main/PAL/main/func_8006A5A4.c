@@ -30,7 +30,7 @@ s32 func_8006A5A4(s32 arg0, void *arg1, s32 arg2) {
     savedMode = D_8009903C;
     asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
-    asm("addu %0,%1,%2" : "=r"(commandState) : "r"(offset), "r"(base));
+    commandState = (s32 *)(offset + (s32)base);
     result = 0;
 
     do {
@@ -58,7 +58,8 @@ retry:
 
     asm("");
     D_8009903C = savedMode;
-    asm("li %0,-1" : "=r"(result));
+    asm("" : "=r"(retries) : "0"(retries));
+    result = -1;
 
 done:
     return result + 1;
@@ -86,7 +87,7 @@ s32 func_8006A6DC(s32 arg0, void *arg1) {
     savedMode = D_8009903C;
     asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
-    asm("addu %0,%1,%2" : "=r"(commandState) : "r"(offset), "r"(base));
+    commandState = (s32 *)(offset + (s32)base);
     result = 0;
 
     do {
@@ -114,7 +115,8 @@ retry:
 
     asm("");
     D_8009903C = savedMode;
-    asm("li %0,-1" : "=r"(result));
+    asm("" : "=r"(retries) : "0"(retries));
+    result = -1;
 
 done:
     return result + 1;
