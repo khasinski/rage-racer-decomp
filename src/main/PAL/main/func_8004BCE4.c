@@ -49,7 +49,7 @@ void func_8004BCE4(void) {
             lowBase++;
             pairOffset += 4;
             lowNibble = highIndex << 2;
-            asm("addu %0,%1,%2" : "=r"(lowNibble) : "r"(lowNibble), "r"(base));
+            lowNibble += (s32)base;
             lowNibble = rowOffset + lowNibble;
             *(u32 *)lowNibble = lowPacked;
             *(u32 *)shift = highPacked;

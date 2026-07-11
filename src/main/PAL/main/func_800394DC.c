@@ -32,7 +32,7 @@ void func_800394DC(GameCarRuntime *obj, s32 arg1) {
     entry = (s16 *)(offset + (s32)base);
     raw = (index << 1) + index;
     raw <<= 2;
-    asm("addu $3,$3,$2" : "=r"(entry) : "0"(entry), "r"(raw));
+    entry = (s16 *)((s32)entry + raw);
 
     if (target < 0x20) {
         state = (u8 *)&objReg->field_BC;
@@ -53,8 +53,9 @@ void func_800394DC(GameCarRuntime *obj, s32 arg1) {
         if (entry[2] < valueRaw) {
             value = valueRaw;
             asm volatile("" : : "r"(value));
+            asm volatile("" : "=r"(valueRaw) : "0"(valueRaw));
             raw = entry[3];
-            asm("slt $2,$4,$2" : "=r"(raw) : "0"(raw), "r"(valueRaw));
+            raw = valueRaw < raw;
             if (raw != 0) {
                 raw = value + *(u16 *)(entry + 4);
                 objReg->field_11C = raw;
