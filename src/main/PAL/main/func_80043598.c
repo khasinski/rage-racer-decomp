@@ -7,8 +7,11 @@ extern s32 D_8007F600;
 extern s32 D_8007F604;
 extern s32 D_8007F608;
 extern s32 D_8007F60C;
+extern u8 D_8009AFD0[];
 extern u8 D_8009B168;
 extern u8 D_8009B16C;
+extern u8 D_8009B16E;
+extern u8 D_8009B16F;
 extern u8 D_8009B194;
 extern u8 D_8009B1B0;
 extern s32 D_8009B1B4;
@@ -28,8 +31,81 @@ void func_80042FA0(s32 arg0);
 void func_80042D10(void);
 void SsSetSpuInputAttr_Link(u8 source, u8 field, u8 value) asm("SsSetSpuInputAttr");
 
-INCLUDE_RODATA("asm/PAL/main/nonmatchings/main/func_80043598", func_80043598_rodata);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80043598", func_80043598);
+void func_80043598(void) {
+    s32 state;
+    s32 result;
+    s32 currentTime;
+    s32 bestTime;
+    s32 enteredTime;
+
+    state = D_8007F60C;
+
+    switch (state) {
+    case 0:
+        if (func_8006A534(1, 0) == 0) {
+            break;
+        }
+        D_8007F60C = 1;
+        /* fallthrough */
+
+    case 1:
+        if (func_8006A5A4(0x11, 0, (s32)&D_8009B16C) != 0) {
+            D_8007F60C = 2;
+        }
+        break;
+
+    case 2:
+        result = func_8006A534(1, 0);
+        if (result == 2) {
+            D_8007F60C = 3;
+        } else if (result == 5) {
+            D_8007F60C = 1;
+        }
+        break;
+
+    case 3:
+        D_8009AFD0[0] = D_8009B16E;
+        D_8009AFD0[2] = 0;
+        D_8009AFD0[1] = D_8009B16F;
+
+        currentTime = CdPosToInt_Local(&D_8007F5B0[D_8009B1B0]);
+        bestTime = CdPosToInt_Local(&D_8007F5B0[0]);
+        if (bestTime < currentTime) {
+            enteredTime = CdPosToInt_Local((CdlLOC *)D_8009AFD0);
+            currentTime = CdPosToInt_Local(&D_8007F5B0[D_8009B1B0]);
+            if (enteredTime >= currentTime) {
+                D_8007F5F8 = 1;
+            } else {
+                D_8007F5F8 = 0;
+            }
+        } else {
+            D_8007F5F8 = 0;
+        }
+
+        D_8007F60C = 4;
+        /* fallthrough */
+
+    case 4:
+        if (func_8006A5A4(9, 0, 0) != 0) {
+            D_8007F60C = 5;
+        }
+        break;
+
+    case 5:
+        result = func_8006A534(1, 0);
+        if (result == 2) {
+            D_8007F60C = 6;
+        } else if (result == 5) {
+            D_8007F60C = 4;
+        }
+        break;
+
+    case 6:
+        D_8007F604 = -1;
+        D_8007F60C = 0;
+        break;
+    }
+}
 
 void func_800437B8(void) {
     s32 state;
