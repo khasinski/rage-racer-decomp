@@ -28,7 +28,7 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
 
     *(s16 *)(packet + 0xC) = 0x140;
     height = 0xF0;
-    asm volatile("move %0,%1" : "=r"(prim) : "r"(packet));
+    asm volatile("" : "=r"(prim) : "0"(packet));
     *(s16 *)(packet + 0x8) = 0;
     *(s16 *)(packet + 0xA) = 0;
     *(s16 *)(packet + 0xE) = height;
@@ -37,7 +37,8 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
     packet[6] = color;
 
     asm volatile("" ::: "memory");
-    asm volatile("addiu %0,%1,16" : "=r"(next) : "r"(packet));
+    next = packet + 0x10;
+    asm volatile("" : : "r"(next));
     func_80064DDC((u32 *)ot, (u32 *)prim);
     *(void **)0x1F800000 = func_80017390(D_8019C900 + 0xCC, next, arg1);
 }

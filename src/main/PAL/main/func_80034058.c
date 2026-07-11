@@ -17,9 +17,10 @@ void *func_80034058(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     rect[2] = w;
     rect[3] = h;
     func_80066604(packet, rect);
-    oldPacket = packet;
     next = packet;
-    asm volatile("addiu %0,%0,12" : "=r"(next) : "0"(next));
+    oldPacket = next;
+    next = (u8 *)next + 12;
+    asm volatile("" : : "r"(next));
     func_80064DDC(ot, oldPacket);
     return next;
 }
