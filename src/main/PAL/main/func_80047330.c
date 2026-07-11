@@ -13,7 +13,7 @@ void func_80047330(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0
     register s32 r0Reg asm("$21");
     register s32 g0Reg asm("$22");
     register s32 b0Reg asm("$23");
-    register s32 alphaReg asm("$16");
+    register u8 alphaReg asm("$16");
     register u8 *a0Reg asm("$4");
     u8 *prim;
     u8 *oldPrim;
@@ -37,7 +37,6 @@ void func_80047330(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0
 
     func_80065020(prim);
     a0Reg = prim;
-    asm("andi $16,$16,0xff" : : "r"(a0Reg));
     SetSemiTrans(a0Reg, alphaReg != 0xFF);
 
     *(s16 *)(prim + 0x8) = x0Reg;
