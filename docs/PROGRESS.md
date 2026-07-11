@@ -6,4 +6,4 @@ A translation unit counts as decompiled when it has no INCLUDE_ASM/INCLUDE_RODAT
 
 | Binary | Functions | % | Code bytes | % |
 |---|---:|---:|---:|---:|
-| `SCES_006.50 (main)` | 544/842 | 64.6% | 113740/409116 | 27.8% |
+| `SCES_006.50 (main)` | 546/842 | 64.8% | 115264/409116 | 28.2% |
