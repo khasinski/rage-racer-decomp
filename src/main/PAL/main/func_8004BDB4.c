@@ -28,7 +28,7 @@ void func_8004BDB4(void) {
         j = 0;
         value2 = limit - i;
         value2 <<= 2;
-        asm("addu %0,%1,%2" : "=r"(srcStart) : "r"(value2), "r"(base));
+        srcStart = (u32 *)(value2 + (s32)base);
         do {
             k = 0;
             src = srcStart;

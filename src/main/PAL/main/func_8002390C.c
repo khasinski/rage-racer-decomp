@@ -37,7 +37,8 @@ void func_8002390C(void) {
 
 use_current:
     raw_base = D_801E4369;
-    asm("andi %0,%1,0xff" : "=r"(value) : "r"(raw_base));
+    asm("" : "=r"(raw_base) : "0"(raw_base));
+    value = raw_base & 0xFF;
     D_8007D5A4 = raw_base;
 
 have_value:
