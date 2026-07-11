@@ -33,7 +33,7 @@ s32 func_8006A808(s32 arg0, void *arg1, s32 arg2) {
     savedMode = D_8009903C;
     asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
-    asm("addu %0,%1,%2" : "=r"(commandState) : "r"(offset), "r"(base));
+    commandState = (s32 *)(offset + (s32)base);
     result = 0;
 
     do {

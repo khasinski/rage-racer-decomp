@@ -32,8 +32,9 @@ void func_8004BF48(void) {
             src = srcStart;
             do {
                 dst = (u32 *)((i * 8 + k) * 8);
-                asm("addiu %0,%1,7" : "=r"(dst) : "r"(dst));
-                asm("subu %0,%1,%2" : "=r"(dst) : "r"(dst), "r"(j));
+                asm("" : "=r"(dst) : "0"(dst));
+                dst = (u32 *)((s32)dst + 7);
+                dst = (u32 *)((s32)dst - j);
                 dst = (u32 *)(((s32)dst << 2) + (s32)(stackBase = saved));
                 *dst = 0;
                 value1 = src[0x00];
