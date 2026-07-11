@@ -114,6 +114,7 @@ $(BUILD)/src/main/PAL/main/func_8007A3A0.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8007A410.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8007A488.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8007AE68.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/func_80047E60.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/lib/libsnd/SsSeqRestartPlayback.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/lib/libsnd/SpuVmCalculateCurrentPitch.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/lib/libsnd/SpuVmCalculateTonePitch.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
