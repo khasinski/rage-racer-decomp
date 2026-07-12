@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/asset.h"
 
-extern s32 D_8007BED8;
 extern s32 D_8007C704;
 extern GameAssetTripleHeader *D_8019C904;
 extern void *D_8019C754;
@@ -15,7 +14,7 @@ void func_8005B9CC(void);
 s32 func_8001839C(void) {
     register s32 loadType asm("$16");
 
-    if (D_8007BED8 != 0) {
+    if (g_AssetLoadState != 0) {
         return 1;
     }
 
@@ -27,14 +26,14 @@ s32 func_8001839C(void) {
 
     func_80042C94();
     D_8007C704 = loadType;
-    D_8007BED8 = 2;
+    g_AssetLoadState = 2;
     return 1;
 }
 
 s32 func_80018410(void) {
     register s32 loadType asm("$16");
 
-    if (D_8007BED8 != 0) {
+    if (g_AssetLoadState != 0) {
         return 1;
     }
 
@@ -46,7 +45,7 @@ s32 func_80018410(void) {
 
     func_80042C94();
     D_8007C704 = loadType;
-    D_8007BED8 = 1;
+    g_AssetLoadState = 1;
     return 1;
 }
 
@@ -56,10 +55,10 @@ void func_80018484(void) {
     register s32 secondOffset asm("$3");
     register s32 thirdOffset asm("$4");
 
-    switch (D_8007BED8) {
+    switch (g_AssetLoadState) {
     case 1:
         func_8005B9CC();
-        D_8007BED8 = 2;
+        g_AssetLoadState = 2;
     case 2:
         if (func_80017C78(7, D_8019C904) != 0) {
             header = D_8019C904;
@@ -68,7 +67,7 @@ void func_80018484(void) {
             D_801F17A8 = (void *)((u8 *)header + firstOffset);
             secondOffset = *(volatile s32 *)&header->secondOffset;
             __asm__ volatile("" ::: "memory");
-            D_8007BED8 = 0;
+            g_AssetLoadState = 0;
             secondOffset = (s32)((u8 *)header + secondOffset);
             header = (GameAssetTripleHeader *)((u8 *)header + thirdOffset);
             __asm__ volatile("" ::: "memory");

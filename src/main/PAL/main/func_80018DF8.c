@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/asset.h"
 
-extern s32 D_8007BED8;
 extern s32 D_8009E6A4;
 extern s16 D_8019CABC;
 extern s32 D_8019C754;
@@ -17,7 +17,7 @@ void func_80018DF8(void) {
     s32 kind;
     s32 result;
 
-    state = D_8007BED8;
+    state = g_AssetLoadState;
     switch (state) {
     case 1:
         kind = 0x55;
@@ -37,7 +37,7 @@ void func_80018DF8(void) {
 
         result = func_80017C78(kind, D_801E4B30);
         if (result != 0) {
-            D_8007BED8 = 2;
+            g_AssetLoadState = 2;
             D_8019C754 = result + D_801E4B30;
         }
         break;
@@ -55,7 +55,7 @@ void func_80018DF8(void) {
             D_801F17A8 = first;
             D_801E8AB0 = second;
             third = *(s32 *)ptr;
-            D_8007BED8 = 0;
+            g_AssetLoadState = 0;
             D_801E4D70 = third;
         }
         break;

@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/asset.h"
 
-extern s32 D_8007BED8;
 extern s32 D_8007D53C;
 extern s32 D_8007D540;
 extern s32 D_8007D544;
@@ -33,7 +33,7 @@ inc_timer:
 
     if (D_8007D544 != 0) {
         D_8007D544--;
-        if ((D_8007BED8 == 0) && (D_801E436A != 0)) {
+        if ((g_AssetLoadState == 0) && (D_801E436A != 0)) {
             D_8007D544 = 0;
         }
     }

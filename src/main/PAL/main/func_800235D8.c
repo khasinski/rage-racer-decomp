@@ -1,5 +1,6 @@
 #include "common.h"
-extern s32 D_8007BED8, D_8019C768, D_801E4B30, D_8019CACC, D_801E42E4, D_801E40B8;
+#include "game/asset.h"
+extern s32 D_8019C768, D_801E4B30, D_8019CACC, D_801E42E4, D_801E40B8;
 extern s32 D_8009F0A0, D_801E42E0, D_8019CB14, D_801E42A0;
 void func_80065860(s32 arg0);
 void func_8001A3C0(s32 arg0);
@@ -10,7 +11,7 @@ void func_8001A610(void);
 void func_800235D8(void) {
     func_80065860(0);
     D_8019C768 = 0x80;
-    if (D_8007BED8 == 0) {
+    if (g_AssetLoadState == 0) {
         func_8001A3C0(D_801E4B30);
         D_8019CACC = 0;
         func_80017884(5);

@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/asset.h"
 
-extern s32 D_8007BED8;
 extern s32 D_8007C704;
 extern s32 D_8009AEFC;
 
@@ -18,7 +18,7 @@ void func_800196B4(void);
 void func_8001989C(void);
 
 void func_80019C04(void) {
-    if (D_8007BED8 != 0) {
+    if (g_AssetLoadState != 0) {
         switch (D_8007C704) {
         case 1:
             func_800180CC();

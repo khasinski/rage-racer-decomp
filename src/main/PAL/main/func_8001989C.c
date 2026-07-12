@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/asset.h"
 
-extern s32 D_8007BED8;
 extern s32 D_8009E6A4;
 extern s32 D_801E428C;
 extern GameSceneAssetHeader *D_8019CAFC;
@@ -25,7 +24,7 @@ void func_8001989C(void) {
     register void *dst asm("$5");
     register s32 offset asm("$2");
 
-    switch (D_8007BED8) {
+    switch (g_AssetLoadState) {
     case 1:
         dst = D_8019CAFC;
         offset = D_801E428C;
@@ -87,12 +86,12 @@ void func_8001989C(void) {
             D_801F17A8 = (u8 *)header + offset;
             func_80043AC8(D_801F17A8, 0);
 
-            D_8007BED8 = 2;
+            g_AssetLoadState = 2;
         }
         break;
     case 2:
         if (func_80017C2C() != 0) {
-            D_8007BED8 = 0;
+            g_AssetLoadState = 0;
         }
         break;
     }
