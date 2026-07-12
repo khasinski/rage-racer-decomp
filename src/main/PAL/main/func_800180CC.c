@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/state.h"
 #include "game/asset.h"
 #include "psyq/gpu.h"
 
-extern s32 D_8007C704;
 extern s32 D_8009F0B8;
 extern u8 *D_8019CAFC;
 extern u8 *D_8019C904;
@@ -98,13 +98,13 @@ s32 func_800182D0(void) {
     }
 
     state = 2;
-    if (D_8007C704 == state) {
-        D_8007C704 = 0;
+    if (g_MainState == state) {
+        g_MainState = 0;
         return 0;
     }
 
     func_80042C94();
-    D_8007C704 = state;
+    g_MainState = state;
     g_AssetLoadState = 1;
     return 1;
 }

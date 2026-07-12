@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/state.h"
 #include "game/asset.h"
 
-extern s32 D_8007C704;
 extern GameAssetTripleHeader *D_8019C904;
 extern void *D_8019C754;
 extern void *D_801E8AB0;
@@ -19,13 +19,13 @@ s32 func_8001839C(void) {
     }
 
     loadType = 3;
-    if (D_8007C704 == loadType) {
-        D_8007C704 = 0;
+    if (g_MainState == loadType) {
+        g_MainState = 0;
         return 0;
     }
 
     func_80042C94();
-    D_8007C704 = loadType;
+    g_MainState = loadType;
     g_AssetLoadState = 2;
     return 1;
 }
@@ -38,13 +38,13 @@ s32 func_80018410(void) {
     }
 
     loadType = 3;
-    if (D_8007C704 == loadType) {
-        D_8007C704 = 0;
+    if (g_MainState == loadType) {
+        g_MainState = 0;
         return 0;
     }
 
     func_80042C94();
-    D_8007C704 = loadType;
+    g_MainState = loadType;
     g_AssetLoadState = 1;
     return 1;
 }
