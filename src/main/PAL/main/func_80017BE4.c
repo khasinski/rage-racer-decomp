@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/state.h"
 #include "game/asset.h"
 
 extern s16 D_8007C700;
-extern s32 D_8007C704;
 
 void func_80027634(void);
 s32 func_8006A534(s32 arg0, s32 arg1);
@@ -15,7 +15,7 @@ void func_80017BE4(void) {
 
     D_8007C700 = 0;
     g_AssetLoadState = 0;
-    D_8007C704 = 0;
+    g_MainState = 0;
 }
 
 s32 func_80017C2C(void) {

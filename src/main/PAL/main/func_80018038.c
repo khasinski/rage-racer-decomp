@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/state.h"
 #include "game/asset.h"
 
-extern s32 D_8007C704;
 extern s32 D_8009F0B8;
 
 void func_80017E8C(void);
@@ -22,12 +22,12 @@ s32 func_80018078(void) {
         return 1;
     }
 
-    if (D_8007C704 == 1) {
-        D_8007C704 = 0;
+    if (g_MainState == 1) {
+        g_MainState = 0;
         return 0;
     }
 
-    D_8007C704 = 1;
+    g_MainState = 1;
     g_AssetLoadState = 1;
     return 1;
 }
