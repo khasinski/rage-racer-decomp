@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/menu.h"
 
-extern u16 D_801E4370;
 extern u16 D_801E436E;
 extern s32 D_801E4D68;
 extern s32 D_801E4D6C;
@@ -25,7 +25,7 @@ void func_800254C8(void) {
 
     func_800253A4();
 
-    input = D_801E4370;
+    input = g_PadEdge;
     oldX = D_801E4D68;
     oldY = D_801E4D6C;
 
@@ -33,21 +33,21 @@ void func_800254C8(void) {
         D_801E4D6C = oldY - 1;
     }
 
-    if (D_801E4370 & 0x4000) {
+    if (g_PadEdge & 0x4000) {
         value = D_801E4D6C;
         if (value < 23) {
             D_801E4D6C = value + 1;
         }
     }
 
-    if (D_801E4370 & 0x8000) {
+    if (g_PadEdge & 0x8000) {
         value = D_801E4D68;
         if (value >= -10) {
             D_801E4D68 = value - 1;
         }
     }
 
-    if (D_801E4370 & 0x2000) {
+    if (g_PadEdge & 0x2000) {
         value = D_801E4D68;
         if (value < 32) {
             D_801E4D68 = value + 1;

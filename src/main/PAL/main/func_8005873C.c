@@ -57,7 +57,7 @@ void func_8005873C(void) {
     }
     GamePlaySoundCue(1);
 after_sound:
-    pad = g_PadEdgeHeld;
+    pad = g_PadEdge2;
     if (!(pad & 0x860)) goto maybe_pop;
     {
         s32 c = GameMenuCursor;
