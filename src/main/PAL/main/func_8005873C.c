@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/menu.h"
+#include "game/audio.h"
 
 extern s32 D_8009B338, D_8019CB0C, D_8009B318;
 extern s32 D_8009B350, D_8009B34C, D_8009B35C, D_8009B340, D_8009B344, D_8009B358;
@@ -9,7 +10,6 @@ extern u32 D_80081D34;
 void func_80051D6C(void);
 s32 func_8004E724(s32 a, s32 b);
 s32 func_800487D8(void *a, void *b, s32 c);
-void func_8005D6EC(s32 a);
 void func_8001D530(void *a, s32 b);
 
 void func_8005873C(void) {
@@ -41,7 +41,7 @@ void func_8005873C(void) {
             D_8009B350 = 0;
             D_8009B34C = 0x3E8000;
             GameMenuCursorAnim = GameMenuCursor;
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
             goto after_sound;
         }
         goto after_sound;
@@ -55,7 +55,7 @@ void func_8005873C(void) {
         D_8009B34C = 0x3E8000;
         GameMenuCursorAnim = nc;
     }
-    func_8005D6EC(1);
+    GamePlaySoundCue(1);
 after_sound:
     pad = g_PadEdgeHeld;
     if (!(pad & 0x860)) goto maybe_pop;
@@ -64,7 +64,7 @@ after_sound:
         if (c == 0x2A) goto pop;
         if (c != 0x2B) goto push;
     }
-    func_8005D6EC(3);
+    GamePlaySoundCue(3);
     GameMenuBusy = 1;
     D_8009B318 = 2;
     D_8009B35C = 0x3D090;
@@ -73,7 +73,7 @@ after_sound:
 push:
     {
         u32 d;
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         GameMenuStack[GameMenuStackDepth] = (u8)GameMenuCursor;
         d = GameMenuStackDepth;
         if (d >= 5) GameMenuCursor = 0x2B;
@@ -85,7 +85,7 @@ maybe_pop:
     if (!(pad & 0x90)) return;
 pop:
     if (GameMenuStackDepth == 0) return;
-    func_8005D6EC(4);
+    GamePlaySoundCue(4);
     {
         register s32 tv asm("$2");
         tv = 0xA;
