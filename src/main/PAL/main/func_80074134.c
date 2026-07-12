@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/audio.h"
 
 extern u8 D_8009DF20[];
-extern volatile u8 D_8009E0A0[];
 extern u32 D_8009E59C[];
 extern u16 D_8019CA68;
 extern u32 D_801E4110;
@@ -100,9 +100,9 @@ evenPeriod:
         register u32 tableBase asm("$4");
 
         voiceIndex = D_801E4BEA;
-        flags = D_8009E0A0[voiceIndex];
+        flags = g_SndVoiceFlags[voiceIndex];
         flags |= 8;
-        D_8009E0A0[voiceIndex] = flags;
+        g_SndVoiceFlags[voiceIndex] = flags;
         asm volatile(
             "lui %0,%%hi(D_801E4BEC)\n\t"
             "addiu %0,%0,%%lo(D_801E4BEC)"
@@ -135,7 +135,7 @@ evenPeriod:
         periodIndex += tableBase;
         *(u16 *)&D_8009DF20[0xA + tableIndex] = periodIndex;
     }
-    D_8009E0A0[D_801E4BEA] |= 0x30;
+    g_SndVoiceFlags[D_801E4BEA] |= 0x30;
 
     (void)stackPad;
 }

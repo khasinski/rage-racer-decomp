@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/audio.h"
 
 extern u8 D_8009DF20[];
-extern u8 D_8009E0A0[];
 extern u8 D_8009E0BC[];
 extern volatile u16 D_8009E670;
 extern volatile u16 D_8009E674;
@@ -24,7 +24,7 @@ void func_80074818(s32 voice, u16 note, u16 fine, u16 left, u16 right) {
     voice = rawVoice & 0xFF;
     index = voice << 4;
     *(u16 *)&D_8009DF20[index + 2] = fine;
-    D_8009E0A0[voice] |= 3;
+    g_SndVoiceFlags[voice] |= 3;
     *(u16 *)&D_8009DF20[index] = note;
 
     if ((u32)voice < 16) {
