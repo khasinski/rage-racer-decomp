@@ -14,7 +14,7 @@ s32 func_80027790(s32 arg0, s32 arg1);
 s32 func_8006A534(s32 arg0, s32 arg1);
 void func_8006A6DC(s32 arg0, void *arg1);
 
-s32 func_80017C78(s32 assetIndex, void *dst) {
+s32 GameLoadAsset(s32 assetIndex, void *dst) {
     register void *dstReg asm("$6");
     s32 result;
     s32 size;
