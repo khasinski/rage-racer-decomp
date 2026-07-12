@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/screens.h"
 
 extern s32 D_801E40B8;
 extern s32 D_801E3E0C;
@@ -13,7 +14,7 @@ void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_800215B8(s32 arg0);
 
-void func_80021654(void) {
+void GameDrawRaceEndPrompt(void) {
     s32 color = 0x7812;
     s32 drawColor;
     s16 index;
