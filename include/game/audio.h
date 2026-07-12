@@ -3,6 +3,14 @@
 
 #include "common.h"
 
+/*
+ * Sound voice work buffer at 0x8009DF20. Two regions keyed by hardware voice
+ * (0..23): a voice*0x10 block at the base (note at +0, fine detune at +2) and a
+ * voice*0x34 block starting at 0x8009E0B8 (pitch +0xC, level +0x10, program
+ * +0x14, ...). g_SndVoiceFlags is the parallel per-voice status byte array.
+ */
+extern volatile u8 g_SndVoiceFlags[] asm("D_8009E0A0");
+
 void GameSetSequenceVolume(s32 volume) asm("func_8005E7A0");
 void GameRefreshSequenceVolumeScale(void) asm("func_8005E7DC");
 void GameSetSequenceVolumeScale(s32 scale) asm("func_8005E834");
