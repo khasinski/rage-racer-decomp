@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/screens.h"
 
 extern s16 D_801E4DAC;
 extern s32 D_801E428C;
@@ -10,7 +11,7 @@ void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016A18(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 
-void func_800200D0(void) {
+void GameDrawResultScreen(void) {
     register u8 *base asm("$16");
     register s32 *scratch asm("$17");
     register s32 width asm("$18");
