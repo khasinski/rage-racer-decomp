@@ -6,6 +6,9 @@
 /* Asset-load state machine phase (0 idle; 1..6 drive func_80017C78 loads). */
 extern s32 g_AssetLoadState asm("D_8007BED8");
 
+/* Load asset assetIndex into dst; returns loaded size/status. */
+s32 GameLoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
+
 typedef struct GameAssetTripleHeader {
     s32 firstOffset;
     s32 secondOffset;
