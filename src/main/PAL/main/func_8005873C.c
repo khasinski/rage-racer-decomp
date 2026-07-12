@@ -30,7 +30,15 @@ void func_8005873C(void) {
             if (D_801E4370 & 0x1000) { s32 u = D_8009B2F4; D_8009B2F4 = (u < 0xB) ? u + 0x21 : u - 0xB; }
             if (D_801E4370 & 0x4000) { s32 d = D_8009B2F4; D_8009B2F4 = (d < 0x21) ? d + 0xB : d - 0x21; }
             if (D_801E4370 & 0x8000) { s32 l = D_8009B2F4; D_8009B2F4 = (l % 11 != 0) ? l - 1 : l + 0xA; }
-            if (D_801E4370 & 0x2000) { register s32 r asm("$5"); register s32 res asm("$2"); s32 rn; r = D_8009B2F4; rn = r + 1; if (rn % 11 == 0) res = r - 0xA; else res = rn; D_8009B2F4 = res; }
+            if (D_801E4370 & 0x2000) {
+                register s32 r asm("$5");
+                register s32 res asm("$2");
+                s32 rn;
+                r = D_8009B2F4;
+                rn = r + 1;
+                if (rn % 11 == 0) res = r - 0xA; else res = rn;
+                D_8009B2F4 = res;
+            }
             D_8009B350 = 0;
             D_8009B34C = 0x3E8000;
             D_8009B380 = D_8009B2F4;
@@ -79,7 +87,11 @@ maybe_pop:
 pop:
     if (D_8007F45C == 0) return;
     func_8005D6EC(4);
-    { register s32 tv asm("$2"); tv = 0xA; D_8007F460[D_8007F45C] = tv; }
+    {
+        register s32 tv asm("$2");
+        tv = 0xA;
+        D_8007F460[D_8007F45C] = tv;
+    }
     newdepth = D_8007F45C - 1;
 set_depth:
     D_8007F45C = newdepth;
