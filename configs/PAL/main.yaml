@@ -70,6 +70,7 @@ segments:
       - [0x17DC, .rodata, PAL/main/func_80022794]
       - [0x17F8, .rodata, PAL/main/func_80023D70]
       - [0x1810, rodata, main/001810_main]
+      - [0x1CA8, .rodata, PAL/main/func_80038FF0]
       - [0x1CBC, .rodata, PAL/main/func_8003F608]
       - [0x1CD4, rodata, main/001CD4_main]
       - [0x1E54, .rodata, PAL/main/func_800432A8]
