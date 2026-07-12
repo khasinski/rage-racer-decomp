@@ -29,6 +29,18 @@ extern s32 GameMenuLoadPhase asm("D_8009B740");
 extern u8 GameMenuStackDepth asm("D_8007F45C");
 extern u8 GameMenuStack[] asm("D_8007F460");
 
+/*
+ * Memory-card menu sub-state (part of the 0x8009B200 block), driven by the big
+ * memcard-menu state machine func_80061520. g_McMenuSlotData points at the
+ * currently selected save-slot record (returned by func_8005ECE0); the others
+ * are selection/phase words.
+ */
+extern s32 g_McMenuState asm("D_8009B71C");
+extern void *g_McMenuSlotData asm("D_8009B720");
+extern s32 g_McMenuSelection asm("D_8009B724");
+extern s32 g_McMenuPhase asm("D_8009B728");
+extern s32 g_McMenuSubState asm("D_8009B72C");
+
 /* Pad "just pressed" (edge) bits used to drive menu input. Two separate edge
  * words exist; g_PadEdge drives directional navigation, g_PadEdge2 the wider
  * button/action set. Their exact split (players vs read phase) is not settled. */
