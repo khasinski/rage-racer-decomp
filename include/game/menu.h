@@ -29,9 +29,11 @@ extern s32 GameMenuLoadPhase asm("D_8009B740");
 extern u8 GameMenuStackDepth asm("D_8007F45C");
 extern u8 GameMenuStack[] asm("D_8007F460");
 
-/* Pad "just pressed" (edge) bits used to drive menu input. */
+/* Pad "just pressed" (edge) bits used to drive menu input. Two separate edge
+ * words exist; g_PadEdge drives directional navigation, g_PadEdge2 the wider
+ * button/action set. Their exact split (players vs read phase) is not settled. */
 extern u16 g_PadEdge asm("D_801E4370");
-extern u16 g_PadEdgeHeld asm("D_801E436E");
+extern u16 g_PadEdge2 asm("D_801E436E");
 
 void GameAdjustMenuSelectionHorizontal(
     s32 *value,
