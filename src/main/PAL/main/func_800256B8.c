@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/state.h"
 
-extern s32 D_8019CB14;
 extern s32 D_8009F0A0;
 extern u8 *D_8019C900;
 
@@ -20,12 +20,12 @@ void func_800256B8(void) {
     s32 h1c0;
     register u8 *rawBase asm("$2");
 
-    if (D_8019CB14 != 9) {
+    if (g_GameMode != 9) {
         func_8002390C();
     }
 
     target = 0xF0;
-    if (D_8019CB14 == 6) {
+    if (g_GameMode == 6) {
         target = 0x1E0;
     }
 
@@ -41,7 +41,7 @@ void func_800256B8(void) {
     base = rawBase + 0xBC8;
     pkt = *scratch;
 
-    if (D_8019CB14 == 6) {
+    if (g_GameMode == 6) {
         w120 = 0x120;
         two = 2;
         white = 0xFF;

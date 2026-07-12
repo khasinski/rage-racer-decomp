@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/state.h"
 
 extern s32 D_8019C704;
 extern s32 D_8019C868;
-extern s32 D_8019CB14;
 extern u16 D_801E436E;
 extern s32 D_801E4D68;
 extern s32 D_801E6C70;
@@ -37,7 +37,7 @@ void func_80024F28(void) {
     buttons = *buttonsPtr;
     if (buttons & 0x860) {
         func_8005D6EC(2);
-        D_8019CB14 = 5;
+        g_GameMode = 5;
         switch (D_8019C868) {
         case 0:
             D_801E4D68 = D_8019C704;
@@ -49,11 +49,11 @@ void func_80024F28(void) {
             D_801E4D68 = D_801E6C70;
             break;
         case 3:
-            D_8019CB14 = 1;
+            g_GameMode = 1;
             break;
         }
     } else if (buttons & 0x90) {
         func_8005D6EC(3);
-        D_8019CB14 = 1;
+        g_GameMode = 1;
     }
 }

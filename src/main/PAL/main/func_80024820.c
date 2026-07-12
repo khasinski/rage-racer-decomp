@@ -1,6 +1,7 @@
 #include "common.h"
+#include "game/state.h"
 extern u16 D_801E436E;
-extern s32 D_801E4D68, D_801E4D6C, D_8019CB14;
+extern s32 D_801E4D68, D_801E4D6C;
 void func_80024420(void);
 void func_8005D6EC(s32 arg0);
 void func_80023FE8(void);
@@ -38,7 +39,7 @@ void func_80024820(void) {
     }
     if (D_801E436E & 0x8F0) {
         func_8005D6EC(2);
-        D_8019CB14 = 2;
+        g_GameMode = 2;
     }
     func_80023FE8();
 }

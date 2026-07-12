@@ -1,10 +1,10 @@
 #include "common.h"
+#include "game/state.h"
 
 extern s32 D_8019C868;
 extern s32 D_8019C704;
 extern s32 D_801E8A50;
 extern s32 D_801E6C70;
-extern s32 D_8019CB14;
 extern s32 D_801E4D68;
 extern volatile u16 D_801E436E;
 
@@ -35,9 +35,9 @@ void func_800250BC(void) {
         }
         pad = D_801E436E;
         if (pad & 0x860) {
-            D_8019CB14 = 4;
+            g_GameMode = 4;
         } else if (pad & 0x90) {
-            D_8019CB14 = 4;
+            g_GameMode = 4;
             D_8019C704 = D_801E4D68;
         }
         break;
@@ -58,9 +58,9 @@ void func_800250BC(void) {
         }
         pad = D_801E436E;
         if (pad & 0x860) {
-            D_8019CB14 = 4;
+            g_GameMode = 4;
         } else if (pad & 0x90) {
-            D_8019CB14 = 4;
+            g_GameMode = 4;
             D_801E8A50 = D_801E4D68;
         }
         break;
@@ -81,9 +81,9 @@ void func_800250BC(void) {
         }
         pad = D_801E436E;
         if (pad & 0x860) {
-            D_8019CB14 = 4;
+            g_GameMode = 4;
         } else if (pad & 0x90) {
-            D_8019CB14 = 4;
+            g_GameMode = 4;
             D_801E6C70 = D_801E4D68;
         }
         break;

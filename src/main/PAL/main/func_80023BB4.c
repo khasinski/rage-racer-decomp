@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/state.h"
 
 extern u8 *D_8019C900;
-extern s32 D_8019CB14;
 extern s32 D_8019C7B4;
 
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -26,7 +26,7 @@ void func_80023BB4(void) {
     tmp = func_80017138((s32)base, tmp, 0x24, 0x134, 0x1C, h18, 0xD0, 0x60, color);
     tmp = func_80017390((s32)base, tmp, 0x3F);
 
-    state = D_8019CB14;
+    state = g_GameMode;
     *scratch = tmp;
     if (state == 1) {
         func_800236C8(0x14, (D_8019C7B4 << 5) + 0x94);

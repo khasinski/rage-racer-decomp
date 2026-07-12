@@ -1,9 +1,9 @@
 #include "common.h"
+#include "game/state.h"
 #include "game/audio.h"
 
 extern u16 D_801E436E;
 extern s32 D_8019C97C;
-extern s32 D_8019CB14;
 
 void func_80024420(void);
 void func_80023FE8(void);
@@ -34,13 +34,13 @@ void func_80024718(void) {
     if (buttons & 0x860) {
         GamePlaySoundCue(2);
         if (D_8019C97C != 0) {
-            D_8019CB14 = 1;
+            g_GameMode = 1;
         } else {
-            D_8019CB14 = 3;
+            g_GameMode = 3;
         }
     } else if (buttons & 0x90) {
         GamePlaySoundCue(3);
-        D_8019CB14 = 1;
+        g_GameMode = 1;
     }
 
     func_80023FE8();

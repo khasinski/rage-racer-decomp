@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/state.h"
 #include "game/menu.h"
 
 extern u16 D_801E436E;
@@ -6,7 +7,6 @@ extern s32 D_801E4D68;
 extern s32 D_801E4D6C;
 extern s32 D_801E4B8C;
 extern s32 D_801E4B9C;
-extern s32 D_8019CB14;
 extern u16 D_8019CE9C;
 extern u16 D_8019CE9E;
 extern u16 D_801C0684;
@@ -61,14 +61,14 @@ void func_800254C8(void) {
     confirm = D_801E436E;
     if (confirm & 0x860) {
         func_8005D6EC(2);
-        D_8019CB14 = 1;
+        g_GameMode = 1;
         D_801E4B8C = D_801E4D68;
         D_801E4B9C = D_801E4D6C;
     } else {
         confirmMask = confirm & 0x90;
         if (confirmMask != 0) {
             func_8005D6EC(3);
-            D_8019CB14 = 1;
+            g_GameMode = 1;
             D_801E4D68 = D_801E4B8C;
             D_801E4D6C = D_801E4B9C;
         }

@@ -10,4 +10,9 @@
  */
 extern s32 g_MainState asm("D_8007C704");
 
+/* Current top-level game mode; indexes g_GameModeHandlers, dispatched each
+ * frame by func_80025870. Distinct from g_MainState (the scene dispatcher). */
+extern s32 g_GameMode asm("D_8019CB14");
+extern void (*g_GameModeHandlers[])(void) asm("D_8007D67C");
+
 #endif

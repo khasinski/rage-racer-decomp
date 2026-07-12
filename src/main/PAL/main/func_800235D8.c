@@ -1,7 +1,8 @@
 #include "common.h"
+#include "game/state.h"
 #include "game/asset.h"
 extern s32 D_8019C768, D_801E4B30, D_8019CACC, D_801E42E4, D_801E40B8;
-extern s32 D_8009F0A0, D_801E42E0, D_8019CB14, D_801E42A0;
+extern s32 D_8009F0A0, D_801E42E0, D_801E42A0;
 void func_80065860(s32 arg0);
 void func_8001A3C0(s32 arg0);
 void func_80017884(s32 arg0);
@@ -28,7 +29,7 @@ void func_800235D8(void) {
         func_8001A610();
         D_8009F0A0 = 0xF0;
         D_801E42E0 = 0x100;
-        D_8019CB14 = 0;
+        g_GameMode = 0;
         D_801E42A0 = -8;
     }
 }

@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/state.h"
 
 extern s32 D_801E42E0;
 extern s32 D_801E42A0;
-extern s32 D_8019CB14;
 extern s32 D_8019C7B0;
 extern s32 D_801E42E4;
 
@@ -14,7 +14,7 @@ void func_80023B2C(void) {
 
     if (D_801E42E0 < 0) {
         D_801E42A0 = 0;
-        D_8019CB14 = 1;
+        g_GameMode = 1;
     } else if (D_801E42E0 >= 0x101) {
         D_801E42E4 = D_8019C7B0;
     }
