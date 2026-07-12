@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/car.h"
 
-extern s32 D_8007BED8;
 extern u32 D_8009E87C;
 extern GameCarEntry *D_8019C7C8;
 extern s32 D_801E40D4;
@@ -24,7 +24,7 @@ void func_80018A70(s32 arg0) {
     register u32 mode asm("$3");
     s32 flag;
 
-    if (D_8007BED8 == 1) {
+    if (g_AssetLoadState == 1) {
         index = arg0 << 3;
         entry = (GameCarEntry *)(index + (s32)D_8019C7C8);
         offset = func_80017848(arg0, entry->modelVariant + 1) << 1;
@@ -58,7 +58,7 @@ void func_80018A70(s32 arg0) {
                 func_8001D900(entry->textureIndex, *(s32 *)(ptr + 0x24));
             }
 
-            D_8007BED8 = 0;
+            g_AssetLoadState = 0;
         }
     }
 }

@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/car.h"
 
-extern s32 D_8007BED8;
 extern u32 D_8009E87C;
 extern GameCarEntry *D_8019C7C8;
 extern u8 *D_801E4090;
@@ -24,7 +24,7 @@ void func_800188B8(s32 arg0) {
     index = arg << 3;
     offset = (func_80017848(arg, ((GameCarEntry *)(index + (s32)D_8019C7C8))->modelVariant) * 2) + 0xA;
 
-    if (D_8007BED8 == 1) {
+    if (g_AssetLoadState == 1) {
         ptr = D_801E4090;
         if (D_8009E87C == 0) {
             ptr += 0x20000;
@@ -58,7 +58,7 @@ void func_800188B8(s32 arg0) {
                 func_8001D900(((GameCarEntry *)entry)->textureIndex, *(s32 *)(ptr + 0x24));
             }
 
-            D_8007BED8 = 0;
+            g_AssetLoadState = 0;
         }
     }
 }

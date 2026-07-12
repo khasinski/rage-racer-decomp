@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/asset.h"
 #include "psyq/gpu.h"
 
-extern s32 D_8007BED8;
 extern s32 D_8007C704;
 extern s32 D_8009F0B8;
 extern u8 *D_8019CAFC;
@@ -28,7 +28,7 @@ void func_800180CC(void) {
     register u8 *next asm("$2");
     register s32 nextState asm("$3");
 
-    switch (D_8007BED8) {
+    switch (g_AssetLoadState) {
     case 1:
         base = (u8 *)&D_8009F0B8;
         loaded = (u8 *)func_80017C78(1, base);
@@ -37,7 +37,7 @@ void func_800180CC(void) {
             __asm__ volatile("" ::: "memory");
             next = loaded + (s32)base;
             D_801F17A8 = next;
-            D_8007BED8 = 2;
+            g_AssetLoadState = 2;
         }
         break;
     case 2:
@@ -51,12 +51,12 @@ void func_800180CC(void) {
     case 3:
         if (func_80017C78(3, D_8019CAFC) != 0) {
             func_8005B768(0, D_801F17A8, D_8019CAFC, 0);
-            D_8007BED8 = 4;
+            g_AssetLoadState = 4;
         }
         break;
     case 4:
         if ((func_8005B89C() << 16) != 0) {
-            D_8007BED8 = 5;
+            g_AssetLoadState = 5;
         }
         break;
     case 5:
@@ -67,7 +67,7 @@ void func_800180CC(void) {
             __asm__ volatile("" : "=r"(next) : "0"(next));
             nextState = 6;
 setNextBuffer:
-            D_8007BED8 = nextState;
+            g_AssetLoadState = nextState;
             __asm__ volatile("" ::: "memory");
             next = loaded + (s32)next;
             D_8019CAFC = next;
@@ -83,7 +83,7 @@ setNextBuffer:
             DrawSync(0);
             finalBase = D_8019CAFC;
             D_801E444C[0] = 0;
-            D_8007BED8 = 0;
+            g_AssetLoadState = 0;
             D_8019C904 = finalBase;
         }
         break;
@@ -93,7 +93,7 @@ setNextBuffer:
 s32 func_800182D0(void) {
     register s32 state asm("$16");
 
-    if (D_8007BED8 != 0) {
+    if (g_AssetLoadState != 0) {
         return 1;
     }
 
@@ -105,6 +105,6 @@ s32 func_800182D0(void) {
 
     func_80042C94();
     D_8007C704 = state;
-    D_8007BED8 = 1;
+    g_AssetLoadState = 1;
     return 1;
 }

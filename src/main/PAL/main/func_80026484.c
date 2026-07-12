@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/asset.h"
 
-extern s32 D_8007BED8;
 extern s32 D_801E42A0;
 extern s32 D_801E42E0;
 extern s32 D_801E42E4;
@@ -12,7 +12,7 @@ void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 void func_80026484(void) {
     s32 delta;
 
-    if (D_8007BED8 == 0) {
+    if (g_AssetLoadState == 0) {
         D_801E42A0 = 4;
     }
 

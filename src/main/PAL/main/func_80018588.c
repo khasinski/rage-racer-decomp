@@ -2,7 +2,6 @@
 #include "game/asset.h"
 #include "game/car.h"
 
-extern s32 D_8007BED8;
 extern u32 D_8009E87C;
 extern GameCarModelAsset *D_8009E698;
 extern GameAssetTripleHeader *D_8019CAFC;
@@ -30,7 +29,7 @@ s32 func_8005B89C(void);
 void func_8005DBD8(void);
 
 void func_80018588(void) {
-    register s32 state asm("$3") = D_8007BED8;
+    register s32 state asm("$3") = g_AssetLoadState;
     register s32 state2 asm("$16");
     register u8 *carModelBase asm("$16");
     register GameAssetTripleHeader *header asm("$2");
@@ -66,12 +65,12 @@ void func_80018588(void) {
 state_1:
         __asm__ volatile("" ::: "$3");
         func_8005B768(1, D_801F17A8, D_801E8AB0, D_8019C754);
-        D_8007BED8 = state2;
+        g_AssetLoadState = state2;
         goto done;
 state_2:
         if ((func_8005B89C() << 16) != 0) {
             func_8005DBD8();
-            D_8007BED8 = 3;
+            g_AssetLoadState = 3;
             D_8019CAFC = (GameAssetTripleHeader *)D_801E8AB0;
         }
         goto done;
@@ -93,7 +92,7 @@ state_3:
                 D_801F17A8 = (u8 *)headerArg + assetOffset;
                 func_8001A3C0(D_801F17A8);
 
-                D_8007BED8 = 4;
+                g_AssetLoadState = 4;
                 D_801E4090 = D_801F17A8;
                 D_801E4B30 = D_801F17A8 + 0x40000;
             }
@@ -132,7 +131,7 @@ state_4:
                 }
 
                 D_8009E87C = 0;
-                D_8007BED8 = 0;
+                g_AssetLoadState = 0;
             }
 done:
     return;
