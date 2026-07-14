@@ -25,6 +25,74 @@ typedef struct GameScratchpadRenderState {
     s16 y1;
 } GameScratchpadRenderState;
 
+typedef struct GameRenderView {
+    s16 angle_0;    /* 0x00 */
+    s16 angle_2;    /* 0x02 */
+    s16 angle_4;    /* 0x04 */
+    s16 horizon_6;  /* 0x06 */
+} GameRenderView;
+
+typedef struct GameRenderObject {
+    s32 x;          /* 0x00 */
+    s32 y;          /* 0x04 */
+    s32 z;          /* 0x08 */
+    s32 field_0C;
+    s32 field_10;
+    s32 field_14;
+    s32 field_18;
+    s32 field_1C;
+    s32 angle_20;   /* 0x20 */
+    s32 angle_24;   /* 0x24 */
+    s32 angle_28;   /* 0x28 */
+    s32 field_2C;
+    s32 field_30;
+    s32 field_34;
+    s32 field_38;
+    s32 field_3C;
+    s32 field_40;
+    s32 angle_44;   /* 0x44 */
+    s32 flags_48;   /* 0x48 (bit 0x1000) */
+    s32 field_4C;
+    s32 angle_50;   /* 0x50 */
+    s32 angle_54;   /* 0x54 */
+    s32 angle_58;   /* 0x58 */
+    s32 field_5C;
+    s32 field_60;   /* 0x60 */
+    s32 field_64;   /* 0x64 */
+    s32 field_68;
+    s32 field_6C;
+    void *field_70; /* 0x70 */
+    s32 field_74;
+    s32 field_78;
+    s32 field_7C;
+    s32 field_80;
+    s32 field_84;
+    s32 field_88;
+    s32 field_8C;
+    s32 field_90;
+    s32 field_94;
+    s32 field_98;
+    s32 field_9C;
+    s32 field_A0;
+    s32 field_A4;
+    s32 field_A8;
+    s32 field_AC;
+    s32 field_B0;
+    s32 field_B4;
+    s32 field_B8;
+    s32 field_BC;
+    s32 field_C0;
+    s32 field_C4;
+    s32 field_C8;
+    s32 field_CC;
+    s32 field_D0;
+    s32 field_D4;
+    s32 field_D8;
+    s32 field_DC;
+    s32 field_E0;
+    s32 field_E4;   /* 0xE4 */
+} GameRenderObject;
+
 typedef struct GameRenderSourcePoint {
     u16 field_0;
     u8 pad2[2];
