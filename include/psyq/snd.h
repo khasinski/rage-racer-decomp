@@ -30,7 +30,7 @@ typedef struct SeqStruct {
     s16 unk42;
     s16 tempo_step;
     s16 unk46;
-    s16 unk48;
+    u16 unk48;
     s16 tempo_multiplier;
     s16 unk4c;
     s16 vol[16];
