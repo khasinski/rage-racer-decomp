@@ -77,7 +77,9 @@ if [ ! -f "$MASPSX_DIR/maspsx.py" ]; then
     git clone --depth 1 "$MASPSX_URL" "$MASPSX_DIR" >/dev/null
 fi
 
-if ! "$PYTHON" "$MASPSX_DIR/maspsx.py" --help 2>/dev/null | grep -q -- '--addiu-branch-delay'; then
+# Reliable "already applied?" guard: --reverse --check succeeds iff the patch is
+# already applied. (The old `--help | grep` guard was flaky across python builds.)
+if ! git -C "$MASPSX_DIR" apply --recount --reverse --check "$MASPSX_PATCH" >/dev/null 2>&1; then
     if [ ! -f "$MASPSX_PATCH" ]; then
         echo "rage-pc: missing $MASPSX_PATCH; maspsx delay-slot flags unavailable" >&2
         exit 1
