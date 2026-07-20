@@ -61,6 +61,7 @@ segments:
       - [0x1338, rodata, main/001338_main]
       - [0x139C, .rodata, PAL/main/func_800180CC]
       - [0x13B4, .rodata, PAL/main/func_8001901C]
+      - [0x13D0, rodata, main/0013D0_main]
       - [0x13D4, .rodata, PAL/main/func_80019C04]
       - [0x1404, .rodata, PAL/main/func_8001B5DC]
       - [0x141C, .rodata, PAL/main/func_8001B884]
