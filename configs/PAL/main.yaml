@@ -93,7 +93,7 @@ segments:
       - [0x4088, .rodata, PAL/main/func_8006AB5C]
       - [0x409C, rodata, main/00409C_main]
       - [0x4434, .rodata, PAL/main/func_8006F5F4]
-      - [0x461C, rodata, main/00461C_main]
+      - [0x461C, .rodata, PAL/main/func_800706AC]
       - [0x46A8, .rodata, PAL/lib/libsnd/SsSetTickMode]
       - [0x46C0, rodata, main/0046C0_main]
       - [0x4708, .rodata, PAL/lib/libspu/SpuSetCommonAttr]
