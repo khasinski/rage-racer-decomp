@@ -1,6 +1,12 @@
 #include "common.h"
 
 extern u8 D_800111C4;
+extern u8 D_800111DC;
+extern u8 D_800111F4;
+
+extern volatile s32 D_8007D790;
+extern volatile s32 D_8007D794;
+extern volatile s32 D_8007D79C;
 
 extern void (*D_8007D78C)(s32, s32);
 extern volatile s32 D_8007D798;
@@ -19,6 +25,11 @@ s32 func_8006DD30(s32 arg0);
 s32 func_8006A574(s32 arg0);
 s32 func_8006A58C(s32 arg0);
 s32 func_8006A5A4(s32 arg0, s32 arg1, s32 arg2);
+s32 func_8006A3E8(void);
+s32 func_8006A418(void);
+s32 func_8006A3F8(void);
+void func_8006A494(void);
+void func_8006A6DC(s32 arg0, s32 arg1);
 s32 func_8002745C(s32 arg0);
 
 void func_80027238(u8 arg0, s32 arg1) {
@@ -73,4 +84,53 @@ void func_80027238(u8 arg0, s32 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80027238", func_8002745C);
+s32 func_8002745C(s32 arg0) {
+    u8 buf[8];
+    s32 t;
+
+    func_8006A574(0);
+    func_8006A58C(0);
+    if (func_8006A3E8() & 0x10) {
+        if ((func_8006DD30(-1) & 0x3F) == 0) {
+            func_80063C38(&D_800111DC);
+        }
+        func_8006A6DC(1, 0);
+        {
+            volatile s32 *q = &D_8007D7AC;
+            *q = func_8006DD30(-1);
+        }
+        D_8007D7A4 = -1;
+        return D_8007D7A4;
+    }
+    if (arg0 != 0) {
+        func_80063C38(&D_800111F4);
+        func_8006A5A4(9, 0, 0);
+        if (func_8006A5A4(2, func_8006A418(), 0) == 0) {
+            register volatile s32 *q asm("$2") = &D_8007D7A4;
+            *q = -1;
+            return *q;
+        }
+    }
+    func_8006A494();
+    {
+        volatile s32 *q = &D_8007D79C;
+        t = *q;
+    }
+    buf[0] = t;
+    if ((t & 0xFF) != func_8006A3F8() || arg0 != 0) {
+        if (func_8006A5A4(0xE, (s32)buf, 0) == 0) {
+            D_8007D7A4 = -1;
+            return D_8007D7A4;
+        }
+    }
+    {
+        volatile s32 *q = &D_8007D7B0;
+        *q = func_8006AADC((void *)func_8006A418());
+    }
+    func_8006A58C((s32)func_80027238);
+    D_8007D798 = D_8007D794;
+    func_8006A6DC(6, 0);
+    D_8007D7A4 = D_8007D790;
+    D_8007D7A8 = func_8006DD30(-1);
+    return D_8007D7A4;
+}
