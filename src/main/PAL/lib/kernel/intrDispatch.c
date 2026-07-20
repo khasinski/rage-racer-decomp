@@ -1,4 +1,5 @@
 #include "common.h"
+#include "psyq/kernel.h"
 
 typedef void (*Callback)(void);
 
