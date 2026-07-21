@@ -1,6 +1,9 @@
 #include "common.h"
 
 extern u8 *D_8019C900;
+extern s32 D_801E42CC;
+extern char *D_8007C7A0[];
+extern char D_80010D2C[];
 extern s16 D_801E4DAC;
 extern s32 D_801E428C;
 extern s32 D_8009EC90;
@@ -68,5 +71,35 @@ void func_8001C974(void) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8001C974", func_8001CD54);
+s32 func_80016EC4(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
+s32 func_80017390(void *ot, s32 p, s32 a);
+s32 func_80032F34(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
+void func_80016754(s32 x, s32 y, void *str, s32 col);
+
+void func_8001CD54(void) {
+    char buf[88];
+    s32 *scr = (s32 *)0x1F800000;
+    s32 p;
+    void *ot = D_8019C900 + 208;
+
+    p = *scr;
+    p = func_80016EC4(ot, p, 0x14, 0xce, 0x58, 8, 0xa8, 0xe0, 0x7812);
+    p = func_80016EC4(ot, p, (D_801E42CC == 0xa) ? 0x6c : 0x70, 0xce, 8, 8, 0x84, 0xc4, 0x7812);
+    p = func_80016EC4(ot, p, (D_801E42CC == 0xa) ? 0x84 : 0x80, 0xce, 8, 8, 0x8c, 0xc4, 0x7812);
+    p = func_80017390(ot, p, 0x29);
+    p = func_80032F34(ot, p, 0x10, 0xcc, 0x5b, 0xc, 0x85, 0x15, 0xe);
+    p = func_80032F34(ot, p, 0x6c, 0xcc, 0x1f, 0xc, 0x40, 0x40, 0x40);
+    p = func_80032F34(ot, p, 0x8c, 0xcc, 0xa4, 0xc, 0, 0, 0);
+    p = func_80032F34(ot, p, 0xf, 0xcb, 0x122, 0xe, 0xff, 0xff, 0xff);
+    *scr = p;
+
+    func_800632F0(buf, D_80010D2C, D_801E42CC);
+    {
+        register s32 x asm("$6");
+        x = (D_801E42CC == 0xa) ? 0x74 : 0x78;
+        func_80016754(x, 0xce, buf, 0x78cc);
+    }
+    func_80016754(0x90, 0xce, D_8007C7A0[D_801E42CC], 0x78cc);
+}
+
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8001C974", func_8001CFB4);
