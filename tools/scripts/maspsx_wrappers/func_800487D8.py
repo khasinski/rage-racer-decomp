@@ -140,6 +140,110 @@ sll\t$2,$7,2
         "loop time/kind register schedule",
     )
     out = replace_once(out, "addu\t$2,$20,$2", "addu\t$2,$2,$20", "tail command pointer add")
+    out = replace_once(
+        out,
+        """sw\t$18,64($sp)
+
+.loc\t1 120
+LM58:
+sw\t$21,76($sp)
+
+.loc\t1 125
+LM59:
+addu\t$21,$5,$zero
+""",
+        """sw\t$21,76($sp)
+
+.loc\t1 125
+LM59:
+addu\t$21,$5,$zero
+
+.loc\t1 120
+LM58:
+sw\t$18,64($sp)
+""",
+        "func_800489AC saved-register setup order",
+    )
+    out = replace_once(
+        out,
+        """sra\t$5,$5,16
+lui\t$2,(-65536 >> 16) & 0xFFFF
+
+.loc\t1 155
+LM73:
+j\t$L44
+or\t$2,$5,$2
+
+$L43:
+
+.loc\t1 156
+LM74:
+sra\t$5,$5,16
+andi\t$2,$5,0x7fff
+""",
+        """sra\t$2,$5,16
+lui\t$3,(-65536 >> 16) & 0xFFFF
+
+.loc\t1 155
+LM73:
+j\t$L44
+or\t$2,$2,$3
+
+$L43:
+
+.loc\t1 156
+LM74:
+sra\t$2,$5,16
+andi\t$2,$2,0x7fff
+        """,
+        "func_800489AC high-half register schedule",
+    )
+    out = replace_once(
+        out,
+        "bne\t$2,$0,$L38\nsll\t$17,$18,1",
+        "bne\t$2,$0,$L38\nsll\t$2,$18,1",
+        "func_800489AC entry index delay",
+    )
+    out = replace_once(
+        out,
+        """addu\t$17,$17,$18
+sll\t$17,$17,2
+addu\t$17,$17,$3
+""",
+        """addu\t$2,$2,$18
+sll\t$2,$2,2
+addu\t$17,$2,$3
+""",
+        "func_800489AC entry pointer arithmetic",
+    )
+    out = replace_once(
+        out,
+        """addu\t$5,$5,$20
+sll\t$5,$5,16
+sra\t$5,$5,16
+sw\t$2,16($sp)
+lbu\t$2,4($8)
+#nop # DEBUG: 'addu\t$6,$6,$19' does not load from $2
+addu\t$6,$6,$19
+sw\t$2,20($sp)
+lbu\t$2,5($8)
+#nop # DEBUG: 'sll\t$6,$6,16' does not load from $2
+sll\t$6,$6,16
+""",
+        """addu\t$5,$5,$20
+sll\t$5,$5,16
+addu\t$6,$6,$19
+sw\t$2,16($sp)
+lbu\t$2,4($8)
+#nop # DEBUG: 'sll\t$6,$6,16' does not load from $2
+sll\t$6,$6,16
+sw\t$2,20($sp)
+lbu\t$2,5($8)
+#nop # DEBUG: 'sra\t$5,$5,16' does not load from $2
+sra\t$5,$5,16
+""",
+        "func_800489AC call coordinate sign-extension schedule",
+    )
     sys.stdout.write(out)
     return 0
 
