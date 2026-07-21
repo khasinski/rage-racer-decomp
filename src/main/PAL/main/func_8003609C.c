@@ -1,5 +1,165 @@
 #include "common.h"
 
+extern s16 D_8009E6A0;
+extern s16 D_8009E74C;
+extern s16 D_8019C750;
+extern s16 D_8019C9AC;
+extern s16 D_801E43FC;
+extern s16 D_801E4CF8;
+extern s16 D_801E4DAC;
+extern s16 D_801E6C90;
+extern s16 D_801E6E74;
+extern s16 D_801E6F20;
+extern s16 D_801E6F22;
+extern s16 D_801E6F24;
+extern s16 D_801E6F26;
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8003609C", func_8003609C);
+extern s32 D_8009AF8C;
+extern s32 D_8009AF90;
+extern s32 D_8009AF94;
+extern s32 D_8009AF98;
+extern s32 D_8009AF9C;
+extern s32 D_8009AFA0;
+extern s32 D_8009E694;
+extern u8 D_8009E6D4;
+extern s32 D_8009E870;
+extern s32 D_8019C768;
+extern s32 *D_8019C9A8;
+extern s32 D_801E408C;
+extern s32 D_801E40B8;
+extern s32 D_801E40CC;
+extern s32 D_801E40D8;
+extern s32 D_801E40E0;
+extern s32 D_801E4148;
+extern s32 *D_801E4150;
+extern u8 D_801E41E8;
+extern u8 D_801E41EC;
+extern u8 D_801E41F0;
+extern s32 D_801E4248;
+extern s32 D_801E428C;
+extern s32 D_801E42E4;
+extern s32 D_801E4364;
+extern u8 D_801E4408;
+extern s32 D_801E4BA8;
+extern s32 D_801E4BB4;
+extern s32 D_801E4BCC;
+extern s32 D_801E4D64;
+extern s32 D_801E4D98;
+extern s32 D_801E4D9C;
+extern s32 D_801E4DA0;
+extern s32 D_801E7A50;
 
+extern u8 D_80011488;
+
+void func_8001674C(u8 *arg0, ...);
+void func_80017884(s32 arg0);
+void func_80019E84(s32 arg0);
+void func_8001A980(s32 *arg0, s32 arg1, s32 arg2);
+void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
+void func_8001D210(void);
+void func_8001D30C(void);
+void func_8001C974(void);
+void func_8001F100(void);
+void func_8002C478(u8 *arg0);
+void func_80032D5C(s32 arg0);
+void func_800340D8(void);
+void func_80038844(void);
+void func_8003D6E8(void);
+void func_8003E464(void);
+void func_8003EBCC(void);
+void func_8003F0F8(void);
+void func_8003F700(void);
+void func_80042BC0(s32 arg0);
+void func_800458CC(s32 arg0);
+void func_8005DC1C(void);
+
+void func_8003609C(void) {
+    u8 *var_a0;
+    u8 *var_v1;
+    s32 temp_v0;
+    s32 temp_v1;
+    s32 temp_v1_2;
+    register s32 var_a2 asm("$6");
+    s32 limit;
+    register s32 trackIndex asm("$5");
+    register s32 courseIndex asm("$4");
+
+    func_8001BE9C(0, 0, 0);
+    func_80017884(5);
+    func_8001F100();
+    func_8001D30C();
+    func_8001D210();
+    D_801E40CC = *D_801E4150;
+    if (D_801E428C == 3) {
+        D_801E4364 = 6;
+    } else {
+        D_801E4364 = 3;
+    }
+    func_8002C478(&D_8009E6D4);
+    func_80019E84(D_8009E74C);
+    func_80038844();
+    D_801E4D64 = 0;
+    D_801E4248 = 0;
+    D_8009AFA0 = 0;
+    D_801E4DA0 = D_801E40D8;
+    temp_v0 = D_801E40D8 / 3;
+    D_801E4D98 = temp_v0;
+    D_801E4D9C = temp_v0 * 2;
+    trackIndex = D_801E428C;
+    courseIndex = D_801E408C;
+    temp_v1 = (trackIndex * 0xC) + (courseIndex * 0x30);
+    D_8009AF90 = *(s32 *)(&D_801E41E8 + temp_v1);
+    D_8009AF94 = *(s32 *)(&D_801E41EC + temp_v1);
+    D_801E4148 = -2;
+    var_a0 = (u8 *)((courseIndex << 5) + (s32)&D_801E4408);
+    D_8009AF98 = *(s32 *)(&D_801E41F0 + temp_v1);
+    temp_v1_2 = *(s32 *)((D_801E4DAC * 4) + ((trackIndex * 8) + (s32)var_a0));
+    D_8009AF9C = 0x3A98;
+    D_8009AF8C = temp_v1_2;
+    D_801E4BCC = temp_v1_2;
+    var_a2 = 0;
+    limit = D_801E4364;
+    if (limit > 0) {
+        var_v1 = &D_8009E6D4 + 0x184;
+        var_a0 = &D_8009E6D4 + 0x16C;
+        do {
+            *(s32 *)var_a0 = 0;
+            *(s32 *)var_v1 = 0;
+            var_v1 += 4;
+            var_a2 += 1;
+            var_a0 += 4;
+        } while (var_a2 < limit);
+    }
+    D_801E4BA8 = 0;
+    func_8001A980((s32 *)var_a0, limit, var_a2);
+    func_800458CC(D_8019C9A8[2]);
+    func_800340D8();
+    func_80032D5C(D_801E4DAC);
+    D_8009E694 = 0;
+    D_801E40B8 = 0;
+    D_8009E870 = 0;
+    D_801E6E74 = 0;
+    D_801E7A50 = 0;
+    D_801E4BB4 = 0x1FE;
+    D_801E6F26 = 0;
+    D_801E6F24 = 0;
+    D_801E6F22 = 0;
+    D_801E6F20 = 0;
+    func_8003D6E8();
+    func_8003F0F8();
+    func_8003E464();
+    func_8003EBCC();
+    func_8003F700();
+    func_80042BC0(D_801E40E0 + 3);
+    D_8019C750 = 0;
+    D_801E43FC = 0;
+    func_8005DC1C();
+    D_8009E6A0 = 1;
+    D_801E6C90 = 0;
+    D_8019C9AC = 0;
+    D_801E4CF8 = 0;
+    D_801E42E4 = 0xC;
+    D_8019C768 = 0x180;
+    func_8001C974();
+    func_8001674C(&D_80011488);
+}
