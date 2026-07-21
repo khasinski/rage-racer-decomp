@@ -1,5 +1,125 @@
 #include "common.h"
 
-
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80028E9C", func_80028E9C);
-
+/*
+ * func_80028E9C: GTE per-face transform-and-clip loop (RTPT/NCLIP/RTPS/AVSZ3) with a computed jr dispatch through a func-pointer table, passing live-out args in t6-t9 with no stack frame. Unmatchable as compiled C.
+ */
+asm(
+    ".set noreorder\n"
+    ".set noat\n"
+    ".globl func_80028E9C\n"
+    "func_80028E9C:\n"
+    ".word 0x30AFFFFF\n"
+    ".word 0x000F78C0\n"
+    ".word 0x3C0E8007\n"
+    ".word 0x35CEDA14\n"
+    ".word 0x01CFC821\n"
+    ".word 0x8F2A0000\n"
+    ".word 0x8F2B0004\n"
+    ".word 0x00052C02\n"
+    ".word 0x8C860000\n"
+    ".word 0x8C880080\n"
+    ".word 0x8C890054\n"
+    ".word 0x8C8D0004\n"
+    ".word 0x8C8C0064\n"
+    ".word 0x25AD0200\n"
+    ".word 0x8D0E0000\n"
+    ".word 0x8D180004\n"
+    ".word 0x000E7C02\n"
+    ".word 0x31CEFFFF\n"
+    ".word 0x0018CC02\n"
+    ".word 0x3318FFFF\n"
+    ".word 0x000E70C0\n"
+    ".word 0x000F78C0\n"
+    ".word 0x0018C0C0\n"
+    ".word 0x01C97021\n"
+    ".word 0x01E97821\n"
+    ".word 0x0309C021\n"
+    ".word 0xC9C00000\n"  /* lwc2 */
+    ".word 0xC9C10004\n"  /* lwc2 */
+    ".word 0xC9E20000\n"  /* lwc2 */
+    ".word 0xC9E30004\n"  /* lwc2 */
+    ".word 0xCB040000\n"  /* lwc2 */
+    ".word 0xCB050004\n"  /* lwc2 */
+    ".word 0x0019C8C0\n"
+    ".word 0x4A280030\n"  /* gte_rtpt (RTPT) */
+    ".word 0x8C830068\n"
+    ".word 0x0329C821\n"
+    ".word 0x4B400006\n"  /* gte_nclip (NCLIP) */
+    ".word 0x14600005\n"
+    ".word 0x4802C000\n"  /* mfc2 */
+    ".word 0x00000000\n"
+    ".word 0x1C400004\n"
+    ".word 0x00000000\n"
+    ".word 0x10000040\n"
+    ".word 0x00000000\n"
+    ".word 0x0441003E\n"
+    ".word 0xE88C0100\n"  /* swc2 */
+    ".word 0xE88D0104\n"  /* swc2 */
+    ".word 0xE88E0108\n"  /* swc2 */
+    ".word 0xCB200000\n"  /* lwc2 */
+    ".word 0xCB210004\n"  /* lwc2 */
+    ".word 0x8482007C\n"
+    ".word 0x4A180001\n"  /* gte_rtps (RTPS) */
+    ".word 0x84830078\n"
+    ".word 0x848E0100\n"
+    ".word 0x848F0104\n"
+    ".word 0xE88E010C\n"  /* swc2 */
+    ".word 0x84980108\n"
+    ".word 0x4B68002E\n"  /* gte_avsz4 (AVSZ4) */
+    ".word 0x8499010C\n"
+    ".word 0x48073800\n"  /* mfc2 */
+    ".word 0x004E082A\n"
+    ".word 0x10200006\n"
+    ".word 0x004F082A\n"
+    ".word 0x10200004\n"
+    ".word 0x0058082A\n"
+    ".word 0x10200002\n"
+    ".word 0x0059082A\n"
+    ".word 0x14200027\n"
+    ".word 0x01C3082A\n"
+    ".word 0x10200006\n"
+    ".word 0x01E3082A\n"
+    ".word 0x10200004\n"
+    ".word 0x0303082A\n"
+    ".word 0x10200002\n"
+    ".word 0x0323082A\n"
+    ".word 0x1420001F\n"
+    ".word 0x8482007E\n"
+    ".word 0x8483007A\n"
+    ".word 0x848E0102\n"
+    ".word 0x848F0106\n"
+    ".word 0x8498010A\n"
+    ".word 0x8499010E\n"
+    ".word 0x004E082A\n"
+    ".word 0x10200006\n"
+    ".word 0x004F082A\n"
+    ".word 0x10200004\n"
+    ".word 0x0058082A\n"
+    ".word 0x10200002\n"
+    ".word 0x0059082A\n"
+    ".word 0x14200011\n"
+    ".word 0x01C3082A\n"
+    ".word 0x10200006\n"
+    ".word 0x01E3082A\n"
+    ".word 0x10200004\n"
+    ".word 0x0303082A\n"
+    ".word 0x10200002\n"
+    ".word 0x0323082A\n"
+    ".word 0x14200009\n"
+    ".word 0x01873807\n"
+    ".word 0x24E2FFFF\n"
+    ".word 0x2C4201BF\n"
+    ".word 0x10400005\n"
+    ".word 0x8C8E0100\n"
+    ".word 0x8C8F0104\n"
+    ".word 0x8C980108\n"
+    ".word 0x01400008\n"
+    ".word 0x8C99010C\n"
+    ".word 0x24A5FFFF\n"
+    ".word 0x14A0FFA1\n"
+    ".word 0x010B4021\n"
+    ".word 0xAC880080\n"
+    ".word 0xAC860000\n"
+    ".word 0x03E00008\n"
+    ".word 0x00000000\n"
+);
