@@ -1,8 +1,114 @@
 #include "common.h"
 
+extern s32 D_8019CB0C;
 
-INCLUDE_RODATA("asm/PAL/main/nonmatchings/main/func_800487D8", func_800487D8_rodata);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_800487D8", func_800487D8);
+typedef struct DrawCommand {
+    s16 time;
+    s16 kind;
+    void *arg1;
+    s32 arg2;
+} DrawCommand;
+
+void func_80048078(s32 arg0, void *arg1, void *arg2, s32 arg3);
+void func_80048210(s32 arg0, void *arg1, void *arg2);
+void func_800483D4(s32 arg0, void *arg1, void *arg2);
+void func_80048580(s32 arg0, void *arg1, void *arg2);
+
+s32 func_800487D8(DrawCommand *commands, s32 *cursor, s32 delta) {
+    register DrawCommand *base asm("$20") = commands;
+    register s32 *pos asm("$18") = cursor;
+    register s32 step_delta asm("$19") = delta;
+    register s32 index asm("$17");
+    register DrawCommand *cmd asm("$16");
+    register DrawCommand *entry asm("$3");
+    s32 next;
+
+    index = 0;
+
+    if (step_delta < 0) {
+        next = *pos + step_delta;
+        if (next > 0) {
+            *pos = next;
+        } else {
+            *pos = 0;
+        }
+    }
+
+    entry = &base[index];
+    if (entry->time >= 0) {
+        cmd = entry;
+        do {
+            register s32 step asm("$4");
+
+            step = *pos - cmd->time;
+            if (step >= 0) {
+                register s32 kind asm("$7") = cmd->kind;
+
+                if ((u32)kind < 0x28) {
+                    switch (kind) {
+                    case 0:
+                    case 1:
+                        func_80048078(step, cmd->arg1, (void *)cmd->arg2, kind);
+                        break;
+                    case 9:
+                        if (D_8019CB0C == 0) {
+                            func_80048078(step, cmd->arg1, (void *)cmd->arg2, kind);
+                        }
+                        break;
+                    case 10:
+                        func_80048210(step, cmd->arg1, (void *)cmd->arg2);
+                        break;
+                    case 19:
+                        if (D_8019CB0C == 0) {
+                            func_80048210(step, cmd->arg1, (void *)cmd->arg2);
+                        }
+                        break;
+                    case 20:
+                        func_800483D4(step, cmd->arg1, (void *)cmd->arg2);
+                        break;
+                    case 29:
+                        if (D_8019CB0C == 0) {
+                            func_800483D4(step, cmd->arg1, (void *)cmd->arg2);
+                        }
+                        break;
+                    case 30:
+                        func_80048580(step, cmd->arg1, (void *)cmd->arg2);
+                        break;
+                    case 39:
+                        if (D_8019CB0C == 0) {
+                            func_80048580(step, cmd->arg1, (void *)cmd->arg2);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            cmd++;
+            index++;
+        } while (cmd->time >= 0);
+    }
+
+    if (step_delta >= 0) {
+        register DrawCommand *tail asm("$2");
+        register s32 old_pos asm("$3");
+        register s32 limit asm("$4");
+        register s32 next_tail asm("$6");
+
+        tail = &base[index];
+        old_pos = *pos;
+        limit = tail->arg2;
+        next_tail = step_delta + old_pos;
+        if (next_tail < limit) {
+            *pos = next_tail;
+        } else {
+            *pos = limit;
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_800487D8", func_800489AC);
 
 void func_80047958(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);

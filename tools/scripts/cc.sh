@@ -146,7 +146,11 @@ run_cc1() {
         if grep -q 'MASPSX_FLAGS:.*--load-dest-temp' "$IN"; then
             maspsx_extra_args+=(--load-dest-temp)
         fi
-        "$PYTHON" "$MASPSX_DIR/maspsx.py" \
+        maspsx_tool="$MASPSX_DIR/maspsx.py"
+        if [ "${IN##*/}" = "func_800487D8.c" ]; then
+            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_800487D8.py"
+        fi
+        "$PYTHON" "$maspsx_tool" \
             --expand-div --aspsx-version=2.34 --force-stdin \
             ${maspsx_extra_args[@]+"${maspsx_extra_args[@]}"} \
             | {
