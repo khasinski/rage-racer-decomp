@@ -155,6 +155,8 @@ run_cc1() {
             maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_800487D8.py"
         elif [ "${IN##*/}" = "func_8003609C.c" ]; then
             maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_8003609C.py"
+        elif [ "${IN##*/}" = "func_8003F700.c" ]; then
+            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_8003F700.py"
         fi
         "$PYTHON" "$maspsx_tool" \
             --expand-div --aspsx-version=2.34 --force-stdin \
