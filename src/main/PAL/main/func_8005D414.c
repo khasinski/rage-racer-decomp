@@ -48,21 +48,14 @@ s32 func_8005D414(s32 cue, s32 volume) {
         }
 
         value = offset << 1;
-        asm("addu %0,%2,%0" : "=r"(value) : "0"(value), "r"(scaleBase));
+        value = scaleBase + value;
         scaleBase = *(s16 *)(value + 4);
         asm("" : "=r"(scaleBase) : "0"(scaleBase));
-        result = (s16)func_80077C7C(callType, scaleBase, tone, pitch, (value = 0x3C), ({
-            value = (result << 9) >> 16;
-            asm volatile(
-                "sll %0,%0,16\n\t"
-                "sll %1,%1,16\n\t"
-                "li %2,0x00000013\n\t"
-                "sra %0,%0,16\n\t"
-                "sra %1,%1,16"
-                : "=r"(tone), "=r"(pitch), "=r"(callType)
-                : "0"(tone), "1"(pitch));
-            0;
-        }), value, value);
+        tone = (s16)tone;
+        pitch = (s16)pitch;
+        callType = 0x13;
+        value = (result << 9) >> 16;
+        result = (s16)func_80077C7C(callType, scaleBase, tone, pitch, 0x3C, 0, value, value);
         *handle = result;
     }
 
@@ -70,4 +63,60 @@ s32 func_8005D414(s32 cue, s32 volume) {
     return result;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005D414", func_8005D530);
+extern s32 D_80011F5C[][6];
+extern s32 D_80011C84;
+extern s16 D_801E6CA8[];
+
+s32 func_8007B088(s32 arg0);
+
+s32 func_8005D530(s32 arg0, s32 x, s32 y) {
+    register s32 id asm("$20");
+    register s32 pan asm("$18");
+    register s32 tone asm("$19");
+    register s32 pitch asm("$22");
+    register s32 leftVol asm("$17");
+    register s32 rightVol asm("$16");
+    register s32 result asm("$21");
+    s32 baseVol;
+    s32 scale;
+    s32 leftProduct;
+    s32 rightProduct;
+
+    id = arg0;
+    baseVol = D_80011F5C[id][0];
+    pan = D_80011F5C[id][1];
+    tone = D_80011F5C[id][2];
+    pitch = D_80011F5C[id][3];
+
+    leftProduct = baseVol * x;
+    if (leftProduct < 0) {
+        leftProduct += 0x7F;
+    }
+    scale = D_801E6CA4;
+    leftVol = (leftProduct >> 7) * scale;
+    if (leftVol < 0) {
+        leftVol += 0x7F;
+    }
+    rightProduct = baseVol * y;
+    if (rightProduct < 0) {
+        rightProduct += 0x7F;
+    }
+    leftVol = leftVol >> 7;
+    rightVol = (rightProduct >> 7) * scale;
+    if (rightVol < 0) {
+        rightVol += 0x7F;
+    }
+    rightVol = rightVol >> 7;
+
+    if (func_8007B088(D_80011C84) != 0 && id != 0x3D && id != 0x2B) {
+        return result;
+    }
+
+    result = (s16)func_80077C7C(
+        0x16, D_801E6CA8[pan], (s16)tone, (s16)pitch, 0x3C, 0, (s16)leftVol, (s16)rightVol);
+    D_801E4D90 = result;
+    result = (s16)func_80077C7C(
+        0x17, D_801E6CA8[pan], (s16)tone, (s16)(pitch + 1), 0x3C, 0, (s16)leftVol, (s16)rightVol);
+    D_801E4D94 = result;
+    return result;
+}
