@@ -561,7 +561,7 @@ segments:
       - [0x41A80, c, PAL/main/func_80051280]
       - [0x41AB4, c, PAL/main/func_800512B4]
       - [0x41B1C, c, PAL/main/func_8005131C, cc=2.6.3]
-      - [0x4214C, c, PAL/main/func_8005194C, cc=2.7.2]
+      - [0x4214C, c, PAL/main/func_8005194C, cc=2.6.3]
       - [0x4256C, c, PAL/main/func_80051D6C, cc=2.6.3]
       - [0x428F8, c, PAL/main/func_800520F8]
       - [0x42928, c, PAL/main/func_80052128]
