@@ -1,8 +1,8 @@
 #include "common.h"
 
-void func_8007b294(s32);
-void func_80079b60(s32, u8 *);
-void func_80075fa4(void);
+void func_8007B294(s32);
+void func_80079B60(s32, u8 *);
+void func_80075FA4(void);
 
 extern u8 D_8009E5E0[];
 
@@ -74,11 +74,11 @@ void func_80075710(s32 arg0) {
 
     {
         u8 *p = D_8009E5E0;
-        func_8007b294(0);
+        func_8007B294(0);
         D_801E4B5C = 0;
         D_8019CA68 = 0;
         asm volatile("" ::: "memory");
-        func_80079b60(0x20, p);
+        func_80079B60(0x20, p);
     }
 
     for (i = 0; (u16)i < 192; i++) D_8009DF20[(u16)i] = 0;
@@ -180,5 +180,5 @@ void func_80075710(s32 arg0) {
     D_801E4D88 = 0;
     D_801E3FB0 = 0;
     D_801E40D0 = 0x80;
-    func_80075fa4();
+    func_80075FA4();
 }
