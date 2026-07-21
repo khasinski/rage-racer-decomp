@@ -437,7 +437,7 @@ segments:
       - [0x2B6BC, c, PAL/main/func_8003AEBC]
       - [0x2B8D4, c, PAL/main/func_8003B0D4, cc=2.6.3]
       - [0x2C350, c, PAL/main/func_8003BB50, cc=2.6.3]
-      - [0x2CD08, c, PAL/main/func_8003C508, cc=2.7.2]
+      - [0x2CD08, c, PAL/main/func_8003C508, cc=2.6.3]
       - [0x2D214, c, PAL/main/func_8003CA14]
       - [0x2D33C, c, PAL/main/func_8003CB3C]
       - [0x2D5F4, c, PAL/main/func_8003CDF4]
