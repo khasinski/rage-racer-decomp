@@ -109,7 +109,93 @@ s32 func_800487D8(DrawCommand *commands, s32 *cursor, s32 delta) {
     return 0;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_800487D8", func_800489AC);
+extern s16 D_80082520;
+extern u8 *D_80082524;
+extern u8 *D_80082528;
+extern s32 D_8009B250[];
+
+void func_80046A2C(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r, s32 g, s32 b, s32 tex, s32 semi,
+                   s32 one, s32 code);
+
+void func_800489AC(s32 arg0, s32 arg1, s32 arg2) {
+    register u8 *draw asm("t0") = D_80082524;
+    register s32 progress asm("a0") = arg0 - D_80082520;
+    register u8 *anim asm("t1") = D_80082528;
+    register u8 *scratch asm("s6") = *(u8 **)0x1F800004;
+    register s32 last asm("s5") = arg1;
+    register s32 i asm("s2");
+    register s32 packed asm("a1");
+    s32 xoff;
+    s32 yoff;
+    register u8 *entry asm("s1");
+    register s32 *fadep asm("s0");
+    s32 scale;
+
+    packed = *(s32 *)(anim + 0x10);
+    i = 0;
+    if (progress < 0) {
+        return;
+    }
+
+    if (*(s32 *)anim < progress) {
+        progress = *(s32 *)anim;
+    }
+
+    D_8009B250[arg2] = 0x1FC;
+
+    if (packed & 0x8000) {
+        scale = packed | 0xFFFF0000;
+    } else {
+        scale = packed & 0x7FFF;
+    }
+    xoff = (u32)(progress * scale) >> 5;
+
+    if (packed < 0) {
+        scale = (packed >> 16) | 0xFFFF0000;
+    } else {
+        scale = (packed >> 16) & 0x7FFF;
+    }
+    yoff = (u32)(progress * scale) >> 5;
+    asm volatile("" : "=r"(yoff) : "0"(yoff));
+
+    if (last < i) {
+        return;
+    }
+
+    {
+        register u8 *entryBase asm("v1") = (u8 *)&D_80082520;
+        entry = entryBase + (i * 0xC);
+    }
+
+    do {
+        register s32 fade asm("v1");
+        register s32 *fadeBase asm("v1") = D_8009B250;
+
+        fadep = &fadeBase[i];
+        fade = *fadep & 0x1FF;
+        *fadep = fade;
+        fade = (u32)fade >> 2;
+
+        func_80046A2C(scratch + 8, (s16)(*(u16 *)(anim + 4) + xoff), (s16)(*(u16 *)(anim + 6) + yoff),
+                      *(s16 *)(draw + 0), *(s16 *)(draw + 2), draw[4], draw[5], fade, fade, fade,
+                      *(u16 *)(anim + 8), 0, 1, draw[7]);
+
+        fade = *fadep;
+        {
+            register s32 nextFade asm("a0") = 0;
+            if (fade >= 0x3C) {
+                nextFade = fade - 0x3C;
+            }
+            fade = nextFade;
+        }
+
+        entry += 0xC;
+        i++;
+        *fadep = fade;
+        draw = *(u8 **)(entry + 4);
+        anim = *(u8 **)(entry + 8);
+    } while (i <= last);
+}
 
 void func_80047958(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
 void func_80047634(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
