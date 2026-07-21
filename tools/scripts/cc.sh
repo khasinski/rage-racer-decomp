@@ -149,6 +149,8 @@ run_cc1() {
         maspsx_tool="$MASPSX_DIR/maspsx.py"
         if [ "${IN##*/}" = "func_800483D4.c" ]; then
             maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_800483D4.py"
+        elif [ "${IN##*/}" = "func_80048580.c" ]; then
+            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_80048580.py"
         elif [ "${IN##*/}" = "func_800487D8.c" ]; then
             maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_800487D8.py"
         fi
