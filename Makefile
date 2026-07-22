@@ -125,6 +125,7 @@ $(BUILD)/src/main/PAL/main/func_8001B974.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80017884.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80075FA4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_800739E8.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/func_8006B0D4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 
 # These active sources still need cc1-psx-272. Some use GCC attribute placement
 # rejected by gcc2.6.3-psx; others produce different linked section bytes under
