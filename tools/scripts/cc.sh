@@ -147,25 +147,6 @@ run_cc1() {
             maspsx_extra_args+=(--load-dest-temp)
         fi
         maspsx_tool="$MASPSX_DIR/maspsx.py"
-        if [ "${IN##*/}" = "func_800483D4.c" ]; then
-            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_800483D4.py"
-        elif [ "${IN##*/}" = "func_800383A8.c" ]; then
-            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_800383A8.py"
-        elif [ "${IN##*/}" = "func_80040DB4.c" ]; then
-            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_80040DB4.py"
-        elif [ "${IN##*/}" = "func_8005D414.c" ]; then
-            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_8005D530.py"
-        elif [ "${IN##*/}" = "func_80048580.c" ]; then
-            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_80048580.py"
-        elif [ "${IN##*/}" = "func_800487D8.c" ]; then
-            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_800487D8.py"
-        elif [ "${IN##*/}" = "func_8003609C.c" ]; then
-            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_8003609C.py"
-        elif [ "${IN##*/}" = "func_8003F700.c" ]; then
-            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_8003F700.py"
-        elif [ "${IN##*/}" = "func_80038CE8.c" ]; then
-            maspsx_tool="$ROOT/tools/scripts/maspsx_wrappers/func_80038CE8.py"
-        fi
         "$PYTHON" "$maspsx_tool" \
             --expand-div --aspsx-version=2.34 --force-stdin \
             ${maspsx_extra_args[@]+"${maspsx_extra_args[@]}"} \
