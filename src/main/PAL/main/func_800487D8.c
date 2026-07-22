@@ -1,8 +1,125 @@
 #include "common.h"
 
+typedef struct {
+    s16 time;
+    s16 type;
+    s32 arg0;
+    s32 arg1;
+} TimedDrawCommand;
 
-INCLUDE_RODATA("asm/PAL/main/nonmatchings/main/func_800487D8", func_800487D8_rodata);
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_800487D8", func_800487D8);
+extern s32 D_8019CB0C;
+
+void func_80048078(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void func_80048210(s32 arg0, s32 arg1, s32 arg2);
+void func_800483D4(s32 arg0, s32 arg1, s32 arg2);
+void func_80048580(s32 arg0, s32 arg1, s32 arg2);
+
+s32 func_800487D8(TimedDrawCommand *commands, s32 *progress, s32 step) {
+    register TimedDrawCommand *base asm("$20") = commands;
+    register s32 *progressPtr asm("$18") = progress;
+    register s32 stepReg asm("$19") = step;
+    register TimedDrawCommand *cmd asm("$16");
+    register TimedDrawCommand *cmdTmp asm("$3");
+    register s32 index = 0;
+    s32 remaining;
+    s32 type;
+    register s32 nextProgress asm("$2");
+    register s32 updatedProgress asm("$6");
+    register s32 limit asm("$4");
+
+    asm("" : "=r"(base), "=r"(progressPtr), "=r"(stepReg) : "0"(base), "1"(progressPtr), "2"(stepReg));
+    if (stepReg < 0) {
+        nextProgress = *progressPtr + stepReg;
+        if (nextProgress > 0) {
+            *progressPtr = nextProgress;
+        } else {
+            *progressPtr = 0;
+        }
+    }
+
+    nextProgress = ((index << 1) + index) << 2;
+    asm("addu %0,%1,%2" : "=r"(cmdTmp) : "r"(nextProgress), "r"(base));
+    if (cmdTmp->time < 0) {
+        goto after_loop;
+    }
+    cmd = cmdTmp;
+loop_body:
+    remaining = *progressPtr - cmd->time;
+    if (remaining >= 0) {
+        type = cmd->type;
+        if ((u32)type < 40) {
+            switch (type) {
+            case 9:
+                if (D_8019CB0C != 0) {
+                    break;
+                }
+                func_80048078(remaining, cmd->arg0, cmd->arg1, type);
+                cmd++;
+                goto loop_continue;
+            case 0:
+            case 1:
+                func_80048078(remaining, cmd->arg0, cmd->arg1, type);
+                cmd++;
+                goto loop_continue;
+            case 19:
+                if (D_8019CB0C != 0) {
+                    break;
+                }
+                func_80048210(remaining, cmd->arg0, cmd->arg1);
+                cmd++;
+                goto loop_continue;
+            case 10:
+                func_80048210(remaining, cmd->arg0, cmd->arg1);
+                cmd++;
+                goto loop_continue;
+            case 29:
+                if (D_8019CB0C != 0) {
+                    break;
+                }
+                func_800483D4(remaining, cmd->arg0, cmd->arg1);
+                cmd++;
+                goto loop_continue;
+            case 20:
+                func_800483D4(remaining, cmd->arg0, cmd->arg1);
+                cmd++;
+                goto loop_continue;
+            case 39:
+                if (D_8019CB0C != 0) {
+                    break;
+                }
+                func_80048580(remaining, cmd->arg0, cmd->arg1);
+                goto loop_next;
+            case 30:
+                func_80048580(remaining, cmd->arg0, cmd->arg1);
+                goto loop_next;
+            default:
+                break;
+            }
+        }
+    }
+loop_next:
+    cmd++;
+loop_continue:
+    index++;
+    if (cmd->time >= 0) {
+        goto loop_body;
+    }
+
+after_loop:
+    if (stepReg >= 0) {
+        cmdTmp = (TimedDrawCommand *)*progressPtr;
+        updatedProgress = stepReg + (s32)cmdTmp;
+        limit = base[index].arg1;
+        if (updatedProgress < limit) {
+            *progressPtr = updatedProgress;
+        } else {
+            *progressPtr = limit;
+            return 1;
+        }
+    }
+
+    return 0;
+}
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_800487D8", func_800489AC);
 
 void func_80047958(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
