@@ -35,8 +35,6 @@ MASPSX_DIR="${MASPSX_DIR:-$TOOL_DIR/maspsx}"
 CC1_URL="https://github.com/Xeeynamo/ff7-decomp/releases/download/init/cc1-psx-272.gz"
 CC1_SHA256="1959ced957d8780489874de30d9af79a9154174624b8a00976f4a7f3fad87ac6"
 MASPSX_URL="${MASPSX_URL:-https://github.com/mkst/maspsx.git}"
-MASPSX_FLAGS="${MASPSX_FLAGS:-}"
-MASPSX_PATCH="$ROOT/tools/patches/maspsx-delay-flags.patch"
 
 CPP="${CPP:-mipsel-none-elf-cpp}"
 AS="${AS:-mipsel-none-elf-as}"
@@ -77,19 +75,6 @@ if [ ! -f "$MASPSX_DIR/maspsx.py" ]; then
     git clone --depth 1 "$MASPSX_URL" "$MASPSX_DIR" >/dev/null
 fi
 
-# Reliable "already applied?" guard: --reverse --check succeeds iff the patch is
-# already applied. (The old `--help | grep` guard was flaky across python builds.)
-if ! git -C "$MASPSX_DIR" apply --recount --reverse --check "$MASPSX_PATCH" >/dev/null 2>&1; then
-    if [ ! -f "$MASPSX_PATCH" ]; then
-        echo "rage-pc: missing $MASPSX_PATCH; maspsx delay-slot flags unavailable" >&2
-        exit 1
-    fi
-    if ! git -C "$MASPSX_DIR" apply --recount "$MASPSX_PATCH"; then
-        echo "rage-pc: failed to apply maspsx delay-slot patch in $MASPSX_DIR" >&2
-        exit 1
-    fi
-fi
-
 run_cc1() {
     if "$CC1" -version </dev/null >/dev/null 2>&1; then
         "$CC1" -quiet -mcpu=3000 -g -mgas -gcoff -O2 -G0 -funsigned-char - -o -
@@ -111,51 +96,6 @@ run_cc1() {
 
 "$CPP" -I"$ROOT/include" -I"$ROOT/src/main" -undef -Wall -fno-builtin "$IN" \
     | run_cc1 \
-    | {
-        # Allow targeted per-object maspsx experiments without changing the
-        # project default wrapper flags.
-        maspsx_extra_args=()
-        if [ -n "$MASPSX_FLAGS" ]; then
-            # shellcheck disable=SC2206
-            maspsx_extra_args=($MASPSX_FLAGS)
-        fi
-        if grep -q 'MASPSX_FLAGS:.*--stack-return-delay' "$IN"; then
-            maspsx_extra_args+=(--stack-return-delay)
-        fi
-        if grep -q 'MASPSX_FLAGS:.*--store-return-delay' "$IN"; then
-            maspsx_extra_args+=(--store-return-delay)
-        fi
-        if grep -q 'MASPSX_FLAGS:.*--la-return-delay' "$IN"; then
-            maspsx_extra_args+=(--la-return-delay)
-        fi
-        if grep -q 'MASPSX_FLAGS:.*--la-call-delay' "$IN"; then
-            maspsx_extra_args+=(--la-call-delay)
-        fi
-        if grep -q 'MASPSX_FLAGS:.*--store-call-delay' "$IN"; then
-            maspsx_extra_args+=(--store-call-delay)
-        fi
-        if grep -q 'MASPSX_FLAGS:.*--store-jump-delay' "$IN"; then
-            maspsx_extra_args+=(--store-jump-delay)
-        fi
-        if grep -q 'MASPSX_FLAGS:.*--store-branch-delay' "$IN"; then
-            maspsx_extra_args+=(--store-branch-delay)
-        fi
-        if grep -q 'MASPSX_FLAGS:.*--addiu-branch-delay' "$IN"; then
-            maspsx_extra_args+=(--addiu-branch-delay)
-        fi
-        if grep -q 'MASPSX_FLAGS:.*--load-dest-temp' "$IN"; then
-            maspsx_extra_args+=(--load-dest-temp)
-        fi
-        maspsx_tool="$MASPSX_DIR/maspsx.py"
-        "$PYTHON" "$maspsx_tool" \
-            --expand-div --aspsx-version=2.34 --force-stdin \
-            ${maspsx_extra_args[@]+"${maspsx_extra_args[@]}"} \
-            | {
-                if [ "${IN##*/}" = "func_80028120.c" ]; then
-                    awk '!($0 ~ /^[[:space:]]*nop[[:space:]]*#/ && index($0, "DEBUG: branch/jump"))'
-                else
-                    cat
-                fi
-            }
-    } \
+    | "$PYTHON" "$MASPSX_DIR/maspsx.py" \
+        --expand-div --aspsx-version=2.34 --force-stdin \
     | "$AS" -EL -G0 -march=r3000 -mtune=r3000 -no-pad-sections -I"$ROOT/include" -o "$OUT" -

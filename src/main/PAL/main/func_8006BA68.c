@@ -1,26 +1,22 @@
 #include "common.h"
 #include "psyq/cd.h"
 
+extern u8 *D_80099300;
+extern u8 *D_80099304;
+extern u8 *D_80099308;
+extern u8 *D_8009930C;
 extern s32 D_8009903C;
 extern s32 D_80099040;
 extern s32 D_8009904C;
 extern s32 D_80099050;
 extern u8 D_80099318;
 extern volatile u8 D_8009931A;
-extern u8 *D_80099300;
-extern u8 *D_80099304;
-extern u8 *D_80099308;
-extern u8 *D_8009930C;
 extern u32 *D_80099310;
 extern CdRegisterMap *volatile D_80099314;
 
 void func_8006DF34(void);
 void func_8006C17C(void);
 void func_8006DF64(s32 arg0, void *arg1);
-
-asm(".globl func_8006BBD0_entry\nfunc_8006BBD0_entry = func_8006BBD0");
-asm(".globl func_8006BCC4_entry\nfunc_8006BCC4_entry = func_8006BCC4");
-asm(".globl func_8006BD14_entry\nfunc_8006BD14_entry = func_8006BD14");
 
 s32 CD_vol(CdlATV *arg0) {
     *D_80099300 = 2;
@@ -73,13 +69,10 @@ int CD_initvol(void) {
     u8 sp0[4];
 
     temp_v1 = D_80099314;
-
-    if (temp_v1->status_mode_a == 0) {
-        if (temp_v1->status_mode_b == 0) {
-            temp_v1->cd_left_volume = 0x3FFF;
-            temp_v1->cd_right_volume = 0x3FFF;
-            temp_v1 = D_80099314;
-        }
+    if (temp_v1->status_mode_a == 0 && temp_v1->status_mode_b == 0) {
+        temp_v1->cd_left_volume = 0x3FFF;
+        temp_v1->cd_right_volume = 0x3FFF;
+        temp_v1 = D_80099314;
     }
 
     temp_v1->output_left_volume = 0x3FFF;
@@ -102,7 +95,7 @@ int CD_initvol(void) {
     return 0;
 }
 
-void func_8006BCC4(void) {
+void CD_initintr(void) {
     D_80099040 = 0;
     D_8009903C = 0;
     D_80099050 = 0;
@@ -111,133 +104,4 @@ void func_8006BCC4(void) {
     func_8006DF64(2, (void *)func_8006C17C);
 }
 
-asm(
-    ".set noreorder\n"
-    ".set noat\n"
-    ".globl func_8006BD14\n"
-    "func_8006BD14:\n"
-    ".word 0x27BDFFE8\n"
-    ".word 0x3C048001\n"
-    ".word 0x24843904\n"
-    ".word 0xAFBF0010\n"
-    ".word 0x0C018F0E\n"
-    ".word 0x00000000\n"
-    ".word 0x3C048001\n"
-    ".word 0x24843910\n"
-    ".word 0x3C05800A\n"
-    ".word 0x24A5931C\n"
-    ".word 0x0C0059D3\n"
-    ".word 0x00000000\n"
-    ".word 0x3C01800A\n"
-    ".word 0xA020905D\n"
-    ".word 0x3C01800A\n"
-    ".word 0xA020905C\n"
-    ".word 0x3C01800A\n"
-    ".word 0xAC209040\n"
-    ".word 0x3C01800A\n"
-    ".word 0xAC20903C\n"
-    ".word 0x3C01800A\n"
-    ".word 0xAC209050\n"
-    ".word 0x3C01800A\n"
-    ".word 0xAC20904C\n"
-    ".word 0x0C01B7CD\n"
-    ".word 0x00000000\n"
-    ".globl func_8006BD7C\n"
-    "func_8006BD7C:\n"
-    ".word 0x3C058007\n"
-    ".word 0x24A5C17C\n"
-    ".word 0x0C01B7D9\n"
-    ".word 0x34040002\n"
-    ".word 0x3C03800A\n"
-    ".word 0x8C639300\n"
-    ".word 0x34020001\n"
-    ".word 0xA0620000\n"
-    ".word 0x3C02800A\n"
-    ".word 0x8C42930C\n"
-    ".word 0x00000000\n"
-    ".word 0x90420000\n"
-    ".word 0x00000000\n"
-    ".word 0x30420007\n"
-    ".word 0x10400016\n"
-    ".word 0x34040001\n"
-    ".word 0x34030007\n"
-    ".word 0x3C02800A\n"
-    ".word 0x8C429300\n"
-    ".word 0x00000000\n"
-    ".word 0xA0440000\n"
-    ".word 0x3C02800A\n"
-    ".word 0x8C42930C\n"
-    ".word 0x00000000\n"
-    ".word 0xA0430000\n"
-    ".word 0x3C02800A\n"
-    ".word 0x8C429308\n"
-    ".word 0x00000000\n"
-    ".word 0xA0430000\n"
-    ".word 0x3C02800A\n"
-    ".word 0x8C42930C\n"
-    ".word 0x00000000\n"
-    ".word 0x90420000\n"
-    ".word 0x00000000\n"
-    ".word 0x30420007\n"
-    ".word 0x1440FFED\n"
-    ".word 0x00000000\n"
-    ".word 0x34040001\n"
-    ".word 0x00002821\n"
-    ".word 0x00003021\n"
-    ".word 0x3C01800A\n"
-    ".word 0xA020931A\n"
-    ".word 0x3C03800A\n"
-    ".word 0x9063931A\n"
-    ".word 0x3C02800A\n"
-    ".word 0x24429319\n"
-    ".word 0xA0430000\n"
-    ".word 0x3C03800A\n"
-    ".word 0x8C639300\n"
-    ".word 0x34020002\n"
-    ".word 0x3C01800A\n"
-    ".word 0xA0229318\n"
-    ".word 0xA0600000\n"
-    ".word 0x3C02800A\n"
-    ".word 0x8C42930C\n"
-    ".word 0x00003821\n"
-    ".word 0xA0400000\n"
-    ".word 0x3C03800A\n"
-    ".word 0x8C639310\n"
-    ".word 0x34021325\n"
-    ".word 0xAC620000\n"
-    ".word 0x0C01AD88\n"
-    ".word 0x00000000\n"
-    ".word 0x3C02800A\n"
-    ".word 0x8C42904C\n"
-    ".word 0x00000000\n"
-    ".word 0x30420010\n"
-    ".word 0x10400005\n"
-    ".word 0x34040001\n"
-    ".word 0x00002821\n"
-    ".word 0x00003021\n"
-    ".word 0x0C01AD88\n"
-    ".word 0x00003821\n"
-    ".word 0x3404000A\n"
-    ".word 0x00002821\n"
-    ".word 0x00003021\n"
-    ".word 0x0C01AD88\n"
-    ".word 0x00003821\n"
-    ".word 0x1440000E\n"
-    ".word 0x2402FFFF\n"
-    ".word 0x3404000C\n"
-    ".word 0x00002821\n"
-    ".word 0x00003021\n"
-    ".word 0x0C01AD88\n"
-    ".word 0x00003821\n"
-    ".word 0x14400007\n"
-    ".word 0x2402FFFF\n"
-    ".word 0x00002021\n"
-    ".word 0x0C01AC35\n"
-    ".word 0x00002821\n"
-    ".word 0x38420002\n"
-    ".word 0x0002102B\n"
-    ".word 0x00021023\n"
-    ".word 0x8FBF0010\n"
-    ".word 0x27BD0018\n"
-    ".word 0x03E00008\n"
-    ".word 0x00000000\n");
+INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8006BD14);

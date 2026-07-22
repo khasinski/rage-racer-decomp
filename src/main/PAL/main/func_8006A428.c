@@ -1,8 +1,8 @@
 #include "common.h"
 
-s32 func_8006BCC4_entry(void);
-s32 func_8006BD14_entry(void);
-s32 func_8006BBD0_entry(void);
+s32 func_8006BCC4_entry(void) asm("func_8006BCC4");
+s32 func_8006BD14_entry(void) asm("func_8006BD14");
+s32 func_8006BBD0_entry(void) asm("func_8006BBD0");
 
 s32 func_8006A428(s32 arg0) {
     if (arg0 == 2) {

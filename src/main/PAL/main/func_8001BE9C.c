@@ -9,8 +9,8 @@ extern u16 D_801E4B9C;
 
 void func_80069A58(s32, s32);
 void func_80069A78(s32);
-void *func_80064AA8(void *, s32, s32, s32, s32);
-u8 *SetDefDrawEnv(void *, s32, s32, s32, s32) asm("func_80064B78");
+void func_80064AA8(void *, s32, s32, s32, s32);
+void func_80064B78(void *, s32, s32, s32, s32);
 void func_8001BE94(s32);
 
 void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2) {
@@ -35,8 +35,8 @@ void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2) {
     height = 0xF0;
     func_80064AA8(base, 0, 0, 0x140, height);
     func_80064AA8(D_801C0620, 0, 0xF0, 0x140, height);
-    SetDefDrawEnv(base + 0x5C, 0, 0xF0, 0x140, height);
-    SetDefDrawEnv(D_801C067C, 0, 0, 0x140, height);
+    func_80064B78(base + 0x5C, 0, 0xF0, 0x140, height);
+    func_80064B78(D_801C067C, 0, 0, 0x140, height);
 
     {
         register void *ptr asm("$4");
@@ -83,6 +83,6 @@ void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2) {
 
     func_8001BE94(0);
     func_8001BE94(1);
-}
 
-asm(".globl func_8001C05C\nfunc_8001C05C = func_8001BE9C + 0x1C0");
+    asm(".globl func_8001C05C\nfunc_8001C05C = func_8001BE9C + 0x1C0");
+}
