@@ -21,29 +21,42 @@ void func_8003DDAC(s32 arg0, s32 arg1) {
     register s32 update asm("$20") = arg1;
     register u16 *dst asm("$16");
     register u16 *delta asm("$22");
+    register u16 *deltaBase asm("$2");
     register s16 *work asm("$18") = sp30;
     register u16 *base asm("$21");
     register s32 offset asm("$17");
     register s32 end asm("$19");
-    s32 start;
+    register s32 start asm("$2");
+    register s32 loopIndex asm("$5");
+    register s32 dstOffset asm("$2");
     s32 limit;
-    s32 active;
+    register s32 active asm("$3");
+    register s32 activeValue asm("$2");
+    register s32 frameMask asm("$2");
 
-    active = (D_801E428C & 3) != 0;
+    activeValue = D_801E428C;
+    active = activeValue & 3;
+    active = active != 0;
     if (active) {
         start = 1;
         end = 4;
     } else {
-        start = 0;
+        asm("addu %0,$0,$0" : "=r"(start));
         end = 1;
     }
 
-    if (start < end) {
-        delta = &D_8007E33C[active];
+    loopIndex = start;
+    asm("" : "=r"(loopIndex) : "0"(loopIndex));
+    if (loopIndex < end) {
+        deltaBase = D_8007E33C;
+        delta = &deltaBase[active];
+        asm("" : "=r"(delta) : "0"(delta));
         work = sp30;
         base = D_8007E334;
-        dst = &base[start];
-        offset = start * 0x10;
+        asm("" : "=r"(base) : "0"(base));
+        dstOffset = loopIndex << 1;
+        asm("addu %0,%1,%2" : "=r"(dst) : "r"(dstOffset), "r"(base));
+        offset = loopIndex * 0x10;
 
         do {
             if (update != 0) {
@@ -66,10 +79,11 @@ void func_8003DDAC(s32 arg0, s32 arg1) {
 
             dst++;
             offset += 0x10;
-        } while (dst < &base[end]);
+        } while ((s32)dst < ((end << 1) + (s32)base));
     }
 
-    if (((frame & 0x1FF) == 0) && (update != 0)) {
+    frameMask = frame & 0x1FF;
+    if ((frameMask == 0) && (update != 0)) {
         D_8007E33C[0] = func_800632B0() & 0x1F;
         D_8007E33C[1] = func_800632B0() & 0x3F;
     }

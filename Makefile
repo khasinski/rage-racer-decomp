@@ -63,7 +63,7 @@ $(BUILD)/src/%.c.o: src/%.c | $(BUILD)
 
 $(BUILD)/src/main/PAL/main/func_8003DDAC.c.o: src/main/PAL/main/func_8003DDAC.c | $(BUILD)
 	@mkdir -p $(dir $@)
-	RAGE_CC1_VERSION=2.6.3 MASPSX_DIR=$(ROOT)/tools/maspsx_2E5AC_orbit_update_schedule $(CC_WRAPPER) $< $@
+	RAGE_CC1_VERSION=2.6.3 $(CC_WRAPPER) $< $@
 
 $(BUILD)/src/main/PAL/main/func_80073748.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8007849C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
