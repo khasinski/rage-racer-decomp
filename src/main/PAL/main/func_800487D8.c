@@ -120,7 +120,138 @@ after_loop:
 
     return 0;
 }
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_800487D8", func_800489AC);
+extern TimedDrawCommand D_80082520[];
+extern s32 D_8009B250[];
+
+void func_80046A2C();
+
+void func_800489AC(s32 progress, s32 count, s32 slot) {
+    register u8 *arg0Ptr asm("$8");
+    register u8 *arg1Ptr asm("$9");
+    register void *ot asm("$22");
+    register s32 countReg asm("$21");
+    register s32 i asm("$18");
+    register TimedDrawCommand *cmd asm("$17");
+    register s32 *timer asm("$16");
+    register s32 xOffset asm("$20");
+    register s32 yOffset asm("$19");
+    register s32 nextTimer asm("$4");
+    register s32 value asm("$2");
+    register s32 temporary asm("$3");
+    register void *basePtr asm("$3");
+    register s32 offset asm("$2");
+    register s32 done asm("$2");
+    register s32 timerValue asm("$3");
+    register s32 fade asm("$3");
+    register s32 drawX asm("$5");
+    register s32 drawY asm("$6");
+    register s32 drawW asm("$7");
+    register s32 drawH asm("$2");
+    s32 elapsed;
+    s32 limit;
+    s32 packed;
+
+    arg0Ptr = (u8 *)D_80082520[0].arg0;
+    elapsed = progress - D_80082520[0].time;
+    arg1Ptr = (u8 *)D_80082520[0].arg1;
+    ot = *(void **)0x1F800004;
+    countReg = count;
+    packed = *(s32 *)(arg1Ptr + 0x10);
+    i = 0;
+
+    if (elapsed < 0) {
+        return;
+    }
+
+    limit = *(s32 *)arg1Ptr;
+    if (limit < elapsed) {
+        elapsed = limit;
+    }
+
+    D_8009B250[slot] = 0x1FC;
+
+    if (packed & 0x8000) {
+        value = packed | 0xFFFF0000;
+    } else {
+        value = packed & 0x7FFF;
+    }
+    value = elapsed * value;
+    xOffset = (u32)value >> 5;
+
+    if (packed < 0) {
+        value = packed >> 0x10;
+        temporary = 0xFFFF0000;
+        value |= temporary;
+    } else {
+        value = (packed >> 0x10) & 0x7FFF;
+    }
+    /* Match note: keep the $s5 save ahead of $s2 in the GCC 2.6.3 prologue. */
+    countReg++;
+    countReg--;
+    value = elapsed * value;
+    yOffset = (u32)value >> 5;
+
+    if (countReg < i) {
+        return;
+    }
+
+    offset = i << 1;
+    basePtr = D_80082520;
+    offset = (offset + i) << 2;
+    cmd = (TimedDrawCommand *)((s32)basePtr + offset);
+
+loop:
+    basePtr = D_8009B250;
+    offset = i << 2;
+    timer = (s32 *)((s32)basePtr + offset);
+
+    fade = *timer & 0x1FF;
+    *timer = fade;
+    fade >>= 2;
+
+    drawH = *(s16 *)(arg0Ptr + 2);
+    drawX = *(u16 *)(arg1Ptr + 4);
+    drawY = *(u16 *)(arg1Ptr + 6);
+    drawW = *(s16 *)arg0Ptr;
+    /* Match note: preserve operand order and split sign extension around call setup. */
+    asm("addu %0,%0,%5" : "=r"(drawX)
+        : "0"(drawX), "r"(drawH), "r"(drawY), "r"(drawW), "r"(xOffset));
+    asm("sll %0,%0,16" : "=r"(drawX) : "0"(drawX));
+    asm("addu %0,%0,%2" : "=r"(drawY) : "0"(drawY), "r"(yOffset));
+    drawY = (u32)drawY << 16;
+    drawX >>= 16;
+    drawY >>= 16;
+
+    func_80046A2C((u8 *)ot + 8,
+                  drawX,
+                  drawY,
+                  drawW,
+                  drawH,
+                  arg0Ptr[4],
+                  arg0Ptr[5],
+                  fade,
+                  fade,
+                  fade,
+                  *(u16 *)(arg1Ptr + 8),
+                  0,
+                  1,
+                  arg0Ptr[7]);
+
+    timerValue = *timer;
+    nextTimer = 0;
+    if (timerValue >= 60) {
+        nextTimer = timerValue - 60;
+    }
+    cmd++;
+    i++;
+    done = countReg < i;
+    *timer = nextTimer;
+    arg0Ptr = (u8 *)cmd->arg0;
+    arg1Ptr = (u8 *)cmd->arg1;
+    if (!done) {
+        goto loop;
+    }
+}
 
 void func_80047958(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
 void func_80047634(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
