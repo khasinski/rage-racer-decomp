@@ -910,7 +910,7 @@ segments:
       - [0x662E0, c, PAL/lib/libsnd/SpuVmKeyOnWithVol]
       - [0x664B0, c, PAL/main/func_80075CB0, cc=2.6.3]
       - [0x666B4, c, PAL/lib/libsnd/SpuVmApplyPitchBendByTone]
-      - [0x667A4, c, PAL/main/func_80075FA4, cc=2.7.2]
+      - [0x667A4, c, PAL/main/func_80075FA4, cc=2.6.3]
       - [0x66B50, c, PAL/lib/libsnd/SpuVmSeKeyOn]
       - [0x67330, c, PAL/lib/libsnd/SsUtKeyOn]
       - [0x67458, c, PAL/lib/libsnd/SpuVmSetSeqVol]
