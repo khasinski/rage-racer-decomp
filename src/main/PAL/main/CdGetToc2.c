@@ -68,7 +68,7 @@ s32 CdGetToc2(s32 arg0, u8 *arg1) {
     }
 
     value = response[1];
-    asm volatile("nop");
+    asm volatile("");
     toc[0] = value;
     value = response[2];
     toc[2] = 0;
@@ -84,7 +84,7 @@ s32 CdGetToc2(s32 arg0, u8 *arg1) {
             }
             count++;
             value = response[1];
-            asm volatile("nop");
+            asm volatile("");
             ptr[0] = value;
             value = response[2];
             firstTrack++;
