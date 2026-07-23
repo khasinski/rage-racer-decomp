@@ -1,5 +1,4 @@
 #include "common.h"
-#include "psyq/spu.h"
 
 extern u8 D_801E42F8;
 extern u8 D_801E4BDF;
@@ -9,143 +8,96 @@ extern u8 D_8009E0BE[];
 extern u8 D_8009E0D0[];
 extern u8 D_8009E0D3[];
 
+u32 func_8007A1F8(s32 on_off, u32 voice_bit);
+
 u8 func_800739E8(s32 unused) {
-    volatile s32 stack[4];
-    register s32 selected asm("$16");
-    register u32 bestPitch asm("$11");
-    register s32 candidates asm("$10");
-    register s32 bestAge asm("$8");
-    register s32 candidate asm("$9");
-    register u32 threshold asm("$12");
-    register u32 i asm("$7");
-    register s32 currentPriority asm("$6");
-    register s32 priorityCopy asm("$5");
-    register u32 currentPitch asm("$4");
-    register s32 offset asm("$3");
-    register u32 voice asm("$2");
-    register s32 initialCount asm("$2");
+    u8 candidates;
+    u16 bestAge;
+    u16 bestPitch;
+    u8 voice;
+    u8 selected;
+    u8 candidate;
+    u16 threshold;
+    s32 offset;
     s32 count;
+    u8 *base;
 
     selected = 99;
-    bestPitch = 0xFFFF;
+    bestPitch = -1;
     candidates = 0;
     bestAge = 0;
-    candidate = 99;
-    initialCount = D_801E42F8;
     threshold = D_801E4BDF;
-    i = 0;
-
-    if (initialCount != 0) {
-        do {
-            voice = i & 0xFF;
-            offset = (voice << 1) + voice;
-            offset = (offset << 2) + voice;
-            offset <<= 2;
-
-            if (D_8009E0D3[offset] != 0) {
-                goto occupied;
-            }
-            if (*(u16 *)&D_8009E0BE[offset] == 0) {
-                selected = i;
-                goto found;
-            }
-
-occupied:
-            voice = i & 0xFF;
-            offset = (voice << 1) + voice;
-            offset = (offset << 2) + voice;
-            offset <<= 2;
-            currentPriority = *(s16 *)&D_8009E0D0[offset];
-
-            if (currentPriority < (s32)(threshold & 0xFFFF)) {
-                priorityCopy = currentPriority;
-                asm("" : "=r"(priorityCopy) : "0"(priorityCopy));
-                threshold = priorityCopy;
-                candidate = i;
-                bestPitch = *(u16 *)&D_8009E0BE[offset];
+    candidate = 99;
+    for (voice = 0; voice < D_801E42F8; voice++) {
+        offset = (u8)voice * 52;
+        if (D_8009E0D3[offset] == 0 &&
+            *(u16 *)&D_8009E0BE[offset] == 0) {
+            selected = voice;
+            goto found;
+        }
+        offset = (u8)voice * 52;
+        if (*(s16 *)&D_8009E0D0[offset] < threshold) {
+            threshold = *(s16 *)&D_8009E0D0[offset];
+            candidate = voice;
+            bestPitch = *(u16 *)&D_8009E0BE[offset];
+            bestAge = *(u16 *)&D_8009E0BA[offset];
+            candidates = 1;
+        } else if (*(s16 *)&D_8009E0D0[offset] == threshold) {
+            candidates += 1;
+            if (*(u16 *)&D_8009E0BE[offset] < bestPitch) {
                 bestAge = *(u16 *)&D_8009E0BA[offset];
-                candidates = 1;
-            } else if (currentPriority == (s32)(threshold & 0xFFFF)) {
-                currentPitch = *(u16 *)&D_8009E0BE[offset];
-                candidates++;
-                if (currentPitch < (bestPitch & 0xFFFF)) {
-                    bestAge = *(u16 *)&D_8009E0BA[offset];
-                    bestPitch = currentPitch;
-                    candidate = i;
-                } else if (currentPitch == (bestPitch & 0xFFFF)) {
-                    register s32 ageRaw asm("$2");
-                    register s32 age asm("$3");
-
-                    ageRaw = *(s16 *)&D_8009E0BA[offset];
-                    age = ageRaw;
-                    asm("" : "=r"(age) : "0"(age));
-                    if (bestAge < ageRaw) {
-                        bestAge = age;
-                        candidate = i;
-                    }
+                bestPitch = *(u16 *)&D_8009E0BE[offset];
+                candidate = voice;
+            } else if (*(u16 *)&D_8009E0BE[offset] == bestPitch) {
+                if (bestAge < *(s16 *)&D_8009E0BA[offset]) {
+                    bestAge = *(s16 *)&D_8009E0BA[offset];
+                    candidate = voice;
                 }
             }
-
-            i++;
-        } while ((i & 0xFF) < D_801E42F8);
+        }
     }
 
 found:
-    if ((selected & 0xFF) == 99) {
-        register u32 candidateFlag asm("$2");
-
-        candidateFlag = candidates & 0xFF;
-        selected = candidate;
-        if (candidateFlag == 0) {
+    if ((u8)selected == 99) {
+        if (candidates == 0) {
             selected = D_801E42F8;
+        } else {
+            selected = candidate;
         }
     }
-
     count = D_801E42F8;
-    if ((u32)(selected & 0xFF) < (u32)count) {
-        i = 0;
+    if ((u32)(u8)selected < (u32)count) {
+        voice = 0;
         if (count != 0) {
-            register u8 *agesBase asm("$5");
-
-            agesBase = D_8009E0B8;
+            base = D_8009E0B8;
             do {
-                register u32 ageIndex asm("$3");
-                register s32 ageOffset asm("$2");
-                register u32 age asm("$3");
+                u32 ageIndex;
+                s32 ageOffset;
+                u32 age;
 
-                ageIndex = i & 0xFF;
+                ageIndex = (u8)voice;
                 ageOffset = (ageIndex << 1) + ageIndex;
                 ageOffset = (ageOffset << 2) + ageIndex;
                 ageOffset <<= 2;
-                i++;
+                voice++;
                 age = *(u16 *)&D_8009E0BA[ageOffset];
-                *(u16 *)&agesBase[ageOffset + 2] = age + 1;
-            } while ((i & 0xFF) < (u32)count);
+                age++;
+                *(u16 *)((s32)ageOffset + (s32)base + 2) = age;
+            } while ((u32)(u8)voice < (u32)count);
         }
-
         {
-            register u32 selectedIndex asm("$3");
-            register s32 selectedOffset asm("$2");
+            u32 selectedIndex;
+            s32 selectedOffset;
 
-            selectedIndex = selected & 0xFF;
-            selectedOffset = (selectedIndex << 1) + selectedIndex;
-            selectedOffset = (selectedOffset << 2) + selectedIndex;
-            selectedOffset <<= 2;
+            selectedIndex = (u8)selected;
+            selectedOffset = selectedIndex * 52;
             *(u16 *)&D_8009E0BA[selectedOffset] = 0;
             *(u16 *)&D_8009E0D0[selectedOffset] = D_801E4BDF;
             if (D_8009E0D3[selectedOffset] == 2) {
-                register s32 noiseMode asm("$4");
-                register u32 noiseMask asm("$5");
-
-                noiseMask = 0xFFFFFF;
-                asm("" : "=r"(noiseMask) : "0"(noiseMask));
-                noiseMode = 0;
-                SpuSetNoiseVoice(noiseMode, noiseMask);
+                func_8007A1F8(0, 0xFFFFFF);
             }
         }
     }
-
     (void)unused;
-    (void)stack;
-    return selected & 0xFF;
+    return (u8)selected;
 }
