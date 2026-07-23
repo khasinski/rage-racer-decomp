@@ -43,7 +43,7 @@ void func_80026920(void) {
         timer = D_801E40B8;
     }
     if (timer >= 0x6CD) {
-        register u32 adjusted asm("v0");
+        u32 adjusted;
 
         adjusted = timer - 0x6CC;
         func_80033AA0((adjusted * 4) + adjusted, 0x49);

@@ -8,7 +8,7 @@ extern u8 D_8007DF14;
 void func_80016754(s32 x, s32 y, void *str, s32 color);
 
 void func_80033F30(s32 x, s32 y, s32 ticks, s32 color) {
-    register s32 savedY asm("$5");
+    s32 savedY;
     s32 sec;
     s32 tmp;
     s32 min;

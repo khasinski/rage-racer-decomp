@@ -156,7 +156,7 @@ done:
 
 s32 func_8005EF44(s32 arg0, s32 arg1) {
     char device[8];
-    register s32 status asm("$3");
+    s32 status;
 
     func_800632F0(device, D_800127CC, arg0, arg1);
     func_8005F304();

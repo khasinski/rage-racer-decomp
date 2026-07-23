@@ -62,14 +62,12 @@ extern u16 D_801E4BC0;
 extern MenuBigFrame *D_8009F0A4;
 extern u8 *D_8019C7A4;
 
-#define AVG(a, b) (tmp = (a), tmp += (b), (s32)(tmp + ((u32)tmp >> 31)) >> 1)
+#define AVG(a, b) ((s32)((a) + (b) + ((u32)((a) + (b)) >> 31)) >> 1)
 
 void func_8001F330(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
     s32 index;
     MenuBigFrame *big;
     MenuSmallFrame *small;
-    register s32 tmp asm("$2");
-
     if (D_801E4DAC != 0) {
         arg1->variantAE = D_801E4D8C;
         arg2->variantAE = D_801E4BC0;

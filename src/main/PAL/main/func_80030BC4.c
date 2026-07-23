@@ -8,7 +8,7 @@ void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 s32 func_800632B0(void);
-void GameSetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104");
+void func_8005C104(s32 index, s32 phase, s32 volume);
 
 void func_80030BC4(GameCarRuntime *car) {
     GameCarRuntime *route = (GameCarRuntime *)&car->field_BC;
@@ -34,7 +34,7 @@ void func_80030BC4(GameCarRuntime *car) {
     car->field_C4 = sinA * coords[2] / 16384;
     car->field_CC = cosA * coords[2] / 16384;
 
-    GameSetIndexedEffectVoice(0, 0x1A80, (0x60 - (D_8019CA04 & 0x1F) * 2) * car->field_15C / 256);
+    func_8005C104(0, 0x1A80, (0x60 - (D_8019CA04 & 0x1F) * 2) * car->field_15C / 256);
 
     car->field_A4 = car->field_A4 / 10;
 
@@ -57,10 +57,10 @@ void func_80030BC4(GameCarRuntime *car) {
             route->field_68 = 0;
             route->field_6C = 0;
             *(s32 *)&route->field_98 = 0;
-            GameSetIndexedEffectVoice(-1, 0, 0);
+            func_8005C104(-1, 0, 0);
         }
     } else {
-        GameSetIndexedEffectVoice(-1, 0, 0);
+        func_8005C104(-1, 0, 0);
         *(s32 *)((u8 *)car + 0x154) = 0;
         *(s32 *)&car->field_124 = 0;
         *(s32 *)&car->field_128 = 0;

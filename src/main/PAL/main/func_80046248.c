@@ -2,7 +2,7 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-void MatrixApplyZRotation(Matrix *arg0, s32 arg1) asm("func_800684B0");
+void func_800684B0(Matrix *arg0, s32 arg1);
 s32 func_800689A8(s32 arg0);
 void func_80046188(GameRenderAxisMatrix *out, s32 arg1, s32 arg2, s32 mode);
 void func_80069458(Matrix *dst, GameRenderAxisMatrix *src);
@@ -30,7 +30,7 @@ s32 func_80046248(GameRenderObject *obj) {
     m.m[2][0] = 0;
     m.m[2][1] = 0;
     m.m[2][2] = 0x1000;
-    MatrixApplyZRotation(&m, 0);
+    func_800684B0(&m, 0);
 
     len = func_800689A8((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
                         (obj->field_10 - obj->y) * (obj->field_10 - obj->y) +

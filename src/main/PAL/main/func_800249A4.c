@@ -13,7 +13,7 @@ void func_800249A4(s32 arg0, s32 arg1) {
     s32 next;
     s32 i;
     s32 y;
-    register s32 c asm("$17");
+    s32 c;
 
     next = func_80017138(base, *(s32 *)0x1F800000, 0x4E, b + 0xA, 0x10, 0xC, 0xB4, 0xC4, 0x7F40);
     next = func_80017138(base, next, 0xE4, b + 0xA, 0x10, 0xC, 0xC4, 0xC4, 0x7F40);

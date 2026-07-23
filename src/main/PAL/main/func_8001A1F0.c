@@ -25,7 +25,6 @@ s32 func_8001A1F0(s32 mask, s32 current) {
 
         offset = (((((candidate * 3) * 4) + candidate) * 8) - candidate) * 4;
         if (first == func_80019D24(*(s16 *)&D_801F18CC[offset])) {
-            asm(".globl func_8001A2B8\nfunc_8001A2B8:");
             return candidate;
         }
     }
