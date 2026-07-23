@@ -5,15 +5,15 @@ extern u32 D_801E6F2C[];
 void func_8005D6EC(s32 arg0);
 
 void func_8004BA50(void) {
-    register s32 i asm("$4");
-    register u32 *stackPtr asm("$5");
-    register u32 *base asm("$6");
-    register u32 *cursor asm("$3");
+    s32 i;
+    u32 *newPtr;
+    u32 *stackPtr;
+    u32 *base;
+    u32 *cursor;
     u32 saved[8];
-    register u32 value asm("$2");
+    u32 value;
 
     func_8005D6EC(1);
-    asm(".globl func_8004BAC8\nfunc_8004BAC8 = func_8004BA50 + 0x78");
 
     i = 0;
     stackPtr = saved;
@@ -28,7 +28,8 @@ void func_8004BA50(void) {
     } while (i < 8);
 
     i = 0x1F7;
-    cursor = base + 0x1F7;
+    newPtr = base + 0x1F7;
+    cursor = newPtr;
     do {
         value = *cursor;
         i--;
@@ -43,7 +44,8 @@ void func_8004BA50(void) {
         value = *cursor;
         cursor++;
         i++;
-        *stackPtr = value;
+        newPtr = stackPtr;
+        *newPtr = value;
         stackPtr++;
-    } while (i < 8);
+    } while (8 > i);
 }

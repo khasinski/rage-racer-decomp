@@ -6,7 +6,7 @@ extern u8 *D_8019C900;
 s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 
 void func_8002229C(s32 arg0, s32 arg1) {
-    register s32 *scratch asm("$16");
+    s32 *scratch;
 
     if (D_8009E694 & 8) {
         scratch = (s32 *)0x1F800000;
@@ -22,5 +22,4 @@ void func_8002229C(s32 arg0, s32 arg1) {
             0x48);
     }
 
-    asm(".globl func_800222F4\nfunc_800222F4 = func_8002229C + 0x58");
 }
