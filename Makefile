@@ -136,6 +136,7 @@ $(BUILD)/src/main/PAL/main/func_800455EC.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/main/func_8006DD30.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/main/func_8006E390.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/lib/libsnd/SsSeqOpen.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
+$(BUILD)/src/main/PAL/lib/libsnd/SpuVmSeKeyOff.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/lib/libspu/_SpuSetAnyVoice.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 
 

@@ -12,21 +12,17 @@ void func_8001A40C(void *arg0);
 void func_80019EBC(void);
 
 void func_80019730(void) {
-    register u8 *base_a0 asm("$4");
     u8 *base;
     s32 offset0;
     s32 offset1;
 
-    base_a0 = D_8019C904;
-    D_801F17A8 = base_a0 + *(s32 *)(base_a0 + 0);
+    D_801F17A8 = D_8019C904 + *(s32 *)(D_8019C904 + 0);
     func_8001A3C0(D_801F17A8);
 
-    base_a0 = D_8019C904;
-    D_801F17A8 = base_a0 + *(s32 *)(base_a0 + 4);
+    D_801F17A8 = D_8019C904 + *(s32 *)(D_8019C904 + 4);
     func_8001A3C0(D_801F17A8);
 
-    base_a0 = D_8019C904;
-    D_801F17A8 = base_a0 + *(s32 *)(base_a0 + 8);
+    D_801F17A8 = D_8019C904 + *(s32 *)(D_8019C904 + 8);
     func_8001A2E0(D_801F17A8);
 
     base = D_8019C904;

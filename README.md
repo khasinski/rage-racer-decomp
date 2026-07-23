@@ -30,9 +30,12 @@ with `make progress`). A translation unit only counts as decompiled when it is
 plain C with no assembly of any kind. The built executable is byte-identical to
 retail (`make check VERSION=PAL`).
 
-The matching policy: every function must eventually match as plain C through
-the stock compiler pipeline. No post-build rewrite passes, no inline assembly;
-functions that cannot yet be matched that way stay as generated split assembly.
+The matching policy: functions should match as plain C through the stock
+compiler pipeline, with no post-build rewrite passes. Inline assembly is only
+accepted when the original code contains documented instructions or ABI
+behavior that the compiler cannot emit; these functions do not count as C
+decompilation progress. Other unmatched functions stay as generated split
+assembly.
 
 Rage Racer is currently believed to use the main executable only. `RAGE.BIN`
 and `RAGE.STR` are treated as game data/stream containers; no conventional PS1

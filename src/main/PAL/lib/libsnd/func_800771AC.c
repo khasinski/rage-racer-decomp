@@ -107,9 +107,9 @@ typedef struct VabHeader771AC {
 } VabHeader771AC;
 
 typedef struct VoiceState771AC {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
+    s16 vag;
+    s16 age;
+    s16 pitch;
     u16 unk6;
     s16 base_volume;
     s8 unkA;
@@ -122,7 +122,7 @@ typedef struct VoiceState771AC {
     s16 vab_id;
     s16 priority;
     u8 pad1A;
-    u8 unk1B;
+    u8 status;
     s16 auto_volume;
     s16 unk1E;
     s16 unk20;
@@ -137,6 +137,34 @@ typedef struct VoiceState771AC {
     s16 end_pan;
 } VoiceState771AC;
 
+typedef struct SvmCurrent771AC {
+    u8 tones;
+    u8 unk1;
+    u8 note;
+    u8 fine;
+    u8 volume;
+    u8 pan;
+    u8 unk6;
+    u8 fake_program;
+    u8 unk8;
+    u8 unk9;
+    u8 master_volume;
+    u8 master_pan;
+    u8 tone;
+    u8 tone_volume;
+    u8 tone_pan;
+    u8 priority;
+    u8 center;
+    u8 shift;
+    u8 min;
+    u8 max;
+    u8 mode;
+    u8 unk15;
+    u16 seq_sep;
+    s16 vag;
+    u16 voice;
+} SvmCurrent771AC;
+
 extern SeqState771AC *D_801E79CC[];
 extern VoiceState771AC D_8009E0B8[];
 extern s16 D_8009DF20[];
@@ -147,8 +175,15 @@ extern s16 D_801E4BE6;
 extern ProgAttr771AC *D_801E4110;
 extern VabHeader771AC *D_801E413C;
 extern ToneAttr771AC *D_801E416C;
+extern s32 D_801E40AC;
+extern SvmCurrent771AC D_801E4BD0;
 
 s32 func_80073314(s16 vab_id, s16 program);
+u8 func_800739E8(s32 priority);
+void func_80074134(void);
+void func_80074348(s32 voice);
+s32 func_80074A6C(u16 note, u16 fine);
+void func_80073C50(s32 count, s32 pitch);
 
 s32 func_800771AC(s16 seq_sep, s16 vab_id, s16 program, u16 volume, u16 pan) {
     SeqState771AC *score =
@@ -233,4 +268,93 @@ s32 func_800771AC(s16 seq_sep, s16 vab_id, s16 program, u16 volume, u16 pan) {
     return voices_updated;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libsnd/func_800771AC", func_800776E4);
+s16 func_800776E4(
+    s16 vab_id,
+    s16 program,
+    s16 tone,
+    s16 note,
+    s16 fine,
+    s16 left,
+    s16 right) {
+    u16 voice;
+    s16 voice_index;
+    s16 vag;
+    s32 tone_index;
+    s32 left_value;
+    s32 right_value;
+
+    if (D_801E40AC == 1) {
+        return -1;
+    }
+    D_801E40AC = 1;
+
+    if (func_80073314(vab_id, program)) {
+        D_801E40AC = 0;
+        return -1;
+    }
+    D_801E4BD0.seq_sep = 0x21;
+    D_801E4BD0.note = note;
+    D_801E4BD0.fine = fine;
+    D_801E4BD0.tone = tone;
+
+    left_value = left;
+    right_value = right;
+    if (left_value == right_value) {
+        D_801E4BD0.pan = 0x40;
+        D_801E4BD0.volume = left;
+    } else if (right_value < left_value) {
+        D_801E4BD0.volume = left;
+        D_801E4BD0.pan = (right_value * 0x40) / left_value;
+    } else {
+        D_801E4BD0.volume = right;
+        D_801E4BD0.pan = 0x7F - ((left_value * 0x40) / right_value);
+    }
+
+    D_801E4BD0.master_volume = D_801E4110[program].mvol;
+    D_801E4BD0.master_pan = D_801E4110[program].mpan;
+    D_801E4BD0.tones = D_801E4110[program].tones;
+
+    tone_index = D_801E4BD0.tone + (D_801E4BD0.fake_program * 0x10);
+    D_801E4BD0.priority = D_801E416C[tone_index].prior;
+    vag = D_801E416C[tone_index].vag;
+    D_801E4BD0.vag = vag;
+    D_801E4BD0.tone_volume = D_801E416C[tone_index].vol;
+    D_801E4BD0.tone_pan = D_801E416C[tone_index].pan;
+    D_801E4BD0.center = D_801E416C[tone_index].center;
+    D_801E4BD0.shift = D_801E416C[tone_index].shift;
+    D_801E4BD0.mode = D_801E416C[tone_index].mode;
+    D_801E4BD0.min = D_801E416C[tone_index].min;
+    D_801E4BD0.max = D_801E416C[tone_index].max;
+
+    if (vag == 0) {
+        D_801E40AC = 0;
+        return -1;
+    }
+
+    voice = func_800739E8(vag);
+    voice_index = voice;
+    if (voice_index == D_801E42F8) {
+        D_801E40AC = 0;
+        return -1;
+    }
+
+    D_801E4BD0.voice = voice;
+    D_8009E0B8[voice_index].seq_sep = 0x21;
+    D_8009E0B8[voice_index].vab_id = vab_id;
+    D_8009E0B8[voice_index].program_index = D_801E4BD0.fake_program;
+    D_8009E0B8[voice_index].program = program;
+    D_8009E0B8[voice_index].vag = D_801E4BD0.vag;
+    D_8009E0B8[voice_index].tone = D_801E4BD0.tone;
+    D_8009E0B8[voice_index].note = note;
+    D_8009E0B8[voice_index].status = 1;
+    D_8009E0B8[voice_index].age = 0;
+
+    func_80074134();
+    if ((s16)D_801E4BD0.vag == 0xFF) {
+        func_80074348(voice);
+    } else {
+        func_80073C50(1, func_80074A6C(note, fine) & 0xFFFF);
+    }
+    D_801E40AC = 0;
+    return voice;
+}

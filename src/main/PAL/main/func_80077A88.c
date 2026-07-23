@@ -1,133 +1,98 @@
 #include "common.h"
 
+typedef struct {
+    s16 vag;
+    s16 age;
+    s16 pitch;
+    u16 env;
+    s16 base_volume;
+    s8 pan;
+    s8 unkB;
+    s16 note;
+    s16 seq_sep;
+    s16 program_index;
+    s16 program;
+    s16 tone;
+    s16 vab_id;
+    s16 priority;
+    u8 pad1A;
+    u8 active;
+    s16 auto_volume;
+    s16 unk1E;
+    s16 unk20;
+    s16 unk22;
+    s16 start_volume;
+    s16 end_volume;
+    s16 auto_pan;
+    s16 unk2A;
+    s16 unk2C;
+    s16 unk2E;
+    s16 start_pan;
+    s16 end_pan;
+} SpuVoice;
+
 extern s32 D_801E40AC;
-extern volatile u16 D_801E4BEA;
-extern volatile u16 D_801F2A08;
-extern volatile u16 D_801F2A0C;
-extern volatile u16 D_8009E670;
-extern volatile u16 D_8009E674;
-extern volatile u8 D_8009E0D3[];
-extern volatile u8 D_8009E0BC[];
-extern volatile u8 D_8009E0B8[];
-extern volatile u8 D_8009E0C4[];
-extern volatile u8 D_8009E0CA[];
-extern volatile u8 D_8009E0CC[];
-extern volatile u8 D_8009E0CE[];
-extern volatile u16 *D_8009A588;
+extern u16 D_801E4BEA;
+extern SpuVoice D_8009E0B8[];
+extern s16 D_8009E0C4[];
+extern s16 D_8009E0CA[];
+extern s16 D_8009E0CC[];
+extern s16 D_8009E0CE[];
+extern u16 D_801F2A08;
+extern u16 D_801F2A0C;
+extern u16 D_8009E670;
+extern u16 D_8009E674;
+extern u16 *D_8009A588;
 
-s32 func_80077A88(s32 voice, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    register s32 one asm("$9") = 1;
-    register s32 voiceReg asm("$8");
-    register s32 arg4Reg asm("$10") = arg4;
-    register s32 highMask asm("$5");
-    register s32 lowMask asm("$6");
-    register s32 offset asm("$4");
-    register s32 index asm("$3");
-    register s32 temp asm("$2");
-    volatile u16 *spu;
-    register u32 activeLow asm("$3");
-    register u32 activeHigh asm("$4");
-    register u32 bits asm("$2");
+s32 func_80077A88(s32 voice, s32 vab_id, s32 program, s32 tone, s32 note) {
+    s16 original_voice;
+    s32 index;
+    u8 new_var;
+    u16 bits_upper;
+    u16 bits_lower;
+    u16 current_voice;
 
-    if (D_801E40AC == one) {
-        goto fail;
+    if (D_801E40AC == 1) {
+        return -1;
     }
+    original_voice = voice;
+    D_801E40AC = 1;
 
-    voiceReg = voice;
-    D_801E40AC = one;
-    if ((u32)(voiceReg & 0xFFFF) >= 0x18) {
-        goto fail_clear;
-    }
-
-    index = (s16)voice;
-    temp = index << 1;
-    temp += index;
-    temp <<= 2;
-    temp += index;
-    offset = temp << 2;
-
-    if (*(s16 *)&D_8009E0CE[offset] != (s16)arg1) {
-        goto fail_clear;
-    }
-    if (*(s16 *)&D_8009E0CA[offset] != (s16)arg2) {
-        goto fail_clear;
-    }
-    if (*(s16 *)&D_8009E0CC[offset] != (s16)arg3) {
-        goto fail_clear;
-    }
-    temp = arg4Reg << 16;
-    temp = temp >> 16;
-    if (*(s16 *)&D_8009E0C4[offset] != temp) {
-        goto fail_clear;
-    }
-
-    if (*(s16 *)&D_8009E0B8[offset] == 0xFF) {
-        temp = voiceReg & 0xFF;
-        index = temp << 1;
-        index += temp;
-        index <<= 2;
-        index += temp;
-        index <<= 2;
-        D_8009E0D3[index] = 0;
-        spu = D_8009A588;
-        *(u16 *)&D_8009E0BC[index] = 0;
-        spu[0xCA] = 0;
-        asm volatile(
-            ".set\tnoreorder\n"
-            "j .Lfunc_80077A88_done\n"
-            "sh $0,0x196(%0)\n"
-            ".set\treorder"
-            :
-            : "r"(spu)
-            : "memory");
-    }
-
-    {
-        D_801E4BEA = voiceReg;
-        index = D_801E4BEA;
-        asm("" : "=r"(index) : "0"(index));
-        offset = index & 0xFFFF;
-        if ((u32)offset < 16) {
-            lowMask = one << offset;
-            highMask = 0;
-        } else {
-            lowMask = 0;
-            temp = offset - 16;
-            highMask = one << temp;
+    if ((u16)original_voice < 24) {
+        index = (s16)voice;
+        voice = ((((index * 2) + index) << 2) + index) << 2;
+        if (*(s16 *)((u8 *)D_8009E0CE + voice) == (s16)vab_id &&
+            *(s16 *)((u8 *)D_8009E0CA + voice) == (s16)program &&
+            *(s16 *)((u8 *)D_8009E0CC + voice) == (s16)tone &&
+            *(s16 *)((u8 *)D_8009E0C4 + voice) == (s16)note) {
+            if (*(s16 *)((u8 *)D_8009E0B8 + voice) == 0xFF) {
+                new_var = original_voice;
+                D_8009E0B8[new_var].active = 0;
+                D_8009E0B8[new_var].pitch = 0;
+                D_8009A588[202] = 0;
+                D_8009A588[203] = 0;
+            } else {
+                *(s16 *)&D_801E4BEA = original_voice;
+                current_voice = D_801E4BEA;
+                if (current_voice < 16) {
+                    bits_lower = 1 << current_voice;
+                    bits_upper = 0;
+                } else {
+                    bits_lower = 0;
+                    bits_upper = 1 << (current_voice - 16);
+                }
+                D_8009E0B8[current_voice].active = 0;
+                D_8009E0B8[current_voice].pitch = 0;
+                D_8009E0B8[current_voice].vag = 0;
+                D_801F2A08 = bits_lower | D_801F2A08;
+                D_801F2A0C = bits_upper | D_801F2A0C;
+                D_8009E670 &= ~D_801F2A08;
+                D_8009E674 &= ~D_801F2A0C;
+            }
+            D_801E40AC = 0;
+            return 0;
         }
-
-        index &= 0xFFFF;
-        temp = index << 1;
-        temp += index;
-        temp <<= 2;
-        temp += index;
-        temp <<= 2;
-
-        D_8009E0D3[temp] = 0;
-        activeLow = D_801F2A08;
-        activeHigh = D_801F2A0C;
-        *(u16 *)&D_8009E0BC[temp] = 0;
-        *(u16 *)&D_8009E0B8[temp] = 0;
-        bits = D_8009E670;
-        asm("or %0,%1,%0" : "=r"(activeLow) : "r"(lowMask), "0"(activeLow));
-        D_801F2A08 = activeLow;
-        activeLow = ~activeLow;
-        bits &= activeLow;
-        D_8009E670 = bits;
-        bits = D_8009E674;
-        asm("or %0,%1,%0" : "=r"(activeHigh) : "r"(highMask), "0"(activeHigh));
-        D_801F2A0C = activeHigh;
-        activeHigh = ~activeHigh;
-        bits &= activeHigh;
-        D_8009E674 = bits;
     }
-
-    asm volatile(".Lfunc_80077A88_done:");
     D_801E40AC = 0;
-    return 0;
-
-fail_clear:
-    D_801E40AC = 0;
-fail:
     return -1;
 }

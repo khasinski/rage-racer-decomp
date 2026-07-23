@@ -8,7 +8,7 @@ extern volatile u32 *D_8009AB90;
 extern s32 D_8009ABC8;
 
 void _spu_startDmaTransfer(u32 arg0, u16 arg1, u32 arg2) {
-    register u32 addr asm("$7") = arg0;
+    u32 addr = arg0;
     volatile s32 i;
     volatile s32 delay;
     u16 cnt;

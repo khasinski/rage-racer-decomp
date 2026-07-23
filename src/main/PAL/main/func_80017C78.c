@@ -15,15 +15,12 @@ s32 func_8006A534(s32 arg0, s32 arg1);
 void func_8006A6DC(s32 arg0, void *arg1);
 
 s32 GameLoadAsset(s32 assetIndex, void *dst) {
-    register void *dstReg asm("$6");
     s32 result;
     s32 size;
 
-    dstReg = dst;
-
     switch (D_8007C700) {
     case 0:
-        func_8001674C(D_80010ADC, D_8007C48C[assetIndex]);
+        func_8001674C(D_80010ADC, D_8007C48C[assetIndex], dst);
         if (func_8006A534(1, 0) != 0) {
             D_8007C700 = 1;
         }
@@ -41,7 +38,7 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
         return 0;
 
     case 3:
-        if (func_80027688((D_801E6834[assetIndex].size + 0x7FF) >> 11, dstReg, 0x80) != 0) {
+        if (func_80027688((D_801E6834[assetIndex].size + 0x7FF) >> 11, dst, 0x80) != 0) {
             D_8007C700 = 4;
         }
         return 0;
@@ -64,7 +61,7 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
         return size;
 
     case 6:
-        func_8001674C(D_80010B08, D_8007C48C[assetIndex]);
+        func_8001674C(D_80010B08, D_8007C48C[assetIndex], dst);
         D_8007C700 = 0;
         break;
     }
