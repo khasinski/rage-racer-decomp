@@ -13,13 +13,12 @@ s32 func_8002A7C4(s32 arg0, s32 arg1) {
     }
 
     if (diff >= 0x801) {
-        asm("");
         diff = 0x1000 - diff;
         sign = !sign;
     }
 
     {
-        register s32 ret asm("$2") = diff;
+        s32 ret = diff;
 
         if (!sign) {
             ret = -ret;

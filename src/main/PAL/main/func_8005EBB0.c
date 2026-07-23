@@ -5,8 +5,8 @@ s32 func_80063DAC(s32 arg0);
 s32 func_80063DBC(s32 arg0);
 
 s32 func_8005EBB0(s32 high, s32 low) {
-    register s32 cmd asm("s1");
-    register s32 ret asm("s0");
+    s32 cmd;
+    s32 ret;
     s32 event;
 
     cmd = (high << 4) + low;
@@ -36,10 +36,7 @@ s32 func_8005EBB0(s32 high, s32 low) {
     }
 
 return_minus_one:
-    if (ret == -1) {
-        return ret;
-    }
-    if (ret == -3) {
+    if (ret == -1 || ret == -3) {
         return ret;
     }
 

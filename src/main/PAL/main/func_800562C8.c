@@ -21,8 +21,8 @@ s32 func_800562C8(s32 arg0) {
         }
         value = 0;
     } else {
-        register s32 limit asm("v1");
-        register u32 product asm("v0");
+        s32 limit;
+        u32 product;
 
         value = arg0 + D_8009B2D0;
         D_8009B2D0 = value;

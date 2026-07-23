@@ -42,7 +42,7 @@ void func_80023750(s32 a0);
 void func_80023D70(void) {
     s32 old;
     s32 value;
-    register s32 buttons asm("$3");
+    s32 buttons;
 
     func_80023BB4();
 
@@ -98,7 +98,7 @@ void func_80023D70(void) {
             break;
         }
     } else {
-        register s32 masked asm("$2");
+        s32 masked;
 
         masked = buttons & 0x90;
         if (masked) {

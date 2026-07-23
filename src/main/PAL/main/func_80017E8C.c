@@ -23,7 +23,7 @@ void func_80017E8C(void) {
         CdlLOC file;
         u8 pad[20];
     } stack;
-    register s32 one asm("$16");
+    s32 one;
     s32 base;
     s32 i;
     s32 status;
@@ -63,7 +63,6 @@ void func_80017E8C(void) {
     }
 
     func_8001674C(D_80010B8C);
-    asm(""); /* Match note: target keeps the debug-print call delay slot as nop. */
 loadSmallTable:
     base = CdPosToInt_Local(&stack.file);
     smallSrc = D_8007C6A8;

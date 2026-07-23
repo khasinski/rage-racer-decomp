@@ -26,8 +26,9 @@ void func_80024820(void) {
         D_801E4D68 = D_801E4D68 + 1;
     }
     {
-        register s32 c asm("$4");
-        c = D_801E4D68 + 6;
+        s32 c;
+        c = D_801E4D68;
+        c += 6;
         c = c % 6;
         D_801E4D68 = c;
         if (c == 5) {

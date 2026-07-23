@@ -85,8 +85,8 @@ L13c:
         if (D_801E4B84 < 2) D_801E4B84 = D_801E4B84 + 1;
     }
     if (D_801E436E & 1) {
-        register s32 p asm("$5");
-        register s32 h0 asm("$2");
+        s32 p;
+        s32 h0;
         func_8001B488();
         h0 = D_801E7734[0];
         p = D_801E4404;

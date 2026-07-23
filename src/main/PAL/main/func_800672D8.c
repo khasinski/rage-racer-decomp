@@ -2,8 +2,8 @@
 
 extern u16 D_800941EC[];
 extern u16 D_800941EE[];
-extern volatile u32 *g_GpuGp0 asm("D_800942B8");
-extern volatile u32 *g_GpuGp1 asm("D_800942BC");
+extern volatile u32 *D_800942B8;
+extern volatile u32 *D_800942BC;
 extern volatile u32 *D_800942C0;
 extern volatile u32 *D_800942C4;
 extern volatile u32 *D_800942C8;
@@ -61,39 +61,39 @@ s32 func_800672D8(GpuRect *rect, u32 *dst) {
     rem = area % 16;
     blocks = area / 16;
 
-    if ((*g_GpuGp1 & 0x04000000) == 0) {
+    if ((*D_800942BC & 0x04000000) == 0) {
         do {
             if (func_80067F38() != 0) {
                 return -1;
             }
-        } while ((*g_GpuGp1 & 0x04000000) == 0);
+        } while ((*D_800942BC & 0x04000000) == 0);
     }
 
-    *g_GpuGp1 = 0x04000000;
-    *g_GpuGp0 = 0x01000000;
-    *g_GpuGp0 = 0xC0000000;
-    *g_GpuGp0 = rect->word0;
-    *g_GpuGp0 = *(u32 *)&rect->w;
+    *D_800942BC = 0x04000000;
+    *D_800942B8 = 0x01000000;
+    *D_800942B8 = 0xC0000000;
+    *D_800942B8 = rect->word0;
+    *D_800942B8 = *(u32 *)&rect->w;
 
-    if ((*g_GpuGp1 & 0x08000000) == 0) {
+    if ((*D_800942BC & 0x08000000) == 0) {
         do {
             if (func_80067F38() != 0) {
                 return -1;
             }
-        } while ((*g_GpuGp1 & 0x08000000) == 0);
+        } while ((*D_800942BC & 0x08000000) == 0);
     }
 
     rem--;
     if (rem != -1) {
         do {
-            *dst = *g_GpuGp0;
+            *dst = *D_800942B8;
             rem--;
             dst++;
         } while (rem != -1);
     }
 
     if (blocks != 0) {
-        *g_GpuGp1 = 0x04000003;
+        *D_800942BC = 0x04000003;
         *D_800942C0 = (u32)dst;
         *D_800942C4 = (blocks << 16) | 0x10;
         *D_800942C8 = 0x01000200;
