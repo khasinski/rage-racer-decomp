@@ -16,7 +16,7 @@ void func_80042FA0(s32 arg0);
 
 void func_800432A8(void) {
     s32 state;
-    register s32 status asm("$4");
+    s32 status;
     u8 track;
 
     switch (D_8007F608) {
@@ -45,10 +45,9 @@ void func_800432A8(void) {
         goto done;
     case 3:
         status = D_8009B194;
-        track = *(u8 *)&D_8007F600;
+        track = (D_8009B1B0 = *(u8 *)&D_8007F600);
         D_8007F600 = -1;
         D_8007F608 = 0;
-        D_8009B1B0 = track;
         func_80042FA0(status);
         goto done;
     case 4:

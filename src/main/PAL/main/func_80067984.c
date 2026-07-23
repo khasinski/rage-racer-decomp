@@ -21,8 +21,7 @@ extern volatile LastCb D_800942DC;
 extern volatile u32 *D_800942C8;
 extern volatile u32 *D_800942BC;
 extern u8 D_800941F0[];
-extern u8 D_800941F4v[] asm("D_800941F4");
-extern volatile s32 D_800941F4s asm("D_800941F4");
+extern volatile s32 D_800941F4;
 
 extern s32 func_8006E0B0(s32);
 extern void func_8006DF94(s32, void *);
@@ -36,7 +35,8 @@ s32 func_80067984(void) {
 
     if (D_800942EC != D_800942F0) {
         while ((*D_800942C8 & 0x01000000) == 0) {
-            if ((((D_800942F0 + 1) & 0x3f) == D_800942EC) && (*(volatile s32 *)D_800941F4v == 0)) {
+            if ((((D_800942F0 + 1) & 0x3f) == D_800942EC) &&
+                (*(volatile s32 *)(u8 *)&D_800941F4 == 0)) {
                 func_8006DF94(2, 0);
             }
 
@@ -60,9 +60,9 @@ s32 func_80067984(void) {
     func_8006E0B0(D_800942F8);
 
     if ((D_800942EC == D_800942F0) && ((*D_800942C8 & 0x01000000) == 0) &&
-        (*(volatile s32 *)D_800941F0 != 0) && (D_800941F4s != 0)) {
+        (*(volatile s32 *)D_800941F0 != 0) && (D_800941F4 != 0)) {
         *(volatile s32 *)D_800941F0 = 0;
-        ((void (*)(void))D_800941F4s)();
+        ((void (*)(void))D_800941F4)();
     }
 
     return (D_800942EC - D_800942F0) & 0x3f;

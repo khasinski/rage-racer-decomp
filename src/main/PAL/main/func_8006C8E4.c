@@ -66,7 +66,7 @@ s32 func_8006C8E4(s32 arg0)
       break;
     }
     __builtin_memcpy(&lba, p + 2, 4);
- do { func_8006A9D8(lba & 0xFFFFFFFFFFFFFFFFu, &D_8009BB14[i]); __builtin_memcpy(&D_8009BB14[i].size, p + 0xA, 4); switch (i) { case 0: *((u16 *) D_8009BB14[0].name) = D_80013AD0; break; case 1: { s32 hi = D_80013AD4; s32 lo = D_80013AD6; *((s16 *) D_8009BB14[1].name) = hi; D_8009BB14[1].name[2] = lo; asm(""); break; } default: func_8006CBF4(D_8009BB14[i].name, p + 0x21, p[0x20]); D_8009BB14[i].name[p[0x20]] = 0; break; } if (D_80099048 >= 2) { func_8001674C(D_80013AD8, D_8009BB14[i].min, D_8009BB14[i].sec, D_8009BB14[i].frame, D_8009BB14[i].size, D_8009BB14[i].name); } } while (0);
+ do { func_8006A9D8(lba & 0xFFFFFFFFFFFFFFFFu, &D_8009BB14[i]); __builtin_memcpy(&D_8009BB14[i].size, p + 0xA, 4); switch (i) { case 0: *((u16 *) D_8009BB14[0].name) = D_80013AD0; break; case 1: { s32 hi = D_80013AD4; s32 lo = D_80013AD6; *((s16 *) D_8009BB14[1].name) = hi; *(volatile u8 *)&D_8009BB14[1].name[2] = lo; break; } default: func_8006CBF4(D_8009BB14[i].name, p + 0x21, p[0x20]); D_8009BB14[i].name[p[0x20]] = 0; break; } if (D_80099048 >= 2) { func_8001674C(D_80013AD8, D_8009BB14[i].min, D_8009BB14[i].sec, D_8009BB14[i].frame, D_8009BB14[i].size, D_8009BB14[i].name); } } while (0);
     p = p + (*p);
     i++;
     if (i >= 0x40)

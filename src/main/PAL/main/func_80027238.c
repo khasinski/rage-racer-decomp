@@ -106,8 +106,10 @@ s32 func_8002745C(s32 arg0) {
         func_80063C38(&D_800111F4);
         func_8006A5A4(9, 0, 0);
         if (func_8006A5A4(2, func_8006A418(), 0) == 0) {
-            register volatile s32 *q asm("$2") = &D_8007D7A4;
-            *q = -1;
+            s32 value = -1;
+            volatile s32 *q = &D_8007D7A4;
+
+            *q = value;
             return *q;
         }
     }

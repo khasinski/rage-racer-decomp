@@ -6,8 +6,7 @@ void func_80066604(void *packet, void *rect);
 void func_80064DDC(void *ot, void *packet);
 
 void *func_80034058(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
-    register void *next asm("$16");
-    register void *oldPacket asm("$5");
+    void *oldPacket;
     s16 rect[4];
     s32 offset;
 
@@ -17,10 +16,8 @@ void *func_80034058(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     rect[2] = w;
     rect[3] = h;
     func_80066604(packet, rect);
-    next = packet;
-    oldPacket = next;
-    next = (u8 *)next + 12;
-    asm volatile("" : : "r"(next));
+    oldPacket = packet;
+    packet = (u8 *)packet + 12;
     func_80064DDC(ot, oldPacket);
-    return next;
+    return packet;
 }
