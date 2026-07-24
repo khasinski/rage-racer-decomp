@@ -186,7 +186,7 @@ help:
 	@echo "  distclean         Also remove generated asm/linker output"
 
 # --- per-object overrides for newly decompiled functions (from working tree) ---
-$(BUILD)/src/main/PAL/main/func_8002A810.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
+$(BUILD)/src/main/PAL/main/func_8002A810.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80029E50.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8002A6B0.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80077A88.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
