@@ -6,11 +6,11 @@ extern s32 D_801E40D4;
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
 s32 func_80059248(s32 arg0) {
-    register s32 value asm("v0");
-    register s32 limit asm("v1");
-    register s32 amount asm("a0");
-    register s32 phase asm("a1");
-    register s32 channel asm("a2");
+    register s32 value;
+    register s32 limit;
+    register s32 amount;
+    register s32 phase;
+    register s32 channel;
 
     if (arg0 == 0) {
         D_8009B2E8 = 0;
@@ -41,8 +41,9 @@ s32 func_80059248(s32 arg0) {
 update:
     amount = value << 16;
     amount >>= 16;
+    limit = D_801E40D4;
     phase = ((u32)D_8009B2E8 >> 2) & 0xFF;
-    channel = D_801E40D4;
+    channel = limit;
     func_80052158(amount, phase, channel);
 
     return D_8009B2E8;
