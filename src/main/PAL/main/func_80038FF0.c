@@ -7,7 +7,7 @@ void func_80038FF0(GameCarRuntime *car) {
     s32 value;
     s32 wave;
     s32 amplitude;
-    register s32 product asm("$4");
+    s32 product;
 
     if (car->motionMode == 0) {
         return;
@@ -20,10 +20,9 @@ void func_80038FF0(GameCarRuntime *car) {
     }
 
     {
-        register s32 timer asm("$5");
+        s32 timer;
 
         timer = car->motionModeTimer;
-        asm("" : "=r"(timer) : "0"(timer));
         product = timer * car->motionValue;
         if (product < 0) {
             product += 0x7F;
