@@ -15,7 +15,7 @@ s32 func_8002A7C4(s32 arg0, s32 arg1);
 void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
-void GameSetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104");
+void func_8005C104(s32 index, s32 phase, s32 volume);
 
 void func_8002F690(GameCarRuntime *car) {
     GameCarRuntime *routeStruct = (GameCarRuntime *)&car->field_BC;
@@ -25,7 +25,7 @@ void func_8002F690(GameCarRuntime *car) {
     s32 base;
     s32 r;
     s32 coords[3];
-    register u8 *data1 asm("$3");
+    u8 *data1;
     u8 *data;
     s32 t;
     s32 idx;
@@ -48,10 +48,10 @@ void func_8002F690(GameCarRuntime *car) {
 
     data1 = D_801E42D8;
     if (*(s16 *)(data1 + 0x100) + 2000 < car->field_134 && D_801E6E74 >= 2) {
-        GameSetIndexedEffectVoice(0, 0x1800,
-                                  (car->field_134 - *(s16 *)(data1 + 0x100)) / 100 + 128);
+        func_8005C104(0, 0x1800,
+                      (car->field_134 - *(s16 *)(data1 + 0x100)) / 100 + 128);
     } else {
-        GameSetIndexedEffectVoice(-1, 0, 0);
+        func_8005C104(-1, 0, 0);
     }
 
     data = D_801E42D8;
@@ -63,12 +63,12 @@ void func_8002F690(GameCarRuntime *car) {
             if (idx >= 101) {
                 idx = 100;
             }
-            GameSetIndexedEffectVoice(2, 0x1500, idx);
+            func_8005C104(2, 0x1500, idx);
         } else {
-            GameSetIndexedEffectVoice(-1, 0, 0);
+            func_8005C104(-1, 0, 0);
         }
     } else {
-        GameSetIndexedEffectVoice(-1, 0, 0);
+        func_8005C104(-1, 0, 0);
     }
 
     if (*(s16 *)(route + 0x9c) == 1) {
@@ -78,7 +78,7 @@ void func_8002F690(GameCarRuntime *car) {
             *(s32 *)(route + 0x48) > *(s32 *)(route + 0x84)) {
             *(s32 *)(route + 0x98) = 1;
             *(s16 *)(route + 0x3e) = 0;
-            GameSetIndexedEffectVoice(0, 0, 0);
+            func_8005C104(0, 0, 0);
             t = 1000 - (*(s32 *)(route + 0x88) - 1000) * 8;
             if (t < 1000) {
                 t = 1000;
@@ -97,7 +97,7 @@ void func_8002F690(GameCarRuntime *car) {
                     *(s32 *)(route + 0x84) < aval) {
                     *(s32 *)(route + 0x98) = m9e;
                     *(s16 *)(route + 0x3e) = 0;
-                    GameSetIndexedEffectVoice(0, 0, 0);
+                    func_8005C104(0, 0, 0);
                     *(s32 *)(route + 0x50) = -coords[0];
                     *(s32 *)(route + 0x54) = car->routeRow;
                 }
