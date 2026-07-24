@@ -31,7 +31,7 @@ void func_800207E0(void) {
     s32 filled;
     s32 i;
     s32 done;
-    register s32 value asm("$2");
+    s32 value;
     s32 *state;
 
     slots = (u8 *)(D_8009E67C + D_801E428C);
@@ -62,7 +62,7 @@ void func_800207E0(void) {
     D_801E4B94 = done;
 
     if (done != 0) {
-        register s16 *record asm("$4");
+        s16 *record;
 
         score_index = (D_8019CABC * 6) + D_8009E6A4;
 
@@ -93,7 +93,7 @@ after_record_check:
         value = func_800214B8();
         D_8019C7C4 = value;
         if (value != 0) {
-            register s32 offset asm("$4");
+            s32 offset;
 
             offset = score_index * 4;
             if (D_8019CB40[score_index].value == 0 || value < D_8019CB40[score_index].value) {
@@ -104,7 +104,7 @@ after_record_check:
 
         func_80021540();
         if (D_8019C7C4 == 1) {
-            register s32 offset asm("$4");
+            s32 offset;
 
             offset = score_index * 4;
             if (*(s16 *)((char *)D_8019CB42 + offset) < 99) {
