@@ -25,10 +25,9 @@ void func_8001F018(s32 arg0);
 void func_8006DD30(s32 arg0);
 
 void func_8001E79C(s32 arg0) {
-    register s32 fail asm("$16");
+    s32 fail;
     char frame_pad[8];
 
-    __asm__("" : : "m"(frame_pad[7]));
     func_80065860(0);
     D_8009AF6C = 0;
     D_8009AF70 = 0;
@@ -40,13 +39,13 @@ void func_8001E79C(s32 arg0) {
     D_8019CEA5 = 1;
     func_8001EB14(arg0);
     {
-        register volatile void *buf asm("$4") = &D_8009AF20;
+        volatile void *buf = &D_8009AF20;
         func_8001EA7C(buf, 0, 0x18, 0, 0x108);
     }
     func_8001EB5C(func_8001EBC8);
     fail = -1;
     while (1) {
-        register volatile void *buf asm("$4") = &D_8009AF20;
+        volatile void *buf = &D_8009AF20;
         if (func_8001ED3C(buf) != fail) {
             break;
         }
