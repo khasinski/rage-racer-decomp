@@ -9,11 +9,11 @@ void func_80067600(void *arg0);
 
 s32 func_80066E6C(s16 *env, u32 rgb) {
     {
-        register s32 x asm("$3") = env[2];
-        register s32 value asm("$2");
+        s32 x = env[2];
+        s32 value;
         if (x >= 0) {
-            register volatile u16 *p asm("$2") = D_800941EC;
-            register s32 mm asm("$4");
+            volatile u16 *p = D_800941EC;
+            s32 mm;
             value = *p;
             value = (s16)value;
             mm = value - 1;
@@ -29,11 +29,11 @@ s32 func_80066E6C(s16 *env, u32 rgb) {
     }
 
     {
-        register s32 x asm("$3") = env[3];
+        s32 x = env[3];
         if (x >= 0) {
-            register volatile u16 *p asm("$2") = D_800941EE;
-            register s32 mm asm("$4");
-            register s32 c asm("$2");
+            volatile u16 *p = D_800941EE;
+            s32 mm;
+            s32 c;
             c = *p;
             c = (s16)c;
             mm = c - 1;
