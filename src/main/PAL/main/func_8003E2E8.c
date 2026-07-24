@@ -12,12 +12,9 @@ void func_8003F2A4(s32 arg0);
 void func_8003F4BC(s32 arg0);
 
 void func_8003E2E8(s32 arg0, s32 arg1) {
-    register s32 value asm("$17") = arg0;
-    register s32 flag asm("$16") = arg1;
+    s32 value = arg0;
+    s32 flag = arg1;
     s32 mode;
-
-    asm("" : "=r"(value) : "0"(value));
-    asm("" : "=r"(flag) : "0"(flag));
 
     if (D_8009E6A4 == 5) {
         flag = 0;
