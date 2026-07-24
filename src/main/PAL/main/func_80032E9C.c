@@ -6,10 +6,10 @@ void func_80064DDC(void *arg0, void *arg1);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
 void func_80032E9C(s32 arg0) {
-    register s32 count asm("$18");
-    register s32 i asm("$16");
-    register s32 offset asm("$17");
-    register void **scratch asm("$16");
+    s32 count;
+    s32 i;
+    s32 offset;
+    void **scratch;
 
     count = 9;
     if (arg0 != 0) {
