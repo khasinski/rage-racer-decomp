@@ -60,9 +60,9 @@ skip_first:
     func_80033308(D_8009AFA4, D_8009AFAC);
 
     {
-        register s32 finalA0 asm("$4") = 0xFA;
-        register s32 finalA1 asm("$5") = 0x7C;
-        register s32 finalA3 asm("$7") = 0x78CC;
+        s32 finalA0 = 0xFA;
+        s32 finalA1 = 0x7C;
+        s32 finalA3 = 0x78CC;
 
         finalValue = *(s32 *)&D_8019C70C[(D_801E428C << 3) + (D_801E408C << 5)];
         func_80033D50(finalA0, finalA1, finalValue, finalA3, timeout);
