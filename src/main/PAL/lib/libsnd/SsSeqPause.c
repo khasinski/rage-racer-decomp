@@ -3,10 +3,10 @@
 extern SeqStruct *D_801E79CC[];
 
 void SsSeqPause(s32 seq, s32 sep) {
-    register s32 offset asm("s0");
-    register SeqStruct *state asm("s1");
-    register SeqStruct **seq_entry asm("s2");
-    register SeqStruct **seq_table asm("v0");
+    s32 offset;
+    SeqStruct *state;
+    SeqStruct **seq_entry;
+    SeqStruct **seq_table;
 
     seq = (s16)seq;
     seq_table = D_801E79CC;
