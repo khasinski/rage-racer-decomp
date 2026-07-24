@@ -14,7 +14,7 @@ void func_80025AC8(void) {
     d = D_801E42A0;
     if (d < 0) {
         s32 e = D_801E42E0;
-        __asm__("addu %0,%1,%2" : "=r"(e) : "0"(e), "r"(d));
+        e += d;
         D_801E42E0 = e;
         if (D_801E42E0 < 0) {
             D_801E42E0 = 0;
@@ -23,7 +23,7 @@ void func_80025AC8(void) {
         func_80033AA0(D_801E42E0, 0x49);
     } else if (d > 0) {
         s32 e = D_801E42E0;
-        __asm__("addu %0,%1,%2" : "=r"(e) : "0"(e), "r"(d));
+        e += d;
         v = e;
         D_801E42E0 = v;
         func_80033AA0(v, 0x49);
