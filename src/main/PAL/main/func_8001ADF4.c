@@ -10,8 +10,8 @@ extern s32 D_801E4030;
 u8 *func_8001A9A8(void);
 u8 *func_8001ACE4(u8 *packet);
 void func_800418D4(void);
-void SetDrawArea(u8 *packet, u8 *drawEnv) asm("func_80066604");
-void AddPrim(u32 *ot, u32 *prim) asm("func_80064DDC");
+void func_80066604(u8 *packet, u8 *drawEnv);
+void func_80064DDC(u32 *ot, u32 *prim);
 void func_800414F0(s32 arg0, s32 arg1);
 void func_80069858(void *arg0);
 void func_80027FF4(void *arg0, s32 arg1, s32 arg2);
@@ -20,9 +20,9 @@ void func_800389F0(void);
 void func_8001ABD8(void);
 
 void func_8001ADF4(s32 arg0) {
-    register u8 **scratch asm("$16");
-    register u8 *packet asm("$17");
-    register u8 *prim asm("$5");
+    u8 **scratch;
+    u8 *packet;
+    u8 *prim;
 
     if (arg0 >= 0x169) {
         D_801E8A98 = 1;
@@ -42,10 +42,10 @@ void func_8001ADF4(s32 arg0) {
 
             func_800418D4();
             packet = func_8001ACE4(*scratch);
-            SetDrawArea(packet, D_8019C900 + 0x70);
+            func_80066604(packet, D_8019C900 + 0x70);
             prim = packet;
             packet += 0xC;
-            AddPrim((u32 *)(D_8019C900 + 0x16C8), (u32 *)prim);
+            func_80064DDC((u32 *)(D_8019C900 + 0x16C8), (u32 *)prim);
             *scratch = packet;
             func_800414F0(-0x3000, 0x6000);
             func_80069858((void *)0x1F800028);
@@ -53,10 +53,10 @@ void func_8001ADF4(s32 arg0) {
             func_80027FF4((void *)0x1F800000, D_801E4BC8, 0x40);
 
             packet = *scratch;
-            SetDrawArea(packet, D_8019C900);
+            func_80066604(packet, D_8019C900);
             prim = packet;
             packet += 0xC;
-            AddPrim((u32 *)(D_8019C900 + 0xBD0), (u32 *)prim);
+            func_80064DDC((u32 *)(D_8019C900 + 0xBD0), (u32 *)prim);
             *scratch = packet;
             func_8004123C();
             func_800389F0();
