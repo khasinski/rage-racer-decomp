@@ -5,8 +5,8 @@
 extern GameTrackPoint *D_8009E688;
 
 void func_8003A148(GameCarRuntime *car, s32 arg1) {
-    register GameCarRuntime *carReg asm("$4") = car;
-    register u8 *state asm("$8");
+    GameCarRuntime *carReg = car;
+    u8 *state;
     s32 current;
     s32 magnitude;
     s32 limit;
@@ -20,8 +20,8 @@ void func_8003A148(GameCarRuntime *car, s32 arg1) {
     }
 
     if (arg1 < 4) {
-        register GameTrackPoint *point asm("$2");
-        register s32 scaled asm("$2");
+        GameTrackPoint *point;
+        s32 scaled;
 
         if (current < 0) {
             trackIndex = carReg->trackPointIndex;
@@ -39,7 +39,7 @@ void func_8003A148(GameCarRuntime *car, s32 arg1) {
         }
         limit = scaled >> 3;
     } else {
-        register GameTrackPoint *point asm("$2");
+        GameTrackPoint *point;
 
         if (current < 0) {
             trackIndex = carReg->trackPointIndex;
