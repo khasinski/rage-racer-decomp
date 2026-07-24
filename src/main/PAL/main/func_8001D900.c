@@ -13,9 +13,9 @@ void func_8001D5F0(u32 arg0, u32 arg1);
 void func_8001D6F4(u32 arg0, u32 arg1);
 
 void func_8001D900(u32 arg0, u32 arg1) {
-    register u16 *base asm("$16");
-    register u16 s1 asm("$17");
-    register u16 s2 asm("$18");
+    u16 *base;
+    u16 s1;
+    u16 s2;
     volatile u16 *idx;
     volatile u16 *color;
     u16 c;
