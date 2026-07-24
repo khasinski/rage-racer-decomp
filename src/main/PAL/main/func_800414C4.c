@@ -3,12 +3,11 @@
 extern u8 *D_801E4B98;
 
 u32 func_800414C4(s32 arg0, s32 arg1, s32 arg2) {
-    register s32 x asm("$4") = arg0 << 2;
-    register s32 y asm("$5");
-    register u8 *base asm("$2");
-    register u32 mask asm("$3");
+    s32 x = arg0 << 2;
+    s32 y;
+    u8 *base;
+    u32 mask;
 
-    asm volatile("" : "=r"(x) : "0"(x));
     y = arg1 << 7;
     base = D_801E4B98;
     mask = 1;
