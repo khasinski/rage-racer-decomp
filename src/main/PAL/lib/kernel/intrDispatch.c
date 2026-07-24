@@ -16,16 +16,15 @@ void func_8001674C(u8 *fmt, ...);
 void func_8006E654(void);
 
 void intrDispatch(void) {
-    register u16 *state asm("$17");
+    u16 *state;
     u16 s0;
     s32 i;
     s32 c;
-    register s32 one asm("$19");
+    s32 one;
     Callback *p;
-    register Callback *base asm("$20");
+    Callback *base;
 
     state = D_80099430;
-    __asm__("" : "=r"(state) : "0"(state));
     if (state[0] == 0) {
         func_8001674C(D_80013B70, *D_8009A4BC);
         func_8006E654();
