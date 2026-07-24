@@ -7,12 +7,12 @@ s32 func_8002A7C4(s32 arg0, s32 arg1);
 void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
-void GameSetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104");
+void func_8005C104(s32 index, s32 phase, s32 volume);
 
 void func_80030814(GameCarRuntime *car) {
     u8 *r = (u8 *)car + 188;
-    register s32 sinF24 asm("$18");
-    register s32 cosF24 asm("$19");
+    s32 sinF24;
+    s32 cosF24;
     volatile s32 coords[3];
     s32 flag = D_801E8AA0;
 
@@ -24,9 +24,9 @@ void func_80030814(GameCarRuntime *car) {
         } else {
             phase = 0x1e00;
         }
-        GameSetIndexedEffectVoice(0, phase, *(s16 *)(r + 0x38) * 2 + 80);
+        func_8005C104(0, phase, *(s16 *)(r + 0x38) * 2 + 80);
     } else {
-        GameSetIndexedEffectVoice(0, 0x1800, flag + 25);
+        func_8005C104(0, 0x1800, flag + 25);
     }
 
     {
@@ -66,7 +66,7 @@ void func_80030814(GameCarRuntime *car) {
     }
 
     if (*(s16 *)(r + 0x38) <= 0) {
-        GameSetIndexedEffectVoice(-1, 0, 0);
+        func_8005C104(-1, 0, 0);
         car->field_24 -= *(s32 *)(r + 0x50);
         D_801E8AA0 = 0;
         *(s16 *)(r + 0x3C) = 0;
