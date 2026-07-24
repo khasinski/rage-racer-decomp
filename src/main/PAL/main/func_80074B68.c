@@ -14,41 +14,40 @@ u16 func_80074A6C(s32 arg0, s32 arg1);
 
 void func_80074B68(s32 arg0, s32 arg1) {
     s32 voice = arg0;
-    s32 dfIndex = (voice & 0xFF) << 3;
+    u8 voiceByte = voice;
+    s32 dfIndex = voiceByte << 3;
     s32 voiceOffset;
-    register s32 x asm("$4");
+    s32 x;
     s32 sh4;
-    register s32 seg asm("$6");
-    register s32 base asm("$2");
+    s32 seg;
     u16 note;
     u16 pitch;
     s32 beaVal;
-    register u8 *pBd7 asm("$4");
+    u8 *pBd7;
 
-    if ((u32)(voice & 0xFF) >= 0x18U) {
+    if (voiceByte >= 0x18U) {
         return;
     }
 
-    voiceOffset = (((((voice & 0xFF) << 1) + (voice & 0xFF)) << 2) + (voice & 0xFF)) << 2;
+    voiceOffset = (((((voiceByte << 1) + voiceByte) << 2) + voiceByte) << 2);
     pBd7 = &D_801E4BD7;
     *pBd7 = D_8009E0C8[voiceOffset];
     D_801E4BDC = D_8009E0CC[voiceOffset];
-    __asm__("andi %0,%1,0xff" : "=r"(beaVal) : "r"(voice));
+    beaVal = voice & 0xFF;
     D_801E4BEA = beaVal;
 
     sh4 = *pBd7 << 4;
-    __asm__("addu %0,%1,%2" : "=r"(seg) : "r"((s32)D_801E4BDC), "r"(sh4));
-    __asm__ volatile("sll $2,%1,16\n\tsra %0,$2,16" : "=r"(x) : "r"(arg1) : "$2");
-    base = seg << 5;
+    seg = (s32)D_801E4BDC + sh4;
+    x = (s16)arg1;
     if (x >= 0) {
-        register u8 *e asm("$3") = D_801E416C;
-        s32 prodA = x * e[base + 0xD];
+        u8 *e = D_801E416C;
+        s32 prodA = x * e[(seg << 5) + 0xD];
         s32 qA = prodA / 127;
         note = *(u16 *)((u8 *)D_8009E0C4 + voiceOffset) + qA;
         pitch = prodA - qA * 127;
     } else {
-        register u8 *e asm("$3") = D_801E416C;
-        s32 prodB = x * e[base + 0xC];
+        u8 *e = D_801E416C;
+        s32 prodB = x * e[(seg << 5) + 0xC];
         s32 qB = prodB / 127;
         note = *(u16 *)((u8 *)D_8009E0C4 + voiceOffset) + qB - 1;
         pitch = qB + 127;
