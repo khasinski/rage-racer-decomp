@@ -2,13 +2,13 @@
 #include "game/render.h"
 
 void func_80046188(GameRenderAxisMatrix *out, s32 arg1, s32 arg2, s32 mode) {
-    register s32 tmp asm("$2");
+    s32 tmp;
 
     switch ((mode & 0xFF) - 0x58) {
     case 0:
     case 32:
-        out->m[0][0] = 0x1000;
-        asm("");
+        tmp = 0x1000;
+        out->m[0][0] = tmp;
         tmp = -arg1;
         out->m[0][1] = 0;
         out->m[0][2] = 0;
@@ -22,8 +22,8 @@ void func_80046188(GameRenderAxisMatrix *out, s32 arg1, s32 arg2, s32 mode) {
 
     case 1:
     case 33:
-        out->m[1][1] = 0x1000;
-        asm("");
+        tmp = 0x1000;
+        out->m[1][1] = tmp;
         tmp = -arg1;
         out->m[0][0] = arg2;
         out->m[0][1] = 0;
