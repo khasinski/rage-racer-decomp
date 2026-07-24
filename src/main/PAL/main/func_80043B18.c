@@ -1,44 +1,41 @@
 #include "common.h"
 
+typedef struct {
+    u8 pad[0x22];
+    s16 value;
+} Func80043B18Entry;
+
 extern u16 D_8019C9A4;
-extern u8 *D_8019C7CC;
+extern Func80043B18Entry *D_8019C7CC;
 
-s32 func_80043B18(u8 *arg0) {
-    register s32 best asm("$9");
-    register u8 *entry asm("$6");
-    register s32 index asm("$7");
-    register s32 selected asm("$11");
-    register s32 span asm("$8");
-    register s32 halfSpan asm("$10");
-    register s32 target asm("$4");
-    register s32 dist asm("$3");
-    register u32 rawValue asm("$5");
-    register s32 tmp asm("$2");
-    s8 framePad[16];
+s32 func_80043B18(u8 *arg0, u16 rawValue) {
+    s32 best;
+    Func80043B18Entry *entry;
+    s32 index;
+    s32 selected;
+    s32 span;
+    s32 halfSpan;
+    s32 target;
+    s32 dist;
+    s32 tmp;
+    u32 candidate;
 
-    asm volatile("" : "=m"(framePad));
-
-    best = 0x7FFFFFFF;
-    asm volatile("" : "=r"(best) : "0"(best));
     entry = D_8019C7CC;
-    tmp = -1;
-    dist = *(s16 *)(entry + 0x22);
-    asm volatile("" : "=r"(dist) : "0"(dist));
-    rawValue = *(volatile u16 *)(entry + 0x22);
+    best = 0x7FFFFFFF;
+    rawValue = *(u16 *)&entry[0].value;
+    dist = entry[0].value;
     index = 0;
 
-    if (dist != tmp) {
+    if (dist != -1) {
         tmp = D_8019C9A4;
         target = *(s16 *)(arg0 + 0x78);
         tmp <<= 16;
         span = tmp >> 16;
         tmp = (u32)tmp >> 31;
-        tmp = span + tmp;
-        halfSpan = tmp >> 1;
+        halfSpan = (span + tmp) >> 1;
 
         do {
-            tmp = rawValue << 16;
-            dist = tmp >> 16;
+            dist = (s16)rawValue;
             tmp = dist < target;
             if (tmp) {
                 dist = target - dist;
@@ -46,26 +43,25 @@ s32 func_80043B18(u8 *arg0) {
                 dist = dist - target;
             }
 
-            tmp = halfSpan < dist;
-            if (tmp) {
-                tmp = span - dist;
+            candidate = halfSpan < dist;
+            if (candidate) {
+                candidate = (u32)(span - dist);
             } else {
-                tmp = dist;
+                candidate = (u32)dist;
             }
 
-            dist = tmp;
+            dist = (s32)candidate;
             tmp = dist < best;
-            entry += 0x24;
             if (tmp) {
                 selected = index;
                 best = dist;
             }
 
             tmp = -1;
-            dist = *(s16 *)(entry + 0x22);
-            asm volatile("" : "=r"(dist) : "0"(dist));
-            rawValue = *(volatile u16 *)(entry + 0x22);
-        } while (dist != tmp, index++, dist != tmp);
+            index++;
+            rawValue = *(u16 *)&entry[index].value;
+            dist = entry[index].value;
+        } while (dist != tmp);
     }
 
     return selected;
