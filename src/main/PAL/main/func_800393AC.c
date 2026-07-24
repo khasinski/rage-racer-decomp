@@ -4,11 +4,11 @@
 extern s32 D_801E408C;
 
 void func_800393AC(GameCarRuntime *arg0, s32 arg1) {
-    register GameCarRuntime *obj asm("a2") = arg0;
-    register s32 temp asm("v0");
-    register s32 value asm("v1");
-    register u8 *base asm("a0");
-    register s32 scene asm("a0");
+    GameCarRuntime *obj = arg0;
+    s32 temp;
+    s32 value;
+    u8 *base;
+    s32 scene;
 
     base = (u8 *)&obj->field_BC;
     if (*(s32 *)&obj->field_F0 == 0) {
@@ -21,7 +21,8 @@ void func_800393AC(GameCarRuntime *arg0, s32 arg1) {
                 return;
             }
             scene = D_801E408C;
-            value = arg1 * value;
+            arg1 *= value;
+            value = arg1;
             temp = value / 0x320;
             *(s32 *)&obj->field_F0 = temp;
             if (scene != 0) {
