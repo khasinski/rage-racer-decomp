@@ -3,11 +3,11 @@
 
 void GameClearSaveHeaderRows(GameSaveHeaderRow *rows) {
     u8 *arg0 = (u8 *)rows;
-    register s32 i asm("a3") = 0;
-    register u8 *ptr1 asm("a2") = arg0;
-    register s32 j asm("v1");
-    register u8 *ptr2 asm("v0");
-    register u8 *ptr3 asm("a1");
+    s32 i = 0;
+    u8 *ptr1 = arg0;
+    s32 j;
+    u8 *ptr2;
+    u8 *ptr3;
 
     do {
         arg0[0] = 0;
