@@ -5,10 +5,10 @@ extern u32 D_801E6F2C[];
 void func_8005D6EC(s32 arg0);
 
 void func_8004BC68(void) {
-    register s32 i asm("$8");
-    register s32 j asm("$7");
-    register s32 mirror asm("$11");
-    register u32 *base asm("$12");
+    s32 i;
+    s32 j;
+    s32 mirror;
+    u32 *base;
 
     func_8005D6EC(8);
     base = D_801E6F2C;
