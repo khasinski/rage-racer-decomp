@@ -10,31 +10,39 @@ void func_80017B94(void *, s32);
 void func_80017BAC(s32);
 
 void func_80018F08(void) {
-    register u32 temp asm("$2");
-    register u32 *src asm("$5");
-    register u32 dst asm("$4");
-    register u32 count asm("$3");
+    u32 temp;
+    u32 *dst;
+    u32 *src;
+    u32 count;
 
     temp = D_8009E698;
-    __asm__ volatile("" : "=r"(temp) : "0"(temp));
-    src = (u32 *)temp;
+    if (temp != 0) {
+        src = (u32 *)temp;
+    } else {
+        src = (u32 *)temp;
+    }
+    count = src[6];
     temp = D_8019C904;
-    __asm__ volatile("" : "=r"(temp) : "0"(temp));
-    dst = temp;
-    count = src[6] + 0x28;
-    temp = count + dst;
+    if (count != 0) {
+        dst = (u32 *)temp;
+    } else {
+        dst = (u32 *)temp;
+    }
+    count = count + 0x28;
+    temp = count + (u32)dst;
     count >>= 2;
     D_8019CAFC = temp;
 
     while (count != 0) {
-        *(u32 *)dst = *src;
+        *dst = *src;
         src++;
         count--;
-        dst += 4;
+        dst++;
     }
 
     func_80017B94((void *)D_8019C904, 0);
-    func_800179B4((void *)(D_8019C904 + 0x28), *(s32 *)(D_8009E698 + 0x20));
+    temp = *(s32 *)(D_8009E698 + 0x20);
+    func_800179B4((void *)(D_8019C904 + 0x28), temp);
     func_80017BAC(0);
     *(u32 *)(D_8009E698 + 0x20) = D_8019C904 + 0x28;
     func_80017948((void *)(D_8019C904 + 0x28), 0);
