@@ -9,9 +9,12 @@ extern volatile u32 *D_8009A4C4;
 
 void *func_8006E4E4(void) {
     u16 *state;
-    register volatile u16 *mask asm("$2");
-    register volatile u32 *status asm("$4");
+    volatile u16 *initialMask;
+    volatile u16 *mask;
+    volatile u32 *newStatus;
+    volatile u32 *status;
     volatile u16 *clearMask;
+    u16 maskValue;
     u32 statusValue;
 
     state = D_80099430;
@@ -21,15 +24,18 @@ void *func_8006E4E4(void) {
 
     EnterCriticalSection();
 
-    mask = D_8009A4C0;
+    initialMask = D_8009A4C0;
+    mask = initialMask;
     status = D_8009A4C4;
-    D_80099462 = *mask;
+    maskValue = *mask;
+    D_80099462 = maskValue;
     statusValue = *status;
     clearMask = D_8009A4BC;
     D_80099464 = statusValue;
     *mask = 0;
     *clearMask = *mask;
-    status = D_8009A4C4;
+    newStatus = D_8009A4C4;
+    status = newStatus;
     *status &= 0x77777777;
     ResetEntryInt();
 

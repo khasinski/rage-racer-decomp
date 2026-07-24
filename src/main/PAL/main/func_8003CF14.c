@@ -170,7 +170,6 @@ void func_8003CF14(s32 arg0, s32 arg1) {
     delta[1] = coords[1] - scratch[3];
     delta[2] = coords[2] - scratch[4];
     c400 = 0x400;
-    __asm__("" : "=r"(c400) : "0"(c400));
     scratch[7] = c400 - func_8001A6AC(delta[0], delta[2]);
     value = func_8006888C(delta[0] * delta[0] + delta[2] * delta[2]);
     scratch[6] = c400 - func_8001A6AC(delta[1], value >> 6);

@@ -36,32 +36,21 @@ void func_800212F0(s32 arg0);
 void func_8001B488(void);
 
 void func_80021338(void) {
+    u8 *src;
+    u8 *dst;
+    s32 i;
     s32 offset;
     s32 emptySlot;
 
-    asm volatile(
-        "move  $t0,$zero\n"
-        "lui   $a3,%%hi(D_801E4388)\n"
-        "addiu $a3,$a3,%%lo(D_801E4388)\n"
-        "lui   $a2,%%hi(D_8007BE68)\n"
-        "addiu $a2,$a2,%%lo(D_8007BE68)\n"
-        "1:\n"
-        "lwl   $v0,3($a2)\n"
-        "lwr   $v0,0($a2)\n"
-        "lwl   $v1,7($a2)\n"
-        "lwr   $v1,4($a2)\n"
-        "swl   $v0,3($a3)\n"
-        "swr   $v0,0($a3)\n"
-        "swl   $v1,7($a3)\n"
-        "swr   $v1,4($a3)\n"
-        "addiu $a3,$a3,8\n"
-        "addiu $t0,$t0,1\n"
-        "slti  $v0,$t0,13\n"
-        "bnez  $v0,1b\n"
-        "addiu $a2,$a2,8\n"
-        :
-        :
-        : "$2", "$3", "$6", "$7", "$8", "memory");
+    i = 0;
+    dst = &D_801E4388;
+    src = &D_8007BE68;
+    do {
+        __builtin_memcpy(dst, src, sizeof(UnkCopyChunk));
+        dst += sizeof(UnkCopyChunk);
+        i++;
+        src += sizeof(UnkCopyChunk);
+    } while (i < 13);
 
     D_8019CB40 = 0;
     D_8019CB42 = 0;

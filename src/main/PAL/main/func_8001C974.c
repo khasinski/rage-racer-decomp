@@ -77,6 +77,7 @@ s32 func_80032F34(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32
 void func_80016754(s32 x, s32 y, void *str, s32 col);
 
 void func_8001CD54(void) {
+    s32 x;
     char buf[88];
     s32 *scr = (s32 *)0x1F800000;
     s32 p;
@@ -84,7 +85,8 @@ void func_8001CD54(void) {
 
     p = *scr;
     p = func_80016EC4(ot, p, 0x14, 0xce, 0x58, 8, 0xa8, 0xe0, 0x7812);
-    p = func_80016EC4(ot, p, (D_801E42CC == 0xa) ? 0x6c : 0x70, 0xce, 8, 8, 0x84, 0xc4, 0x7812);
+    x = (D_801E42CC == 0xa) ? 0x6c : 0x70;
+    p = func_80016EC4(ot, p, x, 0xce, 8, 8, 0x84, 0xc4, 0x7812);
     p = func_80016EC4(ot, p, (D_801E42CC == 0xa) ? 0x84 : 0x80, 0xce, 8, 8, 0x8c, 0xc4, 0x7812);
     p = func_80017390(ot, p, 0x29);
     p = func_80032F34(ot, p, 0x10, 0xcc, 0x5b, 0xc, 0x85, 0x15, 0xe);
@@ -94,11 +96,8 @@ void func_8001CD54(void) {
     *scr = p;
 
     func_800632F0(buf, D_80010D2C, D_801E42CC);
-    {
-        register s32 x asm("$6");
-        x = (D_801E42CC == 0xa) ? 0x74 : 0x78;
-        func_80016754(x, 0xce, buf, 0x78cc);
-    }
+    x = (D_801E42CC == 0xa) ? 0x74 : 0x78;
+    func_80016754(x, 0xce, buf, 0x78cc);
     func_80016754(0x90, 0xce, D_8007C7A0[D_801E42CC], 0x78cc);
 }
 

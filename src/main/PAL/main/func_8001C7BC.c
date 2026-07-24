@@ -38,7 +38,7 @@ void func_8001C7BC(void) {
 
         if (count != 0) {
             ptr = D_8009E67C;
-            asm volatile("addu %0,%1,%2" : "=r"(end) : "0"(count), "r"(ptr));
+            end = (u8 *)(count + (s32)ptr);
             do {
                 if (*ptr != 0) {
                     D_8009EC90++;

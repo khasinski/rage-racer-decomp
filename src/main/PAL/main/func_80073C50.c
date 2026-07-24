@@ -48,9 +48,8 @@ void func_80073C50(s32 arg0, s32 val) {
         base = *(u8 **)((u8 *)D_801E79CC + idx4) + hi * 172;
     }
 
-    a2v = a3v;
+    a2v = a3v & 0x7FFFFFFF;
     if (sixteen != 0x21) {
-        asm("" : "=r"(a3v) : "0"(a3v));
         a2v = a3v * *(u16 *)(base + 116) / 127;
         a3v = a3v * *(u16 *)(base + 118) / 127;
     }
