@@ -91,6 +91,8 @@ segments:
       - [0x22B4, rodata, main/0022B4_main]
       - [0x23A8, .rodata, PAL/main/func_80054D10]
       - [0x23C0, rodata, main/0023C0_main]
+      - [0x23F8, .rodata, PAL/main/func_80059558]
+      - [0x242C, rodata, main/00242C_main]
       - [0x2FB8, .rodata, PAL/main/func_8005ECE0]
       - [0x2FCC, rodata, main/002FCC_main]
       - [0x3810, .rodata, PAL/main/func_80061520]
