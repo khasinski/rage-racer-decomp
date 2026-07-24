@@ -12,9 +12,9 @@ void func_80016A18(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 
 void GameDrawResultScreen(void) {
-    register u8 *base asm("$16");
-    register s32 *scratch asm("$17");
-    register s32 width asm("$18");
+    u8 *base;
+    s32 *scratch;
+    s32 width;
     volatile s32 pad[12];
     s32 y;
     s32 next;
@@ -34,6 +34,7 @@ void GameDrawResultScreen(void) {
     scratch = (s32 *)0x1F800000;
     base += 0xCC;
 
-    next = func_80032F34(base, *scratch, 0, 0, width, 0x30, 0x85, 0x15, 0xE);
+    next = *scratch;
+    next = func_80032F34(base, next, 0, 0, width, 0x30, 0x85, 0x15, 0xE);
     *scratch = func_80032F34(base, next, 0, 0x30, width, 0x18, 0xF0, 0xF0, 0xF0);
 }
