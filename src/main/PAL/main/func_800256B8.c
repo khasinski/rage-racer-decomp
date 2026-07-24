@@ -9,8 +9,8 @@ s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
 s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 
 void func_800256B8(void) {
-    register s32 *scratch asm("$20");
-    register void *base asm("$19");
+    s32 *scratch;
+    void *base;
     s32 pkt;
     s32 target;
     s32 value;
@@ -18,7 +18,7 @@ void func_800256B8(void) {
     s32 two;
     s32 white;
     s32 h1c0;
-    register u8 *rawBase asm("$2");
+    u8 *rawBase;
 
     if (g_GameMode != 9) {
         func_8002390C();
