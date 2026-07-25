@@ -75,6 +75,11 @@ ASM_STMT = re.compile(
 
 
 def strip_nonblocking_asm(text: str) -> str:
+    # Strip C comments first: a directive-like token (asm, .word, .globl, ...)
+    # appearing in prose is documentation, not code, and must not lower progress.
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    text = re.sub(r"//[^\n]*", "", text)
+
     decl_label = r"(?m)(^.*\S\s+)\b(?:__asm__|asm)\s*\(\s*\"(?:[^\"\\]|\\.)*\"\s*\)"
     text = re.sub(decl_label, r"\1", text)
 

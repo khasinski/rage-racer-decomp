@@ -13,14 +13,10 @@ void func_80028DEC(void *arg0, s32 arg1);
 void func_80069458(Matrix *dst, Matrix *src);
 void func_80069568(Matrix *lhs, Matrix *rhs);
 
+extern u32 D_1F800084;
+
 static inline void ClearScratchRenderMode37AAC(void) {
-    __asm__ volatile(
-        ".set push\n"
-        ".set noat\n"
-        "lui $1, 0x1F80\n"
-        "sw $0, 0x84($1)\n"
-        ".set pop\n"
-        ::: "memory");
+    D_1F800084 = 0;
 }
 
 void func_80037AAC(void) {

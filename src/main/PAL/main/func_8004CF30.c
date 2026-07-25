@@ -56,7 +56,7 @@ void func_8004CF30(s32 arg) {
             u0 = (u32)m11 >> 8;
             __asm__("" : "=r"(u0) : "0"(u0));
             c1 = (u32)(cnt * 75) >> 8;
-            __asm__("andi %0, %1, 0xFF" : "=r"(c0) : "r"(u0));
+            c0 = u0 & 0xFF;
             func_80047330(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, c0, c0, c0, c1, c1, c1, 0x60);
             s2 += 0x000A0000;
             s1 += 0x00070000;
@@ -75,7 +75,7 @@ void func_8004CF30(s32 arg) {
             __asm__("" : "=r"(vv) : "0"(vv));
             sh = (u32)vv >> 9;
             __asm__("" : "=r"(sh) : "0"(sh));
-            __asm__("andi %0, %1, 0xFF" : "=r"(col) : "r"(sh));
+            col = sh & 0xFF;
             func_80047024(s3, x0, y0, x1, 2, col, col, col, 0x60);
             s0++;
         } while (s0 < 0x21);

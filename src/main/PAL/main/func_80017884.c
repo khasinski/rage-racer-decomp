@@ -23,8 +23,6 @@ void func_80017884(s32 arg0) {
     register s32 ptr asm("$2");
     register s32 tmp asm("$3");
 
-    asm(".globl func_80017920\nfunc_80017920 = func_80017884 + 0x9C");
-
     tmp = D_8019CACC;
     value = 0xA;
     *(s32 *)0x1F80006C = value;
@@ -59,8 +57,9 @@ void func_80017948(s32 *base, s32 index) {
     register s32 i asm("$5");
     register s32 value asm("$2");
     register s32 count asm("$3");
+    s32 pad[2];
 
-    asm volatile("addiu $sp,$sp,-8");
+    (void)&pad;
     ptr = base + 3;
     D_801E41A8[index] = base;
     value = base[1];
@@ -81,7 +80,6 @@ void func_80017948(s32 *base, s32 index) {
             ptr++;
         } while ((u32)i < (u32)value);
     }
-    asm volatile("addiu $sp,$sp,8");
 }
 
 void func_800179B4(s32 *base, s32 offset) {
@@ -89,8 +87,9 @@ void func_800179B4(s32 *base, s32 offset) {
     register s32 i asm("$7");
     register s32 value asm("$2");
     register s32 count asm("$3");
+    s32 pad[2];
 
-    asm volatile("addiu $sp,$sp,-8");
+    (void)&pad;
     ptr = base + 3;
     value = base[1];
     i = 0;
@@ -110,7 +109,6 @@ void func_800179B4(s32 *base, s32 offset) {
             ptr++;
         } while ((u32)i < (u32)value);
     }
-    asm volatile("addiu $sp,$sp,8");
 }
 
 void func_80017A10(s32 index) {
@@ -142,8 +140,9 @@ void func_80017A6C(s32 *base) {
     register s32 limit asm("$7");
     register s32 *item asm("$3");
     register s32 value asm("$2");
+    s32 pad[2];
 
-    asm volatile("addiu $sp,$sp,-8");
+    (void)&pad;
     ptr = base + 1;
     count = base[0];
     *(s32 *)0x1F800048 = (s32)ptr;
@@ -164,7 +163,6 @@ void func_80017A6C(s32 *base) {
             item += 3;
         } while (i < limit);
     }
-    asm volatile("addiu $sp,$sp,8");
 }
 
 void func_80017AD0(s32 *base) {
@@ -172,8 +170,9 @@ void func_80017AD0(s32 *base) {
     register s32 count asm("$6");
     register s32 i asm("$5");
     register s32 value asm("$2");
+    s32 pad[2];
 
-    asm volatile("addiu $sp,$sp,-8");
+    (void)&pad;
     D_801E5020 = base;
     base = (s32 *)((s32)base + 0x800);
     D_801E4B98 = base;
@@ -197,7 +196,6 @@ void func_80017AD0(s32 *base) {
             ptr++;
         } while (i < count);
     }
-    asm volatile("addiu $sp,$sp,8");
 }
 
 void func_80017B44(void *asset, s32 index) {
@@ -213,7 +211,6 @@ void func_80017B94(void *asset, s32 index) {
 }
 
 void func_80017BAC(s32 index) {
-    asm(".globl func_80017BBC\nfunc_80017BBC = func_80017BAC + 0x10");
     D_8009E698 = D_801E8A54[index];
 }
 

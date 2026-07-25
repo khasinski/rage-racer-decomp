@@ -23,7 +23,8 @@ s32 func_8005026C(s32 arg0) {
     delta = arg0;
 
     if (delta == 0) {
-        asm("sw $0,%0" : "=m"(D_8007FB3C));
+        asm("" : "=r"(delta) : "0"(delta));
+        D_8007FB3C = 0;
         return temp;
     } else {
         if (delta < 0) {

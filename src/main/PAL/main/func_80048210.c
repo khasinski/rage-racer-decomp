@@ -16,6 +16,7 @@ void func_80048210(s32 arg0, u8 *arg1, u8 *arg2) {
     register s32 x1Base asm("$3");
     register s32 x1 asm("$7");
     register s32 y1 asm("$6");
+    register s32 otPtr asm("$4");
     s32 limit;
     s32 xPacked;
     s32 yPacked;
@@ -40,7 +41,7 @@ void func_80048210(s32 arg0, u8 *arg1, u8 *arg2) {
     } else {
         temp = xPacked & 0x7FFF;
     }
-    asm("mult %1,%0\n\tmflo %0\n\tsrl %0,%0,5" : "=r"(interp) : "r"(arg0), "0"(temp));
+    interp = (u32)(arg0 * temp) >> 5;
     x0 = x0Base + interp;
 
     y0 = *(s16 *)(record + 6);
@@ -54,10 +55,11 @@ void func_80048210(s32 arg0, u8 *arg1, u8 *arg2) {
     } else {
         temp = (xPacked >> 16) & 0x7FFF;
     }
-    asm("mult %1,%0\n\tmflo %0\n\tsrl %0,%0,5" : "=r"(interp) : "r"(arg0), "0"(temp));
+    interp = (u32)(arg0 * temp) >> 5;
     y0 += interp;
     asm("" : "=r"(y0) : "0"(y0));
 
+    asm volatile("" ::: "memory");
     x1Base = *(s16 *)(record + 8);
     if (yPacked & 0x8000) {
         y0Call = y0;
@@ -66,8 +68,9 @@ void func_80048210(s32 arg0, u8 *arg1, u8 *arg2) {
         y0Call = y0;
         temp = yPacked & 0x7FFF;
     }
-    asm("mult %1,%0\n\tmflo %0\n\tsrl %0,%0,5" : "=r"(interp) : "r"(arg0), "0"(temp));
+    interp = (u32)(arg0 * temp) >> 5;
 
+    asm volatile("" ::: "memory");
     y1 = *(s16 *)(record + 0xA);
     x1 = x1Base + interp;
     if (yPacked < 0) {
@@ -110,10 +113,10 @@ void func_80048210(s32 arg0, u8 *arg1, u8 *arg2) {
     x0 <<= 0x10;
     y0Arg = y0Call << 0x10;
     x1 <<= 0x10;
-    /* Match note: keep the target operand order for the OT pointer add. */
-    asm("addu %0,%1,%0" : "=r"(arg0) : "r"(otBase), "0"(arg0));
+    otPtr = (s32)otBase + arg0;
+    asm("" : "=r"(otPtr) : "0"(otPtr));
     func_8004711C(
-        (void *)arg0,
+        (void *)otPtr,
         x0 >> 0x10,
         y0Arg >> 0x10,
         x1 >> 0x10,

@@ -41,7 +41,8 @@ void func_8003DDAC(s32 arg0, s32 arg1) {
         start = 1;
         end = 4;
     } else {
-        asm("addu %0,$0,$0" : "=r"(start));
+        asm("" : "=r"(active) : "0"(active));
+        start = 0;
         end = 1;
     }
 
@@ -55,7 +56,7 @@ void func_8003DDAC(s32 arg0, s32 arg1) {
         base = D_8007E334;
         asm("" : "=r"(base) : "0"(base));
         dstOffset = loopIndex << 1;
-        asm("addu %0,%1,%2" : "=r"(dst) : "r"(dstOffset), "r"(base));
+        dst = (u16 *)(dstOffset + (s32)base);
         offset = loopIndex * 0x10;
 
         do {

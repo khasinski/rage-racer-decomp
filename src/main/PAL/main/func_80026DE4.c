@@ -30,21 +30,10 @@ void func_80026DE4(void) {
     s32 arg8;
 
     for (i = 0, offset = 0; i < 14; offset += 8) {
-        register u32 timer asm("$2");
-        register u32 magic asm("$3");
-        register u32 hi asm("$2");
-        register s32 tableY asm("$3");
+        s32 tableY;
 
-        __asm__ volatile(
-            "lui $3,0xAAAA\n"
-            "lui $2,%%hi(D_801E40B8)\n"
-            "lw $2,%%lo(D_801E40B8)($2)\n"
-            "ori $3,$3,0xAAAB\n"
-            "multu $2,$3"
-            : "=r"(timer), "=r"(magic));
+        adjusted = (D_801E40B8 / 3) - 0xD0;
         tableY = *(s16 *)((u8 *)D_8007D6DE + offset);
-        __asm__ volatile("mfhi %0" : "=r"(hi));
-        adjusted = (hi >> 1) - 0xD0;
         delta = tableY - adjusted;
 
         if (delta < 0x60) {
@@ -81,23 +70,16 @@ void func_80026DE4(void) {
         register s32 *scratch asm("s1");
         register u8 *ptr asm("s0");
         register s32 scale_a asm("v1");
+        register s32 tmp asm("v0");
         register u8 *base asm("v0");
 
         camera = D_801E42E0;
-        __asm__ volatile("lui $17,0x1F80" : "=r"(scratch));
-        __asm__ volatile(
-            "sll $2,%1,3\n"
-            "subu $2,$2,%1\n"
-            "sll %0,$2,5"
-            : "=r"(scale_a)
-            : "r"(camera)
-            : "$2");
-        __asm__ volatile(
-            "lui $2,%%hi(D_8019C900)\n"
-            "lw $2,%%lo(D_8019C900)($2)"
-            : "=r"(base));
-        ptr = base + 0xD0;
+        scratch = (s32 *)0x1F800000;
+        tmp = (camera << 3) - camera;
+        scale_a = tmp << 5;
+        base = D_8019C900;
         arg1 = *scratch;
+        ptr = base + 0xD0;
         arg7 = (scale_a / 0x100) + 0x20;
         scale_b = ((camera << 1) + camera) << 6;
         arg8 = (scale_b / 0x100) + 0x40;

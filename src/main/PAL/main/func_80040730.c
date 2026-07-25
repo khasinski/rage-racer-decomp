@@ -7,6 +7,7 @@ extern s16 D_801E4DCC;
 extern s16 D_801E4DB8;
 extern s32 D_801E4168;
 extern s32 D_801E40B8;
+extern s32 D_1F800084;
 
 void func_8001A530(Matrix *mtx, s32 angle);
 void func_8001A5A0(Matrix *mtx, s32 angle);
@@ -15,16 +16,6 @@ void func_80069568(Matrix *lhs, Matrix *rhs);
 void func_80017A10(s32 arg0);
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 void func_80028DEC(void *arg0, s32 arg1);
-
-static inline void ClearScratchRenderMode(void) {
-    __asm__ volatile(
-        ".set push\n"
-        ".set noat\n"
-        "lui $1, 0x1F80\n"
-        "sw $0, 0x84($1)\n"
-        ".set pop\n"
-        ::: "memory");
-}
 
 void func_80040730(void) {
     Matrix mtx0;
@@ -55,7 +46,7 @@ void func_80040730(void) {
     anglePtr = (s16 *)((u8 *)anglePtr - 0x12);
     func_80017794(scratchVec, anglePtr, &mtx0);
     frameValue = D_801E4168;
-    ClearScratchRenderMode();
+    *(s32 *)0x1F800084 = 0;
     drawId = 1;
     if (frameValue >= 0x24) {
         drawId = 0x23;
@@ -79,7 +70,7 @@ void func_80040730(void) {
     func_80069568(&mtx0, mtx1Ptr);
     func_80017794((void *)0x1F80011C, anglePtr, mtx1Ptr);
     frameValue = D_801E4168;
-    ClearScratchRenderMode();
+    D_1F800084 = 0;
     drawId = 1;
     if (frameValue >= 0x25) {
         drawId = 0x24;

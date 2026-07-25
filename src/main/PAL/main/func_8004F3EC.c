@@ -29,7 +29,8 @@ void func_8004F3EC(s32 arg0, s32 arg1) {
     asm("" : "=r"(a1v) : "0"(a1v));
 
     if (count == 0) {
-        asm("sw $0,%0" : "=m"(D_8007FB2C));
+        asm("" : "=r"(count) : "0"(count));
+        D_8007FB2C = 0;
         return;
     }
     if (count < 0) {
@@ -53,7 +54,8 @@ void func_8004F3EC(s32 arg0, s32 arg1) {
         c17 = 0x7F;
         c21 = 0x259;
         c19 = 0x20;
-        asm volatile("addiu %0,%1,0x211" : "=r"(t) : "r"(t), "r"(r5), "r"(r6), "r"(c17), "r"(c21), "r"(c19));
+        asm volatile("" : : "r"(r5), "r"(r6), "r"(c17), "r"(c21), "r"(c19));
+        t = t + 0x211;
         func_80047BD4(r4, r5, r6, a1v, c17, c17, c17, c21, c19);
         func_80047BD4(0x44, y, 7, 0xD, c17, c17, c17, c21, c19);
         func_80046A2C(ot, 0x17, y, 0x34, 0x10, 0x8C, 0x8C, 0, 0, 0, 0x244, 1, 1, 0x3B);

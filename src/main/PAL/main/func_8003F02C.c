@@ -16,16 +16,6 @@ void func_80028DEC(void *arg0, s32 arg1);
 void func_80069568(Matrix *lhs, Matrix *rhs);
 
 
-static inline void ClearScratchRenderMode3F02C(void) {
-    __asm__ volatile(
-        ".set push\n"
-        ".set noat\n"
-        "lui $1, 0x1F80\n"
-        "sw $0, 0x84($1)\n"
-        ".set pop\n"
-        ::: "memory");
-}
-
 void func_8003F02C(void) {
     Matrix mtx0;
     Matrix mtx1;
@@ -43,8 +33,7 @@ void func_8003F02C(void) {
     func_80017A10(1);
     func_80017794((void *)0x1F80011C, &D_801E4340, &mtx0);
     frameValue = D_801E4168;
-    __asm__ volatile("" : "=r"(frameValue) : "0"(frameValue));
-    ClearScratchRenderMode3F02C();
+    *(s32 *)0x1F800084 = 0;
     drawId = 1;
     if (frameValue >= 0x26) {
         drawId = 0x25;

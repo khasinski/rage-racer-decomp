@@ -38,7 +38,7 @@ s32 func_800487D8(TimedDrawCommand *commands, s32 *progress, s32 step) {
     }
 
     nextProgress = ((index << 1) + index) << 2;
-    asm("addu %0,%1,%2" : "=r"(cmdTmp) : "r"(nextProgress), "r"(base));
+    cmdTmp = (TimedDrawCommand *)(nextProgress + (s32)base);
     if (cmdTmp->time < 0) {
         goto after_loop;
     }
@@ -213,11 +213,9 @@ loop:
     drawX = *(u16 *)(arg1Ptr + 4);
     drawY = *(u16 *)(arg1Ptr + 6);
     drawW = *(s16 *)arg0Ptr;
-    /* Match note: preserve operand order and split sign extension around call setup. */
-    asm("addu %0,%0,%5" : "=r"(drawX)
-        : "0"(drawX), "r"(drawH), "r"(drawY), "r"(drawW), "r"(xOffset));
-    asm("sll %0,%0,16" : "=r"(drawX) : "0"(drawX));
-    asm("addu %0,%0,%2" : "=r"(drawY) : "0"(drawY), "r"(yOffset));
+    drawX = drawX + xOffset;
+    drawX <<= 0x10;
+    drawY = drawY + yOffset;
     drawY = (u32)drawY << 16;
     drawX >>= 16;
     drawY >>= 16;

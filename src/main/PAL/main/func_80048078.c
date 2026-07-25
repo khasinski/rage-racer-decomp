@@ -48,8 +48,9 @@ void func_80048078(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     } else {
         temp = packed & 0x7FFF;
     }
-    asm("mult %1,%0\n\tmflo %0\n\tsrl %0,%0,5" : "=r"(interp) : "r"(arg0), "0"(temp));
+    interp = (u32)(arg0 * temp) >> 5;
 
+    asm volatile("" ::: "memory");
     y = *(s16 *)(record + 6);
     x += interp;
     if (packed < 0) {
