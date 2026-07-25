@@ -1,6 +1,13 @@
 #include "common.h"
 
 /*
+ * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * func_80068A38 is a hand-inlined PSY-Q libgte CompMatrix routine: batched
+ * cop2 (ctc2/mtc2/mvmva/mfc2) transfers interleaved with by-hand 16-bit column
+ * packing (lui/and/or/sll) that GCC 2.6.3 cannot reproduce from C or from GTE
+ * macros. Same family as the already-HANDWRITTEN siblings func_80068B98/CA4/
+ * D88/E70/F80. Byte-exact via register-pinned COP2 asm.
+ *
  * The func_80068A2C TU begins with 12 bytes (three 0x00000000 words) of
  * inter-object alignment padding that splat over-split into three bogus
  * single-`nop` "functions" (func_80068A2C/A30/A34).  The previous TU

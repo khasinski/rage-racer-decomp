@@ -16,7 +16,7 @@ BADGES = DOCS / "badges"
 
 
 ASM_MARKERS = re.compile(
-    r"INCLUDE_ASM|INCLUDE_RODATA|\.word|\.globl|\.ent|\.include"
+    r"INCLUDE_ASM|INCLUDE_RODATA|\.word\b|\.globl\b|\.ent\b|\.include\b"
 )
 ASM_RE = re.compile(r"(^|[^_a-zA-Z0-9])(__asm__|asm)\b")
 SUBSEGMENT = re.compile(
