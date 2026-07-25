@@ -69,4 +69,70 @@ s32 func_8005D414(s32 cue, s32 volume) {
     return result;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005D414", func_8005D530);
+s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
+    s32 id;
+    s32 pan;
+    s32 prog;
+    s32 tone;
+    s32 sx;
+    s32 sy;
+    s32 result;
+    s32 baseVol;
+    s32 scale;
+    s32 vx;
+    s32 vy;
+    s32 nextTone;
+
+    id = cue;
+    sy = volumeRight;
+    baseVol = D_80011F5C[id][0];
+    pan = D_80011F5C[id][1];
+    prog = D_80011F5C[id][2];
+    tone = D_80011F5C[id][3];
+
+    vx = baseVol * volumeLeft;
+    if (vx < 0) {
+        vx += 0x7F;
+    }
+    scale = D_801E6CA4.scale;
+    sx = (vx >> 7) * scale;
+    if (sx < 0) {
+        sx += 0x7F;
+    }
+    vy = baseVol * sy;
+    if (vy < 0) {
+        vy += 0x7F;
+    }
+    sx >>= 7;
+    volumeRight = (vy >> 7) * scale;
+    if (volumeRight < 0) {
+        volumeRight += 0x7F;
+    }
+    sy = volumeRight >> 7;
+
+    if ((func_8007B088(D_80011C84) == 0) || (id == 0x3D) || (id == 0x2B)) {
+        result = (s16)func_80077C7C(
+            0x16,
+            D_801E6CA8[pan],
+            (s16)prog,
+            (s16)tone,
+            0x3C,
+            0,
+            (s16)sx,
+            (s16)sy);
+        nextTone = tone + 1;
+        nextTone = (s32)((u32)nextTone << 16) >> 16;
+        result = (s16)func_80077C7C(
+            0x17,
+            D_801E6CA8[(D_801E4D90 = result, pan)],
+            (s16)prog,
+            nextTone,
+            0x3C,
+            0,
+            (s16)sx,
+            (s16)sy);
+        D_801E4D94 = result;
+    }
+
+    return result;
+}

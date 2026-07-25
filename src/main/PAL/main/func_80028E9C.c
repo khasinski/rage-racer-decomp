@@ -1,6 +1,7 @@
 #include "common.h"
 
 /*
+ * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  * Hand-written GTE face loop. This is outside the o32 C ABI: sixteen slt
  * instructions write to the assembler-reserved $at register, and the
  * dispatch path jumps through $t2 while passing live values in $t6-$t9.

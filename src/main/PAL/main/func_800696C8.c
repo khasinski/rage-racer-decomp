@@ -1,4 +1,5 @@
 #include "common.h"
+/* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
 s16 *func_800696C8(s32 *matrix, void *vec, s16 *out) {
