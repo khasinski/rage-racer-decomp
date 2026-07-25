@@ -4,6 +4,15 @@
 #include "common.h"
 
 /*
+ * Volume-scale table at D_801E6CA4. `.values[]` is CSE-accessed relative to
+ * `.scale` in func_8005D050. See func_8005D414.
+ */
+typedef struct SoundScale {
+    s32 scale;
+    s16 values[3];
+} SoundScale;
+
+/*
  * Shared sound-engine work area at 0x801E6D00..0x801E6DA8, touched by ~21
  * functions in src/main/PAL/main. Layout reconstructed from the retail
  * disassembly (base loaded as `lui rX,0x801e` + decimal offset 27904..) and

@@ -1,11 +1,5 @@
 #include "common.h"
-
-typedef struct {
-    s8 pad[8];
-    s32 v8;
-    s16 vC;
-    s16 vE;
-} S22;
+#include "game/menu.h"
 
 extern char D_80010F90[], D_80010FA8[], D_80010F98[], D_80010F9C[], D_80010FA4[];
 extern s32 D_8009E858[];

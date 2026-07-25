@@ -57,6 +57,20 @@ typedef struct StRingClearRecord {
     u8 pad4[0x1C];
 } StRingClearRecord;
 
+/*
+ * CD stream ring header (Rage Racer streaming). Ring pointer D_8009DF1C, ring
+ * base D_801E8AAC. `.state` is read as u16 (lhu). See func_8006D1D0.
+ */
+typedef struct StStrHeader {
+    u16 state;        /* 0x00 */
+    u16 mode;         /* 0x02 */
+    u16 frame;        /* 0x04 */
+    u16 nSectors;     /* 0x06 */
+    u16 nFrames;      /* 0x08 */
+    u8 pad0A[0x12];   /* 0x0A */
+    CdlLOC loc;       /* 0x1C */
+} StStrHeader;
+
 typedef struct CdSearchDirEntry {
     s32 type;
     u8 pad4[4];

@@ -9,6 +9,17 @@ typedef struct GameScoreRecord {
 } GameScoreRecord;
 
 /*
+ * Ranking / time high-score record row. Tables D_801E7744[][4][5] (ranking) and
+ * D_8019CB78[][4][5] (time). `pad[8]` holds an 8-char name.
+ */
+typedef struct S22 {
+    s8 pad[8];   /* 0x00 name[8] */
+    s32 v8;      /* 0x08 */
+    s16 vC;      /* 0x0C */
+    s16 vE;      /* 0x0E */
+} S22;
+
+/*
  * Global menu / UI state block at 0x8009B200 (~0x550 bytes). Accessed field by
  * field as absolute globals rather than through a base pointer, so the named
  * externs below are the usable handles; this struct documents the layout.

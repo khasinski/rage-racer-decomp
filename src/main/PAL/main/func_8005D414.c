@@ -1,9 +1,5 @@
 #include "common.h"
-
-typedef struct SoundScale {
-    s32 scale;
-    s16 values[3];
-} SoundScale;
+#include "game/sound.h"
 
 extern s32 D_80082F44;
 extern s32 D_801E4D90;

@@ -8,6 +8,18 @@ typedef struct GameRenderAxisMatrix {
     s16 m[3][3];
 } GameRenderAxisMatrix;
 
+/*
+ * Camera / horizon row. Base D_8019C9A8, indexed +8*screen. `horizon` is added
+ * to / subtracted from a GameRenderObject's y during the view transform.
+ */
+typedef struct CamRow {
+    u8 pad0[0xC];
+    s16 axis0;   /* 0x0C */
+    u16 axis1;   /* 0x0E */
+    u16 axis2;   /* 0x10 */
+    s16 horizon; /* 0x12 */
+} CamRow;
+
 typedef struct GameScratchpadRenderState {
     s32 pad0;
     void *primData;
