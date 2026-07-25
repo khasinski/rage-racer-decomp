@@ -85,17 +85,8 @@ void data_ready_callback(void) {
 
     entry = (StRingEntry *)((index << 5) + (s32)base);
     entry->state = 2;
-    __asm__ volatile(
-        "lui    $6,%%hi(D_8009DF14)\n"
-        "addiu  $6,$6,%%lo(D_8009DF14)\n"
-        "lwl    $3,0x1F(%0)\n"
-        "lwr    $3,0x1C(%0)\n"
-        "nop\n"
-        "swl    $3,0x3($6)\n"
-        "swr    $3,0x0($6)"
-        :
-        : "r"(entry)
-        : "$3", "$6", "memory");
+    *(CdlLOC *)D_8009DF14 = entry->loc;
+    __asm__ volatile("" ::: "memory");
     D_8009DF18 = entry->value;
     D_801E6C84 = D_801E6C74;
     if (D_8019C994 != 0) {

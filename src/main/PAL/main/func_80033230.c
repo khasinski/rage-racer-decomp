@@ -29,24 +29,12 @@ void func_80033230(void) {
     }
 
     {
-        register s32 magic asm("$2");
-        register s32 sign asm("$2");
         register s32 quotient asm("$3");
         register s32 digit asm("$3");
 
-        magic = 0x66666667;
-        asm volatile(
-            "mult $5,$2\n\t"
-            "sra $2,$5,31\n\t"
-            "mfhi $3"
-            : "=r"(sign), "=r"(quotient)
-            : "0"(magic)
-            : "hi", "lo");
-        quotient >>= 2;
-        quotient -= sign;
+        quotient = value / 10;
         asm volatile("" : "=r"(quotient) : "0"(quotient));
-        digit = value - (quotient * 10);
-        digit = digit * 24;
+        digit = (value - quotient * 10) * 24;
         *(u8 *)(right + 0xC) = digit;
     }
 

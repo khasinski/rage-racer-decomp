@@ -30,7 +30,7 @@ void func_80019F24(void) {
     one = 1;
     value = one - D_801E4BF8[D_8019CA6C];
     if (D_801E4BF8[D_8019CA6C] == D_801E6F10) {
-        asm("addiu %0,%0,-2" : "=r"(rectY) : "0"(rectY));
+        rectY = (s16 *)((u8 *)rectY - 2);
         rect = (Rect *)rectY;
         StoreImage(rect, buffer);
         DrawSync(0);
@@ -51,19 +51,6 @@ void func_80019F24(void) {
             count++;
         } while (count < 0xE0);
 
-        asm(
-            ".set push\n"
-            ".set noat\n"
-            "lui $2,%%hi(D_8019CA6C)\n"
-            ".globl func_8001A008\n"
-            "func_8001A008:\n"
-            "lw $2,%%lo(D_8019CA6C)($2)\n"
-            "lui $1,%%hi(D_801E4BF8)\n"
-            "addu $1,$1,$2\n"
-            "sb %0,%%lo(D_801E4BF8)($1)\n"
-            ".set pop"
-            :
-            : "r"(value)
-            : "$2", "memory");
+        D_801E4BF8[D_8019CA6C] = value;
     }
 }

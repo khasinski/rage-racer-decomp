@@ -80,7 +80,7 @@ void func_8003F0F8(void) {
 updateState:
     asm("" ::: "memory");
     asm("" : "=r"(state) : "0"(state));
-    asm volatile("lh %0,0x0e(%1)" : "=r"(value) : "r"(state));
+    value = state->field_0E;
     value <<= 5;
     v1 = *(s32 *)((s32)D_8007E360 + value);
     a4 = *(s32 *)((s32)D_8007E360 + value + 4);
@@ -90,17 +90,21 @@ updateState:
     *(s32 *)((s32)state + 0x14) = a4;
     *(s32 *)((s32)state + 0x18) = a5;
     *(s32 *)((s32)state + 0x1C) = a6;
-    asm volatile("lh %0,0x0e(%1)" : "=r"(value) : "r"(state));
+    asm("" ::: "memory");
+    value = state->field_0E;
     value <<= 3;
     v1 = *(s16 *)((s32)D_8007E3C0 + value);
-    asm volatile("lh %0,0x0e(%1)" : "=r"(value) : "r"(state));
+    asm("" ::: "memory");
+    value = state->field_0E;
     value <<= 3;
     *(s32 *)((s32)state + 0x20) = v1;
     v1 = *(s16 *)((s32)D_8007E3C0 + value + 2);
-    asm volatile("lh %0,0x0e(%1)" : "=r"(value) : "r"(state));
+    asm("" ::: "memory");
+    value = state->field_0E;
     value <<= 3;
     *(s32 *)((s32)state + 0x24) = v1;
     v1 = *(s16 *)((s32)D_8007E3C0 + value + 4);
+    asm("" ::: "memory");
     value = state->field_0E;
     *(s16 *)((s32)state + 0x0C) = 0;
     *(s32 *)((s32)state + 0x08) = 0;

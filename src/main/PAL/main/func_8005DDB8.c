@@ -46,7 +46,7 @@ void func_8005DDB8(s32 enabled) {
             left += 0x7F;
         }
         unused = 0;
-        asm volatile(".globl func_8005DEE4\nfunc_8005DEE4 = func_8005DDB8 + 0x12C" : : "r"(unused));
+        asm volatile("" : : "r"(unused));
         raw *= scale;
         left >>= 7;
         if (raw < 0) {

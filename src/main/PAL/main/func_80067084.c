@@ -45,7 +45,7 @@ s32 func_80067084(GpuRect *rect, u32 *src) {
     func_80067F04();
 
     w = savedRect->w;
-    asm("move %0,$0" : "=r"(mode) : "r"(w));
+    mode = 0;
     clippedW = w;
     if (w >= 0) {
         volatile u16 *width = D_800941EC;
@@ -93,7 +93,7 @@ s32 func_80067084(GpuRect *rect, u32 *src) {
                 return -1;
             }
             status = *g_GpuGp1;
-            asm("and %0,%0,%2" : "=r"(status) : "0"(status), "r"(readyMask));
+            status &= readyMask;
         } while (status == 0);
     }
 

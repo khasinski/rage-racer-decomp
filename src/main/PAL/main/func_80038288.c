@@ -1,5 +1,30 @@
 #include "common.h"
 
+/*
+ * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ *
+ * Symbol:   func_80038288
+ * Address:  0x80038288 (PAL/main)
+ * Reason:   Tunnel/proximity audio-pitch helper. The surrounding arithmetic is
+ *           ordinary C, but the routine ends with a multiply whose product is
+ *           never consumed before the function returns.
+ * Evidence:
+ *   - Dead `mult v0, v1` at the tail (v1 = -0x40): the retail epilogue
+ *     (lw ra / lw s0 / addiu sp / jr ra) follows immediately with no mflo/mfhi
+ *     and no fall-through consumer. The HI/LO product is discarded.
+ *   - No -O2 C compiler emits a pure dead multiply: GCC dead-code-eliminates
+ *     any multiply whose result is unused and expressible in C. The retail
+ *     bytes therefore cannot be produced from byte-exact plain C - the dead
+ *     multiply only exists because it was written by hand.
+ * Why C+PSYQ macros are insufficient: a dead multiply is not expressible in C
+ *   without an inline-asm `mult` crutch; keeping it as C would require the very
+ *   inline assembly this policy forbids for a plain-C match.
+ * Current representation: register-pinned C with a single inline-asm `mult`
+ *   reproducing the deliberate dead multiply. Byte-exact (tucheck DIFFS=0).
+ * Revisit condition: evidence that the product is consumed (e.g. a caller that
+ *   reads HI/LO), which would make it ordinary C.
+ */
+
 extern s32 D_801E40D8;
 
 s32 func_8001A6AC(s32 arg0, s32 arg1);

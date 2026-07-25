@@ -172,9 +172,9 @@ s32 func_80069BA8(s32 a, s32 b, s32 c, s32 d) {
 }
 
 void func_80069BCC(void *m, void *v, void *out) {
-    gte_op_diag(m, v, out, ".word 0x4B78000C");
+    gte_op12_diag(m, v, out);
 }
 
 void func_80069C24(void *m, void *v, void *out) {
-    gte_op_diag(m, v, out, ".word 0x4B70000C");
+    gte_op0_diag(m, v, out);
 }

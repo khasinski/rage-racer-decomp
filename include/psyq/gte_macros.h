@@ -161,4 +161,10 @@
     "ctc2 $13,$0\n\tctc2 $14,$2\n\tctc2 $15,$4" \
     :: "r"(m),"r"(v),"r"(out) : "$8","$9","$10","$11","$13","$14","$15","memory")
 
+/* op12 (sf=1) and op0 (sf=0) variants of the outer-product diagonal routine.
+ * The cop2 command word stays inside the macro (the hardware interface) so the
+ * calling C keeps no bare `.word`. */
+#define gte_op12_diag(m, v, out) gte_op_diag(m, v, out, ".word 0x4B78000C")
+#define gte_op0_diag(m, v, out)  gte_op_diag(m, v, out, ".word 0x4B70000C")
+
 #endif /* RAGE_PC_PSYQ_GTE_MACROS_H */

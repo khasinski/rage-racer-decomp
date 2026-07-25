@@ -27,12 +27,7 @@ void func_80019D7C(void) {
     register s32 count asm("$4");
 
     do {
-        asm volatile(
-            ".globl func_80019E5C\n"
-            "func_80019E5C = func_80019D7C + 0xE0\n"
-            "addiu %0,%1,0x100"
-            : "=r"(rectValue)
-            : "r"(page));
+        rectValue = page + 0x100;
         one = 1;
         *rectY = rectValue;
         value = one - *state;

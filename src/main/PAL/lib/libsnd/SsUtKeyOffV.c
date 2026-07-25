@@ -32,10 +32,8 @@ s32 SsUtKeyOffV(s32 arg0) {
             register u32 masked asm("$3");
 
             D_801E4BEA = arg0;
-            asm volatile(
-                "lui %0, %%hi(D_801E4BEA)\n"
-                "lhu %0, %%lo(D_801E4BEA)(%0)"
-                : "=r"(channel));
+            channel = D_801E4BEA;
+            asm volatile("" : "=r"(channel) : "0"(channel));
             masked = channel & 0xFFFF;
             asm volatile("" : "=r"(masked) : "0"(masked));
 

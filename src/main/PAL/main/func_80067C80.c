@@ -22,7 +22,7 @@ s32 func_80067C80(u32 mode) {
     state = D_800942F0;
     D_800942FC = intrMask;
     D_800942EC = state;
-    asm(".globl func_80067DB4\nfunc_80067DB4 = func_80067C80 + 0x134" ::: "memory");
+    asm("" ::: "memory");
 
     switch (mode & 7) {
     case 0:

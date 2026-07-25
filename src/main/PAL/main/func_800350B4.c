@@ -40,7 +40,7 @@ s32 func_800350B4(s32 position) {
     D_8019C78C = 0;
     D_8019CAB0 = 0;
 
-loop:
+    do {
     start = zone->start;
     finish = zone->end;
     if (start == -1) {
@@ -99,24 +99,13 @@ store_value:
         D_8019C78C = zone->value;
     }
 
-    {
-        register TrackZone *end asm("$2");
-
-        asm volatile(
-            ".set\tnoreorder\n"
-            "bgtz %1,.Lfunc_800350B4_done\n"
-            "addiu %0,%2,0xF0\n"
-            ".set\treorder"
-            : "=r"(end)
-            : "r"(status), "r"(first));
-        if ((s32)(zone + 1) < (s32)end) {
-            zone++;
-            goto loop;
-        }
+    if (status > 0) {
+        goto done;
     }
+    zone++;
+    } while ((s32)zone < (s32)first + 0xF0);
 
 done:
-    asm volatile(".Lfunc_800350B4_done:");
     switch (status) {
     case 1:
         return position - start;

@@ -25,7 +25,7 @@ void func_80026C0C(void) {
         register s32 value asm("$2");
 
         value = D_801E42E0;
-        __asm__("addu %0,%1,%2" : "=r"(value) : "0"(value), "r"(delta));
+        value = value + delta;
         D_801E42E0 = value;
 
         if (D_801E42E0 < 0) {
@@ -38,7 +38,7 @@ void func_80026C0C(void) {
         register s32 value asm("$4");
 
         value = D_801E42E0;
-        __asm__("addu %0,%1,%2" : "=r"(value) : "0"(value), "r"(delta));
+        value = value + delta;
         D_801E42E0 = value;
 
         func_80033AA0(D_801E42E0, 0x49);

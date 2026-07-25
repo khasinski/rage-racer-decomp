@@ -3,6 +3,7 @@
 #include "psyq/kernel.h"
 
 extern volatile s32 D_8009B740;
+extern char D_800128AC[];
 extern u8 D_8007F45C;
 extern u8 D_8007F460[];
 extern s32 D_801E7A54;
@@ -12,7 +13,6 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     register void *header asm("$19");
     register s32 tries asm("$17");
     register s32 fd asm("$16");
-    register void *name asm("$4");
     register s32 temp asm("$2");
     s32 i;
 
@@ -26,14 +26,12 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 
     {
         register s32 nameOffset asm("$18") = temp << 1;
+        register char *name asm("$4");
 
         do {
-            asm volatile(
-                "lui %0,%%hi(D_800128AC)\n"
-                "addiu %0,%0,%%lo(D_800128AC)\n"
-                "addu %0,%1,%0"
-                : "=r"(name)
-                : "r"(nameOffset));
+            name = D_800128AC;
+            asm volatile("" : "=r"(name) : "0"(name));
+            name = (char *)(nameOffset + (s32)name);
             fd = BiosFileOpen(name, 1);
             if (fd >= 0) {
                 break;

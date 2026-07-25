@@ -75,7 +75,7 @@ void func_8005BF30(void) {
         SsUtSetVVol(0x15, left, right);
         if (D_801E6CEC == 0) {
             right = 0xF;
-            asm volatile(".globl func_8005C030\nfunc_8005C030 = func_8005BF30 + 0x100" : : "r"(right));
+            asm volatile("" : : "r"(right));
             voice = 0x15;
             asm volatile("" : : "r"(voice));
             raw = 0x3C;

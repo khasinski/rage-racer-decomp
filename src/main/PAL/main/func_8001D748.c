@@ -1,10 +1,10 @@
 #include "common.h"
 
 /*
- * Attempt for func_8001D748.
+ * func_8001D748.
  *
- * Same C body as raw_shift_base_attempt, with the first call forced through a
- * small noreorder asm block so the raw store can occupy the jal delay slot.
+ * The store to raw+0x7162 written just before the call is scheduled by the
+ * compiler into the jal delay slot; no hand-written asm is needed.
  */
 
 extern u16 D_8007D30C[];
@@ -15,6 +15,7 @@ extern volatile u16 D_8019CB38;
 extern volatile u16 D_8019CB3A;
 extern volatile u16 D_8019CB3C;
 
+void func_8001D5C8(u32 arg0, u32 arg1);
 void func_8001D5F0(u32 arg0, u32 arg1);
 void func_8001D6F4(u32 arg0, u32 arg1);
 
@@ -35,16 +36,8 @@ void func_8001D748(u32 arg0, u32 arg1) {
     s1 = *(u16 *)((u8 *)D_8007D30C + arg0);
     s2 = *(u16 *)((u8 *)D_8007D330 + arg0);
 
-    __asm__ volatile(
-        "addu\t$4,%0,$0\n"
-        "addu\t$5,%1,$0\n"
-        ".set\tnoreorder\n"
-        "jal\tfunc_8001D5C8\n"
-        "sh\t%0,0x7162(%2)\n"
-        ".set\treorder"
-        :
-        : "r"(s1), "r"(s2), "r"(raw)
-        : "$4", "$5", "$31");
+    *(u16 *)(raw + 0x7162) = s1;
+    func_8001D5C8(s1, s2);
 
     i = 0;
     color = &D_8019CB38;

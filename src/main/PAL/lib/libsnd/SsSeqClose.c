@@ -19,7 +19,8 @@ void SsSeqClose(s32 seq) {
     s32 mask;
 
     seq <<= 16;
-    asm("sra %0,%1,16" : "=r"(seq_s) : "r"(seq));
+    seq_s = seq >> 16;
+    asm("" : "=r"(seq_s) : "0"(seq_s), "r"(seq));
     func_80076C58(seq_s, 0, 0, 1);
     SpuVmSeqKeyOff(seq_s);
 

@@ -21,11 +21,7 @@ void func_8005E900(void) {
     register s32 arg1 asm("$5");
 
     fadeStep = &D_801E6D8C;
-    asm volatile(
-        ".globl func_8005E9F4\n"
-        "func_8005E9F4 = func_8005E900 + 0xF4"
-        : "=r"(fadeStep)
-        : "0"(fadeStep));
+    asm volatile("" : "=r"(fadeStep) : "0"(fadeStep));
     delta = *fadeStep;
     if (delta != 0) {
         value = fadeStep[-2];
