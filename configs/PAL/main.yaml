@@ -87,6 +87,8 @@ segments:
       - [0x1FBC, .rodata, PAL/main/func_800487D8]
       - [0x205C, .rodata, PAL/main/func_80048ED8]
       - [0x2070, rodata, main/002070_main]
+      - [0x21DC, .rodata, PAL/main/func_8004FCE8]
+      - [0x2248, rodata, main/002248_main]
       - [0x2268, .rodata, PAL/main/func_80050FA8]
       - [0x22B4, rodata, main/0022B4_main]
       - [0x23A8, .rodata, PAL/main/func_80054D10]
