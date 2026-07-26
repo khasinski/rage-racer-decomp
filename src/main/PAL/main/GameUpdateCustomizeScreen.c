@@ -81,7 +81,7 @@ void GameUpdateCustomizeScreen(void) {
                 sel = D_8019C7C0;
                 if (sel == 0) {
                     func_8005D6EC(2);
-                    carByte = g_CarTable[g_PlayerCarIndex].pad1[0];
+                    carByte = g_CarTable[g_PlayerCarIndex].tireCompound;
                     D_8019C794 = &D_80082574;
                     GameMenuBusy = -1;
                     goto set_state;
@@ -89,7 +89,7 @@ void GameUpdateCustomizeScreen(void) {
                 if (sel == 1) {
                     if (D_8009E698[8] != 0) {
                         func_8005D6EC(2);
-                        carByte = g_CarTable[g_PlayerCarIndex].pad1[1];
+                        carByte = g_CarTable[g_PlayerCarIndex].transmission;
                         D_8019C794 = &D_800825A4;
                         GameMenuBusy = -2;
 set_state:
@@ -155,7 +155,7 @@ block27:
                     func_8005D6EC(2);
                     GameMenuBusy = -6;
                     g_MenuConfirmTimer = 0x23;
-                    g_CarTable[g_PlayerCarIndex].pad1[1] = g_MenuSubCursor;
+                    g_CarTable[g_PlayerCarIndex].transmission = g_MenuSubCursor;
                     D_801E438A[g_PlayerCarIndex * 8] = g_MenuSubCursor;
                 }
                 if (*pad & 0x90) {
@@ -199,7 +199,7 @@ block27:
                 func_800487D8(D_8019C794, &g_UiScriptProgress2, -1);
                 if (g_UiScriptProgress2 <= 0) {
                     GameMenuBusy = 0;
-                    g_CarTable[g_PlayerCarIndex].pad1[0] = g_MenuSubCursor;
+                    g_CarTable[g_PlayerCarIndex].tireCompound = g_MenuSubCursor;
                     D_801E4389[g_PlayerCarIndex * 8] = g_MenuSubCursor;
                 }
             } else {

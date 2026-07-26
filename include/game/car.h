@@ -3,9 +3,15 @@
 
 #include "common.h"
 
+/*
+ * Per-car entry. The two setup bytes are what the CUSTOMIZE screen edits and
+ * the save file keeps; whether the transmission row can be opened at all is a
+ * property of the car's own loaded data (byte 8 of it), not of this entry.
+ */
 typedef struct GameCarEntry {
     u8 modelVariant;
-    u8 pad1[2];
+    u8 tireCompound;  /* +0x01 CUSTOMIZE row 0, five settings */
+    u8 transmission;  /* +0x02 CUSTOMIZE row 1, 0 or 1; which one is AT is unconfirmed */
     u8 shapeIndex;
     u8 textureIndex;
     u8 enabled;
