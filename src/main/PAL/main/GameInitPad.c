@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/state.h"
 
 extern u8 D_801E403C[];
 
