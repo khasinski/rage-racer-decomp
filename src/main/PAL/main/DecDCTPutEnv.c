@@ -7,7 +7,8 @@ extern u8 D_800830E0[];
 
 void func_800641D0(volatile u32 *arg0, s32 arg1);
 
-u32 *func_80063F08(u32 *arg0) {
+u32 * DecDCTPutEnv(u32 *arg0) asm("func_80063F08");
+u32 *DecDCTPutEnv(u32 *arg0) {
     u32 *ret;
     u32 *dst;
     s32 i;

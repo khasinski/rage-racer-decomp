@@ -9,7 +9,8 @@ extern char D_80013548[];
 extern char D_80013554[];
 extern char D_80013568[];
 
-void func_80065968(char *arg0, Rect *rect) {
+void CheckPrim(char *arg0, Rect *rect) asm("func_80065968");
+void CheckPrim(char *arg0, Rect *rect) {
     switch (g_GraphDebug) {
     case 1: {
         register s32 w asm("$5") = rect->w;

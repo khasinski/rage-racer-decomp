@@ -21,7 +21,8 @@ extern s32 D_8009ABC8;
 extern s32 D_8009ABCC;
 extern s32 D_8009ABD0;
 
-s32 func_80079600(s32 op, ...) {
+s32 _spu_t(s32 op, ...) asm("func_80079600");
+s32 _spu_t(s32 op, ...) {
     s32 dmaControl;
     s32 i;
     va_list args;

@@ -5,7 +5,8 @@ void SetSemiTrans(u8 *arg0, s32 enabled) asm("func_80064E90");
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void func_80046BA0(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
+void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("func_80046BA0");
+void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
     register s32 y1Reg asm("$18");

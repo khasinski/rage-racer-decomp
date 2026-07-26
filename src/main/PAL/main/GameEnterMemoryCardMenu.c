@@ -4,7 +4,8 @@ extern s32 D_8009B72C, D_8009B730, D_8009B9A0, D_8009B9A4, D_801E42E4;
 void func_80065860(s32 arg0);
 void func_8001C088(s32 arg0, s32 arg1, s32 arg2);
 void func_8005EAD0(void);
-void func_800613B8(void) {
+void GameEnterMemoryCardMenu(void) asm("func_800613B8");
+void GameEnterMemoryCardMenu(void) {
     func_80065860(0);
     func_8001C088(0, 0, 0);
     D_8009B744 = 2;

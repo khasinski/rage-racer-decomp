@@ -21,7 +21,8 @@ void func_80046A2C(
     s32 arg13);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void func_80047E60(s32 arg0) {
+void GameDrawBitPatternOverlay(s32 arg0) asm("func_80047E60");
+void GameDrawBitPatternOverlay(s32 arg0) {
     void *ot = *(void **)0x1F800004;
     u8 *row = D_8007F6E8;
     s32 y;

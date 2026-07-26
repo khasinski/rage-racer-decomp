@@ -17,7 +17,17 @@ void func_80046A2C(
     s32 flags);
 void *func_80017390(void *ot, void *prim, s32 count);
 
-s32 func_80047BD4(
+s32 GameDrawNumber(
+    s32 x,
+    s16 y,
+    s32 flags,
+    u32 value,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clut,
+    u8 primitiveCount) asm("func_80047BD4");
+s32 GameDrawNumber(
     s32 x,
     s16 y,
     s32 flags,

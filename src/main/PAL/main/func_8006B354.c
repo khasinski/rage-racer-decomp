@@ -53,7 +53,8 @@ static __inline__ void copy8(u8 *dst, u8 *src) {
     } while (--count != end);
 }
 
-s32 func_8006B354(s32 mode, u8 *result) {
+s32 CD_ready(s32 mode, u8 *result) asm("func_8006B354");
+s32 CD_ready(s32 mode, u8 *result) {
     s32 savedStatus;
     s32 interrupt;
     s32 status;

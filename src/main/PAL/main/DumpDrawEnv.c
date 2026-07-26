@@ -15,7 +15,8 @@ extern char D_8001342C[];
 extern char D_80013438[];
 extern void (*D_800941E4)(char *, ...);
 
-void func_80065234(DrawEnv *arg0) {
+void DumpDrawEnv(DrawEnv *arg0) asm("func_80065234");
+void DumpDrawEnv(DrawEnv *arg0) {
     s32 mode;
     u32 value;
 
@@ -45,7 +46,8 @@ low_mode:
     D_800941E4(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value << 6) & 0x7C0, ((value << 4) & 0x100) + ((value >> 2) & 0x200));
 }
 
-void func_800653B4(DispEnv *arg0) {
+void DumpDispEnv(DispEnv *arg0) asm("func_800653B4");
+void DumpDispEnv(DispEnv *arg0) {
     D_800941E4(D_800133F4, arg0->disp.x, arg0->disp.y, arg0->disp.w, arg0->disp.h);
     D_800941E4(D_80013410, arg0->screen.x, arg0->screen.y, arg0->screen.w, arg0->screen.h);
     D_800941E4(D_8001342C, arg0->isinter);

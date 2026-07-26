@@ -10,7 +10,8 @@ extern s32 D_801E6CE8;
 void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 void func_80078018(s32 arg0);
 
-void func_8005DDB8(s32 enabled) {
+void GameForcePanVoiceEnabled(s32 enabled) asm("func_8005DDB8");
+void GameForcePanVoiceEnabled(s32 enabled) {
     s32 values[2];
     register s32 i asm("$7");
     register s32 *src asm("$6");

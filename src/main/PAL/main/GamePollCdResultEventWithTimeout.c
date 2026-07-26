@@ -11,7 +11,8 @@ extern s32 D_8009B550;
 extern s32 D_8009B554;
 extern s32 D_8019C864;
 
-s32 func_8005F35C(void) {
+s32 GamePollCdResultEventWithTimeout(void) asm("func_8005F35C");
+s32 GamePollCdResultEventWithTimeout(void) {
     register s32 result asm("$16");
     register s32 ready asm("$17");
     s32 count;
@@ -39,7 +40,8 @@ s32 func_8005F35C(void) {
     return result;
 }
 
-s32 func_8005F420(s32 limit) {
+s32 GamePollCdResultEventLimit(s32 limit) asm("func_8005F420");
+s32 GamePollCdResultEventLimit(s32 limit) {
     register s32 i asm("$16");
     register s32 ready asm("$17");
     volatile s32 stack[2];
@@ -67,7 +69,8 @@ s32 func_8005F420(s32 limit) {
     return 0;
 }
 
-s32 func_8005F4D8(void) {
+s32 GameWaitCdResultEvent(void) asm("func_8005F4D8");
+s32 GameWaitCdResultEvent(void) {
     register s32 ready asm("$16");
 
     ready = 1;
@@ -87,7 +90,8 @@ s32 func_8005F4D8(void) {
     }
 }
 
-s32 func_8005F55C(void) {
+s32 GameWaitCdCompleteEvent(void) asm("func_8005F55C");
+s32 GameWaitCdCompleteEvent(void) {
     register s32 ready asm("$16");
 
     ready = 1;

@@ -10,7 +10,8 @@ s32 func_8006BBD0_entry(void) asm("func_8006BBD0");
  * (func_8006BD14) and, for mode 1, the volume init (CD_initvol). Returns 1 on
  * success, 0 if a sub-step failed.
  */
-s32 func_8006A428(s32 mode) {
+s32 CD_init(s32 mode) asm("func_8006A428");
+s32 CD_init(s32 mode) {
     if (mode == 2) {
         func_8006BCC4_entry();
         return 1;

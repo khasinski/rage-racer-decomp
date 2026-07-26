@@ -5,7 +5,8 @@ void func_80046E00(u8 *arg0, s16 x0, s16 y0, s16 x1a, s16 y0b, s16 x0b,
                    s32 d3, s32 d4, s32 d5, s32 d6, s32 d7, s32 dA,
                    s32 dB, s32 dC, s32 h8, s32 f8, s32 f4, s32 dE);
 
-void func_80048580(s32 time, u8 *desc, s32 *ctx) {
+void GameDrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) asm("func_80048580");
+void GameDrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     register s32 duration asm("$7");
     register u8 *table asm("$13");
     register u8 *entry asm("$8");

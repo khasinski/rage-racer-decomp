@@ -2,7 +2,8 @@
 
 void func_800641D0(volatile u32 *arg0, s32 arg1);
 
-void func_80063FB0(volatile u32 *arg0, s32 arg1) {
+void DecDCTin(volatile u32 *arg0, s32 arg1) asm("func_80063FB0");
+void DecDCTin(volatile u32 *arg0, s32 arg1) {
     u32 mask;
 
     if (arg1 & 1) {

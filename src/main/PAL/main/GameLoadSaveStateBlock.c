@@ -57,7 +57,8 @@ void func_80013F80(s32 a, s32 b);
 void func_80021224(void);
 void func_80065B24(void *rect, void *data);
 
-s32 func_8005FED4(u8 *arg0) {
+s32 GameLoadSaveStateBlock(u8 *arg0) asm("func_8005FED4");
+s32 GameLoadSaveStateBlock(u8 *arg0) {
     register u8 *base asm("$17") = arg0;
     __asm__("" : "=r"(base) : "0"(base));
     {

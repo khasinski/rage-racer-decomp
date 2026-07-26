@@ -170,4 +170,210 @@ typedef struct GameRenderPairPoint {
     u16 second_2E;
 } GameRenderPairPoint;
 
+/*
+ * 2D/HUD primitive emitters. All of them pack the primitive at the scratchpad
+ * cursor `*(u8 **)0x1F800000`, bump that cursor past the primitive and link it
+ * into the ordering table `ot` with AddPrim. Sprites and textured quads turn a
+ * linear CLUT index into VRAM clut coordinates (20 cluts per row, first row at
+ * y = 0x1E0). Where an `alpha` argument exists, 0xFF means opaque; anything
+ * else enables semi-transparency and appends a blend packet via func_80017390.
+ */
+void GameDrawSprite(
+    void *ot,
+    s16 x0,
+    s16 y0,
+    s16 w,
+    u16 h,
+    u16 u0,
+    u16 v0,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clutIndex,
+    s32 shadeTex,
+    s32 semiTrans,
+    u32 flags) asm("func_80046A2C");
+void GameDrawFlatTriangle(
+    void *ot,
+    s16 x0,
+    s16 y0,
+    s16 x1,
+    u16 y1,
+    u16 x2,
+    u16 y2,
+    u8 r,
+    u8 g,
+    u8 b,
+    s32 semiTrans,
+    u32 flags) asm("func_80046BA0");
+void GameDrawFlatQuad(
+    void *ot,
+    s16 x0,
+    s16 y0,
+    s16 x1,
+    u16 y1,
+    u16 x2,
+    u16 y2,
+    u16 x3,
+    u16 y3,
+    u8 r,
+    u8 g,
+    u8 b,
+    s32 semiTrans,
+    u32 flags) asm("func_80046CBC");
+/* POLY_FT4: four xy/uv pairs, flat rgb, tpage and a CLUT index as depth key. */
+void GameDrawTexturedQuad(
+    s32 ot,
+    s16 x0,
+    s16 y0,
+    s16 x1,
+    u16 y1,
+    u16 x2,
+    u16 y2,
+    u16 x3,
+    u16 y3,
+    u8 u0,
+    u8 v0,
+    u8 u1,
+    u8 v1,
+    u8 u2,
+    u8 v2,
+    u8 u3,
+    u8 v3,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clutIndex,
+    s32 shadeTex,
+    s32 semiTrans,
+    u16 tpage) asm("func_80046E00");
+/* TILE: solid rectangle at (x, y) sized (w, h). */
+void GameDrawSolidRect(
+    void *ot,
+    s32 x,
+    s32 y,
+    s32 w,
+    u16 h,
+    u8 r,
+    u8 g,
+    u8 b,
+    u8 alpha) asm("func_80047024");
+void GameDrawLine(
+    void *ot,
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    u16 y1,
+    u8 r,
+    u8 g,
+    u8 b,
+    u8 alpha) asm("func_8004711C");
+/* LINE_F3: flat-shaded 3-point polyline. */
+void GameDrawPolyLine3(
+    void *ot,
+    s16 x0,
+    s16 y0,
+    s16 x1,
+    s16 y1,
+    s16 x2,
+    s16 y2,
+    u8 r,
+    u8 g,
+    u8 b,
+    u8 alpha) asm("func_80047214");
+/* LINE_G2: line interpolating rgb0 -> rgb1. */
+void GameDrawGradientLine(
+    void *ot,
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    u16 y1,
+    u8 r0,
+    u8 g0,
+    u8 b0,
+    u8 r1,
+    u8 g1,
+    u8 b1,
+    u8 alpha) asm("func_80047330");
+/* Two-pixel-thick rectangle border, built from six GameDrawLine calls. */
+void GameDrawRectOutline(
+    void *ot,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    u8 r,
+    u8 g,
+    u8 b,
+    u8 alpha) asm("func_80047460");
+/* Clips (x, y, w, h) to the 320x480 frame and queues a SetDrawArea packet. */
+void GameSetDrawClipRect(
+    void *ot,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h) asm("func_800468FC");
+
+/*
+ * Text and number output, both built on GameDrawSprite. The two fonts differ
+ * only in cell size and glyph table: small = 6x12 (D_8007F984), large = 8x16
+ * (D_8007FA3C). Bit 0x80 of `flags` selects fixed-width cells instead of the
+ * per-glyph widths in the table.
+ */
+void GameDrawSmallText(
+    s32 x,
+    s16 y,
+    u8 *str,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clutIndex,
+    s32 flags) asm("func_80047634");
+void GameDrawLargeText(
+    s32 x,
+    s16 y,
+    u8 *str,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clutIndex,
+    s32 flags) asm("func_80047958");
+/* Right-aligned decimal, up to 10 digits, leading zeros blanked. Returns the
+ * number of digit sprites emitted. flags: 1 = large font, 4 = fixed digits at
+ * v=0xDC, 8 = draw into the overlay OT layer. */
+s32 GameDrawNumber(
+    s32 x,
+    s16 y,
+    s32 flags,
+    u32 value,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clutIndex,
+    u8 primitiveCount) asm("func_80047BD4");
+/* Blits an 8x6 bit pattern from D_8007F6E8 as 4x8 blocks; negative argument
+ * animates through the table. */
+void GameDrawBitPatternOverlay(s32 pattern) asm("func_80047E60");
+
+/*
+ * Timed draw script: a table of {time, type, arg0, arg1} entries replayed
+ * against a progress counter, terminated by time < 0. Element types 0/1/9 draw
+ * a sprite, 10/19 a line, 20/29 a triangle and 30/39 a textured quad; the +9
+ * variants are skipped while D_8019CB0C is set. Each element interpolates its
+ * position from a packed s16 velocity pair by (elapsed * velocity) >> 5.
+ * Returns 1 once the progress counter has reached the terminator's limit.
+ */
+s32 GameRunTimedDrawScript(
+    void *commands,
+    s32 *progress,
+    s32 step) asm("func_800487D8");
+void GameDrawScriptedSprite(
+    s32 elapsed,
+    u8 *style,
+    u8 *record,
+    s32 useAlpha) asm("func_80048078");
+void GameDrawScriptedLine(s32 elapsed, u8 *style, u8 *record) asm("func_80048210");
+void GameDrawScriptedTriangle(s32 elapsed, u8 *style, u8 *record) asm("func_800483D4");
+void GameDrawScriptedQuad(s32 elapsed, u8 *style, s32 *record) asm("func_80048580");
+
 #endif

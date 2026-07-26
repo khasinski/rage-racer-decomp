@@ -3,7 +3,8 @@
 
 extern GpuCallbacks *D_800941E0;
 
-void func_80065E00(u8 *arg0) {
+void PutDispEnv(u8 *arg0) asm("func_80065E00");
+void PutDispEnv(u8 *arg0) {
     u32 mode = arg0[3];
 
     D_800941E0->drawSync(0);

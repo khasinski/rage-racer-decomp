@@ -22,7 +22,8 @@ void func_80078018(s32 arg0);
 void func_8005C09C(s32 arg0);
 void func_8005C0E4(void);
 
-void func_8005DEF0(s32 enabled) {
+void GameForceBasicEffectVoicesEnabled(s32 enabled) asm("func_8005DEF0");
+void GameForceBasicEffectVoicesEnabled(s32 enabled) {
     register s32 offset asm("$16");
     register s32 voicePacked asm("$17");
     register s32 voice asm("$18");
@@ -93,7 +94,8 @@ void func_8005DEF0(s32 enabled) {
     } while (i < 2);
 }
 
-void func_8005E058(s32 enabled) {
+void GameForceIndexedEffectVoiceEnabled(s32 enabled) asm("func_8005E058");
+void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
     register s32 base asm("$16");
     register s32 center asm("$17");
     register s32 fine asm("$18");
@@ -125,9 +127,9 @@ void func_8005E058(s32 enabled) {
         center = raw >> 7;
         asm volatile(
             ".globl func_8005E078\n"
-            "func_8005E078 = func_8005E058 + 0x20\n"
+            "func_8005E078 = GameForceIndexedEffectVoiceEnabled + 0x20\n"
             ".globl func_8005E1B8\n"
-            "func_8005E1B8 = func_8005E058 + 0x160"
+            "func_8005E1B8 = GameForceIndexedEffectVoiceEnabled + 0x160"
             :
             : "r"(center));
         fine = raw & 0x7F;
@@ -170,7 +172,8 @@ void func_8005E058(s32 enabled) {
     }
 }
 
-void func_8005E1D0(s32 enabled) {
+void GameForcePitchEffectVoicesEnabled(s32 enabled) asm("func_8005E1D0");
+void GameForcePitchEffectVoicesEnabled(s32 enabled) {
     register s32 voicePacked asm("$17");
     register s32 voice asm("$20");
     register s32 pitchBase asm("$16");
@@ -202,9 +205,9 @@ void func_8005E1D0(s32 enabled) {
             scale = *(s32 *)(D_801E6D40 + offset);
             asm volatile(
                 ".globl func_8005E200\n"
-                "func_8005E200 = func_8005E1D0 + 0x30\n"
+                "func_8005E200 = GameForcePitchEffectVoicesEnabled + 0x30\n"
                 ".globl func_8005E314\n"
-                "func_8005E314 = func_8005E1D0 + 0x144"
+                "func_8005E314 = GameForcePitchEffectVoicesEnabled + 0x144"
                 :
                 : "r"(scale));
             raw = D_801E6CA4;

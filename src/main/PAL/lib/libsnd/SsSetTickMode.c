@@ -6,7 +6,8 @@ extern s32 D_801E6C6C;
 
 s32 func_8006EAEC(s32 arg);
 
-void func_800720F4(s32 spec) {
+void SsSetTickMode(s32 spec) asm("func_800720F4");
+void SsSetTickMode(s32 spec) {
     s32 v;
     s32 m;
 

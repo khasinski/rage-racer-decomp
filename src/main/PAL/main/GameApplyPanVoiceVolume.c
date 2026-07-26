@@ -10,7 +10,8 @@ extern s32 D_801E6CEC;
 void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 void func_80078018(s32 arg0);
 
-void func_8005BF30(void) {
+void GameApplyPanVoiceVolume(void) asm("func_8005BF30");
+void GameApplyPanVoiceVolume(void) {
     s32 values[2];
     register s32 changed asm("$16");
     register s32 i asm("$6");

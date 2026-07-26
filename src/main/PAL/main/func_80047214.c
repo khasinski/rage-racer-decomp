@@ -5,7 +5,8 @@ void func_80064E90(u8 *arg0, s32 enabled);
 void func_80064DDC(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void func_80047214(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
+void GameDrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) asm("func_80047214");
+void GameDrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
     u8 *prim;
     u8 *oldPrim;
 

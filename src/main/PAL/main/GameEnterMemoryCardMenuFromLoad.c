@@ -6,7 +6,8 @@ void func_80065860(s32 arg0);
 void func_8001C088(s32 arg0, s32 arg1, s32 arg2);
 void func_8001A3C0(s32 arg0);
 void func_8005EAD0(void);
-void func_80061458(void) {
+void GameEnterMemoryCardMenuFromLoad(void) asm("func_80061458");
+void GameEnterMemoryCardMenuFromLoad(void) {
     func_80065860(0);
     func_8001C088(0, 0, 0);
     if (g_AssetLoadState == 0) {

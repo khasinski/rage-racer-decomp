@@ -71,4 +71,43 @@ void GameEnterMemoryCardMenu(void) asm("func_800613B8");
 void GameEnterMemoryCardMenuFromLoad(void) asm("func_80061458");
 void GameUpdateMemoryCardMenu(void) asm("func_80061520");
 
+/*
+ * Menu widget drawing. GameDrawMenuButton stamps an outlined, filled box with
+ * an optional caption (bit 0x10 of flags = draw caption, bit 1 = large font);
+ * GameDrawMenuCursorBox draws the two-ring selection frame, pulsing green off
+ * the D_8009B264 phase accumulator unless `flash` selects the on/off blink.
+ * GameDrawFadingMenuSprites redraws `count` timeline sprites whose per-slot
+ * brightness decays through D_8009B250[] (starts at 0x1FC, -60 per frame).
+ */
+void GameDrawMenuButton(
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    u8 r,
+    u8 g,
+    u8 b,
+    s32 flags,
+    s32 textX,
+    s32 textY,
+    s32 caption) asm("func_80048B88");
+void GameDrawMenuCursorBox(
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    s32 flash) asm("func_80048D64");
+void GameDrawFadingMenuSprites(
+    s32 progress,
+    s32 count,
+    s32 slot) asm("func_800489AC");
+
+/*
+ * Menu-mode entry: reloads the view/mode words from D_801E4FAC, seeds the
+ * scratchpad render state and GTE matrices, zeroes the whole 0x8009B2F8..
+ * 0x8009B378 menu state block, and resets all fourteen per-screen transition
+ * accumulators by calling each of them with 0.
+ */
+void GameInitMenuMode(void) asm("func_80050C18");
+
 #endif

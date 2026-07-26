@@ -6,7 +6,8 @@ extern CdSearchDirEntry D_8009C120[];
 
 s32 func_8006CC28(u8 *arg0, u8 *arg1);
 
-s32 func_8006C83C(s32 type, u8 *name) {
+s32 DS_searchdir(s32 type, u8 *name) asm("func_8006C83C");
+s32 DS_searchdir(s32 type, u8 *name) {
     s32 i = 0;
     u8 *entryName = (u8 *)D_8009C120;
     s32 offset = 0;

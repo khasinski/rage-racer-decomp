@@ -35,7 +35,8 @@ typedef struct SpuCommonRegs {
 
 extern SpuCommonRegs *D_8009AB7C;
 
-void func_8007B2D0(SpuCommonAttr *attr) {
+void SpuSetCommonAttr(SpuCommonAttr *attr) asm("func_8007B2D0");
+void SpuSetCommonAttr(SpuCommonAttr *attr) {
     u16 mainModeLeft;
     u16 mainModeRight;
     u16 totalLeft;

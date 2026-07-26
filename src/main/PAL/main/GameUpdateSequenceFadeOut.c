@@ -13,7 +13,8 @@ void func_8005E7A0(s32 arg0);
 void func_8005E8B8(void);
 void func_80072698(s32 arg0, s32 arg1, s32 arg2);
 
-void func_8005E900(void) {
+void GameUpdateSequenceFadeOut(void) asm("func_8005E900");
+void GameUpdateSequenceFadeOut(void) {
     register s32 *fadeStep asm("$4");
     register s32 delta asm("$3");
     register s32 value asm("$2");
@@ -61,7 +62,8 @@ void func_8005E900(void) {
     func_8005E7A0(D_801E6D94);
 }
 
-void func_8005EA14(void) {
+void GameApplyDuckedSequenceAudio(void) asm("func_8005EA14");
+void GameApplyDuckedSequenceAudio(void) {
     register s32 value asm("$3");
     register s32 scaled asm("$2");
     register s32 seq asm("$4");

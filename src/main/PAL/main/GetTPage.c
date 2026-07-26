@@ -2,7 +2,8 @@
 
 s32 func_800657E4(void);
 
-s32 func_80064BB4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+s32 GetTPage(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80064BB4");
+s32 GetTPage(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 mode;
     s32 value;
 

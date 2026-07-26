@@ -69,7 +69,8 @@ extern s32 D_8009ABB8;
         delayValue *= 3;                    \
     }
 
-s32 func_80078A30(s32 resetMode) {
+s32 _spu_init(s32 resetMode) asm("func_80078A30");
+s32 _spu_init(s32 resetMode) {
     volatile s32 delay;
     volatile s32 delayValue;
     s32 waitCount;

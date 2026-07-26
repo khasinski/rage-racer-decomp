@@ -8,7 +8,8 @@ extern u8 D_8009904C;
 s32 func_8006B620(s32 arg0, void *arg1, s32 arg2, s32 arg3);
 s32 func_8006B0D4(s32 arg0, s32 arg1);
 
-s32 func_8006A808(s32 arg0, void *arg1, s32 arg2) {
+s32 CdControlB(s32 arg0, void *arg1, s32 arg2) asm("func_8006A808");
+s32 CdControlB(s32 arg0, void *arg1, s32 arg2) {
     register void *arg asm("$17");
     register s32 arg2Reg asm("$18");
     register s32 cmd asm("$20");

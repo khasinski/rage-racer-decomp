@@ -10,7 +10,8 @@ extern u8 D_8009E0D3[];
 
 u32 func_8007A1F8(s32 on_off, u32 voice_bit);
 
-u8 func_800739E8(s32 unused) {
+u8 SpuVmAlloc(s32 unused) asm("func_800739E8");
+u8 SpuVmAlloc(s32 unused) {
     u8 candidates;
     u16 bestAge;
     u16 bestPitch;

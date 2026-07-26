@@ -5,7 +5,8 @@ s32 func_800657E4(void);
 extern char D_80013374[];
 extern void (*D_800941E4)(char *, ...);
 
-void func_80064C94(s32 arg0) {
+void DumpTPage(s32 arg0) asm("func_80064C94");
+void DumpTPage(s32 arg0) {
     s32 mode;
     u32 value;
 

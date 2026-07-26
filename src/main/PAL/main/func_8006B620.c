@@ -63,7 +63,8 @@ static inline s32 getAlarm(void) {
     return 0;
 }
 
-s32 func_8006B620(u8 command, u8 *params, u8 *result, s32 async) {
+s32 CD_cw(u8 command, u8 *params, u8 *result, s32 async) asm("func_8006B620");
+s32 CD_cw(u8 command, u8 *params, u8 *result, s32 async) {
     s32 i;
     s32 interrupt;
     s32 remaining;

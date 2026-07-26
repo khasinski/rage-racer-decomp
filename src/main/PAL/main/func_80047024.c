@@ -5,7 +5,8 @@ void SetSemiTrans(u8 *arg0, s32 enabled) asm("func_80064E90");
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
+void GameDrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
+void GameDrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
     register s32 x0Reg asm("$17");
     register s32 y0Reg asm("$18");
     register s32 x1Reg asm("$19");

@@ -1,6 +1,7 @@
 #include "common.h"
 
-void func_80068180(u8 *dst, u8 value, s32 count) {
+void MemFill(u8 *dst, u8 value, s32 count) asm("func_80068180");
+void MemFill(u8 *dst, u8 value, s32 count) {
     volatile s32 unused;
     s32 i = count - 1;
 

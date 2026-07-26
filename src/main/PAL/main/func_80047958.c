@@ -25,7 +25,8 @@ void func_80046A2C(
     s32 flags);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void func_80047958(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
+void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047958");
+void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
     register u8 *str asm("$18");
     register s32 x asm("$17");
     u8 fl = flags;

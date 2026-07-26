@@ -14,7 +14,8 @@ void func_8005BF30(void);
 void func_8005C6C0(void);
 void func_8005C168(void);
 void func_8005CDB0(void);
-s32 func_8005D8EC(s32 parameter, s32 position, s32 bank) {
+s32 GameInterpolateAudioParameter(s32 parameter, s32 position, s32 bank) asm("func_8005D8EC");
+s32 GameInterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 value = position;
     s32 index;
     s32 index_offset;
@@ -86,7 +87,8 @@ s32 func_8005D8EC(s32 parameter, s32 position, s32 bank) {
     return result;
 }
 
-void func_8005D9F8(s32 value, s32 bank) {
+void GameUpdateLoadedAudioVoices(s32 value, s32 bank) asm("func_8005D9F8");
+void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
     s32 odd_parameter;
     s32 index;
     s32 tone_offset;
@@ -121,8 +123,8 @@ void func_8005D9F8(s32 value, s32 bank) {
     slot = scale_base;
     do {
         if (*slot != 0) {
-            first = func_8005D8EC(index * 2, value, bank);
-            second = func_8005D8EC(odd_parameter, value, bank);
+            first = GameInterpolateAudioParameter(index * 2, value, bank);
+            second = GameInterpolateAudioParameter(odd_parameter, value, bank);
             scaled = second * slot_base[6];
             if (scaled < 0) {
                 scaled += 0x7F;

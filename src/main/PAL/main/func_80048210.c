@@ -2,7 +2,8 @@
 
 void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
-void func_80048210(s32 arg0, u8 *arg1, u8 *arg2) {
+void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) asm("func_80048210");
+void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     register u8 *record asm("$8") = arg2;
     register u8 *style asm("$10");
     register void *otBase asm("$13");

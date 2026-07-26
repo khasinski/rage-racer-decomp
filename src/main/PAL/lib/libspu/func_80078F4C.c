@@ -9,7 +9,8 @@ extern u8 D_80013EF4[];
 
 void func_8001674C(u8 *fmt, ...);
 
-void func_80078F4C(u16 *addr, u32 size) {
+void _spu_writeByIO(u16 *addr, u32 size) asm("func_80078F4C");
+void _spu_writeByIO(u16 *addr, u32 size) {
     volatile s32 di, dj;
     register u16 stat0 asm("$5");
     register u16 *paddr asm("$18") = addr;

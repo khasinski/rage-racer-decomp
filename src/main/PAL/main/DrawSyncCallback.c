@@ -5,7 +5,8 @@ extern void (*D_800941E4)(char *, ...);
 extern u32 D_800941F4;
 extern u8 D_800941EA;
 
-u32 func_80065804(u32 arg0) {
+u32 DrawSyncCallback(u32 arg0) asm("func_80065804");
+u32 DrawSyncCallback(u32 arg0) {
     u32 ret;
 
     if (D_800941EA >= 2) {

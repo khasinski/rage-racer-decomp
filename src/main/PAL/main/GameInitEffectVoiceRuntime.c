@@ -24,7 +24,8 @@ extern s32 D_800125FC[];
 s32 func_80050FA8(s32 arg0);
 void func_8007865C(s32 arg0);
 
-void func_8005DC1C(void) {
+void GameInitEffectVoiceRuntime(void) asm("func_8005DC1C");
+void GameInitEffectVoiceRuntime(void) {
     func_8007865C(0);
     SsSetVoiceCount(8);
 

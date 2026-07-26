@@ -4,7 +4,8 @@
 void func_80065B24(Rect *arg0, void *arg1);
 s32 func_80064BB4(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
-s32 func_800648EC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+s32 Gpu_LoadTexImageAndGetTPage(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) asm("func_800648EC");
+s32 Gpu_LoadTexImageAndGetTPage(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     Rect rect;
     s32 width;
 

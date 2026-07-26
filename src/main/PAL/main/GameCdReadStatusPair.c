@@ -4,7 +4,8 @@
 s32 func_80063DAC(s32 arg0);
 s32 func_80063DBC(s32 arg0);
 
-s32 func_8005EBB0(s32 high, s32 low) {
+s32 GameCdReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
+s32 GameCdReadStatusPair(s32 high, s32 low) {
     s32 cmd;
     s32 ret;
     s32 event;

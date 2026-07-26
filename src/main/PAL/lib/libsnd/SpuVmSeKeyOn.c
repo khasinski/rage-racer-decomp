@@ -203,7 +203,14 @@ static inline u8 func_80076350_select_tones(
     return count;
 }
 
-s32 func_80076350(
+s32 SpuVmSeKeyOn(
+    s16 seq_sep,
+    s16 vab_id,
+    s16 program,
+    u16 note,
+    u16 volume,
+    u16 pan) asm("func_80076350");
+s32 SpuVmSeKeyOn(
     s16 seq_sep,
     s16 vab_id,
     s16 program,

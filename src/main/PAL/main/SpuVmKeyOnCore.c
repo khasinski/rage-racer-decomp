@@ -10,7 +10,8 @@ extern volatile u16 D_801F2A0C;
 extern u8 D_801E42F8;
 extern volatile u8 *D_8009A588;
 
-void func_80074818(s32 voice, u16 note, u16 fine, u16 left, u16 right) {
+void SpuVmKeyOnCore(s32 voice, u16 note, u16 fine, u16 left, u16 right) asm("func_80074818");
+void SpuVmKeyOnCore(s32 voice, u16 note, u16 fine, u16 left, u16 right) {
     register u32 rawVoice asm("$7");
     register u32 index asm("$2");
     register u32 lowMask asm("$8");

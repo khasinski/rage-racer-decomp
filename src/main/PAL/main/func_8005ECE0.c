@@ -154,7 +154,8 @@ done:
     return D_8019C8F0;
 }
 
-s32 func_8005EF44(s32 arg0, s32 arg1) {
+s32 GameSendFormattedCdCommand(s32 arg0, s32 arg1) asm("func_8005EF44");
+s32 GameSendFormattedCdCommand(s32 arg0, s32 arg1) {
     char device[8];
     s32 status;
 

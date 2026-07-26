@@ -25,7 +25,8 @@ extern volatile u8 D_801E4D88;
 void func_80074ECC(s32 voice);
 void func_800753CC(s32 voice);
 
-void func_80075FA4(void) {
+void SsUtFlush(void) asm("func_80075FA4");
+void SsUtFlush(void) {
     volatile s32 stack[4];
     register s32 i asm("$16");
     register s32 voiceOffset asm("$17");
@@ -225,6 +226,6 @@ noiseLoop:
     spu[0xCD] = noiseHigh;
     }
 
-    asm(".globl func_80076060\nfunc_80076060 = func_80075FA4 + 0xbc");
+    asm(".globl func_80076060\nfunc_80076060 = SsUtFlush + 0xbc");
     (void)stack;
 }

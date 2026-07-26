@@ -14,7 +14,8 @@ void func_80048210(s32 arg0, s32 arg1, s32 arg2);
 void func_800483D4(s32 arg0, s32 arg1, s32 arg2);
 void func_80048580(s32 arg0, s32 arg1, s32 arg2);
 
-s32 func_800487D8(TimedDrawCommand *commands, s32 *progress, s32 step) {
+s32 GameRunTimedDrawScript(TimedDrawCommand *commands, s32 *progress, s32 step) asm("func_800487D8");
+s32 GameRunTimedDrawScript(TimedDrawCommand *commands, s32 *progress, s32 step) {
     register TimedDrawCommand *base asm("$20") = commands;
     register s32 *progressPtr asm("$18") = progress;
     register s32 stepReg asm("$19") = step;
@@ -125,7 +126,8 @@ extern s32 D_8009B250[];
 
 void func_80046A2C();
 
-void func_800489AC(s32 progress, s32 count, s32 slot) {
+void GameDrawFadingMenuSprites(s32 progress, s32 count, s32 slot) asm("func_800489AC");
+void GameDrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     register u8 *arg0Ptr asm("$8");
     register u8 *arg1Ptr asm("$9");
     register void *ot asm("$22");
@@ -256,7 +258,10 @@ void func_80047634(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8);
 void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8);
 
-void func_80048B88(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
+void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
+                   u8 arg4, u8 arg5, u8 arg6,
+                   s32 flags, s32 arg8, s32 arg9, s32 arg10) asm("func_80048B88");
+void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                    u8 arg4, u8 arg5, u8 arg6,
                    s32 flags, s32 arg8, s32 arg9, s32 arg10) {
     register s32 f asm("$16") = flags;
@@ -289,7 +294,8 @@ s32 func_80068568(s32 arg0);
 void func_80047460(
     void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7, s32 arg8);
 
-void func_80048D64(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
+void GameDrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
+void GameDrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
     void *ot;
     s32 savedX0;
     s32 savedY0;

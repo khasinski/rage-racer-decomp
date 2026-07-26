@@ -57,7 +57,8 @@ static __inline__ void copy8(u8 *dst, u8 *src) {
     } while (--count != end);
 }
 
-s32 func_8006B0D4(s32 mode, u8 *result) {
+s32 CD_sync(s32 mode, u8 *result) asm("func_8006B0D4");
+s32 CD_sync(s32 mode, u8 *result) {
     register s32 modeReg asm("$21");
     register u8 *resultReg asm("$22");
     register char **statusNames asm("$19");
@@ -136,7 +137,7 @@ s32 func_8006B0D4(s32 mode, u8 *result) {
         if (sync == 2 || sync == 5) {
             intr->sync = 2;
             copy8(resultReg, (u8 *)D_8009BAF0);
-            asm(".globl func_8006B330\nfunc_8006B330 = func_8006B0D4 + 0x25c");
+            asm(".globl func_8006B330\nfunc_8006B330 = CD_sync + 0x25c");
             return sync;
         }
         }

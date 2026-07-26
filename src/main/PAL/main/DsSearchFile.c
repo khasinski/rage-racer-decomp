@@ -24,7 +24,8 @@ extern int func_8006C8E4(int arg0);
 extern int func_8006C53C(char *a, char *b);
 extern void func_8001674C();
 
-Rec *func_8006C25C(Rec *out, char *path) {
+Rec * DsSearchFile(Rec *out, char *path) asm("func_8006C25C");
+Rec *DsSearchFile(Rec *out, char *path) {
     char buf[32];
     char *p;
     char *b;

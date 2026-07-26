@@ -14,7 +14,8 @@ extern u8 D_801E4BDC;
 
 s32 func_80074A6C(s32 arg0, s32 arg1);
 
-s32 func_80075CB0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg5) {
+s32 SpuVmApplyPitchBendToVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg5) asm("func_80075CB0");
+s32 SpuVmApplyPitchBendToVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg5) {
     register s32 raw asm("$10") = arg0;
     register s32 cst asm("$2") = 0xFFC0;
     register s32 a4 asm("$4");

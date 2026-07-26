@@ -8,7 +8,8 @@ extern volatile u16 *D_8009A4C0;
 
 void ChangeClearRCnt(s32 clear) asm("func_8006DF14");
 void ChangeClearInterruptMask(s32 index, s32 clear) asm("func_8006DF24");
-Callback func_8006E390(s32 arg0, Callback arg1) {
+Callback SetKernelInterruptCallback(s32 arg0, Callback arg1) asm("func_8006E390");
+Callback SetKernelInterruptCallback(s32 arg0, Callback arg1) {
     register s32 index asm("$17");
     register Callback callback asm("$18");
     register Callback *base asm("$5");

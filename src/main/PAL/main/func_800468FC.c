@@ -4,7 +4,8 @@
 void func_80066604(void *packet, void *rect);
 void func_80064DDC(void *ot, void *packet);
 
-void func_800468FC(void *ot, s32 x, s32 y, s32 w, s32 h) {
+void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) asm("func_800468FC");
+void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     register void *otReg asm("$17");
     register u8 **scratch asm("$18");
     register u8 *packet asm("$16");

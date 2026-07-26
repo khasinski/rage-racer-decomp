@@ -103,4 +103,30 @@ void StSetRing(void *base, s32 size) asm("func_8006A058");
 void StSetStream(s32 mode, s32 start_frame, s32 end_frame, s32 callback, s32 user_data) asm("func_8006CF68");
 u32 StFreeRing(u32 *base) asm("func_8006CFF0");
 
+/*
+ * libcd command interface. All three share the same retry-3 body over CD_cw;
+ * CdControlB additionally waits on CD_sync (blocking), CdControlF sends the
+ * command without collecting a result.
+ */
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
+s32 CdControlF(s32 com, void *param) asm("func_8006A6DC");
+s32 CdControlB(s32 com, void *param, s32 result) asm("func_8006A808");
+s32 CdSync(s32 mode, s32 result) asm("func_8006A534");
+s32 CdReady(s32 mode, s32 result) asm("func_8006A554");
+/* Install a completion / data-ready callback; returns the previous one. */
+s32 CdSyncCallback(s32 callback) asm("func_8006A574");
+s32 CdReadyCallback(s32 callback) asm("func_8006A58C");
+
+/*
+ * libcd internals. CD_init resets the drive (CD_initvol + CD_initintr + the
+ * register-level reset func_8006BD14) and is what CdInit retries up to 5 times.
+ * func_8006C17C is the IRQ2 handler installed by that reset; it drains the
+ * interrupt status via func_8006AB5C and fans out to the sync/ready callbacks.
+ */
+s32 CD_init(s32 mode) asm("func_8006A428");
+s32 CD_sync(s32 mode, s32 result) asm("func_8006B0D4");
+s32 CD_ready(s32 mode, s32 result) asm("func_8006B354");
+s32 CD_cw(s32 com, void *param, s32 result, s32 wait) asm("func_8006B620");
+
+
 #endif

@@ -14,7 +14,8 @@ void GameSetLoadedTableVolumeScale(s32 scale) asm("func_8005BD58");
 s32 GameSetSoundToneTableEntry(s32 row, s32 bank, s32 value) asm("func_8005B040");
 void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
 
-void func_8005B070(u16 *table) {
+void GameLoadAudioParameterTable(u16 *table) asm("func_8005B070");
+void GameLoadAudioParameterTable(u16 *table) {
     register u16 *tableReg asm("$16") = table;
     register s32 bank asm("$18");
     register s32 row asm("$17");
@@ -97,7 +98,8 @@ void func_8005B070(u16 *table) {
     }
 }
 
-void func_8005B190(s32 left, s32 right) {
+void GameSetReverbDepth(s32 left, s32 right) asm("func_8005B190");
+void GameSetReverbDepth(s32 left, s32 right) {
     if (left >= 0) {
         if (left >= 0x80) {
             left = 0x7F;
@@ -119,7 +121,8 @@ void func_8005B190(s32 left, s32 right) {
     SsUtSetReverbDepth((s16)left, (s16)right);
 }
 
-void func_8005B204(s32 type, s32 left, s32 right) {
+void GameSetReverbPreset(s32 type, s32 left, s32 right) asm("func_8005B204");
+void GameSetReverbPreset(s32 type, s32 left, s32 right) {
     s32 tempLeft;
     s32 tempRight;
 
@@ -150,7 +153,7 @@ void func_8005B204(s32 type, s32 left, s32 right) {
         D_801E6D88 = right;
         SsUtSetReverbType((s16)type);
         SsUtReverbOn();
-        func_8005B190(left, right);
+        GameSetReverbDepth(left, right);
     } else {
         D_801E6D80 = 0;
         D_801E6D88 = 0;

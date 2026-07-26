@@ -7,7 +7,8 @@ typedef signed int s32;
 typedef unsigned int u32;
 typedef float f32;
 void func_8004711C(void *buf, s16 x1, s16 y1, s16 x2, s16 y2, s32 r, s32 g, s32 b, s32 code);
-void func_80047460(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code)
+void GameDrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code) asm("func_80047460");
+void GameDrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code)
 {
   s32 x_R19 = xa;
   s32 y_R18 = ya;

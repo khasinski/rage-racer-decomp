@@ -13,7 +13,8 @@ extern const s32 D_80011F5C[][6];
 s32 func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 s32 func_8007B088(s32 arg0);
 
-s32 func_8005D414(s32 cue, s32 volume) {
+s32 GameStartSingleSpecialCue(s32 cue, s32 volume) asm("func_8005D414");
+s32 GameStartSingleSpecialCue(s32 cue, s32 volume) {
     s32 result = -1;
     s32 *handle;
     s32 value;

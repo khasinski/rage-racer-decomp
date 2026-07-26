@@ -61,7 +61,8 @@ void func_8006136C(s32 level);
 void func_8006138C(void);
 void func_8005D6EC(s32 cue);
 
-void func_80061520(void) {
+void GameUpdateMemoryCardMenu(void) asm("func_80061520");
+void GameUpdateMemoryCardMenu(void) {
     s32 fadeBusy = 0;
     s32 two = 2;
     s32 code;

@@ -6,7 +6,8 @@ extern u8 D_800941EA;
 extern void (*D_800941E4)(char *, ...);
 extern char D_80013534[];
 
-void func_800658FC(s32 arg0) {
+void DrawSync(s32 arg0) asm("func_800658FC");
+void DrawSync(s32 arg0) {
     if (D_800941EA >= 2) {
         D_800941E4(D_80013534, arg0);
     }

@@ -23,7 +23,8 @@ void func_8007865C(s32 arg0);
 void func_80071AC4(s32 arg0);
 void func_80072B3C(s32 arg0);
 
-s32 func_8005E4EC(s32 slot, s32 header, s32 body, s32 seq) {
+s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E4EC");
+s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     register s32 slotReg asm("$16") = slot;
     register s32 bodyReg asm("$18") = body;
     register s32 seqReg asm("$19") = seq;
@@ -64,7 +65,8 @@ s32 func_8005E4EC(s32 slot, s32 header, s32 body, s32 seq) {
     return D_801F17B4;
 }
 
-s32 func_8005E600(s32 slot) {
+s32 GameCloseAudioSlot(s32 slot) asm("func_8005E600");
+s32 GameCloseAudioSlot(s32 slot) {
     register s32 slotReg asm("$17") = slot;
     register s32 bit asm("$3") = 1;
     register s32 *flagsPtr asm("$16") = &D_801E6C9C;
@@ -97,7 +99,8 @@ done:
     return ret;
 }
 
-void func_8005E694(s32 voice, s32 unused, s16 vabSlot) {
+void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) asm("func_8005E694");
+void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     register s32 voiceOffset asm("$2") = voice * 4;
     register s32 vabOffset asm("$6") = (s16)vabSlot * 2;
 

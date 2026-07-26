@@ -86,7 +86,8 @@ void func_800496F0(s32);
 void func_8004CF30(s32);
 void func_800509C4(s32);
 
-void func_80050C18(void) {
+void GameInitMenuMode(void) asm("func_80050C18");
+void GameInitMenuMode(void) {
     u8 *p;
     s32 *scratch;
 

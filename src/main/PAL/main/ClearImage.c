@@ -6,7 +6,8 @@ extern char D_8001356C[];
 
 void func_80065968(char *arg0, void *arg1);
 
-void func_80065A90(void *arg0, u32 arg1, u32 arg2, u32 arg3) {
+void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3) asm("func_80065A90");
+void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3) {
     register void *rect asm("s3") = arg0;
     register u32 b asm("s2") = arg1;
     register u32 g asm("s1") = arg2;

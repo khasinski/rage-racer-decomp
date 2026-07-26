@@ -49,7 +49,8 @@ static inline u16 get_selected_voice(void) {
     return D_801E4BD0.voice;
 }
 
-s32 func_80076940(s16 seq_sep, s16 vab_id, s16 program, u16 note) {
+s32 SpuVmSeKeyOff(s16 seq_sep, s16 vab_id, s16 program, u16 note) asm("func_80076940");
+s32 SpuVmSeKeyOff(s16 seq_sep, s16 vab_id, s16 program, u16 note) {
     u16 bits_upper;
     u16 bits_lower;
     u8 voice;

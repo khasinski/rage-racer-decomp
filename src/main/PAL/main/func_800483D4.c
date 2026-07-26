@@ -3,7 +3,8 @@
 void func_80046BA0(void *ot, s16 x0, s16 y0, s16 x1, s32 y1, s32 x2, s32 y2,
                    s32 r, s32 g, s32 b, s32 semiTrans, s32 flags);
 
-void func_800483D4(s32 time, u8 *styleArg, u8 *recordArg) {
+void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) asm("func_800483D4");
+void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     register u8 *style asm("$5");
     register u8 *record asm("$6");
     register void *ot asm("$13");

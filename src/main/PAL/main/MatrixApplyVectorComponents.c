@@ -6,7 +6,8 @@
  * fast-path: if the row is (1.0, 0, 0) etc. the matching input component is
  * copied straight through without the multiply-accumulate.
  */
-void func_800681F0(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) {
+void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) asm("func_800681F0");
+void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) {
     s16 *m = mtx;
 
     if (*(s32 *)&m[0] == 0x1000 && m[2] == 0) {
