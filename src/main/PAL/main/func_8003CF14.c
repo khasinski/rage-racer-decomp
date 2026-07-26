@@ -11,10 +11,10 @@ extern s32 D_801E3EBC;
 extern s32 D_801E3ED8;
 extern s32 D_801E3EE0;
 extern s16 D_8007E288[];
-extern s16 D_8009E74C;
-extern s32 D_8009E73C;
-extern s32 D_8009E740;
-extern s32 D_8009E744;
+extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s32 g_PlayerProgressA asm("D_8009E73C");
+extern s32 g_PlayerProgressB asm("D_8009E740");
+extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
 typedef struct Cam {
     s32 x;        /* 0x00 */
@@ -176,9 +176,9 @@ void func_8003CF14(s32 arg0, s32 updateMotion) {
     value = SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]);
     view[6] = c400 - GameAtan2(delta[1], value >> 6);
 
-    D_8009E74C = D_801E3E14.field_78;
-    D_8009E73C = D_801E3E14.field_68;
-    D_8009E740 = D_801E3E14.field_6C;
-    D_8009E744 = D_801E3E14.field_70;
+    g_PlayerTrackSection = D_801E3E14.field_78;
+    g_PlayerProgressA = D_801E3E14.field_68;
+    g_PlayerProgressB = D_801E3E14.field_6C;
+    g_PlayerTrackProgress = D_801E3E14.field_70;
     GameSetCameraRotMatrix();
 }

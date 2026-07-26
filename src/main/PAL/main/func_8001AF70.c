@@ -236,9 +236,9 @@ void GameUpdateMainMenuOpen(void) {
 }
 
 extern s32 g_BgmTrackCount asm("D_801E40A8");
-extern volatile u8 D_801E7734[];
+extern volatile u8 g_BgmShuffleOrder[] asm("D_801E7734");
 extern u8 D_801E7733[];
-extern s32 D_8009E6CC;
+extern s32 g_BgmShuffleIndex asm("D_8009E6CC");
 
 s32 GameRandom15(void) asm("func_800632B0");
 
@@ -249,13 +249,13 @@ void func_8001B488(void) {
     s32 remaining;
 
     for (i = 0; i < g_BgmTrackCount; i++) {
-        D_801E7734[i] = 0xFF;
+        g_BgmShuffleOrder[i] = 0xFF;
     }
 
     for (i = 0; i < g_BgmTrackCount; i++) {
         count = 0;
         for (j = 0; j < g_BgmTrackCount; j++) {
-            if (D_801E7734[j] == 0xFF) {
+            if (g_BgmShuffleOrder[j] == 0xFF) {
                 count++;
             }
         }
@@ -263,7 +263,7 @@ void func_8001B488(void) {
         remaining = ((GameRandom15() & 0xFFF) % count) + 1;
         j = 0;
         while (remaining != 0) {
-            if (D_801E7734[j] == 0xFF) {
+            if (g_BgmShuffleOrder[j] == 0xFF) {
                 remaining--;
             }
             j++;
@@ -271,27 +271,24 @@ void func_8001B488(void) {
         D_801E7733[j] = i;
     }
 
-    D_8009E6CC = 0;
+    g_BgmShuffleIndex = 0;
 }
 
 extern volatile u16 g_PadEdge2 asm("D_801E436E");
 extern s32 D_801E8260;
 
 extern s32 *g_CarTable asm("D_8019C7C8");
-extern s32 *D_8009E67C;
+extern s32 *g_CourseProgress asm("D_8009E67C");
 extern s32 D_801E40A0;
 extern s32 D_801E6E88;
 extern s32 D_8009F098;
 extern s32 D_8019C7B4;
 
-extern s32 D_801E4F44;
-extern s32 D_801E4094;
-extern s32 D_801E42EC;
-extern s32 D_8019C914;
-extern s32 D_801E6E7C;
-extern s32 D_8009E874;
-extern s32 D_801E4388;
-extern s32 D_8019C980;
+extern s32 g_GrandPrixCars asm("D_801E4F44");
+extern s32 g_GrandPrixCourseProgress asm("D_801E42EC");
+extern s32 g_ExtraGrandPrixCars asm("D_8019C914");
+extern s32 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
+extern s32 g_TimeAttackCars asm("D_801E4388");
 
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 extern void func_80017BE4(void);
@@ -346,9 +343,9 @@ void GameUpdateMainMenuInput(void) {
         func_8001B488();
         switch (g_TitleMenuSelection) {
         case 0:
-            g_CarTable = &D_801E4F44;
-            g_RaceProgress = (GameRaceProgress *)&D_801E4094;
-            D_8009E67C = &D_801E42EC;
+            g_CarTable = &g_GrandPrixCars;
+            g_RaceProgress = (GameRaceProgress *)&g_GrandPrixSave;
+            g_CourseProgress = &g_GrandPrixCourseProgress;
             g_SeriesSelection = 0;
             if (D_801E40A0 == -1) {
                 g_GrandPrixClass = 0;
@@ -359,9 +356,9 @@ void GameUpdateMainMenuInput(void) {
             }
             break;
         case 1:
-            g_CarTable = &D_8019C914;
-            g_RaceProgress = (GameRaceProgress *)&D_801E6E7C;
-            D_8009E67C = &D_8009E874;
+            g_CarTable = &g_ExtraGrandPrixCars;
+            g_RaceProgress = (GameRaceProgress *)&g_ExtraGrandPrixSave;
+            g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
             g_SeriesSelection = 1;
             if (D_801E6E88 == -1) {
                 g_GrandPrixClass = 0;
@@ -372,8 +369,8 @@ void GameUpdateMainMenuInput(void) {
             }
             break;
         case 2:
-            g_CarTable = &D_801E4388;
-            g_RaceProgress = (GameRaceProgress *)&D_8019C980;
+            g_CarTable = &g_TimeAttackCars;
+            g_RaceProgress = (GameRaceProgress *)&g_TimeAttackSave;
             g_SeriesSelection = 0;
             func_8001839C();
             break;

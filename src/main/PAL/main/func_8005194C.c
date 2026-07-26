@@ -9,7 +9,7 @@ extern Vec16 D_80082D6C;
 extern s32 D_8009B354;
 extern s32 D_8009B36C;
 extern s32 D_8009B370;
-extern s32 D_8009E6D4;
+extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 D_8009E6D8;
 extern s32 D_8009E6DC;
 extern s32 D_8009E6F4;
@@ -86,7 +86,7 @@ void func_8005194C(void) {
         }
     }
 
-    D_8009E6D4 = 23 - s1;
+    g_PlayerCar = 23 - s1;
     g_MenuViewOffset = s0 + g_MenuViewOffset;
     D_8009E6DC = -20;
     s0 = g_MenuViewOffset / 1000;

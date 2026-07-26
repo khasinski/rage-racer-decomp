@@ -33,7 +33,6 @@ extern s32 D_8009B328;
 extern s32 D_8009B32C;
 extern s32 D_8009B330;
 extern s32 D_8009B334;
-extern s32 D_8009B338;
 extern s32 D_8009B33C;
 extern s32 D_8009B354;
 extern s32 D_8009B360;
@@ -148,7 +147,7 @@ void GameInitMenuMode(void) {
     D_8009B314 = 1;
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = -1;
-    D_8009B338 = 0;
+    g_MenuAltLayoutSetting = 0;
     D_8009B33C = 0;
     g_MenuScreen = 0;
     D_8019C7AC = 0;

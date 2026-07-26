@@ -12,7 +12,7 @@ typedef struct {
 
 extern ColorTable D_800119A0;
 extern s32 D_8009B290;
-extern s32 D_8019CB0C;
+extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 s32 func_80068568(s32 angle);
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
@@ -54,7 +54,7 @@ s32 func_8004F048(s32 *counter, s32 step, s32 index) {
     }
 
     progress = *counter - 11;
-    wideOffset = (D_8019CB0C != 0) ? 0x2C : 0;
+    wideOffset = (g_MenuAltLayout != 0) ? 0x2C : 0;
 
     if (progress >= 0) {
         if (progress >= 11) {

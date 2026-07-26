@@ -68,4 +68,16 @@ typedef struct GameSceneAssetHeader {
     s32 offsets[11];
 } GameSceneAssetHeader;
 
+/*
+ * Asset-region pointers. Spelled with a different type per translation unit
+ * (u8 * / u32 / a typed header pointer), so each file carries its own aliased
+ * extern rather than one declaration here; see docs/names.md 12c.
+ *   g_AssetBase        D_8019C904  base of the resident block, base + base[n]
+ *   g_AssetLoadCursor  D_8019CAFC  load destination, advanced by each load
+ *   g_AssetSubBlockPtr D_801E8AB0  base + header->offsets[n + 1]
+ *   g_ImageBlockBuffer D_801E4B30  buffer handed to func_8001A3C0
+ *   g_CarModelAsset    D_8009E698  registry entry selected by func_80017BAC
+ */
+
+
 #endif

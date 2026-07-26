@@ -51,7 +51,7 @@ extern s32 D_8009B23C;
 extern s32 D_8009B240;
 extern s32 D_8009B244;
 extern s32 D_8009B248;
-extern s32 D_8009E6D4;
+extern s32 g_PlayerCar asm("D_8009E6D4");
 extern u8 *D_8019C7CC;
 
 /*
@@ -634,7 +634,7 @@ block_101:
         break;
     }
     GameSetCameraRotMatrix();
-    if ((cameraModeSel > 0) && (arg1 == &D_8009E6D4)) {
+    if ((cameraModeSel > 0) && (arg1 == &g_PlayerCar)) {
         GameSelectModelBank(0);
         func_8001DAB0(arg1);
     }

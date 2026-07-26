@@ -17,12 +17,11 @@
 extern s32 g_MenuConfirmTimer asm("D_8009B300");
 extern s32 D_8009B314;
 extern u8 g_MenuSubCursor asm("D_8009B2F0");
-extern s32 D_8019CB0C;
 extern s32 D_8019CAB8;
 extern void *D_801E8A44;
 extern s32 D_801F1804;
-extern u16 D_801E444C[];
-extern Rect D_8007BEDC;
+extern u16 g_TeamLogoClut[] asm("D_801E444C");
+extern Rect g_TeamLogoClutRect asm("D_8007BEDC");
 extern u8 D_80082844;
 extern u8 g_UiChromeScript2 asm("D_80082790");
 extern u8 D_80081C14;
@@ -57,7 +56,7 @@ void GameUpdateTeamLogoScreen(void)
   s32 cnt;
   int new_var;
   ot = *((void **) 0x1F800004);
-  D_8019CB0C = 0;
+  g_MenuAltLayout = 0;
   state = GameMenuBusy;
   if (state == 0)
   {
@@ -277,8 +276,8 @@ void GameUpdateTeamLogoScreen(void)
           g_MenuScreen = 6;
           g_MenuHandlerIndex = 6;
           D_801F1804 = 0;
-          D_801E444C[0] = 0;
-          LoadImage(&D_8007BEDC, D_801E444C);
+          g_TeamLogoClut[0] = 0;
+          LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
           break;
 
         default:

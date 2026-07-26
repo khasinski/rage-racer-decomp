@@ -14,7 +14,7 @@ typedef struct {
 
 extern Obj *D_801E4B2C;
 extern s32 D_801E4BBC;
-extern s32 *D_801E6828;
+extern s32 *g_VisibleCellMask asm("D_801E6828");
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
 void func_80069858(void *a);
@@ -23,7 +23,7 @@ void func_800698E8(void *a);
 /*
  * Draw loop over the world-object array D_801E4B2C (D_801E4BBC entries). For
  * each visible object (id != -1, passing the per-sector visibility bitmask test
- * against D_801E6828) it builds a Z-rotation matrix in the scratchpad
+ * against g_VisibleCellMask) it builds a Z-rotation matrix in the scratchpad
  * (0x1F800028), transforms the object position through the GTE
  * (0x1F80011C -> 0x1F800124), sets the primitive shade/semi-trans mode word at
  * 0x1F800084, then dispatches a prim builder (GameSubmitCourseModel2 / GameSubmitCourseModel)
@@ -54,7 +54,7 @@ void GameDrawCourseObjects(void) {
             register s32 r2 asm("$2");
             register s32 r3 asm("$3");
             r3 = obj->fC / 2048;
-            r2 = (s32)D_801E6828;
+            r2 = (s32)g_VisibleCellMask;
             r3 = ((s32 *)r2)[r3];
             r2 = 1 << visShift;
             r2 &= r3;

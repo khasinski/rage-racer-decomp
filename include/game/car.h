@@ -152,9 +152,19 @@ typedef struct GameCarRuntimeProgressWindow {
  * first; re-sorted every frame by func_8003A728 to rubber-band the AI. */
 extern GameCarRuntime *g_RankedCars[4] asm("D_801E40BC");
 
-/* Active car-entry table; repointed at one of D_801E4F44 / D_8019C914 /
- * D_801E4388 per mode, so it is a pointer rather than a fixed array. */
+/* Active car-entry table; repointed at one of the three 13-entry tables below
+ * per title-menu row, so it is a pointer rather than a fixed array. */
 extern GameCarEntry *g_CarTable asm("D_8019C7C8");
+
+/* The three saved car-entry tables, one per title-menu race row (0 GRAND PRIX,
+ * 1 EXTRA GRAND PRIX, 2 TIME ATTACK); save block +0x50 / +0xC0 / +0x128. The
+ * shops raise the Time Attack row to the best spec reached in either GP file. */
+extern GameCarEntry g_GrandPrixCars[] asm("D_801E4F44");
+extern GameCarEntry g_ExtraGrandPrixCars[] asm("D_8019C914");
+extern GameCarEntry g_TimeAttackCars[] asm("D_801E4388");
+
+/* g_Cars index the replay / attract camera is following. */
+extern s32 g_CameraCarIndex asm("D_8009E66C");
 
 /* Index into g_CarTable of the car the player drives; selects the model and
  * texture pack to install. Distinct from g_CarListCursor (names.md 3). */
@@ -332,5 +342,16 @@ void GameDrawCars(void) asm("func_800389F0");
 /* Car motion-state handler for state98 == 1: the one-frame jump takeoff, which
  * hands over to the airborne handler func_80030814. */
 void GameUpdateCarLaunch(GameCarRuntime *car) asm("func_80030030");
+
+/*
+ * The player's own car object and the fields of it that retail addresses as
+ * separate absolute symbols. Per-file types; see docs/names.md 12c.
+ *   g_PlayerCar           D_8009E6D4  0x19C bytes, the g_Cars[] stride
+ *   g_PlayerProgressA/B   D_8009E73C / D_8009E740  +0x68 / +0x6C, sum = progress
+ *   g_PlayerTrackProgress D_8009E744  +0x70
+ *   g_PlayerTrackSection  D_8009E74C  +0x78
+ *   g_PlayerLap           D_8009E83C  +0x168, also the lap-time record header
+ */
+
 
 #endif

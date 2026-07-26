@@ -2,7 +2,7 @@
 
 extern s32 D_8007FB40;
 extern s32 D_8007FB44;
-extern s32 D_8019CB0C;
+extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 void func_80046E00();
 
@@ -49,7 +49,7 @@ void func_80050400(s32 arg0, s32 arg1) {
     value = D_8007FB40;
     if (value != 0) {
         offset = (value - 1) * 2;
-        x0 = (D_8019CB0C != 0) ? 0x69 : 0xA8;
+        x0 = (g_MenuAltLayout != 0) ? 0x69 : 0xA8;
         y0 = 0x9E;
         callScratch = scratch;
         callX = x0;
@@ -86,7 +86,7 @@ void func_80050400(s32 arg0, s32 arg1) {
     render1 = D_8007FB44;
     if (render1 != 0) {
         offset = render1 - 1;
-        x0 = (D_8019CB0C != 0) ? 0x92 : 0xC0;
+        x0 = (g_MenuAltLayout != 0) ? 0x92 : 0xC0;
         y0 = 0x128;
         callScratch = scratch;
         callX = x0;

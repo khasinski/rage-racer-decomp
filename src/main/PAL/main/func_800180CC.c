@@ -4,11 +4,11 @@
 #include "psyq/gpu.h"
 #include "game/cd.h"
 
-extern u8 *D_8019CAFC;
-extern Rect D_8007BEDC;
-extern Rect D_8007BEE4;
-extern u16 D_801E444C[];
-extern u16 D_801E6F2C[];
+extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
+extern Rect g_TeamLogoClutRect asm("D_8007BEDC");
+extern Rect g_TeamLogoRect asm("D_8007BEE4");
+extern u16 g_TeamLogoClut[] asm("D_801E444C");
+extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 s32 func_80017C78(s32 assetIndex, void *dst);
 void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A498(void);
@@ -17,10 +17,10 @@ void func_8005B768(s32 arg0, void *arg1, void *arg2, s32 arg3);
 s32 func_8005B89C(void);
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void DrawSync(s32 mode) asm("func_800658FC");
-extern s32 D_801E4B30;
-extern GameAssetTripleHeader *D_8019C904;
+extern s32 g_ImageBlockBuffer asm("D_801E4B30");
+extern GameAssetTripleHeader *g_AssetBase asm("D_8019C904");
 extern void *D_8019C754;
-extern void *D_801E8AB0;
+extern void *g_AssetSubBlockPtr asm("D_801E8AB0");
 void func_8005B9CC(void);
 
 void func_800180CC(void) {
@@ -50,8 +50,8 @@ void func_800180CC(void) {
         }
         break;
     case 3:
-        if (func_80017C78(3, D_8019CAFC) != 0) {
-            func_8005B768(0, g_AssetBlockPtr, D_8019CAFC, 0);
+        if (func_80017C78(3, g_AssetLoadCursor) != 0) {
+            func_8005B768(0, g_AssetBlockPtr, g_AssetLoadCursor, 0);
             g_AssetLoadState = 4;
         }
         break;
@@ -61,31 +61,31 @@ void func_800180CC(void) {
         }
         break;
     case 5:
-        loaded = (u8 *)func_80017C78(4, D_8019CAFC);
+        loaded = (u8 *)func_80017C78(4, g_AssetLoadCursor);
         if (loaded != 0) {
-            func_80034DCC(D_8019CAFC);
-            next = D_8019CAFC;
+            func_80034DCC(g_AssetLoadCursor);
+            next = g_AssetLoadCursor;
             __asm__ volatile("" : "=r"(next) : "0"(next));
             nextState = 6;
 setNextBuffer:
             g_AssetLoadState = nextState;
             __asm__ volatile("" ::: "memory");
             next = loaded + (s32)next;
-            D_8019CAFC = next;
+            g_AssetLoadCursor = next;
         }
         break;
     case 6:
-        if (func_80017C78(5, D_8019CAFC) != 0) {
+        if (func_80017C78(5, g_AssetLoadCursor) != 0) {
             register u8 *finalBase asm("$2");
 
-            GameUploadImageAsset(D_8019CAFC);
-            StoreImage(&D_8007BEDC, D_801E444C);
-            StoreImage(&D_8007BEE4, D_801E6F2C);
+            GameUploadImageAsset(g_AssetLoadCursor);
+            StoreImage(&g_TeamLogoClutRect, g_TeamLogoClut);
+            StoreImage(&g_TeamLogoRect, g_TeamLogoCanvas);
             DrawSync(0);
-            finalBase = D_8019CAFC;
-            D_801E444C[0] = 0;
+            finalBase = g_AssetLoadCursor;
+            g_TeamLogoClut[0] = 0;
             g_AssetLoadState = 0;
-            D_8019C904 = (GameAssetTripleHeader *)finalBase;
+            g_AssetBase = (GameAssetTripleHeader *)finalBase;
         }
         break;
     }
@@ -112,9 +112,9 @@ s32 func_800182D0(void) {
 
 void func_80018344(void) {
     if (g_AssetLoadState == 1) {
-        if (func_80017C78(6, D_8019C904) != 0) {
+        if (func_80017C78(6, g_AssetBase) != 0) {
             g_AssetLoadState = 0;
-            D_801E4B30 = (s32)D_8019C904;
+            g_ImageBlockBuffer = (s32)g_AssetBase;
         }
     }
 }
@@ -168,8 +168,8 @@ void func_80018484(void) {
         func_8005B9CC();
         g_AssetLoadState = 2;
     case 2:
-        if (func_80017C78(7, D_8019C904) != 0) {
-            header = D_8019C904;
+        if (func_80017C78(7, g_AssetBase) != 0) {
+            header = g_AssetBase;
             firstOffset = *(volatile s32 *)&header->firstOffset;
             thirdOffset = *(volatile s32 *)&header->thirdOffset;
             g_AssetBlockPtr = (void *)((u8 *)header + firstOffset);
@@ -180,7 +180,7 @@ void func_80018484(void) {
             header = (GameAssetTripleHeader *)((u8 *)header + thirdOffset);
             __asm__ volatile("" ::: "memory");
             D_8019C754 = (void *)secondOffset;
-            D_801E8AB0 = header;
+            g_AssetSubBlockPtr = header;
         }
         break;
     }

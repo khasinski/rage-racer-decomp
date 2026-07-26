@@ -4,14 +4,13 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-extern u8 *D_8009E698;
+extern u8 *g_CarModelAsset asm("D_8009E698");
 
 
 extern s32 D_8009B2CC;
 extern s32 D_8009B2C8;
 extern s32 D_8009B334;
 extern s32 D_8019CDF8;
-extern s32 D_8019CB0C;
 extern u8 D_80082724;
 extern u8 D_80081890;
 extern u8 g_UiChromeScript asm("D_80082460");
@@ -32,7 +31,7 @@ void GameUpdateRankingScreen(void) asm("func_80054D10");
 void GameUpdateRankingScreen(void) {
     s32 state;
 
-    D_8019CB0C = 0;
+    g_MenuAltLayout = 0;
     func_8005194C();
     func_8004CF30(-9);
     state = GameMenuBusy;
@@ -194,7 +193,7 @@ s32 GameDrawCarSelectScreen(s32 arg0) {
         xpos = 0xa6;
     }
 
-    mode = D_8009E698[9];
+    mode = g_CarModelAsset[9];
     switch (mode) {
     case 4:
         func_80046A2C(buf, xpos, 0x185, 8, 0x10, 0x20, 0x18, v & 0xff, v & 0xff,

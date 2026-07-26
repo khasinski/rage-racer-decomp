@@ -10,7 +10,6 @@ typedef struct { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 extern Vec16 D_80011AC4;
 extern Vec16 D_80082D6C;
 extern s32 D_8009B37C;
-extern s32 D_8019CB0C;
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
 void func_80069728(void *a, void *b);
@@ -81,7 +80,7 @@ void func_80051D6C(void) {
     s0 = g_MenuViewOffset / 1000;
 
     s2 = 40;
-    if (D_8019CB0C != 0) {
+    if (g_MenuAltLayout != 0) {
         s2 = 64;
     }
 

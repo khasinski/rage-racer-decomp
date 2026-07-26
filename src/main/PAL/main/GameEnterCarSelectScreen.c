@@ -2,8 +2,6 @@
 #include "game/render.h"
 #include "game/menu.h"
 
-extern s32 D_8009B338;
-extern s32 D_8019CB0C;
 extern s32 D_8009B31C;
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 
@@ -15,7 +13,7 @@ void func_8004CF30(s32 arg0);
 
 void GameEnterCarSelectScreen(void) asm("func_80055618");
 void GameEnterCarSelectScreen(void) {
-    D_8019CB0C = D_8009B338;
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_80051238();
     g_MenuScreen = 4;
     g_UiScriptProgress = 0;

@@ -58,4 +58,13 @@ extern s32 D_801E6D9C; /* active/enabled flag */
 extern s32 D_801E6DA0; /* +0x20 */
 extern s16 D_801E6DA4[]; /* +0x24 s16 table */
 
+/*
+ * Pre-race BGM picker (scene 0xA, left/right on the pad). Per-file types.
+ *   g_BgmSelection    D_801E42CC  0 = shuffle, else track + 1; saved
+ *   g_BgmShuffleOrder D_801E7734  the shuffle bag func_8001B488 refills
+ *   g_BgmShuffleIndex D_8009E6CC  cursor into it, wraps at g_BgmTrackCount
+ *   g_BgmTrack        D_801E40E0  the chosen track; GameRequestCdTrack(n + 3)
+ */
+
+
 #endif

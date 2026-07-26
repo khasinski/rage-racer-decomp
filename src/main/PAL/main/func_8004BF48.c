@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern u32 D_801E6F2C[];
+extern u32 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
@@ -22,7 +22,7 @@ void func_8004BF48(void) {
     GamePlaySoundCue(8);
 
     i = 0;
-    base = D_801E6F2C;
+    base = g_TeamLogoCanvas;
     rowBase = base;
     do {
         j = 0;

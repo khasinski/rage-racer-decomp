@@ -5,8 +5,8 @@
 #include "game/track.h"
 
 extern s32 D_801E7A50;
-extern s16 D_8009E74C;
-extern s16 D_8009E83C;
+extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s16 g_PlayerLap asm("D_8009E83C");
 extern s32 g_LapCount asm("D_801E4364");
 extern s16 D_801E8A8C;
 
@@ -27,8 +27,8 @@ void func_80040F24(void) {
     base = rawBase + 0x1CCC;
 
     if (!(current & 8)) {
-        if (D_8009E74C == *(s16 *)((g_RaceSeries << 2) + (s32)base)) {
-            entry = D_8009E83C;
+        if (g_PlayerTrackSection == *(s16 *)((g_RaceSeries << 2) + (s32)base)) {
+            entry = g_PlayerLap;
             if (entry == g_LapCount) {
                 entry = current | 8;
                 D_801E7A50 = entry;
@@ -43,7 +43,7 @@ void func_80040F24(void) {
         return;
     }
 
-    stateBase = (u8 *)&D_8009E74C;
+    stateBase = (u8 *)&g_PlayerTrackSection;
     i = 0;
     temp = 0x10;
     do {

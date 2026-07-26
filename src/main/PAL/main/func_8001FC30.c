@@ -33,9 +33,9 @@ extern s32 g_SeriesCleared asm("D_8019C8EC");
 extern s32 D_801E6E78;
 extern s32 D_8019CB6C;
 extern s32 D_8009EC8C;
-extern u8 D_8009E6D4;
+extern u8 g_PlayerCar asm("D_8009E6D4");
 extern s32 D_801F179C;
-extern s16 D_8009E74C;
+extern s16 g_PlayerTrackSection asm("D_8009E74C");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_8001FC30(s32 arg0, s32 arg1);
@@ -56,7 +56,7 @@ s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
 extern s32 D_801E4BA8;
 extern s32 D_8019C7C4;
 extern s32 D_8019CB74;
-extern s32 D_8019C70C[][4][2];
+extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 extern s32 D_8009E858[];
 extern u16 D_8007D41E[];
 extern u16 D_8007D426[];
@@ -229,13 +229,13 @@ void func_8001FD3C(void) {
         }
     }
 
-    func_8001F330(D_801F179C, &D_8009E6D4, (u8 *)g_Cars);
+    func_8001F330(D_801F179C, &g_PlayerCar, (u8 *)g_Cars);
     D_801F179C++;
     if (D_801F179C == D_8019CB6C) {
         D_801F179C = 0;
     }
     func_80035040();
-    GameUpdateCamera(2, &D_8009E6D4);
+    GameUpdateCamera(2, &g_PlayerCar);
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     func_80041888();
     if (g_GrandPrixMode != 0) {
@@ -247,7 +247,7 @@ void func_8001FD3C(void) {
     func_800418D4();
     func_8001FB8C();
     if (g_SceneTimer == 1) {
-        func_80019E84(D_8009E74C);
+        func_80019E84(g_PlayerTrackSection);
     }
 }
 
@@ -405,7 +405,7 @@ void func_800204F4(s32 arg0) {
     func_80021CD4(&text[2], D_801E4BA8);
 
     color = 0x7812;
-    if (D_8019C70C[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode] == D_801E4BA8) {
+    if (g_BestTotalTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode] == D_801E4BA8) {
         color = 0x784C;
     }
     drawColor = color;

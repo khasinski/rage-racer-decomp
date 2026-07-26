@@ -4,7 +4,7 @@
 #include "game/track.h"
 #include "game/render.h"
 
-extern u32 *D_801E6828;
+extern u32 *g_VisibleCellMask asm("D_801E6828");
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
@@ -40,7 +40,7 @@ void GameDrawShuttleScenery(s32 arg0) {
     bucket >>= 11;
     bucket <<= 2;
     value = state->x;
-    visibility = D_801E6828;
+    visibility = g_VisibleCellMask;
     bit = value + 0x400;
     wordPtr = (u32 *)(bucket + (s32)visibility);
     if (bit < 0) {

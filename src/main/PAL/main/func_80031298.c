@@ -8,7 +8,7 @@
 void func_80038CE8(void *, s32, s32, s32);            /* extern */
 s32 func_80068568(s32);                               /* extern */
 s32 func_80068634(s32);                               /* extern */
-extern u8 D_8009E6D4;
+extern u8 g_PlayerCar asm("D_8009E6D4");
 
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the
@@ -226,7 +226,7 @@ block_21:
         FIELD(spad, s16 *, 0x64) = var_a2;
         GameBuildRotMatrixY(temp_s0_6, FIELD(spad, s16 *, 0x90));
         ApplyMatrix(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
-        if (obj == &D_8009E6D4)
+        if (obj == &g_PlayerCar)
         {
             func_80038CE8(obj, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(clampPair, s16 *, 6));
         }
@@ -245,7 +245,7 @@ block_21:
         FIELD(spad, s16 *, 0x64) = var_a2;
         GameBuildRotMatrixY(temp_s0_6, FIELD(spad, s16 *, 0x90));
         ApplyMatrix(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
-        if (obj == &D_8009E6D4)
+        if (obj == &g_PlayerCar)
         {
             func_80038CE8(obj, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(clampPair, s16 *, 4));
         }

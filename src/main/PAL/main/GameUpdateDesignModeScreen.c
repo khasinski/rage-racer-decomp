@@ -3,8 +3,6 @@
 #include "game/render.h"
 #include "game/car.h"
 
-extern s32 D_8009B338;
-extern s32 D_8019CB0C;
 extern s32 D_8009B37C;
 extern s32 D_8019C758;
 
@@ -26,7 +24,7 @@ void GameUpdateDesignModeScreen(void) {
     s32 sel;
     u16 edge;
 
-    D_8019CB0C = D_8009B338;
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_8005131C();
     if (GameMenuBusy == 0) {
         func_800487D8(&D_800828EC, &g_UiScriptProgress2, -1);

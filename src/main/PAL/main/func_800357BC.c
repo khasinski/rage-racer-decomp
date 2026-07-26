@@ -3,7 +3,7 @@
 
 extern s16 D_8009AFA8;
 extern s16 D_8009AFAC;
-extern s16 D_8009E83C;
+extern s16 g_PlayerLap asm("D_8009E83C");
 extern s16 D_8009AFA4;
 extern s32 D_8009AF7C;
 extern s32 D_8009AF78;
@@ -11,7 +11,7 @@ extern s32 D_8009AFB0;
 extern s32 D_801E4D64;
 extern s32 D_801E4148;
 extern s32 g_LapCount asm("D_801E4364");
-extern u8 D_8019C70C[];
+extern u8 g_BestTotalTimes[] asm("D_8019C70C");
 
 void func_80033D50(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void func_80033308(s32 arg0, s32 arg1);
@@ -29,7 +29,7 @@ void func_800357BC(void) {
         goto compare_first;
     } else if (D_801E4148 >= 0) {
         if (D_8009AFAC != 0) {
-            if (g_LapCount >= D_8009E83C) {
+            if (g_LapCount >= g_PlayerLap) {
                 value = D_8009AF7C;
                 if (D_8009AFAC > 0) {
                     tile = 0x7810;
@@ -63,7 +63,7 @@ skip_first:
         s32 finalA1 = 0x7C;
         s32 finalA3 = 0x78CC;
 
-        finalValue = *(s32 *)&D_8019C70C[(g_CourseIndex << 3) + (g_RaceSeries << 5)];
+        finalValue = *(s32 *)&g_BestTotalTimes[(g_CourseIndex << 3) + (g_RaceSeries << 5)];
         func_80033D50(finalA0, finalA1, finalValue, finalA3, timeout);
     }
 }

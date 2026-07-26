@@ -14,8 +14,6 @@ extern s32 D_801E8A48;
 extern u8 *D_8007D4C0[];
 extern s32 D_8007D508[];
 extern s32 D_8007D4D4[];
-extern S22 D_801E7744[][4][5];
-extern S22 D_8019CB78[][4][5];
 void func_80016EA0(void *dst, s32 len, void *src, s32 arg3);
 void func_80016754(void *dst, s32 x, void *src, s32 color);
 void *func_80021CD4(void *dst, s32 value);
@@ -109,10 +107,10 @@ void func_80021DB8(u8 *arg0) {
         text[1] = D_8007D4C0[countOrIndex][1];
         text[2] = D_8007D4C0[countOrIndex][2];
         text[3] = 0x2F;
-        func_80021CD4(&text[4], D_801E7744[g_GrandPrixSeries][g_CourseIndex][countOrIndex].v8);
-        xOrField = D_801E7744[g_GrandPrixSeries][g_CourseIndex][countOrIndex].vC;
+        func_80021CD4(&text[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].v8);
+        xOrField = g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].vC;
         func_800632F0(&text[0xC], D_80010F9C,
-                      &D_801E7744[g_GrandPrixSeries][g_CourseIndex][countOrIndex],
+                      &g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex],
                       D_8007D508[xOrField]);
         color = 0x78CC;
         if (D_801E8A48 == countOrIndex) {
@@ -149,11 +147,11 @@ void func_80022068(u8 *s5) {
         text[1] = D_8007D4C0[s2][1];
         text[2] = D_8007D4C0[s2][2];
         text[3] = 0x2F;
-        func_80021CD4(&text[4], D_8019CB78[g_GrandPrixSeries][g_CourseIndex][s2].v8);
+        func_80021CD4(&text[4], g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].v8);
 
-        idx = D_8019CB78[g_GrandPrixSeries][g_CourseIndex][s2].vC;
+        idx = g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].vC;
         func_800632F0(&text[0xC], D_80010F9C,
-                      &D_8019CB78[g_GrandPrixSeries][g_CourseIndex][s2], D_8007D508[idx]);
+                      &g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2], D_8007D508[idx]);
 
         color = 0x78CC;
         if (D_8019CE10 == s2) {
@@ -235,7 +233,7 @@ void func_80022324(void) {
     }
 
     i = 0;
-    name_base = (u8 *)D_801E7744;
+    name_base = (u8 *)g_RankingRecords;
     letter = 0x41;
     code = 0xB;
     row_offset = 0;
@@ -288,7 +286,7 @@ void func_80022324(void) {
 
     D_801E8A48 = i;
     i = 0;
-    name_base2 = (u8 *)D_8019CB78;
+    name_base2 = (u8 *)g_TimeRecords;
     letter2 = 0x41;
     code2 = 0xB;
     row_offset = 0;
@@ -406,7 +404,7 @@ void func_80022794(void) {
                 D_801E6C8C = 2;
                 i = 0;
                 if (D_8019CE10 < 5) {
-                    timeRecordBase = D_8019CB78;
+                    timeRecordBase = g_TimeRecords;
                     timeName = D_801F17FC;
                     do {
                         *timeName = D_801E417C[i];
@@ -431,7 +429,7 @@ void func_80022794(void) {
             func_8002229C(D_8019C8F8, D_801E8A48);
         }
         i = 0;
-        rankingRecordBase = D_801E7744;
+        rankingRecordBase = g_RankingRecords;
         do {
             record = (u8 *)((((g_CourseIndex * 5) + D_801E8A48) * 0x10) +
                             (g_GrandPrixSeries * 0x140) +
@@ -503,7 +501,7 @@ void func_80022794(void) {
             func_8002229C(D_8019C8F8, D_8019CE10);
         }
         i = 0;
-        recordBase = D_8019CB78;
+        recordBase = g_TimeRecords;
         do {
             record = (u8 *)((((g_CourseIndex * 5) + D_8019CE10) * 0x10) +
                             (g_GrandPrixSeries * 0x140) + (s32)recordBase + i);

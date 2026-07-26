@@ -1,9 +1,9 @@
 #include "common.h"
 
 extern u8 *D_8019CA64;
-extern u16 D_801E444C[];
+extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 D_801E444E[];
-extern u16 D_801E6F2C[];
+extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
 void func_8001D338(s32 arg0, s32 arg1) {
     register s32 index asm("a2");
@@ -75,7 +75,7 @@ void func_8001D338(s32 arg0, s32 arg1) {
         } while (index < 16);
     }
 
-    dst = D_801E6F2C;
+    dst = g_TeamLogoCanvas;
     outer = 0;
     __asm__ volatile(
         "sll   $v0,$t1,5\n"

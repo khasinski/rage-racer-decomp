@@ -30,7 +30,9 @@ s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
 s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void func_800256B8(void);
 extern s32 g_CameraViewMode asm("D_8009E870");
-extern s32 D_801E40CC, D_8009E66C, D_8019C768;
+extern s32 D_801E40CC;
+extern s32 g_CameraCarIndex asm("D_8009E66C");
+extern s32 D_8019C768;
 extern u8 D_801F18CC[];
 extern s32 *D_8019C9A8;
 void GameInitRenderState(s32 arg0) asm("func_80017884");
@@ -41,7 +43,12 @@ void func_80019E84(s32 arg0);
 void func_800458CC(s32 arg0);
 void GameInitShuttleScenery(void) asm("func_8003F0F8");
 extern s32 D_8019C768, D_801E4B84, D_801E412C;
-extern s32 D_8019CE00, D_8019C99C, D_801E4404, D_8019CAF4, D_8019C7BC, D_8009E66C;
+extern s32 D_8019CE00;
+extern s32 D_8019C99C;
+extern s32 D_801E4404;
+extern s32 D_8019CAF4;
+extern s32 D_8019C7BC;
+extern s32 g_CameraCarIndex asm("D_8009E66C");
 extern s32 D_8019C99C;
 extern u8 D_80011010[];
 void func_80033AA0(s32 arg0, s32 arg1);
@@ -284,7 +291,7 @@ void func_80025940(void) {
     func_8001D210();
     D_801E40CC = *(s32 *)g_TrackEventData;
     func_80038844();
-    func_80019E84(*(s16 *)&D_801F18CC[D_8009E66C * 412]);
+    func_80019E84(*(s16 *)&D_801F18CC[g_CameraCarIndex * 412]);
     func_800458CC(D_8019C9A8[2]);
     g_CameraViewMode = 2;
     g_AnimTimer = 0;
@@ -308,7 +315,7 @@ void func_80025A14(void) {
     D_801E4404 = 0;
     D_8019CAF4 = 0x1E;
     D_8019C7BC = 0;
-    D_8009E66C = 0;
+    g_CameraCarIndex = 0;
 }
 
 void func_80025AC8(void) {

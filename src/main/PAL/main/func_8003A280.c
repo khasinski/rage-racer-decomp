@@ -3,7 +3,7 @@
 #include "game/state.h"
 #include "game/track.h"
 
-extern u8 D_8009E744[];
+extern u8 g_PlayerTrackProgress[] asm("D_8009E744");
 extern s32 D_8009E778;
 
 /*
@@ -22,7 +22,7 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
     register s32 acc9 asm("$25") = 0;
     register s32 i asm("$10") = 0;
     register s32 k11 asm("$17") = 0xB;
-    register u8 *base asm("$16") = D_8009E744;
+    register u8 *base asm("$16") = g_PlayerTrackProgress;
     register s32 carProgress asm("$22");
     register s32 carField34 asm("$15");
     register s32 carA4low asm("$21");

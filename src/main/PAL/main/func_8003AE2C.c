@@ -2,9 +2,9 @@
 #include "game/car.h"
 #include "game/race.h"
 
-extern s32 D_8009E73C;
-extern s32 D_8009E740;
-extern GameRaceRanking D_8009E83C;
+extern s32 g_PlayerProgressA asm("D_8009E73C");
+extern s32 g_PlayerProgressB asm("D_8009E740");
+extern GameRaceRanking g_PlayerLap asm("D_8009E83C");
 extern s32 g_LapCount asm("D_801E4364");
 extern GameCarRuntimeProgressWindow D_801F18C0[];
 
@@ -16,10 +16,10 @@ void func_8003AE2C(void) {
     s32 total;
 
     active = 1;
-    if (g_LapCount >= D_8009E83C.count) {
+    if (g_LapCount >= g_PlayerLap.count) {
         i = 0;
         sentinel = -1;
-        total = D_8009E73C + D_8009E740;
+        total = g_PlayerProgressA + g_PlayerProgressB;
         entry = D_801F18C0;
 
         do {

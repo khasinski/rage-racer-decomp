@@ -31,24 +31,21 @@ void func_8005BDD4(s32 arg0);
 void func_8005BE24(void);
 void func_8005BE58(void);
 extern UnkCopyChunk D_8007BE68[];
-extern u8 D_801E4388;
-extern s16 D_8019CB40;
+extern u8 g_TimeAttackCars asm("D_801E4388");
+extern s16 g_ClassRecords asm("D_8019CB40");
 extern s16 D_8019CB42;
 extern s32 D_801E4DA8;
-extern s32 D_8019C980;
 extern s32 D_8019C984;
 extern s32 D_8019C988;
 extern s32 D_8019C98C;
 extern s32 D_8019C990;
-extern u8 D_801E4F44;
-extern s32 D_801E4094;
-extern u8 D_8019C914;
-extern s32 D_801E6E7C;
-extern u8 D_8009E874;
-extern u8 D_801E42EC;
-extern u8 *D_8009E67C;
+extern u8 g_GrandPrixCars asm("D_801E4F44");
+extern u8 g_ExtraGrandPrixCars asm("D_8019C914");
+extern u8 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
+extern u8 g_GrandPrixCourseProgress asm("D_801E42EC");
+extern u8 *g_CourseProgress asm("D_8009E67C");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
-extern s32 D_801E42CC;
+extern s32 g_BgmSelection asm("D_801E42CC");
 void func_80021224(void);
 void func_80021288(void *arg0, s32 *arg1);
 void func_800212F0(s32 arg0);
@@ -193,7 +190,7 @@ void func_80021288(void *arg0, s32 *arg1) {
 }
 
 void func_800212F0(s32 arg0) {
-    u8 *ptr = D_8009E67C;
+    u8 *ptr = g_CourseProgress;
 
     *(s16 *)(ptr + 6) = 5;
     ptr[3] = 0;
@@ -202,10 +199,10 @@ void func_800212F0(s32 arg0) {
     ptr[0] = 0;
 
     if (arg0 < 2) {
-        D_8009E67C[3] = 0xFF;
+        g_CourseProgress[3] = 0xFF;
     }
 
-    *(s16 *)(D_8009E67C + 4) = 0;
+    *(s16 *)(g_CourseProgress + 4) = 0;
 }
 
 void func_80021338(void) {
@@ -216,7 +213,7 @@ void func_80021338(void) {
     s32 emptySlot;
 
     i = 0;
-    dst = &D_801E4388;
+    dst = &g_TimeAttackCars;
     src = &D_8007BE68;
     do {
         __builtin_memcpy(dst, src, sizeof(UnkCopyChunk));
@@ -225,33 +222,33 @@ void func_80021338(void) {
         src += sizeof(UnkCopyChunk);
     } while (i < 13);
 
-    D_8019CB40 = 0;
+    g_ClassRecords = 0;
     D_8019CB42 = 0;
     D_801E4DA8 = 0;
 
     emptySlot = -1;
     for (offset = 4; offset < 0x2C; offset += 4) {
-        *(s16 *)((u8 *)&D_8019CB40 + offset) = emptySlot;
+        *(s16 *)((u8 *)&g_ClassRecords + offset) = emptySlot;
         *(s16 *)((u8 *)&D_8019CB42 + offset) = 0;
     }
 
-    D_8019C980 = 0;
+    g_TimeAttackSave = 0;
     D_8019C984 = 3;
     D_8019C988 = 0;
     D_8019C98C = 0;
     D_8019C990 = 0;
-    func_80021288(&D_801E4F44, &D_801E4094);
-    func_80021288(&D_8019C914, &D_801E6E7C);
+    func_80021288(&g_GrandPrixCars, &g_GrandPrixSave);
+    func_80021288(&g_ExtraGrandPrixCars, &g_ExtraGrandPrixSave);
 
-    D_8009E67C = &D_8009E874;
+    g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
     func_800212F0(0);
-    D_8009E67C = &D_801E42EC;
+    g_CourseProgress = &g_GrandPrixCourseProgress;
     func_800212F0(0);
 
     g_MaxClassReached[1] = 0;
     g_MaxClassReached[0] = 0;
     g_BgmTrackCount = 9;
-    D_801E42CC = 0;
+    g_BgmSelection = 0;
     func_8001B488();
     g_BgmVolumeSetting = 0xF;
     g_SfxVolumeSetting = 0xF;
@@ -265,7 +262,7 @@ s32 func_800214B8(void) {
     u8 *end;
     u8 extra;
 
-    ptr = D_8009E67C;
+    ptr = g_CourseProgress;
     value = 0;
     if (*(s16 *)(ptr + 4) != 0) {
         return 0;
@@ -276,7 +273,7 @@ s32 func_800214B8(void) {
         value += *ptr++;
     } while ((s32)ptr < (s32)end);
 
-    extra = D_8009E67C[3];
+    extra = g_CourseProgress[3];
     if (extra == 0xFF) {
         value++;
     } else {

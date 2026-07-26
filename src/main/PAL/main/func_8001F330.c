@@ -69,7 +69,7 @@ extern u8 *D_8019C7A4;
 extern s32 D_801E4BB0;
 extern s32 D_8019CB6C;
 extern s32 D_8009EC8C;
-extern u8 D_8009E6D4;
+extern u8 g_PlayerCar asm("D_8009E6D4");
 void func_8001F134(s32 arg0, u8 *arg1, u8 *arg2);
 void func_8001F274(s32 arg0, u8 *arg1);
 extern s32 D_801F179C;
@@ -220,9 +220,9 @@ void func_8001F8D0(s32 arg0, u8 *arg1, u8 *arg2) {
 
 void func_8001F9D8(void) {
     if (g_GrandPrixMode != 0) {
-        func_8001F134(D_801E4BB0, &D_8009E6D4, (u8 *)g_Cars);
+        func_8001F134(D_801E4BB0, &g_PlayerCar, (u8 *)g_Cars);
     } else {
-        func_8001F274(D_801E4BB0, &D_8009E6D4);
+        func_8001F274(D_801E4BB0, &g_PlayerCar);
     }
 
     D_801E4BB0++;

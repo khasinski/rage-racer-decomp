@@ -13,11 +13,11 @@ extern s16 D_8019C750;
 extern s16 D_8019C78C;
 
 
-extern u8 D_8009E6D4[];
+extern u8 g_PlayerCar[] asm("D_8009E6D4");
 
-extern s32 D_8009E744;
+extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
-extern s16 D_8009E74C;
+extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
 extern s32 D_801E3E7C;
 
@@ -79,7 +79,7 @@ void func_800418D4(void);
 
 
 
-extern s16 D_8009E83C;
+extern s16 g_PlayerLap asm("D_8009E83C");
 
 extern s32 D_8019C700;
 
@@ -90,7 +90,7 @@ extern TrackWaypointRuntime D_801E4DF4[];
 /*
  * Initializes the 6 TrackWaypointRuntime slots for the current course. The
  * `magic`/mult/mfhi block is the compiler's divide-by-10 idiom computing the
- * track index (D_8009E83C-1)/10, clamped to 0..9, which selects a
+ * track index (g_PlayerLap-1)/10, clamped to 0..9, which selects a
  * TrackWaypointSeed row in D_8007DFD4. Each slot i is seeded at
  * origin + step*i (x,y), with the fixed constants 0x1766 and 0x174, and marked
  * inactive. Register pins and the raw tail-offset writes are match-load-bearing.
@@ -161,9 +161,9 @@ void func_80037200(void) {
 
         g_SceneTimer--;
         func_8003479C(D_801E414C);
-        func_8003CF14(D_8009E6D4, 0);
-        func_800350B4(D_8009E744);
-        func_80019EFC(D_8009E74C);
+        func_8003CF14(g_PlayerCar, 0);
+        func_800350B4(g_PlayerTrackProgress);
+        func_80019EFC(g_PlayerTrackSection);
         func_800418D4();
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         func_80041840();
@@ -191,8 +191,8 @@ void func_80037200(void) {
     }
 
     GameUpdateLoadedAudioVoices(0, 1);
-    func_8003CF14(D_8009E6D4, 1);
-    func_80019EFC(D_8009E74C);
+    func_8003CF14(g_PlayerCar, 1);
+    func_80019EFC(g_PlayerTrackSection);
     GameUpdateEnvironment();
     func_800418D4();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
@@ -205,11 +205,11 @@ void func_80037200(void) {
     func_8003F9C4();
     func_80040730();
     GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
-    func_800350B4(D_8009E744);
+    func_800350B4(g_PlayerTrackProgress);
     GameSetReverbDepth(D_8019C78C, D_8019C78C);
-    func_80040DB4(D_8009E744);
-    func_80040ADC(D_8009E744);
-    func_8004087C(D_8009E74C);
+    func_80040DB4(g_PlayerTrackProgress);
+    func_80040ADC(g_PlayerTrackProgress);
+    func_8004087C(g_PlayerTrackSection);
 }
 
 void func_80037714(void) {
@@ -224,7 +224,7 @@ void func_80037714(void) {
     register s32 magic asm("$3");
 
     magic = 0x66666667;
-    temp = D_8009E83C;
+    temp = g_PlayerLap;
     track = temp - 1;
     asm volatile("mult %0,%1" : : "r"(track), "r"(magic));
     temp = track >> 31;

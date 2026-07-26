@@ -8,8 +8,8 @@ extern s32 D_8009B360;
 extern s32 D_8009B364;
 extern s32 D_8009B368;
 extern s32 D_801E8268;
-extern u8 *D_8009E67C;
-extern s32 D_8009E6D4;
+extern u8 *g_CourseProgress asm("D_8009E67C");
+extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 D_8009E6D8;
 extern s32 D_8009E6DC;
 extern s32 D_8009E6F4;
@@ -17,11 +17,11 @@ extern s32 D_8009E6F8;
 extern s32 D_8009E6FC;
 extern s32 D_8009E718;
 extern s32 D_8009E71C;
-extern s32 D_8009E744;
-extern u8 D_8007BEDC[];
-extern u8 D_8007BEE4[];
-extern u8 D_801E444C[];
-extern u8 D_801E6F2C[];
+extern s32 g_PlayerTrackProgress asm("D_8009E744");
+extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
+extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
+extern u8 g_TeamLogoClut[] asm("D_801E444C");
+extern u8 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
 void func_80052738(void);
 s32 func_80018530(void);
@@ -57,16 +57,16 @@ void func_80052778(void) {
     mode = g_CourseIndex;
     eight = 8;
     D_801E8268 = eight;
-    table = D_8009E67C;
+    table = g_CourseProgress;
     largeValue |= 0x4000;
     g_UiScriptProgress = 0;
-    D_8009E6D4 = 0;
+    g_PlayerCar = 0;
     D_8009E6D8 = 0;
     D_8009E6DC = 0;
     D_8009E6F4 = 0;
     D_8009E6F8 = 0;
     D_8009E6FC = 0;
-    D_8009E744 = 0;
+    g_PlayerTrackProgress = 0;
     D_8009E718 = 0;
     D_8009E71C = 0;
     g_MenuViewAngleTarget = 0x7A120;
@@ -82,7 +82,7 @@ void func_80052778(void) {
         D_8009B334 = -1;
     }
 
-    LoadImage(D_8007BEE4, D_801E6F2C);
-    LoadImage(D_8007BEDC, D_801E444C);
+    LoadImage(g_TeamLogoRect, g_TeamLogoCanvas);
+    LoadImage(g_TeamLogoClutRect, g_TeamLogoClut);
     func_8001D530(g_TeamNameChars, g_TeamNameLength);
 }

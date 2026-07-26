@@ -501,7 +501,7 @@ typedef struct {
     s32 arg1;
 } TimedDrawCommand;
 
-extern s32 D_8019CB0C;
+extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 void func_80048078(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_80048210(s32 arg0, s32 arg1, s32 arg2);
@@ -545,7 +545,7 @@ loop_body:
         if ((u32)type < 40) {
             switch (type) {
             case 9:
-                if (D_8019CB0C != 0) {
+                if (g_MenuAltLayout != 0) {
                     break;
                 }
                 func_80048078(remaining, cmd->arg0, cmd->arg1, type);
@@ -557,7 +557,7 @@ loop_body:
                 cmd++;
                 goto loop_continue;
             case 19:
-                if (D_8019CB0C != 0) {
+                if (g_MenuAltLayout != 0) {
                     break;
                 }
                 func_80048210(remaining, cmd->arg0, cmd->arg1);
@@ -568,7 +568,7 @@ loop_body:
                 cmd++;
                 goto loop_continue;
             case 29:
-                if (D_8019CB0C != 0) {
+                if (g_MenuAltLayout != 0) {
                     break;
                 }
                 func_800483D4(remaining, cmd->arg0, cmd->arg1);
@@ -579,7 +579,7 @@ loop_body:
                 cmd++;
                 goto loop_continue;
             case 39:
-                if (D_8019CB0C != 0) {
+                if (g_MenuAltLayout != 0) {
                     break;
                 }
                 func_80048580(remaining, cmd->arg0, cmd->arg1);

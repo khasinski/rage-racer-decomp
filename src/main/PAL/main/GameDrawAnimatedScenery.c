@@ -11,7 +11,7 @@ typedef struct {
 } Vec4i;
 
 extern Vec4i D_8007E2C0[];
-extern u32 *D_801E6828;
+extern u32 *g_VisibleCellMask asm("D_801E6828");
 extern s16 D_8007E2EA;
 extern s32 D_801E4BAC;
 extern s32 D_8007E2E4;
@@ -58,7 +58,7 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
     bucket <<= 2;
 
     value = state.x;
-    visibility = D_801E6828;
+    visibility = g_VisibleCellMask;
     bit = value + 0x400;
     wordPtr = (u32 *)(bucket + (s32)visibility);
     if (bit < 0) {

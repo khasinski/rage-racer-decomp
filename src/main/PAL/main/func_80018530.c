@@ -4,13 +4,13 @@
 #include "game/car.h"
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
-extern GameCarModelAsset *D_8009E698;
-extern GameAssetTripleHeader *D_8019CAFC;
+extern GameCarModelAsset *g_CarModelAsset asm("D_8009E698");
+extern GameAssetTripleHeader *g_AssetLoadCursor asm("D_8019CAFC");
 extern s32 D_8019CA64;
 extern u8 *D_801E4090;
-extern u8 *D_801E4B30;
+extern u8 *g_ImageBlockBuffer asm("D_801E4B30");
 extern u8 *D_8019C754;
-extern u8 *D_801E8AB0;
+extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
 s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 assetIndex, void *dst);
 void GameRegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
@@ -78,21 +78,21 @@ void func_80018588(void) {
 
 state_1:
         __asm__ volatile("" ::: "$3");
-        func_8005B768(1, g_AssetBlockPtr, D_801E8AB0, D_8019C754);
+        func_8005B768(1, g_AssetBlockPtr, g_AssetSubBlockPtr, D_8019C754);
         g_AssetLoadState = state2;
         goto done;
 state_2:
         if ((func_8005B89C() << 16) != 0) {
             func_8005DBD8();
             g_AssetLoadState = 3;
-            D_8019CAFC = (GameAssetTripleHeader *)D_801E8AB0;
+            g_AssetLoadCursor = (GameAssetTripleHeader *)g_AssetSubBlockPtr;
         }
         goto done;
 state_3:
-            if (func_80017C78(8, D_8019CAFC) != 0) {
-                GameRegisterModelBank((u8 *)D_8019CAFC + 0xC, 0xE);
+            if (func_80017C78(8, g_AssetLoadCursor) != 0) {
+                GameRegisterModelBank((u8 *)g_AssetLoadCursor + 0xC, 0xE);
 
-                header = D_8019CAFC;
+                header = g_AssetLoadCursor;
                 secondOffset = header->secondOffset;
                 firstOffset = header->firstOffset;
                 secondOffset = (s32)((u8 *)header + secondOffset);
@@ -101,14 +101,14 @@ state_3:
                 g_AssetBlockPtr = (u8 *)secondOffset;
                 func_80017A6C();
 
-                headerArg = D_8019CAFC;
+                headerArg = g_AssetLoadCursor;
                 assetOffset = headerArg->thirdOffset;
                 g_AssetBlockPtr = (u8 *)headerArg + assetOffset;
                 GameUploadImageAsset(g_AssetBlockPtr);
 
                 g_AssetLoadState = 4;
                 D_801E4090 = g_AssetBlockPtr;
-                D_801E4B30 = g_AssetBlockPtr + 0x40000;
+                g_ImageBlockBuffer = g_AssetBlockPtr + 0x40000;
             }
         goto done;
 state_4:
@@ -122,13 +122,13 @@ state_4:
                 func_80017B94(carModelBase, 0);
                 func_80017BAC(0);
 
-                model = D_8009E698;
+                model = g_CarModelAsset;
                 modelPtr = model->modelDataOffset;
                 modelPtr = (s32)(carModelBase + modelPtr);
                 model->modelDataOffset = modelPtr;
                 GameRegisterModelBank((void *)modelPtr, 0);
 
-                model = D_8009E698;
+                model = g_CarModelAsset;
                 modelPtr = model->imageDataOffset;
                 modelPtr = (s32)(carModelBase + modelPtr);
                 model->imageDataOffset = modelPtr;
@@ -138,10 +138,10 @@ state_4:
                 if (carIndex < 10) {
                     indexOffset = carIndex << 3;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-                    func_8001D748(entry->shapeIndex, D_8009E698->imageDataOffset);
+                    func_8001D748(entry->shapeIndex, g_CarModelAsset->imageDataOffset);
                     indexOffset = g_PlayerCarIndex << 3;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-                    func_8001D900(entry->textureIndex, D_8009E698->imageDataOffset);
+                    func_8001D900(entry->textureIndex, g_CarModelAsset->imageDataOffset);
                 }
 
                 g_CarModelSlot = 0;

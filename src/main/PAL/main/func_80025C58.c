@@ -12,9 +12,9 @@ extern s32 D_801E4404;
 s32 func_80016EC4(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
-extern u32 D_8009E6CC;
+extern u32 g_BgmShuffleIndex asm("D_8009E6CC");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
-extern u8 D_801E7734[];
+extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
 void func_8001B488(void);
 extern s32 D_8019CAF4;
 extern s32 D_8019CE00;
@@ -22,7 +22,6 @@ extern s32 D_8019C7BC;
 extern s32 D_8019C99C;
 extern s32 D_8007D6B4;
 extern s32 D_801E412C;
-extern s32 D_8009E66C;
 extern s32 g_CameraViewMode asm("D_8009E870");
 void func_80025E54();
 void func_80033AA0();
@@ -80,11 +79,11 @@ void func_80025E54(u32 arg0) {
     u8 *other;
     u8 value;
 
-    D_8009E6CC++;
-    if (D_8009E6CC == g_BgmTrackCount) {
+    g_BgmShuffleIndex++;
+    if (g_BgmShuffleIndex == g_BgmTrackCount) {
         func_8001B488();
 
-        first = D_801E7734;
+        first = g_BgmShuffleOrder;
         before = first - 1;
         if (arg0 == first[0]) {
             other = g_BgmTrackCount + before;
@@ -112,7 +111,7 @@ L78:
     if (D_8019C7BC == 0) goto L13c;
     D_8019CAF4 = 6;
     if (D_8007D6B4 == 0) goto Ld0;
-    D_801E4404 = D_801E7734[D_8009E6CC];
+    D_801E4404 = g_BgmShuffleOrder[g_BgmShuffleIndex];
     func_80025E54(D_801E4404);
     goto L124;
 Ld0:
@@ -135,12 +134,12 @@ L13c:
         s32 p;
         s32 h0;
         func_8001B488();
-        h0 = D_801E7734[0];
+        h0 = g_BgmShuffleOrder[0];
         p = D_801E4404;
         if (p == h0) {
-            u8 tmp = D_801E7734[g_BgmTrackCount - 1];
-            D_801E7734[0] = tmp;
-            D_801E7734[g_BgmTrackCount - 1] = p;
+            u8 tmp = g_BgmShuffleOrder[g_BgmTrackCount - 1];
+            g_BgmShuffleOrder[0] = tmp;
+            g_BgmShuffleOrder[g_BgmTrackCount - 1] = p;
         }
         D_8007D6B4 = 1;
         D_8007D6B0 = 60;
@@ -161,7 +160,7 @@ L13c:
                 goto lab380;
             case 2:
                 if (D_8007D6B4 != 0) {
-                    D_801E4404 = D_801E7734[D_8009E6CC];
+                    D_801E4404 = g_BgmShuffleOrder[g_BgmShuffleIndex];
                     func_80025E54(D_801E4404);
                 } else {
                     D_801E4404 = D_801E4404 + 1;
@@ -204,10 +203,10 @@ L424:
 L48c:
     if (D_801E412C != 0) func_80025C58();
     g_AnimTimer = g_AnimTimer + 1;
-    D_8009E66C = func_8001A0E4(0xff, D_8009E66C);
+    g_CameraCarIndex = func_8001A0E4(0xff, g_CameraCarIndex);
     func_8003BB50();
-    func_80019EFC(g_Cars[D_8009E66C].field_78);
-    GameUpdateCamera(g_CameraViewMode, &g_Cars[D_8009E66C]);
+    func_80019EFC(g_Cars[g_CameraCarIndex].field_78);
+    GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     GameDrawCars();
     GameUpdateEnvironment();
     func_800418D4();

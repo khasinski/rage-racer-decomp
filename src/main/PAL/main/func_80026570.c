@@ -9,10 +9,9 @@
 
 extern s32 D_8019C99C;
 extern void (*D_8007D6B8[])(void);
-extern s32 D_801E4B30;
+extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 D_8019C768;
 extern s32 D_801E682C;
-extern s32 D_8009E66C;
 void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_80019730(void);
 s32 func_80019844(void);
@@ -35,8 +34,8 @@ void func_80046A2C(
     u32 arg12,
     u32 arg13);
 
-extern u32 D_8009E6CC;
-extern u8 D_801E7734[];
+extern u32 g_BgmShuffleIndex asm("D_8009E6CC");
+extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
 void func_80025940(void);
 void func_80025E54(s32 arg0);
 void func_800266D0(void);
@@ -69,7 +68,7 @@ void func_800265BC(void) {
 
     initialValue = 0x80;
     D_8019C768 = initialValue;
-    GameUploadImageAsset((void *)D_801E4B30);
+    GameUploadImageAsset((void *)g_ImageBlockBuffer);
     func_80019730();
     func_80019844();
 
@@ -77,7 +76,7 @@ void func_800265BC(void) {
     g_FadeLevel = initialValue;
     g_SceneTimer = 0;
     g_SceneId = 0x1E;
-    D_8009E66C = 0;
+    g_CameraCarIndex = 0;
 }
 
 s32 func_8002664C(s32 arg0) {
@@ -128,7 +127,7 @@ void func_80026824(void) {
         func_80025940();
 
         D_801E682C = 1;
-        mode = D_801E7734[D_8009E6CC];
+        mode = g_BgmShuffleOrder[g_BgmShuffleIndex];
         func_80025E54(mode);
 
         mode += 3;
@@ -179,14 +178,14 @@ void func_80026920(void) {
     }
 
     g_AnimTimer++;
-    D_8009E66C = func_8001A1F0(0xFF, D_8009E66C);
+    g_CameraCarIndex = func_8001A1F0(0xFF, g_CameraCarIndex);
     func_8003BB50();
 
-    index = D_8009E66C;
+    index = g_CameraCarIndex;
     offset = (((((index * 3) * 4) + index) * 8) - index) * 4;
     func_80019EFC(*(s16 *)&D_801F18CC[offset]);
 
-    GameUpdateCamera(g_CameraViewMode, &g_Cars[D_8009E66C]);
+    GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     GameDrawCars();
     GameUpdateEnvironment();
     func_800418D4();

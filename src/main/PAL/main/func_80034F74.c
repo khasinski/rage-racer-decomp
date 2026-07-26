@@ -4,7 +4,7 @@
 #include "game/track.h"
 #include "game/car.h"
 
-extern s32 D_8009E6D4;
+extern s32 g_PlayerCar asm("D_8009E6D4");
 
 extern s32 D_8009E704;
 
@@ -26,7 +26,7 @@ void func_80032280(void *arg0);
 
 void GameInitShuttleScenery(void) asm("func_8003F0F8");
 
-extern s16 D_8009E74C;
+extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
 void func_80019EFC(s32 arg0);
 
@@ -62,7 +62,7 @@ extern s16 D_8009AFA8;
 
 extern s16 D_8009AFAC;
 
-extern s16 D_8009E83C;
+extern s16 g_PlayerLap asm("D_8009E83C");
 
 extern s32 D_8009AF78;
 
@@ -87,9 +87,9 @@ extern s32 D_801E4D64;
 
 extern s32 D_801E4D98[];
 
-extern s32 D_801E41E8[][4][3];
+extern s32 g_BestSectorTimes[][4][3] asm("D_801E41E8");
 
-extern s32 D_8019C70C[][4][2];
+extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 
 void func_80033308(s32 arg0, s32 arg1);
 
@@ -103,7 +103,7 @@ void func_80034F74(void) {
 
     GameInitShuttleScenery();
 
-    primary = &D_8009E6D4;
+    primary = &g_PlayerCar;
     secondary = g_Cars;
     func_8001F8D0(D_801F179C, primary, secondary);
 
@@ -121,7 +121,7 @@ void func_80034F74(void) {
 }
 
 void func_80035040(void) {
-    void *ptr = &D_8009E6D4;
+    void *ptr = &g_PlayerCar;
 
     func_8002C168(ptr);
     func_80032280(ptr);
@@ -132,7 +132,7 @@ void func_80035040(void) {
         func_80032280(ptr);
     }
 
-    func_80019EFC(D_8009E74C);
+    func_80019EFC(g_PlayerTrackSection);
 }
 
 s32 func_800350B4(s32 position) {
@@ -322,7 +322,7 @@ void func_800352B8(void *arg0, s32 arg1, s32 arg2) {
     if (D_801E4148 == -2 && arg2 != 0) {
         D_801E4148 = 0;
         D_8009AFAC = 0;
-        D_8009AFB0 = D_801E41E8[g_RaceSeries][g_CourseIndex][0];
+        D_8009AFB0 = g_BestSectorTimes[g_RaceSeries][g_CourseIndex][0];
         D_8009AFA8 = 0x3C;
         D_8009AFA4 = (u16)D_801E4148;
         goto draw;
@@ -352,7 +352,7 @@ draw:
         goto compare_first;
     } else if (D_801E4148 >= 0) {
         if (D_8009AFAC != 0) {
-            if (g_LapCount >= D_8009E83C) {
+            if (g_LapCount >= g_PlayerLap) {
                 value = D_8009AF7C;
                 if (D_8009AFAC > 0) {
                     tile = 0x7810;
@@ -384,7 +384,7 @@ skip_first:
     func_80033D50(
         0xFA,
         0x7C,
-        D_8019C70C[g_RaceSeries][g_CourseIndex][arg1],
+        g_BestTotalTimes[g_RaceSeries][g_CourseIndex][arg1],
         0x78CC,
         timeout);
 }

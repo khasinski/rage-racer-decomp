@@ -12,43 +12,40 @@ extern u16 D_8019CA08;
 extern u16 D_8019CA0A;
 extern u16 D_801E418C;
 extern u16 D_8019CA0C;
-extern s32 D_801E4094;
 extern s32 D_801E4098;
 extern s32 D_801E409C;
 extern s32 D_801E40A0;
 extern s32 D_801E40A4;
-extern s32 D_801E6E7C;
 extern s32 D_801E6E80;
 extern s32 D_801E6E84;
 extern s32 D_801E6E88;
 extern s32 D_801E6E8C;
-extern s32 D_801E42CC;
-extern s32 D_8019C980;
+extern s32 g_BgmSelection asm("D_801E42CC");
 extern s32 D_8019C984;
 extern s32 D_8019C988;
 extern s32 D_8019C98C;
 extern s32 D_8019C990;
 
-extern u8 D_801E4F44[];
-extern u8 D_8019C914[];
-extern u8 D_801E4388[];
-extern u16 D_8019CB40[];
-extern u16 D_801E444C[];
-extern u16 D_801E6F2C[];
-extern s32 D_801E4408[];
-extern s32 D_8019C70C[];
-extern s32 D_801E7744[];
-extern s32 D_8019CB78[];
-extern s32 D_801E41E8[];
+extern u8 g_GrandPrixCars[] asm("D_801E4F44");
+extern u8 g_ExtraGrandPrixCars[] asm("D_8019C914");
+extern u8 g_TimeAttackCars[] asm("D_801E4388");
+extern u16 g_ClassRecords[] asm("D_8019CB40");
+extern u16 g_TeamLogoClut[] asm("D_801E444C");
+extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
+extern s32 g_BestLapTimes[] asm("D_801E4408");
+extern s32 g_BestTotalTimes[] asm("D_8019C70C");
+extern s32 g_RankingRecords[] asm("D_801E7744");
+extern s32 g_TimeRecords[] asm("D_8019CB78");
+extern s32 g_BestSectorTimes[] asm("D_801E41E8");
 
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
-extern u8 D_801E42EC[];
-extern u8 D_8009E874[];
+extern u8 g_GrandPrixCourseProgress[] asm("D_801E42EC");
+extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
 
-extern u8 D_8007BEE4[];
-extern u8 D_8007BEDC[];
+extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
+extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
 
 void func_80013F80(s32 a, s32 b);
 void func_80021224(void);
@@ -100,12 +97,12 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         {
             u16 hE = *(u16 *)(base + 0xE);
             s32 w30;
-            D_801E4094 = *(s32 *)(base + 0x10);
+            g_GrandPrixSave = *(s32 *)(base + 0x10);
             D_801E4098 = *(s32 *)(base + 0x14);
             D_801E409C = *(s32 *)(base + 0x18);
             D_801E40A0 = *(s32 *)(base + 0x1C);
             D_801E40A4 = *(s32 *)(base + 0x20);
-            D_801E6E7C = *(s32 *)(base + 0x24);
+            g_ExtraGrandPrixSave = *(s32 *)(base + 0x24);
             D_801E6E80 = *(s32 *)(base + 0x28);
             D_801E6E84 = *(s32 *)(base + 0x2C);
             w30 = *(s32 *)(base + 0x30);
@@ -117,7 +114,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             D_801E6E88 = w30;
         }
         D_801E6E8C = *(s32 *)(base + 0x34);
-        D_8019C980 = *(s32 *)(base + 0x38);
+        g_TimeAttackSave = *(s32 *)(base + 0x38);
         D_8019C984 = *(s32 *)(base + 0x3C);
         D_8019C988 = *(s32 *)(base + 0x40);
         D_8019C98C = *(s32 *)(base + 0x44);
@@ -128,7 +125,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             s32 w54;
             g_MaxClassReached[0] = *(s32 *)(base + 0x50);
             w54 = *(s32 *)(base + 0x54);
-            D_801E42CC = h4C;
+            g_BgmSelection = h4C;
             g_AdvancedSeriesUnlocked = h4E;
             g_MaxClassReached[1] = w54;
         }
@@ -138,24 +135,24 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         register u8 *src asm("$6") = base;
         register s32 offset asm("$5") = 0;
         for (; offset < 0x68; offset += 8) {
-            D_801E4F44[offset + 0] = src[0x58 + 0];
-            D_801E4F44[offset + 1] = src[0x58 + 1];
-            D_801E4F44[offset + 2] = src[0x58 + 2];
-            D_801E4F44[offset + 3] = src[0x58 + 3];
-            D_801E4F44[offset + 4] = src[0x58 + 4];
-            D_801E4F44[offset + 5] = src[0x58 + 5];
-            D_8019C914[offset + 0] = src[0xC0 + 0];
-            D_8019C914[offset + 1] = src[0xC0 + 1];
-            D_8019C914[offset + 2] = src[0xC0 + 2];
-            D_8019C914[offset + 3] = src[0xC0 + 3];
-            D_8019C914[offset + 4] = src[0xC0 + 4];
-            D_8019C914[offset + 5] = src[0xC0 + 5];
-            D_801E4388[offset + 0] = src[0x128 + 0];
-            D_801E4388[offset + 1] = src[0x128 + 1];
-            D_801E4388[offset + 2] = src[0x128 + 2];
-            D_801E4388[offset + 3] = src[0x128 + 3];
-            D_801E4388[offset + 4] = src[0x128 + 4];
-            D_801E4388[offset + 5] = src[0x128 + 5];
+            g_GrandPrixCars[offset + 0] = src[0x58 + 0];
+            g_GrandPrixCars[offset + 1] = src[0x58 + 1];
+            g_GrandPrixCars[offset + 2] = src[0x58 + 2];
+            g_GrandPrixCars[offset + 3] = src[0x58 + 3];
+            g_GrandPrixCars[offset + 4] = src[0x58 + 4];
+            g_GrandPrixCars[offset + 5] = src[0x58 + 5];
+            g_ExtraGrandPrixCars[offset + 0] = src[0xC0 + 0];
+            g_ExtraGrandPrixCars[offset + 1] = src[0xC0 + 1];
+            g_ExtraGrandPrixCars[offset + 2] = src[0xC0 + 2];
+            g_ExtraGrandPrixCars[offset + 3] = src[0xC0 + 3];
+            g_ExtraGrandPrixCars[offset + 4] = src[0xC0 + 4];
+            g_ExtraGrandPrixCars[offset + 5] = src[0xC0 + 5];
+            g_TimeAttackCars[offset + 0] = src[0x128 + 0];
+            g_TimeAttackCars[offset + 1] = src[0x128 + 1];
+            g_TimeAttackCars[offset + 2] = src[0x128 + 2];
+            g_TimeAttackCars[offset + 3] = src[0x128 + 3];
+            g_TimeAttackCars[offset + 4] = src[0x128 + 4];
+            g_TimeAttackCars[offset + 5] = src[0x128 + 5];
             src += 8;
         }
     }
@@ -164,15 +161,15 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         register u8 *src asm("$4") = base;
         register s32 offset asm("$3") = 0;
         for (; offset < 0x2C; offset += 4) {
-            *(u16 *)((u8 *)D_8019CB40 + offset) = *(u16 *)(src + 0x190);
-            *(u16 *)((u8 *)D_8019CB40 + offset + 2) = *(u16 *)(src + 0x192);
+            *(u16 *)((u8 *)g_ClassRecords + offset) = *(u16 *)(src + 0x190);
+            *(u16 *)((u8 *)g_ClassRecords + offset + 2) = *(u16 *)(src + 0x192);
             src += 4;
         }
     }
 
     {
         register s32 count asm("$13") = 0;
-        register u16 *dst asm("$4") = D_801E444C;
+        register u16 *dst asm("$4") = g_TeamLogoClut;
         register u8 *src asm("$3") = base;
         for (; count < 0x10; count++) {
             *dst++ = *(u16 *)(src + 0x1BC);
@@ -182,7 +179,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
 
     {
         register s32 count asm("$13") = 0;
-        register u16 *dst asm("$4") = D_801E6F2C;
+        register u16 *dst asm("$4") = g_TeamLogoCanvas;
         register u8 *src asm("$3") = base;
         for (; count < 0x400; count++) {
             *dst++ = *(u16 *)(src + 0x1DC);
@@ -190,7 +187,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         }
     }
 
-    /* D_801E4408 / D_8019C70C */
+    /* g_BestLapTimes / g_BestTotalTimes */
     {
         register s32 i asm("$13") = 0;
         register s32 j asm("$12");
@@ -199,20 +196,20 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             j = 0;
             off = i << 5;
             for (; j < 4; j++) {
-                *(s32 *)((u8 *)D_801E4408 + off) = *(s32 *)(base + off + 0x9DC);
-                *(s32 *)((u8 *)D_8019C70C + off) = *(s32 *)(base + off + 0xA1C);
+                *(s32 *)((u8 *)g_BestLapTimes + off) = *(s32 *)(base + off + 0x9DC);
+                *(s32 *)((u8 *)g_BestTotalTimes + off) = *(s32 *)(base + off + 0xA1C);
                 off += 8;
             }
         }
     }
 
-    /* D_801E7744 / D_8019CB78 */
+    /* g_RankingRecords / g_TimeRecords */
     {
         register s32 i asm("$13") = 0;
         register s32 j asm("$12");
         register s32 k asm("$7");
-        register s32 *cb78 asm("$25") = D_8019CB78;
-        register s32 *d1base asm("$24") = D_801E7744;
+        register s32 *cb78 asm("$25") = g_TimeRecords;
+        register s32 *d1base asm("$24") = g_RankingRecords;
         register s32 ioff asm("$16") = 0;
         for (; i < 2; i++) {
             register s32 iofc asm("$15");
@@ -275,12 +272,12 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         }
     }
 
-    /* D_801E41E8 */
+    /* g_BestSectorTimes */
     {
         register s32 i asm("$13") = 0;
         register s32 j asm("$12");
         register s32 k asm("$7");
-        register s32 *e41e8 asm("$10") = D_801E41E8;
+        register s32 *e41e8 asm("$10") = g_BestSectorTimes;
         register s32 ioff asm("$8") = 0;
         for (; i < 2; i++) {
             register s32 iofc asm("$9");
@@ -342,13 +339,13 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         }
     }
 
-    /* D_801E42EC / D_8009E874 unaligned copies */
-    memcpy(D_801E42EC, base + 0xFC8, 8);
-    memcpy(D_8009E874, base + 0xFD0, 8);
+    /* g_GrandPrixCourseProgress / g_ExtraGrandPrixCourseProgress unaligned copies */
+    memcpy(g_GrandPrixCourseProgress, base + 0xFC8, 8);
+    memcpy(g_ExtraGrandPrixCourseProgress, base + 0xFD0, 8);
 
     func_80013F80(D_8019CE08, D_8019CB08);
     func_80021224();
-    LoadImage((void *)D_8007BEE4, D_801E6F2C);
-    LoadImage((void *)D_8007BEDC, D_801E444C);
+    LoadImage((void *)g_TeamLogoRect, g_TeamLogoCanvas);
+    LoadImage((void *)g_TeamLogoClutRect, g_TeamLogoClut);
     return 1;
 }

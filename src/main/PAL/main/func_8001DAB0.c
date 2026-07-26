@@ -3,8 +3,8 @@
 #include "game/render.h"
 #include "game/state.h"
 
-extern GameRenderView *D_8009E698;
-extern Matrix D_8009E6AC;
+extern GameRenderView *g_CarModelAsset asm("D_8009E698");
+extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 D_1F800084;
 
@@ -24,7 +24,7 @@ void func_8001C794(void);
  * base OT bucket; clipHandle is the optional clip volume from func_800350B4.
  */
 void func_8001DAB0(GameRenderObject *obj) {
-    GameRenderView *view = D_8009E698;
+    GameRenderView *view = g_CarModelAsset;
     Matrix m_10;
     Matrix m_30;
     Matrix m_50;
@@ -45,7 +45,7 @@ void func_8001DAB0(GameRenderObject *obj) {
     GameBuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
     GameBuildRotMatrixX(&m_30, obj->angle_20);
     MulMatrix2(&m_10, &m_30);
-    MulMatrix0(&D_8009E6AC, &m_30, &m_90);
+    MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
 
     if (g_SceneId != 8) {
         clipHandle = func_800350B4((s32) obj->field_70);
@@ -118,7 +118,7 @@ void func_8001DAB0(GameRenderObject *obj) {
     GameSubmitModel((void *)0x1F800000, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
 
     for (i = 0; i < 2; i++) {
-        GameRenderView *v = D_8009E698;
+        GameRenderView *v = g_CarModelAsset;
         s32 ax = v->angle_0;
         if (i & 1) {
             ax = -ax;
@@ -136,8 +136,8 @@ void func_8001DAB0(GameRenderObject *obj) {
         func_80069888(&m_90);
     }
 
-    obj->y += D_8009E698->horizon_6;
-    obj->field_60 += D_8009E698->horizon_6;
+    obj->y += g_CarModelAsset->horizon_6;
+    obj->field_60 += g_CarModelAsset->horizon_6;
     if (clipHandle != 0) {
         func_8001C794();
     }

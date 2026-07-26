@@ -5,7 +5,6 @@
 extern s32 D_80082EA4;
 extern s32 D_80082EA8;
 extern s32 D_80082EB0;
-extern s32 D_8019CB0C;
 extern s32 D_8019C770;
 extern void *D_8009F0B0;
 extern u8 D_80082634;
@@ -27,7 +26,7 @@ void GameUpdateLogoSampleScreen(void) {
     s32 t;
     s32 pl;
 
-    D_8019CB0C = 0;
+    g_MenuAltLayout = 0;
     func_8001D338(D_80082EA4, D_80082EA8);
     func_8004A248(1, 0);
     v0 = GameMenuBusy;

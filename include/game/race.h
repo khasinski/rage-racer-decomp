@@ -71,9 +71,13 @@ typedef struct GameRaceProgress {
                        Time Attack: g_GrandPrixSeries, read back as u16. */
 } GameRaceProgress;
 
-/* The save slot the front end is editing; repointed at &D_801E4094 (GP file 1),
- * &D_801E6E7C (file 2) or &D_8019C980 (Time Attack). */
+/* The save slot the front end is editing; repointed at one of the three below,
+ * matching the title-menu row that g_CarTable was repointed for. Declared s32
+ * because most translation units only touch the first word. */
 extern GameRaceProgress *g_RaceProgress asm("D_801E4FAC");
+extern s32 g_GrandPrixSave asm("D_801E4094");
+extern s32 g_ExtraGrandPrixSave asm("D_801E6E7C");
+extern s32 g_TimeAttackSave asm("D_8019C980");
 
 typedef struct GameRaceRanking {
     s16 count;
@@ -89,5 +93,16 @@ s32 GameCanSelectNextCourse(void) asm("func_80053688");
  * "2" / "1" / "GO" dot-matrix board from D_8007DDC0[1..4] plus the six start
  * lamps. See docs/names.md 1. */
 void GameDrawStartCountdown(s32 sceneTimer) asm("func_8003425C");
+
+/*
+ * Per-course records, all in the memory-card save block. Per-file types.
+ *   g_BestTotalTimes  D_8019C70C  [series][course][mode] ms
+ *   g_BestLapTimes    D_801E4408  same shape, best single lap
+ *   g_BestSectorTimes D_801E41E8  [series][course][3] sector splits
+ *   g_CourseProgress  D_8009E67C  -> the running file's course-result record
+ *   g_GrandPrixCourseProgress      D_801E42EC  row 0's record
+ *   g_ExtraGrandPrixCourseProgress D_8009E874  row 1's record
+ */
+
 
 #endif

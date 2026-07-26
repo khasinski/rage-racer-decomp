@@ -3,8 +3,8 @@
 #include "game/race.h"
 #include "game/state.h"
 
-extern s32 D_8009E73C;
-extern s32 D_8009E740;
+extern s32 g_PlayerProgressA asm("D_8009E73C");
+extern s32 g_PlayerProgressB asm("D_8009E740");
 extern s32 D_801E4BB4;
 extern s32 D_801E7740;
 extern s16 D_801E6F26;
@@ -21,7 +21,7 @@ void func_8003A974(void) {
     s32 s1;
     s32 s0;
 
-    s6 = D_8009E73C + D_8009E740;
+    s6 = g_PlayerProgressA + g_PlayerProgressB;
     if ((g_CourseIndex & 3) == 3) {
         s5 = 0xC00;
         s4 = 0x1400;

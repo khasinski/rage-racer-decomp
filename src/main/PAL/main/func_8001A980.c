@@ -22,9 +22,9 @@ extern s16 D_8019CEAA;
 extern s16 D_801C0692;
 extern s16 D_8019CEAE;
 extern s16 D_801C0696;
-extern s32 D_801E6828;
+extern s32 g_VisibleCellMask asm("D_801E6828");
 extern s32 D_8019C7E4;
-extern s32 D_801E4BC8;
+extern s32 g_VisibleCellList asm("D_801E4BC8");
 extern s32 D_8009E888;
 extern s32 D_801E4D18;
 
@@ -102,8 +102,8 @@ s32 func_8001A9A8(void) {
             D_801C0696 = 0;
         }
 
-        D_801E6828 = (s32)&D_8019C7E4;
-        D_801E4BC8 = (s32)&D_8009E888;
+        g_VisibleCellMask = (s32)&D_8019C7E4;
+        g_VisibleCellList = (s32)&D_8009E888;
         scratch->depth += 0x800;
     }
 
@@ -111,9 +111,9 @@ s32 func_8001A9A8(void) {
 }
 
 extern Matrix D_8009AF00;
-extern s32 D_801E6828;
+extern s32 g_VisibleCellMask asm("D_801E6828");
 extern s32 D_8019C86C;
-extern s32 D_801E4BC8;
+extern s32 g_VisibleCellList asm("D_801E4BC8");
 extern s32 D_8009EC94;
 
 void func_80069A58(s32 arg0, s32 arg1);
@@ -138,11 +138,11 @@ void func_8001ABD8(void) {
     scratch->mode = 0xA;
     scratch->x1 = 0x140;
     scratch->y1 = 0xF0;
-    D_801E6828 = (s32)&D_8019C86C;
+    g_VisibleCellMask = (s32)&D_8019C86C;
     __asm__("" : : : "memory");
     v0reg = (s32)g_DrawBuffer;
     v1reg = (s32)&D_8009EC94;
-    D_801E4BC8 = v1reg;
+    g_VisibleCellList = v1reg;
     v1reg = scratch->depth;
     scratch->x0 = 0;
     scratch->y0 = 0;
@@ -207,7 +207,7 @@ u8 *func_8001ACE4(u8 *packet) {
 extern s32 D_801E8A98;
 extern s16 D_8019CA10;
 extern s32 D_801E4D18;
-extern s32 D_801E4BC8;
+extern s32 g_VisibleCellList asm("D_801E4BC8");
 
 u8 *func_8001ACE4(u8 *packet);
 void func_800418D4(void);
@@ -249,7 +249,7 @@ void func_8001ADF4(s32 arg0) {
             func_800414F0(-0x3000, 0x6000);
             func_80069858((void *)0x1F800028);
             *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-            func_80027FF4((void *)0x1F800000, D_801E4BC8, 0x40);
+            func_80027FF4((void *)0x1F800000, g_VisibleCellList, 0x40);
 
             packet = *scratch;
             func_80066604(packet, g_DrawBuffer);

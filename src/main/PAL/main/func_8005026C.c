@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern s32 D_8007FB3C;
-extern s32 D_8019CB0C;
+extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 
@@ -37,7 +37,7 @@ s32 func_8005026C(s32 arg0) {
         }
 
         value = D_8007FB3C;
-        if (value >= 0 && D_8019CB0C == 0) {
+        if (value >= 0 && g_MenuAltLayout == 0) {
             if (value >= 0x10) {
                 value = 0xF;
             }

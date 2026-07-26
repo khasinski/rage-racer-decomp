@@ -65,8 +65,8 @@ void func_800698B8(Matrix *arg0);
 void func_8001C794(void) { func_800698B8(&D_8019CAD4); }
 
 extern s32 D_8019C768;
-extern s32 D_801E4B30;
-extern u8 *D_8009E67C;
+extern s32 g_ImageBlockBuffer asm("D_801E4B30");
+extern u8 *g_CourseProgress asm("D_8009E67C");
 
 void func_8005B9CC(void);
 void GameUploadImageAsset(s32 arg0) asm("func_8001A3C0");
@@ -82,7 +82,7 @@ void func_8001C7BC(void) {
 
     if (g_AssetLoadState != 1) {
         func_8005B9CC();
-        GameUploadImageAsset(D_801E4B30);
+        GameUploadImageAsset(g_ImageBlockBuffer);
         func_80018F08();
 
         D_8019C768 = 0x180;
@@ -93,7 +93,7 @@ void func_8001C7BC(void) {
         g_GrandPrixRound = 0;
 
         if (count != 0) {
-            ptr = D_8009E67C;
+            ptr = g_CourseProgress;
             end = (u8 *)(count + (s32)ptr);
             do {
                 if (*ptr != 0) {
@@ -103,7 +103,7 @@ void func_8001C7BC(void) {
             } while ((s32)ptr < (s32)end);
         }
 
-        if (D_8009E67C[g_CourseIndex] == 0) {
+        if (g_CourseProgress[g_CourseIndex] == 0) {
             g_GrandPrixRound++;
         }
     }
@@ -143,7 +143,7 @@ s32 func_8001C8F0(s32 arg0) {
     return ret;
 }
 
-extern s32 D_801E42CC;
+extern s32 g_BgmSelection asm("D_801E42CC");
 extern char *D_8007C7A0[];
 extern char D_80010D2C[];
 
@@ -155,8 +155,8 @@ extern char D_80010C5C[];
 extern char D_80010C68[];
 extern char D_80010C70[];
 
-extern s32 D_8019C70C[][4][2];
-extern s32 D_801E4408[][4][2];
+extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
+extern s32 g_BestLapTimes[][4][2] asm("D_801E4408");
 
 s32 func_8001C8F0(s32 arg0);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
@@ -196,10 +196,10 @@ void func_8001C974(void) {
         func_80016B7C(0x56, 0xb0, buf, 0x7812, col);
     } else {
         func_80016B7C(0x62, 0x7c, D_80010C68, 0x7812, col);
-        func_80021CD4(buf, D_8019C70C[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
+        func_80021CD4(buf, g_BestTotalTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
         func_80016B7C(0x6a, 0x8c, buf, 0x7812, col);
         func_80016B7C(0x6a, 0x9c, D_80010C70, 0x7812, col);
-        func_80021CD4(buf, D_801E4408[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
+        func_80021CD4(buf, g_BestLapTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
         func_80016B7C(0x6a, 0xac, buf, 0x7812, col);
     }
 }
@@ -218,9 +218,9 @@ void func_8001CD54(void) {
 
     p = *scr;
     p = func_80016EC4(ot, p, 0x14, 0xce, 0x58, 8, 0xa8, 0xe0, 0x7812);
-    x = (D_801E42CC == 0xa) ? 0x6c : 0x70;
+    x = (g_BgmSelection == 0xa) ? 0x6c : 0x70;
     p = func_80016EC4(ot, p, x, 0xce, 8, 8, 0x84, 0xc4, 0x7812);
-    p = func_80016EC4(ot, p, (D_801E42CC == 0xa) ? 0x84 : 0x80, 0xce, 8, 8, 0x8c, 0xc4, 0x7812);
+    p = func_80016EC4(ot, p, (g_BgmSelection == 0xa) ? 0x84 : 0x80, 0xce, 8, 8, 0x8c, 0xc4, 0x7812);
     p = func_80017390(ot, p, 0x29);
     p = GameAddTilePrim(ot, p, 0x10, 0xcc, 0x5b, 0xc, 0x85, 0x15, 0xe);
     p = GameAddTilePrim(ot, p, 0x6c, 0xcc, 0x1f, 0xc, 0x40, 0x40, 0x40);
@@ -228,16 +228,16 @@ void func_8001CD54(void) {
     p = GameAddTilePrim(ot, p, 0xf, 0xcb, 0x122, 0xe, 0xff, 0xff, 0xff);
     *scr = p;
 
-    func_800632F0(buf, D_80010D2C, D_801E42CC);
-    x = (D_801E42CC == 0xa) ? 0x74 : 0x78;
+    func_800632F0(buf, D_80010D2C, g_BgmSelection);
+    x = (g_BgmSelection == 0xa) ? 0x74 : 0x78;
     func_80016754(x, 0xce, buf, 0x78cc);
-    func_80016754(0x90, 0xce, D_8007C7A0[D_801E42CC], 0x78cc);
+    func_80016754(0x90, 0xce, D_8007C7A0[g_BgmSelection], 0x78cc);
 }
 
-extern s32 D_8009E6CC;
+extern s32 g_BgmShuffleIndex asm("D_8009E6CC");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
-extern u8 D_801E7734[];
-extern s32 D_801E40E0;
+extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
+extern s32 g_BgmTrack asm("D_801E40E0");
 
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_80018FC4(void);
@@ -267,34 +267,37 @@ void func_8001CFB4(void) {
         } else {
             g_MirrorMode = 0;
         }
-        if (D_801E42CC == 0) {
-            s32 idx = D_8009E6CC;
-            u8 val = D_801E7734[idx];
-            D_8009E6CC = idx + 1;
-            D_801E40E0 = val;
-            if (D_8009E6CC == g_BgmTrackCount) {
-                D_8009E6CC = 0;
+        if (g_BgmSelection == 0) {
+            s32 idx = g_BgmShuffleIndex;
+            u8 val = g_BgmShuffleOrder[idx];
+            g_BgmShuffleIndex = idx + 1;
+            g_BgmTrack = val;
+            if (g_BgmShuffleIndex == g_BgmTrackCount) {
+                g_BgmShuffleIndex = 0;
             }
         } else {
-            D_801E40E0 = D_801E42CC - 1;
+            g_BgmTrack = g_BgmSelection - 1;
         }
-        if (D_801E40E0 == 9) {
-            D_801E40E0 = 0xe;
+        if (g_BgmTrack == 9) {
+            g_BgmTrack = 0xe;
         }
     }
     if (g_SceneId == 0xa) {
         u16 flags = g_PadEdge2;
         if (flags & 0x8000) {
-            D_801E42CC = D_801E42CC - 1;
+            g_BgmSelection = g_BgmSelection - 1;
         } else if (flags & 0x2000) {
-            D_801E42CC = D_801E42CC + 1;
+            g_BgmSelection = g_BgmSelection + 1;
         }
-        D_801E42CC = (D_801E42CC + g_BgmTrackCount + 1) % (g_BgmTrackCount + 1);
+        g_BgmSelection = (g_BgmSelection + g_BgmTrackCount + 1) % (g_BgmTrackCount + 1);
         func_8001CD54();
     }
 }
 
-extern Matrix D_8019CAD4, D_8007C758, D_8009E6AC, D_8007C778;
+extern Matrix D_8019CAD4;
+extern Matrix D_8007C758;
+extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
+extern Matrix D_8007C778;
 void func_800698B8(Matrix *arg0);
 void func_80069888(Matrix *arg0);
 void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
@@ -302,9 +305,9 @@ void func_800686D4(s32 arg0, s32 arg1);
 void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_8001D210(void) {
     D_8019CAD4 = D_8007C758;
-    D_8009E6AC = D_8007C778;
+    g_SceneLightMatrix = D_8007C778;
     func_800698B8(&D_8019CAD4);
-    func_80069888(&D_8009E6AC);
+    func_80069888(&g_SceneLightMatrix);
     func_80069A18(0x20, 0x20, 0x20);
     func_800686D4(0x1770, 0x140);
     func_80069A38(0x80, 0x80, 0x80);

@@ -14,14 +14,11 @@ extern u8 g_MenuSubCursor asm("D_8009B2F0");
 extern s32 g_MenuConfirmTimer asm("D_8009B300");
 extern s32 D_8009B31C;
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
-extern s32 D_8009B338;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
 extern s32 D_8019C908;
-extern s32 D_8019CB0C;
 extern u8 *D_801E4188;
 extern s32 D_801E4290;
-extern GameCarEntry D_801E4388[];
 
 void func_800189E4(s32 arg0);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
@@ -45,7 +42,7 @@ void GameUpdateEngineerShopScreen(void) {
     s32 sel;
 
     ot = *(void **)0x1F800004;
-    D_8019CB0C = D_8009B338;
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_8004FCE8(D_8009B31C, g_MenuPlateCarIndex, 0);
     func_8005131C();
     g_MenuPlateCarIndex = g_PlayerCarIndex;
@@ -180,8 +177,8 @@ void GameUpdateEngineerShopScreen(void) {
         if (g_UiScriptProgress <= 0) {
             if (GameMenuBusy == 2) {
                 g_CarTable[g_PlayerCarIndex].modelVariant++;
-                if (g_CarTable[g_PlayerCarIndex].modelVariant > D_801E4388[g_PlayerCarIndex].modelVariant) {
-                    D_801E4388[g_PlayerCarIndex].modelVariant = g_CarTable[g_PlayerCarIndex].modelVariant;
+                if (g_CarTable[g_PlayerCarIndex].modelVariant > g_TimeAttackCars[g_PlayerCarIndex].modelVariant) {
+                    g_TimeAttackCars[g_PlayerCarIndex].modelVariant = g_CarTable[g_PlayerCarIndex].modelVariant;
                 }
                 D_8019C908 -= value;
             }

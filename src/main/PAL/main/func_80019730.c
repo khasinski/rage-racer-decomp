@@ -2,10 +2,10 @@
 #include "game/state.h"
 #include "game/asset.h"
 
-extern u8 *D_8019C904;
-extern u8 *D_801E8AB0;
+extern u8 *g_AssetBase asm("D_8019C904");
+extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
 extern u8 *D_801E42D0;
-extern u8 *D_8019CAFC;
+extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A2E0(void *arg0);
 void func_8001A40C(void *arg0);
@@ -16,28 +16,28 @@ void func_80019730(void) {
     s32 offset0;
     s32 offset1;
 
-    g_AssetBlockPtr = D_8019C904 + *(s32 *)(D_8019C904 + 0);
+    g_AssetBlockPtr = g_AssetBase + *(s32 *)(g_AssetBase + 0);
     GameUploadImageAsset(g_AssetBlockPtr);
 
-    g_AssetBlockPtr = D_8019C904 + *(s32 *)(D_8019C904 + 4);
+    g_AssetBlockPtr = g_AssetBase + *(s32 *)(g_AssetBase + 4);
     GameUploadImageAsset(g_AssetBlockPtr);
 
-    g_AssetBlockPtr = D_8019C904 + *(s32 *)(D_8019C904 + 8);
+    g_AssetBlockPtr = g_AssetBase + *(s32 *)(g_AssetBase + 8);
     func_8001A2E0(g_AssetBlockPtr);
 
-    base = D_8019C904;
+    base = g_AssetBase;
     offset0 = *(s32 *)(base + 0xC);
     offset1 = *(s32 *)(base + 0x10);
     g_AssetBlockPtr = base + offset0;
-    D_801E8AB0 = base + offset1;
+    g_AssetSubBlockPtr = base + offset1;
     GameUploadImageAsset(g_AssetBlockPtr);
 
-    func_8001A40C(D_8019C904);
+    func_8001A40C(g_AssetBase);
 
-    D_801E42D0 = D_8019C904;
-    GameUploadImageAsset(D_801E8AB0);
+    D_801E42D0 = g_AssetBase;
+    GameUploadImageAsset(g_AssetSubBlockPtr);
     func_80019EBC();
-    D_8019CAFC = D_8019C904 + 0x38000;
+    g_AssetLoadCursor = g_AssetBase + 0x38000;
 }
 
 s32 func_80019844(void) {

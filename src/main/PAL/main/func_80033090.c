@@ -4,7 +4,7 @@
 
 extern s32 g_LapCount asm("D_801E4364");
 extern s32 D_801E4BCC;
-extern GameRaceRanking D_8009E83C;
+extern GameRaceRanking g_PlayerLap asm("D_8009E83C");
 extern s16 D_8009E836;
 
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
@@ -26,7 +26,7 @@ void func_80033090(void) {
     s32 framePad[2];
     s32 value;
 
-    list = &D_8009E83C;
+    list = &g_PlayerLap;
     visibleCount = list->count;
     if (visibleCount > g_LapCount) {
         visibleCount = g_LapCount;

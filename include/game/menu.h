@@ -71,6 +71,21 @@ extern s32 g_MenuOverlayPattern asm("D_8009B318");
 /* Debug/status phase code written through an asset-load state machine. */
 extern s32 GameMenuLoadPhase asm("D_8009B740");
 
+/*
+ * Alternate menu layout. The garage screens copy the setting into the live
+ * flag on entry, RANKING / TEAM LOGO / LOGO SAMPLE force it to 0. Non-zero
+ * pulls the 3D car view back (40 -> 64), shifts the HUD left by 0x2C, widens
+ * the bottom bar and makes GameDrawScriptedSprite skip element types 9/19/29/39.
+ * The setting is only ever written 0, so the layout is unreachable in retail.
+ */
+extern s32 g_MenuAltLayout asm("D_8019CB0C");
+extern s32 g_MenuAltLayoutSetting asm("D_8009B338");
+
+/* The two S22[series][course][5] high-score tables kept in the save block:
+ * race ranking (+0x9A4) and time ranking (+0x8DC). */
+extern S22 g_RankingRecords[][4][5] asm("D_801E7744");
+extern S22 g_TimeRecords[][4][5] asm("D_8019CB78");
+
 /* The team-name entry buffer and its length, capped at 6 characters. The pair is
  * also the first bytes of the memory-card save header row. */
 extern u8 g_TeamNameLength asm("D_8007F45C");
@@ -233,5 +248,15 @@ void GameDrawMenuCarView(void) asm("func_8005131C");
  * 4bpp bitmap with its own 16-entry CLUT at D_801E444C. */
 void GameDrawTeamLogoCanvas(s32 panelStep, s32 editorStep) asm("func_8004A248");
 void GameUpdateTeamLogoCanvas(void) asm("func_8004C0D8");
+
+/*
+ * TEAM LOGO editor data, all per-file types; see docs/names.md 12c.
+ *   g_TeamLogoCanvas   D_801E6F2C  2048 bytes = 64x64 4bpp
+ *   g_TeamLogoClut     D_801E444C  16 x u16
+ *   g_TeamLogoRect     D_8007BEE4  RECT{0x290,0x30,64,16} for the canvas
+ *   g_TeamLogoClutRect D_8007BEDC  RECT{16,480,16,1} for the CLUT
+ * g_ClassRecords D_8019CB40 is the 11 x {s16 grade, s16 clears} table.
+ */
+
 
 #endif

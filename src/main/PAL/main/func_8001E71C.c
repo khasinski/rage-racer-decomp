@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern s32 D_8009F094;
-extern u32 D_8019C904;
+extern u32 g_AssetBase asm("D_8019C904");
 
 void func_8001E79C(u32 arg0);
 void func_8001E8A4(void);
@@ -25,7 +25,7 @@ void func_8001E71C(void) {
     goto done;
 
 state_0:
-    func_8001E79C(D_8019C904);
+    func_8001E79C(g_AssetBase);
 state_1:
     func_8001E8A4();
     goto done;

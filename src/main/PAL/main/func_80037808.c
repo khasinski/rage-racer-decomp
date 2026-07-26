@@ -7,13 +7,13 @@
 #include "game/state.h"
 #include "game/render.h"
 
-extern s32 D_8009E6D4;
+extern s32 g_PlayerCar asm("D_8009E6D4");
 
 extern s32 D_8009E6DC;
 
 /*
  * Waypoint proximity test: returns 1 if the waypoint's (x,y) lies within a
- * +/-0x40 box around the car centre (D_8009E6D4 / D_8009E6DC), else 0.
+ * +/-0x40 box around the car centre (g_PlayerCar / D_8009E6DC), else 0.
  */
 
 extern s32 D_8019C700;
@@ -50,7 +50,7 @@ extern u32 D_1F800084;
 
 /* Counts how many of the 6 waypoint slots are active (active != 0). */
 
-extern s16 D_8009E83C;
+extern s16 g_PlayerLap asm("D_8009E83C");
 
 
 void *func_80017390(void *ot, void *packet, s32 arg2);
@@ -65,9 +65,9 @@ void SetSprt(u8 *prim) asm("func_80064FA8");
 extern s16 D_8009EC88;
 
 
-extern s32 D_8009E73C;
+extern s32 g_PlayerProgressA asm("D_8009E73C");
 
-extern s32 D_8009E740;
+extern s32 g_PlayerProgressB asm("D_8009E740");
 
 
 extern s16 D_801E43FC;
@@ -75,11 +75,11 @@ extern s16 D_801E43FC;
 
 
 
-extern s32 D_8009E744;
+extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
 extern s16 D_8019C78C;
 
-extern s16 D_8009E74C;
+extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
 extern u8 D_80011494;
 
@@ -193,7 +193,7 @@ typedef struct {
  */
 
 s32 func_80037808(TrackWaypointRuntime *arg0) {
-    s32 center_x = D_8009E6D4;
+    s32 center_x = g_PlayerCar;
     s32 x = arg0->x;
     s32 ret = 0;
 
@@ -376,7 +376,7 @@ void func_80037C04(void) {
     register u8 *packet asm("$16");
 
     scratch = *(u8 **)0x1F800000;
-    track = D_8009E83C;
+    track = g_PlayerLap;
     divisor = 1;
     digitsDrawn = 0;
     xOffset = 0;
@@ -468,13 +468,13 @@ void func_80037D90(void) {
         D_8009EC88 = 1;
     }
 
-    if (D_8009E740 + D_8009E73C >= D_8009E83C * g_TrackLength) {
-        if (D_8009E83C < 257) {
-            D_8009E83C = D_8009E83C + 1;
+    if (g_PlayerProgressB + g_PlayerProgressA >= g_PlayerLap * g_TrackLength) {
+        if (g_PlayerLap < 257) {
+            g_PlayerLap = g_PlayerLap + 1;
             func_80037714();
         }
     }
-    if (D_8009E83C >= 257) {
+    if (g_PlayerLap >= 257) {
         if (g_RacePhase == 2) {
             g_RacePhase = 4;
             D_801E43FC = 0;
@@ -513,7 +513,7 @@ void func_80037D90(void) {
         }
     } else {
         if (g_RacePhase == 0) {
-            func_8003C508(&D_8009E6D4);
+            func_8003C508(&g_PlayerCar);
             D_8009EC88 = 0;
             D_801E43F8 = 0;
             goto Lend;
@@ -521,7 +521,7 @@ void func_80037D90(void) {
     }
     if (g_RacePhase == 1) {
         if ((u32)g_SceneTimer >= 211) {
-            func_8002BE18(&D_8009E6D4);
+            func_8002BE18(&g_PlayerCar);
             g_RacePhase = 2;
         }
     }
@@ -533,17 +533,17 @@ Lend:
     }
 
     if (g_RacePhase > 0) {
-        func_8002DEFC(&D_8009E6D4);
+        func_8002DEFC(&g_PlayerCar);
     } else if (g_RacePhase == 0) {
         func_8005D9F8(0, 1);
     }
     func_80037C04();
 
     if (g_RacePhase > 0) {
-        GameUpdateCamera(0, &D_8009E6D4);
+        GameUpdateCamera(0, &g_PlayerCar);
     }
 
-    p = &D_8009E74C;
+    p = &g_PlayerTrackSection;
     func_80019EFC(*p);
     GameUpdateEnvironment();
     func_800418D4();
@@ -551,7 +551,7 @@ Lend:
     func_80041840();
     GameDrawCourseObjects();
     GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
-    func_800350B4(D_8009E744);
+    func_800350B4(g_PlayerTrackProgress);
     func_8005B190(D_8019C78C, D_8019C78C);
     func_8002F458();
     func_8004087C(*p);

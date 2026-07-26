@@ -8,12 +8,12 @@ extern s32 D_801E419C, D_801F17B0, D_8019CE0C;
 extern u8 D_80010E30[], D_80010E34[], D_80010E38[], D_80010E40[];
 void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
 void func_800632F0(void *dst, void *fmt, s32 val);
-extern s32 D_8009E67C;
+extern s32 g_CourseProgress asm("D_8009E67C");
 extern s32 D_801E4D0C;
 extern s32 D_801E4B94;
 extern s16 D_8019CB58;
 extern s16 D_8019CB54;
-extern GameScoreRecord D_8019CB40[];
+extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
 extern GameScoreRecord D_8019CB42[];
 extern s32 D_8019C7C4;
 extern s32 g_SeriesCleared asm("D_8019C8EC");
@@ -62,7 +62,7 @@ void func_800207E0(void) {
     s32 value;
     s32 *state;
 
-    slots = (u8 *)(D_8009E67C + g_CourseIndex);
+    slots = (u8 *)(g_CourseProgress + g_CourseIndex);
     D_801E4D0C = 0;
 
     if (*slots == 0 || g_RacePosition < *slots) {
@@ -72,7 +72,7 @@ void func_800207E0(void) {
     value = GameGetCarUnlockLevel(g_PlayerCarIndex);
     slot_count = 4;
     if (g_GrandPrixClass < value) {
-        *(s16 *)(D_8009E67C + 4) = 1;
+        *(s16 *)(g_CourseProgress + 4) = 1;
     }
 
     if (g_GrandPrixClass < 2) {
@@ -81,7 +81,7 @@ void func_800207E0(void) {
 
     filled = 0;
     for (i = 0; i < slot_count; i++) {
-        if (((u8 *)D_8009E67C)[i] != 0) {
+        if (((u8 *)g_CourseProgress)[i] != 0) {
             filled++;
         }
     }
@@ -112,8 +112,8 @@ check_record:
 
 not_special_record:
         if (score_index != 5) {
-            if (D_8019CB40[score_index + 1].value == -1) {
-                D_8019CB40[score_index + 1].value = 0;
+            if (g_ClassRecords[score_index + 1].value == -1) {
+                g_ClassRecords[score_index + 1].value = 0;
             }
         }
 
@@ -124,8 +124,8 @@ after_record_check:
             s32 offset;
 
             offset = score_index * 4;
-            if (D_8019CB40[score_index].value == 0 || value < D_8019CB40[score_index].value) {
-                D_8019CB40[score_index].value = (u16)D_8019C7C4;
+            if (g_ClassRecords[score_index].value == 0 || value < g_ClassRecords[score_index].value) {
+                g_ClassRecords[score_index].value = (u16)D_8019C7C4;
             }
             D_801E4D0C = 0xD2;
         }

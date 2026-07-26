@@ -21,7 +21,6 @@ void func_800268EC(void);
 extern s32 D_8019C768;
 extern s32 D_801E4178;
 extern s32 D_801E6824;
-extern s32 D_8009E66C;
 extern u8 D_80011010[];
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_80025940(void);
@@ -73,7 +72,7 @@ void func_80026B88(void) {
     D_801E4178 = 0;
     D_801E6824 = 0;
     g_SceneTimer = 0;
-    D_8009E66C = 3;
+    g_CameraCarIndex = 3;
 }
 
 void func_80026C0C(void) {
@@ -262,14 +261,14 @@ void func_80026F9C(void) {
         g_AnimTimer++;
         if (D_8007D74C[eventIndex].timer == g_SceneTimer) {
             D_801E6824 = eventIndex + 1;
-            D_8009E66C = D_8007D74C[eventIndex].carIndex;
+            g_CameraCarIndex = D_8007D74C[eventIndex].carIndex;
         }
 
         func_8003BB50();
 
-        func_80019EFC(*(s16 *)&D_801F18CC[(((((D_8009E66C * 3) * 4) + D_8009E66C) * 8) - D_8009E66C) * 4]);
+        func_80019EFC(*(s16 *)&D_801F18CC[(((((g_CameraCarIndex * 3) * 4) + g_CameraCarIndex) * 8) - g_CameraCarIndex) * 4]);
 
-        GameUpdateCamera(g_CameraViewMode, &g_Cars[D_8009E66C]);
+        GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
         GameUpdateEnvironment();
     }
 

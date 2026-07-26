@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern s32 D_8007FB30;
-extern s32 D_8019CB0C;
+extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 void func_80047BD4(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8);
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g,
@@ -30,7 +30,7 @@ void func_8004F650(s32 count, s32 arg1, s32 arg2) {
     }
     v0 = D_8007FB30;
     v1 = v0 - 11;
-    if (v1 >= 0 && D_8019CB0C == 0) {
+    if (v1 >= 0 && g_MenuAltLayout == 0) {
         if (v1 >= 11) {
             v1 = 10;
         }

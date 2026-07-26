@@ -12,9 +12,9 @@ extern u8 D_8007C474[];
 extern u32 D_8007C484;
 extern u8 D_8019C86C;
 extern u8 D_8009EC94;
-extern void *D_8009E698;
-extern void *D_801E6828;
-extern void *D_801E4BC8;
+extern void *g_CarModelAsset asm("D_8009E698");
+extern void *g_VisibleCellMask asm("D_801E6828");
+extern void *g_VisibleCellList asm("D_801E4BC8");
 extern void *D_801E41A8[];
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_CourseModelCount asm("D_801E40E4");
@@ -59,12 +59,12 @@ void GameInitRenderState(s32 arg0) {
     value = 0xF0;
     *(u16 *)0x1F80007E = value;
     ptr = (s32)&D_8019C86C;
-    D_801E6828 = (void *)ptr;
+    g_VisibleCellMask = (void *)ptr;
     ptr = (s32)&D_8009EC94;
     *(s32 *)0x1F800064 = arg0;
     *(u16 *)0x1F800078 = 0;
     *(u16 *)0x1F80007A = 0;
-    D_801E4BC8 = (void *)ptr;
+    g_VisibleCellList = (void *)ptr;
     *(s32 *)0x1F800068 = tmp;
 }
 
@@ -229,7 +229,7 @@ void func_80017B94(void *asset, s32 index) {
 }
 
 void func_80017BAC(s32 index) {
-    D_8009E698 = D_801E8A54[index];
+    g_CarModelAsset = D_801E8A54[index];
 }
 
 void func_80017BCC(void) {

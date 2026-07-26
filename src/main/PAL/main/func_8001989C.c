@@ -3,7 +3,7 @@
 #include "game/race.h"
 #include "game/state.h"
 
-extern GameSceneAssetHeader *D_8019CAFC;
+extern GameSceneAssetHeader *g_AssetLoadCursor asm("D_8019CAFC");
 
 s32 func_80017C78(s32 assetIndex, void *dst);
 s32 func_80017C2C(void);
@@ -25,62 +25,62 @@ void func_8001989C(void) {
 
     switch (g_AssetLoadState) {
     case 1:
-        dst = D_8019CAFC;
+        dst = g_AssetLoadCursor;
         offset = g_CourseIndex;
         __asm__ volatile("" : "=r"(offset) : "0"(offset));
         header = (GameSceneAssetHeader *)g_GrandPrixClass;
         if (func_80017C78(((s32)header << 3) + (offset << 1) + 0x58, dst) != 0) {
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[0];
             g_AssetBlockPtr = (u8 *)header + offset;
             func_80017BD4(g_AssetBlockPtr);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[1];
             g_AssetBlockPtr = (u8 *)header + offset;
             func_8004553C(g_AssetBlockPtr);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[2];
             g_AssetBlockPtr = (u8 *)header + offset;
             func_8004550C(g_AssetBlockPtr);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[3];
             g_AssetBlockPtr = (u8 *)header + offset;
             GameRegisterModelBank(g_AssetBlockPtr, 1);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[4];
             g_AssetBlockPtr = (u8 *)header + offset;
             func_8002A6B0(g_AssetBlockPtr);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[5];
             g_AssetBlockPtr = (u8 *)header + offset;
             func_80017A6C(g_AssetBlockPtr);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[6];
             g_AssetBlockPtr = (u8 *)header + offset;
             GameRegisterModelBank(g_AssetBlockPtr, 2);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[7];
             g_AssetBlockPtr = (u8 *)header + offset;
             func_80017AD0(g_AssetBlockPtr);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[8];
             g_AssetBlockPtr = (u8 *)header + offset;
             func_8004121C(g_AssetBlockPtr);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[9];
             g_AssetBlockPtr = (u8 *)header + offset;
             func_80034E04(g_AssetBlockPtr);
 
-            header = D_8019CAFC;
+            header = g_AssetLoadCursor;
             offset = header->offsets[10];
             g_AssetBlockPtr = (u8 *)header + offset;
             func_80043AC8(g_AssetBlockPtr, 0);

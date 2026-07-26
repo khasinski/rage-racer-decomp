@@ -3,13 +3,10 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-extern s32 D_8009B338;
-extern s32 D_8019CB0C;
 extern s32 D_80082EB4;
 extern u8 D_80082010;
 extern u8 g_UiChromeScript asm("D_80082460");
 extern s32 D_801F17A0;
-extern GameCarEntry D_801E4388[];
 
 void func_8005131C(void);
 s32 func_8004F048(void *, s32, s32);
@@ -22,7 +19,7 @@ void func_8001DA74(s32);
 
 void GameUpdatePaintColorScreen(void) asm("func_80058C14");
 void GameUpdatePaintColorScreen(void) {
-    D_8019CB0C = D_8009B338;
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_8005131C();
 
     if (GameMenuBusy == 0) {
@@ -93,8 +90,8 @@ void GameUpdatePaintColorScreen(void) {
                 if (*btn & 0x860) {
                     GamePlaySoundCue(2);
                     g_CarTable[g_PlayerCarIndex].shapeIndex = D_80082EB4;
-                    D_801E4388[g_PlayerCarIndex].shapeIndex = D_80082EB4;
-                    D_801E4388[g_PlayerCarIndex].textureIndex = g_CarTable[g_PlayerCarIndex].textureIndex;
+                    g_TimeAttackCars[g_PlayerCarIndex].shapeIndex = D_80082EB4;
+                    g_TimeAttackCars[g_PlayerCarIndex].textureIndex = g_CarTable[g_PlayerCarIndex].textureIndex;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
@@ -108,8 +105,8 @@ void GameUpdatePaintColorScreen(void) {
                 if (*btn & 0x860) {
                     GamePlaySoundCue(2);
                     g_CarTable[g_PlayerCarIndex].textureIndex = D_80082EB4;
-                    D_801E4388[g_PlayerCarIndex].shapeIndex = g_CarTable[g_PlayerCarIndex].shapeIndex;
-                    D_801E4388[g_PlayerCarIndex].textureIndex = D_80082EB4;
+                    g_TimeAttackCars[g_PlayerCarIndex].shapeIndex = g_CarTable[g_PlayerCarIndex].shapeIndex;
+                    g_TimeAttackCars[g_PlayerCarIndex].textureIndex = D_80082EB4;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {

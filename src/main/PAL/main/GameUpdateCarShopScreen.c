@@ -3,7 +3,7 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-extern u8 *D_8009E698;
+extern u8 *g_CarModelAsset asm("D_8009E698");
 
 extern u8 g_MenuBlankCaption asm("D_80011BA0");
 extern u8 D_800820C4;
@@ -21,13 +21,11 @@ extern s32 D_8009B31C;
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 extern s32 D_8009B32C;
 extern s32 D_8009B330;
-extern s32 D_8009B338;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
 extern s32 D_8019C908;
 extern s16 D_8019CA18;
 extern u8 *D_8019CB00;
-extern s32 D_8019CB0C;
 extern s16 D_801E41A4;
 extern s32 D_801E4294;
 extern u8 D_801E438D[];
@@ -61,7 +59,7 @@ void GameUpdateCarShopScreen(void) {
     s32 u;
 
     ot = *(void **)0x1F800004;
-    D_8019CB0C = D_8009B338;
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_80050400(D_8009B32C, D_8009B330);
     func_8004FCE8(D_8009B31C, g_MenuPlateCarIndex, 0);
     func_8005131C();
@@ -131,7 +129,7 @@ void GameUpdateCarShopScreen(void) {
                     }
                 }
             }
-            if (D_8009E698[8] == 0) {
+            if (g_CarModelAsset[8] == 0) {
                 D_8009B32C = 1;
             } else {
                 D_8009B32C = -1;

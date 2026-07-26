@@ -15,13 +15,17 @@ extern s32 D_8007D544;
 void func_80019AF0(s32 arg0);
 void func_800230B0(void);
 void func_8002317C(void);
-extern Matrix D_8019CAD4, D_8007D548, D_8009E6AC, D_8007D568;
+extern Matrix D_8019CAD4;
+extern Matrix D_8007D548;
+extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
+extern Matrix D_8007D568;
 void func_800698B8(Matrix *arg0);
 void func_80069888(Matrix *arg0);
 void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
 void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_800686D4(s32 arg0, s32 arg1);
-extern s32 D_8019C768, D_801E4B30;
+extern s32 D_8019C768;
+extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 D_8009F0A0;
 void GameUploadImageAsset(s32 arg0) asm("func_8001A3C0");
 void GameInitRenderState(s32 arg0) asm("func_80017884");
@@ -124,9 +128,9 @@ done:
 
 void func_800234DC(void) {
     D_8019CAD4 = D_8007D548;
-    D_8009E6AC = D_8007D568;
+    g_SceneLightMatrix = D_8007D568;
     func_800698B8(&D_8019CAD4);
-    func_80069888(&D_8009E6AC);
+    func_80069888(&g_SceneLightMatrix);
     func_80069A18(0x20, 0x20, 0x20);
     func_80069A38(0, 0, 0);
     func_800686D4(0x4E20, 0x140);
@@ -136,7 +140,7 @@ void func_800235D8(void) {
     SetDispMask(0);
     D_8019C768 = 0x80;
     if (g_AssetLoadState == 0) {
-        GameUploadImageAsset(D_801E4B30);
+        GameUploadImageAsset(g_ImageBlockBuffer);
         g_MirrorMode = 0;
         GameInitRenderState(5);
         GameSetupDisplay480(0, 0, 0);

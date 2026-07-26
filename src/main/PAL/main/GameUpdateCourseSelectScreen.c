@@ -4,8 +4,6 @@
 #include "game/menu.h"
 #include "game/render.h"
 #include "game/car.h"
-extern s32 D_8009B338;
-extern s32 D_8019CB0C;
 extern s32 D_8009B334;
 extern s32 D_8009B31C;
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
@@ -26,7 +24,7 @@ extern u8 *D_8019C764;
 extern s32 D_8019C7AC;
 extern s32 D_8019C908;
 extern u16 D_8019CABC;
-extern u8 *D_8009E67C;
+extern u8 *g_CourseProgress asm("D_8009E67C");
 extern u8 D_80081818;
 extern u8 D_800817A0;
 extern u8 g_UiChromeScript asm("D_80082460");
@@ -70,7 +68,7 @@ void GameUpdateCourseSelectScreen(void) {
     s32 i;
     GameRaceProgress *p;
     ot = *(void **)0x1F800004;
-    D_8019CB0C = D_8009B338;
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
     if (g_GrandPrixMode != 0) {
         func_800506BC(&D_8009B364, &D_8009B360, &D_8009B368);
     } else {
@@ -124,7 +122,7 @@ void GameUpdateCourseSelectScreen(void) {
                         D_8009B360 = (D_8009B360 - lt) + 0x1F4000;
                         g_CourseIndex = llap;
                         D_8009B370 = llap;
-                        D_8009B368 = D_8009E67C[llap & 3];
+                        D_8009B368 = g_CourseProgress[llap & 3];
                         D_8009B334 = (llap < 4) ? -1 : 1;
                     }
                     }
@@ -157,7 +155,7 @@ void GameUpdateCourseSelectScreen(void) {
                             g_CourseIndex = llap;
                             D_8009B370 = llap;
                             g_MenuViewAngle = lu;
-                            D_8009B368 = D_8009E67C[llap & 3];
+                            D_8009B368 = g_CourseProgress[llap & 3];
                             D_8009B334 = (llap < 4) ? -1 : 1;
                         }
                     }
@@ -328,7 +326,7 @@ void GameUpdateCourseSelectScreen(void) {
                         D_8009B360 = 0;
                         g_CourseIndex = g_CourseIndex & ~3;
                         D_8009B36C = g_CourseIndex;
-                        D_8009B368 = D_8009E67C[0];
+                        D_8009B368 = g_CourseProgress[0];
                     }
                     func_800487D8(D_8019C764, &g_UiScriptProgress2, 1);
                     func_80048D64(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);

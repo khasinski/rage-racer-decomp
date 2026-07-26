@@ -1,14 +1,14 @@
 #include "common.h"
 #include "game/track.h"
 
-extern s32 D_8009E744;
+extern s32 g_PlayerTrackProgress asm("D_8009E744");
 extern s16 D_8009E6A0;
 extern s16 D_801E8A8C;
 
 void func_80041170(void) {
     s32 value;
 
-    value = D_8009E744;
+    value = g_PlayerTrackProgress;
     if ((value < 0x7001) || (value >= g_TrackLength - 0x3000)) {
         if (D_8009E6A0 == 1) {
             D_8009E6A0 = 0;

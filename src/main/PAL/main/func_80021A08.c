@@ -6,15 +6,15 @@ extern s32 D_8007D464;
 extern s32 D_8007D484;
 extern s32 D_8007D488;
 extern u16 D_8007D48C;
-extern s32 D_801E4408;
-extern s32 D_8019C70C;
-extern s32 D_801E7744;
+extern s32 g_BestLapTimes asm("D_801E4408");
+extern s32 g_BestTotalTimes asm("D_8019C70C");
+extern s32 g_RankingRecords asm("D_801E7744");
 extern s32 D_801E774C;
 extern u16 D_801E7750;
-extern s32 D_8019CB78;
+extern s32 g_TimeRecords asm("D_8019CB78");
 extern s32 D_8019CB80;
 extern u16 D_8019CB84;
-extern s32 D_801E41E8;
+extern s32 g_BestSectorTimes asm("D_801E41E8");
 extern char D_80010EB4[];
 void func_800632F0(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2);
 extern char D_80010EC4[];
@@ -53,8 +53,8 @@ void func_80021A08(void) {
     /* section 1 */
     r14 = 0;
     r18 = (s32)&D_8007D444;
-    r17 = (s32)&D_8019C70C;
-    r16 = (s32)&D_801E4408;
+    r17 = (s32)&g_BestTotalTimes;
+    r16 = (s32)&g_BestLapTimes;
     do {
         r7 = 0;
         r15 = r14 << 5;
@@ -97,7 +97,7 @@ void func_80021A08(void) {
 
     /* section 2 */
     r14 = 0;
-    r22 = (s32)&D_801E7744;
+    r22 = (s32)&g_RankingRecords;
     r30 = r22 + 4;
     r20 = 0;
     do {
@@ -107,7 +107,7 @@ void func_80021A08(void) {
         do {
             r6 = 0;
             r19 = r15;
-            r18 = (s32)&D_8019CB78;
+            r18 = (s32)&g_TimeRecords;
             r21 = r18 + 4;
             r25 = r7 << 2;
             __asm__("" : "=r"(r25) : "0"(r25));
@@ -168,7 +168,7 @@ void func_80021A08(void) {
     /* section 3 */
     r14 = 0;
     r8 = (s32)&D_8007D444;
-    r9 = (s32)&D_801E41E8;
+    r9 = (s32)&g_BestSectorTimes;
     do {
         r7 = 0;
         r4 = r9;

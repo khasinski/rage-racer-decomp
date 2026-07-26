@@ -4,7 +4,7 @@
 #include "game/render.h"
 #include "game/race.h"
 
-extern u8 *D_8009E698;
+extern u8 *g_CarModelAsset asm("D_8009E698");
 
 extern u8 g_MenuBlankCaption asm("D_80011BA0");
 extern u8 D_80081A34;
@@ -19,10 +19,8 @@ extern s32 g_MenuConfirmTimer asm("D_8009B300");
 extern s32 D_8009B31C;
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 extern s32 D_8009B324;
-extern s32 D_8009B338;
 extern u8 *D_8019C794;
 extern s32 D_8019C7C0;
-extern s32 D_8019CB0C;
 extern u8 D_801E4389[];
 extern u8 D_801E438A[];
 
@@ -48,7 +46,7 @@ void GameUpdateCustomizeScreen(void) {
     s32 sel;
 
     ot = *(void **)0x1F800004;
-    D_8019CB0C = D_8009B338;
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_8004FCE8(D_8009B31C, g_MenuPlateCarIndex, 0);
     mode = 2;
     func_8005131C();
@@ -88,7 +86,7 @@ void GameUpdateCustomizeScreen(void) {
                     goto set_state;
                 }
                 if (sel == 1) {
-                    if (D_8009E698[8] != 0) {
+                    if (g_CarModelAsset[8] != 0) {
                         func_8005D6EC(2);
                         carByte = g_CarTable[g_PlayerCarIndex].transmission;
                         D_8019C794 = &D_800825A4;

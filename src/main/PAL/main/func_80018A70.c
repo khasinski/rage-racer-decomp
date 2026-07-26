@@ -6,7 +6,7 @@
 #include "game/render.h"
 #include "game/cd.h"
 
-extern u8 *D_8009E698;
+extern u8 *g_CarModelAsset asm("D_8009E698");
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
 extern u8 *D_801E4090;
@@ -17,14 +17,14 @@ void GameRegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void func_80017B44(void *arg0, s32 arg1);
 void func_8001D748(s32 arg0, s32 arg1);
 void func_8001D900(s32 arg0, s32 arg1);
-extern s32 D_8019C904;
-extern s32 D_801E4B30;
+extern s32 g_AssetBase asm("D_8019C904");
+extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 s32 GameRandom15(void) asm("func_800632B0");
 void func_80017BE4(void);
 extern s32 D_8019C754;
 extern s32 D_801E4D70;
-extern s32 D_801E8AB0;
-extern u32 D_8019CAFC;
+extern s32 g_AssetSubBlockPtr asm("D_801E8AB0");
+extern u32 g_AssetLoadCursor asm("D_8019CAFC");
 void func_800179B4(void *, s32);
 void func_80017BAC(s32);
 
@@ -100,14 +100,14 @@ void func_80018C0C(void) {
     s32 offset;
 
     if (g_AssetLoadState == 1) {
-        if (func_80017C78(9, (void *)D_8019C904) != 0) {
-            GameRegisterModelBank((void *)(D_8019C904 + 4), 0);
+        if (func_80017C78(9, (void *)g_AssetBase) != 0) {
+            GameRegisterModelBank((void *)(g_AssetBase + 4), 0);
             GameSelectModelBank(0);
 
-            ptr = D_8019C904;
+            ptr = g_AssetBase;
             offset = *(s32 *)ptr;
             g_AssetLoadState = 0;
-            D_801E4B30 = ptr + offset;
+            g_ImageBlockBuffer = ptr + offset;
         }
     }
 }
@@ -160,10 +160,10 @@ void func_80018DF8(void) {
             kind = scaled + base;
         }
 
-        result = func_80017C78((s32)kind, (void *)D_801E4B30);
+        result = func_80017C78((s32)kind, (void *)g_ImageBlockBuffer);
         if (result != 0) {
             g_AssetLoadState = 2;
-            D_8019C754 = result + D_801E4B30;
+            D_8019C754 = result + g_ImageBlockBuffer;
         }
         break;
     case 2:
@@ -178,7 +178,7 @@ void func_80018DF8(void) {
             first = ptr + first;
             second = ptr + second;
             g_AssetBlockPtr = (u8 *)first;
-            D_801E8AB0 = second;
+            g_AssetSubBlockPtr = second;
             third = *(s32 *)ptr;
             g_AssetLoadState = 0;
             D_801E4D70 = third;
@@ -193,14 +193,14 @@ void func_80018F08(void) {
     u32 *src;
     u32 count;
 
-    temp = D_8009E698;
+    temp = g_CarModelAsset;
     if (temp != 0) {
         src = (u32 *)temp;
     } else {
         src = (u32 *)temp;
     }
     count = src[6];
-    temp = D_8019C904;
+    temp = g_AssetBase;
     if (count != 0) {
         dst = (u32 *)temp;
     } else {
@@ -209,7 +209,7 @@ void func_80018F08(void) {
     count = count + 0x28;
     temp = count + (u32)dst;
     count >>= 2;
-    D_8019CAFC = temp;
+    g_AssetLoadCursor = temp;
 
     while (count != 0) {
         *dst = *src;
@@ -218,10 +218,10 @@ void func_80018F08(void) {
         dst++;
     }
 
-    func_80017B94((void *)D_8019C904, 0);
-    temp = *(s32 *)(D_8009E698 + 0x20);
-    func_800179B4((void *)(D_8019C904 + 0x28), temp);
+    func_80017B94((void *)g_AssetBase, 0);
+    temp = *(s32 *)(g_CarModelAsset + 0x20);
+    func_800179B4((void *)(g_AssetBase + 0x28), temp);
     func_80017BAC(0);
-    *(u32 *)(D_8009E698 + 0x20) = D_8019C904 + 0x28;
-    GameRegisterModelBank((void *)(D_8019C904 + 0x28), 0);
+    *(u32 *)(g_CarModelAsset + 0x20) = g_AssetBase + 0x28;
+    GameRegisterModelBank((void *)(g_AssetBase + 0x28), 0);
 }

@@ -687,4 +687,14 @@ extern u8 *g_EnvPaletteTable asm("D_801E4140");
  * 0x1F800084 by every car/track renderer. */
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
+/*
+ * Per-view cell culling, rebuilt every frame by func_800414F0 and swapped in
+ * lockstep for the mirror pass. Per-file types; see docs/names.md 12c.
+ *   g_VisibleCellMask  D_801E6828  32 words, mask[sy] |= 1 << sx over the grid
+ *   g_VisibleCellList  D_801E4BC8  the matching visible-cell record list
+ *   g_SceneLightMatrix D_8009E6AC  assigned from a per-scene constant, then
+ *                                  combined per object and set with gte_SetLightMatrix
+ */
+
+
 #endif

@@ -5,7 +5,7 @@
 #include "game/render.h"
 #include "game/cd.h"
 
-extern s16 D_8019CB40[];
+extern s16 g_ClassRecords[] asm("D_8019CB40");
 extern volatile s32 D_801E4DA8;
 extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern u8 D_80010E68;
@@ -14,7 +14,7 @@ extern s32 D_8019C768;
 extern s32 D_801E3E0C;
 void func_8005B190(s32 arg0, s32 arg1);
 void func_800215B8(s32 arg0);
-extern void *D_8009E67C;
+extern void *g_CourseProgress asm("D_8009E67C");
 extern char D_80010E80[];
 extern char D_80010E8C[];
 extern char D_80010E98[];
@@ -41,7 +41,7 @@ void func_80021540(void) {
     one = 1;
     offset = 0;
     do {
-        current = *(s16 *)((u8 *)D_8019CB40 + offset);
+        current = *(s16 *)((u8 *)g_ClassRecords + offset);
         offset += 4;
         if (current == one) {
             D_801E4DA8 = D_801E4DA8 + 1;
@@ -98,7 +98,7 @@ void GameDrawRaceEndPrompt(void) {
 
     func_80016EA0(0x76, 0xB8, D_80010E98, 0x7812);
 
-    index = *(s16 *)((u8 *)D_8009E67C + 6);
+    index = *(s16 *)((u8 *)g_CourseProgress + 6);
     func_80016EA0(0xBE, 0xB8, &D_8007D438[index], 0x7812);
 
     func_80016754(0x58, 0xD0, D_80010EA0, 0x78CC);
@@ -130,7 +130,7 @@ void func_80021748(void) {
             if (D_801E3E0C != 0) {
                 func_80018410();
             }
-            ptr = D_8009E67C;
+            ptr = g_CourseProgress;
             value = *(u16 *)(ptr + 6);
             g_SceneTimer = 0;
             *(u16 *)(ptr + 6) = value - 1;

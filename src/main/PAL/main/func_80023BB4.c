@@ -20,7 +20,7 @@ extern s32 D_801E4B9C;
 extern s32 D_801E4D68;
 extern XY D_8007D5A8[];
 extern RGB D_8007D658[];
-extern ScoreRec D_8019CB40[];
+extern ScoreRec g_ClassRecords[] asm("D_8019CB40");
 extern Struct12 D_8007D5D4[];
 s32 func_800153FC(void);
 s32 GameRequestTrackLoad(void) asm("func_8001965C");
@@ -153,7 +153,7 @@ void func_80023FE8(void) {
     next = func_80017138(base, next, 0xD8, 0x40, 8, 0x10, D_801E4D68 * 8 + 8, 0x18, 0x7F40);
 
     x = 0xB4;
-    if (D_8019CB40[idx].flag == -1) {
+    if (g_ClassRecords[idx].flag == -1) {
         for (i = 0; i < 8; i++) {
             next = func_80017138(base, next, x + 0x30 + i * 8, y + 8, 8, 0x10, 0x38, 0x28, 0x7F40);
         }
@@ -165,9 +165,9 @@ void func_80023FE8(void) {
 
     next = func_80017138(base, next, x | 8, y + 0x28, 0x44, 0x10, 0x1C, 0x6C, 0x7F40);
     next = func_80017138(base, next, x + 100, y + 0x28, 8, 0x10,
-                         (s16)((s16)D_8019CB40[idx].val / 10) << 3, 0x18, 0x7F40);
+                         (s16)((s16)g_ClassRecords[idx].val / 10) << 3, 0x18, 0x7F40);
     next = func_80017138(base, next, x + 108, y + 0x28, 8, 0x10,
-                         (s16)((s16)D_8019CB40[idx].val % 10) << 3, 0x18, 0x7F40);
+                         (s16)((s16)g_ClassRecords[idx].val % 10) << 3, 0x18, 0x7F40);
     next = func_80017390(base, next, 0x3B);
     next = GameAddTilePrim(base, next, x + 78, y + 47, 0x14, 2, 0xFF, 0xFF, 0xFF);
     next = GameAddTilePrim(base, next, x, y, 0x7C, 0x1E, 0, 0, 0);
@@ -193,7 +193,7 @@ void func_80024420(void) {
     for (i = 0; i < 11; i++) {
         x = D_8007D5A8[i].x;
         y = D_8007D5A8[i].y;
-        flag = D_8019CB40[i].flag;
+        flag = g_ClassRecords[i].flag;
         switch (flag) {
         case 1:
             next = func_80016EC4(base, next, x, y, 0x20, 0x50,
@@ -208,7 +208,7 @@ void func_80024420(void) {
                                  D_8007D5D4[i].b2, D_8007D5D4[i].b3, D_8007D5D4[i].h8);
             break;
         }
-        if (D_8019CB40[i].flag <= 0) {
+        if (g_ClassRecords[i].flag <= 0) {
             next = func_80016EC4(base + 4, next, x, y, 0x20, 0x50, 0x60, 0x70, 0x7E80);
         } else {
             next = func_80016EC4(base + 4, next, x, y, 0x20, 0x50, 0x80, 0x70, 0x7E81);

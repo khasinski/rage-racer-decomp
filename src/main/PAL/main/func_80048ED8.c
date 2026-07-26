@@ -4,7 +4,7 @@
 extern s32 D_8007FB04;
 extern s32 D_8009B268;
 extern s32 D_8009B26C;
-extern s32 D_8019CB0C;
+extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0,
                    u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans,
@@ -136,7 +136,7 @@ void func_80049418(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
     }
 
     intensityBias = 65;
-    if (wide != 0 || D_8019CB0C != 0) {
+    if (wide != 0 || g_MenuAltLayout != 0) {
         halfWidth = 0x58;
     } else {
         halfWidth = 1;

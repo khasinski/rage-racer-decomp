@@ -16,9 +16,9 @@ typedef struct {
     s32 f12;
 } Out;
 
-extern s32 *D_801E6828;
+extern s32 *g_VisibleCellMask asm("D_801E6828");
 extern u16 *D_801E5020;
-extern Out *D_801E4BC8;
+extern Out *g_VisibleCellList asm("D_801E4BC8");
 extern s8 D_8007E45C[];
 extern s8 D_8007E45D[];
 
@@ -41,7 +41,7 @@ void func_800414F0(s32 arg0, s32 arg1) {
     s32 proj[3];
 
     for (i = 31; i >= 0; i--) {
-        D_801E6828[i] = 0;
+        g_VisibleCellMask[i] = 0;
     }
 
     oct = (s->f14 / 128) & 0x1F;
@@ -50,7 +50,7 @@ void func_800414F0(s32 arg0, s32 arg1) {
     ret0 = func_800414A0(cx, cy);
 
     i = 0;
-    out = D_801E4BC8;
+    out = g_VisibleCellList;
     j = 0;
     while (i < 64) {
         s32 k;
@@ -95,7 +95,7 @@ void func_800414F0(s32 arg0, s32 arg1) {
             s32 clut = D_801E5020[((31 - sy) << 5) + sx] & 0x3FF;
 
             out->f12 = clut;
-            D_801E6828[sy] |= 1 << sx;
+            g_VisibleCellMask[sy] |= 1 << sx;
             center = 1024;
             if (clut != 0x3FF) {
                 vec[0] = ((sx << 11) - (s->f0 - center)) << 2;

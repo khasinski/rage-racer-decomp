@@ -3,7 +3,6 @@
 #include "game/audio.h"
 #include "game/render.h"
 
-extern s32 D_8009B338, D_8019CB0C;
 extern u32 D_80081D34;
 
 void func_80051D6C(void);
@@ -16,7 +15,7 @@ void GameUpdateTeamNameScreen(void) {
     u16 pad;
     s32 newdepth;
 
-    D_8019CB0C = D_8009B338;
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_80051D6C();
     if (GameMenuBusy != 0) goto reopen;
 
