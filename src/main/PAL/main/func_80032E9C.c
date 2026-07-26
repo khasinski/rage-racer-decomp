@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/render.h"
 
-extern u8 *D_8019C900;
 
 void func_80064DDC(void *arg0, void *arg1);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
@@ -20,7 +20,7 @@ void func_80032E9C(s32 arg0) {
     if (i < count) {
         offset = 0x23770;
         do {
-            u8 *base = D_8019C900;
+            u8 *base = g_DrawBuffer;
 
             i++;
             func_80064DDC(base + 0xCC, (void *)(offset + (s32)base));
@@ -29,5 +29,5 @@ void func_80032E9C(s32 arg0) {
     }
 
     scratch = (void **)0x1F800000;
-    *scratch = func_80017390(D_8019C900 + 0xCC, *scratch, 9);
+    *scratch = func_80017390(g_DrawBuffer + 0xCC, *scratch, 9);
 }

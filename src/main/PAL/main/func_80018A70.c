@@ -2,9 +2,9 @@
 #include "game/asset.h"
 #include "game/car.h"
 #include "game/state.h"
+#include "game/race.h"
 
 extern u32 D_8009E87C;
-extern GameCarEntry *D_8019C7C8;
 extern s32 D_801E40D4;
 extern u8 *D_801E4090;
 s32 func_80017848(s32 arg0, s32 arg1);
@@ -18,9 +18,6 @@ void func_80042C94(void);
 extern s32 D_8019C904;
 extern s32 D_801E4B30;
 void func_80017A10(s32);
-extern s32 D_8009E6A4;
-extern s16 D_8019CABC;
-extern s32 D_801E428C;
 extern s16 D_801E4DAC;
 extern s32 D_801E772C[];
 s32 func_800632B0(void);
@@ -45,7 +42,7 @@ void func_80018A70(s32 arg0) {
 
     if (g_AssetLoadState == 1) {
         index = arg0 << 3;
-        entry = (GameCarEntry *)(index + (s32)D_8019C7C8);
+        entry = (GameCarEntry *)(index + (s32)g_CarTable);
         offset = func_80017848(arg0, entry->modelVariant + 1) << 1;
         mode = D_8009E87C;
         ptr = D_801E4090;
@@ -71,9 +68,9 @@ void func_80018A70(s32 arg0) {
             func_80017B44((void *)temp, flag);
 
             if (D_801E40D4 < 10) {
-                entry = (GameCarEntry *)(index + (s32)D_8019C7C8);
+                entry = (GameCarEntry *)(index + (s32)g_CarTable);
                 func_8001D748(entry->shapeIndex, *(s32 *)(ptr + 0x24));
-                entry = (GameCarEntry *)(index + (s32)D_8019C7C8);
+                entry = (GameCarEntry *)(index + (s32)g_CarTable);
                 func_8001D900(entry->textureIndex, *(s32 *)(ptr + 0x24));
             }
 
@@ -126,10 +123,10 @@ s32 func_80018C88(void) {
     }
 
     if (D_801E4DAC == 0) {
-        value = (func_800632B0() & 0xFFF) % (D_801E772C[D_8019CABC] + 1);
-        D_8009E6A4 = value;
-        if (((D_801E428C & 3) == 3) && (value < 2)) {
-            D_8009E6A4 = ((func_800632B0() & 0xFFF) % (D_801E772C[D_8019CABC] - 1)) + 2;
+        value = (func_800632B0() & 0xFFF) % (D_801E772C[g_GrandPrixSeries] + 1);
+        g_GrandPrixClass = value;
+        if (((g_CourseIndex & 3) == 3) && (value < 2)) {
+            g_GrandPrixClass = ((func_800632B0() & 0xFFF) % (D_801E772C[g_GrandPrixSeries] - 1)) + 2;
         }
     }
 
@@ -153,14 +150,14 @@ void func_80018DF8(void) {
     case 1:
         kind = 0x55;
         if (D_801E4DAC != 0) {
-            register s32 index asm("$2") = D_8019CABC;
+            register s32 index asm("$2") = g_GrandPrixSeries;
             register s32 scaled asm("$3");
             register s32 base asm("$2");
 
             __asm__ volatile("");
             scaled = index << 1;
             scaled += index;
-            base = D_8009E6A4;
+            base = g_GrandPrixClass;
             scaled <<= 1;
             base += 0x4A;
             kind = scaled + base;

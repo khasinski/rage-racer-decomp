@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/memcard.h"
 #include "psyq/kernel.h"
+#include "game/menu.h"
 
-extern s32 D_8009B740;
 extern char D_800128AC[];
 
 s32 GameScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
@@ -14,7 +14,7 @@ s32 GameScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
     s32 bit;
 
     mask = 0;
-    D_8009B740 = 0x110;
+    GameMenuLoadPhase = 0x110;
     i = 0;
     buffer = arg0;
     nameOffset = 0;
@@ -37,6 +37,6 @@ s32 GameScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
         nameOffset += 0x1A;
     } while (i < 3);
 
-    D_8009B740 = 0x190;
+    GameMenuLoadPhase = 0x190;
     return mask;
 }

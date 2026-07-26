@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/race.h"
 
-extern s32 D_8009E6A4;
 extern s32 D_801E4150;
 extern s32 D_801E408C;
 extern s32 D_801E40D8;
@@ -28,7 +28,7 @@ void func_80040DB4(s32 arg0) {
     register s32 selector asm("$4");
 
     position = arg0;
-    selector = D_8009E6A4;
+    selector = g_GrandPrixClass;
     entryBaseValue = D_801E4150;
     entryBase = (UnkFunc80040DB4Entry *)(entryBaseValue + 0x1C9C);
     selector = selector % 5;

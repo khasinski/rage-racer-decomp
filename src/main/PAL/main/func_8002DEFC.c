@@ -1,5 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/state.h"
+#include "game/menu.h"
 
 typedef struct GearRange {
     s16 up;
@@ -113,7 +115,6 @@ typedef struct Car {
 
 extern u8 D_801E4369;
 extern volatile u16 D_801E436A;
-extern u16 D_801E436E;
 extern u8 *D_801E42D8;
 extern s16 D_801E4374;
 extern s16 D_801E4376;
@@ -134,9 +135,8 @@ extern s32 D_801E8AA0;
 extern s16 D_8019CB08;
 extern s32 D_8019CAB4;
 extern s32 D_8019CACC;
-extern u8 *D_8009E688;
+extern u8 *g_TrackPoints asm("D_8009E688");
 extern s16 D_8009E830;
-extern s32 D_8009E694;
 extern s32 D_8009E808;
 extern u16 D_8007DAB0[];
 extern u16 D_8007DAB2[];
@@ -201,7 +201,7 @@ void func_8002DEFC(Car *car) {
     car->unkB8 = func_8002CD08(car);
 
     if (car->drive.manual != 0) {
-        if (D_801E436E & D_801E4B68[mode23][0]) {
+        if (g_PadEdge2 & D_801E4B68[mode23][0]) {
             s32 g = car->drive.gear;
 
             if (g < *(s16 *)(D_801E42D8 + 0x104) && car->drive.clutch == 0) {
@@ -209,7 +209,7 @@ void func_8002DEFC(Car *car) {
                 D_801F17A4 = 0;
             }
         }
-        if (D_801E436E & D_801E4B68[mode23][1]) {
+        if (g_PadEdge2 & D_801E4B68[mode23][1]) {
             s32 g = p->gear;
 
             if (g >= 2) {
@@ -394,7 +394,7 @@ void func_8002DEFC(Car *car) {
     {
         s32 base = car->unk24 - 0xC00;
 
-        slip = (base + *(s16 *)(D_8009E688 + car->trackPointIndex * 24 + 10)) & 0xFFF;
+        slip = (base + *(s16 *)(g_TrackPoints + car->trackPointIndex * 24 + 10)) & 0xFFF;
     }
     sv2.vx = 0;
     sv2.vz = 0;
@@ -529,7 +529,7 @@ void func_8002DEFC(Car *car) {
         car->unk04 += p->unk68;
         func_80038FF0(car);
     } else {
-        slip = func_8002A788(0xC00 - *(s16 *)(D_8009E688 + car->trackPointIndex * 24 + 10),
+        slip = func_8002A788(0xC00 - *(s16 *)(g_TrackPoints + car->trackPointIndex * 24 + 10),
                              car->unkA0);
         if (crash != 0) {
             p->unk48 -= 1000;
@@ -606,11 +606,11 @@ void func_8002DEFC(Car *car) {
     if (D_8019CAB4 >= *(s16 *)(D_801E42D8 + 0x100) - 100 && D_8009E830 >= 129) {
         s32 r = func_800632B0();
 
-        D_801E40B0 = D_8009E694 & 2;
+        D_801E40B0 = g_AnimTimer & 2;
         D_801E4170 = r % 150 / 2;
     } else {
         revFlag = 0;
-        if (p->unk78 == 0 && (D_8009E694 & 8)) {
+        if (p->unk78 == 0 && (g_AnimTimer & 8)) {
             D_801E40B0 = 0;
             D_801E4170 = func_80068568(func_800632B0() & 0xFFF) * 150 / 4096;
             if (D_801E4170 <= 0) {

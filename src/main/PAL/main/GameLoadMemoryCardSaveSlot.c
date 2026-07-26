@@ -1,10 +1,10 @@
 #include "common.h"
 #include "game/memcard.h"
 #include "psyq/kernel.h"
+#include "game/menu.h"
 
 extern volatile s32 D_8009B740;
 extern char D_800128AC[];
-extern u8 D_8007F45C;
 extern u8 D_8007F460[];
 extern s32 D_801E7A54;
 
@@ -68,7 +68,7 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     }
 
     D_8009B740 = 0x3800;
-    D_8007F45C = *(u8 *)header;
+    GameMenuStackDepth = *(u8 *)header;
     i = 0;
     do {
         register u8 *copy_src asm("$2") = (u8 *)header + i;

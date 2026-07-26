@@ -9,7 +9,6 @@ extern s32 D_801E3EB4;
 extern s32 D_801E3EB8;
 extern s32 D_801E3ED8;
 extern s32 D_801E3EE0;
-extern s32 D_8009E6A8;
 
 s32 func_8001A6AC(s32 arg0, s32 arg1);
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
@@ -58,9 +57,9 @@ void func_8003CB3C(GameRenderObject *obj) {
     }
     rem = index;
     if (index < 0) {
-        rem = index + D_8009E6A8;
+        rem = index + g_TrackPointCount;
     }
-    index = rem % D_8009E6A8;
+    index = rem % g_TrackPointCount;
 
     func_8002FC84(index, coords, D_801E3E14.field_38);
     angle = 0x400 - func_8001A6AC(coords[0] - D_801E3E14.x, coords[2] - D_801E3E1C);

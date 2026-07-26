@@ -1,10 +1,10 @@
 #include "common.h"
 #include "psyq/gte.h"
 #include "game/render.h"
+#include "game/state.h"
 
 extern GameRenderView *D_8009E698;
 extern Matrix D_8009E6AC;
-extern s32 D_801E42E4;
 extern s32 D_801E4168;
 extern s32 D_1F800084;
 
@@ -55,7 +55,7 @@ void func_8001DAB0(GameRenderObject *obj) {
     func_80069568(&m_10, &m_30);
     func_80068B98(&D_8009E6AC, &m_30, &m_90);
 
-    if (D_801E42E4 != 8) {
+    if (g_SceneId != 8) {
         clipHandle = func_800350B4((s32) obj->field_70);
         if (clipHandle != 0) {
             func_8001C248(clipHandle, &m_90);

@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
 
-extern s32 D_801E6CA4;
 
 void GameSetEffectVolumeScale(s32 arg0) {
     if (arg0 >= 0) {
@@ -14,5 +13,5 @@ void GameSetEffectVolumeScale(s32 arg0) {
     }
 
 done:
-    D_801E6CA4 = arg0;
+    g_EffectVolumeScale = arg0;
 }

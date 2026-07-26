@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/render.h"
+#include "game/race.h"
 
-extern s16 D_8009E834;
-extern u8 *D_8019C900;
 
 void func_80033230(void) {
     register u8 *base asm("$4");
@@ -16,8 +16,8 @@ void func_80033230(void) {
 
         leftOffset = 0x237AC;
         rightOffset = 0x237C0;
-        base = D_8019C900;
-        value = D_8009E834;
+        base = g_DrawBuffer;
+        value = g_RacePosition;
         left = base + leftOffset;
         right = base + rightOffset;
     }

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
+#include "game/state.h"
 
 extern s32 D_8007F5F8;
 extern s32 D_8007F5FC;
@@ -16,7 +17,6 @@ extern u8 D_8009B194;
 extern u8 D_8009B1B0;
 extern s32 D_8009B1B4;
 extern s32 D_8019C7BC;
-extern s32 D_801E42E4;
 extern CdlLOC D_8007F5B0[];
 
 s32 func_8006A5A4(s32 arg0, void *arg1, s32 arg2);
@@ -232,7 +232,7 @@ state_3:
 check_cd:
         status = func_8006A554(1, &D_8009B16C);
         if (status == 4) {
-            if (D_801E42E4 == 0x1C) {
+            if (g_SceneId == 0x1C) {
                 D_8019C7BC = 1;
             } else {
                 temp = CdPosToInt_Local(&D_8007F5B0[D_8009B1B0]);

@@ -6,12 +6,12 @@ extern u8 D_8007D588[];
 extern u8 D_8007D589[];
 extern u8 D_8007D58A[];
 extern u8 D_8007D58B[];
-extern u8 * volatile D_8019C900;
+extern u8 * volatile g_DrawBuffer asm("D_8019C900");
 extern volatile u8 D_801E4369;
 extern u8 D_8007D5A4;
 
 void func_800236C8(s32 arg0, s32 arg1) {
-    u8 *base = D_8019C900;
+    u8 *base = g_DrawBuffer;
     s32 *scratch = (s32 *)0x1F800000;
     s32 value;
     s32 scratchValue;
@@ -36,7 +36,7 @@ void func_80023750(s32 arg0) {
     register s32 width asm("$3");
     s32 next;
 
-    raw_base = (s32)D_8019C900;
+    raw_base = (s32)g_DrawBuffer;
     scratch = *(s32 *)0x1F800000;
     next = scratch;
     which = arg0;
@@ -87,7 +87,7 @@ void func_8002390C(void) {
     register s32 scratch asm("$5");
     s32 next;
 
-    raw_base = (s32)D_8019C900;
+    raw_base = (s32)g_DrawBuffer;
     value = D_801E4369;
     scratch = *(s32 *)0x1F800000;
     next = scratch;

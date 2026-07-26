@@ -1,5 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/state.h"
+#include "game/menu.h"
 
 typedef struct { s32 a, b, c, d; } Vec16;
 typedef struct { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
@@ -11,8 +13,6 @@ extern s32 D_8009B350;
 extern s32 D_8009B358;
 extern s32 D_8009B35C;
 extern s32 D_8009B37C;
-extern s32 D_8009B380;
-extern s32 D_8009E694;
 extern s32 D_8019CB0C;
 extern s32 D_801E40E4;
 
@@ -65,11 +65,11 @@ void func_80051D6C(void) {
         s32 t = D_8009B34C + s1;
         D_8009B34C = t;
         if (t <= 3071999) {
-            s32 a = D_8009B380;
+            s32 a = GameMenuCursorAnim;
             if (a >= 0) {
                 D_8009B34C = t - 2048000;
                 D_8009B37C = a;
-                D_8009B380 = -1;
+                GameMenuCursorAnim = -1;
             }
         }
     }
@@ -94,11 +94,11 @@ void func_80051D6C(void) {
     }
 
     poly.f0 = 0;
-    poly.f1 = (s0 - s2) + func_80068568((D_8009E694 * 32) & 0xFE0) * 12 / 4096;
+    poly.f1 = (s0 - s2) + func_80068568((g_AnimTimer * 32) & 0xFE0) * 12 / 4096;
     poly.f2 = 0;
     poly.f4 = 0;
     poly.f5 = s1;
-    poly.f6 = func_80068568((D_8009E694 * 20) & 0xFFC) * 72 / 4096;
+    poly.f6 = func_80068568((g_AnimTimer * 20) & 0xFFC) * 72 / 4096;
 
     func_8001A530(&mtxB, 0x800 - poly.f5);
     func_8001A4C0(&mtxA, poly.f6);

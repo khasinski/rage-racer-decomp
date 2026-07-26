@@ -1,35 +1,35 @@
 #include "common.h"
+#include "game/state.h"
+#include "game/render.h"
+#include "game/menu.h"
 
-extern s32 D_801E40B8, D_801E42E0, D_801E42A0, D_801E42E4;
-extern u16 D_801E436E;
 void func_80065860(s32 arg0);
 void func_800218A0(s32 arg0);
-extern u8 *D_8019C900;
 s32 func_80016EC4(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 
 void func_80022FAC(void) {
     s32 v0, v1;
-    if ((D_801E40B8 = D_801E40B8 + 1) == 2) {
+    if ((g_SceneTimer = g_SceneTimer + 1) == 2) {
         func_80065860(1);
     }
-    v0 = D_801E42E0 + D_801E42A0;
-    D_801E42E0 = v0;
-    v1 = D_801E42A0;
+    v0 = g_FadeLevel + g_FadeStep;
+    g_FadeLevel = v0;
+    v1 = g_FadeStep;
     if (v1 > 0) {
         if (v0 >= 257) {
-            D_801E42E0 = 0x100;
-            D_801E42A0 = 0;
+            g_FadeLevel = 0x100;
+            g_FadeStep = 0;
         }
     } else if (v1 == 0) {
-        if (D_801E40B8 == 0x12C || (D_801E436E & 0x860)) {
-            D_801E42E0 = 0x100;
-            D_801E42A0 = -4;
+        if (g_SceneTimer == 0x12C || (g_PadEdge2 & 0x860)) {
+            g_FadeLevel = 0x100;
+            g_FadeStep = -4;
         }
     } else if (v0 == 0) {
-        D_801E42E4 = 2;
+        g_SceneId = 2;
     }
-    func_800218A0(D_801E42E0);
+    func_800218A0(g_FadeLevel);
 }
 
 void func_800230B0(void) {
@@ -39,7 +39,7 @@ void func_800230B0(void) {
     volatile s32 *scratch;
     s32 next;
 
-    base = D_8019C900 + 0xCC;
+    base = g_DrawBuffer + 0xCC;
     height = 0xF0;
     clut = 0x3FDB;
     scratch = (volatile s32 *)0x1F800000;

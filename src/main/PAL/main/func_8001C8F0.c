@@ -1,28 +1,27 @@
 #include "common.h"
+#include "game/state.h"
+#include "game/render.h"
 
-extern s32 D_801E42E4;
-extern s32 D_801E40B8;
 extern s16 D_8007C798[];
-extern s32 D_801E42E0;
 
 s32 func_8001C8F0(s32 arg0) {
     s32 value;
     s32 ret;
 
-    if (D_801E42E4 == 10) {
+    if (g_SceneId == 10) {
         s32 offset;
         s32 counter;
 
         offset = arg0 << 1;
-        counter = D_801E40B8;
+        counter = g_SceneTimer;
         value = (counter << 2) - *(s16 *)((u8 *)D_8007C798 + offset);
     } else {
-        value = D_801E42E0;
+        value = g_FadeLevel;
         if (value > 0) {
             value--;
-            D_801E42E0 = value;
+            g_FadeLevel = value;
         }
-        value = D_801E42E0;
+        value = g_FadeLevel;
     }
 
     if (value >= 0) {

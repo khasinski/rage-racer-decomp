@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/audio.h"
 
-extern s32 D_801E6CA4;
 extern s16 D_801E6CA8[];
 extern s16 D_80082F28[][2];
 
@@ -15,7 +15,7 @@ void func_8005D7D4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     s32 bend;
     s32 voiceCopy;
 
-    prod = arg2 * D_801E6CA4;
+    prod = arg2 * g_EffectVolumeScale;
     voice = arg0 + 0xE;
     voiceCopy = voice;
     bend = arg4;

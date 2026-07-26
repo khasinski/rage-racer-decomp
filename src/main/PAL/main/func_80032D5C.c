@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/race.h"
 
-extern s32 D_8009E6A4;
 extern u8 D_8007DAF4[];
 extern u8 D_8007DBE4[];
 extern u8 D_801C0504[];
@@ -34,7 +34,7 @@ nonzero_inner:
             dst += offset;
             func_80032FF0(dst, D_8007DAF4 + rowOffset);
         }
-        if (D_8009E6A4 == 5 && row == 0xB) {
+        if (g_GrandPrixClass == 5 && row == 0xB) {
             cursor[0] += 0xE8;
         }
         cursor += 0x237E8;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/state.h"
 
 typedef struct {
     s16 time;
@@ -288,7 +289,6 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 }
 
 extern s32 D_8009B264;
-extern s32 D_8009E694;
 
 s32 func_80068568(s32 arg0);
 void func_80047460(
@@ -312,7 +312,7 @@ void GameDrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
     savedX1 = x1;
     savedY1 = y1;
     if (useFlash != 0) {
-        if (D_8009E694 & 2) {
+        if (g_AnimTimer & 2) {
             color = 0xFF;
         } else {
             color = 0x60;

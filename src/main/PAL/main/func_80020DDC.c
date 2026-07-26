@@ -1,4 +1,6 @@
 #include "common.h"
+#include "game/state.h"
+#include "game/menu.h"
 
 typedef struct {
     u8 pad[0x10];
@@ -12,9 +14,7 @@ typedef struct {
 extern s32 D_8019CB74;
 extern s32 D_801E6DA0;
 extern u16 D_801E436A;
-extern u16 D_801E436E;
 extern s32 D_801E6C78;
-extern s32 D_801E40B8;
 extern s32 D_801F17B0;
 extern s32 D_8019CE0C;
 extern RaceProg *D_801E4FAC;
@@ -75,31 +75,31 @@ void func_80020DDC(void) {
 
     switch (D_8019CB74) {
     case 0:
-        D_801E40B8 -= 8;
-        func_80033AA0(D_801E40B8, 0x49);
-        if (D_801E40B8 == 0) D_8019CB74 = 1;
+        g_SceneTimer -= 8;
+        func_80033AA0(g_SceneTimer, 0x49);
+        if (g_SceneTimer == 0) D_8019CB74 = 1;
         func_800204F4(0);
         goto L428;
     case 1:
         func_800204F4(0);
-        if (D_801E436E & 0x860) {
+        if (g_PadEdge2 & 0x860) {
             D_8019CB74 = 2;
-            D_801E40B8 = 0;
+            g_SceneTimer = 0;
         }
         goto L428;
     case 2:
-        D_801E40B8 += 8;
-        func_800204F4(D_801E40B8);
-        if ((u32)D_801E40B8 >= 129) D_8019CB74 = 3;
+        g_SceneTimer += 8;
+        func_800204F4(g_SceneTimer);
+        if ((u32)g_SceneTimer >= 129) D_8019CB74 = 3;
         goto L428;
     case 3:
-        D_801E40B8 -= 8;
-        func_800206B8(D_801E40B8);
-        if (D_801E40B8 == 0) D_8019CB74 = 4;
+        g_SceneTimer -= 8;
+        func_800206B8(g_SceneTimer);
+        if (g_SceneTimer == 0) D_8019CB74 = 4;
         goto L428;
     case 4:
-        D_801E40B8 += 1;
-        if ((u32)D_801E40B8 < 121) goto L234;
+        g_SceneTimer += 1;
+        if ((u32)g_SceneTimer < 121) goto L234;
         if (D_801F17B0 == 0) goto L248;
         func_8005D6EC((D_801E436A & 0x860) ? 0x10 : 0xf);
         t = D_801F17B0;
@@ -114,13 +114,13 @@ void func_80020DDC(void) {
     L234:
         if (D_801F17B0 != 0) goto L420;
     L248:
-        D_801E40B8 = 0;
+        g_SceneTimer = 0;
         if (D_8019CE0C == 0) goto Lstore7;
         st = 5;
         goto Lstore;
     case 5:
         func_8005D6EC(0x11);
-        if (!(D_801E436E & 0x860)) goto L420;
+        if (!(g_PadEdge2 & 0x860)) goto L420;
         st = 6;
     Lstore:
         D_8019CB74 = st;
@@ -145,7 +145,7 @@ void func_80020DDC(void) {
     case 7:
         func_80020D90();
         func_8005D6EC(0x11);
-        if (!(D_801E436E & 0x860)) goto L420;
+        if (!(g_PadEdge2 & 0x860)) goto L420;
         if (D_801E4D0C != 0) goto L420;
         if (D_801E4B94 != 0) { st = 8; goto Lstore; }
         func_80018410();
@@ -153,11 +153,11 @@ void func_80020DDC(void) {
         goto Lstore;
     case 8:
         if (D_8019C8EC != 0)
-            D_801E40B8 += 1;
+            g_SceneTimer += 1;
         else
-            D_801E40B8 += 2;
-        func_80033AA0(D_801E40B8, 0x49);
-        if ((u32)D_801E40B8 < 0x100) goto L420;
+            g_SceneTimer += 2;
+        func_80033AA0(g_SceneTimer, 0x49);
+        if ((u32)g_SceneTimer < 0x100) goto L420;
         break;
     default:
         goto L428;

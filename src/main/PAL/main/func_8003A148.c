@@ -2,7 +2,6 @@
 #include "game/car.h"
 #include "game/track.h"
 
-extern GameTrackPoint *D_8009E688;
 
 /*
  * Clamps the car's lateral offset (field_11C) to a fraction of the track
@@ -33,11 +32,11 @@ void func_8003A148(GameCarRuntime *car, s32 arg1) {
 
         if (current < 0) {
             trackIndex = carReg->trackPointIndex;
-            point = &D_8009E688[trackIndex];
+            point = &g_TrackPoints[trackIndex];
             limit = point->field_10;
         } else {
             trackIndex = carReg->trackPointIndex;
-            point = &D_8009E688[trackIndex];
+            point = &g_TrackPoints[trackIndex];
             limit = point->field_12;
         }
         scaled = limit << 2;
@@ -51,11 +50,11 @@ void func_8003A148(GameCarRuntime *car, s32 arg1) {
 
         if (current < 0) {
             trackIndex = carReg->trackPointIndex;
-            point = &D_8009E688[trackIndex];
+            point = &g_TrackPoints[trackIndex];
             limit = (point->field_10 << 2) / 7;
         } else {
             trackIndex = carReg->trackPointIndex;
-            point = &D_8009E688[trackIndex];
+            point = &g_TrackPoints[trackIndex];
             limit = (point->field_12 << 2) / 7;
         }
     }

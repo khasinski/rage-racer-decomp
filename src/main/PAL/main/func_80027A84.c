@@ -1,13 +1,13 @@
 #include "common.h"
+#include "game/state.h"
 
-extern u8 *volatile D_8019C900;
+extern u8 *volatile g_DrawBuffer asm("D_8019C900");
 s32 func_80017138(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 color);
 s32 func_80032F34(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 void func_800236C8(s32 a, s32 b);
 void func_80023750(s32 a);
 void func_8002390C(void);
 s32 func_800279EC(s32 base, s32 prim, s32 a, s32 b);
-extern s32 D_801E40B8;
 extern s32 *D_8007D99C[];
 extern s16 D_8007D9E8[];
 void func_80027874(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -16,7 +16,7 @@ s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
 
 void func_80027A84(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 {
-    s32 base = ((s32) D_8019C900) + 0xCC;
+    s32 base = ((s32) g_DrawBuffer) + 0xCC;
     s32 *scratch = (s32 *) 0x1F800000;
     s32 next;
     s32 i;
@@ -40,7 +40,7 @@ void func_80027A84(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     func_80023750(arg1 + 5);
     func_8002390C();
 
-    base = ((s32) D_8019C900) + 0xD8;
+    base = ((s32) g_DrawBuffer) + 0xD8;
     next = func_80032F34(base, *scratch, 0x5D, 0x3C, 0xE4, 0x40, 0, 0, 0);
     next = func_80032F34(base, next, 0x5C, 0x3A, 0xE5, 0x44, 0xFF, 0xFF, 0xFF);
     for (i = 0; i < 3; i++) {
@@ -87,7 +87,7 @@ void func_80027D84(s32 arg0) {
         } while (temp != 0);
     }
 
-    base = (s32)D_8019C900 + 0xCC;
+    base = (s32)g_DrawBuffer + 0xCC;
     next = *(s32 *)0x1F800000;
     if (index == 6 || index == 8 || index == 0xA || index == 0xC) {
         next = func_80016EC4(base, next, 0xDE, 0x60, 0xC, 0x18, 0x84, 0x48, 0x7F81);
@@ -95,7 +95,7 @@ void func_80027D84(s32 arg0) {
     if (index == 7 || index == 9 || index == 0xB || index == 0xD) {
         next = func_80016EC4(base, next, 0xAC, 0x60, 0xC, 0x18, 0x84, 0x48, 0x7F81);
     }
-    if (index == 5 && (D_801E40B8 & 0x10) != 0) {
+    if (index == 5 && (g_SceneTimer & 0x10) != 0) {
         next = func_80016EC4(base, next, 0x108, 0x60, 0xC, 0x18, 0x90, 0x48, 0x7F81);
     }
     delta = index - 0x10;

@@ -1,13 +1,13 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/race.h"
+#include "game/track.h"
 
-extern s16 D_8019CABC;
 extern s32 D_801E3EB4;
 extern s32 D_801E3EB8;
 extern s32 D_801E3EBC;
 extern s32 D_801E3ED8;
 extern s32 D_801E3EE0;
-extern s32 D_8009E6A8;
 extern u16 D_801E436A;
 extern s16 D_8007E288[];
 extern s16 D_8009E74C;
@@ -88,16 +88,16 @@ void func_8003CF14(s32 arg0, s32 updateMotion) {
     s32 c400;
 
     offset = D_801E3E14.field_30;
-    if (D_8019CABC != 0) {
+    if (g_GrandPrixSeries != 0) {
         index = offset + 2;
     } else {
         index = offset - 2;
     }
     rem = index;
     if (index < 0) {
-        rem = index + D_8009E6A8;
+        rem = index + g_TrackPointCount;
     }
-    index = rem % D_8009E6A8;
+    index = rem % g_TrackPointCount;
 
     func_8002FC84(index, coords, D_801E3E14.field_38);
     angle = 0x400 - func_8001A6AC(coords[0] - D_801E3E14.x, coords[2] - D_801E3E14.z);

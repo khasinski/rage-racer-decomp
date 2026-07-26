@@ -8,7 +8,6 @@ extern s16 D_801E4DAC;
 extern s16 D_801E6E74;
 extern Matrix D_8009AF00;
 extern Matrix D_8019CB18;
-extern u8 *D_8019C900;
 extern s16 D_8019CEAA;
 extern s16 D_801C0692;
 extern s16 D_8019CEAE;
@@ -58,7 +57,7 @@ s32 func_8001A9A8(void) {
         scratch->mode = 9;
         scratch->x0 = 0x56;
         __asm__("" ::: "memory");
-        v0reg = (s32)D_8019C900;
+        v0reg = (s32)g_DrawBuffer;
         y0 = *(u16 *)&D_801E4D18;
         scratch->x1 = 0xEA;
         __asm__("" ::: "memory");

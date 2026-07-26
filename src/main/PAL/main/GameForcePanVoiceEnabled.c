@@ -2,7 +2,6 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-extern s32 D_801E6CA4;
 extern s16 D_801E6CA8;
 extern s32 D_801E6CE4;
 extern s32 D_801E6CE8;
@@ -40,7 +39,7 @@ void GameForcePanVoiceEnabled(s32 enabled) {
 
     if (enabled != 0) {
         raw = values[0];
-        scale = D_801E6CA4;
+        scale = g_EffectVolumeScale;
         left = raw * scale;
         raw = values[1];
         if (left < 0) {

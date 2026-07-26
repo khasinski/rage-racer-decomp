@@ -10,7 +10,6 @@ s32 func_8006A5A4(s32 arg0, void *arg1, s32 arg2);
 extern char D_80010ADC[];
 extern char D_80010AFC[];
 extern char D_80010B08[];
-extern char *D_8007C48C[];
 extern GameCdLoadEntry D_801E6834[];
 void func_8001674C(char *arg0, ...);
 s32 func_80027688(s32 arg0, void *arg1, s32 arg2);
@@ -58,7 +57,7 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
 
     switch (D_8007C700) {
     case 0:
-        func_8001674C(D_80010ADC, D_8007C48C[assetIndex], dst);
+        func_8001674C(D_80010ADC, g_AssetPaths[assetIndex], dst);
         if (func_8006A534(1, 0) != 0) {
             D_8007C700 = 1;
         }
@@ -99,7 +98,7 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
         return size;
 
     case 6:
-        func_8001674C(D_80010B08, D_8007C48C[assetIndex], dst);
+        func_8001674C(D_80010B08, g_AssetPaths[assetIndex], dst);
         D_8007C700 = 0;
         break;
     }

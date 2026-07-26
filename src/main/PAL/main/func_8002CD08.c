@@ -2,7 +2,6 @@
 #include "game/track.h"
 #include "game/car.h"
 
-extern GameTrackPoint *D_8009E688;
 
 /*
  * Wrong-way / spin check: compares the car's headingAngle against the current
@@ -20,7 +19,7 @@ s32 func_8002CD08(GameCarTrackAngleWindow *arg0) {
 
     asm volatile("" : "=r"(index) : "0"(index));
     scaled = index * 3;
-    table = D_8009E688;
+    table = g_TrackPoints;
     target = ((GameTrackPoint *)((scaled << 3) + (s32)table))->angle;
     complement = 0xC00;
     complement -= target;

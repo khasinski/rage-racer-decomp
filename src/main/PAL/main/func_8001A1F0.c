@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/state.h"
 
-extern s32 D_801E40B8;
 extern s32 D_8019CA6C;
 extern u8 D_801F18CC[];
 
@@ -13,7 +13,7 @@ s32 func_8001A1F0(s32 mask, s32 current) {
     s32 offset;
     s32 first;
 
-    if (mask & D_801E40B8) {
+    if (mask & g_SceneTimer) {
         return current;
     }
     if ((D_8019CA6C == 0) || (D_8019CA6C == 0x100)) {

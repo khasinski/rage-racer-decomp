@@ -3,7 +3,7 @@
 #define SCRATCH (*(u8 **)0x1F800000)
 
 extern u8 *D_801E42D8;
-extern u8 *volatile D_8019C900;
+extern u8 *volatile g_DrawBuffer asm("D_8019C900");
 extern s32 D_8009E778;
 extern s16 D_8009E806;
 extern u16 D_801E4130;
@@ -68,9 +68,9 @@ void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
         prim[4] = ((96 - amt) * 32 + base[28] * amt) / 96;
         prim[5] = ((96 - amt) * 32 + base[29] * amt) / 96;
         prim[6] = ((96 - amt) * 32 + base[30] * amt) / 96;
-        *(s16 *)(D_8019C900 + 0x236F2) = 0x33A8;
+        *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33A8;
     } else if (type == 2) {
-        *(s16 *)(D_8019C900 + 0x236F2) = 0x33E8;
+        *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33E8;
         D_8007DF02 = 0x80;
         D_8007DF01 = 0x80;
         D_8007DF00 = 0x80;
@@ -78,7 +78,7 @@ void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
     } else {
         s16 rv = 0x33A8;
         asm("" : "=r"(rv) : "0"(rv));
-        *(s16 *)(D_8019C900 + 0x236F2) = rv;
+        *(s16 *)(g_DrawBuffer + 0x236F2) = rv;
         D_8007DF02 = 0x80;
         D_8007DF01 = 0x80;
         D_8007DF00 = 0x80;
@@ -86,7 +86,7 @@ void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
     }
 
     prim[7] = code7;
-    func_80064DDC(D_8019C900 + 0xCC, prim);
+    func_80064DDC(g_DrawBuffer + 0xCC, prim);
     prim += 24;
     SCRATCH = prim;
 
@@ -98,13 +98,13 @@ void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
         func_80033C18(cx, cy, D_8009E778 * 160 / 1168);
     }
 
-    *(u8 *)(D_8019C900 + 0x236E8) = D_8007DF00;
-    *(u8 *)(D_8019C900 + 0x236E9) = D_8007DF01;
-    *(u8 *)(D_8019C900 + 0x236EA) = D_8007DF02;
+    *(u8 *)(g_DrawBuffer + 0x236E8) = D_8007DF00;
+    *(u8 *)(g_DrawBuffer + 0x236E9) = D_8007DF01;
+    *(u8 *)(g_DrawBuffer + 0x236EA) = D_8007DF02;
 
-    { u8 *g = D_8019C900; func_80064DDC(g + 0xCC, g + 0x236CC); }
-    { u8 *g = D_8019C900; func_80064DDC(g + 0xCC, g + 0x236E4); }
-    { u8 *g = D_8019C900; func_80064DDC(g + 0xCC, g + 0x236D8); }
+    { u8 *g = g_DrawBuffer; func_80064DDC(g + 0xCC, g + 0x236CC); }
+    { u8 *g = g_DrawBuffer; func_80064DDC(g + 0xCC, g + 0x236E4); }
+    { u8 *g = g_DrawBuffer; func_80064DDC(g + 0xCC, g + 0x236D8); }
 
     {
         register u8 *q asm("$16") = SCRATCH;
@@ -120,7 +120,7 @@ void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
         q[4] = arg1 * 223 + 32;
         q[5] = 0x20;
         q[6] = 0x20;
-        g = D_8019C900;
+        g = g_DrawBuffer;
         asm("" : "=r"(v10) : "0"(v10), "r"(g));
         *(s16 *)(q + 10) = v10;
         q += 16;

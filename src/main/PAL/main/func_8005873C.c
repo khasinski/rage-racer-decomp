@@ -1,10 +1,11 @@
 #include "common.h"
 #include "game/menu.h"
 #include "game/audio.h"
+#include "game/render.h"
 
-extern s32 D_8009B338, D_8019CB0C, D_8009B318;
-extern s32 D_8009B350, D_8009B34C, D_8009B35C, D_8009B340, D_8009B344, D_8009B358;
-extern s32 D_8019C9F0, D_8019C9F8;
+extern s32 D_8009B338, D_8019CB0C;
+extern s32 D_8009B350, D_8009B34C, D_8009B35C, D_8009B344, D_8009B358;
+extern s32 D_8019C9F8;
 extern u32 D_80081D34;
 
 void func_80051D6C(void);
@@ -21,8 +22,8 @@ void func_8005873C(void) {
     if (GameMenuBusy != 0) goto reopen;
 
     func_8004E724(1, GameMenuCursor);
-    if (func_800487D8(&D_80081D34, &D_8019C9F0, 1) == 0) return;
-    D_8009B318 = -1;
+    if (func_800487D8(&D_80081D34, &g_UiScriptProgress, 1) == 0) return;
+    g_MenuOverlayPattern = -1;
 
     if (GameMenuStackDepth < 6) {
         if ((g_PadEdge & 0xF000) && GameMenuCursorAnim < 0) {
@@ -66,7 +67,7 @@ after_sound:
     }
     GamePlaySoundCue(3);
     GameMenuBusy = 1;
-    D_8009B318 = 2;
+    g_MenuOverlayPattern = 2;
     D_8009B35C = 0x3D090;
     return;
 
@@ -97,16 +98,16 @@ set_depth:
     return;
 
 reopen:
-    D_8009B340 = -1;
+    g_MenuHandlerIndex = -1;
     D_8009B344 = 9;
     func_8004E724(-1, GameMenuCursor);
-    func_800487D8(&D_80081D34, &D_8019C9F0, -1);
-    if (D_8019C9F0 > 0) return;
+    func_800487D8(&D_80081D34, &g_UiScriptProgress, -1);
+    if (g_UiScriptProgress > 0) return;
     if (0x3D08F < D_8009B358) {
         D_8019C9F8 = 6;
-        D_8009B340 = 6;
+        g_MenuHandlerIndex = 6;
         func_8001D530(&GameMenuStack, GameMenuStackDepth);
-        D_8019C9F0 = 0;
+        g_UiScriptProgress = 0;
         GameMenuBusy = 0;
     }
 }

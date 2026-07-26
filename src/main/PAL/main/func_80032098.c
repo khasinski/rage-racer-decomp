@@ -23,8 +23,6 @@ typedef struct Unk32098 {
     s32 field_30;
 } Unk32098;
 
-extern s32 D_8009E6A8;
-extern GameTrackPoint *D_8009E688;
 
 s32 func_80030EB4(Unk32098 *arg0, s32 arg1);
 void func_8001A530(Matrix *mtx, s32 angle);
@@ -56,9 +54,9 @@ s32 func_80032098(Unk32098 *arg0) {
     s32 angle;
 
     index = func_80030EB4(arg0, arg0->field_30);
-    nextIndex = (index + 1) % D_8009E6A8;
+    nextIndex = (index + 1) % g_TrackPointCount;
 
-    base = (TrackPointWindow *)D_8009E688;
+    base = (TrackPointWindow *)g_TrackPoints;
     asm("" : "=r"(base) : "0"(base)); /* Match note: materialize base in $a2 before current offset. */
 
     curOff = (index * 3) << 3;

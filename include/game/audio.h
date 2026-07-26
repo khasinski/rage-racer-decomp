@@ -11,6 +11,15 @@
  */
 extern volatile u8 g_SndVoiceFlags[] asm("D_8009E0A0");
 
+/*
+ * Master scale applied to every sound-effect voice volume, 0..0x80.
+ * GameSetEffectVolumeScale clamps into that range; the voice code multiplies a
+ * cue's nominal volume by it before writing the SPU. This is the `.scale` word
+ * of the SoundScale record at 0x801E6CA4 (see game/sound.h), which is the only
+ * field addressed as a scalar.
+ */
+extern s32 g_EffectVolumeScale asm("D_801E6CA4");
+
 void GameSetSequenceVolume(s32 volume) asm("func_8005E7A0");
 void GameRefreshSequenceVolumeScale(void) asm("func_8005E7DC");
 void GameSetSequenceVolumeScale(s32 scale) asm("func_8005E834");

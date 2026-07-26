@@ -1,4 +1,7 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/state.h"
+#include "game/render.h"
 
 #define AVG(a, b) ((s32)((a) + (b) + ((u32)((a) + (b)) >> 31)) >> 1)
 
@@ -70,11 +73,7 @@ extern u8 D_8009E6D4;
 extern u8 D_801F1854;
 void func_8001F134(s32 arg0, u8 *arg1, u8 *arg2);
 void func_8001F274(s32 arg0, u8 *arg1);
-extern s32 D_801E42E0;
-extern s32 D_801E40B8;
-extern s32 D_801E42A0;
 extern s32 D_801F179C;
-extern s32 D_8009E6A4;
 extern u8 *D_8019C8FC;
 void func_800458CC(void *arg0);
 void func_80034F74(void);
@@ -238,9 +237,9 @@ void func_8001F9D8(void) {
 void func_8001FA70(void) {
     s32 mode;
 
-    D_801E42E0 = 0xFF;
-    D_801E40B8 = 0;
-    D_801E42A0 = -4;
+    g_FadeLevel = 0xFF;
+    g_SceneTimer = 0;
+    g_FadeStep = -4;
 
     if (D_8009EC8C != 0) {
         D_801F179C = (D_801E4BB0 & -2) + 2;
@@ -254,12 +253,12 @@ void func_8001FA70(void) {
     }
 
     if (D_801E4DAC != 0) {
-        mode = D_8009E6A4;
+        mode = g_GrandPrixClass;
         if (mode != 5) {
             func_800458CC(D_8019C8FC - 1800);
         }
     } else {
-        mode = D_8009E6A4;
+        mode = g_GrandPrixClass;
         if (mode != 5) {
             func_800458CC(D_8019C8FC - 3000);
         }
@@ -274,7 +273,7 @@ void func_8001FB8C(void) {
     s32 next;
     s32 value;
 
-    if ((D_801E40B8 & 0x10) && (D_8019C8EC == 0)) {
+    if ((g_SceneTimer & 0x10) && (D_8019C8EC == 0)) {
         scratch = (volatile s32 *)0x1F800000;
         value = *scratch;
         base = D_8019C900 + 0xCC;

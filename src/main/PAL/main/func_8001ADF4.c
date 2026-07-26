@@ -1,9 +1,9 @@
 #include "common.h"
+#include "game/render.h"
 
 extern s32 D_801E8A98;
 extern s16 D_8019CA10;
 extern s32 D_801E4D18;
-extern u8 *D_8019C900;
 extern s32 D_801E4BC8;
 extern s32 D_801E4030;
 
@@ -42,10 +42,10 @@ void func_8001ADF4(s32 arg0) {
 
             func_800418D4();
             packet = func_8001ACE4(*scratch);
-            func_80066604(packet, D_8019C900 + 0x70);
+            func_80066604(packet, g_DrawBuffer + 0x70);
             prim = packet;
             packet += 0xC;
-            func_80064DDC((u32 *)(D_8019C900 + 0x16C8), (u32 *)prim);
+            func_80064DDC((u32 *)(g_DrawBuffer + 0x16C8), (u32 *)prim);
             *scratch = packet;
             func_800414F0(-0x3000, 0x6000);
             func_80069858((void *)0x1F800028);
@@ -53,10 +53,10 @@ void func_8001ADF4(s32 arg0) {
             func_80027FF4((void *)0x1F800000, D_801E4BC8, 0x40);
 
             packet = *scratch;
-            func_80066604(packet, D_8019C900);
+            func_80066604(packet, g_DrawBuffer);
             prim = packet;
             packet += 0xC;
-            func_80064DDC((u32 *)(D_8019C900 + 0xBD0), (u32 *)prim);
+            func_80064DDC((u32 *)(g_DrawBuffer + 0xBD0), (u32 *)prim);
             *scratch = packet;
             func_8004123C();
             func_800389F0();

@@ -1,5 +1,8 @@
 #include "common.h"
 #include "game/screens.h"
+#include "game/race.h"
+#include "game/state.h"
+#include "game/render.h"
 
 extern s16 D_8019CB40[];
 extern volatile s32 D_801E4DA8;
@@ -7,9 +10,7 @@ extern s32 D_801E40A8;
 extern u8 D_80010E68;
 void func_80016B7C(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4);
 extern s32 D_8019C768;
-extern s32 D_801E42E4;
 extern s32 D_801E3E0C;
-extern s32 D_801E40B8;
 void func_8005B190(s32 arg0, s32 arg1);
 void func_800215B8(s32 arg0);
 extern void *D_8009E67C;
@@ -20,15 +21,13 @@ extern char D_80010EA0[];
 extern s16 D_8007D438[];
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-extern volatile u16 D_801E436E;
+extern volatile u16 g_PadEdge2 asm("D_801E436E");
 void func_8005D6EC(s32 arg0);
 void func_80018410(void);
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_80021654(void);
-extern u8 *D_8019C900;
 void func_80046A2C(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
 void func_800218A0(s32 arg0);
-extern s32 D_801E40B8, D_801E42E4, D_8009E6A4;
 void func_80042CCC(s32 arg0);
 void func_800212F0(s32 arg0);
 
@@ -70,9 +69,9 @@ void func_800215B8(s32 arg0) {
 void func_800215FC(void) {
     D_8019C768 = 0x80;
     func_8005B190(0x28, 0x28);
-    D_801E42E4 = 0xE;
+    g_SceneId = 0xE;
     D_801E3E0C = 0;
-    D_801E40B8 = -1;
+    g_SceneTimer = -1;
     func_800215B8(0xFF);
 }
 
@@ -81,7 +80,7 @@ void GameDrawRaceEndPrompt(void) {
     s32 drawColor;
     s16 index;
 
-    if (D_801E40B8 & 4) {
+    if (g_SceneTimer & 4) {
         color = 0x784C;
     }
 
@@ -113,38 +112,38 @@ void func_80021748(void) {
     u8 *ptr;
     u16 value;
 
-    timer = D_801E40B8;
+    timer = g_SceneTimer;
     if (timer == -1) {
         old = D_801E3E0C;
-        if ((D_801E436E & 0x1000) && (old == 1)) {
+        if ((g_PadEdge2 & 0x1000) && (old == 1)) {
             D_801E3E0C = 0;
         }
-        if ((D_801E436E & 0x4000) && (D_801E3E0C == 0)) {
+        if ((g_PadEdge2 & 0x4000) && (D_801E3E0C == 0)) {
             D_801E3E0C = 1;
         }
         current = D_801E3E0C;
         if (old != current) {
             func_8005D6EC(1);
         }
-        if (D_801E436E & 0x800) {
+        if (g_PadEdge2 & 0x800) {
             func_8005D6EC(2);
             if (D_801E3E0C != 0) {
                 func_80018410();
             }
             ptr = D_8009E67C;
             value = *(u16 *)(ptr + 6);
-            D_801E40B8 = 0;
+            g_SceneTimer = 0;
             *(u16 *)(ptr + 6) = value - 1;
         }
     } else {
         timer += 2;
-        D_801E40B8 = timer;
+        g_SceneTimer = timer;
         func_80033AA0(timer, 0x49);
-        if (D_801E40B8 == 0x100) {
+        if (g_SceneTimer == 0x100) {
             if (D_801E3E0C != 0) {
-                D_801E42E4 = 6;
+                g_SceneId = 6;
             } else {
-                D_801E42E4 = 0xB;
+                g_SceneId = 0xB;
             }
         }
     }
@@ -157,27 +156,27 @@ void func_800218A0(s32 arg0) {
         arg0 = 0xFF;
     }
     arg0 >>= 1;
-    func_80046A2C(D_8019C900 + 204, 0x50, 0x6C, 0xA0, 0x18, 0, 0x28, arg0, arg0, arg0, 0xC, 0, 1, 0x29);
+    func_80046A2C(g_DrawBuffer + 204, 0x50, 0x6C, 0xA0, 0x18, 0, 0x28, arg0, arg0, arg0, 0xC, 0, 1, 0x29);
 }
 
 void func_80021920(void) {
     D_8019C768 = 0x80;
-    D_801E42E4 = 0x10;
-    D_801E40B8 = 0x22B;
+    g_SceneId = 0x10;
+    g_SceneTimer = 0x22B;
     func_800218A0(0x22B);
 }
 
 void func_80021964(void) {
-    s32 v = D_801E40B8 - 1;
-    D_801E40B8 = v;
-    if ((D_801E436E & 0x860) && (u32)v >= 261) {
+    s32 v = g_SceneTimer - 1;
+    g_SceneTimer = v;
+    if ((g_PadEdge2 & 0x860) && (u32)v >= 261) {
         func_80042CCC(0xFA);
-        D_801E40B8 = 0xFF;
+        g_SceneTimer = 0xFF;
     }
-    if (D_801E40B8 == 0) {
+    if (g_SceneTimer == 0) {
         func_80018410();
-        func_800212F0(D_8009E6A4);
-        D_801E42E4 = 6;
+        func_800212F0(g_GrandPrixClass);
+        g_SceneId = 6;
     }
-    func_800218A0(D_801E40B8);
+    func_800218A0(g_SceneTimer);
 }

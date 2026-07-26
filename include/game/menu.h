@@ -33,6 +33,20 @@ extern s32 GameMenuCursor asm("D_8009B2F4");
 extern s32 GameMenuBusy asm("D_8009B308");
 /* Cursor animation gate: input is only accepted while this is negative. */
 extern s32 GameMenuCursorAnim asm("D_8009B380");
+/*
+ * Which entry of the menu overlay-handler table D_80082EF0 to run this frame,
+ * or -1 for none. Every menu screen sets it on entry and func_8005ACA0 does
+ * `if (g_MenuHandlerIndex > 0) D_80082EF0[g_MenuHandlerIndex](0x14);`.
+ */
+extern s32 g_MenuHandlerIndex asm("D_8009B340");
+
+/*
+ * Element mask handed to GameDrawBitPatternOverlay (func_80047E60) by
+ * func_8005ACA0, selecting which parts of the current menu overlay are drawn.
+ * -1 while a screen is still opening; screens then set their own pattern.
+ */
+extern s32 g_MenuOverlayPattern asm("D_8009B318");
+
 /* Debug/status phase code written through an asset-load state machine. */
 extern s32 GameMenuLoadPhase asm("D_8009B740");
 

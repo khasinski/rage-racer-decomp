@@ -1,10 +1,8 @@
 #include "common.h"
 #include "game/asset.h"
+#include "game/race.h"
 
-extern s32 D_8009E6A4;
-extern s32 D_801E428C;
 extern GameSceneAssetHeader *D_8019CAFC;
-extern u8 *D_801F17A8;
 
 s32 func_80017C78(s32 assetIndex, void *dst);
 s32 func_80017C2C(void);
@@ -27,64 +25,64 @@ void func_8001989C(void) {
     switch (g_AssetLoadState) {
     case 1:
         dst = D_8019CAFC;
-        offset = D_801E428C;
+        offset = g_CourseIndex;
         __asm__ volatile("" : "=r"(offset) : "0"(offset));
-        header = (GameSceneAssetHeader *)D_8009E6A4;
+        header = (GameSceneAssetHeader *)g_GrandPrixClass;
         if (func_80017C78(((s32)header << 3) + (offset << 1) + 0x58, dst) != 0) {
             header = D_8019CAFC;
             offset = header->offsets[0];
-            D_801F17A8 = (u8 *)header + offset;
-            func_80017BD4(D_801F17A8);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_80017BD4(g_AssetBlockPtr);
 
             header = D_8019CAFC;
             offset = header->offsets[1];
-            D_801F17A8 = (u8 *)header + offset;
-            func_8004553C(D_801F17A8);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_8004553C(g_AssetBlockPtr);
 
             header = D_8019CAFC;
             offset = header->offsets[2];
-            D_801F17A8 = (u8 *)header + offset;
-            func_8004550C(D_801F17A8);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_8004550C(g_AssetBlockPtr);
 
             header = D_8019CAFC;
             offset = header->offsets[3];
-            D_801F17A8 = (u8 *)header + offset;
-            func_80017948(D_801F17A8, 1);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_80017948(g_AssetBlockPtr, 1);
 
             header = D_8019CAFC;
             offset = header->offsets[4];
-            D_801F17A8 = (u8 *)header + offset;
-            func_8002A6B0(D_801F17A8);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_8002A6B0(g_AssetBlockPtr);
 
             header = D_8019CAFC;
             offset = header->offsets[5];
-            D_801F17A8 = (u8 *)header + offset;
-            func_80017A6C(D_801F17A8);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_80017A6C(g_AssetBlockPtr);
 
             header = D_8019CAFC;
             offset = header->offsets[6];
-            D_801F17A8 = (u8 *)header + offset;
-            func_80017948(D_801F17A8, 2);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_80017948(g_AssetBlockPtr, 2);
 
             header = D_8019CAFC;
             offset = header->offsets[7];
-            D_801F17A8 = (u8 *)header + offset;
-            func_80017AD0(D_801F17A8);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_80017AD0(g_AssetBlockPtr);
 
             header = D_8019CAFC;
             offset = header->offsets[8];
-            D_801F17A8 = (u8 *)header + offset;
-            func_8004121C(D_801F17A8);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_8004121C(g_AssetBlockPtr);
 
             header = D_8019CAFC;
             offset = header->offsets[9];
-            D_801F17A8 = (u8 *)header + offset;
-            func_80034E04(D_801F17A8);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_80034E04(g_AssetBlockPtr);
 
             header = D_8019CAFC;
             offset = header->offsets[10];
-            D_801F17A8 = (u8 *)header + offset;
-            func_80043AC8(D_801F17A8, 0);
+            g_AssetBlockPtr = (u8 *)header + offset;
+            func_80043AC8(g_AssetBlockPtr, 0);
 
             g_AssetLoadState = 2;
         }

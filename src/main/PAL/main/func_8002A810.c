@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/track.h"
 
 s32 func_8001A6AC(s32, s32);
 s32 func_8002A788();
@@ -11,7 +12,6 @@ s32 func_80068634();
 extern s32 D_8007DA74;
 extern s32 D_8007DA78;
 extern u8 *D_8009E688;
-extern s32 D_8009E6A8;
 extern u8 *D_8019C7D0;
 extern s32 D_8019C998;
 extern s32 D_8019CA04;
@@ -645,7 +645,7 @@ void func_8002A810(void *base)
   temp_a2 = *((s32 *) (((u8 *) car) + 0x38));
   temp_t0 = (*((s16 *) (((u8 *) ((temp_a1_2 * 0x18) + D_8009E688)) + 0xC))) * (0x400 - temp_a2);
   temp_a1_2 += 1;
-  var_v0_11 = temp_t0 + ((*((s16 *) (((u8 *) (((temp_a1_2 % ((s32) D_8009E6A8)) * 0x18) + D_8009E688)) + 0xC))) * temp_a2);
+  var_v0_11 = temp_t0 + ((*((s16 *) (((u8 *) (((temp_a1_2 % ((s32) g_TrackPointCount)) * 0x18) + D_8009E688)) + 0xC))) * temp_a2);
   secondNonnegative = var_v0_11 >= 0;
   if (!secondNonnegative)
   {

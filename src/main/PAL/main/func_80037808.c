@@ -2,6 +2,9 @@
 #include "game/audio.h"
 #include "game/waypoint.h"
 #include "psyq/gte.h"
+#include "game/race.h"
+#include "game/state.h"
+#include "game/render.h"
 
 extern s32 D_8009E6D4;
 
@@ -54,7 +57,6 @@ extern u32 D_1F800084;
 
 extern s16 D_8009E83C;
 
-extern u8 *D_8019C900;
 
 void *func_80017390(void *ot, void *packet, s32 arg2);
 
@@ -78,11 +80,9 @@ extern s16 D_801E6E74;
 
 extern s16 D_801E43FC;
 
-extern s32 D_8009E694;
 
 extern s32 D_801E4030;
 
-extern s32 D_801E428C;
 
 extern s32 D_8009E744;
 
@@ -181,7 +181,7 @@ s32 func_80068568(s32 arg0);
 
 extern u8 *D_801E4150;
 
-extern u8 *D_8009E688;
+extern u8 *g_TrackPoints asm("D_8009E688");
 
 extern s32 func_80030EB4(u8 *ent, s32 arg);
 
@@ -440,7 +440,7 @@ drawDigit:
             packet[0x0C] = y;
 
             packet += 0x14;
-            func_80064DDC(D_8019C900 + 0xCC, oldPacket);
+            func_80064DDC(g_DrawBuffer + 0xCC, oldPacket);
         }
     }
 
@@ -452,7 +452,7 @@ done:
 
         finalScratch = scratch;
         packet = (u8 *)0x1F800000;
-        ot = D_8019C900 + 0xCC;
+        ot = g_DrawBuffer + 0xCC;
         arg2 = 9;
         *(u8 **)packet = finalScratch;
         *(u8 **)packet = func_80017390(ot, finalScratch, arg2);
@@ -507,7 +507,7 @@ void func_80037D90(void) {
     }
 
     a = D_801E40B8;
-    D_8009E694 = D_8009E694 + 1;
+    g_AnimTimer = g_AnimTimer + 1;
     asm volatile("");
     if (a >= 90) {
         asm volatile("" :: "r"(a));
@@ -554,7 +554,7 @@ Lend:
     *(s32 *)0x1F800084 = D_801E4030;
     func_80041840();
     func_8004123C();
-    func_8003E1A4(D_801E428C & 3, D_801E40B8, 1);
+    func_8003E1A4(g_CourseIndex & 3, D_801E40B8, 1);
     func_800350B4(D_8009E744);
     func_8005B190(D_8019C78C, D_8019C78C);
     func_8002F458();
@@ -694,7 +694,7 @@ void func_800383A8(u8 *ent, s32 pos, s32 *arr) {
         idx = *(s32 *)(ent + 0x30);
         acc = 0xC00;
         levShift = lev << 11;
-        angle = *(s16 *)(D_8009E688 + idx * 24 + 0xA);
+        angle = *(s16 *)(g_TrackPoints + idx * 24 + 0xA);
         acc -= levShift;
         *(s32 *)(ent + 0x24) = (acc - angle) & 0xFFF;
 

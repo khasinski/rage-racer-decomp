@@ -3,8 +3,6 @@
 #include "game/track.h"
 
 extern s32 D_801E408C;
-extern s32 D_8009E6A8;
-extern GameTrackPoint *D_8009E688;
 
 s32 func_8001A6AC(s32 arg0, s32 arg1);
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
@@ -49,11 +47,11 @@ void func_8003AEBC(GameCarRuntime *car) {
 
     rem = index;
     if (index < 0) {
-        rem = index + D_8009E6A8;
+        rem = index + g_TrackPointCount;
     }
-    index = rem % D_8009E6A8;
+    index = rem % g_TrackPointCount;
 
-    point = &D_8009E688[index];
+    point = &g_TrackPoints[index];
     if (point->field_12 < lateral) {
         value = point->field_12 * car->field_3C;
         if (value < 0) {

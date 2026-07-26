@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/track.h"
 
 extern s32 D_801E408C;
 extern s32 *D_801E4150;
-extern s32 D_8009E6A8;
 extern u8 *D_8009E688;
 
 void func_8002BF68(u8 *arg0, s32 arg1) {
@@ -20,7 +20,7 @@ void func_8002BF68(u8 *arg0, s32 arg1) {
             register u8 *table asm("$8");
             s32 wrapped;
 
-            count = D_8009E6A8;
+            count = g_TrackPointCount;
             table = D_8009E688;
 advance_forward_add:
             index++;
@@ -36,7 +36,7 @@ advance_forward_add:
             register s32 wrapped asm("$5");
             s32 mod;
 
-            count = D_8009E6A8;
+            count = g_TrackPointCount;
             table = D_8009E688;
 advance_backward_sub:
             if (index < 0) {
@@ -59,7 +59,7 @@ advance_backward_sub:
             register u8 *table asm("$8");
             s32 wrapped;
 
-            count = D_8009E6A8;
+            count = g_TrackPointCount;
             table = D_8009E688;
 advance_forward_sub:
             do {
@@ -74,7 +74,7 @@ advance_forward_sub:
             register s32 wrapped asm("$5");
             s32 mod;
 
-            count = D_8009E6A8;
+            count = g_TrackPointCount;
             table = D_8009E688;
 advance_backward_add:
             do {

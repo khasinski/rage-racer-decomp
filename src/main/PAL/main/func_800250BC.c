@@ -2,6 +2,7 @@
 #include "game/state.h"
 #include "game/menu.h"
 #include "game/asset.h"
+#include "game/render.h"
 
 extern s32 D_8019C868;
 extern s32 D_8019C704;
@@ -12,7 +13,6 @@ extern volatile u16 D_801E436E;
 void func_80024B6C(void);
 void func_80021224(void);
 void func_8005D6EC(s32 arg0);
-extern u8 *D_8019C900;
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void func_80023750(s32 arg0);
 extern s32 D_801E4D6C;
@@ -27,11 +27,10 @@ extern s32 D_8009F0A0;
 void func_8002390C(void);
 s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-extern s32 D_8009E694, D_801E40B8;
 void func_80065860(s32 arg0);
 void func_800256B8(void);
 extern s32 *D_801E4150;
-extern s32 D_801E40CC, D_8009E66C, D_8009E870, D_8009E694, D_801E40B8, D_8019C768;
+extern s32 D_801E40CC, D_8009E66C, D_8009E870, D_8019C768;
 extern u8 D_801F18CC[];
 extern s32 *D_8019C9A8;
 void func_80017884(s32 arg0);
@@ -41,10 +40,10 @@ void func_80038844(void);
 void func_80019E84(s32 arg0);
 void func_800458CC(s32 arg0);
 void func_8003F0F8(void);
-extern s32 D_8019C768, D_801E42E0, D_801E42A0, D_801E42E4, D_801E4B84, D_801E412C;
-extern s32 D_8019CE00, D_8019C99C, D_801E40B8, D_801E4404, D_8019CAF4, D_8019C7BC, D_8009E66C;
+extern s32 D_8019C768, D_801E4B84, D_801E412C;
+extern s32 D_8019CE00, D_8019C99C, D_801E4404, D_8019CAF4, D_8019C7BC, D_8009E66C;
 void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
-extern s32 D_801E40B8, D_801E42A0, D_801E42E0, D_8019C99C;
+extern s32 D_8019C99C;
 extern u8 D_80011010[];
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_80025940(void);
@@ -52,7 +51,6 @@ void func_80016EA0(s32 a0, s32 a1, void *a2, s32 a3);
 void func_80019730(void);
 void func_80019844(void);
 void func_80025AC8(void);
-extern s32 D_801E42A0;
 
 void func_800250BC(void) {
     s32 old;
@@ -141,7 +139,7 @@ void func_800250BC(void) {
 }
 
 void func_800253A4(void) {
-    s32 base = (s32)D_8019C900;
+    s32 base = (s32)g_DrawBuffer;
     s32 color = 0x7F40;
     s32 y48 = 0x48;
     s32 h18 = 0x18;
@@ -252,7 +250,7 @@ void func_800256B8(void) {
     }
 
     scratch = (s32 *)0x1F800000;
-    rawBase = D_8019C900;
+    rawBase = g_DrawBuffer;
     base = rawBase + 0xBC8;
     pkt = *scratch;
 
@@ -271,10 +269,10 @@ void func_800256B8(void) {
 }
 
 void func_80025870(void) {
-    *(s32 *)0x1F800000 = func_80032F34(D_8019C900 + 204, *(s32 *)0x1F800000, 0, 0, 0x140, 2, 0, 0, 0);
-    D_8009E694 = D_8009E694 + 1;
-    D_801E40B8 = D_801E40B8 + 1;
-    if (D_801E40B8 == 2) {
+    *(s32 *)0x1F800000 = func_80032F34(g_DrawBuffer + 204, *(s32 *)0x1F800000, 0, 0, 0x140, 2, 0, 0, 0);
+    g_AnimTimer = g_AnimTimer + 1;
+    g_SceneTimer = g_SceneTimer + 1;
+    if (g_SceneTimer == 2) {
         func_80065860(1);
     }
     g_GameModeHandlers[g_GameMode]();
@@ -290,8 +288,8 @@ void func_80025940(void) {
     func_80019E84(*(s16 *)&D_801F18CC[D_8009E66C * 412]);
     func_800458CC(D_8019C9A8[2]);
     D_8009E870 = 2;
-    D_8009E694 = 0;
-    D_801E40B8 = 0;
+    g_AnimTimer = 0;
+    g_SceneTimer = 0;
     D_8019C768 = 0x180;
     func_8003F0F8();
 }
@@ -300,14 +298,14 @@ void func_80025A14(void) {
     func_80065860(0);
     func_8001BE9C(0, 0, 0);
     D_8019C768 = 0x80;
-    D_801E42E0 = 0x13C;
-    D_801E42A0 = -4;
-    D_801E42E4 = 0x1C;
+    g_FadeLevel = 0x13C;
+    g_FadeStep = -4;
+    g_SceneId = 0x1C;
     D_801E4B84 = 1;
     D_801E412C = 1;
     D_8019CE00 = 3;
     D_8019C99C = 0;
-    D_801E40B8 = 0;
+    g_SceneTimer = 0;
     D_801E4404 = 0;
     D_8019CAF4 = 0x1E;
     D_8019C7BC = 0;
@@ -317,30 +315,30 @@ void func_80025A14(void) {
 void func_80025AC8(void) {
     s32 d;
     s32 v;
-    if (D_801E40B8 == 0xF) {
+    if (g_SceneTimer == 0xF) {
         func_80065860(1);
     }
-    d = D_801E42A0;
+    d = g_FadeStep;
     if (d < 0) {
-        s32 e = D_801E42E0;
+        s32 e = g_FadeLevel;
         e += d;
-        D_801E42E0 = e;
-        if (D_801E42E0 < 0) {
-            D_801E42E0 = 0;
-            D_801E42A0 = 0;
+        g_FadeLevel = e;
+        if (g_FadeLevel < 0) {
+            g_FadeLevel = 0;
+            g_FadeStep = 0;
         }
-        func_80033AA0(D_801E42E0, 0x49);
+        func_80033AA0(g_FadeLevel, 0x49);
     } else if (d > 0) {
-        s32 e = D_801E42E0;
+        s32 e = g_FadeLevel;
         e += d;
         v = e;
-        D_801E42E0 = v;
+        g_FadeLevel = v;
         func_80033AA0(v, 0x49);
-        if (D_801E42E0 >= 257) {
+        if (g_FadeLevel >= 257) {
             func_80065860(0);
             func_80025940();
-            D_801E42A0 = 0;
-            D_801E42E0 = 0;
+            g_FadeStep = 0;
+            g_FadeLevel = 0;
             D_8019C99C = 2;
         }
     }
@@ -359,7 +357,7 @@ void func_80025BD8(void) {
 
 void func_80025C20(void) {
     if (g_AssetLoadState == 0) {
-        D_801E42A0 = 4;
+        g_FadeStep = 4;
     }
     func_80025AC8();
 }

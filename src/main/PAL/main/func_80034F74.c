@@ -1,4 +1,6 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/state.h"
 
 extern s32 D_8009E6D4;
 
@@ -47,7 +49,6 @@ extern s16 D_8019C78C;
 
 extern s16 D_8019CAB0;
 
-extern s32 D_801E42E4;
 
 extern u8 D_8001147C;
 
@@ -81,7 +82,6 @@ extern s32 D_8009AFB0;
 
 extern s32 D_801E4148;
 
-extern s32 D_801E428C;
 
 extern s32 D_801E4364;
 
@@ -244,10 +244,10 @@ done:
 }
 
 void func_80035258(s32 arg0) {
-    D_801E42E4 = arg0;
+    g_SceneId = arg0;
     func_8005E4A4(0);
     func_8005B190(0, 0);
-    if (D_801E42E4 == 6) {
+    if (g_SceneId == 6) {
         func_80018410();
     }
     func_8001674C(&D_8001147C);
@@ -326,7 +326,7 @@ void func_800352B8(void *arg0, s32 arg1, s32 arg2) {
     if (D_801E4148 == -2 && arg2 != 0) {
         D_801E4148 = 0;
         D_8009AFAC = 0;
-        D_8009AFB0 = D_801E41E8[D_801E408C][D_801E428C][0];
+        D_8009AFB0 = D_801E41E8[D_801E408C][g_CourseIndex][0];
         D_8009AFA8 = 0x3C;
         D_8009AFA4 = (u16)D_801E4148;
         goto draw;
@@ -388,7 +388,7 @@ skip_first:
     func_80033D50(
         0xFA,
         0x7C,
-        D_8019C70C[D_801E408C][D_801E428C][arg1],
+        D_8019C70C[D_801E408C][g_CourseIndex][arg1],
         0x78CC,
         timeout);
 }

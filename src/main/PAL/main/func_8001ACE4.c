@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/render.h"
 
-extern u8 *D_8019C900;
 extern s32 D_801E4D18;
 extern s32 D_801E40D4;
 extern u8 D_8007C728[];
@@ -24,7 +24,7 @@ void func_8001ACE4(u8 *packet) {
     s32 color;
     s32 next;
 
-    base = D_8019C900;
+    base = g_DrawBuffer;
     ot = base + 0xD0;
 
     SetTile(packet);
@@ -45,7 +45,7 @@ void func_8001ACE4(u8 *packet) {
 
     colorIndex = D_8007C728[D_801E40D4];
     paletteIndex = (colorIndex * 2) + colorIndex;
-    base2 = D_8019C900;
+    base2 = g_DrawBuffer;
     ot = base2 + 0xBD0;
     next = func_80016EC4(ot, packet, 0x56, D_801E4D18, D_8007C73A[paletteIndex], 8, D_8007C738[paletteIndex], D_8007C739[paletteIndex], 0x7800);
     func_80017390(ot, next, 9);

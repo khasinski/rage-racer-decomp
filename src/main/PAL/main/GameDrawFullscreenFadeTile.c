@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/render.h"
 
-extern u8 *D_8019C900;
 
 void SetSemiTrans(u8 *arg0, s32 arg1) asm("func_80064E90");
 void SetTile(u8 *arg0) asm("func_80064FF8");
@@ -9,7 +9,7 @@ void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
 void GameDrawFullscreenFadeTile(s32 color, s32 arg1) asm("func_80033AA0");
 void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
-    u8 *base = D_8019C900;
+    u8 *base = g_DrawBuffer;
     u8 *ot = base + 0xCC;
     u8 *packet;
     u8 *next;
@@ -40,5 +40,5 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
     next = packet + 0x10;
     asm volatile("" : : "r"(next));
     func_80064DDC((u32 *)ot, (u32 *)prim);
-    *(void **)0x1F800000 = func_80017390(D_8019C900 + 0xCC, next, arg1);
+    *(void **)0x1F800000 = func_80017390(g_DrawBuffer + 0xCC, next, arg1);
 }

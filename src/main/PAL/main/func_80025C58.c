@@ -1,4 +1,7 @@
 #include "common.h"
+#include "game/state.h"
+#include "game/render.h"
+#include "game/menu.h"
 
 typedef struct {
     u8 _a[120];
@@ -6,7 +9,6 @@ typedef struct {
     u8 _b[290];
 } Arr412;
 
-extern u8 *D_8019C900;
 extern s32 D_801E4B84;
 extern s32 D_8007D6B0;
 extern s32 D_801E4404;
@@ -22,13 +24,8 @@ extern s32 D_8019CE00;
 extern s32 D_8019C7BC;
 extern s32 D_8019C99C;
 extern s32 D_8007D6B4;
-extern s32 D_801E40B8;
-extern s32 D_801E42A0;
-extern u16 D_801E436E;
 extern s32 D_801E412C;
-extern s32 D_801E42E0;
 extern s32 D_801E4030;
-extern s32 D_8009E694;
 extern s32 D_8009E66C;
 extern s32 D_8009E870;
 extern Arr412 D_801F1854[];
@@ -60,7 +57,7 @@ void func_80025C58(void) {
     s32 value;
     s32 next;
 
-    base = D_8019C900 + 0xD0;
+    base = g_DrawBuffer + 0xD0;
     next = *(s32 *)0x1F800000;
     temp = (D_801E4B84 == 0) ? 0x3FEC : 0x3FEF;
     arg4 = 0x14;
@@ -137,16 +134,16 @@ L124:
     D_8019CE00 = D_801E4404 + 3;
 
 L13c:
-    if (D_801E40B8 == 2) func_80065860(1);
-    if (D_801E42A0 != 0) goto L424;
+    if (g_SceneTimer == 2) func_80065860(1);
+    if (g_FadeStep != 0) goto L424;
 
-    if (D_801E436E & 0x8000) {
+    if (g_PadEdge2 & 0x8000) {
         if (D_801E4B84 > 0) D_801E4B84 = D_801E4B84 - 1;
     }
-    if (D_801E436E & 0x2000) {
+    if (g_PadEdge2 & 0x2000) {
         if (D_801E4B84 < 2) D_801E4B84 = D_801E4B84 + 1;
     }
-    if (D_801E436E & 1) {
+    if (g_PadEdge2 & 1) {
         s32 p;
         s32 h0;
         func_8001B488();
@@ -161,7 +158,7 @@ L13c:
         D_8007D6B0 = 60;
     }
     {
-        u16 f = D_801E436E;
+        u16 f = g_PadEdge2;
         if (f & 2) {
             D_8007D6B4 = 0;
             D_8007D6B0 = 0;
@@ -191,34 +188,34 @@ L13c:
                 break;
             case 1:
                 func_80042CCC(60);
-                D_801E42A0 = 4;
+                g_FadeStep = 4;
                 break;
             }
         } else if (f & 0x90) {
             func_80042CCC(60);
-            D_801E42A0 = 4;
+            g_FadeStep = 4;
         }
     }
     {
-        u16 f = D_801E436E;
+        u16 f = g_PadEdge2;
         if (f & 4) D_801E412C = 1;
         if (f & 8) D_801E412C = 0;
     }
     goto L48c;
 
 L424:
-    func_80033AA0(D_801E42E0, 0x49);
-    D_801E42E0 = D_801E42E0 + D_801E42A0;
-    if (D_801E42E0 >= 256) {
+    func_80033AA0(g_FadeLevel, 0x49);
+    g_FadeLevel = g_FadeLevel + g_FadeStep;
+    if (g_FadeLevel >= 256) {
         func_80018B98();
         D_8019C99C = 3;
-        D_801E42E0 = 256;
-        D_801E42A0 = -4;
+        g_FadeLevel = 256;
+        g_FadeStep = -4;
     }
 
 L48c:
     if (D_801E412C != 0) func_80025C58();
-    D_8009E694 = D_8009E694 + 1;
+    g_AnimTimer = g_AnimTimer + 1;
     D_8009E66C = func_8001A0E4(0xff, D_8009E66C);
     func_8003BB50();
     func_80019EFC(D_801F1854[D_8009E66C].f120);
@@ -229,5 +226,5 @@ L48c:
     *(s32 *)0x1F800084 = D_801E4030;
     func_80041888();
     func_8004123C();
-    func_8003E2E8(D_8009E694, 1);
+    func_8003E2E8(g_AnimTimer, 1);
 }

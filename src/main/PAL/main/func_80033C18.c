@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/render.h"
 
 extern u8 *D_801E42D8;
 extern u16 D_801E4130;
-extern u8 *D_8019C900;
 
 u8 *func_80033B7C(u8 *prim, s32 x, s32 y, s32 code, u16 arg4);
 void *func_80017390(void *ot, void *packet, s32 arg2);
@@ -36,5 +36,5 @@ void func_80033C18(s32 x, s32 y, s32 value) {
     prim = func_80033B7C(prim, screenX, screenY, hundreds, color);
     prim = func_80033B7C(prim, screenX + 8, screenY, tens, color);
     prim = func_80033B7C(prim, screenX + 0x10, screenY, ones, color);
-    *scratch = func_80017390(D_8019C900 + 0xCC, prim, 9);
+    *scratch = func_80017390(g_DrawBuffer + 0xCC, prim, 9);
 }

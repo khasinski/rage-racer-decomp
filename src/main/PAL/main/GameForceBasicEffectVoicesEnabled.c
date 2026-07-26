@@ -2,7 +2,6 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-extern s32 D_801E6CA4;
 extern s16 D_801E6CA8;
 extern s32 D_801E6CF4;
 extern s32 D_801E6CF8;
@@ -52,7 +51,7 @@ void GameForceBasicEffectVoicesEnabled(s32 enabled) {
             asm volatile("" : : "r"(unused));
 
             raw = *(s32 *)(D_801E6D10 + offset);
-            scale = D_801E6CA4;
+            scale = g_EffectVolumeScale;
             left = raw * scale;
             raw = *(s32 *)(D_801E6D10 + offset + 4);
             arg0 = voice;
@@ -137,7 +136,7 @@ void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
             product += 0x7F;
         }
         raw = product >> 7;
-        scale = D_801E6CA4;
+        scale = g_EffectVolumeScale;
         raw *= scale;
         left = raw;
         if (raw < 0) {
@@ -210,7 +209,7 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
                 "func_8005E314 = GameForcePitchEffectVoicesEnabled + 0x144"
                 :
                 : "r"(scale));
-            raw = D_801E6CA4;
+            raw = g_EffectVolumeScale;
             raw = scale * raw;
             arg0 = voice;
             asm volatile("" : : "r"(arg0));

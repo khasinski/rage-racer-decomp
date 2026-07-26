@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/state.h"
+#include "game/render.h"
 
-extern u8 *D_8019C900;
 extern s32 D_801E6F28;
-extern s32 D_8009E694;
 
 s32 func_80068568(s32 arg0);
 void func_8001B0F0(s32 arg0);
@@ -21,11 +21,11 @@ void func_8001B170(void) {
         D_801E6F28 -= 2;
     }
 
-    sinValue = func_80068568(((D_8009E694 * 3) << 5) & 0xFE0);
+    sinValue = func_80068568(((g_AnimTimer * 3) << 5) & 0xFE0);
     frame = (sinValue / 64) + 0x80;
 
     scratch = (void **)0x1F800000;
-    base = D_8019C900;
+    base = g_DrawBuffer;
     base += 0xCC;
     next = *scratch;
     next = func_80016F8C(base, next, 0x68, 0xC8, 0x70, 0x10, 0x70, 0xA0, 0x7E84, frame);

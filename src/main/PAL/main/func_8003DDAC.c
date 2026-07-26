@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/race.h"
 
-extern s32 D_801E428C;
 extern s32 D_801E40E4;
 extern u16 D_8007E33C[];
 extern u16 D_8007E334[];
@@ -34,7 +34,7 @@ void func_8003DDAC(s32 arg0, s32 arg1) {
     register s32 activeValue asm("$2");
     register s32 frameMask asm("$2");
 
-    activeValue = D_801E428C;
+    activeValue = g_CourseIndex;
     active = activeValue & 3;
     active = active != 0;
     if (active) {

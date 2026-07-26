@@ -1,17 +1,16 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/state.h"
+#include "game/render.h"
+#include "game/menu.h"
 
 extern u8 *D_801E4FAC;
 extern s32 D_8019CACC;
 extern s32 D_8019C768;
-extern s32 D_801E428C;
 extern s32 D_801E40D4;
-extern s32 D_8009E6A4;
 extern s32 D_8019C908;
 extern s16 D_801E4DAC;
-extern s32 D_801E42E4;
-extern s32 D_801E40B8;
 extern u16 D_801E4034;
-extern s16 D_8019CABC;
 
 extern s32 D_80082568;
 extern s32 D_80082D6C;
@@ -26,15 +25,12 @@ extern void *D_801E4188;
 
 extern s32 D_8009B34C;
 extern s32 D_8009B350;
-extern s32 D_8009B2F8;
 extern s32 D_8009B2FC;
 extern s32 D_8009B300;
 extern s32 D_8009B304;
-extern s32 D_8009B308;
 extern s32 D_8009B30C;
 extern s32 D_8009B310;
 extern s32 D_8009B314;
-extern s32 D_8009B318;
 extern s32 D_8009B31C;
 extern s32 D_8009B320;
 extern s32 D_8009B324;
@@ -44,7 +40,6 @@ extern s32 D_8009B330;
 extern s32 D_8009B334;
 extern s32 D_8009B338;
 extern s32 D_8009B33C;
-extern s32 D_8009B340;
 extern s32 D_8009B344;
 extern s32 D_8009B354;
 extern s32 D_8009B358;
@@ -57,7 +52,6 @@ extern s32 D_8009B370;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
 
-extern s32 D_8019C9F0;
 extern s32 D_8019C9F8;
 extern s32 D_8019C7AC;
 extern s32 D_801E4138;
@@ -100,22 +94,22 @@ void GameInitMenuMode(void) {
         s32 t2 = *(s32 *)(p + 8);
         s32 t3 = *(s32 *)(p + 16);
         D_8019C768 = 0x80;
-        D_801E428C = t0;
+        g_CourseIndex = t0;
         D_801E40D4 = t1;
-        D_8009E6A4 = t2;
+        g_GrandPrixClass = t2;
         D_8019C908 = t3;
     }
     func_80017884(1);
 
     func_8001C088(0, 0, 0);
-    D_801E42E4 = 8;
-    D_801E40B8 = 0;
+    g_SceneId = 8;
+    g_SceneTimer = 0;
     if (D_801E4DAC != 0) {
-        D_8019CABC = D_801E4034;
+        g_GrandPrixSeries = D_801E4034;
     } else {
-        D_8019CABC = *(u16 *)((u8 *)D_801E4FAC + 16);
+        g_GrandPrixSeries = *(u16 *)((u8 *)D_801E4FAC + 16);
     }
-    D_801E428C = ((s32)D_8019CABC << 2) | D_801E428C;
+    g_CourseIndex = ((s32)g_GrandPrixSeries << 2) | g_CourseIndex;
     func_80050B1C();
 
     scratch = (s32 *)0x1F800000;
@@ -137,12 +131,12 @@ void GameInitMenuMode(void) {
     D_801E4188 = &D_80082568;
     D_8009B34C = 500000;
     D_8009B350 = 500000;
-    D_8019C9F0 = 0;
-    D_8009B2F8 = 0;
+    g_UiScriptProgress = 0;
+    g_UiScriptProgress2 = 0;
     D_8009B2FC = 0;
     D_8009B300 = 0;
     D_8009B304 = 0;
-    D_8009B308 = 0;
+    GameMenuBusy = 0;
     D_8009B30C = 0;
     D_8009B310 = 0;
     D_8009B354 = 0;
@@ -154,17 +148,17 @@ void GameInitMenuMode(void) {
     D_8009B370 = -1;
     D_8009B374 = 0;
     D_8009B378 = -1;
-    D_8009B318 = 0;
+    g_MenuOverlayPattern = 0;
     D_8009B31C = 0;
     D_8009B320 = 0;
     D_8009B324 = 0;
     D_8009B328 = 0;
-    D_8009B36C = D_801E428C;
+    D_8009B36C = g_CourseIndex;
     D_8009B32C = 0;
     D_8009B330 = 0;
     D_8009B334 = 0;
     D_8009B314 = 1;
-    D_8009B340 = -1;
+    g_MenuHandlerIndex = -1;
     D_8009B344 = -1;
     D_8009B338 = 0;
     D_8009B33C = 0;

@@ -2,7 +2,6 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-extern s32 D_801E6CA4;
 extern s16 D_801E6CA8;
 extern s32 D_801E6CF0;
 extern s32 D_801E6CF4;
@@ -88,7 +87,7 @@ void GameUpdateIndexedEffectVoice(void) {
             product += 0x7F;
         }
         raw = product >> 7;
-        scale = D_801E6CA4;
+        scale = g_EffectVolumeScale;
         raw *= scale;
         left = raw;
         if (raw < 0) {

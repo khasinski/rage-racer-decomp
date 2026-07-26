@@ -1,9 +1,9 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/race.h"
 
 extern u8 D_801E4FB8[];
 extern u32 *D_801E6828;
-extern s32 D_801E428C;
 extern s32 D_801E40E4;
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
@@ -51,14 +51,14 @@ void func_8003F4BC(s32 arg0) {
     visible = 1 << bucket;
     visible &= *wordPtr;
 
-    if ((visible != 0) || (D_801E428C == 2)) {
+    if ((visible != 0) || (g_CourseIndex == 2)) {
         drawArg = 0x3F;
         func_8001A530(&mtx0, *(s32 *)(state + 0x24));
         mtx1Ptr = &mtx1;
         func_8001A4C0(mtx1Ptr, *(s32 *)(state + 0x28));
         func_80069568(&mtx0, mtx1Ptr);
         func_80069568((Matrix *)0x1F800028, mtx1Ptr);
-        if ((D_801E428C & 3) >= 2) {
+        if ((g_CourseIndex & 3) >= 2) {
             drawArg = 0x3C;
         }
         func_80017794((void *)0x1F80011C, state + 0x10, mtx1Ptr);

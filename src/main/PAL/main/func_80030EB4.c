@@ -4,8 +4,6 @@
 
 typedef struct { s16 vx; s16 vy; } DVEC;
 
-extern GameTrackPoint *D_8009E688;
-extern s32 D_8009E6A8;
 
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
@@ -49,9 +47,9 @@ s32 func_80030EB4(GameCarRuntime *car, s32 idx) {
     i = idx;
 
     do {
-        nxt = (i + 1) % D_8009E6A8;
-        pa = &D_8009E688[i];
-        pb = &D_8009E688[nxt];
+        nxt = (i + 1) % g_TrackPointCount;
+        pa = &g_TrackPoints[i];
+        pb = &g_TrackPoints[nxt];
 
         pax = pa->x;
         paz = pa->z;
@@ -93,15 +91,15 @@ s32 func_80030EB4(GameCarRuntime *car, s32 idx) {
             i -= k;
         }
         if (i >= 0) {
-            ni = i % D_8009E6A8;
+            ni = i % g_TrackPointCount;
         } else {
-            ni = (i + D_8009E6A8) % D_8009E6A8;
+            ni = (i + g_TrackPointCount) % g_TrackPointCount;
         }
         i = ni;
     } while (i != idx);
 
-    car->x = D_8009E688[i].x;
-    car->z = D_8009E688[i].z;
+    car->x = g_TrackPoints[i].x;
+    car->z = g_TrackPoints[i].z;
     i = -1;
     asm volatile("" : "=r"(i) : "0"(i));
     return i;

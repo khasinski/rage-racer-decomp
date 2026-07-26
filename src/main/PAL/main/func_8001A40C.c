@@ -1,10 +1,10 @@
 #include "common.h"
 #include "psyq/gpu.h"
+#include "game/race.h"
 
 extern Rect D_8007C710;
 extern Rect D_8007C718;
 extern GpuRectPacked D_8007C720;
-extern s16 D_8019CABC;
 extern u16 D_801E444C[];
 
 void func_80065B24(Rect *rect, void *data);
@@ -16,7 +16,7 @@ void func_8001A40C(void *dst) {
     D_801E444C[0] = 0x8000;
     func_80065B24(&D_8007C718, D_801E444C);
 
-    if (D_8019CABC != 0) {
+    if (g_GrandPrixSeries != 0) {
         func_80065BEC(&D_8007C720, 0x3F0, 0xE2);
     }
 

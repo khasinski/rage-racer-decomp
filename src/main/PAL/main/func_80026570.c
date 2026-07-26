@@ -1,14 +1,15 @@
 #include "common.h"
 #include "game/asset.h"
 #include "game/car.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/state.h"
 
 extern s32 D_8019C99C;
 extern void (*D_8007D6B8[])(void);
 extern s32 D_801E4B30;
 extern s32 D_8019C768;
 extern s32 D_801E682C;
-extern s32 D_801E42E0;
-extern s32 D_801E42E4;
 extern s32 D_8009E66C;
 void func_80065860(s32 arg0);
 void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
@@ -16,8 +17,6 @@ void func_8001A3C0(void *arg0);
 void func_80019730(void);
 s32 func_80019844(void);
 extern s16 D_8007D6CC[];
-extern u8 *D_8019C900;
-extern s32 D_801E428C;
 s32 func_8002664C(s32 arg0);
 
 void func_80046A2C(
@@ -86,9 +85,9 @@ void func_800265BC(void) {
     func_80019844();
 
     D_801E682C = 0;
-    D_801E42E0 = initialValue;
+    g_FadeLevel = initialValue;
     D_801E40B8 = 0;
-    D_801E42E4 = 0x1E;
+    g_SceneId = 0x1E;
     D_8009E66C = 0;
 }
 
@@ -98,10 +97,10 @@ s32 func_8002664C(s32 arg0) {
     if (D_801E682C == 0) {
         value = (D_801E40B8 * 4) - D_8007D6CC[arg0];
     } else {
-        if (D_801E42E0 > 0) {
-            D_801E42E0--;
+        if (g_FadeLevel > 0) {
+            g_FadeLevel--;
         }
-        value = D_801E42E0;
+        value = g_FadeLevel;
     }
 
     return value < 0 ? 0 : (value < 0x80 ? value : 0x7F);
@@ -113,14 +112,14 @@ void func_800266D0(void) {
     u32 one;
     u32 arg13;
 
-    ptr = D_8019C900 + 0xCC;
+    ptr = g_DrawBuffer + 0xCC;
     value = func_8002664C(0);
     one = 1;
     arg13 = 0x29;
     func_80046A2C(ptr, 0x74, 0x34, 0x58, 0x38, 0xA8, 0xA8, value, value, value, 0x1F, 0, one, arg13);
     func_80046A2C(ptr, 0x44, 0x70, 0xB8, 0x14, 0x48, 0xE8, value, value, value, 0x80, 0, one, arg13);
     value = func_8002664C(1);
-    func_80046A2C(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (D_801E428C * 12) + 0x9C, value, value, value, 0x12, 0, one, arg13);
+    func_80046A2C(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, arg13);
 }
 
 void func_80026824(void) {
@@ -156,7 +155,7 @@ void func_80026824(void) {
 }
 
 void func_800268EC(void) {
-    D_801E42E4 = 3;
+    g_SceneId = 3;
     D_8019C760 = 0;
     func_80042C94();
 }

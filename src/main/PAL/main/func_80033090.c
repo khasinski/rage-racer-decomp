@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/render.h"
 
-extern u8 *D_8019C900;
 extern s32 D_801E4364;
 extern s32 D_801E4BCC;
 extern GameRaceRanking D_8009E83C;
@@ -60,7 +60,7 @@ void func_80033090(void) {
             y += 0xA;
             valuePtr++;
             asm volatile("" : "=r"(valuePtr) : "0"(valuePtr));
-            base = D_8019C900;
+            base = g_DrawBuffer;
             ot = base + 0xCC;
             prim = (void *)(baseOffset + (s32)base);
             *(s16 *)(primOffset + (s32)base + 0x23706) = tile;

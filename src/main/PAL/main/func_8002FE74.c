@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/track.h"
 
 extern u8 *D_801E42D8;
-extern s32 D_8009E6A8;
 
 s32 func_8001A6AC(s32 arg0, s32 arg1);
 s32 func_8002A7C4(s32 arg0, s32 arg1);
@@ -50,9 +50,9 @@ void func_8002FE74(GameCarRuntime *car) {
 
     rawIndex = index;
     if (index < 0) {
-        rawIndex = index + D_8009E6A8;
+        rawIndex = index + g_TrackPointCount;
     }
-    trackCount = D_8009E6A8;
+    trackCount = g_TrackPointCount;
     index = rawIndex % trackCount;
 
     func_8002FC84(index, coords, car->field_38);

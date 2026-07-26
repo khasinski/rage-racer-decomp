@@ -2,7 +2,6 @@
 #include "game/car.h"
 
 extern s32 D_801E40D4;
-extern GameCarEntry *D_8019C7C8;
 extern s16 D_8019CA18;
 extern s16 D_801E41A4;
 
@@ -15,7 +14,7 @@ void func_80055454(void) {
     if (index >= 0) {
         s32 one = 1;
         s32 offset = index * 8;
-        ptr = (GameCarEntry *)(offset + (s32)D_8019C7C8);
+        ptr = (GameCarEntry *)(offset + (s32)g_CarTable);
         while (index >= 0) {
             if (ptr->enabled == one) {
                 D_8019CA18 = index;
@@ -31,7 +30,7 @@ void func_80055454(void) {
     if (index < 13) {
         s32 one = 1;
         s32 offset = index * 8;
-        ptr = (GameCarEntry *)(offset + (s32)D_8019C7C8);
+        ptr = (GameCarEntry *)(offset + (s32)g_CarTable);
         while (index < 13) {
             if (ptr->enabled == one) {
                 D_801E41A4 = index;

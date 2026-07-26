@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gpu.h"
+#include "game/race.h"
 
 typedef struct {
     s32 id;
@@ -28,7 +29,6 @@ extern s16 D_801E402A;
 extern s16 D_801E402C;
 extern s32 D_801E4FB0;
 extern u8 *D_801E4140;
-extern s32 D_801E428C;
 extern s16 D_801E6DA4[];
 
 extern s32 D_8009B24C;
@@ -114,7 +114,7 @@ void func_80045CD4(void) {
     func_8004554C(pp + 0x18, pp + 0x1C, pp + 0x14, frac);
     func_8004554C(pp + 0x24, pp + 0x28, pp + 0x20, frac);
     func_8004554C(pp + 0x30, pp + 0x34, pp + 0x2C, frac);
-    if (D_801E428C == 2) {
+    if (g_CourseIndex == 2) {
         func_8004554C(pp + 0x3C, pp + 0x40, pp + 0x38, frac);
         func_8004554C(pp + 0x48, pp + 0x4C, pp + 0x44, frac);
     } else {

@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/track.h"
 
-extern s32 D_8009E6A8;
 
 s32 func_8002FAE8(s32 arg0, s32 arg1, s32 arg2);
 s32 func_8002FB60(s32 arg0, s32 arg1);
@@ -23,7 +23,7 @@ s32 func_8002FD9C(s32 pointIndex, s32 weight) {
     prev_index = pointIndex - 2;
     if (prev_index < 0) {
         s32 tmp;
-        tmp = D_8009E6A8;
+        tmp = g_TrackPointCount;
         tmp -= 2;
         prev_index = tmp + pointIndex;
     }
@@ -31,7 +31,7 @@ s32 func_8002FD9C(s32 pointIndex, s32 weight) {
     prev = func_8002FB60(prev_index, weight);
     left = func_8002FAE8(center, prev, 0x200);
 
-    next_index = (pointIndex + 2) % D_8009E6A8;
+    next_index = (pointIndex + 2) % g_TrackPointCount;
     next = func_8002FB60(next_index, weight);
     right = func_8002FAE8(center, next, 0x200);
 

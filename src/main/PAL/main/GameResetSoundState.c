@@ -3,7 +3,6 @@
 
 extern s32 D_801E6CBC;
 extern s32 D_801E6C9C;
-extern s32 D_801E6CA4;
 extern s32 D_801E6CDC;
 extern s32 D_801E6CE0;
 extern s32 D_801E6CE4;
@@ -89,7 +88,7 @@ void GameResetSoundState(void) {
         value = 0x1E00;
         D_801E6CF8 = value;
         value = 1;
-        D_801E6CA4 = eighty;
+        g_EffectVolumeScale = eighty;
         D_801E6CEC = 0;
         D_801E6CE0 = eighty;
         D_801E6C9C = value;

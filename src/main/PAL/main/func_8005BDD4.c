@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/audio.h"
 
-extern s32 D_801E6CA4;
 
-/* Set the effect master volume scale (D_801E6CA4 = SoundScale.scale) from a
+/* Set the effect master volume scale (g_EffectVolumeScale = SoundScale.scale) from a
  * 0..15 level, mapping it onto the 0..0x80 fixed-point scale used by the
  * effect-voice volume math. */
 void func_8005BDD4(s32 level) {
@@ -16,5 +16,5 @@ void func_8005BDD4(s32 level) {
     }
 
 done:
-    D_801E6CA4 = (level << 7) / 15;
+    g_EffectVolumeScale = (level << 7) / 15;
 }

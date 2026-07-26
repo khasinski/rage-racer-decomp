@@ -356,6 +356,29 @@ s32 GameDrawNumber(
 void GameDrawBitPatternOverlay(s32 pattern) asm("func_80047E60");
 
 /*
+ * Base of the draw work area for the frame being built. Almost every drawing
+ * routine takes its ordering table from g_DrawBuffer + 0xCC and links
+ * primitives into it (func_80064DDC / func_80017390); further sub-buffers live
+ * at +0x70, +0xBD0 and +0x16C8. Set by the display swap, not from C yet.
+ *
+ * Six translation units need a different declared type (four `volatile`, one
+ * plain s32) and carry their own aliased declaration so that the name is the
+ * same everywhere without changing the generated load.
+ */
+extern u8 *g_DrawBuffer asm("D_8019C900");
+
+/*
+ * Full-screen fade level, 0..0x100, passed straight to
+ * GameDrawFullscreenFadeTile (func_80033AA0) and func_800218A0. Each frame the
+ * owning scene adds g_FadeStep and clamps back into range, so a scene fades in
+ * or out just by setting the step.
+ */
+extern s32 g_FadeLevel asm("D_801E42E0");
+
+/* Per-frame delta added to g_FadeLevel; negative fades out, positive fades in. */
+extern s32 g_FadeStep asm("D_801E42A0");
+
+/*
  * Timed draw script: a table of {time, type, arg0, arg1} entries replayed
  * against a progress counter, terminated by time < 0. Element types 0/1/9 draw
  * a sprite, 10/19 a line, 20/29 a triangle and 30/39 a textured quad; the +9
@@ -367,6 +390,25 @@ s32 GameRunTimedDrawScript(
     void *commands,
     s32 *progress,
     s32 step) asm("func_800487D8");
+
+/*
+ * The progress counter the menu/UI screens hand to GameRunTimedDrawScript. Each
+ * screen resets it to 0 on entry, then passes &g_UiScriptProgress with step +1
+ * while opening and -1 while closing, and treats `<= 0` as "the close animation
+ * has finished". It is also fed to func_800489AC as the elapsed time of the
+ * panel it is animating.
+ */
+extern s32 g_UiScriptProgress asm("D_8019C9F0");
+
+/*
+ * A second, independent GameRunTimedDrawScript progress counter. The menu
+ * screens animate two script layers at once and step them separately - see
+ * func_80053730, which drives &g_UiScriptProgress against one command table and
+ * &g_UiScriptProgress2 against the screen's own tables in the same frame. Which
+ * layer is "background" and which is "foreground" is not settled, hence the
+ * neutral name (cf. g_PadEdge / g_PadEdge2).
+ */
+extern s32 g_UiScriptProgress2 asm("D_8009B2F8");
 void GameDrawScriptedSprite(
     s32 elapsed,
     u8 *style,

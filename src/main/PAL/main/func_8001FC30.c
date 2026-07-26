@@ -1,5 +1,9 @@
 #include "common.h"
 #include "game/screens.h"
+#include "game/race.h"
+#include "game/state.h"
+#include "game/render.h"
+#include "game/menu.h"
 
 typedef struct {
     u8 left;
@@ -23,19 +27,12 @@ void *func_8001720C(
     void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 
 void *func_80017390(void *ot, void *prim, s32 arg2);
-extern s32 D_8009E694;
-extern s32 D_801E40B8;
 extern s16 D_801E4DAC;
 extern s32 D_8019C8EC;
-extern s16 D_8009E834;
-extern s32 D_801E42A0;
-extern s32 D_801E42E0;
 extern s32 D_801E6E78;
 extern s32 D_8019CB6C;
-extern u16 D_801E436E;
 extern s32 D_8009EC8C;
 extern s32 D_8019CACC;
-extern s32 D_801E42E4;
 extern u8 D_8009E6D4;
 extern s32 D_801F179C;
 extern u8 D_801F1854;
@@ -56,8 +53,6 @@ void func_800418D4(void);
 void func_8001FB8C(void);
 void func_80019E84(s32 arg0);
 void func_8001F330(s32 arg0, void *arg1, void *arg2);
-extern s32 D_801E428C;
-extern u8 *D_8019C900;
 extern char D_80010DF0[];
 extern char *D_8007D404[];
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
@@ -66,12 +61,8 @@ s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
 extern s32 D_801E4BA8;
 extern s32 D_8019C7C4;
 extern s32 D_8019CB74;
-extern s16 D_8019CABC;
-extern s32 D_8009E6A4;
-extern s32 D_8009EC90;
 extern s32 D_8019C70C[][4][2];
 extern s32 D_8009E858[];
-extern char *D_8007D3D8[];
 extern u16 D_8007D41E[];
 extern u16 D_8007D426[];
 extern char D_80010DF8[];
@@ -174,28 +165,28 @@ blue_done:
 }
 
 void func_8001FD3C(void) {
-    D_8009E694++;
-    D_801E40B8++;
-    if (D_801E40B8 == 0x3C) {
+    g_AnimTimer++;
+    g_SceneTimer++;
+    if (g_SceneTimer == 0x3C) {
         if (D_801E4DAC != 0) {
             if (D_8019C8EC == 0) {
-                func_8005D6EC(D_8009E834 == 1 ? 0x40 : 0x41);
+                func_8005D6EC(g_RacePosition == 1 ? 0x40 : 0x41);
             }
         }
     }
 
-    if (D_801E42A0 < 0) {
-        D_801E42E0 += D_801E42A0;
-        if (D_801E42E0 < 0) {
-            D_801E42E0 = 0;
-            D_801E42A0 = 0;
+    if (g_FadeStep < 0) {
+        g_FadeLevel += g_FadeStep;
+        if (g_FadeLevel < 0) {
+            g_FadeLevel = 0;
+            g_FadeStep = 0;
             D_801E6E78 = 0;
         }
-        func_80033AA0(D_801E42E0, 0x29);
+        func_80033AA0(g_FadeLevel, 0x29);
     } else {
         if (D_8019C8EC != 0) {
             s32 cb = D_8019CB6C;
-            s32 fc = D_801E40B8;
+            s32 fc = g_SceneTimer;
             if ((u32)(cb - 600) < (u32)fc) {
                 s32 t = fc + 600;
                 s32 c;
@@ -213,32 +204,32 @@ void func_8001FD3C(void) {
             }
         }
 
-        if (D_801E42A0 == 0) {
-            if ((D_801E436E & 0x860) != 0) {
-                D_801E42A0 = 4;
+        if (g_FadeStep == 0) {
+            if ((g_PadEdge2 & 0x860) != 0) {
+                g_FadeStep = 4;
                 func_80042CCC(0x3C);
-            } else if (D_801E40B8 == D_8019CB6C - 68) {
-                D_801E42A0 = 4;
+            } else if (g_SceneTimer == D_8019CB6C - 68) {
+                g_FadeStep = 4;
                 if (D_8009EC8C == 0) {
                     func_80042CCC(0x3C);
                 }
             }
         } else {
-            D_801E42E0 += D_801E42A0;
-            if (D_801E42E0 >= 257) {
+            g_FadeLevel += g_FadeStep;
+            if (g_FadeLevel >= 257) {
                 s32 v = D_801E4DAC;
                 D_8019CACC = 0;
-                D_801E42E4 = v == 0 ? 0x14 : 0x12;
+                g_SceneId = v == 0 ? 0x14 : 0x12;
             }
         }
 
         if (D_8019C8EC != 0) {
-            if (((u32)(D_8019CB6C - 600) < (u32)D_801E40B8) || (D_801E42E0 != 0)) {
-                func_8001FC30(D_801E6E78, D_801E42E0);
+            if (((u32)(D_8019CB6C - 600) < (u32)g_SceneTimer) || (g_FadeLevel != 0)) {
+                func_8001FC30(D_801E6E78, g_FadeLevel);
             }
         } else {
-            if (D_801E42E0 != 0) {
-                func_80033AA0(D_801E42E0, 0x49);
+            if (g_FadeLevel != 0) {
+                func_80033AA0(g_FadeLevel, 0x49);
             }
         }
     }
@@ -256,11 +247,11 @@ void func_8001FD3C(void) {
         func_80038A88();
     }
     func_8004123C();
-    func_8003E2E8(D_801E40B8, 1);
+    func_8003E2E8(g_SceneTimer, 1);
     func_80045CD4();
     func_800418D4();
     func_8001FB8C();
-    if (D_801E40B8 == 1) {
+    if (g_SceneTimer == 1) {
         func_80019E84(D_8009E74C);
     }
 }
@@ -281,10 +272,10 @@ void GameDrawResultScreen(void) {
     } else {
         y = 0x39;
     }
-    func_80016A18(0x60, y, D_8007D404[D_801E428C], 0x78CC);
+    func_80016A18(0x60, y, D_8007D404[g_CourseIndex], 0x78CC);
 
     width = 0x140;
-    base = D_8019C900;
+    base = g_DrawBuffer;
     scratch = (s32 *)0x1F800000;
     base += 0xCC;
 
@@ -303,7 +294,7 @@ void func_800201D4(void) {
         s32 color;
 
         scratch = (s32 *)0x1F800000;
-        base = D_8019C900 + 0xCC;
+        base = g_DrawBuffer + 0xCC;
         height = 8;
         color = 0x78CB;
         next = func_80016EC4(
@@ -346,14 +337,14 @@ void func_800201D4(void) {
         s32 classNumber;
         s32 current;
 
-        current = D_8009E6A4;
+        current = g_GrandPrixClass;
         classNumber = current + 1;
-        name = D_8007D3D8[D_8019CABC ? current + 6 : current];
+        name = g_GrandPrixNames[g_GrandPrixSeries ? current + 6 : current];
         func_800632F0(text, D_80010DF8, classNumber, name);
     }
     func_80016A18(0x10, 0x34, text, 0x78CC);
 
-    func_800632F0(text, D_80010E10, D_8009EC90);
+    func_800632F0(text, D_80010E10, g_GrandPrixRound);
     func_80016A18(0x10, 0x3C, text, 0x78CC);
 
     {
@@ -365,8 +356,8 @@ void func_800201D4(void) {
         scratch = (s32 *)0x1F800000;
         func_800200D0();
 
-        base = D_8019C900 + 0xCC;
-        selection = (GrandPrixIntroSelection *)&D_8009E834;
+        base = g_DrawBuffer + 0xCC;
+        selection = (GrandPrixIntroSelection *)&g_RacePosition;
         next = func_80016EC4(
             base,
             *scratch,
@@ -419,7 +410,7 @@ void func_800204F4(s32 arg0) {
     func_80021CD4(&text[2], D_801E4BA8);
 
     color = 0x7812;
-    if (D_8019C70C[D_8019CABC][D_801E428C][D_801E4DAC] == D_801E4BA8) {
+    if (D_8019C70C[g_GrandPrixSeries][g_CourseIndex][D_801E4DAC] == D_801E4BA8) {
         color = 0x784C;
     }
     drawColor = color;
@@ -429,7 +420,7 @@ void func_800204F4(s32 arg0) {
     func_80016EA0(0x10, base + 0xA4, D_80010E28, 0x7812);
 
     count = 6;
-    if (D_801E428C != 3) {
+    if (g_CourseIndex != 3) {
         count = 3;
     }
 

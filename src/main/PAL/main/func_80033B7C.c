@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/render.h"
 
-extern u8 *D_8019C900;
 
 void func_80064F80(u8 *prim);
 void func_80064EB8(u8 *prim, s32 enabled);
@@ -24,7 +24,7 @@ u8 *func_80033B7C(u8 *prim, s32 x, s32 y, s32 code, u16 arg4) {
     out[0xD] = 0x10;
 
     {
-        register u8 *ot asm("$4") = D_8019C900;
+        register u8 *ot asm("$4") = g_DrawBuffer;
         register u8 *oldPrim asm("$5") = out;
 
         *(s16 *)&out[0x8] = xReg;

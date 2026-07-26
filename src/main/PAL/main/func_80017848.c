@@ -3,7 +3,6 @@
 
 extern u8 D_8007C464[];
 extern u8 D_8007C474[];
-extern GameCarEntry *D_8019C7C8;
 extern u32 D_8007C484;
 extern s32 D_8019CACC;
 extern u8 D_8019C86C;
@@ -26,7 +25,7 @@ s32 func_80017848(s32 arg0, s32 arg1) {
 }
 
 s32 func_8001785C(s32 car_index) {
-    return D_8019C7C8[car_index].modelVariant + D_8007C474[car_index];
+    return g_CarTable[car_index].modelVariant + D_8007C474[car_index];
 }
 
 void func_80017884(s32 arg0) {

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/track.h"
 
 typedef struct {
     s16 x;
@@ -42,7 +43,6 @@ typedef struct {
 } TP;
 
 extern TP *D_8009E688;
-extern s32 D_8009E6A8;
 
 s32 func_80030EB4(Car *car, s32 idx);
 void func_8001A530(Matrix *mtx, s32 angle);
@@ -72,7 +72,7 @@ void func_80031E98(Car *car) {
     s32 v8;
 
     idx = func_80030EB4(car, car->f30);
-    p2 = &D_8009E688[(idx + 1) % D_8009E6A8];
+    p2 = &D_8009E688[(idx + 1) % g_TrackPointCount];
     p1 = &D_8009E688[idx];
 
     seg = p1->segmentLength;

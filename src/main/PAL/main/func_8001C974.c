@@ -1,14 +1,13 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/state.h"
+#include "game/menu.h"
 
-extern u8 *D_8019C900;
 extern s32 D_801E42CC;
 extern char *D_8007C7A0[];
 extern char D_80010D2C[];
 extern s16 D_801E4DAC;
-extern s32 D_801E428C;
-extern s32 D_8009EC90;
-extern s32 D_8009E6A4;
-extern s16 D_8019CABC;
 
 extern char D_80010C30[];
 extern char D_80010C40[];
@@ -18,10 +17,6 @@ extern char D_80010C5C[];
 extern char D_80010C68[];
 extern char D_80010C70[];
 
-typedef struct {
-    s32 a, b, c;
-} Rec;
-extern Rec D_8007BEEC[][6];
 extern s32 D_8019C70C[][4][2];
 extern s32 D_801E4408[][4][2];
 
@@ -36,7 +31,7 @@ void func_8001C974(void) {
     char buf[88];
     s32 col;
     s32 y0;
-    void *ot = D_8019C900 + 204;
+    void *ot = g_DrawBuffer + 204;
 
     col = func_8001C8F0(0);
     func_80046A2C(ot, 0x74, 0x14, 0x58, 0x38, 0xa8, 0xa8, col, col, col, 0x1f, 0, 1, 0x29);
@@ -44,29 +39,29 @@ void func_8001C974(void) {
 
     col = func_8001C8F0(1);
     if (D_801E4DAC != 0) {
-        func_800632F0(buf, D_80010C30, D_8009EC90);
+        func_800632F0(buf, D_80010C30, g_GrandPrixRound);
         func_80016B7C(0x5e, 0x68, buf, 0x7812, col);
         y0 = 0x78;
     } else {
         y0 = 0x68;
     }
-    func_80046A2C(ot, 0x5e, y0, 0x84, 0xc, 0, D_801E428C * 12 + 156, col, col, col, 0x12, 0, 1, 0x29);
+    func_80046A2C(ot, 0x5e, y0, 0x84, 0xc, 0, g_CourseIndex * 12 + 156, col, col, col, 0x12, 0, 1, 0x29);
 
     col = func_8001C8F0(2);
     if (D_801E4DAC != 0) {
         func_80016B7C(0x80, 0x88, D_80010C40, 0x7812, col);
-        func_800632F0(buf, D_80010C44, D_8007BEEC[D_801E428C][D_8009E6A4].a);
+        func_800632F0(buf, D_80010C44, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][0]);
         func_80016B7C(0x56, 0x98, buf, 0x7812, col);
-        func_800632F0(buf, D_80010C50, D_8007BEEC[D_801E428C][D_8009E6A4].b);
+        func_800632F0(buf, D_80010C50, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][1]);
         func_80016B7C(0x56, 0xa4, buf, 0x7812, col);
-        func_800632F0(buf, D_80010C5C, D_8007BEEC[D_801E428C][D_8009E6A4].c);
+        func_800632F0(buf, D_80010C5C, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][2]);
         func_80016B7C(0x56, 0xb0, buf, 0x7812, col);
     } else {
         func_80016B7C(0x62, 0x7c, D_80010C68, 0x7812, col);
-        func_80021CD4(buf, D_8019C70C[D_8019CABC][D_801E428C][D_801E4DAC]);
+        func_80021CD4(buf, D_8019C70C[g_GrandPrixSeries][g_CourseIndex][D_801E4DAC]);
         func_80016B7C(0x6a, 0x8c, buf, 0x7812, col);
         func_80016B7C(0x6a, 0x9c, D_80010C70, 0x7812, col);
-        func_80021CD4(buf, D_801E4408[D_8019CABC][D_801E428C][D_801E4DAC]);
+        func_80021CD4(buf, D_801E4408[g_GrandPrixSeries][g_CourseIndex][D_801E4DAC]);
         func_80016B7C(0x6a, 0xac, buf, 0x7812, col);
     }
 }
@@ -81,7 +76,7 @@ void func_8001CD54(void) {
     char buf[88];
     s32 *scr = (s32 *)0x1F800000;
     s32 p;
-    void *ot = D_8019C900 + 208;
+    void *ot = g_DrawBuffer + 208;
 
     p = *scr;
     p = func_80016EC4(ot, p, 0x14, 0xce, 0x58, 8, 0xa8, 0xe0, 0x7812);
@@ -102,15 +97,12 @@ void func_8001CD54(void) {
 }
 
 extern u32 D_801E40B8;
-extern s32 D_801E42E0;
 extern u16 D_801E436A;
-extern s32 D_801E42E4;
 extern s32 D_8019CACC;
 extern s32 D_8009E6CC;
 extern s32 D_801E40A8;
 extern u8 D_801E7734[];
 extern s32 D_801E40E0;
-extern u16 D_801E436E;
 
 void func_80065860(s32 a);
 void func_8001BE9C(s32 a, s32 b, s32 c);
@@ -131,12 +123,12 @@ void func_8001CFB4(void) {
     if (D_801E40B8 == 0x20) {
         func_8005D6EC(0x19);
     }
-    if (D_801E42E0 == 0) {
+    if (g_FadeLevel == 0) {
         if (func_80018FC4() == 0) {
-            D_801E42E0 = 0x80;
+            g_FadeLevel = 0x80;
         }
     } else if (D_801E40B8 >= 121) {
-        D_801E42E4 = 0xb;
+        g_SceneId = 0xb;
         if ((D_801E436A & 0x80c) == 0x80c) {
             D_8019CACC = 1;
         } else {
@@ -157,8 +149,8 @@ void func_8001CFB4(void) {
             D_801E40E0 = 0xe;
         }
     }
-    if (D_801E42E4 == 0xa) {
-        u16 flags = D_801E436E;
+    if (g_SceneId == 0xa) {
+        u16 flags = g_PadEdge2;
         if (flags & 0x8000) {
             D_801E42CC = D_801E42CC - 1;
         } else if (flags & 0x2000) {

@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/memcard.h"
+#include "game/menu.h"
 
-extern u8 D_8007F45C;
 extern u8 D_8007F460[];
 extern s32 D_801E7A54;
 
@@ -11,7 +11,7 @@ void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) {
     register u32 checksum asm("$3");
     register u16 *scan asm("$6");
 
-    arg0[0] = D_8007F45C;
+    arg0[0] = GameMenuStackDepth;
 
     for (i = 0; i < 7; i++) {
         *((arg0 + i) + 1) = D_8007F460[i];

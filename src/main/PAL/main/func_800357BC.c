@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/race.h"
 
 extern s16 D_8009AFA8;
 extern s16 D_8009AFAC;
@@ -10,7 +11,6 @@ extern s32 D_8009AFB0;
 extern s32 D_801E4D64;
 extern s32 D_801E4148;
 extern s32 D_801E4364;
-extern s32 D_801E428C;
 extern s32 D_801E408C;
 extern u8 D_8019C70C[];
 
@@ -64,7 +64,7 @@ skip_first:
         s32 finalA1 = 0x7C;
         s32 finalA3 = 0x78CC;
 
-        finalValue = *(s32 *)&D_8019C70C[(D_801E428C << 3) + (D_801E408C << 5)];
+        finalValue = *(s32 *)&D_8019C70C[(g_CourseIndex << 3) + (D_801E408C << 5)];
         func_80033D50(finalA0, finalA1, finalValue, finalA3, timeout);
     }
 }

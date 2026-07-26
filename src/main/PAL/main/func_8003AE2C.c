@@ -4,7 +4,6 @@
 
 extern s32 D_8009E73C;
 extern s32 D_8009E740;
-extern s16 D_8009E834;
 extern GameRaceRanking D_8009E83C;
 extern s32 D_801E4364;
 extern GameCarRuntimeProgressWindow D_801F18C0[];
@@ -33,6 +32,6 @@ void func_8003AE2C(void) {
             entry++;
         } while (i < 0xB);
 
-        D_8009E834 = active;
+        g_RacePosition = active;
     }
 }

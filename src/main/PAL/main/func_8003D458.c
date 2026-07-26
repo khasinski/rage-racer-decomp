@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/race.h"
 
 typedef struct {
     s32 x;
@@ -10,7 +11,6 @@ typedef struct {
 
 extern s16 D_801E6E74;
 extern s32 D_801E408C;
-extern s32 D_801E428C;
 extern s32 D_801E40E4;
 extern s32 D_8007E2B8[];
 extern struct {
@@ -42,7 +42,7 @@ void func_8003D458(s32 arg0) {
             s1 = (arg0 - 90) / 3;
             state.x += D_8007E290[D_801E408C].x * (s0 = s1 / 15);
             state.z += D_8007E290[D_801E408C].y * s0;
-            if (D_801E428C % 4 == 3) {
+            if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }
             func_80017794((void *)0x1F80011C, &state, &mtx);
@@ -54,7 +54,7 @@ void func_8003D458(s32 arg0) {
             drawArg = (value < lim) ? value : 1;
         } else {
             state = D_8007E298[D_801E408C];
-            if (D_801E428C % 4 == 3) {
+            if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }
             func_80017794((void *)0x1F80011C, &state, &mtx);

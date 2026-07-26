@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/race.h"
 
-extern s32 D_8009E6A4;
 
 void func_8003D6F0(s32 arg0, s32 arg1);
 void func_8003DDAC(s32 arg0, s32 arg1);
@@ -21,19 +21,19 @@ void func_8003E1A4(s32 arg0, s32 arg1, s32 arg2) {
 
     func_8003D6F0(value, 0);
 
-    if (D_8009E6A4 == 5) {
+    if (g_GrandPrixClass == 5) {
         flag = 0;
     }
 
     switch (mode) {
     case 0:
         func_8003DDAC(value, flag);
-        if (D_8009E6A4 >= 4) {
+        if (g_GrandPrixClass >= 4) {
             func_8003E0D0();
         }
         goto call0;
     case 1:
-        if (D_8009E6A4 >= 2) {
+        if (g_GrandPrixClass >= 2) {
             func_8003DDAC(value, flag);
         }
         if (flag != 0) {

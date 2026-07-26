@@ -1,9 +1,8 @@
 #include "common.h"
 #include "game/asset.h"
+#include "game/render.h"
+#include "game/state.h"
 
-extern s32 D_801E42A0;
-extern s32 D_801E42E0;
-extern s32 D_801E42E4;
 extern char D_80011010[];
 
 void func_80033AA0(s32 arg0, s32 arg1);
@@ -13,22 +12,22 @@ void func_80026484(void) {
     s32 delta;
 
     if (g_AssetLoadState == 0) {
-        D_801E42A0 = 4;
+        g_FadeStep = 4;
     }
 
-    delta = D_801E42A0;
+    delta = g_FadeStep;
     if (delta < 0) {
-        D_801E42E0 += delta;
-        if (D_801E42E0 < 0) {
-            D_801E42E0 = 0;
-            D_801E42A0 = 0;
+        g_FadeLevel += delta;
+        if (g_FadeLevel < 0) {
+            g_FadeLevel = 0;
+            g_FadeStep = 0;
         }
-        func_80033AA0(D_801E42E0, 0x49);
+        func_80033AA0(g_FadeLevel, 0x49);
     } else if (delta > 0) {
-        D_801E42E0 += delta;
-        func_80033AA0(D_801E42E0, 0x49);
-        if (D_801E42E0 >= 0x101) {
-            D_801E42E4 = 0x16;
+        g_FadeLevel += delta;
+        func_80033AA0(g_FadeLevel, 0x49);
+        if (g_FadeLevel >= 0x101) {
+            g_SceneId = 0x16;
         }
     }
 

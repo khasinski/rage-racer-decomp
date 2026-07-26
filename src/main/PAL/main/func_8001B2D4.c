@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/render.h"
 
-extern u8 *D_8019C900;
 extern s16 D_8019CAC0;
 extern s32 D_801E4184;
 extern s32 D_8009F098;
@@ -18,7 +18,7 @@ void func_8001B2D4(void) {
     s32 width;
     s32 y;
 
-    base = D_8019C900 + 0xCC;
+    base = g_DrawBuffer + 0xCC;
     scratch = *(void **)0x1F800000;
     row = 0;
     i = 0;

@@ -1,9 +1,9 @@
 #include "common.h"
+#include "game/audio.h"
 
 extern s32 D_801E6D38[];
 extern u8 D_801E6D34[];
 extern u8 D_801E6D40[];
-extern s32 D_801E6CA4;
 extern s16 D_801E6CA8;
 
 void func_80077C7C(s32, s32, s32, s32, s32, s32, s32, s32);
@@ -19,7 +19,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8005C914", func_8005C914);
 #define VOLPITCH()                                                    \
     svArg = voiceCopy;                                                \
     asm("" : "=r"(svArg) : "0"(svArg));                               \
-    prod = *(s32 *)(D_801E6D40 + offset) * D_801E6CA4;                \
+    prod = *(s32 *)(D_801E6D40 + offset) * g_EffectVolumeScale;                \
     left = prod;                                                      \
     if (prod < 0) {                                                   \
         left = prod + 0x7F;                                           \

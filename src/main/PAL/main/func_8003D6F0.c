@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/race.h"
 
 typedef struct {
     s32 x;
@@ -9,8 +10,6 @@ typedef struct {
 } Vec4i;
 
 extern Vec4i D_8007E2C0[];
-extern s32 D_801E428C;
-extern s32 D_8009E6A4;
 extern u32 *D_801E6828;
 extern s16 D_8007E2EA;
 extern s32 D_801E4BAC;
@@ -48,10 +47,10 @@ void func_8003D6F0(s32 arg0, s32 arg1) {
 
     state = D_8007E2C0[arg1];
 
-    if ((D_801E428C & 3) == 3) {
+    if ((g_CourseIndex & 3) == 3) {
         state.z += 0x5000;
     }
-    if (D_8009E6A4 == 5) {
+    if (g_GrandPrixClass == 5) {
         return;
     }
 

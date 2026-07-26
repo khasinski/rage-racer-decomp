@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/track.h"
 
-extern GameTrackPoint *D_8009E688;
 
 extern u32 D_801E3E14[];
 extern s32 D_801E3E18;
@@ -51,7 +50,7 @@ void func_8003CA14(void *arg0) {
     ((u32 *)dst)[2] = word2;
 
     index = *(s32 *)((s32)base + 0x30);
-    track = D_8009E688;
+    track = g_TrackPoints;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((s32)point + (s32)track);
     D_801E3E14[0] = point->x;

@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/render.h"
 
-extern u8 *D_8019C900;
 
 void SetSprt(u8 *arg0) asm("func_80064FA8");
 void SetShadeTex(u8 *arg0, s32 arg1) asm("func_80064EB8");
@@ -50,12 +50,12 @@ void func_800333DC(void) {
         next += 0x14;
         u += 0x10;
         x += 0x10;
-        ot = D_8019C900;
+        ot = g_DrawBuffer;
         i++;
         AddPrim(ot + 0xCC, oldPacket);
     } while (i < 3);
 
-    ret = func_8001720C(D_8019C900 + 0xCC, next, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
+    ret = func_8001720C(g_DrawBuffer + 0xCC, next, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
     *(void **)0x1F800000 = ret;
-    *(void **)0x1F800000 = func_80017390(D_8019C900 + 0xCC, ret, 9);
+    *(void **)0x1F800000 = func_80017390(g_DrawBuffer + 0xCC, ret, 9);
 }

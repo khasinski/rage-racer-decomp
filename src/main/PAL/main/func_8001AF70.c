@@ -1,8 +1,7 @@
 #include "common.h"
+#include "game/state.h"
 
 extern s32 D_8019C768;
-extern s32 D_801E42E4;
-extern s32 D_801E40B8;
 extern s32 D_801E8260;
 extern s32 D_801E6F28;
 extern s32 D_801E6F1C;
@@ -25,8 +24,8 @@ void func_8001AF70(void) {
     func_8001A498();
 
     D_8019C768 = 0x80;
-    D_801E42E4 = 4;
-    D_801E40B8 = 0;
+    g_SceneId = 4;
+    g_SceneTimer = 0;
     D_801E8260 = 0;
     D_801E6F28 = 0;
     D_801E6F1C = 0;

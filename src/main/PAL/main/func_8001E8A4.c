@@ -1,4 +1,6 @@
 #include "common.h"
+#include "game/state.h"
+#include "game/menu.h"
 
 extern volatile u32 *D_8009AF20[];
 extern volatile u32 *D_8009AF2C[];
@@ -9,8 +11,6 @@ extern s32 D_8009F094;
 extern s16 D_8009AF50;
 extern s16 D_8009AF52;
 extern s32 D_8019CA1C;
-extern s32 D_801E40B8;
-extern u16 D_801E436E;
 extern s32 D_801E8A90;
 extern char D_80010D30[];
 
@@ -28,8 +28,8 @@ void func_8001E8A4(void) {
     s32 value;
     u8 sp10[16];
 
-    D_801E40B8++;
-    if (D_801E40B8 == 4) {
+    g_SceneTimer++;
+    if (g_SceneTimer == 4) {
         func_80065860(1);
     }
 
@@ -55,7 +55,7 @@ void func_8001E8A4(void) {
     if (D_8009AF74 == 1) {
         D_8009F094 = 2;
     }
-    if (D_801E436E & 0x800) {
+    if (g_PadEdge2 & 0x800) {
         func_80042CCC(1);
         D_8009F094 = 2;
     }

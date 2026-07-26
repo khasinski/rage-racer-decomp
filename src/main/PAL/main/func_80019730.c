@@ -3,7 +3,6 @@
 #include "game/asset.h"
 
 extern u8 *D_8019C904;
-extern u8 *D_801F17A8;
 extern u8 *D_801E8AB0;
 extern u8 *D_801E42D0;
 extern u8 *D_8019CAFC;
@@ -17,21 +16,21 @@ void func_80019730(void) {
     s32 offset0;
     s32 offset1;
 
-    D_801F17A8 = D_8019C904 + *(s32 *)(D_8019C904 + 0);
-    func_8001A3C0(D_801F17A8);
+    g_AssetBlockPtr = D_8019C904 + *(s32 *)(D_8019C904 + 0);
+    func_8001A3C0(g_AssetBlockPtr);
 
-    D_801F17A8 = D_8019C904 + *(s32 *)(D_8019C904 + 4);
-    func_8001A3C0(D_801F17A8);
+    g_AssetBlockPtr = D_8019C904 + *(s32 *)(D_8019C904 + 4);
+    func_8001A3C0(g_AssetBlockPtr);
 
-    D_801F17A8 = D_8019C904 + *(s32 *)(D_8019C904 + 8);
-    func_8001A2E0(D_801F17A8);
+    g_AssetBlockPtr = D_8019C904 + *(s32 *)(D_8019C904 + 8);
+    func_8001A2E0(g_AssetBlockPtr);
 
     base = D_8019C904;
     offset0 = *(s32 *)(base + 0xC);
     offset1 = *(s32 *)(base + 0x10);
-    D_801F17A8 = base + offset0;
+    g_AssetBlockPtr = base + offset0;
     D_801E8AB0 = base + offset1;
-    func_8001A3C0(D_801F17A8);
+    func_8001A3C0(g_AssetBlockPtr);
 
     func_8001A40C(D_8019C904);
 

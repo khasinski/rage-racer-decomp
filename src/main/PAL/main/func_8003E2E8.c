@@ -1,8 +1,7 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/state.h"
 
-extern s32 D_8009E6A4;
-extern s32 D_801E428C;
-extern s32 D_801E42E4;
 
 void func_8003DA90(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_8003DDAC(s32 arg0, s32 arg1);
@@ -16,22 +15,22 @@ void func_8003E2E8(s32 arg0, s32 arg1) {
     s32 flag = arg1;
     s32 mode;
 
-    if (D_8009E6A4 == 5) {
+    if (g_GrandPrixClass == 5) {
         flag = 0;
     }
 
-    func_8003DA90(value, 0, D_801E42E4 == 0x11, flag);
+    func_8003DA90(value, 0, g_SceneId == 0x11, flag);
 
-    mode = D_801E428C & 3;
+    mode = g_CourseIndex & 3;
     switch (mode) {
     case 0:
         func_8003DDAC(value, flag);
-        if (D_8009E6A4 >= 4) {
+        if (g_GrandPrixClass >= 4) {
             func_8003E0D0();
         }
         goto call0;
     case 1:
-        if (D_8009E6A4 >= 2) {
+        if (g_GrandPrixClass >= 2) {
             func_8003DDAC(value, flag);
         }
         if (flag != 0) {
@@ -48,7 +47,7 @@ void func_8003E2E8(s32 arg0, s32 arg1) {
         func_8003F4BC(1);
         goto call0;
     case 3:
-        func_8003DA90(value, 1, D_801E42E4 == 0x11, flag);
+        func_8003DA90(value, 1, g_SceneId == 0x11, flag);
         goto call1;
     default:
         return;

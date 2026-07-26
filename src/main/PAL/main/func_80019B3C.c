@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/race.h"
 
 extern s16 D_801E4034;
-extern s32 D_8009E6A4;
 extern s32 D_8007C6A8;
 extern s32 D_8007C6AC;
 extern s32 *D_801E8A90;
@@ -25,7 +25,7 @@ void func_80019B3C(void) {
     }
 
     base = &D_8007C6A8;
-    index += D_8009E6A4;
+    index += g_GrandPrixClass;
     offset = index << 3;
     value = *(s32 *)((s32)&D_8007C6AC + offset);
     D_801E8A90 = (s32 *)((s32)base + offset);

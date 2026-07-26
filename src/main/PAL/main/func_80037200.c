@@ -1,12 +1,14 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/waypoint.h"
+#include "game/race.h"
+#include "game/state.h"
+#include "game/menu.h"
 
 extern s16 D_8019C750;
 
 extern s16 D_8019C78C;
 
-extern s32 D_8009E694;
 
 extern u8 D_8009E6D4[];
 
@@ -18,13 +20,10 @@ extern s32 D_801E3E7C;
 
 extern s32 D_801E4030;
 
-extern s32 D_801E40B8;
 
 extern s16 D_801E414C;
 
-extern s32 D_801E428C;
 
-extern u16 D_801E436E;
 
 extern s16 D_801E43FC;
 
@@ -108,10 +107,10 @@ void func_80037200(void) {
     s32 option;
 
     option = 0;
-    D_801E40B8++;
-    if ((u32)D_801E40B8 < 0x3D) {
+    g_SceneTimer++;
+    if ((u32)g_SceneTimer < 0x3D) {
         func_8001C974();
-        value = D_801E40B8 - 6;
+        value = g_SceneTimer - 6;
         func_80033AA0(0xFF - (((value * 3) * 4) - value), 0x49);
     }
 
@@ -119,7 +118,7 @@ void func_80037200(void) {
         D_8019C750--;
     }
 
-    if ((u32)((u16)D_801E6E74 - 1) < 2 && (D_801E436E & 0x800) && D_8019C750 <= 0) {
+    if ((u32)((u16)D_801E6E74 - 1) < 2 && (g_PadEdge2 & 0x800) && D_8019C750 <= 0) {
         D_8019C750 = 0;
         D_801E4BAC = (u32)D_801E4BAC < 1;
 
@@ -156,17 +155,17 @@ void func_80037200(void) {
     }
 
     if (D_801E4BAC != 0) {
-        if ((D_801E436E & 0x1000) && D_801E414C > 0) {
+        if ((g_PadEdge2 & 0x1000) && D_801E414C > 0) {
             D_801E414C--;
             GamePlaySoundCue(1);
         }
 
-        if ((D_801E436E & 0x4000) && D_801E414C < (2 - D_801E4DAC)) {
+        if ((g_PadEdge2 & 0x4000) && D_801E414C < (2 - D_801E4DAC)) {
             D_801E414C++;
             GamePlaySoundCue(1);
         }
 
-        D_801E40B8--;
+        g_SceneTimer--;
         func_8003479C(D_801E414C);
         func_8003CF14(D_8009E6D4, 0);
         func_800350B4(D_8009E744);
@@ -178,13 +177,13 @@ void func_80037200(void) {
         func_8003EAF4();
         func_8003F02C();
         func_80040730();
-        func_8003E1A4(D_801E428C & 3, D_801E40B8, 0);
+        func_8003E1A4(g_CourseIndex & 3, g_SceneTimer, 0);
         return;
     }
 
-    D_8009E694++;
+    g_AnimTimer++;
 
-    if ((u32)D_801E40B8 >= 0x1F && D_801E6E74 == 0) {
+    if ((u32)g_SceneTimer >= 0x1F && D_801E6E74 == 0) {
         func_80042BF0();
         D_801E6E74 = 2;
         D_8019C750 = 0xA;
@@ -211,7 +210,7 @@ void func_80037200(void) {
     func_8003F02C();
     func_8003F9C4();
     func_80040730();
-    func_8003E1A4(D_801E428C & 3, D_801E40B8, 1);
+    func_8003E1A4(g_CourseIndex & 3, g_SceneTimer, 1);
     func_800350B4(D_8009E744);
     GameSetReverbDepth(D_8019C78C, D_8019C78C);
     func_80040DB4(D_8009E744);

@@ -5,7 +5,6 @@ extern u8 *D_801E4150;
 extern s32 D_8009E710;
 extern s32 D_8009E778;
 extern s32 D_8009E704;
-extern GameTrackPoint *D_8009E688;
 extern s32 D_8019CACC;
 
 s32 func_80068634(s32 arg0);
@@ -71,7 +70,7 @@ chk:
     if (s0 != 0) {
         s0 = (s0 * D_8009E778) / 12775;
         t = *(s32 *)0x1F80001C - 0xC00;
-        s3 = (t + D_8009E688[D_8009E704].angle) & 0xFFF;
+        s3 = (t + g_TrackPoints[D_8009E704].angle) & 0xFFF;
         if (s0 < 0 && (data & 2) > 0) {
             val = s0 * func_80068634(s3);
             if (val < 0) {

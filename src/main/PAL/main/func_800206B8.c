@@ -2,6 +2,7 @@
 #include "game/race.h"
 #include "game/menu.h"
 #include "game/car.h"
+#include "game/state.h"
 
 extern GameRaceProgress *D_801E4FAC;
 extern s32 D_801E419C, D_801F17B0, D_8019CE0C;
@@ -9,13 +10,9 @@ extern u8 D_80010E30[], D_80010E34[], D_80010E38[], D_80010E40[];
 void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
 void func_800632F0(void *dst, void *fmt, s32 val);
 extern s32 D_8009E67C;
-extern s32 D_801E428C;
 extern s32 D_801E4D0C;
-extern s16 D_8009E834;
 extern s32 D_801E40D4;
-extern s32 D_8009E6A4;
 extern s32 D_801E4B94;
-extern s16 D_8019CABC;
 extern s16 D_8019CB58;
 extern s16 D_8019CB54;
 extern GameScoreRecord D_8019CB40[];
@@ -28,20 +25,16 @@ extern s32 D_801E419C;
 s32 func_8001785C(s32 arg0);
 s32 func_800214B8(void);
 void func_80021540(void);
-extern GameCarEntry *D_8019C7C8;
 extern s32 D_801E772C[];
-extern s32 D_801E42E4;
 void func_80021288(s32 arg0, s32 arg1);
 void func_800212F0(s32 arg0);
 void func_80019BB8(s32 arg0);
 void func_80019B3C(s32 arg0);
-extern s32 D_801E40B8;
 extern s32 D_8019C768;
 extern s32 D_8019CB74;
 extern s32 D_801F17B0;
 extern s32 D_801E6DA0;
 extern s32 D_801E6C78;
-extern s32 D_8007BEEC[][6][3];
 extern s32 D_8007BEF4[][6][3];
 extern s32 D_8007C00C[];
 void func_8005D6EC(s32 arg0);
@@ -74,20 +67,20 @@ void func_800207E0(void) {
     s32 value;
     s32 *state;
 
-    slots = (u8 *)(D_8009E67C + D_801E428C);
+    slots = (u8 *)(D_8009E67C + g_CourseIndex);
     D_801E4D0C = 0;
 
-    if (*slots == 0 || D_8009E834 < *slots) {
-        *slots = D_8009E834;
+    if (*slots == 0 || g_RacePosition < *slots) {
+        *slots = g_RacePosition;
     }
 
     value = func_8001785C(D_801E40D4);
     slot_count = 4;
-    if (D_8009E6A4 < value) {
+    if (g_GrandPrixClass < value) {
         *(s16 *)(D_8009E67C + 4) = 1;
     }
 
-    if (D_8009E6A4 < 2) {
+    if (g_GrandPrixClass < 2) {
         slot_count = 3;
     }
 
@@ -104,7 +97,7 @@ void func_800207E0(void) {
     if (done != 0) {
         s16 *record;
 
-        score_index = (D_8019CABC * 6) + D_8009E6A4;
+        score_index = (g_GrandPrixSeries * 6) + g_GrandPrixClass;
 
         if (score_index == 4) {
             record = &D_8019CB58;
@@ -157,7 +150,7 @@ after_record_check:
 
     D_8019C8EC = 0;
     if (D_801E4B94 != 0) {
-        if ((D_801E4034 == 0 && D_8009E6A4 == 4) || (D_801E4034 == 1 && D_8009E6A4 == 5)) {
+        if ((D_801E4034 == 0 && g_GrandPrixClass == 4) || (D_801E4034 == 1 && g_GrandPrixClass == 5)) {
             D_8019C8EC = 1;
             D_8019CAC0 = 1;
         }
@@ -166,7 +159,7 @@ after_record_check:
     D_801E419C = 0;
     if (D_801E4B94 != 0 && D_8019C8EC == 0) {
         state = (s32 *)D_801E4FAC;
-        if (state[3] < D_8009E6A4 + 1) {
+        if (state[3] < g_GrandPrixClass + 1) {
             D_801E419C = 1;
         }
     }
@@ -184,7 +177,7 @@ void func_80020B08(void) {
 
             ptr = D_801E4FAC;
             oldValue = ptr->progression;
-            func_80021288((s32)D_8019C7C8, (s32)ptr);
+            func_80021288((s32)g_CarTable, (s32)ptr);
             magic = 0x3B9AC9FF;
             afterPtr = D_801E4FAC;
             afterPtr->elapsedTime = magic;
@@ -198,11 +191,11 @@ void func_80020B08(void) {
             s32 enabled;
 
             func_80019B3C(7);
-            current = D_8009E6A4;
+            current = g_GrandPrixClass;
             menuPtr = D_801E4FAC;
             enabled = D_801E419C;
             next = current + 1;
-            D_8009E6A4 = next;
+            g_GrandPrixClass = next;
             menuPtr->lap = next;
             menuPtr->state = 0;
 
@@ -214,10 +207,10 @@ void func_80020B08(void) {
                 }
             }
 
-            func_800212F0(D_8009E6A4);
+            func_800212F0(g_GrandPrixClass);
         }
     } else {
-        D_801E42E4 = 6;
+        g_SceneId = 6;
     }
 }
 
@@ -226,14 +219,14 @@ void func_80020C24(void) {
     s32 car;
     s32 value;
 
-    D_801E40B8 = 0x100;
+    g_SceneTimer = 0x100;
     D_8019C768 = 0x80;
 
-    mode = D_801E428C;
-    car = D_8009E6A4;
+    mode = g_CourseIndex;
+    car = g_GrandPrixClass;
     D_8019CB74 = 0;
-    D_801F17B0 = D_8007BEEC[mode][car][D_8009E834 - 1];
-    D_801E42E4 = 0x13;
+    D_801F17B0 = g_PrizeMoney[mode][car][g_RacePosition - 1];
+    g_SceneId = 0x13;
 
     if (D_801E419C != 0) {
         D_8019CE0C = D_8007C00C[car];
@@ -241,13 +234,13 @@ void func_80020C24(void) {
         D_8019CE0C = 0;
     }
 
-    value = D_8007BEF4[D_801E428C][D_8009E6A4][0] / 80;
+    value = D_8007BEF4[g_CourseIndex][g_GrandPrixClass][0] / 80;
     D_801E6DA0 = value;
     if (value <= 0) {
         D_801E6DA0 = 1;
     }
 
-    value = D_8007C00C[D_8009E6A4] / 250;
+    value = D_8007C00C[g_GrandPrixClass] / 250;
     D_801E6C78 = value;
     if (value <= 0) {
         D_801E6C78 = 1;

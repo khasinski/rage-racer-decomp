@@ -65,4 +65,37 @@ void GameUpdateNegconMaxTwistScreen(void) asm("func_80016250");
 void GameDrawNegconMaxTwistScreen(void) asm("func_80016064");
 void GameDrawControllerSetupScene(s32 variant) asm("func_80014618");
 
+/*
+ * Identifier of the scene/screen currently running. Unlike g_MainState and
+ * g_GameMode it is not used to dispatch a handler - it is a tag that the rest
+ * of the game queries (`g_SceneId == 0xC`, `== 0x11`, `== 0x1E`, ...) to decide
+ * whether it should draw, play a cue or accept input. Writing it is how a scene
+ * announces itself, and every writer resets g_SceneTimer to 0 in the same
+ * breath; func_80035258 is the setter that also tears down the previous scene.
+ */
+extern s32 g_SceneId asm("D_801E42E4");
+
+/*
+ * Frame counter of the current scene: reset to 0 whenever a scene handler is
+ * entered (always alongside the D_801E42E4 scene-request write) and
+ * incremented once per frame by that handler. Scenes compare it against
+ * fixed thresholds to sequence themselves (e.g. func_80022FAC waits for
+ * 0x12C, func_80026570 for 0x708), test single bits of it for blinking, and
+ * some reuse it directly as a 0..0x100 fade level (func_8002317C).
+ *
+ * Four translation units treat it as u32; they carry their own
+ * `extern u32 g_SceneTimer asm("D_801E40B8");` so the name is the same
+ * everywhere while the load stays unsigned.
+ */
+extern s32 g_SceneTimer asm("D_801E40B8");
+
+/*
+ * Free-running animation phase counter, incremented once per frame by every
+ * scene handler. Unlike g_SceneTimer it is not compared against deadlines;
+ * it drives cyclic effects — sine/wave offsets (func_80068568 arguments in
+ * func_8001B170 / func_80051D6C), blink tests (`& 2`, `& 8`, `& 0x10`) and
+ * modulo cycles (`% 6`).
+ */
+extern s32 g_AnimTimer asm("D_8009E694");
+
 #endif

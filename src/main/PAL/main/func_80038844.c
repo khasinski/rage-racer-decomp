@@ -1,13 +1,13 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/race.h"
+#include "game/state.h"
 
-extern s32 D_801E42E4;
 
 extern s32 D_801E7740;
 
 extern s32 D_801E408C;
 
-extern s16 D_8019CABC;
 
 extern GameCarRuntime D_801F1854[];
 
@@ -56,7 +56,7 @@ void func_80038844(void) {
     register u16 track asm("v0");
 
     entryBase = D_801F1854;
-    state = D_801E42E4;
+    state = g_SceneId;
     D_801E7740 = 3;
 
     if (state == 0xB) {
@@ -64,7 +64,7 @@ void func_80038844(void) {
         i = 0;
         one = 1;
         flagPtr = &entryBase->activeFlag;
-        D_801E408C = D_8019CABC;
+        D_801E408C = g_GrandPrixSeries;
         cursor = table;
         do {
             track = *(u16 *)&D_801E408C;
@@ -88,7 +88,7 @@ void func_80038844(void) {
         i = 0;
         one = 1;
         flagPtr = &entryBase->activeFlag;
-        D_801E408C = D_8019CABC;
+        D_801E408C = g_GrandPrixSeries;
         cursor = table;
         do {
             track = *(u16 *)&D_801E408C;

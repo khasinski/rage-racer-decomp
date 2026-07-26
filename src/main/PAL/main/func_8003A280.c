@@ -1,10 +1,10 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/state.h"
 
 extern u8 D_801F1854[];
 extern u8 D_8009E744[];
 extern s32 D_801E40D8;
-extern s32 D_801E42E4;
 extern s32 D_8009E778;
 
 void func_8003A280(GameCarRuntime *car, s32 arg1) {
@@ -56,7 +56,7 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
         s16 bucket;
         s32 val;
 
-        if (D_801E42E4 != 0xC && i == k11) {
+        if (g_SceneId != 0xC && i == k11) {
             break;
         }
         if (i == arg1) {

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/audio.h"
 
 extern s32 D_801E6D08;
 extern s16 D_801E6CA8;
@@ -6,7 +7,6 @@ extern u8 D_801E6D00[];
 extern u8 D_801E6D04[];
 extern u8 D_801E6D10[];
 extern u8 D_801E6D14[];
-extern s32 D_801E6CA4;
 
 void func_80077C7C(s32 voice, s32 vab, s32 prog, s32 tone, s32 note, s32 a5, s32 a6, s32 a7);
 void func_80078528(s32 voice, s16 left, s16 right);
@@ -14,7 +14,7 @@ void func_80078018(s32 voice);
 
 #define UPDATE_BASIC_EFFECT_VOLUME()                                  \
     raw = *(s32 *)(D_801E6D10 + offset);                              \
-    scale = D_801E6CA4;                                                \
+    scale = g_EffectVolumeScale;                                                \
     left = raw * scale;                                                \
     raw = *(s32 *)(D_801E6D14 + offset);                              \
     voice = i + 8;                                                     \
@@ -46,7 +46,7 @@ void func_80078018(s32 voice);
 
 #define START_BASIC_EFFECT_VOLUME()                                   \
     raw = *(s32 *)(D_801E6D10 + offset);                              \
-    scale = D_801E6CA4;                                                \
+    scale = g_EffectVolumeScale;                                                \
     left = raw * scale;                                                \
     raw = i + 8;                                                       \
     asm("" : "=r"(raw) : "0"(raw));                                    \

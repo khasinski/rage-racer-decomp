@@ -1,17 +1,17 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/state.h"
+#include "game/menu.h"
+#include "game/render.h"
 extern s32 D_8009B338;
 extern s32 D_8019CB0C;
 extern s16 D_801E4DAC;
 extern s32 D_8009B334;
 extern s32 D_8009B31C;
 extern s32 D_8009B320;
-extern s32 D_8009B308;
 extern s32 D_8009B30C;
 extern s32 D_8009B300;
 extern s32 D_8009B310;
-extern s32 D_8009B318;
-extern s32 D_8009B340;
 extern s32 D_8009B344;
 extern s32 D_8009B348;
 extern s32 D_8009B34C;
@@ -26,22 +26,16 @@ extern s32 D_8009B36C;
 extern s32 D_8009B370;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
-extern s32 D_8009B2F8;
 extern u8 D_8009B2F0;
 extern u8 *D_8019C764;
-extern s32 D_8019C9F0;
 extern s32 D_8019C9F8;
 extern s32 D_8019C7AC;
 extern s32 D_8019C908;
 extern u16 D_8019CABC;
 extern u16 D_801E436A;
-extern u16 D_801E436E;
-extern s32 D_801E428C;
 extern s32 D_801E40D4;
-extern s32 D_801E42E4;
 extern GameRaceProgress *D_801E4FAC;
 extern u8 *D_8009E67C;
-extern s32 D_8009E6A4;
 extern u8 D_80081818;
 extern u8 D_800817A0;
 extern u8 D_80082460;
@@ -96,22 +90,22 @@ void func_80053730(void) {
     if (D_801E4DAC != 0) {
         hdr = &D_800817A0;
     }
-    state = D_8009B308;
+    state = GameMenuBusy;
     if (state == 0) {
         D_8009B30C = 1;
-        func_800487D8(D_8019C764, &D_8009B2F8, -1);
+        func_800487D8(D_8019C764, &g_UiScriptProgress2, -1);
         res = func_80053650();
         func_80049418(1, 1, res, func_80053688());
-        func_800489AC(D_8019C9F0, 2, D_8019C7AC);
-        func_800487D8(hdr, &D_8019C9F0, 0);
+        func_800489AC(g_UiScriptProgress, 2, D_8019C7AC);
+        func_800487D8(hdr, &g_UiScriptProgress, 0);
         func_8004CF30(7);
-        if ((func_800487D8(&D_80082460, &D_8019C9F0, 1) != 0) && (D_8009B2F8 <= 0)) {
-            D_8009B318 = -1;
-            if (D_801E436E & 0x1000) {
+        if ((func_800487D8(&D_80082460, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
+            g_MenuOverlayPattern = -1;
+            if (g_PadEdge2 & 0x1000) {
                 func_8005D6EC(1);
                 D_8019C7AC = (D_8019C7AC > 0) ? D_8019C7AC - 1 : 2;
             }
-            if (D_801E436E & 0x4000) {
+            if (g_PadEdge2 & 0x4000) {
                 func_8005D6EC(1);
                 D_8019C7AC = (D_8019C7AC < 2) ? D_8019C7AC + 1 : 0;
             }
@@ -127,7 +121,7 @@ void func_80053730(void) {
                         s32 lt;
                         func_8005D6EC(8);
                         lu = D_8009B34C;
-                        llap = D_801E428C;
+                        llap = g_CourseIndex;
                         lprev = D_8009B350;
                         lt = D_8009B364;
                         D_8009B350 = 0;
@@ -136,7 +130,7 @@ void func_80053730(void) {
                         llap = llap - 1;
                         D_8009B34C = (lu - lprev) + 0x7A120;
                         D_8009B360 = (D_8009B360 - lt) + 0x1F4000;
-                        D_801E428C = llap;
+                        g_CourseIndex = llap;
                         D_8009B370 = llap;
                         D_8009B368 = D_8009E67C[llap & 3];
                         D_8009B334 = (llap < 4) ? -1 : 1;
@@ -157,7 +151,7 @@ void func_80053730(void) {
                             s32 lbase;
                             func_8005D6EC(8);
                             lu = 0x7A120;
-                            llap = D_801E428C;
+                            llap = g_CourseIndex;
                             lprev = D_8009B350;
                             lt = D_8009B34C;
                             lbase = D_8009B364;
@@ -168,7 +162,7 @@ void func_80053730(void) {
                             lprev = lprev - lt;
                             lu = lu - lprev;
                             D_8009B360 = (D_8009B360 - lbase) + 0x1F4000;
-                            D_801E428C = llap;
+                            g_CourseIndex = llap;
                             D_8009B370 = llap;
                             D_8009B34C = lu;
                             D_8009B368 = D_8009E67C[llap & 3];
@@ -177,12 +171,12 @@ void func_80053730(void) {
                     }
                 }
             }
-            if (D_801E436E & 0x860) {
+            if (g_PadEdge2 & 0x860) {
                 sel = D_8019C7AC;
                 if (sel == 0) {
                     func_8005D6EC(2);
-                    D_8009B308 = 1;
-                    D_8009B318 = 1;
+                    GameMenuBusy = 1;
+                    g_MenuOverlayPattern = 1;
                     D_8009B334 = -1;
                     D_8009B35C = 0x3D090;
                     D_8009B368 = 0;
@@ -192,13 +186,13 @@ void func_80053730(void) {
                         u16 hv;
                         func_8005D6EC(2);
                         hv = 0;
-                        if (D_8009E6A4 < 5) {
+                        if (g_GrandPrixClass < 5) {
                             hv = D_8019CABC;
                         }
                         D_8019C764 = &D_80082604;
-                        D_8009B308 = -1;
+                        GameMenuBusy = -1;
                         D_8019CABC = hv;
-                        D_8009B2F8 = 0;
+                        g_UiScriptProgress2 = 0;
                         D_8009B2F0 = 1;
                     } else {
                         func_8005D6EC(3);
@@ -206,21 +200,21 @@ void func_80053730(void) {
                         D_8009B30C = -1;
                         D_8009B334 = -1;
                         D_8009B35C = 0x3D090;
-                        D_8009B308 = sel;
+                        GameMenuBusy = sel;
                         D_8009B368 = 0;
-                        D_8019CABC = D_801E428C >> 2;
+                        D_8019CABC = g_CourseIndex >> 2;
                         D_8009B360 = (D_8009B360 - D_8009B364) + 0x1F4000;
                     }
                 } else {
                     func_8005D6EC(2);
                     if (D_801E4DAC != 0) {
                         D_8019C764 = &D_800825A4;
-                        D_8009B308 = -2;
-                        D_8009B2F8 = 0;
-                        D_8009B2F0 = D_8009E6A4;
+                        GameMenuBusy = -2;
+                        g_UiScriptProgress2 = 0;
+                        D_8009B2F0 = g_GrandPrixClass;
                     } else {
-                        D_8009B308 = 3;
-                        D_8009B318 = 1;
+                        GameMenuBusy = 3;
+                        g_MenuOverlayPattern = 1;
                         D_8009B334 = -1;
                     }
                 }
@@ -229,18 +223,18 @@ void func_80053730(void) {
     } else if (state < 0) {
         if (state == -1) {
             u16 *pad;
-            func_800487D8(&D_800827FC, &D_8009B2F8, 0);
-            func_800487D8(&D_80082790, &D_8009B2F8, 0);
-            if (func_800487D8(D_8019C764, &D_8009B2F8, 1) != 0) {
-                if (D_801E436E & 0x860) {
+            func_800487D8(&D_800827FC, &g_UiScriptProgress2, 0);
+            func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+            if (func_800487D8(D_8019C764, &g_UiScriptProgress2, 1) != 0) {
+                if (g_PadEdge2 & 0x860) {
                     func_8005D6EC((D_8009B2F0 != 0) ? 2 : 3);
-                    D_8009B308 = -3;
+                    GameMenuBusy = -3;
                     D_8009B300 = 0x23;
                 }
-                pad = (u16 *)&D_801E436E;
+                pad = (u16 *)&g_PadEdge2;
                 if (*pad & 0x90) {
                     func_8005D6EC(3);
-                    D_8009B308 = -4;
+                    GameMenuBusy = -4;
                 }
                 if (*pad & 0x8000) {
                     func_8005D6EC(1);
@@ -258,28 +252,28 @@ void func_80053730(void) {
             }
         } else if (state == -2) {
             u16 *pad;
-            if (func_800487D8(D_8019C764, &D_8009B2F8, 1) != 0) {
-                if (D_801E436E & 0x860) {
+            if (func_800487D8(D_8019C764, &g_UiScriptProgress2, 1) != 0) {
+                if (g_PadEdge2 & 0x860) {
                     func_8005D6EC(2);
-                    if (D_8009B2F0 == D_8009E6A4) {
-                        D_8009B308 = 0;
+                    if (D_8009B2F0 == g_GrandPrixClass) {
+                        GameMenuBusy = 0;
                     } else {
-                        D_8009B308 = -5;
+                        GameMenuBusy = -5;
                         D_8009B310 = 0;
                         D_8009B300 = 0x23;
                         func_8005026C(0);
                     }
                 }
-                pad = (u16 *)&D_801E436E;
+                pad = (u16 *)&g_PadEdge2;
                 if (*pad & 0x90) {
                     func_8005D6EC(3);
-                    D_8009B308 = 0;
+                    GameMenuBusy = 0;
                 }
                 if (*pad & 0x1000) {
                     func_8005D6EC(1);
                     D_8009B2F0 = (D_8009B2F0 != 0) ? D_8009B2F0 - 1 : D_801E4FAC->progression;
                 }
-                if (D_801E436E & 0x4000) {
+                if (g_PadEdge2 & 0x4000) {
                     func_8005D6EC(1);
                     D_8009B2F0 = (D_8009B2F0 < D_801E4FAC->progression) ? D_8009B2F0 + 1 : 0;
                 }
@@ -293,12 +287,12 @@ void func_80053730(void) {
         } else if (state == -3) {
             cnt = D_8009B300;
             if (cnt <= 0) {
-                func_800487D8(&D_800827FC, &D_8009B2F8, -1);
-                func_800487D8(&D_80082790, &D_8009B2F8, 0);
-                func_800487D8(D_8019C764, &D_8009B2F8, 0);
-                if (D_8009B2F8 <= 0) {
+                func_800487D8(&D_800827FC, &g_UiScriptProgress2, -1);
+                func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+                func_800487D8(D_8019C764, &g_UiScriptProgress2, 0);
+                if (g_UiScriptProgress2 <= 0) {
                     func_8005E8E0();
-                    D_8009B308 = (D_8009B2F0 != 0) ? 4 : 2;
+                    GameMenuBusy = (D_8009B2F0 != 0) ? 4 : 2;
                     D_8009B30C = -1;
                     D_8009B35C = 0x3D090;
                     D_8009B368 = 0;
@@ -306,9 +300,9 @@ void func_80053730(void) {
                 }
             } else {
                 D_8009B300 = cnt - 1;
-                func_800487D8(&D_800827FC, &D_8009B2F8, 0);
-                func_800487D8(&D_80082790, &D_8009B2F8, 0);
-                func_800487D8(D_8019C764, &D_8009B2F8, 1);
+                func_800487D8(&D_800827FC, &g_UiScriptProgress2, 0);
+                func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+                func_800487D8(D_8019C764, &g_UiScriptProgress2, 1);
                 func_80048D64((D_8009B2F0 != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 1);
                 func_80046A2C(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80046A2C(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -316,35 +310,35 @@ void func_80053730(void) {
                 func_80048B88(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&D_80011BA0);
             }
         } else if (state == -4) {
-            func_800487D8(&D_800827FC, &D_8009B2F8, -1);
-            func_800487D8(&D_80082790, &D_8009B2F8, 0);
-            func_800487D8(D_8019C764, &D_8009B2F8, 0);
-            if (D_8009B2F8 <= 0) {
-                D_8009B308 = 0;
+            func_800487D8(&D_800827FC, &g_UiScriptProgress2, -1);
+            func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+            func_800487D8(D_8019C764, &g_UiScriptProgress2, 0);
+            if (g_UiScriptProgress2 <= 0) {
+                GameMenuBusy = 0;
             }
         } else if (state == -5) {
             cnt = D_8009B300;
             if (cnt <= 0) {
                 if (D_8009B310 != 0) {
                     if (func_8005026C(-1) == 0) {
-                        D_8009B308 = 0;
-                        D_8009B2F8 = 0;
+                        GameMenuBusy = 0;
+                        g_UiScriptProgress2 = 0;
                     }
                 } else {
                     if (func_8005026C(1) >= 0x19) {
                         D_8009B310 = 1;
-                        D_8009E6A4 = D_8009B2F0;
+                        g_GrandPrixClass = D_8009B2F0;
                         func_800212F0(D_8009B2F0);
                         D_8009B34C = 0x7A120;
                         D_8009B350 = 0x7A120;
                         D_8019C7AC = 0;
                         D_8009B370 = -1;
                         D_8009B360 = 0;
-                        D_801E428C = D_801E428C & ~3;
-                        D_8009B36C = D_801E428C;
+                        g_CourseIndex = g_CourseIndex & ~3;
+                        D_8009B36C = g_CourseIndex;
                         D_8009B368 = D_8009E67C[0];
                     }
-                    func_800487D8(D_8019C764, &D_8009B2F8, 1);
+                    func_800487D8(D_8019C764, &g_UiScriptProgress2, 1);
                     func_80048D64(0xB8, D_8009B2F0 * 0x1E + 0x6C, 0x38, 0x20, 1);
                     for (i = 0; i < D_801E4FAC->progression + 1; i++) {
                         func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -354,7 +348,7 @@ void func_80053730(void) {
                 }
             } else {
                 D_8009B300 = cnt - 1;
-                func_800487D8(D_8019C764, &D_8009B2F8, 1);
+                func_800487D8(D_8019C764, &g_UiScriptProgress2, 1);
                 func_80048D64(0xB8, D_8009B2F0 * 0x1E + 0x6C, 0x38, 0x20, 1);
                 for (i = 0; i < D_801E4FAC->progression + 1; i++) {
                     func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -365,25 +359,25 @@ void func_80053730(void) {
         }
         res = func_80053650();
         func_80049418(1, 1, res, func_80053688());
-        func_800489AC(D_8019C9F0, 2, D_8019C7AC);
-        func_800487D8(hdr, &D_8019C9F0, 0);
-        func_800487D8(&D_80082460, &D_8019C9F0, 1);
+        func_800489AC(g_UiScriptProgress, 2, D_8019C7AC);
+        func_800487D8(hdr, &g_UiScriptProgress, 0);
+        func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
         func_8004CF30(7);
     } else {
-        D_8009B340 = -1;
+        g_MenuHandlerIndex = -1;
         D_8009B344 = 1;
         res = func_80053650();
         func_80049418(-1, 1, res, func_80053688());
-        func_800487D8(hdr, &D_8019C9F0, -1);
-        func_800487D8(&D_80082460, &D_8019C9F0, 0);
-        func_800489AC(D_8019C9F0, 2, D_8019C7AC);
+        func_800487D8(hdr, &g_UiScriptProgress, -1);
+        func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
+        func_800489AC(g_UiScriptProgress, 2, D_8019C7AC);
         func_8004CF30(-9);
-        if (D_8019C9F0 <= 0) {
-            switch (D_8009B308) {
+        if (g_UiScriptProgress <= 0) {
+            switch (GameMenuBusy) {
             case 1:
                 if (D_8009B358 > 0x3D08F) {
                     D_8019C9F8 = 3;
-                    D_8009B340 = 4;
+                    g_MenuHandlerIndex = 4;
                     func_8004F3EC(0, 0);
                     func_80049418(0, 0, 0, 0);
                     D_8009B378 = -1;
@@ -401,14 +395,14 @@ void func_80053730(void) {
                     s32 d;
                     s32 lapc;
                     s32 half;
-                    raw = D_801E428C;
+                    raw = g_CourseIndex;
                     p = D_801E4FAC;
                     d = D_801E40D4;
-                    D_801E42E4 = 2;
-                    lapc = D_8009E6A4;
+                    g_SceneId = 2;
+                    lapc = g_GrandPrixClass;
                     half = D_801E4DAC;
                     raw = raw & 3;
-                    D_801E428C = raw;
+                    g_CourseIndex = raw;
                     p->state = raw;
                     p->pad4 = d;
                     p->lap = lapc;
@@ -421,7 +415,7 @@ void func_80053730(void) {
                 break;
             case 3:
                 D_8019C9F8 = 2;
-                D_8009B340 = 2;
+                g_MenuHandlerIndex = 2;
                 goto clear;
             case 4:
                 if ((D_8009B348 <= 0) && (D_8009B358 > 0x3D08F)) {
@@ -429,11 +423,11 @@ void func_80053730(void) {
                     s32 d;
                     s32 lapc;
                     s32 half;
-                    D_801E42E4 = 0x18;
-                    raw = D_801E428C & 3;
-                    D_801E4FAC->state = (D_801E428C = raw);
+                    g_SceneId = 0x18;
+                    raw = g_CourseIndex & 3;
+                    D_801E4FAC->state = (g_CourseIndex = raw);
                     d = D_801E40D4;
-                    lapc = D_8009E6A4;
+                    lapc = g_GrandPrixClass;
                     half = D_801E4DAC;
                     D_801E4FAC->pad4 = d;
                     D_801E4FAC->lap = lapc;
@@ -445,8 +439,8 @@ void func_80053730(void) {
                         p->elapsedTime = (s16)D_8019CABC;
                     }
                 clear:
-                    D_8019C9F0 = 0;
-                    D_8009B308 = 0;
+                    g_UiScriptProgress = 0;
+                    GameMenuBusy = 0;
                 }
                 break;
             default:

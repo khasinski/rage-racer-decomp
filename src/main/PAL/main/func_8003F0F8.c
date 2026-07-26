@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/race.h"
 
 typedef struct {
     s32 field_00;
@@ -14,7 +15,6 @@ typedef struct {
     s32 pad30;
 } Unk3F0F8State;
 
-extern s32 D_801E428C;
 extern Unk3F0F8State D_801E4FB8;
 extern s32 D_801E4FEC;
 extern s32 D_801E4FF4;
@@ -44,7 +44,7 @@ void func_8003F0F8(void) {
     register s32 a6 asm("$6");
 
     state = &D_801E4FB8;
-    if ((D_801E428C & 3) == 2) {
+    if ((g_CourseIndex & 3) == 2) {
         D_801E4FFA = 2;
         asm("" ::: "memory");
         src = D_8007E3A0;

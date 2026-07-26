@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/state.h"
 
 typedef struct {
     s16 id;    /* 0x0 */
@@ -14,7 +15,6 @@ extern Obj *D_801E4B2C;
 extern s32 D_801E4BBC;
 extern s32 *D_801E6828;
 extern s32 D_801E4030;
-extern s32 D_8009E694;
 
 void func_8001A530(Matrix *mtx, s32 angle);
 void func_80069568(void *a, void *b);
@@ -103,7 +103,7 @@ void func_8004123C(void) {
 
         flags = obj->flags;
         if (flags & 8) {
-            *(s32 *)0x1F800084 = ((D_8009E694 & 0x10) == 0) << 16;
+            *(s32 *)0x1F800084 = ((g_AnimTimer & 0x10) == 0) << 16;
         } else if (flags & 4) {
             *(s32 *)0x1F800084 = 0x10000;
         } else {

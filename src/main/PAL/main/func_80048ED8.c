@@ -1,9 +1,9 @@
 #include "common.h"
+#include "game/state.h"
 
 extern s32 D_8007FB04;
 extern s32 D_8009B268;
 extern s32 D_8009B26C;
-extern s32 D_8009E694;
 extern s32 D_8019CB0C;
 
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0,
@@ -51,7 +51,7 @@ void func_80048ED8(u8 x, s32 useFlag) {
     }
 
     if (useFlag != 0) {
-        if (D_8009E694 & 2) {
+        if (g_AnimTimer & 2) {
             alpha = 0xFF;
         } else {
             alpha = 0x60;

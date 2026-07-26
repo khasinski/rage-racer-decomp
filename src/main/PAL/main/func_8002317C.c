@@ -2,8 +2,8 @@
 #include "game/asset.h"
 #include "game/state.h"
 #include "psyq/gte.h"
+#include "game/render.h"
 
-extern u8 *D_8019C900;
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 extern s32 D_8007D53C;
@@ -22,8 +22,8 @@ void func_80069888(Matrix *arg0);
 void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
 void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_800686D4(s32 arg0, s32 arg1);
-extern s32 D_8019C768, D_801E4B30, D_8019CACC, D_801E42E4, D_801E40B8;
-extern s32 D_8009F0A0, D_801E42E0, D_801E42A0;
+extern s32 D_8019C768, D_801E4B30, D_8019CACC;
+extern s32 D_8009F0A0;
 void func_8001A3C0(s32 arg0);
 void func_80017884(s32 arg0);
 void func_800234DC(void);
@@ -38,7 +38,7 @@ void func_8002317C(void) {
     s32 value;
     void *next;
 
-    fade = D_801E40B8;
+    fade = g_SceneTimer;
     if (fade >= 0) {
         value = fade;
         if (value >= 0x100) {
@@ -49,7 +49,7 @@ void func_8002317C(void) {
     }
     fade = value;
 
-    base = D_8019C900 + 0xCC;
+    base = g_DrawBuffer + 0xCC;
     scratch = (void **)0x1F800000;
 
     next = *scratch;
@@ -89,8 +89,8 @@ inc_timer:
     state = D_8007D53C;
     switch (state) {
     case 0:
-        if ((u32)D_801E40B8 < 0x100) {
-            D_801E40B8 += 8;
+        if ((u32)g_SceneTimer < 0x100) {
+            g_SceneTimer += 8;
         } else {
             D_8007D53C = 1;
         }
@@ -101,15 +101,15 @@ inc_timer:
         }
         break;
     case 2:
-        D_801E40B8 -= 8;
-        if (D_801E40B8 == 0) {
+        g_SceneTimer -= 8;
+        if (g_SceneTimer == 0) {
             D_8007D53C = 3;
             func_8001BE9C(0, 0, 0);
         }
         break;
     case 3:
-        D_801E40B8++;
-        if ((u32)D_801E40B8 >= 21) {
+        g_SceneTimer++;
+        if ((u32)g_SceneTimer >= 21) {
             func_80019AF0(3);
         }
         break;
@@ -118,7 +118,7 @@ inc_timer:
 done:
     if (D_8007D53C != 3) {
         func_8002317C();
-        if ((u32)D_801E40B8 >= 10) {
+        if ((u32)g_SceneTimer >= 10) {
             func_80065860(1);
         }
     }
@@ -142,8 +142,8 @@ void func_800235D8(void) {
         D_8019CACC = 0;
         func_80017884(5);
         func_8001C088(0, 0, 0);
-        D_801E42E4 = 0x17;
-        D_801E40B8 = 0;
+        g_SceneId = 0x17;
+        g_SceneTimer = 0;
         func_800234DC();
         *(s32 *)0x1F800008 = 0;
         *(s32 *)0x1F80000C = 0;
@@ -153,8 +153,8 @@ void func_800235D8(void) {
         *(s32 *)0x1F800020 = 0;
         func_8001A610();
         D_8009F0A0 = 0xF0;
-        D_801E42E0 = 0x100;
+        g_FadeLevel = 0x100;
         g_GameMode = 0;
-        D_801E42A0 = -8;
+        g_FadeStep = -8;
     }
 }

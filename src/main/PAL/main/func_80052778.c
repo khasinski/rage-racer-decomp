@@ -1,7 +1,9 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/menu.h"
 
 extern s32 D_8009B334;
-extern s32 D_8009B340;
 extern s32 D_8009B34C;
 extern s32 D_8009B350;
 extern s32 D_8009B358;
@@ -9,10 +11,8 @@ extern s32 D_8009B35C;
 extern s32 D_8009B360;
 extern s32 D_8009B364;
 extern s32 D_8009B368;
-extern s32 D_8019C9F0;
 extern s32 D_8019C9F8;
 extern s32 D_801E8268;
-extern s32 D_801E428C;
 extern u8 *D_8009E67C;
 extern s32 D_8009E6D4;
 extern s32 D_8009E6D8;
@@ -23,7 +23,6 @@ extern s32 D_8009E6FC;
 extern s32 D_8009E718;
 extern s32 D_8009E71C;
 extern s32 D_8009E744;
-extern u8 D_8007F45C;
 extern u8 D_8007F460[];
 extern u8 D_8007BEDC[];
 extern u8 D_8007BEE4[];
@@ -52,7 +51,7 @@ void func_80052778(void) {
 
     one = 1;
     func_8005E88C();
-    D_8009B340 = one;
+    g_MenuHandlerIndex = one;
     D_8019C9F8 = one;
     func_80049418(0, 0, 0, 0);
 
@@ -61,12 +60,12 @@ void func_80052778(void) {
     largeValue = 0x1F0000;
     asm volatile("" : "=r"(largeValue) : "0"(largeValue));
     D_8009B358 = mode;
-    mode = D_801E428C;
+    mode = g_CourseIndex;
     eight = 8;
     D_801E8268 = eight;
     table = D_8009E67C;
     largeValue |= 0x4000;
-    D_8019C9F0 = 0;
+    g_UiScriptProgress = 0;
     D_8009E6D4 = 0;
     D_8009E6D8 = 0;
     D_8009E6DC = 0;
@@ -91,5 +90,5 @@ void func_80052778(void) {
 
     func_80065B24(D_8007BEE4, D_801E6F2C);
     func_80065B24(D_8007BEDC, D_801E444C);
-    func_8001D530(D_8007F460, D_8007F45C);
+    func_8001D530(D_8007F460, GameMenuStackDepth);
 }

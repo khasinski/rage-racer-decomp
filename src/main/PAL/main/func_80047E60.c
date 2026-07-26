@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/state.h"
 
 extern u8 D_8007F6E8[];
 extern s32 D_8007FB00;
-extern s32 D_8009E694;
 
 void func_80046A2C(
     void *arg0,
@@ -37,7 +37,7 @@ void GameDrawBitPatternOverlay(s32 arg0) {
     }
 
     if (arg0 < 0) {
-        if ((D_8009E694 % 6U) == 0) {
+        if ((g_AnimTimer % 6U) == 0) {
             D_8007FB00 += 8;
         }
 

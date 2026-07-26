@@ -7,13 +7,11 @@ extern u32 D_8009E87C;
 extern GameCarModelAsset *D_8009E698;
 extern GameAssetTripleHeader *D_8019CAFC;
 extern s32 D_8019CA64;
-extern GameCarEntry *D_8019C7C8;
 extern s32 D_801E40D4;
 extern u8 *D_801E4090;
 extern u8 *D_801E4B30;
 extern u8 *D_8019C754;
 extern u8 *D_801E8AB0;
-extern u8 *D_801F17A8;
 s32 func_80017848(s32 arg0, s32 arg1);
 s32 func_80017C78(s32 assetIndex, void *dst);
 void func_80017948(void *arg0, s32 arg1);
@@ -81,7 +79,7 @@ void func_80018588(void) {
 
 state_1:
         __asm__ volatile("" ::: "$3");
-        func_8005B768(1, D_801F17A8, D_801E8AB0, D_8019C754);
+        func_8005B768(1, g_AssetBlockPtr, D_801E8AB0, D_8019C754);
         g_AssetLoadState = state2;
         goto done;
 state_2:
@@ -101,23 +99,23 @@ state_3:
                 secondOffset = (s32)((u8 *)header + secondOffset);
                 header = (GameAssetTripleHeader *)((u8 *)header + firstOffset);
                 D_8019CA64 = (s32)header;
-                D_801F17A8 = (u8 *)secondOffset;
+                g_AssetBlockPtr = (u8 *)secondOffset;
                 func_80017A6C();
 
                 headerArg = D_8019CAFC;
                 assetOffset = headerArg->thirdOffset;
-                D_801F17A8 = (u8 *)headerArg + assetOffset;
-                func_8001A3C0(D_801F17A8);
+                g_AssetBlockPtr = (u8 *)headerArg + assetOffset;
+                func_8001A3C0(g_AssetBlockPtr);
 
                 g_AssetLoadState = 4;
-                D_801E4090 = D_801F17A8;
-                D_801E4B30 = D_801F17A8 + 0x40000;
+                D_801E4090 = g_AssetBlockPtr;
+                D_801E4B30 = g_AssetBlockPtr + 0x40000;
             }
         goto done;
 state_4:
             carIndex = D_801E40D4;
             indexOffset = carIndex << 3;
-            entry = (GameCarEntry *)(indexOffset + (s32)D_8019C7C8);
+            entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
             assetOffset = func_80017848(carIndex, entry->modelVariant) << 1;
             carModelBase = D_801E4090;
 
@@ -140,10 +138,10 @@ state_4:
                 carIndex = D_801E40D4;
                 if (carIndex < 10) {
                     indexOffset = carIndex << 3;
-                    entry = (GameCarEntry *)(indexOffset + (s32)D_8019C7C8);
+                    entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
                     func_8001D748(entry->shapeIndex, D_8009E698->imageDataOffset);
                     indexOffset = D_801E40D4 << 3;
-                    entry = (GameCarEntry *)(indexOffset + (s32)D_8019C7C8);
+                    entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
                     func_8001D900(entry->textureIndex, D_8009E698->imageDataOffset);
                 }
 
@@ -181,7 +179,7 @@ void func_800188B8(s32 arg0) {
 
     arg = arg0;
     index = arg << 3;
-    offset = (func_80017848(arg, ((GameCarEntry *)(index + (s32)D_8019C7C8))->modelVariant) * 2) + 0xA;
+    offset = (func_80017848(arg, ((GameCarEntry *)(index + (s32)g_CarTable))->modelVariant) * 2) + 0xA;
 
     if (g_AssetLoadState == 1) {
         ptr = D_801E4090;
@@ -211,9 +209,9 @@ void func_800188B8(s32 arg0) {
 
             test = arg < 10;
             if (test != 0) {
-                entry = (u8 *)(index + (s32)D_8019C7C8);
+                entry = (u8 *)(index + (s32)g_CarTable);
                 func_8001D748(((GameCarEntry *)entry)->shapeIndex, *(s32 *)(ptr + 0x24));
-                entry = (u8 *)(index + (s32)D_8019C7C8);
+                entry = (u8 *)(index + (s32)g_CarTable);
                 func_8001D900(((GameCarEntry *)entry)->textureIndex, *(s32 *)(ptr + 0x24));
             }
 

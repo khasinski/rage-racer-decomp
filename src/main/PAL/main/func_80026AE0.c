@@ -1,6 +1,10 @@
 #include "common.h"
 #include "game/asset.h"
 #include "game/car.h"
+#include "game/race.h"
+#include "game/state.h"
+#include "game/render.h"
+#include "game/menu.h"
 
 typedef struct UnkEventPair {
     s16 timer;
@@ -8,21 +12,16 @@ typedef struct UnkEventPair {
 } UnkEventPair;
 
 extern s32 D_801E682C;
-extern u32 D_801E42E4;
-extern u16 D_801E436E;
 extern u32 D_8019C760;
 extern void (*D_8007D6D0[])(void);
 void func_80017BE4(void);
 void func_800268EC(void);
 extern s32 D_8019C768;
-extern s32 D_801E42E0;
-extern s32 D_801E42A0;
 extern s32 D_801E4178;
 extern s32 D_801E6824;
 extern s32 D_8009E66C;
 void func_80065860(s32 arg0);
 void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
-extern s32 D_801E428C;
 extern u8 D_80011010[];
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_80025940(void);
@@ -36,13 +35,11 @@ extern s16 D_8007D6DC[];
 extern s16 D_8007D6DE[];
 extern s32 D_8007D6E0[];
 extern u32 D_801E40B8;
-extern u8 *D_8019C900;
 void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 void func_80042C0C(void);
 void func_80018410(void);
-extern s32 D_8009E694;
 extern u32 D_8009E870;
 extern u32 D_801E4030;
 extern u8 D_801F18CC[];
@@ -63,10 +60,10 @@ void func_8003E2E8(s32 arg0, s32 arg1);
 void func_80026AE0(void) {
     D_8007D6D0[D_801E682C]();
 
-    if ((D_801E42E4 == 0x1E) && ((D_801E436E & 0x860) != 0)) {
+    if ((g_SceneId == 0x1E) && ((g_PadEdge2 & 0x860) != 0)) {
         if (g_AssetLoadState != 0) {
             func_80017BE4();
-            D_801E42E4 = 3;
+            g_SceneId = 3;
             D_8019C760 = 0;
         } else {
             func_800268EC();
@@ -79,9 +76,9 @@ void func_80026B88(void) {
     func_8001BE9C(0, 0, 0);
 
     D_8019C768 = 0x80;
-    D_801E42E0 = 0x108;
-    D_801E42A0 = -4;
-    D_801E42E4 = 0x20;
+    g_FadeLevel = 0x108;
+    g_FadeStep = -4;
+    g_SceneId = 0x20;
     D_801E4178 = 0;
     D_801E6824 = 0;
     D_801E40B8 = 0;
@@ -95,37 +92,37 @@ void func_80026C0C(void) {
         func_80065860(1);
     }
 
-    delta = D_801E42A0;
+    delta = g_FadeStep;
     if (delta < 0) {
         register s32 value asm("$2");
 
-        value = D_801E42E0;
+        value = g_FadeLevel;
         value = value + delta;
-        D_801E42E0 = value;
+        g_FadeLevel = value;
 
-        if (D_801E42E0 < 0) {
-            D_801E42E0 = 0;
-            D_801E42A0 = 0;
+        if (g_FadeLevel < 0) {
+            g_FadeLevel = 0;
+            g_FadeStep = 0;
         }
 
-        func_80033AA0(D_801E42E0, 0x49);
+        func_80033AA0(g_FadeLevel, 0x49);
     } else if (delta > 0) {
         register s32 value asm("$4");
 
-        value = D_801E42E0;
+        value = g_FadeLevel;
         value = value + delta;
-        D_801E42E0 = value;
+        g_FadeLevel = value;
 
-        func_80033AA0(D_801E42E0, 0x49);
+        func_80033AA0(g_FadeLevel, 0x49);
 
-        if (D_801E42E0 >= 0x101) {
+        if (g_FadeLevel >= 0x101) {
             func_80065860(0);
-            D_801E428C = 0;
+            g_CourseIndex = 0;
             func_80025940();
             func_80042BF0();
             D_801E4178 = 3;
-            D_801E42E0 = 0x100;
-            D_801E42A0 = 0;
+            g_FadeLevel = 0x100;
+            g_FadeStep = 0;
         }
     }
 
@@ -144,7 +141,7 @@ void func_80026D30(void) {
 
 void func_80026D78(void) {
     if (g_AssetLoadState == 0) {
-        D_801E42A0 = 4;
+        g_FadeStep = 4;
         func_80042BC0(2);
         D_801E4178 = 2;
     }
@@ -213,11 +210,11 @@ void func_80026DE4(void) {
         register s32 tmp asm("v0");
         register u8 *base asm("v0");
 
-        camera = D_801E42E0;
+        camera = g_FadeLevel;
         scratch = (s32 *)0x1F800000;
         tmp = (camera << 3) - camera;
         scale_a = tmp << 5;
-        base = D_8019C900;
+        base = g_DrawBuffer;
         arg1 = *scratch;
         ptr = base + 0xD0;
         arg7 = (scale_a / 0x100) + 0x20;
@@ -230,7 +227,7 @@ void func_80026DE4(void) {
 }
 
 void func_80026F68(void) {
-    D_801E42E4 = 6;
+    g_SceneId = 6;
     func_80042C0C();
     func_80018410();
 }
@@ -244,26 +241,26 @@ void func_80026F9C(void) {
         func_80065860(1);
     }
 
-    if ((u32)D_801E40B8 >= 0x79 && (D_801E436E & 0x860)) {
+    if ((u32)D_801E40B8 >= 0x79 && (g_PadEdge2 & 0x860)) {
         func_80026F68();
     }
 
     timer = D_801E40B8;
     if (timer == 0x3C) {
-        D_801E42A0 = -4;
+        g_FadeStep = -4;
     } else if (timer == 0x42E) {
-        D_801E42A0 = 2;
+        g_FadeStep = 2;
     } else if (timer == 0x500) {
         func_80026F68();
     }
 
-    D_801E42E0 += D_801E42A0;
-    if (D_801E42E0 < 0) {
-        D_801E42E0 = 0;
-        D_801E42A0 = 0;
-    } else if (D_801E42E0 >= 0x100) {
-        D_801E42E0 = 0xFF;
-        D_801E42A0 = 0;
+    g_FadeLevel += g_FadeStep;
+    if (g_FadeLevel < 0) {
+        g_FadeLevel = 0;
+        g_FadeStep = 0;
+    } else if (g_FadeLevel >= 0x100) {
+        g_FadeLevel = 0xFF;
+        g_FadeStep = 0;
     }
 
     func_80026DE4();
@@ -271,7 +268,7 @@ void func_80026F9C(void) {
     active = (u32)(D_801E40B8 - 0x10) < 0x40F;
     if (active) {
         eventIndex = D_801E6824;
-        D_8009E694++;
+        g_AnimTimer++;
         if (D_8007D74C[eventIndex].timer == D_801E40B8) {
             D_801E6824 = eventIndex + 1;
             D_8009E66C = D_8007D74C[eventIndex].carIndex;
@@ -290,5 +287,5 @@ void func_80026F9C(void) {
     *(u32 *)0x1F800084 = D_801E4030;
     func_80041888();
     func_8004123C();
-    func_8003E2E8(D_8009E694, active);
+    func_8003E2E8(g_AnimTimer, active);
 }

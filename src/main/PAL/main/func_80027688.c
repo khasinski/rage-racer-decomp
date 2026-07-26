@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/render.h"
 
 extern volatile s32 D_8007D790;
 extern volatile s32 D_8007D794;
@@ -15,7 +16,6 @@ s32 func_8006A808(s32 arg0, void *arg1, s32 arg2);
 s32 func_8002745C(s32 arg0);
 void func_8006A554(s32 arg0, s32 arg1);
 extern s32 D_8007D78C;
-extern u8 *D_8019C900;
 extern u8 D_8007D7BC[];
 extern u8 D_8007D7BD[];
 extern u8 D_8007D87C[];
@@ -171,7 +171,7 @@ void func_80027874(s32 x, s32 y, u8 *str, s32 arg3) {
         } while (*sr != 0);
     }
     func_800666F4(next, 0, 1, 0x1D, D_8007BED0);
-    func_80064DDC(D_8019C900 + 0xCC, next);
+    func_80064DDC(g_DrawBuffer + 0xCC, next);
     *(u8 **) 0x1F800000 = next + 0xC;
     __asm__ __volatile__("" : : "r"(next));
 }

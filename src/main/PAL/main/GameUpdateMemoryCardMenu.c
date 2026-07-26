@@ -1,8 +1,7 @@
 #include "common.h"
+#include "game/state.h"
+#include "game/menu.h"
 
-extern s32 D_801E40B8;
-extern u16 D_801E436E;
-extern s32 D_801E42E4;
 extern s32 D_8009B564;
 extern s32 D_8009B568;
 extern s32 D_8009B6E8;
@@ -13,17 +12,11 @@ extern s32 D_8009B6FC;
 extern s32 D_8009B700;
 extern s32 D_8009B704;
 extern s32 D_8009B718;
-extern s32 D_8009B71C;
-extern s32 D_8009B720;
 extern volatile s32 D_8009B720_v asm("D_8009B720");
-extern s32 D_8009B724;
-extern s32 D_8009B728;
-extern s32 D_8009B72C;
 extern volatile s32 D_8009B72C_v asm("D_8009B72C");
 extern s32 D_8009B730;
 extern s32 D_8009B734;
 extern s32 D_8009B73C;
-extern s32 D_8009B740;
 extern volatile s32 D_8009B740_v asm("D_8009B740");
 extern s32 D_8009B744;
 extern s32 D_8009B9A0;
@@ -73,11 +66,11 @@ void GameUpdateMemoryCardMenu(void) {
     s32 mcue;
     s32 mslot;
 
-    if (D_801E40B8 == two) {
+    if (g_SceneTimer == two) {
         func_80065860(1);
     }
 
-    if ((u32) D_801E40B8 >= 6) {
+    if ((u32) g_SceneTimer >= 6) {
         s32 step = D_8009B9A0;
         if (step < 0) {
             D_8009B9A4 = D_8009B9A4 + D_8009B9A0;
@@ -94,7 +87,7 @@ void GameUpdateMemoryCardMenu(void) {
             D_8009B9A0 = 0;
             D_8009B9A4 = 0;
             D_80082FB8 = 0;
-            D_801E42E4 = two;
+            g_SceneId = two;
         } else {
             goto L57;
         }
@@ -105,18 +98,18 @@ L57:
     func_8006136C(D_8009B9A4);
 
     {
-    register s32 cur asm("$4") = D_801E40B8;
+    register s32 cur asm("$4") = g_SceneTimer;
     if ((u32) cur < 5) {
         s32 ns = cur + 1;
-        D_801E40B8 = ns;
-        D_8009B728 = 0xF;
+        g_SceneTimer = ns;
+        g_McMenuPhase = 0xF;
         if (ns != 3) goto L_epilogue;
         D_8009B564 = 0;
         func_8005F65C(&D_8009B568);
         D_8009B6F4 = -1;
-        D_8009B728 = 0;
-        D_8009B724 = ns;
-        D_8009B71C = ns;
+        g_McMenuPhase = 0;
+        g_McMenuSelection = ns;
+        g_McMenuState = ns;
         D_80082FA4 = 0;
         D_80082FA8 = 0;
         D_80082FAC = 0;
@@ -130,7 +123,7 @@ L57:
     /* state >= 5: active-menu entry */
     {
         register s32 nx asm("$2") = cur + 1;
-        D_801E40B8 = nx;
+        g_SceneTimer = nx;
     }
     }
     if (D_80082FB8 == 0) goto L_sw1;
@@ -141,13 +134,13 @@ L_sw1:
         s32 st = func_8005ECE0(0, 0);
         s32 c;
         s32 sd;
-        D_8009B720 = st;
+        g_McMenuSlotData = st;
         switch (st) {
         case 0: {
             s32 b = D_8009B6E8;
             D_8009B6E8 = b + 1;
             if (b >= 6) {
-                D_8009B724 = 3;
+                g_McMenuSelection = 3;
             }
             goto L_sw2;
         }
@@ -159,12 +152,12 @@ L_sw1:
         default: sd = D_8009B720_v; c = 0x11; break;
         }
         D_8009B6E8 = 0;
-        D_8009B72C = c;
-        D_8009B724 = sd;
+        g_McMenuSubState = c;
+        g_McMenuSelection = sd;
     }
 
 L_sw2:
-    switch (D_8009B71C) {
+    switch (g_McMenuState) {
     case 3: goto L_state3;
     case 1: goto L_state1;
     case 2: goto L_state2;
@@ -176,46 +169,46 @@ L_sw2:
 
 L_state3:
     {
-    u16 lpad = D_801E436E;
-    D_8009B728 = 0xF;
+    u16 lpad = g_PadEdge2;
+    g_McMenuPhase = 0xF;
     D_80082FB8 = 0;
     if ((lpad & 0x90) && !fadeBusy) {
         func_8005D6EC(3);
         func_8006138C();
     }
     }
-    switch (D_8009B724) {
+    switch (g_McMenuSelection) {
     case 1:
-        if (D_8009B720 == 1) {
+        if (g_McMenuSlotData == 1) {
             if (D_8009B6F4 != 2) {
-                D_8009B71C = 2;
+                g_McMenuState = 2;
             } else {
-                D_8009B71C = D_8009B720;
+                g_McMenuState = g_McMenuSlotData;
             }
         }
         goto L254;
     case 2:
-        D_8009B71C = 2;
+        g_McMenuState = 2;
         goto L254;
     case -1:
     case -2:
-        D_8009B71C = D_8009B724;
+        g_McMenuState = g_McMenuSelection;
         goto L254;
     case 3:
         goto L254;
     case -3:
     default: /* 0 */
-        if (D_8009B720 == -3) {
+        if (g_McMenuSlotData == -3) {
             s32 r = D_8009B6F0;
             D_8009B6F0 = r + 1;
             if (r >= 4) {
-                D_8009B71C = D_8009B720;
+                g_McMenuState = g_McMenuSlotData;
             }
         }
         goto L254;
     }
 L254:
-    if (D_8009B71C != 3) {
+    if (g_McMenuState != 3) {
         D_8009B6F0 = 0;
     }
     goto L_epilogue;
@@ -232,9 +225,9 @@ L_state1:
 L_copyselect:
     {
         s32 *p = &D_80082F54;
-        D_8009B728 = 0;
+        g_McMenuPhase = 0;
         func_800611C8(p, 0, D_8009B744 - 1);
-        pad = D_801E436E;
+        pad = g_PadEdge2;
         if ((pad & 0x860) == 0) goto L_cx3;
         if (*p < D_8009B744 - 1) {
             func_8005D6EC(2);
@@ -268,8 +261,8 @@ L_sw4:
         if (D_8009B734 == 0) goto L_b391;
         a0 = D_8009B564;
         if ((a0 & 7) == 0) goto L_b381;
-        D_8009B728 = 2;
-        if ((D_801E436E & 0x860) == 0) goto L_b477;
+        g_McMenuPhase = 2;
+        if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
         if (((a0 >> *s0) & 1) == 0) goto L_b377;
         func_8005D6EC(2);
         D_80082FAC = 0;
@@ -280,15 +273,15 @@ L_sw4:
         nv = 0x28;
         goto L_b475;
     L_b381:
-        D_8009B728 = 5;
-        if ((D_801E436E & 0x860) == 0) goto L_b477;
+        g_McMenuPhase = 5;
+        if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
         goto L_b433;
     L_b391:
         if (D_8009B73C != 0) goto L_b448;
         a0 = D_8009B564;
         if ((a0 & 7) == 0) goto L_b425;
-        D_8009B728 = 1;
-        if ((D_801E436E & 0x860) == 0) goto L_b477;
+        g_McMenuPhase = 1;
+        if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
         if (((a0 >> *s0) & 1) == 0) goto L_b421;
         func_8005D6EC(2);
         D_80082FAC = 0;
@@ -299,8 +292,8 @@ L_sw4:
         nv = 0x19;
         goto L_b475;
     L_b425:
-        D_8009B728 = 4;
-        if ((D_801E436E & 0x860) == 0) goto L_b439;
+        g_McMenuPhase = 4;
+        if ((g_PadEdge2 & 0x860) == 0) goto L_b439;
     L_b433:
         func_8005D6EC(5);
         D_80082F50 = 0;
@@ -310,8 +303,8 @@ L_sw4:
         D_80082F50 = 0;
         goto L_b477;
     L_b448:
-        D_8009B728 = 1;
-        if ((D_801E436E & 0x860) == 0) goto L_b477;
+        g_McMenuPhase = 1;
+        if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
         if (((D_8009B564 >> *s0) & 1) == 0) goto L_b469;
         func_8005D6EC(2);
         D_80082FAC_v = 0;
@@ -333,7 +326,7 @@ L_sw4:
         s32 *p = &D_80082FAC;
         s32 hi = D_80082F58 << 1;
         s32 lo = D_80082FAC + 9;
-        D_8009B728 = hi + lo;
+        g_McMenuPhase = hi + lo;
         func_8006124C(p);
         if (D_80082FAC == 0) goto L_b518;
         if ((func_800612CC() & 0xFFFF) == 0) goto L_b513;
@@ -349,7 +342,7 @@ L_sw4:
     }
 
     case 0x0B:
-        D_8009B728 = 0xF;
+        g_McMenuPhase = 0xF;
         D_80082FB4 = 0xA;
         D_80082FA4 = 0xC;
         goto L_sw5;
@@ -367,7 +360,7 @@ L_sw4:
         s32 a0 = D_80082F58;
         s32 x;
         s32 dp;
-        D_8009B72C = 5;
+        g_McMenuSubState = 5;
         x = func_80060724(a0, (void *)((s32)&D_8009B568 + (a0 << 7)));
         D_80082FA8 = x;
         if (x == 0) goto L_b574;
@@ -402,10 +395,10 @@ L_sw4:
         L_b605:
             nv = 0xC;
         L_b606:
-            D_8009B72C = nv;
+            g_McMenuSubState = nv;
         }
     L_b608:
-        D_8009B718 = D_8009B740;
+        D_8009B718 = GameMenuLoadPhase;
     L_b611:
         nv = 0x11;
     L_b613:
@@ -444,7 +437,7 @@ L_sw4:
         } else {
             x = 0x10;
         }
-        D_8009B728 = x;
+        g_McMenuPhase = x;
         D_80082FB4 = 0x3C;
         D_80082FB8 = 0;
         D_80082FA4 = 0x15;
@@ -465,11 +458,11 @@ L_sw4:
     }
 
     case 0x19:
-        D_8009B728 = 4;
+        g_McMenuPhase = 4;
         goto L_b850;
 
     case 0x1E:
-        D_8009B72C = 7;
+        g_McMenuSubState = 7;
         D_80082FB4 = 5;
         D_80082FA4 = 0x1F;
         goto L_sw5;
@@ -487,7 +480,7 @@ L_sw4:
         register s32 one asm("$3");
         f = 0xF;
         one = 1;
-        D_8009B728 = f;
+        g_McMenuPhase = f;
         D_80082FB4 = f;
         D_80082FB8 = one;
         D_80082FA4 = 0x21;
@@ -511,14 +504,14 @@ L_sw4:
         if (D_80082FA8 == 0) goto L_b757;
         v1x = *s0;
         D_8009B6F8 = 1;
-        D_8009B72C = 8;
+        g_McMenuSubState = 8;
         D_80082FC4 = v1x;
         goto L_b762;
     L_b757:
         D_8009B6F8 = 1;
-        D_8009B72C = 0xF;
+        g_McMenuSubState = 0xF;
     L_b762:
-        dp = D_8009B740;
+        dp = GameMenuLoadPhase;
         D_80082FB4 = 0x3C;
         D_80082FA4 = 0x23;
         D_8009B718 = dp;
@@ -556,7 +549,7 @@ L_sw4:
         } else {
             x = 0x10;
         }
-        D_8009B728 = x;
+        g_McMenuPhase = x;
         D_80082FB4 = 0x3C;
         D_80082FB8 = 0;
         D_80082FA4 = 0x27;
@@ -577,7 +570,7 @@ L_sw4:
     }
 
     case 0x28:
-        D_8009B728 = 0x14;
+        g_McMenuPhase = 0x14;
     L_b850:
         if ((func_800612CC() & 0xFFFF) != 0) goto L_b862;
         if ((func_8006131C() & 0xFFFF) == 0) goto L_sw5;
@@ -606,14 +599,14 @@ L_sw4:
         goto L_sw5;
     }
 L_sw5:
-    switch (D_8009B724) {
+    switch (g_McMenuSelection) {
     case 3:
-        D_8009B6F4 = D_8009B71C;
+        D_8009B6F4 = g_McMenuState;
         /* fallthrough */
     case -2:
     case -1:
     case 2:
-        D_8009B71C = D_8009B724;
+        g_McMenuState = g_McMenuSelection;
         goto L_sw5tail;
     case 1:
         if (D_80082FC0 != 0) {
@@ -624,20 +617,20 @@ L_sw5:
     case -3:
     default: /* 0 */
         {
-            s32 sd = D_8009B720;
+            s32 sd = g_McMenuSlotData;
             D_80082FC0 = 1;
             if (sd == -3) {
                 s32 r = D_80082FBC - 1;
                 D_80082FBC = r;
                 if (r == 0) {
-                    D_8009B71C = sd;
+                    g_McMenuState = sd;
                 }
             }
         }
         goto L_sw5tail;
     }
 L_sw5tail:
-    if (D_8009B71C == 1) {
+    if (g_McMenuState == 1) {
         goto L_epilogue;
     }
     D_80082FA4 = 0;
@@ -647,11 +640,11 @@ L_sw5tail:
     goto L_epilogue;
 
 L_state2:
-    D_8009B72C = 1;
-    D_8009B728 = 0xF;
+    g_McMenuSubState = 1;
+    g_McMenuPhase = 0xF;
     switch (D_80082FA4) {
     case 0:
-        if ((u32)D_801E40B8 < 0x1F) goto L_sw7;
+        if ((u32)g_SceneTimer < 0x1F) goto L_sw7;
         wtmp = 1;
         goto L_b1017;
     case 1:
@@ -659,7 +652,7 @@ L_state2:
         {
             s32 t = D_8009B704 + 1;
             D_8009B704 = t;
-            if ((D_801E436E & 0x90) == 0) goto L1003;
+            if ((g_PadEdge2 & 0x90) == 0) goto L1003;
             if (t < 0x79) goto L1003;
         }
         D_8009B700 = 0;
@@ -668,7 +661,7 @@ L_state2:
         func_8005D6EC(3);
         func_8006138C();
     L1003:
-        if (D_8009B720 != 1) goto L_sw7;
+        if (g_McMenuSlotData != 1) goto L_sw7;
         D_8009B700 += 1;
         if (D_8009B700 < 2) goto L_sw7;
         wtmp = 2;
@@ -732,21 +725,21 @@ L_state2:
         D_80082FA4 = 9;
         goto L_sw7;
     case 9:
-        if (D_8009B724 != 1) goto L_sw7;
-        D_8009B71C = D_8009B724;
+        if (g_McMenuSelection != 1) goto L_sw7;
+        g_McMenuState = g_McMenuSelection;
         goto L_sw7;
     default:
         goto L_sw7;
     }
 
 L_sw7:
-    switch (D_8009B724) {
+    switch (g_McMenuSelection) {
     case 3:
-        D_8009B6F4 = D_8009B71C;
+        D_8009B6F4 = g_McMenuState;
         /* fallthrough */
     case -2:
     case -1:
-        D_8009B71C = D_8009B724;
+        g_McMenuState = g_McMenuSelection;
         goto L_sw7tail;
     case 2:
         if (D_80082FC0 != 0) {
@@ -760,25 +753,25 @@ L_sw7:
     case 0:
     default:
         D_80082FC0 = 1;
-        if (D_8009B720 != -3) goto L_sw7tail;
+        if (g_McMenuSlotData != -3) goto L_sw7tail;
         {
             s32 t = D_80082FBC;
             D_80082FBC = t - 1;
             if (D_80082FBC != 0) goto L_sw7tail;
         }
-        D_8009B71C = D_8009B720;
+        g_McMenuState = g_McMenuSlotData;
         goto L_sw7tail;
     }
 
 L_sw7tail:
-    if (D_8009B71C == 2) goto L_epilogue;
-    D_8009B72C = 1;
-    D_8009B728 = 0xF;
+    if (g_McMenuState == 2) goto L_epilogue;
+    g_McMenuSubState = 1;
+    g_McMenuPhase = 0xF;
     D_80082FA4 = 0;
     goto L_b1678;
 L_stateM1:
-    D_8009B72C = 0xA;
-    D_8009B728 = 3;
+    g_McMenuSubState = 0xA;
+    g_McMenuPhase = 3;
     D_80082FB8 = 0;
     mst = D_80082FA4;
     if (mst == 1) goto L_h1219;
@@ -828,14 +821,14 @@ L_b1264:
     goto L_sw8;
 
 L_b1268:
-    if ((D_801E436E & 0x90) == 0) goto L_sw8;
+    if ((g_PadEdge2 & 0x90) == 0) goto L_sw8;
     if (fadeBusy != 0) goto L_sw8;
     D_80082FA4 = 0;
     func_8005D6EC(3);
     goto L_b1288;
 
 L_b1280:
-    if ((D_801E436E & 0x90) == 0) goto L_sw8;
+    if ((g_PadEdge2 & 0x90) == 0) goto L_sw8;
     if (fadeBusy != 0) goto L_sw8;
     func_8005D6EC(3);
     /* fall through */
@@ -845,10 +838,10 @@ L_b1288:
     /* fall through */
 
 L_sw8:
-    switch (D_8009B724) {
+    switch (g_McMenuSelection) {
     case 1:
     case 2:
-        D_8009B71C = 2;
+        g_McMenuState = 2;
         /* fall through */
     case -1:
         if (D_80082FC0 == 0) goto L_sw8tail;
@@ -856,24 +849,24 @@ L_sw8:
         D_80082FBC = 3;
         goto L_sw8tail;
     case -2:
-        D_8009B71C = -2;
+        g_McMenuState = -2;
         goto L_sw8tail;
     default:
     case -3:
     case 0:
-        mslot = D_8009B720;
+        mslot = g_McMenuSlotData;
         D_80082FC0 = 1;
         if (mslot != -3) goto L_sw8tail;
         D_80082FBC -= 1;
         if (D_80082FBC != 0) goto L_sw8tail;
-        D_8009B71C = mslot;
+        g_McMenuState = mslot;
         /* fall through */
     case 3:
         ;
     }
 
 L_sw8tail:
-    if (D_8009B71C == -1) goto L_epilogue;
+    if (g_McMenuState == -1) goto L_epilogue;
     D_80082FA4 = 0;
     goto L_epilogue;
 L_stateM2:
@@ -884,10 +877,10 @@ L_stateM2:
 L_m2sel:
     {
         s32 *p = &D_80082F54;
-        D_8009B72C = 0xB;
-        D_8009B728 = 0;
+        g_McMenuSubState = 0xB;
+        g_McMenuPhase = 0;
         func_800611C8(p, 0, D_8009B744 - 1);
-        pad = D_801E436E;
+        pad = g_PadEdge2;
         if ((pad & 0x860) == 0) goto L1415;
         if (*p != 0) goto L1395;
         func_8005D6EC(2);
@@ -921,7 +914,7 @@ L_sw9:
     switch (D_80082FA4) {
     case 0:
         if (D_8009B734 == 0) goto L1461;
-        D_8009B728 = 5;
+        g_McMenuPhase = 5;
     L1447:
         { u16 p = func_800612CC(); if (p) goto L1457; }
     L_b1452:
@@ -930,12 +923,12 @@ L_sw9:
         D_80082F50 = 0;
         goto L_b1606;
     L1461:
-        D_8009B728 = 6;
+        g_McMenuPhase = 6;
         { u16 p = func_800612CC(); if (p == 0) goto L_b1452; }
         D_80082FA4 = 1;
         goto L_sw10;
     case 1:
-        D_8009B728 = D_80082FAC + 7;
+        g_McMenuPhase = D_80082FAC + 7;
         func_8006124C(&D_80082FAC);
         if (D_80082FAC == 0) goto L1447;
         { u16 p = func_800612CC(); if (p == 0) goto L1496; }
@@ -965,7 +958,7 @@ L_sw9:
         }
         goto L_sw10;
     case 7:
-        D_8009B728 = 0x13;
+        g_McMenuPhase = 0x13;
         D_80082FB4 -= 1;
         if (D_80082FB4 == 0) {
             D_80082FB8 = 0;
@@ -974,8 +967,8 @@ L_sw9:
         goto L_sw10;
     case 8:
         {
-        u16 lpad = D_801E436E;
-        D_8009B728 = 0x13;
+        u16 lpad = g_PadEdge2;
+        g_McMenuPhase = 0x13;
         if ((lpad & 0x90) == 0) goto L_sw10;
         }
         D_80082FB8 = 0;
@@ -988,8 +981,8 @@ L_sw9:
         func_8006138C();
         goto L_sw10;
     case 0xA:
-        D_8009B72C = 0x12;
-        D_8009B728 = 0x10;
+        g_McMenuSubState = 0x12;
+        g_McMenuPhase = 0x10;
         D_80082FB8 = 0;
         { u16 p = func_800612CC(); if (p) goto L_b1606; }
         { u16 p = func_8006131C(); if (p == 0) goto L_sw10; }
@@ -1001,17 +994,17 @@ L_sw9:
     }
 
 L_sw10:
-    switch (D_8009B724) {
+    switch (g_McMenuSelection) {
     case 1:
     case 2:
-        D_8009B71C = 2;
+        g_McMenuState = 2;
         goto L_sw10tail;
     case 3:
-        D_8009B6F4 = D_8009B71C;
-        D_8009B71C = 3;
+        D_8009B6F4 = g_McMenuState;
+        g_McMenuState = 3;
         goto L_sw10tail;
     case -1:
-        D_8009B71C = -1;
+        g_McMenuState = -1;
         goto L_sw10tail;
     case -2:
         if (D_80082FC0 != 0) {
@@ -1022,13 +1015,13 @@ L_sw10:
     case -3:
     default:
         {
-            s32 sd = D_8009B720;
+            s32 sd = g_McMenuSlotData;
             D_80082FC0 = 1;
             if (sd == -3) {
                 s32 r = D_80082FBC - 1;
                 D_80082FBC = r;
                 if (r == 0) {
-                    D_8009B71C = sd;
+                    g_McMenuState = sd;
                 }
             }
         }
@@ -1036,7 +1029,7 @@ L_sw10:
     }
 
 L_sw10tail:
-    if (D_8009B71C == -2) {
+    if (g_McMenuState == -2) {
         goto L_epilogue;
     }
     D_80082FA4 = 0;
@@ -1046,10 +1039,10 @@ L_b1678:
     D_80082FAC = 0;
     goto L_epilogue;
 L_stateIdle:
-    D_8009B72C = 0x11;
+    g_McMenuSubState = 0x11;
     {
-    u16 lpad = D_801E436E;
-    D_8009B728 = 0x10;
+    u16 lpad = g_PadEdge2;
+    g_McMenuPhase = 0x10;
     if ((lpad & 0x90) && !fadeBusy) {
         func_8005D6EC(3);
         D_80082FB8 = 0;
@@ -1057,14 +1050,14 @@ L_stateIdle:
     }
     }
     {
-        s32 sel = D_8009B724;
+        s32 sel = g_McMenuSelection;
         s32 three = 3;
         if (sel == -3) goto L_epilogue;
         if (sel == three) {
-            D_8009B6F4 = D_8009B71C;
+            D_8009B6F4 = g_McMenuState;
         }
         tmp = D_80082FB0;
-        D_8009B71C = sel;
+        g_McMenuState = sel;
         D_80082FB0 = tmp + 1;
         if (D_80082FC0 != 0) {
             D_80082FC0 = 0;
@@ -1076,8 +1069,8 @@ L_stateIdle:
 L_epilogue:
     if (D_80082FC8 != 0) {
         func_80027A84(D_80082F50, D_8009B730, D_80082F54, D_80082F58);
-        if (D_8009B728 != 0) {
-            func_80027D84(D_8009B728 - 1);
+        if (g_McMenuPhase != 0) {
+            func_80027D84(g_McMenuPhase - 1);
         }
         func_80060DF0(D_8009B564, &D_8009B568);
     }

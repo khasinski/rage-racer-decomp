@@ -1,12 +1,12 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/state.h"
 
 extern s16 D_801E4DCA;
 extern s16 D_801E4DC8;
 extern s16 D_801E4DCC;
 extern s16 D_801E4DB8;
 extern s32 D_801E4168;
-extern s32 D_801E40B8;
 extern s32 D_1F800084;
 
 void func_8001A530(Matrix *mtx, s32 angle);
@@ -58,7 +58,7 @@ void func_80040730(void) {
         register s32 acc asm("$5");
         register s32 tmp asm("$2");
 
-        base = D_801E40B8;
+        base = g_SceneTimer;
         acc = base << 2;
         acc += base;
         tmp = acc << 5;

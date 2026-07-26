@@ -4,7 +4,6 @@
 
 extern s32 D_8009B33C;
 extern s32 D_8019C7B8;
-extern GameCarEntry *D_8019C7C8;
 extern GameRaceProgress *D_801E4FAC;
 
 s32 func_8001785C(s32 arg0);
@@ -21,7 +20,7 @@ void func_80055524(void) {
 
     if (D_8009B33C != 0) {
         index = 12;
-        enabledBase = (s32)D_8019C7C8;
+        enabledBase = (s32)g_CarTable;
         enabledPtr = (GameCarEntry *)(enabledBase + 0x60);
 loop_enabled:
         byte = enabledPtr->enabled;
@@ -42,7 +41,7 @@ loop_disabled:
         value = func_8001785C(index);
         {
             s32 offset = index * 8;
-            ptr = (GameCarEntry *)(offset + (s32)D_8019C7C8);
+            ptr = (GameCarEntry *)(offset + (s32)g_CarTable);
         }
         if (ptr->enabled == 0) {
             if (D_801E4FAC->progression < 4) {

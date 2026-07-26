@@ -1,12 +1,11 @@
 #include "common.h"
 #include "game/car.h"
 
-extern GameCarEntry *D_8019C7C8;
 
 s32 func_80050F68(void) {
     s32 count = 0;
     s32 i = 0;
-    GameCarEntry *entries = D_8019C7C8;
+    GameCarEntry *entries = g_CarTable;
     s32 flag;
 
     do {

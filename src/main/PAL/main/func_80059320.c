@@ -3,7 +3,6 @@
 #include "game/race.h"
 
 extern s32 D_8009B33C;
-extern GameCarEntry *D_8019C7C8;
 extern s16 D_8019CA18;
 extern s16 D_801E41A4;
 extern s32 D_801E4B88;
@@ -19,7 +18,7 @@ void func_80059320(void) {
         D_8019CA18 = -1;
         index = D_801E4B88 - 1;
         if (index >= 0) {
-            entry = &D_8019C7C8[index];
+            entry = &g_CarTable[index];
             while (index >= 0) {
                 if (entry->enabled == 0) {
                     D_8019CA18 = index;
@@ -36,7 +35,7 @@ void func_80059320(void) {
         backward_loop:
             {
                 s32 value = func_8001785C(index);
-                if (D_8019C7C8[index].enabled == 0) {
+                if (g_CarTable[index].enabled == 0) {
                     s32 progression = D_801E4FAC->progression;
                     if (progression < 4) {
                         if ((progression + 1) < value) {
@@ -65,7 +64,7 @@ backward_done:
         D_801E41A4 = -1;
         index = D_801E4B88 + 1;
         if (index < 13) {
-            entry = &D_8019C7C8[index];
+            entry = &g_CarTable[index];
             while (index < 13) {
                 if (entry->enabled == 0) {
                     D_801E41A4 = index;
@@ -82,7 +81,7 @@ backward_done:
         forward_loop:
             {
                 s32 value = func_8001785C(index);
-                if (D_8019C7C8[index].enabled == 0) {
+                if (g_CarTable[index].enabled == 0) {
                     s32 progression = D_801E4FAC->progression;
                     if (progression < 4) {
                         if ((progression + 1) < value) {

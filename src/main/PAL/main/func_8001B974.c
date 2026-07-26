@@ -1,8 +1,11 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/state.h"
+#include "game/render.h"
+#include "game/asset.h"
 
 extern s32 D_801E6F1C;
 extern s32 D_801E4DA8;
-extern u8 *D_8019C900;
 
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
@@ -52,7 +55,7 @@ alpha_done:
     h88 = 0x88;
     clut0 = 0x7DC0;
 
-    next = func_80016F8C(base = D_8019C900 + 0xD0, next, x28, yA0, hF0, tmp, 0, h88, clut0, alpha);
+    next = func_80016F8C(base = g_DrawBuffer + 0xD0, next, x28, yA0, hF0, tmp, 0, h88, clut0, alpha);
     next = func_80016F8C(base, next, 0x20, 0xB8, 0x100, 0x10, 0, hF0, 0x7DC1, alpha);
     next = func_80016F8C(base, next, 0x11A, 0xAF, 0xC, 8, 0xE0, 0xB0, clut0, alpha);
     next = func_80017390(base, next, 0x19);
@@ -64,20 +67,13 @@ alpha_done:
     next = func_80016F8C(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
     *(void **)scratch = func_800173F4(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
-extern s32 D_8009E694;
 extern s32 D_8019CB70;
 extern s32 D_8009E880;
-extern s32 D_801E40B8;
 extern s32 D_8009F098;
 extern s32 D_8007C744;
-extern s16 D_8019CABC;
-extern s32 D_8009E6A4;
-extern s32 D_801E428C;
-extern s32 D_8007BED8;
 extern u32 D_801E8260;
 extern void (*D_8007C748[])(void);
 extern s16 D_801E4DAC;
-extern s32 D_801E42E4;
 
 int func_800632B0(void);
 int func_8006A5A4(int, int, int);
@@ -92,7 +88,7 @@ void func_8001BB58(void) {
     u32 state;
     s32 b, m4;
 
-    D_8009E694++;
+    g_AnimTimer++;
     func_800632B0();
 
     if (D_8019CB70 > 0) {
@@ -109,39 +105,39 @@ void func_8001BB58(void) {
         }
     }
 
-    state = D_801E40B8;
+    state = g_SceneTimer;
     if (state < 0x1cc) {
-        D_801E40B8 = state + 1;
+        g_SceneTimer = state + 1;
     } else {
         if (D_8009F098 == 3) goto Lcheck;
         if (D_8007C744 & 1) goto Lcheck;
         if (state == 0x1cc) {
-            D_8019CABC = 0;
-            D_8009E6A4 = (func_800632B0() & 0xfff) % 5;
+            g_GrandPrixSeries = 0;
+            g_GrandPrixClass = (func_800632B0() & 0xfff) % 5;
             b = func_800632B0() & 0xfff;
             m4 = b % 4;
-            D_801E428C = m4;
-            if (D_8009E6A4 < 2 && m4 == 3) {
-                D_801E428C = (func_800632B0() & 0xfff) % 3;
+            g_CourseIndex = m4;
+            if (g_GrandPrixClass < 2 && m4 == 3) {
+                g_CourseIndex = (func_800632B0() & 0xfff) % 3;
             }
             func_8001965C();
-            D_801E40B8++;
+            g_SceneTimer++;
         } else if (state == 0x1cd) {
-            if (D_8007BED8 == 0) {
+            if (g_AssetLoadState == 0) {
                 func_80019580();
-                D_801E40B8++;
+                g_SceneTimer++;
             }
         } else if (state == 0x1ce) {
-            if (D_8007BED8 == 0) {
-                D_801E40B8 = 0x1cf;
+            if (g_AssetLoadState == 0) {
+                g_SceneTimer = 0x1cf;
             }
         }
     }
 Lcheck:
-    state = D_801E40B8;
+    state = g_SceneTimer;
     if (state == 0xf) {
         func_80065860(1);
-        state = D_801E40B8;
+        state = g_SceneTimer;
     }
     if (state == 1) {
         func_8001BE9C(0, 0, 0);
@@ -156,9 +152,9 @@ Lcheck:
             func_80019AF0(3);
             D_8007C744++;
         } else {
-            if (D_801E40B8 == 0x1cf) {
+            if (g_SceneTimer == 0x1cf) {
                 D_801E4DAC = 1;
-                D_801E42E4 = 0x1d;
+                g_SceneId = 0x1d;
                 D_8007C744++;
             }
         }

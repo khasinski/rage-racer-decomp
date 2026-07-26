@@ -1,23 +1,20 @@
 #include "common.h"
 #include "game/state.h"
 #include "game/audio.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/menu.h"
 
 typedef struct { s16 x, y; } XY;
 typedef struct { u8 r, g, b; } RGB;
 typedef struct { s16 flag; u16 val; } ScoreRec;
 typedef struct { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
-extern u8 *D_8019C900;
 extern s32 D_8019C7B4;
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
 void func_800236C8(s32 arg0, s32 arg1);
-extern s32 D_8009E6A4;
 extern s32 D_8019C868;
 extern s32 D_8019C97C;
-extern s16 D_8019CABC;
-extern s32 D_8019CB14;
-extern s32 D_801E428C;
-extern u16 D_801E436E;
 extern s32 D_801E4B8C;
 extern s32 D_801E4B9C;
 extern s32 D_801E4D68;
@@ -46,7 +43,7 @@ void func_800249A4(s32 arg0, s32 arg1);
 void func_80024B6C(void);
 
 void func_80023BB4(void) {
-    register u8 *base asm("$16") = D_8019C900;
+    register u8 *base asm("$16") = g_DrawBuffer;
     register s32 h18 asm("$19") = 0x18;
     register s32 h48 asm("$17") = 0x48;
     register s32 color asm("$18") = 0x7F40;
@@ -78,9 +75,9 @@ void func_80023D70(void) {
     func_80023BB4();
 
     old = D_8019C7B4;
-    if (D_801E436E & 0x1000) {
+    if (g_PadEdge2 & 0x1000) {
         D_8019C7B4 = old - 1;
-    } else if (D_801E436E & 0x4000) {
+    } else if (g_PadEdge2 & 0x4000) {
         D_8019C7B4 = old + 1;
     }
 
@@ -89,38 +86,38 @@ void func_80023D70(void) {
         func_8005D6EC(1);
     }
 
-    buttons = D_801E436E;
+    buttons = g_PadEdge2;
     if (buttons & 0x860) {
         func_8005D6EC(2);
         switch (D_8019C7B4) {
         case 0:
-            D_8019CB14 = 2;
+            g_GameMode = 2;
             D_8019C97C = 0;
             D_801E4D6C = 0;
             D_801E4D68 = 0;
             break;
         case 1:
             func_800153FC();
-            D_8019CB14 = 7;
+            g_GameMode = 7;
             break;
         case 2:
-            D_8019CB14 = 4;
+            g_GameMode = 4;
             D_8019C868 = 0;
             break;
         case 3:
             D_801E4DAC = 0;
-            D_8019CABC = 0;
-            D_8009E6A4 = (func_800632B0() & 0xFFF) % 5;
+            g_GrandPrixSeries = 0;
+            g_GrandPrixClass = (func_800632B0() & 0xFFF) % 5;
             value = func_800632B0() & 0xFFF;
-            D_801E428C = value % 4;
-            if ((D_8009E6A4 < 2) && (D_801E428C == 3)) {
-                D_801E428C = (func_800632B0() & 0xFFF) % 3;
+            g_CourseIndex = value % 4;
+            if ((g_GrandPrixClass < 2) && (g_CourseIndex == 3)) {
+                g_CourseIndex = (func_800632B0() & 0xFFF) % 3;
             }
             func_8001965C();
             func_80023B08(0x1B);
             break;
         case 4:
-            D_8019CB14 = 6;
+            g_GameMode = 6;
             D_801E4D68 = D_801E4B8C;
             D_801E4D6C = D_801E4B9C;
             break;
@@ -140,7 +137,7 @@ void func_80023D70(void) {
 }
 
 void func_80023FE8(void) {
-    s32 raw = (s32)D_8019C900;
+    s32 raw = (s32)g_DrawBuffer;
     s32 base = raw + 0xCC;
     s32 next = *(s32 *)0x1F800000;
     s32 idx = D_801E4D6C * 6 + D_801E4D68;
@@ -148,7 +145,7 @@ void func_80023FE8(void) {
     s32 y = 0x38;
     s32 i;
 
-    if (D_8019CB14 == 3) {
+    if (g_GameMode == 3) {
         next = func_80032F34(raw + 0xD4, next,
                              D_8007D5A8[idx].x - 2, D_8007D5A8[idx].y - 4,
                              0x24, 0x58, 0x89, 0xFF, 0x76);
@@ -186,7 +183,7 @@ void func_80024420(void) {
     s32 x, y;
     s32 flag;
 
-    base = (s32)D_8019C900 + 0xCC;
+    base = (s32)g_DrawBuffer + 0xCC;
     next = *(s32 *)0x1F800000;
     next = func_80017138(base, next, 0x24, 0x38, 0x24, 0x18, 0x38, 0x90, 0x7F40);
     next = func_80017138(base, next, 0x24, 0x58, 0x1C, 0x18, 0xD0, 0x60, 0x7F40);
@@ -232,7 +229,7 @@ void func_80024718(void) {
 
     func_80024420();
 
-    buttonPtr = &D_801E436E;
+    buttonPtr = &g_PadEdge2;
     oldCursor = D_8019C97C;
     buttons = *buttonPtr;
     if (buttons & 0x1000) {
@@ -270,13 +267,13 @@ void func_80024820(void) {
     func_80024420();
     oldCursor = D_801E4D68;
     oldFlag = D_801E4D6C;
-    if ((D_801E436E & 0x1000) && oldFlag == 1) {
+    if ((g_PadEdge2 & 0x1000) && oldFlag == 1) {
         D_801E4D6C = 0;
     }
-    if ((D_801E436E & 0x4000) && D_801E4D6C == 0) {
+    if ((g_PadEdge2 & 0x4000) && D_801E4D6C == 0) {
         D_801E4D6C = 1;
     }
-    b = D_801E436E;
+    b = g_PadEdge2;
     if (b & 0x8000) {
         D_801E4D68 = D_801E4D68 - 1;
     }
@@ -296,7 +293,7 @@ void func_80024820(void) {
             func_8005D6EC(1);
         }
     }
-    if (D_801E436E & 0x8F0) {
+    if (g_PadEdge2 & 0x8F0) {
         func_8005D6EC(2);
         g_GameMode = 2;
     }
@@ -305,7 +302,7 @@ void func_80024820(void) {
 
 void func_800249A4(s32 arg0, s32 arg1) {
     s32 b = arg1;
-    s32 base = (s32)D_8019C900 + 0xCC;
+    s32 base = (s32)g_DrawBuffer + 0xCC;
     s32 next;
     s32 i;
     s32 y;
@@ -351,7 +348,7 @@ void func_80024B6C(void) {
     scratch = (s32 *)0x1F800000;
     s3 = 0x18;
     s0 = 0x78;
-    base = (s32)D_8019C900 + 0xCC;
+    base = (s32)g_DrawBuffer + 0xCC;
 
     n = *scratch;
     n = func_80017138(base, n, 0x24, 0x38, 0x2C, s3, 0x9C, s0, 0x7F40);
@@ -388,7 +385,7 @@ void func_80024B6C(void) {
     }
     func_800249A4(D_801E8A50, 0xF8);
 
-    if (D_8019CB14 != 5) {
+    if (g_GameMode != 5) {
         return;
     }
 
@@ -414,7 +411,7 @@ void func_80024F28(void) {
     s32 index;
 
     func_80024B6C();
-    buttonsPtr = &D_801E436E;
+    buttonsPtr = &g_PadEdge2;
     buttons = *buttonsPtr;
     old = D_8019C868;
     if (buttons & 0x1000) {

@@ -1,24 +1,20 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/menu.h"
+#include "game/render.h"
 
 
 extern s32 D_8009B2CC;
 extern u8 *D_8009E698;
 extern s32 D_801E40D4;
-extern u8 *D_8019C7C8;
+extern u8 *g_CarTable asm("D_8019C7C8");
 
-extern s32 D_8009B308;
-extern s32 D_8009B2F8;
 extern s32 D_8009B2C8;
-extern s32 D_8009B318;
-extern s32 D_8009B340;
 extern s32 D_8009B344;
 extern s32 D_8009B334;
 extern s32 D_8019CDF8;
 extern s32 D_8019CB0C;
-extern s32 D_8019C9F0;
 extern s32 D_8019C9F8;
-extern u16 D_801E436E;
-extern s32 D_801E428C;
 extern u8 D_80082724;
 extern u8 D_80081890;
 extern u8 D_80082460;
@@ -41,117 +37,117 @@ void func_80054D10(void) {
     D_8019CB0C = 0;
     func_8005194C();
     func_8004CF30(-9);
-    state = D_8009B308;
+    state = GameMenuBusy;
     if (state == 0) {
-        D_8009B2F8 = 0;
-        D_8009B308 = -1;
+        g_UiScriptProgress2 = 0;
+        GameMenuBusy = -1;
         func_800489AC(0, 2, D_8019CDF8);
-        func_800487D8(&D_80082724, &D_8009B2F8, 1);
+        func_800487D8(&D_80082724, &g_UiScriptProgress2, 1);
     } else if (state < 0) {
         switch (state) {
         case -1:
-            func_800489AC(D_8009B2F8, 2, D_8019CDF8);
-            if (func_800487D8(&D_80082724, &D_8009B2F8, 1) != 0) {
-                D_8009B318 = -1;
-                if (D_801E436E & 0x1000) {
+            func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
+            if (func_800487D8(&D_80082724, &g_UiScriptProgress2, 1) != 0) {
+                g_MenuOverlayPattern = -1;
+                if (g_PadEdge2 & 0x1000) {
                     func_8005D6EC(1);
                     D_8019CDF8 = (D_8019CDF8 > 0) ? D_8019CDF8 - 1 : 2;
                 }
-                if (D_801E436E & 0x4000) {
+                if (g_PadEdge2 & 0x4000) {
                     func_8005D6EC(1);
                     D_8019CDF8 = (D_8019CDF8 < 2) ? D_8019CDF8 + 1 : 0;
                 }
                 {
-                    s32 flags = D_801E436E;
+                    s32 flags = g_PadEdge2;
                     if (flags & 0x860) {
                         s32 x = D_8019CDF8;
                         if (x == 0) {
                             func_8005D6EC(2);
-                            D_8009B308 = -2;
+                            GameMenuBusy = -2;
                             D_8009B2C8 = -3;
                         } else if (x == 1) {
                             func_8005D6EC(2);
-                            D_8009B308 = -2;
+                            GameMenuBusy = -2;
                             D_8009B2C8 = -5;
                         } else if (x == 2) {
                             func_8005D6EC(3);
-                            D_8009B308 = 1;
-                            D_8009B318 = x;
+                            GameMenuBusy = 1;
+                            g_MenuOverlayPattern = x;
                         }
                     } else if (flags & 0x90) {
                         func_8005D6EC(3);
-                        D_8009B308 = 1;
-                        D_8009B318 = 2;
+                        GameMenuBusy = 1;
+                        g_MenuOverlayPattern = 2;
                     }
                 }
             }
             break;
         case -2:
-            func_800487D8(&D_80082724, &D_8009B2F8, -1);
-            func_800489AC(D_8009B2F8, 2, D_8019CDF8);
-            if (D_8009B2F8 > 0) {
+            func_800487D8(&D_80082724, &g_UiScriptProgress2, -1);
+            func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
+            if (g_UiScriptProgress2 > 0) {
                 break;
             }
-            D_8009B308 = D_8009B2C8;
+            GameMenuBusy = D_8009B2C8;
             break;
         case -3:
-            if (func_8004D384(&D_8009B2F8, 1, 0) == 0) {
+            if (func_8004D384(&g_UiScriptProgress2, 1, 0) == 0) {
                 break;
             }
-            if (!(D_801E436E & 0x8f0)) {
+            if (!(g_PadEdge2 & 0x8f0)) {
                 break;
             }
             func_8005D6EC(3);
-            D_8009B308 = -4;
+            GameMenuBusy = -4;
             break;
         case -4:
-            func_8004D384(&D_8009B2F8, -1, 0);
-            if (D_8009B2F8 > 0) {
+            func_8004D384(&g_UiScriptProgress2, -1, 0);
+            if (g_UiScriptProgress2 > 0) {
                 break;
             }
-            D_8009B308 = -1;
+            GameMenuBusy = -1;
             break;
         case -5:
-            if (func_8004D384(&D_8009B2F8, 1, 1) == 0) {
+            if (func_8004D384(&g_UiScriptProgress2, 1, 1) == 0) {
                 break;
             }
-            if (!(D_801E436E & 0x8f0)) {
+            if (!(g_PadEdge2 & 0x8f0)) {
                 break;
             }
             func_8005D6EC(3);
-            D_8009B308 = -6;
+            GameMenuBusy = -6;
             break;
         case -6:
-            func_8004D384(&D_8009B2F8, -1, 1);
-            if (D_8009B2F8 > 0) {
+            func_8004D384(&g_UiScriptProgress2, -1, 1);
+            if (g_UiScriptProgress2 > 0) {
                 break;
             }
-            D_8009B308 = -1;
+            GameMenuBusy = -1;
             break;
         }
     } else {
         goto pos;
     }
-    func_800487D8(&D_80081890, &D_8019C9F0, 0);
-    func_800487D8(&D_80082460, &D_8019C9F0, 1);
+    func_800487D8(&D_80081890, &g_UiScriptProgress, 0);
+    func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
     return;
 pos:
-    D_8009B340 = -1;
+    g_MenuHandlerIndex = -1;
     D_8009B344 = 2;
-    func_800487D8(&D_80082724, &D_8009B2F8, -1);
-    func_800489AC(D_8009B2F8, 2, D_8019CDF8);
-    func_800487D8(&D_80081890, &D_8019C9F0, -1);
-    func_800487D8(&D_80082460, &D_8019C9F0, 0);
-    if (D_8019C9F0 > 0) {
+    func_800487D8(&D_80082724, &g_UiScriptProgress2, -1);
+    func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
+    func_800487D8(&D_80081890, &g_UiScriptProgress, -1);
+    func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
+    if (g_UiScriptProgress > 0) {
         return;
     }
     D_8019C9F8 = 1;
-    D_8009B340 = 1;
+    g_MenuHandlerIndex = 1;
     D_8019CDF8 = 0;
-    D_8019C9F0 = 0;
-    D_8009B308 = 0;
+    g_UiScriptProgress = 0;
+    GameMenuBusy = 0;
     func_800509C4(0);
-    if (D_801E428C >= 4) {
+    if (g_CourseIndex >= 4) {
         D_8009B334 = 1;
     } else {
         D_8009B334 = -1;
@@ -188,7 +184,7 @@ s32 func_800551BC(s32 arg0) {
     col = v & 0xff;
     func_80047460(buf, 0xa3, 0x180, 0x1a, 0x19, col, col, col, 0x20);
 
-    tex = ((u8 *) D_8019C7C8)[D_801E40D4 * 8 + 2];
+    tex = ((u8 *) g_CarTable)[D_801E40D4 * 8 + 2];
     if (tex != 0) {
         func_80046A2C(buf, 0xad, 0x185, 0x10, 0x10, 0x6c, 0x7c, col, col, col,
                       0x244, 0, 1, 0x3b);
