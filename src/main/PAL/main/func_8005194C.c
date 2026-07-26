@@ -13,7 +13,7 @@ extern s32 D_8009E6D8;
 extern s32 D_8009E6DC;
 extern s32 D_8009E6F4;
 extern s32 D_8009E6F8;
-extern s32 D_801E4168;
+extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 D_801E8268;
 
 void func_8001A610(void);
@@ -119,7 +119,7 @@ void func_8005194C(void) {
     *(s32 *)0x1F800084 = 0;
     {
         s32 a1 = 1;
-        if ((s2 & 3) < D_801E4168) {
+        if ((s2 & 3) < g_ModelBankCount) {
             a1 = s2 & 3;
         }
         func_80028DEC((void *)0x1F800000, a1);

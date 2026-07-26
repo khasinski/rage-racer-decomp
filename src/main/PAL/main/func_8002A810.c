@@ -20,7 +20,7 @@ extern s16 D_801E4112;
 extern s16 D_801E4114;
 extern s16 D_801E4152;
 extern s16 D_801E4154;
-extern u8 D_801E4369;
+extern u8 g_PadType asm("D_801E4369");
 extern s16 D_801E4BA0;
 extern s32 D_801E4BF4;
 extern s16 D_801E4FB4;
@@ -620,7 +620,7 @@ void func_8002A810(void *base)
     *((s32 *) (((u8 *) temp_s3) + 0x4C)) = (s32) (0x800 - temp_v0_9);
   }
   var_s5 += ((s32) (*((s32 *) (((u8 *) temp_s3) + 0x4C)))) / 256;
-  if (((*((s32 *) (((u8 *) temp_s3) + 0x98))) != 1) && (D_801E4369 == 0x41))
+  if (((*((s32 *) (((u8 *) temp_s3) + 0x98))) != 1) && (g_PadType == 0x41))
   {
     var_a1_4 = ((g_CarSpec->unk10E) * (*((s32 *) (((u8 *) temp_s3) + 0x88)))) / 1000;
     if (var_a1_4 <= 0)

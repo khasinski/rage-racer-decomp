@@ -15,7 +15,7 @@ extern s32 D_8019CDF8;
 extern s32 D_8019CB0C;
 extern u8 D_80082724;
 extern u8 D_80081890;
-extern u8 D_80082460;
+extern u8 g_UiChromeScript asm("D_80082460");
 
 void func_80047460(void *buf, s32 xa, s32 ya, s32 w, s32 h, s32 r, s32 g, s32 b, s32 code);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
@@ -128,7 +128,7 @@ void GameUpdateRankingScreen(void) {
         goto pos;
     }
     func_800487D8(&D_80081890, &g_UiScriptProgress, 0);
-    func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
+    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
     return;
 pos:
     g_MenuHandlerIndex = -1;
@@ -136,7 +136,7 @@ pos:
     func_800487D8(&D_80082724, &g_UiScriptProgress2, -1);
     func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
     func_800487D8(&D_80081890, &g_UiScriptProgress, -1);
-    func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
+    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
     if (g_UiScriptProgress > 0) {
         return;
     }

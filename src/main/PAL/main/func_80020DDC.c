@@ -14,7 +14,7 @@ extern s32 D_801F17B0;
 extern s32 D_8019CE0C;
 extern s32 D_801E4D0C;
 extern s32 D_801E4B94;
-extern s32 D_8019C8EC;
+extern s32 g_SeriesCleared asm("D_8019C8EC");
 void func_80033AA0(s32, s32);
 void func_800204F4(s32);
 void func_800206B8(s32);
@@ -23,9 +23,9 @@ void func_80020D90(void);
 void func_80018410(void);
 void func_80020B08(void);
 void func_800201D4(void);
-extern s32 D_8019C704;
-extern s32 D_801E8A50;
-extern s32 D_801E6C70;
+extern s32 g_BgmVolumeSetting asm("D_8019C704");
+extern s32 g_SfxVolumeSetting asm("D_801E8A50");
+extern s32 g_MonoOutput asm("D_801E6C70");
 void func_8005BD84(s32 arg0);
 void func_8005BDD4(s32 arg0);
 void func_8005BE24(void);
@@ -47,7 +47,7 @@ extern s32 D_801E6E7C;
 extern u8 D_8009E874;
 extern u8 D_801E42EC;
 extern u8 *D_8009E67C;
-extern s32 D_801E40A8;
+extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern s32 D_801E42CC;
 void func_80021224(void);
 void func_80021288(void *arg0, s32 *arg1);
@@ -144,7 +144,7 @@ void func_80020DDC(void) {
         st = 8;
         goto Lstore;
     case 8:
-        if (D_8019C8EC != 0)
+        if (g_SeriesCleared != 0)
             g_SceneTimer += 1;
         else
             g_SceneTimer += 2;
@@ -162,9 +162,9 @@ L428:
 }
 
 void func_80021224(void) {
-    func_8005BD84(D_8019C704);
-    func_8005BDD4(D_801E8A50);
-    if (D_801E6C70 == 0) {
+    func_8005BD84(g_BgmVolumeSetting);
+    func_8005BDD4(g_SfxVolumeSetting);
+    if (g_MonoOutput == 0) {
         func_8005BE24();
     } else {
         func_8005BE58();
@@ -250,12 +250,12 @@ void func_80021338(void) {
 
     g_MaxClassReached[1] = 0;
     g_MaxClassReached[0] = 0;
-    D_801E40A8 = 9;
+    g_BgmTrackCount = 9;
     D_801E42CC = 0;
     func_8001B488();
-    D_8019C704 = 0xF;
-    D_801E8A50 = 0xF;
-    D_801E6C70 = 0;
+    g_BgmVolumeSetting = 0xF;
+    g_SfxVolumeSetting = 0xF;
+    g_MonoOutput = 0;
     func_80021224();
 }
 

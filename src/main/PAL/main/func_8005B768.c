@@ -22,7 +22,7 @@ void func_80072B3C(s32 arg0);
 void func_80072260(void);
 void func_80071C24(void);
 
-extern s32 D_801E6C9C;
+extern s32 g_AudioSlotMask asm("D_801E6C9C");
 extern s32 D_801E6CA0;
 extern s16 D_801E6CB0;
 extern s16 D_801E6CB2;
@@ -114,7 +114,7 @@ s32 func_8005B89C(void) {
     D_801F17B4 = (s16)completed;
 
     if ((s16)completed != 0) {
-        flagsPtr = &D_801E6C9C;
+        flagsPtr = &g_AudioSlotMask;
         one = 1;
         slot = D_8009E68C;
         value = *flagsPtr;
@@ -138,7 +138,7 @@ s32 func_8005B89C(void) {
 
 s32 func_8005B948(s32 slot) {
     register s32 slotReg asm("$17") = slot;
-    register s32 *flagsPtr asm("$16") = &D_801E6C9C;
+    register s32 *flagsPtr asm("$16") = &g_AudioSlotMask;
     register s32 bit asm("$3") = 1;
     register s32 flags asm("$5") = *flagsPtr;
     register s32 zeroArg asm("$4") = 0;
@@ -255,15 +255,15 @@ s32 func_8005BB1C(s32 header, s32 body, s32 table) {
         GameLoadAudioParameterTable((u16 *)tableReg);
     }
 
-    flags = D_801E6C9C;
+    flags = g_AudioSlotMask;
     D_801E6CC0 = 1;
-    D_801E6C9C = flags | 0x20;
+    g_AudioSlotMask = flags | 0x20;
     return 0;
 }
 
 void func_8005BC14(void) {
     register s32 liveSlot asm("$16");
-    register s32 *flagsPtr asm("$4") = &D_801E6C9C;
+    register s32 *flagsPtr asm("$4") = &g_AudioSlotMask;
     register s32 flags asm("$3") = *flagsPtr;
     register s32 newFlags asm("$2");
 
@@ -279,7 +279,7 @@ void func_8005BC14(void) {
 
 void func_8005BC80(void) {
     register s32 i asm("$16");
-    register s32 *flag asm("$3") = &D_801E6C9C;
+    register s32 *flag asm("$3") = &g_AudioSlotMask;
 
     asm volatile("" : "=r"(flag) : "0"(flag));
     if (*flag != 0) {

@@ -2,8 +2,8 @@
 #include "psyq/gte.h"
 
 extern s32 D_8007E35C;
-extern s32 D_801E4030;
-extern s32 D_801E40E4;
+extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
+extern s32 g_CourseModelCount asm("D_801E40E4");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 void func_8001A530(Matrix *mtx, s32 angle);
@@ -25,9 +25,9 @@ void GameDrawHighClassScenery(void) {
     func_8001A530(&mtx, state[0]);
     func_80069568((Matrix *)0x1F800028, &mtx);
 
-    if (D_801E4030 != 0) {
+    if (g_IsEnvironmentMode4 != 0) {
         func_80017794((void *)0x1F80011C, state - 3, &mtx);
-        frameValue = D_801E40E4;
+        frameValue = g_CourseModelCount;
         *(s32 *)0x1F800084 = 0x10000;
         drawArg = 1;
         if (frameValue >= 0x40) {
@@ -36,7 +36,7 @@ void GameDrawHighClassScenery(void) {
         func_800296B4((void *)0x1F800000, drawArg);
     } else {
         func_80017794((void *)0x1F80011C, state - 3, &mtx);
-        frameValue = D_801E40E4;
+        frameValue = g_CourseModelCount;
         *(s32 *)0x1F800084 = 0;
         drawArg = 1;
         if (frameValue >= 0x40) {

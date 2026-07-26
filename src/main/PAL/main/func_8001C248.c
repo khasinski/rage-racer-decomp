@@ -235,7 +235,7 @@ void func_8001CD54(void) {
 }
 
 extern s32 D_8009E6CC;
-extern s32 D_801E40A8;
+extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern u8 D_801E7734[];
 extern s32 D_801E40E0;
 
@@ -274,7 +274,7 @@ void func_8001CFB4(void) {
             u8 val = D_801E7734[idx];
             D_8009E6CC = idx + 1;
             D_801E40E0 = val;
-            if (D_8009E6CC == D_801E40A8) {
+            if (D_8009E6CC == g_BgmTrackCount) {
                 D_8009E6CC = 0;
             }
         } else {
@@ -291,7 +291,7 @@ void func_8001CFB4(void) {
         } else if (flags & 0x2000) {
             D_801E42CC = D_801E42CC + 1;
         }
-        D_801E42CC = (D_801E42CC + D_801E40A8 + 1) % (D_801E40A8 + 1);
+        D_801E42CC = (D_801E42CC + g_BgmTrackCount + 1) % (g_BgmTrackCount + 1);
         func_8001CD54();
     }
 }

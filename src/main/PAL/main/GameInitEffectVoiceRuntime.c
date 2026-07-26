@@ -4,8 +4,8 @@
 #include "psyq/snd.h"
 #include "game/car.h"
 
-extern s32 D_801E6C9C;
-extern s32 D_801E6CE4;
+extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
 extern s32 D_801E6CE8;
 extern s32 D_801E6CEC;
 extern s32 D_801E6CF0;
@@ -29,7 +29,7 @@ void GameInitEffectVoiceRuntime(void) {
 
         i = 0;
         neg = -1;
-        ptr = &D_801E6C9C;
+        ptr = &g_AudioSlotMask;
         offset = 0;
         for (; i < 2; i++) {
             *(s32 *)((u8 *)&D_801E6D00[0].mode + offset) = neg;
@@ -67,7 +67,7 @@ void GameInitEffectVoiceRuntime(void) {
 
         value = -1;
         D_801E6CE8 = value;
-        D_801E6CE4 = value;
+        g_PanVoiceVolumeL = value;
         D_801E6CF4 = value;
         D_801E6CF0 = value;
         value = 0x1E00;

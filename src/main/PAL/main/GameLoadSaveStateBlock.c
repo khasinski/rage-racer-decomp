@@ -41,9 +41,9 @@ extern s32 D_801E7744[];
 extern s32 D_8019CB78[];
 extern s32 D_801E41E8[];
 
-extern s32 D_8019C704;
-extern s32 D_801E8A50;
-extern s32 D_801E6C70;
+extern s32 g_BgmVolumeSetting asm("D_8019C704");
+extern s32 g_SfxVolumeSetting asm("D_801E8A50");
+extern s32 g_MonoOutput asm("D_801E6C70");
 extern u8 D_801E42EC[];
 extern u8 D_8009E874[];
 
@@ -311,11 +311,11 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         }
     }
 
-    /* D_8019C704 / D_801E8A50 / D_801E6C70 clamps */
+    /* g_BgmVolumeSetting / g_SfxVolumeSetting / g_MonoOutput clamps */
     {
         register s32 v asm("$2") = *(s32 *)(base + 0xFBC);
         register s32 c asm("$3");
-        D_8019C704 = v;
+        g_BgmVolumeSetting = v;
         if (v >= 0) {
             c = v;
             if (c >= 0x10) {
@@ -325,8 +325,8 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             c = 0;
         }
         v = *(s32 *)(base + 0xFC0);
-        D_8019C704 = c;
-        D_801E8A50 = v;
+        g_BgmVolumeSetting = c;
+        g_SfxVolumeSetting = v;
         if (v >= 0) {
             c = v;
             if (c >= 0x10) {
@@ -336,10 +336,10 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             c = 0;
         }
         v = *(s32 *)(base + 0xFC4);
-        D_801E8A50 = c;
-        D_801E6C70 = v;
+        g_SfxVolumeSetting = c;
+        g_MonoOutput = v;
         if (v != 0) {
-            D_801E6C70 = 1;
+            g_MonoOutput = 1;
         }
     }
 

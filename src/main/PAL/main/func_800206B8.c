@@ -16,7 +16,7 @@ extern s16 D_8019CB54;
 extern GameScoreRecord D_8019CB40[];
 extern GameScoreRecord D_8019CB42[];
 extern s32 D_8019C7C4;
-extern s32 D_8019C8EC;
+extern s32 g_SeriesCleared asm("D_8019C8EC");
 extern s32 D_801E419C;
 s32 func_8001785C(s32 arg0);
 s32 func_800214B8(void);
@@ -143,16 +143,16 @@ after_record_check:
         D_8019C7C4 = 0;
     }
 
-    D_8019C8EC = 0;
+    g_SeriesCleared = 0;
     if (D_801E4B94 != 0) {
         if ((g_SeriesSelection == 0 && g_GrandPrixClass == 4) || (g_SeriesSelection == 1 && g_GrandPrixClass == 5)) {
-            D_8019C8EC = 1;
+            g_SeriesCleared = 1;
             g_AdvancedSeriesUnlocked = 1;
         }
     }
 
     D_801E419C = 0;
-    if (D_801E4B94 != 0 && D_8019C8EC == 0) {
+    if (D_801E4B94 != 0 && g_SeriesCleared == 0) {
         state = (s32 *)g_RaceProgress;
         if (state[3] < g_GrandPrixClass + 1) {
             D_801E419C = 1;
@@ -166,7 +166,7 @@ void func_80020B08(void) {
     s32 *entry;
 
     if (D_801E4B94 != 0) {
-        if (D_8019C8EC != 0) {
+        if (g_SeriesCleared != 0) {
             s32 magic;
             GameRaceProgress *afterPtr;
 

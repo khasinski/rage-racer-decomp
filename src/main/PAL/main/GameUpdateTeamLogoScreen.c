@@ -14,9 +14,9 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-extern s32 D_8009B300;
+extern s32 g_MenuConfirmTimer asm("D_8009B300");
 extern s32 D_8009B314;
-extern u8 D_8009B2F0;
+extern u8 g_MenuSubCursor asm("D_8009B2F0");
 extern s32 D_8019CB0C;
 extern s32 D_8019CAB8;
 extern void *D_801E8A44;
@@ -24,12 +24,12 @@ extern s32 D_801F1804;
 extern u16 D_801E444C[];
 extern Rect D_8007BEDC;
 extern u8 D_80082844;
-extern u8 D_80082790;
+extern u8 g_UiChromeScript2 asm("D_80082790");
 extern u8 D_80081C14;
-extern u8 D_80082460;
+extern u8 g_UiChromeScript asm("D_80082460");
 extern u8 D_80082574;
 extern u8 D_80082664;
-extern u8 D_80011BA0;
+extern u8 g_MenuBlankCaption asm("D_80011BA0");
 
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
@@ -63,12 +63,12 @@ void GameUpdateTeamLogoScreen(void)
   {
     func_8004B8B4(-13, -21);
     func_800487D8(&D_80082844, &g_UiScriptProgress2, -1);
-    func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+    func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
     func_800487D8(D_801E8A44, &g_UiScriptProgress2, 0);
     func_8004A248(1, -1);
     func_800489AC(g_UiScriptProgress, 2, D_801F1804);
     func_800487D8(&D_80081C14, &g_UiScriptProgress, 0);
-    if ((func_800487D8(&D_80082460, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0))
+    if ((func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0))
     {
       D_8009B314 = 1;
       g_MenuOverlayPattern = -1;
@@ -90,7 +90,7 @@ void GameUpdateTeamLogoScreen(void)
         {
           func_8005D6EC(2);
           GameMenuBusy = -1;
-          D_8009B2F0 = 0;
+          g_MenuSubCursor = 0;
           g_UiScriptProgress2 = 0;
           D_801E8A44 = &D_80082574;
         }
@@ -128,16 +128,16 @@ void GameUpdateTeamLogoScreen(void)
     {
       u16 *pad;
       func_800487D8(&D_80082844, &g_UiScriptProgress2, 0);
-      func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+      func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
       if (func_800487D8(D_801E8A44, &g_UiScriptProgress2, 1) != 0)
       {
         if (g_PadEdge2 & 0x860)
         {
-          if (D_8009B2F0 != 0)
+          if (g_MenuSubCursor != 0)
           {
             func_8005D6EC(2);
             GameMenuBusy = -2;
-            D_8009B300 = 0x23;
+            g_MenuConfirmTimer = 0x23;
           }
           else
           {
@@ -153,37 +153,37 @@ void GameUpdateTeamLogoScreen(void)
         }
         if ((*pad) & 0x8000)
         {
-          if (D_8009B2F0 == 0)
+          if (g_MenuSubCursor == 0)
           {
             func_8005D6EC(1);
-            D_8009B2F0 = 1;
+            g_MenuSubCursor = 1;
           }
         }
         if (g_PadEdge2 & 0x2000)
         {
-          if (D_8009B2F0 != 0)
+          if (g_MenuSubCursor != 0)
           {
             func_8005D6EC(1);
-            D_8009B2F0 = 0;
+            g_MenuSubCursor = 0;
           }
         }
-        func_80048D64((D_8009B2F0 != 0) ? (0xB8) : (0xDA), 0x44, 0x20, 0x20, 0);
+        func_80048D64((g_MenuSubCursor != 0) ? (0xB8) : (0xDA), 0x44, 0x20, 0x20, 0);
         func_80046A2C(ot, 0xC0, 0x4C, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
         func_80046A2C(ot, 0xE3, 0x4C, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
         new_var = 0x20;
-        func_80048B88(0xB8, 0x44, 0x20, new_var, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&D_80011BA0));
-        func_80048B88(0xDA, 0x44, 0x20, 0x20, 0x3A, 0x1E, 0x95, 0, 0, 0, (s32) (&D_80011BA0));
+        func_80048B88(0xB8, 0x44, 0x20, new_var, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&g_MenuBlankCaption));
+        func_80048B88(0xDA, 0x44, 0x20, 0x20, 0x3A, 0x1E, 0x95, 0, 0, 0, (s32) (&g_MenuBlankCaption));
       }
       func_8004A248(1, 0);
     }
     else
       if (state == (-2))
     {
-      cnt = D_8009B300;
+      cnt = g_MenuConfirmTimer;
       if (cnt <= 0)
       {
         func_800487D8(&D_80082844, &g_UiScriptProgress2, -1);
-        func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+        func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
         func_800487D8(D_801E8A44, &g_UiScriptProgress2, 0);
         if (g_UiScriptProgress2 <= 0)
         {
@@ -193,15 +193,15 @@ void GameUpdateTeamLogoScreen(void)
       }
       else
       {
-        D_8009B300 = cnt - 1;
+        g_MenuConfirmTimer = cnt - 1;
         func_800487D8(&D_80082844, &g_UiScriptProgress2, 0);
-        func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+        func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
         func_800487D8(D_801E8A44, &g_UiScriptProgress2, 1);
-        func_80048D64((D_8009B2F0 != 0) ? (0xB8) : (0xDA), 0x44, 0x20, 0x20, 1);
+        func_80048D64((g_MenuSubCursor != 0) ? (0xB8) : (0xDA), 0x44, 0x20, 0x20, 1);
         func_80046A2C(ot, 0xC0, 0x4C, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
         func_80046A2C(ot, 0xE3, 0x4C, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-        func_80048B88(0xB8, 0x44, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&D_80011BA0));
-        func_80048B88(0xDA, 0x44, 0x20, 0x20, 0x3A, 0x1E, 0x95, 0, 0, 0, (s32) (&D_80011BA0));
+        func_80048B88(0xB8, 0x44, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&g_MenuBlankCaption));
+        func_80048B88(0xDA, 0x44, 0x20, 0x20, 0x3A, 0x1E, 0x95, 0, 0, 0, (s32) (&g_MenuBlankCaption));
       }
       func_8004A248(1, 0);
     }
@@ -241,7 +241,7 @@ void GameUpdateTeamLogoScreen(void)
     }
     func_800489AC(g_UiScriptProgress, 2, D_801F1804);
     func_800487D8(&D_80081C14, &g_UiScriptProgress, 0);
-    func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
+    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
   }
   else
   {
@@ -251,7 +251,7 @@ void GameUpdateTeamLogoScreen(void)
       g_MenuHandlerIndex2 = 7;
       func_8004A248((state == 2) ? (-1) : (1), 0);
       func_800487D8(&D_80081C14, &g_UiScriptProgress, -1);
-      func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
+      func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
       func_800489AC(g_UiScriptProgress, 2, D_801F1804);
     }
     else
@@ -260,7 +260,7 @@ void GameUpdateTeamLogoScreen(void)
       g_MenuHandlerIndex2 = 7;
       func_8004A248((state == 2) ? (-1) : (1), 0);
       func_800487D8(&D_80081C14, &g_UiScriptProgress, -1);
-      func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
+      func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
       func_800489AC(g_UiScriptProgress, 2, D_801F1804);
     }
     if (g_UiScriptProgress <= 0)

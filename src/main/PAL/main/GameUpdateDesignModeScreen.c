@@ -9,9 +9,9 @@ extern s32 D_8009B37C;
 extern s32 D_8019C758;
 
 extern u8 D_800828EC;
-extern u8 D_80082790;
+extern u8 g_UiChromeScript2 asm("D_80082790");
 extern u8 D_80081B54;
-extern u8 D_80082460;
+extern u8 g_UiChromeScript asm("D_80082460");
 
 void func_8005131C(void);
 s32 func_800487D8(void *a, void *b, s32 c);
@@ -30,10 +30,10 @@ void GameUpdateDesignModeScreen(void) {
     func_8005131C();
     if (GameMenuBusy == 0) {
         func_800487D8(&D_800828EC, &g_UiScriptProgress2, -1);
-        func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+        func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
         func_800489AC(g_UiScriptProgress, 3, D_8019C758);
         func_800487D8(&D_80081B54, &g_UiScriptProgress, 0);
-        if (func_800487D8(&D_80082460, &g_UiScriptProgress, 1) != 0) {
+        if (func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
                 func_8005D6EC(1);
@@ -77,19 +77,19 @@ void GameUpdateDesignModeScreen(void) {
         }
     } else if (GameMenuBusy < 0) {
         func_800487D8(&D_800828EC, &g_UiScriptProgress2, 0);
-        if (func_800487D8(&D_80082790, &g_UiScriptProgress2, 1) != 0) {
+        if (func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
             edge = g_PadEdge2;
             if (edge & 0x860) GameMenuBusy = 0;
             if (edge & 0x90) GameMenuBusy = 0;
         }
         func_800489AC(g_UiScriptProgress, 3, D_8019C758);
         func_800487D8(&D_80081B54, &g_UiScriptProgress, 0);
-        func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
+        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
     } else {
         g_MenuHandlerIndex = -1;
         g_MenuHandlerIndex2 = 6;
         func_800487D8(&D_80081B54, &g_UiScriptProgress, -1);
-        func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
+        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
         func_800489AC(g_UiScriptProgress, 3, D_8019C758);
         if (g_UiScriptProgress <= 0) {
             switch (GameMenuBusy) {

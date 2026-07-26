@@ -17,7 +17,7 @@ extern s32 D_8007E2E4;
 extern s16 D_8007E2E8;
 extern s16 D_8009AFCC;
 extern s16 D_8007E2E0[];
-extern s32 D_801E40E4;
+extern s32 g_CourseModelCount asm("D_801E40E4");
 
 void func_8001A530(Matrix *mtx, s32 angle);
 void func_8001A5A0(Matrix *mtx, s32 angle);
@@ -101,13 +101,13 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
             func_80017794((void *)0x1F80011C, &state, &mtx);
             num = D_8007E2EA + 10;
             *(s32 *)0x1F800084 = 0;
-            drawArg = (num < D_801E40E4) ? num : 1;
+            drawArg = (num < g_CourseModelCount) ? num : 1;
             func_800296B4((void *)0x1F800000, drawArg);
         } else {
             func_80017794((void *)0x1F80011C, &state, &mtx);
             num = D_8007E2E8;
             *(s32 *)0x1F800084 = 0;
-            drawArg = (num < D_801E40E4) ? num : 1;
+            drawArg = (num < g_CourseModelCount) ? num : 1;
             func_800296B4((void *)0x1F800000, drawArg);
         }
 
@@ -115,7 +115,7 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
         sv = D_8007E2E4;
         *(s32 *)0x1F800084 = sv;
         num = D_8009AFCC + 4;
-        lim2 = D_801E40E4;
+        lim2 = g_CourseModelCount;
         drawArg = (num < lim2) ? num : 1;
         func_800296B4((void *)0x1F800000, drawArg);
     } else {
@@ -123,7 +123,7 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
         num = D_8007E2EA + 0x18;
         scr = (s32 *)0x1F800084;
         *scr = 0;
-        drawArg = (num < D_801E40E4) ? num : 1;
+        drawArg = (num < g_CourseModelCount) ? num : 1;
         func_800296B4((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
@@ -131,7 +131,7 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
         scr = (s32 *)0x1F800084;
         *scr = sv;
         num = D_8009AFCC + 7;
-        lim2 = D_801E40E4;
+        lim2 = g_CourseModelCount;
         drawArg = (num < lim2) ? num : 1;
         func_800296B4((void *)0x1F800000, drawArg);
     }

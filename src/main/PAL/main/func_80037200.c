@@ -19,7 +19,7 @@ extern s16 D_8009E74C;
 
 extern s32 D_801E3E7C;
 
-extern s32 D_801E4030;
+extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
 
 extern s16 D_801E414C;
@@ -169,7 +169,7 @@ void func_80037200(void) {
         func_800350B4(D_8009E744);
         func_80019EFC(D_8009E74C);
         func_800418D4();
-        *(s32 *)0x1F800084 = D_801E4030;
+        *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         func_80041840();
         func_8004123C();
         func_8003EAF4();
@@ -199,7 +199,7 @@ void func_80037200(void) {
     func_80019EFC(D_8009E74C);
     func_80045CD4();
     func_800418D4();
-    *(s32 *)0x1F800084 = D_801E4030;
+    *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     func_80041840();
     func_8004123C();
     func_8003E590();

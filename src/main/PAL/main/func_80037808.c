@@ -36,7 +36,7 @@ s32 func_80037808(TrackWaypointRuntime *waypoint);
  * offsets are match-load-bearing.
  */
 
-extern s32 D_801E4168;
+extern s32 g_ModelBankCount asm("D_801E4168");
 
 void func_80017A10(s32 arg0);
 
@@ -79,7 +79,6 @@ extern s32 D_8009E740;
 extern s16 D_801E43FC;
 
 
-extern s32 D_801E4030;
 
 
 extern s32 D_8009E744;
@@ -338,7 +337,7 @@ void func_80037AAC(void) {
         func_8001A4C0(mtx1Ptr, *(s32 *)(point + 0x10));
         func_80069458(&mtx0, mtx1Ptr);
         func_80017794((void *)0x1F80011C, point, &mtx0);
-        frameValue = D_801E4168;
+        frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
         drawArg = 1;
         if (drawId < frameValue) {
@@ -349,7 +348,7 @@ void func_80037AAC(void) {
         func_8001A530(mtx1Ptr, 0x800);
         func_80069568(&mtx0, mtx1Ptr);
         func_80017794((void *)0x1F80011C, point, mtx1Ptr);
-        frameValue = D_801E4168;
+        frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
         drawArg = 1;
         if (drawId < frameValue) {
@@ -557,7 +556,7 @@ Lend:
     func_80019EFC(*p);
     func_80045CD4();
     func_800418D4();
-    *(s32 *)0x1F800084 = D_801E4030;
+    *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     func_80041840();
     func_8004123C();
     GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);

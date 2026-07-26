@@ -6,9 +6,9 @@
 #include "game/track.h"
 
 extern s32 D_8019C868;
-extern s32 D_8019C704;
-extern s32 D_801E8A50;
-extern s32 D_801E6C70;
+extern s32 g_BgmVolumeSetting asm("D_8019C704");
+extern s32 g_SfxVolumeSetting asm("D_801E8A50");
+extern s32 g_MonoOutput asm("D_801E6C70");
 extern s32 D_801E4D68;
 void func_80024B6C(void);
 void func_80021224(void);
@@ -29,7 +29,8 @@ s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
 s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void func_80065860(s32 arg0);
 void func_800256B8(void);
-extern s32 D_801E40CC, D_8009E66C, D_8009E870, D_8019C768;
+extern s32 g_CameraViewMode asm("D_8009E870");
+extern s32 D_801E40CC, D_8009E66C, D_8019C768;
 extern u8 D_801F18CC[];
 extern s32 *D_8019C9A8;
 void func_80017884(s32 arg0);
@@ -59,17 +60,17 @@ void func_800250BC(void) {
 
     switch (D_8019C868) {
     case 0:
-        old = D_8019C704;
+        old = g_BgmVolumeSetting;
         if ((g_PadEdge2 & 0x8000) && old > 0) {
-            D_8019C704 = old - 1;
+            g_BgmVolumeSetting = old - 1;
         }
         if (g_PadEdge2 & 0x2000) {
-            s32 value = D_8019C704;
+            s32 value = g_BgmVolumeSetting;
             if (value < 15) {
-                D_8019C704 = value + 1;
+                g_BgmVolumeSetting = value + 1;
             }
         }
-        if (old != D_8019C704) {
+        if (old != g_BgmVolumeSetting) {
             func_8005D6EC(1);
         }
         pad = g_PadEdge2;
@@ -77,22 +78,22 @@ void func_800250BC(void) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
             g_GameMode = 4;
-            D_8019C704 = D_801E4D68;
+            g_BgmVolumeSetting = D_801E4D68;
         }
         break;
 
     case 1:
-        old = D_801E8A50;
+        old = g_SfxVolumeSetting;
         if ((g_PadEdge2 & 0x8000) && old > 0) {
-            D_801E8A50 = old - 1;
+            g_SfxVolumeSetting = old - 1;
         }
         if (g_PadEdge2 & 0x2000) {
-            s32 value = D_801E8A50;
+            s32 value = g_SfxVolumeSetting;
             if (value < 15) {
-                D_801E8A50 = value + 1;
+                g_SfxVolumeSetting = value + 1;
             }
         }
-        if (old != D_801E8A50) {
+        if (old != g_SfxVolumeSetting) {
             func_8005D6EC(1);
         }
         pad = g_PadEdge2;
@@ -100,22 +101,22 @@ void func_800250BC(void) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
             g_GameMode = 4;
-            D_801E8A50 = D_801E4D68;
+            g_SfxVolumeSetting = D_801E4D68;
         }
         break;
 
     case 2:
-        old = D_801E6C70;
+        old = g_MonoOutput;
         if ((g_PadEdge2 & 0x8000) && old > 0) {
-            D_801E6C70 = old - 1;
+            g_MonoOutput = old - 1;
         }
         if (g_PadEdge2 & 0x2000) {
-            s32 value = D_801E6C70;
+            s32 value = g_MonoOutput;
             if (value <= 0) {
-                D_801E6C70 = value + 1;
+                g_MonoOutput = value + 1;
             }
         }
-        if (old != D_801E6C70) {
+        if (old != g_MonoOutput) {
             func_8005D6EC(1);
         }
         pad = g_PadEdge2;
@@ -123,7 +124,7 @@ void func_800250BC(void) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
             g_GameMode = 4;
-            D_801E6C70 = D_801E4D68;
+            g_MonoOutput = D_801E4D68;
         }
         break;
     }
@@ -286,7 +287,7 @@ void func_80025940(void) {
     func_80038844();
     func_80019E84(*(s16 *)&D_801F18CC[D_8009E66C * 412]);
     func_800458CC(D_8019C9A8[2]);
-    D_8009E870 = 2;
+    g_CameraViewMode = 2;
     g_AnimTimer = 0;
     g_SceneTimer = 0;
     D_8019C768 = 0x180;

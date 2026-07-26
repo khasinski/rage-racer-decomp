@@ -23,12 +23,12 @@ extern u32 D_801E3FBA;
 
 extern s16 D_801E4022;
 extern s16 D_801E4024;
-extern s16 D_801E4026;
+extern s16 g_EnvironmentMode asm("D_801E4026");
 extern s16 D_801E4028;
 extern s16 D_801E402A;
 extern s16 D_801E402C;
-extern s32 D_801E4FB0;
-extern u8 *D_801E4140;
+extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
+extern u8 *g_EnvPaletteTable asm("D_801E4140");
 extern s16 D_801E6DA4[];
 
 extern s32 D_8009B24C;
@@ -83,11 +83,11 @@ void func_80045CD4(void) {
 
     for (i = 0; i < 0x10; i++) {
         s16 *dst;
-        p1 = (u8 *)(i * 3) + (D_801E4FB0 * 48 + (s32)D_801E4140);
+        p1 = (u8 *)(i * 3) + (g_EnvironmentModePrev * 48 + (s32)g_EnvPaletteTable);
         local[0] = p1[0] << 4;
         local[1] = p1[1] << 4;
         local[2] = p1[2] << 4;
-        p2 = (u8 *)(i * 3) + (D_801E4026 * 48 + (s32)D_801E4140);
+        p2 = (u8 *)(i * 3) + (g_EnvironmentMode * 48 + (s32)g_EnvPaletteTable);
         func_80069A38(p2[0], p2[1], p2[2]);
         func_80069B14(local, frac, out);
         {
@@ -134,7 +134,7 @@ void func_80045CD4(void) {
         }
     }
 
-    if (D_801E4026 == 2) {
+    if (g_EnvironmentMode == 2) {
         D_8009B24C += 0xFA;
         if (D_8009B24C > 0x7FFF) {
             D_8009B24C = 0x7FFF;

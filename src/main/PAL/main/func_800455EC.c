@@ -34,12 +34,12 @@ extern PackedWord D_801E4016;
 extern PackedWord D_801E401A;
 extern PackedWord D_801E401E;
 extern s16 D_801E4024;
-extern s16 D_801E4026;
+extern s16 g_EnvironmentMode asm("D_801E4026");
 extern s16 D_801E4028;
 extern s16 D_801E402A;
 extern s16 D_801E402C;
-extern s32 D_801E4030;
-extern s32 D_801E4FB0;
+extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
+extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
 
 void func_800455EC(PackedWord *arg0) {
     register PackedWord *src asm("a2");
@@ -74,12 +74,12 @@ void func_800455EC(PackedWord *arg0) {
     D_801E401A = D_801E4016;
 
     field28 = *(u16 *)((u8 *)src + 0x28);
-    mode = D_801E4026;
+    mode = g_EnvironmentMode;
     D_801E4024 = field28;
     newMode = *(u16 *)((u8 *)src + 0x2C);
-    D_801E4026 = newMode;
+    g_EnvironmentMode = newMode;
     flag = *(u16 *)((u8 *)src + 0x2E);
-    D_801E4FB0 = mode;
+    g_EnvironmentModePrev = mode;
     D_801E4028 = ((flag >> 15) ^ 1);
     compareMode = 4;
 
@@ -90,8 +90,8 @@ void func_800455EC(PackedWord *arg0) {
 
     signedMode = (s16)newMode;
     if (signedMode == compareMode) {
-        D_801E4030 = 1;
+        g_IsEnvironmentMode4 = 1;
     } else {
-        D_801E4030 = 0;
+        g_IsEnvironmentMode4 = 0;
     }
 }

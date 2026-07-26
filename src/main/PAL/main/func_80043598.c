@@ -4,16 +4,16 @@
 
 extern s32 D_8007F5F8;
 extern s32 D_8007F5FC;
-extern s32 D_8007F600;
-extern s32 D_8007F604;
-extern s32 D_8007F608;
-extern s32 D_8007F60C;
+extern s32 g_CdTrackPending asm("D_8007F600");
+extern s32 g_CdCommandPending asm("D_8007F604");
+extern s32 g_CdTrackStep asm("D_8007F608");
+extern s32 g_CdCommandStep asm("D_8007F60C");
 extern u8 D_8009AFD0[];
 extern u8 D_8009B168;
 extern u8 D_8009B16C;
 extern u8 D_8009B16E;
 extern u8 D_8009B16F;
-extern u8 D_8009B194;
+extern u8 g_CdVolume asm("D_8009B194");
 extern u8 D_8009B1B0;
 extern s32 D_8009B1B4;
 extern s32 D_8019C7BC;
@@ -38,28 +38,28 @@ void func_80043598(void) {
     s32 bestTime;
     s32 enteredTime;
 
-    state = D_8007F60C;
+    state = g_CdCommandStep;
 
     switch (state) {
     case 0:
         if (func_8006A534(1, 0) == 0) {
             break;
         }
-        D_8007F60C = 1;
+        g_CdCommandStep = 1;
         /* fallthrough */
 
     case 1:
         if (func_8006A5A4(0x11, 0, (s32)&D_8009B16C) != 0) {
-            D_8007F60C = 2;
+            g_CdCommandStep = 2;
         }
         break;
 
     case 2:
         result = func_8006A534(1, 0);
         if (result == 2) {
-            D_8007F60C = 3;
+            g_CdCommandStep = 3;
         } else if (result == 5) {
-            D_8007F60C = 1;
+            g_CdCommandStep = 1;
         }
         break;
 
@@ -82,27 +82,27 @@ void func_80043598(void) {
             D_8007F5F8 = 0;
         }
 
-        D_8007F60C = 4;
+        g_CdCommandStep = 4;
         /* fallthrough */
 
     case 4:
         if (func_8006A5A4(9, 0, 0) != 0) {
-            D_8007F60C = 5;
+            g_CdCommandStep = 5;
         }
         break;
 
     case 5:
         result = func_8006A534(1, 0);
         if (result == 2) {
-            D_8007F60C = 6;
+            g_CdCommandStep = 6;
         } else if (result == 5) {
-            D_8007F60C = 4;
+            g_CdCommandStep = 4;
         }
         break;
 
     case 6:
-        D_8007F604 = -1;
-        D_8007F60C = 0;
+        g_CdCommandPending = -1;
+        g_CdCommandStep = 0;
         break;
     }
 }
@@ -111,7 +111,7 @@ void func_800437B8(void) {
     s32 state;
     s32 status;
 
-    state = D_8007F60C;
+    state = g_CdCommandStep;
     if (state == 1) {
         goto state_1;
     }
@@ -136,29 +136,29 @@ state_0:
     if (func_8006A534(1, 0) == 0) {
         goto done;
     }
-    D_8007F60C = 1;
+    g_CdCommandStep = 1;
 state_1:
     if (func_8006A5A4(3, 0, 0) == 0) {
         goto done;
     }
-    D_8007F60C = 2;
+    g_CdCommandStep = 2;
     goto done;
 
 state_2:
     status = func_8006A534(1, 0);
     if (status == state) {
-        D_8007F60C = 3;
+        g_CdCommandStep = 3;
         goto done;
     }
     if (status == 5) {
-        D_8007F60C = 1;
+        g_CdCommandStep = 1;
         goto done;
     }
     goto done;
 
 state_3:
-    D_8007F604 = -1;
-    D_8007F60C = 0;
+    g_CdCommandPending = -1;
+    g_CdCommandStep = 0;
 
 done:
     return;
@@ -185,14 +185,14 @@ void func_800438BC(void) {
         ".set noreorder");
     func_800431BC();
 
-    D_8007F600 = -1;
-    D_8007F604 = -1;
+    g_CdTrackPending = -1;
+    g_CdCommandPending = -1;
     D_8009B1B0 = 2;
-    D_8007F608 = 0;
-    D_8007F60C = 0;
+    g_CdTrackStep = 0;
+    g_CdCommandStep = 0;
     D_8007F5FC = 0;
     D_8007F5F8 = 0;
-    D_8009B194 = 0x7F;
+    g_CdVolume = 0x7F;
     D_8009B1B4 = 0;
     func_80042FA0(0x7F);
 }
@@ -203,8 +203,8 @@ void func_80043974(void) {
     s32 state;
     s32 value;
 
-    if (D_8007F600 < 0) {
-        state = D_8007F604;
+    if (g_CdTrackPending < 0) {
+        state = g_CdCommandPending;
         if (state == 2) {
             goto state_2;
         }
@@ -238,10 +238,10 @@ check_cd:
                 temp = CdPosToInt_Local(&D_8007F5B0[D_8009B1B0]);
                 value = CdPosToInt_Local(&D_8007F5B0[0]);
                 if (value < temp) {
-                    D_8007F608 = status;
-                    D_8007F604 = 1;
-                    D_8007F60C = 0;
-                    D_8007F600 = D_8009B1B0;
+                    g_CdTrackStep = status;
+                    g_CdCommandPending = 1;
+                    g_CdCommandStep = 0;
+                    g_CdTrackPending = D_8009B1B0;
                 }
             }
         }

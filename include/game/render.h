@@ -610,4 +610,18 @@ void GameSeekEnvironmentScript(s32 time) asm("func_800458CC");
  * between successive colour slots. */
 void GameDrawSkyBackground(void) asm("func_800418D4");
 
+/* Environment mode of the loaded course variant, from variant data +0x2C. Also
+ * the index of the target 48-byte (16 x RGB) sky palette in g_EnvPaletteTable;
+ * mode 2 alone gets clear fog (SetFogNear ramps to 0x7FFF, else to 0x1770). */
+extern s16 g_EnvironmentMode asm("D_801E4026");
+/* The mode the previous variant had; the sky-CLUT lerp's source palette. */
+extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
+/* Sky palette records, 48 bytes each, indexed by environment mode. Installed
+ * from the loaded environment block by func_8004553C. */
+extern u8 *g_EnvPaletteTable asm("D_801E4140");
+/* g_EnvironmentMode == 4. Picks GameDrawStaticScenery's model 0x3B over 0x3A
+ * and the `flags & 2` prop set over `flags & 1`; also forwarded to scratchpad
+ * 0x1F800084 by every car/track renderer. */
+extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
+
 #endif

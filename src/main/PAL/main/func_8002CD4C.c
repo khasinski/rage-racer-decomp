@@ -28,7 +28,7 @@ typedef struct A {
 } A;
 
 extern s16 D_8019C9AC;
-extern u8 D_801E4369;
+extern u8 g_PadType asm("D_801E4369");
 extern s16 D_801E4B60;
 extern s16 D_801E4B62;
 extern s16 D_801E437E;
@@ -58,7 +58,7 @@ void func_8002CD4C(A *ctx) {
     }
     if (mode >= 4) goto L_448;
     if (D_8019C9AC != 0) goto L_448;
-    if (D_801E4369 != 0x41) goto L_1C4;
+    if (g_PadType != 0x41) goto L_1C4;
 
     if (g_MirrorMode != 0) {
         a1 = g_PadHeld & D_801E4B60;
@@ -105,7 +105,7 @@ L_194:
     goto L_53C;
 
 L_1C4:
-    if (D_801E4369 != 0x23) goto L_43C;
+    if (g_PadType != 0x23) goto L_43C;
     a1 = ((s32)(D_801E437E * 13) << 9) / D_8007C020[D_801E418C];
     if (g_MirrorMode != 0) a1 = -a1;
     if (a1 >= 0) goto L_310;

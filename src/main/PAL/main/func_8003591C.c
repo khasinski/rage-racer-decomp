@@ -32,14 +32,14 @@ extern s16 D_8009E83C;
 
 extern s32 D_8019C70C[][4][2];
 
-extern s32 D_8019C8EC;
+extern s32 g_SeriesCleared asm("D_8019C8EC");
 
 extern s16 D_8019CA10;
 
 
 
 
-extern s32 D_801E4364;
+extern s32 g_LapCount asm("D_801E4364");
 
 extern s16 D_801E43FC;
 
@@ -96,7 +96,7 @@ s32 func_800632B0(void);
 extern s16 D_8009E74C;
 
 
-extern s32 D_8009E870;
+extern s32 g_CameraViewMode asm("D_8009E870");
 
 extern s32 D_8009AF8C;
 
@@ -192,11 +192,11 @@ extern s16 D_8019C78C;
 
 extern s16 D_801E3E8C;
 
-extern s32 D_801E4030;
+extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
 extern s16 D_801E414C;
 
-extern u8 D_801E4369;
+extern u8 g_PadType asm("D_801E4369");
 
 
 
@@ -332,7 +332,7 @@ s32 func_8003591C(void *arg0, s32 arg1) {
      */
     route = (u8 *)arg0 + 0xBC;
     if (*(s16 *)((u8 *)arg0 + 0x168) > 0) {
-        if (D_801E4364 >= *(s16 *)((u8 *)arg0 + 0x168)) {
+        if (g_LapCount >= *(s16 *)((u8 *)arg0 + 0x168)) {
             routeOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
             *(s32 *)((s32)route + routeOffset + 0xAC) += 1;
             routeOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
@@ -360,7 +360,7 @@ s32 func_8003591C(void *arg0, s32 arg1) {
         }
         goto update_best;
     }
-    if (D_801E4364 < *(s16 *)((u8 *)arg0 + 0x168)) {
+    if (g_LapCount < *(s16 *)((u8 *)arg0 + 0x168)) {
 update_best:
         if (D_801E4BA8 <
             D_8019C70C[g_RaceSeries][g_CourseIndex][arg1]) {
@@ -373,7 +373,7 @@ update_progress:
     if (progress * g_TrackLength <= D_8009E740 + D_8009E73C) {
         s32 progressLimit;
 
-        progressLimit = D_801E4364;
+        progressLimit = g_LapCount;
         if (progress > progressLimit) {
             goto progress_failed;
         }
@@ -405,7 +405,7 @@ update_progress:
                 D_8009AF94 = D_8009AF84;
             }
 
-            if (D_801E4364 < *(s16 *)(route + 0xAC)) {
+            if (g_LapCount < *(s16 *)(route + 0xAC)) {
                 goto record_done;
             }
             func_8005D6EC(0x26);
@@ -413,7 +413,7 @@ update_progress:
         }
 
 record_done:
-        count = D_801E4364;
+        count = g_LapCount;
         step = *(s16 *)(route + 0xAC);
         if (step == count + 1) {
                 if (*(s16 *)(route + 0xA4) < 4) {
@@ -475,7 +475,7 @@ progress_failed:
 
 after_progress:
 check_finish_transition:
-    if ((D_801E4364 < *(s16 *)(route + 0xAC)) &&
+    if ((g_LapCount < *(s16 *)(route + 0xAC)) &&
         (g_RacePhase == 4)) {
         func_80033AA0(D_801E43FC * 2, 0x29);
         timer = D_801E43FC;
@@ -489,13 +489,13 @@ check_finish_transition:
         if ((s16)timer == 0x3F) {
             if (g_GrandPrixMode != 0) {
                 func_800207E0();
-                if (D_8019C8EC == 1) {
+                if (g_SeriesCleared == 1) {
                     func_80042BC0(0x10);
                 } else {
                     func_80042BC0(0xC);
                 }
             } else {
-                D_8019C8EC = 0;
+                g_SeriesCleared = 0;
                 func_80042BC0(0xD);
             }
         }
@@ -520,7 +520,7 @@ check_finish_transition:
 
 update_countdown:
     if (D_801E6C90 == 2) {
-        value = D_801E4364 - *(s16 *)(route + 0xAC);
+        value = g_LapCount - *(s16 *)(route + 0xAC);
         switch (value) {
         case 2:
             func_8005D6EC(0x27);
@@ -566,9 +566,9 @@ void func_8003609C(void) {
     func_8001D210();
     D_801E40CC = *(s32 *)g_TrackEventData;
     if (g_CourseIndex == 3) {
-        D_801E4364 = 6;
+        g_LapCount = 6;
     } else {
-        D_801E4364 = 3;
+        g_LapCount = 3;
     }
     base = D_8009E6D4;
     func_8002C478(base);
@@ -602,7 +602,7 @@ void func_8003609C(void) {
         D_8009AF98 = *(s32 *)((u8 *)D_801E41E8 + tableOffset + 8);
     } while (0);
     D_8009AF8C = *entry;
-    count = (new_var2 = D_801E4364);
+    count = (new_var2 = g_LapCount);
     D_8009AF9C = 0x3A98;
     D_801E4BCC = D_8009AF8C;
     if (count > 0) {
@@ -624,7 +624,7 @@ void func_8003609C(void) {
     func_80032D5C(g_GrandPrixMode);
     g_AnimTimer = 0;
     g_SceneTimer = 0;
-    D_8009E870 = 0;
+    g_CameraViewMode = 0;
     g_RacePhase = 0;
     D_801E7A50 = 0;
     D_801E4BB4 = 0x1FE;
@@ -779,11 +779,11 @@ set_countdown:
             s32 selectorMask;
             u16 inputMask;
 
-            selectorMask = D_801E4369;
+            selectorMask = g_PadType;
             inputMask = g_PadHeld;
             selectorMask = (u32)(selectorMask ^ 0x23) < 1;
             if ((inputMask & D_801E4B6C[selectorMask * 8]) &&
-                D_8009E870 == 0 && g_RacePhase == 2) {
+                g_CameraViewMode == 0 && g_RacePhase == 2) {
                 if (g_PadEdge2 & 8) {
                     D_8019CA10 = 1;
                 } else if (g_PadEdge2 & 4) {
@@ -792,7 +792,7 @@ set_countdown:
             }
         }
 
-        func_80043BCC(D_8009E870, D_8009E6D4);
+        func_80043BCC(g_CameraViewMode, D_8009E6D4);
         func_80019EFC(D_8009E74C);
         if (g_GrandPrixMode != 0) {
             func_800389F0();
@@ -801,7 +801,7 @@ set_countdown:
             func_800333DC();
         }
         func_800418D4();
-        *(s32 *)0x1F800084 = D_801E4030;
+        *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         func_80041840();
         func_8004123C();
         if (g_GrandPrixMode != 0) {
@@ -897,19 +897,19 @@ update_race:
             s32 selectorMask;
             u16 inputMask;
 
-            selectorMask = D_801E4369;
+            selectorMask = g_PadType;
             inputMask = g_PadEdge2;
             selectorMask = (u32)(selectorMask ^ 0x23) < 1;
             if ((inputMask & D_801E4B6C[selectorMask * 8]) &&
                 (u32)((u16)g_RacePhase - 2) < 2) {
-                D_8009E870 ^= 1;
+                g_CameraViewMode ^= 1;
             }
         }
 
         if (g_RacePhase == 5) {
             func_8003CB3C(D_8009E6D4);
         } else if (g_RacePhase > 0) {
-            func_80043BCC(D_8009E870, D_8009E6D4);
+            func_80043BCC(g_CameraViewMode, D_8009E6D4);
         }
 
         if (g_RacePhase != 5) {
@@ -943,7 +943,7 @@ update_race:
             D_801E8A8C = 0;
         }
 
-        *(s32 *)0x1F800084 = D_801E4030;
+        *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         func_80041840();
         func_8004123C();
         if (g_GrandPrixMode != 0) {

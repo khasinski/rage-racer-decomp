@@ -10,7 +10,7 @@ extern s32 D_8009AF78;
 extern s32 D_8009AFB0;
 extern s32 D_801E4D64;
 extern s32 D_801E4148;
-extern s32 D_801E4364;
+extern s32 g_LapCount asm("D_801E4364");
 extern u8 D_8019C70C[];
 
 void func_80033D50(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
@@ -29,7 +29,7 @@ void func_800357BC(void) {
         goto compare_first;
     } else if (D_801E4148 >= 0) {
         if (D_8009AFAC != 0) {
-            if (D_801E4364 >= D_8009E83C) {
+            if (g_LapCount >= D_8009E83C) {
                 value = D_8009AF7C;
                 if (D_8009AFAC > 0) {
                     tile = 0x7810;

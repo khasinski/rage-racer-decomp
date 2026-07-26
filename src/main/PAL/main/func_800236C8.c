@@ -7,7 +7,7 @@ extern u8 D_8007D589[];
 extern u8 D_8007D58A[];
 extern u8 D_8007D58B[];
 extern u8 * volatile g_DrawBuffer asm("D_8019C900");
-extern volatile u8 D_801E4369;
+extern volatile u8 g_PadType asm("D_801E4369");
 extern u8 D_8007D5A4;
 
 void func_800236C8(s32 arg0, s32 arg1) {
@@ -88,7 +88,7 @@ void func_8002390C(void) {
     s32 next;
 
     raw_base = (s32)g_DrawBuffer;
-    value = D_801E4369;
+    value = g_PadType;
     scratch = *(s32 *)0x1F800000;
     next = scratch;
     base = raw_base + 0xCC;
@@ -104,7 +104,7 @@ void func_8002390C(void) {
     goto have_value;
 
 use_current:
-    raw_base = D_801E4369;
+    raw_base = g_PadType;
     asm("" : "=r"(raw_base) : "0"(raw_base));
     value = raw_base & 0xFF;
     D_8007D5A4 = raw_base;

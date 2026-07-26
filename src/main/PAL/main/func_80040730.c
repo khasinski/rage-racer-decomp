@@ -6,7 +6,7 @@ extern s16 D_801E4DCA;
 extern s16 D_801E4DC8;
 extern s16 D_801E4DCC;
 extern s16 D_801E4DB8;
-extern s32 D_801E4168;
+extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 D_1F800084;
 
 void func_8001A530(Matrix *mtx, s32 angle);
@@ -45,7 +45,7 @@ void func_80040730(void) {
     __asm__("" : "=r"(scratchVec) : "0"(scratchVec));
     anglePtr = (s16 *)((u8 *)anglePtr - 0x12);
     func_80017794(scratchVec, anglePtr, &mtx0);
-    frameValue = D_801E4168;
+    frameValue = g_ModelBankCount;
     *(s32 *)0x1F800084 = 0;
     drawId = 1;
     if (frameValue >= 0x24) {
@@ -69,7 +69,7 @@ void func_80040730(void) {
     }
     func_80069568(&mtx0, mtx1Ptr);
     func_80017794((void *)0x1F80011C, anglePtr, mtx1Ptr);
-    frameValue = D_801E4168;
+    frameValue = g_ModelBankCount;
     D_1F800084 = 0;
     drawId = 1;
     if (frameValue >= 0x25) {

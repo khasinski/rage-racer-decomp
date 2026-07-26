@@ -2,7 +2,7 @@
 #include "game/audio.h"
 
 extern s32 D_80082F40;
-extern s32 D_801E6CE4;
+extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
 extern s32 D_801E6CE8;
 
 void GameSetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
@@ -27,12 +27,12 @@ arg0_done:
 
 arg1_done:
     if (D_80082F40 != 0) {
-        D_801E6CE4 = arg0;
+        g_PanVoiceVolumeL = arg0;
         D_801E6CE8 = arg1;
     } else {
         s32 temp = (arg0 + arg1) / 2;
 
-        D_801E6CE4 = temp;
+        g_PanVoiceVolumeL = temp;
         D_801E6CE8 = temp;
     }
 }

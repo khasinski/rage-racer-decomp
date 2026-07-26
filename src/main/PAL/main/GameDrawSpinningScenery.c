@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/race.h"
 
-extern s32 D_801E40E4;
+extern s32 g_CourseModelCount asm("D_801E40E4");
 extern u16 D_8007E33C[];
 extern u16 D_8007E334[];
 extern u8 D_8007E300[];
@@ -75,7 +75,7 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
 
             *(s32 *)0x1F800084 = 0;
             limit = 1;
-            if (D_801E40E4 >= 0x3F) {
+            if (g_CourseModelCount >= 0x3F) {
                 limit = 0x3E;
             }
             func_80029E50((void *)0x1F800000, limit);

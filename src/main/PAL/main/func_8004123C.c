@@ -14,7 +14,7 @@ typedef struct {
 extern Obj *D_801E4B2C;
 extern s32 D_801E4BBC;
 extern s32 *D_801E6828;
-extern s32 D_801E4030;
+extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
 void func_8001A530(Matrix *mtx, s32 angle);
 void func_80069568(void *a, void *b);
@@ -110,7 +110,7 @@ void func_8004123C(void) {
             *(s32 *)0x1F800084 = 0;
         }
 
-        if (D_801E4030 ? (obj->flags & 2) : (obj->flags & 1)) {
+        if (g_IsEnvironmentMode4 ? (obj->flags & 2) : (obj->flags & 1)) {
             func_80029E50((void *)0x1F800000, obj->id);
         } else {
             func_800296B4((void *)0x1F800000, obj->id);

@@ -4,7 +4,7 @@
 #include "game/track.h"
 
 extern u32 *D_801E6828;
-extern s32 D_801E40E4;
+extern s32 g_CourseModelCount asm("D_801E40E4");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 void func_8001A4C0(Matrix *mtx, s32 angle);
@@ -64,7 +64,7 @@ void GameDrawShuttleScenery(s32 arg0) {
             drawArg = 0x3C;
         }
         func_80017794((void *)0x1F80011C, &state->x, mtx1Ptr);
-        frameValue = D_801E40E4;
+        frameValue = g_CourseModelCount;
         *(s32 *)0x1F800084 = 0;
         drawValue = 1;
         if (drawArg < frameValue) {

@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/audio.h"
 
-extern s16 D_80082F28[];
+extern s16 g_SoundSlotTone[] asm("D_80082F28");
 extern s16 D_80082F2A[];
 extern s32 D_801E6CC8[];
 
@@ -31,7 +31,7 @@ void GameForceSoundSlotVoicePlayback(s32 arg0) {
         active = base;
         saved = 0;
         do {
-            if (*base++ != 0 && *(s16 *)((s32)D_80082F28 + saved) != *(s16 *)((s32)D_80082F2A + saved)) {
+            if (*base++ != 0 && *(s16 *)((s32)g_SoundSlotTone + saved) != *(s16 *)((s32)D_80082F2A + saved)) {
                 GamePlaySoundSlotVoice(i, active[-3], 3);
             }
             i++;

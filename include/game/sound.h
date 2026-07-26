@@ -49,7 +49,9 @@ extern s32 D_801E6D80; /* +0x00 */
 extern s32 D_801E6D84; /* reverb depth left  */
 extern s32 D_801E6D88; /* reverb depth right */
 extern s32 D_801E6D8C; /* sequence flag/state */
-extern s16 D_801E6D90; /* sequence volume    */
+/* libsnd access number of the open SEQ, returned by SsSeqOpen in
+ * GameOpenVabSequenceSlot; the `seq` handle for SsSeqPlay/Stop/SetVol. */
+extern s16 g_SeqHandle asm("D_801E6D90");
 extern s32 D_801E6D94; /* volume scale (also read as s16) */
 extern s32 D_801E6D98; /* sequence volume scale */
 extern s32 D_801E6D9C; /* active/enabled flag */

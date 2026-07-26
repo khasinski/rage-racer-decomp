@@ -9,7 +9,7 @@ typedef struct {
     s32 w;
 } Vec4i;
 
-extern s32 D_801E40E4;
+extern s32 g_CourseModelCount asm("D_801E40E4");
 extern s32 D_8007E2B8[];
 extern struct {
     s16 x;
@@ -45,7 +45,7 @@ void func_8003D458(s32 arg0) {
             }
             func_80017794((void *)0x1F80011C, &state, &mtx);
             rem = s1 - s0 * 15;
-            lim = D_801E40E4;
+            lim = g_CourseModelCount;
             __asm__ __volatile__("");
             value = rem + 0x28;
             *(s32 *)0x1F800084 = 0;
@@ -56,7 +56,7 @@ void func_8003D458(s32 arg0) {
                 state.z += 0x5000;
             }
             func_80017794((void *)0x1F80011C, &state, &mtx);
-            lim = D_801E40E4;
+            lim = g_CourseModelCount;
             __asm__ __volatile__("");
             value = 0x28;
             *(s32 *)0x1F800084 = 0;

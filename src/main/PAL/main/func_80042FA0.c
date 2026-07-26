@@ -2,7 +2,7 @@
 
 extern s32 D_8007F5FC;
 extern u8 D_8007F5A8[];
-extern u8 D_8009B194;
+extern u8 g_CdVolume asm("D_8009B194");
 extern s32 D_8009B184;
 extern s32 D_8009B188;
 extern s32 D_8009B18C;
@@ -22,8 +22,8 @@ void func_80042FA0(s32 arg0) {
     s32 value;
 
     offset = D_8007F5FC;
-    D_8009B194 = arg0;
-    scale = D_8009B194;
+    g_CdVolume = arg0;
+    scale = g_CdVolume;
     offset <<= 2;
 
     product = D_8007F5A8[offset] * scale;

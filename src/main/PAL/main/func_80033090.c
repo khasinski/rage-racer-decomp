@@ -2,7 +2,7 @@
 #include "game/race.h"
 #include "game/render.h"
 
-extern s32 D_801E4364;
+extern s32 g_LapCount asm("D_801E4364");
 extern s32 D_801E4BCC;
 extern GameRaceRanking D_8009E83C;
 extern s16 D_8009E836;
@@ -28,14 +28,14 @@ void func_80033090(void) {
 
     list = &D_8009E83C;
     visibleCount = list->count;
-    if (visibleCount > D_801E4364) {
-        visibleCount = D_801E4364;
+    if (visibleCount > g_LapCount) {
+        visibleCount = g_LapCount;
     }
 
     i = 0;
     activeIndex = D_8009E836;
     asm volatile("" : "=m"(framePad[0]), "=m"(framePad[1]));
-    if (D_801E4364 > 0) {
+    if (g_LapCount > 0) {
         baseOffset = 0x236F8;
         primOffset = 0;
         y = 0x2E;
@@ -68,7 +68,7 @@ void func_80033090(void) {
             i++;
             baseOffset += 0x14;
             primOffset += 0x14;
-        } while (i < D_801E4364);
+        } while (i < g_LapCount);
     }
 
     func_80033D50(0xFA, 0x20, D_801E4BCC, 0x78CC, 0x3E8);

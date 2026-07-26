@@ -3,7 +3,7 @@
 #include "game/asset.h"
 #include "game/car.h"
 
-extern u32 D_8009E87C;
+extern u32 g_CarModelSlot asm("D_8009E87C");
 extern GameCarModelAsset *D_8009E698;
 extern GameAssetTripleHeader *D_8019CAFC;
 extern s32 D_8019CA64;
@@ -144,7 +144,7 @@ state_4:
                     func_8001D900(entry->textureIndex, D_8009E698->imageDataOffset);
                 }
 
-                D_8009E87C = 0;
+                g_CarModelSlot = 0;
                 g_AssetLoadState = 0;
             }
 done:
@@ -182,7 +182,7 @@ void func_800188B8(s32 arg0) {
 
     if (g_AssetLoadState == 1) {
         ptr = D_801E4090;
-        if (D_8009E87C == 0) {
+        if (g_CarModelSlot == 0) {
             ptr += 0x20000;
         }
 
@@ -192,15 +192,15 @@ void func_800188B8(s32 arg0) {
             register s32 test asm("$2");
             register u8 *entry asm("$2");
 
-            func_80017B94(ptr, D_8009E87C < 1);
+            func_80017B94(ptr, g_CarModelSlot < 1);
             fixed = *(volatile s32 *)(ptr + 0x20);
-            flag = D_8009E87C;
+            flag = g_CarModelSlot;
             fixed = (s32)ptr + fixed;
             flag = flag < 1;
             ((GameCarModelAsset *)ptr)->modelDataOffset = fixed;
             func_80017948((void *)fixed, flag);
             fixed = *(volatile s32 *)(ptr + 0x24);
-            flag = D_8009E87C;
+            flag = g_CarModelSlot;
             fixed = (s32)ptr + fixed;
             flag = flag < 1;
             ((GameCarModelAsset *)ptr)->imageDataOffset = fixed;

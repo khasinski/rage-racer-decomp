@@ -5,7 +5,7 @@
 
 extern GameRenderView *D_8009E698;
 extern Matrix D_8009E6AC;
-extern s32 D_801E4168;
+extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 D_1F800084;
 
 s32 func_800350B4(s32 arg0);
@@ -95,7 +95,7 @@ void func_8001DAB0(GameRenderObject *obj) {
     func_80069568(&m_30, &m_70);
     func_80017794((void *)0x1F80011C, obj, &m_70);
     D_1F800084 = 0;
-    func_80028DEC((void *)0x1F800000, D_801E4168 < 1);
+    func_80028DEC((void *)0x1F800000, g_ModelBankCount < 1);
 
     otDepth = obj->field_E4 << 1;
     if (obj->flags_48 & 0x1000) {
@@ -123,7 +123,7 @@ void func_8001DAB0(GameRenderObject *obj) {
     m_B0[1].m[2][2] = -m_B0[0].m[2][2];
     func_80017794((void *)0x1F80011C, obj, &m_F0);
     D_1F800084 = 0;
-    func_80028DEC((void *)0x1F800000, (otDepth + 3 < D_801E4168) ? (otDepth + 3) : 1);
+    func_80028DEC((void *)0x1F800000, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
 
     for (i = 0; i < 2; i++) {
         GameRenderView *v = D_8009E698;
@@ -140,7 +140,7 @@ void func_8001DAB0(GameRenderObject *obj) {
         m_118[2] += obj->z;
         func_80017794((void *)0x1F80011C, m_118, &m_B0[i]);
         D_1F800084 = 0;
-        func_80028DEC((void *)0x1F800000, (otDepth + 2 < D_801E4168) ? (otDepth + 2) : 1);
+        func_80028DEC((void *)0x1F800000, (otDepth + 2 < g_ModelBankCount) ? (otDepth + 2) : 1);
         func_80069888(&m_90);
     }
 

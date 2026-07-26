@@ -8,9 +8,9 @@ extern s32 D_8009B338;
 extern s32 D_8019CB0C;
 extern s32 D_8009B334;
 extern s32 D_8009B31C;
-extern s32 D_8009B320;
+extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 extern s32 D_8009B30C;
-extern s32 D_8009B300;
+extern s32 g_MenuConfirmTimer asm("D_8009B300");
 extern s32 D_8009B310;
 extern s32 D_8009B348;
 extern s32 D_8009B354;
@@ -21,7 +21,7 @@ extern s32 D_8009B36C;
 extern s32 D_8009B370;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
-extern u8 D_8009B2F0;
+extern u8 g_MenuSubCursor asm("D_8009B2F0");
 extern u8 *D_8019C764;
 extern s32 D_8019C7AC;
 extern s32 D_8019C908;
@@ -29,12 +29,12 @@ extern u16 D_8019CABC;
 extern u8 *D_8009E67C;
 extern u8 D_80081818;
 extern u8 D_800817A0;
-extern u8 D_80082460;
+extern u8 g_UiChromeScript asm("D_80082460");
 extern u8 D_800827FC;
-extern u8 D_80082790;
+extern u8 g_UiChromeScript2 asm("D_80082790");
 extern u8 D_80082604;
 extern u8 D_800825A4;
-extern u8 D_80011BA0;
+extern u8 g_MenuBlankCaption asm("D_80011BA0");
 void func_800212F0(s32 arg0);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
@@ -76,7 +76,7 @@ void GameUpdateCourseSelectScreen(void) {
     } else {
         func_800509C4(D_8009B334);
     }
-    func_8004FCE8(D_8009B31C, D_8009B320, 0);
+    func_8004FCE8(D_8009B31C, g_MenuPlateCarIndex, 0);
     func_8005194C();
     hdr = &D_80081818;
     if (g_GrandPrixMode != 0) {
@@ -91,7 +91,7 @@ void GameUpdateCourseSelectScreen(void) {
         func_800489AC(g_UiScriptProgress, 2, D_8019C7AC);
         func_800487D8(hdr, &g_UiScriptProgress, 0);
         func_8004CF30(7);
-        if ((func_800487D8(&D_80082460, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
+        if ((func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
                 func_8005D6EC(1);
@@ -185,7 +185,7 @@ void GameUpdateCourseSelectScreen(void) {
                         GameMenuBusy = -1;
                         D_8019CABC = hv;
                         g_UiScriptProgress2 = 0;
-                        D_8009B2F0 = 1;
+                        g_MenuSubCursor = 1;
                     } else {
                         func_8005D6EC(3);
                         func_8005E8E0();
@@ -203,7 +203,7 @@ void GameUpdateCourseSelectScreen(void) {
                         D_8019C764 = &D_800825A4;
                         GameMenuBusy = -2;
                         g_UiScriptProgress2 = 0;
-                        D_8009B2F0 = g_GrandPrixClass;
+                        g_MenuSubCursor = g_GrandPrixClass;
                     } else {
                         GameMenuBusy = 3;
                         g_MenuOverlayPattern = 1;
@@ -216,12 +216,12 @@ void GameUpdateCourseSelectScreen(void) {
         if (state == -1) {
             u16 *pad;
             func_800487D8(&D_800827FC, &g_UiScriptProgress2, 0);
-            func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+            func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
             if (func_800487D8(D_8019C764, &g_UiScriptProgress2, 1) != 0) {
                 if (g_PadEdge2 & 0x860) {
-                    func_8005D6EC((D_8009B2F0 != 0) ? 2 : 3);
+                    func_8005D6EC((g_MenuSubCursor != 0) ? 2 : 3);
                     GameMenuBusy = -3;
-                    D_8009B300 = 0x23;
+                    g_MenuConfirmTimer = 0x23;
                 }
                 pad = (u16 *)&g_PadEdge2;
                 if (*pad & 0x90) {
@@ -230,29 +230,29 @@ void GameUpdateCourseSelectScreen(void) {
                 }
                 if (*pad & 0x8000) {
                     func_8005D6EC(1);
-                    D_8009B2F0 = 1;
+                    g_MenuSubCursor = 1;
                 }
                 if (*pad & 0x2000) {
                     func_8005D6EC(1);
-                    D_8009B2F0 = 0;
+                    g_MenuSubCursor = 0;
                 }
-                func_80048D64((D_8009B2F0 != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 0);
+                func_80048D64((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 0);
                 func_80046A2C(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80046A2C(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                func_80048B88(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&D_80011BA0);
-                func_80048B88(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&D_80011BA0);
+                func_80048B88(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
+                func_80048B88(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&g_MenuBlankCaption);
             }
         } else if (state == -2) {
             u16 *pad;
             if (func_800487D8(D_8019C764, &g_UiScriptProgress2, 1) != 0) {
                 if (g_PadEdge2 & 0x860) {
                     func_8005D6EC(2);
-                    if (D_8009B2F0 == g_GrandPrixClass) {
+                    if (g_MenuSubCursor == g_GrandPrixClass) {
                         GameMenuBusy = 0;
                     } else {
                         GameMenuBusy = -5;
                         D_8009B310 = 0;
-                        D_8009B300 = 0x23;
+                        g_MenuConfirmTimer = 0x23;
                         func_8005026C(0);
                     }
                 }
@@ -263,53 +263,53 @@ void GameUpdateCourseSelectScreen(void) {
                 }
                 if (*pad & 0x1000) {
                     func_8005D6EC(1);
-                    D_8009B2F0 = (D_8009B2F0 != 0) ? D_8009B2F0 - 1 : g_RaceProgress->maxClassReached;
+                    g_MenuSubCursor = (g_MenuSubCursor != 0) ? g_MenuSubCursor - 1 : g_RaceProgress->maxClassReached;
                 }
                 if (g_PadEdge2 & 0x4000) {
                     func_8005D6EC(1);
-                    D_8009B2F0 = (D_8009B2F0 < g_RaceProgress->maxClassReached) ? D_8009B2F0 + 1 : 0;
+                    g_MenuSubCursor = (g_MenuSubCursor < g_RaceProgress->maxClassReached) ? g_MenuSubCursor + 1 : 0;
                 }
-                func_80048D64(0xB8, D_8009B2F0 * 0x1E + 0x6C, 0x38, 0x20, 0);
+                func_80048D64(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 0);
                 for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                     func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                    func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&D_80011BA0);
+                    func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 }
             }
         } else if (state == -3) {
-            cnt = D_8009B300;
+            cnt = g_MenuConfirmTimer;
             if (cnt <= 0) {
                 func_800487D8(&D_800827FC, &g_UiScriptProgress2, -1);
-                func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+                func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
                 func_800487D8(D_8019C764, &g_UiScriptProgress2, 0);
                 if (g_UiScriptProgress2 <= 0) {
                     func_8005E8E0();
-                    GameMenuBusy = (D_8009B2F0 != 0) ? 4 : 2;
+                    GameMenuBusy = (g_MenuSubCursor != 0) ? 4 : 2;
                     D_8009B30C = -1;
                     g_MenuViewOffsetTarget = 0x3D090;
                     D_8009B368 = 0;
                     D_8009B360 = (D_8009B360 - D_8009B364) + 0x1F4000;
                 }
             } else {
-                D_8009B300 = cnt - 1;
+                g_MenuConfirmTimer = cnt - 1;
                 func_800487D8(&D_800827FC, &g_UiScriptProgress2, 0);
-                func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+                func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
                 func_800487D8(D_8019C764, &g_UiScriptProgress2, 1);
-                func_80048D64((D_8009B2F0 != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 1);
+                func_80048D64((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 1);
                 func_80046A2C(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80046A2C(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                func_80048B88(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&D_80011BA0);
-                func_80048B88(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&D_80011BA0);
+                func_80048B88(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
+                func_80048B88(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&g_MenuBlankCaption);
             }
         } else if (state == -4) {
             func_800487D8(&D_800827FC, &g_UiScriptProgress2, -1);
-            func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
+            func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
             func_800487D8(D_8019C764, &g_UiScriptProgress2, 0);
             if (g_UiScriptProgress2 <= 0) {
                 GameMenuBusy = 0;
             }
         } else if (state == -5) {
-            cnt = D_8009B300;
+            cnt = g_MenuConfirmTimer;
             if (cnt <= 0) {
                 if (D_8009B310 != 0) {
                     if (func_8005026C(-1) == 0) {
@@ -319,8 +319,8 @@ void GameUpdateCourseSelectScreen(void) {
                 } else {
                     if (func_8005026C(1) >= 0x19) {
                         D_8009B310 = 1;
-                        g_GrandPrixClass = D_8009B2F0;
-                        func_800212F0(D_8009B2F0);
+                        g_GrandPrixClass = g_MenuSubCursor;
+                        func_800212F0(g_MenuSubCursor);
                         g_MenuViewAngle = 0x7A120;
                         g_MenuViewAngleTarget = 0x7A120;
                         D_8019C7AC = 0;
@@ -331,21 +331,21 @@ void GameUpdateCourseSelectScreen(void) {
                         D_8009B368 = D_8009E67C[0];
                     }
                     func_800487D8(D_8019C764, &g_UiScriptProgress2, 1);
-                    func_80048D64(0xB8, D_8009B2F0 * 0x1E + 0x6C, 0x38, 0x20, 1);
+                    func_80048D64(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                     for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                         func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
                         func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                        func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&D_80011BA0);
+                        func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                     }
                 }
             } else {
-                D_8009B300 = cnt - 1;
+                g_MenuConfirmTimer = cnt - 1;
                 func_800487D8(D_8019C764, &g_UiScriptProgress2, 1);
-                func_80048D64(0xB8, D_8009B2F0 * 0x1E + 0x6C, 0x38, 0x20, 1);
+                func_80048D64(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                 for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                     func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                    func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&D_80011BA0);
+                    func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 }
             }
         }
@@ -353,7 +353,7 @@ void GameUpdateCourseSelectScreen(void) {
         func_80049418(1, 1, res, GameCanSelectNextCourse());
         func_800489AC(g_UiScriptProgress, 2, D_8019C7AC);
         func_800487D8(hdr, &g_UiScriptProgress, 0);
-        func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
+        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
         func_8004CF30(7);
     } else {
         g_MenuHandlerIndex = -1;
@@ -361,7 +361,7 @@ void GameUpdateCourseSelectScreen(void) {
         res = func_80053650();
         func_80049418(-1, 1, res, GameCanSelectNextCourse());
         func_800487D8(hdr, &g_UiScriptProgress, -1);
-        func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
+        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
         func_800489AC(g_UiScriptProgress, 2, D_8019C7AC);
         func_8004CF30(-9);
         if (g_UiScriptProgress <= 0) {

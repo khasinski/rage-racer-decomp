@@ -5,7 +5,7 @@
 extern s32 D_8009E73C;
 extern s32 D_8009E740;
 extern GameRaceRanking D_8009E83C;
-extern s32 D_801E4364;
+extern s32 g_LapCount asm("D_801E4364");
 extern GameCarRuntimeProgressWindow D_801F18C0[];
 
 void func_8003AE2C(void) {
@@ -16,7 +16,7 @@ void func_8003AE2C(void) {
     s32 total;
 
     active = 1;
-    if (D_801E4364 >= D_8009E83C.count) {
+    if (g_LapCount >= D_8009E83C.count) {
         i = 0;
         sentinel = -1;
         total = D_8009E73C + D_8009E740;

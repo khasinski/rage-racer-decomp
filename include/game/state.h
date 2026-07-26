@@ -42,7 +42,7 @@ void GameDrawControllerSetupScene(s32 variant) asm("func_80014618");
 /*
  * Controller-configuration screen widgets. Two independent 0..7 selections:
  * D_8019CE08 for the standard pad, D_8019CB08 for the NeGcon (pad type byte
- * D_801E4369 == 0x23 picks which diagram is drawn). See docs/names.md 1.
+ * g_PadType == 0x23 picks which diagram is drawn). See docs/names.md 1.
  */
 /* 16x32 arrow sprites at (0x28, 0xE0) and (0x108, 0xE0); `pulse` adds the glow. */
 u8 *GameDrawLeftArrow(void *ot, u8 *prim, s16 x, s16 y, s32 pulse) asm("func_80014A60");

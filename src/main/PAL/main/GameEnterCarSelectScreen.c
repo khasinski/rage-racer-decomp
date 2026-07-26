@@ -5,7 +5,7 @@
 extern s32 D_8009B338;
 extern s32 D_8019CB0C;
 extern s32 D_8009B31C;
-extern s32 D_8009B320;
+extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 
 void func_80051238(void);
 void func_80055454(void);
@@ -20,7 +20,7 @@ void GameEnterCarSelectScreen(void) {
     g_MenuScreen = 4;
     g_UiScriptProgress = 0;
     func_80055454();
-    func_8004FCE8(D_8009B31C, D_8009B320, 0);
+    func_8004FCE8(D_8009B31C, g_MenuPlateCarIndex, 0);
     func_8005131C();
     func_8004CF30(-9);
 }

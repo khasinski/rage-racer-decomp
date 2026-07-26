@@ -80,7 +80,7 @@ extern s32 D_8009AFB0;
 extern s32 D_801E4148;
 
 
-extern s32 D_801E4364;
+extern s32 g_LapCount asm("D_801E4364");
 
 extern s32 D_801E4BCC;
 
@@ -330,7 +330,7 @@ void func_800352B8(void *arg0, s32 arg1, s32 arg2) {
     }
 
     nextSlot = D_801E4148;
-    if (nextSlot >= 0 && D_801E4364 >= *(s16 *)(route + 0xAC)) {
+    if (nextSlot >= 0 && g_LapCount >= *(s16 *)(route + 0xAC)) {
         if (D_8009AFA8 < 0x3C) {
             D_8009AFA8++;
             if (D_8009AFA8 == 0x3C) {
@@ -353,7 +353,7 @@ draw:
         goto compare_first;
     } else if (D_801E4148 >= 0) {
         if (D_8009AFAC != 0) {
-            if (D_801E4364 >= D_8009E83C) {
+            if (g_LapCount >= D_8009E83C) {
                 value = D_8009AF7C;
                 if (D_8009AFAC > 0) {
                     tile = 0x7810;

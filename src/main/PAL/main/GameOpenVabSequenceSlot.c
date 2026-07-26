@@ -3,8 +3,8 @@
 extern s16 D_8009B510[];
 extern s32 D_800125EC[];
 extern s32 D_8009E68C;
-extern s32 D_801E6C9C;
-extern s16 D_801E6D90;
+extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s16 g_SeqHandle asm("D_801E6D90");
 extern s32 D_801E6D9C;
 extern s32 D_801F17B4;
 extern char D_80012788[];
@@ -59,7 +59,7 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
         func_80063D9C(1);
     }
 
-    *(s32 *)&D_801E6D90 = (s16)func_8006F004(seqReg);
+    *(s32 *)&g_SeqHandle = (s16)func_8006F004(seqReg);
     D_801E6D9C = 0;
     ret = func_8007317C(0);
     D_801F17B4 = (s16)ret;
@@ -70,7 +70,7 @@ s32 GameCloseAudioSlot(s32 slot) asm("func_8005E600");
 s32 GameCloseAudioSlot(s32 slot) {
     register s32 slotReg asm("$17") = slot;
     register s32 bit asm("$3") = 1;
-    register s32 *flagsPtr asm("$16") = &D_801E6C9C;
+    register s32 *flagsPtr asm("$16") = &g_AudioSlotMask;
     register s32 flags asm("$5");
     register s32 zeroArg asm("$4") = 0;
     register s32 ret asm("$2");
@@ -91,7 +91,7 @@ loaded:
     *flagsPtr = newFlags;
     func_80073748(zeroArg, 0);
     func_8007865C(0);
-    func_80071AC4(D_801E6D90);
+    func_80071AC4(g_SeqHandle);
     offset = slotReg * 2;
     asm("addu %0, %1, %0" : "=r"(offset) : "r"(flagsPtr), "0"(offset));
     func_80072B3C(*(s16 *)(offset + 0xC));

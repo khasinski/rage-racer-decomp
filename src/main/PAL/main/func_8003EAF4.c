@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 
-extern s32 D_801E4168;
+extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 D_801E431C;
 extern s32 D_801E4320;
 extern s32 D_801E4324;
@@ -42,7 +42,7 @@ void func_8003EAF4(void) {
         func_80069568(mtx1Ptr, &mtx0);
         func_80017A10(2);
         func_80017794((void *)0x1F80011C, state + 4, &mtx0);
-        frameValue = D_801E4168;
+        frameValue = g_ModelBankCount;
         __asm__ volatile("" : "=r"(frameValue) : "0"(frameValue));
         drawBase = (void *)0x1F800000;
         *(s32 *)0x1F800084 = 0;

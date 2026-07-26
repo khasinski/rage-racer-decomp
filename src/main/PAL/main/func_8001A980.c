@@ -15,7 +15,7 @@ void func_8001A980(void) {
 
 extern s32 D_801E8A98;
 extern s16 D_8019CA10;
-extern s32 D_8009E870;
+extern s32 g_CameraViewMode asm("D_8009E870");
 extern Matrix D_8009AF00;
 extern Matrix D_8019CB18;
 extern s16 D_8019CEAA;
@@ -51,7 +51,7 @@ s32 func_8001A9A8(void) {
 
     if ((D_801E8A98 != 0) &&
         (D_8019CA10 != 0) &&
-        (D_8009E870 == 0) &&
+        (g_CameraViewMode == 0) &&
         (g_GrandPrixMode != 0) &&
         (g_RacePhase == 2)) {
         mirrorEnabled = 1;
@@ -208,7 +208,6 @@ extern s32 D_801E8A98;
 extern s16 D_8019CA10;
 extern s32 D_801E4D18;
 extern s32 D_801E4BC8;
-extern s32 D_801E4030;
 
 u8 *func_8001ACE4(u8 *packet);
 void func_800418D4(void);
@@ -251,7 +250,7 @@ void func_8001ADF4(s32 arg0) {
             *scratch = packet;
             func_800414F0(-0x3000, 0x6000);
             func_80069858((void *)0x1F800028);
-            *(s32 *)0x1F800084 = D_801E4030;
+            *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
             func_80027FF4((void *)0x1F800000, D_801E4BC8, 0x40);
 
             packet = *scratch;

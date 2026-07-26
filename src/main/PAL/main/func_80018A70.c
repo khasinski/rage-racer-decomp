@@ -4,7 +4,7 @@
 #include "game/state.h"
 #include "game/race.h"
 
-extern u32 D_8009E87C;
+extern u32 g_CarModelSlot asm("D_8009E87C");
 extern u8 *D_801E4090;
 s32 func_80017848(s32 arg0, s32 arg1);
 s32 func_80017C78(s32 arg0, void *arg1);
@@ -40,7 +40,7 @@ void func_80018A70(s32 arg0) {
         index = arg0 << 3;
         entry = (GameCarEntry *)(index + (s32)g_CarTable);
         offset = func_80017848(arg0, entry->modelVariant + 1) << 1;
-        mode = D_8009E87C;
+        mode = g_CarModelSlot;
         ptr = D_801E4090;
 
         temp = offset + 0xA;
@@ -49,16 +49,16 @@ void func_80018A70(s32 arg0) {
         }
 
         if (func_80017C78(temp, ptr) != 0) {
-            func_80017B94(ptr, D_8009E87C < 1);
+            func_80017B94(ptr, g_CarModelSlot < 1);
 
             temp = ((GameCarModelAsset *)ptr)->modelDataOffset;
-            flag = D_8009E87C < 1;
+            flag = g_CarModelSlot < 1;
             temp = (s32)ptr + temp;
             ((GameCarModelAsset *)ptr)->modelDataOffset = temp;
             func_80017948((void *)temp, flag);
 
             temp = ((GameCarModelAsset *)ptr)->imageDataOffset;
-            flag = D_8009E87C < 1;
+            flag = g_CarModelSlot < 1;
             temp = (s32)ptr + temp;
             ((GameCarModelAsset *)ptr)->imageDataOffset = temp;
             func_80017B44((void *)temp, flag);

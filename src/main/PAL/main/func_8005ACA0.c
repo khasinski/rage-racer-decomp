@@ -17,7 +17,7 @@ extern s32 D_8009B30C;
 extern u8 D_80082A90;
 extern s32 D_8009B2FC;
 extern s32 D_8009B314;
-extern u8 D_801E4369;
+extern u8 g_PadType asm("D_801E4369");
 
 
 void func_80065860(s32);
@@ -72,7 +72,7 @@ void func_8005ACA0(void) {
     }
 
     if (D_8009B314 != 0) {
-        if (D_801E4369 == 0x23) {
+        if (g_PadType == 0x23) {
             scratch = (void *)((s32)scratch + 4);
             func_80046A2C(scratch, 0xC0, 0x1A1, 0x20, 0xC, 0x94, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
             func_80046A2C(scratch, 0xF0, 0x1A1, 0x2C, 0xC, 0xB4, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);

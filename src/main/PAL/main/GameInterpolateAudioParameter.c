@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern s16 D_80082F28[];
+extern s16 g_SoundSlotTone[] asm("D_80082F28");
 extern s16 D_80082F2A[];
 extern s32 D_801E6CB8;
 extern s32 D_801E6CBC;
@@ -107,7 +107,7 @@ void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
         tone_offset = 0;
         do {
             if (*slot++ != 0 &&
-                *(s16 *)((s32)D_80082F28 + tone_offset) !=
+                *(s16 *)((s32)g_SoundSlotTone + tone_offset) !=
                     *(s16 *)((s32)D_80082F2A + tone_offset)) {
                 func_8005B2F0(index, bank, 3);
             }

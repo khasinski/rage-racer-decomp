@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern s16 D_801E6D90;
+extern s16 g_SeqHandle asm("D_801E6D90");
 extern s32 D_801E6D84;
 extern s32 D_801E6D88;
 extern s32 D_801E6D8C;
@@ -70,7 +70,7 @@ void GameApplyDuckedSequenceAudio(void) {
     register s32 volume asm("$5");
 
     value = D_801E6D94;
-    seq = D_801E6D90;
+    seq = g_SeqHandle;
     asm volatile("" : : "r"(seq));
     scaled = value << 1;
     value = scaled + value;

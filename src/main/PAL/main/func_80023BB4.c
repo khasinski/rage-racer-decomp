@@ -33,9 +33,9 @@ void func_80023FE8(void);
 extern s32 D_801E4D68, D_801E4D6C;
 s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80032F34(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-extern s32 D_801E6C70;
-extern s32 D_8019C704;
-extern s32 D_801E8A50;
+extern s32 g_MonoOutput asm("D_801E6C70");
+extern s32 g_BgmVolumeSetting asm("D_8019C704");
+extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 void func_80023750(s32 arg0);
 s32 func_8001705C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void func_800249A4(s32 arg0, s32 arg1);
@@ -359,7 +359,7 @@ void func_80024B6C(void) {
     func_80023750(2);
 
     n = *scratch;
-    if (D_801E6C70 != 0) {
+    if (g_MonoOutput != 0) {
         color = 0x20;
     }
 
@@ -369,7 +369,7 @@ void func_80024B6C(void) {
     asm("" : : "r"(color));
 
     color = 0x20;
-    if (D_801E6C70 != 0) {
+    if (g_MonoOutput != 0) {
         color = 0x7F;
     }
 
@@ -378,11 +378,11 @@ void func_80024B6C(void) {
     n = func_80032F34(base, n, 0xA2, 0x120, 0x58, 0x20, color << 1, color << 1, color << 1);
     asm("" : : "r"(color));
     {
-        s32 a0v = D_8019C704;
+        s32 a0v = g_BgmVolumeSetting;
         *scratch = n;
         func_800249A4(a0v, 0xD0);
     }
-    func_800249A4(D_801E8A50, 0xF8);
+    func_800249A4(g_SfxVolumeSetting, 0xF8);
 
     if (g_GameMode != 5) {
         return;
@@ -397,7 +397,7 @@ void func_80024B6C(void) {
         n = func_80032F34(base, n, 0x44, 0xF4, 0xB8, 0x28, 0x89, 0xFF, 0x76);
         break;
     case 2:
-        n = func_80032F34(base, n, (D_801E6C70 != 0) ? 0xA0 : 0x44, 0x11C, 0x5C, 0x28, 0x89, 0xFF, 0x76);
+        n = func_80032F34(base, n, (g_MonoOutput != 0) ? 0xA0 : 0x44, 0x11C, 0x5C, 0x28, 0x89, 0xFF, 0x76);
         break;
     }
     *(s32 *)0x1F800000 = n;
@@ -432,13 +432,13 @@ void func_80024F28(void) {
         g_GameMode = 5;
         switch (D_8019C868) {
         case 0:
-            D_801E4D68 = D_8019C704;
+            D_801E4D68 = g_BgmVolumeSetting;
             break;
         case 1:
-            D_801E4D68 = D_801E8A50;
+            D_801E4D68 = g_SfxVolumeSetting;
             break;
         case 2:
-            D_801E4D68 = D_801E6C70;
+            D_801E4D68 = g_MonoOutput;
             break;
         case 3:
             g_GameMode = 1;

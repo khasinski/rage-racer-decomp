@@ -2,7 +2,7 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-extern s32 D_801E6CE4;
+extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
 extern s32 D_801E6CE8;
 
 void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
@@ -24,7 +24,7 @@ void GameForcePanVoiceEnabled(s32 enabled) {
 
     i = 0;
     dst = values;
-    src = &D_801E6CE4;
+    src = &g_PanVoiceVolumeL;
     do {
         if (*src < 2) {
             *dst = 0;

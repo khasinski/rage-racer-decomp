@@ -11,7 +11,7 @@ s32 func_80016EC4(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s3
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 extern u32 D_8009E6CC;
-extern s32 D_801E40A8;
+extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern u8 D_801E7734[];
 void func_8001B488(void);
 extern s32 D_8019CAF4;
@@ -20,9 +20,8 @@ extern s32 D_8019C7BC;
 extern s32 D_8019C99C;
 extern s32 D_8007D6B4;
 extern s32 D_801E412C;
-extern s32 D_801E4030;
 extern s32 D_8009E66C;
-extern s32 D_8009E870;
+extern s32 g_CameraViewMode asm("D_8009E870");
 void func_80042BC0();
 void func_80042BF0();
 void func_80025E54();
@@ -87,13 +86,13 @@ void func_80025E54(u32 arg0) {
     u8 value;
 
     D_8009E6CC++;
-    if (D_8009E6CC == D_801E40A8) {
+    if (D_8009E6CC == g_BgmTrackCount) {
         func_8001B488();
 
         first = D_801E7734;
         before = first - 1;
         if (arg0 == first[0]) {
-            other = D_801E40A8 + before;
+            other = g_BgmTrackCount + before;
             value = *other;
             first[0] = value;
             *other = arg0;
@@ -123,7 +122,7 @@ L78:
     goto L124;
 Ld0:
     D_801E4404 = D_801E4404 + 1;
-    D_801E4404 = (D_801E4404 + D_801E40A8) % D_801E40A8;
+    D_801E4404 = (D_801E4404 + g_BgmTrackCount) % g_BgmTrackCount;
 L124:
     D_8019CE00 = D_801E4404 + 3;
 
@@ -144,9 +143,9 @@ L13c:
         h0 = D_801E7734[0];
         p = D_801E4404;
         if (p == h0) {
-            u8 tmp = D_801E7734[D_801E40A8 - 1];
+            u8 tmp = D_801E7734[g_BgmTrackCount - 1];
             D_801E7734[0] = tmp;
-            D_801E7734[D_801E40A8 - 1] = p;
+            D_801E7734[g_BgmTrackCount - 1] = p;
         }
         D_8007D6B4 = 1;
         D_8007D6B0 = 60;
@@ -162,7 +161,7 @@ L13c:
             case 0:
                 if (D_8007D6B4 == 0) {
                     D_801E4404 = D_801E4404 - 1;
-                    D_801E4404 = (D_801E4404 + D_801E40A8) % D_801E40A8;
+                    D_801E4404 = (D_801E4404 + g_BgmTrackCount) % g_BgmTrackCount;
                 }
                 goto lab380;
             case 2:
@@ -171,7 +170,7 @@ L13c:
                     func_80025E54(D_801E4404);
                 } else {
                     D_801E4404 = D_801E4404 + 1;
-                    D_801E4404 = (D_801E4404 + D_801E40A8) % D_801E40A8;
+                    D_801E4404 = (D_801E4404 + g_BgmTrackCount) % g_BgmTrackCount;
                 }
             lab380:
                 if (D_8019CAF4 == 0) {
@@ -213,11 +212,11 @@ L48c:
     D_8009E66C = func_8001A0E4(0xff, D_8009E66C);
     func_8003BB50();
     func_80019EFC(g_Cars[D_8009E66C].field_78);
-    func_80043BCC(D_8009E870, &g_Cars[D_8009E66C]);
+    func_80043BCC(g_CameraViewMode, &g_Cars[D_8009E66C]);
     func_800389F0();
     func_80045CD4();
     func_800418D4();
-    *(s32 *)0x1F800084 = D_801E4030;
+    *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     func_80041888();
     func_8004123C();
     GameDrawCourseScenery2(g_AnimTimer, 1);

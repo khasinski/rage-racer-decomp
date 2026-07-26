@@ -7,7 +7,7 @@ extern s32 D_801E6D88;
 extern s32 D_801E6D80;
 extern s32 D_801E446C[];
 extern s32 D_801E6CC4;
-extern s16 D_80082F28[];
+extern s16 g_SoundSlotTone[] asm("D_80082F28");
 
 void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 void GameSetLoadedTableVolumeScale(s32 scale) asm("func_8005BD58");
@@ -162,7 +162,7 @@ void GameSetReverbPreset(s32 type, s32 left, s32 right) {
 }
 
 void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
-    register s16 *base asm("$3") = D_80082F28;
+    register s16 *base asm("$3") = g_SoundSlotTone;
     register s16 *row asm("$2");
     register s16 *entry asm("$3");
 

@@ -1,10 +1,10 @@
 #include "common.h"
 #include "game/audio.h"
 
-extern s16 D_80082F28[];
+extern s16 g_SoundSlotTone[] asm("D_80082F28");
 
 s32 GameSetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
-    s16 *base = D_80082F28;
+    s16 *base = g_SoundSlotTone;
     s16 *row;
     s16 *entry;
     s32 old;

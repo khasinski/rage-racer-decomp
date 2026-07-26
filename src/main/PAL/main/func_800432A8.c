@@ -1,11 +1,11 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern s32 D_8007F600;
-extern s32 D_8007F604;
-extern s32 D_8007F608;
-extern s32 D_8007F60C;
-extern u8 D_8009B194;
+extern s32 g_CdTrackPending asm("D_8007F600");
+extern s32 g_CdCommandPending asm("D_8007F604");
+extern s32 g_CdTrackStep asm("D_8007F608");
+extern s32 g_CdCommandStep asm("D_8007F60C");
+extern u8 g_CdVolume asm("D_8009B194");
 extern u8 D_8009B1B0;
 extern s32 D_8009B1B4;
 extern CdlLOC D_8009AFD4[];
@@ -19,63 +19,63 @@ void func_800432A8(void) {
     s32 status;
     u8 track;
 
-    switch (D_8007F608) {
+    switch (g_CdTrackStep) {
     case 0:
         if (func_8006A534(1, 0) == 0) {
             goto done;
         }
         D_8009B1B4 = 0;
-        D_8007F608 = 1;
+        g_CdTrackStep = 1;
     case 1:
-        if (func_8006A5A4(0x16, &D_8009AFD4[D_8007F600], 0) == 0) {
+        if (func_8006A5A4(0x16, &D_8009AFD4[g_CdTrackPending], 0) == 0) {
             goto done;
         }
-        D_8007F608 = 2;
+        g_CdTrackStep = 2;
         goto done;
     case 2:
         state = func_8006A534(1, 0);
         if (state == 2) {
-            D_8007F608 = 3;
+            g_CdTrackStep = 3;
             goto done;
         }
         if (state == 5) {
-            D_8007F608 = 1;
+            g_CdTrackStep = 1;
             goto done;
         }
         goto done;
     case 3:
-        status = D_8009B194;
-        track = (D_8009B1B0 = *(u8 *)&D_8007F600);
-        D_8007F600 = -1;
-        D_8007F608 = 0;
+        status = g_CdVolume;
+        track = (D_8009B1B0 = *(u8 *)&g_CdTrackPending);
+        g_CdTrackPending = -1;
+        g_CdTrackStep = 0;
         func_80042FA0(status);
         goto done;
     case 4:
         if (func_8006A534(1, 0) == 0) {
             goto done;
         }
-        D_8007F608 = 5;
+        g_CdTrackStep = 5;
     case 5:
-        if (func_8006A5A4(0x16, &D_8009AFD4[D_8007F600], 0) == 0) {
+        if (func_8006A5A4(0x16, &D_8009AFD4[g_CdTrackPending], 0) == 0) {
             goto done;
         }
-        D_8007F608 = 6;
+        g_CdTrackStep = 6;
         goto done;
     case 6:
         state = func_8006A534(1, 0);
         if (state == 2) {
-            D_8007F608 = 7;
+            g_CdTrackStep = 7;
             goto done;
         }
         if (state == 5) {
-            D_8007F608 = state;
+            g_CdTrackStep = state;
             goto done;
         }
         goto done;
     case 7:
-        track = *(u8 *)&D_8007F600;
-        D_8007F600 = -1;
-        D_8007F608 = 0;
+        track = *(u8 *)&g_CdTrackPending;
+        g_CdTrackPending = -1;
+        g_CdTrackStep = 0;
         D_8009B1B0 = track;
         break;
     }
@@ -88,7 +88,7 @@ void func_80043494(void) {
     s32 state;
     s32 status;
 
-    state = D_8007F60C;
+    state = g_CdCommandStep;
     if (state == 1) {
         goto state_1;
     }
@@ -113,29 +113,29 @@ state_0:
     if (func_8006A534(1, 0) == 0) {
         goto done;
     }
-    D_8007F60C = 1;
+    g_CdCommandStep = 1;
 state_1:
     if (func_8006A5A4(3, 0, 0) == 0) {
         goto done;
     }
-    D_8007F60C = 2;
+    g_CdCommandStep = 2;
     goto done;
 
 state_2:
     status = func_8006A534(1, 0);
     if (status == state) {
-        D_8007F60C = 3;
+        g_CdCommandStep = 3;
         goto done;
     }
     if (status == 5) {
-        D_8007F60C = 1;
+        g_CdCommandStep = 1;
         goto done;
     }
     goto done;
 
 state_3:
-    D_8007F604 = -1;
-    D_8007F60C = 0;
+    g_CdCommandPending = -1;
+    g_CdCommandStep = 0;
 
 done:
     return;

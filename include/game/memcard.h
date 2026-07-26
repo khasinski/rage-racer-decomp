@@ -40,9 +40,9 @@ typedef struct GameSaveBlock {
     s32 rankRecords[2][4][5][4]; /* +0xA5C D_801E7744 ranking rows */
     s32 timeRecords[2][4][5][4]; /* +0xCDC D_8019CB78 time rows */
     s32 unkF5C[2][4][3];   /* +0xF5C D_801E41E8 */
-    s32 unkFBC;            /* +0xFBC D_8019C704, clamped to 0..0xF on load */
-    s32 unkFC0;            /* +0xFC0 D_801E8A50, clamped to 0..0xF on load */
-    s32 unkFC4;            /* +0xFC4 D_801E6C70, forced to 0/1 on load */
+    s32 unkFBC;            /* +0xFBC g_BgmVolumeSetting, clamped to 0..0xF on load */
+    s32 unkFC0;            /* +0xFC0 g_SfxVolumeSetting, clamped to 0..0xF on load */
+    s32 unkFC4;            /* +0xFC4 g_MonoOutput, forced to 0/1 on load */
     u8 courseProgress1[8]; /* +0xFC8 D_801E42EC */
     u8 courseProgress2[8]; /* +0xFD0 D_8009E874 */
     u8 padFD8[0x24];

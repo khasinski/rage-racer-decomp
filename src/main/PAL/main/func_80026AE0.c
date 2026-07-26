@@ -12,7 +12,7 @@ typedef struct UnkEventPair {
 } UnkEventPair;
 
 extern s32 D_801E682C;
-extern u32 D_8019C760;
+extern u32 g_StreamReturnScene asm("D_8019C760");
 extern void (*D_8007D6D0[])(void);
 void func_80017BE4(void);
 void func_800268EC(void);
@@ -39,8 +39,7 @@ s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s3
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 void func_80042C0C(void);
 void func_80018410(void);
-extern u32 D_8009E870;
-extern u32 D_801E4030;
+extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 D_801F18CC[];
 extern UnkEventPair D_8007D74C[];
 void func_80026F68(void);
@@ -62,7 +61,7 @@ void func_80026AE0(void) {
         if (g_AssetLoadState != 0) {
             func_80017BE4();
             g_SceneId = 3;
-            D_8019C760 = 0;
+            g_StreamReturnScene = 0;
         } else {
             func_800268EC();
         }
@@ -276,13 +275,13 @@ void func_80026F9C(void) {
 
         func_80019EFC(*(s16 *)&D_801F18CC[(((((D_8009E66C * 3) * 4) + D_8009E66C) * 8) - D_8009E66C) * 4]);
 
-        func_80043BCC(D_8009E870, &g_Cars[D_8009E66C]);
+        func_80043BCC(g_CameraViewMode, &g_Cars[D_8009E66C]);
         func_80045CD4();
     }
 
     func_800389F0();
     func_800418D4();
-    *(u32 *)0x1F800084 = D_801E4030;
+    *(u32 *)0x1F800084 = (u32)g_IsEnvironmentMode4;
     func_80041888();
     func_8004123C();
     GameDrawCourseScenery2(g_AnimTimer, active);

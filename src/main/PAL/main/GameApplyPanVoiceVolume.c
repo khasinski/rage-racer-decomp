@@ -2,7 +2,7 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-extern s32 D_801E6CE4;
+extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
 extern s32 D_801E6CEC;
 
 void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
@@ -26,7 +26,7 @@ void GameApplyPanVoiceVolume(void) {
     changed = 0;
     i = 0;
     dst = values;
-    src = &D_801E6CE4;
+    src = &g_PanVoiceVolumeL;
     do {
         loopValue = *src;
         if (loopValue < 2) {

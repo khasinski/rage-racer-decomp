@@ -11,7 +11,7 @@ extern void *D_8009F0B0;
 extern u8 D_80082634;
 extern u8 D_80082664;
 extern u8 D_80081CA4;
-extern u8 D_80082460;
+extern u8 g_UiChromeScript asm("D_80082460");
 
 extern void func_8001D338(s32, s32);
 extern void func_8004A248(s32, s32);
@@ -37,7 +37,7 @@ void GameUpdateLogoSampleScreen(void) {
         func_800487D8(D_8009F0B0, &g_UiScriptProgress2, -1);
         func_800489AC(g_UiScriptProgress, 2, D_8019C770);
         func_800487D8(&D_80081CA4, &g_UiScriptProgress, 0);
-        if (func_800487D8(&D_80082460, &g_UiScriptProgress, 1) == 0) return;
+        if (func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) return;
         if (g_UiScriptProgress2 > 0) return;
         g_MenuOverlayPattern = -1;
         if (g_PadEdge2 & 0x1000) {
@@ -151,7 +151,7 @@ void GameUpdateLogoSampleScreen(void) {
         func_8004E368(1, t + 1);
         func_800489AC(g_UiScriptProgress, 2, D_8019C770);
         func_800487D8(&D_80081CA4, &g_UiScriptProgress, 0);
-        func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
+        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
     }
 
@@ -159,7 +159,7 @@ void GameUpdateLogoSampleScreen(void) {
     g_MenuHandlerIndex2 = 8;
     func_8004E368(-1, 0);
     func_800487D8(&D_80081CA4, &g_UiScriptProgress, -1);
-    func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
+    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, 2, D_8019C770);
     if (g_UiScriptProgress <= 0) {
         g_MenuScreen = 7;

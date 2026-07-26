@@ -28,13 +28,12 @@ void *func_8001720C(
     void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 
 void *func_80017390(void *ot, void *prim, s32 arg2);
-extern s32 D_8019C8EC;
+extern s32 g_SeriesCleared asm("D_8019C8EC");
 extern s32 D_801E6E78;
 extern s32 D_8019CB6C;
 extern s32 D_8009EC8C;
 extern u8 D_8009E6D4;
 extern s32 D_801F179C;
-extern s32 D_801E4030;
 extern s16 D_8009E74C;
 void func_8005D6EC(s32 arg0);
 void func_80033AA0(s32 arg0, s32 arg1);
@@ -167,7 +166,7 @@ void func_8001FD3C(void) {
     g_SceneTimer++;
     if (g_SceneTimer == 0x3C) {
         if (g_GrandPrixMode != 0) {
-            if (D_8019C8EC == 0) {
+            if (g_SeriesCleared == 0) {
                 func_8005D6EC(g_RacePosition == 1 ? 0x40 : 0x41);
             }
         }
@@ -182,7 +181,7 @@ void func_8001FD3C(void) {
         }
         func_80033AA0(g_FadeLevel, 0x29);
     } else {
-        if (D_8019C8EC != 0) {
+        if (g_SeriesCleared != 0) {
             s32 cb = D_8019CB6C;
             s32 fc = g_SceneTimer;
             if ((u32)(cb - 600) < (u32)fc) {
@@ -221,7 +220,7 @@ void func_8001FD3C(void) {
             }
         }
 
-        if (D_8019C8EC != 0) {
+        if (g_SeriesCleared != 0) {
             if (((u32)(D_8019CB6C - 600) < (u32)g_SceneTimer) || (g_FadeLevel != 0)) {
                 func_8001FC30(D_801E6E78, g_FadeLevel);
             }
@@ -239,7 +238,7 @@ void func_8001FD3C(void) {
     }
     func_80035040();
     func_80043BCC(2, &D_8009E6D4);
-    *(s32 *)0x1F800084 = D_801E4030;
+    *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     func_80041888();
     if (g_GrandPrixMode != 0) {
         func_80038A88();

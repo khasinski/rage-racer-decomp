@@ -67,7 +67,7 @@ typedef struct Car {
     GameCarDrive drive;  /* 0xBC */
 } Car;
 
-extern u8 D_801E4369;
+extern u8 g_PadType asm("D_801E4369");
 extern volatile u16 g_PadHeld asm("D_801E436A");
 extern s16 D_801E4374;
 extern s16 D_801E4376;
@@ -148,7 +148,7 @@ void func_8002DEFC(Car *car) {
     s32 i;
     s32 off;
 
-    mode23 = D_801E4369 == 0x23;
+    mode23 = g_PadType == 0x23;
     car->unkB8 = func_8002CD08(car);
 
     if (car->drive.manual != 0) {
@@ -237,10 +237,10 @@ void func_8002DEFC(Car *car) {
     }
 
     if (g_RacePhase < 4) {
-        if (D_801E4369 == 0x41) {
+        if (g_PadType == 0x41) {
             *(volatile s16 *)&p->accelBtn = ((g_PadHeld & D_801E4B64) != 0) << 8;
             p->brakeBtn = ((g_PadHeld & D_801E4B66) != 0) << 8;
-        } else if (D_801E4369 == 0x23) {
+        } else if (g_PadType == 0x23) {
             *(volatile s16 *)&p->accelBtn = ((g_PadHeld & D_801E4B74) != 0) << 8;
             p->brakeBtn = ((g_PadHeld & D_801E4B76) != 0) << 8;
             switch (D_8019CB08) {
@@ -290,7 +290,7 @@ void func_8002DEFC(Car *car) {
         }
     }
 
-    if (D_801E4369 == 0x23) {
+    if (g_PadType == 0x23) {
         if (car->unk44 >= 4096) {
             car->unk44 = 4096;
             if (p->steerPos < -4096) {

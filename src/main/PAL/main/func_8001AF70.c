@@ -42,7 +42,8 @@ void func_8001AF70(void) {
     func_8005DBB4();
 }
 
-extern s32 D_8019C760, D_801E6F28, D_8019CB70, D_8009E880, D_8019C768;
+extern s32 g_StreamReturnScene asm("D_8019C760");
+extern s32 D_801E6F28, D_8019CB70, D_8009E880, D_8019C768;
 extern s32 D_801E8260, D_801E6F1C, D_8009F098;
 void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
 void func_80065860(s32 arg0);
@@ -55,7 +56,7 @@ void GameEnterTitleScreen(void) asm("func_8001B014");
 
 void GameEnterTitleScreen(void) {
     func_8001BE9C(0, 0, 0);
-    if (D_8019C760 != 0) {
+    if (g_StreamReturnScene != 0) {
         D_801E6F28 = 0xFF;
         D_8019CB70 = 0x190;
         D_8009E880 = 0;
@@ -236,7 +237,7 @@ void GameUpdateMainMenuOpen(void) {
     GameDrawMainMenuRows();
 }
 
-extern s32 D_801E40A8;
+extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern volatile u8 D_801E7734[];
 extern u8 D_801E7733[];
 extern s32 D_8009E6CC;
@@ -249,13 +250,13 @@ void func_8001B488(void) {
     s32 j;
     s32 remaining;
 
-    for (i = 0; i < D_801E40A8; i++) {
+    for (i = 0; i < g_BgmTrackCount; i++) {
         D_801E7734[i] = 0xFF;
     }
 
-    for (i = 0; i < D_801E40A8; i++) {
+    for (i = 0; i < g_BgmTrackCount; i++) {
         count = 0;
-        for (j = 0; j < D_801E40A8; j++) {
+        for (j = 0; j < g_BgmTrackCount; j++) {
             if (D_801E7734[j] == 0xFF) {
                 count++;
             }

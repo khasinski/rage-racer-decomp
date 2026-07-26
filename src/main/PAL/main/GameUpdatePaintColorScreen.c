@@ -7,7 +7,7 @@ extern s32 D_8009B338;
 extern s32 D_8019CB0C;
 extern s32 D_80082EB4;
 extern u8 D_80082010;
-extern u8 D_80082460;
+extern u8 g_UiChromeScript asm("D_80082460");
 extern s32 D_801F17A0;
 extern GameCarEntry D_801E4388[];
 
@@ -30,7 +30,7 @@ void GameUpdatePaintColorScreen(void) {
         func_80049418(-1, 0, 1, 1);
         func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
         func_800487D8(&D_80082010, &g_UiScriptProgress, 0);
-        if (func_800487D8(&D_80082460, &g_UiScriptProgress, 1) == 0) {
+        if (func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) {
             return;
         }
         if (g_UiScriptProgress2 > 0) {
@@ -124,14 +124,14 @@ void GameUpdatePaintColorScreen(void) {
         func_80049418(1, 0, 1, 1);
         func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
         func_800487D8(&D_80082010, &g_UiScriptProgress, 0);
-        func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
+        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
     }
 
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 10;
     func_800487D8(&D_80082010, &g_UiScriptProgress, -1);
-    func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
+    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
     if (g_UiScriptProgress <= 0) {
         g_MenuScreen = 6;

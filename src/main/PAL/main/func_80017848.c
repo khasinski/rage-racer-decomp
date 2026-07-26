@@ -11,8 +11,8 @@ extern void *D_8009E698;
 extern void *D_801E6828;
 extern void *D_801E4BC8;
 extern void *D_801E41A8[];
-extern s32 D_801E4168;
-extern s32 D_801E40E4;
+extern s32 g_ModelBankCount asm("D_801E4168");
+extern s32 g_CourseModelCount asm("D_801E40E4");
 extern void *D_801E5020;
 extern void *D_801E4B98;
 extern s32 D_801E4144;
@@ -138,7 +138,7 @@ void func_80017A10(s32 index) {
     ptr = *(s32 *)(ptr + 8);
     *(s32 *)0x1F800058 = ptr;
     ptr = *entry;
-    D_801E4168 = value;
+    g_ModelBankCount = value;
     ptr += 0xC;
     *(s32 *)0x1F800050 = ptr;
 }
@@ -156,7 +156,7 @@ void func_80017A6C(s32 *base) {
     ptr = base + 1;
     count = base[0];
     *(s32 *)0x1F800048 = (s32)ptr;
-    D_801E40E4 = count;
+    g_CourseModelCount = count;
     i = 0;
     if (count > 0) {
         limit = count;

@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern u8 *D_801E4448;
-extern s32 D_801E4364;
+extern s32 g_LapCount asm("D_801E4364");
 extern volatile s32 g_RaceSeries asm("D_801E408C");
 extern u8 D_801E42FC[];
 extern s16 D_801E4308;
@@ -27,7 +27,7 @@ void func_8003E464(void) {
 
     base = D_801E4448;
     index = func_800632B0();
-    count = D_801E4364;
+    count = g_LapCount;
     value = index % count;
     out = D_801E42FC;
     value++;
@@ -35,12 +35,12 @@ void func_8003E464(void) {
     value = (s16)value;
 
     if (value <= 0) {
-        D_801E4308 = (u16)D_801E4364 - 1;
+        D_801E4308 = (u16)g_LapCount - 1;
     } else {
         __asm__ volatile("" ::: "memory");
         cmp = count < value;
         if (cmp != 0) {
-            D_801E4308 = (u16)D_801E4364;
+            D_801E4308 = (u16)g_LapCount;
         }
     }
 

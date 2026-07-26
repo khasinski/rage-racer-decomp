@@ -76,7 +76,7 @@ extern s32 D_801F179C;
 extern u8 *D_8019C8FC;
 void func_800458CC(void *arg0);
 void func_80034F74(void);
-extern s32 D_8019C8EC;
+extern s32 g_SeriesCleared asm("D_8019C8EC");
 s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
 
@@ -271,7 +271,7 @@ void func_8001FB8C(void) {
     s32 next;
     s32 value;
 
-    if ((g_SceneTimer & 0x10) && (D_8019C8EC == 0)) {
+    if ((g_SceneTimer & 0x10) && (g_SeriesCleared == 0)) {
         scratch = (volatile s32 *)0x1F800000;
         value = *scratch;
         base = (s32)g_DrawBuffer + 0xCC;

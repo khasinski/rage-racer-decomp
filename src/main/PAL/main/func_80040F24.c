@@ -7,7 +7,7 @@
 extern s32 D_801E7A50;
 extern s16 D_8009E74C;
 extern s16 D_8009E83C;
-extern s32 D_801E4364;
+extern s32 g_LapCount asm("D_801E4364");
 extern s16 D_801E8A8C;
 
 void func_80040F24(void) {
@@ -29,7 +29,7 @@ void func_80040F24(void) {
     if (!(current & 8)) {
         if (D_8009E74C == *(s16 *)((g_RaceSeries << 2) + (s32)base)) {
             entry = D_8009E83C;
-            if (entry == D_801E4364) {
+            if (entry == g_LapCount) {
                 entry = current | 8;
                 D_801E7A50 = entry;
                 if (D_801E8A8C < 10) {

@@ -6,7 +6,7 @@
 
 extern s16 D_8019CB40[];
 extern volatile s32 D_801E4DA8;
-extern s32 D_801E40A8;
+extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern u8 D_80010E68;
 void func_80016B7C(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4);
 extern s32 D_8019C768;
@@ -55,7 +55,7 @@ void func_80021540(void) {
     } else {
         value = 10;
     }
-    D_801E40A8 = value;
+    g_BgmTrackCount = value;
 }
 
 void func_800215B8(s32 arg0) {

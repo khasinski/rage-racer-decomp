@@ -10,7 +10,7 @@ extern Vec16 D_80011AC4;
 extern Vec16 D_80082D6C;
 extern s32 D_8009B37C;
 extern s32 D_8019CB0C;
-extern s32 D_801E40E4;
+extern s32 g_CourseModelCount asm("D_801E40E4");
 
 void func_8001A610(void);
 void func_80069728(void *a, void *b);
@@ -107,7 +107,7 @@ void func_80051D6C(void) {
         func_80017794((void *)0x1F80011C, &poly, &mtxA);
         *(s32 *)0x1F800084 = 0;
         a1 = 1;
-        if (D_8009B37C < D_801E40E4) {
+        if (D_8009B37C < g_CourseModelCount) {
             a1 = D_8009B37C;
         }
         func_800296B4((void *)0x1F800000, a1);

@@ -20,13 +20,13 @@ extern void *D_8019CB00;
 extern void *D_801E4188;
 
 extern s32 D_8009B2FC;
-extern s32 D_8009B300;
+extern s32 g_MenuConfirmTimer asm("D_8009B300");
 extern s32 D_8009B304;
 extern s32 D_8009B30C;
 extern s32 D_8009B310;
 extern s32 D_8009B314;
 extern s32 D_8009B31C;
-extern s32 D_8009B320;
+extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 extern s32 D_8009B324;
 extern s32 D_8009B328;
 extern s32 D_8009B32C;
@@ -124,7 +124,7 @@ void GameInitMenuMode(void) {
     g_UiScriptProgress = 0;
     g_UiScriptProgress2 = 0;
     D_8009B2FC = 0;
-    D_8009B300 = 0;
+    g_MenuConfirmTimer = 0;
     D_8009B304 = 0;
     GameMenuBusy = 0;
     D_8009B30C = 0;
@@ -140,7 +140,7 @@ void GameInitMenuMode(void) {
     D_8009B378 = -1;
     g_MenuOverlayPattern = 0;
     D_8009B31C = 0;
-    D_8009B320 = 0;
+    g_MenuPlateCarIndex = 0;
     D_8009B324 = 0;
     D_8009B328 = 0;
     D_8009B36C = g_CourseIndex;
