@@ -187,3 +187,60 @@ VERSION=PAL` stayed byte-identical (`main.exe: OK`) after each:
   `src/main/PAL/main/func_80021DB8.c`, which now `#include "game/menu.h"`.
 - **SoundScale** → `include/game/sound.h`; local `typedef` removed from the
   matched `src/main/PAL/main/func_8005D414.c`, which now `#include "game/sound.h"`.
+
+---
+
+## 4. Translation units
+
+Matched functions are being grouped into multi-function source files, so a
+config `c` segment spans an address range and its `.c` defines every function
+in that range (in ascending address order). The emitted symbols are unchanged,
+so the ROM stays byte-identical; `asm/` and `linkers/PAL/main.ld` are generated
+by `make split` and never hand-edited.
+
+### What the evidence can and cannot prove
+
+Merging only changes the output when there is something to over-dedup (shared
+strings, rodata, statics). That gives an asymmetry worth stating plainly:
+
+- a merge that **fails** `make check` is real evidence of **separateness** —
+  the two sides were different translation units in the original build;
+- a merge that **succeeds** proves **nothing** about togetherness. Two
+  genuinely separate original files that shared no constants merge without
+  changing a byte.
+
+Measured over the first 42 functions: only **4** byte-proven boundaries. So the
+ROM constrains grouping very weakly, and unbounded merging would produce
+implausibly large files. Groupings below are therefore **consistent with
+byte-exactness**, not recovered originals. Cohesion signals used, in order of
+weight: direct call edges; a **shared external callee** (a family of thin
+wrappers each calling the same helper with different constants — no edges among
+themselves, but clearly one family); shared `D_` global blocks; same structs.
+Units are capped (~12 functions / ~800 lines) so grouping cannot run away.
+
+### Car physics / AI (`func_80034DCC`–`func_800396FC`)
+
+| Unit leader | Funcs | Lines | Closed by |
+|---|---:|---:|---|
+| func_80034DCC | 6 | 92 | seam (thin wrappers sharing helper `func_8001674C`) |
+| func_80034F74 | 5 | 394 | byte-proven boundary |
+| func_800357BC | 1 | 70 | byte-proven boundary (singleton) |
+| func_8003591C | 3 | 990 | cap |
+| func_80037200 | 2 | 275 | byte-proven boundary |
+| func_80037808 | 10 | 876 | cap |
+| func_80038844 | 6 | 284 | seam |
+| func_80038CE8 | 2 | 252 | byte-proven boundary |
+| func_80038FF0 | 7 | 599 | end of range |
+
+`func_8001674C` is declared **un-prototyped** in the `func_8003591C` unit: the
+frame-matching hack there calls it with seven arguments against one declared
+parameter, which only compiles without a prototype. That is evidence the
+original translation unit also declared it K&R-style.
+
+### Toolchain note: cc1 crashes on merged units
+
+cc1 segfaults *while formatting a diagnostic* when a call passes a pointer whose
+type disagrees with a callee definition the merge has just made visible (you see
+a truncated `warning:` then the crash). Fix by casting the argument at the call
+site to the definition's parameter type. This is **not** a translation-unit size
+limit: 256 functions / 43k lines in one file compiles fine.
