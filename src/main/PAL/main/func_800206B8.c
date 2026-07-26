@@ -18,7 +18,7 @@ extern GameScoreRecord D_8019CB42[];
 extern s32 D_8019C7C4;
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 extern s32 D_801E419C;
-s32 func_8001785C(s32 arg0);
+s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
 s32 func_800214B8(void);
 void func_80021540(void);
 void func_80021288(s32 arg0, s32 arg1);
@@ -69,7 +69,7 @@ void func_800207E0(void) {
         *slots = g_RacePosition;
     }
 
-    value = func_8001785C(g_PlayerCarIndex);
+    value = GameGetCarUnlockLevel(g_PlayerCarIndex);
     slot_count = 4;
     if (g_GrandPrixClass < value) {
         *(s16 *)(D_8009E67C + 4) = 1;

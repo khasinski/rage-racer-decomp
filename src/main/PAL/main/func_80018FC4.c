@@ -25,7 +25,7 @@ extern s32 D_801E4D70;
 extern u8 *D_8019C754;
 void func_8005B768(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 func_8005B89C(void);
-s32 func_80017848(s32 arg0, s32 arg1);
+s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 arg0, void *arg1);
 void func_80034DF4(void);
 void func_8001A3C0(void *arg0);
@@ -87,7 +87,7 @@ void func_8001901C(void) {
         break;
     case 3: {
         s32 idx = g_PlayerCarIndex;
-        s32 sz = func_80017848(idx, g_CarTable[idx].modelVariant);
+        s32 sz = GameGetCarAssetIndex(idx, g_CarTable[idx].modelVariant);
         if (func_80017C78((sz << 1) + 11, D_8019CAFC) != 0) {
             register u8 *base_a0 asm("$4");
             register u8 *base_a3 asm("$7");

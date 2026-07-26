@@ -6,7 +6,7 @@ extern s32 D_8009B33C;
 extern s16 D_8019CA18;
 extern s16 D_801E41A4;
 
-s32 func_8001785C(s32 arg0);
+s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
 
 void func_80059320(void) {
     s32 index;
@@ -32,7 +32,7 @@ void func_80059320(void) {
         if (index >= 0) {
         backward_loop:
             {
-                s32 value = func_8001785C(index);
+                s32 value = GameGetCarUnlockLevel(index);
                 if (g_CarTable[index].enabled == 0) {
                     s32 progression = g_RaceProgress->maxClassReached;
                     if (progression < 4) {
@@ -78,7 +78,7 @@ backward_done:
         if (index < 13) {
         forward_loop:
             {
-                s32 value = func_8001785C(index);
+                s32 value = GameGetCarUnlockLevel(index);
                 if (g_CarTable[index].enabled == 0) {
                     s32 progression = g_RaceProgress->maxClassReached;
                     if (progression < 4) {

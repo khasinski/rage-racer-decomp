@@ -6,7 +6,7 @@
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
 extern u8 *D_801E4090;
-s32 func_80017848(s32 arg0, s32 arg1);
+s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 arg0, void *arg1);
 void func_80017B94(void *arg0, s32 arg1);
 void func_80017948(void *arg0, s32 arg1);
@@ -39,7 +39,7 @@ void func_80018A70(s32 arg0) {
     if (g_AssetLoadState == 1) {
         index = arg0 << 3;
         entry = (GameCarEntry *)(index + (s32)g_CarTable);
-        offset = func_80017848(arg0, entry->modelVariant + 1) << 1;
+        offset = GameGetCarAssetIndex(arg0, entry->modelVariant + 1) << 1;
         mode = g_CarModelSlot;
         ptr = D_801E4090;
 

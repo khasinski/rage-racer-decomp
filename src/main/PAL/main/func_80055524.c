@@ -5,7 +5,7 @@
 extern s32 D_8009B33C;
 extern s32 D_8019C7B8;
 
-s32 func_8001785C(s32 arg0);
+s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
 
 void func_80055524(void) {
     s32 index;
@@ -37,7 +37,7 @@ loop_enabled:
     index = 12;
 loop_disabled:
     {
-        value = func_8001785C(index);
+        value = GameGetCarUnlockLevel(index);
         {
             s32 offset = index * 8;
             ptr = (GameCarEntry *)(offset + (s32)g_CarTable);

@@ -1,12 +1,13 @@
 #include "common.h"
 
-s32 func_8001785C(void);
+/* Called here with no argument, so this declaration must stay un-prototyped. */
+s32 GameGetCarUnlockLevel() asm("func_8001785C");
 
 s32 func_80050FA8(s32 arg0) {
     s32 state;
     s32 value;
 
-    state = func_8001785C() + 1;
+    state = GameGetCarUnlockLevel() + 1;
 
     switch (arg0) {
     case 0:

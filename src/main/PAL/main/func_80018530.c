@@ -11,7 +11,7 @@ extern u8 *D_801E4090;
 extern u8 *D_801E4B30;
 extern u8 *D_8019C754;
 extern u8 *D_801E8AB0;
-s32 func_80017848(s32 arg0, s32 arg1);
+s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 assetIndex, void *dst);
 void func_80017948(void *arg0, s32 arg1);
 void func_80017A6C(void);
@@ -115,7 +115,7 @@ state_4:
             carIndex = g_PlayerCarIndex;
             indexOffset = carIndex << 3;
             entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-            assetOffset = func_80017848(carIndex, entry->modelVariant) << 1;
+            assetOffset = GameGetCarAssetIndex(carIndex, entry->modelVariant) << 1;
             carModelBase = D_801E4090;
 
             if (func_80017C78(assetOffset + 0xA, carModelBase) != 0) {
@@ -178,7 +178,7 @@ void func_800188B8(s32 arg0) {
 
     arg = arg0;
     index = arg << 3;
-    offset = (func_80017848(arg, ((GameCarEntry *)(index + (s32)g_CarTable))->modelVariant) * 2) + 0xA;
+    offset = (GameGetCarAssetIndex(arg, ((GameCarEntry *)(index + (s32)g_CarTable))->modelVariant) * 2) + 0xA;
 
     if (g_AssetLoadState == 1) {
         ptr = D_801E4090;

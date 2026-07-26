@@ -2,6 +2,11 @@
 #include "game/car.h"
 #include "game/race.h"
 
+/* (model, owned grade) -> index of the CAR_xx asset pair, 0..31. */
+s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
+/* Progress level needed to buy this model's next grade. */
+s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
+
 extern u8 D_8007C464[];
 extern u8 D_8007C474[];
 extern u32 D_8007C484;
@@ -20,12 +25,12 @@ extern void *D_801E424C[];
 extern void *D_801E8A54[];
 void LoadImage(void *rect, void *data) asm("func_80065B24");
 
-s32 func_80017848(s32 arg0, s32 arg1) {
-    return D_8007C464[arg0] + arg1;
+s32 GameGetCarAssetIndex(s32 model, s32 grade) {
+    return D_8007C464[model] + grade;
 }
 
-s32 func_8001785C(s32 car_index) {
-    return g_CarTable[car_index].modelVariant + D_8007C474[car_index];
+s32 GameGetCarUnlockLevel(s32 model) {
+    return g_CarTable[model].modelVariant + D_8007C474[model];
 }
 
 void func_80017884(s32 arg0) {
