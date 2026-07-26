@@ -4,6 +4,8 @@
 #include "game/render.h"
 #include "game/race.h"
 
+extern u8 *D_8009E698;
+
 extern u8 g_MenuBlankCaption asm("D_80011BA0");
 extern u8 D_80081A34;
 extern u8 D_80081AD0;
@@ -18,7 +20,6 @@ extern s32 D_8009B31C;
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 extern s32 D_8009B324;
 extern s32 D_8009B338;
-extern u8 *D_8009E698;
 extern u8 *D_8019C794;
 extern s32 D_8019C7C0;
 extern s32 D_8019CB0C;

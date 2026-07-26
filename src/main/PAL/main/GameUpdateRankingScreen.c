@@ -1,14 +1,13 @@
 #include "common.h"
+#include "game/car.h"
 #include "game/race.h"
 #include "game/menu.h"
 #include "game/render.h"
 
+extern u8 *D_8009E698;
+
 
 extern s32 D_8009B2CC;
-extern u8 *D_8009E698;
-extern u8 *g_CarTable asm("D_8019C7C8");
-extern s32 g_PlayerCarIndex asm("D_801E40D4");
-
 extern s32 D_8009B2C8;
 extern s32 D_8009B334;
 extern s32 D_8019CDF8;

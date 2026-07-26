@@ -164,6 +164,16 @@ extern s32 g_PlayerCarIndex asm("D_801E40D4");
  * with `enabled == 0`. Buying it copies it into g_PlayerCarIndex. */
 extern s32 g_CarListCursor asm("D_801E4B88");
 
+/* Index of each car model's first grade in the 32-entry asset list; thirteen
+ * entries, one per model. GameGetCarAssetIndex adds the owned grade to it. */
+extern u8 g_CarModelBaseIndex[] asm("D_8007C464");
+
+/* Per-model base of the progress level a purchase requires; the level needed is
+ * this plus the grade being bought (GameGetCarUnlockLevel). */
+extern u8 g_CarModelUnlockBase[] asm("D_8007C474");
+
+
+
 /* One automatic-gearbox shift point; `spec->shiftPoints[gear - 1]`. */
 typedef struct GameCarSpecShiftPoint {
     s16 downshiftSpeed;

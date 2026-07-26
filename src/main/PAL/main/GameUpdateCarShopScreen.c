@@ -3,6 +3,8 @@
 #include "game/menu.h"
 #include "game/render.h"
 
+extern u8 *D_8009E698;
+
 extern u8 g_MenuBlankCaption asm("D_80011BA0");
 extern u8 D_800820C4;
 extern u8 g_UiChromeScript asm("D_80082460");
@@ -22,7 +24,6 @@ extern s32 D_8009B330;
 extern s32 D_8009B338;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
-extern u8 *D_8009E698;
 extern s32 D_8019C908;
 extern s16 D_8019CA18;
 extern u8 *D_8019CB00;

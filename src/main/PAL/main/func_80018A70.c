@@ -4,6 +4,8 @@
 #include "game/state.h"
 #include "game/race.h"
 
+extern u8 *D_8009E698;
+
 extern u32 g_CarModelSlot asm("D_8009E87C");
 extern u8 *D_801E4090;
 s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
@@ -22,7 +24,6 @@ void func_80017BE4(void);
 extern s32 D_8019C754;
 extern s32 D_801E4D70;
 extern s32 D_801E8AB0;
-extern u32 D_8009E698;
 extern u32 D_8019CAFC;
 void func_800179B4(void *, s32);
 void func_80017BAC(s32);
