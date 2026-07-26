@@ -17,7 +17,7 @@ void GameSeedRandom(s32 seed) {
  * its %X / %x digit tables at D_800131E4 / D_800131F8 and by its LibcMemchr /
  * LibcMemmove / LibcStrlen callees.
  */
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameSeedRandom", func_800632F0);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/boot/GameSeedRandom", func_800632F0);
 
 u8 * LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) asm("func_80063B4C");
 u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) {

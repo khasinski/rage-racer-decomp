@@ -5,7 +5,7 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameInitPlayerCar", func_8002C478);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/GameInitPlayerCar", func_8002C478);
 
 /*
  * Wrong-way / spin check: compares the car's headingAngle against the current
@@ -263,4 +263,4 @@ s32 func_8002D2E8(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) {
     return ret;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameInitPlayerCar", func_8002D398);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/GameInitPlayerCar", func_8002D398);

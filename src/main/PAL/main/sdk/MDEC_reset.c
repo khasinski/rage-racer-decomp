@@ -155,7 +155,7 @@ s32 MDEC_timeout(u8 *arg0) {
  * Revisit:  only if a linker/section arrangement can reproduce the exact layout.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/MDEC_reset", D_80064554);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/MDEC_reset", D_80064554);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).

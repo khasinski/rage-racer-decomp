@@ -315,4 +315,4 @@ void func_8003E464(void) {
  * integrating position from a keyframed heading and feeding a distance-attenuated
  * volume to GameSetPitchedSoundCue. See docs/names.md 1.
  */
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameDrawStaticScenery", func_8003E590);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/track/GameDrawStaticScenery", func_8003E590);

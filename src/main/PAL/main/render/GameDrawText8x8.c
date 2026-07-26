@@ -1,12 +1,12 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameDrawText8x8", func_80016754);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameDrawText8x8", func_80016754);
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameDrawText8x8", func_800168AC);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameDrawText8x8", func_800168AC);
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameDrawText8x8", func_80016A18);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameDrawText8x8", func_80016A18);
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameDrawText8x8", func_80016B7C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameDrawText8x8", func_80016B7C);
 
 /*
  * Local wide-parameter declarations. Retail passes x / y / clutIndex straight

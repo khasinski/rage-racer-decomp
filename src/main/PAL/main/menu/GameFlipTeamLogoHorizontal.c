@@ -234,7 +234,7 @@ void GameRotateTeamLogoCw(void) {
     } while (i < 512);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameFlipTeamLogoHorizontal", func_8004C0D8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameFlipTeamLogoHorizontal", func_8004C0D8);
 
 extern s32 g_TeamLogoClutRect asm("D_8007BEDC");
 extern s32 D_8007F964;
@@ -372,4 +372,4 @@ void func_8004CF30(s32 arg) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameFlipTeamLogoHorizontal", func_8004D384);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameFlipTeamLogoHorizontal", func_8004D384);

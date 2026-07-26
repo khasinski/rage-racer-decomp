@@ -18,9 +18,9 @@ u8 *GameQueueDrawModePrim(void *ot, u8 *prim, u16 tpage) {
     return prim;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameQueueDrawModePrim", func_800173F4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameQueueDrawModePrim", func_800173F4);
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameQueueDrawModePrim", func_800175A4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameQueueDrawModePrim", func_800175A4);
 
 /* Local alias: retail passes the tpage through as a full word, so the narrow
  * parameter in the shared prototype would insert a truncation. */

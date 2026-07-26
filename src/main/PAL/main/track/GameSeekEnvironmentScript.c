@@ -2,7 +2,7 @@
 #include "psyq/gpu.h"
 #include "game/race.h"
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameSeekEnvironmentScript", func_800458CC);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/track/GameSeekEnvironmentScript", func_800458CC);
 
 typedef struct {
     s32 id;

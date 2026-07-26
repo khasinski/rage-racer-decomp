@@ -102,7 +102,7 @@ void GameDrawControllerConfigScreen(void) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameDrawControllerConfigScreen", func_800155EC);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameDrawControllerConfigScreen", func_800155EC);
 
 /* "Hold the "NeGcon" in an untwisted" / "position and press start button." */
 extern char D_80010028[];

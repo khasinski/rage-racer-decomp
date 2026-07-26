@@ -336,7 +336,7 @@ void GameEnterCarSelectScreen(void) {
     func_8004CF30(-9);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameUpdateRankingScreen", func_8005568C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameUpdateRankingScreen", func_8005568C);
 
 extern s32 D_8009B2D0;
 

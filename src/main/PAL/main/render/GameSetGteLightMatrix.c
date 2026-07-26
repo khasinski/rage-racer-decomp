@@ -14,7 +14,7 @@ void GameSetGteLightMatrix(Matrix *view) {
     SetLightMatrix(&m);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameSetGteLightMatrix", func_80014618);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameSetGteLightMatrix", func_80014618);
 
 /* Free-running angle the controller-setup screens pulse their arrows with. */
 extern s32 D_8007C13C;

@@ -11,7 +11,7 @@ s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
 void func_80078528(s32, s16, s16);
 void func_800781C0(s32, s32, s32, s32, s32, s32, s32);
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameSetPitchedSoundCue", func_8005C914);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPitchedSoundCue", func_8005C914);
 
 /* Loop over the 4 effect voices (indices 10..13). `voice` is kept in the
  * compiler's scaled (<<16) representation of the short voice number, exactly
@@ -91,7 +91,7 @@ void func_8005CDB0(void) {
     } while ((s32)statePtr < (s32)&D_801E6D38[20]);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameSetPitchedSoundCue", func_8005D050);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPitchedSoundCue", func_8005D050);
 
 extern s32 D_80082F44;
 extern s32 D_801E4D90;

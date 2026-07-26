@@ -243,7 +243,7 @@ update_state:
     D_801E6CF4 = D_801E6CF0;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameSetPanVoiceTargetVolume", func_8005C31C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPanVoiceTargetVolume", func_8005C31C);
 
 void func_80078528(s32 voice, s16 left, s16 right);
 

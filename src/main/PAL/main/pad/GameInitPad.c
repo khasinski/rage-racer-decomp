@@ -61,4 +61,4 @@ void GameApplyPadButtonMapping(void) {
     GameLoadPadButtonMapping(D_8019CE08, D_8019CB08);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/GameInitPad", func_80014014);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/pad/GameInitPad", func_80014014);
