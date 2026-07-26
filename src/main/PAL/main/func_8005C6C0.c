@@ -1,21 +1,17 @@
 #include "common.h"
 #include "game/audio.h"
+#include "game/sound.h"
 
-extern s32 D_801E6D08;
-extern u8 D_801E6D00[];
-extern u8 D_801E6D04[];
-extern u8 D_801E6D10[];
-extern u8 D_801E6D14[];
 
 void func_80077C7C(s32 voice, s32 vab, s32 prog, s32 tone, s32 note, s32 a5, s32 a6, s32 a7);
 void func_80078528(s32 voice, s16 left, s16 right);
 void func_80078018(s32 voice);
 
 #define UPDATE_BASIC_EFFECT_VOLUME()                                  \
-    raw = *(s32 *)(D_801E6D10 + offset);                              \
+    raw = *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset);                              \
     scale = g_EffectVolumeScale;                                                \
     left = raw * scale;                                                \
-    raw = *(s32 *)(D_801E6D14 + offset);                              \
+    raw = *(s32 *)((u8 *)&D_801E6D00[0].volRight + offset);                              \
     voice = i + 8;                                                     \
     if (left < 0) {                                                    \
         left += 0x7F;                                                  \
@@ -44,13 +40,13 @@ void func_80078018(s32 voice);
     *state = neg
 
 #define START_BASIC_EFFECT_VOLUME()                                   \
-    raw = *(s32 *)(D_801E6D10 + offset);                              \
+    raw = *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset);                              \
     scale = g_EffectVolumeScale;                                                \
     left = raw * scale;                                                \
     raw = i + 8;                                                       \
     asm("" : "=r"(raw) : "0"(raw));                                    \
     voice = raw;                                                       \
-    raw = *(s32 *)(D_801E6D14 + offset);                              \
+    raw = *(s32 *)((u8 *)&D_801E6D00[0].volRight + offset);                              \
     if (left < 0) {                                                    \
         left += 0x7F;                                                  \
     }                                                                 \
@@ -91,15 +87,15 @@ void func_8005C6C0(void) {
 
     i = 0;
     neg = -1;
-    state = &D_801E6D08;
+    state = &D_801E6D00[0].mode;
     voicePacked = 0x80000;
     offset = 0;
     do {
         switch (*state) {
         case 0:
             func_80077C7C(voicePacked >> 16, g_VabIds[0],
-                          *(s16 *)(D_801E6D00 + offset),
-                          *(s16 *)(D_801E6D04 + offset), 0x3C, 0, 0, 0);
+                          *(s16 *)((u8 *)&D_801E6D00[0].left + offset),
+                          *(s16 *)((u8 *)&D_801E6D00[0].right + offset), 0x3C, 0, 0, 0);
             START_BASIC_EFFECT_VOLUME();
             break;
         case 2:

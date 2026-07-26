@@ -21,8 +21,8 @@ void func_80033C18(s32 x, s32 y, s32 value) {
     u16 color;
 
     hundreds = value / 100;
-    rawX = *(u16 *)(g_CarSpec + 0x140) + x;
-    rawY = *(u16 *)(g_CarSpec + 0x142) + y;
+    rawX = g_CarSpec->tachoDigitsX + x;
+    rawY = g_CarSpec->tachoDigitsY + y;
     color = D_801E4130;
     scratch = (u8 **)0x1F800000;
     prim = *scratch;

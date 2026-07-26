@@ -26,7 +26,6 @@ extern u8 *D_8019C764;
 extern s32 D_8019C7AC;
 extern s32 D_8019C908;
 extern u16 D_8019CABC;
-extern GameRaceProgress *D_801E4FAC;
 extern u8 *D_8009E67C;
 extern u8 D_80081818;
 extern u8 D_800817A0;
@@ -264,14 +263,14 @@ void GameUpdateCourseSelectScreen(void) {
                 }
                 if (*pad & 0x1000) {
                     func_8005D6EC(1);
-                    D_8009B2F0 = (D_8009B2F0 != 0) ? D_8009B2F0 - 1 : D_801E4FAC->progression;
+                    D_8009B2F0 = (D_8009B2F0 != 0) ? D_8009B2F0 - 1 : g_RaceProgress->maxClassReached;
                 }
                 if (g_PadEdge2 & 0x4000) {
                     func_8005D6EC(1);
-                    D_8009B2F0 = (D_8009B2F0 < D_801E4FAC->progression) ? D_8009B2F0 + 1 : 0;
+                    D_8009B2F0 = (D_8009B2F0 < g_RaceProgress->maxClassReached) ? D_8009B2F0 + 1 : 0;
                 }
                 func_80048D64(0xB8, D_8009B2F0 * 0x1E + 0x6C, 0x38, 0x20, 0);
-                for (i = 0; i < D_801E4FAC->progression + 1; i++) {
+                for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                     func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&D_80011BA0);
@@ -333,7 +332,7 @@ void GameUpdateCourseSelectScreen(void) {
                     }
                     func_800487D8(D_8019C764, &g_UiScriptProgress2, 1);
                     func_80048D64(0xB8, D_8009B2F0 * 0x1E + 0x6C, 0x38, 0x20, 1);
-                    for (i = 0; i < D_801E4FAC->progression + 1; i++) {
+                    for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                         func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
                         func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
                         func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&D_80011BA0);
@@ -343,7 +342,7 @@ void GameUpdateCourseSelectScreen(void) {
                 D_8009B300 = cnt - 1;
                 func_800487D8(D_8019C764, &g_UiScriptProgress2, 1);
                 func_80048D64(0xB8, D_8009B2F0 * 0x1E + 0x6C, 0x38, 0x20, 1);
-                for (i = 0; i < D_801E4FAC->progression + 1; i++) {
+                for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                     func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&D_80011BA0);
@@ -389,18 +388,18 @@ void GameUpdateCourseSelectScreen(void) {
                     s32 lapc;
                     s32 half;
                     raw = g_CourseIndex;
-                    p = D_801E4FAC;
+                    p = g_RaceProgress;
                     d = g_PlayerCarIndex;
                     g_SceneId = 2;
                     lapc = g_GrandPrixClass;
                     half = g_GrandPrixMode;
                     raw = raw & 3;
                     g_CourseIndex = raw;
-                    p->state = raw;
-                    p->pad4 = d;
-                    p->lap = lapc;
+                    p->course = raw;
+                    p->carIndex = d;
+                    p->classIndex = lapc;
                     if (half != 0) {
-                        p->elapsedTime = D_8019C908;
+                        p->unk10 = D_8019C908;
                         goto clear;
                     }
                     goto setlast;
@@ -418,18 +417,18 @@ void GameUpdateCourseSelectScreen(void) {
                     s32 half;
                     g_SceneId = 0x18;
                     raw = g_CourseIndex & 3;
-                    D_801E4FAC->state = (g_CourseIndex = raw);
+                    g_RaceProgress->course = (g_CourseIndex = raw);
                     d = g_PlayerCarIndex;
                     lapc = g_GrandPrixClass;
                     half = g_GrandPrixMode;
-                    D_801E4FAC->pad4 = d;
-                    D_801E4FAC->lap = lapc;
+                    g_RaceProgress->carIndex = d;
+                    g_RaceProgress->classIndex = lapc;
                     if (half != 0) {
-                        D_801E4FAC->elapsedTime = D_8019C908;
+                        g_RaceProgress->unk10 = D_8019C908;
                     } else {
-                        p = D_801E4FAC;
+                        p = g_RaceProgress;
                     setlast:
-                        p->elapsedTime = (s16)D_8019CABC;
+                        p->unk10 = (s16)D_8019CABC;
                     }
                 clear:
                     g_UiScriptProgress = 0;

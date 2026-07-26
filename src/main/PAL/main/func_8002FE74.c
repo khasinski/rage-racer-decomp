@@ -13,12 +13,12 @@ s32 func_80068634(s32 arg0);
 /*
  * AI route steering: projects a target point ahead of (or behind, per the
  * direction flag at car+0x110) the car on the track centre-line, offset
- * laterally, and steers the car's heading toward it. `timerBase` is the per-car
- * spec/config block g_CarSpec (the u16 at +0x10A is a countdown timer).
- * Register pins are match-load-bearing.
+ * laterally, and steers the car's heading toward it. The heading correction is
+ * divided by the spec block's steerResponse. Register pins are
+ * match-load-bearing.
  */
 void func_8002FE74(GameCarRuntime *car) {
-    register u8 *timerBase asm("$2");
+    register GameCarSpec *spec asm("$2");
     register s32 timer asm("$19");
     s32 index;
     register s32 lateral asm("$18");
@@ -34,9 +34,9 @@ void func_8002FE74(GameCarRuntime *car) {
     s32 directionFlag;
     register s32 divisor asm("$16");
 
-    timerBase = g_CarSpec;
+    spec = g_CarSpec;
     lateral = car->field_34;
-    timer = *(u16 *)(timerBase + 0x10A);
+    timer = spec->steerResponse;
     asm volatile("" : "=r"(timer) : "0"(timer));
 
     directionFlag = *(s32 *)((u8 *)car + 0x110);

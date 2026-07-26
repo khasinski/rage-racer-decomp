@@ -4,11 +4,6 @@
 #include "game/race.h"
 
 typedef struct {
-    u8 pad[0x10];
-    s32 elapsedTime;
-} RaceProg;
-
-typedef struct {
     u8 raw[8];
 } UnkCopyChunk;
 
@@ -17,7 +12,6 @@ extern s32 D_801E6DA0;
 extern s32 D_801E6C78;
 extern s32 D_801F17B0;
 extern s32 D_8019CE0C;
-extern RaceProg *D_801E4FAC;
 extern s32 D_801E4D0C;
 extern s32 D_801E4B94;
 extern s32 D_8019C8EC;
@@ -103,11 +97,11 @@ void func_80020DDC(void) {
         t = D_801F17B0;
         if (t >= lim1) {
             D_801F17B0 = t - lim1;
-            D_801E4FAC->elapsedTime += lim1;
+            g_RaceProgress->unk10 += lim1;
         } else {
-            s32 e = D_801E4FAC->elapsedTime;
+            s32 e = g_RaceProgress->unk10;
             D_801F17B0 = 0;
-            D_801E4FAC->elapsedTime = e + t;
+            g_RaceProgress->unk10 = e + t;
         }
     L234:
         if (D_801F17B0 != 0) goto L420;
@@ -130,11 +124,11 @@ void func_80020DDC(void) {
         t = D_8019CE0C;
         if (t >= lim0) {
             D_8019CE0C = t - lim0;
-            D_801E4FAC->elapsedTime += lim0;
+            g_RaceProgress->unk10 += lim0;
         } else {
-            s32 e = D_801E4FAC->elapsedTime;
+            s32 e = g_RaceProgress->unk10;
             D_8019CE0C = 0;
-            D_801E4FAC->elapsedTime = e + t;
+            g_RaceProgress->unk10 = e + t;
         }
         if (D_8019CE0C != 0) goto L420;
     Lstore7:

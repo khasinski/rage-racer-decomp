@@ -2,6 +2,7 @@
 #include "game/race.h"
 #include "game/state.h"
 #include "game/render.h"
+#include "game/car.h"
 
 #define AVG(a, b) ((s32)((a) + (b) + ((u32)((a) + (b)) >> 31)) >> 1)
 
@@ -69,7 +70,6 @@ extern s32 D_801E4BB0;
 extern s32 D_8019CB6C;
 extern s32 D_8009EC8C;
 extern u8 D_8009E6D4;
-extern u8 D_801F1854;
 void func_8001F134(s32 arg0, u8 *arg1, u8 *arg2);
 void func_8001F274(s32 arg0, u8 *arg1);
 extern s32 D_801F179C;
@@ -220,7 +220,7 @@ void func_8001F8D0(s32 arg0, u8 *arg1, u8 *arg2) {
 
 void func_8001F9D8(void) {
     if (g_GrandPrixMode != 0) {
-        func_8001F134(D_801E4BB0, &D_8009E6D4, &D_801F1854);
+        func_8001F134(D_801E4BB0, &D_8009E6D4, (u8 *)g_Cars);
     } else {
         func_8001F274(D_801E4BB0, &D_8009E6D4);
     }

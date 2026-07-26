@@ -6,7 +6,6 @@
 #include "game/menu.h"
 
 extern s32 D_801E429C;
-extern GameRaceProgress *D_801E4FAC;
 
 void func_80033AA0(s32 arg0, s32 arg1);
 void GameDrawMainMenuRows(void) asm("func_8001B2D4");
@@ -25,10 +24,10 @@ void GameUpdateMainMenuExit(void) {
         switch (g_TitleMenuSelection) {
         case 0:
         case 1:
-            ptr = D_801E4FAC;
+            ptr = g_RaceProgress;
             g_GrandPrixMode = 1;
-            if (ptr->progression == -1) {
-                ptr->progression = 0;
+            if (ptr->maxClassReached == -1) {
+                ptr->maxClassReached = 0;
                 g_SceneId = 0x1F;
                 g_GrandPrixSeries = 0;
             } else {

@@ -1,16 +1,17 @@
 #include "common.h"
 #include "game/track.h"
 #include "game/race.h"
+#include "game/car.h"
 
 
 void func_8002BF68(u8 *arg0, s32 arg1) {
-    register u8 *obj asm("$4") = arg0;
+    register GameCarRuntime *obj asm("$4") = (GameCarRuntime *)arg0;
     register s32 state asm("$2") = g_RaceSeries;
-    register s32 cur asm("$9") = *(s32 *)(obj + 0x30);
+    register s32 cur asm("$9") = obj->trackPointIndex;
     register s32 total asm("$7") = 0;
     register s32 index asm("$6");
 
-    *(s32 *)(obj + 0x68) = 0;
+    obj->field_68 = 0;
     if (state != 0) {
         index = *(s32 *)g_TrackEventData;
         if (arg1 == 1) {
@@ -26,7 +27,7 @@ advance_forward_add:
             if (cur == wrapped) {
                 goto done;
             }
-            total += *(s16 *)(table + (wrapped * 24) + 0x16);
+            total += ((GameTrackPoint *)table)[wrapped].segmentLength;
             goto advance_forward_add;
         } else {
             register s32 count asm("$8");
@@ -43,7 +44,7 @@ advance_backward_sub:
                 wrapped = index;
             }
             mod = wrapped % count;
-            total -= *(s16 *)(table + (mod * 24) + 0x16);
+            total -= ((GameTrackPoint *)table)[mod].segmentLength;
             if (cur == wrapped) {
                 goto done;
             }
@@ -63,7 +64,7 @@ advance_forward_sub:
             do {
                 index++;
                 wrapped = index % count;
-                total -= *(s16 *)(table + (wrapped * 24) + 0x16);
+                total -= ((GameTrackPoint *)table)[wrapped].segmentLength;
             } while (cur != wrapped);
             goto done;
         } else {
@@ -85,11 +86,11 @@ advance_backward_add:
                     break;
                 }
                 mod = wrapped % count;
-                total += *(s16 *)(table + (mod * 24) + 0x16);
+                total += ((GameTrackPoint *)table)[mod].segmentLength;
                 index--;
             } while (1);
         }
     }
 done:
-    *(s32 *)(obj + 0x68) = total;
+    obj->field_68 = total;
 }

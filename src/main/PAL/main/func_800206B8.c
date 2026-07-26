@@ -4,7 +4,6 @@
 #include "game/car.h"
 #include "game/state.h"
 
-extern GameRaceProgress *D_801E4FAC;
 extern s32 D_801E419C, D_801F17B0, D_8019CE0C;
 extern u8 D_80010E30[], D_80010E34[], D_80010E38[], D_80010E40[];
 void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
@@ -37,14 +36,14 @@ void func_8005D6EC(s32 arg0);
 
 void func_800206B8(u8 *s0) {
     u8 sp[16];
-    if (D_801E4FAC->elapsedTime > 0x3B9AC9FF) {
-        D_801E4FAC->elapsedTime = 0x3B9AC9FF;
+    if (g_RaceProgress->unk10 > 0x3B9AC9FF) {
+        g_RaceProgress->unk10 = 0x3B9AC9FF;
     }
     func_80016EA0(0x10, s0 + 128, D_80010E30, 0x7812);
     func_800632F0(sp, D_80010E34, D_801F17B0);
     func_80016EA0(0x12, s0 + 140, sp, 0x7812);
     func_80016EA0(0x10, s0 + 160, D_80010E38, 0x7812);
-    func_800632F0(sp, D_80010E34, D_801E4FAC->elapsedTime);
+    func_800632F0(sp, D_80010E34, g_RaceProgress->unk10);
     func_80016EA0(0x12, s0 + 172, sp, 0x7812);
     if (D_801E419C != 0) {
         func_80016EA0(0x10, s0 + 192, D_80010E40, 0x7812);
@@ -154,7 +153,7 @@ after_record_check:
 
     D_801E419C = 0;
     if (D_801E4B94 != 0 && D_8019C8EC == 0) {
-        state = (s32 *)D_801E4FAC;
+        state = (s32 *)g_RaceProgress;
         if (state[3] < g_GrandPrixClass + 1) {
             D_801E419C = 1;
         }
@@ -171,13 +170,13 @@ void func_80020B08(void) {
             s32 magic;
             GameRaceProgress *afterPtr;
 
-            ptr = D_801E4FAC;
-            oldValue = ptr->progression;
+            ptr = g_RaceProgress;
+            oldValue = ptr->maxClassReached;
             func_80021288((s32)g_CarTable, (s32)ptr);
             magic = 0x3B9AC9FF;
-            afterPtr = D_801E4FAC;
-            afterPtr->elapsedTime = magic;
-            afterPtr->progression = oldValue;
+            afterPtr = g_RaceProgress;
+            afterPtr->unk10 = magic;
+            afterPtr->maxClassReached = oldValue;
             func_800212F0(0);
             func_80019BB8(0x21);
         } else {
@@ -188,15 +187,15 @@ void func_80020B08(void) {
 
             func_80019B3C(7);
             current = g_GrandPrixClass;
-            menuPtr = D_801E4FAC;
+            menuPtr = g_RaceProgress;
             enabled = D_801E419C;
             next = current + 1;
             g_GrandPrixClass = next;
-            menuPtr->lap = next;
-            menuPtr->state = 0;
+            menuPtr->classIndex = next;
+            menuPtr->course = 0;
 
             if (enabled != 0) {
-                menuPtr->progression = next;
+                menuPtr->maxClassReached = next;
                 entry = &g_MaxClassReached[g_SeriesSelection];
                 if (*entry < next) {
                     *entry = next;

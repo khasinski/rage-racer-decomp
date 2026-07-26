@@ -279,7 +279,6 @@ extern volatile u16 g_PadEdge2 asm("D_801E436E");
 extern s32 D_801E8260;
 
 extern s32 *g_CarTable asm("D_8019C7C8");
-extern s32 *D_801E4FAC;
 extern s32 *D_8009E67C;
 extern s32 D_801E40A0;
 extern s32 D_801E6E88;
@@ -349,7 +348,7 @@ void GameUpdateMainMenuInput(void) {
         switch (g_TitleMenuSelection) {
         case 0:
             g_CarTable = &D_801E4F44;
-            D_801E4FAC = &D_801E4094;
+            g_RaceProgress = (GameRaceProgress *)&D_801E4094;
             D_8009E67C = &D_801E42EC;
             g_SeriesSelection = 0;
             if (D_801E40A0 == -1) {
@@ -362,7 +361,7 @@ void GameUpdateMainMenuInput(void) {
             break;
         case 1:
             g_CarTable = &D_8019C914;
-            D_801E4FAC = &D_801E6E7C;
+            g_RaceProgress = (GameRaceProgress *)&D_801E6E7C;
             D_8009E67C = &D_8009E874;
             g_SeriesSelection = 1;
             if (D_801E6E88 == -1) {
@@ -375,7 +374,7 @@ void GameUpdateMainMenuInput(void) {
             break;
         case 2:
             g_CarTable = &D_801E4388;
-            D_801E4FAC = &D_8019C980;
+            g_RaceProgress = (GameRaceProgress *)&D_8019C980;
             g_SeriesSelection = 0;
             func_8001839C();
             break;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/car.h"
 #include "game/audio.h"
 #include "game/waypoint.h"
 #include "psyq/gte.h"
@@ -228,6 +229,15 @@ void func_80037860(void) {
     register TrackWaypointRuntime *waypoint asm("$17");
     register s32 i asm("$18");
     register s32 activeState asm("$19");
+    /*
+     * Retail addresses the waypoint's velocity block through a base register
+     * biased to &waypoint->velocityMagnitude, so these stay raw:
+     *   tail-0x30 x        tail-0x28 y          tail-0x20 scale
+     *   tail-0x1C field18  tail-0x10 velocityX  tail-0xC field28
+     *   tail-0x8 velocityY tail-0x4  field30    tail      velocityMagnitude
+     * Writing them as waypoint->field drops the second induction variable and
+     * re-bases every store on $17.
+     */
     register char *tail asm("$16");
 
     if (D_8019C700 != 0) {
@@ -647,7 +657,7 @@ s32 func_80038288(s32 arg0) {
     }
 }
 
-void func_800383A8(u8 *ent, s32 pos, s32 *arr) {
+void func_800383A8(GameCarRuntime *ent, s32 pos, s32 *arr) {
     u8 *base;
     s32 sub;
     u8 *p;
@@ -655,76 +665,76 @@ void func_800383A8(u8 *ent, s32 pos, s32 *arr) {
     s32 scene;
     u16 av;
 
-    *(s32 *)(ent + 0xB0) = 1;
+    ent->field_B0 = 1;
     av = *(u16 *)&arr[pos];
     sub = (pos + 1) * 12;
     {
         u8 *baseValue = g_TrackEventData;
         base = baseValue;
     }
-    *(s16 *)(ent + 0x8A) = 0;
-    *(s32 *)(ent + 0xBC) = 1;
-    *(s16 *)(ent + 0xAE) = av;
+    ent->field_8A = 0;
+    ent->field_BC = 1;
+    ent->field_AE = av;
     val122 = *(u16 *)&arr[pos];
     scene = g_RaceSeries;
-    *(s16 *)(ent + 0x122) = val122;
+    ent->field_122 = val122;
     {
         u8 *p1;
 
         p1 = base + (sub + scene * 144);
-        *(s32 *)(ent + 0x30) = *(s16 *)(p1 + 0x35C);
-        *(s32 *)(ent + 0x00) = *(s32 *)(p1 + 0x354);
-        *(s32 *)(ent + 0x08) = *(s32 *)(p1 + 0x358);
-        *(s32 *)(ent + 0x04) = 0;
+        ent->trackPointIndex = *(s16 *)(p1 + 0x35C);
+        ent->x = *(s32 *)(p1 + 0x354);
+        ent->z = *(s32 *)(p1 + 0x358);
+        *(s32 *)&ent->y = 0;
     }
     {
-        s32 ret = func_80030EB4(ent, *(s32 *)(ent + 0x30));
+        s32 ret = func_80030EB4((u8 *)ent, ent->trackPointIndex);
         s32 lev = g_RaceSeries;
         s32 idx;
         s32 levShift;
         s32 acc;
         s32 angle;
 
-        *(s32 *)(ent + 0x30) = ret;
-        *(s32 *)(ent + 0x20) = 0;
-        idx = *(s32 *)(ent + 0x30);
+        ent->trackPointIndex = ret;
+        ent->field_20 = 0;
+        idx = ent->trackPointIndex;
         acc = 0xC00;
         levShift = lev << 11;
         angle = *(s16 *)(g_TrackPoints + idx * 24 + 0xA);
         acc -= levShift;
-        *(s32 *)(ent + 0x24) = (acc - angle) & 0xFFF;
+        ent->field_24 = (acc - angle) & 0xFFF;
 
-        *(s32 *)(ent + 0x28) = 0;
-        *(s32 *)(ent + 0x64) = 0;
-        *(s32 *)(ent + 0x6C) = 0;
-        *(s32 *)(ent + 0x68) = 0;
-        *(s32 *)(ent + 0x70) = 0;
-        *(s32 *)(ent + 0xA4) = 0;
-        *(s32 *)(ent + 0xA8) = 0;
-        *(s32 *)(ent + 0xD0) = 0;
-        *(s32 *)(ent + 0xCC) = 0;
-        *(s32 *)(ent + 0xC8) = 0;
-        *(s32 *)(ent + 0xE0) = 0;
-        *(s32 *)(ent + 0xDC) = 0;
-        *(s32 *)(ent + 0xD8) = 0;
-        *(s32 *)(ent + 0x18) = 0;
-        *(s32 *)(ent + 0x14) = 0;
-        *(s32 *)(ent + 0x10) = 0;
-        *(s32 *)(ent + 0x100) = 0;
-        *(s16 *)(ent + 0x116) = 0;
-        *(s16 *)(ent + 0x110) = 0;
-        *(s32 *)(ent + 0xF4) = 0;
-        *(s16 *)(ent + 0x13A) = 0;
-        *(s32 *)(ent + 0xF0) = 0;
-        *(s32 *)(ent + 0x108) = *(s32 *)(ent + 0x24);
+        ent->field_28 = 0;
+        ent->field_64 = 0;
+        ent->field_6C = 0;
+        ent->field_68 = 0;
+        ent->trackProgress = 0;
+        ent->field_A4 = 0;
+        ent->field_A8 = 0;
+        ent->field_D0 = 0;
+        ent->field_CC = 0;
+        ent->field_C8 = 0;
+        ent->field_E0 = 0;
+        ent->field_DC = 0;
+        ent->field_D8 = 0;
+        ent->field_18 = 0;
+        ent->field_14 = 0;
+        ent->field_10 = 0;
+        ent->routeIndex = 0;
+        ent->field_116 = 0;
+        ent->field_110 = 0;
+        ent->field_F4 = 0;
+        ent->field_13A = 0;
+        *(s32 *)&ent->field_F0 = 0;
+        ent->field_108 = ent->field_24;
         p = base + (sub + lev * 144);
-        *(s32 *)(ent + 0xEC) = *(s32 *)(ent + 0x24);
-        *(s32 *)(ent + 0xA0) = *(s32 *)(ent + 0x24);
-        *(s32 *)(ent + 0xF8) = 0;
-        *(s16 *)(ent + 0x104) = 0;
-        *(s32 *)(ent + 0xC4) = 0;
-        *(s16 *)(ent + 0x138) = 0;
-        func_8002BF68(ent, *(s16 *)(p + 0x35E));
+        ent->field_EC = ent->field_24;
+        ent->headingAngle = ent->field_24;
+        ent->field_F8 = 0;
+        ent->field_104 = 0;
+        ent->field_C4 = 0;
+        ent->field_138 = 0;
+        func_8002BF68((u8 *)ent, *(s16 *)(p + 0x35E));
     }
 
     sub += g_RaceSeries * 144;
@@ -733,7 +743,7 @@ void func_800383A8(u8 *ent, s32 pos, s32 *arr) {
         u16 model;
 
         model = *(u16 *)(base + 0x35E);
-        *(s16 *)(ent + 0xAC) = model;
+        ent->activeFlag = model;
         if ((s16)model != -1) {
             struct {
                 s32 pad[4];
@@ -743,40 +753,40 @@ void func_800383A8(u8 *ent, s32 pos, s32 *arr) {
 
             pair.a = 20;
             pair.b = -20;
-            func_80031298(ent, *(s32 *)(ent + 0x30), &pair.a);
-            *(s32 *)(ent + 0x60) = *(s32 *)(ent + 0x04);
-            *(s32 *)(ent + 0x74) = *(s32 *)(ent + 0x70);
+            func_80031298((u8 *)ent, ent->trackPointIndex, &pair.a);
+            ent->field_60 = *(s32 *)&ent->y;
+            ent->previousTrackProgress = ent->trackProgress;
         }
     }
 
     {
         s32 height;
 
-        height = *(s32 *)(ent + 0x34);
-        *(s16 *)(ent + 0x120) = 0;
-        *(s32 *)(ent + 0xFC) = height;
-        *(s16 *)(ent + 0x11E) = height;
-        *(s16 *)(ent + 0x11C) = height;
+        height = ent->field_34;
+        ent->field_120 = 0;
+        ent->field_FC = height;
+        ent->field_11E = height;
+        ent->field_11C = height;
     }
-    *(Vec4 *)(ent + 0x50) = *(Vec4 *)(ent + 0x20);
+    *(Vec4 *)&ent->field_50 = *(Vec4 *)&ent->field_20;
     {
         s32 lateral;
 
-        lateral = *(s32 *)(ent + 0x04);
-        *(s32 *)(ent + 0x40) = 0;
-        *(s32 *)(ent + 0x44) = 0;
-        *(s32 *)(ent + 0x48) = 0;
-        *(s32 *)(ent + 0x60) = lateral;
+        lateral = *(s32 *)&ent->y;
+        ent->field_40 = 0;
+        ent->field_44 = 0;
+        ent->field_48 = 0;
+        ent->field_60 = lateral;
     }
 }
 
-void func_800385FC(u8 *ent, s32 pos, s32 *arr)
+void func_800385FC(GameCarRuntime *ent, s32 pos, s32 *arr)
 {
   register s32 pos2_R10 asm("$10");
   register s32 idx_R8 asm("$8");
   register u8 *base_R9 asm("$9");
-  register u8 *ent2_R7 asm("$7");
-  register u8 *sub_R6 asm("$6");
+  register GameCarRuntime *ent2_R7 asm("$7");
+  register GameCarAiBlock *sub_R6 asm("$6");
   s32 c;
   u16 w;
   pos2_R10 = pos;
@@ -796,38 +806,38 @@ void func_800385FC(u8 *ent, s32 pos, s32 *arr)
     idxoff1_R4 = idx_R8;
     idxoff1_R4 = idxoff1_R4 * 16;
     p1_R4 = base_R9 + (idxoff1_R4 + (lev1_R3 * 192));
-    *((s16 *) (ent2_R7 + 0x124)) = ((*((s16 *) (p1_R4 + 0x8F4))) * 1168) / 160;
-    *((u16 *) (ent2_R7 + 0x126)) = *((u16 *) (p1_R4 + 0x8F6));
-    *((u16 *) (ent2_R7 + 0x128)) = *((u16 *) (p1_R4 + 0x8F8));
-    *((u16 *) (ent2_R7 + 0x12A)) = *((u16 *) (p1_R4 + 0x8FA));
-    *((u16 *) (ent2_R7 + 0x12C)) = *((u16 *) (p1_R4 + 0x8FC));
+    ent2_R7->field_124 = ((*((s16 *) (p1_R4 + 0x8F4))) * 1168) / 160;
+    *(u16 *)&ent2_R7->field_126 = *((u16 *) (p1_R4 + 0x8F6));
+    *(u16 *)&ent2_R7->field_128 = *((u16 *) (p1_R4 + 0x8F8));
+    *(u16 *)&ent2_R7->field_12A = *((u16 *) (p1_R4 + 0x8FA));
+    *(u16 *)&ent2_R7->field_12C = *((u16 *) (p1_R4 + 0x8FC));
   }
   __asm__ volatile("");
-  c = *((s16 *) (ent2_R7 + 0x128));
-  sub_R6 = ent2_R7 + 0xBC;
-  *((s16 *) (ent2_R7 + 0x12E)) = 0;
+  c = ent2_R7->field_128;
+  sub_R6 = (GameCarAiBlock *)&ent2_R7->field_BC;
+  ent2_R7->field_12E = 0;
   if (c < 0)
   {
-    *((s16 *) (ent2_R7 + 0x128)) = 0;
+    ent2_R7->field_128 = 0;
   }
   else
     if (!(c < 11))
   {
-    *((s16 *) (ent2_R7 + 0x128)) = 10;
+    ent2_R7->field_128 = 10;
   }
-  if ((*((s16 *) (sub_R6 + 0x6E))) < 0)
+  if ((sub_R6->field_12A) < 0)
   {
-    *((s16 *) (sub_R6 + 0x6E)) = 0;
+    sub_R6->field_12A = 0;
   }
-  c = *((s16 *) (sub_R6 + 0x70));
+  c = sub_R6->field_12C;
   if (c <= 0)
   {
-    *((s16 *) (sub_R6 + 0x70)) = 0;
+    sub_R6->field_12C = 0;
   }
   else
     if (!(c < 16))
   {
-    *((s16 *) (sub_R6 + 0x70)) = 15;
+    sub_R6->field_12C = 15;
   }
   {
     register s32 lev2_R2 asm("$2");
@@ -837,25 +847,25 @@ void func_800385FC(u8 *ent, s32 pos, s32 *arr)
     idxoff2_R4 = idx_R8 * 16;
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
     w = *((u16 *) (p2_R3 + 0x8FE));
-    *((s16 *) (sub_R6 + 0x76)) = w;
+    sub_R6->field_132 = w;
     if (((s16) w) < 0x3D)
     {
-      *((s16 *) (sub_R6 + 0x76)) = 0x3C;
+      sub_R6->field_132 = 0x3C;
     }
     lev2_R2 = g_RaceSeries;
     __asm__("" : "=r"(idxoff2_R4) : "0"(idxoff2_R4));
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
     w = *((u16 *) (p2_R3 + 0x900));
-    *((s16 *) (sub_R6 + 0x78)) = w;
+    sub_R6->field_134 = w;
     if (((s16) w) <= 0)
     {
-      *((s16 *) (sub_R6 + 0x78)) = 0;
+      sub_R6->field_134 = 0;
     }
   }
   {
     register s32 v_R3 asm("$3");
-    v_R3 = *((s16 *) (sub_R6 + 0x68));
-    *((s16 *) (sub_R6 + 0x74)) = (v_R3 * 6) / 100;
+    v_R3 = sub_R6->field_124;
+    sub_R6->field_130 = (v_R3 * 6) / 100;
   }
   if (pos2_R10 >= 4)
   {
@@ -863,10 +873,10 @@ void func_800385FC(u8 *ent, s32 pos, s32 *arr)
     register s32 pm4_R3 asm("$3");
     d_R5 = g_TrackLength;
     pm4_R3 = pos2_R10 - 4;
-    *((s32 *) (sub_R6 + 0x5C)) = (d_R5 / 12) + ((d_R5 / 40) * pm4_R3);
+    sub_R6->field_118 = (d_R5 / 12) + ((d_R5 / 40) * pm4_R3);
   }
   else
   {
-    *((s32 *) (sub_R6 + 0x5C)) = g_TrackLength / 12;
+    sub_R6->field_118 = g_TrackLength / 12;
   }
 }

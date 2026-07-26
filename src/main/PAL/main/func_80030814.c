@@ -12,10 +12,10 @@ void func_8005C104(s32 index, s32 phase, s32 volume);
 /*
  * Car motion handler for state98 == 2 (airborne / jump): decays velocity and
  * spin, advances the car (func_8002F4E4), and lands it when it returns to the
- * ground. The drive sub-block is accessed via raw ((u8*)car + 0xBC) offsets.
+ * ground. The drive sub-block is the GameCarDrive view of car->field_BC.
  */
 void func_80030814(GameCarRuntime *car) {
-    u8 *r = (u8 *)car + 188;
+    GameCarDrive *r = (GameCarDrive *)&car->field_BC;
     s32 sinF24;
     s32 cosF24;
     volatile s32 coords[3];
@@ -29,13 +29,13 @@ void func_80030814(GameCarRuntime *car) {
         } else {
             phase = 0x1e00;
         }
-        func_8005C104(0, phase, *(s16 *)(r + 0x38) * 2 + 80);
+        func_8005C104(0, phase, r->unk38 * 2 + 80);
     } else {
         func_8005C104(0, 0x1800, flag + 25);
     }
 
     {
-        s32 rr = func_8002A7C4(car->field_24, *(s32 *)(r + 0x90));
+        s32 rr = func_8002A7C4(car->field_24, r->unk90);
         s32 base = car->field_24;
         car->field_24 = rr / 5 + base;
         func_8002F4E4(car, base);
@@ -44,40 +44,40 @@ void func_80030814(GameCarRuntime *car) {
     sinF24 = func_80068568(car->field_24);
     cosF24 = func_80068634(car->field_24);
 
-    *(s32 *)(r + 0x08) = func_80068568(car->headingAngle + *(s32 *)(r + 0x60)) * car->field_A4 / 256;
-    *(s32 *)(r + 0x10) = func_80068634(car->headingAngle + *(s32 *)(r + 0x60)) * car->field_A4 / 256;
+    r->accelPos = func_80068568(car->headingAngle + r->unk60) * car->field_A4 / 256;
+    r->brakePos = func_80068634(car->headingAngle + r->unk60) * car->field_A4 / 256;
 
-    coords[0] = (cosF24 * *(s32 *)(r + 0x08) - sinF24 * *(s32 *)(r + 0x10)) / 4096;
-    coords[2] = (sinF24 * *(s32 *)(r + 0x08) + cosF24 * *(s32 *)(r + 0x10)) / 4096;
+    coords[0] = (cosF24 * r->accelPos - sinF24 * r->brakePos) / 4096;
+    coords[2] = (sinF24 * r->accelPos + cosF24 * r->brakePos) / 4096;
 
-    *(s32 *)(r + 0x08) =
-        func_80068568(*(s32 *)(r + 0x58)) * *(s32 *)(r + 0x5C) / 256 + sinF24 * coords[2] / 4096;
-    *(s32 *)(r + 0x10) =
-        func_80068634(*(s32 *)(r + 0x58)) * *(s32 *)(r + 0x5C) / 256 + cosF24 * coords[2] / 4096;
+    r->accelPos =
+        func_80068568(r->unk58) * r->unk5C / 256 + sinF24 * coords[2] / 4096;
+    r->brakePos =
+        func_80068634(r->unk58) * r->unk5C / 256 + cosF24 * coords[2] / 4096;
 
-    if (*(s16 *)(r + 0x9C) != 1 && *(s16 *)(r + 0x9E) != 1 && *(s16 *)(r + 0xA0) < 128) {
-        *(s32 *)(r + 0x44) += 1;
+    if (r->unk9C != 1 && r->unk9E != 1 && r->accelBtn < 128) {
+        r->unk44 += 1;
     } else {
-        *(s32 *)(r + 0x44) = 0;
+        r->unk44 = 0;
     }
 
-    *(s32 *)(r + 0x50) = *(s32 *)(r + 0x50) * 31 / 32;
-    *(s32 *)(r + 0x5C) = *(s32 *)(r + 0x5C) * 31 / 32;
-    *(s32 *)(r + 0x60) = *(s32 *)(r + 0x60) * 31 / 32;
+    r->unk50 = r->unk50 * 31 / 32;
+    r->unk5C = r->unk5C * 31 / 32;
+    r->unk60 = r->unk60 * 31 / 32;
 
-    *(s16 *)(r + 0x3E) = *(s16 *)(r + 0x3E) * 2 / 3;
-    if (*(s32 *)(r + 0x60) >= 1537) {
+    *(s16 *)&r->unk3E = *(s16 *)&r->unk3E * 2 / 3;
+    if (r->unk60 >= 1537) {
         car->field_A4 = car->field_A4 * 4 / 5;
     }
 
-    if (*(s16 *)(r + 0x38) <= 0) {
+    if (r->unk38 <= 0) {
         func_8005C104(-1, 0, 0);
-        car->field_24 -= *(s32 *)(r + 0x50);
+        car->field_24 -= r->unk50;
         D_801E8AA0 = 0;
-        *(s16 *)(r + 0x3C) = 0;
-        *(s32 *)(r + 0x60) = 0;
-        *(s32 *)(r + 0x5C) = 0;
-        *(s32 *)(r + 0x98) = 0;
-        *(s16 *)(r + 0x3E) = 0;
+        r->unk3C = 0;
+        r->unk60 = 0;
+        r->unk5C = 0;
+        r->state98 = 0;
+        *(s16 *)&r->unk3E = 0;
     }
 }

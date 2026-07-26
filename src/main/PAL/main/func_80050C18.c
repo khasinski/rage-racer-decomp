@@ -5,7 +5,6 @@
 #include "game/menu.h"
 #include "game/car.h"
 
-extern u8 *D_801E4FAC;
 extern s32 D_8019C768;
 extern s32 D_8019C908;
 
@@ -73,17 +72,17 @@ void func_800509C4(s32);
 
 void GameInitMenuMode(void) asm("func_80050C18");
 void GameInitMenuMode(void) {
-    u8 *p;
+    GameRaceProgress *p;
     s32 *scratch;
 
     func_80065860(0);
     g_MirrorMode = 0;
-    p = D_801E4FAC;
+    p = g_RaceProgress;
     {
-        s32 t0 = *(s32 *)(p + 0);
-        s32 t1 = *(s32 *)(p + 4);
-        s32 t2 = *(s32 *)(p + 8);
-        s32 t3 = *(s32 *)(p + 16);
+        s32 t0 = p->course;
+        s32 t1 = p->carIndex;
+        s32 t2 = p->classIndex;
+        s32 t3 = p->unk10;
         D_8019C768 = 0x80;
         g_CourseIndex = t0;
         g_PlayerCarIndex = t1;
@@ -98,7 +97,7 @@ void GameInitMenuMode(void) {
     if (g_GrandPrixMode != 0) {
         g_GrandPrixSeries = g_SeriesSelection;
     } else {
-        g_GrandPrixSeries = *(u16 *)((u8 *)D_801E4FAC + 16);
+        g_GrandPrixSeries = *(u16 *)&g_RaceProgress->unk10;
     }
     g_CourseIndex = ((s32)g_GrandPrixSeries << 2) | g_CourseIndex;
     func_80050B1C();

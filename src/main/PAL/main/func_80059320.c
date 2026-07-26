@@ -5,7 +5,6 @@
 extern s32 D_8009B33C;
 extern s16 D_8019CA18;
 extern s16 D_801E41A4;
-extern GameRaceProgress *D_801E4FAC;
 
 s32 func_8001785C(s32 arg0);
 
@@ -35,7 +34,7 @@ void func_80059320(void) {
             {
                 s32 value = func_8001785C(index);
                 if (g_CarTable[index].enabled == 0) {
-                    s32 progression = D_801E4FAC->progression;
+                    s32 progression = g_RaceProgress->maxClassReached;
                     if (progression < 4) {
                         if ((progression + 1) < value) {
                             index--;
@@ -81,7 +80,7 @@ backward_done:
             {
                 s32 value = func_8001785C(index);
                 if (g_CarTable[index].enabled == 0) {
-                    s32 progression = D_801E4FAC->progression;
+                    s32 progression = g_RaceProgress->maxClassReached;
                     if (progression < 4) {
                         if ((progression + 1) < value) {
                             index++;

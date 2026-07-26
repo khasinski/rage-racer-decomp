@@ -39,7 +39,7 @@ void func_80034DCC(void) {
 }
 
 void func_80034DF4(u32 arg0) {
-    g_CarSpec = (u8 *)arg0;
+    g_CarSpec = (GameCarSpec *)arg0;
 }
 
 void func_80034E04(u8 *arg0) {

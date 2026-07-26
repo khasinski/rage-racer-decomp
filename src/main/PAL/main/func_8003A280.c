@@ -3,12 +3,21 @@
 #include "game/state.h"
 #include "game/track.h"
 
-extern u8 D_801F1854[];
 extern u8 D_8009E744[];
 extern s32 D_8009E778;
 
+/*
+ * Inside the loop these two fields must NOT be reached as struct members.
+ * gcc 2.6.3 tags a struct-member MEM with MEM_IN_STRUCT_P and then assumes it
+ * cannot alias a plain global scalar, which lets it hoist the D_8009E778 load
+ * out of the loop into an extra callee-saved register. Retail reloads the
+ * global on every iteration, so the in-loop writes stay raw casts.
+ */
+#define AVOID_BLOCKED(w) (*(s16 *)((u8 *)(w) + 0x48)) /* ->field_104 */
+#define AVOID_NEARBY(w) (*(u16 *)((u8 *)(w) + 0x50))  /* ->field_10C */
+
 void func_8003A280(GameCarRuntime *car, s32 arg1) {
-    register u8 *state asm("$8") = (u8 *)&car->field_BC;
+    register GameCarAiBlock *state asm("$8") = (GameCarAiBlock *)&car->field_BC;
     register s32 acc8 asm("$24") = 0;
     register s32 acc9 asm("$25") = 0;
     register s32 i asm("$10") = 0;
@@ -29,7 +38,7 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
     carProgress = car->trackProgress;
     carField34 = car->field_34;
     carA4low = (u16)car->field_A4;
-    block = D_801F1854 + 0xA4;
+    block = (u8 *)&g_Cars[0].field_A4;
     car->field_120 = 0;
     car->field_10C = 0;
     sums[3] = 0;
@@ -45,7 +54,7 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
     field34plus = (s16)(carField34 + 0x30);
     trackMinus = track - 0x400;
 
-    for (; i < 12; i++, block += 0x19C) {
+    for (; i < 12; i++, block += sizeof(GameCarRuntime)) {
         s32 otherField34;
         s32 otherA4;
         s32 a2;
@@ -62,7 +71,7 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
         if (i == arg1) {
             continue;
         }
-        if (*(s16 *)(block + 8) == -1) {
+        if (*(s16 *)(block + 8) == -1) { /* g_Cars[i].activeFlag */
             continue;
         }
 
@@ -82,11 +91,11 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
             t6 = 0x1800 - (D_8009E778 << 1);
         } else {
             register s32 op asm("$2");
-            otherField34 = *(s32 *)(block - 0x70);
-            otherA4 = *(u16 *)block;
-            op = *(s32 *)(block - 0x34);
+            otherField34 = *(s32 *)(block - 0x70); /* g_Cars[i].field_34 */
+            otherA4 = *(u16 *)block; /* g_Cars[i].field_A4, low half */
+            op = *(s32 *)(block - 0x34); /* g_Cars[i].trackProgress */
             a2 = op + track;
-            t1 = *(u16 *)(state + 0x48);
+            t1 = *(u16 *)&AVOID_BLOCKED(state); /* unsigned load of ->field_104 */
         }
 
         diff = (a2 - carProgress) % track;
@@ -96,10 +105,10 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
         otherA4 -= carA4low;
 
         if (diff > 0 && diff < t6) {
-            (*(u16 *)(state + 0x50))++;
+            AVOID_NEARBY(state)++;
             if (field34minus < otherField34 && otherField34 < field34plus) {
                 if (!((s16)otherA4 > 0 && t1 == 0)) {
-                    *(s16 *)(state + 0x48) = 1;
+                    AVOID_BLOCKED(state) = 1;
                     val = angleDiff + 0x30;
                     if (val < 0) {
                         val = angleDiff + 0x4F;
@@ -129,7 +138,7 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
             }
         } else {
             if (trackMinus < diff) {
-                (*(u16 *)(state + 0x50))++;
+                AVOID_NEARBY(state)++;
             }
         }
     }
@@ -138,33 +147,33 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
     sums[3] = total;
     if (total > 0) {
         if (acc8 == 0 && carField34 >= 0x51) {
-            s32 f104 = *(s16 *)(state + 0x48);
-            *(s16 *)(state + 0x62) = -0x50;
-            *(s16 *)(state + 0x64) = -8 - (f104 << 1);
+            s32 f104 = state->field_104;
+            state->field_11E = -0x50;
+            state->field_120 = -8 - (f104 << 1);
         } else if (acc9 == 0 && carField34 < -0x50) {
-            s32 f104 = *(s16 *)(state + 0x48);
-            *(s16 *)(state + 0x62) = 0x50;
-            *(s16 *)(state + 0x64) = (f104 << 1) + 8;
+            s32 f104 = state->field_104;
+            state->field_11E = 0x50;
+            state->field_120 = (f104 << 1) + 8;
         } else if (sums[0] <= sums[1] && sums[0] <= sums[2] && acc8 == 0) {
-            s32 f104 = *(s16 *)(state + 0x48);
-            *(s16 *)(state + 0x62) = -0x50;
-            *(s16 *)(state + 0x64) = -6 - (f104 << 1);
+            s32 f104 = state->field_104;
+            state->field_11E = -0x50;
+            state->field_120 = -6 - (f104 << 1);
         } else if (sums[2] <= sums[1] && sums[2] <= sums[0] && acc9 == 0) {
-            s32 f104 = *(s16 *)(state + 0x48);
-            *(s16 *)(state + 0x62) = 0x50;
-            *(s16 *)(state + 0x64) = (f104 << 1) + 6;
+            s32 f104 = state->field_104;
+            state->field_11E = 0x50;
+            state->field_120 = (f104 << 1) + 6;
         }
         __asm__("" : : "r"(carField34));
         if (sums[3] >= 0x3E9) {
-            register s32 fv asm("$3") = *(s16 *)(state + 0x74);
+            register s32 fv asm("$3") = state->field_130;
             register s32 d asm("$2") = ((fv << 4) - fv) << 1;
-            *(s16 *)(state + 0x74) = d / 100;
+            state->field_130 = d / 100;
         }
     } else {
-        *(s16 *)(state + 0x64) = 0;
-        *(s16 *)(state + 0x48) = 0;
-        *(s16 *)(state + 0x62) = *(u16 *)(state + 0x60);
+        state->field_120 = 0;
+        state->field_104 = 0;
+        state->field_11E = state->field_11C;
     }
 
-    *(s16 *)(state + 0x60) = *(u16 *)(state + 0x60) + *(u16 *)(state + 0x64);
+    state->field_11C = state->field_11C + state->field_120;
 }

@@ -8,7 +8,6 @@ extern s32 D_801E7740;
 
 
 
-extern GameCarRuntime D_801F1854[];
 
 extern s32 D_8007E074[];
 
@@ -52,7 +51,7 @@ void func_80038844(void) {
     register s32 state asm("v1");
     register u16 track asm("v0");
 
-    entryBase = D_801F1854;
+    entryBase = g_Cars;
     state = g_SceneId;
     D_801E7740 = 3;
 
@@ -116,7 +115,7 @@ void func_800389F0(void) {
     s32 one;
     s32 minus_one;
 
-    base = D_801F1854;
+    base = g_Cars;
     func_80017A10(1);
 
     i = 0;
@@ -136,7 +135,7 @@ void func_800389F0(void) {
 
 void func_80038A88(void) {
     func_80017A10(1);
-    func_8001DFC0(D_801F1854);
+    func_8001DFC0(g_Cars);
 }
 
 void func_80038AB8(GameCarRuntime *arg0) {
@@ -182,7 +181,7 @@ main_body:
         goto dampen;
     }
 
-    if (obj->field_134 < *(s16 *)(g_CarSpec + 0x106)) {
+    if (obj->field_134 < g_CarSpec->redline) {
         goto side_check;
     }
     if (obj->field_15C < 0x81) {

@@ -1,18 +1,6 @@
 #include "common.h"
+#include "game/track.h"
 
-typedef struct {
-    s32 field_0;
-    u8 pad4[4];
-    s32 step;
-    s16 side;
-    s16 phase;
-    s32 out0;
-    s32 out1;
-    s32 out2;
-    u8 pad1C[0x18];
-} Unk3F2A4;
-
-extern Unk3F2A4 D_801E4FB8[];
 extern u8 D_8007E360[];
 extern s16 D_8007E3D8[];
 extern s16 D_8007E3E0[];
@@ -20,7 +8,7 @@ extern s16 D_8007E3E0[];
 void GameUpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
 
 void GameUpdateShuttleScenery(s32 arg0) {
-    Unk3F2A4 *entry;
+    GameShuttleScenery *entry;
     register s32 phase asm("$2");
     register s32 side asm("$10");
     register s32 step asm("$6");
@@ -34,12 +22,12 @@ void GameUpdateShuttleScenery(s32 arg0) {
     register s32 temp asm("$3");
     register s32 value asm("$2");
 
-    entry = &D_801E4FB8[arg0];
+    entry = &g_ShuttleScenery[arg0];
     asm("" : "=r"(entry) : "0"(entry));
     limitPtr = D_8007E3D8;
-    side = entry->side;
-    phase = entry->phase;
-    step = entry->step;
+    side = entry->startEndpoint;
+    phase = entry->pathIndex;
+    step = entry->travelStep;
     baseIndex = side << 4;
     phaseShift = phase << 5;
     baseIndex += phaseShift;
@@ -51,34 +39,34 @@ void GameUpdateShuttleScenery(s32 arg0) {
     altIndex = (1 - side) << 4;
     altIndex += phaseShift;
     value = (value + (step * *(s32 *)(D_8007E360 + altIndex))) / denom;
-    entry->out0 = value;
+    entry->x = value;
 
     denom = *limitPtr;
     temp = *(s32 *)(D_8007E360 + baseIndex + 4);
     value = (denom - step) * temp;
     value = (value + (step * *(s32 *)(D_8007E360 + altIndex + 4))) / denom;
-    entry->out1 = value;
+    entry->y = value;
 
     denom = *limitPtr;
     temp = *(s32 *)(D_8007E360 + baseIndex + 8);
     value = (denom - step) * temp;
     value = (value + (step * *(s32 *)(D_8007E360 + altIndex + 8))) / denom;
-    entry->out2 = value;
+    entry->z = value;
 
-    if (entry->step >= *limitPtr) {
-        entry->step = 0;
-        entry->field_0 = 0;
-        entry->side ^= 1;
+    if (entry->travelStep >= *limitPtr) {
+        entry->travelStep = 0;
+        entry->dwellCounter = 0;
+        entry->startEndpoint ^= 1;
         return;
     }
 
     phase = (s32)D_8007E3E0;
     tailLimitPtr = (s16 *)(phaseOffset + phase);
     asm("" : "=r"(tailLimitPtr) : "0"(tailLimitPtr));
-    if (entry->field_0 >= *tailLimitPtr) {
-        entry->step = entry->step + 1;
-        entry->field_0 = *tailLimitPtr;
+    if (entry->dwellCounter >= *tailLimitPtr) {
+        entry->travelStep = entry->travelStep + 1;
+        entry->dwellCounter = *tailLimitPtr;
         return;
     }
-    entry->field_0 = entry->field_0 + 1;
+    entry->dwellCounter = entry->dwellCounter + 1;
 }

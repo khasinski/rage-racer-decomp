@@ -2,6 +2,7 @@
 #include "game/race.h"
 #include "game/state.h"
 #include "game/track.h"
+#include "game/car.h"
 
 extern s32 D_8009E6D4;
 
@@ -10,7 +11,6 @@ extern s32 D_8009E704;
 
 extern s32 D_801F179C;
 
-extern s32 D_801F1854;
 
 extern s32 D_801F1884;
 
@@ -105,7 +105,7 @@ void func_80034F74(void) {
     GameInitShuttleScenery();
 
     primary = &D_8009E6D4;
-    secondary = &D_801F1854;
+    secondary = g_Cars;
     func_8001F8D0(D_801F179C, primary, secondary);
 
     D_8009E704 = func_80030EB4(primary, D_8009E704);
@@ -128,7 +128,7 @@ void func_80035040(void) {
     func_80032280(ptr);
 
     if (g_GrandPrixMode == 1) {
-        ptr = &D_801F1854;
+        ptr = g_Cars;
         func_8002C168(ptr);
         func_80032280(ptr);
     }

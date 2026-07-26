@@ -13,7 +13,7 @@ void func_8002BE18(u8 *arg0) {
     s32 value;
     s16 index;
 
-    value = ((D_8019CAB4 - D_8019C798) * 10000) / *(s16 *)(g_CarSpec + 0x100);
+    value = ((D_8019CAB4 - D_8019C798) * 10000) / g_CarSpec->revLimit;
     D_801E8A4C = 0;
 
     if (value < 0) {

@@ -89,6 +89,10 @@ are `.word` instruction counts from `asm/nonmatchings/PAL/main/*.s` (bytes = wor
 | GameCarEntry | car.h | 8 | Per-car static config: model variant, shape/texture index, enabled flag. |
 | GameCarRuntime | car.h | 0x19C | Per-car runtime physics/AI state. 11-entry array at `D_801F1854`. |
 | GameCarRuntimeProgressWindow | car.h | 0x19C | Alternate 0x19C-stride window (field_6C / activeFlag) onto the car array. |
+| GameCarDrive | car.h | 0xA8 | Drivetrain / input block at `car->field_BC`: pedals, gear, shift and launch state. |
+| GameCarAiBlock | car.h | 0xE0 | A second, halfword-wide view of the same block used by the traffic-avoidance / grid-seed code (see 3b). |
+| GameCarSpec | car.h | >=0x15C | The loaded car's spec block behind `g_CarSpec`: gear tables, rev limits, tachometer geometry. |
+| GameCarSpecShiftPoint | car.h | 4 | One automatic-gearbox shift point, `spec->shiftPoints[gear - 1]`. |
 | GameCarTrackAngleWindow | car.h | 0x19C | Alternate 0x19C-stride window (trackPointIndex / headingAngle). |
 | GameRenderAxisMatrix | render.h | 0x12 | `s16 m[3][3]` orientation matrix. |
 | GameScratchpadRenderState | render.h | ~0x7C | Scratchpad (0x1F800000) render state: prim ptr, depth, Matrix, ordering/mode, clip rect. |
@@ -101,6 +105,10 @@ are `.word` instruction counts from `asm/nonmatchings/PAL/main/*.s` (bytes = wor
 | EffectVoice | sound.h | 0x14 | Effect voice (note/tone/state/pitch/volume). Array at `D_801E6D30[4]` (HW voices 10..13). |
 | GameScoreRecord | menu.h | 4 | Menu score record: value + count. |
 | GameSaveHeaderRow | memcard.h | 0x80 | Memory-card save-file header row: name, save counter, checksum. |
+| GameSaveBlock | memcard.h | 0x1000 | The whole memory-card payload (documentation only, see 3b). |
+| GameImageBlock | asset.h | var | Self-describing VRAM upload record: size + rect + pixels. |
+| GameSpriteDesc | render.h | 0x14 | Pre-baked SPRT description at `D_8007DAE0`. |
+| GameShuttleScenery | track.h | 0x34 | Shuttle scenery prop state, `D_801E4FB8[2]`. |
 | GameTrackPoint | track.h | 0x18 | Track centerline point: x/z/y, angle, segmentLength. Array at `D_8009E688`. |
 | TrackWaypointSeed | waypoint.h | 0xC | Waypoint seed: origin + step. |
 | TrackWaypointRuntime | waypoint.h | 0x38 | Waypoint runtime: position/velocity/scale/magnitude. |
@@ -124,6 +132,12 @@ are `.word` instruction counts from `asm/nonmatchings/PAL/main/*.s` (bytes = wor
 | StRingClearRecord | cd.h | 0x20 | Stream ring clear record (s32 value). |
 | CdSearchDirEntry | cd.h | ~0x2C | Directory search entry (type + name[0x24]). |
 | Rect | gpu.h | 8 | x/y/w/h. |
+| P_TAG | gpu.h | 8 | Primitive tag + packed rgb/code word shared by every packet below. |
+| POLY_F3 / POLY_F4 | gpu.h | 0x14 / 0x18 | Flat triangle / quad. |
+| POLY_FT4 | gpu.h | 0x28 | Textured quad. |
+| SPRT | gpu.h | 0x14 | Textured sprite. |
+| TILE | gpu.h | 0x10 | Solid rectangle. |
+| LINE_F2 / LINE_F3 / LINE_G2 | gpu.h | 0x10 / 0x18 / 0x14 | Flat line / 3-point polyline / gradient line. |
 | GpuRectPacked | gpu.h | 8 | Packed xy + w/h. |
 | GpuTexWindow | gpu.h | 8 | Texture window x/y/w/h. |
 | DispEnv | gpu.h | ~0x14 | Display environment (disp/screen rects, interlace/rgb24). |
@@ -159,7 +173,10 @@ Landing status into headers is recorded in the change note at the end of this fi
 
 | Address | Symbol | What it is |
 |---|---|---|
-| 0x801F1854 | `D_801F1854` | `GameCarRuntime[11]`, stride 0x19C. `car[0]`=0x801F1854, `car[1]`=`D_801F19F0`, … (see car.h). |
+| 0x801F1854 | `g_Cars` (`D_801F1854`) | `GameCarRuntime[11]`, stride 0x19C. `car[0]`=0x801F1854, `car[1]`=`D_801F19F0`, … (see car.h). Individual *fields* also have split symbols (`D_801F18BC` = `g_Cars[0].field_68`, `D_801F18C4` = `.trackProgress`, `D_801F198C/8E` = `.field_138/13A`), which is why some walkers still use them. |
+| 0x801E40BC | `g_RankedCars` (`D_801E40BC`) | `GameCarRuntime *[4]`, cars sorted by race progress, leader first (car.h). |
+| 0x801E4FB8 | `g_ShuttleScenery` (`D_801E4FB8`) | `GameShuttleScenery[2]`; instance 1's fields also split as `D_801E4FEC..D_801E5014` (track.h). |
+| 0x801E4FAC | `g_RaceProgress` (`D_801E4FAC`) | `GameRaceProgress *` into one of three save slots (`&D_801E4094`, `&D_801E6E7C`, `&D_8019C980`); see race.h. |
 | 0x801E6D00 | `D_801E6D00` | Sound work area: `MusicChannel[2]`@6D00, `EffectVoice[4]`@6D30, scalar control block (reverb depth / vol scale / flags)@6D80. Contiguous through 0x801E6DA8 (see sound.h). |
 | 0x801E6CA4 | `D_801E6CA4` | `SoundScale` volume-scale table (`.scale` + `.values[3]`). |
 | 0x801E79CC | `D_801E79CC` | libsnd `SeqStruct[]` sequence-state table, stride 0xAC (see snd.h / sequence.h). |
@@ -220,7 +237,7 @@ Second naming pass (race / car / menu / CD state, all still byte-neutral):
 | 0x801E4150 | `g_TrackEventData` | track.h | Base of the course's event/marker block, installed by func_80034E04 (which logs `"event ok"`). `*(s32 *)` is the walk start index; func_80038FF0 reads 8-entry 0x40-byte marker rows at `+ g_RaceSeries * 576 + 0x474`. |
 | 0x801E40D4 | `g_PlayerCarIndex` | car.h | Index into `g_CarTable` of the car the player drives; selects the model/texture pack to install. |
 | 0x801E4B88 | `g_CarListCursor` | car.h | Cursor of the car list being browsed in the shop; buying sets `enabled` then copies it into `g_PlayerCarIndex`. |
-| 0x801E42D8 | `g_CarSpec` | car.h | The loaded car's spec block (`func_80034DF4` is just `g_CarSpec = arg0;`): +0x100 rev limit, +0x104 upshift speed, +0x106 redline, +0x10A timer, +0x140/2 tacho origin, gear tables. |
+| 0x801E42D8 | `g_CarSpec` | car.h | The loaded car's spec block (`func_80034DF4` is just `g_CarSpec = arg0;`), now typed as `GameCarSpec *`: rev limit / top gear / redline / steer response, the per-gear ratio and shift-point tables, and the tachometer geometry. |
 | 0x8019C9F8 | `g_MenuScreen` | menu.h | Menu-mode screen id; see section 3a for the id -> screen map. |
 | 0x80082EB8 | `g_MenuScreenUpdate[]` | menu.h | The per-screen state-machine table `func_8005ACA0` dispatches with `g_MenuScreen`. |
 | 0x80082EF0 | `g_MenuScreenDraw[]` | menu.h | The parallel fade/overlay table, dispatched with `g_MenuHandlerIndex` / `g_MenuHandlerIndex2`. |
@@ -360,6 +377,183 @@ in `D_80082EF0`: `func_800496F0` (called unconditionally by func_8005ACA0 every
 frame), `func_8004CF30` (brightness overlay used by ids 1/3/4/5), `func_800509C4`
 (counter in `D_8007FB4C`) and `func_80052158` (primitive shared by the id 5/11/12
 draw halves).
+
+---
+
+## 3b. Typing pass: raw offsets replaced by real structs
+
+A dedicated pass replaced `*(s32 *)(base + 0xNN)` byte arithmetic with real
+struct types across the MAIN tree. Every step was validated by rebuilding: a
+wrong offset, width or signedness changes the emitted load, so `make check
+VERSION=PAL` printing `main.exe: OK` (sha1
+`2913e15648eddef40821c5f666460abc04155ee6`) is a hard test of the layout.
+
+Raw-offset dereferences in `src/main/PAL/{main,lib}`:
+
+| metric | before | after |
+|---|---:|---:|
+| all `*(T *)(...)` casts | 961 | 647 |
+| the `*(T *)(base +/- 0xNN)` form specifically | 554 | 293 |
+
+### Structs completed or newly defined
+
+| Struct | Header | Size | What it is |
+|---|---|---:|---|
+| `g_Cars` | car.h | `GameCarRuntime[11]` | `D_801F1854` finally has one canonical declaration and a name. It had been declared four incompatible ways (`Arr412`, `GameCarRuntime`, `s32`, `u8`), which is exactly why the earlier naming pass could not name it. `Arr412` (0x19C, `f120`) was folded into `GameCarRuntime.field_78`. |
+| `g_RankedCars` | car.h | `GameCarRuntime *[4]` | `D_801E40BC`: the four contenders sorted by race progress (`field_68 + field_6C`), rewritten every frame by func_8003A728 and read by func_8003A974 to rubber-band the AI. Slots 1..3 also carry their own split symbols `D_801E40C0/C4/C8`. |
+| `GameCarSpec` | car.h | >= 0x15C | The car spec block behind `g_CarSpec` (`D_801E42D8`), previously a bare `u8 *` read by raw offset in 10 files: `gearLoad[6]`@0xCC, `gearRatio[7]`@0xE4 (both indexed by 1-based gear), `revLimit`@0x100, `unk102`, `topGear`@0x104, `redline`@0x106, `steerResponse`@0x10A, `unk10C/10E/110/112`, `shiftPoints[6]`@0x120 (`{downshiftSpeed, upshiftSpeed}` per gear), `tachoNeedleX/Y`@0x138/13A, `tachoFaceDX/DY`@0x13C/13E, `tachoDigitsX/Y`@0x140/142, `needleQuad[4]`@0x14C, `needleAngleMin/Max`@0x150/152, `needleColor[4]`@0x154, `needleColorAlt[4]`@0x158. |
+| `GameCarDrive` | car.h | 0xA8 | The drivetrain/input block at `car->field_BC`, promoted out of func_8002DEFC's local `CarDrive` and extended (`unk42/unk44`, `unk6C..unk72`, `unk84/unk88`, `unk9C/unk9E`) so func_80030814 and func_8002F690 could adopt it too. |
+| `GameCarAiBlock` | car.h | 0xE0 | A **second, irreconcilable** view of that same block: func_8003A280 and func_800385FC load 0x104..0x134 as halfwords where `GameCarDrive` declares words. Both views reproduce their own translation unit, so both are kept and cross-referenced. |
+| `GameShuttleScenery` | track.h | 0x34 | `D_801E4FB8[2]`, previously three mutually incompatible local typedefs (`Unk3F0F8State`, `Unk3F2A4`, plain `u8[]`): `dwellCounter`, `travelStep`, `startEndpoint`, `pathIndex`, `x/y/z`@0x10, `angleX/Y/Z`@0x20. Confirms the layout the header comment had only described in prose. |
+| `g_RaceProgress` | race.h | `GameRaceProgress *` | `D_801E4FAC` named, and the three incompatible declarations (`GameRaceProgress *`, `s32 *`, `u8 *`, plus a local `RaceProg`) unified. The struct's field names were corrected from the code that reads them: `state`→`course`, `pad4`→`carIndex`, `lap`→`classIndex`, `progression`→`maxClassReached`, `elapsedTime`→`unk10` (the last is mode-overloaded: elapsed time in Grand Prix, `g_GrandPrixSeries` in Time Attack). |
+| `GameSaveBlock` | memcard.h | 0x1000 | The complete memory-card payload, reconstructed from func_8005F88C and GameLoadSaveStateBlock and verified to add up to exactly 0x1000 with the checksum at +0xFFC. Documentation only — see the revert list below. |
+| `GameImageBlock` | asset.h | var | The self-describing VRAM upload record func_8001A3C0 chains and func_8001A2E0 uploads: `size`, `x/y/w/h`, `pixels[]`. |
+| `GameSpriteDesc` | render.h | 0x14 | The ready-made SPRT description at `D_8007DAE0` that func_80032BD0 fills from the car spec's tacho fields and func_80032FF0 expands into a real SPRT. |
+| `P_TAG`, `POLY_F3`, `POLY_F4`, `POLY_FT4`, `SPRT`, `TILE`, `LINE_F2`, `LINE_F3`, `LINE_G2` | psyq/gpu.h | 0x10..0x28 | The libgpu primitive packets in their PSY-Q layout. `func_800468FC.c` (the game's whole 2D drawing layer: `GameDrawSprite`, `GameDrawFlatTriangle`, `GameDrawFlatQuad`, `GameDrawTexturedQuad`, `GameDrawSolidRect`, `GameDrawLine`, `GameDrawPolyLine3`, `GameDrawGradientLine`) went from 47 raw offsets to zero, and every `prim += 0x14` became `prim++`. |
+
+Structs that already existed and were merely applied for the first time:
+`GameSceneAssetHeader` (func_80018FC4's 21 sub-block lookups, via an
+`ASSET_SUB(base, k)` macro), `GameCarModelAsset` (func_80018A70 /
+func_80018530), `GameTrackPoint` (func_8002BF68), `MusicChannel` /
+`EffectVoice` (GameResetSoundState, GameInitEffectVoiceRuntime,
+GameForceBasicEffectVoicesEnabled, func_8005C6C0), `DrawPacket`
+(SetTexWindow.c's four packet builders), `GameCarRuntime` (func_80037808's
+func_800383A8 / func_800385FC, 70 offsets).
+
+### The gcc 2.6.3 rule that decides whether a struct can be applied
+
+gcc 2.6.3's `true_dependence` treats a `MEM` tagged `MEM_IN_STRUCT_P` and a
+plain scalar `MEM` as **guaranteed not to alias**. A struct-member access and a
+plain global therefore stop constraining each other's order the moment the raw
+cast becomes `p->field`, and the compiler starts hoisting global loads out of
+loops or ahead of stores — costing extra callee-saved registers and breaking the
+match. This is the single reason every revert below happened, and the reason
+some conversions had to keep one or two accesses raw.
+
+The corollary is a cheap trick that *does* work: addressing a field through
+another symbol at a fixed offset (`&D_801E6D00[0].mode + offset` instead of
+`D_801E6D08 + offset`) changes only the relocation's displacement, and the
+linker resolves it to the identical instruction word as long as the two symbols
+share a `%hi`. The unlinked `.o` diff shows `sw v,8(at)` where retail has
+`sw v,0(at)`, and `make check` still passes.
+
+### Reverted, and why
+
+- **`GameSaveBlock` applied to func_8005F88C and GameLoadSaveStateBlock.** Both
+  functions are nothing but a flat copy between the block and ~30 plain globals.
+  As struct members, gcc hoists every global load to the top of the function
+  (+3 saved registers in the writer, +2 in the reader). The struct is kept in
+  `memcard.h` as the verified layout and both functions' comments point at it,
+  but the bodies stay on raw offsets. Secondary reason on the reader side: its
+  body needs a `u8 *` parameter and the header's prototype is `void *`, which
+  gcc 2.6.3 reports as `conflicting types` (and still leaves a usable `.o`).
+- **`GameCarSpec` applied to func_80032BD0.** Same aliasing rule: the function
+  interleaves spec loads with stores to the `D_8019C7Dx` globals, and member
+  reads let gcc reorder the two groups. Reverted to `u8 *data = (u8 *)g_CarSpec`
+  with the offsets named in a comment.
+- **`GameCarAiBlock` in func_8003A280's inner loop.** Three accesses
+  (`field_104`, `field_10C`) had to stay raw casts behind file-local
+  `AVOID_BLOCKED` / `AVOID_NEARBY` macros, because as struct members they let
+  gcc hoist the `D_8009E778` load out of the loop. The other ten accesses in the
+  function convert fine.
+- **`TrackWaypointRuntime` in func_80037860.** Retail keeps a second induction
+  variable biased to `&waypoint->velocityMagnitude` and addresses the velocity
+  block at negative displacements off it. Written as `waypoint->field` the
+  second iv disappears and every store re-bases; 24 accesses stay raw with an
+  offset->field map in a comment.
+- **`GameCarSpec`'s colour fields in func_8003351C, and `GameCarRuntime` in
+  func_8003A728 / func_8003A280 / func_80038FF0.** Same class of problem from
+  the other direction: retail addresses these off a *biased* base register
+  (`spec + 0x138`, `&g_Cars[0].field_A4`) or through a field's own split symbol
+  (`D_801F18BC`, `D_801F198C`), so the displacement the struct member would
+  produce is not the one retail emits. In each case the base expression was
+  rewritten to name the struct field it points at (`(u8 *)&g_Cars[0].field_A4`,
+  `(u8 *)&p->tachoNeedleX`) and the offsets from there are commented, which is
+  as far as this can go without changing bytes.
+- **`func_8003591C` left entirely raw.** `route + i*4 + 0xAC / 0xC0 / 0xC4` are
+  per-lap arrays inside the drive block whose element counts and relationship
+  are not established (0xC0 and 0xC4 overlap when indexed the way the code
+  indexes them), and every access is deliberately written through an explicit
+  offset temporary to force the match. Typing it would mean inventing a layout.
+- **libsnd (`SsSetTableSize`, `SsUtPitchBend`, `SpuVmSetSeqVol`) and
+  func_8003E464 / func_8003EBCC / func_8003F700 left raw.** These walk `SeqStruct`
+  and hardware voice work areas through doubly-indirected pinned registers
+  (`*(s32 *)(offset + (s32)*slot + 0x90)`); the data's meaning is not settled
+  enough to name fields honestly.
+
+### Still on raw offsets, by size
+
+`func_8003591C` (46), `GameLoadSaveStateBlock` (42), `func_80037808` (39, the
+waypoint tail plus the handful of width casts), `func_8005F88C` (33),
+`func_80048078` (27), `func_80038FF0` (24), `func_8003F700` (20),
+`func_80074D1C` (18), `func_8003351C` (18), `func_80046600` (16),
+`SsUtPitchBend` / `SsSetTableSize` (16 each), `func_8003F0F8` (12, static
+position tables), `func_8003E464` (12), `SpuVmSetSeqVol` (12).
+
+Down from a "before" list where seven files were over 30 and `func_80037808`
+alone held 101.
+
+---
+
+### Detail moved out of the headers
+
+The headers were carrying long investigation write-ups; those were compressed to
+1-3 lines per declaration plus a per-field one-liner inside each struct. What is
+not already recorded elsewhere in this file:
+
+**Boot / frame spine (was in `state.h`).** The crt0 entry stub at `0x800630B4`
+calls `GameMainLoop` (`func_80016510`), which runs the one-shot init chain
+(`GameInitSubsystems`, `func_80018038`, …) and then never returns: an endless
+per-frame loop that ticks CD audio, the sequencer and the pending asset loads,
+dispatches the current screen through `g_GameModeHandlers` (indexed by
+`D_801E42E4`), waits on VSync, swaps the display env and finally calls
+`GameUpdatePadState`. The frontend (`func_8001BB58`) and the 3D scene
+(`func_80026AE0`) are two entries of that table, which is why they are mutually
+exclusive per frame.
+
+**Pad button mapping (was in `state.h`).** `GameLoadPadButtonMapping` copies one
+8-entry row of button bitmasks out of `D_8007C0A8` and one out of `D_8007C128`
+into `D_801E4B60` / `D_801E4B70`; `GameApplyPadButtonMapping` re-applies it from
+the two saved selections. The controller-config and NeGcon calibration screens
+are `g_GameModeHandlers` entries 7..11, identified by the strings they draw:
+`"INSERT CONTROLLER"`, `"CONTROLLER ERROR"`, `"Hold the \"NeGcon\" in an
+untwisted position and press start button."`, `"Steer play."`, `"Maximum twist."`.
+
+**Frontend sub-state machine (was in `screens.h`).** `GameUpdateFrontend`
+(`func_8001BB58`) is `g_GameModeHandlers` slot 4 and runs one of four handlers
+each frame through the 4-entry jump table at `D_8007C748`, indexed by the
+frontend sub-state `D_8009F098`:
+
+| `D_8009F098` | handler | hand-off |
+|---:|---|---|
+| 0 | `GameUpdateTitleScreen` | waits for Start (`g_PadEdge2 & 0x800`) |
+| 1 | `GameUpdateMainMenuOpen` | 48-frame row wipe-in (`D_801E6F1C` to 0x30) |
+| 2 | `GameUpdateMainMenuInput` | cursor `% 5` skipping the locked entry 1; move plays cue 1, confirm cue 2, reseeds the opponent order (`func_8001B488`) |
+| 3 | `GameUpdateMainMenuExit` | fades out over 0x81 frames (`func_80033AA0(2*t, 0x59)`), then requests scene 6 / 0x1F (race), 0x19 (SAVE&LOAD) or 0x16 (OPTION) |
+
+All four end by calling `GameDrawMainMenuRows` or `GameDrawPressStartPrompt`, so
+the visible frontend is always drawn by whichever state is active. The prompt is
+a 112x16 cell (tpage code `0x7E84`, uv `0x70,0xA0`) at `(0x68, 0xC8)` whose
+brightness comes from `func_80068568(g_AnimTimer * 96)`; the rows are the same
+page at `x = 0x68`, `y = 0x64 + 0x18*row`, uv `(0, 0xA0 + 0x10*entry)`, with each
+row's wipe height `D_801E6F1C - 8*row` clamped to `0..0x10`.
+
+**`g_AssetPaths[0..9]` (was in `asset.h`).** `LOGO.TMS`, `TITLE.TMS`, `RG3.VH`,
+`RG3.VB`, `RES.DAT`, `CAR.TMS`, `SAVE.TMS`, `SELBGM.BIN`, `SELECT.BIN`,
+`OPTION.BIN`. `[10..73]` are `CAR_xx.1ST` / `CAR_xx.2ND` (32 car models in two
+halves), `[74..85]` `GP0..GP11.TMS`, `[86]` `VOICE.BIN`, `[87..134]` the track
+packs. `func_80017BD4` logs each load as `"Now Loading [%s]->[0x%08x] ..."`.
+
+**Sound work-area provenance (was in `sound.h`).** The 0x801E6D00 layout was
+reconstructed from the retail disassembly (base loaded as `lui rX,0x801e` plus a
+decimal offset from 27904) and cross-checked against every C file that casts
+these symbols. Retired symbol equivalences: `D_801E6D08 ==
+D_801E6D00[0].mode`, `D_801E6D18 == D_801E6D00[1].left`, `D_801E6D38/3C/40 ==
+D_801E6D30[0].state/pitch/volume`, `D_801E6D44/58/6C == D_801E6D30[1..3].note`.
+
+**`g_SceneTimer` signedness (was in `state.h`).** Four translation units need an
+unsigned load and carry their own `extern u32 g_SceneTimer asm("D_801E40B8");`,
+so the name is identical everywhere while the load stays `sltiu`.
 
 ---
 

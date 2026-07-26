@@ -42,7 +42,6 @@ void func_80018410(void);
 extern u32 D_8009E870;
 extern u32 D_801E4030;
 extern u8 D_801F18CC[];
-extern GameCarRuntime D_801F1854[];
 extern UnkEventPair D_8007D74C[];
 void func_80026F68(void);
 void func_80026DE4(void);
@@ -277,7 +276,7 @@ void func_80026F9C(void) {
 
         func_80019EFC(*(s16 *)&D_801F18CC[(((((D_8009E66C * 3) * 4) + D_8009E66C) * 8) - D_8009E66C) * 4]);
 
-        func_80043BCC(D_8009E870, &D_801F1854[D_8009E66C]);
+        func_80043BCC(D_8009E870, &g_Cars[D_8009E66C]);
         func_80045CD4();
     }
 

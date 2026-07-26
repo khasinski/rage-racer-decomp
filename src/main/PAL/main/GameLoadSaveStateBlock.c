@@ -55,6 +55,16 @@ void func_80013F80(s32 a, s32 b);
 void func_80021224(void);
 void func_80065B24(void *rect, void *data);
 
+/*
+ * Verifies the memory-card payload's checksum and scatters it back into the
+ * live globals. The layout is GameSaveBlock in game/memcard.h - the offsets
+ * below are its fields - but the block is read with raw offsets on purpose:
+ * as GameSaveBlock member reads, gcc 2.6.3 stops treating them as aliasing the
+ * plain global stores they feed and hoists every load ahead of the stores,
+ * which costs two extra callee-saved registers and does not match retail.
+ * (That is also why the header is not included here: its prototype takes a
+ * void *, and gcc 2.6.3 rejects the u8 * signature this body needs.)
+ */
 s32 GameLoadSaveStateBlock(u8 *arg0) asm("func_8005FED4");
 s32 GameLoadSaveStateBlock(u8 *arg0) {
     register u8 *base asm("$17") = arg0;

@@ -1,21 +1,15 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/track.h"
 
-typedef struct {
-    s32 field_00;
-    s32 pad04;
-    s32 field_08;
-    s16 field_0C;
-    s16 field_0E;
-    s32 vec0[4];
-    s32 field_20;
-    s32 field_24;
-    s32 field_28;
-    s32 pad2C;
-    s32 pad30;
-} Unk3F0F8State;
-
-extern Unk3F0F8State D_801E4FB8;
+/*
+ * g_ShuttleScenery[1]'s fields, which retail reaches through their own split
+ * symbols rather than by indexing the array:
+ *   D_801E4FEC = dwellCounter   D_801E4FF4 = travelStep
+ *   D_801E4FF8 = startEndpoint  D_801E4FFA = pathIndex
+ *   D_801E4FFC..D_801E5008 = x/y/z/unk1C
+ *   D_801E500C = angleX  D_801E5010 = angleY  D_801E5014 = angleZ
+ */
 extern s32 D_801E4FEC;
 extern s32 D_801E4FF4;
 extern s16 D_801E4FF8;
@@ -35,7 +29,7 @@ extern s16 D_8007E3E0[];
 void GameInitShuttleScenery(void) asm("func_8003F0F8");
 
 void GameInitShuttleScenery(void) {
-    register Unk3F0F8State *state asm("$7");
+    register GameShuttleScenery *state asm("$7");
     register s32 *src asm("$5");
     register s32 *dst asm("$4");
     register s32 index asm("$4");
@@ -45,7 +39,7 @@ void GameInitShuttleScenery(void) {
     register s32 a5 asm("$5");
     register s32 a6 asm("$6");
 
-    state = &D_801E4FB8;
+    state = &g_ShuttleScenery[0];
     if ((g_CourseIndex & 3) == 2) {
         D_801E4FFA = 2;
         asm("" ::: "memory");
@@ -72,46 +66,46 @@ void GameInitShuttleScenery(void) {
         D_801E4FF4 = 0;
         D_801E5014 = value;
         v1 = *(s16 *)((s32)D_8007E3E0 + index);
-        state->field_0E = 1;
+        state->pathIndex = 1;
         D_801E4FEC = v1;
         asm(".globl func_8003F1D0\nfunc_8003F1D0 = func_8003F0F8 + 0xD8");
         goto updateState;
     }
 
-    state->field_0E = 0;
+    state->pathIndex = 0;
 updateState:
     asm("" ::: "memory");
     asm("" : "=r"(state) : "0"(state));
-    value = state->field_0E;
+    value = state->pathIndex;
     value <<= 5;
     v1 = *(s32 *)((s32)D_8007E360 + value);
     a4 = *(s32 *)((s32)D_8007E360 + value + 4);
     a5 = *(s32 *)((s32)D_8007E360 + value + 8);
     a6 = *(s32 *)((s32)D_8007E360 + value + 12);
-    *(s32 *)((s32)state + 0x10) = v1;
-    *(s32 *)((s32)state + 0x14) = a4;
-    *(s32 *)((s32)state + 0x18) = a5;
-    *(s32 *)((s32)state + 0x1C) = a6;
+    state->x = v1;
+    state->y = a4;
+    state->z = a5;
+    state->unk1C = a6;
     asm("" ::: "memory");
-    value = state->field_0E;
+    value = state->pathIndex;
     value <<= 3;
     v1 = *(s16 *)((s32)D_8007E3C0 + value);
     asm("" ::: "memory");
-    value = state->field_0E;
+    value = state->pathIndex;
     value <<= 3;
-    *(s32 *)((s32)state + 0x20) = v1;
+    state->angleX = v1;
     v1 = *(s16 *)((s32)D_8007E3C0 + value + 2);
     asm("" ::: "memory");
-    value = state->field_0E;
+    value = state->pathIndex;
     value <<= 3;
-    *(s32 *)((s32)state + 0x24) = v1;
+    state->angleY = v1;
     v1 = *(s16 *)((s32)D_8007E3C0 + value + 4);
     asm("" ::: "memory");
-    value = state->field_0E;
-    *(s16 *)((s32)state + 0x0C) = 0;
-    *(s32 *)((s32)state + 0x08) = 0;
+    value = state->pathIndex;
+    state->startEndpoint = 0;
+    state->travelStep = 0;
     value <<= 1;
-    *(s32 *)((s32)state + 0x28) = v1;
+    state->angleZ = v1;
     value = *(s16 *)((s32)D_8007E3E0 + value);
-    *(s32 *)((s32)state + 0x00) = value;
+    state->dwellCounter = value;
 }

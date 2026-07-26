@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/memcard.h"
 
 extern u16 D_8019CE08;
 extern u16 D_8019CB08;
@@ -44,6 +45,13 @@ extern s32 D_801E6C70;
 extern u8 D_801E42EC[];
 extern u8 D_8009E874[];
 
+/*
+ * Serialises every live global into the 0x1000-byte memory-card payload. The
+ * field layout is GameSaveBlock (game/memcard.h), but the block is addressed
+ * with raw offsets on purpose: as GameSaveBlock member stores, gcc 2.6.3 stops
+ * treating them as aliasing the plain global loads that feed them and hoists
+ * every load to the top of the function, which retail does not do.
+ */
 void func_8005F88C(u8 *arg0) {
     {
         u16 h0 = D_8019CE08;

@@ -2,12 +2,7 @@
 #include "game/state.h"
 #include "game/render.h"
 #include "game/menu.h"
-
-typedef struct {
-    u8 _a[120];
-    s16 f120;
-    u8 _b[290];
-} Arr412;
+#include "game/car.h"
 
 extern s32 D_801E4B84;
 extern s32 D_8007D6B0;
@@ -28,7 +23,6 @@ extern s32 D_801E412C;
 extern s32 D_801E4030;
 extern s32 D_8009E66C;
 extern s32 D_8009E870;
-extern Arr412 D_801F1854[];
 void func_80042BC0();
 void func_80042BF0();
 void func_80025E54();
@@ -218,8 +212,8 @@ L48c:
     g_AnimTimer = g_AnimTimer + 1;
     D_8009E66C = func_8001A0E4(0xff, D_8009E66C);
     func_8003BB50();
-    func_80019EFC(D_801F1854[D_8009E66C].f120);
-    func_80043BCC(D_8009E870, &D_801F1854[D_8009E66C]);
+    func_80019EFC(g_Cars[D_8009E66C].field_78);
+    func_80043BCC(D_8009E870, &g_Cars[D_8009E66C]);
     func_800389F0();
     func_80045CD4();
     func_800418D4();

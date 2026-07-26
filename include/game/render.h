@@ -4,6 +4,22 @@
 #include "common.h"
 #include "psyq/gte.h"
 
+/* A ready-made SPRT description; func_80032FF0 expands it into a scratchpad
+ * SPRT. D_8007DAE0 is the one instance. */
+typedef struct GameSpriteDesc {
+    u16 x;
+    u16 y;
+    u16 w;
+    u16 h;
+    u8 u0;
+    u8 pad9;
+    u8 v0;
+    u8 padB;
+    u16 clut;
+    u8 padE[2];
+    s32 semiTrans;
+} GameSpriteDesc;
+
 typedef struct GameRenderAxisMatrix {
     s16 m[3][3];
 } GameRenderAxisMatrix;

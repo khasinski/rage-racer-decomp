@@ -322,6 +322,14 @@ s32 func_8003591C(void *arg0, s32 arg1) {
        this unevaluated seven-argument call shape. It emits no instructions. */
     if (0) func_8001674C((char *)0, 0, 0, 0, 0, 0, 0);
 
+    /*
+     * `route` is the car's drive block (GameCarDrive in game/car.h) but this
+     * function reaches past the part that struct describes: `route + i*4 +
+     * 0xAC / 0xC0 / 0xC4` are per-lap arrays whose element counts are not yet
+     * known, and every access here is written as an explicit offset temporary
+     * because that is what reproduces retail's address arithmetic. Left raw on
+     * purpose; see the note in docs/names.md.
+     */
     route = (u8 *)arg0 + 0xBC;
     if (*(s16 *)((u8 *)arg0 + 0x168) > 0) {
         if (D_801E4364 >= *(s16 *)((u8 *)arg0 + 0x168)) {

@@ -51,23 +51,23 @@ void func_80018A70(s32 arg0) {
         if (func_80017C78(temp, ptr) != 0) {
             func_80017B94(ptr, D_8009E87C < 1);
 
-            temp = *(s32 *)(ptr + 0x20);
+            temp = ((GameCarModelAsset *)ptr)->modelDataOffset;
             flag = D_8009E87C < 1;
             temp = (s32)ptr + temp;
-            *(s32 *)(ptr + 0x20) = temp;
+            ((GameCarModelAsset *)ptr)->modelDataOffset = temp;
             func_80017948((void *)temp, flag);
 
-            temp = *(s32 *)(ptr + 0x24);
+            temp = ((GameCarModelAsset *)ptr)->imageDataOffset;
             flag = D_8009E87C < 1;
             temp = (s32)ptr + temp;
-            *(s32 *)(ptr + 0x24) = temp;
+            ((GameCarModelAsset *)ptr)->imageDataOffset = temp;
             func_80017B44((void *)temp, flag);
 
             if (g_PlayerCarIndex < 10) {
                 entry = (GameCarEntry *)(index + (s32)g_CarTable);
-                func_8001D748(entry->shapeIndex, *(s32 *)(ptr + 0x24));
+                func_8001D748(entry->shapeIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
                 entry = (GameCarEntry *)(index + (s32)g_CarTable);
-                func_8001D900(entry->textureIndex, *(s32 *)(ptr + 0x24));
+                func_8001D900(entry->textureIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
             }
 
             g_AssetLoadState = 0;

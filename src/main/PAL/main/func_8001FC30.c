@@ -4,6 +4,7 @@
 #include "game/state.h"
 #include "game/render.h"
 #include "game/menu.h"
+#include "game/car.h"
 
 typedef struct {
     u8 left;
@@ -33,7 +34,6 @@ extern s32 D_8019CB6C;
 extern s32 D_8009EC8C;
 extern u8 D_8009E6D4;
 extern s32 D_801F179C;
-extern u8 D_801F1854;
 extern s32 D_801E4030;
 extern s16 D_8009E74C;
 void func_8005D6EC(s32 arg0);
@@ -232,7 +232,7 @@ void func_8001FD3C(void) {
         }
     }
 
-    func_8001F330(D_801F179C, &D_8009E6D4, &D_801F1854);
+    func_8001F330(D_801F179C, &D_8009E6D4, (u8 *)g_Cars);
     D_801F179C++;
     if (D_801F179C == D_8019CB6C) {
         D_801F179C = 0;

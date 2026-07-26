@@ -4,6 +4,12 @@
 #include "game/car.h"
 #include "game/race.h"
 
+/*
+ * Every `X + *(s32 *)(X + 4*k)` below is sub-block k of the loaded asset
+ * pack's GameSceneAssetHeader offset table (game/asset.h).
+ */
+#define ASSET_SUB(base, k) ((base) + ((GameSceneAssetHeader *)(base))->offsets[k])
+
 s32 GameRequestRaceStart(void) asm("func_80019580");
 
 void GameLoadGrandPrixScreen(void) asm("func_800195F4");
@@ -88,18 +94,18 @@ void func_8001901C(void) {
             register u8 *p1 asm("$5");
             register u8 *p2 asm("$6");
             base_a0 = D_8019CAFC;
-            g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 0);
+            g_AssetBlockPtr = ASSET_SUB(base_a0, 0);
             func_80034DF4();
             base_a3 = D_8019CAFC;
-            p1 = base_a3 + *(s32 *)(base_a3 + 4);
-            p2 = base_a3 + *(s32 *)(base_a3 + 12);
-            base_a3 = base_a3 + *(s32 *)(base_a3 + 8);
+            p1 = ASSET_SUB(base_a3, 1);
+            p2 = ASSET_SUB(base_a3, 3);
+            base_a3 = ASSET_SUB(base_a3, 2);
             g_AssetBlockPtr = p1;
             D_8019C754 = base_a3;
             D_801E8AB0 = p2;
             func_8005B768(3, p1, p2, base_a3);
             base_a0 = D_8019CAFC;
-            g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 16);
+            g_AssetBlockPtr = ASSET_SUB(base_a0, 4);
             func_8001A3C0(g_AssetBlockPtr);
             g_AssetLoadState = 4;
             D_8019CAFC = D_801E8AB0;
@@ -123,17 +129,17 @@ void func_8001901C(void) {
             u8 *base;
             s32 off0, off1;
             base_a0 = D_8019CAFC;
-            g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 0);
+            g_AssetBlockPtr = ASSET_SUB(base_a0, 0);
             func_8001A3C0(g_AssetBlockPtr);
             base_a0 = D_8019CAFC;
-            g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 4);
+            g_AssetBlockPtr = ASSET_SUB(base_a0, 1);
             func_8001A3C0(g_AssetBlockPtr);
             base_a0 = D_8019CAFC;
-            g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 8);
+            g_AssetBlockPtr = ASSET_SUB(base_a0, 2);
             func_8001A2E0(g_AssetBlockPtr);
             base = D_8019CAFC;
-            off0 = *(s32 *)(base + 12);
-            off1 = *(s32 *)(base + 16);
+            off0 = ((GameSceneAssetHeader *)base)->offsets[3];
+            off1 = ((GameSceneAssetHeader *)base)->offsets[4];
             g_AssetBlockPtr = base + off0;
             D_801E8AB0 = base + off1;
             func_8001A3C0(g_AssetBlockPtr);
@@ -155,17 +161,17 @@ void func_8001901C(void) {
         result = (g_GrandPrixClass << 3) + scaled;
         if (func_80017C78(result + 0x58, p) != 0) {
             register u8 *base_a0 asm("$4");
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 0); func_80017BD4(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 4); func_8004553C(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 8); func_8004550C(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 12); func_80017948(g_AssetBlockPtr, 1);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 16); func_8002A6B0(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 20); func_80017A6C(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 24); func_80017948(g_AssetBlockPtr, 2);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 28); func_80017AD0(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 32); func_8004121C(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 36); func_80034E04(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = base_a0 + *(s32 *)(base_a0 + 40); func_80043AC8(g_AssetBlockPtr, 1);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 0); func_80017BD4(g_AssetBlockPtr);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 1); func_8004553C(g_AssetBlockPtr);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 2); func_8004550C(g_AssetBlockPtr);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 3); func_80017948(g_AssetBlockPtr, 1);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 4); func_8002A6B0(g_AssetBlockPtr);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 5); func_80017A6C(g_AssetBlockPtr);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 6); func_80017948(g_AssetBlockPtr, 2);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 7); func_80017AD0(g_AssetBlockPtr);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 8); func_8004121C(g_AssetBlockPtr);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 9); func_80034E04(g_AssetBlockPtr);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 10); func_80043AC8(g_AssetBlockPtr, 1);
             g_AssetLoadState = 7;
         }
         break;

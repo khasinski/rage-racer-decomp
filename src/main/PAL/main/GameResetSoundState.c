@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
+#include "game/sound.h"
 
 extern s32 D_801E6CBC;
 extern s32 D_801E6C9C;
@@ -11,15 +12,6 @@ extern s32 D_801E6CEC;
 extern s32 D_801E6CF0;
 extern s32 D_801E6CF4;
 extern s32 D_801E6CF8;
-extern u8 D_801E6D00[];
-extern u8 D_801E6D04[];
-extern u8 D_801E6D08[];
-extern u8 D_801E6D10[];
-extern u8 D_801E6D30[];
-extern u8 D_801E6D34[];
-extern u8 D_801E6D38[];
-extern u8 D_801E6D3C[];
-extern u8 D_801E6D40[];
 
 void GameResetSoundState(void) {
     {
@@ -44,12 +36,12 @@ void GameResetSoundState(void) {
         ptr = &D_801E6C9C;
         offset = 0;
         for (; i < 2; i++) {
-            *(s32 *)(D_801E6D08 + offset) = neg;
-            *(s32 *)(D_801E6D00 + offset) = neg;
-            *(s32 *)(D_801E6D04 + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D00[0].mode + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D00[0].left + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D00[0].right + offset) = neg;
             ptr[0x78 / 4] = 0;
             ptr = (s32 *)((u8 *)ptr + 0x18);
-            *(s32 *)(D_801E6D10 + offset) = 0;
+            *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset) = 0;
             offset += 0x18;
         }
     }
@@ -65,11 +57,11 @@ void GameResetSoundState(void) {
         value = 0x1E00;
         offset = 0;
         for (; i < 4; i++) {
-            *(s32 *)(D_801E6D38 + offset) = neg;
-            *(s32 *)(D_801E6D30 + offset) = neg;
-            *(s32 *)(D_801E6D34 + offset) = neg;
-            *(s32 *)(D_801E6D3C + offset) = value;
-            *(s32 *)(D_801E6D40 + offset) = 0;
+            *(s32 *)((u8 *)&D_801E6D30[0].state + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D30[0].note + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D30[0].tone + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D30[0].pitch + offset) = value;
+            *(s32 *)((u8 *)&D_801E6D30[0].volume + offset) = 0;
             offset += 0x14;
         }
     }

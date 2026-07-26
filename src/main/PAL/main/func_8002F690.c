@@ -20,19 +20,18 @@ void func_8005C104(s32 index, s32 phase, s32 volume);
  * Car motion handler for state98 == 0 (normal driving): turns steering into a
  * world velocity, triggers over-rev / redline engine-audio cues (comparing
  * against the spec block's redline at +0x100 / +0x106), advances the car
- * (func_8002F4E4), and detects the jump/launch trigger. Route sub-block fields
- * are accessed by raw offset to stay byte-exact.
+ * (func_8002F4E4), and detects the jump/launch trigger. The drive sub-block is
+ * the GameCarDrive view of car->field_BC.
  */
 void func_8002F690(GameCarRuntime *car) {
-    GameCarRuntime *routeStruct = (GameCarRuntime *)&car->field_BC;
-    u8 *route = (u8 *)routeStruct;
+    GameCarDrive *route = (GameCarDrive *)&car->field_BC;
     s32 sinA;
     s32 cosA;
     s32 base;
     s32 r;
     s32 coords[3];
-    u8 *data1;
-    u8 *data;
+    GameCarSpec *spec1;
+    GameCarSpec *spec;
     s32 t;
     s32 idx;
 
@@ -52,18 +51,18 @@ void func_8002F690(GameCarRuntime *car) {
     car->field_C4 = sinA * coords[2] / 4096;
     car->field_CC = cosA * coords[2] / 4096;
 
-    data1 = g_CarSpec;
-    if (*(s16 *)(data1 + 0x100) + 2000 < car->field_134 && g_RacePhase >= 2) {
+    spec1 = g_CarSpec;
+    if (spec1->revLimit + 2000 < car->field_134 && g_RacePhase >= 2) {
         func_8005C104(0, 0x1800,
-                      (car->field_134 - *(s16 *)(data1 + 0x100)) / 100 + 128);
+                      (car->field_134 - spec1->revLimit) / 100 + 128);
     } else {
         func_8005C104(-1, 0, 0);
     }
 
-    data = g_CarSpec;
-    if (*(s16 *)(data + 0x106) + 1000 < *(s32 *)(route + 0x78)) {
+    spec = g_CarSpec;
+    if (spec->redline + 1000 < route->unk78) {
         s16 v = D_801F17A4;
-        if (v >= 41 && *(s16 *)(route + 0x76) == *(s16 *)(data + 0x104) &&
+        if (v >= 41 && route->gear == spec->topGear &&
             car->field_98 == 0) {
             idx = v + 24;
             if (idx >= 101) {
@@ -77,43 +76,43 @@ void func_8002F690(GameCarRuntime *car) {
         func_8005C104(-1, 0, 0);
     }
 
-    if (*(s16 *)(route + 0x9c) == 1) {
-        *(s32 *)(route + 0x48) = car->field_A4 * *(s32 *)(route + 0x44);
-        *(s32 *)(route + 0x44) = 0;
-        if ((s32) D_8007DAC0[*(s32 *)(route + 0x28)].f0 < car->field_A4 &&
-            *(s32 *)(route + 0x48) > *(s32 *)(route + 0x84)) {
-            *(s32 *)(route + 0x98) = 1;
-            *(s16 *)(route + 0x3e) = 0;
+    if (route->unk9C == 1) {
+        route->unk48 = car->field_A4 * route->unk44;
+        route->unk44 = 0;
+        if ((s32) D_8007DAC0[route->unk28].f0 < car->field_A4 &&
+            route->unk48 > route->unk84) {
+            route->state98 = 1;
+            *(s16 *)&route->unk3E = 0;
             func_8005C104(0, 0, 0);
-            t = 1000 - (*(s32 *)(route + 0x88) - 1000) * 8;
+            t = 1000 - (route->unk88 - 1000) * 8;
             if (t < 1000) {
                 t = 1000;
             }
-            *(s32 *)(route + 0x50) = -coords[0] * t / 1000 * 2;
-            *(s32 *)(route + 0x54) = car->routeRow;
+            route->unk50 = -coords[0] * t / 1000 * 2;
+            route->unk54 = car->routeRow;
         }
     } else {
-        if (*(s16 *)(route + 0xa0) < 128) {
-            s16 m9e = *(s16 *)(route + 0x9e);
+        if (route->accelBtn < 128) {
+            s16 m9e = route->unk9E;
             if (m9e == 1) {
                 s32 av = coords[0] < 0 ? -coords[0] : coords[0];
                 s32 aval = av * car->field_A4 / 64;
-                *(s32 *)(route + 0x48) = aval;
-                if ((s32) D_8007DAC0[*(s32 *)(route + 0x28)].f2 < car->field_A4 &&
-                    *(s32 *)(route + 0x84) < aval) {
-                    *(s32 *)(route + 0x98) = m9e;
-                    *(s16 *)(route + 0x3e) = 0;
+                route->unk48 = aval;
+                if ((s32) D_8007DAC0[route->unk28].f2 < car->field_A4 &&
+                    route->unk84 < aval) {
+                    route->state98 = m9e;
+                    *(s16 *)&route->unk3E = 0;
                     func_8005C104(0, 0, 0);
-                    *(s32 *)(route + 0x50) = -coords[0];
-                    *(s32 *)(route + 0x54) = car->routeRow;
+                    route->unk50 = -coords[0];
+                    route->unk54 = car->routeRow;
                 }
             } else {
-                *(s32 *)(route + 0x44) = *(s32 *)(route + 0x44) + 1;
-                *(s32 *)(route + 0x48) = 0;
+                route->unk44 = route->unk44 + 1;
+                route->unk48 = 0;
             }
         } else {
-            *(s32 *)(route + 0x44) = 0;
-            *(s32 *)(route + 0x48) = 0;
+            route->unk44 = 0;
+            route->unk48 = 0;
         }
     }
 }

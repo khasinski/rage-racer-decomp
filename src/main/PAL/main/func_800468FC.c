@@ -65,15 +65,15 @@ void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     }
 }
 
-void func_80064FA8(u8 *arg0);
-void func_80064EB8(u8 *arg0, s32 enabled);
-void func_80064E90(u8 *arg0, s32 enabled);
+void func_80064FA8(void *arg0);
+void func_80064EB8(void *arg0, s32 enabled);
+void func_80064E90(void *arg0, s32 enabled);
 void func_80064DDC(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) asm("func_80046A2C");
 void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) {
-    u8 *prim;
+    SPRT *prim;
     register s32 shadeReg asm("$18");
     register s32 semiReg asm("$19");
     register u32 flagsReg asm("$17");
@@ -92,7 +92,7 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
     s32 base;
     u32 magic;
 
-    prim = *(u8 **)0x1F800000;
+    prim = *(SPRT **)0x1F800000;
     shadeReg = shadeTex;
     semiReg = semiTrans;
     asm("" : : "r"(prim), "r"(shadeReg), "r"(semiReg));
@@ -115,15 +115,15 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
     func_80064EB8(prim, shadeReg);
     func_80064E90(prim, semiReg);
 
-    *(s16 *)(prim + 0x8) = x0Local;
-    *(s16 *)(prim + 0xA) = y0Local;
-    *(s16 *)(prim + 0x10) = x1Local;
-    *(s16 *)(prim + 0x12) = y1Reg;
-    prim[0xC] = u0Reg;
-    prim[0xD] = v0Reg;
-    prim[0x4] = rReg;
-    prim[0x5] = gLocal;
-    prim[0x6] = bLocal;
+    prim->x0 = x0Local;
+    prim->y0 = y0Local;
+    prim->w = x1Local;
+    prim->h = y1Reg;
+    prim->u0 = u0Reg;
+    prim->v0 = v0Reg;
+    prim->t.r0 = rReg;
+    prim->t.g0 = gLocal;
+    prim->t.b0 = bLocal;
 
     asm("" : "=r"(clutReg) : "0"(clutReg));
     magic = 0xCCCCCCCD;
@@ -131,10 +131,10 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
     clutReg &= 0xFFFF;
     div = clutReg / 20U;
     base = (div + 0x1E0) << 6;
-    *(s16 *)(prim + 0xE) = base + (clutReg - (div * 20));
+    prim->clut = base + (clutReg - (div * 20));
 
-    oldPrim = prim;
-    prim += 0x14;
+    oldPrim = (u8 *)prim;
+    prim++;
     func_80064DDC(ot, oldPrim);
 
     clutReg = flagsReg;
@@ -143,11 +143,11 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
         prim = func_80017390(ot, prim, clutReg & 0xFFFF);
     }
 
-    *(u8 **)0x1F800000 = prim;
+    *(SPRT **)0x1F800000 = prim;
 }
 
-void func_80064EE0(u8 *arg0);
-void SetSemiTrans(u8 *arg0, s32 enabled) asm("func_80064E90");
+void func_80064EE0(void *arg0);
+void SetSemiTrans(void *arg0, s32 enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("func_80046BA0");
@@ -160,10 +160,10 @@ void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 
     register s32 rReg asm("$21");
     register s32 gReg asm("$22");
     register s32 bReg asm("$23");
-    u8 *prim;
+    POLY_F3 *prim;
     u8 *oldPrim;
 
-    prim = *(u8 **)0x1F800000;
+    prim = *(POLY_F3 **)0x1F800000;
     semiReg = semiTrans;
     flagsReg = arg11;
     y1Reg = y1;
@@ -176,18 +176,18 @@ void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 
     func_80064EE0(prim);
     SetSemiTrans(prim, semiReg);
 
-    *(s16 *)(prim + 0x8) = x0;
-    *(s16 *)(prim + 0xA) = y0;
-    *(s16 *)(prim + 0xC) = x1;
-    *(s16 *)(prim + 0xE) = y1Reg;
-    *(s16 *)(prim + 0x10) = x2Reg;
-    *(s16 *)(prim + 0x12) = y2Reg;
-    prim[0x4] = rReg;
-    prim[0x5] = gReg;
-    prim[0x6] = bReg;
+    prim->x0 = x0;
+    prim->y0 = y0;
+    prim->x1 = x1;
+    prim->y1 = y1Reg;
+    prim->x2 = x2Reg;
+    prim->y2 = y2Reg;
+    prim->t.r0 = rReg;
+    prim->t.g0 = gReg;
+    prim->t.b0 = bReg;
 
-    oldPrim = prim;
-    prim += 0x14;
+    oldPrim = (u8 *)prim;
+    prim++;
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     semiReg = flagsReg;
@@ -196,17 +196,17 @@ void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 
         prim = func_80017390(ot, prim, semiReg & 0xFFFF);
     }
 
-    *(u8 **)0x1F800000 = prim;
+    *(POLY_F3 **)0x1F800000 = prim;
 }
 
-void func_80064F30(u8 *arg0);
-void func_80064E90(u8 *arg0, s32 enabled);
+void func_80064F30(void *arg0);
+void func_80064E90(void *arg0, s32 enabled);
 void func_80064DDC(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("func_80046CBC");
 void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
-    u8 *prim;
+    POLY_F4 *prim;
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
     register s32 y1Reg asm("$18");
@@ -222,7 +222,7 @@ void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     u8 gLocal;
     u8 bLocal;
 
-    prim = *(u8 **)0x1F800000;
+    prim = *(POLY_F4 **)0x1F800000;
     semiReg = semiTrans;
     flagsReg = flags;
     y1Reg = y1;
@@ -242,20 +242,20 @@ void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     func_80064F30(prim);
     func_80064E90(prim, semiReg);
 
-    *(s16 *)(prim + 0x8) = x0Local;
-    *(s16 *)(prim + 0xA) = y0Local;
-    *(s16 *)(prim + 0xC) = x1Local;
-    *(s16 *)(prim + 0xE) = y1Reg;
-    *(s16 *)(prim + 0x10) = x2Reg;
-    *(s16 *)(prim + 0x12) = y2Reg;
-    *(s16 *)(prim + 0x14) = x3Reg;
-    *(s16 *)(prim + 0x16) = y3Reg;
-    prim[0x4] = rReg;
-    prim[0x5] = gLocal;
-    prim[0x6] = bLocal;
+    prim->x0 = x0Local;
+    prim->y0 = y0Local;
+    prim->x1 = x1Local;
+    prim->y1 = y1Reg;
+    prim->x2 = x2Reg;
+    prim->y2 = y2Reg;
+    prim->x3 = x3Reg;
+    prim->y3 = y3Reg;
+    prim->t.r0 = rReg;
+    prim->t.g0 = gLocal;
+    prim->t.b0 = bLocal;
 
-    oldPrim = prim;
-    prim += 0x18;
+    oldPrim = (u8 *)prim;
+    prim++;
     func_80064DDC(ot, oldPrim);
 
     semiReg = flagsReg;
@@ -264,12 +264,12 @@ void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
         prim = func_80017390(ot, prim, semiReg & 0xFFFF);
     }
 
-    *(u8 **)0x1F800000 = prim;
+    *(POLY_F4 **)0x1F800000 = prim;
 }
 
-void SetPolyFT4(u8 *prim) asm("func_80064F44");
-void SetShadeTex(u8 *prim, s32 enabled) asm("func_80064EB8");
-void SetSemiTrans(u8 *prim, s32 enabled) asm("func_80064E90");
+void SetPolyFT4(void *prim) asm("func_80064F44");
+void SetShadeTex(void *prim, s32 enabled) asm("func_80064EB8");
+void SetSemiTrans(void *prim, s32 enabled) asm("func_80064E90");
 
 /*
  * Packs a POLY_FT4 (textured quad) at the scratchpad cursor and links it into
@@ -286,7 +286,7 @@ void GameDrawTexturedQuad(s32 ot, s16 x0, s16 y0, s16 x1,
                    u8 u0, u8 v0, u8 u1, u8 v1, u8 u2, u8 v2,
                    u8 u3, u8 v3, u8 r, u8 g, u8 b,
                    u16 clutIndex, s32 shadeTex, s32 semiTrans, u16 tpage) {
-    u8 *prim = *(u8 **)0x1F800000;
+    POLY_FT4 *prim = *(POLY_FT4 **)0x1F800000;
     u32 d;
     u32 clutRow;
     u32 rem;
@@ -296,40 +296,40 @@ void GameDrawTexturedQuad(s32 ot, s16 x0, s16 y0, s16 x1,
     SetPolyFT4(prim);
     SetShadeTex(prim, shadeTex);
     SetSemiTrans(prim, semiTrans);
-    *(u16 *)(prim + 0x8) = x0;
-    *(u16 *)(prim + 0xA) = y0;
-    *(u16 *)(prim + 0x10) = x1;
-    *(u16 *)(prim + 0x12) = y1;
-    *(u16 *)(prim + 0x18) = x2;
-    *(u16 *)(prim + 0x1A) = y2;
-    *(u16 *)(prim + 0x20) = x3;
-    *(u16 *)(prim + 0x22) = y3;
-    prim[0xC] = u0;
-    prim[0xD] = v0;
-    prim[0x14] = u1;
-    prim[0x15] = v1;
-    prim[0x1C] = u2;
-    prim[0x1D] = v2;
-    prim[0x24] = u3;
-    prim[0x25] = v3;
-    prim[0x4] = r;
-    prim[0x5] = g;
-    prim[0x6] = b;
-    *(u16 *)(prim + 0x16) = tpage;
+    prim->x0 = x0;
+    prim->y0 = y0;
+    prim->x1 = x1;
+    prim->y1 = y1;
+    prim->x2 = x2;
+    prim->y2 = y2;
+    prim->x3 = x3;
+    prim->y3 = y3;
+    prim->u0 = u0;
+    prim->v0 = v0;
+    prim->u1 = u1;
+    prim->v1 = v1;
+    prim->u2 = u2;
+    prim->v2 = v2;
+    prim->u3 = u3;
+    prim->v3 = v3;
+    prim->t.r0 = r;
+    prim->t.g0 = g;
+    prim->t.b0 = b;
+    prim->tpage = tpage;
     d = clutIndex;
     clutRow = d / 20;
     clut = (clutRow + 0x1E0) << 6;
     rem = d - clutRow * 20;
     clut = clut + rem;
-    *(u16 *)(prim + 0xE) = clut;
-    oldPrim = prim;
-    prim += 0x28;
+    prim->clut = clut;
+    oldPrim = (u8 *)prim;
+    prim++;
     AddPrim((u32 *)ot, (u32 *)oldPrim);
-    *(u8 **)0x1F800000 = prim;
+    *(POLY_FT4 **)0x1F800000 = prim;
 }
 
-void func_80064FF8(u8 *arg0);
-void SetSemiTrans(u8 *arg0, s32 enabled) asm("func_80064E90");
+void func_80064FF8(void *arg0);
+void SetSemiTrans(void *arg0, s32 enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
@@ -343,10 +343,10 @@ void GameDrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 
     register s32 bReg asm("$23");
     register u8 alphaReg asm("$16");
     register u8 *a0Reg asm("$4");
-    u8 *prim;
+    TILE *prim;
     u8 *oldPrim;
 
-    prim = *(u8 **)0x1F800000;
+    prim = *(TILE **)0x1F800000;
     y1Reg = y1;
     rReg = r;
     gReg = g;
@@ -357,30 +357,30 @@ void GameDrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 
     x1Reg = x1;
 
     func_80064FF8(prim);
-    a0Reg = prim;
+    a0Reg = (u8 *)prim;
     SetSemiTrans(a0Reg, alphaReg != 0xFF);
 
-    *(s16 *)(prim + 0x8) = x0Reg;
-    *(s16 *)(prim + 0xA) = y0Reg;
-    *(s16 *)(prim + 0xC) = x1Reg;
-    *(s16 *)(prim + 0xE) = y1Reg;
-    prim[0x4] = rReg;
-    prim[0x5] = gReg;
-    prim[0x6] = bReg;
+    prim->x0 = x0Reg;
+    prim->y0 = y0Reg;
+    prim->w = x1Reg;
+    prim->h = y1Reg;
+    prim->t.r0 = rReg;
+    prim->t.g0 = gReg;
+    prim->t.b0 = bReg;
 
-    oldPrim = prim;
-    prim += 0x10;
+    oldPrim = (u8 *)prim;
+    prim++;
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     if (alphaReg != 0xFF) {
         prim = func_80017390(ot, prim, alphaReg);
     }
 
-    *(u8 **)0x1F800000 = prim;
+    *(TILE **)0x1F800000 = prim;
 }
 
-void func_8006500C(u8 *arg0);
-void SetSemiTrans(u8 *arg0, s32 enabled) asm("func_80064E90");
+void func_8006500C(void *arg0);
+void SetSemiTrans(void *arg0, s32 enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
@@ -394,10 +394,10 @@ void GameDrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8
     register s32 bReg asm("$23");
     register u8 alphaReg asm("$16");
     register u8 *a0Reg asm("$4");
-    u8 *prim;
+    LINE_F2 *prim;
     u8 *oldPrim;
 
-    prim = *(u8 **)0x1F800000;
+    prim = *(LINE_F2 **)0x1F800000;
     y1Reg = y1;
     rReg = r;
     gReg = g;
@@ -408,65 +408,65 @@ void GameDrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8
     x1Reg = x1;
 
     func_8006500C(prim);
-    a0Reg = prim;
+    a0Reg = (u8 *)prim;
     SetSemiTrans(a0Reg, alphaReg != 0xFF);
 
-    *(s16 *)(prim + 0x8) = x0Reg;
-    *(s16 *)(prim + 0xA) = y0Reg;
-    *(s16 *)(prim + 0xC) = x1Reg;
-    *(s16 *)(prim + 0xE) = y1Reg;
-    prim[0x4] = rReg;
-    prim[0x5] = gReg;
-    prim[0x6] = bReg;
+    prim->x0 = x0Reg;
+    prim->y0 = y0Reg;
+    prim->x1 = x1Reg;
+    prim->y1 = y1Reg;
+    prim->t.r0 = rReg;
+    prim->t.g0 = gReg;
+    prim->t.b0 = bReg;
 
-    oldPrim = prim;
-    prim += 0x10;
+    oldPrim = (u8 *)prim;
+    prim++;
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     if (alphaReg != 0xFF) {
         prim = func_80017390(ot, prim, alphaReg);
     }
 
-    *(u8 **)0x1F800000 = prim;
+    *(LINE_F2 **)0x1F800000 = prim;
 }
 
-void func_80065034(u8 *arg0);
-void func_80064E90(u8 *arg0, s32 enabled);
+void func_80065034(void *arg0);
+void func_80064E90(void *arg0, s32 enabled);
 void func_80064DDC(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) asm("func_80047214");
 void GameDrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
-    u8 *prim;
+    LINE_F3 *prim;
     u8 *oldPrim;
 
-    prim = *(u8 **)0x1F800000;
+    prim = *(LINE_F3 **)0x1F800000;
     func_80065034(prim);
     func_80064E90(prim, arg10 != 0xFF);
 
-    *(s16 *)(prim + 0x8) = x0;
-    *(s16 *)(prim + 0xA) = y0;
-    *(s16 *)(prim + 0xC) = x1;
-    *(s16 *)(prim + 0xE) = y1;
-    *(s16 *)(prim + 0x10) = x2;
-    *(s16 *)(prim + 0x12) = y2;
-    prim[0x4] = r;
-    prim[0x5] = g;
-    prim[0x6] = b;
+    prim->x0 = x0;
+    prim->y0 = y0;
+    prim->x1 = x1;
+    prim->y1 = y1;
+    prim->x2 = x2;
+    prim->y2 = y2;
+    prim->t.r0 = r;
+    prim->t.g0 = g;
+    prim->t.b0 = b;
 
-    oldPrim = prim;
-    prim += 0x18;
+    oldPrim = (u8 *)prim;
+    prim++;
     func_80064DDC(ot, oldPrim);
 
     if (arg10 != 0xFF) {
         prim = func_80017390(ot, prim, arg10);
     }
 
-    *(u8 **)0x1F800000 = prim;
+    *(LINE_F3 **)0x1F800000 = prim;
 }
 
-void func_80065020(u8 *arg0);
-void SetSemiTrans(u8 *arg0, s32 enabled) asm("func_80064E90");
+void func_80065020(void *arg0);
+void SetSemiTrans(void *arg0, s32 enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) asm("func_80047330");
@@ -480,13 +480,13 @@ void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0
     register s32 b0Reg asm("$23");
     register u8 alphaReg asm("$16");
     register u8 *a0Reg asm("$4");
-    u8 *prim;
+    LINE_G2 *prim;
     u8 *oldPrim;
     u8 r1Local;
     u8 g1Local;
     u8 b1Local;
 
-    prim = *(u8 **)0x1F800000;
+    prim = *(LINE_G2 **)0x1F800000;
     y1Reg = y1;
     r0Reg = r0;
     g0Reg = g0;
@@ -501,29 +501,29 @@ void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0
     b1Local = b1;
 
     func_80065020(prim);
-    a0Reg = prim;
+    a0Reg = (u8 *)prim;
     SetSemiTrans(a0Reg, alphaReg != 0xFF);
 
-    *(s16 *)(prim + 0x8) = x0Reg;
-    *(s16 *)(prim + 0xA) = y0Reg;
-    *(s16 *)(prim + 0x10) = x1Reg;
-    *(s16 *)(prim + 0x12) = y1Reg;
-    prim[0x4] = r0Reg;
-    prim[0x5] = g0Reg;
-    prim[0x6] = b0Reg;
-    prim[0xC] = r1Local;
-    prim[0xD] = g1Local;
-    prim[0xE] = b1Local;
+    prim->x0 = x0Reg;
+    prim->y0 = y0Reg;
+    prim->x1 = x1Reg;
+    prim->y1 = y1Reg;
+    prim->t.r0 = r0Reg;
+    prim->t.g0 = g0Reg;
+    prim->t.b0 = b0Reg;
+    prim->r1 = r1Local;
+    prim->g1 = g1Local;
+    prim->b1 = b1Local;
 
-    oldPrim = prim;
-    prim += 0x14;
+    oldPrim = (u8 *)prim;
+    prim++;
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     if (alphaReg != 0xFF) {
         prim = func_80017390(ot, prim, alphaReg);
     }
 
-    *(u8 **)0x1F800000 = prim;
+    *(LINE_G2 **)0x1F800000 = prim;
 }
 
 void func_8004711C(void *buf, s16 x1, s16 y1, s16 x2, s16 y2, s32 r, s32 g, s32 b, s32 code);

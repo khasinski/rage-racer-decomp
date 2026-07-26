@@ -4,7 +4,6 @@
 
 extern s32 D_8009B33C;
 extern s32 D_8019C7B8;
-extern GameRaceProgress *D_801E4FAC;
 
 s32 func_8001785C(s32 arg0);
 
@@ -44,12 +43,12 @@ loop_disabled:
             ptr = (GameCarEntry *)(offset + (s32)g_CarTable);
         }
         if (ptr->enabled == 0) {
-            if (D_801E4FAC->progression < 4) {
-                if ((D_801E4FAC->progression + 1) < value) {
+            if (g_RaceProgress->maxClassReached < 4) {
+                if ((g_RaceProgress->maxClassReached + 1) < value) {
                     index--;
                     goto loop_disabled_check;
                 }
-            } else if (D_801E4FAC->progression < value) {
+            } else if (g_RaceProgress->maxClassReached < value) {
                 index--;
                 goto loop_disabled_check;
             }

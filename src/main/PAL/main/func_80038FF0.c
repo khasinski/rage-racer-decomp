@@ -33,6 +33,12 @@ s32 func_80039184(GameCarRuntime *arg0);
  * inline mult/mfhi block is the compiler's divide idiom; keep it verbatim.
  */
 
+/*
+ * Fields of g_Cars[0] that retail reaches through their own split symbols
+ * rather than by indexing the array, so the 0x19C-stride walks below keep them
+ * raw:  D_801F18C4 = .trackProgress  D_801F198C = .field_138
+ *       D_801F198E = .field_13A
+ */
 extern u8 D_801F18C4[];
 
 extern u8 D_801F198C[];

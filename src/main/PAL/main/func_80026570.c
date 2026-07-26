@@ -47,7 +47,6 @@ void func_80042C94(void);
 extern u32 D_8009E870;
 extern u32 D_801E4030;
 extern u8 D_801F18CC[];
-extern GameCarRuntime D_801F1854[];
 void func_80033AA0(s32 arg0, u32 arg1);
 void func_80042CCC(u32 arg0);
 void func_800268EC(void);
@@ -195,7 +194,7 @@ void func_80026920(void) {
     offset = (((((index * 3) * 4) + index) * 8) - index) * 4;
     func_80019EFC(*(s16 *)&D_801F18CC[offset]);
 
-    func_80043BCC(D_8009E870, &D_801F1854[D_8009E66C]);
+    func_80043BCC(D_8009E870, &g_Cars[D_8009E66C]);
     func_800389F0();
     func_80045CD4();
     func_800418D4();

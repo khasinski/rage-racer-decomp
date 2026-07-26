@@ -21,12 +21,14 @@ u8 *func_80033B7C(u8 *prim, s32 x, s32 y, s32 code, u16 arg4);
 void func_80033C18(s32 x, s32 y, s32 value);
 
 void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
-    u8 *p = g_CarSpec;
-    s32 cx = *(s16 *)(p + 0x138);
-    s32 cy = *(s16 *)(p + 0x13A);
-    u8 *base = p + 0x138;
-    s32 b = *(s16 *)(p + 0x150);
-    s32 angle = b + a0 * (*(s16 *)(p + 0x152) - b) / 10000;
+    GameCarSpec *p = g_CarSpec;
+    s32 cx = p->tachoNeedleX;
+    s32 cy = p->tachoNeedleY;
+    /* retail keeps a biased base register at &spec->tachoNeedleX; +28 is
+     * spec->needleColor and +32 spec->needleColorAlt. */
+    u8 *base = (u8 *)&p->tachoNeedleX;
+    s32 b = p->needleAngleMin;
+    s32 angle = b + a0 * (p->needleAngleMax - b) / 10000;
     s32 cos = func_80068568(angle);
     s32 sin = func_80068634(angle);
     u8 *prim = SCRATCH;

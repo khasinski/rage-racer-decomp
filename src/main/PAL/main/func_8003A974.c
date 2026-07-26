@@ -5,7 +5,6 @@
 
 extern s32 D_8009E73C;
 extern s32 D_8009E740;
-extern GameCarRuntime *D_801E40BC[];
 extern s32 D_801E4BB4;
 extern s32 D_801E7740;
 extern s16 D_801E6F26;
@@ -41,7 +40,7 @@ void func_8003A974(void) {
     s0 = 4;
 
     do {
-        s32 a0 = D_801E40BC[s1]->field_68 + D_801E40BC[s1]->field_6C - s6;
+        s32 a0 = g_RankedCars[s1]->field_68 + g_RankedCars[s1]->field_6C - s6;
 
         if (a0 >= 0) {
             if (s1 == 0) {
@@ -50,16 +49,16 @@ void func_8003A974(void) {
             D_801E7740 = s1;
             if (s4 < a0) {
                 D_801E4BB4 &= ~(0x200 >> s0);
-                if (D_801E40BC[s1]->field_A4 >= 0x321) {
-                    D_801E40BC[s1]->field_130 = D_801E40BC[s1]->field_130 * 90 / 100;
+                if (g_RankedCars[s1]->field_A4 >= 0x321) {
+                    g_RankedCars[s1]->field_130 = g_RankedCars[s1]->field_130 * 90 / 100;
                 }
                 return;
             }
             if (s5 < a0) {
                 s32 counter;
 
-                if (D_801E40BC[s1]->field_A4 >= 0x3E9) {
-                    D_801E40BC[s1]->field_130 = D_801E40BC[s1]->field_130 * 98 / 100;
+                if (g_RankedCars[s1]->field_A4 >= 0x3E9) {
+                    g_RankedCars[s1]->field_130 = g_RankedCars[s1]->field_130 * 98 / 100;
                 }
                 counter = *s2;
                 D_801E4BB4 |= (s3 >> s0);

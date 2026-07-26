@@ -197,21 +197,21 @@ void func_800188B8(s32 arg0) {
             flag = D_8009E87C;
             fixed = (s32)ptr + fixed;
             flag = flag < 1;
-            *(s32 *)(ptr + 0x20) = fixed;
+            ((GameCarModelAsset *)ptr)->modelDataOffset = fixed;
             func_80017948((void *)fixed, flag);
             fixed = *(volatile s32 *)(ptr + 0x24);
             flag = D_8009E87C;
             fixed = (s32)ptr + fixed;
             flag = flag < 1;
-            *(s32 *)(ptr + 0x24) = fixed;
+            ((GameCarModelAsset *)ptr)->imageDataOffset = fixed;
             func_80017B44((void *)fixed, flag);
 
             test = arg < 10;
             if (test != 0) {
                 entry = (u8 *)(index + (s32)g_CarTable);
-                func_8001D748(((GameCarEntry *)entry)->shapeIndex, *(s32 *)(ptr + 0x24));
+                func_8001D748(((GameCarEntry *)entry)->shapeIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
                 entry = (u8 *)(index + (s32)g_CarTable);
-                func_8001D900(((GameCarEntry *)entry)->textureIndex, *(s32 *)(ptr + 0x24));
+                func_8001D900(((GameCarEntry *)entry)->textureIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
             }
 
             g_AssetLoadState = 0;

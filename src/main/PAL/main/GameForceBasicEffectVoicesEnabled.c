@@ -1,17 +1,11 @@
 #include "common.h"
 #include "game/audio.h"
+#include "game/sound.h"
 #include "psyq/snd.h"
 
 extern s32 D_801E6CF4;
 extern s32 D_801E6CF8;
 extern s32 D_801E6CFC;
-extern u8 D_801E6D00[];
-extern u8 D_801E6D10[];
-extern u8 D_801E6D30[];
-extern u8 D_801E6D34[];
-extern u8 D_801E6D3C[];
-extern u8 D_801E6D40[];
-extern u8 D_801E6D8C[];
 extern s32 D_800126AC[];
 extern s32 D_800126B4[];
 
@@ -44,15 +38,15 @@ void GameForceBasicEffectVoicesEnabled(s32 enabled) {
             arg0 = voicePacked >> 16;
             raw = 0x3C;
             left = g_VabIds[0];
-            right = *(s16 *)(D_801E6D00 + offset);
+            right = *(s16 *)((u8 *)&D_801E6D00[0].left + offset);
             zeroArg = 0;
             func_80077C7C(arg0, left, right, zeroArg, raw, 0, 0, 0);
             asm volatile("" : : "r"(unused));
 
-            raw = *(s32 *)(D_801E6D10 + offset);
+            raw = *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset);
             scale = g_EffectVolumeScale;
             left = raw * scale;
-            raw = *(s32 *)(D_801E6D10 + offset + 4);
+            raw = *(s32 *)((u8 *)&D_801E6D00[0].volRight + offset);
             arg0 = voice;
             if (left < 0) {
                 left += 0x7F;
@@ -188,7 +182,7 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
     state = enabled;
     voicePacked = 0xA0000;
     voice = 0xA;
-    pitchBase = (s32)D_801E6D3C;
+    pitchBase = (s32)&D_801E6D30[0].pitch;
     toneBase = pitchBase - 0xC;
     offset = 0;
     do {
@@ -196,11 +190,11 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
             arg0 = voicePacked >> 16;
             left = g_VabIds[0];
             right = *(s16 *)toneBase;
-            arg3 = *(s16 *)(D_801E6D34 + offset);
+            arg3 = *(s16 *)((u8 *)&D_801E6D30[0].tone + offset);
             raw = 0x3C;
             func_80077C7C(arg0, left, right, arg3, raw, 0, 0, 0);
 
-            scale = *(s32 *)(D_801E6D40 + offset);
+            scale = *(s32 *)((u8 *)&D_801E6D30[0].volume + offset);
             asm volatile(
                 ".globl func_8005E200\n"
                 "func_8005E200 = GameForcePitchEffectVoicesEnabled + 0x30\n"
@@ -268,5 +262,5 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
         pitchBase += 0x14;
         toneBase += 0x14;
         offset += 0x14;
-    } while (pitchBase < (s32)D_801E6D8C);
+    } while (pitchBase < (s32)&D_801E6D8C);
 }

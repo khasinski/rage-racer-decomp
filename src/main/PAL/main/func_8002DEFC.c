@@ -24,54 +24,6 @@ typedef struct SVec {
     s16 pad;
 } SVec;
 
-/* Player-car input/drivetrain state hanging off the car at +0xBC. */
-typedef struct CarDrive {
-    s32 unk00;
-    s32 unk04;
-    s32 accelPos;    /* 0x08 */
-    s32 unk0C;
-    s32 brakePos;    /* 0x10 */
-    s32 unk14;
-    s32 unk18;
-    s32 steerPos;    /* 0x1C */
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s16 unk2C;       /* engine load */
-    s16 unk2E;
-    s16 gearDisp;    /* 0x30 */
-    s16 unk32;
-    s16 clutch;      /* 0x34 */
-    s16 unk36;
-    s16 unk38;
-    s16 unk3A;
-    s16 unk3C;
-    u16 unk3E;
-    s16 unk40;
-    u8 pad42[6];
-    s32 unk48;       /* 0x48 */
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-    s32 unk68;
-    u8 pad6C[8];
-    s16 manual;      /* 0x74 */
-    s16 gear;        /* 0x76 */
-    s32 unk78;
-    u8 pad7C[0x14];
-    s32 unk90;       /* 0x90 */
-    s32 unk94;       /* 0x94 */
-    s32 state98;     /* 0x98 */
-    u8 pad9C[4];
-    s16 accelBtn;    /* 0xA0 */
-    s16 brakeBtn;    /* 0xA2 */
-    u8 padA4[4];
-} CarDrive;
-
 typedef struct Car {
     s32 unk00;
     s32 unk04;
@@ -112,7 +64,7 @@ typedef struct Car {
     u8 padA8[0x10];
     s16 unkB8;
     u8 padBA[2];
-    CarDrive drive;  /* 0xBC */
+    GameCarDrive drive;  /* 0xBC */
 } Car;
 
 extern u8 D_801E4369;
@@ -171,7 +123,7 @@ void func_8005D9F8(s32 value, s32 bank);
  * g_CarSpec for top-gear/upshift/downshift-speed tables and the shift
  * cooldown timers D_801F17A4/D_801F17B8), dispatches the engine audio and the
  * boost/launch handlers, and resolves track-boundary skid via func_80031298.
- * The local Car/CarDrive structs are a distinct hand-rolled layout (drive block
+ * The local Car struct and the shared GameCarDrive are a distinct hand-rolled layout (drive block
  * at +0xBC) shaped to match; they are NOT GameCarRuntime.
  */
 void func_8002DEFC(Car *car) {
@@ -186,7 +138,7 @@ void func_8002DEFC(Car *car) {
     SVec sv2;
     Vec4 vout;
     s16 arr[4];
-    CarDrive *p = &car->drive;
+    GameCarDrive *p = &car->drive;
     s32 mode23;
     s32 limit;
     s32 slip;
@@ -203,7 +155,7 @@ void func_8002DEFC(Car *car) {
         if (g_PadEdge2 & D_801E4B68[mode23][0]) {
             s32 g = car->drive.gear;
 
-            if (g < *(s16 *)(g_CarSpec + 0x104) && car->drive.clutch == 0) {
+            if (g < g_CarSpec->topGear && car->drive.clutch == 0) {
                 car->drive.gear = car->drive.gear + 1;
                 D_801F17A4 = 0;
             }
@@ -226,7 +178,7 @@ void func_8002DEFC(Car *car) {
             idx = g - 1;
             tableValue = (s32)g_CarSpec;
             tableValue += idx * 4;
-            tableValue = *(s16 *)(tableValue + 0x120);
+            tableValue = *(s16 *)(tableValue + 0x120); /* shiftPoints[idx].downshiftSpeed */
             if (car->speed < tableValue &&
                 D_801F17B8 <= 0 && car->drive.clutch == 0) {
                 if (g >= 2) {
@@ -235,7 +187,7 @@ void func_8002DEFC(Car *car) {
                     D_801F17A4 = 0;
                 }
             } else {
-                u8 *config;
+                GameCarSpec *config;
                 u8 *entry;
                 s32 nextGear;
                 s32 speed;
@@ -244,11 +196,12 @@ void func_8002DEFC(Car *car) {
                 config = g_CarSpec;
                 speed = car->speed;
                 idx = nextGear - 1;
-                entry = config;
+                entry = (u8 *)config;
                 entry += idx * 4;
+                /* config->shiftPoints[idx].upshiftSpeed */
                 if (*(s16 *)(entry + 0x122) < speed &&
                     D_801F17B8 <= 0 && p->clutch == 0 &&
-                    nextGear < *(s16 *)(config + 0x104)) {
+                    nextGear < config->topGear) {
                     p->gear = p->gear + 1;
                     D_801F17B8 = 25;
                     D_801F17A4 = 0;
@@ -427,8 +380,7 @@ void func_8002DEFC(Car *car) {
     }
 
     if (p->unk3C != 0) {
-        s32 d = (*(s16 *)(g_CarSpec + 0x100) + *(s16 *)(g_CarSpec + 0x106)) / 2 -
-                D_801E4BF4;
+        s32 d = (g_CarSpec->revLimit + g_CarSpec->redline) / 2 - D_801E4BF4;
         if (d > 0) {
             car->unk20 += (d * func_800632B0()) / 3276700;
         }
@@ -490,7 +442,7 @@ void func_8002DEFC(Car *car) {
             if (p->state98 == 0 && (s16)car->shiftTick >= 3) {
                 s32 rpm;
 
-                u8 *props;
+                GameCarSpec *props;
                 s32 v = (100 - (p->gear - 1) * 4) * 10000;
 
                 p->unk94 = v * car->speed / 100;
@@ -501,7 +453,7 @@ void func_8002DEFC(Car *car) {
                 p->unk50 = 0;
                 props = g_CarSpec;
                 {
-                    s32 *ratios = (s32 *)(props + 0xE4);
+                    s32 *ratios = props->gearRatio;
 
                     rpm = car->speed * 160 / 1168 * 10000 / ratios[p->gear];
                 }
@@ -510,7 +462,7 @@ void func_8002DEFC(Car *car) {
                 D_801E4BF4 = rpm;
                 p->unk3C = (u16)D_801E4BF4 - (u16)p->unk78;
                 {
-                    s32 *loadRow = (s32 *)(props + 0xCC);
+                    s32 *loadRow = props->gearLoad;
 
                     p->unk2C = rpm * loadRow[p->gear] / 0x20000;
                     if (p->manual == 0) {
@@ -593,7 +545,7 @@ void func_8002DEFC(Car *car) {
         } else {
             sum = d / 4 + cab;
         }
-        rpmLimit = *(s16 *)(g_CarSpec + 0x100);
+        rpmLimit = g_CarSpec->revLimit;
         D_8019CAB4 = sum;
         if (sum >= rpmLimit) {
             D_8019CAB4 = rpmLimit;
@@ -602,7 +554,7 @@ void func_8002DEFC(Car *car) {
         }
     }
 
-    if (D_8019CAB4 >= *(s16 *)(g_CarSpec + 0x100) - 100 && D_8009E830 >= 129) {
+    if (D_8019CAB4 >= g_CarSpec->revLimit - 100 && D_8009E830 >= 129) {
         s32 r = func_800632B0();
 
         D_801E40B0 = g_AnimTimer & 2;
@@ -626,9 +578,9 @@ void func_8002DEFC(Car *car) {
     if (p->unk78 != 0) {
         if (p->gear != 1) {
             revFlag = 0;
-            if (D_8019CAB4 >= *(s16 *)(g_CarSpec + 0x106) - 2000) {
+            if (D_8019CAB4 >= g_CarSpec->redline - 2000) {
                 revFlag = 1;
-                if (D_8019CAB4 < *(s16 *)(g_CarSpec + 0x106)) {
+                if (D_8019CAB4 < g_CarSpec->redline) {
                     revFlag = func_800632B0() & 1;
                 }
             }

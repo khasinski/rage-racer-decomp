@@ -7,7 +7,7 @@ void func_80065B24(Rect *rect, void *data);
 void func_800658FC(s32 mode);
 
 void func_8001A2E0(void *arg0) {
-    u8 *block;
+    GameImageBlock *block;
     u16 rect[4];
     u32 width;
     u32 height;
@@ -19,22 +19,22 @@ void func_8001A2E0(void *arg0) {
 
     if (flags & 8) {
         block = arg0;
-        rect[0] = *(u16 *)(block + 4);
-        rect[1] = *(u16 *)(block + 6);
-        rect[2] = *(u16 *)(block + 8);
-        rect[3] = *(u16 *)(block + 0xA);
-        func_80065B24((Rect *)rect, block + 0xC);
+        rect[0] = block->x;
+        rect[1] = block->y;
+        rect[2] = block->w;
+        rect[3] = block->h;
+        func_80065B24((Rect *)rect, block->pixels);
         func_800658FC(0);
-        arg0 = block + (((u32)*(s32 *)block >> 2) << 2);
+        arg0 = (u8 *)block + (((u32)block->size >> 2) << 2);
     }
 
     block = arg0;
-    rect[0] = *(u16 *)(block + 4);
-    rect[1] = *(u16 *)(block + 6);
-    width = rect[2] = *(u16 *)(block + 8);
-    rect[3] = height = *(u16 *)(block + 0xA);
+    rect[0] = block->x;
+    rect[1] = block->y;
+    width = rect[2] = block->w;
+    rect[3] = height = block->h;
     if (((s32)(width << 16) > 0) && ((s32)(height << 16) > 0)) {
-        func_80065B24((Rect *)rect, block + 0xC);
+        func_80065B24((Rect *)rect, block->pixels);
         func_800658FC(0);
     }
 }

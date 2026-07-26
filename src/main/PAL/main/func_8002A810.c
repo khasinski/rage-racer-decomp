@@ -147,7 +147,7 @@ void func_8002A810(void *base)
   u8 *config;
   car = base;
   base = D_801E8884;
-  config = g_CarSpec;
+  config = (u8 *)g_CarSpec;
   temp_v1 = *((s16 *) (((u8 *) car) + 0x132));
   new_var3 = ((u8 *) (config + (temp_v1 * 4))) + 0xCC;
   var_a2 = (temp_v1 << 6) + ((u8 *) base);
@@ -245,7 +245,7 @@ void func_8002A810(void *base)
     {
       *((s16 *) (((u8 *) temp_s3) + 0x42)) = -0x1E;
     }
-    var_a1 += (*((s16 *) (((u8 *) g_CarSpec) + 0x112))) - (((s16) (*((u16 *) (((u8 *) temp_s3) + 0x42)))) * 0xA);
+    var_a1 += (g_CarSpec->unk112) - (((s16) (*((u16 *) (((u8 *) temp_s3) + 0x42)))) * 0xA);
     *((s16 *) (((u8 *) temp_s3) + 0x32)) = (s16) var_a1;
   }
   else
@@ -319,7 +319,7 @@ void func_8002A810(void *base)
     }
     var_s1 = var_v0_5 >> 0xB;
   }
-  temp_a0_2 = *((s16 *) (((u8 *) config) + 0x100));
+  temp_a0_2 = ((GameCarSpec *)config)->revLimit;
   if ((*((s32 *) (((u8 *) temp_s3) + 0x78))) >= temp_a0_2)
   {
     var_s2 = 0;
@@ -450,7 +450,7 @@ void func_8002A810(void *base)
     {
       var_s2 = 0;
     }
-    if (((*((s16 *) (((u8 *) temp_s3) + 0x76))) == 1) && ((*((s32 *) (((u8 *) temp_s3) + 0x78))) < (*((s16 *) (((u8 *) g_CarSpec) + 0x106)))))
+    if (((*((s16 *) (((u8 *) temp_s3) + 0x76))) == 1) && ((*((s32 *) (((u8 *) temp_s3) + 0x78))) < (g_CarSpec->redline)))
     {
       var_s2 *= 2;
     }
@@ -479,7 +479,7 @@ void func_8002A810(void *base)
         temp_a1 = *((s16 *) (((u8 *) temp_s3) + 0x76));
         if ((*((s16 *) (((u8 *) temp_s3) + 0x30))) != temp_a1)
         {
-          temp_v0_14 = ((s32) ((((*((s32 *) (((u8 *) car) + 0xA4))) * 0xA0) / 1168) * 0x2710)) / ((s32) (*((s32 *) (((u8 *) (g_CarSpec - (-(temp_a1 * 4)))) + 0xE4))));
+          temp_v0_14 = ((s32) ((((*((s32 *) (((u8 *) car) + 0xA4))) * 0xA0) / 1168) * 0x2710)) / ((s32) (*((s32 *) (((u8 *) ((u8 *)g_CarSpec - (-(temp_a1 * 4)))) + 0xE4))));
           temp_v1_23 = *((u16 *) (((u8 *) temp_s3) + 0x78));
           D_801E4BF4 = temp_v0_14;
           *((s16 *) (((u8 *) temp_s3) + 0x3C)) = (s16) (((u16) D_801E4BF4) - temp_v1_23);
@@ -622,7 +622,7 @@ void func_8002A810(void *base)
   var_s5 += ((s32) (*((s32 *) (((u8 *) temp_s3) + 0x4C)))) / 256;
   if (((*((s32 *) (((u8 *) temp_s3) + 0x98))) != 1) && (D_801E4369 == 0x41))
   {
-    var_a1_4 = ((*((s16 *) (((u8 *) g_CarSpec) + 0x10E))) * (*((s32 *) (((u8 *) temp_s3) + 0x88)))) / 1000;
+    var_a1_4 = ((g_CarSpec->unk10E) * (*((s32 *) (((u8 *) temp_s3) + 0x88)))) / 1000;
     if (var_a1_4 <= 0)
     {
       var_a1_4 = 1;
@@ -696,7 +696,7 @@ void func_8002A810(void *base)
     var_s6 = (var_s6 * 4) / 5;
   }
   var_a0_3 = (temp_v1_15 = ((*((s32 *) (((u8 *) car) + 0xA4))) * 0xA0) / 1168);
-  var_v0_12 = (s32) ((*((s16 *) (((u8 *) g_CarSpec) + 0x110))) * 0x3E8);
+  var_v0_12 = (s32) ((g_CarSpec->unk110) * 0x3E8);
   var_a1_7 = var_v0_12 / ((s16) D_801E4FB4);
   if (var_a1_7 <= 0)
   {
@@ -750,13 +750,13 @@ void func_8002A810(void *base)
     }
     else
     {
-      var_a0 = (*((s16 *) (((u8 *) g_CarSpec) + 0x10C))) * 0x64;
+      var_a0 = (g_CarSpec->unk10C) * 0x64;
     }
-    if ((var_a0 <= 0) || ((var_a0_5 = (*((s16 *) (((u8 *) g_CarSpec) + 0x10C))) * 0x64, var_a0_5 <= 0)))
+    if ((var_a0 <= 0) || ((var_a0_5 = (g_CarSpec->unk10C) * 0x64, var_a0_5 <= 0)))
     {
-      var_a0_5 = (*((s16 *) (((u8 *) g_CarSpec) + 0x10C))) * 0x64;
+      var_a0_5 = (g_CarSpec->unk10C) * 0x64;
     }
-    var_a0_6 = ((s32) ((*((s16 *) (((u8 *) g_CarSpec) + 0x10C))) * 0x64)) / var_a0_5;
+    var_a0_6 = ((s32) ((g_CarSpec->unk10C) * 0x64)) / var_a0_5;
     if (var_a0_6 <= 0)
     {
       var_a0_6 = 1;
@@ -808,7 +808,7 @@ void func_8002A810(void *base)
           *((s32 *) (((u8 *) car) + 0xA8)) = temp_v1_20;
           if ((*((s16 *) (((u8 *) temp_s3) + 0x74))) == 0)
           {
-            *((s32 *) (((u8 *) car) + 0xA8)) = (s32) (((*((s16 *) (((u8 *) g_CarSpec) + 0x102))) * temp_v1_20) / 1000);
+            *((s32 *) (((u8 *) car) + 0xA8)) = (s32) (((g_CarSpec->unk102) * temp_v1_20) / 1000);
           }
         }
       }
