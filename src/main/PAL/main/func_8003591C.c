@@ -171,7 +171,7 @@ void func_80032D5C(s32);
 
 void func_8003D6E8(void);
 
-void func_8003F0F8(void);
+void GameInitShuttleScenery(void) asm("func_8003F0F8");
 
 void func_8003E464(void);
 
@@ -263,7 +263,7 @@ void func_8003CB3C(void *arg0);
 
 void func_8003D458(s32 arg0);
 
-void func_8003E1A4(s32 arg0, s32 arg1, s32 arg2);
+void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
 
 void func_8003F608(s32 arg0);
 
@@ -630,7 +630,7 @@ void func_8003609C(void) {
     D_801E6F22 = 0;
     D_801E6F20 = 0;
     func_8003D6E8();
-    func_8003F0F8();
+    GameInitShuttleScenery();
     func_8003E464();
     func_8003EBCC();
     func_8003F700();
@@ -809,9 +809,9 @@ set_countdown:
             func_8003F608(0);
             func_8001ADF4(g_SceneTimer);
         }
-        func_8003E1A4(g_CourseIndex & 3, g_SceneTimer, 0);
+        GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
         if (func_8001A9A8() != 0) {
-            func_8003E1A4(g_CourseIndex & 3, g_SceneTimer, 0);
+            GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
             func_8001ABD8();
         }
     } else {
@@ -951,9 +951,9 @@ update_race:
             func_8003F608(1);
             func_8001ADF4(g_SceneTimer);
         }
-        func_8003E1A4(g_CourseIndex & 3, g_SceneTimer, 1);
+        GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
         if (func_8001A9A8() != 0) {
-            func_8003E1A4(g_CourseIndex & 3, g_SceneTimer, 0);
+            GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
             func_8001ABD8();
         }
 

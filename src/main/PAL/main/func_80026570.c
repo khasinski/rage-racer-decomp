@@ -62,7 +62,7 @@ void func_80045CD4(void);
 void func_800418D4(void);
 void func_80041888(void);
 void func_8004123C(void);
-void func_8003E2E8(u32 arg0, u32 arg1);
+void GameDrawCourseScenery2(u32 arg0, u32 arg1) asm("func_8003E2E8");
 
 void func_80026570(void) {
     void (*func)(void);
@@ -204,5 +204,5 @@ void func_80026920(void) {
     *(u32 *)0x1F800084 = D_801E4030;
     func_80041888();
     func_8004123C();
-    func_8003E2E8(D_8009E694, 1);
+    GameDrawCourseScenery2(D_8009E694, 1);
 }

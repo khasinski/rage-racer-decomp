@@ -24,7 +24,9 @@ static inline void ClearScratchRenderMode3DF68(void) {
     *(s32 *)0x1F800084 = 0;
 }
 
-void func_8003DF68(s32 arg0) {
+void GameDrawStaticScenery(s32 arg0) asm("func_8003DF68");
+
+void GameDrawStaticScenery(s32 arg0) {
     Matrix mtx;
     Vec4i state;
     register s32 *statePtr asm("$16");

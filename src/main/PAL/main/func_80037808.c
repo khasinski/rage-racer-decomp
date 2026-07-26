@@ -124,7 +124,7 @@ void func_80041840(void);
 
 void func_8004123C(void);
 
-void func_8003E1A4(s32 a, s32 b, s32 c);
+void GameDrawCourseScenery(s32 a, s32 b, s32 c) asm("func_8003E1A4");
 
 void func_800350B4(s32 a);
 
@@ -554,7 +554,7 @@ Lend:
     *(s32 *)0x1F800084 = D_801E4030;
     func_80041840();
     func_8004123C();
-    func_8003E1A4(g_CourseIndex & 3, D_801E40B8, 1);
+    GameDrawCourseScenery(g_CourseIndex & 3, D_801E40B8, 1);
     func_800350B4(D_8009E744);
     func_8005B190(D_8019C78C, D_8019C78C);
     func_8002F458();

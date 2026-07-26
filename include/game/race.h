@@ -88,4 +88,20 @@ typedef struct GameRaceRanking {
     s32 values[1];
 } GameRaceRanking;
 
+/*
+ * Course-select gate: may the cursor still step up to the next course?
+ * Returns g_CourseIndex < limit, where the limit accounts for both the series
+ * packed into bits 2+ of g_CourseIndex and the OVAL unlock:
+ *
+ *     series 0 (courses 0..3):  limit = class < 2 ? 2 : 3
+ *     series 1 (courses 4..7):  limit = class < 2 ? 6 : 7
+ *
+ * i.e. only CLASS 3 and up may reach course 3 (OVAL), matching func_80018C88.
+ * The class read is g_GrandPrixClass while a Grand Prix is live
+ * (D_801E4DAC != 0) and the saved per-series class D_801E772C / D_801E7730
+ * otherwise. func_80053730 uses it both to gate a Right press and to tell
+ * func_80049418 whether to show the "next course" arrow.
+ */
+s32 GameCanSelectNextCourse(void) asm("func_80053688");
+
 #endif

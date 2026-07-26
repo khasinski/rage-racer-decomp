@@ -47,7 +47,7 @@ void func_80043BCC(s32 arg0, void *arg1);
 void func_80041888(void);
 void func_80038A88(void);
 void func_8004123C(void);
-void func_8003E2E8(s32 arg0, s32 arg1);
+void GameDrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
 void func_80045CD4(void);
 void func_800418D4(void);
 void func_8001FB8C(void);
@@ -247,7 +247,7 @@ void func_8001FD3C(void) {
         func_80038A88();
     }
     func_8004123C();
-    func_8003E2E8(g_SceneTimer, 1);
+    GameDrawCourseScenery2(g_SceneTimer, 1);
     func_80045CD4();
     func_800418D4();
     func_8001FB8C();

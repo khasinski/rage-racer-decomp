@@ -39,7 +39,7 @@ void func_8001D210(void);
 void func_80038844(void);
 void func_80019E84(s32 arg0);
 void func_800458CC(s32 arg0);
-void func_8003F0F8(void);
+void GameInitShuttleScenery(void) asm("func_8003F0F8");
 extern s32 D_8019C768, D_801E4B84, D_801E412C;
 extern s32 D_8019CE00, D_8019C99C, D_801E4404, D_8019CAF4, D_8019C7BC, D_8009E66C;
 void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
@@ -291,7 +291,7 @@ void func_80025940(void) {
     g_AnimTimer = 0;
     g_SceneTimer = 0;
     D_8019C768 = 0x180;
-    func_8003F0F8();
+    GameInitShuttleScenery();
 }
 
 void func_80025A14(void) {

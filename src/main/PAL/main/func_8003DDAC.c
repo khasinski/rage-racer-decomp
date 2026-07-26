@@ -14,7 +14,9 @@ void func_80017794(void *arg0, void *arg1, void *arg2);
 void func_80029E50(void *arg0, s32 arg1);
 s32 func_800632B0(void);
 
-void func_8003DDAC(s32 arg0, s32 arg1) {
+void GameDrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
+
+void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
     s16 sp10[16];
     s16 sp30[16];
     register s32 frame asm("$23") = arg0;

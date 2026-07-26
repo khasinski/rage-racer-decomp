@@ -24,7 +24,7 @@ s32 func_80030EB4(void *arg0, s32 arg1);
 
 void func_80032280(void *arg0);
 
-void func_8003F0F8(void);
+void GameInitShuttleScenery(void) asm("func_8003F0F8");
 
 extern s16 D_8009E74C;
 
@@ -105,7 +105,7 @@ void func_80034F74(void) {
     void *primary;
     void *secondary;
 
-    func_8003F0F8();
+    GameInitShuttleScenery();
 
     primary = &D_8009E6D4;
     secondary = &D_801F1854;

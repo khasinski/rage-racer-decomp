@@ -32,7 +32,9 @@ extern s32 D_8007E360[];
 extern s16 D_8007E3C0[];
 extern s16 D_8007E3E0[];
 
-void func_8003F0F8(void) {
+void GameInitShuttleScenery(void) asm("func_8003F0F8");
+
+void GameInitShuttleScenery(void) {
     register Unk3F0F8State *state asm("$7");
     register s32 *src asm("$5");
     register s32 *dst asm("$4");

@@ -17,7 +17,9 @@ extern u8 D_8007E360[];
 extern s16 D_8007E3D8[];
 extern s16 D_8007E3E0[];
 
-void func_8003F2A4(s32 arg0) {
+void GameUpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
+
+void GameUpdateShuttleScenery(s32 arg0) {
     Unk3F2A4 *entry;
     register s32 phase asm("$2");
     register s32 side asm("$10");

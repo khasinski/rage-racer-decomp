@@ -49,8 +49,11 @@ void func_80065860(s32 arg0);
 void func_8001A498(void);
 void func_80021540(void);
 void func_8005DBB4(void);
-void func_8001B170(void);
-void func_8001B014(void) {
+void GameDrawPressStartPrompt(void) asm("func_8001B170");
+
+void GameEnterTitleScreen(void) asm("func_8001B014");
+
+void GameEnterTitleScreen(void) {
     func_8001BE9C(0, 0, 0);
     if (D_8019C760 != 0) {
         D_801E6F28 = 0xFF;
@@ -71,7 +74,7 @@ void func_8001B014(void) {
     D_8009F098 = 0;
     func_80021540();
     func_8005DBB4();
-    func_8001B170();
+    GameDrawPressStartPrompt();
 }
 
 
@@ -103,7 +106,9 @@ void func_8001B0F0(s32 arg0);
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void func_8001B170(void) {
+void GameDrawPressStartPrompt(void) asm("func_8001B170");
+
+void GameDrawPressStartPrompt(void) {
     void **scratch;
     u8 *base;
     void *next;
@@ -132,8 +137,11 @@ extern s32 D_801E8260;
 extern s32 D_801E4184;
 void func_8005D6EC(s32 arg0);
 void func_80042CCC(s32 arg0);
-void func_8001B170(void);
-void func_8001B260(void) {
+void GameDrawPressStartPrompt(void) asm("func_8001B170");
+
+void GameUpdateTitleScreen(void) asm("func_8001B260");
+
+void GameUpdateTitleScreen(void) {
     if (g_PadEdge2 & 0x800) {
         func_8005D6EC(2);
         D_8009F098 = 1;
@@ -144,7 +152,7 @@ void func_8001B260(void) {
             func_80042CCC(1);
         }
     }
-    func_8001B170();
+    GameDrawPressStartPrompt();
 }
 
 extern s16 D_8019CAC0;
@@ -155,7 +163,9 @@ extern s32 D_801E6F1C;
 
 void *func_800175A4(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11);
 
-void func_8001B2D4(void) {
+void GameDrawMainMenuRows(void) asm("func_8001B2D4");
+
+void GameDrawMainMenuRows(void) {
     void *scratch;
     u8 *base;
     s32 row;
@@ -217,14 +227,16 @@ void func_8001B2D4(void) {
 extern s32 D_8009F098;
 extern s32 D_801E6F1C;
 
-void func_8001B2D4(void);
+void GameDrawMainMenuRows(void) asm("func_8001B2D4");
 
-void func_8001B440(void) {
+void GameUpdateMainMenuOpen(void) asm("func_8001B440");
+
+void GameUpdateMainMenuOpen(void) {
     if (++D_801E6F1C == 0x30) {
         D_8009F098 = 2;
     }
 
-    func_8001B2D4();
+    GameDrawMainMenuRows();
 }
 
 extern s32 D_801E40A8;
@@ -296,9 +308,11 @@ s32 GameRequestTrackLoad(void) asm("func_8001965C");
 extern void func_8001839C(void);
 extern void func_800182D0(void);
 extern void func_80018B98(void);
-extern void func_8001B2D4(void);
+extern void GameDrawMainMenuRows(void) asm("func_8001B2D4");
 
-void func_8001B5DC(void) {
+void GameUpdateMainMenuInput(void) asm("func_8001B5DC");
+
+void GameUpdateMainMenuInput(void) {
     volatile u16 *flagp = &g_PadEdge2;
     s32 idx;
     u16 flags;
@@ -381,5 +395,5 @@ void func_8001B5DC(void) {
         }
         D_8009F098 = 3;
     }
-    func_8001B2D4();
+    GameDrawMainMenuRows();
 }

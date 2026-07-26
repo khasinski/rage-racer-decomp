@@ -49,7 +49,7 @@ void func_80035258(s32 arg0);
 
 void func_8003CF14(u8 *arg0, s32 arg1);
 
-void func_8003E1A4(s32 arg0, s32 arg1, s32 arg2);
+void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
 
 void func_8003E590(void);
 
@@ -177,7 +177,7 @@ void func_80037200(void) {
         func_8003EAF4();
         func_8003F02C();
         func_80040730();
-        func_8003E1A4(g_CourseIndex & 3, g_SceneTimer, 0);
+        GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
         return;
     }
 
@@ -210,7 +210,7 @@ void func_80037200(void) {
     func_8003F02C();
     func_8003F9C4();
     func_80040730();
-    func_8003E1A4(g_CourseIndex & 3, g_SceneTimer, 1);
+    GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
     func_800350B4(D_8009E744);
     GameSetReverbDepth(D_8019C78C, D_8019C78C);
     func_80040DB4(D_8009E744);

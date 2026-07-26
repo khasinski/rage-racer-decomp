@@ -61,7 +61,7 @@ void func_800506BC(s32 *p0, s32 *p1, s32 *p2);
 void func_800509C4(s32 arg0);
 void func_8005194C(void);
 s32 func_80053650(void);
-s32 func_80053688(void);
+s32 GameCanSelectNextCourse(void) asm("func_80053688");
 void func_8005D6EC(s32 arg0);
 void func_8005E8E0(void);
 void GameUpdateCourseSelectScreen(void) asm("func_80053730");
@@ -96,7 +96,7 @@ void GameUpdateCourseSelectScreen(void) {
         D_8009B30C = 1;
         func_800487D8(D_8019C764, &g_UiScriptProgress2, -1);
         res = func_80053650();
-        func_80049418(1, 1, res, func_80053688());
+        func_80049418(1, 1, res, GameCanSelectNextCourse());
         func_800489AC(g_UiScriptProgress, 2, D_8019C7AC);
         func_800487D8(hdr, &g_UiScriptProgress, 0);
         func_8004CF30(7);
@@ -139,7 +139,7 @@ void GameUpdateCourseSelectScreen(void) {
                     }
                 }
             }
-            if ((D_801E436A & 0x2000) && (func_80053688() != 0)) {
+            if ((D_801E436A & 0x2000) && (GameCanSelectNextCourse() != 0)) {
                 t = D_8009B350;
                 u = D_8009B34C;
                 if (t < u ? (u - t <= 0x3D08F) : (t - u <= 0x3D08F)) {
@@ -359,7 +359,7 @@ void GameUpdateCourseSelectScreen(void) {
             }
         }
         res = func_80053650();
-        func_80049418(1, 1, res, func_80053688());
+        func_80049418(1, 1, res, GameCanSelectNextCourse());
         func_800489AC(g_UiScriptProgress, 2, D_8019C7AC);
         func_800487D8(hdr, &g_UiScriptProgress, 0);
         func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
@@ -368,7 +368,7 @@ void GameUpdateCourseSelectScreen(void) {
         g_MenuHandlerIndex = -1;
         D_8009B344 = 1;
         res = func_80053650();
-        func_80049418(-1, 1, res, func_80053688());
+        func_80049418(-1, 1, res, GameCanSelectNextCourse());
         func_800487D8(hdr, &g_UiScriptProgress, -1);
         func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
         func_800489AC(g_UiScriptProgress, 2, D_8019C7AC);

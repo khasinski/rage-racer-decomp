@@ -351,3 +351,87 @@ type disagrees with a callee definition the merge has just made visible (you see
 a truncated `warning:` then the crash). Fix by casting the argument at the call
 site to the definition's parameter type. This is **not** a translation-unit size
 limit: 256 functions / 43k lines in one file compiles fine.
+
+## 5. The title screen / main menu, and the animated course scenery
+
+Two clusters named in one pass. The frontend was settled from the jump tables
+plus emulator screenshots; the scenery cluster from its data tables, its
+per-frame runtime trace and the course-name table.
+
+### 5a. Frontend state machine (`func_8001Bxxx`)
+
+`GameUpdateFrontend` (`func_8001BB58`, frame-mode table slot 4) runs one of four
+handlers per frame through the **4-entry jump table at `D_8007C748`**, indexed by
+the frontend sub-state `D_8009F098`. Dumping that table settles the whole
+cluster: its entries are exactly `0x8001B260, 0x8001B440, 0x8001B5DC,
+0x8001B884`.
+
+| vaddr | name | role |
+|---|---|---|
+| `0x8001B014` | `GameEnterTitleScreen` | frame-mode slot 3 — the scene the 3D scene requests when the attract race or a race ends. `func_8001AF70` is its slot-2 twin, entered from the menu/story screens |
+| `0x8001B260` | `GameUpdateTitleScreen` | state 0: wait for Start (`g_PadEdge2 & 0x800`), then state = 1 |
+| `0x8001B440` | `GameUpdateMainMenuOpen` | state 1: the row wipe-in. Advances `D_801E6F1C` and hands over the frame it hits `0x30`, so it runs for exactly 48 frames |
+| `0x8001B5DC` | `GameUpdateMainMenuInput` | state 2: Up `0x1000` / Down `0x4000` on the cursor `D_801E4184` (`% 5`), confirm `0x860` |
+| `0x8001B884` | `GameUpdateMainMenuExit` | state 3: fade over `0x81` frames, then request the scene for the chosen row |
+| `0x8001B170` | `GameDrawPressStartPrompt` | the pulsing 112x16 "PRESS START" sprite at `(0x68, 0xC8)`, brightness driven by `func_80068568(g_AnimTimer * 96)` |
+| `0x8001B2D4` | `GameDrawMainMenuRows` | all five rows: 112x16 cells at `x = 0x68`, `y = 0x64 + 0x18*row`, `uv (0, 0xA0 + 0x10*entry)` |
+
+`GameDrawPressStartPrompt` and `GameDrawMainMenuRows` share one texture page —
+the prompt is the `u = 0x70` column (code `0x7E84`), the rows are the `u = 0`
+column (`0x7E85`, or `0x7E86` under the cursor). Entry 1 is skipped while
+`D_8019CAC0 == 0`, which is why the screen shows four rows (GRAND PRIX, TIME
+ATTACK, SAVE&LOAD, OPTION) out of five. The exit handler's targets confirm
+`D_801E4DAC`: it is set to 1 for the two Grand Prix rows and 0 for TIME ATTACK.
+
+`GameCanSelectNextCourse` (`func_80053688`) is the course-select gate:
+`g_CourseIndex < (class < 2 ? 2 : 3)`, or `6 : 7` for the advanced series whose
+number is packed into bits 2+ of `g_CourseIndex`. It is the OVAL unlock, i.e.
+the predicate form of the `func_80018C88` re-roll.
+
+### 5b. Animated course scenery (`func_8003Dxxx` / `func_8003Fxxx`)
+
+Not an ending sequence — the recurring `g_GrandPrixClass == 5` test is just the
+last class suppressing prop animation. `GameDrawCourseScenery2` runs **once per
+frame for the whole attract scene** (164/164 frames in the trace, from
+`func_80026920`), and `GameDrawCourseScenery` is the race-path copy.
+
+All four courses share one coordinate space — they are different routes through
+the same landscape, with THE EXTREME OVAL shifted `+0x5000` in z — so the prop
+positions are a single static table at `0x8007E2C0..0x8007E3E8` and each prop
+culls itself against `D_801E6828`, the 32x32 bitmask of visible 2048-unit
+terrain cells that `func_800414F0` rebuilds every frame from the camera. Each
+leaf then builds a rotation matrix, calls `GameSetGteObjectMatrix` and submits a
+model by index into the course object bank, clamping against the bank size
+`D_801E40E4` with a fallback to model 1.
+
+| vaddr | name | evidence |
+|---|---|---|
+| `0x8003E1A4` | `GameDrawCourseScenery` | dispatcher on the course index; race path (scene `0xC`) |
+| `0x8003E2E8` | `GameDrawCourseScenery2` | same switch; replay (`0x11`) / attract (`0x1E`) path, separate animation state |
+| `0x8003D6F0` | `GameDrawAnimatedScenery` | 16-phase model-swap animation + a 3-variant companion part on a 4-step palette cycle; Grand Prix only |
+| `0x8003DA90` | `GameDrawAnimatedScenery2` | the replay/attract copy of it, argument-driven |
+| `0x8003DDAC` | `GameDrawSpinningScenery` | spins about Z at a rate re-randomised every 512 frames; 1 on MYTHICAL COAST, 3 in a row on OVER PASS CITY from class 2 up |
+| `0x8003DF68` | `GameDrawStaticScenery` | the one landmark drawn on all four courses |
+| `0x8003E0D0` | `GameDrawHighClassScenery` | MYTHICAL COAST only, class 4+; the only prop with no cull |
+| `0x8003F2A4` | `GameUpdateShuttleScenery` | lerps a prop between two endpoints, dwells, then reverses |
+| `0x8003F4BC` | `GameDrawShuttleScenery` | draws it (model `0x3F`, or `0x3C` from course 2 up) |
+| `0x8003F0F8` | `GameInitShuttleScenery` | seeds both instances at course load |
+
+Shuttle paths, from `D_8007E360` / `D_8007E3D8` / `D_8007E3E0`: OVER PASS CITY
+gets one instance that descends 2938 units over 628 frames and waits 300;
+LAKESIDE GATE gets two on paths 1 and 2, the same near-level 3400-unit run
+traversed in opposite directions so the pair passes mid-way (512-frame
+traversal, 128-frame wait).
+
+The course index maps to the names in `g_GrandPrixNames[11..13]` (pointer table
+at `0x8007D404`) and the track packs: 0 = MYTHICAL COAST (`BIG`),
+1 = OVER PASS CITY (`MID`), 2 = LAKESIDE GATE (`HI`), 3 = THE EXTREME OVAL
+(`OVAL`).
+
+**Deliberately generic.** The models live in the course object bank on the disc,
+which this repo does not have, so no prop's *subject* is proven and the names
+describe motion only. The spinners are very likely windmills or wind turbines
+(vertical-plane rotation at a wind-like drifting rate, three in a row, and the
+game's own class names are French wind strengths — CALME, BRISE, RAFALE,
+MISTRAL, TEMPETE), and the LAKESIDE GATE shuttles are very likely boats or a
+cable car, but neither is asserted in a name.

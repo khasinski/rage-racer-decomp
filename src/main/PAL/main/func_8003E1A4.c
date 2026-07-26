@@ -2,14 +2,16 @@
 #include "game/race.h"
 
 
-void func_8003D6F0(s32 arg0, s32 arg1);
-void func_8003DDAC(s32 arg0, s32 arg1);
-void func_8003E0D0(void);
-void func_8003DF68(s32 arg0);
-void func_8003F2A4(s32 arg0);
-void func_8003F4BC(s32 arg0);
+void GameDrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
+void GameDrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
+void GameDrawHighClassScenery(void) asm("func_8003E0D0");
+void GameDrawStaticScenery(s32 arg0) asm("func_8003DF68");
+void GameUpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
+void GameDrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
 
-void func_8003E1A4(s32 arg0, s32 arg1, s32 arg2) {
+void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
+
+void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
     register s32 mode asm("$16") = arg0;
     register s32 value asm("$18") = arg1;
     register s32 flag asm("$17");
@@ -19,7 +21,7 @@ void func_8003E1A4(s32 arg0, s32 arg1, s32 arg2) {
 
     flag = arg2;
 
-    func_8003D6F0(value, 0);
+    GameDrawAnimatedScenery(value, 0);
 
     if (g_GrandPrixClass == 5) {
         flag = 0;
@@ -27,38 +29,38 @@ void func_8003E1A4(s32 arg0, s32 arg1, s32 arg2) {
 
     switch (mode) {
     case 0:
-        func_8003DDAC(value, flag);
+        GameDrawSpinningScenery(value, flag);
         if (g_GrandPrixClass >= 4) {
-            func_8003E0D0();
+            GameDrawHighClassScenery();
         }
         goto call0;
     case 1:
         if (g_GrandPrixClass >= 2) {
-            func_8003DDAC(value, flag);
+            GameDrawSpinningScenery(value, flag);
         }
         if (flag != 0) {
-            func_8003F2A4(0);
+            GameUpdateShuttleScenery(0);
         }
-        func_8003F4BC(0);
+        GameDrawShuttleScenery(0);
         goto call0;
     case 2:
         if (flag != 0) {
-            func_8003F2A4(0);
-            func_8003F2A4(1);
+            GameUpdateShuttleScenery(0);
+            GameUpdateShuttleScenery(1);
         }
-        func_8003F4BC(0);
-        func_8003F4BC(1);
+        GameDrawShuttleScenery(0);
+        GameDrawShuttleScenery(1);
         goto call0;
     case 3:
-        func_8003D6F0(value, 1);
+        GameDrawAnimatedScenery(value, 1);
         goto call1;
     default:
         return;
     }
 
 call0:
-    func_8003DF68(0);
+    GameDrawStaticScenery(0);
     return;
 call1:
-    func_8003DF68(1);
+    GameDrawStaticScenery(1);
 }

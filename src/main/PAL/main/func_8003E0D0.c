@@ -11,7 +11,9 @@ void func_800296B4(void *arg0, s32 arg1);
 void func_80029E50(void *arg0, s32 arg1);
 void func_80069568(Matrix *lhs, Matrix *rhs);
 
-void func_8003E0D0(void) {
+void GameDrawHighClassScenery(void) asm("func_8003E0D0");
+
+void GameDrawHighClassScenery(void) {
     Matrix mtx;
     s32 pad[4];
     register s32 *state asm("$16");

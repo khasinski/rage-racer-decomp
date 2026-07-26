@@ -29,7 +29,9 @@ void func_80017794(void *arg0, Vec4i *state, Matrix *mtx);
 void func_800296B4(void *arg0, s32 arg1);
 s32 func_800632B0(void);
 
-void func_8003D6F0(s32 arg0, s32 arg1) {
+void GameDrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
+
+void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
     Matrix mtx;
     Matrix mtx2;
     Vec4i state;

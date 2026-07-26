@@ -10,9 +10,11 @@ extern s16 D_801E4DAC;
 extern GameRaceProgress *D_801E4FAC;
 
 void func_80033AA0(s32 arg0, s32 arg1);
-void func_8001B2D4(void);
+void GameDrawMainMenuRows(void) asm("func_8001B2D4");
 
-void func_8001B884(void) {
+void GameUpdateMainMenuExit(void) asm("func_8001B884");
+
+void GameUpdateMainMenuExit(void) {
     s32 value;
     GameRaceProgress *ptr;
 
@@ -47,7 +49,7 @@ void func_8001B884(void) {
         }
     }
 
-    func_8001B2D4();
+    GameDrawMainMenuRows();
 }
 
 void GameUpdateFrontend(void) asm("func_8001BB58");

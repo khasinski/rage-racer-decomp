@@ -12,7 +12,9 @@ void func_8001A530(Matrix *mtx, s32 angle);
 void func_800296B4(void *arg0, s32 arg1);
 void func_80069568(Matrix *lhs, Matrix *rhs);
 
-void func_8003F4BC(s32 arg0) {
+void GameDrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
+
+void GameDrawShuttleScenery(s32 arg0) {
     Matrix mtx0;
     Matrix mtx1;
     register u8 *state asm("$18");

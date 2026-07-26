@@ -45,7 +45,7 @@ void func_80045CD4();
 void func_800418D4();
 void func_80041888();
 void func_8004123C();
-void func_8003E2E8();
+void GameDrawCourseScenery2() asm("func_8003E2E8");
 int func_8001A0E4();
 
 void func_80025C58(void) {
@@ -226,5 +226,5 @@ L48c:
     *(s32 *)0x1F800084 = D_801E4030;
     func_80041888();
     func_8004123C();
-    func_8003E2E8(g_AnimTimer, 1);
+    GameDrawCourseScenery2(g_AnimTimer, 1);
 }

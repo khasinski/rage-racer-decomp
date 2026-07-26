@@ -93,7 +93,7 @@ extern s32 g_SceneTimer asm("D_801E40B8");
  * Free-running animation phase counter, incremented once per frame by every
  * scene handler. Unlike g_SceneTimer it is not compared against deadlines;
  * it drives cyclic effects — sine/wave offsets (func_80068568 arguments in
- * func_8001B170 / func_80051D6C), blink tests (`& 2`, `& 8`, `& 0x10`) and
+ * GameDrawPressStartPrompt / func_80051D6C), blink tests (`& 2`, `& 8`, `& 0x10`) and
  * modulo cycles (`% 6`).
  */
 extern s32 g_AnimTimer asm("D_8009E694");

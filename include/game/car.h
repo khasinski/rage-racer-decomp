@@ -140,7 +140,7 @@ typedef struct GameCarRuntimeProgressWindow {
 
 /*
  * Active car-entry table: the per-car static config (modelVariant, enabled)
- * used by the grid/car-select code. func_8001B5DC repoints it at one of three
+ * used by the grid/car-select code. GameUpdateMainMenuInput repoints it at one of three
  * tables (D_801E4F44, D_8019C914, D_801E4388) depending on the mode, so it is
  * a pointer rather than a fixed array.
  */

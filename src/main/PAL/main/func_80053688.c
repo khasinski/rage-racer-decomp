@@ -7,7 +7,9 @@ extern s16 D_8019CAC0;
 extern s32 D_801E7730;
 extern s32 D_801E772C;
 
-s32 func_80053688(void) {
+s32 GameCanSelectNextCourse(void) asm("func_80053688");
+
+s32 GameCanSelectNextCourse(void) {
     s32 limit;
 
     if (D_801E4DAC != 0) {
