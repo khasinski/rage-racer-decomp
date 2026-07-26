@@ -4,7 +4,7 @@
 
 extern u8 D_8009B3B8[];
 
-s32 func_8005B6E4(void) {
+s32 GameInitSoundRuntime(void) {
     SsSetTableSize(D_8009B3B8, 2, 1);
     SsSetTickMode(0x1000);
     SsStartSoundTickMode1();

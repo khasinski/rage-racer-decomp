@@ -12,7 +12,18 @@ void func_80069678(void *, void *, void *);            /* extern */
 extern u8 D_8009E6D4;
 extern s32 D_801E40D8;
 
-s32 func_80031298(void *arg0, s32 arg1, void *arg2)
+/*
+ * Track-segment / route-sprite geometry builder. Interpolates between the
+ * GameTrackPoint at `trackPointIndex` (*(GameTrackPoint*)0x8009E688 + i*0x18)
+ * and its successor: computes route angles/heights via atan2 (func_8001A6AC)
+ * and rsin/rcos (func_80068568/func_80068634), builds the collision-boundary
+ * offset, and writes the interpolated position/angle/height into the render
+ * object `obj`. The scratchpad struct at 0x1F80011C ("spad") is the GTE
+ * per-primitive transform scratch. `clampPair` supplies the s16 margin values
+ * (offsets 0/2/4/6). Raw FIELD(base,type,offset) accesses preserve the match.
+ * Returns the boundary/skid response code.
+ */
+s32 func_80031298(void *obj, s32 trackPointIndex, void *clampPair)
 {
     s32 temp_a0;
     s32 secondResult;
@@ -70,11 +81,11 @@ s32 func_80031298(void *arg0, s32 arg1, void *arg2)
     void *temp_v0_2;
     void *spad;
 
-    temp_hi_2 = (arg1 + 1) % *(s32 *)0x8009E6A8;
+    temp_hi_2 = (trackPointIndex + 1) % *(s32 *)0x8009E6A8;
     temp_a0_2 = *(s32 *)0x8009E688;
     spad = (void *)0x1F80011C;
     *(s32 *)0x1F800158 = 0;
-    temp_s4 = (void *)((arg1 * 0x18) + temp_a0_2);
+    temp_s4 = (void *)((trackPointIndex * 0x18) + temp_a0_2);
     temp_v1 = FIELD(temp_s4, u16 *, 0x16);
     FIELD(spad, u16 *, 0x96) = temp_v1;
     temp_s6 = (void *)((temp_hi_2 * 0x18) + temp_a0_2);
@@ -94,9 +105,9 @@ s32 func_80031298(void *arg0, s32 arg1, void *arg2)
         FIELD(spad, s32 *, 0) = temp_v1_3;
         temp_v0_3 = FIELD(temp_v0_2, s32 *, 4);
         FIELD(spad, s32 *, 0x04) = temp_v0_3;
-        temp_a0_3 = FIELD(arg0, s32 *, 0) - temp_v1_3;
+        temp_a0_3 = FIELD(obj, s32 *, 0) - temp_v1_3;
         FIELD(spad, s32 *, 0x08) = temp_a0_3;
-        temp_a1 = FIELD(arg0, s32 *, 8) - temp_v0_3;
+        temp_a1 = FIELD(obj, s32 *, 8) - temp_v0_3;
         FIELD(spad, s32 *, 0x0C) = temp_a1;
         FIELD(spad, s16 *, 0x7E) = func_8001A6AC(temp_a0_3, temp_a1) & 0xFFF;
         temp_a0_4 = FIELD(temp_s4, s32 *, 0);
@@ -180,9 +191,9 @@ s32 func_80031298(void *arg0, s32 arg1, void *arg2)
         goto block_21;
     }
 block_21:
-    FIELD(spad, u16 *, 0x60) = (u16) (((u16) FIELD(arg0, s32 *, 0) - (u16) FIELD(temp_s4, s32 *, 0)) * 4);
+    FIELD(spad, u16 *, 0x60) = (u16) (((u16) FIELD(obj, s32 *, 0) - (u16) FIELD(temp_s4, s32 *, 0)) * 4);
     temp_a0 = FIELD(spad, s16 *, 0x90);
-    FIELD(spad, s16 *, 0x64) = (s16) (((u16) FIELD(arg0, s32 *, 8) - (u16) FIELD(temp_s4, s32 *, 4)) * 4);
+    FIELD(spad, s16 *, 0x64) = (s16) (((u16) FIELD(obj, s32 *, 8) - (u16) FIELD(temp_s4, s32 *, 4)) * 4);
     FIELD(spad, s16 *, 0x62) = 0;
     temp_s0_4 = func_80068634(temp_a0);
     var_v1 = (temp_s0_4 * (s16) FIELD(spad, u16 *, 0x60)) + (func_80068568(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
@@ -207,7 +218,7 @@ block_21:
     temp_a0_7 = FIELD(spad, s16 *, 0x96);
     temp_lo = (s32) ((FIELD(temp_s6, s16 *, 0x12) * var_s3) + (FIELD(temp_s4, s16 *, 0x12) * (temp_a0_7 - var_s3))) / temp_a0_7;
     FIELD(spad, s16 *, 0x88) = (s16) temp_lo;
-    temp_v1_6 = FIELD(spad, s16 *, 0x8A) + FIELD(arg2, s16 *, 2);
+    temp_v1_6 = FIELD(spad, s16 *, 0x8A) + FIELD(clampPair, s16 *, 2);
     temp_s0_6 = spad + 0x40;
     if (var_a2 < (0 - temp_v1_6))
     {
@@ -217,17 +228,17 @@ block_21:
         FIELD(spad, s16 *, 0x64) = var_a2;
         func_8001A530(temp_s0_6, FIELD(spad, s16 *, 0x90));
         func_80069678(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
-        if (arg0 == &D_8009E6D4)
+        if (obj == &D_8009E6D4)
         {
-            func_80038CE8(arg0, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(arg2, s16 *, 6));
+            func_80038CE8(obj, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(clampPair, s16 *, 6));
         }
-        FIELD(arg0, s32 *, 0) = (s32) (FIELD(arg0, s32 *, 0) - FIELD(spad, s32 *, 0x68));
-        FIELD(arg0, s32 *, 8) = (s32) (FIELD(arg0, s32 *, 8) - FIELD(spad, s32 *, 0x70));
-        var_a2 = -FIELD(spad, s16 *, 0x8A) - FIELD(arg2, s16 *, 2);
-        FIELD(spad, s32 *, 0x3C) = FIELD(arg2, s16 *, 6);
+        FIELD(obj, s32 *, 0) = (s32) (FIELD(obj, s32 *, 0) - FIELD(spad, s32 *, 0x68));
+        FIELD(obj, s32 *, 8) = (s32) (FIELD(obj, s32 *, 8) - FIELD(spad, s32 *, 0x70));
+        var_a2 = -FIELD(spad, s16 *, 0x8A) - FIELD(clampPair, s16 *, 2);
+        FIELD(spad, s32 *, 0x3C) = FIELD(clampPair, s16 *, 6);
         goto boundary_done;
     }
-    temp_v1_7 = (s16) temp_lo - FIELD(arg2, s16 *, 0);
+    temp_v1_7 = (s16) temp_lo - FIELD(clampPair, s16 *, 0);
     if (temp_v1_7 < var_a2)
     {
         var_a2 -= temp_v1_7;
@@ -236,14 +247,14 @@ block_21:
         FIELD(spad, s16 *, 0x64) = var_a2;
         func_8001A530(temp_s0_6, FIELD(spad, s16 *, 0x90));
         func_80069678(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
-        if (arg0 == &D_8009E6D4)
+        if (obj == &D_8009E6D4)
         {
-            func_80038CE8(arg0, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(arg2, s16 *, 4));
+            func_80038CE8(obj, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(clampPair, s16 *, 4));
         }
-        FIELD(arg0, s32 *, 0) = (s32) (FIELD(arg0, s32 *, 0) - FIELD(spad, s32 *, 0x68));
-        FIELD(arg0, s32 *, 8) = (s32) (FIELD(arg0, s32 *, 8) - FIELD(spad, s32 *, 0x70));
-        var_a2 = FIELD(spad, s16 *, 0x88) - FIELD(arg2, s16 *, 0);
-        FIELD(spad, s32 *, 0x3C) = (s32) FIELD(arg2, s16 *, 4);
+        FIELD(obj, s32 *, 0) = (s32) (FIELD(obj, s32 *, 0) - FIELD(spad, s32 *, 0x68));
+        FIELD(obj, s32 *, 8) = (s32) (FIELD(obj, s32 *, 8) - FIELD(spad, s32 *, 0x70));
+        var_a2 = FIELD(spad, s16 *, 0x88) - FIELD(clampPair, s16 *, 0);
+        FIELD(spad, s32 *, 0x3C) = (s32) FIELD(clampPair, s16 *, 4);
     }
 boundary_done:
     if (FIELD(spad, s16 *, 0x96) < var_s3)
@@ -254,21 +265,21 @@ boundary_done:
     {
         var_s3 = 0;
     }
-    FIELD(arg0, s32 *, 0x38) = (s32) ((s32) (var_s3 << 0xA) / (s16) FIELD(spad, s16 *, 0x96));
+    FIELD(obj, s32 *, 0x38) = (s32) ((s32) (var_s3 << 0xA) / (s16) FIELD(spad, s16 *, 0x96));
     if (var_a2 < 0)
     {
-        FIELD(arg0, s32 *, 0x3C) = (var_a2 * 0x400) / FIELD(spad, s16 *, 0x8A);
+        FIELD(obj, s32 *, 0x3C) = (var_a2 * 0x400) / FIELD(spad, s16 *, 0x8A);
     }
     else
     {
-        FIELD(arg0, s32 *, 0x3C) = (var_a2 * 0x400) / FIELD(spad, s16 *, 0x88);
+        FIELD(obj, s32 *, 0x3C) = (var_a2 * 0x400) / FIELD(spad, s16 *, 0x88);
     }
     {
         u32 outputProgress;
         s32 useProgress;
 
         useProgress = *(s32 *)0x801E408C;
-        FIELD(arg0, s32 *, 0x34) = var_a2;
+        FIELD(obj, s32 *, 0x34) = var_a2;
         if (useProgress != 0)
         {
             outputProgress = var_s3;
@@ -277,18 +288,18 @@ boundary_done:
         {
             outputProgress = FIELD(spad, s16 *, 0x96) - var_s3;
         }
-        FIELD(arg0, s32 *, 0x6C) = outputProgress;
+        FIELD(obj, s32 *, 0x6C) = outputProgress;
     }
     temp_a0_8 = FIELD(spad, s16 *, 0x96);
     FIELD(spad, s16 *, 0x8E) = (s16) ((s32) ((FIELD(temp_s6, s16 *, 0xE) * var_s3) + (FIELD(temp_s4, s16 *, 0xE) * (temp_a0_8 - var_s3))) / temp_a0_8);
     temp_a0_9 = FIELD(spad, s16 *, 0x96);
     temp_lo_2 = (s32) ((FIELD(temp_s6, s16 *, 8) * var_s3) + (FIELD(temp_s4, s16 *, 8) * (temp_a0_9 - var_s3))) / temp_a0_9;
-    FIELD(arg0, s32 *, 4) = temp_lo_2;
-    FIELD(arg0, s32 *, 4) = (s32) (((s32) (FIELD(spad, s16 *, 0x8E) * var_a2) >> 7) + temp_lo_2);
+    FIELD(obj, s32 *, 4) = temp_lo_2;
+    FIELD(obj, s32 *, 4) = (s32) (((s32) (FIELD(spad, s16 *, 0x8E) * var_a2) >> 7) + temp_lo_2);
     {
         s16 angle;
 
-        angle = FIELD(arg0, u16 *, 0x24);
+        angle = FIELD(obj, u16 *, 0x24);
         angle -= 0xC00;
         FIELD(spad, s16 *, 0x8C) = angle + FIELD(spad, u16 *, 0x90);
     }
@@ -320,7 +331,7 @@ boundary_done:
         {
             secondProduct += 0xFFF;
         }
-        FIELD(arg0, s32 *, 0x20) = firstProduct + (secondProduct >> 0xC);
+        FIELD(obj, s32 *, 0x20) = firstProduct + (secondProduct >> 0xC);
     }
     var_a0_3 = (0 - FIELD(spad, s32 *, 0x38)) * FIELD(spad, s16 *, 0x94);
     if (var_a0_3 < 0)
@@ -334,27 +345,27 @@ boundary_done:
         var_a1 += 0xFFF;
     }
     temp_a2 = D_801E40D8;
-    temp_hi = (s32) (FIELD(arg0, s32 *, 0x68) + FIELD(arg0, s32 *, 0x6C)) % temp_a2;
-    FIELD(arg0, s32 *, 0x28) = (s32) (temp_a3 + (var_a1 >> 0xC));
-    FIELD(arg0, s32 *, 0xB4) = (s32) FIELD(spad, s16 *, 0x90);
-    FIELD(arg0, s32 *, 0x74) = (s32) FIELD(arg0, s32 *, 0x70);
-    FIELD(arg0, s32 *, 0x70) = temp_hi;
+    temp_hi = (s32) (FIELD(obj, s32 *, 0x68) + FIELD(obj, s32 *, 0x6C)) % temp_a2;
+    FIELD(obj, s32 *, 0x28) = (s32) (temp_a3 + (var_a1 >> 0xC));
+    FIELD(obj, s32 *, 0xB4) = (s32) FIELD(spad, s16 *, 0x90);
+    FIELD(obj, s32 *, 0x74) = (s32) FIELD(obj, s32 *, 0x70);
+    FIELD(obj, s32 *, 0x70) = temp_hi;
     if (temp_hi < 0)
     {
-        FIELD(arg0, s32 *, 0x70) = (s32) (temp_hi + temp_a2);
+        FIELD(obj, s32 *, 0x70) = (s32) (temp_hi + temp_a2);
     }
     {
         s32 finalAngle;
 
         if (*(s32 *)0x801E408C != 0)
         {
-            finalAngle = D_801E40D8 - FIELD(arg0, s32 *, 0x70);
-            FIELD(arg0, s16 *, 0x78) = (s16) (finalAngle >> 8);
+            finalAngle = D_801E40D8 - FIELD(obj, s32 *, 0x70);
+            FIELD(obj, s16 *, 0x78) = (s16) (finalAngle >> 8);
         }
         else
         {
-            finalAngle = FIELD(arg0, s32 *, 0x70);
-            FIELD(arg0, s16 *, 0x78) = (s16) (finalAngle >> 8);
+            finalAngle = FIELD(obj, s32 *, 0x70);
+            FIELD(obj, s16 *, 0x78) = (s16) (finalAngle >> 8);
         }
     }
     return FIELD(spad, s32 *, 0x3C);

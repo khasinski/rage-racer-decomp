@@ -11,6 +11,12 @@ extern s32 D_8009EC94;
 void func_80069A58(s32 arg0, s32 arg1);
 void func_80069A78(s32 arg0);
 
+/*
+ * Sibling of func_8001A9A8: closes the mirror pass and restores the full-screen
+ * main viewport render state (mode 0xA, full 0x140x0xF0 clip rect, prim base),
+ * flips the ordering flag back, pulls the depth back (-= 0x800) and restores the
+ * saved main-view matrix from D_8009AF00.
+ */
 void func_8001ABD8(void) {
     GameScratchpadRenderState *scratch;
     register s32 v0reg asm("$2");

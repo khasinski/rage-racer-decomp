@@ -4,6 +4,14 @@
 
 extern GameTrackPoint *D_8009E688;
 
+/*
+ * Clamps the car's lateral offset (field_11C) to a fraction of the track
+ * half-width at its current point: the left half-width (field_10) when offset
+ * is negative, the right half-width (field_12) otherwise. `arg1` selects the
+ * scaling: <4 uses 5/8 of the half-width, else 4/7. Writes the clamped value
+ * back into the route sub-block (field_BC + 0x60) only if it would exceed the
+ * limit.
+ */
 void func_8003A148(GameCarRuntime *car, s32 arg1) {
     GameCarRuntime *carReg = car;
     u8 *state;

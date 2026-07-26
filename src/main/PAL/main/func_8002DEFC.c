@@ -165,6 +165,16 @@ void func_8005D6EC(s32 id);
 void func_8005C104(s32 arg0, s32 arg1, s32 arg2);
 void func_8005D9F8(s32 value, s32 bank);
 
+/*
+ * Per-car physics / gear-shift driver (matched sibling of the ASM
+ * func_8003BB50). Samples input, builds the car's orientation matrices, runs
+ * the manual/auto gear-shift state machine (using the per-car spec block
+ * D_801E42D8 for top-gear/upshift/downshift-speed tables and the shift
+ * cooldown timers D_801F17A4/D_801F17B8), dispatches the engine audio and the
+ * boost/launch handlers, and resolves track-boundary skid via func_80031298.
+ * The local Car/CarDrive structs are a distinct hand-rolled layout (drive block
+ * at +0xBC) shaped to match; they are NOT GameCarRuntime.
+ */
 void func_8002DEFC(Car *car) {
     Matrix m1;
     Matrix m2;

@@ -60,11 +60,21 @@ typedef struct Block16 {
     s32 w3;
 } Block16;
 
-void func_8003CF14(s32 arg0, s32 arg1) {
-    s32 *scratch = (s32 *)0x1F800000;
+/*
+ * Fuller sibling of func_8003CB3C: camera track-follower with bob/shake. Aims
+ * the eye object D_801E3E14 at a look-ahead centre-line point, and when
+ * updateMotion (arg1) is set, ramps the follow distance and applies the shake
+ * offsets D_8007E288[] driven by the input bits in D_801E436A. Builds and
+ * transposes the view rotation matrices, projects the eye-forward point, and
+ * writes the scratchpad view state (view[2..4]=eye XYZ, view[6]=pitch,
+ * view[7]=yaw, view[8]=roll). markerClamp is the zeroed clamp record for the
+ * track-marker builder func_80031298.
+ */
+void func_8003CF14(s32 arg0, s32 updateMotion) {
+    s32 *view = (s32 *)0x1F800000;
     s32 delta[3];
     s32 coords[3];
-    s16 pair[2];
+    s16 markerClamp[2];
     s16 vec[3];
     s32 out[3];
     Matrix m1;
@@ -94,7 +104,7 @@ void func_8003CF14(s32 arg0, s32 arg1) {
     D_801E3EB4 += func_8002A7C4(D_801E3EB4, angle);
     D_801E3E14.field_24 = D_801E3EB4;
 
-    if (arg1 != 0) {
+    if (updateMotion != 0) {
         if (D_801E3EBC < 50) {
             D_801E3EBC += 3;
         }
@@ -134,19 +144,19 @@ void func_8003CF14(s32 arg0, s32 arg1) {
 
     D_801E3E14.field_24 = D_8007E288[1] + D_801E3E14.field_24;
     func_8002C168(&D_801E3E14);
-    pair[0] = 0;
-    pair[1] = 0;
-    func_80031298(&D_801E3E14, D_801E3E14.field_30, pair);
+    markerClamp[0] = 0;
+    markerClamp[1] = 0;
+    func_80031298(&D_801E3E14, D_801E3E14.field_30, markerClamp);
 
-    *(Block16 *)(scratch + 2) = *(Block16 *)&D_801E3E14.x;
-    scratch[3] -= 48;
-    *(Block16 *)(scratch + 6) = *(Block16 *)&D_801E3E14.field_20;
-    scratch[6] = D_8007E288[0] + scratch[6];
+    *(Block16 *)(view + 2) = *(Block16 *)&D_801E3E14.x;
+    view[3] -= 48;
+    *(Block16 *)(view + 6) = *(Block16 *)&D_801E3E14.field_20;
+    view[6] = D_8007E288[0] + view[6];
 
-    func_8001A530(&m1, scratch[7]);
-    func_8001A5A0(&m2, scratch[6]);
+    func_8001A530(&m1, view[7]);
+    func_8001A5A0(&m2, view[6]);
     func_80069568(&m2, &m1);
-    func_8001A4C0(&m2, scratch[8]);
+    func_8001A4C0(&m2, view[8]);
     func_80069568(&m2, &m1);
 
     vec[0] = 0;
@@ -163,16 +173,16 @@ void func_8003CF14(s32 arg0, s32 arg1) {
     m2.m[2][2] = m1.m[2][2];
     func_80069678(&m2, vec, out);
 
-    coords[0] = (out[0] >> 4) + scratch[2];
-    coords[1] = (out[1] >> 4) + scratch[3];
-    coords[2] = (out[2] >> 4) + scratch[4];
-    delta[0] = coords[0] - scratch[2];
-    delta[1] = coords[1] - scratch[3];
-    delta[2] = coords[2] - scratch[4];
+    coords[0] = (out[0] >> 4) + view[2];
+    coords[1] = (out[1] >> 4) + view[3];
+    coords[2] = (out[2] >> 4) + view[4];
+    delta[0] = coords[0] - view[2];
+    delta[1] = coords[1] - view[3];
+    delta[2] = coords[2] - view[4];
     c400 = 0x400;
-    scratch[7] = c400 - func_8001A6AC(delta[0], delta[2]);
+    view[7] = c400 - func_8001A6AC(delta[0], delta[2]);
     value = func_8006888C(delta[0] * delta[0] + delta[2] * delta[2]);
-    scratch[6] = c400 - func_8001A6AC(delta[1], value >> 6);
+    view[6] = c400 - func_8001A6AC(delta[1], value >> 6);
 
     D_8009E74C = D_801E3E14.field_78;
     D_8009E73C = D_801E3E14.field_68;

@@ -2,16 +2,19 @@
 
 extern s32 D_801E6CA4;
 
-void func_8005BDD4(s32 arg0) {
-    if (arg0 >= 0) {
-        if (arg0 < 0x10) {
+/* Set the effect master volume scale (D_801E6CA4 = SoundScale.scale) from a
+ * 0..15 level, mapping it onto the 0..0x80 fixed-point scale used by the
+ * effect-voice volume math. */
+void func_8005BDD4(s32 level) {
+    if (level >= 0) {
+        if (level < 0x10) {
             goto done;
         }
-        arg0 = 0xF;
+        level = 0xF;
     } else {
-        arg0 = 0;
+        level = 0;
     }
 
 done:
-    D_801E6CA4 = (arg0 << 7) / 15;
+    D_801E6CA4 = (level << 7) / 15;
 }

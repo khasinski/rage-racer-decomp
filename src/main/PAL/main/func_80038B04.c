@@ -4,6 +4,11 @@
 extern s16 D_801E6E74;
 extern u8 *D_801E42D8;
 
+/*
+ * Updates the car's skid/tilt counter (field_8C / field_8E), clamping it
+ * against the spec block's redline value (D_801E42D8 + 0x106). Register-pinned,
+ * goto-structured; the raw drive-block reads (+0xA2 / +0x34) preserve the match.
+ */
 void func_80038B04(GameCarRuntime *arg0) {
     register GameCarRuntime *obj asm("$5");
     register u8 *ptr asm("$4");

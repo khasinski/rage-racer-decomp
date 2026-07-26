@@ -7,6 +7,13 @@ extern GameTrackPoint *D_8019C7D0;
 extern s32 D_801E40D8;
 extern s16 D_8019C9A4;
 
+/*
+ * Installs the track-point table from a loaded blob: word 0 is the point count,
+ * the rest is the GameTrackPoint array. Publishes D_8009E688 (points),
+ * D_8009E6A8 (count) and D_8019C7D0 (marker array right after the points), then
+ * sums every point's segmentLength into the total track length D_801E40D8 and
+ * derives D_8019C9A4 = (total >> 8) + 1.
+ */
 void func_8002A6B0(s32 *trackData) {
     register s32 count asm("$3");
     register s32 limit asm("$4");

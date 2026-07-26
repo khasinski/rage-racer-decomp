@@ -1,9 +1,15 @@
 #include "common.h"
 
-s32 func_8002FAE8(s32 arg0, s32 arg1, s32 arg2) {
-    s32 lhs = arg0 & 0xFFF;
-    s32 rhs = arg1 & 0xFFF;
-    s32 inv = 0x400 - arg2;
+/*
+ * Wrap-aware angle blend in the 12-bit (0..0xFFF) angle space: blends angleA
+ * toward angleB by `weight` (0..0x400) taking the shorter way around the
+ * 0x1000 circle (the 0x801 test unwraps one operand by +0x1000). Returns the
+ * blended angle masked to 12 bits.
+ */
+s32 func_8002FAE8(s32 angleA, s32 angleB, s32 weight) {
+    s32 lhs = angleA & 0xFFF;
+    s32 rhs = angleB & 0xFFF;
+    s32 inv = 0x400 - weight;
     s32 sum;
 
     if (rhs < lhs) {
@@ -14,7 +20,7 @@ s32 func_8002FAE8(s32 arg0, s32 arg1, s32 arg2) {
         lhs += 0x1000;
     }
 
-    sum = lhs * inv + rhs * arg2;
+    sum = lhs * inv + rhs * weight;
     if (sum < 0) {
         sum += 0x3FF;
     }

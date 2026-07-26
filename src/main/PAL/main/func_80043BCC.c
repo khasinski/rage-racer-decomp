@@ -60,7 +60,15 @@ extern s32 D_8009B248;
 extern s32 D_8009E6D4;
 extern u8 *D_8019C7CC;
 
-void func_80043BCC(s32 arg0, void *arg1) {
+/*
+ * Camera-mode state machine: `cameraModeSel` selects among the camera behaviours
+ * (chase / bumper / replay-orbit / intro-pan, etc.); `arg1` is the followed
+ * render/target object. Positions the eye and fills the scratchpad view state
+ * (view[2..8]) with matrix/atan2/sqrt math, then submits via func_8001DAB0.
+ * Field accesses use the FIELD(base,type,offset) raw-offset macro to stay
+ * byte-exact, so params/locals are not retyped.
+ */
+void func_80043BCC(s32 cameraModeSel, void *arg1) {
     s16 sp10[4];
     s32 sp18[3];
     s32 sp28[3];
@@ -144,8 +152,8 @@ void func_80043BCC(s32 arg0, void *arg1) {
     temp_v1_35 = D_8009B240;
     D_8009B240 = temp_v0_30;
     temp_v1_40 = temp_v0_30 != temp_v1_35;
-    if (arg0 < 2) {
-        var_v1_44 = arg0;
+    if (cameraModeSel < 2) {
+        var_v1_44 = cameraModeSel;
     } else {
         var_v1_44 = FIELD(((temp_v0_30 * 0x24) + D_8019C7CC), s16 *, 0x20);
     }
@@ -631,7 +639,7 @@ block_101:
         break;
     }
     func_8001A610();
-    if ((arg0 > 0) && (arg1 == &D_8009E6D4)) {
+    if ((cameraModeSel > 0) && (arg1 == &D_8009E6D4)) {
         func_80017A10(0);
         func_8001DAB0(arg1);
     }

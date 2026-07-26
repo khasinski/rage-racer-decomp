@@ -22,6 +22,15 @@ void func_80017794(void *a0, void *a1, void *a2);
 void func_80028DEC(void *arg0, s32 arg1);
 void func_8001C794(void);
 
+/*
+ * GameRenderObject -> GPU-primitive submitter. Subtracts the active view's
+ * horizon from the object's y, builds a stack of rotation matrices from the
+ * object's angle sets, loads each transform into the GTE at 0x1F80011C and
+ * dispatches the primitive builder func_80028DEC on the scratchpad OT
+ * (0x1F800000) at increasing depth buckets. The m_90 negation block and the
+ * m_B0[1] block build the mirrored copies (flip X/Z columns). otDepth is the
+ * base OT bucket; clipHandle is the optional clip volume from func_800350B4.
+ */
 void func_8001DAB0(GameRenderObject *obj) {
     GameRenderView *view = D_8009E698;
     Matrix m_10;
@@ -35,8 +44,8 @@ void func_8001DAB0(GameRenderObject *obj) {
     s32 m_118[8];
     s32 v_138[3];
     s32 unused_144[4]; /* reserved stack slot present in the original */
-    s32 s5;
-    s32 s4;
+    s32 clipHandle;
+    s32 otDepth;
     s32 i;
 
     obj->y -= view->horizon_6;
@@ -47,9 +56,9 @@ void func_8001DAB0(GameRenderObject *obj) {
     func_80068B98(&D_8009E6AC, &m_30, &m_90);
 
     if (D_801E42E4 != 8) {
-        s5 = func_800350B4((s32) obj->field_70);
-        if (s5 != 0) {
-            func_8001C248(s5, &m_90);
+        clipHandle = func_800350B4((s32) obj->field_70);
+        if (clipHandle != 0) {
+            func_8001C248(clipHandle, &m_90);
         }
     }
     func_80069888(&m_90);
@@ -88,9 +97,9 @@ void func_8001DAB0(GameRenderObject *obj) {
     D_1F800084 = 0;
     func_80028DEC((void *)0x1F800000, D_801E4168 < 1);
 
-    s4 = obj->field_E4 << 1;
+    otDepth = obj->field_E4 << 1;
     if (obj->flags_48 & 0x1000) {
-        s4 += 10;
+        otDepth += 10;
     }
     func_8001A4C0(&m_10, obj->angle_28 - obj->field_64);
     func_80069458(&m_50, &m_10);
@@ -114,7 +123,7 @@ void func_8001DAB0(GameRenderObject *obj) {
     m_B0[1].m[2][2] = -m_B0[0].m[2][2];
     func_80017794((void *)0x1F80011C, obj, &m_F0);
     D_1F800084 = 0;
-    func_80028DEC((void *)0x1F800000, (s4 + 3 < D_801E4168) ? (s4 + 3) : 1);
+    func_80028DEC((void *)0x1F800000, (otDepth + 3 < D_801E4168) ? (otDepth + 3) : 1);
 
     for (i = 0; i < 2; i++) {
         GameRenderView *v = D_8009E698;
@@ -131,13 +140,13 @@ void func_8001DAB0(GameRenderObject *obj) {
         m_118[2] += obj->z;
         func_80017794((void *)0x1F80011C, m_118, &m_B0[i]);
         D_1F800084 = 0;
-        func_80028DEC((void *)0x1F800000, (s4 + 2 < D_801E4168) ? (s4 + 2) : 1);
+        func_80028DEC((void *)0x1F800000, (otDepth + 2 < D_801E4168) ? (otDepth + 2) : 1);
         func_80069888(&m_90);
     }
 
     obj->y += D_8009E698->horizon_6;
     obj->field_60 += D_8009E698->horizon_6;
-    if (s5 != 0) {
+    if (clipHandle != 0) {
         func_8001C794();
     }
 }

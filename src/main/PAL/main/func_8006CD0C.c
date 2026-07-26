@@ -34,6 +34,12 @@ void func_8006D0AC(s32 arg0, s32 arg1);
 void func_8006D1B0(s32 arg0);
 void func_8006D1D0(void);
 
+/*
+ * Issues CD command 0xE (set mode) with the mode byte `arg0`, and when the
+ * data-ready bits (0x100) are set, installs the streaming data-ready callback
+ * and the CDDA/sync handler, then issues command 0x1B (read-S). Returns the
+ * second command's result.
+ */
 s32 func_8006CD0C(s32 arg0) {
     u8 byte;
 
@@ -103,14 +109,16 @@ s32 StGetBackloc(CdlLOC *arg0) {
     return D_8009DF18;
 }
 
-void StSetStream(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/* Arms CD streaming: installs the data-ready `callback`/`user_data` and mode
+ * (bit 0 = one-shot vs looping). start_frame/end_frame bound the stream. */
+void StSetStream(s32 mode, s32 start_frame, s32 end_frame, s32 callback, s32 user_data) {
     func_8006D1B0(1);
     D_801E8274 = 0;
-    D_8019C994 = (Callback)arg3;
-    D_8019C79C = arg0 & 1;
+    D_8019C994 = (Callback)callback;
+    D_8019C79C = mode & 1;
     D_801E4190 = 0;
     D_801E3E08 = 0;
     D_8019C790 = 0;
     D_8009E69C = 0;
-    D_8019C9A0 = arg4;
+    D_8019C9A0 = user_data;
 }

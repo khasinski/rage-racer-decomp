@@ -15,6 +15,14 @@ typedef struct {
     s32 w;
 } Vec4;
 
+/*
+ * Initializes/spawns a route render object `ent`: reads a start entry from the
+ * per-scene table (`arr` indexed by `pos`, D_801E4150 base), sets the model id
+ * (+0xAE / +0x122), start angle (0xC00 - track angle), zeroes the motion state
+ * block, resolves the containing track point (func_80030EB4) and builds the
+ * initial marker geometry (func_80031298). `ent` is a render/route object
+ * accessed by raw byte offset (its first 0xE8 mirror GameRenderObject).
+ */
 void func_800383A8(u8 *ent, s32 pos, s32 *arr) {
     u8 *base;
     s32 sub;

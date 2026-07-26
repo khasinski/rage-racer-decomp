@@ -48,6 +48,15 @@ s32 func_80030EB4(Car *car, s32 idx);
 void func_8001A530(Matrix *mtx, s32 angle);
 s32 *func_80069678(s32 *matrix, s32 *vec, s32 *out);
 
+/*
+ * Samples the track surface height under the car. Locates the containing
+ * segment (func_80030EB4), rotates the car position into segment-local space,
+ * clamps the along-segment distance `t` to [0, segmentLength], and linearly
+ * interpolates the point height `y` and slope `field_E` between the two segment
+ * endpoints. Writes the resulting surface height into car->out4 (and out4 into
+ * f60 while f98 is idle). The local TP/Car/SVec/LVec structs mirror
+ * GameTrackPoint / the render object by raw offset to stay byte-exact.
+ */
 void func_80031E98(Car *car) {
     Matrix mtx;
     SVec v;

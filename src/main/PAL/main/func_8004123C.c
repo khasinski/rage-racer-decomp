@@ -24,53 +24,62 @@ void func_800698E8(void *a);
 void func_80029E50(void *a, s32 b);
 void func_800296B4(void *a, s32 b);
 
+/*
+ * Draw loop over the world-object array D_801E4B2C (D_801E4BBC entries). For
+ * each visible object (id != -1, passing the per-sector visibility bitmask test
+ * against D_801E6828) it builds a Z-rotation matrix in the scratchpad
+ * (0x1F800028), transforms the object position through the GTE
+ * (0x1F80011C -> 0x1F800124), sets the primitive shade/semi-trans mode word at
+ * 0x1F800084, then dispatches a prim builder (func_80029E50 / func_800296B4)
+ * on the scratchpad OT at 0x1F800000.
+ */
 void func_8004123C(void) {
     Matrix mtx;
     volatile s32 pad[10];
-    Obj *p;
+    Obj *obj;
     s32 i;
-    s32 shift;
+    s32 visShift;
     s32 vis;
     s32 flags;
 
-    p = D_801E4B2C;
+    obj = D_801E4B2C;
     i = 0;
     if (D_801E4BBC <= 0) {
         return;
     }
 
     do {
-        if (p->id == -1) {
+        if (obj->id == -1) {
             goto next;
         }
-        shift = p->f4 / 2048;
+        visShift = obj->f4 / 2048;  /* per-sector visibility bit index */
         {
             register s32 r2 asm("$2");
             register s32 r3 asm("$3");
-            r3 = p->fC / 2048;
+            r3 = obj->fC / 2048;
             r2 = (s32)D_801E6828;
             r3 = ((s32 *)r2)[r3];
-            r2 = 1 << shift;
+            r2 = 1 << visShift;
             r2 &= r3;
             if (r2 == 0) {
                 goto next;
             }
         }
 
-        func_8001A530(&mtx, p->f2);
+        func_8001A530(&mtx, obj->f2);
         func_80069568((void *)0x1F800028, &mtx);
         {
             register s32 ov asm("$2");
             register s32 cv asm("$3");
-            ov = (u16)p->f4;
+            ov = (u16)obj->f4;
             cv = *(u16 *)0x1F800008;
             ov -= cv;
             *(s16 *)0x1F80011C = ov;
-            ov = (u16)p->f8;
+            ov = (u16)obj->f8;
             cv = *(u16 *)0x1F80000C;
             ov -= cv;
             *(s16 *)0x1F80011E = ov;
-            ov = (u16)p->fC;
+            ov = (u16)obj->fC;
             cv = *(u16 *)0x1F800010;
             ov -= cv;
             *(s16 *)0x1F800120 = ov;
@@ -92,7 +101,7 @@ void func_8004123C(void) {
         func_80069858(&mtx);
         func_800698E8((void *)0x1F800134);
 
-        flags = p->flags;
+        flags = obj->flags;
         if (flags & 8) {
             *(s32 *)0x1F800084 = ((D_8009E694 & 0x10) == 0) << 16;
         } else if (flags & 4) {
@@ -101,14 +110,14 @@ void func_8004123C(void) {
             *(s32 *)0x1F800084 = 0;
         }
 
-        if (D_801E4030 ? (p->flags & 2) : (p->flags & 1)) {
-            func_80029E50((void *)0x1F800000, p->id);
+        if (D_801E4030 ? (obj->flags & 2) : (obj->flags & 1)) {
+            func_80029E50((void *)0x1F800000, obj->id);
         } else {
-            func_800296B4((void *)0x1F800000, p->id);
+            func_800296B4((void *)0x1F800000, obj->id);
         }
 
     next:
         i++;
-        p++;
+        obj++;
     } while (i < D_801E4BBC);
 }

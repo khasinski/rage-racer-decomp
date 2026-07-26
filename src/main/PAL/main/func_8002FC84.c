@@ -4,10 +4,15 @@
 extern s32 D_8009E6A8;
 extern GameTrackPoint *D_8009E688;
 
-void func_8002FC84(s32 arg0, s32 *out, s32 weight) {
-    s32 next = (arg0 + 1) % D_8009E6A8;
+/*
+ * Linearly interpolates the centre-line XYZ between GameTrackPoint[pointIndex]
+ * and its successor by `weight` (0..0x400), writing the result to out[0..2].
+ * The +0x3FF/+0x7FF bias before the >>10 / >>11 shifts rounds toward zero.
+ */
+void func_8002FC84(s32 pointIndex, s32 *out, s32 weight) {
+    s32 next = (pointIndex + 1) % D_8009E6A8;
     s32 inv = 0x400 - weight;
-    GameTrackPoint *cur = &D_8009E688[arg0];
+    GameTrackPoint *cur = &D_8009E688[pointIndex];
     GameTrackPoint *nxt = &D_8009E688[next];
     s32 sum;
 

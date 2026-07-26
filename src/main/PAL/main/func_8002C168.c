@@ -8,6 +8,14 @@ extern GameTrackPoint *D_8009E688;
 
 s32 func_80030EB4(GameCarRuntime *car, s32 idx);
 
+/*
+ * Lap-progress accumulator. Relocates the car's trackPointIndex to the segment
+ * that now contains it (func_80030EB4), then walks the intervening points and
+ * adds (forward) or subtracts (backward) their segmentLength into
+ * car->field_68 (progress). The two mirror-image branches select forward vs
+ * reverse lap direction from the direction flag D_801E408C. Register-pinned
+ * locals (bv/ir) are load-bearing for the match.
+ */
 void func_8002C168(GameCarRuntime *car) {
     s32 r;
     s32 n;

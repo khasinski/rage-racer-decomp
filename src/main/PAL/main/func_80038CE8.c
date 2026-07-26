@@ -5,6 +5,12 @@ s32 func_8002A788(s32 arg0, s32 arg1);
 s32 func_80068568(s32 angle);
 s32 func_80068634(s32 angle);
 
+/*
+ * Collision / boundary response: sets the car's knock-back motion vector
+ * (velocityX / velocityZ, motionTimer, motionActive) from a push direction and
+ * speed derived per `mode` (0 / 2 / 4 select different angle+speed math from
+ * arg1/arg2). Register-pinned, goto-structured decompilation; do not restructure.
+ */
 void func_80038CE8(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     register GameCarRuntime *carReg asm("$17");
     register s32 x asm("$16");

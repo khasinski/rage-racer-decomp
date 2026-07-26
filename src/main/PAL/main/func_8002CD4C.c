@@ -39,6 +39,13 @@ extern s16 D_8007C020[];
 s32 func_8002A7C4(s32, s32);
 s32 func_80068634(s32);
 
+/*
+ * Steering-lean / body-roll state machine for the car `ctx`: drives the lean
+ * (f44) and roll (f64) from the drive-block steer input (sub.x1C), branching on
+ * the control mode D_801E6E74 (0x41 = player, 0x23 = demo). The local A / SubB
+ * typedefs are raw-offset overlays onto the car runtime (drive block at +0xBC)
+ * shaped to match; retyping them to GameCarRuntime would break the match.
+ */
 void func_8002CD4C(A *ctx) {
     SubB *p = &ctx->sub;
     s16 mode = D_801E6E74;

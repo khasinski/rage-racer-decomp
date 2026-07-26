@@ -22,14 +22,22 @@ extern s32 D_801E4D18;
 void func_80069A58(s32 arg0, s32 arg1);
 void func_80069A78(s32 arg0);
 
+/*
+ * Sets up the scratchpad render state (0x1F800000) for the rear-view mirror
+ * pass: only when all five conditions hold (mirror flag, enabled, etc.) does it
+ * save the current matrix into D_8009AF00, install the mirror matrix D_8019CB18,
+ * set mode 9 + a narrow clip rect + prim base, flip the ordering flag, and push
+ * the pass behind the main scene (depth += 0x800). Returns 1 if the mirror pass
+ * is active, else 0.
+ */
 s32 func_8001A9A8(void) {
     GameScratchpadRenderState *scratch;
-    s32 active;
+    s32 mirrorEnabled;
     register s32 v0reg asm("$2");
     register s32 v1reg asm("$3");
     register s32 y0 asm("$4");
 
-    active = 0;
+    mirrorEnabled = 0;
     scratch = (GameScratchpadRenderState *)0x1F800000;
 
     if ((D_801E8A98 != 0) &&
@@ -37,10 +45,10 @@ s32 func_8001A9A8(void) {
         (D_8009E870 == 0) &&
         (D_801E4DAC != 0) &&
         (D_801E6E74 == 2)) {
-        active = 1;
+        mirrorEnabled = 1;
     }
 
-    if (active != 0) {
+    if (mirrorEnabled != 0) {
         D_8009AF00 = scratch->matrix;
         scratch->matrix = D_8019CB18;
 
@@ -90,5 +98,5 @@ s32 func_8001A9A8(void) {
         scratch->depth += 0x800;
     }
 
-    return active;
+    return mirrorEnabled;
 }

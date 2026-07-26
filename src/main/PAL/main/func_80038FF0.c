@@ -3,6 +3,13 @@
 
 s32 func_80068568(s32 arg0);
 
+/*
+ * Car body oscillation / bounce. While motionMode is non-zero, decays
+ * motionModeTimer and drives a decaying sine wave (amplitude from
+ * motionValue, phase from the timer) into the car's render offsets
+ * (field_20 / field_28). motionMode selects the axis/shape of the bounce:
+ * 1 & 5 both axes, 2 & 4 vertical only, 3 lateral only.
+ */
 void func_80038FF0(GameCarRuntime *car) {
     s32 value;
     s32 wave;

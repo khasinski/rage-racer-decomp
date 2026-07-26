@@ -1,33 +1,33 @@
 #include "common.h"
+#include "game/audio.h"
 
 void func_80043134(s32 arg0);
-void func_8005E834(s32 arg0);
 
-void func_8005BD84(s32 arg0) {
+void GameSetSequenceVolumeSetting(s32 setting) {
     u32 adjusted;
     s32 value;
 
-    value = arg0;
+    value = setting;
     if (value < 0) {
         goto negative;
     }
 
-    adjusted = arg0;
+    adjusted = setting;
     adjusted++;
     adjusted--;
-    arg0 = adjusted;
-    if (arg0 < 0x10) {
+    setting = adjusted;
+    if (setting < 0x10) {
         goto call;
     }
 
-    arg0 = 0xF;
+    setting = 0xF;
     goto call;
 
 negative:
-    arg0 = 0;
+    setting = 0;
 
 call:
-    value = arg0;
-    func_80043134(arg0);
-    func_8005E834(value);
+    value = setting;
+    func_80043134(setting);
+    GameSetSequenceVolumeScale(value);
 }

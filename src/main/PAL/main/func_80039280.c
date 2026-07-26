@@ -3,6 +3,12 @@
 
 s32 func_80039184(GameCarRuntime *arg0);
 
+/*
+ * Jump / launch setup: when func_80039184 reports a marker crossing, seeds the
+ * launch trajectory (field_90/94/98/9A/9C/9E) and snapshots the car's render
+ * offsets (field_20/28 and y). field_98 holds the launch state (1 = jump). The
+ * inline mult/mfhi block is the compiler's divide idiom; keep it verbatim.
+ */
 void func_80039280(GameCarRuntime *arg0) {
     register GameCarRuntime *obj asm("$16");
     register s32 value asm("$4");

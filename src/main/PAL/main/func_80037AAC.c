@@ -19,6 +19,14 @@ static inline void ClearScratchRenderMode37AAC(void) {
     D_1F800084 = 0;
 }
 
+/*
+ * Renders the 6 waypoints. For each active-shaped slot it builds a rotation
+ * matrix from the waypoint's angle (point+0x14) and tilt (point+0x10) and emits
+ * two GTE draw primitives (func_80028DEC) into the scratchpad OT: the second is
+ * the same billboard rotated by 0x800 (180 degrees). `point` walks the
+ * TrackWaypointRuntime array D_801E4DF4 via raw offsets. Register pins are
+ * match-load-bearing.
+ */
 void func_80037AAC(void) {
     Matrix mtx0;
     Matrix mtx1;

@@ -9,6 +9,15 @@ extern s32 D_8009E798[];
 
 s32 func_80037808(TrackWaypointRuntime *waypoint);
 
+/*
+ * Per-frame waypoint spawn/update state machine over the 6 slots. An idle slot
+ * (active==0) that the car is near (func_80037808) spawns: increments the spawn
+ * counter D_801E43F8, plays cue 0xA, marks the slot active and seeds its
+ * velocity from D_8009E798. An active slot integrates position from velocity
+ * with 15/16 per-frame damping and grows its scale toward 0x400, retiring to
+ * state 2 once motion decays to zero. Register pins and raw tail-relative field
+ * offsets are match-load-bearing.
+ */
 void func_80037860(void) {
     register TrackWaypointRuntime *waypoint asm("$17");
     register s32 i asm("$18");

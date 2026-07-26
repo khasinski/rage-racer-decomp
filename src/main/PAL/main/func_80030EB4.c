@@ -11,6 +11,15 @@ s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
 
+/*
+ * Finds the track segment whose (rotated, half-width) quad currently contains
+ * the car. Starting at `idx` it spirals outward over neighbouring segments
+ * (k alternately added/subtracted), and for each builds the segment quad from
+ * the two endpoints' angle + left/right half-widths (field_10/field_12) and
+ * runs four half-plane cross-product tests (func_80069C98). Returns the
+ * containing segment index, or -1 (snapping the car onto the track) if none.
+ * pts[0] is the car-relative point; pts[1..4] are the quad corners.
+ */
 s32 func_80030EB4(GameCarRuntime *car, s32 idx) {
     DVEC pts[5];
     s32 i;

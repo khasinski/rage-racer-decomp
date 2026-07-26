@@ -30,6 +30,14 @@ extern int func_8006CC8C(void *, const char *, int);
 extern void func_8006CBF4(char *, u8 *, int);
 extern int func_8001674C();
 
+/*
+ * Reads and parses the disc's directory into the Entry table D_8009C114[128].
+ * Loads sector 16 (the volume descriptor) via func_8006CB88, validates the "CD"
+ * signature, follows it to the path/directory sector, then walks the packed
+ * variable-length records (record length in *p, name at p+8) copying each into
+ * an Entry (index, header word, flags, name). Returns 1 on success, 0 on error.
+ * D_80099048 is the debug-verbosity level gating the func_8001674C logging.
+ */
 int func_8006C560(void) {
     u8 *p;
     int i;

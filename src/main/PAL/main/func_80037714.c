@@ -6,6 +6,14 @@ extern s32 D_8019C700;
 extern TrackWaypointSeed D_8007DFD4[];
 extern TrackWaypointRuntime D_801E4DF4[];
 
+/*
+ * Initializes the 6 TrackWaypointRuntime slots for the current course. The
+ * `magic`/mult/mfhi block is the compiler's divide-by-10 idiom computing the
+ * track index (D_8009E83C-1)/10, clamped to 0..9, which selects a
+ * TrackWaypointSeed row in D_8007DFD4. Each slot i is seeded at
+ * origin + step*i (x,y), with the fixed constants 0x1766 and 0x174, and marked
+ * inactive. Register pins and the raw tail-offset writes are match-load-bearing.
+ */
 void func_80037714(void) {
     register TrackWaypointRuntime *waypoint asm("$7");
     register s32 i asm("$5");

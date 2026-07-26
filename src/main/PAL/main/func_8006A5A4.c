@@ -6,6 +6,13 @@ extern u8 D_8009904C;
 
 s32 func_8006B620(s32 arg0, void *arg1, s32 arg2, s32 arg3);
 
+/*
+ * Core CD command sender with retry: issues command `arg0` (low byte) with the
+ * parameter bytes at `arg1` and result flags `arg2`, retrying up to 3 times.
+ * Saves/restores the CD mode D_8009903C around the call. Heavily register-
+ * pinned to match; the C identifiers may be renamed but the asm("$N") pins and
+ * offsets must not change.
+ */
 s32 func_8006A5A4(s32 arg0, void *arg1, s32 arg2) {
     register void *arg asm("$17");
     register s32 arg2Reg asm("$18");

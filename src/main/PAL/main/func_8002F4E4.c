@@ -5,6 +5,13 @@ s32 func_8001A6AC(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
+/*
+ * Shared "advance car position/heading" helper. Integrates the car's speed
+ * (field_A4) and lateral component (field_A8) along its heading (field_24) into
+ * the world position, then recomputes headingAngle. Called by each of the
+ * state98 motion handlers. Register pins and the single-param/two-arg call
+ * mismatch are deliberate to match; do not "fix".
+ */
 void func_8002F4E4(GameCarRuntime *arg0) {
     register GameCarRuntime *car asm("$19") = arg0;
     volatile s32 coords[3];

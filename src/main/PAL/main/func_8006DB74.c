@@ -7,6 +7,12 @@ extern char D_80013B14[];
 
 void func_8001674C(char *fmt, ...);
 
+/*
+ * Low-level DMA-channel transfer helper. Spins on the channel's CHCR busy bit
+ * (register window at 0x1F801088 + ch*0x10, timing out after 0x10000 polls),
+ * then programs MADR/BCR/CHCR to start a transfer of `count` blocks of `size`
+ * words. `mode` selects between the block-mode / linked-list setups.
+ */
 void func_8006DB74(s32 ch, u32 madr, u32 count, u32 size, u32 chcrVal, u8 mode) {
     volatile s32 dummy;
     s32 i;

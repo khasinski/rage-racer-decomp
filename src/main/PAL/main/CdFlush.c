@@ -12,30 +12,35 @@ void func_8006BAF0(void);
 s32 func_8006B0D4(s32 arg0, s32 arg1);
 s32 func_8006B354(s32 arg0, s32 arg1);
 
+/* CdFlush. */
 void func_8006A494(void) {
     func_8006BAF0();
 }
 
-s32 func_8006A4B4(s32 arg0) {
+/* CdSetDebug: sets the CD debug-verbosity `level`, returns the previous one. */
+s32 func_8006A4B4(s32 level) {
     s32 old = D_80099048;
-    D_80099048 = arg0;
+    D_80099048 = level;
     return old;
 }
 
-char *func_8006A4CC(s32 arg0) {
-    arg0 &= 0xFF;
-    if ((u32)arg0 >= 0x1C) {
+/* CdComstr: returns the human-readable name for CD command `cmd` (or a default
+ * string if out of range). */
+char *func_8006A4CC(s32 cmd) {
+    cmd &= 0xFF;
+    if ((u32)cmd >= 0x1C) {
         return (char *)D_800136D0;
     }
-    return D_80099060[arg0];
+    return D_80099060[cmd];
 }
 
-char *func_8006A500(s32 arg0) {
-    arg0 &= 0xFF;
-    if ((u32)arg0 >= 7) {
+/* CdIntstr: returns the human-readable name for CD interrupt code `intr`. */
+char *func_8006A500(s32 intr) {
+    intr &= 0xFF;
+    if ((u32)intr >= 7) {
         return (char *)D_800136D0;
     }
-    return D_800990E0[arg0];
+    return D_800990E0[intr];
 }
 
 s32 func_8006A534(s32 arg0, s32 arg1) {

@@ -5,6 +5,13 @@ extern s32 D_801E408C;
 extern s32 D_801E40D8;
 extern u8 *D_801E4150;
 
+/*
+ * Detects whether the car crossed a route marker this frame: scans the 8-entry
+ * row (0x40 stride) of the marker table D_801E4150 keyed by the car's routeRow,
+ * comparing trackProgress against previousTrackProgress (the lap-direction flag
+ * D_801E408C flips the comparison). Returns the crossed-marker code, or 0.
+ * Register-pinned, goto-structured.
+ */
 s32 func_80039184(GameCarRuntime *arg0) {
     register u8 *base asm("t2");
     register s32 pos0 asm("a1");

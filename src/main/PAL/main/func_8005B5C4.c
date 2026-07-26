@@ -13,7 +13,7 @@ s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 void func_8001674C(char *arg0);
 void func_80063D9C(s32 arg0);
 
-s32 func_8005B5C4(s32 header, s32 body) {
+s32 GameInitSoundWithVab(s32 header, s32 body) {
     register s32 headerReg asm("$16") = header;
     register s32 bodyReg asm("$18") = body;
     register s16 *vabIdPtr asm("$17");

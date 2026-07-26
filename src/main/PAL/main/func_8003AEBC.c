@@ -13,6 +13,15 @@ s32 func_8002A7C4(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
+/*
+ * Car route-steering update. Samples a look-ahead track point (two ahead or two
+ * behind depending on the lap-direction flag D_801E408C), clamps the lateral
+ * offset to the track half-width (field_10/field_12), projects the target point
+ * off the centre-line along the inward normal (0x1000 - smoothed track angle),
+ * then nudges the car's headingAngle toward that target (func_8002A7C4). Writes
+ * the steer value into field_44 and the route sub-block (field_BC).
+ * Register-pinned locals are match-load-bearing.
+ */
 void func_8003AEBC(GameCarRuntime *car) {
     GameCarRuntime *route;
     GameTrackPoint *point;

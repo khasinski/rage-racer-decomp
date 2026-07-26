@@ -17,6 +17,13 @@ s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 void func_8005C104(s32 index, s32 phase, s32 volume);
 
+/*
+ * Car motion handler for state98 == 0 (normal driving): turns steering into a
+ * world velocity, triggers over-rev / redline engine-audio cues (comparing
+ * against the spec block's redline at +0x100 / +0x106), advances the car
+ * (func_8002F4E4), and detects the jump/launch trigger. Route sub-block fields
+ * are accessed by raw offset to stay byte-exact.
+ */
 void func_8002F690(GameCarRuntime *car) {
     GameCarRuntime *routeStruct = (GameCarRuntime *)&car->field_BC;
     u8 *route = (u8 *)routeStruct;

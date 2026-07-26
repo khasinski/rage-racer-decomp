@@ -9,6 +9,11 @@ s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 void func_8005C104(s32 index, s32 phase, s32 volume);
 
+/*
+ * Car motion handler for state98 == 2 (airborne / jump): decays velocity and
+ * spin, advances the car (func_8002F4E4), and lands it when it returns to the
+ * ground. The drive sub-block is accessed via raw ((u8*)car + 0xBC) offsets.
+ */
 void func_80030814(GameCarRuntime *car) {
     u8 *r = (u8 *)car + 188;
     s32 sinF24;

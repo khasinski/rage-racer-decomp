@@ -1,6 +1,13 @@
 #include "common.h"
 #include "game/car.h"
 
+/*
+ * Applies and decays the collision shake: while motionActive/motionTimer are
+ * set, subtracts field_7C / field_7E from the car position and damps the
+ * velocity by 7/8 (*8-1 >> 3) each frame. field_7C / field_7E are read via
+ * inline __asm__ lh loads and the registers are pinned, so the struct offsets
+ * must not change.
+ */
 void func_80038C4C(GameCarRuntime *arg0) {
     register GameCarRuntime *obj asm("$6") = arg0;
     register s32 velX asm("$3");

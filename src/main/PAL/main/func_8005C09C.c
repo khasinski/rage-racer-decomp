@@ -14,35 +14,35 @@ extern s32 D_800126B4[];
 void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 void func_80078018(s32 arg0);
 
-void func_8005C09C(s32 arg0) {
-    func_80077C7C(0x14, D_801E6CA8, (s16)arg0, 0, 0x3C, 0, 0, 0);
+void GameStartIndexedEffectVoice(s32 baseTone) {
+    func_80077C7C(0x14, D_801E6CA8, (s16)baseTone, 0, 0x3C, 0, 0, 0);
 }
 
-void func_8005C0E4(void) {
+void GameStopIndexedEffectVoice(void) {
     func_80078018(0x14);
 }
 
-void GameSetIndexedEffectVoice(s32 arg0, s32 arg1, s32 arg2) {
-    if (arg0 >= -1) {
-        if (arg0 >= 3) {
-            arg0 = 2;
+void GameSetIndexedEffectVoice(s32 index, s32 phase, s32 volume) {
+    if (index >= -1) {
+        if (index >= 3) {
+            index = 2;
         }
     } else {
-        arg0 = -1;
+        index = -1;
     }
 
-    if (arg2 >= 0) {
-        if (arg2 >= 0x80) {
-            arg2 = 0x7F;
+    if (volume >= 0) {
+        if (volume >= 0x80) {
+            volume = 0x7F;
         }
     } else {
-        arg2 = 0;
+        volume = 0;
     }
 
-    D_801E6CF0 = arg0;
-    if (arg0 >= 0) {
-        D_801E6CFC = arg2;
-        D_801E6CF8 = arg1;
+    D_801E6CF0 = index;
+    if (index >= 0) {
+        D_801E6CFC = volume;
+        D_801E6CF8 = phase;
     }
 }
 
@@ -68,11 +68,11 @@ void GameUpdateIndexedEffectVoice(void) {
     } else {
         index = D_801E6CF0;
         if (index < 0) {
-            func_8005C0E4();
+            GameStopIndexedEffectVoice();
         } else if (index != raw) {
         start_voice:
             raw = (index * 3) << 2;
-            func_8005C09C(*(s32 *)((s32)D_800126AC + raw));
+            GameStartIndexedEffectVoice(*(s32 *)((s32)D_800126AC + raw));
         }
     }
 

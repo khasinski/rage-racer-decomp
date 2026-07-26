@@ -10,6 +10,12 @@ s32 func_80068634(s32 arg0);
 s32 func_800632B0(void);
 void func_8005C104(s32 index, s32 phase, s32 volume);
 
+/*
+ * Car motion handler for state98 == 3 (crash / tumble): applies a random shake
+ * (func_800632B0) scaled by the remaining shake budget D_8019CA04, advances the
+ * car (func_8002F4E4), and resets the car once the budget expires. field_15C /
+ * field_15E hold the shake magnitude.
+ */
 void func_80030BC4(GameCarRuntime *car) {
     GameCarRuntime *route = (GameCarRuntime *)&car->field_BC;
     s32 sinA;

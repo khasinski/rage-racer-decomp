@@ -26,6 +26,14 @@ extern s32 D_801E4BF4;
 extern s16 D_801E4FB4;
 extern s16 D_801E6E74;
 extern u8 D_801E8884[];
+/*
+ * AI target-speed / drivetrain physics driver (called by func_8002DEFC). Reads
+ * the per-car spec block D_801E42D8 to compute a target speed, applies steering
+ * assist and RPM, and dispatches the state98 motion handlers. `base` is the car
+ * runtime, accessed via raw byte-offset pointer arithmetic (e.g.
+ * *(s16*)((u8*)base+0x132)) with the drive sub-block at base+0xBC; the raw
+ * offsets are what make it match, so it is intentionally left as void*.
+ */
 void func_8002A810(void *base)
 {
   u8 *var_a2;

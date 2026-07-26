@@ -11,6 +11,13 @@ s32 func_8002FD9C(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
+/*
+ * AI route steering: projects a target point ahead of (or behind, per the
+ * direction flag at car+0x110) the car on the track centre-line, offset
+ * laterally, and steers the car's heading toward it. `timerBase` is the per-car
+ * spec/config block D_801E42D8 (the u16 at +0x10A is a countdown timer).
+ * Register pins are match-load-bearing.
+ */
 void func_8002FE74(GameCarRuntime *car) {
     register u8 *timerBase asm("$2");
     register s32 timer asm("$19");

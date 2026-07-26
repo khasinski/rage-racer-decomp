@@ -6,30 +6,36 @@ extern s32 D_801E4D8C;
 extern s32 D_801E4BC0;
 extern u8 *D_8009F0A4;
 
-void func_8001F134(s32 arg0, u8 *arg1, u8 *arg2) {
+/*
+ * Packs a GameRenderPairPoint (billboard/edge pair) from two
+ * GameRenderSourcePoint records (srcA=first, srcB=second) into the pair-point
+ * output ring D_8009F0A4, keyed by pairIndex>>1. Only even indices hold a pair
+ * (odd indices are skipped). Stride is ((n<<1)+n)<<4 == n*0x30 (sizeof pair).
+ */
+void func_8001F134(s32 pairIndex, u8 *srcA, u8 *srcB) {
     GameRenderPairPoint *dst;
     u8 *base;
     GameRenderSourcePoint *src1;
     GameRenderSourcePoint *src2;
-    s32 saved_ae;
+    s32 sourceField_AE;
     s32 current;
     s32 odd;
     u32 first;
 
     current = D_8009E782;
-    src2 = (GameRenderSourcePoint *)arg2;
-    saved_ae = src2->field_AE;
+    src2 = (GameRenderSourcePoint *)srcB;
+    sourceField_AE = src2->field_AE;
     D_801E4D8C = current;
-    odd = arg0 & 1;
-    D_801E4BC0 = saved_ae;
+    odd = pairIndex & 1;
+    D_801E4BC0 = sourceField_AE;
     if (odd) {
         return;
     }
 
-    arg0 >>= 1;
-    dst = (GameRenderPairPoint *)(((arg0 << 1) + arg0) << 4);
+    pairIndex >>= 1;
+    dst = (GameRenderPairPoint *)(((pairIndex << 1) + pairIndex) << 4);
     base = D_8009F0A4;
-    src1 = (GameRenderSourcePoint *)arg1;
+    src1 = (GameRenderSourcePoint *)srcA;
     first = src1->field_0;
     dst = (GameRenderPairPoint *)((s32)dst + (s32)base);
     dst->first_0 = first;
