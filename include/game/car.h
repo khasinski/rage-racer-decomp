@@ -11,7 +11,7 @@
 typedef struct GameCarEntry {
     u8 modelVariant;
     u8 tireCompound;  /* +0x01 CUSTOMIZE row 0, five settings */
-    u8 transmission;  /* +0x02 CUSTOMIZE row 1, 0 or 1; which one is AT is unconfirmed */
+    u8 transmission;  /* +0x02 CUSTOMIZE row 1, 0 automatic, 1 manual */
     u8 shapeIndex;
     u8 textureIndex;
     u8 enabled;

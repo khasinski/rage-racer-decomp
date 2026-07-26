@@ -1000,3 +1000,18 @@ course-select gate (`GameCanSelectNextCourse`) and the attract re-roll both
 require class >= 2 before Oval can be chosen, so variants 1 and 2 are not
 reachable that way; the no-save first-run path in `func_8001B5DC` does set
 class 0 with course 3, which selects OVAL1.
+
+### Default car table (`D_8007BE68`)
+
+Thirteen 8-byte entries, one per model, copied into the car table for a new
+game. Only **model 3 has `enabled = 1`**, so `CAR_3x` is the car the player
+starts with - not `CAR_00`, whose asset index happens to be first.
+
+The template's transmission byte is set for models 2, 6, 8, 9, 11 and 12,
+exactly the models whose asset data clears the automatic-gearbox flag. Two
+independent sources agree, which settles the encoding: **0 = automatic,
+1 = manual**.
+
+Models 10-12 sit outside the gradeable range (`func_80018A70` and the design
+screen both gate on `g_PlayerCarIndex < 10`), so the game shows `GRADE ?` for
+them - its own handling of the four single-grade specials, not a defect.
