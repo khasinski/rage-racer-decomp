@@ -250,6 +250,26 @@ void GameDrawTeamLogoCanvas(s32 panelStep, s32 editorStep) asm("func_8004A248");
 void GameUpdateTeamLogoCanvas(void) asm("func_8004C0D8");
 
 /*
+ * The eight whole-canvas transforms GameUpdateTeamLogoCanvas offers, each
+ * operating in place on g_TeamLogoCanvas (64 rows x 8 words x 8 nibbles).
+ * The four scrolls wrap and play cue 1; the flips and rotations play cue 8.
+ * Directions are derived from the arithmetic - see docs/names.md 13.
+ */
+void GameScrollTeamLogoUp(void) asm("func_8004B9B8");
+void GameScrollTeamLogoDown(void) asm("func_8004BA50");
+void GameScrollTeamLogoLeft(void) asm("func_8004BAE4");
+void GameScrollTeamLogoRight(void) asm("func_8004BBA8");
+/* Mirror about the horizontal axis: row r <-> row 63 - r. */
+void GameFlipTeamLogoVertical(void) asm("func_8004BC68");
+/* Mirror about the vertical axis: nibbles reversed inside each word and word
+ * w swapped with word 7 - w. */
+void GameFlipTeamLogoHorizontal(void) asm("func_8004BCE4");
+/* dst(y, x) = src(x, 63 - y). func_8004BDEC is its silent second entry point. */
+void GameRotateTeamLogoCcw(void) asm("func_8004BDB4");
+/* dst(y, x) = src(63 - x, y). */
+void GameRotateTeamLogoCw(void) asm("func_8004BF48");
+
+/*
  * TEAM LOGO editor data, all per-file types; see docs/names.md 12c.
  *   g_TeamLogoCanvas   D_801E6F2C  2048 bytes = 64x64 4bpp
  *   g_TeamLogoClut     D_801E444C  16 x u16

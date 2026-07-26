@@ -58,8 +58,14 @@ void GameShutdownSoundSystem(void) asm("func_8005BC80");
 void GameSetEffectVolumeScale(s32 scale) asm("func_8005BD2C");
 void GameSetLoadedTableVolumeScale(s32 scale) asm("func_8005BD58");
 void GameSetSequenceVolumeSetting(s32 setting) asm("func_8005BD84");
+/* The effect-side twin of GameSetSequenceVolumeSetting: clamps the 0..15
+ * option-screen level and scales it onto g_EffectVolumeScale's 0..0x80 range. */
+void GameSetEffectVolumeSetting(s32 setting) asm("func_8005BDD4");
 void GameSetStereoOutput(void) asm("func_8005BE24");
 void GameSetMonoOutput(void) asm("func_8005BE58");
+/* Push all three saved audio settings (BGM level, SFX level, mono/stereo) into
+ * the sound runtime; run at boot and again after a memory-card load. */
+void GameApplyAudioSettings(void) asm("func_80021224");
 u32 GameGetLoadedAudioStep(void) asm("func_8005BE88");
 s32 GameGetActiveAudioSlots(void) asm("func_8005BE98");
 s32 GameSetSoundToneTableEntry(s32 row, s32 bank, s32 value) asm("func_8005B040");

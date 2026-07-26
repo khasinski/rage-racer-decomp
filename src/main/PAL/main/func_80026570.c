@@ -13,8 +13,8 @@ extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 D_8019C768;
 extern s32 D_801E682C;
 void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
-void func_80019730(void);
-s32 func_80019844(void);
+void GameInstallCourseAssets(void) asm("func_80019730");
+s32 GameRequestTrackDataAssets(void) asm("func_80019844");
 extern s16 D_8007D6CC[];
 s32 func_8002664C(s32 arg0);
 
@@ -69,8 +69,8 @@ void func_800265BC(void) {
     initialValue = 0x80;
     D_8019C768 = initialValue;
     GameUploadImageAsset((void *)g_ImageBlockBuffer);
-    func_80019730();
-    func_80019844();
+    GameInstallCourseAssets();
+    GameRequestTrackDataAssets();
 
     D_801E682C = 0;
     g_FadeLevel = initialValue;

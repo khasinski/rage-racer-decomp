@@ -130,7 +130,7 @@ s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 GameRequestTrackLoad(void) asm("func_8001965C");
 s32 GameRequestRaceStart(void) asm("func_80019580");
-void func_80019AF0(int);
+void GameBeginIntroFmv(int) asm("func_80019AF0");
 
 void GameUpdateFrontend(void) {
     u32 state;
@@ -197,7 +197,7 @@ Lcheck:
         D_801E8260++;
     } else {
         if (D_8007C744 & 1) {
-            func_80019AF0(3);
+            GameBeginIntroFmv(3);
             D_8007C744++;
         } else {
             if (g_SceneTimer == 0x1cf) {

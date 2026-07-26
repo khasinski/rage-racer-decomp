@@ -12,7 +12,7 @@ extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
 extern s32 D_801E4D68;
 void func_80024B6C(void);
-void func_80021224(void);
+void GameApplyAudioSettings(void) asm("func_80021224");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void func_80023750(s32 arg0);
@@ -54,8 +54,8 @@ extern u8 D_80011010[];
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_80025940(void);
 void func_80016EA0(s32 a0, s32 a1, void *a2, s32 a3);
-void func_80019730(void);
-void func_80019844(void);
+void GameInstallCourseAssets(void) asm("func_80019730");
+void GameRequestTrackDataAssets(void) asm("func_80019844");
 void func_80025AC8(void);
 
 void func_800250BC(void) {
@@ -135,7 +135,7 @@ void func_800250BC(void) {
         break;
     }
 
-    func_80021224();
+    GameApplyAudioSettings();
     pad = g_PadEdge2;
     if (pad & 0x860) {
         GamePlaySoundCue(2);
@@ -353,8 +353,8 @@ void func_80025AC8(void) {
 
 void func_80025BD8(void) {
     if (g_AssetLoadState == 0) {
-        func_80019730();
-        func_80019844();
+        GameInstallCourseAssets();
+        GameRequestTrackDataAssets();
         D_8019C99C = 1;
     }
 

@@ -105,7 +105,7 @@ u32 StFreeRing(u32 *base) asm("func_8006CFF0");
 /* The libds streaming state machine: advances D_80099418 through states 1..0xA,
  * DMAs sector header then body, drives the StStrHeader ring. Installed via
  * CdReadyCallback behind the stub func_8006CDA0 and also pumped directly from
- * func_8001EBC8. */
+ * GameUploadFmvSlice. */
 void StCdInterrupt(void) asm("func_8006D1D0");
 
 /*
@@ -128,6 +128,43 @@ s32 CdReadyCallback(s32 callback) asm("func_8006A58C");
  * func_8006C17C is the IRQ2 handler installed by that reset; it drains the
  * interrupt status via func_8006AB5C and fans out to the sync/ready callbacks.
  */
+/*
+ * libcd's cdread.c, linked into the game's own .text range instead of the
+ * 0x80063200+ SDK block - identified by its three surviving messages
+ * "CdRead: sector error" / "CdRead: Shell open..." / "CdRead: retry...".
+ * CdRead arms a multi-sector transfer and returns immediately; CdReadSync
+ * polls it (mode 0 blocks, non-zero returns the sectors still outstanding).
+ * The two lower entries are cdread.c's own statics, named descriptively here.
+ */
+s32 CdReadSync(s32 mode, s32 result) asm("func_80027790");
+void CdReadBreak(void) asm("func_80027634");
+/* cdread.c's `data_ready_callback`: drains one sector per CdReady interrupt. */
+void CdReadDataReadyCallback(u8 intr, s32 result) asm("func_80027238");
+/* cdread.c's `read_retry`: re-issues CdlSetmode + CdlReadN after a shell open,
+ * a seek error, or the 0x4B0-vblank watchdog in CdReadSync. */
+s32 CdReadRetry(s32 mode) asm("func_8002745C");
+
+/* Install the DMA3 (CD-ROM) data callback; returns the previous one. */
+void CdDataCallback(s32 callback) asm("func_8006A994");
+/* Fetch the next ready ring frame: *addr = its data, *header = its ring entry;
+ * returns 0 when one was handed out. */
+s32 StGetNext(StRingEventRecord **addr, StRingEventRecord **header) asm("func_8006D0EC");
+/* Tear the stream down: clears the CD data / ready callbacks and both kernel
+ * callback slots inside a critical section. */
+void StUnSetRing(void) asm("func_8006CE20");
+
+/*
+ * libpress (MDEC) front end - thin wrappers over the MDEC_* primitives, which
+ * is what identifies each one. DecDCTin/DecDCTout push a bitstream / pull the
+ * decoded macroblocks; the *Callback pair installs the DMA0 (MDECin) and DMA1
+ * (MDECout) completion callbacks, which is how GameUploadFmvSlice is reached.
+ */
+void DecDCTout(volatile u32 *buf, s32 size) asm("func_8006402C");
+void DecDCTinSync(void) asm("func_8006404C");
+void DecDCToutSync(void) asm("func_8006406C");
+void DecDCTinCallback(s32 callback) asm("func_8006408C");
+void DecDCToutCallback(s32 callback) asm("func_800640B0");
+
 s32 CD_init(s32 mode) asm("func_8006A428");
 s32 CD_sync(s32 mode, s32 result) asm("func_8006B0D4");
 s32 CD_ready(s32 mode, s32 result) asm("func_8006B354");

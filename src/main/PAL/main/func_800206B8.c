@@ -21,10 +21,10 @@ extern s32 D_801E419C;
 s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
 s32 func_800214B8(void);
 void func_80021540(void);
-void func_80021288(s32 arg0, s32 arg1);
-void func_800212F0(s32 arg0);
-void func_80019BB8(s32 arg0);
-void func_80019B3C(s32 arg0);
+void GameResetProgressSlot(s32 arg0, s32 arg1) asm("func_80021288");
+void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
+void GameBeginEndingFmv(s32 arg0) asm("func_80019BB8");
+void GameBeginClassFmv(s32 arg0) asm("func_80019B3C");
 extern s32 D_8019C768;
 extern s32 D_8019CB74;
 extern s32 D_801F17B0;
@@ -172,20 +172,20 @@ void func_80020B08(void) {
 
             ptr = g_RaceProgress;
             oldValue = ptr->maxClassReached;
-            func_80021288((s32)g_CarTable, (s32)ptr);
+            GameResetProgressSlot((s32)g_CarTable, (s32)ptr);
             magic = 0x3B9AC9FF;
             afterPtr = g_RaceProgress;
             afterPtr->unk10 = magic;
             afterPtr->maxClassReached = oldValue;
-            func_800212F0(0);
-            func_80019BB8(0x21);
+            GameResetCourseProgress(0);
+            GameBeginEndingFmv(0x21);
         } else {
             s32 current;
             s32 next;
             GameRaceProgress *menuPtr;
             s32 enabled;
 
-            func_80019B3C(7);
+            GameBeginClassFmv(7);
             current = g_GrandPrixClass;
             menuPtr = g_RaceProgress;
             enabled = D_801E419C;
@@ -202,7 +202,7 @@ void func_80020B08(void) {
                 }
             }
 
-            func_800212F0(g_GrandPrixClass);
+            GameResetCourseProgress(g_GrandPrixClass);
         }
     } else {
         g_SceneId = 6;

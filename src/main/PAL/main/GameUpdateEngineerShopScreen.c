@@ -20,7 +20,7 @@ extern s32 D_8019C908;
 extern u8 *D_801E4188;
 extern s32 D_801E4290;
 
-void func_800189E4(s32 arg0);
+void GameRequestUpgradedCarModel(s32 arg0) asm("func_800189E4");
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
 s32 func_800487D8(u8 *commands, s32 *progress, s32 step);
@@ -102,7 +102,7 @@ void GameUpdateEngineerShopScreen(void) {
                             GamePlaySoundCue(2);
                             GameMenuBusy = -2;
                             g_MenuConfirmTimer = 0x23;
-                            func_800189E4(g_PlayerCarIndex);
+                            GameRequestUpgradedCarModel(g_PlayerCarIndex);
                         } else {
                             GamePlaySoundCue(3);
                             GameMenuBusy = 0;

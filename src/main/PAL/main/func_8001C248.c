@@ -70,7 +70,7 @@ extern u8 *g_CourseProgress asm("D_8009E67C");
 
 void func_8005B9CC(void);
 void GameUploadImageAsset(s32 arg0) asm("func_8001A3C0");
-void func_80018F08(void);
+void GameRelocateCarModel(void) asm("func_80018F08");
 
 void func_8001C7BC(void) {
     s32 count;
@@ -83,7 +83,7 @@ void func_8001C7BC(void) {
     if (g_AssetLoadState != 1) {
         func_8005B9CC();
         GameUploadImageAsset(g_ImageBlockBuffer);
-        func_80018F08();
+        GameRelocateCarModel();
 
         D_8019C768 = 0x180;
         g_SceneTimer = 0;
@@ -240,7 +240,7 @@ extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
 extern s32 g_BgmTrack asm("D_801E40E0");
 
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-s32 func_80018FC4(void);
+s32 GameRequestRaceAssets(void) asm("func_80018FC4");
 
 void func_8001CFB4(void) {
     if ((u32)g_SceneTimer < 10000) {
@@ -257,7 +257,7 @@ void func_8001CFB4(void) {
         GamePlaySoundCue(0x19);
     }
     if (g_FadeLevel == 0) {
-        if (func_80018FC4() == 0) {
+        if (GameRequestRaceAssets() == 0) {
             g_FadeLevel = 0x80;
         }
     } else if ((u32)g_SceneTimer >= 121) {

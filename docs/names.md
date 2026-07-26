@@ -1111,3 +1111,215 @@ from the buffer height and the DMA interrupt state. `GameSetupDisplay240` calls
 them in exactly that order (draw env first, disp env at base + 0x5C). Fixing it
 means renaming the symbol, its source file and its config segment together, so
 it is recorded here rather than done in the same pass.
+
+## 13. Subsystem naming pass (asset loader, FMV, cdread, CD-DA, logo editor)
+
+93 more `func_` symbols got real names, chosen by subsystem rather than by
+fan-out. 36 unit files and their config segments were renamed with them. Every
+batch was verified with `make check VERSION=PAL` (sha1 unchanged,
+`2913e15648eddef40821c5f666460abc04155ee6`).
+
+### 13a. The asset-load state machine (`0x80017BD4`–`0x80019C04`)
+
+The decisive evidence is the path table `g_AssetPaths` (D_8007C48C, 135 entries)
+read together with the asset index each loader passes to `GameLoadAsset`:
+
+| index | file |
+|---|---|
+| 0..9 | LOGO.TMS, TITLE.TMS, RG3.VH, RG3.VB, RES.DAT, CAR.TMS, SAVE.TMS, SELBGM.BIN, SELECT.BIN, OPTION.BIN |
+| 10..73 | `CAR_<model><grade>.1ST` / `.2ND`, i.e. `10 + 2 * GameGetCarAssetIndex(model, grade)` |
+| 74..85 | `GP0..GP11.TMS`, addressed as `series * 6 + class + 0x4A` |
+| 86 | VOICE.BIN |
+| 87..134 | `BIG/MID/HI/OVAL <1..6>.1ST` / `.2ND`, addressed as `0x57 + (course << 1) + (class << 3)` |
+
+`GameServiceAssetLoad` (func_80019C04) runs once per frame and dispatches
+`g_MainState` 1..12; each phase has a `GameRequest*` that arms it and a
+`GameLoad*Assets` step that runs it. Reading the index each step loads is what
+names the phase:
+
+| Name | Addr | Evidence |
+|---|---|---|
+| `GameServiceAssetLoad` | 0x80019C04 | 12-way `switch (g_MainState)` over the loaders below, gated on `g_AssetLoadState != 0` |
+| `GameSetTrackCameraTable` | 0x80017BD4 | stores its argument in D_8019C9A8, the camera/horizon row base documented in `game/render.h`; fed sub-block 0 of the `.2ND` track pack |
+| `GameResetAssetLoader` | 0x80017BE4 | aborts a running CdRead (`g_CdLoadPhase == 4`) and clears all three state words |
+| `GameEnableCdAudioMode` | 0x80017C2C | `CdSync` then `CdControl(CdlSetmode, 0x07)` = report/autopause/CDDA; the last step of every track load |
+| `GameLoadAssetBlocking` | 0x80017E48 | `while (GameLoadAsset(...) == 0) {}` |
+| `GameLoadDiscArchiveIndex` | 0x80017E8C | its own strings: `Now Searching [%s] ...`, `\RAGE.BIN;1`, `read:%dsector`, `Search ok!`; builds the 135 `g_AssetCdEntries` and the 11 `g_StreamCdEntries` |
+| `GameInitAssetSystem` | 0x80018038 | index load + blocking load of asset 0 (LOGO.TMS) + `GameUploadImageAsset` |
+| `GameLoadBootAssets` | 0x800180CC | phase 1, assets 1..5 = TITLE.TMS, RG3.VH + RG3.VB (VAB upload), RES.DAT, CAR.TMS, ending with the team-logo `StoreImage` pair |
+| `GameLoadSaveScreenAssets` | 0x80018344 | phase 2, asset 6 = SAVE.TMS |
+| `GameLoadSelectBgmAssets` | 0x80018484 | phase 3, asset 7 = SELBGM.BIN, split into its three sub-blocks |
+| `GameLoadCarSelectAssets` | 0x80018588 | phase 4: uploads the SELBGM bank, loads asset 8 = SELECT.BIN, then the player's `CAR_xx.1ST`. **The dynamic trace guessed "GameLoadRaceAudioBank" for this one; the asset indices say otherwise.** |
+| `GameLoadCarModel` | 0x800188B8 | phase 5, `10 + 2 * GameGetCarAssetIndex(car, car->modelVariant)` into the double-buffered showroom slot D_801E4090 (+0x20000 when `g_CarModelSlot == 0`) |
+| `GameLoadUpgradedCarModel` | 0x80018A70 | phase 6, the same body but with `modelVariant + 1` — the next grade's car, i.e. the upgrade preview |
+| `GameLoadOptionScreenAssets` | 0x80018C0C | phase 7, asset 9 = OPTION.BIN |
+| `GameLoadRoundAssets` | 0x80018DF8 | phase 8, the `GP*.TMS` round screen then asset 0x56 = VOICE.BIN; its requester also rolls a random class when `g_GrandPrixMode == 0` |
+| `GameLoadRaceAssets` | 0x8001901C | phase 9, the full race load: VOICE bank upload, the player's `CAR_xx.2ND`, the course `.1ST` (`0x57 + …`) and `.2ND` (`0x58 + …`) |
+| `GameInstallCourseAssets` | 0x80019730 | unpacks the resident `.1ST` pack out of `g_AssetBase` — the same seven calls `GameLoadRaceAssets` makes in its step 5 |
+| `GameLoadTrackDataAssets` | 0x8001989C | phase 12, the `.2ND` pack, handing sub-blocks 0..10 to the camera table, physics, AI, model banks and scenery — the same eleven calls as `GameLoadRaceAssets` step 6 |
+| `GameRelocateCarModel` | 0x80018F08 | copies the live `g_CarModelAsset` into `g_AssetBase`, un-relocates it with `GameUnrelocateModelBank`, then re-registers the bank at its new address |
+
+The `GameRequest*` twins (0x80018078, 0x800182D0, 0x8001839C, 0x80018410,
+0x80018530, 0x8001882C, 0x800189E4, 0x80018B98, 0x80018C88, 0x80018FC4,
+0x80019844) are all the same shape: return 1 while `g_AssetLoadState != 0`,
+otherwise latch `g_MainState` and return 0 once the phase has been consumed.
+`GameRequestSelectBgmAssetsNoReset` (0x8001839C) differs from
+`GameRequestSelectBgmAssets` (0x80018410) only in starting the phase at
+`g_AssetLoadState = 2`, which skips the `GameCloseLoadedAudioSlots` step.
+`GameLoadCarModelNow` / `GameLoadUpgradedCarModelNow` request and then pump
+`GameServiceAssetLoad` until it goes idle.
+
+Registration helpers in the same TU: `GameUnrelocateModelBank` (0x800179B4) is
+the exact arithmetic inverse of `GameRegisterModelBank`;
+`GameRegisterCourseModels` (0x80017A6C) fills the already-named
+`g_CourseModelCount`; `GameSetCarImageSlot` / `GameUploadCarImage` (0x80017B44 /
+0x80017B5C) and `GameSetCarModelSlot` / `GameSelectCarModelSlot` (0x80017B94 /
+0x80017BAC) are two tiny registries — the second pair is what `game/asset.h`
+already described as "the entry selected by func_80017BAC".
+
+### 13b. FMV playback (`0x8001E6B4`–`0x8001F018`)
+
+One of three wrappers starts a stream, and the caller context names each:
+`GameBeginIntroFmv` (0x80019AF0, stream 0, return scene 3, reached from the
+title/attract path), `GameBeginClassFmv` (0x80019B3C, stream `1 + class` in the
+first series and `5 + class` in the advanced one, return scene 7, called when a
+class is cleared) and `GameBeginEndingFmv` (0x80019BB8, stream 10, return scene
+0x21, called only on the `g_SeriesCleared` branch).
+
+`GameBeginFmv` (0x8001E6B4) stops the sound, resets CD audio, sets
+`g_SceneId = 5` and stores the return scene in `g_StreamReturnScene`.
+`GameUpdateFmv` (0x8001E71C) then walks `D_8009F094`: 0 →
+`GameStartFmvPlayback` (0x8001E79C, display setup + `GameSetupFmvBuffers`
+0x8001EB14 + `GameInitFmvContext` 0x8001EA7C + `GameOpenFmvStream` 0x8001EB5C),
+1 → `GameDecodeFmvFrame` (0x8001E8A4), 2 → `GameEndFmv` (0x8001EA34).
+`GameDecodeFmvFrame` is also the abort path: `g_PadEdge2 & 0x800` (Start) jumps
+straight to state 2. `GameWaitFmvDecode` (0x8001EF54) is named by its own
+timeout message `time out in decoding !`; `GameUploadFmvSlice` (0x8001EBC8) is
+the DMA1 callback that `LoadImage`s one decoded strip; `GamePresentFmvFrame` /
+`GameGetFmvFrame` (0x8001ED3C / 0x8001EDC4) dequeue a ring frame and resize the
+display when the stream's frame size changes; `GameStartStreamRead`
+(0x8001F018) is the `CdlSetmode 0x80` + `CdlReadS` retry loop.
+
+### 13c. `cdread.c` is linked below 0x80063200
+
+`0x80027238`–`0x8002785C` is not game code at all: it is Sony's `libcd`
+`cdread.c`, identified by its three surviving messages — `CdRead: sector error`,
+`CdRead: Shell open...` and `CdRead: retry...` — and confirmed by the shapes:
+
+| Name | Addr | Evidence |
+|---|---|---|
+| `CdRead` | 0x80027688 | `(sectors, buf, mode)`; stores the mode, derives 0x200 / 0x249 / 0x246 words from `mode & 0x30`, ORs in 0x20, saves the sync/ready callbacks, `CdControlB(CdlPause)` if the drive is busy, then `CdReadRetry(0)` |
+| `CdReadSync` | 0x80027790 | `(mode, result)`; polls the remaining-sector count with a 0x4B0-vblank watchdog, then `CdReady(1, result)` |
+| `CdReadBreak` | 0x80027634 | zeroes the remaining count, restores both saved callbacks, `CdlPause` |
+| `CdReadCallback` | 0x8002785C | stores a callback, returns the previous one |
+| `CdReadDataReadyCallback` | 0x80027238 | cdread.c's static `data_ready_callback`: `(intr, result)`, drains one sector with `CdGetSector2`, prints `CdRead: sector error` on a position mismatch |
+| `CdReadRetry` | 0x8002745C | cdread.c's static `read_retry`: prints `CdRead: Shell open...` / `CdRead: retry...`, re-issues `CdlSetmode` and the read |
+
+This deliberately breaks the "everything below 0x80063200 gets a `Game*` name"
+rule, because inventing a `Game*` name for a verbatim SDK module would be the
+wrong name, not a conservative one. The two statics keep descriptive `CdRead*`
+names rather than libcd's lowercase static names, since the project already uses
+`data_ready_callback` for libds's unrelated static at 0x8006CE78.
+
+### 13d. Further SDK identifications from the FMV path
+
+`func_8006DF94` (currently declared `ResetCallback` in `psyq/kernel.h`) is
+really `DMACallback`: it is a kernel-table thunk, and its three wrappers pass
+0, 1 and 3 — MDECin, MDECout and CD-ROM. That settles several names at once:
+
+| Name | Addr | Evidence |
+|---|---|---|
+| `DecDCTout` | 0x8006402C | tail-calls the already-named `MDEC_out`; called as `(buf, w * h / 2)` once per frame |
+| `DecDCTinSync` | 0x8006404C | tail-calls `MDEC_in_sync` |
+| `DecDCToutSync` | 0x8006406C | tail-calls `MDEC_out_sync` |
+| `DecDCTinCallback` | 0x8006408C | `DMACallback(0, f)` — DMA0 is MDECin |
+| `DecDCToutCallback` | 0x800640B0 | `DMACallback(1, f)`; installed with `GameUploadFmvSlice` and cleared by `GameEndFmv` |
+| `CdDataCallback` | 0x8006A994 | `DMACallback(3, f)` — DMA3 is the CD-ROM; installed with libds's `data_ready_callback` |
+| `CdMix` | 0x8006A94C | wraps `CD_vol` and returns 1 |
+| `CdGetSector2` | 0x8006A970 | wraps `CD_getsector2`; used by `CdReadDataReadyCallback` |
+| `StGetNext` | 0x8006D0EC | two out-parameters, returns 0 after marking the ring entry state 4 — the classic `StGetNext(addr, header)` |
+| `StUnSetRing` | 0x8006CE20 | `EnterCriticalSection` → `CdDataCallback(0)` / `CdReadyCallback(0)` → clear both kernel callback slots → `ExitCriticalSection`, at stream teardown |
+
+**`ResetCallback` at func_8006DF94 was not renamed in this pass** — it is an
+existing name with existing call sites, and correcting it belongs in its own
+change. It is recorded here so the discrepancy is not lost.
+
+### 13e. CD-DA pump (`0x8004310C`–`0x80043974`)
+
+`game/cd.h` already documented the request words D_8007F600..D_8007F60C; this
+pass names the machine that drains them. `GameTickCdAudio` (0x80043974) runs
+once per frame and issues at most one `CdControl`: a pending track goes to
+`GameStepCdTrackRequest` (0x800432A8, `CdlSeekP 0x16`), otherwise
+`g_CdCommandPending` 1/2/3 selects `GameStepCdPlayRequest` (0x80043494,
+`CdlPlay`), `GameStepCdPauseRequest` (0x80043598, `CdlGetlocP` then `CdlPause`)
+or `GameStepCdResumeRequest` (0x800437B8, `CdlPlay`). The play and resume steps
+are byte-identical duplicates; they are told apart by which pending value each
+serves — `GameStartCdAudio` posts 1 and `GameResumeCdAudio`'s
+crossed-a-track-boundary branch posts 3. `GameInitCdAudio` (0x800438BC) is the
+one-time setup, `GameBuildCdTrackTable` (0x800431BC) fills D_8009AFD4 from
+`CdGetToc` (each audio track pushed 0x3C sectors in) plus `DsSearchFile` rows,
+and `GameApplyCdVolume` / `GameSetCdVolumeSetting` / `GameSetCdMixPreset`
+(0x8004310C / 0x80043134 / 0x8004318C) are the three ways the attenuator is
+poked.
+
+### 13f. TEAM LOGO canvas transforms (`0x8004B9B8`–`0x8004BF48`)
+
+Eight whole-canvas operations, all dispatched by the already-named
+`GameUpdateTeamLogoCanvas` and all operating in place on `g_TeamLogoCanvas`
+(64 rows x 8 words x 8 nibbles = 64x64 at 4bpp). Column `c` lives in word
+`c >> 3`, nibble `c & 7` — proved by the scrolls, where word `i`'s nibble 7
+receives word `i + 1`'s nibble 0.
+
+| Name | Addr | Evidence |
+|---|---|---|
+| `GameScrollTeamLogoUp` | 0x8004B9B8 | saves row 0, copies row `r + 1` down over row `r`, writes the saved row into row 63 |
+| `GameScrollTeamLogoDown` | 0x8004BA50 | the mirror image of the above |
+| `GameScrollTeamLogoLeft` | 0x8004BAE4 | `word >>= 4` with the next word's low nibble shifted into bit 28; the leftmost column wraps to the right |
+| `GameScrollTeamLogoRight` | 0x8004BBA8 | `word <<= 4` with the previous word's high nibble |
+| `GameFlipTeamLogoVertical` | 0x8004BC68 | swaps row `i` with row `63 - i` for `i` in 0..31 |
+| `GameFlipTeamLogoHorizontal` | 0x8004BCE4 | reverses the nibble order inside each word and swaps word `w` with word `7 - w` |
+| `GameRotateTeamLogoCcw` | 0x8004BDB4 | works out to `dst(y, x) = src(x, 63 - y)`; `func_8004BDEC` is its second entry point, past the sound cue |
+| `GameRotateTeamLogoCw` | 0x8004BF48 | works out to `dst(y, x) = src(63 - x, y)` |
+
+The four scrolls play sound cue 1, the four flips/rotations cue 8 — a second,
+independent split along the same line.
+
+### 13g. Boot defaults and audio settings
+
+`GameInitSaveDefaults` (0x80021338, called once from `GameInitSubsystems`) fills
+every memory-card-backed global with new-game values: the three car tables from
+D_8007BE68, the three `GameRaceProgress` slots via `GameResetProgressSlot`
+(0x80021288), both course-progress blocks via `GameResetCourseProgress`
+(0x800212F0), `g_MaxClassReached`, the BGM selection and the three audio
+settings, which it hands to `GameApplyAudioSettings` (0x80021224).
+`GameApplyAudioSettings` is also the tail of `GameLoadSaveStateBlock`, which is
+what makes "apply", not "init", the right verb. `GameSetEffectVolumeSetting`
+(0x8005BDD4) is the effect-side twin of the already-named
+`GameSetSequenceVolumeSetting`.
+
+### 13h. Left generic on purpose
+
+- `func_800271EC`, `func_80026570`, `func_80026AE0` and `func_80026920`, plus
+  their handler tables D_8007D778 / D_8007D6B8 / D_8007D6D0, are attract- and
+  replay-sequence drivers. The dynamic trace proposed `GameUpdateRaceScene` and
+  `GameDrawRaceSceneSubsystems` for the last two, but reading them shows they
+  are per-sequence step functions with hard-coded frame thresholds, not a race
+  driver and not a subsystem fan-out. Naming them needs each sequence
+  identified first.
+- `func_80017AD0` registers a 0x800 + 0x1000 + table triple out of the `.2ND`
+  pack; what the first two blocks are is not established.
+- `func_8004B8B4` clamps two globals (0x40..0x100 and 0..0x100) and derives
+  D_8007F948 from the second; it has one caller and nothing else reads them.
+- `func_8004B5C8`, `func_8004B6CC`, `func_8004B764`, `func_8004B7F8`,
+  `func_8004CBE4`, `func_8004CC14` and `func_8004CC44` draw UI widgets but are
+  reached only through tables, so which panel each belongs to is unproven.
+- `func_8004CED0` / `func_8004CF00` both `LoadImage` into `g_TeamLogoClutRect`,
+  one from a ROM table and one from `g_TeamLogoClut`; which is "default" and
+  which is "current" is a guess until their two callers are named.
+- `func_80027874` draws a proportional string of 0x18-tall glyphs into the
+  scratchpad primitive buffer. It is clearly a third text renderer alongside
+  `GameDrawProportionalText` and `GameDrawText8x8`, but nothing yet pins which
+  font it uses.
+- `func_8001E684` is not a function at all: it is a nonmatching label inside
+  `func_8001DFC0`'s epilogue, already listed in
+  `configs/PAL/nonmatching_labels.main.txt`.

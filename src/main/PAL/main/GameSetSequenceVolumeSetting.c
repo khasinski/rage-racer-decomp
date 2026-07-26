@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/audio.h"
 
-void func_80043134(s32 arg0);
+void GameSetCdVolumeSetting(s32 arg0) asm("func_80043134");
 
 void GameSetSequenceVolumeSetting(s32 setting) {
     u32 adjusted;
@@ -28,6 +28,6 @@ negative:
 
 call:
     value = setting;
-    func_80043134(setting);
+    GameSetCdVolumeSetting(setting);
     GameSetSequenceVolumeScale(value);
 }

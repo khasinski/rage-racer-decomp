@@ -291,12 +291,12 @@ extern s32 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
 extern s32 g_TimeAttackCars asm("D_801E4388");
 
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-extern void func_80017BE4(void);
+extern void GameResetAssetLoader(void) asm("func_80017BE4");
 extern void func_8001B488(void);
 s32 GameRequestTrackLoad(void) asm("func_8001965C");
-extern void func_8001839C(void);
-extern void func_800182D0(void);
-extern void func_80018B98(void);
+extern void GameRequestSelectBgmAssetsNoReset(void) asm("func_8001839C");
+extern void GameRequestSaveScreenAssets(void) asm("func_800182D0");
+extern void GameRequestOptionScreenAssets(void) asm("func_80018B98");
 extern void GameDrawMainMenuRows(void) asm("func_8001B2D4");
 
 void GameUpdateMainMenuInput(void) asm("func_8001B5DC");
@@ -338,7 +338,7 @@ void GameUpdateMainMenuInput(void) {
     if (g_PadEdge2 & 0x860) {
         GamePlaySoundCue(2);
         if (g_AssetLoadState != 0) {
-            func_80017BE4();
+            GameResetAssetLoader();
         }
         func_8001B488();
         switch (g_TitleMenuSelection) {
@@ -352,7 +352,7 @@ void GameUpdateMainMenuInput(void) {
                 g_CourseIndex = 3;
                 GameRequestTrackLoad();
             } else {
-                func_8001839C();
+                GameRequestSelectBgmAssetsNoReset();
             }
             break;
         case 1:
@@ -365,20 +365,20 @@ void GameUpdateMainMenuInput(void) {
                 g_CourseIndex = 3;
                 GameRequestTrackLoad();
             } else {
-                func_8001839C();
+                GameRequestSelectBgmAssetsNoReset();
             }
             break;
         case 2:
             g_CarTable = &g_TimeAttackCars;
             g_RaceProgress = (GameRaceProgress *)&g_TimeAttackSave;
             g_SeriesSelection = 0;
-            func_8001839C();
+            GameRequestSelectBgmAssetsNoReset();
             break;
         case 3:
-            func_800182D0();
+            GameRequestSaveScreenAssets();
             break;
         case 4:
-            func_80018B98();
+            GameRequestOptionScreenAssets();
             D_8019C7B4 = 0;
             break;
         }

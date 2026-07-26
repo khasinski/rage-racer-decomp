@@ -24,12 +24,12 @@ void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 extern volatile u16 g_PadEdge2 asm("D_801E436E");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-void func_80018410(void);
+void GameRequestSelectBgmAssets(void) asm("func_80018410");
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_80021654(void);
 void func_80046A2C(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
 void func_800218A0(s32 arg0);
-void func_800212F0(s32 arg0);
+void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
 
 void func_80021540(void) {
     s32 offset;
@@ -128,7 +128,7 @@ void func_80021748(void) {
         if (g_PadEdge2 & 0x800) {
             GamePlaySoundCue(2);
             if (D_801E3E0C != 0) {
-                func_80018410();
+                GameRequestSelectBgmAssets();
             }
             ptr = g_CourseProgress;
             value = *(u16 *)(ptr + 6);
@@ -174,8 +174,8 @@ void func_80021964(void) {
         g_SceneTimer = 0xFF;
     }
     if (g_SceneTimer == 0) {
-        func_80018410();
-        func_800212F0(g_GrandPrixClass);
+        GameRequestSelectBgmAssets();
+        GameResetCourseProgress(g_GrandPrixClass);
         g_SceneId = 6;
     }
     func_800218A0(g_SceneTimer);

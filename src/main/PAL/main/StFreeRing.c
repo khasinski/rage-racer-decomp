@@ -41,7 +41,8 @@ void func_8006D0AC(s32 arg0, u32 arg1) {
     }
 }
 
-s32 func_8006D0EC(StRingEventRecord **arg0, StRingEventRecord **arg1) {
+s32 StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) asm("func_8006D0EC");
+s32 StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     register StRingEventRecord **out0 asm("$7") = arg0;
     register StRingEventRecord **out1 asm("$8") = arg1;
     StRingEventRecord *entry;

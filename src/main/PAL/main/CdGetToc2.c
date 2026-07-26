@@ -14,7 +14,7 @@ void func_8006A360(void);
 void func_8006A388(void);
 void func_8006A3B0(void);
 void func_8006A3D8(u32 arg0, s32 arg1);
-void func_8002785C(void *arg0);
+void CdReadCallback(void *arg0) asm("func_8002785C");
 
 s32 CdGetToc2(s32 arg0, u8 *arg1) asm("func_8006A0AC");
 s32 CdGetToc2(s32 arg0, u8 *arg1) {
@@ -145,7 +145,7 @@ loop:
 
     func_8006A574((s32)func_8006A360);
     func_8006A58C((s32)func_8006A388);
-    func_8002785C(func_8006A3B0);
+    CdReadCallback(func_8006A3B0);
     return 1;
 }
 

@@ -34,7 +34,7 @@ extern s32 D_8019CA14;
 extern u8 D_801E417C[];
 extern s32 D_801E6830;
 extern u8 D_801F17FC[];
-void func_80018410(void);
+void GameRequestSelectBgmAssets(void) asm("func_80018410");
 void func_80021D68(void);
 void func_80021DB8(u8 *arg0);
 void func_80022068(u8 *arg0);
@@ -528,7 +528,7 @@ void func_80022794(void) {
         g_SceneTimer += 2;
         func_80033AA0(g_SceneTimer, 0x49);
         if ((u32)g_SceneTimer >= 0x100) {
-            func_80018410();
+            GameRequestSelectBgmAssets();
             g_SceneId = 6;
         }
         func_80022068((u8 *)0);
@@ -542,7 +542,7 @@ void func_80022EE4(void) {
     func_8006A534(0, 0);
     CdControl(9, 0, 0);
     g_SceneId = 6;
-    func_80018410();
+    GameRequestSelectBgmAssets();
 }
 
 void func_80022F2C(void) {

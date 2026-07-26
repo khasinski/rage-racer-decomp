@@ -48,7 +48,7 @@ extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
 extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
 
 void func_80013F80(s32 a, s32 b);
-void func_80021224(void);
+void GameApplyAudioSettings(void) asm("func_80021224");
 void LoadImage(void *rect, void *data) asm("func_80065B24");
 
 /*
@@ -344,7 +344,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
     memcpy(g_ExtraGrandPrixCourseProgress, base + 0xFD0, 8);
 
     func_80013F80(D_8019CE08, D_8019CB08);
-    func_80021224();
+    GameApplyAudioSettings();
     LoadImage((void *)g_TeamLogoRect, g_TeamLogoCanvas);
     LoadImage((void *)g_TeamLogoClutRect, g_TeamLogoClut);
     return 1;

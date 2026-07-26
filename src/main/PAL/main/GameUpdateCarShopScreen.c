@@ -30,7 +30,7 @@ extern s16 D_801E41A4;
 extern s32 D_801E4294;
 extern u8 D_801E438D[];
 
-void func_8001882C(s32 arg0);
+void GameRequestCarModel(s32 arg0) asm("func_8001882C");
 void func_8001D530(void *arg0, s32 arg1);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
@@ -98,7 +98,7 @@ void GameUpdateCarShopScreen(void) {
 
                         GamePlaySoundCue(8);
                         g_CarListCursor = (s32) D_8019CA18;
-                        func_8001882C(D_8019CA18);
+                        GameRequestCarModel(D_8019CA18);
                         lprev = g_MenuViewAngleTarget;
                         D_8009B374 = sel;
                         g_MenuViewAngleTarget = 0;
@@ -118,7 +118,7 @@ void GameUpdateCarShopScreen(void) {
 
                         GamePlaySoundCue(8);
                         g_CarListCursor = (s32) D_801E41A4;
-                        func_8001882C(D_801E41A4);
+                        GameRequestCarModel(D_801E41A4);
                         base = 0x927C0;
                         lprev = g_MenuViewAngleTarget;
                         g_MenuViewAngleTarget = 0x124F80;
@@ -148,7 +148,7 @@ void GameUpdateCarShopScreen(void) {
                                 s32 lu;
                                 s32 lprev;
 
-                                func_8001882C(g_PlayerCarIndex);
+                                GameRequestCarModel(g_PlayerCarIndex);
                                 base = 0x927C0;
                                 current = g_CarListCursor;
                                 selected = g_PlayerCarIndex;
@@ -205,7 +205,7 @@ void GameUpdateCarShopScreen(void) {
                             s32 lu;
                             s32 lprev;
 
-                            func_8001882C(g_PlayerCarIndex);
+                            GameRequestCarModel(g_PlayerCarIndex);
                             base = 0x927C0;
                             current = g_CarListCursor;
                             selected = g_PlayerCarIndex;

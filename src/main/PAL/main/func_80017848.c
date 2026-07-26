@@ -99,7 +99,8 @@ void GameRegisterModelBank(s32 *base, s32 index) {
     }
 }
 
-void func_800179B4(s32 *base, s32 offset) {
+void GameUnrelocateModelBank(s32 *base, s32 offset) asm("func_800179B4");
+void GameUnrelocateModelBank(s32 *base, s32 offset) {
     register s32 *ptr asm("$6");
     register s32 i asm("$7");
     register s32 value asm("$2");
@@ -151,7 +152,8 @@ void GameSelectModelBank(s32 index) {
     *(s32 *)0x1F800050 = ptr;
 }
 
-void func_80017A6C(s32 *base) {
+void GameRegisterCourseModels(s32 *base) asm("func_80017A6C");
+void GameRegisterCourseModels(s32 *base) {
     register s32 *ptr asm("$5");
     register s32 count asm("$2");
     register s32 i asm("$6");
@@ -216,19 +218,23 @@ void func_80017AD0(s32 *base) {
     }
 }
 
-void func_80017B44(void *asset, s32 index) {
+void GameSetCarImageSlot(void *asset, s32 index) asm("func_80017B44");
+void GameSetCarImageSlot(void *asset, s32 index) {
     D_801E424C[index] = asset;
 }
 
-void func_80017B5C(s32 index) {
+void GameUploadCarImage(s32 index) asm("func_80017B5C");
+void GameUploadCarImage(s32 index) {
     LoadImage(&D_8007C484, D_801E424C[index]);
 }
 
-void func_80017B94(void *asset, s32 index) {
+void GameSetCarModelSlot(void *asset, s32 index) asm("func_80017B94");
+void GameSetCarModelSlot(void *asset, s32 index) {
     D_801E8A54[index] = asset;
 }
 
-void func_80017BAC(s32 index) {
+void GameSelectCarModelSlot(s32 index) asm("func_80017BAC");
+void GameSelectCarModelSlot(s32 index) {
     g_CarModelAsset = D_801E8A54[index];
 }
 

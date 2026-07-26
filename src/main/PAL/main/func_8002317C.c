@@ -12,7 +12,7 @@ void *func_80017390(void *arg0, void *arg1, s32 arg2);
 extern s32 D_8007D53C;
 extern s32 D_8007D540;
 extern s32 D_8007D544;
-void func_80019AF0(s32 arg0);
+void GameBeginIntroFmv(s32 arg0) asm("func_80019AF0");
 void func_800230B0(void);
 void func_8002317C(void);
 extern Matrix D_8019CAD4;
@@ -112,7 +112,7 @@ inc_timer:
     case 3:
         g_SceneTimer++;
         if ((u32)g_SceneTimer >= 21) {
-            func_80019AF0(3);
+            GameBeginIntroFmv(3);
         }
         break;
     }

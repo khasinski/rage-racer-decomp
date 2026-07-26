@@ -10,7 +10,7 @@ extern u32 D_8009B188;
 extern u32 D_8009B18C;
 extern u32 D_8009B190;
 
-void func_8006A94C(u8 *arg0);
+void CdMix(u8 *arg0) asm("func_8006A94C");
 
 void GameStepCdVolumeFade(void) asm("func_80042D10");
 void GameStepCdVolumeFade(void) {
@@ -77,5 +77,5 @@ void GameStepCdVolumeFade(void) {
     buf[1] = D_8009B178 >> 12;
     buf[2] = D_8009B17C >> 12;
     buf[3] = D_8009B180 >> 12;
-    func_8006A94C(buf);
+    CdMix(buf);
 }

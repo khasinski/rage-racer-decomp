@@ -25,7 +25,7 @@ extern s32 D_801E412C;
 extern s32 g_CameraViewMode asm("D_8009E870");
 void func_80025E54();
 void func_80033AA0();
-void func_80018B98();
+void GameRequestOptionScreenAssets() asm("func_80018B98");
 void func_80025C58();
 void func_8003BB50();
 void func_80019EFC();
@@ -194,7 +194,7 @@ L424:
     func_80033AA0(g_FadeLevel, 0x49);
     g_FadeLevel = g_FadeLevel + g_FadeStep;
     if (g_FadeLevel >= 256) {
-        func_80018B98();
+        GameRequestOptionScreenAssets();
         D_8019C99C = 3;
         g_FadeLevel = 256;
         g_FadeStep = -4;

@@ -24,7 +24,7 @@ extern u8 g_TeamLogoClut[] asm("D_801E444C");
 extern u8 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
 void func_80052738(void);
-s32 func_80018530(void);
+s32 GameRequestCarSelectAssets(void) asm("func_80018530");
 void func_8005E88C(void);
 void func_80049418(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void LoadImage(void *rect, void *data) asm("func_80065B24");
@@ -39,7 +39,7 @@ void func_80052778(void) {
     register s32 eight asm("$2");
 
     func_80052738();
-    if (func_80018530() != 0) {
+    if (GameRequestCarSelectAssets() != 0) {
         return;
     }
 

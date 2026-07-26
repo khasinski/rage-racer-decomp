@@ -16,7 +16,7 @@ typedef struct UnkEventPair {
 extern s32 D_801E682C;
 extern u32 g_StreamReturnScene asm("D_8019C760");
 extern void (*D_8007D6D0[])(void);
-void func_80017BE4(void);
+void GameResetAssetLoader(void) asm("func_80017BE4");
 void func_800268EC(void);
 extern s32 D_8019C768;
 extern s32 D_801E4178;
@@ -25,8 +25,8 @@ extern u8 D_80011010[];
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_80025940(void);
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-void func_80019730(void);
-void func_80019844(void);
+void GameInstallCourseAssets(void) asm("func_80019730");
+void GameRequestTrackDataAssets(void) asm("func_80019844");
 void func_80026C0C(void);
 extern s16 D_8007D6DC[];
 extern s16 D_8007D6DE[];
@@ -34,7 +34,7 @@ extern s32 D_8007D6E0[];
 void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
-void func_80018410(void);
+void GameRequestSelectBgmAssets(void) asm("func_80018410");
 extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 D_801F18CC[];
 extern UnkEventPair D_8007D74C[];
@@ -52,7 +52,7 @@ void func_80026AE0(void) {
 
     if ((g_SceneId == 0x1E) && ((g_PadEdge2 & 0x860) != 0)) {
         if (g_AssetLoadState != 0) {
-            func_80017BE4();
+            GameResetAssetLoader();
             g_SceneId = 3;
             g_StreamReturnScene = 0;
         } else {
@@ -121,8 +121,8 @@ void func_80026C0C(void) {
 
 void func_80026D30(void) {
     if (g_AssetLoadState == 0) {
-        func_80019730();
-        func_80019844();
+        GameInstallCourseAssets();
+        GameRequestTrackDataAssets();
         D_801E4178 = 1;
     }
 
@@ -219,7 +219,7 @@ void func_80026DE4(void) {
 void func_80026F68(void) {
     g_SceneId = 6;
     GamePauseCdAudio();
-    func_80018410();
+    GameRequestSelectBgmAssets();
 }
 
 void func_80026F9C(void) {

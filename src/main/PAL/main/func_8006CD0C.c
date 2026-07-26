@@ -26,7 +26,7 @@ extern s32 D_801F1850;
 extern s32 D_8019CA00;
 
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
-void func_8006A994(s32 arg0);
+void CdDataCallback(s32 arg0) asm("func_8006A994");
 void func_8006A58C(s32 arg0);
 void func_8006CDA0(void);
 void data_ready_callback(void) asm("func_8006CE78");
@@ -52,7 +52,7 @@ s32 func_8006CD0C(s32 arg0) {
         } else {
             D_8019C7A0 = 1;
         }
-        func_8006A994((s32)data_ready_callback);
+        CdDataCallback((s32)data_ready_callback);
         func_8006A58C((s32)func_8006CDA0);
     }
 
@@ -74,9 +74,10 @@ void StClearRing(void) {
     D_8009E69C = 0;
 }
 
-void func_8006CE20(void) {
+void StUnSetRing(void) asm("func_8006CE20");
+void StUnSetRing(void) {
     EnterCriticalSection();
-    func_8006A994(0);
+    CdDataCallback(0);
     func_8006A58C(0);
     *D_80099360 = 0;
     *D_8009936C = 0;

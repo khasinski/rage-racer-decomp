@@ -53,7 +53,7 @@ void func_8005E4A4(s32 arg0);
 
 void func_8005B190(s32 arg0, s32 arg1);
 
-void func_80018410(void);
+void GameRequestSelectBgmAssets(void) asm("func_80018410");
 
 
 extern s16 D_8009AFA4;
@@ -244,7 +244,7 @@ void func_80035258(s32 arg0) {
     func_8005E4A4(0);
     func_8005B190(0, 0);
     if (g_SceneId == 6) {
-        func_80018410();
+        GameRequestSelectBgmAssets();
     }
     GameDebugPrintf(&D_8001147C);
 }

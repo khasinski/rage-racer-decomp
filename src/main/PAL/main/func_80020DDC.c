@@ -20,14 +20,14 @@ void func_800204F4(s32);
 void func_800206B8(s32);
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_80020D90(void);
-void func_80018410(void);
+void GameRequestSelectBgmAssets(void) asm("func_80018410");
 void func_80020B08(void);
 void func_800201D4(void);
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
 void func_8005BD84(s32 arg0);
-void func_8005BDD4(s32 arg0);
+void GameSetEffectVolumeSetting(s32 arg0) asm("func_8005BDD4");
 void func_8005BE24(void);
 void func_8005BE58(void);
 extern UnkCopyChunk D_8007BE68[];
@@ -46,9 +46,9 @@ extern u8 g_GrandPrixCourseProgress asm("D_801E42EC");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern s32 g_BgmSelection asm("D_801E42CC");
-void func_80021224(void);
-void func_80021288(void *arg0, s32 *arg1);
-void func_800212F0(s32 arg0);
+void GameApplyAudioSettings(void) asm("func_80021224");
+void GameResetProgressSlot(void *arg0, s32 *arg1) asm("func_80021288");
+void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
 void func_8001B488(void);
 
 void func_80020DDC(void) {
@@ -137,7 +137,7 @@ void func_80020DDC(void) {
         if (!(g_PadEdge2 & 0x860)) goto L420;
         if (D_801E4D0C != 0) goto L420;
         if (D_801E4B94 != 0) { st = 8; goto Lstore; }
-        func_80018410();
+        GameRequestSelectBgmAssets();
         st = 8;
         goto Lstore;
     case 8:
@@ -158,9 +158,10 @@ L428:
     func_800201D4();
 }
 
-void func_80021224(void) {
+void GameApplyAudioSettings(void) asm("func_80021224");
+void GameApplyAudioSettings(void) {
     func_8005BD84(g_BgmVolumeSetting);
-    func_8005BDD4(g_SfxVolumeSetting);
+    GameSetEffectVolumeSetting(g_SfxVolumeSetting);
     if (g_MonoOutput == 0) {
         func_8005BE24();
     } else {
@@ -168,7 +169,8 @@ void func_80021224(void) {
     }
 }
 
-void func_80021288(void *arg0, s32 *arg1) {
+void GameResetProgressSlot(void *arg0, s32 *arg1) asm("func_80021288");
+void GameResetProgressSlot(void *arg0, s32 *arg1) {
     UnkCopyChunk *dst;
     UnkCopyChunk *src;
     s32 i;
@@ -189,7 +191,8 @@ void func_80021288(void *arg0, s32 *arg1) {
     arg1[4] = 0;
 }
 
-void func_800212F0(s32 arg0) {
+void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
+void GameResetCourseProgress(s32 arg0) {
     u8 *ptr = g_CourseProgress;
 
     *(s16 *)(ptr + 6) = 5;
@@ -205,7 +208,8 @@ void func_800212F0(s32 arg0) {
     *(s16 *)(g_CourseProgress + 4) = 0;
 }
 
-void func_80021338(void) {
+void GameInitSaveDefaults(void) asm("func_80021338");
+void GameInitSaveDefaults(void) {
     u8 *src;
     u8 *dst;
     s32 i;
@@ -237,13 +241,13 @@ void func_80021338(void) {
     D_8019C988 = 0;
     D_8019C98C = 0;
     D_8019C990 = 0;
-    func_80021288(&g_GrandPrixCars, &g_GrandPrixSave);
-    func_80021288(&g_ExtraGrandPrixCars, &g_ExtraGrandPrixSave);
+    GameResetProgressSlot(&g_GrandPrixCars, &g_GrandPrixSave);
+    GameResetProgressSlot(&g_ExtraGrandPrixCars, &g_ExtraGrandPrixSave);
 
     g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
-    func_800212F0(0);
+    GameResetCourseProgress(0);
     g_CourseProgress = &g_GrandPrixCourseProgress;
-    func_800212F0(0);
+    GameResetCourseProgress(0);
 
     g_MaxClassReached[1] = 0;
     g_MaxClassReached[0] = 0;
@@ -253,7 +257,7 @@ void func_80021338(void) {
     g_BgmVolumeSetting = 0xF;
     g_SfxVolumeSetting = 0xF;
     g_MonoOutput = 0;
-    func_80021224();
+    GameApplyAudioSettings();
 }
 
 s32 func_800214B8(void) {

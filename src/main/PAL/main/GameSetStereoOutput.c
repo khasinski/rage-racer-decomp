@@ -1,6 +1,6 @@
 #include "common.h"
 extern s32 D_80082F40;
-void func_8004318C(s32 arg0);
+void GameSetCdMixPreset(s32 arg0) asm("func_8004318C");
 void func_80072AF4(void);
 void GameSetStereoOutput(void) asm("func_8005BE24");
-void GameSetStereoOutput(void) { D_80082F40 = 1; func_8004318C(0); func_80072AF4(); }
+void GameSetStereoOutput(void) { D_80082F40 = 1; GameSetCdMixPreset(0); func_80072AF4(); }

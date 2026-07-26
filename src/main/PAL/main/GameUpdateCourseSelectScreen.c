@@ -33,7 +33,7 @@ extern u8 g_UiChromeScript2 asm("D_80082790");
 extern u8 D_80082604;
 extern u8 D_800825A4;
 extern u8 g_MenuBlankCaption asm("D_80011BA0");
-void func_800212F0(s32 arg0);
+void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
 s32 func_800487D8(u8 *commands, s32 *progress, s32 step);
@@ -318,7 +318,7 @@ void GameUpdateCourseSelectScreen(void) {
                     if (func_8005026C(1) >= 0x19) {
                         D_8009B310 = 1;
                         g_GrandPrixClass = g_MenuSubCursor;
-                        func_800212F0(g_MenuSubCursor);
+                        GameResetCourseProgress(g_MenuSubCursor);
                         g_MenuViewAngle = 0x7A120;
                         g_MenuViewAngleTarget = 0x7A120;
                         D_8019C7AC = 0;

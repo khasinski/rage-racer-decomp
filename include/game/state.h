@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-/* Top-level scene/state machine, dispatched by func_80019C04; 1 = the
+/* Top-level scene/state machine, dispatched by GameServiceAssetLoad; 1 = the
  * asset-load driver, other values are individual screens. */
 extern s32 g_MainState asm("D_8007C704");
 
@@ -71,5 +71,39 @@ extern s32 g_SceneTimer asm("D_801E40B8");
 /* Free-running animation phase counter: drives cyclic effects (sine offsets,
  * blink tests `& 2` / `& 8`, `% 6` cycles), never a deadline. */
 extern s32 g_AnimTimer asm("D_8009E694");
+
+/*
+ * FMV playback ("\RAGE.STR;1" streams). One of the three GameBegin*Fmv wrappers
+ * picks the stream entry in g_StreamCdEntries, records the scene to come back to
+ * in g_StreamReturnScene and sets g_SceneId = 5; from then on GameUpdateFmv runs
+ * per frame and walks D_8009F094 through 0 (start) -> 1 (decode) -> 2 (finish).
+ * Start (pad bit 0x800) or the end of the stream both move it to 2.
+ * The per-TU-typed members of the family - GameBeginFmv, GameStartFmvPlayback,
+ * GameSetupFmvBuffers, GameInitFmvContext, GameOpenFmvStream,
+ * GamePresentFmvFrame, GameWaitFmvDecode, GameStartStreamRead - keep their
+ * aliased declarations in each file; see docs/names.md 13.
+ */
+void GameUpdateFmv(void) asm("func_8001E71C");
+/* One decoded frame: DecDCTin the next bitstream chunk, DecDCTout the previous
+ * one, then top the ring up from the drive. */
+void GameDecodeFmvFrame(void) asm("func_8001E8A4");
+/* Clear the DecDCTout callback, unhook the streamer, restore g_SceneId. */
+void GameEndFmv(void) asm("func_8001EA34");
+/* Pull the next ready ring frame and resize the display when the stream's
+ * frame size changes; returns 0 when nothing is ready. */
+void *GameGetFmvFrame(s32 *ctx) asm("func_8001EDC4");
+/* The DMA1 (MDECout) callback: LoadImage one decoded strip into VRAM and queue
+ * the next strip, or flip to the other frame buffer at the end of a frame. */
+void GameUploadFmvSlice(void) asm("func_8001EBC8");
+
+/*
+ * Boot-time defaults for everything the memory card persists: the three car
+ * tables, the three GameRaceProgress slots, both course-progress blocks,
+ * g_MaxClassReached, the BGM selection and the three audio settings. Called
+ * once, from GameInitSubsystems.
+ */
+void GameInitSaveDefaults(void) asm("func_80021338");
+/* Reset the current g_CourseProgress block (arg < 2 also marks slot 3 free). */
+void GameResetCourseProgress(s32 mode) asm("func_800212F0");
 
 #endif
