@@ -2,7 +2,8 @@
 
 extern s32 D_8009B2D8;
 
-s32 func_800576BC(s32 arg0) {
+s32 GameDrawTeamLogoScreen(s32 step) asm("func_800576BC");
+s32 GameDrawTeamLogoScreen(s32 arg0) {
     s32 value;
 
     if (arg0 == 0) {

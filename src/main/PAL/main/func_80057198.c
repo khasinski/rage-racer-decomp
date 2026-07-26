@@ -27,7 +27,8 @@ void func_8004B8B4(s32 a, s32 b);
 void func_8004A248(s32 a, s32 b);
 s32 func_8004E724(s32 a, s32 b);
 
-void func_80057198(void) {
+void GameUpdateDesignModeScreen(void) asm("func_80057198");
+void GameUpdateDesignModeScreen(void) {
     s32 sel;
     u16 edge;
 

@@ -31,7 +31,8 @@ void func_8005D6EC(s32 arg0);
 s32 func_8004D384(s32 *arg0, s32 arg1, s32 arg2);
 void func_800509C4(s32 arg0);
 
-void func_80054D10(void) {
+void GameUpdateRankingScreen(void) asm("func_80054D10");
+void GameUpdateRankingScreen(void) {
     s32 state;
 
     D_8019CB0C = 0;
@@ -154,7 +155,8 @@ pos:
     }
 }
 
-s32 func_800551BC(s32 arg0) {
+s32 GameDrawCarSelectScreen(s32 step) asm("func_800551BC");
+s32 GameDrawCarSelectScreen(s32 arg0) {
     s32 p = (s32) *(void **) 0x1F800004;
     u8 *buf = (u8 *) p + 4;
     s32 v;

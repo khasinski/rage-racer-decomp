@@ -2,7 +2,8 @@
 
 extern s32 D_8009B2E0;
 
-s32 func_800586B0(s32 arg0) {
+s32 GameDrawTeamNameScreen(s32 step) asm("func_800586B0");
+s32 GameDrawTeamNameScreen(s32 arg0) {
     s32 value;
 
     if (arg0 == 0) {

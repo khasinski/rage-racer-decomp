@@ -13,7 +13,8 @@ void func_8004FCE8(s32 arg0, s32 arg1, s32 arg2);
 void func_8005131C(void);
 void func_8004CF30(s32 arg0);
 
-void func_80055618(void) {
+void GameEnterCarSelectScreen(void) asm("func_80055618");
+void GameEnterCarSelectScreen(void) {
     D_8019CB0C = D_8009B338;
     func_80051238();
     D_8019C9F8 = 4;

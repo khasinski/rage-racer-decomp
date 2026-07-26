@@ -42,7 +42,8 @@ s32 func_80050FA8(s32 arg0);
 void func_8005131C(void);
 void func_8005D6EC(s32 arg0);
 
-void func_8005A3A4(void) {
+void GameUpdateEngineerShopScreen(void) asm("func_8005A3A4");
+void GameUpdateEngineerShopScreen(void) {
     void *ot;
     s32 value;
     s32 res;

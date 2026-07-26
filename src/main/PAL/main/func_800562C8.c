@@ -5,7 +5,8 @@ extern s32 D_801E40D4;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
-s32 func_800562C8(s32 arg0) {
+s32 GameDrawCustomizeScreen(s32 step) asm("func_800562C8");
+s32 GameDrawCustomizeScreen(s32 arg0) {
     s32 value;
 
     if (arg0 == 0) {

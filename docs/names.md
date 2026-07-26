@@ -40,11 +40,11 @@ are `.word` instruction counts from `asm/nonmatchings/PAL/main/*.s` (bytes = wor
 | Func | Addr | Words | Status | Purpose |
 |---|---|---:|---|---|
 | func_800418D4 | 0x800418D4 | 1211 | [INCLUDE_ASM] | HUD/billboard sprite-and-quad primitive builder: transforms points, packs 0x28-byte prims at scratchpad `0x1F800000`, links into the OT via func_80064DDC/EB8/F30. Largest remaining TU. (cc=2.7.2) |
-| func_8004A248 | 0x8004A248 | 1435 | [INCLUDE_ASM] | Large menu/screen state machine (dispatched from func_80057748). Largest non-SDK function. (WIP "hard" batch, cc=2.7.2) |
+| func_8004A248 | 0x8004A248 | 1435 | [INCLUDE_ASM] | Team-logo canvas renderer, called every frame by the "TEAM LOGO" screen (`GameUpdateTeamLogoScreen`, func_80057748) and its sample picker (func_800580C8) as `func_8004A248(dir, mode)`. Largest non-SDK function. (WIP "hard" batch, cc=2.7.2) |
 | func_8004D384 | 0x8004D384 | 1017 | [INCLUDE_ASM] | Ranking/records overlay renderer: draws 5 rows from the `S22` record tables (`D_801E7744` ranking / `D_8019CB78` time), number+name+bg sprites, two jump-table switches on `record.vC`. |
 | func_8004C0D8 | 0x8004C0D8 | 894 | [INCLUDE_ASM] | 4bpp texture / RGB-palette editor debug tool (dec@0x1000 / inc@0x4000 palette switches, draw/erase plot loops). (cc=2.7.2) |
-| func_8005290C | 0x8005290C | 849 | [INCLUDE_ASM] | HUD position/lap/time overlay drawer: scroll accumulator `D_8009B2C0`, wave/color offsets, sprite/number draws (func_80046A2C/func_80047BD4). (cc=2.7.2) |
-| func_8005568C | 0x8005568C | 783 | [INCLUDE_ASM] | Menu action/screen state machine (jump-table switch on `D_8009B308`) driving screen transitions + audio (func_8005D6EC). |
+| func_8005290C | 0x8005290C | 849 | [INCLUDE_ASM] | `GameDrawCourseSelectScreen` — slot 1 of the menu overlay table `D_80082EF0`, i.e. the fade/transition overlay of the **COURSE SELECT** screen: scroll accumulator `D_8009B2C0`, wave/color offsets, sprite/number draws (func_80046A2C/func_80047BD4). (cc=2.7.2) |
+| func_8005568C | 0x8005568C | 783 | [INCLUDE_ASM] | `GameUpdateCarSelectScreen` — slot 4 of the menu state-machine table `D_80082EB8`, i.e. the **CAR SELECT** screen (rows: race start / customize / car shop / engineer shop / course select). Jump-table switch on `GameMenuBusy` picks the exit: race, or screens 5 / 11 / 12 / 1. |
 | func_800496F0 | 0x800496F0 | 675 | [INCLUDE_ASM] | Debug palette/gradient UI renderer: approaches color counters `D_8009B270[0..2]`, mode counter, scroll `D_8007FB08`; draws header + scrollbar + 4-entry palette. (cc=2.7.2) |
 | func_8004E724 | 0x8004E724 | 585 | [INCLUDE_ASM] | HUD/standings renderer driven by frame counter `D_8007FB28`; `arg0`=counter delta, `arg1`=highlighted row. (cc=2.7.2) |
 | func_8003479C | 0x8003479C | 396 | [INCLUDE_ASM] | Title-screen "RAGE RACER GE" sprite/frame drawer (`GameDrawTitleScreen`, see screens.h). |
@@ -211,6 +211,75 @@ carry their own `extern <their type> g_Name asm("D_XXXXXXXX");` instead of
 including the header, so the name is identical everywhere while the generated
 load stays exactly as it was. Files that both include the header and need a
 different type keep the raw `D_` symbol.
+
+---
+
+## 3a. The menu-mode screen table (identified by emulation)
+
+Everything the front end draws while `g_MainState == 3` (i.e. after GRAND PRIX or
+TIME ATTACK is chosen) is one of fourteen screens. `func_8005ACA0` dispatches
+them through **two parallel tables indexed by the same screen id in
+`D_8019C9F8`**:
+
+```
+D_80082EB8[D_8019C9F8]()              /* per-frame state machine  -> GameUpdate...Screen */
+D_80082EF0[g_MenuHandlerIndex](0x14)  /* fade/transition overlay  -> GameDraw...Screen   */
+```
+
+Each `GameDraw...Screen` owns one accumulator in `0x8009B2C4..0x8009B2EC`,
+clamped to `[0, 0x1FC]`; `GameInitMenuMode` (func_80050C18) resets all fourteen
+by calling them with 0. Slots 0/3/13 point at the no-op `func_8005AC98`.
+
+Identified by booting the retail PAL disc on an instrumented psx-ruby, sampling
+`D_8019C9F8` once per vblank and screenshotting every transition, so each row is
+backed by a picture of the screen's own on-screen title.
+
+| id | `GameUpdate…Screen` | `GameDraw…Screen` | accumulator | on-screen title / rows |
+|---:|---|---|---|---|
+| 0 | func_80052778 | – | – | menu-mode bootstrap; falls straight into id 1 |
+| 1 | func_80053730 | func_8005290C | (`D_8009B2F0`, shared) | **COURSE SELECT** (TIME ATTACK header in TA mode) |
+| 2 | func_80054D10 | func_80054C84 | `D_8009B2C4` | **RANKING** — total time / lap time / exit |
+| 3 | func_80055618 | – | – | one-frame bridge into id 4 |
+| 4 | func_8005568C | func_800551BC | `D_8009B2CC` | **CAR SELECT** — race start / customize / car shop / engineer shop / course select |
+| 5 | func_800563A0 | func_800562C8 | `D_8009B2D0` | **CUSTOMIZE** — tire / transmission / exit |
+| 6 | func_80057198 | func_80056E64 | `D_8009B2D4` | **DESIGN MODE** — logo / name / color / exit |
+| 7 | func_80057748 | func_800576BC | `D_8009B2D8` | **TEAM LOGO** — sample / paint / exit |
+| 8 | func_800580C8 | func_8005803C | `D_8009B2DC` | **TEAM LOGO** (sample picker) — character / background / exit |
+| 9 | func_8005873C | func_800586B0 | `D_8009B2E0` | **TEAM NAME** — 4x11 character grid, 0x2A = BS, 0x2B = ED |
+| 10 | func_80058C14 | func_80058B88 | `D_8009B2E4` | **PAINT COLOR** — body color 1 / body color 2 / exit |
+| 11 | func_80059558 | func_80059248 | `D_8009B2E8` | **SHOP** (car shop) — buy / exit |
+| 12 | func_8005A3A4 | func_8005A2CC | `D_8009B2EC` | **SHOP** (engineer shop) — tune-up / exit |
+| 13 | (NULL) | – | – | unused |
+
+Ids 6..12 are the GRAND PRIX-only design/shop subtree; TIME ATTACK only reaches
+0..5. **SAVE&LOAD and OPTION are not in this table** — they are separate
+`g_MainState` scenes (2 and 7, entered from func_800182D0 / func_80018B98).
+
+The game's internal pad bit layout (`D_801E4368` held / `D_801E436A` held /
+`g_PadEdge2` = `D_801E436E` edge) is *not* the SIO0 order; measured by holding
+each button in turn:
+
+| bit | button | | bit | button |
+|---|---|---|---|---|
+| 0x0001 | L2 | | 0x0100 | Select |
+| 0x0002 | R2 | | 0x0800 | Start |
+| 0x0004 | L1 | | 0x1000 | Up |
+| 0x0008 | R1 | | 0x2000 | Right |
+| 0x0010 | Triangle | | 0x4000 | Down |
+| 0x0020 | Circle | | 0x8000 | Left |
+| 0x0040 | Cross | | | |
+| 0x0080 | Square | | | |
+
+Hence the recurring menu masks: `0x860` = Start|Cross|Circle (confirm), `0x90` =
+Square|Triangle (cancel), `0x1000`/`0x4000` = up/down, `0x8000`/`0x2000` =
+left/right.
+
+Four functions that `GameInitMenuMode` also resets are **not** per-screen and
+must not be named as screens — they are shared menu drawing helpers with no slot
+in `D_80082EF0`: `func_800496F0` (called unconditionally by func_8005ACA0 every
+frame), `func_8004CF30` (brightness overlay used by ids 1/3/4/5), `func_800509C4`
+(counter in `D_8007FB4C`) and `func_80052158` (primitive shared by the id 5/11/12
+draw halves).
 
 ---
 

@@ -5,7 +5,8 @@ extern s32 D_801E40D4;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
-u32 func_8005A2CC(s32 arg0) {
+u32 GameDrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
+u32 GameDrawEngineerShopScreen(s32 arg0) {
     u32 value;
     s32 amount;
 

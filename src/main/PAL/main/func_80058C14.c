@@ -24,7 +24,8 @@ void func_8005D6EC(s32);
 void func_8001D8C4(s32);
 void func_8001DA74(s32);
 
-void func_80058C14(void) {
+void GameUpdatePaintColorScreen(void) asm("func_80058C14");
+void GameUpdatePaintColorScreen(void) {
     D_8019CB0C = D_8009B338;
     func_8005131C();
 

@@ -23,7 +23,8 @@ extern s32 func_800487D8(void *, void *, s32);
 extern void func_800489AC(s32, s32, s32);
 extern void func_8005D6EC(s32);
 
-void func_800580C8(void) {
+void GameUpdateLogoSampleScreen(void) asm("func_800580C8");
+void GameUpdateLogoSampleScreen(void) {
     s32 v0;
     s32 t;
     s32 pl;

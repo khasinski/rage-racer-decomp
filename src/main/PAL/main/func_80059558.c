@@ -58,7 +58,8 @@ void func_8005131C(void);
 void func_80059320(void);
 void func_8005D6EC(s32 arg0);
 
-void func_80059558(void) {
+void GameUpdateCarShopScreen(void) asm("func_80059558");
+void GameUpdateCarShopScreen(void) {
     void *ot;
     s32 value;
     s32 res;

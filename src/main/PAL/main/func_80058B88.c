@@ -2,7 +2,8 @@
 
 extern s32 D_8009B2E4;
 
-s32 func_80058B88(s32 arg0) {
+s32 GameDrawPaintColorScreen(s32 step) asm("func_80058B88");
+s32 GameDrawPaintColorScreen(s32 arg0) {
     s32 value;
 
     if (arg0 == 0) {

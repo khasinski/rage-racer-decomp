@@ -49,7 +49,8 @@ void func_8005EA14(void);
 void func_8005EA6C(void);
 void func_80065B24(Rect *rect, void *data);
 
-void func_80057748(void)
+void GameUpdateTeamLogoScreen(void) asm("func_80057748");
+void GameUpdateTeamLogoScreen(void)
 {
   void *ot;
   s32 state;

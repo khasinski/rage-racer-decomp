@@ -13,7 +13,8 @@ s32 func_8004E724(s32 a, s32 b);
 s32 func_800487D8(void *a, void *b, s32 c);
 void func_8001D530(void *a, s32 b);
 
-void func_8005873C(void) {
+void GameUpdateTeamNameScreen(void) asm("func_8005873C");
+void GameUpdateTeamNameScreen(void) {
     u16 pad;
     s32 newdepth;
 

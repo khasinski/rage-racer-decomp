@@ -2,7 +2,8 @@
 
 extern s32 D_8009B2C4;
 
-s32 func_80054C84(s32 arg0) {
+s32 GameDrawRankingScreen(s32 step) asm("func_80054C84");
+s32 GameDrawRankingScreen(s32 arg0) {
     s32 value;
 
     if (arg0 == 0) {

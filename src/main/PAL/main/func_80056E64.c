@@ -11,7 +11,8 @@ void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex,
                    s32 semiTrans, s32 flags);
 
-s32 func_80056E64(s32 arg0) {
+s32 GameDrawDesignModeScreen(s32 step) asm("func_80056E64");
+s32 GameDrawDesignModeScreen(s32 arg0) {
     CellMask mask;
     void *ot;
     s32 limit;

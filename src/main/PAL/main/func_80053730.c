@@ -64,7 +64,8 @@ s32 func_80053650(void);
 s32 func_80053688(void);
 void func_8005D6EC(s32 arg0);
 void func_8005E8E0(void);
-void func_80053730(void) {
+void GameUpdateCourseSelectScreen(void) asm("func_80053730");
+void GameUpdateCourseSelectScreen(void) {
     void *ot;
     u8 *hdr;
     s32 state;

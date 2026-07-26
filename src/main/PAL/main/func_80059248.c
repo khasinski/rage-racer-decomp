@@ -5,7 +5,8 @@ extern s32 D_801E40D4;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
-s32 func_80059248(s32 arg0) {
+s32 GameDrawCarShopScreen(s32 step) asm("func_80059248");
+s32 GameDrawCarShopScreen(s32 arg0) {
     register s32 value;
     register s32 limit;
     register s32 amount;
