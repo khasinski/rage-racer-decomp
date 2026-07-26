@@ -376,4 +376,168 @@ void GameDrawScriptedLine(s32 elapsed, u8 *style, u8 *record) asm("func_80048210
 void GameDrawScriptedTriangle(s32 elapsed, u8 *style, u8 *record) asm("func_800483D4");
 void GameDrawScriptedQuad(s32 elapsed, u8 *style, s32 *record) asm("func_80048580");
 
+/*
+ * Low-level packet builders from the first 0x3900 bytes of .text (the boot /
+ * controller-setup / top-level block). Unlike the GameDraw* emitters above,
+ * these take the ordering table AND the packet cursor explicitly and return
+ * the advanced cursor, so a caller can build a run of packets and write the
+ * scratchpad cursor back once at the end.
+ *   "Shaded" = takes an extra intensity written to r = g = b (SetShadeTex is
+ *              NOT applied, so the texel is modulated).
+ *   "Trans"  = calls SetSemiTrans(prim, 1).
+ * Plain GameQueueSprite/GameQueueTexturedRect apply SetShadeTex(prim, 1), i.e.
+ * the texture is drawn raw.
+ */
+/* SPRT, 20 bytes. */
+u8 *GameQueueSprite(
+    void *ot,
+    u8 *prim,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 u,
+    u8 v,
+    u16 clutIndex) asm("func_80016EC4");
+u8 *GameQueueShadedSprite(
+    void *ot,
+    u8 *prim,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 u,
+    u8 v,
+    u16 clutIndex,
+    u8 intensity) asm("func_80016F8C");
+u8 *GameQueueShadedSpriteTrans(
+    void *ot,
+    u8 *prim,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 u,
+    u8 v,
+    u16 clutIndex,
+    u8 intensity) asm("func_8001705C");
+u8 *GameQueueSpriteTrans(
+    void *ot,
+    u8 *prim,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 u,
+    u8 v,
+    u16 clutIndex) asm("func_80017138");
+/* TILE, 16 bytes. */
+u8 *GameQueueTileTrans(
+    void *ot,
+    u8 *prim,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 r,
+    u8 g,
+    u8 b) asm("func_8001720C");
+/* LINE_F2, 16 bytes. */
+u8 *GameQueueLine(
+    void *ot,
+    u8 *prim,
+    s16 x0,
+    s16 y0,
+    s16 x1,
+    s16 y1,
+    u8 r,
+    u8 g,
+    u8 b) asm("func_800172D4");
+/*
+ * POLY_FT4, 40 bytes, built as an axis-aligned rectangle at (x, y) sized
+ * (w, h). A negative w or h flips the u or v axis instead of the geometry.
+ * GameQueueShadedTexturedRect derives the uv extent from w/h;
+ * GameQueueTexturedRect takes uSpan/vSpan separately.
+ */
+u8 *GameQueueShadedTexturedRect(
+    void *ot,
+    u8 *prim,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 u,
+    u8 v,
+    u16 clutIndex,
+    u16 tpage,
+    u8 intensity) asm("func_800173F4");
+u8 *GameQueueTexturedRect(
+    void *ot,
+    u8 *prim,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 u,
+    u8 v,
+    u8 uSpan,
+    u8 vSpan,
+    u16 clutIndex,
+    u16 tpage) asm("func_800175A4");
+/*
+ * DR_MODE, 12 bytes: SetDrawMode(prim, 0, 1, tpage, &D_8007BED0) + AddPrim.
+ * This is the "blend packet" the GameDraw* emitters above append when their
+ * alpha argument is not 0xFF. GameSetDrawModePacket only fills the packet in
+ * place (no AddPrim, no cursor advance) and has no callers in the retail EXE.
+ */
+u8 *GameQueueDrawModePrim(void *ot, u8 *prim, u16 tpage) asm("func_80017390");
+void GameSetDrawModePacket(u8 *prim, u16 tpage) asm("func_80017760");
+
+/*
+ * A third font, separate from the small (6x12) / large (8x16) pair above:
+ * fixed 8x8 SPRT_8 cells on tpage 9, uv from the two-byte-per-glyph table
+ * D_8007C2F8 indexed by (ch - 0x20), 8 pixels of advance per character. Each
+ * variant closes the run with its own DR_MODE packet (tpage 9 / 0x29 / 0x49)
+ * and stores the scratchpad cursor back itself.
+ */
+void GameDrawText8x8(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016754");
+void GameDrawText8x8Shaded(
+    s16 x,
+    s16 y,
+    u8 *str,
+    u16 clutIndex,
+    u8 intensity) asm("func_800168AC");
+void GameDrawText8x8Trans(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016A18");
+/*
+ * The proportional font: 12-pixel-tall SPRT cells. Characters below 'a' use
+ * the {u, v} pairs at D_8007C3B8 with fixed 12x12 cells; 'a'..'u' and 'v'+ use
+ * the {u, v, width, advance} rows at D_8007C438 / D_8007C460, so lowercase is
+ * proportionally spaced. Space advances 12 and emits nothing.
+ * `intensity` == 0x100 selects the opaque raw-texture path (SetShadeTex);
+ * anything else is written to r = g = b with SetSemiTrans.
+ * GameDrawProportionalText is the wrapper that passes 0x100.
+ */
+void GameDrawProportionalTextShaded(
+    s16 x,
+    s16 y,
+    u8 *str,
+    u16 clutIndex,
+    s32 intensity) asm("func_80016B7C");
+void GameDrawProportionalText(
+    s16 x,
+    s16 y,
+    u8 *str,
+    u16 clutIndex) asm("func_80016EA0");
+
+/* Loads the GTE light matrix with D_8009E6AC * `view`. */
+void GameSetGteLightMatrix(Matrix *view) asm("func_8001459C");
+/*
+ * Per-object GTE setup: writes (object position - camera position) as an
+ * SVECTOR into `work`, runs it through the scratchpad view matrix at
+ * 0x1F800028, scales the result by 4 into work's Matrix translation, then
+ * SetRotMatrix(rot) + SetTransMatrix(&work->mtx).
+ * `work` layout: SVECTOR @0, VECTOR @8, Matrix @24 (m @24, t @44).
+ */
+void GameSetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) asm("func_80017794");
+
 #endif
