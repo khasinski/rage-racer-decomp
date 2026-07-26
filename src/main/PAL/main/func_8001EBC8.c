@@ -56,7 +56,8 @@ void func_8001EBC8(void) {
         pixelCount = signedStep * D_8009AF52;
         bufferIndex = D_8009AF34_value;
         bufferAddr = bufferIndex << 2;
-        asm("addu %0,%1,%0" : "=r"(bufferAddr) : "r"(bufferPtr), "0"(bufferAddr));
+        asm("" : "=r"(bufferPtr) : "0"(bufferPtr));
+        bufferAddr = (s32)bufferPtr + bufferAddr;
         func_8006402C(*(volatile u32 **)(bufferAddr - 8), pixelCount / 2);
     } else {
         D_8009AF54 = 1;

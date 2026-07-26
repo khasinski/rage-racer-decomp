@@ -36,31 +36,19 @@ void func_80065460(s32 mode) {
         graphType = func_80067C80(maskedMode != 0);
         clearEnv = graphState + 0x10;
         asm("" : "=r"(clearEnv) : "0"(clearEnv));
-        asm volatile(
-            ".set noat\n\t"
-            "sb %2,0(%1)\n\t"
-            "lbu $2,0(%1)\n\t"
-            "li $3,1\n\t"
-            "lui $1,%%hi(D_800941E9)\n\t"
-            "sb $3,%%lo(D_800941E9)($1)\n\t"
-            "sll $2,$2,2\n\t"
-            "lui $1,%%hi(D_80094268)\n\t"
-            "addu $1,$1,$2\n\t"
-            "lhu $3,%%lo(D_80094268)($1)\n\t"
-            "lbu $2,0(%1)\n\t"
-            "li %0,-1\n\t"
-            "sll $2,$2,2\n\t"
-            "lui $1,%%hi(D_800941EC)\n\t"
-            "sh $3,%%lo(D_800941EC)($1)\n\t"
-            "lui $1,%%hi(D_8009427C)\n\t"
-            "addu $1,$1,$2\n\t"
-            "lhu $2,%%lo(D_8009427C)($1)\n\t"
-            "lui $1,%%hi(D_800941EE)\n\t"
-            "sh $2,%%lo(D_800941EE)($1)\n\t"
-            ".set at"
-            : "=r"(fillValue)
-            : "r"(graphState), "r"(graphType)
-            : "memory");
+        *(volatile u8 *)graphState = graphType;
+        {
+            s32 st0 = *(volatile u8 *)graphState;
+            u16 v;
+            s32 st1;
+
+            D_800941E9 = 1;
+            v = *(u16 *)&D_80094268[st0 * 4];
+            st1 = *(volatile u8 *)graphState;
+            fillValue = -1;
+            D_800941EC = v;
+            D_800941EE = *(u16 *)&D_8009427C[st1 * 4];
+        }
         func_80068180(clearEnv, fillValue, 0x5C);
         func_80068180(graphState + 0x6C, -1, 0x14);
         graphType = *(volatile u8 *)graphState;

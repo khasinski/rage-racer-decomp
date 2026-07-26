@@ -128,18 +128,11 @@ s32 MDEC_timeout(u8 *arg0) {
     *D_8008316C = 0;
     *D_80083178 = 0;
 
-    asm volatile(
-        "addu  $2,$0,$0\n"
-        "lui   $3,%%hi(D_80083178)\n"
-        "lw    $3,%%lo(D_80083178)($3)\n"
-        "lui   $4,%%hi(D_80083198)\n"
-        "lw    $4,%%lo(D_80083198)($4)\n"
-        "lw    $3,0($3)\n"
-        "lui   $3,0x6000\n"
-        "sw    $3,0($4)"
-        : "=r"(ret)
-        :
-        : "$3", "$4", "memory");
+    asm volatile("" ::: "memory");
+    ret = 0;
+    asm volatile("" : : "r"(ret));
+    *D_80083178;
+    *D_80083198 = 0x60000000;
 
     return ret;
 }

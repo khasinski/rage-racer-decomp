@@ -62,7 +62,8 @@ void *ClearOTagR(u32 *arg0, s32 arg1) {
 
         asm("" : "=r"(ret), "=r"(mask) : "0"(ret), "1"(mask));
         next = (u32)&D_800942A4;
-        asm volatile("and $3,$3,$4 # maspsx-keep" : "=r"(next) : "0"(next), "r"(mask));
+        asm("" : "=r"(next) : "0"(next));
+        next &= mask;
         *ret = next;
         return ret;
     }

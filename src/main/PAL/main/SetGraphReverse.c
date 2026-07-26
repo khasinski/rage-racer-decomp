@@ -7,6 +7,7 @@ extern u8 g_GraphType asm("D_800941E8");
 extern u8 g_GraphDebug asm("D_800941EA");
 extern u8 g_GraphReverse asm("D_800941EB");
 extern char D_800134AC[];
+extern char D_800134C4[];
 
 s32 SetGraphReverse(s32 arg0) asm("func_800655B8");
 
@@ -60,15 +61,11 @@ s32 SetGraphDebug(u8 arg0) {
         s32 a3;
         register char *fmt asm("$4");
 
-        asm volatile("lbu $5,0($3)" : "=r"(a1) : "r"(ptr) : "memory");
+        a1 = *ptr;
+        asm volatile("" : "=r"(a1) : "0"(a1));
         a2 = g_GraphType;
         a3 = g_GraphReverse;
-        asm volatile(
-            "lui $4,%%hi(D_800134C4)\n\t"
-            "addiu $4,$4,%%lo(D_800134C4)"
-            : "=r"(fmt)
-            :
-            : "memory");
+        fmt = D_800134C4;
         func(fmt, a1, a2, a3);
     }
     return old;

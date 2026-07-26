@@ -13,7 +13,6 @@ void func_800431BC(void) {
     register CdlLOC *tocDst asm("$18");
     register u8 *file asm("$19");
     register s32 count asm("$2");
-    register u32 word asm("$2");
 
     toc = D_8009AFD4;
     D_801E6C80 = CdGetToc(toc);
@@ -35,15 +34,7 @@ void func_800431BC(void) {
         if (DsSearchFile(file, *(void **)toc) == 0) {
             break;
         }
-        asm volatile(
-            "lwl %0,3(%1)\n"
-            "lwr %0,0(%1)\n"
-            "nop\n"
-            "swl %0,3(%2)\n"
-            "swr %0,0(%2)"
-            : "=&r"(word)
-            : "r"(file), "r"(tocDst)
-            : "memory");
+        *tocDst = *(CdlLOC *)file;
         tocDst++;
 
         i++;

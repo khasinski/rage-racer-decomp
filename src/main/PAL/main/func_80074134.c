@@ -103,12 +103,8 @@ evenPeriod:
         flags = g_SndVoiceFlags[voiceIndex];
         flags |= 8;
         g_SndVoiceFlags[voiceIndex] = flags;
-        asm volatile(
-            "lui %0,%%hi(D_801E4BEC)\n\t"
-            "addiu %0,%0,%%lo(D_801E4BEC)"
-            : "=r"(voiceOffsetPtr)
-            : "r"(flags)
-            : "memory");
+        asm volatile("" : : "r"(flags) : "memory");
+        voiceOffsetPtr = &D_801E4BEC;
         periodIndex = D_801E4BD7;
         tableIndex = D_801E4BDC;
         tableBase = D_801E416C;
@@ -116,7 +112,7 @@ evenPeriod:
         periodIndex += tableIndex;
         periodIndex <<= 5;
         periodIndex += tableBase;
-        asm volatile("lh %0,0(%1)" : "=r"(tableIndex) : "r"(voiceOffsetPtr) : "memory");
+        tableIndex = *voiceOffsetPtr;
         periodIndex = *(u16 *)(periodIndex + 0x10);
         tableIndex <<= 1;
         *(u16 *)&D_8009DF20[8 + tableIndex] = periodIndex;
@@ -128,7 +124,7 @@ evenPeriod:
         periodIndex += tableIndex;
         periodIndex <<= 5;
         periodIndex += tableBase;
-        asm volatile("lh %0,0(%1)" : "=r"(tableIndex) : "r"(voiceOffsetPtr) : "memory");
+        tableIndex = *voiceOffsetPtr;
         periodIndex = *(u16 *)(periodIndex + 0x12);
         tableBase = D_8019CA68;
         tableIndex <<= 1;

@@ -116,13 +116,7 @@ void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
         raw = D_801E6CF8;
         base = *(s32 *)((s32)D_800126AC + index);
         center = raw >> 7;
-        asm volatile(
-            ".globl func_8005E078\n"
-            "func_8005E078 = GameForceIndexedEffectVoiceEnabled + 0x20\n"
-            ".globl func_8005E1B8\n"
-            "func_8005E1B8 = GameForceIndexedEffectVoiceEnabled + 0x160"
-            :
-            : "r"(center));
+        asm volatile("" : : "r"(center));
         fine = raw & 0x7F;
         if (product < 0) {
             product += 0x7F;
@@ -194,13 +188,7 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
             SsUtKeyOnV(arg0, left, right, arg3, raw, 0, 0, 0);
 
             scale = *(s32 *)((u8 *)&D_801E6D30[0].volume + offset);
-            asm volatile(
-                ".globl func_8005E200\n"
-                "func_8005E200 = GameForcePitchEffectVoicesEnabled + 0x30\n"
-                ".globl func_8005E314\n"
-                "func_8005E314 = GameForcePitchEffectVoicesEnabled + 0x144"
-                :
-                : "r"(scale));
+            asm volatile("" : : "r"(scale));
             raw = g_EffectVolumeScale;
             raw = scale * raw;
             arg0 = voice;
@@ -234,24 +222,9 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
             asm volatile("" : : "r"(right));
             arg0 = voicePacked >> 16;
             asm volatile("" : : "r"(arg0));
-            asm volatile(
-                ".set push\n"
-                ".set noreorder\n"
-                "sw $0,16($sp)\n"
-                "lw $2,0(%0)\n"
-                "move $5,$0\n"
-                "sll $2,$2,9\n"
-                "sra $2,$2,16\n"
-                "sw $2,20($sp)\n"
-                "lhu $2,0(%0)\n"
-                "li $7,0x3C\n"
-                "andi $2,$2,0x7F\n"
-                ".word 0x0C01E070\n"
-                ".word 0xAFA20018\n"
-                ".set pop"
-                :
-                : "r"(pitchBase), "r"(arg0), "r"(right)
-                : "$2", "$5", "$7", "$31", "memory");
+            SsUtChangePitch(arg0, 0, right, 0x3C, 0,
+                            (*(s32 *)pitchBase << 9) >> 16,
+                            *(u16 *)pitchBase & 0x7F);
         } else {
             SsUtKeyOffV(voicePacked >> 16);
         }
@@ -263,3 +236,14 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
         offset += 0x14;
     } while (pitchBase < (s32)&D_801E6D8C);
 }
+
+/* Mid-function labels the retail build exports (see docs/ASM_AND_GTE_POLICY.md,
+ * "symbol labels"). They define symbols only and emit no code. */
+asm(".globl func_8005E078\n"
+    "func_8005E078 = GameForceIndexedEffectVoiceEnabled + 0x20\n"
+    ".globl func_8005E1B8\n"
+    "func_8005E1B8 = GameForceIndexedEffectVoiceEnabled + 0x160\n"
+    ".globl func_8005E200\n"
+    "func_8005E200 = GameForcePitchEffectVoicesEnabled + 0x30\n"
+    ".globl func_8005E314\n"
+    "func_8005E314 = GameForcePitchEffectVoicesEnabled + 0x144");
