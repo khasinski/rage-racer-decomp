@@ -108,7 +108,6 @@ segments:
       - [0x4708, .rodata, PAL/lib/libspu/SpuSetCommonAttr]
       - [0x4748, rodata, main/004748]
       - [0x8048, c, PAL/main/func_80017848]
-      - [0x805C, c, PAL/main/func_8001785C]
       - [0x8084, c, PAL/main/func_80017884]
       - [0x83D4, c, PAL/main/func_80017BD4]
       - [0x83E4, c, PAL/main/func_80017BE4]
