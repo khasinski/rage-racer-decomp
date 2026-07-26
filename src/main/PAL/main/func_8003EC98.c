@@ -23,7 +23,7 @@ typedef struct {
     s16 pad;
 } KF;
 
-extern volatile s32 D_801E408C;
+extern volatile s32 g_RaceSeries asm("D_801E408C");
 extern u8 *D_801E4128;
 extern s32 D_801E4330;
 extern volatile s32 D_801E4338;
@@ -98,7 +98,7 @@ void func_8003EC98(void) {
         register s32 word1 asm("$3");
         register s32 word2 asm("$5");
 
-        idx = D_801E408C;
+        idx = g_RaceSeries;
         D_801E433E = 0;
         n = *(s16 *)((u8 *)((idx << 2) + (s32)base) + 8);
         off = n * 12 + 0x50;

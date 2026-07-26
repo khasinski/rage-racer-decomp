@@ -1,27 +1,25 @@
 #include "common.h"
 #include "game/track.h"
+#include "game/race.h"
 
-extern s32 D_801E408C;
-extern s32 *D_801E4150;
-extern u8 *D_8009E688;
 
 void func_8002BF68(u8 *arg0, s32 arg1) {
     register u8 *obj asm("$4") = arg0;
-    register s32 state asm("$2") = D_801E408C;
+    register s32 state asm("$2") = g_RaceSeries;
     register s32 cur asm("$9") = *(s32 *)(obj + 0x30);
     register s32 total asm("$7") = 0;
     register s32 index asm("$6");
 
     *(s32 *)(obj + 0x68) = 0;
     if (state != 0) {
-        index = *D_801E4150;
+        index = *(s32 *)g_TrackEventData;
         if (arg1 == 1) {
             register s32 count asm("$5");
             register u8 *table asm("$8");
             s32 wrapped;
 
             count = g_TrackPointCount;
-            table = D_8009E688;
+            table = (u8 *)g_TrackPoints;
 advance_forward_add:
             index++;
             wrapped = index % count;
@@ -37,7 +35,7 @@ advance_forward_add:
             s32 mod;
 
             count = g_TrackPointCount;
-            table = D_8009E688;
+            table = (u8 *)g_TrackPoints;
 advance_backward_sub:
             if (index < 0) {
                 wrapped = index + count;
@@ -53,14 +51,14 @@ advance_backward_sub:
             goto advance_backward_sub;
         }
     } else {
-        index = *D_801E4150;
+        index = *(s32 *)g_TrackEventData;
         if (arg1 == 0) {
             register s32 count asm("$5");
             register u8 *table asm("$8");
             s32 wrapped;
 
             count = g_TrackPointCount;
-            table = D_8009E688;
+            table = (u8 *)g_TrackPoints;
 advance_forward_sub:
             do {
                 index++;
@@ -75,7 +73,7 @@ advance_forward_sub:
             s32 mod;
 
             count = g_TrackPointCount;
-            table = D_8009E688;
+            table = (u8 *)g_TrackPoints;
 advance_backward_add:
             do {
                 if (index < 0) {

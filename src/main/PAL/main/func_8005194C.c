@@ -1,14 +1,11 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/menu.h"
 
 typedef struct { s32 a, b, c, d; } Vec16;
 
 extern Vec16 D_80082D6C;
-extern s32 D_8009B34C;
-extern s32 D_8009B350;
 extern s32 D_8009B354;
-extern s32 D_8009B358;
-extern s32 D_8009B35C;
 extern s32 D_8009B36C;
 extern s32 D_8009B370;
 extern s32 D_8009E6D4;
@@ -16,7 +13,6 @@ extern s32 D_8009E6D8;
 extern s32 D_8009E6DC;
 extern s32 D_8009E6F4;
 extern s32 D_8009E6F8;
-extern u16 D_801E436A;
 extern s32 D_801E4168;
 extern s32 D_801E8268;
 
@@ -47,16 +43,16 @@ void func_8005194C(void) {
     func_8001A610();
     func_80069728((Matrix *)0x1F800028, &D_80082D6C);
 
-    if (249999 < D_8009B35C) {
-        if (D_8009B358 < 2500) {
-            D_8009B358 = 2500;
+    if (249999 < g_MenuViewOffsetTarget) {
+        if (g_MenuViewOffset < 2500) {
+            g_MenuViewOffset = 2500;
         }
     }
 
-    s1 = D_8009B350 - D_8009B34C;
+    s1 = g_MenuViewAngleTarget - g_MenuViewAngle;
     if (s1 != 0) {
         if (s1 > 0) {
-            if (D_8009B34C > 750000 && D_8009B370 >= 0) {
+            if (g_MenuViewAngle > 750000 && D_8009B370 >= 0) {
                 if (D_8009B354 >= 19) {
                     D_8009B354 = 0;
                     D_8009B36C = D_8009B370;
@@ -65,10 +61,10 @@ void func_8005194C(void) {
                     D_8009B354 = D_8009B354 + 1;
                 }
             } else {
-                D_8009B34C = (s1 + 18) / 18 + D_8009B34C;
+                g_MenuViewAngle = (s1 + 18) / 18 + g_MenuViewAngle;
             }
         } else {
-            if (D_8009B34C <= 249999 && D_8009B370 >= 0) {
+            if (g_MenuViewAngle <= 249999 && D_8009B370 >= 0) {
                 if (D_8009B354 >= 19) {
                     D_8009B354 = 0;
                     D_8009B36C = D_8009B370;
@@ -77,16 +73,16 @@ void func_8005194C(void) {
                     D_8009B354 = D_8009B354 + 1;
                 }
             } else {
-                D_8009B34C = (s1 - 18) / 18 + D_8009B34C;
+                g_MenuViewAngle = (s1 - 18) / 18 + g_MenuViewAngle;
             }
         }
     }
 
-    s1 = ((D_8009B34C + 250000) % 500000 - 250000) / 1000;
+    s1 = ((g_MenuViewAngle + 250000) % 500000 - 250000) / 1000;
 
     s2 = D_8009B36C;
 
-    s0 = D_8009B35C - D_8009B358;
+    s0 = g_MenuViewOffsetTarget - g_MenuViewOffset;
     if (s0 != 0) {
         if (s0 > 0) {
             s0 = (250008 - s0) / 8;
@@ -96,17 +92,17 @@ void func_8005194C(void) {
     }
 
     D_8009E6D4 = 23 - s1;
-    D_8009B358 = s0 + D_8009B358;
+    g_MenuViewOffset = s0 + g_MenuViewOffset;
     D_8009E6DC = -20;
-    s0 = D_8009B358 / 1000;
+    s0 = g_MenuViewOffset / 1000;
     D_8009E6D8 = s0 + 15;
 
-    if (D_801E436A & 4) {
+    if (g_PadHeld & 4) {
         if (D_801E8268 < 64) {
             D_801E8268 = D_801E8268 + 1;
         }
     }
-    if (D_801E436A & 8) {
+    if (g_PadHeld & 8) {
         if (D_801E8268 >= -63) {
             D_801E8268 = D_801E8268 - 1;
         }

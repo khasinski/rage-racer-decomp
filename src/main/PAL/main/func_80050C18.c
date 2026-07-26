@@ -3,14 +3,11 @@
 #include "game/state.h"
 #include "game/render.h"
 #include "game/menu.h"
+#include "game/car.h"
 
 extern u8 *D_801E4FAC;
-extern s32 D_8019CACC;
 extern s32 D_8019C768;
-extern s32 D_801E40D4;
 extern s32 D_8019C908;
-extern s16 D_801E4DAC;
-extern u16 D_801E4034;
 
 extern s32 D_80082568;
 extern s32 D_80082D6C;
@@ -23,8 +20,6 @@ extern void *D_8009F0B0;
 extern void *D_8019CB00;
 extern void *D_801E4188;
 
-extern s32 D_8009B34C;
-extern s32 D_8009B350;
 extern s32 D_8009B2FC;
 extern s32 D_8009B300;
 extern s32 D_8009B304;
@@ -40,10 +35,7 @@ extern s32 D_8009B330;
 extern s32 D_8009B334;
 extern s32 D_8009B338;
 extern s32 D_8009B33C;
-extern s32 D_8009B344;
 extern s32 D_8009B354;
-extern s32 D_8009B358;
-extern s32 D_8009B35C;
 extern s32 D_8009B360;
 extern s32 D_8009B364;
 extern s32 D_8009B368;
@@ -52,7 +44,6 @@ extern s32 D_8009B370;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
 
-extern s32 D_8019C9F8;
 extern s32 D_8019C7AC;
 extern s32 D_801E4138;
 extern s32 D_8019C7C0;
@@ -86,7 +77,7 @@ void GameInitMenuMode(void) {
     s32 *scratch;
 
     func_80065860(0);
-    D_8019CACC = 0;
+    g_MirrorMode = 0;
     p = D_801E4FAC;
     {
         s32 t0 = *(s32 *)(p + 0);
@@ -95,7 +86,7 @@ void GameInitMenuMode(void) {
         s32 t3 = *(s32 *)(p + 16);
         D_8019C768 = 0x80;
         g_CourseIndex = t0;
-        D_801E40D4 = t1;
+        g_PlayerCarIndex = t1;
         g_GrandPrixClass = t2;
         D_8019C908 = t3;
     }
@@ -104,8 +95,8 @@ void GameInitMenuMode(void) {
     func_8001C088(0, 0, 0);
     g_SceneId = 8;
     g_SceneTimer = 0;
-    if (D_801E4DAC != 0) {
-        g_GrandPrixSeries = D_801E4034;
+    if (g_GrandPrixMode != 0) {
+        g_GrandPrixSeries = g_SeriesSelection;
     } else {
         g_GrandPrixSeries = *(u16 *)((u8 *)D_801E4FAC + 16);
     }
@@ -129,8 +120,8 @@ void GameInitMenuMode(void) {
     D_8009F0B0 = &D_80082568;
     D_8019CB00 = &D_80082568;
     D_801E4188 = &D_80082568;
-    D_8009B34C = 500000;
-    D_8009B350 = 500000;
+    g_MenuViewAngle = 500000;
+    g_MenuViewAngleTarget = 500000;
     g_UiScriptProgress = 0;
     g_UiScriptProgress2 = 0;
     D_8009B2FC = 0;
@@ -140,8 +131,8 @@ void GameInitMenuMode(void) {
     D_8009B30C = 0;
     D_8009B310 = 0;
     D_8009B354 = 0;
-    D_8009B358 = 0;
-    D_8009B35C = 0;
+    g_MenuViewOffset = 0;
+    g_MenuViewOffsetTarget = 0;
     D_8009B360 = 0;
     D_8009B364 = 0;
     D_8009B368 = 0;
@@ -159,10 +150,10 @@ void GameInitMenuMode(void) {
     D_8009B334 = 0;
     D_8009B314 = 1;
     g_MenuHandlerIndex = -1;
-    D_8009B344 = -1;
+    g_MenuHandlerIndex2 = -1;
     D_8009B338 = 0;
     D_8009B33C = 0;
-    D_8019C9F8 = 0;
+    g_MenuScreen = 0;
     D_8019C7AC = 0;
     D_801E4138 = 0;
     D_8019C7C0 = 0;

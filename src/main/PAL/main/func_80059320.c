@@ -5,7 +5,6 @@
 extern s32 D_8009B33C;
 extern s16 D_8019CA18;
 extern s16 D_801E41A4;
-extern s32 D_801E4B88;
 extern GameRaceProgress *D_801E4FAC;
 
 s32 func_8001785C(s32 arg0);
@@ -16,7 +15,7 @@ void func_80059320(void) {
 
     if (D_8009B33C != 0) {
         D_8019CA18 = -1;
-        index = D_801E4B88 - 1;
+        index = g_CarListCursor - 1;
         if (index >= 0) {
             entry = &g_CarTable[index];
             while (index >= 0) {
@@ -30,7 +29,7 @@ void func_80059320(void) {
         }
     } else {
         D_8019CA18 = -1;
-        index = D_801E4B88 - 1;
+        index = g_CarListCursor - 1;
         if (index >= 0) {
         backward_loop:
             {
@@ -62,7 +61,7 @@ void func_80059320(void) {
 backward_done:
     if (D_8009B33C != 0) {
         D_801E41A4 = -1;
-        index = D_801E4B88 + 1;
+        index = g_CarListCursor + 1;
         if (index < 13) {
             entry = &g_CarTable[index];
             while (index < 13) {
@@ -76,7 +75,7 @@ backward_done:
         }
     } else {
         D_801E41A4 = -1;
-        index = D_801E4B88 + 1;
+        index = g_CarListCursor + 1;
         if (index < 13) {
         forward_loop:
             {

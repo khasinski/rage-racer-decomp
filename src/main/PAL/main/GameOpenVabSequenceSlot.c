@@ -1,6 +1,5 @@
 #include "common.h"
 
-extern s16 D_801E6CA8[];
 extern s16 D_8009B510[];
 extern s32 D_800125EC[];
 extern s32 D_8009E68C;
@@ -23,6 +22,8 @@ void func_8007865C(s32 arg0);
 void func_80071AC4(s32 arg0);
 void func_80072B3C(s32 arg0);
 
+extern s16 g_VabIds[] asm("D_801E6CA8");
+
 s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E4EC");
 s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     register s32 slotReg asm("$16") = slot;
@@ -36,7 +37,7 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     D_8009E68C = slotReg;
     ret = func_80072C4C(header, -1, D_800125EC[slotReg]);
     {
-        register s16 *vabIdBase asm("$3") = D_801E6CA8;
+        register s16 *vabIdBase asm("$3") = g_VabIds;
         slotReg *= 2;
         vabIdPtr = (s16 *)((s32)vabIdBase + slotReg);
     }
@@ -105,5 +106,5 @@ void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     register s32 vabOffset asm("$6") = (s16)vabSlot * 2;
 
     asm("" : "=r"(voiceOffset) : "0"(voiceOffset));
-    func_80077C7C((s16)voice, *(s16 *)((s32)D_801E6CA8 + vabOffset), *(s16 *)((s32)D_8009B510 + voiceOffset), 0, 0x3C, 0, 0, 0);
+    func_80077C7C((s16)voice, *(s16 *)((s32)g_VabIds + vabOffset), *(s16 *)((s32)D_8009B510 + voiceOffset), 0, 0x3C, 0, 0, 0);
 }

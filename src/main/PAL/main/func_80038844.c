@@ -6,7 +6,6 @@
 
 extern s32 D_801E7740;
 
-extern s32 D_801E408C;
 
 
 extern GameCarRuntime D_801F1854[];
@@ -27,13 +26,11 @@ void func_80017A10(s32 arg0);
 
 void func_8001DFC0(GameCarRuntime *arg0);
 
-extern s16 D_801E6E74;
 
-extern u8 *D_801E42D8;
 
 /*
  * Updates the car's skid/tilt counter (field_8C / field_8E), clamping it
- * against the spec block's redline value (D_801E42D8 + 0x106). Register-pinned,
+ * against the spec block's redline value (g_CarSpec + 0x106). Register-pinned,
  * goto-structured; the raw drive-block reads (+0xA2 / +0x34) preserve the match.
  */
 
@@ -64,10 +61,10 @@ void func_80038844(void) {
         i = 0;
         one = 1;
         flagPtr = &entryBase->activeFlag;
-        D_801E408C = g_GrandPrixSeries;
+        g_RaceSeries = g_GrandPrixSeries;
         cursor = table;
         do {
-            track = *(u16 *)&D_801E408C;
+            track = *(u16 *)&g_RaceSeries;
             *(s16 *)flagPtr = 0;
             *(s16 *)(flagPtr + 6) = track;
             if (*cursor >= 0) {
@@ -88,10 +85,10 @@ void func_80038844(void) {
         i = 0;
         one = 1;
         flagPtr = &entryBase->activeFlag;
-        D_801E408C = g_GrandPrixSeries;
+        g_RaceSeries = g_GrandPrixSeries;
         cursor = table;
         do {
-            track = *(u16 *)&D_801E408C;
+            track = *(u16 *)&g_RaceSeries;
             *(s16 *)flagPtr = 0;
             *(s16 *)(flagPtr + 6) = track;
             if (*cursor >= 0) {
@@ -173,7 +170,7 @@ void func_80038B04(GameCarRuntime *arg0) {
     __asm__ volatile("" : "=r"(obj) : "0"(obj));
 
     ptr = (u8 *)&obj->field_BC;
-    if (D_801E6E74 >= 2) {
+    if (g_RacePhase >= 2) {
         goto main_body;
     }
 
@@ -185,7 +182,7 @@ main_body:
         goto dampen;
     }
 
-    if (obj->field_134 < *(s16 *)(D_801E42D8 + 0x106)) {
+    if (obj->field_134 < *(s16 *)(g_CarSpec + 0x106)) {
         goto side_check;
     }
     if (obj->field_15C < 0x81) {

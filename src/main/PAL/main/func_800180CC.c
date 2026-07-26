@@ -3,7 +3,6 @@
 #include "game/asset.h"
 #include "psyq/gpu.h"
 
-extern s32 D_8009F0B8;
 extern u8 *D_8019CAFC;
 extern Rect D_8007BEDC;
 extern Rect D_8007BEE4;
@@ -22,7 +21,6 @@ extern s32 D_801E4B30;
 extern GameAssetTripleHeader *D_8019C904;
 extern void *D_8019C754;
 extern void *D_801E8AB0;
-extern void *D_801F17A8;
 void func_8005B9CC(void);
 
 void func_800180CC(void) {
@@ -33,27 +31,27 @@ void func_800180CC(void) {
 
     switch (g_AssetLoadState) {
     case 1:
-        base = (u8 *)&D_8009F0B8;
+        base = (u8 *)g_LoadBuffer;
         loaded = (u8 *)func_80017C78(1, base);
         if (loaded != 0) {
             func_8001A498();
             __asm__ volatile("" ::: "memory");
             next = loaded + (s32)base;
-            D_801F17A8 = next;
+            g_AssetBlockPtr = next;
             g_AssetLoadState = 2;
         }
         break;
     case 2:
-        loaded = (u8 *)func_80017C78(2, D_801F17A8);
+        loaded = (u8 *)func_80017C78(2, g_AssetBlockPtr);
         if (loaded != 0) {
             nextState = 3;
-            next = D_801F17A8;
+            next = g_AssetBlockPtr;
             goto setNextBuffer;
         }
         break;
     case 3:
         if (func_80017C78(3, D_8019CAFC) != 0) {
-            func_8005B768(0, D_801F17A8, D_8019CAFC, 0);
+            func_8005B768(0, g_AssetBlockPtr, D_8019CAFC, 0);
             g_AssetLoadState = 4;
         }
         break;
@@ -174,7 +172,7 @@ void func_80018484(void) {
             header = D_8019C904;
             firstOffset = *(volatile s32 *)&header->firstOffset;
             thirdOffset = *(volatile s32 *)&header->thirdOffset;
-            D_801F17A8 = (void *)((u8 *)header + firstOffset);
+            g_AssetBlockPtr = (void *)((u8 *)header + firstOffset);
             secondOffset = *(volatile s32 *)&header->secondOffset;
             __asm__ volatile("" ::: "memory");
             g_AssetLoadState = 0;

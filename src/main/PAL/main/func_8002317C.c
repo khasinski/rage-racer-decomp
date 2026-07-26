@@ -3,13 +3,14 @@
 #include "game/state.h"
 #include "psyq/gte.h"
 #include "game/render.h"
+#include "game/menu.h"
+#include "game/race.h"
 
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 extern s32 D_8007D53C;
 extern s32 D_8007D540;
 extern s32 D_8007D544;
-extern u16 D_801E436A;
 void func_80019AF0(s32 arg0);
 void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
 void func_8001C088(s32 arg0, s32 arg1, s32 arg2);
@@ -22,7 +23,7 @@ void func_80069888(Matrix *arg0);
 void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
 void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_800686D4(s32 arg0, s32 arg1);
-extern s32 D_8019C768, D_801E4B30, D_8019CACC;
+extern s32 D_8019C768, D_801E4B30;
 extern s32 D_8009F0A0;
 void func_8001A3C0(s32 arg0);
 void func_80017884(s32 arg0);
@@ -81,7 +82,7 @@ inc_timer:
 
     if (D_8007D544 != 0) {
         D_8007D544--;
-        if ((g_AssetLoadState == 0) && (D_801E436A != 0)) {
+        if ((g_AssetLoadState == 0) && (g_PadHeld != 0)) {
             D_8007D544 = 0;
         }
     }
@@ -139,7 +140,7 @@ void func_800235D8(void) {
     D_8019C768 = 0x80;
     if (g_AssetLoadState == 0) {
         func_8001A3C0(D_801E4B30);
-        D_8019CACC = 0;
+        g_MirrorMode = 0;
         func_80017884(5);
         func_8001C088(0, 0, 0);
         g_SceneId = 0x17;

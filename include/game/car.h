@@ -146,6 +146,40 @@ typedef struct GameCarRuntimeProgressWindow {
  */
 extern GameCarEntry *g_CarTable asm("D_8019C7C8");
 
+/*
+ * Index into g_CarTable of the car the player drives. func_80018530 /
+ * func_80018A70 use it to pick which car model+texture pack to install
+ * (`func_80017848(g_PlayerCarIndex, entry->modelVariant)`, then
+ * func_8001D748 / func_8001D900 with the entry's shapeIndex / textureIndex,
+ * guarded by `< 10` so the eleventh slot is skipped); the garage screens
+ * (func_80058C14 / func_8005A3A4 / func_800563A0) edit
+ * g_CarTable[g_PlayerCarIndex] in place. Distinct from D_801E4B88, the cursor
+ * of the car list being browsed - buying a car sets
+ * `g_CarTable[D_801E4B88].enabled = 1` and only then
+ * `g_PlayerCarIndex = D_801E4B88`.
+ */
+extern s32 g_PlayerCarIndex asm("D_801E40D4");
+
+/*
+ * Cursor of the car list being browsed in the shop / car-select screen.
+ * func_80059320 steps it to the next g_CarTable entry with `enabled == 0` (a car
+ * the player does not own yet); confirming a purchase does
+ * `g_CarTable[g_CarListCursor].enabled = 1` and only then
+ * `g_PlayerCarIndex = g_CarListCursor` (func_80059558). While g_MenuScreen is
+ * 0xB the garage renderer draws this car instead of the player's.
+ */
+extern s32 g_CarListCursor asm("D_801E4B88");
+
+/*
+ * The loaded player car's spec / configuration block. func_80018FC4 installs the
+ * pack for g_PlayerCarIndex and hands the first sub-block to func_80034DF4,
+ * whose whole body is `g_CarSpec = arg0;`. The physics, gearbox and HUD read it
+ * by raw offset: +0x100 rev limit, +0x104 upshift speed, +0x106 redline,
+ * +0x10A a countdown timer, +0x140/+0x142 the tachometer origin, plus the
+ * gear-ratio / shift-speed tables func_8002DEFC walks.
+ */
+extern u8 *g_CarSpec asm("D_801E42D8");
+
 typedef struct GameCarTrackAngleWindow {
     u8 pad0[0x30];
     s32 trackPointIndex;

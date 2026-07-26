@@ -96,7 +96,6 @@ void func_8001989C(void) {
     }
 }
 
-extern s32 D_8007C6AC;
 extern s32 *D_801E8A90;
 extern s32 D_8019CA1C;
 extern s32 D_8019C708;
@@ -109,16 +108,13 @@ void func_80019AF0(void) {
 
     func_8001E6B4();
 
-    ptr = &D_8007C6AC;
+    ptr = (s32 *)&g_StreamCdEntries[0].size;
     value = *ptr;
     D_801E8A90 = ptr - 1;
     D_8019CA1C = value;
     D_8019C708 = value * 2;
 }
 
-extern s16 D_801E4034;
-extern s32 D_8007C6A8;
-extern s32 D_8007C6AC;
 extern s32 *D_801E8A90;
 extern s32 D_8019CA1C;
 extern s32 D_8019C708;
@@ -133,22 +129,21 @@ void func_80019B3C(void) {
 
     func_8001E6B4();
 
-    if (D_801E4034 != 0) {
+    if (g_SeriesSelection != 0) {
         index = 5;
     } else {
         index = 1;
     }
 
-    base = &D_8007C6A8;
+    base = (s32 *)g_StreamCdEntries;
     index += g_GrandPrixClass;
     offset = index << 3;
-    value = *(s32 *)((s32)&D_8007C6AC + offset);
+    value = *(s32 *)((s32)(s32 *)&g_StreamCdEntries[0].size + offset);
     D_801E8A90 = (s32 *)((s32)base + offset);
     D_8019CA1C = value;
     D_8019C708 = value * 2;
 }
 
-extern s32 D_8007C6FC;
 extern s32 *D_801E8A90;
 extern s32 D_8019CA1C;
 extern s32 D_8019C708;
@@ -161,7 +156,7 @@ void func_80019BB8(void) {
 
     func_8001E6B4();
 
-    ptr = &D_8007C6FC;
+    ptr = (s32 *)&g_StreamCdEntries[10].size;
     value = *ptr;
     D_801E8A90 = ptr - 1;
     D_8019CA1C = value;

@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern volatile s32 D_801E408C;
+extern volatile s32 g_RaceSeries asm("D_801E408C");
 extern u8 *D_801E4128;
 extern volatile s32 D_801E4330;
 extern volatile s32 D_801E4338;
@@ -27,9 +27,9 @@ void func_8003EBCC(void) {
     D_801E433C = 1;
     D_801E4330 = 1;
 
-    index0 = D_801E408C;
+    index0 = g_RaceSeries;
     base = D_801E4128;
-    index1 = D_801E408C;
+    index1 = g_RaceSeries;
     src = (u8 *)((index0 << 5) + (s32)base);
     __asm__ volatile("" ::: "memory");
     dst = &D_801E4340;

@@ -8,10 +8,6 @@ typedef struct { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 
 extern Vec16 D_80011AC4;
 extern Vec16 D_80082D6C;
-extern s32 D_8009B34C;
-extern s32 D_8009B350;
-extern s32 D_8009B358;
-extern s32 D_8009B35C;
 extern s32 D_8009B37C;
 extern s32 D_8019CB0C;
 extern s32 D_801E40E4;
@@ -46,13 +42,13 @@ void func_80051D6C(void) {
     func_8001A610();
     func_80069728((Matrix *)0x1F800028, &D_80082D6C);
 
-    if (249999 < D_8009B35C) {
-        if (D_8009B358 < 2500) {
-            D_8009B358 = 2500;
+    if (249999 < g_MenuViewOffsetTarget) {
+        if (g_MenuViewOffset < 2500) {
+            g_MenuViewOffset = 2500;
         }
     }
 
-    s1 = D_8009B350 - D_8009B34C;
+    s1 = g_MenuViewAngleTarget - g_MenuViewAngle;
     if (s1 != 0) {
         if (s1 > 0) {
             s1 = (s1 + 16) / 16;
@@ -62,21 +58,21 @@ void func_80051D6C(void) {
     }
 
     {
-        s32 t = D_8009B34C + s1;
-        D_8009B34C = t;
+        s32 t = g_MenuViewAngle + s1;
+        g_MenuViewAngle = t;
         if (t <= 3071999) {
             s32 a = GameMenuCursorAnim;
             if (a >= 0) {
-                D_8009B34C = t - 2048000;
+                g_MenuViewAngle = t - 2048000;
                 D_8009B37C = a;
                 GameMenuCursorAnim = -1;
             }
         }
     }
 
-    s1 = D_8009B34C / 1000;
+    s1 = g_MenuViewAngle / 1000;
 
-    s0 = D_8009B35C - D_8009B358;
+    s0 = g_MenuViewOffsetTarget - g_MenuViewOffset;
     if (s0 != 0) {
         if (s0 > 0) {
             s0 = (250008 - s0) / 8;
@@ -85,8 +81,8 @@ void func_80051D6C(void) {
         }
     }
 
-    D_8009B358 = s0 + D_8009B358;
-    s0 = D_8009B358 / 1000;
+    g_MenuViewOffset = s0 + g_MenuViewOffset;
+    s0 = g_MenuViewOffset / 1000;
 
     s2 = 40;
     if (D_8019CB0C != 0) {

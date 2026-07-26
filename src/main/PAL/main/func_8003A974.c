@@ -5,7 +5,6 @@
 
 extern s32 D_8009E73C;
 extern s32 D_8009E740;
-extern s16 D_801E6E74;
 extern GameCarRuntime *D_801E40BC[];
 extern s32 D_801E4BB4;
 extern s32 D_801E7740;
@@ -32,7 +31,7 @@ void func_8003A974(void) {
         s4 = 0xE00;
     }
 
-    if (D_801E6E74 >= 4) {
+    if (g_RacePhase >= 4) {
         return;
     }
 

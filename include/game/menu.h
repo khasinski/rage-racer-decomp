@@ -34,11 +34,53 @@ extern s32 GameMenuBusy asm("D_8009B308");
 /* Cursor animation gate: input is only accepted while this is negative. */
 extern s32 GameMenuCursorAnim asm("D_8009B380");
 /*
- * Which entry of the menu overlay-handler table D_80082EF0 to run this frame,
+ * Which entry of the menu overlay-handler table g_MenuScreenDraw to run this frame,
  * or -1 for none. Every menu screen sets it on entry and func_8005ACA0 does
- * `if (g_MenuHandlerIndex > 0) D_80082EF0[g_MenuHandlerIndex](0x14);`.
+ * `if (g_MenuHandlerIndex > 0) g_MenuScreenDraw[g_MenuHandlerIndex](0x14);`.
  */
 extern s32 g_MenuHandlerIndex asm("D_8009B340");
+
+/*
+ * Second, independent slot into the same overlay-handler table g_MenuScreenDraw,
+ * again -1 for none. func_8005ACA0 runs it right after g_MenuHandlerIndex with
+ * a different argument and keeps the result:
+ * `if (g_MenuHandlerIndex2 > 0) D_8009B348 = g_MenuScreenDraw[g_MenuHandlerIndex2](-10);`
+ * GameInitMenuMode clears it to -1.
+ */
+extern s32 g_MenuHandlerIndex2 asm("D_8009B344");
+
+/*
+ * Which menu-mode screen is running: the id func_8005ACA0 dispatches through
+ * `g_MenuScreenUpdate[g_MenuScreen]()`. The full id -> screen mapping is in the
+ * screen-table block at the bottom of this header (0 bootstrap, 1 course select,
+ * 2 ranking, 4 car select, 5 customize, 6 design mode, 7 team logo, 8 logo
+ * sample, 9 team name, 10 paint colour, 11 car shop, 12 engineer shop).
+ * GameInitMenuMode resets it to 0 and each screen writes the next id as it hands
+ * over; screens 1 and 2 also switch the scratchpad render mode
+ * (`(u32)(g_MenuScreen - 1) < 2`), and screen 11 draws g_CarListCursor's car
+ * rather than g_PlayerCarIndex's.
+ */
+extern s32 g_MenuScreen asm("D_8019C9F8");
+
+/*
+ * The two parallel screen tables func_8005ACA0 dispatches through, both indexed
+ * by the same screen id: g_MenuScreenUpdate holds the per-frame state machines
+ * (selected by g_MenuScreen) and g_MenuScreenDraw the matching fade/transition
+ * overlays (selected by g_MenuHandlerIndex / g_MenuHandlerIndex2). See the
+ * screen-table block at the bottom of this header for the entries.
+ */
+extern void (*g_MenuScreenUpdate[])(void) asm("D_80082EB8");
+extern s32 (*g_MenuScreenDraw[])(s32 step) asm("D_80082EF0");
+
+/*
+ * Title-menu cursor, 0..4 (func_8001B5DC wraps it with `(sel + 5) % 5` on the
+ * up/down pad edges and skips entry 1 while g_AdvancedSeriesUnlocked is 0). 0 and 1 are the
+ * two Grand Prix save files - they repoint g_CarTable / D_801E4FAC / D_8009E67C
+ * at that file's tables and set g_GrandPrixMode to 1 - 2 is Time Attack
+ * (g_GrandPrixMode 0), 3 starts the attract demo and 4 opens the options.
+ * func_8001B2D4 draws the row whose index equals it as selected.
+ */
+extern s32 g_TitleMenuSelection asm("D_801E4184");
 
 /*
  * Element mask handed to GameDrawBitPatternOverlay (func_80047E60) by
@@ -51,15 +93,17 @@ extern s32 g_MenuOverlayPattern asm("D_8009B318");
 extern s32 GameMenuLoadPhase asm("D_8009B740");
 
 /*
- * MISNOMER (kept for now, renaming it touches many callers): this is not a
- * screen stack. It is the **team-name entry buffer** and its length. The "TEAM
+ * The team-name entry buffer and its length (previously misnamed
+ * GameMenuStack / GameMenuStackDepth - it is not a screen stack). The "TEAM
  * NAME" screen (GameUpdateTeamNameScreen, id 9) appends the picked grid cell as
- * `GameMenuStack[GameMenuStackDepth] = GameMenuCursor`, caps the length at 8,
+ * `g_TeamNameChars[g_TeamNameLength] = GameMenuCursor`, caps the length at 6,
  * writes 0xA (the blank cell) when BS pops a character, and hands the pair to
- * func_8001D530 to render the name box.
+ * func_8001D530 to render the name box. The length is the first byte of the
+ * memory-card save header row and the characters follow it
+ * (GameWriteSaveHeaderRow / GameLoadMemoryCardSaveSlot).
  */
-extern u8 GameMenuStackDepth asm("D_8007F45C");
-extern u8 GameMenuStack[] asm("D_8007F460");
+extern u8 g_TeamNameLength asm("D_8007F45C");
+extern u8 g_TeamNameChars[] asm("D_8007F460");
 
 /*
  * Memory-card menu sub-state (part of the 0x8009B200 block), driven by the big
@@ -73,11 +117,42 @@ extern s32 g_McMenuSelection asm("D_8009B724");
 extern s32 g_McMenuPhase asm("D_8009B728");
 extern s32 g_McMenuSubState asm("D_8009B72C");
 
-/* Pad "just pressed" (edge) bits used to drive menu input. Two separate edge
- * words exist; g_PadEdge drives directional navigation, g_PadEdge2 the wider
- * button/action set. Their exact split (players vs read phase) is not settled. */
+/*
+ * The pad word block at 0x801E4368, filled by func_80014014 from the raw receive
+ * buffer at D_801E403C. Its layout, read straight off the stores, is
+ *   +0x00 status byte, +0x01 pad type (0x41 digital, 0x23 analog),
+ *   +0x02 g_PadHeld    = ~(raw[0] << 8 | raw[1])   buttons held this frame,
+ *   +0x04 previous frame's g_PadHeld,
+ *   +0x06 g_PadEdge2   = g_PadHeld & ~previous     buttons pressed this frame,
+ *   +0x08 g_PadEdge,
+ *   +0x0A.. analog axes.
+ * The bit order is the game's own remap, not the hardware one (measured by
+ * holding each button under an emulator): 0x1000 up, 0x4000 down, 0x8000 left,
+ * 0x2000 right, 0x0040 cross, 0x0020 circle, 0x0010 triangle, 0x0080 square,
+ * 0x0800 start - so 0x860 is "confirm" and 0x90 is "cancel".
+ *
+ * g_PadHeld is the level state, not an edge: func_8002CD4C ands it with the two
+ * steering button masks, func_8001C974 tests the held 0x80C combination that
+ * turns on g_MirrorMode, and func_8002317C uses `!= 0` for "any button down".
+ */
+extern u16 g_PadHeld asm("D_801E436A");
 extern u16 g_PadEdge asm("D_801E4370");
 extern u16 g_PadEdge2 asm("D_801E436E");
+
+/*
+ * The two eased scalars of the 3D menu/garage view, each a current value and the
+ * target it is being driven toward, in 1/1000 units. func_80051D6C /
+ * func_8005194C step the current value a fraction of the remaining distance each
+ * frame and then divide by 1000 to get the value they feed to the view:
+ * g_MenuViewAngle becomes the rotation angle handed to func_8001A530 (the
+ * carousel wraps it at 0x7A120 = 500000 per entry), g_MenuViewOffset becomes a
+ * translation component. Screens set only the *Target words; GameInitMenuMode
+ * seeds g_MenuViewAngle to 500000.
+ */
+extern s32 g_MenuViewAngle asm("D_8009B34C");
+extern s32 g_MenuViewAngleTarget asm("D_8009B350");
+extern s32 g_MenuViewOffset asm("D_8009B358");
+extern s32 g_MenuViewOffsetTarget asm("D_8009B35C");
 
 void GameAdjustMenuSelectionHorizontal(
     s32 *value,
@@ -138,10 +213,10 @@ void GameInitMenuMode(void) asm("func_80050C18");
  * Everything the front end shows once g_MainState == 3 (GRAND PRIX / TIME
  * ATTACK selected on the top menu) is one of fourteen screens, dispatched from
  * func_8005ACA0 through two parallel function tables indexed by the same screen
- * id in D_8019C9F8:
+ * id in g_MenuScreen:
  *
- *   D_80082EB8[D_8019C9F8]()               <- per-frame state machine ("Update")
- *   D_80082EF0[g_MenuHandlerIndex](0x14)   <- fade/transition overlay ("Draw")
+ *   g_MenuScreenUpdate[g_MenuScreen]()          <- per-frame state machine ("Update")
+ *   g_MenuScreenDraw[g_MenuHandlerIndex](0x14)  <- fade/transition overlay ("Draw")
  *
  * Each Draw entry owns a private accumulator in the 0x8009B2C4..0x8009B2EC
  * block, clamped to [0, 0x1FC], advanced by its `step` argument and zeroed when
@@ -151,7 +226,7 @@ void GameInitMenuMode(void) asm("func_80050C18");
  *
  * Screen ids, the on-screen title each one draws, and its accumulator (verified
  * by running the retail PAL disc under an instrumented emulator, sampling
- * D_8019C9F8 every vblank and screenshotting each transition):
+ * g_MenuScreen every vblank and screenshotting each transition):
  *
  *   id  Update              Draw                accumulator  title / rows
  *   0   func_80052778       -                   -            menu-mode bootstrap, falls into id 1
@@ -176,7 +251,7 @@ void GameInitMenuMode(void) asm("func_80050C18");
  * Every Update runs one frame of its screen: it advances its own timed draw
  * script through GameRunTimedDrawScript, reads g_PadEdge2 (0x1000 up / 0x4000
  * down / 0x8000 left / 0x2000 right / 0x860 confirm / 0x90 cancel), and hands
- * off by writing the next screen id to D_8019C9F8 and g_MenuHandlerIndex.
+ * off by writing the next screen id to g_MenuScreen and g_MenuHandlerIndex.
  *
  * Every Draw takes a signed `step`: 0 resets the accumulator, positive fades
  * the screen in, negative fades it out; the return value is the accumulator.
@@ -216,7 +291,7 @@ s32 GameDrawLogoSampleScreen(s32 step) asm("func_8005803C");
 /*
  * id 9 -- "TEAM NAME": the 4x11 character grid driven by GameMenuCursor, with
  * cell 0x2A = BS and 0x2B = ED. Accepted characters accumulate in
- * GameMenuStack[GameMenuStackDepth].
+ * g_TeamNameChars[g_TeamNameLength].
  */
 void GameUpdateTeamNameScreen(void) asm("func_8005873C");
 s32 GameDrawTeamNameScreen(s32 step) asm("func_800586B0");

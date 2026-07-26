@@ -2,7 +2,7 @@
 
 extern u8 *D_801E4448;
 extern s32 D_801E4364;
-extern volatile s32 D_801E408C;
+extern volatile s32 g_RaceSeries asm("D_801E408C");
 extern u8 D_801E42FC[];
 extern s16 D_801E4308;
 extern u8 *D_801E43F4;
@@ -44,9 +44,9 @@ void func_8003E464(void) {
         }
     }
 
-    scene0 = D_801E408C;
+    scene0 = g_RaceSeries;
     *(s32 *)(out + 4) = 1;
-    scene1 = D_801E408C;
+    scene1 = g_RaceSeries;
     *(s32 *)(out + 0) = 0;
 
     src = (u8 *)((scene0 << 5) + (s32)base);

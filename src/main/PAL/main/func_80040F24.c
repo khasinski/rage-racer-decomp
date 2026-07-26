@@ -1,10 +1,10 @@
 #include "common.h"
 
 #include "game/audio.h"
+#include "game/race.h"
+#include "game/track.h"
 
-extern u8 *D_801E4150;
 extern s32 D_801E7A50;
-extern s32 D_801E408C;
 extern s16 D_8009E74C;
 extern s16 D_8009E83C;
 extern s32 D_801E4364;
@@ -22,12 +22,12 @@ void func_80040F24(void) {
     register s32 current asm("a0");
     s32 product;
 
-    rawBase = D_801E4150;
+    rawBase = g_TrackEventData;
     current = D_801E7A50;
     base = rawBase + 0x1CCC;
 
     if (!(current & 8)) {
-        if (D_8009E74C == *(s16 *)((D_801E408C << 2) + (s32)base)) {
+        if (D_8009E74C == *(s16 *)((g_RaceSeries << 2) + (s32)base)) {
             entry = D_8009E83C;
             if (entry == D_801E4364) {
                 entry = current | 8;
@@ -51,7 +51,7 @@ void func_80040F24(void) {
         mask = temp << i;
         temp = mask & loopFlags;
         if (temp == 0) {
-            temp = D_801E408C;
+            temp = g_RaceSeries;
             entry = ((temp * 3) + i) << 2;
             entry += (s32)base;
             current = *(s16 *)(entry + 0x10);

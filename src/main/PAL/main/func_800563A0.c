@@ -2,6 +2,7 @@
 #include "game/car.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/race.h"
 
 extern u8 D_80011BA0;
 extern u8 D_80081A34;
@@ -17,18 +18,12 @@ extern s32 D_8009B31C;
 extern s32 D_8009B320;
 extern s32 D_8009B324;
 extern s32 D_8009B338;
-extern s32 D_8009B344;
-extern s32 D_8009B358;
-extern s32 D_8009B35C;
 extern u8 *D_8009E698;
 extern u8 *D_8019C794;
 extern s32 D_8019C7C0;
-extern s32 D_8019C9F8;
 extern s32 D_8019CB0C;
-extern s32 D_801E40D4;
 extern u8 D_801E4389[];
 extern u8 D_801E438A[];
-extern s16 D_801E4DAC;
 
 void func_8004FCE8(s32 arg0, s32 arg1, s32 arg2);
 void func_8005131C(void);
@@ -56,11 +51,11 @@ void GameUpdateCustomizeScreen(void) {
     func_8004FCE8(D_8009B31C, D_8009B320, 0);
     mode = 2;
     func_8005131C();
-    if (D_801E4DAC != 0) {
+    if (g_GrandPrixMode != 0) {
         mode = 3;
     }
     cmdList = &D_80081AD0;
-    if (D_801E4DAC != 0) {
+    if (g_GrandPrixMode != 0) {
         cmdList = &D_80081A34;
     }
 
@@ -86,7 +81,7 @@ void GameUpdateCustomizeScreen(void) {
                 sel = D_8019C7C0;
                 if (sel == 0) {
                     func_8005D6EC(2);
-                    carByte = g_CarTable[D_801E40D4].pad1[0];
+                    carByte = g_CarTable[g_PlayerCarIndex].pad1[0];
                     D_8019C794 = &D_80082574;
                     GameMenuBusy = -1;
                     goto set_state;
@@ -94,7 +89,7 @@ void GameUpdateCustomizeScreen(void) {
                 if (sel == 1) {
                     if (D_8009E698[8] != 0) {
                         func_8005D6EC(2);
-                        carByte = g_CarTable[D_801E40D4].pad1[1];
+                        carByte = g_CarTable[g_PlayerCarIndex].pad1[1];
                         D_8019C794 = &D_800825A4;
                         GameMenuBusy = -2;
 set_state:
@@ -116,7 +111,7 @@ set_state:
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 1;
                     D_8009B324 = -3;
-                    D_8009B35C = 0x3D090;
+                    g_MenuViewOffsetTarget = 0x3D090;
                 }
             } else if (g_PadEdge2 & 0x90) {
 block27:
@@ -160,8 +155,8 @@ block27:
                     func_8005D6EC(2);
                     GameMenuBusy = -6;
                     D_8009B300 = 0x23;
-                    g_CarTable[D_801E40D4].pad1[1] = D_8009B2F0;
-                    D_801E438A[D_801E40D4 * 8] = D_8009B2F0;
+                    g_CarTable[g_PlayerCarIndex].pad1[1] = D_8009B2F0;
+                    D_801E438A[g_PlayerCarIndex * 8] = D_8009B2F0;
                 }
                 if (*pad & 0x90) {
                     func_8005D6EC(3);
@@ -204,8 +199,8 @@ block27:
                 func_800487D8(D_8019C794, &g_UiScriptProgress2, -1);
                 if (g_UiScriptProgress2 <= 0) {
                     GameMenuBusy = 0;
-                    g_CarTable[D_801E40D4].pad1[0] = D_8009B2F0;
-                    D_801E4389[D_801E40D4 * 8] = D_8009B2F0;
+                    g_CarTable[g_PlayerCarIndex].pad1[0] = D_8009B2F0;
+                    D_801E4389[g_PlayerCarIndex * 8] = D_8009B2F0;
                 }
             } else {
                 D_8009B300 -= 1;
@@ -235,21 +230,21 @@ block27:
     }
 
     g_MenuHandlerIndex = -1;
-    D_8009B344 = 5;
+    g_MenuHandlerIndex2 = 5;
     func_800487D8(cmdList, &g_UiScriptProgress, -1);
     func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, mode, D_8019C7C0);
     if (g_UiScriptProgress <= 0) {
         switch (GameMenuBusy) {
         case 1:
-            if (D_8009B358 <= 0x3D08F) {
+            if (g_MenuViewOffset <= 0x3D08F) {
                 return;
             }
-            D_8019C9F8 = 6;
+            g_MenuScreen = 6;
             g_MenuHandlerIndex = 6;
             break;
         case 2:
-            D_8019C9F8 = 4;
+            g_MenuScreen = 4;
             g_MenuHandlerIndex = 4;
             D_8019C7C0 = 0;
             break;

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/render.h"
 #include "psyq/cd.h"
+#include "game/race.h"
 
 typedef struct {
     u8 pad0[0x18];
@@ -38,7 +39,6 @@ s32 func_8006CD0C(s32 arg0);
 extern u8 D_801E8AFC;
 extern u8 *D_8009F0A4;
 extern u8 *D_8019C7A4;
-extern s16 D_801E4DAC;
 extern u32 D_801E4BB0;
 extern u32 D_8019CB6C;
 extern u32 D_8009EC8C;
@@ -201,7 +201,7 @@ void func_8001F0E0(void) {
 void func_8001F100(void) {
     u32 value;
 
-    value = D_801E4DAC;
+    value = g_GrandPrixMode;
     D_801E4BB0 = 0;
     if (value != 0) {
         value = 0x5DC;

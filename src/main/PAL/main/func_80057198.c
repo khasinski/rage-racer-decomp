@@ -1,18 +1,12 @@
 #include "common.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/car.h"
 
 extern s32 D_8009B338;
 extern s32 D_8019CB0C;
-extern s32 D_8009B344;
-extern s32 D_8009B34C;
-extern s32 D_8009B350;
-extern s32 D_8009B358;
-extern s32 D_8009B35C;
 extern s32 D_8009B37C;
 extern s32 D_8019C758;
-extern s32 D_8019C9F8;
-extern s32 D_801E40D4;
 
 extern u8 D_800828EC;
 extern u8 D_80082790;
@@ -61,7 +55,7 @@ void GameUpdateDesignModeScreen(void) {
                     GameMenuBusy = 2;
                     g_MenuOverlayPattern = sel;
                 } else if (sel == 2) {
-                    if (D_801E40D4 < 10) {
+                    if (g_PlayerCarIndex < 10) {
                         GameMenuBusy = 3;
                         g_MenuOverlayPattern = 1;
                         func_8005D6EC(2);
@@ -93,41 +87,41 @@ void GameUpdateDesignModeScreen(void) {
         func_800487D8(&D_80082460, &g_UiScriptProgress, 1);
     } else {
         g_MenuHandlerIndex = -1;
-        D_8009B344 = 6;
+        g_MenuHandlerIndex2 = 6;
         func_800487D8(&D_80081B54, &g_UiScriptProgress, -1);
         func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
         func_800489AC(g_UiScriptProgress, 3, D_8019C758);
         if (g_UiScriptProgress <= 0) {
             switch (GameMenuBusy) {
             case 1:
-                D_8019C9F8 = 7;
+                g_MenuScreen = 7;
                 g_MenuHandlerIndex = 7;
                 func_8004A248(0, 0);
                 break;
             case 2:
-                D_8019C9F8 = 9;
+                g_MenuScreen = 9;
                 g_MenuHandlerIndex = 9;
                 func_8004E724(0, 0);
-                D_8009B358 = 0x3D090;
-                D_8009B35C = 0;
-                D_8009B350 = 0;
-                D_8009B34C = 0;
-                GameMenuCursor = (GameMenuStackDepth >= 6) ? 0x2B : 0;
+                g_MenuViewOffset = 0x3D090;
+                g_MenuViewOffsetTarget = 0;
+                g_MenuViewAngleTarget = 0;
+                g_MenuViewAngle = 0;
+                GameMenuCursor = (g_TeamNameLength >= 6) ? 0x2B : 0;
                 D_8009B37C = GameMenuCursor;
                 break;
             case 3:
-                D_8019C9F8 = 10;
+                g_MenuScreen = 10;
                 g_MenuHandlerIndex = 10;
                 g_UiScriptProgress2 = 0;
-                D_8009B358 = 0x3D090;
-                D_8009B35C = 0;
+                g_MenuViewOffset = 0x3D090;
+                g_MenuViewOffsetTarget = 0;
                 break;
             case 4:
-                D_8019C9F8 = 5;
+                g_MenuScreen = 5;
                 g_MenuHandlerIndex = 5;
                 D_8019C758 = 0;
-                D_8009B358 = 0x3D090;
-                D_8009B35C = 0;
+                g_MenuViewOffset = 0x3D090;
+                g_MenuViewOffsetTarget = 0;
                 break;
             }
             g_UiScriptProgress = 0;

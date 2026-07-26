@@ -1,10 +1,10 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/race.h"
 
 extern u8 D_8007C464[];
 extern u8 D_8007C474[];
 extern u32 D_8007C484;
-extern s32 D_8019CACC;
 extern u8 D_8019C86C;
 extern u8 D_8009EC94;
 extern void *D_8009E698;
@@ -33,7 +33,7 @@ void func_80017884(s32 arg0) {
     register s32 ptr asm("$2");
     register s32 tmp asm("$3");
 
-    tmp = D_8019CACC;
+    tmp = g_MirrorMode;
     value = 0xA;
     *(s32 *)0x1F80006C = value;
     value = 0x80;

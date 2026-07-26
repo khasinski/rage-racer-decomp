@@ -2,7 +2,6 @@
 #include "game/car.h"
 #include "game/track.h"
 
-extern u8 *D_801E42D8;
 
 s32 func_8001A6AC(s32 arg0, s32 arg1);
 s32 func_8002A7C4(s32 arg0, s32 arg1);
@@ -15,7 +14,7 @@ s32 func_80068634(s32 arg0);
  * AI route steering: projects a target point ahead of (or behind, per the
  * direction flag at car+0x110) the car on the track centre-line, offset
  * laterally, and steers the car's heading toward it. `timerBase` is the per-car
- * spec/config block D_801E42D8 (the u16 at +0x10A is a countdown timer).
+ * spec/config block g_CarSpec (the u16 at +0x10A is a countdown timer).
  * Register pins are match-load-bearing.
  */
 void func_8002FE74(GameCarRuntime *car) {
@@ -35,7 +34,7 @@ void func_8002FE74(GameCarRuntime *car) {
     s32 directionFlag;
     register s32 divisor asm("$16");
 
-    timerBase = D_801E42D8;
+    timerBase = g_CarSpec;
     lateral = car->field_34;
     timer = *(u16 *)(timerBase + 0x10A);
     asm volatile("" : "=r"(timer) : "0"(timer));

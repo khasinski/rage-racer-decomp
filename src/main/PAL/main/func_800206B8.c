@@ -11,7 +11,6 @@ void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
 void func_800632F0(void *dst, void *fmt, s32 val);
 extern s32 D_8009E67C;
 extern s32 D_801E4D0C;
-extern s32 D_801E40D4;
 extern s32 D_801E4B94;
 extern s16 D_8019CB58;
 extern s16 D_8019CB54;
@@ -19,13 +18,10 @@ extern GameScoreRecord D_8019CB40[];
 extern GameScoreRecord D_8019CB42[];
 extern s32 D_8019C7C4;
 extern s32 D_8019C8EC;
-extern s16 D_801E4034;
-extern s16 D_8019CAC0;
 extern s32 D_801E419C;
 s32 func_8001785C(s32 arg0);
 s32 func_800214B8(void);
 void func_80021540(void);
-extern s32 D_801E772C[];
 void func_80021288(s32 arg0, s32 arg1);
 void func_800212F0(s32 arg0);
 void func_80019BB8(s32 arg0);
@@ -74,7 +70,7 @@ void func_800207E0(void) {
         *slots = g_RacePosition;
     }
 
-    value = func_8001785C(D_801E40D4);
+    value = func_8001785C(g_PlayerCarIndex);
     slot_count = 4;
     if (g_GrandPrixClass < value) {
         *(s16 *)(D_8009E67C + 4) = 1;
@@ -150,9 +146,9 @@ after_record_check:
 
     D_8019C8EC = 0;
     if (D_801E4B94 != 0) {
-        if ((D_801E4034 == 0 && g_GrandPrixClass == 4) || (D_801E4034 == 1 && g_GrandPrixClass == 5)) {
+        if ((g_SeriesSelection == 0 && g_GrandPrixClass == 4) || (g_SeriesSelection == 1 && g_GrandPrixClass == 5)) {
             D_8019C8EC = 1;
-            D_8019CAC0 = 1;
+            g_AdvancedSeriesUnlocked = 1;
         }
     }
 
@@ -201,7 +197,7 @@ void func_80020B08(void) {
 
             if (enabled != 0) {
                 menuPtr->progression = next;
-                entry = &D_801E772C[D_801E4034];
+                entry = &g_MaxClassReached[g_SeriesSelection];
                 if (*entry < next) {
                     *entry = next;
                 }

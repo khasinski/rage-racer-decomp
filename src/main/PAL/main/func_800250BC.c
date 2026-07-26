@@ -3,13 +3,13 @@
 #include "game/menu.h"
 #include "game/asset.h"
 #include "game/render.h"
+#include "game/track.h"
 
 extern s32 D_8019C868;
 extern s32 D_8019C704;
 extern s32 D_801E8A50;
 extern s32 D_801E6C70;
 extern s32 D_801E4D68;
-extern volatile u16 D_801E436E;
 void func_80024B6C(void);
 void func_80021224(void);
 void func_8005D6EC(s32 arg0);
@@ -29,7 +29,6 @@ s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
 s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void func_80065860(s32 arg0);
 void func_800256B8(void);
-extern s32 *D_801E4150;
 extern s32 D_801E40CC, D_8009E66C, D_8009E870, D_8019C768;
 extern u8 D_801F18CC[];
 extern s32 *D_8019C9A8;
@@ -61,10 +60,10 @@ void func_800250BC(void) {
     switch (D_8019C868) {
     case 0:
         old = D_8019C704;
-        if ((D_801E436E & 0x8000) && old > 0) {
+        if ((g_PadEdge2 & 0x8000) && old > 0) {
             D_8019C704 = old - 1;
         }
-        if (D_801E436E & 0x2000) {
+        if (g_PadEdge2 & 0x2000) {
             s32 value = D_8019C704;
             if (value < 15) {
                 D_8019C704 = value + 1;
@@ -73,7 +72,7 @@ void func_800250BC(void) {
         if (old != D_8019C704) {
             func_8005D6EC(1);
         }
-        pad = D_801E436E;
+        pad = g_PadEdge2;
         if (pad & 0x860) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
@@ -84,10 +83,10 @@ void func_800250BC(void) {
 
     case 1:
         old = D_801E8A50;
-        if ((D_801E436E & 0x8000) && old > 0) {
+        if ((g_PadEdge2 & 0x8000) && old > 0) {
             D_801E8A50 = old - 1;
         }
-        if (D_801E436E & 0x2000) {
+        if (g_PadEdge2 & 0x2000) {
             s32 value = D_801E8A50;
             if (value < 15) {
                 D_801E8A50 = value + 1;
@@ -96,7 +95,7 @@ void func_800250BC(void) {
         if (old != D_801E8A50) {
             func_8005D6EC(1);
         }
-        pad = D_801E436E;
+        pad = g_PadEdge2;
         if (pad & 0x860) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
@@ -107,10 +106,10 @@ void func_800250BC(void) {
 
     case 2:
         old = D_801E6C70;
-        if ((D_801E436E & 0x8000) && old > 0) {
+        if ((g_PadEdge2 & 0x8000) && old > 0) {
             D_801E6C70 = old - 1;
         }
-        if (D_801E436E & 0x2000) {
+        if (g_PadEdge2 & 0x2000) {
             s32 value = D_801E6C70;
             if (value <= 0) {
                 D_801E6C70 = value + 1;
@@ -119,7 +118,7 @@ void func_800250BC(void) {
         if (old != D_801E6C70) {
             func_8005D6EC(1);
         }
-        pad = D_801E436E;
+        pad = g_PadEdge2;
         if (pad & 0x860) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
@@ -130,7 +129,7 @@ void func_800250BC(void) {
     }
 
     func_80021224();
-    pad = D_801E436E;
+    pad = g_PadEdge2;
     if (pad & 0x860) {
         func_8005D6EC(2);
     } else if (pad & 0x90) {
@@ -199,7 +198,7 @@ void func_800254C8(void) {
         func_8005D6EC(1);
     }
 
-    confirm = D_801E436E;
+    confirm = g_PadEdge2;
     if (confirm & 0x860) {
         func_8005D6EC(2);
         g_GameMode = 1;
@@ -283,7 +282,7 @@ void func_80025940(void) {
     func_80017884(5);
     func_8001D30C();
     func_8001D210();
-    D_801E40CC = *D_801E4150;
+    D_801E40CC = *(s32 *)g_TrackEventData;
     func_80038844();
     func_80019E84(*(s16 *)&D_801F18CC[D_8009E66C * 412]);
     func_800458CC(D_8019C9A8[2]);

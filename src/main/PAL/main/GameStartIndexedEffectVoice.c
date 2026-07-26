@@ -2,7 +2,6 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-extern s16 D_801E6CA8;
 extern s32 D_801E6CF0;
 extern s32 D_801E6CF4;
 extern s32 D_801E6CF8;
@@ -14,7 +13,7 @@ void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s
 void func_80078018(s32 arg0);
 
 void GameStartIndexedEffectVoice(s32 baseTone) {
-    func_80077C7C(0x14, D_801E6CA8, (s16)baseTone, 0, 0x3C, 0, 0, 0);
+    func_80077C7C(0x14, g_VabIds[0], (s16)baseTone, 0, 0x3C, 0, 0, 0);
 }
 
 void GameStopIndexedEffectVoice(void) {

@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/car.h"
 #include "game/track.h"
+#include "game/race.h"
 
-extern s32 D_801E408C;
 
 s32 func_8001A6AC(s32 arg0, s32 arg1);
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
@@ -13,7 +13,7 @@ s32 func_80068634(s32 arg0);
 
 /*
  * Car route-steering update. Samples a look-ahead track point (two ahead or two
- * behind depending on the lap-direction flag D_801E408C), clamps the lateral
+ * behind depending on the lap-direction flag g_RaceSeries), clamps the lateral
  * offset to the track half-width (field_10/field_12), projects the target point
  * off the centre-line along the inward normal (0x1000 - smoothed track angle),
  * then nudges the car's headingAngle toward that target (func_8002A7C4). Writes
@@ -39,7 +39,7 @@ void func_8003AEBC(GameCarRuntime *car) {
     route = (GameCarRuntime *)&car->field_BC;
     car->field_DC = 0;
 
-    if (D_801E408C != 0) {
+    if (g_RaceSeries != 0) {
         index = offset + 2;
     } else {
         index = offset - 2;
@@ -87,7 +87,7 @@ void func_8003AEBC(GameCarRuntime *car) {
 
     angle = 0x400 - func_8001A6AC(coords[0] - car->x, coords[2] - car->z);
 
-    callArg = D_801E408C;
+    callArg = g_RaceSeries;
     value = car->field_B4;
     callArg = (callArg << 11) + 0xC00;
     value = -func_8002A7C4(callArg - value, angle);

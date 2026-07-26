@@ -3,7 +3,6 @@
 #include "psyq/snd.h"
 
 extern u8 D_8009B3B8[];
-extern s16 D_801E6CA8;
 extern char D_8001267C[];
 extern char D_80012694[];
 
@@ -31,7 +30,7 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
     GameResetSoundState();
 
     ret = func_80072C4C(headerReg, -1, 0x1000);
-    vabIdPtr = &D_801E6CA8;
+    vabIdPtr = g_VabIds;
     *vabIdPtr = ret;
     asm volatile("" : "=r"(ret) : "0"(ret));
     currentVabId = (s16)ret;

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/state.h"
 #include "game/menu.h"
+#include "game/race.h"
 
 typedef struct {
     u8 pad[0x10];
@@ -13,7 +14,6 @@ typedef struct {
 
 extern s32 D_8019CB74;
 extern s32 D_801E6DA0;
-extern u16 D_801E436A;
 extern s32 D_801E6C78;
 extern s32 D_801F17B0;
 extern s32 D_8019CE0C;
@@ -53,8 +53,6 @@ extern s32 D_801E6E7C;
 extern u8 D_8009E874;
 extern u8 D_801E42EC;
 extern u8 *D_8009E67C;
-extern s32 D_801E7730;
-extern s32 D_801E772C;
 extern s32 D_801E40A8;
 extern s32 D_801E42CC;
 void func_80021224(void);
@@ -68,7 +66,7 @@ void func_80020DDC(void) {
     s32 st;
     s32 t;
 
-    if (D_801E436A & 0x860) {
+    if (g_PadHeld & 0x860) {
         lim1 <<= 2;
         lim0 <<= 2;
     }
@@ -101,7 +99,7 @@ void func_80020DDC(void) {
         g_SceneTimer += 1;
         if ((u32)g_SceneTimer < 121) goto L234;
         if (D_801F17B0 == 0) goto L248;
-        func_8005D6EC((D_801E436A & 0x860) ? 0x10 : 0xf);
+        func_8005D6EC((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = D_801F17B0;
         if (t >= lim1) {
             D_801F17B0 = t - lim1;
@@ -128,7 +126,7 @@ void func_80020DDC(void) {
     case 6:
         func_80020D90();
         if (D_8019CE0C == 0) { st = 7; goto Lstore; }
-        func_8005D6EC((D_801E436A & 0x860) ? 0x10 : 0xf);
+        func_8005D6EC((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = D_8019CE0C;
         if (t >= lim0) {
             D_8019CE0C = t - lim0;
@@ -256,8 +254,8 @@ void func_80021338(void) {
     D_8009E67C = &D_801E42EC;
     func_800212F0(0);
 
-    D_801E7730 = 0;
-    D_801E772C = 0;
+    g_MaxClassReached[1] = 0;
+    g_MaxClassReached[0] = 0;
     D_801E40A8 = 9;
     D_801E42CC = 0;
     func_8001B488();

@@ -5,7 +5,6 @@
 
 extern volatile s32 D_8009B740;
 extern char D_800128AC[];
-extern u8 D_8007F460[];
 extern s32 D_801E7A54;
 
 s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
@@ -68,11 +67,11 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     }
 
     D_8009B740 = 0x3800;
-    GameMenuStackDepth = *(u8 *)header;
+    g_TeamNameLength = *(u8 *)header;
     i = 0;
     do {
         register u8 *copy_src asm("$2") = (u8 *)header + i;
-        D_8007F460[i] = copy_src[1];
+        g_TeamNameChars[i] = copy_src[1];
         i++;
     } while (i < 7);
 

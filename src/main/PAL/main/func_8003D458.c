@@ -9,8 +9,6 @@ typedef struct {
     s32 w;
 } Vec4i;
 
-extern s16 D_801E6E74;
-extern s32 D_801E408C;
 extern s32 D_801E40E4;
 extern s32 D_8007E2B8[];
 extern struct {
@@ -34,14 +32,14 @@ void func_8003D458(s32 arg0) {
     s32 rem;
     s32 lim;
 
-    if (D_801E6E74 < 2 && arg0 >= 0x51) {
-        func_8001A530(&mtx, D_8007E2B8[D_801E408C]);
+    if (g_RacePhase < 2 && arg0 >= 0x51) {
+        func_8001A530(&mtx, D_8007E2B8[g_RaceSeries]);
         func_80069568((Matrix *)0x1F800028, &mtx);
         if (arg0 - 90 > 0) {
-            state = D_8007E298[D_801E408C];
+            state = D_8007E298[g_RaceSeries];
             s1 = (arg0 - 90) / 3;
-            state.x += D_8007E290[D_801E408C].x * (s0 = s1 / 15);
-            state.z += D_8007E290[D_801E408C].y * s0;
+            state.x += D_8007E290[g_RaceSeries].x * (s0 = s1 / 15);
+            state.z += D_8007E290[g_RaceSeries].y * s0;
             if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }
@@ -53,7 +51,7 @@ void func_8003D458(s32 arg0) {
             *(s32 *)0x1F800084 = 0;
             drawArg = (value < lim) ? value : 1;
         } else {
-            state = D_8007E298[D_801E408C];
+            state = D_8007E298[g_RaceSeries];
             if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }

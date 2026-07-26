@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/car.h"
 
 extern u32 D_8009B2EC;
-extern s32 D_801E40D4;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
@@ -36,6 +36,6 @@ u32 GameDrawEngineerShopScreen(s32 arg0) {
         amount = (u32)product >> 11;
     }
 
-    func_80052158((s16)amount, (D_8009B2EC >> 2) & 0xFF, D_801E40D4);
+    func_80052158((s16)amount, (D_8009B2EC >> 2) & 0xFF, g_PlayerCarIndex);
     return D_8009B2EC;
 }

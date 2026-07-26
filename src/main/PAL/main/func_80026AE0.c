@@ -34,7 +34,6 @@ void func_80042BC0(u32 arg0);
 extern s16 D_8007D6DC[];
 extern s16 D_8007D6DE[];
 extern s32 D_8007D6E0[];
-extern u32 D_801E40B8;
 void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
@@ -81,14 +80,14 @@ void func_80026B88(void) {
     g_SceneId = 0x20;
     D_801E4178 = 0;
     D_801E6824 = 0;
-    D_801E40B8 = 0;
+    g_SceneTimer = 0;
     D_8009E66C = 3;
 }
 
 void func_80026C0C(void) {
     register s32 delta asm("$3");
 
-    if (D_801E40B8 == 2) {
+    if (g_SceneTimer == 2) {
         func_80065860(1);
     }
 
@@ -169,7 +168,7 @@ void func_80026DE4(void) {
     for (i = 0, offset = 0; i < 14; offset += 8) {
         s32 tableY;
 
-        adjusted = (D_801E40B8 / 3) - 0xD0;
+        adjusted = ((u32)g_SceneTimer / 3) - 0xD0;
         tableY = *(s16 *)((u8 *)D_8007D6DE + offset);
         delta = tableY - adjusted;
 
@@ -237,15 +236,15 @@ void func_80026F9C(void) {
     s32 active;
     s32 eventIndex;
 
-    if (D_801E40B8 == 2) {
+    if (g_SceneTimer == 2) {
         func_80065860(1);
     }
 
-    if ((u32)D_801E40B8 >= 0x79 && (g_PadEdge2 & 0x860)) {
+    if ((u32)g_SceneTimer >= 0x79 && (g_PadEdge2 & 0x860)) {
         func_80026F68();
     }
 
-    timer = D_801E40B8;
+    timer = g_SceneTimer;
     if (timer == 0x3C) {
         g_FadeStep = -4;
     } else if (timer == 0x42E) {
@@ -265,11 +264,11 @@ void func_80026F9C(void) {
 
     func_80026DE4();
 
-    active = (u32)(D_801E40B8 - 0x10) < 0x40F;
+    active = (u32)(g_SceneTimer - 0x10) < 0x40F;
     if (active) {
         eventIndex = D_801E6824;
         g_AnimTimer++;
-        if (D_8007D74C[eventIndex].timer == D_801E40B8) {
+        if (D_8007D74C[eventIndex].timer == g_SceneTimer) {
             D_801E6824 = eventIndex + 1;
             D_8009E66C = D_8007D74C[eventIndex].carIndex;
         }

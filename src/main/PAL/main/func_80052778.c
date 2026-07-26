@@ -4,14 +4,9 @@
 #include "game/menu.h"
 
 extern s32 D_8009B334;
-extern s32 D_8009B34C;
-extern s32 D_8009B350;
-extern s32 D_8009B358;
-extern s32 D_8009B35C;
 extern s32 D_8009B360;
 extern s32 D_8009B364;
 extern s32 D_8009B368;
-extern s32 D_8019C9F8;
 extern s32 D_801E8268;
 extern u8 *D_8009E67C;
 extern s32 D_8009E6D4;
@@ -23,7 +18,6 @@ extern s32 D_8009E6FC;
 extern s32 D_8009E718;
 extern s32 D_8009E71C;
 extern s32 D_8009E744;
-extern u8 D_8007F460[];
 extern u8 D_8007BEDC[];
 extern u8 D_8007BEE4[];
 extern u8 D_801E444C[];
@@ -52,14 +46,14 @@ void func_80052778(void) {
     one = 1;
     func_8005E88C();
     g_MenuHandlerIndex = one;
-    D_8019C9F8 = one;
+    g_MenuScreen = one;
     func_80049418(0, 0, 0, 0);
 
     initValue = 0x7A120;
     mode = 0x3D090;
     largeValue = 0x1F0000;
     asm volatile("" : "=r"(largeValue) : "0"(largeValue));
-    D_8009B358 = mode;
+    g_MenuViewOffset = mode;
     mode = g_CourseIndex;
     eight = 8;
     D_801E8268 = eight;
@@ -75,9 +69,9 @@ void func_80052778(void) {
     D_8009E744 = 0;
     D_8009E718 = 0;
     D_8009E71C = 0;
-    D_8009B350 = 0x7A120;
-    D_8009B34C = initValue;
-    D_8009B35C = 0;
+    g_MenuViewAngleTarget = 0x7A120;
+    g_MenuViewAngle = initValue;
+    g_MenuViewOffsetTarget = 0;
     D_8009B360 = largeValue;
     D_8009B364 = 0;
     D_8009B368 = table[mode & 3];
@@ -90,5 +84,5 @@ void func_80052778(void) {
 
     func_80065B24(D_8007BEE4, D_801E6F2C);
     func_80065B24(D_8007BEDC, D_801E444C);
-    func_8001D530(D_8007F460, GameMenuStackDepth);
+    func_8001D530(g_TeamNameChars, g_TeamNameLength);
 }

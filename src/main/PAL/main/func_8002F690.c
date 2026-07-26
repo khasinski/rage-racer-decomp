@@ -1,13 +1,12 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/race.h"
 
 typedef struct D8007Pair {
     s16 f0;
     s16 f2;
 } D8007Pair;
 
-extern u8 *D_801E42D8;
-extern s16 D_801E6E74;
 extern s16 D_801F17A4;
 extern D8007Pair D_8007DAC0[];
 
@@ -53,15 +52,15 @@ void func_8002F690(GameCarRuntime *car) {
     car->field_C4 = sinA * coords[2] / 4096;
     car->field_CC = cosA * coords[2] / 4096;
 
-    data1 = D_801E42D8;
-    if (*(s16 *)(data1 + 0x100) + 2000 < car->field_134 && D_801E6E74 >= 2) {
+    data1 = g_CarSpec;
+    if (*(s16 *)(data1 + 0x100) + 2000 < car->field_134 && g_RacePhase >= 2) {
         func_8005C104(0, 0x1800,
                       (car->field_134 - *(s16 *)(data1 + 0x100)) / 100 + 128);
     } else {
         func_8005C104(-1, 0, 0);
     }
 
-    data = D_801E42D8;
+    data = g_CarSpec;
     if (*(s16 *)(data + 0x106) + 1000 < *(s32 *)(route + 0x78)) {
         s16 v = D_801F17A4;
         if (v >= 41 && *(s16 *)(route + 0x76) == *(s16 *)(data + 0x104) &&

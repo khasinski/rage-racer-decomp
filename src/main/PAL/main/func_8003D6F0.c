@@ -13,12 +13,10 @@ extern Vec4i D_8007E2C0[];
 extern u32 *D_801E6828;
 extern s16 D_8007E2EA;
 extern s32 D_801E4BAC;
-extern u16 D_8009E834;
 extern s32 D_8007E2E4;
 extern s16 D_8007E2E8;
 extern s16 D_8009AFCC;
 extern s16 D_8007E2E0[];
-extern s16 D_801E4DAC;
 extern s32 D_801E40E4;
 
 void func_8001A530(Matrix *mtx, s32 angle);
@@ -80,7 +78,7 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
     D_8007E2EA = (arg0 / 4) % 16;
     if (D_8007E2EA == 0 && (arg0 & 7) == 0 && D_801E4BAC == 0) {
         D_8007E2E4 = 0;
-        D_8007E2E8 = D_8009E834;
+        D_8007E2E8 = g_RacePosition;
         D_8009AFCC = (func_800632B0() & 7) / 3;
         if (D_8007E2E8 >= 4) {
             D_8007E2E8 = 0;
@@ -92,7 +90,7 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
     func_80069458(&mtx, &mtx2);
     func_80069568((Matrix *)0x1F800028, &mtx);
 
-    if (D_801E4DAC == 0) {
+    if (g_GrandPrixMode == 0) {
         return;
     }
 

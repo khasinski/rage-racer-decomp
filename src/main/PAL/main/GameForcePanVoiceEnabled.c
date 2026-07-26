@@ -2,7 +2,6 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-extern s16 D_801E6CA8;
 extern s32 D_801E6CE4;
 extern s32 D_801E6CE8;
 
@@ -75,7 +74,7 @@ void GameForcePanVoiceEnabled(s32 enabled) {
         right = 0xF;
         asm volatile("" : : "r"(voice), "r"(right));
         raw = 0x3C;
-        left = D_801E6CA8;
+        left = g_VabIds[0];
         zeroArg = 0;
         func_80077C7C(voice, left, right, zeroArg, raw, 0, 0, 0);
     } else {

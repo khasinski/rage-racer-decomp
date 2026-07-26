@@ -134,7 +134,6 @@ void GameDrawPressStartPrompt(void) {
 extern s32 D_8019CB70;
 extern s32 D_8009F098;
 extern s32 D_801E8260;
-extern s32 D_801E4184;
 void func_8005D6EC(s32 arg0);
 void func_80042CCC(s32 arg0);
 void GameDrawPressStartPrompt(void) asm("func_8001B170");
@@ -146,7 +145,7 @@ void GameUpdateTitleScreen(void) {
         func_8005D6EC(2);
         D_8009F098 = 1;
         D_801E8260 = 0;
-        D_801E4184 = 0;
+        g_TitleMenuSelection = 0;
         if (D_8019CB70 > 0) {
             D_8019CB70 = 0;
             func_80042CCC(1);
@@ -155,8 +154,6 @@ void GameUpdateTitleScreen(void) {
     GameDrawPressStartPrompt();
 }
 
-extern s16 D_8019CAC0;
-extern s32 D_801E4184;
 extern s32 D_8009F098;
 extern s32 D_801E429C;
 extern s32 D_801E6F1C;
@@ -189,11 +186,11 @@ void GameDrawMainMenuRows(void) {
 
         code = 0x7E85;
 
-        if ((D_8019CAC0 == 0) && (i == one)) {
+        if ((g_AdvancedSeriesUnlocked == 0) && (i == one)) {
             i = 2;
         }
 
-        if (i == D_801E4184) {
+        if (i == g_TitleMenuSelection) {
             code = 0x7E86;
         }
 
@@ -280,13 +277,10 @@ void func_8001B488(void) {
 
 extern volatile u16 g_PadEdge2 asm("D_801E436E");
 extern s32 D_801E8260;
-extern s32 D_801E4184;
-extern s16 D_8019CAC0;
 
 extern s32 *g_CarTable asm("D_8019C7C8");
 extern s32 *D_801E4FAC;
 extern s32 *D_8009E67C;
-extern s16 D_801E4034;
 extern s32 D_801E40A0;
 extern s32 D_801E6E88;
 extern s32 D_8009F098;
@@ -321,26 +315,26 @@ void GameUpdateMainMenuInput(void) {
         D_801E8260 = 0;
     }
     flags = *flagp;
-    idx = D_801E4184;
+    idx = g_TitleMenuSelection;
 
     if (flags & 0x1000) {
         s32 n = idx - 1;
-        D_801E4184 = n;
-        if (D_8019CAC0 == 0 && n == 1) {
-            D_801E4184 = idx - 2;
+        g_TitleMenuSelection = n;
+        if (g_AdvancedSeriesUnlocked == 0 && n == 1) {
+            g_TitleMenuSelection = idx - 2;
         }
     } else if (flags & 0x4000) {
         s32 n = idx + 1;
-        D_801E4184 = n;
-        if (D_8019CAC0 == 0 && n == 1) {
-            D_801E4184 = idx + 2;
+        g_TitleMenuSelection = n;
+        if (g_AdvancedSeriesUnlocked == 0 && n == 1) {
+            g_TitleMenuSelection = idx + 2;
         }
     }
 
     {
-        s32 m = D_801E4184 + 5;
+        s32 m = g_TitleMenuSelection + 5;
         m = m % 5;
-        D_801E4184 = m;
+        g_TitleMenuSelection = m;
         if (idx != m) {
             func_8005D6EC(1);
         }
@@ -352,12 +346,12 @@ void GameUpdateMainMenuInput(void) {
             func_80017BE4();
         }
         func_8001B488();
-        switch (D_801E4184) {
+        switch (g_TitleMenuSelection) {
         case 0:
             g_CarTable = &D_801E4F44;
             D_801E4FAC = &D_801E4094;
             D_8009E67C = &D_801E42EC;
-            D_801E4034 = 0;
+            g_SeriesSelection = 0;
             if (D_801E40A0 == -1) {
                 g_GrandPrixClass = 0;
                 g_CourseIndex = 3;
@@ -370,7 +364,7 @@ void GameUpdateMainMenuInput(void) {
             g_CarTable = &D_8019C914;
             D_801E4FAC = &D_801E6E7C;
             D_8009E67C = &D_8009E874;
-            D_801E4034 = 1;
+            g_SeriesSelection = 1;
             if (D_801E6E88 == -1) {
                 g_GrandPrixClass = 0;
                 g_CourseIndex = 3;
@@ -382,7 +376,7 @@ void GameUpdateMainMenuInput(void) {
         case 2:
             g_CarTable = &D_801E4388;
             D_801E4FAC = &D_8019C980;
-            D_801E4034 = 0;
+            g_SeriesSelection = 0;
             func_8001839C();
             break;
         case 3:

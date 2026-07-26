@@ -4,7 +4,6 @@
 extern s32 D_801E6D38[];
 extern u8 D_801E6D34[];
 extern u8 D_801E6D40[];
-extern s16 D_801E6CA8;
 
 void func_80077C7C(s32, s32, s32, s32, s32, s32, s32, s32);
 void func_80078018(s32);
@@ -70,7 +69,7 @@ void func_8005CDB0(void) {
         state = *statePtr;
         switch (state) {
         case 0:
-            func_80077C7C(voice >> 16, D_801E6CA8, *f0Ptr,
+            func_80077C7C(voice >> 16, g_VabIds[0], *f0Ptr,
                           *(s16 *)(D_801E6D34 + offset), 0x3C, 0, 0, 0);
             VOLPITCH();
             break;

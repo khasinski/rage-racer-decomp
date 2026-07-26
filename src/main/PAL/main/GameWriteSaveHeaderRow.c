@@ -2,7 +2,6 @@
 #include "game/memcard.h"
 #include "game/menu.h"
 
-extern u8 D_8007F460[];
 extern s32 D_801E7A54;
 
 void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) {
@@ -11,10 +10,10 @@ void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) {
     register u32 checksum asm("$3");
     register u16 *scan asm("$6");
 
-    arg0[0] = GameMenuStackDepth;
+    arg0[0] = g_TeamNameLength;
 
     for (i = 0; i < 7; i++) {
-        *((arg0 + i) + 1) = D_8007F460[i];
+        *((arg0 + i) + 1) = g_TeamNameChars[i];
     }
 
     i = 0;

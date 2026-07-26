@@ -20,7 +20,7 @@ void *func_80021CD4(void *dst, s32 value);
 void func_800632F0();
 s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern volatile s32 D_801E4BA8;
-extern volatile u16 D_801E40D4;
+extern volatile u16 g_PlayerCarIndex asm("D_801E40D4");
 extern s32 D_801E774C;
 extern u16 D_801E7750[];
 extern s32 D_8019CB80;
@@ -282,7 +282,7 @@ void func_80022324(void) {
 
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *((u16 *)((u8 *)D_801E7750 + score_offset)) = D_801E40D4;
+            *((u16 *)((u8 *)D_801E7750 + score_offset)) = g_PlayerCarIndex;
             break;
         }
         i++;
@@ -336,7 +336,7 @@ void func_80022324(void) {
 
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *((u16 *)((u8 *)D_8019CB84 + score_offset)) = D_801E40D4;
+            *((u16 *)((u8 *)D_8019CB84 + score_offset)) = g_PlayerCarIndex;
             break;
         }
         i++;

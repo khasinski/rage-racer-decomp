@@ -2,6 +2,8 @@
 #include "psyq/gte.h"
 #include "game/state.h"
 #include "game/menu.h"
+#include "game/race.h"
+#include "game/car.h"
 
 typedef struct GearRange {
     s16 up;
@@ -114,8 +116,7 @@ typedef struct Car {
 } Car;
 
 extern u8 D_801E4369;
-extern volatile u16 D_801E436A;
-extern u8 *D_801E42D8;
+extern volatile u16 g_PadHeld asm("D_801E436A");
 extern s16 D_801E4374;
 extern s16 D_801E4376;
 extern s16 D_801E4378;
@@ -124,7 +125,6 @@ extern s16 D_801E4B66;
 extern s16 D_801E4B68[2][8];
 extern s16 D_801E4B74;
 extern s16 D_801E4B76;
-extern s16 D_801E6E74;
 extern s32 D_801E40B0;
 extern s32 D_801E4170;
 extern s32 D_801E4194;
@@ -134,7 +134,6 @@ extern s32 D_801F17B8;
 extern s32 D_801E8AA0;
 extern s16 D_8019CB08;
 extern s32 D_8019CAB4;
-extern s32 D_8019CACC;
 extern u8 *g_TrackPoints asm("D_8009E688");
 extern s16 D_8009E830;
 extern s32 D_8009E808;
@@ -169,7 +168,7 @@ void func_8005D9F8(s32 value, s32 bank);
  * Per-car physics / gear-shift driver (matched sibling of the ASM
  * func_8003BB50). Samples input, builds the car's orientation matrices, runs
  * the manual/auto gear-shift state machine (using the per-car spec block
- * D_801E42D8 for top-gear/upshift/downshift-speed tables and the shift
+ * g_CarSpec for top-gear/upshift/downshift-speed tables and the shift
  * cooldown timers D_801F17A4/D_801F17B8), dispatches the engine audio and the
  * boost/launch handlers, and resolves track-boundary skid via func_80031298.
  * The local Car/CarDrive structs are a distinct hand-rolled layout (drive block
@@ -204,7 +203,7 @@ void func_8002DEFC(Car *car) {
         if (g_PadEdge2 & D_801E4B68[mode23][0]) {
             s32 g = car->drive.gear;
 
-            if (g < *(s16 *)(D_801E42D8 + 0x104) && car->drive.clutch == 0) {
+            if (g < *(s16 *)(g_CarSpec + 0x104) && car->drive.clutch == 0) {
                 car->drive.gear = car->drive.gear + 1;
                 D_801F17A4 = 0;
             }
@@ -225,7 +224,7 @@ void func_8002DEFC(Car *car) {
 
             g = car->drive.gear;
             idx = g - 1;
-            tableValue = (s32)D_801E42D8;
+            tableValue = (s32)g_CarSpec;
             tableValue += idx * 4;
             tableValue = *(s16 *)(tableValue + 0x120);
             if (car->speed < tableValue &&
@@ -242,7 +241,7 @@ void func_8002DEFC(Car *car) {
                 s32 speed;
 
                 nextGear = p->gear;
-                config = D_801E42D8;
+                config = g_CarSpec;
                 speed = car->speed;
                 idx = nextGear - 1;
                 entry = config;
@@ -284,13 +283,13 @@ void func_8002DEFC(Car *car) {
         }
     }
 
-    if (D_801E6E74 < 4) {
+    if (g_RacePhase < 4) {
         if (D_801E4369 == 0x41) {
-            *(volatile s16 *)&p->accelBtn = ((D_801E436A & D_801E4B64) != 0) << 8;
-            p->brakeBtn = ((D_801E436A & D_801E4B66) != 0) << 8;
+            *(volatile s16 *)&p->accelBtn = ((g_PadHeld & D_801E4B64) != 0) << 8;
+            p->brakeBtn = ((g_PadHeld & D_801E4B66) != 0) << 8;
         } else if (D_801E4369 == 0x23) {
-            *(volatile s16 *)&p->accelBtn = ((D_801E436A & D_801E4B74) != 0) << 8;
-            p->brakeBtn = ((D_801E436A & D_801E4B76) != 0) << 8;
+            *(volatile s16 *)&p->accelBtn = ((g_PadHeld & D_801E4B74) != 0) << 8;
+            p->brakeBtn = ((g_PadHeld & D_801E4B76) != 0) << 8;
             switch (D_8019CB08) {
             case 0:
             case 5:
@@ -428,7 +427,7 @@ void func_8002DEFC(Car *car) {
     }
 
     if (p->unk3C != 0) {
-        s32 d = (*(s16 *)(D_801E42D8 + 0x100) + *(s16 *)(D_801E42D8 + 0x106)) / 2 -
+        s32 d = (*(s16 *)(g_CarSpec + 0x100) + *(s16 *)(g_CarSpec + 0x106)) / 2 -
                 D_801E4BF4;
         if (d > 0) {
             car->unk20 += (d * func_800632B0()) / 3276700;
@@ -484,7 +483,7 @@ void func_8002DEFC(Car *car) {
             func_80038F0C(1, car);
             D_801E8AA0 = 0;
             if ((s16)car->shiftTick >= 19) {
-                if (D_801E6E74 < 3) {
+                if (g_RacePhase < 3) {
                     func_8005D6EC(0xE);
                 }
             }
@@ -500,7 +499,7 @@ void func_8002DEFC(Car *car) {
                 p->unk58 = car->unkA0;
                 p->unk5C = car->speed / 0x100000;
                 p->unk50 = 0;
-                props = D_801E42D8;
+                props = g_CarSpec;
                 {
                     s32 *ratios = (s32 *)(props + 0xE4);
 
@@ -545,7 +544,7 @@ void func_8002DEFC(Car *car) {
             car->speed = (87 - func_80068568(slip) * 40 / 4096) * car->speed / 100;
             p->unk2C = p->unk2C * (85 - func_80068568(slip) * 20 / 4096) / 100;
             D_801E4BF4 = (85 - func_80068568(slip) * 20 / 4096) * D_801E4BF4 / 100;
-            if (D_801E6E74 < 3) {
+            if (g_RacePhase < 3) {
                 switch (skid) {
                 case 1:
                 case 3:
@@ -557,7 +556,7 @@ void func_8002DEFC(Car *car) {
                                 func_8005D6EC(0xD);
                             }
                         } else {
-                            func_8005D6EC(D_8019CACC == 0 ? 0xB : 0xC);
+                            func_8005D6EC(g_MirrorMode == 0 ? 0xB : 0xC);
                         }
                     }
                     break;
@@ -570,7 +569,7 @@ void func_8002DEFC(Car *car) {
                             } else if (car->speed >= 81) {
                                 func_8005D6EC(0xD);
                             }
-                        } else if (D_8019CACC == 0) {
+                        } else if (g_MirrorMode == 0) {
                             func_8005D6EC(0xC);
                         } else {
                             func_8005D6EC(0xB);
@@ -594,7 +593,7 @@ void func_8002DEFC(Car *car) {
         } else {
             sum = d / 4 + cab;
         }
-        rpmLimit = *(s16 *)(D_801E42D8 + 0x100);
+        rpmLimit = *(s16 *)(g_CarSpec + 0x100);
         D_8019CAB4 = sum;
         if (sum >= rpmLimit) {
             D_8019CAB4 = rpmLimit;
@@ -603,7 +602,7 @@ void func_8002DEFC(Car *car) {
         }
     }
 
-    if (D_8019CAB4 >= *(s16 *)(D_801E42D8 + 0x100) - 100 && D_8009E830 >= 129) {
+    if (D_8019CAB4 >= *(s16 *)(g_CarSpec + 0x100) - 100 && D_8009E830 >= 129) {
         s32 r = func_800632B0();
 
         D_801E40B0 = g_AnimTimer & 2;
@@ -627,9 +626,9 @@ void func_8002DEFC(Car *car) {
     if (p->unk78 != 0) {
         if (p->gear != 1) {
             revFlag = 0;
-            if (D_8019CAB4 >= *(s16 *)(D_801E42D8 + 0x106) - 2000) {
+            if (D_8019CAB4 >= *(s16 *)(g_CarSpec + 0x106) - 2000) {
                 revFlag = 1;
-                if (D_8019CAB4 < *(s16 *)(D_801E42D8 + 0x106)) {
+                if (D_8019CAB4 < *(s16 *)(g_CarSpec + 0x106)) {
                     revFlag = func_800632B0() & 1;
                 }
             }
@@ -638,7 +637,7 @@ void func_8002DEFC(Car *car) {
         }
     }
 
-    if (D_801E6E74 >= 4) {
+    if (g_RacePhase >= 4) {
         func_8005C104(-1, 0, 0);
     }
 

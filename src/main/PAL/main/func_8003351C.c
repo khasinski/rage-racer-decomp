@@ -1,8 +1,8 @@
 #include "common.h"
+#include "game/car.h"
 
 #define SCRATCH (*(u8 **)0x1F800000)
 
-extern u8 *D_801E42D8;
 extern u8 *volatile g_DrawBuffer asm("D_8019C900");
 extern s32 D_8009E778;
 extern s16 D_8009E806;
@@ -21,7 +21,7 @@ u8 *func_80033B7C(u8 *prim, s32 x, s32 y, s32 code, u16 arg4);
 void func_80033C18(s32 x, s32 y, s32 value);
 
 void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
-    u8 *p = D_801E42D8;
+    u8 *p = g_CarSpec;
     s32 cx = *(s16 *)(p + 0x138);
     s32 cy = *(s16 *)(p + 0x13A);
     u8 *base = p + 0x138;

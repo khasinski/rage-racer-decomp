@@ -1,7 +1,7 @@
 #include "common.h"
+#include "game/car.h"
 
 extern s32 D_8009B2E8;
-extern s32 D_801E40D4;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
@@ -42,7 +42,7 @@ s32 GameDrawCarShopScreen(s32 arg0) {
 update:
     amount = value << 16;
     amount >>= 16;
-    limit = D_801E40D4;
+    limit = g_PlayerCarIndex;
     phase = ((u32)D_8009B2E8 >> 2) & 0xFF;
     channel = limit;
     func_80052158(amount, phase, channel);

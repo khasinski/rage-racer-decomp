@@ -3,22 +3,17 @@
 #include "game/state.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/car.h"
 extern s32 D_8009B338;
 extern s32 D_8019CB0C;
-extern s16 D_801E4DAC;
 extern s32 D_8009B334;
 extern s32 D_8009B31C;
 extern s32 D_8009B320;
 extern s32 D_8009B30C;
 extern s32 D_8009B300;
 extern s32 D_8009B310;
-extern s32 D_8009B344;
 extern s32 D_8009B348;
-extern s32 D_8009B34C;
-extern s32 D_8009B350;
 extern s32 D_8009B354;
-extern s32 D_8009B358;
-extern s32 D_8009B35C;
 extern s32 D_8009B360;
 extern s32 D_8009B364;
 extern s32 D_8009B368;
@@ -28,12 +23,9 @@ extern s32 D_8009B374;
 extern s32 D_8009B378;
 extern u8 D_8009B2F0;
 extern u8 *D_8019C764;
-extern s32 D_8019C9F8;
 extern s32 D_8019C7AC;
 extern s32 D_8019C908;
 extern u16 D_8019CABC;
-extern u16 D_801E436A;
-extern s32 D_801E40D4;
 extern GameRaceProgress *D_801E4FAC;
 extern u8 *D_8009E67C;
 extern u8 D_80081818;
@@ -80,7 +72,7 @@ void GameUpdateCourseSelectScreen(void) {
     GameRaceProgress *p;
     ot = *(void **)0x1F800004;
     D_8019CB0C = D_8009B338;
-    if (D_801E4DAC != 0) {
+    if (g_GrandPrixMode != 0) {
         func_800506BC(&D_8009B364, &D_8009B360, &D_8009B368);
     } else {
         func_800509C4(D_8009B334);
@@ -88,7 +80,7 @@ void GameUpdateCourseSelectScreen(void) {
     func_8004FCE8(D_8009B31C, D_8009B320, 0);
     func_8005194C();
     hdr = &D_80081818;
-    if (D_801E4DAC != 0) {
+    if (g_GrandPrixMode != 0) {
         hdr = &D_800817A0;
     }
     state = GameMenuBusy;
@@ -110,9 +102,9 @@ void GameUpdateCourseSelectScreen(void) {
                 func_8005D6EC(1);
                 D_8019C7AC = (D_8019C7AC < 2) ? D_8019C7AC + 1 : 0;
             }
-            if ((D_801E436A & 0x8000) && (func_80053650() != 0)) {
-                t = D_8009B350;
-                u = D_8009B34C;
+            if ((g_PadHeld & 0x8000) && (func_80053650() != 0)) {
+                t = g_MenuViewAngleTarget;
+                u = g_MenuViewAngle;
                 if (t < u ? (u - t <= 0x3D08F) : (t - u <= 0x3D08F)) {
                     if (D_8009B370 < 0) {
 {
@@ -121,15 +113,15 @@ void GameUpdateCourseSelectScreen(void) {
                         s32 lu;
                         s32 lt;
                         func_8005D6EC(8);
-                        lu = D_8009B34C;
+                        lu = g_MenuViewAngle;
                         llap = g_CourseIndex;
-                        lprev = D_8009B350;
+                        lprev = g_MenuViewAngleTarget;
                         lt = D_8009B364;
-                        D_8009B350 = 0;
+                        g_MenuViewAngleTarget = 0;
                         D_8009B354 = 0;
                         D_8009B36C = llap;
                         llap = llap - 1;
-                        D_8009B34C = (lu - lprev) + 0x7A120;
+                        g_MenuViewAngle = (lu - lprev) + 0x7A120;
                         D_8009B360 = (D_8009B360 - lt) + 0x1F4000;
                         g_CourseIndex = llap;
                         D_8009B370 = llap;
@@ -139,9 +131,9 @@ void GameUpdateCourseSelectScreen(void) {
                     }
                 }
             }
-            if ((D_801E436A & 0x2000) && (GameCanSelectNextCourse() != 0)) {
-                t = D_8009B350;
-                u = D_8009B34C;
+            if ((g_PadHeld & 0x2000) && (GameCanSelectNextCourse() != 0)) {
+                t = g_MenuViewAngleTarget;
+                u = g_MenuViewAngle;
                 if (t < u ? (u - t <= 0x3D08F) : (t - u <= 0x3D08F)) {
                     if (D_8009B370 < 0) {
 {
@@ -153,10 +145,10 @@ void GameUpdateCourseSelectScreen(void) {
                             func_8005D6EC(8);
                             lu = 0x7A120;
                             llap = g_CourseIndex;
-                            lprev = D_8009B350;
-                            lt = D_8009B34C;
+                            lprev = g_MenuViewAngleTarget;
+                            lt = g_MenuViewAngle;
                             lbase = D_8009B364;
-                            D_8009B350 = 0xF4240;
+                            g_MenuViewAngleTarget = 0xF4240;
                             D_8009B354 = 0;
                             D_8009B36C = llap;
                             llap = llap + 1;
@@ -165,7 +157,7 @@ void GameUpdateCourseSelectScreen(void) {
                             D_8009B360 = (D_8009B360 - lbase) + 0x1F4000;
                             g_CourseIndex = llap;
                             D_8009B370 = llap;
-                            D_8009B34C = lu;
+                            g_MenuViewAngle = lu;
                             D_8009B368 = D_8009E67C[llap & 3];
                             D_8009B334 = (llap < 4) ? -1 : 1;
                         }
@@ -179,11 +171,11 @@ void GameUpdateCourseSelectScreen(void) {
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 1;
                     D_8009B334 = -1;
-                    D_8009B35C = 0x3D090;
+                    g_MenuViewOffsetTarget = 0x3D090;
                     D_8009B368 = 0;
                     D_8009B360 = (D_8009B360 - D_8009B364) + 0x1F4000;
                 } else if (sel == 2) {
-                    if (D_801E4DAC != 0) {
+                    if (g_GrandPrixMode != 0) {
                         u16 hv;
                         func_8005D6EC(2);
                         hv = 0;
@@ -200,7 +192,7 @@ void GameUpdateCourseSelectScreen(void) {
                         func_8005E8E0();
                         D_8009B30C = -1;
                         D_8009B334 = -1;
-                        D_8009B35C = 0x3D090;
+                        g_MenuViewOffsetTarget = 0x3D090;
                         GameMenuBusy = sel;
                         D_8009B368 = 0;
                         D_8019CABC = g_CourseIndex >> 2;
@@ -208,7 +200,7 @@ void GameUpdateCourseSelectScreen(void) {
                     }
                 } else {
                     func_8005D6EC(2);
-                    if (D_801E4DAC != 0) {
+                    if (g_GrandPrixMode != 0) {
                         D_8019C764 = &D_800825A4;
                         GameMenuBusy = -2;
                         g_UiScriptProgress2 = 0;
@@ -295,7 +287,7 @@ void GameUpdateCourseSelectScreen(void) {
                     func_8005E8E0();
                     GameMenuBusy = (D_8009B2F0 != 0) ? 4 : 2;
                     D_8009B30C = -1;
-                    D_8009B35C = 0x3D090;
+                    g_MenuViewOffsetTarget = 0x3D090;
                     D_8009B368 = 0;
                     D_8009B360 = (D_8009B360 - D_8009B364) + 0x1F4000;
                 }
@@ -330,8 +322,8 @@ void GameUpdateCourseSelectScreen(void) {
                         D_8009B310 = 1;
                         g_GrandPrixClass = D_8009B2F0;
                         func_800212F0(D_8009B2F0);
-                        D_8009B34C = 0x7A120;
-                        D_8009B350 = 0x7A120;
+                        g_MenuViewAngle = 0x7A120;
+                        g_MenuViewAngleTarget = 0x7A120;
                         D_8019C7AC = 0;
                         D_8009B370 = -1;
                         D_8009B360 = 0;
@@ -366,7 +358,7 @@ void GameUpdateCourseSelectScreen(void) {
         func_8004CF30(7);
     } else {
         g_MenuHandlerIndex = -1;
-        D_8009B344 = 1;
+        g_MenuHandlerIndex2 = 1;
         res = func_80053650();
         func_80049418(-1, 1, res, GameCanSelectNextCourse());
         func_800487D8(hdr, &g_UiScriptProgress, -1);
@@ -376,32 +368,32 @@ void GameUpdateCourseSelectScreen(void) {
         if (g_UiScriptProgress <= 0) {
             switch (GameMenuBusy) {
             case 1:
-                if (D_8009B358 > 0x3D08F) {
-                    D_8019C9F8 = 3;
+                if (g_MenuViewOffset > 0x3D08F) {
+                    g_MenuScreen = 3;
                     g_MenuHandlerIndex = 4;
                     func_8004F3EC(0, 0);
                     func_80049418(0, 0, 0, 0);
                     D_8009B378 = -1;
-                    D_8009B34C = 0;
-                    D_8009B350 = 0;
-                    D_8009B358 = 0x3D090;
-                    D_8009B35C = 0;
-                    D_8009B374 = D_801E40D4;
+                    g_MenuViewAngle = 0;
+                    g_MenuViewAngleTarget = 0;
+                    g_MenuViewOffset = 0x3D090;
+                    g_MenuViewOffsetTarget = 0;
+                    D_8009B374 = g_PlayerCarIndex;
                     goto clear;
                 }
                 break;
             case 2:
-                if ((D_8009B348 <= 0) && (D_8009B358 > 0x3D08F)) {
+                if ((D_8009B348 <= 0) && (g_MenuViewOffset > 0x3D08F)) {
                     s32 raw;
                     s32 d;
                     s32 lapc;
                     s32 half;
                     raw = g_CourseIndex;
                     p = D_801E4FAC;
-                    d = D_801E40D4;
+                    d = g_PlayerCarIndex;
                     g_SceneId = 2;
                     lapc = g_GrandPrixClass;
-                    half = D_801E4DAC;
+                    half = g_GrandPrixMode;
                     raw = raw & 3;
                     g_CourseIndex = raw;
                     p->state = raw;
@@ -415,11 +407,11 @@ void GameUpdateCourseSelectScreen(void) {
                 }
                 break;
             case 3:
-                D_8019C9F8 = 2;
+                g_MenuScreen = 2;
                 g_MenuHandlerIndex = 2;
                 goto clear;
             case 4:
-                if ((D_8009B348 <= 0) && (D_8009B358 > 0x3D08F)) {
+                if ((D_8009B348 <= 0) && (g_MenuViewOffset > 0x3D08F)) {
                     s32 raw;
                     s32 d;
                     s32 lapc;
@@ -427,9 +419,9 @@ void GameUpdateCourseSelectScreen(void) {
                     g_SceneId = 0x18;
                     raw = g_CourseIndex & 3;
                     D_801E4FAC->state = (g_CourseIndex = raw);
-                    d = D_801E40D4;
+                    d = g_PlayerCarIndex;
                     lapc = g_GrandPrixClass;
-                    half = D_801E4DAC;
+                    half = g_GrandPrixMode;
                     D_801E4FAC->pad4 = d;
                     D_801E4FAC->lap = lapc;
                     if (half != 0) {

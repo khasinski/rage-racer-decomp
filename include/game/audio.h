@@ -20,6 +20,15 @@ extern volatile u8 g_SndVoiceFlags[] asm("D_8009E0A0");
  */
 extern s32 g_EffectVolumeScale asm("D_801E6CA4");
 
+/*
+ * The libsnd VAB ids of the loaded banks, one per bank slot.
+ * GameInitSoundWithVab fills it from SsVabOpenHead; every key-on passes an
+ * element as the vabId argument of func_80077C7C / func_80078130
+ * (`g_VabIds[slot]`), and the callers that only ever use the first bank read
+ * `g_VabIds[0]`.
+ */
+extern s16 g_VabIds[] asm("D_801E6CA8");
+
 void GameSetSequenceVolume(s32 volume) asm("func_8005E7A0");
 void GameRefreshSequenceVolumeScale(void) asm("func_8005E7DC");
 void GameSetSequenceVolumeScale(s32 scale) asm("func_8005E834");

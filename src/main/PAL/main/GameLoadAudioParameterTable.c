@@ -1,12 +1,12 @@
 #include "common.h"
 #include "psyq/snd.h"
+#include "game/audio.h"
 
 extern s32 D_801E6D84;
 extern s32 D_801E6D88;
 extern s32 D_801E6D80;
 extern s32 D_801E446C[];
 extern s32 D_801E6CC4;
-extern s16 D_801E6CA8[];
 extern s16 D_80082F28[];
 
 void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
@@ -168,5 +168,5 @@ void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
 
     row = (s16 *)((s32)base + (slot << 2));
     entry = (s16 *)((tone << 1) + (s32)row);
-    func_80077C7C((s16)(slot + 0xE), D_801E6CA8[(s16)vabSlot], *entry, 0, 0x3C, 0, 0, 0);
+    func_80077C7C((s16)(slot + 0xE), g_VabIds[(s16)vabSlot], *entry, 0, 0x3C, 0, 0, 0);
 }

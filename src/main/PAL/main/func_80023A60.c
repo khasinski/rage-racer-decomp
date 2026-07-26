@@ -5,7 +5,6 @@
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 extern u32 D_8019C7B0;
-extern u32 D_801E42A0;
 void func_80023A60(s32 arg0, s32 arg1);
 void func_80023BB4(void);
 
@@ -35,14 +34,14 @@ void func_80023A60(s32 color, s32 arg1) {
 void func_80023B08(u32 arg0) {
     D_8019C7B0 = arg0;
     g_GameMode = 0;
-    D_801E42A0 = 8;
+    g_FadeStep = 8;
 }
 
 void func_80023B2C(void) {
-    g_FadeLevel += D_801E42A0;
+    g_FadeLevel += g_FadeStep;
 
     if (g_FadeLevel < 0) {
-        D_801E42A0 = 0;
+        g_FadeStep = 0;
         g_GameMode = 1;
     } else if (g_FadeLevel >= 0x101) {
         g_SceneId = D_8019C7B0;

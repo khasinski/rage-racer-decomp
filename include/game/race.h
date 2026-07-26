@@ -37,9 +37,10 @@ extern s32 g_CourseIndex asm("D_801E428C");
  * Which Grand Prix series is being played: 0 = the first series (class names
  * "CALME".."DIABLE", 6 classes), non-zero = the advanced series
  * ("AISANCE".."RAGE", 5 classes). Selects the name set in g_GrandPrixNames
- * (offset +6), the class count D_801E772C[], and the outer dimension of the
- * per-series record tables (D_801E7744, D_8019CB78, D_8019C70C, D_801E4408).
- * func_80038844 copies it to D_801E408C for the in-race code.
+ * (offset +6), the per-series progression g_MaxClassReached[], and the outer
+ * dimension of the per-series record tables (D_801E7744, D_8019CB78,
+ * D_8019C70C, D_801E4408). func_80038844 copies it to g_RaceSeries for the
+ * in-race code.
  */
 extern s16 g_GrandPrixSeries asm("D_8019CABC");
 
@@ -73,6 +74,86 @@ extern s32 g_PrizeMoney[][6][3] asm("D_8007BEEC");
  * Reset to 0 and incremented by func_8001C7BC.
  */
 extern s32 g_GrandPrixRound asm("D_8009EC90");
+
+/*
+ * Non-zero while a Grand Prix (championship) race is being played, 0 for Time
+ * Attack. func_8001B884 sets it from the title-menu selection: entries 0 and 1
+ * (the two Grand Prix save files, g_TitleMenuSelection) set it to 1, entry 2
+ * (Time Attack) sets it to 0; the attract demo (func_80023BB4 case 3) clears it.
+ *
+ * It selects the pre-race info panel (func_8001C974 shows "R O U N D %d" plus
+ * g_PrizeMoney in Grand Prix, best-lap / best-total times in Time Attack), the
+ * innermost index of the record tables D_8019C70C / D_801E4408
+ * ([series][course][g_GrandPrixMode]), and the number of selectable entries in
+ * the in-race option list (`2 - g_GrandPrixMode`, func_80037200 / func_8003591C).
+ */
+extern s16 g_GrandPrixMode asm("D_801E4DAC");
+
+/*
+ * In-race copy of g_GrandPrixSeries, latched by func_80038844 when the starting
+ * grid is built (`D_801E408C = g_GrandPrixSeries`). Used exactly like
+ * g_GrandPrixSeries as the outer index of the per-series tables (D_8019C70C,
+ * D_801E4408, D_801E774C, D_801E41E8) and of the marker-table block
+ * (`D_801E4150 + g_RaceSeries * 576`).
+ *
+ * The advanced series runs the same courses in the opposite direction, so the
+ * physics and AI also use it as the lap-direction flag: func_8003AEBC looks two
+ * points ahead instead of two behind, func_8002BF68 / func_8002C168 accumulate
+ * segmentLength forwards instead of backwards, and func_80038FF0 /
+ * func_80040DB4 / func_80034F74 / func_80040ADC mirror the track progress with
+ * `g_TrackLength - progress`.
+ */
+extern s32 g_RaceSeries asm("D_801E408C");
+
+/*
+ * Race phase, driven by the race main loops func_80037200 / func_80037808 /
+ * func_8003591C. 0 = pre-start (physics frozen: `if (phase > 0)` gates
+ * func_8002DEFC), 1 = countdown, 2 = racing, 4 / 5 = finished (the HUD and the
+ * lean/roll update stop at `>= 4`), 7 = goal / retire, 8 = aborted. Reset to 0
+ * by func_8003591C when a race is armed.
+ */
+extern s16 g_RacePhase asm("D_801E6E74");
+
+/*
+ * Which series the title menu picked, 0 = first series, 1 = advanced series;
+ * func_8001B5DC sets it from g_TitleMenuSelection (entry 0 -> 0, entry 1 -> 1,
+ * Time Attack -> 0) and GameInitMenuMode copies it into g_GrandPrixSeries.
+ * It also selects the save file whose progression is being played
+ * (g_MaxClassReached[g_SeriesSelection], func_800206B8) and the final class of
+ * that series (4 for the first, 5 for the advanced one).
+ */
+extern s16 g_SeriesSelection asm("D_801E4034");
+
+/*
+ * Non-zero once the advanced series has been unlocked - func_800206B8 sets it
+ * after the last class of the first series is cleared
+ * (`g_SeriesSelection == 0 && g_GrandPrixClass == 4`). It is stored in the save
+ * block at +0x4E, gates title-menu entry 1 (func_8001B5DC skips over it and
+ * func_8001B2D4 skips drawing it while this is 0), and switches
+ * func_80053688's course limit from 2-3 to 6-7.
+ */
+extern s16 g_AdvancedSeriesUnlocked asm("D_8019CAC0");
+
+/*
+ * Highest Grand Prix class reached, one entry per series / save file: index 0 is
+ * the first series (D_801E772C), index 1 the advanced one (D_801E7730).
+ * func_800206B8 raises `g_MaxClassReached[g_SeriesSelection]` when a class is
+ * cleared, func_80053688 unlocks courses from it, func_80018A70 rolls the
+ * attract-demo class inside `% (g_MaxClassReached[series] + 1)`, and the memory
+ * card block keeps it at +0x50 (GameLoadSaveStateBlock / func_8005F88C).
+ */
+extern s32 g_MaxClassReached[2] asm("D_801E772C");
+
+/*
+ * Mirror mode: func_8001C974 sets it when the pad holds the 0x80C combination
+ * as the race scene starts, and every screen entry (GameInitMenuMode,
+ * func_8002317C, func_8001FC30) clears it. When set, left and right are
+ * exchanged everywhere - func_8002CD4C swaps the two steering button masks and
+ * negates the body roll, func_80040ADC and func_8004087C swap the two stereo
+ * arguments of the pan calls, and func_8002DEFC picks the mirrored sound cue
+ * (0xC instead of 0xB).
+ */
+extern s32 g_MirrorMode asm("D_8019CACC");
 
 typedef struct GameRaceProgress {
     s32 state;

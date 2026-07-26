@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/render.h"
+#include "game/race.h"
+#include "game/car.h"
 
 extern s16 D_8019CA10;
 extern s32 D_801E4D18;
@@ -14,8 +16,6 @@ void func_8001A980(void) {
 extern s32 D_801E8A98;
 extern s16 D_8019CA10;
 extern s32 D_8009E870;
-extern s16 D_801E4DAC;
-extern s16 D_801E6E74;
 extern Matrix D_8009AF00;
 extern Matrix D_8019CB18;
 extern s16 D_8019CEAA;
@@ -52,8 +52,8 @@ s32 func_8001A9A8(void) {
     if ((D_801E8A98 != 0) &&
         (D_8019CA10 != 0) &&
         (D_8009E870 == 0) &&
-        (D_801E4DAC != 0) &&
-        (D_801E6E74 == 2)) {
+        (g_GrandPrixMode != 0) &&
+        (g_RacePhase == 2)) {
         mirrorEnabled = 1;
     }
 
@@ -111,7 +111,6 @@ s32 func_8001A9A8(void) {
 }
 
 extern Matrix D_8009AF00;
-extern u8 * volatile D_8019C900;
 extern s32 D_801E6828;
 extern s32 D_8019C86C;
 extern s32 D_801E4BC8;
@@ -141,7 +140,7 @@ void func_8001ABD8(void) {
     scratch->y1 = 0xF0;
     D_801E6828 = (s32)&D_8019C86C;
     __asm__("" : : : "memory");
-    v0reg = (s32)D_8019C900;
+    v0reg = (s32)g_DrawBuffer;
     v1reg = (s32)&D_8009EC94;
     D_801E4BC8 = v1reg;
     v1reg = scratch->depth;
@@ -157,7 +156,6 @@ void func_8001ABD8(void) {
 }
 
 extern s32 D_801E4D18;
-extern s32 D_801E40D4;
 extern u8 D_8007C728[];
 extern u8 D_8007C738[];
 extern u8 D_8007C739[];
@@ -198,7 +196,7 @@ u8 *func_8001ACE4(u8 *packet) {
     packet += 0x10;
     AddPrim((u32 *)otArg, (u32 *)prim);
 
-    colorIndex = D_8007C728[D_801E40D4];
+    colorIndex = D_8007C728[g_PlayerCarIndex];
     paletteIndex = (colorIndex * 2) + colorIndex;
     base2 = g_DrawBuffer;
     ot = base2 + 0xBD0;

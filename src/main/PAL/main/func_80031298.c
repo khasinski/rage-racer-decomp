@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/track.h"
 
 #define FIELD(base, type, offset) (*(type)((s32)(base) + (offset)))
 
@@ -10,7 +11,6 @@ s32 func_80068568(s32);                               /* extern */
 s32 func_80068634(s32);                               /* extern */
 void func_80069678(void *, void *, void *);            /* extern */
 extern u8 D_8009E6D4;
-extern s32 D_801E40D8;
 
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the
@@ -344,7 +344,7 @@ boundary_done:
     {
         var_a1 += 0xFFF;
     }
-    temp_a2 = D_801E40D8;
+    temp_a2 = g_TrackLength;
     temp_hi = (s32) (FIELD(obj, s32 *, 0x68) + FIELD(obj, s32 *, 0x6C)) % temp_a2;
     FIELD(obj, s32 *, 0x28) = (s32) (temp_a3 + (var_a1 >> 0xC));
     FIELD(obj, s32 *, 0xB4) = (s32) FIELD(spad, s16 *, 0x90);
@@ -359,7 +359,7 @@ boundary_done:
 
         if (*(s32 *)0x801E408C != 0)
         {
-            finalAngle = D_801E40D8 - FIELD(obj, s32 *, 0x70);
+            finalAngle = g_TrackLength - FIELD(obj, s32 *, 0x70);
             FIELD(obj, s16 *, 0x78) = (s16) (finalAngle >> 8);
         }
         else

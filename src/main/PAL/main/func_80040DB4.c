@@ -1,9 +1,7 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/track.h"
 
-extern s32 D_801E4150;
-extern s32 D_801E408C;
-extern s32 D_801E40D8;
 
 typedef struct {
     s32 start;
@@ -29,7 +27,7 @@ void func_80040DB4(s32 arg0) {
 
     position = arg0;
     selector = g_GrandPrixClass;
-    entryBaseValue = D_801E4150;
+    entryBaseValue = (s32)g_TrackEventData;
     entryBase = (UnkFunc80040DB4Entry *)(entryBaseValue + 0x1C9C);
     selector = selector % 5;
 
@@ -52,8 +50,8 @@ void func_80040DB4(s32 arg0) {
         break;
     }
 
-    if (D_801E408C != 0) {
-        position = D_801E40D8 - position;
+    if (g_RaceSeries != 0) {
+        position = g_TrackLength - position;
     }
 
     value = 0;

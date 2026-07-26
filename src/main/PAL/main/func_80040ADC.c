@@ -1,9 +1,7 @@
 #include "common.h"
+#include "game/track.h"
+#include "game/race.h"
 
-extern u8 *D_801E4150;
-extern s32 D_801E408C;
-extern s32 D_801E40D8;
-extern s32 D_8019CACC;
 
 s32 func_8006888C(s32 arg0);
 s32 func_8001A6AC(s32 arg0, s32 arg1);
@@ -41,10 +39,10 @@ void func_80040ADC(s32 arg) {
     s32 v0;
     s32 angle, sinv;
 
-    base = (s32)D_801E4150;
+    base = (s32)g_TrackEventData;
     startp = base + 0x1C6C;
-    if (D_801E408C != 0) {
-        arg = D_801E40D8 - arg;
+    if (g_RaceSeries != 0) {
+        arg = g_TrackLength - arg;
     }
 
     s5 = 0;
@@ -143,13 +141,13 @@ matched:
     }
 
     if (s6 == 1) {
-        if (D_8019CACC != 0) {
+        if (g_MirrorMode != 0) {
             func_8005C31C(2, (s16)s5, (s16)a2v);
         } else {
             func_8005C31C(2, (s16)a2v, (s16)s5);
         }
     } else {
-        if (D_8019CACC != 0) {
+        if (g_MirrorMode != 0) {
             func_8005C31C(3, (s16)s5, (s16)a2v);
         } else {
             func_8005C31C(3, (s16)a2v, (s16)s5);

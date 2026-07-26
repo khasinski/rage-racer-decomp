@@ -4,6 +4,7 @@
 #include "game/race.h"
 #include "game/state.h"
 #include "game/menu.h"
+#include "game/track.h"
 
 extern s16 D_8019C750;
 
@@ -29,11 +30,8 @@ extern s16 D_801E43FC;
 
 extern s32 D_801E4BAC;
 
-extern s16 D_801E4DAC;
 
-extern s32 D_801E40D8;
 
-extern s16 D_801E6E74;
 
 void func_8001C974(void);
 
@@ -118,7 +116,7 @@ void func_80037200(void) {
         D_8019C750--;
     }
 
-    if ((u32)((u16)D_801E6E74 - 1) < 2 && (g_PadEdge2 & 0x800) && D_8019C750 <= 0) {
+    if ((u32)((u16)g_RacePhase - 1) < 2 && (g_PadEdge2 & 0x800) && D_8019C750 <= 0) {
         D_8019C750 = 0;
         D_801E4BAC = (u32)D_801E4BAC < 1;
 
@@ -129,19 +127,19 @@ void func_80037200(void) {
             GamePlaySoundCue(2);
         } else if (D_801E414C == 2) {
             D_801E43FC = 0;
-            D_801E6E74 = 7;
+            g_RacePhase = 7;
             func_80042CCC(0x1E);
         } else if (D_801E414C == 1) {
             func_80035258(0xB);
         } else {
             GameForceAllEffectVoicesEnabled(1);
-            if (D_801E6E74 >= 2) {
+            if (g_RacePhase >= 2) {
                 func_80042C28();
             }
         }
     }
 
-    if (D_801E6E74 == 7) {
+    if (g_RacePhase == 7) {
         value = D_801E43FC;
         if (value > 0) {
             func_80033AA0(value * 3, 0x49);
@@ -160,7 +158,7 @@ void func_80037200(void) {
             GamePlaySoundCue(1);
         }
 
-        if ((g_PadEdge2 & 0x4000) && D_801E414C < (2 - D_801E4DAC)) {
+        if ((g_PadEdge2 & 0x4000) && D_801E414C < (2 - g_GrandPrixMode)) {
             D_801E414C++;
             GamePlaySoundCue(1);
         }
@@ -183,15 +181,15 @@ void func_80037200(void) {
 
     g_AnimTimer++;
 
-    if ((u32)g_SceneTimer >= 0x1F && D_801E6E74 == 0) {
+    if ((u32)g_SceneTimer >= 0x1F && g_RacePhase == 0) {
         func_80042BF0();
-        D_801E6E74 = 2;
+        g_RacePhase = 2;
         D_8019C750 = 0xA;
     }
 
-    if (D_801E3E7C >= D_801E40D8 && D_801E6E74 < 3) {
+    if (D_801E3E7C >= g_TrackLength && g_RacePhase < 3) {
         D_801E43FC = 0;
-        D_801E6E74 = 7;
+        g_RacePhase = 7;
         func_80042CCC(0x1E);
         GameForceAllEffectVoicesEnabled(0);
     }

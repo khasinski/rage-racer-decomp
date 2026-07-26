@@ -2,7 +2,6 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-extern s16 D_801E6CA8;
 extern s32 D_801E6CF4;
 extern s32 D_801E6CF8;
 extern s32 D_801E6CFC;
@@ -44,7 +43,7 @@ void GameForceBasicEffectVoicesEnabled(s32 enabled) {
         if (enabled != 0) {
             arg0 = voicePacked >> 16;
             raw = 0x3C;
-            left = D_801E6CA8;
+            left = g_VabIds[0];
             right = *(s16 *)(D_801E6D00 + offset);
             zeroArg = 0;
             func_80077C7C(arg0, left, right, zeroArg, raw, 0, 0, 0);
@@ -195,7 +194,7 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
     do {
         if (state != 0) {
             arg0 = voicePacked >> 16;
-            left = D_801E6CA8;
+            left = g_VabIds[0];
             right = *(s16 *)toneBase;
             arg3 = *(s16 *)(D_801E6D34 + offset);
             raw = 0x3C;

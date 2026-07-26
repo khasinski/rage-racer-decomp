@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/car.h"
 #include "game/track.h"
+#include "game/race.h"
 
-extern s32 D_801E408C;
 
 s32 func_80030EB4(GameCarRuntime *car, s32 idx);
 
@@ -11,7 +11,7 @@ s32 func_80030EB4(GameCarRuntime *car, s32 idx);
  * that now contains it (func_80030EB4), then walks the intervening points and
  * adds (forward) or subtracts (backward) their segmentLength into
  * car->field_68 (progress). The two mirror-image branches select forward vs
- * reverse lap direction from the direction flag D_801E408C. Register-pinned
+ * reverse lap direction from the direction flag g_RaceSeries. Register-pinned
  * locals (bv/ir) are load-bearing for the match.
  */
 void func_8002C168(GameCarRuntime *car) {
@@ -33,7 +33,7 @@ void func_8002C168(GameCarRuntime *car) {
         return;
     }
 
-    if (D_801E408C == 0) {
+    if (g_RaceSeries == 0) {
         if (r != car->trackPointIndex) {
             count = g_TrackPointCount;
             array = g_TrackPoints;

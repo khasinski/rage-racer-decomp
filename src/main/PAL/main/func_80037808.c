@@ -66,17 +66,14 @@ void SetShadeTex(u8 *prim, s32 enabled) asm("func_80064EB8");
 
 void SetSprt(u8 *prim) asm("func_80064FA8");
 
-extern u32 D_801E40B8;
 
 extern s16 D_8009EC88;
 
-extern s32 D_801E40D8;
 
 extern s32 D_8009E73C;
 
 extern s32 D_8009E740;
 
-extern s16 D_801E6E74;
 
 extern s16 D_801E43FC;
 
@@ -142,7 +139,6 @@ void func_80037860(void);
 
 void func_80037AAC(void);
 
-extern s32 D_801E408C;
 
 extern s32 D_8007E054;
 
@@ -173,15 +169,15 @@ extern s32 D_8007E058;
  *   reads HI/LO), which would make it ordinary C.
  */
 
-extern s32 D_801E40D8;
 
 s32 func_8001A6AC(s32 arg0, s32 arg1);
 
 s32 func_80068568(s32 arg0);
 
-extern u8 *D_801E4150;
 
 extern u8 *g_TrackPoints asm("D_8009E688");
+extern s32 g_TrackLength asm("D_801E40D8");
+extern u8 *g_TrackEventData asm("D_801E4150");
 
 extern s32 func_80030EB4(u8 *ent, s32 arg);
 
@@ -198,7 +194,7 @@ typedef struct {
 
 /*
  * Initializes/spawns a route render object `ent`: reads a start entry from the
- * per-scene table (`arr` indexed by `pos`, D_801E4150 base), sets the model id
+ * per-scene table (`arr` indexed by `pos`, g_TrackEventData base), sets the model id
  * (+0xAE / +0x122), start angle (0xC00 - track angle), zeroes the motion state
  * block, resolves the containing track point (func_80030EB4) and builds the
  * initial marker geometry (func_80031298). `ent` is a render/route object
@@ -464,28 +460,28 @@ void func_80037D90(void) {
     register u32 a asm("$5");
     s32 x = 0;
 
-    D_801E40B8 = D_801E40B8 + 1;
-    if (D_801E40B8 < 61) {
-        func_80033AA0(255 - (D_801E40B8 - 6) * 11, 0x49);
+    g_SceneTimer = g_SceneTimer + 1;
+    if ((u32)g_SceneTimer < 61) {
+        func_80033AA0(255 - (g_SceneTimer - 6) * 11, 0x49);
     }
-    if (D_801E40B8 >= 571 && D_8009EC88 == 0) {
+    if ((u32)g_SceneTimer >= 571 && D_8009EC88 == 0) {
         D_8009EC88 = 1;
     }
 
-    if (D_8009E740 + D_8009E73C >= D_8009E83C * D_801E40D8) {
+    if (D_8009E740 + D_8009E73C >= D_8009E83C * g_TrackLength) {
         if (D_8009E83C < 257) {
             D_8009E83C = D_8009E83C + 1;
             func_80037714();
         }
     }
     if (D_8009E83C >= 257) {
-        if (D_801E6E74 == 2) {
-            D_801E6E74 = 4;
+        if (g_RacePhase == 2) {
+            g_RacePhase = 4;
             D_801E43FC = 0;
         }
     }
 
-    if (D_801E6E74 == 5) {
+    if (g_RacePhase == 5) {
         if (D_801E43FC > 0) {
             func_800218A0(D_801E43FC * 3);
             func_80033AA0(D_801E43FC * 3, 0x49);
@@ -495,7 +491,7 @@ void func_80037D90(void) {
             func_80035258(x);
         }
         D_801E43FC = D_801E43FC + 1;
-    } else if (D_801E6E74 == 4) {
+    } else if (g_RacePhase == 4) {
         func_80016754(0x5c, 0x78, &D_80011494, 0x7811);
         func_80033AA0(D_801E43FC * 2, 0x29);
         D_801E43FC = D_801E43FC + 1;
@@ -506,44 +502,44 @@ void func_80037D90(void) {
         }
     }
 
-    a = D_801E40B8;
+    a = g_SceneTimer;
     g_AnimTimer = g_AnimTimer + 1;
     asm volatile("");
     if (a >= 90) {
         asm volatile("" :: "r"(a));
-        if (D_801E6E74 == 0) {
-            D_801E6E74 = 1;
+        if (g_RacePhase == 0) {
+            g_RacePhase = 1;
             goto Lend;
         }
     } else {
-        if (D_801E6E74 == 0) {
+        if (g_RacePhase == 0) {
             func_8003C508(&D_8009E6D4);
             D_8009EC88 = 0;
             D_801E43F8 = 0;
             goto Lend;
         }
     }
-    if (D_801E6E74 == 1) {
-        if (D_801E40B8 >= 211) {
+    if (g_RacePhase == 1) {
+        if ((u32)g_SceneTimer >= 211) {
             func_8002BE18(&D_8009E6D4);
-            D_801E6E74 = 2;
+            g_RacePhase = 2;
         }
     }
 Lend:
 
-    if (D_801E6E74 < 4) {
-        func_8003425C(D_801E40B8);
-        func_800410BC(D_801E40B8);
+    if (g_RacePhase < 4) {
+        func_8003425C(g_SceneTimer);
+        func_800410BC(g_SceneTimer);
     }
 
-    if (D_801E6E74 > 0) {
+    if (g_RacePhase > 0) {
         func_8002DEFC(&D_8009E6D4);
-    } else if (D_801E6E74 == 0) {
+    } else if (g_RacePhase == 0) {
         func_8005D9F8(0, 1);
     }
     func_80037C04();
 
-    if (D_801E6E74 > 0) {
+    if (g_RacePhase > 0) {
         func_80043BCC(0, &D_8009E6D4);
     }
 
@@ -554,12 +550,12 @@ Lend:
     *(s32 *)0x1F800084 = D_801E4030;
     func_80041840();
     func_8004123C();
-    GameDrawCourseScenery(g_CourseIndex & 3, D_801E40B8, 1);
+    GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
     func_800350B4(D_8009E744);
     func_8005B190(D_8019C78C, D_8019C78C);
     func_8002F458();
     func_8004087C(*p);
-    if (D_801E6E74 < 3) {
+    if (g_RacePhase < 3) {
         func_80037860();
         func_80037AAC();
     }
@@ -574,10 +570,10 @@ void func_800381EC(s32 arg0) {
 
     result = 0;
     if (arg0 < 0) {
-        arg0 += D_801E40D8;
+        arg0 += g_TrackLength;
     }
 
-    scene = D_801E408C;
+    scene = g_RaceSeries;
     i = 0;
     offset = scene << 4;
 loop:
@@ -616,7 +612,7 @@ s32 func_80038288(s32 arg0) {
     register s32 remainder asm("a0");
     register s32 scale asm("v1");
 
-    trackLength = D_801E40D8;
+    trackLength = g_TrackLength;
     temp = 0xB875;
     value = trackLength + temp;
     value -= arg0;
@@ -663,14 +659,14 @@ void func_800383A8(u8 *ent, s32 pos, s32 *arr) {
     av = *(u16 *)&arr[pos];
     sub = (pos + 1) * 12;
     {
-        u8 *baseValue = D_801E4150;
+        u8 *baseValue = g_TrackEventData;
         base = baseValue;
     }
     *(s16 *)(ent + 0x8A) = 0;
     *(s32 *)(ent + 0xBC) = 1;
     *(s16 *)(ent + 0xAE) = av;
     val122 = *(u16 *)&arr[pos];
-    scene = D_801E408C;
+    scene = g_RaceSeries;
     *(s16 *)(ent + 0x122) = val122;
     {
         u8 *p1;
@@ -683,7 +679,7 @@ void func_800383A8(u8 *ent, s32 pos, s32 *arr) {
     }
     {
         s32 ret = func_80030EB4(ent, *(s32 *)(ent + 0x30));
-        s32 lev = D_801E408C;
+        s32 lev = g_RaceSeries;
         s32 idx;
         s32 levShift;
         s32 acc;
@@ -731,7 +727,7 @@ void func_800383A8(u8 *ent, s32 pos, s32 *arr) {
         func_8002BF68(ent, *(s16 *)(p + 0x35E));
     }
 
-    sub += D_801E408C * 144;
+    sub += g_RaceSeries * 144;
     base += sub;
     {
         u16 model;
@@ -786,7 +782,7 @@ void func_800385FC(u8 *ent, s32 pos, s32 *arr)
   pos2_R10 = pos;
   __asm__("" : "=r"(pos2_R10) : "0"(pos2_R10));
   idx_R8 = arr[pos2_R10];
-  base_R9 = D_801E4150;
+  base_R9 = g_TrackEventData;
   ent2_R7 = ent;
   if (!(idx_R8 < 12))
   {
@@ -796,7 +792,7 @@ void func_800385FC(u8 *ent, s32 pos, s32 *arr)
     register s32 lev1_R3 asm("$3");
     unsigned int idxoff1_R4;
     register u8 *p1_R4 asm("$4");
-    lev1_R3 = D_801E408C;
+    lev1_R3 = g_RaceSeries;
     idxoff1_R4 = idx_R8;
     idxoff1_R4 = idxoff1_R4 * 16;
     p1_R4 = base_R9 + (idxoff1_R4 + (lev1_R3 * 192));
@@ -837,7 +833,7 @@ void func_800385FC(u8 *ent, s32 pos, s32 *arr)
     register s32 lev2_R2 asm("$2");
     register s32 idxoff2_R4 asm("$4");
     register u8 *p2_R3 asm("$3");
-    lev2_R2 = D_801E408C;
+    lev2_R2 = g_RaceSeries;
     idxoff2_R4 = idx_R8 * 16;
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
     w = *((u16 *) (p2_R3 + 0x8FE));
@@ -846,7 +842,7 @@ void func_800385FC(u8 *ent, s32 pos, s32 *arr)
     {
       *((s16 *) (sub_R6 + 0x76)) = 0x3C;
     }
-    lev2_R2 = D_801E408C;
+    lev2_R2 = g_RaceSeries;
     __asm__("" : "=r"(idxoff2_R4) : "0"(idxoff2_R4));
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
     w = *((u16 *) (p2_R3 + 0x900));
@@ -865,12 +861,12 @@ void func_800385FC(u8 *ent, s32 pos, s32 *arr)
   {
     register s32 d_R5 asm("$5");
     register s32 pm4_R3 asm("$3");
-    d_R5 = D_801E40D8;
+    d_R5 = g_TrackLength;
     pm4_R3 = pos2_R10 - 4;
     *((s32 *) (sub_R6 + 0x5C)) = (d_R5 / 12) + ((d_R5 / 40) * pm4_R3);
   }
   else
   {
-    *((s32 *) (sub_R6 + 0x5C)) = D_801E40D8 / 12;
+    *((s32 *) (sub_R6 + 0x5C)) = g_TrackLength / 12;
   }
 }

@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/car.h"
 
-extern u8 *D_801E42D8;
 extern s16 D_8019C7D4;
 extern s16 D_8019C7D6;
 extern s16 D_8019C7D8;
@@ -20,7 +20,7 @@ void func_80064EB8(u8 *arg0, s32 arg1);
 void func_800666F4(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4);
 
 void func_80032BD0(void) {
-    u8 *data = D_801E42D8;
+    u8 *data = g_CarSpec;
     u8 *prim0 = D_801C051C;
     u8 *prim1 = D_801E3D04;
     u8 *src = D_8007DAE0;

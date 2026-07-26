@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/audio.h"
 #include "psyq/snd.h"
+#include "game/car.h"
 
-extern s32 D_801E40D4;
 extern s32 D_801E6C9C;
 extern s32 D_801E6CE4;
 extern s32 D_801E6CE8;
@@ -85,5 +85,5 @@ void GameInitEffectVoiceRuntime(void) {
 
     GameSetEffectVoicesEnabled(1);
     GameSetReverbPreset(2, 0, 0);
-    GameSetLoadedTableVolumeScale(D_800125FC[func_80050FA8(D_801E40D4)]);
+    GameSetLoadedTableVolumeScale(D_800125FC[func_80050FA8(g_PlayerCarIndex)]);
 }

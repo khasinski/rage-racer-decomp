@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/track.h"
+#include "game/race.h"
 
 s32 func_80068568(s32 arg0);
 
@@ -11,17 +13,14 @@ s32 func_80068568(s32 arg0);
  * 1 & 5 both axes, 2 & 4 vertical only, 3 lateral only.
  */
 
-extern s32 D_801E408C;
 
-extern s32 D_801E40D8;
 
-extern u8 *D_801E4150;
 
 /*
  * Detects whether the car crossed a route marker this frame: scans the 8-entry
- * row (0x40 stride) of the marker table D_801E4150 keyed by the car's routeRow,
+ * row (0x40 stride) of the marker table g_TrackEventData keyed by the car's routeRow,
  * comparing trackProgress against previousTrackProgress (the lap-direction flag
- * D_801E408C flips the comparison). Returns the crossed-marker code, or 0.
+ * g_RaceSeries flips the comparison). Returns the crossed-marker code, or 0.
  * Register-pinned, goto-structured.
  */
 
@@ -118,7 +117,7 @@ s32 func_80039184(GameCarRuntime *arg0) {
     register s32 threshold asm("a1");
     register s32 resultOffset asm("v0");
 
-    base = D_801E4150;
+    base = g_TrackEventData;
     if (arg0->field_A4 < 0x320) {
         return 0;
     }
@@ -127,9 +126,9 @@ s32 func_80039184(GameCarRuntime *arg0) {
     pos1 = arg0->previousTrackProgress;
     row = arg0->routeRow;
 
-    if (D_801E408C != 0) {
-        pos0 = D_801E40D8 - pos0;
-        pos1 = D_801E40D8 - pos1;
+    if (g_RaceSeries != 0) {
+        pos0 = g_TrackLength - pos0;
+        pos1 = g_TrackLength - pos1;
     }
 
     if (pos1 < pos0) {
@@ -284,7 +283,7 @@ void func_800393AC(GameCarRuntime *arg0, s32 arg1) {
             if (value < 0x3C1) {
                 return;
             }
-            scene = D_801E408C;
+            scene = g_RaceSeries;
             arg1 *= value;
             value = arg1;
             temp = value / 0x320;
@@ -362,13 +361,13 @@ void func_800394DC(GameCarRuntime *obj, s32 arg1) {
 
     raw = objReg->trackProgress;
     asm volatile("" : : "r"(stack));
-    scene = D_801E408C;
+    scene = g_RaceSeries;
     target = raw >> 4;
     index = objReg->routeIndex;
     raw = (scene << 1) + scene;
     offset = (raw << 4) - raw;
     offset <<= 3;
-    base = D_801E4150;
+    base = g_TrackEventData;
     offset += 0x84;
     entry = (s16 *)(offset + (s32)base);
     raw = (index << 1) + index;
@@ -416,7 +415,7 @@ advance:
         register s32 next asm("$2");
 
         next = *(s32 *)(state + 0x44);
-        scene = D_801E408C;
+        scene = g_RaceSeries;
         next++;
         advanceOffset = (next << 1) + next;
         advanceOffset <<= 2;
@@ -426,7 +425,7 @@ advance:
     offset = (raw << 4) - raw;
     offset <<= 3;
     asm volatile("" : "=r"(offset) : "0"(offset));
-    base = D_801E4150;
+    base = g_TrackEventData;
     advanceOffset += offset;
     raw = (s32)(base + advanceOffset);
     if (*(s16 *)(raw + 0x84) == -1) {
@@ -452,8 +451,8 @@ void func_80039644(void) {
     register s32 target asm("a3");
     register s32 value asm("v1");
 
-    scene = D_801E408C;
-    base = D_801E4150;
+    scene = g_RaceSeries;
+    base = g_TrackEventData;
     product = (scene << 3) + scene;
     baseOffset = product << 6;
 
@@ -524,7 +523,7 @@ void func_800396FC(u8 *car, s32 gear)
   {
     *((s16 *) (car + 0x138)) = 0;
   }
-  tbl = D_801E4150 + ((D_801E408C * 576) + 0x474);
+  tbl = g_TrackEventData + ((g_RaceSeries * 576) + 0x474);
   p[0] = tbl + (g0 * 12);
   p[1] = tbl + ((g0 * 12) + 12);
   lim[0] = *((u16 *) p[0]);

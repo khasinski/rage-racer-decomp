@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/render.h"
+#include "game/car.h"
 
-extern u8 *D_801E42D8;
 extern u16 D_801E4130;
 
 u8 *func_80033B7C(u8 *prim, s32 x, s32 y, s32 code, u16 arg4);
@@ -21,8 +21,8 @@ void func_80033C18(s32 x, s32 y, s32 value) {
     u16 color;
 
     hundreds = value / 100;
-    rawX = *(u16 *)(D_801E42D8 + 0x140) + x;
-    rawY = *(u16 *)(D_801E42D8 + 0x142) + y;
+    rawX = *(u16 *)(g_CarSpec + 0x140) + x;
+    rawY = *(u16 *)(g_CarSpec + 0x142) + y;
     color = D_801E4130;
     scratch = (u8 **)0x1F800000;
     prim = *scratch;

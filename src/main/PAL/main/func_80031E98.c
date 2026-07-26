@@ -1,6 +1,5 @@
 #include "common.h"
 #include "psyq/gte.h"
-#include "game/track.h"
 
 typedef struct {
     s16 x;
@@ -42,7 +41,14 @@ typedef struct {
     u16 segmentLength; /* 0x16 */
 } TP;
 
-extern TP *D_8009E688;
+/*
+ * Same objects as game/track.h's g_TrackPoints / g_TrackPointCount; this TU
+ * views the point record through the local TP typedef (it needs 0x0E, which
+ * GameTrackPoint leaves unnamed, and an unsigned segmentLength), so it carries
+ * its own aliased declarations instead of including the header.
+ */
+extern TP *g_TrackPoints asm("D_8009E688");
+extern s32 g_TrackPointCount asm("D_8009E6A8");
 
 s32 func_80030EB4(Car *car, s32 idx);
 void func_8001A530(Matrix *mtx, s32 angle);
@@ -72,8 +78,8 @@ void func_80031E98(Car *car) {
     s32 v8;
 
     idx = func_80030EB4(car, car->f30);
-    p2 = &D_8009E688[(idx + 1) % g_TrackPointCount];
-    p1 = &D_8009E688[idx];
+    p2 = &g_TrackPoints[(idx + 1) % g_TrackPointCount];
+    p1 = &g_TrackPoints[idx];
 
     seg = p1->segmentLength;
     v.x = car->x - p1->x;

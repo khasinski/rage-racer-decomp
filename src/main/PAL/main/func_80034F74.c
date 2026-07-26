@@ -1,12 +1,12 @@
 #include "common.h"
 #include "game/race.h"
 #include "game/state.h"
+#include "game/track.h"
 
 extern s32 D_8009E6D4;
 
 extern s32 D_8009E704;
 
-extern s16 D_801E4DAC;
 
 extern s32 D_801F179C;
 
@@ -37,11 +37,8 @@ typedef struct TrackZone {
     s16 value;
 } TrackZone;
 
-extern s32 D_801E408C;
 
-extern s32 D_801E40D8;
 
-extern u8 *D_801E4150;
 
 extern s16 D_8019CE34;
 
@@ -116,7 +113,7 @@ void func_80034F74(void) {
     func_8002C168(primary);
     func_80032280(primary);
 
-    if (D_801E4DAC == 1) {
+    if (g_GrandPrixMode == 1) {
         D_801F1884 = func_80030EB4(secondary, D_801F1884);
         func_8002BF68(secondary, 1);
         func_8002C168(secondary);
@@ -130,7 +127,7 @@ void func_80035040(void) {
     func_8002C168(ptr);
     func_80032280(ptr);
 
-    if (D_801E4DAC == 1) {
+    if (g_GrandPrixMode == 1) {
         ptr = &D_801F1854;
         func_8002C168(ptr);
         func_80032280(ptr);
@@ -151,11 +148,11 @@ s32 func_800350B4(s32 position) {
     register s32 code asm("$3");
     register u16 rawCode asm("$2");
 
-    base = D_801E4150;
-    scene = D_801E408C;
+    base = g_TrackEventData;
+    scene = g_RaceSeries;
     first = (TrackZone *)(base + 0xA74);
     if (scene != 0) {
-        position = D_801E40D8 - position;
+        position = g_TrackLength - position;
     }
 
     status = 0;
@@ -271,7 +268,7 @@ void func_800352B8(void *arg0, s32 arg1, s32 arg2) {
 
     slot = D_801E4148;
     if (slot >= 0) {
-        if ((*(s16 *)((u8 *)arg0 + 0x168) - 1) * D_801E40D8 + D_801E4D98[slot] <=
+        if ((*(s16 *)((u8 *)arg0 + 0x168) - 1) * g_TrackLength + D_801E4D98[slot] <=
                 (*(s32 *)((u8 *)arg0 + 0x6C) + *(s32 *)((u8 *)arg0 + 0x68)) ||
             arg2 != 0) {
             D_8009AF80[slot] = D_801E4D64;
@@ -326,7 +323,7 @@ void func_800352B8(void *arg0, s32 arg1, s32 arg2) {
     if (D_801E4148 == -2 && arg2 != 0) {
         D_801E4148 = 0;
         D_8009AFAC = 0;
-        D_8009AFB0 = D_801E41E8[D_801E408C][g_CourseIndex][0];
+        D_8009AFB0 = D_801E41E8[g_RaceSeries][g_CourseIndex][0];
         D_8009AFA8 = 0x3C;
         D_8009AFA4 = (u16)D_801E4148;
         goto draw;
@@ -388,7 +385,7 @@ skip_first:
     func_80033D50(
         0xFA,
         0x7C,
-        D_8019C70C[D_801E408C][g_CourseIndex][arg1],
+        D_8019C70C[g_RaceSeries][g_CourseIndex][arg1],
         0x78CC,
         timeout);
 }

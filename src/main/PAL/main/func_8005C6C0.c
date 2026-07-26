@@ -2,7 +2,6 @@
 #include "game/audio.h"
 
 extern s32 D_801E6D08;
-extern s16 D_801E6CA8;
 extern u8 D_801E6D00[];
 extern u8 D_801E6D04[];
 extern u8 D_801E6D10[];
@@ -98,7 +97,7 @@ void func_8005C6C0(void) {
     do {
         switch (*state) {
         case 0:
-            func_80077C7C(voicePacked >> 16, D_801E6CA8,
+            func_80077C7C(voicePacked >> 16, g_VabIds[0],
                           *(s16 *)(D_801E6D00 + offset),
                           *(s16 *)(D_801E6D04 + offset), 0x3C, 0, 0, 0);
             START_BASIC_EFFECT_VOLUME();

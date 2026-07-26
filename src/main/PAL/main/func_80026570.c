@@ -35,7 +35,6 @@ void func_80046A2C(
     u32 arg12,
     u32 arg13);
 
-extern u32 D_801E40B8;
 extern u32 D_8009E6CC;
 extern u8 D_801E7734[];
 void func_80025940(void);
@@ -45,7 +44,6 @@ void func_80042BF0(void);
 void func_800266D0(void);
 extern u32 D_8019C760;
 void func_80042C94(void);
-extern u32 D_8009E694;
 extern u32 D_8009E870;
 extern u32 D_801E4030;
 extern u8 D_801F18CC[];
@@ -68,7 +66,7 @@ void func_80026570(void) {
     void (*func)(void);
 
     func = D_8007D6B8[D_8019C99C];
-    D_801E40B8++;
+    g_SceneTimer++;
     func();
 }
 
@@ -86,7 +84,7 @@ void func_800265BC(void) {
 
     D_801E682C = 0;
     g_FadeLevel = initialValue;
-    D_801E40B8 = 0;
+    g_SceneTimer = 0;
     g_SceneId = 0x1E;
     D_8009E66C = 0;
 }
@@ -95,7 +93,7 @@ s32 func_8002664C(s32 arg0) {
     s32 value;
 
     if (D_801E682C == 0) {
-        value = (D_801E40B8 * 4) - D_8007D6CC[arg0];
+        value = (g_SceneTimer * 4) - D_8007D6CC[arg0];
     } else {
         if (g_FadeLevel > 0) {
             g_FadeLevel--;
@@ -126,12 +124,12 @@ void func_80026824(void) {
     s32 mode;
     u32 timer;
 
-    timer = D_801E40B8;
+    timer = g_SceneTimer;
     if (timer < 0x2710) {
-        D_801E40B8 = timer + 1;
+        g_SceneTimer = timer + 1;
     }
 
-    if (D_801E40B8 == 2) {
+    if (g_SceneTimer == 2) {
         func_80065860(1);
     }
 
@@ -166,17 +164,17 @@ void func_80026920(void) {
     s32 index;
     s32 offset;
 
-    D_801E40B8++;
-    if (D_801E40B8 < 0x3D) {
+    g_SceneTimer++;
+    if ((u32)g_SceneTimer < 0x3D) {
         func_800266D0();
-        value = D_801E40B8 - 6;
+        value = g_SceneTimer - 6;
         func_80033AA0(0xFF - (((value * 3) * 4) - value), 0x49);
     }
 
-    timer = D_801E40B8;
+    timer = g_SceneTimer;
     if (timer == 0x6CC) {
         func_80042CCC(0x38);
-        timer = D_801E40B8;
+        timer = g_SceneTimer;
     }
     if (timer >= 0x6CD) {
         u32 adjusted;
@@ -185,11 +183,11 @@ void func_80026920(void) {
         func_80033AA0((adjusted * 4) + adjusted, 0x49);
     }
 
-    if (D_801E40B8 == 0x708) {
+    if (g_SceneTimer == 0x708) {
         func_800268EC();
     }
 
-    D_8009E694++;
+    g_AnimTimer++;
     D_8009E66C = func_8001A1F0(0xFF, D_8009E66C);
     func_8003BB50();
 
@@ -204,5 +202,5 @@ void func_80026920(void) {
     *(u32 *)0x1F800084 = D_801E4030;
     func_80041888();
     func_8004123C();
-    GameDrawCourseScenery2(D_8009E694, 1);
+    GameDrawCourseScenery2(g_AnimTimer, 1);
 }

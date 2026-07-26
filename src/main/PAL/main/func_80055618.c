@@ -1,9 +1,9 @@
 #include "common.h"
 #include "game/render.h"
+#include "game/menu.h"
 
 extern s32 D_8009B338;
 extern s32 D_8019CB0C;
-extern s32 D_8019C9F8;
 extern s32 D_8009B31C;
 extern s32 D_8009B320;
 
@@ -17,7 +17,7 @@ void GameEnterCarSelectScreen(void) asm("func_80055618");
 void GameEnterCarSelectScreen(void) {
     D_8019CB0C = D_8009B338;
     func_80051238();
-    D_8019C9F8 = 4;
+    g_MenuScreen = 4;
     g_UiScriptProgress = 0;
     func_80055454();
     func_8004FCE8(D_8009B31C, D_8009B320, 0);

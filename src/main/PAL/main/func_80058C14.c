@@ -5,14 +5,10 @@
 
 extern s32 D_8009B338;
 extern s32 D_8019CB0C;
-extern s32 D_8009B344;
-extern s32 D_8009B35C;
 extern s32 D_80082EB4;
 extern u8 D_80082010;
 extern u8 D_80082460;
 extern s32 D_801F17A0;
-extern s32 D_8019C9F8;
-extern s32 D_801E40D4;
 extern GameCarEntry D_801E4388[];
 
 void func_8005131C(void);
@@ -56,13 +52,13 @@ void GameUpdatePaintColorScreen(void) {
                 s32 val;
                 if (sel == 0) {
                     func_8005D6EC(2);
-                    val = g_CarTable[D_801E40D4].shapeIndex;
+                    val = g_CarTable[g_PlayerCarIndex].shapeIndex;
                     GameMenuBusy = -1;
                     g_UiScriptProgress2 = 0;
                     D_80082EB4 = val;
                 } else if (sel == 1) {
                     func_8005D6EC(2);
-                    val = g_CarTable[D_801E40D4].textureIndex;
+                    val = g_CarTable[g_PlayerCarIndex].textureIndex;
                     GameMenuBusy = -2;
                     g_UiScriptProgress2 = 0;
                     D_80082EB4 = val;
@@ -70,13 +66,13 @@ void GameUpdatePaintColorScreen(void) {
                     func_8005D6EC(3);
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 2;
-                    D_8009B35C = 0x3D090;
+                    g_MenuViewOffsetTarget = 0x3D090;
                 }
             } else if (f & 0x90) {
                 func_8005D6EC(3);
                 GameMenuBusy = 3;
                 g_MenuOverlayPattern = 2;
-                D_8009B35C = 0x3D090;
+                g_MenuViewOffsetTarget = 0x3D090;
             }
         }
         return;
@@ -96,14 +92,14 @@ void GameUpdatePaintColorScreen(void) {
                 u16 *btn = &g_PadEdge2;
                 if (*btn & 0x860) {
                     func_8005D6EC(2);
-                    g_CarTable[D_801E40D4].shapeIndex = D_80082EB4;
-                    D_801E4388[D_801E40D4].shapeIndex = D_80082EB4;
-                    D_801E4388[D_801E40D4].textureIndex = g_CarTable[D_801E40D4].textureIndex;
+                    g_CarTable[g_PlayerCarIndex].shapeIndex = D_80082EB4;
+                    D_801E4388[g_PlayerCarIndex].shapeIndex = D_80082EB4;
+                    D_801E4388[g_PlayerCarIndex].textureIndex = g_CarTable[g_PlayerCarIndex].textureIndex;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
                     func_8005D6EC(3);
-                    D_80082EB4 = g_CarTable[D_801E40D4].shapeIndex;
+                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].shapeIndex;
                     GameMenuBusy = 0;
                 }
                 func_8001D8C4(D_80082EB4);
@@ -111,14 +107,14 @@ void GameUpdatePaintColorScreen(void) {
                 u16 *btn = &g_PadEdge2;
                 if (*btn & 0x860) {
                     func_8005D6EC(2);
-                    g_CarTable[D_801E40D4].textureIndex = D_80082EB4;
-                    D_801E4388[D_801E40D4].shapeIndex = g_CarTable[D_801E40D4].shapeIndex;
-                    D_801E4388[D_801E40D4].textureIndex = D_80082EB4;
+                    g_CarTable[g_PlayerCarIndex].textureIndex = D_80082EB4;
+                    D_801E4388[g_PlayerCarIndex].shapeIndex = g_CarTable[g_PlayerCarIndex].shapeIndex;
+                    D_801E4388[g_PlayerCarIndex].textureIndex = D_80082EB4;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
                     func_8005D6EC(3);
-                    D_80082EB4 = g_CarTable[D_801E40D4].textureIndex;
+                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].textureIndex;
                     GameMenuBusy = 0;
                 }
                 func_8001DA74(D_80082EB4);
@@ -133,12 +129,12 @@ void GameUpdatePaintColorScreen(void) {
     }
 
     g_MenuHandlerIndex = -1;
-    D_8009B344 = 10;
+    g_MenuHandlerIndex2 = 10;
     func_800487D8(&D_80082010, &g_UiScriptProgress, -1);
     func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
     if (g_UiScriptProgress <= 0) {
-        D_8019C9F8 = 6;
+        g_MenuScreen = 6;
         g_MenuHandlerIndex = 6;
         D_801F17A0 = 0;
         g_UiScriptProgress = 0;

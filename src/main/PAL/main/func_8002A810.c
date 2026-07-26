@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/track.h"
+#include "game/race.h"
+#include "game/car.h"
 
 s32 func_8001A6AC(s32, s32);
 s32 func_8002A788();
@@ -11,7 +13,6 @@ s32 func_80068568(s32);
 s32 func_80068634();
 extern s32 D_8007DA74;
 extern s32 D_8007DA78;
-extern u8 *D_8009E688;
 extern u8 *D_8019C7D0;
 extern s32 D_8019C998;
 extern s32 D_8019CA04;
@@ -19,16 +20,14 @@ extern s16 D_801E4112;
 extern s16 D_801E4114;
 extern s16 D_801E4152;
 extern s16 D_801E4154;
-extern u8 *D_801E42D8;
 extern u8 D_801E4369;
 extern s16 D_801E4BA0;
 extern s32 D_801E4BF4;
 extern s16 D_801E4FB4;
-extern s16 D_801E6E74;
 extern u8 D_801E8884[];
 /*
  * AI target-speed / drivetrain physics driver (called by func_8002DEFC). Reads
- * the per-car spec block D_801E42D8 to compute a target speed, applies steering
+ * the per-car spec block g_CarSpec to compute a target speed, applies steering
  * assist and RPM, and dispatches the state98 motion handlers. `base` is the car
  * runtime, accessed via raw byte-offset pointer arithmetic (e.g.
  * *(s16*)((u8*)base+0x132)) with the drive sub-block at base+0xBC; the raw
@@ -148,13 +147,13 @@ void func_8002A810(void *base)
   u8 *config;
   car = base;
   base = D_801E8884;
-  config = D_801E42D8;
+  config = g_CarSpec;
   temp_v1 = *((s16 *) (((u8 *) car) + 0x132));
   new_var3 = ((u8 *) (config + (temp_v1 * 4))) + 0xCC;
   var_a2 = (temp_v1 << 6) + ((u8 *) base);
   var_s7 = *((s32 *) new_var3);
   temp_s3 = car + 0xBC;
-  if (D_801E6E74 < 2)
+  if (g_RacePhase < 2)
   {
     *((s16 *) (((u8 *) car) + 0xEC)) = temp_v1;
     var_s7 = *((s32 *) (((u8 *) config) + 0xD0));
@@ -212,7 +211,7 @@ void func_8002A810(void *base)
   if ((*((s32 *) (((u8 *) temp_s3) + 0x98))) == 1)
   {
     temp_v1_4 = *((s16 *) (((u8 *) temp_s3) + 0x40));
-    temp_v0_2 = (*((u16 *) (((u8 *) ((((*((s32 *) (((u8 *) car) + 0x30))) * 3) * 8) + D_8009E688)) + 0x14))) & 3;
+    temp_v0_2 = (*((u16 *) (((u8 *) ((((*((s32 *) (((u8 *) car) + 0x30))) * 3) * 8) + ((u8 *) g_TrackPoints))) + 0x14))) & 3;
     if (temp_v1_4 != temp_v0_2)
     {
       if (temp_v1_4 != 0)
@@ -246,12 +245,12 @@ void func_8002A810(void *base)
     {
       *((s16 *) (((u8 *) temp_s3) + 0x42)) = -0x1E;
     }
-    var_a1 += (*((s16 *) (((u8 *) D_801E42D8) + 0x112))) - (((s16) (*((u16 *) (((u8 *) temp_s3) + 0x42)))) * 0xA);
+    var_a1 += (*((s16 *) (((u8 *) g_CarSpec) + 0x112))) - (((s16) (*((u16 *) (((u8 *) temp_s3) + 0x42)))) * 0xA);
     *((s16 *) (((u8 *) temp_s3) + 0x32)) = (s16) var_a1;
   }
   else
   {
-    temp_v1_6 = ((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + D_8009E688;
+    temp_v1_6 = ((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints);
     temp_a0 = *((s16 *) (((u8 *) temp_s3) + 0x40));
     if ((temp_a0 != ((*((u16 *) (((u8 *) temp_v1_6) + 0x14))) & 3)) && (temp_a0 != 0))
     {
@@ -265,7 +264,7 @@ void func_8002A810(void *base)
       {
         var_a0_2 = 0x32;
       }
-      if (((*((u16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + D_8009E688)) + 0x14))) & 3) == 1)
+      if (((*((u16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints))) + 0x14))) & 3) == 1)
       {
         var_v0_3 = (-(var_a0_2 * 0x3C)) / 20;
       }
@@ -451,7 +450,7 @@ void func_8002A810(void *base)
     {
       var_s2 = 0;
     }
-    if (((*((s16 *) (((u8 *) temp_s3) + 0x76))) == 1) && ((*((s32 *) (((u8 *) temp_s3) + 0x78))) < (*((s16 *) (((u8 *) D_801E42D8) + 0x106)))))
+    if (((*((s16 *) (((u8 *) temp_s3) + 0x76))) == 1) && ((*((s32 *) (((u8 *) temp_s3) + 0x78))) < (*((s16 *) (((u8 *) g_CarSpec) + 0x106)))))
     {
       var_s2 *= 2;
     }
@@ -480,7 +479,7 @@ void func_8002A810(void *base)
         temp_a1 = *((s16 *) (((u8 *) temp_s3) + 0x76));
         if ((*((s16 *) (((u8 *) temp_s3) + 0x30))) != temp_a1)
         {
-          temp_v0_14 = ((s32) ((((*((s32 *) (((u8 *) car) + 0xA4))) * 0xA0) / 1168) * 0x2710)) / ((s32) (*((s32 *) (((u8 *) (D_801E42D8 - (-(temp_a1 * 4)))) + 0xE4))));
+          temp_v0_14 = ((s32) ((((*((s32 *) (((u8 *) car) + 0xA4))) * 0xA0) / 1168) * 0x2710)) / ((s32) (*((s32 *) (((u8 *) (g_CarSpec - (-(temp_a1 * 4)))) + 0xE4))));
           temp_v1_23 = *((u16 *) (((u8 *) temp_s3) + 0x78));
           D_801E4BF4 = temp_v0_14;
           *((s16 *) (((u8 *) temp_s3) + 0x3C)) = (s16) (((u16) D_801E4BF4) - temp_v1_23);
@@ -623,7 +622,7 @@ void func_8002A810(void *base)
   var_s5 += ((s32) (*((s32 *) (((u8 *) temp_s3) + 0x4C)))) / 256;
   if (((*((s32 *) (((u8 *) temp_s3) + 0x98))) != 1) && (D_801E4369 == 0x41))
   {
-    var_a1_4 = ((*((s16 *) (((u8 *) D_801E42D8) + 0x10E))) * (*((s32 *) (((u8 *) temp_s3) + 0x88)))) / 1000;
+    var_a1_4 = ((*((s16 *) (((u8 *) g_CarSpec) + 0x10E))) * (*((s32 *) (((u8 *) temp_s3) + 0x88)))) / 1000;
     if (var_a1_4 <= 0)
     {
       var_a1_4 = 1;
@@ -639,13 +638,13 @@ void func_8002A810(void *base)
       var_s5 -= ((s32) ((temp_a0_7 * 5) / 6)) / var_a1_4;
     }
   }
-  temp_a0_8 = func_8002A788(*((s32 *) (((u8 *) car) + 0xA0)), 0xC00 - (*((s16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + D_8009E688)) + 0xA))));
+  temp_a0_8 = func_8002A788(*((s32 *) (((u8 *) car) + 0xA0)), 0xC00 - (*((s16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints))) + 0xA))));
   var_a0 = temp_a0_8;
   temp_a1_2 = *((s32 *) (((u8 *) car) + 0x30));
   temp_a2 = *((s32 *) (((u8 *) car) + 0x38));
-  temp_t0 = (*((s16 *) (((u8 *) ((temp_a1_2 * 0x18) + D_8009E688)) + 0xC))) * (0x400 - temp_a2);
+  temp_t0 = (*((s16 *) (((u8 *) ((temp_a1_2 * 0x18) + ((u8 *) g_TrackPoints))) + 0xC))) * (0x400 - temp_a2);
   temp_a1_2 += 1;
-  var_v0_11 = temp_t0 + ((*((s16 *) (((u8 *) (((temp_a1_2 % ((s32) g_TrackPointCount)) * 0x18) + D_8009E688)) + 0xC))) * temp_a2);
+  var_v0_11 = temp_t0 + ((*((s16 *) (((u8 *) (((temp_a1_2 % ((s32) g_TrackPointCount)) * 0x18) + ((u8 *) g_TrackPoints))) + 0xC))) * temp_a2);
   secondNonnegative = var_v0_11 >= 0;
   if (!secondNonnegative)
   {
@@ -679,7 +678,7 @@ void func_8002A810(void *base)
   {
     var_s5 += var_a0 / 10;
   }
-  if ((D_801E6E74 == 2) && ((*((s32 *) (((u8 *) temp_s3) + 0x98))) == 3))
+  if ((g_RacePhase == 2) && ((*((s32 *) (((u8 *) temp_s3) + 0x98))) == 3))
   {
     var_s5 += (D_8019CA04 & 0x1F) * 5;
   }
@@ -697,7 +696,7 @@ void func_8002A810(void *base)
     var_s6 = (var_s6 * 4) / 5;
   }
   var_a0_3 = (temp_v1_15 = ((*((s32 *) (((u8 *) car) + 0xA4))) * 0xA0) / 1168);
-  var_v0_12 = (s32) ((*((s16 *) (((u8 *) D_801E42D8) + 0x110))) * 0x3E8);
+  var_v0_12 = (s32) ((*((s16 *) (((u8 *) g_CarSpec) + 0x110))) * 0x3E8);
   var_a1_7 = var_v0_12 / ((s16) D_801E4FB4);
   if (var_a1_7 <= 0)
   {
@@ -733,7 +732,7 @@ void func_8002A810(void *base)
   if ((*((s32 *) (((u8 *) temp_s3) + 0x98))) == 1)
   {
     temp_v1_18 = *((s32 *) (((u8 *) car) + 0x30));
-    temp_v1_16 = *((u16 *) (((u8 *) ((temp_v1_18 * 0x18) + D_8009E688)) + 0x14));
+    temp_v1_16 = *((u16 *) (((u8 *) ((temp_v1_18 * 0x18) + ((u8 *) g_TrackPoints))) + 0x14));
     var_v0_12 = temp_v1_16 & 3;
     if (var_v0_12 > 0)
     {
@@ -751,13 +750,13 @@ void func_8002A810(void *base)
     }
     else
     {
-      var_a0 = (*((s16 *) (((u8 *) D_801E42D8) + 0x10C))) * 0x64;
+      var_a0 = (*((s16 *) (((u8 *) g_CarSpec) + 0x10C))) * 0x64;
     }
-    if ((var_a0 <= 0) || ((var_a0_5 = (*((s16 *) (((u8 *) D_801E42D8) + 0x10C))) * 0x64, var_a0_5 <= 0)))
+    if ((var_a0 <= 0) || ((var_a0_5 = (*((s16 *) (((u8 *) g_CarSpec) + 0x10C))) * 0x64, var_a0_5 <= 0)))
     {
-      var_a0_5 = (*((s16 *) (((u8 *) D_801E42D8) + 0x10C))) * 0x64;
+      var_a0_5 = (*((s16 *) (((u8 *) g_CarSpec) + 0x10C))) * 0x64;
     }
-    var_a0_6 = ((s32) ((*((s16 *) (((u8 *) D_801E42D8) + 0x10C))) * 0x64)) / var_a0_5;
+    var_a0_6 = ((s32) ((*((s16 *) (((u8 *) g_CarSpec) + 0x10C))) * 0x64)) / var_a0_5;
     if (var_a0_6 <= 0)
     {
       var_a0_6 = 1;
@@ -809,7 +808,7 @@ void func_8002A810(void *base)
           *((s32 *) (((u8 *) car) + 0xA8)) = temp_v1_20;
           if ((*((s16 *) (((u8 *) temp_s3) + 0x74))) == 0)
           {
-            *((s32 *) (((u8 *) car) + 0xA8)) = (s32) (((*((s16 *) (((u8 *) D_801E42D8) + 0x102))) * temp_v1_20) / 1000);
+            *((s32 *) (((u8 *) car) + 0xA8)) = (s32) (((*((s16 *) (((u8 *) g_CarSpec) + 0x102))) * temp_v1_20) / 1000);
           }
         }
       }
@@ -826,7 +825,7 @@ void func_8002A810(void *base)
   {
     *((s32 *) (((u8 *) car) + 0xA0)) = (s32) (*((s32 *) (((u8 *) car) + 0x24)));
   }
-  if (D_801E6E74 >= 2)
+  if (g_RacePhase >= 2)
   {
     temp_v1_22 = *((s32 *) (((u8 *) temp_s3) + 0x98));
     switch (temp_v1_22)

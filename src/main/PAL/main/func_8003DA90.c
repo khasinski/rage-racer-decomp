@@ -9,7 +9,6 @@ typedef struct {
     s32 w;
 } Vec4i;
 
-extern s16 D_801E4DAC;
 extern Vec4i D_8007E2C0[];
 extern u32 *D_801E6828;
 extern s16 D_8007E2F2;
@@ -44,7 +43,7 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     register s32 lim2 asm("$2");
     register s32 *scr asm("$8");
 
-    if (D_801E4DAC == 0) {
+    if (g_GrandPrixMode == 0) {
         return;
     }
     if (g_GrandPrixClass == 5) {

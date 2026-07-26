@@ -4,7 +4,6 @@
 #include "game/render.h"
 
 extern u8 D_80011BA0;
-extern u8 D_8007F460[];
 extern u8 D_800820C4;
 extern u8 D_80082460;
 extern u8 D_80082790;
@@ -21,23 +20,16 @@ extern s32 D_8009B320;
 extern s32 D_8009B32C;
 extern s32 D_8009B330;
 extern s32 D_8009B338;
-extern s32 D_8009B344;
-extern s32 D_8009B34C;
-extern s32 D_8009B350;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
 extern u8 *D_8009E698;
 extern s32 D_8019C908;
-extern s32 D_8019C9F8;
 extern s16 D_8019CA18;
 extern u8 *D_8019CB00;
 extern s32 D_8019CB0C;
-extern s32 D_801E40D4;
 extern s16 D_801E41A4;
 extern s32 D_801E4294;
-extern u16 D_801E436A;
 extern u8 D_801E438D[];
-extern s32 D_801E4B88;
 
 void func_8001882C(s32 arg0);
 void func_8001D530(void *arg0, s32 arg1);
@@ -72,9 +64,9 @@ void GameUpdateCarShopScreen(void) {
     func_80050400(D_8009B32C, D_8009B330);
     func_8004FCE8(D_8009B31C, D_8009B320, 0);
     func_8005131C();
-    value = D_80082D7C[func_80050FA8(D_801E4B88)];
+    value = D_80082D7C[func_80050FA8(g_CarListCursor)];
     if (GameMenuBusy == 0) {
-        D_8009B320 = D_801E4B88;
+        D_8009B320 = g_CarListCursor;
         func_800487D8(D_8019CB00, &g_UiScriptProgress2, -1);
         func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
         func_80049418(1, 0, ~D_8019CA18 != 0, ~D_801E41A4 != 0);
@@ -97,44 +89,44 @@ void GameUpdateCarShopScreen(void) {
                 D_801E4294 = (D_801E4294 <= 0) ? D_801E4294 + 1 : 0;
             }
             func_80059320();
-            sel = D_801E4B88;
-            if ((D_801E436A & 0x8000) && (D_8019CA18 != -1)) {
-                t = D_8009B350;
-                u = D_8009B34C;
+            sel = g_CarListCursor;
+            if ((g_PadHeld & 0x8000) && (D_8019CA18 != -1)) {
+                t = g_MenuViewAngleTarget;
+                u = g_MenuViewAngle;
                 if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
                     if (D_8009B378 < 0) {
                         s32 lprev;
 
                         func_8005D6EC(8);
-                        D_801E4B88 = (s32) D_8019CA18;
+                        g_CarListCursor = (s32) D_8019CA18;
                         func_8001882C(D_8019CA18);
-                        lprev = D_8009B350;
+                        lprev = g_MenuViewAngleTarget;
                         D_8009B374 = sel;
-                        D_8009B350 = 0;
+                        g_MenuViewAngleTarget = 0;
                         D_8009B330 = -1;
-                        D_8009B378 = D_801E4B88;
-                        D_8009B34C = (D_8009B34C - lprev) + 0x927C0;
+                        D_8009B378 = g_CarListCursor;
+                        g_MenuViewAngle = (g_MenuViewAngle - lprev) + 0x927C0;
                     }
                 }
             }
-            if ((D_801E436A & 0x2000) && (D_801E41A4 != -1)) {
-                t = D_8009B350;
-                u = D_8009B34C;
+            if ((g_PadHeld & 0x2000) && (D_801E41A4 != -1)) {
+                t = g_MenuViewAngleTarget;
+                u = g_MenuViewAngle;
                 if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
                     if (D_8009B378 < 0) {
                         s32 base;
                         s32 lprev;
 
                         func_8005D6EC(8);
-                        D_801E4B88 = (s32) D_801E41A4;
+                        g_CarListCursor = (s32) D_801E41A4;
                         func_8001882C(D_801E41A4);
                         base = 0x927C0;
-                        lprev = D_8009B350;
-                        D_8009B350 = 0x124F80;
+                        lprev = g_MenuViewAngleTarget;
+                        g_MenuViewAngleTarget = 0x124F80;
                         D_8009B374 = sel;
                         D_8009B330 = -1;
-                        D_8009B378 = D_801E4B88;
-                        D_8009B34C = base - (lprev - D_8009B34C);
+                        D_8009B378 = g_CarListCursor;
+                        g_MenuViewAngle = base - (lprev - g_MenuViewAngle);
                     }
                 }
             }
@@ -143,30 +135,30 @@ void GameUpdateCarShopScreen(void) {
             } else {
                 D_8009B32C = -1;
             }
-            t = D_8009B350;
-            u = D_8009B34C;
+            t = g_MenuViewAngleTarget;
+            u = g_MenuViewAngle;
             if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
                 if (D_8009B378 < 0) {
                     if (g_PadEdge2 & 0x860) {
                         sel = D_801E4294;
                         if (sel == 1) {
-                            if (D_801E40D4 != D_801E4B88) {
+                            if (g_PlayerCarIndex != g_CarListCursor) {
                                 s32 base;
                                 s32 current;
                                 s32 selected;
                                 s32 lu;
                                 s32 lprev;
 
-                                func_8001882C(D_801E40D4);
+                                func_8001882C(g_PlayerCarIndex);
                                 base = 0x927C0;
-                                current = D_801E4B88;
-                                selected = D_801E40D4;
-                                lu = D_8009B34C;
-                                lprev = D_8009B350;
-                                D_8009B350 = 0;
+                                current = g_CarListCursor;
+                                selected = g_PlayerCarIndex;
+                                lu = g_MenuViewAngle;
+                                lprev = g_MenuViewAngleTarget;
+                                g_MenuViewAngleTarget = 0;
                                 D_8009B374 = current;
                                 D_8009B378 = selected;
-                                D_8009B34C = (lu - lprev) + base;
+                                g_MenuViewAngle = (lu - lprev) + base;
                             }
                             func_8005D6EC(3);
                             g_MenuOverlayPattern = 2;
@@ -176,12 +168,12 @@ void GameUpdateCarShopScreen(void) {
                         if (sel != 0) {
                             return;
                         }
-                        if (g_CarTable[D_801E4B88].enabled == 0) {
+                        if (g_CarTable[g_CarListCursor].enabled == 0) {
                             func_8005D6EC(2);
                             GameMenuBusy = -1;
                             g_UiScriptProgress2 = 0;
                             D_8009B2F0 = 0;
-                            switch (D_801E4B88) {
+                            switch (g_CarListCursor) {
                             case 0:
                             case 1:
                             case 2:
@@ -207,23 +199,23 @@ void GameUpdateCarShopScreen(void) {
                         }
                         return;
                     } else if (g_PadEdge2 & 0x90) {
-                        if (D_801E40D4 != D_801E4B88) {
+                        if (g_PlayerCarIndex != g_CarListCursor) {
                             s32 base;
                             s32 current;
                             s32 selected;
                             s32 lu;
                             s32 lprev;
 
-                            func_8001882C(D_801E40D4);
+                            func_8001882C(g_PlayerCarIndex);
                             base = 0x927C0;
-                            current = D_801E4B88;
-                            selected = D_801E40D4;
-                            lu = D_8009B34C;
-                            lprev = D_8009B350;
-                            D_8009B350 = 0;
+                            current = g_CarListCursor;
+                            selected = g_PlayerCarIndex;
+                            lu = g_MenuViewAngle;
+                            lprev = g_MenuViewAngleTarget;
+                            g_MenuViewAngleTarget = 0;
                             D_8009B374 = current;
                             D_8009B378 = selected;
-                            D_8009B34C = (lu - lprev) + base;
+                            g_MenuViewAngle = (lu - lprev) + base;
                         }
                         func_8005D6EC(3);
                         GameMenuBusy = 1;
@@ -294,11 +286,11 @@ block_51:
                     func_800487D8(D_8019CB00, &g_UiScriptProgress2, -1);
                     func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
                     if (g_UiScriptProgress2 <= 0) {
-                        g_CarTable[D_801E4B88].enabled = 1;
-                        D_801E438D[D_801E4B88 * 8] = 1;
+                        g_CarTable[g_CarListCursor].enabled = 1;
+                        D_801E438D[g_CarListCursor * 8] = 1;
                         GameMenuBusy = 2;
                         D_8009B32C = -1;
-                        D_801E40D4 = D_801E4B88;
+                        g_PlayerCarIndex = g_CarListCursor;
                     }
                 } else {
                     D_8009B300 -= 1;
@@ -319,7 +311,7 @@ block_51:
             return;
         }
         g_MenuHandlerIndex = -1;
-        D_8009B344 = 0xB;
+        g_MenuHandlerIndex2 = 0xB;
         func_80049418(-1, 0, ~D_8019CA18 != 0, ~D_801E41A4 != 0);
         func_8004F650(-1, D_8019C908, value);
         func_800487D8(&D_800820C4, &g_UiScriptProgress, -1);
@@ -329,12 +321,12 @@ block_51:
             if (GameMenuBusy == 2) {
                 D_8019C908 -= value;
             }
-            D_8019C9F8 = 4;
+            g_MenuScreen = 4;
             g_MenuHandlerIndex = 4;
             g_UiScriptProgress = 0;
             GameMenuBusy = 0;
             D_801E4294 = 0;
-            func_8001D530(&D_8007F460, GameMenuStackDepth);
+            func_8001D530(&g_TeamNameChars, g_TeamNameLength);
             func_8004CF00();
         }
     }

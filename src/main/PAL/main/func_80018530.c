@@ -7,7 +7,6 @@ extern u32 D_8009E87C;
 extern GameCarModelAsset *D_8009E698;
 extern GameAssetTripleHeader *D_8019CAFC;
 extern s32 D_8019CA64;
-extern s32 D_801E40D4;
 extern u8 *D_801E4090;
 extern u8 *D_801E4B30;
 extern u8 *D_8019C754;
@@ -113,7 +112,7 @@ state_3:
             }
         goto done;
 state_4:
-            carIndex = D_801E40D4;
+            carIndex = g_PlayerCarIndex;
             indexOffset = carIndex << 3;
             entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
             assetOffset = func_80017848(carIndex, entry->modelVariant) << 1;
@@ -135,12 +134,12 @@ state_4:
                 model->imageDataOffset = modelPtr;
                 func_80017B44((void *)modelPtr, 0);
 
-                carIndex = D_801E40D4;
+                carIndex = g_PlayerCarIndex;
                 if (carIndex < 10) {
                     indexOffset = carIndex << 3;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
                     func_8001D748(entry->shapeIndex, D_8009E698->imageDataOffset);
-                    indexOffset = D_801E40D4 << 3;
+                    indexOffset = g_PlayerCarIndex << 3;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
                     func_8001D900(entry->textureIndex, D_8009E698->imageDataOffset);
                 }

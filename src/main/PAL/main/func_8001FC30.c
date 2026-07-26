@@ -27,12 +27,10 @@ void *func_8001720C(
     void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 
 void *func_80017390(void *ot, void *prim, s32 arg2);
-extern s16 D_801E4DAC;
 extern s32 D_8019C8EC;
 extern s32 D_801E6E78;
 extern s32 D_8019CB6C;
 extern s32 D_8009EC8C;
-extern s32 D_8019CACC;
 extern u8 D_8009E6D4;
 extern s32 D_801F179C;
 extern u8 D_801F1854;
@@ -168,7 +166,7 @@ void func_8001FD3C(void) {
     g_AnimTimer++;
     g_SceneTimer++;
     if (g_SceneTimer == 0x3C) {
-        if (D_801E4DAC != 0) {
+        if (g_GrandPrixMode != 0) {
             if (D_8019C8EC == 0) {
                 func_8005D6EC(g_RacePosition == 1 ? 0x40 : 0x41);
             }
@@ -217,8 +215,8 @@ void func_8001FD3C(void) {
         } else {
             g_FadeLevel += g_FadeStep;
             if (g_FadeLevel >= 257) {
-                s32 v = D_801E4DAC;
-                D_8019CACC = 0;
+                s32 v = g_GrandPrixMode;
+                g_MirrorMode = 0;
                 g_SceneId = v == 0 ? 0x14 : 0x12;
             }
         }
@@ -243,7 +241,7 @@ void func_8001FD3C(void) {
     func_80043BCC(2, &D_8009E6D4);
     *(s32 *)0x1F800084 = D_801E4030;
     func_80041888();
-    if (D_801E4DAC != 0) {
+    if (g_GrandPrixMode != 0) {
         func_80038A88();
     }
     func_8004123C();
@@ -267,7 +265,7 @@ void GameDrawResultScreen(void) {
     (void)pad;
     func_80016EA0(0xDC, 0x1C, D_80010DF0, 0x7812);
 
-    if (D_801E4DAC != 0) {
+    if (g_GrandPrixMode != 0) {
         y = 0x3C;
     } else {
         y = 0x39;
@@ -410,7 +408,7 @@ void func_800204F4(s32 arg0) {
     func_80021CD4(&text[2], D_801E4BA8);
 
     color = 0x7812;
-    if (D_8019C70C[g_GrandPrixSeries][g_CourseIndex][D_801E4DAC] == D_801E4BA8) {
+    if (D_8019C70C[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode] == D_801E4BA8) {
         color = 0x784C;
     }
     drawColor = color;

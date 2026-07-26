@@ -3,10 +3,9 @@
 #include "game/state.h"
 #include "game/render.h"
 #include "game/asset.h"
+#include "game/menu.h"
 
 extern s32 D_801E429C;
-extern s32 D_801E4184;
-extern s16 D_801E4DAC;
 extern GameRaceProgress *D_801E4FAC;
 
 void func_80033AA0(s32 arg0, s32 arg1);
@@ -23,11 +22,11 @@ void GameUpdateMainMenuExit(void) {
     func_80033AA0(value * 2, 0x59);
 
     if (D_801E429C >= 0x81) {
-        switch (D_801E4184) {
+        switch (g_TitleMenuSelection) {
         case 0:
         case 1:
             ptr = D_801E4FAC;
-            D_801E4DAC = 1;
+            g_GrandPrixMode = 1;
             if (ptr->progression == -1) {
                 ptr->progression = 0;
                 g_SceneId = 0x1F;
@@ -37,7 +36,7 @@ void GameUpdateMainMenuExit(void) {
             }
             break;
         case 2:
-            D_801E4DAC = 0;
+            g_GrandPrixMode = 0;
             g_SceneId = 6;
             break;
         case 3:
@@ -125,7 +124,6 @@ extern s32 D_8009F098;
 extern s32 D_8007C744;
 extern u32 D_801E8260;
 extern void (*D_8007C748[])(void);
-extern s16 D_801E4DAC;
 
 int func_800632B0(void);
 int func_8006A5A4(int, int, int);
@@ -205,7 +203,7 @@ Lcheck:
             D_8007C744++;
         } else {
             if (g_SceneTimer == 0x1cf) {
-                D_801E4DAC = 1;
+                g_GrandPrixMode = 1;
                 g_SceneId = 0x1d;
                 D_8007C744++;
             }

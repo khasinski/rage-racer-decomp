@@ -143,4 +143,25 @@ void GameUpdateShuttleScenery(s32 instance) asm("func_8003F2A4");
 void GameDrawShuttleScenery(s32 instance) asm("func_8003F4BC");
 void GameInitShuttleScenery(void) asm("func_8003F0F8");
 
+/*
+ * Total length of the loaded course: func_8002A6B0 sums every point's
+ * segmentLength into it while it builds g_TrackPoints. Cars' along-track
+ * progress is measured in the same units, so this is the lap distance -
+ * func_80037200 ends the lap at `>= g_TrackLength`, func_80037808 /
+ * func_8003591C multiply it by the lap count to get the race distance, and the
+ * reverse-direction code mirrors a position with `g_TrackLength - position`.
+ */
+extern s32 g_TrackLength asm("D_801E40D8");
+
+/*
+ * Base of the loaded course's event/marker data block. func_80034E04 installs it
+ * (`g_TrackEventData = arg0`, then it derives D_801E4448 / D_8019CAF8 /
+ * D_801E4128 / D_801E4BA4 / D_801E4174 from the offset words at +0xB64..+0xB78)
+ * and logs "event ok". The block starts with an s32 - `*(s32 *)g_TrackEventData`
+ * is the track-walk start index used by func_8002BF68 / func_8003591C /
+ * func_800250BC - and func_80038FF0 reads 8-entry marker rows of 0x40 bytes out
+ * of it, per series: `g_TrackEventData + g_RaceSeries * 576 + 0x474`.
+ */
+extern u8 *g_TrackEventData asm("D_801E4150");
+
 #endif

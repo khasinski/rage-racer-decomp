@@ -2,13 +2,11 @@
 #include "game/state.h"
 #include "game/menu.h"
 
-extern s32 D_8019C9F8;
-extern s32 D_8009B344;
 extern s32 D_8009B348;
 extern s32 D_8009B324;
-extern s32 D_801E4B88;
-extern s32 D_801E40D4;
 extern s32 g_CarTable asm("D_8019C7C8");
+extern s32 g_PlayerCarIndex asm("D_801E40D4");
+extern s32 g_CarListCursor asm("D_801E4B88");
 
 struct Entry_5ACA0 {
     u8 f0;
@@ -21,8 +19,6 @@ extern s32 D_8009B2FC;
 extern s32 D_8009B314;
 extern u8 D_801E4369;
 
-extern s32 (*D_80082EF0[])(s32);
-extern void (*D_80082EB8[])(void);
 
 void func_80065860(s32);
 void func_80047024(void *, s32, s32, s32, s32, s32, s32, s32, s32);
@@ -48,21 +44,21 @@ void func_8005ACA0(void) {
     }
     func_80047024(scratch, 0, 0, 0x140, 2, 0, 0, 0, 0xFF);
 
-    if ((u32)(D_8019C9F8 - 1) < 2) {
+    if ((u32)(g_MenuScreen - 1) < 2) {
         *(s32 *)0x1F800064 = 1;
     } else {
         *(s32 *)0x1F800064 = 5;
     }
 
     if (g_MenuHandlerIndex > 0) {
-        D_80082EF0[g_MenuHandlerIndex](0x14);
+        g_MenuScreenDraw[g_MenuHandlerIndex](0x14);
     }
-    if (D_8009B344 > 0) {
-        D_8009B348 = D_80082EF0[D_8009B344](-10);
+    if (g_MenuHandlerIndex2 > 0) {
+        D_8009B348 = g_MenuScreenDraw[g_MenuHandlerIndex2](-10);
     }
-    D_80082EB8[D_8019C9F8]();
+    g_MenuScreenUpdate[g_MenuScreen]();
 
-    func_800496F0(D_8009B324, ((struct Entry_5ACA0 *)g_CarTable)[(D_8019C9F8 == 0xB) ? D_801E4B88 : D_801E40D4].f1);
+    func_800496F0(D_8009B324, ((struct Entry_5ACA0 *)g_CarTable)[(g_MenuScreen == 0xB) ? g_CarListCursor : g_PlayerCarIndex].f1);
 
     {
         register s32 flag asm("$6");

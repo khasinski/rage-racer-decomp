@@ -6,9 +6,7 @@ extern s32 D_80082EA4;
 extern s32 D_80082EA8;
 extern s32 D_80082EB0;
 extern s32 D_8019CB0C;
-extern s32 D_8009B344;
 extern s32 D_8019C770;
-extern s32 D_8019C9F8;
 extern void *D_8009F0B0;
 extern u8 D_80082634;
 extern u8 D_80082664;
@@ -158,13 +156,13 @@ void GameUpdateLogoSampleScreen(void) {
     }
 
     g_MenuHandlerIndex = -1;
-    D_8009B344 = 8;
+    g_MenuHandlerIndex2 = 8;
     func_8004E368(-1, 0);
     func_800487D8(&D_80081CA4, &g_UiScriptProgress, -1);
     func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, 2, D_8019C770);
     if (g_UiScriptProgress <= 0) {
-        D_8019C9F8 = 7;
+        g_MenuScreen = 7;
         g_MenuHandlerIndex = 7;
         D_8019C770 = 0;
         g_UiScriptProgress = 0;

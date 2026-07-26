@@ -5,7 +5,6 @@
 #include "game/race.h"
 
 extern u32 D_8009E87C;
-extern s32 D_801E40D4;
 extern u8 *D_801E4090;
 s32 func_80017848(s32 arg0, s32 arg1);
 s32 func_80017C78(s32 arg0, void *arg1);
@@ -18,14 +17,11 @@ void func_80042C94(void);
 extern s32 D_8019C904;
 extern s32 D_801E4B30;
 void func_80017A10(s32);
-extern s16 D_801E4DAC;
-extern s32 D_801E772C[];
 s32 func_800632B0(void);
 void func_80017BE4(void);
 extern s32 D_8019C754;
 extern s32 D_801E4D70;
 extern s32 D_801E8AB0;
-extern s32 D_801F17A8;
 extern u32 D_8009E698;
 extern u32 D_8019CAFC;
 void func_800179B4(void *, s32);
@@ -67,7 +63,7 @@ void func_80018A70(s32 arg0) {
             *(s32 *)(ptr + 0x24) = temp;
             func_80017B44((void *)temp, flag);
 
-            if (D_801E40D4 < 10) {
+            if (g_PlayerCarIndex < 10) {
                 entry = (GameCarEntry *)(index + (s32)g_CarTable);
                 func_8001D748(entry->shapeIndex, *(s32 *)(ptr + 0x24));
                 entry = (GameCarEntry *)(index + (s32)g_CarTable);
@@ -122,11 +118,11 @@ s32 func_80018C88(void) {
         func_80017BE4();
     }
 
-    if (D_801E4DAC == 0) {
-        value = (func_800632B0() & 0xFFF) % (D_801E772C[g_GrandPrixSeries] + 1);
+    if (g_GrandPrixMode == 0) {
+        value = (func_800632B0() & 0xFFF) % (g_MaxClassReached[g_GrandPrixSeries] + 1);
         g_GrandPrixClass = value;
         if (((g_CourseIndex & 3) == 3) && (value < 2)) {
-            g_GrandPrixClass = ((func_800632B0() & 0xFFF) % (D_801E772C[g_GrandPrixSeries] - 1)) + 2;
+            g_GrandPrixClass = ((func_800632B0() & 0xFFF) % (g_MaxClassReached[g_GrandPrixSeries] - 1)) + 2;
         }
     }
 
@@ -149,7 +145,7 @@ void func_80018DF8(void) {
     switch (state) {
     case 1:
         kind = 0x55;
-        if (D_801E4DAC != 0) {
+        if (g_GrandPrixMode != 0) {
             register s32 index asm("$2") = g_GrandPrixSeries;
             register s32 scaled asm("$3");
             register s32 base asm("$2");
@@ -180,7 +176,7 @@ void func_80018DF8(void) {
             second = *(s32 *)(ptr + 8);
             first = ptr + first;
             second = ptr + second;
-            D_801F17A8 = first;
+            g_AssetBlockPtr = (u8 *)first;
             D_801E8AB0 = second;
             third = *(s32 *)ptr;
             g_AssetLoadState = 0;

@@ -15,16 +15,11 @@ extern s32 D_8009B300;
 extern s32 D_8009B31C;
 extern s32 D_8009B320;
 extern s32 D_8009B338;
-extern s32 D_8009B344;
-extern s32 D_8009B34C;
-extern s32 D_8009B350;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
 extern s32 D_8019C908;
-extern s32 D_8019C9F8;
 extern s32 D_8019CB0C;
 extern u8 *D_801E4188;
-extern s32 D_801E40D4;
 extern s32 D_801E4290;
 extern GameCarEntry D_801E4388[];
 
@@ -53,8 +48,8 @@ void GameUpdateEngineerShopScreen(void) {
     D_8019CB0C = D_8009B338;
     func_8004FCE8(D_8009B31C, D_8009B320, 0);
     func_8005131C();
-    D_8009B320 = D_801E40D4;
-    value = D_80082D80[func_80050FA8(D_801E40D4)];
+    D_8009B320 = g_PlayerCarIndex;
+    value = D_80082D80[func_80050FA8(g_PlayerCarIndex)];
     if (GameMenuBusy == 0) {
         func_800487D8(D_801E4188, &g_UiScriptProgress2, -1);
         func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
@@ -110,7 +105,7 @@ void GameUpdateEngineerShopScreen(void) {
                             func_8005D6EC(2);
                             GameMenuBusy = -2;
                             D_8009B300 = 0x23;
-                            func_800189E4(D_801E40D4);
+                            func_800189E4(g_PlayerCarIndex);
                         } else {
                             func_8005D6EC(3);
                             GameMenuBusy = 0;
@@ -142,12 +137,12 @@ void GameUpdateEngineerShopScreen(void) {
                     func_800487D8(D_801E4188, &g_UiScriptProgress2, -1);
                     func_800487D8(&D_80082790, &g_UiScriptProgress2, 0);
                     if (g_UiScriptProgress2 <= 0) {
-                        D_8009B34C = 0x927C0;
-                        D_8009B350 = 0;
+                        g_MenuViewAngle = 0x927C0;
+                        g_MenuViewAngleTarget = 0;
                         GameMenuBusy = 2;
                         g_MenuOverlayPattern = 2;
-                        D_8009B374 = D_801E40D4;
-                        D_8009B378 = D_801E40D4;
+                        D_8009B374 = g_PlayerCarIndex;
+                        D_8009B378 = g_PlayerCarIndex;
                     }
                 } else {
                     D_8009B300 -= 1;
@@ -177,20 +172,20 @@ void GameUpdateEngineerShopScreen(void) {
             return;
         }
         g_MenuHandlerIndex = -1;
-        D_8009B344 = 0xC;
+        g_MenuHandlerIndex2 = 0xC;
         func_8004F99C(-1, D_8019C908, value);
         func_800487D8(&D_80082130, &g_UiScriptProgress, -1);
         func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
         func_800489AC(g_UiScriptProgress, 1, D_801E4290);
         if (g_UiScriptProgress <= 0) {
             if (GameMenuBusy == 2) {
-                g_CarTable[D_801E40D4].modelVariant++;
-                if (g_CarTable[D_801E40D4].modelVariant > D_801E4388[D_801E40D4].modelVariant) {
-                    D_801E4388[D_801E40D4].modelVariant = g_CarTable[D_801E40D4].modelVariant;
+                g_CarTable[g_PlayerCarIndex].modelVariant++;
+                if (g_CarTable[g_PlayerCarIndex].modelVariant > D_801E4388[g_PlayerCarIndex].modelVariant) {
+                    D_801E4388[g_PlayerCarIndex].modelVariant = g_CarTable[g_PlayerCarIndex].modelVariant;
                 }
                 D_8019C908 -= value;
             }
-            D_8019C9F8 = 4;
+            g_MenuScreen = 4;
             g_MenuHandlerIndex = 4;
             g_UiScriptProgress = 0;
             GameMenuBusy = 0;

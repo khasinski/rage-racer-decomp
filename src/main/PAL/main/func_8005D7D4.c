@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
 
-extern s16 D_801E6CA8[];
 extern s16 D_80082F28[][2];
 
 void func_80078528(s32 voice, s16 left, s16 right);
@@ -41,5 +40,5 @@ void func_8005D7D4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     }
     func_80078528((s16)voiceCopy, left, right);
     voice = arg0 + 0xE;
-    func_80078130((s16)voice, D_801E6CA8[(s16)bend], D_80082F28[arg0][arg3], 0x3C, arg1);
+    func_80078130((s16)voice, g_VabIds[(s16)bend], D_80082F28[arg0][arg3], 0x3C, arg1);
 }

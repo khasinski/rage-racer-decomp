@@ -17,7 +17,6 @@ extern u8 *D_801E8AB0;
 extern u8 *D_801E42D0;
 extern s32 D_801E4D70;
 extern u8 *D_8019C754;
-extern s32 D_801E40D4;
 void func_8005B768(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 func_8005B89C(void);
 s32 func_80017848(s32 arg0, s32 arg1);
@@ -81,7 +80,7 @@ void func_8001901C(void) {
         }
         break;
     case 3: {
-        s32 idx = D_801E40D4;
+        s32 idx = g_PlayerCarIndex;
         s32 sz = func_80017848(idx, g_CarTable[idx].modelVariant);
         if (func_80017C78((sz << 1) + 11, D_8019CAFC) != 0) {
             register u8 *base_a0 asm("$4");

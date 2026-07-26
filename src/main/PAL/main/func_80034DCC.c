@@ -1,10 +1,11 @@
 #include "common.h"
+#include "game/track.h"
+#include "game/car.h"
 
 extern u8 D_80011438[];
 
 void func_8001674C(u8 *arg0);
 
-extern u32 D_801E42D8;
 
 extern u8 D_80011440[];
 
@@ -12,7 +13,6 @@ extern u8 *volatile D_8019CAF8;
 
 extern u8 *volatile D_801E4128;
 
-extern u8 *volatile D_801E4150;
 
 extern u8 *volatile D_801E4174;
 
@@ -39,7 +39,7 @@ void func_80034DCC(void) {
 }
 
 void func_80034DF4(u32 arg0) {
-    D_801E42D8 = arg0;
+    g_CarSpec = (u8 *)arg0;
 }
 
 void func_80034E04(u8 *arg0) {
@@ -51,7 +51,7 @@ void func_80034E04(u8 *arg0) {
     offset0 = *(s32 *)(arg0 + 0xB78);
     offset1 = *(s32 *)(arg0 + 0xB68);
     base = arg0 + 0xB64;
-    D_801E4150 = arg0;
+    g_TrackEventData = arg0;
     D_801E4448 = base + offset0;
     offset0 = *(s32 *)(arg0 + 0xB64);
     D_8019CAF8 = base + offset1;

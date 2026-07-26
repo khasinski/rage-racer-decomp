@@ -2,13 +2,13 @@
 #include "psyq/gte.h"
 #include "game/race.h"
 #include "game/track.h"
+#include "game/menu.h"
 
 extern s32 D_801E3EB4;
 extern s32 D_801E3EB8;
 extern s32 D_801E3EBC;
 extern s32 D_801E3ED8;
 extern s32 D_801E3EE0;
-extern u16 D_801E436A;
 extern s16 D_8007E288[];
 extern s16 D_8009E74C;
 extern s32 D_8009E73C;
@@ -64,7 +64,7 @@ typedef struct Block16 {
  * Fuller sibling of func_8003CB3C: camera track-follower with bob/shake. Aims
  * the eye object D_801E3E14 at a look-ahead centre-line point, and when
  * updateMotion (arg1) is set, ramps the follow distance and applies the shake
- * offsets D_8007E288[] driven by the input bits in D_801E436A. Builds and
+ * offsets D_8007E288[] driven by the input bits in g_PadHeld. Builds and
  * transposes the view rotation matrices, projects the eye-forward point, and
  * writes the scratchpad view state (view[2..4]=eye XYZ, view[6]=pitch,
  * view[7]=yaw, view[8]=roll). markerClamp is the zeroed clamp record for the
@@ -125,14 +125,14 @@ void func_8003CF14(s32 arg0, s32 updateMotion) {
         D_801E3E14.x = D_801E3ED8 / 256 + D_801E3E14.x;
         D_801E3E14.z = D_801E3EE0 / 256 + D_801E3E14.z;
 
-        if (D_801E436A & 0x1000) {
+        if (g_PadHeld & 0x1000) {
             D_8007E288[0] -= 8;
-        } else if (D_801E436A & 0x4000) {
+        } else if (g_PadHeld & 0x4000) {
             D_8007E288[0] += 8;
         }
-        if (D_801E436A & 0x8000) {
+        if (g_PadHeld & 0x8000) {
             D_8007E288[1] -= 16;
-        } else if (D_801E436A & 0x2000) {
+        } else if (g_PadHeld & 0x2000) {
             D_8007E288[1] += 16;
         }
     }

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/race.h"
 
 extern u16 D_8019CE08;
 extern u16 D_8019CB08;
@@ -24,9 +25,6 @@ extern s32 D_8019C984;
 extern s32 D_8019C988;
 extern s32 D_8019C98C;
 extern s32 D_8019C990;
-extern u16 D_8019CAC0;
-extern s32 D_801E772C;
-extern s32 D_801E7730;
 
 extern u8 D_801E4F44[];
 extern u8 D_8019C914[];
@@ -85,14 +83,14 @@ void func_8005F88C(u8 *arg0) {
         *(s32 *)(arg0 + 0x44) = D_8019C98C;
         {
             register s32 w48 asm("$4") = D_8019C990;
-            u16 h4E = D_8019CAC0;
+            u16 h4E = g_AdvancedSeriesUnlocked;
             *(u16 *)(arg0 + 0x4C) = h4C;
             *(u16 *)(arg0 + 0x4E) = h4E;
             *(s32 *)(arg0 + 0x48) = w48;
         }
     }
-    *(s32 *)(arg0 + 0x50) = D_801E772C;
-    *(s32 *)(arg0 + 0x54) = D_801E7730;
+    *(s32 *)(arg0 + 0x50) = g_MaxClassReached[0];
+    *(s32 *)(arg0 + 0x54) = g_MaxClassReached[1];
 
     {
         register s32 offset asm("$3") = 0;

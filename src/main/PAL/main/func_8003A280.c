@@ -1,10 +1,10 @@
 #include "common.h"
 #include "game/car.h"
 #include "game/state.h"
+#include "game/track.h"
 
 extern u8 D_801F1854[];
 extern u8 D_8009E744[];
-extern s32 D_801E40D8;
 extern s32 D_8009E778;
 
 void func_8003A280(GameCarRuntime *car, s32 arg1) {
@@ -36,7 +36,7 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
     sums[2] = 0;
     sums[1] = 0;
     sums[0] = 0;
-    track = D_801E40D8;
+    track = g_TrackLength;
     {
         s32 tmp = car->field_A4 << 1;
         t6 = tmp + 0xC00;

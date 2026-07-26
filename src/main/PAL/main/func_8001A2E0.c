@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "game/race.h"
+#include "game/asset.h"
 
 void func_80065B24(Rect *rect, void *data);
 void func_800658FC(s32 mode);
@@ -88,10 +89,9 @@ void func_8001A40C(void *dst) {
     D_801E444C[0] = 0;
 }
 
-extern s32 D_8009F0B8;
 
 void func_8001A3C0(void *arg0);
 
 void func_8001A498(void) {
-    func_8001A3C0(&D_8009F0B8);
+    func_8001A3C0(g_LoadBuffer);
 }

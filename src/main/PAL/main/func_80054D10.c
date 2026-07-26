@@ -6,15 +6,13 @@
 
 extern s32 D_8009B2CC;
 extern u8 *D_8009E698;
-extern s32 D_801E40D4;
 extern u8 *g_CarTable asm("D_8019C7C8");
+extern s32 g_PlayerCarIndex asm("D_801E40D4");
 
 extern s32 D_8009B2C8;
-extern s32 D_8009B344;
 extern s32 D_8009B334;
 extern s32 D_8019CDF8;
 extern s32 D_8019CB0C;
-extern s32 D_8019C9F8;
 extern u8 D_80082724;
 extern u8 D_80081890;
 extern u8 D_80082460;
@@ -134,7 +132,7 @@ void GameUpdateRankingScreen(void) {
     return;
 pos:
     g_MenuHandlerIndex = -1;
-    D_8009B344 = 2;
+    g_MenuHandlerIndex2 = 2;
     func_800487D8(&D_80082724, &g_UiScriptProgress2, -1);
     func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
     func_800487D8(&D_80081890, &g_UiScriptProgress, -1);
@@ -142,7 +140,7 @@ pos:
     if (g_UiScriptProgress > 0) {
         return;
     }
-    D_8019C9F8 = 1;
+    g_MenuScreen = 1;
     g_MenuHandlerIndex = 1;
     D_8019CDF8 = 0;
     g_UiScriptProgress = 0;
@@ -186,7 +184,7 @@ s32 GameDrawCarSelectScreen(s32 arg0) {
     col = v & 0xff;
     func_80047460(buf, 0xa3, 0x180, 0x1a, 0x19, col, col, col, 0x20);
 
-    tex = ((u8 *) g_CarTable)[D_801E40D4 * 8 + 2];
+    tex = ((u8 *) g_CarTable)[g_PlayerCarIndex * 8 + 2];
     if (tex != 0) {
         func_80046A2C(buf, 0xad, 0x185, 0x10, 0x10, 0x6c, 0x7c, col, col, col,
                       0x244, 0, 1, 0x3b);

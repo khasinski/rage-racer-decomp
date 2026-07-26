@@ -1,11 +1,11 @@
 #include "common.h"
 #include "game/sound.h"
+#include "game/audio.h"
 
 extern s32 D_80082F44;
 extern s32 D_801E4D90;
 extern s32 D_801E4D94;
 extern SoundScale D_801E6CA4;
-extern s16 D_801E6CA8[];
 extern s32 D_80011C84;
 extern const s32 D_80011C8C[][6];
 extern const s32 D_80011F5C[][6];
@@ -110,7 +110,7 @@ s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
     if ((func_8007B088(D_80011C84) == 0) || (id == 0x3D) || (id == 0x2B)) {
         result = (s16)func_80077C7C(
             0x16,
-            D_801E6CA8[pan],
+            g_VabIds[pan],
             (s16)prog,
             (s16)tone,
             0x3C,
@@ -121,7 +121,7 @@ s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
         nextTone = (s32)((u32)nextTone << 16) >> 16;
         result = (s16)func_80077C7C(
             0x17,
-            D_801E6CA8[(D_801E4D90 = result, pan)],
+            g_VabIds[(D_801E4D90 = result, pan)],
             (s16)prog,
             nextTone,
             0x3C,

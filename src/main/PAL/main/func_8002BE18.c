@@ -1,10 +1,10 @@
 #include "common.h"
+#include "game/car.h"
 
 
 extern s16 D_8019C798;
 extern s32 D_8019CAB4;
 extern s32 D_8019CA04;
-extern u8 *D_801E42D8;
 extern s16 D_801E4B90;
 extern s16 D_801E4BA0;
 extern s16 D_801E8A4C;
@@ -13,7 +13,7 @@ void func_8002BE18(u8 *arg0) {
     s32 value;
     s16 index;
 
-    value = ((D_8019CAB4 - D_8019C798) * 10000) / *(s16 *)(D_801E42D8 + 0x100);
+    value = ((D_8019CAB4 - D_8019C798) * 10000) / *(s16 *)(g_CarSpec + 0x100);
     D_801E8A4C = 0;
 
     if (value < 0) {

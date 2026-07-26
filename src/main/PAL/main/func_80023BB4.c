@@ -18,7 +18,6 @@ extern s32 D_8019C97C;
 extern s32 D_801E4B8C;
 extern s32 D_801E4B9C;
 extern s32 D_801E4D68;
-extern s16 D_801E4DAC;
 extern XY D_8007D5A8[];
 extern RGB D_8007D658[];
 extern ScoreRec D_8019CB40[];
@@ -105,7 +104,7 @@ void func_80023D70(void) {
             D_8019C868 = 0;
             break;
         case 3:
-            D_801E4DAC = 0;
+            g_GrandPrixMode = 0;
             g_GrandPrixSeries = 0;
             g_GrandPrixClass = (func_800632B0() & 0xFFF) % 5;
             value = func_800632B0() & 0xFFF;

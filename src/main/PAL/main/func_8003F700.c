@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/race.h"
 
 typedef struct {
     s32 w[4];
@@ -15,7 +16,6 @@ typedef struct {
     s16 secondNeg;
 } StateHead;
 
-extern s32 D_801E408C;
 extern u8 *D_801E4BA4;
 extern u8 *D_801E4174;
 extern u8 *D_801E42DC;
@@ -46,7 +46,7 @@ void func_8003F700(void) {
     s32 ia;
     s32 ib;
 
-    lev = D_801E408C;
+    lev = g_RaceSeries;
     tblA = D_801E4BA4;
     tblB = D_801E4174;
     ia = *(s16 *)(tblA + (lev * 2));

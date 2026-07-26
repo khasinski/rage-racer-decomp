@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/race.h"
 
 extern char D_80012F90[];
 extern char D_80012F98[];
@@ -27,9 +28,6 @@ extern s32 D_8019C984;
 extern s32 D_8019C988;
 extern s32 D_8019C98C;
 extern s32 D_8019C990;
-extern u16 D_8019CAC0;
-extern s32 D_801E772C;
-extern s32 D_801E7730;
 
 extern u8 D_801E4F44[];
 extern u8 D_8019C914[];
@@ -119,11 +117,11 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             register s32 h4C asm("$3") = *(s16 *)(base + 0x4C);
             register u16 h4E asm("$4") = *(u16 *)(base + 0x4E);
             s32 w54;
-            D_801E772C = *(s32 *)(base + 0x50);
+            g_MaxClassReached[0] = *(s32 *)(base + 0x50);
             w54 = *(s32 *)(base + 0x54);
             D_801E42CC = h4C;
-            D_8019CAC0 = h4E;
-            D_801E7730 = w54;
+            g_AdvancedSeriesUnlocked = h4E;
+            g_MaxClassReached[1] = w54;
         }
     }
 

@@ -1,11 +1,10 @@
 #include "common.h"
 #include "game/track.h"
+#include "game/race.h"
 
-extern u8 *D_801E4150;
 extern s32 D_8009E710;
 extern s32 D_8009E778;
 extern s32 D_8009E704;
-extern s32 D_8019CACC;
 
 s32 func_80068634(s32 arg0);
 void func_8005BEA8(s32 arg0, s32 arg1);
@@ -23,7 +22,7 @@ void func_8004087C(s16 arg) {
     s32 a0v, a1v;
 
     data = 0;
-    base = (s32)D_801E4150;
+    base = (s32)g_TrackEventData;
     p = (s16 *)(base + 0x1B7C);
     end = (s16 *)(base + 0x1C6C);
     cur = p;
@@ -101,7 +100,7 @@ chk:
         s2 = 0;
         s1 = 0;
     }
-    if (D_8019CACC) {
+    if (g_MirrorMode) {
         a0v = s2;
         a1v = s1;
     } else {

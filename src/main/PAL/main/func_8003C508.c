@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/race.h"
 
 typedef struct KE {
     u16 f0;
@@ -35,7 +36,6 @@ typedef struct Obj {
 } Obj;
 
 extern u8 *volatile D_8019CAF8;
-extern s32 D_801E408C;
 extern KE *D_801E4038;
 extern s32 D_8009AFB4;
 extern s16 D_8009AFBC;
@@ -61,7 +61,7 @@ void func_8003C508(Obj *obj, s32 mode) {
     if (mode < 90) {
         if (mode < 2) {
             u8 *base = D_8019CAF8;
-            s16 n = *(s16 *) (base + 2 * D_801E408C);
+            s16 n = *(s16 *) (base + 2 * g_RaceSeries);
             s32 off = n * 20 + 4;
             KE *p = (KE *) (off + (s32) base);
             KE *q;

@@ -16,10 +16,8 @@
 
 extern s32 D_8009B300;
 extern s32 D_8009B314;
-extern s32 D_8009B344;
 extern u8 D_8009B2F0;
 extern s32 D_8019CB0C;
-extern s32 D_8019C9F8;
 extern s32 D_8019CAB8;
 extern void *D_801E8A44;
 extern s32 D_801F1804;
@@ -250,7 +248,7 @@ void GameUpdateTeamLogoScreen(void)
     if (g_PadEdge2)
     {
       g_MenuHandlerIndex = -1;
-      D_8009B344 = 7;
+      g_MenuHandlerIndex2 = 7;
       func_8004A248((state == 2) ? (-1) : (1), 0);
       func_800487D8(&D_80081C14, &g_UiScriptProgress, -1);
       func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
@@ -259,7 +257,7 @@ void GameUpdateTeamLogoScreen(void)
     else
     {
       g_MenuHandlerIndex = -1;
-      D_8009B344 = 7;
+      g_MenuHandlerIndex2 = 7;
       func_8004A248((state == 2) ? (-1) : (1), 0);
       func_800487D8(&D_80081C14, &g_UiScriptProgress, -1);
       func_800487D8(&D_80082460, &g_UiScriptProgress, 0);
@@ -270,13 +268,13 @@ void GameUpdateTeamLogoScreen(void)
       switch (GameMenuBusy)
       {
         case 1:
-          D_8019C9F8 = 8;
+          g_MenuScreen = 8;
           g_MenuHandlerIndex = 8;
           func_8004E368(0, 0);
           break;
 
         case 2:
-          D_8019C9F8 = 6;
+          g_MenuScreen = 6;
           g_MenuHandlerIndex = 6;
           D_801F1804 = 0;
           D_801E444C[0] = 0;

@@ -146,7 +146,6 @@ s32 func_8001C8F0(s32 arg0) {
 extern s32 D_801E42CC;
 extern char *D_8007C7A0[];
 extern char D_80010D2C[];
-extern s16 D_801E4DAC;
 
 extern char D_80010C30[];
 extern char D_80010C40[];
@@ -177,7 +176,7 @@ void func_8001C974(void) {
     func_80046A2C(ot, 0x44, 0x50, 0xb8, 0x14, 0x48, 0xe8, col, col, col, 0x80, 0, 1, 0x29);
 
     col = func_8001C8F0(1);
-    if (D_801E4DAC != 0) {
+    if (g_GrandPrixMode != 0) {
         func_800632F0(buf, D_80010C30, g_GrandPrixRound);
         func_80016B7C(0x5e, 0x68, buf, 0x7812, col);
         y0 = 0x78;
@@ -187,7 +186,7 @@ void func_8001C974(void) {
     func_80046A2C(ot, 0x5e, y0, 0x84, 0xc, 0, g_CourseIndex * 12 + 156, col, col, col, 0x12, 0, 1, 0x29);
 
     col = func_8001C8F0(2);
-    if (D_801E4DAC != 0) {
+    if (g_GrandPrixMode != 0) {
         func_80016B7C(0x80, 0x88, D_80010C40, 0x7812, col);
         func_800632F0(buf, D_80010C44, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][0]);
         func_80016B7C(0x56, 0x98, buf, 0x7812, col);
@@ -197,10 +196,10 @@ void func_8001C974(void) {
         func_80016B7C(0x56, 0xb0, buf, 0x7812, col);
     } else {
         func_80016B7C(0x62, 0x7c, D_80010C68, 0x7812, col);
-        func_80021CD4(buf, D_8019C70C[g_GrandPrixSeries][g_CourseIndex][D_801E4DAC]);
+        func_80021CD4(buf, D_8019C70C[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
         func_80016B7C(0x6a, 0x8c, buf, 0x7812, col);
         func_80016B7C(0x6a, 0x9c, D_80010C70, 0x7812, col);
-        func_80021CD4(buf, D_801E4408[g_GrandPrixSeries][g_CourseIndex][D_801E4DAC]);
+        func_80021CD4(buf, D_801E4408[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
         func_80016B7C(0x6a, 0xac, buf, 0x7812, col);
     }
 }
@@ -235,9 +234,6 @@ void func_8001CD54(void) {
     func_80016754(0x90, 0xce, D_8007C7A0[D_801E42CC], 0x78cc);
 }
 
-extern u32 D_801E40B8;
-extern u16 D_801E436A;
-extern s32 D_8019CACC;
 extern s32 D_8009E6CC;
 extern s32 D_801E40A8;
 extern u8 D_801E7734[];
@@ -249,29 +245,29 @@ void func_8005D6EC(s32 a);
 s32 func_80018FC4(void);
 
 void func_8001CFB4(void) {
-    if (D_801E40B8 < 10000) {
-        D_801E40B8 = D_801E40B8 + 1;
+    if ((u32)g_SceneTimer < 10000) {
+        g_SceneTimer = g_SceneTimer + 1;
     }
-    if (D_801E40B8 == 0xf) {
+    if (g_SceneTimer == 0xf) {
         func_80065860(1);
     }
-    if (D_801E40B8 == 1) {
+    if (g_SceneTimer == 1) {
         func_8001BE9C(0, 0, 0);
     }
     func_8001C974();
-    if (D_801E40B8 == 0x20) {
+    if (g_SceneTimer == 0x20) {
         func_8005D6EC(0x19);
     }
     if (g_FadeLevel == 0) {
         if (func_80018FC4() == 0) {
             g_FadeLevel = 0x80;
         }
-    } else if (D_801E40B8 >= 121) {
+    } else if ((u32)g_SceneTimer >= 121) {
         g_SceneId = 0xb;
-        if ((D_801E436A & 0x80c) == 0x80c) {
-            D_8019CACC = 1;
+        if ((g_PadHeld & 0x80c) == 0x80c) {
+            g_MirrorMode = 1;
         } else {
-            D_8019CACC = 0;
+            g_MirrorMode = 0;
         }
         if (D_801E42CC == 0) {
             s32 idx = D_8009E6CC;

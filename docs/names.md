@@ -201,16 +201,96 @@ All of these keep their original emitted symbol via
 | 0x801E42A0 | `g_FadeStep` | render.h | Per-frame delta added to `g_FadeLevel`. |
 | 0x8019C9F0 | `g_UiScriptProgress` | render.h | `GameRunTimedDrawScript` progress counter (layer 1). |
 | 0x8009B2F8 | `g_UiScriptProgress2` | render.h | Second, independent script progress counter (layer 2). |
-| 0x8009B340 | `g_MenuHandlerIndex` | menu.h | Index into the overlay handler table `D_80082EF0`, -1 = none. |
+| 0x8009B340 | `g_MenuHandlerIndex` | menu.h | Index into the overlay handler table `g_MenuScreenDraw`, -1 = none. |
 | 0x8009B318 | `g_MenuOverlayPattern` | menu.h | Element mask passed to `GameDrawBitPatternOverlay`. |
 | 0x801E6CA4 | `g_EffectVolumeScale` | audio.h | Master SE volume scale 0..0x80 (`.scale` of the `SoundScale` record). |
 
+Second naming pass (race / car / menu / CD state, all still byte-neutral):
+
+| Address | Name | Header | What it is |
+|---|---|---|---|
+| 0x801E4DAC | `g_GrandPrixMode` | race.h | 1 = Grand Prix (championship), 0 = Time Attack. Set from `g_TitleMenuSelection` by func_8001B884; picks the pre-race panel (ROUND + prize money vs best-lap/best-total), the innermost index of the record tables, and the in-race option count (`2 - mode`). |
+| 0x801E408C | `g_RaceSeries` | race.h | In-race copy of `g_GrandPrixSeries`, latched by func_80038844 when the grid is built. Outer index of the per-series tables **and** the reverse-lap-direction flag, because the advanced series runs the courses backwards (mirrored progress `g_TrackLength - pos`, look-ahead instead of look-behind). Corrects the older "lap-direction flag" comments. |
+| 0x801E6E74 | `g_RacePhase` | race.h | Race phase: 0 pre-start (physics frozen), 1 countdown, 2 racing, 4/5 finished, 7 goal/retire, 8 aborted. |
+| 0x801E4034 | `g_SeriesSelection` | race.h | Series/save-file the title menu picked (0 first, 1 advanced); `GameInitMenuMode` copies it into `g_GrandPrixSeries`. |
+| 0x8019CAC0 | `g_AdvancedSeriesUnlocked` | race.h | Set by func_800206B8 after the last class of the first series; gates title-menu entry 1 and widens func_80053688's course limit from 2-3 to 6-7. Saved at save+0x4E. |
+| 0x801E772C | `g_MaxClassReached[2]` | race.h | Highest class reached per series/save file (`[1]` is the old `D_801E7730`). Unlocks courses and bounds the attract-demo class roll. Saved at save+0x50. |
+| 0x8019CACC | `g_MirrorMode` | race.h | Mirror mode, armed by the held `0x80C` pad combination as the race scene starts. Swaps the two steering masks and negates body roll (func_8002CD4C), swaps the stereo pan arguments (func_80040ADC / func_8004087C) and selects the mirrored sound cue (func_8002DEFC). |
+| 0x801E40D8 | `g_TrackLength` | track.h | Total lap distance: func_8002A6B0 sums every `segmentLength` into it. |
+| 0x801E4150 | `g_TrackEventData` | track.h | Base of the course's event/marker block, installed by func_80034E04 (which logs `"event ok"`). `*(s32 *)` is the walk start index; func_80038FF0 reads 8-entry 0x40-byte marker rows at `+ g_RaceSeries * 576 + 0x474`. |
+| 0x801E40D4 | `g_PlayerCarIndex` | car.h | Index into `g_CarTable` of the car the player drives; selects the model/texture pack to install. |
+| 0x801E4B88 | `g_CarListCursor` | car.h | Cursor of the car list being browsed in the shop; buying sets `enabled` then copies it into `g_PlayerCarIndex`. |
+| 0x801E42D8 | `g_CarSpec` | car.h | The loaded car's spec block (`func_80034DF4` is just `g_CarSpec = arg0;`): +0x100 rev limit, +0x104 upshift speed, +0x106 redline, +0x10A timer, +0x140/2 tacho origin, gear tables. |
+| 0x8019C9F8 | `g_MenuScreen` | menu.h | Menu-mode screen id; see section 3a for the id -> screen map. |
+| 0x80082EB8 | `g_MenuScreenUpdate[]` | menu.h | The per-screen state-machine table `func_8005ACA0` dispatches with `g_MenuScreen`. |
+| 0x80082EF0 | `g_MenuScreenDraw[]` | menu.h | The parallel fade/overlay table, dispatched with `g_MenuHandlerIndex` / `g_MenuHandlerIndex2`. |
+| 0x8009B344 | `g_MenuHandlerIndex2` | menu.h | Second slot into `g_MenuScreenDraw`, run with `-10`; result kept in `D_8009B348`. |
+| 0x801E4184 | `g_TitleMenuSelection` | menu.h | Title-menu cursor 0..4 (two Grand Prix files, Time Attack, attract demo, options); entry 1 is skipped until `g_AdvancedSeriesUnlocked`. |
+| 0x801E436A | `g_PadHeld` | menu.h | Buttons held this frame — `+0x02` of the pad block at 0x801E4368, computed as `~(raw[0] << 8 \| raw[1])`, with `+0x04` the previous frame and `g_PadEdge2` = `held & ~previous`. |
+| 0x8009B34C / 0x8009B350 | `g_MenuViewAngle` / `…Target` | menu.h | Eased current/target rotation angle of the 3D menu view, in 1/1000 units; the carousel wraps at 500000 per entry. |
+| 0x8009B358 / 0x8009B35C | `g_MenuViewOffset` / `…Target` | menu.h | The second eased current/target pair, a translation component of the same view. |
+| 0x8007F45C / 0x8007F460 | `g_TeamNameLength` / `g_TeamNameChars[]` | menu.h | Renamed from `GameMenuStackDepth` / `GameMenuStack`: the team-name entry buffer written by screen 9, not a screen stack. |
+| 0x8007C700 | `g_CdLoadPhase` | asset.h | `GameLoadAsset`'s own CD state machine, 0..6 (seek / read / wait / `"read:%d"` / `"File read error:%s"`). |
+| 0x801E6834 | `g_AssetCdEntries[]` | asset.h | Disc location + size of each of the 135 assets, read from the `\RAGE.BIN;1` index by func_80017E8C. |
+| 0x8007C6A8 | `g_StreamCdEntries[]` | asset.h | Same for the 11 `\RAGE.STR;1` streams; func_80019B3C picks `1 + class` / `5 + class`. |
+| 0x8009F0B8 | `g_LoadBuffer[]` | asset.h | Boot CD scratch buffer: the RAGE.BIN index first, then asset 0. |
+| 0x801E6CA8 | `g_VabIds[]` | audio.h | libsnd VAB ids of the loaded banks; every key-on passes `g_VabIds[slot]`. |
+
 A handful of translation units declare one of these with a different type
-(`u32` vs `s32`, `volatile`, or a locally-defined struct view). Those files
-carry their own `extern <their type> g_Name asm("D_XXXXXXXX");` instead of
-including the header, so the name is identical everywhere while the generated
-load stays exactly as it was. Files that both include the header and need a
-different type keep the raw `D_` symbol.
+(`u32` vs `s32`, `volatile`, or a locally-defined struct view). Two remedies keep
+the name identical everywhere without moving a byte:
+
+- if the difference is only signedness or a pointer type, the file keeps the
+  canonical declaration and gets an explicit cast at the few places where the
+  difference is observable — `(u32)g_SceneTimer < 61` still assembles to `sltiu`,
+  `(u8 *)g_TrackPoints` and `(s32)g_DrawBuffer` are free;
+- if the file needs a genuinely different object view (a `volatile` load, a
+  narrower width, or a locally-defined struct), it carries its own
+  `extern <its type> g_Name asm("D_XXXXXXXX");` and does not include the header.
+
+Between them these retired the eight translation units that the first pass had to
+revert (`g_TrackPoints`, `g_SceneTimer`, `g_AnimTimer`, `g_FadeStep`,
+`g_DrawBuffer`, `g_PadEdge2`, `g_AssetBlockPtr`, `g_RacePosition`), so no file is
+left on a raw `D_` symbol for a name that exists.
+
+#### Deliberately still unnamed
+
+High-reach globals whose *meaning* is not settled, with what is actually known —
+naming these would be a guess, and a wrong name costs more than none:
+
+- **`D_8019CB0C` (21 files) / `D_8009B338`** — a menu layout selector. When set,
+  x coordinates shift left (0xA8→0x69, 0xC0→0x92, `xBase -= 0x2C`), a sprite pair
+  widens (`halfWidth` 0x58 instead of 1), `func_80051D6C`'s offset bias becomes 64
+  instead of 40, one panel (func_8004F650) stops drawing entirely, and the timed
+  draw script skips element types 9/19/29/39 while keeping 0/10/20/30. Each screen
+  either zeroes it (ids 2, 7, 8) or copies `D_8009B338` into it. **`D_8009B338` is
+  written `0` and nothing else** — verified by scanning every `lui`+lo pair in the
+  retail image, not just the decompiled C — so the alternate layout is dead code in
+  the shipped build and there is no way to observe which layout it is.
+- **`D_801E4030` (12 files)** — `func_800455EC` sets it to `sceneMode == 4`, where
+  `sceneMode` (`D_801E4026`) also indexes a 48-byte-stride colour table. It selects
+  object flag bit 2 instead of bit 1 in `func_8004123C` and writes `0x10000`
+  instead of `0` to the scratchpad render word `0x1F800084`. Consistent with a
+  night/alternate-lighting variant but not proven.
+- **`D_8019C768` (12 files)** — written `0x80` or `0x180` on entry to almost every
+  scene; the only reader in the whole image is
+  `GameAdvanceSaveHeaderCounter`, which advances the play-time counter by 1 when it
+  is `0x80` and by 2 otherwise. Not enough to say what the number *is*.
+- **`D_801E6F2C` (13 files)** — a 0x200-word buffer that nine `func_8004Bxxx`
+  helpers scroll by 8 words at a time and that `StoreImage`/`func_80065B24` move
+  to and from the VRAM rect `D_8007BEE4`; also written to the memory card. Either a
+  scrolling text/log buffer or a saved VRAM tile, undecided.
+- **`D_8009E6D4` (10 files)** — a small transform struct (`func_8005194C` writes
+  `D_8009E6D4 = 23 - pos` and `D_8009E6DC = -20`) that is also passed by address to
+  the car/physics/render calls. Declared three incompatible ways.
+- **`D_8009E67C` (9 files)** — per-save-file course-progress record, repointed
+  like `g_CarTable` (`&D_801E42EC` / `&D_8009E874`); bytes [0..3] are per-course
+  flags, +4 and +6 are s16 fields whose meaning is unclear.
+- **SDK data** — `D_800941E0`/`E4`/`EA`, `D_800942BC` (libgpu), `D_801E79CC`
+  (libsnd `SeqStruct[]`), `D_8009AB7C`, `D_801E416C`, `D_801E42F8`, and everything
+  at or above 0x80063200 need matching against Sony sources, not invented names.
+  `D_8009E674` is referenced *only* from 0x80074xxx–0x80078xxx, i.e. purely from
+  library code, so it belongs to that set too.
 
 ---
 
@@ -219,11 +299,11 @@ different type keep the raw `D_` symbol.
 Everything the front end draws while `g_MainState == 3` (i.e. after GRAND PRIX or
 TIME ATTACK is chosen) is one of fourteen screens. `func_8005ACA0` dispatches
 them through **two parallel tables indexed by the same screen id in
-`D_8019C9F8`**:
+`g_MenuScreen`**:
 
 ```
-D_80082EB8[D_8019C9F8]()              /* per-frame state machine  -> GameUpdate...Screen */
-D_80082EF0[g_MenuHandlerIndex](0x14)  /* fade/transition overlay  -> GameDraw...Screen   */
+g_MenuScreenUpdate[g_MenuScreen]()          /* per-frame state machine -> GameUpdate...Screen */
+g_MenuScreenDraw[g_MenuHandlerIndex](0x14)  /* fade/transition overlay -> GameDraw...Screen   */
 ```
 
 Each `GameDraw...Screen` owns one accumulator in `0x8009B2C4..0x8009B2EC`,
@@ -231,7 +311,7 @@ clamped to `[0, 0x1FC]`; `GameInitMenuMode` (func_80050C18) resets all fourteen
 by calling them with 0. Slots 0/3/13 point at the no-op `func_8005AC98`.
 
 Identified by booting the retail PAL disc on an instrumented psx-ruby, sampling
-`D_8019C9F8` once per vblank and screenshotting every transition, so each row is
+`g_MenuScreen` once per vblank and screenshotting every transition, so each row is
 backed by a picture of the screen's own on-screen title.
 
 | id | `GameUpdate…Screen` | `GameDraw…Screen` | accumulator | on-screen title / rows |
@@ -255,8 +335,8 @@ Ids 6..12 are the GRAND PRIX-only design/shop subtree; TIME ATTACK only reaches
 0..5. **SAVE&LOAD and OPTION are not in this table** — they are separate
 `g_MainState` scenes (2 and 7, entered from func_800182D0 / func_80018B98).
 
-The game's internal pad bit layout (`D_801E4368` held / `D_801E436A` held /
-`g_PadEdge2` = `D_801E436E` edge) is *not* the SIO0 order; measured by holding
+The game's internal pad bit layout (`g_PadHeld` = `D_801E436A`, `g_PadEdge2` =
+`D_801E436E`) is *not* the SIO0 order; measured by holding
 each button in turn:
 
 | bit | button | | bit | button |

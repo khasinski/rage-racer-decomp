@@ -24,7 +24,6 @@ void func_80071C24(void);
 
 extern s32 D_801E6C9C;
 extern s32 D_801E6CA0;
-extern s16 D_801E6CA8[];
 extern s16 D_801E6CB0;
 extern s16 D_801E6CB2;
 extern s16 D_801E6CAE;
@@ -73,7 +72,7 @@ loadVab:
     D_8009E68C = slotReg;
     ret = func_80072C4C(header, -1, D_800125EC[slotReg]);
     {
-        register s16 *vabIdBase asm("$4") = D_801E6CA8;
+        register s16 *vabIdBase asm("$4") = g_VabIds;
         register s32 offset asm("$3") = slotReg * 2;
         vabIdPtr = (s16 *)((s32)vabIdBase + offset);
     }

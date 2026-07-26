@@ -1,4 +1,6 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/menu.h"
 
 typedef struct SubB {
     char _p0[0x1C];
@@ -25,11 +27,8 @@ typedef struct A {
     SubB sub;
 } A;
 
-extern s16 D_801E6E74;
 extern s16 D_8019C9AC;
 extern u8 D_801E4369;
-extern s32 D_8019CACC;
-extern u16 D_801E436A;
 extern s16 D_801E4B60;
 extern s16 D_801E4B62;
 extern s16 D_801E437E;
@@ -42,13 +41,13 @@ s32 func_80068634(s32);
 /*
  * Steering-lean / body-roll state machine for the car `ctx`: drives the lean
  * (f44) and roll (f64) from the drive-block steer input (sub.x1C), branching on
- * the control mode D_801E6E74 (0x41 = player, 0x23 = demo). The local A / SubB
+ * the control mode g_RacePhase (0x41 = player, 0x23 = demo). The local A / SubB
  * typedefs are raw-offset overlays onto the car runtime (drive block at +0xBC)
  * shaped to match; retyping them to GameCarRuntime would break the match.
  */
 void func_8002CD4C(A *ctx) {
     SubB *p = &ctx->sub;
-    s16 mode = D_801E6E74;
+    s16 mode = g_RacePhase;
     s32 v1, a1;
     s32 a0v, r, s2v;
 
@@ -61,12 +60,12 @@ void func_8002CD4C(A *ctx) {
     if (D_8019C9AC != 0) goto L_448;
     if (D_801E4369 != 0x41) goto L_1C4;
 
-    if (D_8019CACC != 0) {
-        a1 = D_801E436A & D_801E4B60;
-        v1 = D_801E436A & D_801E4B62;
+    if (g_MirrorMode != 0) {
+        a1 = g_PadHeld & D_801E4B60;
+        v1 = g_PadHeld & D_801E4B62;
     } else {
-        v1 = D_801E436A & D_801E4B60;
-        a1 = D_801E436A & D_801E4B62;
+        v1 = g_PadHeld & D_801E4B60;
+        a1 = g_PadHeld & D_801E4B62;
     }
 
     if (v1 == 0) goto L_11c;
@@ -108,7 +107,7 @@ L_194:
 L_1C4:
     if (D_801E4369 != 0x23) goto L_43C;
     a1 = ((s32)(D_801E437E * 13) << 9) / D_8007C020[D_801E418C];
-    if (D_8019CACC != 0) a1 = -a1;
+    if (g_MirrorMode != 0) a1 = -a1;
     if (a1 >= 0) goto L_310;
 
     /* a1 < 0 */
