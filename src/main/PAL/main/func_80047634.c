@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/state.h"
 
 typedef struct {
     u8 u;
@@ -132,4 +133,357 @@ void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, 
 
     *(void **)0x1F800000 =
         func_80017390((u8 *)ot + 4, *(void **)0x1F800000, (fl & 0x7f) + 27);
+}
+
+extern Glyph D_8007FA3C[];
+
+void func_80046A2C(
+    void *ot,
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    s32 u0,
+    s32 v0,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 clut,
+    s32 sh,
+    s32 st,
+    s32 flags);
+void *func_80017390(void *ot, void *prim, s32 arg2);
+
+void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047958");
+void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
+    register u8 *str asm("$18");
+    register s32 x asm("$17");
+    u8 fl = flags;
+    s32 fixed;
+    void *ot;
+    s32 idx;
+    s32 u0;
+    s32 v0;
+    s32 w;
+    u8 c;
+
+    str = str0;
+    x = x0;
+    ot = *(void **)0x1F800004;
+
+    while (*str) {
+        fixed = flags & 0x80;
+        c = *str;
+        str++;
+        switch (c) {
+        case ' ':
+            x += 8;
+            continue;
+        case '.':
+            idx = 0x24;
+            goto draw;
+        case '-':
+            idx = 0x25;
+            goto draw;
+        case '!':
+            idx = 0x26;
+            goto draw;
+        case '?':
+            idx = 0x27;
+            goto draw;
+        case '@':
+            idx = 0x28;
+            goto draw;
+        case '/':
+            idx = 0x2b;
+            goto draw;
+        case ',':
+            idx = 0x2c;
+            goto draw;
+        case '"':
+            idx = 0x2d;
+            goto draw;
+        case '\'':
+            idx = 0x2e;
+            goto draw;
+        case ':':
+            idx = 0x30;
+            goto draw;
+        }
+
+        if (c < '0') {
+            continue;
+        }
+        if (c < ':') {
+            idx = c - '0';
+        } else if (c < 'A') {
+            continue;
+        } else if (c < '[') {
+            idx = c - '7';
+        } else {
+            continue;
+        }
+
+    draw:
+        w = fixed ? 8 : D_8007FA3C[idx].w;
+        u0 = fixed ? (idx % 32) * 8 : D_8007FA3C[idx].u;
+        v0 = fixed ? (idx / 32) * 16 + 24 : D_8007FA3C[idx].v;
+
+        func_80046A2C(
+            (u8 *)ot + 4,
+            (s16)x,
+            (s16)y,
+            (s16)w,
+            0x10,
+            (s16)u0,
+            (s16)v0,
+            color & 0xff,
+            g,
+            b,
+            clut,
+            0,
+            1,
+            0x80);
+        {
+            register s32 nx asm("$2");
+            nx = x + w;
+            asm("" : "=r"(nx) : "0"(nx));
+            x = nx;
+        }
+    }
+
+    *(void **)0x1F800000 =
+        func_80017390((u8 *)ot + 4, *(void **)0x1F800000, (fl & 0x7f) + 27);
+}
+
+void func_80046A2C(
+    void *ot,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 clut,
+    s32 arg11,
+    s32 arg12,
+    s32 flags);
+void *func_80017390(void *ot, void *prim, s32 count);
+
+s32 GameDrawNumber(
+    s32 x,
+    s16 y,
+    s32 flags,
+    u32 value,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clut,
+    u8 primitiveCount) asm("func_80047BD4");
+s32 GameDrawNumber(
+    s32 x,
+    s16 y,
+    s32 flags,
+    u32 value,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clut,
+    u8 primitiveCount) {
+    u8 digits[11];
+    u16 drawVValue;
+    void *ot;
+    s32 width;
+    s32 height;
+    s32 v;
+    s32 i;
+    s32 digit;
+    s32 drawn;
+    s32 drawWidth;
+    s32 drawHeight;
+    s32 newHeight;
+    s32 drawV;
+    s32 small;
+    s32 nextX;
+
+    i = 9;
+    if (flags & 8) {
+        ot = (u8 *)*(void **)0x1F800004 + 4;
+    } else {
+        ot = *(void **)0x1F800004;
+    }
+
+    height = 16;
+    if (flags & 4) {
+        width = 8;
+        v = 0xDC;
+    } else {
+        small = flags & 1;
+        width = small ? 8 : 6;
+        height = small ? 16 : 12;
+        v = (-small) & 0x18;
+    }
+
+    for (digit = 0; digit <= i; digit++) {
+        digits[i - digit] = value % 10;
+        value /= 10;
+    }
+
+    digits[10] = 0xFF;
+    i = 0;
+    while ((digits[i] == 0) && (digits[i + 1] != 0xFF)) {
+        digits[i] = ' ';
+        i++;
+    }
+
+    drawn = 0;
+    if (flags & 2) {
+        i = 0;
+    }
+
+    if (digits[i] != 0xFF) {
+        drawWidth = width;
+        drawHeight = newHeight = height;
+        drawV = v;
+        while (digits[i] != 0xFF) {
+            drawVValue = drawV;
+            if (digits[i] == ' ') {
+                nextX = x + width;
+                if (nextX != drawWidth) {
+                    x = nextX;
+                } else {
+                    x = nextX;
+                }
+                i++;
+                continue;
+            }
+
+            func_80046A2C(
+                ot,
+                (s16)x,
+                y,
+                drawWidth,
+                drawHeight,
+                digits[i] * drawWidth,
+                drawVValue,
+                r,
+                g,
+                b,
+                clut,
+                0,
+                1,
+                0x80);
+            i++;
+            digit = width;
+            drawn++;
+            do {
+                nextX = x + digit;
+                if (nextX) {
+                    x = nextX;
+                } else {
+                    x = nextX;
+                }
+            } while (0);
+        }
+    }
+
+    *(void **)0x1F800000 =
+        func_80017390(ot, *(void **)0x1F800000, primitiveCount + 27);
+    return drawn;
+}
+
+extern u8 D_8007F6E8[];
+extern s32 D_8007FB00;
+
+void *func_80017390(void *arg0, void *arg1, s32 arg2);
+
+void GameDrawBitPatternOverlay(s32 arg0) asm("func_80047E60");
+void GameDrawBitPatternOverlay(s32 arg0) {
+    void *ot = *(void **)0x1F800004;
+    u8 *row = D_8007F6E8;
+    s32 y;
+    s32 outer;
+    s32 one;
+    s32 x;
+    s32 bit;
+    s32 offset;
+
+    if (arg0 == 0) {
+        return;
+    }
+
+    if (arg0 < 0) {
+        if ((g_AnimTimer % 6U) == 0) {
+            D_8007FB00 += 8;
+        }
+
+        offset = D_8007FB00;
+        offset += (s32)D_8007F6E8;
+        if (*(u8 *)(offset + 7) != 0) {
+            D_8007FB00 = 0x10;
+        }
+        row = (u8 *)(D_8007FB00 + (s32)D_8007F6E8);
+    } else {
+        row += (arg0 - 1) * 8;
+    }
+
+    y = 0x150;
+    outer = 0;
+    one = 1;
+    do {
+        x = 0x22;
+        bit = 0;
+        do {
+            if (((*row << bit) & 0x80) != 0) {
+                func_80046A2C(
+                    (u8 *)ot + 4,
+                    (s16)x,
+                    (s16)y,
+                    4,
+                    8,
+                    0xFC,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0x244,
+                    one,
+                    one,
+                    0x80);
+            }
+            bit++;
+            x += 4;
+        } while (bit < 8);
+        y += 8;
+        outer++;
+        row++;
+    } while (outer < 6);
+
+    outer = 0;
+    x = 1;
+    bit = 0x4C0000;
+    do {
+        func_80046A2C(
+            (u8 *)ot + 4,
+            (s16)(bit >> 16),
+            0x33,
+            4,
+            8,
+            0xFC,
+            0,
+            0,
+            0,
+            0,
+            0x244,
+            x,
+            x,
+            0x80);
+        bit += 0x50000;
+        outer++;
+    } while (outer < 0x10);
+
+    *(void **)0x1F800000 = func_80017390((u8 *)ot + 4, *(void **)0x1F800000, 0x39);
 }

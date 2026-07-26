@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/state.h"
 
 void func_80046A2C(
     void *ot,
@@ -109,4 +110,732 @@ void GameDrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
         flags8,
         flags4,
         alpha);
+}
+
+void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
+
+void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) asm("func_80048210");
+void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
+    register u8 *record asm("$8") = arg2;
+    register u8 *style asm("$10");
+    register void *otBase asm("$13");
+    register s32 mode asm("$11");
+    register s32 y1Reg asm("$2");
+    register s32 x0Base asm("$6");
+    register s32 x0 asm("$5");
+    register s32 y0 asm("$6");
+    register s32 y0Call asm("$12");
+    register s32 y0Arg asm("$6");
+    register s32 x1Base asm("$3");
+    register s32 x1 asm("$7");
+    register s32 y1 asm("$6");
+    register s32 otPtr asm("$4");
+    s32 limit;
+    s32 xPacked;
+    s32 yPacked;
+    s32 temp;
+    s32 interp;
+    s32 alpha;
+
+    /* Match note: materialize record in $t0 before the first load. */
+    asm("" : "=r"(record) : "0"(record));
+    limit = *(s32 *)record;
+    otBase = *(void **)0x1F800004;
+    xPacked = *(s32 *)(record + 0xC);
+    yPacked = *(s32 *)(record + 0x10);
+    style = arg1;
+    if (limit < arg0) {
+        arg0 = limit;
+    }
+
+    x0Base = *(s16 *)(record + 4);
+    if (xPacked & 0x8000) {
+        temp = xPacked | 0xFFFF0000;
+    } else {
+        temp = xPacked & 0x7FFF;
+    }
+    interp = (u32)(arg0 * temp) >> 5;
+    x0 = x0Base + interp;
+
+    y0 = *(s16 *)(record + 6);
+    if (xPacked < 0) {
+        register s32 hi asm("$2");
+        register s32 mask asm("$3");
+
+        hi = xPacked >> 16;
+        mask = 0xFFFF0000;
+        temp = hi | mask;
+    } else {
+        temp = (xPacked >> 16) & 0x7FFF;
+    }
+    interp = (u32)(arg0 * temp) >> 5;
+    y0 += interp;
+    asm("" : "=r"(y0) : "0"(y0));
+
+    asm volatile("" ::: "memory");
+    x1Base = *(s16 *)(record + 8);
+    if (yPacked & 0x8000) {
+        y0Call = y0;
+        temp = yPacked | 0xFFFF0000;
+    } else {
+        y0Call = y0;
+        temp = yPacked & 0x7FFF;
+    }
+    interp = (u32)(arg0 * temp) >> 5;
+
+    asm volatile("" ::: "memory");
+    y1 = *(s16 *)(record + 0xA);
+    x1 = x1Base + interp;
+    if (yPacked < 0) {
+        register s32 hi asm("$2");
+        register s32 mask asm("$3");
+
+        hi = yPacked >> 16;
+        mask = 0xFFFF0000;
+        temp = hi | mask;
+    } else {
+        temp = (yPacked >> 16) & 0x7FFF;
+    }
+    interp = (u32)(arg0 * temp) >> 5;
+    y1 += interp;
+    asm("" : "=r"(y1) : "0"(y1));
+
+    switch (style[3] & 3) {
+    case 0:
+        mode = 0;
+        break;
+    case 1:
+        mode = 3;
+        break;
+    case 2:
+        mode = 5;
+        break;
+    case 3:
+        mode = 0x2BE;
+        break;
+    }
+
+    if (style[3] & 4) {
+        alpha = style[3] & 0x60;
+    } else {
+        alpha = 0xFF;
+    }
+
+    y1Reg = (s16)y1;
+    arg0 = mode << 2;
+    x0 <<= 0x10;
+    y0Arg = y0Call << 0x10;
+    x1 <<= 0x10;
+    otPtr = (s32)otBase + arg0;
+    asm("" : "=r"(otPtr) : "0"(otPtr));
+    func_8004711C(
+        (void *)otPtr,
+        x0 >> 0x10,
+        y0Arg >> 0x10,
+        x1 >> 0x10,
+        y1Reg,
+        style[0],
+        style[1],
+        style[2],
+        alpha);
+}
+
+void func_80046BA0(void *ot, s16 x0, s16 y0, s16 x1, s32 y1, s32 x2, s32 y2,
+                   s32 r, s32 g, s32 b, s32 semiTrans, s32 flags);
+
+void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) asm("func_800483D4");
+void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
+    register u8 *style asm("$5");
+    register u8 *record asm("$6");
+    register void *ot asm("$13");
+    register s32 limit asm("$7");
+    register s32 packedSpeed asm("$3");
+    register s32 product asm("$2");
+    register s32 x asm("$9");
+    register s32 y0 asm("$11");
+    register s32 y asm("$6");
+    register s32 y1 asm("$12");
+    register s32 mode asm("$10");
+    register s32 semiTrans asm("$8");
+    register s32 flags asm("$4");
+    s32 callArgs[12];
+
+    style = styleArg;
+    record = recordArg;
+    /* Match note: preserve the original independent load schedule. */
+    asm volatile(
+        "lw %0,0(%3)\n"
+        "lui %1,0x1f80\n"
+        "lw %1,4(%1)\n"
+        "lw %2,8(%3)"
+        : "=r"(limit), "=r"(ot), "=r"(packedSpeed)
+        : "r"(record));
+    if (limit < time) {
+        time = limit;
+    }
+
+    limit = *(s16 *)(record + 4);
+    if (packedSpeed & 0x8000) {
+        product = packedSpeed | 0xFFFF0000;
+    } else {
+        product = packedSpeed & 0x7FFF;
+    }
+    product = time * product;
+    asm("" : "=r"(product), "=r"(record) : "0"(product), "1"(record));
+    product = (u32)product >> 5;
+    product = limit + product;
+    asm("" : "=r"(product) : "0"(product));
+
+    y = *(s16 *)(record + 6);
+    x = product;
+    if (packedSpeed < 0) {
+        product = packedSpeed >> 16;
+        packedSpeed = 0xFFFF0000;
+        product |= packedSpeed;
+    } else {
+        product = (packedSpeed >> 16) & 0x7FFF;
+    }
+    product = time * product;
+    asm("" : "=r"(product), "=r"(style) : "0"(product), "1"(style));
+    product = (u32)product >> 5;
+    y += product;
+
+    product = *(u16 *)(style + 2);
+    packedSpeed = *(u16 *)(style + 6);
+    y0 = product + y;
+    y1 = packedSpeed + y;
+    asm("" : "=r"(y0), "=r"(y1), "=r"(style) : "0"(y0), "1"(y1), "2"(style));
+    product = *(u16 *)style;
+    packedSpeed = *(u16 *)(style + 4);
+    product = x + product;
+    asm("" : "=r"(product) : "0"(product));
+    limit = product;
+    asm("" : "=r"(limit), "=r"(style) : "0"(limit), "1"(style));
+    packedSpeed = x + packedSpeed;
+
+    switch (style[0xB] & 3) {
+    case 0:
+        mode = 0;
+        break;
+    case 1:
+        mode = 3;
+        break;
+    case 2:
+        mode = 5;
+        break;
+    case 3:
+        mode = 0x2BE;
+        break;
+    }
+
+    {
+        register s32 alpha asm("$2");
+
+        alpha = style[0xB];
+        semiTrans = alpha & 4;
+        if (semiTrans != 0) {
+            alpha &= 0x60;
+            asm("" : "=r"(alpha) : "0"(alpha));
+            flags = (u8)alpha;
+        } else {
+            flags = 0x80;
+        }
+    }
+
+    /* Match note: keep the original o32 stack-argument and delay-slot order. */
+    asm volatile(
+        ".set\tnoreorder\n"
+        "sll $2,$11,16\n"
+        "sra $2,$2,16\n"
+        "sw $2,16($sp)\n"
+        "sll $2,$3,16\n"
+        "sra $2,$2,16\n"
+        "sw $2,20($sp)\n"
+        "sll $2,$12,16\n"
+        "sra $2,$2,16\n"
+        "sll $6,$6,16\n"
+        "sw $2,24($sp)\n"
+        :
+        : "r"(y0), "r"(packedSpeed), "r"(y1), "r"(y)
+        : "memory");
+    asm volatile(
+        ".set\tnoreorder\n"
+        "lbu $2,8($5)\n"
+        "sll $7,$7,16\n"
+        "sw $2,28($sp)\n"
+        "lbu $2,9($5)\n"
+        "sra $6,$6,16\n"
+        "sw $2,32($sp)\n"
+        "lbu $2,10($5)\n"
+        "sra $7,$7,16\n"
+        "sw $4,44($sp)\n"
+        :
+        : "r"(style), "r"(limit), "r"(flags)
+        : "memory");
+    asm volatile(
+        ".set\tnoreorder\n"
+        "sll $4,$10,2\n"
+        "sll $5,$9,16\n"
+        "addu $4,$13,$4\n"
+        "sra $5,$5,16\n"
+        "sw $8,40($sp)\n"
+        "jal func_80046BA0\n"
+        "sw $2,36($sp)\n"
+        ".set\treorder"
+        :
+        : "r"(ot), "r"(x), "r"(mode), "r"(semiTrans), "m"(callArgs[0])
+        : "$31", "memory");
+}
+
+void func_80046E00(u8 *arg0, s16 x0, s16 y0, s16 x1a, s16 y0b, s16 x0b,
+                   s16 y1a, s16 x1b, s16 y1b, s32 d0, s32 d1, s32 d2,
+                   s32 d3, s32 d4, s32 d5, s32 d6, s32 d7, s32 dA,
+                   s32 dB, s32 dC, s32 h8, s32 f8, s32 f4, s32 dE);
+
+void GameDrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) asm("func_80048580");
+void GameDrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
+    register s32 duration asm("$7");
+    register u8 *table asm("$13");
+    register u8 *entry asm("$8");
+    s32 velocity0;
+    s32 velocity1;
+    s32 x;
+    s32 y;
+    s32 dx;
+    s32 dy;
+    register s32 index asm("$10");
+    register s32 posX asm("$5");
+    register s32 posY asm("$5");
+    register s32 posX2 asm("$3");
+    register s32 posY2 asm("$6");
+    u32 velocityX;
+    u32 velocityY;
+    u32 velocityX2;
+    u32 velocityY2;
+    register s32 value asm("$2");
+    s32 flags;
+
+    duration = ctx[0];
+    table = *(u8 **)0x1F800004;
+    velocity0 = ctx[3];
+    velocity1 = ctx[4];
+    entry = desc;
+    if (duration < time) {
+        time = duration;
+    }
+
+    posX = *(s16 *)((u8 *)ctx + 4);
+    if (velocity0 & 0x8000) {
+        velocityX = velocity0 | 0xFFFF0000;
+    } else {
+        velocityX = velocity0 & 0x7FFF;
+    }
+    posX += (time * velocityX) >> 5;
+    asm("" : "=r"(posX) : "0"(posX));
+    x = posX;
+    asm("" : "=r"(x) : "0"(x));
+
+    posY = *(s16 *)((u8 *)ctx + 6);
+    if (velocity0 < 0) {
+        value = velocity0 >> 16;
+        velocityY = value | 0xFFFF0000;
+    } else {
+        value = velocity0 >> 16;
+        velocityY = value & 0x7FFF;
+    }
+    value = posY + ((time * velocityY) >> 5);
+    asm("" : "=r"(value) : "0"(value));
+    y = value;
+    asm("" : "=r"(y) : "0"(y) : "memory");
+
+    posX2 = *(s16 *)((u8 *)ctx + 8);
+    if (velocity1 & 0x8000) {
+        velocityX2 = velocity1 | 0xFFFF0000;
+    } else {
+        velocityX2 = velocity1 & 0x7FFF;
+    }
+    value = posX2 + ((time * velocityX2) >> 5);
+    asm("" : "=r"(value) : "0"(value) : "memory");
+    dx = value;
+
+    posY2 = *(s16 *)((u8 *)ctx + 0xA);
+    if (velocity1 < 0) {
+        value = velocity1 >> 16;
+        velocityY2 = value | 0xFFFF0000;
+    } else {
+        value = velocity1 >> 16;
+        velocityY2 = value & 0x7FFF;
+    }
+    posY2 += (time * velocityY2) >> 5;
+    asm("" : "=r"(posY2) : "0"(posY2));
+    dy = posY2;
+
+    switch (entry[0xD] & 3) {
+    case 0:
+        asm(".globl func_800486C0\nfunc_800486C0 = . + 4");
+        index = 0;
+        break;
+    case 1:
+        index = 3;
+        break;
+    case 2:
+        index = 5;
+        break;
+    case 3:
+        index = 0x2BE;
+        break;
+    }
+
+    flags = entry[0xD];
+    func_80046E00(table + index * 4, x, y, x + dx, y, x, y + dy,
+                  x + dx, y + dy, entry[0], entry[1], entry[2], entry[3],
+                  entry[4], entry[5], entry[6], entry[7], entry[0xA],
+                  entry[0xB], entry[0xC], *(u16 *)(entry + 8), flags & 8,
+                  flags & 4, entry[0xE]);
+}
+
+typedef struct {
+    s16 time;
+    s16 type;
+    s32 arg0;
+    s32 arg1;
+} TimedDrawCommand;
+
+extern s32 D_8019CB0C;
+
+void func_80048078(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void func_80048210(s32 arg0, s32 arg1, s32 arg2);
+void func_800483D4(s32 arg0, s32 arg1, s32 arg2);
+void func_80048580(s32 arg0, s32 arg1, s32 arg2);
+
+s32 GameRunTimedDrawScript(TimedDrawCommand *commands, s32 *progress, s32 step) asm("func_800487D8");
+s32 GameRunTimedDrawScript(TimedDrawCommand *commands, s32 *progress, s32 step) {
+    register TimedDrawCommand *base asm("$20") = commands;
+    register s32 *progressPtr asm("$18") = progress;
+    register s32 stepReg asm("$19") = step;
+    register TimedDrawCommand *cmd asm("$16");
+    register TimedDrawCommand *cmdTmp asm("$3");
+    register s32 index = 0;
+    s32 remaining;
+    s32 type;
+    register s32 nextProgress asm("$2");
+    register s32 updatedProgress asm("$6");
+    register s32 limit asm("$4");
+
+    asm("" : "=r"(base), "=r"(progressPtr), "=r"(stepReg) : "0"(base), "1"(progressPtr), "2"(stepReg));
+    if (stepReg < 0) {
+        nextProgress = *progressPtr + stepReg;
+        if (nextProgress > 0) {
+            *progressPtr = nextProgress;
+        } else {
+            *progressPtr = 0;
+        }
+    }
+
+    nextProgress = ((index << 1) + index) << 2;
+    cmdTmp = (TimedDrawCommand *)(nextProgress + (s32)base);
+    if (cmdTmp->time < 0) {
+        goto after_loop;
+    }
+    cmd = cmdTmp;
+loop_body:
+    remaining = *progressPtr - cmd->time;
+    if (remaining >= 0) {
+        type = cmd->type;
+        if ((u32)type < 40) {
+            switch (type) {
+            case 9:
+                if (D_8019CB0C != 0) {
+                    break;
+                }
+                func_80048078(remaining, cmd->arg0, cmd->arg1, type);
+                cmd++;
+                goto loop_continue;
+            case 0:
+            case 1:
+                func_80048078(remaining, cmd->arg0, cmd->arg1, type);
+                cmd++;
+                goto loop_continue;
+            case 19:
+                if (D_8019CB0C != 0) {
+                    break;
+                }
+                func_80048210(remaining, cmd->arg0, cmd->arg1);
+                cmd++;
+                goto loop_continue;
+            case 10:
+                func_80048210(remaining, cmd->arg0, cmd->arg1);
+                cmd++;
+                goto loop_continue;
+            case 29:
+                if (D_8019CB0C != 0) {
+                    break;
+                }
+                func_800483D4(remaining, cmd->arg0, cmd->arg1);
+                cmd++;
+                goto loop_continue;
+            case 20:
+                func_800483D4(remaining, cmd->arg0, cmd->arg1);
+                cmd++;
+                goto loop_continue;
+            case 39:
+                if (D_8019CB0C != 0) {
+                    break;
+                }
+                func_80048580(remaining, cmd->arg0, cmd->arg1);
+                goto loop_next;
+            case 30:
+                func_80048580(remaining, cmd->arg0, cmd->arg1);
+                goto loop_next;
+            default:
+                break;
+            }
+        }
+    }
+loop_next:
+    cmd++;
+loop_continue:
+    index++;
+    if (cmd->time >= 0) {
+        goto loop_body;
+    }
+
+after_loop:
+    if (stepReg >= 0) {
+        cmdTmp = (TimedDrawCommand *)*progressPtr;
+        updatedProgress = stepReg + (s32)cmdTmp;
+        limit = base[index].arg1;
+        if (updatedProgress < limit) {
+            *progressPtr = updatedProgress;
+        } else {
+            *progressPtr = limit;
+            return 1;
+        }
+    }
+
+    return 0;
+}
+extern TimedDrawCommand D_80082520[];
+extern s32 D_8009B250[];
+
+void func_80046A2C();
+
+void GameDrawFadingMenuSprites(s32 progress, s32 count, s32 slot) asm("func_800489AC");
+void GameDrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
+    register u8 *arg0Ptr asm("$8");
+    register u8 *arg1Ptr asm("$9");
+    register void *ot asm("$22");
+    register s32 countReg asm("$21");
+    register s32 i asm("$18");
+    register TimedDrawCommand *cmd asm("$17");
+    register s32 *timer asm("$16");
+    register s32 xOffset asm("$20");
+    register s32 yOffset asm("$19");
+    register s32 nextTimer asm("$4");
+    register s32 value asm("$2");
+    register s32 temporary asm("$3");
+    register void *basePtr asm("$3");
+    register s32 offset asm("$2");
+    register s32 done asm("$2");
+    register s32 timerValue asm("$3");
+    register s32 fade asm("$3");
+    register s32 drawX asm("$5");
+    register s32 drawY asm("$6");
+    register s32 drawW asm("$7");
+    register s32 drawH asm("$2");
+    s32 elapsed;
+    s32 limit;
+    s32 packed;
+
+    arg0Ptr = (u8 *)D_80082520[0].arg0;
+    elapsed = progress - D_80082520[0].time;
+    arg1Ptr = (u8 *)D_80082520[0].arg1;
+    ot = *(void **)0x1F800004;
+    countReg = count;
+    packed = *(s32 *)(arg1Ptr + 0x10);
+    i = 0;
+
+    if (elapsed < 0) {
+        return;
+    }
+
+    limit = *(s32 *)arg1Ptr;
+    if (limit < elapsed) {
+        elapsed = limit;
+    }
+
+    D_8009B250[slot] = 0x1FC;
+
+    if (packed & 0x8000) {
+        value = packed | 0xFFFF0000;
+    } else {
+        value = packed & 0x7FFF;
+    }
+    value = elapsed * value;
+    xOffset = (u32)value >> 5;
+
+    if (packed < 0) {
+        value = packed >> 0x10;
+        temporary = 0xFFFF0000;
+        value |= temporary;
+    } else {
+        value = (packed >> 0x10) & 0x7FFF;
+    }
+    /* Match note: keep the $s5 save ahead of $s2 in the GCC 2.6.3 prologue. */
+    countReg++;
+    countReg--;
+    value = elapsed * value;
+    yOffset = (u32)value >> 5;
+
+    if (countReg < i) {
+        return;
+    }
+
+    offset = i << 1;
+    basePtr = D_80082520;
+    offset = (offset + i) << 2;
+    cmd = (TimedDrawCommand *)((s32)basePtr + offset);
+
+loop:
+    basePtr = D_8009B250;
+    offset = i << 2;
+    timer = (s32 *)((s32)basePtr + offset);
+
+    fade = *timer & 0x1FF;
+    *timer = fade;
+    fade >>= 2;
+
+    drawH = *(s16 *)(arg0Ptr + 2);
+    drawX = *(u16 *)(arg1Ptr + 4);
+    drawY = *(u16 *)(arg1Ptr + 6);
+    drawW = *(s16 *)arg0Ptr;
+    drawX = drawX + xOffset;
+    drawX <<= 0x10;
+    drawY = drawY + yOffset;
+    drawY = (u32)drawY << 16;
+    drawX >>= 16;
+    drawY >>= 16;
+
+    func_80046A2C((u8 *)ot + 8,
+                  drawX,
+                  drawY,
+                  drawW,
+                  drawH,
+                  arg0Ptr[4],
+                  arg0Ptr[5],
+                  fade,
+                  fade,
+                  fade,
+                  *(u16 *)(arg1Ptr + 8),
+                  0,
+                  1,
+                  arg0Ptr[7]);
+
+    timerValue = *timer;
+    nextTimer = 0;
+    if (timerValue >= 60) {
+        nextTimer = timerValue - 60;
+    }
+    cmd++;
+    i++;
+    done = countReg < i;
+    *timer = nextTimer;
+    arg0Ptr = (u8 *)cmd->arg0;
+    arg1Ptr = (u8 *)cmd->arg1;
+    if (!done) {
+        goto loop;
+    }
+}
+
+void func_80047958(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
+void func_80047634(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
+void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8);
+void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8);
+
+void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
+                   u8 arg4, u8 arg5, u8 arg6,
+                   s32 flags, s32 arg8, s32 arg9, s32 arg10) asm("func_80048B88");
+void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
+                   u8 arg4, u8 arg5, u8 arg6,
+                   s32 flags, s32 arg8, s32 arg9, s32 arg10) {
+    register s32 f asm("$16") = flags;
+    register s32 p0 asm("$18") = arg0;
+    register void *ot asm("$19") = *(void **)0x1F800004;
+    register s32 p1 asm("$20") = arg1;
+    register s32 p2 asm("$21") = arg2;
+    register s32 p3 asm("$17") = arg3;
+
+    if (flags & 0x10) {
+        if (flags & 1) {
+            func_80047958((s16)(arg0 + arg8), (s16)(arg1 + arg9), arg10,
+                          0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
+        } else {
+            func_80047634((s16)(arg0 + arg8), (s16)(arg1 + arg9), arg10,
+                          0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
+        }
+    }
+    func_80047460(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
+                  0xb4, 0xb4, 0xb4, (f & 4) ? (f & 0x60) : 0xff);
+    func_80047024(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
+                  arg4, arg5, arg6, (f & 2) ? (f & 0x60) : 0xff);
+    __asm__("" : : "r"(p0), "r"(p1), "r"(p2), "r"(p3), "r"(f));
+}
+
+extern s32 D_8009B264;
+
+s32 func_80068568(s32 arg0);
+void func_80047460(
+    void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7, s32 arg8);
+
+void GameDrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
+void GameDrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
+    void *ot;
+    s32 savedX0;
+    s32 savedY0;
+    s32 savedX1;
+    s32 savedY1;
+    s32 color;
+    s32 white;
+    register s32 counter asm("$2");
+    register s32 phaseBase asm("$4");
+
+    ot = *(void **)0x1F800004;
+    savedX0 = x0;
+    savedY0 = y0;
+    savedX1 = x1;
+    savedY1 = y1;
+    if (useFlash != 0) {
+        if (g_AnimTimer & 2) {
+            color = 0xFF;
+        } else {
+            color = 0x60;
+        }
+    } else {
+        counter = D_8009B264;
+        phaseBase = counter;
+        if (counter < 0) {
+            phaseBase = counter + 0xFFF;
+        }
+        phaseBase = (phaseBase >> 12) << 12;
+        counter = func_80068568(counter - phaseBase);
+        if (counter < 0) {
+            counter += 0x3F;
+        }
+        color = (counter >> 6) - 0x41;
+    }
+
+    white = 0xFF;
+    func_80047460(
+        ot,
+        (s16)(savedX0 - 1),
+        (s16)(savedY0 - 2),
+        (s16)(savedX1 + 2),
+        (s16)(savedY1 + 4),
+        0,
+        color & 0xFF,
+        0,
+        white);
+    func_80047460(
+        ot, (s16)savedX0, (s16)savedY0, (s16)savedX1, (s16)(savedY1 + 0), 0, color & 0xFF, 0, white);
+    D_8009B264 += 0x60;
 }
