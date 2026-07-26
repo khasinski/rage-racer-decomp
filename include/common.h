@@ -17,6 +17,7 @@ typedef float f32;
  * format string in the image is passed to it, from libgpu, libcd, libspu and
  * the game alike, which is what labels most of the arguments in this repo.
  */
-void GameDebugPrintf(const char *fmt, ...) asm("func_8001674C");
+/* Stubbed out: does nothing and returns 1. */
+s32 GameDebugPrintf() asm("func_8001674C");
 
 #endif

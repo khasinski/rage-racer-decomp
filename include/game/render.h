@@ -612,7 +612,7 @@ u8 *GameQueueTexturedRect(
  * place (no AddPrim, no cursor advance) and has no callers in the retail EXE.
  */
 u8 *GameQueueDrawModePrim(void *ot, u8 *prim, u16 tpage) asm("func_80017390");
-void GameSetDrawModePacket(u8 *prim, u16 tpage) asm("func_80017760");
+void GameSetDrawModePacket(u8 *prim, s32 tpage) asm("func_80017760");
 
 /*
  * A third font, separate from the small (6x12) / large (8x16) pair above:
