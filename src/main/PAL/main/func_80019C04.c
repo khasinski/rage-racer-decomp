@@ -13,8 +13,8 @@ void func_80018A70(s32);
 void func_80018C0C(void);
 void func_80018DF8(void);
 void func_8001901C(void);
-void func_800195F4(void);
-void func_800196B4(void);
+void GameLoadGrandPrixScreen(void) asm("func_800195F4");
+void GameLoadCourseAssets(void) asm("func_800196B4");
 void func_8001989C(void);
 
 void func_80019C04(void) {
@@ -48,10 +48,10 @@ void func_80019C04(void) {
             func_8001901C();
             break;
         case 10:
-            func_800195F4();
+            GameLoadGrandPrixScreen();
             break;
         case 11:
-            func_800196B4();
+            GameLoadCourseAssets();
             break;
         case 12:
             func_8001989C();

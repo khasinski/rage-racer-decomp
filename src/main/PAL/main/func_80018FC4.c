@@ -4,6 +4,14 @@
 #include "game/car.h"
 #include "game/race.h"
 
+s32 GameRequestRaceStart(void) asm("func_80019580");
+
+void GameLoadGrandPrixScreen(void) asm("func_800195F4");
+
+void GameLoadCourseAssets(void) asm("func_800196B4");
+
+s32 GameRequestTrackLoad(void) asm("func_8001965C");
+
 extern u8 *D_8019CAFC;
 extern u8 *D_801E8AB0;
 extern u8 *D_801E42D0;
@@ -171,7 +179,7 @@ void func_8001901C(void) {
     }
 }
 
-s32 func_80019580(void) {
+s32 GameRequestRaceStart(void) {
     s32 state;
 
     if (g_AssetLoadState != 0) {
@@ -190,7 +198,7 @@ s32 func_80019580(void) {
     return 1;
 }
 
-void func_800195F4(void) {
+void GameLoadGrandPrixScreen(void) {
     s32 base;
     s32 offset;
     s32 value;
@@ -205,7 +213,7 @@ void func_800195F4(void) {
     }
 }
 
-s32 func_8001965C(void) {
+s32 GameRequestTrackLoad(void) {
     if (g_AssetLoadState != 0) {
         return 1;
     }
@@ -220,7 +228,7 @@ s32 func_8001965C(void) {
     return 1;
 }
 
-void func_800196B4(void) {
+void GameLoadCourseAssets(void) {
     s32 value;
 
     if (g_AssetLoadState == 1) {

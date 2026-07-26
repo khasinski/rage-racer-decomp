@@ -4,6 +4,10 @@
 #include "game/render.h"
 #include "game/asset.h"
 
+void GameUpdateFrontend(void) asm("func_8001BB58");
+
+void GameUpdateTitleAttract(void) asm("func_8001B974");
+
 extern s32 D_801E6F1C;
 extern s32 D_801E4DA8;
 
@@ -11,7 +15,7 @@ void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 ar
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 void *func_800173F4(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10);
 
-void func_8001B974(void) {
+void GameUpdateTitleAttract(void) {
     register s32 alpha asm("$18");
     void *base;
     register s32 color asm("$20");
@@ -78,13 +82,13 @@ extern s16 D_801E4DAC;
 int func_800632B0(void);
 int func_8006A5A4(int, int, int);
 void func_8005D6EC(int);
-void func_8001965C(void);
-void func_80019580(void);
+s32 GameRequestTrackLoad(void) asm("func_8001965C");
+s32 GameRequestRaceStart(void) asm("func_80019580");
 void func_80065860(int);
 void func_8001BE9C(int, int, int);
 void func_80019AF0(int);
 
-void func_8001BB58(void) {
+void GameUpdateFrontend(void) {
     u32 state;
     s32 b, m4;
 
@@ -120,11 +124,11 @@ void func_8001BB58(void) {
             if (g_GrandPrixClass < 2 && m4 == 3) {
                 g_CourseIndex = (func_800632B0() & 0xfff) % 3;
             }
-            func_8001965C();
+            GameRequestTrackLoad();
             g_SceneTimer++;
         } else if (state == 0x1cd) {
             if (g_AssetLoadState == 0) {
-                func_80019580();
+                GameRequestRaceStart();
                 g_SceneTimer++;
             }
         } else if (state == 0x1ce) {
@@ -160,5 +164,5 @@ Lcheck:
         }
     }
 
-    func_8001B974();
+    GameUpdateTitleAttract();
 }

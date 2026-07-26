@@ -24,7 +24,7 @@ extern RGB D_8007D658[];
 extern ScoreRec D_8019CB40[];
 extern Struct12 D_8007D5D4[];
 s32 func_800153FC(void);
-void func_8001965C(void);
+s32 GameRequestTrackLoad(void) asm("func_8001965C");
 void func_80023B08(s32 arg0);
 void func_80023BB4(void);
 s32 func_800632B0(void);
@@ -113,7 +113,7 @@ void func_80023D70(void) {
             if ((g_GrandPrixClass < 2) && (g_CourseIndex == 3)) {
                 g_CourseIndex = (func_800632B0() & 0xFFF) % 3;
             }
-            func_8001965C();
+            GameRequestTrackLoad();
             func_80023B08(0x1B);
             break;
         case 4:
