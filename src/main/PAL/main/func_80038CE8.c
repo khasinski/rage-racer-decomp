@@ -2,7 +2,9 @@
 #include "game/car.h"
 
 s32 func_8002A788(s32 arg0, s32 arg1);
+
 s32 func_80068568(s32 angle);
+
 s32 func_80068634(s32 angle);
 
 /*
@@ -11,6 +13,11 @@ s32 func_80068634(s32 angle);
  * speed derived per `mode` (0 / 2 / 4 select different angle+speed math from
  * arg1/arg2). Register-pinned, goto-structured decompilation; do not restructure.
  */
+
+s32 func_8002FB60(s32 arg0);
+
+s32 func_800632B0(void);
+
 void func_80038CE8(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     register GameCarRuntime *carReg asm("$17");
     register s32 x asm("$16");
@@ -178,4 +185,68 @@ store_values:
     carReg->motionTimer = tmp;
     carReg->velocityX = x;
     carReg->velocityZ = z;
+}
+
+void func_80038F0C(s32 arg0, GameCarRuntime *arg1) {
+    GameCarRuntime *obj;
+    s32 value;
+    s32 temp;
+    s32 distance;
+
+    obj = arg1;
+    value = 1;
+    obj->motionMode = arg0;
+    if (arg0 == value) {
+        goto mode1;
+    }
+
+    value = 2;
+    if (arg0 == value) {
+        goto mode2;
+    }
+
+    return;
+
+mode1:
+    value = obj->field_9A;
+    temp = 0x1E;
+    obj->motionModeTimer = temp;
+    value <<= 3;
+    goto final_store;
+
+mode2:
+    value = func_8002FB60(obj->trackPointIndex);
+    temp = func_8002A788(value, obj->field_24);
+    if (temp >= 0x401) {
+        temp = 0x800 - temp;
+    }
+
+    distance = obj->field_A4;
+    if (distance < 0x140) {
+        obj->motionValue = 0;
+        goto after_store;
+    }
+
+    value = distance - 0x140;
+    value *= temp;
+    if (value < 0) {
+        value += 0xFFF;
+    }
+    value >>= 12;
+
+store:
+    obj->motionValue = value;
+
+after_store:
+    value = 0x1E;
+    obj->motionModeTimer = value;
+
+    value = func_800632B0();
+    if (value & 0x80) {
+        value = *(u16 *)&obj->motionValue;
+        value = -value;
+
+final_store:
+        obj->motionValue = value;
+    }
 }
