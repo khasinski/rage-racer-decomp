@@ -51,8 +51,16 @@ def badge(path: Path, label: str, message: str, percent: float) -> None:
     )
 
 
+def _blank(match: re.Match) -> str:
+    """Replace a comment with spaces so offsets stay aligned with the raw text."""
+    return re.sub(r"[^\n]", " ", match.group(0))
+
+
 def strip_comments(text: str) -> str:
-    return re.sub(r"//.*", "", re.sub(r"/\*.*?\*/", "", text, flags=re.S))
+    # Length-preserving: a HANDWRITTEN_ASM note is located by its offset in the
+    # raw text, and a unit that holds several functions only classifies them
+    # correctly when the stripped offsets still line up.
+    return re.sub(r"//[^\n]*", _blank, re.sub(r"/\*.*?\*/", _blank, text, flags=re.S))
 
 
 # Sanctioned GTE/COP2 operations (see docs/ASM_AND_GTE_POLICY.md). Expressed
@@ -103,6 +111,8 @@ def is_plain_c(path: Path) -> bool:
 # Proven handwritten assembly (see docs/ASM_AND_GTE_POLICY.md) is excluded from
 # the progress denominator entirely: it is neither pending C work nor a C match.
 HANDWRITTEN_RE = re.compile(r"\bHANDWRITTEN_ASM\b")
+HANDWRITTEN_SYMBOL_RE = re.compile(r"^\s*\*?\s*Symbol:\s*(\w+)", re.M)
+ASM_ALIAS_RE = re.compile(r"\b(\w+)\s*\([^;{]*?\)\s*asm\(\"(\w+)\"\)")
 
 
 def is_handwritten(path: Path) -> bool:
@@ -121,6 +131,7 @@ FUNC_DEF = re.compile(
     re.M,
 )
 INCLUDE_ASM_RE = re.compile(r"\bINCLUDE_ASM\s*\(")
+INCLUDE_ASM_NAME_RE = re.compile(r"\bINCLUDE_ASM\s*\([^,]*,\s*(\w+)\s*\)")
 
 
 def count_functions(path: Path) -> int:
@@ -130,7 +141,7 @@ def count_functions(path: Path) -> int:
 
 
 def _function_bodies(text: str):
-    """Yield (name, body) for each function definition, by brace matching."""
+    """Yield (name, body, offset) for each definition, by brace matching."""
     for match in FUNC_DEF.finditer(text):
         if "static" in match.group(0) and "inline" in match.group(0):
             continue
@@ -144,25 +155,69 @@ def _function_bodies(text: str):
                 if depth == 0:
                     break
             index += 1
-        yield match.group(1), text[start : index + 1]
+        yield match.group(1), text[start : index + 1], match.start()
+
+
+SYMBOL_ADDRESS_RE = re.compile(r"^(?:func|D)_(8[0-9A-Fa-f]{7})$")
+
+
+def _header_aliases(cache={}) -> dict:
+    """C function name -> emitted symbol, from the `asm("...")` aliases in
+    include/. A unit that defines a named function gets its address this way."""
+    if not cache:
+        for header in (ROOT / "include").rglob("*.h"):
+            text = strip_comments(header.read_text(errors="ignore"))
+            for name, symbol in ASM_ALIAS_RE.findall(text):
+                cache.setdefault(name, symbol)
+    return cache
+
+
+def _address_of(name: str, aliases: dict) -> int | None:
+    for candidate in (name, aliases.get(name), _header_aliases().get(name)):
+        match = SYMBOL_ADDRESS_RE.match(candidate or "")
+        if match:
+            return int(match.group(1), 16)
+    return None
 
 
 def classify_functions(path: Path) -> dict:
-    """Count a unit's functions by kind.
+    """Count a unit's functions by kind. See classify_with_addresses."""
+    counts = {"plain": 0, "asm": 0, "handwritten": 0}
+    for kind, _address in classify_with_addresses(path):
+        counts[kind] += 1
+    return counts
+
+
+def classify_with_addresses(path: Path) -> list:
+    """Classify a unit's functions, each with its vram address when known.
 
     Attribution is per function, not per file: a unit may hold both plain C and
     a function that needs an assembly crutch, and grouping the two must not
-    reclassify the clean ones. Keys are "plain", "asm" and "handwritten".
+    reclassify the clean ones. Kinds are "plain", "asm" and "handwritten".
     """
     raw = path.read_text(errors="ignore")
     text = strip_comments(raw)
-    counts = {"plain": 0, "asm": 0, "handwritten": 0}
+    found = []
 
-    # A HANDWRITTEN_ASM note sits in the comment block above whatever it
-    # documents, so attribute each marker to the following stub or definition.
+    # A HANDWRITTEN_ASM note either names its subject on a `Symbol:` line - in
+    # which case it documents that symbol wherever in the unit it sits - or it
+    # sits in the comment block right above what it documents.
     handwritten_before = [m.start() for m in HANDWRITTEN_RE.finditer(raw)]
+    handwritten_symbols = set()
+    for start in handwritten_before:
+        symbol = HANDWRITTEN_SYMBOL_RE.search(raw, start, start + 1200)
+        if symbol:
+            handwritten_symbols.add(symbol.group(1))
 
-    def documented(position: int) -> bool:
+    # A unit-local `asm("func_XXXXXXXX")` alias lets a note name the emitted
+    # symbol while the definition carries the readable name.
+    aliases = dict(ASM_ALIAS_RE.findall(text))
+
+    def documented(position: int, name: str | None = None) -> bool:
+        if name and (
+            name in handwritten_symbols or aliases.get(name) in handwritten_symbols
+        ):
+            return True
         return position >= 0 and any(
             0 <= position - start < 4000 for start in handwritten_before
         )
@@ -170,23 +225,50 @@ def classify_functions(path: Path) -> dict:
     # Each INCLUDE_ASM stands in for one function that is still assembly, unless
     # it is documented handwritten assembly, which is excluded entirely.
     for match in INCLUDE_ASM_RE.finditer(text):
-        marker = raw.find(text[match.start() : match.start() + 40])
-        if documented(marker if marker >= 0 else match.start()):
-            counts["handwritten"] += 1
-        else:
-            counts["asm"] += 1
+        stub = INCLUDE_ASM_NAME_RE.match(text, match.start())
+        stub_name = stub.group(1) if stub else None
+        kind = "handwritten" if documented(match.start(), stub_name) else "asm"
+        found.append((kind, _address_of(stub_name or "", aliases)))
 
-    for name, body in _function_bodies(text):
-        marked = documented(raw.find(name))
+    for name, body, offset in _function_bodies(text):
+        marked = documented(offset, name)
         stripped = strip_nonblocking_asm(body)
         blocking = ASM_MARKERS.search(stripped) or ASM_RE.search(stripped)
         if marked and blocking:
-            counts["handwritten"] += 1
+            kind = "handwritten"
         elif blocking:
-            counts["asm"] += 1
+            kind = "asm"
         else:
-            counts["plain"] += 1
-    return counts
+            kind = "plain"
+        found.append((kind, _address_of(name, aliases)))
+    return found
+
+
+# The PS-X EXE maps file offset 0x800 to vram 0x80010000.
+BASE_VRAM = 0x80010000
+BASE_OFF = 0x800
+
+
+def _function_extents(classified: list, start: int, end: int):
+    """Split a subsegment's bytes across its functions, or None if it cannot be
+    done exactly (an unresolved address, or one outside the subsegment)."""
+    low = BASE_VRAM + (start - BASE_OFF)
+    high = BASE_VRAM + (end - BASE_OFF)
+    entries = []
+    for kind, address in classified:
+        if address is None or not low <= address < high:
+            return None
+        entries.append((address, kind))
+    entries.sort()
+    if len(dict(entries)) != len(entries):
+        return None
+    # Anything ahead of the first recognised function (alignment, or a leading
+    # routine the source scan could not place) goes to that first function.
+    bounds = [low] + [address for address, _kind in entries[1:]] + [high]
+    return [
+        (kind, bounds[index + 1] - bounds[index])
+        for index, (_address, kind) in enumerate(entries)
+    ]
 
 
 def main() -> int:
@@ -222,7 +304,10 @@ def main() -> int:
             total_bytes += size
             continue
 
-        kinds = classify_functions(src)
+        classified = classify_with_addresses(src)
+        kinds = {"plain": 0, "asm": 0, "handwritten": 0}
+        for unit_kind, _address in classified:
+            kinds[unit_kind] += 1
         counted = kinds["plain"] + kinds["asm"]
 
         handwritten_funcs += kinds["handwritten"]
@@ -231,14 +316,29 @@ def main() -> int:
             handwritten_bytes += size
             continue
 
-        # Bytes are still attributed per subsegment, so a unit that mixes plain
-        # C with a crutch counts its bytes as plain only when every function in
-        # it is plain.
         total_funcs += counted
-        total_bytes += size
         plain_funcs += kinds["plain"]
-        if kinds["asm"] == 0:
-            plain_bytes += size
+
+        # Bytes are attributed per function so that grouping functions into a
+        # translation unit cannot change the total: each function owns the
+        # bytes from its address up to the next one in the unit. A unit whose
+        # addresses cannot all be resolved falls back to whole-subsegment
+        # attribution, where a mixed unit counts as plain only when every
+        # function in it is plain.
+        extents = _function_extents(classified, start, end)
+        if extents is None:
+            total_bytes += size
+            if kinds["asm"] == 0:
+                plain_bytes += size
+            continue
+
+        for unit_kind, length in extents:
+            if unit_kind == "handwritten":
+                handwritten_bytes += length
+                continue
+            total_bytes += length
+            if unit_kind == "plain":
+                plain_bytes += length
 
     func_pct = plain_funcs / total_funcs * 100 if total_funcs else 0.0
     byte_pct = plain_bytes / total_bytes * 100 if total_bytes else 0.0
@@ -273,7 +373,7 @@ def main() -> int:
         "",
         f"_Generated by `tools/scripts/progress_report.py` on {date.today().isoformat()}. Regenerate with `make progress`._",
         "",
-        "A function counts as decompiled when it has no INCLUDE_ASM/INCLUDE_RODATA and no non-empty inline assembly, except sanctioned GTE/COP2 operations expressed through `psyq/gte_macros.h` (or an equivalent single documented cop2 op), which represent the hardware interface and do not lower progress (see `docs/ASM_AND_GTE_POLICY.md`). Register/symbol asm labels and empty barriers used for matching do not lower progress. Functions are counted and classified INDIVIDUALLY rather than per file, because a translation unit may hold several functions and one function needing an assembly crutch must not reclassify the plain C beside it. Code bytes are still attributed per subsegment, so a mixed unit counts its bytes as plain only when every function in it is plain. The built executable is byte-identical to retail (`make check VERSION=PAL`).",
+        "A function counts as decompiled when it has no INCLUDE_ASM/INCLUDE_RODATA and no non-empty inline assembly, except sanctioned GTE/COP2 operations expressed through `psyq/gte_macros.h` (or an equivalent single documented cop2 op), which represent the hardware interface and do not lower progress (see `docs/ASM_AND_GTE_POLICY.md`). Register/symbol asm labels and empty barriers used for matching do not lower progress. Functions are counted and classified INDIVIDUALLY rather than per file, because a translation unit may hold several functions and one function needing an assembly crutch must not reclassify the plain C beside it. Code bytes are attributed the same way: each function owns the bytes from its address to the next function in its unit, so grouping functions into a translation unit cannot move the totals. A unit whose addresses cannot all be resolved falls back to whole-subsegment attribution, where a mixed unit counts as plain only when every function in it is plain. The built executable is byte-identical to retail (`make check VERSION=PAL`).",
         "",
         f"{handwritten_funcs} functions ({handwritten_bytes} code bytes) are documented handwritten assembly (`HANDWRITTEN_ASM`, see `docs/ASM_AND_GTE_POLICY.md`) and are excluded from the totals below.",
         "",

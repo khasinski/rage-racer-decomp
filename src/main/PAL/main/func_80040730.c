@@ -2,6 +2,8 @@
 #include "psyq/gte.h"
 #include "game/state.h"
 #include "game/render.h"
+#include "game/track.h"
+#include "game/race.h"
 
 extern s16 D_801E4DCA;
 extern s16 D_801E4DC8;
@@ -71,4 +73,267 @@ void func_80040730(void) {
         drawId = 0x24;
     }
     GameSubmitModel((void *)0x1F800000, drawId);
+}
+
+extern s32 D_8009E710;
+extern s32 D_8009E778;
+extern s32 D_8009E704;
+
+s32 func_80068634(s32 arg0);
+void func_8005BEA8(s32 arg0, s32 arg1);
+
+void func_8004087C(s16 arg) {
+    s32 base;
+    s16 *p;
+    s16 *cur;
+    s16 *end;
+    s32 data;
+    s16 lo;
+    s32 s0, s1, s2, s3;
+    s32 val;
+    s32 t;
+    s32 a0v, a1v;
+
+    data = 0;
+    base = (s32)g_TrackEventData;
+    p = (s16 *)(base + 0x1B7C);
+    end = (s16 *)(base + 0x1C6C);
+    cur = p;
+    do {
+        lo = cur[0];
+        if (arg < lo) {
+            goto endchk;
+        }
+        if (cur[1] >= arg) {
+            goto found;
+        }
+    endchk:
+        if (lo == -1) {
+            break;
+        }
+        p = cur + 4;
+        cur = p;
+    } while ((s32)p < (s32)end);
+
+after:
+    if (data == 0) {
+        goto zero;
+    }
+    s0 = D_8009E710;
+    if (s0 >= 0) {
+        goto sub;
+    }
+    s0 += 0x100;
+    if (s0 <= 0) {
+        goto chk;
+    }
+    s0 = 0;
+    goto chk;
+found:
+    data = p[2];
+    goto after;
+sub:
+    s0 -= 0x100;
+    if (s0 >= 0) {
+        goto chk;
+    }
+    s0 = 0;
+chk:
+    if (s0 != 0) {
+        s0 = (s0 * D_8009E778) / 12775;
+        t = *(s32 *)0x1F80001C - 0xC00;
+        s3 = (t + g_TrackPoints[D_8009E704].angle) & 0xFFF;
+        if (s0 < 0 && (data & 2) > 0) {
+            val = s0 * func_80068634(s3);
+            if (val < 0) {
+                val += 0xFFF;
+            }
+            s1 = -(s0 + (val >> 12));
+            val = (-s0) * func_80068634(s3);
+            if (val < 0) {
+                val += 0xFFF;
+            }
+            s2 = -(s0 + (val >> 12));
+        } else if (s0 > 0 && (data & 1) > 0) {
+            val = s0 * func_80068634(s3);
+            if (val < 0) {
+                val += 0xFFF;
+            }
+            s2 = s0 + (val >> 12);
+            val = (-s0) * func_80068634(s3);
+            if (val < 0) {
+                val += 0xFFF;
+            }
+            s1 = s0 + (val >> 12);
+        } else {
+            s2 = 0;
+            s1 = 0;
+        }
+    } else {
+        s2 = 0;
+        s1 = 0;
+    }
+    if (g_MirrorMode) {
+        a0v = s2;
+        a1v = s1;
+    } else {
+        a0v = s1;
+        a1v = s2;
+    }
+    goto call;
+zero:
+    a0v = 0;
+    a1v = 0;
+call:
+    func_8005BEA8(a0v, a1v);
+}
+
+s32 func_80068568(s32 arg0);
+void func_8005C31C(s32 arg0, s32 arg1, s32 arg2);
+
+typedef struct {
+    s32 lo;    /* 0x00 */
+    s32 hi;    /* 0x04 */
+    u16 f08;   /* 0x08 */
+    u16 f0A;   /* 0x0A */
+    s32 f0C;   /* 0x0C */
+    s32 f10;   /* 0x10 */
+    s32 f14;   /* 0x14 */
+} TrackSeg;    /* size 0x18 */
+
+void func_80040ADC(s32 arg) {
+    register s32 base asm("v0");
+    register s32 startp asm("a1");
+    register TrackSeg *seg asm("a3");
+    register s32 v1 asm("v1");
+    register s32 t0 asm("t0");
+    register u16 a1raw asm("a1");
+    register u16 t1raw asm("t1");
+    register s32 sentinel asm("t2");
+    register s32 s0v asm("s0");
+    register s32 s1 asm("s1");
+    register s32 s2 asm("s2");
+    register s32 s3 asm("s3");
+    register s32 s4 asm("s4");
+    register s32 s5 asm("s5");
+    register s32 s6 asm("s6");
+    register s32 a2v asm("a2");
+    register s32 a1s asm("a1");
+    s32 v0;
+    s32 angle, sinv;
+
+    base = (s32)g_TrackEventData;
+    startp = base + 0x1C6C;
+    if (g_RaceSeries != 0) {
+        arg = g_TrackLength - arg;
+    }
+
+    s5 = 0;
+    a2v = 0;
+    s2 = 0;
+    s0v = 0;
+    sentinel = -1;
+    seg = (TrackSeg *)startp;
+loop:
+    v1 = seg->lo;
+    t0 = seg->hi;
+    if (v1 == sentinel) {
+        goto matched;
+    }
+    a1raw = seg->f08;
+    t1raw = seg->f0A;
+    if (arg < v1) {
+        goto next;
+    }
+    if (t0 < arg) {
+        goto next;
+    }
+    v0 = a1raw << 16;
+    __asm__("" : "=r"(v0) : "0"(v0));
+    a1s = v0 >> 16;
+    if (arg < v1 + a1s) {
+        v0 = arg - v1;
+    } else {
+        v0 = t1raw << 16;
+        __asm__("" : "=r"(v0) : "0"(v0));
+        a1s = v0 >> 16;
+        if ((t0 - a1s) < arg) {
+            v0 = t0 - arg;
+        } else {
+            goto set30;
+        }
+    }
+    v1 = (v0 * 48) / a1s;
+    s2 = v1;
+    goto load;
+set30:
+    s2 = 0x30;
+load:
+    s3 = seg->f0C;
+    s4 = seg->f10;
+    s6 = seg->f14;
+    goto matched;
+next:
+    s0v++;
+    seg++;
+    if (s0v < 2) {
+        goto loop;
+    }
+
+matched:
+    v0 = s2 << 16;
+    __asm__("" : "=r"(v0) : "0"(v0));
+    s0v = v0 >> 16;
+    if (s0v != 0) {
+        s3 -= *(s32 *)0x1F800008;
+        s4 -= *(s32 *)0x1F800010;
+        v0 = SquareRoot12((s3 * s3) / 4 + (s4 * s4) / 4);
+        v0 = s2 - (v0 >> 11);
+        s1 = v0;
+        __asm__("" : "=r"(v0) : "0"(v0));
+        v0 = s0v < (s16)v0;
+        __asm__("" : "=r"(v0) : "0"(v0));
+        if (v0) {
+            s1 = s2;
+        }
+        if ((s16)s1 < 0) {
+            s1 = 0;
+        }
+        angle = GameAtan2(s3, s4);
+        v1 = *(s32 *)0x1F80001C;
+        __asm__("" : "=r"(v1) : "0"(v1));
+        v1 -= 0xC00;
+        v1 += angle;
+        s0v = v1 & 0xFFF;
+        sinv = func_80068568(s0v);
+        v1 = s1 << 16;
+        __asm__("" : "=r"(v1) : "0"(v1));
+        s1 = v1 >> 16;
+        v0 = s2 + (s1 * sinv) / 4096;
+        __asm__("" : "=r"(v0) : "0"(v0));
+        s5 = v0 + 0x20;
+        sinv = func_80068568(s0v);
+        v1 = -s1;
+        __asm__("" : "=r"(v1) : "0"(v1));
+        v0 = s2 + (v1 * sinv) / 4096;
+        __asm__("" : "=r"(v0) : "0"(v0));
+        a2v = v0 + 0x20;
+        if (s6 < 0) {
+            s6 = -s6;
+        }
+    }
+
+    if (s6 == 1) {
+        if (g_MirrorMode != 0) {
+            func_8005C31C(2, (s16)s5, (s16)a2v);
+        } else {
+            func_8005C31C(2, (s16)a2v, (s16)s5);
+        }
+    } else {
+        if (g_MirrorMode != 0) {
+            func_8005C31C(3, (s16)s5, (s16)a2v);
+        } else {
+            func_8005C31C(3, (s16)a2v, (s16)s5);
+        }
+    }
 }

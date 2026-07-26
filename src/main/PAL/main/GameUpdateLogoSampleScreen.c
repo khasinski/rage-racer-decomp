@@ -1,6 +1,13 @@
 #include "common.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/audio.h"
+#include "game/car.h"
+#include "game/race.h"
+
+s32 GameDrawTeamNameScreen(s32 arg0);
+s32 GameDrawPaintColorScreen(s32 arg0);
+s32 GameDrawCarShopScreen(s32 arg0);
 
 extern s32 D_80082EA4;
 extern s32 D_80082EA8;
@@ -167,4 +174,455 @@ void GameUpdateLogoSampleScreen(void) {
         g_UiScriptProgress = 0;
         GameMenuBusy = 0;
     }
+}
+
+extern s32 D_8009B2E0;
+
+s32 GameDrawTeamNameScreen(s32 step) asm("func_800586B0");
+s32 GameDrawTeamNameScreen(s32 arg0) {
+    s32 value;
+
+    if (arg0 == 0) {
+        D_8009B2E0 = 0;
+        return;
+    }
+
+    if (arg0 > 0) {
+        value = arg0 + D_8009B2E0;
+        D_8009B2E0 = value;
+        if (value >= 0x1FD) {
+            D_8009B2E0 = 0x1FC;
+        }
+    } else {
+        value = arg0 + D_8009B2E0;
+        D_8009B2E0 = value;
+        if (value < 0) {
+            D_8009B2E0 = 0;
+        }
+    }
+
+    return D_8009B2E0;
+}
+
+extern u32 D_80081D34;
+
+void func_80051D6C(void);
+s32 func_8004E724(s32 a, s32 b);
+s32 func_800487D8(void *a, void *b, s32 c);
+void func_8001D530(void *a, s32 b);
+
+void GameUpdateTeamNameScreen(void) asm("func_8005873C");
+void GameUpdateTeamNameScreen(void) {
+    u16 pad;
+    s32 newdepth;
+
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
+    func_80051D6C();
+    if (GameMenuBusy != 0) goto reopen;
+
+    func_8004E724(1, GameMenuCursor);
+    if (func_800487D8(&D_80081D34, &g_UiScriptProgress, 1) == 0) return;
+    g_MenuOverlayPattern = -1;
+
+    if (g_TeamNameLength < 6) {
+        if ((g_PadEdge & 0xF000) && GameMenuCursorAnim < 0) {
+            if (g_PadEdge & 0x1000) { s32 u = GameMenuCursor; GameMenuCursor = (u < 0xB) ? u + 0x21 : u - 0xB; }
+            if (g_PadEdge & 0x4000) { s32 d = GameMenuCursor; GameMenuCursor = (d < 0x21) ? d + 0xB : d - 0x21; }
+            if (g_PadEdge & 0x8000) { s32 l = GameMenuCursor; GameMenuCursor = (l % 11 != 0) ? l - 1 : l + 0xA; }
+            if (g_PadEdge & 0x2000) {
+                register s32 r asm("$5");
+                register s32 res asm("$2");
+                s32 rn;
+                r = GameMenuCursor;
+                rn = r + 1;
+                if (rn % 11 == 0) res = r - 0xA; else res = rn;
+                GameMenuCursor = res;
+            }
+            g_MenuViewAngleTarget = 0;
+            g_MenuViewAngle = 0x3E8000;
+            GameMenuCursorAnim = GameMenuCursor;
+            GamePlaySoundCue(1);
+            goto after_sound;
+        }
+        goto after_sound;
+    }
+
+    if (!((g_PadEdge & 0xA000) && GameMenuCursorAnim < 0)) goto after_sound;
+    {
+        s32 nc = (GameMenuCursor == 0x2A) ? 0x2B : 0x2A;
+        GameMenuCursor = nc;
+        g_MenuViewAngleTarget = 0;
+        g_MenuViewAngle = 0x3E8000;
+        GameMenuCursorAnim = nc;
+    }
+    GamePlaySoundCue(1);
+after_sound:
+    pad = g_PadEdge2;
+    if (!(pad & 0x860)) goto maybe_pop;
+    {
+        s32 c = GameMenuCursor;
+        if (c == 0x2A) goto pop;
+        if (c != 0x2B) goto push;
+    }
+    GamePlaySoundCue(3);
+    GameMenuBusy = 1;
+    g_MenuOverlayPattern = 2;
+    g_MenuViewOffsetTarget = 0x3D090;
+    return;
+
+push:
+    {
+        u32 d;
+        GamePlaySoundCue(2);
+        g_TeamNameChars[g_TeamNameLength] = (u8)GameMenuCursor;
+        d = g_TeamNameLength;
+        if (d >= 5) GameMenuCursor = 0x2B;
+        if (d >= 7) newdepth = d; else newdepth = d + 1;
+    }
+    goto set_depth;
+
+maybe_pop:
+    if (!(pad & 0x90)) return;
+pop:
+    if (g_TeamNameLength == 0) return;
+    GamePlaySoundCue(4);
+    {
+        register s32 tv asm("$2");
+        tv = 0xA;
+        g_TeamNameChars[g_TeamNameLength] = tv;
+    }
+    newdepth = g_TeamNameLength - 1;
+set_depth:
+    g_TeamNameLength = newdepth;
+    return;
+
+reopen:
+    g_MenuHandlerIndex = -1;
+    g_MenuHandlerIndex2 = 9;
+    func_8004E724(-1, GameMenuCursor);
+    func_800487D8(&D_80081D34, &g_UiScriptProgress, -1);
+    if (g_UiScriptProgress > 0) return;
+    if (0x3D08F < g_MenuViewOffset) {
+        g_MenuScreen = 6;
+        g_MenuHandlerIndex = 6;
+        func_8001D530(&g_TeamNameChars, g_TeamNameLength);
+        g_UiScriptProgress = 0;
+        GameMenuBusy = 0;
+    }
+}
+
+extern s32 D_8009B2E4;
+
+s32 GameDrawPaintColorScreen(s32 step) asm("func_80058B88");
+s32 GameDrawPaintColorScreen(s32 arg0) {
+    s32 value;
+
+    if (arg0 == 0) {
+        D_8009B2E4 = 0;
+        return;
+    }
+
+    if (arg0 > 0) {
+        value = arg0 + D_8009B2E4;
+        D_8009B2E4 = value;
+        if (value >= 0x1FD) {
+            D_8009B2E4 = 0x1FC;
+        }
+    } else {
+        value = arg0 + D_8009B2E4;
+        D_8009B2E4 = value;
+        if (value < 0) {
+            D_8009B2E4 = 0;
+        }
+    }
+
+    return D_8009B2E4;
+}
+
+extern s32 D_80082EB4;
+extern u8 D_80082010;
+extern s32 D_801F17A0;
+
+void func_8005131C(void);
+s32 func_8004F048(void *, s32, s32);
+void func_80049418(s32, s32, s32, s32);
+void func_800489AC(s32, s32, s32);
+s32 func_800487D8(void *, void *, s32);
+void func_8001D8C4(s32);
+void func_8001DA74(s32);
+
+void GameUpdatePaintColorScreen(void) asm("func_80058C14");
+void GameUpdatePaintColorScreen(void) {
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
+    func_8005131C();
+
+    if (GameMenuBusy == 0) {
+        func_8004F048(&g_UiScriptProgress2, -1, D_80082EB4);
+        func_80049418(-1, 0, 1, 1);
+        func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
+        func_800487D8(&D_80082010, &g_UiScriptProgress, 0);
+        if (func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) {
+            return;
+        }
+        if (g_UiScriptProgress2 > 0) {
+            return;
+        }
+        g_MenuOverlayPattern = -1;
+        if (g_PadEdge2 & 0x1000) {
+            GamePlaySoundCue(1);
+            D_801F17A0 = D_801F17A0 > 0 ? D_801F17A0 - 1 : 2;
+        }
+        if (g_PadEdge2 & 0x4000) {
+            GamePlaySoundCue(1);
+            D_801F17A0 = D_801F17A0 < 2 ? D_801F17A0 + 1 : 0;
+        }
+        {
+            u16 f = g_PadEdge2;
+            if (f & 0x860) {
+                s32 sel = D_801F17A0;
+                s32 val;
+                if (sel == 0) {
+                    GamePlaySoundCue(2);
+                    val = g_CarTable[g_PlayerCarIndex].shapeIndex;
+                    GameMenuBusy = -1;
+                    g_UiScriptProgress2 = 0;
+                    D_80082EB4 = val;
+                } else if (sel == 1) {
+                    GamePlaySoundCue(2);
+                    val = g_CarTable[g_PlayerCarIndex].textureIndex;
+                    GameMenuBusy = -2;
+                    g_UiScriptProgress2 = 0;
+                    D_80082EB4 = val;
+                } else if (sel == 2) {
+                    GamePlaySoundCue(3);
+                    GameMenuBusy = 1;
+                    g_MenuOverlayPattern = 2;
+                    g_MenuViewOffsetTarget = 0x3D090;
+                }
+            } else if (f & 0x90) {
+                GamePlaySoundCue(3);
+                GameMenuBusy = 3;
+                g_MenuOverlayPattern = 2;
+                g_MenuViewOffsetTarget = 0x3D090;
+            }
+        }
+        return;
+    }
+
+    if (GameMenuBusy < 0) {
+        if (func_8004F048(&g_UiScriptProgress2, 1, D_80082EB4) != 0) {
+            if (g_PadEdge & 0x8000) {
+                GamePlaySoundCue(1);
+                D_80082EB4 = D_80082EB4 > 0 ? D_80082EB4 - 1 : 0x11;
+            }
+            if (g_PadEdge & 0x2000) {
+                GamePlaySoundCue(1);
+                D_80082EB4 = D_80082EB4 < 17 ? D_80082EB4 + 1 : 0;
+            }
+            if (GameMenuBusy == -1) {
+                u16 *btn = &g_PadEdge2;
+                if (*btn & 0x860) {
+                    GamePlaySoundCue(2);
+                    g_CarTable[g_PlayerCarIndex].shapeIndex = D_80082EB4;
+                    g_TimeAttackCars[g_PlayerCarIndex].shapeIndex = D_80082EB4;
+                    g_TimeAttackCars[g_PlayerCarIndex].textureIndex = g_CarTable[g_PlayerCarIndex].textureIndex;
+                    GameMenuBusy = 0;
+                }
+                if (*btn & 0x90) {
+                    GamePlaySoundCue(3);
+                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].shapeIndex;
+                    GameMenuBusy = 0;
+                }
+                func_8001D8C4(D_80082EB4);
+            } else {
+                u16 *btn = &g_PadEdge2;
+                if (*btn & 0x860) {
+                    GamePlaySoundCue(2);
+                    g_CarTable[g_PlayerCarIndex].textureIndex = D_80082EB4;
+                    g_TimeAttackCars[g_PlayerCarIndex].shapeIndex = g_CarTable[g_PlayerCarIndex].shapeIndex;
+                    g_TimeAttackCars[g_PlayerCarIndex].textureIndex = D_80082EB4;
+                    GameMenuBusy = 0;
+                }
+                if (*btn & 0x90) {
+                    GamePlaySoundCue(3);
+                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].textureIndex;
+                    GameMenuBusy = 0;
+                }
+                func_8001DA74(D_80082EB4);
+            }
+        }
+
+        func_80049418(1, 0, 1, 1);
+        func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
+        func_800487D8(&D_80082010, &g_UiScriptProgress, 0);
+        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
+        return;
+    }
+
+    g_MenuHandlerIndex = -1;
+    g_MenuHandlerIndex2 = 10;
+    func_800487D8(&D_80082010, &g_UiScriptProgress, -1);
+    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
+    func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
+    if (g_UiScriptProgress <= 0) {
+        g_MenuScreen = 6;
+        g_MenuHandlerIndex = 6;
+        D_801F17A0 = 0;
+        g_UiScriptProgress = 0;
+        GameMenuBusy = 0;
+    }
+}
+
+extern s32 D_8009B2E8;
+
+void func_80052158(s32 arg0, s32 arg1, s32 arg2);
+
+s32 GameDrawCarShopScreen(s32 step) asm("func_80059248");
+s32 GameDrawCarShopScreen(s32 arg0) {
+    register s32 value;
+    register s32 limit;
+    register s32 amount;
+    register s32 phase;
+    register s32 channel;
+
+    if (arg0 == 0) {
+        D_8009B2E8 = 0;
+        return;
+    }
+
+    if (arg0 > 0) {
+        value = D_8009B2E8 + arg0;
+        D_8009B2E8 = value;
+        if (value >= 0x1FD) {
+            D_8009B2E8 = 0x1FC;
+        }
+        value = 0;
+        goto update;
+    }
+
+    value = D_8009B2E8 + arg0;
+    D_8009B2E8 = value;
+    if (value < 0) {
+        D_8009B2E8 = 0;
+    }
+
+    value = D_8009B2E8;
+    limit = 0x1FC;
+    limit -= value;
+    value = (u32)(limit * limit) >> 0xB;
+
+update:
+    amount = value << 16;
+    amount >>= 16;
+    limit = g_PlayerCarIndex;
+    phase = ((u32)D_8009B2E8 >> 2) & 0xFF;
+    channel = limit;
+    func_80052158(amount, phase, channel);
+
+    return D_8009B2E8;
+}
+
+extern s32 D_8009B33C;
+extern s16 D_8019CA18;
+extern s16 D_801E41A4;
+
+s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
+
+void func_80059320(void) {
+    s32 index;
+    GameCarEntry *entry;
+
+    if (D_8009B33C != 0) {
+        D_8019CA18 = -1;
+        index = g_CarListCursor - 1;
+        if (index >= 0) {
+            entry = &g_CarTable[index];
+            while (index >= 0) {
+                if (entry->enabled == 0) {
+                    D_8019CA18 = index;
+                    break;
+                }
+                index--;
+                entry--;
+            }
+        }
+    } else {
+        D_8019CA18 = -1;
+        index = g_CarListCursor - 1;
+        if (index >= 0) {
+        backward_loop:
+            {
+                s32 value = GameGetCarUnlockLevel(index);
+                if (g_CarTable[index].enabled == 0) {
+                    s32 progression = g_RaceProgress->maxClassReached;
+                    if (progression < 4) {
+                        if ((progression + 1) < value) {
+                            index--;
+                            goto backward_check;
+                        }
+                        D_8019CA18 = index;
+                        goto backward_done;
+                    }
+                    if (progression >= value) {
+                        D_8019CA18 = index;
+                        goto backward_done;
+                    }
+                }
+                index--;
+            }
+        backward_check:
+            if (index >= 0) {
+                goto backward_loop;
+            }
+        }
+    }
+
+backward_done:
+    if (D_8009B33C != 0) {
+        D_801E41A4 = -1;
+        index = g_CarListCursor + 1;
+        if (index < 13) {
+            entry = &g_CarTable[index];
+            while (index < 13) {
+                if (entry->enabled == 0) {
+                    D_801E41A4 = index;
+                    break;
+                }
+                index++;
+                entry++;
+            }
+        }
+    } else {
+        D_801E41A4 = -1;
+        index = g_CarListCursor + 1;
+        if (index < 13) {
+        forward_loop:
+            {
+                s32 value = GameGetCarUnlockLevel(index);
+                if (g_CarTable[index].enabled == 0) {
+                    s32 progression = g_RaceProgress->maxClassReached;
+                    if (progression < 4) {
+                        if ((progression + 1) < value) {
+                            index++;
+                            goto forward_check;
+                        }
+                        D_801E41A4 = index;
+                        goto forward_done;
+                    }
+                    if (progression >= value) {
+                        D_801E41A4 = index;
+                        goto forward_done;
+                    }
+                }
+                index++;
+            }
+        forward_check:
+            if (index < 13) {
+                goto forward_loop;
+            }
+        }
+    }
+
+forward_done:
+    return;
 }

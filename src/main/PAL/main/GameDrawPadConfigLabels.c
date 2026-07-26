@@ -80,3 +80,82 @@ u8 *GameDrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
     } while (i < 5);
     return QueueDrawModePrimWide(ot, prim, 0x3B);
 }
+
+/* Screen positions, six 4-byte {x, y} rows each: where a label sits and where
+ * the button it names sits. */
+typedef struct CalloutPoint {
+    s16 x;
+    s16 y;
+} CalloutPoint;
+
+extern CalloutPoint D_8007C168[];
+extern CalloutPoint D_8007C180[];
+
+/* Screen animation counter; the callouts only draw while it is settled. */
+extern s32 D_801E8AA4;
+
+/* Local wide-parameter view of GameQueueLine; see GameQueueSprite.c. */
+u8 *QueueLineWide(
+    void *ot,
+    u8 *prim,
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    s32 r,
+    s32 g,
+    s32 b) asm("func_800172D4");
+
+/*
+ * The five green callout lines joining each action label to its button: one
+ * vertical drop from the label, then a two-pixel-thick horizontal run to the
+ * button. Suppressed while the panel is still sliding.
+ */
+u8 *GameDrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
+    s32 i;
+
+    if (D_801E8AA4 > -16 && D_801E8AA4 < 16) {
+        i = 0;
+        do {
+            CalloutPoint *lp = &D_8007C168[labelRow[i]];
+            CalloutPoint *bp = &D_8007C180[buttonRow[i]];
+
+            prim = QueueLineWide(
+                ot, prim, lp->x, lp->y, lp->x, bp->y, 0x20, 0xFF, 0x20);
+            prim = QueueLineWide(
+                ot, prim, lp->x, bp->y, bp->x, bp->y, 0x20, 0xFF, 0x20);
+            prim = QueueLineWide(
+                ot, prim, lp->x, bp->y - 1, bp->x, bp->y - 1, 0x20, 0xFF, 0x20);
+            i++;
+        } while (i < 5);
+    }
+    return prim;
+}
+
+/* Eight rows of five bytes: the label slot each action sits in, and the button
+ * each label points at, for the standard pad. */
+extern u8 D_8007C1C0[];
+extern u8 D_8007C1E8[];
+
+extern s16 D_8019CE08;
+
+/* One whole standard-pad diagram for the current selection: the five action
+ * labels, then the five callout lines from each label to its button. */
+u8 *GameDrawPadConfigDiagram(void *ot, u8 *prim) {
+    prim = GameDrawPadConfigLabels(ot, prim, &D_8007C1C0[D_8019CE08 * 5]);
+    return GameDrawPadConfigCallouts(
+        ot, prim, &D_8007C1C0[D_8019CE08 * 5], &D_8007C1E8[D_8019CE08 * 5]);
+}
+
+/* The NeGcon counterparts of D_8007C1C0 / D_8007C1E8. */
+extern u8 D_8007C210[];
+extern u8 D_8007C238[];
+
+extern s16 D_8019CB08;
+
+/* One whole NeGcon diagram for the current selection: labels, then callouts. */
+u8 *GameDrawNegconConfigDiagram(void *ot, u8 *prim) {
+    prim = GameDrawPadConfigLabels(ot, prim, &D_8007C210[D_8019CB08 * 5]);
+    return GameDrawPadConfigCallouts(
+        ot, prim, &D_8007C210[D_8019CB08 * 5], &D_8007C238[D_8019CB08 * 5]);
+}

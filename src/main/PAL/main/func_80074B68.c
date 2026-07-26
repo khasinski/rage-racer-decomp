@@ -56,3 +56,9 @@ void func_80074B68(s32 arg0, s32 arg1) {
     *(volatile s16 *)(D_8009DF24 + (dfIndex << 1)) = func_80074A6C(note, pitch);
     D_8009E0A0[voice & 0xFF] |= 4;
 }
+
+void func_80074D0C(void) {
+}
+
+void func_80074D14(void) {
+}

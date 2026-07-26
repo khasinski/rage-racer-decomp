@@ -2,6 +2,7 @@
 #include "psyq/cd.h"
 #include "game/state.h"
 #include "game/cd.h"
+#include "game/race.h"
 
 extern s32 D_8007F5F8;
 extern s32 D_8007F5FC;
@@ -106,8 +107,6 @@ void GameStepCdPauseRequest(void) {
         break;
     }
 }
-
-void GameStepCdResumeRequest(void) asm("func_800437B8");
 void GameStepCdResumeRequest(void) {
     s32 state;
     s32 status;
@@ -251,4 +250,22 @@ check_cd:
     }
 done:
     GameStepCdVolumeFade();
+}
+
+extern void *D_8019C7CC;
+
+void func_80043AC8(u8 *arg0, s32 arg1) {
+    void *ptr;
+
+    if (arg1 != 0) {
+        if (g_GrandPrixSeries != 0) {
+            ptr = arg0 + *(s32 *)(arg0 + 4);
+        } else {
+            ptr = arg0 + *(s32 *)(arg0 + 0);
+        }
+    } else {
+        ptr = arg0 + *(s32 *)(arg0 + 8);
+    }
+
+    D_8019C7CC = ptr;
 }

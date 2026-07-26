@@ -182,3 +182,297 @@ void func_8003CF14(s32 arg0, s32 updateMotion) {
     g_PlayerTrackProgress = D_801E3E14.field_70;
     GameSetCameraRotMatrix();
 }
+
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+    s32 w;
+} Vec4i;
+
+extern s32 g_CourseModelCount asm("D_801E40E4");
+extern s32 D_8007E2B8[];
+extern struct {
+    s16 x;
+    s16 y;
+} D_8007E290[];
+extern Vec4i D_8007E298[];
+
+void func_80017794(void *arg0, Vec4i *state, Matrix *mtx);
+
+void func_8003D458(s32 arg0) {
+    Matrix mtx;
+    Vec4i state;
+    s32 s1;
+    s32 s0;
+    register s32 value asm("$2");
+    s32 drawArg;
+    s32 rem;
+    s32 lim;
+
+    if (g_RacePhase < 2 && arg0 >= 0x51) {
+        GameBuildRotMatrixY(&mtx, D_8007E2B8[g_RaceSeries]);
+        MulMatrix2((Matrix *)0x1F800028, &mtx);
+        if (arg0 - 90 > 0) {
+            state = D_8007E298[g_RaceSeries];
+            s1 = (arg0 - 90) / 3;
+            state.x += D_8007E290[g_RaceSeries].x * (s0 = s1 / 15);
+            state.z += D_8007E290[g_RaceSeries].y * s0;
+            if (g_CourseIndex % 4 == 3) {
+                state.z += 0x5000;
+            }
+            func_80017794((void *)0x1F80011C, &state, &mtx);
+            rem = s1 - s0 * 15;
+            lim = g_CourseModelCount;
+            __asm__ __volatile__("");
+            value = rem + 0x28;
+            *(s32 *)0x1F800084 = 0;
+            drawArg = (value < lim) ? value : 1;
+        } else {
+            state = D_8007E298[g_RaceSeries];
+            if (g_CourseIndex % 4 == 3) {
+                state.z += 0x5000;
+            }
+            func_80017794((void *)0x1F80011C, &state, &mtx);
+            lim = g_CourseModelCount;
+            __asm__ __volatile__("");
+            value = 0x28;
+            *(s32 *)0x1F800084 = 0;
+            drawArg = (value < lim) ? value : 1;
+        }
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+    }
+}
+
+void func_8003D6E8(void) {
+}
+
+extern Vec4i D_8007E2C0[];
+extern u32 *g_VisibleCellMask asm("D_801E6828");
+extern s16 D_8007E2EA;
+extern s32 D_801E4BAC;
+extern s32 D_8007E2E4;
+extern s16 D_8007E2E8;
+extern s16 D_8009AFCC;
+extern s16 D_8007E2E0[];
+s32 GameRandom15(void) asm("func_800632B0");
+
+void GameDrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
+
+void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
+    Matrix mtx;
+    Matrix mtx2;
+    Vec4i state;
+    register s32 bucket asm("$2");
+    register s32 value asm("$6");
+    register u32 *visibility asm("$3");
+    register u32 *wordPtr asm("$4");
+    register s32 bit asm("$5");
+    register s32 visible asm("$3");
+    register s32 num asm("$3");
+    register s32 drawArg asm("$5");
+    register s32 sv asm("$2");
+    register s32 lim2 asm("$2");
+    register s32 *scr asm("$8");
+
+    state = D_8007E2C0[arg1];
+
+    if ((g_CourseIndex & 3) == 3) {
+        state.z += 0x5000;
+    }
+    if (g_GrandPrixClass == 5) {
+        return;
+    }
+
+    bucket = state.z + 0x400;
+    if (bucket < 0) {
+        bucket = state.z + 0xBFF;
+    }
+    bucket >>= 11;
+    bucket <<= 2;
+
+    value = state.x;
+    visibility = g_VisibleCellMask;
+    bit = value + 0x400;
+    wordPtr = (u32 *)(bucket + (s32)visibility);
+    if (bit < 0) {
+        bit = value + 0xBFF;
+    }
+    bucket = bit >> 11;
+    visible = 1 << bucket;
+    visible &= *wordPtr;
+    if (visible == 0) {
+        return;
+    }
+
+    D_8007E2EA = (arg0 / 4) % 16;
+    if (D_8007E2EA == 0 && (arg0 & 7) == 0 && D_801E4BAC == 0) {
+        D_8007E2E4 = 0;
+        D_8007E2E8 = g_RacePosition;
+        D_8009AFCC = (GameRandom15() & 7) / 3;
+        if (D_8007E2E8 >= 4) {
+            D_8007E2E8 = 0;
+        }
+    }
+
+    GameBuildRotMatrixY(&mtx, state.w);
+    GameBuildRotMatrixX(&mtx2, D_8007E2E0[arg1]);
+    MulMatrix(&mtx, &mtx2);
+    MulMatrix2((Matrix *)0x1F800028, &mtx);
+
+    if (g_GrandPrixMode == 0) {
+        return;
+    }
+
+    D_8007E2E4 = ((arg0 >> 3) & 3) << 16;
+
+    if (D_8007E2E8 != 0) {
+        if (D_8007E2EA < 13) {
+            func_80017794((void *)0x1F80011C, &state, &mtx);
+            num = D_8007E2EA + 10;
+            *(s32 *)0x1F800084 = 0;
+            drawArg = (num < g_CourseModelCount) ? num : 1;
+            GameSubmitCourseModel((void *)0x1F800000, drawArg);
+        } else {
+            func_80017794((void *)0x1F80011C, &state, &mtx);
+            num = D_8007E2E8;
+            *(s32 *)0x1F800084 = 0;
+            drawArg = (num < g_CourseModelCount) ? num : 1;
+            GameSubmitCourseModel((void *)0x1F800000, drawArg);
+        }
+
+        func_80017794((void *)0x1F80011C, &state, &mtx);
+        sv = D_8007E2E4;
+        *(s32 *)0x1F800084 = sv;
+        num = D_8009AFCC + 4;
+        lim2 = g_CourseModelCount;
+        drawArg = (num < lim2) ? num : 1;
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+    } else {
+        func_80017794((void *)0x1F80011C, &state, &mtx);
+        num = D_8007E2EA + 0x18;
+        scr = (s32 *)0x1F800084;
+        *scr = 0;
+        drawArg = (num < g_CourseModelCount) ? num : 1;
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+
+        func_80017794((void *)0x1F80011C, &state, &mtx);
+        sv = D_8007E2E4;
+        scr = (s32 *)0x1F800084;
+        *scr = sv;
+        num = D_8009AFCC + 7;
+        lim2 = g_CourseModelCount;
+        drawArg = (num < lim2) ? num : 1;
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+    }
+}
+
+extern s16 D_8007E2F2;
+extern s32 D_8007E2EC;
+extern s16 D_8007E2F0;
+
+void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
+
+void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    Matrix mtx;
+    Matrix mtx2;
+    Vec4i state;
+    register s32 bucket asm("$2");
+    register s32 value asm("$5");
+    register u32 *visibility asm("$3");
+    register u32 *wordPtr asm("$3");
+    register s32 bit asm("$4");
+    register s32 visible asm("$2");
+    register s32 num asm("$3");
+    register s32 drawArg asm("$5");
+    register s32 sv asm("$2");
+    register s32 lim2 asm("$2");
+    register s32 *scr asm("$8");
+
+    if (g_GrandPrixMode == 0) {
+        return;
+    }
+    if (g_GrandPrixClass == 5) {
+        return;
+    }
+
+    state = D_8007E2C0[arg1];
+    if ((g_CourseIndex & 3) == 3) {
+        state.z += 0x5000;
+    }
+
+    bucket = state.z + 0x400;
+    if (bucket < 0) {
+        bucket = state.z + 0xBFF;
+    }
+    bucket >>= 11;
+    bucket <<= 2;
+
+    value = state.x;
+    visibility = g_VisibleCellMask;
+    bit = value + 0x400;
+    wordPtr = (u32 *)(bucket + (s32)visibility);
+    if (bit < 0) {
+        bit = value + 0xBFF;
+    }
+    bucket = bit >> 11;
+    visible = 1 << bucket;
+    visible &= *wordPtr;
+    if (visible == 0) {
+        return;
+    }
+
+    D_8007E2F2 = (arg0 / 4) % 16;
+    if (D_8007E2F2 == 0 && (arg0 & 7) == 0 && arg3 == 1) {
+        D_8007E2EC = 0;
+        D_8007E2F0 = (GameRandom15() & 7) / 3;
+    }
+
+    GameBuildRotMatrixY(&mtx, state.w);
+    GameBuildRotMatrixX(&mtx2, D_8007E2E0[arg1]);
+    MulMatrix(&mtx, &mtx2);
+    MulMatrix2((Matrix *)0x1F800028, &mtx);
+
+    D_8007E2EC = ((arg0 >> 3) & 3) << 16;
+
+    if (arg2 != 0) {
+        func_80017794((void *)0x1F80011C, &state, &mtx);
+        num = D_8007E2F2 + 0xA;
+        scr = (s32 *)0x1F800084;
+        *scr = 0;
+        drawArg = (num < g_CourseModelCount) ? num : 1;
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+
+        func_80017794((void *)0x1F80011C, &state, &mtx);
+        sv = D_8007E2EC;
+        drawArg = 1;
+        scr = (s32 *)0x1F800084;
+        *scr = sv;
+        lim2 = g_CourseModelCount;
+        num = D_8007E2F0;
+        __asm__("" : "=r"(num) : "0"(num), "r"(lim2));
+        num = num + 4;
+    } else {
+        func_80017794((void *)0x1F80011C, &state, &mtx);
+        num = D_8007E2F2 + 0x18;
+        scr = (s32 *)0x1F800084;
+        *scr = 0;
+        drawArg = (num < g_CourseModelCount) ? num : 1;
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+
+        func_80017794((void *)0x1F80011C, &state, &mtx);
+        sv = D_8007E2EC;
+        drawArg = 1;
+        scr = (s32 *)0x1F800084;
+        *scr = sv;
+        lim2 = g_CourseModelCount;
+        num = D_8007E2F0;
+        __asm__("" : "=r"(num) : "0"(num), "r"(lim2));
+        num = num + 7;
+    }
+
+    if (num < lim2) {
+        drawArg = num;
+    }
+    GameSubmitCourseModel((void *)0x1F800000, drawArg);
+}

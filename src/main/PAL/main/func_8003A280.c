@@ -2,6 +2,9 @@
 #include "game/car.h"
 #include "game/state.h"
 #include "game/track.h"
+#include "game/race.h"
+
+void func_8003A974(void);
 
 extern u8 g_PlayerTrackProgress[] asm("D_8009E744");
 extern s32 D_8009E778;
@@ -176,4 +179,238 @@ void func_8003A280(GameCarRuntime *car, s32 arg1) {
     }
 
     state->field_11C = state->field_11C + state->field_120;
+}
+
+/* g_RankedCars - 1: this walker is indexed from the slot before the leader. */
+extern GameCarRuntime *D_801E40B8[];
+
+void func_8003A6A4(GameCarRuntime *arg0, s32 arg1) {
+    GameCarRuntime *entry;
+    s32 offset;
+    s32 pos0Base;
+    s32 pos0;
+    s32 pos1;
+    s32 value;
+
+    offset = arg1 << 2;
+    pos0Base = arg0->field_68;
+    entry = *(GameCarRuntime **)((u8 *)D_801E40B8 + offset);
+    pos0 = pos0Base + arg0->field_6C;
+    pos1 = entry->field_68 + entry->field_6C;
+
+    if ((pos1 - pos0) < 0x2800) {
+        return;
+    }
+
+    if (entry->field_A4 >= 0x385) {
+        value = entry->field_130;
+        value = ((value * 5) + ((value * 5) << 4)) / 100;
+        entry->field_130 = value;
+    }
+}
+
+/* g_Cars[0].field_68 / .field_6C - retail references both split symbols. */
+extern s32 D_801F18BC;
+extern s32 D_801F18C0;
+
+/*
+ * Ranks the first four cars by race progress (`field_68 + field_6C`) and
+ * publishes the ordering into g_RankedCars: slot 0 the leader, slot 3 the
+ * last of the four, slots 1/2 the middle pair in order. func_8003A974 reads
+ * the result to rubber-band the AI.
+ */
+void func_8003A728(void) {
+    s32 i;
+    s32 offset;
+    s32 maxValue;
+    s32 minValue;
+    s32 value;
+    s32 sums[4];
+    s32 *sumPtr;
+    s16 indices[4];
+
+    i = 0;
+    sumPtr = sums;
+    offset = 0;
+    do {
+        *sumPtr = *(s32 *)((u8 *)&D_801F18BC + offset) + *(s32 *)((u8 *)&D_801F18C0 + offset);
+        offset += sizeof(GameCarRuntime);
+        i++;
+        sumPtr++;
+    } while (i < 4);
+
+    indices[0] = 0;
+    indices[3] = 0;
+    maxValue = sums[0];
+    minValue = sums[0];
+    for (i = 1; i < 4; i++) {
+        value = sums[i];
+        if (maxValue < value) {
+            maxValue = value;
+            indices[0] = i;
+        } else if (value < minValue) {
+            minValue = value;
+            indices[3] = i;
+        }
+    }
+
+    g_RankedCars[0] = &g_Cars[indices[0]];
+    g_RankedCars[3] = &g_Cars[indices[3]];
+
+    for (i = 0; i < 4; i++) {
+        if ((i != indices[0]) && (i != indices[3])) {
+            indices[1] = i;
+            break;
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        if ((i != indices[0]) && (i != indices[3]) && (i != indices[1])) {
+            indices[2] = i;
+            break;
+        }
+    }
+
+    if (sums[indices[1]] > sums[indices[2]]) {
+        g_RankedCars[1] = &g_Cars[indices[1]];
+        g_RankedCars[2] = &g_Cars[indices[2]];
+    } else {
+        g_RankedCars[1] = &g_Cars[indices[2]];
+        g_RankedCars[2] = &g_Cars[indices[1]];
+    }
+}
+
+extern s32 g_PlayerProgressA asm("D_8009E73C");
+extern s32 g_PlayerProgressB asm("D_8009E740");
+extern s32 D_801E4BB4;
+extern s32 D_801E7740;
+extern s16 D_801E6F26;
+extern s16 D_8009E6A0;
+
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+
+void func_8003A974(void) {
+    s32 s6;
+    s32 s5;
+    s32 s4;
+    s32 s3;
+    s16 *s2;
+    s32 s1;
+    s32 s0;
+
+    s6 = g_PlayerProgressA + g_PlayerProgressB;
+    if ((g_CourseIndex & 3) == 3) {
+        s5 = 0xC00;
+        s4 = 0x1400;
+    } else {
+        s5 = 0x600;
+        s4 = 0xE00;
+    }
+
+    if (g_RacePhase >= 4) {
+        return;
+    }
+
+    s1 = 3;
+    s3 = 0x20;
+    s2 = &D_801E6F26;
+    s0 = 4;
+
+    do {
+        s32 a0 = g_RankedCars[s1]->field_68 + g_RankedCars[s1]->field_6C - s6;
+
+        if (a0 >= 0) {
+            if (s1 == 0) {
+                D_801E4BB4 &= ~1;
+            }
+            D_801E7740 = s1;
+            if (s4 < a0) {
+                D_801E4BB4 &= ~(0x200 >> s0);
+                if (g_RankedCars[s1]->field_A4 >= 0x321) {
+                    g_RankedCars[s1]->field_130 = g_RankedCars[s1]->field_130 * 90 / 100;
+                }
+                return;
+            }
+            if (s5 < a0) {
+                s32 counter;
+
+                if (g_RankedCars[s1]->field_A4 >= 0x3E9) {
+                    g_RankedCars[s1]->field_130 = g_RankedCars[s1]->field_130 * 98 / 100;
+                }
+                counter = *s2;
+                D_801E4BB4 |= (s3 >> s0);
+                if (counter >= 0x12D) {
+                    *s2 = 0;
+                }
+                return;
+            }
+            if (!((0x200 >> s0) & D_801E4BB4)) {
+                s32 bit;
+                s32 flags;
+
+                switch ((u32)g_SceneTimer % 3) {
+                case 1:
+                    goto cue_33;
+                case 0:
+                    goto cue_32;
+                case 2:
+                    goto cue_34;
+                }
+cue_32:
+                if (D_8009E6A0 != 0) {
+                    GamePlaySoundCue(0x32);
+                }
+                bit = 0x200;
+                goto cue_done;
+cue_33:
+                if (D_8009E6A0 != 0) {
+                    GamePlaySoundCue(0x33);
+                }
+                bit = 0x200;
+                goto cue_done;
+cue_34:
+                if (D_8009E6A0 != 0) {
+                    GamePlaySoundCue(0x34);
+                }
+                bit = 0x200;
+cue_done:
+                flags = D_801E4BB4;
+                *s2 = 0;
+                D_801E4BB4 = (bit >> s0) | flags;
+                return;
+            }
+            (*(u16 *)s2)++;
+            return;
+        } else {
+            if (s1 == 0 && !(D_801E4BB4 & 1) && a0 < -0x1C00) {
+                if (D_8009E6A0 != 0 && g_RacePosition == 1) {
+                    GamePlaySoundCue(0x2D);
+                }
+                D_801E4BB4 = (D_801E4BB4 & ~0x10) | 1;
+            } else if (a0 >= -0x7FF && !((s3 >> s0) & D_801E4BB4)) {
+                if (g_SceneTimer & 1) {
+                    if (D_8009E6A0 != 0) GamePlaySoundCue(0x2F);
+                } else {
+                    if (D_8009E6A0 != 0) GamePlaySoundCue(0x30);
+                }
+                D_801E4BB4 |= (s3 >> s0);
+            } else {
+                if (a0 < -0x1000) {
+                    D_801E4BB4 &= ~(s3 >> s0);
+                } else if (a0 < -0x800) {
+                    if (*s2 >= 0x12D) {
+                        if (g_SceneTimer & 1) {
+                            if (D_8009E6A0 != 0) GamePlaySoundCue(0x37);
+                        } else {
+                            if (D_8009E6A0 != 0) GamePlaySoundCue(0x36);
+                        }
+                        *s2 = 0;
+                    }
+                }
+            }
+            s2--;
+            s0--;
+            s1--;
+        }
+    } while (s1 >= 0);
 }

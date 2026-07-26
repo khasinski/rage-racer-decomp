@@ -1,9 +1,13 @@
 #include "common.h"
 #include "game/state.h"
+#include "game/audio.h"
+#include "game/menu.h"
+
+void GameDrawNegconMaxTwistScreen(void);
 
 /*
  * Four {u, v} texel pairs copied into a local that is never read back; see
- * GameDrawNegconMaxTwistScreen.c for why this is spelled as a struct copy.
+ * GameDrawNegconMaxTwistScreen for why this is spelled as a struct copy.
  */
 typedef struct NegconUvTemplate {
     u8 uv[8];
@@ -22,7 +26,7 @@ extern s16 D_8007C260[];
 
 void func_80027874(s32 x, s32 y, char *str, s32 clutIndex);
 
-/* Local wide-parameter views; see GameQueueSprite.c / GameDrawLeftArrow.c. */
+/* Local wide-parameter views; see GameQueueSprite.c / GameSetGteLightMatrix.c. */
 u8 *DrawLeftArrowWide(
     void *ot,
     u8 *prim,
@@ -108,4 +112,135 @@ void GameDrawNegconSteerPlayScreen(void) {
     prim = QueueLineWide(ot, prim, 0x94, 0xE6, 0xA8, 0xE6, 0, 0, 0);
     *(u8 **)0x1F800000 =
         QueueLineWide(ot, prim, 0x94, 0xE7, 0xA8, 0xE7, 0, 0, 0);
+}
+
+extern u8 g_PadType asm("D_801E4369");
+/* Its backup, taken by GameBeginNegconCalibration. */
+extern u16 D_8019C75C;
+/* The arrow pulse angle the setup screens advance every frame. */
+extern s32 D_8007C13C;
+/* One of the four controller-screen animation counters. */
+extern s32 D_801E8A9C;
+
+void func_80023750(s32 arg0);
+
+/*
+ * Game mode 10: pick the steering play with left/right, confirm with
+ * start/cross (on to mode 11, the max-twist screen) or cancel with
+ * circle/square. Cancelling - and unplugging the NeGcon - restores the
+ * backed-up setting on the way back to mode 1.
+ */
+void GameUpdateNegconSteerPlayScreen(void) {
+    g_AnimTimer++;
+    D_8007C13C += 96;
+    if (g_PadEdge2 & 0x90) {
+        GamePlaySoundCue(3);
+        g_GameMode = 1;
+        D_8019CAD0 = D_8019C75C;
+    } else if (g_PadEdge2 & 0x860) {
+        GamePlaySoundCue(2);
+        g_GameMode = 11;
+    }
+    if (g_PadEdge2 & 0x8000) {
+        if (D_8019CAD0 > 0) {
+            GamePlaySoundCue(8);
+            D_8019CAD0 = D_8019CAD0 - 1;
+        }
+    }
+    if (g_PadEdge2 & 0x2000) {
+        if (D_8019CAD0 < 3) {
+            GamePlaySoundCue(8);
+            D_8019CAD0 = D_8019CAD0 + 1;
+        }
+    }
+    if (g_PadType != 0x23) {
+        g_GameMode = 1;
+        D_8019CAD0 = D_8019C75C;
+    }
+    D_801E8A9C = -896;
+    GameDrawNegconSteerPlayScreen();
+    func_80023750(4);
+    GameDrawControllerSetupScene(1);
+}
+
+extern NegconUvTemplate D_80010084;
+
+/* "Maximum twist." */
+extern char D_8001008C[];
+/* The 0..3 maximum-twist setting this screen edits. */
+extern s16 D_801E418C;
+
+/*
+ * Game mode 11's overlay: the caption, the two nudge arrows (lit only while
+ * the setting can still move that way), the gauge sprite whose width and texel
+ * column follow the 0..3 setting, its end cap, and the framed panel.
+ */
+void GameDrawNegconMaxTwistScreen(void) {
+    NegconUvTemplate unused;
+    u8 *ot;
+    u8 *prim;
+    s32 xoff;
+    s32 w;
+
+    unused = D_80010084;
+    func_80027874(0x18, 0x30, D_8001008C, 0x7F81);
+    ot = g_DrawBuffer + 0xCC;
+    prim = *(u8 **)0x1F800000;
+    prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, D_801E418C != 0);
+    prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, D_801E418C != 3);
+    if (D_801E418C == 3) {
+        xoff = 0;
+        w = 0x24;
+    } else {
+        xoff = 0xC;
+        w = 0x18;
+    }
+    prim = QueueSpriteTransWide(
+        ot, prim, xoff + 0x88, 0x30, w, 0x18, D_801E418C * 24, 0x30, 0x7F81);
+    prim = QueueSpriteTransWide(ot, prim, 0xAC, 0x30, 4, 0x18, 0x78, 0x30, 0x7F81);
+    prim = QueueDrawModePrimWide(ot, prim, 0x3F);
+    prim = (u8 *)GameAddTilePrim(
+        (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
+    *(s32 *)0x1F800000 = GameAddTilePrim(
+        (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
+}
+
+/* Its backup, taken by GameBeginNegconCalibration. */
+extern u16 D_8019CB04;
+
+/*
+ * Game mode 11: pick the maximum twist range with left/right, confirm with
+ * start/cross or cancel with circle/square. Cancelling - and unplugging the
+ * NeGcon - restores the backed-up setting on the way back to mode 1.
+ */
+void GameUpdateNegconMaxTwistScreen(void) {
+    g_AnimTimer++;
+    if (g_PadEdge2 & 0x90) {
+        GamePlaySoundCue(3);
+        g_GameMode = 1;
+        D_801E418C = D_8019CB04;
+    } else if (g_PadEdge2 & 0x860) {
+        GamePlaySoundCue(2);
+        g_GameMode = 1;
+    }
+    if (g_PadEdge2 & 0x8000) {
+        if (D_801E418C > 0) {
+            GamePlaySoundCue(8);
+            D_801E418C = D_801E418C - 1;
+        }
+    }
+    if (g_PadEdge2 & 0x2000) {
+        if (D_801E418C < 3) {
+            GamePlaySoundCue(8);
+            D_801E418C = D_801E418C + 1;
+        }
+    }
+    if (g_PadType != 0x23) {
+        g_GameMode = 1;
+        D_801E418C = D_8019CB04;
+    }
+    D_801E8A9C = -896;
+    GameDrawNegconMaxTwistScreen();
+    func_80023750(4);
+    GameDrawControllerSetupScene(1);
 }

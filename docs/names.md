@@ -671,6 +671,30 @@ frame-matching hack there calls it with seven arguments against one declared
 parameter, which only compiles without a prototype. That is evidence the
 original translation unit also declared it K&R-style.
 
+### What closes a run, in practice
+
+Sweeping every `PAL/main` `c` segment for merge candidates (cap 8 functions /
+700 lines) left **131 boundaries** that are not the cap. They fall into four
+classes, and only the first two are evidence about the original build:
+
+| Class | Count | What it means |
+|---|---:|---|
+| conflicting declaration of a shared symbol | 50 | the two sides spell one `D_` global with different types (`u16`/`s16`, `volatile`/plain) or one callee with a different signature. Both spellings are load-bearing, so the two functions were **not** one unit. |
+| the merged unit does not compile | 27 | the definition's own parameter types disagree with the prototype in a header one side includes — e.g. `GameDrawLeftArrow(…, s32 x, s32 y, …)` against `game/state.h`'s `s16`. The definition side never saw that header. |
+| per-file compiler | 27 | the `Makefile` pins the object to gcc 2.7.2 (or an explicit 2.6.3 rule); a unit compiles as one object, so such a file cannot join a neighbour under a different compiler. |
+| named by a `.rodata` subsegment | 27 | the config places an asm rodata block through `[…, .rodata, PAL/main/<unit>]`, and splat emits `<unit>.c.o(.rodata)` for it. Such a file may **lead** a unit but may not be merged away, or the link loses the object. |
+
+Two mechanical constraints are easy to get wrong and both produce a build that
+fails rather than a wrong ROM:
+
+- **Adjacency is over *all* `c` segments, not just `PAL/main` ones.** libsnd and
+  libspu units are interleaved into the same address order; two `PAL/main`
+  files that look consecutive in a filtered list can have a libsnd unit between
+  them, and merging them relocates that unit.
+- **`asm/` and the objects that `.include` it have no make dependency.** After
+  `make split` regenerates a stub, the `.c.o` that includes it must be deleted
+  by hand or make will happily relink a stale object.
+
 ### Toolchain note: cc1 crashes on merged units
 
 cc1 segfaults *while formatting a diagnostic* when a call passes a pointer whose

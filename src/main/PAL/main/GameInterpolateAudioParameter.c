@@ -1,4 +1,8 @@
 #include "common.h"
+#include "game/audio.h"
+#include "game/sound.h"
+#include "psyq/snd.h"
+#include "game/car.h"
 
 extern s16 g_SoundSlotTone[] asm("D_80082F28");
 extern s16 D_80082F2A[];
@@ -141,4 +145,184 @@ void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
     func_8005C6C0();
     func_8005C168();
     func_8005CDB0();
+}
+
+void GameSetDefaultReverbDepth(void) {
+    GameSetReverbDepth(0x28, 0x28);
+}
+
+extern s32 D_801E6D8C;
+void func_8007865C(s32 arg0);
+void func_80072B04(s32 arg0);
+void func_8005B190(s32 arg0, s32 arg1);
+void func_8005E7DC(void);
+void GameInitSequenceAudio(void) asm("func_8005DBD8");
+void GameInitSequenceAudio(void) {
+    func_8007865C(0);
+    func_80072B04(0x12);
+    func_8005B190(0x28, 0x28);
+    D_801E6D8C = 0;
+    func_8005E7DC();
+}
+
+extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
+extern s32 D_801E6CE8;
+extern s32 D_801E6CEC;
+extern s32 D_801E6CF0;
+extern s32 D_801E6CF4;
+extern s32 D_801E6CF8;
+extern s32 D_800125FC[];
+
+s32 func_80050FA8(s32 arg0);
+
+void GameInitEffectVoiceRuntime(void) asm("func_8005DC1C");
+void GameInitEffectVoiceRuntime(void) {
+    func_8007865C(0);
+    SsSetVoiceCount(8);
+
+    {
+        register s32 i asm("$4");
+        register s32 neg asm("$6");
+        register s32 *ptr asm("$5");
+        register s32 offset asm("$3");
+
+        i = 0;
+        neg = -1;
+        ptr = &g_AudioSlotMask;
+        offset = 0;
+        for (; i < 2; i++) {
+            *(s32 *)((u8 *)&D_801E6D00[0].mode + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D00[0].left + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D00[0].right + offset) = neg;
+            ptr[0x78 / 4] = 0;
+            ptr = (s32 *)((u8 *)ptr + 0x18);
+            *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset) = 0;
+            offset += 0x18;
+        }
+    }
+
+    {
+        register s32 i asm("$4");
+        register s32 neg asm("$5");
+        register s32 value asm("$6");
+        register s32 offset asm("$3");
+
+        i = 0;
+        neg = -1;
+        value = 0x1E00;
+        offset = 0;
+        for (; i < 4; i++) {
+            *(s32 *)((u8 *)&D_801E6D30[0].state + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D30[0].note + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D30[0].tone + offset) = neg;
+            *(s32 *)((u8 *)&D_801E6D30[0].pitch + offset) = value;
+            *(s32 *)((u8 *)&D_801E6D30[0].volume + offset) = 0;
+            offset += 0x14;
+        }
+    }
+
+    {
+        register s32 value asm("$2");
+
+        value = -1;
+        D_801E6CE8 = value;
+        g_PanVoiceVolumeL = value;
+        D_801E6CF4 = value;
+        D_801E6CF0 = value;
+        value = 0x1E00;
+        D_801E6CEC = 0;
+        D_801E6CF8 = value;
+    }
+
+    GameSetEffectVoicesEnabled(1);
+    GameSetReverbPreset(2, 0, 0);
+    GameSetLoadedTableVolumeScale(D_800125FC[func_80050FA8(g_PlayerCarIndex)]);
+}
+
+extern s32 D_801E6D84;
+extern s32 D_801E6D88;
+
+void GameRestoreReverbDepth(s32 arg0) {
+    if (arg0 != 0) {
+        GameSetReverbDepth(D_801E6D84, D_801E6D88);
+    } else {
+        GameSetReverbDepth(0, 0);
+    }
+}
+
+s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
+
+void GameForcePanVoiceEnabled(s32 enabled) asm("func_8005DDB8");
+void GameForcePanVoiceEnabled(s32 enabled) {
+    s32 values[2];
+    register s32 i asm("$7");
+    register s32 *src asm("$6");
+    register s32 *dst asm("$5");
+    register s32 scale asm("$3");
+    register s32 raw asm("$2");
+    register s32 voice asm("$4");
+    register s32 left asm("$5");
+    register s32 right asm("$6");
+    register s32 zeroArg asm("$7");
+    register s32 unused asm("$16");
+
+    i = 0;
+    dst = values;
+    src = &g_PanVoiceVolumeL;
+    do {
+        if (*src < 2) {
+            *dst = 0;
+        } else {
+            *dst = *src;
+        }
+        dst++;
+        i++;
+        src++;
+    } while (i < 2);
+
+    if (enabled != 0) {
+        raw = values[0];
+        scale = g_EffectVolumeScale;
+        left = raw * scale;
+        raw = values[1];
+        if (left < 0) {
+            left += 0x7F;
+        }
+        unused = 0;
+        asm volatile("" : : "r"(unused));
+        raw *= scale;
+        left >>= 7;
+        if (raw < 0) {
+            raw += 0x7F;
+        }
+        right = raw >> 7;
+
+        if (left >= 0) {
+            if (left >= 0x81) {
+                left = 0x80;
+            }
+        } else {
+            left = 0;
+        }
+
+        if (right >= 0) {
+            if (right >= 0x81) {
+                right = 0x80;
+            }
+        } else {
+            right = 0;
+        }
+
+        SsUtSetVVol(0x15, left, right);
+        voice = 0x15;
+        right = 0xF;
+        asm volatile("" : : "r"(voice), "r"(right));
+        raw = 0x3C;
+        left = g_VabIds[0];
+        zeroArg = 0;
+        SsUtKeyOnV(voice, left, right, zeroArg, raw, 0, 0, 0);
+    } else {
+        SsUtKeyOffV(0x15);
+    }
 }

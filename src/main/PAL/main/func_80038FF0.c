@@ -3,28 +3,9 @@
 #include "game/track.h"
 #include "game/race.h"
 
-s32 func_80068568(s32 arg0);
-
-/*
- * Car body oscillation / bounce. While motionMode is non-zero, decays
- * motionModeTimer and drives a decaying sine wave (amplitude from
- * motionValue, phase from the timer) into the car's render offsets
- * (field_20 / field_28). motionMode selects the axis/shape of the bounce:
- * 1 & 5 both axes, 2 & 4 vertical only, 3 lateral only.
- */
-
-
-
-
-/*
- * Detects whether the car crossed a route marker this frame: scans the 8-entry
- * row (0x40 stride) of the marker table g_TrackEventData keyed by the car's routeRow,
- * comparing trackProgress against previousTrackProgress (the lap-direction flag
- * g_RaceSeries flips the comparison). Returns the crossed-marker code, or 0.
- * Register-pinned, goto-structured.
- */
-
 s32 func_80039184(GameCarRuntime *arg0);
+
+s32 func_80068568(s32 arg0);
 
 /*
  * Jump / launch setup: when func_80039184 reports a marker crossing, seeds the
@@ -44,8 +25,6 @@ extern u8 D_801F18C4[];
 extern u8 D_801F198C[];
 
 extern u8 D_801F198E[];
-
-void func_800393AC(GameCarRuntime *arg0, s32 arg1);
 
 void func_80038FF0(GameCarRuntime *car) {
     s32 value;
@@ -602,3 +581,5 @@ void func_800396FC(u8 *car, s32 gear)
   }
 
 }
+
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80038FF0", func_80039980);

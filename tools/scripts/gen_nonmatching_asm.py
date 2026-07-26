@@ -20,6 +20,31 @@ C_FUNC_RE = re.compile(
     r"^\s*(?:[A-Za-z_][A-Za-z0-9_]*\s+)+(?P<name>func_[0-9A-Fa-f]{8})\s*\([^;]*\)\s*\{",
     re.MULTILINE,
 )
+# A decompiled function that carries a real name is defined as `Name(...) {` and
+# gets its address from an `asm("func_XXXXXXXX")` alias on a declaration, either
+# in the same file or in a header. Both halves are needed so that a unit which
+# mixes named C functions with INCLUDE_ASM stubs still bounds each stub at the
+# next C function instead of swallowing it.
+C_NAMED_DEF_RE = re.compile(
+    r"^[A-Za-z_][A-Za-z0-9_ \t\*]*?(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*\([^;{]*\)\s*\{",
+    re.MULTILINE,
+)
+ASM_ALIAS_RE = re.compile(
+    r"(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*\([^;{]*\)\s*asm\(\"(?P<symbol>[A-Za-z0-9_]+)\"\)"
+)
+
+
+def collect_asm_aliases(*roots: Path) -> dict[str, str]:
+    """Map C function name -> the asm symbol its declaration aliases it to."""
+    aliases: dict[str, str] = {}
+    for root in roots:
+        if not root.exists():
+            continue
+        for pattern in ("*.h", "*.c"):
+            for path in root.rglob(pattern):
+                for match in ASM_ALIAS_RE.finditer(path.read_text()):
+                    aliases.setdefault(match.group("name"), match.group("symbol"))
+    return aliases
 
 
 def parse_subsegments(config: Path) -> list[tuple[int, str, str, int]]:
@@ -37,8 +62,9 @@ def parse_subsegments(config: Path) -> list[tuple[int, str, str, int]]:
 
 
 def parse_wrappers(
-    src_root: Path, version: str
+    src_root: Path, version: str, aliases: dict[str, str] | None = None
 ) -> tuple[dict[str, list[str]], dict[str, list[str]], dict[str, str]]:
+    aliases = aliases or {}
     asm_by_unit: dict[str, list[str]] = {}
     c_funcs_by_unit: dict[str, list[str]] = {}
     rodata_by_name: dict[str, str] = {}
@@ -46,9 +72,12 @@ def parse_wrappers(
         text = path.read_text()
         rel = path.relative_to(src_root).with_suffix("").as_posix()
         asm_by_unit[f"{version}/{rel}"] = [match.group(1) for match in ASM_WRAP_RE.finditer(text)]
-        c_funcs_by_unit[f"{version}/{rel}"] = [
-            match.group("name") for match in C_FUNC_RE.finditer(text)
-        ]
+        names = [match.group("name") for match in C_FUNC_RE.finditer(text)]
+        for match in C_NAMED_DEF_RE.finditer(text):
+            symbol = aliases.get(match.group("name"))
+            if symbol is not None:
+                names.append(symbol)
+        c_funcs_by_unit[f"{version}/{rel}"] = names
         for match in RODATA_WRAP_RE.finditer(text):
             rodata_by_name[match.group(1)] = rel
     return asm_by_unit, c_funcs_by_unit, rodata_by_name
@@ -148,7 +177,10 @@ def main() -> int:
     if not config.exists() or not target.exists() or not src_root.exists():
         return 0
 
-    asm_wrappers_by_unit, c_funcs_by_unit, rodata_wrappers = parse_wrappers(src_root, args.version)
+    aliases = collect_asm_aliases(root / "include", src_root)
+    asm_wrappers_by_unit, c_funcs_by_unit, rodata_wrappers = parse_wrappers(
+        src_root, args.version, aliases
+    )
     label_addresses = parse_label_addresses(labels)
     target_bytes = target.read_bytes()
 

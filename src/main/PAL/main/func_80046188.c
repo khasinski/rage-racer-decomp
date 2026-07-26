@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/render.h"
+#include "psyq/gte.h"
 
 /*
  * Builds a single-axis rotation matrix into `out` (0x1000 == 1.0 fixed-point).
@@ -54,4 +55,101 @@ void func_80046188(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axis
         out->m[2][2] = 0x1000;
         break;
     }
+}
+
+void func_800684B0(Matrix *arg0, s32 arg1);
+s32 func_800689A8(s32 arg0);
+void func_800681F0(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ);
+void func_80069858(s32 *matrix);
+void func_800698E8(s32 *matrix);
+
+/*
+ * Builds a billboard / look-at view Matrix for a GameRenderObject: the eye is
+ * obj->{x,y,z} and the look-at target is obj->{field_0C,field_10,field_14}.
+ * `len` is the distance (func_800689A8 sqrt); computes a pitch and a yaw axis
+ * rotation (func_80046188), the translation (func_800681F0), then per-row
+ * fixed-point projection scaling (<<1 / <<2). Returns 1 if eye==target, else 0.
+ */
+s32 func_80046248(GameRenderObject *obj) {
+    Matrix m;
+    GameRenderAxisMatrix am;
+    volatile s32 pad[18];
+    s32 outX;
+    s32 outY;
+    s32 outZ;
+    s32 len;
+    s32 horiz;
+    s32 pitch;
+
+    m.m[0][0] = 0x1000;
+    m.m[0][1] = 0;
+    m.m[0][2] = 0;
+    m.m[1][0] = 0;
+    m.m[1][1] = 0x1000;
+    m.m[1][2] = 0;
+    m.m[2][0] = 0;
+    m.m[2][1] = 0;
+    m.m[2][2] = 0x1000;
+    func_800684B0(&m, 0);
+
+    len = func_800689A8((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
+                        (obj->field_10 - obj->y) * (obj->field_10 - obj->y) +
+                        (obj->field_14 - obj->z) * (obj->field_14 - obj->z));
+    if (len == 0) {
+        return 1;
+    }
+
+    horiz = obj->y - obj->field_10;
+    pitch = (horiz << 12) / len;
+    pitch = -pitch;
+    horiz = func_800689A8((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
+                          (obj->field_14 - obj->z) * (obj->field_14 - obj->z));
+    func_80046188(&am, (s16)pitch, (s16)((horiz << 12) / len), 0x78);
+    MulMatrix(&m, &am);
+
+    if (horiz != 0) {
+        s32 t1;
+        s32 t2;
+
+        len = horiz;
+        horiz = obj->field_0C - obj->x;
+        t1 = (horiz << 12) / len;
+        horiz = obj->field_14 - obj->z;
+        t2 = (horiz << 12) / len;
+        func_80046188(&am, (s16)(-t1), (s16)t2, 0x79);
+        MulMatrix(&m, &am);
+    }
+
+    func_800681F0((s16 *)&m, -obj->x, -obj->y, -obj->z, &outX, &outY, &outZ);
+    m.t[0] = outX;
+    m.t[1] = outY;
+    m.t[2] = outZ;
+    m.m[0][0] <<= 1;
+    m.m[0][1] <<= 1;
+    m.m[0][2] <<= 1;
+    m.m[1][0] <<= 2;
+    m.m[1][1] <<= 2;
+    m.m[1][2] <<= 2;
+    m.m[2][0] <<= 1;
+    m.m[2][1] <<= 1;
+    m.m[2][2] <<= 1;
+    m.t[0] <<= 1;
+    m.t[1] <<= 1;
+    m.t[2] <<= 1;
+    func_80069858((s32 *)&m);
+    func_800698E8((s32 *)&m);
+    return 0;
+}
+
+// Fixed-point blend in 0..10000 scale.
+s32 func_80046598(s32 arg0, s32 arg1) {
+    s32 initial;
+    s32 value;
+    s32 doubled;
+
+    initial = 0x2710 - arg0;
+    value = initial;
+    doubled = arg0 * 2;
+    value = (value * doubled) / 10000;
+    return ((value * arg1) + (arg0 * arg0)) / 10000;
 }

@@ -14,6 +14,8 @@
 #include "game/menu.h"
 #include "game/render.h"
 
+s32 GameDrawLogoSampleScreen(s32 arg0);
+
 extern s32 g_MenuConfirmTimer asm("D_8009B300");
 extern s32 D_8009B314;
 extern u8 g_MenuSubCursor asm("D_8009B2F0");
@@ -289,4 +291,32 @@ void GameUpdateTeamLogoScreen(void)
       GameMenuBusy = 0;
     }
   }
+}
+
+extern s32 D_8009B2DC;
+
+s32 GameDrawLogoSampleScreen(s32 step) asm("func_8005803C");
+s32 GameDrawLogoSampleScreen(s32 arg0) {
+    s32 value;
+
+    if (arg0 == 0) {
+        D_8009B2DC = 0;
+        return;
+    }
+
+    if (arg0 > 0) {
+        value = arg0 + D_8009B2DC;
+        D_8009B2DC = value;
+        if (value >= 0x1FD) {
+            D_8009B2DC = 0x1FC;
+        }
+    } else {
+        value = arg0 + D_8009B2DC;
+        D_8009B2DC = value;
+        if (value < 0) {
+            D_8009B2DC = 0;
+        }
+    }
+
+    return D_8009B2DC;
 }

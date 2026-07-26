@@ -1,5 +1,6 @@
 #include "common.h"
 
+void func_80067F04(void);
 
 extern volatile u32 *D_800942BC;
 extern volatile u32 *D_800942C8;
@@ -7,7 +8,6 @@ extern s32 D_800942EC;
 extern s32 D_800942F0;
 
 void func_80067984(void);
-void func_80067F04(void);
 s32 func_80067F38(void);
 
 s32 func_80067DBC(s32 arg0) {
@@ -67,3 +67,8 @@ tail:
 returnPending:
     return pending;
 }
+
+extern s32 D_80094300;
+extern s32 D_80094304;
+s32 VSync(s32 mode) asm("func_8006DD30");
+void func_80067F04(void) { D_80094300 = VSync(-1) + 240; D_80094304 = 0; }

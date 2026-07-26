@@ -2,6 +2,7 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/state.h"
+#include "game/cd.h"
 
 extern GameRenderView *g_CarModelAsset asm("D_8009E698");
 extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
@@ -141,4 +142,58 @@ void func_8001DAB0(GameRenderObject *obj) {
     if (clipHandle != 0) {
         func_8001C794();
     }
+}
+
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8001DAB0", func_8001DFC0);
+
+extern s32 D_8009F094;
+extern s32 g_StreamReturnScene asm("D_8019C760");
+s32 func_8005B9CC(void);
+void func_8006A534(s32 arg0, s32 arg1);
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
+void GameBeginFmv(s32 arg0) asm("func_8001E6B4");
+void GameBeginFmv(s32 arg0) {
+    func_8005B9CC();
+    GameResetCdAudioState();
+    D_8009F094 = 0;
+    g_StreamReturnScene = arg0;
+    g_SceneId = 5;
+    func_8006A534(0, 0);
+    CdControl(9, 0, 0);
+}
+
+extern u32 g_AssetBase asm("D_8019C904");
+
+void GameStartFmvPlayback(u32 arg0) asm("func_8001E79C");
+void GameDecodeFmvFrame(void) asm("func_8001E8A4");
+void GameEndFmv(void) asm("func_8001EA34");
+
+void GameUpdateFmv(void) asm("func_8001E71C");
+void GameUpdateFmv(void) {
+    s32 state = D_8009F094;
+
+    if (state == 1) {
+        goto state_1;
+    }
+    if (state < 2) {
+        if (state == 0) {
+            goto state_0;
+        }
+        goto done;
+    }
+    if (state == 2) {
+        goto state_2;
+    }
+    goto done;
+
+state_0:
+    GameStartFmvPlayback(g_AssetBase);
+state_1:
+    GameDecodeFmvFrame();
+    goto done;
+
+state_2:
+    GameEndFmv();
+
+done:
 }

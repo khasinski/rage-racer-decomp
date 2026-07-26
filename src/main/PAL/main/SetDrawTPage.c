@@ -1,4 +1,6 @@
 #include "common.h"
+#include "psyq/gpu.h"
+#include "psyq/kernel.h"
 
 s32 func_800657E4(void);
 
@@ -49,4 +51,217 @@ low_mode:
 
 done:
     *(u32 *)&arg0[4] = encoded;
+}
+
+void func_80065198(u8 *arg0, u8 *arg1) {
+    s32 sign;
+    s32 value;
+    s32 size;
+
+    sign = *(s16 *)&arg1[4];
+    value = sign * *(s16 *)&arg1[6];
+    value += 1;
+    sign = (u32)value >> 31;
+    value += sign;
+    value >>= 1;
+    size = value + 4;
+    if ((u32)(value - 1) >= 0xB) {
+        size = 0;
+    }
+
+    *(u32 *)&arg0[4] = 0x01000000;
+    arg0[3] = size;
+    *(u32 *)&arg0[8] = 0xA0000000;
+    *(u32 *)&arg0[0xC] = *(u32 *)&arg1[0];
+    *(u32 *)&arg0[0x10] = *(u32 *)&arg1[4];
+}
+
+s32 func_800651FC(u8 *arg0, u8 *arg1) {
+    s32 value;
+
+    value = arg0[3] + arg1[3] + 1;
+    if (value >= 0x21) {
+        return -1;
+    }
+    arg0[3] = value;
+    *(u32 *)arg1 = 0;
+    return 0;
+}
+
+extern char D_80013374[];
+extern char D_8001339C[];
+extern char D_800133B4[];
+extern char D_800133C4[];
+extern char D_800133DC[];
+extern char D_800133E8[];
+extern char D_800133F4[];
+extern char D_80013410[];
+extern char D_8001342C[];
+extern char D_80013438[];
+extern void (*D_800941E4)(char *, ...);
+
+void DumpDrawEnv(DrawEnv *arg0) asm("func_80065234");
+void DumpDrawEnv(DrawEnv *arg0) {
+    s32 mode;
+    u32 value;
+
+    D_800941E4(D_8001339C, arg0->clip.x, arg0->clip.y, arg0->clip.w, arg0->clip.h);
+    D_800941E4(D_800133B4, arg0->ofs[0], arg0->ofs[1]);
+    D_800941E4(D_800133C4, arg0->tw.x, arg0->tw.y, arg0->tw.w, arg0->tw.h);
+    D_800941E4(D_800133DC, arg0->dtd);
+    D_800941E4(D_800133E8, arg0->dfe);
+
+    mode = func_800657E4();
+    if (mode == 1) {
+        goto high_mode;
+    }
+
+    mode = func_800657E4();
+    if (mode != 2) {
+        goto low_mode;
+    }
+
+high_mode:
+    value = arg0->tpage;
+    D_800941E4(D_80013374, (value >> 9) & 3, (value >> 7) & 3, (value << 6) & 0x7C0, (value << 3) & 0x300);
+    return;
+
+low_mode:
+    value = arg0->tpage;
+    D_800941E4(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value << 6) & 0x7C0, ((value << 4) & 0x100) + ((value >> 2) & 0x200));
+}
+
+void DumpDispEnv(DispEnv *arg0) asm("func_800653B4");
+void DumpDispEnv(DispEnv *arg0) {
+    D_800941E4(D_800133F4, arg0->disp.x, arg0->disp.y, arg0->disp.w, arg0->disp.h);
+    D_800941E4(D_80013410, arg0->screen.x, arg0->screen.y, arg0->screen.w, arg0->screen.h);
+    D_800941E4(D_8001342C, arg0->isinter);
+    D_800941E4(D_80013438, arg0->isrgb24);
+}
+
+extern char D_80013478[];
+extern char D_80013498[];
+extern u8 D_800941A0[];
+extern GpuCallbacks *D_800941E0;
+extern u8 D_800941E8[];
+extern u8 D_800941E9;
+extern u8 D_800941EA;
+extern u16 D_800941EC;
+extern u16 D_800941EE;
+extern u8 D_80094268[];
+extern u8 D_8009427C[];
+
+void func_80068180(u8 *dst, s32 value, s32 count);
+void func_800681AC(void *arg0);
+s32 func_80067C80(s32 arg0);
+
+void func_80065460(s32 mode) {
+    register s32 maskedMode asm("$17");
+    register u8 *graphState asm("$16");
+    register s32 graphType asm("$2");
+    register u8 *clearEnv asm("$4");
+    register s32 fillValue asm("$5");
+
+    maskedMode = mode & 7;
+    if ((maskedMode == 0) || (maskedMode == 3)) {
+        graphState = D_800941E8;
+        GameDebugPrintf(D_80013478, D_800941A0, graphState);
+        func_80068180(graphState, 0, 0x80);
+        KernelCallbackSlot3();
+        func_800681AC((void *)((u32)D_800941E0 & 0xFFFFFF));
+        graphType = func_80067C80(maskedMode != 0);
+        clearEnv = graphState + 0x10;
+        asm("" : "=r"(clearEnv) : "0"(clearEnv));
+        *(volatile u8 *)graphState = graphType;
+        {
+            s32 st0 = *(volatile u8 *)graphState;
+            u16 v;
+            s32 st1;
+
+            D_800941E9 = 1;
+            v = *(u16 *)&D_80094268[st0 * 4];
+            st1 = *(volatile u8 *)graphState;
+            fillValue = -1;
+            D_800941EC = v;
+            D_800941EE = *(u16 *)&D_8009427C[st1 * 4];
+        }
+        func_80068180(clearEnv, fillValue, 0x5C);
+        func_80068180(graphState + 0x6C, -1, 0x14);
+        graphType = *(volatile u8 *)graphState;
+    } else {
+        if (D_800941EA >= 2) {
+            D_800941E4(D_80013498, mode);
+        }
+        D_800941E0->resetGraph(1);
+    }
+}
+
+extern void (* volatile GPU_printf)(char *, ...) asm("D_800941E4");
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
+extern u8 g_GraphType asm("D_800941E8");
+extern u8 g_GraphDebug asm("D_800941EA");
+extern u8 g_GraphReverse asm("D_800941EB");
+extern char D_800134AC[];
+extern char D_800134C4[];
+
+s32 SetGraphReverse(s32 arg0) asm("func_800655B8");
+
+s32 SetGraphReverse(s32 arg0) {
+    register s32 newValue asm("$17") = arg0;
+    register u8 *state asm("$16") = &g_GraphReverse;
+    register s32 old asm("$18") = *state;
+    GpuCallbacks *callbacks;
+    GpuCallbacks *callbacks2;
+    s32 value;
+    s32 command;
+
+    if (g_GraphDebug >= 2) {
+        GPU_printf(D_800134AC, newValue);
+    }
+
+    callbacks = g_GpuFuncs;
+    *state = newValue;
+    value = callbacks->read(8);
+    if (*state != 0) {
+        command = value | 0x08000080;
+    } else {
+        command = value | 0x08000000;
+    }
+    g_GpuFuncs->submit(command);
+
+    if (g_GraphType == 2) {
+        callbacks2 = g_GpuFuncs;
+        if (g_GraphReverse != 0) {
+            command = 0x20000501;
+        } else {
+            command = 0x20000504;
+        }
+        callbacks2->submit(command);
+    }
+
+    return old;
+}
+
+s32 SetGraphDebug(u8 arg0) asm("func_800656CC");
+
+s32 SetGraphDebug(u8 arg0) {
+    register volatile u8 *ptr asm("$3") = &g_GraphDebug;
+    register s32 old asm("$16") = *ptr;
+
+    *ptr = arg0;
+    if (arg0 != 0) {
+        void (*func)(char *, ...) = GPU_printf;
+        register s32 a1 asm("$5");
+        s32 a2;
+        s32 a3;
+        register char *fmt asm("$4");
+
+        a1 = *ptr;
+        asm volatile("" : "=r"(a1) : "0"(a1));
+        a2 = g_GraphType;
+        a3 = g_GraphReverse;
+        fmt = D_800134C4;
+        func(fmt, a1, a2, a3);
+    }
+    return old;
 }

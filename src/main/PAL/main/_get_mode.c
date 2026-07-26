@@ -211,3 +211,77 @@ u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {
 
     return 0;
 }
+
+extern u8 g_GraphReverse asm("D_800941EB");
+
+u_long get_dx(DispEnv *env) asm("func_80066CB0");
+
+u_long get_dx(DispEnv *env) {
+    register volatile u8 *modep asm("$2") = &g_GraphType;
+    register s32 value asm("$2");
+    register s32 mode asm("$3");
+
+    value = *modep;
+    asm("" : "=r"(value) : "0"(value));
+    mode = value & 0xFF;
+
+    switch (mode) {
+    case 1:
+        return g_GraphReverse ? 0x400 - env->disp.x - env->disp.w : env->disp.x;
+    case 2:
+        return g_GraphReverse ? 0x400 - env->disp.x - (env->disp.w / 2)
+                          : env->disp.x / 2;
+    default:
+        return env->disp.x;
+    }
+}
+
+extern u32 *D_800942BC;
+
+u32 _status(void) asm("func_80066D6C");
+u32 _status(void) {
+    return *D_800942BC;
+}
+
+extern volatile u32 *D_800942CC;
+extern volatile u32 *D_800942D0;
+extern volatile u32 *D_800942D4;
+extern volatile u32 *D_800942D8;
+
+void func_80067F04(void);
+s32 func_80067F38(void);
+
+s32 func_80066D84(u32 *arg0, s32 arg1) {
+    s32 size;
+    u32 mask;
+    volatile u32 *status;
+    s32 offset;
+
+    size = arg1;
+    status = D_800942D8;
+    *status |= 0x08000000;
+    *D_800942D4 = 0;
+    offset = (size << 2) - 4;
+    arg0 = (u32 *)((u8 *)arg0 + offset);
+    *D_800942CC = (u32)arg0;
+    *D_800942D0 = size;
+    *D_800942D4 = 0x11000002;
+    func_80067F04();
+
+    if ((*D_800942D4 & 0x01000000) != 0) {
+        mask = 0x01000000;
+        while (1) {
+            u32 statusValue;
+
+            if (func_80067F38() != 0) {
+                return -1;
+            }
+            statusValue = *D_800942D4;
+            statusValue &= mask;
+            if (statusValue == 0) {
+                break;
+            }
+        }
+    }
+    return size;
+}

@@ -63,3 +63,82 @@ return_zero:
 done:
     return result;
 }
+
+extern volatile u32 *D_800942B8;
+extern volatile u32 *D_800942BC;
+
+s32 func_800680A4(u32 arg0) {
+    volatile u32 *gp0;
+    u32 status;
+
+    *D_800942BC = 0x10000007;
+    gp0 = D_800942B8;
+    status = *gp0 & 0xFFFFFF;
+
+    if (status != 2) {
+        *gp0 = (*D_800942BC & 0x3FFF) | 0xE1001000;
+        *D_800942B8;
+
+        if ((*D_800942BC & 0x1000) == 0) {
+            return 0;
+        }
+
+        if ((arg0 & 8) == 0) {
+            return 1;
+        }
+
+        *D_800942BC = 0x20000504;
+        return 2;
+    }
+
+    if ((arg0 & 8) == 0) {
+        return 3;
+    }
+
+    *D_800942BC = 0x9000001;
+    return 4;
+}
+
+void MemFill(u8 *dst, u8 value, s32 count) asm("func_80068180");
+void MemFill(u8 *dst, u8 value, s32 count) {
+    volatile s32 unused;
+    s32 i = count - 1;
+
+    if (count != 0) {
+        s32 end = -1;
+
+        do {
+            *dst = value;
+            i--;
+            dst++;
+        } while (i != end);
+    }
+}
+
+u32 func_800681AC[4] __attribute__((section(".text"))) = {
+    0x240A00A0,
+    0x01400008,
+    0x24090049,
+    0,
+};
+
+u8 *MemCopy(u8 *dst, u8 *src, s32 count) asm("func_800681BC");
+u8 *MemCopy(u8 *dst, u8 *src, s32 count) {
+    u8 *ret;
+
+    if (dst == 0) {
+        return 0;
+    }
+
+    ret = dst;
+    if (count > 0) {
+        do {
+            *dst = *src;
+            src++;
+            count--;
+            dst++;
+        } while (count > 0);
+    }
+
+    return ret;
+}

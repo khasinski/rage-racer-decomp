@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/cd.h"
+#include "psyq/cd.h"
 
 extern s32 D_8007F5FC;
 extern u8 g_CdVolume asm("D_8009B194");
@@ -9,4 +10,48 @@ void GameSetCdMixPreset(s32 arg0) asm("func_8004318C");
 void GameSetCdMixPreset(s32 arg0) {
     D_8007F5FC = arg0;
     GameSetCdVolume(g_CdVolume);
+}
+
+extern CdlLOC D_8009AFD4[];
+extern CdlLOC D_8009AFDC[];
+extern void *D_8007F568[];
+extern s32 D_801E6C80;
+extern u8 D_8009B198[];
+
+void GameBuildCdTrackTable(void) asm("func_800431BC");
+void GameBuildCdTrackTable(void) {
+    register CdlLOC *toc asm("$16");
+    register s32 i asm("$17");
+    register CdlLOC *tocDst asm("$18");
+    register u8 *file asm("$19");
+    register s32 count asm("$2");
+
+    toc = D_8009AFD4;
+    D_801E6C80 = CdGetToc(toc);
+    if (D_801E6C80 > 0) {
+        i = 1;
+        toc++;
+        do {
+            CdIntToPos(CdPosToInt_Local(toc) + 0x3C, toc);
+            count = D_801E6C80;
+            i++;
+        } while ((count >= i) ? (toc++, 1) : (toc++, 0));
+    }
+
+    i = 2;
+    file = D_8009B198;
+    tocDst = D_8009AFDC;
+    toc = (CdlLOC *)D_8007F568;
+    do {
+        if (DsSearchFile(file, *(void **)toc) == 0) {
+            break;
+        }
+        *tocDst = *(CdlLOC *)file;
+        tocDst++;
+
+        i++;
+        toc++;
+    } while (i < 0x12);
+
+    D_801E6C80 = 0x10;
 }
