@@ -1,8 +1,13 @@
 #include "common.h"
+
 extern s32 D_801E40B8, D_801E42E0, D_801E42A0, D_801E42E4;
 extern u16 D_801E436E;
 void func_80065860(s32 arg0);
 void func_800218A0(s32 arg0);
+extern u8 *D_8019C900;
+s32 func_80016EC4(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
+
 void func_80022FAC(void) {
     s32 v0, v1;
     if ((D_801E40B8 = D_801E40B8 + 1) == 2) {
@@ -25,4 +30,23 @@ void func_80022FAC(void) {
         D_801E42E4 = 2;
     }
     func_800218A0(D_801E42E0);
+}
+
+void func_800230B0(void) {
+    u8 *base;
+    s32 clut;
+    s32 height;
+    volatile s32 *scratch;
+    s32 next;
+
+    base = D_8019C900 + 0xCC;
+    height = 0xF0;
+    clut = 0x3FDB;
+    scratch = (volatile s32 *)0x1F800000;
+
+    next = *scratch;
+    next = func_80016EC4(base, next, 0, 0, 0x100, height, 0, 0, clut);
+    next = func_80017390(base, next, 6);
+    next = func_80016EC4(base, next, 0x100, 0, 0x40, height, 0, 0, clut);
+    *scratch = func_80017390(base, next, 7);
 }

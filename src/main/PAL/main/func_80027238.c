@@ -3,11 +3,9 @@
 extern u8 D_800111C4;
 extern u8 D_800111DC;
 extern u8 D_800111F4;
-
 extern volatile s32 D_8007D790;
 extern volatile s32 D_8007D794;
 extern volatile s32 D_8007D79C;
-
 extern void (*D_8007D78C)(s32, s32);
 extern volatile s32 D_8007D798;
 extern volatile s32 D_8007D7A0;
@@ -17,13 +15,10 @@ extern volatile s32 D_8007D7AC;
 extern volatile s32 D_8007D7B0;
 extern volatile s32 D_8007D7B4;
 extern volatile s32 D_8007D7B8;
-
 void func_8006A970(void *arg0, s32 arg1);
 s32 func_8006AADC(void *arg0);
 void func_80063C38(void *arg0);
 s32 func_8006DD30(s32 arg0);
-s32 func_8006A574(s32 arg0);
-s32 func_8006A58C(s32 arg0);
 s32 func_8006A5A4(s32 arg0, s32 arg1, s32 arg2);
 s32 func_8006A3E8(void);
 s32 func_8006A418(void);
@@ -31,6 +26,8 @@ s32 func_8006A3F8(void);
 void func_8006A494(void);
 void func_8006A6DC(s32 arg0, s32 arg1);
 s32 func_8002745C(s32 arg0);
+void func_8006A574(s32 arg0);
+void func_8006A58C(s32 arg0);
 
 void func_80027238(u8 arg0, s32 arg1) {
     volatile s32 *p;
@@ -135,4 +132,14 @@ s32 func_8002745C(s32 arg0) {
     D_8007D7A4 = D_8007D790;
     D_8007D7A8 = func_8006DD30(-1);
     return D_8007D7A4;
+}
+
+void func_80027634(void) {
+    volatile s32 *ptr;
+
+    ptr = &D_8007D7A4;
+    *ptr = 0;
+    func_8006A574(D_8007D7B4);
+    func_8006A58C(D_8007D7B8);
+    func_8006A5A4(9, 0, 0);
 }

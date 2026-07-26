@@ -1,5 +1,7 @@
 #include "common.h"
 
+#define AVG(a, b) ((s32)((a) + (b) + ((u32)((a) + (b)) >> 31)) >> 1)
+
 typedef struct {
     s32 x;
     s32 y;
@@ -61,8 +63,25 @@ extern u16 D_801E4D8C;
 extern u16 D_801E4BC0;
 extern MenuBigFrame *D_8009F0A4;
 extern u8 *D_8019C7A4;
-
-#define AVG(a, b) ((s32)((a) + (b) + ((u32)((a) + (b)) >> 31)) >> 1)
+extern s32 D_801E4BB0;
+extern s32 D_8019CB6C;
+extern s32 D_8009EC8C;
+extern u8 D_8009E6D4;
+extern u8 D_801F1854;
+void func_8001F134(s32 arg0, u8 *arg1, u8 *arg2);
+void func_8001F274(s32 arg0, u8 *arg1);
+extern s32 D_801E42E0;
+extern s32 D_801E40B8;
+extern s32 D_801E42A0;
+extern s32 D_801F179C;
+extern s32 D_8009E6A4;
+extern u8 *D_8019C8FC;
+void func_800458CC(void *arg0);
+void func_80034F74(void);
+extern s32 D_8019C8EC;
+extern s32 D_8019C900;
+s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
 
 void func_8001F330(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
     s32 index;
@@ -151,5 +170,115 @@ void func_8001F330(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
             arg1->field44 = AVG(small->field44, arg1->field44);
         }
         arg1->field8C = small->field10;
+    }
+}
+
+void func_8001F8D0(s32 arg0, u8 *arg1, u8 *arg2) {
+    register s32 index asm("s0");
+    register u8 *primary asm("s1");
+    register u8 *secondary asm("s2");
+    register s32 next asm("a0");
+    register s32 offset asm("v0");
+    register u8 *base asm("v1");
+
+    index = arg0;
+    primary = arg1;
+    secondary = arg2;
+
+    func_8001F330(index, (MenuObj *)primary, (MenuObj *)secondary);
+
+    if (D_801E4DAC != 0) {
+        if ((index & 1) == 0) {
+            index >>= 1;
+            offset = index * 3;
+        } else {
+            asm("");
+            index >>= 1;
+            next = index + 1;
+            if (next == 0x2EE) {
+                next = 0;
+            }
+            offset = next * 3;
+        }
+        base = (u8 *)((offset << 4) + (s32)D_8009F0A4);
+        *(s32 *)(primary + 0x30) = *(s32 *)(base + 0x24);
+        *(s32 *)(secondary + 0x30) = *(s32 *)(base + 0x28);
+    } else {
+        if ((index & 1) == 0) {
+            index >>= 1;
+            offset = index * 7;
+        } else {
+            asm("");
+            index >>= 1;
+            next = index + 1;
+            if (next == 0x505) {
+                next = 0;
+            }
+            offset = next * 7;
+        }
+        offset = (offset << 2) + (s32)D_8019C7A4;
+        *(s32 *)(primary + 0x30) = *(s32 *)(offset + 0x14);
+    }
+}
+
+void func_8001F9D8(void) {
+    if (D_801E4DAC != 0) {
+        func_8001F134(D_801E4BB0, &D_8009E6D4, &D_801F1854);
+    } else {
+        func_8001F274(D_801E4BB0, &D_8009E6D4);
+    }
+
+    D_801E4BB0++;
+    if (D_801E4BB0 == D_8019CB6C) {
+        D_801E4BB0 = 0;
+        D_8009EC8C = 1;
+    }
+}
+
+void func_8001FA70(void) {
+    s32 mode;
+
+    D_801E42E0 = 0xFF;
+    D_801E40B8 = 0;
+    D_801E42A0 = -4;
+
+    if (D_8009EC8C != 0) {
+        D_801F179C = (D_801E4BB0 & -2) + 2;
+    } else {
+        D_801F179C = 0;
+        D_8019CB6C = D_801E4BB0 - 2;
+    }
+
+    if (!(D_801F179C < D_8019CB6C)) {
+        D_801F179C = 0;
+    }
+
+    if (D_801E4DAC != 0) {
+        mode = D_8009E6A4;
+        if (mode != 5) {
+            func_800458CC(D_8019C8FC - 1800);
+        }
+    } else {
+        mode = D_8009E6A4;
+        if (mode != 5) {
+            func_800458CC(D_8019C8FC - 3000);
+        }
+    }
+
+    func_80034F74();
+}
+
+void func_8001FB8C(void) {
+    volatile s32 *scratch;
+    s32 base;
+    s32 next;
+    s32 value;
+
+    if ((D_801E40B8 & 0x10) && (D_8019C8EC == 0)) {
+        scratch = (volatile s32 *)0x1F800000;
+        value = *scratch;
+        base = D_8019C900 + 0xCC;
+        next = func_80016EC4(base, value, 0x10, 0x10, 0x48, 0x10, 0, 0x68, 0x780D);
+        *scratch = func_80017390(base, next, 9);
     }
 }

@@ -1,10 +1,33 @@
 #include "common.h"
+#include "game/asset.h"
+#include "game/state.h"
+#include "psyq/gte.h"
 
 extern u8 *D_8019C900;
-extern s32 D_801E40B8;
-
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
+extern s32 D_8007D53C;
+extern s32 D_8007D540;
+extern s32 D_8007D544;
+extern u16 D_801E436A;
+void func_80019AF0(s32 arg0);
+void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
+void func_8001C088(s32 arg0, s32 arg1, s32 arg2);
+void func_800230B0(void);
+void func_8002317C(void);
+void func_80065860(s32 arg0);
+extern Matrix D_8019CAD4, D_8007D548, D_8009E6AC, D_8007D568;
+void func_800698B8(Matrix *arg0);
+void func_80069888(Matrix *arg0);
+void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
+void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
+void func_800686D4(s32 arg0, s32 arg1);
+extern s32 D_8019C768, D_801E4B30, D_8019CACC, D_801E42E4, D_801E40B8;
+extern s32 D_8009F0A0, D_801E42E0, D_801E42A0;
+void func_8001A3C0(s32 arg0);
+void func_80017884(s32 arg0);
+void func_800234DC(void);
+void func_8001A610(void);
 
 void func_8002317C(void) {
     u8 *base;
@@ -37,4 +60,101 @@ void func_8002317C(void) {
     next = func_80016F8C(base, next, 0xDC, 0xC4, 8, 0x10, 0, height, clut, fade);
     next = func_80016F8C(base, next, 0x64, 0xC4, 0x78, height, 0, 0, clut, fade);
     *scratch = func_80017390(base, next, 5);
+}
+
+void func_800232B4(void) {
+    s32 state;
+
+    if (D_8007D540 < 110) {
+        if (D_8007D540 >= 10) {
+            func_80065860(1);
+        }
+        func_800230B0();
+        goto inc_timer;
+    } else if (D_8007D540 == 110) {
+        func_80065860(0);
+        func_8001C088(0, 0, 0);
+inc_timer:
+        D_8007D540++;
+        return;
+    }
+
+    if (D_8007D544 != 0) {
+        D_8007D544--;
+        if ((g_AssetLoadState == 0) && (D_801E436A != 0)) {
+            D_8007D544 = 0;
+        }
+    }
+
+    state = D_8007D53C;
+    switch (state) {
+    case 0:
+        if ((u32)D_801E40B8 < 0x100) {
+            D_801E40B8 += 8;
+        } else {
+            D_8007D53C = 1;
+        }
+        break;
+    case 1:
+        if (D_8007D544 == 0) {
+            D_8007D53C = 2;
+        }
+        break;
+    case 2:
+        D_801E40B8 -= 8;
+        if (D_801E40B8 == 0) {
+            D_8007D53C = 3;
+            func_8001BE9C(0, 0, 0);
+        }
+        break;
+    case 3:
+        D_801E40B8++;
+        if ((u32)D_801E40B8 >= 21) {
+            func_80019AF0(3);
+        }
+        break;
+    }
+
+done:
+    if (D_8007D53C != 3) {
+        func_8002317C();
+        if ((u32)D_801E40B8 >= 10) {
+            func_80065860(1);
+        }
+    }
+}
+
+void func_800234DC(void) {
+    D_8019CAD4 = D_8007D548;
+    D_8009E6AC = D_8007D568;
+    func_800698B8(&D_8019CAD4);
+    func_80069888(&D_8009E6AC);
+    func_80069A18(0x20, 0x20, 0x20);
+    func_80069A38(0, 0, 0);
+    func_800686D4(0x4E20, 0x140);
+}
+
+void func_800235D8(void) {
+    func_80065860(0);
+    D_8019C768 = 0x80;
+    if (g_AssetLoadState == 0) {
+        func_8001A3C0(D_801E4B30);
+        D_8019CACC = 0;
+        func_80017884(5);
+        func_8001C088(0, 0, 0);
+        D_801E42E4 = 0x17;
+        D_801E40B8 = 0;
+        func_800234DC();
+        *(s32 *)0x1F800008 = 0;
+        *(s32 *)0x1F80000C = 0;
+        *(s32 *)0x1F800010 = -3520;
+        *(s32 *)0x1F800018 = 0;
+        *(s32 *)0x1F80001C = 0;
+        *(s32 *)0x1F800020 = 0;
+        func_8001A610();
+        D_8009F0A0 = 0xF0;
+        D_801E42E0 = 0x100;
+        g_GameMode = 0;
+        D_801E42A0 = -8;
+    }
 }

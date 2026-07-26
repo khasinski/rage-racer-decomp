@@ -1,11 +1,51 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/menu.h"
+#include "game/car.h"
 
 extern GameRaceProgress *D_801E4FAC;
 extern s32 D_801E419C, D_801F17B0, D_8019CE0C;
 extern u8 D_80010E30[], D_80010E34[], D_80010E38[], D_80010E40[];
 void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
 void func_800632F0(void *dst, void *fmt, s32 val);
+extern s32 D_8009E67C;
+extern s32 D_801E428C;
+extern s32 D_801E4D0C;
+extern s16 D_8009E834;
+extern s32 D_801E40D4;
+extern s32 D_8009E6A4;
+extern s32 D_801E4B94;
+extern s16 D_8019CABC;
+extern s16 D_8019CB58;
+extern s16 D_8019CB54;
+extern GameScoreRecord D_8019CB40[];
+extern GameScoreRecord D_8019CB42[];
+extern s32 D_8019C7C4;
+extern s32 D_8019C8EC;
+extern s16 D_801E4034;
+extern s16 D_8019CAC0;
+extern s32 D_801E419C;
+s32 func_8001785C(s32 arg0);
+s32 func_800214B8(void);
+void func_80021540(void);
+extern GameCarEntry *D_8019C7C8;
+extern s32 D_801E772C[];
+extern s32 D_801E42E4;
+void func_80021288(s32 arg0, s32 arg1);
+void func_800212F0(s32 arg0);
+void func_80019BB8(s32 arg0);
+void func_80019B3C(s32 arg0);
+extern s32 D_801E40B8;
+extern s32 D_8019C768;
+extern s32 D_8019CB74;
+extern s32 D_801F17B0;
+extern s32 D_801E6DA0;
+extern s32 D_801E6C78;
+extern s32 D_8007BEEC[][6][3];
+extern s32 D_8007BEF4[][6][3];
+extern s32 D_8007C00C[];
+void func_8005D6EC(s32 arg0);
+
 void func_800206B8(u8 *s0) {
     u8 sp[16];
     if (D_801E4FAC->elapsedTime > 0x3B9AC9FF) {
@@ -21,5 +61,204 @@ void func_800206B8(u8 *s0) {
         func_80016EA0(0x10, s0 + 192, D_80010E40, 0x7812);
         func_800632F0(sp, D_80010E34, D_8019CE0C);
         func_80016EA0(0x12, s0 + 204, sp, 0x7812);
+    }
+}
+
+void func_800207E0(void) {
+    s32 score_index;
+    u8 *slots;
+    s32 slot_count;
+    s32 filled;
+    s32 i;
+    s32 done;
+    s32 value;
+    s32 *state;
+
+    slots = (u8 *)(D_8009E67C + D_801E428C);
+    D_801E4D0C = 0;
+
+    if (*slots == 0 || D_8009E834 < *slots) {
+        *slots = D_8009E834;
+    }
+
+    value = func_8001785C(D_801E40D4);
+    slot_count = 4;
+    if (D_8009E6A4 < value) {
+        *(s16 *)(D_8009E67C + 4) = 1;
+    }
+
+    if (D_8009E6A4 < 2) {
+        slot_count = 3;
+    }
+
+    filled = 0;
+    for (i = 0; i < slot_count; i++) {
+        if (((u8 *)D_8009E67C)[i] != 0) {
+            filled++;
+        }
+    }
+
+    done = ((slot_count ^ filled) == 0);
+    D_801E4B94 = done;
+
+    if (done != 0) {
+        s16 *record;
+
+        score_index = (D_8019CABC * 6) + D_8009E6A4;
+
+        if (score_index == 4) {
+            record = &D_8019CB58;
+            goto check_record;
+        }
+        if (score_index != 10) {
+            goto not_special_record;
+        }
+        record = &D_8019CB54;
+
+check_record:
+        if (*record == -1) {
+            *record = 0;
+        }
+
+        goto after_record_check;
+
+not_special_record:
+        if (score_index != 5) {
+            if (D_8019CB40[score_index + 1].value == -1) {
+                D_8019CB40[score_index + 1].value = 0;
+            }
+        }
+
+after_record_check:
+        value = func_800214B8();
+        D_8019C7C4 = value;
+        if (value != 0) {
+            s32 offset;
+
+            offset = score_index * 4;
+            if (D_8019CB40[score_index].value == 0 || value < D_8019CB40[score_index].value) {
+                D_8019CB40[score_index].value = (u16)D_8019C7C4;
+            }
+            D_801E4D0C = 0xD2;
+        }
+
+        func_80021540();
+        if (D_8019C7C4 == 1) {
+            s32 offset;
+
+            offset = score_index * 4;
+            if (*(s16 *)((char *)D_8019CB42 + offset) < 99) {
+                (*(s16 *)((char *)D_8019CB42 + offset))++;
+            }
+        }
+    } else {
+        D_8019C7C4 = 0;
+    }
+
+    D_8019C8EC = 0;
+    if (D_801E4B94 != 0) {
+        if ((D_801E4034 == 0 && D_8009E6A4 == 4) || (D_801E4034 == 1 && D_8009E6A4 == 5)) {
+            D_8019C8EC = 1;
+            D_8019CAC0 = 1;
+        }
+    }
+
+    D_801E419C = 0;
+    if (D_801E4B94 != 0 && D_8019C8EC == 0) {
+        state = (s32 *)D_801E4FAC;
+        if (state[3] < D_8009E6A4 + 1) {
+            D_801E419C = 1;
+        }
+    }
+}
+
+void func_80020B08(void) {
+    s32 oldValue;
+    GameRaceProgress *ptr;
+    s32 *entry;
+
+    if (D_801E4B94 != 0) {
+        if (D_8019C8EC != 0) {
+            s32 magic;
+            GameRaceProgress *afterPtr;
+
+            ptr = D_801E4FAC;
+            oldValue = ptr->progression;
+            func_80021288((s32)D_8019C7C8, (s32)ptr);
+            magic = 0x3B9AC9FF;
+            afterPtr = D_801E4FAC;
+            afterPtr->elapsedTime = magic;
+            afterPtr->progression = oldValue;
+            func_800212F0(0);
+            func_80019BB8(0x21);
+        } else {
+            s32 current;
+            s32 next;
+            GameRaceProgress *menuPtr;
+            s32 enabled;
+
+            func_80019B3C(7);
+            current = D_8009E6A4;
+            menuPtr = D_801E4FAC;
+            enabled = D_801E419C;
+            next = current + 1;
+            D_8009E6A4 = next;
+            menuPtr->lap = next;
+            menuPtr->state = 0;
+
+            if (enabled != 0) {
+                menuPtr->progression = next;
+                entry = &D_801E772C[D_801E4034];
+                if (*entry < next) {
+                    *entry = next;
+                }
+            }
+
+            func_800212F0(D_8009E6A4);
+        }
+    } else {
+        D_801E42E4 = 6;
+    }
+}
+
+void func_80020C24(void) {
+    s32 mode;
+    s32 car;
+    s32 value;
+
+    D_801E40B8 = 0x100;
+    D_8019C768 = 0x80;
+
+    mode = D_801E428C;
+    car = D_8009E6A4;
+    D_8019CB74 = 0;
+    D_801F17B0 = D_8007BEEC[mode][car][D_8009E834 - 1];
+    D_801E42E4 = 0x13;
+
+    if (D_801E419C != 0) {
+        D_8019CE0C = D_8007C00C[car];
+    } else {
+        D_8019CE0C = 0;
+    }
+
+    value = D_8007BEF4[D_801E428C][D_8009E6A4][0] / 80;
+    D_801E6DA0 = value;
+    if (value <= 0) {
+        D_801E6DA0 = 1;
+    }
+
+    value = D_8007C00C[D_8009E6A4] / 250;
+    D_801E6C78 = value;
+    if (value <= 0) {
+        D_801E6C78 = 1;
+    }
+}
+
+void func_80020D90(void) {
+    if (D_801E4D0C > 0) {
+        D_801E4D0C--;
+    }
+    if (D_801E4D0C == 0xB4) {
+        func_8005D6EC(0x42);
     }
 }

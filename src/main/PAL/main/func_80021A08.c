@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/screens.h"
 
 extern s32 D_8007D444;
 extern s32 D_8007D464;
@@ -14,6 +15,13 @@ extern s32 D_8019CB78;
 extern s32 D_8019CB80;
 extern u16 D_8019CB84;
 extern s32 D_801E41E8;
+extern char D_80010EB4[];
+void func_800632F0(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2);
+extern char D_80010EC4[];
+extern char D_80010ED0[];
+void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
+void func_80016A18(s32 arg0, s32 arg1, char *arg2, s32 arg3);
+void func_800200D0(void);
 
 void func_80021A08(void) {
     register s32 r2 asm("$2");
@@ -184,4 +192,20 @@ void func_80021A08(void) {
     } while (r14 < 2);
 
     __asm__("" : : "r"(r23));
+}
+
+void *GameFormatLapTime(void *dst, s32 value) {
+    s32 minutes = value / 60000;
+    s32 ticks = value / 1000;
+    s32 seconds = ticks - (minutes * 60);
+    s32 fraction = value - (ticks * 1000);
+
+    func_800632F0(dst, D_80010EB4, minutes, seconds, fraction);
+    return dst;
+}
+
+void GameDrawCourseIntro(void) {
+    func_80016EA0(0x10, 0x1C, D_80010EC4, 0x7812);
+    func_80016A18(0x10, 0x39, D_80010ED0, 0x78CC);
+    func_800200D0();
 }
