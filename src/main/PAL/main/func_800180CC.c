@@ -5,13 +5,10 @@
 
 extern s32 D_8009F0B8;
 extern u8 *D_8019CAFC;
-extern u8 *D_8019C904;
-extern u8 *D_801F17A8;
 extern Rect D_8007BEDC;
 extern Rect D_8007BEE4;
 extern u16 D_801E444C[];
 extern u16 D_801E6F2C[];
-
 void func_80042C94(void);
 s32 func_80017C78(s32 assetIndex, void *dst);
 void func_8001A3C0(void *arg0);
@@ -21,6 +18,12 @@ void func_8005B768(s32 arg0, void *arg1, void *arg2, s32 arg3);
 s32 func_8005B89C(void);
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void DrawSync(s32 mode) asm("func_800658FC");
+extern s32 D_801E4B30;
+extern GameAssetTripleHeader *D_8019C904;
+extern void *D_8019C754;
+extern void *D_801E8AB0;
+extern void *D_801F17A8;
+void func_8005B9CC(void);
 
 void func_800180CC(void) {
     register u8 *loaded asm("$16");
@@ -84,7 +87,7 @@ setNextBuffer:
             finalBase = D_8019CAFC;
             D_801E444C[0] = 0;
             g_AssetLoadState = 0;
-            D_8019C904 = finalBase;
+            D_8019C904 = (GameAssetTripleHeader *)finalBase;
         }
         break;
     }
@@ -107,4 +110,80 @@ s32 func_800182D0(void) {
     g_MainState = state;
     g_AssetLoadState = 1;
     return 1;
+}
+
+void func_80018344(void) {
+    if (g_AssetLoadState == 1) {
+        if (func_80017C78(6, D_8019C904) != 0) {
+            g_AssetLoadState = 0;
+            D_801E4B30 = (s32)D_8019C904;
+        }
+    }
+}
+
+s32 func_8001839C(void) {
+    register s32 loadType asm("$16");
+
+    if (g_AssetLoadState != 0) {
+        return 1;
+    }
+
+    loadType = 3;
+    if (g_MainState == loadType) {
+        g_MainState = 0;
+        return 0;
+    }
+
+    func_80042C94();
+    g_MainState = loadType;
+    g_AssetLoadState = 2;
+    return 1;
+}
+
+s32 func_80018410(void) {
+    register s32 loadType asm("$16");
+
+    if (g_AssetLoadState != 0) {
+        return 1;
+    }
+
+    loadType = 3;
+    if (g_MainState == loadType) {
+        g_MainState = 0;
+        return 0;
+    }
+
+    func_80042C94();
+    g_MainState = loadType;
+    g_AssetLoadState = 1;
+    return 1;
+}
+
+void func_80018484(void) {
+    register GameAssetTripleHeader *header asm("$2");
+    register s32 firstOffset asm("$3");
+    register s32 secondOffset asm("$3");
+    register s32 thirdOffset asm("$4");
+
+    switch (g_AssetLoadState) {
+    case 1:
+        func_8005B9CC();
+        g_AssetLoadState = 2;
+    case 2:
+        if (func_80017C78(7, D_8019C904) != 0) {
+            header = D_8019C904;
+            firstOffset = *(volatile s32 *)&header->firstOffset;
+            thirdOffset = *(volatile s32 *)&header->thirdOffset;
+            D_801F17A8 = (void *)((u8 *)header + firstOffset);
+            secondOffset = *(volatile s32 *)&header->secondOffset;
+            __asm__ volatile("" ::: "memory");
+            g_AssetLoadState = 0;
+            secondOffset = (s32)((u8 *)header + secondOffset);
+            header = (GameAssetTripleHeader *)((u8 *)header + thirdOffset);
+            __asm__ volatile("" ::: "memory");
+            D_8019C754 = (void *)secondOffset;
+            D_801E8AB0 = header;
+        }
+        break;
+    }
 }
