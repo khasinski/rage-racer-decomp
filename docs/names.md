@@ -762,3 +762,241 @@ describe motion only. The spinners are very likely windmills or wind turbines
 game's own class names are French wind strengths — CALME, BRISE, RAFALE,
 MISTRAL, TEMPETE), and the LAKESIDE GATE shuttles are very likely boats or a
 cable car, but neither is asserted in a name.
+
+## 12. Globals naming, round 3
+
+Round 3 named 53 more `D_XXXXXXXX` globals, all byte-neutral (`make check
+VERSION=PAL` = `build/PAL/main.exe: OK`, sha1 `2913e15648eddef40821c5f666460abc04155ee6`,
+with `build/PAL/src/main/PAL/main/*.o` wiped before every check). Targets were
+picked by measured reach (`grep -rl` over `src/`) working top-down; of ~1400
+still-raw symbols only ~20 reach 10+ files and ~90 reach 5-9, and 812 appear in
+exactly one file, so the single-file tail was left alone.
+
+### 12a. The environment / time-of-day chain, and why the sky changes run to run
+
+This is the correlation that confused readers, and it is one variable, not two.
+
+    g_GrandPrixClass  (a dice roll in Time Attack)
+      -> course asset index = 0x57 + (course << 1) + (class << 3)
+      -> that VARIANT's data carries an environment mode at +0x2C
+      -> g_EnvironmentMode
+      -> which 48-byte (16 x RGB) sky palette record is the lerp target
+      -> plus fog near/far, plus g_IsEnvironmentMode4's prop and model choices
+
+`func_80018A70` re-rolls `g_GrandPrixClass` on every Time Attack race start,
+bounded by `g_MaxClassReached[g_GrandPrixSeries]`, with a re-roll to `>= 2` on
+THE EXTREME OVAL (which corroborates the earlier finding that OVAL variants 1
+and 2 were never authored). Because the same value is the track-variant index,
+one roll simultaneously decides which sky loads and whether the spinning props
+appear at all (the dispatcher gates them on class `>= 2`). There is no separate
+weather variable. `g_GrandPrixClass` keeps its name: it really is the class, and
+Time Attack simply picks one per race.
+
+The colour timeline itself (`func_800455EC` loads a keyframe, `func_80045CD4`
+lerps one frame of it) is nine 12-byte `{ cur, from, to }` RGB slots at
+`D_801E3FB6`; slot 0 is the GTE far/fog colour, slots 1..8 the sky gradient.
+`g_EnvironmentMode` indexes `g_EnvPaletteTable` for the 16-colour CLUT that gets
+uploaded through the 16x1 VRAM rect at (0xE0, 0x1E6), and `g_EnvironmentModePrev`
+is the lerp's source palette. Mode 2 alone ramps `SetFogNear` up to 0x7FFF
+(clear); every other mode ramps it down to 0x1770 (hazy).
+
+**What mode 4 is remains unknown.** `g_IsEnvironmentMode4` is provably
+`g_EnvironmentMode == 4` and provably selects `GameDrawStaticScenery`'s model
+`0x3B` over `0x3A` and the `flags & 2` prop set over `flags & 1`, and every car
+and track renderer forwards it to scratchpad `0x1F800084`. Whether mode 4 is
+night, dusk or rain cannot be settled from the executable: `g_EnvPaletteTable`
+is a runtime pointer installed by `func_8004553C` from the loaded variant asset,
+so the palette contents are on the disc, which this repo does not have. The name
+is therefore deliberately mechanical rather than descriptive.
+
+**`D_801E4028` left unnamed.** It is `((*(u16 *)(src + 0x2E) >> 15) ^ 1)`, and it
+gates lerping `D_801E3FB9` - the fourth, spare byte of colour slot 0 - toward
+that halfword's low bits. No decompiled function anywhere reads `D_801E3FB9`, so
+what the flag is *for* is unrecoverable and any name would be a guess.
+
+### 12b. Named this round
+
+| address | name | type | files | justification |
+|---|---|---|---|---|
+| `D_801E4030` | `g_IsEnvironmentMode4` | `s32` | 12 | `g_EnvironmentMode == 4`; picks static-landmark model `0x3B` and the `flags & 2` props |
+| `D_801E4026` | `g_EnvironmentMode` | `s16` | 2 | variant data `+0x2C`; indexes the 48-byte sky palette records |
+| `D_801E4FB0` | `g_EnvironmentModePrev` | `s32` | 2 | the previous mode, i.e. the CLUT lerp's source palette |
+| `D_801E4140` | `g_EnvPaletteTable` | `u8 *` | 2 | base of those records; installed by `func_8004553C` |
+| `D_801E6F2C` | `g_TeamLogoCanvas` | per-file | 13 | 2048 bytes = 64x64 4bpp; VRAM rect `D_8007BEE4` {0x290,0x30,16,64}; the 4-bit nibble-carry scroll helpers only make sense at 4bpp |
+| `D_8009E6D4` | `g_PlayerCar` | per-file | 10 | 0x19C bytes, the `g_Cars[]` stride; `func_80034F74` calls the same helper on it and on `g_Cars[0]` at the same field offsets |
+| `D_80082460` | `g_UiChromeScript` | `u8` | 9 | always `GameRunTimedDrawScript`'s table arg paired with `g_UiScriptProgress`; 15 records + terminator, limit 25 |
+| `D_801E40E4` | `g_CourseModelCount` | `s32` | 9 | written from `bank[0]` by `func_80017848`; every scenery drawer clamps a model id against it and falls back to 1 |
+| `D_8019C70C` | `g_BestTotalTimes` | per-file | 8 | `[series][course][mode]` ms, lower-is-better; the 3x/6x default ratio vs `g_BestLapTimes` proves total-vs-lap |
+| `D_801E6828` | `g_VisibleCellMask` | per-file | 8 | `func_800414F0` rebuilds 32 words as `mask[sy] |= 1 << sx` from `camera / 2048`; consumers cull on the cell bit |
+| `D_801E444C` | `g_TeamLogoClut` | per-file | 8 | 16 `u16`, uploaded through the 16x1 rect `D_8007BEDC`, always back-to-back with the canvas |
+| `D_8009E698` | `g_CarModelAsset` | per-file | 8 | sole writer `func_80017BAC` sets it from the loaded-asset registry; readers use `GameCarModelAsset` `+0x18/+0x20/+0x24` |
+| `D_8009E67C` | `g_CourseProgress` | per-file | 8 | repointed to `D_801E42EC` / `D_8009E874` with the file's car table; bytes 0..3 are best place per course |
+| `D_8009E83C` | `g_PlayerLap` | per-file | 8 | `g_PlayerCar + 0x168`; incremented when progress passes lap x `g_TrackLength` |
+| `D_801E4B30` | `g_ImageBlockBuffer` | per-file | 8 | `g_AssetBlockPtr + 0x40000`; every read hands it to the image-block installer `func_8001A3C0` |
+| `D_801E4168` | `g_ModelBankCount` | `s32` | 7 | same clamp idiom as `g_CourseModelCount` but for the bank `func_80017A10` last bound |
+| `D_801E4364` | `g_LapCount` | `s32` | 7 | `= (g_CourseIndex == 3) ? 6 : 3` at race init; bound of the per-lap time arrays |
+| `D_8009E744` | `g_PlayerTrackProgress` | per-file | 7 | `g_PlayerCar + 0x70`, matched against `obj->field_70` at a shared callee |
+| `D_8009E74C` | `g_PlayerTrackSection` | `s16` | 7 | `g_PlayerCar + 0x78`; drives the tunnel tpage swap and track-event triggers |
+| `D_8007F604` | `g_CdCommandPending` | `s32` | 7 | `-1` idle, 1 play / 2 pause / 3 resume; dispatched by `func_80043974` |
+| `D_8007F60C` | `g_CdCommandStep` | `s32` | 7 | 0..6 sub-state of the running CD-DA command; reset by every setter |
+| `D_801E4369` | `g_PadType` | `u8` | 6 | only ever compared against `0x41` (digital pad) and `0x23` (NeGcon); never written from C |
+| `D_80082790` | `g_UiChromeScript2` | `u8` | 6 | the `g_UiScriptProgress2` sibling table, 8 records, limit 16 |
+| `D_8009B300` | `g_MenuConfirmTimer` | `s32` | 6 | set to `0x23` the frame a confirm is accepted, decremented to 0, then the screen advances |
+| `D_8009B320` | `g_MenuPlateCarIndex` | `s32` | 6 | `func_8004FCE8`'s car index; latched from `g_CarListCursor` / `g_PlayerCarIndex` |
+| `D_8009B194` | `g_CdVolume` | `u8` | 6 | divided by 127 into the four CD mix words; `func_80043134` rescales the 0..15 option into it |
+| `D_8009E870` | `g_CameraViewMode` | per-file | 6 | `func_80043BCC`'s mode arg; 0 chase (only mode with a mirror), 1 in-car, 2 replay |
+| `D_8007BEDC` | `g_TeamLogoClutRect` | per-file | 6 | literal `RECT{16,480,16,1}` in `.data`, used only with `g_TeamLogoClut` |
+| `D_8019CB40` | `g_ClassRecords` | per-file | 6 | 0x2C bytes = 11 x `{s16 grade, s16 clears}`, index `series * 6 + class`; `-1` locked |
+| `D_801E4388` | `g_CarTable3` | per-file | 6 | save block `+0x128`, the third 13 x `GameCarEntry`; `g_CarTable` is repointed at it |
+| `D_8019CAFC` | `g_AssetLoadCursor` | per-file | 6 | advanced by each `GameLoadAsset`'s returned size; its settled value becomes `g_AssetBase` |
+| `D_801E6D90` | `g_SeqHandle` | `s16` | 6 | the `SsSeqOpen` return value, passed as `seq` to `SsSeqPlay/Stop/SetVol` (its old header comment said "sequence volume" and was wrong) |
+| `D_8007F600` | `g_CdTrackPending` | `s32` | 5 | indexes the per-track `CdlLOC` table `D_8009AFD4`; `-1` = none |
+| `D_8007F608` | `g_CdTrackStep` | `s32` | 5 | 0..7 sub-state of the track-change sequence in `func_800432A8` |
+| `D_8009B2F0` | `g_MenuSubCursor` | `u8` | 5 | the open modal's cursor; deliberately generic, its range differs per screen |
+| `D_80011BA0` | `g_MenuBlankCaption` | `u8` | 5 | the `.asciz " "` literal, always `GameDrawMenuButton`'s caption with flag `0x10` clear |
+| `D_801E40A8` | `g_BgmTrackCount` | `s32` | 5 | `9`, or `10` once five class records are grade 1; bound of the `D_801E7734` shuffle bag |
+| `D_8019C8EC` | `g_SeriesCleared` | `s32` | 5 | set only when the series' final class is completed; wipes the save and starts the ending |
+| `D_8019C760` | `g_StreamReturnScene` | per-file | 5 | `g_SceneId` is restored from it when the stream ends; non-zero also skips title re-init |
+| `D_8009E87C` | `g_CarModelSlot` | per-file | 5 | `= (self < 1)`, a pure 0/1 flip selecting one of two 0x20000 model buffers |
+| `D_8009E6AC` | `g_SceneLightMatrix` | `Matrix` | 5 | assigned wholesale from a per-scene constant matrix, then loaded into the GTE |
+| `D_8019C904` | `g_AssetBase` | per-file | 5 | base of the resident asset block; all sub-block pointers are `base + base[n]` |
+| `D_801E8AB0` | `g_AssetSubBlockPtr` | per-file | 5 | always `base + header->offsets[n + 1]`, the companion of `g_AssetBlockPtr` |
+| `D_80082F28` | `g_SoundSlotTone` | `s16[]` | 5 | `s16[6][2]`, SPU program per sound slot; slot n drives hardware voice n + 14 |
+| `D_801E6C9C` | `g_AudioSlotMask` | `s32` | 5 | `|= 1 << slot` on load, `^= bit` on close; returned by `GameGetActiveAudioSlots` |
+| `D_801E6CE4` | `g_PanVoiceVolumeL` | `s32` | 5 | left of an L/R pair clamped 0..0x80, `-1` idle, applied to voice `0x15` |
+| `D_801E8A50` | `g_SfxVolumeSetting` | `s32` | 5 | OPTIONS row 1, 0..15, feeds `g_EffectVolumeScale = (n << 7) / 15` |
+| `D_801E6C70` | `g_MonoOutput` | `s32` | 5 | OPTIONS row 2, 0/1; `0 -> GameSetStereoOutput`, non-zero `-> GameSetMonoOutput` |
+| `D_8019C704` | `g_BgmVolumeSetting` | `s32` | 5 | OPTIONS row 0, 0..15, feeds `GameSetSequenceVolumeSetting` |
+| `D_801E4408` | `g_BestLapTimes` | per-file | 5 | updated from the best-lap accumulator `D_801E4BCC`; printed one line under `g_BestTotalTimes` |
+| `D_801E41E8` | `g_BestSectorTimes` | per-file | 5 | `[series][course][3]`; the three sector boundaries are `trackLength/3` and `2/3` |
+| `D_8009E73C` | `g_PlayerProgressA` | `s32` | 5 | `g_PlayerCar + 0x68` |
+| `D_8009E740` | `g_PlayerProgressB` | `s32` | 5 | `g_PlayerCar + 0x6C`; `A + B` is the value the position sort and lap test use |
+
+`g_PlayerProgressA` / `B` are named for their identity, not their semantics: the
+sum is provably total race progress, but which half carries laps-worth of
+accumulated length and which the within-segment remainder is not settled, so the
+names stay neutral.
+
+### 12c. Declared per file, not in one header
+
+Where a symbol is spelled with a different type in different translation units
+(`u8 *` / `u32` / `s32` / a typed struct pointer for the same pointer, or
+`s32[][4][2]` / `s32[]` / `u8[]` for the same table), it gets its own aliased
+`extern <that file's type> g_Name asm("D_XXXXXXXX");` in each file instead of one
+canonical header declaration. Same name everywhere, identical codegen, and no
+`conflicting types` from a header that disagrees with a local view. The relevant
+headers carry a comment block listing those names and addresses so they are
+still discoverable; the uniform-typed symbols do get real header declarations
+and their local `extern`s were deleted.
+
+Two mechanical traps worth recording for the next pass:
+
+* **Inline asm does not follow `asm()` labels.** `func_8005F88C.c` references
+  `D_8019C70C`, `D_801E4408`, `D_801E41E8`, `D_8019C704`, `D_801E8A50` and
+  `D_801E6C70` inside `asm volatile` strings as `%hi(...)`/`%lo(...)`. Those
+  files must keep the raw `D_` spelling; the same applies to `func_8001D338.c`
+  for `D_801E444C`. Renaming them there produces `undefined reference` at link.
+* **Multi-declarator lines.** `extern s32 A, B, C;` with an `asm()` label
+  appended attaches the label to the last declarator only. Every such line had
+  to be split.
+
+### 12d. High-reach globals deliberately still unnamed
+
+* **`D_8019CB0C` (20 files)** - an alternate menu layout selector: it shifts
+  panel x from `0xA8` to `0x69`, adds a `0x2C` wide offset, and makes
+  `GameDrawScriptedSprite` skip script element types 9/19/29/39. It is only ever
+  assigned from `D_8009B338`, which round 2 proved is only ever written zero, so
+  the alternate layout is unreachable in retail and cannot be characterised.
+  Confirms and keeps the round-2 entry.
+* **`D_8019C768` (12 files)** - written `0x80` on entry to eleven scenes and
+  `0x180` in three race-side inits, and read in exactly one place
+  (`GameAdvanceSaveHeaderCounter`: `+= 1` if `0x80`, else `+= 2`) which nothing
+  in the image calls. Write-many, read-never-reached; no recoverable meaning.
+* **`D_8009B31C` (6 files)** - the fade-step argument of `func_8004FCE8`'s car
+  name plate. Its only write in the whole program is `= 0` in
+  `GameInitMenuMode`, and `func_8004FCE8` returns immediately when the argument
+  is 0, so the plate never draws in the shipped build. Same reasoning that left
+  `D_8009B338` unnamed in round 2.
+* **`D_801E4BC8` (5 files)** - swapped in lockstep with `g_VisibleCellMask`
+  (main view `-> &D_8009EC94`, mirror `-> &D_8009E888`) and walked 64 times while
+  the bitmask is rebuilt, then DMA'd to scratchpad with count `0x40`. The role is
+  clear but the 16-byte element is still four unidentified words, so no name.
+* **`D_801E4028` (2 files)** - see 12a.
+
+### 12e. SDK data: identified, deliberately not renamed
+
+These are Sony library globals. Their meanings are now pinned - in most cases by
+a public API accessor in the same file - but they should be given Sony's own
+names from Sony sources rather than invented `g_` names, so they were left raw.
+Recorded here so the identification is not lost.
+
+| address | files | what it is | how it was pinned |
+|---|---|---|---|
+| `D_80099048` | 7 | libcd debug verbosity 0/1/2 | `CdSetDebug` is its setter |
+| `D_8009905D` | 7 | last CD command byte | `CdLastCom` returns it |
+| `D_80099060` | 6 | 32 x `const char *` CdlCOM name table | `CdComstr` indexes it; strings are in `.rodata` |
+| `D_800990E0` | 5 | 8 x `const char *` interrupt-code names | `CdIntstr` indexes it |
+| `D_8009903C` | 7 | user sync/command-complete callback | `CdSyncCallback` swaps it; called as `fn(status, D_8009BAF0)` |
+| `D_80099040` | 6 | user data-ready (INT1) callback | `CdReadyCallback` swaps it |
+| `D_80099318` | 7 | 3 status bytes: sync / ready / data-end | the CD ISR writes each byte per interrupt code |
+| `D_80099300` | 6 | `-> 0x1F801800`, CD index/status register | literal address in `.data`; bit 5 tested as FIFO-not-empty |
+| `D_8009BAF0` / `D_8009BAF8` | 5 each | the two 8-byte CD result buffers | the ISR copies 8 response bytes into one or the other per interrupt |
+| `D_8009A588` | 9 | `-> 0x1F801C00`, SPU register base | literal address; `[0x1AA/2]` is SPUCNT |
+| `D_8009A4C0` | 6 | `-> 0x1F801074`, I_MASK | `GetIntrMask` / `SetIntrMask` are its accessors |
+| `D_8009DF20` | 10 | 24 x 16-byte SPU voice register shadow | `SsUtFlush` copies it to the SPU 16 bytes per voice; zeroed as 192 `u16` |
+| `D_8009E0B8` +0x04/0x0E/0x12/0x14/0x1B | 14/6/5/5/6/7 | one 24 x 0x34 libsnd voice-state table, and its `pitch`/`seq_sep`/`program`/`tone`/`status` fields | stride 0x34 in four places; count 24 from `SsUtFlush`'s terminator `< D_8009E0B8` |
+| `D_801E4BD0` +0x07/0x0C/0x16/0x1A | 6/6/5/5/11 | one 0x20-byte libsnd current-key-on record and its `program_index`/`tone`/`seq_sep`/`voice` fields | six offset-compatible local typedefs |
+| `D_801F2A08` / `D_801F2A0C` | 10 each | pending SPU KEY-OFF masks, voices 0-15 / 16-23 | `SsUtFlush` writes them to SPU halfword `0xC6/0xC7` |
+| `D_801E6C6C` | 5 | libsnd tick rate (50/60/120/240) | `SsSetTickMode` sets it; it is the tempo divisor |
+| `D_801E40AC` | 7 | libsnd voice-manager re-entrancy guard | the same `if (x != 1) { x = 1; ...; x = 0; }` in five API bodies |
+| `D_801E3FB0` | 6 | libsnd mono/stereo flag | `SsSetMono` sets 1, `SsSetStereo` sets 0 |
+| `D_801E4110` / `D_801E413C` | 6 / 5 | open VAB's `ProgAtr` table / `VabHdr` | both written in `SpuVmVSetUp` from the per-VAB registries |
+| `D_801E4CFC` | 6 | `u8[16]` per-VAB-id state, 0 free / 1 open / 2 allocated | `SsVabOpen` sets, `SsVabTransBody` promotes, `SsVabClose` frees |
+
+---
+
+## 6. Disc asset archive (RAGE.BIN)
+
+All 135 assets live in one archive, `\RAGE.BIN;1`, indexed by a table of
+contents in its **first sector**. `func_80017BD4`'s loader reads that sector
+once at boot and expands it into `g_AssetCdEntries`:
+
+```
+TOC entry i (8 bytes, 135 entries):  { u32 sectorOffset, u32 sizeInBytes }
+asset i:  LBA = LBA(RAGE.BIN) + sectorOffset,  length = sizeInBytes
+```
+
+`GameLoadAsset(index, dst)` then seeks that LBA and reads `(size + 0x7FF) >> 11`
+sectors. `g_AssetPaths[index]` holds the matching `\..\PACK\NAME` string, which
+is only ever passed to the debug printf - the path is not used to find the file.
+`\RAGE.STR;1` carries the 11 streams in `g_StreamCdEntries` the same way.
+
+Layout of the index space: 0-9 misc (LOGO/TITLE/RG3.VH/RG3.VB/RES.DAT/CAR.TMS/
+SAVE.TMS/SELBGM/SELECT/OPTION), 10-73 the 32 car models as `.1ST`/`.2ND` pairs,
+74-85 the GP screens, 86 VOICE.BIN, 87-134 the tracks as 6 variants x 4 courses
+x 2 halves in the order BIG, MID, HI, OVAL - hence the loader's
+`87 + class*8 + course*2`.
+
+### Car data block
+
+The first bytes of a car's `.1ST` are read directly by the menus through
+`D_8009E698`:
+
+| offset | meaning |
+|---|---|
+| +8 | non-zero if the car offers an automatic gearbox. When zero the CUSTOMIZE screen refuses to open the transmission row and plays the rejection cue, and the car shop flags it before purchase. |
+| +9 | 4, 5 or 6 - the gear count (the ranking screen switches on it). |
+
+Nine of the thirty-two cars are manual-only (`+8 == 0`): CAR_20, CAR_21,
+CAR_60, CAR_61, CAR_80, CAR_81, CAR_90, CAR_B0, CAR_C0. Almost every six-speed
+car is manual-only; `CAR_A0` and the `CAR_7x` family are the exceptions.
+
+### The Oval variants are authored, not placeholders
+
+Measured from the disc: all six OVAL variants are distinct data of normal size
+(663-716 KB, larger than the matching BIG variants). An earlier guess that the
+low-tier Oval data was never produced is **wrong**. What is true is that the
+course-select gate (`GameCanSelectNextCourse`) and the attract re-roll both
+require class >= 2 before Oval can be chosen, so variants 1 and 2 are not
+reachable that way; the no-save first-run path in `func_8001B5DC` does set
+class 0 with course 3, which selects OVAL1.
