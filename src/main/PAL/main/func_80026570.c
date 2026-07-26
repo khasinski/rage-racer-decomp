@@ -4,6 +4,8 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/state.h"
+#include "psyq/gpu.h"
+#include "game/cd.h"
 
 extern s32 D_8019C99C;
 extern void (*D_8007D6B8[])(void);
@@ -11,9 +13,7 @@ extern s32 D_801E4B30;
 extern s32 D_8019C768;
 extern s32 D_801E682C;
 extern s32 D_8009E66C;
-void func_80065860(s32 arg0);
-void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
-void func_8001A3C0(void *arg0);
+void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_80019730(void);
 s32 func_80019844(void);
 extern s16 D_8007D6CC[];
@@ -39,25 +39,18 @@ extern u32 D_8009E6CC;
 extern u8 D_801E7734[];
 void func_80025940(void);
 void func_80025E54(s32 arg0);
-void func_80042BC0(s32 arg0);
-void func_80042BF0(void);
 void func_800266D0(void);
 extern u32 g_StreamReturnScene asm("D_8019C760");
-void func_80042C94(void);
 extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 D_801F18CC[];
 void func_80033AA0(s32 arg0, u32 arg1);
-void func_80042CCC(u32 arg0);
 void func_800268EC(void);
 s32 func_8001A1F0(u32 arg0, s32 arg1);
 void func_8003BB50(void);
 void func_80019EFC(s32 arg0);
-void func_80043BCC(u32 arg0, GameCarRuntime *arg1);
-void func_800389F0(void);
-void func_80045CD4(void);
+void GameUpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
 void func_80041888(void);
-void func_8004123C(void);
 void GameDrawCourseScenery2(u32 arg0, u32 arg1) asm("func_8003E2E8");
 
 void func_80026570(void) {
@@ -71,12 +64,12 @@ void func_80026570(void) {
 void func_800265BC(void) {
     s32 initialValue;
 
-    func_80065860(0);
-    func_8001BE9C(0, 0, 0);
+    SetDispMask(0);
+    GameSetupDisplay240(0, 0, 0);
 
     initialValue = 0x80;
     D_8019C768 = initialValue;
-    func_8001A3C0((void *)D_801E4B30);
+    GameUploadImageAsset((void *)D_801E4B30);
     func_80019730();
     func_80019844();
 
@@ -128,7 +121,7 @@ void func_80026824(void) {
     }
 
     if (g_SceneTimer == 2) {
-        func_80065860(1);
+        SetDispMask(1);
     }
 
     if (g_AssetLoadState == 0) {
@@ -143,8 +136,8 @@ void func_80026824(void) {
             mode = 0x11;
         }
 
-        func_80042BC0(mode);
-        func_80042BF0();
+        GameRequestCdTrack(mode);
+        GameStartCdAudio();
     }
 
     func_800266D0();
@@ -153,7 +146,7 @@ void func_80026824(void) {
 void func_800268EC(void) {
     g_SceneId = 3;
     g_StreamReturnScene = 0;
-    func_80042C94();
+    GameResetCdAudioState();
 }
 
 void func_80026920(void) {
@@ -171,7 +164,7 @@ void func_80026920(void) {
 
     timer = g_SceneTimer;
     if (timer == 0x6CC) {
-        func_80042CCC(0x38);
+        GameStartCdVolumeFade(0x38);
         timer = g_SceneTimer;
     }
     if (timer >= 0x6CD) {
@@ -193,12 +186,12 @@ void func_80026920(void) {
     offset = (((((index * 3) * 4) + index) * 8) - index) * 4;
     func_80019EFC(*(s16 *)&D_801F18CC[offset]);
 
-    func_80043BCC(g_CameraViewMode, &g_Cars[D_8009E66C]);
-    func_800389F0();
-    func_80045CD4();
+    GameUpdateCamera(g_CameraViewMode, &g_Cars[D_8009E66C]);
+    GameDrawCars();
+    GameUpdateEnvironment();
     func_800418D4();
     *(u32 *)0x1F800084 = (u32)g_IsEnvironmentMode4;
     func_80041888();
-    func_8004123C();
+    GameDrawCourseObjects();
     GameDrawCourseScenery2(g_AnimTimer, 1);
 }

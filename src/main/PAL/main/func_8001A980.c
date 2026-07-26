@@ -162,7 +162,7 @@ extern u8 D_8007C739[];
 extern u8 D_8007C73A[];
 
 void SetTile(u8 *arg0) asm("func_80064FF8");
-void AddPrim(u32 *arg0, u32 *arg1) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 s32 func_80016EC4(u8 *arg0, u8 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 
@@ -212,12 +212,10 @@ extern s32 D_801E4BC8;
 u8 *func_8001ACE4(u8 *packet);
 void func_800418D4(void);
 void func_80066604(u8 *packet, u8 *drawEnv);
-void func_80064DDC(u32 *ot, u32 *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void func_800414F0(s32 arg0, s32 arg1);
 void func_80069858(void *arg0);
 void func_80027FF4(void *arg0, s32 arg1, s32 arg2);
-void func_8004123C(void);
-void func_800389F0(void);
 void func_8001ABD8(void);
 
 void func_8001ADF4(s32 arg0) {
@@ -246,7 +244,7 @@ void func_8001ADF4(s32 arg0) {
             func_80066604(packet, g_DrawBuffer + 0x70);
             prim = packet;
             packet += 0xC;
-            func_80064DDC((u32 *)(g_DrawBuffer + 0x16C8), (u32 *)prim);
+            AddPrim((u32 *)(g_DrawBuffer + 0x16C8), (u32 *)prim);
             *scratch = packet;
             func_800414F0(-0x3000, 0x6000);
             func_80069858((void *)0x1F800028);
@@ -257,10 +255,10 @@ void func_8001ADF4(s32 arg0) {
             func_80066604(packet, g_DrawBuffer);
             prim = packet;
             packet += 0xC;
-            func_80064DDC((u32 *)(g_DrawBuffer + 0xBD0), (u32 *)prim);
+            AddPrim((u32 *)(g_DrawBuffer + 0xBD0), (u32 *)prim);
             *scratch = packet;
-            func_8004123C();
-            func_800389F0();
+            GameDrawCourseObjects();
+            GameDrawCars();
             func_8001ABD8();
         }
     }

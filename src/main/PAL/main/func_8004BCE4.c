@@ -2,7 +2,7 @@
 
 extern u32 D_801E6F2C[];
 
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void func_8004BCE4(void) {
     register u32 *base asm("$14");
@@ -20,7 +20,7 @@ void func_8004BCE4(void) {
     register u32 shift asm("$2");
     register u32 lowNibble asm("$3");
 
-    func_8005D6EC(8);
+    GamePlaySoundCue(8);
 
     base = D_801E6F2C;
     row = 0;

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/render.h"
 
 typedef struct {
     s16 x;
@@ -37,12 +38,6 @@ extern s32 D_801E4354;
 extern s32 D_801E4358;
 extern KF *D_801E6C88;
 
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_8001A5A0(Matrix *mtx, s32 angle);
-void func_8001A4C0(Matrix *mtx, s32 angle);
-void func_80069568(Matrix *lhs, Matrix *rhs);
-void func_80069458(Matrix *lhs, Matrix *rhs);
-s32 *func_80069678(s32 *matrix, s32 *vec, s32 *out);
 
 void func_8003EC98(void) {
     Matrix mtx0;
@@ -148,14 +143,14 @@ void func_8003EC98(void) {
         __asm__("" : "=r"(m0) : "0"(m0));
         __asm__ volatile("" ::: "memory");
         vin.z = -rec->rot * 4;
-        func_8001A530(m0, 0x800 - r4354);
+        GameBuildRotMatrixY(m0, 0x800 - r4354);
     }
 
-    func_8001A5A0(&mtx1, D_801E4350);
-    func_80069568(&mtx0, &mtx1);
-    func_8001A4C0(&mtx0, D_801E4358);
-    func_80069458(&mtx1, &mtx0);
-    func_80069678((s32 *)&mtx1, (s32 *)&vin, (s32 *)&vout);
+    GameBuildRotMatrixX(&mtx1, D_801E4350);
+    MulMatrix2(&mtx0, &mtx1);
+    GameBuildRotMatrixZ(&mtx0, D_801E4358);
+    MulMatrix(&mtx1, &mtx0);
+    ApplyMatrix((s32 *)&mtx1, (s32 *)&vin, (s32 *)&vout);
 
     D_801E4340 += vout.x / 4;
     D_801E4344 += vout.y / 4;

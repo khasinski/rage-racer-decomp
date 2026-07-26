@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/race.h"
+#include "psyq/gte.h"
+#include "game/render.h"
 
 typedef struct KE {
     u16 f0;
@@ -44,13 +46,9 @@ extern s16 D_8009AFC0;
 
 s32 func_80068634(s32 angle);
 s32 func_80068568(s32 angle);
-s32 func_8006888C(s32 arg0);
-s32 func_8001A6AC(s32 arg0, s32 arg1);
-void func_8001A610(void);
-void func_80017A10(s32 arg0);
 void func_8001DAB0(void *arg0);
 void func_80033AA0(s32 arg0, s32 arg1);
-void func_80043BCC(void *arg0, s32 arg1);
+void GameUpdateCamera(void *arg0, s32 arg1) asm("func_80043BCC");
 
 void func_8003C508(Obj *obj, s32 mode) {
     s32 *spad = (s32 *) 0x1F800000;
@@ -109,12 +107,12 @@ void func_8003C508(Obj *obj, s32 mode) {
             delta[1] = obj->y - s0v - spad[3];
             delta[2] = func_80068634(obj->f24) / 128 + obj->z - spad[4];
             s0v = 0x400;
-            spad[7] = s0v - func_8001A6AC(delta[0], delta[2]);
-            s0v = s0v - func_8001A6AC(delta[1], func_8006888C(delta[0] * delta[0] + delta[2] * delta[2]) >> 6);
+            spad[7] = s0v - GameAtan2(delta[0], delta[2]);
+            s0v = s0v - GameAtan2(delta[1], SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]) >> 6);
             spad[6] = s0v;
             spad[8] = 0;
-            func_8001A610();
-            func_80017A10(0);
+            GameSetCameraRotMatrix();
+            GameSelectModelBank(0);
             func_8001DAB0(obj);
         } else {
             func_80033AA0(D_8009AFB4 * 26, 0x29);
@@ -141,9 +139,9 @@ void func_8003C508(Obj *obj, s32 mode) {
                 spad[9] = c3;
             }
             __asm__ volatile("");
-            func_8001A610();
+            GameSetCameraRotMatrix();
         }
     } else {
-        func_80043BCC(obj, 0);
+        GameUpdateCamera(obj, 0);
     }
 }

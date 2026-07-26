@@ -10,7 +10,7 @@ s32 func_80017C2C(void);
 void func_80017BD4(void *arg0);
 void func_8004553C(void *arg0);
 void func_8004550C(void *arg0);
-void func_80017948(void *arg0, s32 arg1);
+void GameRegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void func_8002A6B0(void *arg0);
 void func_80017A6C(void *arg0);
 void func_80017AD0(void *arg0);
@@ -48,7 +48,7 @@ void func_8001989C(void) {
             header = D_8019CAFC;
             offset = header->offsets[3];
             g_AssetBlockPtr = (u8 *)header + offset;
-            func_80017948(g_AssetBlockPtr, 1);
+            GameRegisterModelBank(g_AssetBlockPtr, 1);
 
             header = D_8019CAFC;
             offset = header->offsets[4];
@@ -63,7 +63,7 @@ void func_8001989C(void) {
             header = D_8019CAFC;
             offset = header->offsets[6];
             g_AssetBlockPtr = (u8 *)header + offset;
-            func_80017948(g_AssetBlockPtr, 2);
+            GameRegisterModelBank(g_AssetBlockPtr, 2);
 
             header = D_8019CAFC;
             offset = header->offsets[7];

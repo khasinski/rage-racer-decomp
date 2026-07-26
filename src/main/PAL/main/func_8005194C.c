@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 #include "game/menu.h"
+#include "game/render.h"
 
 typedef struct { s32 a, b, c, d; } Vec16;
 
@@ -16,14 +17,8 @@ extern s32 D_8009E6F8;
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 D_801E8268;
 
-void func_8001A610(void);
 void func_80069728(void *a, void *b);
-void func_8001A530(void *mtx, s32 angle);
-void func_8001A5A0(void *mtx, s32 angle);
-void *func_80069568(void *a, void *b);
-void func_80017A10(s32 a);
 void func_80017794(void *a, void *b, void *c);
-void func_80028DEC(void *a, s32 b);
 
 void func_8005194C(void) {
     Matrix mtxA;
@@ -40,7 +35,7 @@ void func_8005194C(void) {
     *(s32 *)0x1F80001C = 0;
     *(s32 *)0x1F800020 = 0;
 
-    func_8001A610();
+    GameSetCameraRotMatrix();
     func_80069728((Matrix *)0x1F800028, &D_80082D6C);
 
     if (249999 < g_MenuViewOffsetTarget) {
@@ -110,11 +105,11 @@ void func_8005194C(void) {
 
     p = &D_8009E6F8;
     *p = *p + D_801E8268;
-    func_8001A530(&mtxB, 0x800 - *p);
-    func_8001A5A0(&mtxA, D_8009E6F4);
-    func_80069568(&mtxB, &mtxA);
-    func_80069568((Matrix *)0x1F800028, &mtxA);
-    func_80017A10(14);
+    GameBuildRotMatrixY(&mtxB, 0x800 - *p);
+    GameBuildRotMatrixX(&mtxA, D_8009E6F4);
+    MulMatrix2(&mtxB, &mtxA);
+    MulMatrix2((Matrix *)0x1F800028, &mtxA);
+    GameSelectModelBank(14);
     func_80017794((void *)0x1F80011C, p - 9, &mtxA);
     *(s32 *)0x1F800084 = 0;
     {
@@ -122,6 +117,6 @@ void func_8005194C(void) {
         if ((s2 & 3) < g_ModelBankCount) {
             a1 = s2 & 3;
         }
-        func_80028DEC((void *)0x1F800000, a1);
+        GameSubmitModel((void *)0x1F800000, a1);
     }
 }

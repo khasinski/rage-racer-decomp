@@ -5,6 +5,8 @@
 #include "game/state.h"
 #include "game/menu.h"
 #include "game/track.h"
+#include "game/render.h"
+#include "game/cd.h"
 
 extern s16 D_8019C750;
 
@@ -67,21 +69,15 @@ void func_80040ADC(s32 arg0);
 
 void func_80040DB4(s32 arg0);
 
-void func_8004123C(void);
 
 void func_80041840(void);
 
 void func_800418D4(void);
 
-void func_80042BF0(void);
 
-void func_80042C0C(void);
 
-void func_80042C28(void);
 
-void func_80042CCC(s32 arg0);
 
-void func_80045CD4(void);
 
 extern s16 D_8009E83C;
 
@@ -121,20 +117,20 @@ void func_80037200(void) {
         D_801E4BAC = (u32)D_801E4BAC < 1;
 
         if (D_801E4BAC != 0) {
-            func_80042C0C();
+            GamePauseCdAudio();
             GameForceAllEffectVoicesEnabled(0);
             D_801E414C = 0;
             GamePlaySoundCue(2);
         } else if (D_801E414C == 2) {
             D_801E43FC = 0;
             g_RacePhase = 7;
-            func_80042CCC(0x1E);
+            GameStartCdVolumeFade(0x1E);
         } else if (D_801E414C == 1) {
             func_80035258(0xB);
         } else {
             GameForceAllEffectVoicesEnabled(1);
             if (g_RacePhase >= 2) {
-                func_80042C28();
+                GameResumeCdAudio();
             }
         }
     }
@@ -171,7 +167,7 @@ void func_80037200(void) {
         func_800418D4();
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         func_80041840();
-        func_8004123C();
+        GameDrawCourseObjects();
         func_8003EAF4();
         func_8003F02C();
         func_80040730();
@@ -182,7 +178,7 @@ void func_80037200(void) {
     g_AnimTimer++;
 
     if ((u32)g_SceneTimer >= 0x1F && g_RacePhase == 0) {
-        func_80042BF0();
+        GameStartCdAudio();
         g_RacePhase = 2;
         D_8019C750 = 0xA;
     }
@@ -190,18 +186,18 @@ void func_80037200(void) {
     if (D_801E3E7C >= g_TrackLength && g_RacePhase < 3) {
         D_801E43FC = 0;
         g_RacePhase = 7;
-        func_80042CCC(0x1E);
+        GameStartCdVolumeFade(0x1E);
         GameForceAllEffectVoicesEnabled(0);
     }
 
     GameUpdateLoadedAudioVoices(0, 1);
     func_8003CF14(D_8009E6D4, 1);
     func_80019EFC(D_8009E74C);
-    func_80045CD4();
+    GameUpdateEnvironment();
     func_800418D4();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     func_80041840();
-    func_8004123C();
+    GameDrawCourseObjects();
     func_8003E590();
     func_8003EAF4();
     func_8003EC98();

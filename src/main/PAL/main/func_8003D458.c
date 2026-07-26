@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 #include "game/race.h"
+#include "game/render.h"
 
 typedef struct {
     s32 x;
@@ -17,10 +18,7 @@ extern struct {
 } D_8007E290[];
 extern Vec4i D_8007E298[];
 
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_80069568(Matrix *lhs, Matrix *rhs);
 void func_80017794(void *arg0, Vec4i *state, Matrix *mtx);
-void func_800296B4(void *arg0, s32 arg1);
 
 void func_8003D458(s32 arg0) {
     Matrix mtx;
@@ -33,8 +31,8 @@ void func_8003D458(s32 arg0) {
     s32 lim;
 
     if (g_RacePhase < 2 && arg0 >= 0x51) {
-        func_8001A530(&mtx, D_8007E2B8[g_RaceSeries]);
-        func_80069568((Matrix *)0x1F800028, &mtx);
+        GameBuildRotMatrixY(&mtx, D_8007E2B8[g_RaceSeries]);
+        MulMatrix2((Matrix *)0x1F800028, &mtx);
         if (arg0 - 90 > 0) {
             state = D_8007E298[g_RaceSeries];
             s1 = (arg0 - 90) / 3;
@@ -62,6 +60,6 @@ void func_8003D458(s32 arg0) {
             *(s32 *)0x1F800084 = 0;
             drawArg = (value < lim) ? value : 1;
         }
-        func_800296B4((void *)0x1F800000, drawArg);
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
     }
 }

@@ -3,7 +3,7 @@
 extern s32 D_801E4B34;
 
 void func_80066604(void *packet, void *rect);
-void func_80064DDC(void *ot, void *packet);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
 void *func_80034058(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     void *oldPacket;
@@ -18,6 +18,6 @@ void *func_80034058(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     func_80066604(packet, rect);
     oldPacket = packet;
     packet = (u8 *)packet + 12;
-    func_80064DDC(ot, oldPacket);
+    AddPrim(ot, oldPacket);
     return packet;
 }

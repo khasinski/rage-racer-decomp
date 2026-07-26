@@ -1,11 +1,11 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/sound.h"
+#include "psyq/snd.h"
 
 
-void func_80077C7C(s32 voice, s32 vab, s32 prog, s32 tone, s32 note, s32 a5, s32 a6, s32 a7);
 void func_80078528(s32 voice, s16 left, s16 right);
-void func_80078018(s32 voice);
+s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
 
 #define UPDATE_BASIC_EFFECT_VOLUME()                                  \
     raw = *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset);                              \
@@ -93,7 +93,7 @@ void func_8005C6C0(void) {
     do {
         switch (*state) {
         case 0:
-            func_80077C7C(voicePacked >> 16, g_VabIds[0],
+            SsUtKeyOnV(voicePacked >> 16, g_VabIds[0],
                           *(s16 *)((u8 *)&D_801E6D00[0].left + offset),
                           *(s16 *)((u8 *)&D_801E6D00[0].right + offset), 0x3C, 0, 0, 0);
             START_BASIC_EFFECT_VOLUME();
@@ -102,7 +102,7 @@ void func_8005C6C0(void) {
             UPDATE_BASIC_EFFECT_VOLUME();
             break;
         case 1:
-            func_80078018(voicePacked >> 16);
+            SsUtKeyOffV(voicePacked >> 16);
             *state = neg;
             break;
         }

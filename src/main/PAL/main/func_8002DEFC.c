@@ -4,6 +4,7 @@
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/car.h"
+#include "game/render.h"
 
 typedef struct GearRange {
     s16 up;
@@ -95,12 +96,6 @@ extern u16 D_8007DAB2[];
 s32 func_8002CD08(void *car);
 void func_8002CD4C(void *car);
 void func_8002A810(void *car);
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_8001A5A0(Matrix *mtx, s32 angle);
-void func_8001A4C0(Matrix *mtx, s32 angle);
-void func_80069568(Matrix *lhs, Matrix *rhs);
-s32 *func_80069678(void *mtx, void *vec, void *out);
-void func_80069D18(void *rot, void *mtx);
 void func_8002C168(void *car);
 void func_80038C4C(void *car);
 s32 func_80031298(void *car, s32 arg1, void *arg2);
@@ -109,10 +104,9 @@ void func_80038F0C(s32 arg0, void *car);
 void func_80038B04(void *car);
 void func_80039280(void *car);
 void func_80038FF0(void *car);
-s32 func_8002A788(s32 arg0, s32 arg1);
 s32 func_80068568(s32 angle);
-s32 func_800632B0(void);
-void func_8005D6EC(s32 id);
+s32 GameRandom15(void) asm("func_800632B0");
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8005C104(s32 arg0, s32 arg1, s32 arg2);
 void func_8005D9F8(s32 value, s32 bank);
 
@@ -318,11 +312,11 @@ void func_8002DEFC(Car *car) {
 
     car->unk00 -= car->unk10;
     car->unk08 -= car->unk18;
-    func_8001A530(&m1, car->unk24);
-    func_8001A5A0(&m2, car->unk20);
-    func_80069568(&m2, &m1);
-    func_8001A4C0(&m2, car->unk28);
-    func_80069568(&m2, &m1);
+    GameBuildRotMatrixY(&m1, car->unk24);
+    GameBuildRotMatrixX(&m2, car->unk20);
+    MulMatrix2(&m2, &m1);
+    GameBuildRotMatrixZ(&m2, car->unk28);
+    MulMatrix2(&m2, &m1);
 
     sv1.vx = 0;
     sv1.vy = 0;
@@ -336,7 +330,7 @@ void func_8002DEFC(Car *car) {
     m2.m[2][1] = m1.m[1][2];
     m2.m[2][2] = m1.m[2][2];
     sv1.vz = -p->unk3E - 50;
-    func_80069678(&m2, &sv1, &car->unk10);
+    ApplyMatrix(&m2, &sv1, &car->unk10);
 
     tmp.x = (p->accelPos * 6) / 1280 + car->unk00 + car->unk10;
     tmp.z = (p->brakePos * 6) / 1280 + car->unk08 + car->unk18;
@@ -351,7 +345,7 @@ void func_8002DEFC(Car *car) {
     sv2.vx = 0;
     sv2.vz = 0;
     sv2.vy = slip;
-    func_80069D18(&sv2, &mA);
+    RotMatrix(&sv2, &mA);
 
     arr[0] = 0;
     arr[1] = 0;
@@ -361,7 +355,7 @@ void func_8002DEFC(Car *car) {
         sv2.vx = *(u16 *)((u8 *)D_8007DAB0 + off) * 4;
         sv2.vz = *(u16 *)((u8 *)D_8007DAB2 + off) * 4;
         sv2.vy = 0;
-        func_80069678(&mA, &sv2, &vout);
+        ApplyMatrix(&mA, &sv2, &vout);
         if (arr[0] < vout.x) {
             arr[2] = i;
             arr[0] = vout.x;
@@ -382,7 +376,7 @@ void func_8002DEFC(Car *car) {
     if (p->unk3C != 0) {
         s32 d = (g_CarSpec->revLimit + g_CarSpec->redline) / 2 - D_801E4BF4;
         if (d > 0) {
-            car->unk20 += (d * func_800632B0()) / 3276700;
+            car->unk20 += (d * GameRandom15()) / 3276700;
         }
     }
 
@@ -436,7 +430,7 @@ void func_8002DEFC(Car *car) {
             D_801E8AA0 = 0;
             if ((s16)car->shiftTick >= 19) {
                 if (g_RacePhase < 3) {
-                    func_8005D6EC(0xE);
+                    GamePlaySoundCue(0xE);
                 }
             }
             if (p->state98 == 0 && (s16)car->shiftTick >= 3) {
@@ -480,7 +474,7 @@ void func_8002DEFC(Car *car) {
         car->unk04 += p->unk68;
         func_80038FF0(car);
     } else {
-        slip = func_8002A788(0xC00 - *(s16 *)(g_TrackPoints + car->trackPointIndex * 24 + 10),
+        slip = GameGetAngleDistance(0xC00 - *(s16 *)(g_TrackPoints + car->trackPointIndex * 24 + 10),
                              car->unkA0);
         if (crash != 0) {
             p->unk48 -= 1000;
@@ -503,12 +497,12 @@ void func_8002DEFC(Car *car) {
                     if (car->unk82 >= 15) {
                         if ((u32)(slip - 768) < 257U) {
                             if (skid == 1) {
-                                func_8005D6EC(0xA);
+                                GamePlaySoundCue(0xA);
                             } else if (car->speed >= 81) {
-                                func_8005D6EC(0xD);
+                                GamePlaySoundCue(0xD);
                             }
                         } else {
-                            func_8005D6EC(g_MirrorMode == 0 ? 0xB : 0xC);
+                            GamePlaySoundCue(g_MirrorMode == 0 ? 0xB : 0xC);
                         }
                     }
                     break;
@@ -517,14 +511,14 @@ void func_8002DEFC(Car *car) {
                     if (car->unk82 >= 15) {
                         if ((u32)(slip - 768) < 257U) {
                             if (skid == 2) {
-                                func_8005D6EC(0xA);
+                                GamePlaySoundCue(0xA);
                             } else if (car->speed >= 81) {
-                                func_8005D6EC(0xD);
+                                GamePlaySoundCue(0xD);
                             }
                         } else if (g_MirrorMode == 0) {
-                            func_8005D6EC(0xC);
+                            GamePlaySoundCue(0xC);
                         } else {
-                            func_8005D6EC(0xB);
+                            GamePlaySoundCue(0xB);
                         }
                     }
                     break;
@@ -555,7 +549,7 @@ void func_8002DEFC(Car *car) {
     }
 
     if (D_8019CAB4 >= g_CarSpec->revLimit - 100 && D_8009E830 >= 129) {
-        s32 r = func_800632B0();
+        s32 r = GameRandom15();
 
         D_801E40B0 = g_AnimTimer & 2;
         D_801E4170 = r % 150 / 2;
@@ -563,7 +557,7 @@ void func_8002DEFC(Car *car) {
         revFlag = 0;
         if (p->unk78 == 0 && (g_AnimTimer & 8)) {
             D_801E40B0 = 0;
-            D_801E4170 = func_80068568(func_800632B0() & 0xFFF) * 150 / 4096;
+            D_801E4170 = func_80068568(GameRandom15() & 0xFFF) * 150 / 4096;
             if (D_801E4170 <= 0) {
                 D_801E4170 = 0;
             }
@@ -581,7 +575,7 @@ void func_8002DEFC(Car *car) {
             if (D_8019CAB4 >= g_CarSpec->redline - 2000) {
                 revFlag = 1;
                 if (D_8019CAB4 < g_CarSpec->redline) {
-                    revFlag = func_800632B0() & 1;
+                    revFlag = GameRandom15() & 1;
                 }
             }
         } else {

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "game/state.h"
+#include "game/cd.h"
 
 extern s32 D_8007F5F8;
 extern s32 D_8007F5FC;
@@ -19,7 +20,7 @@ extern s32 D_8009B1B4;
 extern s32 D_8019C7BC;
 extern CdlLOC D_8007F5B0[];
 
-s32 func_8006A5A4(s32 arg0, void *arg1, s32 arg2);
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 s32 func_8006A534(s32 arg0, s32 arg1);
 s32 func_8006A554(s32 arg0, void *arg1);
 s32 CdPosToInt_Local(CdlLOC *loc) asm("func_8006AADC");
@@ -27,8 +28,6 @@ void func_800432A8(void);
 void func_80043494(void);
 void func_800437B8(void);
 void func_800431BC(void);
-void func_80042FA0(s32 arg0);
-void func_80042D10(void);
 void SsSetSpuInputAttr_Link(u8 source, u8 field, u8 value) asm("SsSetSpuInputAttr");
 
 void func_80043598(void) {
@@ -49,7 +48,7 @@ void func_80043598(void) {
         /* fallthrough */
 
     case 1:
-        if (func_8006A5A4(0x11, 0, (s32)&D_8009B16C) != 0) {
+        if (CdControl(0x11, 0, (s32)&D_8009B16C) != 0) {
             g_CdCommandStep = 2;
         }
         break;
@@ -86,7 +85,7 @@ void func_80043598(void) {
         /* fallthrough */
 
     case 4:
-        if (func_8006A5A4(9, 0, 0) != 0) {
+        if (CdControl(9, 0, 0) != 0) {
             g_CdCommandStep = 5;
         }
         break;
@@ -138,7 +137,7 @@ state_0:
     }
     g_CdCommandStep = 1;
 state_1:
-    if (func_8006A5A4(3, 0, 0) == 0) {
+    if (CdControl(3, 0, 0) == 0) {
         goto done;
     }
     g_CdCommandStep = 2;
@@ -194,7 +193,7 @@ void func_800438BC(void) {
     D_8007F5F8 = 0;
     g_CdVolume = 0x7F;
     D_8009B1B4 = 0;
-    func_80042FA0(0x7F);
+    GameSetCdVolume(0x7F);
 }
 
 void func_80043974(void) {
@@ -247,5 +246,5 @@ check_cd:
         }
     }
 done:
-    func_80042D10();
+    GameStepCdVolumeFade();
 }

@@ -13,7 +13,7 @@ s32 func_8006B620(s32 arg0, void *arg1, s32 arg2, s32 arg3);
  * pinned to match; the C identifiers may be renamed but the asm("$N") pins and
  * offsets must not change.
  */
-s32 CdControl(s32 arg0, void *arg1, s32 arg2) asm("func_8006A5A4");
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 s32 CdControl(s32 arg0, void *arg1, s32 arg2) {
     register void *arg asm("$17");
     register s32 arg2Reg asm("$18");

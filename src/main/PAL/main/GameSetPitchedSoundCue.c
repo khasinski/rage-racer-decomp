@@ -1,12 +1,12 @@
 #include "common.h"
 #include "game/audio.h"
+#include "psyq/snd.h"
 
 extern s32 D_801E6D38[];
 extern u8 D_801E6D34[];
 extern u8 D_801E6D40[];
 
-void func_80077C7C(s32, s32, s32, s32, s32, s32, s32, s32);
-void func_80078018(s32);
+s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
 void func_80078528(s32, s16, s16);
 void func_800781C0(s32, s32, s32, s32, s32, s32, s32);
 
@@ -69,7 +69,7 @@ void func_8005CDB0(void) {
         state = *statePtr;
         switch (state) {
         case 0:
-            func_80077C7C(voice >> 16, g_VabIds[0], *f0Ptr,
+            SsUtKeyOnV(voice >> 16, g_VabIds[0], *f0Ptr,
                           *(s16 *)(D_801E6D34 + offset), 0x3C, 0, 0, 0);
             VOLPITCH();
             break;
@@ -77,7 +77,7 @@ void func_8005CDB0(void) {
             VOLPITCH();
             break;
         case 1:
-            func_80078018(voice >> 16);
+            SsUtKeyOffV(voice >> 16);
             *statePtr = neg;
             break;
         }

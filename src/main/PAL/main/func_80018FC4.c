@@ -3,6 +3,7 @@
 #include "game/asset.h"
 #include "game/car.h"
 #include "game/race.h"
+#include "game/cd.h"
 
 /*
  * Every `X + *(s32 *)(X + 4*k)` below is sub-block k of the loaded asset
@@ -28,14 +29,14 @@ s32 func_8005B89C(void);
 s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 arg0, void *arg1);
 void func_80034DF4(void);
-void func_8001A3C0(void *arg0);
+void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A2E0(void *arg0);
 void func_8001A40C(void *arg0);
 void func_80019EBC(void);
 void func_80017BD4(void *arg0);
 void func_8004553C(void *arg0);
 void func_8004550C(void *arg0);
-void func_80017948(void *arg0, s32 arg1);
+void GameRegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void func_8002A6B0(void *arg0);
 void func_80017A6C(void *arg0);
 void func_80017AD0(void *arg0);
@@ -43,7 +44,6 @@ void func_8004121C(void *arg0);
 void func_80034E04(void *arg0);
 void func_80043AC8(void *arg0, s32 arg1);
 s32 func_80017C2C(void);
-void func_80042C94(void);
 extern s32 D_801E4B30;
 extern s32 D_8019C904;
 
@@ -106,7 +106,7 @@ void func_8001901C(void) {
             func_8005B768(3, p1, p2, base_a3);
             base_a0 = D_8019CAFC;
             g_AssetBlockPtr = ASSET_SUB(base_a0, 4);
-            func_8001A3C0(g_AssetBlockPtr);
+            GameUploadImageAsset(g_AssetBlockPtr);
             g_AssetLoadState = 4;
             D_8019CAFC = D_801E8AB0;
         }
@@ -130,10 +130,10 @@ void func_8001901C(void) {
             s32 off0, off1;
             base_a0 = D_8019CAFC;
             g_AssetBlockPtr = ASSET_SUB(base_a0, 0);
-            func_8001A3C0(g_AssetBlockPtr);
+            GameUploadImageAsset(g_AssetBlockPtr);
             base_a0 = D_8019CAFC;
             g_AssetBlockPtr = ASSET_SUB(base_a0, 1);
-            func_8001A3C0(g_AssetBlockPtr);
+            GameUploadImageAsset(g_AssetBlockPtr);
             base_a0 = D_8019CAFC;
             g_AssetBlockPtr = ASSET_SUB(base_a0, 2);
             func_8001A2E0(g_AssetBlockPtr);
@@ -142,10 +142,10 @@ void func_8001901C(void) {
             off1 = ((GameSceneAssetHeader *)base)->offsets[4];
             g_AssetBlockPtr = base + off0;
             D_801E8AB0 = base + off1;
-            func_8001A3C0(g_AssetBlockPtr);
+            GameUploadImageAsset(g_AssetBlockPtr);
             func_8001A40C(D_8019CAFC);
             D_801E42D0 = D_8019CAFC;
-            func_8001A3C0(D_801E8AB0);
+            GameUploadImageAsset(D_801E8AB0);
             func_80019EBC();
             g_AssetLoadState = 6;
             D_8019CAFC = D_8019CAFC + 0x38000;
@@ -164,10 +164,10 @@ void func_8001901C(void) {
             base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 0); func_80017BD4(g_AssetBlockPtr);
             base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 1); func_8004553C(g_AssetBlockPtr);
             base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 2); func_8004550C(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 3); func_80017948(g_AssetBlockPtr, 1);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 3); GameRegisterModelBank(g_AssetBlockPtr, 1);
             base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 4); func_8002A6B0(g_AssetBlockPtr);
             base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 5); func_80017A6C(g_AssetBlockPtr);
-            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 6); func_80017948(g_AssetBlockPtr, 2);
+            base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 6); GameRegisterModelBank(g_AssetBlockPtr, 2);
             base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 7); func_80017AD0(g_AssetBlockPtr);
             base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 8); func_8004121C(g_AssetBlockPtr);
             base_a0 = D_8019CAFC; g_AssetBlockPtr = ASSET_SUB(base_a0, 9); func_80034E04(g_AssetBlockPtr);
@@ -197,7 +197,7 @@ s32 GameRequestRaceStart(void) {
         return 0;
     }
 
-    func_80042C94();
+    GameResetCdAudioState();
     g_MainState = state;
     g_AssetLoadState = 1;
     return 1;

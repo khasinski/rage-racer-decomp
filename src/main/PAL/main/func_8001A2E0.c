@@ -3,7 +3,7 @@
 #include "game/race.h"
 #include "game/asset.h"
 
-void func_80065B24(Rect *rect, void *data);
+void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void func_800658FC(s32 mode);
 
 void func_8001A2E0(void *arg0) {
@@ -23,7 +23,7 @@ void func_8001A2E0(void *arg0) {
         rect[1] = block->y;
         rect[2] = block->w;
         rect[3] = block->h;
-        func_80065B24((Rect *)rect, block->pixels);
+        LoadImage((Rect *)rect, block->pixels);
         func_800658FC(0);
         arg0 = (u8 *)block + (((u32)block->size >> 2) << 2);
     }
@@ -34,14 +34,15 @@ void func_8001A2E0(void *arg0) {
     width = rect[2] = block->w;
     rect[3] = height = block->h;
     if (((s32)(width << 16) > 0) && ((s32)(height << 16) > 0)) {
-        func_80065B24((Rect *)rect, block->pixels);
+        LoadImage((Rect *)rect, block->pixels);
         func_800658FC(0);
     }
 }
 
 void func_8001A2E0(void *arg0);
 
-void func_8001A3C0(void *arg0) {
+void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
+void GameUploadImageAsset(void *arg0) {
     union {
         s32 offset;
         u8 *next;
@@ -71,14 +72,14 @@ extern Rect D_8007C718;
 extern GpuRectPacked D_8007C720;
 extern u16 D_801E444C[];
 
-void func_80065B24(Rect *rect, void *data);
+void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void func_80065B88(Rect *rect, void *data);
 s32 func_80065BEC(GpuRectPacked *rect, u32 x, u32 y);
 void func_800658FC(s32 mode);
 
 void func_8001A40C(void *dst) {
     D_801E444C[0] = 0x8000;
-    func_80065B24(&D_8007C718, D_801E444C);
+    LoadImage(&D_8007C718, D_801E444C);
 
     if (g_GrandPrixSeries != 0) {
         func_80065BEC(&D_8007C720, 0x3F0, 0xE2);
@@ -90,8 +91,8 @@ void func_8001A40C(void *dst) {
 }
 
 
-void func_8001A3C0(void *arg0);
+void GameUploadImageAsset(void *arg0);
 
 void func_8001A498(void) {
-    func_8001A3C0(g_LoadBuffer);
+    GameUploadImageAsset(g_LoadBuffer);
 }

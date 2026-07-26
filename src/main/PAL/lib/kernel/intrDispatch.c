@@ -12,7 +12,6 @@ extern s32 D_8009A4C8;
 extern u8 D_80013B70[];
 extern u8 D_80013B8C[];
 
-void func_8001674C(u8 *fmt, ...);
 void func_8006E654(void);
 
 void intrDispatch(void) {
@@ -26,7 +25,7 @@ void intrDispatch(void) {
 
     state = D_80099430;
     if (state[0] == 0) {
-        func_8001674C(D_80013B70, *D_8009A4BC);
+        GameDebugPrintf(D_80013B70, *D_8009A4BC);
         func_8006E654();
     }
     D_80099432 = 1;
@@ -57,7 +56,7 @@ void intrDispatch(void) {
         c = D_8009A4C8;
         D_8009A4C8 = c + 1;
         if (c >= 0x801) {
-            func_8001674C(D_80013B8C, *D_8009A4BC, *D_8009A4C0);
+            GameDebugPrintf(D_80013B8C, *D_8009A4BC, *D_8009A4C0);
             D_8009A4C8 = 0;
             *D_8009A4BC = 0;
         }

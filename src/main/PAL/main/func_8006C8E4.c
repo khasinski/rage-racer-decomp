@@ -32,10 +32,10 @@ extern u8 D_80013AF4[];
 extern u16 D_80013AD0;
 extern s16 D_80013AD4;
 extern s8 D_80013AD6;
+extern void GameDebugPrintf() asm("func_8001674C");
 s32 func_8006CB88(s32 arg0, s32 arg1, void *arg2);
 void func_8006A9D8(u32 arg0, Entry *arg1);
 void func_8006CBF4(char *dst, u8 *src, s32 n);
-extern void func_8001674C();
 s32 func_8006C8E4(s32 arg0)
 {
   u8 *p;
@@ -49,13 +49,13 @@ s32 func_8006C8E4(s32 arg0)
   {
     if (D_80099048 > 0)
     {
-      func_8001674C(D_80013A94);
+      GameDebugPrintf(D_80013A94);
     }
     return -1;
   }
   if (D_80099048 >= 2)
   {
-    func_8001674C(D_80013AB4);
+    GameDebugPrintf(D_80013AB4);
   }
   i = 0;
   p = D_8009D714;
@@ -66,7 +66,7 @@ s32 func_8006C8E4(s32 arg0)
       break;
     }
     __builtin_memcpy(&lba, p + 2, 4);
- do { func_8006A9D8(lba & 0xFFFFFFFFFFFFFFFFu, &D_8009BB14[i]); __builtin_memcpy(&D_8009BB14[i].size, p + 0xA, 4); switch (i) { case 0: *((u16 *) D_8009BB14[0].name) = D_80013AD0; break; case 1: { s32 hi = D_80013AD4; s32 lo = D_80013AD6; *((s16 *) D_8009BB14[1].name) = hi; *(volatile u8 *)&D_8009BB14[1].name[2] = lo; break; } default: func_8006CBF4(D_8009BB14[i].name, p + 0x21, p[0x20]); D_8009BB14[i].name[p[0x20]] = 0; break; } if (D_80099048 >= 2) { func_8001674C(D_80013AD8, D_8009BB14[i].min, D_8009BB14[i].sec, D_8009BB14[i].frame, D_8009BB14[i].size, D_8009BB14[i].name); } } while (0);
+ do { func_8006A9D8(lba & 0xFFFFFFFFFFFFFFFFu, &D_8009BB14[i]); __builtin_memcpy(&D_8009BB14[i].size, p + 0xA, 4); switch (i) { case 0: *((u16 *) D_8009BB14[0].name) = D_80013AD0; break; case 1: { s32 hi = D_80013AD4; s32 lo = D_80013AD6; *((s16 *) D_8009BB14[1].name) = hi; *(volatile u8 *)&D_8009BB14[1].name[2] = lo; break; } default: func_8006CBF4(D_8009BB14[i].name, p + 0x21, p[0x20]); D_8009BB14[i].name[p[0x20]] = 0; break; } if (D_80099048 >= 2) { GameDebugPrintf(D_80013AD8, D_8009BB14[i].min, D_8009BB14[i].sec, D_8009BB14[i].frame, D_8009BB14[i].size, D_8009BB14[i].name); } } while (0);
     p = p + (*p);
     i++;
     if (i >= 0x40)
@@ -82,7 +82,7 @@ s32 func_8006C8E4(s32 arg0)
   }
   if (2 <= D_80099048)
   {
-    func_8001674C(D_80013AF4, i);
+    GameDebugPrintf(D_80013AF4, i);
   }
   return 1;
 }

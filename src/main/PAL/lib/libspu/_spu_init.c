@@ -43,7 +43,6 @@ typedef union SpuInitRegisterMap {
     volatile u16 raw[0x100];
 } SpuInitRegisterMap;
 
-extern s32 func_8001674C(const char *format, ...);
 extern s32 func_80078F4C(s32 addr, s32 size);
 
 extern char D_80013EC0[];
@@ -93,7 +92,7 @@ s32 _spu_init(s32 resetMode) {
             waitCount = D_8009AB74 + 1;
             D_8009AB74 = waitCount;
             if (waitCount > 5000) {
-                func_8001674C(D_80013EC0, D_80013ED0);
+                GameDebugPrintf(D_80013EC0, D_80013ED0);
                 break;
             }
         } while (D_8009AB7C->regs.spuStat & 0x7FF);

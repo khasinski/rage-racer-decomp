@@ -9,8 +9,7 @@ extern s32 D_801E6CFC;
 extern s32 D_800126AC[];
 extern s32 D_800126B4[];
 
-void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
-void func_80078018(s32 arg0);
+s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
 void func_8005C09C(s32 arg0);
 void func_8005C0E4(void);
 
@@ -40,7 +39,7 @@ void GameForceBasicEffectVoicesEnabled(s32 enabled) {
             left = g_VabIds[0];
             right = *(s16 *)((u8 *)&D_801E6D00[0].left + offset);
             zeroArg = 0;
-            func_80077C7C(arg0, left, right, zeroArg, raw, 0, 0, 0);
+            SsUtKeyOnV(arg0, left, right, zeroArg, raw, 0, 0, 0);
             asm volatile("" : : "r"(unused));
 
             raw = *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset);
@@ -76,7 +75,7 @@ void GameForceBasicEffectVoicesEnabled(s32 enabled) {
 
             SsUtSetVVol((s16)arg0, left, right);
         } else {
-            func_80078018(voicePacked >> 16);
+            SsUtKeyOffV(voicePacked >> 16);
         }
 
         voicePacked += 0x10000;
@@ -192,7 +191,7 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
             right = *(s16 *)toneBase;
             arg3 = *(s16 *)((u8 *)&D_801E6D30[0].tone + offset);
             raw = 0x3C;
-            func_80077C7C(arg0, left, right, arg3, raw, 0, 0, 0);
+            SsUtKeyOnV(arg0, left, right, arg3, raw, 0, 0, 0);
 
             scale = *(s32 *)((u8 *)&D_801E6D30[0].volume + offset);
             asm volatile(
@@ -254,7 +253,7 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
                 : "r"(pitchBase), "r"(arg0), "r"(right)
                 : "$2", "$5", "$7", "$31", "memory");
         } else {
-            func_80078018(voicePacked >> 16);
+            SsUtKeyOffV(voicePacked >> 16);
         }
 
         voicePacked += 0x10000;

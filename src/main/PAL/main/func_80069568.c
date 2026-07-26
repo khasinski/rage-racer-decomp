@@ -5,7 +5,7 @@
  *
  * Symbol:   func_80069568  (libgte matrix x matrix multiply, cc region 2.6.3)
  * Reason:   hand-written PSY-Q libgte routine (.set noreorder style); sibling of
- *           func_80069458 / func_80068CA4 / func_800696C8 / func_800690E0.
+ *           MulMatrix / func_80068CA4 / func_800696C8 / func_800690E0.
  * Evidence: `lui $1,0xffff; and rN,rN,$1` masks twice (not CSE'd) using the
  *           reserved assembler temp $at, which cc1 never allocates; register
  *           file is t0-t8 exclusively (GCC prefers v0/v1/a0-a3); reached only

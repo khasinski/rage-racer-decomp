@@ -9,15 +9,14 @@ extern s32 D_801E6CFC;
 extern s32 D_800126AC[];
 extern s32 D_800126B4[];
 
-void func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
-void func_80078018(s32 arg0);
+s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
 
 void GameStartIndexedEffectVoice(s32 baseTone) {
-    func_80077C7C(0x14, g_VabIds[0], (s16)baseTone, 0, 0x3C, 0, 0, 0);
+    SsUtKeyOnV(0x14, g_VabIds[0], (s16)baseTone, 0, 0x3C, 0, 0, 0);
 }
 
 void GameStopIndexedEffectVoice(void) {
-    func_80078018(0x14);
+    SsUtKeyOffV(0x14);
 }
 
 void GameSetIndexedEffectVoice(s32 index, s32 phase, s32 volume) {

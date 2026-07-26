@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/state.h"
 #include "game/menu.h"
+#include "psyq/gpu.h"
 
 extern s32 D_8009B564;
 extern s32 D_8009B568;
@@ -36,7 +37,6 @@ extern s32 D_80082FC0;
 extern s32 D_80082FC4;
 extern s32 D_80082FC8;
 
-void func_80065860(s32 arg0);
 void func_8005F65C(void *buf);
 s32 func_80060724(s32 off, void *buf);
 s32 func_800609E4(s32 off, void *buf);
@@ -52,7 +52,7 @@ u16 func_800612CC(void);
 u16 func_8006131C(void);
 void func_8006136C(s32 level);
 void func_8006138C(void);
-void func_8005D6EC(s32 cue);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void GameUpdateMemoryCardMenu(void) asm("func_80061520");
 void GameUpdateMemoryCardMenu(void) {
@@ -67,7 +67,7 @@ void GameUpdateMemoryCardMenu(void) {
     s32 mslot;
 
     if (g_SceneTimer == two) {
-        func_80065860(1);
+        SetDispMask(1);
     }
 
     if ((u32) g_SceneTimer >= 6) {
@@ -173,7 +173,7 @@ L_state3:
     g_McMenuPhase = 0xF;
     D_80082FB8 = 0;
     if ((lpad & 0x90) && !fadeBusy) {
-        func_8005D6EC(3);
+        GamePlaySoundCue(3);
         func_8006138C();
     }
     }
@@ -230,7 +230,7 @@ L_copyselect:
         pad = g_PadEdge2;
         if ((pad & 0x860) == 0) goto L_cx3;
         if (*p < D_8009B744 - 1) {
-            func_8005D6EC(2);
+            GamePlaySoundCue(2);
             D_80082F50 = 1;
             D_80082FA4 = 0;
             D_80082FA8 = 0;
@@ -239,12 +239,12 @@ L_copyselect:
             goto L_sw5;
         }
         if (fadeBusy) goto L_sw5;
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         goto L_cxfade;
     L_cx3:
         if ((pad & 0x90) == 0) goto L_sw5;
         if (fadeBusy) goto L_sw5;
-        func_8005D6EC(3);
+        GamePlaySoundCue(3);
     L_cxfade:
         D_80082FB8 = 0;
         func_8006138C();
@@ -264,12 +264,12 @@ L_sw4:
         g_McMenuPhase = 2;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
         if (((a0 >> *s0) & 1) == 0) goto L_b377;
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         D_80082FAC = 0;
         nv = 0x1E;
         goto L_b475;
     L_b377:
-        func_8005D6EC(5);
+        GamePlaySoundCue(5);
         nv = 0x28;
         goto L_b475;
     L_b381:
@@ -283,19 +283,19 @@ L_sw4:
         g_McMenuPhase = 1;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
         if (((a0 >> *s0) & 1) == 0) goto L_b421;
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         D_80082FAC = 0;
         nv = 0xA;
         goto L_b475;
     L_b421:
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         nv = 0x19;
         goto L_b475;
     L_b425:
         g_McMenuPhase = 4;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b439;
     L_b433:
-        func_8005D6EC(5);
+        GamePlaySoundCue(5);
         D_80082F50 = 0;
         goto L_b477;
     L_b439:
@@ -306,12 +306,12 @@ L_sw4:
         g_McMenuPhase = 1;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
         if (((D_8009B564 >> *s0) & 1) == 0) goto L_b469;
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         D_80082FAC_v = 0;
         nv = 0xA;
         goto L_b475;
     L_b469:
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         D_80082FB4 = 0x1E;
         nv = 0xB;
     L_b475:
@@ -658,7 +658,7 @@ L_state2:
         D_8009B700 = 0;
         D_8009B704 = 0;
         if (fadeBusy != 0) goto L1003;
-        func_8005D6EC(3);
+        GamePlaySoundCue(3);
         func_8006138C();
     L1003:
         if (g_McMenuSlotData != 1) goto L_sw7;
@@ -813,24 +813,24 @@ L_b1240:
     }
     if (fadeBusy != 0) goto L_sw8;
     D_80082FA4 = 0;
-    func_8005D6EC(2);
+    GamePlaySoundCue(2);
     goto L_b1288;
 
 L_b1264:
-    func_8005D6EC(5);
+    GamePlaySoundCue(5);
     goto L_sw8;
 
 L_b1268:
     if ((g_PadEdge2 & 0x90) == 0) goto L_sw8;
     if (fadeBusy != 0) goto L_sw8;
     D_80082FA4 = 0;
-    func_8005D6EC(3);
+    GamePlaySoundCue(3);
     goto L_b1288;
 
 L_b1280:
     if ((g_PadEdge2 & 0x90) == 0) goto L_sw8;
     if (fadeBusy != 0) goto L_sw8;
-    func_8005D6EC(3);
+    GamePlaySoundCue(3);
     /* fall through */
 
 L_b1288:
@@ -883,7 +883,7 @@ L_m2sel:
         pad = g_PadEdge2;
         if ((pad & 0x860) == 0) goto L1415;
         if (*p != 0) goto L1395;
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         D_80082F50 = 1;
         D_80082FAC = 0;
         D_8009B734 = *p;
@@ -891,17 +891,17 @@ L_m2sel:
     L1395:
         if (*p != D_8009B744 - 1) goto L1405;
         if (fadeBusy) goto L_sw10;
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         goto L_b1420;
     L1405:
-        func_8005D6EC(5);
+        GamePlaySoundCue(5);
         D_80082F50 = 1;
         D_8009B734 = *p;
         goto L_sw10;
     L1415:
         if ((pad & 0x90) == 0) goto L_sw10;
         if (fadeBusy) goto L_sw10;
-        func_8005D6EC(3);
+        GamePlaySoundCue(3);
         goto L_b1420;
     }
 
@@ -977,7 +977,7 @@ L_sw9:
         D_80082FAC = 0;
         D_80082FB4 = 0;
         if (fadeBusy) goto L_sw10;
-        func_8005D6EC(3);
+        GamePlaySoundCue(3);
         func_8006138C();
         goto L_sw10;
     case 0xA:
@@ -1044,7 +1044,7 @@ L_stateIdle:
     u16 lpad = g_PadEdge2;
     g_McMenuPhase = 0x10;
     if ((lpad & 0x90) && !fadeBusy) {
-        func_8005D6EC(3);
+        GamePlaySoundCue(3);
         D_80082FB8 = 0;
         func_8006138C();
     }

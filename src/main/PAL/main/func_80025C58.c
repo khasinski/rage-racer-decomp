@@ -3,6 +3,8 @@
 #include "game/render.h"
 #include "game/menu.h"
 #include "game/car.h"
+#include "psyq/gpu.h"
+#include "game/cd.h"
 
 extern s32 D_801E4B84;
 extern s32 D_8007D6B0;
@@ -22,22 +24,15 @@ extern s32 D_8007D6B4;
 extern s32 D_801E412C;
 extern s32 D_8009E66C;
 extern s32 g_CameraViewMode asm("D_8009E870");
-void func_80042BC0();
-void func_80042BF0();
 void func_80025E54();
-void func_80065860();
-void func_80042CCC();
 void func_80033AA0();
 void func_80018B98();
 void func_80025C58();
 void func_8003BB50();
 void func_80019EFC();
-void func_80043BCC();
-void func_800389F0();
-void func_80045CD4();
+void GameUpdateCamera() asm("func_80043BCC");
 void func_800418D4();
 void func_80041888();
-void func_8004123C();
 void GameDrawCourseScenery2() asm("func_8003E2E8");
 int func_8001A0E4();
 
@@ -108,8 +103,8 @@ void func_80025ED8(void) {
     if (t == 4) goto L13c;
     if (t != 0) goto L13c;
     if (D_8019CE00 == 12) D_8019CE00 = 17;
-    func_80042BC0(D_8019CE00);
-    func_80042BF0();
+    GameRequestCdTrack(D_8019CE00);
+    GameStartCdAudio();
     D_8019C7BC = 0;
     goto L13c;
 
@@ -127,7 +122,7 @@ L124:
     D_8019CE00 = D_801E4404 + 3;
 
 L13c:
-    if (g_SceneTimer == 2) func_80065860(1);
+    if (g_SceneTimer == 2) SetDispMask(1);
     if (g_FadeStep != 0) goto L424;
 
     if (g_PadEdge2 & 0x8000) {
@@ -174,18 +169,18 @@ L13c:
                 }
             lab380:
                 if (D_8019CAF4 == 0) {
-                    func_80042CCC(60);
+                    GameStartCdVolumeFade(60);
                     D_8019CAF4 = 0x40;
                 }
                 D_8019CE00 = D_801E4404 + 3;
                 break;
             case 1:
-                func_80042CCC(60);
+                GameStartCdVolumeFade(60);
                 g_FadeStep = 4;
                 break;
             }
         } else if (f & 0x90) {
-            func_80042CCC(60);
+            GameStartCdVolumeFade(60);
             g_FadeStep = 4;
         }
     }
@@ -212,12 +207,12 @@ L48c:
     D_8009E66C = func_8001A0E4(0xff, D_8009E66C);
     func_8003BB50();
     func_80019EFC(g_Cars[D_8009E66C].field_78);
-    func_80043BCC(g_CameraViewMode, &g_Cars[D_8009E66C]);
-    func_800389F0();
-    func_80045CD4();
+    GameUpdateCamera(g_CameraViewMode, &g_Cars[D_8009E66C]);
+    GameDrawCars();
+    GameUpdateEnvironment();
     func_800418D4();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     func_80041888();
-    func_8004123C();
+    GameDrawCourseObjects();
     GameDrawCourseScenery2(g_AnimTimer, 1);
 }

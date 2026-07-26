@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/cd.h"
 
 extern s32 D_8007F5FC;
 extern u8 D_8007F5A8[];
@@ -12,9 +13,9 @@ extern s32 D_8009B178;
 extern s32 D_8009B17C;
 extern s32 D_8009B180;
 
-void func_80042D10(void);
 
-void func_80042FA0(s32 arg0) {
+void GameSetCdVolume(s32 arg0) asm("func_80042FA0");
+void GameSetCdVolume(s32 arg0) {
     s32 offset;
     s32 scale;
     s32 magic;
@@ -47,5 +48,5 @@ void func_80042FA0(s32 arg0) {
     D_8009B190 = value;
     D_8009B180 = value;
 
-    func_80042D10();
+    GameStepCdVolumeFade();
 }

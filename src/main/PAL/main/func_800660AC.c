@@ -43,7 +43,7 @@ extern Cache D_80094254;
 
 s32 func_80066CB0(void *arg0);
 s32 func_8006EAEC(void);
-void *func_800681BC(void *dst, void *src, s32 count);
+void *MemCopy(void *dst, void *src, s32 count) asm("func_800681BC");
 
 Env *func_800660AC(Env *arg0) {
     Env *s0 = arg0;
@@ -160,6 +160,6 @@ Env *func_800660AC(Env *arg0) {
         D_800941E0.funcs->submit(flags);
     }
 
-    func_800681BC(&D_80094254, s0, 0x14);
+    MemCopy(&D_80094254, s0, 0x14);
     return s0;
 }

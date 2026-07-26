@@ -7,7 +7,7 @@ extern u8 D_801E42FC[];
 extern s16 D_801E4308;
 extern u8 *D_801E43F4;
 
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 
 void func_8003E464(void) {
     register u8 *base asm("s0");
@@ -26,7 +26,7 @@ void func_8003E464(void) {
     register s32 word3 asm("a3");
 
     base = D_801E4448;
-    index = func_800632B0();
+    index = GameRandom15();
     count = g_LapCount;
     value = index % count;
     out = D_801E42FC;

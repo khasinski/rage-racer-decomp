@@ -2,7 +2,7 @@
 
 extern u32 D_801E6F2C[];
 
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void func_8004BA50(void) {
     s32 i;
@@ -13,7 +13,7 @@ void func_8004BA50(void) {
     u32 saved[8];
     u32 value;
 
-    func_8005D6EC(1);
+    GamePlaySoundCue(1);
 
     i = 0;
     stackPtr = saved;

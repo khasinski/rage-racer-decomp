@@ -30,7 +30,6 @@ void func_8006C17C(void);
 void func_8006DF64(s32 arg0, void *arg1);
 s32 func_8006B620(s32 arg0, void *arg1, s32 arg2, s32 arg3);
 s32 func_8006B0D4(s32 arg0, u8 *arg1);
-s32 func_8001674C(u8 *format, ...);
 void func_80063C38(u8 *text);
 
 s32 CD_vol(CdlATV *arg0) {
@@ -110,7 +109,7 @@ void CD_initintr(void) {
 
 s32 func_8006BD14(void) {
     func_80063C38(D_80013904);
-    func_8001674C(D_80013910, D_8009931C);
+    GameDebugPrintf(D_80013910, D_8009931C);
 
     D_8009905D = 0;
     D_8009905C = 0;

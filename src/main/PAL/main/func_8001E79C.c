@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/state.h"
+#include "psyq/gpu.h"
+#include "game/render.h"
 
 extern s32 D_8009AF6C;
 extern s32 D_8009AF70;
@@ -13,26 +15,24 @@ extern u8 D_801C068D;
 extern u8 D_8019CEA5;
 extern s32 D_801E8A90;
 
-void func_80065860(s32 arg0);
 void func_8004310C(void);
-void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
 void func_8001EB14(s32 arg0);
 void func_8001EA7C(volatile void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void func_8001EBC8(void);
 void func_8001EB5C(void (*arg0)(void));
 s32 func_8001ED3C(volatile void *arg0);
 void func_8001F018(s32 arg0);
-void func_8006DD30(s32 arg0);
+s32 VSync(s32 mode) asm("func_8006DD30");
 
 void func_8001E79C(s32 arg0) {
     s32 fail;
     char frame_pad[8];
 
-    func_80065860(0);
+    SetDispMask(0);
     D_8009AF6C = 0;
     D_8009AF70 = 0;
     func_8004310C();
-    func_8001BE9C(0, 0, 0);
+    GameSetupDisplay240(0, 0, 0);
     D_801C0638 = 0;
     D_8019CE50 = 0;
     D_801C068D = 1;
@@ -54,6 +54,6 @@ void func_8001E79C(s32 arg0) {
     D_8009AF74 = 0;
     g_SceneTimer = 0;
     D_8009F094 = 1;
-    func_8006DD30(0);
+    VSync(0);
     D_8009E678 = 0;
 }

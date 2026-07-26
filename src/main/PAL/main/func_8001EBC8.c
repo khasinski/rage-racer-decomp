@@ -15,7 +15,7 @@ extern volatile s32 D_8009AF54;
 extern s32 D_8019CA00;
 
 void func_8006402C(volatile u32 *arg0, s32 arg1);
-void func_80065B24(Rect *rect, void *data);
+void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void func_8006D1D0(void);
 
 void func_8001EBC8(void) {
@@ -70,5 +70,5 @@ void func_8001EBC8(void) {
     }
 
     oldOffset = oldBuffer << 2;
-    func_80065B24(&rect, (void *)*(volatile u32 **)((s32)D_8009AF2C + oldOffset));
+    LoadImage(&rect, (void *)*(volatile u32 **)((s32)D_8009AF2C + oldOffset));
 }

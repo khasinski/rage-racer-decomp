@@ -2,6 +2,7 @@
 #include "game/car.h"
 #include "game/race.h"
 #include "game/state.h"
+#include "game/render.h"
 
 
 extern s32 D_801E7740;
@@ -21,7 +22,6 @@ void func_800385FC(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
 
 void func_80039644(void);
 
-void func_80017A10(s32 arg0);
 
 void func_8001DFC0(GameCarRuntime *arg0);
 
@@ -108,7 +108,8 @@ void func_80038844(void) {
     func_80039644();
 }
 
-void func_800389F0(void) {
+void GameDrawCars(void) asm("func_800389F0");
+void GameDrawCars(void) {
     GameCarRuntime *base;
     s32 i;
     u8 *entry;
@@ -116,7 +117,7 @@ void func_800389F0(void) {
     s32 minus_one;
 
     base = g_Cars;
-    func_80017A10(1);
+    GameSelectModelBank(1);
 
     i = 0;
     minus_one = -1;
@@ -134,7 +135,7 @@ void func_800389F0(void) {
 }
 
 void func_80038A88(void) {
-    func_80017A10(1);
+    GameSelectModelBank(1);
     func_8001DFC0(g_Cars);
 }
 

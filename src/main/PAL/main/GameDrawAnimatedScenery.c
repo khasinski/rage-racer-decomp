@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 #include "game/race.h"
+#include "game/render.h"
 
 typedef struct {
     s32 x;
@@ -19,13 +20,8 @@ extern s16 D_8009AFCC;
 extern s16 D_8007E2E0[];
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_8001A5A0(Matrix *mtx, s32 angle);
-void func_80069458(Matrix *lhs, Matrix *rhs);
-void func_80069568(Matrix *lhs, Matrix *rhs);
 void func_80017794(void *arg0, Vec4i *state, Matrix *mtx);
-void func_800296B4(void *arg0, s32 arg1);
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 
 void GameDrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
 
@@ -79,16 +75,16 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
     if (D_8007E2EA == 0 && (arg0 & 7) == 0 && D_801E4BAC == 0) {
         D_8007E2E4 = 0;
         D_8007E2E8 = g_RacePosition;
-        D_8009AFCC = (func_800632B0() & 7) / 3;
+        D_8009AFCC = (GameRandom15() & 7) / 3;
         if (D_8007E2E8 >= 4) {
             D_8007E2E8 = 0;
         }
     }
 
-    func_8001A530(&mtx, state.w);
-    func_8001A5A0(&mtx2, D_8007E2E0[arg1]);
-    func_80069458(&mtx, &mtx2);
-    func_80069568((Matrix *)0x1F800028, &mtx);
+    GameBuildRotMatrixY(&mtx, state.w);
+    GameBuildRotMatrixX(&mtx2, D_8007E2E0[arg1]);
+    MulMatrix(&mtx, &mtx2);
+    MulMatrix2((Matrix *)0x1F800028, &mtx);
 
     if (g_GrandPrixMode == 0) {
         return;
@@ -102,13 +98,13 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
             num = D_8007E2EA + 10;
             *(s32 *)0x1F800084 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
-            func_800296B4((void *)0x1F800000, drawArg);
+            GameSubmitCourseModel((void *)0x1F800000, drawArg);
         } else {
             func_80017794((void *)0x1F80011C, &state, &mtx);
             num = D_8007E2E8;
             *(s32 *)0x1F800084 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
-            func_800296B4((void *)0x1F800000, drawArg);
+            GameSubmitCourseModel((void *)0x1F800000, drawArg);
         }
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
@@ -117,14 +113,14 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
         num = D_8009AFCC + 4;
         lim2 = g_CourseModelCount;
         drawArg = (num < lim2) ? num : 1;
-        func_800296B4((void *)0x1F800000, drawArg);
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
     } else {
         func_80017794((void *)0x1F80011C, &state, &mtx);
         num = D_8007E2EA + 0x18;
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        func_800296B4((void *)0x1F800000, drawArg);
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
         sv = D_8007E2E4;
@@ -133,6 +129,6 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
         num = D_8009AFCC + 7;
         lim2 = g_CourseModelCount;
         drawArg = (num < lim2) ? num : 1;
-        func_800296B4((void *)0x1F800000, drawArg);
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
     }
 }

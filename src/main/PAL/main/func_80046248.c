@@ -5,7 +5,6 @@
 void func_800684B0(Matrix *arg0, s32 arg1);
 s32 func_800689A8(s32 arg0);
 void func_80046188(GameRenderAxisMatrix *out, s32 arg1, s32 arg2, s32 mode);
-void func_80069458(Matrix *dst, GameRenderAxisMatrix *src);
 void func_800681F0(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ);
 void func_80069858(s32 *matrix);
 void func_800698E8(s32 *matrix);
@@ -52,7 +51,7 @@ s32 func_80046248(GameRenderObject *obj) {
     horiz = func_800689A8((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
                           (obj->field_14 - obj->z) * (obj->field_14 - obj->z));
     func_80046188(&am, (s16)pitch, (s16)((horiz << 12) / len), 0x78);
-    func_80069458(&m, &am);
+    MulMatrix(&m, &am);
 
     if (horiz != 0) {
         s32 t1;
@@ -64,7 +63,7 @@ s32 func_80046248(GameRenderObject *obj) {
         horiz = obj->field_14 - obj->z;
         t2 = (horiz << 12) / len;
         func_80046188(&am, (s16)(-t1), (s16)t2, 0x79);
-        func_80069458(&m, &am);
+        MulMatrix(&m, &am);
     }
 
     func_800681F0((s16 *)&m, -obj->x, -obj->y, -obj->z, &outX, &outY, &outZ);

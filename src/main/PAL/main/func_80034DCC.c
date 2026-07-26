@@ -4,7 +4,6 @@
 
 extern u8 D_80011438[];
 
-void func_8001674C(u8 *arg0);
 
 
 extern u8 D_80011440[];
@@ -35,7 +34,7 @@ void func_8005B468(s32 arg0);
 void func_8005B204(s32 arg0, s32 arg1, s32 arg2);
 
 void func_80034DCC(void) {
-    func_8001674C(D_80011438);
+    GameDebugPrintf(D_80011438);
 }
 
 void func_80034DF4(u32 arg0) {
@@ -63,21 +62,21 @@ void func_80034E04(u8 *arg0) {
     base += offset1;
     D_801E4BA4 = (u8 *)offset0;
     D_801E4174 = base;
-    func_8001674C(callArg);
+    GameDebugPrintf(callArg);
 }
 
 void func_80034E88(void) {
     if (func_8005B5C4() != 0) {
-        func_8001674C(&D_8001144C);
+        GameDebugPrintf(&D_8001144C);
     }
-    func_8001674C(&D_8001145C);
+    GameDebugPrintf(&D_8001145C);
 }
 
 void func_80034ED0(void) {
     func_8005BB1C();
     func_8005B468(1);
     func_8005B204(2, 0, 0);
-    func_8001674C(&D_8001146C);
+    GameDebugPrintf(&D_8001146C);
 }
 
 s32 func_80034F18(s32 arg0, s32 arg1) {

@@ -15,7 +15,7 @@ extern u8 D_8007DF02;
 s32 func_80068568(s32 angle);
 s32 func_80068634(s32 angle);
 void func_80064F30(void *prim);
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void func_80064FF8(void *prim);
 u8 *func_80033B7C(u8 *prim, s32 x, s32 y, s32 code, u16 arg4);
 void func_80033C18(s32 x, s32 y, s32 value);
@@ -88,7 +88,7 @@ void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
     }
 
     prim[7] = code7;
-    func_80064DDC(g_DrawBuffer + 0xCC, prim);
+    AddPrim(g_DrawBuffer + 0xCC, prim);
     prim += 24;
     SCRATCH = prim;
 
@@ -104,9 +104,9 @@ void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
     *(u8 *)(g_DrawBuffer + 0x236E9) = D_8007DF01;
     *(u8 *)(g_DrawBuffer + 0x236EA) = D_8007DF02;
 
-    { u8 *g = g_DrawBuffer; func_80064DDC(g + 0xCC, g + 0x236CC); }
-    { u8 *g = g_DrawBuffer; func_80064DDC(g + 0xCC, g + 0x236E4); }
-    { u8 *g = g_DrawBuffer; func_80064DDC(g + 0xCC, g + 0x236D8); }
+    { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236CC); }
+    { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236E4); }
+    { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236D8); }
 
     {
         register u8 *q asm("$16") = SCRATCH;
@@ -127,7 +127,7 @@ void func_8003351C(s32 a0, s32 arg1, s32 type, s32 amt) {
         *(s16 *)(q + 10) = v10;
         q += 16;
         asm("" : "=r"(g) : "0"(g), "r"(q) : "memory");
-        func_80064DDC(g + 0xCC, prim);
+        AddPrim(g + 0xCC, prim);
         SCRATCH = q;
     }
 }

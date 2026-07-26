@@ -2,8 +2,8 @@
 #include "game/state.h"
 #include "game/render.h"
 #include "game/menu.h"
+#include "psyq/gpu.h"
 
-void func_80065860(s32 arg0);
 void func_800218A0(s32 arg0);
 s32 func_80016EC4(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
@@ -11,7 +11,7 @@ s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 void func_80022FAC(void) {
     s32 v0, v1;
     if ((g_SceneTimer = g_SceneTimer + 1) == 2) {
-        func_80065860(1);
+        SetDispMask(1);
     }
     v0 = g_FadeLevel + g_FadeStep;
     g_FadeLevel = v0;

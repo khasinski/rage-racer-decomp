@@ -7,7 +7,8 @@ extern s32 g_CdTrackStep asm("D_8007F608");
 extern s32 g_CdCommandStep asm("D_8007F60C");
 extern u8 D_8009B1B0;
 
-void func_80042C28(void) {
+void GameResumeCdAudio(void) asm("func_80042C28");
+void GameResumeCdAudio(void) {
     if (D_8007F5F8 != 0) {
         u8 value;
 

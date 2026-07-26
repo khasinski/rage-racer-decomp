@@ -13,7 +13,7 @@
  *             - a deliberately unfilled `jr ra; nop` delay slot (GCC -O2 always
  *               fills it), plus in-order stores.
  *           Same family/representation as siblings func_80068E70, func_800696C8,
- *           func_80069678, func_800690E0.
+ *           ApplyMatrix, func_800690E0.
  * Revisit:  only with proof it was compiler-generated C.
  */
 

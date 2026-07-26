@@ -2,7 +2,7 @@
 #include "game/render.h"
 
 
-void func_80064DDC(void *arg0, void *arg1);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
 void func_80032E9C(s32 arg0) {
@@ -23,7 +23,7 @@ void func_80032E9C(s32 arg0) {
             u8 *base = g_DrawBuffer;
 
             i++;
-            func_80064DDC(base + 0xCC, (void *)(offset + (s32)base));
+            AddPrim(base + 0xCC, (void *)(offset + (s32)base));
             offset += 0x14;
         } while (i < count);
     }

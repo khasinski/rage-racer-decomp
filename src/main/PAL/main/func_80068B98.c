@@ -2,7 +2,8 @@
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *func_80068B98(s32 *matrix, void *src, void *dst) {
+void *MulMatrix0(s32 *matrix, void *src, void *dst) asm("func_80068B98");
+void *MulMatrix0(s32 *matrix, void *src, void *dst) {
     register s32 m0 asm("$8") = matrix[0];
     register s32 m1 asm("$9") = matrix[1];
     register s32 m2 asm("$10") = matrix[2];

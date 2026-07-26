@@ -16,7 +16,6 @@ extern s32 D_80094304;
 extern char D_8001362C[];
 extern char D_80013660[];
 
-void func_8001674C(char *fmt, ...);
 
 s32 func_80067F38(void) {
     s32 intrMask;
@@ -39,10 +38,10 @@ s32 func_80067F38(void) {
     (void)*gp1ForLog;
     pending = D_800942EC;
     gpuTail = D_800942F0;
-    func_8001674C(D_8001362C, (pending - gpuTail) & 0x3F, *gp1ForLog, *D_800942C8, *D_800942C0);
+    GameDebugPrintf(D_8001362C, (pending - gpuTail) & 0x3F, *gp1ForLog, *D_800942C8, *D_800942C0);
     dc = D_800942DC;
     asm("" : "=r"(dc) : "0"(dc));
-    func_8001674C(D_80013660, *dc, D_800942E0, D_800942E4);
+    GameDebugPrintf(D_80013660, *dc, D_800942E0, D_800942E4);
 
     intrMask = SetIntrMask(0);
     D_800942F0 = 0;

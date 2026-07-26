@@ -2,7 +2,7 @@
 
 extern u32 D_801E6F2C[];
 
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void func_8004BDB4(void) {
     register s32 i asm("$8");
@@ -21,7 +21,7 @@ void func_8004BDB4(void) {
 
     asm(".globl func_8004BDEC\nfunc_8004BDEC = func_8004BDB4 + 0x38");
 
-    func_8005D6EC(8);
+    GamePlaySoundCue(8);
 
     base = D_801E6F2C;
     i = 0;

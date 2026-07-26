@@ -18,8 +18,8 @@ extern volatile s32 D_8007D7B8;
 void func_8006A970(void *arg0, s32 arg1);
 s32 func_8006AADC(void *arg0);
 void func_80063C38(void *arg0);
-s32 func_8006DD30(s32 arg0);
-s32 func_8006A5A4(s32 arg0, s32 arg1, s32 arg2);
+s32 VSync(s32 mode) asm("func_8006DD30");
+s32 CdControl(s32 com, s32 param, s32 result) asm("func_8006A5A4");
 s32 func_8006A3E8(void);
 s32 func_8006A418(void);
 s32 func_8006A3F8(void);
@@ -60,21 +60,21 @@ void func_80027238(u8 arg0, s32 arg1) {
 
     {
         volatile s32 *r = &D_8007D7A8;
-        *r = func_8006DD30(-1);
+        *r = VSync(-1);
     }
 
     if (D_8007D7A4 < 0) {
         func_8002745C(1);
     }
 
-    if (func_8006DD30(-1) > D_8007D7AC + 0x4B0) {
+    if (VSync(-1) > D_8007D7AC + 0x4B0) {
         D_8007D7A4 = -1;
     }
 
-    if (D_8007D7A4 == 0 || func_8006DD30(-1) > D_8007D7AC + 0x4B0) {
+    if (D_8007D7A4 == 0 || VSync(-1) > D_8007D7AC + 0x4B0) {
         func_8006A574(D_8007D7B4);
         func_8006A58C(D_8007D7B8);
-        func_8006A5A4(9, 0, 0);
+        CdControl(9, 0, 0);
         if (D_8007D78C != 0) {
             D_8007D78C((D_8007D7A4 == 0) ? 2 : 5, arg1);
         }
@@ -88,21 +88,21 @@ s32 func_8002745C(s32 arg0) {
     func_8006A574(0);
     func_8006A58C(0);
     if (func_8006A3E8() & 0x10) {
-        if ((func_8006DD30(-1) & 0x3F) == 0) {
+        if ((VSync(-1) & 0x3F) == 0) {
             func_80063C38(&D_800111DC);
         }
         func_8006A6DC(1, 0);
         {
             volatile s32 *q = &D_8007D7AC;
-            *q = func_8006DD30(-1);
+            *q = VSync(-1);
         }
         D_8007D7A4 = -1;
         return D_8007D7A4;
     }
     if (arg0 != 0) {
         func_80063C38(&D_800111F4);
-        func_8006A5A4(9, 0, 0);
-        if (func_8006A5A4(2, func_8006A418(), 0) == 0) {
+        CdControl(9, 0, 0);
+        if (CdControl(2, func_8006A418(), 0) == 0) {
             s32 value = -1;
             volatile s32 *q = &D_8007D7A4;
 
@@ -117,7 +117,7 @@ s32 func_8002745C(s32 arg0) {
     }
     buf[0] = t;
     if ((t & 0xFF) != func_8006A3F8() || arg0 != 0) {
-        if (func_8006A5A4(0xE, (s32)buf, 0) == 0) {
+        if (CdControl(0xE, (s32)buf, 0) == 0) {
             D_8007D7A4 = -1;
             return D_8007D7A4;
         }
@@ -130,7 +130,7 @@ s32 func_8002745C(s32 arg0) {
     D_8007D798 = D_8007D794;
     func_8006A6DC(6, 0);
     D_8007D7A4 = D_8007D790;
-    D_8007D7A8 = func_8006DD30(-1);
+    D_8007D7A8 = VSync(-1);
     return D_8007D7A4;
 }
 
@@ -141,5 +141,5 @@ void func_80027634(void) {
     *ptr = 0;
     func_8006A574(D_8007D7B4);
     func_8006A58C(D_8007D7B8);
-    func_8006A5A4(9, 0, 0);
+    CdControl(9, 0, 0);
 }

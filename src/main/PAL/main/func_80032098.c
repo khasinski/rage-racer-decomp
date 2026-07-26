@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/track.h"
 #include "psyq/gte.h"
+#include "game/render.h"
 
 typedef struct TrackPointWindow {
     s32 x;
@@ -24,9 +25,7 @@ typedef struct Unk32098 {
 } Unk32098;
 
 
-s32 func_80030EB4(Unk32098 *arg0, s32 arg1);
-void func_8001A530(Matrix *mtx, s32 angle);
-s32 *func_80069678(s32 *matrix, s32 *vec, s32 *out);
+s32 GameFindTrackSegment(Unk32098 *arg0, s32 arg1) asm("func_80030EB4");
 
 s32 func_80032098(Unk32098 *arg0) {
     s32 index;
@@ -53,7 +52,7 @@ s32 func_80032098(Unk32098 *arg0) {
     s32 curZ;
     s32 angle;
 
-    index = func_80030EB4(arg0, arg0->field_30);
+    index = GameFindTrackSegment(arg0, arg0->field_30);
     nextIndex = (index + 1) % g_TrackPointCount;
 
     base = (TrackPointWindow *)g_TrackPoints;
@@ -75,9 +74,9 @@ s32 func_80032098(Unk32098 *arg0) {
     angle = cur->angle;
     nextOff = (nextIndex * 3) << 3;
     next = (TrackPointWindow *)(nextOff + (s32)base);
-    func_8001A530(&mtx, (0x1000 - angle) & 0xFFF);
+    GameBuildRotMatrixY(&mtx, (0x1000 - angle) & 0xFFF);
 
-    func_80069678((s32 *)&mtx, (s32 *)vec, out);
+    ApplyMatrix((s32 *)&mtx, (s32 *)vec, out);
 
     segmentLengthCompare = (s16)segmentLengthRaw;
     distance = out[0];

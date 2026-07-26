@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/render.h"
 
-s32 func_8001A6AC(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
@@ -47,5 +47,5 @@ void func_8002F4E4(GameCarRuntime *arg0) {
 
         car->field_A4 += ((((angleSin * otherSin) + (angleCos * otherCos)) / 4096) * car->field_A8) / 4096;
     }
-    car->headingAngle = 0x400 - func_8001A6AC(coords[0], coords[2]);
+    car->headingAngle = 0x400 - GameAtan2(coords[0], coords[2]);
 }

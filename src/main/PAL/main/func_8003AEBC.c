@@ -2,12 +2,11 @@
 #include "game/car.h"
 #include "game/track.h"
 #include "game/race.h"
+#include "game/render.h"
 
 
-s32 func_8001A6AC(s32 arg0, s32 arg1);
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
 s32 func_8002FD9C(s32 arg0, s32 arg1);
-s32 func_8002A7C4(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
@@ -16,7 +15,7 @@ s32 func_80068634(s32 arg0);
  * behind depending on the lap-direction flag g_RaceSeries), clamps the lateral
  * offset to the track half-width (field_10/field_12), projects the target point
  * off the centre-line along the inward normal (0x1000 - smoothed track angle),
- * then nudges the car's headingAngle toward that target (func_8002A7C4). Writes
+ * then nudges the car's headingAngle toward that target (GameGetAngleDelta). Writes
  * the steer value into field_44 and the route sub-block (field_BC).
  * Register-pinned locals are match-load-bearing.
  */
@@ -85,16 +84,16 @@ void func_8003AEBC(GameCarRuntime *car) {
     }
     coords[2] += zValue >> 12;
 
-    angle = 0x400 - func_8001A6AC(coords[0] - car->x, coords[2] - car->z);
+    angle = 0x400 - GameAtan2(coords[0] - car->x, coords[2] - car->z);
 
     callArg = g_RaceSeries;
     value = car->field_B4;
     callArg = (callArg << 11) + 0xC00;
-    value = -func_8002A7C4(callArg - value, angle);
+    value = -GameGetAngleDelta(callArg - value, angle);
     car->field_44 = value * 3;
 
     if (car->field_98 == 0) {
-        value = func_8002A7C4(car->headingAngle, angle);
+        value = GameGetAngleDelta(car->headingAngle, angle);
         value += car->headingAngle;
         car->headingAngle = value;
         route->trackPointIndex = value;

@@ -6,7 +6,6 @@ extern u32 D_801E6C6C;
 extern char D_80013BD4[];
 extern char D_80013BEC[];
 
-void func_8001674C(char *fmt);
 s32 func_80070D70(s16 arg0, s16 arg1);
 
 s32 func_8006ECDC(s32 arg0, s32 arg1, s32 arg2) {
@@ -68,10 +67,10 @@ s32 func_8006ECDC(s32 arg0, s32 arg1, s32 arg2) {
     if (seq[7] == 1) {
         goto ok;
     }
-    func_8001674C(D_80013BD4);
+    GameDebugPrintf(D_80013BD4);
     return -1;
 magic_err:
-    func_8001674C(D_80013BEC);
+    GameDebugPrintf(D_80013BEC);
     return 0;
 ok:
 

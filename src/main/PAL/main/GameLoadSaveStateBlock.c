@@ -50,10 +50,9 @@ extern u8 D_8009E874[];
 extern u8 D_8007BEE4[];
 extern u8 D_8007BEDC[];
 
-void func_8001674C(char *fmt, ...);
 void func_80013F80(s32 a, s32 b);
 void func_80021224(void);
-void func_80065B24(void *rect, void *data);
+void LoadImage(void *rect, void *data) asm("func_80065B24");
 
 /*
  * Verifies the memory-card payload's checksum and scatters it back into the
@@ -82,9 +81,9 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             sum += *p++;
             i++;
         } while (i < 0x7FE);
-        func_8001674C(D_80012F90);
+        GameDebugPrintf(D_80012F90);
         sum = ~sum;
-        func_8001674C(D_80012F98, *(s32 *)(base + 0xFFC), sum);
+        GameDebugPrintf(D_80012F98, *(s32 *)(base + 0xFFC), sum);
         if (*(s32 *)(base + 0xFFC) != sum) {
             return 0;
         }
@@ -349,7 +348,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
 
     func_80013F80(D_8019CE08, D_8019CB08);
     func_80021224();
-    func_80065B24((void *)D_8007BEE4, D_801E6F2C);
-    func_80065B24((void *)D_8007BEDC, D_801E444C);
+    LoadImage((void *)D_8007BEE4, D_801E6F2C);
+    LoadImage((void *)D_8007BEDC, D_801E444C);
     return 1;
 }

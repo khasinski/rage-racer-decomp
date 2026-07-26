@@ -4,7 +4,7 @@
 
 void func_80064F80(u8 *prim);
 void func_80064EB8(u8 *prim, s32 enabled);
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
 u8 *func_80033B7C(u8 *prim, s32 x, s32 y, s32 code, u16 arg4) {
     register u8 *out asm("$16") = prim;
@@ -31,7 +31,7 @@ u8 *func_80033B7C(u8 *prim, s32 x, s32 y, s32 code, u16 arg4) {
         *(s16 *)&out[0xA] = yReg;
         *(s16 *)&out[0xE] = arg4Reg;
         out += 0x10;
-        func_80064DDC(ot + 0xCC, oldPrim);
+        AddPrim(ot + 0xCC, oldPrim);
     }
 
     return out;

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/sound.h"
 #include "game/audio.h"
+#include "psyq/snd.h"
 
 extern s32 D_80082F44;
 extern s32 D_801E4D90;
@@ -10,7 +11,6 @@ extern s32 D_80011C84;
 extern const s32 D_80011C8C[][6];
 extern const s32 D_80011F5C[][6];
 
-s32 func_80077C7C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 s32 func_8007B088(s32 arg0);
 
 s32 GameStartSingleSpecialCue(s32 cue, s32 volume) asm("func_8005D414");
@@ -50,7 +50,7 @@ s32 GameStartSingleSpecialCue(s32 cue, s32 volume) {
         scaleValue = D_801E6CA4.values[offset];
         tone = (s16)tone;
         pitch = (s16)pitch;
-        result = (s16)func_80077C7C(
+        result = (s16)SsUtKeyOnV(
             0x13,
             scaleValue,
             tone,
@@ -108,7 +108,7 @@ s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
     sy = volumeRight >> 7;
 
     if ((func_8007B088(D_80011C84) == 0) || (id == 0x3D) || (id == 0x2B)) {
-        result = (s16)func_80077C7C(
+        result = (s16)SsUtKeyOnV(
             0x16,
             g_VabIds[pan],
             (s16)prog,
@@ -119,7 +119,7 @@ s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
             (s16)sy);
         nextTone = tone + 1;
         nextTone = (s32)((u32)nextTone << 16) >> 16;
-        result = (s16)func_80077C7C(
+        result = (s16)SsUtKeyOnV(
             0x17,
             g_VabIds[(D_801E4D90 = result, pan)],
             (s16)prog,

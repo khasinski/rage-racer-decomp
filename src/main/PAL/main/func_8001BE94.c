@@ -1,7 +1,7 @@
 #include "common.h"
 
 /*
- * Empty stub; func_8001BE9C and func_8001C088 both call it with one argument,
+ * Empty stub; GameSetupDisplay240 and GameSetupDisplay480 both call it with one argument,
  * so the parameter is declared and ignored.
  */
 void func_8001BE94(int arg0) {
@@ -20,7 +20,8 @@ void func_80064AA8(void *, s32, s32, s32, s32);
 void func_80064B78(void *, s32, s32, s32, s32);
 void func_8001BE94(s32);
 
-void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2) {
+void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) asm("func_8001BE9C");
+void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
     register s32 a2_save asm("$20") = arg2;
@@ -106,7 +107,8 @@ void func_80064AA8(void *, s32, s32, s32, s32);
 void func_80064B78(void *, s32, s32, s32, s32);
 void func_8001BE94(s32);
 
-void func_8001C088(s32 arg0, s32 arg1, s32 arg2) {
+void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) asm("func_8001C088");
+void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
     register s32 a2_save asm("$20") = arg2;

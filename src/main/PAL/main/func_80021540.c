@@ -3,6 +3,7 @@
 #include "game/race.h"
 #include "game/state.h"
 #include "game/render.h"
+#include "game/cd.h"
 
 extern s16 D_8019CB40[];
 extern volatile s32 D_801E4DA8;
@@ -22,13 +23,12 @@ extern s16 D_8007D438[];
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 extern volatile u16 g_PadEdge2 asm("D_801E436E");
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_80018410(void);
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_80021654(void);
 void func_80046A2C(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
 void func_800218A0(s32 arg0);
-void func_80042CCC(s32 arg0);
 void func_800212F0(s32 arg0);
 
 void func_80021540(void) {
@@ -123,10 +123,10 @@ void func_80021748(void) {
         }
         current = D_801E3E0C;
         if (old != current) {
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
         }
         if (g_PadEdge2 & 0x800) {
-            func_8005D6EC(2);
+            GamePlaySoundCue(2);
             if (D_801E3E0C != 0) {
                 func_80018410();
             }
@@ -170,7 +170,7 @@ void func_80021964(void) {
     s32 v = g_SceneTimer - 1;
     g_SceneTimer = v;
     if ((g_PadEdge2 & 0x860) && (u32)v >= 261) {
-        func_80042CCC(0xFA);
+        GameStartCdVolumeFade(0xFA);
         g_SceneTimer = 0xFF;
     }
     if (g_SceneTimer == 0) {

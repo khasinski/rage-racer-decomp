@@ -4,6 +4,8 @@
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/asset.h"
+#include "psyq/gpu.h"
+#include "game/cd.h"
 
 extern s32 D_8019C768;
 extern s32 D_801E8260;
@@ -14,7 +16,6 @@ extern s32 D_8009F098;
 extern s32 D_8009E880;
 extern s32 D_8019CB70;
 
-void func_80065860(s32 arg0);
 void func_8005B9CC(void);
 void func_80019EBC(void);
 void func_8001A498(void);
@@ -22,7 +23,7 @@ void func_80021540(void);
 void func_8005DBB4(void);
 
 void func_8001AF70(void) {
-    func_80065860(0);
+    SetDispMask(0);
     func_8005B9CC();
     func_80019EBC();
     func_8001A498();
@@ -45,8 +46,6 @@ void func_8001AF70(void) {
 extern s32 g_StreamReturnScene asm("D_8019C760");
 extern s32 D_801E6F28, D_8019CB70, D_8009E880, D_8019C768;
 extern s32 D_801E8260, D_801E6F1C, D_8009F098;
-void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
-void func_80065860(s32 arg0);
 void func_8001A498(void);
 void func_80021540(void);
 void func_8005DBB4(void);
@@ -55,13 +54,13 @@ void GameDrawPressStartPrompt(void) asm("func_8001B170");
 void GameEnterTitleScreen(void) asm("func_8001B014");
 
 void GameEnterTitleScreen(void) {
-    func_8001BE9C(0, 0, 0);
+    GameSetupDisplay240(0, 0, 0);
     if (g_StreamReturnScene != 0) {
         D_801E6F28 = 0xFF;
         D_8019CB70 = 0x190;
         D_8009E880 = 0;
     } else {
-        func_80065860(0);
+        SetDispMask(0);
         func_8001A498();
         D_801E6F28 = 0;
         D_8019CB70 = 0;
@@ -135,21 +134,20 @@ void GameDrawPressStartPrompt(void) {
 extern s32 D_8019CB70;
 extern s32 D_8009F098;
 extern s32 D_801E8260;
-void func_8005D6EC(s32 arg0);
-void func_80042CCC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void GameDrawPressStartPrompt(void) asm("func_8001B170");
 
 void GameUpdateTitleScreen(void) asm("func_8001B260");
 
 void GameUpdateTitleScreen(void) {
     if (g_PadEdge2 & 0x800) {
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         D_8009F098 = 1;
         D_801E8260 = 0;
         g_TitleMenuSelection = 0;
         if (D_8019CB70 > 0) {
             D_8019CB70 = 0;
-            func_80042CCC(1);
+            GameStartCdVolumeFade(1);
         }
     }
     GameDrawPressStartPrompt();
@@ -242,7 +240,7 @@ extern volatile u8 D_801E7734[];
 extern u8 D_801E7733[];
 extern s32 D_8009E6CC;
 
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 
 void func_8001B488(void) {
     s32 i;
@@ -262,7 +260,7 @@ void func_8001B488(void) {
             }
         }
 
-        remaining = ((func_800632B0() & 0xFFF) % count) + 1;
+        remaining = ((GameRandom15() & 0xFFF) % count) + 1;
         j = 0;
         while (remaining != 0) {
             if (D_801E7734[j] == 0xFF) {
@@ -295,7 +293,7 @@ extern s32 D_8009E874;
 extern s32 D_801E4388;
 extern s32 D_8019C980;
 
-extern void func_8005D6EC(s32);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 extern void func_80017BE4(void);
 extern void func_8001B488(void);
 s32 GameRequestTrackLoad(void) asm("func_8001965C");
@@ -336,12 +334,12 @@ void GameUpdateMainMenuInput(void) {
         m = m % 5;
         g_TitleMenuSelection = m;
         if (idx != m) {
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
         }
     }
 
     if (g_PadEdge2 & 0x860) {
-        func_8005D6EC(2);
+        GamePlaySoundCue(2);
         if (g_AssetLoadState != 0) {
             func_80017BE4();
         }

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
+#include "game/cd.h"
 
 extern s32 g_CdTrackPending asm("D_8007F600");
 extern s32 g_CdCommandPending asm("D_8007F604");
@@ -11,8 +12,7 @@ extern s32 D_8009B1B4;
 extern CdlLOC D_8009AFD4[];
 
 s32 func_8006A534(s32 arg0, s32 arg1);
-s32 func_8006A5A4(s32 arg0, void *arg1, s32 arg2);
-void func_80042FA0(s32 arg0);
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 
 void func_800432A8(void) {
     s32 state;
@@ -27,7 +27,7 @@ void func_800432A8(void) {
         D_8009B1B4 = 0;
         g_CdTrackStep = 1;
     case 1:
-        if (func_8006A5A4(0x16, &D_8009AFD4[g_CdTrackPending], 0) == 0) {
+        if (CdControl(0x16, &D_8009AFD4[g_CdTrackPending], 0) == 0) {
             goto done;
         }
         g_CdTrackStep = 2;
@@ -48,7 +48,7 @@ void func_800432A8(void) {
         track = (D_8009B1B0 = *(u8 *)&g_CdTrackPending);
         g_CdTrackPending = -1;
         g_CdTrackStep = 0;
-        func_80042FA0(status);
+        GameSetCdVolume(status);
         goto done;
     case 4:
         if (func_8006A534(1, 0) == 0) {
@@ -56,7 +56,7 @@ void func_800432A8(void) {
         }
         g_CdTrackStep = 5;
     case 5:
-        if (func_8006A5A4(0x16, &D_8009AFD4[g_CdTrackPending], 0) == 0) {
+        if (CdControl(0x16, &D_8009AFD4[g_CdTrackPending], 0) == 0) {
             goto done;
         }
         g_CdTrackStep = 6;
@@ -115,7 +115,7 @@ state_0:
     }
     g_CdCommandStep = 1;
 state_1:
-    if (func_8006A5A4(3, 0, 0) == 0) {
+    if (CdControl(3, 0, 0) == 0) {
         goto done;
     }
     g_CdCommandStep = 2;

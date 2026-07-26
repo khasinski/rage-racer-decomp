@@ -15,7 +15,6 @@ void func_8006A388(void);
 void func_8006A3B0(void);
 void func_8006A3D8(u32 arg0, s32 arg1);
 void func_8002785C(void *arg0);
-void func_8001674C(u8 *arg0, ...);
 
 s32 CdGetToc2(s32 arg0, u8 *arg1) asm("func_8006A0AC");
 s32 CdGetToc2(s32 arg0, u8 *arg1) {
@@ -59,7 +58,7 @@ s32 CdGetToc2(s32 arg0, u8 *arg1) {
     }
 
     if (D_80099048 >= 2) {
-        func_8001674C(D_80013678, firstTrack, lastTrack);
+        GameDebugPrintf(D_80013678, firstTrack, lastTrack);
     }
 
     command[0] = 0;
@@ -112,7 +111,7 @@ s32 CdGetToc2(s32 arg0, u8 *arg1) {
                 second = entry[1];
                 entry += 4;
                 count++;
-                func_8001674C(fmt, first, second);
+                GameDebugPrintf(fmt, first, second);
             } while (count <= (s32)ptr);
         }
     }
@@ -122,7 +121,7 @@ s32 CdGetToc2(s32 arg0, u8 *arg1) {
 
 fail:
     if (D_80099048 != 0) {
-        func_8001674C(D_800136A4);
+        GameDebugPrintf(D_800136A4);
     }
     func_8006A574(oldHandler);
     return 0;
@@ -140,7 +139,7 @@ loop:
             goto loop;
         }
 
-        func_8001674C(D_800136B8);
+        GameDebugPrintf(D_800136B8);
         return 0;
     }
 

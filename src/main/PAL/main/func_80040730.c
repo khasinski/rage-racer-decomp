@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 #include "game/state.h"
+#include "game/render.h"
 
 extern s16 D_801E4DCA;
 extern s16 D_801E4DC8;
@@ -9,13 +10,7 @@ extern s16 D_801E4DB8;
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 D_1F800084;
 
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_8001A5A0(Matrix *mtx, s32 angle);
-void func_8001A4C0(Matrix *mtx, s32 angle);
-void func_80069568(Matrix *lhs, Matrix *rhs);
-void func_80017A10(s32 arg0);
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
-void func_80028DEC(void *arg0, s32 arg1);
 
 void func_80040730(void) {
     Matrix mtx0;
@@ -33,14 +28,14 @@ void func_80040730(void) {
     anglePtr = &D_801E4DCA;
     mtx1Ptr = &mtx1;
 
-    func_8001A530(mtx0Ptr, 0x800 - anglePtr[0]);
-    func_8001A5A0(mtx1Ptr, D_801E4DC8);
-    func_80069568(&mtx0, mtx1Ptr);
-    func_80069568((Matrix *)0x1F800028, mtx1Ptr);
-    func_8001A4C0(&mtx0, D_801E4DCC);
-    func_80069568(mtx1Ptr, &mtx0);
+    GameBuildRotMatrixY(mtx0Ptr, 0x800 - anglePtr[0]);
+    GameBuildRotMatrixX(mtx1Ptr, D_801E4DC8);
+    MulMatrix2(&mtx0, mtx1Ptr);
+    MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
+    GameBuildRotMatrixZ(&mtx0, D_801E4DCC);
+    MulMatrix2(mtx1Ptr, &mtx0);
 
-    func_80017A10(1);
+    GameSelectModelBank(1);
     scratchVec = (void *)0x1F80011C;
     __asm__("" : "=r"(scratchVec) : "0"(scratchVec));
     anglePtr = (s16 *)((u8 *)anglePtr - 0x12);
@@ -51,7 +46,7 @@ void func_80040730(void) {
     if (frameValue >= 0x24) {
         drawId = 0x23;
     }
-    func_80028DEC((void *)0x1F800000, drawId);
+    GameSubmitModel((void *)0x1F800000, drawId);
 
     {
         register s32 base asm("$3");
@@ -65,9 +60,9 @@ void func_80040730(void) {
         acc += tmp;
         acc <<= 1;
         acc += base;
-        func_8001A530(mtx1Ptr, acc & 0xFFF);
+        GameBuildRotMatrixY(mtx1Ptr, acc & 0xFFF);
     }
-    func_80069568(&mtx0, mtx1Ptr);
+    MulMatrix2(&mtx0, mtx1Ptr);
     func_80017794((void *)0x1F80011C, anglePtr, mtx1Ptr);
     frameValue = g_ModelBankCount;
     D_1F800084 = 0;
@@ -75,5 +70,5 @@ void func_80040730(void) {
     if (frameValue >= 0x25) {
         drawId = 0x24;
     }
-    func_80028DEC((void *)0x1F800000, drawId);
+    GameSubmitModel((void *)0x1F800000, drawId);
 }

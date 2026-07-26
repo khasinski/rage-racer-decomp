@@ -1,21 +1,19 @@
 #include "common.h"
 #include "game/track.h"
+#include "psyq/gte.h"
+#include "game/render.h"
 
 #define FIELD(base, type, offset) (*(type)((s32)(base) + (offset)))
 
-void func_8001A530(void *, s32);                      /* extern */
-s32 func_8001A6AC(s32, s32);                          /* extern */
-s32 func_8002A788(s32, s32);                          /* extern */
 void func_80038CE8(void *, s32, s32, s32);            /* extern */
 s32 func_80068568(s32);                               /* extern */
 s32 func_80068634(s32);                               /* extern */
-void func_80069678(void *, void *, void *);            /* extern */
 extern u8 D_8009E6D4;
 
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the
  * GameTrackPoint at `trackPointIndex` (*(GameTrackPoint*)0x8009E688 + i*0x18)
- * and its successor: computes route angles/heights via atan2 (func_8001A6AC)
+ * and its successor: computes route angles/heights via atan2 (GameAtan2)
  * and rsin/rcos (func_80068568/func_80068634), builds the collision-boundary
  * offset, and writes the interpolated position/angle/height into the render
  * object `obj`. The scratchpad struct at 0x1F80011C ("spad") is the GTE
@@ -109,7 +107,7 @@ s32 func_80031298(void *obj, s32 trackPointIndex, void *clampPair)
         FIELD(spad, s32 *, 0x08) = temp_a0_3;
         temp_a1 = FIELD(obj, s32 *, 8) - temp_v0_3;
         FIELD(spad, s32 *, 0x0C) = temp_a1;
-        FIELD(spad, s16 *, 0x7E) = func_8001A6AC(temp_a0_3, temp_a1) & 0xFFF;
+        FIELD(spad, s16 *, 0x7E) = GameAtan2(temp_a0_3, temp_a1) & 0xFFF;
         temp_a0_4 = FIELD(temp_s4, s32 *, 0);
         temp_v1_4 = FIELD(spad, s32 *, 0);
         temp_a2_2 = FIELD(spad, s32 *, 0x04);
@@ -119,8 +117,8 @@ s32 func_80031298(void *obj, s32 trackPointIndex, void *clampPair)
         FIELD(spad, s32 *, 0x2C) = temp_a1_2;
         FIELD(spad, s32 *, 0x28) = FIELD(temp_s6, s32 *, 0) - temp_v1_4;
         FIELD(spad, s32 *, 0x30) = FIELD(temp_s6, s32 *, 4) - temp_a2_2;
-        FIELD(spad, s16 *, 0x80) = func_8001A6AC(temp_a0_4, temp_a1_2) & 0xFFF;
-        FIELD(spad, s16 *, 0x82) = func_8001A6AC(FIELD(spad, s32 *, 0x28), FIELD(spad, s32 *, 0x30)) & 0xFFF;
+        FIELD(spad, s16 *, 0x80) = GameAtan2(temp_a0_4, temp_a1_2) & 0xFFF;
+        FIELD(spad, s16 *, 0x82) = GameAtan2(FIELD(spad, s32 *, 0x28), FIELD(spad, s32 *, 0x30)) & 0xFFF;
         temp_s0 = func_80068634(FIELD(spad, s16 *, 0x7E));
         var_v0 = (temp_s0 * FIELD(spad, s32 *, 0x08)) + (func_80068568(FIELD(spad, s16 *, 0x7E)) * FIELD(spad, s32 *, 0x0C));
         if (var_v0 < 0)
@@ -142,8 +140,8 @@ s32 func_80031298(void *obj, s32 trackPointIndex, void *clampPair)
             var_v0_3 += 0xFFF;
         }
         FIELD(spad, s32 *, 0x18) = var_v0_3 >> 0xC;
-        FIELD(spad, s16 *, 0x7C) = func_8002A788(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x82));
-        temp_v0_4 = func_8002A788(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x7E));
+        FIELD(spad, s16 *, 0x7C) = GameGetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x82));
+        temp_v0_4 = GameGetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x7E));
         temp_a1_3 = FIELD(spad, s16 *, 0x7C);
         FIELD(spad, s16 *, 0x7E) = temp_v0_4;
         {
@@ -226,8 +224,8 @@ block_21:
         FIELD(spad, u16 *, 0x60) = 0U;
         FIELD(spad, s16 *, 0x62) = 0;
         FIELD(spad, s16 *, 0x64) = var_a2;
-        func_8001A530(temp_s0_6, FIELD(spad, s16 *, 0x90));
-        func_80069678(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
+        GameBuildRotMatrixY(temp_s0_6, FIELD(spad, s16 *, 0x90));
+        ApplyMatrix(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
         if (obj == &D_8009E6D4)
         {
             func_80038CE8(obj, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(clampPair, s16 *, 6));
@@ -245,8 +243,8 @@ block_21:
         FIELD(spad, u16 *, 0x60) = 0U;
         FIELD(spad, s16 *, 0x62) = 0;
         FIELD(spad, s16 *, 0x64) = var_a2;
-        func_8001A530(temp_s0_6, FIELD(spad, s16 *, 0x90));
-        func_80069678(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
+        GameBuildRotMatrixY(temp_s0_6, FIELD(spad, s16 *, 0x90));
+        ApplyMatrix(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
         if (obj == &D_8009E6D4)
         {
             func_80038CE8(obj, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(clampPair, s16 *, 4));
@@ -307,9 +305,9 @@ boundary_done:
     FIELD(spad, s16 *, 0x92) = (s16) ((s32) ((FIELD(temp_s6, s16 *, 0xC) * var_s3) + (FIELD(temp_s4, s16 *, 0xC) * (temp_a0_10 - var_s3))) / temp_a0_10);
     temp_a0_11 = (u16) FIELD(spad, s16 *, 0x88) + (u16) FIELD(spad, s16 *, 0x8A);
     FIELD(spad, s16 *, 0x86) = temp_a0_11;
-    temp_s0_7 = func_8001A6AC((s32) temp_a0_11, (s32) (FIELD(temp_s6, s16 *, 0xE) * temp_a0_11) >> 7);
+    temp_s0_7 = GameAtan2((s32) temp_a0_11, (s32) (FIELD(temp_s6, s16 *, 0xE) * temp_a0_11) >> 7);
     temp_a0_12 = FIELD(spad, s16 *, 0x86);
-    secondResult = func_8001A6AC((s32) temp_a0_12, (s32) (FIELD(temp_s4, s16 *, 0xE) * temp_a0_12) >> 7);
+    secondResult = GameAtan2((s32) temp_a0_12, (s32) (FIELD(temp_s4, s16 *, 0xE) * temp_a0_12) >> 7);
     temp_a1_4 = FIELD(spad, s16 *, 0x96);
     FIELD(spad, s16 *, 0x94) = (s16) ((s32) ((temp_s0_7 * var_s3) + (secondResult * (temp_a1_4 - var_s3))) / temp_a1_4);
     FIELD(spad, s32 *, 0x38) = func_80068634(FIELD(spad, s16 *, 0x8C));

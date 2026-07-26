@@ -28,7 +28,6 @@ extern const char D_80013A70[];
 extern int func_8006CB88(int, int, void *);
 extern int func_8006CC8C(void *, const char *, int);
 extern void func_8006CBF4(char *, u8 *, int);
-extern int func_8001674C();
 
 /*
  * Reads and parses the disc's directory into the Entry table D_8009C114[128].
@@ -36,7 +35,7 @@ extern int func_8001674C();
  * signature, follows it to the path/directory sector, then walks the packed
  * variable-length records (record length in *p, name at p+8) copying each into
  * an Entry (index, header word, flags, name). Returns 1 on success, 0 on error.
- * D_80099048 is the debug-verbosity level gating the func_8001674C logging.
+ * D_80099048 is the debug-verbosity level gating the GameDebugPrintf logging.
  */
 int func_8006C560(void) {
     u8 *p;
@@ -47,26 +46,26 @@ int func_8006C560(void) {
     r = func_8006CB88(1, 16, D_8009D714);
     if (r != 1) {
         if (D_80099048 > 0) {
-            func_8001674C(D_800139B4);
+            GameDebugPrintf(D_800139B4);
         }
         return 0;
     }
     if (func_8006CC8C(&D_8009D714[1], D_800139E0, 5) != 0) {
         if (D_80099048 > 0) {
-            func_8001674C(D_800139E8);
+            GameDebugPrintf(D_800139E8);
         }
         return 0;
     }
     hdr = D_8009D7A0;
     if (func_8006CB88(1, *(int *)&hdr, D_8009D714) != r) {
         if (D_80099048 > 0) {
-            func_8001674C(D_80013A18, *(int *)&hdr);
+            GameDebugPrintf(D_80013A18, *(int *)&hdr);
         }
         return 0;
     }
     p = D_8009D714;
     if (D_80099048 >= 2) {
-        func_8001674C(D_80013A3C);
+        GameDebugPrintf(D_80013A3C);
     }
     i = 0;
     while (p < &D_8009D714[0x800]) {
@@ -84,7 +83,7 @@ int func_8006C560(void) {
         d = (n & 1) + 8;
         p += n + d;
         if (D_80099048 >= 2) {
-            func_8001674C(D_80013A5C, D_8009C114[i].word2,
+            GameDebugPrintf(D_80013A5C, D_8009C114[i].word2,
                           D_8009C114[i].index, D_8009C114[i].field6,
                           D_8009C114[i].name);
         }
@@ -98,7 +97,7 @@ int func_8006C560(void) {
     }
     D_80099348 = 0;
     if (D_80099048 >= 2) {
-        func_8001674C(D_80013A70, i);
+        GameDebugPrintf(D_80013A70, i);
     }
     return 1;
 }

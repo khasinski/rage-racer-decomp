@@ -30,11 +30,10 @@ extern volatile u16 D_801C0680;
 extern volatile u16 D_801C0682;
 s32 func_8006D0EC(StRingEventRecord **arg0, StRingEventRecord **arg1);
 void func_80065A90(void *arg0, u32 arg1, u32 arg2, u32 arg3);
-void func_8001674C(const char *fmt);
 extern char D_80010D34[];
 s32 func_8006A534(s32 arg0, s32 arg1);
-s32 func_8006A5A4(s32 arg0, void *arg1, s32 arg2);
-s32 func_8006DD30(s32 arg0);
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
+s32 VSync(s32 mode) asm("func_8006DD30");
 s32 func_8006CD0C(s32 arg0);
 extern u8 D_801E8AFC;
 extern u8 *D_8009F0A4;
@@ -141,7 +140,7 @@ void func_8001EF54(Unk8001EF54 *arg0) {
         do {
             timeout = timeout - 1;
             if (timeout == 0) {
-                func_8001674C(D_80010D34);
+                GameDebugPrintf(D_80010D34);
                 arg0->field_34 = one;
                 arg0->field_28 = arg0->field_28 < 1U;
                 x = ((Unk8001EF54 *)((u8 *)arg0 + (arg0->field_28 << 3)))->field_18;
@@ -162,7 +161,7 @@ outer:
     }
 
     byte = 0x80;
-    while (func_8006A5A4(0xE, &byte, 0) == 0) {
+    while (CdControl(0xE, &byte, 0) == 0) {
     }
 
 pollFirst:
@@ -170,12 +169,12 @@ pollFirst:
     case 0:
         goto pollFirst;
     case 2:
-        func_8006DD30(3);
+        VSync(3);
         break;
     }
 
 send:
-    while (func_8006A5A4(0x15, arg0, 0) == 0) {
+    while (CdControl(0x15, arg0, 0) == 0) {
     }
 
 pollNext:

@@ -30,11 +30,10 @@ extern char D_80013814[];
 extern char D_80013824[];
 extern char D_8001389C[];
 
-s32 func_8001674C(char *format, ...);
 void func_80063C38(char *text);
 s32 func_8006AB5C(void);
 void func_8006BAF0(void);
-s32 func_8006DD30(s32 mode);
+s32 VSync(s32 mode) asm("func_8006DD30");
 s32 func_8006E088(void);
 
 static __inline__ void copy8(u8 *dst, u8 *src) {
@@ -72,7 +71,7 @@ s32 CD_sync(s32 mode, u8 *result) {
     asm("" : "=r"(modeReg) : "0"(modeReg));
     resultReg = result;
     asm("" : "=r"(resultReg) : "0"(resultReg));
-    D_8009BB08 = func_8006DD30(-1) + 0x3C0;
+    D_8009BB08 = VSync(-1) + 0x3C0;
     statusNames = D_800990E0;
     intr = &D_80099318;
     ready = (u8 *)&intr->ready;
@@ -80,10 +79,10 @@ s32 CD_sync(s32 mode, u8 *result) {
     D_8009BB10 = D_8001389C;
 
     for (;;) {
-        if (D_8009BB08 < func_8006DD30(-1) ||
+        if (D_8009BB08 < VSync(-1) ||
             D_8009BB0C++ > 0x3C0000) {
             func_80063C38(D_80013814);
-            func_8001674C(D_80013824, ((CdAlarm *)&D_8009BB08)->name,
+            GameDebugPrintf(D_80013824, ((CdAlarm *)&D_8009BB08)->name,
                           D_80099060[D_8009905D],
                           statusNames[intr->sync], statusNames[intr->ready]);
             func_8006BAF0();

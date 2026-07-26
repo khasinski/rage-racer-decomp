@@ -2,6 +2,7 @@
 #include "psyq/gte.h"
 #include "game/state.h"
 #include "game/menu.h"
+#include "game/render.h"
 
 typedef struct { s32 a, b, c, d; } Vec16;
 typedef struct { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
@@ -12,14 +13,9 @@ extern s32 D_8009B37C;
 extern s32 D_8019CB0C;
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
-void func_8001A610(void);
 void func_80069728(void *a, void *b);
-void *func_80069568(void *matrix, void *inout);
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_8001A4C0(Matrix *mtx, s32 angle);
 s32 func_80068568(s32 arg0);
 void func_80017794(void *a, void *b, void *c);
-void func_800296B4(void *a, s32 b);
 
 void func_80051D6C(void) {
     Matrix mtxA;
@@ -39,7 +35,7 @@ void func_80051D6C(void) {
     *(s32 *)0x1F80001C = -104;
     *(s32 *)0x1F800020 = 0;
 
-    func_8001A610();
+    GameSetCameraRotMatrix();
     func_80069728((Matrix *)0x1F800028, &D_80082D6C);
 
     if (249999 < g_MenuViewOffsetTarget) {
@@ -96,10 +92,10 @@ void func_80051D6C(void) {
     poly.f5 = s1;
     poly.f6 = func_80068568((g_AnimTimer * 20) & 0xFFC) * 72 / 4096;
 
-    func_8001A530(&mtxB, 0x800 - poly.f5);
-    func_8001A4C0(&mtxA, poly.f6);
-    func_80069568(&mtxB, &mtxA);
-    func_80069568((Matrix *)0x1F800028, &mtxA);
+    GameBuildRotMatrixY(&mtxB, 0x800 - poly.f5);
+    GameBuildRotMatrixZ(&mtxA, poly.f6);
+    MulMatrix2(&mtxB, &mtxA);
+    MulMatrix2((Matrix *)0x1F800028, &mtxA);
     func_80069728(&mtxA, &vcopy);
 
     if (D_8009B37C != 10 && (u32)(D_8009B37C - 42) >= 2) {
@@ -110,6 +106,6 @@ void func_80051D6C(void) {
         if (D_8009B37C < g_CourseModelCount) {
             a1 = D_8009B37C;
         }
-        func_800296B4((void *)0x1F800000, a1);
+        GameSubmitCourseModel((void *)0x1F800000, a1);
     }
 }

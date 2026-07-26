@@ -3,6 +3,9 @@
 #include "game/state.h"
 #include "game/menu.h"
 #include "game/track.h"
+#include "game/render.h"
+#include "game/cd.h"
+#include "game/car.h"
 
 extern s32 D_8009AF80[];
 
@@ -81,17 +84,14 @@ void func_8003CA14(void *arg0);
 
 void func_80041170(void);
 
-void func_80042BC0(s32 arg0);
 
-void func_80042BF0(void);
 
-void func_80042CCC(s32 arg0);
 
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void func_8005E4A4(s32 arg0);
 
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 
 extern s16 D_8009E74C;
 
@@ -141,9 +141,8 @@ extern s16 D_801E6F26;
 
 extern u8 D_80011488[];
 
-void func_8001BE9C(s32, s32, s32);
 
-void func_80017884(s32);
+void GameInitRenderState(s32) asm("func_80017884");
 
 void func_8001F100(void);
 
@@ -179,7 +178,6 @@ void func_8005DC1C(void);
 
 void func_8001C974(void);
 
-void func_8001674C();
 
 
 extern u8 D_8009E6AC[];
@@ -246,7 +244,6 @@ void func_800352B8(void *arg0, s32 arg1, s32 arg2);
 
 void func_800357BC(void);
 
-void func_800389F0(void);
 
 void func_8003AE2C(void);
 
@@ -272,19 +269,15 @@ void func_80040F24(void);
 
 void func_800410BC(s32 arg0);
 
-void func_8004123C(void);
 
 void func_80041840(void);
 
 void func_800418D4(void);
 
-void func_80042C0C(void);
 
-void func_80042C28(void);
 
-void func_80043BCC(s32 arg0, void *arg1);
+void GameUpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
 
-void func_80045CD4(void);
 
 void func_8005B190(s32 arg0, s32 arg1);
 
@@ -320,7 +313,7 @@ s32 func_8003591C(void *arg0, s32 arg1) {
 
     /* Match note: GCC reserves the original 0x48 frame only when it sees
        this unevaluated seven-argument call shape. It emits no instructions. */
-    if (0) func_8001674C((char *)0, 0, 0, 0, 0, 0, 0);
+    if (0) GameDebugPrintf((char *)0, 0, 0, 0, 0, 0, 0);
 
     /*
      * `route` is the car's drive block (GameCarDrive in game/car.h) but this
@@ -346,7 +339,7 @@ s32 func_8003591C(void *arg0, s32 arg1) {
                      0xC4) = func_80034F18(
                 (routeCallOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4,
                  *(s32 *)((s32)route + routeCallOffset + 0xAC)),
-                func_800632B0() % 40);
+                GameRandom15() % 40);
             routeCompareOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
             if (*(s32 *)((s32)route + routeCompareOffset + 0xC4) > 0x927BE) {
                 *(s32 *)(route + 0xC4 +
@@ -408,7 +401,7 @@ update_progress:
             if (g_LapCount < *(s16 *)(route + 0xAC)) {
                 goto record_done;
             }
-            func_8005D6EC(0x26);
+            GamePlaySoundCue(0x26);
             D_801E6C90 = 0x96;
         }
 
@@ -450,16 +443,16 @@ record_done:
                         D_8009AF98;
                 }
                 g_RacePhase = 4;
-                func_80042CCC(8);
-                func_8005D6EC(0x2B);
+                GameStartCdVolumeFade(8);
+                GamePlaySoundCue(0x2B);
                 goto reset_transition;
             }
 
             g_RacePhase = 5;
             func_8003CA14(&D_8009E6D4);
-            func_80042CCC(0x3C);
+            GameStartCdVolumeFade(0x3C);
             if (*(s16 *)((u8 *)D_8009E67C + 6) != 0) {
-                func_8005D6EC(0x3D);
+                GamePlaySoundCue(0x3D);
             }
 reset_transition:
             func_8005E4A4(0);
@@ -490,19 +483,19 @@ check_finish_transition:
             if (g_GrandPrixMode != 0) {
                 func_800207E0();
                 if (g_SeriesCleared == 1) {
-                    func_80042BC0(0x10);
+                    GameRequestCdTrack(0x10);
                 } else {
-                    func_80042BC0(0xC);
+                    GameRequestCdTrack(0xC);
                 }
             } else {
                 g_SeriesCleared = 0;
-                func_80042BC0(0xD);
+                GameRequestCdTrack(0xD);
             }
         }
         if (D_801E43FC >= 0x83) {
             func_8001FA70();
             func_80035258(0x11);
-            func_80042BF0();
+            GameStartCdAudio();
             goto update_countdown;
         }
     } else if ((g_GrandPrixMode == 0) &&
@@ -512,7 +505,7 @@ check_finish_transition:
         g_RacePhase = 5;
         D_801E4408[g_RaceSeries][g_CourseIndex][0] =
             D_801E774C[g_RaceSeries][g_CourseIndex][0];
-        func_80042CCC(8);
+        GameStartCdVolumeFade(8);
         func_8005E4A4(0);
         D_801E43FC = 0;
         func_8003CA14(&D_8009E6D4);
@@ -523,13 +516,13 @@ update_countdown:
         value = g_LapCount - *(s16 *)(route + 0xAC);
         switch (value) {
         case 2:
-            func_8005D6EC(0x27);
+            GamePlaySoundCue(0x27);
             break;
         case 1:
-            func_8005D6EC(0x28);
+            GamePlaySoundCue(0x28);
             break;
         case 0:
-            func_8005D6EC(0x29);
+            GamePlaySoundCue(0x29);
             break;
         }
         D_801E6C90--;
@@ -559,8 +552,8 @@ void func_8003609C(void) {
     s32 new_var2;
     s32 *second;
 
-    func_8001BE9C(0, 0, 0);
-    func_80017884(5);
+    GameSetupDisplay240(0, 0, 0);
+    GameInitRenderState(5);
     func_8001F100();
     func_8001D30C();
     func_8001D210();
@@ -637,7 +630,7 @@ void func_8003609C(void) {
     func_8003E464();
     func_8003EBCC();
     func_8003F700();
-    func_80042BC0(D_801E40E0 + 3);
+    GameRequestCdTrack(D_801E40E0 + 3);
     D_8019C750 = 0;
     D_801E43FC = 0;
     func_8005DC1C();
@@ -648,7 +641,7 @@ void func_8003609C(void) {
     g_SceneId = 12;
     D_8019C768 = 0x180;
     func_8001C974();
-    func_8001674C(D_80011488);
+    GameDebugPrintf(D_80011488);
 
     (void)pad;
 }
@@ -679,10 +672,10 @@ void func_800363D4(void) {
         D_801E4BAC = value;
 
         if (value != 0) {
-            func_80042C0C();
+            GamePauseCdAudio();
             func_8005E4A4(0);
             D_801E414C = 0;
-            func_8005D6EC(2);
+            GamePlaySoundCue(2);
         } else if (D_801E414C == (2 - g_GrandPrixMode)) {
             D_801E43FC = 0;
             if (g_GrandPrixMode == 0 || (s16)mode < 2) {
@@ -695,11 +688,11 @@ void func_800363D4(void) {
                 value = *(s16 *)(D_8009E67C + 6);
                 g_RacePhase = 5;
                 if (value != 0) {
-                    func_8005D6EC(0x3D);
+                    GamePlaySoundCue(0x3D);
                 }
             }
             func_8003CA14(D_8009E6D4);
-            func_80042CCC(8);
+            GameStartCdVolumeFade(8);
         } else if (D_801E414C == 1) {
             if (g_GrandPrixMode == 0) {
                 func_80035258(0xB);
@@ -712,7 +705,7 @@ set_countdown:
             D_8019C750 = 0x1E;
             func_8005E4A4(1);
             if (g_RacePhase >= 2) {
-                func_80042C28();
+                GameResumeCdAudio();
             }
         }
     }
@@ -726,8 +719,8 @@ set_countdown:
                 option = 0xF;
             }
             if (D_801E43FC == 0xA) {
-                func_80042BC0(0xF);
-                func_80042BF0();
+                GameRequestCdTrack(0xF);
+                GameStartCdAudio();
             }
             if (D_801E43FC >= 0x65) {
                 func_80035258(option);
@@ -750,13 +743,13 @@ set_countdown:
         func_8005B190(0x28, 0x28);
         if ((g_PadEdge2 & 0x1000) && D_801E414C > 0) {
             D_801E414C--;
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
         }
         if (g_PadEdge2 & 0x4000) {
             selection = D_801E414C;
             if (selection < (2 - g_GrandPrixMode)) {
                 D_801E414C = selection + 1;
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
             }
         }
 
@@ -792,10 +785,10 @@ set_countdown:
             }
         }
 
-        func_80043BCC(g_CameraViewMode, D_8009E6D4);
+        GameUpdateCamera(g_CameraViewMode, D_8009E6D4);
         func_80019EFC(D_8009E74C);
         if (g_GrandPrixMode != 0) {
-            func_800389F0();
+            GameDrawCars();
         }
         if ((D_8009E78C != g_RaceSeries) && (D_801E8A8C >= 0xA)) {
             func_800333DC();
@@ -803,7 +796,7 @@ set_countdown:
         func_800418D4();
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         func_80041840();
-        func_8004123C();
+        GameDrawCourseObjects();
         if (g_GrandPrixMode != 0) {
             if (g_GrandPrixClass != 5) {
                 func_8003D458(g_SceneTimer);
@@ -838,7 +831,7 @@ set_countdown:
 update_race:
             if ((g_RacePhase == 1) && ((u32)g_SceneTimer >= 0xD3)) {
                 func_8002BE18(D_8009E6D4, frameValue);
-                func_80042BF0();
+                GameStartCdAudio();
                 g_RacePhase = 2;
                 D_8019C750 = 0x1E;
             }
@@ -863,13 +856,13 @@ update_race:
             }
             if (D_8009AF9C <= 0) {
                 if (*(s16 *)(D_8009E67C + 6) != 0) {
-                    func_8005D6EC(0x3D);
+                    GamePlaySoundCue(0x3D);
                 }
                 func_8005E4A4(0);
                 g_RacePhase = 5;
                 D_801E43FC = 0;
                 func_8003CA14(D_8009E6D4);
-                func_80042CCC(8);
+                GameStartCdVolumeFade(8);
             }
         }
 
@@ -909,7 +902,7 @@ update_race:
         if (g_RacePhase == 5) {
             func_8003CB3C(D_8009E6D4);
         } else if (g_RacePhase > 0) {
-            func_80043BCC(g_CameraViewMode, D_8009E6D4);
+            GameUpdateCamera(g_CameraViewMode, D_8009E6D4);
         }
 
         if (g_RacePhase != 5) {
@@ -920,9 +913,9 @@ update_race:
         func_80019EFC(next);
 
         if (g_GrandPrixMode != 0) {
-            func_800389F0();
+            GameDrawCars();
         }
-        func_80045CD4();
+        GameUpdateEnvironment();
         func_800418D4();
 
         if ((D_8009E78C != g_RaceSeries) && (g_RacePhase < 4)) {
@@ -936,7 +929,7 @@ update_race:
                     D_801E8A8C = 0xA;
                 }
                 if ((u8)g_SceneTimer == 0) {
-                    func_8005D6EC(0x2C);
+                    GamePlaySoundCue(0x2C);
                 }
             }
         } else {
@@ -945,7 +938,7 @@ update_race:
 
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         func_80041840();
-        func_8004123C();
+        GameDrawCourseObjects();
         if (g_GrandPrixMode != 0) {
             if (g_GrandPrixClass != 5) {
                 func_8003D458(g_SceneTimer);

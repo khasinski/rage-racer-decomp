@@ -15,7 +15,6 @@ extern u16 D_800941EE;
 extern u8 D_80094268[];
 extern u8 D_8009427C[];
 
-void func_8001674C(char *fmt, ...);
 void func_80068180(u8 *dst, s32 value, s32 count);
 void func_800681AC(void *arg0);
 s32 func_80067C80(s32 arg0);
@@ -30,7 +29,7 @@ void func_80065460(s32 mode) {
     maskedMode = mode & 7;
     if ((maskedMode == 0) || (maskedMode == 3)) {
         graphState = D_800941E8;
-        func_8001674C(D_80013478, D_800941A0, graphState);
+        GameDebugPrintf(D_80013478, D_800941A0, graphState);
         func_80068180(graphState, 0, 0x80);
         KernelCallbackSlot3();
         func_800681AC((void *)((u32)D_800941E0 & 0xFFFFFF));

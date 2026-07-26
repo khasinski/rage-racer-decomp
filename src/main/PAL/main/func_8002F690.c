@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/car.h"
 #include "game/race.h"
+#include "game/render.h"
 
 typedef struct D8007Pair {
     s16 f0;
@@ -10,7 +11,6 @@ typedef struct D8007Pair {
 extern s16 D_801F17A4;
 extern D8007Pair D_8007DAC0[];
 
-s32 func_8002A7C4(s32 arg0, s32 arg1);
 void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
@@ -35,7 +35,7 @@ void func_8002F690(GameCarRuntime *car) {
     s32 t;
     s32 idx;
 
-    r = func_8002A7C4(car->field_24, *(s32 *)&car->field_14C);
+    r = GameGetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
     base = car->field_24;
     car->field_24 = r / 5 + base;
     func_8002F4E4(car, base);

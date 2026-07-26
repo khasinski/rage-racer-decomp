@@ -2,7 +2,7 @@
 
 extern u32 D_801E6F2C[];
 
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void func_8004BC68(void) {
     s32 i;
@@ -10,7 +10,7 @@ void func_8004BC68(void) {
     s32 mirror;
     u32 *base;
 
-    func_8005D6EC(8);
+    GamePlaySoundCue(8);
     base = D_801E6F2C;
     i = 0;
     mirror = 0x3F;

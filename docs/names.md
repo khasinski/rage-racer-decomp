@@ -1015,3 +1015,99 @@ independent sources agree, which settles the encoding: **0 = automatic,
 Models 10-12 sit outside the gradeable range (`func_80018A70` and the design
 screen both gate on `g_PlayerCarIndex < 10`), so the game shows `GRADE ?` for
 them - its own handling of the four single-grade specials, not a defect.
+---
+
+## 7. High-fanout names (this pass)
+
+Named by reach: the functions referenced from the most translation units, so
+each name pays off at many call sites. "Files" is the number of `src/` files
+that mentioned the `func_` symbol before the rename. Every entry below was
+verified with `make check VERSION=PAL` staying at
+`2913e15648eddef40821c5f666460abc04155ee6`.
+
+### PSY-Q SDK region (>= 0x80063200) — real Sony symbols only
+
+| Name | Addr | Files | Evidence |
+|---|---|---:|---|
+| `MulMatrix2` | 0x80069568 | 21 | Loads m0 into the GTE rotation control registers (`ctc2 $0..$4`), pushes each column of m1 through `MVMVA` (`cop2 0x486012`: mx=rotation, v=V0, cv=none, sf=12) and stores the three result columns **back into m1**, returning m1. That destination is what separates it from `MulMatrix`/`MulMatrix0`. |
+| `SetDispMask` | 0x80065860 | 18 | Its own trace string at `D_80013520` is `"SetDispMask(%d)...\n"`. Body issues GP1(03h): `0x03000000` when enabling, `0x03000001` when disabling, and clears the 0x14-byte cached DISPENV on disable. |
+| `ApplyMatrix` | 0x80069678 | 11 | Same `MVMVA` as the multiply family, but with a single vector: `lwc2 $0/$1` load an SVECTOR from arg1 and `swc2 $25/$26/$27` store MAC1..3 into the VECTOR at arg2. Callers confirm the widths (`SVec` in, `LVec` out in func_80031E98). |
+| `SsUtKeyOnV` | 0x80077C7C | 10 | Eight arguments `(voice, vabId, prog, tone, note, fine, volL, volR)`; rejects `voice >= 24` and an unknown program with -1, stamps the libsnd utility sep number `0x21` into the current-voice record `D_801E4BD0`, derives volume/pan from the two volumes, copies the ProgAtr/VagAtr fields and returns the voice number. Call sites pass note 0x3C. |
+| `MulMatrix` | 0x80069458 | 9 | Instruction-for-instruction identical to `MulMatrix2` except that the four result stores target `a0` and the return is `a0` — the in-place form. |
+| `SquareRoot12` | 0x8006888C | 5 | Normalises with `Lzc`, runs the hyperbolic CORDIC in func_80068738 (the repeated shift-4 iteration is the giveaway) and re-scales. Simulated over the input range it returns exactly `64 * sqrt(a)` = `sqrt(a << 12)`, i.e. 12 fractional bits in and out — the `12` variant, not `SquareRoot0`. |
+| `MemCopy` | 0x800681BC | 5 | Byte copy returning `dst`, NULL-guarded; shares a translation unit with the already-named `MemFill` (func_80068180). |
+| `MulMatrix0` | 0x80068B98 | 4 | The three-argument form of the same MVMVA multiply: result written to m2, m2 returned. |
+| `RotMatrix` | 0x80069D18 | 4 | Already identified in section 1; the callers now use the name. |
+
+Deliberately **left generic** in this region, because the Sony symbol could not
+be pinned: func_80067F38 and func_80067F04 (the libgpu timeout watchdog — they
+own the `"GPU timeout:que=%d,..."` / `"func=(%08x)(%08x,%08x)"` strings and the
+`VSync(-1) + 240` deadline, but the public name is unknown), func_8006AB5C (a
+libcd error/trace helper), and the software matrix routines func_80069110 /
+func_80069728 / func_800696C8.
+
+### Namco game code (< 0x80063200)
+
+| Name | Addr | Files | Evidence |
+|---|---|---:|---|
+| `GameDebugPrintf` | 0x8001674C | 31 | The single trace/printf entry point; every surviving PSY-Q format string in the image is passed to it, from libgpu, libcd, libspu and the game alike. The file was already named for it; only the call sites were still on the raw symbol. |
+| `GameBuildRotMatrixY` | 0x8001A530 | 24 | Fills `m[0][0]=c, m[0][2]=-s, m[1][1]=0x1000, m[2][0]=s, m[2][2]=c` from rsin/rcos of a 12-bit angle — the Y rotation. Siblings differ only in which row/column holds the identity. |
+| `GameBuildRotMatrixZ` | 0x8001A4C0 | 13 | Same shape with `m[2][2] = 0x1000`. |
+| `GameBuildRotMatrixX` | 0x8001A5A0 | 12 | Same shape with `m[0][0] = 0x1000`. |
+| `GameAtan2` | 0x8001A6AC | 12 | Four-quadrant arctangent over the table `D_8007B664`, in 12-bit angle units (`0x400` = 90 degrees). **Argument order is (x, y)**, the reverse of C's `atan2`: `GameAtan2(0, +y)` is `0x400`, and callers pass `(dx, dz)` / `(dx, dy)`. |
+| `GameSelectModelBank` | 0x80017A10 | 12 | Points the scratchpad bank cursor (0x1F800050/54/58) and `g_ModelBankCount` at entry `index` of the registered bank table `D_801E41A8`; `GameSubmitModel` reads exactly those slots. |
+| `GameSetupDisplay240` | 0x8001BE9C | 11 | `SetGeomOffset(0xA0, 0x78)` + `SetGeomScreen(0x140)`, then the def-draw/def-disp env pair for two 320x240 buffers stacked at y=0 and y=0xF0, with (r, g, b) as the background clear colour. |
+| `GameGetAngleDelta` | 0x8002A7C4 | 10 | Signed shortest delta between two 12-bit angles (already documented in-file). |
+| `GameStartCdVolumeFade` | 0x80042CCC | 10 | Sets the remaining frame count of the CD-DA volume fade, clamped to +/-0xFFF; callers pass 1, 8, 30, 60, 120, 250 frames. |
+| `GameUploadImageAsset` | 0x8001A3C0 | 10 | Walks the chain of `GameImageBlock` records in a loaded image asset and hands each to func_8001A2E0, which `LoadImage`s it into VRAM. |
+| `GameSubmitCourseModel` | 0x800296B4 | 9 | Hand-written GTE engine entry point. Reads the **course** object bank pointer from scratchpad 0x1F800048 (the one func_80017A6C installs, stride 12 bytes, size `g_CourseModelCount`), indexes it by arg1 and interprets the model's opcode list through `jtbl_8007DA54`. Every caller clamps arg1 against `g_CourseModelCount` with a fallback of 1. |
+| `GameSetCameraRotMatrix` | 0x8001A610 | 9 | Composes Y*X*Z from the scratchpad camera angles at 0x1F800018 / 0x1C / 0x20 into the scratchpad matrix 0x1F800028 and installs it with `SetRotMatrix`; `D_8019CB18` receives the same product pre-multiplied by a 180-degree Y turn. |
+| `GameDrawCourseObjects` | 0x8004123C | 9 | The per-frame loop over the world object array `D_801E4B2C` (`D_801E4BBC` entries): sector-bitmask cull, Z rotation, GTE transform, shade/semi-trans mode word, then `GameSubmitCourseModel` / `...2`. |
+| `GameAddTilePrim` | 0x80032F34 | 8 | `SetTile` + `AddPrim` on a caller-supplied 0x10-byte packet, returning the advanced cursor. Declared per translation unit rather than in a header: callers disagree on whether `ot`/`prim` are pointers or `s32`. |
+| `GameUpdateCamera` | 0x80043BCC | 8 | The camera-mode state machine (already documented in-file). Also per-TU, for the same reason. |
+| `GameUpdateEnvironment` | 0x80045CD4 | 8 | Advances the course environment command script `D_801E40E8`, cross-fades the 16-entry sky/fog CLUT between `g_EnvironmentModePrev` and `g_EnvironmentMode` into VRAM at (0xE0, 0x1E6), then updates the GTE far colour and fog distance. **It draws nothing** — the "draws the sky/background" reading is wrong; `GameDrawSkyBackground` (func_800418D4) is the drawing half. |
+| `GameSubmitModel` | 0x80028DEC | 7 | The same engine entry point for the bank at scratchpad 0x1F800050, i.e. the one `GameSelectModelBank` installs; it also mirrors the GTE rotation matrix when the scratchpad mirror flag is set. |
+| `GameStartCdAudio` | 0x80042BF0 | 7 | Posts CD command 1, whose handler (func_80043494) issues `CdControl(CdlPlay)`. |
+| `GameRequestCdTrack` | 0x80042BC0 | 6 | Posts a pending track index for the func_800432A8 seek/play state machine. |
+| `GameResetCdAudioState` | 0x80042C94 | 6 | Clears the pending track and command and resets the current track index to 2. |
+| `GameSetCdVolume` | 0x80042FA0 | 6 | Scales the four `D_8007F5A8` mix values by 0..0x7F into both current and target levels and pushes them through `CdMix` (func_8006A94C, a one-line `CD_mix` wrapper returning 1). |
+| `GameDrawCars` | 0x800389F0 | 6 | Selects model bank 1 and calls `GameDrawCar` for each of the 11 runtime cars with `activeFlag != -1 && field_BC == 1`. |
+| `GameFindTrackSegment` | 0x80030EB4 | 6 | Spiral search for the track segment quad containing the car (already documented in-file). |
+| `GameGetCarModelIndex` | 0x8001785C | 6 | `g_CarTable[i].modelVariant + D_8007C474[i]`. |
+| `GameGetAngleDistance` | 0x8002A788 | 6 | Unsigned companion of `GameGetAngleDelta`. Declared **unprototyped** in the header on purpose: func_8002A810 calls it with two extra arguments the original left live in a2/a3. |
+| `GameSetupDisplay480` | 0x8001C088 | 5 | The 320x480 variant of `GameSetupDisplay240` (`SetGeomOffset(0xA0, 0xF0)`, both envs full height). |
+| `GameSubmitCourseModel2` | 0x80029E50 | 5 | Byte-identical to `GameSubmitCourseModel` except it dispatches through `jtbl_8007DA64`. Selected by `GameDrawCourseObjects` on the per-object flag (bit 2 when `g_IsEnvironmentMode4`, else bit 1). The `2` is deliberate — what the second opcode table renders differently is not proven. |
+| `GameRegisterModelBank` | 0x80017948 | 5 | Rebases a freshly loaded model bank's internal offsets to absolute addresses and stores it at `D_801E41A8[index]`. |
+| `GameInitRenderState` | 0x80017884 | 5 | Seeds the scratchpad render state: draw distance 0xA, fog/far colours, 0x140x0xF0 screen, mirror flag from `g_MirrorMode`, visibility-mask pointer. |
+| `GamePauseCdAudio` | 0x80042C0C | 3 | Posts CD command 2, whose handler captures `CdlGetlocP` and then issues `CdlPause`. |
+| `GameResumeCdAudio` | 0x80042C28 | 2 | Undoes the pause, replaying the track when the pause crossed a track boundary. |
+| `GameStepCdVolumeFade` | 0x80042D10 | 2 | One frame of the fade, then `CdMix`. |
+
+Deliberately **left generic** here: func_80019EFC (8 files) picks the target
+page of the two-state VRAM texture swap that func_8001A030 walks one row at a
+time — the mechanism is clear but what the two states *are* is not; func_8004FCE8
+(6) draws an 8x16 glyph out of a strip indexed by the car model index, subject
+unproven; func_80018410 (6) requests main-state 3 asset loading, and what state
+3 selects is not established.
+
+### Existing names propagated to their call sites
+
+These already had a name in a header but their call sites were still on the raw
+symbol: `GamePlaySoundCue` (33 files), `GameRandom15` (13), `LoadImage` (12),
+`AddPrim` (12), `VSync` (11), `CdControl` (10), `SsUtKeyOffV` (9).
+`GameQueueDrawModePrim` (func_80017390), `GameSetGteObjectMatrix`
+(func_80017794) and `GameDrawText8x8` (func_80016754) were **not** propagated:
+their header prototypes take narrow (`u16`/`s16`) parameters that the call
+sites pass as full words, so switching the call sites to the prototype would
+insert truncations and change the emitted code.
+
+### Correction found while doing this
+
+`SetDefDrawEnv` at 0x80064B78 is misnamed: it writes a `disp`/`screen` Rect
+pair plus `isinter`/`isrgb24` at +0x10/+0x11 — an 0x14-byte **DISPENV** — so it
+is `SetDefDispEnv`. The real `SetDefDrawEnv` is the still-unnamed func_80064AA8,
+which writes clip/ofs/tw/tpage/dtd/dfe/isbg/rgb (0x1C bytes) and derives `dfe`
+from the buffer height and the DMA interrupt state. `GameSetupDisplay240` calls
+them in exactly that order (draw env first, disp env at base + 0x5C). Fixing it
+means renaming the symbol, its source file and its config segment together, so
+it is recorded here rather than done in the same pass.

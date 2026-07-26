@@ -21,7 +21,6 @@ extern u8 D_800830E0[];
 s32 MDEC_in_sync(void) asm("func_800642F4");
 s32 MDEC_out_sync(void) asm("func_8006438C");
 s32 MDEC_timeout(u8 *arg0) asm("func_80064424");
-void func_8001674C(u8 *arg0, ...);
 
 void MDEC_in(volatile u32 *arg0, s32 arg1) asm("func_800641D0");
 
@@ -57,7 +56,7 @@ one:
     return;
 
 bad:
-    func_8001674C(D_800132C8);
+    GameDebugPrintf(D_800132C8);
 }
 
 void MDEC_in(volatile u32 *arg0, s32 arg1) {
@@ -113,10 +112,10 @@ s32 MDEC_timeout(u8 *arg0) {
     u32 status;
     register s32 ret asm("$2");
 
-    func_8001674C(D_80013364, arg0);
+    GameDebugPrintf(D_80013364, arg0);
     status = *D_80083198;
-    func_8001674C(D_80013304, (*D_8008316C >> 24) & 1, (*D_80083178 >> 24) & 1, *D_80083164, *D_80083170);
-    func_8001674C(D_8001332C,
+    GameDebugPrintf(D_80013304, (*D_8008316C >> 24) & 1, (*D_80083178 >> 24) & 1, *D_80083164, *D_80083170);
+    GameDebugPrintf(D_8001332C,
                   (~status >> 31) & 1,
                   (status >> 30) & 1,
                   (status >> 29) & 1,

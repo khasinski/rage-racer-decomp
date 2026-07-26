@@ -9,7 +9,6 @@ extern char D_80012694[];
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
-void func_8001674C(char *arg0);
 void func_80063D9C(s32 arg0);
 
 s32 GameInitSoundWithVab(s32 header, s32 body) {
@@ -36,14 +35,14 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        func_8001674C(D_8001267C);
+        GameDebugPrintf(D_8001267C);
         func_80063D9C(1);
     }
 
     ret = func_800730BC(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
-        func_8001674C(D_80012694);
+        GameDebugPrintf(D_80012694);
         func_80063D9C(1);
     }
 

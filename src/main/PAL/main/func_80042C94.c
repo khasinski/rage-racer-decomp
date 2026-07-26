@@ -6,7 +6,8 @@ extern s32 g_CdTrackStep asm("D_8007F608");
 extern s32 g_CdCommandStep asm("D_8007F60C");
 extern u8 D_8009B1B0;
 
-void func_80042C94(void) {
+void GameResetCdAudioState(void) asm("func_80042C94");
+void GameResetCdAudioState(void) {
     g_CdTrackPending = -1;
     g_CdCommandPending = -1;
     g_CdTrackStep = 0;

@@ -3,6 +3,8 @@
 #include "game/race.h"
 #include "game/state.h"
 #include "game/render.h"
+#include "psyq/gpu.h"
+#include "game/cd.h"
 
 extern char D_80010F90[], D_80010FA8[], D_80010F98[], D_80010F9C[], D_80010FA4[];
 extern s32 D_8009E858[];
@@ -18,7 +20,7 @@ void func_80016EA0(void *dst, s32 len, void *src, s32 arg3);
 void func_80016754(void *dst, s32 x, void *src, s32 color);
 void *func_80021CD4(void *dst, s32 value);
 void func_800632F0();
-s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 extern volatile s32 D_801E4BA8;
 extern volatile u16 g_PlayerCarIndex asm("D_801E40D4");
 extern s32 D_801E774C;
@@ -40,14 +42,9 @@ void func_80021DB8(u8 *arg0);
 void func_80022068(u8 *arg0);
 void func_8002229C(s32 arg0, s32 arg1);
 void func_80033AA0(s32 arg0, s32 arg1);
-void func_80042BC0(s32 arg0);
-void func_80042BF0(void);
-void func_80042CCC(s32 arg0);
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8006A534(s32 arg0, s32 arg1);
-void func_8006A5A4(s32 arg0, s32 arg1, s32 arg2);
-void func_80065860(s32 arg0);
-void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 
 void func_80021DB8(u8 *arg0) {
     register u8 *panel;
@@ -177,7 +174,7 @@ void func_8002229C(s32 arg0, s32 arg1) {
 
     if (g_AnimTimer & 8) {
         scratch = (s32 *)0x1F800000;
-        *scratch = func_80032F34(
+        *scratch = GameAddTilePrim(
             g_DrawBuffer + 0xCC,
             *scratch,
             (arg0 << 3) + 0x7C,
@@ -366,8 +363,8 @@ void func_80022794(void) {
         func_80033AA0(g_SceneTimer, 0x49);
         if (g_SceneTimer == 0) {
             if (D_801E8A48 < 5 || D_8019CE10 < 5) {
-                func_80042BC0(0xE);
-                func_80042BF0();
+                GameRequestCdTrack(0xE);
+                GameStartCdAudio();
             }
             if (D_801E8A48 < 5) {
                 D_801E6830 = 0xB;
@@ -396,14 +393,14 @@ void func_80022794(void) {
         }
         D_801E6830 = (D_801E6830 + 42) % 42;
         if (previous != D_801E6830) {
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
         }
 
         D_801E417C[D_8019C8F8] = D_801E6830;
         buttons = g_PadEdge2;
         name = (u8 *)D_801E417C;
         if (buttons & 0x860) {
-            func_8005D6EC(2);
+            GamePlaySoundCue(2);
             D_8019C8F8++;
             if (D_8019C8F8 == 6) {
                 D_801E6C8C = 2;
@@ -425,7 +422,7 @@ void func_80022794(void) {
             }
             D_801E6830 = D_801E417C[D_8019C8F8];
         } else if ((buttons & 0x90) && D_8019C8F8 > 0) {
-            func_8005D6EC(3);
+            GamePlaySoundCue(3);
             D_8019C8F8--;
             D_801E6830 = name[D_8019C8F8];
         }
@@ -483,21 +480,21 @@ void func_80022794(void) {
         }
         D_801E6830 = (D_801E6830 + 42) % 42;
         if (previous != D_801E6830) {
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
         }
 
         D_801F17FC[D_8019C8F8] = D_801E6830;
         buttons = g_PadEdge2;
         name = (u8 *)D_801F17FC;
         if (buttons & 0x860) {
-            func_8005D6EC(2);
+            GamePlaySoundCue(2);
             D_8019C8F8++;
             if (D_8019C8F8 == 6) {
                 D_801E6C8C = 5;
             }
             D_801E6830 = name[D_8019C8F8];
         } else if ((buttons & 0x90) && D_8019C8F8 > 0) {
-            func_8005D6EC(3);
+            GamePlaySoundCue(3);
             D_8019C8F8--;
             D_801E6830 = name[D_8019C8F8];
         }
@@ -520,8 +517,8 @@ void func_80022794(void) {
     case 5:
         if (g_PadEdge2 & 0x860) {
             if (D_801E8A48 < 5 || D_8019CE10 < 5) {
-                func_80042CCC(0x78);
-                func_80042BF0();
+                GameStartCdVolumeFade(0x78);
+                GameStartCdAudio();
             }
             D_801E6C8C = 6;
             D_8019CA14 = 0;
@@ -545,16 +542,16 @@ void func_80022794(void) {
 
 void func_80022EE4(void) {
     func_8006A534(0, 0);
-    func_8006A5A4(9, 0, 0);
+    CdControl(9, 0, 0);
     g_SceneId = 6;
     func_80018410();
 }
 
 void func_80022F2C(void) {
     func_8006A534(0, 0);
-    func_8006A5A4(9, 0, 0);
-    func_80065860(0);
-    func_8001BE9C(0, 0, 0);
+    CdControl(9, 0, 0);
+    SetDispMask(0);
+    GameSetupDisplay240(0, 0, 0);
     D_8019C768 = 0x80;
     g_FadeStep = 4;
     g_FadeLevel = 0;

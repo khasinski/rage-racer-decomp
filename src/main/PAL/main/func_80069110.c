@@ -11,7 +11,7 @@
  *           multiply to signed mult; narrow multu is unreachable from C, and
  *           NO matched function in the project emits it. It also folds
  *           (s16)word / word>>16 into lh loads vs the retail's single-lw +
- *           andi/sll/sra extraction. Sibling func_80069D18 = RotMatrix (14x
+ *           andi/sll/sra extraction. Sibling RotMatrix = RotMatrix (14x
  *           multu), a documented PSY-Q libgte asm routine.
  * Revisit:  only if the exact gcc-2.7.2 variant that emits narrow multu is
  *           obtained AND verified not to regress already-matched functions.

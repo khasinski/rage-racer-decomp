@@ -10,7 +10,7 @@ extern u8 D_8009E0D3[];
 extern u8 D_8009E0BC[];
 extern u8 D_8009E0B8[];
 
-s32 SsUtKeyOffV(s32 arg0) asm("func_80078018");
+s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
 
 s32 SsUtKeyOffV(s32 arg0) {
     register s32 one asm("$5") = 1;

@@ -1,10 +1,10 @@
 #include "common.h"
 #include "game/track.h"
 #include "game/race.h"
+#include "psyq/gte.h"
+#include "game/render.h"
 
 
-s32 func_8006888C(s32 arg0);
-s32 func_8001A6AC(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
 void func_8005C31C(s32 arg0, s32 arg1, s32 arg2);
 
@@ -104,7 +104,7 @@ matched:
     if (s0v != 0) {
         s3 -= *(s32 *)0x1F800008;
         s4 -= *(s32 *)0x1F800010;
-        v0 = func_8006888C((s3 * s3) / 4 + (s4 * s4) / 4);
+        v0 = SquareRoot12((s3 * s3) / 4 + (s4 * s4) / 4);
         v0 = s2 - (v0 >> 11);
         s1 = v0;
         __asm__("" : "=r"(v0) : "0"(v0));
@@ -116,7 +116,7 @@ matched:
         if ((s16)s1 < 0) {
             s1 = 0;
         }
-        angle = func_8001A6AC(s3, s4);
+        angle = GameAtan2(s3, s4);
         v1 = *(s32 *)0x1F80001C;
         __asm__("" : "=r"(v1) : "0"(v1));
         v1 -= 0xC00;

@@ -1,9 +1,9 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/render.h"
 
 extern s32 D_801E8AA0;
 
-s32 func_8002A7C4(s32 arg0, s32 arg1);
 void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
@@ -35,7 +35,7 @@ void func_80030814(GameCarRuntime *car) {
     }
 
     {
-        s32 rr = func_8002A7C4(car->field_24, r->unk90);
+        s32 rr = GameGetAngleDelta(car->field_24, r->unk90);
         s32 base = car->field_24;
         car->field_24 = rr / 5 + base;
         func_8002F4E4(car, base);

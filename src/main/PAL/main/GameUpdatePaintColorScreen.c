@@ -16,7 +16,7 @@ s32 func_8004F048(void *, s32, s32);
 void func_80049418(s32, s32, s32, s32);
 void func_800489AC(s32, s32, s32);
 s32 func_800487D8(void *, void *, s32);
-void func_8005D6EC(s32);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8001D8C4(s32);
 void func_8001DA74(s32);
 
@@ -38,11 +38,11 @@ void GameUpdatePaintColorScreen(void) {
         }
         g_MenuOverlayPattern = -1;
         if (g_PadEdge2 & 0x1000) {
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
             D_801F17A0 = D_801F17A0 > 0 ? D_801F17A0 - 1 : 2;
         }
         if (g_PadEdge2 & 0x4000) {
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
             D_801F17A0 = D_801F17A0 < 2 ? D_801F17A0 + 1 : 0;
         }
         {
@@ -51,25 +51,25 @@ void GameUpdatePaintColorScreen(void) {
                 s32 sel = D_801F17A0;
                 s32 val;
                 if (sel == 0) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     val = g_CarTable[g_PlayerCarIndex].shapeIndex;
                     GameMenuBusy = -1;
                     g_UiScriptProgress2 = 0;
                     D_80082EB4 = val;
                 } else if (sel == 1) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     val = g_CarTable[g_PlayerCarIndex].textureIndex;
                     GameMenuBusy = -2;
                     g_UiScriptProgress2 = 0;
                     D_80082EB4 = val;
                 } else if (sel == 2) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 2;
                     g_MenuViewOffsetTarget = 0x3D090;
                 }
             } else if (f & 0x90) {
-                func_8005D6EC(3);
+                GamePlaySoundCue(3);
                 GameMenuBusy = 3;
                 g_MenuOverlayPattern = 2;
                 g_MenuViewOffsetTarget = 0x3D090;
@@ -81,24 +81,24 @@ void GameUpdatePaintColorScreen(void) {
     if (GameMenuBusy < 0) {
         if (func_8004F048(&g_UiScriptProgress2, 1, D_80082EB4) != 0) {
             if (g_PadEdge & 0x8000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_80082EB4 = D_80082EB4 > 0 ? D_80082EB4 - 1 : 0x11;
             }
             if (g_PadEdge & 0x2000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_80082EB4 = D_80082EB4 < 17 ? D_80082EB4 + 1 : 0;
             }
             if (GameMenuBusy == -1) {
                 u16 *btn = &g_PadEdge2;
                 if (*btn & 0x860) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     g_CarTable[g_PlayerCarIndex].shapeIndex = D_80082EB4;
                     D_801E4388[g_PlayerCarIndex].shapeIndex = D_80082EB4;
                     D_801E4388[g_PlayerCarIndex].textureIndex = g_CarTable[g_PlayerCarIndex].textureIndex;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     D_80082EB4 = g_CarTable[g_PlayerCarIndex].shapeIndex;
                     GameMenuBusy = 0;
                 }
@@ -106,14 +106,14 @@ void GameUpdatePaintColorScreen(void) {
             } else {
                 u16 *btn = &g_PadEdge2;
                 if (*btn & 0x860) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     g_CarTable[g_PlayerCarIndex].textureIndex = D_80082EB4;
                     D_801E4388[g_PlayerCarIndex].shapeIndex = g_CarTable[g_PlayerCarIndex].shapeIndex;
                     D_801E4388[g_PlayerCarIndex].textureIndex = D_80082EB4;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     D_80082EB4 = g_CarTable[g_PlayerCarIndex].textureIndex;
                     GameMenuBusy = 0;
                 }

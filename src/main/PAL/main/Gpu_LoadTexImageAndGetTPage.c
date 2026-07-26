@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-void func_80065B24(Rect *arg0, void *arg1);
+void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 s32 func_80064BB4(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 s32 Gpu_LoadTexImageAndGetTPage(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) asm("func_800648EC");
@@ -45,6 +45,6 @@ two:
     rect.w = arg5;
 
 call:
-    func_80065B24(&rect, arg0);
+    LoadImage(&rect, arg0);
     return func_80064BB4(arg1, arg2, arg3, arg4) & 0xFFFF;
 }

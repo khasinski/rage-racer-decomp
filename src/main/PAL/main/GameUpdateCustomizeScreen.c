@@ -30,7 +30,7 @@ void func_8004FCE8(s32 arg0, s32 arg1, s32 arg2);
 void func_8005131C(void);
 s32 func_800487D8(u8 *commands, s32 *progress, s32 step);
 void func_800489AC(s32 arg0, s32 arg1, s32 arg2);
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_80048ED8(u8 x, s32 useFlag);
 void func_80048D64(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
@@ -69,11 +69,11 @@ void GameUpdateCustomizeScreen(void) {
         if ((func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_8019C7C0 = (D_8019C7C0 > 0) ? D_8019C7C0 - 1 : lowMode;
             }
             if (g_PadEdge2 & 0x4000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_8019C7C0 = (D_8019C7C0 < mode) ? D_8019C7C0 + 1 : 0;
             }
             if (g_PadEdge2 & 0x860) {
@@ -98,7 +98,7 @@ set_state:
                         g_MenuSubCursor = carByte;
                         return;
                     }
-                    func_8005D6EC(5);
+                    GamePlaySoundCue(5);
                     D_8019C794 = &D_80082814;
                     GameMenuBusy = -3;
                     g_UiScriptProgress2 = 0;
@@ -108,7 +108,7 @@ set_state:
                     goto block27;
                 }
                 if (sel == 2) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 1;
                     D_8009B324 = -3;
@@ -116,7 +116,7 @@ set_state:
                 }
             } else if (g_PadEdge2 & 0x90) {
 block27:
-                func_8005D6EC(3);
+                GamePlaySoundCue(3);
                 GameMenuBusy = 2;
                 g_MenuOverlayPattern = 2;
             }
@@ -129,21 +129,21 @@ block27:
             if (func_800487D8(D_8019C794, &g_UiScriptProgress2, 1) != 0) {
                 pad = &g_PadEdge2;
                 if (*pad & 0x860) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     GameMenuBusy = -5;
                     g_MenuConfirmTimer = 0x23;
                 }
                 if (*pad & 0x90) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     GameMenuBusy = 0;
                 }
                 if ((*pad & 0x8000) && (g_MenuSubCursor < 4)) {
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     g_MenuSubCursor++;
                 }
                 if (g_PadEdge2 & 0x2000) {
                     if (g_MenuSubCursor != 0) {
-                        func_8005D6EC(1);
+                        GamePlaySoundCue(1);
                         g_MenuSubCursor--;
                     }
                 }
@@ -153,23 +153,23 @@ block27:
             if (func_800487D8(D_8019C794, &g_UiScriptProgress2, 1) != 0) {
                 pad = &g_PadEdge2;
                 if (*pad & 0x860) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     GameMenuBusy = -6;
                     g_MenuConfirmTimer = 0x23;
                     g_CarTable[g_PlayerCarIndex].transmission = g_MenuSubCursor;
                     D_801E438A[g_PlayerCarIndex * 8] = g_MenuSubCursor;
                 }
                 if (*pad & 0x90) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     GameMenuBusy = 0;
                 }
                 if ((*pad & 0x8000) && (g_MenuSubCursor != 0)) {
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     g_MenuSubCursor = 0;
                 }
                 if (g_PadEdge2 & 0x2000) {
                     if (g_MenuSubCursor == 0) {
-                        func_8005D6EC(1);
+                        GamePlaySoundCue(1);
                         g_MenuSubCursor = 1;
                     }
                 }

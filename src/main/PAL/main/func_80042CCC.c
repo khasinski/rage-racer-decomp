@@ -2,7 +2,8 @@
 
 extern s32 D_8009B1B4;
 
-void func_80042CCC(s32 arg0) {
+void GameStartCdVolumeFade(s32 arg0) asm("func_80042CCC");
+void GameStartCdVolumeFade(s32 arg0) {
     D_8009B1B4 = arg0;
     if (arg0 >= 0x1000) {
         D_8009B1B4 = 0xFFF;

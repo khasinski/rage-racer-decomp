@@ -5,6 +5,7 @@
 #include "game/state.h"
 #include "game/render.h"
 #include "game/menu.h"
+#include "psyq/gpu.h"
 
 extern s16 D_8019CE34;
 extern Matrix D_8019CAD4;
@@ -67,9 +68,8 @@ extern s32 D_8019C768;
 extern s32 D_801E4B30;
 extern u8 *D_8009E67C;
 
-void func_80065860(s32 arg0);
 void func_8005B9CC(void);
-void func_8001A3C0(s32 arg0);
+void GameUploadImageAsset(s32 arg0) asm("func_8001A3C0");
 void func_80018F08(void);
 
 void func_8001C7BC(void) {
@@ -77,12 +77,12 @@ void func_8001C7BC(void) {
     u8 *ptr;
     u8 *end;
 
-    func_80065860(0);
+    SetDispMask(0);
     D_8019C768 = 0x80;
 
     if (g_AssetLoadState != 1) {
         func_8005B9CC();
-        func_8001A3C0(D_801E4B30);
+        GameUploadImageAsset(D_801E4B30);
         func_80018F08();
 
         D_8019C768 = 0x180;
@@ -206,7 +206,7 @@ void func_8001C974(void) {
 
 s32 func_80016EC4(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
 s32 func_80017390(void *ot, s32 p, s32 a);
-s32 func_80032F34(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
+s32 GameAddTilePrim(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g) asm("func_80032F34");
 void func_80016754(s32 x, s32 y, void *str, s32 col);
 
 void func_8001CD54(void) {
@@ -222,10 +222,10 @@ void func_8001CD54(void) {
     p = func_80016EC4(ot, p, x, 0xce, 8, 8, 0x84, 0xc4, 0x7812);
     p = func_80016EC4(ot, p, (D_801E42CC == 0xa) ? 0x84 : 0x80, 0xce, 8, 8, 0x8c, 0xc4, 0x7812);
     p = func_80017390(ot, p, 0x29);
-    p = func_80032F34(ot, p, 0x10, 0xcc, 0x5b, 0xc, 0x85, 0x15, 0xe);
-    p = func_80032F34(ot, p, 0x6c, 0xcc, 0x1f, 0xc, 0x40, 0x40, 0x40);
-    p = func_80032F34(ot, p, 0x8c, 0xcc, 0xa4, 0xc, 0, 0, 0);
-    p = func_80032F34(ot, p, 0xf, 0xcb, 0x122, 0xe, 0xff, 0xff, 0xff);
+    p = GameAddTilePrim(ot, p, 0x10, 0xcc, 0x5b, 0xc, 0x85, 0x15, 0xe);
+    p = GameAddTilePrim(ot, p, 0x6c, 0xcc, 0x1f, 0xc, 0x40, 0x40, 0x40);
+    p = GameAddTilePrim(ot, p, 0x8c, 0xcc, 0xa4, 0xc, 0, 0, 0);
+    p = GameAddTilePrim(ot, p, 0xf, 0xcb, 0x122, 0xe, 0xff, 0xff, 0xff);
     *scr = p;
 
     func_800632F0(buf, D_80010D2C, D_801E42CC);
@@ -239,9 +239,7 @@ extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern u8 D_801E7734[];
 extern s32 D_801E40E0;
 
-void func_80065860(s32 a);
-void func_8001BE9C(s32 a, s32 b, s32 c);
-void func_8005D6EC(s32 a);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_80018FC4(void);
 
 void func_8001CFB4(void) {
@@ -249,14 +247,14 @@ void func_8001CFB4(void) {
         g_SceneTimer = g_SceneTimer + 1;
     }
     if (g_SceneTimer == 0xf) {
-        func_80065860(1);
+        SetDispMask(1);
     }
     if (g_SceneTimer == 1) {
-        func_8001BE9C(0, 0, 0);
+        GameSetupDisplay240(0, 0, 0);
     }
     func_8001C974();
     if (g_SceneTimer == 0x20) {
-        func_8005D6EC(0x19);
+        GamePlaySoundCue(0x19);
     }
     if (g_FadeLevel == 0) {
         if (func_80018FC4() == 0) {

@@ -19,7 +19,7 @@ extern void func_8004B8B4(s32, s32);
 extern void func_8004E368(s32, s32);
 extern s32 func_800487D8(void *, void *, s32);
 extern void func_800489AC(s32, s32, s32);
-extern void func_8005D6EC(s32);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void GameUpdateLogoSampleScreen(void) asm("func_800580C8");
 void GameUpdateLogoSampleScreen(void) {
@@ -42,7 +42,7 @@ void GameUpdateLogoSampleScreen(void) {
         g_MenuOverlayPattern = -1;
         if (g_PadEdge2 & 0x1000) {
             s32 n, c;
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
             c = D_8019C770;
             n = 2;
             if (c > 0) n = c - 1;
@@ -50,7 +50,7 @@ void GameUpdateLogoSampleScreen(void) {
         }
         if (g_PadEdge2 & 0x4000) {
             s32 n, c;
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
             c = D_8019C770;
             n = 0;
             if (c < 2) n = c + 1;
@@ -59,24 +59,24 @@ void GameUpdateLogoSampleScreen(void) {
         if (g_PadEdge2 & 0x860) {
             pl = D_8019C770;
             if (pl == 0) {
-                func_8005D6EC(2);
+                GamePlaySoundCue(2);
                 GameMenuBusy = -1;
                 g_UiScriptProgress2 = 0;
                 D_8009F0B0 = &D_80082634;
                 D_80082EB0 = D_80082EA4;
             } else if (pl == 1) {
-                func_8005D6EC(2);
+                GamePlaySoundCue(2);
                 GameMenuBusy = -2;
                 g_UiScriptProgress2 = 0;
                 D_8009F0B0 = &D_80082664;
                 D_80082EB0 = D_80082EA8;
             } else if (pl == 2) {
-                func_8005D6EC(3);
+                GamePlaySoundCue(3);
                 GameMenuBusy = 1;
                 g_MenuOverlayPattern = 2;
             }
         } else if (g_PadEdge2 & 0x90) {
-            func_8005D6EC(3);
+            GamePlaySoundCue(3);
             GameMenuBusy = 1;
             g_MenuOverlayPattern = 2;
         }
@@ -89,18 +89,18 @@ void GameUpdateLogoSampleScreen(void) {
             if (func_800487D8(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
                 u16 *p = &g_PadEdge2;
                 if (*p & 0x860) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     GameMenuBusy = 0;
                     D_80082EB0 = D_80082EA4;
                 }
                 if (*p & 0x90) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     GameMenuBusy = 0;
                     D_80082EA4 = D_80082EB0;
                 }
                 if (*p & 0x8000) {
                     s32 n, c;
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     c = D_80082EA4;
                     n = 0x13;
                     if (c > 0) n = c - 1;
@@ -108,7 +108,7 @@ void GameUpdateLogoSampleScreen(void) {
                 }
                 if (g_PadEdge2 & 0x2000) {
                     s32 n, c;
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     c = D_80082EA4;
                     n = 0;
                     if (c < 19) n = c + 1;
@@ -120,18 +120,18 @@ void GameUpdateLogoSampleScreen(void) {
             if (func_800487D8(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
                 u16 *p = &g_PadEdge2;
                 if (*p & 0x860) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     GameMenuBusy = 0;
                     D_80082EB0 = D_80082EA8;
                 }
                 if (*p & 0x90) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     GameMenuBusy = 0;
                     D_80082EA8 = D_80082EB0;
                 }
                 if (*p & 0x8000) {
                     s32 n, c;
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     c = D_80082EA8;
                     n = 0x13;
                     if (c > 0) n = c - 1;
@@ -139,7 +139,7 @@ void GameUpdateLogoSampleScreen(void) {
                 }
                 if (g_PadEdge2 & 0x2000) {
                     s32 n, c;
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     c = D_80082EA8;
                     n = 0;
                     if (c < 19) n = c + 1;

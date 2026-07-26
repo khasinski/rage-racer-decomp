@@ -4,6 +4,7 @@
 #include "game/render.h"
 #include "game/asset.h"
 #include "game/menu.h"
+#include "psyq/gpu.h"
 
 extern s32 D_801E429C;
 
@@ -124,13 +125,11 @@ extern s32 D_8007C744;
 extern u32 D_801E8260;
 extern void (*D_8007C748[])(void);
 
-int func_800632B0(void);
-int func_8006A5A4(int, int, int);
-void func_8005D6EC(int);
+s32 GameRandom15(void) asm("func_800632B0");
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 GameRequestTrackLoad(void) asm("func_8001965C");
 s32 GameRequestRaceStart(void) asm("func_80019580");
-void func_80065860(int);
-void func_8001BE9C(int, int, int);
 void func_80019AF0(int);
 
 void GameUpdateFrontend(void) {
@@ -138,19 +137,19 @@ void GameUpdateFrontend(void) {
     s32 b, m4;
 
     g_AnimTimer++;
-    func_800632B0();
+    GameRandom15();
 
     if (D_8019CB70 > 0) {
         D_8019CB70--;
     }
     if (D_8019CB70 == 0) {
-        if (func_8006A5A4(9, 0, 0) == 1) {
+        if (CdControl(9, 0, 0) == 1) {
             D_8019CB70--;
         }
     }
     if (D_8009E880 != 0) {
         if (--D_8009E880 == 0) {
-            func_8005D6EC(0x1a);
+            GamePlaySoundCue(0x1a);
         }
     }
 
@@ -162,12 +161,12 @@ void GameUpdateFrontend(void) {
         if (D_8007C744 & 1) goto Lcheck;
         if (state == 0x1cc) {
             g_GrandPrixSeries = 0;
-            g_GrandPrixClass = (func_800632B0() & 0xfff) % 5;
-            b = func_800632B0() & 0xfff;
+            g_GrandPrixClass = (GameRandom15() & 0xfff) % 5;
+            b = GameRandom15() & 0xfff;
             m4 = b % 4;
             g_CourseIndex = m4;
             if (g_GrandPrixClass < 2 && m4 == 3) {
-                g_CourseIndex = (func_800632B0() & 0xfff) % 3;
+                g_CourseIndex = (GameRandom15() & 0xfff) % 3;
             }
             GameRequestTrackLoad();
             g_SceneTimer++;
@@ -185,11 +184,11 @@ void GameUpdateFrontend(void) {
 Lcheck:
     state = g_SceneTimer;
     if (state == 0xf) {
-        func_80065860(1);
+        SetDispMask(1);
         state = g_SceneTimer;
     }
     if (state == 1) {
-        func_8001BE9C(0, 0, 0);
+        GameSetupDisplay240(0, 0, 0);
     }
 
     D_8007C748[D_8009F098]();

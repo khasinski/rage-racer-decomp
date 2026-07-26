@@ -10,14 +10,13 @@ s32 func_8005E4EC(s32 slot, s32 header, s32 body, s32 seq);
 s32 func_8005BA20(s32 header, s32 body, u16 *table);
 s32 func_8005E600(s32 arg0);
 s32 func_8005B948(s32 arg0);
-void func_8001674C(char *arg0);
 void func_80063D9C(s32 arg0);
 void func_800736E8(void);
 void func_80073614(s32 arg0);
 void func_80073748(s32 arg0, s32 arg1);
 void func_8007865C(s32 arg0);
-void func_80078018(s32 arg0);
-void func_8006DD30(s32 arg0);
+s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
+s32 VSync(s32 mode) asm("func_8006DD30");
 void func_80072B3C(s32 arg0);
 void func_80072260(void);
 void func_80071C24(void);
@@ -85,14 +84,14 @@ loadVab:
         currentVabId = (s16)ret;
         fail = -1;
         if (currentVabId == fail) {
-            func_8001674C(D_8001267C);
+            GameDebugPrintf(D_8001267C);
             func_80063D9C(1);
         }
 
         ret = func_800730BC(bodyReg, currentVabId);
         *vabIdPtr = ret;
         if ((s16)ret == fail) {
-            func_8001674C(D_80012694);
+            GameDebugPrintf(D_80012694);
             func_80063D9C(1);
         }
     }
@@ -200,14 +199,14 @@ s32 func_8005BA20(s32 header, s32 body, u16 *table) {
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        func_8001674C(D_8001267C);
+        GameDebugPrintf(D_8001267C);
         func_80063D9C(1);
     }
 
     ret = func_800730BC(body, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
-        func_8001674C(D_80012694);
+        GameDebugPrintf(D_80012694);
         func_80063D9C(1);
     }
 
@@ -239,14 +238,14 @@ s32 func_8005BB1C(s32 header, s32 body, s32 table) {
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        func_8001674C(D_8001267C);
+        GameDebugPrintf(D_8001267C);
         func_80063D9C(1);
     }
 
     ret = func_800730BC(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
-        func_8001674C(D_80012694);
+        GameDebugPrintf(D_80012694);
         func_80063D9C(1);
     }
 
@@ -272,7 +271,7 @@ void func_8005BC14(void) {
         *flagsPtr = newFlags;
         func_800736E8();
         func_80073748(0x28, 0x28);
-        func_80078018((s16)liveSlot);
+        SsUtKeyOffV((s16)liveSlot);
         func_80072B3C(D_801E6CB2);
     }
 }
@@ -289,10 +288,10 @@ void func_8005BC80(void) {
         func_80073748(0, 0);
         i = 0;
         while (i < 24) {
-            func_80078018((s16)i);
+            SsUtKeyOffV((s16)i);
             i++;
         }
-        func_8006DD30(2);
+        VSync(2);
         func_80072B3C(D_801E6CB0);
         func_80072B3C(D_801E6CB2);
         func_80072260();

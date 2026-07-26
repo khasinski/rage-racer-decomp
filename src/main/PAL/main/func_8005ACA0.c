@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/state.h"
 #include "game/menu.h"
+#include "psyq/gpu.h"
 
 extern s32 D_8009B348;
 extern s32 D_8009B324;
@@ -20,7 +21,6 @@ extern s32 D_8009B314;
 extern u8 g_PadType asm("D_801E4369");
 
 
-void func_80065860(s32);
 void func_80047024(void *, s32, s32, s32, s32, s32, s32, s32, s32);
 s32 func_800487D8(void *, void *);
 void func_800496F0(s32, s32);
@@ -40,7 +40,7 @@ void func_8005ACA0(void) {
     g_AnimTimer = c0;
     g_SceneTimer = c1;
     if (c1 == 2) {
-        func_80065860(1);
+        SetDispMask(1);
     }
     func_80047024(scratch, 0, 0, 0x140, 2, 0, 0, 0, 0xFF);
 

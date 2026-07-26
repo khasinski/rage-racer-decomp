@@ -5,7 +5,7 @@
  * func_80068A38 is a hand-inlined PSY-Q libgte CompMatrix routine: batched
  * cop2 (ctc2/mtc2/mvmva/mfc2) transfers interleaved with by-hand 16-bit column
  * packing (lui/and/or/sll) that GCC 2.6.3 cannot reproduce from C or from GTE
- * macros. Same family as the already-HANDWRITTEN siblings func_80068B98/CA4/
+ * macros. Same family as the already-HANDWRITTEN siblings MulMatrix0/CA4/
  * D88/E70/F80. Byte-exact via register-pinned COP2 asm.
  *
  * The func_80068A2C TU begins with 12 bytes (three 0x00000000 words) of
@@ -23,7 +23,7 @@ u32 func_80068A2C[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  * (CompMatrix-family: R2 = R0 * R1, T2 = R0 * T1 + T0) built from three/four
  * MVMVA (cop2 0x486012, sf=1, mx=Rot, v=V0, cv=none) commands with the column
  * vectors packed out of the source MATRIX by hand.  It belongs to the same
- * family as its neighbours func_80068B98/CA4/D88/E70 and, like them, only
+ * family as its neighbours MulMatrix0/CA4/D88/E70 and, like them, only
  * reaches a byte-exact match through register-pinned COP2 transfers: GCC 2.6.3
  * will not reproduce the batched 5x lw / 5x ctc2 load block nor the exact
  * IR/MAC extraction register schedule from natural C.

@@ -24,7 +24,7 @@ void func_8005194C(void);
 void func_8004CF30(s32 arg0);
 void func_800489AC(s32 arg0, s32 arg1, s32 arg2);
 s32 func_800487D8(u8 *arg0, s32 *arg1, s32 arg2);
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_8004D384(s32 *arg0, s32 arg1, s32 arg2);
 void func_800509C4(s32 arg0);
 
@@ -48,11 +48,11 @@ void GameUpdateRankingScreen(void) {
             if (func_800487D8(&D_80082724, &g_UiScriptProgress2, 1) != 0) {
                 g_MenuOverlayPattern = -1;
                 if (g_PadEdge2 & 0x1000) {
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     D_8019CDF8 = (D_8019CDF8 > 0) ? D_8019CDF8 - 1 : 2;
                 }
                 if (g_PadEdge2 & 0x4000) {
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     D_8019CDF8 = (D_8019CDF8 < 2) ? D_8019CDF8 + 1 : 0;
                 }
                 {
@@ -60,20 +60,20 @@ void GameUpdateRankingScreen(void) {
                     if (flags & 0x860) {
                         s32 x = D_8019CDF8;
                         if (x == 0) {
-                            func_8005D6EC(2);
+                            GamePlaySoundCue(2);
                             GameMenuBusy = -2;
                             D_8009B2C8 = -3;
                         } else if (x == 1) {
-                            func_8005D6EC(2);
+                            GamePlaySoundCue(2);
                             GameMenuBusy = -2;
                             D_8009B2C8 = -5;
                         } else if (x == 2) {
-                            func_8005D6EC(3);
+                            GamePlaySoundCue(3);
                             GameMenuBusy = 1;
                             g_MenuOverlayPattern = x;
                         }
                     } else if (flags & 0x90) {
-                        func_8005D6EC(3);
+                        GamePlaySoundCue(3);
                         GameMenuBusy = 1;
                         g_MenuOverlayPattern = 2;
                     }
@@ -95,7 +95,7 @@ void GameUpdateRankingScreen(void) {
             if (!(g_PadEdge2 & 0x8f0)) {
                 break;
             }
-            func_8005D6EC(3);
+            GamePlaySoundCue(3);
             GameMenuBusy = -4;
             break;
         case -4:
@@ -112,7 +112,7 @@ void GameUpdateRankingScreen(void) {
             if (!(g_PadEdge2 & 0x8f0)) {
                 break;
             }
-            func_8005D6EC(3);
+            GamePlaySoundCue(3);
             GameMenuBusy = -6;
             break;
         case -6:

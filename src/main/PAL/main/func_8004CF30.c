@@ -7,7 +7,7 @@ void func_80047330(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r, u32 g, u32 b, u8 alpha);
 void func_80064F58(u8 *prim);
 void func_80064E90(u8 *prim, s32 arg1);
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
 typedef struct {
     s16 b[33];
@@ -113,7 +113,7 @@ void func_8004CF30(s32 arg) {
         {
             u8 *oldPrim = prim;
             prim += 0x24;
-            func_80064DDC(s3, oldPrim);
+            AddPrim(s3, oldPrim);
         }
         *(u8 **)0x1F800000 = prim;
         func_800468FC(s3, 0x48, 0, 0x140, 0x1E0);

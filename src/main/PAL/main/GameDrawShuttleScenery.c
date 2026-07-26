@@ -2,15 +2,12 @@
 #include "psyq/gte.h"
 #include "game/race.h"
 #include "game/track.h"
+#include "game/render.h"
 
 extern u32 *D_801E6828;
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
-void func_8001A4C0(Matrix *mtx, s32 angle);
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_800296B4(void *arg0, s32 arg1);
-void func_80069568(Matrix *lhs, Matrix *rhs);
 
 void GameDrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
 
@@ -55,11 +52,11 @@ void GameDrawShuttleScenery(s32 arg0) {
 
     if ((visible != 0) || (g_CourseIndex == 2)) {
         drawArg = 0x3F;
-        func_8001A530(&mtx0, state->angleY);
+        GameBuildRotMatrixY(&mtx0, state->angleY);
         mtx1Ptr = &mtx1;
-        func_8001A4C0(mtx1Ptr, state->angleZ);
-        func_80069568(&mtx0, mtx1Ptr);
-        func_80069568((Matrix *)0x1F800028, mtx1Ptr);
+        GameBuildRotMatrixZ(mtx1Ptr, state->angleZ);
+        MulMatrix2(&mtx0, mtx1Ptr);
+        MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
         if ((g_CourseIndex & 3) >= 2) {
             drawArg = 0x3C;
         }
@@ -70,6 +67,6 @@ void GameDrawShuttleScenery(s32 arg0) {
         if (drawArg < frameValue) {
             drawValue = drawArg;
         }
-        func_800296B4((void *)0x1F800000, drawValue);
+        GameSubmitCourseModel((void *)0x1F800000, drawValue);
     }
 }

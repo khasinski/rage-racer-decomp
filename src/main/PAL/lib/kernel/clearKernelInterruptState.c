@@ -13,7 +13,6 @@ extern u8 D_80013BC4[];
 void RegisterKernelCallback(s32 slot, void *callback) asm("func_8006DF64");
 void *setIntrVSyncAddress(void) asm("func_8006E7D4");
 void *setIntrDMAAddress(void) asm("func_8006EA00");
-void func_8001674C(u8 *arg0, ...);
 
 void clearKernelInterruptState(u32 *dst, s32 count) {
     volatile s32 unused;
@@ -191,9 +190,9 @@ void intrDMADispatcher(void) {
 
     if (((*D_8009A4F4 & 0xFF000000) == 0x80000000) || ((*D_8009A4F4 & 0x8000) != 0)) {
         fmt = D_80013BA8;
-        func_8001674C(fmt, *D_8009A4F4);
+        GameDebugPrintf(fmt, *D_8009A4F4);
         for (i = 0; i < 7; i++) {
-            func_8001674C(D_80013BC4, i, D_8009A518[i * 4]);
+            GameDebugPrintf(D_80013BC4, i, D_8009A518[i * 4]);
         }
     }
 }

@@ -5,7 +5,7 @@ extern u8 D_801EB9DC[];
 
 void func_800658FC(s32 mode);
 void func_80064FF8(u8 *prim);
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
 void func_800340D8(void) {
     register u8 **initBuffers asm("$16");
@@ -62,7 +62,7 @@ void func_800340D8(void) {
                 if (linear > 0) {
                     addPrimBase = buffers[0];
                     prevOffset = offset - 0x10;
-                    func_80064DDC((void *)(prevOffset + (s32)addPrimBase), (void *)((s32)offset + (s32)addPrimBase));
+                    AddPrim((void *)(prevOffset + (s32)addPrimBase), (void *)((s32)offset + (s32)addPrimBase));
                 }
 
                 col++;

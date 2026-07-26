@@ -4,7 +4,7 @@
 
 void SetSemiTrans(u8 *arg0, s32 arg1) asm("func_80064E90");
 void SetTile(u8 *arg0) asm("func_80064FF8");
-void func_80064DDC(u32 *arg0, u32 *arg1);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
 void GameDrawFullscreenFadeTile(s32 color, s32 arg1) asm("func_80033AA0");
@@ -39,6 +39,6 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
     asm volatile("" ::: "memory");
     next = packet + 0x10;
     asm volatile("" : : "r"(next));
-    func_80064DDC((u32 *)ot, (u32 *)prim);
+    AddPrim((u32 *)ot, (u32 *)prim);
     *(void **)0x1F800000 = func_80017390(g_DrawBuffer + 0xCC, next, arg1);
 }

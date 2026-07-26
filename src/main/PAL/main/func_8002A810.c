@@ -2,9 +2,8 @@
 #include "game/track.h"
 #include "game/race.h"
 #include "game/car.h"
+#include "game/render.h"
 
-s32 func_8001A6AC(s32, s32);
-s32 func_8002A788();
 void func_8002F690();
 void func_80030030();
 void func_80030814();
@@ -613,7 +612,7 @@ void func_8002A810(void *base)
   {
     var_s1 -= var_t3 / 2;
   }
-  temp_v0_9 = func_8002A788(*((s32 *) (((u8 *) car) + 0x24)), *((s32 *) (((u8 *) car) + 0xA0)), (s32) var_a2, var_a3);
+  temp_v0_9 = GameGetAngleDistance(*((s32 *) (((u8 *) car) + 0x24)), *((s32 *) (((u8 *) car) + 0xA0)), (s32) var_a2, var_a3);
   *((s32 *) (((u8 *) temp_s3) + 0x4C)) = temp_v0_9;
   if (temp_v0_9 >= 0x401)
   {
@@ -638,7 +637,7 @@ void func_8002A810(void *base)
       var_s5 -= ((s32) ((temp_a0_7 * 5) / 6)) / var_a1_4;
     }
   }
-  temp_a0_8 = func_8002A788(*((s32 *) (((u8 *) car) + 0xA0)), 0xC00 - (*((s16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints))) + 0xA))));
+  temp_a0_8 = GameGetAngleDistance(*((s32 *) (((u8 *) car) + 0xA0)), 0xC00 - (*((s16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints))) + 0xA))));
   var_a0 = temp_a0_8;
   temp_a1_2 = *((s32 *) (((u8 *) car) + 0x30));
   temp_a2 = *((s32 *) (((u8 *) car) + 0x38));
@@ -739,7 +738,7 @@ void func_8002A810(void *base)
       temp_v1_17 = (((((s32) (temp_v1_16 << 0x10)) >> 13) >> 7) * 0xC) + D_8019C7D0;
       temp_s2 = (*((s32 *) (((u8 *) car) + 0))) - (*((s32 *) (((u8 *) temp_v1_17) + 0)));
       temp_s1 = (*((s32 *) (((u8 *) car) + 8))) - (*((s32 *) (((u8 *) temp_v1_17) + 4)));
-      temp_v0_12 = func_8001A6AC(temp_s2, temp_s1);
+      temp_v0_12 = GameAtan2(temp_s2, temp_s1);
       temp_s0 = func_80068634(temp_v0_12);
       temp_v0_13 = (temp_s0 * temp_s2) + (func_80068568(temp_v0_12) * temp_s1);
       var_a0 = temp_v0_13 >> 0xC;

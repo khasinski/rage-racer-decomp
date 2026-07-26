@@ -4,6 +4,7 @@
 #include "game/render.h"
 #include "game/menu.h"
 #include "game/car.h"
+#include "psyq/gpu.h"
 
 extern s32 D_8019C768;
 extern s32 D_8019C908;
@@ -49,11 +50,8 @@ extern s32 D_8019C7C0;
 extern s32 D_8019C758;
 extern s32 D_801E4D74;
 
-void func_80065860(s32);
-void func_80017884(s32);
-void func_8001C088(s32, s32, s32);
+void GameInitRenderState(s32) asm("func_80017884");
 void func_80050B1C(void);
-void func_8001A610(void);
 void func_80069728(void *, void *);
 void func_8005290C(s32);
 void func_80054C84(s32);
@@ -75,7 +73,7 @@ void GameInitMenuMode(void) {
     GameRaceProgress *p;
     s32 *scratch;
 
-    func_80065860(0);
+    SetDispMask(0);
     g_MirrorMode = 0;
     p = g_RaceProgress;
     {
@@ -89,9 +87,9 @@ void GameInitMenuMode(void) {
         g_GrandPrixClass = t2;
         D_8019C908 = t3;
     }
-    func_80017884(1);
+    GameInitRenderState(1);
 
-    func_8001C088(0, 0, 0);
+    GameSetupDisplay480(0, 0, 0);
     g_SceneId = 8;
     g_SceneTimer = 0;
     if (g_GrandPrixMode != 0) {
@@ -109,7 +107,7 @@ void GameInitMenuMode(void) {
     scratch[6] = 0x100;
     scratch[7] = 0;
     scratch[8] = 0;
-    func_8001A610();
+    GameSetCameraRotMatrix();
     func_80069728((void *)0x1F800028, &D_80082D6C);
 
     D_8019C764 = &D_80082568;

@@ -9,7 +9,6 @@ extern s16 D_80094308[];
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rsinCore(s32 arg0) asm("func_800685A4");
 s32 rcos(s32 arg0) asm("func_80068634");
-void func_80069458(Matrix *arg0, Matrix *arg1);
 
 void MatrixApplyZRotation(Matrix *arg0, s32 arg1) asm("func_800684B0");
 void MatrixApplyZRotation(Matrix *arg0, s32 arg1) {
@@ -37,7 +36,7 @@ void MatrixApplyZRotation(Matrix *arg0, s32 arg1) {
         sp10.t[0] = 0;
         sp10.t[1] = 0;
         sp10.t[2] = 0;
-        func_80069458(arg0, &sp10);
+        MulMatrix(arg0, &sp10);
     }
 }
 

@@ -217,7 +217,7 @@ void SetShadeTex(void *prim, s32 enabled) asm("func_80064EB8");
 void SetPrimAddr(u32 *prim, u32 addr) asm("func_80064E54");
 void TermPrim(u32 *prim) asm("func_80064E78");
 s32 GetPrimAddr(u32 *prim) asm("func_80064DA4");
-void AddPrim(u32 *ot, u32 *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void AddPrims(u32 *ot, u32 first, u32 *last) asm("func_80064E18");
 void *ClearOTag(u32 *ot, s32 count) asm("func_80065CB0");
 void *ClearOTagR(u32 *ot, s32 count) asm("func_80065D68");
@@ -257,6 +257,10 @@ s32 LoadClut2(void *clut, s32 x, s32 y) asm("func_800649D8");
 /* D_800941E8 (mode) and D_800941EA (debug level) accessors. */
 s32 GetGraphType(void) asm("func_800657E4");
 s32 GetGraphDebug(void) asm("func_800657F4");
+/* GP1(03h) display enable: 0 blanks the screen (and clears the cached
+ * DISPENV), non-zero shows it. Named from its own "SetDispMask(%d)..." trace
+ * string at D_80013520. */
+void SetDispMask(s32 mask) asm("func_80065860");
 
 /* libgpu-internal byte fill helper. */
 void MemFill(u8 *dst, u8 value, s32 count) asm("func_80068180");

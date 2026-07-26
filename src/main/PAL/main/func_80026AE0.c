@@ -5,6 +5,8 @@
 #include "game/state.h"
 #include "game/render.h"
 #include "game/menu.h"
+#include "psyq/gpu.h"
+#include "game/cd.h"
 
 typedef struct UnkEventPair {
     s16 timer;
@@ -20,24 +22,19 @@ extern s32 D_8019C768;
 extern s32 D_801E4178;
 extern s32 D_801E6824;
 extern s32 D_8009E66C;
-void func_80065860(s32 arg0);
-void func_8001BE9C(s32 arg0, s32 arg1, s32 arg2);
 extern u8 D_80011010[];
 void func_80033AA0(s32 arg0, s32 arg1);
 void func_80025940(void);
-void func_80042BF0(void);
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80019730(void);
 void func_80019844(void);
 void func_80026C0C(void);
-void func_80042BC0(u32 arg0);
 extern s16 D_8007D6DC[];
 extern s16 D_8007D6DE[];
 extern s32 D_8007D6E0[];
 void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
-void func_80042C0C(void);
 void func_80018410(void);
 extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 D_801F18CC[];
@@ -46,12 +43,9 @@ void func_80026F68(void);
 void func_80026DE4(void);
 void func_8003BB50(void);
 void func_80019EFC(s32 arg0);
-void func_80043BCC(u32 arg0, GameCarRuntime *arg1);
-void func_800389F0(void);
-void func_80045CD4(void);
+void GameUpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
 void func_80041888(void);
-void func_8004123C(void);
 void GameDrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
 
 void func_80026AE0(void) {
@@ -69,8 +63,8 @@ void func_80026AE0(void) {
 }
 
 void func_80026B88(void) {
-    func_80065860(0);
-    func_8001BE9C(0, 0, 0);
+    SetDispMask(0);
+    GameSetupDisplay240(0, 0, 0);
 
     D_8019C768 = 0x80;
     g_FadeLevel = 0x108;
@@ -86,7 +80,7 @@ void func_80026C0C(void) {
     register s32 delta asm("$3");
 
     if (g_SceneTimer == 2) {
-        func_80065860(1);
+        SetDispMask(1);
     }
 
     delta = g_FadeStep;
@@ -113,10 +107,10 @@ void func_80026C0C(void) {
         func_80033AA0(g_FadeLevel, 0x49);
 
         if (g_FadeLevel >= 0x101) {
-            func_80065860(0);
+            SetDispMask(0);
             g_CourseIndex = 0;
             func_80025940();
-            func_80042BF0();
+            GameStartCdAudio();
             D_801E4178 = 3;
             g_FadeLevel = 0x100;
             g_FadeStep = 0;
@@ -139,7 +133,7 @@ void func_80026D30(void) {
 void func_80026D78(void) {
     if (g_AssetLoadState == 0) {
         g_FadeStep = 4;
-        func_80042BC0(2);
+        GameRequestCdTrack(2);
         D_801E4178 = 2;
     }
 
@@ -225,7 +219,7 @@ void func_80026DE4(void) {
 
 void func_80026F68(void) {
     g_SceneId = 6;
-    func_80042C0C();
+    GamePauseCdAudio();
     func_80018410();
 }
 
@@ -235,7 +229,7 @@ void func_80026F9C(void) {
     s32 eventIndex;
 
     if (g_SceneTimer == 2) {
-        func_80065860(1);
+        SetDispMask(1);
     }
 
     if ((u32)g_SceneTimer >= 0x79 && (g_PadEdge2 & 0x860)) {
@@ -275,14 +269,14 @@ void func_80026F9C(void) {
 
         func_80019EFC(*(s16 *)&D_801F18CC[(((((D_8009E66C * 3) * 4) + D_8009E66C) * 8) - D_8009E66C) * 4]);
 
-        func_80043BCC(g_CameraViewMode, &g_Cars[D_8009E66C]);
-        func_80045CD4();
+        GameUpdateCamera(g_CameraViewMode, &g_Cars[D_8009E66C]);
+        GameUpdateEnvironment();
     }
 
-    func_800389F0();
+    GameDrawCars();
     func_800418D4();
     *(u32 *)0x1F800084 = (u32)g_IsEnvironmentMode4;
     func_80041888();
-    func_8004123C();
+    GameDrawCourseObjects();
     GameDrawCourseScenery2(g_AnimTimer, active);
 }

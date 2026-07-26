@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/render.h"
 #include "game/track.h"
+#include "psyq/gte.h"
 
 extern GameRenderObject D_801E3E14;
 extern s32 D_801E3E44;
@@ -10,16 +11,11 @@ extern s32 D_801E3EB8;
 extern s32 D_801E3ED8;
 extern s32 D_801E3EE0;
 
-s32 func_8001A6AC(s32 arg0, s32 arg1);
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
-s32 func_8002A7C4(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
-s32 func_8006888C(s32 arg0);
 void func_8002C168(void *arg0);
 void func_80031298(void *arg0, s32 arg1, void *arg2);
-void func_8001A610(void);
-void func_80017A10(s32 arg0);
 void func_8001DAB0(GameRenderObject *obj);
 
 typedef struct Block16 {
@@ -62,9 +58,9 @@ void func_8003CB3C(GameRenderObject *obj) {
     index = rem % g_TrackPointCount;
 
     func_8002FC84(index, coords, D_801E3E14.field_38);
-    angle = 0x400 - func_8001A6AC(coords[0] - D_801E3E14.x, coords[2] - D_801E3E1C);
+    angle = 0x400 - GameAtan2(coords[0] - D_801E3E14.x, coords[2] - D_801E3E1C);
 
-    D_801E3EB4 += func_8002A7C4(D_801E3EB4, angle);
+    D_801E3EB4 += GameGetAngleDelta(D_801E3EB4, angle);
 
     value = func_80068568(D_801E3EB4) * D_801E3EB8;
     if (value < 0) {
@@ -93,12 +89,12 @@ void func_8003CB3C(GameRenderObject *obj) {
     delta[1] = obj->y - view[3];
     delta[2] = obj->z - view[4];
 
-    view[7] = 0x400 - func_8001A6AC(delta[0], delta[2]);
-    value = func_8006888C(delta[0] * delta[0] + delta[2] * delta[2]);
-    view[6] = 0x400 - func_8001A6AC(delta[1], value >> 6);
+    view[7] = 0x400 - GameAtan2(delta[0], delta[2]);
+    value = SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]);
+    view[6] = 0x400 - GameAtan2(delta[1], value >> 6);
     view[8] = 0;
 
-    func_8001A610();
-    func_80017A10(0);
+    GameSetCameraRotMatrix();
+    GameSelectModelBank(0);
     func_8001DAB0(obj);
 }

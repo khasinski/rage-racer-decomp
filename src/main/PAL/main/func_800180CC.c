@@ -2,15 +2,15 @@
 #include "game/state.h"
 #include "game/asset.h"
 #include "psyq/gpu.h"
+#include "game/cd.h"
 
 extern u8 *D_8019CAFC;
 extern Rect D_8007BEDC;
 extern Rect D_8007BEE4;
 extern u16 D_801E444C[];
 extern u16 D_801E6F2C[];
-void func_80042C94(void);
 s32 func_80017C78(s32 assetIndex, void *dst);
-void func_8001A3C0(void *arg0);
+void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A498(void);
 void func_80034DCC(void *arg0);
 void func_8005B768(s32 arg0, void *arg1, void *arg2, s32 arg3);
@@ -78,7 +78,7 @@ setNextBuffer:
         if (func_80017C78(5, D_8019CAFC) != 0) {
             register u8 *finalBase asm("$2");
 
-            func_8001A3C0(D_8019CAFC);
+            GameUploadImageAsset(D_8019CAFC);
             StoreImage(&D_8007BEDC, D_801E444C);
             StoreImage(&D_8007BEE4, D_801E6F2C);
             DrawSync(0);
@@ -104,7 +104,7 @@ s32 func_800182D0(void) {
         return 0;
     }
 
-    func_80042C94();
+    GameResetCdAudioState();
     g_MainState = state;
     g_AssetLoadState = 1;
     return 1;
@@ -132,7 +132,7 @@ s32 func_8001839C(void) {
         return 0;
     }
 
-    func_80042C94();
+    GameResetCdAudioState();
     g_MainState = loadType;
     g_AssetLoadState = 2;
     return 1;
@@ -151,7 +151,7 @@ s32 func_80018410(void) {
         return 0;
     }
 
-    func_80042C94();
+    GameResetCdAudioState();
     g_MainState = loadType;
     g_AssetLoadState = 1;
     return 1;

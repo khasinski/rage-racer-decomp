@@ -6,7 +6,7 @@ extern u8 *D_8019C904;
 extern u8 *D_801E8AB0;
 extern u8 *D_801E42D0;
 extern u8 *D_8019CAFC;
-void func_8001A3C0(void *arg0);
+void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A2E0(void *arg0);
 void func_8001A40C(void *arg0);
 void func_80019EBC(void);
@@ -17,10 +17,10 @@ void func_80019730(void) {
     s32 offset1;
 
     g_AssetBlockPtr = D_8019C904 + *(s32 *)(D_8019C904 + 0);
-    func_8001A3C0(g_AssetBlockPtr);
+    GameUploadImageAsset(g_AssetBlockPtr);
 
     g_AssetBlockPtr = D_8019C904 + *(s32 *)(D_8019C904 + 4);
-    func_8001A3C0(g_AssetBlockPtr);
+    GameUploadImageAsset(g_AssetBlockPtr);
 
     g_AssetBlockPtr = D_8019C904 + *(s32 *)(D_8019C904 + 8);
     func_8001A2E0(g_AssetBlockPtr);
@@ -30,12 +30,12 @@ void func_80019730(void) {
     offset1 = *(s32 *)(base + 0x10);
     g_AssetBlockPtr = base + offset0;
     D_801E8AB0 = base + offset1;
-    func_8001A3C0(g_AssetBlockPtr);
+    GameUploadImageAsset(g_AssetBlockPtr);
 
     func_8001A40C(D_8019C904);
 
     D_801E42D0 = D_8019C904;
-    func_8001A3C0(D_801E8AB0);
+    GameUploadImageAsset(D_801E8AB0);
     func_80019EBC();
     D_8019CAFC = D_8019C904 + 0x38000;
 }

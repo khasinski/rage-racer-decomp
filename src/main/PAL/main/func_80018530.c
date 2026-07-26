@@ -13,12 +13,12 @@ extern u8 *D_8019C754;
 extern u8 *D_801E8AB0;
 s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 assetIndex, void *dst);
-void func_80017948(void *arg0, s32 arg1);
+void GameRegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void func_80017A6C(void);
 void func_80017B44(void *arg0, s32 arg1);
 void func_80017B94(void *arg0, s32 arg1);
 void func_80017BAC(s32 arg0);
-void func_8001A3C0(void *arg0);
+void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001D748(s32 arg0, s32 arg1);
 void func_8001D900(s32 arg0, s32 arg1);
 void func_8005B768(s32 arg0, void *arg1, void *arg2, void *arg3);
@@ -90,7 +90,7 @@ state_2:
         goto done;
 state_3:
             if (func_80017C78(8, D_8019CAFC) != 0) {
-                func_80017948((u8 *)D_8019CAFC + 0xC, 0xE);
+                GameRegisterModelBank((u8 *)D_8019CAFC + 0xC, 0xE);
 
                 header = D_8019CAFC;
                 secondOffset = header->secondOffset;
@@ -104,7 +104,7 @@ state_3:
                 headerArg = D_8019CAFC;
                 assetOffset = headerArg->thirdOffset;
                 g_AssetBlockPtr = (u8 *)headerArg + assetOffset;
-                func_8001A3C0(g_AssetBlockPtr);
+                GameUploadImageAsset(g_AssetBlockPtr);
 
                 g_AssetLoadState = 4;
                 D_801E4090 = g_AssetBlockPtr;
@@ -126,7 +126,7 @@ state_4:
                 modelPtr = model->modelDataOffset;
                 modelPtr = (s32)(carModelBase + modelPtr);
                 model->modelDataOffset = modelPtr;
-                func_80017948((void *)modelPtr, 0);
+                GameRegisterModelBank((void *)modelPtr, 0);
 
                 model = D_8009E698;
                 modelPtr = model->imageDataOffset;
@@ -198,7 +198,7 @@ void func_800188B8(s32 arg0) {
             fixed = (s32)ptr + fixed;
             flag = flag < 1;
             ((GameCarModelAsset *)ptr)->modelDataOffset = fixed;
-            func_80017948((void *)fixed, flag);
+            GameRegisterModelBank((void *)fixed, flag);
             fixed = *(volatile s32 *)(ptr + 0x24);
             flag = g_CarModelSlot;
             fixed = (s32)ptr + fixed;

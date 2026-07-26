@@ -1,15 +1,12 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/render.h"
 
 extern s32 D_8007E35C;
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_800296B4(void *arg0, s32 arg1);
-void func_80029E50(void *arg0, s32 arg1);
-void func_80069568(Matrix *lhs, Matrix *rhs);
 
 void GameDrawHighClassScenery(void) asm("func_8003E0D0");
 
@@ -22,8 +19,8 @@ void GameDrawHighClassScenery(void) {
 
     (void)pad;
     state = &D_8007E35C;
-    func_8001A530(&mtx, state[0]);
-    func_80069568((Matrix *)0x1F800028, &mtx);
+    GameBuildRotMatrixY(&mtx, state[0]);
+    MulMatrix2((Matrix *)0x1F800028, &mtx);
 
     if (g_IsEnvironmentMode4 != 0) {
         func_80017794((void *)0x1F80011C, state - 3, &mtx);
@@ -33,7 +30,7 @@ void GameDrawHighClassScenery(void) {
         if (frameValue >= 0x40) {
             drawArg = 0x3F;
         }
-        func_800296B4((void *)0x1F800000, drawArg);
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
     } else {
         func_80017794((void *)0x1F80011C, state - 3, &mtx);
         frameValue = g_CourseModelCount;
@@ -42,6 +39,6 @@ void GameDrawHighClassScenery(void) {
         if (frameValue >= 0x40) {
             drawArg = 0x3F;
         }
-        func_80029E50((void *)0x1F800000, drawArg);
+        GameSubmitCourseModel2((void *)0x1F800000, drawArg);
     }
 }

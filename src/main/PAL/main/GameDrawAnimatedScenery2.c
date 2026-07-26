@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 #include "game/race.h"
+#include "game/render.h"
 
 typedef struct {
     s32 x;
@@ -17,13 +18,8 @@ extern s16 D_8007E2F0;
 extern s16 D_8007E2E0[];
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_8001A5A0(Matrix *mtx, s32 angle);
-void func_80069458(Matrix *lhs, Matrix *rhs);
-void func_80069568(Matrix *lhs, Matrix *rhs);
 void func_80017794(void *arg0, Vec4i *state, Matrix *mtx);
-void func_800296B4(void *arg0, s32 arg1);
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 
 void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
 
@@ -79,13 +75,13 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     D_8007E2F2 = (arg0 / 4) % 16;
     if (D_8007E2F2 == 0 && (arg0 & 7) == 0 && arg3 == 1) {
         D_8007E2EC = 0;
-        D_8007E2F0 = (func_800632B0() & 7) / 3;
+        D_8007E2F0 = (GameRandom15() & 7) / 3;
     }
 
-    func_8001A530(&mtx, state.w);
-    func_8001A5A0(&mtx2, D_8007E2E0[arg1]);
-    func_80069458(&mtx, &mtx2);
-    func_80069568((Matrix *)0x1F800028, &mtx);
+    GameBuildRotMatrixY(&mtx, state.w);
+    GameBuildRotMatrixX(&mtx2, D_8007E2E0[arg1]);
+    MulMatrix(&mtx, &mtx2);
+    MulMatrix2((Matrix *)0x1F800028, &mtx);
 
     D_8007E2EC = ((arg0 >> 3) & 3) << 16;
 
@@ -95,7 +91,7 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        func_800296B4((void *)0x1F800000, drawArg);
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
         sv = D_8007E2EC;
@@ -112,7 +108,7 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        func_800296B4((void *)0x1F800000, drawArg);
+        GameSubmitCourseModel((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
         sv = D_8007E2EC;
@@ -128,5 +124,5 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     if (num < lim2) {
         drawArg = num;
     }
-    func_800296B4((void *)0x1F800000, drawArg);
+    GameSubmitCourseModel((void *)0x1F800000, drawArg);
 }

@@ -10,7 +10,7 @@ extern volatile s32 D_8007D7B4;
 extern volatile s32 D_8007D7B8;
 s32 func_8006A574(s32 arg0);
 s32 func_8006A58C(s32 arg0);
-s32 func_8006DD30(s32 arg0);
+s32 VSync(s32 mode) asm("func_8006DD30");
 s32 func_8006A3E8(void);
 s32 func_8006A808(s32 arg0, void *arg1, s32 arg2);
 s32 func_8002745C(s32 arg0);
@@ -22,9 +22,9 @@ extern u8 D_8007D87C[];
 extern u8 D_8007BED0[];
 void func_80064FA8(u8 *prim);
 void func_80064EB8(u8 *prim, s32 enabled);
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_800666F4(void *prim, s32 a, s32 b, s32 c, void *d);
-s32 func_80032F34(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 GameAddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 
 s32 func_80027688(s32 arg0, s32 arg1, s32 arg2) {
     s32 savedArg0;
@@ -61,7 +61,7 @@ s32 func_80027688(s32 arg0, s32 arg1, s32 arg2) {
     D_8007D790 = savedArg0;
     D_8007D7B4 = func_8006A574(0);
     D_8007D7B8 = func_8006A58C(0);
-    D_8007D7AC = func_8006DD30(-1);
+    D_8007D7AC = VSync(-1);
 
     if ((func_8006A3E8() & 0xE0) != 0) {
         func_8006A808(9, 0, 0);
@@ -83,7 +83,7 @@ s32 func_80027790(s32 arg0, s32 arg1) {
     do {
         s32 now;
 
-        now = func_8006DD30(-1);
+        now = VSync(-1);
         if (state[0] + 0x4B0 < now) {
             result = -1;
             goto loop_check;
@@ -93,7 +93,7 @@ s32 func_80027790(s32 arg0, s32 arg1) {
             goto reset_read;
         }
 
-        now = func_8006DD30(-1);
+        now = VSync(-1);
         if (state[-1] + 0x3C < now) {
 reset_read:
             func_8002745C(1);
@@ -165,13 +165,13 @@ void func_80027874(s32 x, s32 y, u8 *str, s32 arg3) {
                 *(volatile s16 *)(packet + 0x10) = w;
                 packet += 0x14;
                 __asm__ __volatile__("" : "=r"(otv) : "0"(otv));
-                func_80064DDC(otv + 0xCC, oldPacket);
+                AddPrim(otv + 0xCC, oldPacket);
             }
             x += D_8007D87C[idx];
         } while (*sr != 0);
     }
     func_800666F4(next, 0, 1, 0x1D, D_8007BED0);
-    func_80064DDC(g_DrawBuffer + 0xCC, next);
+    AddPrim(g_DrawBuffer + 0xCC, next);
     *(u8 **) 0x1F800000 = next + 0xC;
     __asm__ __volatile__("" : : "r"(next));
 }
@@ -179,6 +179,6 @@ void func_80027874(s32 x, s32 y, u8 *str, s32 arg3) {
 void func_800279EC(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 temp;
 
-    temp = func_80032F34(arg0, arg1, arg2 + 1, arg3 + 2, 0xC2, 0x1C, 0, 0, 0);
-    func_80032F34(arg0, temp, arg2, arg3, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
+    temp = GameAddTilePrim(arg0, arg1, arg2 + 1, arg3 + 2, 0xC2, 0x1C, 0, 0, 0);
+    GameAddTilePrim(arg0, temp, arg2, arg3, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
 }

@@ -7,7 +7,6 @@ extern u8 D_80013EC0[];
 extern u8 D_80013EE0[];
 extern u8 D_80013EF4[];
 
-void func_8001674C(u8 *fmt, ...);
 
 void _spu_writeByIO(u16 *addr, u32 size) asm("func_80078F4C");
 void _spu_writeByIO(u16 *addr, u32 size) {
@@ -47,7 +46,7 @@ void _spu_writeByIO(u16 *addr, u32 size) {
             D_8009AB74 = 0;
             while (D_8009AB7C[0xD7] & 0x400) {
                 if (++D_8009AB74 >= 5001) {
-                    func_8001674C(D_80013EC0, D_80013EE0);
+                    GameDebugPrintf(D_80013EC0, D_80013EE0);
                     break;
                 }
             }
@@ -64,7 +63,7 @@ void _spu_writeByIO(u16 *addr, u32 size) {
     D_8009AB74 = 0;
     while ((D_8009AB7C[0xD7] & 0x7ff) != saved) {
         if (++D_8009AB74 >= 5001) {
-            func_8001674C(D_80013EC0, D_80013EF4);
+            GameDebugPrintf(D_80013EC0, D_80013EF4);
             break;
         }
     }

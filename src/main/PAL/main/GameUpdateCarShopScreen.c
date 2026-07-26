@@ -49,7 +49,7 @@ void func_80050400(s32 arg0, s32 arg1);
 s32 func_80050FA8(s32 arg0);
 void func_8005131C(void);
 void func_80059320(void);
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void GameUpdateCarShopScreen(void) asm("func_80059558");
 void GameUpdateCarShopScreen(void) {
@@ -82,11 +82,11 @@ void GameUpdateCarShopScreen(void) {
         if ((res != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = initial;
             if (g_PadEdge2 & 0x1000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_801E4294 = (D_801E4294 > 0) ? D_801E4294 - 1 : 1;
             }
             if (g_PadEdge2 & 0x4000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_801E4294 = (D_801E4294 <= 0) ? D_801E4294 + 1 : 0;
             }
             func_80059320();
@@ -98,7 +98,7 @@ void GameUpdateCarShopScreen(void) {
                     if (D_8009B378 < 0) {
                         s32 lprev;
 
-                        func_8005D6EC(8);
+                        GamePlaySoundCue(8);
                         g_CarListCursor = (s32) D_8019CA18;
                         func_8001882C(D_8019CA18);
                         lprev = g_MenuViewAngleTarget;
@@ -118,7 +118,7 @@ void GameUpdateCarShopScreen(void) {
                         s32 base;
                         s32 lprev;
 
-                        func_8005D6EC(8);
+                        GamePlaySoundCue(8);
                         g_CarListCursor = (s32) D_801E41A4;
                         func_8001882C(D_801E41A4);
                         base = 0x927C0;
@@ -161,7 +161,7 @@ void GameUpdateCarShopScreen(void) {
                                 D_8009B378 = selected;
                                 g_MenuViewAngle = (lu - lprev) + base;
                             }
-                            func_8005D6EC(3);
+                            GamePlaySoundCue(3);
                             g_MenuOverlayPattern = 2;
                             GameMenuBusy = sel;
                             goto block_51;
@@ -170,7 +170,7 @@ void GameUpdateCarShopScreen(void) {
                             return;
                         }
                         if (g_CarTable[g_CarListCursor].enabled == 0) {
-                            func_8005D6EC(2);
+                            GamePlaySoundCue(2);
                             GameMenuBusy = -1;
                             g_UiScriptProgress2 = 0;
                             g_MenuSubCursor = 0;
@@ -218,7 +218,7 @@ void GameUpdateCarShopScreen(void) {
                             D_8009B378 = selected;
                             g_MenuViewAngle = (lu - lprev) + base;
                         }
-                        func_8005D6EC(3);
+                        GamePlaySoundCue(3);
                         GameMenuBusy = 1;
                         g_MenuOverlayPattern = 2;
 block_51:
@@ -240,31 +240,31 @@ block_51:
                         if (g_PadEdge2 & 0x860) {
                             if (g_MenuSubCursor != 0) {
                                 if (D_8019C908 >= value) {
-                                    func_8005D6EC(2);
+                                    GamePlaySoundCue(2);
                                     GameMenuBusy = -3;
                                     g_MenuConfirmTimer = 0x23;
                                 } else {
-                                    func_8005D6EC(5);
+                                    GamePlaySoundCue(5);
                                     D_8019CB00 = &D_800828B0;
                                     GameMenuBusy = -2;
                                 }
                             } else {
-                                func_8005D6EC(3);
+                                GamePlaySoundCue(3);
                                 GameMenuBusy = 0;
                             }
                         }
                         pad = &g_PadEdge2;
                         if (*pad & 0x90) {
-                            func_8005D6EC(3);
+                            GamePlaySoundCue(3);
                             GameMenuBusy = 0;
                         }
                         if ((*pad & 0x8000) && (g_MenuSubCursor == 0)) {
-                            func_8005D6EC(1);
+                            GamePlaySoundCue(1);
                             g_MenuSubCursor = 1;
                         }
                         if (g_PadEdge2 & 0x2000) {
                             if (g_MenuSubCursor != 0) {
-                                func_8005D6EC(1);
+                                GamePlaySoundCue(1);
                                 g_MenuSubCursor = 0;
                             }
                         }

@@ -2,7 +2,7 @@
 #include "psyq/gpu.h"
 
 void func_80066604(void *packet, void *rect);
-void func_80064DDC(void *ot, void *packet);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
 void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) asm("func_800468FC");
 void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
@@ -57,7 +57,7 @@ void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
                     func_80066604(packet, &rect);
                     oldPacket = packet;
                     packet += 12;
-                    func_80064DDC(otReg, oldPacket);
+                    AddPrim(otReg, oldPacket);
                     *scratch = packet;
                 }
             }
@@ -68,7 +68,7 @@ void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
 void func_80064FA8(void *arg0);
 void func_80064EB8(void *arg0, s32 enabled);
 void func_80064E90(void *arg0, s32 enabled);
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) asm("func_80046A2C");
@@ -135,7 +135,7 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
 
     oldPrim = (u8 *)prim;
     prim++;
-    func_80064DDC(ot, oldPrim);
+    AddPrim(ot, oldPrim);
 
     clutReg = flagsReg;
     flagsReg &= 0x80;
@@ -201,7 +201,7 @@ void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 
 
 void func_80064F30(void *arg0);
 void func_80064E90(void *arg0, s32 enabled);
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("func_80046CBC");
@@ -256,7 +256,7 @@ void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
 
     oldPrim = (u8 *)prim;
     prim++;
-    func_80064DDC(ot, oldPrim);
+    AddPrim(ot, oldPrim);
 
     semiReg = flagsReg;
     flagsReg &= 0x80;
@@ -432,7 +432,7 @@ void GameDrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8
 
 void func_80065034(void *arg0);
 void func_80064E90(void *arg0, s32 enabled);
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) asm("func_80047214");
@@ -456,7 +456,7 @@ void GameDrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2,
 
     oldPrim = (u8 *)prim;
     prim++;
-    func_80064DDC(ot, oldPrim);
+    AddPrim(ot, oldPrim);
 
     if (arg10 != 0xFF) {
         prim = func_80017390(ot, prim, arg10);

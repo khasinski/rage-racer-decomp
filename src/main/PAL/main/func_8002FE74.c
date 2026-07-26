@@ -1,10 +1,9 @@
 #include "common.h"
 #include "game/car.h"
 #include "game/track.h"
+#include "game/render.h"
 
 
-s32 func_8001A6AC(s32 arg0, s32 arg1);
-s32 func_8002A7C4(s32 arg0, s32 arg1);
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
 s32 func_8002FD9C(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
@@ -69,7 +68,7 @@ void func_8002FE74(GameCarRuntime *car) {
     }
     coords[2] += value >> 12;
 
-    finalAngle = 0x400 - func_8001A6AC(coords[0] - car->x, coords[2] - car->z);
+    finalAngle = 0x400 - GameAtan2(coords[0] - car->x, coords[2] - car->z);
 
     if (car->field_98 == 0) {
         xValue = timer << 16;
@@ -78,7 +77,7 @@ void func_8002FE74(GameCarRuntime *car) {
             divisor = 1;
         }
 
-        headingDelta = func_8002A7C4(car->headingAngle, finalAngle);
+        headingDelta = GameGetAngleDelta(car->headingAngle, finalAngle);
         headingDelta = ((headingDelta * 5) << 2) / divisor;
         car->headingAngle += headingDelta;
     }

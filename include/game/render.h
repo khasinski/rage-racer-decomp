@@ -187,6 +187,69 @@ typedef struct GameRenderPairPoint {
 } GameRenderPairPoint;
 
 /*
+ * Rotation-matrix builders. Each fills only the 3x3 part of `mtx` with a
+ * rotation about one axis by a 12-bit angle (0x1000 = one turn), leaving the
+ * translation alone; sin/cos come from rsin/rcos (func_80068568/func_80068634)
+ * and 1.0 is 0x1000.
+ */
+void GameBuildRotMatrixZ(void *mtx, s32 angle) asm("func_8001A4C0");
+void GameBuildRotMatrixY(void *mtx, s32 angle) asm("func_8001A530");
+void GameBuildRotMatrixX(void *mtx, s32 angle) asm("func_8001A5A0");
+/*
+ * Composes Y*X*Z from the scratchpad camera angles (0x1F800018 / 0x1C / 0x20)
+ * into the scratchpad matrix at 0x1F800028 and installs it with SetRotMatrix;
+ * D_8019CB18 gets the same matrix pre-multiplied by a 180-degree Y turn.
+ */
+void GameSetCameraRotMatrix(void) asm("func_8001A610");
+/*
+ * atan2 over the arctangent table D_8007B664, in 12-bit angle units
+ * (0x400 = 90 degrees). Argument order is (x, y), the reverse of C's atan2:
+ * GameAtan2(0, +y) is 0x400.
+ */
+s32 GameAtan2(s32 x, s32 y) asm("func_8001A6AC");
+/* Shortest way round the 0x1000 circle between two 12-bit angles: the signed
+ * delta from `from` to `to` in (-0x800, 0x800], and its magnitude. */
+s32 GameGetAngleDelta(s32 from, s32 to) asm("func_8002A7C4");
+/* (s32 a, s32 b); left unprototyped because func_8002A810 calls it with two
+ * extra arguments that the original left live in a2/a3. */
+s32 GameGetAngleDistance() asm("func_8002A788");
+
+/*
+ * Sets up both environments for the frame and clears to (r, g, b):
+ * 240 = two 320x240 buffers stacked at y=0 / y=0xF0, 480 = one 320x480 pair.
+ * Both also set the GTE projection (SetGeomOffset / SetGeomScreen 0x140).
+ */
+void GameSetupDisplay240(s32 r, s32 g, s32 b) asm("func_8001BE9C");
+void GameSetupDisplay480(s32 r, s32 g, s32 b) asm("func_8001C088");
+
+/*
+ * Model banks. GameSelectModelBank points the scratchpad bank cursor
+ * (0x1F800050/54/58) and g_ModelBankCount at entry `index` of the registered
+ * bank table D_801E41A8; GameSubmitModel then walks model `index` of that bank
+ * into the scratchpad ordering table. The Course variants use the separate
+ * course object bank at 0x1F800048 (size g_CourseModelCount); ...2 is the same
+ * routine running the second opcode table (jtbl_8007DA64, not jtbl_8007DA54).
+ * All four are entry points of the hand-written GTE engine, so `ctx` is always
+ * the scratchpad base 0x1F800000.
+ */
+void GameSelectModelBank(s32 index) asm("func_80017A10");
+void GameSubmitModel(void *ctx, s32 index) asm("func_80028DEC");
+void GameSubmitCourseModel(void *ctx, s32 index) asm("func_800296B4");
+void GameSubmitCourseModel2(void *ctx, s32 index) asm("func_80029E50");
+
+/* Per-frame draw loop over the world object array D_801E4B2C: culls each entry
+ * against the visibility bitmask, transforms it and submits its model. */
+void GameDrawCourseObjects(void) asm("func_8004123C");
+
+/*
+ * Per-frame environment step: advances the course's environment command script
+ * (D_801E40E8), cross-fades the 16-entry sky/fog CLUT between
+ * g_EnvironmentModePrev and g_EnvironmentMode into VRAM at (0xE0, 0x1E6), and
+ * updates the GTE far colour and fog distance. Does not draw anything.
+ */
+void GameUpdateEnvironment(void) asm("func_80045CD4");
+
+/*
  * 2D/HUD primitive emitters. All of them pack the primitive at the scratchpad
  * cursor `*(u8 **)0x1F800000`, bump that cursor past the primitive and link it
  * into the ordering table `ot` with AddPrim. Sprites and textured quads turn a

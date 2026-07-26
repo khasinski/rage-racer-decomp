@@ -5,6 +5,7 @@
 #include "game/render.h"
 #include "game/menu.h"
 #include "game/car.h"
+#include "game/cd.h"
 
 typedef struct {
     u8 left;
@@ -35,17 +36,14 @@ extern s32 D_8009EC8C;
 extern u8 D_8009E6D4;
 extern s32 D_801F179C;
 extern s16 D_8009E74C;
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_80033AA0(s32 arg0, s32 arg1);
-void func_80042CCC(s32 arg0);
 void func_8001FC30(s32 arg0, s32 arg1);
 void func_80035040(void);
-void func_80043BCC(s32 arg0, void *arg1);
+void GameUpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
 void func_80041888(void);
 void func_80038A88(void);
-void func_8004123C(void);
 void GameDrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
-void func_80045CD4(void);
 void func_800418D4(void);
 void func_8001FB8C(void);
 void func_80019E84(s32 arg0);
@@ -54,7 +52,7 @@ extern char D_80010DF0[];
 extern char *D_8007D404[];
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016A18(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-s32 func_80032F34(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 extern s32 D_801E4BA8;
 extern s32 D_8019C7C4;
 extern s32 D_8019CB74;
@@ -167,7 +165,7 @@ void func_8001FD3C(void) {
     if (g_SceneTimer == 0x3C) {
         if (g_GrandPrixMode != 0) {
             if (g_SeriesCleared == 0) {
-                func_8005D6EC(g_RacePosition == 1 ? 0x40 : 0x41);
+                GamePlaySoundCue(g_RacePosition == 1 ? 0x40 : 0x41);
             }
         }
     }
@@ -204,11 +202,11 @@ void func_8001FD3C(void) {
         if (g_FadeStep == 0) {
             if ((g_PadEdge2 & 0x860) != 0) {
                 g_FadeStep = 4;
-                func_80042CCC(0x3C);
+                GameStartCdVolumeFade(0x3C);
             } else if (g_SceneTimer == D_8019CB6C - 68) {
                 g_FadeStep = 4;
                 if (D_8009EC8C == 0) {
-                    func_80042CCC(0x3C);
+                    GameStartCdVolumeFade(0x3C);
                 }
             }
         } else {
@@ -237,15 +235,15 @@ void func_8001FD3C(void) {
         D_801F179C = 0;
     }
     func_80035040();
-    func_80043BCC(2, &D_8009E6D4);
+    GameUpdateCamera(2, &D_8009E6D4);
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     func_80041888();
     if (g_GrandPrixMode != 0) {
         func_80038A88();
     }
-    func_8004123C();
+    GameDrawCourseObjects();
     GameDrawCourseScenery2(g_SceneTimer, 1);
-    func_80045CD4();
+    GameUpdateEnvironment();
     func_800418D4();
     func_8001FB8C();
     if (g_SceneTimer == 1) {
@@ -277,8 +275,8 @@ void GameDrawResultScreen(void) {
     base += 0xCC;
 
     next = *scratch;
-    next = func_80032F34(base, next, 0, 0, width, 0x30, 0x85, 0x15, 0xE);
-    *scratch = func_80032F34(base, next, 0, 0x30, width, 0x18, 0xF0, 0xF0, 0xF0);
+    next = GameAddTilePrim(base, next, 0, 0, width, 0x30, 0x85, 0x15, 0xE);
+    *scratch = GameAddTilePrim(base, next, 0, 0x30, width, 0x18, 0xF0, 0xF0, 0xF0);
 }
 
 void func_800201D4(void) {

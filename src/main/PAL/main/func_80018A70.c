@@ -3,6 +3,8 @@
 #include "game/car.h"
 #include "game/state.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/cd.h"
 
 extern u8 *D_8009E698;
 
@@ -11,15 +13,13 @@ extern u8 *D_801E4090;
 s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 arg0, void *arg1);
 void func_80017B94(void *arg0, s32 arg1);
-void func_80017948(void *arg0, s32 arg1);
+void GameRegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void func_80017B44(void *arg0, s32 arg1);
 void func_8001D748(s32 arg0, s32 arg1);
 void func_8001D900(s32 arg0, s32 arg1);
-void func_80042C94(void);
 extern s32 D_8019C904;
 extern s32 D_801E4B30;
-void func_80017A10(s32);
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 void func_80017BE4(void);
 extern s32 D_8019C754;
 extern s32 D_801E4D70;
@@ -56,7 +56,7 @@ void func_80018A70(s32 arg0) {
             flag = g_CarModelSlot < 1;
             temp = (s32)ptr + temp;
             ((GameCarModelAsset *)ptr)->modelDataOffset = temp;
-            func_80017948((void *)temp, flag);
+            GameRegisterModelBank((void *)temp, flag);
 
             temp = ((GameCarModelAsset *)ptr)->imageDataOffset;
             flag = g_CarModelSlot < 1;
@@ -89,7 +89,7 @@ s32 func_80018B98(void) {
         return 0;
     }
 
-    func_80042C94();
+    GameResetCdAudioState();
     g_MainState = state;
     g_AssetLoadState = 1;
     return 1;
@@ -101,8 +101,8 @@ void func_80018C0C(void) {
 
     if (g_AssetLoadState == 1) {
         if (func_80017C78(9, (void *)D_8019C904) != 0) {
-            func_80017948((void *)(D_8019C904 + 4), 0);
-            func_80017A10(0);
+            GameRegisterModelBank((void *)(D_8019C904 + 4), 0);
+            GameSelectModelBank(0);
 
             ptr = D_8019C904;
             offset = *(s32 *)ptr;
@@ -120,10 +120,10 @@ s32 func_80018C88(void) {
     }
 
     if (g_GrandPrixMode == 0) {
-        value = (func_800632B0() & 0xFFF) % (g_MaxClassReached[g_GrandPrixSeries] + 1);
+        value = (GameRandom15() & 0xFFF) % (g_MaxClassReached[g_GrandPrixSeries] + 1);
         g_GrandPrixClass = value;
         if (((g_CourseIndex & 3) == 3) && (value < 2)) {
-            g_GrandPrixClass = ((func_800632B0() & 0xFFF) % (g_MaxClassReached[g_GrandPrixSeries] - 1)) + 2;
+            g_GrandPrixClass = ((GameRandom15() & 0xFFF) % (g_MaxClassReached[g_GrandPrixSeries] - 1)) + 2;
         }
     }
 
@@ -223,5 +223,5 @@ void func_80018F08(void) {
     func_800179B4((void *)(D_8019C904 + 0x28), temp);
     func_80017BAC(0);
     *(u32 *)(D_8009E698 + 0x20) = D_8019C904 + 0x28;
-    func_80017948((void *)(D_8019C904 + 0x28), 0);
+    GameRegisterModelBank((void *)(D_8019C904 + 0x28), 0);
 }

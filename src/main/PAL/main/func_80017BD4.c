@@ -5,11 +5,10 @@
 
 void func_80027634(void);
 s32 func_8006A534(s32 arg0, s32 arg1);
-s32 func_8006A5A4(s32 arg0, void *arg1, s32 arg2);
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 extern char D_80010ADC[];
 extern char D_80010AFC[];
 extern char D_80010B08[];
-void func_8001674C(char *arg0, ...);
 s32 func_80027688(s32 arg0, void *arg1, s32 arg2);
 s32 func_80027790(s32 arg0, s32 arg1);
 void func_8006A6DC(s32 arg0, void *arg1);
@@ -20,7 +19,7 @@ extern char D_80010B58[];
 extern char D_80010B68[];
 extern char D_80010B80[];
 extern char D_80010B8C[];
-void func_8001A3C0(void *arg0);
+void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 
 void func_80017BD4(u32 value) {
     *(u32 *)0x8019C9A8 = value;
@@ -44,7 +43,7 @@ s32 func_80017C2C(void) {
     }
 
     value = 7;
-    return func_8006A5A4(0xE, &value, 0);
+    return CdControl(0xE, &value, 0);
 }
 
 s32 GameLoadAsset(s32 assetIndex, void *dst) {
@@ -53,7 +52,7 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
 
     switch (g_CdLoadPhase) {
     case 0:
-        func_8001674C(D_80010ADC, g_AssetPaths[assetIndex], dst);
+        GameDebugPrintf(D_80010ADC, g_AssetPaths[assetIndex], dst);
         if (func_8006A534(1, 0) != 0) {
             g_CdLoadPhase = 1;
         }
@@ -89,12 +88,12 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
 
     case 5:
         size = (g_AssetCdEntries[assetIndex].size >> 2) << 2;
-        func_8001674C(D_80010AFC, size);
+        GameDebugPrintf(D_80010AFC, size);
         g_CdLoadPhase = 0;
         return size;
 
     case 6:
-        func_8001674C(D_80010B08, g_AssetPaths[assetIndex], dst);
+        GameDebugPrintf(D_80010B08, g_AssetPaths[assetIndex], dst);
         g_CdLoadPhase = 0;
         break;
     }
@@ -120,21 +119,21 @@ void func_80017E8C(void) {
     GameCdLoadEntry *dst;
     GameCdLoadEntry *smallSrc;
 
-    func_8001674C(D_80010ADC, D_80010B38, g_LoadBuffer);
+    GameDebugPrintf(D_80010ADC, D_80010B38, g_LoadBuffer);
     if (DsSearchFile(&stack.file, D_80010B38) == 0) {
-        func_8001674C(D_80010B44, D_80010B38);
+        GameDebugPrintf(D_80010B44, D_80010B38);
     }
 
     one = 1;
     do {
-        func_8006A5A4(2, &stack.file, 0);
+        CdControl(2, &stack.file, 0);
         func_80027688(one, g_LoadBuffer, 0x80);
         do {
             status = func_80027790(1, 0);
         } while (status > 0);
     } while (status != 0);
 
-    func_8001674C(D_80010B58, one);
+    GameDebugPrintf(D_80010B58, one);
     base = CdPosToInt_Local(&stack.file);
     src = g_LoadBuffer;
     dst = g_AssetCdEntries;
@@ -145,13 +144,13 @@ void func_80017E8C(void) {
         dst++;
     }
 
-    func_8001674C(D_80010B68, D_80010B80);
+    GameDebugPrintf(D_80010B68, D_80010B80);
     if (DsSearchFile(&stack.file, D_80010B80) == 0) {
-        func_8001674C(D_80010B44, D_80010B80);
+        GameDebugPrintf(D_80010B44, D_80010B80);
         goto loadSmallTable;
     }
 
-    func_8001674C(D_80010B8C);
+    GameDebugPrintf(D_80010B8C);
 loadSmallTable:
     base = CdPosToInt_Local(&stack.file);
     smallSrc = g_StreamCdEntries;
@@ -167,7 +166,7 @@ void func_80018038(void) {
     func_80017E8C();
     ptr = &g_LoadBuffer;
     func_80017E48(0, (s32)ptr);
-    func_8001A3C0(ptr);
+    GameUploadImageAsset(ptr);
 }
 
 s32 func_80018078(void) {

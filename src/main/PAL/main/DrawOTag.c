@@ -9,7 +9,7 @@ extern char D_800135E0[];
 extern char D_800135F8[];
 
 void func_8006674C(void *arg0, void *arg1);
-void *func_800681BC(void *dst, void *src, s32 count);
+void *MemCopy(void *dst, void *src, s32 count) asm("func_800681BC");
 
 void DrawOTag(void *arg0) asm("func_80065E60");
 
@@ -42,7 +42,7 @@ void *func_80065ED4(void *arg0) {
         *(u32 *)tag = word;
         gpu->send(gpu->moveImage, sendTag, size, 0);
     }
-    func_800681BC(debug + 0xE, prim, 0x5C);
+    MemCopy(debug + 0xE, prim, 0x5C);
     return prim;
 }
 
@@ -74,5 +74,5 @@ void *func_80065F98(void *arg0, void *arg1) {
         *(u32 *)tag = word;
         gpu->send(gpu->moveImage, sendTag, size, 0);
     }
-    return func_800681BC(debug + 0xE, prim, 0x5C);
+    return MemCopy(debug + 0xE, prim, 0x5C);
 }

@@ -131,6 +131,23 @@ void SsUtReverbOff(void) asm("func_800736E8");
 void SsUtSetReverbFeedback(s32 feedback) asm("func_80073708");
 void SsUtSetReverbDelay(s32 delay) asm("func_800737E0");
 s16 SsUtGetVVol(s16 voice, s16 *left, s16 *right) asm("func_8007849C");
+/*
+ * Key-on a named hardware voice: rejects voice >= 24 or an unknown program,
+ * stamps the utility sep number 0x21 into the current-voice record D_801E4BD0,
+ * derives volume/pan from (volL, volR), copies the program and tone attributes
+ * and starts the note; returns the voice number, or -1. Declared with s32
+ * parameters, not the SDK's short, because the game calls it unprototyped and
+ * passes full words.
+ */
+s32 SsUtKeyOnV(
+    s32 voice,
+    s32 vabId,
+    s32 prog,
+    s32 tone,
+    s32 note,
+    s32 fine,
+    s32 volL,
+    s32 volR) asm("func_80077C7C");
 void _SsVmInit(void) asm("func_8007865C");
 
 void SsSetMVol(s16 left, s16 right) asm("func_8006EAFC");

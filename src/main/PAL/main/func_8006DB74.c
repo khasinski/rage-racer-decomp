@@ -5,7 +5,6 @@ extern volatile u32 *D_800993E8;
 extern u8 *D_800993EC;
 extern char D_80013B14[];
 
-void func_8001674C(char *fmt, ...);
 
 /*
  * Low-level DMA-channel transfer helper. Spins on the channel's CHCR busy bit
@@ -23,7 +22,7 @@ void func_8006DB74(s32 ch, u32 madr, u32 count, u32 size, u32 chcrVal, u8 mode) 
     i = 0;
     while (*(volatile u32 *)(0x1F801088 + (ch << 4)) & 0x01000000) {
         if (i == 0x10000) {
-            func_8001674C(D_80013B14, *(volatile u32 *)(0x1F801088 + (ch << 4)));
+            GameDebugPrintf(D_80013B14, *(volatile u32 *)(0x1F801088 + (ch << 4)));
             break;
         }
         i++;

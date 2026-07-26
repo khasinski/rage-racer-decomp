@@ -1,18 +1,18 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/render.h"
 
 extern s32 D_8019CA04;
 
-s32 func_8002A7C4(s32 arg0, s32 arg1);
 void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 void func_8005C104(s32 index, s32 phase, s32 volume);
 
 /*
  * Car motion handler for state98 == 3 (crash / tumble): applies a random shake
- * (func_800632B0) scaled by the remaining shake budget D_8019CA04, advances the
+ * (GameRandom15) scaled by the remaining shake budget D_8019CA04, advances the
  * car (func_8002F4E4), and resets the car once the budget expires. field_15C /
  * field_15E hold the shake magnitude.
  */
@@ -24,7 +24,7 @@ void func_80030BC4(GameCarRuntime *car) {
     s32 r;
     s32 coords[3];
 
-    r = func_8002A7C4(car->field_24, *(s32 *)&car->field_14C);
+    r = GameGetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
     base = car->field_24;
     car->field_24 = r / 5 + base;
     func_8002F4E4(car, base);
@@ -56,8 +56,8 @@ void func_80030BC4(GameCarRuntime *car) {
         if (f15c < 127 && f134 >= 2001) {
             sinA += 127;
         }
-        route->field_68 = (func_800632B0() & 3) * sinA / 256;
-        route->field_6C = (func_800632B0() & 7) * sinA / 256;
+        route->field_68 = (GameRandom15() & 3) * sinA / 256;
+        route->field_6C = (GameRandom15() & 7) * sinA / 256;
         D_8019CA04 -= sinA;
         if (D_8019CA04 <= 0) {
             route->field_68 = 0;

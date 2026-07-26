@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/render.h"
 
 typedef struct {
     s16 x;
@@ -50,13 +51,11 @@ typedef struct {
 extern TP *g_TrackPoints asm("D_8009E688");
 extern s32 g_TrackPointCount asm("D_8009E6A8");
 
-s32 func_80030EB4(Car *car, s32 idx);
-void func_8001A530(Matrix *mtx, s32 angle);
-s32 *func_80069678(s32 *matrix, s32 *vec, s32 *out);
+s32 GameFindTrackSegment(Car *car, s32 idx) asm("func_80030EB4");
 
 /*
  * Samples the track surface height under the car. Locates the containing
- * segment (func_80030EB4), rotates the car position into segment-local space,
+ * segment (GameFindTrackSegment), rotates the car position into segment-local space,
  * clamps the along-segment distance `t` to [0, segmentLength], and linearly
  * interpolates the point height `y` and slope `field_E` between the two segment
  * endpoints. Writes the resulting surface height into car->out4 (and out4 into
@@ -77,7 +76,7 @@ void func_80031E98(Car *car) {
     s32 e;
     s32 v8;
 
-    idx = func_80030EB4(car, car->f30);
+    idx = GameFindTrackSegment(car, car->f30);
     p2 = &g_TrackPoints[(idx + 1) % g_TrackPointCount];
     p1 = &g_TrackPoints[idx];
 
@@ -85,8 +84,8 @@ void func_80031E98(Car *car) {
     v.x = car->x - p1->x;
     v.z = car->z - p1->z;
     v.y = 0;
-    func_8001A530(&mtx, (0x1000 - p1->angle) & 0xFFF);
-    func_80069678((s32 *)&mtx, (s32 *)&v, (s32 *)&out);
+    GameBuildRotMatrixY(&mtx, (0x1000 - p1->angle) & 0xFFF);
+    ApplyMatrix((s32 *)&mtx, (s32 *)&v, (s32 *)&out);
 
     t = out.x;
     oz = out.z;

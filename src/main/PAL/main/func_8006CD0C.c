@@ -25,7 +25,7 @@ extern s32 D_801E8274;
 extern s32 D_801F1850;
 extern s32 D_8019CA00;
 
-s32 func_8006A5A4(s32 arg0, void *arg1, s32 arg2);
+s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 void func_8006A994(s32 arg0);
 void func_8006A58C(s32 arg0);
 void func_8006CDA0(void);
@@ -44,7 +44,7 @@ s32 func_8006CD0C(s32 arg0) {
     u8 byte;
 
     byte = arg0;
-    func_8006A5A4(0xE, &byte, 0);
+    CdControl(0xE, &byte, 0);
 
     if (arg0 & 0x100) {
         if (arg0 & 0x20) {
@@ -56,7 +56,7 @@ s32 func_8006CD0C(s32 arg0) {
         func_8006A58C((s32)func_8006CDA0);
     }
 
-    return func_8006A5A4(0x1B, 0, 0);
+    return CdControl(0x1B, 0, 0);
 }
 
 void func_8006CDA0(void) {

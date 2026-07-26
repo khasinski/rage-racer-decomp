@@ -24,7 +24,6 @@ extern u8 D_80013868;
 extern u8 D_8001387C;
 
 void func_80063C38();
-void func_8001674C();
 
 static __inline__ void copy8(u8 *d, u8 *s) {
     s32 n;
@@ -89,7 +88,7 @@ s32 func_8006AB5C(void) {
     if (mode == 5) {
         func_80063C38(&D_80013840);
         if (D_80099048 > 0) {
-            func_8001674C(&D_8001384C, D_80099060[D_8009905D], D_8009904C, D_80099050);
+            GameDebugPrintf(&D_8001384C, D_80099060[D_8009905D], D_8009904C, D_80099050);
         }
     }
 
@@ -146,7 +145,7 @@ s32 func_8006AB5C(void) {
     }
     default:
         func_80063C38(&D_80013868);
-        func_8001674C(&D_8001387C, mode);
+        GameDebugPrintf(&D_8001387C, mode);
         break;
     }
     return 0;

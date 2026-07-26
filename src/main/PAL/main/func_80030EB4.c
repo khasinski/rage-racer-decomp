@@ -18,7 +18,8 @@ s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
  * containing segment index, or -1 (snapping the car onto the track) if none.
  * pts[0] is the car-relative point; pts[1..4] are the quad corners.
  */
-s32 func_80030EB4(GameCarRuntime *car, s32 idx) {
+s32 GameFindTrackSegment(GameCarRuntime *car, s32 idx) asm("func_80030EB4");
+s32 GameFindTrackSegment(GameCarRuntime *car, s32 idx) {
     DVEC pts[5];
     s32 i;
     s32 k;

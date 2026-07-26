@@ -16,7 +16,7 @@ extern u8 g_UiChromeScript asm("D_80082460");
 void func_8005131C(void);
 s32 func_800487D8(void *a, void *b, s32 c);
 void func_800489AC(s32 a, s32 b, s32 c);
-void func_8005D6EC(s32 a);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8004B8B4(s32 a, s32 b);
 void func_8004A248(s32 a, s32 b);
 s32 func_8004E724(s32 a, s32 b);
@@ -36,41 +36,41 @@ void GameUpdateDesignModeScreen(void) {
         if (func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_8019C758 = (D_8019C758 > 0) ? D_8019C758 - 1 : 3;
             }
             if (g_PadEdge2 & 0x4000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_8019C758 = (D_8019C758 < 3) ? D_8019C758 + 1 : 0;
             }
             if (g_PadEdge2 & 0x860) {
                 sel = D_8019C758;
                 if (sel == 0) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     func_8004B8B4(-256, -256);
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 1;
                 } else if (sel == 1) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     GameMenuBusy = 2;
                     g_MenuOverlayPattern = sel;
                 } else if (sel == 2) {
                     if (g_PlayerCarIndex < 10) {
                         GameMenuBusy = 3;
                         g_MenuOverlayPattern = 1;
-                        func_8005D6EC(2);
+                        GamePlaySoundCue(2);
                     } else {
                         GameMenuBusy = -1;
                         g_UiScriptProgress2 = 0;
-                        func_8005D6EC(5);
+                        GamePlaySoundCue(5);
                     }
                 } else if (sel == 3) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     GameMenuBusy = 4;
                     g_MenuOverlayPattern = 2;
                 }
             } else if (g_PadEdge2 & 0x90) {
-                func_8005D6EC(3);
+                GamePlaySoundCue(3);
                 GameMenuBusy = 4;
                 g_MenuOverlayPattern = 2;
             }

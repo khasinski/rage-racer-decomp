@@ -1,9 +1,16 @@
 #include "common.h"
 
 void func_80064FF8(u8 *prim);
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
-u8 *func_80032F34(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) {
+/*
+ * Packs a TILE (SetTile + AddPrim) at `prim`, links it into `ot` and returns
+ * the cursor advanced past the 0x10-byte packet. Declared per translation unit
+ * rather than in a header: callers disagree on whether `ot`/`prim` are pointers
+ * or s32, and gcc 2.6.3 will not take both against one prototype.
+ */
+u8 *GameAddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("func_80032F34");
+u8 *GameAddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) {
     u8 *oldPrim;
 
     func_80064FF8(prim);
@@ -18,6 +25,6 @@ u8 *func_80032F34(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, 
     prim[0x06] = b;
 
     prim += 0x10;
-    func_80064DDC(ot, oldPrim);
+    AddPrim(ot, oldPrim);
     return prim;
 }

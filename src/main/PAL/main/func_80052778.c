@@ -27,7 +27,7 @@ void func_80052738(void);
 s32 func_80018530(void);
 void func_8005E88C(void);
 void func_80049418(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_80065B24(void *arg0, void *arg1);
+void LoadImage(void *rect, void *data) asm("func_80065B24");
 void func_8001D530(void *arg0, s32 arg1);
 
 void func_80052778(void) {
@@ -82,7 +82,7 @@ void func_80052778(void) {
         D_8009B334 = -1;
     }
 
-    func_80065B24(D_8007BEE4, D_801E6F2C);
-    func_80065B24(D_8007BEDC, D_801E444C);
+    LoadImage(D_8007BEE4, D_801E6F2C);
+    LoadImage(D_8007BEDC, D_801E444C);
     func_8001D530(g_TeamNameChars, g_TeamNameLength);
 }

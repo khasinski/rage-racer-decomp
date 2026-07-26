@@ -20,7 +20,7 @@ void func_8002BF68(void *arg0, s32 arg1);
 
 void func_8002C168(void *arg0);
 
-s32 func_80030EB4(void *arg0, s32 arg1);
+s32 GameFindTrackSegment(void *arg0, s32 arg1) asm("func_80030EB4");
 
 void func_80032280(void *arg0);
 
@@ -55,7 +55,6 @@ void func_8005B190(s32 arg0, s32 arg1);
 
 void func_80018410(void);
 
-void func_8001674C(void *arg0);
 
 extern s16 D_8009AFA4;
 
@@ -96,7 +95,7 @@ void func_80033308(s32 arg0, s32 arg1);
 
 void func_80033D50(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void func_80034F74(void) {
     void *primary;
@@ -108,13 +107,13 @@ void func_80034F74(void) {
     secondary = g_Cars;
     func_8001F8D0(D_801F179C, primary, secondary);
 
-    D_8009E704 = func_80030EB4(primary, D_8009E704);
+    D_8009E704 = GameFindTrackSegment(primary, D_8009E704);
     func_8002BF68(primary, 1);
     func_8002C168(primary);
     func_80032280(primary);
 
     if (g_GrandPrixMode == 1) {
-        D_801F1884 = func_80030EB4(secondary, D_801F1884);
+        D_801F1884 = GameFindTrackSegment(secondary, D_801F1884);
         func_8002BF68(secondary, 1);
         func_8002C168(secondary);
         func_80032280(secondary);
@@ -247,7 +246,7 @@ void func_80035258(s32 arg0) {
     if (g_SceneId == 6) {
         func_80018410();
     }
-    func_8001674C(&D_8001147C);
+    GameDebugPrintf(&D_8001147C);
 }
 
 void func_800352B8(void *arg0, s32 arg1, s32 arg2) {
@@ -284,10 +283,10 @@ void func_800352B8(void *arg0, s32 arg1, s32 arg2) {
                     D_8009AFAC = -1;
                     delta = -delta;
                     if (arg2 == 0) {
-                        func_8005D6EC(0x3F);
+                        GamePlaySoundCue(0x3F);
                     }
                 } else if (delta > 0 && arg2 == 0) {
-                    func_8005D6EC(0x3E);
+                    GamePlaySoundCue(0x3E);
                 }
                 D_8009AF7C = delta;
             } else {

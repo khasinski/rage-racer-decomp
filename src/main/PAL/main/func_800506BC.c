@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/render.h"
 
 typedef struct {
     s16 x;
@@ -18,7 +19,6 @@ typedef struct {
 extern SVec D_80011A48[];
 extern s32 D_8007FB48;
 
-void func_8001A530(Matrix *mtx, s32 angle);
 s16 *func_800696C8(s32 *matrix, void *vec, s16 *out);
 void func_80046E00();
 
@@ -72,7 +72,7 @@ void func_800506BC(s32 *p0, s32 *p1, s32 *p2) {
         return;
     }
 
-    func_8001A530(&mtx, n);
+    GameBuildRotMatrixY(&mtx, n);
     func_800696C8((s32 *)&mtx, &verts[0], (s16 *)&out[0]);
     func_800696C8((s32 *)&mtx, &verts[1], (s16 *)&out[1]);
     func_800696C8((s32 *)&mtx, &verts[2], (s16 *)&out[2]);

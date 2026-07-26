@@ -32,7 +32,7 @@ extern s32 D_801E6DA0;
 extern s32 D_801E6C78;
 extern s32 D_8007BEF4[][6][3];
 extern s32 D_8007C00C[];
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void func_800206B8(u8 *s0) {
     u8 sp[16];
@@ -247,6 +247,6 @@ void func_80020D90(void) {
         D_801E4D0C--;
     }
     if (D_801E4D0C == 0xB4) {
-        func_8005D6EC(0x42);
+        GamePlaySoundCue(0x42);
     }
 }

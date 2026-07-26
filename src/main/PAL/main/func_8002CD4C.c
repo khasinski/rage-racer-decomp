@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/race.h"
 #include "game/menu.h"
+#include "game/render.h"
 
 typedef struct SubB {
     char _p0[0x1C];
@@ -35,7 +36,6 @@ extern s16 D_801E437E;
 extern s16 D_801E418C;
 extern s16 D_8007C020[];
 
-s32 func_8002A7C4(s32, s32);
 s32 func_80068634(s32);
 
 /*
@@ -177,7 +177,7 @@ L_43C:
 L_448:
     {
         s32 arg1 = (ctx->fB8 << 11) + 3072;
-        r = func_8002A7C4(ctx->f24, arg1 - ctx->fB4);
+        r = GameGetAngleDelta(ctx->f24, arg1 - ctx->fB4);
     }
     s2v = r * 32;
     r = func_80068634(ctx->f34 * 2);

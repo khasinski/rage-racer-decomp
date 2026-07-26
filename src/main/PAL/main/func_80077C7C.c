@@ -110,7 +110,17 @@ extern void func_80074348(s32);
 extern s32 func_80074A6C(u16, u16);
 extern void func_80073C50(s32, u16);
 
-s32 func_80077C7C(
+s32 SsUtKeyOnV(
+    s32 voice,
+    s16 vab_id,
+    s16 program,
+    s16 tone,
+    u16 note,
+    u16 fine,
+    s16 left,
+    s16 right) asm("func_80077C7C");
+
+s32 SsUtKeyOnV(
     s32 voice,
     s16 vab_id,
     s16 program,

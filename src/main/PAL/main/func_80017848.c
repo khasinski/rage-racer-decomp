@@ -33,7 +33,8 @@ s32 GameGetCarUnlockLevel(s32 model) {
     return g_CarTable[model].modelVariant + D_8007C474[model];
 }
 
-void func_80017884(s32 arg0) {
+void GameInitRenderState(s32 arg0) asm("func_80017884");
+void GameInitRenderState(s32 arg0) {
     register s32 value asm("$2");
     register s32 ptr asm("$2");
     register s32 tmp asm("$3");
@@ -67,7 +68,8 @@ void func_80017884(s32 arg0) {
     *(s32 *)0x1F800068 = tmp;
 }
 
-void func_80017948(s32 *base, s32 index) {
+void GameRegisterModelBank(s32 *base, s32 index) asm("func_80017948");
+void GameRegisterModelBank(s32 *base, s32 index) {
     register s32 *ptr asm("$6");
     register s32 i asm("$5");
     register s32 value asm("$2");
@@ -126,7 +128,8 @@ void func_800179B4(s32 *base, s32 offset) {
     }
 }
 
-void func_80017A10(s32 index) {
+void GameSelectModelBank(s32 index) asm("func_80017A10");
+void GameSelectModelBank(s32 index) {
     register s32 *entry asm("$4");
     register s32 ptr asm("$2");
     register s32 value asm("$3");

@@ -3,6 +3,7 @@
 #include "game/race.h"
 #include "game/track.h"
 #include "game/menu.h"
+#include "game/render.h"
 
 extern s32 D_801E3EB4;
 extern s32 D_801E3EB8;
@@ -38,20 +39,11 @@ typedef struct Cam {
 
 extern Cam D_801E3E14;
 
-s32 func_8001A6AC(s32 arg0, s32 arg1);
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
-s32 func_8002A7C4(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
-s32 func_8006888C(s32 arg0);
 void func_8002C168(void *arg0);
 void func_80031298(void *arg0, s32 arg1, void *arg2);
-void func_8001A610(void);
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_8001A5A0(Matrix *mtx, s32 angle);
-void func_8001A4C0(Matrix *mtx, s32 angle);
-void func_80069568(Matrix *lhs, Matrix *rhs);
-void func_80069678(Matrix *mtx, void *in, void *out);
 
 typedef struct Block16 {
     s32 w0;
@@ -100,8 +92,8 @@ void func_8003CF14(s32 arg0, s32 updateMotion) {
     index = rem % g_TrackPointCount;
 
     func_8002FC84(index, coords, D_801E3E14.field_38);
-    angle = 0x400 - func_8001A6AC(coords[0] - D_801E3E14.x, coords[2] - D_801E3E14.z);
-    D_801E3EB4 += func_8002A7C4(D_801E3EB4, angle);
+    angle = 0x400 - GameAtan2(coords[0] - D_801E3E14.x, coords[2] - D_801E3E14.z);
+    D_801E3EB4 += GameGetAngleDelta(D_801E3EB4, angle);
     D_801E3E14.field_24 = D_801E3EB4;
 
     if (updateMotion != 0) {
@@ -153,11 +145,11 @@ void func_8003CF14(s32 arg0, s32 updateMotion) {
     *(Block16 *)(view + 6) = *(Block16 *)&D_801E3E14.field_20;
     view[6] = D_8007E288[0] + view[6];
 
-    func_8001A530(&m1, view[7]);
-    func_8001A5A0(&m2, view[6]);
-    func_80069568(&m2, &m1);
-    func_8001A4C0(&m2, view[8]);
-    func_80069568(&m2, &m1);
+    GameBuildRotMatrixY(&m1, view[7]);
+    GameBuildRotMatrixX(&m2, view[6]);
+    MulMatrix2(&m2, &m1);
+    GameBuildRotMatrixZ(&m2, view[8]);
+    MulMatrix2(&m2, &m1);
 
     vec[0] = 0;
     vec[1] = 0;
@@ -171,7 +163,7 @@ void func_8003CF14(s32 arg0, s32 updateMotion) {
     m2.m[2][0] = m1.m[0][2];
     m2.m[2][1] = m1.m[1][2];
     m2.m[2][2] = m1.m[2][2];
-    func_80069678(&m2, vec, out);
+    ApplyMatrix(&m2, vec, out);
 
     coords[0] = (out[0] >> 4) + view[2];
     coords[1] = (out[1] >> 4) + view[3];
@@ -180,13 +172,13 @@ void func_8003CF14(s32 arg0, s32 updateMotion) {
     delta[1] = coords[1] - view[3];
     delta[2] = coords[2] - view[4];
     c400 = 0x400;
-    view[7] = c400 - func_8001A6AC(delta[0], delta[2]);
-    value = func_8006888C(delta[0] * delta[0] + delta[2] * delta[2]);
-    view[6] = c400 - func_8001A6AC(delta[1], value >> 6);
+    view[7] = c400 - GameAtan2(delta[0], delta[2]);
+    value = SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]);
+    view[6] = c400 - GameAtan2(delta[1], value >> 6);
 
     D_8009E74C = D_801E3E14.field_78;
     D_8009E73C = D_801E3E14.field_68;
     D_8009E740 = D_801E3E14.field_6C;
     D_8009E744 = D_801E3E14.field_70;
-    func_8001A610();
+    GameSetCameraRotMatrix();
 }

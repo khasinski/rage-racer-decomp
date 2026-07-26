@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/race.h"
+#include "psyq/gte.h"
+#include "game/render.h"
 
 extern s32 g_CourseModelCount asm("D_801E40E4");
 extern u16 D_8007E33C[];
@@ -7,12 +9,8 @@ extern u16 D_8007E334[];
 extern u8 D_8007E300[];
 extern u8 D_8007E2F4[];
 
-void func_8001A530(void *arg0, s32 arg1);
-void func_8001A4C0(void *arg0, s32 arg1);
-void func_80069568(void *arg0, void *arg1);
 void func_80017794(void *arg0, void *arg1, void *arg2);
-void func_80029E50(void *arg0, s32 arg1);
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 
 void GameDrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
 
@@ -67,10 +65,10 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
             }
             *dst &= 0xFFF;
 
-            func_8001A530(sp10, *(s32 *)(D_8007E300 + offset));
-            func_80069568((void *)0x1F800028, sp10);
-            func_8001A4C0(work, *(s16 *)dst);
-            func_80069568(sp10, work);
+            GameBuildRotMatrixY(sp10, *(s32 *)(D_8007E300 + offset));
+            MulMatrix2((void *)0x1F800028, sp10);
+            GameBuildRotMatrixZ(work, *(s16 *)dst);
+            MulMatrix2(sp10, work);
             func_80017794((void *)0x1F80011C, D_8007E2F4 + offset, work);
 
             *(s32 *)0x1F800084 = 0;
@@ -78,7 +76,7 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
             if (g_CourseModelCount >= 0x3F) {
                 limit = 0x3E;
             }
-            func_80029E50((void *)0x1F800000, limit);
+            GameSubmitCourseModel2((void *)0x1F800000, limit);
 
             dst++;
             offset += 0x10;
@@ -87,7 +85,7 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
 
     frameMask = frame & 0x1FF;
     if ((frameMask == 0) && (update != 0)) {
-        D_8007E33C[0] = func_800632B0() & 0x1F;
-        D_8007E33C[1] = func_800632B0() & 0x3F;
+        D_8007E33C[0] = GameRandom15() & 0x1F;
+        D_8007E33C[1] = GameRandom15() & 0x3F;
     }
 }

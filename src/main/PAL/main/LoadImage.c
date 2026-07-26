@@ -13,7 +13,7 @@ extern char D_80013578[];
 extern char D_80013584[];
 extern char D_80013590[];
 
-void LoadImage(Rect *arg0, void *arg1) asm("func_80065B24");
+void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void StoreImage(Rect *arg0, void *arg1) asm("func_80065B88");
 s32 MoveImage(GpuRectPacked *arg0, u32 arg1, u32 arg2) asm("func_80065BEC");
 

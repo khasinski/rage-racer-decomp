@@ -193,11 +193,11 @@ extern s32 D_8019CA6C;
 extern s32 D_801E8AF8;
 
 void func_80019F24(void);
-s32 func_8006DD30(s32 arg0);
+s32 VSync(s32 mode) asm("func_8006DD30");
 
 void func_8001A030(void) {
     while (D_8019CA6C != D_801E8AF8) {
-        if (func_8006DD30(1) >= 471) {
+        if (VSync(1) >= 471) {
             break;
         }
 
@@ -214,7 +214,7 @@ void func_8001A030(void) {
 extern s32 D_8019CA6C;
 extern u8 D_801F18CC[];
 
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 
 s32 func_8001A0E4(s32 mask, s32 current) {
     s32 random;
@@ -226,7 +226,7 @@ s32 func_8001A0E4(s32 mask, s32 current) {
         return current;
     }
     if ((D_8019CA6C == 0) || (D_8019CA6C == 0x100)) {
-        random = func_800632B0() & 0x7FFF;
+        random = GameRandom15() & 0x7FFF;
         candidate = random % 11;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
@@ -243,7 +243,7 @@ s32 func_8001A0E4(s32 mask, s32 current) {
 extern s32 D_8019CA6C;
 extern u8 D_801F18CC[];
 
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 
 s32 func_8001A1F0(s32 mask, s32 current) {
     s32 random;
@@ -255,7 +255,7 @@ s32 func_8001A1F0(s32 mask, s32 current) {
         return current;
     }
     if ((D_8019CA6C == 0) || (D_8019CA6C == 0x100)) {
-        random = func_800632B0() & 0x7FFF;
+        random = GameRandom15() & 0x7FFF;
         candidate = random % 4;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;

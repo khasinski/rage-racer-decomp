@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 #include "game/state.h"
+#include "game/render.h"
 
 typedef struct {
     s16 id;    /* 0x0 */
@@ -16,13 +17,8 @@ extern s32 D_801E4BBC;
 extern s32 *D_801E6828;
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_80069568(void *a, void *b);
-void func_80069678(void *a, void *b, void *c);
 void func_80069858(void *a);
 void func_800698E8(void *a);
-void func_80029E50(void *a, s32 b);
-void func_800296B4(void *a, s32 b);
 
 /*
  * Draw loop over the world-object array D_801E4B2C (D_801E4BBC entries). For
@@ -30,10 +26,11 @@ void func_800296B4(void *a, s32 b);
  * against D_801E6828) it builds a Z-rotation matrix in the scratchpad
  * (0x1F800028), transforms the object position through the GTE
  * (0x1F80011C -> 0x1F800124), sets the primitive shade/semi-trans mode word at
- * 0x1F800084, then dispatches a prim builder (func_80029E50 / func_800296B4)
+ * 0x1F800084, then dispatches a prim builder (GameSubmitCourseModel2 / GameSubmitCourseModel)
  * on the scratchpad OT at 0x1F800000.
  */
-void func_8004123C(void) {
+void GameDrawCourseObjects(void) asm("func_8004123C");
+void GameDrawCourseObjects(void) {
     Matrix mtx;
     volatile s32 pad[10];
     Obj *obj;
@@ -66,8 +63,8 @@ void func_8004123C(void) {
             }
         }
 
-        func_8001A530(&mtx, obj->f2);
-        func_80069568((void *)0x1F800028, &mtx);
+        GameBuildRotMatrixY(&mtx, obj->f2);
+        MulMatrix2((void *)0x1F800028, &mtx);
         {
             register s32 ov asm("$2");
             register s32 cv asm("$3");
@@ -84,7 +81,7 @@ void func_8004123C(void) {
             ov -= cv;
             *(s16 *)0x1F800120 = ov;
         }
-        func_80069678((void *)0x1F800028, (void *)0x1F80011C, (void *)0x1F800124);
+        ApplyMatrix((void *)0x1F800028, (void *)0x1F80011C, (void *)0x1F800124);
         {
             register s32 a asm("$2");
             register s32 b asm("$3");
@@ -111,9 +108,9 @@ void func_8004123C(void) {
         }
 
         if (g_IsEnvironmentMode4 ? (obj->flags & 2) : (obj->flags & 1)) {
-            func_80029E50((void *)0x1F800000, obj->id);
+            GameSubmitCourseModel2((void *)0x1F800000, obj->id);
         } else {
-            func_800296B4((void *)0x1F800000, obj->id);
+            GameSubmitCourseModel((void *)0x1F800000, obj->id);
         }
 
     next:

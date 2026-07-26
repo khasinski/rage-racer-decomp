@@ -4,7 +4,13 @@
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
-void func_8001A4C0(Matrix *mtx, s32 angle) {
+void GameBuildRotMatrixZ(Matrix *mtx, s32 angle) asm("func_8001A4C0");
+void GameBuildRotMatrixY(Matrix *mtx, s32 angle) asm("func_8001A530");
+void GameBuildRotMatrixX(Matrix *mtx, s32 angle) asm("func_8001A5A0");
+void GameSetCameraRotMatrix(void) asm("func_8001A610");
+s32 GameAtan2(s32 x, s32 y) asm("func_8001A6AC");
+
+void GameBuildRotMatrixZ(Matrix *mtx, s32 angle) {
     s32 s;
     s32 c;
 
@@ -24,7 +30,7 @@ void func_8001A4C0(Matrix *mtx, s32 angle) {
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
-void func_8001A530(Matrix *mtx, s32 angle) {
+void GameBuildRotMatrixY(Matrix *mtx, s32 angle) {
     s32 s;
     s32 c;
 
@@ -44,7 +50,7 @@ void func_8001A530(Matrix *mtx, s32 angle) {
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
-void func_8001A5A0(Matrix *mtx, s32 angle) {
+void GameBuildRotMatrixX(Matrix *mtx, s32 angle) {
     s32 s;
     s32 c;
 
@@ -63,30 +69,25 @@ void func_8001A5A0(Matrix *mtx, s32 angle) {
 
 extern Matrix D_8019CB18;
 
-void func_8001A4C0(Matrix *mtx, s32 angle);
-void func_8001A530(Matrix *mtx, s32 angle);
-void func_8001A5A0(Matrix *mtx, s32 angle);
-void func_80068B98(Matrix *lhs, Matrix *rhs, Matrix *out);
-void func_80069568(Matrix *lhs, Matrix *rhs);
 void func_80069858(Matrix *mtx);
 
-void func_8001A610(void) {
+void GameSetCameraRotMatrix(void) {
     Matrix mtx;
     Matrix *scratch = (Matrix *)0x1F800028;
 
-    func_8001A530(scratch, *(s32 *)0x1F80001C);
-    func_8001A5A0(&mtx, *(s32 *)0x1F800018);
-    func_80069568(&mtx, scratch);
-    func_8001A4C0(&mtx, *(s32 *)0x1F800020);
-    func_80069568(&mtx, scratch);
-    func_8001A530(&mtx, 0x800);
-    func_80068B98(&mtx, scratch, &D_8019CB18);
+    GameBuildRotMatrixY(scratch, *(s32 *)0x1F80001C);
+    GameBuildRotMatrixX(&mtx, *(s32 *)0x1F800018);
+    MulMatrix2(&mtx, scratch);
+    GameBuildRotMatrixZ(&mtx, *(s32 *)0x1F800020);
+    MulMatrix2(&mtx, scratch);
+    GameBuildRotMatrixY(&mtx, 0x800);
+    MulMatrix0(&mtx, scratch, &D_8019CB18);
     func_80069858(scratch);
 }
 
 extern s16 D_8007B664[];
 
-s32 func_8001A6AC(s32 arg0, s32 arg1) {
+s32 GameAtan2(s32 arg0, s32 arg1) {
     s32 temp_v0;
     s32 temp_v1;
 

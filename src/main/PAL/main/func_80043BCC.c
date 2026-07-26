@@ -1,4 +1,6 @@
 #include "common.h"
+#include "psyq/gte.h"
+#include "game/render.h"
 
 typedef struct {
     s32 words[4];
@@ -6,19 +8,11 @@ typedef struct {
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
-extern void func_80017A10(s32);
-extern void func_8001A4C0(void *, s32);
-extern void func_8001A530(void *, s32);
-extern void func_8001A5A0(void *, s32);
-extern void func_8001A610(void);
-extern s32 func_8001A6AC(s32, s32);
 extern void func_8001DAB0(void *);
 extern s32 func_80043B18();
 extern s32 func_80068634(s32);
 extern s32 func_800689A8(s32);
 extern void *func_80068F80(void *, void *, void *);
-extern void func_80069568(void *, void *);
-extern s32 *func_80069678(s32 *, s32 *, s32 *);
 extern void *func_80069CC8(void *, void *);
 extern s32 D_8007F610;
 extern s32 D_8007F614;
@@ -68,7 +62,8 @@ extern u8 *D_8019C7CC;
  * Field accesses use the FIELD(base,type,offset) raw-offset macro to stay
  * byte-exact, so params/locals are not retyped.
  */
-void func_80043BCC(s32 cameraModeSel, void *arg1) {
+void GameUpdateCamera(s32 cameraModeSel, void *arg1) asm("func_80043BCC");
+void GameUpdateCamera(s32 cameraModeSel, void *arg1) {
     s16 sp10[4];
     s32 sp18[3];
     s32 sp28[3];
@@ -161,11 +156,11 @@ void func_80043BCC(s32 cameraModeSel, void *arg1) {
     case 0:                                         /* switch 1 */
         *(WordVector *)&scratch[2] = *(WordVector *)arg1;
         *(WordVector *)&scratch[6] = *(WordVector *)((u8 *)arg1 + 0x20);
-        func_8001A530(&sp48[0], scratch[7]);
-        func_8001A5A0(&sp68[0], scratch[6]);
-        func_80069568(&sp68[0], &sp48[0]);
-        func_8001A4C0(&sp68[0], scratch[8]);
-        func_80069568(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixY(&sp48[0], scratch[7]);
+        GameBuildRotMatrixX(&sp68[0], scratch[6]);
+        MulMatrix2(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixZ(&sp68[0], scratch[8]);
+        MulMatrix2(&sp68[0], &sp48[0]);
         sp10[0] = 0;
         sp10[1] = -0x1C0;
         sp10[2] = 0;
@@ -178,7 +173,7 @@ void func_80043BCC(s32 cameraModeSel, void *arg1) {
         sp68[6] = sp48[2];
         sp68[7] = sp48[5];
         sp68[8] = sp48[8];
-        func_80069678((s32 *)&sp68[0], (s32 *)&sp10[0], &sp38[0]);
+        ApplyMatrix((s32 *)&sp68[0], (s32 *)&sp10[0], &sp38[0]);
         scratch[2] += sp38[0] >> 4;
         scratch[3] += sp38[1] >> 4;
         scratch[4] += sp38[2] >> 4;
@@ -322,17 +317,17 @@ block_36:
             *angleState = var_v1_549;
         }
         angleState = (s32 *)&sp88[0];
-        func_8001A530(angleState, 0 - D_8009B224);
-        func_8001A5A0(&sp68[0], -0x80);
-        func_80069568(&sp68[0], &sp88[0]);
+        GameBuildRotMatrixY(angleState, 0 - D_8009B224);
+        GameBuildRotMatrixX(&sp68[0], -0x80);
+        MulMatrix2(&sp68[0], &sp88[0]);
         D_8009B1EC = D_8009B220;
-        func_8001A530(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        func_8001A5A0(&sp68[0], FIELD(arg1, s32 *, 0x20));
-        func_80069568(&sp68[0], &sp48[0]);
-        func_8001A4C0(&sp68[0], FIELD(arg1, s32 *, 0x28));
-        func_80069568(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        MulMatrix2(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
-        func_80069568(angleState, &sp48[0]);
+        MulMatrix2(angleState, &sp48[0]);
         func_80069CC8(&sp48[0], &sp68[0]);
         sp18[1] = -0x3C;
         sp18[0] = 0;
@@ -364,8 +359,8 @@ block_52:
         scratch[4] -= sp38[2];
         temp_v0_687 = func_800689A8((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
         sp38[3] = temp_v0_687;
-        scratch[6] = 0x400 - (func_8001A6AC(sp38[1] + 0x28, temp_v0_687) & 0xFFF);
-        scratch[7] = 0x400 - (func_8001A6AC(sp38[0], sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (GameAtan2(sp38[1] + 0x28, temp_v0_687) & 0xFFF);
+        scratch[7] = 0x400 - (GameAtan2(sp38[0], sp38[2]) & 0xFFF);
         scratch[8] = FIELD(arg1, s32 *, 0x28) - FIELD(arg1, s32 *, 0x64);
         if (D_8007F610 == 0) {
             var_v0_713 = scratch[6] - 0x90;
@@ -379,11 +374,11 @@ block_52:
         temp_s2_728 = temp_v0_30 * 0x24;
         temp_v0_732 = temp_s2_728 + D_8019C7CC;
         *(WordVector *)&scratch[2] = *(WordVector *)temp_v0_732;
-        func_8001A530(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        func_8001A5A0(&sp68[0], FIELD(arg1, s32 *, 0x20));
-        func_80069568(&sp68[0], &sp48[0]);
-        func_8001A4C0(&sp68[0], FIELD(arg1, s32 *, 0x28));
-        func_80069568(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        MulMatrix2(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
         temp_v0_764 = temp_s2_728 + D_8019C7CC;
         sp18[0] = FIELD(temp_v0_764, s32 *, 0x10);
@@ -405,8 +400,8 @@ block_52:
         temp_v0_859 = scratch[4] - (FIELD(arg1, s32 *, 8) + sp28[2]);
         sp38[2] = temp_v0_859;
         squaredZ = temp_v0_859 * temp_v0_859;
-        scratch[6] = 0x400 - (func_8001A6AC(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
-        var_s0_879 = 0x400 - (func_8001A6AC(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (GameAtan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
+        var_s0_879 = 0x400 - (GameAtan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
         var_v0_881 = 2;
         goto block_101;
     case 3:                                         /* switch 1 */
@@ -520,18 +515,18 @@ block_52:
         D_8009B214 = temp_v0_1221;
         temp_a1_1227 = temp_a2_1183 - FIELD(arg1, s32 *, 0x24);
         sp38[1] = temp_a1_1227;
-        func_8001A530(&sp88[0], temp_a1_1227);
-        func_8001A5A0(&sp68[0], sp38[0]);
-        func_80069568(&sp68[0], &sp88[0]);
-        func_8001A4C0(&sp68[0], sp38[2]);
-        func_80069568(&sp68[0], &sp88[0]);
-        func_8001A530(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        func_8001A5A0(&sp68[0], FIELD(arg1, s32 *, 0x20));
-        func_80069568(&sp68[0], &sp48[0]);
-        func_8001A4C0(&sp68[0], FIELD(arg1, s32 *, 0x28));
-        func_80069568(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixY(&sp88[0], temp_a1_1227);
+        GameBuildRotMatrixX(&sp68[0], sp38[0]);
+        MulMatrix2(&sp68[0], &sp88[0]);
+        GameBuildRotMatrixZ(&sp68[0], sp38[2]);
+        MulMatrix2(&sp68[0], &sp88[0]);
+        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        MulMatrix2(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
-        func_80069568(&sp88[0], &sp48[0]);
+        MulMatrix2(&sp88[0], &sp48[0]);
         func_80069CC8(&sp48[0], &sp68[0]);
         sp18[2] += 0x32;
         func_80068F80(&spA8[0], &sp18[0], &sp38[0]);
@@ -547,17 +542,17 @@ block_52:
         scratch[4] -= sp38[2];
         temp_v0_1320 = func_800689A8((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
         sp38[3] = temp_v0_1320;
-        scratch[6] = 0x400 - (func_8001A6AC(sp38[1], temp_v0_1320) & 0xFFF);
-        scratch[7] = 0x400 - (func_8001A6AC(sp38[0], sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (GameAtan2(sp38[1], temp_v0_1320) & 0xFFF);
+        scratch[7] = 0x400 - (GameAtan2(sp38[0], sp38[2]) & 0xFFF);
         scratch[8] = 0;
         sp18[0] = 0x1000;
         sp18[1] = 0;
         sp18[2] = 0;
-        func_8001A530(&sp88[0], 0 - scratch[7]);
+        GameBuildRotMatrixY(&sp88[0], 0 - scratch[7]);
         func_80068F80(&sp88[0], &sp18[0], &sp28[0]);
         func_80069CC8(&sp68[0], &sp88[0]);
         func_80068F80(&sp88[0], &sp28[0], &sp18[0]);
-        scratch[8] = 0x400 - (func_8001A6AC(sp18[1], sp18[0]) & 0xFFF);
+        scratch[8] = 0x400 - (GameAtan2(sp18[1], sp18[0]) & 0xFFF);
         D_8009B218 = 3;
         break;
     case 4:                                         /* switch 1 */
@@ -570,11 +565,11 @@ block_52:
         } else if (D_8009B244 < FIELD((temp_a3_1372 + (u32)D_8019C7CC), s32 *, 0x1C)) {
             D_8009B244 += 1;
         }
-        func_8001A530(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        func_8001A5A0(&sp68[0], FIELD(arg1, s32 *, 0x20));
-        func_80069568(&sp68[0], &sp48[0]);
-        func_8001A4C0(&sp68[0], FIELD(arg1, s32 *, 0x28));
-        func_80069568(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        MulMatrix2(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
         sp18[0] = 0;
         temp_s0_1437 = temp_v0_30 * 0x24;
@@ -598,8 +593,8 @@ block_52:
         temp_v0_1549 = scratch[4] - (FIELD(arg1, s32 *, 8) + sp28[2]);
         sp38[2] = temp_v0_1549;
         squaredZ = temp_v0_1549 * temp_v0_1549;
-        scratch[6] = 0x400 - (func_8001A6AC(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
-        var_s0_879 = 0x400 - (func_8001A6AC(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (GameAtan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
+        var_s0_879 = 0x400 - (GameAtan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
         var_v0_881 = 4;
 block_101:
         scratch[7] = var_s0_879;
@@ -608,14 +603,14 @@ block_101:
         break;
     case 5:                                         /* switch 1 */
         *(WordVector *)&scratch[2] = *(WordVector *)arg1;
-        func_8001A530(&sp88[0], 0 - D_8007F614);
-        func_8001A530(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        func_8001A5A0(&sp68[0], FIELD(arg1, s32 *, 0x20));
-        func_80069568(&sp68[0], &sp48[0]);
-        func_8001A4C0(&sp68[0], FIELD(arg1, s32 *, 0x28));
-        func_80069568(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixY(&sp88[0], 0 - D_8007F614);
+        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        MulMatrix2(&sp68[0], &sp48[0]);
+        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
-        func_80069568(&sp88[0], &sp48[0]);
+        MulMatrix2(&sp88[0], &sp48[0]);
         func_80069CC8(&sp48[0], &sp68[0]);
         sp18[0] = 0;
         sp18[1] = 0;
@@ -628,8 +623,8 @@ block_101:
         scratch[4] += sp28[2];
         sp18[2] = D_8007F618;
         func_80068F80(&sp68[0], &sp18[0], &sp38[0]);
-        scratch[6] = 0x400 - (func_8001A6AC(sp38[1], D_8007F618) & 0xFFF);
-        scratch[7] = 0x400 - (func_8001A6AC(sp38[0], sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (GameAtan2(sp38[1], D_8007F618) & 0xFFF);
+        scratch[7] = 0x400 - (GameAtan2(sp38[0], sp38[2]) & 0xFFF);
         scratch[8] = FIELD(arg1, s32 *, 0x28);
         D_8009B218 = 5;
         scratch[2] -= sp38[0];
@@ -638,9 +633,9 @@ block_101:
         scratch[4] -= sp38[2];
         break;
     }
-    func_8001A610();
+    GameSetCameraRotMatrix();
     if ((cameraModeSel > 0) && (arg1 == &D_8009E6D4)) {
-        func_80017A10(0);
+        GameSelectModelBank(0);
         func_8001DAB0(arg1);
     }
 }

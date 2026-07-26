@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/render.h"
 
-s32 func_8002A788(s32 arg0, s32 arg1);
 
 s32 func_80068568(s32 angle);
 
@@ -16,7 +16,7 @@ s32 func_80068634(s32 angle);
 
 s32 func_8002FB60(s32 arg0);
 
-s32 func_800632B0(void);
+s32 GameRandom15(void) asm("func_800632B0");
 
 void func_80038CE8(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     register GameCarRuntime *carReg asm("$17");
@@ -73,7 +73,7 @@ got_angle_0:
     } else {
         speed = *(u16 *)&carReg->field_A4;
     }
-    trig = func_80068568(func_8002A788((s16)rawArg, carReg->field_24));
+    trig = func_80068568(GameGetAngleDistance((s16)rawArg, carReg->field_24));
     product = (s16)speed * trig;
     if (product >= 0) {
         goto nonneg_speed;
@@ -85,7 +85,7 @@ nonneg_speed:
     goto speed_ready;
 
 low_speed:
-    trig = func_80068568(func_8002A788((s16)rawArg, carReg->field_24));
+    trig = func_80068568(GameGetAngleDistance((s16)rawArg, carReg->field_24));
     product = trig << 1;
     product += trig;
     product <<= 3;
@@ -216,7 +216,7 @@ mode1:
 
 mode2:
     value = func_8002FB60(obj->trackPointIndex);
-    temp = func_8002A788(value, obj->field_24);
+    temp = GameGetAngleDistance(value, obj->field_24);
     if (temp >= 0x401) {
         temp = 0x800 - temp;
     }
@@ -241,7 +241,7 @@ after_store:
     value = 0x1E;
     obj->motionModeTimer = value;
 
-    value = func_800632B0();
+    value = GameRandom15();
     if (value & 0x80) {
         value = *(u16 *)&obj->motionValue;
         value = -value;

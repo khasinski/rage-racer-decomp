@@ -42,10 +42,10 @@ void func_8004A248(s32 arg0, s32 arg1);
 void func_8004B8B4(s32 arg0, s32 arg1);
 void func_8004C0D8(void);
 void func_8004E368(s32 arg0, s32 arg1);
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8005EA14(void);
 void func_8005EA6C(void);
-void func_80065B24(Rect *rect, void *data);
+void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 
 void GameUpdateTeamLogoScreen(void) asm("func_80057748");
 void GameUpdateTeamLogoScreen(void)
@@ -74,12 +74,12 @@ void GameUpdateTeamLogoScreen(void)
       g_MenuOverlayPattern = -1;
       if (g_PadEdge2 & 0x1000)
       {
-        func_8005D6EC(1);
+        GamePlaySoundCue(1);
         D_801F1804 = (D_801F1804 > 0) ? (D_801F1804 - 1) : (2);
       }
       if (g_PadEdge2 & 0x4000)
       {
-        func_8005D6EC(1);
+        GamePlaySoundCue(1);
         D_801F1804 = (D_801F1804 < 2) ? (D_801F1804 + 1) : (0);
       }
       edge = g_PadEdge2;
@@ -88,7 +88,7 @@ void GameUpdateTeamLogoScreen(void)
         sel = D_801F1804;
         if (sel == 0)
         {
-          func_8005D6EC(2);
+          GamePlaySoundCue(2);
           GameMenuBusy = -1;
           g_MenuSubCursor = 0;
           g_UiScriptProgress2 = 0;
@@ -97,7 +97,7 @@ void GameUpdateTeamLogoScreen(void)
         else
           if (sel == 1)
         {
-          func_8005D6EC(2);
+          GamePlaySoundCue(2);
           func_8005EA14();
           GameMenuBusy = -3;
           D_8019CAB8 = 0;
@@ -107,7 +107,7 @@ void GameUpdateTeamLogoScreen(void)
         else
           if (sel == 2)
         {
-          func_8005D6EC(3);
+          GamePlaySoundCue(3);
           GameMenuBusy = sel;
           g_MenuOverlayPattern = sel;
         }
@@ -115,7 +115,7 @@ void GameUpdateTeamLogoScreen(void)
       else
         if (edge & 0x90)
       {
-        func_8005D6EC(3);
+        GamePlaySoundCue(3);
         GameMenuBusy = 2;
         g_MenuOverlayPattern = 2;
       }
@@ -135,27 +135,27 @@ void GameUpdateTeamLogoScreen(void)
         {
           if (g_MenuSubCursor != 0)
           {
-            func_8005D6EC(2);
+            GamePlaySoundCue(2);
             GameMenuBusy = -2;
             g_MenuConfirmTimer = 0x23;
           }
           else
           {
-            func_8005D6EC(3);
+            GamePlaySoundCue(3);
             GameMenuBusy = 0;
           }
         }
         pad = (u16 *) (&g_PadEdge2);
         if ((*pad) & 0x90)
         {
-          func_8005D6EC(3);
+          GamePlaySoundCue(3);
           GameMenuBusy = 0;
         }
         if ((*pad) & 0x8000)
         {
           if (g_MenuSubCursor == 0)
           {
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
             g_MenuSubCursor = 1;
           }
         }
@@ -163,7 +163,7 @@ void GameUpdateTeamLogoScreen(void)
         {
           if (g_MenuSubCursor != 0)
           {
-            func_8005D6EC(1);
+            GamePlaySoundCue(1);
             g_MenuSubCursor = 0;
           }
         }
@@ -213,7 +213,7 @@ void GameUpdateTeamLogoScreen(void)
       {
         if (g_PadEdge2 & 0x800)
         {
-          func_8005D6EC(3);
+          GamePlaySoundCue(3);
           func_8005EA6C();
           GameMenuBusy = -4;
         }
@@ -278,7 +278,7 @@ void GameUpdateTeamLogoScreen(void)
           g_MenuHandlerIndex = 6;
           D_801F1804 = 0;
           D_801E444C[0] = 0;
-          func_80065B24(&D_8007BEDC, D_801E444C);
+          LoadImage(&D_8007BEDC, D_801E444C);
           break;
 
         default:

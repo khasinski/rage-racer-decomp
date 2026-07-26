@@ -18,7 +18,7 @@ extern s32 g_SeriesCleared asm("D_8019C8EC");
 void func_80033AA0(s32, s32);
 void func_800204F4(s32);
 void func_800206B8(s32);
-void func_8005D6EC(s32);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_80020D90(void);
 void func_80018410(void);
 void func_80020B08(void);
@@ -93,7 +93,7 @@ void func_80020DDC(void) {
         g_SceneTimer += 1;
         if ((u32)g_SceneTimer < 121) goto L234;
         if (D_801F17B0 == 0) goto L248;
-        func_8005D6EC((g_PadHeld & 0x860) ? 0x10 : 0xf);
+        GamePlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = D_801F17B0;
         if (t >= lim1) {
             D_801F17B0 = t - lim1;
@@ -111,7 +111,7 @@ void func_80020DDC(void) {
         st = 5;
         goto Lstore;
     case 5:
-        func_8005D6EC(0x11);
+        GamePlaySoundCue(0x11);
         if (!(g_PadEdge2 & 0x860)) goto L420;
         st = 6;
     Lstore:
@@ -120,7 +120,7 @@ void func_80020DDC(void) {
     case 6:
         func_80020D90();
         if (D_8019CE0C == 0) { st = 7; goto Lstore; }
-        func_8005D6EC((g_PadHeld & 0x860) ? 0x10 : 0xf);
+        GamePlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = D_8019CE0C;
         if (t >= lim0) {
             D_8019CE0C = t - lim0;
@@ -136,7 +136,7 @@ void func_80020DDC(void) {
         goto Lstore;
     case 7:
         func_80020D90();
-        func_8005D6EC(0x11);
+        GamePlaySoundCue(0x11);
         if (!(g_PadEdge2 & 0x860)) goto L420;
         if (D_801E4D0C != 0) goto L420;
         if (D_801E4B94 != 0) { st = 8; goto Lstore; }

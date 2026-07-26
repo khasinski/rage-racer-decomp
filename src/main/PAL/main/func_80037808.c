@@ -38,19 +38,13 @@ s32 func_80037808(TrackWaypointRuntime *waypoint);
 
 extern s32 g_ModelBankCount asm("D_801E4168");
 
-void func_80017A10(s32 arg0);
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
-void func_8001A4C0(Matrix *mtx, s32 angle);
 
-void func_8001A530(Matrix *mtx, s32 angle);
 
-void func_80028DEC(void *arg0, s32 arg1);
 
-void func_80069458(Matrix *dst, Matrix *src);
 
-void func_80069568(Matrix *lhs, Matrix *rhs);
 
 extern u32 D_1F800084;
 
@@ -61,7 +55,7 @@ extern s16 D_8009E83C;
 
 void *func_80017390(void *ot, void *packet, s32 arg2);
 
-void func_80064DDC(void *ot, void *prim);
+void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
 void SetShadeTex(u8 *prim, s32 enabled) asm("func_80064EB8");
 
@@ -109,17 +103,15 @@ void func_8005D9F8(s32 a, s32 b);
 
 void func_80037C04(void);
 
-void func_80043BCC(s32 a, void *b);
+void GameUpdateCamera(s32 a, void *b) asm("func_80043BCC");
 
 void func_80019EFC(s32 a);
 
-void func_80045CD4(void);
 
 void func_800418D4(void);
 
 void func_80041840(void);
 
-void func_8004123C(void);
 
 void GameDrawCourseScenery(s32 a, s32 b, s32 c) asm("func_8003E1A4");
 
@@ -170,7 +162,6 @@ extern s32 D_8007E058;
  */
 
 
-s32 func_8001A6AC(s32 arg0, s32 arg1);
 
 s32 func_80068568(s32 arg0);
 
@@ -179,7 +170,7 @@ extern u8 *g_TrackPoints asm("D_8009E688");
 extern s32 g_TrackLength asm("D_801E40D8");
 extern u8 *g_TrackEventData asm("D_801E4150");
 
-extern s32 func_80030EB4(u8 *ent, s32 arg);
+extern s32 GameFindTrackSegment(u8 *ent, s32 arg) asm("func_80030EB4");
 
 extern void func_8002BF68(u8 *ent, s32 arg);
 
@@ -196,7 +187,7 @@ typedef struct {
  * Initializes/spawns a route render object `ent`: reads a start entry from the
  * per-scene table (`arr` indexed by `pos`, g_TrackEventData base), sets the model id
  * (+0xAE / +0x122), start angle (0xC00 - track angle), zeroes the motion state
- * block, resolves the containing track point (func_80030EB4) and builds the
+ * block, resolves the containing track point (GameFindTrackSegment) and builds the
  * initial marker geometry (func_80031298). `ent` is a render/route object
  * accessed by raw byte offset (its first 0xE8 mirror GameRenderObject).
  */
@@ -310,7 +301,7 @@ static inline void ClearScratchRenderMode37AAC(void) {
 /*
  * Renders the 6 waypoints. For each active-shaped slot it builds a rotation
  * matrix from the waypoint's angle (point+0x14) and tilt (point+0x10) and emits
- * two GTE draw primitives (func_80028DEC) into the scratchpad OT: the second is
+ * two GTE draw primitives (GameSubmitModel) into the scratchpad OT: the second is
  * the same billboard rotated by 0x800 (180 degrees). `point` walks the
  * TrackWaypointRuntime array D_801E4DF4 via raw offsets. Register pins are
  * match-load-bearing.
@@ -326,16 +317,16 @@ void func_80037AAC(void) {
     s32 drawArg;
 
     drawId = 2;
-    func_80017A10(0);
+    GameSelectModelBank(0);
     i = 0;
     mtx1Ptr = &mtx1;
     point = (char *)&D_801E4DF4[0].x;
 
     do {
-        func_8001A530(&mtx0, *(s32 *)(point + 0x14));
-        func_80069568((Matrix *)0x1F800028, &mtx0);
-        func_8001A4C0(mtx1Ptr, *(s32 *)(point + 0x10));
-        func_80069458(&mtx0, mtx1Ptr);
+        GameBuildRotMatrixY(&mtx0, *(s32 *)(point + 0x14));
+        MulMatrix2((Matrix *)0x1F800028, &mtx0);
+        GameBuildRotMatrixZ(mtx1Ptr, *(s32 *)(point + 0x10));
+        MulMatrix(&mtx0, mtx1Ptr);
         func_80017794((void *)0x1F80011C, point, &mtx0);
         frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
@@ -343,10 +334,10 @@ void func_80037AAC(void) {
         if (drawId < frameValue) {
             drawArg = drawId;
         }
-        func_80028DEC((void *)0x1F800000, drawArg);
+        GameSubmitModel((void *)0x1F800000, drawArg);
 
-        func_8001A530(mtx1Ptr, 0x800);
-        func_80069568(&mtx0, mtx1Ptr);
+        GameBuildRotMatrixY(mtx1Ptr, 0x800);
+        MulMatrix2(&mtx0, mtx1Ptr);
         func_80017794((void *)0x1F80011C, point, mtx1Ptr);
         frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
@@ -354,7 +345,7 @@ void func_80037AAC(void) {
         if (drawId < frameValue) {
             drawArg = drawId;
         }
-        func_80028DEC((void *)0x1F800000, drawArg);
+        GameSubmitModel((void *)0x1F800000, drawArg);
 
         i++;
         point += sizeof(TrackWaypointRuntime);
@@ -445,7 +436,7 @@ drawDigit:
             packet[0x0C] = y;
 
             packet += 0x14;
-            func_80064DDC(g_DrawBuffer + 0xCC, oldPacket);
+            AddPrim(g_DrawBuffer + 0xCC, oldPacket);
         }
     }
 
@@ -549,16 +540,16 @@ Lend:
     func_80037C04();
 
     if (g_RacePhase > 0) {
-        func_80043BCC(0, &D_8009E6D4);
+        GameUpdateCamera(0, &D_8009E6D4);
     }
 
     p = &D_8009E74C;
     func_80019EFC(*p);
-    func_80045CD4();
+    GameUpdateEnvironment();
     func_800418D4();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     func_80041840();
-    func_8004123C();
+    GameDrawCourseObjects();
     GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
     func_800350B4(D_8009E744);
     func_8005B190(D_8019C78C, D_8019C78C);
@@ -642,7 +633,7 @@ s32 func_80038288(s32 arg0) {
     }
 
     if (value != 0) {
-        temp = func_8001A6AC(0x29DD - *(s32 *)0x1F800008, 0x6EF3 - *(s32 *)0x1F800010);
+        temp = GameAtan2(0x29DD - *(s32 *)0x1F800008, 0x6EF3 - *(s32 *)0x1F800010);
         value = 0xC00 - temp;
         temp = *(s32 *)0x1F80001C;
         value &= 0xFFF;
@@ -687,7 +678,7 @@ void func_800383A8(GameCarRuntime *ent, s32 pos, s32 *arr) {
         *(s32 *)&ent->y = 0;
     }
     {
-        s32 ret = func_80030EB4((u8 *)ent, ent->trackPointIndex);
+        s32 ret = GameFindTrackSegment((u8 *)ent, ent->trackPointIndex);
         s32 lev = g_RaceSeries;
         s32 idx;
         s32 levShift;

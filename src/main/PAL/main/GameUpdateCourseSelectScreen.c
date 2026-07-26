@@ -53,7 +53,7 @@ void func_800509C4(s32 arg0);
 void func_8005194C(void);
 s32 func_80053650(void);
 s32 GameCanSelectNextCourse(void) asm("func_80053688");
-void func_8005D6EC(s32 arg0);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8005E8E0(void);
 void GameUpdateCourseSelectScreen(void) asm("func_80053730");
 void GameUpdateCourseSelectScreen(void) {
@@ -94,11 +94,11 @@ void GameUpdateCourseSelectScreen(void) {
         if ((func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_8019C7AC = (D_8019C7AC > 0) ? D_8019C7AC - 1 : 2;
             }
             if (g_PadEdge2 & 0x4000) {
-                func_8005D6EC(1);
+                GamePlaySoundCue(1);
                 D_8019C7AC = (D_8019C7AC < 2) ? D_8019C7AC + 1 : 0;
             }
             if ((g_PadHeld & 0x8000) && (func_80053650() != 0)) {
@@ -111,7 +111,7 @@ void GameUpdateCourseSelectScreen(void) {
                         s32 lprev;
                         s32 lu;
                         s32 lt;
-                        func_8005D6EC(8);
+                        GamePlaySoundCue(8);
                         lu = g_MenuViewAngle;
                         llap = g_CourseIndex;
                         lprev = g_MenuViewAngleTarget;
@@ -141,7 +141,7 @@ void GameUpdateCourseSelectScreen(void) {
                             s32 lu;
                             s32 lt;
                             s32 lbase;
-                            func_8005D6EC(8);
+                            GamePlaySoundCue(8);
                             lu = 0x7A120;
                             llap = g_CourseIndex;
                             lprev = g_MenuViewAngleTarget;
@@ -166,7 +166,7 @@ void GameUpdateCourseSelectScreen(void) {
             if (g_PadEdge2 & 0x860) {
                 sel = D_8019C7AC;
                 if (sel == 0) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 1;
                     D_8009B334 = -1;
@@ -176,7 +176,7 @@ void GameUpdateCourseSelectScreen(void) {
                 } else if (sel == 2) {
                     if (g_GrandPrixMode != 0) {
                         u16 hv;
-                        func_8005D6EC(2);
+                        GamePlaySoundCue(2);
                         hv = 0;
                         if (g_GrandPrixClass < 5) {
                             hv = D_8019CABC;
@@ -187,7 +187,7 @@ void GameUpdateCourseSelectScreen(void) {
                         g_UiScriptProgress2 = 0;
                         g_MenuSubCursor = 1;
                     } else {
-                        func_8005D6EC(3);
+                        GamePlaySoundCue(3);
                         func_8005E8E0();
                         D_8009B30C = -1;
                         D_8009B334 = -1;
@@ -198,7 +198,7 @@ void GameUpdateCourseSelectScreen(void) {
                         D_8009B360 = (D_8009B360 - D_8009B364) + 0x1F4000;
                     }
                 } else {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     if (g_GrandPrixMode != 0) {
                         D_8019C764 = &D_800825A4;
                         GameMenuBusy = -2;
@@ -219,21 +219,21 @@ void GameUpdateCourseSelectScreen(void) {
             func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
             if (func_800487D8(D_8019C764, &g_UiScriptProgress2, 1) != 0) {
                 if (g_PadEdge2 & 0x860) {
-                    func_8005D6EC((g_MenuSubCursor != 0) ? 2 : 3);
+                    GamePlaySoundCue((g_MenuSubCursor != 0) ? 2 : 3);
                     GameMenuBusy = -3;
                     g_MenuConfirmTimer = 0x23;
                 }
                 pad = (u16 *)&g_PadEdge2;
                 if (*pad & 0x90) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     GameMenuBusy = -4;
                 }
                 if (*pad & 0x8000) {
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     g_MenuSubCursor = 1;
                 }
                 if (*pad & 0x2000) {
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     g_MenuSubCursor = 0;
                 }
                 func_80048D64((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 0);
@@ -246,7 +246,7 @@ void GameUpdateCourseSelectScreen(void) {
             u16 *pad;
             if (func_800487D8(D_8019C764, &g_UiScriptProgress2, 1) != 0) {
                 if (g_PadEdge2 & 0x860) {
-                    func_8005D6EC(2);
+                    GamePlaySoundCue(2);
                     if (g_MenuSubCursor == g_GrandPrixClass) {
                         GameMenuBusy = 0;
                     } else {
@@ -258,15 +258,15 @@ void GameUpdateCourseSelectScreen(void) {
                 }
                 pad = (u16 *)&g_PadEdge2;
                 if (*pad & 0x90) {
-                    func_8005D6EC(3);
+                    GamePlaySoundCue(3);
                     GameMenuBusy = 0;
                 }
                 if (*pad & 0x1000) {
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     g_MenuSubCursor = (g_MenuSubCursor != 0) ? g_MenuSubCursor - 1 : g_RaceProgress->maxClassReached;
                 }
                 if (g_PadEdge2 & 0x4000) {
-                    func_8005D6EC(1);
+                    GamePlaySoundCue(1);
                     g_MenuSubCursor = (g_MenuSubCursor < g_RaceProgress->maxClassReached) ? g_MenuSubCursor + 1 : 0;
                 }
                 func_80048D64(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 0);

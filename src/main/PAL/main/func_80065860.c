@@ -8,7 +8,8 @@ extern char D_80013520[];
 
 void func_80068180(u8 *dst, s32 value, s32 count);
 
-void func_80065860(s32 arg0) {
+void SetDispMask(s32 arg0) asm("func_80065860");
+void SetDispMask(s32 arg0) {
     register s32 enable asm("$16") = arg0;
     register u8 *debug asm("$17") = &g_GraphDebug;
     register u8 *clearPtr asm("$4");

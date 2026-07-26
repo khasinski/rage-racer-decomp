@@ -10,7 +10,7 @@ extern s32 D_801E7740;
 extern s16 D_801E6F26;
 extern s16 D_8009E6A0;
 
-void func_8005D6EC(s32);
+void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void func_8003A974(void) {
     s32 s6;
@@ -81,19 +81,19 @@ void func_8003A974(void) {
                 }
 cue_32:
                 if (D_8009E6A0 != 0) {
-                    func_8005D6EC(0x32);
+                    GamePlaySoundCue(0x32);
                 }
                 bit = 0x200;
                 goto cue_done;
 cue_33:
                 if (D_8009E6A0 != 0) {
-                    func_8005D6EC(0x33);
+                    GamePlaySoundCue(0x33);
                 }
                 bit = 0x200;
                 goto cue_done;
 cue_34:
                 if (D_8009E6A0 != 0) {
-                    func_8005D6EC(0x34);
+                    GamePlaySoundCue(0x34);
                 }
                 bit = 0x200;
 cue_done:
@@ -107,14 +107,14 @@ cue_done:
         } else {
             if (s1 == 0 && !(D_801E4BB4 & 1) && a0 < -0x1C00) {
                 if (D_8009E6A0 != 0 && g_RacePosition == 1) {
-                    func_8005D6EC(0x2D);
+                    GamePlaySoundCue(0x2D);
                 }
                 D_801E4BB4 = (D_801E4BB4 & ~0x10) | 1;
             } else if (a0 >= -0x7FF && !((s3 >> s0) & D_801E4BB4)) {
                 if (g_SceneTimer & 1) {
-                    if (D_8009E6A0 != 0) func_8005D6EC(0x2F);
+                    if (D_8009E6A0 != 0) GamePlaySoundCue(0x2F);
                 } else {
-                    if (D_8009E6A0 != 0) func_8005D6EC(0x30);
+                    if (D_8009E6A0 != 0) GamePlaySoundCue(0x30);
                 }
                 D_801E4BB4 |= (s3 >> s0);
             } else {
@@ -123,9 +123,9 @@ cue_done:
                 } else if (a0 < -0x800) {
                     if (*s2 >= 0x12D) {
                         if (g_SceneTimer & 1) {
-                            if (D_8009E6A0 != 0) func_8005D6EC(0x37);
+                            if (D_8009E6A0 != 0) GamePlaySoundCue(0x37);
                         } else {
-                            if (D_8009E6A0 != 0) func_8005D6EC(0x36);
+                            if (D_8009E6A0 != 0) GamePlaySoundCue(0x36);
                         }
                         *s2 = 0;
                     }

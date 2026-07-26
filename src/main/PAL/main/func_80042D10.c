@@ -12,7 +12,8 @@ extern u32 D_8009B190;
 
 void func_8006A94C(u8 *arg0);
 
-void func_80042D10(void) {
+void GameStepCdVolumeFade(void) asm("func_80042D10");
+void GameStepCdVolumeFade(void) {
     u8 buf[4];
     register s32 cnt asm("$13");
 

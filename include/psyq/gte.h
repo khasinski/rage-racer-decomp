@@ -49,4 +49,22 @@ s32 Lzc(s32 data) asm("func_80069C7C");
 /* Transposes the 3x3 rotation part of m0 into m1, leaving the translation. */
 Matrix *TransposeMatrix(Matrix *m0, Matrix *m1) asm("func_80069CC8");
 
+/*
+ * Matrix multiply family. Each loads m0 into the GTE rotation control registers
+ * (ctc2 $0..$4) and pushes the three columns of m1 through MVMVA
+ * (cop2 0x486012, mx=rotation, v=V0, no translation, sf=12), so only the 3x3
+ * rotation part is touched. They differ only in where the product lands:
+ * MulMatrix  -> m0, MulMatrix2 -> m1, MulMatrix0 -> m2. Each returns it.
+ */
+void *MulMatrix(void *m0, void *m1) asm("func_80069458");
+void *MulMatrix2(void *m0, void *m1) asm("func_80069568");
+void *MulMatrix0(void *m0, void *m1, void *m2) asm("func_80068B98");
+/* v1 = m * v0 through the same MVMVA; v0 is a short vector, v1 gets MAC1..3. */
+void *ApplyMatrix(void *m, void *v0, void *v1) asm("func_80069678");
+/* Rotation matrix from an SVECTOR of Z/Y/X Euler angles (raw asm sibling). */
+void *RotMatrix(void *r, void *m) asm("func_80069D18");
+/* Square root in 12-bit fixed point: returns sqrt(a << 12), i.e. 64*sqrt(a).
+ * Normalises with Lzc, then runs the hyperbolic CORDIC in func_80068738. */
+s32 SquareRoot12(s32 a) asm("func_8006888C");
+
 #endif
