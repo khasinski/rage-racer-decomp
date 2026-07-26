@@ -598,4 +598,16 @@ void GameSetGteLightMatrix(Matrix *view) asm("func_8001459C");
  */
 void GameSetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) asm("func_80017794");
 
+/*
+ * The environment colour timeline and the sky it feeds. The state is nine
+ * 12-byte { cur, from, to } RGB slots at D_801E3FB6 + 0x0C * k - slot 0 the GTE
+ * far/fog colour, 1..8 the sky gradient - lerped every frame by func_80045CD4.
+ */
+/* Jumps that timeline to `time` and applies one frame, then programs
+ * SetFarColor + SetFogNear. */
+void GameSeekEnvironmentScript(s32 time) asm("func_800458CC");
+/* The backdrop: half a 16-segment panorama cylinder over gradient bands shaded
+ * between successive colour slots. */
+void GameDrawSkyBackground(void) asm("func_800418D4");
+
 #endif

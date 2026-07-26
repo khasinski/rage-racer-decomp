@@ -39,6 +39,26 @@ void GameUpdateNegconMaxTwistScreen(void) asm("func_80016250");
 void GameDrawNegconMaxTwistScreen(void) asm("func_80016064");
 void GameDrawControllerSetupScene(s32 variant) asm("func_80014618");
 
+/*
+ * Controller-configuration screen widgets. Two independent 0..7 selections:
+ * D_8019CE08 for the standard pad, D_8019CB08 for the NeGcon (pad type byte
+ * D_801E4369 == 0x23 picks which diagram is drawn). See docs/names.md 1.
+ */
+/* 16x32 arrow sprites at (0x28, 0xE0) and (0x108, 0xE0); `pulse` adds the glow. */
+u8 *GameDrawLeftArrow(void *ot, u8 *prim, s16 x, s16 y, s32 pulse) asm("func_80014A60");
+u8 *GameDrawRightArrow(void *ot, u8 *prim, s16 x, s16 y, s32 pulse) asm("func_80014B70");
+/* Framed panel showing the selected configuration number. */
+u8 *GameDrawPadConfigSelector(void *ot, u8 *prim, s16 x, s16 y, s32 selection) asm("func_80014C80");
+/* The five action labels, and the five lines from each label to its button. */
+u8 *GameDrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) asm("func_80014EAC");
+u8 *GameDrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) asm("func_800151B0");
+/* One whole controller diagram for the current selection: labels + callouts. */
+u8 *GameDrawPadConfigDiagram(void *ot, u8 *prim) asm("func_8001530C");
+u8 *GameDrawNegconConfigDiagram(void *ot, u8 *prim) asm("func_80015384");
+/* Entry hook: backs both selections up to D_8019C7A8 / D_8019C76C so a cancel
+ * can restore them. Its caller sets g_GameMode = 7 in the same breath. */
+void GameBeginControllerConfig(void) asm("func_800153FC");
+
 /* Identity of the running scene: queried (`== 0xC`, `== 0x11`, `== 0x1E`, ...)
  * but never dispatched. Every writer also resets g_SceneTimer. */
 extern s32 g_SceneId asm("D_801E42E4");

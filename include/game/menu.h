@@ -167,6 +167,9 @@ s32 GameDrawCourseSelectScreen(s32 step) asm("func_8005290C");
 /* id 2 -- "RANKING": total time / lap time tables, or exit back to id 1. */
 void GameUpdateRankingScreen(void) asm("func_80054D10");
 s32 GameDrawRankingScreen(s32 step) asm("func_80054C84");
+/* The five record rows: place number + suffix + holder + row background, from
+ * the ranking table D_801E7744 or the time table D_8019CB78. */
+s32 GameDrawRankingTable(s32 *accumulator, s32 step, s32 table) asm("func_8004D384");
 
 /* id 3 -- runs for a single frame on the way from id 1 into id 4. */
 void GameEnterCarSelectScreen(void) asm("func_80055618");
@@ -210,5 +213,25 @@ s32 GameDrawCarShopScreen(s32 step) asm("func_80059248");
 /* id 12 -- "SHOP" (engineer shop): pay the tune-up fee to grade the car up. */
 void GameUpdateEngineerShopScreen(void) asm("func_8005A3A4");
 u32 GameDrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
+
+/*
+ * Menu widgets shared across those screens. Each keeps its own accumulator and
+ * follows the same `step` convention as the Draw handlers above: 0 resets and
+ * draws nothing, positive ramps in, negative ramps out. docs/names.md 1 has the
+ * data layouts.
+ */
+/* The four-bar car performance chart; only visible on CUSTOMIZE. */
+void GameDrawCarSpecGraph(s32 step, s32 tireGrade) asm("func_800496F0");
+/* "MAX POWER <n> ps / <n> rpm" and "MAX TORQUE <n>.<n> kgm / <n> rpm". */
+void GameDrawCarEngineSpec(s16 yOffset, u8 brightness, s32 unused) asm("func_80052158");
+/* The TEAM NAME 4x11 grid, its highlight and caret, and the typed name. */
+void GameDrawTeamNameEntry(s32 step, s32 cursorIndex) asm("func_8004E724");
+/* The 3D car view behind screens 3, 4, 5, 6, 10, 11, 12: eases
+ * g_MenuViewAngle/Offset, then submits the car and the showroom floor. */
+void GameDrawMenuCarView(void) asm("func_8005131C");
+/* Draw and input halves of the logo painter. The canvas D_801E6F2C is a 64x64
+ * 4bpp bitmap with its own 16-entry CLUT at D_801E444C. */
+void GameDrawTeamLogoCanvas(s32 panelStep, s32 editorStep) asm("func_8004A248");
+void GameUpdateTeamLogoCanvas(void) asm("func_8004C0D8");
 
 #endif

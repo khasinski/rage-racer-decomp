@@ -18,57 +18,109 @@ are `.word` instruction counts from `asm/nonmatchings/PAL/main/*.s` (bytes = wor
 
 ## 1. Remaining functions (what each IS)
 
+Every non-handwritten `INCLUDE_ASM` stub now carries a real name; the segment
+name, the source file name and the `INCLUDE_ASM` path argument were renamed
+together and `make check VERSION=PAL` stayed byte-identical. The only stub still
+on a `func_` name on purpose is `func_8007010C` (see the SDK table).
+
+Several rows below correct earlier descriptions in this file; where a name
+supersedes a wrong one the old claim is called out, because it is also repeated
+in the headers and in commit messages.
+
+### Controller-configuration screen (`0x80014A60`–`0x80015440`)
+
+`GameDrawControllerConfigScreen` (func_80015444) keeps **two** independent 0..7
+configuration selections: `D_8019CE08` for the standard pad, whose 8 rows of
+button bitmasks live at `D_8007C028`, and `D_8019CB08` for the NeGcon, whose rows
+live at `D_8007C0A8`. `GameLoadPadButtonMapping` installs one of each into
+`D_801E4B60` / `D_801E4B70`. The screen draws whichever one matches the pad type
+byte `D_801E4369` (`== 0x23` is the NeGcon), which is what identifies the two
+diagram functions. Rows 4 and 5 of the two mask tables are what differ: the pad
+table shifts on R1|R2 / L1|L2, the NeGcon table on Down / Up.
+
+| Name | Addr | Words | Purpose / how it is known |
+|---|---|---:|---|
+| `GameDrawLeftArrow` | 0x80014A60 | 68 | 16x32 arrow sprite (tpage 0x7F82, v = 0xB8, **u = 0x48**) plus an optional additive glow whose brightness is `rcos(D_8007C13C)`. The config screen draws it at (0x28, 0xE0) with the glow flag `selection != 0`. |
+| `GameDrawRightArrow` | 0x80014B70 | 68 | Byte-identical except **u = 0x58**; drawn at (0x108, 0xE0) with the flag `(selection ^ 7) != 0`. The `!= 0` / `!= 7` pair against the 0..7 selection range is what proves which arrow is which. Both are reused by the NeGcon "steer play" and "maximum twist" screens. |
+| `GameDrawPadConfigSelector` | 0x80014C80 | 139 | The framed number panel: a 0x30x0xC caption sprite, three 8x16 glyphs whose middle one is `u = 0x50 + 8 * index`, and a white/black double frame. Called once per screen with the active selection. |
+| `GameDrawPadConfigLabels` | 0x80014EAC | 193 | The five action labels of one diagram, positions taken from a 5-byte row. |
+| `GameDrawPadConfigCallouts` | 0x800151B0 | 87 | Five lines (its only callee is `GameQueueLine`) from the label anchors `D_8007C168[6]` to the button positions `D_8007C180[16]` — entries 0..7 are the standard pad's buttons, 8..0xF the NeGcon's, which is why the two row tables have disjoint value ranges. |
+| `GameDrawPadConfigDiagram` | 0x8001530C | 30 | Standard-pad diagram: `GameDrawPadConfigLabels` then `GameDrawPadConfigCallouts` with `D_8007C1C0 + 5 * D_8019CE08` and `D_8007C1E8 + 5 * D_8019CE08`. |
+| `GameDrawNegconConfigDiagram` | 0x80015384 | 30 | Same shape with `D_8007C210` / `D_8007C238` and `D_8019CB08`; this is the branch taken when `D_801E4369 == 0x23`. |
+| `GameBeginControllerConfig` | 0x800153FC | 18 | Entry hook: copies both selections into the backup slots `D_8019C7A8` / `D_8019C76C` (which `GameUpdateControllerConfigScreen` restores on cancel) and clears `D_801E8AA4` / `D_801E8A9C` / `D_801E7A4C` / `D_801E6C7C`. Its caller sets `g_GameMode = 7` in the next instruction. |
+
 ### Car physics / collision
-| Func | Addr | Words | Status | Purpose |
-|---|---|---:|---|---|
-| func_8002D398 | 0x8002D398 | 729 | [INCLUDE_ASM] | Car-vs-car collision detection over `GameCarRuntime[11]` (`D_801F1854`, stride 0x19C). Builds rotated, bilinearly-subdivided collision quads (func_80069D18/func_80069678), point-in-quad tests (func_8002D2E8), applies response (func_80038CE8) + audio (func_8005D6EC). |
-| func_80039980 | 0x80039980 | 498 | [INCLUDE_ASM] | Car-vs-car collision resolution over the car array (`D_801F19F0`); projects unit quads through a rotation matrix, subdivides self into 4 sub-quads, tests the other car's 4 corners + 5 midpoints, pushes the pair apart and damps `field_A8`. |
-| func_8003B0D4 | 0x8003B0D4 | 671 | [INCLUDE_ASM] | Per-frame car-array driver: ~10 sequential passes (reset scratch, AI target-speed physics, sin/cos shake + matrix build, motion/launch state machine) over `GameCarRuntime[11]`. |
-| func_8003BB50 | 0x8003BB50 | 622 | [INCLUDE_ASM] | Per-car physics/shift driver: 9 loops over `GameCarRuntime[11]` (matrix build+transpose+rotate, shift-state machine with 72/216/97/100 magic divides). Sibling of matched func_8002DEFC. |
-| func_8003F9C4 | 0x8003F9C4 | 859 | [INCLUDE_ASM] | Dual-channel record/marker state machine over the `D_801E42DC`/`D_801E42E8` tables (stride 20): index/marker/divisor updates then a dx/dy/dz angle-quality clamp. |
-| func_80030030 | 0x80030030 | 505 | [INCLUDE_ASM] | Car engine-sound update: derives effect-voice index/phase/volume from car speed & heading (func_8002A788), drives `GameSetIndexedEffectVoice` (func_8005C104). |
+| Name | Addr | Words | Purpose |
+|---|---|---:|---|
+| `GameCollidePlayerWithCars` | 0x8002D398 | 729 | Player-vs-field collision, **detection and response together**. Called only from the player physics driver func_8002DEFC (`func_8002DEFC(&D_8009E6D4)`), and returns 0 or the struck sub-quad 1..4. Early-returns unless `g_GrandPrixMode`. Builds rotated bilinearly-subdivided quads (func_80069D18 / func_80069678), point-in-quad tests (func_8002D2E8), then shake `D_801E4BA0`, grip/damage decay, func_80038CE8 impulses on **both** cars, and a `GamePlaySoundCue` crash cue 0xA..0xD chosen by proximity band and by `(hit & 1) != g_MirrorMode`. |
+| `GameCollideRivalCars` | 0x80039980 | 498 | One row of the AI pairwise sweep: tests `car[index]` against `car[index + 1 .. 10]` only (base `D_801F19F0` + 0x19C * index; callers pass index 0..9, i.e. the upper triangle). Same quad tests and push-apart, but **no sound, no damage globals and no mode gate** — that is what separates it from `GameCollidePlayerWithCars`. |
+| `GameUpdateRaceCars` | 0x8003B0D4 | 671 | Race variant of the rival-car driver: ~10 sequential passes over `GameCarRuntime[11]`. Called from the race scene only when `g_RacePhase >= 2 && g_GrandPrixMode != 0`. Owns the three race-only passes func_8003A728 / func_8003A974 / func_8003A6A4 and time-slices cars 4..10 on `(i & 1) == (g_AnimTimer & 1)`. |
+| `GameUpdateAttractCars` | 0x8003BB50 | 622 | Attract/replay variant of the same driver, called by the three non-interactive 3D scenes (func_80025C58, func_80026570 — which writes `g_SceneId = 0x1E` — and func_80026AE0). No player to budget for, so every car runs every frame; additionally wraps `car->field_68` modulo `g_TrackLength`. |
+| `GameUpdateCarLaunch` | 0x80030030 | 505 | Car motion-state handler for `state98 == 1`, the one-frame takeoff of a jump. func_8002A810 dispatches `car + 0xBC + 0x98` over func_8002F690 (state 0, which also arms state 1), this, func_80030814 (state 2, airborne) and func_80030BC4. Turns the launch spin seeded in route+0x50 into clamped yaw, recomputes revs / tacho / world velocity, then sets route+0x38 = 0x14 and route+0x98 = 2. **Was described here as an "engine-sound update"** — the func_8005C104 call is 12 of 505 words and is a house idiom shared with the sibling handlers. |
+| `GameInitPlayerCar` | 0x8002C478 | 548 | Race-entry init for the player object: `g_RacePhase = 2`, `g_RaceSeries`, clear the runtime block, seat the car at the start pose from `g_TrackEventData + series * 0x90 + 0x354`, and build the speed/gear lookup tables `D_801E8884` (0x40 per gear), `D_801E4114`, `D_801E4154` from `g_CarSpec`. Its own GameDebugPrintf labels are `init_car`, `h_tbl`, `init0`, `init1`, `init1b`, `init2`, `init4`..`init6`, `init_ok`. **Was described here as a "track-geometry sample builder"**; `g_TrackPoints` is touched once, to seat the car. |
+| `GameResetCarTrackState` | 0x80032280 | 596 | The non-clamping twin of matched func_80031298: recomputes a car's track-relative placement (segment interpolation, progress modulo `g_TrackLength`, road heading and grade) from `car->trackPointIndex`, with none of func_80031298's boundary clamp or collision push, and writes the reference orientation triple at +0x50/0x54/0x58 rather than the live +0x20. All four call sites are the init/reset paths in func_80034F74. **Was described here as a "marker or sprite builder"**; it builds no primitives. |
+
+### Animated course scenery with sound (see also 5b)
+| Name | Addr | Words | Purpose |
+|---|---|---:|---|
+| `GameUpdateFlybyScenery` | 0x8003E590 | 345 | The course's one scripted **airborne** prop, updated (not drawn) once a frame from the race scene and twice from func_8003F608. Armed when `D_8009E83C == D_801E4308 && D_8009E74C` matches the per-series entry in the course event block, then lives 0x1C3 = 451 frames. Linearly lerps three Euler angles over each keyframe's `duration` (-1 wraps), builds `rsinY(0x800 - rotY) * rsinX(rotX) * rsinZ(rotZ)` and **integrates** position by rotating the forward vector `(0, 0, -radius * 4)` through it, so the keyframes steer a heading rather than list waypoints. Sound: distance to the listener `D_8009E6D4/D8/DC` as `dx²/8 + dy²/16 + dz²/8` through func_8006888C, mapped to volume `0x74 - dist`, at fixed pitch 0x1900 — the halved vertical term is what says the object is above the track. `g_CourseIndex & 3` picks cue 1 (MYTHICAL COAST), cue 1 forced silent (OVER PASS CITY) or cue 2 (LAKESIDE GATE, THE EXTREME OVAL). **Was filed under "Sound & music" as a "car proximity/engine audio-cue driver".** |
+| `GameUpdatePathScenery` | 0x8003F9C4 | 859 | The course's **permanently looping** prop, seeded by func_8003F700 and drawn by func_80040730. Two keyframe tracks: A at `D_801E42DC` stride 0x14 `{s32 x,y,z; s16 loopIndex; s16 duration; s16 easeFlag}` drives position `D_801E4DB8/BC/C0`, B at `D_801E42E8` stride 0x0C `{s16 rx,ry,rz; …}` drives rotation `D_801E4DC8/CA/CC`. Motion is a **sinusoidal ease** between waypoints (`P[i+1] - half - half*rcos(t*0x800/dur)>>12` then `P[i] + half + half*rsin(…-0x400)>>12`), not a lerp. Sound is cue 0, culled outside a ±0x1000 box, `vol = 0x64 - (sqrt(dx²/4 + dy²/8 + dz²/4) >> 10)`, slew-limited ±0x14 against `D_801E4DF0`, with pitch `((delta/2) + 0x3C) << 7` — an approximated Doppler shift. **Was described here as a "dual-channel record/marker state machine … stride 20"**, wrong on the framing and on both strides. |
 
 ### Sound & music
-| Func | Addr | Words | Status | Purpose |
-|---|---|---:|---|---|
-| func_8005C914 | 0x8005C914 | 295 | [INCLUDE_ASM] | Sound-cue state machine over `EffectVoice D_801E6D30[4]` + cue table `D_80012730[3][6]`; clamps mode 0..2 / volume 0..0x7F and starts/stops paired voices. Signature `(s32 mode, s32 pitchArg, s32 volume)`. |
-| func_8005C31C | 0x8005C31C | 233 | [INCLUDE_ASM] | Sound-channel/state reset over the `MusicChannel D_801E6D00` block (left=right=-1, mode=1, vols=0) and related sound scalars. (WIP "hard" batch.) |
-| func_8003E590 | 0x8003E590 | 345 | [INCLUDE_ASM] | Car proximity/engine audio-cue driver; calls `func_8005C914(1, tone, proximity)`. (WIP "hard" batch, DIFFS≈33.) |
-| func_8007010C | 0x8007010C | 360 | [INCLUDE_ASM] | libsnd sequence tick/step over `SeqStruct` (`D_801E79CC`, stride 0xAC). |
+| Name | Addr | Words | Purpose |
+|---|---|---:|---|
+| `GameSetPitchedSoundCue` | 0x8005C914 | 295 | Mono positional cue setter over `EffectVoice D_801E6D30[4]`. `arg0` is a **cue index**, not a mode: each cue owns a fixed pair of voices (cue 0 → voices 0..1 / hw 10,11; cues 1 and 2 → voices 2..3 / hw 12,13, hence mutually exclusive), and the call keys the pair on, updates it in place if it already holds the cue's programs, or keys it off at volume 0. `pitch` is a 7.7 note (0x1900 = note 50); volume 0..0x7F scaled by the record's volScale. Its two callers are `GameUpdateFlybyScenery` and `GameUpdatePathScenery`. |
+| `GameSetStereoSoundCue` | 0x8005C31C | 233 | The stereo twin, over `D_801E6D00[2]`, taking independent left/right volumes when `D_80082F40` (written by `GameSetStereoOutput` / `GameSetMonoOutput`) says stereo and the average in both when it says mono; func_80040ADC picks the argument order from `g_MirrorMode`. Cues {0,1} and {2,3} form two groups and a stop only lands within the requested group. **Was described here as a "sound-channel/state reset"** — it only looks like one because func_8003591C's teardown calls it four times in a row as (2,0,0) (3,0,0) (0,0,0) (1,0,0). |
+
+Both share one 7-record table of stride 0x18 running contiguously from
+`D_800126D0` to `D_80012748`, shaped
+`{ s32 voiceCount; s32 volScale; struct { s32 prog; s32 tone; } v[]; }` —
+records 0..3 are the stereo cues, 4..6 (`D_80012730` onwards) the mono ones.
+Note that `EffectVoice`/`MusicChannel` +0x00/+0x04 are the VAB **program** and
+**tone** numbers, not the field names currently in `sound.h`.
 
 ### Menu / HUD / overlay renderers
-| Func | Addr | Words | Status | Purpose |
-|---|---|---:|---|---|
-| func_800418D4 | 0x800418D4 | 1211 | [INCLUDE_ASM] | HUD/billboard sprite-and-quad primitive builder: transforms points, packs 0x28-byte prims at scratchpad `0x1F800000`, links into the OT via func_80064DDC/EB8/F30. Largest remaining TU. (cc=2.7.2) |
-| func_8004A248 | 0x8004A248 | 1435 | [INCLUDE_ASM] | Team-logo canvas renderer, called every frame by the "TEAM LOGO" screen (`GameUpdateTeamLogoScreen`, func_80057748) and its sample picker (func_800580C8) as `func_8004A248(dir, mode)`. Largest non-SDK function. (WIP "hard" batch, cc=2.7.2) |
-| func_8004D384 | 0x8004D384 | 1017 | [INCLUDE_ASM] | Ranking/records overlay renderer: draws 5 rows from the `S22` record tables (`D_801E7744` ranking / `D_8019CB78` time), number+name+bg sprites, two jump-table switches on `record.vC`. |
-| func_8004C0D8 | 0x8004C0D8 | 894 | [INCLUDE_ASM] | 4bpp texture / RGB-palette editor debug tool (dec@0x1000 / inc@0x4000 palette switches, draw/erase plot loops). (cc=2.7.2) |
-| func_8005290C | 0x8005290C | 849 | [INCLUDE_ASM] | `GameDrawCourseSelectScreen` — slot 1 of the menu overlay table `D_80082EF0`, i.e. the fade/transition overlay of the **COURSE SELECT** screen: scroll accumulator `D_8009B2C0`, wave/color offsets, sprite/number draws (func_80046A2C/func_80047BD4). (cc=2.7.2) |
-| func_8005568C | 0x8005568C | 783 | [INCLUDE_ASM] | `GameUpdateCarSelectScreen` — slot 4 of the menu state-machine table `D_80082EB8`, i.e. the **CAR SELECT** screen (rows: race start / customize / car shop / engineer shop / course select). Jump-table switch on `GameMenuBusy` picks the exit: race, or screens 5 / 11 / 12 / 1. |
-| func_800496F0 | 0x800496F0 | 675 | [INCLUDE_ASM] | Debug palette/gradient UI renderer: approaches color counters `D_8009B270[0..2]`, mode counter, scroll `D_8007FB08`; draws header + scrollbar + 4-entry palette. (cc=2.7.2) |
-| func_8004E724 | 0x8004E724 | 585 | [INCLUDE_ASM] | HUD/standings renderer driven by frame counter `D_8007FB28`; `arg0`=counter delta, `arg1`=highlighted row. (cc=2.7.2) |
-| func_8003479C | 0x8003479C | 396 | [INCLUDE_ASM] | Title-screen "RAGE RACER GE" sprite/frame drawer (`GameDrawTitleScreen`, see screens.h). |
-| func_8005131C | 0x8005131C | 396 | [INCLUDE_ASM] | HUD matrix helper: builds two matrices from car index (`D_8009B374`), `D_8019C7C8[]` byte table and pointer `D_8009E6F8`. |
-| func_80052158 | 0x80052158 | 376 | [INCLUDE_ASM] | Menu/HUD overlay renderer (WIP near-match; ~2 register-pair swaps outstanding). |
-| func_8003425C | 0x8003425C | 336 | [INCLUDE_ASM] | Debug color-grid/overlay renderer (`ColCode` table `D_8007DF1C`, `D_8007DDC0[5][16]`). |
-| func_800458CC | 0x800458CC | 258 | [INCLUDE_ASM] | Walks an `Entry` record ring (stride 0x30, `D_801E42F4`/`D_801E40E8`) by modular index (`D_801AC774`), writing packed words into the `D_801E3FBx` framebuffer-head block. |
+| Name | Addr | Words | Purpose |
+|---|---|---:|---|
+| `GameDrawSkyBackground` | 0x800418D4 | 1211 | The sky/horizon backdrop, drawn by every scene that has a horizon. A 4 × 8 sweep emits the visible half of a 16-segment panorama cylinder as POLY_FT4s, uv rows from `D_8007F510 + 8 * D_8007F470[…]` indexed by `(yaw >> 7) + j`, linked at OT + 0xAFC; the gradient bands underneath are shaded between successive colour slots with the same `g_CourseIndex == 2 ? slots 5,6 : slots 7,8` split func_80045CD4 uses. Yaw and roll are negated when `g_MirrorMode` disagrees with the scratchpad flag at 0x1F800068. **Was described here as a "HUD/billboard primitive builder".** (cc=2.7.2) |
+| `GameDrawTeamLogoCanvas` | 0x8004A248 | 1435 | Draw half of the logo painter (largest non-SDK function). `(0, 0)` resets both panel accumulators `D_8007FB0C` / `D_8007FB10`; otherwise they ramp and gate the outer panel (12 slide steps) and the paint sub-panel. Uploads the 64×64 4bpp canvas `D_801E6F2C`, its raw CLUT `D_801E444C`, and a copy scaled by the fade level `D_8009B298` whose entry 0 is three phase-shifted sines of `D_8009B288` (the colour-cycling cursor), then emits the frame, the zoomed canvas, the 1:1 preview, the swatch boxes and the crosshair. (cc=2.7.2) |
+| `GameUpdateTeamLogoCanvas` | 0x8004C0D8 | 894 | Input half of the same widget, called from the PAINT branch of `GameUpdateTeamLogoScreen`. Plots with Circle held — replaces the nibble at `(u16 *)D_801E6F2C + (y << 4) + (x >> 2)` over a `D_8007F94C`-sized brush — and maps the d-pad through the auto-repeat timer `D_8007FB14` onto the scroll/flip/rotate helpers func_8004B9B8..func_8004BF48. Holding all four shoulder buttons and pressing Select toggles `D_8007F930`, a hidden palette editor over the 5-bit channels of the selected CLUT entry. **Was described here as a "4bpp texture / palette editor debug tool"** — it is the shipped feature. (cc=2.7.2) |
+| `GameDrawRankingTable` | 0x8004D384 | 1017 | The five record rows, called three times from `GameUpdateRankingScreen` as `(accumulator, step, table)`. Reads the `S22` records from `D_801E7744` (ranking) or `D_8019CB78` (time) and draws the place number, its suffix from the `"ST"/"ND"/"RD"/"TH"` table at `D_80011920`, the holder's name and the row background. Sole caller of `GameFormatLapTime` in the image. |
+| `GameDrawCourseSelectScreen` | 0x8005290C | 849 | Slot 1 of the overlay table `g_MenuScreenDraw`, i.e. the fade/transition overlay of the **COURSE SELECT** screen: scroll accumulator `D_8009B2C0`, wave/colour offsets, sprite/number draws. (cc=2.7.2) |
+| `GameUpdateCarSelectScreen` | 0x8005568C | 783 | Slot 4 of `g_MenuScreenUpdate`, the **CAR SELECT** hub (race start / customize / car shop / engineer shop / course select); a jump-table switch on `GameMenuBusy` picks the exit — a race, or screens 5 / 11 / 12 / 1. |
+| `GameDrawCarSpecGraph` | 0x800496F0 | 675 | The car performance bar chart, drawn obliquely: 45°-recession floor lines plus four bars at `x = 0x66 + 12i`, each a front face with a lightened top (+0x40) and darkened right (−0x40) face and a semi-transparent drop shadow, over the four violet colours at `D_80011870`. Bars 0..2 ease towards the car asset's spec bytes +0x0B/0x0C/0x0D, bar 3 towards one of 10/30/50/70/90 selected by the tire grade. func_8005ACA0 calls it every menu frame, but its `step` argument `D_8009B324` only leaves 0 on entry to and exit from CUSTOMIZE, so it is only visible there. **Was described here as a "debug palette/gradient UI renderer".** (cc=2.7.2) |
+| `GameDrawTeamNameEntry` | 0x8004E724 | 585 | The whole **TEAM NAME** widget: the 4×11 grid of 8px glyph cells at `x = 0x56 + 12*col` wiping in as `D_8007FB28` climbs to 25, the cursor cell redrawn with flags 0x5B, the pulsing highlight box (green channel from `rcos(D_8009B28C += 96)`), the 12×24 caret while `g_TeamNameLength < 6`, and the typed `g_TeamNameChars`. Grid cell 10 is a gap, hence the `index >= 11 ? index - 1` glyph fixup. **Was described here as a "HUD/standings renderer".** (cc=2.7.2) |
+| `GameDrawRaceOptionMenu` | 0x8003479C | 396 | The in-race option/pause overlay, drawn by both in-race scene handlers after they clamp the cursor `D_801E414C` against `2 - g_GrandPrixMode` and decrement `g_SceneTimer` to freeze the scene; `cursorRow` steps the 64×11 highlight outline 10 pixels per row. `"  RAGE RACER GE"` is not a title — it is the first 0x14-byte half of one entry in the 4 × 0x28 marquee table at `D_8007DF34` (`"  RAGE RACER GETS YOU GOING!  "` twice, `"   KICK BACK AND CHILL OUT!   "`, `"    SLASH THOSE RECORDS!     "`), selected by `g_SceneTimer & 3`, scrolled by the two accumulators `D_8007DF30`/`D_8007DF32` and clipped to (114, 138, 92, 12). **Was named `GameDrawTitleScreen` in screens.h; that alias is retired.** |
+| `GameDrawMenuCarView` | 0x8005131C | 396 | The 3D car view behind screens 3, 4, 5, 6, 10, 11, 12. Installs the menu view matrix from `D_80082D6C`, eases `g_MenuViewOffset` / `g_MenuViewAngle` (angle wraps modulo 600000), and on arrival with no load pending flips the two-slot model double buffer `D_8009E87C` and commits `D_8009B378` into `D_8009B374`. Then submits **two** models: the car through the render object at `D_8009E6D4`, and fixed model 14 (the showroom floor) with the OT cursor bumped 0x78. L2/R2 nudge the tilt `D_8009E718` within ±6144; L1/R1 nudge `D_801E8268` within ±64. |
+| `GameDrawCarEngineSpec` | 0x80052158 | 376 | The two engine spec lines, `MAX POWER <n> ps / <n> rpm` at `y = 0xCC - yOffset` and `MAX TORQUE <n>.<n> kgm / <n> rpm` at `0xDA - yOffset`, each number through `sprintf("%d")` with `x` advanced 6 per digit; values are the car asset header fields +0x10/0x12 and +0x14/0x15/0x16. Its third argument is loaded and discarded. Shared by the id 5 / 11 / 12 draw halves. |
+| `GameDrawStartCountdown` | 0x8003425C | 336 | The race-start signal gantry, live for `105 <= g_SceneTimer < 300` behind a `g_RacePhase < 4` guard. `phase = (t - 90) / 30` selects one of the 32×16 dot-matrix bitmaps `D_8007DDC0[1..4]` — they read **"3", "2", "1", "GO"** — stamped bit by bit onto 512 TILE prims of stride 0x10, each cell taking one of the four `code \| rgb` words at `D_8007DF1C` (code 0x60 = TILE; red on/off then blue on/off), with the band `7 - t' < row < t' + 8` inverted so each digit wipes open. Phase 0 flashes every cell. Underneath: two 96×24 backings and a 3×2 array of 32×24 start lamps whose column `phase - 1` brightens over 16 frames; `D_8007DF18` then slides the board off at −16 a frame. **Was described here as a "debug colour-grid renderer".** |
+| `GameSeekEnvironmentScript` | 0x800458CC | 258 | Jumps the environment colour timeline to `time`: wraps modulo `D_8019C774`, walks the 0x30-stride cue list at `D_801E42F4` for the record containing it, backs up two records (wrapping to the tail), publishes that record's nine RGB words into the colour slots, sets the lerp numerator/denominator, applies one frame, enables the script unless `g_GrandPrixClass >= 5`, and programs `SetFarColor(slot 0)` + `SetFogNear(D_8009B24C, 320)`. Two of its callers pass the current position minus 1800 or 3000 frames, i.e. a rewind. **Was described here as writing "packed words into the `D_801E3FBx` framebuffer-head block"** — see the colour-slot layout below. |
+
+The block the last two share is nine 12-byte colour slots at
+`D_801E3FB6 + 0x0C * k`, each `{ u8 cur[3]; u8 pad; u8 from[3]; u8 pad; u8
+to[3]; u8 pad }`. Slot 0 is the GTE far/fog colour, slots 1..8 the sky gradient.
+func_80045CD4 is the per-frame lerp (fraction `(D_801E4022 << 12) /
+D_801E4024`), which also cross-fades a 16-colour CLUT and `StoreImage`s it to
+VRAM (0xE0, 0x1E6, 16, 1). `D_801E3FB4` is the fog-active flag, `D_8009B24C`
+the fog-near distance and `D_801E4026` the environment id (2 = the heavy-fog
+variant).
 
 ### Track & rendering
-| Func | Addr | Words | Status | Purpose |
-|---|---|---:|---|---|
-| func_80032280 | 0x80032280 | 596 | [INCLUDE_ASM] | Track/route marker or sprite builder; sibling of matched func_80031298. Uses scratchpad struct `0x1F80011C`, atan2 (func_8001A6AC), rsin/rcos (func_80068634/func_80068568). |
-| func_8002C478 | 0x8002C478 | 548 | [INCLUDE_ASM] | Track-geometry sample builder: fills a large per-track work aggregate from `GameTrackPoint` samples (`D_8009E688`) using SVec/Vec4 rotation (func_80069678). |
-| func_8001DFC0 | 0x8001DFC0 | 445 | [INCLUDE_ASM] | Render-object transform: applies the camera-row horizon (`CamRow` at `D_8019C9A8`) and builds view matrices for a `GameRenderObject`. |
+| Name | Addr | Words | Purpose |
+|---|---|---:|---|
+| `GameDrawCar` | 0x8001DFC0 | 445 | Draws one car, from the func_800389F0 loop over the 11 runtime entries (`activeFlag != -1 && field_BC == 1`). Culls on `out[2] >= 0`, then picks a LOD by Manhattan camera distance: < 3328 gives the full body plus three extra prims and a two-pass mirrored sub-part (the pass negates matrix columns 0 and 2 and the +0xC offset — the left/right wheels), < 9472 a single low-detail prim, beyond that nothing. Every submission is `*(s32 *)0x1F800084 = colour; func_80028DEC(0x1F800000, primId)` with primId clamped against the object-bank size `D_801E4168`. **Was described here as a "render-object transform"**; correspondingly, §2's `CamRow` entry is wrong — `D_8019C9A8` is a pointer, the index is the per-object model selector `D_8007D3AC[g_CourseIndex][obj->field_AE]` rather than a screen number, +0xC/0xE/0x10 is a mirrored sub-part offset vector and +0x12 a Y bias restored on exit. |
 
 ### CD / streaming
-| Func | Addr | Words | Status | Purpose |
-|---|---|---:|---|---|
-| func_8006D1D0 | 0x8006D1D0 | 604 | [INCLUDE_ASM] | CD-streaming "data ready" state machine (func_8006CDA0→): advances `D_80099418` through states 1..0xA, DMAs sector headers/data, drives the `StStrHeader` ring (`D_8009DF1C` / `D_801E8AAC` / `D_801E6C74`/`D_801E6C84`). (cc=2.7.2) |
+| Name | Addr | Words | Purpose |
+|---|---|---:|---|
+| `StCdInterrupt` | 0x8006D1D0 | 604 | The libds streaming state machine: advances `D_80099418` through states 1..0xA, reads the CD result (error bit 0x04 → state 3), recomputes the ring cursor as `D_8009DF1C = (D_801E6C74 << 5) + D_801E8AAC`, DMAs sector header then body, compares the chunk against `StStrHeader.nFrames` and calls `StFreeRing`. Named as the public entry point rather than an internal because it takes no arguments, because the `CdReadyCallback` the library installs (func_8006CDA0) is a six-instruction stub whose whole body calls it, and because the game calls it directly — func_8001EBC8 does `if (D_8019CA00) { StCdInterrupt(); D_8019CA00 = 0; }`, the documented `StSetMask` use. Its TU already supplies `StClearRing`, `StGetBackloc` and `StSetStream`. (cc=2.7.2) |
 
 ### SDK library
-| Func | Addr | Words | Status | Purpose |
+| Name | Addr | Words | Status | Purpose |
 |---|---|---:|---|---|
-| func_800632F0 | 0x800632F0 | 535 | [INCLUDE_ASM] | libc `vsprintf`/formatted-string core (memchr func_80063B4C, memmove func_80063B9C, strlen func_80063C08). Ordinary compiler C, not yet matched. |
+| `LibcSprintf` | 0x800632F0 | 535 | [INCLUDE_ASM] | PSY-Q libc `sprintf`, the whole formatter with no `vsprintf` split — all ~30 call sites pass varargs directly and nothing wraps it. Digit tables `"0123456789ABCDEF"` at `D_800131E4` and `"0123456789abcdef"` at `D_800131F8`; callees are the matched `LibcMemchr` / `LibcMemmove` / `LibcStrlen`. |
+| `TransposeMatrix` | 0x80069CC8 | 46 | matched C | libgte `TransposeMatrix(m0, m1)`: transposes only the 3×3 rotation part and returns `m1`. Sits next to `RotMatrix` (func_80069D18) and all nine callers are inside func_80043BCC. Body is decompiled with register pinning; the file also carries func_80069D18 as raw asm. |
+| func_8007010C | 0x8007010C | 360 | [INCLUDE_ASM] | **Deliberately left generic.** libsnd internal, so there is no public `Ss*` name to claim. Behaviourally it is the MIDI **Control Change #6 (Data Entry MSB)** handler: func_8006F1E0 routes status 0xB0 to func_8006F5F4, whose `case 6:` is this. It applies the pending RPN/NRPN to the channel's VAB program by rewriting the `VagAtr` of every tone — `SsUtGetProgAtr` for the tone count, then per tone `SsUtGetVagAtr` → mutate → `SsUtSetVagAtr` — with the field chosen by `SeqStruct + 0x13`: 0 → +0x0C/+0x0D (`pbmin`/`pbmax`, i.e. RPN 0 pitch-bend sensitivity), 1 → +0x05 (`shift`), 2 → +0x04 (`center`), all gated on `play_mode == 0`. **Was described here as the "libsnd sequence tick/step"** — that is `SsSeqCalledTbyT` at 0x800731CC. |
 | **GTE geometry/command engine** | 0x80027FF4–0x8002A2CC | ~2.6k | [proteza] | Hand-written scratchpad-`0x1F800000` GTE dispatch engine: custom calling convention (state in t0/t6-t9/a2), multiple mid-routine entry points, heavy COP2. 25 funcs incl. func_80027FF4 (75), func_80028120 (469), func_80028874 (248), func_800298B0 (360), func_80029FD8 (144), func_8002A2CC (249). |
 | **libgte matrix routines** | 0x80069110–0x800696C8 | — | [proteza] | Hand-written libgte matrix multiply/transpose/apply (narrow unsigned-multiply fixed-point idioms): func_80069110 (73), func_80069458 (68), func_80069568 (68), func_80069728 (76), func_80069CC8 (3×3 s16 matrix transpose). Siblings of matched func_80069D18 (RotMatrix). |
 | func_800689A8 | 0x800689A8 | 33 | [proteza] | GTE-LZC fixed-point square-root helper. |
@@ -160,7 +212,7 @@ are `.word` instruction counts from `asm/nonmatchings/PAL/main/*.s` (bytes = wor
 ### Seed-only structs (were not in headers before this pass)
 | Struct | Size | Layout | Where used |
 |---|---:|---|---|
-| S22 | 0x10 | `s8 name[8]` (a.k.a. `pad[8]`); `s32 v8`; `s16 vC`; `s16 vE` | Ranking / time high-score record row. Tables `D_801E7744[][4][5]` (ranking) and `D_8019CB78[][4][5]` (time). Referenced by matched func_80021DB8 and seed func_8004D384. |
+| S22 | 0x10 | `s8 name[8]` (a.k.a. `pad[8]`); `s32 v8`; `s16 vC`; `s16 vE` | Ranking / time high-score record row. Tables `D_801E7744[][4][5]` (ranking) and `D_8019CB78[][4][5]` (time). Referenced by matched func_80021DB8 and by `GameDrawRankingTable`. |
 | CamRow | 0x14 | `u8 pad0[0xC]`; `s16 axis0`@0xC; `u16 axis1`@0xE; `u16 axis2`@0x10; `s16 horizon`@0x12 | Camera/horizon row. Base `D_8019C9A8`, indexed `+8*screen`. Referenced by seed func_8001DFC0 (`horizon` adjusts render-object y). |
 | SoundScale | 0x0C | `s32 scale`; `s16 values[3]` | Volume-scale table at `D_801E6CA4`. Referenced by matched func_8005D414 and seed func_8005D050 (which aliases it via `asm("D_801E6CA4")` for a `.values` CSE). |
 | StStrHeader | 0x20 | `u16 state`; `u16 mode`; `u16 frame`; `u16 nSectors`; `u16 nFrames`; `u8 pad0A[0x12]`; `CdlLOC loc`@0x1C | CD stream ring header. Ring pointer `D_8009DF1C`, ring base `D_801E8AAC`. Referenced by seed func_8006D1D0 (`.state` read `lhu`). |
@@ -334,10 +386,10 @@ backed by a picture of the screen's own on-screen title.
 | id | `GameUpdate…Screen` | `GameDraw…Screen` | accumulator | on-screen title / rows |
 |---:|---|---|---|---|
 | 0 | func_80052778 | – | – | menu-mode bootstrap; falls straight into id 1 |
-| 1 | func_80053730 | func_8005290C | (`D_8009B2F0`, shared) | **COURSE SELECT** (TIME ATTACK header in TA mode) |
+| 1 | func_80053730 | `GameDrawCourseSelectScreen` | (`D_8009B2F0`, shared) | **COURSE SELECT** (TIME ATTACK header in TA mode) |
 | 2 | func_80054D10 | func_80054C84 | `D_8009B2C4` | **RANKING** — total time / lap time / exit |
 | 3 | func_80055618 | – | – | one-frame bridge into id 4 |
-| 4 | func_8005568C | func_800551BC | `D_8009B2CC` | **CAR SELECT** — race start / customize / car shop / engineer shop / course select |
+| 4 | `GameUpdateCarSelectScreen` | func_800551BC | `D_8009B2CC` | **CAR SELECT** — race start / customize / car shop / engineer shop / course select |
 | 5 | func_800563A0 | func_800562C8 | `D_8009B2D0` | **CUSTOMIZE** — tire / transmission / exit |
 | 6 | func_80057198 | func_80056E64 | `D_8009B2D4` | **DESIGN MODE** — logo / name / color / exit |
 | 7 | func_80057748 | func_800576BC | `D_8009B2D8` | **TEAM LOGO** — sample / paint / exit |
@@ -373,10 +425,11 @@ left/right.
 
 Four functions that `GameInitMenuMode` also resets are **not** per-screen and
 must not be named as screens — they are shared menu drawing helpers with no slot
-in `D_80082EF0`: `func_800496F0` (called unconditionally by func_8005ACA0 every
-frame), `func_8004CF30` (brightness overlay used by ids 1/3/4/5), `func_800509C4`
-(counter in `D_8007FB4C`) and `func_80052158` (primitive shared by the id 5/11/12
-draw halves).
+in `D_80082EF0`: `GameDrawCarSpecGraph` (called unconditionally by func_8005ACA0
+every frame, but only visible on CUSTOMIZE — see section 1), `func_8004CF30`
+(brightness overlay used by ids 1/3/4/5), `func_800509C4` (counter in
+`D_8007FB4C`) and `GameDrawCarEngineSpec` (the engine spec lines shared by the
+id 5/11/12 draw halves).
 
 ---
 

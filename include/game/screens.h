@@ -15,7 +15,10 @@ void GameDrawRaceEndPrompt(void) asm("func_80021654");        /* "PRESS START BU
 void GameDrawCourseIntro(void) asm("func_80021D68");          /* "COURSE IN" / "TIME ATTACK" */
 void GameDrawGrandprixIntro(void) asm("func_800201D4");       /* "CLASS%d %s GRANDPRIX" */
 void GameDrawEndingScreen(void) asm("func_80037D90");         /* "CONGRATULATIONS!!" */
-void GameDrawTitleScreen(void) asm("func_8003479C");          /* "RAGE RACER GE" */
+/* The in-race option/pause overlay; `cursorRow` is D_801E414C. The
+ * "RAGE RACER GE" string is one half of a scrolling marquee, not a title -
+ * this is not the title screen. See docs/names.md 1. */
+void GameDrawRaceOptionMenu(s32 cursorRow) asm("func_8003479C");
 
 /*
  * Title screen and main menu. GameUpdateFrontend (func_8001BB58) runs one of the

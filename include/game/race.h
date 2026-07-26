@@ -85,4 +85,9 @@ typedef struct GameRaceRanking {
  * advanced series. This is the OVAL unlock; see names.md 5. */
 s32 GameCanSelectNextCourse(void) asm("func_80053688");
 
+/* The race-start signal gantry, live for 105 <= g_SceneTimer < 300: the "3" /
+ * "2" / "1" / "GO" dot-matrix board from D_8007DDC0[1..4] plus the six start
+ * lamps. See docs/names.md 1. */
+void GameDrawStartCountdown(s32 sceneTimer) asm("func_8003425C");
+
 #endif

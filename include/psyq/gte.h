@@ -46,5 +46,7 @@ void OuterProduct12(void *m, void *v0, void *v1) asm("func_80069BCC");
 void OuterProduct0(void *m, void *v0, void *v1) asm("func_80069C24");
 s32 NormalClip(s32 sxy0, s32 sxy1, s32 sxy2) asm("func_80069C98");
 s32 Lzc(s32 data) asm("func_80069C7C");
+/* Transposes the 3x3 rotation part of m0 into m1, leaving the translation. */
+Matrix *TransposeMatrix(Matrix *m0, Matrix *m1) asm("func_80069CC8");
 
 #endif

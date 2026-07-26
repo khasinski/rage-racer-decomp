@@ -286,4 +286,32 @@ typedef struct GameCarTrackAngleWindow {
     s32 headingAngle;
 } GameCarTrackAngleWindow;
 
+/*
+ * The car pipeline, all still INCLUDE_ASM. docs/names.md 1 has the evidence and
+ * the data layouts.
+ */
+/* Race-entry init for the player object: start pose plus the speed/gear lookup
+ * tables D_801E8884 / D_801E4114 / D_801E4154. Logs "init_car" .. "init_ok". */
+void GameInitPlayerCar(GameCarRuntime *car) asm("func_8002C478");
+/* Non-clamping twin of func_80031298: recomputes the track-relative placement
+ * and writes the reference triple at +0x50, for the init/reset paths only. */
+void GameResetCarTrackState(GameCarRuntime *car) asm("func_80032280");
+/* The two variants of the rival-car driver over GameCarRuntime[11]. Race runs
+ * only while `g_RacePhase >= 2 && g_GrandPrixMode`, adds three race-only passes
+ * and time-slices cars 4..10; attract has no player so every car runs. */
+void GameUpdateRaceCars(void) asm("func_8003B0D4");
+void GameUpdateAttractCars(void) asm("func_8003BB50");
+/* Player-vs-field collision (detection, response and the crash cue), called
+ * only from func_8002DEFC; returns the struck sub-quad 1..4 or 0. */
+s32 GameCollidePlayerWithCars(GameCarRuntime *car) asm("func_8002D398");
+/* One row of the AI pairwise sweep: car[index] against car[index + 1 .. 10],
+ * push-apart only - no sound, no damage globals, no mode gate. */
+s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) asm("func_80039980");
+/* Draws one car, from the func_800389F0 loop; two LOD tiers plus the mirrored
+ * wheel pass, submitted through func_80028DEC. */
+void GameDrawCar(void *car) asm("func_8001DFC0");
+/* Car motion-state handler for state98 == 1: the one-frame jump takeoff, which
+ * hands over to the airborne handler func_80030814. */
+void GameUpdateCarLaunch(GameCarRuntime *car) asm("func_80030030");
+
 #endif

@@ -102,6 +102,11 @@ s32 StGetBackloc(CdlLOC *loc) asm("func_8006CF08");
 void StSetRing(void *base, s32 size) asm("func_8006A058");
 void StSetStream(s32 mode, s32 start_frame, s32 end_frame, s32 callback, s32 user_data) asm("func_8006CF68");
 u32 StFreeRing(u32 *base) asm("func_8006CFF0");
+/* The libds streaming state machine: advances D_80099418 through states 1..0xA,
+ * DMAs sector header then body, drives the StStrHeader ring. Installed via
+ * CdReadyCallback behind the stub func_8006CDA0 and also pumped directly from
+ * func_8001EBC8. */
+void StCdInterrupt(void) asm("func_8006D1D0");
 
 /*
  * libcd command interface. All three share the same retry-3 body over CD_cw;
