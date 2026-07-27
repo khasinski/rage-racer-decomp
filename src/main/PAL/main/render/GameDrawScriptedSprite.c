@@ -53,6 +53,7 @@ void GameDrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     }
     interp = (u32)(arg0 * temp) >> 5;
 
+    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" ::: "memory");
     y = *(s16 *)(record + 6);
     x += interp;
@@ -177,6 +178,7 @@ void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     interp = (u32)(arg0 * temp) >> 5;
     y0 += interp;
 
+    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" ::: "memory");
     x1Base = *(s16 *)(record + 8);
     if (yPacked & 0x8000) {
@@ -188,6 +190,7 @@ void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     }
     interp = (u32)(arg0 * temp) >> 5;
 
+    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" ::: "memory");
     y1 = *(s16 *)(record + 0xA);
     x1 = x1Base + interp;
@@ -277,6 +280,7 @@ void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
      * scratchpad load past the second record load. */
     limit = *(s32 *)record;
     ot = *(void **)0x1F800004;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("");
     packedSpeed = *(s32 *)(record + 8);
     if (limit < time) {
@@ -806,6 +810,7 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                   0xb4, 0xb4, 0xb4, (f & 4) ? (f & 0x60) : 0xff);
     func_80047024(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
                   arg4, arg5, arg6, (f & 2) ? (f & 0x60) : 0xff);
+    /* This barrier is load-bearing: removing it changes .text. */
     __asm__("" : : "r"(p0), "r"(p1), "r"(p2), "r"(p3), "r"(f));
 }
 

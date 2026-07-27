@@ -111,12 +111,12 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     flags = g_SndVoiceFlags[index];
     flags |= 4;
     g_SndVoiceFlags[index] = flags;
+    /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     ret = 0;
     goto done;
 
 fail_late:
-    __asm__ volatile("" ::: "memory");
     ret = -1;
 
 done:
@@ -179,12 +179,12 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, long arg4, long 
     field = g_SndVoiceFlags[index];
     field |= 0x30;
     g_SndVoiceFlags[index] = field;
+    /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     ret = 0;
     goto done;
 
 fail_late:
-    __asm__ volatile("" ::: "memory");
     ret = -1;
 
 done:
@@ -216,7 +216,7 @@ long SsUtSetDetVVol(long arg0, short arg1, short arg2) {
     long index;
     long j;
     /* This pin is load-bearing: removing it changes .text. */
-    register short valueX asm("$7");
+    short valueX;
     u_char flags;
 
     valueX = arg1;

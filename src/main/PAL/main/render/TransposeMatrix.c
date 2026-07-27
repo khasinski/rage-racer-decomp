@@ -28,6 +28,7 @@ Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
     register s32 value2 asm("$11");
 
     value0 = srcp[0];
+    /* These barriers are load-bearing: removing any one changes .text. */
     __asm__ volatile("");
     ret = dst;
     __asm__ volatile("" : "=r"(ret) : "0"(ret));

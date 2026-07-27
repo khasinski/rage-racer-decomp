@@ -65,6 +65,7 @@ s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
 
 loadSeq:
         {
+            /* This barrier is load-bearing: removing it changes .text. */
             asm volatile("" ::: "$6");
             ret = func_8005E4EC(seqSlotArg, header, bodyReg, table);
             return (s16)ret;
@@ -81,6 +82,7 @@ loadVab:
         vabIdPtr = (s16 *)((s32)vabIdBase + offset);
     }
     *vabIdPtr = ret;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" : "=r"(ret) : "0"(ret));
 
     {
@@ -197,6 +199,7 @@ s32 func_8005BA20(s32 header, s32 body, u16 *table) {
     ret = func_80072C4C(header, -1, g_VabSpuAddressExtra);
     vabIdPtr = &g_VabIds3;
     *vabIdPtr = ret;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" : "=r"(ret) : "0"(ret));
 
     currentVabId = (s16)ret;
@@ -229,14 +232,13 @@ s32 func_8005BB1C(s32 header, s32 body, s32 table) {
     s16 *vabIdPtr;
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 currentVabId asm("$5");
-    register s32 fail asm("$17");
+    s32 fail;
     register s32 ret asm("$2");
     s32 flags;
 
     ret = func_80072C4C(header, -1, 0x6A000);
     vabIdPtr = &g_VabIds3;
     *vabIdPtr = ret;
-    asm volatile("" : "=r"(ret) : "0"(ret));
 
     currentVabId = (s16)ret;
     fail = -1;
@@ -283,7 +285,6 @@ void func_8005BC80(void) {
     s32 i;
     s32 *flag = &g_AudioSlotMask;
 
-    asm volatile("" : "=r"(flag) : "0"(flag));
     if (*flag != 0) {
         *flag = 0;
         func_800736E8();

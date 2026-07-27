@@ -157,19 +157,20 @@ void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0"
 
 void GameLoadAudioParameterTable(u16 *table) asm("func_8005B070");
 void GameLoadAudioParameterTable(u16 *table) {
-    register u16 *tableReg asm("$16") = table;
-    register s32 bank asm("$18");
-    register s32 row asm("$17");
-    register s32 col asm("$5");
-    register s32 bankOffset asm("$9");
-    register s32 rowOffset asm("$7");
-    register s32 rowBaseOffset asm("$8");
-    register s32 colOffset asm("$3");
+    u16 *tableReg = table;
+    s32 bank;
+    s32 row;
+    s32 col;
+    s32 bankOffset;
+    s32 rowOffset;
+    s32 rowBaseOffset;
+    s32 colOffset;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 *base asm("$10") = g_EngineSoundCurves;
-    register s32 *secondBase asm("$11");
-    register s32 *leftPtr asm("$3");
-    register s32 *rightPtr asm("$6");
-    register s32 step asm("$2");
+    s32 *secondBase;
+    s32 *leftPtr;
+    s32 *rightPtr;
+    s32 step;
 
     bank = 0;
     secondBase = base + 9;
@@ -187,7 +188,6 @@ void GameLoadAudioParameterTable(u16 *table) {
                 leftValue = *tableReg++;
                 colOffset = col << 2;
                 col++;
-                asm volatile("" : "=r"(col) : "0"(col));
                 leftPtr = (s32 *)(colOffset + (rowBaseOffset + (s32)base));
                 *leftPtr = leftValue;
                 *rightPtr = *tableReg++;
@@ -206,7 +206,6 @@ void GameLoadAudioParameterTable(u16 *table) {
 
         scale = *tableReg;
         tableReg++;
-        asm volatile("" : "=r"(scale) : "0"(scale));
         bank = 0;
         GameSetLoadedTableVolumeScale(scale);
     }
@@ -219,10 +218,8 @@ void GameLoadAudioParameterTable(u16 *table) {
 
             tone = *tableReg;
             tableReg++;
-            asm volatile("" : "=r"(tone) : "0"(tone));
             rowArg = row;
             row++;
-            asm volatile("" : "=r"(row) : "0"(row));
             GameSetSoundToneTableEntry(rowArg, bank, tone);
         } while (row < 6);
         bank++;

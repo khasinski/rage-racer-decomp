@@ -780,9 +780,7 @@ void func_8004CF30(s32 arg) {
             register u32 u0 asm("$8");
             u8 c1;
             register u32 c0 asm("$2");
-            __asm__("" : "=r"(m11) : "0"(m11));
             u0 = (u32)m11 >> 8;
-            __asm__("" : "=r"(u0) : "0"(u0));
             c1 = (u32)(cnt * 75) >> 8;
             c0 = u0 & 0xFF;
             func_80047330(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, c0, c0, c0, c1, c1, c1, 0x60);
@@ -801,9 +799,7 @@ void func_8004CF30(s32 arg) {
             register s32 vv asm("$2") = v;
             register u32 sh asm("$8");
             register u32 col asm("$2");
-            __asm__("" : "=r"(vv) : "0"(vv));
             sh = (u32)vv >> 9;
-            __asm__("" : "=r"(sh) : "0"(sh));
             col = sh & 0xFF;
             func_80047024(s3, x0, y0, x1, 2, col, col, col, 0x60);
             s0++;
@@ -817,7 +813,6 @@ void func_8004CF30(s32 arg) {
             register s32 x asm("$3") = D_8007FB20;
             register s32 q0 asm("$2") = x / 5 + (x >> 31);
             register u8 col asm("$8");
-            __asm__("" : "=r"(q0) : "0"(q0));
             col = q0 - (x >> 31);
             *(s16 *)(prim + 0x20) = 0x13F;
             *(s16 *)(prim + 0x10) = 0x13F;

@@ -186,7 +186,7 @@ void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
     s32 value;
     /* These pins are load-bearing: removing either one changes .text. */
     register s32 temp asm("$3");
-    register s32 result asm("$2");
+    s32 result;
     s32 one;
     volatile s32 stack[2];
 
@@ -202,6 +202,7 @@ void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
         value = value / 6;
         /* These barriers are load-bearing: without them the copy to `result`
          * is scheduled ahead of the divide and the load delay needs a nop. */
+        /* These barriers are load-bearing: removing any one changes .text. */
         asm volatile("" : "=r"(value) : "0"(value));
         result = temp;
         asm volatile("" : "=r"(temp) : "0"(temp));
@@ -355,6 +356,7 @@ void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     s32 stack[2];
 
     raw = objReg->trackProgress;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" : : "r"(stack));
     scene = g_RaceSeries;
     target = raw >> 4;
@@ -387,7 +389,7 @@ void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
         valueRaw = objReg->field_11C;
         if (entry[2] < valueRaw) {
             value = valueRaw;
-            asm volatile("" : : "r"(value));
+            /* This barrier is load-bearing: removing it changes .text. */
             asm volatile("" : "=r"(valueRaw) : "0"(valueRaw));
             raw = entry[3];
             raw = valueRaw < raw;
@@ -420,7 +422,6 @@ advance:
     raw = (scene << 1) + scene;
     offset = (raw << 4) - raw;
     offset <<= 3;
-    asm volatile("" : "=r"(offset) : "0"(offset));
     base = g_TrackEventData;
     advanceOffset += offset;
     raw = (s32)(base + advanceOffset);
@@ -455,6 +456,7 @@ void GameSeedCarRouteMarkers(void) {
     baseOffset = product << 6;
 
 outer:
+    /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     index = 0;
     raw = *(s32 *)(g_CarTrackProgress + offset);
@@ -474,6 +476,7 @@ inner:
         offset += 0x19C;
         goto next;
     }
+    /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     index++;
     if (index < 0x30) {
@@ -566,7 +569,6 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   if ((*((s16 *) (&lim[1]))) < rpm)
   {
     L2_inc:
-    __asm__ volatile("" : : : "memory");
     cnt = *((u16 *) (sub_R9 + 0x7C));
     d_R3 = 1;
     q = d_R3;
@@ -578,13 +580,11 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   {
     cnt = *((u16 *) (sub_R9 + 0x7C));
     one = 1;
-    __asm__("" : "=r"(one) : "0"(one));
     *((s16 *) (sub_R9 + 0x7E)) = one;
     cnt = cnt - 1;
   }
 
   *((u16 *) (sub_R9 + 0x7C)) = cnt;
-  __asm__ volatile("");
   if (rpm < 0x20)
   {
     *((u16 *) (sub_R9 + 0x7C)) = 0;

@@ -42,6 +42,7 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
         vabIdPtr = (s16 *)((s32)vabIdBase + slotReg);
     }
     *vabIdPtr = ret;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" : "=r"(ret) : "0"(ret));
 
     currentVabId = (s16)ret;

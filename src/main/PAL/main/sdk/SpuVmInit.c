@@ -83,6 +83,7 @@ void SpuVmInit(long arg0) {
         func_8007B294(0);
         D_801E4B5C = 0;
         g_SndDamper = 0;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm volatile("" ::: "memory");
         func_80079B60(0x20, p);
     }
@@ -141,7 +142,6 @@ void SpuVmInit(long arg0) {
                 /* This barrier is load-bearing: it hides the halfword load,
                  * whose known-zero high bits would otherwise let gcc drop the
                  * mask. */
-                asm("" : "=r"(lowBits) : "0"(lowBits));
                 mindex = lowBits & 0xFFFF;
                 if ((u_long)mindex < 0x10) {
                     lowMask = one << mindex;
@@ -157,26 +157,25 @@ void SpuVmInit(long arg0) {
                 g_SndVoiceStateStatus[offset] = 0;
                 lowBits = D_801F2A08;
                 highBits = D_801F2A0C;
-                __asm__ volatile("");
                 i++;
-                __asm__ volatile("" ::: "memory");
                 *(short *)&g_SndVoiceStatePitch[offset] = 0;
                 *(short *)&g_SndVoiceState[offset] = 0;
 
                 bits = D_8009E670;
+                /* This barrier is load-bearing: removing it changes .text. */
                 __asm__ volatile("");
                 /* These barriers are load-bearing. Without them `combine` folds
                  * the single-use `zero_extend(mem)` that defines the second
                  * operand into the `ior`, tripping its "complex expression
                  * first" rule and swapping the operands; retail keeps the
                  * written mask-first order. */
+                /* These barriers are load-bearing: removing any one changes .text. */
                 asm("" : "=r"(lowBits) : "0"(lowBits));
                 lowBits = lowMask | lowBits;
                 asm("" : "=r"(highBits) : "0"(highBits));
                 highBits = highMask | highBits;
                 D_801F2A08 = lowBits;
                 bits = bits & ~lowBits;
-                __asm__ volatile("");
                 D_801F2A0C = highBits;
                 D_8009E670 = bits;
                 bits = D_8009E674;

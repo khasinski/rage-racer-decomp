@@ -74,15 +74,16 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
      * `ior`, which trips its "put the complex expression first" rule and swaps
      * the operands to `or rd,rt,rs`. Hiding the definition keeps the written
      * order, which is retail's `or rd,mask,bits`. */
+    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(voiceIndex) : "0"(voiceIndex));
     voiceIndex = lowMask | voiceIndex;
     asm("" : "=r"(count) : "0"(count));
     count = highMask | count;
     D_8009E670 = voiceIndex;
+    /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     index &= ~voiceIndex;
     D_8009E674 = count;
-    __asm__ volatile("" ::: "memory");
     count = ~count;
     D_801F2A08 = index;
     index = D_801F2A0C;
