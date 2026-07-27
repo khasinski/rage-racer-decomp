@@ -239,7 +239,7 @@ void *ClearOTagR(u_long *ot, long count) asm("func_80065D68");
 /* CheckPrim (func_80065968) is declared locally per TU: callers pass either a
  * Rect * or a GpuRectPacked *, and gcc 2.6.3 will not accept both against one
  * prototype. */
-void ClearImage(void *rect, u_long r, u_long g, u_long b) asm("func_80065A90");
+void ClearImage(void *rect, u_char r, u_char g, u_char b) asm("func_80065A90");
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 long MoveImage(GpuRectPacked *rect, u_long x, u_long y) asm("func_80065BEC");

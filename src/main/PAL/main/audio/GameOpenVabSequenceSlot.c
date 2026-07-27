@@ -68,34 +68,29 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
 
 s32 GameCloseAudioSlot(s32 slot) asm("func_8005E600");
 s32 GameCloseAudioSlot(s32 slot) {
-    /* These pins are load-bearing: removing any one changes .text. */
-    register s32 slotReg asm("$17") = slot;
+    s32 *flagsPtr = &g_AudioSlotMask;
     s32 bit = 1;
-    register s32 *flagsPtr asm("$16") = &g_AudioSlotMask;
-    s32 flags;
+    s32 flags = *flagsPtr;
     s32 zeroArg = 0;
     s32 ret;
-    s32 newFlags;
-    s32 offset;
+    s16 *ids;
 
-    flags = *flagsPtr;
-    bit <<= slotReg;
+    bit <<= slot;
     if (bit & flags) {
         goto loaded;
     }
-
     ret = 0;
     goto done;
 
 loaded:
-    newFlags = bit ^ flags;
-    *flagsPtr = newFlags;
+    *flagsPtr = bit ^ flags;
     func_80073748(zeroArg, 0);
     func_8007865C(0);
     func_80071AC4(g_SeqHandle);
-    offset = slotReg * 2;
-    asm("addu %0, %1, %0" : "=r"(offset) : "r"(flagsPtr), "0"(offset));
-    func_80072B3C(*(s16 *)(offset + 0xC));
+    /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
+       (rather than naming the symbol) is what the retail code does. */
+    ids = (s16 *)((s32)flagsPtr + 0xC);
+    func_80072B3C(ids[slot]);
     ret = 1;
 done:
     return ret;

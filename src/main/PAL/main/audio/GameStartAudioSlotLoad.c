@@ -143,15 +143,14 @@ s32 GamePollAudioSlotLoad(void) {
 }
 
 s32 func_8005B948(s32 slot) {
-    /* These pins are load-bearing: removing any one changes .text. */
-    register s32 slotReg asm("$17") = slot;
-    register s32 *flagsPtr asm("$16") = &g_AudioSlotMask;
+    s32 *flagsPtr = &g_AudioSlotMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;
     s32 zeroArg = 0;
     s32 ret;
+    s16 *ids;
 
-    bit <<= slotReg;
+    bit <<= slot;
 
     if (bit & flags) {
         goto loaded;
@@ -161,19 +160,14 @@ s32 func_8005B948(s32 slot) {
     goto done;
 
 loaded:
-    {
-        s32 newFlags = bit ^ flags;
-        *flagsPtr = newFlags;
-        func_80073748(zeroArg, 0);
-        func_8007865C(0);
-        {
-            s32 offset = slotReg * 2;
-            // Preserve operand order for the matching address calculation.
-            asm("addu %0, %1, %0" : "=r"(offset) : "r"(flagsPtr), "0"(offset));
-            func_80072B3C(*(s16 *)(offset + 0xC));
-        }
-        ret = 1;
-    }
+    *flagsPtr = bit ^ flags;
+    func_80073748(zeroArg, 0);
+    func_8007865C(0);
+    /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
+       (rather than naming the symbol) is what the retail code does. */
+    ids = (s16 *)((s32)flagsPtr + 0xC);
+    func_80072B3C(ids[slot]);
+    ret = 1;
 done:
     return ret;
 }

@@ -168,30 +168,8 @@ extern char D_8001356C[];
 
 void func_80065968(char *arg0, void *arg1);
 
-void ClearImage(void *arg0, u_long arg1, u_long arg2, u_long arg3) asm("func_80065A90");
-void ClearImage(void *arg0, u_long arg1, u_long arg2, u_long arg3) {
-    void *rect = arg0;
-    /* These pins are load-bearing: removing any one changes .text. */
-    register u_long b asm("s2") = arg1;
-    u_long g = arg2;
-    register u_long r asm("s0") = arg3;
-
+void ClearImage(void *rect, u_char r, u_char g, u_char b) asm("func_80065A90");
+void ClearImage(void *rect, u_char r, u_char g, u_char b) {
     func_80065968(D_8001356C, rect);
-
-    {
-        /* This pin is load-bearing: removing it changes .text. */
-        register void *rectArg asm("$5") = rect;
-
-        asm volatile(
-            "andi $16,$16,0x00ff # maspsx-keep\n\t"
-            "sll $16,$16,16 # maspsx-keep\n\t"
-            "andi $17,$17,0x00ff # maspsx-keep\n\t"
-            "sll $17,$17,8 # maspsx-keep\n\t"
-            "or $16,$16,$17 # maspsx-keep\n\t"
-            "andi $18,$18,0x00ff # maspsx-keep"
-            :
-            : "r"(g), "r"(rectArg));
-
-        g_GpuFuncs->send(g_GpuFuncs->cmd0C, rectArg, 8, r | b);
-    }
+    g_GpuFuncs->send(g_GpuFuncs->cmd0C, rect, 8, (b << 16) | (g << 8) | r);
 }
