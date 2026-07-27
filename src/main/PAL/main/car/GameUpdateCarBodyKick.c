@@ -17,14 +17,14 @@ s32 func_80068568(s32 arg0);
 /*
  * Fields of g_Cars[0] that retail reaches through their own split symbols
  * rather than by indexing the array, so the 0x19C-stride walks below keep them
- * raw:  D_801F18C4 = .trackProgress  D_801F198C = .field_138
- *       D_801F198E = .field_13A
+ * raw:  g_CarTrackProgress = .trackProgress  g_CarMarkerIndex = .field_138
+ *       g_CarMarkerFlag = .field_13A
  */
-extern u8 D_801F18C4[];
+extern u8 g_CarTrackProgress[] asm("D_801F18C4");
 
-extern u8 D_801F198C[];
+extern u8 g_CarMarkerIndex[] asm("D_801F198C");
 
-extern u8 D_801F198E[];
+extern u8 g_CarMarkerFlag[] asm("D_801F198E");
 
 void GameUpdateCarBodyKick(GameCarRuntime *car) asm("func_80038FF0");
 void GameUpdateCarBodyKick(GameCarRuntime *car) {
@@ -450,20 +450,20 @@ void GameSeedCarRouteMarkers(void) {
 outer:
     __asm__ volatile("" ::: "memory");
     index = 0;
-    raw = *(s32 *)(D_801F18C4 + offset);
+    raw = *(s32 *)(g_CarTrackProgress + offset);
     tableOffset = baseOffset;
-    *(s16 *)(D_801F198E + offset) = one;
+    *(s16 *)(g_CarMarkerFlag + offset) = one;
     target = raw >> 4;
 
 inner:
     value = *(s16 *)(base + tableOffset + 0x474);
     if (target >= value) {
-        *(s16 *)(D_801F198C + offset) = index;
+        *(s16 *)(g_CarMarkerIndex + offset) = index;
         offset += 0x19C;
         goto next;
     }
     if (value == -1) {
-        *(s16 *)(D_801F198C + offset) = 0;
+        *(s16 *)(g_CarMarkerIndex + offset) = 0;
         offset += 0x19C;
         goto next;
     }

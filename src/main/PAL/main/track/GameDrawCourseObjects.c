@@ -160,8 +160,11 @@ typedef struct {
     s32 f12;
 } Out;
 extern Out *g_VisibleCellList asm("D_801E4BC8");
-extern s8 D_8007E45C[];
-extern s8 D_8007E45D[];
+/* Interleaved { dx, dy } terrain-cell offsets, 64 pairs per octant and eight
+ * octants; the four switch arms fold the full circle onto that one octant by
+ * negating dx and/or dy. */
+extern s8 g_CellScanOffsetX[] asm("D_8007E45C");
+extern s8 g_CellScanOffsetY[] asm("D_8007E45D");
 void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
 
 void GameBuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
@@ -200,22 +203,22 @@ void GameBuildVisibleCells(s32 arg0, s32 arg1) {
         switch (oct / 8) {
         case 0:
             k = j + (oct << 7);
-            dx = D_8007E45C[k];
-            dy = D_8007E45D[k];
+            dx = g_CellScanOffsetX[k];
+            dy = g_CellScanOffsetY[k];
             sx = cx + dx;
             sy = cy + dy;
             break;
         case 1:
             k = j + ((8 - (oct % 8)) << 7);
-            dx = D_8007E45C[k];
-            dy = D_8007E45D[k];
+            dx = g_CellScanOffsetX[k];
+            dy = g_CellScanOffsetY[k];
             sx = cx + dx;
             sy = cy - dy;
             break;
         case 2:
             k = j + ((oct - 16) << 7);
-            dx = D_8007E45C[k];
-            dy = D_8007E45D[k];
+            dx = g_CellScanOffsetX[k];
+            dy = g_CellScanOffsetY[k];
             sx = cx - dx;
             sy = cy - dy;
             break;
@@ -223,8 +226,8 @@ void GameBuildVisibleCells(s32 arg0, s32 arg1) {
             k = oct % 8;
             k = 8 - k;
             k = j + (k << 7);
-            dx = D_8007E45C[k];
-            dy = D_8007E45D[k];
+            dx = g_CellScanOffsetX[k];
+            dy = g_CellScanOffsetY[k];
             sx = cx - dx;
             sy = cy + dy;
             break;

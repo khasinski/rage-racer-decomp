@@ -9,11 +9,11 @@
 
 extern s32 g_PlayerCar asm("D_8009E6D4");
 
-extern s32 D_8009E6DC;
+extern s32 g_PlayerCarZ asm("D_8009E6DC");
 
 /*
  * Waypoint proximity test: returns 1 if the waypoint's (x,y) lies within a
- * +/-0x40 box around the car centre (g_PlayerCar / D_8009E6DC), else 0.
+ * +/-0x40 box around the car centre (g_PlayerCar / g_PlayerCarZ), else 0.
  */
 
 extern s32 g_WaypointSpawnCooldown asm("D_8019C700");
@@ -22,7 +22,9 @@ extern TrackWaypointRuntime g_Waypoints[] asm("D_801E4DF4");
 
 extern s32 g_WaypointsCollected asm("D_801E43F8");
 
-extern s32 D_8009E798[];
+/* g_PlayerCar + 0xC4: the four words a spawning waypoint copies as its own
+ * starting velocity. */
+extern s32 g_PlayerVelocity[] asm("D_8009E798");
 
 s32 GameIsCarNearWaypoint(TrackWaypointRuntime *waypoint) asm("func_80037808");
 
@@ -30,7 +32,7 @@ s32 GameIsCarNearWaypoint(TrackWaypointRuntime *waypoint) asm("func_80037808");
  * Per-frame waypoint spawn/update state machine over the 6 slots. An idle slot
  * (active==0) that the car is near (GameIsCarNearWaypoint) spawns: increments the spawn
  * counter g_WaypointsCollected, plays cue 0xA, marks the slot active and seeds its
- * velocity from D_8009E798. An active slot integrates position from velocity
+ * velocity from g_PlayerVelocity. An active slot integrates position from velocity
  * with 15/16 per-frame damping and grows its scale toward 0x400, retiring to
  * state 2 once motion decays to zero. Register pins and raw tail-relative field
  * offsets are match-load-bearing.
@@ -46,7 +48,7 @@ void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
 
 
-extern u32 D_1F800084;
+extern u32 g_ScratchRenderMode asm("D_1F800084");
 
 /* Counts how many of the 6 waypoint slots are active (active != 0). */
 
@@ -62,6 +64,9 @@ void SetShadeTex(u8 *prim, s32 enabled) asm("func_80064EB8");
 void SetSprt(u8 *prim) asm("func_80064FA8");
 
 
+/* Deliberately raw: set to 1 once g_SceneTimer passes 571 and cleared during
+ * race phase 0, but its only reader is the guard on its own write, so it has
+ * no effect at all -- and this whole scene is unreachable (names.md 15f). */
 extern s16 D_8009EC88;
 
 
@@ -80,7 +85,7 @@ extern s16 g_ReverbZoneDepth asm("D_8019C78C");
 
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
-extern u8 D_80011494;
+extern u8 g_TextCongratulations asm("D_80011494");
 
 void GameDrawFullscreenFadeTile(s32 a, s32 b) asm("func_80033AA0");
 
@@ -131,9 +136,12 @@ void GameUpdateWaypoints(void) asm("func_80037860");
 void GameDrawWaypoints(void) asm("func_80037AAC");
 
 
-extern s32 D_8007E054;
+/* Two 8-byte { start, end } reverb spans per series (offset = series * 16):
+ * inside one of them GameApplyTrackReverbZone drives the reverb depth to 0x46,
+ * outside it to 0. */
+extern s32 g_ReverbZoneStart asm("D_8007E054");
 
-extern s32 D_8007E058;
+extern s32 g_ReverbZoneEnd asm("D_8007E058");
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -201,7 +209,7 @@ s32 GameIsCarNearWaypoint(TrackWaypointRuntime *arg0) {
         s32 max_x = center_x + 0x40;
 
         if (x < max_x) {
-            s32 center_y = D_8009E6DC;
+            s32 center_y = g_PlayerCarZ;
             s32 y = arg0->y;
 
             if ((center_y - 0x40) < y) {
@@ -252,7 +260,7 @@ void GameUpdateWaypoints(void) {
 
                 waypoint->active = activeState;
                 asm volatile("" ::: "memory");
-                src = D_8009E798;
+                src = g_PlayerVelocity;
                 asm volatile("" : "=r"(src) : "0"(src));
                 src0 = src[0];
                 src1 = src[1];
@@ -296,7 +304,7 @@ void GameUpdateWaypoints(void) {
 }
 
 static inline void ClearScratchRenderMode37AAC(void) {
-    D_1F800084 = 0;
+    g_ScratchRenderMode = 0;
 }
 
 /*
@@ -497,7 +505,7 @@ void GameUpdateWaypointCollectScene(void) {
         }
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
     } else if (g_RacePhase == 4) {
-        func_80016754(0x5c, 0x78, &D_80011494, 0x7811);
+        func_80016754(0x5c, 0x78, &g_TextCongratulations, 0x7811);
         GameDrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
         if (g_RaceFadeTimer < 201) {
@@ -583,11 +591,11 @@ void GameApplyTrackReverbZone(s32 arg0) {
     i = 0;
     offset = scene << 4;
 loop:
-    if (*(s32 *)((u8 *)&D_8007E054 + offset) >= arg0) {
+    if (*(s32 *)((u8 *)&g_ReverbZoneStart + offset) >= arg0) {
         goto next;
     }
 
-    if (arg0 >= *(s32 *)((u8 *)&D_8007E058 + offset)) {
+    if (arg0 >= *(s32 *)((u8 *)&g_ReverbZoneEnd + offset)) {
         i++;
         goto check;
     }

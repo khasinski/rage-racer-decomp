@@ -6,13 +6,13 @@
 
 extern s32 g_PlayerCar asm("D_8009E6D4");
 
-extern s32 D_8009E704;
+extern s32 g_PlayerTrackPoint asm("D_8009E704");
 
 
 extern s32 g_ReplayReadCursor asm("D_801F179C");
 
 
-extern s32 D_801F1884;
+extern s32 g_Car0TrackPoint asm("D_801F1884");
 
 void GameApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2) asm("func_8001F8D0");
 
@@ -44,10 +44,10 @@ extern s16 g_TrackZoneCode asm("D_8019CE34");
 
 extern s16 g_ReverbZoneDepth asm("D_8019C78C");
 
-extern s16 D_8019CAB0;
+extern s16 g_TrackZoneDark asm("D_8019CAB0");
 
 
-extern u8 D_8001147C;
+extern u8 g_MsgGameExit asm("D_8001147C");
 
 void func_8005E4A4(s32 arg0);
 
@@ -100,13 +100,13 @@ void GameSeedReplayCars(void) {
     secondary = g_Cars;
     GameApplyReplayFrameAndTilt(g_ReplayReadCursor, primary, secondary);
 
-    D_8009E704 = GameFindTrackSegment(primary, D_8009E704);
+    g_PlayerTrackPoint = GameFindTrackSegment(primary, g_PlayerTrackPoint);
     GameSeedCarLapProgress(primary, 1);
     func_8002C168(primary);
     func_80032280(primary);
 
     if (g_GrandPrixMode == 1) {
-        D_801F1884 = GameFindTrackSegment(secondary, D_801F1884);
+        g_Car0TrackPoint = GameFindTrackSegment(secondary, g_Car0TrackPoint);
         GameSeedCarLapProgress(secondary, 1);
         func_8002C168(secondary);
         func_80032280(secondary);
@@ -154,7 +154,7 @@ s32 GameGetTrackZoneBlend(s32 position) {
     zone = first;
     g_TrackZoneCode = 0;
     g_ReverbZoneDepth = 0;
-    D_8019CAB0 = 0;
+    g_TrackZoneDark = 0;
 
     do {
     start = zone->start;
@@ -194,7 +194,7 @@ code_positive:
         goto normalize_code;
 
 code_zero:
-        D_8019CAB0 = 3;
+        g_TrackZoneDark = 3;
         goto store_value;
 
 code_two:
@@ -242,7 +242,7 @@ void GameExitRaceScene(s32 arg0) {
     if (g_SceneId == 6) {
         GameRequestSelectBgmAssets();
     }
-    GameDebugPrintf(&D_8001147C);
+    GameDebugPrintf(&g_MsgGameExit);
 }
 
 void GameUpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) asm("func_800352B8");

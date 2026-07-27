@@ -10,7 +10,7 @@
 
 extern s32 g_SectorTime1 asm("D_8009AF84");
 
-extern s32 D_8009AF88;
+extern s32 g_SectorTime2 asm("D_8009AF88");
 
 
 extern s32 g_RefSectorTime0 asm("D_8009AF90");
@@ -34,7 +34,8 @@ extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 
-extern s16 D_8019CA10;
+/* Rear-view mirror on/off; render/GameDrawRearViewMirror.c owns it. */
+extern s16 g_MirrorViewEnabled asm("D_8019CA10");
 
 
 
@@ -46,9 +47,11 @@ extern s32 g_BestLapTimes[][4][2] asm("D_801E4408");
 
 extern s32 g_BestSectorTimes[][4][3] asm("D_801E41E8");
 
-extern s32 D_801E41EC;
+/* Split symbols for g_BestSectorTimes + 4 and + 8, i.e. sectors 1 and 2 of
+ * the [series][course] record this code writes one element at a time. */
+extern s32 g_BestSectorTime1 asm("D_801E41EC");
 
-extern s32 D_801E41F0;
+extern s32 g_BestSectorTime2 asm("D_801E41F0");
 
 extern s32 g_RaceTotalTime asm("D_801E4BA8");
 
@@ -96,24 +99,32 @@ extern s32 g_CameraViewMode asm("D_8009E870");
 
 extern s16 g_PauseDebounce asm("D_8019C750");
 
+/* Deliberately raw: see docs/names.md 12d. Written 0x80 / 0x180 on scene
+ * entry, and its one reader is never reached in retail. */
 extern s32 D_8019C768;
 
-extern u8 *D_8019C9A8;
+extern u8 *g_CamRow asm("D_8019C9A8");
 
+/* Deliberately raw: the only two writes in the whole image store zero (here
+ * and in the car-init routine func_8002CB30), so the one reader --
+ * GameUpdateCarBodyRoll skipping the pad read when it is non-zero -- can
+ * never fire. Naming it would invent a feature. */
 extern s16 D_8019C9AC;
 
 
-extern s32 D_801E40CC;
+extern s32 g_TrackWalkStart asm("D_801E40CC");
 
 extern s32 g_BgmTrack asm("D_801E40E0");
 
 
 
+/* Deliberately raw: written zero at race init and read nowhere in the image. */
 extern s32 D_801E4248;
 
 
 extern s32 g_RivalCueFlags asm("D_801E4BB4");
 
+/* Deliberately raw: written zero at race init and read nowhere in the image. */
 extern s16 D_801E4CF8;
 
 
@@ -130,7 +141,7 @@ extern s16 g_RivalCueCooldown2 asm("D_801E6F24");
 
 extern s16 g_RivalCueCooldown3 asm("D_801E6F26");
 
-extern u8 D_80011488[];
+extern u8 g_MsgGame0Ok[] asm("D_80011488");
 
 
 void GameInitRenderState(s32) asm("func_80017884");
@@ -187,7 +198,10 @@ extern u8 g_PadType asm("D_801E4369");
 
 
 
-extern s16 D_801E4B6C[];
+/* Mask 6 of each row of the live button mapping (see GameUpdatePlayerCar.c),
+ * hence the eight-halfword stride. Holding it while paused, in the chase view
+ * and mid-race, makes D-pad up/down turn the rear-view mirror on and off. */
+extern s16 g_PadMirrorMasks[] asm("D_801E4B6C");
 
 extern s32 g_RacePaused asm("D_801E4BAC");
 
@@ -381,7 +395,7 @@ update_progress:
             result =
                 *(s32 *)((s32)route + resultOffset + 0xC0);
             g_BestLapThisRace = candidateTime;
-            D_8009AF88 = result;
+            g_SectorTime2 = result;
             if (arg1 == 0) {
                 g_RefSectorTime2 = result;
                 g_RefSectorTime0 = g_SectorTimes[0];
@@ -427,9 +441,9 @@ record_done:
                 if (arg1 == 0) {
                     tableOffset = g_CourseIndex * 12 + g_RaceSeries * 48;
                     *(s32 *)((u8 *)g_BestSectorTimes + tableOffset) = g_RefSectorTime0;
-                    *(s32 *)((u8 *)&D_801E41EC + tableOffset) =
+                    *(s32 *)((u8 *)&g_BestSectorTime1 + tableOffset) =
                         g_RefSectorTime1;
-                    *(s32 *)((u8 *)&D_801E41F0 + tableOffset) =
+                    *(s32 *)((u8 *)&g_BestSectorTime2 + tableOffset) =
                         g_RefSectorTime2;
                 }
                 g_RacePhase = 4;
@@ -447,7 +461,7 @@ record_done:
 reset_transition:
             func_8005E4A4(0);
             g_RaceFadeTimer = 0;
-            D_8019CA10 = 0;
+            g_MirrorViewEnabled = 0;
             goto after_progress;
         }
         goto check_finish_transition;
@@ -548,7 +562,7 @@ void GameEnterRaceScene(void) {
     func_8001F100();
     GameLoadTrackTexturePageRange();
     func_8001D210();
-    D_801E40CC = *(s32 *)g_TrackEventData;
+    g_TrackWalkStart = *(s32 *)g_TrackEventData;
     if (g_CourseIndex == 3) {
         g_LapCount = 6;
     } else {
@@ -603,7 +617,7 @@ void GameEnterRaceScene(void) {
     }
     g_RaceTotalTime = 0;
     GameResetMirrorState();
-    func_800458CC(*(s32 *)(D_8019C9A8 + 8));
+    func_800458CC(*(s32 *)(g_CamRow + 8));
     func_800340D8();
     GameBuildRaceHudPrims(g_GrandPrixMode);
     g_AnimTimer = 0;
@@ -632,7 +646,7 @@ void GameEnterRaceScene(void) {
     g_SceneId = 12;
     D_8019C768 = 0x180;
     func_8001C974();
-    GameDebugPrintf(D_80011488);
+    GameDebugPrintf(g_MsgGame0Ok);
 
     (void)pad;
 }
@@ -725,7 +739,7 @@ set_countdown:
                 GameExitRaceScene(0xD);
             }
         }
-        D_8019CA10 = 0;
+        g_MirrorViewEnabled = 0;
         g_RaceFadeTimer++;
     } else if (g_RacePhase == 7) {
         GameExitRaceScene(6);
@@ -767,12 +781,12 @@ set_countdown:
             selectorMask = g_PadType;
             inputMask = g_PadHeld;
             selectorMask = (u32)(selectorMask ^ 0x23) < 1;
-            if ((inputMask & D_801E4B6C[selectorMask * 8]) &&
+            if ((inputMask & g_PadMirrorMasks[selectorMask * 8]) &&
                 g_CameraViewMode == 0 && g_RacePhase == 2) {
                 if (g_PadEdge2 & 8) {
-                    D_8019CA10 = 1;
+                    g_MirrorViewEnabled = 1;
                 } else if (g_PadEdge2 & 4) {
-                    D_8019CA10 = 0;
+                    g_MirrorViewEnabled = 0;
                 }
             }
         }
@@ -885,7 +899,7 @@ update_race:
             selectorMask = g_PadType;
             inputMask = g_PadEdge2;
             selectorMask = (u32)(selectorMask ^ 0x23) < 1;
-            if ((inputMask & D_801E4B6C[selectorMask * 8]) &&
+            if ((inputMask & g_PadMirrorMasks[selectorMask * 8]) &&
                 (u32)((u16)g_RacePhase - 2) < 2) {
                 g_CameraViewMode ^= 1;
             }

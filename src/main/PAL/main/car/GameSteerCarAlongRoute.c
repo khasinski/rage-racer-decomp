@@ -142,10 +142,13 @@ typedef struct Obj {
 
 extern u8 *volatile g_RaceIntroCameraScript asm("D_8019CAF8");
 extern KE *g_RaceIntroCameraCursor asm("D_801E4038");
-extern s32 D_8009AFB4;
-extern s16 D_8009AFBC;
-extern s16 D_8009AFBE;
-extern s16 D_8009AFC0;
+/* The pre-race fly-in: the timer counts down to 0 while the eye is eased
+ * along the delta by cos(timer / keyframe->f12), and it also drives the
+ * fade (timer * 26). */
+extern s32 g_RaceIntroCameraTimer asm("D_8009AFB4");
+extern s16 g_RaceIntroCameraDeltaX asm("D_8009AFBC");
+extern s16 g_RaceIntroCameraDeltaY asm("D_8009AFBE");
+extern s16 g_RaceIntroCameraDeltaZ asm("D_8009AFC0");
 
 s32 func_80068634(s32 angle);
 s32 func_80068568(s32 angle);
@@ -170,42 +173,42 @@ void GameRunRaceIntroCamera(Obj *obj, s32 mode) {
             g_RaceIntroCameraCursor = p;
             *(B16 *) 0x1F800008 = *(B16 *) p;
             q = g_RaceIntroCameraCursor;
-            D_8009AFBC = -q[0].f0 + q[1].f0;
+            g_RaceIntroCameraDeltaX = -q[0].f0 + q[1].f0;
             __asm__ volatile("");
-            D_8009AFBE = -q[0].f4 + q[1].f4;
+            g_RaceIntroCameraDeltaY = -q[0].f4 + q[1].f4;
             __asm__ volatile("");
-            D_8009AFC0 = -q[0].f8 + q[1].f8;
+            g_RaceIntroCameraDeltaZ = -q[0].f8 + q[1].f8;
             __asm__ volatile("");
-            D_8009AFB4 = q[0].f12;
+            g_RaceIntroCameraTimer = q[0].f12;
         } else {
             register KE *a asm("$4") = g_RaceIntroCameraCursor;
             if (mode == a->f10) {
                 g_RaceIntroCameraCursor = &a[1];
-                D_8009AFB4 = a[1].f12;
+                g_RaceIntroCameraTimer = a[1].f12;
                 if (a[1].fC == 1) {
-                    D_8009AFBC = -a[1].f0 + ((u16 *) obj)[0];
-                    D_8009AFBE = -a[1].f4 - 28 + ((u16 *) obj)[2];
-                    D_8009AFC0 = -a[1].f8 + ((u16 *) obj)[4];
+                    g_RaceIntroCameraDeltaX = -a[1].f0 + ((u16 *) obj)[0];
+                    g_RaceIntroCameraDeltaY = -a[1].f4 - 28 + ((u16 *) obj)[2];
+                    g_RaceIntroCameraDeltaZ = -a[1].f8 + ((u16 *) obj)[4];
                 } else {
-                    D_8009AFBC = -a[1].f0 + a[2].f0;
-                    D_8009AFBE = -a[1].f4 + a[2].f4;
-                    D_8009AFC0 = -a[1].f8 + a[2].f8;
+                    g_RaceIntroCameraDeltaX = -a[1].f0 + a[2].f0;
+                    g_RaceIntroCameraDeltaY = -a[1].f4 + a[2].f4;
+                    g_RaceIntroCameraDeltaZ = -a[1].f8 + a[2].f8;
                 }
             }
         }
 
-        D_8009AFB4 = D_8009AFB4 - 1;
-        if (D_8009AFB4 <= 0) {
-            D_8009AFB4 = 0;
+        g_RaceIntroCameraTimer = g_RaceIntroCameraTimer - 1;
+        if (g_RaceIntroCameraTimer <= 0) {
+            g_RaceIntroCameraTimer = 0;
         }
 
         if (g_RaceIntroCameraCursor->fC == 0) {
             spad[2] = ((s32 *) g_RaceIntroCameraCursor)[0]
-                      + ((s32) D_8009AFBC * func_80068634((D_8009AFB4 << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDeltaX * func_80068634((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
             spad[3] = ((s32 *) g_RaceIntroCameraCursor)[1]
-                      + ((s32) D_8009AFBE * func_80068634((D_8009AFB4 << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDeltaY * func_80068634((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
             spad[4] = ((s32 *) g_RaceIntroCameraCursor)[2]
-                      + ((s32) D_8009AFC0 * func_80068634((D_8009AFB4 << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDeltaZ * func_80068634((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
 
             delta[0] = func_80068568(obj->f24) / 128 + obj->x - spad[2];
             delta[1] = obj->y - s0v - spad[3];
@@ -219,7 +222,7 @@ void GameRunRaceIntroCamera(Obj *obj, s32 mode) {
             GameSelectModelBank(0);
             GameDrawPlayerCarModel(obj);
         } else {
-            GameDrawFullscreenFadeTile(D_8009AFB4 * 26, 0x29);
+            GameDrawFullscreenFadeTile(g_RaceIntroCameraTimer * 26, 0x29);
             {
                 s32 c0 = obj->x;
                 s32 c1 = obj->y;
@@ -256,6 +259,8 @@ extern s32 g_CameraCarZ asm("D_801E3E1C");
 extern s32 g_CameraCarAngleY asm("D_801E3E38");
 extern s32 g_CameraCarHeading asm("D_801E3EB4");
 extern s32 g_CameraCarSpeed asm("D_801E3EB8");
+/* Deliberately raw: written here and in one other camera seeder, read
+ * nowhere in the image. */
 extern s32 D_801E3F60;
 
 typedef struct CopyBlock8003CA14 {

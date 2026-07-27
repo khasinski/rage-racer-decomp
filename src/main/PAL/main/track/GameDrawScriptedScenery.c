@@ -50,35 +50,56 @@ typedef struct {
     s16 h[4];
 } Blk8;
 
+/*
+ * Frame counters and rate signs of the two keyframe tracks. func_8003F9C4
+ * compares posFrame against g_PathSceneryPosSpan and rotFrame against
+ * g_PathSceneryRotSpan to decide when to step to the next keyframe;
+ * posRateNeg / rotRateNeg record that the keyframe's rate field was negative
+ * (the rate itself is stored as a magnitude).
+ */
 typedef struct {
-    s16 prev;
-    s16 current;
-    s16 firstNeg;
-    s16 secondNeg;
-} StateHead;
+    s16 posFrame;
+    s16 rotFrame;
+    s16 posRateNeg;
+    s16 rotRateNeg;
+} PathSceneryClock;
 
 extern u8 *g_PathSceneryPosData asm("D_801E4BA4");
 extern u8 *g_PathSceneryRotData asm("D_801E4174");
-extern u8 *D_801E42DC;
-extern u8 *D_801E42E8;
-extern StateHead D_801E4DB0;
+/*
+ * The looping prop's two keyframe tracks for the running series: 20-byte
+ * position records { s32 x, y, z; u16 loopTo @0x0C; u16 span @0x10;
+ * s16 rate @0x12 } and 12-byte rotation records { s16 x, y, z; ...;
+ * u16 span @0x08; s16 rate @0x0A }. `Data` is the whole table (a per-series
+ * s16 offset header), `Keys` the record array this series starts at, and
+ * g_PathSceneryPosIndex / …RotIndex the record currently being eased out of.
+ * A span field of -1 terminates and sends the index back to `loopTo`.
+ */
+extern u8 *g_PathSceneryPosKeys asm("D_801E42DC");
+extern u8 *g_PathSceneryRotKeys asm("D_801E42E8");
+extern PathSceneryClock g_PathSceneryClock asm("D_801E4DB0");
 extern Blk16 g_PathSceneryX asm("D_801E4DB8");
 extern Blk8 g_PathSceneryRotX asm("D_801E4DC8");
-extern s16 D_801E4DE0;
-extern s16 D_801E4DE2;
-extern u16 D_801E4DE4;
-extern u16 D_801E4DE6;
-extern u16 D_801E4DE8;
-extern u16 D_801E4DEA;
-extern s16 D_801E4DEC;
-extern s16 D_801E4DEE;
-extern s32 D_801E4DF0;
-extern s16 D_801E4DD0;
-extern s16 D_801E4DD2;
-extern s16 D_801E4DD4;
-extern s16 D_801E4DD8;
-extern s16 D_801E4DDA;
-extern s16 D_801E4DDC;
+extern s16 g_PathSceneryPosPhase asm("D_801E4DE0");
+extern s16 g_PathSceneryRotPhase asm("D_801E4DE2");
+extern u16 g_PathSceneryPosSpan asm("D_801E4DE4");
+extern u16 g_PathSceneryRotSpan asm("D_801E4DE6");
+extern u16 g_PathSceneryPosRate asm("D_801E4DE8");
+extern u16 g_PathSceneryRotRate asm("D_801E4DEA");
+extern s16 g_PathSceneryPosIndex asm("D_801E4DEC");
+extern s16 g_PathSceneryRotIndex asm("D_801E4DEE");
+/* Slew state of the prop's positional sound: func_80040590 turns the distance
+ * from g_PlayerCar to g_PathSceneryX into 100 - dist/1024, clamps it to
+ * [0, 100] and walks this value at most 20 a frame towards it. */
+extern s32 g_PathSceneryVolume asm("D_801E4DF0");
+/* Half of (next keyframe - this keyframe), i.e. the amplitude of the cosine
+ * ease that carries the prop from one keyframe to the next. */
+extern s16 g_PathSceneryRotHalfDeltaX asm("D_801E4DD0");
+extern s16 g_PathSceneryRotHalfDeltaY asm("D_801E4DD2");
+extern s16 g_PathSceneryRotHalfDeltaZ asm("D_801E4DD4");
+extern s16 g_PathSceneryHalfDeltaX asm("D_801E4DD8");
+extern s16 g_PathSceneryHalfDeltaY asm("D_801E4DDA");
+extern s16 g_PathSceneryHalfDeltaZ asm("D_801E4DDC");
 
 void GameInitPathScenery(void) asm("func_8003F700");
 void GameInitPathScenery(void) {
@@ -93,13 +114,13 @@ void GameInitPathScenery(void) {
     tblB = g_PathSceneryRotData;
     ia = *(s16 *)(tblA + (lev * 2));
     ib = *(s16 *)(tblB + (lev * 2));
-    D_801E4DB0.current = 0;
-    D_801E4DB0.prev = 0;
-    D_801E42DC = tblA;
-    D_801E42DC = D_801E42DC + ((ia * 20) + 4);
-    D_801E42E8 = tblB;
-    D_801E42E8 = D_801E42E8 + ((ib * 12) + 4);
-    g_PathSceneryX = *(Blk16 *)D_801E42DC;
+    g_PathSceneryClock.rotFrame = 0;
+    g_PathSceneryClock.posFrame = 0;
+    g_PathSceneryPosKeys = tblA;
+    g_PathSceneryPosKeys = g_PathSceneryPosKeys + ((ia * 20) + 4);
+    g_PathSceneryRotKeys = tblB;
+    g_PathSceneryRotKeys = g_PathSceneryRotKeys + ((ib * 12) + 4);
+    g_PathSceneryX = *(Blk16 *)g_PathSceneryPosKeys;
 
     {
         u8 *copySrc;
@@ -107,28 +128,28 @@ void GameInitPathScenery(void) {
         u8 *entryB;
         s16 sv;
 
-        copySrc = D_801E42E8;
-        entryA = D_801E42DC;
+        copySrc = g_PathSceneryRotKeys;
+        entryA = g_PathSceneryPosKeys;
         g_PathSceneryRotX = *(Blk8 *)copySrc;
-        D_801E4DE0 = 0;
-        D_801E4DE2 = 0;
-        D_801E4DE4 = *(u16 *)(entryA + 0x10);
-        entryB = D_801E42E8;
-        D_801E4DE6 = *(u16 *)(entryB + 0x8);
-        D_801E4DE8 = *(u16 *)(entryA + 0x12);
-        D_801E4DEA = *(u16 *)(entryB + 0xA);
+        g_PathSceneryPosPhase = 0;
+        g_PathSceneryRotPhase = 0;
+        g_PathSceneryPosSpan = *(u16 *)(entryA + 0x10);
+        entryB = g_PathSceneryRotKeys;
+        g_PathSceneryRotSpan = *(u16 *)(entryB + 0x8);
+        g_PathSceneryPosRate = *(u16 *)(entryA + 0x12);
+        g_PathSceneryRotRate = *(u16 *)(entryB + 0xA);
 
         sv = *(s16 *)(entryA + 0x12);
         if (sv < 0) {
             sv = -sv;
-            D_801E4DE8 = sv;
-            D_801E4DB0.firstNeg = 1;
+            g_PathSceneryPosRate = sv;
+            g_PathSceneryClock.posRateNeg = 1;
         } else {
             if (sv == 0) {
                 sv = 1;
             }
-            D_801E4DE8 = sv;
-            D_801E4DB0.firstNeg = 0;
+            g_PathSceneryPosRate = sv;
+            g_PathSceneryClock.posRateNeg = 0;
         }
     }
 
@@ -136,41 +157,41 @@ void GameInitPathScenery(void) {
         u8 *entryB;
         s16 sv;
 
-        entryB = D_801E42E8;
+        entryB = g_PathSceneryRotKeys;
         sv = *(s16 *)(entryB + 0xA);
         if (sv < 0) {
             sv = -sv;
-            D_801E4DEA = sv;
-            D_801E4DB0.secondNeg = 1;
+            g_PathSceneryRotRate = sv;
+            g_PathSceneryClock.rotRateNeg = 1;
         } else {
             if (sv == 0) {
                 sv = 1;
             }
-            D_801E4DEA = sv;
-            D_801E4DB0.secondNeg = 0;
+            g_PathSceneryRotRate = sv;
+            g_PathSceneryClock.rotRateNeg = 0;
         }
     }
 
     {
         u8 *entry;
 
-        entry = D_801E42DC;
-        D_801E4DF0 = 0;
-        D_801E4DEC = 0;
-        D_801E4DEE = 0;
-        D_801E4DD8 = (*(s32 *)(entry + 0x14) - *(s32 *)(entry + 0x0)) / 2;
-        D_801E4DDA = (*(s32 *)(entry + 0x18) - *(s32 *)(entry + 0x4)) / 2;
-        D_801E4DDC = (*(s32 *)(entry + 0x1C) - *(s32 *)(entry + 0x8)) / 2;
-        entry = D_801E42E8;
-        D_801E4DD0 = (*(s16 *)(entry + 0xC) - *(s16 *)(entry + 0x0)) / 2;
-        D_801E4DD2 = (*(s16 *)(entry + 0xE) - *(s16 *)(entry + 0x2)) / 2;
-        D_801E4DD4 = (*(s16 *)(entry + 0x10) - *(s16 *)(entry + 0x4)) / 2;
+        entry = g_PathSceneryPosKeys;
+        g_PathSceneryVolume = 0;
+        g_PathSceneryPosIndex = 0;
+        g_PathSceneryRotIndex = 0;
+        g_PathSceneryHalfDeltaX = (*(s32 *)(entry + 0x14) - *(s32 *)(entry + 0x0)) / 2;
+        g_PathSceneryHalfDeltaY = (*(s32 *)(entry + 0x18) - *(s32 *)(entry + 0x4)) / 2;
+        g_PathSceneryHalfDeltaZ = (*(s32 *)(entry + 0x1C) - *(s32 *)(entry + 0x8)) / 2;
+        entry = g_PathSceneryRotKeys;
+        g_PathSceneryRotHalfDeltaX = (*(s16 *)(entry + 0xC) - *(s16 *)(entry + 0x0)) / 2;
+        g_PathSceneryRotHalfDeltaY = (*(s16 *)(entry + 0xE) - *(s16 *)(entry + 0x2)) / 2;
+        g_PathSceneryRotHalfDeltaZ = (*(s16 *)(entry + 0x10) - *(s16 *)(entry + 0x4)) / 2;
     }
 }
 
 /*
  * Ticks the course's permanently looping prop and its positional sound. Two
- * keyframe tracks (position at D_801E42DC, rotation at D_801E42E8) eased
+ * keyframe tracks (position at g_PathSceneryPosKeys, rotation at g_PathSceneryRotKeys) eased
  * sinusoidally between waypoints; the sound is GameSetPitchedSoundCue cue 0 with
  * a Doppler-approximating pitch. See docs/names.md 1.
  */

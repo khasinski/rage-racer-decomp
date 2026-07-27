@@ -26,13 +26,13 @@ typedef struct {
 
 extern volatile s32 g_RaceSeries asm("D_801E408C");
 extern u8 *g_RouteSceneryData asm("D_801E4128");
-extern s32 D_801E4330;
+extern s32 g_RouteSceneryClock asm("D_801E4330");
 extern volatile s32 g_RouteSceneryFrame asm("D_801E4338");
 extern s16 g_RouteSceneryKeyIndex asm("D_801E433E");
 extern s32 g_RouteSceneryX asm("D_801E4340");
-extern s32 D_801E4344;
-extern s32 D_801E4348;
-extern s32 D_801E434C;
+extern s32 g_RouteSceneryY asm("D_801E4344");
+extern s32 g_RouteSceneryZ asm("D_801E4348");
+extern s32 g_RouteSceneryW asm("D_801E434C");
 extern s32 g_RouteSceneryRotX asm("D_801E4350");
 extern s32 g_RouteSceneryRotY asm("D_801E4354");
 extern s32 g_RouteSceneryRotZ asm("D_801E4358");
@@ -54,7 +54,7 @@ void GameUpdateRouteScenery(void) {
     s32 c;
     s32 r4354;
 
-    cnt = &D_801E4330;
+    cnt = &g_RouteSceneryClock;
     c = *cnt;
     base = g_RouteSceneryData;
     if (c <= 0) {
@@ -154,6 +154,6 @@ void GameUpdateRouteScenery(void) {
     ApplyMatrix((s32 *)&mtx1, (s32 *)&vin, (s32 *)&vout);
 
     g_RouteSceneryX += vout.x / 4;
-    D_801E4344 += vout.y / 4;
-    D_801E4348 += vout.z / 4;
+    g_RouteSceneryY += vout.y / 4;
+    g_RouteSceneryZ += vout.z / 4;
 }

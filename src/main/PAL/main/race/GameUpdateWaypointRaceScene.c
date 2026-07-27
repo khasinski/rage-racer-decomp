@@ -81,7 +81,7 @@ extern s16 g_PlayerLap asm("D_8009E83C");
 
 extern s32 g_WaypointSpawnCooldown asm("D_8019C700");
 
-extern TrackWaypointSeed D_8007DFD4[];
+extern TrackWaypointSeed g_WaypointSeeds[] asm("D_8007DFD4");
 
 extern TrackWaypointRuntime g_Waypoints[] asm("D_801E4DF4");
 
@@ -89,7 +89,7 @@ extern TrackWaypointRuntime g_Waypoints[] asm("D_801E4DF4");
  * Initializes the 6 TrackWaypointRuntime slots for the current course. The
  * `magic`/mult/mfhi block is the compiler's divide-by-10 idiom computing the
  * track index (g_PlayerLap-1)/10, clamped to 0..9, which selects a
- * TrackWaypointSeed row in D_8007DFD4. Each slot i is seeded at
+ * TrackWaypointSeed row in g_WaypointSeeds. Each slot i is seeded at
  * origin + step*i (x,y), with the fixed constants 0x1766 and 0x174, and marked
  * inactive. Register pins and the raw tail-offset writes are match-load-bearing.
  */
@@ -243,7 +243,7 @@ void GameSeedWaypoints(void) {
     waypoint = g_Waypoints;
     temp = (track << 1) + track;
     temp <<= 2;
-    magic = (s32)D_8007DFD4;
+    magic = (s32)g_WaypointSeeds;
     seed = (TrackWaypointSeed *)(temp + magic);
     i = 0;
     code = 0x1766;

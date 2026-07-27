@@ -8,17 +8,17 @@
 extern s16 g_ClassRecords[] asm("D_8019CB40");
 extern volatile s32 g_ClassWinCount asm("D_801E4DA8");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
-extern u8 D_80010E68;
+extern u8 g_CaptionLostRace asm("D_80010E68");
 void func_80016B7C(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4);
 extern s32 D_8019C768;
 extern s32 g_LostRaceChoice asm("D_801E3E0C");
 void func_8005B190(s32 arg0, s32 arg1);
 void GameDrawLostRaceCaption(s32 arg0) asm("func_800215B8");
 extern void *g_CourseProgress asm("D_8009E67C");
-extern char D_80010E80[];
-extern char D_80010E8C[];
-extern char D_80010E98[];
-extern char D_80010EA0[];
+extern char g_TextTryAgain[] asm("D_80010E80");
+extern char g_TextEndRace[] asm("D_80010E8C");
+extern char g_TextChance[] asm("D_80010E98");
+extern char g_TextPressStart[] asm("D_80010EA0");
 extern s16 g_ChanceDigits[] asm("D_8007D438");
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
@@ -65,7 +65,7 @@ void GameDrawLostRaceCaption(s32 arg0) {
         arg0 = 0xFF;
     }
     arg0 >>= 1;
-    func_80016B7C(0x28, 0x40, &D_80010E68, 0x7812, arg0);
+    func_80016B7C(0x28, 0x40, &g_CaptionLostRace, 0x7812, arg0);
 }
 
 void GameEnterLostRaceScreen(void) asm("func_800215FC");
@@ -91,20 +91,20 @@ void GameDrawRaceEndPrompt(void) {
     if (g_LostRaceChoice == 0) {
         drawColor = color;
     }
-    func_80016EA0(0x6A, 0x68, D_80010E80, drawColor);
+    func_80016EA0(0x6A, 0x68, g_TextTryAgain, drawColor);
 
     drawColor = 0x7812;
     if (g_LostRaceChoice != 0) {
         drawColor = color;
     }
-    func_80016EA0(0x70, 0x78, D_80010E8C, drawColor);
+    func_80016EA0(0x70, 0x78, g_TextEndRace, drawColor);
 
-    func_80016EA0(0x76, 0xB8, D_80010E98, 0x7812);
+    func_80016EA0(0x76, 0xB8, g_TextChance, 0x7812);
 
     index = *(s16 *)((u8 *)g_CourseProgress + 6);
     func_80016EA0(0xBE, 0xB8, &g_ChanceDigits[index], 0x7812);
 
-    func_80016754(0x58, 0xD0, D_80010EA0, 0x78CC);
+    func_80016754(0x58, 0xD0, g_TextPressStart, 0x78CC);
     GameDrawLostRaceCaption(0xFF);
 }
 

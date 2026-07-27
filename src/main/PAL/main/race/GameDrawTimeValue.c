@@ -1,6 +1,9 @@
 #include "common.h"
 
-extern u8 D_8007DF04[];
+/* Static text buffers the two time drawers format into, seeded in .data with
+ * "0'00\"000" and "00'00\"". The named split symbols are the digit positions
+ * each writer touches; the separators are never rewritten. */
+extern u8 g_TimeTextBuffer[] asm("D_8007DF04");
 
 void func_80016754(s32 x, s32 y, void *str, s32 color);
 
@@ -30,34 +33,34 @@ void GameDrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
         minutes = whole / 60;
         fraction = (remainder * 1000) / localDivisor;
         seconds = whole % 60;
-        D_8007DF04[0] = minutes + '0';
+        g_TimeTextBuffer[0] = minutes + '0';
 
         secondTens = seconds / 10;
-        D_8007DF04[2] = secondTens + '0';
-        D_8007DF04[3] = (seconds - (secondTens * 10)) + '0';
+        g_TimeTextBuffer[2] = secondTens + '0';
+        g_TimeTextBuffer[3] = (seconds - (secondTens * 10)) + '0';
 
         fractionHundreds = fraction / 100;
-        D_8007DF04[5] = fractionHundreds + '0';
+        g_TimeTextBuffer[5] = fractionHundreds + '0';
 
         fractionTens = fraction / 10;
-        D_8007DF04[6] = (fractionTens - (fractionHundreds * 10)) + '0';
-        D_8007DF04[7] = (fraction - (fractionTens * 10)) + '0';
+        g_TimeTextBuffer[6] = (fractionTens - (fractionHundreds * 10)) + '0';
+        g_TimeTextBuffer[7] = (fraction - (fractionTens * 10)) + '0';
     } else {
-        D_8007DF04[0] = '-';
-        D_8007DF04[2] = '-';
-        D_8007DF04[3] = '-';
-        D_8007DF04[5] = '-';
-        D_8007DF04[6] = '-';
-        D_8007DF04[7] = '-';
+        g_TimeTextBuffer[0] = '-';
+        g_TimeTextBuffer[2] = '-';
+        g_TimeTextBuffer[3] = '-';
+        g_TimeTextBuffer[5] = '-';
+        g_TimeTextBuffer[6] = '-';
+        g_TimeTextBuffer[7] = '-';
     }
 
-    func_80016754(savedX, savedY, D_8007DF04, savedColor);
+    func_80016754(savedX, savedY, g_TimeTextBuffer, savedColor);
 }
 
-extern u8 D_8007DF10;
-extern u8 D_8007DF11[];
-extern u8 D_8007DF13;
-extern u8 D_8007DF14;
+extern u8 g_ClockTextBuffer asm("D_8007DF10");
+extern u8 g_ClockTextMinUnits[] asm("D_8007DF11");
+extern u8 g_ClockTextSecTens asm("D_8007DF13");
+extern u8 g_ClockTextSecUnits asm("D_8007DF14");
 
 void GameDrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) asm("func_80033F30");
 void GameDrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
@@ -75,20 +78,23 @@ void GameDrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
     min = tmp;
     tmp = sec - min * 60;
     if (min < 10) {
-        D_8007DF10 = ' ';
+        g_ClockTextBuffer = ' ';
     } else {
-        D_8007DF10 = min / 10 + '0';
+        g_ClockTextBuffer = min / 10 + '0';
     }
     tens = min / 10;
-    p = D_8007DF11;
+    p = g_ClockTextMinUnits;
     tens2 = tmp / 10;
     *p = min - tens * 10 + '0';
-    D_8007DF13 = tens2 + '0';
-    D_8007DF14 = tmp - tens2 * 10 + '0';
+    g_ClockTextSecTens = tens2 + '0';
+    g_ClockTextSecUnits = tmp - tens2 * 10 + '0';
     func_80016754(x, savedY, p - 1, color);
 }
 
-extern s32 D_801E4B34;
+/* Which of the two frame buffers is being drawn, 0 or 1; the main loop sets
+ * it beside g_DrawBuffer. Here it turns into the 240-line y bias of the
+ * drawing-area rect. */
+extern s32 g_DrawBufferParity asm("D_801E4B34");
 
 void func_80066604(void *packet, void *rect);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
@@ -99,7 +105,7 @@ void *GameQueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) 
     s16 rect[4];
     s32 offset;
 
-    offset = ((D_801E4B34 << 4) - D_801E4B34) << 4;
+    offset = ((g_DrawBufferParity << 4) - g_DrawBufferParity) << 4;
     rect[0] = x;
     rect[1] = y + offset;
     rect[2] = w;
@@ -111,8 +117,11 @@ void *GameQueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) 
     return packet;
 }
 
-extern u8 *D_8019C90C[2];
-extern u8 D_801EB9DC[];
+/* The two 12000-byte TILE strips func_800340D8 builds, backed by
+ * g_TileStripStorage. Nothing in the decompiled tree reads them back, so what
+ * the strip renders is still unestablished -- see docs/names.md 15g. */
+extern u8 *g_TileStripBuffers[2] asm("D_8019C90C");
+extern u8 g_TileStripStorage[] asm("D_801EB9DC");
 
 void func_800658FC(s32 mode);
 void func_80064FF8(u8 *prim);
@@ -136,10 +145,10 @@ void func_800340D8(void) {
     register u8 *storeBaseV1 asm("$3");
     register u8 *storeBaseV0 asm("$2");
 
-    initBuffers = D_8019C90C;
-    firstBuffer = D_801EB9DC;
+    initBuffers = g_TileStripBuffers;
+    firstBuffer = g_TileStripStorage;
     initBuffers[0] = firstBuffer;
-    D_8019C90C[1] = firstBuffer + 12000;
+    g_TileStripBuffers[1] = firstBuffer + 12000;
     func_800658FC(0);
 
     color = 0x20;

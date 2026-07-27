@@ -9,7 +9,7 @@
 extern u8 *g_CarModelAsset asm("D_8009E698");
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
-extern u8 *D_801E4090;
+extern u8 *g_CarModelBuffer asm("D_801E4090");
 s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 arg0, void *arg1);
 void GameSetCarModelSlot(void *arg0, s32 arg1) asm("func_80017B94");
@@ -21,8 +21,11 @@ extern s32 g_AssetBase asm("D_8019C904");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 s32 GameRandom15(void) asm("func_800632B0");
 void GameResetAssetLoader(void) asm("func_80017BE4");
-extern s32 D_8019C754;
-extern s32 D_801E4D70;
+/* Where asset 0x56 lands: g_ImageBlockBuffer advanced past the car texture
+ * block just loaded. Its header words 1 and 2 are relocated into
+ * g_AssetBlockPtr / g_AssetSubBlockPtr and word 0 is kept as-is. */
+extern s32 g_SharedAssetPtr asm("D_8019C754");
+extern s32 g_SharedAssetWord0 asm("D_801E4D70");
 extern s32 g_AssetSubBlockPtr asm("D_801E8AB0");
 extern u32 g_AssetLoadCursor asm("D_8019CAFC");
 void GameUnrelocateModelBank(void *, s32) asm("func_800179B4");
@@ -43,7 +46,7 @@ void GameLoadUpgradedCarModel(s32 arg0) {
         entry = (GameCarEntry *)(index + (s32)g_CarTable);
         offset = GameGetCarAssetIndex(arg0, entry->modelVariant + 1) << 1;
         mode = g_CarModelSlot;
-        ptr = D_801E4090;
+        ptr = g_CarModelBuffer;
 
         temp = offset + 0xA;
         if (mode == 0) {
@@ -168,12 +171,12 @@ void GameLoadRoundAssets(void) {
         result = func_80017C78((s32)kind, (void *)g_ImageBlockBuffer);
         if (result != 0) {
             g_AssetLoadState = 2;
-            D_8019C754 = result + g_ImageBlockBuffer;
+            g_SharedAssetPtr = result + g_ImageBlockBuffer;
         }
         break;
     case 2:
-        if (func_80017C78(0x56, (void *)D_8019C754) != 0) {
-            register s32 ptr asm("$4") = D_8019C754;
+        if (func_80017C78(0x56, (void *)g_SharedAssetPtr) != 0) {
+            register s32 ptr asm("$4") = g_SharedAssetPtr;
             register s32 first asm("$2");
             register s32 second asm("$3");
             register s32 third asm("$2");
@@ -186,7 +189,7 @@ void GameLoadRoundAssets(void) {
             g_AssetSubBlockPtr = second;
             third = *(s32 *)ptr;
             g_AssetLoadState = 0;
-            D_801E4D70 = third;
+            g_SharedAssetWord0 = third;
         }
         break;
     }

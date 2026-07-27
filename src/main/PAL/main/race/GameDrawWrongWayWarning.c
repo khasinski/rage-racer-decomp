@@ -69,10 +69,13 @@ extern u8 *volatile g_DrawBuffer asm("D_8019C900");
 extern s32 g_PlayerSpeed asm("D_8009E778");
 extern s16 g_PlayerGear asm("D_8009E806");
 extern u16 g_HudGlyphClut asm("D_801E4130");
-extern s16 D_8019C7D6;
-extern u8 D_8007DF00;
-extern u8 D_8007DF01;
-extern u8 D_8007DF02;
+extern s16 g_TachoNeedleQuadY0 asm("D_8019C7D6");
+/* Tint of the tachometer face: the dial-mode branches set all three to the
+ * same level and the tail of the function copies them into the face prim
+ * already staged at g_DrawBuffer + 0x236E8. .data seeds them 0x80. */
+extern u8 g_TachoFaceR asm("D_8007DF00");
+extern u8 g_TachoFaceG asm("D_8007DF01");
+extern u8 g_TachoFaceB asm("D_8007DF02");
 
 s32 func_80068568(s32 angle);
 s32 func_80068634(s32 angle);
@@ -103,7 +106,7 @@ void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
 
     vp = (s16 *)(prim + 8);
     i = 0;
-    pb = &D_8019C7D6;
+    pb = &g_TachoNeedleQuadY0;
     pa = pb - 1;
     for (; i < 4; i++) {
         *vp++ = cx + (sin * pa[0] - cos * pb[0]) / 4096;
@@ -116,35 +119,35 @@ void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
 
     if (type == 1) {
         if (amt > 96) amt = 96;
-        D_8007DF02 = -128 - amt;
-        D_8007DF01 = -128 - amt;
-        D_8007DF00 = -128 - amt;
+        g_TachoFaceB = -128 - amt;
+        g_TachoFaceG = -128 - amt;
+        g_TachoFaceR = -128 - amt;
         prim[4] = (amt * 32 + base[28] * (96 - amt)) / 96;
         prim[5] = (amt * 32 + base[29] * (96 - amt)) / 96;
         prim[6] = (amt * 32 + base[30] * (96 - amt)) / 96;
     } else if (type == 3) {
         amt -= 32;
         if (amt < 0) amt = 0;
-        D_8007DF02 = amt + 32;
-        D_8007DF01 = amt + 32;
-        D_8007DF00 = amt + 32;
+        g_TachoFaceB = amt + 32;
+        g_TachoFaceG = amt + 32;
+        g_TachoFaceR = amt + 32;
         prim[4] = ((96 - amt) * 32 + base[28] * amt) / 96;
         prim[5] = ((96 - amt) * 32 + base[29] * amt) / 96;
         prim[6] = ((96 - amt) * 32 + base[30] * amt) / 96;
         *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33A8;
     } else if (type == 2) {
         *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33E8;
-        D_8007DF02 = 0x80;
-        D_8007DF01 = 0x80;
-        D_8007DF00 = 0x80;
+        g_TachoFaceB = 0x80;
+        g_TachoFaceG = 0x80;
+        g_TachoFaceR = 0x80;
         *(s32 *)(prim + 4) = *(s32 *)(base + 32);
     } else {
         s16 rv = 0x33A8;
         asm("" : "=r"(rv) : "0"(rv));
         *(s16 *)(g_DrawBuffer + 0x236F2) = rv;
-        D_8007DF02 = 0x80;
-        D_8007DF01 = 0x80;
-        D_8007DF00 = 0x80;
+        g_TachoFaceB = 0x80;
+        g_TachoFaceG = 0x80;
+        g_TachoFaceR = 0x80;
         *(s32 *)(prim + 4) = *(s32 *)(base + 28);
     }
 
@@ -161,9 +164,9 @@ void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
         GameDrawSpeedDigits(cx, cy, g_PlayerSpeed * 160 / 1168);
     }
 
-    *(u8 *)(g_DrawBuffer + 0x236E8) = D_8007DF00;
-    *(u8 *)(g_DrawBuffer + 0x236E9) = D_8007DF01;
-    *(u8 *)(g_DrawBuffer + 0x236EA) = D_8007DF02;
+    *(u8 *)(g_DrawBuffer + 0x236E8) = g_TachoFaceR;
+    *(u8 *)(g_DrawBuffer + 0x236E9) = g_TachoFaceG;
+    *(u8 *)(g_DrawBuffer + 0x236EA) = g_TachoFaceB;
 
     { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236CC); }
     { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236E4); }

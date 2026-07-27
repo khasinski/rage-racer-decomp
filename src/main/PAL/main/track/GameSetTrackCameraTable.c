@@ -6,19 +6,19 @@
 void CdReadBreak(void) asm("func_80027634");
 s32 func_8006A534(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
-extern char D_80010ADC[];
-extern char D_80010AFC[];
-extern char D_80010B08[];
+extern char g_MsgNowLoading[] asm("D_80010ADC");
+extern char g_MsgReadBytes[] asm("D_80010AFC");
+extern char g_MsgFileReadError[] asm("D_80010B08");
 s32 CdRead(s32 arg0, void *arg1, s32 arg2) asm("func_80027688");
 s32 CdReadSync(s32 arg0, s32 arg1) asm("func_80027790");
 void func_8006A6DC(s32 arg0, void *arg1);
 s32 func_80017C78(s32 arg0, s32 arg1);
-extern char D_80010B38[];
-extern char D_80010B44[];
-extern char D_80010B58[];
-extern char D_80010B68[];
-extern char D_80010B80[];
-extern char D_80010B8C[];
+extern char g_PathRageBin[] asm("D_80010B38");
+extern char g_MsgFileNotFound[] asm("D_80010B44");
+extern char g_MsgReadSectors[] asm("D_80010B58");
+extern char g_MsgNowSearching[] asm("D_80010B68");
+extern char g_PathRageStr[] asm("D_80010B80");
+extern char g_MsgSearchOk[] asm("D_80010B8C");
 void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 
 void GameSetTrackCameraTable(u32 value) asm("func_80017BD4");
@@ -55,7 +55,7 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
 
     switch (g_CdLoadPhase) {
     case 0:
-        GameDebugPrintf(D_80010ADC, g_AssetPaths[assetIndex], dst);
+        GameDebugPrintf(g_MsgNowLoading, g_AssetPaths[assetIndex], dst);
         if (func_8006A534(1, 0) != 0) {
             g_CdLoadPhase = 1;
         }
@@ -91,12 +91,12 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
 
     case 5:
         size = (g_AssetCdEntries[assetIndex].size >> 2) << 2;
-        GameDebugPrintf(D_80010AFC, size);
+        GameDebugPrintf(g_MsgReadBytes, size);
         g_CdLoadPhase = 0;
         return size;
 
     case 6:
-        GameDebugPrintf(D_80010B08, g_AssetPaths[assetIndex], dst);
+        GameDebugPrintf(g_MsgFileReadError, g_AssetPaths[assetIndex], dst);
         g_CdLoadPhase = 0;
         break;
     }
@@ -124,9 +124,9 @@ void GameLoadDiscArchiveIndex(void) {
     GameCdLoadEntry *dst;
     GameCdLoadEntry *smallSrc;
 
-    GameDebugPrintf(D_80010ADC, D_80010B38, g_LoadBuffer);
-    if (DsSearchFile(&stack.file, D_80010B38) == 0) {
-        GameDebugPrintf(D_80010B44, D_80010B38);
+    GameDebugPrintf(g_MsgNowLoading, g_PathRageBin, g_LoadBuffer);
+    if (DsSearchFile(&stack.file, g_PathRageBin) == 0) {
+        GameDebugPrintf(g_MsgFileNotFound, g_PathRageBin);
     }
 
     one = 1;
@@ -138,7 +138,7 @@ void GameLoadDiscArchiveIndex(void) {
         } while (status > 0);
     } while (status != 0);
 
-    GameDebugPrintf(D_80010B58, one);
+    GameDebugPrintf(g_MsgReadSectors, one);
     base = CdPosToInt_Local(&stack.file);
     src = g_LoadBuffer;
     dst = g_AssetCdEntries;
@@ -149,13 +149,13 @@ void GameLoadDiscArchiveIndex(void) {
         dst++;
     }
 
-    GameDebugPrintf(D_80010B68, D_80010B80);
-    if (DsSearchFile(&stack.file, D_80010B80) == 0) {
-        GameDebugPrintf(D_80010B44, D_80010B80);
+    GameDebugPrintf(g_MsgNowSearching, g_PathRageStr);
+    if (DsSearchFile(&stack.file, g_PathRageStr) == 0) {
+        GameDebugPrintf(g_MsgFileNotFound, g_PathRageStr);
         goto loadSmallTable;
     }
 
-    GameDebugPrintf(D_80010B8C);
+    GameDebugPrintf(g_MsgSearchOk);
 loadSmallTable:
     base = CdPosToInt_Local(&stack.file);
     smallSrc = g_StreamCdEntries;

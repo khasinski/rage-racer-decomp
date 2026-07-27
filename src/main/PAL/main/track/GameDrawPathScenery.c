@@ -5,12 +5,12 @@
 #include "game/track.h"
 #include "game/race.h"
 
-extern s16 D_801E4DCA;
+extern s16 g_PathSceneryRotY asm("D_801E4DCA");
 extern s16 g_PathSceneryRotX asm("D_801E4DC8");
-extern s16 D_801E4DCC;
+extern s16 g_PathSceneryRotZ asm("D_801E4DCC");
 extern s16 g_PathSceneryX asm("D_801E4DB8");
 extern s32 g_ModelBankCount asm("D_801E4168");
-extern s32 D_1F800084;
+extern s32 g_ScratchRenderMode asm("D_1F800084");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
@@ -28,14 +28,14 @@ void GameDrawPathScenery(void) {
 
     mtx0Ptr = &mtx0;
     __asm__("" : "=r"(mtx0Ptr) : "0"(mtx0Ptr));
-    anglePtr = &D_801E4DCA;
+    anglePtr = &g_PathSceneryRotY;
     mtx1Ptr = &mtx1;
 
     GameBuildRotMatrixY(mtx0Ptr, 0x800 - anglePtr[0]);
     GameBuildRotMatrixX(mtx1Ptr, g_PathSceneryRotX);
     MulMatrix2(&mtx0, mtx1Ptr);
     MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
-    GameBuildRotMatrixZ(&mtx0, D_801E4DCC);
+    GameBuildRotMatrixZ(&mtx0, g_PathSceneryRotZ);
     MulMatrix2(mtx1Ptr, &mtx0);
 
     GameSelectModelBank(1);
@@ -68,7 +68,7 @@ void GameDrawPathScenery(void) {
     MulMatrix2(&mtx0, mtx1Ptr);
     func_80017794((void *)0x1F80011C, anglePtr, mtx1Ptr);
     frameValue = g_ModelBankCount;
-    D_1F800084 = 0;
+    g_ScratchRenderMode = 0;
     drawId = 1;
     if (frameValue >= 0x25) {
         drawId = 0x24;
@@ -76,9 +76,12 @@ void GameDrawPathScenery(void) {
     GameSubmitModel((void *)0x1F800000, drawId);
 }
 
-extern s32 D_8009E710;
+/* g_PlayerCar + 0x3C. Named for its identity only: this caller branches on
+ * its sign while the other user treats it as an unsigned 0..0x800 width
+ * fraction, and docs/names.md 15g leaves that unreconciled. */
+extern s32 g_PlayerField3C asm("D_8009E710");
 extern s32 g_PlayerSpeed asm("D_8009E778");
-extern s32 D_8009E704;
+extern s32 g_PlayerTrackPoint asm("D_8009E704");
 
 s32 func_80068634(s32 arg0);
 void func_8005BEA8(s32 arg0, s32 arg1);
@@ -120,7 +123,7 @@ after:
     if (data == 0) {
         goto zero;
     }
-    s0 = D_8009E710;
+    s0 = g_PlayerField3C;
     if (s0 >= 0) {
         goto sub;
     }
@@ -143,7 +146,7 @@ chk:
     if (s0 != 0) {
         s0 = (s0 * g_PlayerSpeed) / 12775;
         t = *(s32 *)0x1F80001C - 0xC00;
-        s3 = (t + g_TrackPoints[D_8009E704].angle) & 0xFFF;
+        s3 = (t + g_TrackPoints[g_PlayerTrackPoint].angle) & 0xFFF;
         if (s0 < 0 && (data & 2) > 0) {
             val = s0 * func_80068634(s3);
             if (val < 0) {

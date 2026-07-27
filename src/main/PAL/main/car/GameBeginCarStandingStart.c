@@ -7,6 +7,7 @@ extern s32 g_EngineRpm asm("D_8019CAB4");
 extern s32 g_StandingStartSpin asm("D_8019CA04");
 extern s16 g_PeakOutputValue asm("D_801E4B90");
 extern s16 g_GripLossTimer asm("D_801E4BA0");
+/* Deliberately raw: written here, read nowhere in the image (names.md 15g). */
 extern s16 D_801E8A4C;
 
 void GameBeginCarStandingStart(u8 *arg0) asm("func_8002BE18");

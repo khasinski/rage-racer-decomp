@@ -98,7 +98,7 @@ void GameSteerCarToTrackLine(GameCarRuntime *car) {
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/GameSteerCarToTrackLine", func_80030030);
 
-extern s32 D_801E8AA0;
+extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
 
 void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 void func_8005C104(s32 index, s32 phase, s32 volume);
@@ -114,7 +114,7 @@ void GameUpdateCarAirborne(GameCarRuntime *car) {
     s32 sinF24;
     s32 cosF24;
     volatile s32 coords[3];
-    s32 flag = D_801E8AA0;
+    s32 flag = g_ShiftSoundLevel;
 
     if (flag == 0) {
         s32 phase;
@@ -168,7 +168,7 @@ void GameUpdateCarAirborne(GameCarRuntime *car) {
     if (r->unk38 <= 0) {
         func_8005C104(-1, 0, 0);
         car->field_24 -= r->unk50;
-        D_801E8AA0 = 0;
+        g_ShiftSoundLevel = 0;
         r->unk3C = 0;
         r->unk60 = 0;
         r->unk5C = 0;

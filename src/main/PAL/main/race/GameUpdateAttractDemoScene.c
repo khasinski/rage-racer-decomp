@@ -18,25 +18,28 @@ extern u32 g_StreamReturnScene asm("D_8019C760");
 extern void (*g_AttractDemoSteps[])(void) asm("D_8007D6D0");
 void GameResetAssetLoader(void) asm("func_80017BE4");
 void GameReturnToTitleScene(void) asm("func_800268EC");
+/* Deliberately raw: see docs/names.md 12d. */
 extern s32 D_8019C768;
 extern s32 g_PrologueStep asm("D_801E4178");
 extern s32 g_PrologueCutIndex asm("D_801E6824");
-extern u8 D_80011010[];
+extern u8 g_TextNowLoading[] asm("D_80011010");
 void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80025940(void);
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void GameInstallCourseAssets(void) asm("func_80019730");
 void GameRequestTrackDataAssets(void) asm("func_80019844");
 void GameUpdatePrologueLoad(void) asm("func_80026C0C");
-extern s16 D_8007D6DC[];
-extern s16 D_8007D6DE[];
-extern s32 D_8007D6E0[];
+/* Split symbols of the 14-entry prologue table: 8 bytes each, { s16 x,
+ * s16 y, char *text }. The scroll drives y and the alpha ramp. */
+extern s16 g_PrologueLineX[] asm("D_8007D6DC");
+extern s16 g_PrologueLineY[] asm("D_8007D6DE");
+extern s32 g_PrologueLineText[] asm("D_8007D6E0");
 void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 void GameRequestSelectBgmAssets(void) asm("func_80018410");
 extern u32 g_CameraViewMode asm("D_8009E870");
-extern u8 D_801F18CC[];
+extern u8 g_CarTrackSection[] asm("D_801F18CC");
 extern UnkEventPair g_PrologueCameraCuts[] asm("D_8007D74C");
 void GameExitPrologue(void) asm("func_80026F68");
 void GameDrawPrologueText(void) asm("func_80026DE4");
@@ -119,7 +122,7 @@ void GameUpdatePrologueLoad(void) {
         }
     }
 
-    func_80016EA0(0x5E, 0x72, D_80011010, 0x7812);
+    func_80016EA0(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
 void GameUpdatePrologueLoadStep0(void) asm("func_80026D30");
@@ -167,7 +170,7 @@ void GameDrawPrologueText(void) {
         s32 tableY;
 
         adjusted = ((u32)g_SceneTimer / 3) - 0xD0;
-        tableY = *(s16 *)((u8 *)D_8007D6DE + offset);
+        tableY = *(s16 *)((u8 *)g_PrologueLineY + offset);
         delta = tableY - adjusted;
 
         if (delta < 0x60) {
@@ -191,9 +194,9 @@ void GameDrawPrologueText(void) {
         i++;
         if (value != 0) {
             func_800168AC(
-                *(s16 *)((u8 *)D_8007D6DC + offset),
+                *(s16 *)((u8 *)g_PrologueLineX + offset),
                 delta,
-                *(s32 *)((u8 *)D_8007D6E0 + offset),
+                *(s32 *)((u8 *)g_PrologueLineText + offset),
                 0x78CC,
                 value);
         }
@@ -275,7 +278,7 @@ void GameUpdatePrologue(void) {
 
         func_8003BB50();
 
-        GameRequestTrackTexturePage(*(s16 *)&D_801F18CC[(((((g_CameraCarIndex * 3) * 4) + g_CameraCarIndex) * 8) - g_CameraCarIndex) * 4]);
+        GameRequestTrackTexturePage(*(s16 *)&g_CarTrackSection[(((((g_CameraCarIndex * 3) * 4) + g_CameraCarIndex) * 8) - g_CameraCarIndex) * 4]);
 
         GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
         GameUpdateEnvironment();

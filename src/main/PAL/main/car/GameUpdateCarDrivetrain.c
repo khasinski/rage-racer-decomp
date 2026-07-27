@@ -13,16 +13,33 @@ s32 func_80068634();
 extern s32 g_ShiftTargetSpeed asm("D_8007DA74");
 extern s32 g_RoadGrade asm("D_8007DA78");
 extern u8 *g_TrackArcCenters asm("D_8019C7D0");
+/* Deliberately raw: the only initialiser anywhere is func_8002C478 writing
+ * zero, and the only other write is this decrement, so the boost it would add
+ * can never fire. See docs/names.md 15g. */
 extern s32 D_8019C998;
 extern s32 g_StandingStartSpin asm("D_8019CA04");
-extern s16 D_801E4112;
-extern s16 D_801E4114;
-extern s16 D_801E4152;
-extern s16 D_801E4154;
+/*
+ * Rpm-band indexes into the car spec's two rpm->value curves, rebuilt per car
+ * by func_8002C478: entry b holds how many curve points sit at or below rpm
+ * band b, where band = drive->rpm / 1000. `Start` is the same table one
+ * halfword earlier, i.e. band b - 1, so [Start[b], End[b]) is the range of
+ * curve points this rpm can land in. The first curve (spec +0x40 / +0x44 x,
+ * +0x00 / +0x04 y) yields the torque term; the second (spec +0xA8 / +0xAC x,
+ * +0x80 / +0x84 y) a 0..100 percentage that is subtracted from it.
+ */
+extern s16 g_TorqueBandStart asm("D_801E4112");
+extern s16 g_TorqueBandEnd asm("D_801E4114");
+extern s16 g_TorqueLossBandStart asm("D_801E4152");
+extern s16 g_TorqueLossBandEnd asm("D_801E4154");
 extern u8 g_PadType asm("D_801E4369");
 extern s16 g_GripLossTimer asm("D_801E4BA0");
 extern s32 g_ShiftTargetRpm asm("D_801E4BF4");
-extern s16 D_801E4FB4;
+/* Divisor of the speed-squared drag term: drag = v^2 / (spec->unk110 * 1000 /
+ * this). Reset to 1000 at the end of every frame, so writers elsewhere
+ * (func_8002CB30, func_8002D398) change the drag for exactly one frame.
+ * NOTE: docs/names.md 15g listed this as written-but-never-read; that is
+ * wrong, the read is right here. */
+extern s16 g_DragScale asm("D_801E4FB4");
 extern u8 g_GearTorqueCurve[] asm("D_801E8884");
 /*
  * AI target-speed / drivetrain physics driver (called by GameUpdatePlayerCar). Reads
@@ -333,7 +350,7 @@ void GameUpdateCarDrivetrain(void *base) {
     }
     else
     {
-      temp_v0_3 = *((&D_801E4112) + temp_t2);
+      temp_v0_3 = *((&g_TorqueBandStart) + temp_t2);
       if (temp_v0_3 == 0)
       {
         var_v1_2 = 0;
@@ -343,7 +360,7 @@ void GameUpdateCarDrivetrain(void *base) {
         var_v1_2 = temp_v0_3 - 1;
       }
     }
-    temp_t1 = *((&D_801E4114) + temp_t2);
+    temp_t1 = *((&g_TorqueBandEnd) + temp_t2);
     var_a1_2 = var_v1_2;
     if (var_a1_2 < temp_t1)
     {
@@ -385,14 +402,14 @@ void GameUpdateCarDrivetrain(void *base) {
     }
     else
     {
-      temp_v0_5 = *((&D_801E4152) + temp_t2);
+      temp_v0_5 = *((&g_TorqueLossBandStart) + temp_t2);
       var_v1_4 = 0;
       if (temp_v0_5 != 0)
       {
         var_v1_4 = temp_v0_5 - 1;
       }
     }
-    temp_t1 = *((&D_801E4154) + temp_t2);
+    temp_t1 = *((&g_TorqueLossBandEnd) + temp_t2);
     var_a1_4 = var_v1_4;
     var_s2 = 0;
     if (var_a1_4 < temp_t1)
@@ -696,13 +713,13 @@ void GameUpdateCarDrivetrain(void *base) {
   }
   var_a0_3 = (temp_v1_15 = ((*((s32 *) (((u8 *) car) + 0xA4))) * 0xA0) / 1168);
   var_v0_12 = (s32) ((g_CarSpec->unk110) * 0x3E8);
-  var_a1_7 = var_v0_12 / ((s16) D_801E4FB4);
+  var_a1_7 = var_v0_12 / ((s16) g_DragScale);
   if (var_a1_7 <= 0)
   {
     var_a1_7 = 1;
   }
   var_s5 += ((s32) (temp_v1_15 * temp_v1_15)) / var_a1_7;
-  D_801E4FB4 = 0x3E8;
+  g_DragScale = 0x3E8;
   if ((*((s16 *) (((u8 *) car) + 0x98))) == 0)
   {
     var_s5 = (var_s5 * (0x64 - var_s2)) / 100;

@@ -249,14 +249,23 @@ void GameDrawStartGridScenery(s32 arg0) {
 void func_8003D6E8(void) {
 }
 
-extern Vec4i D_8007E2C0[];
+/*
+ * The animated trackside boards. Position and pitch are authored per
+ * instance; the rest is shared animation state, and the "2" set belongs to
+ * the second drawer below. Frame cycles 0..15 off the caller's clock; every
+ * eighth frame with frame == 0 the board latches g_RacePosition (clamped to
+ * 0..3) and rolls a 0..2 variant, so the board is showing the player's
+ * position. Tint is (clock >> 3 & 3) << 16, written to the scratchpad render
+ * mode word for the second of the two models each board draws.
+ */
+extern Vec4i g_AnimSceneryPos[] asm("D_8007E2C0");
 extern u32 *g_VisibleCellMask asm("D_801E6828");
-extern s16 D_8007E2EA;
+extern s16 g_AnimSceneryFrame asm("D_8007E2EA");
 extern s32 g_RacePaused asm("D_801E4BAC");
-extern s32 D_8007E2E4;
-extern s16 D_8007E2E8;
-extern s16 D_8009AFCC;
-extern s16 D_8007E2E0[];
+extern s32 g_AnimSceneryTint asm("D_8007E2E4");
+extern s16 g_AnimSceneryRacePosition asm("D_8007E2E8");
+extern s16 g_AnimSceneryVariant asm("D_8009AFCC");
+extern s16 g_AnimSceneryPitch[] asm("D_8007E2E0");
 s32 GameRandom15(void) asm("func_800632B0");
 
 void GameDrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
@@ -277,7 +286,7 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
     register s32 lim2 asm("$2");
     register s32 *scr asm("$8");
 
-    state = D_8007E2C0[arg1];
+    state = g_AnimSceneryPos[arg1];
 
     if ((g_CourseIndex & 3) == 3) {
         state.z += 0x5000;
@@ -307,18 +316,18 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
         return;
     }
 
-    D_8007E2EA = (arg0 / 4) % 16;
-    if (D_8007E2EA == 0 && (arg0 & 7) == 0 && g_RacePaused == 0) {
-        D_8007E2E4 = 0;
-        D_8007E2E8 = g_RacePosition;
-        D_8009AFCC = (GameRandom15() & 7) / 3;
-        if (D_8007E2E8 >= 4) {
-            D_8007E2E8 = 0;
+    g_AnimSceneryFrame = (arg0 / 4) % 16;
+    if (g_AnimSceneryFrame == 0 && (arg0 & 7) == 0 && g_RacePaused == 0) {
+        g_AnimSceneryTint = 0;
+        g_AnimSceneryRacePosition = g_RacePosition;
+        g_AnimSceneryVariant = (GameRandom15() & 7) / 3;
+        if (g_AnimSceneryRacePosition >= 4) {
+            g_AnimSceneryRacePosition = 0;
         }
     }
 
     GameBuildRotMatrixY(&mtx, state.w);
-    GameBuildRotMatrixX(&mtx2, D_8007E2E0[arg1]);
+    GameBuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
     MulMatrix(&mtx, &mtx2);
     MulMatrix2((Matrix *)0x1F800028, &mtx);
 
@@ -326,52 +335,52 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
         return;
     }
 
-    D_8007E2E4 = ((arg0 >> 3) & 3) << 16;
+    g_AnimSceneryTint = ((arg0 >> 3) & 3) << 16;
 
-    if (D_8007E2E8 != 0) {
-        if (D_8007E2EA < 13) {
+    if (g_AnimSceneryRacePosition != 0) {
+        if (g_AnimSceneryFrame < 13) {
             func_80017794((void *)0x1F80011C, &state, &mtx);
-            num = D_8007E2EA + 10;
+            num = g_AnimSceneryFrame + 10;
             *(s32 *)0x1F800084 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
             GameSubmitCourseModel((void *)0x1F800000, drawArg);
         } else {
             func_80017794((void *)0x1F80011C, &state, &mtx);
-            num = D_8007E2E8;
+            num = g_AnimSceneryRacePosition;
             *(s32 *)0x1F800084 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
             GameSubmitCourseModel((void *)0x1F800000, drawArg);
         }
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
-        sv = D_8007E2E4;
+        sv = g_AnimSceneryTint;
         *(s32 *)0x1F800084 = sv;
-        num = D_8009AFCC + 4;
+        num = g_AnimSceneryVariant + 4;
         lim2 = g_CourseModelCount;
         drawArg = (num < lim2) ? num : 1;
         GameSubmitCourseModel((void *)0x1F800000, drawArg);
     } else {
         func_80017794((void *)0x1F80011C, &state, &mtx);
-        num = D_8007E2EA + 0x18;
+        num = g_AnimSceneryFrame + 0x18;
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
         GameSubmitCourseModel((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
-        sv = D_8007E2E4;
+        sv = g_AnimSceneryTint;
         scr = (s32 *)0x1F800084;
         *scr = sv;
-        num = D_8009AFCC + 7;
+        num = g_AnimSceneryVariant + 7;
         lim2 = g_CourseModelCount;
         drawArg = (num < lim2) ? num : 1;
         GameSubmitCourseModel((void *)0x1F800000, drawArg);
     }
 }
 
-extern s16 D_8007E2F2;
-extern s32 D_8007E2EC;
-extern s16 D_8007E2F0;
+extern s16 g_AnimScenery2Frame asm("D_8007E2F2");
+extern s32 g_AnimScenery2Tint asm("D_8007E2EC");
+extern s16 g_AnimScenery2Variant asm("D_8007E2F0");
 
 void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
 
@@ -398,7 +407,7 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         return;
     }
 
-    state = D_8007E2C0[arg1];
+    state = g_AnimSceneryPos[arg1];
     if ((g_CourseIndex & 3) == 3) {
         state.z += 0x5000;
     }
@@ -424,51 +433,51 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         return;
     }
 
-    D_8007E2F2 = (arg0 / 4) % 16;
-    if (D_8007E2F2 == 0 && (arg0 & 7) == 0 && arg3 == 1) {
-        D_8007E2EC = 0;
-        D_8007E2F0 = (GameRandom15() & 7) / 3;
+    g_AnimScenery2Frame = (arg0 / 4) % 16;
+    if (g_AnimScenery2Frame == 0 && (arg0 & 7) == 0 && arg3 == 1) {
+        g_AnimScenery2Tint = 0;
+        g_AnimScenery2Variant = (GameRandom15() & 7) / 3;
     }
 
     GameBuildRotMatrixY(&mtx, state.w);
-    GameBuildRotMatrixX(&mtx2, D_8007E2E0[arg1]);
+    GameBuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
     MulMatrix(&mtx, &mtx2);
     MulMatrix2((Matrix *)0x1F800028, &mtx);
 
-    D_8007E2EC = ((arg0 >> 3) & 3) << 16;
+    g_AnimScenery2Tint = ((arg0 >> 3) & 3) << 16;
 
     if (arg2 != 0) {
         func_80017794((void *)0x1F80011C, &state, &mtx);
-        num = D_8007E2F2 + 0xA;
+        num = g_AnimScenery2Frame + 0xA;
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
         GameSubmitCourseModel((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
-        sv = D_8007E2EC;
+        sv = g_AnimScenery2Tint;
         drawArg = 1;
         scr = (s32 *)0x1F800084;
         *scr = sv;
         lim2 = g_CourseModelCount;
-        num = D_8007E2F0;
+        num = g_AnimScenery2Variant;
         __asm__("" : "=r"(num) : "0"(num), "r"(lim2));
         num = num + 4;
     } else {
         func_80017794((void *)0x1F80011C, &state, &mtx);
-        num = D_8007E2F2 + 0x18;
+        num = g_AnimScenery2Frame + 0x18;
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
         GameSubmitCourseModel((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
-        sv = D_8007E2EC;
+        sv = g_AnimScenery2Tint;
         drawArg = 1;
         scr = (s32 *)0x1F800084;
         *scr = sv;
         lim2 = g_CourseModelCount;
-        num = D_8007E2F0;
+        num = g_AnimScenery2Variant;
         __asm__("" : "=r"(num) : "0"(num), "r"(lim2));
         num = num + 7;
     }

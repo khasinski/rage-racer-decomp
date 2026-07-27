@@ -182,7 +182,12 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
     state->field_11C = state->field_11C + state->field_120;
 }
 
-/* g_RankedCars - 1: this walker is indexed from the slot before the leader. */
+/*
+ * g_RankedCars - 1: this walker is indexed from the slot before the leader,
+ * so the byte at 0x801E40B8 itself is never loaded. It stays raw because that
+ * address already has a name for what actually lives there -- g_SceneTimer in
+ * game/state.h -- and aliasing it a second time would be misleading.
+ */
 extern GameCarRuntime *D_801E40B8[];
 
 void GameSlowRivalAhead(GameCarRuntime *arg0, s32 arg1) asm("func_8003A6A4");
@@ -211,9 +216,10 @@ void GameSlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
     }
 }
 
-/* g_Cars[0].field_68 / .field_6C - retail references both split symbols. */
-extern s32 D_801F18BC;
-extern s32 D_801F18C0;
+/* Base of the per-car progress pair, walked at the 0x19C GameCarRuntime
+ * stride: g_Cars[0].field_68 / .field_6C, whose sum is race progress. */
+extern s32 g_CarProgressA asm("D_801F18BC");
+extern s32 g_CarProgressB asm("D_801F18C0");
 
 /*
  * Ranks the first four cars by race progress (`field_68 + field_6C`) and
@@ -236,7 +242,7 @@ void GameRankContenders(void) {
     sumPtr = sums;
     offset = 0;
     do {
-        *sumPtr = *(s32 *)((u8 *)&D_801F18BC + offset) + *(s32 *)((u8 *)&D_801F18C0 + offset);
+        *sumPtr = *(s32 *)((u8 *)&g_CarProgressA + offset) + *(s32 *)((u8 *)&g_CarProgressB + offset);
         offset += sizeof(GameCarRuntime);
         i++;
         sumPtr++;

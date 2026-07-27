@@ -2,11 +2,11 @@
 #include "game/track.h"
 #include "game/car.h"
 
-extern u8 D_80011438[];
+extern u8 g_MsgResOk[] asm("D_80011438");
 
 
 
-extern u8 D_80011440[];
+extern u8 g_MsgEventOk[] asm("D_80011440");
 
 extern u8 *volatile g_RaceIntroCameraScript asm("D_8019CAF8");
 
@@ -19,13 +19,13 @@ extern u8 *volatile g_FlybySceneryData asm("D_801E4448");
 
 extern u8 *volatile g_PathSceneryPosData asm("D_801E4BA4");
 
-extern u8 D_8001144C;
+extern u8 g_MsgSoundError asm("D_8001144C");
 
-extern u8 D_8001145C;
+extern u8 g_MsgInitSoundOk asm("D_8001145C");
 
 s32 func_8005B5C4(void);
 
-extern u8 D_8001146C;
+extern u8 g_MsgInitEngineOk asm("D_8001146C");
 
 void func_8005BB1C(void);
 
@@ -35,7 +35,7 @@ void func_8005B204(s32 arg0, s32 arg1, s32 arg2);
 
 void GameInstallResourceData(void) asm("func_80034DCC");
 void GameInstallResourceData(void) {
-    GameDebugPrintf(D_80011438);
+    GameDebugPrintf(g_MsgResOk);
 }
 
 void GameSetCarSpec(u32 arg0) asm("func_80034DF4");
@@ -60,7 +60,7 @@ void GameInstallTrackEventData(u8 *arg0) {
     offset1 = *(s32 *)(arg0 + 0xB70);
     g_RouteSceneryData = base + offset0;
     offset0 = *(s32 *)(arg0 + 0xB6C);
-    callArg = D_80011440;
+    callArg = g_MsgEventOk;
     offset0 = (s32)(base + offset0);
     base += offset1;
     g_PathSceneryPosData = (u8 *)offset0;
@@ -71,9 +71,9 @@ void GameInstallTrackEventData(u8 *arg0) {
 void GameInitSoundSystem(void) asm("func_80034E88");
 void GameInitSoundSystem(void) {
     if (func_8005B5C4() != 0) {
-        GameDebugPrintf(&D_8001144C);
+        GameDebugPrintf(&g_MsgSoundError);
     }
-    GameDebugPrintf(&D_8001145C);
+    GameDebugPrintf(&g_MsgInitSoundOk);
 }
 
 void GameInitEngineSound(void) asm("func_80034ED0");
@@ -81,7 +81,7 @@ void GameInitEngineSound(void) {
     func_8005BB1C();
     func_8005B468(1);
     func_8005B204(2, 0, 0);
-    GameDebugPrintf(&D_8001146C);
+    GameDebugPrintf(&g_MsgInitEngineOk);
 }
 
 s32 GameFramesToMilliseconds(s32 arg0, s32 arg1) asm("func_80034F18");

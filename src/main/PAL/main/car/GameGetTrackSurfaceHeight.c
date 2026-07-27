@@ -100,19 +100,25 @@ s32 GameGetTrackSurfaceHeight(Unk32098 *arg0) {
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/GameGetTrackSurfaceHeight", func_80032280);
 
-extern s16 D_8019C7D4;
-extern s16 D_8019C7D6;
-extern s16 D_8019C7D8;
-extern s16 D_8019C7DA;
-extern s16 D_8019C7DC;
-extern s16 D_8019C7DE;
-extern s16 D_8019C7E0;
-extern s16 D_8019C7E2;
-extern GameSpriteDesc D_8007DAE0;
-extern u8 D_801C051C[];
-extern u8 D_801E3D04[];
-extern u8 D_801E3CEC[];
-extern u8 D_801E3CF8[];
+/* The four corners of the tachometer needle, unrotated, rebuilt from
+ * g_CarSpec +0x14C..+0x14F whenever the car changes. GameDrawTachometer walks
+ * them as an (x, y) pair array from &g_TachoNeedleQuadY0 - 1. */
+extern s16 g_TachoNeedleQuadX0 asm("D_8019C7D4");
+extern s16 g_TachoNeedleQuadY0 asm("D_8019C7D6");
+extern s16 g_TachoNeedleQuadX1 asm("D_8019C7D8");
+extern s16 g_TachoNeedleQuadY1 asm("D_8019C7DA");
+extern s16 g_TachoNeedleQuadX2 asm("D_8019C7DC");
+extern s16 g_TachoNeedleQuadY2 asm("D_8019C7DE");
+extern s16 g_TachoNeedleQuadX3 asm("D_8019C7E0");
+extern s16 g_TachoNeedleQuadY3 asm("D_8019C7E2");
+extern GameSpriteDesc g_TachoNeedleSprite asm("D_8007DAE0");
+/* The needle SPRT in each of the two draw buffers, plus the two DR_TPAGE
+ * prims that precede buffer 1's copy at -0x18 and -0x0C (buffer 0's are
+ * reached as g_TachoNeedlePrim0 - 0x18 / - 0x0C). */
+extern u8 g_TachoNeedlePrim0[] asm("D_801C051C");
+extern u8 g_TachoNeedlePrim1[] asm("D_801E3D04");
+extern u8 g_TachoNeedlePrim1PageA[] asm("D_801E3CEC");
+extern u8 g_TachoNeedlePrim1PageB[] asm("D_801E3CF8");
 
 void GameBuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) asm("func_80032FF0");
 void func_80064EB8(u8 *arg0, s32 arg1);
@@ -130,18 +136,18 @@ void func_800666F4(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4);
 void GameBuildTachoNeedleQuad(void) asm("func_80032BD0");
 void GameBuildTachoNeedleQuad(void) {
     u8 *data = (u8 *)g_CarSpec;
-    u8 *prim0 = D_801C051C;
-    u8 *prim1 = D_801E3D04;
-    GameSpriteDesc *src = &D_8007DAE0;
+    u8 *prim0 = g_TachoNeedlePrim0;
+    u8 *prim1 = g_TachoNeedlePrim1;
+    GameSpriteDesc *src = &g_TachoNeedleSprite;
 
-    D_8019C7D4 = -data[0x14F];
-    D_8019C7D6 = data[0x14E];
-    D_8019C7D8 = -data[0x14D];
-    D_8019C7DA = -data[0x14C];
-    D_8019C7DC = data[0x14F];
-    D_8019C7DE = data[0x14E];
-    D_8019C7E0 = data[0x14D];
-    D_8019C7E2 = -data[0x14C];
+    g_TachoNeedleQuadX0 = -data[0x14F];
+    g_TachoNeedleQuadY0 = data[0x14E];
+    g_TachoNeedleQuadX1 = -data[0x14D];
+    g_TachoNeedleQuadY1 = -data[0x14C];
+    g_TachoNeedleQuadX2 = data[0x14F];
+    g_TachoNeedleQuadY2 = data[0x14E];
+    g_TachoNeedleQuadX3 = data[0x14D];
+    g_TachoNeedleQuadY3 = -data[0x14C];
 
     src->x = *(u16 *)(data + 0x13C) + *(u16 *)(data + 0x138);
     src->y = *(u16 *)(data + 0x13E) + *(u16 *)(data + 0x13A);
@@ -152,6 +158,6 @@ void GameBuildTachoNeedleQuad(void) {
     func_80064EB8(prim1, 0);
     func_800666F4(prim0 - 0x18, 0, 1, 9, 0);
     func_800666F4(prim0 - 0x0C, 0, 1, 0xA, 0);
-    func_800666F4(D_801E3CEC, 0, 1, 9, 0);
-    func_800666F4(D_801E3CF8, 0, 1, 0xA, 0);
+    func_800666F4(g_TachoNeedlePrim1PageA, 0, 1, 9, 0);
+    func_800666F4(g_TachoNeedlePrim1PageB, 0, 1, 0xA, 0);
 }

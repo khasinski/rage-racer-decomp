@@ -2496,3 +2496,206 @@ happened to place in the middle of the game text. They must not be "fixed" into
   what `src/main/PAL/lib/libsnd/` and `lib/libspu/` already do. LibRef47 documents
   no internal statics, so these are descriptions, not recovered symbols, and this
   section says so explicitly rather than letting a later reader assume otherwise.
+
+---
+
+## 18. Globals pass over `race/`, `car/` and `track/`
+
+Section 15 named the *functions* in the three gameplay directories; their
+globals were left for later. This pass closed that: of the **284** distinct
+`D_XXXXXXXX` globals still spelled raw in those directories, **268 now carry a
+name** and 16 stay raw on purpose (18f). Nothing but identifiers changed —
+every declaration keeps its own file's type, `volatile`, array shape and
+pointer-ness verbatim, with the alias appended:
+
+```c
+extern s16 D_8009B21C;   ->   extern s16 g_ChaseTargetYaw asm("D_8009B21C");
+```
+
+`make check VERSION=PAL` printed `build/PAL/main.exe: OK`, sha1
+`2913e15648eddef40821c5f666460abc04155ee6`, after every batch and at the end.
+
+**By reach and directory.** Measured *before* the pass, over the three
+directories only:
+
+| reach | candidates | named | left raw |
+|---|---|---|---|
+| 3+ files | 1 | 0 | 1 (`D_8019C768`) |
+| 2 files | 20 | 18 | 2 |
+| 1 file | 263 | 250 | 13 |
+
+Counted once per directory a symbol appears in: **race 77, car 51, track 145**.
+The near-absence of high-reach targets is itself the result — section 12 and
+section 15 had already taken every gameplay global that crossed three files, so
+what was left is almost entirely the single-file tail, which is exactly the part
+that turns an individual file from unreadable into readable.
+
+### 18a. The camera work block at `0x8009B1B8` (37 names, one file)
+
+`track/GameUpdateCamera.c` alone held 38 raw globals, all of one contiguous
+block, and reading it settles what the five camera modes are.
+
+`GameUpdateCamera(mode, object)` takes modes 0 and 1 straight from
+`g_CameraViewMode`; for anything `>= 2` the mode comes from the nearest track
+camera's own `+0x20` field. So:
+
+* **mode 0** — bumper/cockpit: the eye is the car plus a rotated `(0, -0x1C0, 0)
+  >> 4` and the yaw gets `car->field_8C`.
+* **mode 1** — the chase view, and the only mode with smoothing. Named
+  `g_ChaseTargetYaw` / `g_ChaseYaw` / `g_ChaseYawLag` / `g_ChaseYawRampNeg` /
+  `…Pos` / `g_ChaseYawStepLimit` / `g_ChaseYawStep` / `g_ChaseYawDamping` /
+  `g_ChaseCarSpeed`. The camera walks towards the car's heading by a quadratic
+  ramp `((ramp + 8)^2) / damping`, clamped to `g_ChaseYawStepLimit` (max 0x40),
+  and **the damping is a function of speed**: 222 at rest falling to 1 at
+  1250 units, so the camera lags at parking speed and snaps at racing speed.
+  Two ramps exist because the sign of the yaw error picks one and zeroes the
+  other.
+* **mode 2 / mode 4** — fixed trackside cameras; 4 dollies toward the car over
+  `node->duration` frames.
+* **mode 3** — a keyframed camera *around* the car. Named `g_CamPath*`: an
+  offset triple and a pitch/yaw/roll/distance quad, each with a `Start`, a
+  `Delta` and a current value, eased by `1 - cos()` over `node->duration`.
+  This proves the 0x24-byte track-camera record is a **union**: modes 2 and 4
+  read `+0x00..0x0C` as a world position, mode 3 reads the same four words as
+  angles + distance (they are wrapped to +-0x800, a position never would be).
+* **mode 5** — a rear/orbit camera at a fixed yaw and pull-back.
+
+`g_ChaseCameraPreset` (`D_8007F610`), `g_OrbitCameraYaw` (`D_8007F614`) and
+`g_OrbitCameraDistance` (`D_8007F618`) are `.data` constants **with no writer
+anywhere in the image**: 0, 0 and 330. So the three chase distances
+(eye 0x3A/0x59/0x97, pull-back 0x118/0x140/0x190) are authored but retail always
+uses the nearest one.
+
+### 18b. The environment colour timeline, finished
+
+Section 12a described the nine `{ cur, from, to }` RGB slots at `D_801E3FB6` but
+left them raw. All 27 are now `g_EnvFogColor{,From,To}` and
+`g_EnvColor1..8{,From,To}`, plus `g_EnvSpare` for the fourth byte of slot 0.
+Reading `GameUpdateEnvironment`'s eight `GameLerpEnvColor` calls adds one fact
+section 12a did not have: **slots 5/6 and 7/8 are alternates, chosen by
+`g_CourseIndex == 2`** — only six of the nine slots are ever lerped on a given
+course.
+
+`D_801E4028` is now `g_EnvSpareLerp`, reversing 12a's decision to leave it raw.
+12a's objection was that naming it asserts what the flag is *for*; the name
+chosen asserts only what it *does* — it is the gate on the `g_EnvSpareFrom ->
+g_EnvSpareTo` lerp of `g_EnvSpare`, which is provable and complete. Same
+mechanical style as `g_IsEnvironmentMode4`.
+
+`D_8009B24C` is `g_FogNear`, `D_801E40E8` is `g_EnvScriptCursor`.
+
+### 18c. Two controller findings
+
+**The live button mapping is `D_801E4B60[16]`.** `GameLoadPadButtonMapping`
+copies one of eight authored presets per controller into it: the standard pad's
+eight `u16` masks at `+0x00`, the NeGcon's eight at `+0x10`. Reading the
+consumers assigns every slot a job:
+
+| slot | name | evidence |
+|---|---|---|
+| 0, 1 | `g_PadSteerLeftMask` / `g_PadSteerRightMask` | `g_MirrorMode` swaps exactly these two |
+| 2, 3 | `g_PadAccelMask` / `g_PadBrakeMask` (`g_Negcon…` for row 1) | drive `accelBtn` / `brakeBtn` |
+| 4, 5 | `g_PadShiftMasks[type][0/1]` | gear up / gear down, hence the 8-halfword row stride |
+| 6 | `g_PadMirrorMasks[type * 8]` | held + D-pad up/down toggles `g_MirrorViewEnabled` while paused |
+
+**The NeGcon analog channels are I, II and shoulder L.** `func_80014014` writes
+`raw[5] - centre` to `g_NegconAnalogI`, `raw[6] - centre` to `…II` and
+`raw[7] - centre` to `…L`, and the *digital* pad path writes a flat **0x6A**
+into the same three slots when the mapped button is held. That constant is what
+proves the scale: every consumer divides by 106. The eight-way
+`g_NegconConfigIndex` switch then reads as real control layouts (I=throttle
+II=brake, swapped, brake-only on L, II+L, …).
+
+`g_NegconSteer` is the twist after the calibrated centre, a dead zone and a
+clamp to `g_NegconSteerRange[g_NegconSteerPlay]` = `{25, 38, 75, 113}` — the
+0..3 setting the NEGCON STEER PLAY screen edits and the save file keeps. A
+higher setting needs more twist for full lock.
+
+### 18d. Judgement calls, and the readings they beat
+
+* **`D_8009B1EC` left raw although its whole block is named.** The slot carries
+  the mode-3 camera path's *yaw delta* and the mode-1 chase camera's *previous
+  yaw*. Both roles are live, in the same function, and no name is honest for
+  both, so the block has a hole and a comment saying why. Aliasing one address
+  to two identifiers in one TU would compile, but it would be worse to read.
+* **`D_801E40B8` left raw in `car/GameUpdateCarTrafficAvoidance.c`.** It is
+  `g_RankedCars - 1` and the walker never loads the byte at that address. But
+  `0x801E40B8` already has a name for what lives there — `g_SceneTimer` — so a
+  second alias would tell a reader the scene timer is a car pointer. Raw plus a
+  comment beats both.
+* **`D_8019CAB0` -> `g_TrackZoneDark`, not `g_InTunnel`.** `GameGetTrackZoneBlend`
+  sets it to 3 when the player is inside a zone whose code is 0; its only reader
+  is `GameDrawPlayerTachometer`, where it forces dial mode 2 — the mode the
+  time-of-day test otherwise only picks at night. "Tunnel" is the obvious guess
+  and probably right, but the executable only proves "a zone that wants the lit
+  dial".
+* **`D_801E8AA0` -> `g_ShiftSoundLevel`, not `g_WheelspinLevel`.** It is
+  `shiftTick & 0x3F` latched when a gear change lands under power, and its only
+  effect is `func_8005C104(0, 0x1800, level + 25)` while the car is airborne.
+  The trigger is a shift and the effect is a sound volume; the *content* of
+  continuous sound 0 is on the disc, so the name does not claim it is a squeal.
+* **The lowercase captions.** `D_80010E1C` etc. contain bytes like `"hai"`,
+  `"hegi"`, `"hfgi"`, `"hci"`. `func_80016B7C` routes 'a'..'u' through a
+  separate word-sprite bank (4-byte records at `0x8007C438`) and 'v'..0xFF
+  through a second one at `0x8007C460`, so these are pre-rendered captions whose
+  artwork is on the disc. They are named for **what they label**, which the call
+  sites do prove: `"hegi"` is always immediately followed by the total time
+  (`"T/…"`) and `"hfgi"` by the per-lap list, in two independent panels, so
+  `g_CaptionTotalTime` / `g_CaptionLapTime`; `"hai"` heads the five ranking rows,
+  so `g_CaptionRanking`; and in the prize panel `"hci"`, `"hebi"`, `"hji"` are
+  each followed by `%dv` of `g_PrizeAmount`, the running total and
+  `g_PromotionBonus`.
+* **`D_801E4112` / `D_801E4114` are one table read two ways.** `func_8002C478`
+  fills entry `b` with how many points of a car-spec rpm curve sit at or below
+  rpm band `b` (`band = rpm / 1000`); `D_801E4112` is that same table one
+  halfword earlier. So `[g_TorqueBandStart[b], g_TorqueBandEnd[b])` is the search
+  range, which is why two symbols two bytes apart are both indexed by `b`. Same
+  shape at `D_801E4152` / `D_801E4154` for the second curve.
+* **`D_8007D6DC/DE/E0` are `g_PrologueLine{X,Y,Text}`**, split symbols of one
+  14-entry 8-byte table `{ s16 x, s16 y, char *text }`. Section 15d had promised
+  a `g_PrologueLines`; the table is addressed only through the three column
+  symbols, so those are what exist.
+* **Split symbols named as such, not invented as new objects.**
+  `g_Shuttle1*` (`g_ShuttleScenery[1]`'s fields), `g_CarProgressA/B`,
+  `g_CarTrackProgress`, `g_CarTrackSection`, `g_CarMarkerIndex/Flag` (bases of
+  0x19C-stride walks over `g_Cars`), `g_BestSectorTime1/2`, `g_SectorTime2`,
+  `g_RankingCars`, `g_TimeRecordTimes/Cars`, `g_ClassRecord5/6`, `g_ClassClears`,
+  `g_PrizeMoney3rd`, `g_DefaultRecordTimes/Cars`, `g_ShuttlePath2Points`,
+  `g_StaticSceneryYaw`, `g_SpinningSceneryYaw`, `g_EnvFogColorG/B`.
+
+### 18e. Corrections to earlier sections
+
+* **`D_801E4FB4` is read.** Section 15g lists it among globals "written but
+  never read anywhere in the image". It is read at `0x8002B840`, inside
+  `GameUpdateCarDrivetrain`: `drag = v^2 / (g_CarSpec->unk110 * 1000 / D_801E4FB4)`,
+  and the same function resets it to 1000 immediately afterwards — so writers
+  elsewhere (`func_8002CB30`, `func_8002D398`) change the drag for exactly one
+  frame. It is now `g_DragScale`, and the 15g entry is wrong.
+* **A second `%hi`/`%lo` trap, in this territory.** `LA_ORDERED(dst, sym, dep)`
+  in `include/asm_macros.h` **stringifies** its symbol into an inline-asm `la`.
+  `track/GameSeekEnvironmentScript.c` uses it on `D_801E6DA4` (the 16-entry sky
+  CLUT), so that symbol must keep the raw spelling exactly like the
+  `%hi`/`%lo` cases in 12c. Renaming it links clean at compile time and fails at
+  link. Any future pass touching a `LA_ORDERED` argument must know this.
+* **`include/game/sound.h` claims `D_801E6DA4` as "+0x24 s16 table" of the sound
+  work area.** Its only user in the tree is the sky-CLUT upload. The header
+  declaration is left alone (it is another pass's territory) but the
+  identification is recorded here as doubtful.
+* **`D_801E4112`/`D_801E4152` overlap `D_801E4110`**, which section 12e
+  identifies as libsnd's open-VAB `ProgAtr` pointer. Both cannot be live at
+  once. The drivetrain reading is direct (`func_8002C478` builds the tables, and
+  the disassembly shows the `addiu`s), so the 12e entry is the one to re-check.
+
+### 18f. Left raw on purpose
+
+| symbol | why |
+|---|---|
+| `D_8019C768` | section 12d; unchanged |
+| `D_8009B1EC` | two live roles in one slot — see 18d |
+| `D_801E40B8` | already named `g_SceneTimer`; used only as `g_RankedCars - 1` |
+| `D_8019CB38` / `D_8019CB3A` | referenced from `%hi`/`%lo` inline asm (12c) |
+| `D_801E6DA4` | referenced from a `LA_ORDERED` inline asm — see 18e |
+| `D_8019C9AC` | both writes in the image store zero, so the one reader (skip the pad, freeze the steering) can never fire |
+| `D_8019C998` | same shape: initialised to zero, only ever decremented |
+| `D_801E4194`, `D_801E4248`, `D_801E4CF8`, `D_801E4D84`, `D_801E433C`, `D_801E3F60`, `D_801E8A4C` | written, never read anywhere in the image |
+| `D_8009EC88` | its only reader is the guard on its own write, so it has no effect — and it lives in the unreachable waypoint mode (15f) |

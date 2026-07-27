@@ -41,7 +41,7 @@ void GameAdvanceBgmShuffleBag(s32 arg0) asm("func_80025E54");
 void GameDrawAttractTitle(void) asm("func_800266D0");
 extern u32 g_StreamReturnScene asm("D_8019C760");
 extern u32 g_CameraViewMode asm("D_8009E870");
-extern u8 D_801F18CC[];
+extern u8 g_CarTrackSection[] asm("D_801F18CC");
 void GameDrawFullscreenFadeTile(s32 arg0, u32 arg1) asm("func_80033AA0");
 void GameReturnToTitleScene(void) asm("func_800268EC");
 s32 GameCycleAttractCameraCar(u32 arg0, s32 arg1) asm("func_8001A1F0");
@@ -190,7 +190,7 @@ void GameUpdateAttractDemoRace(void) {
 
     index = g_CameraCarIndex;
     offset = (((((index * 3) * 4) + index) * 8) - index) * 4;
-    GameRequestTrackTexturePage(*(s16 *)&D_801F18CC[offset]);
+    GameRequestTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
 
     GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     GameDrawCars();

@@ -3,9 +3,9 @@
 #include "game/render.h"
 
 extern s32 g_ModelBankCount asm("D_801E4168");
-extern s32 D_801E431C;
-extern s32 D_801E4320;
-extern s32 D_801E4324;
+extern s32 g_FlybySceneryRotX asm("D_801E431C");
+extern s32 g_FlybySceneryRotY asm("D_801E4320");
+extern s32 g_FlybySceneryRotZ asm("D_801E4324");
 extern s32 g_FlybyScenery[] asm("D_801E42FC");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
@@ -25,16 +25,16 @@ void GameDrawFlybyScenery(void) {
     state = g_FlybyScenery;
     if (state[0] > 0) {
         mtx0Ptr = &mtx0;
-        angle = D_801E4320;
+        angle = g_FlybySceneryRotY;
         __asm__ volatile("" : "=r"(angle) : "0"(angle));
         baseAngle = 0x800;
         __asm__ volatile("" : "=r"(baseAngle) : "0"(baseAngle), "r"(angle));
         GameBuildRotMatrixY(mtx0Ptr, baseAngle - angle);
         mtx1Ptr = &mtx1;
-        GameBuildRotMatrixX(mtx1Ptr, D_801E431C);
+        GameBuildRotMatrixX(mtx1Ptr, g_FlybySceneryRotX);
         MulMatrix2(&mtx0, mtx1Ptr);
         MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
-        GameBuildRotMatrixZ(&mtx0, D_801E4324);
+        GameBuildRotMatrixZ(&mtx0, g_FlybySceneryRotZ);
         MulMatrix2(mtx1Ptr, &mtx0);
         GameSelectModelBank(2);
         func_80017794((void *)0x1F80011C, state + 4, &mtx0);
@@ -48,8 +48,13 @@ void GameDrawFlybyScenery(void) {
 
 extern volatile s32 g_RaceSeries asm("D_801E408C");
 extern u8 *g_RouteSceneryData asm("D_801E4128");
-extern volatile s32 D_801E4330;
+/* 0 while the route prop is not running; the seeder sets it to 1 and
+ * GameUpdateRouteScenery increments it every frame, so it is both the enable
+ * and the frame count since the seed. */
+extern volatile s32 g_RouteSceneryClock asm("D_801E4330");
 extern volatile s32 g_RouteSceneryFrame asm("D_801E4338");
+/* Deliberately raw: the seeder's `= 1` is its only appearance in the image;
+ * nothing ever reads it. */
 extern volatile s16 D_801E433C;
 extern volatile s16 g_RouteSceneryKeyIndex asm("D_801E433E");
 extern s32 g_RouteSceneryX asm("D_801E4340");
@@ -72,7 +77,7 @@ void GameSeedRouteScenery(void) {
     register s32 value asm("$2");
 
     D_801E433C = 1;
-    D_801E4330 = 1;
+    g_RouteSceneryClock = 1;
 
     index0 = g_RaceSeries;
     base = g_RouteSceneryData;

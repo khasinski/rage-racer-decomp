@@ -6,7 +6,14 @@
 #include "psyq/gpu.h"
 #include "game/cd.h"
 
-extern char D_80010F90[], D_80010FA8[], D_80010F98[], D_80010F9C[], D_80010FA4[];
+/* Second copies of the same three captions -- the ROM holds duplicate literals
+ * at 0x80010E1C..0x80010E28 and here; see docs/names.md 18d for why the bytes
+ * are lowercase and how each caption is identified. */
+extern char g_CaptionLapTime2[] asm("D_80010F90");
+extern char g_CaptionTotalTime2[] asm("D_80010FA8");
+extern char g_CaptionRanking2[] asm("D_80010F98");
+extern char g_FmtRecordName[] asm("D_80010F9C");
+extern char g_FmtCarName[] asm("D_80010FA4");
 extern s32 g_PlayerLapTimes[] asm("D_8009E858");
 extern s32 g_BestLapIndex asm("D_8019CAC8");
 extern s32 g_TimeRecordInsertRow asm("D_8019CE10");
@@ -22,9 +29,13 @@ s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
 extern volatile s32 g_RaceTotalTime asm("D_801E4BA8");
 extern volatile u16 g_PlayerCarIndex asm("D_801E40D4");
 extern s32 g_RankingTimes asm("D_801E774C");
-extern u16 D_801E7750[];
-extern s32 D_8019CB80;
-extern u16 D_8019CB84[];
+/* Split symbols of the two S22 record tables: +0x08 is the time and +0x0C the
+ * car index, so g_RankingCars is g_RankingRecords[0][0][0].vC and
+ * g_TimeRecordTimes / g_TimeRecordCars the same pair of g_TimeRecords. */
+extern u16 g_RankingCars[] asm("D_801E7750");
+extern s32 g_TimeRecordTimes asm("D_8019CB80");
+extern u16 g_TimeRecordCars[] asm("D_8019CB84");
+/* Deliberately raw: see docs/names.md 12d. */
 extern s32 D_8019C768;
 extern s32 g_RecordEntryState asm("D_801E6C8C");
 void GameInsertRaceRecords(void) asm("func_80022324");
@@ -62,7 +73,7 @@ void GameDrawRankingPanel(u8 *arg0) {
     s32 limit;
 
     panel = arg0;
-    func_80016EA0(panel + 0x10, 0x4C, D_80010F90, 0x7852);
+    func_80016EA0(panel + 0x10, 0x4C, g_CaptionLapTime2, 0x7852);
     mode = g_CourseIndex;
     text[1] = 0x2F;
     limit = 6;
@@ -99,7 +110,7 @@ void GameDrawRankingPanel(u8 *arg0) {
             scoreOrX += 4;
         } while (iter < limit);
     }
-    func_80016EA0(panel + 0x10, 0x6C, D_80010F98, 0x7812);
+    func_80016EA0(panel + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
     countOrIndex = 0;
     scoreOrX = 0x82;
     destination = 0x78;
@@ -110,7 +121,7 @@ void GameDrawRankingPanel(u8 *arg0) {
         text[3] = 0x2F;
         func_80021CD4(&text[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].v8);
         xOrField = g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].vC;
-        LibcSprintf(&text[0xC], D_80010F9C,
+        LibcSprintf(&text[0xC], g_FmtRecordName,
                       &g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex],
                       g_CarClassNames[xOrField]);
         color = 0x78CC;
@@ -118,7 +129,7 @@ void GameDrawRankingPanel(u8 *arg0) {
             color = 0x780F;
         }
         func_80016754(panel + 0x14, destination, text, color);
-        LibcSprintf(text, D_80010FA4, g_CarNames[xOrField]);
+        LibcSprintf(text, g_FmtCarName, g_CarNames[xOrField]);
         func_80016754(panel + 0x2C, scoreOrX, text, color);
         destination += 0x14;
         scoreOrX += 0x14;
@@ -132,14 +143,14 @@ void GameDrawTimeRecordPanel(u8 *s5) {
     s32 s4, s3;
     s32 s2, color, idx;
 
-    func_80016EA0(s5 + 0x10, 0x4C, D_80010FA8, 0x7852);
+    func_80016EA0(s5 + 0x10, 0x4C, g_CaptionTotalTime2, 0x7852);
 
     text[0] = 0x54;
     text[1] = 0x2F;
     func_80021CD4(&text[2], g_RaceTotalTime);
     func_80016754(s5 + 0x14, 0x58, text, 0x78CC);
 
-    func_80016EA0(s5 + 0x10, 0x6C, D_80010F98, 0x7812);
+    func_80016EA0(s5 + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
 
     s2 = 0;
     s4 = 0x82;
@@ -152,7 +163,7 @@ void GameDrawTimeRecordPanel(u8 *s5) {
         func_80021CD4(&text[4], g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].v8);
 
         idx = g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].vC;
-        LibcSprintf(&text[0xC], D_80010F9C,
+        LibcSprintf(&text[0xC], g_FmtRecordName,
                       &g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2], g_CarClassNames[idx]);
 
         color = 0x78CC;
@@ -161,7 +172,7 @@ void GameDrawTimeRecordPanel(u8 *s5) {
         }
         func_80016754(s5 + 0x14, s3, text, color);
 
-        LibcSprintf(text, D_80010FA4, g_CarNames[idx]);
+        LibcSprintf(text, g_FmtCarName, g_CarNames[idx]);
 
         func_80016754(s5 + 0x2C, s4, text, color);
         s3 += 0x14;
@@ -281,7 +292,7 @@ void GameInsertRaceRecords(void) {
 
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *((u16 *)((u8 *)D_801E7750 + score_offset)) = g_PlayerCarIndex;
+            *((u16 *)((u8 *)g_RankingCars + score_offset)) = g_PlayerCarIndex;
             break;
         }
         i++;
@@ -297,7 +308,7 @@ void GameInsertRaceRecords(void) {
     while (i < 5) {
         score_offset = row_offset + (g_CourseIndex * 0x50);
         score_offset += g_GrandPrixSeries * 0x140;
-        score_value = *((s32 *)((u8 *)&D_8019CB80 + score_offset));
+        score_value = *((s32 *)((u8 *)&g_TimeRecordTimes + score_offset));
         if (g_RaceTotalTime < score_value) {
             if (i < 4) {
                 j = 4;
@@ -323,7 +334,7 @@ void GameInsertRaceRecords(void) {
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *((s32 *)((u8 *)&D_8019CB80 + score_offset)) = g_RaceTotalTime;
+            *((s32 *)((u8 *)&g_TimeRecordTimes + score_offset)) = g_RaceTotalTime;
             j = 0;
             fill_offset = row_offset;
             for (; j < 6; j++) {
@@ -335,7 +346,7 @@ void GameInsertRaceRecords(void) {
 
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *((u16 *)((u8 *)D_8019CB84 + score_offset)) = g_PlayerCarIndex;
+            *((u16 *)((u8 *)g_TimeRecordCars + score_offset)) = g_PlayerCarIndex;
             break;
         }
         i++;

@@ -4,10 +4,14 @@
 #include "game/render.h"
 
 extern s32 g_CourseModelCount asm("D_801E40E4");
-extern u16 D_8007E33C[];
-extern u16 D_8007E334[];
-extern u8 D_8007E300[];
-extern u8 D_8007E2F4[];
+extern u16 g_SpinningSceneryRate[] asm("D_8007E33C");
+extern u16 g_SpinningSceneryAngle[] asm("D_8007E334");
+extern u8 g_SpinningSceneryYaw[] asm("D_8007E300");
+/* One 16-byte { x, y, z, yaw } record per prop -- g_SpinningSceneryYaw is the
+ * split symbol for that fourth word. g_SpinningSceneryAngle is the live Z spin
+ * of each prop, advanced by g_SpinningSceneryRate[active], and the two rates
+ * are re-rolled to rand & 0x1F / rand & 0x3F every 512 frames. */
+extern u8 g_SpinningSceneryPos[] asm("D_8007E2F4");
 
 void func_80017794(void *arg0, void *arg1, void *arg2);
 s32 GameRandom15(void) asm("func_800632B0");
@@ -49,11 +53,11 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
     loopIndex = start;
     asm("" : "=r"(loopIndex) : "0"(loopIndex));
     if (loopIndex < end) {
-        deltaBase = D_8007E33C;
+        deltaBase = g_SpinningSceneryRate;
         delta = &deltaBase[active];
         asm("" : "=r"(delta) : "0"(delta));
         work = sp30;
-        base = D_8007E334;
+        base = g_SpinningSceneryAngle;
         asm("" : "=r"(base) : "0"(base));
         dstOffset = loopIndex << 1;
         dst = (u16 *)(dstOffset + (s32)base);
@@ -65,11 +69,11 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
             }
             *dst &= 0xFFF;
 
-            GameBuildRotMatrixY(sp10, *(s32 *)(D_8007E300 + offset));
+            GameBuildRotMatrixY(sp10, *(s32 *)(g_SpinningSceneryYaw + offset));
             MulMatrix2((void *)0x1F800028, sp10);
             GameBuildRotMatrixZ(work, *(s16 *)dst);
             MulMatrix2(sp10, work);
-            func_80017794((void *)0x1F80011C, D_8007E2F4 + offset, work);
+            func_80017794((void *)0x1F80011C, g_SpinningSceneryPos + offset, work);
 
             *(s32 *)0x1F800084 = 0;
             limit = 1;
@@ -85,7 +89,7 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
 
     frameMask = frame & 0x1FF;
     if ((frameMask == 0) && (update != 0)) {
-        D_8007E33C[0] = GameRandom15() & 0x1F;
-        D_8007E33C[1] = GameRandom15() & 0x3F;
+        g_SpinningSceneryRate[0] = GameRandom15() & 0x1F;
+        g_SpinningSceneryRate[1] = GameRandom15() & 0x3F;
     }
 }

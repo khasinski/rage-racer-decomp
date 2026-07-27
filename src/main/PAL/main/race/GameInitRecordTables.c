@@ -4,21 +4,23 @@
 extern s32 g_DefaultLapTimes asm("D_8007D444");
 extern s32 g_DefaultTotalTimes asm("D_8007D464");
 extern s32 g_DefaultRecordRows asm("D_8007D484");
-extern s32 D_8007D488;
-extern u16 D_8007D48C;
+/* Split symbols of g_DefaultRecordRows, whose records are 12 bytes: the name
+ * at +0, the seed time at +4 and the car index at +8. */
+extern s32 g_DefaultRecordTimes asm("D_8007D488");
+extern u16 g_DefaultRecordCars asm("D_8007D48C");
 extern s32 g_BestLapTimes asm("D_801E4408");
 extern s32 g_BestTotalTimes asm("D_8019C70C");
 extern s32 g_RankingRecords asm("D_801E7744");
 extern s32 g_RankingTimes asm("D_801E774C");
-extern u16 D_801E7750;
+extern u16 g_RankingCars asm("D_801E7750");
 extern s32 g_TimeRecords asm("D_8019CB78");
-extern s32 D_8019CB80;
-extern u16 D_8019CB84;
+extern s32 g_TimeRecordTimes asm("D_8019CB80");
+extern u16 g_TimeRecordCars asm("D_8019CB84");
 extern s32 g_BestSectorTimes asm("D_801E41E8");
-extern char D_80010EB4[];
+extern char g_FmtLapTime[] asm("D_80010EB4");
 void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2) asm("func_800632F0");
-extern char D_80010EC4[];
-extern char D_80010ED0[];
+extern char g_TextTimeAttack[] asm("D_80010EC4");
+extern char g_TextCourseIn[] asm("D_80010ED0");
 void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 void func_80016A18(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 void func_800200D0(void);
@@ -116,11 +118,11 @@ void GameInitRecordTables(void) {
             r24 = r14 << 4;
             r2 = r24 + r2;
             r17 = r25 + r2;
-            r10 = (s32)&D_8007D48C;
+            r10 = (s32)&g_DefaultRecordCars;
             r13 = 0;
             r12 = 0;
             r11 = r15;
-            r9 = (s32)&D_8007D488;
+            r9 = (s32)&g_DefaultRecordTimes;
             r8 = (s32)&g_DefaultRecordRows;
             do {
                 r5 = r11 + r16;
@@ -151,12 +153,12 @@ void GameInitRecordTables(void) {
                 r2 = *(s32 *)r2;
                 r12 += 0x7D0;
                 r2 = r13 + r2;
-                *(s32 *)((s32)&D_8019CB80 + r5) = r2;
+                *(s32 *)((s32)&g_TimeRecordTimes + r5) = r2;
                 r2 = *(u16 *)r10;
                 r13 += 0x2710;
-                *(u16 *)((s32)&D_801E7750 + r5) = r2;
+                *(u16 *)((s32)&g_RankingCars + r5) = r2;
                 r2 = *(u16 *)r10;
-                *(u16 *)((s32)&D_8019CB84 + r5) = r2;
+                *(u16 *)((s32)&g_TimeRecordCars + r5) = r2;
                 r10 += 0xC;
             } while (r6 < 5);
             r7++;
@@ -201,12 +203,12 @@ void *GameFormatLapTime(void *dst, s32 value) {
     s32 seconds = ticks - (minutes * 60);
     s32 fraction = value - (ticks * 1000);
 
-    LibcSprintf(dst, D_80010EB4, minutes, seconds, fraction);
+    LibcSprintf(dst, g_FmtLapTime, minutes, seconds, fraction);
     return dst;
 }
 
 void GameDrawCourseIntro(void) {
-    func_80016EA0(0x10, 0x1C, D_80010EC4, 0x7812);
-    func_80016A18(0x10, 0x39, D_80010ED0, 0x78CC);
+    func_80016EA0(0x10, 0x1C, g_TextTimeAttack, 0x7812);
+    func_80016A18(0x10, 0x39, g_TextCourseIn, 0x78CC);
     func_800200D0();
 }

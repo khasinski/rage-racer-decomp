@@ -3,7 +3,7 @@
 #include "game/render.h"
 #include "game/state.h"
 
-extern char D_80011010[];
+extern char g_TextNowLoading[] asm("D_80011010");
 
 void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
@@ -29,5 +29,5 @@ void GameExitBgmSelect(void) {
         }
     }
 
-    func_80016EA0(0x5E, 0x72, D_80011010, 0x7812);
+    func_80016EA0(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }

@@ -11,8 +11,10 @@ typedef struct {
     s32 w;
 } Vec4i;
 
-extern Vec4i D_8007E340;
-extern s32 D_8007E34C;
+extern Vec4i g_StaticSceneryPos asm("D_8007E340");
+/* +0x0C of the same 4-word record, i.e. its w component used as a Y angle;
+ * g_HighClassSceneryYaw is the same field of the record at 0x8007E350. */
+extern s32 g_StaticSceneryYaw asm("D_8007E34C");
 extern u32 *g_VisibleCellMask asm("D_801E6828");
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 extern s32 g_CourseModelCount asm("D_801E40E4");
@@ -38,7 +40,7 @@ void GameDrawStaticScenery(s32 arg0) {
     register s32 drawArg asm("$5");
     register s32 frameValue asm("$2");
 
-    state = D_8007E340;
+    state = g_StaticSceneryPos;
     statePtr = (s32 *)&state;
 
     if (arg0 != 0) {
@@ -64,7 +66,7 @@ void GameDrawStaticScenery(s32 arg0) {
     visible &= *wordPtr;
 
     if (visible != 0) {
-        GameBuildRotMatrixY(&mtx, D_8007E34C);
+        GameBuildRotMatrixY(&mtx, g_StaticSceneryYaw);
         MulMatrix2((Matrix *)0x1F800028, &mtx);
 
         if (g_IsEnvironmentMode4 != 0) {
@@ -89,7 +91,7 @@ void GameDrawStaticScenery(s32 arg0) {
     }
 }
 
-extern s32 D_8007E35C;
+extern s32 g_HighClassSceneryYaw asm("D_8007E35C");
 
 void GameDrawHighClassScenery(void) asm("func_8003E0D0");
 
@@ -101,7 +103,7 @@ void GameDrawHighClassScenery(void) {
     register s32 drawArg asm("$5");
 
     (void)pad;
-    state = &D_8007E35C;
+    state = &g_HighClassSceneryYaw;
     GameBuildRotMatrixY(&mtx, state[0]);
     MulMatrix2((Matrix *)0x1F800028, &mtx);
 
@@ -245,7 +247,7 @@ extern u8 *g_FlybySceneryData asm("D_801E4448");
 extern s32 g_LapCount asm("D_801E4364");
 extern volatile s32 g_RaceSeries asm("D_801E408C");
 extern u8 g_FlybyScenery[] asm("D_801E42FC");
-extern s16 D_801E4308;
+extern s16 g_FlybySceneryLap asm("D_801E4308");
 extern u8 *g_FlybySceneryKeyframe asm("D_801E43F4");
 
 s32 GameRandom15(void) asm("func_800632B0");
@@ -273,16 +275,16 @@ void GameSeedFlybyScenery(void) {
     value = index % count;
     out = g_FlybyScenery;
     value++;
-    D_801E4308 = value;
+    g_FlybySceneryLap = value;
     value = (s16)value;
 
     if (value <= 0) {
-        D_801E4308 = (u16)g_LapCount - 1;
+        g_FlybySceneryLap = (u16)g_LapCount - 1;
     } else {
         __asm__ volatile("" ::: "memory");
         cmp = count < value;
         if (cmp != 0) {
-            D_801E4308 = (u16)g_LapCount;
+            g_FlybySceneryLap = (u16)g_LapCount;
         }
     }
 

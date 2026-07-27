@@ -4,9 +4,12 @@
 #include "game/race.h"
 #include "game/render.h"
 
-extern u8 D_8007E360[];
-extern s16 D_8007E3D8[];
-extern s16 D_8007E3E0[];
+/* Per-path authored data; see GameDrawRouteScenery.c for the layout.
+ * g_ShuttlePathTravelMax is the leg length in steps: the divisor of the
+ * endpoint-to-endpoint lerp and the value travelStep counts up to. */
+extern u8 g_ShuttlePathPoints[] asm("D_8007E360");
+extern s16 g_ShuttlePathTravelMax[] asm("D_8007E3D8");
+extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
 
 void GameUpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
 
@@ -27,7 +30,7 @@ void GameUpdateShuttleScenery(s32 arg0) {
 
     entry = &g_ShuttleScenery[arg0];
     asm("" : "=r"(entry) : "0"(entry));
-    limitPtr = D_8007E3D8;
+    limitPtr = g_ShuttlePathTravelMax;
     side = entry->startEndpoint;
     phase = entry->pathIndex;
     step = entry->travelStep;
@@ -37,23 +40,23 @@ void GameUpdateShuttleScenery(s32 arg0) {
     phaseOffset = phase << 1;
     limitPtr = (s16 *)((s32)limitPtr + phaseOffset);
     denom = *limitPtr;
-    temp = *(s32 *)(D_8007E360 + baseIndex);
+    temp = *(s32 *)(g_ShuttlePathPoints + baseIndex);
     value = (denom - step) * temp;
     altIndex = (1 - side) << 4;
     altIndex += phaseShift;
-    value = (value + (step * *(s32 *)(D_8007E360 + altIndex))) / denom;
+    value = (value + (step * *(s32 *)(g_ShuttlePathPoints + altIndex))) / denom;
     entry->x = value;
 
     denom = *limitPtr;
-    temp = *(s32 *)(D_8007E360 + baseIndex + 4);
+    temp = *(s32 *)(g_ShuttlePathPoints + baseIndex + 4);
     value = (denom - step) * temp;
-    value = (value + (step * *(s32 *)(D_8007E360 + altIndex + 4))) / denom;
+    value = (value + (step * *(s32 *)(g_ShuttlePathPoints + altIndex + 4))) / denom;
     entry->y = value;
 
     denom = *limitPtr;
-    temp = *(s32 *)(D_8007E360 + baseIndex + 8);
+    temp = *(s32 *)(g_ShuttlePathPoints + baseIndex + 8);
     value = (denom - step) * temp;
-    value = (value + (step * *(s32 *)(D_8007E360 + altIndex + 8))) / denom;
+    value = (value + (step * *(s32 *)(g_ShuttlePathPoints + altIndex + 8))) / denom;
     entry->z = value;
 
     if (entry->travelStep >= *limitPtr) {
@@ -63,7 +66,7 @@ void GameUpdateShuttleScenery(s32 arg0) {
         return;
     }
 
-    phase = (s32)D_8007E3E0;
+    phase = (s32)g_ShuttlePathDwellMax;
     tailLimitPtr = (s16 *)(phaseOffset + phase);
     asm("" : "=r"(tailLimitPtr) : "0"(tailLimitPtr));
     if (entry->dwellCounter >= *tailLimitPtr) {

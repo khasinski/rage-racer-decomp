@@ -70,26 +70,45 @@ typedef struct Car {
 
 extern u8 g_PadType asm("D_801E4369");
 extern volatile u16 g_PadHeld asm("D_801E436A");
-extern s16 D_801E4374;
-extern s16 D_801E4376;
-extern s16 D_801E4378;
-extern s16 D_801E4B64;
-extern s16 D_801E4B66;
-extern s16 D_801E4B68[2][8];
-extern s16 D_801E4B74;
-extern s16 D_801E4B76;
+/*
+ * The NeGcon's three analog channels, already zeroed against the calibration
+ * captured by the controller-config screen: button I, button II and the left
+ * shoulder. Full scale is 106 (0x6A), which is why every use divides by 106 --
+ * func_80014014 feeds the digital pad through the same three slots by writing
+ * a flat 0x6A when the mapped button is held.
+ */
+extern s16 g_NegconAnalogI asm("D_801E4374");
+extern s16 g_NegconAnalogII asm("D_801E4376");
+extern s16 g_NegconAnalogL asm("D_801E4378");
+/*
+ * The live button mapping GameLoadPadButtonMapping installs: eight u16 masks
+ * for the standard pad at 0x801E4B60 then eight for the NeGcon at 0x801E4B70.
+ * These are masks 2 and 3 of each row; g_PadShiftMasks is the [pad/NeGcon][up,
+ * down] view of masks 4 and 5, which is why its row stride is eight halfwords.
+ */
+extern s16 g_PadAccelMask asm("D_801E4B64");
+extern s16 g_PadBrakeMask asm("D_801E4B66");
+extern s16 g_PadShiftMasks[2][8] asm("D_801E4B68");
+extern s16 g_NegconAccelMask asm("D_801E4B74");
+extern s16 g_NegconBrakeMask asm("D_801E4B76");
 extern s32 g_TachoNeedleFlash asm("D_801E40B0");
 extern s32 g_EngineRpmJitter asm("D_801E4170");
 extern s32 D_801E4194;
 extern s32 g_ShiftTargetRpm asm("D_801E4BF4");
 extern s16 g_SteerHoldFrames asm("D_801F17A4");
 extern s32 g_AutoShiftCooldown asm("D_801F17B8");
-extern s32 D_801E8AA0;
-extern s16 D_8019CB08;
+/* Latched from car->shiftTick & 0x3F when a gear change lands under power, and
+ * cleared on every other shift and on touchdown. Its only effect is to raise
+ * the volume of continuous sound 0 (flag + 25) while the car is airborne. */
+extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
+extern s16 g_NegconConfigIndex asm("D_8019CB08");
 extern s32 g_EngineRpm asm("D_8019CAB4");
 extern u8 *g_TrackPoints asm("D_8009E688");
-extern s16 D_8009E830;
-extern s32 D_8009E808;
+/* g_PlayerCar drive +0xA0 / +0xA4: the throttle the input layer produced this
+ * frame (0..0x100) and the drivetrain's own rpm, which g_EngineRpm is slewed
+ * towards by a half (clutch in) or a quarter (clutch out) of the gap. */
+extern s16 g_PlayerThrottle asm("D_8009E830");
+extern s32 g_PlayerTargetRpm asm("D_8009E808");
 extern u16 g_CarCornerOffsetX[] asm("D_8007DAB0");
 extern u16 g_CarCornerOffsetZ[] asm("D_8007DAB2");
 
@@ -147,7 +166,7 @@ void GameUpdatePlayerCar(Car *car) {
     car->unkB8 = GameIsCarFacingBackwards(car);
 
     if (car->drive.manual != 0) {
-        if (g_PadEdge2 & D_801E4B68[mode23][0]) {
+        if (g_PadEdge2 & g_PadShiftMasks[mode23][0]) {
             s32 g = car->drive.gear;
 
             if (g < g_CarSpec->topGear && car->drive.clutch == 0) {
@@ -155,7 +174,7 @@ void GameUpdatePlayerCar(Car *car) {
                 g_SteerHoldFrames = 0;
             }
         }
-        if (g_PadEdge2 & D_801E4B68[mode23][1]) {
+        if (g_PadEdge2 & g_PadShiftMasks[mode23][1]) {
             s32 g = p->gear;
 
             if (g >= 2) {
@@ -233,28 +252,28 @@ void GameUpdatePlayerCar(Car *car) {
 
     if (g_RacePhase < 4) {
         if (g_PadType == 0x41) {
-            *(volatile s16 *)&p->accelBtn = ((g_PadHeld & D_801E4B64) != 0) << 8;
-            p->brakeBtn = ((g_PadHeld & D_801E4B66) != 0) << 8;
+            *(volatile s16 *)&p->accelBtn = ((g_PadHeld & g_PadAccelMask) != 0) << 8;
+            p->brakeBtn = ((g_PadHeld & g_PadBrakeMask) != 0) << 8;
         } else if (g_PadType == 0x23) {
-            *(volatile s16 *)&p->accelBtn = ((g_PadHeld & D_801E4B74) != 0) << 8;
-            p->brakeBtn = ((g_PadHeld & D_801E4B76) != 0) << 8;
-            switch (D_8019CB08) {
+            *(volatile s16 *)&p->accelBtn = ((g_PadHeld & g_NegconAccelMask) != 0) << 8;
+            p->brakeBtn = ((g_PadHeld & g_NegconBrakeMask) != 0) << 8;
+            switch (g_NegconConfigIndex) {
             case 0:
             case 5:
-                *(volatile s16 *)&p->accelBtn = (D_801E4374 << 8) / 106;
-                p->brakeBtn = (D_801E4376 << 8) / 106;
+                *(volatile s16 *)&p->accelBtn = (g_NegconAnalogI << 8) / 106;
+                p->brakeBtn = (g_NegconAnalogII << 8) / 106;
                 break;
             case 1:
             case 6:
-                *(volatile s16 *)&p->accelBtn = (D_801E4376 << 8) / 106;
-                p->brakeBtn = (D_801E4374 << 8) / 106;
+                *(volatile s16 *)&p->accelBtn = (g_NegconAnalogII << 8) / 106;
+                p->brakeBtn = (g_NegconAnalogI << 8) / 106;
                 break;
             case 2:
-                p->brakeBtn = (D_801E4378 << 8) / 106;
+                p->brakeBtn = (g_NegconAnalogL << 8) / 106;
                 break;
             case 3:
-                *(volatile s16 *)&p->accelBtn = (D_801E4376 << 8) / 106;
-                p->brakeBtn = (D_801E4378 << 8) / 106;
+                *(volatile s16 *)&p->accelBtn = (g_NegconAnalogII << 8) / 106;
+                p->brakeBtn = (g_NegconAnalogL << 8) / 106;
                 break;
             case 4:
             case 7:
@@ -428,7 +447,7 @@ void GameUpdatePlayerCar(Car *car) {
             car->unk90 = 0;
             car->unk94 = 0;
             GameStartCarBodyKick(1, car);
-            D_801E8AA0 = 0;
+            g_ShiftSoundLevel = 0;
             if ((s16)car->shiftTick >= 19) {
                 if (g_RacePhase < 3) {
                     GamePlaySoundCue(0xE);
@@ -441,7 +460,7 @@ void GameUpdatePlayerCar(Car *car) {
                 s32 v = (100 - (p->gear - 1) * 4) * 10000;
 
                 p->unk94 = v * car->speed / 100;
-                D_801E8AA0 = car->shiftTick & 0x3F;
+                g_ShiftSoundLevel = car->shiftTick & 0x3F;
                 p->unk60 = 0;
                 p->unk58 = car->unkA0;
                 p->unk5C = car->speed / 0x100000;
@@ -529,7 +548,7 @@ void GameUpdatePlayerCar(Car *car) {
     }
 
     {
-        s32 d = D_8009E808;
+        s32 d = g_PlayerTargetRpm;
         s32 cab = g_EngineRpm;
         s32 sum;
         s32 rpmLimit;
@@ -549,7 +568,7 @@ void GameUpdatePlayerCar(Car *car) {
         }
     }
 
-    if (g_EngineRpm >= g_CarSpec->revLimit - 100 && D_8009E830 >= 129) {
+    if (g_EngineRpm >= g_CarSpec->revLimit - 100 && g_PlayerThrottle >= 129) {
         s32 r = GameRandom15();
 
         g_TachoNeedleFlash = g_AnimTimer & 2;
@@ -590,12 +609,12 @@ void GameUpdatePlayerCar(Car *car) {
 
     if (p->manual != 0) {
         func_8005D9F8(g_EngineRpm + g_EngineRpmJitter,
-                      (0 < D_8009E830) & (p->clutch == 0) & revFlag);
+                      (0 < g_PlayerThrottle) & (p->clutch == 0) & revFlag);
     } else {
         s32 flag = 0;
         s32 vol = g_EngineRpm + g_EngineRpmJitter;
 
-        if (D_8009E830 > 0) {
+        if (g_PlayerThrottle > 0) {
             flag = revFlag & 1;
         }
         func_8005D9F8(vol, flag);
@@ -604,7 +623,7 @@ void GameUpdatePlayerCar(Car *car) {
     p->gearDisp = p->gear;
 }
 
-extern s16 D_8019CAB0;
+extern s16 g_TrackZoneDark asm("D_8019CAB0");
 extern s32 g_EnvScriptClock asm("D_8019C8FC");
 
 s32 GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) asm("func_8003351C");
@@ -615,7 +634,7 @@ s32 GameDrawPlayerTachometer(void) {
     s32 arg2;
     s32 arg3;
 
-    if (D_8019CAB0 != 3) {
+    if (g_TrackZoneDark != 3) {
         value = g_EnvScriptClock;
         arg3 = value - 0x1154;
         if ((u32)arg3 < 0x434C) {

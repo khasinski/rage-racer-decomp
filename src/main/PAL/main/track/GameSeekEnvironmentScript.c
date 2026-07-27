@@ -13,27 +13,36 @@ extern u8 g_EnvScriptEnabled asm("D_8019C8F4");
 extern s32 g_EnvScriptClock asm("D_8019C8FC");
 extern s32 g_EnvScriptLength asm("D_8019C774");
 
-extern Cmd *D_801E40E8;
+/* Next cue of g_EnvScriptCues due to fire; wraps back to the head when the
+ * record it lands on has a negative id (the terminator). */
+extern Cmd *g_EnvScriptCursor asm("D_801E40E8");
 extern u32 *g_EnvScriptCues asm("D_801E42F4");
 
 extern s16 g_EnvFogEnabled asm("D_801E3FB4");
-extern u8 D_801E3FB6;
-extern u8 D_801E3FB7;
-extern u8 D_801E3FB8;
-extern u8 D_801E3FB9;
-extern u32 D_801E3FBA;
+/* Split symbols of the packed slot-0 colour: this file addresses the R, G and B
+ * bytes individually to feed SetFarColor, so it declares them as three u8. */
+extern u8 g_EnvFogColor asm("D_801E3FB6");
+extern u8 g_EnvFogColorG asm("D_801E3FB7");
+extern u8 g_EnvFogColorB asm("D_801E3FB8");
+extern u8 g_EnvSpare asm("D_801E3FB9");
+extern u32 g_EnvFogColorFrom asm("D_801E3FBA");
 
 extern s16 g_EnvLerpFrame asm("D_801E4022");
 extern s16 g_EnvLerpDuration asm("D_801E4024");
 extern s16 g_EnvironmentMode asm("D_801E4026");
-extern s16 D_801E4028;
+extern s16 g_EnvSpareLerp asm("D_801E4028");
 extern s16 g_EnvSpareFrom asm("D_801E402A");
 extern s16 g_EnvSpareTo asm("D_801E402C");
 extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
 extern u8 *g_EnvPaletteTable asm("D_801E4140");
+/* The 16-entry sky CLUT staged here and uploaded through the (0xE0, 0x1E6)
+ * 16x1 VRAM rect. It MUST keep the raw D_ spelling: LA_ORDERED stringifies the
+ * symbol into an inline-asm `la`, which does not follow asm() labels. */
 extern s16 D_801E6DA4[];
 
-extern s32 D_8009B24C;
+/* GTE fog-near distance, ramped +-0xFA a frame: up to 0x7FFF (clear) in
+ * environment mode 2, down to 0x1770 (hazy) in every other mode. */
+extern s32 g_FogNear asm("D_8009B24C");
 
 void GameLoadEnvironmentCue(void *arg0) asm("func_800455EC");
 void GameLerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) asm("func_8004554C");
@@ -61,13 +70,13 @@ void GameUpdateEnvironment(void) {
         return;
     }
 
-    cur = D_801E40E8;
+    cur = g_EnvScriptCursor;
     if (cur->id == g_EnvScriptClock) {
         g_EnvLerpFrame = 0;
-        D_801E40E8 = cur + 1;
+        g_EnvScriptCursor = cur + 1;
         GameLoadEnvironmentCue(cur);
-        if (D_801E40E8->id < 0) {
-            D_801E40E8 = (Cmd *)g_EnvScriptCues;
+        if (g_EnvScriptCursor->id < 0) {
+            g_EnvScriptCursor = (Cmd *)g_EnvScriptCues;
         }
     }
 
@@ -113,7 +122,7 @@ void GameUpdateEnvironment(void) {
     rect.h = 0x1;
     func_80065B24(&rect);
 
-    pp = (u8 *)&D_801E3FBA;
+    pp = (u8 *)&g_EnvFogColorFrom;
     GameLerpEnvColor(pp + 0x0, pp + 0x4, pp - 0x4, frac);
     GameLerpEnvColor(pp + 0xC, pp + 0x10, pp + 0x8, frac);
     GameLerpEnvColor(pp + 0x18, pp + 0x1C, pp + 0x14, frac);
@@ -127,29 +136,29 @@ void GameUpdateEnvironment(void) {
         GameLerpEnvColor(pp + 0x60, pp + 0x64, pp + 0x5C, frac);
     }
 
-    func_80069A38(D_801E3FB6, D_801E3FB7, D_801E3FB8);
+    func_80069A38(g_EnvFogColor, g_EnvFogColorG, g_EnvFogColorB);
 
-    if (D_801E4028 != 0) {
-        D_801E3FB9 = (g_EnvSpareFrom * diff + g_EnvSpareTo * g_EnvLerpFrame) / g_EnvLerpDuration;
+    if (g_EnvSpareLerp != 0) {
+        g_EnvSpare = (g_EnvSpareFrom * diff + g_EnvSpareTo * g_EnvLerpFrame) / g_EnvLerpDuration;
     }
 
     if (g_EnvLerpFrame == g_EnvLerpDuration) {
-        if ((*(u32 *)&g_EnvFogEnabled & 0xFFFF0000) == 0x80800000 && D_801E3FB8 == 0x80) {
+        if ((*(u32 *)&g_EnvFogEnabled & 0xFFFF0000) == 0x80800000 && g_EnvFogColorB == 0x80) {
             g_EnvFogEnabled = 0;
         }
     }
 
     if (g_EnvironmentMode == 2) {
-        D_8009B24C += 0xFA;
-        if (D_8009B24C > 0x7FFF) {
-            D_8009B24C = 0x7FFF;
+        g_FogNear += 0xFA;
+        if (g_FogNear > 0x7FFF) {
+            g_FogNear = 0x7FFF;
         }
     } else {
-        D_8009B24C -= 0xFA;
-        if (D_8009B24C < 0x1770) {
-            D_8009B24C = 0x1770;
+        g_FogNear -= 0xFA;
+        if (g_FogNear < 0x1770) {
+            g_FogNear = 0x1770;
         }
     }
 
-    func_800686D4(D_8009B24C, 0x140);
+    func_800686D4(g_FogNear, 0x140);
 }

@@ -58,13 +58,21 @@ typedef struct A {
     SubB sub;
 } A;
 
+/* Deliberately raw: both writes in the image store zero, so this branch --
+ * ignore the pad and freeze the steering -- is unreachable in retail. */
 extern s16 D_8019C9AC;
 extern u8 g_PadType asm("D_801E4369");
-extern s16 D_801E4B60;
-extern s16 D_801E4B62;
-extern s16 D_801E437E;
-extern s16 D_801E418C;
-extern s16 D_8007C020[];
+/* Masks 0 and 1 of the live button mapping; g_MirrorMode swaps them. */
+extern s16 g_PadSteerLeftMask asm("D_801E4B60");
+extern s16 g_PadSteerRightMask asm("D_801E4B62");
+/* NeGcon steering: the raw twist minus the calibrated centre, minus a
+ * dead zone, clamped to +-g_NegconSteerRange[g_NegconSteerPlay].
+ * g_NegconSteerPlay is the 0..3 setting the NEGCON STEER PLAY screen edits
+ * and the save file keeps; the range table is { 25, 38, 75, 113 }, so a
+ * higher setting needs more twist for full lock. */
+extern s16 g_NegconSteer asm("D_801E437E");
+extern s16 g_NegconSteerPlay asm("D_801E418C");
+extern s16 g_NegconSteerRange[] asm("D_8007C020");
 
 s32 func_80068634(s32);
 
@@ -92,11 +100,11 @@ void GameUpdateCarBodyRoll(A *ctx) {
     if (g_PadType != 0x41) goto L_1C4;
 
     if (g_MirrorMode != 0) {
-        a1 = g_PadHeld & D_801E4B60;
-        v1 = g_PadHeld & D_801E4B62;
+        a1 = g_PadHeld & g_PadSteerLeftMask;
+        v1 = g_PadHeld & g_PadSteerRightMask;
     } else {
-        v1 = g_PadHeld & D_801E4B60;
-        a1 = g_PadHeld & D_801E4B62;
+        v1 = g_PadHeld & g_PadSteerLeftMask;
+        a1 = g_PadHeld & g_PadSteerRightMask;
     }
 
     if (v1 == 0) goto L_11c;
@@ -137,7 +145,7 @@ L_194:
 
 L_1C4:
     if (g_PadType != 0x23) goto L_43C;
-    a1 = ((s32)(D_801E437E * 13) << 9) / D_8007C020[D_801E418C];
+    a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconSteerPlay];
     if (g_MirrorMode != 0) a1 = -a1;
     if (a1 >= 0) goto L_310;
 

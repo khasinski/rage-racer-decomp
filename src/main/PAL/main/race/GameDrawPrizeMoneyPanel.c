@@ -6,16 +6,26 @@
 
 extern s32 g_PrizeAmount asm("D_801F17B0");
 extern s32 g_PromotionBonus asm("D_8019CE0C");
-extern u8 D_80010E30[], D_80010E34[], D_80010E38[], D_80010E40[];
+extern u8 g_CaptionPrizeMoney[] asm("D_80010E30");
+extern u8 g_FmtMoney[] asm("D_80010E34");
+extern u8 g_CaptionTotalMoney[] asm("D_80010E38");
+extern u8 g_CaptionPromotionBonus[] asm("D_80010E40");
 void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
 void LibcSprintf(void *dst, void *fmt, s32 val) asm("func_800632F0");
 extern s32 g_CourseProgress asm("D_8009E67C");
 extern s32 g_ClassClearFanfareTimer asm("D_801E4D0C");
 extern s32 g_ClassCompleted asm("D_801E4B94");
-extern s16 D_8019CB58;
-extern s16 D_8019CB54;
+/*
+ * Two split symbols of g_ClassRecords, unlocked out of sequence: finishing
+ * class 4 of the first series opens entry 6 (the advanced series' first
+ * class) instead of entry 5, and finishing entry 10 (the advanced series'
+ * last class) is what finally opens entry 5, the first series' sixth class.
+ * g_ClassClears is &g_ClassRecords[0].clears, the second halfword.
+ */
+extern s16 g_ClassRecord6 asm("D_8019CB58");
+extern s16 g_ClassRecord5 asm("D_8019CB54");
 extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
-extern GameScoreRecord D_8019CB42[];
+extern GameScoreRecord g_ClassClears[] asm("D_8019CB42");
 extern s32 g_ClassResultPlace asm("D_8019C7C4");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 extern s32 g_ClassPromoted asm("D_801E419C");
@@ -26,12 +36,15 @@ void GameResetProgressSlot(s32 arg0, s32 arg1) asm("func_80021288");
 void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
 void GameBeginEndingFmv(s32 arg0) asm("func_80019BB8");
 void GameBeginClassFmv(s32 arg0) asm("func_80019B3C");
+/* Deliberately raw: see docs/names.md 12d. */
 extern s32 D_8019C768;
 extern s32 g_PrizeScreenStep asm("D_8019CB74");
 extern s32 g_PrizeAmount asm("D_801F17B0");
 extern s32 g_PrizeCountStep asm("D_801E6DA0");
 extern s32 g_BonusCountStep asm("D_801E6C78");
-extern s32 D_8007BEF4[][6][3];
+/* &g_PrizeMoney[0][0][2], i.e. the third-place column; the prize counter's
+ * step is that figure divided by 80. */
+extern s32 g_PrizeMoney3rd[][6][3] asm("D_8007BEF4");
 extern s32 g_PromotionBonusTable[] asm("D_8007C00C");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
@@ -41,15 +54,15 @@ void GameDrawPrizeMoneyPanel(u8 *s0) {
     if (g_RaceProgress->unk10 > 0x3B9AC9FF) {
         g_RaceProgress->unk10 = 0x3B9AC9FF;
     }
-    func_80016EA0(0x10, s0 + 128, D_80010E30, 0x7812);
-    LibcSprintf(sp, D_80010E34, g_PrizeAmount);
+    func_80016EA0(0x10, s0 + 128, g_CaptionPrizeMoney, 0x7812);
+    LibcSprintf(sp, g_FmtMoney, g_PrizeAmount);
     func_80016EA0(0x12, s0 + 140, sp, 0x7812);
-    func_80016EA0(0x10, s0 + 160, D_80010E38, 0x7812);
-    LibcSprintf(sp, D_80010E34, g_RaceProgress->unk10);
+    func_80016EA0(0x10, s0 + 160, g_CaptionTotalMoney, 0x7812);
+    LibcSprintf(sp, g_FmtMoney, g_RaceProgress->unk10);
     func_80016EA0(0x12, s0 + 172, sp, 0x7812);
     if (g_ClassPromoted != 0) {
-        func_80016EA0(0x10, s0 + 192, D_80010E40, 0x7812);
-        LibcSprintf(sp, D_80010E34, g_PromotionBonus);
+        func_80016EA0(0x10, s0 + 192, g_CaptionPromotionBonus, 0x7812);
+        LibcSprintf(sp, g_FmtMoney, g_PromotionBonus);
         func_80016EA0(0x12, s0 + 204, sp, 0x7812);
     }
 }
@@ -98,13 +111,13 @@ void GameCommitClassProgress(void) {
         score_index = (g_GrandPrixSeries * 6) + g_GrandPrixClass;
 
         if (score_index == 4) {
-            record = &D_8019CB58;
+            record = &g_ClassRecord6;
             goto check_record;
         }
         if (score_index != 10) {
             goto not_special_record;
         }
-        record = &D_8019CB54;
+        record = &g_ClassRecord5;
 
 check_record:
         if (*record == -1) {
@@ -138,8 +151,8 @@ after_record_check:
             s32 offset;
 
             offset = score_index * 4;
-            if (*(s16 *)((char *)D_8019CB42 + offset) < 99) {
-                (*(s16 *)((char *)D_8019CB42 + offset))++;
+            if (*(s16 *)((char *)g_ClassClears + offset) < 99) {
+                (*(s16 *)((char *)g_ClassClears + offset))++;
             }
         }
     } else {
@@ -234,7 +247,7 @@ void GameEnterPrizeScreen(void) {
         g_PromotionBonus = 0;
     }
 
-    value = D_8007BEF4[g_CourseIndex][g_GrandPrixClass][0] / 80;
+    value = g_PrizeMoney3rd[g_CourseIndex][g_GrandPrixClass][0] / 80;
     g_PrizeCountStep = value;
     if (value <= 0) {
         g_PrizeCountStep = 1;
