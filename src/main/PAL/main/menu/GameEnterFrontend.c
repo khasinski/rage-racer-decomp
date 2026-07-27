@@ -293,7 +293,6 @@ extern s32 D_801E8260;
 
 extern s32 *g_CarTable asm("D_8019C7C8");
 extern s32 *g_CourseProgress asm("D_8009E67C");
-extern s32 g_GrandPrixSaveMaxClass asm("D_801E40A0");
 extern s32 g_ExtraGrandPrixSaveMaxClass asm("D_801E6E88");
 extern s32 g_FrontendState;
 extern s32 g_OptionMenuCursor asm("D_8019C7B4");
@@ -358,10 +357,10 @@ void GameUpdateMainMenuInput(void) {
         switch (g_TitleMenuSelection) {
         case 0:
             g_CarTable = &g_GrandPrixCars;
-            g_RaceProgress = (GameRaceProgress *)&g_GrandPrixSave;
+            g_RaceProgress = &g_GrandPrixSave;
             g_CourseProgress = &g_GrandPrixCourseProgress;
             g_SeriesSelection = 0;
-            if (g_GrandPrixSaveMaxClass == -1) {
+            if (g_GrandPrixSave.maxClassReached == -1) {
                 g_GrandPrixClass = 0;
                 g_CourseIndex = 3;
                 GameRequestTrackLoad();
@@ -371,7 +370,7 @@ void GameUpdateMainMenuInput(void) {
             break;
         case 1:
             g_CarTable = &g_ExtraGrandPrixCars;
-            g_RaceProgress = (GameRaceProgress *)&g_ExtraGrandPrixSave;
+            g_RaceProgress = &g_ExtraGrandPrixSave;
             g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
             g_SeriesSelection = 1;
             if (g_ExtraGrandPrixSaveMaxClass == -1) {
@@ -384,7 +383,7 @@ void GameUpdateMainMenuInput(void) {
             break;
         case 2:
             g_CarTable = &g_TimeAttackCars;
-            g_RaceProgress = (GameRaceProgress *)&g_TimeAttackSave;
+            g_RaceProgress = &g_TimeAttackSave;
             g_SeriesSelection = 0;
             GameRequestSelectBgmAssetsNoReset();
             break;

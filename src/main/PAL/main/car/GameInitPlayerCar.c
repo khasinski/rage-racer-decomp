@@ -65,13 +65,17 @@ extern u8 g_PadType asm("D_801E4369");
 /* Masks 0 and 1 of the live button mapping; g_MirrorMode swaps them. */
 extern s16 g_PadSteerLeftMask asm("D_801E4B60");
 extern s16 g_PadSteerRightMask asm("D_801E4B62");
-/* NeGcon steering: the raw twist minus the calibrated centre, minus a
- * dead zone, clamped to +-g_NegconSteerRange[g_NegconSteerPlay].
- * g_NegconSteerPlay is the 0..3 setting the NEGCON STEER PLAY screen edits
- * and the save file keeps; the range table is { 25, 38, 75, 113 }, so a
- * higher setting needs more twist for full lock. */
+/* NeGcon steering: the raw twist minus the calibrated centre, minus the dead
+ * zone indexed by the separate NEGCON STEER PLAY setting at D_8019CAD0 (a
+ * word table at 0x8007C128), then clamped to
+ * +-g_NegconSteerRange[g_NegconMaxTwist].
+ * g_NegconMaxTwist is the 0..3 setting the MAXIMUM TWIST screen edits and the
+ * save file keeps; the range table is { 25, 38, 75, 113 }, so a higher setting
+ * needs more twist for full lock. This file used to spell D_801E418C
+ * g_NegconSteerPlay, which is the name of that other setting -- see
+ * docs/names.md 20. */
 extern s16 g_NegconSteer asm("D_801E437E");
-extern s16 g_NegconSteerPlay asm("D_801E418C");
+extern s16 g_NegconMaxTwist asm("D_801E418C");
 extern s16 g_NegconSteerRange[] asm("D_8007C020");
 
 s32 func_80068634(s32);
@@ -145,7 +149,7 @@ L_194:
 
 L_1C4:
     if (g_PadType != 0x23) goto L_43C;
-    a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconSteerPlay];
+    a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconMaxTwist];
     if (g_MirrorMode != 0) a1 = -a1;
     if (a1 >= 0) goto L_310;
 

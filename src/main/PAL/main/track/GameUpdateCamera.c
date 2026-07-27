@@ -28,31 +28,27 @@ extern s32 g_OrbitCameraDistance asm("D_8007F618");
  * a delta to the destination and the current interpolated value. Mode-3 nodes
  * therefore store angles in the first four words where modes 2/4 store a world
  * position -- the record is a union keyed on `node->mode`. */
-extern s32 g_CamPathOffsetDeltaX asm("D_8009B1B8");
-extern s32 g_CamPathOffsetDeltaY asm("D_8009B1BC");
-extern s32 g_CamPathOffsetDeltaZ asm("D_8009B1C0");
-extern s32 g_CamPathOffsetStartX asm("D_8009B1C8");
-extern s32 g_CamPathOffsetStartY asm("D_8009B1CC");
-extern s32 g_CamPathOffsetStartZ asm("D_8009B1D0");
-extern s32 g_CamPathOffsetX asm("D_8009B1D8");
-extern s32 g_CamPathOffsetY asm("D_8009B1DC");
-extern s32 g_CamPathOffsetZ asm("D_8009B1E0");
-extern s32 g_CamPathPitchDelta asm("D_8009B1E8");
-/* Left raw on purpose: this one slot carries two unrelated quantities. Mode 3
- * uses it as the yaw delta of the camera path (between g_CamPathPitchDelta and
- * g_CamPathRollDelta); mode 1 uses it as the chase camera's yaw carried over
- * from the previous frame. No single name is honest for both. */
+/* The offset triples, each padded to 16 bytes: delta at 0x8009B1B8, start at
+ * +0x10, current at +0x20. Indices 0/1/2 are x/y/z. */
+extern s32 g_CamPathOffsetDelta[3] asm("D_8009B1B8");
+extern s32 g_CamPathOffsetStart[3] asm("D_8009B1C8");
+extern s32 g_CamPathOffset[3] asm("D_8009B1D8");
+/* The orientation quads, same three-group shape as the offsets: delta at
+ * 0x8009B1E8, start at +0x10, current at +0x20. Elements 0..2 are pitch, yaw
+ * and roll -- 12-bit angles, wrapped to +-0x800 on load and masked with 0xFFF
+ * on store -- and element 3 is the pull-back distance, a plain length. */
+#define CAMPATH_PITCH 0
+#define CAMPATH_YAW 1
+#define CAMPATH_ROLL 2
+#define CAMPATH_DIST 3
+extern s32 g_CamPathAngleDelta[4] asm("D_8009B1E8");
+extern s32 g_CamPathAngleStart[4] asm("D_8009B1F8");
+extern s32 g_CamPathAngle[4] asm("D_8009B208");
+/* Same word as g_CamPathAngleDelta[CAMPATH_YAW]. Mode 1 reuses it for the chase
+ * camera's yaw carried over from the previous frame, which the quad name would
+ * misdescribe, so the mode-1 code below keeps the raw spelling and only the
+ * mode-3 half goes through the array. (Section 18d left the whole slot raw.) */
 extern s32 D_8009B1EC;
-extern s32 g_CamPathRollDelta asm("D_8009B1F0");
-extern s32 g_CamPathDistDelta asm("D_8009B1F4");
-extern s32 g_CamPathPitchStart asm("D_8009B1F8");
-extern s32 g_CamPathYawStart asm("D_8009B1FC");
-extern s32 g_CamPathRollStart asm("D_8009B200");
-extern s32 g_CamPathDistStart asm("D_8009B204");
-extern s32 g_CamPathPitch asm("D_8009B208");
-extern s32 g_CamPathYaw asm("D_8009B20C");
-extern s32 g_CamPathRoll asm("D_8009B210");
-extern s32 g_CamPathDist asm("D_8009B214");
 /* Camera mode the previous frame ran (0..5); every case ends by writing it. */
 extern u8 g_CameraModePrev asm("D_8009B218");
 /* Mode-1 chase smoothing. The target is the car heading; the camera walks
@@ -433,33 +429,33 @@ block_52:
             g_CamPathNode = temp_v0_30;
             g_CamPathFrame = 0;
             if (g_CameraModePrev == 3) {
-                g_CamPathOffsetStartX = g_CamPathOffsetX;
-                g_CamPathOffsetStartY = g_CamPathOffsetY;
-                g_CamPathOffsetStartZ = g_CamPathOffsetZ;
-                g_CamPathPitchStart = g_CamPathPitch;
-                g_CamPathYawStart = g_CamPathYaw;
-                g_CamPathRollStart = g_CamPathRoll;
-                g_CamPathDistStart = g_CamPathDist;
+                g_CamPathOffsetStart[0] = g_CamPathOffset[0];
+                g_CamPathOffsetStart[1] = g_CamPathOffset[1];
+                g_CamPathOffsetStart[2] = g_CamPathOffset[2];
+                g_CamPathAngleStart[CAMPATH_PITCH] = g_CamPathAngle[CAMPATH_PITCH];
+                g_CamPathAngleStart[CAMPATH_YAW] = g_CamPathAngle[CAMPATH_YAW];
+                g_CamPathAngleStart[CAMPATH_ROLL] = g_CamPathAngle[CAMPATH_ROLL];
+                g_CamPathAngleStart[CAMPATH_DIST] = g_CamPathAngle[CAMPATH_DIST];
             } else {
                 temp_v0_944 = (temp_v0_30 * 0x24) + g_TrackCameras;
-                g_CamPathOffsetStartX = FIELD(temp_v0_944, s32 *, 0x10);
-                g_CamPathOffsetStartY = FIELD(temp_v0_944, s32 *, 0x14);
-                g_CamPathOffsetStartZ = FIELD(temp_v0_944, s32 *, 0x18);
-                g_CamPathPitchStart = FIELD(temp_v0_944, s32 *, 0);
-                g_CamPathYawStart = FIELD(temp_v0_944, s32 *, 4);
-                g_CamPathRollStart = FIELD(temp_v0_944, s32 *, 8);
-                g_CamPathDistStart = FIELD(temp_v0_944, s32 *, 0xC);
+                g_CamPathOffsetStart[0] = FIELD(temp_v0_944, s32 *, 0x10);
+                g_CamPathOffsetStart[1] = FIELD(temp_v0_944, s32 *, 0x14);
+                g_CamPathOffsetStart[2] = FIELD(temp_v0_944, s32 *, 0x18);
+                g_CamPathAngleStart[CAMPATH_PITCH] = FIELD(temp_v0_944, s32 *, 0);
+                g_CamPathAngleStart[CAMPATH_YAW] = FIELD(temp_v0_944, s32 *, 4);
+                g_CamPathAngleStart[CAMPATH_ROLL] = FIELD(temp_v0_944, s32 *, 8);
+                g_CamPathAngleStart[CAMPATH_DIST] = FIELD(temp_v0_944, s32 *, 0xC);
             }
             temp_a0_976 = (g_CamPathNode * 0x24) + g_TrackCameras;
-            g_CamPathOffsetDeltaX = FIELD(temp_a0_976, s32 *, 0x10) - g_CamPathOffsetStartX;
-            g_CamPathOffsetDeltaY = FIELD(temp_a0_976, s32 *, 0x14) - g_CamPathOffsetStartY;
-            g_CamPathOffsetDeltaZ = FIELD(temp_a0_976, s32 *, 0x18) - g_CamPathOffsetStartZ;
-            var_a1_886 = FIELD(temp_a0_976, s32 *, 0) - g_CamPathPitchStart;
-            temp_a2_1183 = (s32)&g_CamPathPitchDelta;
+            g_CamPathOffsetDelta[0] = FIELD(temp_a0_976, s32 *, 0x10) - g_CamPathOffsetStart[0];
+            g_CamPathOffsetDelta[1] = FIELD(temp_a0_976, s32 *, 0x14) - g_CamPathOffsetStart[1];
+            g_CamPathOffsetDelta[2] = FIELD(temp_a0_976, s32 *, 0x18) - g_CamPathOffsetStart[2];
+            var_a1_886 = FIELD(temp_a0_976, s32 *, 0) - g_CamPathAngleStart[CAMPATH_PITCH];
+            temp_a2_1183 = (s32)&g_CamPathAngleDelta[CAMPATH_PITCH];
             *(s32 *)temp_a2_1183 = var_a1_886;
-            D_8009B1EC = FIELD(temp_a0_976, s32 *, 4) - g_CamPathYawStart;
-            g_CamPathRollDelta = FIELD(temp_a0_976, s32 *, 8) - g_CamPathRollStart;
-            g_CamPathDistDelta = FIELD(temp_a0_976, s32 *, 0xC) - g_CamPathDistStart;
+            g_CamPathAngleDelta[CAMPATH_YAW] = FIELD(temp_a0_976, s32 *, 4) - g_CamPathAngleStart[CAMPATH_YAW];
+            g_CamPathAngleDelta[CAMPATH_ROLL] = FIELD(temp_a0_976, s32 *, 8) - g_CamPathAngleStart[CAMPATH_ROLL];
+            g_CamPathAngleDelta[CAMPATH_DIST] = FIELD(temp_a0_976, s32 *, 0xC) - g_CamPathAngleStart[CAMPATH_DIST];
             if (var_a1_886 > 0) {
                 if (var_a1_886 >= 0x800) {
                     *(s32 *)temp_a2_1183 = var_a1_886 - 0x1000;
@@ -467,7 +463,7 @@ block_52:
             } else if (var_a1_886 < -0x7FF) {
                 *(s32 *)temp_a2_1183 = var_a1_886 + 0x1000;
             }
-            case3Angle = &D_8009B1EC;
+            case3Angle = &g_CamPathAngleDelta[CAMPATH_YAW];
             if (*case3Angle > 0) {
                 if (*case3Angle >= 0x800) {
                     *case3Angle -= 0x1000;
@@ -475,7 +471,7 @@ block_52:
             } else if (*case3Angle < -0x7FF) {
                 *case3Angle += 0x1000;
             }
-            case3Angle = &g_CamPathRollDelta;
+            case3Angle = &g_CamPathAngleDelta[CAMPATH_ROLL];
             if (*case3Angle > 0) {
                 if (*case3Angle >= 0x800) {
                     *case3Angle -= 0x1000;
@@ -487,55 +483,55 @@ block_52:
             g_CamPathFrame += 1;
         }
         temp_a1_1117 = 0x1000 - func_80068634((s32) (g_CamPathFrame << 0xB) / (s32) FIELD(((g_CamPathNode * 0x24) + g_TrackCameras), s32 *, 0x1C));
-        var_a0_1119 = temp_a1_1117 * g_CamPathOffsetDeltaX;
+        var_a0_1119 = temp_a1_1117 * g_CamPathOffsetDelta[0];
         if (var_a0_1119 < 0) {
             var_a0_1119 += 0x1FFF;
         }
-        temp_t2_1131 = (var_a0_1119 >> 0xD) + g_CamPathOffsetStartX;
-        var_a0_1132 = temp_a1_1117 * g_CamPathOffsetDeltaY;
+        temp_t2_1131 = (var_a0_1119 >> 0xD) + g_CamPathOffsetStart[0];
+        var_a0_1132 = temp_a1_1117 * g_CamPathOffsetDelta[1];
         sp18[0] = temp_t2_1131;
         if (var_a0_1132 < 0) {
             var_a0_1132 += 0x1FFF;
         }
-        temp_t1_1144 = (var_a0_1132 >> 0xD) + g_CamPathOffsetStartY;
-        var_a0_1145 = temp_a1_1117 * g_CamPathOffsetDeltaZ;
+        temp_t1_1144 = (var_a0_1132 >> 0xD) + g_CamPathOffsetStart[1];
+        var_a0_1145 = temp_a1_1117 * g_CamPathOffsetDelta[2];
         sp18[1] = temp_t1_1144;
         if (var_a0_1145 < 0) {
             var_a0_1145 += 0x1FFF;
         }
-        temp_t0_1157 = (var_a0_1145 >> 0xD) + g_CamPathOffsetStartZ;
-        var_a0_1158 = temp_a1_1117 * g_CamPathPitchDelta;
+        temp_t0_1157 = (var_a0_1145 >> 0xD) + g_CamPathOffsetStart[2];
+        var_a0_1158 = temp_a1_1117 * g_CamPathAngleDelta[CAMPATH_PITCH];
         sp18[2] = temp_t0_1157;
         if (var_a0_1158 < 0) {
             var_a0_1158 += 0x1FFF;
         }
-        temp_a3_1170 = (var_a0_1158 >> 0xD) + g_CamPathPitchStart;
-        var_a0_1171 = temp_a1_1117 * D_8009B1EC;
+        temp_a3_1170 = (var_a0_1158 >> 0xD) + g_CamPathAngleStart[CAMPATH_PITCH];
+        var_a0_1171 = temp_a1_1117 * g_CamPathAngleDelta[CAMPATH_YAW];
         sp38[0] = temp_a3_1170;
         if (var_a0_1171 < 0) {
             var_a0_1171 += 0x1FFF;
         }
-        temp_a2_1183 = (var_a0_1171 >> 0xD) + g_CamPathYawStart;
-        var_a0_1184 = temp_a1_1117 * g_CamPathRollDelta;
+        temp_a2_1183 = (var_a0_1171 >> 0xD) + g_CamPathAngleStart[CAMPATH_YAW];
+        var_a0_1184 = temp_a1_1117 * g_CamPathAngleDelta[CAMPATH_ROLL];
         sp38[1] = temp_a2_1183;
         if (var_a0_1184 < 0) {
             var_a0_1184 += 0x1FFF;
         }
-        temp_v1_1196 = (var_a0_1184 >> 0xD) + g_CamPathRollStart;
-        var_a0_1197 = temp_a1_1117 * g_CamPathDistDelta;
+        temp_v1_1196 = (var_a0_1184 >> 0xD) + g_CamPathAngleStart[CAMPATH_ROLL];
+        var_a0_1197 = temp_a1_1117 * g_CamPathAngleDelta[CAMPATH_DIST];
         sp38[2] = temp_v1_1196;
         if (var_a0_1197 < 0) {
             var_a0_1197 += 0x1FFF;
         }
-        g_CamPathPitch = temp_a3_1170 & 0xFFF;
-        g_CamPathYaw = temp_a2_1183 & 0xFFF;
-        g_CamPathRoll = temp_v1_1196 & 0xFFF;
-        g_CamPathOffsetX = temp_t2_1131;
-        g_CamPathOffsetY = temp_t1_1144;
-        g_CamPathOffsetZ = temp_t0_1157;
-        temp_v0_1221 = (var_a0_1197 >> 0xD) + g_CamPathDistStart;
+        g_CamPathAngle[CAMPATH_PITCH] = temp_a3_1170 & 0xFFF;
+        g_CamPathAngle[CAMPATH_YAW] = temp_a2_1183 & 0xFFF;
+        g_CamPathAngle[CAMPATH_ROLL] = temp_v1_1196 & 0xFFF;
+        g_CamPathOffset[0] = temp_t2_1131;
+        g_CamPathOffset[1] = temp_t1_1144;
+        g_CamPathOffset[2] = temp_t0_1157;
+        temp_v0_1221 = (var_a0_1197 >> 0xD) + g_CamPathAngleStart[CAMPATH_DIST];
         sp38[3] = temp_v0_1221;
-        g_CamPathDist = temp_v0_1221;
+        g_CamPathAngle[CAMPATH_DIST] = temp_v0_1221;
         temp_a1_1227 = temp_a2_1183 - FIELD(arg1, s32 *, 0x24);
         sp38[1] = temp_a1_1227;
         GameBuildRotMatrixY(&sp88[0], temp_a1_1227);
@@ -558,7 +554,7 @@ block_52:
         scratch[2] += sp38[0];
         scratch[3] += sp38[1];
         scratch[4] += sp38[2];
-        sp28[2] = g_CamPathDist;
+        sp28[2] = g_CamPathAngle[CAMPATH_DIST];
         ApplyMatrixLV(&sp68[0], &sp28[0], &sp38[0]);
         scratch[2] -= sp38[0];
         scratch[3] -= sp38[1];

@@ -666,6 +666,28 @@ void GameSetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) asm("func_
  * 12-byte { cur, from, to } RGB slots at D_801E3FB6 + 0x0C * k - slot 0 the GTE
  * far/fog colour, 1..8 the sky gradient - lerped every frame by func_80045CD4.
  */
+/* One packed RGB triple of that timeline. The block starts at 0x801E3FB6, i.e.
+ * 2 mod 4, so every word in it is half-aligned and must be declared packed --
+ * the compiler emits lwl/lwr, not lw. */
+typedef struct GameEnvColor {
+    u32 rgb __attribute__((packed));
+} GameEnvColor;
+
+/* One timeline slot: the live colour and the pair it is being lerped between.
+ * GameLoadEnvironmentCue rolls `cur` into `from` and the cue's value into `to`;
+ * GameUpdateEnvironment walks `cur` across over g_EnvLerpDuration frames. */
+typedef struct GameEnvColorSlot {
+    GameEnvColor cur;
+    GameEnvColor from;
+    GameEnvColor to;
+} GameEnvColorSlot;
+
+/* The nine slots. [0] is the GTE far/fog colour (SetFarColor takes its three
+ * bytes; g_EnvSpare is its unused fourth byte), [1..8] the sky-gradient bands.
+ * Only six are lerped on a given course: [5]/[6] and [7]/[8] are alternates
+ * picked by g_CourseIndex == 2. */
+extern GameEnvColorSlot g_EnvColors[9] asm("D_801E3FB6");
+
 /* Jumps that timeline to `time` and applies one frame, then programs
  * SetFarColor + SetFogNear. */
 void GameSeekEnvironmentScript(s32 time) asm("func_800458CC");

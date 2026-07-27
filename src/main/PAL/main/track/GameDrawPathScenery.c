@@ -5,9 +5,10 @@
 #include "game/track.h"
 #include "game/race.h"
 
-extern s16 g_PathSceneryRotY asm("D_801E4DCA");
-extern s16 g_PathSceneryRotX asm("D_801E4DC8");
-extern s16 g_PathSceneryRotZ asm("D_801E4DCC");
+/* The looping prop's live orientation: three 12-bit angles copied wholesale out
+ * of the current rotation keyframe by GameInitPathScenery, which sees the same
+ * eight bytes as one Blk8. */
+extern s16 g_PathSceneryRot[3] asm("D_801E4DC8");
 extern s16 g_PathSceneryX asm("D_801E4DB8");
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_ScratchRenderMode asm("D_1F800084");
@@ -28,14 +29,14 @@ void GameDrawPathScenery(void) {
 
     mtx0Ptr = &mtx0;
     __asm__("" : "=r"(mtx0Ptr) : "0"(mtx0Ptr));
-    anglePtr = &g_PathSceneryRotY;
+    anglePtr = &g_PathSceneryRot[1];
     mtx1Ptr = &mtx1;
 
     GameBuildRotMatrixY(mtx0Ptr, 0x800 - anglePtr[0]);
-    GameBuildRotMatrixX(mtx1Ptr, g_PathSceneryRotX);
+    GameBuildRotMatrixX(mtx1Ptr, g_PathSceneryRot[0]);
     MulMatrix2(&mtx0, mtx1Ptr);
     MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
-    GameBuildRotMatrixZ(&mtx0, g_PathSceneryRotZ);
+    GameBuildRotMatrixZ(&mtx0, g_PathSceneryRot[2]);
     MulMatrix2(mtx1Ptr, &mtx0);
 
     GameSelectModelBank(1);

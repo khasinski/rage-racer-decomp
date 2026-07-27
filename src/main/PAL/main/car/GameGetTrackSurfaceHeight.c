@@ -101,16 +101,10 @@ s32 GameGetTrackSurfaceHeight(Unk32098 *arg0) {
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/GameGetTrackSurfaceHeight", func_80032280);
 
 /* The four corners of the tachometer needle, unrotated, rebuilt from
- * g_CarSpec +0x14C..+0x14F whenever the car changes. GameDrawTachometer walks
- * them as an (x, y) pair array from &g_TachoNeedleQuadY0 - 1. */
-extern s16 g_TachoNeedleQuadX0 asm("D_8019C7D4");
-extern s16 g_TachoNeedleQuadY0 asm("D_8019C7D6");
-extern s16 g_TachoNeedleQuadX1 asm("D_8019C7D8");
-extern s16 g_TachoNeedleQuadY1 asm("D_8019C7DA");
-extern s16 g_TachoNeedleQuadX2 asm("D_8019C7DC");
-extern s16 g_TachoNeedleQuadY2 asm("D_8019C7DE");
-extern s16 g_TachoNeedleQuadX3 asm("D_8019C7E0");
-extern s16 g_TachoNeedleQuadY3 asm("D_8019C7E2");
+ * g_CarSpec +0x14C..+0x14F whenever the car changes. [corner][0] is x and
+ * [corner][1] is y; GameDrawTachometer walks the same eight halfwords as an
+ * (x, y) pair array. */
+extern s16 g_TachoNeedleQuad[4][2] asm("D_8019C7D4");
 extern GameSpriteDesc g_TachoNeedleSprite asm("D_8007DAE0");
 /* The needle SPRT in each of the two draw buffers, plus the two DR_TPAGE
  * prims that precede buffer 1's copy at -0x18 and -0x0C (buffer 0's are
@@ -140,14 +134,14 @@ void GameBuildTachoNeedleQuad(void) {
     u8 *prim1 = g_TachoNeedlePrim1;
     GameSpriteDesc *src = &g_TachoNeedleSprite;
 
-    g_TachoNeedleQuadX0 = -data[0x14F];
-    g_TachoNeedleQuadY0 = data[0x14E];
-    g_TachoNeedleQuadX1 = -data[0x14D];
-    g_TachoNeedleQuadY1 = -data[0x14C];
-    g_TachoNeedleQuadX2 = data[0x14F];
-    g_TachoNeedleQuadY2 = data[0x14E];
-    g_TachoNeedleQuadX3 = data[0x14D];
-    g_TachoNeedleQuadY3 = -data[0x14C];
+    g_TachoNeedleQuad[0][0] = -data[0x14F];
+    g_TachoNeedleQuad[0][1] = data[0x14E];
+    g_TachoNeedleQuad[1][0] = -data[0x14D];
+    g_TachoNeedleQuad[1][1] = -data[0x14C];
+    g_TachoNeedleQuad[2][0] = data[0x14F];
+    g_TachoNeedleQuad[2][1] = data[0x14E];
+    g_TachoNeedleQuad[3][0] = data[0x14D];
+    g_TachoNeedleQuad[3][1] = -data[0x14C];
 
     src->x = *(u16 *)(data + 0x13C) + *(u16 *)(data + 0x138);
     src->y = *(u16 *)(data + 0x13E) + *(u16 *)(data + 0x13A);

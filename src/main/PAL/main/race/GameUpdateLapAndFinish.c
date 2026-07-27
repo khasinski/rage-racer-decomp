@@ -8,14 +8,15 @@
 #include "game/car.h"
 
 
-extern s32 g_SectorTime1 asm("D_8009AF84");
-
-extern s32 g_SectorTime2 asm("D_8009AF88");
 
 
+/* Elements 0, 1 and 2 of g_RefSectorTimes (D_8009AF90). They CANNOT be spelled
+ * g_RefSectorTimes[k] here: with one array symbol GCC 2.6.3 CSEs the base
+ * address into a register and reschedules around it, which shifts the
+ * allocation of the whole surrounding block. Three symbols keep three separate
+ * %hi/%lo pairs, which is what the retail code has. */
 extern s32 g_RefSectorTime0 asm("D_8009AF90");
 extern s32 g_RefSectorTime1 asm("D_8009AF94");
-
 extern s32 g_RefSectorTime2 asm("D_8009AF98");
 
 
@@ -47,11 +48,6 @@ extern s32 g_BestLapTimes[][4][2] asm("D_801E4408");
 
 extern s32 g_BestSectorTimes[][4][3] asm("D_801E41E8");
 
-/* Split symbols for g_BestSectorTimes + 4 and + 8, i.e. sectors 1 and 2 of
- * the [series][course] record this code writes one element at a time. */
-extern s32 g_BestSectorTime1 asm("D_801E41EC");
-
-extern s32 g_BestSectorTime2 asm("D_801E41F0");
 
 extern s32 g_RaceTotalTime asm("D_801E4BA8");
 
@@ -395,11 +391,11 @@ update_progress:
             result =
                 *(s32 *)((s32)route + resultOffset + 0xC0);
             g_BestLapThisRace = candidateTime;
-            g_SectorTime2 = result;
+            g_SectorTimes[2] = result;
             if (arg1 == 0) {
                 g_RefSectorTime2 = result;
                 g_RefSectorTime0 = g_SectorTimes[0];
-                g_RefSectorTime1 = g_SectorTime1;
+                g_RefSectorTime1 = g_SectorTimes[1];
             }
 
             if (g_LapCount < *(s16 *)(route + 0xAC)) {
@@ -441,9 +437,9 @@ record_done:
                 if (arg1 == 0) {
                     tableOffset = g_CourseIndex * 12 + g_RaceSeries * 48;
                     *(s32 *)((u8 *)g_BestSectorTimes + tableOffset) = g_RefSectorTime0;
-                    *(s32 *)((u8 *)&g_BestSectorTime1 + tableOffset) =
+                    *(s32 *)((u8 *)&g_BestSectorTimes[0][0][1] + tableOffset) =
                         g_RefSectorTime1;
-                    *(s32 *)((u8 *)&g_BestSectorTime2 + tableOffset) =
+                    *(s32 *)((u8 *)&g_BestSectorTimes[0][0][2] + tableOffset) =
                         g_RefSectorTime2;
                 }
                 g_RacePhase = 4;

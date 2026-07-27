@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "game/race.h"
+#include "game/render.h"
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/track/GameSeekEnvironmentScript", func_800458CC);
 
@@ -19,13 +20,20 @@ extern Cmd *g_EnvScriptCursor asm("D_801E40E8");
 extern u32 *g_EnvScriptCues asm("D_801E42F4");
 
 extern s16 g_EnvFogEnabled asm("D_801E3FB4");
-/* Split symbols of the packed slot-0 colour: this file addresses the R, G and B
- * bytes individually to feed SetFarColor, so it declares them as three u8. */
+/* Split symbols of the packed slot-0 colour, i.e. g_EnvColors[0].cur: this file
+ * addresses its R, G and B bytes individually to feed SetFarColor, so it
+ * declares them as three u8. */
 extern u8 g_EnvFogColor asm("D_801E3FB6");
 extern u8 g_EnvFogColorG asm("D_801E3FB7");
 extern u8 g_EnvFogColorB asm("D_801E3FB8");
 extern u8 g_EnvSpare asm("D_801E3FB9");
-extern u32 g_EnvFogColorFrom asm("D_801E3FBA");
+
+/* GameLerpEnvColor works in bytes, so the eight lerps below address the slots
+ * of g_EnvColors through one byte cursor `pp` = &g_EnvColors[0].from. Slot
+ * stride 0x0C, field order { cur, from, to }. */
+#define ENV_CUR(k) (pp + 0x0C * (k) - 4)
+#define ENV_FROM(k) (pp + 0x0C * (k))
+#define ENV_TO(k) (pp + 0x0C * (k) + 4)
 
 extern s16 g_EnvLerpFrame asm("D_801E4022");
 extern s16 g_EnvLerpDuration asm("D_801E4024");
@@ -122,18 +130,20 @@ void GameUpdateEnvironment(void) {
     rect.h = 0x1;
     func_80065B24(&rect);
 
-    pp = (u8 *)&g_EnvFogColorFrom;
-    GameLerpEnvColor(pp + 0x0, pp + 0x4, pp - 0x4, frac);
-    GameLerpEnvColor(pp + 0xC, pp + 0x10, pp + 0x8, frac);
-    GameLerpEnvColor(pp + 0x18, pp + 0x1C, pp + 0x14, frac);
-    GameLerpEnvColor(pp + 0x24, pp + 0x28, pp + 0x20, frac);
-    GameLerpEnvColor(pp + 0x30, pp + 0x34, pp + 0x2C, frac);
+    /* cur = lerp(from, to, frac) for slots 0..4, then one of the two alternate
+     * pairs. Slot 0 is the fog colour SetFarColor gets three lines below. */
+    pp = (u8 *)&g_EnvColors[0].from;
+    GameLerpEnvColor(ENV_FROM(0), ENV_TO(0), ENV_CUR(0), frac);
+    GameLerpEnvColor(ENV_FROM(1), ENV_TO(1), ENV_CUR(1), frac);
+    GameLerpEnvColor(ENV_FROM(2), ENV_TO(2), ENV_CUR(2), frac);
+    GameLerpEnvColor(ENV_FROM(3), ENV_TO(3), ENV_CUR(3), frac);
+    GameLerpEnvColor(ENV_FROM(4), ENV_TO(4), ENV_CUR(4), frac);
     if (g_CourseIndex == 2) {
-        GameLerpEnvColor(pp + 0x3C, pp + 0x40, pp + 0x38, frac);
-        GameLerpEnvColor(pp + 0x48, pp + 0x4C, pp + 0x44, frac);
+        GameLerpEnvColor(ENV_FROM(5), ENV_TO(5), ENV_CUR(5), frac);
+        GameLerpEnvColor(ENV_FROM(6), ENV_TO(6), ENV_CUR(6), frac);
     } else {
-        GameLerpEnvColor(pp + 0x54, pp + 0x58, pp + 0x50, frac);
-        GameLerpEnvColor(pp + 0x60, pp + 0x64, pp + 0x5C, frac);
+        GameLerpEnvColor(ENV_FROM(7), ENV_TO(7), ENV_CUR(7), frac);
+        GameLerpEnvColor(ENV_FROM(8), ENV_TO(8), ENV_CUR(8), frac);
     }
 
     func_80069A38(g_EnvFogColor, g_EnvFogColorG, g_EnvFogColorB);

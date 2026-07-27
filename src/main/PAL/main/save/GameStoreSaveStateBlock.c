@@ -10,19 +10,7 @@ extern u16 g_NegconNeutralI asm("D_8019CA08");
 extern u16 g_NegconNeutralII asm("D_8019CA0A");
 extern u16 g_NegconMaxTwist asm("D_801E418C");
 extern u16 g_NegconNeutralL asm("D_8019CA0C");
-extern s32 g_GrandPrixSaveCar asm("D_801E4098");
-extern s32 g_GrandPrixSaveClass asm("D_801E409C");
-extern s32 g_GrandPrixSaveMaxClass asm("D_801E40A0");
-extern s32 g_GrandPrixSaveTime asm("D_801E40A4");
-extern s32 g_ExtraGrandPrixSaveCar asm("D_801E6E80");
-extern s32 g_ExtraGrandPrixSaveClass asm("D_801E6E84");
-extern s32 g_ExtraGrandPrixSaveMaxClass asm("D_801E6E88");
-extern s32 g_ExtraGrandPrixSaveTime asm("D_801E6E8C");
 extern u16 g_BgmSelection asm("D_801E42CC");
-extern s32 g_TimeAttackSaveCar asm("D_8019C984");
-extern s32 g_TimeAttackSaveClass asm("D_8019C988");
-extern s32 g_TimeAttackSaveMaxClass asm("D_8019C98C");
-extern s32 g_TimeAttackSaveSeries asm("D_8019C990");
 
 extern u8 g_GrandPrixCars[] asm("D_801E4F44");
 extern u8 g_ExtraGrandPrixCars[] asm("D_8019C914");
@@ -70,25 +58,25 @@ void GameStoreSaveStateBlock(u8 *arg0) {
         *(u16 *)(arg0 + 0xC) = h1;
     }
 
-    *(s32 *)(arg0 + 0x10) = g_GrandPrixSave;
-    *(s32 *)(arg0 + 0x14) = g_GrandPrixSaveCar;
-    *(s32 *)(arg0 + 0x18) = g_GrandPrixSaveClass;
-    *(s32 *)(arg0 + 0x1C) = g_GrandPrixSaveMaxClass;
-    *(s32 *)(arg0 + 0x20) = g_GrandPrixSaveTime;
-    *(s32 *)(arg0 + 0x24) = g_ExtraGrandPrixSave;
-    *(s32 *)(arg0 + 0x28) = g_ExtraGrandPrixSaveCar;
-    *(s32 *)(arg0 + 0x2C) = g_ExtraGrandPrixSaveClass;
-    *(s32 *)(arg0 + 0x30) = g_ExtraGrandPrixSaveMaxClass;
+    *(s32 *)(arg0 + 0x10) = g_GrandPrixSave.course;
+    *(s32 *)(arg0 + 0x14) = g_GrandPrixSave.carIndex;
+    *(s32 *)(arg0 + 0x18) = g_GrandPrixSave.classIndex;
+    *(s32 *)(arg0 + 0x1C) = g_GrandPrixSave.maxClassReached;
+    *(s32 *)(arg0 + 0x20) = g_GrandPrixSave.unk10;
+    *(s32 *)(arg0 + 0x24) = g_ExtraGrandPrixSave.course;
+    *(s32 *)(arg0 + 0x28) = g_ExtraGrandPrixSave.carIndex;
+    *(s32 *)(arg0 + 0x2C) = g_ExtraGrandPrixSave.classIndex;
+    *(s32 *)(arg0 + 0x30) = g_ExtraGrandPrixSave.maxClassReached;
     {
-        s32 w34 = g_ExtraGrandPrixSaveTime;
+        s32 w34 = g_ExtraGrandPrixSave.unk10;
         register u16 h4C asm("$3") = g_BgmSelection;
         *(s32 *)(arg0 + 0x34) = w34;
-        *(s32 *)(arg0 + 0x38) = g_TimeAttackSave;
-        *(s32 *)(arg0 + 0x3C) = g_TimeAttackSaveCar;
-        *(s32 *)(arg0 + 0x40) = g_TimeAttackSaveClass;
-        *(s32 *)(arg0 + 0x44) = g_TimeAttackSaveMaxClass;
+        *(s32 *)(arg0 + 0x38) = g_TimeAttackSave.course;
+        *(s32 *)(arg0 + 0x3C) = g_TimeAttackSave.carIndex;
+        *(s32 *)(arg0 + 0x40) = g_TimeAttackSave.classIndex;
+        *(s32 *)(arg0 + 0x44) = g_TimeAttackSave.maxClassReached;
         {
-            register s32 w48 asm("$4") = g_TimeAttackSaveSeries;
+            register s32 w48 asm("$4") = g_TimeAttackSave.unk10;
             u16 h4E = g_AdvancedSeriesUnlocked;
             *(u16 *)(arg0 + 0x4C) = h4C;
             *(u16 *)(arg0 + 0x4E) = h4E;

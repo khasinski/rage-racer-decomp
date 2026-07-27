@@ -203,7 +203,10 @@ void GameBeginNegconCalibration(void) {
 }
 
 /* The raw NeGcon axes in the BIOS pad buffer (g_PadBuffers + 4): steering,
- * then the three analog buttons. */
+ * then the three analog buttons. Four consecutive unsigned bytes, 0..255 with
+ * 0x80 the mechanical centre -- which is what the `- 128` below proves; the
+ * three buttons keep their raw 0..255 and are re-centred by subtracting the
+ * latched g_NegconNeutral* instead. */
 extern u8 g_NegconAxisSteer asm("D_801E4040");
 extern u8 g_NegconAxisI asm("D_801E4041");
 extern u8 g_NegconAxisII asm("D_801E4042");

@@ -75,9 +75,11 @@ typedef struct GameRaceProgress {
  * matching the title-menu row that g_CarTable was repointed for. Declared s32
  * because most translation units only touch the first word. */
 extern GameRaceProgress *g_RaceProgress asm("D_801E4FAC");
-extern s32 g_GrandPrixSave asm("D_801E4094");
-extern s32 g_ExtraGrandPrixSave asm("D_801E6E7C");
-extern s32 g_TimeAttackSave asm("D_8019C980");
+/* The three slots themselves. Their fields used to be spelled as separate
+ * symbols per serialiser (g_GrandPrixSaveCar and friends); they are members. */
+extern GameRaceProgress g_GrandPrixSave asm("D_801E4094");
+extern GameRaceProgress g_ExtraGrandPrixSave asm("D_801E6E7C");
+extern GameRaceProgress g_TimeAttackSave asm("D_8019C980");
 
 typedef struct GameRaceRanking {
     s16 count;

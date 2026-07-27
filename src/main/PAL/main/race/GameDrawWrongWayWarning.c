@@ -69,7 +69,9 @@ extern u8 *volatile g_DrawBuffer asm("D_8019C900");
 extern s32 g_PlayerSpeed asm("D_8009E778");
 extern s16 g_PlayerGear asm("D_8009E806");
 extern u16 g_HudGlyphClut asm("D_801E4130");
-extern s16 g_TachoNeedleQuadY0 asm("D_8019C7D6");
+/* The needle corner table car/GameGetTrackSurfaceHeight.c rebuilds: four
+ * (x, y) pairs. The loop below biases its cursor to the y of corner 0. */
+extern s16 g_TachoNeedleQuad[4][2] asm("D_8019C7D4");
 /* Tint of the tachometer face: the dial-mode branches set all three to the
  * same level and the tail of the function copies them into the face prim
  * already staged at g_DrawBuffer + 0x236E8. .data seeds them 0x80. */
@@ -106,7 +108,7 @@ void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
 
     vp = (s16 *)(prim + 8);
     i = 0;
-    pb = &g_TachoNeedleQuadY0;
+    pb = &g_TachoNeedleQuad[0][1];
     pa = pb - 1;
     for (; i < 4; i++) {
         *vp++ = cx + (sin * pa[0] - cos * pb[0]) / 4096;

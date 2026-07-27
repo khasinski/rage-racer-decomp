@@ -2983,3 +2983,178 @@ way to keep both the type and the compile.
 
 After this pass 232 raw globals are still referenced from the eight front-end
 directories: 10 reach three files, 38 reach two, and 184 are single-file.
+
+## 20. Types pass: aggregation and semantics
+
+Sections 18 and 19 gave every reachable global a name. What a name cannot say
+is that a *run* of globals is one object, and what byte-exactness does not pin
+is the meaning of a value whose width is already forced. This pass took the
+largest runs of consecutive named globals and tried to collapse each into the
+struct or array it really is, then annotated the values whose unit the code
+proves.
+
+Width and signedness were not revisited: byte-exactness already fixes them at
+every site that really loads or stores, and same-width spellings (`int`,
+`long`, `s32`) compile identically here. Aggregation is different — it can
+change codegen, so **every conversion was verified on its own** with
+`make check VERSION=PAL`, the affected object deleted first, and reverted if
+the sha1 moved off `2913e15648eddef40821c5f666460abc04155ee6`.
+
+### 20a. Aggregations that hold
+
+| run | was | is now | where |
+|---|---|---|---|
+| `D_801E3FB6` 27 words | 27 `PackedWord` externs | `GameEnvColorSlot g_EnvColors[9]`, each `{ cur, from, to }` of `GameEnvColor` | `include/game/render.h`; users `track/GameLoadEnvironmentCue.c`, `track/GameSeekEnvironmentScript.c` |
+| `D_8009B1B8/C8/D8` | `g_CamPathOffset{,Start,Delta}{X,Y,Z}` | `s32 g_CamPathOffsetDelta[3]` / `…Start[3]` / `g_CamPathOffset[3]` | `track/GameUpdateCamera.c` |
+| `D_8009B1E8/F8/B208` | `g_CamPath{Pitch,Yaw,Roll,Dist}{Delta,Start,}` | `s32 g_CamPathAngleDelta[4]` / `…Start[4]` / `g_CamPathAngle[4]` + `CAMPATH_PITCH/YAW/ROLL/DIST` | same |
+| `D_801E4DC8` | `g_PathSceneryRot{X,Y,Z}` and a `Blk8` under a fourth name | one `g_PathSceneryRot`, `s16[3]` in the drawer and `Blk8` in the initialiser | `track/GameDrawPathScenery.c`, `track/GameDrawScriptedScenery.c` |
+| `D_801E4DD0` / `D_801E4DD8` | `g_PathScenery{Rot,}HalfDelta{X,Y,Z}` | `s16 g_PathSceneryRotHalfDelta[3]` / `g_PathSceneryHalfDelta[3]` | `track/GameDrawScriptedScenery.c` |
+| `D_8019C7D4` 8 halfwords | `g_TachoNeedleQuad{X,Y}{0..3}` | `s16 g_TachoNeedleQuad[4][2]` | `car/GameGetTrackSurfaceHeight.c` (writer) and `race/GameDrawWrongWayWarning.c` (reader) |
+| `D_801E4094`, `D_801E6E7C`, `D_8019C980` | three `s32` bases plus 12 split field symbols | three `GameRaceProgress` objects, fields as members | `include/game/race.h`; `save/GameStoreSaveStateBlock.c`, `save/GameLoadSaveStateBlock.c`, `menu/GameUpdatePrizeMoneyScreen.c`, `menu/GameEnterFrontend.c` |
+| `D_8009AF84/88` | `g_SectorTime1/2` | `g_SectorTimes[1]/[2]` | `race/GameUpdateLapAndFinish.c` |
+| `D_801E41EC/F0` | `g_BestSectorTime1/2` | `&g_BestSectorTimes[0][0][1]/[2]` | same |
+
+Sixty-eight declarations become nineteen. Three things are worth recording
+about *why* these held where others did not:
+
+* **Arrays are safer than structs, and a base+index is safer than a member.**
+  An array subscript produces an ordinary `MEM`; a struct member reference sets
+  `MEM_IN_STRUCT_P`, which feeds gcc 2.6.3's aliasing decisions. The one struct
+  conversion that held (`GameRaceProgress`) is in two straight-line serialisers
+  whose only other memory traffic is through a `s32 *` the compiler cannot
+  disambiguate anyway.
+* **Half-aligned words survive if the member is packed.** `g_EnvColors` starts
+  at `0x801E3FB6`, i.e. 2 mod 4, so every word in the block is loaded with
+  `lwl`/`lwr`. Wrapping the `u32 __attribute__((packed))` in a struct keeps the
+  aggregate's alignment at 1 and the same instruction pair comes out.
+* **A per-file *type* is still allowed, and now carries the aggregation.**
+  `D_801E4DC8` is `s16 g_PathSceneryRot[3]` in the drawer and `Blk8
+  g_PathSceneryRot` in the initialiser that copies the whole keyframe; one
+  name, two views. Same for `g_FmvUploadRect` (a `Rect`) against its volatile
+  `X`/`Y` halves.
+
+`g_CamPathAngleDelta[CAMPATH_YAW]` incidentally closes the hole section 18d
+left open. `D_8009B1EC` carries the mode-3 camera path's yaw delta *and* the
+mode-1 chase camera's previous yaw, and 18d left the whole slot raw because no
+single name is honest for both. The array names only the mode-3 role, which is
+the honest half; the mode-1 code keeps the raw spelling, and the two now sit
+side by side with a comment saying so.
+
+### 20b. Aggregations that do not hold, and what the compiler did instead
+
+* **`g_RefSectorTime0/1/2` (`D_8009AF90`) cannot become `g_RefSectorTimes[k]`**
+  in `race/GameUpdateLapAndFinish.c`. With three symbols gcc emits three
+  independent `%hi`/`%lo` pairs. With one array symbol it CSEs the base into a
+  register, and the resulting live range reshuffles the register allocation of
+  the whole surrounding block — the diff is not just the relocation form, it
+  moves `lui a1` to `lui a2` and inserts an `addiu` that materialises the base.
+  The `g_SectorTimes[1]/[2]` fold in the same function is fine, because
+  `g_SectorTimes[0]` is already spelled that way there, so nothing changes
+  about how many bases are live.
+* **The eight libcard event descriptors at `D_8009B538` cannot become
+  `g_McEvents[k]`** in `save/GameClearMemoryCardHwEvents.c`, even though
+  `save/GamePollMemoryCardStatus.c` already opens them as an array. The four
+  pollers call `TestEvent` in a row; with an array base gcc keeps that base in
+  a callee-saved register across the calls, and
+  `GamePollMemoryCardHwEvent`'s frame grows from 24 to 32 bytes. The eight
+  scalars stay, with the array layout and the index-plus-one return convention
+  written at the declaration.
+* **`g_Shuttle1*` cannot become `g_ShuttleScenery[1].field`** in
+  `track/GameDrawRouteScenery.c`, although `GameShuttleScenery` is already
+  typed and `GameUpdateShuttleScenery` indexes the array happily. As member
+  references the loads and stores get `MEM_IN_STRUCT_P`, stop aliasing the
+  `g_ShuttlePath*` table reads interleaved with them, and gcc hoists one base
+  register for the block: 0x34-relative offsets (52, 60, 64, 66, 84, 88, 92)
+  appear where retail has separate `%hi`/`%lo` pairs, and the branch layout
+  moves with it. The eleven symbols stay, with their offsets documented.
+
+In all three cases the declarations now say, at the declaration, which object
+the scalars are fields of and at what offset, so a reader gets the structure
+even though the compiler would not take it.
+
+### 20c. Runs deliberately left as scalars
+
+* **`g_PathScenery{Pos,Rot}{Phase,Span,Rate,Index}`** (`D_801E4DE0`..`DEE`) are
+  four two-halfword pairs, position first — a structure-of-arrays over the
+  prop's two keyframe tracks. Nothing in the image indexes them by track, so
+  turning them into `[2]` arrays would trade eight readable names for eight
+  equally readable subscripts and buy no structure the comment cannot state.
+* **`g_CdMix{,Full}{LL,LR,RR,RL}`** (`D_8009B174`) are already recognised as a
+  `CdlATV` (19b) and `GameStepCdVolumeFade` already walks them through a
+  hand-pinned `p = &g_CdMixLL`. An array would fight that.
+* **The `D_801E4B84` and `D_8007F5F8` runs are not objects at all.** Both look
+  like long runs of adjacent named globals, but reading them shows unrelated
+  neighbours in `.bss` — `g_BgmSelectCursor`, `g_CarListCursor`,
+  `g_ScreenOffsetX`, `g_PeakOutputValue`… — that happen to be allocated next to
+  each other. Adjacency in `.bss` is not evidence of aggregation; only a walker
+  is.
+
+### 20d. Semantics recorded this pass
+
+Every one of these is stated at the declaration, with the instruction pattern
+that proves it:
+
+* **12-bit angles (4096 to the turn).** `g_CamPathAngle[CAMPATH_PITCH/YAW/ROLL]`
+  and their `Start`/`Delta` companions: the deltas are wrapped into
+  `[-0x800, 0x800)` on load (`>= 0x800` subtracts 0x1000, `< -0x7FF` adds it)
+  and the interpolated values are masked `& 0xFFF` on store. Element 3 of the
+  same quads gets *neither*, which is what proves `CAMPATH_DIST` is a length
+  and not a fourth angle — and, with it, that the 0x24-byte track-camera record
+  really is the union 18a claims. Same unit for `g_PathSceneryRot[3]` and
+  `g_RouteSceneryRot{X,Y,Z}`, both consumed as `0x800 - yaw`, i.e. reflected
+  about half a turn.
+* **12.12 fixed point.** `g_CdMix*` / `g_CdMixFull*` are shifted right 12 to
+  make the 0..0x7F bytes `CdMix` wants, so 0x7F000 is full scale.
+* **Cosine-ease phase, 0..0x1000.** `g_PathSceneryPosPhase` /
+  `g_PathSceneryRotPhase`.
+* **Unsigned 0..255 with 0x80 the mechanical centre.** The four raw NeGcon axis
+  bytes at `D_801E4040`; `GameUpdateNegconNeutralScreen` latches the steering
+  one as `axis - 128` while the three analog buttons keep their raw range and
+  are re-centred against the latched `g_NegconNeutral*` instead.
+* **Packed RGB, half-aligned.** The 27 `g_EnvColors` words; the block base is
+  2 mod 4, so they are `lwl`/`lwr` traffic and the type has to say `packed`.
+* **Position vector plus spare word.** `D_801E4340` is x, y, z and a fourth
+  word copied verbatim out of the series header, written through one cursor;
+  `D_8009B1B8`/`C8`/`D8` are three xyz triples each padded to 16 bytes.
+
+### 20e. A wrong name found, and corrected
+
+**`D_801E418C` is `g_NegconMaxTwist`, not `g_NegconSteerPlay`.**
+`car/GameInitPlayerCar.c` declared it `g_NegconSteerPlay` and its comment — and
+section 18c, which repeats it — attributed the `{ 25, 38, 75, 113 }` clamp
+table `g_NegconSteerRange` to "the 0..3 setting the NEGCON STEER PLAY screen
+edits". It is the *other* setting. The image settles it at `0x80014464`:
+
+    lh   v0, D_8019CAD0        # NEGCON STEER PLAY, 0..3
+    sll  v0, v0, 2             # stride 4
+    lhu  v0, 0x8007C128(at)    # subtracted from / added to the raw twist
+    ...
+    lh   v0, D_801E418C        # MAXIMUM TWIST, 0..3
+    sll  v0, v0, 1             # stride 2
+    lh   v0, 0x8007C020(at)    # g_NegconSteerRange, the clamp
+
+Two different settings, two different tables, two different strides.
+`D_8019CAD0` is the dead zone (hence "play"), edited by
+`GameUpdateNegconSteerPlayScreen` and drawn against `g_NegconPlayPercent`;
+`D_801E418C` is the twist range, edited by `GameUpdateNegconMaxTwistScreen`,
+backed up in `g_NegconMaxTwistSaved`, and divided into the twist by
+`GameInitPlayerCar`. Every other file already called `D_801E418C`
+`g_NegconMaxTwist`; `car/` was the only dissenter, and it is now fixed. The
+sentence in 18c is wrong and this entry supersedes it.
+
+The alias-collision check 19a asks for (one name per address, one address per
+name) found this. It also still reports eleven **pre-existing** addresses
+carrying two different names from different directories, which a later pass
+should reconcile: `D_8019CB08` (`g_NegconConfigIndex` / `g_NegconMappingIndex`),
+`D_8019CB74` (`g_PrizeScreenState` / `g_PrizeScreenStep`), `D_8019CE0C`
+(`g_PendingClassBonus` / `g_PromotionBonus`), `D_801F17B0`
+(`g_PendingPrizeMoney` / `g_PrizeAmount`), `D_801E6C78` (`g_BonusCountStep` /
+`g_BonusTickRate`), `D_801E6DA0` (`g_PrizeCountStep` / `g_PrizeTickRate`),
+`D_801E6CA4` (`g_EffectVolumeScale` / `g_SoundScale`), `D_8019C754`
+(`g_AssetBlockPtr2` / `g_SharedAssetPtr`), `D_8009B1B0` (`g_CdCurrentTrack` /
+`g_CdTrack`), `D_801E4B34` (`g_DrawBufferParity` / `g_FrameParity`) and
+`D_800941E8` (`g_GraphType` / `g_GraphTypeArray`). The remaining duplicates are
+the sanctioned array-base-plus-element-zero pattern
+(`g_EnvColors`/`g_EnvFogColor`, `g_RefSectorTimes`/`g_RefSectorTime0`,
+`g_PadButtonMapping`/`g_PadSteerLeftMask`, …) or a deliberate volatile/non-
+volatile pair, and are fine.

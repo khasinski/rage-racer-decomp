@@ -29,6 +29,11 @@ extern u8 *g_RouteSceneryData asm("D_801E4128");
 extern s32 g_RouteSceneryClock asm("D_801E4330");
 extern volatile s32 g_RouteSceneryFrame asm("D_801E4338");
 extern s16 g_RouteSceneryKeyIndex asm("D_801E433E");
+/* One 4-word position vector at 0x801E4340 -- x, y, z and a fourth word
+ * copied straight out of the series header -- followed by a 3-word orientation
+ * at 0x801E4350 in 12-bit angle units (4096 to the turn: the yaw below is used
+ * as 0x800 - yaw, i.e. reflected about half a turn). The block-copy below
+ * writes all four position words through one cursor. */
 extern s32 g_RouteSceneryX asm("D_801E4340");
 extern s32 g_RouteSceneryY asm("D_801E4344");
 extern s32 g_RouteSceneryZ asm("D_801E4348");

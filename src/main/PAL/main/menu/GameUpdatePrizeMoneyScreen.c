@@ -35,10 +35,6 @@ extern u8 g_TimeAttackCars asm("D_801E4388");
 extern s16 g_ClassRecords asm("D_8019CB40");
 extern s16 D_8019CB42;
 extern s32 g_ClassWinCount asm("D_801E4DA8");
-extern s32 g_TimeAttackSaveCar asm("D_8019C984");
-extern s32 g_TimeAttackSaveClass asm("D_8019C988");
-extern s32 g_TimeAttackSaveMaxClass asm("D_8019C98C");
-extern s32 g_TimeAttackSaveSeries asm("D_8019C990");
 extern u8 g_GrandPrixCars asm("D_801E4F44");
 extern u8 g_ExtraGrandPrixCars asm("D_8019C914");
 extern u8 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
@@ -238,13 +234,13 @@ void GameInitSaveDefaults(void) {
         *(s16 *)((u8 *)&D_8019CB42 + offset) = 0;
     }
 
-    g_TimeAttackSave = 0;
-    g_TimeAttackSaveCar = 3;
-    g_TimeAttackSaveClass = 0;
-    g_TimeAttackSaveMaxClass = 0;
-    g_TimeAttackSaveSeries = 0;
-    GameResetProgressSlot(&g_GrandPrixCars, &g_GrandPrixSave);
-    GameResetProgressSlot(&g_ExtraGrandPrixCars, &g_ExtraGrandPrixSave);
+    g_TimeAttackSave.course = 0;
+    g_TimeAttackSave.carIndex = 3;
+    g_TimeAttackSave.classIndex = 0;
+    g_TimeAttackSave.maxClassReached = 0;
+    g_TimeAttackSave.unk10 = 0;
+    GameResetProgressSlot(&g_GrandPrixCars, (s32 *)&g_GrandPrixSave);
+    GameResetProgressSlot(&g_ExtraGrandPrixCars, (s32 *)&g_ExtraGrandPrixSave);
 
     g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
     GameResetCourseProgress(0);

@@ -2,6 +2,14 @@
 #include "psyq/kernel.h"
 #include "game/memcard.h"
 
+/* Elements 0..3 and 4..7 of the eight-descriptor libcard event table
+ * g_McEvents (D_8009B538), which save/GamePollMemoryCardStatus.c opens as an
+ * array: [0..3] are the hardware class 0xF4000001 and [4..7] the software
+ * class 0xF0000011, each in the order IOE, Error, Timeout, NewCard -- which is
+ * why every poller below returns index + 1. They cannot be spelled
+ * g_McEvents[k] in this file: with one array symbol GCC 2.6.3 keeps the base
+ * address live in a callee-saved register across the TestEvent calls, which
+ * grows GamePollMemoryCardHwEvent's frame from 24 to 32 bytes. */
 extern s32 g_McHwEventIoe asm("D_8009B538");
 extern s32 g_McHwEventError asm("D_8009B53C");
 extern s32 g_McHwEventTimeout asm("D_8009B540");

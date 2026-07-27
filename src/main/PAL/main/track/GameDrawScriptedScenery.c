@@ -79,7 +79,11 @@ extern u8 *g_PathSceneryPosKeys asm("D_801E42DC");
 extern u8 *g_PathSceneryRotKeys asm("D_801E42E8");
 extern PathSceneryClock g_PathSceneryClock asm("D_801E4DB0");
 extern Blk16 g_PathSceneryX asm("D_801E4DB8");
-extern Blk8 g_PathSceneryRotX asm("D_801E4DC8");
+extern Blk8 g_PathSceneryRot asm("D_801E4DC8");
+/* The two tracks' cursors, interleaved pos/rot at 0x801E4DE0: phase, span, rate
+ * and index are each a two-halfword pair with position first. Left as eight
+ * scalars because nothing in the image indexes them by track. Phase is the
+ * cosine-ease argument, 0..0x1000. */
 extern s16 g_PathSceneryPosPhase asm("D_801E4DE0");
 extern s16 g_PathSceneryRotPhase asm("D_801E4DE2");
 extern u16 g_PathSceneryPosSpan asm("D_801E4DE4");
@@ -93,13 +97,11 @@ extern s16 g_PathSceneryRotIndex asm("D_801E4DEE");
  * [0, 100] and walks this value at most 20 a frame towards it. */
 extern s32 g_PathSceneryVolume asm("D_801E4DF0");
 /* Half of (next keyframe - this keyframe), i.e. the amplitude of the cosine
- * ease that carries the prop from one keyframe to the next. */
-extern s16 g_PathSceneryRotHalfDeltaX asm("D_801E4DD0");
-extern s16 g_PathSceneryRotHalfDeltaY asm("D_801E4DD2");
-extern s16 g_PathSceneryRotHalfDeltaZ asm("D_801E4DD4");
-extern s16 g_PathSceneryHalfDeltaX asm("D_801E4DD8");
-extern s16 g_PathSceneryHalfDeltaY asm("D_801E4DDA");
-extern s16 g_PathSceneryHalfDeltaZ asm("D_801E4DDC");
+ * ease that carries the prop from one keyframe to the next. Two xyz triples,
+ * each padded to 8 bytes: the rotation one at 0x801E4DD0, the position one at
+ * 0x801E4DD8. */
+extern s16 g_PathSceneryRotHalfDelta[3] asm("D_801E4DD0");
+extern s16 g_PathSceneryHalfDelta[3] asm("D_801E4DD8");
 
 void GameInitPathScenery(void) asm("func_8003F700");
 void GameInitPathScenery(void) {
@@ -130,7 +132,7 @@ void GameInitPathScenery(void) {
 
         copySrc = g_PathSceneryRotKeys;
         entryA = g_PathSceneryPosKeys;
-        g_PathSceneryRotX = *(Blk8 *)copySrc;
+        g_PathSceneryRot = *(Blk8 *)copySrc;
         g_PathSceneryPosPhase = 0;
         g_PathSceneryRotPhase = 0;
         g_PathSceneryPosSpan = *(u16 *)(entryA + 0x10);
@@ -179,13 +181,13 @@ void GameInitPathScenery(void) {
         g_PathSceneryVolume = 0;
         g_PathSceneryPosIndex = 0;
         g_PathSceneryRotIndex = 0;
-        g_PathSceneryHalfDeltaX = (*(s32 *)(entry + 0x14) - *(s32 *)(entry + 0x0)) / 2;
-        g_PathSceneryHalfDeltaY = (*(s32 *)(entry + 0x18) - *(s32 *)(entry + 0x4)) / 2;
-        g_PathSceneryHalfDeltaZ = (*(s32 *)(entry + 0x1C) - *(s32 *)(entry + 0x8)) / 2;
+        g_PathSceneryHalfDelta[0] = (*(s32 *)(entry + 0x14) - *(s32 *)(entry + 0x0)) / 2;
+        g_PathSceneryHalfDelta[1] = (*(s32 *)(entry + 0x18) - *(s32 *)(entry + 0x4)) / 2;
+        g_PathSceneryHalfDelta[2] = (*(s32 *)(entry + 0x1C) - *(s32 *)(entry + 0x8)) / 2;
         entry = g_PathSceneryRotKeys;
-        g_PathSceneryRotHalfDeltaX = (*(s16 *)(entry + 0xC) - *(s16 *)(entry + 0x0)) / 2;
-        g_PathSceneryRotHalfDeltaY = (*(s16 *)(entry + 0xE) - *(s16 *)(entry + 0x2)) / 2;
-        g_PathSceneryRotHalfDeltaZ = (*(s16 *)(entry + 0x10) - *(s16 *)(entry + 0x4)) / 2;
+        g_PathSceneryRotHalfDelta[0] = (*(s16 *)(entry + 0xC) - *(s16 *)(entry + 0x0)) / 2;
+        g_PathSceneryRotHalfDelta[1] = (*(s16 *)(entry + 0xE) - *(s16 *)(entry + 0x2)) / 2;
+        g_PathSceneryRotHalfDelta[2] = (*(s16 *)(entry + 0x10) - *(s16 *)(entry + 0x4)) / 2;
     }
 }
 

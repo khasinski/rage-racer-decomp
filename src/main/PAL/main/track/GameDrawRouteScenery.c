@@ -40,9 +40,17 @@ void GameDrawRouteScenery(void) {
 }
 
 /*
- * g_ShuttleScenery[1]'s fields, which retail reaches through their own split
- * symbols rather than by indexing the array. See GameShuttleScenery in
- * game/track.h for what each field does.
+ * g_ShuttleScenery[1]'s fields, at +0x34 of the array in game/track.h, which
+ * documents what each one does: dwellCounter +0x00, travelStep +0x08,
+ * startEndpoint +0x0C, pathIndex +0x0E, x/y/z +0x10..0x18, unk1C +0x1C and
+ * angleX/Y/Z +0x20..0x28.
+ *
+ * They CANNOT be written as g_ShuttleScenery[1].field here. As struct member
+ * references GCC 2.6.3 marks the loads and stores MEM_IN_STRUCT_P, stops
+ * treating them as aliasing the g_ShuttlePath* table reads interleaved with
+ * them, hoists one base register for the whole block and reorders the stores
+ * (0x34-relative offsets 52/60/64/66/84/88/92 appear, and the branch layout
+ * moves). Eleven separate symbols are what retail's codegen requires.
  */
 extern s32 g_Shuttle1DwellCounter asm("D_801E4FEC");
 extern s32 g_Shuttle1TravelStep asm("D_801E4FF4");

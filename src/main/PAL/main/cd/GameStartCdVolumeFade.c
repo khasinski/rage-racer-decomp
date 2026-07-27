@@ -13,6 +13,10 @@ void GameStartCdVolumeFade(s32 arg0) {
     }
 }
 
+/* The live CdlATV mixer, in 12.12 fixed point: the four values are shifted
+ * right 12 to make the 0..0x7F bytes CdMix wants, so 0x7F000 is full. The
+ * matching g_CdMixFull* four at +0x10 are the target the fade ramps toward.
+ * Channel order is CdlATV's: L->L, L->R, R->R, R->L. */
 extern u32 g_CdMixLL asm("D_8009B174");
 extern u32 g_CdMixLR asm("D_8009B178");
 extern u32 g_CdMixRR asm("D_8009B17C");
