@@ -213,27 +213,18 @@ void GameUpdateWaypointRaceScene(void) {
 
 void GameSeedWaypoints(void) asm("func_80037714");
 void GameSeedWaypoints(void) {
-    register TrackWaypointRuntime *waypoint asm("$7");
-    register s32 i asm("$5");
-    register TrackWaypointSeed *seed asm("$6");
-    register s32 code asm("$9");
-    register s32 field18 asm("$8");
+    TrackWaypointRuntime *waypoint;
+    s32 i;
+    TrackWaypointSeed *seed;
+    s32 code;
+    s32 field18;
     register char *tail asm("$4");
-    register s32 track asm("$4");
+    s32 track;
     register s32 temp asm("$2");
-    register s32 magic asm("$3");
+    register s32 seedBase asm("$3");
 
-    magic = 0x66666667;
-    temp = g_PlayerLap;
-    track = temp - 1;
-    asm volatile("mult %0,%1" : : "r"(track), "r"(magic));
-    temp = track >> 31;
-    asm volatile("mfhi %0" : "=r"(magic));
-    magic >>= 2;
-    magic -= temp;
-    temp = (magic << 2) + magic;
-    temp <<= 1;
-    track -= temp;
+    track = g_PlayerLap - 1;
+    track = track % 10;
     if (track < 0) {
         track = 0;
     } else if (track >= 9) {
@@ -243,8 +234,8 @@ void GameSeedWaypoints(void) {
     waypoint = g_Waypoints;
     temp = (track << 1) + track;
     temp <<= 2;
-    magic = (s32)g_WaypointSeeds;
-    seed = (TrackWaypointSeed *)(temp + magic);
+    seedBase = (s32)g_WaypointSeeds;
+    seed = (TrackWaypointSeed *)(temp + seedBase);
     i = 0;
     code = 0x1766;
     field18 = 0x174;

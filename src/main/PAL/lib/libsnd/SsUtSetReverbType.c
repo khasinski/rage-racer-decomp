@@ -7,9 +7,9 @@ extern short g_SndReverbAttrMode asm("D_8019C77C");
 long SsUtSetReverbType(long type) asm("func_80073614");
 long SsUtSetReverbType(long type) {
     register long normalized asm("v1");
-    register long negative asm("a1");
-    register long mode asm("v0");
-    register long result asm("s0");
+    long negative;
+    long mode;
+    long result;
 
     negative = 0;
     normalized = type;
@@ -34,11 +34,7 @@ long SsUtSetReverbType(long type) {
     result = mode >> 16;
 
     if (result == 0) {
-        asm volatile(
-            ".globl func_800736F8\n"
-            "func_800736F8 = func_800736E8 + 0x10\n"
-            ".word 0x0C01E8B4\n"
-            ".word 0x00002021");
+        SpuSetReverb(0);
     }
     SpuSetReverbModeParam(&g_SndReverbAttr);
     return result;
