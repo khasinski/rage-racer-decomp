@@ -1,10 +1,10 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern s32 D_8009A768;
-extern s32 D_8009AB70;
-extern s32 D_8009ABB0;
-extern s32 D_8009ABB4;
+extern long D_8009A768;
+extern long D_8009AB70;
+extern long D_8009ABB0;
+extern long D_8009ABB4;
 
 void SpuQuit(void) {
     if (D_8009AB70 == 1) {

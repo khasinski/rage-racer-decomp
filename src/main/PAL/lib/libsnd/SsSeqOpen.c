@@ -1,17 +1,19 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern s32 D_801E4B80;
+extern long D_801E4B80;
 extern char D_80013C10[];
 
-s32 SsSeqParseHeader(s32 arg0, s32 arg1, s32 arg2) asm("func_8006ECDC");
+long SsSeqParseHeader(long arg0, long arg1, long arg2) asm("func_8006ECDC");
 
-s32 SsSeqOpen(s32 seq_data, s32 vab_id) asm("func_8006F004");
+long SsSeqOpen(long seq_data, long vab_id) asm("func_8006F004");
 
-s32 SsSeqOpen(s32 seq_data, s32 vab_id) {
-    s32 used;
-    s32 i;
-    u8 found;
-    s32 slot;
+long SsSeqOpen(long seq_data, long vab_id) {
+    long used;
+    long i;
+    u_char found;
+    long slot;
 
     used = D_801E4B80;
     if (used == -1) {
@@ -29,10 +31,10 @@ s32 SsSeqOpen(s32 seq_data, s32 vab_id) {
         i++;
     } while (found == 0);
 
-    D_801E4B80 = (1 << (s16)slot) | D_801E4B80;
+    D_801E4B80 = (1 << (short)slot) | D_801E4B80;
 
-    if ((s16)SsSeqParseHeader((s16)slot, (s16)vab_id, seq_data) == -1) {
+    if ((short)SsSeqParseHeader((short)slot, (short)vab_id, seq_data) == -1) {
         return -1;
     }
-    return (s16)slot;
+    return (short)slot;
 }

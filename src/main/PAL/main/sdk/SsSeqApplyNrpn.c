@@ -1,43 +1,45 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct {
-    /*00*/ u8  f00;
-    /*01*/ u8  f01;
-    /*02*/ u8  r02[4];
-    /*06*/ u8  f06;
-    /*07*/ u8  f07;
-    /*08*/ u8  r08;
-    /*09*/ u8  f09;
-    /*0a*/ u8  f0a;
-    /*0b*/ u8  r0b[5];
-    /*10*/ u16 f10;
-    /*12*/ u16 f12;
-    /*14*/ u8  r14[0x0c];
-    /*20*/ u16 f20;
-    /*22*/ u16 f22;
-    /*24*/ u16 f24;
-    /*26*/ u16 f26;
-    /*28*/ u16 f28;
-    /*2a*/ u16 f2a;
-    /*2c*/ u16 f2c;
-    /*2e*/ u16 f2e;
-    /*30*/ u16 f30;
-    /*32*/ u16 r32;
+    /*00*/ u_char  f00;
+    /*01*/ u_char  f01;
+    /*02*/ u_char  r02[4];
+    /*06*/ u_char  f06;
+    /*07*/ u_char  f07;
+    /*08*/ u_char  r08;
+    /*09*/ u_char  f09;
+    /*0a*/ u_char  f0a;
+    /*0b*/ u_char  r0b[5];
+    /*10*/ u_short f10;
+    /*12*/ u_short f12;
+    /*14*/ u_char  r14[0x0c];
+    /*20*/ u_short f20;
+    /*22*/ u_short f22;
+    /*24*/ u_short f24;
+    /*26*/ u_short f26;
+    /*28*/ u_short f28;
+    /*2a*/ u_short f2a;
+    /*2c*/ u_short f2c;
+    /*2e*/ u_short f2e;
+    /*30*/ u_short f30;
+    /*32*/ u_short r32;
 } Arg;
 
-void func_800733D8(s16, s16, s16, Arg *);
-void func_80073820(s16, s16, s16, Arg *);
-void func_80070E28(u16, u16, u16 *);
-void func_80070E84(u16 *, u16 *, u16 *);
-void func_80073614(s32);
-void func_80073748(s32, s32);
-void func_80073708(s32);
-void func_800737E0(s32);
+void func_800733D8(short, short, short, Arg *);
+void func_80073820(short, short, short, Arg *);
+void func_80070E28(u_short, u_short, u_short *);
+void func_80070E84(u_short *, u_short *, u_short *);
+void func_80073614(long);
+void func_80073748(long, long);
+void func_80073708(long);
+void func_800737E0(long);
 void func_800736E8(void);
 void func_800736C8(void);
 
-void SsSeqApplyNrpn(s16 p0, s16 p1, s16 p2, Arg arg, s16 mode, u8 val) asm("func_800706AC");
-void SsSeqApplyNrpn(s16 p0, s16 p1, s16 p2, Arg arg, s16 mode, u8 val) {
+void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val) asm("func_800706AC");
+void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val) {
     func_800733D8(p0, p1, p2, &arg);
 
     switch (mode) {
@@ -120,7 +122,7 @@ void SsSeqApplyNrpn(s16 p0, s16 p1, s16 p2, Arg arg, s16 mode, u8 val) {
         case 12:
             if (val != 0 && val < 64) {
                 arg.f30 = 0;
-            } else if ((u8)(val - 64) < 64) {
+            } else if ((u_char)(val - 64) < 64) {
                 arg.f30 = 1;
             }
             break;
@@ -138,8 +140,8 @@ void SsSeqApplyNrpn(s16 p0, s16 p1, s16 p2, Arg arg, s16 mode, u8 val) {
         func_80073614(val);
         break;
     case 16: {
-        register s32 a0r asm("$4") = val;
-        register s32 a1r asm("$5") = a0r;
+        register long a0r asm("$4") = val;
+        register long a1r asm("$5") = a0r;
         func_80073748(a0r, a1r);
         break;
     }

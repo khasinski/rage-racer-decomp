@@ -1,30 +1,32 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern u8 D_8009E0C8[];
-extern s16 D_8009E0C4[];
-extern u8 D_8009E0CC[];
-extern volatile u8 D_8009DF24[];
-extern volatile u8 D_8009E0A0[];
-extern u8 D_801E4BD7;
-extern u8 D_801E4BDC;
-extern s16 D_801E4BEA;
-extern u8 *D_801E416C;
+extern u_char D_8009E0C8[];
+extern short D_8009E0C4[];
+extern u_char D_8009E0CC[];
+extern volatile u_char D_8009DF24[];
+extern volatile u_char D_8009E0A0[];
+extern u_char D_801E4BD7;
+extern u_char D_801E4BDC;
+extern short D_801E4BEA;
+extern u_char *D_801E416C;
 
-u16 func_80074A6C(s32 arg0, s32 arg1);
+u_short func_80074A6C(long arg0, long arg1);
 
-void SpuVmPitchBendVoice(s32 arg0, s32 arg1) asm("func_80074B68");
-void SpuVmPitchBendVoice(s32 arg0, s32 arg1) {
-    s32 voice = arg0;
-    u8 voiceByte = voice;
-    s32 dfIndex = voiceByte << 3;
-    s32 voiceOffset;
-    s32 x;
-    s32 sh4;
-    s32 seg;
-    u16 note;
-    u16 pitch;
-    s32 beaVal;
-    u8 *pBd7;
+void SpuVmPitchBendVoice(long arg0, long arg1) asm("func_80074B68");
+void SpuVmPitchBendVoice(long arg0, long arg1) {
+    long voice = arg0;
+    u_char voiceByte = voice;
+    long dfIndex = voiceByte << 3;
+    long voiceOffset;
+    long x;
+    long sh4;
+    long seg;
+    u_short note;
+    u_short pitch;
+    long beaVal;
+    u_char *pBd7;
 
     if (voiceByte >= 0x18U) {
         return;
@@ -38,23 +40,23 @@ void SpuVmPitchBendVoice(s32 arg0, s32 arg1) {
     D_801E4BEA = beaVal;
 
     sh4 = *pBd7 << 4;
-    seg = (s32)D_801E4BDC + sh4;
-    x = (s16)arg1;
+    seg = (long)D_801E4BDC + sh4;
+    x = (short)arg1;
     if (x >= 0) {
-        u8 *e = D_801E416C;
-        s32 prodA = x * e[(seg << 5) + 0xD];
-        s32 qA = prodA / 127;
-        note = *(u16 *)((u8 *)D_8009E0C4 + voiceOffset) + qA;
+        u_char *e = D_801E416C;
+        long prodA = x * e[(seg << 5) + 0xD];
+        long qA = prodA / 127;
+        note = *(u_short *)((u_char *)D_8009E0C4 + voiceOffset) + qA;
         pitch = prodA - qA * 127;
     } else {
-        u8 *e = D_801E416C;
-        s32 prodB = x * e[(seg << 5) + 0xC];
-        s32 qB = prodB / 127;
-        note = *(u16 *)((u8 *)D_8009E0C4 + voiceOffset) + qB - 1;
+        u_char *e = D_801E416C;
+        long prodB = x * e[(seg << 5) + 0xC];
+        long qB = prodB / 127;
+        note = *(u_short *)((u_char *)D_8009E0C4 + voiceOffset) + qB - 1;
         pitch = qB + 127;
     }
 
-    *(volatile s16 *)(D_8009DF24 + (dfIndex << 1)) = func_80074A6C(note, pitch);
+    *(volatile short *)(D_8009DF24 + (dfIndex << 1)) = func_80074A6C(note, pitch);
     D_8009E0A0[voice & 0xFF] |= 4;
 }
 

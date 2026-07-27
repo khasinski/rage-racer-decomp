@@ -3,27 +3,27 @@
 
 typedef void (*Callback)(void);
 
-extern s32 D_8009A558;
-extern s32 D_8009A55C;
+extern long D_8009A558;
+extern long D_8009A55C;
 extern Callback D_8009A560;
 extern Callback D_8009A564;
-extern u8 D_8009A568;
-extern u8 D_8009A569;
-extern u8 D_8009A56A;
+extern u_char D_8009A568;
+extern u_char D_8009A569;
+extern u_char D_8009A56A;
 
-s32 func_8006DF64(s32 arg0, Callback arg1);
+long func_8006DF64(long arg0, Callback arg1);
 void func_8006DFC4(Callback arg0);
 void SsSoundTickCallback(void) asm("func_80071EEC");
 void SsSoundTickVSyncCallback(void) asm("func_80071F2C");
 
-void SsStartSoundTick(s32 arg0) asm("func_80071C44");
+void SsStartSoundTick(long arg0) asm("func_80071C44");
 
-void SsStartSoundTick(s32 arg0) {
-    register s32 size asm("$16");
-    register s32 channel asm("$17");
-    register u8 *flag asm("$5");
-    register s32 state asm("$3");
-    s32 wait;
+void SsStartSoundTick(long arg0) {
+    register long size asm("$16");
+    register long channel asm("$17");
+    register u_char *flag asm("$5");
+    register long state asm("$3");
+    long wait;
 
     wait = 0x3E8;
     while (--wait >= 0) {
@@ -78,9 +78,9 @@ state_2:
 
 derive_size:
     {
-        register s32 *active asm("$4");
-        register s32 dividend asm("$2");
-        register s32 quotient asm("$2");
+        register long *active asm("$4");
+        register long dividend asm("$2");
+        register long quotient asm("$2");
 
         active = &D_8009A55C;
         asm("" : "=r"(active) : "0"(active));
@@ -92,7 +92,7 @@ derive_size:
             dividend = 0x204CC0;
             quotient = dividend / state;
             asm("" : "=r"(active), "=r"(quotient) : "0"(active), "1"(quotient));
-            ((u8 *)active)[0xD] = ((u8 *)active)[0xD] + 1;
+            ((u_char *)active)[0xD] = ((u_char *)active)[0xD] + 1;
         } else {
             dividend = 0x409980;
             quotient = dividend / state;
@@ -112,7 +112,7 @@ setup:
     SetRCnt(channel, size & 0xFFFF, 0x1000);
 
     {
-        register s32 mode asm("$4");
+        register long mode asm("$4");
         Callback callback;
 
         mode = D_8009A56A;

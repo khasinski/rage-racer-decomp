@@ -108,7 +108,7 @@ void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     SsUtKeyOnV((s16)voice, *(s16 *)((s32)g_VabIds + vabOffset), *(s16 *)((s32)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
 }
 
-s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
+long SsUtKeyOffV(long voice) asm("func_80078018");
 
 void GameStopDirectVoice(s16 voice) asm("func_8005E6F4");
 void GameStopDirectVoice(s16 voice) {

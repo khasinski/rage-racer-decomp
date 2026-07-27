@@ -3,14 +3,14 @@
 
 typedef void (*Callback)(void);
 
-extern s32 D_8009A55C;
+extern long D_8009A55C;
 extern Callback D_8009A564;
-extern u8 D_8009A568;
-extern u8 D_8009A569;
-extern u8 D_8009A56A;
+extern u_char D_8009A568;
+extern u_char D_8009A569;
+extern u_char D_8009A56A;
 
-s32 func_8006DF64(s32 arg0, Callback arg1);
-void func_8006DFC4(s32 arg0);
+long func_8006DF64(long arg0, Callback arg1);
+void func_8006DFC4(long arg0);
 
 void SsStopSoundTick(void) asm("func_80072260");
 

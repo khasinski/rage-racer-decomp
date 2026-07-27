@@ -3,8 +3,8 @@
 
 extern SeqStruct *D_801E79CC[];
 
-void SsSeqResetChannelNote(s32 seq, s32 sep) {
-    SeqStruct *state = &D_801E79CC[(s16)seq][(s16)sep];
+void SsSeqResetChannelNote(long seq, long sep) {
+    SeqStruct *state = &D_801E79CC[(short)seq][(short)sep];
 
     SsUtReverbOff();
     SpuVmDamperOff();
@@ -14,5 +14,5 @@ void SsSeqResetChannelNote(s32 seq, s32 sep) {
     state->play_mode = 0;
     state->vol[state->channel] = 0x7F;
     state->panpot[state->channel] = 0x40;
-    state->delta_value = SsSeqReadDeltaTime((s16)seq, (s16)sep);
+    state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
 }

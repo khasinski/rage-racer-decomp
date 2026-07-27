@@ -1,7 +1,9 @@
+#include <sys/types.h>
+
 #include "common.h"
 #include "game/state.h"
 
-extern s32 D_801E4178;
+extern long D_801E4178;
 extern void (*D_8007D778[])(void);
 
 void func_800271EC(void) {
@@ -12,40 +14,40 @@ void func_800271EC(void) {
     func();
 }
 
-extern u8 D_800111C4;
-extern u8 D_800111DC;
-extern u8 D_800111F4;
-extern volatile s32 D_8007D790;
-extern volatile s32 D_8007D794;
-extern volatile s32 D_8007D79C;
-extern void (*D_8007D78C)(s32, s32);
-extern volatile s32 D_8007D798;
-extern volatile s32 D_8007D7A0;
-extern volatile s32 D_8007D7A4;
-extern volatile s32 D_8007D7A8;
-extern volatile s32 D_8007D7AC;
-extern volatile s32 D_8007D7B0;
-extern volatile s32 D_8007D7B4;
-extern volatile s32 D_8007D7B8;
-void CdGetSector2(void *arg0, s32 arg1) asm("func_8006A970");
-s32 func_8006AADC(void *arg0);
+extern u_char D_800111C4;
+extern u_char D_800111DC;
+extern u_char D_800111F4;
+extern volatile long D_8007D790;
+extern volatile long D_8007D794;
+extern volatile long D_8007D79C;
+extern void (*D_8007D78C)(long, long);
+extern volatile long D_8007D798;
+extern volatile long D_8007D7A0;
+extern volatile long D_8007D7A4;
+extern volatile long D_8007D7A8;
+extern volatile long D_8007D7AC;
+extern volatile long D_8007D7B0;
+extern volatile long D_8007D7B4;
+extern volatile long D_8007D7B8;
+void CdGetSector2(void *arg0, long arg1) asm("func_8006A970");
+long func_8006AADC(void *arg0);
 void func_80063C38(void *arg0);
-s32 VSync(s32 mode) asm("func_8006DD30");
-s32 CdControl(s32 com, s32 param, s32 result) asm("func_8006A5A4");
-s32 func_8006A3E8(void);
-s32 func_8006A418(void);
-s32 func_8006A3F8(void);
+long VSync(long mode) asm("func_8006DD30");
+long CdControl(long com, long param, long result) asm("func_8006A5A4");
+long func_8006A3E8(void);
+long func_8006A418(void);
+long func_8006A3F8(void);
 void func_8006A494(void);
-void func_8006A6DC(s32 arg0, s32 arg1);
-s32 CdReadRetry(s32 arg0) asm("func_8002745C");
-void func_8006A574(s32 arg0);
-void func_8006A58C(s32 arg0);
+void func_8006A6DC(long arg0, long arg1);
+long CdReadRetry(long arg0) asm("func_8002745C");
+void func_8006A574(long arg0);
+void func_8006A58C(long arg0);
 
-void CdReadDataReadyCallback(u8 arg0, s32 arg1) asm("func_80027238");
-void CdReadDataReadyCallback(u8 arg0, s32 arg1) {
-    volatile s32 *p;
-    s32 dv;
-    s32 buf[4];
+void CdReadDataReadyCallback(u_char arg0, long arg1) asm("func_80027238");
+void CdReadDataReadyCallback(u_char arg0, long arg1) {
+    volatile long *p;
+    long dv;
+    long buf[4];
 
     if (arg0 == 1) {
         p = &D_8007D7A4;
@@ -67,12 +69,12 @@ void CdReadDataReadyCallback(u8 arg0, s32 arg1) {
             D_8007D7B0;
         }
     } else {
-        volatile s32 *q = &D_8007D7A4;
+        volatile long *q = &D_8007D7A4;
         *q = -1;
     }
 
     {
-        volatile s32 *r = &D_8007D7A8;
+        volatile long *r = &D_8007D7A8;
         *r = VSync(-1);
     }
 
@@ -93,9 +95,9 @@ void CdReadDataReadyCallback(u8 arg0, s32 arg1) {
         }
     }
 }
-s32 CdReadRetry(s32 arg0) {
-    u8 buf[8];
-    s32 t;
+long CdReadRetry(long arg0) {
+    u_char buf[8];
+    long t;
 
     func_8006A574(0);
     func_8006A58C(0);
@@ -105,7 +107,7 @@ s32 CdReadRetry(s32 arg0) {
         }
         func_8006A6DC(1, 0);
         {
-            volatile s32 *q = &D_8007D7AC;
+            volatile long *q = &D_8007D7AC;
             *q = VSync(-1);
         }
         D_8007D7A4 = -1;
@@ -115,8 +117,8 @@ s32 CdReadRetry(s32 arg0) {
         func_80063C38(&D_800111F4);
         CdControl(9, 0, 0);
         if (CdControl(2, func_8006A418(), 0) == 0) {
-            s32 value = -1;
-            volatile s32 *q = &D_8007D7A4;
+            long value = -1;
+            volatile long *q = &D_8007D7A4;
 
             *q = value;
             return *q;
@@ -124,21 +126,21 @@ s32 CdReadRetry(s32 arg0) {
     }
     func_8006A494();
     {
-        volatile s32 *q = &D_8007D79C;
+        volatile long *q = &D_8007D79C;
         t = *q;
     }
     buf[0] = t;
     if ((t & 0xFF) != func_8006A3F8() || arg0 != 0) {
-        if (CdControl(0xE, (s32)buf, 0) == 0) {
+        if (CdControl(0xE, (long)buf, 0) == 0) {
             D_8007D7A4 = -1;
             return D_8007D7A4;
         }
     }
     {
-        volatile s32 *q = &D_8007D7B0;
+        volatile long *q = &D_8007D7B0;
         *q = func_8006AADC((void *)func_8006A418());
     }
-    func_8006A58C((s32)CdReadDataReadyCallback);
+    func_8006A58C((long)CdReadDataReadyCallback);
     D_8007D798 = D_8007D794;
     func_8006A6DC(6, 0);
     D_8007D7A4 = D_8007D790;
@@ -148,7 +150,7 @@ s32 CdReadRetry(s32 arg0) {
 
 void CdReadBreak(void) asm("func_80027634");
 void CdReadBreak(void) {
-    volatile s32 *ptr;
+    volatile long *ptr;
 
     ptr = &D_8007D7A4;
     *ptr = 0;

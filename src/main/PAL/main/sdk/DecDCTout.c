@@ -3,7 +3,7 @@
 void func_80064264(void);
 void func_800642F4(void);
 void func_8006438C(void);
-void DMACallback(s32 arg0, s32 arg1) asm("func_8006DF94");
+void DMACallback(long arg0, long arg1) asm("func_8006DF94");
 
 void DecDCTout(void) asm("func_8006402C");
 void DecDCTout(void) {
@@ -20,12 +20,12 @@ void DecDCToutSync(void) {
     func_8006438C();
 }
 
-void DecDCTinCallback(s32 arg0) asm("func_8006408C");
-void DecDCTinCallback(s32 arg0) {
+void DecDCTinCallback(long arg0) asm("func_8006408C");
+void DecDCTinCallback(long arg0) {
     DMACallback(0, arg0);
 }
 
-void DecDCToutCallback(s32 arg0) asm("func_800640B0");
-void DecDCToutCallback(s32 arg0) {
+void DecDCToutCallback(long arg0) asm("func_800640B0");
+void DecDCToutCallback(long arg0) {
     DMACallback(1, arg0);
 }

@@ -1,12 +1,14 @@
+#include <sys/types.h>
+
 #include "common.h"
 #include "game/cd.h"
 #include "game/memcard.h"
 
-extern u8 D_80082FD9[];
+extern u_char D_80082FD9[];
 
-s32 LibcToLower(s32 arg0) asm("func_80063D6C");
-s32 LibcToLower(s32 arg0) {
-    u8 value = arg0;
+long LibcToLower(long arg0) asm("func_80063D6C");
+long LibcToLower(long arg0) {
+    u_char value = arg0;
 
     if (D_80082FD9[value & 0xFF] & 1) {
         value = arg0 + 0x20;
@@ -15,7 +17,7 @@ s32 LibcToLower(s32 arg0) {
     return value & 0xFF;
 }
 
-u32 func_80063D9C[20] __attribute__((section(".text"))) = {
+u_long func_80063D9C[20] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090038,
@@ -38,9 +40,10 @@ u32 func_80063D9C[20] __attribute__((section(".text"))) = {
     0,
 };
 
-void _card_write(s32 arg0, s32 arg1, s32 arg2) asm("func_80063E24");
-void _new_card(s32 arg0) asm("func_80063E34");
+void _card_write(long arg0, long arg1, long arg2) asm("func_80063E24");
+void _new_card(long arg0) asm("func_80063E34");
 
+/* libcard, but declared in game/memcard.h, so it keeps common.h's typedefs. */
 s32 _card_clear(s32 arg0) {
     _new_card(arg0);
     _card_write(arg0, 0x3F, 0);

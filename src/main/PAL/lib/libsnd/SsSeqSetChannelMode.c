@@ -3,32 +3,32 @@
 
 extern SeqStruct *D_801E79CC[];
 
-void SsSeqSetChannelMode(s32 seq, s32 sep, u8 mode) asm("func_8006FED8");
+void SsSeqSetChannelMode(long seq, long sep, u_char mode) asm("func_8006FED8");
 
-void SsSeqSetChannelMode(s32 seq, s32 sep, u8 mode) {
-    register s32 seq_raw asm("$7");
-    register s32 sep_raw asm("$8");
-    register s32 seq_s asm("$4");
-    register s32 sep_s asm("$5");
+void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
+    register long seq_raw asm("$7");
+    register long sep_raw asm("$8");
+    register long seq_s asm("$4");
+    register long sep_s asm("$5");
     register SeqStruct *state asm("$16");
-    register s32 seq_offset asm("$3");
-    register s32 sep_offset asm("$2");
+    register long seq_offset asm("$3");
+    register long sep_offset asm("$2");
     register SeqStruct *base asm("$3");
-    s32 mode8;
+    long mode8;
 
     seq_raw = seq;
     sep_raw = sep;
     seq_s = seq;
     sep_s = sep;
     asm("" : "=r"(seq_raw), "=r"(sep_raw) : "0"(seq_raw), "1"(sep_raw));
-    seq_s = (s16)seq_s;
+    seq_s = (short)seq_s;
     seq_offset = seq_s * 4;
-    sep_s = (s16)sep_s;
+    sep_s = (short)sep_s;
     sep_offset = (((((sep_s * 2) + sep_s) * 4) - sep_s) * 4) - sep_s;
-    base = *(SeqStruct **)((u8 *)D_801E79CC + seq_offset);
+    base = *(SeqStruct **)((u_char *)D_801E79CC + seq_offset);
     sep_offset = sep_offset * 4;
-    state = (SeqStruct *)(sep_offset + (s32)base);
-    mode8 = (u8)mode;
+    state = (SeqStruct *)(sep_offset + (long)base);
+    mode8 = (u_char)mode;
 
     if (mode8 == 0x14) {
         goto mode_14;
@@ -69,11 +69,11 @@ mode_1e:
 
 mode_default:
     {
-        register s32 seq_arg asm("$4");
-        register s32 sep_arg asm("$5");
+        register long seq_arg asm("$4");
+        register long sep_arg asm("$5");
 
-        seq_arg = (s16)seq_raw;
-        sep_arg = (s16)sep_raw;
+        seq_arg = (short)seq_raw;
+        sep_arg = (short)sep_raw;
         state->unk16 = mode;
         state->unk2a++;
         asm("" : : : "memory");

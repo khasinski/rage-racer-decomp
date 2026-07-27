@@ -1,37 +1,39 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct SpuInitVolume {
-    s16 left;
-    s16 right;
+    short left;
+    short right;
 } SpuInitVolume;
 
 typedef struct SpuInitVoiceRegister {
     SpuInitVolume volume;
-    u16 pitch;
-    u16 addr;
-    u16 adsr[2];
-    u16 volumex;
-    u16 loopAddr;
+    u_short pitch;
+    u_short addr;
+    u_short adsr[2];
+    u_short volumex;
+    u_short loopAddr;
 } SpuInitVoiceRegister;
 
 typedef struct SpuInitControl {
     SpuInitVoiceRegister voice[24];
     SpuInitVolume mainVol;
     SpuInitVolume revVol;
-    u16 keyOn[2];
-    u16 keyOff[2];
-    u16 chanFm[2];
-    u16 noiseMode[2];
-    u16 revMode[2];
-    u32 chanOn;
-    u16 unk;
-    u16 revWorkAddr;
-    u16 irqAddr;
-    u16 transAddr;
-    u16 transFifo;
-    u16 spuCnt;
-    u16 dataTrans;
-    u16 spuStat;
+    u_short keyOn[2];
+    u_short keyOff[2];
+    u_short chanFm[2];
+    u_short noiseMode[2];
+    u_short revMode[2];
+    u_long chanOn;
+    u_short unk;
+    u_short revWorkAddr;
+    u_short irqAddr;
+    u_short transAddr;
+    u_short transFifo;
+    u_short spuCnt;
+    u_short dataTrans;
+    u_short spuStat;
     SpuInitVolume cdVol;
     SpuInitVolume extVol;
     SpuInitVolume mainVolCurrent;
@@ -40,27 +42,27 @@ typedef struct SpuInitControl {
 
 typedef union SpuInitRegisterMap {
     SpuInitControl regs;
-    volatile u16 raw[0x100];
+    volatile u_short raw[0x100];
 } SpuInitRegisterMap;
 
-extern s32 func_80078F4C(s32 addr, s32 size);
+extern long func_80078F4C(long addr, long size);
 
 extern char D_80013EC0[];
 extern char D_80013ED0[];
-extern s32 D_8009AB74;
-extern u16 D_8009AB78;
+extern long D_8009AB74;
+extern u_short D_8009AB78;
 extern volatile SpuInitRegisterMap *D_8009AB7C;
-extern volatile s32 *D_8009AB8C;
-extern s32 D_8009AB94;
-extern s32 D_8009AB98;
-extern s32 D_8009AB9C;
-extern s32 D_8009ABA0;
-extern s32 D_8009ABA4;
-extern s32 D_8009ABA8;
-extern s32 D_8009ABAC;
+extern volatile long *D_8009AB8C;
+extern long D_8009AB94;
+extern long D_8009AB98;
+extern long D_8009AB9C;
+extern long D_8009ABA0;
+extern long D_8009ABA4;
+extern long D_8009ABA8;
+extern long D_8009ABAC;
 extern void (*volatile D_8009ABB0)(void);
 extern void (*volatile D_8009ABB4)(void);
-extern s32 D_8009ABB8;
+extern long D_8009ABB8;
 
 #define SPU_INIT_DELAY()                    \
     delayValue = 0xD;                       \
@@ -68,13 +70,13 @@ extern s32 D_8009ABB8;
         delayValue *= 3;                    \
     }
 
-s32 _spu_init(s32 resetMode) asm("func_80078A30");
-s32 _spu_init(s32 resetMode) {
-    volatile s32 delay;
-    volatile s32 delayValue;
-    s32 waitCount;
-    s32 channel;
-    s16 temp;
+long _spu_init(long resetMode) asm("func_80078A30");
+long _spu_init(long resetMode) {
+    volatile long delay;
+    volatile long delayValue;
+    long waitCount;
+    long channel;
+    short temp;
 
     *D_8009AB8C |= 0xB0000;
     D_8009AB7C->regs.mainVol.left = 0;
@@ -120,7 +122,7 @@ s32 _spu_init(s32 resetMode) {
         D_8009AB7C->regs.extVol.left = 0;
         D_8009AB7C->regs.extVol.right = 0;
         D_8009AB78 = 0x200;
-        func_80078F4C((s32)&D_8009ABB8, 0x10);
+        func_80078F4C((long)&D_8009ABB8, 0x10);
 
         for (channel = 0; channel < 24; channel++) {
             D_8009AB7C->raw[channel * 8 + 0] = 0;

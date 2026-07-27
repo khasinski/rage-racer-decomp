@@ -15,7 +15,7 @@ void func_800736E8(void);
 void func_80073614(s32 arg0);
 void func_80073748(s32 arg0, s32 arg1);
 void func_8007865C(s32 arg0);
-s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
+long SsUtKeyOffV(long voice) asm("func_80078018");
 s32 VSync(s32 mode) asm("func_8006DD30");
 void func_80072B3C(s32 arg0);
 void func_80072260(void);

@@ -1,9 +1,11 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-u32 *DecDCTGetEnv(u32 *arg0);
-u32 *DecDCTPutEnv(u32 *arg0);
+u_long *DecDCTGetEnv(u_long *arg0);
+u_long *DecDCTPutEnv(u_long *arg0);
 
-u32 _new_card[4] asm("func_80063E34") __attribute__((section(".text"))) = {
+u_long _new_card[4] asm("func_80063E34") __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090050,
@@ -11,25 +13,25 @@ u32 _new_card[4] asm("func_80063E34") __attribute__((section(".text"))) = {
 };
 
 void func_8006DF34(void);
-void func_800640D4(s32 arg0);
+void func_800640D4(long arg0);
 
-void DecDCTReset(s32 arg0) asm("func_80063E44");
-void DecDCTReset(s32 arg0) {
+void DecDCTReset(long arg0) asm("func_80063E44");
+void DecDCTReset(long arg0) {
     if (arg0 == 0) {
         func_8006DF34();
     }
     func_800640D4(arg0);
 }
 
-extern u32 D_80083060[];
-extern u32 D_800830A0[];
-extern u32 D_800830E4[];
+extern u_long D_80083060[];
+extern u_long D_800830A0[];
+extern u_long D_800830E4[];
 
-u32 * DecDCTGetEnv(u32 *arg0) asm("func_80063E7C");
-u32 *DecDCTGetEnv(u32 *arg0) {
-    u32 *dst;
-    u32 *src;
-    s32 i;
+u_long * DecDCTGetEnv(u_long *arg0) asm("func_80063E7C");
+u_long *DecDCTGetEnv(u_long *arg0) {
+    u_long *dst;
+    u_long *src;
+    long i;
 
     dst = arg0;
     src = D_80083060;
@@ -52,16 +54,16 @@ u32 *DecDCTGetEnv(u32 *arg0) {
     return arg0;
 }
 
-extern u8 D_8008305C[];
-extern u8 D_800830E0[];
+extern u_char D_8008305C[];
+extern u_char D_800830E0[];
 
-void func_800641D0(volatile u32 *arg0, s32 arg1);
+void func_800641D0(volatile u_long *arg0, long arg1);
 
-u32 * DecDCTPutEnv(u32 *arg0) asm("func_80063F08");
-u32 *DecDCTPutEnv(u32 *arg0) {
-    u32 *ret;
-    u32 *dst;
-    s32 i;
+u_long * DecDCTPutEnv(u_long *arg0) asm("func_80063F08");
+u_long *DecDCTPutEnv(u_long *arg0) {
+    u_long *ret;
+    u_long *dst;
+    long i;
 
     ret = arg0;
     dst = D_80083060;
@@ -75,20 +77,20 @@ u32 *DecDCTPutEnv(u32 *arg0) {
         *dst++ = *arg0++;
     }
 
-    func_800641D0((volatile u32 *)D_8008305C, 0x20);
-    func_800641D0((volatile u32 *)D_800830E0, 0x20);
+    func_800641D0((volatile u_long *)D_8008305C, 0x20);
+    func_800641D0((volatile u_long *)D_800830E0, 0x20);
 
     return ret;
 }
 
-s32 DecDCTBufSize(u16 *arg0) asm("func_80063FA4");
-s32 DecDCTBufSize(u16 *arg0) {
+long DecDCTBufSize(u_short *arg0) asm("func_80063FA4");
+long DecDCTBufSize(u_short *arg0) {
     return *arg0;
 }
 
-void DecDCTin(volatile u32 *arg0, s32 arg1) asm("func_80063FB0");
-void DecDCTin(volatile u32 *arg0, s32 arg1) {
-    u32 mask;
+void DecDCTin(volatile u_long *arg0, long arg1) asm("func_80063FB0");
+void DecDCTin(volatile u_long *arg0, long arg1) {
+    u_long mask;
 
     if (arg1 & 1) {
         arg0[0] &= 0xF7FFFFFF;
@@ -103,5 +105,5 @@ void DecDCTin(volatile u32 *arg0, s32 arg1) {
         arg0[0] &= 0xFDFFFFFF;
     }
 
-    func_800641D0(arg0, *(u16 *)arg0);
+    func_800641D0(arg0, *(u_short *)arg0);
 }

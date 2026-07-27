@@ -1,24 +1,26 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-void SsPackAdsr(u16 *in, u16 *out0, u16 *out1) asm("func_80070E84");
+void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) asm("func_80070E84");
 
-void SsPackAdsr(u16 *in, u16 *out0, u16 *out1) {
-    register u32 mask asm("$4") = 0xFFFF8000;
-    register s32 has8000 asm("$2") = ((s16 *)in)[6];
-    register s32 has4000 asm("$3") = ((s16 *)in)[8];
-    register u32 pred asm("$2");
-    register u32 word1High asm("$9");
-    register s32 hasWord0High asm("$2");
-    register u32 word1 asm("$8");
-    register u32 word0High asm("$10");
-    register u32 word0 asm("$4");
-    register u32 tmp asm("$2");
-    register u32 tmp2 asm("$3");
+void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
+    register u_long mask asm("$4") = 0xFFFF8000;
+    register long has8000 asm("$2") = ((short *)in)[6];
+    register long has4000 asm("$3") = ((short *)in)[8];
+    register u_long pred asm("$2");
+    register u_long word1High asm("$9");
+    register long hasWord0High asm("$2");
+    register u_long word1 asm("$8");
+    register u_long word0High asm("$10");
+    register u_long word0 asm("$4");
+    register u_long tmp asm("$2");
+    register u_long tmp2 asm("$3");
 
     pred = has8000 != 0;
     pred = -pred;
     word1High = pred & mask;
-    hasWord0High = ((s16 *)in)[5];
+    hasWord0High = ((short *)in)[5];
     word1 = word1High;
     pred = hasWord0High != 0;
     pred = -pred;

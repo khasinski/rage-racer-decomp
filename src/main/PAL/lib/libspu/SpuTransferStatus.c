@@ -1,14 +1,16 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern volatile u16 *D_8009AB7C;
+extern volatile u_short *D_8009AB7C;
 
-void _spu_startDmaTransfer(s32 arg0, s32 arg1, s32 arg2) asm("func_80079420");
+void _spu_startDmaTransfer(long arg0, long arg1, long arg2) asm("func_80079420");
 
-s32 SpuTransferStatus(s32 arg0, s32 arg1) asm("func_8007B014");
+long SpuTransferStatus(long arg0, long arg1) asm("func_8007B014");
 
-s32 SpuTransferStatus(s32 arg0, s32 arg1) {
-    s32 size;
-    u32 status;
+long SpuTransferStatus(long arg0, long arg1) {
+    long size;
+    u_long status;
 
     switch (arg1) {
     case 5:

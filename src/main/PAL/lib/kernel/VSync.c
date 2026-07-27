@@ -1,33 +1,33 @@
 #include "psyq/kernel.h"
 
-typedef void (*Callback2)(s32, s32);
+typedef void (*Callback2)(long, long);
 
 typedef struct {
-    u8 pad0[0xC];
+    u_char pad0[0xC];
     void (*callback)(void);
 } CallbackTable;
 
-extern volatile s32 *D_80099420;
-extern volatile s32 *D_80099424;
-extern volatile s32 D_80099428;
-extern s32 D_8009942C;
-extern u16 D_80099432;
-extern volatile u16 *D_8009A4C0;
+extern volatile long *D_80099420;
+extern volatile long *D_80099424;
+extern volatile long D_80099428;
+extern long D_8009942C;
+extern u_short D_80099432;
+extern volatile u_short *D_8009A4C0;
 extern KernelCallback *D_8009A4B8;
-extern volatile s32 D_8009A4EC;
+extern volatile long D_8009A4EC;
 extern char D_80013B2C[];
 
 void func_80063C38(char *arg0);
 
-s32 VSync(s32 arg0) {
-    s32 oldTimer;
-    s32 delta;
-    register s32 waitTarget asm("$2");
-    s32 waitCount;
-    volatile s32 *timer;
+long VSync(long arg0) {
+    long oldTimer;
+    long delta;
+    register long waitTarget asm("$2");
+    long waitCount;
+    volatile long *timer;
 
     oldTimer = *D_80099420;
-    delta = (u16)(*D_80099424 - D_80099428);
+    delta = (u_short)(*D_80099424 - D_80099428);
 
     if (arg0 < 0) {
         return D_8009A4EC;
@@ -52,8 +52,8 @@ s32 VSync(s32 arg0) {
     waitVSync(waitTarget, waitCount);
 
     {
-        register volatile s32 *timer2 asm("$2");
-        register s32 waitBase asm("$4");
+        register volatile long *timer2 asm("$2");
+        register long waitBase asm("$4");
 
         timer2 = D_80099420;
         oldTimer = *timer2;
@@ -75,8 +75,8 @@ s32 VSync(s32 arg0) {
     return delta;
 }
 
-void waitVSync(s32 arg0, s32 arg1) {
-    volatile s32 timeout;
+void waitVSync(long arg0, long arg1) {
+    volatile long timeout;
 
     timeout = arg1 << 15;
     if (D_8009A4EC < arg0) {
@@ -91,14 +91,14 @@ void waitVSync(s32 arg0, s32 arg1) {
     }
 }
 
-u32 ChangeClearRCntStub[4] asm("func_8006DF14") __attribute__((section(".text"))) = {
+u_long ChangeClearRCntStub[4] asm("func_8006DF14") __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x2409005B,
     0,
 };
 
-u32 ChangeClearInterruptMaskStub[4] asm("func_8006DF24") __attribute__((section(".text"))) = {
+u_long ChangeClearInterruptMaskStub[4] asm("func_8006DF24") __attribute__((section(".text"))) = {
     0x240A00C0,
     0x01400008,
     0x2409000A,
@@ -113,11 +113,11 @@ void KernelCallbackSlot2(void) {
     D_8009A4B8[2]();
 }
 
-void DMACallback(s32 arg0, s32 arg1) {
+void DMACallback(long arg0, long arg1) {
     D_8009A4B8[1]();
 }
 
-void VSyncCallback(s32 arg0) {
+void VSyncCallback(long arg0) {
     ((Callback2)D_8009A4B8[5])(0, arg0);
 }
 
@@ -133,17 +133,17 @@ void KernelCallbackSlot6(void) {
     D_8009A4B8[6]();
 }
 
-s32 GetKernelStatus(void) {
+long GetKernelStatus(void) {
     return D_80099432;
 }
 
-s32 GetIntrMask(void) {
+long GetIntrMask(void) {
     return *D_8009A4C0;
 }
 
-s32 SetIntrMask(s32 arg0) {
-    u16 value;
-    volatile u16 *ptr;
+long SetIntrMask(long arg0) {
+    u_short value;
+    volatile u_short *ptr;
 
     ptr = D_8009A4C0;
     value = *ptr;

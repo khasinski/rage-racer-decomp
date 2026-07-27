@@ -2,23 +2,23 @@
 #include "psyq/cd.h"
 
 void func_8006BA68(void);
-s32 func_8006C06C(void);
-void DMACallback(s32 arg0, s32 arg1) asm("func_8006DF94");
+long func_8006C06C(void);
+void DMACallback(long arg0, long arg1) asm("func_8006DF94");
 void func_8006BF00(void);
 
-s32 CdMix(void) asm("func_8006A94C");
-s32 CdMix(void) {
+long CdMix(void) asm("func_8006A94C");
+long CdMix(void) {
     func_8006BA68();
     return 1;
 }
 
-s32 CdGetSector2(void) asm("func_8006A970");
-s32 CdGetSector2(void) {
+long CdGetSector2(void) asm("func_8006A970");
+long CdGetSector2(void) {
     return func_8006C06C() == 0;
 }
 
-void CdDataCallback(s32 arg0) asm("func_8006A994");
-void CdDataCallback(s32 arg0) {
+void CdDataCallback(long arg0) asm("func_8006A994");
+void CdDataCallback(long arg0) {
     DMACallback(3, arg0);
 }
 
@@ -26,8 +26,8 @@ void func_8006A9B8(void) {
     func_8006BF00();
 }
 
-CdlLOC *CdIntToPos(s32 i, CdlLOC *p) {
-    inline int ENCODE_BCD(n) { return (((n / 10) << 4) + (n % 10)); };
+CdlLOC *CdIntToPos(long i, CdlLOC *p) {
+    inline long ENCODE_BCD(n) { return (((n / 10) << 4) + (n % 10)); };
 
     i += 150;
     p->sector = ENCODE_BCD(i % 75);
@@ -36,14 +36,14 @@ CdlLOC *CdIntToPos(s32 i, CdlLOC *p) {
     return p;
 }
 
-s32 CdPosToInt_Local(CdlLOC *arg0) {
-    register s32 v0 asm("$2");
-    register s32 v1 asm("$3") = arg0->minute;
-    register s32 a0 asm("$4");
-    register s32 a1 asm("$5");
-    register s32 a2 asm("$6") = arg0->second;
+long CdPosToInt_Local(CdlLOC *arg0) {
+    register long v0 asm("$2");
+    register long v1 asm("$3") = arg0->minute;
+    register long a0 asm("$4");
+    register long a1 asm("$5");
+    register long a2 asm("$6") = arg0->second;
 
-    a1 = (u32) v1 >> 4;
+    a1 = (u_long) v1 >> 4;
     v0 = a1 << 2;
     v0 += a1;
     v0 <<= 1;
@@ -53,7 +53,7 @@ s32 CdPosToInt_Local(CdlLOC *arg0) {
     a1 -= v0;
     a1 <<= 2;
 
-    v1 = (u32) a2 >> 4;
+    v1 = (u_long) a2 >> 4;
     v0 = v1 << 2;
     v0 += v1;
     v0 <<= 1;
@@ -66,7 +66,7 @@ s32 CdPosToInt_Local(CdlLOC *arg0) {
 
     a1 = arg0->sector;
     v0 -= v1;
-    a0 = (u32) a1 >> 4;
+    a0 = (u_long) a1 >> 4;
     v1 = a0 << 2;
     v1 += a0;
     v1 <<= 1;

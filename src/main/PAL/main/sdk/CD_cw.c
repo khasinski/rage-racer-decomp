@@ -1,35 +1,37 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct {
-    u8 sync;
-    u8 ready;
-    u8 command;
+    u_char sync;
+    u_char ready;
+    u_char command;
 } CdState;
 
 typedef struct {
-    s32 deadline;
-    s32 count;
+    long deadline;
+    long count;
     char *name;
 } CdAlarm;
 
-typedef void (*CdCallback)(u8 status, u8 *result);
+typedef void (*CdCallback)(u_char status, u_char *result);
 
 extern CdCallback D_8009903C;
 extern CdCallback D_80099040;
-extern s32 D_80099048;
-extern u8 D_80099058[4];
-extern u8 D_8009905C;
-extern u8 D_8009905D;
+extern long D_80099048;
+extern u_char D_80099058[4];
+extern u_char D_8009905C;
+extern u_char D_8009905D;
 extern char *D_80099060[];
 extern char *D_800990E0[];
-extern s32 D_80099180[];
-extern s32 D_80099280[];
-extern volatile u8 *D_80099300;
-extern volatile u8 *D_80099304;
-extern volatile u8 *D_80099308;
+extern long D_80099180[];
+extern long D_80099280[];
+extern volatile u_char *D_80099300;
+extern volatile u_char *D_80099304;
+extern volatile u_char *D_80099308;
 extern volatile CdState D_80099318;
-extern u8 D_8009BAF0[8];
-extern u8 D_8009BAF8[8];
+extern u_char D_8009BAF0[8];
+extern u_char D_8009BAF8[8];
 extern CdAlarm D_8009BB08;
 extern char D_80013814[];
 extern char D_80013824[];
@@ -38,11 +40,11 @@ extern char D_800138B8[];
 extern char D_800138C8[];
 
 void func_80063C38(char *text);
-s32 func_8006AB5C(void);
-s32 func_8006B0D4(s32 mode, u8 *result);
+long func_8006AB5C(void);
+long func_8006B0D4(long mode, u_char *result);
 void func_8006BAF0(void);
-s32 VSync(s32 mode) asm("func_8006DD30");
-s32 func_8006E088(void);
+long VSync(long mode) asm("func_8006DD30");
+long func_8006E088(void);
 
 static inline void setAlarm(char *name) {
     D_8009BB08.deadline = VSync(-1) + 0x3C0;
@@ -50,7 +52,7 @@ static inline void setAlarm(char *name) {
     D_8009BB08.name = name;
 }
 
-static inline s32 getAlarm(void) {
+static inline long getAlarm(void) {
     if (D_8009BB08.deadline < VSync(-1) ||
         D_8009BB08.count++ > 0x3C0000) {
         func_80063C38(D_80013814);
@@ -62,14 +64,14 @@ static inline s32 getAlarm(void) {
     return 0;
 }
 
-s32 CD_cw(u8 command, u8 *params, u8 *result, s32 async) asm("func_8006B620");
-s32 CD_cw(u8 command, u8 *params, u8 *result, s32 async) {
-    s32 i;
-    s32 interrupt;
-    s32 remaining;
-    u8 interruptState;
-    u8 *destination;
-    u8 *source;
+long CD_cw(u_char command, u_char *params, u_char *result, long async) asm("func_8006B620");
+long CD_cw(u_char command, u_char *params, u_char *result, long async) {
+    long i;
+    long interrupt;
+    long remaining;
+    u_char interruptState;
+    u_char *destination;
+    u_char *source;
 
     if (D_80099048 >= 2) {
         GameDebugPrintf(D_800138B0, D_80099060[command]);

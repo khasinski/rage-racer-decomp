@@ -1,16 +1,18 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-typedef void (*CdCallback)(s32, u8 *);
+typedef void (*CdCallback)(long, u_char *);
 
 typedef struct CdIntr {
-    u8 sync;
-    u8 ready;
-    u8 command;
+    u_char sync;
+    u_char ready;
+    u_char command;
 } CdIntr;
 
 typedef struct CdAlarm {
-    s32 deadline;
-    s32 count;
+    long deadline;
+    long count;
     char *name;
 } CdAlarm;
 
@@ -18,28 +20,28 @@ extern char *D_80099060[];
 extern char *D_800990E0[];
 extern CdCallback D_8009903C;
 extern CdCallback D_80099040;
-extern u8 D_8009905D;
-extern volatile u8 *D_80099300;
+extern u_char D_8009905D;
+extern volatile u_char *D_80099300;
 extern volatile CdIntr D_80099318;
-extern u8 D_8009BAF0[];
-extern u8 D_8009BAF8[];
-extern u8 D_8009BB00[];
-extern s32 D_8009BB08;
-extern s32 D_8009BB0C;
+extern u_char D_8009BAF0[];
+extern u_char D_8009BAF8[];
+extern u_char D_8009BB00[];
+extern long D_8009BB08;
+extern long D_8009BB0C;
 extern char *D_8009BB10;
 extern char D_80013814[];
 extern char D_80013824[];
 extern char D_800138A4[];
 
 void func_80063C38(char *text);
-s32 func_8006AB5C(void);
+long func_8006AB5C(void);
 void func_8006BAF0(void);
-s32 VSync(s32 mode) asm("func_8006DD30");
-s32 func_8006E088(void);
+long VSync(long mode) asm("func_8006DD30");
+long func_8006E088(void);
 
-static __inline__ void copy8(u8 *dst, u8 *src) {
-    s32 count;
-    s32 end;
+static __inline__ void copy8(u_char *dst, u_char *src) {
+    long count;
+    long end;
 
     if (dst == 0) {
         return;
@@ -52,12 +54,12 @@ static __inline__ void copy8(u8 *dst, u8 *src) {
     } while (--count != end);
 }
 
-s32 CD_ready(s32 mode, u8 *result) asm("func_8006B354");
-s32 CD_ready(s32 mode, u8 *result) {
-    s32 savedStatus;
-    s32 interrupt;
-    s32 status;
-    s32 alarmStatus;
+long CD_ready(long mode, u_char *result) asm("func_8006B354");
+long CD_ready(long mode, u_char *result) {
+    long savedStatus;
+    long interrupt;
+    long status;
+    long alarmStatus;
 
     D_8009BB08 = VSync(-1) + 0x3C0;
     D_8009BB0C = 0;

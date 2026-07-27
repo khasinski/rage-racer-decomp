@@ -1,38 +1,38 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern volatile u8 *D_80099300;
-extern volatile u8 *D_80099304;
-extern volatile u8 *D_80099308;
-extern volatile u8 *D_8009930C;
-extern s32 D_8009903C;
-extern s32 D_80099040;
-extern s32 D_8009904C;
-extern s32 D_80099050;
-extern u8 D_8009905C;
-extern u8 D_8009905D;
-extern volatile u32 *D_80099310;
+extern volatile u_char *D_80099300;
+extern volatile u_char *D_80099304;
+extern volatile u_char *D_80099308;
+extern volatile u_char *D_8009930C;
+extern long D_8009903C;
+extern long D_80099040;
+extern long D_8009904C;
+extern long D_80099050;
+extern u_char D_8009905C;
+extern u_char D_8009905D;
+extern volatile u_long *D_80099310;
 extern CdRegisterMap *volatile D_80099314;
-extern u8 D_80013904[];
-extern u8 D_80013910[];
+extern u_char D_80013904[];
+extern u_char D_80013910[];
 extern void *D_8009931C[];
 
 typedef struct {
-    u8 sync;
-    u8 ready;
-    u8 command;
+    u_char sync;
+    u_char ready;
+    u_char command;
 } CdState;
 
 extern volatile CdState D_80099318;
 
 void func_8006DF34(void);
 void func_8006C17C(void);
-void func_8006DF64(s32 arg0, void *arg1);
-s32 func_8006B620(s32 arg0, void *arg1, s32 arg2, s32 arg3);
-s32 func_8006B0D4(s32 arg0, u8 *arg1);
-void func_80063C38(u8 *text);
+void func_8006DF64(long arg0, void *arg1);
+long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
+long func_8006B0D4(long arg0, u_char *arg1);
+void func_80063C38(u_char *text);
 
-s32 CD_vol(CdlATV *arg0) {
+long CD_vol(CdlATV *arg0) {
     *D_80099300 = 2;
     *D_80099308 = arg0->val0;
     *D_8009930C = arg0->val1;
@@ -44,8 +44,8 @@ s32 CD_vol(CdlATV *arg0) {
 }
 
 void CD_flush(void) {
-    volatile u8 *state;
-    volatile u8 *reg;
+    volatile u_char *state;
+    volatile u_char *reg;
 
     *D_80099300 = 1;
 
@@ -67,9 +67,9 @@ void CD_flush(void) {
     *D_80099310 = 0x1325;
 }
 
-int CD_initvol(void) {
+long CD_initvol(void) {
     CdRegisterMap *temp_v1;
-    u8 sp0[4];
+    u_char sp0[4];
 
     temp_v1 = D_80099314;
     if (temp_v1->status_mode_a == 0 && temp_v1->status_mode_b == 0) {
@@ -107,7 +107,7 @@ void CD_initintr(void) {
     func_8006DF64(2, (void *)func_8006C17C);
 }
 
-s32 func_8006BD14(void) {
+long func_8006BD14(void) {
     func_80063C38(D_80013904);
     GameDebugPrintf(D_80013910, D_8009931C);
 

@@ -4,16 +4,16 @@
 
 extern GpuCallbacks *g_GpuCallbacks asm("D_800941E0");
 extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
-extern u8 g_GraphQueue asm("D_800941E9");
-extern u8 g_GraphDebug asm("D_800941EA");
+extern u_char g_GraphQueue asm("D_800941E9");
+extern u_char g_GraphDebug asm("D_800941EA");
 extern char D_800134F0[];
 
 /* GP1 queue mode; own trace string D_800134F0 is "SetGrapQue(%d)...". */
-s32 SetGraphQueue(s32 mode) asm("func_80065738");
-s32 SetGraphQueue(s32 arg0) {
-    register s32 newQueue asm("$16") = arg0;
-    register u8 *queue asm("$17") = &g_GraphQueue;
-    register s32 oldQueue asm("$18");
+long SetGraphQueue(long mode) asm("func_80065738");
+long SetGraphQueue(long arg0) {
+    register long newQueue asm("$16") = arg0;
+    register u_char *queue asm("$17") = &g_GraphQueue;
+    register long oldQueue asm("$18");
 
     oldQueue = *queue;
     if (g_GraphDebug >= 2) {
@@ -29,26 +29,26 @@ s32 SetGraphQueue(s32 arg0) {
     return oldQueue;
 }
 
-extern u8 D_800941E8;
-extern u8 D_800941EA;
+extern u_char D_800941E8;
+extern u_char D_800941EA;
 
-s32 GetGraphType(void) asm("func_800657E4");
-s32 GetGraphType(void) {
+long GetGraphType(void) asm("func_800657E4");
+long GetGraphType(void) {
     return D_800941E8;
 }
 
-s32 GetGraphDebug(void) asm("func_800657F4");
-s32 GetGraphDebug(void) {
+long GetGraphDebug(void) asm("func_800657F4");
+long GetGraphDebug(void) {
     return D_800941EA;
 }
 
 extern char D_80013504[];
 extern void (*D_800941E4)(char *, ...);
-extern u32 D_800941F4;
+extern u_long D_800941F4;
 
-u32 DrawSyncCallback(u32 arg0) asm("func_80065804");
-u32 DrawSyncCallback(u32 arg0) {
-    u32 ret;
+u_long DrawSyncCallback(u_long arg0) asm("func_80065804");
+u_long DrawSyncCallback(u_long arg0) {
+    u_long ret;
 
     if (D_800941EA >= 2) {
         D_800941E4(D_80013504, arg0);
@@ -61,15 +61,15 @@ u32 DrawSyncCallback(u32 arg0) {
 
 extern char D_80013520[];
 
-void func_80068180(u8 *dst, s32 value, s32 count);
+void func_80068180(u_char *dst, long value, long count);
 
-void SetDispMask(s32 arg0) asm("func_80065860");
-void SetDispMask(s32 arg0) {
-    register s32 enable asm("$16") = arg0;
-    register u8 *debug asm("$17") = &g_GraphDebug;
-    register u8 *clearPtr asm("$4");
+void SetDispMask(long arg0) asm("func_80065860");
+void SetDispMask(long arg0) {
+    register long enable asm("$16") = arg0;
+    register u_char *debug asm("$17") = &g_GraphDebug;
+    register u_char *clearPtr asm("$4");
     register GpuCallbacks *gpu asm("$2");
-    register s32 mask asm("$4");
+    register long mask asm("$4");
 
     if (*debug >= 2) {
         GPU_printf(D_80013520, enable);
@@ -95,16 +95,16 @@ void SetDispMask(s32 arg0) {
 extern GpuCallbacks *D_800941E0;
 extern char D_80013534[];
 
-void DrawSync(s32 arg0) asm("func_800658FC");
-void DrawSync(s32 arg0) {
+void DrawSync(long arg0) asm("func_800658FC");
+void DrawSync(long arg0) {
     if (D_800941EA >= 2) {
         D_800941E4(D_80013534, arg0);
     }
     D_800941E0->drawSync(arg0);
 }
 
-extern s16 D_800941EC;
-extern s16 D_800941EE;
+extern short D_800941EC;
+extern short D_800941EE;
 extern char D_80013548[];
 extern char D_80013554[];
 extern char D_80013568[];
@@ -113,12 +113,12 @@ void CheckPrim(char *arg0, Rect *rect) asm("func_80065968");
 void CheckPrim(char *arg0, Rect *rect) {
     switch (g_GraphDebug) {
     case 1: {
-        register s32 w asm("$5") = rect->w;
-        s32 maxX = D_800941EC;
-        register s32 x asm("$7");
-        register s32 y asm("$3");
-        register s32 h asm("$6");
-        s32 maxY;
+        register long w asm("$5") = rect->w;
+        long maxX = D_800941EC;
+        register long x asm("$7");
+        register long y asm("$3");
+        register long h asm("$6");
+        long maxY;
 
         if (maxX < w) {
             goto bad;
@@ -165,12 +165,12 @@ extern char D_8001356C[];
 
 void func_80065968(char *arg0, void *arg1);
 
-void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3) asm("func_80065A90");
-void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3) {
+void ClearImage(void *arg0, u_long arg1, u_long arg2, u_long arg3) asm("func_80065A90");
+void ClearImage(void *arg0, u_long arg1, u_long arg2, u_long arg3) {
     register void *rect asm("s3") = arg0;
-    register u32 b asm("s2") = arg1;
-    register u32 g asm("s1") = arg2;
-    register u32 r asm("s0") = arg3;
+    register u_long b asm("s2") = arg1;
+    register u_long g asm("s1") = arg2;
+    register u_long r asm("s0") = arg3;
 
     func_80065968(D_8001356C, rect);
 

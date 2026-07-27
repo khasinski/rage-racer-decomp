@@ -2,21 +2,21 @@
 #include "psyq/cd.h"
 
 typedef struct {
-    u8 b[4];
+    u_char b[4];
 } W4;
 
 typedef struct {
-    s32 index;    /* +0  */
-    s32 field6;   /* +4  */
-    s32 word2;    /* +8  */
+    long index;    /* +0  */
+    long field6;   /* +4  */
+    long word2;    /* +8  */
     char name[32];/* +12 */
 } Entry;
 
-extern u8 D_8009D714[];
+extern u_char D_8009D714[];
 extern W4 D_8009D7A0;
 extern Entry D_8009C114[];
-extern s32 D_80099048;
-extern s32 D_80099348;
+extern long D_80099048;
+extern long D_80099348;
 
 extern const char D_800139B4[];
 extern const char D_800139E0[];
@@ -26,9 +26,9 @@ extern const char D_80013A3C[];
 extern const char D_80013A5C[];
 extern const char D_80013A70[];
 
-extern int func_8006CB88(int, int, void *);
-extern int LibcStrncmp(void *, const char *, int) asm("func_8006CC8C");
-extern void func_8006CBF4(char *, u8 *, int);
+extern long func_8006CB88(long, long, void *);
+extern long LibcStrncmp(void *, const char *, long) asm("func_8006CC8C");
+extern void func_8006CBF4(char *, u_char *, long);
 
 /*
  * Reads and parses the disc's directory into the Entry table D_8009C114[128].
@@ -41,11 +41,11 @@ extern void func_8006CBF4(char *, u8 *, int);
 /* Rebuilds the ISO path-table cache after a disc change: reads the primary
  * volume descriptor at sector 16, checks "CD001", then parses up to 128
  * path-table records. Owns all four of its own "CD_newmedia: ..." messages. */
-int CD_newmedia(void) asm("func_8006C560");
-int CD_newmedia(void) {
-    u8 *p;
-    int i;
-    int r;
+long CD_newmedia(void) asm("func_8006C560");
+long CD_newmedia(void) {
+    u_char *p;
+    long i;
+    long r;
     W4 hdr;
 
     r = func_8006CB88(1, 16, D_8009D714);
@@ -62,9 +62,9 @@ int CD_newmedia(void) {
         return 0;
     }
     hdr = D_8009D7A0;
-    if (func_8006CB88(1, *(int *)&hdr, D_8009D714) != r) {
+    if (func_8006CB88(1, *(long *)&hdr, D_8009D714) != r) {
         if (D_80099048 > 0) {
-            GameDebugPrintf(D_80013A18, *(int *)&hdr);
+            GameDebugPrintf(D_80013A18, *(long *)&hdr);
         }
         return 0;
     }
@@ -74,13 +74,13 @@ int CD_newmedia(void) {
     }
     i = 0;
     while (p < &D_8009D714[0x800]) {
-        int n;
-        int d;
+        long n;
+        long d;
         if (*p == 0) {
             break;
         }
         *(W4 *)&D_8009C114[i].word2 = *(W4 *)(p + 2);
-        D_8009C114[i].field6 = *(u8 *)(p + 6);
+        D_8009C114[i].field6 = *(u_char *)(p + 6);
         D_8009C114[i].index = i + 1;
         func_8006CBF4(D_8009C114[i].name, p + 8, *p);
         D_8009C114[i].name[*p] = 0;
@@ -107,20 +107,20 @@ int CD_newmedia(void) {
     return 1;
 }
 
-extern volatile s32 D_8009C118[];
+extern volatile long D_8009C118[];
 extern CdSearchDirEntry D_8009C120[];
 
-s32 func_8006CC28(u8 *arg0, u8 *arg1);
+long func_8006CC28(u_char *arg0, u_char *arg1);
 
-s32 DS_searchdir(s32 type, u8 *name) asm("func_8006C83C");
-s32 DS_searchdir(s32 type, u8 *name) {
-    s32 i = 0;
-    u8 *entryName = (u8 *)D_8009C120;
-    s32 offset = 0;
-    s32 entryType;
+long DS_searchdir(long type, u_char *name) asm("func_8006C83C");
+long DS_searchdir(long type, u_char *name) {
+    long i = 0;
+    u_char *entryName = (u_char *)D_8009C120;
+    long offset = 0;
+    long entryType;
 
     while (i < 0x80) {
-        entryType = *(s32 *)((u8 *)D_8009C118 + offset);
+        entryType = *(long *)((u_char *)D_8009C118 + offset);
         if (entryType != 0) {
             if (entryType == type && func_8006CC28(name, entryName) == 0) {
                 return i + 1;

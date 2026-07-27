@@ -2,16 +2,16 @@
 
 extern SeqStruct *D_801E79CC[];
 
-void SsSeqDispatchControlChange(s32 seq, s32 sep, s32 value) asm("func_8006F5F4");
-void func_80070A1C(s32 seq, s32 sep, s32 value);
+void SsSeqDispatchControlChange(long seq, long sep, long value) asm("func_8006F5F4");
+void func_80070A1C(long seq, long sep, long value);
 
-void SsSeqDispatchMidiEvent(s16 seq, s16 sep) asm("func_8006F1E0");
-void SsSeqDispatchMidiEvent(s16 seq, s16 sep) {
+void SsSeqDispatchMidiEvent(short seq, short sep) asm("func_8006F1E0");
+void SsSeqDispatchMidiEvent(short seq, short sep) {
     SeqStruct *state = &D_801E79CC[seq][sep];
-    u8 *p;
-    s32 status;
-    s32 lo;
-    s32 d1;
+    u_char *p;
+    long status;
+    long lo;
+    long d1;
 
     p = state->read_pos;
     state->read_pos = p + 1;

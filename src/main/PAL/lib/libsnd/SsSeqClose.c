@@ -1,22 +1,22 @@
 #include "psyq/snd.h"
 
 extern SeqStruct *D_801E79CC[];
-extern s32 D_801E4B80;
-extern s16 D_801E8270;
+extern long D_801E4B80;
+extern short D_801E8270;
 
-void func_80076C58(s32 seq_sep, u16 left, u16 right, s32 arg3);
+void func_80076C58(long seq_sep, u_short left, u_short right, long arg3);
 
-void SsSeqClose(s32 seq) {
-    volatile s32 pad[2];
-    register s32 seq_s asm("$16");
+void SsSeqClose(long seq) {
+    volatile long pad[2];
+    register long seq_s asm("$16");
     register volatile SeqStruct **slot asm("$5");
     register volatile SeqStruct **table asm("$3");
-    register s32 seq_offset asm("$2");
-    register s32 offset asm("$4");
-    register s32 index asm("$6");
-    register s32 value asm("$7");
-    register s32 current asm("$3");
-    s32 mask;
+    register long seq_offset asm("$2");
+    register long offset asm("$4");
+    register long index asm("$6");
+    register long value asm("$7");
+    register long current asm("$3");
+    long mask;
 
     seq <<= 16;
     seq_s = seq >> 16;
@@ -31,26 +31,26 @@ void SsSeqClose(s32 seq) {
     if (D_801E8270 > 0) {
         table = (volatile SeqStruct **)D_801E79CC;
         seq_offset = seq_s * 4;
-        slot = (volatile SeqStruct **)(seq_offset + (s32)table);
+        slot = (volatile SeqStruct **)(seq_offset + (long)table);
         value = 0x7F;
         offset = 0;
         do {
-            ((SeqStruct *)(offset + (s32)*slot))->flags = 0;
+            ((SeqStruct *)(offset + (long)*slot))->flags = 0;
             current = 0xFF;
-            ((SeqStruct *)(offset + (s32)*slot))->unk3C = current;
-            ((SeqStruct *)(offset + (s32)*slot))->unk0 = 0;
-            ((SeqStruct *)(offset + (s32)*slot))->unk3E = 0;
-            ((SeqStruct *)(offset + (s32)*slot))->unk40 = 0;
-            ((SeqStruct *)(offset + (s32)*slot))->unk94 = 0;
-            ((SeqStruct *)(offset + (s32)*slot))->unk98 = 0;
-            ((SeqStruct *)(offset + (s32)*slot))->unk42 = 0;
-            ((SeqStruct *)(offset + (s32)*slot))->target_tempo = 0;
-            ((SeqStruct *)(offset + (s32)*slot))->tempo_countdown = 0;
-            ((SeqStruct *)(offset + (s32)*slot))->unk9C = 0;
-            ((SeqStruct *)(offset + (s32)*slot))->tempo_step = 0;
+            ((SeqStruct *)(offset + (long)*slot))->unk3C = current;
+            ((SeqStruct *)(offset + (long)*slot))->unk0 = 0;
+            ((SeqStruct *)(offset + (long)*slot))->unk3E = 0;
+            ((SeqStruct *)(offset + (long)*slot))->unk40 = 0;
+            ((SeqStruct *)(offset + (long)*slot))->unk94 = 0;
+            ((SeqStruct *)(offset + (long)*slot))->unk98 = 0;
+            ((SeqStruct *)(offset + (long)*slot))->unk42 = 0;
+            ((SeqStruct *)(offset + (long)*slot))->target_tempo = 0;
+            ((SeqStruct *)(offset + (long)*slot))->tempo_countdown = 0;
+            ((SeqStruct *)(offset + (long)*slot))->unk9C = 0;
+            ((SeqStruct *)(offset + (long)*slot))->tempo_step = 0;
             index++;
-            ((SeqStruct *)(offset + (s32)*slot))->unk74 = value;
-            current = offset + (s32)*slot;
+            ((SeqStruct *)(offset + (long)*slot))->unk74 = value;
+            current = offset + (long)*slot;
             offset += sizeof(SeqStruct);
             ((SeqStruct *)current)->unk76 = value;
         } while (index < D_801E8270);

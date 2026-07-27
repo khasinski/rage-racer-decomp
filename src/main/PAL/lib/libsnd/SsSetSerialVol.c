@@ -1,7 +1,7 @@
 #include "psyq/spu.h"
 
 
-void SsSetSerialVol(u8 source, s16 left, s16 right) {
+void SsSetSerialVol(u_char source, short left, short right) {
     SpuCommonAttr attr;
 
     if (source == 0) {

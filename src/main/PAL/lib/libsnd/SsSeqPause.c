@@ -2,20 +2,20 @@
 
 extern SeqStruct *D_801E79CC[];
 
-void SsSeqPause(s32 seq, s32 sep) {
-    s32 offset;
+void SsSeqPause(long seq, long sep) {
+    long offset;
     SeqStruct *state;
     SeqStruct **seq_entry;
     SeqStruct **seq_table;
 
-    seq = (s16)seq;
+    seq = (short)seq;
     seq_table = D_801E79CC;
     seq_entry = &seq_table[seq];
-    sep = (s16)sep;
+    sep = (short)sep;
     offset = sep * sizeof(SeqStruct);
-    state = (SeqStruct *)((u8 *)*seq_entry + offset);
-    SpuVmSeqKeyOff(((s16)sep << 8) | (s16)seq);
+    state = (SeqStruct *)((u_char *)*seq_entry + offset);
+    SpuVmSeqKeyOff(((short)sep << 8) | (short)seq);
     state->unk2b = 0;
-    offset = (s32)((u8 *)*seq_entry + offset);
+    offset = (long)((u_char *)*seq_entry + offset);
     ((SeqStruct *)offset)->flags &= ~SS_SEQ_FLAG_PAUSED;
 }

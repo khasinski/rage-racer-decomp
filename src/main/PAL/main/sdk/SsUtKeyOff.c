@@ -1,57 +1,59 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct {
-    s16 vag;
-    s16 age;
-    s16 pitch;
-    u16 env;
-    s16 base_volume;
-    s8 pan;
-    s8 unkB;
-    s16 note;
-    s16 seq_sep;
-    s16 program_index;
-    s16 program;
-    s16 tone;
-    s16 vab_id;
-    s16 priority;
-    u8 pad1A;
-    u8 active;
-    s16 auto_volume;
-    s16 unk1E;
-    s16 unk20;
-    s16 unk22;
-    s16 start_volume;
-    s16 end_volume;
-    s16 auto_pan;
-    s16 unk2A;
-    s16 unk2C;
-    s16 unk2E;
-    s16 start_pan;
-    s16 end_pan;
+    short vag;
+    short age;
+    short pitch;
+    u_short env;
+    short base_volume;
+    signed char pan;
+    signed char unkB;
+    short note;
+    short seq_sep;
+    short program_index;
+    short program;
+    short tone;
+    short vab_id;
+    short priority;
+    u_char pad1A;
+    u_char active;
+    short auto_volume;
+    short unk1E;
+    short unk20;
+    short unk22;
+    short start_volume;
+    short end_volume;
+    short auto_pan;
+    short unk2A;
+    short unk2C;
+    short unk2E;
+    short start_pan;
+    short end_pan;
 } SpuVoice;
 
-extern s32 D_801E40AC;
-extern u16 D_801E4BEA;
+extern long D_801E40AC;
+extern u_short D_801E4BEA;
 extern SpuVoice D_8009E0B8[];
-extern s16 D_8009E0C4[];
-extern s16 D_8009E0CA[];
-extern s16 D_8009E0CC[];
-extern s16 D_8009E0CE[];
-extern u16 D_801F2A08;
-extern u16 D_801F2A0C;
-extern u16 D_8009E670;
-extern u16 D_8009E674;
-extern u16 *D_8009A588;
+extern short D_8009E0C4[];
+extern short D_8009E0CA[];
+extern short D_8009E0CC[];
+extern short D_8009E0CE[];
+extern u_short D_801F2A08;
+extern u_short D_801F2A0C;
+extern u_short D_8009E670;
+extern u_short D_8009E674;
+extern u_short *D_8009A588;
 
-s32 SsUtKeyOff(s32 voice, s32 vab_id, s32 program, s32 tone, s32 note) asm("func_80077A88");
-s32 SsUtKeyOff(s32 voice, s32 vab_id, s32 program, s32 tone, s32 note) {
-    s16 original_voice;
-    s32 index;
-    u8 new_var;
-    u16 bits_upper;
-    u16 bits_lower;
-    u16 current_voice;
+long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) asm("func_80077A88");
+long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) {
+    short original_voice;
+    long index;
+    u_char new_var;
+    u_short bits_upper;
+    u_short bits_lower;
+    u_short current_voice;
 
     if (D_801E40AC == 1) {
         return -1;
@@ -59,21 +61,21 @@ s32 SsUtKeyOff(s32 voice, s32 vab_id, s32 program, s32 tone, s32 note) {
     original_voice = voice;
     D_801E40AC = 1;
 
-    if ((u16)original_voice < 24) {
-        index = (s16)voice;
+    if ((u_short)original_voice < 24) {
+        index = (short)voice;
         voice = ((((index * 2) + index) << 2) + index) << 2;
-        if (*(s16 *)((u8 *)D_8009E0CE + voice) == (s16)vab_id &&
-            *(s16 *)((u8 *)D_8009E0CA + voice) == (s16)program &&
-            *(s16 *)((u8 *)D_8009E0CC + voice) == (s16)tone &&
-            *(s16 *)((u8 *)D_8009E0C4 + voice) == (s16)note) {
-            if (*(s16 *)((u8 *)D_8009E0B8 + voice) == 0xFF) {
+        if (*(short *)((u_char *)D_8009E0CE + voice) == (short)vab_id &&
+            *(short *)((u_char *)D_8009E0CA + voice) == (short)program &&
+            *(short *)((u_char *)D_8009E0CC + voice) == (short)tone &&
+            *(short *)((u_char *)D_8009E0C4 + voice) == (short)note) {
+            if (*(short *)((u_char *)D_8009E0B8 + voice) == 0xFF) {
                 new_var = original_voice;
                 D_8009E0B8[new_var].active = 0;
                 D_8009E0B8[new_var].pitch = 0;
                 D_8009A588[202] = 0;
                 D_8009A588[203] = 0;
             } else {
-                *(s16 *)&D_801E4BEA = original_voice;
+                *(short *)&D_801E4BEA = original_voice;
                 current_voice = D_801E4BEA;
                 if (current_voice < 16) {
                     bits_lower = 1 << current_voice;

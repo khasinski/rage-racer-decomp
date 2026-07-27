@@ -1,8 +1,10 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-void SsUnpackAdsr(u32 arg0, u32 arg1, u16 *out) asm("func_80070E28");
+void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out) asm("func_80070E28");
 
-void SsUnpackAdsr(u32 arg0, u32 arg1, u16 *out) {
+void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out) {
     out[5] = arg0 & 0x8000;
     out[6] = arg1 & 0x8000;
     out[8] = arg1 & 0x4000;

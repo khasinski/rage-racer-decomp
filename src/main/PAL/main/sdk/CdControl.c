@@ -1,10 +1,12 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern s32 D_80098FBC[];
-extern s32 D_8009903C;
-extern u8 D_8009904C;
+extern long D_80098FBC[];
+extern long D_8009903C;
+extern u_char D_8009904C;
 
-s32 func_8006B620(s32 arg0, void *arg1, s32 arg2, s32 arg3);
+long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
 
 /*
  * Core CD command sender with retry: issues command `arg0` (low byte) with the
@@ -13,18 +15,18 @@ s32 func_8006B620(s32 arg0, void *arg1, s32 arg2, s32 arg3);
  * pinned to match; the C identifiers may be renamed but the asm("$N") pins and
  * offsets must not change.
  */
-s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
-s32 CdControl(s32 arg0, void *arg1, s32 arg2) {
+long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+long CdControl(long arg0, void *arg1, long arg2) {
     register void *arg asm("$17");
-    register s32 arg2Reg asm("$18");
-    register s32 cmd asm("$20");
-    register s32 retries asm("$16");
-    register s32 command asm("$19");
-    register s32 *base asm("$3");
-    register s32 savedMode asm("$21");
-    register s32 offset asm("$2");
-    register s32 *commandState asm("$22");
-    register s32 result asm("$23");
+    register long arg2Reg asm("$18");
+    register long cmd asm("$20");
+    register long retries asm("$16");
+    register long command asm("$19");
+    register long *base asm("$3");
+    register long savedMode asm("$21");
+    register long offset asm("$2");
+    register long *commandState asm("$22");
+    register long result asm("$23");
 
     arg = arg1;
     arg2Reg = arg2;
@@ -38,7 +40,7 @@ s32 CdControl(s32 arg0, void *arg1, s32 arg2) {
     savedMode = D_8009903C;
     asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
-    commandState = (s32 *)(offset + (s32)base);
+    commandState = (long *)(offset + (long)base);
     result = 0;
 
     do {
@@ -73,17 +75,17 @@ done:
     return result + 1;
 }
 
-s32 CdControlF(s32 arg0, void *arg1) asm("func_8006A6DC");
-s32 CdControlF(s32 arg0, void *arg1) {
+long CdControlF(long arg0, void *arg1) asm("func_8006A6DC");
+long CdControlF(long arg0, void *arg1) {
     register void *arg asm("$17");
-    register s32 cmd asm("$19");
-    register s32 retries asm("$16");
-    register s32 command asm("$18");
-    register s32 savedMode asm("$20");
-    register s32 *base asm("$3");
-    register s32 offset asm("$2");
-    register s32 *commandState asm("$21");
-    register s32 result asm("$22");
+    register long cmd asm("$19");
+    register long retries asm("$16");
+    register long command asm("$18");
+    register long savedMode asm("$20");
+    register long *base asm("$3");
+    register long offset asm("$2");
+    register long *commandState asm("$21");
+    register long result asm("$22");
 
     arg = arg1;
     cmd = arg0;
@@ -96,7 +98,7 @@ s32 CdControlF(s32 arg0, void *arg1) {
     savedMode = D_8009903C;
     asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
-    commandState = (s32 *)(offset + (s32)base);
+    commandState = (long *)(offset + (long)base);
     result = 0;
 
     do {
@@ -131,26 +133,26 @@ done:
     return result + 1;
 }
 
-extern s32 D_80098FBC[];
-extern s32 D_8009903C;
-extern u8 D_8009904C;
+extern long D_80098FBC[];
+extern long D_8009903C;
+extern u_char D_8009904C;
 
-s32 func_8006B620(s32 arg0, void *arg1, s32 arg2, s32 arg3);
-s32 func_8006B0D4(s32 arg0, s32 arg1);
+long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
+long func_8006B0D4(long arg0, long arg1);
 
-s32 CdControlB(s32 arg0, void *arg1, s32 arg2) asm("func_8006A808");
-s32 CdControlB(s32 arg0, void *arg1, s32 arg2) {
+long CdControlB(long arg0, void *arg1, long arg2) asm("func_8006A808");
+long CdControlB(long arg0, void *arg1, long arg2) {
     register void *arg asm("$17");
-    register s32 arg2Reg asm("$18");
-    register s32 cmd asm("$20");
-    register s32 retries asm("$16");
-    register s32 command asm("$19");
-    register s32 savedMode asm("$21");
-    register s32 *base asm("$3");
-    register s32 offset asm("$2");
-    register s32 *commandState asm("$22");
-    register s32 result asm("$2");
-    register s32 zero asm("$4");
+    register long arg2Reg asm("$18");
+    register long cmd asm("$20");
+    register long retries asm("$16");
+    register long command asm("$19");
+    register long savedMode asm("$21");
+    register long *base asm("$3");
+    register long offset asm("$2");
+    register long *commandState asm("$22");
+    register long result asm("$2");
+    register long zero asm("$4");
 
     arg = arg1;
     arg2Reg = arg2;
@@ -164,7 +166,7 @@ s32 CdControlB(s32 arg0, void *arg1, s32 arg2) {
     savedMode = D_8009903C;
     asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
-    commandState = (s32 *)(offset + (s32)base);
+    commandState = (long *)(offset + (long)base);
     result = 0;
 
     do {

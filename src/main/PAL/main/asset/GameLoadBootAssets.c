@@ -16,7 +16,7 @@ void func_80034DCC(void *arg0);
 void func_8005B768(s32 arg0, void *arg1, void *arg2, s32 arg3);
 s32 func_8005B89C(void);
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
-void DrawSync(s32 mode) asm("func_800658FC");
+void DrawSync(long mode) asm("func_800658FC");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern GameAssetTripleHeader *g_AssetBase asm("D_8019C904");
 extern void *g_AssetBlockPtr2 asm("D_8019C754");

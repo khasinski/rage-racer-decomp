@@ -1,147 +1,149 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct {
-    u8 tones;
-    u8 mvol;
-    u8 prior;
-    u8 mode;
-    u8 mpan;
-    u8 reserved0;
-    s16 attr;
-    u32 reserved1;
-    u16 reserved2;
-    u16 reserved3;
+    u_char tones;
+    u_char mvol;
+    u_char prior;
+    u_char mode;
+    u_char mpan;
+    u_char reserved0;
+    short attr;
+    u_long reserved1;
+    u_short reserved2;
+    u_short reserved3;
 } ProgAtr77C7C;
 
 typedef struct {
-    u8 prior;
-    u8 mode;
-    u8 vol;
-    u8 pan;
-    u8 center;
-    u8 shift;
-    u8 min;
-    u8 max;
-    u8 vibW;
-    u8 vibT;
-    u8 porW;
-    u8 porT;
-    u8 pbmin;
-    u8 pbmax;
-    u8 reserved1;
-    u8 reserved2;
-    u16 adsr1;
-    u16 adsr2;
-    s16 prog;
-    s16 vag;
-    s16 reserved[4];
+    u_char prior;
+    u_char mode;
+    u_char vol;
+    u_char pan;
+    u_char center;
+    u_char shift;
+    u_char min;
+    u_char max;
+    u_char vibW;
+    u_char vibT;
+    u_char porW;
+    u_char porT;
+    u_char pbmin;
+    u_char pbmax;
+    u_char reserved1;
+    u_char reserved2;
+    u_short adsr1;
+    u_short adsr2;
+    short prog;
+    short vag;
+    short reserved[4];
 } VagAtr77C7C;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk04;
-    u16 unk6;
-    s16 unk8;
-    u8 unka;
-    u8 unkb;
-    s16 note;
-    s16 unke;
-    s16 unk10;
-    s16 prog;
-    s16 tone;
-    s16 vabId;
-    s16 unk18;
-    u8 pad19[1];
-    u8 unk1b;
-    s16 auto_vol;
-    s16 unk1e;
-    s16 unk20;
-    s16 unk22;
-    s16 start_vol;
-    s16 end_vol;
-    s16 auto_pan;
-    s16 unk2a;
-    s16 unk2c;
-    s16 unk2e;
-    s16 start_pan;
-    s16 end_pan;
+    short unk0;
+    short unk2;
+    short unk04;
+    u_short unk6;
+    short unk8;
+    u_char unka;
+    u_char unkb;
+    short note;
+    short unke;
+    short unk10;
+    short prog;
+    short tone;
+    short vabId;
+    short unk18;
+    u_char pad19[1];
+    u_char unk1b;
+    short auto_vol;
+    short unk1e;
+    short unk20;
+    short unk22;
+    short start_vol;
+    short end_vol;
+    short auto_pan;
+    short unk2a;
+    short unk2c;
+    short unk2e;
+    short start_pan;
+    short end_pan;
 } SpuVoice77C7C;
 
 typedef struct {
-    u8 tones;
-    u8 vab_id;
-    u8 note;
-    u8 fine;
-    u8 volume;
-    u8 pan;
-    u8 program;
-    u8 fake_program;
-    u8 unk8;
-    u8 unk9;
-    u8 mvol;
-    u8 mpan;
-    u8 tone;
-    u8 tone_volume;
-    u8 tone_pan;
-    u8 priority;
-    u8 center;
-    u8 shift;
-    u8 min;
-    u8 max;
-    u8 mode;
-    u8 pad15;
-    u16 seq_sep;
-    u16 vag;
-    u16 voice;
-    u16 unk1c;
-    u16 unk1e;
+    u_char tones;
+    u_char vab_id;
+    u_char note;
+    u_char fine;
+    u_char volume;
+    u_char pan;
+    u_char program;
+    u_char fake_program;
+    u_char unk8;
+    u_char unk9;
+    u_char mvol;
+    u_char mpan;
+    u_char tone;
+    u_char tone_volume;
+    u_char tone_pan;
+    u_char priority;
+    u_char center;
+    u_char shift;
+    u_char min;
+    u_char max;
+    u_char mode;
+    u_char pad15;
+    u_short seq_sep;
+    u_short vag;
+    u_short voice;
+    u_short unk1c;
+    u_short unk1e;
 } SvmCur77C7C;
 
-extern s32 D_801E40AC;
+extern long D_801E40AC;
 extern ProgAtr77C7C *D_801E4110;
 extern VagAtr77C7C *D_801E416C;
 extern SvmCur77C7C D_801E4BD0;
 extern SpuVoice77C7C D_8009E0B8[];
 
-extern s32 func_80073314(s16, s16);
+extern long func_80073314(short, short);
 extern void func_80074134(void);
-extern void SpuVmNoiseKeyOn(s32) asm("func_80074348");
-extern s32 func_80074A6C(u16, u16);
-extern void func_80073C50(s32, u16);
+extern void SpuVmNoiseKeyOn(long) asm("func_80074348");
+extern long func_80074A6C(u_short, u_short);
+extern void func_80073C50(long, u_short);
 
-s32 SsUtKeyOnV(
-    s32 voice,
-    s16 vab_id,
-    s16 program,
-    s16 tone,
-    u16 note,
-    u16 fine,
-    s16 left,
-    s16 right) asm("func_80077C7C");
+long SsUtKeyOnV(
+    long voice,
+    short vab_id,
+    short program,
+    short tone,
+    u_short note,
+    u_short fine,
+    short left,
+    short right) asm("func_80077C7C");
 
-s32 SsUtKeyOnV(
-    s32 voice,
-    s16 vab_id,
-    s16 program,
-    s16 tone,
-    u16 note,
-    u16 fine,
-    s16 left,
-    s16 right) {
-    s32 idx;
-    u8 tone_value;
-    u16 vag;
+long SsUtKeyOnV(
+    long voice,
+    short vab_id,
+    short program,
+    short tone,
+    u_short note,
+    u_short fine,
+    short left,
+    short right) {
+    long idx;
+    u_char tone_value;
+    u_short vag;
     ProgAtr77C7C *program_attr;
     VagAtr77C7C *tone_attr;
-    s32 left_value;
-    s32 right_value;
+    long left_value;
+    long right_value;
 
     if (D_801E40AC == 1) {
         return -1;
     }
     D_801E40AC = 1;
-    if ((u16)voice >= 24) {
+    if ((u_short)voice >= 24) {
         D_801E40AC = 0;
         return -1;
     }
@@ -192,7 +194,7 @@ s32 SsUtKeyOnV(
         return -1;
     }
 
-    idx = (s16)voice;
+    idx = (short)voice;
     D_801E4BD0.voice = voice;
     D_8009E0B8[idx].unke = 0x21;
     D_8009E0B8[idx].vabId = vab_id;
@@ -205,11 +207,11 @@ s32 SsUtKeyOnV(
     D_8009E0B8[idx].unk2 = 0;
     D_8009E0B8[idx].tone = tone_value;
     func_80074134();
-    if ((s16)D_801E4BD0.vag == 0xFF) {
+    if ((short)D_801E4BD0.vag == 0xFF) {
         SpuVmNoiseKeyOn(voice & 0xFF);
     } else {
         func_80073C50(1, func_80074A6C(note, fine));
     }
     D_801E40AC = 0;
-    return (s16)voice;
+    return (short)voice;
 }

@@ -1,14 +1,16 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-void SpuVmSeKeyOn(s32 arg0, s16 arg1, s16 arg2, u16 arg3, u16 arg4, u16 arg5) asm("func_80076350");
-void SpuVmSeKeyOff(s32 arg0, s16 arg1, s16 arg2, u16 arg3) asm("func_80076940");
+void SpuVmSeKeyOn(long arg0, short arg1, short arg2, u_short arg3, u_short arg4, u_short arg5) asm("func_80076350");
+void SpuVmSeKeyOff(long arg0, short arg1, short arg2, u_short arg3) asm("func_80076940");
 
 void SsUtKeyOnV(void) asm("func_80076C50");
 
-void func_80076B30(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4, u16 arg5) {
-    u16 base;
-    s32 balance;
-    register s32 quotient asm("$2");
+void func_80076B30(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5) {
+    u_short base;
+    long balance;
+    register long quotient asm("$2");
 
     if (arg4 == arg5) {
         balance = 0x40;
@@ -23,10 +25,10 @@ void func_80076B30(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4, u16 arg5) {
         balance = 0x7F - quotient;
     }
 
-    SpuVmSeKeyOn(0x21, (s16)arg0, (s16)arg1, (u16)arg2, base, (u16)balance);
+    SpuVmSeKeyOn(0x21, (short)arg0, (short)arg1, (u_short)arg2, base, (u_short)balance);
 }
 
-void func_80076C1C(s32 arg0, s32 arg1, s32 arg2) {
+void func_80076C1C(long arg0, long arg1, long arg2) {
     SpuVmSeKeyOff(0x21, arg0, arg1, arg2);
 }
 

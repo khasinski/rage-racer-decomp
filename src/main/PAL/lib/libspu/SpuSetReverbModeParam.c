@@ -1,23 +1,23 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern s32 D_8009A720;
+extern long D_8009A720;
 extern SpuRevAttrState D_8009A728;
-extern s32 D_8009A768;
-extern s32 D_8009A770[];
+extern long D_8009A768;
+extern long D_8009A770[];
 extern SpuRxx *D_8009AB7C;
-extern s32 D_8009AB94;
-extern s32 D_8009ABA0;
-extern volatile s32 D_8009ABB0;
-extern s32 D_8009ABE0[];
+extern long D_8009AB94;
+extern long D_8009ABA0;
+extern volatile long D_8009ABB0;
+extern long D_8009ABE0[];
 extern SpuReverbRegAttr D_8009AC30[];
 
-#define D_8009AB7C_HALF ((volatile u16 *)D_8009AB7C)
+#define D_8009AB7C_HALF ((volatile u_short *)D_8009AB7C)
 
 static inline void copy_reverb_attr(SpuReverbRegAttr *dst, SpuReverbRegAttr *src) {
-    u8 *d = (u8 *)dst;
-    u8 *s = (u8 *)src;
-    s32 size = sizeof(SpuReverbRegAttr) - 1;
+    u_char *d = (u_char *)dst;
+    u_char *s = (u_char *)src;
+    long size = sizeof(SpuReverbRegAttr) - 1;
 
     while (size != -1) {
         *d++ = *s++;
@@ -25,19 +25,19 @@ static inline void copy_reverb_attr(SpuReverbRegAttr *dst, SpuReverbRegAttr *src
     }
 }
 
-s32 SpuSetReverbModeParam(SpuReverbAttr *attr) {
+long SpuSetReverbModeParam(SpuReverbAttr *attr) {
     SpuReverbRegAttr entry;
-    s32 reenable;
-    s32 mode_changed;
-    s32 delay_changed;
-    s32 feedback_changed;
-    s32 clear_wa;
-    s32 depth_changed;
-    u32 mask;
-    s32 set_all;
-    u32 mode;
-    s32 delay;
-    u16 cnt;
+    long reenable;
+    long mode_changed;
+    long delay_changed;
+    long feedback_changed;
+    long clear_wa;
+    long depth_changed;
+    u_long mask;
+    long set_all;
+    u_long mode;
+    long delay;
+    u_short cnt;
 
     reenable = 0;
     mode_changed = 0;
@@ -169,8 +169,8 @@ s32 SpuSetReverbModeParam(SpuReverbAttr *attr) {
 }
 
 void _spu_setReverbAttr(SpuReverbRegAttr *attr) {
-    u32 mask = attr->flags;
-    s32 set_all = attr->flags == 0;
+    u_long mask = attr->flags;
+    long set_all = attr->flags == 0;
 
     if (set_all || (mask & 0x1)) {
         D_8009AB7C_HALF[0xE0] = attr->dAPF1;
@@ -270,14 +270,14 @@ void _spu_setReverbAttr(SpuReverbRegAttr *attr) {
     }
 }
 
-s32 SpuClearReverbWorkArea(u32 mode) {
-    volatile s32 callback;
-    s32 old_transmode;
-    u32 size;
-    u32 addr;
-    s32 chunk_active;
-    u32 chunk_size;
-    s32 restored_transmode;
+long SpuClearReverbWorkArea(u_long mode) {
+    volatile long callback;
+    long old_transmode;
+    u_long size;
+    u_long addr;
+    long chunk_active;
+    u_long chunk_size;
+    long restored_transmode;
 
     callback = 0;
     restored_transmode = 0;

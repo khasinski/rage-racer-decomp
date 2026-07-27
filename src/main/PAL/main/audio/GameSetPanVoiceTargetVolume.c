@@ -41,7 +41,7 @@ arg1_done:
 
 extern s32 g_PanVoiceActive asm("D_801E6CEC");
 
-s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
+long SsUtKeyOffV(long voice) asm("func_80078018");
 
 void GameApplyPanVoiceVolume(void) asm("func_8005BF30");
 void GameApplyPanVoiceVolume(void) {

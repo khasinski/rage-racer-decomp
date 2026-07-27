@@ -1,192 +1,194 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct SeqState76350 {
-    u8 unk0;
-    u8 pad1[3];
-    u8 *read_pos;
-    u8 *next_sep_pos;
-    u8 *loop_pos;
-    u8 unk10;
-    u8 unk11;
-    u8 channel;
-    u8 unk13;
-    u8 unk14;
-    u8 unk15;
-    u8 unk16;
-    u8 panpot[16];
-    u8 unk27;
-    u8 unk28;
-    u8 unk29;
-    u8 unk2A;
-    u8 unk2B;
-    u8 programs[16];
-    u8 unk3C;
-    u8 pad3D;
-    s16 unk3E;
-    s16 unk40;
-    s16 unk42;
-    s16 unk44;
-    s16 unk46;
-    s16 unk48;
-    s16 unk4A;
-    s16 unk4C;
-    s16 vol[16];
-    s16 unk6E;
-    s16 unk70;
-    s16 unk72;
-    u16 unk74;
-    u16 unk76;
-    s16 unk78;
-    s16 unk7A;
-    s32 unk7C;
-    u32 unk80;
-    s32 unk84;
-    s32 unk88;
-    s32 unk8C;
-    s32 unk90;
-    u32 unk94;
-    u32 unk98;
-    s32 unk9C;
-    u32 unkA0;
-    u32 unkA4;
-    s16 padA8;
-    s16 padAA;
+    u_char unk0;
+    u_char pad1[3];
+    u_char *read_pos;
+    u_char *next_sep_pos;
+    u_char *loop_pos;
+    u_char unk10;
+    u_char unk11;
+    u_char channel;
+    u_char unk13;
+    u_char unk14;
+    u_char unk15;
+    u_char unk16;
+    u_char panpot[16];
+    u_char unk27;
+    u_char unk28;
+    u_char unk29;
+    u_char unk2A;
+    u_char unk2B;
+    u_char programs[16];
+    u_char unk3C;
+    u_char pad3D;
+    short unk3E;
+    short unk40;
+    short unk42;
+    short unk44;
+    short unk46;
+    short unk48;
+    short unk4A;
+    short unk4C;
+    short vol[16];
+    short unk6E;
+    short unk70;
+    short unk72;
+    u_short unk74;
+    u_short unk76;
+    short unk78;
+    short unk7A;
+    long unk7C;
+    u_long unk80;
+    long unk84;
+    long unk88;
+    long unk8C;
+    long unk90;
+    u_long unk94;
+    u_long unk98;
+    long unk9C;
+    u_long unkA0;
+    u_long unkA4;
+    short padA8;
+    short padAA;
 } SeqState76350;
 
 typedef struct VabHeader76350 {
-    s32 form;
-    s32 ver;
-    s32 id;
-    u32 fsize;
-    u16 reserved0;
-    u16 ps;
-    u16 ts;
-    u16 vs;
-    u8 mvol;
-    u8 pan;
-    u8 attr1;
-    u8 attr2;
-    u32 reserved1;
+    long form;
+    long ver;
+    long id;
+    u_long fsize;
+    u_short reserved0;
+    u_short ps;
+    u_short ts;
+    u_short vs;
+    u_char mvol;
+    u_char pan;
+    u_char attr1;
+    u_char attr2;
+    u_long reserved1;
 } VabHeader76350;
 
 typedef struct ProgAttr76350 {
-    u8 tones;
-    u8 mvol;
-    u8 prior;
-    u8 mode;
-    u8 mpan;
-    s8 reserved0;
-    s16 attr;
-    u32 reserved1;
-    u16 reserved2;
-    u16 reserved3;
+    u_char tones;
+    u_char mvol;
+    u_char prior;
+    u_char mode;
+    u_char mpan;
+    signed char reserved0;
+    short attr;
+    u_long reserved1;
+    u_short reserved2;
+    u_short reserved3;
 } ProgAttr76350;
 
 typedef struct ToneAttr76350 {
-    u8 prior;
-    u8 mode;
-    u8 vol;
-    u8 pan;
-    u8 center;
-    u8 shift;
-    u8 min;
-    u8 max;
-    u8 vibW;
-    u8 vibT;
-    u8 porW;
-    u8 porT;
-    u8 pbmin;
-    u8 pbmax;
-    u8 reserved1;
-    u8 reserved2;
-    u16 adsr1;
-    u16 adsr2;
-    s16 prog;
-    s16 vag;
-    s16 reserved[4];
+    u_char prior;
+    u_char mode;
+    u_char vol;
+    u_char pan;
+    u_char center;
+    u_char shift;
+    u_char min;
+    u_char max;
+    u_char vibW;
+    u_char vibT;
+    u_char porW;
+    u_char porT;
+    u_char pbmin;
+    u_char pbmax;
+    u_char reserved1;
+    u_char reserved2;
+    u_short adsr1;
+    u_short adsr2;
+    short prog;
+    short vag;
+    short reserved[4];
 } ToneAttr76350;
 
 typedef struct VoiceState76350 {
-    s16 vag;
-    s16 age;
-    s16 pitch;
-    u16 env;
-    s16 base_volume;
-    s8 pan;
-    s8 unkB;
-    s16 note;
-    s16 seq_sep;
-    s16 program_index;
-    s16 program;
-    s16 tone;
-    s16 vab_id;
-    s16 priority;
-    u8 pad1A;
-    u8 active;
-    s16 auto_volume;
-    s16 unk1E;
-    s16 unk20;
-    s16 unk22;
-    s16 start_volume;
-    s16 end_volume;
-    s16 auto_pan;
-    s16 unk2A;
-    s16 unk2C;
-    s16 unk2E;
-    s16 start_pan;
-    s16 end_pan;
+    short vag;
+    short age;
+    short pitch;
+    u_short env;
+    short base_volume;
+    signed char pan;
+    signed char unkB;
+    short note;
+    short seq_sep;
+    short program_index;
+    short program;
+    short tone;
+    short vab_id;
+    short priority;
+    u_char pad1A;
+    u_char active;
+    short auto_volume;
+    short unk1E;
+    short unk20;
+    short unk22;
+    short start_volume;
+    short end_volume;
+    short auto_pan;
+    short unk2A;
+    short unk2C;
+    short unk2E;
+    short start_pan;
+    short end_pan;
 } VoiceState76350;
 
 typedef struct SvmCurrent76350 {
-    u8 tone_count;
-    u8 vab_id;
-    u8 note;
-    u8 unk3;
-    u8 volume;
-    u8 pan;
-    u8 program;
-    u8 program_index;
-    u8 unk8;
-    u8 unk9;
-    u8 master_volume;
-    u8 master_pan;
-    u8 tone;
-    u8 tone_volume;
-    u8 tone_pan;
-    u8 priority;
-    u8 center;
-    u8 shift;
-    u8 min;
-    u8 max;
-    u8 mode;
-    u8 pad15;
-    s16 seq_sep;
-    s16 vag;
-    s16 voice;
-    s16 register_offset;
-    s16 tone_index;
+    u_char tone_count;
+    u_char vab_id;
+    u_char note;
+    u_char unk3;
+    u_char volume;
+    u_char pan;
+    u_char program;
+    u_char program_index;
+    u_char unk8;
+    u_char unk9;
+    u_char master_volume;
+    u_char master_pan;
+    u_char tone;
+    u_char tone_volume;
+    u_char tone_pan;
+    u_char priority;
+    u_char center;
+    u_char shift;
+    u_char min;
+    u_char max;
+    u_char mode;
+    u_char pad15;
+    short seq_sep;
+    short vag;
+    short voice;
+    short register_offset;
+    short tone_index;
 } SvmCurrent76350;
 
 extern SeqState76350 *D_801E79CC[];
 extern ProgAttr76350 *D_801E4110;
 extern VabHeader76350 *D_801E413C;
 extern ToneAttr76350 *D_801E416C;
-extern u8 D_801E42F8;
+extern u_char D_801E42F8;
 extern SvmCurrent76350 D_801E4BD0;
 extern VoiceState76350 D_8009E0B8[];
 
-s32 func_80073314(s16 vab_id, s16 program);
-s32 func_80076940(s16 seq_sep, s16 vab_id, s16 program, u16 note);
-u8 func_800739E8(s32 priority);
+long func_80073314(short vab_id, short program);
+long func_80076940(short seq_sep, short vab_id, short program, u_short note);
+u_char func_800739E8(long priority);
 void func_80074134(void);
-void SpuVmNoiseKeyOn(u8 voice) asm("func_80074348");
-u16 func_800749B4(void);
-void func_80073C50(u8 tone_count, u16 pitch);
+void SpuVmNoiseKeyOn(u_char voice) asm("func_80074348");
+u_short func_800749B4(void);
+void func_80073C50(u_char tone_count, u_short pitch);
 
-static inline u8 func_80076350_select_tones(
-    u8 *tone_indices, u8 *vag_indices) {
-    u8 tone;
-    u8 count;
+static inline u_char func_80076350_select_tones(
+    u_char *tone_indices, u_char *vag_indices) {
+    u_char tone;
+    u_char count;
     ToneAttr76350 *attr;
 
     count = 0;
@@ -203,28 +205,28 @@ static inline u8 func_80076350_select_tones(
     return count;
 }
 
-s32 SpuVmSeKeyOn(
-    s16 seq_sep,
-    s16 vab_id,
-    s16 program,
-    u16 note,
-    u16 volume,
-    u16 pan) asm("func_80076350");
-s32 SpuVmSeKeyOn(
-    s16 seq_sep,
-    s16 vab_id,
-    s16 program,
-    u16 note,
-    u16 volume,
-    u16 pan) {
+long SpuVmSeKeyOn(
+    short seq_sep,
+    short vab_id,
+    short program,
+    u_short note,
+    u_short volume,
+    u_short pan) asm("func_80076350");
+long SpuVmSeKeyOn(
+    short seq_sep,
+    short vab_id,
+    short program,
+    u_short note,
+    u_short volume,
+    u_short pan) {
     SeqState76350 *score =
         &D_801E79CC[seq_sep & 0xFF][(seq_sep & 0xFF00) >> 8];
-    u8 vag_indices[0x80];
-    u8 tone_indices[0x80];
-    u8 i;
-    s32 result;
-    s32 tone;
-    u8 tone_count;
+    u_char vag_indices[0x80];
+    u_char tone_indices[0x80];
+    u_char i;
+    long result;
+    long tone;
+    u_char tone_count;
 
     result = 0;
     if (func_80073314(vab_id, program)) {

@@ -9,7 +9,7 @@ extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
 extern s32 g_IndexedEffectTones[] asm("D_800126AC");
 extern s32 g_IndexedEffectVolumes[] asm("D_800126B4");
 
-s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
+long SsUtKeyOffV(long voice) asm("func_80078018");
 void func_8005C09C(s32 arg0);
 void func_8005C0E4(void);
 

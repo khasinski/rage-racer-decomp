@@ -1,32 +1,34 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern s32 D_80099048;
-extern u8 D_80013678[];
-extern u8 D_80013688[];
-extern u8 D_800136A4[];
-extern u8 D_800136B8[];
+extern long D_80099048;
+extern u_char D_80013678[];
+extern u_char D_80013688[];
+extern u_char D_800136A4[];
+extern u_char D_800136B8[];
 
-s32 func_8006A428(s32 arg0);
-s32 func_8006A574(s32 arg0);
-s32 func_8006A58C(s32 arg0);
-s32 func_8006A808(s32 arg0, u8 *arg1, u8 *arg2);
+long func_8006A428(long arg0);
+long func_8006A574(long arg0);
+long func_8006A58C(long arg0);
+long func_8006A808(long arg0, u_char *arg1, u_char *arg2);
 void func_8006A360(void);
 void func_8006A388(void);
 void func_8006A3B0(void);
-void DeliverEvent(u32 arg0, s32 arg1) asm("func_8006A3D8");
+void DeliverEvent(u_long arg0, long arg1) asm("func_8006A3D8");
 void CdReadCallback(void *arg0) asm("func_8002785C");
 
-s32 CdGetToc2(s32 arg0, u8 *arg1) asm("func_8006A0AC");
-s32 CdGetToc2(s32 arg0, u8 *arg1) {
-    u8 command[8];
-    u8 response[8];
-    register u8 *toc asm("$20") = arg1;
-    register s32 oldHandler asm("$21");
-    register s32 firstTrack asm("$16");
-    register u8 *ptr asm("$17");
-    register s32 count asm("$18");
-    register s32 lastTrack asm("$19");
-    u32 value;
+long CdGetToc2(long arg0, u_char *arg1) asm("func_8006A0AC");
+long CdGetToc2(long arg0, u_char *arg1) {
+    u_char command[8];
+    u_char response[8];
+    register u_char *toc asm("$20") = arg1;
+    register long oldHandler asm("$21");
+    register long firstTrack asm("$16");
+    register u_char *ptr asm("$17");
+    register long count asm("$18");
+    register long lastTrack asm("$19");
+    u_long value;
 
     asm("" : "=r"(toc) : "0"(toc));
     command[0] = 1;
@@ -37,9 +39,9 @@ s32 CdGetToc2(s32 arg0, u8 *arg1) {
     }
 
     {
-        register u32 firstBcd asm("$4");
-        register u32 lastBcd asm("$5");
-        register u32 high asm("$3");
+        register u_long firstBcd asm("$4");
+        register u_long lastBcd asm("$5");
+        register u_long high asm("$3");
 
         firstBcd = response[1];
         lastBcd = response[2];
@@ -93,13 +95,13 @@ s32 CdGetToc2(s32 arg0, u8 *arg1) {
         } while (firstTrack <= lastTrack);
     }
 
-    ptr = (u8 *)(count - 1);
+    ptr = (u_char *)(count - 1);
     if (D_80099048 >= 2) {
-        if ((s32)ptr >= 0) {
-            register u8 *entry asm("$16");
-            register u8 *fmt asm("$4");
-            u32 first;
-            u32 second;
+        if ((long)ptr >= 0) {
+            register u_char *entry asm("$16");
+            register u_char *fmt asm("$4");
+            u_long first;
+            u_long second;
 
             count = 0;
             asm("" : "=r"(count) : "0"(count));
@@ -112,12 +114,12 @@ s32 CdGetToc2(s32 arg0, u8 *arg1) {
                 entry += 4;
                 count++;
                 GameDebugPrintf(fmt, first, second);
-            } while (count <= (s32)ptr);
+            } while (count <= (long)ptr);
         }
     }
 
     func_8006A574(oldHandler);
-    return (s32)ptr;
+    return (long)ptr;
 
 fail:
     if (D_80099048 != 0) {
@@ -127,9 +129,9 @@ fail:
     return 0;
 }
 
-s32 CdInit(void) asm("func_8006A2D0");
-s32 CdInit(void) {
-    s32 retries;
+long CdInit(void) asm("func_8006A2D0");
+long CdInit(void) {
+    long retries;
 
     retries = 4;
 loop:
@@ -143,8 +145,8 @@ loop:
         return 0;
     }
 
-    func_8006A574((s32)func_8006A360);
-    func_8006A58C((s32)func_8006A388);
+    func_8006A574((long)func_8006A360);
+    func_8006A58C((long)func_8006A388);
     CdReadCallback(func_8006A3B0);
     return 1;
 }

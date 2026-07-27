@@ -3,7 +3,7 @@
 typedef void (*Callback)(void);
 
 extern Callback D_8009A560;
-extern s32 D_8009A56C;
+extern long D_8009A56C;
 
 void SsSoundTickVSyncCallback(void) asm("func_80071F2C");
 

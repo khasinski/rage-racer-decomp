@@ -1,35 +1,35 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u8 *D_801E79CC[];
-extern u32 D_801E6C6C;
+extern u_char *D_801E79CC[];
+extern u_long D_801E6C6C;
 extern char D_80013BD4[];
 extern char D_80013BEC[];
 
-s32 func_80070D70(s16 arg0, s16 arg1);
+long func_80070D70(short arg0, short arg1);
 
-s32 SsSeqParseHeader(s32 arg0, s32 arg1, s32 arg2) asm("func_8006ECDC");
-s32 SsSeqParseHeader(s32 arg0, s32 arg1, s32 arg2) {
+long SsSeqParseHeader(long arg0, long arg1, long arg2) asm("func_8006ECDC");
+long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     SeqStruct *s;
-    register u8 *seq asm("$7");
-    u8 *p;
-    s32 i;
-    s32 hi, lo, b0, b1, b2;
-    s32 v24;
-    s32 q;
-    s32 ret;
-    u32 D;
-    register s32 prod asm("$6");
-    register s32 vab asm("$4");
-    register s32 slot asm("$9");
+    register u_char *seq asm("$7");
+    u_char *p;
+    long i;
+    long hi, lo, b0, b1, b2;
+    long v24;
+    long q;
+    long ret;
+    u_long D;
+    register long prod asm("$6");
+    register long vab asm("$4");
+    register long slot asm("$9");
 
-    seq = (u8 *)arg2;
+    seq = (u_char *)arg2;
     __asm__("" : "=r"(seq) : "0"(seq));
     slot = arg0;
     __asm__("" : "=r"(slot) : "0"(slot));
     vab = arg0;
     __asm__("" : "=r"(vab) : "0"(vab));
-    s = (SeqStruct *)D_801E79CC[(s16)vab];
+    s = (SeqStruct *)D_801E79CC[(short)vab];
 
     s->unk4c = arg1;
     s->tempo_multiplier = 0;
@@ -87,14 +87,14 @@ ok:
 
     q = 60000000 / v24;
     s->base_unk84 = v24;
-    if ((s32)((u32)v24 >> 1) < 60000000 % v24)
+    if ((long)((u_long)v24 >> 1) < 60000000 % v24)
         s->base_unk84 = q + 1;
     else
         s->base_unk84 = q;
 
     s->tempo = s->base_unk84;
     s->read_pos = s->read_pos + 2;
-    ret = func_80070D70((s16)slot, 0);
+    ret = func_80070D70((short)slot, 0);
 
     s->next_sep_pos = s->read_pos;
     D = D_801E6C6C;
@@ -103,17 +103,17 @@ ok:
     s->loop_pos = s->read_pos;
 
     prod = s->tempo_multiplier * s->base_unk84;
-    if ((u32)(prod * 10) < D * 60) {
-        s32 qi = (D * 600) / (u32)prod;
+    if ((u_long)(prod * 10) < D * 60) {
+        long qi = (D * 600) / (u_long)prod;
         s->unk6E = qi;
         s->tick_period = qi;
     } else {
-        s32 qe;
+        long qe;
         __asm__ volatile("" ::: "memory");
-        qe = (u32)(s->tempo_multiplier * s->base_unk84 * 10) / (D * 60);
+        qe = (u_long)(s->tempo_multiplier * s->base_unk84 * 10) / (D * 60);
         s->unk6E = -1;
         s->tick_period = qe;
-        if (D * 30 < (u32)(s->tempo_multiplier * s->base_unk84 * 10) % (D * 60))
+        if (D * 30 < (u_long)(s->tempo_multiplier * s->base_unk84 * 10) % (D * 60))
             s->tick_period = qe + 1;
     }
     s->unk72 = s->tick_period;

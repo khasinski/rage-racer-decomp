@@ -3,23 +3,23 @@
 
 typedef void (*Callback)(void);
 
-extern u16 D_80099430[];
-extern u16 D_80099432;
-extern u16 D_80099460;
-extern volatile u16 *D_8009A4BC;
-extern volatile u16 *D_8009A4C0;
-extern s32 D_8009A4C8;
-extern u8 D_80013B70[];
-extern u8 D_80013B8C[];
+extern u_short D_80099430[];
+extern u_short D_80099432;
+extern u_short D_80099460;
+extern volatile u_short *D_8009A4BC;
+extern volatile u_short *D_8009A4C0;
+extern long D_8009A4C8;
+extern u_char D_80013B70[];
+extern u_char D_80013B8C[];
 
 void func_8006E654(void);
 
 void intrDispatch(void) {
-    u16 *state;
-    u16 s0;
-    s32 i;
-    s32 c;
-    s32 one;
+    u_short *state;
+    u_short s0;
+    long i;
+    long c;
+    long one;
     Callback *p;
     Callback *base;
 

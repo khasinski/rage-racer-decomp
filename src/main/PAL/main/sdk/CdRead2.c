@@ -4,34 +4,34 @@
 
 typedef void (*Callback)(void);
 
-extern s32 D_8009DF18;
-extern u8 D_8009DF14[];
-extern s32 D_8009E69C;
-extern u8 *D_80099360;
-extern u8 *D_8009936C;
-extern s32 D_8019C7A0;
-extern s16 D_8019C790;
-extern s32 D_8019C79C;
+extern long D_8009DF18;
+extern u_char D_8009DF14[];
+extern long D_8009E69C;
+extern u_char *D_80099360;
+extern u_char *D_8009936C;
+extern long D_8019C7A0;
+extern short D_8019C790;
+extern long D_8019C79C;
 extern Callback D_8019C994;
-extern s32 D_8019C9A0;
-extern s32 D_801E3E08;
-extern s32 D_801E4190;
-extern s32 D_801E42C8;
-extern s32 D_801E6C74;
-extern s32 D_801E6C84;
-extern s32 D_801E6C98;
+extern long D_8019C9A0;
+extern long D_801E3E08;
+extern long D_801E4190;
+extern long D_801E42C8;
+extern long D_801E6C74;
+extern long D_801E6C84;
+extern long D_801E6C98;
 extern StRingEntry *D_801E8AAC;
-extern s32 D_801E8274;
-extern s32 D_801F1850;
-extern s32 D_8019CA00;
+extern long D_801E8274;
+extern long D_801F1850;
+extern long D_8019CA00;
 
-s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
-void CdDataCallback(s32 arg0) asm("func_8006A994");
-void func_8006A58C(s32 arg0);
+long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+void CdDataCallback(long arg0) asm("func_8006A994");
+void func_8006A58C(long arg0);
 void func_8006CDA0(void);
 void data_ready_callback(void) asm("func_8006CE78");
-void func_8006D0AC(s32 arg0, s32 arg1);
-void func_8006D1B0(s32 arg0);
+void func_8006D0AC(long arg0, long arg1);
+void func_8006D1B0(long arg0);
 void func_8006D1D0(void);
 
 /*
@@ -40,9 +40,9 @@ void func_8006D1D0(void);
  * and the CDDA/sync handler, then issues command 0x1B (read-S). Returns the
  * second command's result.
  */
-s32 CdRead2(s32 arg0) asm("func_8006CD0C");
-s32 CdRead2(s32 arg0) {
-    u8 byte;
+long CdRead2(long arg0) asm("func_8006CD0C");
+long CdRead2(long arg0) {
+    u_char byte;
 
     byte = arg0;
     CdControl(0xE, &byte, 0);
@@ -53,8 +53,8 @@ s32 CdRead2(s32 arg0) {
         } else {
             D_8019C7A0 = 1;
         }
-        CdDataCallback((s32)data_ready_callback);
-        func_8006A58C((s32)func_8006CDA0);
+        CdDataCallback((long)data_ready_callback);
+        func_8006A58C((long)func_8006CDA0);
     }
 
     return CdControl(0x1B, 0, 0);
@@ -87,11 +87,11 @@ void StUnSetRing(void) {
 }
 
 void data_ready_callback(void) {
-    register s32 index asm("$2") = D_801E6C84;
+    register long index asm("$2") = D_801E6C84;
     register StRingEntry *base asm("$3") = D_801E8AAC;
     register StRingEntry *entry asm("$2");
 
-    entry = (StRingEntry *)((index << 5) + (s32)base);
+    entry = (StRingEntry *)((index << 5) + (long)base);
     entry->state = 2;
     *(CdlLOC *)D_8009DF14 = entry->loc;
     __asm__ volatile("" ::: "memory");
@@ -103,7 +103,7 @@ void data_ready_callback(void) {
     D_801E42C8 = 0;
 }
 
-s32 StGetBackloc(CdlLOC *arg0) {
+long StGetBackloc(CdlLOC *arg0) {
     if (D_8019C7A0 != 0) {
         return -1;
     }
@@ -113,7 +113,7 @@ s32 StGetBackloc(CdlLOC *arg0) {
 
 /* Arms CD streaming: installs the data-ready `callback`/`user_data` and mode
  * (bit 0 = one-shot vs looping). start_frame/end_frame bound the stream. */
-void StSetStream(s32 mode, s32 start_frame, s32 end_frame, s32 callback, s32 user_data) {
+void StSetStream(long mode, long start_frame, long end_frame, long callback, long user_data) {
     func_8006D1B0(1);
     D_801E8274 = 0;
     D_8019C994 = (Callback)callback;

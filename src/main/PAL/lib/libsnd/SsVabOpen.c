@@ -1,53 +1,53 @@
 #include "psyq/snd.h"
 #include "psyq/spu.h"
 
-extern u8 D_801E4CFC[];
-extern u16 D_801F17AC;
+extern u_char D_801E4CFC[];
+extern u_short D_801F17AC;
 extern VabHdr *D_8019CA20[];
-extern s16 D_801E40D0;
+extern short D_801E40D0;
 extern ProgAtr *D_8019C9B0[];
 extern VagAtr *D_8019CA70[];
-extern u32 D_801F17BC[];
-extern u16 *D_801F180C[];
-extern s32 D_801E8AB8[];
+extern u_long D_801F17BC[];
+extern u_short *D_801F180C[];
+extern long D_801E8AB8[];
 
-extern s32 func_8007B2C0(void);
-extern void func_8007B294(s32 value);
+extern long func_8007B2C0(void);
+extern void func_8007B294(long value);
 
-s16 func_80072BC0(u8 *addr, VabHdr *header) {
-    s16 vabId;
+short func_80072BC0(u_char *addr, VabHdr *header) {
+    short vabId;
 
     vabId = SsVabOpenHead(addr, -1);
     if (vabId != -1) {
-        vabId = SsVabTransBody((u8 *)D_801F180C[vabId], vabId);
+        vabId = SsVabTransBody((u_char *)D_801F180C[vabId], vabId);
     }
     return vabId;
 }
 
-s16 func_80072C18(u8 *addr, s16 vabId) {
+short func_80072C18(u_char *addr, short vabId) {
     return SsVabOpenHeadWithMode(addr, vabId, 0, 0);
 }
 
-s16 func_80072C4C(u8 *addr, s16 vabId, u32 spuAddr) {
+short func_80072C4C(u_char *addr, short vabId, u_long spuAddr) {
     return SsVabOpenHeadWithMode(addr, vabId, 1, spuAddr);
 }
 
-s16 func_80072C80(u8 *addr, s16 vabId, u32 spuAddr) {
+short func_80072C80(u_char *addr, short vabId, u_long spuAddr) {
     return SsVabOpenHeadWithMode(addr, vabId, 1, spuAddr);
 }
 
-s16 func_80072CB4(u8 *addr, s16 vabid, s16 mode, u32 spuAddr) {
-    s32 vagLengths[256];
-    s32 i;
-    s32 totalSize;
-    s16 vabId;
-    u16 length;
-    u16 *vagOffsetTable;
-    u32 magic;
-    u32 allocation;
-    u8 vagCount;
+short func_80072CB4(u_char *addr, short vabid, short mode, u_long spuAddr) {
+    long vagLengths[256];
+    long i;
+    long totalSize;
+    short vabId;
+    u_short length;
+    u_short *vagOffsetTable;
+    u_long magic;
+    u_long allocation;
+    u_char vagCount;
     ProgAtr *programTable;
-    u8 *cursor;
+    u_char *cursor;
     VabHdr *header;
 
     vabId = 16;
@@ -121,7 +121,7 @@ s16 func_80072CB4(u8 *addr, s16 vabid, s16 mode, u32 spuAddr) {
 
     totalSize = 0;
     D_8019CA70[vabId] = (VagAtr *)cursor;
-    vagOffsetTable = (u16 *)(cursor + (header->ps << 9));
+    vagOffsetTable = (u_short *)(cursor + (header->ps << 9));
     vagCount = header->vs;
     for (i = 0; i < 256; i++) {
         if (vagCount >= i) {
@@ -159,10 +159,10 @@ s16 func_80072CB4(u8 *addr, s16 vabid, s16 mode, u32 spuAddr) {
     for (i = 0; i <= vagCount; i++) {
         totalSize += vagLengths[i];
         if (!(i & 1)) {
-            ((s16 *)&programTable[i / 2].reserved2)[0] =
+            ((short *)&programTable[i / 2].reserved2)[0] =
                 (allocation + totalSize) >> 3;
         } else {
-            ((s16 *)&programTable[i / 2].reserved2)[1] =
+            ((short *)&programTable[i / 2].reserved2)[1] =
                 (allocation + totalSize) >> 3;
         }
     }

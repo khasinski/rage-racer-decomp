@@ -1,31 +1,31 @@
 #include "common.h"
 #include "psyq/kernel.h"
 
-extern volatile u32 *g_GpuGp1 asm("D_800942BC");
-extern volatile u32 *D_800942C0;
-extern volatile u32 *D_800942C8;
-extern volatile u32 *D_800942D8;
-extern s32 D_800942DC[];
-extern s32 D_800942E0;
-extern s32 D_800942E4;
-extern s32 D_800942EC;
-extern volatile s32 D_800942F0;
-extern s32 D_800942FC;
-extern s32 D_80094300;
-extern s32 D_80094304;
+extern volatile u_long *g_GpuGp1 asm("D_800942BC");
+extern volatile u_long *D_800942C0;
+extern volatile u_long *D_800942C8;
+extern volatile u_long *D_800942D8;
+extern long D_800942DC[];
+extern long D_800942E0;
+extern long D_800942E4;
+extern long D_800942EC;
+extern volatile long D_800942F0;
+extern long D_800942FC;
+extern long D_80094300;
+extern long D_80094304;
 extern char D_8001362C[];
 extern char D_80013660[];
 
 
-s32 Gpu_CheckTimeout(void) asm("func_80067F38");
-s32 Gpu_CheckTimeout(void) {
-    s32 intrMask;
-    register s32 state asm("$3");
-    register s32 result asm("$2");
-    register s32 *dc asm("$2");
-    register volatile u32 *gp1ForLog asm("$3");
-    register s32 pending asm("$5");
-    register s32 gpuTail asm("$8");
+long Gpu_CheckTimeout(void) asm("func_80067F38");
+long Gpu_CheckTimeout(void) {
+    long intrMask;
+    register long state asm("$3");
+    register long result asm("$2");
+    register long *dc asm("$2");
+    register volatile u_long *gp1ForLog asm("$3");
+    register long pending asm("$5");
+    register long gpuTail asm("$8");
 
     if (D_80094300 >= VSync(-1)) {
         state = D_80094304++;
@@ -65,15 +65,15 @@ done:
     return result;
 }
 
-extern volatile u32 *D_800942B8;
-extern volatile u32 *D_800942BC;
+extern volatile u_long *D_800942B8;
+extern volatile u_long *D_800942BC;
 
 /* GPU-type probe: GP1(10h) info word 7, then a texture-window write-back
  * test. Returns 0..4; ResetGraph stores it as the graph type. */
-s32 Gpu_ProbeType(u32 mode) asm("func_800680A4");
-s32 Gpu_ProbeType(u32 arg0) {
-    volatile u32 *gp0;
-    u32 status;
+long Gpu_ProbeType(u_long mode) asm("func_800680A4");
+long Gpu_ProbeType(u_long arg0) {
+    volatile u_long *gp0;
+    u_long status;
 
     *D_800942BC = 0x10000007;
     gp0 = D_800942B8;
@@ -103,13 +103,13 @@ s32 Gpu_ProbeType(u32 arg0) {
     return 4;
 }
 
-void MemFill(u8 *dst, u8 value, s32 count) asm("func_80068180");
-void MemFill(u8 *dst, u8 value, s32 count) {
-    volatile s32 unused;
-    s32 i = count - 1;
+void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");
+void MemFill(u_char *dst, u_char value, long count) {
+    volatile long unused;
+    long i = count - 1;
 
     if (count != 0) {
-        s32 end = -1;
+        long end = -1;
 
         do {
             *dst = value;
@@ -119,16 +119,16 @@ void MemFill(u8 *dst, u8 value, s32 count) {
     }
 }
 
-u32 func_800681AC[4] __attribute__((section(".text"))) = {
+u_long func_800681AC[4] __attribute__((section(".text"))) = {
     0x240A00A0,
     0x01400008,
     0x24090049,
     0,
 };
 
-u8 *MemCopy(u8 *dst, u8 *src, s32 count) asm("func_800681BC");
-u8 *MemCopy(u8 *dst, u8 *src, s32 count) {
-    u8 *ret;
+u_char *MemCopy(u_char *dst, u_char *src, long count) asm("func_800681BC");
+u_char *MemCopy(u_char *dst, u_char *src, long count) {
+    u_char *ret;
 
     if (dst == 0) {
         return 0;

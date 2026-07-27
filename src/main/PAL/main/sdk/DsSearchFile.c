@@ -1,14 +1,14 @@
 #include "common.h"
 
 typedef struct {
-    s32 w0;
-    s32 w1;
+    long w0;
+    long w1;
     char name[16];
 } Rec;
 
-extern s32 D_8009934C;
-extern s32 D_80099054;
-extern s32 D_80099048;
+extern long D_8009934C;
+extern long D_80099054;
+extern long D_80099048;
 extern Rec D_8009BB14[64];
 
 extern const char D_80013928[];
@@ -18,19 +18,19 @@ extern const char D_80013978[];
 extern const char D_80013998[];
 extern const char D_800139A4[];
 
-extern int func_8006C560(void);
-extern int func_8006C83C(int type, char *name);
-extern int func_8006C8E4(int arg0);
-extern int CD_namecmp(char *a, char *b) asm("func_8006C53C");
+extern long func_8006C560(void);
+extern long func_8006C83C(long type, char *name);
+extern long func_8006C8E4(long arg0);
+extern long CD_namecmp(char *a, char *b) asm("func_8006C53C");
 
 Rec * DsSearchFile(Rec *out, char *path) asm("func_8006C25C");
 Rec *DsSearchFile(Rec *out, char *path) {
     char buf[32];
     char *p;
     char *b;
-    int type;
-    int n;
-    int i;
+    long type;
+    long n;
+    long i;
     Rec *rec;
     char *nm;
 

@@ -1,16 +1,16 @@
 #include "psyq/spu.h"
 
-extern volatile u16 *D_8009AB7C;
-extern volatile s32 D_8009ABB0;
-extern s32 D_8009ABC8;
+extern volatile u_short *D_8009AB7C;
+extern volatile long D_8009ABB0;
+extern long D_8009ABC8;
 
-void DeliverEvent(s32 arg0, s32 arg1) asm("func_8006A3D8");
+void DeliverEvent(long arg0, long arg1) asm("func_8006A3D8");
 
 void _spu_transferCallback(void) {
-    volatile s32 i;
-    volatile s32 delay;
-    u16 cnt;
-    s32 wait;
+    volatile long i;
+    volatile long delay;
+    u_short cnt;
+    long wait;
     void (*callback)(void);
 
     if (D_8009ABC8 == 0) {

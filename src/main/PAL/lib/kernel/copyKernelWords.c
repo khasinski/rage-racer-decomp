@@ -1,7 +1,7 @@
 #include "psyq/kernel.h"
 
-void copyKernelWords(u32 *dst, u32 *src, u32 count, s32 arg3) {
-    u32 i;
+void copyKernelWords(u_long *dst, u_long *src, u_long count, long arg3) {
+    u_long i;
 
     for (i = 0; i < count; i++) {
         *dst++ = *src++;

@@ -1,17 +1,17 @@
 #include "psyq/snd.h"
 
 extern SeqStruct *D_801E79CC[];
-extern s32 D_801E6C6C;
+extern long D_801E6C6C;
 
-void func_80070A1C(s16 arg0, s16 arg1, u8 arg2);
+void func_80070A1C(short arg0, short arg1, u_char arg2);
 
-void func_80070A1C(s16 arg0, s16 arg1, u8 arg2) {
+void func_80070A1C(short arg0, short arg1, u_char arg2) {
     SeqStruct *pSeq = &D_801E79CC[arg0][arg1];
 
     if (arg2 != 0x2f) {
         if (arg2 == 0x51) {
-            u8 *p;
-            s32 value;
+            u_char *p;
+            long value;
 
             p = pSeq->read_pos;
             pSeq->read_pos = p + 1;
@@ -23,16 +23,16 @@ void func_80070A1C(s16 arg0, s16 arg1, u8 arg2) {
 
             pSeq->tempo = 60000000 / value;
 
-            if ((u32)(pSeq->tempo_multiplier * pSeq->tempo * 10) < (u32)(D_801E6C6C * 60)) {
-                s16 q = (u32)(D_801E6C6C * 600) / (u32)(pSeq->tempo_multiplier * pSeq->tempo);
+            if ((u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) < (u_long)(D_801E6C6C * 60)) {
+                short q = (u_long)(D_801E6C6C * 600) / (u_long)(pSeq->tempo_multiplier * pSeq->tempo);
                 pSeq->unk6E = q;
                 pSeq->tick_period = q;
             } else {
                 pSeq->unk6E = -1;
                 pSeq->tick_period =
-                    (u32)(pSeq->tempo_multiplier * pSeq->tempo * 10) / (u32)(D_801E6C6C * 60);
-                if ((u32)(D_801E6C6C * 30) <
-                    (u32)(pSeq->tempo_multiplier * pSeq->tempo * 10) % (u32)(D_801E6C6C * 60)) {
+                    (u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) / (u_long)(D_801E6C6C * 60);
+                if ((u_long)(D_801E6C6C * 30) <
+                    (u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) % (u_long)(D_801E6C6C * 60)) {
                     pSeq->tick_period++;
                 }
             }
@@ -40,7 +40,7 @@ void func_80070A1C(s16 arg0, s16 arg1, u8 arg2) {
             pSeq->delta_value = SsSeqReadDeltaTime(arg0, arg1);
         }
     } else {
-        s32 c = pSeq->unk48 + 1;
+        long c = pSeq->unk48 + 1;
         pSeq->unk48 = c;
 
         if (pSeq->unk46 == 0) {
@@ -48,7 +48,7 @@ void func_80070A1C(s16 arg0, s16 arg1, u8 arg2) {
             pSeq->unk27 = 0;
             pSeq->delta_value = 0;
             pSeq->read_pos = pSeq->next_sep_pos;
-        } else if ((s16)c < pSeq->unk46) {
+        } else if ((short)c < pSeq->unk46) {
             pSeq->unk80 = 0;
             pSeq->unk27 = 0;
             pSeq->delta_value = 0;

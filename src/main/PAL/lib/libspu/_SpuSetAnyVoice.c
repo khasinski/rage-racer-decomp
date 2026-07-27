@@ -1,21 +1,23 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern volatile u16 *D_8009AB7C;
+extern volatile u_short *D_8009AB7C;
 
-u32 _SpuSetAnyVoice(s32 arg0, u32 arg1, s32 arg2, s32 arg3) asm("func_8007A21C");
+u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) asm("func_8007A21C");
 
-u32 _SpuSetAnyVoice(s32 arg0, u32 arg1, s32 arg2, s32 arg3) {
-    register volatile u16 *reg_hi asm("$7");
-    register volatile u16 *reg_lo asm("$6");
-    register u32 hi asm("$2");
-    register u32 lo asm("$3");
-    u32 old;
+u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) {
+    register volatile u_short *reg_hi asm("$7");
+    register volatile u_short *reg_lo asm("$6");
+    register u_long hi asm("$2");
+    register u_long lo asm("$3");
+    u_long old;
 
     {
-        register volatile u16 *base asm("$3") = D_8009AB7C;
+        register volatile u_short *base asm("$3") = D_8009AB7C;
 
-        reg_hi = (volatile u16 *)((u32)(arg3 << 1) + (u32)base);
-        reg_lo = (volatile u16 *)((u32)(arg2 << 1) + (u32)base);
+        reg_hi = (volatile u_short *)((u_long)(arg3 << 1) + (u_long)base);
+        reg_lo = (volatile u_short *)((u_long)(arg2 << 1) + (u_long)base);
     }
 
     hi = *reg_hi;

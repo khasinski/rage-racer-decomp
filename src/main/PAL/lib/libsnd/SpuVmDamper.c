@@ -1,7 +1,7 @@
 #include "psyq/snd.h"
 
-extern s16 D_8019CA68;
-extern volatile s32 D_801E40AC;
+extern short D_8019CA68;
+extern volatile long D_801E40AC;
 
 void SpuVmDamperOff(void) {
     D_8019CA68 = 0;

@@ -1,21 +1,23 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 void Gpu_ArmTimeout(void) asm("func_80067F04");
 
-extern volatile u32 *D_800942BC;
-extern volatile u32 *D_800942C8;
-extern s32 D_800942EC;
-extern s32 D_800942F0;
+extern volatile u_long *D_800942BC;
+extern volatile u_long *D_800942C8;
+extern long D_800942EC;
+extern long D_800942F0;
 
 void func_80067984(void);
-s32 Gpu_CheckTimeout(void) asm("func_80067F38");
+long Gpu_CheckTimeout(void) asm("func_80067F38");
 
 /* Driver-table slot +0x3C, the body of DrawSync: mode 0 blocks until the
  * queue is empty and the GPU idle, any other mode returns the number of
  * queue entries still outstanding. */
-s32 Gpu_DrawSync(s32 mode) asm("func_80067DBC");
-s32 Gpu_DrawSync(s32 arg0) {
-    s32 pending;
+long Gpu_DrawSync(long mode) asm("func_80067DBC");
+long Gpu_DrawSync(long arg0) {
+    long pending;
 
     if (arg0 == 0) {
         Gpu_ArmTimeout();
@@ -72,7 +74,7 @@ returnPending:
     return pending;
 }
 
-extern s32 D_80094300;
-extern s32 D_80094304;
-s32 VSync(s32 mode) asm("func_8006DD30");
+extern long D_80094300;
+extern long D_80094304;
+long VSync(long mode) asm("func_8006DD30");
 void Gpu_ArmTimeout(void) { D_80094300 = VSync(-1) + 240; D_80094304 = 0; }

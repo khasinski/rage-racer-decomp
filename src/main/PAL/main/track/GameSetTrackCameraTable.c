@@ -5,12 +5,12 @@
 
 void CdReadBreak(void) asm("func_80027634");
 s32 func_8006A534(s32 arg0, s32 arg1);
-s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
+long CdControl(long com, void *param, long result) asm("func_8006A5A4");
 extern char g_MsgNowLoading[] asm("D_80010ADC");
 extern char g_MsgReadBytes[] asm("D_80010AFC");
 extern char g_MsgFileReadError[] asm("D_80010B08");
 s32 CdRead(s32 arg0, void *arg1, s32 arg2) asm("func_80027688");
-s32 CdReadSync(s32 arg0, s32 arg1) asm("func_80027790");
+long CdReadSync(long arg0, long arg1) asm("func_80027790");
 void func_8006A6DC(s32 arg0, void *arg1);
 s32 func_80017C78(s32 arg0, s32 arg1);
 extern char g_PathRageBin[] asm("D_80010B38");

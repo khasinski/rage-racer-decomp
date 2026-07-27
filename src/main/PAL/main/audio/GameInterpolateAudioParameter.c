@@ -251,7 +251,7 @@ void GameRestoreReverbDepth(s32 arg0) {
     }
 }
 
-s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
+long SsUtKeyOffV(long voice) asm("func_80078018");
 
 void GameForcePanVoiceEnabled(s32 enabled) asm("func_8005DDB8");
 void GameForcePanVoiceEnabled(s32 enabled) {

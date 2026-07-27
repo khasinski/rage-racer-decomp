@@ -1,14 +1,14 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-extern volatile s32 D_8009A718;
-extern s32 D_8009A71C;
-extern s32 D_8009A720;
+extern volatile long D_8009A718;
+extern long D_8009A71C;
+extern long D_8009A720;
 extern SpuRxx *D_8009AB7C;
 
-s32 SpuSetReverb(s32 on_off) {
-    register s32 value asm("s0") = on_off;
-    register u16 cnt asm("v1");
+long SpuSetReverb(long on_off) {
+    register long value asm("s0") = on_off;
+    register u_short cnt asm("v1");
 
     if (value != 0) {
         if (value == 1) {

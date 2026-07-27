@@ -1,26 +1,28 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern u8 D_801E4BD2;
-extern u8 D_801E4BD7;
-extern u8 D_801E4BDC;
-extern u8 D_801E4BE0;
-extern u8 D_801E4BE1;
-extern u8 *D_801E416C;
-extern u16 D_8009A58C[];
+extern u_char D_801E4BD2;
+extern u_char D_801E4BD7;
+extern u_char D_801E4BDC;
+extern u_char D_801E4BE0;
+extern u_char D_801E4BE1;
+extern u_char *D_801E416C;
+extern u_short D_8009A58C[];
 
-u16 SpuVmCalculateCurrentPitch(void) asm("func_800749B4");
-u16 SpuVmCalculateTonePitch(s32 arg0, s32 arg1) asm("func_80074A6C");
+u_short SpuVmCalculateCurrentPitch(void) asm("func_800749B4");
+u_short SpuVmCalculateTonePitch(long arg0, long arg1) asm("func_80074A6C");
 
-u16 SpuVmCalculateCurrentPitch(void) {
-    register s32 delta asm("a0");
-    register s32 nibble asm("a2");
-    register s32 temp asm("v0");
-    s32 quotient;
+u_short SpuVmCalculateCurrentPitch(void) {
+    register long delta asm("a0");
+    register long nibble asm("a2");
+    register long temp asm("v0");
+    long quotient;
 
-    delta = (s16)(D_801E4BD2 + 0x3C - D_801E4BE0);
+    delta = (short)(D_801E4BD2 + 0x3C - D_801E4BE0);
     quotient = delta / 12;
     {
-        register s32 raw asm("v1");
+        register long raw asm("v1");
         raw = D_801E4BE1;
         nibble = raw >> 3;
     }
@@ -31,34 +33,34 @@ u16 SpuVmCalculateCurrentPitch(void) {
 
     temp = (delta << 16) >> 12;
     {
-        register s32 value asm("v1");
+        register long value asm("v1");
         value = D_8009A58C[nibble + temp];
-        temp = (s16)(quotient - 5);
+        temp = (short)(quotient - 5);
         if (temp > 0) {
             value <<= temp;
         } else if (temp < 0) {
-            value = (u16)value;
+            value = (u_short)value;
             value >>= -temp;
         }
         return value;
     }
 }
 
-u16 SpuVmCalculateTonePitch(s32 arg0, s32 arg1) {
-    register u8 *entry asm("v1");
-    register s32 arg0_hold asm("t0");
-    register s32 bank asm("a2");
-    register s32 quotient8 asm("a1");
-    register s32 sum asm("v0");
-    register s32 nibble asm("a3");
-    register s32 raw_delta asm("v0");
-    register s32 delta asm("v1");
-    register s32 quotient asm("a0");
-    s32 table_index;
-    s32 shift;
+u_short SpuVmCalculateTonePitch(long arg0, long arg1) {
+    register u_char *entry asm("v1");
+    register long arg0_hold asm("t0");
+    register long bank asm("a2");
+    register long quotient8 asm("a1");
+    register long sum asm("v0");
+    register long nibble asm("a3");
+    register long raw_delta asm("v0");
+    register long delta asm("v1");
+    register long quotient asm("a0");
+    long table_index;
+    long shift;
 
     entry = D_801E416C + (((D_801E4BDC + (D_801E4BD7 << 4)) << 5));
-    sum = (u16)arg1 + entry[5];
+    sum = (u_short)arg1 + entry[5];
     if (sum < 0) {
         arg0_hold = arg0;
         sum += 7;
@@ -76,7 +78,7 @@ u16 SpuVmCalculateTonePitch(s32 arg0, s32 arg1) {
     }
 
     {
-        register s32 entry_value asm("v1") = *(entry + 4);
+        register long entry_value asm("v1") = *(entry + 4);
         raw_delta = arg0_hold + (0x3C - entry_value);
         raw_delta = bank + raw_delta;
     }
@@ -87,18 +89,18 @@ u16 SpuVmCalculateTonePitch(s32 arg0, s32 arg1) {
     delta -= quotient * 12;
     table_index = (delta << 16) >> 12;
     {
-        register s32 signed_nibble asm("v0") = (s16)nibble;
+        register long signed_nibble asm("v0") = (short)nibble;
         table_index += signed_nibble;
     }
-    shift = (s16)(quotient - 5);
+    shift = (short)(quotient - 5);
 
     {
-        register s32 value asm("v1");
+        register long value asm("v1");
         value = D_8009A58C[table_index];
         if (shift > 0) {
             value <<= shift;
         } else if (shift < 0) {
-            value = (u16)value;
+            value = (u_short)value;
             value >>= -shift;
         }
         return value;

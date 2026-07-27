@@ -1,16 +1,18 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-typedef void (*CdCallback)(s32, u8 *);
+typedef void (*CdCallback)(long, u_char *);
 
 typedef struct CdIntr {
-    u8 sync;
-    u8 ready;
-    u8 command;
+    u_char sync;
+    u_char ready;
+    u_char command;
 } CdIntr;
 
 typedef struct CdAlarm {
-    s32 deadline;
-    s32 count;
+    long deadline;
+    long count;
     char *name;
 } CdAlarm;
 
@@ -18,29 +20,29 @@ extern char *D_80099060[];
 extern char *D_800990E0[];
 extern CdCallback D_8009903C;
 extern CdCallback D_80099040;
-extern u8 D_8009905D;
-extern volatile u8 *D_80099300;
+extern u_char D_8009905D;
+extern volatile u_char *D_80099300;
 extern volatile CdIntr D_80099318;
-extern u8 D_8009BAF0[];
-extern u8 D_8009BAF8[];
-extern s32 D_8009BB08;
-extern s32 D_8009BB0C;
+extern u_char D_8009BAF0[];
+extern u_char D_8009BAF8[];
+extern long D_8009BB08;
+extern long D_8009BB0C;
 extern char *D_8009BB10;
 extern char D_80013814[];
 extern char D_80013824[];
 extern char D_8001389C[];
 
 void func_80063C38(char *text);
-s32 func_8006AB5C(void);
+long func_8006AB5C(void);
 void func_8006BAF0(void);
-s32 VSync(s32 mode) asm("func_8006DD30");
-s32 func_8006E088(void);
+long VSync(long mode) asm("func_8006DD30");
+long func_8006E088(void);
 
-static __inline__ void copy8(u8 *dst, u8 *src) {
-    register u8 *dstReg asm("$5");
-    register u8 *srcReg asm("$4");
-    register s32 count asm("$3");
-    register s32 end asm("$7");
+static __inline__ void copy8(u_char *dst, u_char *src) {
+    register u_char *dstReg asm("$5");
+    register u_char *srcReg asm("$4");
+    register long count asm("$3");
+    register long end asm("$7");
 
     dstReg = dst;
     srcReg = src;
@@ -56,16 +58,16 @@ static __inline__ void copy8(u8 *dst, u8 *src) {
     } while (--count != end);
 }
 
-s32 CD_sync(s32 mode, u8 *result) asm("func_8006B0D4");
-s32 CD_sync(s32 mode, u8 *result) {
-    register s32 modeReg asm("$21");
-    register u8 *resultReg asm("$22");
+long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
+long CD_sync(long mode, u_char *result) {
+    register long modeReg asm("$21");
+    register u_char *resultReg asm("$22");
     register char **statusNames asm("$19");
     register volatile CdIntr *intr asm("$18");
-    register u8 *ready asm("$20");
-    register s32 savedStatus asm("$17");
-    register s32 interrupt asm("$16");
-    register s32 alarmStatus asm("$2");
+    register u_char *ready asm("$20");
+    register long savedStatus asm("$17");
+    register long interrupt asm("$16");
+    register long alarmStatus asm("$2");
 
     modeReg = mode;
     asm("" : "=r"(modeReg) : "0"(modeReg));
@@ -74,7 +76,7 @@ s32 CD_sync(s32 mode, u8 *result) {
     D_8009BB08 = VSync(-1) + 0x3C0;
     statusNames = D_800990E0;
     intr = &D_80099318;
-    ready = (u8 *)&intr->ready;
+    ready = (u_char *)&intr->ready;
     D_8009BB0C = 0;
     D_8009BB10 = D_8001389C;
 
@@ -96,14 +98,14 @@ s32 CD_sync(s32 mode, u8 *result) {
         }
 
         if (func_8006E088()) {
-            register u32 rawStatus asm("$2");
+            register u_long rawStatus asm("$2");
 
             rawStatus = *D_80099300;
             asm("" : "=r"(rawStatus) : "0"(rawStatus));
             savedStatus = rawStatus & 3;
             for (;;) {
-                register s32 readyBit asm("$2");
-                register s32 syncBit asm("$2");
+                register long readyBit asm("$2");
+                register long syncBit asm("$2");
 
                 interrupt = func_8006AB5C();
                 if (interrupt == 0) {
@@ -127,15 +129,15 @@ s32 CD_sync(s32 mode, u8 *result) {
         }
 
         {
-        register s32 sync asm("$6");
-        register u32 syncRaw asm("$2");
+        register long sync asm("$6");
+        register u_long syncRaw asm("$2");
 
         syncRaw = intr->sync;
         asm("" : "=r"(syncRaw) : "0"(syncRaw));
         sync = syncRaw & 0xFF;
         if (sync == 2 || sync == 5) {
             intr->sync = 2;
-            copy8(resultReg, (u8 *)D_8009BAF0);
+            copy8(resultReg, (u_char *)D_8009BAF0);
             asm(".globl func_8006B330\nfunc_8006B330 = CD_sync + 0x25c");
             return sync;
         }

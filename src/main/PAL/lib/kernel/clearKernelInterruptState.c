@@ -1,22 +1,22 @@
 #include "psyq/kernel.h"
 
 extern void *D_8009A4CC[];
-extern u32 *D_8009A4F0;
-extern volatile s32 D_8009A4EC;
-extern volatile u32 *D_8009A4F4;
-extern u32 D_8009A4F8[];
-extern u32 *D_8009A518;
-extern s32 D_8009A51C;
-extern u8 D_80013BA8[];
-extern u8 D_80013BC4[];
+extern u_long *D_8009A4F0;
+extern volatile long D_8009A4EC;
+extern volatile u_long *D_8009A4F4;
+extern u_long D_8009A4F8[];
+extern u_long *D_8009A518;
+extern long D_8009A51C;
+extern u_char D_80013BA8[];
+extern u_char D_80013BC4[];
 
-void RegisterKernelCallback(s32 slot, void *callback) asm("func_8006DF64");
+void RegisterKernelCallback(long slot, void *callback) asm("func_8006DF64");
 void *setIntrVSyncAddress(void) asm("func_8006E7D4");
 void *setIntrDMAAddress(void) asm("func_8006EA00");
 
-void clearKernelInterruptState(u32 *dst, s32 count) {
-    volatile s32 unused;
-    s32 i = count - 1;
+void clearKernelInterruptState(u_long *dst, long count) {
+    volatile long unused;
+    long i = count - 1;
 
     if (count != 0) {
         do {
@@ -27,7 +27,7 @@ void clearKernelInterruptState(u32 *dst, s32 count) {
     }
 }
 
-u32 SysEnqIntRPStub[31] asm("func_8006E644") __attribute__((section(".text"))) = {
+u_long SysEnqIntRPStub[31] asm("func_8006E644") __attribute__((section(".text"))) = {
     0x240A00A0,
     0x01400008,
     0x24090072,
@@ -61,7 +61,7 @@ u32 SysEnqIntRPStub[31] asm("func_8006E644") __attribute__((section(".text"))) =
     0,
 };
 
-u32 RestoreKernelRegistersStub[17] asm("func_8006E6C0") __attribute__((section(".text"))) = {
+u_long RestoreKernelRegistersStub[17] asm("func_8006E6C0") __attribute__((section(".text"))) = {
     0x8C9F0000,
     0x8C9C002C,
     0x8C9D0004,
@@ -84,17 +84,17 @@ u32 RestoreKernelRegistersStub[17] asm("func_8006E6C0") __attribute__((section("
 void *startIntrVSync(void) {
     *D_8009A4F0 = 0x107;
     D_8009A4EC = 0;
-    clearIntrVSyncCallbacks((u32 *)D_8009A4CC, 8);
+    clearIntrVSyncCallbacks((u_long *)D_8009A4CC, 8);
     RegisterKernelCallback(0, intrVSyncDispatcher);
 
     return setIntrVSyncAddress;
 }
 
 void intrVSyncDispatcher(void) {
-    register s32 i asm("$17");
+    register long i asm("$17");
     register void (**callback)(void) asm("$16");
     void (*func)(void);
-    s32 count;
+    long count;
 
     count = D_8009A4EC;
     i = 0;
@@ -109,7 +109,7 @@ void intrVSyncDispatcher(void) {
     }
 }
 
-void setIntrVSync(s32 arg0, void *arg1) {
+void setIntrVSync(long arg0, void *arg1) {
     register void **base asm("$2");
     register void **slot asm("$4");
 
@@ -120,9 +120,9 @@ void setIntrVSync(s32 arg0, void *arg1) {
     }
 }
 
-void clearIntrVSyncCallbacks(u32 *dst, s32 count) {
-    volatile s32 unused;
-    s32 i = count - 1;
+void clearIntrVSyncCallbacks(u_long *dst, long count) {
+    volatile long unused;
+    long i = count - 1;
 
     if (count != 0) {
         do {
@@ -142,14 +142,14 @@ void *startIntrDMA(void) {
 }
 
 void intrDMADispatcher(void) {
-    u32 pending;
-    u32 pendingTemp;
-    s32 i;
+    u_long pending;
+    u_long pendingTemp;
+    long i;
     void (**handler)(void);
-    u32 lowMask;
-    u32 one;
+    u_long lowMask;
+    u_long one;
     register void (**handlerBase)(void) asm("$21");
-    register u8 *fmt asm("$4");
+    register u_char *fmt asm("$4");
 
     pendingTemp = *D_8009A4F4;
     pending = (pendingTemp >> 0x18) & 0x7F;
@@ -163,9 +163,9 @@ void intrDMADispatcher(void) {
                 handler = handlerBase;
                 while ((pending != 0) && (i < 7)) {
                     if (pending & 1) {
-                        register volatile u32 *bits asm("$4");
-                        register u32 value asm("$2");
-                        register s32 shift asm("$2");
+                        register volatile u_long *bits asm("$4");
+                        register u_long value asm("$2");
+                        register long shift asm("$2");
 
                         bits = D_8009A4F4;
                         shift = i + 0x18;
@@ -197,28 +197,28 @@ void intrDMADispatcher(void) {
     }
 }
 
-u32 setIntrDMA(s32 arg0, u32 arg1) {
-    register s32 index asm("$6");
-    register u32 callback asm("$4");
-    register u32 *base asm("$3");
-    register s32 offset asm("$2");
-    register u32 *slot asm("$3");
-    register u32 oldCallback asm("$7");
+u_long setIntrDMA(long arg0, u_long arg1) {
+    register long index asm("$6");
+    register u_long callback asm("$4");
+    register u_long *base asm("$3");
+    register long offset asm("$2");
+    register u_long *slot asm("$3");
+    register u_long oldCallback asm("$7");
 
     index = arg0;
     asm("");
     base = D_8009A4F8;
     offset = index << 2;
-    slot = (u32 *)((s32)base + offset);
+    slot = (u_long *)((long)base + offset);
     oldCallback = *slot;
     callback = arg1;
 
     if (callback != oldCallback) {
         if (callback != 0) {
-            register volatile u32 *bits asm("$5") = D_8009A4F4;
-            register u32 value asm("$4");
-            register s32 shift asm("$3");
-            register u32 mask asm("$2") = 0xFFFFFF;
+            register volatile u_long *bits asm("$5") = D_8009A4F4;
+            register u_long value asm("$4");
+            register long shift asm("$3");
+            register u_long mask asm("$2") = 0xFFFFFF;
 
             *slot = callback;
             value = *bits;
@@ -231,11 +231,11 @@ u32 setIntrDMA(s32 arg0, u32 arg1) {
             value |= mask;
             *bits = value;
         } else {
-            register volatile u32 *bits asm("$5") = D_8009A4F4;
-            register u32 value asm("$3");
-            register s32 shift asm("$4");
-            register u32 mask asm("$2") = 0xFFFFFF;
-            register u32 zero asm("$0");
+            register volatile u_long *bits asm("$5") = D_8009A4F4;
+            register u_long value asm("$3");
+            register long shift asm("$4");
+            register u_long mask asm("$2") = 0xFFFFFF;
+            register u_long zero asm("$0");
 
             *slot = zero;
             value = *bits;
@@ -254,9 +254,9 @@ u32 setIntrDMA(s32 arg0, u32 arg1) {
     return oldCallback;
 }
 
-void clearIntrDMACallbacks(u32 *dst, s32 count) {
-    volatile s32 unused;
-    s32 i = count - 1;
+void clearIntrDMACallbacks(u_long *dst, long count) {
+    volatile long unused;
+    long i = count - 1;
 
     if (count != 0) {
         do {
@@ -267,14 +267,14 @@ void clearIntrDMACallbacks(u32 *dst, s32 count) {
     }
 }
 
-s32 SetDMAInterruptState(s32 arg0) {
-    s32 value;
+long SetDMAInterruptState(long arg0) {
+    long value;
 
     value = D_8009A51C;
     D_8009A51C = arg0;
     return value;
 }
 
-s32 GetDMAInterruptState(void) {
+long GetDMAInterruptState(void) {
     return D_8009A51C;
 }

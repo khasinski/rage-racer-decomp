@@ -1,9 +1,11 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-void StSetRing(s32 base, s32 size);
-s32 CdGetToc(s32 toc);
+void StSetRing(long base, long size);
+long CdGetToc(long toc);
 
-u32 func_8006A018[16] __attribute__((section(".text"))) = {
+u_long func_8006A018[16] __attribute__((section(".text"))) = {
     0x241A0100,
     0x8F5A0008,
     0x00000000,
@@ -22,19 +24,19 @@ u32 func_8006A018[16] __attribute__((section(".text"))) = {
     0x00000000,
 };
 
-extern s32 D_801E8AAC;
-extern s32 D_801F1850;
+extern long D_801E8AAC;
+extern long D_801F1850;
 void func_8006CDC0(void);
 
 /* StSetRing: installs the stream ring buffer (`base`, `size`) then clears it. */
-void StSetRing(s32 base, s32 size) asm("func_8006A058");
-void StSetRing(s32 base, s32 size) { D_801E8AAC = base; D_801F1850 = size; func_8006CDC0(); }
+void StSetRing(long base, long size) asm("func_8006A058");
+void StSetRing(long base, long size) { D_801E8AAC = base; D_801F1850 = size; func_8006CDC0(); }
 
-s32 func_8006A0AC(s32 arg0, s32 arg1);
+long func_8006A0AC(long arg0, long arg1);
 
 /* CdGetToc: reads the disc table of contents into `toc` (thin wrapper over
  * CdGetToc2 / func_8006A0AC with track count 1). */
-s32 CdGetToc(s32 toc) asm("func_8006A088");
-s32 CdGetToc(s32 toc) {
+long CdGetToc(long toc) asm("func_8006A088");
+long CdGetToc(long toc) {
     return func_8006A0AC(1, toc);
 }

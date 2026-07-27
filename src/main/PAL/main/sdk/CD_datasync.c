@@ -1,18 +1,20 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern s32 D_80099060[];
-extern u8 D_80099318[];
-extern s32 D_800990E0[];
-extern u8 D_8009905D;
-extern s32 D_8009BB08;
-extern s32 D_8009BB0C;
+extern long D_80099060[];
+extern u_char D_80099318[];
+extern long D_800990E0[];
+extern u_char D_8009905D;
+extern long D_8009BB08;
+extern long D_8009BB0C;
 extern void *D_8009BB10;
-extern volatile u32 *D_80099344;
+extern volatile u_long *D_80099344;
 extern char D_8001391C[];
 extern char D_80013814[];
 extern char D_80013824[];
 
-s32 VSync(s32 mode) asm("func_8006DD30");
+long VSync(long mode) asm("func_8006DD30");
 void func_80063C38(char *);
 void func_8006BAF0(void);
 
@@ -21,12 +23,12 @@ void func_8006BAF0(void);
  * self-naming idiom as CD_sync / CD_ready / CD_cw: it stores its own name
  * string D_8001391C = "CD_datasync" into the D_8009BB10 slot the timeout
  * message prints as its first %s. arg 0 blocks, non-zero polls. */
-s32 CD_datasync(s32 mode) asm("func_8006BF00");
-s32 CD_datasync(s32 arg) {
-    register s32 *b60 asm("$19");
-    register u8 *b318 asm("$17");
-    register s32 *bE0 asm("$16");
-    s32 result;
+long CD_datasync(long mode) asm("func_8006BF00");
+long CD_datasync(long arg) {
+    register long *b60 asm("$19");
+    register u_char *b318 asm("$17");
+    register long *bE0 asm("$16");
+    long result;
 
     /* Forces GCC to reserve the 6-word outgoing-arg frame slot without
        emitting the call (the printf below is issued from inline asm). */
@@ -39,14 +41,14 @@ s32 CD_datasync(s32 arg) {
     D_8009BB0C = 0;
     D_8009BB10 = D_8001391C;
     do {
-        s32 status;
+        long status;
         if (VSync(-1) > D_8009BB08 || D_8009BB0C++ > 0x3C0000) {
             register void *a1v asm("$5");
-            register s32 a2v asm("$6");
-            register s32 a3v asm("$7");
-            register s32 t2 asm("$2");
-            register s32 t3 asm("$3");
-            register s32 t4 asm("$4");
+            register long a2v asm("$6");
+            register long a3v asm("$7");
+            register long t2 asm("$2");
+            register long t3 asm("$3");
+            register long t4 asm("$4");
 
             func_80063C38(D_80013814);
             /* GameDebugPrintf(D_80013824, D_8009BB10,

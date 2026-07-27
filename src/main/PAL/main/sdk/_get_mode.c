@@ -1,23 +1,21 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-typedef unsigned int u_long;
+extern u_char g_GraphType asm("D_800941E8");
+extern u_char g_GraphTypeArray[] asm("D_800941E8");
+extern u_short D_800941EC[];
+extern u_short D_800941EE[];
 
-extern u8 g_GraphType asm("D_800941E8");
-extern u8 g_GraphTypeArray[] asm("D_800941E8");
-extern u16 D_800941EC[];
-extern u16 D_800941EE[];
-
-u32 _get_mode(s32 arg0, s32 arg1, u32 arg2) asm("func_800669F0");
-u32 Gpu_BuildDrawAreaTopLeftCmd(s32 arg0, s32 arg1) asm("func_80066A4C");
-u32 Gpu_BuildDrawAreaBottomRightCmd(s32 arg0, s32 arg1) asm("func_80066B18");
-u32 Gpu_BuildDrawOffsetCmd(s32 arg0, s32 arg1) asm("func_80066BE4");
+u_long _get_mode(long arg0, long arg1, u_long arg2) asm("func_800669F0");
+u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) asm("func_80066A4C");
+u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) asm("func_80066B18");
+u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) asm("func_80066BE4");
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
 
-u32 _get_mode(s32 arg0, s32 arg1, u32 arg2) {
-    register volatile u8 *modep asm("$2") = &g_GraphType;
-    register u32 value asm("$2");
-    register u32 cmd asm("$3");
+u_long _get_mode(long arg0, long arg1, u_long arg2) {
+    register volatile u_char *modep asm("$2") = &g_GraphType;
+    register u_long value asm("$2");
+    register u_long cmd asm("$3");
 
     value = *modep;
     value = value - 1;
@@ -46,22 +44,22 @@ u32 _get_mode(s32 arg0, s32 arg1, u32 arg2) {
     return cmd | value;
 }
 
-u32 Gpu_BuildDrawAreaTopLeftCmd(s32 arg0, s32 arg1) {
-    register s32 x asm("$4") = arg0;
-    register s32 y asm("$3");
-    register s32 outY asm("$5");
-    register u32 value asm("$2");
-    register u32 shiftedY asm("$3");
+u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
+    register long x asm("$4") = arg0;
+    register long y asm("$3");
+    register long outY asm("$5");
+    register u_long value asm("$2");
+    register u_long shiftedY asm("$3");
 
-    x = (s16)x;
+    x = (short)x;
     if (x < 0) {
         value = 0;
     } else {
-        register volatile u16 *widthp asm("$2") = D_800941EC;
-        register s32 maxX asm("$6");
+        register volatile u_short *widthp asm("$2") = D_800941EC;
+        register long maxX asm("$6");
 
         value = *widthp;
-        value = (s16)value;
+        value = (short)value;
         maxX = value - 1;
         value = maxX < x;
         if (value != 0) {
@@ -72,14 +70,14 @@ u32 Gpu_BuildDrawAreaTopLeftCmd(s32 arg0, s32 arg1) {
     x = value;
 
     value = arg1 << 16;
-    y = (s32)value >> 16;
+    y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
-        register volatile u16 *heightp asm("$2") = D_800941EE;
-        register s32 maxY asm("$5");
+        register volatile u_short *heightp asm("$2") = D_800941EE;
+        register long maxY asm("$5");
 
         value = *heightp;
-        value = (s16)value;
+        value = (short)value;
         maxY = value - 1;
         value = maxY < y;
         if (value != 0) {
@@ -89,7 +87,7 @@ u32 Gpu_BuildDrawAreaTopLeftCmd(s32 arg0, s32 arg1) {
     }
 
     {
-        register volatile u8 *modep asm("$2") = g_GraphTypeArray;
+        register volatile u_char *modep asm("$2") = g_GraphTypeArray;
 
         value = *modep;
     }
@@ -110,22 +108,22 @@ u32 Gpu_BuildDrawAreaTopLeftCmd(s32 arg0, s32 arg1) {
     return shiftedY | value;
 }
 
-u32 Gpu_BuildDrawAreaBottomRightCmd(s32 arg0, s32 arg1) {
-    register s32 x asm("$4") = arg0;
-    register s32 y asm("$3");
-    register s32 outY asm("$5");
-    register u32 value asm("$2");
-    register u32 shiftedY asm("$3");
+u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
+    register long x asm("$4") = arg0;
+    register long y asm("$3");
+    register long outY asm("$5");
+    register u_long value asm("$2");
+    register u_long shiftedY asm("$3");
 
-    x = (s16)x;
+    x = (short)x;
     if (x < 0) {
         value = 0;
     } else {
-        register volatile u16 *widthp asm("$2") = D_800941EC;
-        register s32 maxX asm("$6");
+        register volatile u_short *widthp asm("$2") = D_800941EC;
+        register long maxX asm("$6");
 
         value = *widthp;
-        value = (s16)value;
+        value = (short)value;
         maxX = value - 1;
         value = maxX < x;
         if (value != 0) {
@@ -136,14 +134,14 @@ u32 Gpu_BuildDrawAreaBottomRightCmd(s32 arg0, s32 arg1) {
     x = value;
 
     value = arg1 << 16;
-    y = (s32)value >> 16;
+    y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
-        register volatile u16 *heightp asm("$2") = D_800941EE;
-        register s32 maxY asm("$5");
+        register volatile u_short *heightp asm("$2") = D_800941EE;
+        register long maxY asm("$5");
 
         value = *heightp;
-        value = (s16)value;
+        value = (short)value;
         maxY = value - 1;
         value = maxY < y;
         if (value != 0) {
@@ -153,7 +151,7 @@ u32 Gpu_BuildDrawAreaBottomRightCmd(s32 arg0, s32 arg1) {
     }
 
     {
-        register volatile u8 *modep asm("$2") = g_GraphTypeArray;
+        register volatile u_char *modep asm("$2") = g_GraphTypeArray;
 
         value = *modep;
     }
@@ -174,10 +172,10 @@ u32 Gpu_BuildDrawAreaBottomRightCmd(s32 arg0, s32 arg1) {
     return shiftedY | value;
 }
 
-u32 Gpu_BuildDrawOffsetCmd(s32 arg0, s32 arg1) {
-    register u32 x asm("$2");
-    register u32 y asm("$3");
-    register volatile u8 *modep asm("$2") = g_GraphTypeArray;
+u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) {
+    register u_long x asm("$2");
+    register u_long y asm("$3");
+    register volatile u_char *modep asm("$2") = g_GraphTypeArray;
 
     x = *modep;
     x = x - 1;
@@ -212,14 +210,14 @@ u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {
     return 0;
 }
 
-extern u8 g_GraphReverse asm("D_800941EB");
+extern u_char g_GraphReverse asm("D_800941EB");
 
 u_long get_dx(DispEnv *env) asm("func_80066CB0");
 
 u_long get_dx(DispEnv *env) {
-    register volatile u8 *modep asm("$2") = &g_GraphType;
-    register s32 value asm("$2");
-    register s32 mode asm("$3");
+    register volatile u_char *modep asm("$2") = &g_GraphType;
+    register long value asm("$2");
+    register long mode asm("$3");
 
     value = *modep;
     asm("" : "=r"(value) : "0"(value));
@@ -236,38 +234,38 @@ u_long get_dx(DispEnv *env) {
     }
 }
 
-extern u32 *D_800942BC;
+extern u_long *D_800942BC;
 
-u32 _status(void) asm("func_80066D6C");
-u32 _status(void) {
+u_long _status(void) asm("func_80066D6C");
+u_long _status(void) {
     return *D_800942BC;
 }
 
-extern volatile u32 *D_800942CC;
-extern volatile u32 *D_800942D0;
-extern volatile u32 *D_800942D4;
-extern volatile u32 *D_800942D8;
+extern volatile u_long *D_800942CC;
+extern volatile u_long *D_800942D0;
+extern volatile u_long *D_800942D4;
+extern volatile u_long *D_800942D8;
 
 void Gpu_ArmTimeout(void) asm("func_80067F04");
-s32 Gpu_CheckTimeout(void) asm("func_80067F38");
+long Gpu_CheckTimeout(void) asm("func_80067F38");
 
 /* Driver-table slot +0x2C: clears an ordering table through the hardware
  * OTC DMA channel (chcr 0x11000002, walking backwards from the end).
  * ClearOTagR is its only caller. */
-s32 Gpu_ClearOTagDma(u32 *ot, s32 count) asm("func_80066D84");
-s32 Gpu_ClearOTagDma(u32 *arg0, s32 arg1) {
-    s32 size;
-    u32 mask;
-    volatile u32 *status;
-    s32 offset;
+long Gpu_ClearOTagDma(u_long *ot, long count) asm("func_80066D84");
+long Gpu_ClearOTagDma(u_long *arg0, long arg1) {
+    long size;
+    u_long mask;
+    volatile u_long *status;
+    long offset;
 
     size = arg1;
     status = D_800942D8;
     *status |= 0x08000000;
     *D_800942D4 = 0;
     offset = (size << 2) - 4;
-    arg0 = (u32 *)((u8 *)arg0 + offset);
-    *D_800942CC = (u32)arg0;
+    arg0 = (u_long *)((u_char *)arg0 + offset);
+    *D_800942CC = (u_long)arg0;
     *D_800942D0 = size;
     *D_800942D4 = 0x11000002;
     Gpu_ArmTimeout();
@@ -275,7 +273,7 @@ s32 Gpu_ClearOTagDma(u32 *arg0, s32 arg1) {
     if ((*D_800942D4 & 0x01000000) != 0) {
         mask = 0x01000000;
         while (1) {
-            u32 statusValue;
+            u_long statusValue;
 
             if (Gpu_CheckTimeout() != 0) {
                 return -1;

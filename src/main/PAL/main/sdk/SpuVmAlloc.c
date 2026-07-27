@@ -1,28 +1,30 @@
+#include <sys/types.h>
+
 #include "common.h"
 #include "game/audio.h"
 
-extern u8 D_801E42F8;
-extern u8 D_801E4BDF;
-extern u8 D_8009E0B8[];
-extern u8 D_8009E0BA[];
-extern u8 D_8009E0BE[];
-extern u8 D_8009E0D0[];
-extern u8 D_8009E0D3[];
+extern u_char D_801E42F8;
+extern u_char D_801E4BDF;
+extern u_char D_8009E0B8[];
+extern u_char D_8009E0BA[];
+extern u_char D_8009E0BE[];
+extern u_char D_8009E0D0[];
+extern u_char D_8009E0D3[];
 
-u32 func_8007A1F8(s32 on_off, u32 voice_bit);
+u_long func_8007A1F8(long on_off, u_long voice_bit);
 
-u8 SpuVmAlloc(s32 unused) asm("func_800739E8");
-u8 SpuVmAlloc(s32 unused) {
-    u8 candidates;
-    u16 bestAge;
-    u16 bestPitch;
-    u8 voice;
-    u8 selected;
-    u8 candidate;
-    u16 threshold;
-    s32 offset;
-    s32 count;
-    u8 *base;
+u_char SpuVmAlloc(long unused) asm("func_800739E8");
+u_char SpuVmAlloc(long unused) {
+    u_char candidates;
+    u_short bestAge;
+    u_short bestPitch;
+    u_char voice;
+    u_char selected;
+    u_char candidate;
+    u_short threshold;
+    long offset;
+    long count;
+    u_char *base;
 
     selected = 99;
     bestPitch = -1;
@@ -31,28 +33,28 @@ u8 SpuVmAlloc(s32 unused) {
     threshold = D_801E4BDF;
     candidate = 99;
     for (voice = 0; voice < D_801E42F8; voice++) {
-        offset = (u8)voice * 52;
+        offset = (u_char)voice * 52;
         if (D_8009E0D3[offset] == 0 &&
-            *(u16 *)&D_8009E0BE[offset] == 0) {
+            *(u_short *)&D_8009E0BE[offset] == 0) {
             selected = voice;
             goto found;
         }
-        offset = (u8)voice * 52;
-        if (*(s16 *)&D_8009E0D0[offset] < threshold) {
-            threshold = *(s16 *)&D_8009E0D0[offset];
+        offset = (u_char)voice * 52;
+        if (*(short *)&D_8009E0D0[offset] < threshold) {
+            threshold = *(short *)&D_8009E0D0[offset];
             candidate = voice;
-            bestPitch = *(u16 *)&D_8009E0BE[offset];
-            bestAge = *(u16 *)&D_8009E0BA[offset];
+            bestPitch = *(u_short *)&D_8009E0BE[offset];
+            bestAge = *(u_short *)&D_8009E0BA[offset];
             candidates = 1;
-        } else if (*(s16 *)&D_8009E0D0[offset] == threshold) {
+        } else if (*(short *)&D_8009E0D0[offset] == threshold) {
             candidates += 1;
-            if (*(u16 *)&D_8009E0BE[offset] < bestPitch) {
-                bestAge = *(u16 *)&D_8009E0BA[offset];
-                bestPitch = *(u16 *)&D_8009E0BE[offset];
+            if (*(u_short *)&D_8009E0BE[offset] < bestPitch) {
+                bestAge = *(u_short *)&D_8009E0BA[offset];
+                bestPitch = *(u_short *)&D_8009E0BE[offset];
                 candidate = voice;
-            } else if (*(u16 *)&D_8009E0BE[offset] == bestPitch) {
-                if (bestAge < *(s16 *)&D_8009E0BA[offset]) {
-                    bestAge = *(s16 *)&D_8009E0BA[offset];
+            } else if (*(u_short *)&D_8009E0BE[offset] == bestPitch) {
+                if (bestAge < *(short *)&D_8009E0BA[offset]) {
+                    bestAge = *(short *)&D_8009E0BA[offset];
                     candidate = voice;
                 }
             }
@@ -60,7 +62,7 @@ u8 SpuVmAlloc(s32 unused) {
     }
 
 found:
-    if ((u8)selected == 99) {
+    if ((u_char)selected == 99) {
         if (candidates == 0) {
             selected = D_801E42F8;
         } else {
@@ -68,71 +70,71 @@ found:
         }
     }
     count = D_801E42F8;
-    if ((u32)(u8)selected < (u32)count) {
+    if ((u_long)(u_char)selected < (u_long)count) {
         voice = 0;
         if (count != 0) {
             base = D_8009E0B8;
             do {
-                u32 ageIndex;
-                s32 ageOffset;
-                u32 age;
+                u_long ageIndex;
+                long ageOffset;
+                u_long age;
 
-                ageIndex = (u8)voice;
+                ageIndex = (u_char)voice;
                 ageOffset = (ageIndex << 1) + ageIndex;
                 ageOffset = (ageOffset << 2) + ageIndex;
                 ageOffset <<= 2;
                 voice++;
-                age = *(u16 *)&D_8009E0BA[ageOffset];
+                age = *(u_short *)&D_8009E0BA[ageOffset];
                 age++;
-                *(u16 *)((s32)ageOffset + (s32)base + 2) = age;
-            } while ((u32)(u8)voice < (u32)count);
+                *(u_short *)((long)ageOffset + (long)base + 2) = age;
+            } while ((u_long)(u_char)voice < (u_long)count);
         }
         {
-            u32 selectedIndex;
-            s32 selectedOffset;
+            u_long selectedIndex;
+            long selectedOffset;
 
-            selectedIndex = (u8)selected;
+            selectedIndex = (u_char)selected;
             selectedOffset = selectedIndex * 52;
-            *(u16 *)&D_8009E0BA[selectedOffset] = 0;
-            *(u16 *)&D_8009E0D0[selectedOffset] = D_801E4BDF;
+            *(u_short *)&D_8009E0BA[selectedOffset] = 0;
+            *(u_short *)&D_8009E0D0[selectedOffset] = D_801E4BDF;
             if (D_8009E0D3[selectedOffset] == 2) {
                 func_8007A1F8(0, 0xFFFFFF);
             }
         }
     }
     (void)unused;
-    return (u8)selected;
+    return (u_char)selected;
 }
 
-extern u8 *D_801E413C;
-extern u8 D_801E4BD4;
-extern u8 D_801E4BDA;
-extern u8 D_801E4BDD;
-extern u8 D_801E4BDB;
-extern u8 D_801E4BD5;
-extern u8 D_801E4BDE;
-extern u8 D_801E4BE4;
-extern u16 D_801E4BE6;
-extern s16 D_801E4BEA;
-extern s16 D_801E3FB0;
-extern u8 *D_801E79CC[];
-extern u8 D_8009DF20[];
-extern u8 D_8009E0A0[];
-extern u16 D_8009E680;
-extern u16 D_8009E684;
-extern u16 D_8009E670;
-extern u16 D_8009E674;
-extern u16 D_801F2A08;
-extern u16 D_801F2A0C;
+extern u_char *D_801E413C;
+extern u_char D_801E4BD4;
+extern u_char D_801E4BDA;
+extern u_char D_801E4BDD;
+extern u_char D_801E4BDB;
+extern u_char D_801E4BD5;
+extern u_char D_801E4BDE;
+extern u_char D_801E4BE4;
+extern u_short D_801E4BE6;
+extern short D_801E4BEA;
+extern short D_801E3FB0;
+extern u_char *D_801E79CC[];
+extern u_char D_8009DF20[];
+extern u_char D_8009E0A0[];
+extern u_short D_8009E680;
+extern u_short D_8009E684;
+extern u_short D_8009E670;
+extern u_short D_8009E674;
+extern u_short D_801F2A08;
+extern u_short D_801F2A0C;
 
-void func_80073C50(s32 arg0, s32 val) {
-    u32 a1v, a2v, a3v;
-    u16 vidx;
-    s32 g, t, sixteen, center, hi;
-    u8 *base;
-    u32 kx;
-    s16 *fp;
-    s32 tA, F0;
+void func_80073C50(long arg0, long val) {
+    u_long a1v, a2v, a3v;
+    u_short vidx;
+    long g, t, sixteen, center, hi;
+    u_char *base;
+    u_long kx;
+    short *fp;
+    long tA, F0;
 
     tA = D_801E413C[0x18] * 16383;
     a2v = D_801E4BD4 * tA / 16129;
@@ -144,17 +146,17 @@ void func_80073C50(s32 arg0, s32 val) {
     g = D_801E4BE6;
     center = g & 0xff;
     {
-        s32 idx4 = center << 2;
+        long idx4 = center << 2;
         t = g << 16;
         sixteen = t >> 16;
-        hi = (u32)t >> 24;
-        base = *(u8 **)((u8 *)D_801E79CC + idx4) + hi * 172;
+        hi = (u_long)t >> 24;
+        base = *(u_char **)((u_char *)D_801E79CC + idx4) + hi * 172;
     }
 
     a2v = a3v & 0x7FFFFFFF;
     if (sixteen != 0x21) {
-        a2v = a3v * *(u16 *)(base + 116) / 127;
-        a3v = a3v * *(u16 *)(base + 118) / 127;
+        a2v = a3v * *(u_short *)(base + 116) / 127;
+        a3v = a3v * *(u_short *)(base + 118) / 127;
     }
 
     kx = D_801E4BDE;
@@ -190,17 +192,17 @@ void func_80073C50(s32 arg0, s32 val) {
     a2v = a2v * a2v / 16383;
     a1v = a1v * a1v / 16383;
 
-    *(u16 *)&D_8009DF20[vidx * 2 + 4] = val;
-    *(u16 *)&D_8009DF20[vidx * 2] = a2v;
-    *(u16 *)&D_8009DF20[vidx * 2 + 2] = a1v;
+    *(u_short *)&D_8009DF20[vidx * 2 + 4] = val;
+    *(u_short *)&D_8009DF20[vidx * 2] = a2v;
+    *(u_short *)&D_8009DF20[vidx * 2 + 2] = a1v;
 
     fp = &D_801E4BEA;
     D_8009E0A0[*fp] |= 7;
-    *(u16 *)&D_8009E0B8[*fp * 0x34 + 4] = val;
+    *(u_short *)&D_8009E0B8[*fp * 0x34 + 4] = val;
     D_8009E0B8[*fp * 0x34 + 0x1B] = 1;
 
     {
-        s32 f = *fp;
+        long f = *fp;
         if (f < 16) {
             a2v = 1 << f;
             a1v = 0;
@@ -226,26 +228,26 @@ void func_80073C50(s32 arg0, s32 val) {
     (void)arg0;
 }
 
-extern u32 D_8009E59C[];
-extern u16 D_8019CA68;
-extern u32 D_801E4110;
-extern volatile u32 D_801E416C;
-extern u8 D_801E4BD7;
-extern u8 D_801E4BDC;
-extern u16 D_801E4BE8;
-extern s16 D_801E4BEC;
-extern s16 D_801E4BEE;
+extern u_long D_8009E59C[];
+extern u_short D_8019CA68;
+extern u_long D_801E4110;
+extern volatile u_long D_801E416C;
+extern u_char D_801E4BD7;
+extern u_char D_801E4BDC;
+extern u_short D_801E4BE8;
+extern short D_801E4BEC;
+extern short D_801E4BEE;
 
 void func_80074134(void) {
-    register s32 i asm("$6");
-    register s16 *packedVoicePtr asm("$3");
-    register s16 *voicePtr asm("$8");
-    register s32 bit asm("$7");
-    register s32 voice asm("$4");
-    register u32 *mask asm("$5");
-    register s32 periodIndex asm("$2");
-    s32 tableIndex;
-    u8 stackPad[8];
+    register long i asm("$6");
+    register short *packedVoicePtr asm("$3");
+    register short *voicePtr asm("$8");
+    register long bit asm("$7");
+    register long voice asm("$4");
+    register u_long *mask asm("$5");
+    register long periodIndex asm("$2");
+    long tableIndex;
+    u_char stackPad[8];
 
     i = 0;
     packedVoicePtr = &D_801E4BEC;
@@ -256,7 +258,7 @@ void func_80074134(void) {
 
     *packedVoicePtr = voice << 3;
     D_801E4BEE = (D_801E4BD7 << 4) + D_801E4BDC;
-    *(u16 *)&D_8009DF20[0x19E + (voice * 0x34)] = 0x7FFF;
+    *(u_short *)&D_8009DF20[0x19E + (voice * 0x34)] = 0x7FFF;
 
     do {
         i++;
@@ -265,7 +267,7 @@ void func_80074134(void) {
     } while (i < 16);
 
     {
-        register u32 periodRaw asm("$3");
+        register u_long periodRaw asm("$3");
 
         periodRaw = D_801E4BE8;
         periodIndex = periodRaw & 1;
@@ -278,13 +280,13 @@ void func_80074134(void) {
     }
 
     if (1) {
-        register s32 voiceOffset asm("$3");
+        register long voiceOffset asm("$3");
 
         periodIndex = periodIndex >> 16;
         periodIndex = (periodIndex - 1) / 2;
         periodIndex <<= 4;
         {
-            register s32 periodBase asm("$3");
+            register long periodBase asm("$3");
 
             periodBase = D_801E4110;
             periodIndex += periodBase;
@@ -292,35 +294,35 @@ void func_80074134(void) {
         {
             voiceOffset = D_801E4BEC;
         }
-        periodIndex = *(u16 *)(periodIndex + 0xC);
+        periodIndex = *(u_short *)(periodIndex + 0xC);
         voiceOffset <<= 1;
-        *(u16 *)&D_8009DF20[6 + voiceOffset] = periodIndex;
+        *(u_short *)&D_8009DF20[6 + voiceOffset] = periodIndex;
     } else {
 evenPeriod:
         {
-            register s32 voiceOffset asm("$3");
+            register long voiceOffset asm("$3");
 
             periodIndex = periodIndex >> 16;
             periodIndex = (periodIndex - 1) / 2;
             periodIndex <<= 4;
             {
-                register s32 periodBase asm("$3");
+                register long periodBase asm("$3");
 
                 periodBase = D_801E4110;
                 periodIndex += periodBase;
             }
             voiceOffset = D_801E4BEC;
-            periodIndex = *(u16 *)(periodIndex + 0xE);
+            periodIndex = *(u_short *)(periodIndex + 0xE);
             voiceOffset <<= 1;
-            *(u16 *)&D_8009DF20[6 + voiceOffset] = periodIndex;
+            *(u_short *)&D_8009DF20[6 + voiceOffset] = periodIndex;
         }
     }
 
     {
-        register s32 voiceIndex asm("$3");
-        register s32 flags asm("$2");
-        register s16 *voiceOffsetPtr asm("$5");
-        register u32 tableBase asm("$4");
+        register long voiceIndex asm("$3");
+        register long flags asm("$2");
+        register short *voiceOffsetPtr asm("$5");
+        register u_long tableBase asm("$4");
 
         voiceIndex = D_801E4BEA;
         flags = g_SndVoiceFlags[voiceIndex];
@@ -336,9 +338,9 @@ evenPeriod:
         periodIndex <<= 5;
         periodIndex += tableBase;
         tableIndex = *voiceOffsetPtr;
-        periodIndex = *(u16 *)(periodIndex + 0x10);
+        periodIndex = *(u_short *)(periodIndex + 0x10);
         tableIndex <<= 1;
-        *(u16 *)&D_8009DF20[8 + tableIndex] = periodIndex;
+        *(u_short *)&D_8009DF20[8 + tableIndex] = periodIndex;
         asm volatile("" : : : "memory");
 
         periodIndex = D_801E4BD7;
@@ -348,11 +350,11 @@ evenPeriod:
         periodIndex <<= 5;
         periodIndex += tableBase;
         tableIndex = *voiceOffsetPtr;
-        periodIndex = *(u16 *)(periodIndex + 0x12);
+        periodIndex = *(u_short *)(periodIndex + 0x12);
         tableBase = D_8019CA68;
         tableIndex <<= 1;
         periodIndex += tableBase;
-        *(u16 *)&D_8009DF20[0xA + tableIndex] = periodIndex;
+        *(u_short *)&D_8009DF20[0xA + tableIndex] = periodIndex;
     }
     g_SndVoiceFlags[D_801E4BEA] |= 0x30;
 

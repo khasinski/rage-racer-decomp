@@ -1,23 +1,25 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern volatile u16 *D_8009AB7C;
-extern u16 D_8009AB78;
-extern s32 D_8009AB74;
-extern u8 D_80013EC0[];
-extern u8 D_80013EE0[];
-extern u8 D_80013EF4[];
+extern volatile u_short *D_8009AB7C;
+extern u_short D_8009AB78;
+extern long D_8009AB74;
+extern u_char D_80013EC0[];
+extern u_char D_80013EE0[];
+extern u_char D_80013EF4[];
 
 
-void _spu_writeByIO(u16 *addr, u32 size) asm("func_80078F4C");
-void _spu_writeByIO(u16 *addr, u32 size) {
-    volatile s32 di, dj;
-    register u16 stat0 asm("$5");
-    register u16 *paddr asm("$18") = addr;
-    u16 saved;
-    register u16 ctrl asm("$4");
-    register u16 cmasked asm("$2");
-    s32 chunk;
-    s32 k;
+void _spu_writeByIO(u_short *addr, u_long size) asm("func_80078F4C");
+void _spu_writeByIO(u_short *addr, u_long size) {
+    volatile long di, dj;
+    register u_short stat0 asm("$5");
+    register u_short *paddr asm("$18") = addr;
+    u_short saved;
+    register u_short ctrl asm("$4");
+    register u_short cmasked asm("$2");
+    long chunk;
+    long k;
 
 #define SPU_DELAY()                           \
     for (dj = 13, di = 0; di < 240; di++) {   \

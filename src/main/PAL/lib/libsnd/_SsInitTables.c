@@ -1,25 +1,27 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern u16 D_8009A528[];
-extern u16 D_8009A538[];
-extern s32 D_801E6C6C;
-extern s32 D_801E4B80;
-extern s32 D_801E40AC;
-extern s32 D_801E7A58[][0x10];
+extern u_short D_8009A528[];
+extern u_short D_8009A538[];
+extern long D_801E6C6C;
+extern long D_801E4B80;
+extern long D_801E40AC;
+extern long D_801E7A58[][0x10];
 
-void SpuVmInit(s32 arg0) asm("func_80075710");
+void SpuVmInit(long arg0) asm("func_80075710");
 
 void _SsInitTables(void) asm("func_80071B0C");
 
 void _SsInitTables(void) {
     {
-        register s32 i asm("$4");
-        register s32 j asm("$5");
-        register u16 *dst asm("$6");
-        register u16 *table asm("$7");
-        register u16 *src asm("$3");
+        register long i asm("$4");
+        register long j asm("$5");
+        register u_short *dst asm("$6");
+        register u_short *table asm("$7");
+        register u_short *src asm("$3");
 
-        dst = (u16 *)0x1F801C00;
+        dst = (u_short *)0x1F801C00;
         i = 0;
         table = D_8009A528;
         for (i = 0; i < 0x18; i++) {
@@ -32,11 +34,11 @@ void _SsInitTables(void) {
     }
 
     {
-        register s32 i asm("$4");
-        register u16 *dst asm("$6");
-        register u16 *src asm("$3");
+        register long i asm("$4");
+        register u_short *dst asm("$6");
+        register u_short *src asm("$3");
 
-        dst = (u16 *)0x1F801D80;
+        dst = (u_short *)0x1F801D80;
         i = 0;
         src = D_8009A538;
         for (i = 0; i < 0x10; i++) {
@@ -47,13 +49,13 @@ void _SsInitTables(void) {
     SpuVmInit(0x18);
 
     {
-        register s32 i asm("$5");
-        register s32 j asm("$4");
-        register s32 *row asm("$3");
-        register s32 *clear asm("$2");
+        register long i asm("$5");
+        register long j asm("$4");
+        register long *row asm("$3");
+        register long *clear asm("$2");
 
         i = 0;
-        row = (s32 *)D_801E7A58;
+        row = (long *)D_801E7A58;
         for (i = 0; i < 0x20; i++) {
             j = 0xF;
             clear = row + 0xF;

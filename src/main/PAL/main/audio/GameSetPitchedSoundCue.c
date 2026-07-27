@@ -7,7 +7,7 @@ extern s32 g_EffectVoiceState[] asm("D_801E6D38");
 extern u8 g_EffectVoiceTone[] asm("D_801E6D34");
 extern u8 g_EffectVoiceVolume[] asm("D_801E6D40");
 
-s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
+long SsUtKeyOffV(long voice) asm("func_80078018");
 void func_80078528(s32, s16, s16);
 void func_800781C0(s32, s32, s32, s32, s32, s32, s32);
 

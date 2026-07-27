@@ -1,32 +1,34 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern volatile u8 D_801E42F8;
-extern volatile u16 D_801E4BEA;
-extern volatile u16 D_801F2A08;
-extern volatile u16 D_801F2A0C;
-extern volatile u16 D_8009E670;
-extern volatile u16 D_8009E674;
-extern u8 D_8009E0B8[];
-extern u8 D_8009E0BC[];
-extern u8 D_8009E0C6[];
-extern u8 D_8009E0D3[];
+extern volatile u_char D_801E42F8;
+extern volatile u_short D_801E4BEA;
+extern volatile u_short D_801F2A08;
+extern volatile u_short D_801F2A0C;
+extern volatile u_short D_8009E670;
+extern volatile u_short D_8009E674;
+extern u_char D_8009E0B8[];
+extern u_char D_8009E0BC[];
+extern u_char D_8009E0C6[];
+extern u_char D_8009E0D3[];
 
-void SpuVmSeqKeyOff(s32 arg0) asm("func_80076ED8");
+void SpuVmSeqKeyOff(long arg0) asm("func_80076ED8");
 
-void SpuVmSeqKeyOff(s32 arg0) {
-    register s32 i asm("$7");
-    register s32 arg0s asm("$9");
-    register volatile u16 *current asm("$10");
-    register s32 one asm("$8");
-    register s32 index asm("$2");
-    register u32 lowMask asm("$6");
-    register u32 highMask asm("$5");
-    register u32 lowBits asm("$3");
-    register u32 highBits asm("$4");
-    register u32 bits asm("$2");
-    register u32 slot asm("$3");
-    register u32 slotIndex asm("$4");
-    register s32 offset asm("$3");
+void SpuVmSeqKeyOff(long arg0) {
+    register long i asm("$7");
+    register long arg0s asm("$9");
+    register volatile u_short *current asm("$10");
+    register long one asm("$8");
+    register long index asm("$2");
+    register u_long lowMask asm("$6");
+    register u_long highMask asm("$5");
+    register u_long lowBits asm("$3");
+    register u_long highBits asm("$4");
+    register u_long bits asm("$2");
+    register u_long slot asm("$3");
+    register u_long slotIndex asm("$4");
+    register long offset asm("$3");
 
     i = 0;
     if (D_801E42F8 != 0) {
@@ -46,7 +48,7 @@ void SpuVmSeqKeyOff(s32 arg0) {
                 "sll %0,%0,2"
                 : "=&r"(offset)
                 : "r"(index));
-            index = *(s16 *)&D_8009E0C6[offset];
+            index = *(short *)&D_8009E0C6[offset];
             if (index != arg0s) {
                 goto next;
             }
@@ -71,8 +73,8 @@ void SpuVmSeqKeyOff(s32 arg0) {
             D_8009E0D3[index] = 0;
             lowBits = D_801F2A08;
             highBits = D_801F2A0C;
-            *(s16 *)&D_8009E0BC[index] = 0;
-            *(s16 *)&D_8009E0B8[index] = 0;
+            *(short *)&D_8009E0BC[index] = 0;
+            *(short *)&D_8009E0B8[index] = 0;
 
             bits = D_8009E670;
             asm volatile(

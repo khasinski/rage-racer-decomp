@@ -2,14 +2,14 @@
 
 extern SeqStruct *D_801E79CC[];
 
-void func_80076C58(s32 seq_sep, u16 left, u16 right, s32 mode);
+void func_80076C58(long seq_sep, u_short left, u_short right, long mode);
 
-void func_800724F0(s32 seq, s32 sep, s32 playMode, s32 loopCount) {
-    s16 sepIndex;
-    s32 sequenceBase;
-    s32 sepOffset;
-    s32 mode;
-    s32 seqOffset;
+void func_800724F0(long seq, long sep, long playMode, long loopCount) {
+    short sepIndex;
+    long sequenceBase;
+    long sepOffset;
+    long mode;
+    long seqOffset;
     SeqStruct **sequence;
     SeqStruct *state;
     SeqStruct *flagsState;
@@ -17,60 +17,60 @@ void func_800724F0(s32 seq, s32 sep, s32 playMode, s32 loopCount) {
     SeqStruct *stopState;
 
     seqOffset = seq << 16;
-    sequenceBase = (s32)D_801E79CC;
+    sequenceBase = (long)D_801E79CC;
     sequence = (SeqStruct **)((seqOffset >> 14) + sequenceBase);
     sepIndex = sep;
     sepOffset = sepIndex * 0xAC;
     seqOffset = sepOffset;
-    state = (SeqStruct *)(sepOffset + (s32)*sequence);
+    state = (SeqStruct *)(sepOffset + (long)*sequence);
     state->flags &= ~0x200;
-    flagsState = (SeqStruct *)(sepOffset + (s32)*sequence);
+    flagsState = (SeqStruct *)(sepOffset + (long)*sequence);
     mode = playMode & 0xFF;
     flagsState->flags &= ~4;
     state->unk46 = loopCount;
 
     if (mode == 1) {
-        playState = (SeqStruct *)(seqOffset + (s32)*sequence);
+        playState = (SeqStruct *)(seqOffset + (long)*sequence);
         playState->flags |= 1;
         state->unk48 = 0;
         state->unk2b = 1;
-        func_80076C58((s16)(seq | (sep << 8)), state->unk74, state->unk76, 0);
+        func_80076C58((short)(seq | (sep << 8)), state->unk74, state->unk76, 0);
     } else if (mode == 0) {
-        stopState = (SeqStruct *)(seqOffset + (s32)*sequence);
+        stopState = (SeqStruct *)(seqOffset + (long)*sequence);
         stopState->flags |= 2;
     }
 }
 
-void func_800725F0(s32 seq, s32 playMode, s32 loopCount) {
-    func_800724F0((s16)seq, 0, playMode & 0xFF, (s16)loopCount);
+void func_800725F0(long seq, long playMode, long loopCount) {
+    func_800724F0((short)seq, 0, playMode & 0xFF, (short)loopCount);
 }
 
-void func_80072628(s32 seq, s32 sep, s32 playMode, s32 loopCount) {
-    func_800724F0((s16)seq, (s16)sep, playMode & 0xFF, (s16)loopCount);
+void func_80072628(long seq, long sep, long playMode, long loopCount) {
+    func_800724F0((short)seq, (short)sep, playMode & 0xFF, (short)loopCount);
 }
 
-void func_80072660(s32 seq, s32 sep, s32 left, s32 right) {
-    func_80076C58((s16)(seq | (sep << 8)), (u16)left, (u16)right, 0);
+void func_80072660(long seq, long sep, long left, long right) {
+    func_80076C58((short)(seq | (sep << 8)), (u_short)left, (u_short)right, 0);
 }
 
-void func_80072698(s32 seq, s32 left, s32 right) {
-    func_80076C58((s16)seq, (u16)left, (u16)right, 0);
+void func_80072698(long seq, long left, long right) {
+    func_80076C58((short)seq, (u_short)left, (u_short)right, 0);
 }
 
-void func_800726C8(s32 seq, s32 sep, s32 left, s32 right) {
-    func_80076C58((s16)(seq | (sep << 8)), (u16)left, (u16)right, 0);
+void func_800726C8(long seq, long sep, long left, long right) {
+    func_80076C58((short)(seq | (sep << 8)), (u_short)left, (u_short)right, 0);
 }
 
-void func_80076DCC(s32 seqSep, s32 value, s32 ticks);
+void func_80076DCC(long seqSep, long value, long ticks);
 
-void func_80072700(s32 seq, s32 sep, s32 value, s32 ticks) {
-    func_80076DCC((s16)(seq | (sep << 8)), value, ticks);
+void func_80072700(long seq, long sep, long value, long ticks) {
+    func_80076DCC((short)(seq | (sep << 8)), value, ticks);
 }
 
-void func_80076ED8(s32 seqSep);
+void func_80076ED8(long seqSep);
 
-void func_80072734(s16 seq, s16 sep) {
-    s32 i;
+void func_80072734(short seq, short sep) {
+    long i;
     SeqStruct *score;
 
     score = &D_801E79CC[seq][sep];
@@ -111,10 +111,10 @@ void func_80072734(s16 seq, s16 sep) {
     score->unk7A = 0x7F;
 }
 
-void func_800728A0(s32 seq) {
-    func_80072734((s16)seq, 0);
+void func_800728A0(long seq) {
+    func_80072734((short)seq, 0);
 }
 
-void func_800728C8(s32 seq, s32 sep) {
-    func_80072734((s16)seq, (s16)sep);
+void func_800728C8(long seq, long sep) {
+    func_80072734((short)seq, (short)sep);
 }

@@ -1,6 +1,8 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-u32 Gte_PatchExceptionHandler[28] asm("func_80069FA8") __attribute__((section(".text"))) = {
+u_long Gte_PatchExceptionHandler[28] asm("func_80069FA8") __attribute__((section(".text"))) = {
     0x3C01800A,
     0xAC3FAEDC,
     0x0C018C84,

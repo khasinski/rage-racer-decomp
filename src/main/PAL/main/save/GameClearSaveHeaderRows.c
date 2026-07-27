@@ -41,7 +41,7 @@ extern Rect g_SaveIconRect asm("D_8009B55C");
 
 void LibcSprintf(void *dst, char *fmt, s32 arg0) asm("func_800632F0");
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
-void DrawSync(s32 mode) asm("func_800658FC");
+void DrawSync(long mode) asm("func_800658FC");
 
 void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 imageY) {
     register u8 *blockReg asm("$18");

@@ -1,39 +1,39 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-s32 CdStatus(void);
-u8 CdMode(void);
-u8 CdLastCom(void);
+long CdStatus(void);
+u_char CdMode(void);
+u_char CdLastCom(void);
 CdlLOC *CdLastPos(void);
 
-u32 DeliverEvent[4] asm("func_8006A3D8") __attribute__((section(".text"))) = {
+u_long DeliverEvent[4] asm("func_8006A3D8") __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090007,
     0,
 };
 
-extern u8 D_8009904C;
+extern u_char D_8009904C;
 
 /* CdStatus: returns the last cached CD drive status byte. */
-s32 CdStatus(void) asm("func_8006A3E8");
-s32 CdStatus(void) {
+long CdStatus(void) asm("func_8006A3E8");
+long CdStatus(void) {
     return D_8009904C;
 }
 
 extern CdlLOC D_80099058;
-extern u8 D_8009905C;
-extern u8 D_8009905D;
+extern u_char D_8009905C;
+extern u_char D_8009905D;
 
 /* CdMode: returns the last CD mode byte. */
-u8 CdMode(void) asm("func_8006A3F8");
-u8 CdMode(void) {
+u_char CdMode(void) asm("func_8006A3F8");
+u_char CdMode(void) {
     return D_8009905C;
 }
 
 /* CdLastCom: returns the last CD command byte issued. */
-u8 CdLastCom(void) asm("func_8006A408");
-u8 CdLastCom(void) {
+u_char CdLastCom(void) asm("func_8006A408");
+u_char CdLastCom(void) {
     return D_8009905D;
 }
 
@@ -43,9 +43,9 @@ CdlLOC *CdLastPos(void) {
     return &D_80099058;
 }
 
-s32 func_8006BCC4_entry(void) asm("func_8006BCC4");
-s32 func_8006BD14_entry(void) asm("func_8006BD14");
-s32 func_8006BBD0_entry(void) asm("func_8006BBD0");
+long func_8006BCC4_entry(void) asm("func_8006BCC4");
+long func_8006BD14_entry(void) asm("func_8006BD14");
+long func_8006BBD0_entry(void) asm("func_8006BBD0");
 
 /*
  * CD reset/init sequence keyed by `mode`: mode 2 only (re)installs the CD
@@ -53,8 +53,8 @@ s32 func_8006BBD0_entry(void) asm("func_8006BBD0");
  * (func_8006BD14) and, for mode 1, the volume init (CD_initvol). Returns 1 on
  * success, 0 if a sub-step failed.
  */
-s32 CD_init(s32 mode) asm("func_8006A428");
-s32 CD_init(s32 mode) {
+long CD_init(long mode) asm("func_8006A428");
+long CD_init(long mode) {
     if (mode == 2) {
         func_8006BCC4_entry();
         return 1;

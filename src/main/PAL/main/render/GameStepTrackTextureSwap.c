@@ -45,7 +45,7 @@ extern u8 *g_TrackTextureShadow asm("D_801E42D0");
 extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
-void DrawSync(s32 mode) asm("func_800658FC");
+void DrawSync(long mode) asm("func_800658FC");
 
 void GameSwapTrackTexturePageNow(void) asm("func_80019D7C");
 void GameSwapTrackTexturePageNow(void) {
@@ -140,7 +140,7 @@ extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
 extern u8 *g_TrackTextureShadow asm("D_801E42D0");
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
-void DrawSync(s32 mode) asm("func_800658FC");
+void DrawSync(long mode) asm("func_800658FC");
 
 void GameSwapTrackTextureRow(void) asm("func_80019F24");
 void GameSwapTrackTextureRow(void) {

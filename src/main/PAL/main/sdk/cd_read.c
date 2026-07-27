@@ -1,9 +1,9 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
-void CdRead(s32 arg0, void *arg1, s32 arg2) asm("func_80027688");
-s32 CdReadSync(s32 arg0, s32 arg1) asm("func_80027790");
+long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+void CdRead(long arg0, void *arg1, long arg2) asm("func_80027688");
+long CdReadSync(long arg0, long arg1) asm("func_80027790");
 
 /*
  * Reads one 0x80-word directory/data sector at logical sector `sectorInt` into
@@ -13,9 +13,9 @@ s32 CdReadSync(s32 arg0, s32 arg1) asm("func_80027790");
 /* libcd's static cd_read, named from CD_newmedia's own error text
  * "Read error in cd_read(PVD)"; CD_newmedia and CD_cachefile are its
  * only callers. */
-s32 cd_read(s32 count, s32 sectorInt, void *buf) asm("func_8006CB88");
-s32 cd_read(s32 arg0, s32 sectorInt, void *buf) {
-    s32 scratch[2];
+long cd_read(long count, long sectorInt, void *buf) asm("func_8006CB88");
+long cd_read(long arg0, long sectorInt, void *buf) {
+    long scratch[2];
 
     CdIntToPos(sectorInt, (CdlLOC *)scratch);
     CdControl(2, scratch, 0);
@@ -23,11 +23,11 @@ s32 cd_read(s32 arg0, s32 sectorInt, void *buf) {
     return CdReadSync(0, 0) < 1U;
 }
 
-void LibcMemcpy(u8 *dst, u8 *src, s32 count) asm("func_8006CBF4");
-void LibcMemcpy(u8 *dst, u8 *src, s32 count) {
-    u8 scratch[8];
-    register s32 i asm("$3");
-    register s32 end asm("$6");
+void LibcMemcpy(u_char *dst, u_char *src, long count) asm("func_8006CBF4");
+void LibcMemcpy(u_char *dst, u_char *src, long count) {
+    u_char scratch[8];
+    register long i asm("$3");
+    register long end asm("$6");
 
     /* Forces the target's otherwise unused 8-byte leaf frame. */
     asm volatile("" : "=m"(scratch));
@@ -48,9 +48,9 @@ loop:
     }
 }
 
-s32 LibcStrcmp(u8 *arg0, u8 *arg1) asm("func_8006CC28");
-s32 LibcStrcmp(u8 *arg0, u8 *arg1) {
-    s32 left;
+long LibcStrcmp(u_char *arg0, u_char *arg1) asm("func_8006CC28");
+long LibcStrcmp(u_char *arg0, u_char *arg1) {
+    long left;
 
     if ((arg0 == 0) || (arg1 == 0)) {
         if (arg0 == arg1) {
@@ -72,10 +72,10 @@ s32 LibcStrcmp(u8 *arg0, u8 *arg1) {
     return *arg0 - arg1[-1];
 }
 
-s32 LibcStrncmp(u8 *arg0, u8 *arg1, s32 arg2) asm("func_8006CC8C");
-s32 LibcStrncmp(u8 *arg0, u8 *arg1, s32 arg2) {
-    s32 left;
-    s32 right;
+long LibcStrncmp(u_char *arg0, u_char *arg1, long arg2) asm("func_8006CC8C");
+long LibcStrncmp(u_char *arg0, u_char *arg1, long arg2) {
+    long left;
+    long right;
 
     if ((arg0 == 0) || (arg1 == 0)) {
         if (arg0 == arg1) {

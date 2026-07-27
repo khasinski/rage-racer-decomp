@@ -2,16 +2,16 @@
 
 extern SeqStruct *D_801E79CC[];
 
-s32 SsSeqReadDeltaTime(s32 arg0, s32 arg1) asm("func_80070D70");
+long SsSeqReadDeltaTime(long arg0, long arg1) asm("func_80070D70");
 
-s32 SsSeqReadDeltaTime(s32 arg0, s32 arg1) {
+long SsSeqReadDeltaTime(long arg0, long arg1) {
     SeqStruct *state;
-    u8 *stream;
-    s32 value;
-    s32 byte;
-    s32 ret;
+    u_char *stream;
+    long value;
+    long byte;
+    long ret;
 
-    state = &D_801E79CC[(s16)arg0][(s16)arg1];
+    state = &D_801E79CC[(short)arg0][(short)arg1];
 
     stream = state->read_pos;
     state->read_pos = stream + 1;

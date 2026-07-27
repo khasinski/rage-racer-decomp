@@ -1,22 +1,22 @@
 #include "psyq/kernel.h"
 
-extern u16 D_80099430[];
-extern u16 D_80099462;
-extern u32 D_80099464;
-extern volatile u16 *D_8009A4BC;
-extern volatile u16 *D_8009A4C0;
-extern volatile u32 *D_8009A4C4;
+extern u_short D_80099430[];
+extern u_short D_80099462;
+extern u_long D_80099464;
+extern volatile u_short *D_8009A4BC;
+extern volatile u_short *D_8009A4C0;
+extern volatile u_long *D_8009A4C4;
 
 void *StopKernelInterrupts(void) asm("func_8006E4E4");
 void *StopKernelInterrupts(void) {
-    u16 *state;
-    volatile u16 *initialMask;
-    volatile u16 *mask;
-    volatile u32 *newStatus;
-    volatile u32 *status;
-    volatile u16 *clearMask;
-    u16 maskValue;
-    u32 statusValue;
+    u_short *state;
+    volatile u_short *initialMask;
+    volatile u_short *mask;
+    volatile u_long *newStatus;
+    volatile u_long *status;
+    volatile u_short *clearMask;
+    u_short maskValue;
+    u_long statusValue;
 
     state = D_80099430;
     if (state[0] == 0) {

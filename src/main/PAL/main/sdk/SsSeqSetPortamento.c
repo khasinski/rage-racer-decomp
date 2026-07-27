@@ -2,25 +2,25 @@
 
 extern SeqStruct *D_801E79CC[];
 
-void SsSeqSetPortamento(s16 seq, s16 sep, u8 value) asm("func_8006FB7C");
-void SsSeqSetPortamento(s16 seq, s16 sep, u8 value) {
+void SsSeqSetPortamento(short seq, short sep, u_char value) asm("func_8006FB7C");
+void SsSeqSetPortamento(short seq, short sep, u_char value) {
     SeqStruct *state;
-    u8 channel;
+    u_char channel;
     ProgAtr progAtr;
     VagAtr vagAtr;
-    s32 tone;
+    long tone;
 
     state = &D_801E79CC[seq][sep];
     channel = state->channel;
     SsUtGetProgAtr(state->unk4c, state->programs[channel], &progAtr);
     for (tone = 0; tone < progAtr.tones; tone++) {
-        SsUtGetVagAtr(state->unk4c, state->programs[channel], (s16)tone, &vagAtr);
+        SsUtGetVagAtr(state->unk4c, state->programs[channel], (short)tone, &vagAtr);
         if (value < 0x40) {
             vagAtr.mode = 2;
         } else if (value >= 0x40 && value < 0x80) {
             vagAtr.mode = 0;
         }
-        SsUtSetVagAtr(state->unk4c, state->programs[channel], (s16)tone, &vagAtr);
+        SsUtSetVagAtr(state->unk4c, state->programs[channel], (short)tone, &vagAtr);
     }
 
     state->delta_value = SsSeqReadDeltaTime(seq, sep);

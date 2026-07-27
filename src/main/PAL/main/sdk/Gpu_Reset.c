@@ -1,25 +1,25 @@
 #include "common.h"
 #include "psyq/kernel.h"
 
-extern volatile u32 *g_GpuGp1 asm("D_800942BC");
-extern volatile u32 *D_800942C8;
-extern volatile u32 *D_800942D8;
-extern s32 D_800942EC;
-extern volatile s32 D_800942F0;
-extern s32 D_800942FC;
-extern u8 g_GpuGp1Mirror[] asm("D_8009B9F0");
-extern u8 D_801E5024[];
+extern volatile u_long *g_GpuGp1 asm("D_800942BC");
+extern volatile u_long *D_800942C8;
+extern volatile u_long *D_800942D8;
+extern long D_800942EC;
+extern volatile long D_800942F0;
+extern long D_800942FC;
+extern u_char g_GpuGp1Mirror[] asm("D_8009B9F0");
+extern u_char D_801E5024[];
 
-void func_80068180(u8 *dst, u8 value, s32 count);
-s32 func_800680A4(u32 arg0);
+void func_80068180(u_char *dst, u_char value, long count);
+long func_800680A4(u_long arg0);
 
 /* Driver-table slot +0x34, the body of ResetGraph: empties the queue,
  * re-arms DMA2, and issues GP1(00h) (mode 0) or GP1(02h)+GP1(01h)
  * (mode 1). Mode 0 also probes the GPU type through Gpu_ProbeType. */
-s32 Gpu_Reset(u32 mode) asm("func_80067C80");
-s32 Gpu_Reset(u32 mode) {
-    s32 intrMask;
-    s32 state;
+long Gpu_Reset(u_long mode) asm("func_80067C80");
+long Gpu_Reset(u_long mode) {
+    long intrMask;
+    long state;
 
     intrMask = SetIntrMask(0);
     D_800942F0 = 0;

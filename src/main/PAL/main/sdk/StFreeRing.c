@@ -1,39 +1,39 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern s32 D_801F1850;
-extern s32 D_801E6C98;
+extern long D_801F1850;
+extern long D_801E6C98;
 extern StHEADER_RR *D_801E8AAC;
-extern s32 D_801E8278;
-extern s32 D_801E8A94;
-extern s32 D_801E3E10;
+extern long D_801E8278;
+extern long D_801E8A94;
+extern long D_801E3E10;
 
-u32 StFreeRing(u32 *base) {
-    s32 temp_a1;
-    s32 i;
-    s16 nSectors;
+u_long StFreeRing(u_long *base) {
+    long temp_a1;
+    long i;
+    short nSectors;
     StHEADER_RR *temp_v0;
     StHEADER_RR *temp_v0_2;
 
-    temp_a1 = (base - (u32 *)&D_801E8AAC[D_801F1850]) / 504;
+    temp_a1 = (base - (u_long *)&D_801E8AAC[D_801F1850]) / 504;
     temp_v0 = &D_801E8AAC[temp_a1];
     nSectors = D_801E8AAC[temp_a1].nSectors;
-    if ((s16)temp_v0->id != 4) {
+    if ((short)temp_v0->id != 4) {
         return 1;
     }
 
     for (i = 0; i < nSectors;) {
         temp_v0_2 = &D_801E8AAC[i + temp_a1];
         i++;
-        *(s16 *)temp_v0_2 = 0;
+        *(short *)temp_v0_2 = 0;
     }
 
     D_801E6C98 = i + temp_a1;
     return 0;
 }
 
-void func_8006D0AC(s32 arg0, u32 arg1) {
-    u32 i;
+void func_8006D0AC(long arg0, u_long arg1) {
+    u_long i;
 
     for (i = 0; i < arg1; i++) {
         asm("" ::: "memory");
@@ -41,14 +41,14 @@ void func_8006D0AC(s32 arg0, u32 arg1) {
     }
 }
 
-s32 StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) asm("func_8006D0EC");
-s32 StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
+long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) asm("func_8006D0EC");
+long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     register StRingEventRecord **out0 asm("$7") = arg0;
     register StRingEventRecord **out1 asm("$8") = arg1;
     StRingEventRecord *entry;
-    s32 old_flag;
+    long old_flag;
 
-    entry = (StRingEventRecord *)((D_801E6C98 << 5) + (s32)D_801E8AAC);
+    entry = (StRingEventRecord *)((D_801E6C98 << 5) + (long)D_801E8AAC);
 
     if ((entry->state & 0xFFFF) == 1) {
         old_flag = D_801E8278;
@@ -57,25 +57,25 @@ s32 StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
             entry->state = 0;
         }
 
-        entry = (StRingEventRecord *)((D_801E6C98 << 5) + (s32)D_801E8AAC);
+        entry = (StRingEventRecord *)((D_801E6C98 << 5) + (long)D_801E8AAC);
     }
 
     if ((entry->state & 0xFFFF) == 2) {
-        register s32 track asm("$4");
+        register long track asm("$4");
         register StRingEventRecord *raw_base asm("$3");
-        register s32 index asm("$5");
+        register long index asm("$5");
         register StRingEventRecord *base asm("$4");
-        register s32 offset asm("$3");
+        register long offset asm("$3");
 
         entry->state = 4;
         asm("" ::: "memory");
         track = D_801F1850;
         raw_base = (StRingEventRecord *)D_801E8AAC;
         index = D_801E6C98;
-        base = (StRingEventRecord *)((track << 5) + (s32)raw_base);
+        base = (StRingEventRecord *)((track << 5) + (long)raw_base);
         offset = (index << 6) - index;
         offset <<= 5;
-        base = (StRingEventRecord *)((s32)base + offset);
+        base = (StRingEventRecord *)((long)base + offset);
         *out0 = base;
         *out1 = entry;
         return 0;
@@ -84,7 +84,7 @@ s32 StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     return 1;
 }
 
-void func_8006D1B0(s32 arg0, s32 arg1, s32 arg2) {
+void func_8006D1B0(long arg0, long arg1, long arg2) {
     D_801E8A94 = arg0;
     D_801E3E10 = arg1;
     D_801E8278 = arg2;

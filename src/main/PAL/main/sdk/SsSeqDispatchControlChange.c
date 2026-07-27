@@ -2,26 +2,26 @@
 
 extern SeqStruct *D_801E79CC[];
 
-s32 func_80070D70(s32 seq, s16 sep);
-void func_8007010C(s16 seq, s16 sep, u8 value);
-void func_800771AC(s32 channel, s16 vab, u8 prog, s16 volume, s32 pan);
-void func_8007701C(s16 vab, u8 prog, u8 volume);
+long func_80070D70(long seq, short sep);
+void func_8007010C(short seq, short sep, u_char value);
+void func_800771AC(long channel, short vab, u_char prog, short volume, long pan);
+void func_8007701C(short vab, u_char prog, u_char volume);
 void func_800731A8(void);
 void func_800731B8(void);
-void SsSeqSetPortamento(s16 seq, s16 sep, u8 value) asm("func_8006FB7C");
-void func_80073748(s32 left, s32 right);
-void func_8006FDA8(s16 seq, s16 sep, u8 value);
-void func_8006FED8(s16 seq, s16 sep, u8 value);
-void func_8007001C(s16 seq, s16 sep, u8 value);
-void func_80070094(s16 seq, s16 sep, u8 value);
-void func_8006FCE0(s16 seq, s16 sep);
+void SsSeqSetPortamento(short seq, short sep, u_char value) asm("func_8006FB7C");
+void func_80073748(long left, long right);
+void func_8006FDA8(short seq, short sep, u_char value);
+void func_8006FED8(short seq, short sep, u_char value);
+void func_8007001C(short seq, short sep, u_char value);
+void func_80070094(short seq, short sep, u_char value);
+void func_8006FCE0(short seq, short sep);
 
-void SsSeqDispatchControlChange(s16 seq, s16 sep, s32 arg2) asm("func_8006F5F4");
-void SsSeqDispatchControlChange(s16 seq, s16 sep, s32 arg2) {
-    u32 control;
-    s16 value;
-    s16 channel;
-    u8 *readPos;
+void SsSeqDispatchControlChange(short seq, short sep, long arg2) asm("func_8006F5F4");
+void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
+    u_long control;
+    short value;
+    short channel;
+    u_char *readPos;
     SeqStruct *state;
 
     control = arg2 & 0xFF;

@@ -1,40 +1,42 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 #define VA_ROUNDED_SIZE(type) \
-    (((sizeof(type) + sizeof(s32) - 1) / sizeof(s32)) * sizeof(s32))
+    (((sizeof(type) + sizeof(long) - 1) / sizeof(long)) * sizeof(long))
 #define va_start(list, last) \
-    (list = (void *)((u8 *)&(last) + VA_ROUNDED_SIZE(last)))
+    (list = (void *)((u_char *)&(last) + VA_ROUNDED_SIZE(last)))
 #define va_arg(list, type) \
-    (list = (void *)((u8 *)list + VA_ROUNDED_SIZE(type)), \
-     *(type *)((u8 *)list - VA_ROUNDED_SIZE(type)))
+    (list = (void *)((u_char *)list + VA_ROUNDED_SIZE(type)), \
+     *(type *)((u_char *)list - VA_ROUNDED_SIZE(type)))
 
 typedef void *va_list;
 
-extern u16 D_8009AB78;
-extern volatile u16 *D_8009AB7C;
-extern volatile u32 *D_8009AB80;
-extern volatile u32 *D_8009AB84;
-extern volatile u32 *D_8009AB88;
-extern volatile u32 *D_8009AB90;
-extern s32 D_8009ABA0;
-extern s32 D_8009ABC8;
-extern s32 D_8009ABCC;
-extern s32 D_8009ABD0;
+extern u_short D_8009AB78;
+extern volatile u_short *D_8009AB7C;
+extern volatile u_long *D_8009AB80;
+extern volatile u_long *D_8009AB84;
+extern volatile u_long *D_8009AB88;
+extern volatile u_long *D_8009AB90;
+extern long D_8009ABA0;
+extern long D_8009ABC8;
+extern long D_8009ABCC;
+extern long D_8009ABD0;
 
-s32 _spu_t(s32 op, ...) asm("func_80079600");
-s32 _spu_t(s32 op, ...) {
-    s32 dmaControl;
-    s32 i;
+long _spu_t(long op, ...) asm("func_80079600");
+long _spu_t(long op, ...) {
+    long dmaControl;
+    long i;
     va_list args;
-    u32 count;
-    u16 transferMode;
-    u16 control;
+    u_long count;
+    u_short transferMode;
+    u_short control;
 
     va_start(args, op);
 
     switch (op) {
     case 2:
-        count = va_arg(args, u32);
+        count = va_arg(args, u_long);
         D_8009AB78 = count >> D_8009ABA0;
         D_8009AB7C[0xD3] = D_8009AB78;
         break;
@@ -89,9 +91,9 @@ s32 _spu_t(s32 op, ...) {
             *D_8009AB90 = (*D_8009AB90 & 0xF0FFFFFF) | 0x20000000;
         }
 
-        count = va_arg(args, u32);
+        count = va_arg(args, u_long);
         D_8009ABCC = count;
-        count = va_arg(args, u32);
+        count = va_arg(args, u_long);
         D_8009ABD0 = count / 64;
         D_8009ABD0 += (count % 64) ? 1 : 0;
         *D_8009AB80 = D_8009ABCC;

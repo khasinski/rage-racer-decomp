@@ -1,62 +1,64 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct {
-    s16 vag;
-    s16 age;
-    s16 pitch;
-    u16 env;
-    s16 base_volume;
-    s8 pan;
-    s8 unkB;
-    s16 note;
-    s16 seq_sep;
-    s16 program_index;
-    s16 program;
-    s16 tone;
-    s16 vab_id;
-    s16 priority;
-    u8 pad1A;
-    u8 active;
-    s16 auto_volume;
-    s16 unk1E;
-    s16 unk20;
-    s16 unk22;
-    s16 start_volume;
-    s16 end_volume;
-    s16 auto_pan;
-    s16 unk2A;
-    s16 unk2C;
-    s16 unk2E;
-    s16 start_pan;
-    s16 end_pan;
+    short vag;
+    short age;
+    short pitch;
+    u_short env;
+    short base_volume;
+    signed char pan;
+    signed char unkB;
+    short note;
+    short seq_sep;
+    short program_index;
+    short program;
+    short tone;
+    short vab_id;
+    short priority;
+    u_char pad1A;
+    u_char active;
+    short auto_volume;
+    short unk1E;
+    short unk20;
+    short unk22;
+    short start_volume;
+    short end_volume;
+    short auto_pan;
+    short unk2A;
+    short unk2C;
+    short unk2E;
+    short start_pan;
+    short end_pan;
 } SpuVoice76940;
 
 typedef struct {
-    u8 pad[0x1A];
-    s16 voice;
+    u_char pad[0x1A];
+    short voice;
 } SvmCurrent76940;
 
 extern SpuVoice76940 D_8009E0B8[];
-extern u16 D_8009E670;
-extern u16 D_8009E674;
-extern u16 *D_8009A588;
-extern u8 D_801E42F8;
+extern u_short D_8009E670;
+extern u_short D_8009E674;
+extern u_short *D_8009A588;
+extern u_char D_801E42F8;
 extern SvmCurrent76940 D_801E4BD0;
-extern u16 D_801F2A08;
-extern u16 D_801F2A0C;
+extern u_short D_801F2A08;
+extern u_short D_801F2A0C;
 
-static inline u16 get_selected_voice(void) {
+static inline u_short get_selected_voice(void) {
     return D_801E4BD0.voice;
 }
 
-s32 SpuVmSeKeyOff(s16 seq_sep, s16 vab_id, s16 program, u16 note) asm("func_80076940");
-s32 SpuVmSeKeyOff(s16 seq_sep, s16 vab_id, s16 program, u16 note) {
-    u16 bits_upper;
-    u16 bits_lower;
-    u8 voice;
-    s32 count;
-    u16 selected_voice;
-    u32 selected_index;
+long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) asm("func_80076940");
+long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) {
+    u_short bits_upper;
+    u_short bits_lower;
+    u_char voice;
+    long count;
+    u_short selected_voice;
+    u_long selected_index;
 
     count = 0;
     for (voice = 0; voice < D_801E42F8; voice++) {

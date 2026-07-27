@@ -142,8 +142,8 @@ void GameMainLoop(void) {
         g_FrameParity = parity;
         *(s32 *)0x1F800004 = (s32)(frame + 0xCC);
         *(s32 *)0x1F800000 = (s32)(frame + 0x16CC);
-        ClearOTagR((u32 *)(frame + 0xCC), 0x2C0);
-        ClearOTagR((u32 *)(g_DrawBuffer + 0xBCC), 0x2C0);
+        ClearOTagR((u_long *)(frame + 0xCC), 0x2C0);
+        ClearOTagR((u_long *)(g_DrawBuffer + 0xBCC), 0x2C0);
         func_80043974();
         func_8005AF78();
         func_80019C04();

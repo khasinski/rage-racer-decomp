@@ -1,17 +1,17 @@
 #include "psyq/spu.h"
 
-extern s32 _spu_mem_mode_unitM asm("D_8009ABA0");
+extern long _spu_mem_mode_unitM asm("D_8009ABA0");
 extern SpuMallocEntry *_spu_memList asm("D_8009ABDC");
 
-s32 _SpuIsInAllocateArea(u32 arg0) asm("func_8007A3A0");
-s32 _SpuIsInAllocateArea_(u32 arg0) asm("func_8007A410");
+long _SpuIsInAllocateArea(u_long arg0) asm("func_8007A3A0");
+long _SpuIsInAllocateArea_(u_long arg0) asm("func_8007A410");
 
-s32 _SpuIsInAllocateArea(u32 arg0) {
+long _SpuIsInAllocateArea(u_long arg0) {
     SpuMallocEntry *var_a1;
-    u32 temp_v1;
-    u32 bits1;
-    u32 bits2;
-    u32 mask;
+    u_long temp_v1;
+    u_long bits1;
+    u_long bits2;
+    u_long mask;
 
     bits1 = 0x80000000;
     bits2 = 0x40000000;
@@ -26,7 +26,7 @@ s32 _SpuIsInAllocateArea(u32 arg0) {
         }
         if (!(temp_v1 & bits2)) {
             if ((temp_v1 & mask) < arg0) {
-                if (arg0 >= (u32)((temp_v1 & mask) + var_a1->size)) {
+                if (arg0 >= (u_long)((temp_v1 & mask) + var_a1->size)) {
                     var_a1 += 1;
                     continue;
                 }
@@ -40,12 +40,12 @@ s32 _SpuIsInAllocateArea(u32 arg0) {
     return 0;
 }
 
-s32 _SpuIsInAllocateArea_(u32 arg0) {
+long _SpuIsInAllocateArea_(u_long arg0) {
     SpuMallocEntry *var_a1;
-    u32 temp_v1;
-    u32 bits1;
-    u32 bits2;
-    u32 mask;
+    u_long temp_v1;
+    u_long bits1;
+    u_long bits2;
+    u_long mask;
 
     bits1 = 0x80000000;
     bits2 = 0x40000000;
@@ -61,7 +61,7 @@ s32 _SpuIsInAllocateArea_(u32 arg0) {
         }
         if (!(temp_v1 & bits2)) {
             if ((temp_v1 & mask) < arg0) {
-                if (arg0 >= (u32)((temp_v1 & mask) + var_a1->size)) {
+                if (arg0 >= (u_long)((temp_v1 & mask) + var_a1->size)) {
                     var_a1 += 1;
                     continue;
                 }

@@ -1,22 +1,24 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern u8 *D_801E4110;
+extern u_char *D_801E4110;
 
-s32 SpuVmVSetUp(s32 arg0, s32 arg1) asm("func_80073314");
+long SpuVmVSetUp(long arg0, long arg1) asm("func_80073314");
 
-s32 SsUtSetProgVol(s32 arg0, s32 arg1, s32 arg2) asm("func_8007701C");
-s32 SsUtGetProgVol(s32 arg0, s32 arg1) asm("func_80077090");
-s32 SsUtSetProgPan(s32 arg0, s32 arg1, s32 arg2) asm("func_800770E4");
-s32 SsUtGetProgPan(s32 arg0, s32 arg1) asm("func_80077158");
+long SsUtSetProgVol(long arg0, long arg1, long arg2) asm("func_8007701C");
+long SsUtGetProgVol(long arg0, long arg1) asm("func_80077090");
+long SsUtSetProgPan(long arg0, long arg1, long arg2) asm("func_800770E4");
+long SsUtGetProgPan(long arg0, long arg1) asm("func_80077158");
 
-s32 SsUtSetProgVol(s32 arg0, s32 arg1, s32 arg2) {
-    s32 value;
-    s32 arg0s;
-    s32 index;
+long SsUtSetProgVol(long arg0, long arg1, long arg2) {
+    long value;
+    long arg0s;
+    long index;
 
     value = arg2;
-    arg0s = (s16)arg0;
-    index = (s16)arg1;
+    arg0s = (short)arg0;
+    index = (short)arg1;
     if (SpuVmVSetUp(arg0s, index) == 0) {
         D_801E4110[(index << 4) + 0x1] = value;
         return D_801E4110[(index << 4) + 0x1];
@@ -24,26 +26,26 @@ s32 SsUtSetProgVol(s32 arg0, s32 arg1, s32 arg2) {
     return -1;
 }
 
-s32 SsUtGetProgVol(s32 arg0, s32 arg1) {
-    s32 arg0s;
-    s32 index;
+long SsUtGetProgVol(long arg0, long arg1) {
+    long arg0s;
+    long index;
 
-    arg0s = (s16)arg0;
-    index = (s16)arg1;
+    arg0s = (short)arg0;
+    index = (short)arg1;
     if (SpuVmVSetUp(arg0s, index) == 0) {
         return D_801E4110[(index << 4) + 0x1];
     }
     return -1;
 }
 
-s32 SsUtSetProgPan(s32 arg0, s32 arg1, s32 arg2) {
-    s32 value;
-    s32 arg0s;
-    s32 index;
+long SsUtSetProgPan(long arg0, long arg1, long arg2) {
+    long value;
+    long arg0s;
+    long index;
 
     value = arg2;
-    arg0s = (s16)arg0;
-    index = (s16)arg1;
+    arg0s = (short)arg0;
+    index = (short)arg1;
     if (SpuVmVSetUp(arg0s, index) == 0) {
         D_801E4110[(index << 4) + 0x4] = value;
         return D_801E4110[(index << 4) + 0x4];
@@ -51,12 +53,12 @@ s32 SsUtSetProgPan(s32 arg0, s32 arg1, s32 arg2) {
     return -1;
 }
 
-s32 SsUtGetProgPan(s32 arg0, s32 arg1) {
-    s32 arg0s;
-    s32 index;
+long SsUtGetProgPan(long arg0, long arg1) {
+    long arg0s;
+    long index;
 
-    arg0s = (s16)arg0;
-    index = (s16)arg1;
+    arg0s = (short)arg0;
+    index = (short)arg1;
     if (SpuVmVSetUp(arg0s, index) == 0) {
         return D_801E4110[(index << 4) + 0x4];
     }

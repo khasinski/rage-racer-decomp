@@ -2,9 +2,9 @@
 
 extern SeqStruct *D_801E79CC[];
 
-void SsSeqSetNoteParam2C(s32 seq, s32 sep, u8 value) {
-    SeqStruct *state = &D_801E79CC[(s16)seq][(s16)sep];
+void SsSeqSetNoteParam2C(long seq, long sep, u_char value) {
+    SeqStruct *state = &D_801E79CC[(short)seq][(short)sep];
 
     state->programs[state->channel] = value;
-    state->delta_value = SsSeqReadDeltaTime((s16)seq, (s16)sep);
+    state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
 }

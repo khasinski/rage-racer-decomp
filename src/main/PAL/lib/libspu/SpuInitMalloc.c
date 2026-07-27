@@ -1,11 +1,11 @@
 #include "psyq/spu.h"
 
-extern s32 _spu_mem_mode_unitM asm("D_8009ABA0");
-extern s32 D_8009A71C;
-extern s32 D_8009A720;
-extern s32 _spu_mem_mode_plus asm("D_8009ABA8");
-extern s32 _spu_AllocBlockNum asm("D_8009ABD4");
-extern s32 _spu_AllocLastNum asm("D_8009ABD8");
+extern long _spu_mem_mode_unitM asm("D_8009ABA0");
+extern long D_8009A71C;
+extern long D_8009A720;
+extern long _spu_mem_mode_plus asm("D_8009ABA8");
+extern long _spu_AllocBlockNum asm("D_8009ABD4");
+extern long _spu_AllocLastNum asm("D_8009ABD8");
 extern SpuMallocEntry *_spu_memList asm("D_8009ABDC");
 
 #define BLK(i) (&_spu_memList[(i)])
@@ -14,15 +14,15 @@ extern SpuMallocEntry *_spu_memList asm("D_8009ABDC");
 #define BLK_IS_FREE(i) (BLK(i)->addr & 0x80000000)
 #define BLK_IS_END(i) (BLK(i)->addr & 0x40000000)
 
-s32 SpuInitMalloc(s32 arg0, u32 *arg1) asm("func_80079B60");
-s32 SpuMalloc(s32 size) asm("func_80079BB4");
+long SpuInitMalloc(long arg0, u_long *arg1) asm("func_80079B60");
+long SpuMalloc(long size) asm("func_80079BB4");
 void _spu_gcSPU(void) asm("func_80079E7C");
-void SpuFree(u32 arg0) asm("func_8007A17C");
+void SpuFree(u_long arg0) asm("func_8007A17C");
 
-s32 SpuInitMalloc(s32 arg0, u32 *arg1) {
-    s32 ret = arg0;
-    u32 size;
-    s32 shift;
+long SpuInitMalloc(long arg0, u_long *arg1) {
+    long ret = arg0;
+    u_long size;
+    long shift;
 
     if (ret > 0) {
         shift = _spu_mem_mode_unitM;
@@ -40,13 +40,13 @@ s32 SpuInitMalloc(s32 arg0, u32 *arg1) {
     return 0;
 }
 
-s32 SpuMalloc(s32 size) {
-    s32 var_a0;
-    s32 var_s2;
-    s32 var_s3;
-    s32 var_v0;
-    s32 temp_s1;
-    s32 i;
+long SpuMalloc(long size) {
+    long var_a0;
+    long var_s2;
+    long var_s3;
+    long var_v0;
+    long temp_s1;
+    long i;
 
     i = 0;
     var_s2 = -1;
@@ -85,9 +85,9 @@ s32 SpuMalloc(s32 size) {
 
     if (BLK(var_s2)->addr & 0x40000000) {
         if ((var_s2 < _spu_AllocBlockNum) && ((BLK(var_s2)->size - var_s3) >= size)) {
-            s32 next = var_s2 + 1;
+            long next = var_s2 + 1;
 
-            BLK(next)->addr = ((*(volatile s32 *)&BLK(var_s2)->addr & 0x0FFFFFFF) + size) | 0x40000000;
+            BLK(next)->addr = ((*(volatile long *)&BLK(var_s2)->addr & 0x0FFFFFFF) + size) | 0x40000000;
             BLK(next)->size = BLK(var_s2)->size - size;
 
             BLK(var_s2)->addr &= 0x0FFFFFFF;
@@ -100,10 +100,10 @@ s32 SpuMalloc(s32 size) {
         }
     } else {
         if ((size < BLK(var_s2)->size) && (_spu_AllocLastNum < _spu_AllocBlockNum)) {
-            s32 t_addr;
-            s32 t_size;
-            s32 addr = BLK(var_s2)->addr + size;
-            s32 split_size = BLK(var_s2)->size - size;
+            long t_addr;
+            long t_size;
+            long addr = BLK(var_s2)->addr + size;
+            long split_size = BLK(var_s2)->size - size;
 
             t_addr = BLK(_spu_AllocLastNum)->addr;
             t_size = BLK(_spu_AllocLastNum)->size;
@@ -128,8 +128,8 @@ s32 SpuMalloc(s32 size) {
 }
 
 void _spu_gcSPU(void) {
-    s32 i;
-    s32 j;
+    long i;
+    long j;
 
     for (i = 0; i <= _spu_AllocLastNum;) {
         if (BLK_IS_FREE(i)) {
@@ -138,7 +138,7 @@ void _spu_gcSPU(void) {
             j = i + 1;
             scan = BLK(j);
             while (1) {
-                s32 is_not_empty = scan->addr != 0x2FFFFFFF;
+                long is_not_empty = scan->addr != 0x2FFFFFFF;
                 scan++;
                 if (is_not_empty) {
                     break;
@@ -172,8 +172,8 @@ void _spu_gcSPU(void) {
             }
 
             if (BLK_ADDR(j) < BLK_ADDR(i)) {
-                u32 swap_addr = BLK(i)->addr;
-                u32 swap_size = BLK(i)->size;
+                u_long swap_addr = BLK(i)->addr;
+                u_long swap_size = BLK(i)->size;
                 BLK(i)->addr = BLK(j)->addr;
                 BLK(i)->size = BLK(j)->size;
                 BLK(j)->addr = swap_addr;
@@ -205,14 +205,14 @@ void _spu_gcSPU(void) {
     }
 }
 
-void SpuFree(u32 arg0) {
-    s32 cur_block_num;
+void SpuFree(u_long arg0) {
+    long cur_block_num;
     SpuMallocEntry *cur_mem;
-    u32 temp;
-    u32 cur_addr;
-    s32 mask4;
-    s32 block_num;
-    u8 pad[2];
+    u_long temp;
+    u_long cur_addr;
+    long mask4;
+    long block_num;
+    u_char pad[2];
 
     cur_block_num = 0;
     if (_spu_AllocBlockNum > 0) {

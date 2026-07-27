@@ -1,11 +1,13 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern volatile u16 *D_8009AB7C;
+extern volatile u_short *D_8009AB7C;
 
-s32 _spu_resetTransferControl(void) {
-    volatile s32 i;
-    volatile s32 delay;
-    u16 cnt;
+long _spu_resetTransferControl(void) {
+    volatile long i;
+    volatile long delay;
+    u_short cnt;
 
     cnt = D_8009AB7C[0xD5];
     D_8009AB7C[0xD5] = cnt & 0x7FCF;
@@ -18,7 +20,7 @@ s32 _spu_resetTransferControl(void) {
     }
 
     {
-        volatile u16 *base = D_8009AB7C;
+        volatile u_short *base = D_8009AB7C;
 
         cnt &= 0xFFCF;
         base[0xD5] = cnt;

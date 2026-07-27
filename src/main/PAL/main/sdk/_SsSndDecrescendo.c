@@ -1,32 +1,34 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct SeqStruct71568 {
-    u8 pad00[0x3E];
-    s16 unk3E;
-    s16 unk40;
-    s16 unk42;
-    u8 pad44[0x34];
-    s16 unk78;
-    s16 unk7A;
-    u8 pad7C[0x14];
-    s32 flags;
-    u32 unk94;
-    u32 unk98;
-    u8 pad9C[0x10];
+    u_char pad00[0x3E];
+    short unk3E;
+    short unk40;
+    short unk42;
+    u_char pad44[0x34];
+    short unk78;
+    short unk7A;
+    u_char pad7C[0x14];
+    long flags;
+    u_long unk94;
+    u_long unk98;
+    u_char pad9C[0x10];
 } SeqStruct71568;
 
 typedef union SeqVolume71568 {
-    s16 output;
-    u16 value;
+    short output;
+    u_short value;
 } SeqVolume71568;
 
 extern SeqStruct71568 *D_801E79CC[];
 
-s32 func_80076C58(s16 seq_sep, u16 left, u16 right, s16 update_voices);
-s32 func_80076DCC(s16 seq_sep, s16 *left, s16 *right);
+long func_80076C58(short seq_sep, u_short left, u_short right, short update_voices);
+long func_80076DCC(short seq_sep, short *left, short *right);
 
-void _SsSndDecrescendo(s16 seq, s16 sep) asm("func_80071568");
-void _SsSndDecrescendo(s16 seq, s16 sep) {
+void _SsSndDecrescendo(short seq, short sep) asm("func_80071568");
+void _SsSndDecrescendo(short seq, short sep) {
     SeqStruct71568 *score = &D_801E79CC[seq][sep];
     SeqVolume71568 left;
     SeqVolume71568 right;
@@ -59,7 +61,7 @@ void _SsSndDecrescendo(s16 seq, s16 sep) {
         score->unk40 += score->unk42;
         if (score->unk40 > 0) {
             func_80076DCC(seq | (sep << 8), &left.output, &right.output);
-            if (((u32)(s32)score->unk3E >=
+            if (((u_long)(long)score->unk3E >=
                  ((score->unk94 - score->unk98) * -score->unk42)) &&
                 (-score->unk42 < left.value)) {
                 func_80076C58(seq | (sep << 8),

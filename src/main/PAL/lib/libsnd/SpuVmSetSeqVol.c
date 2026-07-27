@@ -1,45 +1,47 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern u8 *D_801E79CC[];
-extern s16 D_801E4BE6;
-extern volatile u8 D_801E42F8;
-extern u8 D_8009DF20[];
-extern volatile u8 D_8009E0A0[];
-extern u8 D_8009E0C6[];
+extern u_char *D_801E79CC[];
+extern short D_801E4BE6;
+extern volatile u_char D_801E42F8;
+extern u_char D_8009DF20[];
+extern volatile u_char D_8009E0A0[];
+extern u_char D_8009E0C6[];
 
-s16 SpuVmSetSeqVol(s32 arg0, u16 arg1, u16 arg2, s16 arg3) asm("func_80076C58");
-s32 SpuVmGetSeqVol(s32 arg0, s16 *arg1, s16 *arg2) asm("func_80076DCC");
-s16 SpuVmGetSeqVolLeft(s32 arg0) asm("func_80076E38");
-s16 SpuVmGetSeqVolRight(s32 arg0) asm("func_80076E88");
+short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) asm("func_80076C58");
+long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) asm("func_80076DCC");
+short SpuVmGetSeqVolLeft(long arg0) asm("func_80076E38");
+short SpuVmGetSeqVolRight(long arg0) asm("func_80076E88");
 
-s16 SpuVmSetSeqVol(s32 arg0, u16 arg1, u16 arg2, s16 arg3) {
-    register u32 offset asm("$2");
-    register u8 *base asm("$8");
-    register u8 *entry asm("$3");
-    register u32 index asm("$3");
-    register u16 x asm("$9");
-    register u16 y asm("$8");
+short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) {
+    register u_long offset asm("$2");
+    register u_char *base asm("$8");
+    register u_char *entry asm("$3");
+    register u_long index asm("$3");
+    register u_short x asm("$9");
+    register u_short y asm("$8");
 
     offset = (arg0 & 0xFF) << 2;
-    base = *(u8 **)((u8 *)D_801E79CC + offset);
+    base = *(u_char **)((u_char *)D_801E79CC + offset);
     __asm__ volatile("addiu $sp,$sp,-8" ::: "memory");
     D_801E4BE6 = arg0;
     arg0 <<= 16;
-    index = ((u32)arg0) >> 24;
+    index = ((u_long)arg0) >> 24;
     offset = index * 0xAC;
-    entry = (u8 *)(offset + (s32)base);
+    entry = (u_char *)(offset + (long)base);
 
-    *(u16 *)(entry + 0x74) = arg1;
-    offset = *(volatile u16 *)(entry + 0x74);
+    *(u_short *)(entry + 0x74) = arg1;
+    offset = *(volatile u_short *)(entry + 0x74);
     arg0 >>= 16;
-    *(u16 *)(entry + 0x76) = arg2;
+    *(u_short *)(entry + 0x76) = arg2;
     if (offset >= 0x80) {
-        *(u16 *)(entry + 0x74) = 0x7F;
+        *(u_short *)(entry + 0x74) = 0x7F;
     }
 
-    offset = *(volatile u16 *)(entry + 0x76);
+    offset = *(volatile u_short *)(entry + 0x76);
     if (offset >= 0x80) {
-        *(u16 *)(entry + 0x76) = 0x7F;
+        *(u_short *)(entry + 0x76) = 0x7F;
     }
 
     index = arg1 & 0xFFFF;
@@ -50,10 +52,10 @@ s16 SpuVmSetSeqVol(s32 arg0, u16 arg1, u16 arg2, s16 arg3) {
     y = offset + index;
 
     if (arg3 == 1) {
-        register s32 i asm("$6");
-        register u8 *dst asm("$7");
-        register u8 *dstY asm("$10");
-        register s32 signedIndex asm("$5");
+        register long i asm("$6");
+        register u_char *dst asm("$7");
+        register u_char *dstY asm("$10");
+        register long signedIndex asm("$5");
 
         i = 0;
         if (D_801E42F8 != 0) {
@@ -62,19 +64,19 @@ s16 SpuVmSetSeqVol(s32 arg0, u16 arg1, u16 arg2, s16 arg3) {
             dstY = dst + 2;
             do {
                 offset = i << 16;
-                signedIndex = (s32)offset >> 16;
+                signedIndex = (long)offset >> 16;
                 offset = signedIndex * 3;
                 offset *= 4;
                 offset += signedIndex;
                 offset *= 4;
 
-                if (*(u16 *)&D_8009E0C6[offset] != arg0) {
+                if (*(u_short *)&D_8009E0C6[offset] != arg0) {
                     offset = i + 1;
                 } else {
                     offset = signedIndex << 19;
-                    offset = (s32)offset >> 15;
-                    *(u16 *)(offset + (s32)dst) = x;
-                    *(u16 *)(offset + (s32)dstY) = y;
+                    offset = (long)offset >> 15;
+                    *(u_short *)(offset + (long)dst) = x;
+                    *(u_short *)(offset + (long)dstY) = y;
                     offset = D_8009E0A0[signedIndex];
                     offset |= 3;
                     D_8009E0A0[signedIndex] = offset;
@@ -83,7 +85,7 @@ s16 SpuVmSetSeqVol(s32 arg0, u16 arg1, u16 arg2, s16 arg3) {
 
                 i = offset;
                 __asm__("" : "=r"(offset) : "0"(offset));
-            } while (((s32)(offset << 16) >> 16) < D_801E42F8);
+            } while (((long)(offset << 16) >> 16) < D_801E42F8);
         }
     }
 
@@ -92,47 +94,47 @@ s16 SpuVmSetSeqVol(s32 arg0, u16 arg1, u16 arg2, s16 arg3) {
     return offset;
 }
 
-s32 SpuVmGetSeqVol(s32 arg0, s16 *arg1, s16 *arg2) {
-    s32 index;
-    register s32 offset asm("$2");
-    register u8 *base asm("$3");
-    register u8 *ptr asm("$2");
-    register s16 *status asm("$7");
+long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) {
+    long index;
+    register long offset asm("$2");
+    register u_char *base asm("$3");
+    register u_char *ptr asm("$2");
+    register short *status asm("$7");
 
     status = &D_801E4BE6;
     offset = (arg0 & 0xFF) << 2;
-    base = *(u8 **)((u8 *)D_801E79CC + offset);
+    base = *(u_char **)((u_char *)D_801E79CC + offset);
     *status = arg0;
     index = (arg0 & 0xFF00) >> 8;
 
-    ptr = (u8 *)((index * 0xAC) + (s32)base);
-    *arg1 = *(u16 *)(ptr + 0x74);
-    *arg2 = *(u16 *)(ptr + 0x76);
+    ptr = (u_char *)((index * 0xAC) + (long)base);
+    *arg1 = *(u_short *)(ptr + 0x74);
+    *arg2 = *(u_short *)(ptr + 0x76);
     return *status;
 }
 
-s16 SpuVmGetSeqVolLeft(s32 arg0) {
-    s32 index;
-    register s32 offset asm("$2");
-    register u8 *ptr asm("$3");
+short SpuVmGetSeqVolLeft(long arg0) {
+    long index;
+    register long offset asm("$2");
+    register u_char *ptr asm("$3");
 
     offset = (arg0 & 0xFF) << 2;
-    ptr = *(u8 **)((u8 *)D_801E79CC + offset);
+    ptr = *(u_char **)((u_char *)D_801E79CC + offset);
     D_801E4BE6 = arg0;
     index = (arg0 & 0xFF00) >> 8;
 
-    return *(s16 *)(ptr + (index * 0xAC) + 0x74);
+    return *(short *)(ptr + (index * 0xAC) + 0x74);
 }
 
-s16 SpuVmGetSeqVolRight(s32 arg0) {
-    s32 index;
-    register s32 offset asm("$2");
-    register u8 *ptr asm("$3");
+short SpuVmGetSeqVolRight(long arg0) {
+    long index;
+    register long offset asm("$2");
+    register u_char *ptr asm("$3");
 
     offset = (arg0 & 0xFF) << 2;
-    ptr = *(u8 **)((u8 *)D_801E79CC + offset);
+    ptr = *(u_char **)((u_char *)D_801E79CC + offset);
     D_801E4BE6 = arg0;
     index = (arg0 & 0xFF00) >> 8;
 
-    return *(s16 *)(ptr + (index * 0xAC) + 0x76);
+    return *(short *)(ptr + (index * 0xAC) + 0x76);
 }

@@ -1,7 +1,7 @@
 #include "psyq/spu.h"
 
 
-void SsSetSpuInputAttr(u8 source, u8 field, u8 value) {
+void SsSetSpuInputAttr(u_char source, u_char field, u_char value) {
     SpuCommonAttr attr;
 
     if (source == 0) {

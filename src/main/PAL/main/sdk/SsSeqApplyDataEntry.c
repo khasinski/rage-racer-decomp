@@ -2,7 +2,7 @@
 
 /* MIDI Control Change 6 (Data Entry MSB): applies the pending RPN/NRPN to the
  * channel's VAB program. Declaration only - the emitted symbol is unchanged. */
-void SsSeqApplyDataEntry(void *seq, s32 channel) asm("func_8007010C");
+void SsSeqApplyDataEntry(void *seq, long channel) asm("func_8007010C");
 
 /*
  * SsSeqApplyDataEntry - a libsnd internal static, named descriptively in the

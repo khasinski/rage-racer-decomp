@@ -1,36 +1,38 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct {
-    void (*cb)(s32, s32);
-    s32 arg;
-    s32 tag;
-    s32 params[21];
+    void (*cb)(long, long);
+    long arg;
+    long tag;
+    long params[21];
 } QEntry;
 
 typedef struct {
-    void (*cb)(s32, s32);
-    s32 arg;
-    s32 tag;
+    void (*cb)(long, long);
+    long arg;
+    long tag;
 } LastCb;
 
 extern volatile QEntry D_801E5024[];
-extern volatile s32 D_800942EC;
-extern volatile s32 D_800942F0;
-extern s32 D_800942F8;
+extern volatile long D_800942EC;
+extern volatile long D_800942F0;
+extern long D_800942F8;
 extern volatile LastCb D_800942DC;
-extern volatile u32 *D_800942C8;
-extern volatile u32 *D_800942BC;
-extern u8 D_800941F0[];
-extern volatile s32 D_800941F4;
+extern volatile u_long *D_800942C8;
+extern volatile u_long *D_800942BC;
+extern u_char D_800941F0[];
+extern volatile long D_800941F4;
 
-extern s32 func_8006E0B0(s32);
-extern void DMACallback(s32, void *) asm("func_8006DF94");
+extern long func_8006E0B0(long);
+extern void DMACallback(long, void *) asm("func_8006DF94");
 
 /* Driver-table slot +0x24, and the DMA2 completion callback: drains the
  * Gpu_AddQueue ring, then fires the DrawSyncCallback when it empties.
  * Returns the number of entries still queued. */
-s32 Gpu_ExecuteQueue(void) asm("func_80067984");
-s32 Gpu_ExecuteQueue(void) {
+long Gpu_ExecuteQueue(void) asm("func_80067984");
+long Gpu_ExecuteQueue(void) {
     if (*D_800942C8 & 0x01000000) {
         return 1;
     }
@@ -40,7 +42,7 @@ s32 Gpu_ExecuteQueue(void) {
     if (D_800942EC != D_800942F0) {
         while ((*D_800942C8 & 0x01000000) == 0) {
             if ((((D_800942F0 + 1) & 0x3f) == D_800942EC) &&
-                (*(volatile s32 *)(u8 *)&D_800941F4 == 0)) {
+                (*(volatile long *)(u_char *)&D_800941F4 == 0)) {
                 DMACallback(2, 0);
             }
 
@@ -64,8 +66,8 @@ s32 Gpu_ExecuteQueue(void) {
     func_8006E0B0(D_800942F8);
 
     if ((D_800942EC == D_800942F0) && ((*D_800942C8 & 0x01000000) == 0) &&
-        (*(volatile s32 *)D_800941F0 != 0) && (D_800941F4 != 0)) {
-        *(volatile s32 *)D_800941F0 = 0;
+        (*(volatile long *)D_800941F0 != 0) && (D_800941F4 != 0)) {
+        *(volatile long *)D_800941F0 = 0;
         ((void (*)(void))D_800941F4)();
     }
 

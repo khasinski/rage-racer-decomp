@@ -1,9 +1,9 @@
 #include "psyq/spu.h"
 
 
-void SsSetMVol(s16 left, s16 right) {
-    s32 left_s = left;
-    s32 right_s = right;
+void SsSetMVol(short left, short right) {
+    long left_s = left;
+    long right_s = right;
     SpuCommonAttr attr;
 
     attr.mask = 3;

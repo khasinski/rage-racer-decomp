@@ -2,31 +2,31 @@
 
 typedef struct SpuVoiceRegs {
     SpuVolume volume;
-    u16 pitch;
-    u16 addr;
-    u16 adsr[2];
-    u16 volumex;
-    u16 loopAddr;
+    u_short pitch;
+    u_short addr;
+    u_short adsr[2];
+    u_short volumex;
+    u_short loopAddr;
 } SpuVoiceRegs;
 
 typedef struct SpuCommonRegs {
     SpuVoiceRegs voice[24];
     SpuVolume mainVol;
     SpuVolume revVol;
-    u16 keyOn[2];
-    u16 keyOff[2];
-    u16 chanFm[2];
-    u16 noiseMode[2];
-    u16 revMode[2];
-    u32 chanOn;
-    u16 unknown;
-    u16 revWorkAddr;
-    u16 irqAddr;
-    u16 transAddr;
-    u16 transFifo;
-    u16 spuCnt;
-    u16 dataTrans;
-    u16 spuStat;
+    u_short keyOn[2];
+    u_short keyOff[2];
+    u_short chanFm[2];
+    u_short noiseMode[2];
+    u_short revMode[2];
+    u_long chanOn;
+    u_short unknown;
+    u_short revWorkAddr;
+    u_short irqAddr;
+    u_short transAddr;
+    u_short transFifo;
+    u_short spuCnt;
+    u_short dataTrans;
+    u_short spuStat;
     SpuVolume cdVol;
     SpuVolume extVol;
     SpuVolume mainVolCurrent;
@@ -37,13 +37,13 @@ extern SpuCommonRegs *D_8009AB7C;
 
 void SpuSetCommonAttr(SpuCommonAttr *attr) asm("func_8007B2D0");
 void SpuSetCommonAttr(SpuCommonAttr *attr) {
-    u16 mainModeLeft;
-    u16 mainModeRight;
-    u16 totalLeft;
-    u16 totalRight;
-    u32 mask;
-    s32 setAll;
-    u16 control;
+    u_short mainModeLeft;
+    u_short mainModeRight;
+    u_short totalLeft;
+    u_short totalRight;
+    u_long mask;
+    long setAll;
+    u_short control;
 
     totalLeft = 0;
     totalRight = 0;

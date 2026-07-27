@@ -1,35 +1,37 @@
+#include <sys/types.h>
+
 #include "common.h"
 
-extern volatile s32 D_801E40AC;
-extern volatile u16 D_801E4BEA;
-extern volatile u16 D_801F2A08;
-extern volatile u16 D_801F2A0C;
-extern volatile u16 D_8009E670;
-extern volatile u16 D_8009E674;
-extern u8 D_8009E0D3[];
-extern u8 D_8009E0BC[];
-extern u8 D_8009E0B8[];
+extern volatile long D_801E40AC;
+extern volatile u_short D_801E4BEA;
+extern volatile u_short D_801F2A08;
+extern volatile u_short D_801F2A0C;
+extern volatile u_short D_8009E670;
+extern volatile u_short D_8009E674;
+extern u_char D_8009E0D3[];
+extern u_char D_8009E0BC[];
+extern u_char D_8009E0B8[];
 
-s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
+long SsUtKeyOffV(long voice) asm("func_80078018");
 
-s32 SsUtKeyOffV(s32 arg0) {
-    register s32 one asm("$5") = 1;
-    register u32 value asm("$2");
-    register u32 highBits asm("$6");
-    register u32 lowBits asm("$7");
-    register s32 offset asm("$3");
-    register u32 activeLow asm("$4");
-    register u32 activeHigh asm("$5");
-    register u32 maskLow asm("$3");
-    register u32 maskHigh asm("$3");
+long SsUtKeyOffV(long arg0) {
+    register long one asm("$5") = 1;
+    register u_long value asm("$2");
+    register u_long highBits asm("$6");
+    register u_long lowBits asm("$7");
+    register long offset asm("$3");
+    register u_long activeLow asm("$4");
+    register u_long activeHigh asm("$5");
+    register u_long maskLow asm("$3");
+    register u_long maskHigh asm("$3");
 
     if (D_801E40AC != one) {
         value = arg0 & 0xFFFF;
         asm volatile("" : "=r"(value) : "0"(value));
         D_801E40AC = one;
         if (value < 0x18) {
-            register u32 channel asm("$4");
-            register u32 masked asm("$3");
+            register u_long channel asm("$4");
+            register u_long masked asm("$3");
 
             D_801E4BEA = arg0;
             channel = D_801E4BEA;
@@ -41,7 +43,7 @@ s32 SsUtKeyOffV(s32 arg0) {
                 lowBits = one << masked;
                 highBits = 0;
             } else {
-                register u32 temp asm("$2");
+                register u_long temp asm("$2");
 
                 lowBits = 0;
                 temp = masked - 0x10;
@@ -53,8 +55,8 @@ s32 SsUtKeyOffV(s32 arg0) {
             D_8009E0D3[offset] = 0;
             activeLow = D_801F2A08;
             activeHigh = D_801F2A0C;
-            *(u16 *)&D_8009E0BC[offset] = 0;
-            *(u16 *)&D_8009E0B8[offset] = 0;
+            *(u_short *)&D_8009E0BC[offset] = 0;
+            *(u_short *)&D_8009E0B8[offset] = 0;
 
             maskLow = D_8009E670;
             asm volatile("" : "=r"(maskLow) : "0"(maskLow));

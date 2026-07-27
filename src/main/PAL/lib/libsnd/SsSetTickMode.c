@@ -1,15 +1,15 @@
 #include "common.h"
 
-extern s32 D_8009A558;
-extern s32 D_8009A55C;
-extern s32 D_801E6C6C;
+extern long D_8009A558;
+extern long D_8009A55C;
+extern long D_801E6C6C;
 
-s32 func_8006EAEC(s32 arg);
+long func_8006EAEC(long arg);
 
-void SsSetTickMode(s32 spec) asm("func_800720F4");
-void SsSetTickMode(s32 spec) {
-    s32 v;
-    s32 m;
+void SsSetTickMode(long spec) asm("func_800720F4");
+void SsSetTickMode(long spec) {
+    long v;
+    long m;
 
     v = func_8006EAEC(spec);
     if (spec & 0x1000) {

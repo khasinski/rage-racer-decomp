@@ -1,18 +1,18 @@
 #include "psyq/spu.h"
 
-extern volatile u16 *D_8009AB7C;
-extern volatile u32 *D_8009AB80;
-extern volatile u32 *D_8009AB84;
-extern volatile u32 *D_8009AB88;
-extern volatile u32 *D_8009AB90;
-extern s32 D_8009ABC8;
+extern volatile u_short *D_8009AB7C;
+extern volatile u_long *D_8009AB80;
+extern volatile u_long *D_8009AB84;
+extern volatile u_long *D_8009AB88;
+extern volatile u_long *D_8009AB90;
+extern long D_8009ABC8;
 
-void _spu_startDmaTransfer(u32 arg0, u16 arg1, u32 arg2) {
-    u32 addr = arg0;
-    volatile s32 i;
-    volatile s32 delay;
-    u16 cnt;
-    u32 value;
+void _spu_startDmaTransfer(u_long arg0, u_short arg1, u_long arg2) {
+    u_long addr = arg0;
+    volatile long i;
+    volatile long delay;
+    u_short cnt;
+    u_long value;
 
     D_8009AB7C[0xD3] = arg1;
 

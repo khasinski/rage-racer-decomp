@@ -1,100 +1,102 @@
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct {
-    u8 pad00[0x74];
-    u16 left_volume;
-    u16 right_volume;
-    u8 pad78[0x34];
+    u_char pad00[0x74];
+    u_short left_volume;
+    u_short right_volume;
+    u_char pad78[0x34];
 } SeqState74348;
 
 typedef struct {
-    s16 vag;
-    s16 age;
-    s16 pitch;
-    u16 unk6;
-    s16 base_volume;
-    s8 unkA;
-    s8 unkB;
-    s16 note;
-    s16 seq_sep;
-    s16 program_index;
-    s16 program;
-    s16 tone;
-    s16 vab_id;
-    s16 priority;
-    u8 pad1A;
-    u8 status;
-    s16 auto_volume;
-    s16 unk1E;
-    s16 unk20;
-    s16 unk22;
-    s16 start_volume;
-    s16 end_volume;
-    s16 auto_pan;
-    s16 unk2A;
-    s16 unk2C;
-    s16 unk2E;
-    s16 start_pan;
-    s16 end_pan;
+    short vag;
+    short age;
+    short pitch;
+    u_short unk6;
+    short base_volume;
+    signed char unkA;
+    signed char unkB;
+    short note;
+    short seq_sep;
+    short program_index;
+    short program;
+    short tone;
+    short vab_id;
+    short priority;
+    u_char pad1A;
+    u_char status;
+    short auto_volume;
+    short unk1E;
+    short unk20;
+    short unk22;
+    short start_volume;
+    short end_volume;
+    short auto_pan;
+    short unk2A;
+    short unk2C;
+    short unk2E;
+    short start_pan;
+    short end_pan;
 } VoiceState74348;
 
 typedef struct {
-    u8 tones;
-    u8 vab_id;
-    u8 note;
-    u8 fine;
-    u8 volume;
-    u8 pan;
-    u8 program;
-    u8 fake_program;
-    u8 unk8;
-    u8 unk9;
-    u8 master_volume;
-    u8 master_pan;
-    u8 tone;
-    u8 tone_volume;
-    u8 tone_pan;
-    u8 priority;
-    u8 center;
-    u8 shift;
-    u8 min;
-    u8 max;
-    u8 mode;
-    u8 pad15;
-    u16 seq_sep;
-    s16 vag;
-    u16 voice;
+    u_char tones;
+    u_char vab_id;
+    u_char note;
+    u_char fine;
+    u_char volume;
+    u_char pan;
+    u_char program;
+    u_char fake_program;
+    u_char unk8;
+    u_char unk9;
+    u_char master_volume;
+    u_char master_pan;
+    u_char tone;
+    u_char tone_volume;
+    u_char tone_pan;
+    u_char priority;
+    u_char center;
+    u_char shift;
+    u_char min;
+    u_char max;
+    u_char mode;
+    u_char pad15;
+    u_short seq_sep;
+    short vag;
+    u_short voice;
 } SvmCurrent74348;
 
 extern SeqState74348 *D_801E79CC[];
 extern VoiceState74348 D_8009E0B8[];
 extern SvmCurrent74348 D_801E4BD0;
-extern u16 D_8009DF20[];
-extern u8 D_8009E0A0[];
-extern u8 D_801E42F8;
-extern s16 D_801E3FB0;
-extern volatile u16 *D_8009A588;
-extern volatile u16 D_801F2A08;
-extern volatile u16 D_801F2A0C;
-extern u16 D_8009E670;
-extern u16 D_8009E674;
-extern u16 D_8009E680;
-extern u16 D_8009E684;
+extern u_short D_8009DF20[];
+extern u_char D_8009E0A0[];
+extern u_char D_801E42F8;
+extern short D_801E3FB0;
+extern volatile u_short *D_8009A588;
+extern volatile u_short D_801F2A08;
+extern volatile u_short D_801F2A0C;
+extern u_short D_8009E670;
+extern u_short D_8009E674;
+extern u_short D_8009E680;
+extern u_short D_8009E684;
 
-void SpuVmNoiseKeyOn(u8 voice) asm("func_80074348");
-void SpuVmNoiseKeyOn(u8 voice) {
+void SpuVmNoiseKeyOn(u_char voice) asm("func_80074348");
+void SpuVmNoiseKeyOn(u_char voice) {
     SeqState74348 *score =
         &D_801E79CC[D_801E4BD0.seq_sep & 0xFF]
                     [(D_801E4BD0.seq_sep & 0xFF00) >> 8];
-    s16 current_voice;
-    u16 bits_upper;
-    u16 bits_lower;
-    u32 left_temp;
-    u32 right_temp;
-    u32 left;
-    u32 right;
-    u16 control;
-    u32 pan;
+    short current_voice;
+    u_short bits_upper;
+    u_short bits_lower;
+    u_long left_temp;
+    u_long right_temp;
+    u_long left;
+    u_long right;
+    u_short control;
+    u_long pan;
 
     control = D_8009A588[0x1AA / 2];
 

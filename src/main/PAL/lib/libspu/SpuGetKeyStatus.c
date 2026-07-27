@@ -1,14 +1,14 @@
 #include "psyq/spu.h"
 
-extern volatile u32 D_8009A76C;
-extern volatile u16 *D_8009AB7C;
+extern volatile u_long D_8009A76C;
+extern volatile u_short *D_8009AB7C;
 
-s32 SpuGetKeyStatus(u32 arg0) {
-    s32 voice = -1;
-    s32 i = 0;
-    u32 mask = 1;
-    register u32 value asm("$3");
-    register s32 ret asm("$2");
+long SpuGetKeyStatus(u_long arg0) {
+    long voice = -1;
+    long i = 0;
+    u_long mask = 1;
+    register u_long value asm("$3");
+    register long ret asm("$2");
 
 loop:
     if (arg0 & (mask << i)) {
@@ -31,15 +31,15 @@ found:
 
 body:
     {
-        register u32 offset asm("$3") = voice << 4;
-        register volatile u16 *base asm("$2") = D_8009AB7C;
-        register u32 flags asm("$4") = D_8009A76C;
-        register u32 flag asm("$2");
+        register u_long offset asm("$3") = voice << 4;
+        register volatile u_short *base asm("$2") = D_8009AB7C;
+        register u_long flags asm("$4") = D_8009A76C;
+        register u_long flag asm("$2");
 
-        offset += (u32)base;
+        offset += (u_long)base;
         flag = (1 << voice) & flags;
         asm("" : "=r"(flag) : "0"(flag));
-        value = *(volatile u16 *)(offset + 0xC);
+        value = *(volatile u_short *)(offset + 0xC);
         if (flag != 0) {
             ret = 3;
             if (value == 0) {

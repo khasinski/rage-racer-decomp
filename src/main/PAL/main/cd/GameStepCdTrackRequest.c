@@ -12,7 +12,7 @@ extern s32 g_CdFadeFrames asm("D_8009B1B4");
 extern CdlLOC g_CdTrackLocs[] asm("D_8009AFD4");
 
 s32 func_8006A534(s32 arg0, s32 arg1);
-s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
+long CdControl(long com, void *param, long result) asm("func_8006A5A4");
 
 void GameStepCdTrackRequest(void) asm("func_800432A8");
 void GameStepCdTrackRequest(void) {

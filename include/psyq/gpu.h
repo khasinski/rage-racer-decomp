@@ -1,44 +1,46 @@
 #ifndef RAGE_PC_PSYQ_GPU_H
 #define RAGE_PC_PSYQ_GPU_H
 
+#include <sys/types.h>
+
 #include "common.h"
 
 typedef struct Rect {
-    s16 x;
-    s16 y;
-    s16 w;
-    s16 h;
+    short x;
+    short y;
+    short w;
+    short h;
 } Rect;
 
 typedef struct GpuRectPacked {
-    u32 xy;
-    s16 w;
-    s16 h;
+    u_long xy;
+    short w;
+    short h;
 } GpuRectPacked;
 
 typedef struct GpuTexWindow {
-    u8 x;
-    u8 pad1;
-    u8 y;
-    u8 pad3;
-    s16 w;
-    s16 h;
+    u_char x;
+    u_char pad1;
+    u_char y;
+    u_char pad3;
+    short w;
+    short h;
 } GpuTexWindow;
 
 typedef struct DispEnv {
     Rect disp;
     Rect screen;
-    u8 isinter;
-    u8 isrgb24;
+    u_char isinter;
+    u_char isrgb24;
 } DispEnv;
 
 typedef struct DrawEnv {
     Rect clip;
-    s16 ofs[2];
+    short ofs[2];
     Rect tw;
-    u16 tpage;
-    u8 dtd;
-    u8 dfe;
+    u_short tpage;
+    u_char dtd;
+    u_char dfe;
 } DrawEnv;
 
 /*
@@ -47,127 +49,127 @@ typedef struct DrawEnv {
  * vertex 0 + the primitive code the Set* helpers stamp in).
  */
 typedef struct P_TAG {
-    u32 tag;
-    u8 r0;
-    u8 g0;
-    u8 b0;
-    u8 code;
+    u_long tag;
+    u_char r0;
+    u_char g0;
+    u_char b0;
+    u_char code;
 } P_TAG;
 
 /* Flat triangle, 0x14 bytes. func_80064EE0 = SetPolyF3. */
 typedef struct POLY_F3 {
     P_TAG t;
-    s16 x0;
-    s16 y0;
-    s16 x1;
-    s16 y1;
-    s16 x2;
-    s16 y2;
+    short x0;
+    short y0;
+    short x1;
+    short y1;
+    short x2;
+    short y2;
 } POLY_F3;
 
 /* Flat quad, 0x18 bytes. func_80064F30 = SetPolyF4. */
 typedef struct POLY_F4 {
     P_TAG t;
-    s16 x0;
-    s16 y0;
-    s16 x1;
-    s16 y1;
-    s16 x2;
-    s16 y2;
-    s16 x3;
-    s16 y3;
+    short x0;
+    short y0;
+    short x1;
+    short y1;
+    short x2;
+    short y2;
+    short x3;
+    short y3;
 } POLY_F4;
 
 /* Textured quad, 0x28 bytes. func_80064F44 = SetPolyFT4. */
 typedef struct POLY_FT4 {
     P_TAG t;
-    s16 x0;
-    s16 y0;
-    u8 u0;
-    u8 v0;
-    u16 clut;
-    s16 x1;
-    s16 y1;
-    u8 u1;
-    u8 v1;
-    u16 tpage;
-    s16 x2;
-    s16 y2;
-    u8 u2;
-    u8 v2;
-    u16 pad1E;
-    s16 x3;
-    s16 y3;
-    u8 u3;
-    u8 v3;
-    u16 pad26;
+    short x0;
+    short y0;
+    u_char u0;
+    u_char v0;
+    u_short clut;
+    short x1;
+    short y1;
+    u_char u1;
+    u_char v1;
+    u_short tpage;
+    short x2;
+    short y2;
+    u_char u2;
+    u_char v2;
+    u_short pad1E;
+    short x3;
+    short y3;
+    u_char u3;
+    u_char v3;
+    u_short pad26;
 } POLY_FT4;
 
 /* Textured sprite, 0x14 bytes. func_80064FA8 = SetSprt. */
 typedef struct SPRT {
     P_TAG t;
-    s16 x0;
-    s16 y0;
-    u8 u0;
-    u8 v0;
-    u16 clut;
-    s16 w;
-    s16 h;
+    short x0;
+    short y0;
+    u_char u0;
+    u_char v0;
+    u_short clut;
+    short w;
+    short h;
 } SPRT;
 
 /* Solid rectangle, 0x10 bytes. func_80064FF8 = SetTile. */
 typedef struct TILE {
     P_TAG t;
-    s16 x0;
-    s16 y0;
-    s16 w;
-    s16 h;
+    short x0;
+    short y0;
+    short w;
+    short h;
 } TILE;
 
 /* Flat line, 0x10 bytes. func_8006500C = SetLineF2. */
 typedef struct LINE_F2 {
     P_TAG t;
-    s16 x0;
-    s16 y0;
-    s16 x1;
-    s16 y1;
+    short x0;
+    short y0;
+    short x1;
+    short y1;
 } LINE_F2;
 
 /* Flat 3-point polyline, 0x18 bytes. func_80065034 = SetLineF3. */
 typedef struct LINE_F3 {
     P_TAG t;
-    s16 x0;
-    s16 y0;
-    s16 x1;
-    s16 y1;
-    s16 x2;
-    s16 y2;
-    u32 pad14;
+    short x0;
+    short y0;
+    short x1;
+    short y1;
+    short x2;
+    short y2;
+    u_long pad14;
 } LINE_F3;
 
 /* Gradient line, 0x14 bytes. func_80065020 = SetLineG2. */
 typedef struct LINE_G2 {
     P_TAG t;
-    s16 x0;
-    s16 y0;
-    u8 r1;
-    u8 g1;
-    u8 b1;
-    u8 pad0F;
-    s16 x1;
-    s16 y1;
+    short x0;
+    short y0;
+    u_char r1;
+    u_char g1;
+    u_char b1;
+    u_char pad0F;
+    short x1;
+    short y1;
 } LINE_G2;
 
 typedef struct DrawPacket {
-    u8 pad0[3];
-    u8 code;
-    u32 x0y0;
-    u32 x1y1;
+    u_char pad0[3];
+    u_char code;
+    u_long x0y0;
+    u_long x1y1;
 } DrawPacket;
 
 /*
  * The libgpu driver table at 0x800941A0 (D_800941E0 points at it), dumped in
- * asm/PAL/main/data/main/6BE64.data.s. Slots holding a `u32` are worker
+ * asm/PAL/main/data/main/6BE64.data.s. Slots holding a `u_long` are worker
  * function addresses passed to `send` rather than called directly:
  *   +0x04 func_8006767C  +0x08 Gpu_AddQueue      +0x0C Gpu_ClearImage
  *   +0x10 Gpu_WriteGp1   +0x14 Gpu_WriteGp0Words +0x18 Gpu_StartDmaTransfer
@@ -177,21 +179,21 @@ typedef struct DrawPacket {
  *   +0x3C Gpu_DrawSync
  */
 typedef struct GpuCallbacks {
-    u8 pad0[0x8];
-    s32 (*send)(u32 worker, void *buf, s32 size, u32 data);
-    u32 cmd0C;
-    void (*submit)(s32 cmd);
-    void (*writeGp0Words)(void *src, s32 count);
-    u32 sendList;
-    u32 storeImage;
-    u32 loadImage;
-    u8 pad24[0x28 - 0x24];
-    s32 (*read)(s32 cmd);
-    void (*clearOTag)(void *ot, s32 count);
-    u8 pad30[0x34 - 0x30];
-    void (*resetGraph)(s32 mode);
-    s32 (*status)(void);
-    void (*drawSync)(s32 mode);
+    u_char pad0[0x8];
+    long (*send)(u_long worker, void *buf, long size, u_long data);
+    u_long cmd0C;
+    void (*submit)(long cmd);
+    void (*writeGp0Words)(void *src, long count);
+    u_long sendList;
+    u_long storeImage;
+    u_long loadImage;
+    u_char pad24[0x28 - 0x24];
+    long (*read)(long cmd);
+    void (*clearOTag)(void *ot, long count);
+    u_char pad30[0x34 - 0x30];
+    void (*resetGraph)(long mode);
+    long (*status)(void);
+    void (*drawSync)(long mode);
 } GpuCallbacks;
 
 /*
@@ -221,66 +223,68 @@ void SetLineF4(void *prim) asm("func_80065074");   /* 0x4C */
 void SetLineG4(void *prim) asm("func_80065094");   /* 0x5C */
 
 /* Primitive attribute bits (bit 1 = semi-transparency, bit 0 = shade-texture). */
-void SetSemiTrans(void *prim, s32 enabled) asm("func_80064E90");
-void SetShadeTex(void *prim, s32 enabled) asm("func_80064EB8");
+void SetSemiTrans(void *prim, long enabled) asm("func_80064E90");
+void SetShadeTex(void *prim, long enabled) asm("func_80064EB8");
 
 /* Ordering-table / primitive-list plumbing (24-bit "next" pointer in the tag). */
-void SetPrimAddr(u32 *prim, u32 addr) asm("func_80064E54");
-void TermPrim(u32 *prim) asm("func_80064E78");
-s32 GetPrimAddr(u32 *prim) asm("func_80064DA4");
+void SetPrimAddr(u_long *prim, u_long addr) asm("func_80064E54");
+void TermPrim(u_long *prim) asm("func_80064E78");
+long GetPrimAddr(u_long *prim) asm("func_80064DA4");
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
-void AddPrims(u32 *ot, u32 first, u32 *last) asm("func_80064E18");
-void *ClearOTag(u32 *ot, s32 count) asm("func_80065CB0");
-void *ClearOTagR(u32 *ot, s32 count) asm("func_80065D68");
+void AddPrims(u_long *ot, u_long first, u_long *last) asm("func_80064E18");
+void *ClearOTag(u_long *ot, long count) asm("func_80065CB0");
+void *ClearOTagR(u_long *ot, long count) asm("func_80065D68");
 
 /* Draw/display environment and texture-page helpers. */
 /* CheckPrim (func_80065968) is declared locally per TU: callers pass either a
  * Rect * or a GpuRectPacked *, and gcc 2.6.3 will not accept both against one
  * prototype. */
-void ClearImage(void *rect, u32 r, u32 g, u32 b) asm("func_80065A90");
+void ClearImage(void *rect, u_long r, u_long g, u_long b) asm("func_80065A90");
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
-s32 MoveImage(GpuRectPacked *rect, u32 x, u32 y) asm("func_80065BEC");
-void DrawSync(s32 mode) asm("func_800658FC");
-u32 DrawSyncCallback(u32 callback) asm("func_80065804");
-void DumpClut(s32 clut) asm("func_80064D64");
-void DumpTPage(s32 tpage) asm("func_80064C94");
+long MoveImage(GpuRectPacked *rect, u_long x, u_long y) asm("func_80065BEC");
+/* LibRef47 6-33 returns long (queue length for mode 1); no caller here uses the
+ * result, so it is declared void. */
+void DrawSync(long mode) asm("func_800658FC");
+u_long DrawSyncCallback(u_long callback) asm("func_80065804");
+void DumpClut(long clut) asm("func_80064D64");
+void DumpTPage(long tpage) asm("func_80064C94");
 void DumpDrawEnv(DrawEnv *env) asm("func_80065234");
 void DumpDispEnv(DispEnv *env) asm("func_800653B4");
-s32 GetClut(s32 x, s32 y) asm("func_80064C7C");
-s32 GetTPage(s32 tp, s32 abr, s32 x, s32 y) asm("func_80064BB4");
-s32 GetDispEnv(s32 env) asm("func_8006655C");
-s32 GetDrawEnv(s32 env) asm("func_80066074");
+long GetClut(long x, long y) asm("func_80064C7C");
+long GetTPage(long tp, long abr, long x, long y) asm("func_80064BB4");
+long GetDispEnv(long env) asm("func_8006655C");
+long GetDrawEnv(long env) asm("func_80066074");
 /* Draws one primitive immediately (DrawSync + push prim[4..] for prim[3]
  * words). The real PutDispEnv is func_800660AC. */
-void DrawPrim(u8 *prim) asm("func_80065E00");
+void DrawPrim(u_char *prim) asm("func_80065E00");
 /* Fills the 0x1C-byte DRAWENV head: clip, ofs, tw, tpage, dtd, dfe, isbg, rgb.
  * `dfe` comes from the buffer height and the DMA interrupt state. */
-void *SetDefDrawEnv(u8 *env, s32 x, s32 y, s32 w, s32 h) asm("func_80064AA8");
+void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) asm("func_80064AA8");
 /* Fills the 0x14-byte DISPENV: disp Rect, screen Rect, isinter, isrgb24.
  * Was bound to SetDefDrawEnv here; that was wrong (see docs/names.md 17). */
-u8 *SetDefDispEnv(u8 *env, s32 x, s32 y, s32 w, s32 h) asm("func_80064B78");
-void SetDrawTPage(u8 *prim, s32 dfe, s32 dtd, s32 tpage) asm("func_800650E4");
+u_char *SetDefDispEnv(u_char *env, long x, long y, long w, long h) asm("func_80064B78");
+void SetDrawTPage(u_char *prim, long dfe, long dtd, long tpage) asm("func_800650E4");
 void SetTexWindow(DrawPacket *prim, void *tw) asm("func_800665C8");
 void SetDrawArea(DrawPacket *prim, Rect *rect) asm("func_80066604");
-void SetDrawOffset(DrawPacket *prim, s16 *ofs) asm("func_80066688");
+void SetDrawOffset(DrawPacket *prim, short *ofs) asm("func_80066688");
 void SetDrawMode(
     DrawPacket *prim,
-    s32 dfe,
-    s32 dtd,
-    u16 tpage,
+    long dfe,
+    long dtd,
+    u_short tpage,
     void *tw) asm("func_800666F4");
-s32 LoadClut(void *clut, s32 x, s32 y) asm("func_80064A40");
-s32 LoadClut2(void *clut, s32 x, s32 y) asm("func_800649D8");
+long LoadClut(void *clut, long x, long y) asm("func_80064A40");
+long LoadClut2(void *clut, long x, long y) asm("func_800649D8");
 /* D_800941E8 (mode) and D_800941EA (debug level) accessors. */
-s32 GetGraphType(void) asm("func_800657E4");
-s32 GetGraphDebug(void) asm("func_800657F4");
+long GetGraphType(void) asm("func_800657E4");
+long GetGraphDebug(void) asm("func_800657F4");
 /* GP1(03h) display enable: 0 blanks the screen (and clears the cached
  * DISPENV), non-zero shows it. Named from its own "SetDispMask(%d)..." trace
  * string at D_80013520. */
-void SetDispMask(s32 mask) asm("func_80065860");
+void SetDispMask(long mask) asm("func_80065860");
 
 /* libgpu-internal byte fill helper. */
-void MemFill(u8 *dst, u8 value, s32 count) asm("func_80068180");
+void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");
 
 #endif

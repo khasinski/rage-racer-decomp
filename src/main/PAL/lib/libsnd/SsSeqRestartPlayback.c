@@ -2,9 +2,9 @@
 
 extern SeqStruct *D_801E79CC[];
 
-void SsSeqRestartPlayback(s16 arg0, s16 arg1) asm("func_80070F10");
+void SsSeqRestartPlayback(short arg0, short arg1) asm("func_80070F10");
 
-void SsSeqRestartPlayback(s16 arg0, s16 arg1) {
+void SsSeqRestartPlayback(short arg0, short arg1) {
     SeqStruct *state;
 
     state = &D_801E79CC[arg0][arg1];
