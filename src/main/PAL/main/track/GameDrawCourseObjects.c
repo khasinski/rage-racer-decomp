@@ -162,7 +162,7 @@ typedef struct {
 extern Out *g_VisibleCellList asm("D_801E4BC8");
 extern s8 D_8007E45C[];
 extern s8 D_8007E45D[];
-void *func_80068F80(void *mtx, void *vec, void *out);
+void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
 
 void GameBuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
 void GameBuildVisibleCells(s32 arg0, s32 arg1) {
@@ -240,7 +240,7 @@ void GameBuildVisibleCells(s32 arg0, s32 arg1) {
                 vec[0] = ((sx << 11) - (s->f0 - center)) << 2;
                 vec[1] = (-s->f4) << 2;
                 vec[2] = ((sy << 11) - (s->f8 - center)) << 2;
-                func_80068F80((void *)0x1F800028, vec, proj);
+                ApplyMatrixLV((void *)0x1F800028, vec, proj);
                 if (proj[2] >= arg0 && arg1 >= proj[2]) {
                     out->f0 = proj[0];
                     do {

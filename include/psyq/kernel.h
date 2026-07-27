@@ -12,7 +12,9 @@ void ChangeClearRCnt(s32 clear) asm("func_8006DF14");
 void ChangeClearInterruptMask(s32 index, s32 clear) asm("func_8006DF24");
 void KernelCallbackSlot3(void) asm("func_8006DF34");
 void KernelCallbackSlot2(void) asm("func_8006DF64");
-void ResetCallback(s32 spec, s32 callback) asm("func_8006DF94");
+/* BIOS DMA callback installer: spec 0=MDECin 1=MDECout 2=GPU 3=CD-ROM 4=SPU.
+ * Was declared ResetCallback here; that was wrong (docs/names.md 17). */
+void DMACallback(s32 spec, s32 callback) asm("func_8006DF94");
 void VSyncCallback(s32 callback) asm("func_8006DFC4");
 void KernelCallbackSlot5(void) asm("func_8006DFF8");
 void KernelCallbackSlot4(void) asm("func_8006E028");

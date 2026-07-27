@@ -24,7 +24,7 @@ extern u8 D_800941F0[];
 extern volatile s32 D_800941F4;
 
 extern s32 func_8006E0B0(s32);
-extern void func_8006DF94(s32, void *);
+extern void DMACallback(s32, void *) asm("func_8006DF94");
 
 /* Driver-table slot +0x24, and the DMA2 completion callback: drains the
  * Gpu_AddQueue ring, then fires the DrawSyncCallback when it empties.
@@ -41,7 +41,7 @@ s32 Gpu_ExecuteQueue(void) {
         while ((*D_800942C8 & 0x01000000) == 0) {
             if ((((D_800942F0 + 1) & 0x3f) == D_800942EC) &&
                 (*(volatile s32 *)(u8 *)&D_800941F4 == 0)) {
-                func_8006DF94(2, 0);
+                DMACallback(2, 0);
             }
 
             while ((*D_800942BC & 0x04000000) == 0) {

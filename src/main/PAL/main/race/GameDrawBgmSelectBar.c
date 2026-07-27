@@ -24,16 +24,16 @@ extern s32 g_BgmRandomPlay asm("D_8007D6B4");
 extern s32 g_BgmSelectShowUi asm("D_801E412C");
 extern s32 g_CameraViewMode asm("D_8009E870");
 void GameAdvanceBgmShuffleBag() asm("func_80025E54");
-void func_80033AA0();
+void GameDrawFullscreenFadeTile() asm("func_80033AA0");
 void GameRequestOptionScreenAssets() asm("func_80018B98");
 void GameDrawBgmSelectBar() asm("func_80025C58");
 void func_8003BB50();
-void func_80019EFC();
+void GameRequestTrackTexturePage() asm("func_80019EFC");
 void GameUpdateCamera() asm("func_80043BCC");
 void func_800418D4();
 void GameDrawTerrainCellsWide() asm("func_80041888");
 void GameDrawCourseScenery2() asm("func_8003E2E8");
-int func_8001A0E4();
+int GameCycleBgmSelectCameraCar() asm("func_8001A0E4");
 
 void GameDrawBgmSelectBar(void) asm("func_80025C58");
 void GameDrawBgmSelectBar(void) {
@@ -194,7 +194,7 @@ L13c:
     goto L48c;
 
 L424:
-    func_80033AA0(g_FadeLevel, 0x49);
+    GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
     g_FadeLevel = g_FadeLevel + g_FadeStep;
     if (g_FadeLevel >= 256) {
         GameRequestOptionScreenAssets();
@@ -206,9 +206,9 @@ L424:
 L48c:
     if (g_BgmSelectShowUi != 0) GameDrawBgmSelectBar();
     g_AnimTimer = g_AnimTimer + 1;
-    g_CameraCarIndex = func_8001A0E4(0xff, g_CameraCarIndex);
+    g_CameraCarIndex = GameCycleBgmSelectCameraCar(0xff, g_CameraCarIndex);
     func_8003BB50();
-    func_80019EFC(g_Cars[g_CameraCarIndex].field_78);
+    GameRequestTrackTexturePage(g_Cars[g_CameraCarIndex].field_78);
     GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     GameDrawCars();
     GameUpdateEnvironment();

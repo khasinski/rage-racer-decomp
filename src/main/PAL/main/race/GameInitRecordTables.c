@@ -16,7 +16,7 @@ extern s32 D_8019CB80;
 extern u16 D_8019CB84;
 extern s32 g_BestSectorTimes asm("D_801E41E8");
 extern char D_80010EB4[];
-void func_800632F0(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2);
+void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2) asm("func_800632F0");
 extern char D_80010EC4[];
 extern char D_80010ED0[];
 void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
@@ -201,7 +201,7 @@ void *GameFormatLapTime(void *dst, s32 value) {
     s32 seconds = ticks - (minutes * 60);
     s32 fraction = value - (ticks * 1000);
 
-    func_800632F0(dst, D_80010EB4, minutes, seconds, fraction);
+    LibcSprintf(dst, D_80010EB4, minutes, seconds, fraction);
     return dst;
 }
 

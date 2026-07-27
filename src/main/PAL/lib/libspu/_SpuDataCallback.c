@@ -1,7 +1,7 @@
 #include "psyq/spu.h"
 
-void func_8006DF94(s32 spec, void *callback);
+void DMACallback(s32 spec, void *callback) asm("func_8006DF94");
 
 void _SpuDataCallback(void *callback) {
-    func_8006DF94(4, callback);
+    DMACallback(4, callback);
 }

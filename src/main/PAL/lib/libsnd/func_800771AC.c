@@ -181,7 +181,7 @@ extern SvmCurrent771AC D_801E4BD0;
 s32 func_80073314(s16 vab_id, s16 program);
 u8 func_800739E8(s32 priority);
 void func_80074134(void);
-void func_80074348(s32 voice);
+void SpuVmNoiseKeyOn(s32 voice) asm("func_80074348");
 s32 func_80074A6C(u16 note, u16 fine);
 void func_80073C50(s32 count, s32 pitch);
 
@@ -268,7 +268,8 @@ s32 func_800771AC(s16 seq_sep, s16 vab_id, s16 program, u16 volume, u16 pan) {
     return voices_updated;
 }
 
-s16 func_800776E4(
+s16 SsUtKeyOn(s16, s16, s16, s16, s16, s16, s16) asm("func_800776E4");
+s16 SsUtKeyOn(
     s16 vab_id,
     s16 program,
     s16 tone,
@@ -351,7 +352,7 @@ s16 func_800776E4(
 
     func_80074134();
     if ((s16)D_801E4BD0.vag == 0xFF) {
-        func_80074348(voice);
+        SpuVmNoiseKeyOn(voice);
     } else {
         func_80073C50(1, func_80074A6C(note, fine) & 0xFFFF);
     }

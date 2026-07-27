@@ -22,8 +22,8 @@ extern volatile u16 D_8009E684;
 extern u8 D_801E42F8;
 extern volatile u8 D_801E4D88;
 
-void func_80074ECC(s32 voice);
-void func_800753CC(s32 voice);
+void SpuVmAutoVolTick(s32 voice) asm("func_80074ECC");
+void SpuVmAutoPanTick(s32 voice) asm("func_800753CC");
 
 void SsUtFlush(void) asm("func_80075FA4");
 void SsUtFlush(void) {
@@ -141,10 +141,10 @@ noiseLoop:
         register s32 voiceStep asm("$2");
 
         if (*(s16 *)&D_8009E0D4[voiceOffset] != 0) {
-            func_80074ECC(voiceIndex >> 16);
+            SpuVmAutoVolTick(voiceIndex >> 16);
         }
         if (*(s16 *)&D_8009E0E0[voiceOffset] != 0) {
-            func_800753CC(voiceIndex >> 16);
+            SpuVmAutoPanTick(voiceIndex >> 16);
         }
         voiceOffset += 0x34;
         voiceStep = 0x10000;

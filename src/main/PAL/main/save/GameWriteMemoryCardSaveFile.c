@@ -281,7 +281,7 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 extern char D_80012FAC[];
 extern char D_8009B748[];
 
-void Square_Vsprintf(char *dst, char *fmt, s32 arg0, s32 arg1) asm("func_800632F0");
+void LibcSprintf(char *dst, char *fmt, s32 arg0, s32 arg1) asm("func_800632F0");
 
 s32 GameCountMemoryCardFiles(s32 arg0, s32 arg1) {
     char path[0x20];
@@ -290,7 +290,7 @@ s32 GameCountMemoryCardFiles(s32 arg0, s32 arg1) {
     s32 count;
 
     count = 0;
-    Square_Vsprintf(path, D_80012FAC, arg0, arg1);
+    LibcSprintf(path, D_80012FAC, arg0, arg1);
     entry = D_8009B748;
 
     if (BiosFirstFile(path, entry) == entry) {

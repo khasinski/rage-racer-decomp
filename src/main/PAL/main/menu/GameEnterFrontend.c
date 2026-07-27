@@ -17,7 +17,7 @@ extern s32 D_8009E880;
 extern s32 D_8019CB70;
 
 void func_8005B9CC(void);
-void func_80019EBC(void);
+void GameResetTrackTextureSwap(void) asm("func_80019EBC");
 void func_8001A498(void);
 void func_80021540(void);
 void func_8005DBB4(void);
@@ -28,7 +28,7 @@ void GameEnterFrontend(void) asm("func_8001AF70");
 void GameEnterFrontend(void) {
     SetDispMask(0);
     func_8005B9CC();
-    func_80019EBC();
+    GameResetTrackTextureSwap();
     func_8001A498();
 
     D_8019C768 = 0x80;

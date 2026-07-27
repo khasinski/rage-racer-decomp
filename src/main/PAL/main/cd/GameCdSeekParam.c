@@ -1,10 +1,10 @@
 #include "common.h"
 void func_8005F2AC(s32 arg0);
-void func_80063DAC(s32 arg0);
+void _card_info(s32 arg0) asm("func_80063DAC");
 void func_8005F4D8(void);
 void GameCdSeekParam(s32 arg0) asm("func_8005EB78");
 void GameCdSeekParam(s32 arg0) {
     func_8005F2AC(arg0);
-    func_80063DAC(arg0 & 0xFF);
+    _card_info(arg0 & 0xFF);
     func_8005F4D8();
 }

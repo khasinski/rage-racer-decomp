@@ -4,7 +4,7 @@ extern volatile u16 *D_8009AB7C;
 extern volatile s32 D_8009ABB0;
 extern s32 D_8009ABC8;
 
-void func_8006A3D8(s32 arg0, s32 arg1);
+void DeliverEvent(s32 arg0, s32 arg1) asm("func_8006A3D8");
 
 void _spu_transferCallback(void) {
     volatile s32 i;
@@ -57,6 +57,6 @@ void _spu_transferCallback(void) {
         callback = (void (*)(void))D_8009ABB0;
         callback();
     } else {
-        func_8006A3D8(0xF0000009, 0x20);
+        DeliverEvent(0xF0000009, 0x20);
     }
 }

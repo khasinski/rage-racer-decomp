@@ -68,7 +68,7 @@ void GameBeginReplay(void) asm("func_8001FA70");
 
 void GameCommitClassProgress(void) asm("func_800207E0");
 
-void func_80033AA0(s32 arg0, s32 arg1);
+void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 
 s32 GameFramesToMilliseconds(s32 arg0, s32 arg1) asm("func_80034F18");
 
@@ -137,23 +137,23 @@ void GameInitRenderState(s32) asm("func_80017884");
 
 void func_8001F100(void);
 
-void func_8001D30C(void);
+void GameLoadTrackTexturePageRange(void) asm("func_8001D30C");
 
 void func_8001D210(void);
 
 void func_8002C478(void *);
 
-void func_80019E84(s32);
+void GameSetTrackTexturePageNow(s32) asm("func_80019E84");
 
 void GameBuildStartingGrid(void) asm("func_80038844");
 
-void func_8001A980(void);
+void GameResetMirrorState(void) asm("func_8001A980");
 
 void func_800458CC(s32);
 
 void func_800340D8(void);
 
-void func_80032D5C(s32);
+void GameBuildRaceHudPrims(s32) asm("func_80032D5C");
 
 void func_8003D6E8(void);
 
@@ -191,15 +191,15 @@ extern s16 D_801E4B6C[];
 
 extern s32 g_RacePaused asm("D_801E4BAC");
 
-s32 func_8001A9A8(void);
+s32 GameBeginMirrorPass(void) asm("func_8001A9A8");
 
 s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
 
-void func_80019EFC(s32 arg0);
+void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
 
-void func_8001ABD8(void);
+void GameEndMirrorPass(void) asm("func_8001ABD8");
 
-void func_8001ADF4(s32 arg0);
+void GameDrawRearViewMirror(s32 arg0) asm("func_8001ADF4");
 
 void GameRecordReplayFrame(void) asm("func_8001F9D8");
 
@@ -213,11 +213,11 @@ void GameUpdatePlayerCar(void *arg0) asm("func_8002DEFC");
 
 void GameDrawPlayerTachometer(void) asm("func_8002F458");
 
-void func_80032E9C(s32 arg0);
+void GameDrawRaceHudLabels(s32 arg0) asm("func_80032E9C");
 
 void func_80033090(void);
 
-void func_800331F8(s32 arg0);
+void GameDrawTimeRemaining(s32 arg0) asm("func_800331F8");
 
 void func_80033230(void);
 
@@ -460,7 +460,7 @@ after_progress:
 check_finish_transition:
     if ((g_LapCount < *(s16 *)(route + 0xAC)) &&
         (g_RacePhase == 4)) {
-        func_80033AA0(g_RaceFadeTimer * 2, 0x29);
+        GameDrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
         timer = g_RaceFadeTimer;
         oldTimer = timer;
         timer = timer < 2;
@@ -546,7 +546,7 @@ void GameEnterRaceScene(void) {
     GameSetupDisplay240(0, 0, 0);
     GameInitRenderState(5);
     func_8001F100();
-    func_8001D30C();
+    GameLoadTrackTexturePageRange();
     func_8001D210();
     D_801E40CC = *(s32 *)g_TrackEventData;
     if (g_CourseIndex == 3) {
@@ -556,7 +556,7 @@ void GameEnterRaceScene(void) {
     }
     base = g_PlayerCar;
     func_8002C478(base);
-    func_80019E84(g_PlayerTrackSection);
+    GameSetTrackTexturePageNow(g_PlayerTrackSection);
     GameBuildStartingGrid();
     trackLength = g_TrackLength;
     mode = (count = g_CourseIndex);
@@ -602,10 +602,10 @@ void GameEnterRaceScene(void) {
         } while (i < count);
     }
     g_RaceTotalTime = 0;
-    func_8001A980();
+    GameResetMirrorState();
     func_800458CC(*(s32 *)(D_8019C9A8 + 8));
     func_800340D8();
-    func_80032D5C(g_GrandPrixMode);
+    GameBuildRaceHudPrims(g_GrandPrixMode);
     g_AnimTimer = 0;
     g_SceneTimer = 0;
     g_CameraViewMode = 0;
@@ -650,7 +650,7 @@ void GameUpdateRaceScene(void) {
     option = 0;
     if ((u32)value < 0x3D) {
         func_8001C974();
-        func_80033AA0(0xFF - ((g_SceneTimer - 6) * 0xB), 0x49);
+        GameDrawFullscreenFadeTile(0xFF - ((g_SceneTimer - 6) * 0xB), 0x49);
     }
 
     if (g_PauseDebounce > 0) {
@@ -707,7 +707,7 @@ set_countdown:
             (g_GrandPrixMode == 0)) {
             if (g_RaceFadeTimer >= 0x15) {
                 func_800218A0((g_RaceFadeTimer - 0x14) * 3);
-                func_80033AA0((g_RaceFadeTimer - 0x14) * 3, 0x49);
+                GameDrawFullscreenFadeTile((g_RaceFadeTimer - 0x14) * 3, 0x49);
                 option = 0xF;
             }
             if (g_RaceFadeTimer == 0xA) {
@@ -719,7 +719,7 @@ set_countdown:
             }
         } else if ((g_GrandPrixMode == 1) && (*(s16 *)(g_CourseProgress + 6) > 0)) {
             GameDrawLostRaceCaption(g_RaceFadeTimer * 2);
-            func_80033AA0(g_RaceFadeTimer * 2, 0x49);
+            GameDrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x49);
             option = 0xD;
             if (g_RaceFadeTimer >= 0x7E) {
                 GameExitRaceScene(0xD);
@@ -750,9 +750,9 @@ set_countdown:
         if (g_GrandPrixMode == 0) {
             GameDrawSplitTimes();
         }
-        func_80032E9C(g_GrandPrixMode);
+        GameDrawRaceHudLabels(g_GrandPrixMode);
         if (g_GrandPrixMode != 0) {
-            func_800331F8(g_RaceTimeRemaining);
+            GameDrawTimeRemaining(g_RaceTimeRemaining);
             func_80033230();
         }
         func_80033090();
@@ -778,7 +778,7 @@ set_countdown:
         }
 
         GameUpdateCamera(g_CameraViewMode, g_PlayerCar);
-        func_80019EFC(g_PlayerTrackSection);
+        GameRequestTrackTexturePage(g_PlayerTrackSection);
         if (g_GrandPrixMode != 0) {
             GameDrawCars();
         }
@@ -795,12 +795,12 @@ set_countdown:
             }
             func_80069888(g_SceneLightMatrix);
             GameDrawScriptedScenery(0);
-            func_8001ADF4(g_SceneTimer);
+            GameDrawRearViewMirror(g_SceneTimer);
         }
         GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
-        if (func_8001A9A8() != 0) {
+        if (GameBeginMirrorPass() != 0) {
             GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
-            func_8001ABD8();
+            GameEndMirrorPass();
         }
     } else {
         s32 frameValue;
@@ -844,7 +844,7 @@ update_race:
 
         if (g_RacePhase < 4) {
             if (g_GrandPrixMode != 0) {
-                func_800331F8(g_RaceTimeRemaining);
+                GameDrawTimeRemaining(g_RaceTimeRemaining);
             }
             if (g_RaceTimeRemaining <= 0) {
                 if (*(s16 *)(g_CourseProgress + 6) != 0) {
@@ -865,7 +865,7 @@ update_race:
             }
         }
         if (option < 2 && g_RacePhase < 5) {
-            func_80032E9C(g_GrandPrixMode);
+            GameDrawRaceHudLabels(g_GrandPrixMode);
         }
 
         if (g_RacePhase > 0) {
@@ -902,7 +902,7 @@ update_race:
         } else {
             next = g_CameraCarTrackSection;
         }
-        func_80019EFC(next);
+        GameRequestTrackTexturePage(next);
 
         if (g_GrandPrixMode != 0) {
             GameDrawCars();
@@ -937,12 +937,12 @@ update_race:
             }
             func_80069888(g_SceneLightMatrix);
             GameDrawScriptedScenery(1);
-            func_8001ADF4(g_SceneTimer);
+            GameDrawRearViewMirror(g_SceneTimer);
         }
         GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
-        if (func_8001A9A8() != 0) {
+        if (GameBeginMirrorPass() != 0) {
             GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
-            func_8001ABD8();
+            GameEndMirrorPass();
         }
 
         GameGetTrackZoneBlend(g_PlayerTrackProgress);

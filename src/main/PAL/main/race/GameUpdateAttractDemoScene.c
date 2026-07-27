@@ -22,7 +22,7 @@ extern s32 D_8019C768;
 extern s32 g_PrologueStep asm("D_801E4178");
 extern s32 g_PrologueCutIndex asm("D_801E6824");
 extern u8 D_80011010[];
-void func_80033AA0(s32 arg0, s32 arg1);
+void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80025940(void);
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void GameInstallCourseAssets(void) asm("func_80019730");
@@ -41,7 +41,7 @@ extern UnkEventPair g_PrologueCameraCuts[] asm("D_8007D74C");
 void GameExitPrologue(void) asm("func_80026F68");
 void GameDrawPrologueText(void) asm("func_80026DE4");
 void func_8003BB50(void);
-void func_80019EFC(s32 arg0);
+void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
 void GameUpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
 void GameDrawTerrainCellsWide(void) asm("func_80041888");
@@ -98,7 +98,7 @@ void GameUpdatePrologueLoad(void) {
             g_FadeStep = 0;
         }
 
-        func_80033AA0(g_FadeLevel, 0x49);
+        GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
     } else if (delta > 0) {
         register s32 value asm("$4");
 
@@ -106,7 +106,7 @@ void GameUpdatePrologueLoad(void) {
         value = value + delta;
         g_FadeLevel = value;
 
-        func_80033AA0(g_FadeLevel, 0x49);
+        GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
 
         if (g_FadeLevel >= 0x101) {
             SetDispMask(0);
@@ -275,7 +275,7 @@ void GameUpdatePrologue(void) {
 
         func_8003BB50();
 
-        func_80019EFC(*(s16 *)&D_801F18CC[(((((g_CameraCarIndex * 3) * 4) + g_CameraCarIndex) * 8) - g_CameraCarIndex) * 4]);
+        GameRequestTrackTexturePage(*(s16 *)&D_801F18CC[(((((g_CameraCarIndex * 3) * 4) + g_CameraCarIndex) * 8) - g_CameraCarIndex) * 4]);
 
         GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
         GameUpdateEnvironment();

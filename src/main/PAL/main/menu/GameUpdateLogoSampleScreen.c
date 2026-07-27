@@ -21,8 +21,8 @@ extern u8 g_UiChromeScript asm("D_80082460");
 
 extern void func_8001D338(s32, s32);
 extern void func_8004A248(s32, s32);
-extern void func_8004B8B4(s32, s32);
-extern void func_8004E368(s32, s32);
+extern void GameRampTeamLogoCanvas(s32, s32) asm("func_8004B8B4");
+extern void GameDrawLogoSamplePanel(s32, s32) asm("func_8004E368");
 extern s32 func_800487D8(void *, void *, s32);
 extern void func_800489AC(s32, s32, s32);
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
@@ -38,8 +38,8 @@ void GameUpdateLogoSampleScreen(void) {
     func_8004A248(1, 0);
     v0 = GameMenuBusy;
     if (v0 == 0) {
-        func_8004B8B4(-10, 0);
-        func_8004E368(-1, D_80082EB0 + 1);
+        GameRampTeamLogoCanvas(-10, 0);
+        GameDrawLogoSamplePanel(-1, D_80082EB0 + 1);
         func_800487D8(D_8009F0B0, &g_UiScriptProgress2, -1);
         func_800489AC(g_UiScriptProgress, 2, D_8019C770);
         func_800487D8(&D_80081CA4, &g_UiScriptProgress, 0);
@@ -90,7 +90,7 @@ void GameUpdateLogoSampleScreen(void) {
     }
 
     if (v0 < 0) {
-        func_8004B8B4(10, 0);
+        GameRampTeamLogoCanvas(10, 0);
         if (GameMenuBusy == -1) {
             if (func_800487D8(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
                 u16 *p = &g_PadEdge2;
@@ -154,7 +154,7 @@ void GameUpdateLogoSampleScreen(void) {
             }
             t = D_80082EA8;
         }
-        func_8004E368(1, t + 1);
+        GameDrawLogoSamplePanel(1, t + 1);
         func_800489AC(g_UiScriptProgress, 2, D_8019C770);
         func_800487D8(&D_80081CA4, &g_UiScriptProgress, 0);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
@@ -163,7 +163,7 @@ void GameUpdateLogoSampleScreen(void) {
 
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 8;
-    func_8004E368(-1, 0);
+    GameDrawLogoSamplePanel(-1, 0);
     func_800487D8(&D_80081CA4, &g_UiScriptProgress, -1);
     func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, 2, D_8019C770);
@@ -209,7 +209,7 @@ extern u32 D_80081D34;
 void func_80051D6C(void);
 s32 func_8004E724(s32 a, s32 b);
 s32 func_800487D8(void *a, void *b, s32 c);
-void func_8001D530(void *a, s32 b);
+void GameUploadTeamNameTexture(void *a, s32 b) asm("func_8001D530");
 
 void GameUpdateTeamNameScreen(void) asm("func_8005873C");
 void GameUpdateTeamNameScreen(void) {
@@ -305,7 +305,7 @@ reopen:
     if (0x3D08F < g_MenuViewOffset) {
         g_MenuScreen = 6;
         g_MenuHandlerIndex = 6;
-        func_8001D530(&g_TeamNameChars, g_TeamNameLength);
+        GameUploadTeamNameTexture(&g_TeamNameChars, g_TeamNameLength);
         g_UiScriptProgress = 0;
         GameMenuBusy = 0;
     }

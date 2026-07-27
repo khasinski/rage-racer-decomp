@@ -8,11 +8,11 @@ typedef struct {
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
-extern void func_8001DAB0(void *);
+extern void GameDrawPlayerCarModel(void *) asm("func_8001DAB0");
 extern s32 GameFindNearestTrackCamera() asm("func_80043B18");
 extern s32 func_80068634(s32);
 extern s32 func_800689A8(s32);
-extern void *func_80068F80(void *, void *, void *);
+extern void *ApplyMatrixLV(void *, void *, void *) asm("func_80068F80");
 extern void *func_80069CC8(void *, void *);
 extern s32 D_8007F610;
 extern s32 D_8007F614;
@@ -58,7 +58,7 @@ extern u8 *g_TrackCameras asm("D_8019C7CC");
  * Camera-mode state machine: `cameraModeSel` selects among the camera behaviours
  * (chase / bumper / replay-orbit / intro-pan, etc.); `arg1` is the followed
  * render/target object. Positions the eye and fills the scratchpad view state
- * (view[2..8]) with matrix/atan2/sqrt math, then submits via func_8001DAB0.
+ * (view[2..8]) with matrix/atan2/sqrt math, then submits via GameDrawPlayerCarModel.
  * Field accesses use the FIELD(base,type,offset) raw-offset macro to stay
  * byte-exact, so params/locals are not retyped.
  */
@@ -332,7 +332,7 @@ block_36:
         sp18[1] = -0x3C;
         sp18[0] = 0;
         sp18[2] = 0x32;
-        func_80068F80(&spA8[0], &sp18[0], &sp28[0]);
+        ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);
         sp18[0] = 0;
         scratch[2] += sp28[0];
         scratch[3] += sp28[1];
@@ -353,7 +353,7 @@ block_52:
             sp18[2] = var_v0_652;
             break;
         }
-        func_80068F80(&sp68[0], &sp18[0], &sp38[0]);
+        ApplyMatrixLV(&sp68[0], &sp18[0], &sp38[0]);
         scratch[2] -= sp38[0];
         scratch[3] -= sp38[1];
         scratch[4] -= sp38[2];
@@ -384,7 +384,7 @@ block_52:
         sp18[0] = FIELD(temp_v0_764, s32 *, 0x10);
         sp18[1] = FIELD(temp_v0_764, s32 *, 0x14);
         sp18[2] = FIELD(temp_v0_764, s32 *, 0x18) + 0x32;
-        func_80068F80(&spA8[0], &sp18[0], &sp28[0]);
+        ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);
         temp_a1_781 = scratch[2] - (FIELD(arg1, s32 *, 0) + sp28[0]);
         sp38[0] = temp_a1_781;
         sp38[1] = scratch[3] - (FIELD(arg1, s32 *, 4) + sp28[1]);
@@ -529,14 +529,14 @@ block_52:
         MulMatrix2(&sp88[0], &sp48[0]);
         func_80069CC8(&sp48[0], &sp68[0]);
         sp18[2] += 0x32;
-        func_80068F80(&spA8[0], &sp18[0], &sp38[0]);
+        ApplyMatrixLV(&spA8[0], &sp18[0], &sp38[0]);
         sp28[0] = 0;
         sp28[1] = 0;
         scratch[2] += sp38[0];
         scratch[3] += sp38[1];
         scratch[4] += sp38[2];
         sp28[2] = D_8009B214;
-        func_80068F80(&sp68[0], &sp28[0], &sp38[0]);
+        ApplyMatrixLV(&sp68[0], &sp28[0], &sp38[0]);
         scratch[2] -= sp38[0];
         scratch[3] -= sp38[1];
         scratch[4] -= sp38[2];
@@ -549,9 +549,9 @@ block_52:
         sp18[1] = 0;
         sp18[2] = 0;
         GameBuildRotMatrixY(&sp88[0], 0 - scratch[7]);
-        func_80068F80(&sp88[0], &sp18[0], &sp28[0]);
+        ApplyMatrixLV(&sp88[0], &sp18[0], &sp28[0]);
         func_80069CC8(&sp68[0], &sp88[0]);
-        func_80068F80(&sp88[0], &sp28[0], &sp18[0]);
+        ApplyMatrixLV(&sp88[0], &sp28[0], &sp18[0]);
         scratch[8] = 0x400 - (GameAtan2(sp18[1], sp18[0]) & 0xFFF);
         D_8009B218 = 3;
         break;
@@ -575,7 +575,7 @@ block_52:
         temp_s0_1437 = temp_v0_30 * 0x24;
         sp18[1] = FIELD((temp_s0_1437 + (u32)g_TrackCameras), s32 *, 0xC);
         sp18[2] = 0x32;
-        func_80068F80(&spA8[0], &sp18[0], &sp28[0]);
+        ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);
         temp_s0_1448 = temp_s0_1437 + g_TrackCameras;
         temp_v0_1452 = FIELD(temp_s0_1448, s32 *, 0x10) - scratch[2];
         sp38[0] = temp_v0_1452;
@@ -615,14 +615,14 @@ block_101:
         sp18[0] = 0;
         sp18[1] = 0;
         sp18[2] = 0x32;
-        func_80068F80(&spA8[0], &sp18[0], &sp28[0]);
+        ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);
         sp18[0] = 0;
         sp18[1] = 0;
         scratch[2] += sp28[0];
         scratch[3] += sp28[1];
         scratch[4] += sp28[2];
         sp18[2] = D_8007F618;
-        func_80068F80(&sp68[0], &sp18[0], &sp38[0]);
+        ApplyMatrixLV(&sp68[0], &sp18[0], &sp38[0]);
         scratch[6] = 0x400 - (GameAtan2(sp38[1], D_8007F618) & 0xFFF);
         scratch[7] = 0x400 - (GameAtan2(sp38[0], sp38[2]) & 0xFFF);
         scratch[8] = FIELD(arg1, s32 *, 0x28);
@@ -636,7 +636,7 @@ block_101:
     GameSetCameraRotMatrix();
     if ((cameraModeSel > 0) && (arg1 == &g_PlayerCar)) {
         GameSelectModelBank(0);
-        func_8001DAB0(arg1);
+        GameDrawPlayerCarModel(arg1);
     }
 }
 

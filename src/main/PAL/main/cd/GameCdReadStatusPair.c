@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/cd.h"
 
-s32 func_80063DAC(s32 arg0);
-s32 func_80063DBC(s32 arg0);
+s32 _card_info(s32 arg0) asm("func_80063DAC");
+s32 _card_load(s32 arg0) asm("func_80063DBC");
 
 s32 GameCdReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
 s32 GameCdReadStatusPair(s32 high, s32 low) {
@@ -12,8 +12,8 @@ s32 GameCdReadStatusPair(s32 high, s32 low) {
 
     cmd = (high << 4) + low;
 
-    func_80063DAC(cmd);
-    event = GameWaitCdResultEvent();
+    _card_info(cmd);
+    event = GameWaitMemoryCardHwEvent();
 
     switch (event) {
     case 1:
@@ -27,9 +27,9 @@ s32 GameCdReadStatusPair(s32 high, s32 low) {
         break;
     case 4:
         ret = 2;
-        GameClearCdCompleteEvents();
-        GameIssueCdCommand3F(cmd);
-        GameWaitCdCompleteEvent();
+        GameClearMemoryCardSwEvents();
+        _card_clear(cmd);
+        GameWaitMemoryCardSwEvent();
         goto return_minus_one;
     default:
         ret = -3;
@@ -41,9 +41,9 @@ return_minus_one:
         return ret;
     }
 
-    GameClearCdResultEvents();
-    func_80063DBC(cmd);
-    event = GameWaitCdResultEvent();
+    GameClearMemoryCardHwEvents();
+    _card_load(cmd);
+    event = GameWaitMemoryCardHwEvent();
 
     switch (event) {
     case 1:

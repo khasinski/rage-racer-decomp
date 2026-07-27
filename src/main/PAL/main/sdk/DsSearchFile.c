@@ -21,7 +21,7 @@ extern const char D_800139A4[];
 extern int func_8006C560(void);
 extern int func_8006C83C(int type, char *name);
 extern int func_8006C8E4(int arg0);
-extern int func_8006C53C(char *a, char *b);
+extern int CD_namecmp(char *a, char *b) asm("func_8006C53C");
 
 Rec * DsSearchFile(Rec *out, char *path) asm("func_8006C25C");
 Rec *DsSearchFile(Rec *out, char *path) {
@@ -99,7 +99,7 @@ after_tokens:
         if (D_8009BB14[i].name[0] == 0) {
             break;
         }
-        if (func_8006C53C(nm, buf)) {
+        if (CD_namecmp(nm, buf)) {
             if (D_80099048 >= 2) {
                 GameDebugPrintf(D_80013998, buf);
             }

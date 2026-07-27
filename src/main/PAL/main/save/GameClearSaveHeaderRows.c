@@ -39,7 +39,7 @@ void GameClearSaveHeaderRows(GameSaveHeaderRow *rows) {
 extern char D_80012F8C[];
 extern Rect D_8009B55C;
 
-void Square_Vsprintf(void *dst, char *fmt, s32 arg0) asm("func_800632F0");
+void LibcSprintf(void *dst, char *fmt, s32 arg0) asm("func_800632F0");
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void DrawSync(s32 mode) asm("func_800658FC");
 
@@ -73,7 +73,7 @@ void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s3
     blockReg[1] = 'C';
     blockReg[2] = 0x11;
     blockReg[3] = 1;
-    Square_Vsprintf(blockReg + 4, D_80012F8C, (s32)titleReg);
+    LibcSprintf(blockReg + 4, D_80012F8C, (s32)titleReg);
 
     magic = 0x66666667;
     asm("" : "=r"(magic) : "0"(magic));

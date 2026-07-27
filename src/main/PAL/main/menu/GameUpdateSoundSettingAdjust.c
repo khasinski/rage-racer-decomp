@@ -40,10 +40,10 @@ extern s32 D_8019C768;
 extern u8 D_801F18CC[];
 extern s32 *D_8019C9A8;
 void GameInitRenderState(s32 arg0) asm("func_80017884");
-void func_8001D30C(void);
+void GameLoadTrackTexturePageRange(void) asm("func_8001D30C");
 void func_8001D210(void);
 void func_80038844(void);
-void func_80019E84(s32 arg0);
+void GameSetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
 void func_800458CC(s32 arg0);
 void GameInitShuttleScenery(void) asm("func_8003F0F8");
 extern s32 D_8019C768, D_801E4B84, D_801E412C;
@@ -55,7 +55,7 @@ extern s32 D_8019C7BC;
 extern s32 g_CameraCarIndex asm("D_8009E66C");
 extern s32 D_8019C99C;
 extern u8 D_80011010[];
-void func_80033AA0(s32 arg0, s32 arg1);
+void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80025940(void);
 void func_80016EA0(s32 a0, s32 a1, void *a2, s32 a3);
 void GameInstallCourseAssets(void) asm("func_80019730");
@@ -297,11 +297,11 @@ void GameUpdateOptionScene(void) {
 
 void func_80025940(void) {
     GameInitRenderState(5);
-    func_8001D30C();
+    GameLoadTrackTexturePageRange();
     func_8001D210();
     D_801E40CC = *(s32 *)g_TrackEventData;
     func_80038844();
-    func_80019E84(*(s16 *)&D_801F18CC[g_CameraCarIndex * 412]);
+    GameSetTrackTexturePageNow(*(s16 *)&D_801F18CC[g_CameraCarIndex * 412]);
     func_800458CC(D_8019C9A8[2]);
     g_CameraViewMode = 2;
     g_AnimTimer = 0;
@@ -343,13 +343,13 @@ void func_80025AC8(void) {
             g_FadeLevel = 0;
             g_FadeStep = 0;
         }
-        func_80033AA0(g_FadeLevel, 0x49);
+        GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
     } else if (d > 0) {
         s32 e = g_FadeLevel;
         e += d;
         v = e;
         g_FadeLevel = v;
-        func_80033AA0(v, 0x49);
+        GameDrawFullscreenFadeTile(v, 0x49);
         if (g_FadeLevel >= 257) {
             SetDispMask(0);
             func_80025940();

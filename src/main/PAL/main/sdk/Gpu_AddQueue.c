@@ -20,11 +20,11 @@ extern u8 D_800941F0[];
 extern volatile u8 D_800941E9;
 extern s32 D_800941F4;
 
-extern void func_80067F04(void);
-extern s32 func_80067F38(void);
+extern void Gpu_ArmTimeout(void) asm("func_80067F04");
+extern s32 Gpu_CheckTimeout(void) asm("func_80067F38");
 extern void func_80067984(void);
 extern s32 func_8006E0B0(s32);
-extern void func_8006DF94(s32, void *);
+extern void DMACallback(s32, void *) asm("func_8006DF94");
 
 /* Driver-table slot +0x08, the `send` entry every libgpu call goes through:
  * runs the worker immediately when the queue is empty and the GPU idle,
@@ -36,9 +36,9 @@ s32 Gpu_AddQueue(void (*cb)(s32, s32), s32 arg, s32 size, s32 tag) {
     s32 *src;
     s32 ret;
 
-    func_80067F04();
+    Gpu_ArmTimeout();
     while ((((D_800942EC + 1) & 0x3f)) == D_800942F0) {
-        if (func_80067F38() != 0) {
+        if (Gpu_CheckTimeout() != 0) {
             return -1;
         }
         func_80067984();
@@ -65,7 +65,7 @@ s32 Gpu_AddQueue(void (*cb)(s32, s32), s32 arg, s32 size, s32 tag) {
     return 0;
 
 enqueue:
-    func_8006DF94(2, (void *)func_80067984);
+    DMACallback(2, (void *)func_80067984);
 
     if (size != 0) {
         u8 *pbase = (u8 *)D_801E5024 + 12;

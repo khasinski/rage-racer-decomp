@@ -288,7 +288,8 @@ void *func_80068E70(s32 *matrix, void *src) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *func_80068F80(void *mtx, void *vec, void *out) {
+void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
+void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
     register void *m asm("$4") = mtx;
     register void *v asm("$5") = vec;
     register void *o asm("$6") = out;
@@ -427,7 +428,10 @@ s32 func_800690E0(s32 *arg0, s32 *arg1, s32 arg2) {
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  *
- * Symbol:   func_80069110  (PSY-Q libgte matrix routine, func_80069xxx region)
+ * Symbol:   func_80069110 = ScaleMatrixL (PSY-Q libgte; see include/psyq/gte.h).
+ *           m[i][j] *= v[i], the row-scaling twin of ScaleMatrix
+ *           (func_80069728) - Sony's Run-Time Library Reference, 8-151.
+ *           Unreferenced in this image.
  * Reason:   hand-written libgte SDK assembly, not compiler C.
  * Evidence: every fixed-point product uses a NARROW unsigned multiply
  *           (multu + mflo, no mfhi) - the asm author's idiom. GCC 2.6.3 AND

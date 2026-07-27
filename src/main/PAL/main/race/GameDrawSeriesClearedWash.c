@@ -37,7 +37,7 @@ extern u8 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_ReplayReadCursor asm("D_801F179C");
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-void func_80033AA0(s32 arg0, s32 arg1);
+void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void GameDrawSeriesClearedWash(s32 arg0, s32 arg1) asm("func_8001FC30");
 void GameUpdateReplayCars(void) asm("func_80035040");
 void GameUpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
@@ -46,7 +46,7 @@ void GameDrawPlayerCarOnly(void) asm("func_80038A88");
 void GameDrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
 void func_800418D4(void);
 void GameDrawReplayBadge(void) asm("func_8001FB8C");
-void func_80019E84(s32 arg0);
+void GameSetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
 void GameApplyReplayFrame(s32 arg0, void *arg1, void *arg2) asm("func_8001F330");
 extern char D_80010DF0[];
 extern char *g_CourseNames[] asm("D_8007D404");
@@ -79,7 +79,7 @@ s32 func_80016EC4(
     s32 arg7,
     s32 arg8);
 
-void func_800632F0(void *dst, void *fmt, ...);
+void LibcSprintf(void *dst, void *fmt, ...) asm("func_800632F0");
 void func_800200D0(void);
 void *func_80021CD4(void *dst, s32 value);
 
@@ -179,7 +179,7 @@ void GameUpdateReplayScene(void) {
             g_FadeStep = 0;
             g_EndingWashLevel = 0;
         }
-        func_80033AA0(g_FadeLevel, 0x29);
+        GameDrawFullscreenFadeTile(g_FadeLevel, 0x29);
     } else {
         if (g_SeriesCleared != 0) {
             s32 cb = g_ReplayFrameCount;
@@ -226,7 +226,7 @@ void GameUpdateReplayScene(void) {
             }
         } else {
             if (g_FadeLevel != 0) {
-                func_80033AA0(g_FadeLevel, 0x49);
+                GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
             }
         }
     }
@@ -249,7 +249,7 @@ void GameUpdateReplayScene(void) {
     func_800418D4();
     GameDrawReplayBadge();
     if (g_SceneTimer == 1) {
-        func_80019E84(g_PlayerTrackSection);
+        GameSetTrackTexturePageNow(g_PlayerTrackSection);
     }
 }
 
@@ -338,11 +338,11 @@ void GameDrawGrandPrixResultPanel(void) {
         current = g_GrandPrixClass;
         classNumber = current + 1;
         name = g_GrandPrixNames[g_GrandPrixSeries ? current + 6 : current];
-        func_800632F0(text, D_80010DF8, classNumber, name);
+        LibcSprintf(text, D_80010DF8, classNumber, name);
     }
     func_80016A18(0x10, 0x34, text, 0x78CC);
 
-    func_800632F0(text, D_80010E10, g_GrandPrixRound);
+    LibcSprintf(text, D_80010E10, g_GrandPrixRound);
     func_80016A18(0x10, 0x3C, text, 0x78CC);
 
     {

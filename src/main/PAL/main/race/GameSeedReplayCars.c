@@ -28,7 +28,7 @@ void GameInitShuttleScenery(void) asm("func_8003F0F8");
 
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
-void func_80019EFC(s32 arg0);
+void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
 
 typedef struct TrackZone {
     s32 start;
@@ -83,7 +83,7 @@ extern s32 g_BestSectorTimes[][4][3] asm("D_801E41E8");
 
 extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 
-void func_80033308(s32 arg0, s32 arg1);
+void GameDrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
 
 void GameDrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
 
@@ -126,7 +126,7 @@ void GameUpdateReplayCars(void) {
         func_80032280(ptr);
     }
 
-    func_80019EFC(g_PlayerTrackSection);
+    GameRequestTrackTexturePage(g_PlayerTrackSection);
 }
 
 s32 GameGetTrackZoneBlend(s32 position) asm("func_800350B4");
@@ -376,7 +376,7 @@ compare_first:
 skip_first:
     timeout = 0x3E8;
     GameDrawTimeValue(0x12, 0x20, g_SplitTargetTime, 0x78CC, timeout);
-    func_80033308(g_SplitSector, g_SplitSign);
+    GameDrawSplitDelta(g_SplitSector, g_SplitSign);
 
     GameDrawTimeValue(
         0xFA,

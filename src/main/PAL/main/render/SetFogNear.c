@@ -117,7 +117,8 @@ done:
 
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
-void func_80068928(void) {
+void InitGeom(void) asm("func_80068928");
+void InitGeom(void) {
     asm volatile(
         ".set noreorder\n"
         ".set noat\n"

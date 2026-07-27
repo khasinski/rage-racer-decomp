@@ -76,12 +76,12 @@ $(BUILD)/src/main/PAL/main/MatrixApplyZRotation.c.o: RAGE_CC1_VERSION_OBJ := 2.6
 $(BUILD)/src/main/PAL/main/StFreeRing.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8007B014.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80043134.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/cd/func_80042FA0.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/cd/GameSetCdVolume.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80060CB0.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/GameRefreshSequenceVolumeScale.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80020C24.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/boot/func_8002317C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/menu/func_8005026C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/boot/GameDrawBootLogo.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/menu/GameDrawClassChangeCurtain.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8006E1A8.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/race/GameDrawSpeedDigits.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80039280.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
@@ -97,11 +97,11 @@ $(BUILD)/src/main/PAL/main/track/GameInterpolateTrackPoint.c.o: RAGE_CC1_VERSION
 $(BUILD)/src/main/PAL/main/track/GameSmoothTrackAngle.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/car/GameAdvanceCarPosition.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80024420.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/save/func_80027A84.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/save/GameDrawMemoryCardScreen.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80027D84.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80043598.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80037714.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/render/func_80032D5C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/render/GameBuildRaceHudPrims.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/race/GameUpdateRacePosition.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8003DDAC.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/render/GameUpdateScriptedCamera.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
@@ -187,7 +187,7 @@ help:
 
 # --- per-object overrides for newly decompiled functions (from working tree) ---
 $(BUILD)/src/main/PAL/main/car/GameUpdateCarDrivetrain.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/gte/func_80029E50.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/gte/GameSubmitCourseModel2.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/track/GameInstallTrackPoints.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/sdk/func_80077A88.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
-$(BUILD)/src/main/PAL/main/sdk/func_8006DB74.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
+$(BUILD)/src/main/PAL/main/sdk/SsUtKeyOff.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
+$(BUILD)/src/main/PAL/main/sdk/CD_dmastart.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2

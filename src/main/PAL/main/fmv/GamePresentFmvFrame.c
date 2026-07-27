@@ -34,7 +34,7 @@ extern char D_80010D34[];
 s32 func_8006A534(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 s32 VSync(s32 mode) asm("func_8006DD30");
-s32 func_8006CD0C(s32 arg0);
+s32 CdRead2(s32 arg0) asm("func_8006CD0C");
 extern u8 D_801E8AFC;
 extern u8 *D_8009F0A4;
 extern u8 *D_8019C7A4;
@@ -191,7 +191,7 @@ pollNext:
         goto send;
     }
 
-    if (func_8006CD0C(0x1E0) == 0) {
+    if (CdRead2(0x1E0) == 0) {
         goto outer;
     }
 }

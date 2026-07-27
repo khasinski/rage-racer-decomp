@@ -1,5 +1,16 @@
 #include "common.h"
 
+/*
+ * LEFT RAW ON PURPOSE (docs/names.md 17i). This is libcd's interrupt decoder:
+ * it reads the 8-byte response FIFO, decodes intr codes 1..5 into D_80099318
+ * and the two result buffers, and is drained in a while loop by CD_sync,
+ * CD_ready, CD_cw and the IRQ2 handler. Every other libcd internal in this
+ * image was pinned because it stores its own name into a trace slot; this one
+ * owns only "DiskError: " and "CDROM: unknown intr", neither of which names a
+ * function. CD_intr / CD_getintr / CD_status / CD_readIntr are all
+ * unfalsifiable here, so no name is asserted.
+ */
+
 extern volatile u8 *D_80099300;
 extern volatile u8 *D_80099304;
 extern volatile u8 *D_80099308;

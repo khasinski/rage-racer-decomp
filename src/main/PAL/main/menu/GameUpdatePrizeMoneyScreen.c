@@ -15,7 +15,7 @@ extern s32 g_PendingClassBonus asm("D_8019CE0C");
 extern s32 D_801E4D0C;
 extern s32 D_801E4B94;
 extern s32 g_SeriesCleared asm("D_8019C8EC");
-void func_80033AA0(s32, s32);
+void GameDrawFullscreenFadeTile(s32, s32) asm("func_80033AA0");
 void func_800204F4(s32);
 void func_800206B8(s32);
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
@@ -67,7 +67,7 @@ void GameUpdatePrizeMoneyScreen(void) {
     switch (g_PrizeScreenState) {
     case 0:
         g_SceneTimer -= 8;
-        func_80033AA0(g_SceneTimer, 0x49);
+        GameDrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if (g_SceneTimer == 0) g_PrizeScreenState = 1;
         func_800204F4(0);
         goto L428;
@@ -147,7 +147,7 @@ void GameUpdatePrizeMoneyScreen(void) {
             g_SceneTimer += 1;
         else
             g_SceneTimer += 2;
-        func_80033AA0(g_SceneTimer, 0x49);
+        GameDrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if ((u32)g_SceneTimer < 0x100) goto L420;
         break;
     default:

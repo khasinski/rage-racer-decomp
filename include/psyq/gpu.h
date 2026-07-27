@@ -254,7 +254,12 @@ s32 GetDrawEnv(s32 env) asm("func_80066074");
 /* Draws one primitive immediately (DrawSync + push prim[4..] for prim[3]
  * words). The real PutDispEnv is func_800660AC. */
 void DrawPrim(u8 *prim) asm("func_80065E00");
-u8 *SetDefDrawEnv(u8 *env, s32 x, s32 y, s32 w, s32 h) asm("func_80064B78");
+/* Fills the 0x1C-byte DRAWENV head: clip, ofs, tw, tpage, dtd, dfe, isbg, rgb.
+ * `dfe` comes from the buffer height and the DMA interrupt state. */
+void *SetDefDrawEnv(u8 *env, s32 x, s32 y, s32 w, s32 h) asm("func_80064AA8");
+/* Fills the 0x14-byte DISPENV: disp Rect, screen Rect, isinter, isrgb24.
+ * Was bound to SetDefDrawEnv here; that was wrong (see docs/names.md 17). */
+u8 *SetDefDispEnv(u8 *env, s32 x, s32 y, s32 w, s32 h) asm("func_80064B78");
 void SetDrawTPage(u8 *prim, s32 dfe, s32 dtd, s32 tpage) asm("func_800650E4");
 void SetTexWindow(DrawPacket *prim, void *tw) asm("func_800665C8");
 void SetDrawArea(DrawPacket *prim, Rect *rect) asm("func_80066604");

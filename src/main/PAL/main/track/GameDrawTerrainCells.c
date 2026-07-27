@@ -3,19 +3,19 @@
 extern s32 g_VisibleCellList asm("D_801E4BC8");
 void GameBuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
 void func_80069858(s32 arg0);
-void func_80027FF4(s32 arg0, s32 arg1, s32 arg2);
+void GameSubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
 void GameDrawTerrainCells(void) asm("func_80041840");
 void GameDrawTerrainCells(void) {
     GameBuildVisibleCells(-12288, 0x14000);
     func_80069858(0x1F800028);
-    func_80027FF4(0x1F800000, g_VisibleCellList, 0x40);
+    GameSubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
 }
 
 void GameDrawTerrainCellsWide(void) asm("func_80041888");
 void GameDrawTerrainCellsWide(void) {
     GameBuildVisibleCells(0xFFFF6000, 0x14000);
     func_80069858(0x1F800028);
-    func_80027FF4(0x1F800000, g_VisibleCellList, 0x40);
+    GameSubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
 }
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/track/GameDrawTerrainCells", func_800418D4);

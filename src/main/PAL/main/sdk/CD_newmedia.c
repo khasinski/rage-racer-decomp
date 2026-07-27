@@ -27,7 +27,7 @@ extern const char D_80013A5C[];
 extern const char D_80013A70[];
 
 extern int func_8006CB88(int, int, void *);
-extern int func_8006CC8C(void *, const char *, int);
+extern int LibcStrncmp(void *, const char *, int) asm("func_8006CC8C");
 extern void func_8006CBF4(char *, u8 *, int);
 
 /*
@@ -55,7 +55,7 @@ int CD_newmedia(void) {
         }
         return 0;
     }
-    if (func_8006CC8C(&D_8009D714[1], D_800139E0, 5) != 0) {
+    if (LibcStrncmp(&D_8009D714[1], D_800139E0, 5) != 0) {
         if (D_80099048 > 0) {
             GameDebugPrintf(D_800139E8);
         }

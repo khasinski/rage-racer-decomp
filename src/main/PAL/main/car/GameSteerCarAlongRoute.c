@@ -149,8 +149,8 @@ extern s16 D_8009AFC0;
 
 s32 func_80068634(s32 angle);
 s32 func_80068568(s32 angle);
-void func_8001DAB0(void *arg0);
-void func_80033AA0(s32 arg0, s32 arg1);
+void GameDrawPlayerCarModel(void *arg0) asm("func_8001DAB0");
+void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void GameUpdateCamera(void *arg0, s32 arg1) asm("func_80043BCC");
 
 void GameRunRaceIntroCamera(Obj *obj, s32 mode) asm("func_8003C508");
@@ -217,9 +217,9 @@ void GameRunRaceIntroCamera(Obj *obj, s32 mode) {
             spad[8] = 0;
             GameSetCameraRotMatrix();
             GameSelectModelBank(0);
-            func_8001DAB0(obj);
+            GameDrawPlayerCarModel(obj);
         } else {
-            func_80033AA0(D_8009AFB4 * 26, 0x29);
+            GameDrawFullscreenFadeTile(D_8009AFB4 * 26, 0x29);
             {
                 s32 c0 = obj->x;
                 s32 c1 = obj->y;

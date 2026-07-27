@@ -114,7 +114,7 @@ extern u8 D_801E3D04[];
 extern u8 D_801E3CEC[];
 extern u8 D_801E3CF8[];
 
-void func_80032FF0(SPRT *prim, GameSpriteDesc *src);
+void GameBuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) asm("func_80032FF0");
 void func_80064EB8(u8 *arg0, s32 arg1);
 void func_800666F4(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4);
 
@@ -146,8 +146,8 @@ void GameBuildTachoNeedleQuad(void) {
     src->x = *(u16 *)(data + 0x13C) + *(u16 *)(data + 0x138);
     src->y = *(u16 *)(data + 0x13E) + *(u16 *)(data + 0x13A);
 
-    func_80032FF0((SPRT *)prim0, src);
-    func_80032FF0((SPRT *)prim1, src);
+    GameBuildSpriteFromDesc((SPRT *)prim0, src);
+    GameBuildSpriteFromDesc((SPRT *)prim1, src);
     func_80064EB8(prim0, 0);
     func_80064EB8(prim1, 0);
     func_800666F4(prim0 - 0x18, 0, 1, 9, 0);

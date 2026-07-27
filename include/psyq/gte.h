@@ -61,6 +61,13 @@ void *MulMatrix2(void *m0, void *m1) asm("func_80069568");
 void *MulMatrix0(void *m0, void *m1, void *m2) asm("func_80068B98");
 /* v1 = m * v0 through the same MVMVA; v0 is a short vector, v1 gets MAC1..3. */
 void *ApplyMatrix(void *m, void *v0, void *v1) asm("func_80069678");
+/* SVECTOR in, SVECTOR out; returns v1. LibRef47 8-23. */
+s16 *ApplyMatrixSV(void *m, void *v0, s16 *v1) asm("func_800696C8");
+
+/* Matrix scaling. ScaleMatrix does m[i][j] *= v[j] (column j scaled by
+ * v[j]); ScaleMatrixL does m[i][j] *= v[i]. LibRef47 8-150 / 8-151. */
+void *ScaleMatrix(void *m, void *v) asm("func_80069728");
+void *ScaleMatrixL(void *m, void *v) asm("func_80069110");
 /* Rotation matrix from an SVECTOR of Z/Y/X Euler angles (raw asm sibling). */
 void *RotMatrix(void *r, void *m) asm("func_80069D18");
 /* Square root in 12-bit fixed point: returns sqrt(a << 12), i.e. 64*sqrt(a).

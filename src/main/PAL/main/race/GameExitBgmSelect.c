@@ -5,7 +5,7 @@
 
 extern char D_80011010[];
 
-void func_80033AA0(s32 arg0, s32 arg1);
+void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 
 void GameExitBgmSelect(void) asm("func_80026484");
@@ -23,10 +23,10 @@ void GameExitBgmSelect(void) {
             g_FadeLevel = 0;
             g_FadeStep = 0;
         }
-        func_80033AA0(g_FadeLevel, 0x49);
+        GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
     } else if (delta > 0) {
         g_FadeLevel += delta;
-        func_80033AA0(g_FadeLevel, 0x49);
+        GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
         if (g_FadeLevel >= 0x101) {
             g_SceneId = 0x16;
         }

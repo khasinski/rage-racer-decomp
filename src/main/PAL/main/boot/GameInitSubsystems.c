@@ -12,7 +12,7 @@ void GameMainLoop(void);
 
 void func_80065460(s32 arg0);
 void func_800656CC(s32 arg0);
-void func_80068928(void);
+void InitGeom(void) asm("func_80068928");
 void func_8005F5E0(void);
 void func_8001F0E0(void);
 void func_80021A08(void);
@@ -51,7 +51,7 @@ void GameInitSubsystems(void) {
     D_801E4B9C = 0;
     D_801E4B8C = 0;
     SetDMAInterruptState(1);
-    func_80068928();
+    InitGeom();
     GameInitPad();
     func_8005F5E0();
     D_8019CAD0 = 1;
@@ -89,7 +89,7 @@ void func_80018078(void);
 void func_80043974(void);
 void func_8005AF78(void);
 void func_80019C04(void);
-void func_8001A030(void);
+void GameStepTrackTextureSwap(void) asm("func_8001A030");
 void func_80065ED4(u8 *env);
 void func_800660AC(u8 *arg0);
 void func_80065E60(u8 *ot);
@@ -150,7 +150,7 @@ void GameMainLoop(void) {
         GameAdvanceSaveHeaderCounter();
         D_8007C268[g_SceneId]();
         DrawSync(0);
-        func_8001A030();
+        GameStepTrackTextureSwap();
         frameLimit = D_8019C768;
         while (VSync(1) < frameLimit) {
         }

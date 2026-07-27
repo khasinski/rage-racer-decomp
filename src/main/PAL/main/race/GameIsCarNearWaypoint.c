@@ -82,7 +82,7 @@ extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
 extern u8 D_80011494;
 
-void func_80033AA0(s32 a, s32 b);
+void GameDrawFullscreenFadeTile(s32 a, s32 b) asm("func_80033AA0");
 
 void GameSeedWaypoints(void) asm("func_80037714");
 
@@ -104,7 +104,7 @@ void GameDrawLapNumber(void) asm("func_80037C04");
 
 void GameUpdateCamera(s32 a, void *b) asm("func_80043BCC");
 
-void func_80019EFC(s32 a);
+void GameRequestTrackTexturePage(s32 a) asm("func_80019EFC");
 
 
 void func_800418D4(void);
@@ -467,7 +467,7 @@ void GameUpdateWaypointCollectScene(void) {
 
     g_SceneTimer = g_SceneTimer + 1;
     if ((u32)g_SceneTimer < 61) {
-        func_80033AA0(255 - (g_SceneTimer - 6) * 11, 0x49);
+        GameDrawFullscreenFadeTile(255 - (g_SceneTimer - 6) * 11, 0x49);
     }
     if ((u32)g_SceneTimer >= 571 && D_8009EC88 == 0) {
         D_8009EC88 = 1;
@@ -489,7 +489,7 @@ void GameUpdateWaypointCollectScene(void) {
     if (g_RacePhase == 5) {
         if (g_RaceFadeTimer > 0) {
             func_800218A0(g_RaceFadeTimer * 3);
-            func_80033AA0(g_RaceFadeTimer * 3, 0x49);
+            GameDrawFullscreenFadeTile(g_RaceFadeTimer * 3, 0x49);
             x = 6;
         }
         if (g_RaceFadeTimer >= 101) {
@@ -498,7 +498,7 @@ void GameUpdateWaypointCollectScene(void) {
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
     } else if (g_RacePhase == 4) {
         func_80016754(0x5c, 0x78, &D_80011494, 0x7811);
-        func_80033AA0(g_RaceFadeTimer * 2, 0x29);
+        GameDrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
         if (g_RaceFadeTimer < 201) {
             g_RaceFadeTimer = g_RaceFadeTimer + 1;
@@ -549,7 +549,7 @@ Lend:
     }
 
     p = &g_PlayerTrackSection;
-    func_80019EFC(*p);
+    GameRequestTrackTexturePage(*p);
     GameUpdateEnvironment();
     func_800418D4();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;

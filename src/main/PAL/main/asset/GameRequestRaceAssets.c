@@ -32,7 +32,7 @@ void func_80034DF4(void);
 void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A2E0(void *arg0);
 void func_8001A40C(void *arg0);
-void func_80019EBC(void);
+void GameResetTrackTextureSwap(void) asm("func_80019EBC");
 void GameSetTrackCameraTable(void *arg0) asm("func_80017BD4");
 void func_8004553C(void *arg0);
 void func_8004550C(void *arg0);
@@ -148,7 +148,7 @@ void GameLoadRaceAssets(void) {
             func_8001A40C(g_AssetLoadCursor);
             D_801E42D0 = g_AssetLoadCursor;
             GameUploadImageAsset(g_AssetSubBlockPtr);
-            func_80019EBC();
+            GameResetTrackTextureSwap();
             g_AssetLoadState = 6;
             g_AssetLoadCursor = g_AssetLoadCursor + 0x38000;
         }

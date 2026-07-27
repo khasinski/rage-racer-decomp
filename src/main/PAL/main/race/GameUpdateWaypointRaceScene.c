@@ -35,9 +35,9 @@ extern s32 g_RacePaused asm("D_801E4BAC");
 
 void func_8001C974(void);
 
-void func_80019EFC(s32 arg0);
+void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
 
-void func_80033AA0(s32 arg0, s32 arg1);
+void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 
 void func_8003479C(s32 arg0);
 
@@ -104,7 +104,7 @@ void GameUpdateWaypointRaceScene(void) {
     if ((u32)g_SceneTimer < 0x3D) {
         func_8001C974();
         value = g_SceneTimer - 6;
-        func_80033AA0(0xFF - (((value * 3) * 4) - value), 0x49);
+        GameDrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
     }
 
     if (g_PauseDebounce > 0) {
@@ -137,7 +137,7 @@ void GameUpdateWaypointRaceScene(void) {
     if (g_RacePhase == 7) {
         value = g_RaceFadeTimer;
         if (value > 0) {
-            func_80033AA0(value * 3, 0x49);
+            GameDrawFullscreenFadeTile(value * 3, 0x49);
             option = 6;
             value = g_RaceFadeTimer;
         }
@@ -162,7 +162,7 @@ void GameUpdateWaypointRaceScene(void) {
         func_8003479C(g_RaceOptionCursor);
         GameUpdateFreeLookCamera(g_PlayerCar, 0);
         GameGetTrackZoneBlend(g_PlayerTrackProgress);
-        func_80019EFC(g_PlayerTrackSection);
+        GameRequestTrackTexturePage(g_PlayerTrackSection);
         func_800418D4();
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         GameDrawTerrainCells();
@@ -191,7 +191,7 @@ void GameUpdateWaypointRaceScene(void) {
 
     GameUpdateLoadedAudioVoices(0, 1);
     GameUpdateFreeLookCamera(g_PlayerCar, 1);
-    func_80019EFC(g_PlayerTrackSection);
+    GameRequestTrackTexturePage(g_PlayerTrackSection);
     GameUpdateEnvironment();
     func_800418D4();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;

@@ -179,7 +179,7 @@ s32 func_80073314(s16 vab_id, s16 program);
 s32 func_80076940(s16 seq_sep, s16 vab_id, s16 program, u16 note);
 u8 func_800739E8(s32 priority);
 void func_80074134(void);
-void func_80074348(u8 voice);
+void SpuVmNoiseKeyOn(u8 voice) asm("func_80074348");
 u16 func_800749B4(void);
 void func_80073C50(u8 tone_count, u16 pitch);
 
@@ -291,7 +291,7 @@ s32 SpuVmSeKeyOn(
                     D_801E4BD0.vag;
                 func_80074134();
                 if (D_801E4BD0.vag == 0xFF) {
-                    func_80074348(D_801E4BD0.voice);
+                    SpuVmNoiseKeyOn(D_801E4BD0.voice);
                 } else {
                     func_80073C50(
                         tone_count, func_800749B4() & 0xFFFF);

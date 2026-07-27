@@ -113,7 +113,7 @@ void KernelCallbackSlot2(void) {
     D_8009A4B8[2]();
 }
 
-void ResetCallback(s32 arg0, s32 arg1) {
+void DMACallback(s32 arg0, s32 arg1) {
     D_8009A4B8[1]();
 }
 

@@ -40,9 +40,9 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, s32 a10);
 void func_80048D64(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void func_8004A248(s32 arg0, s32 arg1);
-void func_8004B8B4(s32 arg0, s32 arg1);
+void GameRampTeamLogoCanvas(s32 arg0, s32 arg1) asm("func_8004B8B4");
 void func_8004C0D8(void);
-void func_8004E368(s32 arg0, s32 arg1);
+void GameDrawLogoSamplePanel(s32 arg0, s32 arg1) asm("func_8004E368");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8005EA14(void);
 void func_8005EA6C(void);
@@ -62,7 +62,7 @@ void GameUpdateTeamLogoScreen(void)
   state = GameMenuBusy;
   if (state == 0)
   {
-    func_8004B8B4(-13, -21);
+    GameRampTeamLogoCanvas(-13, -21);
     func_800487D8(&D_80082844, &g_UiScriptProgress2, -1);
     func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
     func_800487D8(D_801E8A44, &g_UiScriptProgress2, 0);
@@ -209,7 +209,7 @@ void GameUpdateTeamLogoScreen(void)
     else
       if (state == (-3))
     {
-      func_8004B8B4(9, 0x15);
+      GameRampTeamLogoCanvas(9, 0x15);
       if (func_800487D8(D_801E8A44, &g_UiScriptProgress2, 1) != 0)
       {
         if (g_PadEdge2 & 0x800)
@@ -228,7 +228,7 @@ void GameUpdateTeamLogoScreen(void)
     }
     else
     {
-      func_8004B8B4(-13, -21);
+      GameRampTeamLogoCanvas(-13, -21);
       func_800487D8(D_801E8A44, &g_UiScriptProgress2, -1);
       func_8004A248(1, -1);
       if (g_UiScriptProgress2 < 7)
@@ -271,7 +271,7 @@ void GameUpdateTeamLogoScreen(void)
         case 1:
           g_MenuScreen = 8;
           g_MenuHandlerIndex = 8;
-          func_8004E368(0, 0);
+          GameDrawLogoSamplePanel(0, 0);
           break;
 
         case 2:

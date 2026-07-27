@@ -11,7 +11,7 @@ void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 
 extern s32 D_801E429C;
 
-void func_80033AA0(s32 arg0, s32 arg1);
+void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void GameDrawMainMenuRows(void) asm("func_8001B2D4");
 
 void GameUpdateMainMenuExit(void) asm("func_8001B884");
@@ -22,7 +22,7 @@ void GameUpdateMainMenuExit(void) {
 
     value = D_801E429C + 1;
     D_801E429C = value;
-    func_80033AA0(value * 2, 0x59);
+    GameDrawFullscreenFadeTile(value * 2, 0x59);
 
     if (D_801E429C >= 0x81) {
         switch (g_TitleMenuSelection) {
@@ -230,8 +230,6 @@ extern u16 g_ScreenOffsetY asm("D_801E4B9C");
 
 void func_80069A58(s32, s32);
 void func_80069A78(s32);
-void func_80064AA8(void *, s32, s32, s32, s32);
-void func_80064B78(void *, s32, s32, s32, s32);
 
 void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) asm("func_8001BE9C");
 void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
@@ -254,10 +252,10 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
 
     base = (u8 *)D_8019CE38;
     height = 0xF0;
-    func_80064AA8(base, 0, 0, 0x140, height);
-    func_80064AA8(D_801C0620, 0, 0xF0, 0x140, height);
-    func_80064B78(base + 0x5C, 0, 0xF0, 0x140, height);
-    func_80064B78(D_801C067C, 0, 0, 0x140, height);
+    SetDefDrawEnv(base, 0, 0, 0x140, height);
+    SetDefDrawEnv(D_801C0620, 0, 0xF0, 0x140, height);
+    SetDefDispEnv(base + 0x5C, 0, 0xF0, 0x140, height);
+    SetDefDispEnv(D_801C067C, 0, 0, 0x140, height);
 
     {
         register void *ptr asm("$4");
@@ -272,8 +270,8 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
         arg3 = 0x94;
         __asm__("" : : "r"(ptr), "r"(arg1), "r"(arg2), "r"(arg3));
         small_height = 0x24;
-        func_80064AA8(ptr, arg1, arg2, arg3, small_height);
-        func_80064AA8(D_801C0690, 0x56, 0x102, 0x94, small_height);
+        SetDefDrawEnv(ptr, arg1, arg2, arg3, small_height);
+        SetDefDrawEnv(D_801C0690, 0x56, 0x102, 0x94, small_height);
     }
 
     i = 0;
@@ -328,10 +326,10 @@ void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     func_80069A78(0x140);
 
     height = 0x1E0;
-    func_80064AA8(base, 0, 0, 0x140, height);
-    func_80064AA8(D_801C0620, 0, 0, 0x140, height);
-    func_80064B78(base + 0x5C, 0, 0, 0x140, height);
-    func_80064B78(D_801C067C, 0, 0, 0x140, height);
+    SetDefDrawEnv(base, 0, 0, 0x140, height);
+    SetDefDrawEnv(D_801C0620, 0, 0, 0x140, height);
+    SetDefDispEnv(base + 0x5C, 0, 0, 0x140, height);
+    SetDefDispEnv(D_801C067C, 0, 0, 0x140, height);
 
     i = 0;
     one = 1;

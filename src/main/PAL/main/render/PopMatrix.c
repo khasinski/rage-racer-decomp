@@ -2,7 +2,8 @@
 #include "psyq/gte_macros.h"
 
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out);
-s16 *func_800696C8(s32 *matrix, void *vec, s16 *out);
+/* libgte ApplyMatrixSV: SVECTOR in, SVECTOR out, returns out. */
+s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out) asm("func_800696C8");
 
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
@@ -147,7 +148,7 @@ const u32 func_8006944C[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  *               cc1 never emits $at (it materialises -65536 into a GPR).
  *             - a deliberately unfilled `jr ra; nop` delay slot (GCC -O2 always
  *               fills it), plus in-order stores.
- *           Same family/representation as siblings func_80068E70, func_800696C8,
+ *           Same family/representation as siblings func_80068E70, ApplyMatrixSV,
  *           ApplyMatrix, func_800690E0.
  * Revisit:  only with proof it was compiler-generated C.
  */
@@ -159,7 +160,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80069458);
  *
  * Symbol:   func_80069568  (libgte matrix x matrix multiply, cc region 2.6.3)
  * Reason:   hand-written PSY-Q libgte routine (.set noreorder style); sibling of
- *           MulMatrix / func_80068CA4 / func_800696C8 / func_800690E0.
+ *           MulMatrix / func_80068CA4 / ApplyMatrixSV / func_800690E0.
  * Evidence: `lui $1,0xffff; and rN,rN,$1` masks twice (not CSE'd) using the
  *           reserved assembler temp $at, which cc1 never allocates; register
  *           file is t0-t8 exclusively (GCC prefers v0/v1/a0-a3); reached only
@@ -203,7 +204,7 @@ s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-s16 *func_800696C8(s32 *matrix, void *vec, s16 *out) {
+s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out) {
     register s32 m0 asm("$8") = matrix[0];
     register s32 m1 asm("$9") = matrix[1];
     register s32 m2 asm("$10") = matrix[2];

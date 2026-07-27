@@ -2,7 +2,6 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 
-u8 *SetDefDrawEnv(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 s32 func_80064BB4(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -82,7 +81,8 @@ s32 LoadClut(void *arg0, s32 arg1, s32 arg2) {
 
 s32 func_800657E4(void);
 
-void *func_80064AA8(u8 *env, s32 x, s32 y, s32 w, s32 h) {
+/* Fills the 0x1C-byte DRAWENV head. */
+void *SetDefDrawEnv(u8 *env, s32 x, s32 y, s32 w, s32 h) {
     register u8 *envReg asm("$17") = env;
     register s32 xReg asm("$19") = x;
     register s32 yReg asm("$20") = y;
@@ -124,8 +124,9 @@ void *func_80064AA8(u8 *env, s32 x, s32 y, s32 w, s32 h) {
     return envReg;
 }
 
-u8 * SetDefDrawEnv(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_80064B78");
-u8 *SetDefDrawEnv(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/* Fills the 0x14-byte DISPENV. */
+u8 * SetDefDispEnv(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_80064B78");
+u8 *SetDefDispEnv(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     u8 *ret;
 
     ret = arg0;

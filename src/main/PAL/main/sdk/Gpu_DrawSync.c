@@ -1,6 +1,6 @@
 #include "common.h"
 
-void func_80067F04(void);
+void Gpu_ArmTimeout(void) asm("func_80067F04");
 
 extern volatile u32 *D_800942BC;
 extern volatile u32 *D_800942C8;
@@ -8,7 +8,7 @@ extern s32 D_800942EC;
 extern s32 D_800942F0;
 
 void func_80067984(void);
-s32 func_80067F38(void);
+s32 Gpu_CheckTimeout(void) asm("func_80067F38");
 
 /* Driver-table slot +0x3C, the body of DrawSync: mode 0 blocks until the
  * queue is empty and the GPU idle, any other mode returns the number of
@@ -18,12 +18,12 @@ s32 Gpu_DrawSync(s32 arg0) {
     s32 pending;
 
     if (arg0 == 0) {
-        func_80067F04();
+        Gpu_ArmTimeout();
         goto pollState;
 
 retry:
         func_80067984();
-        if (func_80067F38() != 0) {
+        if (Gpu_CheckTimeout() != 0) {
             return -1;
         }
 
@@ -34,7 +34,7 @@ pollState:
         goto retry;
 
 waitReady:
-        if (func_80067F38() != 0) {
+        if (Gpu_CheckTimeout() != 0) {
             return -1;
         }
 
@@ -75,4 +75,4 @@ returnPending:
 extern s32 D_80094300;
 extern s32 D_80094304;
 s32 VSync(s32 mode) asm("func_8006DD30");
-void func_80067F04(void) { D_80094300 = VSync(-1) + 240; D_80094304 = 0; }
+void Gpu_ArmTimeout(void) { D_80094300 = VSync(-1) + 240; D_80094304 = 0; }

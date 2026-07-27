@@ -6,7 +6,7 @@ extern s32 g_LapCount asm("D_801E4364");
 extern u8 g_BestTotalTimes[] asm("D_8019C70C");
 
 void GameDrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
-void func_80033308(s32 arg0, s32 arg1);
+void GameDrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
 
 void GameDrawSplitTimes(void) asm("func_800357BC");
 void GameDrawSplitTimes(void) {
@@ -49,7 +49,7 @@ compare_first:
 skip_first:
     timeout = 0x3E8;
     GameDrawTimeValue(0x12, 0x20, g_SplitTargetTime, 0x78CC, timeout);
-    func_80033308(g_SplitSector, g_SplitSign);
+    GameDrawSplitDelta(g_SplitSector, g_SplitSign);
 
     {
         s32 finalA0 = 0xFA;

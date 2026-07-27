@@ -20,8 +20,9 @@ are `.word` instruction counts from `asm/nonmatchings/PAL/main/*.s` (bytes = wor
 
 Every non-handwritten `INCLUDE_ASM` stub now carries a real name; the segment
 name, the source file name and the `INCLUDE_ASM` path argument were renamed
-together and `make check VERSION=PAL` stayed byte-identical. The only stub still
-on a `func_` name on purpose is `func_8007010C` (see the SDK table).
+together and `make check VERSION=PAL` stayed byte-identical. `func_8007010C` is
+now `SsSeqApplyDataEntry` (section 17d); the only symbol in the whole tree still
+left on a `func_` name as a deliberate decision is `func_8006AB5C` (section 17i).
 
 Several rows below correct earlier descriptions in this file; where a name
 supersedes a wrong one the old claim is called out, because it is also repeated
@@ -120,7 +121,7 @@ variant).
 |---|---|---:|---|---|
 | `LibcSprintf` | 0x800632F0 | 535 | [INCLUDE_ASM] | PSY-Q libc `sprintf`, the whole formatter with no `vsprintf` split — all ~30 call sites pass varargs directly and nothing wraps it. Digit tables `"0123456789ABCDEF"` at `D_800131E4` and `"0123456789abcdef"` at `D_800131F8`; callees are the matched `LibcMemchr` / `LibcMemmove` / `LibcStrlen`. |
 | `TransposeMatrix` | 0x80069CC8 | 46 | matched C | libgte `TransposeMatrix(m0, m1)`: transposes only the 3×3 rotation part and returns `m1`. Sits next to `RotMatrix` (func_80069D18) and all nine callers are inside func_80043BCC. Body is decompiled with register pinning; the file also carries func_80069D18 as raw asm. |
-| func_8007010C | 0x8007010C | 360 | [INCLUDE_ASM] | **Deliberately left generic.** libsnd internal, so there is no public `Ss*` name to claim. Behaviourally it is the MIDI **Control Change #6 (Data Entry MSB)** handler: func_8006F1E0 routes status 0xB0 to func_8006F5F4, whose `case 6:` is this. It applies the pending RPN/NRPN to the channel's VAB program by rewriting the `VagAtr` of every tone — `SsUtGetProgAtr` for the tone count, then per tone `SsUtGetVagAtr` → mutate → `SsUtSetVagAtr` — with the field chosen by `SeqStruct + 0x13`: 0 → +0x0C/+0x0D (`pbmin`/`pbmax`, i.e. RPN 0 pitch-bend sensitivity), 1 → +0x05 (`shift`), 2 → +0x04 (`center`), all gated on `play_mode == 0`. **Was described here as the "libsnd sequence tick/step"** — that is `SsSeqCalledTbyT` at 0x800731CC. |
+| `SsSeqApplyDataEntry` | 0x8007010C | 360 | [INCLUDE_ASM] | Named in section 17d. libsnd internal, so the name is descriptive rather than a recovered Sony symbol. Behaviourally it is the MIDI **Control Change #6 (Data Entry MSB)** handler: func_8006F1E0 routes status 0xB0 to func_8006F5F4, whose `case 6:` is this. It applies the pending RPN/NRPN to the channel's VAB program by rewriting the `VagAtr` of every tone — `SsUtGetProgAtr` for the tone count, then per tone `SsUtGetVagAtr` → mutate → `SsUtSetVagAtr` — with the field chosen by `SeqStruct + 0x13`: 0 → +0x0C/+0x0D (`pbmin`/`pbmax`, i.e. RPN 0 pitch-bend sensitivity), 1 → +0x05 (`shift`), 2 → +0x04 (`center`), all gated on `play_mode == 0`. **Was described here as the "libsnd sequence tick/step"** — that is `SsSeqCalledTbyT` at 0x800731CC. |
 | **GTE geometry/command engine** | 0x80027FF4–0x8002A2CC | ~2.6k | [proteza] | Hand-written scratchpad-`0x1F800000` GTE dispatch engine: custom calling convention (state in t0/t6-t9/a2), multiple mid-routine entry points, heavy COP2. 25 funcs incl. func_80027FF4 (75), func_80028120 (469), func_80028874 (248), func_800298B0 (360), func_80029FD8 (144), func_8002A2CC (249). |
 | **libgte matrix routines** | 0x80069110–0x800696C8 | — | [proteza] | Hand-written libgte matrix multiply/transpose/apply (narrow unsigned-multiply fixed-point idioms): func_80069110 (73), func_80069458 (68), func_80069568 (68), func_80069728 (76), func_80069CC8 (3×3 s16 matrix transpose). Siblings of matched func_80069D18 (RotMatrix). |
 | func_800689A8 | 0x800689A8 | 33 | [proteza] | GTE-LZC fixed-point square-root helper. |
@@ -1097,7 +1098,7 @@ func_80069728 / func_800696C8.
 | `GameSetCdVolume` | 0x80042FA0 | 6 | Scales the four `D_8007F5A8` mix values by 0..0x7F into both current and target levels and pushes them through `CdMix` (func_8006A94C, a one-line `CD_mix` wrapper returning 1). |
 | `GameDrawCars` | 0x800389F0 | 6 | Selects model bank 1 and calls `GameDrawCar` for each of the 11 runtime cars with `activeFlag != -1 && field_BC == 1`. |
 | `GameFindTrackSegment` | 0x80030EB4 | 6 | Spiral search for the track segment quad containing the car (already documented in-file). |
-| `GameGetCarModelIndex` | 0x8001785C | 6 | `g_CarTable[i].modelVariant + D_8007C474[i]`. |
+| `GameGetCarUnlockLevel` | 0x8001785C | 6 | `g_CarTable[i].modelVariant + D_8007C474[i]` — the progress level a purchase of this model's next grade requires. (Listed here as `GameGetCarModelIndex` until section 17b; the source name was always the right one.) |
 | `GameGetAngleDistance` | 0x8002A788 | 6 | Unsigned companion of `GameGetAngleDelta`. Declared **unprototyped** in the header on purpose: func_8002A810 calls it with two extra arguments the original left live in a2/a3. |
 | `GameSetupDisplay480` | 0x8001C088 | 5 | The 320x480 variant of `GameSetupDisplay240` (`SetGeomOffset(0xA0, 0xF0)`, both envs full height). |
 | `GameSubmitCourseModel2` | 0x80029E50 | 5 | Byte-identical to `GameSubmitCourseModel` except it dispatches through `jtbl_8007DA64`. Selected by `GameDrawCourseObjects` on the per-object flag (bit 2 when `g_IsEnvironmentMode4`, else bit 1). The `2` is deliberate — what the second opcode table renders differently is not proven. |
@@ -1132,9 +1133,8 @@ pair plus `isinter`/`isrgb24` at +0x10/+0x11 — an 0x14-byte **DISPENV** — so
 is `SetDefDispEnv`. The real `SetDefDrawEnv` is the still-unnamed func_80064AA8,
 which writes clip/ofs/tw/tpage/dtd/dfe/isbg/rgb (0x1C bytes) and derives `dfe`
 from the buffer height and the DMA interrupt state. `GameSetupDisplay240` calls
-them in exactly that order (draw env first, disp env at base + 0x5C). Fixing it
-means renaming the symbol, its source file and its config segment together, so
-it is recorded here rather than done in the same pass.
+them in exactly that order (draw env first, disp env at base + 0x5C). **Done in section 17b**: `SetDefDispEnv` is now func_80064B78 and
+`SetDefDrawEnv` func_80064AA8.
 
 ## 13. Subsystem naming pass (asset loader, FMV, cdread, CD-DA, logo editor)
 
@@ -1266,7 +1266,8 @@ really `DMACallback`: it is a kernel-table thunk, and its three wrappers pass
 
 **`ResetCallback` at func_8006DF94 was not renamed in this pass** — it is an
 existing name with existing call sites, and correcting it belongs in its own
-change. It is recorded here so the discrepancy is not lost.
+change. **Done in section 17b**: func_8006DF94 is `DMACallback`, and the name
+`ResetCallback` now belongs to func_8006DF34.
 
 ### 13e. CD-DA pump (`0x8004310C`–`0x80043974`)
 
@@ -1862,6 +1863,11 @@ Globals named with them: `g_OptionMenuExitScene`, `g_OptionMenuCursor`,
 
 ### 15g. Left unnamed on purpose
 
+> **Superseded in several places by section 17**, which reopened these
+> decisions with two sources this pass did not have (Sony's Run-Time Library
+> Reference, and the `Ss*`/`Spu*` naming precedent already set in
+> `src/main/PAL/lib/`). Read 17a before relying on any entry below.
+
 - **Every libspu / libsnd internal in `sdk/`.** func_8006ECDC (the shared SEQ
   header parser behind `SsSeqOpen`), func_8006F5F4 (the MIDI Control Change
   dispatcher — controller numbers 0/6/7/10/11/64/65/91/98..101/121 all check
@@ -1896,3 +1902,562 @@ Globals named with them: `g_OptionMenuExitScene`, `g_OptionMenuCursor`,
   private accumulator and is reached only through a table, so which panel it
   belongs to is unproven — and func_800512B4 / func_800520F8, which have no C
   caller at all.
+
+---
+
+## 17. Finishing the unit files (`sdk/`, `menu/`, `render/`, `gte/`, `boot/`, `save/`, `asset/`, `cd/`, `audio/`)
+
+57 unit files were still called `func_XXXXXXXX.c`. **56 now carry a name**; the
+one exception is `sdk/func_8006AB5C.c`, and section 17i says why. About 110
+functions and 10 globals were named with them, and **eight existing names were
+found to be wrong and corrected** (17b). Everything is an `asm()` alias, so
+`make check VERSION=PAL` stayed at `build/PAL/main.exe: OK`,
+sha1 `2913e15648eddef40821c5f666460abc04155ee6`, verified after every batch.
+
+Two new evidence sources made this pass possible, and both should be reused:
+
+* **Sony's own *Run-Time Library Reference* (LibRef47).** Fetched, converted to
+  text and kept at `scratchpad/psyq_libref47.txt`. It gives the exact signature,
+  fixed-point format, return value and prose description of every public
+  libgpu / libgte / libcd / libspu / libsnd / libapi entry point. Grepping a
+  candidate name and comparing its Syntax block against the disassembly turned
+  several long-standing "PROBABLE" readings into proofs and *refuted* three
+  existing names outright. It documents the public API only — no `SpuVm*`, no
+  `_Ss*`, no libgpu statics — so it can confirm a name but never invent one.
+* **The `src/main/PAL/lib/libsnd/` and `lib/libspu/` trees.** They already carry
+  invented-but-descriptive `Ss*` / `Spu*` / `_Ss*` / `_spu_*` names for library
+  internals (`SsSeqApplyControlChange`, `SsSeqSetChannelParam13`,
+  `SpuVmCalculateCurrentPitch`, `_SsInitTables`). Section 15g had declined to
+  name the libsnd internals in `sdk/` because "there is no public `Ss*` symbol
+  to claim" — but the codebase had already settled that question in the other
+  direction. That precedent is what unblocks 17c.
+
+### 17a. Reopened decisions from section 15g, and how they came out
+
+| symbol | 15g said | now |
+|---|---|---|
+| `func_8006CD0C` | "the streaming-read starter — its `St*`/`Ds*` name is not provable" | **`CdRead2`**, a *public* libcd symbol. See 17e. |
+| `func_8006DB74` | "unreferenced in the image" | **Wrong** — three `jal` sites, all DMA channel 3. Named `CD_dmastart`. |
+| `func_8006E4E4` | "a slot in the kernel interrupt-module vector … also unreferenced" | **Wrong** — it is slot +0x10 of libapi `intr.c`'s module descriptor and is invoked by the public `StopCallback()` thunk. Named `StopKernelInterrupts`. |
+| the libsnd internals | "left unnamed on purpose" | all named, see 17d |
+| the `menu/` transition widgets | "reached only through a table, so which panel it belongs to is unproven" | **Wrong on the premise** — none of them is in `g_MenuScreenUpdate`, `g_MenuScreenDraw` or any other data table. Each is `jal`-ed from exactly one screen handler, and four of them are now named with certainty. See 17g. |
+| `func_80067F04` / `func_80067F38` | "the public name is unknown" | still unknown; given descriptive `Gpu_*` names. |
+| `func_8006AB5C` | "its Sony name is still unknown" | confirmed, and the reasoning is now stronger. Still raw. |
+| the `menu/` attract/replay step drivers | left raw | untouched — no new evidence. |
+
+### 17b. Existing names that were wrong
+
+Eight, in rough order of how much they would have misled a reader.
+
+1. **`SsUtVibrateOn` does not exist.** `psyq/snd.h` bound
+   `SsUtVibrateOn` → func_800785B4 and `SsUtAutoVol` → func_80078608. Grepping
+   LibRef47 for "Vibrate" returns **zero hits in the entire document** — there
+   is no such PSY-Q symbol; the name was invented by an earlier pass. The two
+   functions are `SsUtAutoVol` (func_800785B4) and `SsUtAutoPan` (func_80078608).
+   Proof beyond the missing symbol: LibRef47 14-90/14-91 give both as
+   `short f(short vc, short start, short end, short delta_time)` returning 0/−1,
+   and both bodies are exactly `if ((u16)vc < 24) { helper(vc,a,b,c); return 0; }
+   return -1;`. Which is which is settled by the tick partners — func_800785B4
+   arms the `SpuVoice + 0x1C…0x26` block whose tick handler `SpuVmAutoVolTick`
+   feeds the ramped value into the **volume** multiply chain, and func_80078608
+   arms `+0x28…0x32` whose handler `SpuVmAutoPanTick` feeds it in as the third
+   **pan** factor. Section 15g suspected a one-slot shift; the truth is that one
+   of the two names was fictional. Both functions are uncalled, so this was a
+   pure rename.
+2. **`SsUtKeyOn` / `SsUtKeyOff` were bound to the wrong pair.** They pointed at
+   func_80076B30 (6 arguments, `void`) and func_80076C1C (3 arguments). LibRef47
+   14-103/14-104 give `short SsUtKeyOn(vabId, prog, tone, note, fine, volL, volR)`
+   returning the allocated voice and `short SsUtKeyOff(voice, vabId, prog, tone,
+   note)` returning 0/−1. Those are func_800776E4 and func_80077A88, which sit
+   back to back with the already-correct `SsUtKeyOnV` (func_80077C7C) and
+   `SsUtKeyOffV` (func_80078018) — LibRef's own declaration order, four in a row.
+   func_80076B30 / func_80076C1C are thin `SpuVmSeKeyOn/SeKeyOff(0x21, …)`
+   wrappers with no caller and no matching public signature; they are back on
+   raw names, and `lib/libsnd/SsUtKeyOn.c` should be renamed with them (it was
+   left alone here because it is outside this pass's directories).
+3. **`SetDefDrawEnv` was the display environment.** func_80064B78 writes a
+   0x14-byte DISPENV (disp Rect, screen Rect, `isinter`, `isrgb24`); the 0x1C-byte
+   DRAWENV head (clip, ofs, tw, tpage, dtd, dfe, isbg, rgb, with `dfe` derived
+   from the buffer height and the DMA interrupt state) is func_80064AA8, which had
+   no name at all. Recorded in section 7 as "belongs in its own change"; done now.
+   `GameSetupDisplay240` calls them in exactly that order, draw env first.
+4. **`ResetCallback` was `DMACallback`.** func_8006DF94 is a kernel jump-table
+   thunk whose five call sites pass 0, 1, 2, 3 and 4 — MDECin, MDECout, GPU,
+   CD-ROM, SPU. That is `DMACallback(dma, func)`. Recorded in 13d; done now. The
+   name `ResetCallback` is now free and belongs to func_8006DF34, which reaches
+   slot +0x0C and is called by `ResetGraph` and `DecDCTReset(0)`.
+5. **The memory-card event group was labelled "Cd".** `GameOpenCdEventGroup`,
+   `GameEnableCdEventGroup`, `GameDisableCdEventGroup`, `GameCloseCdEventGroup`,
+   `GameClearCdResultEvents`, `GameClearCdCompleteEvents`, `GameWaitCdResultEvent`,
+   `GameWaitCdCompleteEvent`, `GamePollCdResultEventWithTimeout`,
+   `GamePollCdResultEventLimit` and the two wrappers `GameStartCdEvents` /
+   `GameStopCdEvents` all operate on the eight handles at `D_8009B538`, opened
+   with descriptors **`0xF4000001` (HwCARD)** and **`0xF0000011` (SwCARD)** and
+   specs `EvSpIOE 0x0004`, `EvSpERROR 0x8000`, `EvSpTIMOUT 0x0100`,
+   `EvSpNEW 0x2000`. Nothing in them touches the CD. They are now
+   `Game*MemoryCard*Events`, with the "Result"/"Complete" split renamed to the
+   accurate `Hw` (`D_8009B538..544`) / `Sw` (`D_8009B548..554`).
+6. **`GameSendFormattedCdCommand` formats a memory card.** func_8005EF44
+   `sprintf`s `"bu%1d%1d:"` and calls `BiosFormatDevice`; its one call site is
+   the branch that then shows "FORMAT DATA OK!". Now `GameFormatMemoryCard`.
+7. **`GameGetCarModelIndex` in section 7 was stale.** The source has called
+   func_8001785C `GameGetCarUnlockLevel` since the typing pass, and the source is
+   right: three of its six call sites compare the result against class progress
+   (`g_RaceProgress->maxClassReached`, `g_GrandPrixClass`), and `game/car.h`
+   already documents `D_8007C474` as "per-model base of the progress level a
+   purchase requires". The section 7 row is corrected.
+8. **`SsSeqCalledTbyT` was the wrong function.** It was bound to func_800731CC,
+   which is sixteen words of `if (guard != 1) { guard = 1; internalFlush(); guard = 0; }`
+   and never touches SEQ data. LibRef47 14-32 defines `SsSeqCalledTbyT` as
+   "interprets SEQ/SEP data and carries out playback" — that is func_80071018,
+   the sole caller of `SsSeqAdvanceChannelTick` in the whole image. Rebound.
+   func_800731CC is back on a raw name: it is very probably the public
+   `SsUtFlush`, but `SsUtFlush` is currently bound to func_80075FA4 (the
+   *unguarded* internal flush that func_800731CC calls), and untangling that pair
+   means renaming an already-named unit file, so it is recorded rather than done.
+
+Two further discrepancies found and **recorded, not acted on**, because they are
+in files outside this pass's directories:
+
+* `psyq/kernel.h` binds func_8006DF14 to `ChangeClearRCnt` and func_8006DF24 to
+  `ChangeClearInterruptMask`. The stubs decode as **B0(5Bh) = `ChangeClearPad`**
+  and **C0(0Ah) = `ChangeClearRCnt`** — one slot apart from the truth.
+* `psyq/kernel.h` binds func_8006E644 to `SysEnqIntRP`, but the stub is
+  **A0(72h) = `_96_remove`**, and it is called from the `ResetCallback` worker,
+  which is where detaching the BIOS CD-ROM driver belongs.
+
+### 17c. `gte/`: the hand-written GTE engine, read opcode table by opcode table
+
+The five `gte/` units are `HANDWRITTEN_ASM` and excluded from the progress
+metric, so no earlier pass had read them. They are not mysterious once the four
+dispatch tables in `asm/PAL/main/data/main/6BE64.data.s` are dumped: every leaf
+is a primitive emitter, and the table a leaf sits in says which primitive and
+whether it is depth-cued.
+
+Two constants in the scratchpad render state decide most of it. `GameInitRenderState`
+writes `{0x80,0x80,0x80,0x2C}` at `0x1F800070` and `{0xFF,0xFF,0xFF,0x3C}` at
+`0x1F800074`; those words are loaded straight into the GTE `RGBC` register
+(`lwc2 $6`), so the fourth byte — the GP0 command code — travels through the
+lighting/depth-cue result into the packet. **0x2C is POLY_FT4 and 0x3C is
+POLY_GT4**, written as literals, so those two primitive identifications need no
+inference. The others follow from the packet shape (tag length and field
+layout): 5 words / 24 bytes = POLY_F4, 8 / 36 = POLY_G4, 9 / 40 = POLY_FT4,
+12 / 52 = POLY_GT4.
+
+**`jtbl_8007DA14` (8 entries × {target, stride}) is the model path**, reached
+from `func_80028E9C` with `index = opcode & 0xFFFF`. Entries 0..3 are the
+depth-cued set and 4..7 the plain set, each covering F4 / FT4 / G4 / GT4:
+
+| i | function | new name | primitive | GTE |
+|---:|---|---|---|---|
+| 0 | func_800293F0 | `GameEmitPolyF4Fog` | POLY_F4 24 B | DPCS |
+| 1 | func_80029458 | `GameEmitPolyFT4Fog` | POLY_FT4 40 B, code 0x2C from `0x1F800070` | DPCS |
+| 2 | func_800294E4 | `GameEmitPolyG4Fog` | POLY_G4 36 B | NCDT + NCDS |
+| 3 | func_800295BC | `GameEmitPolyGT4Fog` | POLY_GT4 52 B, code 0x3C from `0x1F800074` | NCDT + NCDS |
+| 4 | func_80029064 | `GameEmitPolyF4` | POLY_F4 24 B | none |
+| 5 | func_800290C8 | `GameEmitPolyFT4Raw` | POLY_FT4 40 B, code forced **0x2D** (`li t6,0x2d`) | none |
+| 6 | func_80029158 | `GameEmitPolyG4` | POLY_G4 36 B | NCCT + NCCS |
+| 7 | func_80029230 | `GameEmitPolyGT4` | POLY_GT4 52 B, code forced 0x3C | NCT + NCS |
+
+`GameSubmitModel` (func_80028DEC) reaches this table through `func_80028E9C`
+(`GameSubmitModelFaces` — the per-face `RTPT` / `NCLIP` / `AVSZ4` loop) with
+**`addiu a1,a1,4` in the `jal` delay slot**, so it always selects entries 4..7,
+the un-fogged half.
+
+**`func_80029340` is `GameSubmitModel2`, and it is dead code.** It is
+instruction-for-instruction `GameSubmitModel` with that one delay slot replaced
+by `nop`, so it selects entries 0..3 — the fogged half of the same table. It has
+zero references anywhere in the image and appears in no table.
+
+**`jtbl_8007DA54` and `jtbl_8007DA64` (4 entries each) are the course path**,
+and this settles the question section 7 left open about `GameSubmitCourseModel2`.
+The two tables hold the *same four primitives with the same four record strides*
+(0x10 / 0x1C / 0x20 / 0x20); DA64's bodies each add `RTPS` on the face's fourth
+vertex followed by `DPCS`. **The second opcode table is the depth-cued one** —
+verified instruction by instruction on indices 0 and 1 (`c2 0x180001` = RTPS,
+`c2 0x780010` = DPCS in func_80029FD8 and func_8002A218, none at all in
+func_8002970C).
+
+| i | DA54 (plain) | DA64 (fogged) | primitive |
+|---:|---|---|---|
+| 0 | func_8002970C `GameEmitCoursePolyF4` | func_80029FD8 `GameEmitCoursePolyF4Fog` | POLY_F4 24 B |
+| 1 | func_80029788 `GameEmitCoursePolyFT4` | 0x8002A074 → func_8002A218 `GameEmitCoursePolyFT4Fog` | POLY_FT4 40 B |
+| 2 | func_80029830 `GameEmitCourseSubdividedFT4` | func_8002A2CC `GameSubmitCourseSubdividedFaces` → func_800298B0 `GameEmitCourseSubdividedFT4Fog` | subdivided POLY_FT4 + GP0 0xE2 texture window |
+| 3 | 0x8002A550 | 0x8002A5F8 | as 2, plus `g_AnimTimer & 0x7F` added to the CLUT word and to all four UV pairs — a scrolling texture |
+
+`func_80029EA8` is `GameTransformCourseModel`: both course entry points call it
+in their `jal` delay slot with the course bank from `0x1F800048`. It applies the
+mirror-flag negation to the GTE rotation matrix and TRX, then `RTPT`s the whole
+vertex list three at a time into a screen-XY array at `0x1F80011C` (4 bytes per
+vertex) and a Z array at `0x1F8002FC` (2 bytes per vertex). That is why the
+course face loops contain no projection of their own.
+
+**`jtbl_8007D9F4` (4 entries × {target, stride}) is the terrain path.**
+`func_80027FF4` is `GameSubmitTerrainCells` — its three call sites all read
+`GameSubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40)`, so the name is
+certain. It walks 64 sixteen-byte `{x, y, z, cellIndex}` records, loads TRX/TRY/TRZ
+and dispatches per cell to `GameSubmitTerrainCellFaces` (func_80028120) or, past
+`TRZ >= 0xA000`, to `GameSubmitTerrainCellFacesFar` (func_80028D84), which skips
+face records until one carries flag bit 2 and then branches into the same loop —
+a distance LOD. All four `jtbl_8007D9F4` modes emit POLY_FT4; two of them wrap
+it in a pair of 12-byte GP0 0xE2 texture-window packets, and two skip the depth
+cue and instead add 1 to the CLUT row. When a face's subdivision counters survive
+the distance reduction, the mode calls `GameEmitSubdividedTerrainQuad`
+(func_80028874), which lerps screen XY and UVs with `INTPL` through
+`GameInterpolateSubdivRow` (func_80028C54) and emits one POLY_FT4 per cell.
+
+Naming style: `GameSubmit*` for the entry points that walk a model's opcode list
+(matching the existing `GameSubmitModel` / `GameSubmitCourseModel`), and
+`GameEmit*` for the jump-table leaves that write one packet. `GameEmit` is a new
+verb in this codebase; it is used deliberately, to mark "hand-written engine leaf
+reached only through a jump table" as distinct from the C-level `GameQueue*` /
+`GameAddTilePrim` helpers.
+
+Not settled, and therefore not in any name:
+
+* What the alternate CLUT row selected by `func_80028120`'s modes 1 and 3
+  actually is. The selector is `g_IsEnvironmentMode4` and the effect is
+  `clut += 1`; what the second palette row contains is on the disc.
+* `GameEmitSubdividedTerrainQuad` also emits two `LINE_F3` packets per
+  subdivided quad, guarded on a sign bit, 64 OT entries further back. The
+  primitive type and the guard are certain; whether they are seam filler, a road
+  edge stripe or debug output is not.
+* `func_80029FD8` and `func_8002A2CC` are each simultaneously a jump-table entry
+  point, an emitter body and the host of a shared face loop. Their names describe
+  the entry-point role, which is how they are reached; the file comments say so.
+
+### 17d. `sdk/`: the libsnd sequencer, and the libspu voice manager
+
+The MIDI chain reads end to end now. `SsSeqOpen` (func_8006F004) calls
+**`SsSeqParseHeader`** (func_8006ECDC), which zeroes the `SeqStruct`, seeds
+`programs[i]=i` / `panpot=0x40` / `vol=0x7F` for 16 channels, accepts `"SEQp"`
+in either byte order, reads the big-endian resolution and the 3-byte
+microseconds-per-quarter-note tempo and converts it with the literal 60000000
+(`lui a2,0x393 / ori a2,a2,0x8700`). Its two error messages are crossed in
+Sony's original: the *version* check prints `"This is not SEQ Data.\n"` and the
+*magic* check prints `"This is an old SEQ Data Format.\n"` and returns 0, which
+the caller treats as success.
+
+`SsSeqAdvanceChannelDelta` then calls **`SsSeqDispatchMidiEvent`**
+(func_8006F1E0), the status-byte router with running-status latching, whose five
+targets are Note On, **`SsSeqDispatchControlChange`** (func_8006F5F4), Program
+Change, Pitch Bend and Meta/SysEx. The Control Change dispatcher handles
+controllers 0, 6, 7, 10, 11, 64, 65, 91, 98, 99, 100, 101 and 121, every one
+with its standard MIDI meaning — which is what makes the two leaves nameable:
+
+* **`SsSeqSetPortamento`** (func_8006FB7C) is `case 65:` (Portamento On/Off). It
+  walks every tone of the channel's program and writes `VagAtr.mode = 2` for
+  values under 0x40 and `0` at or above, through `SsUtGetVagAtr` /
+  `SsUtSetVagAtr`. Writing the whole byte also clears the reverb bit — a real
+  side effect, not a decompilation artefact.
+* **`SsSeqApplyDataEntry`** (func_8007010C) is `case 6:` (Data Entry MSB), and
+  section 1's row for it described only half of what it does. The RPN half
+  (gated on `unk29 == 2`) writes `pbmin`/`pbmax` for RPN 0; its RPN 1 and RPN 2
+  branches compute a value and then **load and store `VagAtr.shift` / `.center`
+  unchanged** — they are no-ops in the shipped library. The NRPN half (gated on
+  `unk2a == 2`) is the functional one: CC 99 carries the tone number (0x10 meaning
+  "all tones"), CC 98 the parameter number, and both go to
+  **`SsSeqApplyNrpn`** (func_800706AC).
+* **`SsSeqApplyNrpn`** implements 23 parameters: 0..3 write `prior` / `mode`
+  (with `SsUtReverbOff` / `SsUtReverbOn` on 0 and 4) / `min` / `max`; 4..14 go
+  through `SsUnpackAdsr` → mutate → `SsPackAdsr` and cover AR/DR/SL/SR/RR with
+  their linear-vs-exponential mode bits, the sustain direction, `vibT` and
+  `porW`; 15..19 call the `SsUtSetReverb*` setters and touch no VagAtr at all.
+
+The per-tick side: **`SsSeqCalledTbyT`** (func_80071018) takes the
+`D_801E40AC` re-entrancy guard, flushes the voices and then walks every open
+seq × sep, calling `SsSeqAdvanceChannelTick` plus, on the flag bits,
+**`_SsSndCrescendo`** (func_8007128C, ramps the volume up to 0x7F and clears
+flag 0x10) and **`_SsSndDecrescendo`** (func_80071568, the mirror image down to
+1, flag 0x20).
+
+libspu voice manager, all in `SpuVoice` (stride 0x34 off `D_8009E0B8`):
+
+| name | addr | what settles it |
+|---|---|---|
+| `SpuVmInit` | 0x80075710 | the cold init: `SpuInitMalloc`, zero the 24×16-byte voice register shadow and the 16-byte VAB-id table, `D_801E42F8 = min(arg, 24)` (the voice count), per-voice defaults **and** the real SPU registers at `0x1F801C00 + v*16` (ADDR 0x200, PITCH 0x1000, ADSR1 0x80FF, ADSR2 0x4000), master volume 0x3FFF. Its only caller is `_SsInitTables`, with 0x18. The already-named `_SsVmInit` is the warm-reset subset. |
+| `SpuVmNoiseKeyOn` | 0x80074348 | the branch `SsUtKeyOnV` takes when `vag == 0xFF`. It is the only place in the image that programs the SPU noise clock: it clears SPUCNT bits 13:8 and writes `(note - center) & 0x3F`, sets the voice status to 2 (the value `SsUtFlush` tests before calling `SpuSetNoiseVoice`) and writes the NON registers directly. |
+| `SpuVmAutoVol` / `SpuVmAutoVolTick` | 0x80074D1C / 0x80074ECC | arm and advance the `+0x1C…0x26` ramp; the tick handler feeds the ramped value into the volume multiply chain. |
+| `SpuVmAutoPan` / `SpuVmAutoPanTick` | 0x8007521C / 0x800753CC | the same shape over `+0x28…0x32`; the tick handler feeds the ramped value in as the third pan factor. |
+| `SpuVmPitchBendVoice` | 0x80074B68 | uncalled. Scales the bend by the tone's `pbmax`/`pbmin` and divides by 127 (the `0x81020409` magic multiply). Its negative branch sets `fine` from the **quotient** rather than the remainder, where the matched sibling `SpuVmApplyPitchBendToVoice` uses the remainder — Sony's bug, preserved byte-exact, and plausibly why this entry point was superseded. |
+| `SsUtKeyOff` | 0x80077A88 | see 17b item 2. Requires all four of vabId/prog/tone/note to match the voice record before keying off. |
+
+Every `Ss*` / `Spu*` spelling in this section that is not in LibRef47 is a
+*descriptive* name in the style `lib/libsnd/` already uses, not a recovered Sony
+static. That is stated here so nobody later mistakes them for recovered symbols.
+
+`func_80074D0C` and `func_80074D14` (two words each, `jr ra`) stay raw: empty
+stubs with no caller and nothing to name them from.
+
+### 17e. `sdk/`: libcd, libcard, libpress, libapi
+
+* **`CdRead2` (func_8006CD0C)** — this is the pass's best single result, because
+  section 15g had written it off. LibRef47 10-31: `int CdRead2(int mode)`,
+  "seeks to the position specified by CdlSetloc and starts reading … **starts
+  streaming when the CdlModeStream flag is set in mode**", returning 1/0. The
+  body is one `int` in; `CdControl(CdlSetmode, &(u8)mode)`; `if (mode & 0x100)`
+  install the data-ready and ready callbacks; `return CdControl(CdlReadS)`.
+  `CdlModeStream = 0x100` and `CdlModeStream2 = 0x120` are LibRef's own Table
+  10-4, and the `mode & 0x20` test writes the flag that `StGetBackloc`
+  (documented as "valid **only** for CdlModeStream2 mode", −1 otherwise) reads.
+  The single call site passes `0x1E0` = Stream2 | Speed | RT, the textbook STR
+  mode. `DsRead2` is excluded by LibRef's own note that it takes a position.
+* **The libcard block is entirely BIOS stubs and is now labelled**: `_bu_init`
+  (A0 70h, func_80063180), `_card_info` (A0 ABh), `_card_load` (A0 ACh),
+  `InitCARD` (B0 4Ah), `StartCARD` (B0 4Bh), `_card_write` (B0 4Eh,
+  func_80063E24), `_new_card` (B0 50h, func_80063E34) and their composite
+  `_card_clear` (func_80063DEC = `_new_card(); _card_write(chan, 0x3F, NULL);`,
+  which is LibRef's "dummy write to the system management area"). The B0
+  numbering is anchored by eight stubs this repo had already identified
+  (OpenEvent 08h … DisableEvent 0Dh, BiosFileOpen 32h … BiosNextFile 43h),
+  with no contradictions.
+* **libpress**: `_new_card` shares a unit with `DecDCTReset`, `DecDCTGetEnv`,
+  `DecDCTPutEnv`, `DecDCTBufSize` and `DecDCTin`, all of which were already
+  aliased and all of which now check out against LibRef47 argument for argument.
+  `DecDCTin`'s `mode` handling is the decisive one: bit 0 flips the 24-bit
+  output bit in the MDEC command word and bit 1 the STP bit, exactly as
+  documented.
+* **`DeliverEvent` (func_8006A3D8)** — B0(07h); its three libcd callers pass
+  `(0xF0000003, 0x20 | 0x40)`, i.e. `HwCdRom` with `EvSpCOMP` / `EvSpDR`.
+* **`StopKernelInterrupts` (func_8006E4E4)** — the vector at `0x8009A498` is
+  self-identifying: word 0 is the RCS string
+  `$Id: intr.c,v 1.73 1995/11/10 05:29:40 suzu Exp $`, so the module is libapi's
+  `intr.c`. Slot +0x10 is this function and the public thunk that reaches it is
+  `StopCallback()`; the body saves I_MASK and DPCR, zeroes I_MASK, acks I_STAT,
+  clears the enable bit of all seven DMA channels and calls `ResetEntryInt` —
+  LibRef's "disable all interrupts", and the exact inverse of its partner
+  `StartKernelInterrupts`, which restores the two saved words.
+* **`Gpu_ArmTimeout` / `Gpu_CheckTimeout` (func_80067F04 / func_80067F38)** —
+  arm `VSync(-1) + 240` and, past the deadline, print the
+  `"GPU timeout:que=%d,stat=%08x,chcr=%08x,madr=%08x,"` /
+  `"func=(%08x)(%08x,%08x)\n"` pair, mask interrupts, reset the queue and issue
+  GP1(02h)+GP1(01h). Both are reached from five driver-table workers. **No Sony
+  name is claimed** — neither string self-names, and `_status` is definitely
+  wrong because section 16 already pinned that to driver slot +0x38.
+  `Gpu_*` is this project's established prefix for exactly this situation.
+* **`Gte_PatchExceptionHandler` (func_80069FA8)** — called only from `InitGeom`
+  (func_80068928, itself named this pass). It `EnterCriticalSection`s, fetches
+  the C0 table with B0(56h), overwrites the BIOS `ExceptionHandler` entry with
+  14 words of hand-written code that saves only `at`/`v0`/`v1`/`ra` into the TCB
+  instead of the full register spill, then `FlushCache` (A0 44h) and
+  `ExitCriticalSection`. Descriptive name, new `Gte_` prefix by analogy with
+  `Gpu_`; no Sony symbol is claimed.
+* **`CD_namecmp` (func_8006C53C) / `CD_strncmp` (func_8006CC8C)** — the 12-byte
+  filename compare `DsSearchFile` runs over the 64-entry `CdlFILE` cache
+  `CD_cachefile` fills, and the null-safe `strncmp` under it. Descriptive names
+  in libcd's existing `CD_*` style; not Sony symbols.
+* **`CD_dmastart` (func_8006DB74)** — spins on the channel's CHCR busy bit,
+  prints `"DMA STATUS ERROR %x\n"` on timeout, then programs MADR/BCR/CHCR. All
+  three call sites use channel 3 with an 8-word header transfer and a 0x1F8-word
+  body transfer — the libds sector header/body split. Descriptive name.
+
+### 17f. `render/`: the two-page track texture swap, and the rear-view mirror
+
+**The VRAM texture swap is solved as a mechanism.** The rectangle is
+`Rect{x=576, y=256, w=448, h=256}` — the whole right-hand half of the lower VRAM
+bank, 0x38000 bytes — and the row stride 0x380 is one 448-pixel line. The RAM
+shadow `D_801E42D0` is produced by `func_8001A40C`'s `StoreImage` of exactly that
+rectangle, and the install sequence in `GameInstallCourseAssets` is decisive:
+upload image blocks 0..3 of the track `.1ST`, snapshot the region into the
+shadow, then upload block 4 **on top**. So the shadow holds the region without
+block 4 and VRAM holds it with block 4; `GameStepTrackTextureSwap` (func_8001A030,
+called once a frame from `GameMainLoop`) exchanges them one row per iteration
+until `VSync(1) >= 471` eats the frame's spare time, and
+`g_TrackTextureRowState[256]` makes each row's exchange idempotent.
+
+The trigger is authored per course: `GameLoadTrackTexturePageRange` (func_8001D30C)
+copies words 0 and 1 of the `.2ND` pack's sub-block 0 into
+`g_TrackTextureSectionLo` / `…Hi`, and `GameSelectTrackTexturePage` (func_80019D24)
+returns 0 or 0x100 according to whether the car's track section falls inside that
+window. The clincher that the two pages are two *regions of the course* is the
+attract camera: `GameCycleAttractCameraCar` and `GameCycleBgmSelectCameraCar` roll
+a random car and **refuse to cut to it unless it maps to the same texture page as
+the car currently being watched**.
+
+Named with it: `GameRequestTrackTexturePage` (func_80019EFC — the "8 files" entry
+section 7 left generic), `GameSetTrackTexturePageNow` (func_80019E84, used by scene
+entries and camera teleports), `GameSwapTrackTexturePageNow` (func_80019D7C),
+`GameSwapTrackTextureRow` (func_80019F24), `GameResetTrackTextureSwap` (func_80019EBC),
+and the globals `g_TrackTexturePageWanted`, `g_TrackTextureTargetRow`,
+`g_TrackTextureCursorRow`, `g_TrackTextureShadow`, `g_TrackTextureSectionLo/Hi`.
+
+**What is still not settled is which pixels differ** — that is block 4 of the
+`.1ST` pack, which is on the disc. Three cheap checks would close it: dump
+`offsets[4]` and block 4's image rects; compare words 0/1 of the matching `.2ND`
+against `g_TrackLength` to see what fraction of a lap the window is; render both
+sets. A tunnel would show as a short window, a course split as one near half the
+lap. The code is agnostic, so no name asserts either.
+
+**`render/func_8001A980.c` is the rear-view mirror**, and every number agrees:
+`GameBeginMirrorPass` (func_8001A9A8) installs `D_8019CB18` — which section 7
+already documents as the camera matrix pre-multiplied by a 180° Y turn — sets
+`SetGeomOffset(0xA0, 0x24)` / `SetGeomScreen(0xC0)`, and clips to a 148 × 36
+window centred on x = 320, mirrored into the second `DRAWENV` of both frame
+contexts so the panel can slide in from above. `GameEndMirrorPass` (func_8001ABD8)
+is its exact inverse. `GameDrawMirrorFrame` (func_8001ACE4) draws a 152 × 40 black
+`TILE` — a 2-pixel border exactly bounding the viewport — plus one 8-px sprite
+picked by car model through `D_8007C728[13]` into four styles. `GameDrawRearViewMirror`
+(func_8001ADF4) runs the whole pass: unlock at `g_SceneTimer >= 0x169` (361 frames,
+after the countdown), slide `g_MirrorPanelY`, then sky, frame, terrain, course
+objects and cars into the mirror viewport. `GameResetMirrorState` (func_8001A980)
+seeds it at race entry. `g_MirrorViewEnabled` is the player's toggle — the only
+other writer is `GameUpdateRaceScene`, where a shoulder button plus `g_PadEdge2`
+sets it.
+
+Also in `render/`: **`GameDrawPlayerCarModel`** (func_8001DAB0) is the hero car,
+not a duplicate of `GameDrawCar` — all four callers do
+`GameSelectModelBank(0); func_8001DAB0(&g_PlayerCar)` where `GameDrawCars` selects
+bank **1**, and it has no LOD ladder at all. **`GameBuildRaceHudPrims`**
+(func_80032D5C) expands 12 (GP) or 11 (time trial) `GameSpriteDesc` rows into
+both frame contexts at `frame + 0x236F8 + 0x14*i`, which is precisely the block
+`GameDrawLapTimes`, `GameDrawRaceHudLabels` and `GameDrawRacePosition` index into;
+**`GameDrawRaceHudLabels`** (func_80032E9C) links prims 6..8 or 6..11 every frame.
+`GameBuildSpriteFromDesc` (func_80032FF0), `GameDrawTimeRemaining` (func_800331F8,
+`GameDrawMinuteSecondTime` at (14, 210) turning to the warning colour below 1500
+ticks) and `GameDrawSplitDelta` (func_80033308) complete that unit.
+
+SDK routines named in `render/` from LibRef47, all instruction-verified:
+**`CompMatrix`** (func_80068A38 — `[m2] = [m0][m1]`, `m2->t = [m0]·m1->t + m0->t`,
+with `m1->t` going through the 16-bit V0 registers exactly as the documented
+(1,15,0) restriction requires), **`ApplyMatrixLV`** (func_80068F80, the 32-bit
+hi/lo split), **`ApplyMatrixSV`** (func_800696C8, SVECTOR in and out, returns the
+third argument), **`ScaleMatrix`** (func_80069728, `m[i][j] *= v[j]`) and
+**`ScaleMatrixL`** (func_80069110, `m[i][j] *= v[i]`, unreferenced). The
+ScaleMatrix pair was decided by LibRef47 8-150/8-151, which print the two
+matrices side by side; nothing in the image distinguishes them.
+
+### 17g. `menu/`, `boot/`, `save/`, `asset/`, `audio/`
+
+Section 15g's reason for leaving five `menu/` widgets raw was that they are
+"reached only through a table". They are not in any table. Every one is `jal`-ed
+from exactly one screen handler, and the screen entry code sets
+`g_MenuHandlerIndex = <id>` and calls the widget with all-zero arguments in the
+next instruction — which is what ties each widget to one screen:
+
+| function | new name | screen |
+|---|---|---|
+| func_8004E368 | `GameDrawLogoSamplePanel` | id 8, TEAM LOGO sample picker (`g_MenuHandlerIndex = 8` then `func_8004E368(0,0)` on adjacent lines). Draws a two-digit sample number 01..20, a caption plate and the 15 colour swatches of the live logo CLUT `D_801E444C`. |
+| func_8004F650 | `GameDrawCarShopPricePanel` | id 11, car shop. Row 1 is `g_PlayerMoney`, row 2 the car price from `g_CarPriceTable`. |
+| func_8004F99C | `GameDrawEngineerShopPricePanel` | id 12, engineer shop. Structurally identical, 211 words each; the only differences are the accumulator and row 2's caption width. |
+| func_8005026C | `GameDrawClassChangeCurtain` | id 1, COURSE SELECT. Two opaque 320×240 bars in the menu red (0x95,0x25,0x1E) closing from top and bottom over the 320×480 menu frame; its only trigger is the GRAND PRIX class change, whose `>= 0x19` branch commits `g_GrandPrixClass`. |
+| func_800506BC | `GameFlipCourseCard` | id 1, GRAND PRIX branch only. A 64×80 quad at (228, 88) spun about Y by exactly half a turn per course change (`0x1F4000 / 1000` = 2048 GTE units), swapping its texture mid-flip; keyed off `g_CourseProgress`. |
+
+`GameClearTeamNameTexture` / `GameUploadTeamNameTexture` (func_8001D4E8 /
+func_8001D530) blank and refill a 12-word × 8-line VRAM strip at (0x282, 0x37)
+from `g_TeamNameChars` / `g_TeamNameLength`; the start x of `0x288 - len` centres
+up to six 8-pixel glyphs, which is exactly `g_TeamNameLength`'s cap.
+`GameRampTeamLogoCanvas` (func_8004B8B4) is the parameter ramp feeding
+`GameDrawTeamLogoCanvas` — it drives `D_8009B298`, already documented in section 1
+as that function's fade level.
+
+`boot/`: **`_start` (0x800630B4)** is the executable entry — the PS-EXE header's
+`pc0` field at file offset 0x10 holds exactly that address. It clears BSS
+0x8009AED8..0x801F2A10, sets `sp = 0x80200000` from the four-entry RAM-size table
+at 0x80063160, `gp`, `fp`, calls `InitHeap` and then `main`. **`__main`
+(func_800630AC)** is an empty function called as the very first `jal` in `main`,
+before any argument setup — the GCC 2.x convention. `GameDrawBootLogo`,
+`GameUpdateBootLogoScene` (scene table slot 1), `GameInstallSceneLighting` and
+`GameEnterAttractScene` (slot 22) complete the boot unit.
+
+`save/`: **`GamePollMemoryCardStatus` (func_8005ECE0)** builds
+`chan = (port << 4) + slot` — LibRef's own "Port number × 16 + Card number" — and
+runs `_card_info` → poll → `_card_load` → poll, mapping the four event codes onto
+LibRef Table 4-2: `EvSpIOE` proceeds, `EvSpTIMOUT` returns −1 (no card),
+`EvSpERROR` −3, and `EvSpNEW` at the second poll returns −2 (present but
+unformatted), which is what drives the "New Memory card." / "Format Memory card?"
+prompts. **`GameDrawMemoryCardMessage` (func_80027D84)** is settled by its own
+20-entry line table `D_8007D99C`: "Select file to save.", "No Memory card.",
+"Memory card full.", "Format Memory card?", "Overwrite old file?",
+"Now accessing Memory card.", "LOAD/SAVE/FORMAT DATA OK!" and so on, with
+indices 16..18 drawing a banner sprite instead. **`GameStoreSaveStateBlock`
+(func_8005F88C)** is the exact inverse of `GameLoadSaveStateBlock`: it serialises
+every save-backed global into the 0x1000-byte block and ends with
+`checksum = ~Σ u16[0..0x7FD]`.
+
+`audio/`: **`GameStartAudioSlotLoad` / `GamePollAudioSlotLoad`** (func_8005B768 /
+func_8005B89C) are a start/poll pair over `SsVabOpenHeadSticky` →
+`SsVabTransBody` → `SsVabTransCompleted`, with the per-slot SPU destination table
+`D_800125EC = {0x1000, 0x20000, 0x20000, 0x6A000}`. Every asset loader uses them
+as `case n: start(...); state++` / `case n+1: if (poll()) state++`.
+
+`asset/`: **`GameUploadImageBlock` (func_8001A2E0)** is the per-record worker
+under the already-named chain walker `GameUploadImageAsset`; it uploads the CLUT
+sub-block first when `flags & 8` and then the pixel block.
+
+### 17h. A note on the `0x80063200` rule
+
+The convention "everything below 0x80063200 is Namco game code and gets a `Game*`
+name" has a documented exception at **0x800630AC–0x80063220**: `__main`, `_start`,
+`InitHeap`, `_bu_init`, `SetMemSize`, the B0 event stubs, `BiosInitPad`,
+`BiosStartPad` and `ExitCriticalSection` are all crt0/BIOS objects that the linker
+happened to place in the middle of the game text. They must not be "fixed" into
+`Game*` names. Section 13c already broke the rule the same way for libcd's
+`cdread.c` at 0x80027238.
+
+### 17i. Left unnamed on purpose
+
+* **`func_8006AB5C`** — the libcd interrupt decoder (350 words, drained in a
+  `while` loop by `CD_sync`, `CD_ready`, `CD_cw` and the IRQ2 handler). Section 15d
+  already corrected section 7's "error/trace helper" reading; this pass confirms
+  it and strengthens the reason to leave it raw. Every other libcd internal in
+  this image was pinned because it stores *its own name* into a trace slot or is
+  named inside another routine's message. This one owns two strings,
+  `"DiskError: "` and `"CDROM: unknown intr"`, and neither is an identity string.
+  `CD_intr`, `CD_getintr`, `CD_status` and `CD_readIntr` are all unfalsifiable
+  here, and `CD_status` is additionally implausible — the status accessor is
+  `CdStatus`, which reads the byte this function writes. What would settle it: a
+  libcd object with a surviving symbol table or `$Id:` string (libcd left none in
+  this image; only libapi's `intr.c` did), or another PS1 decompilation with
+  libcd symbols at matching offsets. **This is the only one of the 57 units still
+  on a `func_` name.**
+* **`func_800271EC`** (19 words, scene-table slot 32) keeps section 13h's ruling:
+  it is a per-sequence step driver dispatching `D_8007D778[D_801E4178]`, and the
+  four steps are not identified. Its unit is named after the libcd `cdread.c`
+  statics that dominate it, which is what section 14c already decided about the
+  file's placement.
+* **`func_8004A17C`** (51 words, in `menu/GameDrawTeamLogoCanvas.c`) has **no
+  caller anywhere**, and its two globals `D_8009B280` / `D_8009B284` are
+  referenced nowhere else in the image. It ramps a level and draws a 248×480
+  semi-transparent grey curtain at (72, 0). Dead code with a private accumulator:
+  no feature can be attributed to it.
+* **`func_80052128`** (12 words, in `menu/GameDrawCarEngineSpec.c`) also has no
+  caller and no data reference. It prints one of the 13 strings
+  `"CAR-0"`..`"CAR-C"` from `D_80082E70` through `GameDrawText8x8`. A leftover
+  debug label printer; naming it would imply it is reachable.
+* **`func_80050400`** (175 words, in `menu/GameInitMenuMode.c`) provably belongs
+  to screen id 11 — its reset is welded to `g_MenuHandlerIndex = 11` and its only
+  live caller is `GameUpdateCarShopScreen`. But *what its two unfolding textured
+  plates depict* is not proven: plate A is gated on `g_CarModelAsset[8]`, an
+  undocumented car-asset-header byte, and **plate B never opens in the shipped
+  build** — `D_8009B330` is only ever assigned −1 or 0, never a positive step.
+  Any content-bearing name would be a guess.
+* **`func_800509C4`** (86 words) draws a 48×24 plate at (76, 215) that unfolds
+  only in TIME ATTACK COURSE SELECT and only while the course series index is
+  ≥ 1. Section 15g declined it; this evidence does not overturn that, because the
+  tpage-0x20F artwork is on the disc.
+* **`func_800332E0`** (10 words, no callers) writes one CLUT word into HUD prim 8.
+  Dead; belongs with the section 15f list, not in a name.
+* **`func_8001A40C`** does `LoadImage` of the team-logo CLUT and then
+  `StoreImage`s the whole 448×256 page into `g_AssetBase`. The mechanism is
+  unambiguous but nothing in the decompiled tree reads that captured page, so
+  what it is *for* is unproven.
+* **`func_80074D0C` / `func_80074D14`** — two-word empty libsnd stubs, no callers.
+* **`func_800731CC`** — see 17b item 8; it is very probably `SsUtFlush`, but
+  freeing that name means renaming an already-named unit file, so it is recorded
+  rather than done.
+* **`func_80076B30` / `func_80076C1C`** — the pair displaced from
+  `SsUtKeyOn`/`SsUtKeyOff`. They are `SpuVmSeKeyOn/SeKeyOff(0x21, …)` wrappers
+  with no callers and no matching LibRef signature.
+
+### 17j. New naming conventions introduced
+
+* **`GameEmit*`** for the hand-written GTE engine leaves that write one primitive
+  packet and are reached only through a jump table, as distinct from the C-level
+  `GameQueue*` / `GameAddTilePrim` helpers. `GameSubmit*` stays for the entry
+  points that walk a model's opcode list.
+* **`Gte_*`** for libgte internals whose Sony name cannot be pinned, by analogy
+  with the existing `Gpu_*`.
+* **`Ss*` / `Spu*` descriptive names for libsnd/libspu internals**, matching
+  what `src/main/PAL/lib/libsnd/` and `lib/libspu/` already do. LibRef47 documents
+  no internal statics, so these are descriptions, not recovered symbols, and this
+  section says so explicitly rather than letting a later reader assume otherwise.

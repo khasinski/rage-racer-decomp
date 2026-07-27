@@ -25,7 +25,7 @@ extern s32 D_8009B32C;
 extern s32 D_8009B330;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
-extern s32 D_8019C908;
+extern s32 g_PlayerMoney asm("D_8019C908");
 extern s16 D_8019CA18;
 extern u8 *D_8019CB00;
 extern s16 D_801E41A4;
@@ -33,7 +33,7 @@ extern s32 D_801E4294;
 extern u8 D_801E438D[];
 
 void GameRequestCarModel(s32 arg0) asm("func_8001882C");
-void func_8001D530(void *arg0, s32 arg1);
+void GameUploadTeamNameTexture(void *arg0, s32 arg1) asm("func_8001D530");
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
 s32 func_800487D8(u8 *commands, s32 *progress, s32 step);
@@ -43,7 +43,7 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
 void func_80048D64(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void func_80049418(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_8004CF00(void);
-void func_8004F650(s32 arg0, s32 arg1, s32 arg2);
+void GameDrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2) asm("func_8004F650");
 void func_8004FCE8(s32 arg0, s32 arg1, s32 arg2);
 void func_80050400(s32 arg0, s32 arg1);
 s32 func_80050FA8(s32 arg0);
@@ -71,7 +71,7 @@ void GameUpdateCarShopScreen(void) {
         func_800487D8(D_8019CB00, &g_UiScriptProgress2, -1);
         func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
         func_80049418(1, 0, ~D_8019CA18 != 0, ~D_801E41A4 != 0);
-        func_8004F650(1, D_8019C908, value);
+        GameDrawCarShopPricePanel(1, g_PlayerMoney, value);
         func_800489AC(g_UiScriptProgress, 1, D_801E4294);
         func_800487D8(&D_800820C4, &g_UiScriptProgress, 0);
         {
@@ -239,7 +239,7 @@ block_51:
                     if (GameMenuBusy == -1) {
                         if (g_PadEdge2 & 0x860) {
                             if (g_MenuSubCursor != 0) {
-                                if (D_8019C908 >= value) {
+                                if (g_PlayerMoney >= value) {
                                     GamePlaySoundCue(2);
                                     GameMenuBusy = -3;
                                     g_MenuConfirmTimer = 0x23;
@@ -305,7 +305,7 @@ block_51:
                 }
             }
             func_80049418(1, 0, ~D_8019CA18 != 0, ~D_801E41A4 != 0);
-            func_8004F650(1, D_8019C908, value);
+            GameDrawCarShopPricePanel(1, g_PlayerMoney, value);
             func_800489AC(g_UiScriptProgress, 1, D_801E4294);
             func_800487D8(&D_800820C4, &g_UiScriptProgress, 0);
             func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
@@ -314,20 +314,20 @@ block_51:
         g_MenuHandlerIndex = -1;
         g_MenuHandlerIndex2 = 0xB;
         func_80049418(-1, 0, ~D_8019CA18 != 0, ~D_801E41A4 != 0);
-        func_8004F650(-1, D_8019C908, value);
+        GameDrawCarShopPricePanel(-1, g_PlayerMoney, value);
         func_800487D8(&D_800820C4, &g_UiScriptProgress, -1);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
         func_800489AC(g_UiScriptProgress, 1, D_801E4294);
         if (g_UiScriptProgress <= 0) {
             if (GameMenuBusy == 2) {
-                D_8019C908 -= value;
+                g_PlayerMoney -= value;
             }
             g_MenuScreen = 4;
             g_MenuHandlerIndex = 4;
             g_UiScriptProgress = 0;
             GameMenuBusy = 0;
             D_801E4294 = 0;
-            func_8001D530(&g_TeamNameChars, g_TeamNameLength);
+            GameUploadTeamNameTexture(&g_TeamNameChars, g_TeamNameLength);
             func_8004CF00();
         }
     }
@@ -380,7 +380,7 @@ extern u8 *D_801E4188;
 extern s32 D_801E4290;
 
 void GameRequestUpgradedCarModel(s32 arg0) asm("func_800189E4");
-void func_8004F99C(s32 arg0, s32 arg1, s32 arg2);
+void GameDrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2) asm("func_8004F99C");
 
 void GameUpdateEngineerShopScreen(void) asm("func_8005A3A4");
 void GameUpdateEngineerShopScreen(void) {
@@ -398,7 +398,7 @@ void GameUpdateEngineerShopScreen(void) {
     if (GameMenuBusy == 0) {
         func_800487D8(D_801E4188, &g_UiScriptProgress2, -1);
         func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
-        func_8004F99C(1, D_8019C908, value);
+        GameDrawEngineerShopPricePanel(1, g_PlayerMoney, value);
         func_800489AC(g_UiScriptProgress, 1, D_801E4290);
         func_800487D8(&D_80082130, &g_UiScriptProgress, 0);
         res = func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
@@ -415,7 +415,7 @@ void GameUpdateEngineerShopScreen(void) {
             if (g_PadEdge2 & 0x860) {
                 sel = D_801E4290;
                 if (sel == 0) {
-                    if (D_8019C908 >= value) {
+                    if (g_PlayerMoney >= value) {
                         GamePlaySoundCue(2);
                         D_801E4188 = &D_80082A54;
                         GameMenuBusy = -1;
@@ -510,7 +510,7 @@ void GameUpdateEngineerShopScreen(void) {
                     }
                 }
             }
-            func_8004F99C(1, D_8019C908, value);
+            GameDrawEngineerShopPricePanel(1, g_PlayerMoney, value);
             func_800489AC(g_UiScriptProgress, 1, D_801E4290);
             func_800487D8(&D_80082130, &g_UiScriptProgress, 0);
             func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
@@ -518,7 +518,7 @@ void GameUpdateEngineerShopScreen(void) {
         }
         g_MenuHandlerIndex = -1;
         g_MenuHandlerIndex2 = 0xC;
-        func_8004F99C(-1, D_8019C908, value);
+        GameDrawEngineerShopPricePanel(-1, g_PlayerMoney, value);
         func_800487D8(&D_80082130, &g_UiScriptProgress, -1);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
         func_800489AC(g_UiScriptProgress, 1, D_801E4290);
@@ -528,7 +528,7 @@ void GameUpdateEngineerShopScreen(void) {
                 if (g_CarTable[g_PlayerCarIndex].modelVariant > g_TimeAttackCars[g_PlayerCarIndex].modelVariant) {
                     g_TimeAttackCars[g_PlayerCarIndex].modelVariant = g_CarTable[g_PlayerCarIndex].modelVariant;
                 }
-                D_8019C908 -= value;
+                g_PlayerMoney -= value;
             }
             g_MenuScreen = 4;
             g_MenuHandlerIndex = 4;

@@ -7,7 +7,7 @@ extern s32 D_801E4B80;
 extern s32 D_801E40AC;
 extern s32 D_801E7A58[][0x10];
 
-void func_80075710(s32 arg0);
+void SpuVmInit(s32 arg0) asm("func_80075710");
 
 void _SsInitTables(void) asm("func_80071B0C");
 
@@ -44,7 +44,7 @@ void _SsInitTables(void) {
         }
     }
 
-    func_80075710(0x18);
+    SpuVmInit(0x18);
 
     {
         register s32 i asm("$5");

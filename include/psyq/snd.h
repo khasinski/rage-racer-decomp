@@ -199,7 +199,10 @@ s16 SsVabTransBody(u8 *addr, s16 vab_id) asm("func_800730BC");
 s16 SsVabTransCompleted(s16 immediate_flag) asm("func_8007317C");
 void SpuVmDamperOff(void) asm("func_800731A8");
 void SpuVmDamperOn(void) asm("func_800731B8");
-void SsSeqCalledTbyT(void) asm("func_800731CC");
+/* The tick entry point: interprets SEQ/SEP data and carries out playback
+ * (LibRef47 14-32). It is the only caller of SsSeqAdvanceChannelTick.
+ * Was bound to func_800731CC here; that was wrong (docs/names.md 17). */
+void SsSeqCalledTbyT(void) asm("func_80071018");
 s32 SsUtGetProgAtr(s32 vab_id, s32 program, ProgAtr *out) asm("func_8007320C");
 s32 SpuVmVSetUp(s32 vab_id, s32 program) asm("func_80073314");
 s32 SsUtGetVagAtr(s32 vab_id, s32 program, s32 tone, VagAtr *out) asm("func_800733D8");
@@ -216,8 +219,10 @@ s32 SpuVmApplyPitchBendByTone(s32 note, s32 vab_id, s32 program, s32 bend) asm("
 void SsUtFlush(void) asm("func_80075FA4");
 void SpuVmSeKeyOn(s32 seq, s32 vab_id, s32 program, s32 tone, s32 volume, s32 pan) asm("func_80076350");
 void SpuVmSeKeyOff(s32 seq, s32 vab_id, s32 program, s32 tone) asm("func_80076940");
-void SsUtKeyOn(s32 vab_id, s32 program, s32 tone, s32 unused, u16 left, u16 right) asm("func_80076B30");
-void SsUtKeyOff(s32 vab_id, s32 program, s32 tone) asm("func_80076C1C");
+/* LibRef47 14-103/14-104. func_80076B30 (6 args, void) and func_80076C1C
+ * (3 args) cannot be these; they are left raw (docs/names.md 17). */
+s16 SsUtKeyOn(s16 vabId, s16 prog, s16 tone, s16 note, s16 fine, s16 volL, s16 volR) asm("func_800776E4");
+s32 SsUtKeyOff(s32 voice, s32 vabId, s32 prog, s32 tone, s32 note) asm("func_80077A88");
 void SpuVmSeqKeyOff(s32 seq_sep) asm("func_80076ED8");
 s32 SsUtSetProgVol(s32 vab_id, s32 program, s32 volume) asm("func_8007701C");
 s32 SsUtGetProgVol(s32 vab_id, s32 program) asm("func_80077090");

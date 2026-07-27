@@ -11,7 +11,8 @@ void SpuVmDamperOn(void) {
     D_8019CA68 = 2;
 }
 
-void SsSeqCalledTbyT(void) {
+/* Re-entrancy-guarded wrapper around the internal flush; see psyq/snd.h. */
+void func_800731CC(void) {
     if (D_801E40AC != 1) {
         D_801E40AC = 1;
         SsUtFlush();

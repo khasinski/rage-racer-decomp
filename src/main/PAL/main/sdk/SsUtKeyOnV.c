@@ -106,7 +106,7 @@ extern SpuVoice77C7C D_8009E0B8[];
 
 extern s32 func_80073314(s16, s16);
 extern void func_80074134(void);
-extern void func_80074348(s32);
+extern void SpuVmNoiseKeyOn(s32) asm("func_80074348");
 extern s32 func_80074A6C(u16, u16);
 extern void func_80073C50(s32, u16);
 
@@ -206,7 +206,7 @@ s32 SsUtKeyOnV(
     D_8009E0B8[idx].tone = tone_value;
     func_80074134();
     if ((s16)D_801E4BD0.vag == 0xFF) {
-        func_80074348(voice & 0xFF);
+        SpuVmNoiseKeyOn(voice & 0xFF);
     } else {
         func_80073C50(1, func_80074A6C(note, fine));
     }

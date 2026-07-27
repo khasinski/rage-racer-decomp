@@ -248,8 +248,8 @@ extern volatile u32 *D_800942D0;
 extern volatile u32 *D_800942D4;
 extern volatile u32 *D_800942D8;
 
-void func_80067F04(void);
-s32 func_80067F38(void);
+void Gpu_ArmTimeout(void) asm("func_80067F04");
+s32 Gpu_CheckTimeout(void) asm("func_80067F38");
 
 /* Driver-table slot +0x2C: clears an ordering table through the hardware
  * OTC DMA channel (chcr 0x11000002, walking backwards from the end).
@@ -270,14 +270,14 @@ s32 Gpu_ClearOTagDma(u32 *arg0, s32 arg1) {
     *D_800942CC = (u32)arg0;
     *D_800942D0 = size;
     *D_800942D4 = 0x11000002;
-    func_80067F04();
+    Gpu_ArmTimeout();
 
     if ((*D_800942D4 & 0x01000000) != 0) {
         mask = 0x01000000;
         while (1) {
             u32 statusValue;
 
-            if (func_80067F38() != 0) {
+            if (Gpu_CheckTimeout() != 0) {
                 return -1;
             }
             statusValue = *D_800942D4;

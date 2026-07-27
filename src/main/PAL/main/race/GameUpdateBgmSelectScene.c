@@ -42,11 +42,11 @@ void GameDrawAttractTitle(void) asm("func_800266D0");
 extern u32 g_StreamReturnScene asm("D_8019C760");
 extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 D_801F18CC[];
-void func_80033AA0(s32 arg0, u32 arg1);
+void GameDrawFullscreenFadeTile(s32 arg0, u32 arg1) asm("func_80033AA0");
 void GameReturnToTitleScene(void) asm("func_800268EC");
-s32 func_8001A1F0(u32 arg0, s32 arg1);
+s32 GameCycleAttractCameraCar(u32 arg0, s32 arg1) asm("func_8001A1F0");
 void func_8003BB50(void);
-void func_80019EFC(s32 arg0);
+void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
 void GameUpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
 void GameDrawTerrainCellsWide(void) asm("func_80041888");
@@ -165,7 +165,7 @@ void GameUpdateAttractDemoRace(void) {
     if ((u32)g_SceneTimer < 0x3D) {
         GameDrawAttractTitle();
         value = g_SceneTimer - 6;
-        func_80033AA0(0xFF - (((value * 3) * 4) - value), 0x49);
+        GameDrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
     }
 
     timer = g_SceneTimer;
@@ -177,7 +177,7 @@ void GameUpdateAttractDemoRace(void) {
         u32 adjusted;
 
         adjusted = timer - 0x6CC;
-        func_80033AA0((adjusted * 4) + adjusted, 0x49);
+        GameDrawFullscreenFadeTile((adjusted * 4) + adjusted, 0x49);
     }
 
     if (g_SceneTimer == 0x708) {
@@ -185,12 +185,12 @@ void GameUpdateAttractDemoRace(void) {
     }
 
     g_AnimTimer++;
-    g_CameraCarIndex = func_8001A1F0(0xFF, g_CameraCarIndex);
+    g_CameraCarIndex = GameCycleAttractCameraCar(0xFF, g_CameraCarIndex);
     func_8003BB50();
 
     index = g_CameraCarIndex;
     offset = (((((index * 3) * 4) + index) * 8) - index) * 4;
-    func_80019EFC(*(s16 *)&D_801F18CC[offset]);
+    GameRequestTrackTexturePage(*(s16 *)&D_801F18CC[offset]);
 
     GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     GameDrawCars();

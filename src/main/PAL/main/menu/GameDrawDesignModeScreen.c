@@ -101,7 +101,7 @@ void func_8005131C(void);
 s32 func_800487D8(void *a, void *b, s32 c);
 void func_800489AC(s32 a, s32 b, s32 c);
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-void func_8004B8B4(s32 a, s32 b);
+void GameRampTeamLogoCanvas(s32 a, s32 b) asm("func_8004B8B4");
 void func_8004A248(s32 a, s32 b);
 s32 func_8004E724(s32 a, s32 b);
 
@@ -131,7 +131,7 @@ void GameUpdateDesignModeScreen(void) {
                 sel = D_8019C758;
                 if (sel == 0) {
                     GamePlaySoundCue(2);
-                    func_8004B8B4(-256, -256);
+                    GameRampTeamLogoCanvas(-256, -256);
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 1;
                 } else if (sel == 1) {

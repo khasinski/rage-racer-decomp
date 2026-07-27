@@ -17,8 +17,8 @@ extern s16 D_801E4BE6;
 extern s16 D_801E4BEA;
 
 s32 SpuVmVSetUp(s32 arg0, s32 arg1) asm("func_80073314");
-s32 SpuVmVibrate(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80074D1C");
-s32 SpuVmAutoVolPan(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8007521C");
+s32 SpuVmAutoVol(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80074D1C");
+s32 SpuVmAutoPan(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8007521C");
 s32 SpuVmApplyPitchBendToVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_80075CB0");
 u16 SpuVmCalculateTonePitch(s32 arg0, s32 arg1) asm("func_80074A6C");
 
@@ -293,7 +293,7 @@ s32 SsUtSetVVol(s32 arg0, s16 arg1, s16 arg2) {
 
 s32 SsUtVibrateOn(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     if ((u16)arg0 < 0x18U) {
-        SpuVmVibrate((s16)arg0, (s16)arg1, (s16)arg2, (s16)arg3);
+        SpuVmAutoVol((s16)arg0, (s16)arg1, (s16)arg2, (s16)arg3);
         return 0;
     }
 
@@ -302,7 +302,7 @@ s32 SsUtVibrateOn(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 s32 SsUtAutoVol(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     if ((u16)arg0 < 0x18U) {
-        SpuVmAutoVolPan((s16)arg0, (s16)arg1, (s16)arg2, (s16)arg3);
+        SpuVmAutoPan((s16)arg0, (s16)arg1, (s16)arg2, (s16)arg3);
         return 0;
     }
 

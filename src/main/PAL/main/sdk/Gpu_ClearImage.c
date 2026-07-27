@@ -91,8 +91,8 @@ typedef struct {
     s16 h;
 } GpuRect;
 
-void func_80067F04(void);
-s32 func_80067F38(void);
+void Gpu_ArmTimeout(void) asm("func_80067F04");
+s32 Gpu_CheckTimeout(void) asm("func_80067F38");
 
 /* Driver-table slot +0x20: the worker LoadImage enqueues. Clips the rect,
  * issues GP0(A0h) and pushes the odd words by hand, the rest by DMA2. */
@@ -122,7 +122,7 @@ s32 Gpu_LoadImage(GpuRect *rect, u32 *src) {
     savedRect = rect;
     asm("" : "=r"(savedRect) : "0"(savedRect));
     current = src;
-    func_80067F04();
+    Gpu_ArmTimeout();
 
     w = savedRect->w;
     mode = 0;
@@ -169,7 +169,7 @@ s32 Gpu_LoadImage(GpuRect *rect, u32 *src) {
     if ((*g_GpuGp1 & 0x04000000) == 0) {
         readyMask = 0x04000000;
         do {
-            if (func_80067F38() != 0) {
+            if (Gpu_CheckTimeout() != 0) {
                 return -1;
             }
             status = *g_GpuGp1;
@@ -226,7 +226,7 @@ s32 Gpu_StoreImage(GpuRect *rect, u32 *dst) {
     s32 blocks;
     s32 rem;
 
-    func_80067F04();
+    Gpu_ArmTimeout();
 
     w = rect->w;
     if (w >= 0) {
@@ -263,7 +263,7 @@ s32 Gpu_StoreImage(GpuRect *rect, u32 *dst) {
 
     if ((*D_800942BC & 0x04000000) == 0) {
         do {
-            if (func_80067F38() != 0) {
+            if (Gpu_CheckTimeout() != 0) {
                 return -1;
             }
         } while ((*D_800942BC & 0x04000000) == 0);
@@ -277,7 +277,7 @@ s32 Gpu_StoreImage(GpuRect *rect, u32 *dst) {
 
     if ((*D_800942BC & 0x08000000) == 0) {
         do {
-            if (func_80067F38() != 0) {
+            if (Gpu_CheckTimeout() != 0) {
                 return -1;
             }
         } while ((*D_800942BC & 0x08000000) == 0);

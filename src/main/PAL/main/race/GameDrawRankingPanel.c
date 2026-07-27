@@ -17,7 +17,7 @@ extern s32 g_CarNames[] asm("D_8007D4D4");
 void func_80016EA0(void *dst, s32 len, void *src, s32 arg3);
 void func_80016754(void *dst, s32 x, void *src, s32 color);
 void *func_80021CD4(void *dst, s32 value);
-void func_800632F0();
+void LibcSprintf() asm("func_800632F0");
 s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 extern volatile s32 g_RaceTotalTime asm("D_801E4BA8");
 extern volatile u16 g_PlayerCarIndex asm("D_801E40D4");
@@ -39,7 +39,7 @@ void func_80021D68(void);
 void GameDrawRankingPanel(u8 *arg0) asm("func_80021DB8");
 void GameDrawTimeRecordPanel(u8 *arg0) asm("func_80022068");
 void GameDrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
-void func_80033AA0(s32 arg0, s32 arg1);
+void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8006A534(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
@@ -110,7 +110,7 @@ void GameDrawRankingPanel(u8 *arg0) {
         text[3] = 0x2F;
         func_80021CD4(&text[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].v8);
         xOrField = g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].vC;
-        func_800632F0(&text[0xC], D_80010F9C,
+        LibcSprintf(&text[0xC], D_80010F9C,
                       &g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex],
                       g_CarClassNames[xOrField]);
         color = 0x78CC;
@@ -118,7 +118,7 @@ void GameDrawRankingPanel(u8 *arg0) {
             color = 0x780F;
         }
         func_80016754(panel + 0x14, destination, text, color);
-        func_800632F0(text, D_80010FA4, g_CarNames[xOrField]);
+        LibcSprintf(text, D_80010FA4, g_CarNames[xOrField]);
         func_80016754(panel + 0x2C, scoreOrX, text, color);
         destination += 0x14;
         scoreOrX += 0x14;
@@ -152,7 +152,7 @@ void GameDrawTimeRecordPanel(u8 *s5) {
         func_80021CD4(&text[4], g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].v8);
 
         idx = g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].vC;
-        func_800632F0(&text[0xC], D_80010F9C,
+        LibcSprintf(&text[0xC], D_80010F9C,
                       &g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2], g_CarClassNames[idx]);
 
         color = 0x78CC;
@@ -161,7 +161,7 @@ void GameDrawTimeRecordPanel(u8 *s5) {
         }
         func_80016754(s5 + 0x14, s3, text, color);
 
-        func_800632F0(text, D_80010FA4, g_CarNames[idx]);
+        LibcSprintf(text, D_80010FA4, g_CarNames[idx]);
 
         func_80016754(s5 + 0x2C, s4, text, color);
         s3 += 0x14;
@@ -364,7 +364,7 @@ void GameUpdateRecordEntry(void) {
     switch (g_RecordEntryState) {
     case 0:
         g_SceneTimer -= 8;
-        func_80033AA0(g_SceneTimer, 0x49);
+        GameDrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if (g_SceneTimer == 0) {
             if (g_RankingInsertRow < 5 || g_TimeRecordInsertRow < 5) {
                 GameRequestCdTrack(0xE);
@@ -532,7 +532,7 @@ void GameUpdateRecordEntry(void) {
 
     case 6:
         g_SceneTimer += 2;
-        func_80033AA0(g_SceneTimer, 0x49);
+        GameDrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if ((u32)g_SceneTimer >= 0x100) {
             GameRequestSelectBgmAssets();
             g_SceneId = 6;

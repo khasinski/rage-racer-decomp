@@ -3,7 +3,7 @@
 
 void func_8006BA68(void);
 s32 func_8006C06C(void);
-void func_8006DF94(s32 arg0, s32 arg1);
+void DMACallback(s32 arg0, s32 arg1) asm("func_8006DF94");
 void func_8006BF00(void);
 
 s32 CdMix(void) asm("func_8006A94C");
@@ -19,7 +19,7 @@ s32 CdGetSector2(void) {
 
 void CdDataCallback(s32 arg0) asm("func_8006A994");
 void CdDataCallback(s32 arg0) {
-    func_8006DF94(3, arg0);
+    DMACallback(3, arg0);
 }
 
 void func_8006A9B8(void) {

@@ -16,7 +16,7 @@ s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 void func_8002C168(void *arg0);
 void GameUpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
-void func_8001DAB0(GameRenderObject *obj);
+void GameDrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
 
 typedef struct Block16 {
     s32 w0;
@@ -30,7 +30,7 @@ typedef struct Block16 {
  * g_CameraCar (a GameRenderObject) toward the sampled centre-line point
  * (func_8002FC84 + atan2), nudges its position, then seeds the scratchpad view
  * state (view[2..4]=eye XYZ, view[6]=pitch, view[7]=yaw, view[8]=roll) from the
- * eye object and submits the render object (func_8001DAB0). markerClamp is the
+ * eye object and submits the render object (GameDrawPlayerCarModel). markerClamp is the
  * zeroed clamp record passed to the track-marker builder GameUpdateCarTrackState.
  */
 void GameUpdateFinishCamera(GameRenderObject *obj) asm("func_8003CB3C");
@@ -97,5 +97,5 @@ void GameUpdateFinishCamera(GameRenderObject *obj) {
 
     GameSetCameraRotMatrix();
     GameSelectModelBank(0);
-    func_8001DAB0(obj);
+    GameDrawPlayerCarModel(obj);
 }

@@ -50,7 +50,6 @@ extern s32 D_8009E6F8;
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_MenuViewSpin asm("D_801E8268");
 
-void func_80069728(void *a, void *b);
 void func_80017794(void *a, void *b, void *c);
 
 /* The course diorama behind COURSE SELECT and RANKING, with the carousel easing. */
@@ -71,7 +70,7 @@ void GameDrawMenuCourseView(void) {
     *(s32 *)0x1F800020 = 0;
 
     GameSetCameraRotMatrix();
-    func_80069728((Matrix *)0x1F800028, &D_80082D6C);
+    ScaleMatrix((Matrix *)0x1F800028, &D_80082D6C);
 
     if (249999 < g_MenuViewOffsetTarget) {
         if (g_MenuViewOffset < 2500) {
@@ -184,7 +183,7 @@ void GameDrawTeamNameCharModel(void) {
     *(s32 *)0x1F800020 = 0;
 
     GameSetCameraRotMatrix();
-    func_80069728((Matrix *)0x1F800028, &D_80082D6C);
+    ScaleMatrix((Matrix *)0x1F800028, &D_80082D6C);
 
     if (249999 < g_MenuViewOffsetTarget) {
         if (g_MenuViewOffset < 2500) {
@@ -244,7 +243,7 @@ void GameDrawTeamNameCharModel(void) {
     GameBuildRotMatrixZ(&mtxA, poly.f6);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2((Matrix *)0x1F800028, &mtxA);
-    func_80069728(&mtxA, &vcopy);
+    ScaleMatrix(&mtxA, &vcopy);
 
     if (g_TeamNameCharModel != 10 && (u32)(g_TeamNameCharModel - 42) >= 2) {
         s32 a1;

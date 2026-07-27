@@ -40,7 +40,7 @@ s32 GameRequestCarSelectAssets(void) asm("func_80018530");
 void func_8005E88C(void);
 void func_80049418(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void LoadImage(void *rect, void *data) asm("func_80065B24");
-void func_8001D530(void *arg0, s32 arg1);
+void GameUploadTeamNameTexture(void *arg0, s32 arg1) asm("func_8001D530");
 
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
 void GameEnterCourseSelectScreen(void) asm("func_80052778");
@@ -98,7 +98,7 @@ void GameEnterCourseSelectScreen(void) {
 
     LoadImage(g_TeamLogoRect, g_TeamLogoCanvas);
     LoadImage(g_TeamLogoClutRect, g_TeamLogoClut);
-    func_8001D530(g_TeamNameChars, g_TeamNameLength);
+    GameUploadTeamNameTexture(g_TeamNameChars, g_TeamNameLength);
 }
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameDrawNowLoadingText", func_8005290C);
@@ -147,7 +147,7 @@ extern s32 D_8009B378;
 extern u8 g_MenuSubCursor asm("D_8009B2F0");
 extern u8 *D_8019C764;
 extern s32 D_8019C7AC;
-extern s32 D_8019C908;
+extern s32 g_PlayerMoney asm("D_8019C908");
 extern u16 D_8019CABC;
 extern u8 D_80081818;
 extern u8 D_800817A0;
@@ -169,8 +169,8 @@ void func_80049418(s32, s32, s32, s32);
 void func_8004CF30(s32 arg0);
 void func_8004F3EC(s32 arg0, s32 arg1);
 void func_8004FCE8(s32 arg0, s32 arg1, s32 arg2);
-s32 func_8005026C(s32 arg0);
-void func_800506BC(s32 *p0, s32 *p1, s32 *p2);
+s32 GameDrawClassChangeCurtain(s32 arg0) asm("func_8005026C");
+void GameFlipCourseCard(s32 *p0, s32 *p1, s32 *p2) asm("func_800506BC");
 void func_800509C4(s32 arg0);
 void func_8005194C(void);
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
@@ -192,7 +192,7 @@ void GameUpdateCourseSelectScreen(void) {
     ot = *(void **)0x1F800004;
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     if (g_GrandPrixMode != 0) {
-        func_800506BC(&D_8009B364, &D_8009B360, &D_8009B368);
+        GameFlipCourseCard(&D_8009B364, &D_8009B360, &D_8009B368);
     } else {
         func_800509C4(D_8009B334);
     }
@@ -373,7 +373,7 @@ void GameUpdateCourseSelectScreen(void) {
                         GameMenuBusy = -5;
                         D_8009B310 = 0;
                         g_MenuConfirmTimer = 0x23;
-                        func_8005026C(0);
+                        GameDrawClassChangeCurtain(0);
                     }
                 }
                 pad = (u16 *)&g_PadEdge2;
@@ -432,12 +432,12 @@ void GameUpdateCourseSelectScreen(void) {
             cnt = g_MenuConfirmTimer;
             if (cnt <= 0) {
                 if (D_8009B310 != 0) {
-                    if (func_8005026C(-1) == 0) {
+                    if (GameDrawClassChangeCurtain(-1) == 0) {
                         GameMenuBusy = 0;
                         g_UiScriptProgress2 = 0;
                     }
                 } else {
-                    if (func_8005026C(1) >= 0x19) {
+                    if (GameDrawClassChangeCurtain(1) >= 0x19) {
                         D_8009B310 = 1;
                         g_GrandPrixClass = g_MenuSubCursor;
                         GameResetCourseProgress(g_MenuSubCursor);
@@ -519,7 +519,7 @@ void GameUpdateCourseSelectScreen(void) {
                     p->carIndex = d;
                     p->classIndex = lapc;
                     if (half != 0) {
-                        p->unk10 = D_8019C908;
+                        p->unk10 = g_PlayerMoney;
                         goto clear;
                     }
                     goto setlast;
@@ -544,7 +544,7 @@ void GameUpdateCourseSelectScreen(void) {
                     g_RaceProgress->carIndex = d;
                     g_RaceProgress->classIndex = lapc;
                     if (half != 0) {
-                        g_RaceProgress->unk10 = D_8019C908;
+                        g_RaceProgress->unk10 = g_PlayerMoney;
                     } else {
                         p = g_RaceProgress;
                     setlast:

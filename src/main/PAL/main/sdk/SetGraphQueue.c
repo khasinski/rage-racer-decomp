@@ -23,7 +23,7 @@ s32 SetGraphQueue(s32 arg0) {
     if (newQueue != *queue) {
         g_GpuCallbacks->resetGraph(1);
         *queue = newQueue;
-        ResetCallback(2, 0);
+        DMACallback(2, 0);
     }
 
     return oldQueue;

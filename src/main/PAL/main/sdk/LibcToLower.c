@@ -37,10 +37,10 @@ u32 func_80063D9C[20] __attribute__((section(".text"))) = {
     0,
 };
 
-void func_80063E24(s32 arg0, s32 arg1, s32 arg2);
-void func_80063E34(s32 arg0);
+void _card_write(s32 arg0, s32 arg1, s32 arg2) asm("func_80063E24");
+void _new_card(s32 arg0) asm("func_80063E34");
 
-s32 GameIssueCdCommand3F(s32 arg0) {
-    func_80063E34(arg0);
-    func_80063E24(arg0, 0x3F, 0);
+s32 _card_clear(s32 arg0) {
+    _new_card(arg0);
+    _card_write(arg0, 0x3F, 0);
 }

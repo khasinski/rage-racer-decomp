@@ -2,7 +2,7 @@
 
 extern u8 *D_801E79CC[];
 
-void func_8006F1E0(s32 arg0, s32 arg1);
+void SsSeqDispatchMidiEvent(s32 arg0, s32 arg1) asm("func_8006F1E0");
 
 void SsSeqAdvanceChannelDelta(s32 seq, s32 channel) asm("func_8006F0D0");
 
@@ -57,7 +57,7 @@ void SsSeqAdvanceChannelDelta(s32 seq, s32 channel) {
         saved1 = raw1;
 loop_call:
         do {
-            func_8006F1E0(saved0 >> 16, saved1 >> 16);
+            SsSeqDispatchMidiEvent(saved0 >> 16, saved1 >> 16);
             loop_delay = state->delta_value;
         } while (loop_delay == 0);
 
