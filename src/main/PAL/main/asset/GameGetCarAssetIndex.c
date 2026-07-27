@@ -7,30 +7,30 @@ s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 /* Progress level needed to buy this model's next grade. */
 s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
 
-extern u8 D_8007C464[];
-extern u8 D_8007C474[];
-extern u32 D_8007C484;
+extern u8 g_CarModelBaseIndex[] asm("D_8007C464");
+extern u8 g_CarModelUnlockBase[] asm("D_8007C474");
+extern u32 g_CarImageRect asm("D_8007C484");
 extern u8 D_8019C86C;
 extern u8 D_8009EC94;
 extern void *g_CarModelAsset asm("D_8009E698");
 extern void *g_VisibleCellMask asm("D_801E6828");
 extern void *g_VisibleCellList asm("D_801E4BC8");
-extern void *D_801E41A8[];
+extern void *g_ModelBanks[] asm("D_801E41A8");
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_CourseModelCount asm("D_801E40E4");
-extern void *D_801E5020;
-extern void *D_801E4B98;
+extern void *g_TerrainCellGrid asm("D_801E5020");
+extern void *g_CellVisibilityTable asm("D_801E4B98");
 extern s32 D_801E4144;
-extern void *D_801E424C[];
-extern void *D_801E8A54[];
+extern void *g_CarImageSlots[] asm("D_801E424C");
+extern void *g_CarModelSlots[] asm("D_801E8A54");
 void LoadImage(void *rect, void *data) asm("func_80065B24");
 
 s32 GameGetCarAssetIndex(s32 model, s32 grade) {
-    return D_8007C464[model] + grade;
+    return g_CarModelBaseIndex[model] + grade;
 }
 
 s32 GameGetCarUnlockLevel(s32 model) {
-    return g_CarTable[model].modelVariant + D_8007C474[model];
+    return g_CarTable[model].modelVariant + g_CarModelUnlockBase[model];
 }
 
 void GameInitRenderState(s32 arg0) asm("func_80017884");
@@ -78,7 +78,7 @@ void GameRegisterModelBank(s32 *base, s32 index) {
 
     (void)&pad;
     ptr = base + 3;
-    D_801E41A8[index] = base;
+    g_ModelBanks[index] = base;
     value = base[1];
     i = 0;
     value = (s32)base + value;
@@ -135,7 +135,7 @@ void GameSelectModelBank(s32 index) {
     register s32 ptr asm("$2");
     register s32 value asm("$3");
 
-    ptr = (s32)D_801E41A8;
+    ptr = (s32)g_ModelBanks;
     entry = (s32 *)((index << 2) + ptr);
     ptr = *entry;
     value = *(volatile s32 *)entry;
@@ -193,9 +193,9 @@ void func_80017AD0(s32 *base) {
     s32 pad[2];
 
     (void)&pad;
-    D_801E5020 = base;
+    g_TerrainCellGrid = base;
     base = (s32 *)((s32)base + 0x800);
-    D_801E4B98 = base;
+    g_CellVisibilityTable = base;
     base = (s32 *)((s32)base + 0x1000);
     ptr = base + 2;
     count = base[0];
@@ -220,22 +220,22 @@ void func_80017AD0(s32 *base) {
 
 void GameSetCarImageSlot(void *asset, s32 index) asm("func_80017B44");
 void GameSetCarImageSlot(void *asset, s32 index) {
-    D_801E424C[index] = asset;
+    g_CarImageSlots[index] = asset;
 }
 
 void GameUploadCarImage(s32 index) asm("func_80017B5C");
 void GameUploadCarImage(s32 index) {
-    LoadImage(&D_8007C484, D_801E424C[index]);
+    LoadImage(&g_CarImageRect, g_CarImageSlots[index]);
 }
 
 void GameSetCarModelSlot(void *asset, s32 index) asm("func_80017B94");
 void GameSetCarModelSlot(void *asset, s32 index) {
-    D_801E8A54[index] = asset;
+    g_CarModelSlots[index] = asset;
 }
 
 void GameSelectCarModelSlot(s32 index) asm("func_80017BAC");
 void GameSelectCarModelSlot(s32 index) {
-    g_CarModelAsset = D_801E8A54[index];
+    g_CarModelAsset = g_CarModelSlots[index];
 }
 
 void func_80017BCC(void) {

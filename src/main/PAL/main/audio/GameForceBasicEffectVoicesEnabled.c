@@ -3,11 +3,11 @@
 #include "game/sound.h"
 #include "psyq/snd.h"
 
-extern s32 D_801E6CF4;
-extern s32 D_801E6CF8;
-extern s32 D_801E6CFC;
-extern s32 D_800126AC[];
-extern s32 D_800126B4[];
+extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
+extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
+extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
+extern s32 g_IndexedEffectTones[] asm("D_800126AC");
+extern s32 g_IndexedEffectVolumes[] asm("D_800126B4");
 
 s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
 void func_8005C09C(s32 arg0);
@@ -37,15 +37,15 @@ void GameForceBasicEffectVoicesEnabled(s32 enabled) {
             arg0 = voicePacked >> 16;
             raw = 0x3C;
             left = g_VabIds[0];
-            right = *(s16 *)((u8 *)&D_801E6D00[0].left + offset);
+            right = *(s16 *)((u8 *)&g_MusicChannels[0].left + offset);
             zeroArg = 0;
             SsUtKeyOnV(arg0, left, right, zeroArg, raw, 0, 0, 0);
             asm volatile("" : : "r"(unused));
 
-            raw = *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset);
+            raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);
             scale = g_EffectVolumeScale;
             left = raw * scale;
-            raw = *(s32 *)((u8 *)&D_801E6D00[0].volRight + offset);
+            raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);
             arg0 = voice;
             if (left < 0) {
                 left += 0x7F;
@@ -99,22 +99,22 @@ void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
     register s32 voice asm("$4");
 
     if (enabled != 0) {
-        index = D_801E6CF4;
+        index = g_IndexedEffectIndexPrev;
         if (index < 0) {
             return;
         }
         raw = (index * 3) << 2;
-        func_8005C09C(*(s32 *)((s32)D_800126AC + raw));
+        func_8005C09C(*(s32 *)((s32)g_IndexedEffectTones + raw));
     } else {
         func_8005C0E4();
     }
 
-    raw = D_801E6CF4;
+    raw = g_IndexedEffectIndexPrev;
     if (raw >= 0) {
         index = (raw * 3) << 2;
-        product = D_801E6CFC * *(s32 *)((s32)D_800126B4 + index);
-        raw = D_801E6CF8;
-        base = *(s32 *)((s32)D_800126AC + index);
+        product = g_IndexedEffectVolume * *(s32 *)((s32)g_IndexedEffectVolumes + index);
+        raw = g_IndexedEffectPitch;
+        base = *(s32 *)((s32)g_IndexedEffectTones + index);
         center = raw >> 7;
         asm volatile("" : : "r"(center));
         fine = raw & 0x7F;
@@ -175,7 +175,7 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
     state = enabled;
     voicePacked = 0xA0000;
     voice = 0xA;
-    pitchBase = (s32)&D_801E6D30[0].pitch;
+    pitchBase = (s32)&g_EffectVoices[0].pitch;
     toneBase = pitchBase - 0xC;
     offset = 0;
     do {
@@ -183,11 +183,11 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
             arg0 = voicePacked >> 16;
             left = g_VabIds[0];
             right = *(s16 *)toneBase;
-            arg3 = *(s16 *)((u8 *)&D_801E6D30[0].tone + offset);
+            arg3 = *(s16 *)((u8 *)&g_EffectVoices[0].tone + offset);
             raw = 0x3C;
             SsUtKeyOnV(arg0, left, right, arg3, raw, 0, 0, 0);
 
-            scale = *(s32 *)((u8 *)&D_801E6D30[0].volume + offset);
+            scale = *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset);
             asm volatile("" : : "r"(scale));
             raw = g_EffectVolumeScale;
             raw = scale * raw;
@@ -249,8 +249,8 @@ asm(".globl func_8005E078\n"
     "func_8005E314 = GameForcePitchEffectVoicesEnabled + 0x144");
 
 extern s16 g_SoundSlotTone[] asm("D_80082F28");
-extern s16 D_80082F2A[];
-extern s32 D_801E6CC8[];
+extern s16 g_SoundSlotToneBank1[] asm("D_80082F2A");
+extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 
 void GameSetSoundSlotVoicesEnabledWithRegisterArg(void) asm("func_8005B40C");
 void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
@@ -274,11 +274,11 @@ void GameForceSoundSlotVoicePlayback(s32 arg0) {
 
     i = 0;
     if (saved != 0) {
-        base = D_801E6CC8;
+        base = g_SoundSlotActive;
         active = base;
         saved = 0;
         do {
-            if (*base++ != 0 && *(s16 *)((s32)g_SoundSlotTone + saved) != *(s16 *)((s32)D_80082F2A + saved)) {
+            if (*base++ != 0 && *(s16 *)((s32)g_SoundSlotTone + saved) != *(s16 *)((s32)g_SoundSlotToneBank1 + saved)) {
                 GamePlaySoundSlotVoice(i, active[-3], 3);
             }
             i++;
@@ -287,7 +287,7 @@ void GameForceSoundSlotVoicePlayback(s32 arg0) {
 
         i = 0;
         odd = 1;
-        base = D_801E6CC8;
+        base = g_SoundSlotActive;
         active = base;
         do {
             if (*active != 0) {

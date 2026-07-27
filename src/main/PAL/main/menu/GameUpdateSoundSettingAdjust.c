@@ -10,13 +10,13 @@ extern s32 g_SoundOptionCursor asm("D_8019C868");
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
-extern s32 D_801E4D68;
+extern s32 g_ScreenOffsetEditX asm("D_801E4D68");
 void func_80024B6C(void);
 void GameApplyAudioSettings(void) asm("func_80021224");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void func_80023750(s32 arg0);
-extern s32 D_801E4D6C;
+extern s32 g_ScreenOffsetEditY asm("D_801E4D6C");
 extern s32 g_ScreenOffsetX asm("D_801E4B8C");
 extern s32 g_ScreenOffsetY asm("D_801E4B9C");
 extern u16 D_8019CE9C;
@@ -36,7 +36,7 @@ void GameDrawOptionSceneOverlay(void);
 extern s32 g_CameraViewMode asm("D_8009E870");
 extern s32 D_801E40CC;
 extern s32 g_CameraCarIndex asm("D_8009E66C");
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern u8 D_801F18CC[];
 extern s32 *D_8019C9A8;
 void GameInitRenderState(s32 arg0) asm("func_80017884");
@@ -46,14 +46,16 @@ void func_80038844(void);
 void GameSetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
 void func_800458CC(s32 arg0);
 void GameInitShuttleScenery(void) asm("func_8003F0F8");
-extern s32 D_8019C768, D_801E4B84, D_801E412C;
-extern s32 D_8019CE00;
-extern s32 D_8019C99C;
-extern s32 D_801E4404;
-extern s32 D_8019CAF4;
-extern s32 D_8019C7BC;
+extern s32 g_FrameSyncThreshold;
+extern s32 g_BgmSelectCursor asm("D_801E4B84");
+extern s32 g_BgmSelectShowUi asm("D_801E412C");
+extern s32 g_BgmSelectCdTrack asm("D_8019CE00");
+extern s32 g_BgmSelectStep asm("D_8019C99C");
+extern s32 g_BgmSelectTrack asm("D_801E4404");
+extern s32 g_BgmChangeDelay asm("D_8019CAF4");
+extern s32 g_CdTrackEnded asm("D_8019C7BC");
 extern s32 g_CameraCarIndex asm("D_8009E66C");
-extern s32 D_8019C99C;
+extern s32 g_BgmSelectStep;
 extern u8 D_80011010[];
 void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80025940(void);
@@ -90,7 +92,7 @@ void GameUpdateSoundSettingAdjust(void) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
             g_GameMode = 4;
-            g_BgmVolumeSetting = D_801E4D68;
+            g_BgmVolumeSetting = g_ScreenOffsetEditX;
         }
         break;
 
@@ -113,7 +115,7 @@ void GameUpdateSoundSettingAdjust(void) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
             g_GameMode = 4;
-            g_SfxVolumeSetting = D_801E4D68;
+            g_SfxVolumeSetting = g_ScreenOffsetEditX;
         }
         break;
 
@@ -136,7 +138,7 @@ void GameUpdateSoundSettingAdjust(void) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
             g_GameMode = 4;
-            g_MonoOutput = D_801E4D68;
+            g_MonoOutput = g_ScreenOffsetEditX;
         }
         break;
     }
@@ -181,35 +183,35 @@ void GameUpdateScreenAdjustScreen(void) {
     GameDrawScreenAdjustScreen();
 
     input = g_PadEdge;
-    oldX = D_801E4D68;
-    oldY = D_801E4D6C;
+    oldX = g_ScreenOffsetEditX;
+    oldY = g_ScreenOffsetEditY;
 
     if ((input & 0x1000) && (oldY >= -31)) {
-        D_801E4D6C = oldY - 1;
+        g_ScreenOffsetEditY = oldY - 1;
     }
 
     if (g_PadEdge & 0x4000) {
-        value = D_801E4D6C;
+        value = g_ScreenOffsetEditY;
         if (value < 23) {
-            D_801E4D6C = value + 1;
+            g_ScreenOffsetEditY = value + 1;
         }
     }
 
     if (g_PadEdge & 0x8000) {
-        value = D_801E4D68;
+        value = g_ScreenOffsetEditX;
         if (value >= -10) {
-            D_801E4D68 = value - 1;
+            g_ScreenOffsetEditX = value - 1;
         }
     }
 
     if (g_PadEdge & 0x2000) {
-        value = D_801E4D68;
+        value = g_ScreenOffsetEditX;
         if (value < 32) {
-            D_801E4D68 = value + 1;
+            g_ScreenOffsetEditX = value + 1;
         }
     }
 
-    if ((oldX != D_801E4D68) || (oldY != D_801E4D6C)) {
+    if ((oldX != g_ScreenOffsetEditX) || (oldY != g_ScreenOffsetEditY)) {
         GamePlaySoundCue(1);
     }
 
@@ -217,22 +219,22 @@ void GameUpdateScreenAdjustScreen(void) {
     if (confirm & 0x860) {
         GamePlaySoundCue(2);
         g_GameMode = 1;
-        g_ScreenOffsetX = D_801E4D68;
-        g_ScreenOffsetY = D_801E4D6C;
+        g_ScreenOffsetX = g_ScreenOffsetEditX;
+        g_ScreenOffsetY = g_ScreenOffsetEditY;
     } else {
         confirmMask = confirm & 0x90;
         if (confirmMask != 0) {
             GamePlaySoundCue(3);
             g_GameMode = 1;
-            D_801E4D68 = g_ScreenOffsetX;
-            D_801E4D6C = g_ScreenOffsetY;
+            g_ScreenOffsetEditX = g_ScreenOffsetX;
+            g_ScreenOffsetEditY = g_ScreenOffsetY;
         }
     }
 
-    D_8019CE9C = D_801E4D68;
-    D_8019CE9E = D_801E4D6C + 29;
-    D_801C0684 = D_801E4D68;
-    D_801C0686 = D_801E4D6C + 29;
+    D_8019CE9C = g_ScreenOffsetEditX;
+    D_8019CE9E = g_ScreenOffsetEditY + 29;
+    D_801C0684 = g_ScreenOffsetEditX;
+    D_801C0686 = g_ScreenOffsetEditY + 29;
 }
 
 void GameDrawOptionSceneOverlay(void) {
@@ -306,25 +308,25 @@ void func_80025940(void) {
     g_CameraViewMode = 2;
     g_AnimTimer = 0;
     g_SceneTimer = 0;
-    D_8019C768 = 0x180;
+    g_FrameSyncThreshold = 0x180;
     GameInitShuttleScenery();
 }
 
 void func_80025A14(void) {
     SetDispMask(0);
     GameSetupDisplay240(0, 0, 0);
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
     g_FadeLevel = 0x13C;
     g_FadeStep = -4;
     g_SceneId = 0x1C;
-    D_801E4B84 = 1;
-    D_801E412C = 1;
-    D_8019CE00 = 3;
-    D_8019C99C = 0;
+    g_BgmSelectCursor = 1;
+    g_BgmSelectShowUi = 1;
+    g_BgmSelectCdTrack = 3;
+    g_BgmSelectStep = 0;
     g_SceneTimer = 0;
-    D_801E4404 = 0;
-    D_8019CAF4 = 0x1E;
-    D_8019C7BC = 0;
+    g_BgmSelectTrack = 0;
+    g_BgmChangeDelay = 0x1E;
+    g_CdTrackEnded = 0;
     g_CameraCarIndex = 0;
 }
 
@@ -355,7 +357,7 @@ void func_80025AC8(void) {
             func_80025940();
             g_FadeStep = 0;
             g_FadeLevel = 0;
-            D_8019C99C = 2;
+            g_BgmSelectStep = 2;
         }
     }
     func_80016EA0(0x5E, 0x72, D_80011010, 0x7812);
@@ -365,7 +367,7 @@ void func_80025BD8(void) {
     if (g_AssetLoadState == 0) {
         GameInstallCourseAssets();
         GameRequestTrackDataAssets();
-        D_8019C99C = 1;
+        g_BgmSelectStep = 1;
     }
 
     func_80025AC8();

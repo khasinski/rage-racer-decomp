@@ -7,8 +7,8 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 
-extern s16 D_8019CE34;
-extern Matrix D_8019CAD4;
+extern s16 g_TrackZoneCode asm("D_8019CE34");
+extern Matrix g_SceneColorMatrix asm("D_8019CAD4");
 extern Matrix D_8007C778;
 void func_800698B8(Matrix *arg0);
 
@@ -18,35 +18,35 @@ void GameApplyZoneLighting(s32 a0, Matrix *a1) {
     Matrix out;
     s32 s1;
 
-    if (D_8019CE34 != 0) {
+    if (g_TrackZoneCode != 0) {
         s1 = 0x100 - (a0 * 3) / 4;
-        out.m[0][0] = D_8019CAD4.m[0][0] * s1 / 256;
-        out.m[0][1] = D_8019CAD4.m[0][1] * s1 / 256;
-        out.m[0][2] = D_8019CAD4.m[0][2] * s1 / 256;
-        out.m[1][0] = D_8019CAD4.m[1][0] * s1 / 256;
-        out.m[1][1] = D_8019CAD4.m[1][1] * s1 / 256;
-        out.m[1][2] = D_8019CAD4.m[1][2] * s1 / 256;
-        out.m[2][0] = D_8019CAD4.m[2][0] * s1 / 256;
-        out.m[2][1] = D_8019CAD4.m[2][1] * s1 / 256;
-        out.m[2][2] = D_8019CAD4.m[2][2] * s1 / 256;
+        out.m[0][0] = g_SceneColorMatrix.m[0][0] * s1 / 256;
+        out.m[0][1] = g_SceneColorMatrix.m[0][1] * s1 / 256;
+        out.m[0][2] = g_SceneColorMatrix.m[0][2] * s1 / 256;
+        out.m[1][0] = g_SceneColorMatrix.m[1][0] * s1 / 256;
+        out.m[1][1] = g_SceneColorMatrix.m[1][1] * s1 / 256;
+        out.m[1][2] = g_SceneColorMatrix.m[1][2] * s1 / 256;
+        out.m[2][0] = g_SceneColorMatrix.m[2][0] * s1 / 256;
+        out.m[2][1] = g_SceneColorMatrix.m[2][1] * s1 / 256;
+        out.m[2][2] = g_SceneColorMatrix.m[2][2] * s1 / 256;
         func_800698B8(&out);
     } else {
         s32 k;
         s32 h;
         s32 kb;
-        out.m[0][0] = D_8019CAD4.m[0][0];
-        out.m[0][1] = D_8019CAD4.m[0][1];
-        out.m[0][2] = D_8019CAD4.m[0][2];
+        out.m[0][0] = g_SceneColorMatrix.m[0][0];
+        out.m[0][1] = g_SceneColorMatrix.m[0][1];
+        out.m[0][2] = g_SceneColorMatrix.m[0][2];
         h = a0 / 2;
         k = 0x100;
         s1 = k - h;
-        out.m[1][0] = D_8019CAD4.m[1][0] * s1 / 256;
-        out.m[1][1] = D_8019CAD4.m[1][1] * s1 / 256;
-        out.m[1][2] = D_8019CAD4.m[1][2] * s1 / 256;
+        out.m[1][0] = g_SceneColorMatrix.m[1][0] * s1 / 256;
+        out.m[1][1] = g_SceneColorMatrix.m[1][1] * s1 / 256;
+        out.m[1][2] = g_SceneColorMatrix.m[1][2] * s1 / 256;
         s1 = k - (a0 * 3) / 4;
-        out.m[2][0] = D_8019CAD4.m[2][0] * s1 / 256;
-        out.m[2][1] = D_8019CAD4.m[2][1] * s1 / 256;
-        out.m[2][2] = D_8019CAD4.m[2][2] * s1 / 256;
+        out.m[2][0] = g_SceneColorMatrix.m[2][0] * s1 / 256;
+        out.m[2][1] = g_SceneColorMatrix.m[2][1] * s1 / 256;
+        out.m[2][2] = g_SceneColorMatrix.m[2][2] * s1 / 256;
         func_800698B8(&out);
 
         kb = k - a0;
@@ -62,13 +62,13 @@ void GameApplyZoneLighting(s32 a0, Matrix *a1) {
     }
 }
 
-extern Matrix D_8019CAD4;
+extern Matrix g_SceneColorMatrix;
 void func_800698B8(Matrix *arg0);
 /* Puts the unmodified colour matrix back after GameApplyZoneLighting. */
 void GameRestoreColorMatrix(void) asm("func_8001C794");
-void GameRestoreColorMatrix(void) { func_800698B8(&D_8019CAD4); }
+void GameRestoreColorMatrix(void) { func_800698B8(&g_SceneColorMatrix); }
 
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
@@ -84,14 +84,14 @@ void GameEnterRoundScreen(void) {
     u8 *end;
 
     SetDispMask(0);
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
 
     if (g_AssetLoadState != 1) {
         func_8005B9CC();
         GameUploadImageAsset(g_ImageBlockBuffer);
         GameRelocateCarModel();
 
-        D_8019C768 = 0x180;
+        g_FrameSyncThreshold = 0x180;
         g_SceneTimer = 0;
         g_SceneId = 10;
         g_FadeLevel = 0;
@@ -306,7 +306,7 @@ void GameUpdateRoundScreen(void) {
     }
 }
 
-extern Matrix D_8019CAD4;
+extern Matrix g_SceneColorMatrix;
 extern Matrix D_8007C758;
 extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
 extern Matrix D_8007C778;
@@ -318,9 +318,9 @@ void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 /* Installs the track colour/light matrices, back and far colours and the fog near distance. */
 void GameInitTrackLighting(void) asm("func_8001D210");
 void GameInitTrackLighting(void) {
-    D_8019CAD4 = D_8007C758;
+    g_SceneColorMatrix = D_8007C758;
     g_SceneLightMatrix = D_8007C778;
-    func_800698B8(&D_8019CAD4);
+    func_800698B8(&g_SceneColorMatrix);
     func_80069888(&g_SceneLightMatrix);
     func_80069A18(0x20, 0x20, 0x20);
     func_800686D4(0x1770, 0x140);

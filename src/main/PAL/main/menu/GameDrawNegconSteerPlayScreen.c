@@ -20,9 +20,9 @@ extern char D_80010078[];
 
 extern u8 *g_DrawBuffer asm("D_8019C900");
 /* The 0..3 steering-play setting this screen edits. */
-extern s16 D_8019CAD0;
+extern s16 g_NegconSteerPlay asm("D_8019CAD0");
 /* Play in hundredths of a degree per setting; the gauge marks scale from it. */
-extern s16 D_8007C260[];
+extern s16 g_NegconPlayPercent[] asm("D_8007C260");
 
 void func_80027874(s32 x, s32 y, char *str, s32 clutIndex);
 
@@ -88,12 +88,12 @@ void GameDrawNegconSteerPlayScreen(void) {
     func_80027874(0x18, 0x30, D_80010078, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
     prim = *(u8 **)0x1F800000;
-    prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, D_8019CAD0 != 0);
-    prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, D_8019CAD0 != 3);
+    prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, g_NegconSteerPlay != 0);
+    prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, g_NegconSteerPlay != 3);
     prim = QueueSpriteTransWide(
         ot, prim, 0x70, 0x30, 0xC, 0x18, 0x8C, 0x18, 0x7F81);
     prim = QueueSpriteTransWide(
-        ot, prim, 0x7C, 0x30, 0xC, 0x18, D_8019CAD0 * 12 + 152, 0x18, 0x7F81);
+        ot, prim, 0x7C, 0x30, 0xC, 0x18, g_NegconSteerPlay * 12 + 152, 0x18, 0x7F81);
     prim = QueueSpriteTransWide(
         ot, prim, 0x88, 0x30, 0xC, 0x18, 0x6C, 0x30, 0x7F81);
     prim = QueueDrawModePrimWide(ot, prim, 0x3F);
@@ -101,7 +101,7 @@ void GameDrawNegconSteerPlayScreen(void) {
         (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
     prim = (u8 *)GameAddTilePrim(
         (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
-    span = ((D_8007C260[D_8019CAD0] << 7) / 100) * 2;
+    span = ((g_NegconPlayPercent[g_NegconSteerPlay] << 7) / 100) * 2;
     y = 230 - span;
     prim = QueueLineWide(ot, prim, 0x94, y, 0xA8, y, 0x20, 0x40, 0xFF);
     prim = QueueLineWide(ot, prim, 0x94, y + 1, 0xA8, y + 1, 0x20, 0x40, 0xFF);
@@ -116,11 +116,11 @@ void GameDrawNegconSteerPlayScreen(void) {
 
 extern u8 g_PadType asm("D_801E4369");
 /* Its backup, taken by GameBeginNegconCalibration. */
-extern u16 D_8019C75C;
+extern u16 g_NegconSteerPlaySaved asm("D_8019C75C");
 /* The arrow pulse angle the setup screens advance every frame. */
-extern s32 D_8007C13C;
+extern s32 g_SetupArrowPulse asm("D_8007C13C");
 /* One of the four controller-screen animation counters. */
-extern s32 D_801E8A9C;
+extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
 
 void func_80023750(s32 arg0);
 
@@ -132,32 +132,32 @@ void func_80023750(s32 arg0);
  */
 void GameUpdateNegconSteerPlayScreen(void) {
     g_AnimTimer++;
-    D_8007C13C += 96;
+    g_SetupArrowPulse += 96;
     if (g_PadEdge2 & 0x90) {
         GamePlaySoundCue(3);
         g_GameMode = 1;
-        D_8019CAD0 = D_8019C75C;
+        g_NegconSteerPlay = g_NegconSteerPlaySaved;
     } else if (g_PadEdge2 & 0x860) {
         GamePlaySoundCue(2);
         g_GameMode = 11;
     }
     if (g_PadEdge2 & 0x8000) {
-        if (D_8019CAD0 > 0) {
+        if (g_NegconSteerPlay > 0) {
             GamePlaySoundCue(8);
-            D_8019CAD0 = D_8019CAD0 - 1;
+            g_NegconSteerPlay = g_NegconSteerPlay - 1;
         }
     }
     if (g_PadEdge2 & 0x2000) {
-        if (D_8019CAD0 < 3) {
+        if (g_NegconSteerPlay < 3) {
             GamePlaySoundCue(8);
-            D_8019CAD0 = D_8019CAD0 + 1;
+            g_NegconSteerPlay = g_NegconSteerPlay + 1;
         }
     }
     if (g_PadType != 0x23) {
         g_GameMode = 1;
-        D_8019CAD0 = D_8019C75C;
+        g_NegconSteerPlay = g_NegconSteerPlaySaved;
     }
-    D_801E8A9C = -896;
+    g_ControllerSceneAngleX = -896;
     GameDrawNegconSteerPlayScreen();
     func_80023750(4);
     GameDrawControllerSetupScene(1);
@@ -168,7 +168,7 @@ extern NegconUvTemplate D_80010084;
 /* "Maximum twist." */
 extern char D_8001008C[];
 /* The 0..3 maximum-twist setting this screen edits. */
-extern s16 D_801E418C;
+extern s16 g_NegconMaxTwist asm("D_801E418C");
 
 /*
  * Game mode 11's overlay: the caption, the two nudge arrows (lit only while
@@ -186,9 +186,9 @@ void GameDrawNegconMaxTwistScreen(void) {
     func_80027874(0x18, 0x30, D_8001008C, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
     prim = *(u8 **)0x1F800000;
-    prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, D_801E418C != 0);
-    prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, D_801E418C != 3);
-    if (D_801E418C == 3) {
+    prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, g_NegconMaxTwist != 0);
+    prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, g_NegconMaxTwist != 3);
+    if (g_NegconMaxTwist == 3) {
         xoff = 0;
         w = 0x24;
     } else {
@@ -196,7 +196,7 @@ void GameDrawNegconMaxTwistScreen(void) {
         w = 0x18;
     }
     prim = QueueSpriteTransWide(
-        ot, prim, xoff + 0x88, 0x30, w, 0x18, D_801E418C * 24, 0x30, 0x7F81);
+        ot, prim, xoff + 0x88, 0x30, w, 0x18, g_NegconMaxTwist * 24, 0x30, 0x7F81);
     prim = QueueSpriteTransWide(ot, prim, 0xAC, 0x30, 4, 0x18, 0x78, 0x30, 0x7F81);
     prim = QueueDrawModePrimWide(ot, prim, 0x3F);
     prim = (u8 *)GameAddTilePrim(
@@ -206,7 +206,7 @@ void GameDrawNegconMaxTwistScreen(void) {
 }
 
 /* Its backup, taken by GameBeginNegconCalibration. */
-extern u16 D_8019CB04;
+extern u16 g_NegconMaxTwistSaved asm("D_8019CB04");
 
 /*
  * Game mode 11: pick the maximum twist range with left/right, confirm with
@@ -218,28 +218,28 @@ void GameUpdateNegconMaxTwistScreen(void) {
     if (g_PadEdge2 & 0x90) {
         GamePlaySoundCue(3);
         g_GameMode = 1;
-        D_801E418C = D_8019CB04;
+        g_NegconMaxTwist = g_NegconMaxTwistSaved;
     } else if (g_PadEdge2 & 0x860) {
         GamePlaySoundCue(2);
         g_GameMode = 1;
     }
     if (g_PadEdge2 & 0x8000) {
-        if (D_801E418C > 0) {
+        if (g_NegconMaxTwist > 0) {
             GamePlaySoundCue(8);
-            D_801E418C = D_801E418C - 1;
+            g_NegconMaxTwist = g_NegconMaxTwist - 1;
         }
     }
     if (g_PadEdge2 & 0x2000) {
-        if (D_801E418C < 3) {
+        if (g_NegconMaxTwist < 3) {
             GamePlaySoundCue(8);
-            D_801E418C = D_801E418C + 1;
+            g_NegconMaxTwist = g_NegconMaxTwist + 1;
         }
     }
     if (g_PadType != 0x23) {
         g_GameMode = 1;
-        D_801E418C = D_8019CB04;
+        g_NegconMaxTwist = g_NegconMaxTwistSaved;
     }
-    D_801E8A9C = -896;
+    g_ControllerSceneAngleX = -896;
     GameDrawNegconMaxTwistScreen();
     func_80023750(4);
     GameDrawControllerSetupScene(1);

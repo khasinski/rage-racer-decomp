@@ -6,16 +6,16 @@
 #include "psyq/gpu.h"
 #include "game/render.h"
 
-extern char D_80012FC8[];
-extern u8 D_80012FD0[];
-extern char D_80012FFC[];
-extern char D_80013000[];
-extern char D_80082F7C[];
-extern char D_80082F86[];
-extern char D_80082F9A[];
-extern s32 D_80082F50;
-extern s32 D_80082F54;
-extern s32 D_8009B73C;
+extern char g_FmtSaveRow[] asm("D_80012FC8");
+extern u8 g_SaveNameCharset[] asm("D_80012FD0");
+extern char g_FmtSaveRowTail[] asm("D_80012FFC");
+extern char g_FmtSaveRowEmpty[] asm("D_80013000");
+extern char g_McSlotLabels[] asm("D_80082F7C");
+extern char g_McSlotLabelNoFile[] asm("D_80082F86");
+extern char g_McSlotLabelError[] asm("D_80082F9A");
+extern s32 g_McMenuPage asm("D_80082F50");
+extern s32 g_McMenuRowCursor asm("D_80082F54");
+extern s32 g_McFreeBlocks asm("D_8009B73C");
 
 void func_80047958(s32, s32, void *, s32, s32, s32, s32, s32);
 void LibcSprintf() asm("func_800632F0");
@@ -36,41 +36,41 @@ void GameDrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
         if (flags_reg & 1) {
             s32 i;
 
-            LibcSprintf(text, D_80012FC8, row_bit);
+            LibcSprintf(text, g_FmtSaveRow, row_bit);
             func_80047958(0x48, y, text, 0x7F, color, color, width, height);
 
             for (i = 0; i < row[0]; i++) {
-                text_ptr[i] = D_80012FD0[*((row + i) + 1)];
+                text_ptr[i] = g_SaveNameCharset[*((row + i) + 1)];
             }
             while (i < 7) {
                 text_ptr[i++] = ' ';
             }
-            LibcSprintf(text + 6, D_80012FFC);
+            LibcSprintf(text + 6, g_FmtSaveRowTail);
             func_80047958(0x68, y, text, 0x7F, color, color, width, height);
             func_80047958(0xB0, y, GameFormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
         } else if (flags_reg & 0x10000) {
-            LibcSprintf(text, D_80012FC8, row_bit);
+            LibcSprintf(text, g_FmtSaveRow, row_bit);
             func_80047958(0x48, y, text, 0x7F, color, color, width, height);
-            func_80047958(0x88, y, D_80082F9A, 0x7F, color, color, width, height);
-        } else if (D_8009B73C == 0) {
-            if (D_80082F50 == 0) {
-                LibcSprintf(text, D_80013000, row_bit);
+            func_80047958(0x88, y, g_McSlotLabelError, 0x7F, color, color, width, height);
+        } else if (g_McFreeBlocks == 0) {
+            if (g_McMenuPage == 0) {
+                LibcSprintf(text, g_FmtSaveRowEmpty, row_bit);
                 func_80047958(0x48, y, text, 0x7F, color, color, width, height);
-            } else if (D_80082F54 == 0) {
-                LibcSprintf(text, D_80013000, row_bit);
+            } else if (g_McMenuRowCursor == 0) {
+                LibcSprintf(text, g_FmtSaveRowEmpty, row_bit);
                 func_80047958(0x48, y, text, 0x7F, color, color, width, height);
             } else {
-                LibcSprintf(text, D_80012FC8, row_bit);
+                LibcSprintf(text, g_FmtSaveRow, row_bit);
                 func_80047958(0x48, y, text, 0x7F, color, color, width, height);
-                func_80047958(0x90, y, D_80082F86, 0x7F, color, color, width, height);
+                func_80047958(0x90, y, g_McSlotLabelNoFile, 0x7F, color, color, width, height);
             }
-        } else if (D_80082F50 == 0) {
-            LibcSprintf(text, D_80013000, row_bit);
+        } else if (g_McMenuPage == 0) {
+            LibcSprintf(text, g_FmtSaveRowEmpty, row_bit);
             func_80047958(0x48, y, text, 0x7F, color, color, width, height);
         } else {
-            LibcSprintf(text, D_80012FC8, row_bit);
+            LibcSprintf(text, g_FmtSaveRow, row_bit);
             func_80047958(0x48, y, text, 0x7F, color, color, width, height);
-            func_80047958(0x90, y, D_80082F7C + (D_80082F54 * 10), 0x7F, color, color, width, height);
+            func_80047958(0x90, y, g_McSlotLabels + (g_McMenuRowCursor * 10), 0x7F, color, color, width, height);
         }
 
         row_bit++;
@@ -153,29 +153,33 @@ void GameDrawMenuFadeOverlay(s32 arg0) {
     func_80023A60(arg0, 0x40);
 }
 
-extern s32 D_8009B9A0;
+extern s32 g_McFadeStep asm("D_8009B9A0");
 
 void GameStartMenuExitFade(void) {
     GameStopMemoryCardEvents();
-    D_8009B9A0 = 8;
+    g_McFadeStep = 8;
 }
 
-extern s32 D_8009B744, D_80082F50, D_80082F54;
-extern s32 D_8009B730, D_8009B9A0, D_8009B9A4;
+extern s32 g_McMenuRowCount asm("D_8009B744");
+extern s32 g_McMenuPage;
+extern s32 g_McMenuRowCursor;
+extern s32 g_McFromLoadMenu asm("D_8009B730");
+extern s32 g_McFadeStep;
+extern s32 g_McFadeLevel asm("D_8009B9A4");
 void func_8005EAD0(void);
 void GameEnterMemoryCardMenu(void) asm("func_800613B8");
 void GameEnterMemoryCardMenu(void) {
     SetDispMask(0);
     GameSetupDisplay480(0, 0, 0);
-    D_8009B744 = 2;
+    g_McMenuRowCount = 2;
     g_McMenuState = -1;
     g_SceneTimer = 0;
-    D_80082F50 = 0;
-    D_80082F54 = 0;
+    g_McMenuPage = 0;
+    g_McMenuRowCursor = 0;
     g_McMenuSubState = 1;
-    D_8009B730 = 0;
+    g_McFromLoadMenu = 0;
     func_8005EAD0();
-    D_8009B9A0 = -8;
-    D_8009B9A4 = 0xFF;
+    g_McFadeStep = -8;
+    g_McFadeLevel = 0xFF;
     g_SceneId = 0x1A;
 }

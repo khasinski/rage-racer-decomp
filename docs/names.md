@@ -2699,3 +2699,287 @@ higher setting needs more twist for full lock.
 | `D_8019C998` | same shape: initialised to zero, only ever decremented |
 | `D_801E4194`, `D_801E4248`, `D_801E4CF8`, `D_801E4D84`, `D_801E433C`, `D_801E3F60`, `D_801E8A4C` | written, never read anywhere in the image |
 | `D_8009EC88` | its only reader is the guard on its own write, so it has no effect — and it lives in the unreachable waypoint mode (15f) |
+
+## 19. Front-end globals pass (`menu/ save/ asset/ cd/ fmv/ audio/ pad/ boot/`)
+
+Function naming was essentially finished; globals were not. 374 globals carried a
+name and ~1040 were still raw `D_XXXXXXXX`. This pass took the eight front-end
+directories and named **259 more**, bringing the project total to **633**.
+Everything is an `asm()` alias with the file's own declaration type left
+byte-for-byte alone, so `make check VERSION=PAL` stayed at
+`build/PAL/main.exe: OK`, sha1 `2913e15648eddef40821c5f666460abc04155ee6`,
+verified after every batch with the affected objects deleted first.
+
+Of the 259: **54 reach three or more files, 71 reach two, 134 are single-file.**
+By directory: `save` 76, `menu` 64, `audio` 50, `fmv` 35, `boot` 25, `cd` 23,
+`pad` 19, `asset` 11 (a symbol used from two directories is counted in both).
+
+### 19a. Two corrections to earlier sections
+
+1. **`D_8019C768` is `g_FrameSyncThreshold`, not an unnameable write-only.**
+   Section 12d lists it as "written `0x80` on entry to eleven scenes and `0x180`
+   in three race-side inits, and read in exactly one place
+   (`GameAdvanceSaveHeaderCounter`) which nothing in the image calls.
+   Write-many, read-never-reached; no recoverable meaning." That is wrong. A
+   full objdump cross-reference finds **nineteen** references, and the load at
+   `0x80016684` is inside `GameMainLoop`:
+
+       frameLimit = g_FrameSyncThreshold;
+       while (VSync(1) < frameLimit) { }
+
+   It is the per-frame pacing deadline in `VSync(1)` units (scanlines since the
+   last `VSync(0)`): `0x80` = 128 lines, comfortably inside one PAL field, so the
+   frame is not held; `0x180` = 384 lines, past one 312-line field, so the race
+   scenes are held to half rate. `GameAdvanceSaveHeaderCounter` is the
+   confirmation, not a curiosity — it adds **1** to the saved play-time counter
+   when the threshold is `0x80` and **2** otherwise, which is exactly the
+   compensation a one-field / two-field frame needs. It reaches 13 files and was
+   the single highest-fanout raw global left in this territory.
+
+2. **`func_8006DB74` / the section 12d entry aside, one existing name was
+   ambiguous**: `D_8007C464` / `D_8007C474` had been named `g_CarModelBaseIndex`
+   / `g_CarModelUnlockBase` in `car/`. This pass initially coined
+   `g_CarAssetBase` / `g_CarUnlockLevelBase` for the same two symbols in
+   `asset/GameGetCarAssetIndex.c`; that was caught by an alias-collision check
+   and reverted to the existing spellings. **A per-file *type* is allowed; a
+   per-file *name* is not.** The check is worth keeping: grep every
+   `NAME asm("D_XXXXXXXX")` in `src/` + `include/` and assert one name per
+   address.
+
+### 19b. `cd/` — the CD-DA mixer, and the ten looping BGM tracks
+
+`CdlATV` (LibRef47 10-3) is `{val0 L->L, val1 L->R, val2 R->R, val3 R->L}`, and
+that pins the whole mixer:
+
+| address | name | evidence |
+|---|---|---|
+| `D_8007F5A8` | `g_CdMixPresets` | `u8[2][4]` in `.data`: `{0x7F,0,0x7F,0}` (stereo) and `{0x3F,0x3F,0x3F,0x3F}` (mono fold-down) |
+| `D_8007F5FC` | `g_CdMixPreset` | the row index; `GameSetStereoOutput` writes 0, `GameSetMonoOutput` 1 |
+| `D_8009B174..80` | `g_CdMixLL/LR/RR/RL` | the live 12.12 values; `CdMix` gets `>> 12` |
+| `D_8009B184..90` | `g_CdMixFullLL/...` | the same four at full setting volume; a fade-in ramps live toward these |
+| `D_8009B1B4` | `g_CdFadeFrames` | `> 0` frames left of a fade-out, `< 0` of a fade-in, clamped to ±0xFFF |
+
+`D_8007F568` is `g_CdAudioFileNames` — sixteen `"\CDDA\DAnnXXXX.DA;1"` paths in
+track order — and `GameBuildCdTrackTable` `DsSearchFile`s each one into
+`g_CdBgmTrackLocs`, which is `&g_CdTrackLocs[2]`, so **`g_CdTrackLocs` is indexed
+by CD track number**: track 2 is `DA02PRO`, track 17 is `DA17EXTR`.
+
+That settles `D_8007F5B0` = **`g_CdTrackLoopPoint`**, eighteen `CdlLOC` in
+`.data` that are `0:00` for every track except 3..11 and 17, which are `5:00`.
+Those nine plus one are exactly `g_BgmTrackCount`'s `9`, or `10` once five class
+records are grade 1 — independent confirmation from two directions.
+`GameTickCdAudio` uses "entry is non-zero" (spelled as a `CdPosToInt` compare
+against entry 0) as "this track loops", and `GameStepCdPauseRequest` uses the
+5:00 value as a real threshold: `D_8007F5F8` = **`g_CdRestartOnResume`** is set
+when the pause happened past 5:00 into a looping track, and `GameResumeCdAudio`
+then re-issues a play from the top instead of a `CdlPlay` un-pause.
+
+`D_8009B168` stays raw: its only reference is an inline-asm `%hi`/`%lo` pair
+(see 12c). It is the `CdlSetmode` byte, `0x07` = `CdlModeDA | CdlModeAP |
+CdlModeRept`, which is why `GameTickCdAudio` can detect end-of-track as status 4.
+
+### 19c. `audio/` — the engine-sound curve table
+
+`GameLoadAudioParameterTable` (in `menu/GameUpdateMenuMode.c`) writes the shape
+out longhand: **`g_EngineSoundCurves` (`D_801E446C`) is `[2 banks][12][9][2]`** —
+bank stride `0x360`, row stride `0x48`, nine `{position, value}` breakpoints per
+row — and its last word becomes **`g_EngineSoundMaxRpm`** (`D_801E6CC4`, clamped
+to `1..0x2800`). `GameUpdateLoadedAudioVoices` is called from
+`GameUpdatePlayerCar` as `(g_EngineRpm + g_EngineRpmJitter, bank)` and normalises
+that onto `0..10240` with `((rpm * 5) << 11) / g_EngineSoundMaxRpm`, so the twelve
+rows are six sound slots × {pitch curve, volume curve} and the domain is engine
+revs. Hence `g_EngineSoundPosition` (`D_801E6CB8`) and `g_EngineSoundBank`
+(`D_801E6CBC`, latched so a bank change re-keys the six voices).
+
+Also named here: `g_SoundSlotActive[6]` (`D_801E6CC8`), `g_SoundSlotVolumeScale`
+(`D_801E6CE0`, which is `g_SoundSlotActive[6]` read as `base[6]` in two files and
+is the per-car engine loudness from **`g_CarSoundVolumeScales`**, `D_800125FC`,
+indexed the same way `g_CarPriceTable` is), the pan voice (`g_PanVoiceVolumeR`,
+`g_PanVoiceActive`), the indexed effect voice (`g_IndexedEffectIndex` / `…Prev` /
+`…Pitch` / `…Volume` over the 3×3-word table `g_IndexedEffectTones` /
+`g_IndexedEffectVolumes`), the VAB loader (`g_VabSpuAddress` =
+`{0x1000, 0x20000, 0x20000}` + `g_VabSpuAddressExtra` = `0x6A000`,
+`g_AudioLoadSlot`, `g_VabTransferDone`, `g_ExtraVabLoaded`), and the sequence
+side in `game/sound.h`: `g_MusicChannels`, `g_EffectVoices`, `g_ReverbDepthL/R`,
+`g_SeqVolume`, `g_SeqVolumeSetting`, `g_SeqVolumeFadeStep`.
+
+**`D_801E6D8C` deliberately keeps the raw spelling in `game/sound.h`.** As a
+value it is `g_ReverbFadeStep` (the per-frame delta `GameUpdateSequenceFadeOut`
+adds to `g_ReverbDepthL/R`, `-3` while a fade runs), and it is named that in the
+two files that read it as one. But `GameForceBasicEffectVoicesEnabled` also uses
+`&D_801E6D8C` as the **end address of `g_EffectVoices`** (`= &g_EffectVoices[4].pitch`),
+and spelling that loop bound `&g_ReverbFadeStep` would actively mislead. The
+header says so at the declaration.
+
+`D_801E6CAE/B0/B2` are `g_VabIds3/4/5`, split symbols of `g_VabIds` — the same
+`+0xC` off `&g_AudioSlotMask` that `GameCloseAudioSlot` indexes. Named
+mechanically on purpose (the `g_RefSectorTime0/1/2` precedent of 15b), because
+"the extra VAB" is not one slot: the loader writes slot 3 and the closer closes
+slot 5.
+
+### 19d. `pad/` — the NeGcon calibration chain
+
+`GameUpdateNegconNeutralScreen` latches four raw axis bytes out of the BIOS pad
+buffer and every one of the six persisted settings falls out of it:
+
+| address | name | how |
+|---|---|---|
+| `D_801E4040..43` | `g_NegconAxisSteer/I/II/L` | `g_PadBuffers + 4..7`, the NeGcon's twist and three analog buttons |
+| `D_801E4BF0` | `g_NegconSteerNeutral` | `= g_NegconAxisSteer - 128`, the signed centre offset |
+| `D_8019CA08/0A/0C` | `g_NegconNeutralI/II/L` | the other three, latched raw |
+| `D_8019CAD0` | `g_NegconSteerPlay` | the 0..3 dead-zone setting mode 10 edits; indexes `g_NegconPlayPercent` (`D_8007C260`) for the gauge |
+| `D_801E418C` | `g_NegconMaxTwist` | the 0..3 range mode 11 edits; `car/GameInitPlayerCar` divides by `D_8007C020[…]` with it |
+
+`GameBeginNegconCalibration` parks all six in `g_NegconSteerNeutralSaved`,
+`g_NegconNeutralISaved/IISaved/LSaved`, `g_NegconSteerPlaySaved`,
+`g_NegconMaxTwistSaved` so a cancel restores them, and the two button-mapping
+selections in `g_PadMappingIndexSaved` / `g_NegconMappingIndexSaved`. The live
+selections are `g_PadMappingIndex` (`D_8019CE08`) and `g_NegconMappingIndex`
+(`D_8019CB08`); `GameLoadPadButtonMapping` copies one row of
+`g_PadButtonPresets` / `g_NegconButtonPresets` (8 presets × 8 masks each) into
+`g_PadButtonMapping` (`D_801E4B60`, pad masks at +0, NeGcon at +0x10).
+
+**`D_801E8AA4` and `D_801E8A9C` are rotation angles, not counters.**
+`GameDrawControllerSetupScene` feeds them to `GameBuildRotMatrixY(m, angle+1024)`
+and `GameBuildRotMatrixX(m, angle-64)`, so they are
+`g_ControllerSceneAngleY` / `g_ControllerSceneAngleX`. A left/right press adds
+±2048 (half a turn) to the Y angle and it decays `*15/16` each frame; that is why
+`GameDrawPadConfigCallouts` draws only while `|angle| < 16`, i.e. once the
+diagram has settled. Its companions are `g_PadConfigFlipTimer` (`D_801E7A4C`, a
+30-frame window) and `g_PadConfigFlipPhase` (`D_801E6C7C`, `(timer >> 2) & 1`).
+
+### 19e. `save/` — the memory-card menu, and play time
+
+`GameOpenMemoryCardEvents` opens eight handles as `D_8009B538[0..7]`, so the four
+`Hw` and four `Sw` slots that 17b identified now carry the spec in the name:
+`g_McHwEventIoe / …Error / …Timeout / …New` and the `g_McSw…` four. The same
+address is declared `s32 g_McEvents[]` in `GamePollMemoryCardStatus.c`, which
+indexes it — a textbook 12c per-file type.
+
+`GameEnterMemoryCardMenu` and `GameEnterMemoryCardMenuFromLoad` differ in exactly
+three writes, which names the whole menu: `g_McMenuRowCount` (`D_8009B744`, 2 or
+3), `g_McMenuRowCursor` (`D_80082F54`, 0 or 2) and `g_McFromLoadMenu`
+(`D_8009B730`). `g_McMenuPage` (`D_80082F50`) is 0 for row-select and 1 for the
+save/load action machine, whose sub-state is `g_McActionState` (`D_80082FA4`),
+countdown `g_McActionTimer`, result `g_McActionResult`, target slot
+`g_McSlotCursor`, and whose direction is `g_McSaveMode` (`D_8009B734`: the
+zero branch prompts LOAD, the non-zero branch prompts OVERWRITE).
+`g_McFadeStep` / `g_McFadeLevel` (`D_8009B9A0` / `D_8009B9A4`) are the ±8 and
+0..0xFF the entry and exit fades ride; `g_McSlotUsedMask` (`D_8009B564`) is
+`GameRefreshMemoryCardSaveStatus`'s return, tested as `(mask >> slot) & 1`;
+`g_McSaveHeaders` (`D_8009B568`) is the `GameSaveHeaderRow[3]` the whole file
+indexes with `slot << 7`; `g_McCardFileCount` / `g_McFreeBlocks`
+(`D_8009B738` / `D_8009B73C`) come straight out of that function.
+
+**`D_801E7A54` is `g_SaveElapsedTicks`**: `GameAdvanceSaveHeaderCounter`
+increments it once per frame, `GameWriteSaveHeaderRow` stores it in the header,
+and `GameFormatSaveElapsedTime` prints it as `"%5d:%02d:%02d"` — the play time on
+the memory-card screen. See 18a for why its increment is 1 or 2.
+
+The three `GameRaceProgress` slots are now readable end to end. `game/race.h`
+already typed the struct; its fields 1..4 exist as separate symbols in the two
+serialisers, and they are named per slot:
+`g_GrandPrixSaveCar/Class/MaxClass/Time` (`D_801E4098..A4`),
+`g_ExtraGrandPrixSave…` (`D_801E6E80..8C`) and `g_TimeAttackSaveCar/Class/
+MaxClass/Series` (`D_8019C984..990`) — the last one is `Series` rather than
+`Time` because `race.h` already records that Time Attack reuses `unk10` for
+`g_GrandPrixSeries`.
+
+### 19f. `fmv/` — the decode context is one struct
+
+`GameStartFmvPlayback` passes `&D_8009AF20` as the context to
+`GameInitFmvContext` / `GamePresentFmvFrame`, and those index it as
+`ctx[0..5]`, so the block is one record and the raw symbols are its fields:
+`g_FmvVlcBuffers` (`ctx[0..1]`), `g_FmvVlcIndex` (`ctx[2]`),
+`g_FmvStripBuffers` (`ctx[3..4]`), `g_FmvStripIndex` (`ctx[5]`).
+`GameSetupFmvBuffers` lays the memory out from one base and names the templates:
+`g_FmvVlcBuffer0/1` at `+0` / `+0x28000` (the VLC-expanded bitstream `DecDCTin`
+consumes), `g_FmvStripBuffer0/1` at `+0x50000` / `+0x52D00` (the MDEC output
+strips `DecDCTout` fills) and `g_FmvRingBuffer` at `+0x55A00` (`StSetRing`).
+With them: `g_FmvStripRects` / `g_FmvStripRectIndex` / `g_FmvUploadRect`
+(+ its `X`/`Y` split symbols) / `g_FmvStripWidth` / `g_FmvStripHeight` /
+`g_FmvStripDone`, `g_FmvFrameWidth` / `g_FmvFrameHeight` and
+`g_FmvStreamEnded`. `g_FmvState` (`D_8009F094`) is the 0/1/2 state `state.h`
+already documents; `g_StreamLoc` (`D_801E8A90`) and `g_StreamSectorCount`
+(`D_8019CA1C`) are the `CdlLOC` and length the three `GameBegin*Fmv` wrappers
+copy out of `g_StreamCdEntries`.
+
+`D_8019CE94..9A` and `D_801C067C..82` are the `DISPENV` rect of frame contexts 0
+and 1 — `g_FrameContexts + 0x5C` and `+ 0x237E8 + 0x5C` — so they are
+`g_DispEnv0X/Y/W/H` and `g_DispEnv1X/Y/W/H`; `D_8019CE50` / `D_801C0638` are
+`+0x18` of the `DRAWENV` (`g_DrawEnv0Dither` / `g_DrawEnv1Dither`) and
+`D_8019CEA5` / `D_801C068D` are `+0x6D` of the `DISPENV`
+(`g_DispEnv0Rgb24` / `g_DispEnv1Rgb24`, set to 1 for the 24-bit FMV mode).
+
+### 19g. `boot/` and `menu/`
+
+`GameMainLoop`'s locals are all named now: `g_FrameContexts` (the two
+0x237E8-byte contexts), `g_FrameParity`, `g_FrameCounter`, `g_GameClock` (the
+running `1 + elapsed/256` accumulator) and `g_SceneHandlers` — the table 14a
+documents, finally spelled that way at its only dispatch site. `g_BootLogoState`
+/ `g_BootLogoTimer` / `g_BootLogoHoldTimer` drive the logo scene;
+`g_DefaultColorMatrix` / `g_DefaultLightMatrix` are the two constant matrices
+`GameInstallSceneLighting` copies into `g_SceneColorMatrix` and
+`g_SceneLightMatrix`.
+
+In `menu/`: `g_PrevOwnedCarIndex` / `g_NextOwnedCarIndex` (`D_8019CA18` /
+`D_801E41A4`) are the scan up and down `g_CarTable` for the nearest `enabled`
+car — up moves the car-shop cursor on D-pad up, down on D-pad down, and both
+light the browse arrows. `g_CarSwapFromIndex` / `g_CarSwapToIndex`
+(`D_8009B374` / `D_8009B378`, `-1` idle) are the showroom turntable's source and
+destination while it spins between two cars; `g_CourseSwapDelay` (`D_8009B354`,
+0..19) is the equivalent hold at the far side of the course carousel before
+`g_MenuCourseModelIndex` takes `g_MenuPendingCourseIndex`.
+`g_MenuHintBarScript` / `g_MenuHintBarProgress` / `g_MenuHintBarStep` /
+`g_MenuHintButtonsVisible` are the bottom button-hint bar that
+`GameUpdateMenuMode` runs after every screen handler.
+`g_FrontendState` (`D_8009F098`, 0..3 through `g_FrontendDrawHandlers`),
+`g_TitleAttractTimer` (`0x190` frames), `g_TitleExitTimer` (`0x1E`),
+`g_TitlePulse` and `g_MainMenuSlide` cover the title screen;
+`g_ScreenOffsetEditX/Y` are the live copies the screen-adjust panel edits before
+committing to `g_ScreenOffsetX/Y`.
+
+`g_GrandPrixSeriesU16` in `menu/GameDrawNowLoadingText.c` is the one place the
+12c "same name, per-file type" rule could not be applied literally: that file
+includes `game/race.h`, which already declares `g_GrandPrixSeries` as `s16`, and
+the unit needs a `u16` view of the same address. A second C spelling was the only
+way to keep both the type and the compile.
+
+### 19h. Left raw on purpose
+
+* **`D_8009B33C`, and its neighbours in the menu-mode block.** Written `0` by
+  `GameInitMenuMode` and *never* written anything else in the whole image (four
+  references, one store, three loads), so the branches it guards in
+  `GameUpdateRankingScreen` and `GameUpdateLogoSampleScreen` are unreachable in
+  retail. Exactly the reasoning that left `D_8009B338` and `D_8009B31C` raw in
+  rounds 2 and 3.
+* **The seven per-screen "secondary timed-draw script" pointers**
+  (`D_8019C764`, `D_801E40B4`, `D_8019C794`, `D_801E8A44`, `D_8009F0B0`,
+  `D_8019CB00`, `D_801E4188`). `GameInitMenuMode` seeds all seven to
+  `&D_80082568` and each is then repointed by exactly one screen handler at a
+  different script table. The mechanism is certain; which *panel* each one draws
+  is not, because the tables are `GameRunTimedDrawScript` records whose contents
+  are sprite rows, so a name would assert artwork this repo cannot see.
+* **`D_8019C754` → `g_AssetBlockPtr2`, chosen mechanically.** In `asset/` it is
+  sub-block 2 of a pack and becomes `GameStartAudioSlotLoad`'s fourth argument
+  (the SEQ pointer for slot 1, the parameter table for slot 3); in
+  `car/GameLoadUpgradedCarModel` it is a plain load destination. No single
+  semantic name covers all four uses, so the name says only that it is another
+  asset-block cursor alongside `g_AssetBlockPtr` and `g_AssetSubBlockPtr`.
+* **`D_8019CA00`** is read by `GameUploadFmvSlice` but is libds state owned by
+  `sdk/CdRead2.c`; 12e's rule keeps SDK globals raw.
+* **`D_801E4D14`, `D_8019CB10`** — written by `GameInitSubsystems` and otherwise
+  touched only inside `GameUpdatePadState`, which is still `INCLUDE_ASM`. There
+  is nothing to read them against until that unit is decompiled.
+* **`D_8019C86C` / `D_8009EC94`** (the main-view visible-cell mask and list that
+  `GameInitRenderState` points `g_VisibleCellMask` / `g_VisibleCellList` at) are
+  referenced from `asset/` but belong to `track/` and `render/`. Left for the
+  pass that owns those directories, so the two agents cannot coin different
+  names for the same address.
+* **The `D_80082FBC/C0/C8` tail of the memory-card action machine**, the
+  `D_8009B36x` menu-mode accumulators and the remaining single-file `D_8009Bxxx`
+  block: each is a private counter inside one screen, readable in place, and
+  naming them would mostly restate the surrounding code.
+
+After this pass 232 raw globals are still referenced from the eight front-end
+directories: 10 reach three files, 38 reach two, and 184 are single-file.

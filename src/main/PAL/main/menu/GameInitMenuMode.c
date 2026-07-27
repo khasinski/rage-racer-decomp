@@ -326,7 +326,7 @@ void func_800509C4(s32 arg0) {
     }
 }
 
-extern Matrix D_8019CAD4;
+extern Matrix g_SceneColorMatrix asm("D_8019CAD4");
 extern Matrix D_80082DFC;
 extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
 extern Matrix D_80082E1C;
@@ -339,20 +339,20 @@ void func_800686D4(s32 arg0, s32 arg1);
 /* The menu-mode twin of GameInitTrackLighting. */
 void GameInitMenuLighting(void) asm("func_80050B1C");
 void GameInitMenuLighting(void) {
-    D_8019CAD4 = D_80082DFC;
+    g_SceneColorMatrix = D_80082DFC;
     g_SceneLightMatrix = D_80082E1C;
-    func_800698B8(&D_8019CAD4);
+    func_800698B8(&g_SceneColorMatrix);
     func_80069888(&g_SceneLightMatrix);
     func_80069A18(0x20, 0x20, 0x20);
     func_80069A38(0, 0, 0);
     func_800686D4(0x4E20, 0x140);
 }
 
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_PlayerMoney asm("D_8019C908");
 
 extern s32 D_80082568;
-extern s32 D_80082D6C;
+extern s32 g_MenuViewScale asm("D_80082D6C");
 
 extern void *D_8019C764;
 extern void *D_801E40B4;
@@ -362,33 +362,33 @@ extern void *D_8009F0B0;
 extern void *D_8019CB00;
 extern void *D_801E4188;
 
-extern s32 D_8009B2FC;
+extern s32 g_MenuHintBarProgress asm("D_8009B2FC");
 extern s32 g_MenuConfirmTimer asm("D_8009B300");
 extern s32 D_8009B304;
-extern s32 D_8009B30C;
+extern s32 g_MenuHintBarStep asm("D_8009B30C");
 extern s32 D_8009B310;
-extern s32 D_8009B314;
+extern s32 g_MenuHintButtonsVisible asm("D_8009B314");
 extern s32 g_CarNamePlateStep asm("D_8009B31C");
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 extern s32 D_8009B324;
 extern s32 D_8009B328;
 extern s32 D_8009B32C;
 extern s32 D_8009B330;
-extern s32 D_8009B334;
+extern s32 g_TimeAttackPlateStep asm("D_8009B334");
 extern s32 D_8009B33C;
-extern s32 D_8009B354;
+extern s32 g_CourseSwapDelay asm("D_8009B354");
 extern s32 D_8009B360;
 extern s32 D_8009B364;
 extern s32 D_8009B368;
 extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
 extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
-extern s32 D_8009B374;
-extern s32 D_8009B378;
+extern s32 g_CarSwapFromIndex asm("D_8009B374");
+extern s32 g_CarSwapToIndex asm("D_8009B378");
 
-extern s32 D_8019C7AC;
+extern s32 g_CourseSelectOption asm("D_8019C7AC");
 extern s32 D_801E4138;
-extern s32 D_8019C7C0;
-extern s32 D_8019C758;
+extern s32 g_RankingOption asm("D_8019C7C0");
+extern s32 g_DesignModeOption asm("D_8019C758");
 extern s32 D_801E4D74;
 
 void GameInitRenderState(s32) asm("func_80017884");
@@ -419,7 +419,7 @@ void GameInitMenuMode(void) {
         s32 t1 = p->carIndex;
         s32 t2 = p->classIndex;
         s32 t3 = p->unk10;
-        D_8019C768 = 0x80;
+        g_FrameSyncThreshold = 0x80;
         g_CourseIndex = t0;
         g_PlayerCarIndex = t1;
         g_GrandPrixClass = t2;
@@ -446,7 +446,7 @@ void GameInitMenuMode(void) {
     scratch[7] = 0;
     scratch[8] = 0;
     GameSetCameraRotMatrix();
-    ScaleMatrix((void *)0x1F800028, &D_80082D6C);
+    ScaleMatrix((void *)0x1F800028, &g_MenuViewScale);
 
     D_8019C764 = &D_80082568;
     D_801E40B4 = &D_80082568;
@@ -459,21 +459,21 @@ void GameInitMenuMode(void) {
     g_MenuViewAngleTarget = 500000;
     g_UiScriptProgress = 0;
     g_UiScriptProgress2 = 0;
-    D_8009B2FC = 0;
+    g_MenuHintBarProgress = 0;
     g_MenuConfirmTimer = 0;
     D_8009B304 = 0;
     GameMenuBusy = 0;
-    D_8009B30C = 0;
+    g_MenuHintBarStep = 0;
     D_8009B310 = 0;
-    D_8009B354 = 0;
+    g_CourseSwapDelay = 0;
     g_MenuViewOffset = 0;
     g_MenuViewOffsetTarget = 0;
     D_8009B360 = 0;
     D_8009B364 = 0;
     D_8009B368 = 0;
     g_MenuPendingCourseIndex = -1;
-    D_8009B374 = 0;
-    D_8009B378 = -1;
+    g_CarSwapFromIndex = 0;
+    g_CarSwapToIndex = -1;
     g_MenuOverlayPattern = 0;
     g_CarNamePlateStep = 0;
     g_MenuPlateCarIndex = 0;
@@ -482,17 +482,17 @@ void GameInitMenuMode(void) {
     g_MenuCourseModelIndex = g_CourseIndex;
     D_8009B32C = 0;
     D_8009B330 = 0;
-    D_8009B334 = 0;
-    D_8009B314 = 1;
+    g_TimeAttackPlateStep = 0;
+    g_MenuHintButtonsVisible = 1;
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = -1;
     g_MenuAltLayoutSetting = 0;
     D_8009B33C = 0;
     g_MenuScreen = 0;
-    D_8019C7AC = 0;
+    g_CourseSelectOption = 0;
     D_801E4138 = 0;
-    D_8019C7C0 = 0;
-    D_8019C758 = 0;
+    g_RankingOption = 0;
+    g_DesignModeOption = 0;
     D_801E4D74 = 0;
 
     func_8005290C(0);

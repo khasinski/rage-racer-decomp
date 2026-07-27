@@ -4,17 +4,17 @@
 #include "psyq/gpu.h"
 #include "game/cd.h"
 
-extern volatile u32 *D_8009AF20[];
-extern volatile u32 *D_8009AF2C[];
-extern s32 D_8009AF28;
-extern s32 D_8009AF34;
-extern s32 D_8009AF74;
-extern s32 D_8009F094;
-extern s16 D_8009AF50;
-extern s16 D_8009AF52;
-extern s32 D_8019CA1C;
-extern s32 D_801E8A90;
-extern char D_80010D30[];
+extern volatile u32 *g_FmvVlcBuffers[] asm("D_8009AF20");
+extern volatile u32 *g_FmvStripBuffers[] asm("D_8009AF2C");
+extern s32 g_FmvVlcIndex asm("D_8009AF28");
+extern s32 g_FmvStripIndex asm("D_8009AF34");
+extern s32 g_FmvStreamEnded asm("D_8009AF74");
+extern s32 g_FmvState asm("D_8009F094");
+extern s16 g_FmvStripWidth asm("D_8009AF50");
+extern s16 g_FmvStripHeight asm("D_8009AF52");
+extern s32 g_StreamSectorCount asm("D_8019CA1C");
+extern s32 g_StreamLoc asm("D_801E8A90");
+extern char g_MsgFmvSector[] asm("D_80010D30");
 
 void func_80063FB0(volatile u32 *arg0, s32 arg1);
 void DecDCTout(volatile u32 *arg0, s32 arg1) asm("func_8006402C");
@@ -33,31 +33,31 @@ void GameDecodeFmvFrame(void) {
         SetDispMask(1);
     }
 
-    func_80063FB0(D_8009AF20[D_8009AF28], 3);
-    DecDCTout(D_8009AF2C[D_8009AF34], (D_8009AF50 * D_8009AF52) / 2);
+    func_80063FB0(g_FmvVlcBuffers[g_FmvVlcIndex], 3);
+    DecDCTout(g_FmvStripBuffers[g_FmvStripIndex], (g_FmvStripWidth * g_FmvStripHeight) / 2);
 
     {
         s32 fail;
 
         fail = -1;
-        while (GamePresentFmvFrame(D_8009AF20) == fail) {
+        while (GamePresentFmvFrame(g_FmvVlcBuffers) == fail) {
             value = func_8006CF08(sp10);
-            GameDebugPrintf(D_80010D30, value);
-            if ((D_8019CA1C < (u32)value) || (value < 0)) {
-                GameStartStreamRead((void *)D_801E8A90);
+            GameDebugPrintf(g_MsgFmvSector, value);
+            if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
+                GameStartStreamRead((void *)g_StreamLoc);
             } else {
                 GameStartStreamRead(sp10);
             }
         }
     }
 
-    GameWaitFmvDecode(D_8009AF20, 0);
-    if (D_8009AF74 == 1) {
-        D_8009F094 = 2;
+    GameWaitFmvDecode(g_FmvVlcBuffers, 0);
+    if (g_FmvStreamEnded == 1) {
+        g_FmvState = 2;
     }
     if (g_PadEdge2 & 0x800) {
         GameStartCdVolumeFade(1);
-        D_8009F094 = 2;
+        g_FmvState = 2;
     }
 }
 
@@ -69,18 +69,18 @@ void GameEndFmv(void) {
     DecDCToutCallback(0);
     StUnSetRing();
     g_SceneId = g_StreamReturnScene;
-    g_StreamReturnScene = D_8009AF74;
+    g_StreamReturnScene = g_FmvStreamEnded;
 }
 
-extern volatile u32 D_8009AF5C;
-extern volatile u32 D_8009AF60;
-extern volatile u32 D_8009AF64;
-extern volatile u32 D_8009AF68;
-extern volatile u16 D_8019CE94;
-extern volatile u16 D_8019CE96;
-extern volatile u16 D_801C067C;
-extern volatile u16 D_801C067E;
-extern volatile u32 D_801E4B34;
+extern volatile u32 g_FmvVlcBuffer0 asm("D_8009AF5C");
+extern volatile u32 g_FmvVlcBuffer1 asm("D_8009AF60");
+extern volatile u32 g_FmvStripBuffer0 asm("D_8009AF64");
+extern volatile u32 g_FmvStripBuffer1 asm("D_8009AF68");
+extern volatile u16 g_DispEnv0X asm("D_8019CE94");
+extern volatile u16 g_DispEnv0Y asm("D_8019CE96");
+extern volatile u16 g_DispEnv1X asm("D_801C067C");
+extern volatile u16 g_DispEnv1Y asm("D_801C067E");
+extern volatile u32 g_FrameParity asm("D_801E4B34");
 
 void GameInitFmvContext(void *arg0, s32 arg1, s32 arg2) asm("func_8001EA7C");
 void GameInitFmvContext(void *arg0, s32 arg1, s32 arg2) {
@@ -98,24 +98,24 @@ void GameInitFmvContext(void *arg0, s32 arg1, s32 arg2) {
 
     words = arg0;
     halves = arg0;
-    word0 = D_8009AF5C;
-    word1 = D_8009AF60;
-    word3 = D_8009AF64;
-    word4 = D_8009AF68;
+    word0 = g_FmvVlcBuffer0;
+    word1 = g_FmvVlcBuffer1;
+    word3 = g_FmvStripBuffer0;
+    word4 = g_FmvStripBuffer1;
     words[2] = 0;
     words[5] = 0;
     words[0] = word0;
     words[1] = word1;
     words[3] = word3;
     words[4] = word4;
-    half18 = D_8019CE94;
+    half18 = g_DispEnv0X;
     halves[0xC] = half18;
-    half1A = D_8019CE96;
+    half1A = g_DispEnv0Y;
     halves[0xD] = half1A;
-    half20 = D_801C067C;
+    half20 = g_DispEnv1X;
     halves[0x10] = half20;
-    word28 = D_801E4B34;
-    half22 = D_801C067E;
+    word28 = g_FrameParity;
+    half22 = g_DispEnv1Y;
     halves[0x16] = arg1;
     halves[0x17] = arg2;
     words[0xD] = 0;

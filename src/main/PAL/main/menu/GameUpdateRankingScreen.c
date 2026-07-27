@@ -12,7 +12,7 @@ extern u8 *g_CarModelAsset asm("D_8009E698");
 
 extern s32 D_8009B2CC;
 extern s32 D_8009B2C8;
-extern s32 D_8009B334;
+extern s32 g_TimeAttackPlateStep asm("D_8009B334");
 extern s32 D_8019CDF8;
 extern u8 D_80082724;
 extern u8 D_80081890;
@@ -148,9 +148,9 @@ pos:
     GameMenuBusy = 0;
     func_800509C4(0);
     if (g_CourseIndex >= 4) {
-        D_8009B334 = 1;
+        g_TimeAttackPlateStep = 1;
     } else {
-        D_8009B334 = -1;
+        g_TimeAttackPlateStep = -1;
     }
 }
 
@@ -215,14 +215,14 @@ s32 GameDrawCarSelectScreen(s32 arg0) {
     return D_8009B2CC;
 }
 
-extern s16 D_8019CA18;
-extern s16 D_801E41A4;
+extern s16 g_PrevOwnedCarIndex asm("D_8019CA18");
+extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 
 void func_80055454(void) {
     s32 index;
     GameCarEntry *ptr;
 
-    D_8019CA18 = -1;
+    g_PrevOwnedCarIndex = -1;
     index = g_PlayerCarIndex - 1;
     if (index >= 0) {
         s32 one = 1;
@@ -230,7 +230,7 @@ void func_80055454(void) {
         ptr = (GameCarEntry *)(offset + (s32)g_CarTable);
         while (index >= 0) {
             if (ptr->enabled == one) {
-                D_8019CA18 = index;
+                g_PrevOwnedCarIndex = index;
                 break;
             }
             index--;
@@ -238,7 +238,7 @@ void func_80055454(void) {
         }
     }
 
-    D_801E41A4 = -1;
+    g_NextOwnedCarIndex = -1;
     index = g_PlayerCarIndex + 1;
     if (index < 13) {
         s32 one = 1;
@@ -246,7 +246,7 @@ void func_80055454(void) {
         ptr = (GameCarEntry *)(offset + (s32)g_CarTable);
         while (index < 13) {
             if (ptr->enabled == one) {
-                D_801E41A4 = index;
+                g_NextOwnedCarIndex = index;
                 break;
             }
             index++;
@@ -388,7 +388,7 @@ extern u8 g_MenuSubCursor asm("D_8009B2F0");
 extern s32 g_MenuConfirmTimer asm("D_8009B300");
 extern s32 D_8009B324;
 extern u8 *D_8019C794;
-extern s32 D_8019C7C0;
+extern s32 g_RankingOption asm("D_8019C7C0");
 extern u8 D_801E4389[];
 extern u8 D_801E438A[];
 s32 func_800487D8(u8 *commands, s32 *progress, s32 step);
@@ -423,22 +423,22 @@ void GameUpdateCustomizeScreen(void) {
         D_8009B324 = 3;
         func_800487D8(D_8019C794, &g_UiScriptProgress2, -1);
         lowMode = mode & 0xFF;
-        func_800489AC(g_UiScriptProgress, lowMode, D_8019C7C0);
+        func_800489AC(g_UiScriptProgress, lowMode, g_RankingOption);
         func_800487D8(cmdList, &g_UiScriptProgress, 0);
         if ((func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
                 GamePlaySoundCue(1);
-                D_8019C7C0 = (D_8019C7C0 > 0) ? D_8019C7C0 - 1 : lowMode;
+                g_RankingOption = (g_RankingOption > 0) ? g_RankingOption - 1 : lowMode;
             }
             if (g_PadEdge2 & 0x4000) {
                 GamePlaySoundCue(1);
-                D_8019C7C0 = (D_8019C7C0 < mode) ? D_8019C7C0 + 1 : 0;
+                g_RankingOption = (g_RankingOption < mode) ? g_RankingOption + 1 : 0;
             }
             if (g_PadEdge2 & 0x860) {
                 u8 carByte;
 
-                sel = D_8019C7C0;
+                sel = g_RankingOption;
                 if (sel == 0) {
                     func_8005D6EC(2);
                     carByte = g_CarTable[g_PlayerCarIndex].tireCompound;
@@ -583,7 +583,7 @@ block27:
                 func_80048B88(0xDA, 0x68, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, &g_MenuBlankCaption);
             }
         }
-        func_800489AC(g_UiScriptProgress, mode, D_8019C7C0);
+        func_800489AC(g_UiScriptProgress, mode, g_RankingOption);
         func_800487D8(cmdList, &g_UiScriptProgress, 0);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
@@ -593,7 +593,7 @@ block27:
     g_MenuHandlerIndex2 = 5;
     func_800487D8(cmdList, &g_UiScriptProgress, -1);
     func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
-    func_800489AC(g_UiScriptProgress, mode, D_8019C7C0);
+    func_800489AC(g_UiScriptProgress, mode, g_RankingOption);
     if (g_UiScriptProgress <= 0) {
         switch (GameMenuBusy) {
         case 1:
@@ -606,7 +606,7 @@ block27:
         case 2:
             g_MenuScreen = 4;
             g_MenuHandlerIndex = 4;
-            D_8019C7C0 = 0;
+            g_RankingOption = 0;
             break;
         }
         g_UiScriptProgress = 0;

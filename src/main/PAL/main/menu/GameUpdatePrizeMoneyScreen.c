@@ -12,8 +12,8 @@ extern s32 g_PrizeTickRate asm("D_801E6DA0");
 extern s32 g_BonusTickRate asm("D_801E6C78");
 extern s32 g_PendingPrizeMoney asm("D_801F17B0");
 extern s32 g_PendingClassBonus asm("D_8019CE0C");
-extern s32 D_801E4D0C;
-extern s32 D_801E4B94;
+extern s32 g_ClassClearFanfareTimer asm("D_801E4D0C");
+extern s32 g_ClassCompleted asm("D_801E4B94");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 void GameDrawFullscreenFadeTile(s32, s32) asm("func_80033AA0");
 void func_800204F4(s32);
@@ -34,11 +34,11 @@ extern UnkCopyChunk D_8007BE68[];
 extern u8 g_TimeAttackCars asm("D_801E4388");
 extern s16 g_ClassRecords asm("D_8019CB40");
 extern s16 D_8019CB42;
-extern s32 D_801E4DA8;
-extern s32 D_8019C984;
-extern s32 D_8019C988;
-extern s32 D_8019C98C;
-extern s32 D_8019C990;
+extern s32 g_ClassWinCount asm("D_801E4DA8");
+extern s32 g_TimeAttackSaveCar asm("D_8019C984");
+extern s32 g_TimeAttackSaveClass asm("D_8019C988");
+extern s32 g_TimeAttackSaveMaxClass asm("D_8019C98C");
+extern s32 g_TimeAttackSaveSeries asm("D_8019C990");
 extern u8 g_GrandPrixCars asm("D_801E4F44");
 extern u8 g_ExtraGrandPrixCars asm("D_8019C914");
 extern u8 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
@@ -137,8 +137,8 @@ void GameUpdatePrizeMoneyScreen(void) {
         func_80020D90();
         GamePlaySoundCue(0x11);
         if (!(g_PadEdge2 & 0x860)) goto L420;
-        if (D_801E4D0C != 0) goto L420;
-        if (D_801E4B94 != 0) { st = 8; goto Lstore; }
+        if (g_ClassClearFanfareTimer != 0) goto L420;
+        if (g_ClassCompleted != 0) { st = 8; goto Lstore; }
         GameRequestSelectBgmAssets();
         st = 8;
         goto Lstore;
@@ -230,7 +230,7 @@ void GameInitSaveDefaults(void) {
 
     g_ClassRecords = 0;
     D_8019CB42 = 0;
-    D_801E4DA8 = 0;
+    g_ClassWinCount = 0;
 
     emptySlot = -1;
     for (offset = 4; offset < 0x2C; offset += 4) {
@@ -239,10 +239,10 @@ void GameInitSaveDefaults(void) {
     }
 
     g_TimeAttackSave = 0;
-    D_8019C984 = 3;
-    D_8019C988 = 0;
-    D_8019C98C = 0;
-    D_8019C990 = 0;
+    g_TimeAttackSaveCar = 3;
+    g_TimeAttackSaveClass = 0;
+    g_TimeAttackSaveMaxClass = 0;
+    g_TimeAttackSaveSeries = 0;
     GameResetProgressSlot(&g_GrandPrixCars, &g_GrandPrixSave);
     GameResetProgressSlot(&g_ExtraGrandPrixCars, &g_ExtraGrandPrixSave);
 

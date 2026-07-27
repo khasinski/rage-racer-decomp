@@ -18,32 +18,32 @@ typedef struct {
 void *GameGetFmvFrame(s32 *arg0) asm("func_8001EDC4");
 void func_80064588(void *arg0, s32 arg1);
 s32 func_8006CFF0(void *arg0);
-extern s32 D_8009AF6C;
-extern s32 D_8009AF70;
-extern s32 D_8009AF74;
-extern s32 D_8019CA1C;
-extern u16 D_8019CE96;
-extern volatile u16 D_8019CE98;
-extern volatile u16 D_8019CE9A;
-extern u16 D_801C067E;
-extern volatile u16 D_801C0680;
-extern volatile u16 D_801C0682;
+extern s32 g_FmvFrameWidth asm("D_8009AF6C");
+extern s32 g_FmvFrameHeight asm("D_8009AF70");
+extern s32 g_FmvStreamEnded asm("D_8009AF74");
+extern s32 g_StreamSectorCount asm("D_8019CA1C");
+extern u16 g_DispEnv0Y asm("D_8019CE96");
+extern volatile u16 g_DispEnv0W asm("D_8019CE98");
+extern volatile u16 g_DispEnv0H asm("D_8019CE9A");
+extern u16 g_DispEnv1Y asm("D_801C067E");
+extern volatile u16 g_DispEnv1W asm("D_801C0680");
+extern volatile u16 g_DispEnv1H asm("D_801C0682");
 s32 StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) asm("func_8006D0EC");
 void func_80065A90(void *arg0, u32 arg1, u32 arg2, u32 arg3);
-extern char D_80010D34[];
+extern char g_MsgFmvDecodeTimeout[] asm("D_80010D34");
 s32 func_8006A534(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 s32 VSync(s32 mode) asm("func_8006DD30");
 s32 CdRead2(s32 arg0) asm("func_8006CD0C");
 extern u8 D_801E8AFC;
-extern u8 *D_8009F0A4;
-extern u8 *D_8019C7A4;
-extern u32 D_801E4BB0;
-extern u32 D_8019CB6C;
-extern u32 D_8009EC8C;
+extern u8 *g_ReplayFramesGp asm("D_8009F0A4");
+extern u8 *g_ReplayFramesTimeAttack asm("D_8019C7A4");
+extern u32 g_ReplayWriteCursor asm("D_801E4BB0");
+extern u32 g_ReplayFrameCount asm("D_8019CB6C");
+extern u32 g_ReplayBufferWrapped asm("D_8009EC8C");
 extern s16 D_8009E782;
-extern s32 D_801E4D8C;
-extern s32 D_801E4BC0;
+extern s32 g_ReplayPlayerModel asm("D_801E4D8C");
+extern s32 g_ReplayRivalModel asm("D_801E4BC0");
 
 s32 GamePresentFmvFrame(s32 *arg0) asm("func_8001ED3C");
 s32 GamePresentFmvFrame(s32 *arg0) {
@@ -87,27 +87,27 @@ void *GameGetFmvFrame(s32 *arg0) {
 
 process:
     entry = slot[1];
-    if (*(u32 *)((char *)entry + 8) >= (u32)D_8019CA1C) {
-        D_8009AF74 = 1;
+    if (*(u32 *)((char *)entry + 8) >= (u32)g_StreamSectorCount) {
+        g_FmvStreamEnded = 1;
     }
     w = *(u16 *)((char *)entry + 0x10);
-    if ((D_8009AF6C != w) || (D_8009AF70 != *(u16 *)((char *)entry + 0x12))) {
+    if ((g_FmvFrameWidth != w) || (g_FmvFrameHeight != *(u16 *)((char *)entry + 0x12))) {
         h = *(u16 *)((char *)entry + 0x12);
         rect[0] = 0;
         rect[1] = 0;
         rect[2] = w * 3 / 2;
         rect[3] = 0x1E0;
-        D_8009AF6C = w;
-        D_8009AF70 = h;
+        g_FmvFrameWidth = w;
+        g_FmvFrameHeight = h;
         func_80065A90(rect, 0, 0, 0);
     }
 
     dst = (u16 *)arg0;
     ret = slot[0];
-    h32 = D_8009AF70;
-    w32 = D_8009AF6C;
+    h32 = g_FmvFrameHeight;
+    w32 = g_FmvFrameWidth;
     half = (0xF0 - h32) / 2;
-    dst[0xD] = D_8019CE96 + half;
+    dst[0xD] = g_DispEnv0Y + half;
     __asm__ __volatile__("" ::: "memory");
     {
         register u32 wsgn asm("$4");
@@ -117,18 +117,18 @@ process:
     }
     dst[0x12] = wdraw;
     dst[0xE] = wdraw;
-    wid16 = D_8009AF6C;
-    c067e = D_801C067E;
-    hgt16 = D_8009AF70;
+    wid16 = g_FmvFrameWidth;
+    c067e = g_DispEnv1Y;
+    hgt16 = g_FmvFrameHeight;
     dst[0x13] = hgt16;
     dst[0xF] = hgt16;
     dst[0x19] = hgt16;
     c067e += half;
     dst[0x11] = c067e;
-    D_801C0680 = wid16;
-    D_8019CE98 = wid16;
-    D_801C0682 = hgt16;
-    D_8019CE9A = hgt16;
+    g_DispEnv1W = wid16;
+    g_DispEnv0W = wid16;
+    g_DispEnv1H = hgt16;
+    g_DispEnv0H = hgt16;
     return ret;
 }
 
@@ -143,7 +143,7 @@ void GameWaitFmvDecode(Unk8001EF54 *arg0) {
         do {
             timeout = timeout - 1;
             if (timeout == 0) {
-                GameDebugPrintf(D_80010D34);
+                GameDebugPrintf(g_MsgFmvDecodeTimeout);
                 arg0->field_34 = one;
                 arg0->field_28 = arg0->field_28 < 1U;
                 x = ((Unk8001EF54 *)((u8 *)arg0 + (arg0->field_28 << 3)))->field_18;
@@ -197,28 +197,28 @@ pollNext:
 }
 
 void func_8001F0E0(void) {
-    D_8009F0A4 = &D_801E8AFC;
-    D_8019C7A4 = &D_801E8AFC;
+    g_ReplayFramesGp = &D_801E8AFC;
+    g_ReplayFramesTimeAttack = &D_801E8AFC;
 }
 
 void func_8001F100(void) {
     u32 value;
 
     value = g_GrandPrixMode;
-    D_801E4BB0 = 0;
+    g_ReplayWriteCursor = 0;
     if (value != 0) {
         value = 0x5DC;
     } else {
         value = 0xA0A;
     }
-    D_8019CB6C = value;
-    D_8009EC8C = 0;
+    g_ReplayFrameCount = value;
+    g_ReplayBufferWrapped = 0;
 }
 
 /*
  * Packs a GameRenderPairPoint (billboard/edge pair) from two
  * GameRenderSourcePoint records (srcA=first, srcB=second) into the pair-point
- * output ring D_8009F0A4, keyed by pairIndex>>1. Only even indices hold a pair
+ * output ring g_ReplayFramesGp, keyed by pairIndex>>1. Only even indices hold a pair
  * (odd indices are skipped). Stride is ((n<<1)+n)<<4 == n*0x30 (sizeof pair).
  */
 void func_8001F134(s32 pairIndex, u8 *srcA, u8 *srcB) {
@@ -234,16 +234,16 @@ void func_8001F134(s32 pairIndex, u8 *srcA, u8 *srcB) {
     current = D_8009E782;
     src2 = (GameRenderSourcePoint *)srcB;
     sourceField_AE = src2->field_AE;
-    D_801E4D8C = current;
+    g_ReplayPlayerModel = current;
     odd = pairIndex & 1;
-    D_801E4BC0 = sourceField_AE;
+    g_ReplayRivalModel = sourceField_AE;
     if (odd) {
         return;
     }
 
     pairIndex >>= 1;
     dst = (GameRenderPairPoint *)(((pairIndex << 1) + pairIndex) << 4);
-    base = D_8009F0A4;
+    base = g_ReplayFramesGp;
     src1 = (GameRenderSourcePoint *)srcA;
     first = src1->field_0;
     dst = (GameRenderPairPoint *)((s32)dst + (s32)base);
@@ -272,7 +272,7 @@ void func_8001F134(s32 pairIndex, u8 *srcA, u8 *srcB) {
 
 /*
  * Single-point variant of func_8001F134: packs a GameRenderSinglePoint from a
- * GameRenderSourcePoint into the single-point output buffer D_8019C7A4, keyed
+ * GameRenderSourcePoint into the single-point output buffer g_ReplayFramesTimeAttack, keyed
  * by pointIndex>>1 (odd indices skipped). Stride ((n<<3)-n)<<2 == n*0x1C
  * (sizeof GameRenderSinglePoint).
  */
@@ -282,14 +282,14 @@ void func_8001F274(s32 pointIndex, u8 *srcPtr) {
     GameRenderSourcePoint *src;
     u32 first;
 
-    D_801E4D8C = D_8009E782;
+    g_ReplayPlayerModel = D_8009E782;
     if (pointIndex & 1) {
         return;
     }
 
     pointIndex >>= 1;
     dst = (GameRenderSinglePoint *)(((pointIndex << 3) - pointIndex) << 2);
-    base = D_8019C7A4;
+    base = g_ReplayFramesTimeAttack;
     src = (GameRenderSourcePoint *)srcPtr;
     first = src->field_0;
     dst = (GameRenderSinglePoint *)((s32)dst + (s32)base);

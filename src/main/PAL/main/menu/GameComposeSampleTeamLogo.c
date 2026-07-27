@@ -2,7 +2,7 @@
 
 extern u8 *g_TeamLogoSampleData asm("D_8019CA64");
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
-extern u16 D_801E444E[];
+extern u16 g_TeamLogoSwatches[] asm("D_801E444E");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
 /* Builds g_TeamLogoCanvas and its CLUT from one sample character and one sample background. */
@@ -25,7 +25,7 @@ void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) {
     __asm__("" : "=r"(row1) : "0"(row1));
     arg1 &= 1;
     index = 1;
-    dst = D_801E444E;
+    dst = g_TeamLogoSwatches;
 
     __asm__ volatile(
         "srl   $v0,$a0,31\n"

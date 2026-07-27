@@ -1,12 +1,12 @@
 #include "common.h"
 #include "psyq/kernel.h"
 
-extern s32 D_80082F4C;
-extern s32 D_8009E668;
-extern s32 D_8019C864;
-extern s32 D_8019C8F0;
-extern s32 D_801E825C;
-extern char D_800127CC[];
+extern s32 g_McLastCardStatus asm("D_80082F4C");
+extern s32 g_McStatusState asm("D_8009E668");
+extern s32 g_McPollTicks asm("D_8019C864");
+extern s32 g_McStatusResult asm("D_8019C8F0");
+extern s32 g_McCardStatus asm("D_801E825C");
+extern char g_FmtCardDevice[] asm("D_800127CC");
 
 void func_8005F2AC(void);
 void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1) asm("func_800632F0");
@@ -27,11 +27,11 @@ s32 GamePollMemoryCardStatus(s32 arg0, s32 arg1) {
 
     handle = (arg0 << 4) + arg1;
 
-    switch (D_8009E668) {
+    switch (g_McStatusState) {
     case 0:
         _card_info(handle);
-        D_8009E668 = 1;
-        D_8019C864 = 0;
+        g_McStatusState = 1;
+        g_McPollTicks = 0;
         goto clear_result;
 
     case 1:
@@ -59,11 +59,11 @@ s32 GamePollMemoryCardStatus(s32 arg0, s32 arg1) {
         goto fail_neg3_case1;
 
 case1_ready:
-        D_801E825C = status;
-        if (D_80082F4C == status) {
-            D_8009E668 = 4;
+        g_McCardStatus = status;
+        if (g_McLastCardStatus == status) {
+            g_McStatusState = 4;
         } else {
-            D_8009E668 = two;
+            g_McStatusState = two;
         }
         goto done;
 
@@ -72,28 +72,28 @@ fail_neg1_case1:
         goto fail_case1;
 
 case1_status4:
-        D_801E825C = two;
+        g_McCardStatus = two;
         func_8005F304();
         _card_clear(handle);
         func_8005F55C();
-        D_8009E668 = two;
-        D_80082F4C = 0;
+        g_McStatusState = two;
+        g_McLastCardStatus = 0;
         goto done;
 
 fail_neg3_case1:
         state = -3;
 
 fail_case1:
-        D_801E825C = state;
-        D_8009E668 = 4;
-        D_80082F4C = 0;
+        g_McCardStatus = state;
+        g_McStatusState = 4;
+        g_McLastCardStatus = 0;
         goto done;
 
     case 2:
         func_8005F2AC();
         _card_load(handle);
-        D_8009E668 = 3;
-        D_8019C864 = 0;
+        g_McStatusState = 3;
+        g_McPollTicks = 0;
         goto done;
 
     case 3:
@@ -102,7 +102,7 @@ fail_case1:
             goto done;
         }
 
-        D_8009E668 = 4;
+        g_McStatusState = 4;
         if (status == 2) {
             goto fail_neg3_case3;
         }
@@ -121,7 +121,7 @@ fail_case1:
         goto fail_neg3_case3;
 
 case3_ready:
-        D_80082F4C = status;
+        g_McLastCardStatus = status;
         goto done;
 
 fail_neg1_case3:
@@ -136,24 +136,24 @@ fail_neg3_case3:
         state = -3;
 
 fail_case3:
-        D_801E825C = state;
-        D_80082F4C = 0;
+        g_McCardStatus = state;
+        g_McLastCardStatus = 0;
         goto done;
 
     case 4:
-        D_8009E668 = 0;
-        D_8019C8F0 = D_801E825C;
+        g_McStatusState = 0;
+        g_McStatusResult = g_McCardStatus;
         goto done;
 
     default:
-        D_8009E668 = 0;
+        g_McStatusState = 0;
 clear_result:
-        D_8019C8F0 = 0;
+        g_McStatusResult = 0;
         goto done;
     }
 
 done:
-    return D_8019C8F0;
+    return g_McStatusResult;
 }
 
 s32 GameFormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
@@ -161,7 +161,7 @@ s32 GameFormatMemoryCard(s32 arg0, s32 arg1) {
     char device[8];
     s32 status;
 
-    LibcSprintf(device, D_800127CC, arg0, arg1);
+    LibcSprintf(device, g_FmtCardDevice, arg0, arg1);
     func_8005F304();
     func_80063280(device);
     status = func_8005F55C();
@@ -177,57 +177,57 @@ s32 GameFormatMemoryCard(s32 arg0, s32 arg1) {
     return status;
 }
 
-extern s32 D_8009B538[];
+extern s32 g_McEvents[] asm("D_8009B538");
 
 
 void GameOpenMemoryCardEvents(void) asm("func_8005EFAC");
 void GameOpenMemoryCardEvents(void) {
     EnterCriticalSection();
-    D_8009B538[0] = OpenEvent(0xF4000001, 0x0004, 0x2000, 0);
-    D_8009B538[1] = OpenEvent(0xF4000001, 0x8000, 0x2000, 0);
-    D_8009B538[2] = OpenEvent(0xF4000001, 0x0100, 0x2000, 0);
-    D_8009B538[3] = OpenEvent(0xF4000001, 0x2000, 0x2000, 0);
-    D_8009B538[4] = OpenEvent(0xF0000011, 0x0004, 0x2000, 0);
-    D_8009B538[5] = OpenEvent(0xF0000011, 0x8000, 0x2000, 0);
-    D_8009B538[6] = OpenEvent(0xF0000011, 0x0100, 0x2000, 0);
-    D_8009B538[7] = OpenEvent(0xF0000011, 0x2000, 0x2000, 0);
+    g_McEvents[0] = OpenEvent(0xF4000001, 0x0004, 0x2000, 0);
+    g_McEvents[1] = OpenEvent(0xF4000001, 0x8000, 0x2000, 0);
+    g_McEvents[2] = OpenEvent(0xF4000001, 0x0100, 0x2000, 0);
+    g_McEvents[3] = OpenEvent(0xF4000001, 0x2000, 0x2000, 0);
+    g_McEvents[4] = OpenEvent(0xF0000011, 0x0004, 0x2000, 0);
+    g_McEvents[5] = OpenEvent(0xF0000011, 0x8000, 0x2000, 0);
+    g_McEvents[6] = OpenEvent(0xF0000011, 0x0100, 0x2000, 0);
+    g_McEvents[7] = OpenEvent(0xF0000011, 0x2000, 0x2000, 0);
     ExitCriticalSection();
 }
 
 void GameEnableMemoryCardEvents(void) asm("func_8005F0D4");
 void GameEnableMemoryCardEvents(void) {
-    EnableEvent(D_8009B538[0]);
-    EnableEvent(D_8009B538[1]);
-    EnableEvent(D_8009B538[2]);
-    EnableEvent(D_8009B538[3]);
-    EnableEvent(D_8009B538[4]);
-    EnableEvent(D_8009B538[5]);
-    EnableEvent(D_8009B538[6]);
-    EnableEvent(D_8009B538[7]);
+    EnableEvent(g_McEvents[0]);
+    EnableEvent(g_McEvents[1]);
+    EnableEvent(g_McEvents[2]);
+    EnableEvent(g_McEvents[3]);
+    EnableEvent(g_McEvents[4]);
+    EnableEvent(g_McEvents[5]);
+    EnableEvent(g_McEvents[6]);
+    EnableEvent(g_McEvents[7]);
 }
 
 void GameDisableMemoryCardEvents(void) asm("func_8005F16C");
 void GameDisableMemoryCardEvents(void) {
-    DisableEvent(D_8009B538[0]);
-    DisableEvent(D_8009B538[1]);
-    DisableEvent(D_8009B538[2]);
-    DisableEvent(D_8009B538[3]);
-    DisableEvent(D_8009B538[4]);
-    DisableEvent(D_8009B538[5]);
-    DisableEvent(D_8009B538[6]);
-    DisableEvent(D_8009B538[7]);
+    DisableEvent(g_McEvents[0]);
+    DisableEvent(g_McEvents[1]);
+    DisableEvent(g_McEvents[2]);
+    DisableEvent(g_McEvents[3]);
+    DisableEvent(g_McEvents[4]);
+    DisableEvent(g_McEvents[5]);
+    DisableEvent(g_McEvents[6]);
+    DisableEvent(g_McEvents[7]);
 }
 
 void GameCloseMemoryCardEvents(void) asm("func_8005F204");
 void GameCloseMemoryCardEvents(void) {
     EnterCriticalSection();
-    CloseEvent(D_8009B538[0]);
-    CloseEvent(D_8009B538[1]);
-    CloseEvent(D_8009B538[2]);
-    CloseEvent(D_8009B538[3]);
-    CloseEvent(D_8009B538[4]);
-    CloseEvent(D_8009B538[5]);
-    CloseEvent(D_8009B538[6]);
-    CloseEvent(D_8009B538[7]);
+    CloseEvent(g_McEvents[0]);
+    CloseEvent(g_McEvents[1]);
+    CloseEvent(g_McEvents[2]);
+    CloseEvent(g_McEvents[3]);
+    CloseEvent(g_McEvents[4]);
+    CloseEvent(g_McEvents[5]);
+    CloseEvent(g_McEvents[6]);
+    CloseEvent(g_McEvents[7]);
     ExitCriticalSection();
 }

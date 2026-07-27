@@ -19,7 +19,7 @@ void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void DrawSync(s32 mode) asm("func_800658FC");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern GameAssetTripleHeader *g_AssetBase asm("D_8019C904");
-extern void *D_8019C754;
+extern void *g_AssetBlockPtr2 asm("D_8019C754");
 extern void *g_AssetSubBlockPtr asm("D_801E8AB0");
 void func_8005B9CC(void);
 
@@ -185,7 +185,7 @@ void GameLoadSelectBgmAssets(void) {
             secondOffset = (s32)((u8 *)header + secondOffset);
             header = (GameAssetTripleHeader *)((u8 *)header + thirdOffset);
             __asm__ volatile("" ::: "memory");
-            D_8019C754 = (void *)secondOffset;
+            g_AssetBlockPtr2 = (void *)secondOffset;
             g_AssetSubBlockPtr = header;
         }
         break;

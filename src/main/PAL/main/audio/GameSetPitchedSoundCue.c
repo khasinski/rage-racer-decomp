@@ -3,9 +3,9 @@
 #include "psyq/snd.h"
 #include "game/sound.h"
 
-extern s32 D_801E6D38[];
-extern u8 D_801E6D34[];
-extern u8 D_801E6D40[];
+extern s32 g_EffectVoiceState[] asm("D_801E6D38");
+extern u8 g_EffectVoiceTone[] asm("D_801E6D34");
+extern u8 g_EffectVoiceVolume[] asm("D_801E6D40");
 
 s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
 void func_80078528(s32, s16, s16);
@@ -19,7 +19,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPitchedSoundCue", func_
 #define VOLPITCH()                                                    \
     svArg = voiceCopy;                                                \
     asm("" : "=r"(svArg) : "0"(svArg));                               \
-    prod = *(s32 *)(D_801E6D40 + offset) * g_EffectVolumeScale;                \
+    prod = *(s32 *)(g_EffectVoiceVolume + offset) * g_EffectVolumeScale;                \
     left = prod;                                                      \
     if (prod < 0) {                                                   \
         left = prod + 0x7F;                                           \
@@ -60,7 +60,7 @@ void func_8005CDB0(void) {
     s32 state;
 
     neg = -1;
-    statePtr = D_801E6D38;
+    statePtr = g_EffectVoiceState;
     voice = 10 << 16;
     voiceCopy = 10;
     pitchPtr = statePtr + 1;
@@ -71,7 +71,7 @@ void func_8005CDB0(void) {
         switch (state) {
         case 0:
             SsUtKeyOnV(voice >> 16, g_VabIds[0], *f0Ptr,
-                          *(s16 *)(D_801E6D34 + offset), 0x3C, 0, 0, 0);
+                          *(s16 *)(g_EffectVoiceTone + offset), 0x3C, 0, 0, 0);
             VOLPITCH();
             break;
         case 2:
@@ -88,18 +88,18 @@ void func_8005CDB0(void) {
         pitchPtr = (s32 *)((u8 *)pitchPtr + 0x14);
         f0Ptr = (s16 *)((u8 *)f0Ptr + 0x14);
         offset += 0x14;
-    } while ((s32)statePtr < (s32)&D_801E6D38[20]);
+    } while ((s32)statePtr < (s32)&g_EffectVoiceState[20]);
 }
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPitchedSoundCue", func_8005D050);
 
-extern s32 D_80082F44;
-extern s32 D_801E4D90;
-extern s32 D_801E4D94;
-extern SoundScale D_801E6CA4;
+extern s32 g_ActiveSpecialCue asm("D_80082F44");
+extern s32 g_SpecialCueVoiceA asm("D_801E4D90");
+extern s32 g_SpecialCueVoiceB asm("D_801E4D94");
+extern SoundScale g_SoundScale asm("D_801E6CA4");
 extern s32 D_80011C84;
-extern const s32 D_80011C8C[][6];
-extern const s32 D_80011F5C[][6];
+extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
+extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
 
 s32 func_8007B088(s32 arg0);
 
@@ -115,21 +115,21 @@ s32 GameStartSingleSpecialCue(s32 cue, s32 volume) {
     s32 scaleValue;
     s32 current;
 
-    handle = &D_801E4D90;
-    D_801E4D94 = result;
+    handle = &g_SpecialCueVoiceA;
+    g_SpecialCueVoiceB = result;
     *handle = result;
-    current = D_80082F44;
+    current = g_ActiveSpecialCue;
 
     if (current != cue) {
-        scaled = volume * D_80011C8C[cue][0];
-        offset = D_80011C8C[cue][1];
-        tone = D_80011C8C[cue][2];
-        pitch = D_80011C8C[cue][3];
+        scaled = volume * g_SoundCueParams[cue][0];
+        offset = g_SoundCueParams[cue][1];
+        tone = g_SoundCueParams[cue][2];
+        pitch = g_SoundCueParams[cue][3];
         if (scaled < 0) {
             scaled += 0x7F;
         }
 
-        result = D_801E6CA4.scale;
+        result = g_SoundScale.scale;
         value = scaled >> 7;
         value *= result;
         result = value;
@@ -137,7 +137,7 @@ s32 GameStartSingleSpecialCue(s32 cue, s32 volume) {
             result += 0x7F;
         }
 
-        scaleValue = D_801E6CA4.values[offset];
+        scaleValue = g_SoundScale.values[offset];
         tone = (s16)tone;
         pitch = (s16)pitch;
         result = (s16)SsUtKeyOnV(
@@ -152,7 +152,7 @@ s32 GameStartSingleSpecialCue(s32 cue, s32 volume) {
         *handle = result;
     }
 
-    D_80082F44 = cue;
+    g_ActiveSpecialCue = cue;
     return result;
 }
 
@@ -172,16 +172,16 @@ s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
 
     id = cue;
     sy = volumeRight;
-    baseVol = D_80011F5C[id][0];
-    pan = D_80011F5C[id][1];
-    prog = D_80011F5C[id][2];
-    tone = D_80011F5C[id][3];
+    baseVol = g_SoundCueParams2[id][0];
+    pan = g_SoundCueParams2[id][1];
+    prog = g_SoundCueParams2[id][2];
+    tone = g_SoundCueParams2[id][3];
 
     vx = baseVol * volumeLeft;
     if (vx < 0) {
         vx += 0x7F;
     }
-    scale = D_801E6CA4.scale;
+    scale = g_SoundScale.scale;
     sx = (vx >> 7) * scale;
     if (sx < 0) {
         sx += 0x7F;
@@ -211,28 +211,28 @@ s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
         nextTone = (s32)((u32)nextTone << 16) >> 16;
         result = (s16)SsUtKeyOnV(
             0x17,
-            g_VabIds[(D_801E4D90 = result, pan)],
+            g_VabIds[(g_SpecialCueVoiceA = result, pan)],
             (s16)prog,
             nextTone,
             0x3C,
             0,
             (s16)sx,
             (s16)sy);
-        D_801E4D94 = result;
+        g_SpecialCueVoiceB = result;
     }
 
     return result;
 }
 
-extern s32 D_801E6CA0;
-extern s32 D_80082F48;
+extern s32 g_SoundCueBank asm("D_801E6CA0");
+extern s32 g_LastSpecialCueRequest asm("D_80082F48");
 
 void func_8005D050(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void GamePlaySoundCue(s32 arg0) {
     s32 test;
 
-    if (D_801E6CA0 == 1) {
+    if (g_SoundCueBank == 1) {
         if (arg0 >= 0) {
             test = arg0 < 0x1E;
             if (test != 0) {
@@ -251,7 +251,7 @@ mode1_clamped:
         goto middle;
     }
 
-    if (D_801E6CA0 == 2) {
+    if (g_SoundCueBank == 2) {
         if (arg0 >= 0) {
             test = arg0 < 0x46;
             if (test != 0) {
@@ -266,8 +266,8 @@ mode2_clamped:
         test = arg0 - 0xF;
         if ((u32)test < 3U) {
 special:
-            if (arg0 != D_80082F48) {
-                D_80082F48 = arg0;
+            if (arg0 != g_LastSpecialCueRequest) {
+                g_LastSpecialCueRequest = arg0;
                 GameStartSingleSpecialCue(arg0, 0x80);
             }
             return;

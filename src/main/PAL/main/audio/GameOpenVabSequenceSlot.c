@@ -1,15 +1,15 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern s16 D_8009B510[];
-extern s32 D_800125EC[];
-extern s32 D_8009E68C;
+extern s16 g_VabSlotVoiceTone[] asm("D_8009B510");
+extern s32 g_VabSpuAddress[] asm("D_800125EC");
+extern s32 g_AudioLoadSlot asm("D_8009E68C");
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
 extern s16 g_SeqHandle asm("D_801E6D90");
-extern s32 D_801E6D9C;
-extern s32 D_801F17B4;
-extern char D_80012788[];
-extern char D_800127A0[];
+extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
+extern s32 g_VabTransferDone asm("D_801F17B4");
+extern char g_MsgSeqVabOpenHeadError[] asm("D_80012788");
+extern char g_MsgSeqVabTransBodyError[] asm("D_800127A0");
 
 void func_80063D9C(s32 arg0);
 s32 func_8006F004(s32 arg0);
@@ -33,8 +33,8 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     register s32 fail asm("$17");
     register s32 ret asm("$2");
 
-    D_8009E68C = slotReg;
-    ret = func_80072C4C(header, -1, D_800125EC[slotReg]);
+    g_AudioLoadSlot = slotReg;
+    ret = func_80072C4C(header, -1, g_VabSpuAddress[slotReg]);
     {
         register s16 *vabIdBase asm("$3") = g_VabIds;
         slotReg *= 2;
@@ -46,7 +46,7 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        GameDebugPrintf(D_80012788);
+        GameDebugPrintf(g_MsgSeqVabOpenHeadError);
         func_80063D9C(1);
     }
 
@@ -54,15 +54,15 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     *vabIdPtr = ret;
     currentVabId = (s16)ret;
     if (currentVabId == fail) {
-        GameDebugPrintf(D_800127A0);
+        GameDebugPrintf(g_MsgSeqVabTransBodyError);
         func_80063D9C(1);
     }
 
     *(s32 *)&g_SeqHandle = (s16)func_8006F004(seqReg);
-    D_801E6D9C = 0;
+    g_SeqVolumeFadeStep = 0;
     ret = func_8007317C(0);
-    D_801F17B4 = (s16)ret;
-    return D_801F17B4;
+    g_VabTransferDone = (s16)ret;
+    return g_VabTransferDone;
 }
 
 s32 GameCloseAudioSlot(s32 slot) asm("func_8005E600");
@@ -105,7 +105,7 @@ void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     register s32 vabOffset asm("$6") = (s16)vabSlot * 2;
 
     asm("" : "=r"(voiceOffset) : "0"(voiceOffset));
-    SsUtKeyOnV((s16)voice, *(s16 *)((s32)g_VabIds + vabOffset), *(s16 *)((s32)D_8009B510 + voiceOffset), 0, 0x3C, 0, 0, 0);
+    SsUtKeyOnV((s16)voice, *(s16 *)((s32)g_VabIds + vabOffset), *(s16 *)((s32)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
 }
 
 s32 SsUtKeyOffV(s32 voice) asm("func_80078018");

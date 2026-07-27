@@ -1,30 +1,30 @@
 #include "common.h"
 #include "game/race.h"
 
-extern char D_80012F90[];
-extern char D_80012F98[];
+extern char g_MsgSaveChecksumOk[] asm("D_80012F90");
+extern char g_FmtSaveChecksum[] asm("D_80012F98");
 
-extern s16 D_8019CE08;
-extern s16 D_8019CB08;
-extern u16 D_801E4BF0;
-extern u16 D_8019CAD0;
-extern u16 D_8019CA08;
-extern u16 D_8019CA0A;
-extern u16 D_801E418C;
-extern u16 D_8019CA0C;
-extern s32 D_801E4098;
-extern s32 D_801E409C;
-extern s32 D_801E40A0;
-extern s32 D_801E40A4;
-extern s32 D_801E6E80;
-extern s32 D_801E6E84;
-extern s32 D_801E6E88;
-extern s32 D_801E6E8C;
+extern s16 g_PadMappingIndex asm("D_8019CE08");
+extern s16 g_NegconMappingIndex asm("D_8019CB08");
+extern u16 g_NegconSteerNeutral asm("D_801E4BF0");
+extern u16 g_NegconSteerPlay asm("D_8019CAD0");
+extern u16 g_NegconNeutralI asm("D_8019CA08");
+extern u16 g_NegconNeutralII asm("D_8019CA0A");
+extern u16 g_NegconMaxTwist asm("D_801E418C");
+extern u16 g_NegconNeutralL asm("D_8019CA0C");
+extern s32 g_GrandPrixSaveCar asm("D_801E4098");
+extern s32 g_GrandPrixSaveClass asm("D_801E409C");
+extern s32 g_GrandPrixSaveMaxClass asm("D_801E40A0");
+extern s32 g_GrandPrixSaveTime asm("D_801E40A4");
+extern s32 g_ExtraGrandPrixSaveCar asm("D_801E6E80");
+extern s32 g_ExtraGrandPrixSaveClass asm("D_801E6E84");
+extern s32 g_ExtraGrandPrixSaveMaxClass asm("D_801E6E88");
+extern s32 g_ExtraGrandPrixSaveTime asm("D_801E6E8C");
 extern s32 g_BgmSelection asm("D_801E42CC");
-extern s32 D_8019C984;
-extern s32 D_8019C988;
-extern s32 D_8019C98C;
-extern s32 D_8019C990;
+extern s32 g_TimeAttackSaveCar asm("D_8019C984");
+extern s32 g_TimeAttackSaveClass asm("D_8019C988");
+extern s32 g_TimeAttackSaveMaxClass asm("D_8019C98C");
+extern s32 g_TimeAttackSaveSeries asm("D_8019C990");
 
 extern u8 g_GrandPrixCars[] asm("D_801E4F44");
 extern u8 g_ExtraGrandPrixCars[] asm("D_8019C914");
@@ -78,9 +78,9 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             sum += *p++;
             i++;
         } while (i < 0x7FE);
-        GameDebugPrintf(D_80012F90);
+        GameDebugPrintf(g_MsgSaveChecksumOk);
         sum = ~sum;
-        GameDebugPrintf(D_80012F98, *(s32 *)(base + 0xFFC), sum);
+        GameDebugPrintf(g_FmtSaveChecksum, *(s32 *)(base + 0xFFC), sum);
         if (*(s32 *)(base + 0xFFC) != sum) {
             return 0;
         }
@@ -91,34 +91,34 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         u16 h1 = *(u16 *)(base + 0x2);
         u16 h2 = *(u16 *)(base + 0x4);
         u16 h3 = *(u16 *)(base + 0x6);
-        D_8019CA08 = *(u16 *)(base + 0x8);
-        D_8019CA0A = *(u16 *)(base + 0xA);
-        D_8019CA0C = *(u16 *)(base + 0xC);
+        g_NegconNeutralI = *(u16 *)(base + 0x8);
+        g_NegconNeutralII = *(u16 *)(base + 0xA);
+        g_NegconNeutralL = *(u16 *)(base + 0xC);
         {
             u16 hE = *(u16 *)(base + 0xE);
             s32 w30;
             g_GrandPrixSave = *(s32 *)(base + 0x10);
-            D_801E4098 = *(s32 *)(base + 0x14);
-            D_801E409C = *(s32 *)(base + 0x18);
-            D_801E40A0 = *(s32 *)(base + 0x1C);
-            D_801E40A4 = *(s32 *)(base + 0x20);
+            g_GrandPrixSaveCar = *(s32 *)(base + 0x14);
+            g_GrandPrixSaveClass = *(s32 *)(base + 0x18);
+            g_GrandPrixSaveMaxClass = *(s32 *)(base + 0x1C);
+            g_GrandPrixSaveTime = *(s32 *)(base + 0x20);
             g_ExtraGrandPrixSave = *(s32 *)(base + 0x24);
-            D_801E6E80 = *(s32 *)(base + 0x28);
-            D_801E6E84 = *(s32 *)(base + 0x2C);
+            g_ExtraGrandPrixSaveCar = *(s32 *)(base + 0x28);
+            g_ExtraGrandPrixSaveClass = *(s32 *)(base + 0x2C);
             w30 = *(s32 *)(base + 0x30);
-            D_8019CE08 = h0;
-            D_8019CB08 = h1;
-            D_801E4BF0 = h2;
-            D_8019CAD0 = h3;
-            D_801E418C = hE;
-            D_801E6E88 = w30;
+            g_PadMappingIndex = h0;
+            g_NegconMappingIndex = h1;
+            g_NegconSteerNeutral = h2;
+            g_NegconSteerPlay = h3;
+            g_NegconMaxTwist = hE;
+            g_ExtraGrandPrixSaveMaxClass = w30;
         }
-        D_801E6E8C = *(s32 *)(base + 0x34);
+        g_ExtraGrandPrixSaveTime = *(s32 *)(base + 0x34);
         g_TimeAttackSave = *(s32 *)(base + 0x38);
-        D_8019C984 = *(s32 *)(base + 0x3C);
-        D_8019C988 = *(s32 *)(base + 0x40);
-        D_8019C98C = *(s32 *)(base + 0x44);
-        D_8019C990 = *(s32 *)(base + 0x48);
+        g_TimeAttackSaveCar = *(s32 *)(base + 0x3C);
+        g_TimeAttackSaveClass = *(s32 *)(base + 0x40);
+        g_TimeAttackSaveMaxClass = *(s32 *)(base + 0x44);
+        g_TimeAttackSaveSeries = *(s32 *)(base + 0x48);
         {
             register s32 h4C asm("$3") = *(s16 *)(base + 0x4C);
             register u16 h4E asm("$4") = *(u16 *)(base + 0x4E);
@@ -343,7 +343,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
     memcpy(g_GrandPrixCourseProgress, base + 0xFC8, 8);
     memcpy(g_ExtraGrandPrixCourseProgress, base + 0xFD0, 8);
 
-    func_80013F80(D_8019CE08, D_8019CB08);
+    func_80013F80(g_PadMappingIndex, g_NegconMappingIndex);
     GameApplyAudioSettings();
     LoadImage((void *)g_TeamLogoRect, g_TeamLogoCanvas);
     LoadImage((void *)g_TeamLogoClutRect, g_TeamLogoClut);

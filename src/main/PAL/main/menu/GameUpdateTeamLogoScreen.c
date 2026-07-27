@@ -17,7 +17,7 @@
 s32 GameDrawLogoSampleScreen(s32 arg0);
 
 extern s32 g_MenuConfirmTimer asm("D_8009B300");
-extern s32 D_8009B314;
+extern s32 g_MenuHintButtonsVisible asm("D_8009B314");
 extern u8 g_MenuSubCursor asm("D_8009B2F0");
 extern s32 D_8019CAB8;
 extern void *D_801E8A44;
@@ -71,7 +71,7 @@ void GameUpdateTeamLogoScreen(void)
     func_800487D8(&D_80081C14, &g_UiScriptProgress, 0);
     if ((func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0))
     {
-      D_8009B314 = 1;
+      g_MenuHintButtonsVisible = 1;
       g_MenuOverlayPattern = -1;
       if (g_PadEdge2 & 0x1000)
       {
@@ -222,7 +222,7 @@ void GameUpdateTeamLogoScreen(void)
       }
       if (g_UiScriptProgress2 >= 8)
       {
-        D_8009B314 = 0;
+        g_MenuHintButtonsVisible = 0;
       }
       func_8004A248(1, 1);
     }
@@ -233,7 +233,7 @@ void GameUpdateTeamLogoScreen(void)
       func_8004A248(1, -1);
       if (g_UiScriptProgress2 < 7)
       {
-        D_8009B314 = 1;
+        g_MenuHintButtonsVisible = 1;
       }
       if (g_UiScriptProgress2 <= 0)
       {

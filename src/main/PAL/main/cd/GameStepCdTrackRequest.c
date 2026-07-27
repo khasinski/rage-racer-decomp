@@ -7,9 +7,9 @@ extern s32 g_CdCommandPending asm("D_8007F604");
 extern s32 g_CdTrackStep asm("D_8007F608");
 extern s32 g_CdCommandStep asm("D_8007F60C");
 extern u8 g_CdVolume asm("D_8009B194");
-extern u8 D_8009B1B0;
-extern s32 D_8009B1B4;
-extern CdlLOC D_8009AFD4[];
+extern u8 g_CdCurrentTrack asm("D_8009B1B0");
+extern s32 g_CdFadeFrames asm("D_8009B1B4");
+extern CdlLOC g_CdTrackLocs[] asm("D_8009AFD4");
 
 s32 func_8006A534(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
@@ -25,10 +25,10 @@ void GameStepCdTrackRequest(void) {
         if (func_8006A534(1, 0) == 0) {
             goto done;
         }
-        D_8009B1B4 = 0;
+        g_CdFadeFrames = 0;
         g_CdTrackStep = 1;
     case 1:
-        if (CdControl(0x16, &D_8009AFD4[g_CdTrackPending], 0) == 0) {
+        if (CdControl(0x16, &g_CdTrackLocs[g_CdTrackPending], 0) == 0) {
             goto done;
         }
         g_CdTrackStep = 2;
@@ -46,7 +46,7 @@ void GameStepCdTrackRequest(void) {
         goto done;
     case 3:
         status = g_CdVolume;
-        track = (D_8009B1B0 = *(u8 *)&g_CdTrackPending);
+        track = (g_CdCurrentTrack = *(u8 *)&g_CdTrackPending);
         g_CdTrackPending = -1;
         g_CdTrackStep = 0;
         GameSetCdVolume(status);
@@ -57,7 +57,7 @@ void GameStepCdTrackRequest(void) {
         }
         g_CdTrackStep = 5;
     case 5:
-        if (CdControl(0x16, &D_8009AFD4[g_CdTrackPending], 0) == 0) {
+        if (CdControl(0x16, &g_CdTrackLocs[g_CdTrackPending], 0) == 0) {
             goto done;
         }
         g_CdTrackStep = 6;
@@ -77,7 +77,7 @@ void GameStepCdTrackRequest(void) {
         track = *(u8 *)&g_CdTrackPending;
         g_CdTrackPending = -1;
         g_CdTrackStep = 0;
-        D_8009B1B0 = track;
+        g_CdCurrentTrack = track;
         break;
     }
 

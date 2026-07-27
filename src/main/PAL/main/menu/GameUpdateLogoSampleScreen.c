@@ -523,8 +523,8 @@ update:
 }
 
 extern s32 D_8009B33C;
-extern s16 D_8019CA18;
-extern s16 D_801E41A4;
+extern s16 g_PrevOwnedCarIndex asm("D_8019CA18");
+extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 
 s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
 
@@ -533,13 +533,13 @@ void func_80059320(void) {
     GameCarEntry *entry;
 
     if (D_8009B33C != 0) {
-        D_8019CA18 = -1;
+        g_PrevOwnedCarIndex = -1;
         index = g_CarListCursor - 1;
         if (index >= 0) {
             entry = &g_CarTable[index];
             while (index >= 0) {
                 if (entry->enabled == 0) {
-                    D_8019CA18 = index;
+                    g_PrevOwnedCarIndex = index;
                     break;
                 }
                 index--;
@@ -547,7 +547,7 @@ void func_80059320(void) {
             }
         }
     } else {
-        D_8019CA18 = -1;
+        g_PrevOwnedCarIndex = -1;
         index = g_CarListCursor - 1;
         if (index >= 0) {
         backward_loop:
@@ -560,11 +560,11 @@ void func_80059320(void) {
                             index--;
                             goto backward_check;
                         }
-                        D_8019CA18 = index;
+                        g_PrevOwnedCarIndex = index;
                         goto backward_done;
                     }
                     if (progression >= value) {
-                        D_8019CA18 = index;
+                        g_PrevOwnedCarIndex = index;
                         goto backward_done;
                     }
                 }
@@ -579,13 +579,13 @@ void func_80059320(void) {
 
 backward_done:
     if (D_8009B33C != 0) {
-        D_801E41A4 = -1;
+        g_NextOwnedCarIndex = -1;
         index = g_CarListCursor + 1;
         if (index < 13) {
             entry = &g_CarTable[index];
             while (index < 13) {
                 if (entry->enabled == 0) {
-                    D_801E41A4 = index;
+                    g_NextOwnedCarIndex = index;
                     break;
                 }
                 index++;
@@ -593,7 +593,7 @@ backward_done:
             }
         }
     } else {
-        D_801E41A4 = -1;
+        g_NextOwnedCarIndex = -1;
         index = g_CarListCursor + 1;
         if (index < 13) {
         forward_loop:
@@ -606,11 +606,11 @@ backward_done:
                             index++;
                             goto forward_check;
                         }
-                        D_801E41A4 = index;
+                        g_NextOwnedCarIndex = index;
                         goto forward_done;
                     }
                     if (progression >= value) {
-                        D_801E41A4 = index;
+                        g_NextOwnedCarIndex = index;
                         goto forward_done;
                     }
                 }

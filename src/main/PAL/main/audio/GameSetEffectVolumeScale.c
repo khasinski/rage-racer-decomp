@@ -15,7 +15,7 @@ done:
     g_EffectVolumeScale = arg0;
 }
 
-extern s32 D_801E6CE0;
+extern s32 g_SoundSlotVolumeScale asm("D_801E6CE0");
 
 void GameSetLoadedTableVolumeScale(s32 arg0) {
     if (arg0 >= 0) {
@@ -28,7 +28,7 @@ void GameSetLoadedTableVolumeScale(s32 arg0) {
     }
 
 done:
-    D_801E6CE0 = arg0;
+    g_SoundSlotVolumeScale = arg0;
 }
 
 void GameSetCdVolumeSetting(s32 arg0) asm("func_80043134");
@@ -80,20 +80,20 @@ done:
     g_EffectVolumeScale = (level << 7) / 15;
 }
 
-extern s32 D_80082F40;
+extern s32 g_StereoOutput asm("D_80082F40");
 void GameSetCdMixPreset(s32 arg0) asm("func_8004318C");
 void func_80072AF4(void);
 void GameSetStereoOutput(void) asm("func_8005BE24");
-void GameSetStereoOutput(void) { D_80082F40 = 1; GameSetCdMixPreset(0); func_80072AF4(); }
+void GameSetStereoOutput(void) { g_StereoOutput = 1; GameSetCdMixPreset(0); func_80072AF4(); }
 
 void func_80072AE0(void);
 void GameSetMonoOutput(void) asm("func_8005BE58");
-void GameSetMonoOutput(void) { D_80082F40 = 0; GameSetCdMixPreset(1); func_80072AE0(); }
+void GameSetMonoOutput(void) { g_StereoOutput = 0; GameSetCdMixPreset(1); func_80072AE0(); }
 
-extern u32 D_801E6CC4;
+extern u32 g_EngineSoundMaxRpm asm("D_801E6CC4");
 
 u32 GameGetLoadedAudioStep(void) {
-    return D_801E6CC4;
+    return g_EngineSoundMaxRpm;
 }
 
 extern s32 g_AudioSlotMask asm("D_801E6C9C");

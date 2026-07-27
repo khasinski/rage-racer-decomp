@@ -6,10 +6,10 @@ u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2);
 void *LibcMemmove(u8 *dest, u8 *src, s32 count);
 s32 LibcStrlen(u8 *arg0);
 
-extern s32 D_8009B9A8;
+extern s32 g_RandomSeed asm("D_8009B9A8");
 
 void GameSeedRandom(s32 seed) {
-    D_8009B9A8 = seed;
+    g_RandomSeed = seed;
 }
 
 /*
@@ -81,7 +81,7 @@ s32 LibcStrlen(u8 *arg0) {
     return count;
 }
 
-extern u8 D_800132C0[];
+extern u8 g_LibcNullText[] asm("D_800132C0");
 
 void func_80063C88(s32 arg0);
 
@@ -92,7 +92,7 @@ void LibcPutString(u8 *arg0) {
 
     ptr = arg0;
     if (ptr == 0) {
-        ptr = D_800132C0;
+        ptr = g_LibcNullText;
     }
 
     while (value = *ptr++, value != 0) {
@@ -100,8 +100,8 @@ void LibcPutString(u8 *arg0) {
     }
 }
 
-extern u8 D_80082FD9[];
-extern s32 D_8009B9AC;
+extern u8 g_LibcCtype[] asm("D_80082FD9");
+extern s32 g_LibcOutColumn asm("D_8009B9AC");
 
 void LibcPutChar(s32 arg0) asm("func_80063C88");
 void LibcPutChar(s32 arg0) {
@@ -118,18 +118,18 @@ void LibcPutChar(s32 arg0) {
     }
 
     LibcPutChar(13);
-    D_8009B9AC = 0;
+    g_LibcOutColumn = 0;
     goto output;
 
 tab:
     do {
         LibcPutChar(0x20);
-    } while ((D_8009B9AC & 7) != 0);
+    } while ((g_LibcOutColumn & 7) != 0);
     return;
 
 other:
-    if (D_80082FD9[value] & 0x97) {
-        D_8009B9AC++;
+    if (g_LibcCtype[value] & 0x97) {
+        g_LibcOutColumn++;
     }
 
 output:
@@ -140,7 +140,7 @@ s32 LibcToUpper(s32 arg0) asm("func_80063D3C");
 s32 LibcToUpper(s32 arg0) {
     u8 value = arg0;
 
-    if (D_80082FD9[value & 0xFF] & 2) {
+    if (g_LibcCtype[value & 0xFF] & 2) {
         value = arg0 - 0x20;
     }
 

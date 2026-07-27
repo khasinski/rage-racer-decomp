@@ -9,7 +9,7 @@
 void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
 void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 
-extern s32 D_801E429C;
+extern s32 g_TitlePulse asm("D_801E429C");
 
 void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void GameDrawMainMenuRows(void) asm("func_8001B2D4");
@@ -20,11 +20,11 @@ void GameUpdateMainMenuExit(void) {
     s32 value;
     GameRaceProgress *ptr;
 
-    value = D_801E429C + 1;
-    D_801E429C = value;
+    value = g_TitlePulse + 1;
+    g_TitlePulse = value;
     GameDrawFullscreenFadeTile(value * 2, 0x59);
 
-    if (D_801E429C >= 0x81) {
+    if (g_TitlePulse >= 0x81) {
         switch (g_TitleMenuSelection) {
         case 0:
         case 1:
@@ -58,8 +58,8 @@ void GameUpdateFrontend(void) asm("func_8001BB58");
 
 void GameUpdateTitleAttract(void) asm("func_8001B974");
 
-extern s32 D_801E6F1C;
-extern s32 D_801E4DA8;
+extern s32 g_MainMenuSlide asm("D_801E6F1C");
+extern s32 g_ClassWinCount asm("D_801E4DA8");
 
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
@@ -79,7 +79,7 @@ void GameUpdateTitleAttract(void) {
     register s32 x28 asm("$6");
     register s32 yA0 asm("$7");
 
-    tmp = D_801E6F1C;
+    tmp = g_MainMenuSlide;
     tmp <<= 1;
     clamped = 0x7F;
     alpha = clamped - tmp;
@@ -114,19 +114,19 @@ alpha_done:
     next = func_80016F8C(base, next, 0x11A, 0xAF, 0xC, 8, 0xE0, 0xB0, clut0, alpha);
     next = func_80017390(base, next, 0x19);
 
-    if (D_801E4DA8 >= 0xB) {
+    if (g_ClassWinCount >= 0xB) {
         color = 0x7D80;
     }
 
     next = func_80016F8C(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
     *(void **)scratch = func_800173F4(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
-extern s32 D_8019CB70;
-extern s32 D_8009E880;
-extern s32 D_8009F098;
+extern s32 g_TitleAttractTimer asm("D_8019CB70");
+extern s32 g_TitleExitTimer asm("D_8009E880");
+extern s32 g_FrontendState asm("D_8009F098");
 extern s32 D_8007C744;
 extern u32 D_801E8260;
-extern void (*D_8007C748[])(void);
+extern void (*g_FrontendDrawHandlers[])(void) asm("D_8007C748");
 
 s32 GameRandom15(void) asm("func_800632B0");
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
@@ -142,16 +142,16 @@ void GameUpdateFrontend(void) {
     g_AnimTimer++;
     GameRandom15();
 
-    if (D_8019CB70 > 0) {
-        D_8019CB70--;
+    if (g_TitleAttractTimer > 0) {
+        g_TitleAttractTimer--;
     }
-    if (D_8019CB70 == 0) {
+    if (g_TitleAttractTimer == 0) {
         if (CdControl(9, 0, 0) == 1) {
-            D_8019CB70--;
+            g_TitleAttractTimer--;
         }
     }
-    if (D_8009E880 != 0) {
-        if (--D_8009E880 == 0) {
+    if (g_TitleExitTimer != 0) {
+        if (--g_TitleExitTimer == 0) {
             GamePlaySoundCue(0x1a);
         }
     }
@@ -160,7 +160,7 @@ void GameUpdateFrontend(void) {
     if (state < 0x1cc) {
         g_SceneTimer = state + 1;
     } else {
-        if (D_8009F098 == 3) goto Lcheck;
+        if (g_FrontendState == 3) goto Lcheck;
         if (D_8007C744 & 1) goto Lcheck;
         if (state == 0x1cc) {
             g_GrandPrixSeries = 0;
@@ -194,7 +194,7 @@ Lcheck:
         GameSetupDisplay240(0, 0, 0);
     }
 
-    D_8007C748[D_8009F098]();
+    g_FrontendDrawHandlers[g_FrontendState]();
 
     if (D_801E8260 < 900) {
         D_801E8260++;
@@ -221,9 +221,9 @@ Lcheck:
 void func_8001BE94(int arg0) {
 }
 
-extern volatile u8 D_8019CE38[];
+extern volatile u8 g_FrameContexts[] asm("D_8019CE38");
 extern u8 D_801C0620[];
-extern u8 D_801C067C[];
+extern u8 g_DispEnv1X[] asm("D_801C067C");
 extern u8 D_801C0690[];
 extern u16 g_ScreenOffsetX asm("D_801E4B8C");
 extern u16 g_ScreenOffsetY asm("D_801E4B9C");
@@ -250,12 +250,12 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     func_80069A58(0xA0, 0x78);
     func_80069A78(0x140);
 
-    base = (u8 *)D_8019CE38;
+    base = (u8 *)g_FrameContexts;
     height = 0xF0;
     SetDefDrawEnv(base, 0, 0, 0x140, height);
     SetDefDrawEnv(D_801C0620, 0, 0xF0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0xF0, 0x140, height);
-    SetDefDispEnv(D_801C067C, 0, 0, 0x140, height);
+    SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
 
     {
         register void *ptr asm("$4");
@@ -281,22 +281,22 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     offset = 0;
     do {
         stride = 0x20000;
-        D_8019CE38[offset + 0x16] = one;
-        D_8019CE38[offset + 0x18] = one;
-        D_8019CE38[offset + 0x19] = a0_save;
-        D_8019CE38[offset + 0x1A] = a1_save;
-        D_8019CE38[offset + 0x1B] = a2_save;
+        g_FrameContexts[offset + 0x16] = one;
+        g_FrameContexts[offset + 0x18] = one;
+        g_FrameContexts[offset + 0x19] = a0_save;
+        g_FrameContexts[offset + 0x1A] = a1_save;
+        g_FrameContexts[offset + 0x1B] = a2_save;
         value = *src0;
         stride |= 0x37E8;
-        *(volatile u16 *)(D_8019CE38 + offset + 0x64) = value;
+        *(volatile u16 *)(g_FrameContexts + offset + 0x64) = value;
         value = *src1;
         i++;
-        D_8019CE38[offset + 0x86] = one;
-        D_8019CE38[offset + 0x88] = 0;
-        D_8019CE38[offset + 0x89] = a0_save;
-        D_8019CE38[offset + 0x8A] = a1_save;
-        D_8019CE38[offset + 0x8B] = a2_save;
-        *(volatile u16 *)(D_8019CE38 + offset + 0x66) = value + 0x1D;
+        g_FrameContexts[offset + 0x86] = one;
+        g_FrameContexts[offset + 0x88] = 0;
+        g_FrameContexts[offset + 0x89] = a0_save;
+        g_FrameContexts[offset + 0x8A] = a1_save;
+        g_FrameContexts[offset + 0x8B] = a2_save;
+        *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value + 0x1D;
         offset += stride;
     } while (i < 2);
 
@@ -311,7 +311,7 @@ void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
     register s32 a2_save asm("$20") = arg2;
-    register u8 *base asm("$17") = (u8 *)D_8019CE38;
+    register u8 *base asm("$17") = (u8 *)g_FrameContexts;
     register s32 height asm("$16");
     register u16 *src0 asm("$8");
     register u16 *src1 asm("$7");
@@ -329,7 +329,7 @@ void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     SetDefDrawEnv(base, 0, 0, 0x140, height);
     SetDefDrawEnv(D_801C0620, 0, 0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0, 0x140, height);
-    SetDefDispEnv(D_801C067C, 0, 0, 0x140, height);
+    SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
 
     i = 0;
     one = 1;
@@ -338,22 +338,22 @@ void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     offset = 0;
     do {
         stride = 0x20000;
-        D_8019CE38[offset + 0x16] = one;
-        D_8019CE38[offset + 0x18] = one;
-        D_8019CE38[offset + 0x19] = a0_save;
-        D_8019CE38[offset + 0x1A] = a1_save;
-        D_8019CE38[offset + 0x1B] = a2_save;
+        g_FrameContexts[offset + 0x16] = one;
+        g_FrameContexts[offset + 0x18] = one;
+        g_FrameContexts[offset + 0x19] = a0_save;
+        g_FrameContexts[offset + 0x1A] = a1_save;
+        g_FrameContexts[offset + 0x1B] = a2_save;
         value = *src0;
         stride |= 0x37E8;
-        *(volatile u16 *)(D_8019CE38 + offset + 0x64) = value;
+        *(volatile u16 *)(g_FrameContexts + offset + 0x64) = value;
         value = *src1;
         i++;
-        D_8019CE38[offset + 0x86] = one;
-        D_8019CE38[offset + 0x88] = 0;
-        D_8019CE38[offset + 0x89] = a0_save;
-        D_8019CE38[offset + 0x8A] = a1_save;
-        D_8019CE38[offset + 0x8B] = a2_save;
-        *(volatile u16 *)(D_8019CE38 + offset + 0x66) = value + 0x1D;
+        g_FrameContexts[offset + 0x86] = one;
+        g_FrameContexts[offset + 0x88] = 0;
+        g_FrameContexts[offset + 0x89] = a0_save;
+        g_FrameContexts[offset + 0x8A] = a1_save;
+        g_FrameContexts[offset + 0x8B] = a2_save;
+        *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value + 0x1D;
         offset += stride;
     } while (i < 2);
 

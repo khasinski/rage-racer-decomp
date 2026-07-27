@@ -3,17 +3,17 @@
 #include "psyq/gpu.h"
 #include "game/render.h"
 
-extern s32 D_8009AF6C;
-extern s32 D_8009AF70;
-extern s32 D_8009AF74;
-extern s32 D_8009F094;
-extern s32 D_8009E678;
-extern volatile u8 D_8009AF20;
-extern u8 D_801C0638;
-extern u8 D_8019CE50;
-extern u8 D_801C068D;
-extern u8 D_8019CEA5;
-extern s32 D_801E8A90;
+extern s32 g_FmvFrameWidth asm("D_8009AF6C");
+extern s32 g_FmvFrameHeight asm("D_8009AF70");
+extern s32 g_FmvStreamEnded asm("D_8009AF74");
+extern s32 g_FmvState asm("D_8009F094");
+extern s32 g_GameClock asm("D_8009E678");
+extern volatile u8 g_FmvVlcBuffers asm("D_8009AF20");
+extern u8 g_DrawEnv1Dither asm("D_801C0638");
+extern u8 g_DrawEnv0Dither asm("D_8019CE50");
+extern u8 g_DispEnv1Rgb24 asm("D_801C068D");
+extern u8 g_DispEnv0Rgb24 asm("D_8019CEA5");
+extern s32 g_StreamLoc asm("D_801E8A90");
 
 void GameApplyCdVolume(void) asm("func_8004310C");
 void GameSetupFmvBuffers(s32 arg0) asm("func_8001EB14");
@@ -30,31 +30,31 @@ void GameStartFmvPlayback(s32 arg0) {
     char frame_pad[8];
 
     SetDispMask(0);
-    D_8009AF6C = 0;
-    D_8009AF70 = 0;
+    g_FmvFrameWidth = 0;
+    g_FmvFrameHeight = 0;
     GameApplyCdVolume();
     GameSetupDisplay240(0, 0, 0);
-    D_801C0638 = 0;
-    D_8019CE50 = 0;
-    D_801C068D = 1;
-    D_8019CEA5 = 1;
+    g_DrawEnv1Dither = 0;
+    g_DrawEnv0Dither = 0;
+    g_DispEnv1Rgb24 = 1;
+    g_DispEnv0Rgb24 = 1;
     GameSetupFmvBuffers(arg0);
     {
-        volatile void *buf = &D_8009AF20;
+        volatile void *buf = &g_FmvVlcBuffers;
         GameInitFmvContext(buf, 0, 0x18, 0, 0x108);
     }
     GameOpenFmvStream(GameUploadFmvSlice);
     fail = -1;
     while (1) {
-        volatile void *buf = &D_8009AF20;
+        volatile void *buf = &g_FmvVlcBuffers;
         if (GamePresentFmvFrame(buf) != fail) {
             break;
         }
-        GameStartStreamRead(D_801E8A90);
+        GameStartStreamRead(g_StreamLoc);
     }
-    D_8009AF74 = 0;
+    g_FmvStreamEnded = 0;
     g_SceneTimer = 0;
-    D_8009F094 = 1;
+    g_FmvState = 1;
     VSync(0);
-    D_8009E678 = 0;
+    g_GameClock = 0;
 }

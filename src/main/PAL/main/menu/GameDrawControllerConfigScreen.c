@@ -7,10 +7,10 @@
 extern u8 g_PadType asm("D_801E4369");
 
 /* The two 0..7 selections; g_PadType picks which one the screen edits. */
-extern s16 D_8019CE08;
-extern s16 D_8019CB08;
+extern s16 g_PadMappingIndex asm("D_8019CE08");
+extern s16 g_NegconMappingIndex asm("D_8019CB08");
 /* 0 while a controller is present, else the error code the banner reports. */
-extern s32 D_801E79C8;
+extern s32 g_PadErrorState asm("D_801E79C8");
 
 /* "INSERT CONTROLLER" / "CONTROLLER ERROR" */
 extern char D_80010000[];
@@ -67,9 +67,9 @@ void GameDrawControllerConfigScreen(void) {
     u8 *prim;
 
     if (g_PadType == 0x23) {
-        selection = D_8019CB08;
+        selection = g_NegconMappingIndex;
     } else {
-        selection = D_8019CE08;
+        selection = g_PadMappingIndex;
     }
     /* The arrows light while the selection can still move that way; the xor
      * is folded into `selection` because retail lets it clobber the loaded
@@ -77,8 +77,8 @@ void GameDrawControllerConfigScreen(void) {
     leftLit = selection != 0;
     selection ^= 7;
     rightLit = selection != 0;
-    if (D_801E79C8 != 0) {
-        if (D_801E79C8 == 1) {
+    if (g_PadErrorState != 0) {
+        if (g_PadErrorState == 1) {
             DrawProportionalTextWide(0x3A, 0xEA, D_80010000, 0x7812);
         } else {
             DrawProportionalTextWide(0x40, 0xEA, D_80010014, 0x7812);
@@ -89,13 +89,13 @@ void GameDrawControllerConfigScreen(void) {
         prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, leftLit);
         prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, rightLit);
         if (g_PadType == 0x23) {
-            prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, D_8019CB08);
+            prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, g_NegconMappingIndex);
             prim = GameDrawNegconConfigDiagram(ot, prim);
             prim = QueueSpriteTransWide(
                 ot, prim, 0x10, 0x40, 0xD8, 0x10, 0, 0xA8, 0x7F40);
             prim = QueueDrawModePrimWide(ot, prim, 0x3F);
         } else {
-            prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, D_8019CE08);
+            prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, g_PadMappingIndex);
             prim = GameDrawPadConfigDiagram(ot, prim);
         }
         *(u8 **)0x1F800000 = prim;
@@ -140,27 +140,27 @@ void GameDrawNegconNeutralScreen(void) {
  * The six live NeGcon settings. All of them are persisted to the memory card,
  * so they also appear as fields of GameSaveBlock (game/memcard.h).
  */
-extern u16 D_801E4BF0;
-extern u16 D_8019CA08;
-extern u16 D_8019CA0A;
-extern u16 D_8019CA0C;
-extern u16 D_8019CAD0;
-extern u16 D_801E418C;
+extern u16 g_NegconSteerNeutral asm("D_801E4BF0");
+extern u16 g_NegconNeutralI asm("D_8019CA08");
+extern u16 g_NegconNeutralII asm("D_8019CA0A");
+extern u16 g_NegconNeutralL asm("D_8019CA0C");
+extern u16 g_NegconSteerPlay asm("D_8019CAD0");
+extern u16 g_NegconMaxTwist asm("D_801E418C");
 
 /* ...and where each of them is parked while the calibration screens run, so a
  * cancel can put every one of them back. */
-extern u16 D_801E41A0;
-extern u16 D_8009F0A8;
-extern u16 D_8009F0AA;
-extern u16 D_8009F0AC;
-extern u16 D_8019C75C;
-extern u16 D_8019CB04;
+extern u16 g_NegconSteerNeutralSaved asm("D_801E41A0");
+extern u16 g_NegconNeutralISaved asm("D_8009F0A8");
+extern u16 g_NegconNeutralIISaved asm("D_8009F0AA");
+extern u16 g_NegconNeutralLSaved asm("D_8009F0AC");
+extern u16 g_NegconSteerPlaySaved asm("D_8019C75C");
+extern u16 g_NegconMaxTwistSaved asm("D_8019CB04");
 
 /* The same four screen counters GameBeginControllerConfig clears. */
-extern s32 D_801E8AA4;
-extern s32 D_801E8A9C;
-extern s32 D_801E7A4C;
-extern s32 D_801E6C7C;
+extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
+extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
+extern s32 g_PadConfigFlipTimer asm("D_801E7A4C");
+extern s32 g_PadConfigFlipPhase asm("D_801E6C7C");
 
 /*
  * Entry hook for the NeGcon calibration sequence: snapshots the six live
@@ -175,39 +175,39 @@ extern s32 D_801E6C7C;
 void GameBeginNegconCalibration(void) {
     register u16 twist asm("$3");
     register u16 mode asm("$4");
-    u16 *neutral = &D_8019CA08;
-    u16 steer = D_801E4BF0;
+    u16 *neutral = &g_NegconNeutralI;
+    u16 steer = g_NegconSteerNeutral;
     u16 neutral0 = *neutral;
-    u16 neutral1 = D_8019CA0A;
-    u16 neutral2 = D_8019CA0C;
+    u16 neutral1 = g_NegconNeutralII;
+    u16 neutral2 = g_NegconNeutralL;
 
-    twist = D_8019CAD0;
-    mode = D_801E418C;
+    twist = g_NegconSteerPlay;
+    mode = g_NegconMaxTwist;
     asm("");
 
     *neutral = 0;
-    D_801E8AA4 = 0;
-    D_801E8A9C = 0;
-    D_801E7A4C = 0;
-    D_801E6C7C = 0;
-    D_801E4BF0 = 0;
-    D_8019CA0A = 0;
-    D_8019CA0C = 0;
+    g_ControllerSceneAngleY = 0;
+    g_ControllerSceneAngleX = 0;
+    g_PadConfigFlipTimer = 0;
+    g_PadConfigFlipPhase = 0;
+    g_NegconSteerNeutral = 0;
+    g_NegconNeutralII = 0;
+    g_NegconNeutralL = 0;
     g_GameMode = 9;
-    D_801E41A0 = steer;
-    D_8009F0A8 = neutral0;
-    D_8009F0AA = neutral1;
-    D_8009F0AC = neutral2;
-    D_8019C75C = twist;
-    D_8019CB04 = mode;
+    g_NegconSteerNeutralSaved = steer;
+    g_NegconNeutralISaved = neutral0;
+    g_NegconNeutralIISaved = neutral1;
+    g_NegconNeutralLSaved = neutral2;
+    g_NegconSteerPlaySaved = twist;
+    g_NegconMaxTwistSaved = mode;
 }
 
-/* The raw NeGcon axes in the BIOS pad buffer (D_801E403C + 4): steering,
+/* The raw NeGcon axes in the BIOS pad buffer (g_PadBuffers + 4): steering,
  * then the three analog buttons. */
-extern u8 D_801E4040;
-extern u8 D_801E4041;
-extern u8 D_801E4042;
-extern u8 D_801E4043;
+extern u8 g_NegconAxisSteer asm("D_801E4040");
+extern u8 g_NegconAxisI asm("D_801E4041");
+extern u8 g_NegconAxisII asm("D_801E4042");
+extern u8 g_NegconAxisL asm("D_801E4043");
 
 void func_80023750(s32 arg0);
 
@@ -221,10 +221,10 @@ void GameUpdateNegconNeutralScreen(void) {
     if (g_PadEdge2 & 0x800) {
         GamePlaySoundCue(2);
         g_GameMode = 10;
-        D_801E4BF0 = D_801E4040 - 128;
-        D_8019CA08 = D_801E4041;
-        D_8019CA0A = D_801E4042;
-        D_8019CA0C = D_801E4043;
+        g_NegconSteerNeutral = g_NegconAxisSteer - 128;
+        g_NegconNeutralI = g_NegconAxisI;
+        g_NegconNeutralII = g_NegconAxisII;
+        g_NegconNeutralL = g_NegconAxisL;
     }
     if (g_PadType != 0x23) {
         g_GameMode = 1;

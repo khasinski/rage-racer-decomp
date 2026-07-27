@@ -3,7 +3,7 @@
 #include "game/sound.h"
 #include "psyq/snd.h"
 
-extern s32 D_801E6CC8[];
+extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 
 void GameSetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
     s32 *entry;
@@ -11,7 +11,7 @@ void GameSetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
     register s32 offset asm("$3");
 
     if (arg1 != 0) {
-        base = D_801E6CC8;
+        base = g_SoundSlotActive;
         offset = arg0 << 2;
         asm("" : "=r"(base), "=r"(offset) : "0"(base), "1"(offset));
         entry = (s32 *)(offset + (s32)base);
@@ -20,7 +20,7 @@ void GameSetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
             *entry = 1;
         }
     } else {
-        base = D_801E6CC8;
+        base = g_SoundSlotActive;
         offset = arg0 << 2;
         asm("" : "=r"(base), "=r"(offset) : "0"(base), "1"(offset));
         entry = (s32 *)(offset + (s32)base);
@@ -45,16 +45,16 @@ void GameSetEffectVoicesEnabled(s32 arg0) {
     GameSetSoundSlotVoicesEnabled(arg0);
 }
 
-extern s32 D_801E6CBC;
+extern s32 g_EngineSoundBank asm("D_801E6CBC");
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
-extern s32 D_801E6CDC;
-extern s32 D_801E6CE0;
+extern s32 g_SoundSlotActive5 asm("D_801E6CDC");
+extern s32 g_SoundSlotVolumeScale asm("D_801E6CE0");
 extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
-extern s32 D_801E6CE8;
-extern s32 D_801E6CEC;
-extern s32 D_801E6CF0;
-extern s32 D_801E6CF4;
-extern s32 D_801E6CF8;
+extern s32 g_PanVoiceVolumeR asm("D_801E6CE8");
+extern s32 g_PanVoiceActive asm("D_801E6CEC");
+extern s32 g_IndexedEffectIndex asm("D_801E6CF0");
+extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
+extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 
 void GameResetSoundState(void) {
     {
@@ -62,7 +62,7 @@ void GameResetSoundState(void) {
         register s32 *ptr asm("$2");
 
         i = 5;
-        ptr = &D_801E6CDC;
+        ptr = &g_SoundSlotActive5;
         for (; i >= 0; i--) {
             *ptr-- = 0;
         }
@@ -79,12 +79,12 @@ void GameResetSoundState(void) {
         ptr = &g_AudioSlotMask;
         offset = 0;
         for (; i < 2; i++) {
-            *(s32 *)((u8 *)&D_801E6D00[0].mode + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D00[0].left + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D00[0].right + offset) = neg;
+            *(s32 *)((u8 *)&g_MusicChannels[0].mode + offset) = neg;
+            *(s32 *)((u8 *)&g_MusicChannels[0].left + offset) = neg;
+            *(s32 *)((u8 *)&g_MusicChannels[0].right + offset) = neg;
             ptr[0x78 / 4] = 0;
             ptr = (s32 *)((u8 *)ptr + 0x18);
-            *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset) = 0;
+            *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset) = 0;
             offset += 0x18;
         }
     }
@@ -100,11 +100,11 @@ void GameResetSoundState(void) {
         value = 0x1E00;
         offset = 0;
         for (; i < 4; i++) {
-            *(s32 *)((u8 *)&D_801E6D30[0].state + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D30[0].note + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D30[0].tone + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D30[0].pitch + offset) = value;
-            *(s32 *)((u8 *)&D_801E6D30[0].volume + offset) = 0;
+            *(s32 *)((u8 *)&g_EffectVoices[0].state + offset) = neg;
+            *(s32 *)((u8 *)&g_EffectVoices[0].note + offset) = neg;
+            *(s32 *)((u8 *)&g_EffectVoices[0].tone + offset) = neg;
+            *(s32 *)((u8 *)&g_EffectVoices[0].pitch + offset) = value;
+            *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset) = 0;
             offset += 0x14;
         }
     }
@@ -115,24 +115,24 @@ void GameResetSoundState(void) {
 
         eighty = 0x80;
         value = -1;
-        D_801E6CBC = value;
-        D_801E6CE8 = value;
+        g_EngineSoundBank = value;
+        g_PanVoiceVolumeR = value;
         g_PanVoiceVolumeL = value;
-        D_801E6CF4 = value;
-        D_801E6CF0 = value;
+        g_IndexedEffectIndexPrev = value;
+        g_IndexedEffectIndex = value;
         value = 0x1E00;
-        D_801E6CF8 = value;
+        g_IndexedEffectPitch = value;
         value = 1;
         g_EffectVolumeScale = eighty;
-        D_801E6CEC = 0;
-        D_801E6CE0 = eighty;
+        g_PanVoiceActive = 0;
+        g_SoundSlotVolumeScale = eighty;
         g_AudioSlotMask = value;
     }
 }
 
-extern u8 D_8009B3B8[];
-extern char D_8001267C[];
-extern char D_80012694[];
+extern u8 g_SndTableArea[] asm("D_8009B3B8");
+extern char g_MsgVabOpenHeadError[] asm("D_8001267C");
+extern char g_MsgVabTransBodyError[] asm("D_80012694");
 
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
@@ -148,7 +148,7 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
     register s32 ret asm("$2");
 
     asm("" : "=r"(bodyReg) : "0"(bodyReg));
-    SsSetTableSize(D_8009B3B8, 2, 1);
+    SsSetTableSize(g_SndTableArea, 2, 1);
     SsSetTickMode(1);
     SsStartSoundTickMode1();
     SsSetVoiceCount(0xA);
@@ -163,14 +163,14 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        GameDebugPrintf(D_8001267C);
+        GameDebugPrintf(g_MsgVabOpenHeadError);
         func_80063D9C(1);
     }
 
     ret = func_800730BC(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
-        GameDebugPrintf(D_80012694);
+        GameDebugPrintf(g_MsgVabTransBodyError);
         func_80063D9C(1);
     }
 
@@ -181,7 +181,7 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
 }
 
 s32 GameInitSoundRuntime(void) {
-    SsSetTableSize(D_8009B3B8, 2, 1);
+    SsSetTableSize(g_SndTableArea, 2, 1);
     SsSetTickMode(0x1000);
     SsStartSoundTickMode1();
     SsSetVoiceCount(0xA);

@@ -90,7 +90,7 @@ s32 GameDrawDesignModeScreen(s32 arg0) {
 }
 
 extern s32 g_TeamNameCharModel asm("D_8009B37C");
-extern s32 D_8019C758;
+extern s32 g_DesignModeOption asm("D_8019C758");
 
 extern u8 D_800828EC;
 extern u8 g_UiChromeScript2 asm("D_80082790");
@@ -115,20 +115,20 @@ void GameUpdateDesignModeScreen(void) {
     if (GameMenuBusy == 0) {
         func_800487D8(&D_800828EC, &g_UiScriptProgress2, -1);
         func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
-        func_800489AC(g_UiScriptProgress, 3, D_8019C758);
+        func_800489AC(g_UiScriptProgress, 3, g_DesignModeOption);
         func_800487D8(&D_80081B54, &g_UiScriptProgress, 0);
         if (func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
                 GamePlaySoundCue(1);
-                D_8019C758 = (D_8019C758 > 0) ? D_8019C758 - 1 : 3;
+                g_DesignModeOption = (g_DesignModeOption > 0) ? g_DesignModeOption - 1 : 3;
             }
             if (g_PadEdge2 & 0x4000) {
                 GamePlaySoundCue(1);
-                D_8019C758 = (D_8019C758 < 3) ? D_8019C758 + 1 : 0;
+                g_DesignModeOption = (g_DesignModeOption < 3) ? g_DesignModeOption + 1 : 0;
             }
             if (g_PadEdge2 & 0x860) {
-                sel = D_8019C758;
+                sel = g_DesignModeOption;
                 if (sel == 0) {
                     GamePlaySoundCue(2);
                     GameRampTeamLogoCanvas(-256, -256);
@@ -166,7 +166,7 @@ void GameUpdateDesignModeScreen(void) {
             if (edge & 0x860) GameMenuBusy = 0;
             if (edge & 0x90) GameMenuBusy = 0;
         }
-        func_800489AC(g_UiScriptProgress, 3, D_8019C758);
+        func_800489AC(g_UiScriptProgress, 3, g_DesignModeOption);
         func_800487D8(&D_80081B54, &g_UiScriptProgress, 0);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
     } else {
@@ -174,7 +174,7 @@ void GameUpdateDesignModeScreen(void) {
         g_MenuHandlerIndex2 = 6;
         func_800487D8(&D_80081B54, &g_UiScriptProgress, -1);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
-        func_800489AC(g_UiScriptProgress, 3, D_8019C758);
+        func_800489AC(g_UiScriptProgress, 3, g_DesignModeOption);
         if (g_UiScriptProgress <= 0) {
             switch (GameMenuBusy) {
             case 1:
@@ -203,7 +203,7 @@ void GameUpdateDesignModeScreen(void) {
             case 4:
                 g_MenuScreen = 5;
                 g_MenuHandlerIndex = 5;
-                D_8019C758 = 0;
+                g_DesignModeOption = 0;
                 g_MenuViewOffset = 0x3D090;
                 g_MenuViewOffsetTarget = 0;
                 break;

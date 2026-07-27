@@ -22,17 +22,17 @@ void func_80072260(void);
 void func_80071C24(void);
 
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
-extern s32 D_801E6CA0;
-extern s16 D_801E6CB0;
-extern s16 D_801E6CB2;
-extern s16 D_801E6CAE;
-extern s32 D_801E6CC0;
-extern s32 D_8009E68C;
-extern s32 D_801F17B4;
-extern s32 D_800125EC[];
-extern s32 D_800125F8;
-extern char D_8001267C[];
-extern char D_80012694[];
+extern s32 g_SoundCueBank asm("D_801E6CA0");
+extern s16 g_VabIds4 asm("D_801E6CB0");
+extern s16 g_VabIds5 asm("D_801E6CB2");
+extern s16 g_VabIds3 asm("D_801E6CAE");
+extern s32 g_ExtraVabLoaded asm("D_801E6CC0");
+extern s32 g_AudioLoadSlot asm("D_8009E68C");
+extern s32 g_VabTransferDone asm("D_801F17B4");
+extern s32 g_VabSpuAddress[] asm("D_800125EC");
+extern s32 g_VabSpuAddressExtra asm("D_800125F8");
+extern char g_MsgVabOpenHeadError[] asm("D_8001267C");
+extern char g_MsgVabTransBodyError[] asm("D_80012694");
 
 s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) asm("func_8005B768");
 s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
@@ -69,8 +69,8 @@ loadSeq:
     }
 
 loadVab:
-    D_8009E68C = slotReg;
-    ret = func_80072C4C(header, -1, D_800125EC[slotReg]);
+    g_AudioLoadSlot = slotReg;
+    ret = func_80072C4C(header, -1, g_VabSpuAddress[slotReg]);
     {
         register s16 *vabIdBase asm("$4") = g_VabIds;
         register s32 offset asm("$3") = slotReg * 2;
@@ -85,20 +85,20 @@ loadVab:
         currentVabId = (s16)ret;
         fail = -1;
         if (currentVabId == fail) {
-            GameDebugPrintf(D_8001267C);
+            GameDebugPrintf(g_MsgVabOpenHeadError);
             func_80063D9C(1);
         }
 
         ret = func_800730BC(bodyReg, currentVabId);
         *vabIdPtr = ret;
         if ((s16)ret == fail) {
-            GameDebugPrintf(D_80012694);
+            GameDebugPrintf(g_MsgVabTransBodyError);
             func_80063D9C(1);
         }
     }
 
     ret = func_8007317C(0);
-    D_801F17B4 = (s16)ret;
+    g_VabTransferDone = (s16)ret;
     return (s16)ret;
 }
 
@@ -112,29 +112,29 @@ s32 GamePollAudioSlotLoad(void) {
     s32 bit;
 
     completed = func_8007317C(0);
-    D_801F17B4 = (s16)completed;
+    g_VabTransferDone = (s16)completed;
 
     if ((s16)completed != 0) {
         flagsPtr = &g_AudioSlotMask;
         one = 1;
-        slot = D_8009E68C;
+        slot = g_AudioLoadSlot;
         value = *flagsPtr;
         bit = (s16)(one << slot);
         *flagsPtr = bit | value;
 
         if (slot == 0) {
-            D_801E6CA0 = one;
+            g_SoundCueBank = one;
         } else if (slot == one) {
-            D_801E6CA0 = slot;
+            g_SoundCueBank = slot;
         } else {
             value = 2;
             if ((slot == value) || (slot == 3)) {
-                D_801E6CA0 = value;
+                g_SoundCueBank = value;
             }
         }
     }
 
-    return (s16)D_801F17B4;
+    return (s16)g_VabTransferDone;
 }
 
 s32 func_8005B948(s32 slot) {
@@ -192,23 +192,23 @@ s32 func_8005BA20(s32 header, s32 body, u16 *table) {
     register s32 fail asm("$16");
     register s32 tableReg asm("$19") = (s32)table;
 
-    D_8009E68C = 3;
-    ret = func_80072C4C(header, -1, D_800125F8);
-    vabIdPtr = &D_801E6CAE;
+    g_AudioLoadSlot = 3;
+    ret = func_80072C4C(header, -1, g_VabSpuAddressExtra);
+    vabIdPtr = &g_VabIds3;
     *vabIdPtr = ret;
     asm volatile("" : "=r"(ret) : "0"(ret));
 
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        GameDebugPrintf(D_8001267C);
+        GameDebugPrintf(g_MsgVabOpenHeadError);
         func_80063D9C(1);
     }
 
     ret = func_800730BC(body, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
-        GameDebugPrintf(D_80012694);
+        GameDebugPrintf(g_MsgVabTransBodyError);
         func_80063D9C(1);
     }
 
@@ -216,10 +216,10 @@ s32 func_8005BA20(s32 header, s32 body, u16 *table) {
         GameLoadAudioParameterTable((u16 *)tableReg);
     }
 
-    D_801E6CC0 = 1;
+    g_ExtraVabLoaded = 1;
     ret = func_8007317C(0);
-    D_801F17B4 = (s16)ret;
-    return D_801F17B4;
+    g_VabTransferDone = (s16)ret;
+    return g_VabTransferDone;
 }
 
 s32 func_8005BB1C(s32 header, s32 body, s32 table) {
@@ -233,21 +233,21 @@ s32 func_8005BB1C(s32 header, s32 body, s32 table) {
 
     asm("" : "=r"(bodyReg), "=r"(tableReg) : "0"(bodyReg), "1"(tableReg));
     ret = func_80072C4C(header, -1, 0x6A000);
-    vabIdPtr = &D_801E6CAE;
+    vabIdPtr = &g_VabIds3;
     *vabIdPtr = ret;
     asm volatile("" : "=r"(ret) : "0"(ret));
 
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        GameDebugPrintf(D_8001267C);
+        GameDebugPrintf(g_MsgVabOpenHeadError);
         func_80063D9C(1);
     }
 
     ret = func_800730BC(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
-        GameDebugPrintf(D_80012694);
+        GameDebugPrintf(g_MsgVabTransBodyError);
         func_80063D9C(1);
     }
 
@@ -257,7 +257,7 @@ s32 func_8005BB1C(s32 header, s32 body, s32 table) {
     }
 
     flags = g_AudioSlotMask;
-    D_801E6CC0 = 1;
+    g_ExtraVabLoaded = 1;
     g_AudioSlotMask = flags | 0x20;
     return 0;
 }
@@ -274,7 +274,7 @@ void func_8005BC14(void) {
         func_800736E8();
         func_80073748(0x28, 0x28);
         SsUtKeyOffV((s16)liveSlot);
-        func_80072B3C(D_801E6CB2);
+        func_80072B3C(g_VabIds5);
     }
 }
 
@@ -294,8 +294,8 @@ void func_8005BC80(void) {
             i++;
         }
         VSync(2);
-        func_80072B3C(D_801E6CB0);
-        func_80072B3C(D_801E6CB2);
+        func_80072B3C(g_VabIds4);
+        func_80072B3C(g_VabIds5);
         func_80072260();
         func_80071C24();
     }

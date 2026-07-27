@@ -7,14 +7,14 @@
 #include "psyq/gpu.h"
 #include "game/cd.h"
 
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 D_801E8260;
 extern s32 D_801E6F28;
-extern s32 D_801E6F1C;
-extern s32 D_801E429C;
-extern s32 D_8009F098;
-extern s32 D_8009E880;
-extern s32 D_8019CB70;
+extern s32 g_MainMenuSlide asm("D_801E6F1C");
+extern s32 g_TitlePulse asm("D_801E429C");
+extern s32 g_FrontendState asm("D_8009F098");
+extern s32 g_TitleExitTimer asm("D_8009E880");
+extern s32 g_TitleAttractTimer asm("D_8019CB70");
 
 void func_8005B9CC(void);
 void GameResetTrackTextureSwap(void) asm("func_80019EBC");
@@ -31,24 +31,29 @@ void GameEnterFrontend(void) {
     GameResetTrackTextureSwap();
     func_8001A498();
 
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
     g_SceneId = 4;
     g_SceneTimer = 0;
     D_801E8260 = 0;
     D_801E6F28 = 0;
-    D_801E6F1C = 0;
-    D_801E429C = 0;
-    D_8009F098 = 0;
-    D_8009E880 = 0;
-    D_8019CB70 = -1;
+    g_MainMenuSlide = 0;
+    g_TitlePulse = 0;
+    g_FrontendState = 0;
+    g_TitleExitTimer = 0;
+    g_TitleAttractTimer = -1;
 
     func_80021540();
     func_8005DBB4();
 }
 
 extern s32 g_StreamReturnScene asm("D_8019C760");
-extern s32 D_801E6F28, D_8019CB70, D_8009E880, D_8019C768;
-extern s32 D_801E8260, D_801E6F1C, D_8009F098;
+extern s32 D_801E6F28;
+extern s32 g_TitleAttractTimer;
+extern s32 g_TitleExitTimer;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
+extern s32 D_801E8260;
+extern s32 g_MainMenuSlide;
+extern s32 g_FrontendState;
 void func_8001A498(void);
 void func_80021540(void);
 void func_8005DBB4(void);
@@ -60,21 +65,21 @@ void GameEnterTitleScreen(void) {
     GameSetupDisplay240(0, 0, 0);
     if (g_StreamReturnScene != 0) {
         D_801E6F28 = 0xFF;
-        D_8019CB70 = 0x190;
-        D_8009E880 = 0;
+        g_TitleAttractTimer = 0x190;
+        g_TitleExitTimer = 0;
     } else {
         SetDispMask(0);
         func_8001A498();
         D_801E6F28 = 0;
-        D_8019CB70 = 0;
-        D_8009E880 = 0x1E;
+        g_TitleAttractTimer = 0;
+        g_TitleExitTimer = 0x1E;
     }
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
     g_SceneTimer = 0;
     g_SceneId = 4;
     D_801E8260 = 0;
-    D_801E6F1C = 0;
-    D_8009F098 = 0;
+    g_MainMenuSlide = 0;
+    g_FrontendState = 0;
     func_80021540();
     func_8005DBB4();
     GameDrawPressStartPrompt();
@@ -137,8 +142,8 @@ void GameDrawPressStartPrompt(void) {
     *scratch = func_80017390(base, next, 0x39);
 }
 
-extern s32 D_8019CB70;
-extern s32 D_8009F098;
+extern s32 g_TitleAttractTimer;
+extern s32 g_FrontendState;
 extern s32 D_801E8260;
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void GameDrawPressStartPrompt(void) asm("func_8001B170");
@@ -148,20 +153,20 @@ void GameUpdateTitleScreen(void) asm("func_8001B260");
 void GameUpdateTitleScreen(void) {
     if (g_PadEdge2 & 0x800) {
         GamePlaySoundCue(2);
-        D_8009F098 = 1;
+        g_FrontendState = 1;
         D_801E8260 = 0;
         g_TitleMenuSelection = 0;
-        if (D_8019CB70 > 0) {
-            D_8019CB70 = 0;
+        if (g_TitleAttractTimer > 0) {
+            g_TitleAttractTimer = 0;
             GameStartCdVolumeFade(1);
         }
     }
     GameDrawPressStartPrompt();
 }
 
-extern s32 D_8009F098;
-extern s32 D_801E429C;
-extern s32 D_801E6F1C;
+extern s32 g_FrontendState;
+extern s32 g_TitlePulse;
+extern s32 g_MainMenuSlide;
 
 void *func_800175A4(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11);
 
@@ -199,15 +204,15 @@ void GameDrawMainMenuRows(void) {
             code = 0x7E86;
         }
 
-        if (D_8009F098 == one) {
+        if (g_FrontendState == one) {
             code = 0x7E85;
         }
 
-        if ((D_801E429C & 2) != 0) {
+        if ((g_TitlePulse & 2) != 0) {
             code = 0x7E85;
         }
 
-        delta = D_801E6F1C - (row * 8);
+        delta = g_MainMenuSlide - (row * 8);
         if (delta >= 0) {
             frame = delta;
             if (frame >= 0x11) {
@@ -226,16 +231,16 @@ void GameDrawMainMenuRows(void) {
     *(void **)0x1F800000 = scratch;
 }
 
-extern s32 D_8009F098;
-extern s32 D_801E6F1C;
+extern s32 g_FrontendState;
+extern s32 g_MainMenuSlide;
 
 void GameDrawMainMenuRows(void) asm("func_8001B2D4");
 
 void GameUpdateMainMenuOpen(void) asm("func_8001B440");
 
 void GameUpdateMainMenuOpen(void) {
-    if (++D_801E6F1C == 0x30) {
-        D_8009F098 = 2;
+    if (++g_MainMenuSlide == 0x30) {
+        g_FrontendState = 2;
     }
 
     GameDrawMainMenuRows();
@@ -288,9 +293,9 @@ extern s32 D_801E8260;
 
 extern s32 *g_CarTable asm("D_8019C7C8");
 extern s32 *g_CourseProgress asm("D_8009E67C");
-extern s32 D_801E40A0;
-extern s32 D_801E6E88;
-extern s32 D_8009F098;
+extern s32 g_GrandPrixSaveMaxClass asm("D_801E40A0");
+extern s32 g_ExtraGrandPrixSaveMaxClass asm("D_801E6E88");
+extern s32 g_FrontendState;
 extern s32 g_OptionMenuCursor asm("D_8019C7B4");
 
 extern s32 g_GrandPrixCars asm("D_801E4F44");
@@ -356,7 +361,7 @@ void GameUpdateMainMenuInput(void) {
             g_RaceProgress = (GameRaceProgress *)&g_GrandPrixSave;
             g_CourseProgress = &g_GrandPrixCourseProgress;
             g_SeriesSelection = 0;
-            if (D_801E40A0 == -1) {
+            if (g_GrandPrixSaveMaxClass == -1) {
                 g_GrandPrixClass = 0;
                 g_CourseIndex = 3;
                 GameRequestTrackLoad();
@@ -369,7 +374,7 @@ void GameUpdateMainMenuInput(void) {
             g_RaceProgress = (GameRaceProgress *)&g_ExtraGrandPrixSave;
             g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
             g_SeriesSelection = 1;
-            if (D_801E6E88 == -1) {
+            if (g_ExtraGrandPrixSaveMaxClass == -1) {
                 g_GrandPrixClass = 0;
                 g_CourseIndex = 3;
                 GameRequestTrackLoad();
@@ -391,7 +396,7 @@ void GameUpdateMainMenuInput(void) {
             g_OptionMenuCursor = 0;
             break;
         }
-        D_8009F098 = 3;
+        g_FrontendState = 3;
     }
     GameDrawMainMenuRows();
 }

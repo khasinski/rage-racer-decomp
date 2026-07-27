@@ -5,12 +5,12 @@
 #include "game/car.h"
 
 extern s16 g_SoundSlotTone[] asm("D_80082F28");
-extern s16 D_80082F2A[];
-extern s32 D_801E6CB8;
-extern s32 D_801E6CBC;
-extern s32 D_801E6CC4;
-extern s32 D_801E6CC8[];
-extern s32 D_801E446C[];
+extern s16 g_SoundSlotToneBank1[] asm("D_80082F2A");
+extern s32 g_EngineSoundPosition asm("D_801E6CB8");
+extern s32 g_EngineSoundBank asm("D_801E6CBC");
+extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
+extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
+extern s32 g_EngineSoundCurves[] asm("D_801E446C");
 
 void func_8005B2F0(s32 slot, s32 tone, s32 vab_slot);
 void func_8005D7D4(s32 slot, s32 left, s32 right, s32 bank, s32 mode);
@@ -23,7 +23,7 @@ s32 GameInterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 value = position;
     s32 index;
     s32 index_offset;
-    s32 *base = D_801E446C;
+    s32 *base = g_EngineSoundCurves;
     s32 row_offset;
     s32 bank_offset;
     s32 *base_minus;
@@ -103,27 +103,27 @@ void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
     s32 *slot_base;
     s32 first;
 
-    value = ((value * 5) << 11) / *(scale_base = &D_801E6CC4);
+    value = ((value * 5) << 11) / *(scale_base = &g_EngineSoundMaxRpm);
 
-    if (bank != D_801E6CBC) {
+    if (bank != g_EngineSoundBank) {
         index = 0;
         slot = scale_base + 1;
         tone_offset = 0;
         do {
             if (*slot++ != 0 &&
                 *(s16 *)((s32)g_SoundSlotTone + tone_offset) !=
-                    *(s16 *)((s32)D_80082F2A + tone_offset)) {
+                    *(s16 *)((s32)g_SoundSlotToneBank1 + tone_offset)) {
                 func_8005B2F0(index, bank, 3);
             }
             index++;
             tone_offset += 4;
         } while (index < 6);
-        D_801E6CBC = bank;
+        g_EngineSoundBank = bank;
     }
 
     index = 0;
     odd_parameter = 1;
-    scale_base = (slot_base = D_801E6CC8);
+    scale_base = (slot_base = g_SoundSlotActive);
     slot = scale_base;
     do {
         if (*slot != 0) {
@@ -140,7 +140,7 @@ void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
         slot++;
     } while (index < 6);
 
-    D_801E6CB8 = value;
+    g_EngineSoundPosition = value;
     func_8005BF30();
     func_8005C6C0();
     func_8005C168();
@@ -151,7 +151,7 @@ void GameSetDefaultReverbDepth(void) {
     GameSetReverbDepth(0x28, 0x28);
 }
 
-extern s32 D_801E6D8C;
+extern s32 g_ReverbFadeStep asm("D_801E6D8C");
 void func_8007865C(s32 arg0);
 void func_80072B04(s32 arg0);
 void func_8005B190(s32 arg0, s32 arg1);
@@ -161,18 +161,18 @@ void GameInitSequenceAudio(void) {
     func_8007865C(0);
     func_80072B04(0x12);
     func_8005B190(0x28, 0x28);
-    D_801E6D8C = 0;
+    g_ReverbFadeStep = 0;
     func_8005E7DC();
 }
 
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
 extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
-extern s32 D_801E6CE8;
-extern s32 D_801E6CEC;
-extern s32 D_801E6CF0;
-extern s32 D_801E6CF4;
-extern s32 D_801E6CF8;
-extern s32 D_800125FC[];
+extern s32 g_PanVoiceVolumeR asm("D_801E6CE8");
+extern s32 g_PanVoiceActive asm("D_801E6CEC");
+extern s32 g_IndexedEffectIndex asm("D_801E6CF0");
+extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
+extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
+extern s32 g_CarSoundVolumeScales[] asm("D_800125FC");
 
 s32 func_80050FA8(s32 arg0);
 
@@ -192,12 +192,12 @@ void GameInitEffectVoiceRuntime(void) {
         ptr = &g_AudioSlotMask;
         offset = 0;
         for (; i < 2; i++) {
-            *(s32 *)((u8 *)&D_801E6D00[0].mode + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D00[0].left + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D00[0].right + offset) = neg;
+            *(s32 *)((u8 *)&g_MusicChannels[0].mode + offset) = neg;
+            *(s32 *)((u8 *)&g_MusicChannels[0].left + offset) = neg;
+            *(s32 *)((u8 *)&g_MusicChannels[0].right + offset) = neg;
             ptr[0x78 / 4] = 0;
             ptr = (s32 *)((u8 *)ptr + 0x18);
-            *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset) = 0;
+            *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset) = 0;
             offset += 0x18;
         }
     }
@@ -213,11 +213,11 @@ void GameInitEffectVoiceRuntime(void) {
         value = 0x1E00;
         offset = 0;
         for (; i < 4; i++) {
-            *(s32 *)((u8 *)&D_801E6D30[0].state + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D30[0].note + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D30[0].tone + offset) = neg;
-            *(s32 *)((u8 *)&D_801E6D30[0].pitch + offset) = value;
-            *(s32 *)((u8 *)&D_801E6D30[0].volume + offset) = 0;
+            *(s32 *)((u8 *)&g_EffectVoices[0].state + offset) = neg;
+            *(s32 *)((u8 *)&g_EffectVoices[0].note + offset) = neg;
+            *(s32 *)((u8 *)&g_EffectVoices[0].tone + offset) = neg;
+            *(s32 *)((u8 *)&g_EffectVoices[0].pitch + offset) = value;
+            *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset) = 0;
             offset += 0x14;
         }
     }
@@ -226,26 +226,26 @@ void GameInitEffectVoiceRuntime(void) {
         register s32 value asm("$2");
 
         value = -1;
-        D_801E6CE8 = value;
+        g_PanVoiceVolumeR = value;
         g_PanVoiceVolumeL = value;
-        D_801E6CF4 = value;
-        D_801E6CF0 = value;
+        g_IndexedEffectIndexPrev = value;
+        g_IndexedEffectIndex = value;
         value = 0x1E00;
-        D_801E6CEC = 0;
-        D_801E6CF8 = value;
+        g_PanVoiceActive = 0;
+        g_IndexedEffectPitch = value;
     }
 
     GameSetEffectVoicesEnabled(1);
     GameSetReverbPreset(2, 0, 0);
-    GameSetLoadedTableVolumeScale(D_800125FC[func_80050FA8(g_PlayerCarIndex)]);
+    GameSetLoadedTableVolumeScale(g_CarSoundVolumeScales[func_80050FA8(g_PlayerCarIndex)]);
 }
 
-extern s32 D_801E6D84;
-extern s32 D_801E6D88;
+extern s32 g_ReverbDepthL asm("D_801E6D84");
+extern s32 g_ReverbDepthR asm("D_801E6D88");
 
 void GameRestoreReverbDepth(s32 arg0) {
     if (arg0 != 0) {
-        GameSetReverbDepth(D_801E6D84, D_801E6D88);
+        GameSetReverbDepth(g_ReverbDepthL, g_ReverbDepthR);
     } else {
         GameSetReverbDepth(0, 0);
     }

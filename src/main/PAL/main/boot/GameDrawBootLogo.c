@@ -9,24 +9,24 @@
 
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
-extern s32 D_8007D53C;
-extern s32 D_8007D540;
-extern s32 D_8007D544;
+extern s32 g_BootLogoState asm("D_8007D53C");
+extern s32 g_BootLogoTimer asm("D_8007D540");
+extern s32 g_BootLogoHoldTimer asm("D_8007D544");
 void GameBeginIntroFmv(s32 arg0) asm("func_80019AF0");
 void func_800230B0(void);
 void GameDrawBootLogo(void) asm("func_8002317C");
-extern Matrix D_8019CAD4;
-extern Matrix D_8007D548;
+extern Matrix g_SceneColorMatrix asm("D_8019CAD4");
+extern Matrix g_DefaultColorMatrix asm("D_8007D548");
 extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
-extern Matrix D_8007D568;
+extern Matrix g_DefaultLightMatrix asm("D_8007D568");
 void func_800698B8(Matrix *arg0);
 void func_80069888(Matrix *arg0);
 void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
 void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_800686D4(s32 arg0, s32 arg1);
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
-extern s32 D_8009F0A0;
+extern s32 g_OptionLetterboxHeight asm("D_8009F0A0");
 void GameUploadImageAsset(s32 arg0) asm("func_8001A3C0");
 void GameInitRenderState(s32 arg0) asm("func_80017884");
 void GameInstallSceneLighting(void) asm("func_800234DC");
@@ -69,45 +69,45 @@ void GameUpdateBootLogoScene(void) asm("func_800232B4");
 void GameUpdateBootLogoScene(void) {
     s32 state;
 
-    if (D_8007D540 < 110) {
-        if (D_8007D540 >= 10) {
+    if (g_BootLogoTimer < 110) {
+        if (g_BootLogoTimer >= 10) {
             SetDispMask(1);
         }
         func_800230B0();
         goto inc_timer;
-    } else if (D_8007D540 == 110) {
+    } else if (g_BootLogoTimer == 110) {
         SetDispMask(0);
         GameSetupDisplay480(0, 0, 0);
 inc_timer:
-        D_8007D540++;
+        g_BootLogoTimer++;
         return;
     }
 
-    if (D_8007D544 != 0) {
-        D_8007D544--;
+    if (g_BootLogoHoldTimer != 0) {
+        g_BootLogoHoldTimer--;
         if ((g_AssetLoadState == 0) && (g_PadHeld != 0)) {
-            D_8007D544 = 0;
+            g_BootLogoHoldTimer = 0;
         }
     }
 
-    state = D_8007D53C;
+    state = g_BootLogoState;
     switch (state) {
     case 0:
         if ((u32)g_SceneTimer < 0x100) {
             g_SceneTimer += 8;
         } else {
-            D_8007D53C = 1;
+            g_BootLogoState = 1;
         }
         break;
     case 1:
-        if (D_8007D544 == 0) {
-            D_8007D53C = 2;
+        if (g_BootLogoHoldTimer == 0) {
+            g_BootLogoState = 2;
         }
         break;
     case 2:
         g_SceneTimer -= 8;
         if (g_SceneTimer == 0) {
-            D_8007D53C = 3;
+            g_BootLogoState = 3;
             GameSetupDisplay240(0, 0, 0);
         }
         break;
@@ -120,7 +120,7 @@ inc_timer:
     }
 
 done:
-    if (D_8007D53C != 3) {
+    if (g_BootLogoState != 3) {
         GameDrawBootLogo();
         if ((u32)g_SceneTimer >= 10) {
             SetDispMask(1);
@@ -130,9 +130,9 @@ done:
 
 void GameInstallSceneLighting(void) asm("func_800234DC");
 void GameInstallSceneLighting(void) {
-    D_8019CAD4 = D_8007D548;
-    g_SceneLightMatrix = D_8007D568;
-    func_800698B8(&D_8019CAD4);
+    g_SceneColorMatrix = g_DefaultColorMatrix;
+    g_SceneLightMatrix = g_DefaultLightMatrix;
+    func_800698B8(&g_SceneColorMatrix);
     func_80069888(&g_SceneLightMatrix);
     func_80069A18(0x20, 0x20, 0x20);
     func_80069A38(0, 0, 0);
@@ -142,7 +142,7 @@ void GameInstallSceneLighting(void) {
 void GameEnterAttractScene(void) asm("func_800235D8");
 void GameEnterAttractScene(void) {
     SetDispMask(0);
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
     if (g_AssetLoadState == 0) {
         GameUploadImageAsset(g_ImageBlockBuffer);
         g_MirrorMode = 0;
@@ -158,7 +158,7 @@ void GameEnterAttractScene(void) {
         *(s32 *)0x1F80001C = 0;
         *(s32 *)0x1F800020 = 0;
         GameSetCameraRotMatrix();
-        D_8009F0A0 = 0xF0;
+        g_OptionLetterboxHeight = 0xF0;
         g_FadeLevel = 0x100;
         g_GameMode = 0;
         g_FadeStep = -8;

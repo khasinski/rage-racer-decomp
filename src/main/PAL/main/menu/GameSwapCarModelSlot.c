@@ -38,8 +38,8 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameSwapCarModelSlot", func_800
 
 typedef struct { s32 a, b, c, d; } Vec16;
 
-extern Vec16 D_80082D6C;
-extern s32 D_8009B354;
+extern Vec16 g_MenuViewScale asm("D_80082D6C");
+extern s32 g_CourseSwapDelay asm("D_8009B354");
 extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
 extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
 extern s32 g_PlayerCar asm("D_8009E6D4");
@@ -70,7 +70,7 @@ void GameDrawMenuCourseView(void) {
     *(s32 *)0x1F800020 = 0;
 
     GameSetCameraRotMatrix();
-    ScaleMatrix((Matrix *)0x1F800028, &D_80082D6C);
+    ScaleMatrix((Matrix *)0x1F800028, &g_MenuViewScale);
 
     if (249999 < g_MenuViewOffsetTarget) {
         if (g_MenuViewOffset < 2500) {
@@ -82,24 +82,24 @@ void GameDrawMenuCourseView(void) {
     if (s1 != 0) {
         if (s1 > 0) {
             if (g_MenuViewAngle > 750000 && g_MenuPendingCourseIndex >= 0) {
-                if (D_8009B354 >= 19) {
-                    D_8009B354 = 0;
+                if (g_CourseSwapDelay >= 19) {
+                    g_CourseSwapDelay = 0;
                     g_MenuCourseModelIndex = g_MenuPendingCourseIndex;
                     g_MenuPendingCourseIndex = -1;
                 } else {
-                    D_8009B354 = D_8009B354 + 1;
+                    g_CourseSwapDelay = g_CourseSwapDelay + 1;
                 }
             } else {
                 g_MenuViewAngle = (s1 + 18) / 18 + g_MenuViewAngle;
             }
         } else {
             if (g_MenuViewAngle <= 249999 && g_MenuPendingCourseIndex >= 0) {
-                if (D_8009B354 >= 19) {
-                    D_8009B354 = 0;
+                if (g_CourseSwapDelay >= 19) {
+                    g_CourseSwapDelay = 0;
                     g_MenuCourseModelIndex = g_MenuPendingCourseIndex;
                     g_MenuPendingCourseIndex = -1;
                 } else {
-                    D_8009B354 = D_8009B354 + 1;
+                    g_CourseSwapDelay = g_CourseSwapDelay + 1;
                 }
             } else {
                 g_MenuViewAngle = (s1 - 18) / 18 + g_MenuViewAngle;
@@ -183,7 +183,7 @@ void GameDrawTeamNameCharModel(void) {
     *(s32 *)0x1F800020 = 0;
 
     GameSetCameraRotMatrix();
-    ScaleMatrix((Matrix *)0x1F800028, &D_80082D6C);
+    ScaleMatrix((Matrix *)0x1F800028, &g_MenuViewScale);
 
     if (249999 < g_MenuViewOffsetTarget) {
         if (g_MenuViewOffset < 2500) {

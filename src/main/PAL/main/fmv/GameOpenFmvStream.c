@@ -1,7 +1,8 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern s32 D_8009AF58, D_801E8A90;
+extern s32 g_FmvRingBuffer asm("D_8009AF58");
+extern s32 g_StreamLoc asm("D_801E8A90");
 void func_80063E44(s32 arg0);
 void DecDCToutCallback(s32 arg0) asm("func_800640B0");
 void func_8006A058(s32 arg0, s32 arg1);
@@ -11,22 +12,22 @@ void GameOpenFmvStream(s32 arg0) asm("func_8001EB5C");
 void GameOpenFmvStream(s32 arg0) {
     func_80063E44(0);
     DecDCToutCallback(arg0);
-    func_8006A058(D_8009AF58, 0x20);
+    func_8006A058(g_FmvRingBuffer, 0x20);
     func_8006CF68(1, 1, -1, 0, 0);
-    GameStartStreamRead(D_801E8A90);
+    GameStartStreamRead(g_StreamLoc);
 }
 
-extern volatile u32 *D_8009AF2C[];
-extern Rect D_8009AF38[];
-extern volatile s32 D_8009AF34;
-extern volatile s32 D_8009AF34_value asm("D_8009AF34");
-extern volatile s32 D_8009AF48;
-extern Rect D_8009AF4C;
-extern volatile s16 D_8009AF4C_x asm("D_8009AF4C");
-extern volatile s16 D_8009AF4E_y asm("D_8009AF4E");
-extern s16 D_8009AF50;
-extern s16 D_8009AF52;
-extern volatile s32 D_8009AF54;
+extern volatile u32 *g_FmvStripBuffers[] asm("D_8009AF2C");
+extern Rect g_FmvStripRects[] asm("D_8009AF38");
+extern volatile s32 g_FmvStripIndex asm("D_8009AF34");
+extern volatile s32 g_FmvStripIndexRaw asm("D_8009AF34");
+extern volatile s32 g_FmvStripRectIndex asm("D_8009AF48");
+extern Rect g_FmvUploadRect asm("D_8009AF4C");
+extern volatile s16 g_FmvUploadRectX asm("D_8009AF4C");
+extern volatile s16 g_FmvUploadRectY asm("D_8009AF4E");
+extern s16 g_FmvStripWidth asm("D_8009AF50");
+extern s16 g_FmvStripHeight asm("D_8009AF52");
+extern volatile s32 g_FmvStripDone asm("D_8009AF54");
 extern s32 D_8019CA00;
 
 void DecDCTout(volatile u32 *arg0, s32 arg1) asm("func_8006402C");
@@ -54,38 +55,38 @@ void GameUploadFmvSlice(void) {
         D_8019CA00 = 0;
     }
 
-    rect = D_8009AF4C;
+    rect = g_FmvUploadRect;
 
-    bufferPtr = &D_8009AF34;
+    bufferPtr = &g_FmvStripIndex;
     oldBuffer = *bufferPtr;
     state = *bufferPtr;
-    x = D_8009AF4C_x;
-    step = D_8009AF50;
+    x = g_FmvUploadRectX;
+    step = g_FmvStripWidth;
     *bufferPtr = state == 0;
 
-    index = D_8009AF48;
+    index = g_FmvStripRectIndex;
     x += step;
-    D_8009AF4C_x = x;
+    g_FmvUploadRectX = x;
 
-    if ((s16)x < (D_8009AF38[index].x + D_8009AF38[index].w)) {
+    if ((s16)x < (g_FmvStripRects[index].x + g_FmvStripRects[index].w)) {
         signedStep = (s16)step;
-        pixelCount = signedStep * D_8009AF52;
-        bufferIndex = D_8009AF34_value;
+        pixelCount = signedStep * g_FmvStripHeight;
+        bufferIndex = g_FmvStripIndexRaw;
         bufferAddr = bufferIndex << 2;
         asm("" : "=r"(bufferPtr) : "0"(bufferPtr));
         bufferAddr = (s32)bufferPtr + bufferAddr;
         DecDCTout(*(volatile u32 **)(bufferAddr - 8), pixelCount / 2);
     } else {
-        D_8009AF54 = 1;
+        g_FmvStripDone = 1;
         asm("" : : : "memory");
         next = index == 0;
-        D_8009AF48 = next;
+        g_FmvStripRectIndex = next;
         asm("" : : : "memory");
-        D_8009AF4C_x = D_8009AF38[next].x;
+        g_FmvUploadRectX = g_FmvStripRects[next].x;
         asm("" : : : "memory");
-        D_8009AF4E_y = D_8009AF38[next].y;
+        g_FmvUploadRectY = g_FmvStripRects[next].y;
     }
 
     oldOffset = oldBuffer << 2;
-    LoadImage(&rect, (void *)*(volatile u32 **)((s32)D_8009AF2C + oldOffset));
+    LoadImage(&rect, (void *)*(volatile u32 **)((s32)g_FmvStripBuffers + oldOffset));
 }

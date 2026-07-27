@@ -36,8 +36,8 @@ void GameClearSaveHeaderRows(GameSaveHeaderRow *rows) {
     } while (i < 3);
 }
 
-extern char D_80012F8C[];
-extern Rect D_8009B55C;
+extern char g_FmtString[] asm("D_80012F8C");
+extern Rect g_SaveIconRect asm("D_8009B55C");
 
 void LibcSprintf(void *dst, char *fmt, s32 arg0) asm("func_800632F0");
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
@@ -73,11 +73,11 @@ void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s3
     blockReg[1] = 'C';
     blockReg[2] = 0x11;
     blockReg[3] = 1;
-    LibcSprintf(blockReg + 4, D_80012F8C, (s32)titleReg);
+    LibcSprintf(blockReg + 4, g_FmtString, (s32)titleReg);
 
     magic = 0x66666667;
     asm("" : "=r"(magic) : "0"(magic));
-    rectArg = &D_8009B55C;
+    rectArg = &g_SaveIconRect;
     asm("" : "=r"(rectArg) : "0"(rectArg));
     asm("mult %0,%1" : : "r"(iconTileReg), "r"(magic));
     imageData = blockReg + 0x60;
@@ -88,8 +88,8 @@ void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s3
     asm("" : "=r"(rectW) : "0"(rectW));
     rectH = 0x10;
     asm("" : "=r"(rectH) : "0"(rectH));
-    D_8009B55C.w = 0x10;
-    D_8009B55C.h = 1;
+    g_SaveIconRect.w = 0x10;
+    g_SaveIconRect.h = 1;
     asm("" ::: "memory");
     sign = iconTileReg >> 31;
     asm("mfhi %0" : "=r"(tileRow));
@@ -97,7 +97,7 @@ void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s3
     tileRow -= sign;
     tileX = iconTileReg - (tileRow * 20);
     rectArg->x = tileX << 4;
-    D_8009B55C.y = tileRow + 0x1E0;
+    g_SaveIconRect.y = tileRow + 0x1E0;
     StoreImage(rectArg, imageData);
     dataOffset = 0x80;
     DrawSync(0);
@@ -115,7 +115,7 @@ void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s3
     } while (i <= 0);
 }
 
-extern s32 D_801E7A54;
+extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 
 void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) {
     u8 *arg0 = (u8 *)row;
@@ -131,7 +131,7 @@ void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) {
 
     i = 0;
     checksum = 0;
-    *(s32 *)(arg0 + 8) = D_801E7A54;
+    *(s32 *)(arg0 + 8) = g_SaveElapsedTicks;
     scan = (u16 *)arg0;
 
     do {

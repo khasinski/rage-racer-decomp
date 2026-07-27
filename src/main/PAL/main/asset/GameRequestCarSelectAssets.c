@@ -6,10 +6,10 @@
 extern u32 g_CarModelSlot asm("D_8009E87C");
 extern GameCarModelAsset *g_CarModelAsset asm("D_8009E698");
 extern GameAssetTripleHeader *g_AssetLoadCursor asm("D_8019CAFC");
-extern s32 D_8019CA64;
+extern s32 g_TeamLogoSampleData asm("D_8019CA64");
 extern u8 *D_801E4090;
 extern u8 *g_ImageBlockBuffer asm("D_801E4B30");
-extern u8 *D_8019C754;
+extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
 s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 assetIndex, void *dst);
@@ -24,7 +24,7 @@ void func_8001D900(s32 arg0, s32 arg1);
 void func_8005B768(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 func_8005B89C(void);
 void func_8005DBD8(void);
-extern s32 D_8009AEFC;
+extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
 void GameServiceAssetLoad(void) asm("func_80019C04");
 
 s32 GameRequestCarSelectAssets(void) asm("func_80018530");
@@ -80,7 +80,7 @@ void GameLoadCarSelectAssets(void) {
 
 state_1:
         __asm__ volatile("" ::: "$3");
-        func_8005B768(1, g_AssetBlockPtr, g_AssetSubBlockPtr, D_8019C754);
+        func_8005B768(1, g_AssetBlockPtr, g_AssetSubBlockPtr, g_AssetBlockPtr2);
         g_AssetLoadState = state2;
         goto done;
 state_2:
@@ -99,7 +99,7 @@ state_3:
                 firstOffset = header->firstOffset;
                 secondOffset = (s32)((u8 *)header + secondOffset);
                 header = (GameAssetTripleHeader *)((u8 *)header + firstOffset);
-                D_8019CA64 = (s32)header;
+                g_TeamLogoSampleData = (s32)header;
                 g_AssetBlockPtr = (u8 *)secondOffset;
                 GameRegisterCourseModels();
 
@@ -160,7 +160,7 @@ s32 GameRequestCarModel(s32 arg0) {
     }
 
     g_MainState = 5;
-    D_8009AEFC = arg0;
+    g_PendingCarModelIndex = arg0;
     g_AssetLoadState = 1;
     return 1;
 }
@@ -231,7 +231,7 @@ s32 GameRequestUpgradedCarModel(s32 arg0) {
     }
 
     g_MainState = 6;
-    D_8009AEFC = arg0;
+    g_PendingCarModelIndex = arg0;
     g_AssetLoadState = 1;
     return 1;
 }

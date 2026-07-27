@@ -10,17 +10,17 @@ void func_800728A0(s32 arg0);
 void GameStopSequence(void) asm("func_8005E8B8");
 void GameStopSequence(void) { func_800728A0(g_SeqHandle); }
 
-extern s32 D_801E6D8C;
-extern s32 D_801E6D9C;
+extern s32 g_ReverbFadeStep asm("D_801E6D8C");
+extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
 
 void GameStartSequenceFadeOut(void) {
-    D_801E6D9C = -4;
-    D_801E6D8C = -3;
+    g_SeqVolumeFadeStep = -4;
+    g_ReverbFadeStep = -3;
 }
 
-extern s32 D_801E6D84;
-extern s32 D_801E6D88;
-extern s32 D_801E6D94;
+extern s32 g_ReverbDepthL asm("D_801E6D84");
+extern s32 g_ReverbDepthR asm("D_801E6D88");
+extern s32 g_SeqVolume asm("D_801E6D94");
 
 void func_8005B190(s32 arg0, s32 arg1);
 void func_8005E600(s32 arg0);
@@ -36,7 +36,7 @@ void GameUpdateSequenceFadeOut(void) {
     register s32 arg0 asm("$4");
     register s32 arg1 asm("$5");
 
-    fadeStep = &D_801E6D8C;
+    fadeStep = &g_ReverbFadeStep;
     asm volatile("" : "=r"(fadeStep) : "0"(fadeStep));
     delta = *fadeStep;
     if (delta != 0) {
@@ -46,27 +46,27 @@ void GameUpdateSequenceFadeOut(void) {
             fadeStep[-2] = 0;
         }
 
-        value = D_801E6D88;
+        value = g_ReverbDepthR;
         value += delta;
-        D_801E6D88 = value;
+        g_ReverbDepthR = value;
         if (value < 0) {
-            D_801E6D88 = 0;
+            g_ReverbDepthR = 0;
         }
 
-        if ((fadeStep[-2] == 0) && (D_801E6D88 == 0)) {
+        if ((fadeStep[-2] == 0) && (g_ReverbDepthR == 0)) {
             *fadeStep = 0;
         }
     }
 
-    func_8005B190(D_801E6D84, D_801E6D88);
+    func_8005B190(g_ReverbDepthL, g_ReverbDepthR);
 
-    value = D_801E6D94;
-    delta = D_801E6D9C;
+    value = g_SeqVolume;
+    delta = g_SeqVolumeFadeStep;
     value += delta;
-    D_801E6D94 = value;
+    g_SeqVolume = value;
     if (value <= 0) {
-        D_801E6D94 = 0;
-        D_801E6D9C = 0;
+        g_SeqVolume = 0;
+        g_SeqVolumeFadeStep = 0;
         func_8005E8B8();
         func_8005E600(6);
         arg0 = 0x28;
@@ -74,7 +74,7 @@ void GameUpdateSequenceFadeOut(void) {
         func_8005B190(arg0, arg1);
     }
 
-    func_8005E7A0(D_801E6D94);
+    func_8005E7A0(g_SeqVolume);
 }
 
 void GameApplyDuckedSequenceAudio(void) asm("func_8005EA14");
@@ -84,7 +84,7 @@ void GameApplyDuckedSequenceAudio(void) {
     register s32 seq asm("$4");
     register s32 volume asm("$5");
 
-    value = D_801E6D94;
+    value = g_SeqVolume;
     seq = g_SeqHandle;
     asm volatile("" : : "r"(seq));
     scaled = value << 1;

@@ -4,22 +4,22 @@
 #include "game/cd.h"
 #include "game/race.h"
 
-extern s32 D_8007F5F8;
-extern s32 D_8007F5FC;
+extern s32 g_CdRestartOnResume asm("D_8007F5F8");
+extern s32 g_CdMixPreset asm("D_8007F5FC");
 extern s32 g_CdTrackPending asm("D_8007F600");
 extern s32 g_CdCommandPending asm("D_8007F604");
 extern s32 g_CdTrackStep asm("D_8007F608");
 extern s32 g_CdCommandStep asm("D_8007F60C");
-extern u8 D_8009AFD0[];
+extern u8 g_CdTrackElapsedLoc[] asm("D_8009AFD0");
 extern u8 D_8009B168;
-extern u8 D_8009B16C;
-extern u8 D_8009B16E;
-extern u8 D_8009B16F;
+extern u8 g_CdLocResult asm("D_8009B16C");
+extern u8 g_CdLocMinute asm("D_8009B16E");
+extern u8 g_CdLocSecond asm("D_8009B16F");
 extern u8 g_CdVolume asm("D_8009B194");
-extern u8 D_8009B1B0;
-extern s32 D_8009B1B4;
-extern s32 D_8019C7BC;
-extern CdlLOC D_8007F5B0[];
+extern u8 g_CdCurrentTrack asm("D_8009B1B0");
+extern s32 g_CdFadeFrames asm("D_8009B1B4");
+extern s32 g_CdTrackEnded asm("D_8019C7BC");
+extern CdlLOC g_CdTrackLoopPoint[] asm("D_8007F5B0");
 
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 s32 func_8006A534(s32 arg0, s32 arg1);
@@ -50,7 +50,7 @@ void GameStepCdPauseRequest(void) {
         /* fallthrough */
 
     case 1:
-        if (CdControl(0x11, 0, (s32)&D_8009B16C) != 0) {
+        if (CdControl(0x11, 0, (s32)&g_CdLocResult) != 0) {
             g_CdCommandStep = 2;
         }
         break;
@@ -65,22 +65,22 @@ void GameStepCdPauseRequest(void) {
         break;
 
     case 3:
-        D_8009AFD0[0] = D_8009B16E;
-        D_8009AFD0[2] = 0;
-        D_8009AFD0[1] = D_8009B16F;
+        g_CdTrackElapsedLoc[0] = g_CdLocMinute;
+        g_CdTrackElapsedLoc[2] = 0;
+        g_CdTrackElapsedLoc[1] = g_CdLocSecond;
 
-        currentTime = CdPosToInt_Local(&D_8007F5B0[D_8009B1B0]);
-        bestTime = CdPosToInt_Local(&D_8007F5B0[0]);
+        currentTime = CdPosToInt_Local(&g_CdTrackLoopPoint[g_CdCurrentTrack]);
+        bestTime = CdPosToInt_Local(&g_CdTrackLoopPoint[0]);
         if (bestTime < currentTime) {
-            enteredTime = CdPosToInt_Local((CdlLOC *)D_8009AFD0);
-            currentTime = CdPosToInt_Local(&D_8007F5B0[D_8009B1B0]);
+            enteredTime = CdPosToInt_Local((CdlLOC *)g_CdTrackElapsedLoc);
+            currentTime = CdPosToInt_Local(&g_CdTrackLoopPoint[g_CdCurrentTrack]);
             if (enteredTime >= currentTime) {
-                D_8007F5F8 = 1;
+                g_CdRestartOnResume = 1;
             } else {
-                D_8007F5F8 = 0;
+                g_CdRestartOnResume = 0;
             }
         } else {
-            D_8007F5F8 = 0;
+            g_CdRestartOnResume = 0;
         }
 
         g_CdCommandStep = 4;
@@ -188,13 +188,13 @@ void GameInitCdAudio(void) {
 
     g_CdTrackPending = -1;
     g_CdCommandPending = -1;
-    D_8009B1B0 = 2;
+    g_CdCurrentTrack = 2;
     g_CdTrackStep = 0;
     g_CdCommandStep = 0;
-    D_8007F5FC = 0;
-    D_8007F5F8 = 0;
+    g_CdMixPreset = 0;
+    g_CdRestartOnResume = 0;
     g_CdVolume = 0x7F;
-    D_8009B1B4 = 0;
+    g_CdFadeFrames = 0;
     GameSetCdVolume(0x7F);
 }
 
@@ -232,18 +232,18 @@ state_3:
     } else {
         GameStepCdTrackRequest();
 check_cd:
-        status = func_8006A554(1, &D_8009B16C);
+        status = func_8006A554(1, &g_CdLocResult);
         if (status == 4) {
             if (g_SceneId == 0x1C) {
-                D_8019C7BC = 1;
+                g_CdTrackEnded = 1;
             } else {
-                temp = CdPosToInt_Local(&D_8007F5B0[D_8009B1B0]);
-                value = CdPosToInt_Local(&D_8007F5B0[0]);
+                temp = CdPosToInt_Local(&g_CdTrackLoopPoint[g_CdCurrentTrack]);
+                value = CdPosToInt_Local(&g_CdTrackLoopPoint[0]);
                 if (value < temp) {
                     g_CdTrackStep = status;
                     g_CdCommandPending = 1;
                     g_CdCommandStep = 0;
-                    g_CdTrackPending = D_8009B1B0;
+                    g_CdTrackPending = g_CdCurrentTrack;
                 }
             }
         }
@@ -252,7 +252,7 @@ done:
     GameStepCdVolumeFade();
 }
 
-extern void *D_8019C7CC;
+extern void *g_TrackCameras asm("D_8019C7CC");
 
 void func_80043AC8(u8 *arg0, s32 arg1) {
     void *ptr;
@@ -267,5 +267,5 @@ void func_80043AC8(u8 *arg0, s32 arg1) {
         ptr = arg0 + *(s32 *)(arg0 + 8);
     }
 
-    D_8019C7CC = ptr;
+    g_TrackCameras = ptr;
 }

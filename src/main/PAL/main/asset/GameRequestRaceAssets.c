@@ -21,9 +21,9 @@ s32 GameRequestTrackLoad(void) asm("func_8001965C");
 
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
-extern u8 *D_801E42D0;
+extern u8 *g_TrackTextureShadow asm("D_801E42D0");
 extern s32 D_801E4D70;
-extern u8 *D_8019C754;
+extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
 void func_8005B768(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 func_8005B89C(void);
 s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
@@ -103,7 +103,7 @@ void GameLoadRaceAssets(void) {
             p2 = ASSET_SUB(base_a3, 3);
             base_a3 = ASSET_SUB(base_a3, 2);
             g_AssetBlockPtr = p1;
-            D_8019C754 = base_a3;
+            g_AssetBlockPtr2 = base_a3;
             g_AssetSubBlockPtr = p2;
             func_8005B768(3, p1, p2, base_a3);
             base_a0 = g_AssetLoadCursor;
@@ -146,7 +146,7 @@ void GameLoadRaceAssets(void) {
             g_AssetSubBlockPtr = base + off1;
             GameUploadImageAsset(g_AssetBlockPtr);
             func_8001A40C(g_AssetLoadCursor);
-            D_801E42D0 = g_AssetLoadCursor;
+            g_TrackTextureShadow = g_AssetLoadCursor;
             GameUploadImageAsset(g_AssetSubBlockPtr);
             GameResetTrackTextureSwap();
             g_AssetLoadState = 6;

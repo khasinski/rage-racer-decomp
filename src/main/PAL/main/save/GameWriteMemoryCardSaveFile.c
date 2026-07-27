@@ -76,8 +76,8 @@ body:
     return 1;
 }
 
-extern char D_800128AC[];
-extern char D_800127D8[];
+extern char g_SaveFilePath[] asm("D_800128AC");
+extern char g_SaveTitleSjis[] asm("D_800127D8");
 
 s32 GameWriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     u8 block0[0x200];
@@ -90,8 +90,8 @@ s32 GameWriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 
     GameMenuLoadPhase = 0x1000;
     return GameWriteMemoryCardSaveFile(
-        D_800128AC + arg0 * 0x1A,
-        D_800127D8 + arg0 * 0x46,
+        g_SaveFilePath + arg0 * 0x1A,
+        g_SaveTitleSjis + arg0 * 0x46,
         block0,
         arg1,
         block1);
@@ -172,7 +172,7 @@ s32 GameScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
     nameOffset = 0;
 
     do {
-        fd = BiosFileOpen(D_800128AC + nameOffset, 1);
+        fd = BiosFileOpen(g_SaveFilePath + nameOffset, 1);
         if (fd >= 0) {
             if (GameReadVerifiedSaveHeader(fd, buffer) == 0) {
                 BiosFileClose(fd);
@@ -193,8 +193,8 @@ s32 GameScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
     return mask;
 }
 
-extern volatile s32 D_8009B740;
-extern s32 D_801E7A54;
+extern volatile s32 GameMenuLoadPhase asm("D_8009B740");
+extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 
 s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     u8 block[0x1000];
@@ -205,7 +205,7 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     s32 i;
 
     header = arg1;
-    D_8009B740 = 0x3000;
+    GameMenuLoadPhase = 0x3000;
     tries = 0;
     temp = arg0 << 1;
     temp += arg0;
@@ -217,7 +217,7 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
         register char *name asm("$4");
 
         do {
-            name = D_800128AC;
+            name = g_SaveFilePath;
             asm volatile("" : "=r"(name) : "0"(name));
             name = (char *)(nameOffset + (s32)name);
             fd = BiosFileOpen(name, 1);
@@ -228,34 +228,34 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
         } while (tries < 2);
     }
 
-    D_8009B740 = tries | 0x3100;
+    GameMenuLoadPhase = tries | 0x3100;
 
     if (fd < 0) {
         return 0;
     }
 
-    D_8009B740 = 0x3300;
+    GameMenuLoadPhase = 0x3300;
     if (GameReadVerifiedSaveHeader(fd, header) == 0) {
         return 0;
     }
 
-    D_8009B740 = 0x3500;
+    GameMenuLoadPhase = 0x3500;
     if (BiosFileSeek(fd, 0x280, 0) < 0) {
         return 0;
     }
 
-    D_8009B740 = 0x3600;
+    GameMenuLoadPhase = 0x3600;
     if (BiosFileRead(fd, block, 0x1000) != 0x1000) {
         return 0;
     }
 
     BiosFileClose(fd);
-    D_8009B740 = 0x3700;
+    GameMenuLoadPhase = 0x3700;
     if (GameLoadSaveStateBlock(block) == 0) {
         return 0;
     }
 
-    D_8009B740 = 0x3800;
+    GameMenuLoadPhase = 0x3800;
     g_TeamNameLength = *(u8 *)header;
     i = 0;
     do {
@@ -272,14 +272,14 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
         asm volatile("" : "=r"(one) : "0"(one));
         word = *(s32 *)((u8 *)header + 8);
         status = tries | 0x3900;
-        D_8009B740 = status;
-        D_801E7A54 = word;
+        GameMenuLoadPhase = status;
+        g_SaveElapsedTicks = word;
         return one;
     }
 }
 
-extern char D_80012FAC[];
-extern char D_8009B748[];
+extern char g_FmtCardWildcard[] asm("D_80012FAC");
+extern char g_McDirEntries[] asm("D_8009B748");
 
 void LibcSprintf(char *dst, char *fmt, s32 arg0, s32 arg1) asm("func_800632F0");
 
@@ -290,8 +290,8 @@ s32 GameCountMemoryCardFiles(s32 arg0, s32 arg1) {
     s32 count;
 
     count = 0;
-    LibcSprintf(path, D_80012FAC, arg0, arg1);
-    entry = D_8009B748;
+    LibcSprintf(path, g_FmtCardWildcard, arg0, arg1);
+    entry = g_McDirEntries;
 
     if (BiosFirstFile(path, entry) == entry) {
         asm("" : "=r"(count) : "0"(count));

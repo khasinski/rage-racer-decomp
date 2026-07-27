@@ -17,7 +17,7 @@ extern s32 g_SoundOptionCursor asm("D_8019C868");
 extern s32 g_ClassRecordMenuCursor asm("D_8019C97C");
 extern s32 g_ScreenOffsetX asm("D_801E4B8C");
 extern s32 g_ScreenOffsetY asm("D_801E4B9C");
-extern s32 D_801E4D68;
+extern s32 g_ScreenOffsetEditX asm("D_801E4D68");
 extern XY D_8007D5A8[];
 extern RGB D_8007D658[];
 extern ScoreRec g_ClassRecords[] asm("D_8019CB40");
@@ -36,7 +36,8 @@ void GameDrawClassRecordGrid(void);
 /* One class record: class digit, grade sprite, clear count. */
 void GameDrawClassRecordDetail(void) asm("func_80023FE8");
 void GameDrawClassRecordDetail(void);
-extern s32 D_801E4D68, D_801E4D6C;
+extern s32 g_ScreenOffsetEditX;
+extern s32 g_ScreenOffsetEditY asm("D_801E4D6C");
 s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 GameAddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 extern s32 g_MonoOutput asm("D_801E6C70");
@@ -104,8 +105,8 @@ void GameUpdateOptionRootMenu(void) {
         case 0:
             g_GameMode = 2;
             g_ClassRecordMenuCursor = 0;
-            D_801E4D6C = 0;
-            D_801E4D68 = 0;
+            g_ScreenOffsetEditY = 0;
+            g_ScreenOffsetEditX = 0;
             break;
         case 1:
             func_800153FC();
@@ -129,8 +130,8 @@ void GameUpdateOptionRootMenu(void) {
             break;
         case 4:
             g_GameMode = 6;
-            D_801E4D68 = g_ScreenOffsetX;
-            D_801E4D6C = g_ScreenOffsetY;
+            g_ScreenOffsetEditX = g_ScreenOffsetX;
+            g_ScreenOffsetEditY = g_ScreenOffsetY;
             break;
         case 5:
             func_80023B08(2);
@@ -151,7 +152,7 @@ void GameDrawClassRecordDetail(void) {
     s32 raw = (s32)g_DrawBuffer;
     s32 base = raw + 0xCC;
     s32 next = *(s32 *)0x1F800000;
-    s32 idx = D_801E4D6C * 6 + D_801E4D68;
+    s32 idx = g_ScreenOffsetEditY * 6 + g_ScreenOffsetEditX;
     s32 x;
     s32 y = 0x38;
     s32 i;
@@ -162,7 +163,7 @@ void GameDrawClassRecordDetail(void) {
                              0x24, 0x58, 0x89, 0xFF, 0x76);
     }
     next = func_80017138(base, next, 0xBC, 0x40, 0x18, 0x10, 0, 0x6C, 0x7F40);
-    next = func_80017138(base, next, 0xD8, 0x40, 8, 0x10, D_801E4D68 * 8 + 8, 0x18, 0x7F40);
+    next = func_80017138(base, next, 0xD8, 0x40, 8, 0x10, g_ScreenOffsetEditX * 8 + 8, 0x18, 0x7F40);
 
     x = 0xB4;
     if (g_ClassRecords[idx].flag == -1) {
@@ -280,31 +281,31 @@ void GameUpdateClassRecordBrowse(void) {
     s32 oldFlag;
     u16 b;
     GameDrawClassRecordGrid();
-    oldCursor = D_801E4D68;
-    oldFlag = D_801E4D6C;
+    oldCursor = g_ScreenOffsetEditX;
+    oldFlag = g_ScreenOffsetEditY;
     if ((g_PadEdge2 & 0x1000) && oldFlag == 1) {
-        D_801E4D6C = 0;
+        g_ScreenOffsetEditY = 0;
     }
-    if ((g_PadEdge2 & 0x4000) && D_801E4D6C == 0) {
-        D_801E4D6C = 1;
+    if ((g_PadEdge2 & 0x4000) && g_ScreenOffsetEditY == 0) {
+        g_ScreenOffsetEditY = 1;
     }
     b = g_PadEdge2;
     if (b & 0x8000) {
-        D_801E4D68 = D_801E4D68 - 1;
+        g_ScreenOffsetEditX = g_ScreenOffsetEditX - 1;
     }
     if (b & 0x2000) {
-        D_801E4D68 = D_801E4D68 + 1;
+        g_ScreenOffsetEditX = g_ScreenOffsetEditX + 1;
     }
     {
         s32 c;
-        c = D_801E4D68;
+        c = g_ScreenOffsetEditX;
         c += 6;
         c = c % 6;
-        D_801E4D68 = c;
+        g_ScreenOffsetEditX = c;
         if (c == 5) {
-            D_801E4D6C = 0;
+            g_ScreenOffsetEditY = 0;
         }
-        if (oldCursor != c || oldFlag != D_801E4D6C) {
+        if (oldCursor != c || oldFlag != g_ScreenOffsetEditY) {
             GamePlaySoundCue(1);
         }
     }
@@ -450,13 +451,13 @@ void GameUpdateSoundOptionMenu(void) {
         g_GameMode = 5;
         switch (g_SoundOptionCursor) {
         case 0:
-            D_801E4D68 = g_BgmVolumeSetting;
+            g_ScreenOffsetEditX = g_BgmVolumeSetting;
             break;
         case 1:
-            D_801E4D68 = g_SfxVolumeSetting;
+            g_ScreenOffsetEditX = g_SfxVolumeSetting;
             break;
         case 2:
-            D_801E4D68 = g_MonoOutput;
+            g_ScreenOffsetEditX = g_MonoOutput;
             break;
         case 3:
             g_GameMode = 1;

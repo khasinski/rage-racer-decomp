@@ -3,9 +3,9 @@
 #include "psyq/snd.h"
 #include "game/sound.h"
 
-extern s32 D_80082F40;
+extern s32 g_StereoOutput asm("D_80082F40");
 extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
-extern s32 D_801E6CE8;
+extern s32 g_PanVoiceVolumeR asm("D_801E6CE8");
 
 void GameSetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
     if (arg0 >= 0) {
@@ -28,18 +28,18 @@ arg0_done:
     }
 
 arg1_done:
-    if (D_80082F40 != 0) {
+    if (g_StereoOutput != 0) {
         g_PanVoiceVolumeL = arg0;
-        D_801E6CE8 = arg1;
+        g_PanVoiceVolumeR = arg1;
     } else {
         s32 temp = (arg0 + arg1) / 2;
 
         g_PanVoiceVolumeL = temp;
-        D_801E6CE8 = temp;
+        g_PanVoiceVolumeR = temp;
     }
 }
 
-extern s32 D_801E6CEC;
+extern s32 g_PanVoiceActive asm("D_801E6CEC");
 
 s32 SsUtKeyOffV(s32 voice) asm("func_80078018");
 
@@ -107,7 +107,7 @@ void GameApplyPanVoiceVolume(void) {
         }
 
         SsUtSetVVol(0x15, left, right);
-        if (D_801E6CEC == 0) {
+        if (g_PanVoiceActive == 0) {
             right = 0xF;
             asm volatile("" : : "r"(right));
             voice = 0x15;
@@ -117,19 +117,19 @@ void GameApplyPanVoiceVolume(void) {
             zeroArg = 0;
             SsUtKeyOnV(voice, left, right, zeroArg, raw, 0, 0, 0);
         }
-    } else if (D_801E6CEC != 0) {
+    } else if (g_PanVoiceActive != 0) {
         SsUtKeyOffV(0x15);
     }
 
-    D_801E6CEC = changed;
+    g_PanVoiceActive = changed;
 }
 
-extern s32 D_801E6CF0;
-extern s32 D_801E6CF4;
-extern s32 D_801E6CF8;
-extern s32 D_801E6CFC;
-extern s32 D_800126AC[];
-extern s32 D_800126B4[];
+extern s32 g_IndexedEffectIndex asm("D_801E6CF0");
+extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
+extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
+extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
+extern s32 g_IndexedEffectTones[] asm("D_800126AC");
+extern s32 g_IndexedEffectVolumes[] asm("D_800126B4");
 
 void GameStartIndexedEffectVoice(s32 baseTone) {
     SsUtKeyOnV(0x14, g_VabIds[0], (s16)baseTone, 0, 0x3C, 0, 0, 0);
@@ -156,10 +156,10 @@ void GameSetIndexedEffectVoice(s32 index, s32 phase, s32 volume) {
         volume = 0;
     }
 
-    D_801E6CF0 = index;
+    g_IndexedEffectIndex = index;
     if (index >= 0) {
-        D_801E6CFC = volume;
-        D_801E6CF8 = phase;
+        g_IndexedEffectVolume = volume;
+        g_IndexedEffectPitch = phase;
     }
 }
 
@@ -175,30 +175,30 @@ void GameUpdateIndexedEffectVoice(void) {
     register s32 right asm("$6");
     register s32 voice asm("$4");
 
-    raw = D_801E6CF4;
+    raw = g_IndexedEffectIndexPrev;
     if (raw < 0) {
-        index = D_801E6CF0;
+        index = g_IndexedEffectIndex;
         if (index < 0) {
             goto update_state;
         }
         goto start_voice;
     } else {
-        index = D_801E6CF0;
+        index = g_IndexedEffectIndex;
         if (index < 0) {
             GameStopIndexedEffectVoice();
         } else if (index != raw) {
         start_voice:
             raw = (index * 3) << 2;
-            GameStartIndexedEffectVoice(*(s32 *)((s32)D_800126AC + raw));
+            GameStartIndexedEffectVoice(*(s32 *)((s32)g_IndexedEffectTones + raw));
         }
     }
 
-    raw = D_801E6CF0;
+    raw = g_IndexedEffectIndex;
     if (raw >= 0) {
         index = (raw * 3) << 2;
-        product = D_801E6CFC * *(s32 *)((s32)D_800126B4 + index);
-        raw = D_801E6CF8;
-        base = *(s32 *)((s32)D_800126AC + index);
+        product = g_IndexedEffectVolume * *(s32 *)((s32)g_IndexedEffectVolumes + index);
+        raw = g_IndexedEffectPitch;
+        base = *(s32 *)((s32)g_IndexedEffectTones + index);
         center = raw >> 7;
         fine = raw & 0x7F;
         if (product < 0) {
@@ -240,7 +240,7 @@ void GameUpdateIndexedEffectVoice(void) {
     }
 
 update_state:
-    D_801E6CF4 = D_801E6CF0;
+    g_IndexedEffectIndexPrev = g_IndexedEffectIndex;
 }
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPanVoiceTargetVolume", func_8005C31C);
@@ -248,10 +248,10 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPanVoiceTargetVolume", 
 void func_80078528(s32 voice, s16 left, s16 right);
 
 #define UPDATE_BASIC_EFFECT_VOLUME()                                  \
-    raw = *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset);                              \
+    raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);                              \
     scale = g_EffectVolumeScale;                                                \
     left = raw * scale;                                                \
-    raw = *(s32 *)((u8 *)&D_801E6D00[0].volRight + offset);                              \
+    raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);                              \
     voice = i + 8;                                                     \
     if (left < 0) {                                                    \
         left += 0x7F;                                                  \
@@ -280,13 +280,13 @@ void func_80078528(s32 voice, s16 left, s16 right);
     *state = neg
 
 #define START_BASIC_EFFECT_VOLUME()                                   \
-    raw = *(s32 *)((u8 *)&D_801E6D00[0].volLeft + offset);                              \
+    raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);                              \
     scale = g_EffectVolumeScale;                                                \
     left = raw * scale;                                                \
     raw = i + 8;                                                       \
     asm("" : "=r"(raw) : "0"(raw));                                    \
     voice = raw;                                                       \
-    raw = *(s32 *)((u8 *)&D_801E6D00[0].volRight + offset);                              \
+    raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);                              \
     if (left < 0) {                                                    \
         left += 0x7F;                                                  \
     }                                                                 \
@@ -327,15 +327,15 @@ void func_8005C6C0(void) {
 
     i = 0;
     neg = -1;
-    state = &D_801E6D00[0].mode;
+    state = &g_MusicChannels[0].mode;
     voicePacked = 0x80000;
     offset = 0;
     do {
         switch (*state) {
         case 0:
             SsUtKeyOnV(voicePacked >> 16, g_VabIds[0],
-                          *(s16 *)((u8 *)&D_801E6D00[0].left + offset),
-                          *(s16 *)((u8 *)&D_801E6D00[0].right + offset), 0x3C, 0, 0, 0);
+                          *(s16 *)((u8 *)&g_MusicChannels[0].left + offset),
+                          *(s16 *)((u8 *)&g_MusicChannels[0].right + offset), 0x3C, 0, 0, 0);
             START_BASIC_EFFECT_VOLUME();
             break;
         case 2:

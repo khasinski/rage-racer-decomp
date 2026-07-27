@@ -23,12 +23,12 @@ extern s32 g_CarNamePlateStep asm("D_8009B31C");
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 extern s32 D_8009B32C;
 extern s32 D_8009B330;
-extern s32 D_8009B374;
-extern s32 D_8009B378;
+extern s32 g_CarSwapFromIndex asm("D_8009B374");
+extern s32 g_CarSwapToIndex asm("D_8009B378");
 extern s32 g_PlayerMoney asm("D_8019C908");
-extern s16 D_8019CA18;
+extern s16 g_PrevOwnedCarIndex asm("D_8019CA18");
 extern u8 *D_8019CB00;
-extern s16 D_801E41A4;
+extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 extern s32 D_801E4294;
 extern u8 D_801E438D[];
 
@@ -70,7 +70,7 @@ void GameUpdateCarShopScreen(void) {
         g_MenuPlateCarIndex = g_CarListCursor;
         func_800487D8(D_8019CB00, &g_UiScriptProgress2, -1);
         func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
-        func_80049418(1, 0, ~D_8019CA18 != 0, ~D_801E41A4 != 0);
+        func_80049418(1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
         GameDrawCarShopPricePanel(1, g_PlayerMoney, value);
         func_800489AC(g_UiScriptProgress, 1, D_801E4294);
         func_800487D8(&D_800820C4, &g_UiScriptProgress, 0);
@@ -91,42 +91,42 @@ void GameUpdateCarShopScreen(void) {
             }
             func_80059320();
             sel = g_CarListCursor;
-            if ((g_PadHeld & 0x8000) && (D_8019CA18 != -1)) {
+            if ((g_PadHeld & 0x8000) && (g_PrevOwnedCarIndex != -1)) {
                 t = g_MenuViewAngleTarget;
                 u = g_MenuViewAngle;
                 if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
-                    if (D_8009B378 < 0) {
+                    if (g_CarSwapToIndex < 0) {
                         s32 lprev;
 
                         GamePlaySoundCue(8);
-                        g_CarListCursor = (s32) D_8019CA18;
-                        GameRequestCarModel(D_8019CA18);
+                        g_CarListCursor = (s32) g_PrevOwnedCarIndex;
+                        GameRequestCarModel(g_PrevOwnedCarIndex);
                         lprev = g_MenuViewAngleTarget;
-                        D_8009B374 = sel;
+                        g_CarSwapFromIndex = sel;
                         g_MenuViewAngleTarget = 0;
                         D_8009B330 = -1;
-                        D_8009B378 = g_CarListCursor;
+                        g_CarSwapToIndex = g_CarListCursor;
                         g_MenuViewAngle = (g_MenuViewAngle - lprev) + 0x927C0;
                     }
                 }
             }
-            if ((g_PadHeld & 0x2000) && (D_801E41A4 != -1)) {
+            if ((g_PadHeld & 0x2000) && (g_NextOwnedCarIndex != -1)) {
                 t = g_MenuViewAngleTarget;
                 u = g_MenuViewAngle;
                 if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
-                    if (D_8009B378 < 0) {
+                    if (g_CarSwapToIndex < 0) {
                         s32 base;
                         s32 lprev;
 
                         GamePlaySoundCue(8);
-                        g_CarListCursor = (s32) D_801E41A4;
-                        GameRequestCarModel(D_801E41A4);
+                        g_CarListCursor = (s32) g_NextOwnedCarIndex;
+                        GameRequestCarModel(g_NextOwnedCarIndex);
                         base = 0x927C0;
                         lprev = g_MenuViewAngleTarget;
                         g_MenuViewAngleTarget = 0x124F80;
-                        D_8009B374 = sel;
+                        g_CarSwapFromIndex = sel;
                         D_8009B330 = -1;
-                        D_8009B378 = g_CarListCursor;
+                        g_CarSwapToIndex = g_CarListCursor;
                         g_MenuViewAngle = base - (lprev - g_MenuViewAngle);
                     }
                 }
@@ -139,7 +139,7 @@ void GameUpdateCarShopScreen(void) {
             t = g_MenuViewAngleTarget;
             u = g_MenuViewAngle;
             if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
-                if (D_8009B378 < 0) {
+                if (g_CarSwapToIndex < 0) {
                     if (g_PadEdge2 & 0x860) {
                         sel = D_801E4294;
                         if (sel == 1) {
@@ -157,8 +157,8 @@ void GameUpdateCarShopScreen(void) {
                                 lu = g_MenuViewAngle;
                                 lprev = g_MenuViewAngleTarget;
                                 g_MenuViewAngleTarget = 0;
-                                D_8009B374 = current;
-                                D_8009B378 = selected;
+                                g_CarSwapFromIndex = current;
+                                g_CarSwapToIndex = selected;
                                 g_MenuViewAngle = (lu - lprev) + base;
                             }
                             GamePlaySoundCue(3);
@@ -214,8 +214,8 @@ void GameUpdateCarShopScreen(void) {
                             lu = g_MenuViewAngle;
                             lprev = g_MenuViewAngleTarget;
                             g_MenuViewAngleTarget = 0;
-                            D_8009B374 = current;
-                            D_8009B378 = selected;
+                            g_CarSwapFromIndex = current;
+                            g_CarSwapToIndex = selected;
                             g_MenuViewAngle = (lu - lprev) + base;
                         }
                         GamePlaySoundCue(3);
@@ -304,7 +304,7 @@ block_51:
                     func_80048B88(0xDA, 0x44, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, &g_MenuBlankCaption);
                 }
             }
-            func_80049418(1, 0, ~D_8019CA18 != 0, ~D_801E41A4 != 0);
+            func_80049418(1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
             GameDrawCarShopPricePanel(1, g_PlayerMoney, value);
             func_800489AC(g_UiScriptProgress, 1, D_801E4294);
             func_800487D8(&D_800820C4, &g_UiScriptProgress, 0);
@@ -313,7 +313,7 @@ block_51:
         }
         g_MenuHandlerIndex = -1;
         g_MenuHandlerIndex2 = 0xB;
-        func_80049418(-1, 0, ~D_8019CA18 != 0, ~D_801E41A4 != 0);
+        func_80049418(-1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
         GameDrawCarShopPricePanel(-1, g_PlayerMoney, value);
         func_800487D8(&D_800820C4, &g_UiScriptProgress, -1);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
@@ -486,8 +486,8 @@ void GameUpdateEngineerShopScreen(void) {
                         g_MenuViewAngleTarget = 0;
                         GameMenuBusy = 2;
                         g_MenuOverlayPattern = 2;
-                        D_8009B374 = g_PlayerCarIndex;
-                        D_8009B378 = g_PlayerCarIndex;
+                        g_CarSwapFromIndex = g_PlayerCarIndex;
+                        g_CarSwapToIndex = g_PlayerCarIndex;
                     }
                 } else {
                     g_MenuConfirmTimer -= 1;

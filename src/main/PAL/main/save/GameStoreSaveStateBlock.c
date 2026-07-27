@@ -2,27 +2,27 @@
 #include "game/race.h"
 #include "game/memcard.h"
 
-extern u16 D_8019CE08;
-extern u16 D_8019CB08;
-extern u16 D_801E4BF0;
-extern u16 D_8019CAD0;
-extern u16 D_8019CA08;
-extern u16 D_8019CA0A;
-extern u16 D_801E418C;
-extern u16 D_8019CA0C;
-extern s32 D_801E4098;
-extern s32 D_801E409C;
-extern s32 D_801E40A0;
-extern s32 D_801E40A4;
-extern s32 D_801E6E80;
-extern s32 D_801E6E84;
-extern s32 D_801E6E88;
-extern s32 D_801E6E8C;
+extern u16 g_PadMappingIndex asm("D_8019CE08");
+extern u16 g_NegconMappingIndex asm("D_8019CB08");
+extern u16 g_NegconSteerNeutral asm("D_801E4BF0");
+extern u16 g_NegconSteerPlay asm("D_8019CAD0");
+extern u16 g_NegconNeutralI asm("D_8019CA08");
+extern u16 g_NegconNeutralII asm("D_8019CA0A");
+extern u16 g_NegconMaxTwist asm("D_801E418C");
+extern u16 g_NegconNeutralL asm("D_8019CA0C");
+extern s32 g_GrandPrixSaveCar asm("D_801E4098");
+extern s32 g_GrandPrixSaveClass asm("D_801E409C");
+extern s32 g_GrandPrixSaveMaxClass asm("D_801E40A0");
+extern s32 g_GrandPrixSaveTime asm("D_801E40A4");
+extern s32 g_ExtraGrandPrixSaveCar asm("D_801E6E80");
+extern s32 g_ExtraGrandPrixSaveClass asm("D_801E6E84");
+extern s32 g_ExtraGrandPrixSaveMaxClass asm("D_801E6E88");
+extern s32 g_ExtraGrandPrixSaveTime asm("D_801E6E8C");
 extern u16 g_BgmSelection asm("D_801E42CC");
-extern s32 D_8019C984;
-extern s32 D_8019C988;
-extern s32 D_8019C98C;
-extern s32 D_8019C990;
+extern s32 g_TimeAttackSaveCar asm("D_8019C984");
+extern s32 g_TimeAttackSaveClass asm("D_8019C988");
+extern s32 g_TimeAttackSaveMaxClass asm("D_8019C98C");
+extern s32 g_TimeAttackSaveSeries asm("D_8019C990");
 
 extern u8 g_GrandPrixCars[] asm("D_801E4F44");
 extern u8 g_ExtraGrandPrixCars[] asm("D_8019C914");
@@ -36,9 +36,9 @@ extern s32 g_RankingRecords[] asm("D_801E7744");
 extern s32 g_TimeRecords[] asm("D_8019CB78");
 extern s32 g_BestSectorTimes[] asm("D_801E41E8");
 
-extern s32 D_8019C704;
-extern s32 D_801E8A50;
-extern s32 D_801E6C70;
+extern s32 g_BgmVolumeSetting asm("D_8019C704");
+extern s32 g_SfxVolumeSetting asm("D_801E8A50");
+extern s32 g_MonoOutput asm("D_801E6C70");
 extern u8 g_GrandPrixCourseProgress[] asm("D_801E42EC");
 extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
 
@@ -52,43 +52,43 @@ extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
 void GameStoreSaveStateBlock(u8 *arg0) asm("func_8005F88C");
 void GameStoreSaveStateBlock(u8 *arg0) {
     {
-        u16 h0 = D_8019CE08;
-        u16 h1 = D_8019CB08;
-        u16 h2 = D_801E4BF0;
-        u16 h3 = D_8019CAD0;
+        u16 h0 = g_PadMappingIndex;
+        u16 h1 = g_NegconMappingIndex;
+        u16 h2 = g_NegconSteerNeutral;
+        u16 h3 = g_NegconSteerPlay;
         *(u16 *)(arg0 + 0x0) = h0;
         *(u16 *)(arg0 + 0x2) = h1;
         *(u16 *)(arg0 + 0x4) = h2;
         *(u16 *)(arg0 + 0x6) = h3;
     }
-    *(u16 *)(arg0 + 0x8) = D_8019CA08;
-    *(u16 *)(arg0 + 0xA) = D_8019CA0A;
+    *(u16 *)(arg0 + 0x8) = g_NegconNeutralI;
+    *(u16 *)(arg0 + 0xA) = g_NegconNeutralII;
     {
-        u16 h0 = D_801E418C;
-        u16 h1 = D_8019CA0C;
+        u16 h0 = g_NegconMaxTwist;
+        u16 h1 = g_NegconNeutralL;
         *(u16 *)(arg0 + 0xE) = h0;
         *(u16 *)(arg0 + 0xC) = h1;
     }
 
     *(s32 *)(arg0 + 0x10) = g_GrandPrixSave;
-    *(s32 *)(arg0 + 0x14) = D_801E4098;
-    *(s32 *)(arg0 + 0x18) = D_801E409C;
-    *(s32 *)(arg0 + 0x1C) = D_801E40A0;
-    *(s32 *)(arg0 + 0x20) = D_801E40A4;
+    *(s32 *)(arg0 + 0x14) = g_GrandPrixSaveCar;
+    *(s32 *)(arg0 + 0x18) = g_GrandPrixSaveClass;
+    *(s32 *)(arg0 + 0x1C) = g_GrandPrixSaveMaxClass;
+    *(s32 *)(arg0 + 0x20) = g_GrandPrixSaveTime;
     *(s32 *)(arg0 + 0x24) = g_ExtraGrandPrixSave;
-    *(s32 *)(arg0 + 0x28) = D_801E6E80;
-    *(s32 *)(arg0 + 0x2C) = D_801E6E84;
-    *(s32 *)(arg0 + 0x30) = D_801E6E88;
+    *(s32 *)(arg0 + 0x28) = g_ExtraGrandPrixSaveCar;
+    *(s32 *)(arg0 + 0x2C) = g_ExtraGrandPrixSaveClass;
+    *(s32 *)(arg0 + 0x30) = g_ExtraGrandPrixSaveMaxClass;
     {
-        s32 w34 = D_801E6E8C;
+        s32 w34 = g_ExtraGrandPrixSaveTime;
         register u16 h4C asm("$3") = g_BgmSelection;
         *(s32 *)(arg0 + 0x34) = w34;
         *(s32 *)(arg0 + 0x38) = g_TimeAttackSave;
-        *(s32 *)(arg0 + 0x3C) = D_8019C984;
-        *(s32 *)(arg0 + 0x40) = D_8019C988;
-        *(s32 *)(arg0 + 0x44) = D_8019C98C;
+        *(s32 *)(arg0 + 0x3C) = g_TimeAttackSaveCar;
+        *(s32 *)(arg0 + 0x40) = g_TimeAttackSaveClass;
+        *(s32 *)(arg0 + 0x44) = g_TimeAttackSaveMaxClass;
         {
-            register s32 w48 asm("$4") = D_8019C990;
+            register s32 w48 asm("$4") = g_TimeAttackSaveSeries;
             u16 h4E = g_AdvancedSeriesUnlocked;
             *(u16 *)(arg0 + 0x4C) = h4C;
             *(u16 *)(arg0 + 0x4E) = h4E;

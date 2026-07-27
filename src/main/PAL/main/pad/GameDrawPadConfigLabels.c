@@ -7,7 +7,7 @@ typedef struct LabelPoint {
     s16 y;
 } LabelPoint;
 
-extern LabelPoint D_8007C150[];
+extern LabelPoint g_PadLabelSlots[] asm("D_8007C150");
 
 /* Local wide-parameter views; see GameQueueSprite.c. */
 u8 *QueueSpriteTransWide(
@@ -44,37 +44,37 @@ u8 *GameDrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
 
     k = labelRow[0];
     prim = QueueSpriteTransWide(
-        ot, prim, D_8007C150[k].x + 4, D_8007C150[k].y + 8, 0x40, 0x10, 0x40,
+        ot, prim, g_PadLabelSlots[k].x + 4, g_PadLabelSlots[k].y + 8, 0x40, 0x10, 0x40,
         0xBC, 0x7F40);
     k = labelRow[1];
     prim = QueueSpriteTransWide(
-        ot, prim, D_8007C150[k].x + 22, D_8007C150[k].y + 8, 0x1C, 0x10, 0x84,
+        ot, prim, g_PadLabelSlots[k].x + 22, g_PadLabelSlots[k].y + 8, 0x1C, 0x10, 0x84,
         0xBC, 0x7F40);
     k = labelRow[2];
     prim = QueueSpriteTransWide(
-        ot, prim, D_8007C150[k].x + 18, D_8007C150[k].y + 8, 0x28, 0x10, 0x90,
+        ot, prim, g_PadLabelSlots[k].x + 18, g_PadLabelSlots[k].y + 8, 0x28, 0x10, 0x90,
         0xAC, 0x7F40);
     k = labelRow[3];
     prim = QueueSpriteTransWide(
-        ot, prim, D_8007C150[k].x + 9, D_8007C150[k].y + 8, 0x18, 0x10, 0x90,
+        ot, prim, g_PadLabelSlots[k].x + 9, g_PadLabelSlots[k].y + 8, 0x18, 0x10, 0x90,
         0xAC, 0x7F40);
     k = labelRow[3];
     prim = QueueSpriteTransWide(
-        ot, prim, D_8007C150[k].x + 33, D_8007C150[k].y + 8, 0x20, 0x10, 0xB8,
+        ot, prim, g_PadLabelSlots[k].x + 33, g_PadLabelSlots[k].y + 8, 0x20, 0x10, 0xB8,
         0xAC, 0x7F40);
     k = labelRow[4];
     prim = QueueSpriteTransWide(
-        ot, prim, D_8007C150[k].x + 5, D_8007C150[k].y + 8, 0x40, 0x10, 0,
+        ot, prim, g_PadLabelSlots[k].x + 5, g_PadLabelSlots[k].y + 8, 0x40, 0x10, 0,
         0xBC, 0x7F40);
     i = 0;
     do {
         k = labelRow[i];
         prim = (u8 *)GameAddTilePrim(
-            (s32)ot, (s32)prim, D_8007C150[k].x + 1, D_8007C150[k].y + 2, 0x46,
+            (s32)ot, (s32)prim, g_PadLabelSlots[k].x + 1, g_PadLabelSlots[k].y + 2, 0x46,
             0x1C, 0, 0, 0);
         k = labelRow[i];
         prim = (u8 *)GameAddTilePrim(
-            (s32)ot, (s32)prim, D_8007C150[k].x, D_8007C150[k].y, 0x48, 0x20,
+            (s32)ot, (s32)prim, g_PadLabelSlots[k].x, g_PadLabelSlots[k].y, 0x48, 0x20,
             0xFF, 0xFF, 0xFF);
         i++;
     } while (i < 5);
@@ -88,11 +88,11 @@ typedef struct CalloutPoint {
     s16 y;
 } CalloutPoint;
 
-extern CalloutPoint D_8007C168[];
-extern CalloutPoint D_8007C180[];
+extern CalloutPoint g_PadCalloutLabelPoints[] asm("D_8007C168");
+extern CalloutPoint g_PadCalloutButtonPoints[] asm("D_8007C180");
 
 /* Screen animation counter; the callouts only draw while it is settled. */
-extern s32 D_801E8AA4;
+extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
 
 /* Local wide-parameter view of GameQueueLine; see GameQueueSprite.c. */
 u8 *QueueLineWide(
@@ -114,11 +114,11 @@ u8 *QueueLineWide(
 u8 *GameDrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
     s32 i;
 
-    if (D_801E8AA4 > -16 && D_801E8AA4 < 16) {
+    if (g_ControllerSceneAngleY > -16 && g_ControllerSceneAngleY < 16) {
         i = 0;
         do {
-            CalloutPoint *lp = &D_8007C168[labelRow[i]];
-            CalloutPoint *bp = &D_8007C180[buttonRow[i]];
+            CalloutPoint *lp = &g_PadCalloutLabelPoints[labelRow[i]];
+            CalloutPoint *bp = &g_PadCalloutButtonPoints[buttonRow[i]];
 
             prim = QueueLineWide(
                 ot, prim, lp->x, lp->y, lp->x, bp->y, 0x20, 0xFF, 0x20);
@@ -134,28 +134,28 @@ u8 *GameDrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
 
 /* Eight rows of five bytes: the label slot each action sits in, and the button
  * each label points at, for the standard pad. */
-extern u8 D_8007C1C0[];
-extern u8 D_8007C1E8[];
+extern u8 g_PadConfigLabelRows[] asm("D_8007C1C0");
+extern u8 g_PadConfigButtonRows[] asm("D_8007C1E8");
 
-extern s16 D_8019CE08;
+extern s16 g_PadMappingIndex asm("D_8019CE08");
 
 /* One whole standard-pad diagram for the current selection: the five action
  * labels, then the five callout lines from each label to its button. */
 u8 *GameDrawPadConfigDiagram(void *ot, u8 *prim) {
-    prim = GameDrawPadConfigLabels(ot, prim, &D_8007C1C0[D_8019CE08 * 5]);
+    prim = GameDrawPadConfigLabels(ot, prim, &g_PadConfigLabelRows[g_PadMappingIndex * 5]);
     return GameDrawPadConfigCallouts(
-        ot, prim, &D_8007C1C0[D_8019CE08 * 5], &D_8007C1E8[D_8019CE08 * 5]);
+        ot, prim, &g_PadConfigLabelRows[g_PadMappingIndex * 5], &g_PadConfigButtonRows[g_PadMappingIndex * 5]);
 }
 
-/* The NeGcon counterparts of D_8007C1C0 / D_8007C1E8. */
-extern u8 D_8007C210[];
-extern u8 D_8007C238[];
+/* The NeGcon counterparts of g_PadConfigLabelRows / g_PadConfigButtonRows. */
+extern u8 g_NegconConfigLabelRows[] asm("D_8007C210");
+extern u8 g_NegconConfigButtonRows[] asm("D_8007C238");
 
-extern s16 D_8019CB08;
+extern s16 g_NegconMappingIndex asm("D_8019CB08");
 
 /* One whole NeGcon diagram for the current selection: labels, then callouts. */
 u8 *GameDrawNegconConfigDiagram(void *ot, u8 *prim) {
-    prim = GameDrawPadConfigLabels(ot, prim, &D_8007C210[D_8019CB08 * 5]);
+    prim = GameDrawPadConfigLabels(ot, prim, &g_NegconConfigLabelRows[g_NegconMappingIndex * 5]);
     return GameDrawPadConfigCallouts(
-        ot, prim, &D_8007C210[D_8019CB08 * 5], &D_8007C238[D_8019CB08 * 5]);
+        ot, prim, &g_NegconConfigLabelRows[g_NegconMappingIndex * 5], &g_NegconConfigButtonRows[g_NegconMappingIndex * 5]);
 }

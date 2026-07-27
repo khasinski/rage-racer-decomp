@@ -16,10 +16,10 @@ struct Entry_5ACA0 {
     u8 f1;
     u8 pad[6];
 };
-extern s32 D_8009B30C;
-extern u8 D_80082A90;
-extern s32 D_8009B2FC;
-extern s32 D_8009B314;
+extern s32 g_MenuHintBarStep asm("D_8009B30C");
+extern u8 g_MenuHintBarScript asm("D_80082A90");
+extern s32 g_MenuHintBarProgress asm("D_8009B2FC");
+extern s32 g_MenuHintButtonsVisible asm("D_8009B314");
 extern u8 g_PadType asm("D_801E4369");
 
 
@@ -67,16 +67,16 @@ void GameUpdateMenuMode(void) {
 
     {
         register s32 flag asm("$6");
-        flag = D_8009B30C;
+        flag = g_MenuHintBarStep;
         if (flag == 0) {
             return;
         }
     }
-    if (func_800487D8(&D_80082A90, &D_8009B2FC) == 0) {
+    if (func_800487D8(&g_MenuHintBarScript, &g_MenuHintBarProgress) == 0) {
         return;
     }
 
-    if (D_8009B314 != 0) {
+    if (g_MenuHintButtonsVisible != 0) {
         if (g_PadType == 0x23) {
             scratch = (void *)((s32)scratch + 4);
             func_80046A2C(scratch, 0xC0, 0x1A1, 0x20, 0xC, 0x94, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -90,7 +90,7 @@ void GameUpdateMenuMode(void) {
     func_80047E60(g_MenuOverlayPattern);
 }
 
-extern s32 D_801E6D9C;
+extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
 void func_800731CC(void);
 void SsSeqCalledTbyT(void) asm("func_80071018");
 void func_8005E900(void);
@@ -99,7 +99,7 @@ void func_8005AF78(void) {
         func_800731CC();
     } else {
         SsSeqCalledTbyT();
-        if (D_801E6D9C != 0) {
+        if (g_SeqVolumeFadeStep != 0) {
             func_8005E900();
         }
     }
@@ -144,11 +144,11 @@ s32 GameSetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
     return old;
 }
 
-extern s32 D_801E6D84;
-extern s32 D_801E6D88;
+extern s32 g_ReverbDepthL asm("D_801E6D84");
+extern s32 g_ReverbDepthR asm("D_801E6D88");
 extern s32 D_801E6D80;
-extern s32 D_801E446C[];
-extern s32 D_801E6CC4;
+extern s32 g_EngineSoundCurves[] asm("D_801E446C");
+extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
 
 void GameSetLoadedTableVolumeScale(s32 scale) asm("func_8005BD58");
 s32 GameSetSoundToneTableEntry(s32 row, s32 bank, s32 value) asm("func_8005B040");
@@ -165,7 +165,7 @@ void GameLoadAudioParameterTable(u16 *table) {
     register s32 rowBaseOffset asm("$8");
     register s32 rowBasePtr asm("$2");
     register s32 colOffset asm("$3");
-    register s32 *base asm("$10") = D_801E446C;
+    register s32 *base asm("$10") = g_EngineSoundCurves;
     register s32 *secondBase asm("$11");
     register s32 *leftPtr asm("$3");
     register s32 *rightPtr asm("$6");
@@ -230,7 +230,7 @@ void GameLoadAudioParameterTable(u16 *table) {
     } while (bank < 2);
 
     step = *tableReg;
-    leftPtr = &D_801E6CC4;
+    leftPtr = &g_EngineSoundMaxRpm;
     *leftPtr = step;
     step--;
     if ((u32)step >= 0x27FF) {
@@ -256,8 +256,8 @@ void GameSetReverbDepth(s32 left, s32 right) {
         right = 0;
     }
 
-    D_801E6D84 = left;
-    D_801E6D88 = right;
+    g_ReverbDepthL = left;
+    g_ReverbDepthR = right;
     SsUtSetReverbDepth((s16)left, (s16)right);
 }
 
@@ -289,15 +289,15 @@ void GameSetReverbPreset(s32 type, s32 left, s32 right) {
 
     if ((u32)(type - 1) < 9) {
         D_801E6D80 = type;
-        D_801E6D84 = left;
-        D_801E6D88 = right;
+        g_ReverbDepthL = left;
+        g_ReverbDepthR = right;
         SsUtSetReverbType((s16)type);
         SsUtReverbOn();
         GameSetReverbDepth(left, right);
     } else {
         D_801E6D80 = 0;
-        D_801E6D88 = 0;
-        D_801E6D84 = 0;
+        g_ReverbDepthR = 0;
+        g_ReverbDepthL = 0;
     }
 }
 

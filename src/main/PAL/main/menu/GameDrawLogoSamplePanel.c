@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern s32 D_8007FB24;
-extern u16 D_801E444E[];
+extern u16 g_TeamLogoSwatches[] asm("D_801E444E");
 
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
                    u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
@@ -44,8 +44,8 @@ void GameDrawLogoSamplePanel(s32 arg0, s32 arg1) {
 
         for (i = 0, xoff = -23; i < 15; i++) {
             func_80047024(ot, (s16)(xc + xoff), (s16)(t + 528), 8, 0x10,
-                          *(u8 *)&D_801E444E[i] << 3, (D_801E444E[i] >> 2) & 0xf8,
-                          (D_801E444E[i] >> 7) & 0xf8, 0xFF);
+                          *(u8 *)&g_TeamLogoSwatches[i] << 3, (g_TeamLogoSwatches[i] >> 2) & 0xf8,
+                          (g_TeamLogoSwatches[i] >> 7) & 0xf8, 0xFF);
             xoff += 8;
         }
 

@@ -2,7 +2,7 @@
 #include "game/memcard.h"
 #include "game/menu.h"
 
-extern s32 D_8009B748[];
+extern s32 g_McDirEntries[] asm("D_8009B748");
 
 s32 GameCalculateMemoryCardFreeBlocks(s32 arg0) {
     u8 scratch[8];
@@ -15,7 +15,7 @@ s32 GameCalculateMemoryCardFreeBlocks(s32 arg0) {
     sum = 0;
 
     if (arg0 > 0) {
-        ptr = (u8 *)D_8009B748;
+        ptr = (u8 *)g_McDirEntries;
         do {
             value = *(s32 *)(ptr + 0x18);
             sum += value;
@@ -36,23 +36,23 @@ s32 GameCalculateMemoryCardFreeBlocks(s32 arg0) {
     }
 }
 
-extern s32 D_8009B738;
-extern s32 D_8009B73C;
+extern s32 g_McCardFileCount asm("D_8009B738");
+extern s32 g_McFreeBlocks asm("D_8009B73C");
 
 s32 GameRefreshMemoryCardSaveStatus(s32 arg0, GameSaveHeaderRow *arg1) {
     s32 ret;
 
     GameMenuLoadPhase = 0x100;
     GameClearSaveHeaderRows(arg1);
-    D_8009B738 = GameCountMemoryCardFiles(0, 0);
-    D_8009B73C = GameCalculateMemoryCardFreeBlocks(D_8009B738);
+    g_McCardFileCount = GameCountMemoryCardFiles(0, 0);
+    g_McFreeBlocks = GameCalculateMemoryCardFreeBlocks(g_McCardFileCount);
     ret = GameScanMemoryCardSaveHeaders(arg1);
     GameMenuLoadPhase = 0x200;
 
     return ret;
 }
 
-extern char D_80012FB8[];
+extern char g_FmtPlayTime[] asm("D_80012FB8");
 
 void LibcSprintf(void *arg0, char *arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_800632F0");
 
@@ -61,19 +61,19 @@ void *GameFormatSaveElapsedTime(void *arg0, u32 arg1) {
     u32 totalMinutes = arg1 / 3600;
     u32 totalSeconds = arg1 / 60;
 
-    LibcSprintf(arg0, D_80012FB8, hours, totalMinutes - (hours * 60), totalSeconds - (totalMinutes * 60));
+    LibcSprintf(arg0, g_FmtPlayTime, hours, totalMinutes - (hours * 60), totalSeconds - (totalMinutes * 60));
     return (u8 *)arg0 + 2;
 }
 
-extern u8 D_800128FC[];
+extern u8 g_McMessageText[] asm("D_800128FC");
 
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 
 void GameDrawMemoryCardMessageLine(s32 arg0, s32 arg1) {
-    func_80016754(0x28, 0xB8, &D_800128FC[arg1 * 30], 0x78CC);
+    func_80016754(0x28, 0xB8, &g_McMessageText[arg1 * 30], 0x78CC);
 }
 
-extern u8 D_80012ADC[];
+extern u8 g_McHelpText[] asm("D_80012ADC");
 
 void func_80016754(s32, s32, void *, s32);
 
@@ -89,7 +89,7 @@ void GameDrawMemoryCardHelpPrompt(s32 arg0) {
     y = 0x28;
     __asm__("" : "=r"(x), "=r"(y) : "0"(x), "1"(y));
     offset <<= 2;
-    base = D_80012ADC;
+    base = g_McHelpText;
     func_80016754(x, y, base + offset, 0x78CC);
 
     x = 0x50;

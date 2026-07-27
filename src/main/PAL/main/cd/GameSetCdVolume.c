@@ -1,17 +1,17 @@
 #include "common.h"
 #include "game/cd.h"
 
-extern s32 D_8007F5FC;
-extern u8 D_8007F5A8[];
+extern s32 g_CdMixPreset asm("D_8007F5FC");
+extern u8 g_CdMixPresets[] asm("D_8007F5A8");
 extern u8 g_CdVolume asm("D_8009B194");
-extern s32 D_8009B184;
-extern s32 D_8009B188;
-extern s32 D_8009B18C;
-extern s32 D_8009B190;
-extern s32 D_8009B174;
-extern s32 D_8009B178;
-extern s32 D_8009B17C;
-extern s32 D_8009B180;
+extern s32 g_CdMixFullLL asm("D_8009B184");
+extern s32 g_CdMixFullLR asm("D_8009B188");
+extern s32 g_CdMixFullRR asm("D_8009B18C");
+extern s32 g_CdMixFullRL asm("D_8009B190");
+extern s32 g_CdMixLL asm("D_8009B174");
+extern s32 g_CdMixLR asm("D_8009B178");
+extern s32 g_CdMixRR asm("D_8009B17C");
+extern s32 g_CdMixRL asm("D_8009B180");
 
 
 void GameSetCdVolume(s32 arg0) asm("func_80042FA0");
@@ -22,31 +22,31 @@ void GameSetCdVolume(s32 arg0) {
     s32 product;
     s32 value;
 
-    offset = D_8007F5FC;
+    offset = g_CdMixPreset;
     g_CdVolume = arg0;
     scale = g_CdVolume;
     offset <<= 2;
 
-    product = D_8007F5A8[offset] * scale;
+    product = g_CdMixPresets[offset] * scale;
     magic = 0x81020409;
     value = (product / 127) << 12;
-    D_8009B184 = value;
-    D_8009B174 = value;
+    g_CdMixFullLL = value;
+    g_CdMixLL = value;
 
-    product = D_8007F5A8[offset + 1] * scale;
+    product = g_CdMixPresets[offset + 1] * scale;
     value = (product / 127) << 12;
-    D_8009B188 = value;
-    D_8009B178 = value;
+    g_CdMixFullLR = value;
+    g_CdMixLR = value;
 
-    product = D_8007F5A8[offset + 2] * scale;
+    product = g_CdMixPresets[offset + 2] * scale;
     value = (product / 127) << 12;
-    D_8009B18C = value;
-    D_8009B17C = value;
+    g_CdMixFullRR = value;
+    g_CdMixRR = value;
 
-    product = D_8007F5A8[offset + 3] * scale;
+    product = g_CdMixPresets[offset + 3] * scale;
     value = (product / 127) << 12;
-    D_8009B190 = value;
-    D_8009B180 = value;
+    g_CdMixFullRL = value;
+    g_CdMixRL = value;
 
     GameStepCdVolumeFade();
 }

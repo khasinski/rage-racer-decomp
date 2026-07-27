@@ -4,7 +4,7 @@
 
 extern u8 *g_AssetBase asm("D_8019C904");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
-extern u8 *D_801E42D0;
+extern u8 *g_TrackTextureShadow asm("D_801E42D0");
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A2E0(void *arg0);
@@ -35,7 +35,7 @@ void GameInstallCourseAssets(void) {
 
     func_8001A40C(g_AssetBase);
 
-    D_801E42D0 = g_AssetBase;
+    g_TrackTextureShadow = g_AssetBase;
     GameUploadImageAsset(g_AssetSubBlockPtr);
     GameResetTrackTextureSwap();
     g_AssetLoadCursor = g_AssetBase + 0x38000;

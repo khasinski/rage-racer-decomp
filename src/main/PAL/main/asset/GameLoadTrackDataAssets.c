@@ -97,8 +97,8 @@ void GameLoadTrackDataAssets(void) {
     }
 }
 
-extern s32 *D_801E8A90;
-extern s32 D_8019CA1C;
+extern s32 *g_StreamLoc asm("D_801E8A90");
+extern s32 g_StreamSectorCount asm("D_8019CA1C");
 extern s32 D_8019C708;
 
 void GameBeginFmv(void) asm("func_8001E6B4");
@@ -112,13 +112,13 @@ void GameBeginIntroFmv(void) {
 
     ptr = (s32 *)&g_StreamCdEntries[0].size;
     value = *ptr;
-    D_801E8A90 = ptr - 1;
-    D_8019CA1C = value;
+    g_StreamLoc = ptr - 1;
+    g_StreamSectorCount = value;
     D_8019C708 = value * 2;
 }
 
-extern s32 *D_801E8A90;
-extern s32 D_8019CA1C;
+extern s32 *g_StreamLoc;
+extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
 void GameBeginFmv(void) asm("func_8001E6B4");
@@ -142,13 +142,13 @@ void GameBeginClassFmv(void) {
     index += g_GrandPrixClass;
     offset = index << 3;
     value = *(s32 *)((s32)(s32 *)&g_StreamCdEntries[0].size + offset);
-    D_801E8A90 = (s32 *)((s32)base + offset);
-    D_8019CA1C = value;
+    g_StreamLoc = (s32 *)((s32)base + offset);
+    g_StreamSectorCount = value;
     D_8019C708 = value * 2;
 }
 
-extern s32 *D_801E8A90;
-extern s32 D_8019CA1C;
+extern s32 *g_StreamLoc;
+extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
 void GameBeginFmv(void) asm("func_8001E6B4");
@@ -162,12 +162,12 @@ void GameBeginEndingFmv(void) {
 
     ptr = (s32 *)&g_StreamCdEntries[10].size;
     value = *ptr;
-    D_801E8A90 = ptr - 1;
-    D_8019CA1C = value;
+    g_StreamLoc = ptr - 1;
+    g_StreamSectorCount = value;
     D_8019C708 = value * 4;
 }
 
-extern s32 D_8009AEFC;
+extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
 
 void GameLoadBootAssets(void) asm("func_800180CC");
 void GameLoadSaveScreenAssets(void) asm("func_80018344");
@@ -199,10 +199,10 @@ void GameServiceAssetLoad(void) {
             GameLoadCarSelectAssets();
             break;
         case 5:
-            GameLoadCarModel(D_8009AEFC);
+            GameLoadCarModel(g_PendingCarModelIndex);
             break;
         case 6:
-            GameLoadUpgradedCarModel(D_8009AEFC);
+            GameLoadUpgradedCarModel(g_PendingCarModelIndex);
             break;
         case 7:
             GameLoadOptionScreenAssets();
