@@ -43,6 +43,7 @@ asm/**
 !asm/EUR/main/.gitkeep
 linkers/**/*.ld
 linkers/**/undefined_*.txt
+linkers/**/addr_halves.*.txt
 !linkers/**/undefined_syms_manual.txt
 
 # Local reverse-engineering scratch/output.

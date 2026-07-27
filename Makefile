@@ -51,10 +51,11 @@ stage:
 	$(PY) tools/scripts/stage_discs.py
 
 split:
-	rm -rf $(ASM_DIR) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES)
+	rm -rf $(ASM_DIR) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES) $(ADDR_HALVES)
 	$(PY) -m splat split $(SPLAT_CFG)
 	$(PY) tools/scripts/gen_nonmatching_asm.py --version $(VERSION) --basename $(BASENAME)
 	$(PY) tools/scripts/symbolise_data_words.py --version $(VERSION) --basename $(BASENAME)
+	$(PY) tools/scripts/gen_bss.py --version $(VERSION) --basename $(BASENAME)
 
 $(BUILD)/asm/%.s.o: asm/%.s
 	@mkdir -p $(dir $@)
@@ -102,15 +103,23 @@ UNDEFINED_SYMS := linkers/$(VERSION)/undefined_syms_auto.$(BASENAME).txt
 UNDEFINED_FUNCS := linkers/$(VERSION)/undefined_funcs_auto.$(BASENAME).txt
 UNDEFINED_MANUAL := linkers/$(VERSION)/undefined_syms_manual.txt
 ADDR_ALIASES := linkers/$(VERSION)/undefined_addr_aliases.$(BASENAME).txt
+ADDR_HALVES := linkers/$(VERSION)/addr_halves.$(BASENAME).txt
 
 build: $(OUT_BIN)
 
-$(ADDR_ALIASES): $(OBJS)
-	$(PY) tools/scripts/gen_undefined_addr_aliases.py --nm $(NM) --output $@ $(OBJS)
+# splat's undefined_syms_auto / undefined_funcs_auto are NOT linked in: every
+# line in them is an assignment, and an assignment overrides a real definition,
+# so linking them would pin each address forever. They stay on disk because the
+# disassembler reads them for symbol names. This target distils them down to
+# the addresses the link actually still needs, and only that file is linked.
+$(ADDR_ALIASES): $(OBJS) $(UNDEFINED_MANUAL) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_HALVES)
+	$(PY) tools/scripts/gen_undefined_addr_aliases.py --nm $(NM) --output $@ \
+	      --source $(UNDEFINED_SYMS) --source $(UNDEFINED_FUNCS) \
+	      --manual $(UNDEFINED_MANUAL) --manual $(ADDR_HALVES) $(OBJS)
 
-$(ELF): $(OBJS) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(UNDEFINED_MANUAL) $(ADDR_ALIASES)
-	$(LD) -EL -T $(LD_SCRIPT) -T $(UNDEFINED_SYMS) -T $(UNDEFINED_FUNCS) \
-	      -T $(UNDEFINED_MANUAL) -T $(ADDR_ALIASES) \
+$(ELF): $(OBJS) $(LD_SCRIPT) $(UNDEFINED_MANUAL) $(ADDR_ALIASES) $(ADDR_HALVES)
+	$(LD) -EL -T $(LD_SCRIPT) \
+	      -T $(UNDEFINED_MANUAL) -T $(ADDR_ALIASES) -T $(ADDR_HALVES) \
 	      -Map $(BUILD)/$(BASENAME).map -o $@
 
 $(OUT_BIN): $(ELF)
@@ -127,7 +136,7 @@ clean:
 
 distclean: clean
 	rm -rf asm/$(VERSION)/$(BASENAME) $(LD_SCRIPT) \
-	       $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES)
+	       $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES) $(ADDR_HALVES)
 
 help:
 	@echo "Targets:"

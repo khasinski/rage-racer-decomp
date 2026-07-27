@@ -146,7 +146,11 @@ LINKER_ASSIGN_RE = re.compile(
     r"^\s*(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*=\s*(?P<value>[^;]+);", re.MULTILINE
 )
 DATA_LABEL_RE = re.compile(r"^\s*(?:glabel|dlabel|jlabel|alabel)\s+(?P<name>[A-Za-z_][A-Za-z0-9_]*)")
-DATA_ADDR_RE = re.compile(r"^\s*/\* [0-9A-Fa-f]+ (?P<vaddr>[0-9A-Fa-f]{8}) \*/")
+# The word itself is present on lines symbolise_data_words.py has rewritten,
+# absent elsewhere; missing that case silently loses the label above it.
+DATA_ADDR_RE = re.compile(
+    r"^\s*/\* [0-9A-Fa-f]+ (?P<vaddr>[0-9A-Fa-f]{8})(?: [0-9A-Fa-f]{8})? \*/"
+)
 
 
 def address_from_name(name: str) -> int | None:
@@ -332,7 +336,11 @@ class Stats:
     pairs_absolute: int = 0
     #: pairs that are RAM addresses but cannot be spelled relocatably.
     pairs_frozen: int = 0
+    #: pairs spelled through linker-computed halves; see `_half_symbols`.
+    pairs_halved: int = 0
     words: int = 0
+    #: alias base name -> the expression its `_hi`/`_lo` halves are cut from.
+    halves: dict[str, str] = field(default_factory=dict)
 
 
 def _gte_name(word: int, vram: int) -> str | None:
@@ -383,7 +391,7 @@ def disassemble(
         if internal(target) and target not in labels:
             local.setdefault(target, f".L{target:08X}")
 
-    hi_at, lo_at, notes = _pair_addresses(instructions, table, stats)
+    hi_at, lo_at, halves, notes = _pair_addresses(instructions, table, stats)
 
     lines: list[str] = []
     for index, instruction in enumerate(instructions):
@@ -395,7 +403,9 @@ def disassemble(
             lines.append(f"{local[address]}:")
 
         word = words[index]
-        text = _instruction_text(instruction, index, local, labels, table, hi_at, lo_at, stats)
+        text = _instruction_text(
+            instruction, index, local, labels, table, hi_at, lo_at, halves, stats
+        )
         if index in notes:
             text = f"{text}  /* {notes[index]} */"
         lines.append(f"/* {address:08X} {word:08X} */  {text}")
@@ -435,6 +445,7 @@ def _pair_addresses(
     """
     hi_at: dict[int, str] = {}
     lo_at: dict[int, str] = {}
+    halves: dict[int, str] = {}
     notes: dict[int, str] = {}
     pending: dict[str, tuple[int, int]] = {}
     counted: set[int] = set()
@@ -463,13 +474,15 @@ def _pair_addresses(
                 # `ori` zero-extends where `%lo` relocation arithmetic assumes
                 # the sign extension of `addiu` and the loads: when bit 15 of
                 # the address is set the pair's `lui` holds a different upper
-                # half than `%hi` would compute.  There is no relocation pair
-                # that spells this, so it stays literal and says why.
+                # half than `%hi` would compute, so `%hi`/`%lo` cannot spell
+                # this pair.  Cut the two halves in the linker script instead
+                # and reference them by name -- same encoding, but the value
+                # is still computed from the symbol, so the pair can move.
                 blocked = reference is not None and name == "ori" and bool(address & 0x8000)
                 if blocked:
-                    note = f"frozen: {reference} is built by zero-extending ori"
-                    notes[hi_index] = note
-                    notes[index] = note
+                    alias = _half_symbols(reference, stats)
+                    halves[hi_index] = f"{alias}_hi"
+                    halves[index] = f"{alias}_lo"
                     reference = None
                 if hi_index not in counted:
                     counted.add(hi_index)
@@ -478,7 +491,7 @@ def _pair_addresses(
                     else:
                         stats.pairs += 1
                         if blocked:
-                            stats.pairs_frozen += 1
+                            stats.pairs_halved += 1
                 if reference is not None:
                     if hi_index not in hi_at:
                         stats.pairs_named += 1
@@ -492,7 +505,20 @@ def _pair_addresses(
     for hi_index in list(hi_at):
         if not any(lo_index > hi_index for lo_index in lo_at if lo_at[lo_index] == hi_at[hi_index]):
             hi_at.pop(hi_index)
-    return hi_at, lo_at, notes
+    return hi_at, lo_at, halves, notes
+
+
+def _half_symbols(reference: str, stats: Stats) -> str:
+    """Name the linker symbols that hold the two halves of `reference`.
+
+    `lui $t2, name_hi` assembles to an R_MIPS_LO16 against `name_hi`, i.e. the
+    low 16 bits of whatever the linker script assigns it, so defining
+    `name_hi = (expr) >> 16` reproduces the literal upper half without `%hi`'s
+    sign compensation.
+    """
+    alias = re.sub(r"[^0-9A-Za-z_]+", "_", reference).strip("_")
+    stats.halves[alias] = reference
+    return alias
 
 
 def _instruction_text(
@@ -503,6 +529,7 @@ def _instruction_text(
     table: SymbolTable,
     hi_at: dict[int, str],
     lo_at: dict[int, str],
+    halves: dict[int, str],
     stats: Stats,
 ) -> str:
     name = instruction.getOpcodeName()
@@ -518,6 +545,11 @@ def _instruction_text(
         # No name for it: an encoded target is still better than a bare word,
         # but say so, because this one cannot move.
         return f".word 0x{word:08X}  /* {name} 0x{target:08X}: no symbol */"
+
+    if index in halves:
+        if name == "lui":
+            return f"lui ${instruction.rt.name}, {halves[index]}"
+        return f"ori ${instruction.rt.name}, ${instruction.rs.name}, {halves[index]}"
 
     if index in hi_at:
         return f"lui ${instruction.rt.name}, %hi({hi_at[index]})"

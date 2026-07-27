@@ -393,6 +393,17 @@ def main() -> int:
         write_words(output, '.section .rodata, "a"', data, vram, data_labels)
         generated += 1
 
+    # The hand-written engine builds a few addresses with `lui`/`ori`, which no
+    # %hi/%lo pair can spell.  Cutting the halves here keeps the encoding while
+    # leaving the value a function of the symbol, so those pairs move too.
+    halves = Path("linkers") / args.version / f"addr_halves.{args.basename}.txt"
+    lines = ["/* Address halves for lui/ori pairs; see tools/scripts/dis_sym.py. */"]
+    for alias, reference in sorted(stats.halves.items()):
+        lines.append(f"{alias}_hi = ({reference}) >> 16;")
+        lines.append(f"{alias}_lo = ({reference}) & 0xFFFF;")
+    halves.parent.mkdir(parents=True, exist_ok=True)
+    halves.write_text("\n".join(lines) + "\n")
+
     print(f"generated {generated} local nonmatching asm files for {args.version}/{args.basename}")
     print(
         f"  symbolised {stats.calls_named}/{stats.calls} calls and "
@@ -400,8 +411,9 @@ def main() -> int:
         f"{stats.words} instructions"
     )
     print(
-        f"  left literal: {stats.pairs_absolute} hardware or constant pairs, "
-        f"{stats.pairs_frozen} pairs no relocation can spell"
+        f"  left literal: {stats.pairs_absolute} hardware or constant pairs; "
+        f"{stats.pairs_halved} lui/ori pairs spelled through {len(stats.halves)} "
+        f"linker-computed address halves"
     )
     return 0
 
