@@ -145,7 +145,169 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameDrawPlayerCarModel", func_8001DFC0);
+
+extern u8 *g_CamRow2 asm("D_8019C9A8");
+extern s32 g_CourseIdx asm("D_801E428C");
+extern u8 D_8007D3AC[][11];
+extern s16 D_8007D380[][2];
+void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
+
+void func_8001DFC0(GameRenderObject *obj) {
+    Matrix m_10;
+    Matrix m_30;
+    Matrix m_50;
+    Matrix m_70;
+    Matrix m_90;
+    Matrix m_B0[2];
+    Matrix m_F0;
+    s16 v_110[4];
+    s32 m_118[4];
+    s32 v_128[4];
+    s32 v_138[4];
+    s32 v_148[4];
+    s32 clipHandle;
+    s32 otDepth;
+    s32 i;
+    s32 model;
+    s32 *cam = (s32 *)0x1F800000;
+    s16 *lod;
+
+    model = D_8007D3AC[g_CourseIdx][((GameRenderSourcePoint *)obj)->field_AE];
+    lod = D_8007D380[model];
+    obj->y -= ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
+    obj->field_60 -= ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
+
+    v_128[0] = obj->x - cam[2];
+    v_128[1] = 0;
+    v_128[2] = obj->z - cam[4];
+    ApplyMatrixLV((void *)0x1F800028, v_128, v_148);
+    if (v_128[0] < 0) {
+        v_128[0] = -v_128[0];
+    }
+    if (v_128[2] < 0) {
+        v_128[2] = -v_128[2];
+    }
+    otDepth = v_128[0] + v_128[2];
+    if (v_148[2] >= 0) {
+        if (otDepth < 0xD00) {
+            GameBuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
+            GameBuildRotMatrixX(&m_30, obj->angle_20);
+            MulMatrix2(&m_10, &m_30);
+            MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
+            clipHandle = func_800350B4((s32)obj->field_70);
+            if (clipHandle != 0) {
+                func_8001C248(clipHandle, &m_90);
+            }
+            func_80069888(&m_90);
+
+            m_90.m[0][0] = -m_90.m[0][0];
+            m_90.m[0][2] = -m_90.m[0][2];
+            m_90.m[1][0] = -m_90.m[1][0];
+            m_90.m[1][2] = -m_90.m[1][2];
+            m_90.m[2][0] = -m_90.m[2][0];
+            m_90.m[2][2] = -m_90.m[2][2];
+
+            m_50 = m_30;
+            MulMatrix2((Matrix *)0x1F800028, &m_30);
+
+            GameBuildRotMatrixY(&m_10, 0x800 - obj->angle_54);
+            GameBuildRotMatrixX(&m_70, obj->angle_50);
+            MulMatrix2(&m_10, &m_70);
+            MulMatrix2((Matrix *)0x1F800028, &m_70);
+            GameBuildRotMatrixZ(&m_10, obj->angle_58);
+            MulMatrix2(&m_70, &m_10);
+
+            v_138[0] = obj->x;
+            v_138[2] = obj->z;
+            v_138[1] = obj->field_60;
+            func_80017794((void *)0x1F80011C, v_138, &m_10);
+            g_ScratchRenderMode = 0;
+            GameSubmitModel((void *)0x1F800000,
+                            (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
+
+            func_80017794((void *)0x1F80011C, v_138, &m_10);
+            g_ScratchRenderMode = 0;
+            GameSubmitModel((void *)0x1F800000,
+                            (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
+
+            GameBuildRotMatrixZ(&m_70, obj->angle_28);
+            MulMatrix2(&m_30, &m_70);
+            func_80017794((void *)0x1F80011C, obj, &m_70);
+            g_ScratchRenderMode = lod[1] << 16;
+            GameSubmitModel((void *)0x1F800000,
+                            (lod[0] < g_ModelBankCount) ? lod[0] : 1);
+
+            GameBuildRotMatrixZ(&m_10, obj->angle_28 - obj->field_64);
+            MulMatrix(&m_50, &m_10);
+            MulMatrix(&m_30, &m_10);
+            GameBuildRotMatrixX(&m_F0, obj->flags_48);
+            MulMatrix2(&m_30, &m_F0);
+
+            GameBuildRotMatrixY(&m_10, obj->angle_44 * 2);
+            GameBuildRotMatrixX(&m_B0[0], obj->flags_48);
+            MulMatrix2(&m_10, &m_B0[0]);
+            MulMatrix2(&m_30, &m_B0[0]);
+
+            m_B0[1].m[0][0] = -m_B0[0].m[0][0];
+            m_B0[1].m[0][1] = m_B0[0].m[0][1];
+            m_B0[1].m[0][2] = -m_B0[0].m[0][2];
+            m_B0[1].m[1][0] = -m_B0[0].m[1][0];
+            m_B0[1].m[1][1] = m_B0[0].m[1][1];
+            m_B0[1].m[1][2] = -m_B0[0].m[1][2];
+            m_B0[1].m[2][0] = -m_B0[0].m[2][0];
+            m_B0[1].m[2][1] = m_B0[0].m[2][1];
+            m_B0[1].m[2][2] = -m_B0[0].m[2][2];
+            func_80017794((void *)0x1F80011C, obj, &m_F0);
+            g_ScratchRenderMode = 0;
+            GameSubmitModel((void *)0x1F800000,
+                            (lod[0] + 3 < g_ModelBankCount) ? (lod[0] + 3) : 1);
+
+            for (i = 0; i < 2; i++) {
+                s32 ax = ((CamRow *)(g_CamRow2 + (model << 3)))->axis0;
+                if (i & 1) {
+                    ax = -ax;
+                }
+                v_110[0] = ax;
+                v_110[1] = ((CamRow *)(g_CamRow2 + (model << 3)))->axis1;
+                v_110[2] = ((CamRow *)(g_CamRow2 + (model << 3)))->axis2;
+                ApplyMatrix((s32 *)&m_50, (s32 *)v_110, m_118);
+                m_118[0] += obj->x;
+                m_118[1] += obj->y;
+                m_118[2] += obj->z;
+                func_80017794((void *)0x1F80011C, m_118, &m_B0[i]);
+                g_ScratchRenderMode = 0;
+                GameSubmitModel((void *)0x1F800000,
+                                (lod[0] + 2 < g_ModelBankCount) ? (lod[0] + 2) : 1);
+                func_80069888(&m_90);
+            }
+        } else if (otDepth < 0x2500) {
+            GameBuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
+            GameBuildRotMatrixX(&m_50, obj->angle_20);
+            MulMatrix2(&m_10, &m_50);
+            MulMatrix0(&g_SceneLightMatrix, &m_50, &m_90);
+            clipHandle = func_800350B4((s32)obj->field_70);
+            if (clipHandle != 0) {
+                func_8001C248(clipHandle, &m_90);
+            }
+            func_80069888(&m_90);
+
+            GameBuildRotMatrixZ(&m_10, obj->angle_28);
+            MulMatrix2(&m_50, &m_10);
+            MulMatrix2((Matrix *)0x1F800028, &m_10);
+            func_80017794((void *)0x1F80011C, obj, &m_10);
+            g_ScratchRenderMode = lod[1] << 16;
+            GameSubmitModel((void *)0x1F800000,
+                            (lod[0] + 4 < g_ModelBankCount) ? (lod[0] + 4) : 1);
+        }
+    }
+
+    obj->y += ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
+    obj->field_60 += ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
+    if (clipHandle != 0) {
+        func_8001C794();
+    }
+}
+
 
 extern s32 g_FmvState asm("D_8009F094");
 extern s32 g_StreamReturnScene asm("D_8019C760");
