@@ -104,5 +104,76 @@ void GameDrawStartCountdown(s32 sceneTimer) asm("func_8003425C");
  *   g_ExtraGrandPrixCourseProgress D_8009E874  row 1's record
  */
 
+/*
+ * Live race timing. Times are milliseconds; 0x927BF is the saturation value
+ * for anything over 9'59"998, which the HUD prints as dashes. See names.md 15.
+ */
+
+/* Elapsed time of the lap in progress. */
+extern s32 g_LapTimeMs asm("D_801E4D64");
+
+/* Grand Prix time limit, in frames; counts down while g_RacePhase >= 2 and
+ * forces g_RacePhase = 5 when it reaches 0. Seeded to 15000. */
+extern s32 g_RaceTimeRemaining asm("D_8009AF9C");
+
+/* Sector being timed, 0..2; -2 before the first start-line crossing. */
+extern s32 g_SectorIndex asm("D_801E4148");
+
+/* This lap's three sector times, filled in as each boundary is crossed. */
+extern s32 g_SectorTimes[3] asm("D_8009AF80");
+
+/* Total of the best lap the split is measured against; seeded from the save
+ * records and written back when the race completes. */
+extern s32 g_RefLapTime asm("D_8009AF8C");
+
+/* Two arrays whose elements also carry their own split symbols, so the file
+ * that touches one element at a time declares three scalars instead:
+ *   g_SectorEndDistance[3]  D_801E4D98/9C/A0  lap distance ending each sector
+ *                                             (L/3, 2L/3, L)
+ *   g_RefSectorTimes[3]     D_8009AF90/94/98  the best lap's sector times
+ */
+
+/* Split readout: the sector time just recorded, the unsigned difference from
+ * the reference, and its sign (+1 ahead, -1 behind, 0 no split). */
+extern s32 g_LastSectorTime asm("D_8009AF78");
+extern s32 g_SplitDelta asm("D_8009AF7C");
+extern s16 g_SplitSign asm("D_8009AFAC");
+
+/* Which sector's reference is on screen, the reference time itself, and the
+ * 0..0x3C frame counter that ends the split display. */
+extern s16 g_SplitSector asm("D_8009AFA4");
+extern s32 g_SplitTargetTime asm("D_8009AFB0");
+extern s16 g_SplitTimer asm("D_8009AFA8");
+
+/* Set when a lap time saturates at 0x927BF; write-only in retail. */
+extern s32 g_LapTimeSaturated asm("D_8009AFA0");
+
+/* Frames the player has been driving the wrong way. Past 10 the warning shows
+ * and rival cues are muted; in Time Attack 60 on lap 0 aborts the run. */
+extern s16 g_WrongWayTimer asm("D_801E8A8C");
+
+/* g_PlayerCar.facingBackwards. Wrong way is `!= g_RaceSeries`, because the
+ * advanced series drives the course in the other direction. */
+extern s16 g_PlayerFacingBackwards asm("D_8009E78C");
+
+/* Non-zero while rival proximity / position sound cues may play: set only in
+ * the middle of a lap and cleared by the wrong-way warning. */
+extern s16 g_RivalCueEnabled asm("D_8009E6A0");
+
+/* Frame counter of the in-race fade transitions; every use is the brightness
+ * argument of GameDrawFullscreenFadeTile plus a frame threshold. */
+extern s16 g_RaceFadeTimer asm("D_801E43FC");
+
+/* Cursor of the in-race option overlay, clamped to 2 - g_GrandPrixMode. */
+extern s16 g_RaceOptionCursor asm("D_801E414C");
+
+/* Best lap of this race so far (D_801E4BCC), seeded from g_BestLapTimes at the
+ * grid, and GameDrawTimeValue (func_80033D50), which prints one millisecond
+ * time as m'ss"fff. Both are also referenced from render/, so they are
+ * declared per file rather than here. */
+
+/* The wrong-way warning: three sprites over a backing panel, drawn once
+ * g_WrongWayTimer passes 10. */
+void GameDrawWrongWayWarning(void) asm("func_800333DC");
 
 #endif

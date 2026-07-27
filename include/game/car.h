@@ -71,13 +71,17 @@ typedef struct GameCarRuntime {
     s16 field_9C;
     s16 field_9E;
     s32 headingAngle;
-    s32 field_A4;
+    s32 field_A4;    /* +0xA4 speed; km/h readout is field_A4 * 160 / 1168 */
     s32 field_A8;
     s16 activeFlag;
     s16 field_AE;
     s32 field_B0;
     s32 field_B4;
-    s16 routeRow;
+    /* +0xB8 0 = travelling with the course, 1 = against it. Seeded to
+     * g_RaceSeries for every car by GameBuildStartingGrid and recomputed each
+     * frame for the player from GameIsCarFacingBackwards; `!= g_RaceSeries`
+     * is the wrong-way test. */
+    s16 facingBackwards;
     u8 padBA[2];
     s32 field_BC;
     s32 field_C0;
@@ -120,7 +124,7 @@ typedef struct GameCarRuntime {
     s16 field_12C;
     s16 field_12E;
     s16 field_130;
-    s16 field_132;
+    s16 field_132;   /* +0x132 current gear */
     s32 field_134;
     s16 field_138;
     s16 field_13A;
@@ -149,7 +153,7 @@ typedef struct GameCarRuntimeProgressWindow {
 } GameCarRuntimeProgressWindow;
 
 /* The four contenders ordered by race progress (`field_68 + field_6C`), best
- * first; re-sorted every frame by func_8003A728 to rubber-band the AI. */
+ * first; re-sorted every frame by GameRankContenders to rubber-band the AI. */
 extern GameCarRuntime *g_RankedCars[4] asm("D_801E40BC");
 
 /* Active car-entry table; repointed at one of the three 13-entry tables below
@@ -237,7 +241,7 @@ typedef struct GameCarDrive {
     s32 steerPos;    /* +0x1C */
     s32 unk20;
     s32 unk24;
-    s32 unk28;       /* +0x28 index into the D_8007DAC0 launch table */
+    s32 unk28;       /* +0x28 index into the g_LaunchSpeedThresholds launch table */
     s16 unk2C;       /* engine load */
     s16 unk2E;
     s16 gearDisp;    /* +0x30 */
@@ -317,9 +321,9 @@ typedef struct GameCarTrackAngleWindow {
  * the data layouts.
  */
 /* Race-entry init for the player object: start pose plus the speed/gear lookup
- * tables D_801E8884 / D_801E4114 / D_801E4154. Logs "init_car" .. "init_ok". */
+ * tables g_GearTorqueCurve / D_801E4114 / D_801E4154. Logs "init_car" .. "init_ok". */
 void GameInitPlayerCar(GameCarRuntime *car) asm("func_8002C478");
-/* Non-clamping twin of func_80031298: recomputes the track-relative placement
+/* Non-clamping twin of GameUpdateCarTrackState: recomputes the track-relative placement
  * and writes the reference triple at +0x50, for the init/reset paths only. */
 void GameResetCarTrackState(GameCarRuntime *car) asm("func_80032280");
 /* The two variants of the rival-car driver over GameCarRuntime[11]. Race runs
@@ -328,7 +332,7 @@ void GameResetCarTrackState(GameCarRuntime *car) asm("func_80032280");
 void GameUpdateRaceCars(void) asm("func_8003B0D4");
 void GameUpdateAttractCars(void) asm("func_8003BB50");
 /* Player-vs-field collision (detection, response and the crash cue), called
- * only from func_8002DEFC; returns the struck sub-quad 1..4 or 0. */
+ * only from GameUpdatePlayerCar; returns the struck sub-quad 1..4 or 0. */
 s32 GameCollidePlayerWithCars(GameCarRuntime *car) asm("func_8002D398");
 /* One row of the AI pairwise sweep: car[index] against car[index + 1 .. 10],
  * push-apart only - no sound, no damage globals, no mode gate. */
@@ -340,7 +344,7 @@ void GameDrawCar(void *car) asm("func_8001DFC0");
  * whose activeFlag != -1 and field_BC == 1. */
 void GameDrawCars(void) asm("func_800389F0");
 /* Car motion-state handler for state98 == 1: the one-frame jump takeoff, which
- * hands over to the airborne handler func_80030814. */
+ * hands over to the airborne handler GameUpdateCarAirborne. */
 void GameUpdateCarLaunch(GameCarRuntime *car) asm("func_80030030");
 
 /*

@@ -1447,3 +1447,264 @@ revisited.
   two neighbours `cd/GameCdReadStatusPair` and `cd/GameClearCdResultEvents` are
   the same family and one of them includes `game/memcard.h`; the three probably
   belong together, in `save/`.
+
+---
+
+## 15. Gameplay core pass (`race/`, `car/`, `track/`)
+
+The three gameplay directories were the least-named part of the tree: 50 of
+their 68 units were still called `func_XXXXXXXX.c`. All 68 now carry a name, and
+about 145 functions plus 145 globals inside them were named. Everything is an
+`asm()` alias, so `make check VERSION=PAL` stayed at
+`build/PAL/main.exe: OK`, sha1 `2913e15648eddef40821c5f666460abc04155ee6`,
+verified after every batch.
+
+Names that leak into `render/`, `menu/`, `asset/`, `cd/`, `fmv/`, `sdk/` or
+`boot/` were applied **only inside the three gameplay directories**; those files
+keep the raw `D_` / `func_` spelling and still link, because the emitted symbol
+never changed. The same applies to the four inline-`asm` `%hi`/`%lo` references
+in `car/GameBlendPaintColor.c`, which must keep the raw `D_8019CB38` /
+`D_8019CB3A` spelling (see 12c).
+
+### 15a. The wrong-way warning — one chain, four names
+
+The strongest single result of this pass, because it explains a global that
+reaches three directories and a HUD element nobody had placed.
+
+`GameCarRuntime + 0xB8` was called `routeRow`. It is a direction flag:
+
+- `GameBuildStartingGrid` seeds it to `g_RaceSeries` for all 11 cars;
+- for the player it is **rewritten every frame** — `sh v0, 184(s1)` at
+  `0x8002DF38` inside `GameUpdatePlayerCar` stores the return of
+  `GameIsCarFacingBackwards` (`func_8002CD08`), which compares the car's
+  `headingAngle` against `0xC00 - trackPoint->angle` and returns whether the
+  delta lands in `0x401..0x7FF`, i.e. facing backwards;
+- `GameSteerCarAlongRoute` uses it as `flag << 11`, a clean 0/0x800 = 0°/180°
+  yaw flip;
+- the advanced series runs the courses backwards, so `g_RaceSeries` **is** the
+  expected direction.
+
+Hence `field_B8` is now `facingBackwards`, `D_8009E78C` (the player's copy) is
+`g_PlayerFacingBackwards`, and the test `g_PlayerFacingBackwards != g_RaceSeries`
+that guards `func_800333DC` is the wrong-way condition. `D_801E8A8C`, which
+counts those frames, is `g_WrongWayTimer`: past 10 frames the banner shows and a
+cue repeats, `GameUpdateRivalCueGate` mutes the rival cues, and in Time Attack 60
+frames on lap 0 forces `g_RacePhase = 5` and ends the run. `func_800333DC` is
+therefore `GameDrawWrongWayWarning` — three sprites over a 0x78x0x20 backing at
+screen centre.
+
+### 15b. Race timing and the split HUD (`game/race.h`)
+
+`GameUpdateSplitTimes` (`func_800352B8`) and its drawing-only twin
+`GameDrawSplitTimes` (`func_800357BC`) are a three-sector split system. Named in
+`race.h`, all from `GameEnterRaceScene`'s seeding and the two consumers:
+
+| address | name | what settles it |
+|---|---|---|
+| `D_801E4D64` | `g_LapTimeMs` | zeroed at race init, drawn as `m'ss"fff` |
+| `D_801E4BCC` | `g_BestLapThisRace` | seeded from `g_BestLapTimes[series][course][mode]` |
+| `D_8009AF8C` | `g_RefLapTime` | the same seed; the lap-line delta is measured against it |
+| `D_801E4148` | `g_SectorIndex` | `-2` before the first crossing, then `0..2` modulo 3 |
+| `D_801E4D98/9C/A0` | `g_SectorEndDistance[3]` | written `L/3`, `2L/3`, `L` at race init |
+| `D_8009AF80/84/88` | `g_SectorTimes[3]` | filled as each boundary is crossed |
+| `D_8009AF90/94/98` | `g_RefSectorTimes[3]` | loaded from `g_BestSectorTimes` and written back at the finish |
+| `D_8009AF78` | `g_LastSectorTime` | `g_SectorTimes[justCompleted]` |
+| `D_8009AF7C` / `D_8009AFAC` | `g_SplitDelta` / `g_SplitSign` | `|ref - now|` and `+1` ahead / `-1` behind (cue 0x3E vs 0x3F, tile 0x7810 vs 0x780F) |
+| `D_8009AFA4/A8/B0` | `g_SplitSector` / `g_SplitTimer` / `g_SplitTargetTime` | the sector shown, the `0..0x3C` display window, the reference drawn |
+| `D_801E4BA8` | `g_RaceTotalTime` | summed from the per-lap array, saturated at `0x927BF`, compared against `g_BestTotalTimes` |
+| `D_8009AF9C` | `g_RaceTimeRemaining` | `15000` at init, `--` while `g_RacePhase >= 2 && g_GrandPrixMode`; `<= 0` ends the race |
+
+`0x927BE` (599998 ms = 9'59"998) is the display cap everywhere; `0x927BF` is the
+saturation value the HUD prints as dashes. `D_8009AFA0` (`g_LapTimeSaturated`) is
+set when a lap time saturates and is **write-only in retail** — three stores, no
+loads anywhere in the image.
+
+Two arrays keep per-file spellings because their elements also carry split
+symbols: `GameUpdateLapAndFinish` touches one element at a time and declares
+`g_RefSectorTime0/1/2` and `g_SectorEndDistance0/1/2`, while `GameSeedReplayCars`
+indexes them and declares `g_RefSectorTimes[]` / `g_SectorEndDistance[]`.
+
+### 15c. Speed, revs and the tachometer
+
+`D_8009E778` is `g_PlayerCar.field_A4`. Three independent uses agree that it is
+speed: `GameDrawSpeedDigits` prints `g_PlayerSpeed * 160 / 1168`,
+`GameInitRivalCarAi` converts a top speed the other way with `* 1168 / 160`, and
+the launch thresholds `g_LaunchSpeedThresholds` are compared against `field_A4`.
+So `field_A4` is speed and 1168 internal units = 160 on the readout.
+
+`D_8019CAB4` is `g_EngineRpm`: it is slewed toward `g_PlayerCar.field_134`,
+clamped to `[500, g_CarSpec->revLimit]`, handed to the engine-sound driver, and
+passed to `GameDrawTachometer` (`func_8003351C`), which turns it into the needle
+angle `needleAngleMin + rpm * (needleAngleMax - needleAngleMin) / 10000`.
+`D_801E4170` (`g_EngineRpmJitter`) is the idle/redline wobble added to it for
+both the sound and the needle. `D_8009E806` is `g_PlayerCar.field_132`, the
+current gear, drawn as a single glyph by `GameDrawHudDigit` (`func_80033B7C`,
+an 8x8 `SPRT_8` with `u = digit * 8`).
+
+`GameBeginCarStandingStart` (`func_8002BE18`) is the green light: it turns the
+revs held at the line into `g_StandingStartSpin` (`D_8019CA04`), which
+`GameUpdateCarStandingStart` (`func_80030BC4`, drive `state98 == 3`) then burns
+down. That corrects the old "crash / tumble" reading of `func_80030BC4`: the
+only write of `state98 = 3` in the whole image is in `GameInitPlayerCar`, so
+state 3 is the grid state.
+
+### 15d. Named this pass, by directory
+
+**`track/` (28 units, 18 renamed).** Environment timeline:
+`GameSetEnvironmentScript`, `GameSetEnvPaletteTable`, `GameLerpEnvColor`,
+`GameLoadEnvironmentCue`, with `g_EnvScriptCues` / `g_EnvScriptLength` /
+`g_EnvScriptClock` / `g_EnvScriptEnabled` / `g_EnvFogEnabled` /
+`g_EnvLerpFrame` / `g_EnvLerpDuration`. World: `GameSetCourseObjects`,
+`g_CourseObjects` / `g_CourseObjectCount`, `GameBuildVisibleCells`,
+`GameGetCellRegion`, `GameIsCellVisibleFromRegion`, `g_TerrainCellGrid`,
+`g_CellVisibilityTable`, `GameDrawTerrainCells` / `…Wide`. Cameras:
+`GameFindNearestTrackCamera`, `g_TrackCameras`, `g_TrackSectionCount`
+(`= (g_TrackLength >> 8) + 1`, which is also what proves `car + 0x78` is
+`progress >> 8`), `GameUpdateFinishCamera`, `GameSeedFinishCamera`,
+`GameUpdateFreeLookCamera`. Scripted scenery: `GameDrawFlybyScenery`,
+`GameSeedFlybyScenery`, `GameUpdateRouteScenery`, `GameDrawRouteScenery`,
+`GameSeedRouteScenery`, `GameInitPathScenery`, `GameDrawPathScenery`,
+`GameDrawScriptedScenery`, `GameDrawStartGridScenery`, plus their data and
+runtime blocks. Cues: `GamePlayCountdownCues` (cues 0x1E-0x21 land one frame
+after each of `GameDrawStartCountdown`'s "3"/"2"/"1"/"GO" phases at t = 120 /
+150 / 180 / 210 — that timing is what identifies it), `GameTriggerRaceCues`,
+`GameUpdateRivalCueGate`, `g_RaceCueFlags`, `g_RaceCueDelay`.
+
+**`car/` (20 units, 13 renamed).** Paint: `GameBlendPaintColor` and its
+thirds/quarters siblings, `GameApplyBodyColor1/2`, `GameSetBodyColor1/2`,
+`g_BodyColorPrimary` / `g_BodyColorSecondary`. Drivetrain:
+`GameUpdateCarDrivetrain`, `GameUpdateCarDriving` (state 0),
+`GameUpdateCarAirborne` (state 2), `GameUpdateCarStandingStart` (state 3),
+`GameSteerCarToTrackLine`, `g_GearTorqueCurve`, `g_ShiftTargetRpm`,
+`g_AutoShiftCooldown`, `g_SteerHoldFrames`, `g_LaunchSpeedThresholds`.
+Track state: `GameUpdateCarTrackState` (the clamping twin of the already-named
+`GameResetCarTrackState`), `GameSeedCarLapProgress`,
+`GameGetTrackSurfaceHeight`. Grid and AI: `GameBuildStartingGrid`,
+`GameInitRivalCar`, `GameInitRivalCarAi`, `GameSeedCarRouteMarkers`,
+`GameUpdateCarAiTargetSpeed`, `GameApplyCarRacingLineHint`,
+`GameUpdateCarTrafficAvoidance`, `GameRankContenders`,
+`GameUpdateRivalRubberBand`, `GameSlowRivalAhead`. Body motion:
+`GameSetCarKnockback`, `GameApplyCarKnockback`, `GameStartCarBodyKick`,
+`GameUpdateCarBodyKick`, `GameUpdateCarCrestHop`, `GameGetCarCrestTrigger`,
+`GameClearCarMotionState`, `GameUpdateCarBodyRoll`, `GameIsPointInQuad`.
+
+**`race/` (20 units, 19 renamed).** Replay: `GameApplyReplayFrame`,
+`GameRecordReplayFrame`, `GameBeginReplay`, `GameUpdateReplayScene`,
+`GameSeedReplayCars`, `GameUpdateReplayCars`, and the ring globals
+`g_ReplayWriteCursor` / `g_ReplayReadCursor` / `g_ReplayFrameCount` /
+`g_ReplayBufferWrapped` / `g_ReplayFramesGp` / `g_ReplayFramesTimeAttack`.
+Results and progression: `GameDrawGrandPrixResultPanel`, `GameDrawRaceTimePanel`,
+`GameDrawPrizeMoneyPanel`, `GameCommitClassProgress`,
+`GameAdvanceGrandPrixClass`, `GameEnterPrizeScreen`, `g_PrizeAmount`,
+`g_PromotionBonus`, `g_ClassPromoted`, `g_ClassCompleted`, `g_ClassResultPlace`.
+Records: `GameInitRecordTables`, `GameDrawRankingPanel`,
+`GameDrawTimeRecordPanel`, `GameInsertRaceRecords`, `GameUpdateRecordEntry`,
+`g_NameEntryCharset` (the 42 codes `0-9`, space, `A-Z`, `. - ! ? @`),
+`g_NameEntryCursor`, `g_NameEntryChar`, `g_PlaceSuffixNames`, `g_CarNames`,
+`g_CarClassNames`. LOST RACE: `GameEnterLostRaceScreen`,
+`GameUpdateLostRaceScreen`, `g_LostRaceChoice`, `g_ChanceDigits`. BGM select:
+`GameDrawBgmSelectBar`, `GameUpdateBgmSelect`, `GameExitBgmSelect`,
+`GameAdvanceBgmShuffleBag`, `g_BgmSelectTrack`, `g_BgmRandomPlay`,
+`g_CdTrackEnded`. Attract and prologue: `GameEnterAttractDemo`,
+`GameUpdateAttractDemoRace`, `GameEnterPrologue`, `GameDrawPrologueText`,
+`g_PrologueLines` (the `{x, y, text}` table whose strings are the RAGE RACER
+opening narration, in order), `g_PrologueCameraCuts`. Race spine:
+`GameUpdateLapAndFinish`, `GameEnterRaceScene`, `GameUpdateRaceScene`,
+`GameExitRaceScene`, `GameGetTrackZoneBlend`, `g_RacePaused`, `g_PauseDebounce`,
+`g_RaceFadeTimer`, `g_RaceOptionCursor`. HUD: `GameDrawTimeValue`,
+`GameDrawMinuteSecondTime`, `GameDrawSpeedDigits`, `GameDrawHudDigit`.
+
+### 15e. Judgement calls, and the readings they beat
+
+- **`D_8009E6A0` → `g_RivalCueEnabled`, not `g_CommentaryEnabled`.** Every
+  reader is inside `GameUpdateRivalRubberBand`, where all eight cues (0x2D,
+  0x2F, 0x30, 0x32-0x34, 0x36, 0x37) are individually wrapped in
+  `if (D_8009E6A0 != 0)`, and those cues fire from rival-proximity events. It is
+  tri-state (`GameEnterRaceScene` writes 1, `GameUpdateLapAndFinish` writes 2),
+  so it is not a boolean "enabled". "Commentary" would assert that the cues are
+  speech; the call sites only prove they are about rivals. Same reasoning
+  renamed its companion `D_801E6C90` to `g_RaceCueDelay` rather than
+  `g_CommentaryDelay` or `g_LapCueTimer`.
+- **`D_801E4BA0` → `g_GripLossTimer`.** It is set to 200 by
+  `GameBeginCarStandingStart` on a launch in gear >= 2 and by
+  `GameCollidePlayerWithCars`, is decremented once a frame, and its only effect
+  is halving `car->field_A8` while positive. "Wheelspin timer" fits the launch
+  writer but not the collision writer; "speedometer suppress" fits neither
+  writer's trigger. The chosen name states only what is proven.
+- **`func_80033D50` → `GameDrawTimeValue`, not `GameDrawLapTime`.** It draws the
+  running lap time, the last sector time, the reference time and the best total
+  time; four of its six call sites are not lap times.
+- **`func_8003351C` keeps `GameDrawTachometer`; `func_8002F458` is
+  `GameDrawPlayerTachometer`.** The wrapper only picks the dial-lighting mode
+  from `g_EnvScriptClock` and forwards `g_EngineRpm + g_EngineRpmJitter`; the
+  drawing is all in `func_8003351C`.
+- **`D_8007D404` → `g_CourseNames` is an alias of `&g_GrandPrixNames[11]`.** The
+  same four pointers are reachable both ways; the second name is kept because
+  every user of `D_8007D404` indexes it with `g_CourseIndex`, not with a class
+  number.
+- **`D_801E774C` → `g_RankingTimes` is `&g_RankingRecords[0][0][0].v8`**, the
+  `S22` record's time field, indexed with stride 20 words. It is a split symbol
+  of `D_801E7744`, in the pattern section 3 documents for `g_Cars`.
+
+### 15f. Dead code found while naming
+
+Verified against a full `mips-linux-gnu-objdump -d build/PAL/main.elf`, checking
+both the symbol and the encoded `jal` word, and against the scene table
+`D_8007C268`:
+
+- **`race/GameUpdateWaypointRaceScene.c` and the waypoint half of
+  `race/GameIsCarNearWaypoint.c` are an unreachable game mode.**
+  `func_80037200` and `func_80037D90` have zero references and are not in the
+  scene table, and with them go `GameSeedWaypoints`, `GameUpdateWaypoints`,
+  `GameDrawWaypoints`, `GameCountActiveWaypoints`, `GameDrawLapNumber`,
+  `GameApplyTrackReverbZone` and `func_80038288`. `GameUpdateFreeLookCamera`
+  (`func_8003CF14`) and `g_FreeCameraAngleOffset` are reachable only from it.
+  `func_80037D90` draws `"CONGRATULATIONS!!"` and counts to 257 laps, so the cut
+  mode was some kind of collect-the-waypoints event.
+- **`GameSeedFinishCameraAlt` (`func_8003CDF4`)** is
+  instruction-for-instruction `GameSeedFinishCamera` with three constants
+  changed, and has zero references.
+- **`GameGetReverseTrackAngle` (`func_8002FBEC`)**, **`GameGetTrackSurfaceHeight`
+  (`func_80032098`)** and the already-named **`GameSampleTrackSurfaceHeight`
+  (`func_80031E98`)** have zero references.
+- **`GameInitSoundSystem` (`func_80034E88`)** and **`GameInitEngineSound`
+  (`func_80034ED0`)** have zero references; they are named with certainty
+  anyway, because their own `GameDebugPrintf` strings are `"sound error\n"`,
+  `"init_sound ok\n"` and `"init_engine ok\n"`.
+
+The names are kept: the code is in the ROM and has to be read by someone.
+
+### 15g. Deliberately left unnamed
+
+- **`func_800340D8`** (called once from race init) builds two 12000-byte buffers
+  of 512 chained 2x1 `TILE`s on a skewed 16x32 grid at `x = 0xCD - 3*col`,
+  `y = 0x5A + 2*row`, colour 0x20, into `D_8019C90C[0..1]`. The geometry is
+  certain; nothing in the decompiled tree ever reads `D_8019C90C`, so what the
+  strip renders is not established.
+- **`func_800218A0`** draws one 0xA0x0x18 sprite at (0x50, 0x6C), uv (0, 0x28),
+  from the race-end scenes, the retire path and the post-ending still. The
+  caller set does not choose between "GAME OVER", "THE END" and a logo, and the
+  texture is on the disc.
+- **`func_8004087C`** walks 8-byte rows in `g_TrackEventData + 0x1B7C` keyed by
+  the player's track section and pans a continuous sound by the car's `+0x3C`
+  value. The other use of `field_3C` treats it as an unsigned 0..0x800 width
+  fraction while this one branches on its sign; until that is reconciled, any
+  "roadside wall on the left/right" name would be a guess.
+- **`func_8003D6E8`** has an empty body. Positionally it is the first of the
+  five scenery seeders `GameEnterRaceScene` calls in a row, but there is no
+  side effect to name it from.
+- **`D_801E4194`, `D_801E8A4C`, `D_8019C998`, `D_801E4D84`, `D_801E4FB4`** are
+  each written but never read anywhere in the image (`D_8019C998` is read but
+  only ever written zero). Naming them would be inventing a feature.
+- **`D_8019C768`** keeps the entry from section 3: still only `0x80` / `0x180`
+  writes and one reader that cannot pin the quantity.
+- **`GameCarEntry.shapeIndex` / `.textureIndex` are misnamed** — the PAINT COLOR
+  screen's two rows write them and hand them straight to `GameSetBodyColor1` /
+  `GameSetBodyColor2`, so they are body colour 1 and body colour 2, not
+  geometry/texture selectors. The rename is not done here because
+  `asset/GameRequestCarSelectAssets.c` and `menu/GameUpdateLogoSampleScreen.c`
+  use the current field names and are another pass's territory.
+- **Cue numbers.** Cues can be placed by their trigger conditions (0x1E-0x22
+  countdown, 0x23 over-speed, 0x26 record, 0x27-0x29 laps to go, 0x2A final lap,
+  0x2C wrong way, 0x3E/0x3F split faster/slower), but the audio is on the disc,
+  so no cue's *content* is asserted in a name.

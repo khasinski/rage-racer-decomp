@@ -1,15 +1,15 @@
 #include "common.h"
 #include "game/track.h"
 
-extern GameTrackPoint *D_8019C7D0;
-extern s16 D_8019C9A4;
+extern GameTrackPoint *g_TrackArcCenters asm("D_8019C7D0");
+extern s16 g_TrackSectionCount asm("D_8019C9A4");
 
 /*
  * Installs the track-point table from a loaded blob: word 0 is the point count,
  * the rest is the GameTrackPoint array. Publishes g_TrackPoints (points),
- * g_TrackPointCount (count) and D_8019C7D0 (marker array right after the points), then
+ * g_TrackPointCount (count) and g_TrackArcCenters (marker array right after the points), then
  * sums every point's segmentLength into the total track length g_TrackLength and
- * derives D_8019C9A4 = (total >> 8) + 1.
+ * derives g_TrackSectionCount = (total >> 8) + 1.
  */
 void GameInstallTrackPoints(s32 *trackData) asm("func_8002A6B0");
 void GameInstallTrackPoints(s32 *trackData) {
@@ -28,7 +28,7 @@ void GameInstallTrackPoints(s32 *trackData) {
     g_TrackPoints = points;
     g_TrackLength = 0;
     g_TrackPointCount = count;
-    D_8019C7D0 = (GameTrackPoint *)((count * sizeof(GameTrackPoint)) + (s32)points);
+    g_TrackArcCenters = (GameTrackPoint *)((count * sizeof(GameTrackPoint)) + (s32)points);
 
     i = 0;
     if (count > 0) {
@@ -42,5 +42,5 @@ void GameInstallTrackPoints(s32 *trackData) {
     }
 
     total = g_TrackLength;
-    D_8019C9A4 = (total >> 8) + 1;
+    g_TrackSectionCount = (total >> 8) + 1;
 }

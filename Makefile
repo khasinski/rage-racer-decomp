@@ -83,16 +83,16 @@ $(BUILD)/src/main/PAL/main/func_80020C24.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/boot/func_8002317C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/menu/func_8005026C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8006E1A8.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/race/func_80033C18.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/race/GameDrawSpeedDigits.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80039280.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/race/func_8001F330.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/race/GameApplyReplayFrame.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_800207E0.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/race/func_80021A08.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/race/GameInitRecordTables.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80022324.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/car/func_8002BF68.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/car/GameSeedCarLapProgress.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/car/GameAccumulateLapProgress.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/track/GameBlendAngle.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/track/func_8002FBEC.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/track/GameGetReverseTrackAngle.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/track/GameInterpolateTrackPoint.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/track/GameSmoothTrackAngle.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/car/GameAdvanceCarPosition.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
@@ -105,7 +105,7 @@ $(BUILD)/src/main/PAL/main/render/func_80032D5C.c.o: RAGE_CC1_VERSION_OBJ := 2.6
 $(BUILD)/src/main/PAL/main/race/GameUpdateRacePosition.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8003DDAC.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/render/func_80046600.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/track/func_80040F24.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/track/GameTriggerRaceCues.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80079BB4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80079E7C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8007A17C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
@@ -118,7 +118,7 @@ $(BUILD)/src/main/PAL/main/func_80047E60.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/lib/libsnd/SsSeqRestartPlayback.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/lib/libsnd/SpuVmCalculateCurrentPitch.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/lib/libsnd/SpuVmCalculateTonePitch.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/race/func_8001FC30.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/race/GameDrawSeriesClearedWash.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8005B070.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/car/GameClampCarLateralOffset.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8001B974.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
@@ -131,8 +131,8 @@ $(BUILD)/src/main/PAL/main/func_8006B0D4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 # rejected by gcc2.6.3-psx; others produce different linked section bytes under
 # 2.6.3 and would shift the final executable.
 $(BUILD)/src/main/PAL/main/menu/func_8001D338.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
-$(BUILD)/src/main/PAL/main/race/func_80026484.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
-$(BUILD)/src/main/PAL/main/track/func_800455EC.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
+$(BUILD)/src/main/PAL/main/race/GameExitBgmSelect.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
+$(BUILD)/src/main/PAL/main/track/GameLoadEnvironmentCue.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/main/func_8006DD30.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/main/func_8006E390.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/lib/libsnd/SsSeqOpen.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
@@ -186,7 +186,7 @@ help:
 	@echo "  distclean         Also remove generated asm/linker output"
 
 # --- per-object overrides for newly decompiled functions (from working tree) ---
-$(BUILD)/src/main/PAL/main/car/func_8002A810.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/car/GameUpdateCarDrivetrain.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/gte/func_80029E50.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/track/GameInstallTrackPoints.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/sdk/func_80077A88.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2

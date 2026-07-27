@@ -241,16 +241,17 @@ call1:
     GameDrawStaticScenery(1);
 }
 
-extern u8 *D_801E4448;
+extern u8 *g_FlybySceneryData asm("D_801E4448");
 extern s32 g_LapCount asm("D_801E4364");
 extern volatile s32 g_RaceSeries asm("D_801E408C");
-extern u8 D_801E42FC[];
+extern u8 g_FlybyScenery[] asm("D_801E42FC");
 extern s16 D_801E4308;
-extern u8 *D_801E43F4;
+extern u8 *g_FlybySceneryKeyframe asm("D_801E43F4");
 
 s32 GameRandom15(void) asm("func_800632B0");
 
-void func_8003E464(void) {
+void GameSeedFlybyScenery(void) asm("func_8003E464");
+void GameSeedFlybyScenery(void) {
     register u8 *base asm("s0");
     register u8 *out asm("s1");
     register s32 count asm("a0");
@@ -266,11 +267,11 @@ void func_8003E464(void) {
     register s32 word2 asm("a2");
     register s32 word3 asm("a3");
 
-    base = D_801E4448;
+    base = g_FlybySceneryData;
     index = GameRandom15();
     count = g_LapCount;
     value = index % count;
-    out = D_801E42FC;
+    out = g_FlybyScenery;
     value++;
     D_801E4308 = value;
     value = (s16)value;
@@ -306,7 +307,7 @@ void func_8003E464(void) {
     index = (recordIndex << 1) + recordIndex;
     index <<= 2;
     index += 0x50;
-    D_801E43F4 = base + index;
+    g_FlybySceneryKeyframe = base + index;
 }
 
 /*

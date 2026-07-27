@@ -9,34 +9,34 @@ typedef struct {
     u8 pad[0x2C];
 } Cmd;
 
-extern u8 D_8019C8F4;
-extern s32 D_8019C8FC;
-extern s32 D_8019C774;
+extern u8 g_EnvScriptEnabled asm("D_8019C8F4");
+extern s32 g_EnvScriptClock asm("D_8019C8FC");
+extern s32 g_EnvScriptLength asm("D_8019C774");
 
 extern Cmd *D_801E40E8;
-extern u32 *D_801E42F4;
+extern u32 *g_EnvScriptCues asm("D_801E42F4");
 
-extern s16 D_801E3FB4;
+extern s16 g_EnvFogEnabled asm("D_801E3FB4");
 extern u8 D_801E3FB6;
 extern u8 D_801E3FB7;
 extern u8 D_801E3FB8;
 extern u8 D_801E3FB9;
 extern u32 D_801E3FBA;
 
-extern s16 D_801E4022;
-extern s16 D_801E4024;
+extern s16 g_EnvLerpFrame asm("D_801E4022");
+extern s16 g_EnvLerpDuration asm("D_801E4024");
 extern s16 g_EnvironmentMode asm("D_801E4026");
 extern s16 D_801E4028;
-extern s16 D_801E402A;
-extern s16 D_801E402C;
+extern s16 g_EnvSpareFrom asm("D_801E402A");
+extern s16 g_EnvSpareTo asm("D_801E402C");
 extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
 extern u8 *g_EnvPaletteTable asm("D_801E4140");
 extern s16 D_801E6DA4[];
 
 extern s32 D_8009B24C;
 
-void func_800455EC(void *arg0);
-void func_8004554C(u8 *arg0, u8 *arg1, u8 *out, s32 arg3);
+void GameLoadEnvironmentCue(void *arg0) asm("func_800455EC");
+void GameLerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) asm("func_8004554C");
 /* Deliberately unprototyped: the original passes only the rect and leaves
  * a1 live, so the psyq/gpu.h LoadImage prototype cannot be used here. */
 void func_80065B24();
@@ -57,34 +57,34 @@ void GameUpdateEnvironment(void) {
     Cmd *cur;
     u8 *pp;
 
-    if (D_8019C8F4 == 0) {
+    if (g_EnvScriptEnabled == 0) {
         return;
     }
 
     cur = D_801E40E8;
-    if (cur->id == D_8019C8FC) {
-        D_801E4022 = 0;
+    if (cur->id == g_EnvScriptClock) {
+        g_EnvLerpFrame = 0;
         D_801E40E8 = cur + 1;
-        func_800455EC(cur);
+        GameLoadEnvironmentCue(cur);
         if (D_801E40E8->id < 0) {
-            D_801E40E8 = (Cmd *)D_801E42F4;
+            D_801E40E8 = (Cmd *)g_EnvScriptCues;
         }
     }
 
-    D_8019C8FC = (D_8019C8FC < D_8019C774) ? D_8019C8FC + 1 : 0;
+    g_EnvScriptClock = (g_EnvScriptClock < g_EnvScriptLength) ? g_EnvScriptClock + 1 : 0;
 
-    if (D_801E3FB4 == 0) {
+    if (g_EnvFogEnabled == 0) {
         return;
     }
 
-    if (D_8019C8F4 != 0) {
-        if (D_801E4022 < D_801E4024) {
-            D_801E4022 = D_801E4022 + 1;
+    if (g_EnvScriptEnabled != 0) {
+        if (g_EnvLerpFrame < g_EnvLerpDuration) {
+            g_EnvLerpFrame = g_EnvLerpFrame + 1;
         }
     }
 
-    diff = D_801E4024 - D_801E4022;
-    frac = (D_801E4022 << 12) / D_801E4024;
+    diff = g_EnvLerpDuration - g_EnvLerpFrame;
+    frac = (g_EnvLerpFrame << 12) / g_EnvLerpDuration;
 
     for (i = 0; i < 0x10; i++) {
         s16 *dst;
@@ -114,28 +114,28 @@ void GameUpdateEnvironment(void) {
     func_80065B24(&rect);
 
     pp = (u8 *)&D_801E3FBA;
-    func_8004554C(pp + 0x0, pp + 0x4, pp - 0x4, frac);
-    func_8004554C(pp + 0xC, pp + 0x10, pp + 0x8, frac);
-    func_8004554C(pp + 0x18, pp + 0x1C, pp + 0x14, frac);
-    func_8004554C(pp + 0x24, pp + 0x28, pp + 0x20, frac);
-    func_8004554C(pp + 0x30, pp + 0x34, pp + 0x2C, frac);
+    GameLerpEnvColor(pp + 0x0, pp + 0x4, pp - 0x4, frac);
+    GameLerpEnvColor(pp + 0xC, pp + 0x10, pp + 0x8, frac);
+    GameLerpEnvColor(pp + 0x18, pp + 0x1C, pp + 0x14, frac);
+    GameLerpEnvColor(pp + 0x24, pp + 0x28, pp + 0x20, frac);
+    GameLerpEnvColor(pp + 0x30, pp + 0x34, pp + 0x2C, frac);
     if (g_CourseIndex == 2) {
-        func_8004554C(pp + 0x3C, pp + 0x40, pp + 0x38, frac);
-        func_8004554C(pp + 0x48, pp + 0x4C, pp + 0x44, frac);
+        GameLerpEnvColor(pp + 0x3C, pp + 0x40, pp + 0x38, frac);
+        GameLerpEnvColor(pp + 0x48, pp + 0x4C, pp + 0x44, frac);
     } else {
-        func_8004554C(pp + 0x54, pp + 0x58, pp + 0x50, frac);
-        func_8004554C(pp + 0x60, pp + 0x64, pp + 0x5C, frac);
+        GameLerpEnvColor(pp + 0x54, pp + 0x58, pp + 0x50, frac);
+        GameLerpEnvColor(pp + 0x60, pp + 0x64, pp + 0x5C, frac);
     }
 
     func_80069A38(D_801E3FB6, D_801E3FB7, D_801E3FB8);
 
     if (D_801E4028 != 0) {
-        D_801E3FB9 = (D_801E402A * diff + D_801E402C * D_801E4022) / D_801E4024;
+        D_801E3FB9 = (g_EnvSpareFrom * diff + g_EnvSpareTo * g_EnvLerpFrame) / g_EnvLerpDuration;
     }
 
-    if (D_801E4022 == D_801E4024) {
-        if ((*(u32 *)&D_801E3FB4 & 0xFFFF0000) == 0x80800000 && D_801E3FB8 == 0x80) {
-            D_801E3FB4 = 0;
+    if (g_EnvLerpFrame == g_EnvLerpDuration) {
+        if ((*(u32 *)&g_EnvFogEnabled & 0xFFFF0000) == 0x80800000 && D_801E3FB8 == 0x80) {
+            g_EnvFogEnabled = 0;
         }
     }
 

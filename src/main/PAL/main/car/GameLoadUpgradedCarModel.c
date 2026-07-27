@@ -15,8 +15,8 @@ s32 func_80017C78(s32 arg0, void *arg1);
 void GameSetCarModelSlot(void *arg0, s32 arg1) asm("func_80017B94");
 void GameRegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void GameSetCarImageSlot(void *arg0, s32 arg1) asm("func_80017B44");
-void func_8001D748(s32 arg0, s32 arg1);
-void func_8001D900(s32 arg0, s32 arg1);
+void GameApplyBodyColor1(s32 arg0, s32 arg1) asm("func_8001D748");
+void GameApplyBodyColor2(s32 arg0, s32 arg1) asm("func_8001D900");
 extern s32 g_AssetBase asm("D_8019C904");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 s32 GameRandom15(void) asm("func_800632B0");
@@ -67,9 +67,9 @@ void GameLoadUpgradedCarModel(s32 arg0) {
 
             if (g_PlayerCarIndex < 10) {
                 entry = (GameCarEntry *)(index + (s32)g_CarTable);
-                func_8001D748(entry->shapeIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
+                GameApplyBodyColor1(entry->shapeIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
                 entry = (GameCarEntry *)(index + (s32)g_CarTable);
-                func_8001D900(entry->textureIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
+                GameApplyBodyColor2(entry->textureIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
             }
 
             g_AssetLoadState = 0;

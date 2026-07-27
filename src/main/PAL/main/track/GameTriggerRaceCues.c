@@ -1,0 +1,88 @@
+#include "common.h"
+
+#include "game/audio.h"
+#include "game/race.h"
+#include "game/track.h"
+
+extern s32 g_RaceCueFlags asm("D_801E7A50");
+extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s16 g_PlayerLap asm("D_8009E83C");
+extern s32 g_LapCount asm("D_801E4364");
+
+void GameTriggerRaceCues(void) asm("func_80040F24");
+void GameTriggerRaceCues(void) {
+    register u8 *rawBase asm("v0");
+    register u8 *base asm("s0");
+    register s32 i asm("a1");
+    register s32 mask asm("a2");
+    register u8 *stateBase asm("a3");
+    register s32 temp asm("v0");
+    register s32 entry asm("v1");
+    register s32 loopFlags asm("t0");
+    register s32 current asm("a0");
+    s32 product;
+
+    rawBase = g_TrackEventData;
+    current = g_RaceCueFlags;
+    base = rawBase + 0x1CCC;
+
+    if (!(current & 8)) {
+        if (g_PlayerTrackSection == *(s16 *)((g_RaceSeries << 2) + (s32)base)) {
+            entry = g_PlayerLap;
+            if (entry == g_LapCount) {
+                entry = current | 8;
+                g_RaceCueFlags = entry;
+                if (g_WrongWayTimer < 10) {
+                    GamePlaySoundCue(0x2A);
+                }
+            }
+        }
+    }
+
+    if (g_WrongWayTimer != 0) {
+        return;
+    }
+
+    stateBase = (u8 *)&g_PlayerTrackSection;
+    i = 0;
+    temp = 0x10;
+    do {
+        loopFlags = g_RaceCueFlags;
+        mask = temp << i;
+        temp = mask & loopFlags;
+        if (temp == 0) {
+            temp = g_RaceSeries;
+            entry = ((temp * 3) + i) << 2;
+            entry += (s32)base;
+            current = *(s16 *)(entry + 0x10);
+            temp = -1;
+            if (current == temp) {
+                return;
+            }
+
+            temp = *(s16 *)stateBase;
+            if (temp == current) {
+                entry = *(s16 *)(entry + 0x12);
+                temp = *(s32 *)(stateBase + 0xD0);
+                product = entry * temp;
+                temp = product / 100;
+                entry = *(s32 *)(stateBase + 0x2C);
+                if (temp < entry) {
+                    temp = *(s16 *)(stateBase + 0xA);
+                    if (temp <= 0) {
+                        temp = mask | loopFlags;
+                        g_RaceCueFlags = temp;
+                        GamePlaySoundCue(0x23);
+                    }
+                }
+                return;
+            }
+        }
+        i++;
+        temp = i < 3;
+        if (temp == 0) {
+            break;
+        }
+        temp = 0x10;
+    } while (1);
+}
