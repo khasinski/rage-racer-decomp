@@ -1347,3 +1347,103 @@ what makes "apply", not "init", the right verb. `GameSetEffectVolumeSetting`
 - `func_8001E684` is not a function at all: it is a nonmatching label inside
   `func_8001DFC0`'s epilogue, already listed in
   `configs/PAL/nonmatching_labels.main.txt`.
+
+## 14. Subsystem directory pass (`src/main/PAL/main/<subsystem>/`)
+
+Every `PAL/main` unit now lives in a subsystem directory: `boot menu race car
+track render audio cd fmv asset save pad gte sdk`. Moving a unit rewrites four
+things in lockstep — the `.c` path, the `configs/PAL/main.yaml` name token, the
+`INCLUDE_ASM` first argument, and (where one exists) the per-object
+`RAGE_CC1_VERSION_OBJ` rule in the `Makefile`, whose target is spelled as an
+object path. Dropping that last one silently demotes a 2.7.2 unit to the 2.6.3
+default and changes the ROM, so it is not optional.
+
+### 14a. The scene-handler table `D_8007C268`
+
+The 34-entry word table at `0x8007C268` is indexed by `g_SceneId`
+(`D_801E42E4`) and holds the per-frame handler of every scene. Dumping it is
+what settles most of the `0x8001F330`–`0x80027000` cluster, because those units
+are scene handlers with no other distinguishing globals:
+
+| id | handler | what it is |
+|---:|---|---|
+| 1 | func_800232B4 | boot logo sequence, hands over to `GameBeginIntroFmv` |
+| 2 / 3 | func_8001AF70 / `GameEnterTitleScreen` | title entry (menu-side / 3D-side) |
+| 4 | `GameUpdateFrontend` | title + main menu |
+| 5 | `GameUpdateFmv` | FMV playback |
+| 6 | `GameInitMenuMode` | enter the fourteen-screen menu mode |
+| 7 | func_80022EE4 | return scene of `GameBeginClassFmv` |
+| 8 | func_8005ACA0 | menu-mode per-frame dispatcher |
+| 9 / 10 | func_8001C7BC / func_8001CFB4 | ROUND screen: prize money, best times, BGM selector |
+| 11 / 12 | func_8003609C / func_800363D4 | the race |
+| 13..16 | func_800215FC / func_80021748 / func_80021920 / func_80021964 | LOST RACE → TRY AGAIN / END RACE prompt, then the continue countdown |
+| 17..20 | func_8001FD3C / func_80020C24 / func_80020DDC / func_80022748 | RESULT, prize money / promotion, OPTION, record entry |
+| 21 | func_80022794 | record name entry |
+| 22 | func_800235D8 | enter the attract 3D scene |
+| 23 | func_80025870 | attract 3D scene |
+| 24..26 | func_800613B8 / func_80061458 / func_80061520 | SAVE & LOAD |
+| 27..32 | func_80025A14 … func_800271EC | attract / replay sequence steps |
+| 33 | func_80022F2C | return scene of `GameBeginEndingFmv` |
+| 34 | func_80022FAC | the post-ending still, fades back to the title |
+
+`g_GameMode` (`D_8019CB14`) is a *second*, independent dispatcher over
+`g_GameModeHandlers` (`D_8007D67C`, 12 entries). Reading its rows shows it is
+the setup menu: 0 is the fade transition, 1 the six-row root menu, 2/3/4 its
+sub-panels, 5 the sound settings (BGM / SFX / mono), 6 the screen-position
+adjust, and 7..11 the already-named controller-configuration screens. That is
+what files `func_80023A60`, `func_80023BB4` and `func_800250BC` under `menu/`.
+
+### 14b. Named in this pass
+
+Single-function units whose in-file documentation already pinned the behaviour;
+each got the name, the file and the config token together, with the symbol kept
+behind an `asm()` alias.
+
+| Old | New | Dir |
+|---|---|---|
+| func_8002A788 | `GameGetAngleDistance` (file only; both functions were already named) | car |
+| func_8002A6B0 | `GameInstallTrackPoints` | track |
+| func_8002C168 | `GameAccumulateLapProgress` | car |
+| func_8002F4E4 | `GameAdvanceCarPosition` | car |
+| func_8002FAE8 | `GameBlendAngle` | track |
+| func_8002FB60 | `GameInterpolateTrackAngle` | track |
+| func_8002FC84 | `GameInterpolateTrackPoint` | track |
+| func_8002FD9C | `GameSmoothTrackAngle` | track |
+| func_8003A148 | `GameClampCarLateralOffset` | car |
+| func_80031E98 | `GameSampleTrackSurfaceHeight` | car |
+| func_8003AE2C | `GameUpdateRacePosition` | race |
+
+### 14c. Units whose directory is a judgement call
+
+These straddle two subsystems; each was filed by which functions dominate the
+unit by word count, and the losing half is recorded here so the choice can be
+revisited.
+
+- `func_8001DAB0` → `render/`: the render-object submitter and `GameDrawCar`
+  (769 words) against `GameBeginFmv` / `GameUpdateFmv` (58 words).
+- `func_8002317C` → `boot/`: the boot logo scene against the attract-scene
+  entry `func_800235D8`.
+- `func_80020DDC` → `menu/`: the OPTION screen against `GameInitSaveDefaults`
+  and its `GameReset*` helpers, which are boot-time.
+- `func_80041840` → `track/`: `GameDrawSkyBackground` (1211 words) against the
+  five one-line CD-DA request wrappers at the tail (67 words), which belong to
+  `cd/`.
+- `func_800271EC` → `sdk/`: scene 32's handler (19 words) against libcd
+  `cdread.c`'s three statics (276 words).
+- `func_800333DC` → `race/`: the tachometer HUD against `func_80033AA0`, the
+  fade overlay every screen in the game calls.
+- `func_80043B18` / `func_80043BCC` (`GameUpdateCamera`) → `track/`, on the
+  strength of "track cameras" being the only camera entry in the taxonomy;
+  `render/` is equally arguable.
+- The libgpu internals `func_80065738`–`func_80067F38` → `sdk/`. The placed
+  libgpu units are already split between `render/` (`DrawOTag`, `GetPrimAddr`,
+  `SetDrawTPage`, `GetDrawEnv`) and `sdk/` (`LoadImage`, `GetDispEnv`,
+  `Gpu_WriteGp1`, `DumpClut`, `Gpu_LoadTexImageAndGetTPage`), so there is no
+  consistent precedent to follow. libgte went to `render/` instead, where all
+  five already-placed libgte units (`SetRotMatrix`, `SetFogNear`,
+  `MatrixApply*`) live.
+- `func_8005ECE0` → `save/` on its own `"bu%1d%1d:"` device strings and
+  `BiosFormatDevice` call, against an adjacency that says `cd/`. Note that its
+  two neighbours `cd/GameCdReadStatusPair` and `cd/GameClearCdResultEvents` are
+  the same family and one of them includes `game/memcard.h`; the three probably
+  belong together, in `save/`.

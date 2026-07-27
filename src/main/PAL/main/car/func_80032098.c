@@ -97,7 +97,7 @@ s32 func_80032098(Unk32098 *arg0) {
     return y + (((s16)fieldE * outZ) >> 7);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80032098", func_80032280);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/func_80032098", func_80032280);
 
 extern s16 D_8019C7D4;
 extern s16 D_8019C7D6;

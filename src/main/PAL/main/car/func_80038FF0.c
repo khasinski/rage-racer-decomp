@@ -582,4 +582,4 @@ void func_800396FC(u8 *car, s32 gear)
 
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80038FF0", func_80039980);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/func_80038FF0", func_80039980);

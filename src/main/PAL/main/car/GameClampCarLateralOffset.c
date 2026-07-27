@@ -11,7 +11,8 @@
  * back into the route sub-block (field_BC + 0x60) only if it would exceed the
  * limit.
  */
-void func_8003A148(GameCarRuntime *car, s32 arg1) {
+void GameClampCarLateralOffset(GameCarRuntime *car, s32 arg1) asm("func_8003A148");
+void GameClampCarLateralOffset(GameCarRuntime *car, s32 arg1) {
     GameCarRuntime *carReg = car;
     u8 *state;
     s32 current;

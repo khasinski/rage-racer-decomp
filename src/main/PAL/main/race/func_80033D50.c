@@ -185,6 +185,6 @@ void func_800340D8(void) {
     } while (bufferIndex < 2);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80033D50", func_8003425C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/race/func_80033D50", func_8003425C);
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80033D50", func_8003479C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/race/func_80033D50", func_8003479C);

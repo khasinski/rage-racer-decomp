@@ -172,4 +172,4 @@ void func_8003F700(void) {
  * sinusoidally between waypoints; the sound is GameSetPitchedSoundCue cue 0 with
  * a Doppler-approximating pitch. See docs/names.md 1.
  */
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8003F608", func_8003F9C4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/track/func_8003F608", func_8003F9C4);

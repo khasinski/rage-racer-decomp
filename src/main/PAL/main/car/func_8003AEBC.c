@@ -101,9 +101,9 @@ void func_8003AEBC(GameCarRuntime *car) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8003AEBC", func_8003B0D4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/func_8003AEBC", func_8003B0D4);
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8003AEBC", func_8003BB50);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/func_8003AEBC", func_8003BB50);
 
 typedef struct KE {
     u16 f0;

@@ -58,4 +58,4 @@ void func_8004E368(s32 arg0, s32 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8004E368", func_8004E724);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/func_8004E368", func_8004E724);

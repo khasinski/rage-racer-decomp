@@ -12,7 +12,8 @@ s32 func_80068634(s32 arg0);
  * state98 motion handlers. Register pins and the single-param/two-arg call
  * mismatch are deliberate to match; do not "fix".
  */
-void func_8002F4E4(GameCarRuntime *arg0) {
+void GameAdvanceCarPosition(GameCarRuntime *arg0) asm("func_8002F4E4");
+void GameAdvanceCarPosition(GameCarRuntime *arg0) {
     register GameCarRuntime *car asm("$19") = arg0;
     volatile s32 coords[3];
 

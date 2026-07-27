@@ -185,4 +185,4 @@ void func_80049418(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80048ED8", func_800496F0);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/func_80048ED8", func_800496F0);

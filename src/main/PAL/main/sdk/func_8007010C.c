@@ -6,5 +6,5 @@
  * the pending RPN/NRPN to the channel's VAB program by rewriting the VagAtr of
  * every tone. See docs/names.md 1.
  */
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8007010C", func_8007010C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/func_8007010C", func_8007010C);
 

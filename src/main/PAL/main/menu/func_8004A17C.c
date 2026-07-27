@@ -37,7 +37,7 @@ void func_8004A17C(s32 delta) {
     func_80047024(scratch + 0x18, 0x48, 0, 0xF8, limit, alpha, alpha, alpha, 0x40);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8004A17C", func_8004A248);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/func_8004A17C", func_8004A248);
 
 extern s32 D_8007F948;
 extern s32 D_8009B298;

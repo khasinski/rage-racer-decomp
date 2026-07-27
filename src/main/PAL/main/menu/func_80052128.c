@@ -8,4 +8,4 @@ void func_80052128(s32 arg0, s32 arg1, s32 arg2) {
     func_80016754(arg0, arg1, D_80082E70[arg2], 0x78CC);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80052128", func_80052158);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/func_80052128", func_80052158);

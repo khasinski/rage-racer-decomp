@@ -6,7 +6,8 @@
  * 0x1000 circle (the 0x801 test unwraps one operand by +0x1000). Returns the
  * blended angle masked to 12 bits.
  */
-s32 func_8002FAE8(s32 angleA, s32 angleB, s32 weight) {
+s32 GameBlendAngle(s32 angleA, s32 angleB, s32 weight) asm("func_8002FAE8");
+s32 GameBlendAngle(s32 angleA, s32 angleB, s32 weight) {
     s32 lhs = angleA & 0xFFF;
     s32 rhs = angleB & 0xFFF;
     s32 inv = 0x400 - weight;

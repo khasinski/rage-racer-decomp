@@ -7,7 +7,8 @@
  * and its successor by `weight` (0..0x400), writing the result to out[0..2].
  * The +0x3FF/+0x7FF bias before the >>10 / >>11 shifts rounds toward zero.
  */
-void func_8002FC84(s32 pointIndex, s32 *out, s32 weight) {
+void GameInterpolateTrackPoint(s32 pointIndex, s32 *out, s32 weight) asm("func_8002FC84");
+void GameInterpolateTrackPoint(s32 pointIndex, s32 *out, s32 weight) {
     s32 next = (pointIndex + 1) % g_TrackPointCount;
     s32 inv = 0x400 - weight;
     GameTrackPoint *cur = &g_TrackPoints[pointIndex];

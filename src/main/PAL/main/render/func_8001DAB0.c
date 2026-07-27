@@ -144,7 +144,7 @@ void func_8001DAB0(GameRenderObject *obj) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_8001DAB0", func_8001DFC0);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/func_8001DAB0", func_8001DFC0);
 
 extern s32 D_8009F094;
 extern s32 g_StreamReturnScene asm("D_8019C760");

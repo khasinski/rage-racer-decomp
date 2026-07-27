@@ -97,7 +97,7 @@ void func_80052778(void) {
     func_8001D530(g_TeamNameChars, g_TeamNameLength);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/func_80052738", func_8005290C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/func_80052738", func_8005290C);
 
 s32 func_80053650(void) {
     s32 v1 = 0;
