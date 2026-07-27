@@ -157,20 +157,19 @@ void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0"
 
 void GameLoadAudioParameterTable(u16 *table) asm("func_8005B070");
 void GameLoadAudioParameterTable(u16 *table) {
-    u16 *tableReg = table;
-    s32 bank;
-    s32 row;
-    s32 col;
-    s32 bankOffset;
-    s32 rowOffset;
-    s32 rowBaseOffset;
-    s32 rowBasePtr;
-    s32 colOffset;
-    s32 *base = g_EngineSoundCurves;
-    s32 *secondBase;
-    s32 *leftPtr;
-    s32 *rightPtr;
-    s32 step;
+    register u16 *tableReg asm("$16") = table;
+    register s32 bank asm("$18");
+    register s32 row asm("$17");
+    register s32 col asm("$5");
+    register s32 bankOffset asm("$9");
+    register s32 rowOffset asm("$7");
+    register s32 rowBaseOffset asm("$8");
+    register s32 colOffset asm("$3");
+    register s32 *base asm("$10") = g_EngineSoundCurves;
+    register s32 *secondBase asm("$11");
+    register s32 *leftPtr asm("$3");
+    register s32 *rightPtr asm("$6");
+    register s32 step asm("$2");
 
     bank = 0;
     secondBase = base + 9;
@@ -189,9 +188,7 @@ void GameLoadAudioParameterTable(u16 *table) {
                 colOffset = col << 2;
                 col++;
                 asm volatile("" : "=r"(col) : "0"(col));
-                asm volatile("addu %0,%1,%2" : "=r"(rowBasePtr) : "r"(rowBaseOffset), "r"(base), "r"(colOffset));
-                asm volatile("addu %0,%0,%1" : "=r"(colOffset) : "r"(rowBasePtr), "0"(colOffset));
-                leftPtr = (s32 *)colOffset;
+                leftPtr = (s32 *)(colOffset + (rowBaseOffset + (s32)base));
                 *leftPtr = leftValue;
                 *rightPtr = *tableReg++;
                 rightPtr++;
