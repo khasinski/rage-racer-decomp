@@ -336,7 +336,9 @@ void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
 void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_800686D4(s32 arg0, s32 arg1);
 
-void func_80050B1C(void) {
+/* The menu-mode twin of GameInitTrackLighting. */
+void GameInitMenuLighting(void) asm("func_80050B1C");
+void GameInitMenuLighting(void) {
     D_8019CAD4 = D_80082DFC;
     g_SceneLightMatrix = D_80082E1C;
     func_800698B8(&D_8019CAD4);
@@ -366,7 +368,7 @@ extern s32 D_8009B304;
 extern s32 D_8009B30C;
 extern s32 D_8009B310;
 extern s32 D_8009B314;
-extern s32 D_8009B31C;
+extern s32 g_CarNamePlateStep asm("D_8009B31C");
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 extern s32 D_8009B324;
 extern s32 D_8009B328;
@@ -378,8 +380,8 @@ extern s32 D_8009B354;
 extern s32 D_8009B360;
 extern s32 D_8009B364;
 extern s32 D_8009B368;
-extern s32 D_8009B36C;
-extern s32 D_8009B370;
+extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
+extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
 extern s32 D_8009B374;
 extern s32 D_8009B378;
 
@@ -435,7 +437,7 @@ void GameInitMenuMode(void) {
         g_GrandPrixSeries = *(u16 *)&g_RaceProgress->unk10;
     }
     g_CourseIndex = ((s32)g_GrandPrixSeries << 2) | g_CourseIndex;
-    func_80050B1C();
+    GameInitMenuLighting();
 
     scratch = (s32 *)0x1F800000;
     scratch[3] = -64;
@@ -470,15 +472,15 @@ void GameInitMenuMode(void) {
     D_8009B360 = 0;
     D_8009B364 = 0;
     D_8009B368 = 0;
-    D_8009B370 = -1;
+    g_MenuPendingCourseIndex = -1;
     D_8009B374 = 0;
     D_8009B378 = -1;
     g_MenuOverlayPattern = 0;
-    D_8009B31C = 0;
+    g_CarNamePlateStep = 0;
     g_MenuPlateCarIndex = 0;
     D_8009B324 = 0;
     D_8009B328 = 0;
-    D_8009B36C = g_CourseIndex;
+    g_MenuCourseModelIndex = g_CourseIndex;
     D_8009B32C = 0;
     D_8009B330 = 0;
     D_8009B334 = 0;
@@ -510,7 +512,9 @@ void GameInitMenuMode(void) {
     func_800509C4(0);
 }
 
-s32 func_80050F68(void) {
+/* Counts the enabled entries of g_CarTable. */
+s32 GameCountOwnedCars(void) asm("func_80050F68");
+s32 GameCountOwnedCars(void) {
     s32 count = 0;
     s32 i = 0;
     GameCarEntry *entries = g_CarTable;

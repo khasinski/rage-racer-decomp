@@ -11,7 +11,7 @@ extern GpuCallbacks *D_800941E0;
 u32 func_80066594(void) {
     u32 ret;
 
-    ret = D_800941E0->drawSyncStatus();
+    ret = D_800941E0->status();
     return ret >> 31;
 }
 

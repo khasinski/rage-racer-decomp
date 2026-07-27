@@ -67,7 +67,10 @@ done:
 extern volatile u32 *D_800942B8;
 extern volatile u32 *D_800942BC;
 
-s32 func_800680A4(u32 arg0) {
+/* GPU-type probe: GP1(10h) info word 7, then a texture-window write-back
+ * test. Returns 0..4; ResetGraph stores it as the graph type. */
+s32 Gpu_ProbeType(u32 mode) asm("func_800680A4");
+s32 Gpu_ProbeType(u32 arg0) {
     volatile u32 *gp0;
     u32 status;
 

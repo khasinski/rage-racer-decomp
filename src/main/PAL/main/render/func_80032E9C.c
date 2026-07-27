@@ -82,7 +82,10 @@ extern GameRaceRanking g_PlayerLap asm("D_8009E83C");
 extern s16 D_8009E836;
 void func_80033D50(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
-void func_80033090(void) {
+/* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
+ * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
+void GameDrawLapTimes(void) asm("func_80033090");
+void GameDrawLapTimes(void) {
     register s32 i __asm("$17");
     register s32 visibleCount __asm("$22");
     register s32 activeIndex __asm("$23");
@@ -158,7 +161,10 @@ void func_800331F8(s32 arg0) {
     func_80033F30(0xE, 0xD2, arg0, arg3);
 }
 
-void func_80033230(void) {
+/* The two race-position digits, from g_RacePosition; the tens digit is
+ * blanked below 10 and the colour changes from 4th place down. */
+void GameDrawRacePosition(void) asm("func_80033230");
+void GameDrawRacePosition(void) {
     register u8 *base asm("$4");
     register s32 value asm("$5");
     register u8 *left asm("$7");

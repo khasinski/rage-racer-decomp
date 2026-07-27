@@ -104,7 +104,7 @@ $(BUILD)/src/main/PAL/main/func_80037714.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/render/func_80032D5C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/race/GameUpdateRacePosition.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_8003DDAC.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/render/func_80046600.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
+$(BUILD)/src/main/PAL/main/render/GameUpdateScriptedCamera.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/track/GameTriggerRaceCues.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80079BB4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/func_80079E7C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
@@ -130,7 +130,7 @@ $(BUILD)/src/main/PAL/main/func_8006B0D4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 # These active sources still need cc1-psx-272. Some use GCC attribute placement
 # rejected by gcc2.6.3-psx; others produce different linked section bytes under
 # 2.6.3 and would shift the final executable.
-$(BUILD)/src/main/PAL/main/menu/func_8001D338.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
+$(BUILD)/src/main/PAL/main/menu/GameComposeSampleTeamLogo.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/main/race/GameExitBgmSelect.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/main/track/GameLoadEnvironmentCue.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2
 $(BUILD)/src/main/PAL/main/func_8006DD30.c.o: RAGE_CC1_VERSION_OBJ := 2.7.2

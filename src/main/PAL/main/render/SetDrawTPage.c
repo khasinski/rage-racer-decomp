@@ -155,7 +155,10 @@ void func_80068180(u8 *dst, s32 value, s32 count);
 void func_800681AC(void *arg0);
 s32 func_80067C80(s32 arg0);
 
-void func_80065460(s32 mode) {
+/* libgpu ResetGraph. Own trace strings D_80013478 "ResetGraph:jtb=%08x,env=%08x"
+ * and D_80013498 "ResetGraph(%d)..."; mode&7 of 0 or 3 does the full reset. */
+void ResetGraph(s32 mode) asm("func_80065460");
+void ResetGraph(s32 mode) {
     register s32 maskedMode asm("$17");
     register u8 *graphState asm("$16");
     register s32 graphType asm("$2");

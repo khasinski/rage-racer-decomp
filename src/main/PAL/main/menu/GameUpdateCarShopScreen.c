@@ -16,10 +16,10 @@ extern u8 D_80082904;
 extern u8 D_80082958;
 extern u8 D_800829AC;
 extern u8 D_80082A00;
-extern s32 D_80082D7C[];
+extern s32 g_CarPriceTable[] asm("D_80082D7C");
 extern u8 g_MenuSubCursor asm("D_8009B2F0");
 extern s32 g_MenuConfirmTimer asm("D_8009B300");
-extern s32 D_8009B31C;
+extern s32 g_CarNamePlateStep asm("D_8009B31C");
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 extern s32 D_8009B32C;
 extern s32 D_8009B330;
@@ -63,9 +63,9 @@ void GameUpdateCarShopScreen(void) {
     ot = *(void **)0x1F800004;
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_80050400(D_8009B32C, D_8009B330);
-    func_8004FCE8(D_8009B31C, g_MenuPlateCarIndex, 0);
+    func_8004FCE8(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     func_8005131C();
-    value = D_80082D7C[func_80050FA8(g_CarListCursor)];
+    value = g_CarPriceTable[func_80050FA8(g_CarListCursor)];
     if (GameMenuBusy == 0) {
         g_MenuPlateCarIndex = g_CarListCursor;
         func_800487D8(D_8019CB00, &g_UiScriptProgress2, -1);
@@ -391,7 +391,7 @@ void GameUpdateEngineerShopScreen(void) {
 
     ot = *(void **)0x1F800004;
     g_MenuAltLayout = g_MenuAltLayoutSetting;
-    func_8004FCE8(D_8009B31C, g_MenuPlateCarIndex, 0);
+    func_8004FCE8(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     func_8005131C();
     g_MenuPlateCarIndex = g_PlayerCarIndex;
     value = D_80082D80[func_80050FA8(g_PlayerCarIndex)];

@@ -174,7 +174,8 @@ s32 GetClut(s32 arg0, s32 arg1) {
 }
 
 extern char D_80013374[];
-extern void (*D_800941E4)(char *, ...);
+/* libgpu's printf hook; every GPU trace string goes through it. */
+extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
 
 void DumpTPage(s32 arg0) asm("func_80064C94");
 void DumpTPage(s32 arg0) {
@@ -192,10 +193,10 @@ void DumpTPage(s32 arg0) {
     }
 
 high_mode:
-    D_800941E4(D_80013374, (((u32)arg0 & 0xFFFF) >> 9) & 3, (((u32)arg0 & 0xFFFF) >> 7) & 3, (((u32)arg0 & 0xFFFF) << 6) & 0x7C0, (((u32)arg0 & 0xFFFF) << 3) & 0x300);
+    GPU_printf(D_80013374, (((u32)arg0 & 0xFFFF) >> 9) & 3, (((u32)arg0 & 0xFFFF) >> 7) & 3, (((u32)arg0 & 0xFFFF) << 6) & 0x7C0, (((u32)arg0 & 0xFFFF) << 3) & 0x300);
     return;
 
 low_mode:
     value = arg0 & 0xFFFF;
-    D_800941E4(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value << 6) & 0x7C0, ((value << 4) & 0x100) + ((value >> 2) & 0x200));
+    GPU_printf(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value << 6) & 0x7C0, ((value << 4) & 0x100) + ((value >> 2) & 0x200));
 }

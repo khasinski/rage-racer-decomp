@@ -89,7 +89,7 @@ s32 GameDrawDesignModeScreen(s32 arg0) {
     return D_8009B2D4;
 }
 
-extern s32 D_8009B37C;
+extern s32 g_TeamNameCharModel asm("D_8009B37C");
 extern s32 D_8019C758;
 
 extern u8 D_800828EC;
@@ -191,7 +191,7 @@ void GameUpdateDesignModeScreen(void) {
                 g_MenuViewAngleTarget = 0;
                 g_MenuViewAngle = 0;
                 GameMenuCursor = (g_TeamNameLength >= 6) ? 0x2B : 0;
-                D_8009B37C = GameMenuCursor;
+                g_TeamNameCharModel = GameMenuCursor;
                 break;
             case 3:
                 g_MenuScreen = 10;

@@ -317,7 +317,7 @@ loop_disabled_check:
 done:
 }
 
-extern s32 D_8009B31C;
+extern s32 g_CarNamePlateStep asm("D_8009B31C");
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 
 void func_80051238(void);
@@ -331,7 +331,7 @@ void GameEnterCarSelectScreen(void) {
     g_MenuScreen = 4;
     g_UiScriptProgress = 0;
     func_80055454();
-    func_8004FCE8(D_8009B31C, g_MenuPlateCarIndex, 0);
+    func_8004FCE8(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     func_8005131C();
     func_8004CF30(-9);
 }
@@ -408,7 +408,7 @@ void GameUpdateCustomizeScreen(void) {
 
     ot = *(void **)0x1F800004;
     g_MenuAltLayout = g_MenuAltLayoutSetting;
-    func_8004FCE8(D_8009B31C, g_MenuPlateCarIndex, 0);
+    func_8004FCE8(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     mode = 2;
     func_8005131C();
     if (g_GrandPrixMode != 0) {

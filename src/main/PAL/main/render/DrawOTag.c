@@ -3,7 +3,8 @@
 
 extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 extern u8 g_GraphDebug asm("D_800941EA");
-extern void (*D_800941E4)(char *, ...);
+/* libgpu's printf hook; every GPU trace string goes through it. */
+extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
 extern char D_800135CC[];
 extern char D_800135E0[];
 extern char D_800135F8[];
@@ -15,18 +16,20 @@ void DrawOTag(void *arg0) asm("func_80065E60");
 
 void DrawOTag(void *arg0) {
     if (g_GraphDebug >= 2) {
-        D_800941E4(D_800135CC, arg0);
+        GPU_printf(D_800135CC, arg0);
     }
-    g_GpuFuncs->send(g_GpuFuncs->moveImage, arg0, 0, 0);
+    g_GpuFuncs->send(g_GpuFuncs->sendList, arg0, 0, 0);
 }
 
-void *func_80065ED4(void *arg0) {
+/* Named from its own trace string D_800135E0, "PutDrawEnv(%08x)...". */
+void *PutDrawEnv(void *env) asm("func_80065ED4");
+void *PutDrawEnv(void *arg0) {
     register u8 *debug asm("$18") = &g_GraphDebug;
     register void *prim asm("$17") = arg0;
     register void *tag asm("$16");
 
     if (*debug >= 2) {
-        D_800941E4(D_800135E0, prim);
+        GPU_printf(D_800135E0, prim);
     }
 
     tag = (u8 *)prim + 0x1C;
@@ -40,20 +43,22 @@ void *func_80065ED4(void *arg0) {
 
         word |= mask;
         *(u32 *)tag = word;
-        gpu->send(gpu->moveImage, sendTag, size, 0);
+        gpu->send(gpu->sendList, sendTag, size, 0);
     }
     MemCopy(debug + 0xE, prim, 0x5C);
     return prim;
 }
 
-void *func_80065F98(void *arg0, void *arg1) {
+/* Named from its own trace string D_800135F8, "DrawOTagEnv(%08x,&08x)...". */
+void *DrawOTagEnv(void *ot, void *env) asm("func_80065F98");
+void *DrawOTagEnv(void *arg0, void *arg1) {
     register void *src asm("$18") = arg0;
     register u8 *debug asm("$19") = &g_GraphDebug;
     register void *prim asm("$17") = arg1;
     register void *tag asm("$16");
 
     if (*debug >= 2) {
-        D_800941E4(D_800135F8, src, prim);
+        GPU_printf(D_800135F8, src, prim);
     }
 
     tag = (u8 *)prim + 0x1C;
@@ -72,7 +77,7 @@ void *func_80065F98(void *arg0, void *arg1) {
         gpu = g_GpuFuncs;
         word |= mask;
         *(u32 *)tag = word;
-        gpu->send(gpu->moveImage, sendTag, size, 0);
+        gpu->send(gpu->sendList, sendTag, size, 0);
     }
     return MemCopy(debug + 0xE, prim, 0x5C);
 }

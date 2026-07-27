@@ -1708,3 +1708,191 @@ The names are kept: the code is in the ROM and has to be read by someone.
   countdown, 0x23 over-speed, 0x26 record, 0x27-0x29 laps to go, 0x2A final lap,
   0x2C wrong way, 0x3E/0x3F split faster/slower), but the audio is on the disc,
   so no cue's *content* is asserted in a name.
+
+## 16. `sdk/`, `render/` and `menu/` naming pass
+
+76 units in those three directories were still called `func_XXXXXXXX`. This pass
+named 78 functions and 30 globals and renamed 35 unit files. Every batch was
+verified with `make check VERSION=PAL` at
+`2913e15648eddef40821c5f666460abc04155ee6`.
+
+### 15a. libgpu: the driver table at `0x800941A0` decides everything
+
+`D_800941E0` points at a 16-slot function table (dumped in
+`asm/PAL/main/data/main/6BE64.data.s`). Reading which public entry point uses
+which slot pins the whole module, and it corrects two `GpuCallbacks` field
+names that were guesses:
+
+| slot | function | how the slot is used |
+|---|---|---|
+| +0x08 | `Gpu_AddQueue` (func_800676A0) | the `send` entry: runs the worker now if the GPU is idle, else queues it |
+| +0x0C | `Gpu_ClearImage` (func_80066E6C) | the worker `ClearImage` enqueues |
+| +0x10 | `Gpu_WriteGp1` (already named) | `submit` |
+| +0x14 | `Gpu_WriteGp0Words` (already named) | **was `putDispEnv`** — it is the raw GP0 word pusher |
+| +0x18 | `Gpu_StartDmaTransfer` (already named) | **was `moveImage`**, but `DrawOTag`, `PutDrawEnv`, `DrawOTagEnv` and `MoveImage` all use it: renamed `sendList` |
+| +0x1C / +0x20 | `Gpu_StoreImage` / `Gpu_LoadImage` (func_800672D8 / func_80067084) | the `StoreImage` / `LoadImage` workers |
+| +0x24 | `Gpu_ExecuteQueue` (func_80067984) | the queue drain, also installed as the DMA2 callback |
+| +0x28 | `Gpu_GetControlMirrorByte` | `read` |
+| +0x2C | `Gpu_ClearOTagDma` (func_80066D84) | **was `clearImage`** — it is the OTC-DMA ordering-table clear `ClearOTagR` uses |
+| +0x34 | `Gpu_Reset` (func_80067C80) | the body of `ResetGraph` |
+| +0x38 | `_status` (already named) | **was `drawSyncStatus`** |
+| +0x3C | `Gpu_DrawSync` (func_80067DBC) | the body of `DrawSync` |
+
+The `Gpu_*` prefix is this project's existing convention for libgpu internals
+whose Sony static name could not be pinned (`Gpu_WriteGp1`,
+`Gpu_BuildDrawAreaTopLeftCmd`, ...), used alongside the ones that could
+(`_get_mode`, `_status`, `_param`, `get_dx`). `Gpu_AddQueue` / `Gpu_ExecuteQueue`
+are very probably libgpu's `_addque` / `_exeque` — `_addque(func, p, size, tag)`
+has exactly this four-argument shape — but that was not provable from the image,
+so the descriptive name was used.
+
+### 15b. libgpu public entry points named from their own trace strings
+
+| Name | Addr | String |
+|---|---|---|
+| `SetGraphQueue` | 0x80065738 | `D_800134F0` = `"SetGrapQue(%d)...\n"` (the SDK's own typo) |
+| `ResetGraph` | 0x80065460 | `D_80013478` `"ResetGraph:jtb=%08x,env=%08x\n"` + `D_80013498` `"ResetGraph(%d)...\n"` |
+| `PutDispEnv` | 0x800660AC | `D_80013614` = `"PutDispEnv(%08x)...\n"` |
+| `PutDrawEnv` | 0x80065ED4 | `D_800135E0` = `"PutDrawEnv(%08x)...\n"` |
+| `DrawOTagEnv` | 0x80065F98 | `D_800135F8` = `"DrawOTagEnv(%08x,&08x)...\n"` |
+
+**Correction:** `func_80065E00` was declared `PutDispEnv` in `psyq/gpu.h`. It is
+not — the string above proves `PutDispEnv` is func_800660AC. func_80065E00 is
+`DrawPrim`: it does `drawSync(0)` and then pushes `prim[3]` words starting at
+`prim + 4` through the +0x14 slot, i.e. draws one primitive immediately. It had
+no call sites, so the correction is a pure rename.
+
+`GPU_printf` (`D_800941E4`) was already aliased in two files; it is now used in
+all six that reference it.
+
+### 15c. libgte: the matrix stack, and Lzc
+
+`func_80069234` / `func_800692D4` are `PushMatrix` / `PopMatrix`: they save and
+restore GTE control registers `$0..$7` through a 32-byte-per-level stack at
+`0x80094CAC` with the index at `0x80094CA8`, push erroring at index 0x280
+(20 levels) and pop erroring at index 0. `func_80069C7C` is `Lzc` — `psyq/gte.h`
+already bound the name to that address, the definition just had not taken it.
+
+### 15d. libcd: three more self-naming internals
+
+libcd's internals identify themselves the same way `CD_sync` / `CD_ready` /
+`CD_cw` already did in this codebase:
+
+| Name | Addr | Evidence |
+|---|---|---|
+| `CD_datasync` | 0x8006BF00 | stores `D_8001391C = "CD_datasync"` into the `D_8009BB10` slot its own `"%s:(%s) Sync=%s, Ready=%s\n"` timeout message prints |
+| `CD_newmedia` | 0x8006C560 | owns all four `"CD_newmedia: ..."` messages; reads the PVD at sector 16, checks `"CD001"` and parses the path table |
+| `CD_cachefile` | 0x8006C8E4 | owns all three `"CD_cachefile: ..."` messages; fills the 64-entry file cache from one directory |
+| `cd_read` | 0x8006CB88 | `CD_newmedia`'s own error text is `"Read error in cd_read(PVD)"`; lowercase because it is a static |
+
+**Correction to section 7:** func_8006AB5C is described there as "a libcd
+error/trace helper". It is the interrupt decoder — it reads the 8-byte response
+FIFO, decodes intr codes 1..5 into `D_80099318` and the two result buffers, and
+is drained in a `while (...)` loop by `CD_sync`, `CD_ready`, `CD_cw` and
+`CD_getsector2`. Its Sony name is still unknown, so it keeps the raw symbol.
+
+### 15e. `render/`: the scripted camera and two HUD readouts
+
+`GameUpdateScriptedCamera` (func_80046600) plays a table of 0x20-byte
+keyframes at `g_CameraPath` (D_8007F628): six `s32` (eye xyz, then look-at xyz),
+a duration at +0x18 and a Bezier control value at +0x1C. Each frame it eases the
+six values with `GameBezierEase` (func_80046598 — literally
+`2t(1-t)*control + t^2` over 0..10000) and installs the result with
+`GameSetLookAtMatrix` (func_80046248), which builds the view matrix from an eye
+and a target and hands it to `SetRotMatrix` / `SetTransMatrix`.
+`GameBuildAxisRotMatrix` (func_80046188) is its single-axis rotation helper —
+its `axis` argument is an **ASCII letter**, `(axis & 0xFF) - 0x58` giving 0/1/2
+for `'X'/'Y'/'Z'` and 0x20/0x21/0x22 for `'x'/'y'/'z'`.
+
+`GameDrawLapTimes` (func_80033090) and `GameDrawRacePosition` (func_80033230)
+are the two race HUD readouts that live in `render/func_80032E9C.c`.
+
+### 15f. `menu/`: the setup menu is scene 23, not the attract scene
+
+Section 14a's scene table has two wrong rows. `func_80025870` (id 23) dispatches
+`g_GameModeHandlers[g_GameMode]` and then the setup-scene overlay — it is
+`GameUpdateOptionScene`, the OPTION / setup menu, not "attract 3D scene".
+Correspondingly id 19 (`func_80020DDC`) is not OPTION either: it is
+`GameUpdatePrizeMoneyScreen`, the nine-state machine that counts
+`g_PendingPrizeMoney` and then `g_PendingClassBonus` into the save block at
+`g_PrizeTickRate` / `g_BonusTickRate` per frame (x4 while confirm is held).
+
+That settles the whole `g_GameModeHandlers` block:
+
+| mode | handler | screen |
+|---:|---|---|
+| 0 | `GameUpdateOptionMenuFade` | the fade in and out of the setup menu |
+| 1 | `GameUpdateOptionRootMenu` | the six-row root menu (`GameDrawOptionRootMenu`) |
+| 2 / 3 | `GameUpdateClassRecordMenu` / `GameUpdateClassRecordBrowse` | the class-record list and its eleven-cell grid |
+| 4 / 5 | `GameUpdateSoundOptionMenu` / `GameUpdateSoundSettingAdjust` | the SOUND panel and the left/right editor behind it |
+| 6 | `GameUpdateScreenAdjustScreen` | screen position, committing to `g_ScreenOffsetX/Y` |
+| 7..11 | the already-named controller-configuration screens | |
+
+`GameDrawFullscreenFadeTile480` (func_80023A60) is the 0x140x0x1E0 twin of the
+existing `GameDrawFullscreenFadeTile` (func_80033AA0, 0x140x0xF0) — the setup
+scene runs in 480 lines.
+
+Also named in `menu/`, each from its own callers or literals:
+`GameEnterFrontend` (scene 2), `GameUpdateMenuMode` (scene 8),
+`GameUpdateEndingStill` / `GameDrawEndingStill` (scene 34),
+`GameEnterRoundScreen` / `GameUpdateRoundScreen` / `GameDrawRoundScreen` /
+`GameDrawBgmSelector` (scenes 9 and 10), `GameInitTrackLighting` and its
+menu-mode twin `GameInitMenuLighting`, `GameApplyZoneLighting` /
+`GameRestoreColorMatrix`, `GameShuffleBgmOrder`, `GameDrawNowLoadingText`
+(the literal `"NOW LOADING"` at D_80011B60), `GameEnterCourseSelectScreen`
+(`g_MenuScreenUpdate[0]`), `GameCanSelectPrevCourse` (the exact mirror of the
+already-named `GameCanSelectNextCourse`), `GameGetOwnedCarAssetIndex`
+(`GameGetCarAssetIndex(model, owned grade)` written out longhand),
+`GameSwapCarModelSlot` / `GameInstallCarModelSlot`, `GameDrawMenuCourseView`,
+`GameDrawTeamNameCharModel`, `GameDrawTireCompoundSlider`,
+`GameDrawBrowseArrows`, `GameDrawPaintColorPalette`, `GameDrawCarNamePlate`,
+`GameComposeSampleTeamLogo`, `GameComputeClassGrade`, `GameCountOwnedCars`,
+`GameDrawMenuCursorArrow`, `GameDrawOptionHintBar`, `GameDrawPadTypeHint`,
+`GameDrawVolumeBar`, `GameStartOptionMenuExit`, `GameDrawTitleFadeOverlay`.
+
+Globals named with them: `g_OptionMenuExitScene`, `g_OptionMenuCursor`,
+`g_ClassRecordMenuCursor`, `g_SoundOptionCursor`, `g_ScreenOffsetX/Y`,
+`g_OptionLetterboxHeight`, `g_LastValidPadType`, `g_BgmTrackNames`,
+`g_RoundScreenFadeDelays`, `g_CarPriceTable`, `g_PaintColorTable`,
+`g_MenuCourseModelIndex`, `g_MenuPendingCourseIndex`, `g_TeamNameCharModel`,
+`g_MenuViewSpin`, `g_PrizeScreenState`, `g_PendingPrizeMoney`,
+`g_PendingClassBonus`, `g_PrizeTickRate`, `g_BonusTickRate`,
+`g_TeamLogoSampleData`, `g_BrowseArrowsFade`, `g_CarNamePlateFade`,
+`g_CarNamePlateStep`, plus the camera-path four above and `GPU_printf`.
+
+### 15g. Left unnamed on purpose
+
+- **Every libspu / libsnd internal in `sdk/`.** func_8006ECDC (the shared SEQ
+  header parser behind `SsSeqOpen`), func_8006F5F4 (the MIDI Control Change
+  dispatcher — controller numbers 0/6/7/10/11/64/65/91/98..101/121 all check
+  out), func_800706AC (the NRPN parameter applicator, sibling of func_8007010C),
+  func_80074348 (the noise-tone key-on, selected when `vag == 0xFF`),
+  func_80074B68, func_80074D1C / func_8007521C (auto-volume / auto-pan ramp
+  setup) and func_80077A88 (matching key-off) are all library-internal statics.
+  Section 1 already set the precedent with func_8007010C: there is no public
+  `Ss*` symbol to claim, and inventing a `Game*` one would be wrong.
+  Section 12e's rule keeps their globals raw for the same reason.
+- **A discrepancy worth recording, not acting on:** `psyq/snd.h` binds
+  `SsUtVibrateOn` to func_800785B4 and `SsUtAutoVol` to func_80078608. Those two
+  wrappers arm func_80074D1C and func_8007521C, whose tick partners
+  (func_80074ECC, func_800753CC) apply the ramped value as **volume** and as
+  **pan** respectively — which reads as the `SsUtAutoVol` / `SsUtAutoPan` pair,
+  shifted by one. These are existing names with existing call sites, so
+  correcting them belongs in its own change.
+- **libgpu:** func_80067F04 / func_80067F38 (the timeout watchdog) stay generic,
+  as section 7 decided; func_8006767C, the +0x04 driver slot, has no caller.
+- **libcd/libds:** func_8006C53C (a 12-character filename compare),
+  func_8006CD0C (the streaming-read starter — its `St*`/`Ds*` name is not
+  provable), func_8006DB74 (a generic DMA-channel starter owning
+  `"DMA STATUS ERROR %x\n"`, unreferenced in the image), func_8006E4E4 (a slot
+  in the kernel interrupt-module vector at 0x8009A498, also unreferenced).
+- **`render/`:** func_80019D24 and its family (section 7 already left
+  func_80019EFC generic — what the two VRAM texture-swap states *are* is still
+  unproven), func_8001D30C, func_8001A980, func_80032D5C, func_8001DAB0.
+- **`menu/`:** the attract/replay step drivers func_80025940, func_80025A14,
+  func_80025AC8, func_80025BD8, func_80025C20 (section 13h's reasoning still
+  holds), the transition widgets func_80050400, func_800509C4, func_8004F3EC,
+  func_8004E368, func_8004F650, func_8004F99C, func_8005026C — each owns a
+  private accumulator and is reached only through a table, so which panel it
+  belongs to is unproven — and func_800512B4 / func_800520F8, which have no C
+  caller at all.

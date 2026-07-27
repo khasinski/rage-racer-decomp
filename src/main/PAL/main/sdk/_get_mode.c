@@ -251,7 +251,11 @@ extern volatile u32 *D_800942D8;
 void func_80067F04(void);
 s32 func_80067F38(void);
 
-s32 func_80066D84(u32 *arg0, s32 arg1) {
+/* Driver-table slot +0x2C: clears an ordering table through the hardware
+ * OTC DMA channel (chcr 0x11000002, walking backwards from the end).
+ * ClearOTagR is its only caller. */
+s32 Gpu_ClearOTagDma(u32 *ot, s32 count) asm("func_80066D84");
+s32 Gpu_ClearOTagDma(u32 *arg0, s32 arg1) {
     s32 size;
     u32 mask;
     volatile u32 *status;

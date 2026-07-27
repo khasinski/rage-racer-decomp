@@ -60,13 +60,14 @@ s32 MoveImage(GpuRectPacked *arg0, u32 arg1, u32 arg2) {
         data = 0;
         D_800942A0 = wh;
         asm("" : : "r"(wh) : "memory");
-        return gpu->send(gpu->moveImage, buf - 2, size, data);
+        return gpu->send(gpu->sendList, buf - 2, size, data);
     }
     return -1;
 }
 
 extern u8 g_GraphDebug asm("D_800941EA");
-extern void (*D_800941E4)(char *, ...);
+/* libgpu's printf hook; every GPU trace string goes through it. */
+extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
 extern char D_8001359C[];
 extern char D_800135B4[];
 extern u32 D_800942A4;
@@ -79,7 +80,7 @@ void *ClearOTag(u32 *arg0, s32 count) {
     register s32 remaining asm("$17") = count;
 
     if (g_GraphDebug >= 2) {
-        register void (*debug)(char *, ...) asm("$2") = D_800941E4;
+        register void (*debug)(char *, ...) asm("$2") = GPU_printf;
 
         asm("" : "=r"(debug) : "0"(debug));
         debug(D_8001359C, ptr, remaining);
@@ -114,10 +115,10 @@ void *ClearOTag(u32 *arg0, s32 count) {
 void * ClearOTagR(u32 *arg0, s32 arg1) asm("func_80065D68");
 void *ClearOTagR(u32 *arg0, s32 arg1) {
     if (g_GraphDebug >= 2) {
-        D_800941E4(D_800135B4, arg0, arg1);
+        GPU_printf(D_800135B4, arg0, arg1);
     }
 
-    g_GpuFuncsClearOTagR->clearImage(arg0, arg1);
+    g_GpuFuncsClearOTagR->clearOTag(arg0, arg1);
 
     {
         register u32 mask asm("$4") = 0xFFFFFF;
@@ -135,10 +136,12 @@ void *ClearOTagR(u32 *arg0, s32 arg1) {
 
 extern GpuCallbacks *D_800941E0;
 
-void PutDispEnv(u8 *arg0) asm("func_80065E00");
-void PutDispEnv(u8 *arg0) {
+/* libgpu DrawPrim: waits for the drawing to finish, then pushes the single
+ * primitive at arg0 + 4, whose word count is the tag's length byte arg0[3]. */
+void DrawPrim(u8 *prim) asm("func_80065E00");
+void DrawPrim(u8 *arg0) {
     u32 mode = arg0[3];
 
     D_800941E0->drawSync(0);
-    D_800941E0->putDispEnv(arg0 + 4, mode);
+    D_800941E0->writeGp0Words(arg0 + 4, mode);
 }

@@ -225,8 +225,8 @@ extern volatile u8 D_8019CE38[];
 extern u8 D_801C0620[];
 extern u8 D_801C067C[];
 extern u8 D_801C0690[];
-extern u16 D_801E4B8C;
-extern u16 D_801E4B9C;
+extern u16 g_ScreenOffsetX asm("D_801E4B8C");
+extern u16 g_ScreenOffsetY asm("D_801E4B9C");
 
 void func_80069A58(s32, s32);
 void func_80069A78(s32);
@@ -278,8 +278,8 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
 
     i = 0;
     one = 1;
-    src0 = &D_801E4B8C;
-    src1 = &D_801E4B9C;
+    src0 = &g_ScreenOffsetX;
+    src1 = &g_ScreenOffsetY;
     offset = 0;
     do {
         stride = 0x20000;
@@ -335,8 +335,8 @@ void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
 
     i = 0;
     one = 1;
-    src0 = &D_801E4B8C;
-    src1 = &D_801E4B9C;
+    src0 = &g_ScreenOffsetX;
+    src1 = &g_ScreenOffsetY;
     offset = 0;
     do {
         stride = 0x20000;

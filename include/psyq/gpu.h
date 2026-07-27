@@ -165,21 +165,32 @@ typedef struct DrawPacket {
     u32 x1y1;
 } DrawPacket;
 
+/*
+ * The libgpu driver table at 0x800941A0 (D_800941E0 points at it), dumped in
+ * asm/PAL/main/data/main/6BE64.data.s. Slots holding a `u32` are worker
+ * function addresses passed to `send` rather than called directly:
+ *   +0x04 func_8006767C  +0x08 Gpu_AddQueue      +0x0C Gpu_ClearImage
+ *   +0x10 Gpu_WriteGp1   +0x14 Gpu_WriteGp0Words +0x18 Gpu_StartDmaTransfer
+ *   +0x1C Gpu_StoreImage +0x20 Gpu_LoadImage     +0x24 Gpu_ExecuteQueue
+ *   +0x28 Gpu_GetControlMirrorByte               +0x2C Gpu_ClearOTagDma
+ *   +0x30 _param         +0x34 Gpu_Reset         +0x38 _status
+ *   +0x3C Gpu_DrawSync
+ */
 typedef struct GpuCallbacks {
     u8 pad0[0x8];
-    s32 (*send)(u32 cmd, void *buf, s32 size, u32 data);
+    s32 (*send)(u32 worker, void *buf, s32 size, u32 data);
     u32 cmd0C;
     void (*submit)(s32 cmd);
-    void (*putDispEnv)(void *env, s32 mode);
-    u32 moveImage;
+    void (*writeGp0Words)(void *src, s32 count);
+    u32 sendList;
     u32 storeImage;
     u32 loadImage;
     u8 pad24[0x28 - 0x24];
     s32 (*read)(s32 cmd);
-    void (*clearImage)(void *rect, s32 rgb);
+    void (*clearOTag)(void *ot, s32 count);
     u8 pad30[0x34 - 0x30];
     void (*resetGraph)(s32 mode);
-    s32 (*drawSyncStatus)(void);
+    s32 (*status)(void);
     void (*drawSync)(s32 mode);
 } GpuCallbacks;
 
@@ -240,7 +251,9 @@ s32 GetClut(s32 x, s32 y) asm("func_80064C7C");
 s32 GetTPage(s32 tp, s32 abr, s32 x, s32 y) asm("func_80064BB4");
 s32 GetDispEnv(s32 env) asm("func_8006655C");
 s32 GetDrawEnv(s32 env) asm("func_80066074");
-void PutDispEnv(u8 *env) asm("func_80065E00");
+/* Draws one primitive immediately (DrawSync + push prim[4..] for prim[3]
+ * words). The real PutDispEnv is func_800660AC. */
+void DrawPrim(u8 *prim) asm("func_80065E00");
 u8 *SetDefDrawEnv(u8 *env, s32 x, s32 y, s32 w, s32 h) asm("func_80064B78");
 void SetDrawTPage(u8 *prim, s32 dfe, s32 dtd, s32 tpage) asm("func_800650E4");
 void SetTexWindow(DrawPacket *prim, void *tw) asm("func_800665C8");
