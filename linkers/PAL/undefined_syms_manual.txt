@@ -76,3 +76,8 @@ func_8006E684 = func_8006E644 + 0x40;
 .L800635D0_main = func_800632F0 + 0x2E0;
 .L80070740_main = func_800706AC + 0x94;
 .L8007082C_main = func_800706AC + 0x180;
+
+/* Size the BIOS loads, for the PS-EXE header. Kept as one absolute symbol
+   because the assembler cannot emit a difference of two linker symbols in a
+   .word; see tools/scripts/symbolise_header.py. */
+main_LOAD_SIZE = main_ROM_END - main_ROM_START;

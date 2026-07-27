@@ -55,6 +55,7 @@ split:
 	$(PY) -m splat split $(SPLAT_CFG)
 	$(PY) tools/scripts/gen_nonmatching_asm.py --version $(VERSION) --basename $(BASENAME)
 	$(PY) tools/scripts/symbolise_data_words.py --version $(VERSION) --basename $(BASENAME)
+	$(PY) tools/scripts/symbolise_header.py --version $(VERSION) --basename $(BASENAME)
 	$(PY) tools/scripts/gen_bss.py --version $(VERSION) --basename $(BASENAME)
 
 $(BUILD)/asm/%.s.o: asm/%.s
