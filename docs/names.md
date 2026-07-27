@@ -3176,9 +3176,9 @@ gives a usable per-word residual instead of shifting the whole image.
 ### 21a. The phantom 8-byte stack frame (`addiu $sp,$sp,-8` with no stack use)
 
 Twenty-nine retail functions contain `addiu $sp,$sp,-8` / `addiu $sp,$sp,8`
-around a body that never touches the frame. Four of them are still carried by an
+around a body that never touches the frame. Three of them are still carried by an
 `__asm__ volatile("addiu $sp,$sp,-8" ::: "memory")` crutch
-(`SsUtChangeADSR`, `SsUtSetDetVVol`, `SsUtSetVVol` in `lib/libsnd/SsUtPitchBend.c`,
+(`SsUtChangeADSR`, `SsUtSetVVol` in `lib/libsnd/SsUtPitchBend.c`,
 and `SpuVmSetSeqVol`), and two more are carried by a fabricated local
 (`volatile s32 unused;` in `render/Gpu_WriteGp0Words`, `s32 pad[2];` in
 `track/GameInstallTrackPoints`).
@@ -3259,14 +3259,84 @@ dropping the `$4` pin, dropping the `limit` variable entirely (loses the copy an
 a word), assigning `limit` at the top of the function, `for (limit = count, i = 0; …)`,
 an outer `if (count > 0)` around the `for` (adds a word), and a `while` form.
 
-**It does not explain the three `SsUt*` setters**, which contain no loop at all.
-Ruled out by direct compilation (all produce `vars= 0`): unused local scalars,
-unused local structs, `do { … } while (0)` wrappers, `for (;;) { …; break; }`,
-`while (cond) { …; return; }`, `goto`-threaded bodies, `&&`-folded range checks,
-storing the comparison in a variable, `switch` on the comparison, signed vs
-unsigned parameter typing, and `short` vs `int` return type. Whatever creates the
-dead unallocatable pseudo there is something else that survives `reg_scan` and is
-killed by `cse2`/`combine`; that is the single open question for this family.
+**The loop is not the cause; it is only one carrier.** The general rule, read
+out of the gcc 2.6.3 sources (`ftp.gnu.org/old-gnu/gcc/gcc-2.6.3.tar.bz2`) and
+confirmed against `-da` dumps:
+
+* `flow_analysis` sets `reg_n_refs`; only `combine` runs between it and
+  `regclass`, so `combine` is the only pass that can leave a pseudo with refs
+  and no insns.
+* `combine.c` normally repairs this: after a successful `try_combine` it does
+  `reg_n_sets[i2dest]--; if (… == 0 …) reg_n_refs[i2dest] = 0;` — but only
+  `if (! added_sets_2 && newi2pat == 0 && ! i2dest_in_i2src)` (combine.c:2280).
+* So the stale case is exactly a **three-insn combine `(i1, i2, i3)` in which
+  `i1dest` is still live after `i3`**. `added_sets_1` then forces the merged
+  pattern into a `PARALLEL` that combine splits, `newi2pat` becomes i1's set
+  (moved into i2's slot, i1 deleted) and `i2dest` — the intermediate — vanishes
+  from the RTL with `reg_n_refs` still at its old value.
+* `regclass` then sees all-zero costs for it, `reg_class_subunion` walks down
+  from `ST_REGS`, `find_reg` fails, and `alter_reg` gives it a 4-byte slot;
+  `MIPS_STACK_ALIGN` rounds `get_frame_size()` up to 8.
+
+In the `for`-loop carrier the triple is `i1 = (set i 0)`, `i2 = (set t (lt i n))`,
+`i3` = the duplicated exit branch; `i` is live in the loop, so `newi2pat` is
+`(set i 0)` and the compare temp `t` is the phantom. `while (n > 0)` produces no
+frame because a compare against 0 needs no `slt` temp at all.
+
+**Loop-free carrier, which is what the `SsUt*` setters use.** Indexing *one*
+scaled array base at two constant offsets inside a single basic block:
+
+```c
+extern short A[];
+void t07(int a, short v) { int o = a << 4; A[o] = v; A[o + 1] = v; }   /* vars= 8 */
+```
+
+`expand` forces the symbol into a register (`(set r75 (symbol_ref A))`) because
+`(plus symbol reg)` is not a valid *value*, then materialises the address
+(`(set r78 (plus r77 r75))`). Combine folds the symbol back into the MEM —
+legal, `sh v,A(r77)` — and `r75` is still needed for the `A+2` access, so
+`added_sets_1` fires and `r78` is the phantom. Its `.lreg` line is
+`Register 78 used 2 times across 2 insns in block 0; dies in 0 places;
+ST_REGS or none`, and `.greg` omits it from `Register dispositions`. Writing the
+two stores through two *separate* symbols (`D_8009DF20` and `D_8009DF22`) gives
+`vars= 0`; writing them as `base[j]` / `base[j + 1]` on a shared halfword view
+gives the retail frame with no other change. The base must be a scaled type
+(a `u8` base needs no shift, so `EXPAND_SUM` keeps it inside the MEM), the two
+accesses must be in the same basic block (LOG_LINKS do not cross blocks), and
+the MEMs must not be `volatile` (combine refuses to rewrite a volatile MEM, so
+the fold — and with it the phantom — never happens).
+
+This retires the crutch in `SsUtSetDetVVol` (func_80078430), which is now plain
+C: `j = index * 8; g_SndVoiceRegs16[j + 1] = volr; … g_SndVoiceRegs16[j] = voll;`
+plus the two pre-existing `$2` / `$7` pins.
+
+**Still open, with the distance measured.**
+
+* `SsUtSetVVol` (func_80078528): same rewrite gets the frame and the right 35
+  words, 17 differ. The residual is purely allocation — retail spills `volr`
+  (`move $3,$6` in the guard's delay slot) because `voll * 129` is computed
+  first and lands in `$6`; ours computes `volr * 129` first and spills `voll`
+  instead. Swept `x`/`y`/`index`/`j`/`flags` pins × three statement orders.
+* `SsUtChangeADSR` (func_80078300): with `g_SndVoiceRegs16[j + 4]` /
+  `[j + 5]` the frame appears and the store order is retail's, but the third
+  `bne`'s delay slot takes `li $2,-1` (stolen by `dbr` from `fail_late`)
+  instead of retail's `sll $2,$8,4`, costing one word (55 vs 54). With
+  `D_8009DF28[0]` / `[1]` as the base instead, the count is right (54) but
+  `sched` interleaves the flags `lbu` between the two `sh`, where retail has a
+  `nop`; 14 differ.
+* `SpuVmSetSeqVol` (func_80076C58): the crutch is unnecessary — the retail
+  `beqz D_801E42F8` guard *is* a duplicated exit test, so the body is a pre-test
+  `for` and the three preheader insns after the guard (`andi`, `la D_8009DF20`,
+  `addiu +2`) are `move_movables` hoists, i.e. they must be written *inside* the
+  loop. That form is 2 words out. The `blez` vs `beqz` half of it needs
+  `nonzero_bits` to know the bound's sign bit is clear, which `combine` only
+  manages when the compared pseudo has `reg_n_sets > 1` (`set_nonzero_bits_and_
+  sign_copies` ignores single-set pseudos, and the `reg_last_set` fast path is
+  barred because `subst_low_cuid` is the counter's `i = 0`, which always
+  precedes the duplicated load). Assigning the bound to a local both before and
+  at the end of the loop supplies the second set and closes it, leaving one
+  three-word permutation at the loop tail — but that shape is invented C, so
+  the crutch stays for now.
 
 ### 21b. `SsUtChangeADSR` (func_80078300) — crutch-free body, blocked only by 18a
 
@@ -3386,6 +3456,22 @@ because with only one symbolic address left in the loop gcc drops the explicit
 
 decomp-permuter ran ~280k iterations on this base (weights per
 `docs/`-sanctioned settings, all fabrication weights zero) without beating it.
+
+**What the ordering actually implies** (2026-07-27). Everything emitted before
+`NOTE_INSN_LOOP_BEG` goes through `emit_insn_before (…, loop_start)`, so later
+passes land *closer* to the loop: expand's preheader statements first, then
+`jump.c:duplicate_loop_exit_test`'s copies, then `loop.c:move_movables`, then
+`strength_reduce`'s giv initialisers. Retail has `la $22` before `move $18,$19`,
+so either the `la` is a preheader statement (source order) and `sprt = packet`
+follows it, or `sprt = packet` is emitted by `strength_reduce`. Both were tried:
+`u8 *font = D_8007C2F8;` declared *before* `sprt` still yields the same three
+words, because cse folds the symbol back into the loop body and `move_movables`
+re-creates the `la` afterwards; and making `sprt` a real giv (`sprt =
+(Sprt8 *)packet;` inside the `if`) makes `strength_reduce` collapse it into
+`packet` altogether, losing three words (83 vs 86). Retail keeps two registers
+stepping by 16 from the same start, so they are two bivs, not a biv and a giv.
+Also confirmed here: `D_8007C2F8 + 1` being rebuilt with `lui`/`addiu` every
+iteration is reproduced by a pointer local declared *inside* `if (cell != 0)`.
 
 Solving this also unblocks `func_800168AC` and `func_80016A18`, which are the
 same function with one extra argument.

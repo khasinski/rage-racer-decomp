@@ -7,6 +7,10 @@ extern short *g_SndSpuRegs asm("D_8009A588");
  * register file both as halfwords and by byte offset. */
 extern u_char *g_SndSpuRegsBytes asm("D_8009A588");
 extern volatile u_char g_SndVoiceRegs[] asm("D_8009DF20");
+/* Halfword view of the same voice register file: one 16-byte block per voice,
+ * so voice n's left volume is g_SndVoiceRegs16[n * 8] and its right volume is
+ * g_SndVoiceRegs16[n * 8 + 1]. */
+extern short g_SndVoiceRegs16[] asm("D_8009DF20");
 extern volatile u_char g_SndVoiceRegsVolRight[] asm("D_8009DF22");
 extern volatile u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
 extern volatile u_char g_SndVoiceRegsAdsr1[] asm("D_8009DF28");
@@ -210,30 +214,29 @@ long SsUtSetDetVVol(long arg0, short arg1, short arg2) {
     /* This pin is load-bearing: removing it changes .text. */
     register long ret asm("$2");
     long index;
-    long offset;
+    long j;
     /* This pin is load-bearing: removing it changes .text. */
     register short valueX asm("$7");
     u_char flags;
 
-    __asm__ volatile("addiu $sp,$sp,-8" ::: "memory");
     valueX = arg1;
 
     if ((u_short)arg0 >= 0x18U) {
         ret = -1;
-        goto done;
+    } else {
+        index = (short)arg0;
+        j = index * 8;
+        /* Indexing one shared halfword base at j and j+1 - rather than two
+         * separate symbols - is what produces the retail 8-byte frame; see
+         * docs/names.md 21a. */
+        g_SndVoiceRegs16[j + 1] = arg2;
+        flags = g_SndVoiceFlags[index];
+        g_SndVoiceRegs16[j] = valueX;
+        flags |= 3;
+        g_SndVoiceFlags[index] = flags;
+        ret = 0;
     }
 
-    index = (short)arg0;
-    offset = index << 4;
-    *(volatile short *)(g_SndVoiceRegsVolRight + offset) = arg2;
-    flags = g_SndVoiceFlags[index];
-    ret = 0;
-    *(volatile short *)(g_SndVoiceRegs + offset) = valueX;
-    flags |= 3;
-    g_SndVoiceFlags[index] = flags;
-
-done:
-    __asm__ volatile("addiu $sp,$sp,8" ::: "memory");
     return ret;
 }
 
