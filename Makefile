@@ -33,6 +33,12 @@ ASM_OBJS := $(ASM_SRCS:%.s=$(BUILD)/%.s.o)
 C_OBJS   := $(C_SRCS:%=$(BUILD)/%.o)
 OBJS := $(ASM_OBJS) $(C_OBJS)
 
+# Header dependencies, written by cpp -MD in tools/scripts/cc.sh. Without
+# these a change under include/ leaves every dependent object stale, which
+# has repeatedly hidden real breakage behind a passing build.
+C_DEPS := $(C_OBJS:.o=.o.d)
+-include $(C_DEPS)
+
 .PHONY: all setup stage split build check progress clean distclean help
 
 all: build check

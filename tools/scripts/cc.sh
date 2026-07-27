@@ -67,7 +67,10 @@ run_cc1() {
     fi
 }
 
-"$CPP" -I"$ROOT/include" -I"$ROOT/src/main" -undef -Wall -fno-builtin "$IN" \
+# -MD makes cpp write "$OUT.d" alongside the object, which the Makefile
+# includes so a header edit rebuilds the units that use it.
+"$CPP" -I"$ROOT/include" -I"$ROOT/src/main" -undef -Wall -fno-builtin \
+    -MD -MF "$OUT.d" -MT "$OUT" "$IN" \
     | run_cc1 \
     | "$PYTHON" "$MASPSX_DIR/maspsx.py" \
         --expand-div --aspsx-version=2.34 --force-stdin \
