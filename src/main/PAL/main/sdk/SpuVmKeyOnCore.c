@@ -69,8 +69,15 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
     count = D_8009E674;
     *(u_short *)&g_SndVoiceStatePitch[index - 2] = 0;
     index = D_801F2A08;
-    __asm__("or %0,%1,%2" : "=r"(voiceIndex) : "r"(lowMask), "r"(voiceIndex));
-    __asm__("or %0,%1,%2" : "=r"(count) : "r"(highMask), "r"(count));
+    /* These barriers are load-bearing. Without them `combine` substitutes the
+     * single-use `zero_extend(mem)` that defines the second operand into the
+     * `ior`, which trips its "put the complex expression first" rule and swaps
+     * the operands to `or rd,rt,rs`. Hiding the definition keeps the written
+     * order, which is retail's `or rd,mask,bits`. */
+    asm("" : "=r"(voiceIndex) : "0"(voiceIndex));
+    voiceIndex = lowMask | voiceIndex;
+    asm("" : "=r"(count) : "0"(count));
+    count = highMask | count;
     D_8009E670 = voiceIndex;
     __asm__ volatile("" ::: "memory");
     index &= ~voiceIndex;

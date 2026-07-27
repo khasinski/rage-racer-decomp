@@ -273,14 +273,12 @@ void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
 
     style = styleArg;
     record = recordArg;
-    /* Match note: preserve the original independent load schedule. */
-    asm volatile(
-        "lw %0,0(%3)\n"
-        "lui %1,0x1f80\n"
-        "lw %1,4(%1)\n"
-        "lw %2,8(%3)"
-        : "=r"(limit), "=r"(ot), "=r"(packedSpeed)
-        : "r"(record));
+    /* The barrier is load-bearing: without it the scheduler sinks the
+     * scratchpad load past the second record load. */
+    limit = *(s32 *)record;
+    ot = *(void **)0x1F800004;
+    asm volatile("");
+    packedSpeed = *(s32 *)(record + 8);
     if (limit < time) {
         time = limit;
     }

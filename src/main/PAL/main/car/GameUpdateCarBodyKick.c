@@ -184,8 +184,8 @@ void GameUpdateCarCrestHop(GameCarRuntime *arg0) asm("func_80039280");
 void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
     GameCarRuntime *obj;
     s32 value;
-    s32 temp;
-    /* This pin is load-bearing: removing it changes .text. */
+    /* These pins are load-bearing: removing either one changes .text. */
+    register s32 temp asm("$3");
     register s32 result asm("$2");
     s32 one;
     volatile s32 stack[2];
@@ -196,11 +196,12 @@ void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
     if (obj->field_98 != 0) {
         result = obj->field_9A;
         value = result * result;
-        asm volatile("" : "=r"(value) : "0"(value));
-        result = 0x2AAAAAAB;
-        asm volatile("mult $4,$2");
         temp = obj->field_90;
-        asm volatile("sra $4,$4,31\nmfhi $2\nsubu $4,$2,$4" : "=r"(value), "=r"(result) : "0"(value), "1"(result));
+        /* /6 is the retail `mult` by 0x2AAAAAAB + `mfhi` - (x >> 31); gcc
+         * generates that magic-number sequence for a signed divide by 6. */
+        value = value / 6;
+        /* These barriers are load-bearing: without them the copy to `result`
+         * is scheduled ahead of the divide and the load delay needs a nop. */
         asm volatile("" : "=r"(value) : "0"(value));
         result = temp;
         asm volatile("" : "=r"(temp) : "0"(temp));

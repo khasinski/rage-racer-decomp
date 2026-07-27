@@ -138,7 +138,11 @@ void SpuVmInit(long arg0) {
 
                 g_SndCurrentVoice = i;
                 lowBits = g_SndCurrentVoice;
-                __asm__("andi %0,%1,0xffff" : "=r"(mindex) : "r"(lowBits));
+                /* This barrier is load-bearing: it hides the halfword load,
+                 * whose known-zero high bits would otherwise let gcc drop the
+                 * mask. */
+                asm("" : "=r"(lowBits) : "0"(lowBits));
+                mindex = lowBits & 0xFFFF;
                 if ((u_long)mindex < 0x10) {
                     lowMask = one << mindex;
                     highMask = 0;
@@ -161,8 +165,15 @@ void SpuVmInit(long arg0) {
 
                 bits = D_8009E670;
                 __asm__ volatile("");
-                __asm__("or %0,%1,%2" : "=r"(lowBits) : "r"(lowMask), "r"(lowBits));
-                __asm__("or %0,%1,%2" : "=r"(highBits) : "r"(highMask), "r"(highBits));
+                /* These barriers are load-bearing. Without them `combine` folds
+                 * the single-use `zero_extend(mem)` that defines the second
+                 * operand into the `ior`, tripping its "complex expression
+                 * first" rule and swapping the operands; retail keeps the
+                 * written mask-first order. */
+                asm("" : "=r"(lowBits) : "0"(lowBits));
+                lowBits = lowMask | lowBits;
+                asm("" : "=r"(highBits) : "0"(highBits));
+                highBits = highMask | highBits;
                 D_801F2A08 = lowBits;
                 bits = bits & ~lowBits;
                 __asm__ volatile("");

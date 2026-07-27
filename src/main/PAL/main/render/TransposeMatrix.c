@@ -52,17 +52,28 @@ Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
 }
 
 /*
- * func_80069D18 is RotMatrix: it builds a rotation MATRIX from an SVECTOR of
- * Euler angles using the packed cos/sin table at 0x80094FAC (cos in the high
- * halfword, sin in the low halfword; sin negated for negative angles).
+ * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  *
- * It is genuinely hand-written assembly in the original program and cannot be
- * produced from C with this toolchain: every fixed-point product uses a 32-bit
- * `multu` keeping only the low word (`multu; mflo; sra 12`). GCC 2.6.3/2.7.2
- * canonicalise every 32-bit-result multiply to signed `mult`, and only ever
- * emit `multu` for a true 64-bit widening multiply (which also reads `mfhi`).
- * No C expression yields `multu`+`mflo`-only, so a byte-exact C body is
- * impossible; it stays as raw asm to preserve the match. (See commit af632214,
- * which documents this exact function as one of the genuine hand-asm cases.)
+ * Symbol:   func_80069D18 = RotMatrix (PSY-Q libgte; Sony's Run-Time Library
+ *           Reference, 8-140). Builds a rotation MATRIX from an SVECTOR of
+ *           Euler angles using the packed cos/sin table at D_80094FAC (cos in
+ *           the high halfword, sin in the low halfword; sin negated for
+ *           negative angles).
+ * Reason:   hand-written PSY-Q libgte SDK assembly, not compiler C.
+ * Evidence: every fixed-point product is a NARROW unsigned multiply keeping
+ *           only the low word - 14x `multu`, 15x `mflo`, and ZERO `mfhi` in
+ *           the whole body. GCC 2.6.3 and 2.7.2 (this repo's cc1) canonicalise
+ *           every truncated 32-bit multiply to signed `mult`, and only emit
+ *           `multu` for a true 64-bit widening multiply, which always reads
+ *           `mfhi`. `multu` with no `mfhi` is therefore unreachable from C,
+ *           and no matched function in this project emits it. The body also
+ *           loads the packed table entry as one `lw` and splits it with
+ *           `sll 16; sra 16` / `sra 16` where cc1 folds such halfword
+ *           extraction into `lh`, and joins its if/else arms with a bare `j`
+ *           whose delay slot carries the shared `sra $t1,$t9,16`.
+ *           Exact same idiom and register file (t0-t9 only) as the documented
+ *           siblings func_80069110 (ScaleMatrixL) and func_80069458.
+ * Revisit:  only if the exact cc1 variant that emits narrow multu is obtained
+ *           AND verified not to regress already-matched functions.
  */
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/TransposeMatrix", func_80069D18);
