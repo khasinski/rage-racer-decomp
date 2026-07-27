@@ -26,18 +26,12 @@ u8 Gpu_GetControlMirrorByte(s32 arg0) {
 }
 
 s32 Gpu_WriteGp0Words(u32 *src, s32 count) {
-    volatile s32 unused;
-    s32 i = count - 1;
+    s32 i;
 
     *g_GpuGp1Volatile = 0x04000000;
-    if (count != 0) {
-        s32 end = -1;
-
-        do {
-            *g_GpuGp0 = *src;
-            src++;
-            i--;
-        } while (i != end);
+    for (i = count - 1; i != -1; i--) {
+        *g_GpuGp0 = *src;
+        src++;
     }
     return 0;
 }

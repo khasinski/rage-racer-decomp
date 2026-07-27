@@ -3158,3 +3158,277 @@ the sanctioned array-base-plus-element-zero pattern
 (`g_EnvColors`/`g_EnvFogColor`, `g_RefSectorTimes`/`g_RefSectorTime0`,
 `g_PadButtonMapping`/`g_PadSteerLeftMask`, …) or a deliberate volatile/non-
 volatile pair, and are fine.
+
+## 21. Endgame pass: the last 67 functions (findings, not conversions)
+
+This section records what was *established* about the remaining non-plain
+functions so the analysis does not have to be redone. Nothing in it changed the
+ROM: `make check VERSION=PAL` is still `OK` at
+`2913e15648eddef40821c5f666460abc04155ee6`.
+
+Measurement used throughout: compile the single translation unit with
+`tools/scripts/cc.sh`, then compare the function's `.text` words against the
+retail words in `asm/PAL/main/nonmatchings/**/<func>.s`, masking the immediate
+field of any word that carries an `R_MIPS_HI16` / `LO16` / `26` relocation. That
+is layout-independent, so a candidate whose instruction *count* differs still
+gives a usable per-word residual instead of shifting the whole image.
+
+### 21a. The phantom 8-byte stack frame (`addiu $sp,$sp,-8` with no stack use)
+
+Twenty-nine retail functions contain `addiu $sp,$sp,-8` / `addiu $sp,$sp,8`
+around a body that never touches the frame. Four of them are still carried by an
+`__asm__ volatile("addiu $sp,$sp,-8" ::: "memory")` crutch
+(`SsUtChangeADSR`, `SsUtSetDetVVol`, `SsUtSetVVol` in `lib/libsnd/SsUtPitchBend.c`,
+and `SpuVmSetSeqVol`), and two more are carried by a fabricated local
+(`volatile s32 unused;` in `render/Gpu_WriteGp0Words`, `s32 pad[2];` in
+`track/GameInstallTrackPoints`).
+
+**The mechanism is now known.** gcc emits `.frame $sp,8,$31 # vars= 8`, i.e.
+`get_frame_size()` is non-zero, because `alter_reg` in reload gave a stack slot
+to a pseudo that
+
+1. still has `REG_N_REFS > 0` from the last `reg_scan`, but
+2. has no surviving insn at `regclass` time, so all its class costs are zero, so
+   `regclass` picks the last class it scans — `ST_REGS` — which has no
+   allocatable register on this soft-float target, so `find_reg` fails and the
+   pseudo is spilled to a slot that nothing ever reads.
+
+Confirmed with `-da` RTL dumps on a two-line reproducer:
+
+```c
+void f5(int n) { int i; for (i = 0; i < n; i++); }   /* .frame $sp,8 */
+```
+
+`f5`'s `.lreg` dump shows `Register 74 used 2 times across 2 insns in block 0;
+dies in 0 places; ST_REGS or none`, `.greg` lists it under
+`3 regs to allocate: 72 71 74` with `74 conflicts:` (none) and then omits it from
+`Register dispositions`. Reg 74 is the *duplicate* of the loop exit test that
+`jump.c:duplicate_loop_exit_test` copies above `NOTE_INSN_LOOP_BEG`; `combine`
+later folds it into `branch_zero` and the reference count is never refreshed.
+
+Practical consequence, verified by compiling each shape:
+
+| source shape | frame |
+|---|---|
+| `for (i = 0; i < n; i++) …` (pre-test loop) | **8** |
+| `while (n > 0) { …; n--; }` | 0 |
+| `while (n--) …` | **8** |
+| `i = 0; do { … } while (i < n);` | 0 |
+| `if (n > 0) { i = 0; do { … } while (i < n); }` | 0 |
+| `for (i = 0; i < 10; i++) …` (constant bound) | 0 |
+
+This immediately retired one fabrication. `render/Gpu_WriteGp0Words`
+(func_800675B0) is now
+
+```c
+s32 Gpu_WriteGp0Words(u32 *src, s32 count) {
+    s32 i;
+
+    *g_GpuGp1Volatile = 0x04000000;
+    for (i = count - 1; i != -1; i--) {
+        *g_GpuGp0 = *src;
+        src++;
+    }
+    return 0;
+}
+```
+
+with no `volatile s32 unused;` and no `if (count != 0) { … do … while … }`
+rewrite: the `beqz $5,…` guard in retail *is* the duplicated exit test, folded by
+`combine` from `count - 1 != -1` back to `count != 0`, and the frame comes free.
+Still byte-identical.
+
+`track/GameInstallTrackPoints` (func_8002A6B0) is the same story but does not
+close. Replacing `s32 pad[2]; asm volatile("" : "=m"(pad));` and the
+`if (count > 0) { … do … while … }` with
+
+```c
+    limit = count;
+    for (i = 0; i < limit; i++) {
+        index = i % limit;
+        point = (GameTrackPoint *)((index * sizeof(GameTrackPoint)) + (s32)points);
+        g_TrackLength += point->segmentLength;
+    }
+```
+
+(register pins unchanged) gets the frame and the right instruction count, and
+leaves **three words**: retail emits `move $4,$3` (`limit = count`) *after* the
+`blez $3` guard, in the loop preheader, while gcc schedules it before the
+`sw g_TrackPointCount` / `sw g_TrackArcCenters` pair. Tried and rejected:
+dropping the `$4` pin, dropping the `limit` variable entirely (loses the copy and
+a word), assigning `limit` at the top of the function, `for (limit = count, i = 0; …)`,
+an outer `if (count > 0)` around the `for` (adds a word), and a `while` form.
+
+**It does not explain the three `SsUt*` setters**, which contain no loop at all.
+Ruled out by direct compilation (all produce `vars= 0`): unused local scalars,
+unused local structs, `do { … } while (0)` wrappers, `for (;;) { …; break; }`,
+`while (cond) { …; return; }`, `goto`-threaded bodies, `&&`-folded range checks,
+storing the comparison in a variable, `switch` on the comparison, signed vs
+unsigned parameter typing, and `short` vs `int` return type. Whatever creates the
+dead unallocatable pseudo there is something else that survives `reg_scan` and is
+killed by `cse2`/`combine`; that is the single open question for this family.
+
+### 21b. `SsUtChangeADSR` (func_80078300) — crutch-free body, blocked only by 18a
+
+The `lhu`-from-stack-slot crutch is unnecessary. Declaring arguments 5 and 6 as
+`unsigned short` makes `assign_parms` emit the zero-extending entry loads by
+itself, and the whole body then falls out of ordinary C:
+
+```c
+s16 SsUtChangeADSR(s16 vc, s16 vabId, s16 prog, s16 tone, u16 adsr1, u16 adsr2) {
+    s32 off;
+    if ((u16)vc < 24) {
+        off = vc * 0x34;
+        if (*(s16 *)((u8 *)D_8009E0CE + off) == vabId &&
+            *(s16 *)((u8 *)D_8009E0CA + off) == prog &&
+            *(s16 *)((u8 *)D_8009E0C4 + off) == tone) {
+            *(volatile s16 *)(D_8009DF28 + (vc << 4)) = adsr1;
+            *(volatile s16 *)(D_8009DF2A + (vc << 4)) = adsr2;
+            D_8009E0A0[vc] |= 0x30;
+            return 0;
+        }
+    }
+    return -1;
+}
+```
+
+This compiles to retail's instruction sequence exactly — `andi/sltiu`, the
+`lhu $9,16($sp)` / `lhu $10,20($sp)` entry loads, the three `lh` compares with
+their `-1` delay-slot fills, the two `sh` stores and the `ori 0x30` — with every
+stack offset 8 lower, because the retail frame is 8 bytes and this body's is 0.
+Solve 18a and this function, `SsUtSetDetVVol` and `SsUtSetVVol` all convert; the
+same natural-C reduction applies to the latter two (`voll * 129` / `volr * 129`
+with the `volr` store first, which is what retail does).
+
+### 21c. `func_80016754` GameDrawText8x8 — 3 words, one construct
+
+Down from six residual words to three. The two solved sub-problems:
+
+* **Use the `str` parameter as the walking cursor**, not a local copy. A local
+  `p = str;` is a body insn, so `sched2` interleaves the callee-saved stores
+  differently and `sw $fp,56($sp)` lands one slot early. With the parameter
+  itself as the cursor the prologue comes out as retail's
+  `sw $21 / move $21 / sw $23 / move $23 / sw $20 / move $20 / sw $fp / …`.
+  gcc 2.6.3 **segfaults** on `register T x asm("$n")` applied to a parameter, so
+  the pin cannot be moved onto `str`.
+* **Hold the scratchpad pointer in a variable**: `u8 **scratch = (u8 **)0x1F800000;`
+  used for both the initial read and the final write. This is what flips the
+  `$19`/`$20` allocation so `str` lands in `$20` and `packet` in `$19`, and it
+  also fixes the `addiu $2,$19,12` at the tail. (Found by decomp-permuter, which
+  proposed the equivalent `int new_var = 0x1F800000;`.)
+
+Current best body (86/86 words, 3 differ):
+
+```c
+void GameDrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
+    u8 **scratch = (u8 **)0x1F800000;
+    u8 *packet;
+
+    packet = *scratch;
+
+    if (*str != 0) {
+        volatile SPRT_8 *sprt = (SPRT_8 *)packet;
+
+        do {
+            s32 cell = *str - 0x20;
+
+            str++;
+            if (cell != 0) {
+                s32 u = D_8007C2F8[cell * 2] * 8;
+                s32 v = D_8007C2F8[cell * 2 + 1] * 8;
+
+                SetSprt8(packet);
+                SetShadeTex(packet, 1);
+                sprt->x0 = x;
+                sprt->y0 = y;
+                sprt->u0 = u;
+                sprt->v0 = v;
+                sprt->clut = clutIndex;
+                AddPrim(g_DrawBuffer + 0xCC, (void *)sprt);
+                sprt++;
+                packet += 16;
+            }
+            x += 8;
+        } while (*str != 0);
+    }
+    SetDrawMode((DrawPacket *)packet, 0, 1, 9, D_8007BED0);
+    AddPrim(g_DrawBuffer + 0xCC, packet);
+    *scratch = packet + 12;
+}
+```
+
+**The residual** is the order of two independent insns in the loop preheader at
+`0x800167a0`:
+
+```
+retail:  lui $22,%hi(D_8007C2F8) ; addiu $22,$22,%lo(…) ; move $18,$19
+ours:    move $18,$19            ; lui $22,%hi(…)       ; addiu $22,$22,%lo(…)
+```
+
+`la $22,D_8007C2F8` is `loop.c`'s LICM hoist of the first font-table address (the
+second, `D_8007C2F8+1`, is deliberately *not* hoisted by gcc and is rebuilt each
+iteration into `$8` — ours reproduces that exactly). `move_movables` emits every
+hoisted insn immediately before `NOTE_INSN_LOOP_BEG`, therefore after
+`sprt = packet`, which is the last statement of the preheader. Retail has it
+before, which is where `strength_reduce` puts *giv initialisers* (they run after
+`move_movables`) — but `packet`/`sprt` are incremented inside `if (cell != 0)`, so
+neither is a biv and no giv is available.
+
+Ruled out by compilation, all still 3 words: declaring `sprt` at function scope
+and assigning it inside the `if`; initialising `sprt` from `*scratch` instead of
+from `packet`; hoisting `cell` out of the loop body; extra casts on the
+initialiser; folding `u`/`v` into their declarations; `*(D_8007C2F8 + …)` instead
+of the array form. Swapping the `u`/`v` computations makes it worse (7 words).
+Introducing an explicit `u8 *font = D_8007C2F8;` fixes the order but costs a word,
+because with only one symbolic address left in the loop gcc drops the explicit
+`la` for `D_8007C2F8+1` and uses the `lbu $17,D_8007C2F8+1($3)` assembler macro
+(3 words) instead of retail's `la`+`addu`+`lbu` (4 words).
+
+decomp-permuter ran ~280k iterations on this base (weights per
+`docs/`-sanctioned settings, all fabrication weights zero) without beating it.
+
+Solving this also unblocks `func_800168AC` and `func_80016A18`, which are the
+same function with one extra argument.
+
+### 21d. `func_800155EC` GameUpdateControllerConfigScreen — 8 words, one scheduling tie
+
+Retail keeps `&g_PadEdge2` in `$16` for the first three of the five reads and
+rematerialises `lui/lhu` for the last two. That is reproduced by
+`u16 *edge = &g_PadEdge2;` used for the `0x90`, `0x860` and `0x800` tests and the
+plain global for the `0x8000` and `0x2000` tests; with that, 199 of the 207 words
+match, and the instruction count is right (using `*edge` for all five loses two
+words, using none loses the `la` entirely).
+
+**The residual** is the first basic block. Retail issues the pad load first:
+
+```
+retail:  lhu $3,0($16) ; addu $2,$2,1 ; sw $2,g_AnimTimer ; lw $2,D_8007C13C ;
+         andi $3,$3,0x90 ; addu $2,$2,96 ; sw $2,D_8007C13C ; beq …
+ours:    addu $2,$2,1 ; sw $2,g_AnimTimer ; lw $2,D_8007C13C ; lhu $3,0($16) ;
+         addu $2,$2,96 ; andi $3,$3,0x90 ; sw $2,D_8007C13C ; beq …
+```
+
+Both are valid schedules of the same DAG; gcc's list scheduler breaks the
+priority tie between `lhu $3,0($16)` and `lw $2,D_8007C13C` the other way.
+Reading the pad word into a local *before* the two counter updates does not move
+it (verified: byte-identical output), and swapping the two counter updates only
+swaps them. Note that without the pointer the same source schedules the `lhu`
+first — i.e. the tie flips purely on the MEM being `(mem (reg))` rather than
+`(mem (symbol_ref))`. That is also the reason to be suspicious of the
+three-pointer-reads/two-direct-reads split as *original* source: it is the only
+shape found that reproduces retail's instruction count, but it is odd C, and the
+scheduling residual may be telling us the real source materialises the address
+some other way.
+
+decomp-permuter has this base too; ~44k iterations, no improvement.
+
+### 21e. `func_80069D18` (in `render/TransposeMatrix.c`)
+
+Still listed among the 67, but the file already documents (with a commit
+reference) why it cannot be C: every fixed-point product is `multu`+`mflo` with
+no `mfhi`, and gcc 2.6.3 only emits `multu` for a true 64-bit widening multiply.
+It is `RotMatrix`, hand-written assembly in the original. If the project wants
+its progress figure to reflect reality it belongs in the `HANDWRITTEN_ASM`
+bucket alongside the 46 GTE-engine leaves, not in the outstanding list. Left
+unchanged here because reclassifying it moves the headline number without
+decompiling anything.
