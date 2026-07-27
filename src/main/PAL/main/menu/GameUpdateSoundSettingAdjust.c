@@ -34,11 +34,11 @@ s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
 void GameDrawOptionSceneOverlay(void) asm("func_800256B8");
 void GameDrawOptionSceneOverlay(void);
 extern s32 g_CameraViewMode asm("D_8009E870");
-extern s32 D_801E40CC;
+extern s32 g_TrackWalkStart asm("D_801E40CC");
 extern s32 g_CameraCarIndex asm("D_8009E66C");
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
-extern u8 D_801F18CC[];
-extern s32 *D_8019C9A8;
+extern u8 g_CarTrackSection[] asm("D_801F18CC");
+extern s32 *g_CamRow asm("D_8019C9A8");
 void GameInitRenderState(s32 arg0) asm("func_80017884");
 void GameLoadTrackTexturePageRange(void) asm("func_8001D30C");
 void func_8001D210(void);
@@ -56,7 +56,7 @@ extern s32 g_BgmChangeDelay asm("D_8019CAF4");
 extern s32 g_CdTrackEnded asm("D_8019C7BC");
 extern s32 g_CameraCarIndex asm("D_8009E66C");
 extern s32 g_BgmSelectStep;
-extern u8 D_80011010[];
+extern u8 g_TextNowLoading[] asm("D_80011010");
 void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80025940(void);
 void func_80016EA0(s32 a0, s32 a1, void *a2, s32 a3);
@@ -301,10 +301,10 @@ void func_80025940(void) {
     GameInitRenderState(5);
     GameLoadTrackTexturePageRange();
     func_8001D210();
-    D_801E40CC = *(s32 *)g_TrackEventData;
+    g_TrackWalkStart = *(s32 *)g_TrackEventData;
     func_80038844();
-    GameSetTrackTexturePageNow(*(s16 *)&D_801F18CC[g_CameraCarIndex * 412]);
-    func_800458CC(D_8019C9A8[2]);
+    GameSetTrackTexturePageNow(*(s16 *)&g_CarTrackSection[g_CameraCarIndex * 412]);
+    func_800458CC(g_CamRow[2]);
     g_CameraViewMode = 2;
     g_AnimTimer = 0;
     g_SceneTimer = 0;
@@ -360,7 +360,7 @@ void func_80025AC8(void) {
             g_BgmSelectStep = 2;
         }
     }
-    func_80016EA0(0x5E, 0x72, D_80011010, 0x7812);
+    func_80016EA0(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
 void func_80025BD8(void) {

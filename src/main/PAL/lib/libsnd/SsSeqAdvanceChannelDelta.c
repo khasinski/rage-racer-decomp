@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern u_char *D_801E79CC[];
+extern u_char *g_SndSeqTable[] asm("D_801E79CC");
 
 void SsSeqDispatchMidiEvent(long arg0, long arg1) asm("func_8006F1E0");
 
@@ -26,7 +26,7 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
     raw1 = channel << 16;
     chan_index = raw1 >> 16;
     chan = ((((chan_index * 3) * 4) - chan_index) * 4) - chan_index;
-    state = (SeqStruct *)((chan * 4) + (long)*(u_char **)((u_char *)D_801E79CC + table_offset));
+    state = (SeqStruct *)((chan * 4) + (long)*(u_char **)((u_char *)g_SndSeqTable + table_offset));
 
     period = state->tick_period;
     delay = state->delta_value;

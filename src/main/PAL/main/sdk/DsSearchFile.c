@@ -6,10 +6,10 @@ typedef struct {
     char name[16];
 } Rec;
 
-extern long D_8009934C;
-extern long D_80099054;
-extern long D_80099048;
-extern Rec D_8009BB14[64];
+extern long g_CdCachedShellOpenCount asm("D_8009934C");
+extern long g_CdShellOpenCount asm("D_80099054");
+extern long g_CdDebugLevel asm("D_80099048");
+extern Rec g_CdFileCache[64] asm("D_8009BB14");
 
 extern const char D_80013928[];
 extern const char D_80013944[];
@@ -34,11 +34,11 @@ Rec *DsSearchFile(Rec *out, char *path) {
     Rec *rec;
     char *nm;
 
-    if (D_8009934C != D_80099054) {
+    if (g_CdCachedShellOpenCount != g_CdShellOpenCount) {
         if (!func_8006C560()) {
             return 0;
         }
-        D_8009934C = D_80099054;
+        g_CdCachedShellOpenCount = g_CdShellOpenCount;
     }
     if (*path != '\\') {
         return 0;
@@ -69,38 +69,38 @@ Rec *DsSearchFile(Rec *out, char *path) {
     }
 after_tokens:
     if (n >= 8) {
-        if (D_80099048 > 0) {
+        if (g_CdDebugLevel > 0) {
             GameDebugPrintf(D_80013928, path, n);
         }
         return 0;
     }
     if (buf[0] == 0) {
-        if (D_80099048 > 0) {
+        if (g_CdDebugLevel > 0) {
             GameDebugPrintf(D_80013944, path);
         }
         return 0;
     }
     *b = 0;
     if (func_8006C8E4(type) == 0) {
-        if (D_80099048 > 0) {
+        if (g_CdDebugLevel > 0) {
             GameDebugPrintf(D_8001395C);
         }
         return 0;
     }
-    if (D_80099048 >= 2) {
+    if (g_CdDebugLevel >= 2) {
         GameDebugPrintf(D_80013978, buf);
     }
     {
-        char *base = D_8009BB14[0].name;
+        char *base = g_CdFileCache[0].name;
         rec = (Rec *)(base - 8);
         nm = base;
     }
     for (i = 0; i < 64; i++) {
-        if (D_8009BB14[i].name[0] == 0) {
+        if (g_CdFileCache[i].name[0] == 0) {
             break;
         }
         if (CD_namecmp(nm, buf)) {
-            if (D_80099048 >= 2) {
+            if (g_CdDebugLevel >= 2) {
                 GameDebugPrintf(D_80013998, buf);
             }
             *out = *rec;
@@ -109,7 +109,7 @@ after_tokens:
         rec++;
         nm += 24;
     }
-    if (D_80099048 > 0) {
+    if (g_CdDebugLevel > 0) {
         GameDebugPrintf(D_800139A4, buf);
     }
     return 0;

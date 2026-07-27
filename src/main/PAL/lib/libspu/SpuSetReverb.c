@@ -2,9 +2,9 @@
 #include "psyq/spu.h"
 
 extern volatile long D_8009A718;
-extern long D_8009A71C;
-extern long D_8009A720;
-extern SpuRxx *D_8009AB7C;
+extern long g_SpuRevReserveWa asm("D_8009A71C");
+extern long g_SpuRevWorkAreaAddr asm("D_8009A720");
+extern SpuRxx *g_SpuRegBase asm("D_8009AB7C");
 
 long SpuSetReverb(long on_off) {
     register long value asm("s0") = on_off;
@@ -18,24 +18,24 @@ long SpuSetReverb(long on_off) {
     }
 
 disable:
-    cnt = D_8009AB7C->spucnt;
+    cnt = g_SpuRegBase->spucnt;
     asm volatile(
         "lui $1,%hi(D_8009A718)\n"
         "sw $0,%lo(D_8009A718)($1)");
-    D_8009AB7C->spucnt = cnt & 0xFF7F;
+    g_SpuRegBase->spucnt = cnt & 0xFF7F;
     goto done;
 
 check_on:
-    if (D_8009A71C != value && _SpuIsInAllocateArea_(D_8009A720) != 0) {
-        cnt = D_8009AB7C->spucnt;
+    if (g_SpuRevReserveWa != value && _SpuIsInAllocateArea_(g_SpuRevWorkAreaAddr) != 0) {
+        cnt = g_SpuRegBase->spucnt;
         D_8009A718 = 0;
-        D_8009AB7C->spucnt = cnt & 0xFF7F;
+        g_SpuRegBase->spucnt = cnt & 0xFF7F;
         goto done;
     }
 
-    cnt = D_8009AB7C->spucnt;
+    cnt = g_SpuRegBase->spucnt;
     D_8009A718 = value;
-    D_8009AB7C->spucnt = cnt | 0x80;
+    g_SpuRegBase->spucnt = cnt | 0x80;
 
 done:
     return D_8009A718;

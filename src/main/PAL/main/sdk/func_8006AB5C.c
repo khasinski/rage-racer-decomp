@@ -13,24 +13,24 @@
  * unfalsifiable here, so no name is asserted.
  */
 
-extern volatile u_char *D_80099300;
-extern volatile u_char *D_80099304;
-extern volatile u_char *D_80099308;
-extern volatile u_char *D_8009930C;
-extern long D_80099048;
-extern u_long D_8009904C;
-extern u_long D_80099050;
-extern u_long D_80099054;
-extern u_long D_80099060[];
-extern u_long D_80099100[];
-extern u_long D_80099200[];
+extern volatile u_char *g_CdReg0 asm("D_80099300");
+extern volatile u_char *g_CdReg1 asm("D_80099304");
+extern volatile u_char *g_CdReg2 asm("D_80099308");
+extern volatile u_char *g_CdReg3 asm("D_8009930C");
+extern long g_CdDebugLevel asm("D_80099048");
+extern u_long g_CdStatusByte asm("D_8009904C");
+extern u_long g_CdErrorByte asm("D_80099050");
+extern u_long g_CdShellOpenCount asm("D_80099054");
+extern u_long g_CdCommandNames[] asm("D_80099060");
+extern u_long g_CdCommandHasComplete[] asm("D_80099100");
+extern u_long g_CdCommandAckHasStatus[] asm("D_80099200");
 extern u_char D_8009905D;
-extern volatile u_char D_80099318;
-extern volatile u_char D_80099319;
-extern volatile u_char D_8009931A;
-extern u_char D_8009BAF0;
-extern u_char D_8009BAF8;
-extern u_char D_8009BB00;
+extern volatile u_char g_CdSyncStatus asm("D_80099318");
+extern volatile u_char g_CdReadyStatus asm("D_80099319");
+extern volatile u_char g_CdDataEndStatus asm("D_8009931A");
+extern u_char g_CdSyncResult asm("D_8009BAF0");
+extern u_char g_CdReadyResult asm("D_8009BAF8");
+extern u_char g_CdDataEndResult asm("D_8009BB00");
 extern u_char D_80013840;
 extern u_char D_8001384C;
 extern u_char D_80013868;
@@ -58,8 +58,8 @@ long func_8006AB5C(void) {
     volatile u_char *p;
     volatile u_char *q;
 
-    *D_80099300 = 1;
-    p = D_8009930C;
+    *g_CdReg0 = 1;
+    p = g_CdReg3;
     mode = *p & 7;
     if (mode == 0) {
         return 0;
@@ -71,10 +71,10 @@ long func_8006AB5C(void) {
     i = 0;
     q = buf;
     for (; i < 8; i++) {
-        if (!(*D_80099300 & 0x20)) {
+        if (!(*g_CdReg0 & 0x20)) {
             break;
         }
-        *q++ = *D_80099304;
+        *q++ = *g_CdReg1;
     }
     if (i < 8) {
         volatile u_char *r;
@@ -84,50 +84,50 @@ long func_8006AB5C(void) {
         } while ((long)r < (long)&buf[8]);
     }
 
-    *D_80099300 = 1;
-    *D_8009930C = 7;
-    *D_80099308 = 7;
+    *g_CdReg0 = 1;
+    *g_CdReg3 = 7;
+    *g_CdReg2 = 7;
 
-    if (!(mode == 3 && D_80099200[D_8009905D] == 0)) {
-        if (!(D_8009904C & 0x10) && (buf[0] & 0x10)) {
-            D_80099054++;
+    if (!(mode == 3 && g_CdCommandAckHasStatus[D_8009905D] == 0)) {
+        if (!(g_CdStatusByte & 0x10) && (buf[0] & 0x10)) {
+            g_CdShellOpenCount++;
         }
         v = buf[0];
         flag = v & 0x1d;
-        D_8009904C = v;
-        D_80099050 = buf[1];
+        g_CdStatusByte = v;
+        g_CdErrorByte = buf[1];
     }
 
     if (mode == 5) {
         func_80063C38(&D_80013840);
-        if (D_80099048 > 0) {
-            GameDebugPrintf(&D_8001384C, D_80099060[D_8009905D], D_8009904C, D_80099050);
+        if (g_CdDebugLevel > 0) {
+            GameDebugPrintf(&D_8001384C, g_CdCommandNames[D_8009905D], g_CdStatusByte, g_CdErrorByte);
         }
     }
 
     switch (mode) {
     case 3:
         if (flag) {
-            volatile u_char *sp = &D_80099318;
+            volatile u_char *sp = &g_CdSyncStatus;
             *sp = 5;
-            copy8(&D_8009BAF0, (u_char *)buf);
+            copy8(&g_CdSyncResult, (u_char *)buf);
             return 2;
         }
-        if (D_80099100[D_8009905D] != 0) {
-            volatile u_char *sp = &D_80099318;
+        if (g_CdCommandHasComplete[D_8009905D] != 0) {
+            volatile u_char *sp = &g_CdSyncStatus;
             *sp = 3;
-            copy8(&D_8009BAF0, (u_char *)buf);
+            copy8(&g_CdSyncResult, (u_char *)buf);
             return 1;
         }
         {
-            volatile u_char *sp = &D_80099318;
+            volatile u_char *sp = &g_CdSyncStatus;
             *sp = 2;
         }
-        copy8(&D_8009BAF0, (u_char *)buf);
+        copy8(&g_CdSyncResult, (u_char *)buf);
         return 2;
     case 2:
-        D_80099318 = flag ? 5 : 2;
-        copy8(&D_8009BAF0, (u_char *)buf);
+        g_CdSyncStatus = flag ? 5 : 2;
+        copy8(&g_CdSyncResult, (u_char *)buf);
         return 2;
     case 1:
         if (flag) {
@@ -135,25 +135,25 @@ long func_8006AB5C(void) {
                 flag = 0;
             }
         }
-        D_80099319 = flag ? 5 : 1;
-        copy8(&D_8009BAF8, (u_char *)buf);
-        *D_80099300 = 0;
-        *D_8009930C = 0;
+        g_CdReadyStatus = flag ? 5 : 1;
+        copy8(&g_CdReadyResult, (u_char *)buf);
+        *g_CdReg0 = 0;
+        *g_CdReg3 = 0;
         return 4;
     case 4: {
-        volatile u_char *sp = &D_80099319;
-        D_8009931A = 4;
-        *sp = D_8009931A;
-        copy8(&D_8009BB00, (u_char *)buf);
-        copy8(&D_8009BAF8, (u_char *)buf);
+        volatile u_char *sp = &g_CdReadyStatus;
+        g_CdDataEndStatus = 4;
+        *sp = g_CdDataEndStatus;
+        copy8(&g_CdDataEndResult, (u_char *)buf);
+        copy8(&g_CdReadyResult, (u_char *)buf);
         return 4;
     }
     case 5: {
-        volatile u_char *sp = &D_80099318;
-        D_80099319 = 5;
-        *sp = D_80099319;
-        copy8(&D_8009BAF0, (u_char *)buf);
-        copy8(&D_8009BAF8, (u_char *)buf);
+        volatile u_char *sp = &g_CdSyncStatus;
+        g_CdReadyStatus = 5;
+        *sp = g_CdReadyStatus;
+        copy8(&g_CdSyncResult, (u_char *)buf);
+        copy8(&g_CdReadyResult, (u_char *)buf);
         return 6;
     }
     default:

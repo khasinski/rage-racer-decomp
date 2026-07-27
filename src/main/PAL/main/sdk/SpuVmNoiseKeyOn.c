@@ -68,26 +68,26 @@ typedef struct {
     u_short voice;
 } SvmCurrent74348;
 
-extern SeqState74348 *D_801E79CC[];
-extern VoiceState74348 D_8009E0B8[];
-extern SvmCurrent74348 D_801E4BD0;
-extern u_short D_8009DF20[];
-extern u_char D_8009E0A0[];
+extern SeqState74348 *g_SndSeqTable[] asm("D_801E79CC");
+extern VoiceState74348 g_SndVoiceState[] asm("D_8009E0B8");
+extern SvmCurrent74348 g_SndCurrentAttr asm("D_801E4BD0");
+extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char D_801E42F8;
-extern short D_801E3FB0;
-extern volatile u_short *D_8009A588;
+extern short g_SndMonoMode asm("D_801E3FB0");
+extern volatile u_short *g_SndSpuRegs asm("D_8009A588");
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern u_short D_8009E670;
 extern u_short D_8009E674;
-extern u_short D_8009E680;
-extern u_short D_8009E684;
+extern u_short g_SndReverbOnLow asm("D_8009E680");
+extern u_short g_SndReverbOnHigh asm("D_8009E684");
 
 void SpuVmNoiseKeyOn(u_char voice) asm("func_80074348");
 void SpuVmNoiseKeyOn(u_char voice) {
     SeqState74348 *score =
-        &D_801E79CC[D_801E4BD0.seq_sep & 0xFF]
-                    [(D_801E4BD0.seq_sep & 0xFF00) >> 8];
+        &g_SndSeqTable[g_SndCurrentAttr.seq_sep & 0xFF]
+                    [(g_SndCurrentAttr.seq_sep & 0xFF00) >> 8];
     short current_voice;
     u_short bits_upper;
     u_short bits_lower;
@@ -98,18 +98,18 @@ void SpuVmNoiseKeyOn(u_char voice) {
     u_short control;
     u_long pan;
 
-    control = D_8009A588[0x1AA / 2];
+    control = g_SndSpuRegs[0x1AA / 2];
 
     left_temp = score->left_volume * 0x81;
     right_temp = score->right_volume * 0x81;
 
-    left_temp = (left_temp * D_801E4BD0.master_volume) / 0x7F;
-    right_temp = (right_temp * D_801E4BD0.master_volume) / 0x7F;
+    left_temp = (left_temp * g_SndCurrentAttr.master_volume) / 0x7F;
+    right_temp = (right_temp * g_SndCurrentAttr.master_volume) / 0x7F;
 
-    left_temp = (left_temp * D_801E4BD0.tone_volume) / 0x7F;
-    right_temp = (right_temp * D_801E4BD0.tone_volume) / 0x7F;
+    left_temp = (left_temp * g_SndCurrentAttr.tone_volume) / 0x7F;
+    right_temp = (right_temp * g_SndCurrentAttr.tone_volume) / 0x7F;
 
-    pan = D_801E4BD0.tone_pan;
+    pan = g_SndCurrentAttr.tone_pan;
     if (pan < 0x40) {
         left = left_temp;
         right = (right_temp * pan) / 0x3F;
@@ -118,21 +118,21 @@ void SpuVmNoiseKeyOn(u_char voice) {
         right = right_temp;
     }
 
-    pan = D_801E4BD0.master_pan;
+    pan = g_SndCurrentAttr.master_pan;
     if (pan < 0x40) {
         right = (right * pan) / 0x3F;
     } else {
         left = (left * (0x7F - pan)) / 0x3F;
     }
 
-    pan = D_801E4BD0.pan;
+    pan = g_SndCurrentAttr.pan;
     if (pan < 0x40) {
         right = (pan * right) / 0x3F;
     } else {
         left = (left * (0x7F - pan)) / 0x3F;
     }
 
-    if (D_801E3FB0 == 1) {
+    if (g_SndMonoMode == 1) {
         if (left < right) {
             left = right;
         } else {
@@ -141,12 +141,12 @@ void SpuVmNoiseKeyOn(u_char voice) {
     }
 
     control &= ~0x3F00;
-    control |= ((D_801E4BD0.note - D_801E4BD0.center) & 0x3F) << 8;
-    D_8009A588[0x1AA / 2] = control;
+    control |= ((g_SndCurrentAttr.note - g_SndCurrentAttr.center) & 0x3F) << 8;
+    g_SndSpuRegs[0x1AA / 2] = control;
 
-    D_8009DF20[voice * 8] = left;
-    D_8009DF20[voice * 8 + 1] = right;
-    D_8009E0A0[voice] |= 3;
+    g_SndVoiceRegs[voice * 8] = left;
+    g_SndVoiceRegs[voice * 8 + 1] = right;
+    g_SndVoiceFlags[voice] |= 3;
 
     if (voice < 0x10) {
         bits_lower = 1 << voice;
@@ -156,25 +156,25 @@ void SpuVmNoiseKeyOn(u_char voice) {
         bits_upper = 1 << (voice - 0x10);
     }
 
-    D_8009E0B8[voice].pitch = 0xA;
+    g_SndVoiceState[voice].pitch = 0xA;
     for (current_voice = 0; current_voice < D_801E42F8; current_voice++) {
-        D_8009E0B8[current_voice].status &= 1;
+        g_SndVoiceState[current_voice].status &= 1;
     }
-    D_8009E0B8[voice].status = 2;
+    g_SndVoiceState[voice].status = 2;
 
     D_8009E670 |= bits_lower;
     D_8009E674 |= bits_upper;
     D_801F2A08 &= ~D_8009E670;
     D_801F2A0C &= ~D_8009E674;
 
-    if (D_801E4BD0.mode & 4) {
-        D_8009E680 |= bits_lower;
-        D_8009E684 |= bits_upper;
+    if (g_SndCurrentAttr.mode & 4) {
+        g_SndReverbOnLow |= bits_lower;
+        g_SndReverbOnHigh |= bits_upper;
     } else {
-        D_8009E680 &= ~bits_lower;
-        D_8009E684 &= ~bits_upper;
+        g_SndReverbOnLow &= ~bits_lower;
+        g_SndReverbOnHigh &= ~bits_upper;
     }
 
-    D_8009A588[0x194 / 2] = bits_lower;
-    D_8009A588[0x196 / 2] = bits_upper;
+    g_SndSpuRegs[0x194 / 2] = bits_lower;
+    g_SndSpuRegs[0x196 / 2] = bits_upper;
 }

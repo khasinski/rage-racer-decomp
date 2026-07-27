@@ -44,7 +44,7 @@ extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
 extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
 extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 D_8009E6D8;
-extern s32 D_8009E6DC;
+extern s32 g_PlayerCarZ asm("D_8009E6DC");
 extern s32 D_8009E6F4;
 extern s32 D_8009E6F8;
 extern s32 g_ModelBankCount asm("D_801E4168");
@@ -122,7 +122,7 @@ void GameDrawMenuCourseView(void) {
 
     g_PlayerCar = 23 - s1;
     g_MenuViewOffset = s0 + g_MenuViewOffset;
-    D_8009E6DC = -20;
+    g_PlayerCarZ = -20;
     s0 = g_MenuViewOffset / 1000;
     D_8009E6D8 = s0 + 15;
 

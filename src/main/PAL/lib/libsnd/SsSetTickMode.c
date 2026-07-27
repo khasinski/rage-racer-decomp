@@ -1,8 +1,8 @@
 #include "common.h"
 
-extern long D_8009A558;
-extern long D_8009A55C;
-extern long D_801E6C6C;
+extern long g_SndTickMode asm("D_8009A558");
+extern long g_SndNoTickFlag asm("D_8009A55C");
+extern long g_SndTickResolution asm("D_801E6C6C");
 
 long func_8006EAEC(long arg);
 
@@ -13,53 +13,53 @@ void SsSetTickMode(long spec) {
 
     v = func_8006EAEC(spec);
     if (spec & 0x1000) {
-        D_8009A55C = 1;
-        D_8009A558 = spec & 0xFFF;
+        g_SndNoTickFlag = 1;
+        g_SndTickMode = spec & 0xFFF;
     } else {
-        D_8009A55C = 0;
-        D_8009A558 = spec;
+        g_SndNoTickFlag = 0;
+        g_SndTickMode = spec;
     }
 
-    m = D_8009A558;
+    m = g_SndTickMode;
     if (m < 6) {
     switch (m) {
     case 4:
-        D_801E6C6C = 50;
-        D_8009A558 = (v == 1) ? 5 : 50;
+        g_SndTickResolution = 50;
+        g_SndTickMode = (v == 1) ? 5 : 50;
         break;
     case 1:
-        D_801E6C6C = 60;
-        D_8009A558 = (v == 0) ? 5 : 60;
+        g_SndTickResolution = 60;
+        g_SndTickMode = (v == 0) ? 5 : 60;
         break;
     case 3:
-        D_801E6C6C = 120;
+        g_SndTickResolution = 120;
         break;
     case 2:
-        D_801E6C6C = 240;
+        g_SndTickResolution = 240;
         break;
     case 5:
         if (v == 0) {
-            D_801E6C6C = 60;
+            g_SndTickResolution = 60;
         } else if (v == 1) {
-            D_801E6C6C = 50;
+            g_SndTickResolution = 50;
         } else {
-            D_801E6C6C = 60;
+            g_SndTickResolution = 60;
         }
         break;
     case 0:
         if (v == 0) {
-            D_801E6C6C = 60;
+            g_SndTickResolution = 60;
         } else if (v == 1) {
-            D_801E6C6C = 50;
+            g_SndTickResolution = 50;
         } else {
-            D_801E6C6C = 60;
+            g_SndTickResolution = 60;
         }
         break;
     default:
-        D_801E6C6C = 60;
+        g_SndTickResolution = 60;
         break;
     }
     } else {
-        D_801E6C6C = m;
+        g_SndTickResolution = m;
     }
 }

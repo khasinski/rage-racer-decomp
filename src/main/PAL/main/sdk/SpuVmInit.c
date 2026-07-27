@@ -6,55 +6,55 @@ void func_8007B294(long);
 void func_80079B60(long, u_char *);
 void func_80075FA4(void);
 
-extern u_char D_8009E5E0[];
+extern u_char g_SpuMallocArea[] asm("D_8009E5E0");
 
 extern volatile u_short D_801E4B5C;
-extern volatile u_short D_8019CA68;
-extern volatile u_short D_801F17AC;
+extern volatile u_short g_SndDamper asm("D_8019CA68");
+extern volatile u_short g_SndVabOpenCount asm("D_801F17AC");
 
-extern u_short D_8009DF20[];
-extern u_char D_8009E0A0[];
-extern u_char D_801E4CFC[];
+extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern u_char g_SndVabStatus[] asm("D_801E4CFC");
 
 extern volatile u_char D_801E42F8;
-extern volatile u_short D_801E4BEA;
+extern volatile u_short g_SndCurrentVoice asm("D_801E4BEA");
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
-extern u_short *D_8009A588;
+extern u_short *g_SndSpuRegs asm("D_8009A588");
 
-extern u_char D_8009E0B8[];
-extern u_char D_8009E0BA[];
-extern u_char D_8009E0BC[];
-extern u_char D_8009E0BE[];
+extern u_char g_SndVoiceState[] asm("D_8009E0B8");
+extern u_char g_SndVoiceStateAge[] asm("D_8009E0BA");
+extern u_char g_SndVoiceStatePitch[] asm("D_8009E0BC");
+extern u_char g_SndVoiceStateEnvx[] asm("D_8009E0BE");
 extern u_char D_8009E0C0[];
 extern u_char D_8009E0C2[];
-extern u_char D_8009E0C6[];
-extern u_char D_8009E0C8[];
-extern u_char D_8009E0CA[];
-extern u_char D_8009E0CC[];
-extern u_char D_8009E0D3[];
-extern u_char D_8009E0D4[];
+extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
+extern u_char g_SndVoiceStateProgActual[] asm("D_8009E0C8");
+extern u_char g_SndVoiceStateProg[] asm("D_8009E0CA");
+extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
+extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
+extern u_char g_SndVoiceStateAutoVol[] asm("D_8009E0D4");
 extern u_char D_8009E0D6[];
 extern u_char D_8009E0D8[];
 extern u_char D_8009E0DA[];
 extern u_char D_8009E0DC[];
-extern u_char D_8009E0E0[];
+extern u_char g_SndVoiceStateAutoPan[] asm("D_8009E0E0");
 extern u_char D_8009E0E2[];
 extern u_char D_8009E0E4[];
 extern u_char D_8009E0E6[];
 extern u_char D_8009E0E8[];
 
-extern volatile u_short D_8019C780;
-extern volatile u_short D_8019C782;
-extern volatile u_short D_8009E680;
-extern volatile u_short D_8009E684;
-extern volatile u_long D_8019C778;
-extern volatile u_long D_8019C77C;
-extern volatile u_char D_801E4D88;
-extern volatile u_short D_801E3FB0;
-extern volatile u_short D_801E40D0;
+extern volatile u_short g_SndReverbAttrDepthLeft asm("D_8019C780");
+extern volatile u_short g_SndReverbAttrDepthRight asm("D_8019C782");
+extern volatile u_short g_SndReverbOnLow asm("D_8009E680");
+extern volatile u_short g_SndReverbOnHigh asm("D_8009E684");
+extern volatile u_long g_SndReverbAttr asm("D_8019C778");
+extern volatile u_long g_SndReverbAttrMode asm("D_8019C77C");
+extern volatile u_char g_SndReservedVoiceCount asm("D_801E4D88");
+extern volatile u_short g_SndMonoMode asm("D_801E3FB0");
+extern volatile u_short g_SndVabProgMax asm("D_801E40D0");
 
 void SpuVmInit(long arg0) asm("func_80075710");
 void SpuVmInit(long arg0) {
@@ -76,18 +76,18 @@ void SpuVmInit(long arg0) {
     u_long cond;
 
     {
-        u_char *p = D_8009E5E0;
+        u_char *p = g_SpuMallocArea;
         func_8007B294(0);
         D_801E4B5C = 0;
-        D_8019CA68 = 0;
+        g_SndDamper = 0;
         asm volatile("" ::: "memory");
         func_80079B60(0x20, p);
     }
 
-    for (i = 0; (u_short)i < 192; i++) D_8009DF20[(u_short)i] = 0;
-    for (i = 0; (u_short)i < 24; i++) D_8009E0A0[(u_short)i] = 0;
-    D_801F17AC = 0;
-    for (i = 0; (u_short)i < 16; i++) D_801E4CFC[(u_short)i] = 0;
+    for (i = 0; (u_short)i < 192; i++) g_SndVoiceRegs[(u_short)i] = 0;
+    for (i = 0; (u_short)i < 24; i++) g_SndVoiceFlags[(u_short)i] = 0;
+    g_SndVabOpenCount = 0;
+    for (i = 0; (u_short)i < 16; i++) g_SndVabStatus[(u_short)i] = 0;
 
     n = arg0 & 0xff;
     if (n >= 24) {
@@ -103,29 +103,29 @@ void SpuVmInit(long arg0) {
                 index = (u_short)i;
                 shifted = index << 3;
                 offset = index * 0x34;
-                eighteen = 0x18;   *(short *)&D_8009E0BA[offset] = eighteen;
-                eighteen = -1;     *(short *)&D_8009E0C6[offset] = eighteen;
-                *(short *)&D_8009E0B8[offset] = ff;
-                D_8009E0D3[offset] = 0;
-                *(short *)&D_8009E0BC[offset] = 0;
-                *(short *)&D_8009E0BE[offset] = 0;
-                *(short *)&D_8009E0C8[offset] = 0;
-                *(short *)&D_8009E0CA[offset] = 0;
-                *(short *)&D_8009E0CC[offset] = ff;
+                eighteen = 0x18;   *(short *)&g_SndVoiceStateAge[offset] = eighteen;
+                eighteen = -1;     *(short *)&g_SndVoiceStateSeqSep[offset] = eighteen;
+                *(short *)&g_SndVoiceState[offset] = ff;
+                g_SndVoiceStateStatus[offset] = 0;
+                *(short *)&g_SndVoiceStatePitch[offset] = 0;
+                *(short *)&g_SndVoiceStateEnvx[offset] = 0;
+                *(short *)&g_SndVoiceStateProgActual[offset] = 0;
+                *(short *)&g_SndVoiceStateProg[offset] = 0;
+                *(short *)&g_SndVoiceStateTone[offset] = ff;
                 *(short *)&D_8009E0C0[offset] = 0;
                 eighteen = 0x40;   D_8009E0C2[offset] = eighteen;
-                *(short *)&D_8009E0D4[offset] = 0;
+                *(short *)&g_SndVoiceStateAutoVol[offset] = 0;
                 *(short *)&D_8009E0D6[offset] = 0;
                 *(short *)&D_8009E0D8[offset] = 0;
                 *(short *)&D_8009E0DA[offset] = 0;
-                *(short *)&D_8009E0E0[offset] = 0;
+                *(short *)&g_SndVoiceStateAutoPan[offset] = 0;
                 *(short *)&D_8009E0E2[offset] = 0;
                 *(short *)&D_8009E0E4[offset] = 0;
                 *(short *)&D_8009E0E6[offset] = 0;
                 *(short *)&D_8009E0E8[offset] = 0;
                 *(short *)&D_8009E0DC[offset] = 0;
 
-                spu = (volatile u_short *)&D_8009A588[(u_short)shifted];
+                spu = (volatile u_short *)&g_SndSpuRegs[(u_short)shifted];
                 spu[3] = 0x200;
                 spu[2] = 0x1000;
                 spu[4] = 0x80FF;
@@ -133,8 +133,8 @@ void SpuVmInit(long arg0) {
                 spu[1] = 0;
                 spu[5] = 0x4000;
 
-                D_801E4BEA = i;
-                lowBits = D_801E4BEA;
+                g_SndCurrentVoice = i;
+                lowBits = g_SndCurrentVoice;
                 __asm__("andi %0,%1,0xffff" : "=r"(mindex) : "r"(lowBits));
                 if ((u_long)mindex < 0x10) {
                     lowMask = one << mindex;
@@ -147,14 +147,14 @@ void SpuVmInit(long arg0) {
 
                 lowBits &= 0xFFFF;
                 offset = lowBits * 0x34;
-                D_8009E0D3[offset] = 0;
+                g_SndVoiceStateStatus[offset] = 0;
                 lowBits = D_801F2A08;
                 highBits = D_801F2A0C;
                 __asm__ volatile("");
                 i++;
                 __asm__ volatile("" ::: "memory");
-                *(short *)&D_8009E0BC[offset] = 0;
-                *(short *)&D_8009E0B8[offset] = 0;
+                *(short *)&g_SndVoiceStatePitch[offset] = 0;
+                *(short *)&g_SndVoiceState[offset] = 0;
 
                 bits = D_8009E670;
                 __asm__ volatile("");
@@ -171,17 +171,17 @@ void SpuVmInit(long arg0) {
             } while ((u_short)i < cond);
     }
 
-    D_8019C780 = 0x3FFF;
-    D_8019C782 = 0x3FFF;
+    g_SndReverbAttrDepthLeft = 0x3FFF;
+    g_SndReverbAttrDepthRight = 0x3FFF;
     D_8009E670 = 0;
     D_8009E674 = 0;
     D_801F2A08 = 0;
-    D_8009E680 = 0;
-    D_8009E684 = 0;
-    D_8019C778 = 0;
-    D_8019C77C = 0;
-    D_801E4D88 = 0;
-    D_801E3FB0 = 0;
-    D_801E40D0 = 0x80;
+    g_SndReverbOnLow = 0;
+    g_SndReverbOnHigh = 0;
+    g_SndReverbAttr = 0;
+    g_SndReverbAttrMode = 0;
+    g_SndReservedVoiceCount = 0;
+    g_SndMonoMode = 0;
+    g_SndVabProgMax = 0x80;
     func_80075FA4();
 }

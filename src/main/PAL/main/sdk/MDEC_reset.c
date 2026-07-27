@@ -2,23 +2,26 @@
 
 #include "common.h"
 
-extern volatile u_long *D_80083164;
-extern volatile u_long *D_80083168;
-extern volatile u_long *D_8008316C;
-extern volatile u_long *D_80083170;
-extern volatile u_long *D_80083174;
-extern volatile u_long *D_80083178;
-extern volatile u_long *D_80083194;
-extern volatile u_long *D_80083198;
-extern volatile u_long *D_8008319C;
+/* libmdec hardware, from the data segment: DMA channel 0 (MDEC in) and
+ * channel 1 (MDEC out) MADR/BCR/CHCR at 0x1F801080.. and 0x1F801090..,
+ * the MDEC command port 0x1F801820 and control/status 0x1F801824. */
+extern volatile u_long *g_MdecInDmaMadr asm("D_80083164");
+extern volatile u_long *g_MdecInDmaBcr asm("D_80083168");
+extern volatile u_long *g_MdecInDmaChcr asm("D_8008316C");
+extern volatile u_long *g_MdecOutDmaMadr asm("D_80083170");
+extern volatile u_long *g_MdecOutDmaBcr asm("D_80083174");
+extern volatile u_long *g_MdecOutDmaChcr asm("D_80083178");
+extern volatile u_long *g_MdecCmdReg asm("D_80083194");
+extern volatile u_long *g_MdecCtrlReg asm("D_80083198");
+extern volatile u_long *g_MdecDpcr asm("D_8008319C");
 extern u_char D_800132C8[];
 extern u_char D_800132E4[];
 extern u_char D_800132F4[];
 extern u_char D_80013304[];
 extern u_char D_8001332C[];
 extern u_char D_80013364[];
-extern u_char D_8008305C[];
-extern u_char D_800830E0[];
+extern u_char g_MdecQuantCmd[] asm("D_8008305C");
+extern u_char g_MdecIdctCmd[] asm("D_800830E0");
 
 long MDEC_in_sync(void) asm("func_800642F4");
 long MDEC_out_sync(void) asm("func_8006438C");
@@ -30,7 +33,7 @@ void MDEC_reset(long arg0) asm("func_800640D4");
 void MDEC_reset(long arg0) {
     register long option asm("$5") = arg0;
     register long zero asm("$0");
-    volatile u_long *inBuffer = (volatile u_long *)D_8008305C;
+    volatile u_long *inBuffer = (volatile u_long *)g_MdecQuantCmd;
 
     if (option == 0) {
         goto zero;
@@ -41,20 +44,20 @@ void MDEC_reset(long arg0) {
     goto bad;
 
 zero:
-    *D_80083198 = 0x80000000;
-    *D_8008316C = zero;
-    *D_80083178 = zero;
-    *D_80083198 = 0x60000000;
+    *g_MdecCtrlReg = 0x80000000;
+    *g_MdecInDmaChcr = zero;
+    *g_MdecOutDmaChcr = zero;
+    *g_MdecCtrlReg = 0x60000000;
     MDEC_in(inBuffer, 0x20);
-    MDEC_in((volatile u_long *)D_800830E0, 0x20);
+    MDEC_in((volatile u_long *)g_MdecIdctCmd, 0x20);
     return;
 
 one:
-    *D_80083198 = 0x80000000;
-    *D_8008316C = 0;
-    *D_80083178 = 0;
-    *D_80083178;
-    *D_80083198 = 0x60000000;
+    *g_MdecCtrlReg = 0x80000000;
+    *g_MdecInDmaChcr = 0;
+    *g_MdecOutDmaChcr = 0;
+    *g_MdecOutDmaChcr;
+    *g_MdecCtrlReg = 0x60000000;
     return;
 
 bad:
@@ -63,34 +66,34 @@ bad:
 
 void MDEC_in(volatile u_long *arg0, long arg1) {
     MDEC_in_sync();
-    *D_8008319C |= 0x88;
-    *D_80083164 = (u_long)(arg0 + 1);
-    *D_80083168 = ((u_long)arg1 >> 5 << 16) | 0x20;
-    *D_80083194 = *arg0;
-    *D_8008316C = 0x01000201;
+    *g_MdecDpcr |= 0x88;
+    *g_MdecInDmaMadr = (u_long)(arg0 + 1);
+    *g_MdecInDmaBcr = ((u_long)arg1 >> 5 << 16) | 0x20;
+    *g_MdecCmdReg = *arg0;
+    *g_MdecInDmaChcr = 0x01000201;
 }
 
 void MDEC_out(volatile u_long *arg0, long arg1) asm("func_80064264");
 void MDEC_out(volatile u_long *arg0, long arg1) {
     MDEC_out_sync();
-    *D_8008319C |= 0x88;
-    *D_80083178 = 0;
-    *D_80083170 = (u_long)arg0;
-    *D_80083174 = ((u_long)arg1 >> 5 << 16) | 0x20;
-    *D_80083178 = 0x01000200;
+    *g_MdecDpcr |= 0x88;
+    *g_MdecOutDmaChcr = 0;
+    *g_MdecOutDmaMadr = (u_long)arg0;
+    *g_MdecOutDmaBcr = ((u_long)arg1 >> 5 << 16) | 0x20;
+    *g_MdecOutDmaChcr = 0x01000200;
 }
 
 long MDEC_in_sync(void) {
     volatile long timeout;
 
     timeout = 0x100000;
-    if (*D_80083198 & 0x20000000) {
+    if (*g_MdecCtrlReg & 0x20000000) {
         do {
             if (--timeout == -1) {
                 MDEC_timeout(D_800132E4);
                 return -1;
             }
-        } while (*D_80083198 & 0x20000000);
+        } while (*g_MdecCtrlReg & 0x20000000);
     }
     return 0;
 }
@@ -99,13 +102,13 @@ long MDEC_out_sync(void) {
     volatile long timeout;
 
     timeout = 0x100000;
-    if (*D_80083178 & 0x01000000) {
+    if (*g_MdecOutDmaChcr & 0x01000000) {
         do {
             if (--timeout == -1) {
                 MDEC_timeout(D_800132F4);
                 return -1;
             }
-        } while (*D_80083178 & 0x01000000);
+        } while (*g_MdecOutDmaChcr & 0x01000000);
     }
     return 0;
 }
@@ -115,8 +118,8 @@ long MDEC_timeout(u_char *arg0) {
     register long ret asm("$2");
 
     GameDebugPrintf(D_80013364, arg0);
-    status = *D_80083198;
-    GameDebugPrintf(D_80013304, (*D_8008316C >> 24) & 1, (*D_80083178 >> 24) & 1, *D_80083164, *D_80083170);
+    status = *g_MdecCtrlReg;
+    GameDebugPrintf(D_80013304, (*g_MdecInDmaChcr >> 24) & 1, (*g_MdecOutDmaChcr >> 24) & 1, *g_MdecInDmaMadr, *g_MdecOutDmaMadr);
     GameDebugPrintf(D_8001332C,
                   (~status >> 31) & 1,
                   (status >> 30) & 1,
@@ -126,15 +129,15 @@ long MDEC_timeout(u_char *arg0) {
                   (status >> 25) & 1,
                   (status >> 23) & 1);
 
-    *D_80083198 = 0x80000000;
-    *D_8008316C = 0;
-    *D_80083178 = 0;
+    *g_MdecCtrlReg = 0x80000000;
+    *g_MdecInDmaChcr = 0;
+    *g_MdecOutDmaChcr = 0;
 
     asm volatile("" ::: "memory");
     ret = 0;
     asm volatile("" : : "r"(ret));
-    *D_80083178;
-    *D_80083198 = 0x60000000;
+    *g_MdecOutDmaChcr;
+    *g_MdecCtrlReg = 0x60000000;
 
     return ret;
 }

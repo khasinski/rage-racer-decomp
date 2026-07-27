@@ -1,10 +1,10 @@
 #include "psyq/snd.h"
 
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void SsSeqResetChannelNote(long seq, long sep) {
-    SeqStruct *state = &D_801E79CC[(short)seq][(short)sep];
+    SeqStruct *state = &g_SndSeqTable[(short)seq][(short)sep];
 
     SsUtReverbOff();
     SpuVmDamperOff();

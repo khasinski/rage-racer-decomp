@@ -2,8 +2,8 @@
 
 #include "common.h"
 
-extern long D_801E4B80;
-extern char D_80013C10[];
+extern long g_SndSeqOpenMask asm("D_801E4B80");
+extern char g_MsgSeqTableFull[] asm("D_80013C10");
 
 long SsSeqParseHeader(long arg0, long arg1, long arg2) asm("func_8006ECDC");
 
@@ -15,9 +15,9 @@ long SsSeqOpen(long seq_data, long vab_id) {
     u_char found;
     long slot;
 
-    used = D_801E4B80;
+    used = g_SndSeqOpenMask;
     if (used == -1) {
-        GameDebugPrintf(D_80013C10);
+        GameDebugPrintf(g_MsgSeqTableFull);
         return -1;
     }
 
@@ -31,7 +31,7 @@ long SsSeqOpen(long seq_data, long vab_id) {
         i++;
     } while (found == 0);
 
-    D_801E4B80 = (1 << (short)slot) | D_801E4B80;
+    g_SndSeqOpenMask = (1 << (short)slot) | g_SndSeqOpenMask;
 
     if ((short)SsSeqParseHeader((short)slot, (short)vab_id, seq_data) == -1) {
         return -1;

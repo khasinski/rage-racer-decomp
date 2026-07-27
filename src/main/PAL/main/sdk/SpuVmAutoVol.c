@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern volatile u_char D_8009E0D4[];
+extern volatile u_char g_SndVoiceStateAutoVol[] asm("D_8009E0D4");
 extern volatile u_char D_8009E0D6[];
 extern volatile u_char D_8009E0D8[];
 extern volatile u_char D_8009E0DA[];
@@ -39,7 +39,7 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     }
 
     offset = (((((short)arg0 * 2) + (short)arg0) * 4) + (short)arg0) * 4;
-    *(volatile short *)(D_8009E0D4 + offset) = 1;
+    *(volatile short *)(g_SndVoiceStateAutoVol + offset) = 1;
     *(volatile short *)(D_8009E0DC + offset) = start;
     *(volatile short *)(D_8009E0DE + offset) = target;
 
@@ -109,12 +109,12 @@ typedef struct VabHeader {
     u_char masterVolume;
 } VabHeader;
 
-extern u_short D_8009DF20[];
-extern u_char D_8009E0A0[];
-extern SpuVoice D_8009E0B8[];
-extern VabHeader *D_801E413C;
-extern SvmCurrent D_801E4BD0;
-extern short D_801E3FB0;
+extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
+extern VabHeader *g_SndCurrentVabHeader asm("D_801E413C");
+extern SvmCurrent g_SndCurrentAttr asm("D_801E4BD0");
+extern short g_SndMonoMode asm("D_801E3FB0");
 
 void SpuVmAutoVolTick(short voice) asm("func_80074ECC");
 void SpuVmAutoVolTick(short voice) {
@@ -127,34 +127,34 @@ void SpuVmAutoVolTick(short voice) {
     long scaledMasterVolume;
 
     registerOffset = voice * 8;
-    if (D_8009E0B8[voice].volumeCounter != 0) {
-        if (D_8009E0B8[voice].volumeCounterReload-- > 0) {
+    if (g_SndVoiceState[voice].volumeCounter != 0) {
+        if (g_SndVoiceState[voice].volumeCounterReload-- > 0) {
             return;
         }
-        D_8009E0B8[voice].volumeCounterReload =
-            D_8009E0B8[voice].volumeCounter;
+        g_SndVoiceState[voice].volumeCounterReload =
+            g_SndVoiceState[voice].volumeCounter;
     }
 
-    D_8009E0B8[voice].currentVolume += D_8009E0B8[voice].volumeStep;
-    if (D_8009E0B8[voice].volumeStep > 0) {
-        if (D_8009E0B8[voice].currentVolume >=
-            D_8009E0B8[voice].targetVolume) {
-            D_8009E0B8[voice].currentVolume =
-                D_8009E0B8[voice].targetVolume;
-            D_8009E0B8[voice].autoVolume = 0;
+    g_SndVoiceState[voice].currentVolume += g_SndVoiceState[voice].volumeStep;
+    if (g_SndVoiceState[voice].volumeStep > 0) {
+        if (g_SndVoiceState[voice].currentVolume >=
+            g_SndVoiceState[voice].targetVolume) {
+            g_SndVoiceState[voice].currentVolume =
+                g_SndVoiceState[voice].targetVolume;
+            g_SndVoiceState[voice].autoVolume = 0;
         }
-    } else if (D_8009E0B8[voice].volumeStep < 0) {
-        if (D_8009E0B8[voice].currentVolume <=
-            D_8009E0B8[voice].targetVolume) {
-            D_8009E0B8[voice].currentVolume =
-                D_8009E0B8[voice].targetVolume;
-            D_8009E0B8[voice].autoVolume = 0;
+    } else if (g_SndVoiceState[voice].volumeStep < 0) {
+        if (g_SndVoiceState[voice].currentVolume <=
+            g_SndVoiceState[voice].targetVolume) {
+            g_SndVoiceState[voice].currentVolume =
+                g_SndVoiceState[voice].targetVolume;
+            g_SndVoiceState[voice].autoVolume = 0;
         }
     }
 
-    currentVolume = D_8009E0B8[voice].currentVolume;
-    D_801E4BD0.currentVolume = currentVolume;
-    scaledMasterVolume = D_801E413C->masterVolume * 0x3FFF;
+    currentVolume = g_SndVoiceState[voice].currentVolume;
+    g_SndCurrentAttr.currentVolume = currentVolume;
+    scaledMasterVolume = g_SndCurrentVabHeader->masterVolume * 0x3FFF;
 
     leftVolumeTemp =
         ((currentVolume * scaledMasterVolume) / 0x7F) / 0x7F;
@@ -162,40 +162,40 @@ void SpuVmAutoVolTick(short voice) {
         ((currentVolume * scaledMasterVolume) / 0x7F) / 0x7F;
 
     leftVolumeTemp =
-        ((leftVolumeTemp * D_801E4BD0.masterVolume *
-          D_801E4BD0.volume) /
+        ((leftVolumeTemp * g_SndCurrentAttr.masterVolume *
+          g_SndCurrentAttr.volume) /
          0x7F) /
         0x7F;
     rightVolumeTemp =
-        ((rightVolumeTemp * D_801E4BD0.masterVolume *
-          D_801E4BD0.volume) /
+        ((rightVolumeTemp * g_SndCurrentAttr.masterVolume *
+          g_SndCurrentAttr.volume) /
          0x7F) /
         0x7F;
 
-    if (D_801E4BD0.currentPan < 0x40) {
+    if (g_SndCurrentAttr.currentPan < 0x40) {
         leftVolume = leftVolumeTemp;
         rightVolume =
-            (rightVolumeTemp * D_801E4BD0.currentPan) / 0x40;
+            (rightVolumeTemp * g_SndCurrentAttr.currentPan) / 0x40;
     } else {
         leftVolume =
-            (leftVolumeTemp * (0x7F - D_801E4BD0.currentPan)) / 0x40;
+            (leftVolumeTemp * (0x7F - g_SndCurrentAttr.currentPan)) / 0x40;
         rightVolume = rightVolumeTemp;
     }
 
-    if (D_801E4BD0.masterPan < 0x40) {
-        rightVolume = (rightVolume * D_801E4BD0.masterPan) / 0x40;
+    if (g_SndCurrentAttr.masterPan < 0x40) {
+        rightVolume = (rightVolume * g_SndCurrentAttr.masterPan) / 0x40;
     } else {
         leftVolume =
-            (leftVolume * (0x7F - D_801E4BD0.masterPan)) / 0x40;
+            (leftVolume * (0x7F - g_SndCurrentAttr.masterPan)) / 0x40;
     }
 
-    if (D_801E4BD0.pan < 0x40) {
-        rightVolume = (rightVolume * D_801E4BD0.pan) / 0x40;
+    if (g_SndCurrentAttr.pan < 0x40) {
+        rightVolume = (rightVolume * g_SndCurrentAttr.pan) / 0x40;
     } else {
-        leftVolume = (leftVolume * (0x7F - D_801E4BD0.pan)) / 0x40;
+        leftVolume = (leftVolume * (0x7F - g_SndCurrentAttr.pan)) / 0x40;
     }
 
-    if (D_801E3FB0 == 1) {
+    if (g_SndMonoMode == 1) {
         if (rightVolume > leftVolume) {
             leftVolume = rightVolume;
         } else {
@@ -203,9 +203,9 @@ void SpuVmAutoVolTick(short voice) {
         }
     }
 
-    D_8009DF20[registerOffset] = leftVolume;
-    D_8009DF20[registerOffset + 1] = rightVolume;
-    D_8009E0A0[voice] |= 3;
+    g_SndVoiceRegs[registerOffset] = leftVolume;
+    g_SndVoiceRegs[registerOffset + 1] = rightVolume;
+    g_SndVoiceFlags[voice] |= 3;
 }
 
 /*
@@ -213,7 +213,7 @@ void SpuVmAutoVolTick(short voice) {
  * both goes through an explicit (volatile short *) cast, so the plain form keeps
  * the accesses volatile and both members byte-exact.
  */
-extern u_char D_8009E0E0[];
+extern u_char g_SndVoiceStateAutoPan[] asm("D_8009E0E0");
 extern u_char D_8009E0E2[];
 extern u_char D_8009E0E4[];
 extern u_char D_8009E0E6[];
@@ -250,7 +250,7 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     }
 
     offset = (((((short)arg0 * 2) + (short)arg0) * 4) + (short)arg0) * 4;
-    *(volatile short *)(D_8009E0E0 + offset) = 1;
+    *(volatile short *)(g_SndVoiceStateAutoPan + offset) = 1;
     *(volatile short *)(D_8009E0E8 + offset) = start;
     *(volatile short *)(D_8009E0EA + offset) = target;
 
@@ -292,16 +292,16 @@ large:
     *(volatile short *)(D_8009E0E2 + offset) = quotient;
 }
 
-extern u_char D_8009E0A0[];
-extern u_short D_8009DF20[];
-extern u_short D_8009DF22[];
+extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_short g_SndVoiceRegsVolRight[] asm("D_8009DF22");
 extern u_char D_801E4BD4;
 extern u_char D_801E4BD5;
 extern u_char D_801E4BDA;
 extern u_char D_801E4BDB;
 extern u_char D_801E4BDD;
 extern u_char D_801E4BDE;
-extern short D_801E3FB0;
+extern short g_SndMonoMode asm("D_801E3FB0");
 
 void SpuVmAutoPanTick(long arg0) asm("func_800753CC");
 void SpuVmAutoPanTick(long arg0) {
@@ -369,7 +369,7 @@ checkNegativeStep:
 
 clampEnvelope:
     *(u_short *)&D_8009E0E8[offset] = clampValue;
-    *(u_short *)&D_8009E0E0[offset] = 0;
+    *(u_short *)&g_SndVoiceStateAutoPan[offset] = 0;
 
 envelopeDone:
     envelope = D_8009E0E8[(short)originalArg * 52];
@@ -390,7 +390,7 @@ envelopeDone:
     register long flagIndex asm("$3");
 
     asm("" : : : "memory");
-    base = (u_char *)D_801E413C;
+    base = (u_char *)g_SndCurrentVabHeader;
     asm("" : : : "memory");
     D_801E4BD5 = envelope;
     asm("" : : : "memory");
@@ -445,7 +445,7 @@ envelopeDone:
         left = (u_long)mixed >> 6;
     }
 
-    if (D_801E3FB0 == 1) {
+    if (g_SndMonoMode == 1) {
         compareRight = (u_short)right;
         compareLeft = (u_short)left;
         if (compareLeft < compareRight) {
@@ -457,9 +457,9 @@ envelopeDone:
 
     outputOffset = (short)index8 << 1;
     flagIndex = (short)originalArg;
-    *(u_short *)((u_char *)D_8009DF22 + outputOffset) = right;
+    *(u_short *)((u_char *)g_SndVoiceRegsVolRight + outputOffset) = right;
     asm("" : : : "memory");
-    *(u_short *)((u_char *)D_8009DF20 + outputOffset) = left;
-    D_8009E0A0[flagIndex] |= 3;
+    *(u_short *)((u_char *)g_SndVoiceRegs + outputOffset) = left;
+    g_SndVoiceFlags[flagIndex] |= 3;
     }
 }

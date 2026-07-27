@@ -37,9 +37,14 @@ typedef struct {
     volatile u_char eb;
 } GfxState;
 
-extern GfxState D_800941E0;
+/* Struct view of the libgpu env head: the same six words other files name
+ * g_GpuFuncs, GPU_printf, g_GraphType, g_GraphQueue, g_GraphDebug and
+ * g_GraphReverse. Spelling them as those globals here compiles but does not
+ * match - gcc 2.6.3 treats a struct member reference as non-aliasing - so
+ * this TU keeps the struct, and the base keeps the address's one name. */
+extern GfxState g_GpuFuncs asm("D_800941E0");
 extern char D_80013614[];
-extern Cache D_80094254;
+extern Cache g_DispEnvCache asm("D_80094254");
 
 long func_80066CB0(void *arg0);
 long func_8006EAEC(void);
@@ -55,20 +60,20 @@ Env *PutDispEnv(Env *arg0) {
 
     flags = 0x8000000;
 
-    if (D_800941E0.debug >= 2) {
-        D_800941E0.printf(D_80013614, s0);
+    if (g_GpuFuncs.debug >= 2) {
+        g_GpuFuncs.printf(D_80013614, s0);
     }
 
-    if (D_800941E0.e8 == 1 || D_800941E0.e8 == 2) {
+    if (g_GpuFuncs.e8 == 1 || g_GpuFuncs.e8 == 2) {
         long r = func_80066CB0(s0);
         cmd = (((u_short)s0->x2 & 0xfff) << 12 | (r & 0xfff)) | 0x5000000;
     } else {
         cmd = (((u_short)s0->x2 & 0x3ff) << 10 | ((u_short)s0->x0 & 0x3ff)) | 0x5000000;
     }
-    D_800941E0.funcs->submit(cmd);
+    g_GpuFuncs.funcs->submit(cmd);
 
-    if ((short)D_80094254.x8 != s0->x8 || (short)D_80094254.xA != s0->xA ||
-        (short)D_80094254.xC != s0->xC || (short)D_80094254.xE != s0->xE) {
+    if ((short)g_DispEnvCache.x8 != s0->x8 || (short)g_DispEnvCache.xA != s0->xA ||
+        (short)g_DispEnvCache.xC != s0->xC || (short)g_DispEnvCache.xE != s0->xE) {
         long left;
         long right;
         long top;
@@ -116,20 +121,20 @@ Env *PutDispEnv(Env *arg0) {
             long lo = left & 0xfff;
             register u_long k asm("$3") = 0x6000000;
             asm("" : "=r"(lo) : "0"(lo));
-            D_800941E0.funcs->submit(hi | (lo | k));
+            g_GpuFuncs.funcs->submit(hi | (lo | k));
         }
         {
             register long hi asm("$2") = (bottom & 0x3ff) << 10;
             long lo = top & 0x3ff;
             register u_long k asm("$3") = 0x7000000;
             asm("" : "=r"(lo) : "0"(lo));
-            D_800941E0.funcs->submit(hi | (lo | k));
+            g_GpuFuncs.funcs->submit(hi | (lo | k));
         }
     }
 
-    if (D_80094254.x10 != *(u_long *)&s0->x10 || (short)D_80094254.x0 != s0->x0 ||
-        (short)D_80094254.x2 != s0->x2 || (short)D_80094254.x4 != s0->x4 ||
-        (short)D_80094254.x6 != s0->x6) {
+    if (g_DispEnvCache.x10 != *(u_long *)&s0->x10 || (short)g_DispEnvCache.x0 != s0->x0 ||
+        (short)g_DispEnvCache.x2 != s0->x2 || (short)g_DispEnvCache.x4 != s0->x4 ||
+        (short)g_DispEnvCache.x6 != s0->x6) {
         s0->x12 = func_8006EAEC();
         if (s0->x12 == 1) {
             flags |= 8;
@@ -140,7 +145,7 @@ Env *PutDispEnv(Env *arg0) {
         if (s0->x10 != 0) {
             flags |= 0x20;
         }
-        if (D_800941E0.eb != 0) {
+        if (g_GpuFuncs.eb != 0) {
             flags |= 0x80;
         }
         if (s0->x4 < 281) {
@@ -160,9 +165,9 @@ Env *PutDispEnv(Env *arg0) {
                 flags |= 0x24;
             }
         }
-        D_800941E0.funcs->submit(flags);
+        g_GpuFuncs.funcs->submit(flags);
     }
 
-    MemCopy(&D_80094254, s0, 0x14);
+    MemCopy(&g_DispEnvCache, s0, 0x14);
     return s0;
 }

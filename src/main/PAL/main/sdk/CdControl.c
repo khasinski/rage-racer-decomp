@@ -2,9 +2,9 @@
 
 #include "common.h"
 
-extern long D_80098FBC[];
-extern long D_8009903C;
-extern u_char D_8009904C;
+extern long g_CdCommandNeedsSetloc[] asm("D_80098FBC");
+extern long g_CdSyncCallback asm("D_8009903C");
+extern u_char g_CdStatusByte asm("D_8009904C");
 
 long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
 
@@ -35,18 +35,18 @@ long CdControl(long arg0, void *arg1, long arg2) {
     retries = 3;
     command = cmd & 0xFF;
     asm("" : "=r"(command) : "0"(command));
-    base = D_80098FBC;
+    base = g_CdCommandNeedsSetloc;
     asm("" : "=r"(base) : "0"(base));
-    savedMode = D_8009903C;
+    savedMode = g_CdSyncCallback;
     asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
     commandState = (long *)(offset + (long)base);
     result = 0;
 
     do {
-        D_8009903C = 0;
+        g_CdSyncCallback = 0;
         if (command != 1) {
-            if (D_8009904C & 0x10) {
+            if (g_CdStatusByte & 0x10) {
                 func_8006B620(1, 0, 0, 0);
             }
         }
@@ -57,7 +57,7 @@ long CdControl(long arg0, void *arg1, long arg2) {
             }
         }
 
-        D_8009903C = savedMode;
+        g_CdSyncCallback = savedMode;
         if (func_8006B620(cmd & 0xFF, arg, arg2Reg, 0) == 0) {
             goto done;
         }
@@ -67,7 +67,7 @@ retry:
     } while (retries != -1);
 
     asm("");
-    D_8009903C = savedMode;
+    g_CdSyncCallback = savedMode;
     asm("" : "=r"(retries) : "0"(retries));
     result = -1;
 
@@ -93,18 +93,18 @@ long CdControlF(long arg0, void *arg1) {
     retries = 3;
     command = cmd & 0xFF;
     asm("" : "=r"(command) : "0"(command));
-    base = D_80098FBC;
+    base = g_CdCommandNeedsSetloc;
     asm("" : "=r"(base) : "0"(base));
-    savedMode = D_8009903C;
+    savedMode = g_CdSyncCallback;
     asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
     commandState = (long *)(offset + (long)base);
     result = 0;
 
     do {
-        D_8009903C = 0;
+        g_CdSyncCallback = 0;
         if (command != 1) {
-            if (D_8009904C & 0x10) {
+            if (g_CdStatusByte & 0x10) {
                 func_8006B620(1, 0, 0, 0);
             }
         }
@@ -115,7 +115,7 @@ long CdControlF(long arg0, void *arg1) {
             }
         }
 
-        D_8009903C = savedMode;
+        g_CdSyncCallback = savedMode;
         if (func_8006B620(cmd & 0xFF, arg, 0, 1) == 0) {
             goto done;
         }
@@ -125,7 +125,7 @@ retry:
     } while (retries != -1);
 
     asm("");
-    D_8009903C = savedMode;
+    g_CdSyncCallback = savedMode;
     asm("" : "=r"(retries) : "0"(retries));
     result = -1;
 
@@ -133,9 +133,9 @@ done:
     return result + 1;
 }
 
-extern long D_80098FBC[];
-extern long D_8009903C;
-extern u_char D_8009904C;
+extern long g_CdCommandNeedsSetloc[] asm("D_80098FBC");
+extern long g_CdSyncCallback asm("D_8009903C");
+extern u_char g_CdStatusByte asm("D_8009904C");
 
 long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
 long func_8006B0D4(long arg0, long arg1);
@@ -161,18 +161,18 @@ long CdControlB(long arg0, void *arg1, long arg2) {
     retries = 3;
     command = cmd & 0xFF;
     asm("" : "=r"(command) : "0"(command));
-    base = D_80098FBC;
+    base = g_CdCommandNeedsSetloc;
     asm("" : "=r"(base) : "0"(base));
-    savedMode = D_8009903C;
+    savedMode = g_CdSyncCallback;
     asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
     commandState = (long *)(offset + (long)base);
     result = 0;
 
     do {
-        D_8009903C = 0;
+        g_CdSyncCallback = 0;
         if (command != 1) {
-            if (D_8009904C & 0x10) {
+            if (g_CdStatusByte & 0x10) {
                 func_8006B620(1, 0, 0, 0);
             }
         }
@@ -183,7 +183,7 @@ long CdControlB(long arg0, void *arg1, long arg2) {
             }
         }
 
-        D_8009903C = savedMode;
+        g_CdSyncCallback = savedMode;
         if (func_8006B620(cmd & 0xFF, arg, arg2Reg, 0) == 0) {
             result = 0;
             goto done;
@@ -194,7 +194,7 @@ retry:
     } while (retries != -1);
 
     asm("");
-    D_8009903C = savedMode;
+    g_CdSyncCallback = savedMode;
     asm("" : "=r"(result));
 
 done:

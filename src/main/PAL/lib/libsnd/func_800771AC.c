@@ -167,18 +167,18 @@ typedef struct SvmCurrent771AC {
     u_short voice;
 } SvmCurrent771AC;
 
-extern SeqState771AC *D_801E79CC[];
-extern VoiceState771AC D_8009E0B8[];
-extern short D_8009DF20[];
-extern u_char D_8009E0A0[];
+extern SeqState771AC *g_SndSeqTable[] asm("D_801E79CC");
+extern VoiceState771AC g_SndVoiceState[] asm("D_8009E0B8");
+extern short g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char D_801E42F8;
-extern short D_801E3FB0;
-extern short D_801E4BE6;
-extern ProgAttr771AC *D_801E4110;
-extern VabHeader771AC *D_801E413C;
-extern ToneAttr771AC *D_801E416C;
-extern long D_801E40AC;
-extern SvmCurrent771AC D_801E4BD0;
+extern short g_SndMonoMode asm("D_801E3FB0");
+extern short g_SndCurrentSeqSep asm("D_801E4BE6");
+extern ProgAttr771AC *g_SndCurrentProgTable asm("D_801E4110");
+extern VabHeader771AC *g_SndCurrentVabHeader asm("D_801E413C");
+extern ToneAttr771AC *g_SndCurrentToneTable asm("D_801E416C");
+extern long g_SndUpdateLock asm("D_801E40AC");
+extern SvmCurrent771AC g_SndCurrentAttr asm("D_801E4BD0");
 
 long func_80073314(short vab_id, short program);
 u_char func_800739E8(long priority);
@@ -189,7 +189,7 @@ void func_80073C50(long count, long pitch);
 
 long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {
     SeqState771AC *score =
-        &D_801E79CC[seq_sep & 0xFF][(seq_sep & 0xFF00) >> 8];
+        &g_SndSeqTable[seq_sep & 0xFF][(seq_sep & 0xFF00) >> 8];
     long voices_updated;
     u_char voice;
     long base_volume;
@@ -203,22 +203,22 @@ long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u
 
     voices_updated = 0;
     func_80073314(vab_id, program);
-    D_801E4BE6 = seq_sep;
+    g_SndCurrentSeqSep = seq_sep;
     for (voice = 0; voice < D_801E42F8; voice++) {
         current_program = program;
-        if ((D_8009E0B8[voice].seq_sep == seq_sep) &&
-            (D_8009E0B8[voice].program == current_program) &&
-            (D_8009E0B8[voice].vab_id == vab_id)) {
+        if ((g_SndVoiceState[voice].seq_sep == seq_sep) &&
+            (g_SndVoiceState[voice].program == current_program) &&
+            (g_SndVoiceState[voice].vab_id == vab_id)) {
             if (score->vol[score->channel] != volume &&
                 score->vol[score->channel] == 0) {
                 score->vol[score->channel] = 1;
             }
-            base_volume = (D_8009E0B8[voice].base_volume * volume) / 0x7F;
-            master_volume = D_801E413C->mvol * 0x3FFF;
+            base_volume = (g_SndVoiceState[voice].base_volume * volume) / 0x7F;
+            master_volume = g_SndCurrentVabHeader->mvol * 0x3FFF;
             left_scaled = ((base_volume * master_volume) / 0x7F) / 0x7F;
             left_scaled =
-                ((left_scaled * D_801E4110[current_program].mvol *
-                  D_801E416C[D_8009E0B8[voice].tone +
+                ((left_scaled * g_SndCurrentProgTable[current_program].mvol *
+                  g_SndCurrentToneTable[g_SndVoiceState[voice].tone +
                               (current_program * 0x10)]
                       .vol) /
                  0x7F) /
@@ -228,7 +228,7 @@ long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u
             left_scaled = (left_scaled * score->unk74) / 0x7F;
             right_scaled = (right_scaled * score->unk76) / 0x7F;
 
-            current_pan = D_801E416C[D_8009E0B8[voice].tone].pan;
+            current_pan = g_SndCurrentToneTable[g_SndVoiceState[voice].tone].pan;
             if (current_pan < 0x40) {
                 left = left_scaled;
                 right = (right_scaled * current_pan) / 0x3F;
@@ -236,7 +236,7 @@ long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u
                 left = (left_scaled * (0x7F - current_pan)) / 0x3F;
                 right = right_scaled;
             }
-            current_pan = D_801E4110[D_8009E0B8[voice].program_index].mpan;
+            current_pan = g_SndCurrentProgTable[g_SndVoiceState[voice].program_index].mpan;
             if (current_pan < 0x40) {
                 right = (right * current_pan) / 0x3F;
             } else {
@@ -252,7 +252,7 @@ long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u
             } else {
                 left = (left * (0x7F - current_pan)) / 0x3F;
             }
-            if (D_801E3FB0 == 1) {
+            if (g_SndMonoMode == 1) {
                 if (left < right) {
                     left = right;
                 } else {
@@ -261,9 +261,9 @@ long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u
             }
             left = (left * left) / 0x3FFF;
             right = (right * right) / 0x3FFF;
-            D_8009DF20[voice * 8] = left;
-            D_8009DF20[voice * 8 + 1] = right;
-            D_8009E0A0[voice] |= 3;
+            g_SndVoiceRegs[voice * 8] = left;
+            g_SndVoiceRegs[voice * 8 + 1] = right;
+            g_SndVoiceFlags[voice] |= 3;
             voices_updated++;
         }
     }
@@ -286,78 +286,78 @@ short SsUtKeyOn(
     long left_value;
     long right_value;
 
-    if (D_801E40AC == 1) {
+    if (g_SndUpdateLock == 1) {
         return -1;
     }
-    D_801E40AC = 1;
+    g_SndUpdateLock = 1;
 
     if (func_80073314(vab_id, program)) {
-        D_801E40AC = 0;
+        g_SndUpdateLock = 0;
         return -1;
     }
-    D_801E4BD0.seq_sep = 0x21;
-    D_801E4BD0.note = note;
-    D_801E4BD0.fine = fine;
-    D_801E4BD0.tone = tone;
+    g_SndCurrentAttr.seq_sep = 0x21;
+    g_SndCurrentAttr.note = note;
+    g_SndCurrentAttr.fine = fine;
+    g_SndCurrentAttr.tone = tone;
 
     left_value = left;
     right_value = right;
     if (left_value == right_value) {
-        D_801E4BD0.pan = 0x40;
-        D_801E4BD0.volume = left;
+        g_SndCurrentAttr.pan = 0x40;
+        g_SndCurrentAttr.volume = left;
     } else if (right_value < left_value) {
-        D_801E4BD0.volume = left;
-        D_801E4BD0.pan = (right_value * 0x40) / left_value;
+        g_SndCurrentAttr.volume = left;
+        g_SndCurrentAttr.pan = (right_value * 0x40) / left_value;
     } else {
-        D_801E4BD0.volume = right;
-        D_801E4BD0.pan = 0x7F - ((left_value * 0x40) / right_value);
+        g_SndCurrentAttr.volume = right;
+        g_SndCurrentAttr.pan = 0x7F - ((left_value * 0x40) / right_value);
     }
 
-    D_801E4BD0.master_volume = D_801E4110[program].mvol;
-    D_801E4BD0.master_pan = D_801E4110[program].mpan;
-    D_801E4BD0.tones = D_801E4110[program].tones;
+    g_SndCurrentAttr.master_volume = g_SndCurrentProgTable[program].mvol;
+    g_SndCurrentAttr.master_pan = g_SndCurrentProgTable[program].mpan;
+    g_SndCurrentAttr.tones = g_SndCurrentProgTable[program].tones;
 
-    tone_index = D_801E4BD0.tone + (D_801E4BD0.fake_program * 0x10);
-    D_801E4BD0.priority = D_801E416C[tone_index].prior;
-    vag = D_801E416C[tone_index].vag;
-    D_801E4BD0.vag = vag;
-    D_801E4BD0.tone_volume = D_801E416C[tone_index].vol;
-    D_801E4BD0.tone_pan = D_801E416C[tone_index].pan;
-    D_801E4BD0.center = D_801E416C[tone_index].center;
-    D_801E4BD0.shift = D_801E416C[tone_index].shift;
-    D_801E4BD0.mode = D_801E416C[tone_index].mode;
-    D_801E4BD0.min = D_801E416C[tone_index].min;
-    D_801E4BD0.max = D_801E416C[tone_index].max;
+    tone_index = g_SndCurrentAttr.tone + (g_SndCurrentAttr.fake_program * 0x10);
+    g_SndCurrentAttr.priority = g_SndCurrentToneTable[tone_index].prior;
+    vag = g_SndCurrentToneTable[tone_index].vag;
+    g_SndCurrentAttr.vag = vag;
+    g_SndCurrentAttr.tone_volume = g_SndCurrentToneTable[tone_index].vol;
+    g_SndCurrentAttr.tone_pan = g_SndCurrentToneTable[tone_index].pan;
+    g_SndCurrentAttr.center = g_SndCurrentToneTable[tone_index].center;
+    g_SndCurrentAttr.shift = g_SndCurrentToneTable[tone_index].shift;
+    g_SndCurrentAttr.mode = g_SndCurrentToneTable[tone_index].mode;
+    g_SndCurrentAttr.min = g_SndCurrentToneTable[tone_index].min;
+    g_SndCurrentAttr.max = g_SndCurrentToneTable[tone_index].max;
 
     if (vag == 0) {
-        D_801E40AC = 0;
+        g_SndUpdateLock = 0;
         return -1;
     }
 
     voice = func_800739E8(vag);
     voice_index = voice;
     if (voice_index == D_801E42F8) {
-        D_801E40AC = 0;
+        g_SndUpdateLock = 0;
         return -1;
     }
 
-    D_801E4BD0.voice = voice;
-    D_8009E0B8[voice_index].seq_sep = 0x21;
-    D_8009E0B8[voice_index].vab_id = vab_id;
-    D_8009E0B8[voice_index].program_index = D_801E4BD0.fake_program;
-    D_8009E0B8[voice_index].program = program;
-    D_8009E0B8[voice_index].vag = D_801E4BD0.vag;
-    D_8009E0B8[voice_index].tone = D_801E4BD0.tone;
-    D_8009E0B8[voice_index].note = note;
-    D_8009E0B8[voice_index].status = 1;
-    D_8009E0B8[voice_index].age = 0;
+    g_SndCurrentAttr.voice = voice;
+    g_SndVoiceState[voice_index].seq_sep = 0x21;
+    g_SndVoiceState[voice_index].vab_id = vab_id;
+    g_SndVoiceState[voice_index].program_index = g_SndCurrentAttr.fake_program;
+    g_SndVoiceState[voice_index].program = program;
+    g_SndVoiceState[voice_index].vag = g_SndCurrentAttr.vag;
+    g_SndVoiceState[voice_index].tone = g_SndCurrentAttr.tone;
+    g_SndVoiceState[voice_index].note = note;
+    g_SndVoiceState[voice_index].status = 1;
+    g_SndVoiceState[voice_index].age = 0;
 
     func_80074134();
-    if ((short)D_801E4BD0.vag == 0xFF) {
+    if ((short)g_SndCurrentAttr.vag == 0xFF) {
         SpuVmNoiseKeyOn(voice);
     } else {
         func_80073C50(1, func_80074A6C(note, fine) & 0xFFFF);
     }
-    D_801E40AC = 0;
+    g_SndUpdateLock = 0;
     return voice;
 }

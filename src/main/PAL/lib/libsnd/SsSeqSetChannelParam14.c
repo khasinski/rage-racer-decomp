@@ -1,9 +1,9 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void SsSeqSetChannelParam14(long seq, long sep, u_char value) {
-    SeqStruct *state = &D_801E79CC[(short)seq][(short)sep];
+    SeqStruct *state = &g_SndSeqTable[(short)seq][(short)sep];
 
     state->play_mode = value;
     state->unk29++;

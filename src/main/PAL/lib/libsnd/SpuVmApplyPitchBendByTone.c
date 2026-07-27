@@ -3,7 +3,7 @@
 #include "common.h"
 
 extern volatile u_char D_801E42F8;
-extern short D_801E4BE6;
+extern short g_SndCurrentSeqSep asm("D_801E4BE6");
 
 void SpuVmVSetUp(long arg0, long arg1) asm("func_80073314");
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg4) asm("func_80075CB0");
@@ -42,7 +42,7 @@ long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) {
         "addu %2,%3,$zero"
         : "=r"(i), "=r"(bound), "=r"(store_voice)
         : "r"(voice));
-    D_801E4BE6 = store_voice;
+    g_SndCurrentSeqSep = store_voice;
     sum = 0;
 
     if (bound > 0) {

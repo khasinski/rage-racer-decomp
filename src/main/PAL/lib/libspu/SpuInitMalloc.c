@@ -1,8 +1,8 @@
 #include "psyq/spu.h"
 
 extern long _spu_mem_mode_unitM asm("D_8009ABA0");
-extern long D_8009A71C;
-extern long D_8009A720;
+extern long g_SpuRevReserveWa asm("D_8009A71C");
+extern long g_SpuRevWorkAreaAddr asm("D_8009A720");
 extern long _spu_mem_mode_plus asm("D_8009ABA8");
 extern long _spu_AllocBlockNum asm("D_8009ABD4");
 extern long _spu_AllocLastNum asm("D_8009ABD8");
@@ -51,10 +51,10 @@ long SpuMalloc(long size) {
     i = 0;
     var_s2 = -1;
 
-    if (D_8009A71C == 0) {
+    if (g_SpuRevReserveWa == 0) {
         var_s3 = 0;
     } else {
-        var_s3 = (0x10000 - D_8009A720) << _spu_mem_mode_unitM;
+        var_s3 = (0x10000 - g_SpuRevWorkAreaAddr) << _spu_mem_mode_unitM;
     }
 
     var_a0 = size;

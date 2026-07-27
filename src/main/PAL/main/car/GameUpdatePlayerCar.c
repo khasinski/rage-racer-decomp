@@ -101,7 +101,7 @@ extern s32 g_AutoShiftCooldown asm("D_801F17B8");
  * cleared on every other shift and on touchdown. Its only effect is to raise
  * the volume of continuous sound 0 (flag + 25) while the car is airborne. */
 extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
-extern s16 g_NegconConfigIndex asm("D_8019CB08");
+extern s16 g_NegconMappingIndex asm("D_8019CB08");
 extern s32 g_EngineRpm asm("D_8019CAB4");
 extern u8 *g_TrackPoints asm("D_8009E688");
 /* g_PlayerCar drive +0xA0 / +0xA4: the throttle the input layer produced this
@@ -257,7 +257,7 @@ void GameUpdatePlayerCar(Car *car) {
         } else if (g_PadType == 0x23) {
             *(volatile s16 *)&p->accelBtn = ((g_PadHeld & g_NegconAccelMask) != 0) << 8;
             p->brakeBtn = ((g_PadHeld & g_NegconBrakeMask) != 0) << 8;
-            switch (g_NegconConfigIndex) {
+            switch (g_NegconMappingIndex) {
             case 0:
             case 5:
                 *(volatile s16 *)&p->accelBtn = (g_NegconAnalogI << 8) / 106;

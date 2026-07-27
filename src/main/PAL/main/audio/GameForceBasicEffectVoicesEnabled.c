@@ -234,7 +234,7 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
         pitchBase += 0x14;
         toneBase += 0x14;
         offset += 0x14;
-    } while (pitchBase < (s32)&D_801E6D8C);
+    } while (pitchBase < (s32)&g_ReverbFadeStep);
 }
 
 /* Mid-function labels the retail build exports (see docs/ASM_AND_GTE_POLICY.md,

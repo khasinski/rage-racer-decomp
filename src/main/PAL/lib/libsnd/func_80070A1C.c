@@ -1,12 +1,12 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
-extern long D_801E6C6C;
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern long g_SndTickResolution asm("D_801E6C6C");
 
 void func_80070A1C(short arg0, short arg1, u_char arg2);
 
 void func_80070A1C(short arg0, short arg1, u_char arg2) {
-    SeqStruct *pSeq = &D_801E79CC[arg0][arg1];
+    SeqStruct *pSeq = &g_SndSeqTable[arg0][arg1];
 
     if (arg2 != 0x2f) {
         if (arg2 == 0x51) {
@@ -23,16 +23,16 @@ void func_80070A1C(short arg0, short arg1, u_char arg2) {
 
             pSeq->tempo = 60000000 / value;
 
-            if ((u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) < (u_long)(D_801E6C6C * 60)) {
-                short q = (u_long)(D_801E6C6C * 600) / (u_long)(pSeq->tempo_multiplier * pSeq->tempo);
+            if ((u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) < (u_long)(g_SndTickResolution * 60)) {
+                short q = (u_long)(g_SndTickResolution * 600) / (u_long)(pSeq->tempo_multiplier * pSeq->tempo);
                 pSeq->unk6E = q;
                 pSeq->tick_period = q;
             } else {
                 pSeq->unk6E = -1;
                 pSeq->tick_period =
-                    (u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) / (u_long)(D_801E6C6C * 60);
-                if ((u_long)(D_801E6C6C * 30) <
-                    (u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) % (u_long)(D_801E6C6C * 60)) {
+                    (u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) / (u_long)(g_SndTickResolution * 60);
+                if ((u_long)(g_SndTickResolution * 30) <
+                    (u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) % (u_long)(g_SndTickResolution * 60)) {
                     pSeq->tick_period++;
                 }
             }
@@ -55,11 +55,11 @@ void func_80070A1C(short arg0, short arg1, u_char arg2) {
             pSeq->read_pos = pSeq->next_sep_pos;
             pSeq->loop_pos = pSeq->next_sep_pos;
         } else {
-            D_801E79CC[arg0][arg1].flags &= ~1;
-            D_801E79CC[arg0][arg1].flags &= ~8;
-            D_801E79CC[arg0][arg1].flags &= ~2;
-            D_801E79CC[arg0][arg1].flags |= 0x200;
-            D_801E79CC[arg0][arg1].flags |= 4;
+            g_SndSeqTable[arg0][arg1].flags &= ~1;
+            g_SndSeqTable[arg0][arg1].flags &= ~8;
+            g_SndSeqTable[arg0][arg1].flags &= ~2;
+            g_SndSeqTable[arg0][arg1].flags |= 0x200;
+            g_SndSeqTable[arg0][arg1].flags |= 4;
             pSeq->unk2b = 0;
             pSeq->loop_pos = pSeq->next_sep_pos;
             if (pSeq->unk3C != 0xff) {

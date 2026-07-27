@@ -3,13 +3,13 @@
 
 typedef void (*Callback)(void);
 
-extern long D_8009A558;
-extern long D_8009A55C;
-extern Callback D_8009A560;
-extern Callback D_8009A564;
-extern u_char D_8009A568;
+extern long g_SndTickMode asm("D_8009A558");
+extern long g_SndNoTickFlag asm("D_8009A55C");
+extern Callback g_SndTickCallback asm("D_8009A560");
+extern Callback g_SndPrevVSyncCallback asm("D_8009A564");
+extern u_char g_SndTickUsesVSync asm("D_8009A568");
 extern u_char D_8009A569;
-extern u_char D_8009A56A;
+extern u_char g_SndTickIrq asm("D_8009A56A");
 
 long func_8006DF64(long arg0, Callback arg1);
 void func_8006DFC4(Callback arg0);
@@ -30,12 +30,12 @@ void SsStartSoundTick(long arg0) {
     }
 
     channel = 0xF2000002;
-    flag = &D_8009A568;
+    flag = &g_SndTickUsesVSync;
     *flag = 0;
-    state = D_8009A558;
-    D_8009A56A = 6;
+    state = g_SndTickMode;
+    g_SndTickIrq = 6;
     D_8009A569 = 0;
-    D_8009A564 = 0;
+    g_SndPrevVSyncCallback = 0;
 
     if (state == 2) {
         goto state_2;
@@ -55,11 +55,11 @@ void SsStartSoundTick(long arg0) {
     goto derive_size;
 
 state_0:
-    D_8009A56A = 0xFF;
+    g_SndTickIrq = 0xFF;
     goto done;
 
 state_5:
-    D_8009A56A = 0;
+    g_SndTickIrq = 0;
     if (arg0 == 0) {
         *flag = 1;
         goto setup;
@@ -82,7 +82,7 @@ derive_size:
         register long dividend asm("$2");
         register long quotient asm("$2");
 
-        active = &D_8009A55C;
+        active = &g_SndNoTickFlag;
         asm("" : "=r"(active) : "0"(active));
         if (*active != 0) {
             goto done;
@@ -101,9 +101,9 @@ derive_size:
     }
 
 setup:
-    if (D_8009A568 != 0) {
+    if (g_SndTickUsesVSync != 0) {
         EnterCriticalSection();
-        func_8006DFC4(D_8009A560);
+        func_8006DFC4(g_SndTickCallback);
         goto unlock;
     }
 
@@ -115,15 +115,15 @@ setup:
         register long mode asm("$4");
         Callback callback;
 
-        mode = D_8009A56A;
+        mode = g_SndTickIrq;
         if (mode == 0) {
-            D_8009A564 = (Callback)func_8006DF64(0, 0);
-            mode = D_8009A56A;
+            g_SndPrevVSyncCallback = (Callback)func_8006DF64(0, 0);
+            mode = g_SndTickIrq;
             callback = SsSoundTickCallback;
         } else {
             callback = SsSoundTickVSyncCallback;
             if (D_8009A569 == 0) {
-                callback = D_8009A560;
+                callback = g_SndTickCallback;
             }
         }
         func_8006DF64(mode, callback);

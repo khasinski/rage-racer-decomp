@@ -20,7 +20,6 @@ void GameOpenFmvStream(s32 arg0) {
 extern volatile u32 *g_FmvStripBuffers[] asm("D_8009AF2C");
 extern Rect g_FmvStripRects[] asm("D_8009AF38");
 extern volatile s32 g_FmvStripIndex asm("D_8009AF34");
-extern volatile s32 g_FmvStripIndexRaw asm("D_8009AF34");
 extern volatile s32 g_FmvStripRectIndex asm("D_8009AF48");
 /* One 4-halfword Rect at 0x8009AF4C. g_FmvUploadRectX/Y are its x/y and
  * g_FmvStripWidth/Height are its w/h: an MDEC strip and the VRAM rect it is
@@ -33,7 +32,7 @@ extern volatile s16 g_FmvUploadRectY asm("D_8009AF4E");
 extern s16 g_FmvStripWidth asm("D_8009AF50");
 extern s16 g_FmvStripHeight asm("D_8009AF52");
 extern volatile s32 g_FmvStripDone asm("D_8009AF54");
-extern s32 D_8019CA00;
+extern s32 g_StInterruptPending asm("D_8019CA00");
 
 void DecDCTout(volatile u32 *arg0, s32 arg1) asm("func_8006402C");
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
@@ -55,9 +54,9 @@ void GameUploadFmvSlice(void) {
     register u16 step asm("$7");
     register s32 signedStep asm("$2");
 
-    if (D_8019CA00 != 0) {
+    if (g_StInterruptPending != 0) {
         func_8006D1D0();
-        D_8019CA00 = 0;
+        g_StInterruptPending = 0;
     }
 
     rect = g_FmvUploadRect;
@@ -76,7 +75,7 @@ void GameUploadFmvSlice(void) {
     if ((s16)x < (g_FmvStripRects[index].x + g_FmvStripRects[index].w)) {
         signedStep = (s16)step;
         pixelCount = signedStep * g_FmvStripHeight;
-        bufferIndex = g_FmvStripIndexRaw;
+        bufferIndex = g_FmvStripIndex;
         bufferAddr = bufferIndex << 2;
         asm("" : "=r"(bufferPtr) : "0"(bufferPtr));
         bufferAddr = (s32)bufferPtr + bufferAddr;

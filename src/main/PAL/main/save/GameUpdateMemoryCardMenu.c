@@ -13,7 +13,12 @@ extern s32 g_McSettleTicks asm("D_8009B6FC");
 extern s32 D_8009B700;
 extern s32 D_8009B704;
 extern s32 g_McSavedLoadPhase asm("D_8009B718");
-extern volatile s32 g_McMenuSlotDataV asm("D_8009B720");
+/* Volatile aliases of three game/menu.h globals, NOT extra objects: this file
+ * reads each of them both ways, and only the volatile spelling forces the
+ * reload the retail code has at those few sites. A redeclaration cannot add the
+ * qualifier (gcc 2.6.3 keeps the first declaration's type), so the alias needs
+ * its own identifier. */
+extern volatile s32 g_McCardStatusV asm("D_8009B720");
 extern volatile s32 g_McMenuSubStateV asm("D_8009B72C");
 extern s32 g_McFromLoadMenu asm("D_8009B730");
 extern s32 g_McSaveMode asm("D_8009B734");
@@ -134,7 +139,7 @@ L_sw1:
         s32 st = func_8005ECE0(0, 0);
         s32 c;
         s32 sd;
-        g_McMenuSlotData = st;
+        g_McCardStatus = st;
         switch (st) {
         case 0: {
             s32 b = g_McNoCardTicks;
@@ -144,12 +149,12 @@ L_sw1:
             }
             goto L_sw2;
         }
-        case 1: sd = g_McMenuSlotDataV; c = 2; break;
-        case 2: sd = g_McMenuSlotDataV; c = 1; break;
-        case -1: sd = g_McMenuSlotDataV; c = 0xA; break;
-        case -2: sd = g_McMenuSlotDataV; c = 0xB; break;
-        case -3: sd = g_McMenuSlotDataV; c = 0x11; break;
-        default: sd = g_McMenuSlotDataV; c = 0x11; break;
+        case 1: sd = g_McCardStatusV; c = 2; break;
+        case 2: sd = g_McCardStatusV; c = 1; break;
+        case -1: sd = g_McCardStatusV; c = 0xA; break;
+        case -2: sd = g_McCardStatusV; c = 0xB; break;
+        case -3: sd = g_McCardStatusV; c = 0x11; break;
+        default: sd = g_McCardStatusV; c = 0x11; break;
         }
         g_McNoCardTicks = 0;
         g_McMenuSubState = c;
@@ -179,11 +184,11 @@ L_state3:
     }
     switch (g_McMenuSelection) {
     case 1:
-        if (g_McMenuSlotData == 1) {
+        if (g_McCardStatus == 1) {
             if (D_8009B6F4 != 2) {
                 g_McMenuState = 2;
             } else {
-                g_McMenuState = g_McMenuSlotData;
+                g_McMenuState = g_McCardStatus;
             }
         }
         goto L254;
@@ -198,11 +203,11 @@ L_state3:
         goto L254;
     case -3:
     default: /* 0 */
-        if (g_McMenuSlotData == -3) {
+        if (g_McCardStatus == -3) {
             s32 r = g_McErrorTicks;
             g_McErrorTicks = r + 1;
             if (r >= 4) {
-                g_McMenuState = g_McMenuSlotData;
+                g_McMenuState = g_McCardStatus;
             }
         }
         goto L254;
@@ -617,7 +622,7 @@ L_sw5:
     case -3:
     default: /* 0 */
         {
-            s32 sd = g_McMenuSlotData;
+            s32 sd = g_McCardStatus;
             D_80082FC0 = 1;
             if (sd == -3) {
                 s32 r = D_80082FBC - 1;
@@ -661,7 +666,7 @@ L_state2:
         GamePlaySoundCue(3);
         func_8006138C();
     L1003:
-        if (g_McMenuSlotData != 1) goto L_sw7;
+        if (g_McCardStatus != 1) goto L_sw7;
         D_8009B700 += 1;
         if (D_8009B700 < 2) goto L_sw7;
         wtmp = 2;
@@ -753,13 +758,13 @@ L_sw7:
     case 0:
     default:
         D_80082FC0 = 1;
-        if (g_McMenuSlotData != -3) goto L_sw7tail;
+        if (g_McCardStatus != -3) goto L_sw7tail;
         {
             s32 t = D_80082FBC;
             D_80082FBC = t - 1;
             if (D_80082FBC != 0) goto L_sw7tail;
         }
-        g_McMenuState = g_McMenuSlotData;
+        g_McMenuState = g_McCardStatus;
         goto L_sw7tail;
     }
 
@@ -854,7 +859,7 @@ L_sw8:
     default:
     case -3:
     case 0:
-        mslot = g_McMenuSlotData;
+        mslot = g_McCardStatus;
         D_80082FC0 = 1;
         if (mslot != -3) goto L_sw8tail;
         D_80082FBC -= 1;
@@ -1015,7 +1020,7 @@ L_sw10:
     case -3:
     default:
         {
-            s32 sd = g_McMenuSlotData;
+            s32 sd = g_McCardStatus;
             D_80082FC0 = 1;
             if (sd == -3) {
                 s32 r = D_80082FBC - 1;

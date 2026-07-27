@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void SsSeqPause(long seq, long sep) {
     long offset;
@@ -9,7 +9,7 @@ void SsSeqPause(long seq, long sep) {
     SeqStruct **seq_table;
 
     seq = (short)seq;
-    seq_table = D_801E79CC;
+    seq_table = g_SndSeqTable;
     seq_entry = &seq_table[seq];
     sep = (short)sep;
     offset = sep * sizeof(SeqStruct);

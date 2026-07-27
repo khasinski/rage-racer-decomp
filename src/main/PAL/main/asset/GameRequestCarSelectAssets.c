@@ -7,7 +7,7 @@ extern u32 g_CarModelSlot asm("D_8009E87C");
 extern GameCarModelAsset *g_CarModelAsset asm("D_8009E698");
 extern GameAssetTripleHeader *g_AssetLoadCursor asm("D_8019CAFC");
 extern s32 g_TeamLogoSampleData asm("D_8019CA64");
-extern u8 *D_801E4090;
+extern u8 *g_CarModelBuffer asm("D_801E4090");
 extern u8 *g_ImageBlockBuffer asm("D_801E4B30");
 extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
@@ -109,7 +109,7 @@ state_3:
                 GameUploadImageAsset(g_AssetBlockPtr);
 
                 g_AssetLoadState = 4;
-                D_801E4090 = g_AssetBlockPtr;
+                g_CarModelBuffer = g_AssetBlockPtr;
                 g_ImageBlockBuffer = g_AssetBlockPtr + 0x40000;
             }
         goto done;
@@ -118,7 +118,7 @@ state_4:
             indexOffset = carIndex << 3;
             entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
             assetOffset = GameGetCarAssetIndex(carIndex, entry->modelVariant) << 1;
-            carModelBase = D_801E4090;
+            carModelBase = g_CarModelBuffer;
 
             if (func_80017C78(assetOffset + 0xA, carModelBase) != 0) {
                 GameSetCarModelSlot(carModelBase, 0);
@@ -186,7 +186,7 @@ void GameLoadCarModel(s32 arg0) {
     offset = (GameGetCarAssetIndex(arg, ((GameCarEntry *)(index + (s32)g_CarTable))->modelVariant) * 2) + 0xA;
 
     if (g_AssetLoadState == 1) {
-        ptr = D_801E4090;
+        ptr = g_CarModelBuffer;
         if (g_CarModelSlot == 0) {
             ptr += 0x20000;
         }

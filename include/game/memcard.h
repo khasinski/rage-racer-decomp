@@ -17,24 +17,24 @@ typedef struct GameSaveHeaderRow {
  * by GameLoadSaveStateBlock - both keep raw offsets, see names.md 3b.
  */
 typedef struct GameSaveBlock {
-    u16 unk00;             /* D_8019CE08 */
-    u16 unk02;             /* D_8019CB08 */
-    u16 unk04;             /* D_801E4BF0 */
-    u16 unk06;             /* D_8019CAD0 */
-    u16 unk08;             /* D_8019CA08 */
-    u16 unk0A;             /* D_8019CA0A */
-    u16 unk0C;             /* D_8019CA0C */
-    u16 unk0E;             /* D_801E418C */
-    s32 gpFile1[5];        /* +0x10 D_801E4094..A4, i.e. GameRaceProgress slot 1 */
-    s32 gpFile2[5];        /* +0x24 D_801E6E7C..8C, GameRaceProgress slot 2 */
-    s32 timeAttack[5];     /* +0x38 D_8019C980..990, GameRaceProgress slot 3 */
-    u16 unk4C;             /* +0x4C D_801E42CC */
+    u16 unk00;             /* g_PadMappingIndex */
+    u16 unk02;             /* g_NegconMappingIndex */
+    u16 unk04;             /* g_NegconSteerNeutral */
+    u16 unk06;             /* g_NegconSteerPlay */
+    u16 unk08;             /* g_NegconNeutralI */
+    u16 unk0A;             /* g_NegconNeutralII */
+    u16 unk0C;             /* g_NegconNeutralL */
+    u16 unk0E;             /* g_NegconMaxTwist */
+    s32 gpFile1[5];        /* +0x10 g_GrandPrixSave..A4, i.e. GameRaceProgress slot 1 */
+    s32 gpFile2[5];        /* +0x24 g_ExtraGrandPrixSave..8C, GameRaceProgress slot 2 */
+    s32 timeAttack[5];     /* +0x38 g_TimeAttackSave..990, GameRaceProgress slot 3 */
+    u16 unk4C;             /* +0x4C g_BgmSelection */
     u16 advancedUnlocked;  /* +0x4E g_AdvancedSeriesUnlocked */
     s32 maxClassReached[2];/* +0x50 g_MaxClassReached */
     u8 carTables[3][0x68]; /* +0x58 the three GameCarEntry tables, 13 rows of 8 */
-    u16 unk190[0x16];      /* +0x190 D_8019CB40 */
+    u16 unk190[0x16];      /* +0x190 g_ClassRecords */
     u16 unk1BC[0x10];      /* +0x1BC D_801E444C */
-    u16 unk1DC[0x400];     /* +0x1DC D_801E6F2C, the 0x800-byte scroll/VRAM buffer */
+    u16 unk1DC[0x400];     /* +0x1DC g_TeamLogoCanvas, the 0x800-byte scroll/VRAM buffer */
     s32 unk9DC[0x10];      /* +0x9DC D_801E4408, [2][4] pairs on an 8-byte stride */
     s32 unkA1C[0x10];      /* +0xA1C D_8019C70C, same shape */
     s32 rankRecords[2][4][5][4]; /* +0xA5C D_801E7744 ranking rows */

@@ -100,11 +100,11 @@ typedef struct {
     u_short unk1e;
 } SvmCur77C7C;
 
-extern long D_801E40AC;
-extern ProgAtr77C7C *D_801E4110;
-extern VagAtr77C7C *D_801E416C;
-extern SvmCur77C7C D_801E4BD0;
-extern SpuVoice77C7C D_8009E0B8[];
+extern long g_SndUpdateLock asm("D_801E40AC");
+extern ProgAtr77C7C *g_SndCurrentProgTable asm("D_801E4110");
+extern VagAtr77C7C *g_SndCurrentToneTable asm("D_801E416C");
+extern SvmCur77C7C g_SndCurrentAttr asm("D_801E4BD0");
+extern SpuVoice77C7C g_SndVoiceState[] asm("D_8009E0B8");
 
 extern long func_80073314(short, short);
 extern void func_80074134(void);
@@ -139,79 +139,79 @@ long SsUtKeyOnV(
     long left_value;
     long right_value;
 
-    if (D_801E40AC == 1) {
+    if (g_SndUpdateLock == 1) {
         return -1;
     }
-    D_801E40AC = 1;
+    g_SndUpdateLock = 1;
     if ((u_short)voice >= 24) {
-        D_801E40AC = 0;
+        g_SndUpdateLock = 0;
         return -1;
     }
     if (func_80073314(vab_id, program) != 0) {
-        D_801E40AC = 0;
+        g_SndUpdateLock = 0;
         return -1;
     }
-    D_801E4BD0.seq_sep = 0x21;
+    g_SndCurrentAttr.seq_sep = 0x21;
     left_value = left;
     right_value = right;
-    D_801E4BD0.note = note;
-    D_801E4BD0.fine = fine;
-    D_801E4BD0.tone = tone;
+    g_SndCurrentAttr.note = note;
+    g_SndCurrentAttr.fine = fine;
+    g_SndCurrentAttr.tone = tone;
 
     if (left_value == right_value) {
-        D_801E4BD0.pan = 0x40;
-        D_801E4BD0.volume = left;
+        g_SndCurrentAttr.pan = 0x40;
+        g_SndCurrentAttr.volume = left;
     } else if (right_value < left_value) {
-        D_801E4BD0.volume = left;
-        D_801E4BD0.pan = (right_value * 0x40) / left_value;
+        g_SndCurrentAttr.volume = left;
+        g_SndCurrentAttr.pan = (right_value * 0x40) / left_value;
     } else {
-        D_801E4BD0.volume = right;
-        D_801E4BD0.pan =
+        g_SndCurrentAttr.volume = right;
+        g_SndCurrentAttr.pan =
             0x7F - ((left_value * 0x40) / right_value);
     }
 
-    program_attr = &D_801E4110[program];
-    D_801E4BD0.mvol = program_attr->mvol;
-    D_801E4BD0.mpan = program_attr->mpan;
-    D_801E4BD0.tones = program_attr->tones;
+    program_attr = &g_SndCurrentProgTable[program];
+    g_SndCurrentAttr.mvol = program_attr->mvol;
+    g_SndCurrentAttr.mpan = program_attr->mpan;
+    g_SndCurrentAttr.tones = program_attr->tones;
 
     tone_attr =
-        &D_801E416C[D_801E4BD0.tone +
-                     D_801E4BD0.fake_program * 0x10];
-    D_801E4BD0.priority = tone_attr->prior;
+        &g_SndCurrentToneTable[g_SndCurrentAttr.tone +
+                     g_SndCurrentAttr.fake_program * 0x10];
+    g_SndCurrentAttr.priority = tone_attr->prior;
     vag = tone_attr->vag;
-    D_801E4BD0.vag = vag;
-    D_801E4BD0.tone_volume = tone_attr->vol;
-    D_801E4BD0.tone_pan = tone_attr->pan;
-    D_801E4BD0.center = tone_attr->center;
-    D_801E4BD0.shift = tone_attr->shift;
-    D_801E4BD0.mode = tone_attr->mode;
-    D_801E4BD0.min = tone_attr->min;
-    D_801E4BD0.max = tone_attr->max;
+    g_SndCurrentAttr.vag = vag;
+    g_SndCurrentAttr.tone_volume = tone_attr->vol;
+    g_SndCurrentAttr.tone_pan = tone_attr->pan;
+    g_SndCurrentAttr.center = tone_attr->center;
+    g_SndCurrentAttr.shift = tone_attr->shift;
+    g_SndCurrentAttr.mode = tone_attr->mode;
+    g_SndCurrentAttr.min = tone_attr->min;
+    g_SndCurrentAttr.max = tone_attr->max;
 
     if (vag == 0) {
-        D_801E40AC = 0;
+        g_SndUpdateLock = 0;
         return -1;
     }
 
     idx = (short)voice;
-    D_801E4BD0.voice = voice;
-    D_8009E0B8[idx].unke = 0x21;
-    D_8009E0B8[idx].vabId = vab_id;
-    D_8009E0B8[idx].unk10 = D_801E4BD0.fake_program;
-    D_8009E0B8[idx].prog = program;
-    D_8009E0B8[idx].unk0 = D_801E4BD0.vag;
-    tone_value = D_801E4BD0.tone;
-    D_8009E0B8[idx].note = note;
-    D_8009E0B8[idx].unk1b = 1;
-    D_8009E0B8[idx].unk2 = 0;
-    D_8009E0B8[idx].tone = tone_value;
+    g_SndCurrentAttr.voice = voice;
+    g_SndVoiceState[idx].unke = 0x21;
+    g_SndVoiceState[idx].vabId = vab_id;
+    g_SndVoiceState[idx].unk10 = g_SndCurrentAttr.fake_program;
+    g_SndVoiceState[idx].prog = program;
+    g_SndVoiceState[idx].unk0 = g_SndCurrentAttr.vag;
+    tone_value = g_SndCurrentAttr.tone;
+    g_SndVoiceState[idx].note = note;
+    g_SndVoiceState[idx].unk1b = 1;
+    g_SndVoiceState[idx].unk2 = 0;
+    g_SndVoiceState[idx].tone = tone_value;
     func_80074134();
-    if ((short)D_801E4BD0.vag == 0xFF) {
+    if ((short)g_SndCurrentAttr.vag == 0xFF) {
         SpuVmNoiseKeyOn(voice & 0xFF);
     } else {
         func_80073C50(1, func_80074A6C(note, fine));
     }
-    D_801E40AC = 0;
+    g_SndUpdateLock = 0;
     return (short)voice;
 }

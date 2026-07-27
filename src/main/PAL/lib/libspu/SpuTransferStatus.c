@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern volatile u_short *D_8009AB7C;
+extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
 
 void _spu_startDmaTransfer(long arg0, long arg1, long arg2) asm("func_80079420");
 
@@ -29,6 +29,6 @@ long SpuTransferStatus(long arg0, long arg1) {
     }
 
     _spu_startDmaTransfer(arg0, arg1, size);
-    status = D_8009AB7C[0xD7] & 0x800;
+    status = g_SpuRegBase[0xD7] & 0x800;
     return status > 0;
 }

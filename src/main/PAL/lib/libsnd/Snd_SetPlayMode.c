@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void func_80076C58(long seq_sep, u_short left, u_short right, long mode);
 
@@ -17,7 +17,7 @@ void func_800724F0(long seq, long sep, long playMode, long loopCount) {
     SeqStruct *stopState;
 
     seqOffset = seq << 16;
-    sequenceBase = (long)D_801E79CC;
+    sequenceBase = (long)g_SndSeqTable;
     sequence = (SeqStruct **)((seqOffset >> 14) + sequenceBase);
     sepIndex = sep;
     sepOffset = sepIndex * 0xAC;
@@ -73,11 +73,11 @@ void func_80072734(short seq, short sep) {
     long i;
     SeqStruct *score;
 
-    score = &D_801E79CC[seq][sep];
-    D_801E79CC[seq][sep].flags &= ~1;
-    D_801E79CC[seq][sep].flags &= ~2;
-    D_801E79CC[seq][sep].flags &= ~8;
-    D_801E79CC[seq][sep].flags |= 4;
+    score = &g_SndSeqTable[seq][sep];
+    g_SndSeqTable[seq][sep].flags &= ~1;
+    g_SndSeqTable[seq][sep].flags &= ~2;
+    g_SndSeqTable[seq][sep].flags &= ~8;
+    g_SndSeqTable[seq][sep].flags |= 4;
     func_80076ED8((sep << 8) | seq);
 
     score->delta_value = score->base_delta_value;

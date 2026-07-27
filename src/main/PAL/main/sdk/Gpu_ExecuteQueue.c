@@ -15,15 +15,15 @@ typedef struct {
     long tag;
 } LastCb;
 
-extern volatile QEntry D_801E5024[];
-extern volatile long D_800942EC;
-extern volatile long D_800942F0;
-extern long D_800942F8;
-extern volatile LastCb D_800942DC;
-extern volatile u_long *D_800942C8;
-extern volatile u_long *D_800942BC;
-extern u_char D_800941F0[];
-extern volatile long D_800941F4;
+extern volatile QEntry g_GpuQueue[] asm("D_801E5024");
+extern volatile long g_GpuQueueWriteIdx asm("D_800942EC");
+extern volatile long g_GpuQueueReadIdx asm("D_800942F0");
+extern long g_ExecQueueIntrMask asm("D_800942F8");
+extern volatile LastCb g_GpuLastCb asm("D_800942DC");
+extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
+extern volatile u_long *g_GpuGp1 asm("D_800942BC");
+extern u_char g_DrawSyncCbPending[] asm("D_800941F0");
+extern volatile long g_DrawSyncCallback asm("D_800941F4");
 
 extern long func_8006E0B0(long);
 extern void DMACallback(long, void *) asm("func_8006DF94");
@@ -33,43 +33,43 @@ extern void DMACallback(long, void *) asm("func_8006DF94");
  * Returns the number of entries still queued. */
 long Gpu_ExecuteQueue(void) asm("func_80067984");
 long Gpu_ExecuteQueue(void) {
-    if (*D_800942C8 & 0x01000000) {
+    if (*g_GpuDmaChcr & 0x01000000) {
         return 1;
     }
 
-    D_800942F8 = func_8006E0B0(0);
+    g_ExecQueueIntrMask = func_8006E0B0(0);
 
-    if (D_800942EC != D_800942F0) {
-        while ((*D_800942C8 & 0x01000000) == 0) {
-            if ((((D_800942F0 + 1) & 0x3f) == D_800942EC) &&
-                (*(volatile long *)(u_char *)&D_800941F4 == 0)) {
+    if (g_GpuQueueWriteIdx != g_GpuQueueReadIdx) {
+        while ((*g_GpuDmaChcr & 0x01000000) == 0) {
+            if ((((g_GpuQueueReadIdx + 1) & 0x3f) == g_GpuQueueWriteIdx) &&
+                (*(volatile long *)(u_char *)&g_DrawSyncCallback == 0)) {
                 DMACallback(2, 0);
             }
 
-            while ((*D_800942BC & 0x04000000) == 0) {
+            while ((*g_GpuGp1 & 0x04000000) == 0) {
                 ;
             }
 
-            D_801E5024[D_800942F0].cb(D_801E5024[D_800942F0].arg,
-                                      D_801E5024[D_800942F0].tag);
-            D_800942DC.cb = D_801E5024[D_800942F0].cb;
-            D_800942DC.arg = D_801E5024[D_800942F0].arg;
-            D_800942DC.tag = D_801E5024[D_800942F0].tag;
+            g_GpuQueue[g_GpuQueueReadIdx].cb(g_GpuQueue[g_GpuQueueReadIdx].arg,
+                                      g_GpuQueue[g_GpuQueueReadIdx].tag);
+            g_GpuLastCb.cb = g_GpuQueue[g_GpuQueueReadIdx].cb;
+            g_GpuLastCb.arg = g_GpuQueue[g_GpuQueueReadIdx].arg;
+            g_GpuLastCb.tag = g_GpuQueue[g_GpuQueueReadIdx].tag;
 
-            D_800942F0 = (D_800942F0 + 1) & 0x3f;
-            if (D_800942EC == D_800942F0) {
+            g_GpuQueueReadIdx = (g_GpuQueueReadIdx + 1) & 0x3f;
+            if (g_GpuQueueWriteIdx == g_GpuQueueReadIdx) {
                 break;
             }
         }
     }
 
-    func_8006E0B0(D_800942F8);
+    func_8006E0B0(g_ExecQueueIntrMask);
 
-    if ((D_800942EC == D_800942F0) && ((*D_800942C8 & 0x01000000) == 0) &&
-        (*(volatile long *)D_800941F0 != 0) && (D_800941F4 != 0)) {
-        *(volatile long *)D_800941F0 = 0;
-        ((void (*)(void))D_800941F4)();
+    if ((g_GpuQueueWriteIdx == g_GpuQueueReadIdx) && ((*g_GpuDmaChcr & 0x01000000) == 0) &&
+        (*(volatile long *)g_DrawSyncCbPending != 0) && (g_DrawSyncCallback != 0)) {
+        *(volatile long *)g_DrawSyncCbPending = 0;
+        ((void (*)(void))g_DrawSyncCallback)();
     }
 
-    return (D_800942EC - D_800942F0) & 0x3f;
+    return (g_GpuQueueWriteIdx - g_GpuQueueReadIdx) & 0x3f;
 }

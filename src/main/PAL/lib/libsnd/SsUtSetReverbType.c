@@ -1,8 +1,8 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-extern SpuReverbAttr D_8019C778;
-extern short D_8019C77C;
+extern SpuReverbAttr g_SndReverbAttr asm("D_8019C778");
+extern short g_SndReverbAttrMode asm("D_8019C77C");
 
 long SsUtSetReverbType(long type) asm("func_80073614");
 long SsUtSetReverbType(long type) {
@@ -22,14 +22,14 @@ long SsUtSetReverbType(long type) {
         goto fail;
     }
 
-    D_8019C778.mask = 1;
+    g_SndReverbAttr.mask = 1;
     if (negative != 0) {
         mode = (normalized | 0x100) << 16;
     } else {
         mode = normalized << 16;
     }
     mode >>= 16;
-    *(long *)&D_8019C77C = mode;
+    *(long *)&g_SndReverbAttrMode = mode;
     mode = normalized << 16;
     result = mode >> 16;
 
@@ -40,7 +40,7 @@ long SsUtSetReverbType(long type) {
             ".word 0x0C01E8B4\n"
             ".word 0x00002021");
     }
-    SpuSetReverbModeParam(&D_8019C778);
+    SpuSetReverbModeParam(&g_SndReverbAttr);
     return result;
 
 fail:
@@ -49,7 +49,7 @@ fail:
 
 long SsUtGetReverbType(void) asm("func_800736B8");
 long SsUtGetReverbType(void) {
-    return D_8019C77C;
+    return g_SndReverbAttrMode;
 }
 
 void SsUtReverbOn(void) asm("func_800736C8");
@@ -65,22 +65,22 @@ void SsUtReverbOff(void) {
 
 void SsUtSetReverbFeedback(long feedback) asm("func_80073708");
 void SsUtSetReverbFeedback(long feedback) {
-    D_8019C778.mask = 0x10;
-    D_8019C778.feedback = (short)feedback;
-    SpuSetReverbModeParam(&D_8019C778);
+    g_SndReverbAttr.mask = 0x10;
+    g_SndReverbAttr.feedback = (short)feedback;
+    SpuSetReverbModeParam(&g_SndReverbAttr);
 }
 
 void SsUtSetReverbDepth(long left, long right) asm("func_80073748");
 void SsUtSetReverbDepth(long left, long right) {
-    D_8019C778.mask = 0x6;
-    D_8019C778.depth.left = ((short)left * 0x7FFF) / 0x7F;
-    D_8019C778.depth.right = ((short)right * 0x7FFF) / 0x7F;
-    SpuSetReverbModeParam(&D_8019C778);
+    g_SndReverbAttr.mask = 0x6;
+    g_SndReverbAttr.depth.left = ((short)left * 0x7FFF) / 0x7F;
+    g_SndReverbAttr.depth.right = ((short)right * 0x7FFF) / 0x7F;
+    SpuSetReverbModeParam(&g_SndReverbAttr);
 }
 
 void SsUtSetReverbDelay(long delay) asm("func_800737E0");
 void SsUtSetReverbDelay(long delay) {
-    D_8019C778.mask = 0x8;
-    D_8019C778.delay = (short)delay;
-    SpuSetReverbModeParam(&D_8019C778);
+    g_SndReverbAttr.mask = 0x8;
+    g_SndReverbAttr.delay = (short)delay;
+    SpuSetReverbModeParam(&g_SndReverbAttr);
 }

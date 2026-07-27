@@ -1,17 +1,17 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern u_char D_80094254;
+extern u_char g_DispEnvCache asm("D_80094254");
 void MemCopy(long arg0, void *arg1, long arg2) asm("func_800681BC");
 long GetDispEnv(long arg0) asm("func_8006655C");
-long GetDispEnv(long arg0) { MemCopy(arg0, &D_80094254, 0x14); return arg0; }
+long GetDispEnv(long arg0) { MemCopy(arg0, &g_DispEnvCache, 0x14); return arg0; }
 
-extern GpuCallbacks *D_800941E0;
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 
 u_long func_80066594(void) {
     u_long ret;
 
-    ret = D_800941E0->status();
+    ret = g_GpuFuncs->status();
     return ret >> 31;
 }
 
@@ -61,8 +61,8 @@ void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4
     pkt->x1y1 = func_80066C2C(arg4);
 }
 
-extern u_short D_800941EC[];
-extern u_short D_800941EE[];
+extern u_short g_VramWidth[] asm("D_800941EC");
+extern u_short g_VramHeight[] asm("D_800941EE");
 
 typedef struct {
     Rect clip;
@@ -116,7 +116,7 @@ void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
         coord = value >> 16;
 
         if (coord >= 0) {
-            volatile u_short *width = D_800941EC;
+            volatile u_short *width = g_VramWidth;
 
             value = *width;
             value = (short)value;
@@ -133,7 +133,7 @@ void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
 
         coord = clipped.h;
         if (coord >= 0) {
-            volatile u_short *height = D_800941EE;
+            volatile u_short *height = g_VramHeight;
 
             value = *height;
             value = (short)value;

@@ -12,11 +12,11 @@ typedef struct {
     char name[32];/* +12 */
 } Entry;
 
-extern u_char D_8009D714[];
+extern u_char g_CdSectorBuf[] asm("D_8009D714");
 extern W4 D_8009D7A0;
-extern Entry D_8009C114[];
-extern long D_80099048;
-extern long D_80099348;
+extern Entry g_CdPathTable[] asm("D_8009C114");
+extern long g_CdDebugLevel asm("D_80099048");
+extern long g_CdCachedDir asm("D_80099348");
 
 extern const char D_800139B4[];
 extern const char D_800139E0[];
@@ -48,49 +48,49 @@ long CD_newmedia(void) {
     long r;
     W4 hdr;
 
-    r = func_8006CB88(1, 16, D_8009D714);
+    r = func_8006CB88(1, 16, g_CdSectorBuf);
     if (r != 1) {
-        if (D_80099048 > 0) {
+        if (g_CdDebugLevel > 0) {
             GameDebugPrintf(D_800139B4);
         }
         return 0;
     }
-    if (LibcStrncmp(&D_8009D714[1], D_800139E0, 5) != 0) {
-        if (D_80099048 > 0) {
+    if (LibcStrncmp(&g_CdSectorBuf[1], D_800139E0, 5) != 0) {
+        if (g_CdDebugLevel > 0) {
             GameDebugPrintf(D_800139E8);
         }
         return 0;
     }
     hdr = D_8009D7A0;
-    if (func_8006CB88(1, *(long *)&hdr, D_8009D714) != r) {
-        if (D_80099048 > 0) {
+    if (func_8006CB88(1, *(long *)&hdr, g_CdSectorBuf) != r) {
+        if (g_CdDebugLevel > 0) {
             GameDebugPrintf(D_80013A18, *(long *)&hdr);
         }
         return 0;
     }
-    p = D_8009D714;
-    if (D_80099048 >= 2) {
+    p = g_CdSectorBuf;
+    if (g_CdDebugLevel >= 2) {
         GameDebugPrintf(D_80013A3C);
     }
     i = 0;
-    while (p < &D_8009D714[0x800]) {
+    while (p < &g_CdSectorBuf[0x800]) {
         long n;
         long d;
         if (*p == 0) {
             break;
         }
-        *(W4 *)&D_8009C114[i].word2 = *(W4 *)(p + 2);
-        D_8009C114[i].field6 = *(u_char *)(p + 6);
-        D_8009C114[i].index = i + 1;
-        func_8006CBF4(D_8009C114[i].name, p + 8, *p);
-        D_8009C114[i].name[*p] = 0;
+        *(W4 *)&g_CdPathTable[i].word2 = *(W4 *)(p + 2);
+        g_CdPathTable[i].field6 = *(u_char *)(p + 6);
+        g_CdPathTable[i].index = i + 1;
+        func_8006CBF4(g_CdPathTable[i].name, p + 8, *p);
+        g_CdPathTable[i].name[*p] = 0;
         n = *p;
         d = (n & 1) + 8;
         p += n + d;
-        if (D_80099048 >= 2) {
-            GameDebugPrintf(D_80013A5C, D_8009C114[i].word2,
-                          D_8009C114[i].index, D_8009C114[i].field6,
-                          D_8009C114[i].name);
+        if (g_CdDebugLevel >= 2) {
+            GameDebugPrintf(D_80013A5C, g_CdPathTable[i].word2,
+                          g_CdPathTable[i].index, g_CdPathTable[i].field6,
+                          g_CdPathTable[i].name);
         }
         i++;
         if (i >= 128) {
@@ -98,10 +98,10 @@ long CD_newmedia(void) {
         }
     }
     if (i < 128) {
-        D_8009C114[i].field6 = 0;
+        g_CdPathTable[i].field6 = 0;
     }
-    D_80099348 = 0;
-    if (D_80099048 >= 2) {
+    g_CdCachedDir = 0;
+    if (g_CdDebugLevel >= 2) {
         GameDebugPrintf(D_80013A70, i);
     }
     return 1;

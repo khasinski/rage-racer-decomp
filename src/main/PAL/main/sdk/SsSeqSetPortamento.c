@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void SsSeqSetPortamento(short seq, short sep, u_char value) asm("func_8006FB7C");
 void SsSeqSetPortamento(short seq, short sep, u_char value) {
@@ -10,7 +10,7 @@ void SsSeqSetPortamento(short seq, short sep, u_char value) {
     VagAtr vagAtr;
     long tone;
 
-    state = &D_801E79CC[seq][sep];
+    state = &g_SndSeqTable[seq][sep];
     channel = state->channel;
     SsUtGetProgAtr(state->unk4c, state->programs[channel], &progAtr);
     for (tone = 0; tone < progAtr.tones; tone++) {

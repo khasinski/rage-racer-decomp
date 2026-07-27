@@ -16,23 +16,25 @@ typedef struct {
 
 typedef void (*CdCallback)(u_char status, u_char *result);
 
-extern CdCallback D_8009903C;
-extern CdCallback D_80099040;
-extern long D_80099048;
-extern u_char D_80099058[4];
-extern u_char D_8009905C;
+extern CdCallback g_CdSyncCallback asm("D_8009903C");
+extern CdCallback g_CdReadyCallback asm("D_80099040");
+extern long g_CdDebugLevel asm("D_80099048");
+extern u_char g_CdLastPos[4] asm("D_80099058");
+extern u_char g_CdModeByte asm("D_8009905C");
 extern u_char D_8009905D;
-extern char *D_80099060[];
-extern char *D_800990E0[];
-extern long D_80099180[];
-extern long D_80099280[];
-extern volatile u_char *D_80099300;
-extern volatile u_char *D_80099304;
-extern volatile u_char *D_80099308;
-extern volatile CdState D_80099318;
-extern u_char D_8009BAF0[8];
-extern u_char D_8009BAF8[8];
-extern CdAlarm D_8009BB08;
+extern char *g_CdCommandNames[] asm("D_80099060");
+extern char *g_CdIntrNames[] asm("D_800990E0");
+extern long g_CdCommandClearsReady[] asm("D_80099180");
+extern long g_CdCommandParamCount[] asm("D_80099280");
+/* CD-ROM controller ports 0x1F801800..03, from the data segment. Port 0 is
+ * the index/status register; 1..3 are bank-switched by the index it holds. */
+extern volatile u_char *g_CdReg0 asm("D_80099300");
+extern volatile u_char *g_CdReg1 asm("D_80099304");
+extern volatile u_char *g_CdReg2 asm("D_80099308");
+extern volatile CdState g_CdSyncStatus asm("D_80099318");
+extern u_char g_CdSyncResult[8] asm("D_8009BAF0");
+extern u_char g_CdReadyResult[8] asm("D_8009BAF8");
+extern CdAlarm g_CdTimeoutDeadline asm("D_8009BB08");
 extern char D_80013814[];
 extern char D_80013824[];
 extern char D_800138B0[];
@@ -47,17 +49,17 @@ long VSync(long mode) asm("func_8006DD30");
 long func_8006E088(void);
 
 static inline void setAlarm(char *name) {
-    D_8009BB08.deadline = VSync(-1) + 0x3C0;
-    D_8009BB08.count = 0;
-    D_8009BB08.name = name;
+    g_CdTimeoutDeadline.deadline = VSync(-1) + 0x3C0;
+    g_CdTimeoutDeadline.count = 0;
+    g_CdTimeoutDeadline.name = name;
 }
 
 static inline long getAlarm(void) {
-    if (D_8009BB08.deadline < VSync(-1) ||
-        D_8009BB08.count++ > 0x3C0000) {
+    if (g_CdTimeoutDeadline.deadline < VSync(-1) ||
+        g_CdTimeoutDeadline.count++ > 0x3C0000) {
         func_80063C38(D_80013814);
-        GameDebugPrintf(D_80013824, D_8009BB08.name, D_80099060[D_8009905D],
-                      D_800990E0[D_80099318.sync], D_800990E0[D_80099318.ready]);
+        GameDebugPrintf(D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[D_8009905D],
+                      g_CdIntrNames[g_CdSyncStatus.sync], g_CdIntrNames[g_CdSyncStatus.ready]);
         func_8006BAF0();
         return -1;
     }
@@ -73,13 +75,13 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
     u_char *destination;
     u_char *source;
 
-    if (D_80099048 >= 2) {
-        GameDebugPrintf(D_800138B0, D_80099060[command]);
+    if (g_CdDebugLevel >= 2) {
+        GameDebugPrintf(D_800138B0, g_CdCommandNames[command]);
     }
 
-    if (D_80099280[command] != 0 && params == 0) {
-        if (D_80099048 > 0) {
-            GameDebugPrintf(D_800138B8, D_80099060[command]);
+    if (g_CdCommandParamCount[command] != 0 && params == 0) {
+        if (g_CdDebugLevel > 0) {
+            GameDebugPrintf(D_800138B8, g_CdCommandNames[command]);
         }
         return -2;
     }
@@ -88,22 +90,22 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
 
     if (command == 2) {
         for (i = 0; i < 4; i++) {
-            D_80099058[i] = params[i];
+            g_CdLastPos[i] = params[i];
         }
     }
 
-    D_80099318.sync = 0;
-    if (D_80099180[command] != 0) {
-        D_80099318.ready = 0;
+    g_CdSyncStatus.sync = 0;
+    if (g_CdCommandClearsReady[command] != 0) {
+        g_CdSyncStatus.ready = 0;
     }
-    *D_80099300 = 0;
+    *g_CdReg0 = 0;
 
-    for (i = 0; i < D_80099180[0x40 + command]; i++) {
-        *D_80099308 = params[i];
+    for (i = 0; i < g_CdCommandClearsReady[0x40 + command]; i++) {
+        *g_CdReg2 = params[i];
     }
 
     D_8009905D = command;
-    *D_80099304 = command;
+    *g_CdReg1 = command;
 
     if (async != 0) {
         return 0;
@@ -111,31 +113,31 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
 
     setAlarm(D_800138C8);
 
-    while (D_80099318.sync == 0) {
+    while (g_CdSyncStatus.sync == 0) {
         if (getAlarm() != 0) {
             return -1;
         }
 
         if (func_8006E088() != 0) {
-            interruptState = *D_80099300 & 3;
+            interruptState = *g_CdReg0 & 3;
             while ((interrupt = func_8006AB5C()) != 0) {
-                if ((interrupt & 4) != 0 && D_80099040 != 0) {
-                    D_80099040(D_80099318.ready, D_8009BAF8);
+                if ((interrupt & 4) != 0 && g_CdReadyCallback != 0) {
+                    g_CdReadyCallback(g_CdSyncStatus.ready, g_CdReadyResult);
                 }
-                if ((interrupt & 2) != 0 && D_8009903C != 0) {
-                    D_8009903C(D_80099318.sync, D_8009BAF0);
+                if ((interrupt & 2) != 0 && g_CdSyncCallback != 0) {
+                    g_CdSyncCallback(g_CdSyncStatus.sync, g_CdSyncResult);
                 }
             }
-            *D_80099300 = interruptState;
+            *g_CdReg0 = interruptState;
         }
     }
 
     destination = result;
-    if (D_80099318.sync == 2 && command == 0xE) {
-        D_8009905C = *params;
+    if (g_CdSyncStatus.sync == 2 && command == 0xE) {
+        g_CdModeByte = *params;
     }
 
-    source = D_8009BAF0;
+    source = g_CdSyncResult;
     if (destination != 0) {
         remaining = 7;
         do {
@@ -144,5 +146,5 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
         } while (remaining != -1);
     }
 
-    return -(D_80099318.sync == 5);
+    return -(g_CdSyncStatus.sync == 5);
 }

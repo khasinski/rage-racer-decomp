@@ -96,6 +96,11 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPitchedSoundCue", func_
 extern s32 g_ActiveSpecialCue asm("D_80082F44");
 extern s32 g_SpecialCueVoiceA asm("D_801E4D90");
 extern s32 g_SpecialCueVoiceB asm("D_801E4D94");
+/* Struct view of the same two objects audio.h names g_EffectVolumeScale
+ * (D_801E6CA4) and g_VabIds (D_801E6CA8) -- not a third global. Spelling the
+ * three reads below as those two scalars instead compiles but does not match:
+ * gcc 2.6.3 treats a struct member reference as non-aliasing (MEM_IN_STRUCT_P)
+ * and reorders the surrounding volume arithmetic. */
 extern SoundScale g_SoundScale asm("D_801E6CA4");
 extern s32 D_80011C84;
 extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");

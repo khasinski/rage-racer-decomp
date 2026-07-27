@@ -1,18 +1,18 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long D_8009A720;
-extern SpuRevAttrState D_8009A728;
-extern long D_8009A768;
-extern long D_8009A770[];
-extern SpuRxx *D_8009AB7C;
-extern long D_8009AB94;
-extern long D_8009ABA0;
-extern volatile long D_8009ABB0;
-extern long D_8009ABE0[];
-extern SpuReverbRegAttr D_8009AC30[];
+extern long g_SpuRevWorkAreaAddr asm("D_8009A720");
+extern SpuRevAttrState g_SpuRevAttr asm("D_8009A728");
+extern long g_SpuTransferEvent asm("D_8009A768");
+extern long g_SpuZeroBuf[] asm("D_8009A770");
+extern SpuRxx *g_SpuRegBase asm("D_8009AB7C");
+extern long g_SpuTransferByIo asm("D_8009AB94");
+extern long _spu_mem_mode_unitM asm("D_8009ABA0");
+extern volatile long g_SpuTransferCallback asm("D_8009ABB0");
+extern long g_SpuRevWorkAreaStartAddr[] asm("D_8009ABE0");
+extern SpuReverbRegAttr g_SpuRevAttrTable[] asm("D_8009AC30");
 
-#define D_8009AB7C_HALF ((volatile u_short *)D_8009AB7C)
+#define SPU_REG16 ((volatile u_short *)g_SpuRegBase)
 
 static inline void copy_reverb_attr(SpuReverbRegAttr *dst, SpuReverbRegAttr *src) {
     u_char *d = (u_char *)dst;
@@ -56,40 +56,40 @@ long SpuSetReverbModeParam(SpuReverbAttr *attr) {
             mode &= ~0x100;
             clear_wa = 1;
         }
-        if ((mode >= 0xA) || (_SpuIsInAllocateArea_(D_8009ABE0[mode]) != 0)) {
+        if ((mode >= 0xA) || (_SpuIsInAllocateArea_(g_SpuRevWorkAreaStartAddr[mode]) != 0)) {
             return -1;
         }
         mode_changed = 1;
-        D_8009A728.mode = mode;
-        D_8009A720 = D_8009ABE0[D_8009A728.mode];
-        copy_reverb_attr(&entry, &D_8009AC30[D_8009A728.mode]);
+        g_SpuRevAttr.mode = mode;
+        g_SpuRevWorkAreaAddr = g_SpuRevWorkAreaStartAddr[g_SpuRevAttr.mode];
+        copy_reverb_attr(&entry, &g_SpuRevAttrTable[g_SpuRevAttr.mode]);
 
-        switch (D_8009A728.mode) {
+        switch (g_SpuRevAttr.mode) {
         case 7:
-            D_8009A728.feedback = 0x7F;
-            D_8009A728.delay = 0x7F;
+            g_SpuRevAttr.feedback = 0x7F;
+            g_SpuRevAttr.delay = 0x7F;
             break;
         case 8:
-            D_8009A728.feedback = 0;
-            D_8009A728.delay = 0x7F;
+            g_SpuRevAttr.feedback = 0;
+            g_SpuRevAttr.delay = 0x7F;
             break;
         default:
-            D_8009A728.feedback = 0;
-            D_8009A728.delay = 0;
+            g_SpuRevAttr.feedback = 0;
+            g_SpuRevAttr.delay = 0;
             break;
         }
     }
 
     if (set_all || (mask & 0x8)) {
-        if (D_8009A728.mode < 9) {
-            if (D_8009A728.mode >= 7) {
+        if (g_SpuRevAttr.mode < 9) {
+            if (g_SpuRevAttr.mode >= 7) {
                 delay_changed = 1;
                 if (!mode_changed) {
-                    copy_reverb_attr(&entry, &D_8009AC30[D_8009A728.mode]);
+                    copy_reverb_attr(&entry, &g_SpuRevAttrTable[g_SpuRevAttr.mode]);
                     entry.flags = 0x0C011C00;
                 }
                 delay = attr->delay;
-                D_8009A728.delay = delay;
+                g_SpuRevAttr.delay = delay;
                 entry.mLSAME = ((delay << 13) / 0x7F) - entry.dAPF1;
                 entry.mRSAME = ((delay << 12) / 0x7F) - entry.dAPF2;
                 entry.mLCOMB1 = ((delay << 12) / 0x7F) + entry.mRCOMB1;
@@ -97,72 +97,72 @@ long SpuSetReverbModeParam(SpuReverbAttr *attr) {
                 entry.mLAPF1 = ((delay << 12) / 0x7F) + entry.mLAPF2;
                 entry.mRAPF1 = ((delay << 12) / 0x7F) + entry.mRAPF2;
             } else {
-                D_8009A728.delay = 0;
+                g_SpuRevAttr.delay = 0;
             }
         } else {
-            D_8009A728.delay = 0;
+            g_SpuRevAttr.delay = 0;
         }
     }
 
     if (set_all || (mask & 0x10)) {
-        if (D_8009A728.mode < 9) {
-            if (D_8009A728.mode >= 7) {
+        if (g_SpuRevAttr.mode < 9) {
+            if (g_SpuRevAttr.mode >= 7) {
                 feedback_changed = 1;
                 if (!mode_changed) {
                     if (!delay_changed) {
-                        copy_reverb_attr(&entry, &D_8009AC30[D_8009A728.mode]);
+                        copy_reverb_attr(&entry, &g_SpuRevAttrTable[g_SpuRevAttr.mode]);
                         entry.flags = 0x80;
                     } else {
                         entry.flags |= 0x80;
                     }
                 }
-                D_8009A728.feedback = attr->feedback;
-                entry.vWALL = (D_8009A728.feedback * 0x8100) / 0x7F;
+                g_SpuRevAttr.feedback = attr->feedback;
+                entry.vWALL = (g_SpuRevAttr.feedback * 0x8100) / 0x7F;
             } else {
-                D_8009A728.feedback = 0;
+                g_SpuRevAttr.feedback = 0;
             }
         } else {
-            D_8009A728.feedback = 0;
+            g_SpuRevAttr.feedback = 0;
         }
     }
 
     if (mode_changed) {
-        reenable = (D_8009AB7C->spucnt >> 7) & 1;
+        reenable = (g_SpuRegBase->spucnt >> 7) & 1;
         if (reenable) {
-            cnt = D_8009AB7C->spucnt;
+            cnt = g_SpuRegBase->spucnt;
             cnt &= ~0x80;
-            D_8009AB7C->spucnt = cnt;
+            g_SpuRegBase->spucnt = cnt;
         }
     }
 
     if (!mode_changed) {
         if (set_all || (mask & 0x2)) {
-            D_8009AB7C->rev_vol_left = attr->depth.left;
-            D_8009A728.depth_left = attr->depth.left;
+            g_SpuRegBase->rev_vol_left = attr->depth.left;
+            g_SpuRevAttr.depth_left = attr->depth.left;
         }
         if (set_all || (mask & 0x4)) {
-            D_8009AB7C->rev_vol_right = attr->depth.right;
-            D_8009A728.depth_right = attr->depth.right;
+            g_SpuRegBase->rev_vol_right = attr->depth.right;
+            g_SpuRevAttr.depth_right = attr->depth.right;
         }
     } else {
-        D_8009AB7C->rev_vol_left = 0;
-        D_8009AB7C->rev_vol_right = 0;
-        D_8009A728.depth_left = 0;
-        D_8009A728.depth_right = 0;
+        g_SpuRegBase->rev_vol_left = 0;
+        g_SpuRegBase->rev_vol_right = 0;
+        g_SpuRevAttr.depth_left = 0;
+        g_SpuRevAttr.depth_right = 0;
     }
 
     if (mode_changed || delay_changed || feedback_changed) {
         _spu_setReverbAttr(&entry);
     }
     if (clear_wa) {
-        SpuClearReverbWorkArea(D_8009A728.mode);
+        SpuClearReverbWorkArea(g_SpuRevAttr.mode);
     }
     if (mode_changed) {
-        _spu_FsetRXX(0xD1, D_8009A720, 0);
+        _spu_FsetRXX(0xD1, g_SpuRevWorkAreaAddr, 0);
         if (reenable) {
-            cnt = D_8009AB7C->spucnt;
+            cnt = g_SpuRegBase->spucnt;
             cnt |= 0x80;
-            D_8009AB7C->spucnt = cnt;
+            g_SpuRegBase->spucnt = cnt;
         }
     }
     return 0;
@@ -173,100 +173,100 @@ void _spu_setReverbAttr(SpuReverbRegAttr *attr) {
     long set_all = attr->flags == 0;
 
     if (set_all || (mask & 0x1)) {
-        D_8009AB7C_HALF[0xE0] = attr->dAPF1;
+        SPU_REG16[0xE0] = attr->dAPF1;
     }
     if (set_all || (mask & 0x2)) {
-        D_8009AB7C_HALF[0xE1] = attr->dAPF2;
+        SPU_REG16[0xE1] = attr->dAPF2;
     }
     if (set_all || (mask & 0x4)) {
-        D_8009AB7C_HALF[0xE2] = attr->vIIR;
+        SPU_REG16[0xE2] = attr->vIIR;
     }
     if (set_all || (mask & 0x8)) {
-        D_8009AB7C_HALF[0xE3] = attr->vCOMB1;
+        SPU_REG16[0xE3] = attr->vCOMB1;
     }
     if (set_all || (mask & 0x10)) {
-        D_8009AB7C_HALF[0xE4] = attr->vCOMB2;
+        SPU_REG16[0xE4] = attr->vCOMB2;
     }
     if (set_all || (mask & 0x20)) {
-        D_8009AB7C_HALF[0xE5] = attr->vCOMB3;
+        SPU_REG16[0xE5] = attr->vCOMB3;
     }
     if (set_all || (mask & 0x40)) {
-        D_8009AB7C_HALF[0xE6] = attr->vCOMB4;
+        SPU_REG16[0xE6] = attr->vCOMB4;
     }
     if (set_all || (mask & 0x80)) {
-        D_8009AB7C_HALF[0xE7] = attr->vWALL;
+        SPU_REG16[0xE7] = attr->vWALL;
     }
     if (set_all || (mask & 0x100)) {
-        D_8009AB7C_HALF[0xE8] = attr->vAPF1;
+        SPU_REG16[0xE8] = attr->vAPF1;
     }
     if (set_all || (mask & 0x200)) {
-        D_8009AB7C_HALF[0xE9] = attr->vAPF2;
+        SPU_REG16[0xE9] = attr->vAPF2;
     }
     if (set_all || (mask & 0x400)) {
-        D_8009AB7C_HALF[0xEA] = attr->mLSAME;
+        SPU_REG16[0xEA] = attr->mLSAME;
     }
     if (set_all || (mask & 0x800)) {
-        D_8009AB7C_HALF[0xEB] = attr->mRSAME;
+        SPU_REG16[0xEB] = attr->mRSAME;
     }
     if (set_all || (mask & 0x1000)) {
-        D_8009AB7C_HALF[0xEC] = attr->mLCOMB1;
+        SPU_REG16[0xEC] = attr->mLCOMB1;
     }
     if (set_all || (mask & 0x2000)) {
-        D_8009AB7C_HALF[0xED] = attr->mRCOMB1;
+        SPU_REG16[0xED] = attr->mRCOMB1;
     }
     if (set_all || (mask & 0x4000)) {
-        D_8009AB7C_HALF[0xEE] = attr->mLCOMB2;
+        SPU_REG16[0xEE] = attr->mLCOMB2;
     }
     if (set_all || (mask & 0x8000)) {
-        D_8009AB7C_HALF[0xEF] = attr->mRCOMB2;
+        SPU_REG16[0xEF] = attr->mRCOMB2;
     }
     if (set_all || (mask & 0x10000)) {
-        D_8009AB7C_HALF[0xF0] = attr->dLSAME;
+        SPU_REG16[0xF0] = attr->dLSAME;
     }
     if (set_all || (mask & 0x20000)) {
-        D_8009AB7C_HALF[0xF1] = attr->dRSAME;
+        SPU_REG16[0xF1] = attr->dRSAME;
     }
     if (set_all || (mask & 0x40000)) {
-        D_8009AB7C_HALF[0xF2] = attr->mLDIFF;
+        SPU_REG16[0xF2] = attr->mLDIFF;
     }
     if (set_all || (mask & 0x80000)) {
-        D_8009AB7C_HALF[0xF3] = attr->mRDIFF;
+        SPU_REG16[0xF3] = attr->mRDIFF;
     }
     if (set_all || (mask & 0x100000)) {
-        D_8009AB7C_HALF[0xF4] = attr->mLCOMB3;
+        SPU_REG16[0xF4] = attr->mLCOMB3;
     }
     if (set_all || (mask & 0x200000)) {
-        D_8009AB7C_HALF[0xF5] = attr->mRCOMB3;
+        SPU_REG16[0xF5] = attr->mRCOMB3;
     }
     if (set_all || (mask & 0x400000)) {
-        D_8009AB7C_HALF[0xF6] = attr->mLCOMB4;
+        SPU_REG16[0xF6] = attr->mLCOMB4;
     }
     if (set_all || (mask & 0x800000)) {
-        D_8009AB7C_HALF[0xF7] = attr->mRCOMB4;
+        SPU_REG16[0xF7] = attr->mRCOMB4;
     }
     if (set_all || (mask & 0x1000000)) {
-        D_8009AB7C_HALF[0xF8] = attr->dLDIFF;
+        SPU_REG16[0xF8] = attr->dLDIFF;
     }
     if (set_all || (mask & 0x2000000)) {
-        D_8009AB7C_HALF[0xF9] = attr->dRDIFF;
+        SPU_REG16[0xF9] = attr->dRDIFF;
     }
     if (set_all || (mask & 0x4000000)) {
-        D_8009AB7C_HALF[0xFA] = attr->mLAPF1;
+        SPU_REG16[0xFA] = attr->mLAPF1;
     }
     if (set_all || (mask & 0x8000000)) {
-        D_8009AB7C_HALF[0xFB] = attr->mRAPF1;
+        SPU_REG16[0xFB] = attr->mRAPF1;
     }
     if (set_all || (mask & 0x10000000)) {
-        D_8009AB7C_HALF[0xFC] = attr->mLAPF2;
+        SPU_REG16[0xFC] = attr->mLAPF2;
     }
     if (set_all || (mask & 0x20000000)) {
-        D_8009AB7C_HALF[0xFD] = attr->mRAPF2;
+        SPU_REG16[0xFD] = attr->mRAPF2;
     }
     if (set_all || (mask & 0x40000000)) {
-        D_8009AB7C_HALF[0xFE] = attr->vLIN;
+        SPU_REG16[0xFE] = attr->vLIN;
     }
     if (set_all || (mask & 0x80000000)) {
-        D_8009AB7C_HALF[0xFF] = attr->vRIN;
+        SPU_REG16[0xFF] = attr->vRIN;
     }
 }
 
@@ -281,28 +281,28 @@ long SpuClearReverbWorkArea(u_long mode) {
 
     callback = 0;
     restored_transmode = 0;
-    if ((mode >= 0xA) || (_SpuIsInAllocateArea_(D_8009ABE0[mode]) != 0)) {
+    if ((mode >= 0xA) || (_SpuIsInAllocateArea_(g_SpuRevWorkAreaStartAddr[mode]) != 0)) {
         return -1;
     }
 
     if (mode == 0) {
-        size = 0x10 << D_8009ABA0;
-        addr = 0xFFF0 << D_8009ABA0;
+        size = 0x10 << _spu_mem_mode_unitM;
+        addr = 0xFFF0 << _spu_mem_mode_unitM;
     } else {
-        size = (0x10000 - D_8009ABE0[mode]) << D_8009ABA0;
-        addr = D_8009ABE0[mode] << D_8009ABA0;
+        size = (0x10000 - g_SpuRevWorkAreaStartAddr[mode]) << _spu_mem_mode_unitM;
+        addr = g_SpuRevWorkAreaStartAddr[mode] << _spu_mem_mode_unitM;
     }
 
-    old_transmode = D_8009AB94;
-    if (D_8009AB94 == 1) {
-        D_8009AB94 = 0;
+    old_transmode = g_SpuTransferByIo;
+    if (g_SpuTransferByIo == 1) {
+        g_SpuTransferByIo = 0;
         restored_transmode = 1;
     }
 
     chunk_active = 1;
-    if (D_8009ABB0 != 0) {
-        callback = D_8009ABB0;
-        D_8009ABB0 = 0;
+    if (g_SpuTransferCallback != 0) {
+        callback = g_SpuTransferCallback;
+        g_SpuTransferCallback = 0;
     }
 
     do {
@@ -315,17 +315,17 @@ long SpuClearReverbWorkArea(u_long mode) {
 
         _spu_t(2, addr);
         _spu_t(1);
-        _spu_t(3, D_8009A770, chunk_size);
-        WaitEvent(D_8009A768);
+        _spu_t(3, g_SpuZeroBuf, chunk_size);
+        WaitEvent(g_SpuTransferEvent);
         size -= 0x400;
         addr += 0x400;
     } while (chunk_active != 0);
 
     if (restored_transmode != 0) {
-        D_8009AB94 = old_transmode;
+        g_SpuTransferByIo = old_transmode;
     }
     if (callback != 0) {
-        D_8009ABB0 = callback;
+        g_SpuTransferCallback = callback;
     }
     return 0;
 }

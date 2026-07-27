@@ -2,15 +2,15 @@
 
 #include "common.h"
 
-extern volatile long D_801E40AC;
-extern volatile u_short D_801E4BEA;
+extern volatile long g_SndUpdateLock asm("D_801E40AC");
+extern volatile u_short g_SndCurrentVoice asm("D_801E4BEA");
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
-extern u_char D_8009E0D3[];
-extern u_char D_8009E0BC[];
-extern u_char D_8009E0B8[];
+extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
+extern u_char g_SndVoiceStatePitch[] asm("D_8009E0BC");
+extern u_char g_SndVoiceState[] asm("D_8009E0B8");
 
 long SsUtKeyOffV(long voice) asm("func_80078018");
 
@@ -25,16 +25,16 @@ long SsUtKeyOffV(long arg0) {
     register u_long maskLow asm("$3");
     register u_long maskHigh asm("$3");
 
-    if (D_801E40AC != one) {
+    if (g_SndUpdateLock != one) {
         value = arg0 & 0xFFFF;
         asm volatile("" : "=r"(value) : "0"(value));
-        D_801E40AC = one;
+        g_SndUpdateLock = one;
         if (value < 0x18) {
             register u_long channel asm("$4");
             register u_long masked asm("$3");
 
-            D_801E4BEA = arg0;
-            channel = D_801E4BEA;
+            g_SndCurrentVoice = arg0;
+            channel = g_SndCurrentVoice;
             asm volatile("" : "=r"(channel) : "0"(channel));
             masked = channel & 0xFFFF;
             asm volatile("" : "=r"(masked) : "0"(masked));
@@ -52,15 +52,15 @@ long SsUtKeyOffV(long arg0) {
 
             channel &= 0xFFFF;
             offset = ((((channel * 3) * 4) + channel) * 4);
-            D_8009E0D3[offset] = 0;
+            g_SndVoiceStateStatus[offset] = 0;
             activeLow = D_801F2A08;
             activeHigh = D_801F2A0C;
-            *(u_short *)&D_8009E0BC[offset] = 0;
-            *(u_short *)&D_8009E0B8[offset] = 0;
+            *(u_short *)&g_SndVoiceStatePitch[offset] = 0;
+            *(u_short *)&g_SndVoiceState[offset] = 0;
 
             maskLow = D_8009E670;
             asm volatile("" : "=r"(maskLow) : "0"(maskLow));
-            D_801E40AC = 0;
+            g_SndUpdateLock = 0;
             asm volatile("" ::: "memory");
             activeLow = lowBits | activeLow;
             D_801F2A08 = activeLow;
@@ -74,7 +74,7 @@ long SsUtKeyOffV(long arg0) {
             asm volatile("" ::: "memory");
             return 0;
         }
-        D_801E40AC = 0;
+        g_SndUpdateLock = 0;
     }
     return -1;
 }

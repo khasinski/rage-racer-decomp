@@ -2,12 +2,12 @@
 
 #include "common.h"
 
-extern u_short D_8009A528[];
-extern u_short D_8009A538[];
-extern long D_801E6C6C;
-extern long D_801E4B80;
-extern long D_801E40AC;
-extern long D_801E7A58[][0x10];
+extern u_short g_SndVoiceRegDefaults[] asm("D_8009A528");
+extern u_short g_SndSpuCtrlDefaults[] asm("D_8009A538");
+extern long g_SndTickResolution asm("D_801E6C6C");
+extern long g_SndSeqOpenMask asm("D_801E4B80");
+extern long g_SndUpdateLock asm("D_801E40AC");
+extern long g_SndMarkCallbacks[][0x10] asm("D_801E7A58");
 
 void SpuVmInit(long arg0) asm("func_80075710");
 
@@ -23,7 +23,7 @@ void _SsInitTables(void) {
 
         dst = (u_short *)0x1F801C00;
         i = 0;
-        table = D_8009A528;
+        table = g_SndVoiceRegDefaults;
         for (i = 0; i < 0x18; i++) {
             j = 0;
             src = table;
@@ -40,7 +40,7 @@ void _SsInitTables(void) {
 
         dst = (u_short *)0x1F801D80;
         i = 0;
-        src = D_8009A538;
+        src = g_SndSpuCtrlDefaults;
         for (i = 0; i < 0x10; i++) {
             *dst++ = *src++;
         }
@@ -55,7 +55,7 @@ void _SsInitTables(void) {
         register long *clear asm("$2");
 
         i = 0;
-        row = (long *)D_801E7A58;
+        row = (long *)g_SndMarkCallbacks;
         for (i = 0; i < 0x20; i++) {
             j = 0xF;
             clear = row + 0xF;
@@ -66,7 +66,7 @@ void _SsInitTables(void) {
         }
     }
 
-    D_801E6C6C = 0x3C;
-    D_801E4B80 = 0;
-    D_801E40AC = 0;
+    g_SndTickResolution = 0x3C;
+    g_SndSeqOpenMask = 0;
+    g_SndUpdateLock = 0;
 }

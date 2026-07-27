@@ -1,10 +1,9 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern u_char g_GraphType asm("D_800941E8");
-extern u_char g_GraphTypeArray[] asm("D_800941E8");
-extern u_short D_800941EC[];
-extern u_short D_800941EE[];
+extern u_char g_GraphType[] asm("D_800941E8");
+extern u_short g_VramWidth[] asm("D_800941EC");
+extern u_short g_VramHeight[] asm("D_800941EE");
 
 u_long _get_mode(long arg0, long arg1, u_long arg2) asm("func_800669F0");
 u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) asm("func_80066A4C");
@@ -13,7 +12,7 @@ u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) asm("func_80066BE4");
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
 
 u_long _get_mode(long arg0, long arg1, u_long arg2) {
-    register volatile u_char *modep asm("$2") = &g_GraphType;
+    register volatile u_char *modep asm("$2") = g_GraphType;
     register u_long value asm("$2");
     register u_long cmd asm("$3");
 
@@ -55,7 +54,7 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
     if (x < 0) {
         value = 0;
     } else {
-        register volatile u_short *widthp asm("$2") = D_800941EC;
+        register volatile u_short *widthp asm("$2") = g_VramWidth;
         register long maxX asm("$6");
 
         value = *widthp;
@@ -73,7 +72,7 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
     y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
-        register volatile u_short *heightp asm("$2") = D_800941EE;
+        register volatile u_short *heightp asm("$2") = g_VramHeight;
         register long maxY asm("$5");
 
         value = *heightp;
@@ -87,7 +86,7 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
     }
 
     {
-        register volatile u_char *modep asm("$2") = g_GraphTypeArray;
+        register volatile u_char *modep asm("$2") = g_GraphType;
 
         value = *modep;
     }
@@ -119,7 +118,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
     if (x < 0) {
         value = 0;
     } else {
-        register volatile u_short *widthp asm("$2") = D_800941EC;
+        register volatile u_short *widthp asm("$2") = g_VramWidth;
         register long maxX asm("$6");
 
         value = *widthp;
@@ -137,7 +136,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
     y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
-        register volatile u_short *heightp asm("$2") = D_800941EE;
+        register volatile u_short *heightp asm("$2") = g_VramHeight;
         register long maxY asm("$5");
 
         value = *heightp;
@@ -151,7 +150,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
     }
 
     {
-        register volatile u_char *modep asm("$2") = g_GraphTypeArray;
+        register volatile u_char *modep asm("$2") = g_GraphType;
 
         value = *modep;
     }
@@ -175,7 +174,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
 u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) {
     register u_long x asm("$2");
     register u_long y asm("$3");
-    register volatile u_char *modep asm("$2") = g_GraphTypeArray;
+    register volatile u_char *modep asm("$2") = g_GraphType;
 
     x = *modep;
     x = x - 1;
@@ -215,7 +214,7 @@ extern u_char g_GraphReverse asm("D_800941EB");
 u_long get_dx(DispEnv *env) asm("func_80066CB0");
 
 u_long get_dx(DispEnv *env) {
-    register volatile u_char *modep asm("$2") = &g_GraphType;
+    register volatile u_char *modep asm("$2") = g_GraphType;
     register long value asm("$2");
     register long mode asm("$3");
 
@@ -234,17 +233,17 @@ u_long get_dx(DispEnv *env) {
     }
 }
 
-extern u_long *D_800942BC;
+extern u_long *g_GpuGp1 asm("D_800942BC");
 
 u_long _status(void) asm("func_80066D6C");
 u_long _status(void) {
-    return *D_800942BC;
+    return *g_GpuGp1;
 }
 
-extern volatile u_long *D_800942CC;
-extern volatile u_long *D_800942D0;
-extern volatile u_long *D_800942D4;
-extern volatile u_long *D_800942D8;
+extern volatile u_long *g_OtcDmaMadr asm("D_800942CC");
+extern volatile u_long *g_OtcDmaBcr asm("D_800942D0");
+extern volatile u_long *g_OtcDmaChcr asm("D_800942D4");
+extern volatile u_long *g_GpuDpcr asm("D_800942D8");
 
 void Gpu_ArmTimeout(void) asm("func_80067F04");
 long Gpu_CheckTimeout(void) asm("func_80067F38");
@@ -260,17 +259,17 @@ long Gpu_ClearOTagDma(u_long *arg0, long arg1) {
     long offset;
 
     size = arg1;
-    status = D_800942D8;
+    status = g_GpuDpcr;
     *status |= 0x08000000;
-    *D_800942D4 = 0;
+    *g_OtcDmaChcr = 0;
     offset = (size << 2) - 4;
     arg0 = (u_long *)((u_char *)arg0 + offset);
-    *D_800942CC = (u_long)arg0;
-    *D_800942D0 = size;
-    *D_800942D4 = 0x11000002;
+    *g_OtcDmaMadr = (u_long)arg0;
+    *g_OtcDmaBcr = size;
+    *g_OtcDmaChcr = 0x11000002;
     Gpu_ArmTimeout();
 
-    if ((*D_800942D4 & 0x01000000) != 0) {
+    if ((*g_OtcDmaChcr & 0x01000000) != 0) {
         mask = 0x01000000;
         while (1) {
             u_long statusValue;
@@ -278,7 +277,7 @@ long Gpu_ClearOTagDma(u_long *arg0, long arg1) {
             if (Gpu_CheckTimeout() != 0) {
                 return -1;
             }
-            statusValue = *D_800942D4;
+            statusValue = *g_OtcDmaChcr;
             statusValue &= mask;
             if (statusValue == 0) {
                 break;

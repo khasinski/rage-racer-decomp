@@ -4,10 +4,16 @@
 #include "common.h"
 
 /*
- * Sound voice work buffer at 0x8009DF20. Two regions keyed by hardware voice
- * (0..23): a voice*0x10 block at the base (note at +0, fine detune at +2) and a
- * voice*0x34 block starting at 0x8009E0B8 (pitch +0xC, level +0x10, program
- * +0x14, ...). g_SndVoiceFlags is the parallel per-voice status byte array.
+ * Sound voice work buffer, two regions keyed by hardware voice (0..23).
+ * g_SndVoiceRegs at 0x8009DF20, stride 0x10, is a straight shadow of the SPU
+ * voice registers: SsUtFlush copies +0/+2/+4/+6/+8/+0xA into volL, volR, pitch,
+ * start address and the two ADSR words, each gated by a bit of
+ * g_SndVoiceFlags (1/4/8/0x10). g_SndVoiceState at 0x8009E0B8, stride 0x34, is
+ * libsnd's own record: +0xC note, +0x10 actual program, +0x14 tone.
+ * (This block previously described +0 as a note and +2 as fine detune, and gave
+ * the 0x34 record's fields as pitch/level/program; both were wrong, taken from
+ * the mislabelled SpuVmKeyOnCore prototype whose 2nd/3rd arguments are really
+ * the left and right volumes.)
  */
 extern volatile u8 g_SndVoiceFlags[] asm("D_8009E0A0");
 

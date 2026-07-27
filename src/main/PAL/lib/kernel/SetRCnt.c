@@ -1,8 +1,11 @@
 #include "psyq/kernel.h"
 
-extern volatile u_short *D_8009A574;
-extern volatile u_long *D_8009A570;
-extern u_long D_8009A578[];
+/* Root counters: g_RootCounterRegs is 0x1F801100, three 16-byte banks of
+ * {count, mode, target}; g_IrqRegs is the I_STAT/I_MASK pair at 0x1F801070,
+ * indexed [1] for the mask; g_RootCounterIrqBits is each counter's mask bit. */
+extern volatile u_short *g_RootCounterRegs asm("D_8009A574");
+extern volatile u_long *g_IrqRegs asm("D_8009A570");
+extern u_long g_RootCounterIrqBits[] asm("D_8009A578");
 
 long SetRCnt(long arg0, long arg1, long arg2) {
     register long index asm("$8") = arg0 & 0xFFFF;
@@ -18,7 +21,7 @@ long SetRCnt(long arg0, long arg1, long arg2) {
         return 0;
     }
 
-    base_v0 = (long)D_8009A574;
+    base_v0 = (long)g_RootCounterRegs;
     offset = index << 4;
     entry = (volatile u_short *)(offset + base_v0);
     small = (u_long)index < 2U;
@@ -45,7 +48,7 @@ long SetRCnt(long arg0, long arg1, long arg2) {
 
     ret = 1;
     asm("" : "=r"(ret) : "0"(ret));
-    base = (long)D_8009A574;
+    base = (long)g_RootCounterRegs;
     entry = (volatile u_short *)(offset + base);
     entry[2] = flags;
     return ret;
@@ -58,14 +61,14 @@ long GetRCnt(long arg0) {
     if (index >= 3) {
         return 0;
     }
-    return D_8009A574[index * 8];
+    return g_RootCounterRegs[index * 8];
 }
 
 long StartRCnt(long arg0) {
     long index;
 
     index = arg0 & 0xFFFF;
-    D_8009A570[1] |= D_8009A578[index];
+    g_IrqRegs[1] |= g_RootCounterIrqBits[index];
     return index < 3;
 }
 
@@ -73,7 +76,7 @@ long StopRCnt(long arg0) {
     long index;
 
     index = arg0 & 0xFFFF;
-    D_8009A570[1] = ~D_8009A578[index] & D_8009A570[1];
+    g_IrqRegs[1] = ~g_RootCounterIrqBits[index] & g_IrqRegs[1];
     asm volatile("" ::: "memory");
     return 1;
 }
@@ -85,6 +88,6 @@ long ResetRCnt(long arg0) {
     if (index >= 3) {
         return 0;
     }
-    D_8009A574[index * 8] = 0;
+    g_RootCounterRegs[index * 8] = 0;
     return 1;
 }

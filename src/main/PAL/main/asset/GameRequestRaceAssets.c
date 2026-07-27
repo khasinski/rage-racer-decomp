@@ -22,7 +22,7 @@ s32 GameRequestTrackLoad(void) asm("func_8001965C");
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
 extern u8 *g_TrackTextureShadow asm("D_801E42D0");
-extern s32 D_801E4D70;
+extern s32 g_SharedAssetWord0 asm("D_801E4D70");
 extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
 void func_8005B768(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 func_8005B89C(void);
@@ -68,7 +68,7 @@ void GameLoadRaceAssets(void) {
     switch (g_AssetLoadState) {
     case 1: {
         s32 *src = (s32 *)g_AssetBlockPtr;
-        s32 raw = D_801E4D70;
+        s32 raw = g_SharedAssetWord0;
         s32 *dst = (s32 *)g_AssetLoadCursor;
         s32 n = raw / 4;
         while (n != 0) {
@@ -79,7 +79,7 @@ void GameLoadRaceAssets(void) {
         }
         func_8005B768(2, g_AssetLoadCursor, g_AssetSubBlockPtr, 0);
         g_AssetLoadState = 2;
-        g_AssetLoadCursor = g_AssetLoadCursor + D_801E4D70;
+        g_AssetLoadCursor = g_AssetLoadCursor + g_SharedAssetWord0;
         break;
     }
     case 2:

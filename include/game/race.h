@@ -128,11 +128,15 @@ extern s32 g_SectorTimes[3] asm("D_8009AF80");
  * records and written back when the race completes. */
 extern s32 g_RefLapTime asm("D_8009AF8C");
 
-/* Two arrays whose elements also carry their own split symbols, so the file
- * that touches one element at a time declares three scalars instead:
+/* Two 3-element arrays:
  *   g_SectorEndDistance[3]  D_801E4D98/9C/A0  lap distance ending each sector
  *                                             (L/3, 2L/3, L)
  *   g_RefSectorTimes[3]     D_8009AF90/94/98  the best lap's sector times
+ * g_RefSectorTimes is the one exception to one-address-one-name in this header:
+ * race/GameUpdateLapAndFinish.c must spell its three elements as the separate
+ * scalars g_RefSectorTime0/1/2 or gcc 2.6.3 CSEs the array base into a register
+ * and reschedules the surrounding block. g_SectorEndDistance was checked the
+ * same way and does not need it, so it is indexed everywhere.
  */
 
 /* Split readout: the sector time just recorded, the unsigned difference from

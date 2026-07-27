@@ -1,10 +1,10 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char *D_801E79CC[];
-extern u_long D_801E6C6C;
-extern char D_80013BD4[];
-extern char D_80013BEC[];
+extern u_char *g_SndSeqTable[] asm("D_801E79CC");
+extern u_long g_SndTickResolution asm("D_801E6C6C");
+extern char g_MsgSeqNotSeqData[] asm("D_80013BD4");
+extern char g_MsgSeqOldFormat[] asm("D_80013BEC");
 
 long func_80070D70(short arg0, short arg1);
 
@@ -29,7 +29,7 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     __asm__("" : "=r"(slot) : "0"(slot));
     vab = arg0;
     __asm__("" : "=r"(vab) : "0"(vab));
-    s = (SeqStruct *)D_801E79CC[(short)vab];
+    s = (SeqStruct *)g_SndSeqTable[(short)vab];
 
     s->unk4c = arg1;
     s->tempo_multiplier = 0;
@@ -68,10 +68,10 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     if (seq[7] == 1) {
         goto ok;
     }
-    GameDebugPrintf(D_80013BD4);
+    GameDebugPrintf(g_MsgSeqNotSeqData);
     return -1;
 magic_err:
-    GameDebugPrintf(D_80013BEC);
+    GameDebugPrintf(g_MsgSeqOldFormat);
     return 0;
 ok:
 
@@ -97,7 +97,7 @@ ok:
     ret = func_80070D70((short)slot, 0);
 
     s->next_sep_pos = s->read_pos;
-    D = D_801E6C6C;
+    D = g_SndTickResolution;
     s->base_delta_value = ret;
     s->delta_value = ret;
     s->loop_pos = s->read_pos;

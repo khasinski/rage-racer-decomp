@@ -1,9 +1,9 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char D_801E4CFC[];
-extern u_char D_801E4BD7;
-extern volatile u_char *D_801E416C;
+extern u_char g_SndVabStatus[] asm("D_801E4CFC");
+extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
+extern volatile u_char *g_SndCurrentToneTable asm("D_801E416C");
 
 long SpuVmVSetUp(long arg0, long arg1) asm("func_80073314");
 
@@ -14,29 +14,29 @@ long SsUtSetVagAtr(long arg0, long arg1, long arg2, VagAtr *arg3) {
     long offset;
 
     index = (short)arg0;
-    if (D_801E4CFC[index] == 1) {
+    if (g_SndVabStatus[index] == 1) {
         SpuVmVSetUp(index, (short)arg1);
-        offset = (short)(arg2 + (D_801E4BD7 << 4)) << 5;
+        offset = (short)(arg2 + (g_SndCurrentProgActual << 4)) << 5;
 
         /* Preserves the original `offset + base` addu operand order. */
-        *(volatile u_char *)(offset + (long)D_801E416C) = arg3->prior;
-        D_801E416C[offset + 0x1] = arg3->mode;
-        D_801E416C[offset + 0x2] = arg3->vol;
-        D_801E416C[offset + 0x3] = arg3->pan;
-        D_801E416C[offset + 0x4] = arg3->center;
-        D_801E416C[offset + 0x5] = arg3->shift;
-        D_801E416C[offset + 0x7] = arg3->max;
-        D_801E416C[offset + 0x6] = arg3->min;
-        D_801E416C[offset + 0x8] = arg3->vibW;
-        D_801E416C[offset + 0x9] = arg3->vibT;
-        D_801E416C[offset + 0xA] = arg3->porW;
-        D_801E416C[offset + 0xB] = arg3->porT;
-        D_801E416C[offset + 0xC] = arg3->pbmin;
-        D_801E416C[offset + 0xD] = arg3->pbmax;
-        *(u_short *)&D_801E416C[offset + 0x10] = arg3->adsr1;
-        *(u_short *)&D_801E416C[offset + 0x12] = arg3->adsr2;
-        *(u_short *)&D_801E416C[offset + 0x14] = arg3->prog;
-        *(u_short *)&D_801E416C[offset + 0x16] = arg3->vag;
+        *(volatile u_char *)(offset + (long)g_SndCurrentToneTable) = arg3->prior;
+        g_SndCurrentToneTable[offset + 0x1] = arg3->mode;
+        g_SndCurrentToneTable[offset + 0x2] = arg3->vol;
+        g_SndCurrentToneTable[offset + 0x3] = arg3->pan;
+        g_SndCurrentToneTable[offset + 0x4] = arg3->center;
+        g_SndCurrentToneTable[offset + 0x5] = arg3->shift;
+        g_SndCurrentToneTable[offset + 0x7] = arg3->max;
+        g_SndCurrentToneTable[offset + 0x6] = arg3->min;
+        g_SndCurrentToneTable[offset + 0x8] = arg3->vibW;
+        g_SndCurrentToneTable[offset + 0x9] = arg3->vibT;
+        g_SndCurrentToneTable[offset + 0xA] = arg3->porW;
+        g_SndCurrentToneTable[offset + 0xB] = arg3->porT;
+        g_SndCurrentToneTable[offset + 0xC] = arg3->pbmin;
+        g_SndCurrentToneTable[offset + 0xD] = arg3->pbmax;
+        *(u_short *)&g_SndCurrentToneTable[offset + 0x10] = arg3->adsr1;
+        *(u_short *)&g_SndCurrentToneTable[offset + 0x12] = arg3->adsr2;
+        *(u_short *)&g_SndCurrentToneTable[offset + 0x14] = arg3->prog;
+        *(u_short *)&g_SndCurrentToneTable[offset + 0x16] = arg3->vag;
 
         return 0;
     }

@@ -1,10 +1,10 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
-extern long D_801E6C6C;
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern long g_SndTickResolution asm("D_801E6C6C");
 
 void _SsSndTempo(short arg0, short arg1) {
-    SeqStruct *pSeq = &D_801E79CC[arg0][arg1];
+    SeqStruct *pSeq = &g_SndSeqTable[arg0][arg1];
 
     pSeq->tempo_countdown--;
 
@@ -17,13 +17,13 @@ void _SsSndTempo(short arg0, short arg1) {
             }
 
             pSeq->tick_period =
-                (u_long)((pSeq->tempo_multiplier * pSeq->tempo) * 0xA) / (u_long)(D_801E6C6C * 0x3C);
+                (u_long)((pSeq->tempo_multiplier * pSeq->tempo) * 0xA) / (u_long)(g_SndTickResolution * 0x3C);
             if (pSeq->tick_period <= 0) {
                 pSeq->tick_period = 1;
             }
             if ((pSeq->tempo_countdown == 0) || (pSeq->tempo == pSeq->target_tempo)) {
-                D_801E79CC[arg0][arg1].flags &= ~0x40;
-                D_801E79CC[arg0][arg1].flags &= ~0x80;
+                g_SndSeqTable[arg0][arg1].flags &= ~0x40;
+                g_SndSeqTable[arg0][arg1].flags &= ~0x80;
             }
         }
     } else {
@@ -40,13 +40,13 @@ void _SsSndTempo(short arg0, short arg1) {
         }
 
         pSeq->tick_period =
-            (u_long)((pSeq->tempo_multiplier * pSeq->tempo) * 0xA) / (u_long)(D_801E6C6C * 0x3C);
+            (u_long)((pSeq->tempo_multiplier * pSeq->tempo) * 0xA) / (u_long)(g_SndTickResolution * 0x3C);
         if (pSeq->tick_period <= 0) {
             pSeq->tick_period = 1;
         }
         if ((pSeq->tempo_countdown == 0) || (pSeq->tempo == pSeq->target_tempo)) {
-            D_801E79CC[arg0][arg1].flags &= ~0x40;
-            D_801E79CC[arg0][arg1].flags &= ~0x80;
+            g_SndSeqTable[arg0][arg1].flags &= ~0x40;
+            g_SndSeqTable[arg0][arg1].flags &= ~0x80;
         }
     }
 }

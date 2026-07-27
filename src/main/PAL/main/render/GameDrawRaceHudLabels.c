@@ -79,7 +79,7 @@ void GameBuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
 }
 
 extern s32 g_LapCount asm("D_801E4364");
-extern s32 D_801E4BCC;
+extern s32 g_BestLapThisRace asm("D_801E4BCC");
 extern GameRaceRanking g_PlayerLap asm("D_8009E83C");
 extern s16 D_8009E836;
 void func_80033D50(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
@@ -148,7 +148,7 @@ void GameDrawLapTimes(void) {
         } while (i < g_LapCount);
     }
 
-    func_80033D50(0xFA, 0x20, D_801E4BCC, 0x78CC, 0x3E8);
+    func_80033D50(0xFA, 0x20, g_BestLapThisRace, 0x78CC, 0x3E8);
 }
 
 void func_80033F30(s32 arg0, s32 arg1, s32 arg2, s32 arg3);

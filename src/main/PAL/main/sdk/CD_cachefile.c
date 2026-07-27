@@ -14,11 +14,11 @@ typedef struct
   long f0;
   u_char rest[40];
 } Rec44;
-extern long D_80099348;
-extern long D_80099048;
-extern Entry D_8009BB14[64];
+extern long g_CdCachedDir asm("D_80099348");
+extern long g_CdDebugLevel asm("D_80099048");
+extern Entry g_CdFileCache[64] asm("D_8009BB14");
 extern Rec44 D_8009C0F0[];
-extern u_char D_8009D714[0x800];
+extern u_char g_CdSectorBuf[0x800] asm("D_8009D714");
 extern u_char D_80013A94[];
 extern u_char D_80013AB4[];
 extern u_char D_80013AD8[];
@@ -38,32 +38,32 @@ long CD_cachefile(long arg0)
   u_char *p;
   long i;
   u_long lba;
-  if (arg0 == D_80099348)
+  if (arg0 == g_CdCachedDir)
   {
     return 1;
   }
-  if (func_8006CB88(1, D_8009C0F0[arg0].f0, D_8009D714) != 1)
+  if (func_8006CB88(1, D_8009C0F0[arg0].f0, g_CdSectorBuf) != 1)
   {
-    if (D_80099048 > 0)
+    if (g_CdDebugLevel > 0)
     {
       GameDebugPrintf(D_80013A94);
     }
     return -1;
   }
-  if (D_80099048 >= 2)
+  if (g_CdDebugLevel >= 2)
   {
     GameDebugPrintf(D_80013AB4);
   }
   i = 0;
-  p = D_8009D714;
-  while (p < (D_8009D714 + 0x800))
+  p = g_CdSectorBuf;
+  while (p < (g_CdSectorBuf + 0x800))
   {
     if ((*p) == 0)
     {
       break;
     }
     __builtin_memcpy(&lba, p + 2, 4);
- do { func_8006A9D8(lba & 0xFFFFFFFFFFFFFFFFu, &D_8009BB14[i]); __builtin_memcpy(&D_8009BB14[i].size, p + 0xA, 4); switch (i) { case 0: *((u_short *) D_8009BB14[0].name) = D_80013AD0; break; case 1: { long hi = D_80013AD4; long lo = D_80013AD6; *((short *) D_8009BB14[1].name) = hi; *(volatile u_char *)&D_8009BB14[1].name[2] = lo; break; } default: func_8006CBF4(D_8009BB14[i].name, p + 0x21, p[0x20]); D_8009BB14[i].name[p[0x20]] = 0; break; } if (D_80099048 >= 2) { GameDebugPrintf(D_80013AD8, D_8009BB14[i].min, D_8009BB14[i].sec, D_8009BB14[i].frame, D_8009BB14[i].size, D_8009BB14[i].name); } } while (0);
+ do { func_8006A9D8(lba & 0xFFFFFFFFFFFFFFFFu, &g_CdFileCache[i]); __builtin_memcpy(&g_CdFileCache[i].size, p + 0xA, 4); switch (i) { case 0: *((u_short *) g_CdFileCache[0].name) = D_80013AD0; break; case 1: { long hi = D_80013AD4; long lo = D_80013AD6; *((short *) g_CdFileCache[1].name) = hi; *(volatile u_char *)&g_CdFileCache[1].name[2] = lo; break; } default: func_8006CBF4(g_CdFileCache[i].name, p + 0x21, p[0x20]); g_CdFileCache[i].name[p[0x20]] = 0; break; } if (g_CdDebugLevel >= 2) { GameDebugPrintf(D_80013AD8, g_CdFileCache[i].min, g_CdFileCache[i].sec, g_CdFileCache[i].frame, g_CdFileCache[i].size, g_CdFileCache[i].name); } } while (0);
     p = p + (*p);
     i++;
     if (i >= 0x40)
@@ -72,12 +72,12 @@ long CD_cachefile(long arg0)
     }
   }
 
-  D_80099348 = arg0;
+  g_CdCachedDir = arg0;
   if (0x40 > i)
   {
-    D_8009BB14[i].name[0] = 0;
+    g_CdFileCache[i].name[0] = 0;
   }
-  if (2 <= D_80099048)
+  if (2 <= g_CdDebugLevel)
   {
     GameDebugPrintf(D_80013AF4, i);
   }

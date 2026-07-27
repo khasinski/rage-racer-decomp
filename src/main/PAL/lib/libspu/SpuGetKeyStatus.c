@@ -1,7 +1,7 @@
 #include "psyq/spu.h"
 
-extern volatile u_long D_8009A76C;
-extern volatile u_short *D_8009AB7C;
+extern volatile u_long g_SpuKeyStatus asm("D_8009A76C");
+extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
 
 long SpuGetKeyStatus(u_long arg0) {
     long voice = -1;
@@ -32,8 +32,8 @@ found:
 body:
     {
         register u_long offset asm("$3") = voice << 4;
-        register volatile u_short *base asm("$2") = D_8009AB7C;
-        register u_long flags asm("$4") = D_8009A76C;
+        register volatile u_short *base asm("$2") = g_SpuRegBase;
+        register u_long flags asm("$4") = g_SpuKeyStatus;
         register u_long flag asm("$2");
 
         offset += (u_long)base;

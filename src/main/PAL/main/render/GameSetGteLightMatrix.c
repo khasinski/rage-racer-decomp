@@ -17,7 +17,7 @@ void GameSetGteLightMatrix(Matrix *view) {
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameSetGteLightMatrix", func_80014618);
 
 /* Free-running angle the controller-setup screens pulse their arrows with. */
-extern s32 D_8007C13C;
+extern s32 g_SetupArrowPulse asm("D_8007C13C");
 
 s32 func_80068568(s32 angle);
 
@@ -50,7 +50,7 @@ u8 *GameDrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     prim = QueueSpriteWide(ot, prim, x, y, 0x10, 0x20, 0x48, 0xB8, 0x7F82);
     prim = GameQueueDrawModePrim(ot, prim, 0x39);
     if (pulse != 0) {
-        u8 glow = func_80068568(D_8007C13C % 0x1000) / 64 - 65;
+        u8 glow = func_80068568(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
         prim = (u8 *)GameAddTilePrim(
             (s32)ot, (s32)prim, x, y, 0x10, 0x20, 0, glow, 0);
@@ -66,7 +66,7 @@ u8 *GameDrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     prim = QueueSpriteWide(ot, prim, x, y, 0x10, 0x20, 0x58, 0xB8, 0x7F82);
     prim = GameQueueDrawModePrim(ot, prim, 0x39);
     if (pulse != 0) {
-        u8 glow = func_80068568(D_8007C13C % 0x1000) / 64 - 65;
+        u8 glow = func_80068568(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
         prim = (u8 *)GameAddTilePrim(
             (s32)ot, (s32)prim, x, y, 0x10, 0x20, 0, glow, 0);

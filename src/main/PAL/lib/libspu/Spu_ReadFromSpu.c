@@ -1,12 +1,12 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long D_8009A714;
-extern long D_8009A768;
-extern u_short D_8009AB78;
-extern long D_8009AB94;
-extern long D_8009ABAC;
-extern long D_8009ABB0;
+extern long g_SpuTransferMode asm("D_8009A714");
+extern long g_SpuTransferEvent asm("D_8009A768");
+extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
+extern long g_SpuTransferByIo asm("D_8009AB94");
+extern long g_SpuTransferCompleted asm("D_8009ABAC");
+extern long g_SpuTransferCallback asm("D_8009ABB0");
 
 u_long Spu_ReadFromSpu(long arg0, u_long arg1) {
     u_long size = arg1;
@@ -17,15 +17,15 @@ u_long Spu_ReadFromSpu(long arg0, u_long arg1) {
 
     _spu_Fw(arg0, size);
 
-    if (D_8009ABB0 == 0) {
-        D_8009ABAC = 0;
+    if (g_SpuTransferCallback == 0) {
+        g_SpuTransferCompleted = 0;
     }
 
     return size;
 }
 
 long SpuSetTransferStartAddr(long arg0) {
-    D_8009AB78 = _spu_FsetRXXa(-1, arg0);
+    g_SpuTransferStartAddr = _spu_FsetRXXa(-1, arg0);
     return arg0;
 }
 
@@ -43,8 +43,8 @@ void SpuSetTransferMode(long arg0) {
         }
     }
 
-    D_8009A714 = arg0;
-    D_8009AB94 = value;
+    g_SpuTransferMode = arg0;
+    g_SpuTransferByIo = value;
 }
 
 long SpuIsTransferCompleted(long arg0) {
@@ -55,24 +55,24 @@ long SpuIsTransferCompleted(long arg0) {
     saved_arg = arg0;
     one = 1;
 
-    if (D_8009A714 == one) {
+    if (g_SpuTransferMode == one) {
         ret = one;
-    } else if (D_8009ABAC == one) {
+    } else if (g_SpuTransferCompleted == one) {
         ret = one;
     } else {
-        ret = TestEvent(D_8009A768);
+        ret = TestEvent(g_SpuTransferEvent);
 
         if (saved_arg == one) {
             if (ret == 0) {
                 do {
-                    ret = TestEvent(D_8009A768);
+                    ret = TestEvent(g_SpuTransferEvent);
                 } while (ret == 0);
             }
 
             ret = 1;
-            D_8009ABAC = ret;
+            g_SpuTransferCompleted = ret;
         } else if (ret == one) {
-            D_8009ABAC = ret;
+            g_SpuTransferCompleted = ret;
         }
     }
 
@@ -81,12 +81,12 @@ long SpuIsTransferCompleted(long arg0) {
 
 void _spu_setTransferCompletionFlag(long arg0) {
     if (arg0 == 1) {
-        D_8009ABAC = 0;
+        g_SpuTransferCompleted = 0;
     } else {
-        D_8009ABAC = 1;
+        g_SpuTransferCompleted = 1;
     }
 }
 
 u_long _spu_isTransferIdle(void) {
-    return D_8009ABAC == 0;
+    return g_SpuTransferCompleted == 0;
 }

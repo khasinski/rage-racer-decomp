@@ -2,16 +2,16 @@
 
 typedef void (*Callback)(void);
 
-extern Callback D_8009A560;
-extern long D_8009A56C;
+extern Callback g_SndTickCallback asm("D_8009A560");
+extern long g_SndTickVSyncToggle asm("D_8009A56C");
 
 void SsSoundTickVSyncCallback(void) asm("func_80071F2C");
 
 void SsSoundTickVSyncCallback(void) {
-    if (D_8009A56C == 0) {
-        D_8009A56C = 1;
+    if (g_SndTickVSyncToggle == 0) {
+        g_SndTickVSyncToggle = 1;
     } else {
-        D_8009A56C = 0;
-        D_8009A560();
+        g_SndTickVSyncToggle = 0;
+        g_SndTickCallback();
     }
 }

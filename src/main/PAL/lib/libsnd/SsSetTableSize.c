@@ -2,9 +2,9 @@
 
 #include "common.h"
 
-extern u_char *D_801E79CC[];
-extern short D_801E826C;
-extern short D_801E8270;
+extern u_char *g_SndSeqTable[] asm("D_801E79CC");
+extern short g_SndSeqTableSMax asm("D_801E826C");
+extern short g_SndSeqTableTMax asm("D_801E8270");
 
 void SsSetTableSize(u_char *arg0, long arg1, long arg2) asm("func_80072310");
 
@@ -26,16 +26,16 @@ void SsSetTableSize(u_char *arg0, long arg1, long arg2) {
     long limit;
 
     signedArg = arg1;
-    D_801E826C = signedArg;
+    g_SndSeqTableSMax = signedArg;
     signedArg <<= 16;
     signedArg >>= 16;
-    D_801E8270 = arg2;
+    g_SndSeqTableTMax = arg2;
 
     outer = 0;
     if (signedArg > 0) {
         tmp = arg2 << 16;
         step = tmp >> 16;
-        table = (volatile u_char **)D_801E79CC;
+        table = (volatile u_char **)g_SndSeqTable;
         firstOffset = 0;
         do {
             tmp = firstOffset * 0xAC;
@@ -47,12 +47,12 @@ void SsSetTableSize(u_char *arg0, long arg1, long arg2) {
     }
 
     outer = 0;
-    if (D_801E826C > 0) {
+    if (g_SndSeqTableSMax > 0) {
         step = 0x7F;
-        row = (volatile u_char **)D_801E79CC;
+        row = (volatile u_char **)g_SndSeqTable;
         do {
             inner = 0;
-            if (D_801E8270 > 0) {
+            if (g_SndSeqTableTMax > 0) {
                 slot = row;
                 offset = 0;
                 do {
@@ -74,14 +74,14 @@ void SsSetTableSize(u_char *arg0, long arg1, long arg2) {
                     inner++;
                     *(short *)(offset + (long)*slot + 0x78) = step;
                     base76 = (long)*slot;
-                    limit = D_801E8270;
+                    limit = g_SndSeqTableTMax;
                     base76 = offset + base76;
                     offset += 0xAC;
                     keepGoing = inner < limit;
                     *(short *)(base76 + 0x7A) = step;
                 } while (keepGoing);
             }
-            limit = D_801E826C;
+            limit = g_SndSeqTableSMax;
             outer++;
             keepGoing = outer < limit;
             row++;

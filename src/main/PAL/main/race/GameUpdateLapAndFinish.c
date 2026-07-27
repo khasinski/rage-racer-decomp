@@ -124,10 +124,8 @@ extern s32 g_RivalCueFlags asm("D_801E4BB4");
 extern s16 D_801E4CF8;
 
 
-extern s32 g_SectorEndDistance0 asm("D_801E4D98");
-extern s32 g_SectorEndDistance1 asm("D_801E4D9C");
+extern s32 g_SectorEndDistance[] asm("D_801E4D98");
 
-extern s32 g_SectorEndDistance2 asm("D_801E4DA0");
 
 extern s16 g_RivalCueCooldown0 asm("D_801E6F20");
 
@@ -574,9 +572,9 @@ void GameEnterRaceScene(void) {
     g_LapTimeMs = 0;
     D_801E4248 = 0;
     g_LapTimeSaturated = 0;
-    g_SectorEndDistance2 = trackLength;
-    g_SectorEndDistance0 = trackLength / 3;
-    g_SectorEndDistance1 = g_SectorEndDistance0 * 2;
+    g_SectorEndDistance[2] = trackLength;
+    g_SectorEndDistance[0] = trackLength / 3;
+    g_SectorEndDistance[1] = g_SectorEndDistance[0] * 2;
     tableOffset = (mode * 12) + (scene * 48);
     g_RefSectorTime0 = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset);
     scene *= 32;

@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void SsSeqSetChannelMode(long seq, long sep, u_char mode) asm("func_8006FED8");
 
@@ -25,7 +25,7 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     seq_offset = seq_s * 4;
     sep_s = (short)sep_s;
     sep_offset = (((((sep_s * 2) + sep_s) * 4) - sep_s) * 4) - sep_s;
-    base = *(SeqStruct **)((u_char *)D_801E79CC + seq_offset);
+    base = *(SeqStruct **)((u_char *)g_SndSeqTable + seq_offset);
     sep_offset = sep_offset * 4;
     state = (SeqStruct *)(sep_offset + (long)base);
     mode8 = (u_char)mode;

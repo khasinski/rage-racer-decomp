@@ -22,14 +22,14 @@ typedef union SeqVolume71568 {
     u_short value;
 } SeqVolume71568;
 
-extern SeqStruct71568 *D_801E79CC[];
+extern SeqStruct71568 *g_SndSeqTable[] asm("D_801E79CC");
 
 long func_80076C58(short seq_sep, u_short left, u_short right, short update_voices);
 long func_80076DCC(short seq_sep, short *left, short *right);
 
 void _SsSndDecrescendo(short seq, short sep) asm("func_80071568");
 void _SsSndDecrescendo(short seq, short sep) {
-    SeqStruct71568 *score = &D_801E79CC[seq][sep];
+    SeqStruct71568 *score = &g_SndSeqTable[seq][sep];
     SeqVolume71568 left;
     SeqVolume71568 right;
 
@@ -51,10 +51,10 @@ void _SsSndDecrescendo(short seq, short sep) {
                     func_80076C58(seq | (sep << 8), 1, 1, 0);
                 }
             } else {
-                D_801E79CC[seq][sep].flags &= ~0x20;
+                g_SndSeqTable[seq][sep].flags &= ~0x20;
             }
             if ((score->unk98 == 0) || (score->unk40 == 0)) {
-                D_801E79CC[seq][sep].flags &= ~0x20;
+                g_SndSeqTable[seq][sep].flags &= ~0x20;
             }
         }
     } else {
@@ -72,10 +72,10 @@ void _SsSndDecrescendo(short seq, short sep) {
                 func_80076C58(seq | (sep << 8), 1, 1, 0);
             }
         } else {
-            D_801E79CC[seq][sep].flags &= ~0x20;
+            g_SndSeqTable[seq][sep].flags &= ~0x20;
         }
         if ((score->unk98 == 0) || (score->unk40 == 0)) {
-            D_801E79CC[seq][sep].flags &= ~0x20;
+            g_SndSeqTable[seq][sep].flags &= ~0x20;
         }
     }
 

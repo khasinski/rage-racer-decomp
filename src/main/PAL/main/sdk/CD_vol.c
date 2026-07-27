@@ -1,21 +1,21 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern volatile u_char *D_80099300;
-extern volatile u_char *D_80099304;
-extern volatile u_char *D_80099308;
-extern volatile u_char *D_8009930C;
-extern long D_8009903C;
-extern long D_80099040;
-extern long D_8009904C;
-extern long D_80099050;
-extern u_char D_8009905C;
+extern volatile u_char *g_CdReg0 asm("D_80099300");
+extern volatile u_char *g_CdReg1 asm("D_80099304");
+extern volatile u_char *g_CdReg2 asm("D_80099308");
+extern volatile u_char *g_CdReg3 asm("D_8009930C");
+extern long g_CdSyncCallback asm("D_8009903C");
+extern long g_CdReadyCallback asm("D_80099040");
+extern long g_CdStatusByte asm("D_8009904C");
+extern long g_CdErrorByte asm("D_80099050");
+extern u_char g_CdModeByte asm("D_8009905C");
 extern u_char D_8009905D;
-extern volatile u_long *D_80099310;
-extern CdRegisterMap *volatile D_80099314;
+extern volatile u_long *g_ComDelayReg asm("D_80099310");
+extern CdRegisterMap *volatile g_CdSpuRegs asm("D_80099314");
 extern u_char D_80013904[];
 extern u_char D_80013910[];
-extern void *D_8009931C[];
+extern void *g_CdDebugInfo[] asm("D_8009931C");
 
 typedef struct {
     u_char sync;
@@ -23,7 +23,7 @@ typedef struct {
     u_char command;
 } CdState;
 
-extern volatile CdState D_80099318;
+extern volatile CdState g_CdSyncStatus asm("D_80099318");
 
 void func_8006DF34(void);
 void func_8006C17C(void);
@@ -33,13 +33,13 @@ long func_8006B0D4(long arg0, u_char *arg1);
 void func_80063C38(u_char *text);
 
 long CD_vol(CdlATV *arg0) {
-    *D_80099300 = 2;
-    *D_80099308 = arg0->val0;
-    *D_8009930C = arg0->val1;
-    *D_80099300 = 3;
-    *D_80099304 = arg0->val2;
-    *D_80099308 = arg0->val3;
-    *D_8009930C = 0x20;
+    *g_CdReg0 = 2;
+    *g_CdReg2 = arg0->val0;
+    *g_CdReg3 = arg0->val1;
+    *g_CdReg0 = 3;
+    *g_CdReg1 = arg0->val2;
+    *g_CdReg2 = arg0->val3;
+    *g_CdReg3 = 0x20;
     return 0;
 }
 
@@ -47,35 +47,35 @@ void CD_flush(void) {
     volatile u_char *state;
     volatile u_char *reg;
 
-    *D_80099300 = 1;
+    *g_CdReg0 = 1;
 
-    if ((*D_8009930C & 7) != 0) {
+    if ((*g_CdReg3 & 7) != 0) {
         do {
-            *D_80099300 = 1;
-            *D_8009930C = 7;
-            *D_80099308 = 7;
-        } while ((*D_8009930C & 7) != 0);
+            *g_CdReg0 = 1;
+            *g_CdReg3 = 7;
+            *g_CdReg2 = 7;
+        } while ((*g_CdReg3 & 7) != 0);
     }
 
-    state = &D_80099318.ready;
-    D_80099318.command = 0;
-    *state = D_80099318.command;
-    reg = D_80099300;
-    D_80099318.sync = 2;
+    state = &g_CdSyncStatus.ready;
+    g_CdSyncStatus.command = 0;
+    *state = g_CdSyncStatus.command;
+    reg = g_CdReg0;
+    g_CdSyncStatus.sync = 2;
     *reg = 0;
-    *D_8009930C = 0;
-    *D_80099310 = 0x1325;
+    *g_CdReg3 = 0;
+    *g_ComDelayReg = 0x1325;
 }
 
 long CD_initvol(void) {
     CdRegisterMap *temp_v1;
     u_char sp0[4];
 
-    temp_v1 = D_80099314;
+    temp_v1 = g_CdSpuRegs;
     if (temp_v1->status_mode_a == 0 && temp_v1->status_mode_b == 0) {
         temp_v1->cd_left_volume = 0x3FFF;
         temp_v1->cd_right_volume = 0x3FFF;
-        temp_v1 = D_80099314;
+        temp_v1 = g_CdSpuRegs;
     }
 
     temp_v1->output_left_volume = 0x3FFF;
@@ -87,54 +87,54 @@ long CD_initvol(void) {
     sp0[3] = 0;
     sp0[1] = 0;
 
-    *D_80099300 = 2;
-    *D_80099308 = sp0[0];
-    *D_8009930C = sp0[1];
-    *D_80099300 = 3;
-    *D_80099304 = sp0[2];
-    *D_80099308 = sp0[3];
-    *D_8009930C = 0x20;
+    *g_CdReg0 = 2;
+    *g_CdReg2 = sp0[0];
+    *g_CdReg3 = sp0[1];
+    *g_CdReg0 = 3;
+    *g_CdReg1 = sp0[2];
+    *g_CdReg2 = sp0[3];
+    *g_CdReg3 = 0x20;
 
     return 0;
 }
 
 void CD_initintr(void) {
-    D_80099040 = 0;
-    D_8009903C = 0;
-    D_80099050 = 0;
-    D_8009904C = 0;
+    g_CdReadyCallback = 0;
+    g_CdSyncCallback = 0;
+    g_CdErrorByte = 0;
+    g_CdStatusByte = 0;
     func_8006DF34();
     func_8006DF64(2, (void *)func_8006C17C);
 }
 
 long func_8006BD14(void) {
     func_80063C38(D_80013904);
-    GameDebugPrintf(D_80013910, D_8009931C);
+    GameDebugPrintf(D_80013910, g_CdDebugInfo);
 
     D_8009905D = 0;
-    D_8009905C = 0;
-    D_80099040 = 0;
-    D_8009903C = 0;
-    D_80099050 = 0;
-    D_8009904C = 0;
+    g_CdModeByte = 0;
+    g_CdReadyCallback = 0;
+    g_CdSyncCallback = 0;
+    g_CdErrorByte = 0;
+    g_CdStatusByte = 0;
     func_8006DF34();
     func_8006DF64(2, func_8006C17C);
 
-    *D_80099300 = 1;
-    while ((*D_8009930C & 7) != 0) {
-        *D_80099300 = 1;
-        *D_8009930C = 7;
-        *D_80099308 = 7;
+    *g_CdReg0 = 1;
+    while ((*g_CdReg3 & 7) != 0) {
+        *g_CdReg0 = 1;
+        *g_CdReg3 = 7;
+        *g_CdReg2 = 7;
     }
 
-    D_80099318.ready = D_80099318.command = 0;
-    D_80099318.sync = 2;
-    *D_80099300 = 0;
-    *D_8009930C = 0;
-    *D_80099310 = 0x1325;
+    g_CdSyncStatus.ready = g_CdSyncStatus.command = 0;
+    g_CdSyncStatus.sync = 2;
+    *g_CdReg0 = 0;
+    *g_CdReg3 = 0;
+    *g_ComDelayReg = 0x1325;
 
     func_8006B620(1, 0, 0, 0);
-    if ((D_8009904C & 0x10) != 0) {
+    if ((g_CdStatusByte & 0x10) != 0) {
         func_8006B620(1, 0, 0, 0);
     }
 

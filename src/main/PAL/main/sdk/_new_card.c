@@ -23,9 +23,13 @@ void DecDCTReset(long arg0) {
     func_800640D4(arg0);
 }
 
-extern u_long D_80083060[];
-extern u_long D_800830A0[];
-extern u_long D_800830E4[];
+/* The two MDEC parameter blocks, each a command word followed by its table:
+ * g_MdecQuantCmd 0x40000001 (MDEC command 2, set quant tables, colour) with
+ * the 64-byte luma and chroma tables, and g_MdecIdctCmd 0x60000000
+ * (command 3, set scale table) with the 64-halfword IDCT cosine table. */
+extern u_long g_MdecQuantLuma[] asm("D_80083060");
+extern u_long g_MdecQuantChroma[] asm("D_800830A0");
+extern u_long g_MdecIdctTable[] asm("D_800830E4");
 
 u_long * DecDCTGetEnv(u_long *arg0) asm("func_80063E7C");
 u_long *DecDCTGetEnv(u_long *arg0) {
@@ -34,19 +38,19 @@ u_long *DecDCTGetEnv(u_long *arg0) {
     long i;
 
     dst = arg0;
-    src = D_80083060;
+    src = g_MdecQuantLuma;
     for (i = 0xF; i != -1; i--) {
         *dst++ = *src++;
     }
 
     dst = arg0 + 0x10;
-    src = D_800830A0;
+    src = g_MdecQuantChroma;
     for (i = 0xF; i != -1; i--) {
         *dst++ = *src++;
     }
 
     dst = arg0 + 0x20;
-    src = D_800830E4;
+    src = g_MdecIdctTable;
     for (i = 0x1F; i != -1; i--) {
         *dst++ = *src++;
     }
@@ -54,8 +58,8 @@ u_long *DecDCTGetEnv(u_long *arg0) {
     return arg0;
 }
 
-extern u_char D_8008305C[];
-extern u_char D_800830E0[];
+extern u_char g_MdecQuantCmd[] asm("D_8008305C");
+extern u_char g_MdecIdctCmd[] asm("D_800830E0");
 
 void func_800641D0(volatile u_long *arg0, long arg1);
 
@@ -66,19 +70,19 @@ u_long *DecDCTPutEnv(u_long *arg0) {
     long i;
 
     ret = arg0;
-    dst = D_80083060;
+    dst = g_MdecQuantLuma;
     for (i = 0xF; i != -1; i--) {
         *dst++ = *arg0++;
     }
 
-    dst = D_800830A0;
+    dst = g_MdecQuantChroma;
     arg0 = ret + 0x10;
     for (i = 0xF; i != -1; i--) {
         *dst++ = *arg0++;
     }
 
-    func_800641D0((volatile u_long *)D_8008305C, 0x20);
-    func_800641D0((volatile u_long *)D_800830E0, 0x20);
+    func_800641D0((volatile u_long *)g_MdecQuantCmd, 0x20);
+    func_800641D0((volatile u_long *)g_MdecIdctCmd, 0x20);
 
     return ret;
 }

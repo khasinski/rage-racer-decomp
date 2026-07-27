@@ -25,7 +25,7 @@ extern s32 g_MenuViewSpin asm("D_801E8268");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 D_8009E6D8;
-extern s32 D_8009E6DC;
+extern s32 g_PlayerCarZ asm("D_8009E6DC");
 extern s32 D_8009E6F4;
 extern s32 D_8009E6F8;
 extern s32 D_8009E6FC;
@@ -76,7 +76,7 @@ void GameEnterCourseSelectScreen(void) {
     g_UiScriptProgress = 0;
     g_PlayerCar = 0;
     D_8009E6D8 = 0;
-    D_8009E6DC = 0;
+    g_PlayerCarZ = 0;
     D_8009E6F4 = 0;
     D_8009E6F8 = 0;
     D_8009E6FC = 0;

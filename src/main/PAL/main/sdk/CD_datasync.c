@@ -2,14 +2,14 @@
 
 #include "common.h"
 
-extern long D_80099060[];
-extern u_char D_80099318[];
-extern long D_800990E0[];
+extern long g_CdCommandNames[] asm("D_80099060");
+extern u_char g_CdSyncStatus[] asm("D_80099318");
+extern long g_CdIntrNames[] asm("D_800990E0");
 extern u_char D_8009905D;
-extern long D_8009BB08;
-extern long D_8009BB0C;
+extern long g_CdTimeoutDeadline asm("D_8009BB08");
+extern long g_CdTimeoutCounter asm("D_8009BB0C");
 extern void *D_8009BB10;
-extern volatile u_long *D_80099344;
+extern volatile u_long *g_CdDmaChcr asm("D_80099344");
 extern char D_8001391C[];
 extern char D_80013814[];
 extern char D_80013824[];
@@ -34,15 +34,15 @@ long CD_datasync(long arg) {
        emitting the call (the printf below is issued from inline asm). */
     if (0) GameDebugPrintf(D_80013824, 0, 0, 0, 0);
 
-    D_8009BB08 = VSync(-1) + 0x3C0;
-    b60 = D_80099060;
-    b318 = D_80099318;
-    bE0 = D_800990E0;
-    D_8009BB0C = 0;
+    g_CdTimeoutDeadline = VSync(-1) + 0x3C0;
+    b60 = g_CdCommandNames;
+    b318 = g_CdSyncStatus;
+    bE0 = g_CdIntrNames;
+    g_CdTimeoutCounter = 0;
     D_8009BB10 = D_8001391C;
     do {
         long status;
-        if (VSync(-1) > D_8009BB08 || D_8009BB0C++ > 0x3C0000) {
+        if (VSync(-1) > g_CdTimeoutDeadline || g_CdTimeoutCounter++ > 0x3C0000) {
             register void *a1v asm("$5");
             register long a2v asm("$6");
             register long a3v asm("$7");
@@ -81,7 +81,7 @@ long CD_datasync(long arg) {
             result = -1;
             goto done;
         }
-        if ((*D_80099344 & 0x1000000) == 0) {
+        if ((*g_CdDmaChcr & 0x1000000) == 0) {
             result = 0;
             goto done;
         }

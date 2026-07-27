@@ -24,13 +24,13 @@ u_long func_8006A018[16] __attribute__((section(".text"))) = {
     0x00000000,
 };
 
-extern long D_801E8AAC;
-extern long D_801F1850;
+extern long g_StRingBase asm("D_801E8AAC");
+extern long g_StRingSize asm("D_801F1850");
 void func_8006CDC0(void);
 
 /* StSetRing: installs the stream ring buffer (`base`, `size`) then clears it. */
 void StSetRing(long base, long size) asm("func_8006A058");
-void StSetRing(long base, long size) { D_801E8AAC = base; D_801F1850 = size; func_8006CDC0(); }
+void StSetRing(long base, long size) { g_StRingBase = base; g_StRingSize = size; func_8006CDC0(); }
 
 long func_8006A0AC(long arg0, long arg1);
 

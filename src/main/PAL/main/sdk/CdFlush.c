@@ -1,11 +1,11 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern long D_80099048;
-extern long D_8009903C;
-extern long D_80099040;
-extern char *D_80099060[];
-extern char *D_800990E0[];
+extern long g_CdDebugLevel asm("D_80099048");
+extern long g_CdSyncCallback asm("D_8009903C");
+extern long g_CdReadyCallback asm("D_80099040");
+extern char *g_CdCommandNames[] asm("D_80099060");
+extern char *g_CdIntrNames[] asm("D_800990E0");
 extern u_char D_800136D0[];
 
 void func_8006BAF0(void);
@@ -21,8 +21,8 @@ void CdFlush(void) {
 /* CdSetDebug: sets the CD debug-verbosity `level`, returns the previous one. */
 long CdSetDebug(long level) asm("func_8006A4B4");
 long CdSetDebug(long level) {
-    long old = D_80099048;
-    D_80099048 = level;
+    long old = g_CdDebugLevel;
+    g_CdDebugLevel = level;
     return old;
 }
 
@@ -34,7 +34,7 @@ char *CdComstr(long cmd) {
     if ((u_long)cmd >= 0x1C) {
         return (char *)D_800136D0;
     }
-    return D_80099060[cmd];
+    return g_CdCommandNames[cmd];
 }
 
 /* CdIntstr: returns the human-readable name for CD interrupt code `intr`. */
@@ -44,7 +44,7 @@ char *CdIntstr(long intr) {
     if ((u_long)intr >= 7) {
         return (char *)D_800136D0;
     }
-    return D_800990E0[intr];
+    return g_CdIntrNames[intr];
 }
 
 long CdSync(long arg0, long arg1) asm("func_8006A534");
@@ -59,16 +59,16 @@ long CdReady(long arg0, long arg1) {
 
 long CdSyncCallback(long arg0) asm("func_8006A574");
 long CdSyncCallback(long arg0) {
-    long old = D_8009903C;
+    long old = g_CdSyncCallback;
 
-    D_8009903C = arg0;
+    g_CdSyncCallback = arg0;
     return old;
 }
 
 long CdReadyCallback(long arg0) asm("func_8006A58C");
 long CdReadyCallback(long arg0) {
-    long old = D_80099040;
+    long old = g_CdReadyCallback;
 
-    D_80099040 = arg0;
+    g_CdReadyCallback = arg0;
     return old;
 }

@@ -94,7 +94,7 @@ void GameDrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
 /* Which of the two frame buffers is being drawn, 0 or 1; the main loop sets
  * it beside g_DrawBuffer. Here it turns into the 240-line y bias of the
  * drawing-area rect. */
-extern s32 g_DrawBufferParity asm("D_801E4B34");
+extern s32 g_FrameParity asm("D_801E4B34");
 
 void func_80066604(void *packet, void *rect);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
@@ -105,7 +105,7 @@ void *GameQueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) 
     s16 rect[4];
     s32 offset;
 
-    offset = ((g_DrawBufferParity << 4) - g_DrawBufferParity) << 4;
+    offset = ((g_FrameParity << 4) - g_FrameParity) << 4;
     rect[0] = x;
     rect[1] = y + offset;
     rect[2] = w;

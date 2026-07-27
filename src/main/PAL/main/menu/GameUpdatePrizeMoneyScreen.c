@@ -8,10 +8,10 @@ typedef struct {
 } UnkCopyChunk;
 
 extern s32 g_PrizeScreenState asm("D_8019CB74");
-extern s32 g_PrizeTickRate asm("D_801E6DA0");
-extern s32 g_BonusTickRate asm("D_801E6C78");
-extern s32 g_PendingPrizeMoney asm("D_801F17B0");
-extern s32 g_PendingClassBonus asm("D_8019CE0C");
+extern s32 g_PrizeCountStep asm("D_801E6DA0");
+extern s32 g_BonusCountStep asm("D_801E6C78");
+extern s32 g_PrizeAmount asm("D_801F17B0");
+extern s32 g_PromotionBonus asm("D_8019CE0C");
 extern s32 g_ClassClearFanfareTimer asm("D_801E4D0C");
 extern s32 g_ClassCompleted asm("D_801E4B94");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
@@ -33,7 +33,7 @@ void func_8005BE58(void);
 extern UnkCopyChunk D_8007BE68[];
 extern u8 g_TimeAttackCars asm("D_801E4388");
 extern s16 g_ClassRecords asm("D_8019CB40");
-extern s16 D_8019CB42;
+extern s16 g_ClassClears asm("D_8019CB42");
 extern s32 g_ClassWinCount asm("D_801E4DA8");
 extern u8 g_GrandPrixCars asm("D_801E4F44");
 extern u8 g_ExtraGrandPrixCars asm("D_8019C914");
@@ -50,8 +50,8 @@ void func_8001B488(void);
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
 void GameUpdatePrizeMoneyScreen(void) asm("func_80020DDC");
 void GameUpdatePrizeMoneyScreen(void) {
-    s32 lim1 = g_PrizeTickRate;
-    s32 lim0 = g_BonusTickRate;
+    s32 lim1 = g_PrizeCountStep;
+    s32 lim0 = g_BonusCountStep;
     s32 st;
     s32 t;
 
@@ -87,22 +87,22 @@ void GameUpdatePrizeMoneyScreen(void) {
     case 4:
         g_SceneTimer += 1;
         if ((u32)g_SceneTimer < 121) goto L234;
-        if (g_PendingPrizeMoney == 0) goto L248;
+        if (g_PrizeAmount == 0) goto L248;
         GamePlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
-        t = g_PendingPrizeMoney;
+        t = g_PrizeAmount;
         if (t >= lim1) {
-            g_PendingPrizeMoney = t - lim1;
+            g_PrizeAmount = t - lim1;
             g_RaceProgress->unk10 += lim1;
         } else {
             s32 e = g_RaceProgress->unk10;
-            g_PendingPrizeMoney = 0;
+            g_PrizeAmount = 0;
             g_RaceProgress->unk10 = e + t;
         }
     L234:
-        if (g_PendingPrizeMoney != 0) goto L420;
+        if (g_PrizeAmount != 0) goto L420;
     L248:
         g_SceneTimer = 0;
-        if (g_PendingClassBonus == 0) goto Lstore7;
+        if (g_PromotionBonus == 0) goto Lstore7;
         st = 5;
         goto Lstore;
     case 5:
@@ -114,18 +114,18 @@ void GameUpdatePrizeMoneyScreen(void) {
         goto L420;
     case 6:
         func_80020D90();
-        if (g_PendingClassBonus == 0) { st = 7; goto Lstore; }
+        if (g_PromotionBonus == 0) { st = 7; goto Lstore; }
         GamePlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
-        t = g_PendingClassBonus;
+        t = g_PromotionBonus;
         if (t >= lim0) {
-            g_PendingClassBonus = t - lim0;
+            g_PromotionBonus = t - lim0;
             g_RaceProgress->unk10 += lim0;
         } else {
             s32 e = g_RaceProgress->unk10;
-            g_PendingClassBonus = 0;
+            g_PromotionBonus = 0;
             g_RaceProgress->unk10 = e + t;
         }
-        if (g_PendingClassBonus != 0) goto L420;
+        if (g_PromotionBonus != 0) goto L420;
     Lstore7:
         st = 7;
         goto Lstore;
@@ -225,13 +225,13 @@ void GameInitSaveDefaults(void) {
     } while (i < 13);
 
     g_ClassRecords = 0;
-    D_8019CB42 = 0;
+    g_ClassClears = 0;
     g_ClassWinCount = 0;
 
     emptySlot = -1;
     for (offset = 4; offset < 0x2C; offset += 4) {
         *(s16 *)((u8 *)&g_ClassRecords + offset) = emptySlot;
-        *(s16 *)((u8 *)&D_8019CB42 + offset) = 0;
+        *(s16 *)((u8 *)&g_ClassClears + offset) = 0;
     }
 
     g_TimeAttackSave.course = 0;

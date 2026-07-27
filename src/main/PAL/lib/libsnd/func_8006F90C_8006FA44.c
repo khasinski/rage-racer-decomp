@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void func_8006F90C(long seq, long sep, long value) {
     register long seq_arg asm("$7");
@@ -42,7 +42,7 @@ void func_8006F90C(long seq, long sep, long value) {
     sep_offset <<= 2;
     sep_offset -= sep_s;
     sep_offset <<= 2;
-    base = *(SeqStruct **)((u_char *)D_801E79CC + seq_offset);
+    base = *(SeqStruct **)((u_char *)g_SndSeqTable + seq_offset);
     state = (SeqStruct *)(sep_offset + (long)base);
     seq_raw = seq_arg;
     channel_offset = state->channel;
@@ -108,7 +108,7 @@ void func_8006FA44(long seq, long sep, long value) {
     sep_offset <<= 2;
     sep_offset -= sep_s;
     sep_offset <<= 2;
-    base = *(SeqStruct **)((u_char *)D_801E79CC + seq_offset);
+    base = *(SeqStruct **)((u_char *)g_SndSeqTable + seq_offset);
     state = (SeqStruct *)(sep_offset + (long)base);
     seq_raw = seq_arg;
     channel_offset = state->channel;

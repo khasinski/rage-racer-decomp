@@ -6,11 +6,11 @@ void *ClearOTag(u_long *arg0, long count);
 void *ClearOTagR(u_long *arg0, long arg1);
 
 extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
-extern GpuCallbacks *g_GpuFuncsStore asm("D_800941E0");
-extern GpuCallbacks *g_GpuFuncsMove asm("D_800941E0");
-extern u_long D_80094298;
-extern u_long D_8009429C;
-extern u_long D_800942A0;
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
+extern u_long g_MoveImageSrc asm("D_80094298");
+extern u_long g_MoveImageDst asm("D_8009429C");
+extern u_long g_MoveImageSize asm("D_800942A0");
 
 void CheckPrim(char *arg0, void *arg1) asm("func_80065968");
 extern char D_80013578[];
@@ -28,7 +28,7 @@ void LoadImage(Rect *arg0, void *arg1) {
 
 void StoreImage(Rect *arg0, void *arg1) {
     CheckPrim(D_80013584, arg0);
-    g_GpuFuncsStore->send(g_GpuFuncsStore->storeImage, arg0, 8, (u_long)arg1);
+    g_GpuFuncs->send(g_GpuFuncs->storeImage, arg0, 8, (u_long)arg1);
 }
 
 long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) {
@@ -50,15 +50,15 @@ long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) {
         low = arg1 & 0xFFFF;
         packed |= low;
         asm("" : "=r"(packed) : "0"(packed));
-        buf = &D_80094298;
+        buf = &g_MoveImageSrc;
         xy = arg0->xy;
-        gpu = g_GpuFuncsMove;
+        gpu = g_GpuFuncs;
         size = 0x14;
-        D_8009429C = packed;
+        g_MoveImageDst = packed;
         *buf = xy;
         wh = *(u_long *)&arg0->w;
         data = 0;
-        D_800942A0 = wh;
+        g_MoveImageSize = wh;
         asm("" : : "r"(wh) : "memory");
         return gpu->send(gpu->sendList, buf - 2, size, data);
     }
@@ -70,9 +70,9 @@ extern u_char g_GraphDebug asm("D_800941EA");
 extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
 extern char D_8001359C[];
 extern char D_800135B4[];
-extern u_long D_800942A4;
+extern u_long g_OtagTerminator asm("D_800942A4");
 
-extern GpuCallbacks *g_GpuFuncsClearOTagR asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 
 void * ClearOTag(u_long *arg0, long count) asm("func_80065CB0");
 void *ClearOTag(u_long *arg0, long count) {
@@ -108,7 +108,7 @@ void *ClearOTag(u_long *arg0, long count) {
         } while (remaining != 0);
     }
 
-    *ptr = (u_long)&D_800942A4 & 0xFFFFFF;
+    *ptr = (u_long)&g_OtagTerminator & 0xFFFFFF;
     return ptr;
 }
 
@@ -118,7 +118,7 @@ void *ClearOTagR(u_long *arg0, long arg1) {
         GPU_printf(D_800135B4, arg0, arg1);
     }
 
-    g_GpuFuncsClearOTagR->clearOTag(arg0, arg1);
+    g_GpuFuncs->clearOTag(arg0, arg1);
 
     {
         register u_long mask asm("$4") = 0xFFFFFF;
@@ -126,7 +126,7 @@ void *ClearOTagR(u_long *arg0, long arg1) {
         register u_long next asm("$3");
 
         asm("" : "=r"(ret), "=r"(mask) : "0"(ret), "1"(mask));
-        next = (u_long)&D_800942A4;
+        next = (u_long)&g_OtagTerminator;
         asm("" : "=r"(next) : "0"(next));
         next &= mask;
         *ret = next;
@@ -134,7 +134,7 @@ void *ClearOTagR(u_long *arg0, long arg1) {
     }
 }
 
-extern GpuCallbacks *D_800941E0;
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 
 /* libgpu DrawPrim: waits for the drawing to finish, then pushes the single
  * primitive at arg0 + 4, whose word count is the tag's length byte arg0[3]. */
@@ -142,6 +142,6 @@ void DrawPrim(u_char *prim) asm("func_80065E00");
 void DrawPrim(u_char *arg0) {
     u_long mode = arg0[3];
 
-    D_800941E0->drawSync(0);
-    D_800941E0->writeGp0Words(arg0 + 4, mode);
+    g_GpuFuncs->drawSync(0);
+    g_GpuFuncs->writeGp0Words(arg0 + 4, mode);
 }

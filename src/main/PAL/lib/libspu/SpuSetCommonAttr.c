@@ -33,7 +33,7 @@ typedef struct SpuCommonRegs {
     SpuVolume unknownVol;
 } SpuCommonRegs;
 
-extern SpuCommonRegs *D_8009AB7C;
+extern SpuCommonRegs *g_SpuRegBase asm("D_8009AB7C");
 
 void SpuSetCommonAttr(SpuCommonAttr *attr) asm("func_8007B2D0");
 void SpuSetCommonAttr(SpuCommonAttr *attr) {
@@ -98,7 +98,7 @@ void SpuSetCommonAttr(SpuCommonAttr *attr) {
             }
         }
         totalLeft &= 0x7FFF;
-        D_8009AB7C->mainVol.left = totalLeft | mainModeLeft;
+        g_SpuRegBase->mainVol.left = totalLeft | mainModeLeft;
     }
 
     if (setAll != 0 || mask & 2) {
@@ -149,70 +149,70 @@ void SpuSetCommonAttr(SpuCommonAttr *attr) {
             }
         }
         totalRight &= 0x7FFF;
-        D_8009AB7C->mainVol.right = totalRight | mainModeRight;
+        g_SpuRegBase->mainVol.right = totalRight | mainModeRight;
     }
 
     if (setAll != 0 || mask & 0x40) {
-        D_8009AB7C->cdVol.left = attr->cd.volume.left;
+        g_SpuRegBase->cdVol.left = attr->cd.volume.left;
     }
 
     if (setAll != 0 || mask & 0x80) {
-        D_8009AB7C->cdVol.right = attr->cd.volume.right;
+        g_SpuRegBase->cdVol.right = attr->cd.volume.right;
     }
 
     if (setAll != 0 || mask & 0x100) {
         if (attr->cd.reverb == 0) {
-            control = D_8009AB7C->spuCnt;
+            control = g_SpuRegBase->spuCnt;
             control &= ~4;
-            D_8009AB7C->spuCnt = control;
+            g_SpuRegBase->spuCnt = control;
         } else {
-            control = D_8009AB7C->spuCnt;
+            control = g_SpuRegBase->spuCnt;
             control |= 4;
-            D_8009AB7C->spuCnt = control;
+            g_SpuRegBase->spuCnt = control;
         }
     }
 
     if (setAll != 0 || mask & 0x200) {
         if (attr->cd.mix == 0) {
-            control = D_8009AB7C->spuCnt;
+            control = g_SpuRegBase->spuCnt;
             control &= ~1;
-            D_8009AB7C->spuCnt = control;
+            g_SpuRegBase->spuCnt = control;
         } else {
-            control = D_8009AB7C->spuCnt;
+            control = g_SpuRegBase->spuCnt;
             control |= 1;
-            D_8009AB7C->spuCnt = control;
+            g_SpuRegBase->spuCnt = control;
         }
     }
 
     if (setAll != 0 || mask & 0x400) {
-        D_8009AB7C->extVol.left = attr->ext.volume.left;
+        g_SpuRegBase->extVol.left = attr->ext.volume.left;
     }
 
     if (setAll != 0 || mask & 0x800) {
-        D_8009AB7C->extVol.right = attr->ext.volume.right;
+        g_SpuRegBase->extVol.right = attr->ext.volume.right;
     }
 
     if (setAll != 0 || mask & 0x1000) {
         if (attr->ext.reverb == 0) {
-            control = D_8009AB7C->spuCnt;
+            control = g_SpuRegBase->spuCnt;
             control &= ~8;
-            D_8009AB7C->spuCnt = control;
+            g_SpuRegBase->spuCnt = control;
         } else {
-            control = D_8009AB7C->spuCnt;
+            control = g_SpuRegBase->spuCnt;
             control |= 8;
-            D_8009AB7C->spuCnt = control;
+            g_SpuRegBase->spuCnt = control;
         }
     }
 
     if (setAll != 0 || mask & 0x2000) {
         if (attr->ext.mix == 0) {
-            control = D_8009AB7C->spuCnt;
+            control = g_SpuRegBase->spuCnt;
             control &= ~2;
-            D_8009AB7C->spuCnt = control;
+            g_SpuRegBase->spuCnt = control;
         } else {
-            control = D_8009AB7C->spuCnt;
+            control = g_SpuRegBase->spuCnt;
             control |= 2;
-            D_8009AB7C->spuCnt = control;
+            g_SpuRegBase->spuCnt = control;
         }
     }
 }

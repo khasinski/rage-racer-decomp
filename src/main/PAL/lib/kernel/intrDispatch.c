@@ -3,12 +3,16 @@
 
 typedef void (*Callback)(void);
 
-extern u_short D_80099430[];
-extern u_short D_80099432;
-extern u_short D_80099460;
-extern volatile u_short *D_8009A4BC;
-extern volatile u_short *D_8009A4C0;
-extern long D_8009A4C8;
+/* The kernel interrupt block at 0x80099430: [0] installed flag,
+ * [1] g_IntrInDispatch, [2..] g_IntrCallbacks (11 handler slots),
+ * +0x30 g_IntrCallbackMask (which slots are filled), +0x38 the saved
+ * register frame HookEntryInt is pointed at. */
+extern u_short g_IntrState[] asm("D_80099430");
+extern u_short g_IntrInDispatch asm("D_80099432");
+extern u_short g_IntrCallbackMask asm("D_80099460");
+extern volatile u_short *g_IrqStatus asm("D_8009A4BC");
+extern volatile u_short *g_IrqMask asm("D_8009A4C0");
+extern long g_IntrStuckCount asm("D_8009A4C8");
 extern u_char D_80013B70[];
 extern u_char D_80013B8C[];
 
@@ -23,13 +27,13 @@ void intrDispatch(void) {
     Callback *p;
     Callback *base;
 
-    state = D_80099430;
+    state = g_IntrState;
     if (state[0] == 0) {
-        GameDebugPrintf(D_80013B70, *D_8009A4BC);
+        GameDebugPrintf(D_80013B70, *g_IrqStatus);
         func_8006E654();
     }
-    D_80099432 = 1;
-    s0 = (D_80099460 & *D_8009A4BC) & *D_8009A4C0;
+    g_IntrInDispatch = 1;
+    s0 = (g_IntrCallbackMask & *g_IrqStatus) & *g_IrqMask;
     if (s0 != 0) {
         one = 1;
         base = (Callback *)&state[2];
@@ -39,7 +43,7 @@ void intrDispatch(void) {
                 p = base;
                 while ((s0 != 0) && (i < 0xB)) {
                     if (s0 & 1) {
-                        *D_8009A4BC = ~(one << i);
+                        *g_IrqStatus = ~(one << i);
                         if (*p != 0) {
                             (*p)();
                         }
@@ -49,20 +53,20 @@ void intrDispatch(void) {
                     i++;
                 }
             }
-            s0 = (D_80099460 & *D_8009A4BC) & *D_8009A4C0;
+            s0 = (g_IntrCallbackMask & *g_IrqStatus) & *g_IrqMask;
         } while (s0 != 0);
     }
-    if ((*D_8009A4BC & *D_8009A4C0) != 0) {
-        c = D_8009A4C8;
-        D_8009A4C8 = c + 1;
+    if ((*g_IrqStatus & *g_IrqMask) != 0) {
+        c = g_IntrStuckCount;
+        g_IntrStuckCount = c + 1;
         if (c >= 0x801) {
-            GameDebugPrintf(D_80013B8C, *D_8009A4BC, *D_8009A4C0);
-            D_8009A4C8 = 0;
-            *D_8009A4BC = 0;
+            GameDebugPrintf(D_80013B8C, *g_IrqStatus, *g_IrqMask);
+            g_IntrStuckCount = 0;
+            *g_IrqStatus = 0;
         }
     } else {
-        D_8009A4C8 = 0;
+        g_IntrStuckCount = 0;
     }
-    D_80099432 = 0;
+    g_IntrInDispatch = 0;
     func_8006E654();
 }

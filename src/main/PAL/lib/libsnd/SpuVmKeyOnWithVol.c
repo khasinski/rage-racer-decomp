@@ -2,12 +2,12 @@
 
 #include "common.h"
 
-extern u_char D_801E4BDF;
+extern u_char g_SndCurrentPriority asm("D_801E4BDF");
 extern u_char D_801E42F8;
-extern u_char D_801E4BEA;
-extern u_char D_8009E0D3[];
-extern u_char D_8009E0BC[];
-extern u_char *D_8009A588;
+extern u_char g_SndCurrentVoice asm("D_801E4BEA");
+extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
+extern u_char g_SndVoiceStatePitch[] asm("D_8009E0BC");
+extern u_char *g_SndSpuRegs asm("D_8009A588");
 
 u_char SpuVmAlloc(long arg0) asm("func_800739E8");
 void SpuVmKeyOnCore(long arg0, u_short arg1, u_short arg2, u_short arg3, u_short arg4) asm("func_80074818");
@@ -19,12 +19,12 @@ void SpuVmKeyOnWithDefaultVol(long arg0, long arg1) asm("func_80075C30");
 void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
     long ret;
 
-    D_801E4BDF = 0x7F;
+    g_SndCurrentPriority = 0x7F;
     ret = SpuVmAlloc(0xFF) & 0xFF;
-    *(u_short *)&D_801E4BEA = ret;
+    *(u_short *)&g_SndCurrentVoice = ret;
 
     if (ret < D_801E42F8) {
-        SpuVmKeyOnCore(D_801E4BEA, arg0, arg1, arg2, arg3);
+        SpuVmKeyOnCore(g_SndCurrentVoice, arg0, arg1, arg2, arg3);
     }
 }
 
@@ -48,11 +48,11 @@ void SpuVmClearFinishedVoices(void) {
 loop:
     next >>= 16;
     offset = next * 0x34;
-    if (D_8009E0D3[offset] == flag) {
+    if (g_SndVoiceStateStatus[offset] == flag) {
         offset = ((u_char)i) * 0x34;
-        D_8009E0D3[offset] = 0;
-        ptr = D_8009A588;
-        *(u_short *)(D_8009E0BC + offset) = 0;
+        g_SndVoiceStateStatus[offset] = 0;
+        ptr = g_SndSpuRegs;
+        *(u_short *)(g_SndVoiceStatePitch + offset) = 0;
         *(u_short *)(ptr + 0x194) = 0;
         *(u_short *)(ptr + 0x196) = 0;
     }
@@ -72,11 +72,11 @@ loop:
 void SpuVmKeyOnWithDefaultVol(long arg0, long arg1) {
     long ret;
 
-    D_801E4BDF = 0x7F;
+    g_SndCurrentPriority = 0x7F;
     ret = SpuVmAlloc(0xFF) & 0xFF;
-    *(u_short *)&D_801E4BEA = ret;
+    *(u_short *)&g_SndCurrentVoice = ret;
 
     if (ret < D_801E42F8) {
-        SpuVmKeyOnCore(D_801E4BEA, arg0, arg1, 0x80FF, 0x5FC8);
+        SpuVmKeyOnCore(g_SndCurrentVoice, arg0, arg1, 0x80FF, 0x5FC8);
     }
 }

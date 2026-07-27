@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern long D_80099048;
+extern long g_CdDebugLevel asm("D_80099048");
 extern u_char D_80013678[];
 extern u_char D_80013688[];
 extern u_char D_800136A4[];
@@ -59,7 +59,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
         lastTrack = high + lastBcd;
     }
 
-    if (D_80099048 >= 2) {
+    if (g_CdDebugLevel >= 2) {
         GameDebugPrintf(D_80013678, firstTrack, lastTrack);
     }
 
@@ -96,7 +96,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
     }
 
     ptr = (u_char *)(count - 1);
-    if (D_80099048 >= 2) {
+    if (g_CdDebugLevel >= 2) {
         if ((long)ptr >= 0) {
             register u_char *entry asm("$16");
             register u_char *fmt asm("$4");
@@ -122,7 +122,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
     return (long)ptr;
 
 fail:
-    if (D_80099048 != 0) {
+    if (g_CdDebugLevel != 0) {
         GameDebugPrintf(D_800136A4);
     }
     func_8006A574(oldHandler);

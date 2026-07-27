@@ -1,11 +1,11 @@
 #include "psyq/kernel.h"
 
-extern u_short D_80099430[];
-extern u_short D_80099462;
-extern u_long D_80099464;
-extern volatile u_short *D_8009A4BC;
-extern volatile u_short *D_8009A4C0;
-extern volatile u_long *D_8009A4C4;
+extern u_short g_IntrState[] asm("D_80099430");
+extern u_short g_IntrSavedIrqMask asm("D_80099462");
+extern u_long g_IntrSavedDpcr asm("D_80099464");
+extern volatile u_short *g_IrqStatus asm("D_8009A4BC");
+extern volatile u_short *g_IrqMask asm("D_8009A4C0");
+extern volatile u_long *g_KernelDpcr asm("D_8009A4C4");
 
 void *StopKernelInterrupts(void) asm("func_8006E4E4");
 void *StopKernelInterrupts(void) {
@@ -18,24 +18,24 @@ void *StopKernelInterrupts(void) {
     u_short maskValue;
     u_long statusValue;
 
-    state = D_80099430;
+    state = g_IntrState;
     if (state[0] == 0) {
         return 0;
     }
 
     EnterCriticalSection();
 
-    initialMask = D_8009A4C0;
+    initialMask = g_IrqMask;
     mask = initialMask;
-    status = D_8009A4C4;
+    status = g_KernelDpcr;
     maskValue = *mask;
-    D_80099462 = maskValue;
+    g_IntrSavedIrqMask = maskValue;
     statusValue = *status;
-    clearMask = D_8009A4BC;
-    D_80099464 = statusValue;
+    clearMask = g_IrqStatus;
+    g_IntrSavedDpcr = statusValue;
     *mask = 0;
     *clearMask = *mask;
-    newStatus = D_8009A4C4;
+    newStatus = g_KernelDpcr;
     status = newStatus;
     *status &= 0x77777777;
     ResetEntryInt();

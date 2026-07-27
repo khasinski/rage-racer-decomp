@@ -2,12 +2,12 @@
 
 #include "common.h"
 
-extern volatile u_short *D_8009AB7C;
-extern u_short D_8009AB78;
-extern long D_8009AB74;
-extern u_char D_80013EC0[];
-extern u_char D_80013EE0[];
-extern u_char D_80013EF4[];
+extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
+extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
+extern long g_SpuWaitCount asm("D_8009AB74");
+extern u_char g_SpuTimeoutFmt[] asm("D_80013EC0");
+extern u_char g_SpuTimeoutMsgWrdy[] asm("D_80013EE0");
+extern u_char g_SpuTimeoutMsgDmaf[] asm("D_80013EF4");
 
 
 void _spu_writeByIO(u_short *addr, u_long size) asm("func_80078F4C");
@@ -26,8 +26,8 @@ void _spu_writeByIO(u_short *addr, u_long size) {
         dj = dj * 3;                          \
     }
 
-    stat0 = D_8009AB7C[0xD7];
-    D_8009AB7C[0xD3] = D_8009AB78;
+    stat0 = g_SpuRegBase[0xD7];
+    g_SpuRegBase[0xD3] = g_SpuTransferStartAddr;
     saved = stat0 & 0x7ff;
     SPU_DELAY();
 
@@ -35,20 +35,20 @@ void _spu_writeByIO(u_short *addr, u_long size) {
         do {
             chunk = (size < 65) ? size : 64;
             for (k = 0; k < chunk; k += 2) {
-                D_8009AB7C[0xD4] = *paddr++;
+                g_SpuRegBase[0xD4] = *paddr++;
             }
-            ctrl = D_8009AB7C[0xD5];
+            ctrl = g_SpuRegBase[0xD5];
             cmasked = ctrl & 0xffcf;
             asm("" : "=r"(cmasked) : "0"(cmasked));
             ctrl = cmasked | 0x10;
-            D_8009AB7C[0xD5] = ctrl;
+            g_SpuRegBase[0xD5] = ctrl;
 
             SPU_DELAY();
 
-            D_8009AB74 = 0;
-            while (D_8009AB7C[0xD7] & 0x400) {
-                if (++D_8009AB74 >= 5001) {
-                    GameDebugPrintf(D_80013EC0, D_80013EE0);
+            g_SpuWaitCount = 0;
+            while (g_SpuRegBase[0xD7] & 0x400) {
+                if (++g_SpuWaitCount >= 5001) {
+                    GameDebugPrintf(g_SpuTimeoutFmt, g_SpuTimeoutMsgWrdy);
                     break;
                 }
             }
@@ -60,12 +60,12 @@ void _spu_writeByIO(u_short *addr, u_long size) {
         } while (size != 0);
     }
 
-    ctrl = D_8009AB7C[0xD5];
-    D_8009AB7C[0xD5] = ctrl & 0xffcf;
-    D_8009AB74 = 0;
-    while ((D_8009AB7C[0xD7] & 0x7ff) != saved) {
-        if (++D_8009AB74 >= 5001) {
-            GameDebugPrintf(D_80013EC0, D_80013EF4);
+    ctrl = g_SpuRegBase[0xD5];
+    g_SpuRegBase[0xD5] = ctrl & 0xffcf;
+    g_SpuWaitCount = 0;
+    while ((g_SpuRegBase[0xD7] & 0x7ff) != saved) {
+        if (++g_SpuWaitCount >= 5001) {
+            GameDebugPrintf(g_SpuTimeoutFmt, g_SpuTimeoutMsgDmaf);
             break;
         }
     }

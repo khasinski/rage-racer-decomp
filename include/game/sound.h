@@ -19,7 +19,7 @@ typedef struct SoundScale {
 /* Music / sound-mode channel; `left` and `right` are also read as their low
  * halves. Reset to left=right=-1, mode=1, vols=0. */
 typedef struct MusicChannel {
-    s32 left;      /* +0x00 current left/tone value (D_801E6D00) */
+    s32 left;      /* +0x00 current left/tone value (g_MusicChannels) */
     s32 right;     /* +0x04 current right value     (D_801E6D04) */
     s32 mode;      /* +0x08 state/mode 0/1/2/-1      (D_801E6D08) */
     s32 reserved;  /* +0x0C unused                              */
@@ -32,13 +32,13 @@ extern MusicChannel g_MusicChannels[] asm("D_801E6D00");
 /* Effect voice, 4 elements for hardware voices 10..13. func_8005C914 walks it
  * with a pointer to `.state`. */
 typedef struct EffectVoice {
-    s16 note;      /* +0x00 note/detune base  (D_801E6D30) */
+    s16 note;      /* +0x00 note/detune base  (g_EffectVoices) */
     s16 unk02;     /* +0x02                                */
-    s16 tone;      /* +0x04 tone              (D_801E6D34) */
+    s16 tone;      /* +0x04 tone              (g_EffectVoiceTone) */
     s16 unk06;     /* +0x06                                */
-    s32 state;     /* +0x08 state 0/1/2/-1    (D_801E6D38) */
+    s32 state;     /* +0x08 state 0/1/2/-1    (g_EffectVoiceState) */
     s32 pitch;     /* +0x0C pitch             (D_801E6D3C) */
-    s32 volume;    /* +0x10 volume            (D_801E6D40) */
+    s32 volume;    /* +0x10 volume            (g_EffectVoiceVolume) */
 } EffectVoice; /* sizeof 0x14 */
 
 extern EffectVoice g_EffectVoices[] asm("D_801E6D30");
@@ -52,14 +52,14 @@ extern s32 g_ReverbDepthR asm("D_801E6D88"); /* reverb depth right */
  * while a BGM fade-out runs, 0 when it has finished. Kept on the raw spelling
  * because GameForceBasicEffectVoicesEnabled also uses &D_801E6D8C as the end
  * address of g_EffectVoices (= &g_EffectVoices[4].pitch). */
-extern s32 D_801E6D8C;
+extern s32 g_ReverbFadeStep asm("D_801E6D8C");
 /* libsnd access number of the open SEQ, returned by SsSeqOpen in
  * GameOpenVabSequenceSlot; the `seq` handle for SsSeqPlay/Stop/SetVol. */
 extern s16 g_SeqHandle asm("D_801E6D90");
 extern s32 g_SeqVolume asm("D_801E6D94"); /* current SEQ volume, also read as s16 */
 extern s32 g_SeqVolumeSetting asm("D_801E6D98"); /* 0..15 OPTIONS level; volume = n * 114 / 15 */
 extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C"); /* step added to g_SeqVolume each frame; -4 while fading out */
-extern s32 D_801E6DA0; /* +0x20 */
+extern s32 g_PrizeCountStep; /* +0x20 */
 extern s16 D_801E6DA4[]; /* +0x24 s16 table */
 
 /*

@@ -1,11 +1,11 @@
 #include "psyq/kernel.h"
 
-extern void *D_8009A4CC[];
-extern u_long *D_8009A4F0;
-extern volatile long D_8009A4EC;
-extern volatile u_long *D_8009A4F4;
-extern u_long D_8009A4F8[];
-extern u_long *D_8009A518;
+extern void *g_VSyncCallbacks[] asm("D_8009A4CC");
+extern u_long *g_Timer1ModeReg asm("D_8009A4F0");
+extern volatile long g_VSyncCount asm("D_8009A4EC");
+extern volatile u_long *g_DmaIrqControl asm("D_8009A4F4");
+extern u_long g_DmaCallbacks[] asm("D_8009A4F8");
+extern u_long *g_DmaChannelRegs asm("D_8009A518");
 extern long D_8009A51C;
 extern u_char D_80013BA8[];
 extern u_char D_80013BC4[];
@@ -82,9 +82,9 @@ u_long RestoreKernelRegistersStub[17] asm("func_8006E6C0") __attribute__((sectio
 };
 
 void *startIntrVSync(void) {
-    *D_8009A4F0 = 0x107;
-    D_8009A4EC = 0;
-    clearIntrVSyncCallbacks((u_long *)D_8009A4CC, 8);
+    *g_Timer1ModeReg = 0x107;
+    g_VSyncCount = 0;
+    clearIntrVSyncCallbacks((u_long *)g_VSyncCallbacks, 8);
     RegisterKernelCallback(0, intrVSyncDispatcher);
 
     return setIntrVSyncAddress;
@@ -96,11 +96,11 @@ void intrVSyncDispatcher(void) {
     void (*func)(void);
     long count;
 
-    count = D_8009A4EC;
+    count = g_VSyncCount;
     i = 0;
-    callback = (void (**)(void))D_8009A4CC;
-    D_8009A4EC = count + 1;
-    count = D_8009A4EC;
+    callback = (void (**)(void))g_VSyncCallbacks;
+    g_VSyncCount = count + 1;
+    count = g_VSyncCount;
     for (; i < 8; i++) {
         func = *callback++;
         if (func != 0) {
@@ -113,7 +113,7 @@ void setIntrVSync(long arg0, void *arg1) {
     register void **base asm("$2");
     register void **slot asm("$4");
 
-    base = D_8009A4CC;
+    base = g_VSyncCallbacks;
     slot = &base[arg0];
     if (arg1 != *slot) {
         *slot = arg1;
@@ -134,8 +134,8 @@ void clearIntrVSyncCallbacks(u_long *dst, long count) {
 }
 
 void *startIntrDMA(void) {
-    clearIntrDMACallbacks(D_8009A4F8, 8);
-    *D_8009A4F4 = 0;
+    clearIntrDMACallbacks(g_DmaCallbacks, 8);
+    *g_DmaIrqControl = 0;
     RegisterKernelCallback(3, intrDMADispatcher);
 
     return setIntrDMAAddress;
@@ -151,12 +151,12 @@ void intrDMADispatcher(void) {
     register void (**handlerBase)(void) asm("$21");
     register u_char *fmt asm("$4");
 
-    pendingTemp = *D_8009A4F4;
+    pendingTemp = *g_DmaIrqControl;
     pending = (pendingTemp >> 0x18) & 0x7F;
     if (pending != 0) {
         one = 1;
         lowMask = 0xFFFFFF;
-        handlerBase = (void (**)(void))D_8009A4F8;
+        handlerBase = (void (**)(void))g_DmaCallbacks;
         do {
             i = 0;
             if (pending != 0) {
@@ -167,7 +167,7 @@ void intrDMADispatcher(void) {
                         register u_long value asm("$2");
                         register long shift asm("$2");
 
-                        bits = D_8009A4F4;
+                        bits = g_DmaIrqControl;
                         shift = i + 0x18;
                         value = one << shift;
                         value |= lowMask;
@@ -183,16 +183,16 @@ void intrDMADispatcher(void) {
                 }
             }
 
-            pendingTemp = *D_8009A4F4;
+            pendingTemp = *g_DmaIrqControl;
             pending = (pendingTemp >> 0x18) & 0x7F;
         } while (pending != 0);
     }
 
-    if (((*D_8009A4F4 & 0xFF000000) == 0x80000000) || ((*D_8009A4F4 & 0x8000) != 0)) {
+    if (((*g_DmaIrqControl & 0xFF000000) == 0x80000000) || ((*g_DmaIrqControl & 0x8000) != 0)) {
         fmt = D_80013BA8;
-        GameDebugPrintf(fmt, *D_8009A4F4);
+        GameDebugPrintf(fmt, *g_DmaIrqControl);
         for (i = 0; i < 7; i++) {
-            GameDebugPrintf(D_80013BC4, i, D_8009A518[i * 4]);
+            GameDebugPrintf(D_80013BC4, i, g_DmaChannelRegs[i * 4]);
         }
     }
 }
@@ -207,7 +207,7 @@ u_long setIntrDMA(long arg0, u_long arg1) {
 
     index = arg0;
     asm("");
-    base = D_8009A4F8;
+    base = g_DmaCallbacks;
     offset = index << 2;
     slot = (u_long *)((long)base + offset);
     oldCallback = *slot;
@@ -215,7 +215,7 @@ u_long setIntrDMA(long arg0, u_long arg1) {
 
     if (callback != oldCallback) {
         if (callback != 0) {
-            register volatile u_long *bits asm("$5") = D_8009A4F4;
+            register volatile u_long *bits asm("$5") = g_DmaIrqControl;
             register u_long value asm("$4");
             register long shift asm("$3");
             register u_long mask asm("$2") = 0xFFFFFF;
@@ -231,7 +231,7 @@ u_long setIntrDMA(long arg0, u_long arg1) {
             value |= mask;
             *bits = value;
         } else {
-            register volatile u_long *bits asm("$5") = D_8009A4F4;
+            register volatile u_long *bits asm("$5") = g_DmaIrqControl;
             register u_long value asm("$3");
             register long shift asm("$4");
             register u_long mask asm("$2") = 0xFFFFFF;

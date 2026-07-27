@@ -16,18 +16,18 @@ typedef struct CdAlarm {
     char *name;
 } CdAlarm;
 
-extern char *D_80099060[];
-extern char *D_800990E0[];
-extern CdCallback D_8009903C;
-extern CdCallback D_80099040;
+extern char *g_CdCommandNames[] asm("D_80099060");
+extern char *g_CdIntrNames[] asm("D_800990E0");
+extern CdCallback g_CdSyncCallback asm("D_8009903C");
+extern CdCallback g_CdReadyCallback asm("D_80099040");
 extern u_char D_8009905D;
-extern volatile u_char *D_80099300;
-extern volatile CdIntr D_80099318;
-extern u_char D_8009BAF0[];
-extern u_char D_8009BAF8[];
-extern u_char D_8009BB00[];
-extern long D_8009BB08;
-extern long D_8009BB0C;
+extern volatile u_char *g_CdReg0 asm("D_80099300");
+extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
+extern u_char g_CdSyncResult[] asm("D_8009BAF0");
+extern u_char g_CdReadyResult[] asm("D_8009BAF8");
+extern u_char g_CdDataEndResult[] asm("D_8009BB00");
+extern long g_CdTimeoutDeadline asm("D_8009BB08");
+extern long g_CdTimeoutCounter asm("D_8009BB0C");
 extern char *D_8009BB10;
 extern char D_80013814[];
 extern char D_80013824[];
@@ -61,18 +61,18 @@ long CD_ready(long mode, u_char *result) {
     long status;
     long alarmStatus;
 
-    D_8009BB08 = VSync(-1) + 0x3C0;
-    D_8009BB0C = 0;
+    g_CdTimeoutDeadline = VSync(-1) + 0x3C0;
+    g_CdTimeoutCounter = 0;
     D_8009BB10 = D_800138A4;
 
     for (;;) {
-        if (D_8009BB08 < VSync(-1) ||
-            D_8009BB0C++ > 0x3C0000) {
+        if (g_CdTimeoutDeadline < VSync(-1) ||
+            g_CdTimeoutCounter++ > 0x3C0000) {
             func_80063C38(D_80013814);
-            GameDebugPrintf(D_80013824, ((CdAlarm *)&D_8009BB08)->name,
-                          D_80099060[D_8009905D],
-                          D_800990E0[D_80099318.sync],
-                          D_800990E0[D_80099318.ready]);
+            GameDebugPrintf(D_80013824, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
+                          g_CdCommandNames[D_8009905D],
+                          g_CdIntrNames[g_CdSyncStatus.sync],
+                          g_CdIntrNames[g_CdSyncStatus.ready]);
             func_8006BAF0();
             alarmStatus = -1;
         } else {
@@ -84,29 +84,29 @@ long CD_ready(long mode, u_char *result) {
         }
 
         if (func_8006E088()) {
-            savedStatus = *D_80099300 & 3;
+            savedStatus = *g_CdReg0 & 3;
             while ((interrupt = func_8006AB5C()) != 0) {
-                if ((interrupt & 4) != 0 && D_80099040 != 0) {
-                    D_80099040(D_80099318.ready, D_8009BAF8);
+                if ((interrupt & 4) != 0 && g_CdReadyCallback != 0) {
+                    g_CdReadyCallback(g_CdSyncStatus.ready, g_CdReadyResult);
                 }
-                if ((interrupt & 2) != 0 && D_8009903C != 0) {
-                    D_8009903C(D_80099318.sync, D_8009BAF0);
+                if ((interrupt & 2) != 0 && g_CdSyncCallback != 0) {
+                    g_CdSyncCallback(g_CdSyncStatus.sync, g_CdSyncResult);
                 }
             }
-            *D_80099300 = savedStatus;
+            *g_CdReg0 = savedStatus;
         }
 
-        status = D_80099318.command;
+        status = g_CdSyncStatus.command;
         if (status != 0) {
-            D_80099318.command = 0;
-            copy8(result, D_8009BB00);
+            g_CdSyncStatus.command = 0;
+            copy8(result, g_CdDataEndResult);
             return status;
         }
 
-        status = D_80099318.ready;
+        status = g_CdSyncStatus.ready;
         if (status != 0) {
-            D_80099318.ready = 0;
-            copy8(result, D_8009BAF8);
+            g_CdSyncStatus.ready = 0;
+            copy8(result, g_CdReadyResult);
             return status;
         }
 

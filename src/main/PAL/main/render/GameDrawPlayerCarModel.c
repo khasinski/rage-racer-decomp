@@ -7,7 +7,7 @@
 extern GameRenderView *g_CarModelAsset asm("D_8009E698");
 extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
 extern s32 g_ModelBankCount asm("D_801E4168");
-extern s32 D_1F800084;
+extern s32 g_ScratchRenderMode asm("D_1F800084");
 
 s32 func_800350B4(s32 arg0);
 void func_8001C248(s32 arg0, Matrix *arg1);
@@ -78,17 +78,17 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
     v_138[2] = obj->z;
     v_138[1] = obj->field_60;
     func_80017794((void *)0x1F80011C, v_138, &m_10);
-    D_1F800084 = 0;
+    g_ScratchRenderMode = 0;
     GameSubmitModel((void *)0x1F800000, 1);
 
     func_80017794((void *)0x1F80011C, v_138, &m_10);
-    D_1F800084 = 0;
+    g_ScratchRenderMode = 0;
     GameSubmitModel((void *)0x1F800000, 1);
 
     GameBuildRotMatrixZ(&m_70, obj->angle_28);
     MulMatrix2(&m_30, &m_70);
     func_80017794((void *)0x1F80011C, obj, &m_70);
-    D_1F800084 = 0;
+    g_ScratchRenderMode = 0;
     GameSubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
 
     otDepth = obj->field_E4 << 1;
@@ -116,7 +116,7 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
     m_B0[1].m[2][1] = m_B0[0].m[2][1];
     m_B0[1].m[2][2] = -m_B0[0].m[2][2];
     func_80017794((void *)0x1F80011C, obj, &m_F0);
-    D_1F800084 = 0;
+    g_ScratchRenderMode = 0;
     GameSubmitModel((void *)0x1F800000, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
 
     for (i = 0; i < 2; i++) {
@@ -133,7 +133,7 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
         m_118[1] += obj->y;
         m_118[2] += obj->z;
         func_80017794((void *)0x1F80011C, m_118, &m_B0[i]);
-        D_1F800084 = 0;
+        g_ScratchRenderMode = 0;
         GameSubmitModel((void *)0x1F800000, (otDepth + 2 < g_ModelBankCount) ? (otDepth + 2) : 1);
         func_80069888(&m_90);
     }
@@ -147,7 +147,7 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameDrawPlayerCarModel", func_8001DFC0);
 
-extern s32 D_8009F094;
+extern s32 g_FmvState asm("D_8009F094");
 extern s32 g_StreamReturnScene asm("D_8019C760");
 s32 func_8005B9CC(void);
 void func_8006A534(s32 arg0, s32 arg1);
@@ -156,7 +156,7 @@ void GameBeginFmv(s32 arg0) asm("func_8001E6B4");
 void GameBeginFmv(s32 arg0) {
     func_8005B9CC();
     GameResetCdAudioState();
-    D_8009F094 = 0;
+    g_FmvState = 0;
     g_StreamReturnScene = arg0;
     g_SceneId = 5;
     func_8006A534(0, 0);
@@ -171,7 +171,7 @@ void GameEndFmv(void) asm("func_8001EA34");
 
 void GameUpdateFmv(void) asm("func_8001E71C");
 void GameUpdateFmv(void) {
-    s32 state = D_8009F094;
+    s32 state = g_FmvState;
 
     if (state == 1) {
         goto state_1;

@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern volatile u_short *D_8009AB7C;
+extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
 
 u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) asm("func_8007A21C");
 
@@ -14,7 +14,7 @@ u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) {
     u_long old;
 
     {
-        register volatile u_short *base asm("$3") = D_8009AB7C;
+        register volatile u_short *base asm("$3") = g_SpuRegBase;
 
         reg_hi = (volatile u_short *)((u_long)(arg3 << 1) + (u_long)base);
         reg_lo = (volatile u_short *)((u_long)(arg2 << 1) + (u_long)base);

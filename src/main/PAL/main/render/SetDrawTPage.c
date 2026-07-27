@@ -141,15 +141,15 @@ void DumpDispEnv(DispEnv *arg0) {
 
 extern char D_80013478[];
 extern char D_80013498[];
-extern u8 D_800941A0[];
-extern GpuCallbacks *D_800941E0;
-extern u8 D_800941E8[];
-extern u8 D_800941E9;
-extern u8 D_800941EA;
-extern u16 D_800941EC;
-extern u16 D_800941EE;
-extern u8 D_80094268[];
-extern u8 D_8009427C[];
+extern u8 g_GpuJumpTable[] asm("D_800941A0");
+extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
+extern u8 g_GraphType[] asm("D_800941E8");
+extern u8 g_GraphQueue asm("D_800941E9");
+extern u8 g_GraphDebug asm("D_800941EA");
+extern u16 g_VramWidth asm("D_800941EC");
+extern u16 g_VramHeight asm("D_800941EE");
+extern u8 g_VramWidthTable[] asm("D_80094268");
+extern u8 g_VramHeightTable[] asm("D_8009427C");
 
 void func_80068180(u8 *dst, s32 value, s32 count);
 void func_800681AC(void *arg0);
@@ -167,11 +167,11 @@ void ResetGraph(s32 mode) {
 
     maskedMode = mode & 7;
     if ((maskedMode == 0) || (maskedMode == 3)) {
-        graphState = D_800941E8;
-        GameDebugPrintf(D_80013478, D_800941A0, graphState);
+        graphState = g_GraphType;
+        GameDebugPrintf(D_80013478, g_GpuJumpTable, graphState);
         func_80068180(graphState, 0, 0x80);
         KernelCallbackSlot3();
-        func_800681AC((void *)((u32)D_800941E0 & 0xFFFFFF));
+        func_800681AC((void *)((u32)g_GpuFuncs & 0xFFFFFF));
         graphType = func_80067C80(maskedMode != 0);
         clearEnv = graphState + 0x10;
         asm("" : "=r"(clearEnv) : "0"(clearEnv));
@@ -181,27 +181,26 @@ void ResetGraph(s32 mode) {
             u16 v;
             s32 st1;
 
-            D_800941E9 = 1;
-            v = *(u16 *)&D_80094268[st0 * 4];
+            g_GraphQueue = 1;
+            v = *(u16 *)&g_VramWidthTable[st0 * 4];
             st1 = *(volatile u8 *)graphState;
             fillValue = -1;
-            D_800941EC = v;
-            D_800941EE = *(u16 *)&D_8009427C[st1 * 4];
+            g_VramWidth = v;
+            g_VramHeight = *(u16 *)&g_VramHeightTable[st1 * 4];
         }
         func_80068180(clearEnv, fillValue, 0x5C);
         func_80068180(graphState + 0x6C, -1, 0x14);
         graphType = *(volatile u8 *)graphState;
     } else {
-        if (D_800941EA >= 2) {
+        if (g_GraphDebug >= 2) {
             D_800941E4(D_80013498, mode);
         }
-        D_800941E0->resetGraph(1);
+        g_GpuFuncs->resetGraph(1);
     }
 }
 
 extern void (* volatile GPU_printf)(char *, ...) asm("D_800941E4");
 extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
-extern u8 g_GraphType asm("D_800941E8");
 extern u8 g_GraphDebug asm("D_800941EA");
 extern u8 g_GraphReverse asm("D_800941EB");
 extern char D_800134AC[];
@@ -232,7 +231,7 @@ s32 SetGraphReverse(s32 arg0) {
     }
     g_GpuFuncs->submit(command);
 
-    if (g_GraphType == 2) {
+    if (g_GraphType[0] == 2) {
         callbacks2 = g_GpuFuncs;
         if (g_GraphReverse != 0) {
             command = 0x20000501;
@@ -261,7 +260,7 @@ s32 SetGraphDebug(u8 arg0) {
 
         a1 = *ptr;
         asm volatile("" : "=r"(a1) : "0"(a1));
-        a2 = g_GraphType;
+        a2 = g_GraphType[0];
         a3 = g_GraphReverse;
         fmt = D_800134C4;
         func(fmt, a1, a2, a3);

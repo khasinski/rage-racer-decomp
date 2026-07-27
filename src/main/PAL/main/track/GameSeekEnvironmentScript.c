@@ -20,12 +20,12 @@ extern Cmd *g_EnvScriptCursor asm("D_801E40E8");
 extern u32 *g_EnvScriptCues asm("D_801E42F4");
 
 extern s16 g_EnvFogEnabled asm("D_801E3FB4");
-/* Split symbols of the packed slot-0 colour, i.e. g_EnvColors[0].cur: this file
- * addresses its R, G and B bytes individually to feed SetFarColor, so it
- * declares them as three u8. */
-extern u8 g_EnvFogColor asm("D_801E3FB6");
-extern u8 g_EnvFogColorG asm("D_801E3FB7");
-extern u8 g_EnvFogColorB asm("D_801E3FB8");
+/* The three bytes of the packed slot-0 colour g_EnvColors[0].cur, addressed
+ * individually because SetFarColor takes R, G and B separately. The cast is
+ * what the byte view costs: render.h is included here, so this TU cannot
+ * redeclare D_801E3FB6 as u8[] under a second name. g_EnvSpare is the fourth,
+ * unused byte of the same word. */
+#define ENV_FOG_RGB ((u8 *)g_EnvColors)
 extern u8 g_EnvSpare asm("D_801E3FB9");
 
 /* GameLerpEnvColor works in bytes, so the eight lerps below address the slots
@@ -146,14 +146,14 @@ void GameUpdateEnvironment(void) {
         GameLerpEnvColor(ENV_FROM(8), ENV_TO(8), ENV_CUR(8), frac);
     }
 
-    func_80069A38(g_EnvFogColor, g_EnvFogColorG, g_EnvFogColorB);
+    func_80069A38(ENV_FOG_RGB[0], ENV_FOG_RGB[1], ENV_FOG_RGB[2]);
 
     if (g_EnvSpareLerp != 0) {
         g_EnvSpare = (g_EnvSpareFrom * diff + g_EnvSpareTo * g_EnvLerpFrame) / g_EnvLerpDuration;
     }
 
     if (g_EnvLerpFrame == g_EnvLerpDuration) {
-        if ((*(u32 *)&g_EnvFogEnabled & 0xFFFF0000) == 0x80800000 && g_EnvFogColorB == 0x80) {
+        if ((*(u32 *)&g_EnvFogEnabled & 0xFFFF0000) == 0x80800000 && ENV_FOG_RGB[2] == 0x80) {
             g_EnvFogEnabled = 0;
         }
     }

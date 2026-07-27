@@ -4,13 +4,13 @@
 #include "game/cd.h"
 #include "game/memcard.h"
 
-extern u_char D_80082FD9[];
+extern u_char g_LibcCtype[] asm("D_80082FD9");
 
 long LibcToLower(long arg0) asm("func_80063D6C");
 long LibcToLower(long arg0) {
     u_char value = arg0;
 
-    if (D_80082FD9[value & 0xFF] & 1) {
+    if (g_LibcCtype[value & 0xFF] & 1) {
         value = arg0 + 0x20;
     }
 

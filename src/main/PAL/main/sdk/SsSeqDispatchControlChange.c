@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 long func_80070D70(long seq, short sep);
 void func_8007010C(short seq, short sep, u_char value);
@@ -25,7 +25,7 @@ void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
     SeqStruct *state;
 
     control = arg2 & 0xFF;
-    state = &D_801E79CC[seq][sep];
+    state = &g_SndSeqTable[seq][sep];
     readPos = state->read_pos;
     channel = state->channel;
     state->read_pos++;

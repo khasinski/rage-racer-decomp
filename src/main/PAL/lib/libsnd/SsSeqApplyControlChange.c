@@ -1,8 +1,8 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
-extern void (*D_801E7A58[][0x10])(long seq, long sep, u_char value);
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern void (*g_SndMarkCallbacks[][0x10])(long seq, long sep, u_char value) asm("D_801E7A58");
 
 void SsSeqApplyControlChange(long seq, long sep, u_char value) asm("func_8006FDA8");
 
@@ -24,7 +24,7 @@ void SsSeqApplyControlChange(long seq, long sep, u_char value) {
     seq_offset = seq_shift >> 14;
     sep_s = (short)sep_s;
     sep_offset = (((((sep_s * 2) + sep_s) * 4) - sep_s) * 4) - sep_s;
-    base = *(SeqStruct **)((u_char *)D_801E79CC + seq_offset);
+    base = *(SeqStruct **)((u_char *)g_SndSeqTable + seq_offset);
     sep_offset = sep_offset * 4;
     state = (SeqStruct *)(sep_offset + (long)base);
 
@@ -53,7 +53,7 @@ maybe_callback:
         seq_cb = seq_raw << 16;
         raw_shift = seq_raw << 16;
         seq_cb = raw_shift >> 16;
-        callback = D_801E7A58[seq_cb][(short)sep_raw];
+        callback = g_SndMarkCallbacks[seq_cb][(short)sep_raw];
         if (callback != 0) {
             callback(seq_cb, (short)sep_raw, value);
         }

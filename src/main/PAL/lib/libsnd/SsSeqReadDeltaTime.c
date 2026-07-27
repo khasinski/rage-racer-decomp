@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 long SsSeqReadDeltaTime(long arg0, long arg1) asm("func_80070D70");
 
@@ -11,7 +11,7 @@ long SsSeqReadDeltaTime(long arg0, long arg1) {
     long byte;
     long ret;
 
-    state = &D_801E79CC[(short)arg0][(short)arg1];
+    state = &g_SndSeqTable[(short)arg0][(short)arg1];
 
     stream = state->read_pos;
     state->read_pos = stream + 1;

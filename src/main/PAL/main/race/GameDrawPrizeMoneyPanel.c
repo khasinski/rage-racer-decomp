@@ -38,7 +38,7 @@ void GameBeginEndingFmv(s32 arg0) asm("func_80019BB8");
 void GameBeginClassFmv(s32 arg0) asm("func_80019B3C");
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
-extern s32 g_PrizeScreenStep asm("D_8019CB74");
+extern s32 g_PrizeScreenState asm("D_8019CB74");
 extern s32 g_PrizeAmount asm("D_801F17B0");
 extern s32 g_PrizeCountStep asm("D_801E6DA0");
 extern s32 g_BonusCountStep asm("D_801E6C78");
@@ -237,7 +237,7 @@ void GameEnterPrizeScreen(void) {
 
     mode = g_CourseIndex;
     car = g_GrandPrixClass;
-    g_PrizeScreenStep = 0;
+    g_PrizeScreenState = 0;
     g_PrizeAmount = g_PrizeMoney[mode][car][g_RacePosition - 1];
     g_SceneId = 0x13;
 

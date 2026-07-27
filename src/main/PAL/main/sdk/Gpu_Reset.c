@@ -2,13 +2,13 @@
 #include "psyq/kernel.h"
 
 extern volatile u_long *g_GpuGp1 asm("D_800942BC");
-extern volatile u_long *D_800942C8;
-extern volatile u_long *D_800942D8;
-extern long D_800942EC;
-extern volatile long D_800942F0;
-extern long D_800942FC;
+extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
+extern volatile u_long *g_GpuDpcr asm("D_800942D8");
+extern long g_GpuQueueWriteIdx asm("D_800942EC");
+extern volatile long g_GpuQueueReadIdx asm("D_800942F0");
+extern long g_GpuResetIntrMask asm("D_800942FC");
 extern u_char g_GpuGp1Mirror[] asm("D_8009B9F0");
-extern u_char D_801E5024[];
+extern u_char g_GpuQueue[] asm("D_801E5024");
 
 void func_80068180(u_char *dst, u_char value, long count);
 long func_800680A4(u_long arg0);
@@ -22,29 +22,29 @@ long Gpu_Reset(u_long mode) {
     long state;
 
     intrMask = SetIntrMask(0);
-    D_800942F0 = 0;
-    state = D_800942F0;
-    D_800942FC = intrMask;
-    D_800942EC = state;
+    g_GpuQueueReadIdx = 0;
+    state = g_GpuQueueReadIdx;
+    g_GpuResetIntrMask = intrMask;
+    g_GpuQueueWriteIdx = state;
     asm("" ::: "memory");
 
     switch (mode & 7) {
     case 0:
-        *D_800942C8 = 0x401;
-        *D_800942D8 |= 0x800;
+        *g_GpuDmaChcr = 0x401;
+        *g_GpuDpcr |= 0x800;
         *g_GpuGp1 = 0;
         func_80068180(g_GpuGp1Mirror, 0, 0x100);
-        func_80068180(D_801E5024, 0, 0x1800);
+        func_80068180(g_GpuQueue, 0, 0x1800);
         break;
     case 1:
-        *D_800942C8 = 0x401;
-        *D_800942D8 |= 0x800;
+        *g_GpuDmaChcr = 0x401;
+        *g_GpuDpcr |= 0x800;
         *g_GpuGp1 = 0x02000000;
         *g_GpuGp1 = 0x01000000;
         break;
     }
 
-    SetIntrMask(D_800942FC);
+    SetIntrMask(g_GpuResetIntrMask);
 
     if ((mode & 7) == 0) {
         return func_800680A4(mode);

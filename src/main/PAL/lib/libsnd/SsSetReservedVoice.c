@@ -1,28 +1,28 @@
 #include "psyq/spu.h"
 
-extern u_char D_801E4D88;
-extern short D_801E3FB0;
+extern u_char g_SndReservedVoiceCount asm("D_801E4D88");
+extern short g_SndMonoMode asm("D_801E3FB0");
 extern volatile u_char D_801E42F8;
-extern u_char D_801E4CFC[];
-extern u_short D_801F17AC;
-extern u_long D_801F17BC[];
+extern u_char g_SndVabStatus[] asm("D_801E4CFC");
+extern u_short g_SndVabOpenCount asm("D_801F17AC");
+extern u_long g_SndVabSpuAddr[] asm("D_801F17BC");
 
 void SsSetReservedVoice(u_char arg0) asm("func_80072AD0");
 
 void SsSetReservedVoice(u_char arg0) {
-    D_801E4D88 = arg0;
+    g_SndReservedVoiceCount = arg0;
 }
 
 void SsSetMono(void) asm("func_80072AE0");
 
 void SsSetMono(void) {
-    D_801E3FB0 = 1;
+    g_SndMonoMode = 1;
 }
 
 void SsSetStereo(void) asm("func_80072AF4");
 
 void SsSetStereo(void) {
-    D_801E3FB0 = 0;
+    g_SndMonoMode = 0;
 }
 
 u_char SsSetVoiceCount(u_char voices) asm("func_80072B04");
@@ -43,10 +43,10 @@ void SsVabClose(short vab_id) {
 
     if ((u_short)vab_id < 16) {
         id = vab_id;
-        if (D_801E4CFC[id] == 1) {
-            SpuFree(D_801F17BC[id]);
-            D_801E4CFC[id] = 0;
-            D_801F17AC--;
+        if (g_SndVabStatus[id] == 1) {
+            SpuFree(g_SndVabSpuAddr[id]);
+            g_SndVabStatus[id] = 0;
+            g_SndVabOpenCount--;
         }
     }
 }

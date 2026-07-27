@@ -62,9 +62,8 @@ typedef struct A {
  * ignore the pad and freeze the steering -- is unreachable in retail. */
 extern s16 D_8019C9AC;
 extern u8 g_PadType asm("D_801E4369");
-/* Masks 0 and 1 of the live button mapping; g_MirrorMode swaps them. */
-extern s16 g_PadSteerLeftMask asm("D_801E4B60");
-extern s16 g_PadSteerRightMask asm("D_801E4B62");
+/* The live button mapping; masks 0 and 1 steer, g_MirrorMode swaps them. */
+extern s16 g_PadButtonMapping[] asm("D_801E4B60");
 /* NeGcon steering: the raw twist minus the calibrated centre, minus the dead
  * zone indexed by the separate NEGCON STEER PLAY setting at D_8019CAD0 (a
  * word table at 0x8007C128), then clamped to
@@ -104,11 +103,11 @@ void GameUpdateCarBodyRoll(A *ctx) {
     if (g_PadType != 0x41) goto L_1C4;
 
     if (g_MirrorMode != 0) {
-        a1 = g_PadHeld & g_PadSteerLeftMask;
-        v1 = g_PadHeld & g_PadSteerRightMask;
+        a1 = g_PadHeld & g_PadButtonMapping[0];
+        v1 = g_PadHeld & g_PadButtonMapping[1];
     } else {
-        v1 = g_PadHeld & g_PadSteerLeftMask;
-        a1 = g_PadHeld & g_PadSteerRightMask;
+        v1 = g_PadHeld & g_PadButtonMapping[0];
+        a1 = g_PadHeld & g_PadButtonMapping[1];
     }
 
     if (v1 == 0) goto L_11c;

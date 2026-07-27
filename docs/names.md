@@ -3432,3 +3432,237 @@ its progress figure to reflect reality it belongs in the `HANDWRITTEN_ASM`
 bucket alongside the 46 GTE-engine leaves, not in the outstanding list. Left
 unchanged here because reclassifying it moves the headline number without
 decompiling anything.
+
+## 22. One address, one name (duplicate-name pass)
+
+24 addresses carried more than one name, mostly because parallel passes named
+the same word from different directories. Sixteen were plain naming accidents
+and are now single-named; the eight below are **forced** by gcc 2.6.3 and are
+kept deliberately, each documented at its declaration. Every step in this
+section was verified byte-identical with `make check VERSION=PAL`.
+
+### Resolved (one name now)
+
+| Address | Kept | Dropped | Why this reading |
+|---|---|---|---|
+| `D_800941E0` | `g_GpuFuncs` | `g_GpuCallbacks`, `g_GpuFuncsStore`, `g_GpuFuncsMove`, `g_GpuFuncsClearOTagR` | Not five slots: five `GpuCallbacks *` externs for the *same* pointer, one per function of `sdk/LoadImage.c` and `sdk/SetGraphQueue.c`. Same type, different functions, so merging is free. |
+| `D_800941E8` | `g_GraphType` | `g_GraphTypeArray` | The scalar and the `u_char[]` are the same byte; `_get_mode.c` and `render/SetDrawTPage.c` now both use the array spelling (`g_GraphType[0]` where a scalar was wanted). Also names the two raw uses in `SetDrawTPage.c` / `SetGraphQueue.c`. |
+| `D_800942BC` | `g_GpuGp1` | `g_GpuGp1Volatile` | One `volatile u_long *` serves both `Gpu_WriteGp1` and `Gpu_WriteGp0Words`; the non-volatile spelling was not needed. |
+| `D_8009AF34` | `g_FmvStripIndex` | `g_FmvStripIndexRaw` | The second symbol looked like a CSE break inside `GameUploadFmvSlice`; it is not, the single symbol matches. |
+| `D_8009B1B0` | `g_CdCurrentTrack` | `g_CdTrack` | The track the CD-DA driver last selected (`GameStepCdTrackRequest` writes it from `g_CdTrackPending`); two of the three files already said "current". |
+| `D_8009B720` | `g_McCardStatus` (+`V`) | `g_McMenuSlotData` | It is the last `GamePollMemoryCardStatus` (func_8005ECE0) return code — 0 no card yet, 1/2 present, -1/-2/-3 error — compared against those constants and copied into `g_McMenuState`. It is not a pointer to a save-slot record, so `game/menu.h`'s `void *` was wrong as well as the name. |
+| `D_8019C754` | `g_AssetBlockPtr2` | `g_SharedAssetPtr` | Third pointer of the asset triple handed to func_8005B768 next to `g_AssetBlockPtr` / `g_AssetSubBlockPtr`; three files out of four already named it that way. |
+| `D_8019CB08` | `g_NegconMappingIndex` | `g_NegconConfigIndex` | Same reading, seven files to one. |
+| `D_8019CB74` | `g_PrizeScreenState` | `g_PrizeScreenStep` | `GameUpdatePrizeMoneyScreen` switches on it over eight states 0..7; it is not a step size. |
+| `D_8019CE0C` | `g_PromotionBonus` | `g_PendingClassBonus` | Loaded from `g_PromotionBonusTable[class]` and printed under the screen's own "PROMOTION BONUS" caption (`D_80010E40`). That it counts down to zero is documented, not encoded in the name. |
+| `D_801E3FB6` | `g_EnvColors` | `g_EnvFogColor`, and its `G`/`B` siblings | `track/GameSeekEnvironmentScript.c` needed the three bytes of `g_EnvColors[0].cur` individually for SetFarColor; it now reaches them through `ENV_FOG_RGB` = `((u8 *)g_EnvColors)`, which matches. |
+| `D_801E4B34` | `g_FrameParity` | `g_DrawBufferParity` | Index of the current frame context in `g_FrameContexts`, written beside `g_DrawBuffer`; the 240-line y bias in `race/` is a consequence, not the definition. |
+| `D_801E4B60` | `g_PadButtonMapping` | `g_PadSteerLeftMask`, `g_PadSteerRightMask` | The aggregate works in `car/GameInitPlayerCar.c` too: masks 0 and 1 are now `g_PadButtonMapping[0]` / `[1]`. |
+| `D_801E4D98` | `g_SectorEndDistance` | `g_SectorEndDistance0/1/2` | The array spelling was assumed to be impossible in `race/GameUpdateLapAndFinish.c` by analogy with `g_RefSectorTimes`; it was retested and matches. |
+| `D_801E6C78` | `g_BonusCountStep` | `g_BonusTickRate` | `bonus / 250`, subtracted from the counter every frame: an amount per tick, not a rate. |
+| `D_801E6DA0` | `g_PrizeCountStep` | `g_PrizeTickRate` | Same, `prize / 80`. |
+| `D_801F17B0` | `g_PrizeAmount` | `g_PendingPrizeMoney` | The figure under the "PRIZE MONEY" caption (`D_80010E30`), counted down into the total. |
+
+### Kept split, with the experiment that forced it
+
+Each of these compiles fine under one name; it is the *object file* that changes.
+
+| Address | Names | Forcing reason |
+|---|---|---|
+| `D_8009AF4C` | `g_FmvUploadRect` / `g_FmvUploadRectX` | Whole-`Rect` copy and a `volatile s16` x in the same function. `g_FmvUploadRect.x` does not match. |
+| `D_8009AF90` | `g_RefSectorTimes` / `g_RefSectorTime0` | Retested: `g_RefSectorTimes[k]` in `GameUpdateLapAndFinish` still shifts the whole surrounding allocation. |
+| `D_8009B538` | `g_McEvents` / `g_McHwEventIoe` | Retested: `g_McEvents[k]` in `GameClearMemoryCardHwEvents.c` keeps the base live in a callee-saved register and grows the frame. |
+| `D_8009B720`, `D_8009B72C`, `D_8009B740` | `g_McCardStatus` / `g_McMenuSubState` / `GameMenuLoadPhase` plus a `…V` alias each | `save/GameUpdateMemoryCardMenu.c` reads each of the three **both** ways, and only the volatile spelling forces the reload retail has at those sites. A redeclaration cannot add the qualifier: gcc 2.6.3 keeps the first declaration's type (that is also why the `volatile` at `GameWriteMemoryCardSaveFile.c:196` is a no-op), so the alias needs its own identifier. Convention adopted: the volatile alias is the base name plus `V`. |
+| `D_8019CABC` | `g_GrandPrixSeries` / `g_GrandPrixSeriesU16` | `menu/GameDrawNowLoadingText.c` includes `game/race.h`, and `u16` vs `s16` is a hard "conflicting types" error in gcc 2.6.3, not a warning. |
+| `D_801E6CA4` | `g_EffectVolumeScale` / `g_SoundScale` | `SoundScale` is just `{ g_EffectVolumeScale; g_VabIds[3] }`. Spelling the three reads in `GameSetPitchedSoundCue.c` as those two existing globals compiles but does not match, in either direction: a struct member reference is non-aliasing to gcc 2.6.3 (`MEM_IN_STRUCT_P`) and the volume arithmetic reorders. |
+| `D_8009AB7C` | `g_SpuRegBase` / `g_SpuRegBaseNv` | `_spu_FgetRXXa` reads the SPU register file through a non-volatile pointer; the volatile spelling does not match. |
+
+### Hardware register mirrors
+
+Twenty-six library globals are just pointers to PS1 hardware, and the data
+segment (`asm/PAL/main/data/main/6BE64.data.s`) states which:
+
+| Address | Name | Register |
+|---|---|---|
+| `D_800942B8` / `D_800942BC` | `g_GpuGp0` / `g_GpuGp1` | 0x1F801810 / 0x1F801814 |
+| `D_800942C0/C4/C8` | `g_GpuDmaMadr/Bcr/Chcr` | DMA2 0x1F8010A0/A4/A8 |
+| `D_800942CC/D0/D4` | `g_OtcDmaMadr/Bcr/Chcr` | DMA6 (OTC) 0x1F8010E0/E4/E8 |
+| `D_800942D8` | `g_GpuDpcr` | DPCR 0x1F8010F0 |
+| `D_8009A4BC/C0/C4` | `g_IrqStatus` / `g_IrqMask` / `g_KernelDpcr` | I_STAT 0x1F801070, I_MASK 0x1F801074, DPCR |
+| `D_8009AB7C` | `g_SpuRegBase` | SPU register file 0x1F801C00 |
+| `D_8009AB80/84/88` | `g_SpuDmaMadr/Bcr/Chcr` | DMA4 0x1F8010C0/C4/C8 |
+| `D_8009AB8C` / `D_8009AB90` | `g_SpuDpcr` / `g_SpuDelayReg` | DPCR, SPU_DELAY 0x1F801014 |
+| `D_80099300..0C` | `g_CdReg0..g_CdReg3` | CD ports 0x1F801800..03 |
+| `D_80099310` / `D_80099334` | `g_ComDelayReg` / `g_CdromDelayReg` | 0x1F801020 / 0x1F801018 |
+| `D_80099338` | `g_CdDpcr` | DPCR |
+| `D_8009933C/40/44` | `g_CdDmaMadr/Bcr/Chcr` | DMA3 0x1F8010B0/B4/B8 |
+
+Three libraries keep their own pointer to DPCR, which is why `g_GpuDpcr`,
+`g_KernelDpcr`, `g_SpuDpcr` and `g_CdDpcr` are four names: four distinct
+addresses holding the same value.
+
+## 23. Library globals pass (`sdk/`, `lib/kernel`, `lib/libspu`, `render/`)
+
+Naming pass over the raw `D_` globals of the Sony libraries, where there is
+external ground truth: the hardware map (initialised pointers in
+`asm/PAL/main/data/main/6BE64.data.s` literally hold `0x1F801xxx`), the psyq
+function names the files are already named after, and the trace strings in
+rodata. Every batch below was verified with `make check VERSION=PAL`.
+
+### libgpu env block (`0x800941E0`–`0x80094304`)
+
+`ResetGraph` memsets 0x80 bytes from `0x800941E8` and its own trace string calls
+that pointer `env=%08x`; `0x800941E8 + 0x80 = 0x80094268`, which is exactly the
+end of the block below. That is why the two environment caches sit where they do.
+
+| Address | Name | Evidence |
+|---|---|---|
+| `D_800941A0` | `g_GpuJumpTable` | the driver table `g_GpuFuncs` points at; `ResetGraph` prints it as `jtb=%08x` |
+| `D_800941EC` / `D_800941EE` | `g_VramWidth` / `g_VramHeight` | loaded from the per-type tables below; every draw-area builder clamps against them |
+| `D_800941F0` / `D_800941F4` | `g_DrawSyncCbPending` / `g_DrawSyncCallback` | set by `Gpu_AddQueue`, cleared and invoked by `Gpu_ExecuteQueue` when the ring drains; `DrawSyncCallback` swaps the second |
+| `D_800941F8` / `D_80094254` | `g_DrawEnvCache` / `g_DispEnvCache` | the 0x5C and 0x14 bytes `PutDrawEnv`/`GetDrawEnv` and `PutDispEnv`/`GetDispEnv` copy |
+| `D_80094268` / `D_8009427C` | `g_VramWidthTable` / `g_VramHeightTable` | five longs each, indexed by graph type |
+| `D_80094298/9C/A0` | `g_MoveImageSrc/Dst/Size` | the three words `MoveImage` fills before sending a 0x14-byte GP0(80h) list |
+| `D_800942A4` | `g_OtagTerminator` | its 24-bit address is the last "next" tag written by `ClearOTag`/`ClearOTagR`; the data is a dead-end packet |
+| `D_800942DC/E0/E4` | `g_GpuLastCb/Arg/Data` | what `Gpu_ExecuteQueue` records and the timeout dump prints as `func=(%08x)(%08x,%08x)` |
+| `D_800942EC` / `D_800942F0` | `g_GpuQueueWriteIdx` / `g_GpuQueueReadIdx` | the mod-64 pair whose difference `& 0x3F` is the printed queue depth |
+| `D_800942F4/F8/FC` | `g_AddQueueIntrMask` / `g_ExecQueueIntrMask` / `g_GpuResetIntrMask` | each holds a `SetIntrMask(0)` result restored on the matching exit |
+| `D_80094300` / `D_80094304` | `g_GpuTimeoutDeadline` / `g_GpuTimeoutPolls` | `VSync(-1) + 240`, and the poll counter that forces the timeout past 0xF0000 |
+| `D_801E5024` | `g_GpuQueue` | the 64 x 96-byte ring both indices address; `Gpu_Reset` clears exactly 0x1800 bytes |
+| `D_8009B9B0` | `g_ClearImagePacket` | the 12-word list `Gpu_ClearImage` builds |
+| `D_80094308` / `D_8007B664` | `g_SinTable` / `g_AtanTable` | 0x401-entry quarter-wave tables on 4096 units per turn, used by `rsin`/`rcos` and `GameAtan2` |
+
+`sdk/PutDispEnv.c` keeps a `GfxState` struct over the head of this block instead
+of the six scalars the rest of the tree uses. Replacing it with those scalars
+compiles and does not match — same `MEM_IN_STRUCT_P` effect as `g_SoundScale` —
+so it stays, aliased to the base's one name.
+
+### Kernel (`lib/kernel`, `sdk/StopKernelInterrupts.c`)
+
+`g_IntrState` (`D_80099430`) is the interrupt block: `[0]` installed flag,
+`[1]` `g_IntrInDispatch`, `[2..]` `g_IntrCallbacks` (11 slots), `+0x30`
+`g_IntrCallbackMask` (which slots are filled — the dispatcher ANDs it with
+I_STAT & I_MASK), `+0x38` the register frame `HookEntryInt` is pointed at.
+`g_IntrSavedIrqMask` / `g_IntrSavedDpcr` (`D_80099462/64`) are what
+`StopKernelInterrupts` parks and `StartKernelInterrupts` restores;
+`g_IntrStuckCount` (`D_8009A4C8`) is the 0x801-iteration stuck-IRQ guard;
+`g_IntrRpNode` (`D_8009A4B8`) is the node handed to `SysEnqIntRP`.
+VSync: `g_VSyncCallbacks` / `g_VSyncCount` (`D_8009A4CC` / `D_8009A4EC`),
+`g_VSyncGpuStat` and `g_Timer1CountReg` with their two sampled `*Base` words.
+DMA: `g_DmaCallbacks` (`D_8009A4F8`), `g_DmaIrqControl` (DICR),
+`g_DmaChannelRegs` (0x1F801080). Root counters: `g_RootCounterRegs` (0x1F801100,
+three 16-byte banks), `g_IrqRegs`, `g_RootCounterIrqBits`.
+
+### libmdec (`sdk/MDEC_reset.c`, `sdk/_new_card.c`)
+
+DMA channel 0 is MDEC-in and channel 1 MDEC-out, hence
+`g_MdecInDmaMadr/Bcr/Chcr` and `g_MdecOutDmaMadr/Bcr/Chcr`, plus `g_MdecCmdReg`
+(0x1F801820) and `g_MdecCtrlReg` (0x1F801824). The two parameter blocks are a
+command word followed by its table: `g_MdecQuantCmd` = 0x40000001 (command 2,
+set quant tables, colour) with `g_MdecQuantLuma` / `g_MdecQuantChroma`, and
+`g_MdecIdctCmd` = 0x60000000 (command 3) with `g_MdecIdctTable`, whose first
+entry 0x5A82 is sqrt(2) x 2^14.
+
+### libcd accessors and streaming
+
+`CdStatus`, `CdMode` and `CdLastPos` are one-line accessors, which names
+`g_CdStatusByte`, `g_CdModeByte` and `g_CdLastPos` outright. `StSetRing`'s two
+arguments name `g_StRingBase` and `g_StRingSize`; `g_StRingSlot` is the slot
+index `StGetNext` walks and wraps.
+
+### Name propagation
+
+97 addresses that already had a name in one file were still spelled `D_…` in
+others; those uses now use the name. Two were reverted and are commented in
+place: `car/GameUpdateCarTrafficAvoidance.c` reuses `D_801E40B8` for something
+other than `g_SceneTimer`, and `sdk/SpuVmAlloc.c` includes `game/audio.h`, whose
+`g_SndVoiceFlags` is `volatile` — and gcc 2.6.3 rejects a requalified *array*
+redeclaration outright, where it merely warns for a scalar.
+
+### libspu (`lib/libspu`, `sdk/Spu*.c`)
+
+`g_SpuRegBase` (0x1F801C00) is the register file; `_spu_FsetRXX`/`_spu_FgetRXXa`
+index it, which is where the psyq names already in these files come from. The
+state named in this pass: `g_SpuTransferMode` / `g_SpuTransferByIo` (the
+`SpuSetTransferMode` selector, which `_spu_Fw` uses to pick DMA or the
+`_spu_writeByIO` loop), `g_SpuTransferStartAddr` (register 0xD3, in 8-byte
+units), `g_SpuTransferCompleted` / `g_SpuTransferIsRead` /
+`g_SpuTransferCallback` / `g_SpuTransferEvent` (EvSpEND, 0xF0000009),
+`g_SpuDmaTransferAddr` / `g_SpuDmaBlockCount`, `g_SpuKeyStatus` (the bit-per-voice
+mask `SpuGetKeyStatus` turns into the LibRef Table 15-1 values), the reverb group
+`g_SpuRevFlag`-adjacent `g_SpuRevReserveWa` / `g_SpuRevWorkAreaAddr` /
+`g_SpuRevAttr` / `g_SpuRevWorkAreaStartAddr` / `g_SpuRevAttrTable`, the
+`g_SpuMemMode` unit/shift/mask quartet, `g_SpuZeroBuf` (0x400 zero bytes DMA'd
+over the reverb work area), `g_SpuDummyAdpcmBlock` (16 x 0x07, the silent ADPCM
+block written at SPU RAM 0x1000) and the four `SPU:T/O [%s]` message strings.
+
+### libsnd (`lib/libsnd`, `sdk/Ss*.c`)
+
+`g_SndSpuRegs` is libsnd's own 0x1F801C00 pointer. The tick group
+(`g_SndTickMode`, `g_SndTickResolution` 50/60/120/240, `g_SndNoTickFlag`,
+`g_SndTickCallback` = `SsSeqCalledTbyT`, `g_SndTickUsesVSync`, `g_SndTickIrq`,
+`g_SndTickVSyncToggle`, `g_SndPrevVSyncCallback`) comes straight off
+`SsSetTickMode` and the SS_TICK* / SS_NOTICK spec bits. `g_SndSeqTable` with
+`g_SndSeqTableSMax` / `g_SndSeqTableTMax` are `SsSetTableSize`'s three arguments;
+`g_SndMarkCallbacks` is `SsSetMarkCallback`'s `[32][16]` table, dispatched on
+controller 0x28. The VAB side is `g_SndVabProgTable` / `g_SndVabHeader` /
+`g_SndVabToneTable` per id, latched into the `g_SndCurrent*` set by
+`SpuVmVSetUp`, plus `g_SndVabStatus`, `g_SndVabOpenCount`, `g_SndVabBodySize`,
+`g_SndVabSpuAddr`, `g_SndVabBodyAddr`. `g_SndPitchTable` is the note-to-pitch
+table indexed `[semitone * 16 + fine/8]`.
+
+Two corrections this pass produced:
+
+- `sdk/SsUtFlush.c` had its four key-register locals swapped. `spu[0xC4]/[0xC5]`
+  is KON (0x1F801D88) and `spu[0xC6]/[0xC7]` is KOFF, so `D_8009E670/74` are
+  key-**on** and `D_801F2A08/0C` key-**off**, and `spu[0xCC]/[0xCD]` is EON, not
+  noise. All four key words keep their raw `D_` spelling — inline-asm `%hi`/`%lo`
+  pairs elsewhere stringify them.
+- `include/game/audio.h` described the 0x8009DF20 block as "note at +0, fine
+  detune at +2" and the 0x34 record as "pitch +0xC, level +0x10, program +0x14".
+  Both were wrong: the first block is a straight SPU voice-register shadow
+  (volL, volR, pitch, address, ADSR x2) and the second has note at +0xC, actual
+  program at +0x10 and tone at +0x14. The error came from the mislabelled
+  `SpuVmKeyOnCore(voice, note, fine, …)` prototype, whose 2nd and 3rd arguments
+  are really the left and right volumes.
+
+### libcd (`sdk/CD_*.c`, `sdk/Cd*.c`, `sdk/cd_read.c`)
+
+Six 32-entry tables indexed by the `CdlCOM` code drive the whole command layer,
+and their contents identify them: `g_CdCommandNeedsSetloc` (send CdlSetloc
+first), `g_CdCommandParamCount` (3 for CdlSetloc, 2 for CdlSetfilter, 1 for
+CdlSetmode/CdlGetTD), `g_CdCommandHasComplete` (an INT2 is still owed),
+`g_CdCommandClearsReady`, `g_CdCommandAckHasStatus` (0 exactly at CdlGetlocL and
+CdlGetlocP, which return position data rather than a status byte), plus the
+`g_CdCommandNames` / `g_CdIntrNames` string tables behind CdComstr/CdIntstr.
+State: `g_CdSyncCallback` / `g_CdReadyCallback`, the `g_Cd*Status` /
+`g_Cd*Result` triples for INT1/2/3/4/5, `g_CdDebugLevel` (CdSetDebug),
+`g_CdErrorByte`, `g_CdShellOpenCount`, and the `g_CdTimeoutDeadline` /
+`g_CdTimeoutCounter` watchdog. The directory cache is one contiguous run:
+`g_CdFileCache[64]` CdlFILE records, `g_CdPathTable[128]` ISO path-table records,
+`g_CdSectorBuf` (one 0x800-byte staging sector) — the address arithmetic between
+them is exact. `cd_read.c`'s statics become the `g_CdRead*` set (callback, sector
+count, buffer and cursor, mode, words per sector, remaining, the two VSync
+watchdog stamps, expected sector, and the two saved libcd callbacks). libds adds
+`g_StBackLoc` / `g_StBackFrame` (what `StGetBackloc` returns), `g_StColorMode`
+(bit 0 of the StSetStream mode: 0 = 16-bit, 1 = 24-bit), `g_StNotStream2Mode`,
+`g_StFrameCallback`, `g_StDmaBusy` and `g_StInterruptPending`.
+
+### Left raw on purpose
+
+- Every symbol in the `%hi`/`%lo` and `LA_ORDERED` set: renaming one compiles
+  clean and fails only at link.
+- `D_8009A710`, `D_8009AB98`, `D_8009ABB4` (libspu), `D_8009A569` (libsnd):
+  written zero and never read anywhere in the image. `D_8009ABB4` is shaped like
+  `SpuSetIRQCallback`'s slot but this build has no call site to prove it.
+- The field aliases inside `g_SndVoiceState`, `g_SndCurrentAttr`,
+  `g_CdPathTable` and `g_DispEnvCache`: they are struct members reached through
+  their own labels, and naming them separately would fight the struct.
+- The auto-vol / auto-pan ramp words `D_8009E0D6..DE` and `D_8009E0E2..EA`, the
+  libds ring cursors `D_801E6C74` / `D_801E6C84`, and the `StSetStream`
+  end-of-stream callback `D_8019C9A0`: every remaining reader is inside
+  `StCdInterrupt` / `SpuVmAutoVol`, which are still assembly, so the roles are
+  not settled.
+- The `render/Game*.c` game-side globals (camera, HUD, glyph tables, track
+  texture streaming). They are game state, not library state, and pinning them
+  down needs callers outside this pass.

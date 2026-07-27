@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void SsSeqResume(long arg0, long arg1) asm("func_800718E0");
 
@@ -14,7 +14,7 @@ void SsSeqResume(long arg0, long arg1) {
     long index;
 
     raw = arg0 << 16;
-    table = D_801E79CC;
+    table = g_SndSeqTable;
     slot = (SeqStruct **)((raw >> 14) + (long)table);
     asm("" : "=r"(slot) : "0"(slot));
     index = (short)arg1;

@@ -2,12 +2,12 @@
 
 #include "common.h"
 
-extern u_char *D_801E79CC[];
-extern short D_801E4BE6;
+extern u_char *g_SndSeqTable[] asm("D_801E79CC");
+extern short g_SndCurrentSeqSep asm("D_801E4BE6");
 extern volatile u_char D_801E42F8;
-extern u_char D_8009DF20[];
-extern volatile u_char D_8009E0A0[];
-extern u_char D_8009E0C6[];
+extern u_char g_SndVoiceRegs[] asm("D_8009DF20");
+extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
 
 short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) asm("func_80076C58");
 long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) asm("func_80076DCC");
@@ -23,9 +23,9 @@ short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) {
     register u_short y asm("$8");
 
     offset = (arg0 & 0xFF) << 2;
-    base = *(u_char **)((u_char *)D_801E79CC + offset);
+    base = *(u_char **)((u_char *)g_SndSeqTable + offset);
     __asm__ volatile("addiu $sp,$sp,-8" ::: "memory");
-    D_801E4BE6 = arg0;
+    g_SndCurrentSeqSep = arg0;
     arg0 <<= 16;
     index = ((u_long)arg0) >> 24;
     offset = index * 0xAC;
@@ -60,7 +60,7 @@ short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) {
         i = 0;
         if (D_801E42F8 != 0) {
             arg0 &= 0xFFFF;
-            dst = D_8009DF20;
+            dst = g_SndVoiceRegs;
             dstY = dst + 2;
             do {
                 offset = i << 16;
@@ -70,16 +70,16 @@ short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) {
                 offset += signedIndex;
                 offset *= 4;
 
-                if (*(u_short *)&D_8009E0C6[offset] != arg0) {
+                if (*(u_short *)&g_SndVoiceStateSeqSep[offset] != arg0) {
                     offset = i + 1;
                 } else {
                     offset = signedIndex << 19;
                     offset = (long)offset >> 15;
                     *(u_short *)(offset + (long)dst) = x;
                     *(u_short *)(offset + (long)dstY) = y;
-                    offset = D_8009E0A0[signedIndex];
+                    offset = g_SndVoiceFlags[signedIndex];
                     offset |= 3;
-                    D_8009E0A0[signedIndex] = offset;
+                    g_SndVoiceFlags[signedIndex] = offset;
                     offset = i + 1;
                 }
 
@@ -89,7 +89,7 @@ short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) {
         }
     }
 
-    offset = D_801E4BE6;
+    offset = g_SndCurrentSeqSep;
     __asm__ volatile("addiu $sp,$sp,8" ::: "memory");
     return offset;
 }
@@ -101,9 +101,9 @@ long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) {
     register u_char *ptr asm("$2");
     register short *status asm("$7");
 
-    status = &D_801E4BE6;
+    status = &g_SndCurrentSeqSep;
     offset = (arg0 & 0xFF) << 2;
-    base = *(u_char **)((u_char *)D_801E79CC + offset);
+    base = *(u_char **)((u_char *)g_SndSeqTable + offset);
     *status = arg0;
     index = (arg0 & 0xFF00) >> 8;
 
@@ -119,8 +119,8 @@ short SpuVmGetSeqVolLeft(long arg0) {
     register u_char *ptr asm("$3");
 
     offset = (arg0 & 0xFF) << 2;
-    ptr = *(u_char **)((u_char *)D_801E79CC + offset);
-    D_801E4BE6 = arg0;
+    ptr = *(u_char **)((u_char *)g_SndSeqTable + offset);
+    g_SndCurrentSeqSep = arg0;
     index = (arg0 & 0xFF00) >> 8;
 
     return *(short *)(ptr + (index * 0xAC) + 0x74);
@@ -132,8 +132,8 @@ short SpuVmGetSeqVolRight(long arg0) {
     register u_char *ptr asm("$3");
 
     offset = (arg0 & 0xFF) << 2;
-    ptr = *(u_char **)((u_char *)D_801E79CC + offset);
-    D_801E4BE6 = arg0;
+    ptr = *(u_char **)((u_char *)g_SndSeqTable + offset);
+    g_SndCurrentSeqSep = arg0;
     index = (arg0 & 0xFF00) >> 8;
 
     return *(short *)(ptr + (index * 0xAC) + 0x76);

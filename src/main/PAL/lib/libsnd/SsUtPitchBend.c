@@ -2,21 +2,23 @@
 
 #include "common.h"
 
-extern short *D_8009A588;
-extern u_char *D_8009A588_bytes asm("D_8009A588");
-extern volatile u_char D_8009DF20[];
-extern volatile u_char D_8009DF22[];
-extern volatile u_char D_8009DF24[];
-extern volatile u_char D_8009DF28[];
-extern volatile u_char D_8009DF2A[];
-extern volatile u_char D_8009E0A0[];
-extern short D_8009E0C4[];
-extern short D_8009E0CA[];
-extern u_char D_8009E0CC[];
-extern short D_8009E0CE[];
-extern u_char D_801E4BDC;
-extern short D_801E4BE6;
-extern short D_801E4BEA;
+extern short *g_SndSpuRegs asm("D_8009A588");
+/* Byte view of the same pointer, needed because this TU addresses the voice
+ * register file both as halfwords and by byte offset. */
+extern u_char *g_SndSpuRegsBytes asm("D_8009A588");
+extern volatile u_char g_SndVoiceRegs[] asm("D_8009DF20");
+extern volatile u_char g_SndVoiceRegsVolRight[] asm("D_8009DF22");
+extern volatile u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
+extern volatile u_char g_SndVoiceRegsAdsr1[] asm("D_8009DF28");
+extern volatile u_char g_SndVoiceRegsAdsr2[] asm("D_8009DF2A");
+extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern short g_SndVoiceStateNote[] asm("D_8009E0C4");
+extern short g_SndVoiceStateProg[] asm("D_8009E0CA");
+extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
+extern short g_SndVoiceStateVabId[] asm("D_8009E0CE");
+extern u_char g_SndCurrentTone asm("D_801E4BDC");
+extern short g_SndCurrentSeqSep asm("D_801E4BE6");
+extern short g_SndCurrentVoice asm("D_801E4BEA");
 
 long SpuVmVSetUp(long arg0, long arg1) asm("func_80073314");
 long SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) asm("func_80074D1C");
@@ -46,7 +48,7 @@ long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4) {
     y = (short)arg2;
 
     SpuVmVSetUp(x, y);
-    D_801E4BE6 = 0x21;
+    g_SndCurrentSeqSep = 0x21;
     ret = SpuVmApplyPitchBendToVoice((short)id, 0x21, x, y, extra);
     return -(((u_long)(ret << 16)) < 1U);
 }
@@ -79,30 +81,30 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     tmp += index;
     voiceOffset = tmp << 2;
 
-    x = *(short *)((u_char *)D_8009E0CE + voiceOffset);
+    x = *(short *)((u_char *)g_SndVoiceStateVabId + voiceOffset);
     if (x != (short)arg1) {
         ret = -1;
         goto done;
     }
 
-    y = *(short *)((u_char *)D_8009E0CA + voiceOffset);
+    y = *(short *)((u_char *)g_SndVoiceStateProg + voiceOffset);
     if (y != (short)arg2) {
         ret = -1;
         goto done;
     }
 
-    if (*(short *)((u_char *)D_8009E0C4 + voiceOffset) != (short)arg3) {
+    if (*(short *)((u_char *)g_SndVoiceStateNote + voiceOffset) != (short)arg3) {
         goto fail_late;
     }
 
     SpuVmVSetUp(x, y);
-    D_801E4BE6 = 0x21;
-    D_801E4BEA = id;
-    D_801E4BDC = *(u_char *)(D_8009E0CC + voiceOffset);
-    *(volatile short *)(D_8009DF24 + (index << 4)) = SpuVmCalculateTonePitch(stackA, stackB);
-    flags = D_8009E0A0[index];
+    g_SndCurrentSeqSep = 0x21;
+    g_SndCurrentVoice = id;
+    g_SndCurrentTone = *(u_char *)(g_SndVoiceStateTone + voiceOffset);
+    *(volatile short *)(g_SndVoiceRegsPitch + (index << 4)) = SpuVmCalculateTonePitch(stackA, stackB);
+    flags = g_SndVoiceFlags[index];
     flags |= 4;
-    D_8009E0A0[index] = flags;
+    g_SndVoiceFlags[index] = flags;
     __asm__ volatile("" ::: "memory");
     ret = 0;
     goto done;
@@ -147,29 +149,29 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, long arg4, long 
     tmp += index;
     voiceOffset = tmp << 2;
 
-    field = *(short *)((u_char *)D_8009E0CE + voiceOffset);
+    field = *(short *)((u_char *)g_SndVoiceStateVabId + voiceOffset);
     if (field != (short)arg1) {
         ret = -1;
         goto done;
     }
 
-    field = *(short *)((u_char *)D_8009E0CA + voiceOffset);
+    field = *(short *)((u_char *)g_SndVoiceStateProg + voiceOffset);
     if (field != (short)arg2) {
         ret = -1;
         goto done;
     }
 
-    field = *(short *)((u_char *)D_8009E0C4 + voiceOffset);
+    field = *(short *)((u_char *)g_SndVoiceStateNote + voiceOffset);
     if (field != (short)arg3) {
         goto fail_late;
     }
 
     volOffset = index << 4;
-    *(volatile short *)(D_8009DF28 + volOffset) = left;
-    *(volatile short *)(D_8009DF2A + volOffset) = right;
-    field = D_8009E0A0[index];
+    *(volatile short *)(g_SndVoiceRegsAdsr1 + volOffset) = left;
+    *(volatile short *)(g_SndVoiceRegsAdsr2 + volOffset) = right;
+    field = g_SndVoiceFlags[index];
     field |= 0x30;
-    D_8009E0A0[index] = field;
+    g_SndVoiceFlags[index] = field;
     __asm__ volatile("" ::: "memory");
     ret = 0;
     goto done;
@@ -189,9 +191,9 @@ long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) {
 
     if ((u_short)arg0 < 0x18U) {
         offset = (arg0 << 16) >> 12;
-        base = D_8009A588_bytes;
+        base = g_SndSpuRegsBytes;
         *arg1 = *(u_short *)(offset + (long)base);
-        base = D_8009A588_bytes;
+        base = g_SndSpuRegsBytes;
         offset += (long)base;
         *arg2 = *(u_short *)(offset + 2);
         return 0;
@@ -217,12 +219,12 @@ long SsUtSetDetVVol(long arg0, short arg1, short arg2) {
 
     index = (short)arg0;
     offset = index << 4;
-    *(volatile short *)(D_8009DF22 + offset) = arg2;
-    flags = D_8009E0A0[index];
+    *(volatile short *)(g_SndVoiceRegsVolRight + offset) = arg2;
+    flags = g_SndVoiceFlags[index];
     ret = 0;
-    *(volatile short *)(D_8009DF20 + offset) = valueX;
+    *(volatile short *)(g_SndVoiceRegs + offset) = valueX;
     flags |= 3;
-    D_8009E0A0[index] = flags;
+    g_SndVoiceFlags[index] = flags;
 
 done:
     __asm__ volatile("addiu $sp,$sp,8" ::: "memory");
@@ -235,7 +237,7 @@ short SsUtGetVVol(short arg0, short *arg1, short *arg2) {
     short right;
 
     if ((u_short)arg0 < 24U) {
-        ptr = &D_8009A588[arg0 * 8];
+        ptr = &g_SndSpuRegs[arg0 * 8];
         left = ptr[0];
         right = ptr[1];
         *arg1 = left / 129;
@@ -281,12 +283,12 @@ long SsUtSetVVol(long arg0, short arg1, short arg2) {
     y = yarg;
     index = (short)arg0;
     offset = index << 4;
-    *(volatile short *)(D_8009DF22 + offset) = y;
-    flags = D_8009E0A0[index];
+    *(volatile short *)(g_SndVoiceRegsVolRight + offset) = y;
+    flags = g_SndVoiceFlags[index];
     ret = 0;
-    *(volatile short *)(D_8009DF20 + offset) = x;
+    *(volatile short *)(g_SndVoiceRegs + offset) = x;
     flags |= 3;
-    D_8009E0A0[index] = flags;
+    g_SndVoiceFlags[index] = flags;
 
     __asm__ volatile("2:");
     __asm__ volatile("addiu $sp,$sp,8" ::: "memory");

@@ -1,17 +1,19 @@
 #include "psyq/spu.h"
 
-extern u_short D_8009AB78;
-extern volatile u_short *D_8009AB7C;
-extern u_short *D_8009AB7C_nonvolatile asm("D_8009AB7C");
-extern long D_8009AB94;
-extern long D_8009AB9C;
+extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
+extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
+/* Non-volatile view of the same pointer: _spu_FgetRXXa reads the register file
+ * through it and the volatile spelling does not match. Same object, one alias. */
+extern u_short *g_SpuRegBaseNv asm("D_8009AB7C");
+extern long g_SpuTransferByIo asm("D_8009AB94");
+extern long g_SpuMemMode asm("D_8009AB9C");
 extern long _spu_mem_mode_unitM asm("D_8009ABA0");
-extern u_long D_8009ABA4;
+extern u_long g_SpuMemModeUnit asm("D_8009ABA4");
 extern u_long _spu_mem_mode_plus asm("D_8009ABA8");
 
 long _spu_Fw(long arg0, long arg1) {
-    if (D_8009AB94 == 0) {
-        _spu_t(2, D_8009AB78 << _spu_mem_mode_unitM);
+    if (g_SpuTransferByIo == 0) {
+        _spu_t(2, g_SpuTransferStartAddr << _spu_mem_mode_unitM);
         _spu_t(1);
         _spu_t(3, arg0, arg1);
     } else {
@@ -22,7 +24,7 @@ long _spu_Fw(long arg0, long arg1) {
 }
 
 long _spu_Fr(long arg0, long arg1) {
-    _spu_t(2, D_8009AB78 << _spu_mem_mode_unitM);
+    _spu_t(2, g_SpuTransferStartAddr << _spu_mem_mode_unitM);
     _spu_t(0);
     _spu_t(3, arg0, arg1);
 
@@ -31,9 +33,9 @@ long _spu_Fr(long arg0, long arg1) {
 
 void _spu_FsetRXX(long arg0, u_long arg1, long arg2) {
     if (arg2 == 0) {
-        D_8009AB7C[arg0] = arg1;
+        g_SpuRegBase[arg0] = arg1;
     } else {
-        D_8009AB7C[arg0] = arg1 >> _spu_mem_mode_unitM;
+        g_SpuRegBase[arg0] = arg1 >> _spu_mem_mode_unitM;
     }
 }
 
@@ -43,8 +45,8 @@ long _spu_FsetRXXa(long arg0, u_long arg1) {
     register long shift asm("$2");
     u_long divisor;
 
-    if (D_8009AB9C != 0) {
-        divisor = D_8009ABA4;
+    if (g_SpuMemMode != 0) {
+        divisor = g_SpuMemModeUnit;
         if ((arg1 % divisor) != 0) {
             arg1 += divisor;
             arg1 &= ~_spu_mem_mode_plus;
@@ -67,7 +69,7 @@ ret_arg:
 
 store:
     {
-        register long base asm("$4") = (long)D_8009AB7C;
+        register long base asm("$4") = (long)g_SpuRegBase;
         register long offset asm("$3") = index << 1;
         *(volatile u_short *)(offset + base) = shifted;
     }
@@ -78,7 +80,7 @@ long _spu_FgetRXXa(long arg0, long arg1) {
     register long value asm("a0");
     long ret;
 
-    value = D_8009AB7C_nonvolatile[arg0];
+    value = g_SpuRegBaseNv[arg0];
     if (arg1 != -1) {
         ret = value << _spu_mem_mode_unitM;
     } else {

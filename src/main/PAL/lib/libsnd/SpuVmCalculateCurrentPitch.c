@@ -2,13 +2,13 @@
 
 #include "common.h"
 
-extern u_char D_801E4BD2;
-extern u_char D_801E4BD7;
-extern u_char D_801E4BDC;
-extern u_char D_801E4BE0;
-extern u_char D_801E4BE1;
-extern u_char *D_801E416C;
-extern u_short D_8009A58C[];
+extern u_char g_SndCurrentNote asm("D_801E4BD2");
+extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
+extern u_char g_SndCurrentTone asm("D_801E4BDC");
+extern u_char g_SndCurrentToneCenter asm("D_801E4BE0");
+extern u_char g_SndCurrentToneShift asm("D_801E4BE1");
+extern u_char *g_SndCurrentToneTable asm("D_801E416C");
+extern u_short g_SndPitchTable[] asm("D_8009A58C");
 
 u_short SpuVmCalculateCurrentPitch(void) asm("func_800749B4");
 u_short SpuVmCalculateTonePitch(long arg0, long arg1) asm("func_80074A6C");
@@ -19,11 +19,11 @@ u_short SpuVmCalculateCurrentPitch(void) {
     register long temp asm("v0");
     long quotient;
 
-    delta = (short)(D_801E4BD2 + 0x3C - D_801E4BE0);
+    delta = (short)(g_SndCurrentNote + 0x3C - g_SndCurrentToneCenter);
     quotient = delta / 12;
     {
         register long raw asm("v1");
-        raw = D_801E4BE1;
+        raw = g_SndCurrentToneShift;
         nibble = raw >> 3;
     }
     delta -= quotient * 12;
@@ -34,7 +34,7 @@ u_short SpuVmCalculateCurrentPitch(void) {
     temp = (delta << 16) >> 12;
     {
         register long value asm("v1");
-        value = D_8009A58C[nibble + temp];
+        value = g_SndPitchTable[nibble + temp];
         temp = (short)(quotient - 5);
         if (temp > 0) {
             value <<= temp;
@@ -59,7 +59,7 @@ u_short SpuVmCalculateTonePitch(long arg0, long arg1) {
     long table_index;
     long shift;
 
-    entry = D_801E416C + (((D_801E4BDC + (D_801E4BD7 << 4)) << 5));
+    entry = g_SndCurrentToneTable + (((g_SndCurrentTone + (g_SndCurrentProgActual << 4)) << 5));
     sum = (u_short)arg1 + entry[5];
     if (sum < 0) {
         arg0_hold = arg0;
@@ -96,7 +96,7 @@ u_short SpuVmCalculateTonePitch(long arg0, long arg1) {
 
     {
         register long value asm("v1");
-        value = D_8009A58C[table_index];
+        value = g_SndPitchTable[table_index];
         if (shift > 0) {
             value <<= shift;
         } else if (shift < 0) {

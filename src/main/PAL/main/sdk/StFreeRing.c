@@ -1,9 +1,9 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern long D_801F1850;
-extern long D_801E6C98;
-extern StHEADER_RR *D_801E8AAC;
+extern long g_StRingSize asm("D_801F1850");
+extern long g_StRingSlot asm("D_801E6C98");
+extern StHEADER_RR *g_StRingBase asm("D_801E8AAC");
 extern long D_801E8278;
 extern long D_801E8A94;
 extern long D_801E3E10;
@@ -15,20 +15,20 @@ u_long StFreeRing(u_long *base) {
     StHEADER_RR *temp_v0;
     StHEADER_RR *temp_v0_2;
 
-    temp_a1 = (base - (u_long *)&D_801E8AAC[D_801F1850]) / 504;
-    temp_v0 = &D_801E8AAC[temp_a1];
-    nSectors = D_801E8AAC[temp_a1].nSectors;
+    temp_a1 = (base - (u_long *)&g_StRingBase[g_StRingSize]) / 504;
+    temp_v0 = &g_StRingBase[temp_a1];
+    nSectors = g_StRingBase[temp_a1].nSectors;
     if ((short)temp_v0->id != 4) {
         return 1;
     }
 
     for (i = 0; i < nSectors;) {
-        temp_v0_2 = &D_801E8AAC[i + temp_a1];
+        temp_v0_2 = &g_StRingBase[i + temp_a1];
         i++;
         *(short *)temp_v0_2 = 0;
     }
 
-    D_801E6C98 = i + temp_a1;
+    g_StRingSlot = i + temp_a1;
     return 0;
 }
 
@@ -37,7 +37,7 @@ void func_8006D0AC(long arg0, u_long arg1) {
 
     for (i = 0; i < arg1; i++) {
         asm("" ::: "memory");
-        ((StRingClearRecord *)D_801E8AAC)[i + arg0].value = 0;
+        ((StRingClearRecord *)g_StRingBase)[i + arg0].value = 0;
     }
 }
 
@@ -48,16 +48,16 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     StRingEventRecord *entry;
     long old_flag;
 
-    entry = (StRingEventRecord *)((D_801E6C98 << 5) + (long)D_801E8AAC);
+    entry = (StRingEventRecord *)((g_StRingSlot << 5) + (long)g_StRingBase);
 
     if ((entry->state & 0xFFFF) == 1) {
         old_flag = D_801E8278;
-        D_801E6C98 = 0;
+        g_StRingSlot = 0;
         if (old_flag != 0) {
             entry->state = 0;
         }
 
-        entry = (StRingEventRecord *)((D_801E6C98 << 5) + (long)D_801E8AAC);
+        entry = (StRingEventRecord *)((g_StRingSlot << 5) + (long)g_StRingBase);
     }
 
     if ((entry->state & 0xFFFF) == 2) {
@@ -69,9 +69,9 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
 
         entry->state = 4;
         asm("" ::: "memory");
-        track = D_801F1850;
-        raw_base = (StRingEventRecord *)D_801E8AAC;
-        index = D_801E6C98;
+        track = g_StRingSize;
+        raw_base = (StRingEventRecord *)g_StRingBase;
+        index = g_StRingSlot;
         base = (StRingEventRecord *)((track << 5) + (long)raw_base);
         offset = (index << 6) - index;
         offset <<= 5;

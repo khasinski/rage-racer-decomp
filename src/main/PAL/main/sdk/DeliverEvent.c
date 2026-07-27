@@ -13,22 +13,22 @@ u_long DeliverEvent[4] asm("func_8006A3D8") __attribute__((section(".text"))) = 
     0,
 };
 
-extern u_char D_8009904C;
+extern u_char g_CdStatusByte asm("D_8009904C");
 
 /* CdStatus: returns the last cached CD drive status byte. */
 long CdStatus(void) asm("func_8006A3E8");
 long CdStatus(void) {
-    return D_8009904C;
+    return g_CdStatusByte;
 }
 
-extern CdlLOC D_80099058;
-extern u_char D_8009905C;
+extern CdlLOC g_CdLastPos asm("D_80099058");
+extern u_char g_CdModeByte asm("D_8009905C");
 extern u_char D_8009905D;
 
 /* CdMode: returns the last CD mode byte. */
 u_char CdMode(void) asm("func_8006A3F8");
 u_char CdMode(void) {
-    return D_8009905C;
+    return g_CdModeByte;
 }
 
 /* CdLastCom: returns the last CD command byte issued. */
@@ -40,7 +40,7 @@ u_char CdLastCom(void) {
 /* CdLastPos: returns the last reported disc position. */
 CdlLOC * CdLastPos(void) asm("func_8006A418");
 CdlLOC *CdLastPos(void) {
-    return &D_80099058;
+    return &g_CdLastPos;
 }
 
 long func_8006BCC4_entry(void) asm("func_8006BCC4");

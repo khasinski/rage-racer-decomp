@@ -4,9 +4,9 @@
 
 typedef void (*Callback)(void);
 
-extern Callback D_80099434[];
-extern u_short D_80099460;
-extern volatile u_short *D_8009A4C0;
+extern Callback g_IntrCallbacks[] asm("D_80099434");
+extern u_short g_IntrCallbackMask asm("D_80099460");
+extern volatile u_short *g_IrqMask asm("D_8009A4C0");
 
 void ChangeClearRCnt(long clear) asm("func_8006DF14");
 void ChangeClearInterruptMask(long index, long clear) asm("func_8006DF24");
@@ -26,7 +26,7 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     index = arg0;
     __asm__("" : "=r"(index) : "0"(index));
     callback = arg1;
-    base = D_80099434;
+    base = g_IntrCallbacks;
     __asm__("" : "=r"(base) : "0"(base));
     offset = index << 2;
     slot = (Callback *)(offset + (long)base);
@@ -41,7 +41,7 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
         goto done;
     }
 
-    maskPtr = D_8009A4C0;
+    maskPtr = g_IrqMask;
     pendingValue = *maskPtr;
     __asm__("" : "=r"(pendingValue) : "0"(pendingValue));
     *maskPtr = 0;
@@ -69,10 +69,10 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
         bit = 1 << index;
         bit = ~bit;
         *slot = zero;
-        activeMask = D_80099460;
+        activeMask = g_IntrCallbackMask;
         pendingMask &= bit;
         activeMask &= bit;
-        D_80099460 = activeMask;
+        g_IntrCallbackMask = activeMask;
     }
 
     if (index == 0) {
@@ -90,7 +90,7 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
         ChangeClearInterruptMask(2, callback == 0);
     }
 
-    *D_8009A4C0 = pendingMask;
+    *g_IrqMask = pendingMask;
 done:
     return oldCallback;
 }

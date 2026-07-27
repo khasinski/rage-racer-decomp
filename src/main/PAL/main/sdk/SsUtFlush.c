@@ -1,26 +1,31 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-extern long D_8009E598;
-extern u_long D_8009E59C[];
-extern volatile u_short *D_8009A588;
-extern u_char D_8009DF20[];
-extern u_char D_8009DF24[];
-extern u_char D_8009DF26[];
-extern u_char D_8009E0A0[];
-extern u_char D_8009E0B8[];
-extern u_char D_8009E0BE[];
-extern u_char D_8009E0D3[];
-extern u_char D_8009E0D4[];
-extern u_char D_8009E0E0[];
+extern long g_SndVoiceSilenceIndex asm("D_8009E598");
+extern u_long g_SndVoiceSilenceHistory[] asm("D_8009E59C");
+extern volatile u_short *g_SndSpuRegs asm("D_8009A588");
+extern u_char g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
+extern u_char g_SndVoiceRegsAddr[] asm("D_8009DF26");
+extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern u_char g_SndVoiceState[] asm("D_8009E0B8");
+extern u_char g_SndVoiceStateEnvx[] asm("D_8009E0BE");
+extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
+extern u_char g_SndVoiceStateAutoVol[] asm("D_8009E0D4");
+extern u_char g_SndVoiceStateAutoPan[] asm("D_8009E0E0");
+/* The four pending key registers, flushed below into the SPU as
+ * spu[0xC4]/[0xC5] = KON 0x1F801D88 and spu[0xC6]/[0xC7] = KOFF 0x1F801D8C.
+ * So D_8009E670/74 are key-ON and D_801F2A08/0C key-OFF, not the other way
+ * round. All four MUST keep the raw D_ spelling: %hi/%lo pairs in inline asm
+ * elsewhere stringify them. */
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
-extern volatile u_short D_8009E680;
-extern volatile u_short D_8009E684;
+extern volatile u_short g_SndReverbOnLow asm("D_8009E680");
+extern volatile u_short g_SndReverbOnHigh asm("D_8009E684");
 extern u_char D_801E42F8;
-extern volatile u_char D_801E4D88;
+extern volatile u_char g_SndReservedVoiceCount asm("D_801E4D88");
 
 void SpuVmAutoVolTick(long voice) asm("func_80074ECC");
 void SpuVmAutoPanTick(long voice) asm("func_800753CC");
@@ -34,12 +39,12 @@ void SsUtFlush(void) {
     register long two asm("$19");
     register long oneSaved asm("$20");
     register u_long commonMask asm("$18");
-    u_short keyOnLow;
-    u_short keyOnHigh;
     u_short keyOffLow;
     u_short keyOffHigh;
-    u_short noiseLow;
-    u_short noiseHigh;
+    u_short keyOnLow;
+    u_short keyOnHigh;
+    u_short reverbOnLow;
+    u_short reverbOnHigh;
 
     {
         register long count asm("$4");
@@ -52,20 +57,20 @@ void SsUtFlush(void) {
         register volatile u_short *spu asm("$5");
 
         i = 0;
-        historyWork = D_8009E598;
+        historyWork = g_SndVoiceSilenceIndex;
         count = D_801E42F8;
-        historyBase = D_8009E59C;
+        historyBase = g_SndVoiceSilenceHistory;
         historyWork = (historyWork + 1) & 0xF;
         asm("" : "=r"(historyWork) : "0"(historyWork));
-        D_8009E598 = historyWork;
+        g_SndVoiceSilenceIndex = historyWork;
         historyWork = (long)&historyBase[historyWork];
         *(u_long *)historyWork = 0;
         if (count > 0) {
         history = (u_long *)historyWork;
         one = 1;
         voiceCount = count;
-        pitchPtr = (u_short *)D_8009E0BE;
-        spu = D_8009A588;
+        pitchPtr = (u_short *)g_SndVoiceStateEnvx;
+        spu = g_SndSpuRegs;
         do {
             *pitchPtr = spu[6];
             if (*pitchPtr == 0) {
@@ -78,12 +83,12 @@ void SsUtFlush(void) {
         }
     }
 
-    if (D_801E4D88 == 0) {
+    if (g_SndReservedVoiceCount == 0) {
         register u_long *historyScan asm("$3");
 
         commonMask = ~0U;
         i = 0;
-        historyScan = D_8009E59C;
+        historyScan = g_SndVoiceSilenceHistory;
         do {
             commonMask &= *historyScan++;
             i++;
@@ -101,10 +106,10 @@ void SsUtFlush(void) {
             voiceOffset = 0;
 noiseLoop:
             if ((commonMask & (oneSaved << i)) != 0) {
-                if (D_8009E0D3[voiceOffset] == two) {
+                if (g_SndVoiceStateStatus[voiceOffset] == two) {
                     SpuSetNoiseVoice(0, 0xFFFFFF);
                 }
-                D_8009E0D3[voiceOffset] = 0;
+                g_SndVoiceStateStatus[voiceOffset] = 0;
             }
             activeVoices = D_801E42F8;
             asm("" : "=r"(activeVoices) : "0"(activeVoices), "r"(i));
@@ -140,10 +145,10 @@ noiseLoop:
     do {
         register long voiceStep asm("$2");
 
-        if (*(short *)&D_8009E0D4[voiceOffset] != 0) {
+        if (*(short *)&g_SndVoiceStateAutoVol[voiceOffset] != 0) {
             SpuVmAutoVolTick(voiceIndex >> 16);
         }
-        if (*(short *)&D_8009E0E0[voiceOffset] != 0) {
+        if (*(short *)&g_SndVoiceStateAutoPan[voiceOffset] != 0) {
             SpuVmAutoPanTick(voiceIndex >> 16);
         }
         voiceOffset += 0x34;
@@ -165,32 +170,32 @@ noiseLoop:
 
         spuOffset = 0;
         asm("" : : "r"(oneSaved), "r"(two), "r"(spuOffset));
-        flagsPtr = D_8009E0A0;
-        srcBase = D_8009DF20;
+        flagsPtr = g_SndVoiceFlags;
+        srcBase = g_SndVoiceRegs;
         src10 = srcBase + 10;
         src8 = srcBase + 8;
         src2 = srcBase + 2;
         src0 = srcBase;
         do {
         if (*flagsPtr & 1) {
-            spu = (volatile u_short *)((u_char *)D_8009A588 + spuOffset);
+            spu = (volatile u_short *)((u_char *)g_SndSpuRegs + spuOffset);
             value = *(u_short *)src0;
             spu[0] = value;
             value = *(u_short *)src2;
             spu[1] = value;
         }
         if (*flagsPtr & 4) {
-            spu = (volatile u_short *)((u_char *)D_8009A588 + spuOffset);
-            value = *(u_short *)&D_8009DF24[spuOffset];
+            spu = (volatile u_short *)((u_char *)g_SndSpuRegs + spuOffset);
+            value = *(u_short *)&g_SndVoiceRegsPitch[spuOffset];
             spu[2] = value;
         }
         if (*flagsPtr & 8) {
-            spu = (volatile u_short *)((u_char *)D_8009A588 + spuOffset);
-            value = *(u_short *)&D_8009DF26[spuOffset];
+            spu = (volatile u_short *)((u_char *)g_SndSpuRegs + spuOffset);
+            value = *(u_short *)&g_SndVoiceRegsAddr[spuOffset];
             spu[3] = value;
         }
         if (*flagsPtr & 0x10) {
-            spu = (volatile u_short *)((u_char *)D_8009A588 + spuOffset);
+            spu = (volatile u_short *)((u_char *)g_SndSpuRegs + spuOffset);
             value = *(u_short *)src8;
             spu[4] = value;
             value = *(u_short *)src10;
@@ -203,27 +208,27 @@ noiseLoop:
         src8 += 16;
         spuOffset += 16;
         src0 += 16;
-        } while ((long)flagsPtr < (long)D_8009E0B8);
+        } while ((long)flagsPtr < (long)g_SndVoiceState);
     }
 
     {
-    volatile u_short *spu = D_8009A588;
-    keyOnLow = D_801F2A08;
-    keyOnHigh = D_801F2A0C;
-    keyOffLow = D_8009E670;
-    keyOffHigh = D_8009E674;
-    noiseLow = D_8009E680;
-    noiseHigh = D_8009E684;
+    volatile u_short *spu = g_SndSpuRegs;
+    keyOffLow = D_801F2A08;
+    keyOffHigh = D_801F2A0C;
+    keyOnLow = D_8009E670;
+    keyOnHigh = D_8009E674;
+    reverbOnLow = g_SndReverbOnLow;
+    reverbOnHigh = g_SndReverbOnHigh;
     D_801F2A08 = 0;
     D_801F2A0C = 0;
     D_8009E670 = 0;
     D_8009E674 = 0;
-    spu[0xC6] = keyOnLow;
-    spu[0xC7] = keyOnHigh;
-    spu[0xC4] = keyOffLow;
-    spu[0xC5] = keyOffHigh;
-    spu[0xCC] = noiseLow;
-    spu[0xCD] = noiseHigh;
+    spu[0xC6] = keyOffLow;
+    spu[0xC7] = keyOffHigh;
+    spu[0xC4] = keyOnLow;
+    spu[0xC5] = keyOnHigh;
+    spu[0xCC] = reverbOnLow;
+    spu[0xCD] = reverbOnHigh;
     }
 
     asm(".globl func_80076060\nfunc_80076060 = SsUtFlush + 0xbc");

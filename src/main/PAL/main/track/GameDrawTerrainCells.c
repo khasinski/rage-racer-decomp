@@ -46,17 +46,17 @@ void GamePauseCdAudio(void) {
 }
 
 /* Set when the CD was stopped rather than paused, so a resume has to reissue
- * a play of g_CdTrack from the top instead of an unpause. g_CdTrack is the
+ * a play of g_CdCurrentTrack from the top instead of an unpause. g_CdCurrentTrack is the
  * track the CD-DA driver last selected; GameResetCdAudioState parks it at 2. */
 extern s32 g_CdRestartOnResume asm("D_8007F5F8");
-extern u8 g_CdTrack asm("D_8009B1B0");
+extern u8 g_CdCurrentTrack asm("D_8009B1B0");
 
 void GameResumeCdAudio(void) asm("func_80042C28");
 void GameResumeCdAudio(void) {
     if (g_CdRestartOnResume != 0) {
         u8 value;
 
-        value = g_CdTrack;
+        value = g_CdCurrentTrack;
         g_CdTrackStep = 4;
         g_CdRestartOnResume = 0;
         g_CdCommandPending = 1;
@@ -74,5 +74,5 @@ void GameResetCdAudioState(void) {
     g_CdCommandPending = -1;
     g_CdTrackStep = 0;
     g_CdCommandStep = 0;
-    g_CdTrack = 2;
+    g_CdCurrentTrack = 2;
 }

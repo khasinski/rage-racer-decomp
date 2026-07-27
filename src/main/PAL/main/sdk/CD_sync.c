@@ -16,17 +16,17 @@ typedef struct CdAlarm {
     char *name;
 } CdAlarm;
 
-extern char *D_80099060[];
-extern char *D_800990E0[];
-extern CdCallback D_8009903C;
-extern CdCallback D_80099040;
+extern char *g_CdCommandNames[] asm("D_80099060");
+extern char *g_CdIntrNames[] asm("D_800990E0");
+extern CdCallback g_CdSyncCallback asm("D_8009903C");
+extern CdCallback g_CdReadyCallback asm("D_80099040");
 extern u_char D_8009905D;
-extern volatile u_char *D_80099300;
-extern volatile CdIntr D_80099318;
-extern u_char D_8009BAF0[];
-extern u_char D_8009BAF8[];
-extern long D_8009BB08;
-extern long D_8009BB0C;
+extern volatile u_char *g_CdReg0 asm("D_80099300");
+extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
+extern u_char g_CdSyncResult[] asm("D_8009BAF0");
+extern u_char g_CdReadyResult[] asm("D_8009BAF8");
+extern long g_CdTimeoutDeadline asm("D_8009BB08");
+extern long g_CdTimeoutCounter asm("D_8009BB0C");
 extern char *D_8009BB10;
 extern char D_80013814[];
 extern char D_80013824[];
@@ -73,19 +73,19 @@ long CD_sync(long mode, u_char *result) {
     asm("" : "=r"(modeReg) : "0"(modeReg));
     resultReg = result;
     asm("" : "=r"(resultReg) : "0"(resultReg));
-    D_8009BB08 = VSync(-1) + 0x3C0;
-    statusNames = D_800990E0;
-    intr = &D_80099318;
+    g_CdTimeoutDeadline = VSync(-1) + 0x3C0;
+    statusNames = g_CdIntrNames;
+    intr = &g_CdSyncStatus;
     ready = (u_char *)&intr->ready;
-    D_8009BB0C = 0;
+    g_CdTimeoutCounter = 0;
     D_8009BB10 = D_8001389C;
 
     for (;;) {
-        if (D_8009BB08 < VSync(-1) ||
-            D_8009BB0C++ > 0x3C0000) {
+        if (g_CdTimeoutDeadline < VSync(-1) ||
+            g_CdTimeoutCounter++ > 0x3C0000) {
             func_80063C38(D_80013814);
-            GameDebugPrintf(D_80013824, ((CdAlarm *)&D_8009BB08)->name,
-                          D_80099060[D_8009905D],
+            GameDebugPrintf(D_80013824, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
+                          g_CdCommandNames[D_8009905D],
                           statusNames[intr->sync], statusNames[intr->ready]);
             func_8006BAF0();
             alarmStatus = -1;
@@ -100,7 +100,7 @@ long CD_sync(long mode, u_char *result) {
         if (func_8006E088()) {
             register u_long rawStatus asm("$2");
 
-            rawStatus = *D_80099300;
+            rawStatus = *g_CdReg0;
             asm("" : "=r"(rawStatus) : "0"(rawStatus));
             savedStatus = rawStatus & 3;
             for (;;) {
@@ -113,19 +113,19 @@ long CD_sync(long mode, u_char *result) {
                 }
                 readyBit = interrupt & 4;
                 if (readyBit != 0) {
-                    if (D_80099040 != 0) {
-                        D_80099040(*ready, D_8009BAF8);
+                    if (g_CdReadyCallback != 0) {
+                        g_CdReadyCallback(*ready, g_CdReadyResult);
                     }
                     asm("");
                     syncBit = interrupt & 2;
                 } else {
                     syncBit = interrupt & 2;
                 }
-                if (syncBit && D_8009903C != 0) {
-                    D_8009903C(intr->sync, D_8009BAF0);
+                if (syncBit && g_CdSyncCallback != 0) {
+                    g_CdSyncCallback(intr->sync, g_CdSyncResult);
                 }
             }
-            *D_80099300 = savedStatus;
+            *g_CdReg0 = savedStatus;
         }
 
         {
@@ -137,7 +137,7 @@ long CD_sync(long mode, u_char *result) {
         sync = syncRaw & 0xFF;
         if (sync == 2 || sync == 5) {
             intr->sync = 2;
-            copy8(resultReg, (u_char *)D_8009BAF0);
+            copy8(resultReg, (u_char *)g_CdSyncResult);
             asm(".globl func_8006B330\nfunc_8006B330 = CD_sync + 0x25c");
             return sync;
         }

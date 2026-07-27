@@ -3,13 +3,13 @@
 #include "common.h"
 #include "game/render.h"
 
-extern volatile long D_8007D790;
-extern volatile long D_8007D794;
-extern volatile long D_8007D79C;
-extern volatile long D_8007D7A0;
-extern volatile long D_8007D7AC;
-extern volatile long D_8007D7B4;
-extern volatile long D_8007D7B8;
+extern volatile long g_CdReadSectorCount asm("D_8007D790");
+extern volatile long g_CdReadBuffer asm("D_8007D794");
+extern volatile long g_CdReadMode asm("D_8007D79C");
+extern volatile long g_CdReadSectorWords asm("D_8007D7A0");
+extern volatile long g_CdReadStartVSync asm("D_8007D7AC");
+extern volatile long g_CdReadSavedSyncCallback asm("D_8007D7B4");
+extern volatile long g_CdReadSavedReadyCallback asm("D_8007D7B8");
 long func_8006A574(long arg0);
 long func_8006A58C(long arg0);
 long VSync(long mode) asm("func_8006DD30");
@@ -17,7 +17,7 @@ long func_8006A3E8(void);
 long func_8006A808(long arg0, void *arg1, long arg2);
 long CdReadRetry(long arg0) asm("func_8002745C");
 void func_8006A554(long arg0, long arg1);
-extern long D_8007D78C;
+extern long g_CdReadCallback asm("D_8007D78C");
 extern u_char D_8007D7BC[];
 extern u_char D_8007D7BD[];
 extern u_char D_8007D87C[];
@@ -34,7 +34,7 @@ long CdRead(long arg0, long arg1, long arg2) {
     long mode;
     long value;
 
-    value = (long)&D_8007D79C;
+    value = (long)&g_CdReadMode;
     *(volatile long *)value = arg2;
     value = *(volatile long *)value;
     mode = value & 0x30;
@@ -42,29 +42,29 @@ long CdRead(long arg0, long arg1, long arg2) {
     switch (mode) {
     case 0:
         value = 0x200;
-        D_8007D7A0 = value;
+        g_CdReadSectorWords = value;
         break;
     case 0x20:
         value = 0x249;
-        D_8007D7A0 = value;
+        g_CdReadSectorWords = value;
         break;
     default:
         value = 0x246;
-        mode = (long)&D_8007D7A0;
+        mode = (long)&g_CdReadSectorWords;
         *(volatile long *)mode = value;
         break;
     }
 
-    mode = (long)&D_8007D79C;
+    mode = (long)&g_CdReadMode;
     savedArg0 = arg0;
     value = *(volatile long *)mode;
     value |= 0x20;
     *(volatile long *)mode = value;
-    D_8007D794 = arg1;
-    D_8007D790 = savedArg0;
-    D_8007D7B4 = func_8006A574(0);
-    D_8007D7B8 = func_8006A58C(0);
-    D_8007D7AC = VSync(-1);
+    g_CdReadBuffer = arg1;
+    g_CdReadSectorCount = savedArg0;
+    g_CdReadSavedSyncCallback = func_8006A574(0);
+    g_CdReadSavedReadyCallback = func_8006A58C(0);
+    g_CdReadStartVSync = VSync(-1);
 
     if ((func_8006A3E8() & 0xE0) != 0) {
         func_8006A808(9, 0, 0);
@@ -82,7 +82,7 @@ long CdReadSync(long arg0, long arg1) {
 
     savedArg0 = arg0;
     savedArg1 = arg1;
-    state = &D_8007D7AC;
+    state = &g_CdReadStartVSync;
 
     do {
         long now;
@@ -119,9 +119,9 @@ loop_check:
 
 long CdReadCallback(long arg0) asm("func_8002785C");
 long CdReadCallback(long arg0) {
-    long old = D_8007D78C;
+    long old = g_CdReadCallback;
 
-    D_8007D78C = arg0;
+    g_CdReadCallback = arg0;
     return old;
 }
 

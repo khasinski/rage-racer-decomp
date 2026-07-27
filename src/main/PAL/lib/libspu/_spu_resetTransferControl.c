@@ -2,15 +2,15 @@
 
 #include "common.h"
 
-extern volatile u_short *D_8009AB7C;
+extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
 
 long _spu_resetTransferControl(void) {
     volatile long i;
     volatile long delay;
     u_short cnt;
 
-    cnt = D_8009AB7C[0xD5];
-    D_8009AB7C[0xD5] = cnt & 0x7FCF;
+    cnt = g_SpuRegBase[0xD5];
+    g_SpuRegBase[0xD5] = cnt & 0x7FCF;
 
     delay = 0xD;
     i = 0;
@@ -20,7 +20,7 @@ long _spu_resetTransferControl(void) {
     }
 
     {
-        volatile u_short *base = D_8009AB7C;
+        volatile u_short *base = g_SpuRegBase;
 
         cnt &= 0xFFCF;
         base[0xD5] = cnt;

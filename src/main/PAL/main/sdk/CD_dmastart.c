@@ -3,8 +3,8 @@
 #include "common.h"
 
 extern volatile u_char *D_800993D0;
-extern volatile u_long *D_800993E8;
-extern u_char *D_800993EC;
+extern volatile u_long *g_DmaDpcr asm("D_800993E8");
+extern u_char *g_DmaDicr asm("D_800993EC");
 extern char D_80013B14[];
 
 
@@ -33,17 +33,17 @@ void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal
 
     if (mode == 1) {
         register long bv asm("$4");
-        dptr = D_800993EC;
+        dptr = g_DmaDicr;
         bv = dptr[2];
         dptr[2] = bv | (1 << ch);
     } else {
         register long bv asm("$4");
-        dptr = D_800993EC;
+        dptr = g_DmaDicr;
         bv = dptr[2];
         dptr[2] = bv & ~(1 << ch);
     }
 
-    dummy = *(volatile u_long *)D_800993EC;
+    dummy = *(volatile u_long *)g_DmaDicr;
     asm volatile("");
     {
         register long dv asm("$6");
@@ -53,7 +53,7 @@ void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal
         bit = 1 << (dv + 3);
         asm volatile("");
         p = (volatile u_long *)(0x1F801080 + (ch << 4));
-        dp = D_800993E8;
+        dp = g_DmaDpcr;
         dv = *dp;
         *dp = dv | bit;
         *p++ = madr;

@@ -210,7 +210,7 @@ void GameStepTrackTextureSwap(void) {
 }
 
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
-extern u8 D_801F18CC[];
+extern u8 g_CarTrackSection[] asm("D_801F18CC");
 
 s32 GameRandom15(void) asm("func_800632B0");
 
@@ -229,10 +229,10 @@ s32 GameCycleBgmSelectCameraCar(s32 mask, s32 current) {
         candidate = random % 11;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
-        first = GameSelectTrackTexturePage(*(s16 *)&D_801F18CC[offset]);
+        first = GameSelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
 
         offset = (((((candidate * 3) * 4) + candidate) * 8) - candidate) * 4;
-        if (first == GameSelectTrackTexturePage(*(s16 *)&D_801F18CC[offset])) {
+        if (first == GameSelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset])) {
             return candidate;
         }
     }
@@ -240,7 +240,7 @@ s32 GameCycleBgmSelectCameraCar(s32 mask, s32 current) {
 }
 
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
-extern u8 D_801F18CC[];
+extern u8 g_CarTrackSection[] asm("D_801F18CC");
 
 s32 GameRandom15(void) asm("func_800632B0");
 
@@ -259,10 +259,10 @@ s32 GameCycleAttractCameraCar(s32 mask, s32 current) {
         candidate = random % 4;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
-        first = GameSelectTrackTexturePage(*(s16 *)&D_801F18CC[offset]);
+        first = GameSelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
 
         offset = (((((candidate * 3) * 4) + candidate) * 8) - candidate) * 4;
-        if (first == GameSelectTrackTexturePage(*(s16 *)&D_801F18CC[offset])) {
+        if (first == GameSelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset])) {
             return candidate;
         }
     }

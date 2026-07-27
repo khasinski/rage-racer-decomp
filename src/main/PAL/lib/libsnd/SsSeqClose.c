@@ -1,8 +1,8 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *D_801E79CC[];
-extern long D_801E4B80;
-extern short D_801E8270;
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern long g_SndSeqOpenMask asm("D_801E4B80");
+extern short g_SndSeqTableTMax asm("D_801E8270");
 
 void func_80076C58(long seq_sep, u_short left, u_short right, long arg3);
 
@@ -25,11 +25,11 @@ void SsSeqClose(long seq) {
     SpuVmSeqKeyOff(seq_s);
 
     mask = ~(1 << seq_s);
-    D_801E4B80 = D_801E4B80 & mask;
+    g_SndSeqOpenMask = g_SndSeqOpenMask & mask;
 
     index = 0;
-    if (D_801E8270 > 0) {
-        table = (volatile SeqStruct **)D_801E79CC;
+    if (g_SndSeqTableTMax > 0) {
+        table = (volatile SeqStruct **)g_SndSeqTable;
         seq_offset = seq_s * 4;
         slot = (volatile SeqStruct **)(seq_offset + (long)table);
         value = 0x7F;
@@ -53,6 +53,6 @@ void SsSeqClose(long seq) {
             current = offset + (long)*slot;
             offset += sizeof(SeqStruct);
             ((SeqStruct *)current)->unk76 = value;
-        } while (index < D_801E8270);
+        } while (index < g_SndSeqTableTMax);
     }
 }

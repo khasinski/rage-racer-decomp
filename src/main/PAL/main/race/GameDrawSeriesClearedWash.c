@@ -55,7 +55,7 @@ void func_80016A18(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 extern s32 g_RaceTotalTime asm("D_801E4BA8");
 extern s32 g_ClassResultPlace asm("D_8019C7C4");
-extern s32 g_PrizeScreenStep asm("D_8019CB74");
+extern s32 g_PrizeScreenState asm("D_8019CB74");
 extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 extern s32 g_PlayerLapTimes[] asm("D_8009E858");
 /* Grand Prix result panel: the finishing-position graphic's per-place sprite
@@ -295,7 +295,7 @@ void GameDrawGrandPrixResultPanel(void) asm("func_800201D4");
 void GameDrawGrandPrixResultPanel(void) {
     u8 *base;
     char text[0x30];
-    if ((g_ClassResultPlace != 0) && (g_PrizeScreenStep >= 5)) {
+    if ((g_ClassResultPlace != 0) && (g_PrizeScreenState >= 5)) {
         s32 *scratch;
         s32 next;
         s32 height;

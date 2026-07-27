@@ -4,10 +4,10 @@
 
 void Gpu_ArmTimeout(void) asm("func_80067F04");
 
-extern volatile u_long *D_800942BC;
-extern volatile u_long *D_800942C8;
-extern long D_800942EC;
-extern long D_800942F0;
+extern volatile u_long *g_GpuGp1 asm("D_800942BC");
+extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
+extern long g_GpuQueueWriteIdx asm("D_800942EC");
+extern long g_GpuQueueReadIdx asm("D_800942F0");
 
 void func_80067984(void);
 long Gpu_CheckTimeout(void) asm("func_80067F38");
@@ -30,7 +30,7 @@ retry:
         }
 
 pollState:
-        if (D_800942EC == D_800942F0) {
+        if (g_GpuQueueWriteIdx == g_GpuQueueReadIdx) {
             goto checkBusy;
         }
         goto retry;
@@ -41,26 +41,26 @@ waitReady:
         }
 
 checkBusy:
-        if (*D_800942C8 & 0x01000000) {
+        if (*g_GpuDmaChcr & 0x01000000) {
             goto waitReady;
         }
 
-        if (*D_800942BC & 0x04000000) {
+        if (*g_GpuGp1 & 0x04000000) {
             return 0;
         }
         goto waitReady;
     }
 
-    pending = (D_800942EC - D_800942F0) & 0x3F;
+    pending = (g_GpuQueueWriteIdx - g_GpuQueueReadIdx) & 0x3F;
     if (pending != 0) {
         func_80067984();
     }
 
-    if (*D_800942C8 & 0x01000000) {
+    if (*g_GpuDmaChcr & 0x01000000) {
         goto tail;
     }
 
-    if (*D_800942BC & 0x04000000) {
+    if (*g_GpuGp1 & 0x04000000) {
         goto returnPending;
     }
 
@@ -74,7 +74,7 @@ returnPending:
     return pending;
 }
 
-extern long D_80094300;
-extern long D_80094304;
+extern long g_GpuTimeoutDeadline asm("D_80094300");
+extern long g_GpuTimeoutPolls asm("D_80094304");
 long VSync(long mode) asm("func_8006DD30");
-void Gpu_ArmTimeout(void) { D_80094300 = VSync(-1) + 240; D_80094304 = 0; }
+void Gpu_ArmTimeout(void) { g_GpuTimeoutDeadline = VSync(-1) + 240; g_GpuTimeoutPolls = 0; }

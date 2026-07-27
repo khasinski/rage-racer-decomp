@@ -38,17 +38,17 @@ typedef struct {
     short voice;
 } SvmCurrent76940;
 
-extern SpuVoice76940 D_8009E0B8[];
+extern SpuVoice76940 g_SndVoiceState[] asm("D_8009E0B8");
 extern u_short D_8009E670;
 extern u_short D_8009E674;
-extern u_short *D_8009A588;
+extern u_short *g_SndSpuRegs asm("D_8009A588");
 extern u_char D_801E42F8;
-extern SvmCurrent76940 D_801E4BD0;
+extern SvmCurrent76940 g_SndCurrentAttr asm("D_801E4BD0");
 extern u_short D_801F2A08;
 extern u_short D_801F2A0C;
 
 static inline u_short get_selected_voice(void) {
-    return D_801E4BD0.voice;
+    return g_SndCurrentAttr.voice;
 }
 
 long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) asm("func_80076940");
@@ -62,17 +62,17 @@ long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) {
 
     count = 0;
     for (voice = 0; voice < D_801E42F8; voice++) {
-        if ((D_8009E0B8[voice].note == note) &&
-            (D_8009E0B8[voice].program == program) &&
-            (D_8009E0B8[voice].seq_sep == seq_sep) &&
-            (D_8009E0B8[voice].vab_id == vab_id)) {
-            if (D_8009E0B8[voice].vag == 0xFF) {
-                D_8009E0B8[voice].active = 0;
-                D_8009E0B8[voice].pitch = 0;
-                D_8009A588[202] = 0;
-                D_8009A588[203] = 0;
+        if ((g_SndVoiceState[voice].note == note) &&
+            (g_SndVoiceState[voice].program == program) &&
+            (g_SndVoiceState[voice].seq_sep == seq_sep) &&
+            (g_SndVoiceState[voice].vab_id == vab_id)) {
+            if (g_SndVoiceState[voice].vag == 0xFF) {
+                g_SndVoiceState[voice].active = 0;
+                g_SndVoiceState[voice].pitch = 0;
+                g_SndSpuRegs[202] = 0;
+                g_SndSpuRegs[203] = 0;
             } else {
-                D_801E4BD0.voice = voice;
+                g_SndCurrentAttr.voice = voice;
                 selected_voice = get_selected_voice();
                 selected_index = selected_voice;
                 if (selected_index < 0x10) {
@@ -83,9 +83,9 @@ long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) {
                     bits_upper = 1 << (selected_index - 0x10);
                 }
 
-                D_8009E0B8[selected_voice].active = 0;
-                D_8009E0B8[selected_voice].pitch = 0;
-                D_8009E0B8[selected_voice].vag = 0;
+                g_SndVoiceState[selected_voice].active = 0;
+                g_SndVoiceState[selected_voice].pitch = 0;
+                g_SndVoiceState[selected_voice].vag = 0;
 
                 D_801F2A08 = bits_lower | D_801F2A08;
                 D_801F2A0C = bits_upper | D_801F2A0C;

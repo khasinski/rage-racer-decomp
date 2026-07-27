@@ -91,10 +91,12 @@ extern S22 g_TimeRecords[][4][5] asm("D_8019CB78");
 extern u8 g_TeamNameLength asm("D_8007F45C");
 extern u8 g_TeamNameChars[] asm("D_8007F460");
 
-/* Memory-card menu sub-state, driven by func_80061520. g_McMenuSlotData points
- * at the selected save-slot record; the others are selection/phase words. */
+/* Memory-card menu sub-state, driven by func_80061520. g_McCardStatus is the
+ * last GamePollMemoryCardStatus result (0 no card yet, 1/2 card present,
+ * -1/-2/-3 error), not a record pointer; the others are selection/phase words.
+ */
 extern s32 g_McMenuState asm("D_8009B71C");
-extern void *g_McMenuSlotData asm("D_8009B720");
+extern s32 g_McCardStatus asm("D_8009B720");
 extern s32 g_McMenuSelection asm("D_8009B724");
 extern s32 g_McMenuPhase asm("D_8009B728");
 extern s32 g_McMenuSubState asm("D_8009B72C");

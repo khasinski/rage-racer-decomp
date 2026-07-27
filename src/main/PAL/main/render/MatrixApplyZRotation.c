@@ -4,7 +4,7 @@
 extern s16 D_80092B08[];
 extern s16 D_80093308[];
 extern s16 D_80093B08[];
-extern s16 D_80094308[];
+extern s16 g_SinTable[] asm("D_80094308");
 
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rsinCore(s32 arg0) asm("func_800685A4");
@@ -60,17 +60,17 @@ done:
 s32 rsinCore(s32 arg0) {
     if (arg0 < 0x801) {
         if (arg0 < 0x401) {
-            return D_80094308[arg0];
+            return g_SinTable[arg0];
         }
 
-        return D_80094308[0x800 - arg0];
+        return g_SinTable[0x800 - arg0];
     }
 
     if (arg0 < 0xC01) {
         return -D_80093308[arg0];
     }
 
-    return -D_80094308[0x1000 - arg0];
+    return -g_SinTable[0x1000 - arg0];
 }
 
 s32 rcos(s32 arg0) {
@@ -82,14 +82,14 @@ s32 rcos(s32 arg0) {
 
     if (arg0 < 0x801) {
         if (arg0 < 0x401) {
-            return D_80094308[0x400 - arg0];
+            return g_SinTable[0x400 - arg0];
         }
 
         return -D_80093B08[arg0];
     }
 
     if (arg0 < 0xC01) {
-        return -D_80094308[0xC00 - arg0];
+        return -g_SinTable[0xC00 - arg0];
     }
 
     return D_80092B08[arg0];

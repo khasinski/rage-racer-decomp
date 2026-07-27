@@ -1,15 +1,15 @@
 #include "psyq/snd.h"
 #include "psyq/spu.h"
 
-extern u_char D_801E4CFC[];
-extern u_short D_801F17AC;
-extern VabHdr *D_8019CA20[];
-extern short D_801E40D0;
-extern ProgAtr *D_8019C9B0[];
-extern VagAtr *D_8019CA70[];
-extern u_long D_801F17BC[];
-extern u_short *D_801F180C[];
-extern long D_801E8AB8[];
+extern u_char g_SndVabStatus[] asm("D_801E4CFC");
+extern u_short g_SndVabOpenCount asm("D_801F17AC");
+extern VabHdr *g_SndVabHeader[] asm("D_8019CA20");
+extern short g_SndVabProgMax asm("D_801E40D0");
+extern ProgAtr *g_SndVabProgTable[] asm("D_8019C9B0");
+extern VagAtr *g_SndVabToneTable[] asm("D_8019CA70");
+extern u_long g_SndVabSpuAddr[] asm("D_801F17BC");
+extern u_short *g_SndVabBodyAddr[] asm("D_801F180C");
+extern long g_SndVabBodySize[] asm("D_801E8AB8");
 
 extern long func_8007B2C0(void);
 extern void func_8007B294(long value);
@@ -19,7 +19,7 @@ short func_80072BC0(u_char *addr, VabHdr *header) {
 
     vabId = SsVabOpenHead(addr, -1);
     if (vabId != -1) {
-        vabId = SsVabTransBody((u_char *)D_801F180C[vabId], vabId);
+        vabId = SsVabTransBody((u_char *)g_SndVabBodyAddr[vabId], vabId);
     }
     return vabId;
 }
@@ -61,19 +61,19 @@ short func_80072CB4(u_char *addr, short vabid, short mode, u_long spuAddr) {
     }
     if (vabid == -1) {
         for (i = 0; i < 16; i++) {
-            if (D_801E4CFC[i] == 0) {
-                D_801E4CFC[i] = 1;
+            if (g_SndVabStatus[i] == 0) {
+                g_SndVabStatus[i] = 1;
                 vabId = i;
-                D_801F17AC++;
+                g_SndVabOpenCount++;
                 break;
             }
         }
     } else {
-        cursor = D_801E4CFC;
+        cursor = g_SndVabStatus;
         if (cursor[vabid] == 0) {
-            D_801E4CFC[vabid] = 1;
+            g_SndVabStatus[vabid] = 1;
             vabId = vabid;
-            D_801F17AC++;
+            g_SndVabOpenCount++;
         }
     }
     if (vabId >= 16) {
@@ -82,37 +82,37 @@ short func_80072CB4(u_char *addr, short vabid, short mode, u_long spuAddr) {
     }
 
     cursor = addr;
-    D_8019CA20[vabId] = (VabHdr *)cursor;
+    g_SndVabHeader[vabId] = (VabHdr *)cursor;
     cursor += sizeof(VabHdr);
     header = (VabHdr *)addr;
     magic = header->form;
     if ((magic >> 8) != (('V' << 16) | ('A' << 8) | 'B')) {
-        D_801E4CFC[vabId] = 0;
+        g_SndVabStatus[vabId] = 0;
         func_8007B294(0);
-        D_801F17AC--;
+        g_SndVabOpenCount--;
         return -1;
     }
     if ((magic & 0xFF) == 'p') {
         if (header->ver >= 5) {
-            D_801E40D0 = 0x80;
+            g_SndVabProgMax = 0x80;
         } else {
-            D_801E40D0 = 0x40;
+            g_SndVabProgMax = 0x40;
         }
     } else {
-        D_801E40D0 = 0x40;
+        g_SndVabProgMax = 0x40;
     }
-    if (header->ps > D_801E40D0) {
-        D_801E4CFC[vabId] = 0;
+    if (header->ps > g_SndVabProgMax) {
+        g_SndVabStatus[vabId] = 0;
         func_8007B294(0);
-        D_801F17AC--;
+        g_SndVabOpenCount--;
         return -1;
     }
 
-    D_8019C9B0[vabId] = (ProgAtr *)cursor;
+    g_SndVabProgTable[vabId] = (ProgAtr *)cursor;
     programTable = (ProgAtr *)cursor;
-    cursor += D_801E40D0 * sizeof(ProgAtr);
+    cursor += g_SndVabProgMax * sizeof(ProgAtr);
     totalSize = 0;
-    for (i = 0; i < D_801E40D0; i++) {
+    for (i = 0; i < g_SndVabProgMax; i++) {
         programTable[i].reserved1 = totalSize;
         if (programTable[i].tones != 0) {
             totalSize++;
@@ -120,7 +120,7 @@ short func_80072CB4(u_char *addr, short vabid, short mode, u_long spuAddr) {
     }
 
     totalSize = 0;
-    D_8019CA70[vabId] = (VagAtr *)cursor;
+    g_SndVabToneTable[vabId] = (VagAtr *)cursor;
     vagOffsetTable = (u_short *)(cursor + (header->ps << 9));
     vagCount = header->vs;
     for (i = 0; i < 256; i++) {
@@ -136,25 +136,25 @@ short func_80072CB4(u_char *addr, short vabid, short mode, u_long spuAddr) {
         vagOffsetTable++;
     }
 
-    D_801F180C[vabId] = vagOffsetTable;
+    g_SndVabBodyAddr[vabId] = vagOffsetTable;
     allocation = spuAddr;
     if (mode == 0) {
         allocation = SpuMalloc(totalSize);
         if (allocation == -1) {
-            D_801E4CFC[vabId] = 0;
+            g_SndVabStatus[vabId] = 0;
             func_8007B294(0);
-            D_801F17AC--;
+            g_SndVabOpenCount--;
             return -1;
         }
     }
     if ((allocation + totalSize) > 0x80000U) {
-        D_801E4CFC[vabId] = 0;
+        g_SndVabStatus[vabId] = 0;
         func_8007B294(0);
-        D_801F17AC--;
+        g_SndVabOpenCount--;
         return -1;
     }
 
-    D_801F17BC[vabId] = allocation;
+    g_SndVabSpuAddr[vabId] = allocation;
     totalSize = 0;
     for (i = 0; i <= vagCount; i++) {
         totalSize += vagLengths[i];
@@ -167,7 +167,7 @@ short func_80072CB4(u_char *addr, short vabid, short mode, u_long spuAddr) {
         }
     }
 
-    D_801E8AB8[vabId] = totalSize;
-    D_801E4CFC[vabId] = 2;
+    g_SndVabBodySize[vabId] = totalSize;
+    g_SndVabStatus[vabId] = 2;
     return vabId;
 }

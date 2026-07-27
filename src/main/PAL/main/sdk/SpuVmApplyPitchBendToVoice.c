@@ -2,17 +2,17 @@
 
 #include "common.h"
 
-extern u_char D_8009E0C4[];
-extern u_char D_8009E0C6[];
-extern u_char D_8009E0CA[];
-extern u_char D_8009E0CC[];
-extern u_char D_8009E0CE[];
-extern u_char D_8009DF24[];
-extern u_char D_8009E0A0[];
-extern u_char D_801E4BD7;
-extern u_char *D_801E416C;
-extern u_short D_801E4BEA;
-extern u_char D_801E4BDC;
+extern u_char g_SndVoiceStateNote[] asm("D_8009E0C4");
+extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
+extern u_char g_SndVoiceStateProg[] asm("D_8009E0CA");
+extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
+extern u_char g_SndVoiceStateVabId[] asm("D_8009E0CE");
+extern u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
+extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
+extern u_char *g_SndCurrentToneTable asm("D_801E416C");
+extern u_short g_SndCurrentVoice asm("D_801E4BEA");
+extern u_char g_SndCurrentTone asm("D_801E4BDC");
 
 long func_80074A6C(long arg0, long arg1);
 
@@ -38,21 +38,21 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
     t1 = arg5 + cst;
     off = ((((i * 3) * 4) + i) * 4);
 
-    if (*(short *)&D_8009E0C6[off] == (short)arg1 &&
-        *(short *)&D_8009E0CE[off] == (short)arg2 &&
-        *(short *)&D_8009E0CA[off] == (short)arg3) {
+    if (*(short *)&g_SndVoiceStateSeqSep[off] == (short)arg1 &&
+        *(short *)&g_SndVoiceStateVabId[off] == (short)arg2 &&
+        *(short *)&g_SndVoiceStateProg[off] == (short)arg3) {
 
-        t = *(u_short *)&D_8009E0CC[off] + (D_801E4BD7 << 4);
-        f0 = *(u_short *)&D_8009E0C4[off];
+        t = *(u_short *)&g_SndVoiceStateTone[off] + (g_SndCurrentProgActual << 4);
+        f0 = *(u_short *)&g_SndVoiceStateNote[off];
         w = (short)t1;
 
         if (w > 0) {
-            prod = w * (u_char)D_801E416C[(((u_short)t) << 5) + 0xD];
+            prod = w * (u_char)g_SndCurrentToneTable[(((u_short)t) << 5) + 0xD];
             q = prod / 63;
             base = f0 + q;
             bal = (prod - q * 63) << 1;
         } else if (w < 0) {
-            prod = w * (u_char)D_801E416C[(((u_short)t) << 5) + 0xC];
+            prod = w * (u_char)g_SndCurrentToneTable[(((u_short)t) << 5) + 0xC];
             q = prod;
             if (prod < 0) q = prod + 0x3F;
             q = q >> 6;
@@ -69,12 +69,12 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
 
         j = (short)raw;
         off2 = ((((j * 3) * 4) + j) * 4);
-        c = *(u_char *)&D_8009E0CC[off2];
-        D_801E4BEA = raw;
-        D_801E4BDC = c;
+        c = *(u_char *)&g_SndVoiceStateTone[off2];
+        g_SndCurrentVoice = raw;
+        g_SndCurrentTone = c;
         ret = func_80074A6C((u_short)base, (u_short)bal);
-        *(short *)&D_8009DF24[j << 4] = ret;
-        D_8009E0A0[j] |= 4;
+        *(short *)&g_SndVoiceRegsPitch[j << 4] = ret;
+        g_SndVoiceFlags[j] |= 4;
         return 1;
     }
     return 0;
