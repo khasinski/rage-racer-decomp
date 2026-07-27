@@ -5,7 +5,9 @@ extern s32 g_McLastCardStatus asm("D_80082F4C");
 extern s32 g_McStatusState asm("D_8009E668");
 extern s32 g_McPollTicks asm("D_8019C864");
 extern s32 g_McStatusResult asm("D_8019C8F0");
-extern s32 g_McCardStatus asm("D_801E825C");
+/* The poller's own working status word. Distinct from menu.h's
+ * g_McPollStatus (D_8009B720), which is the code the menu reads. */
+extern s32 g_McPollStatus asm("D_801E825C");
 extern char g_FmtCardDevice[] asm("D_800127CC");
 
 void func_8005F2AC(void);
@@ -59,7 +61,7 @@ s32 GamePollMemoryCardStatus(s32 arg0, s32 arg1) {
         goto fail_neg3_case1;
 
 case1_ready:
-        g_McCardStatus = status;
+        g_McPollStatus = status;
         if (g_McLastCardStatus == status) {
             g_McStatusState = 4;
         } else {
@@ -72,7 +74,7 @@ fail_neg1_case1:
         goto fail_case1;
 
 case1_status4:
-        g_McCardStatus = two;
+        g_McPollStatus = two;
         func_8005F304();
         _card_clear(handle);
         func_8005F55C();
@@ -84,7 +86,7 @@ fail_neg3_case1:
         state = -3;
 
 fail_case1:
-        g_McCardStatus = state;
+        g_McPollStatus = state;
         g_McStatusState = 4;
         g_McLastCardStatus = 0;
         goto done;
@@ -136,13 +138,13 @@ fail_neg3_case3:
         state = -3;
 
 fail_case3:
-        g_McCardStatus = state;
+        g_McPollStatus = state;
         g_McLastCardStatus = 0;
         goto done;
 
     case 4:
         g_McStatusState = 0;
-        g_McStatusResult = g_McCardStatus;
+        g_McStatusResult = g_McPollStatus;
         goto done;
 
     default:

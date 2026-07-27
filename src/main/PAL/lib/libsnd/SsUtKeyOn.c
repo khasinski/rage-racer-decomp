@@ -5,7 +5,9 @@
 void SpuVmSeKeyOn(long arg0, short arg1, short arg2, u_short arg3, u_short arg4, u_short arg5) asm("func_80076350");
 void SpuVmSeKeyOff(long arg0, short arg1, short arg2, u_short arg3) asm("func_80076940");
 
-void SsUtKeyOnV(void) asm("func_80076C50");
+/* Empty two-word stub. Was misnamed SsUtKeyOnV, which is the eight
+ * argument function at func_80077C7C in sdk/SsUtKeyOnV.c. */
+void func_80076C50(void);
 
 void func_80076B30(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5) {
     u_short base;
@@ -33,5 +35,5 @@ void func_80076C1C(long arg0, long arg1, long arg2) {
     SpuVmSeKeyOff(0x21, arg0, arg1, arg2);
 }
 
-void SsUtKeyOnV(void) {
+void func_80076C50(void) {
 }
