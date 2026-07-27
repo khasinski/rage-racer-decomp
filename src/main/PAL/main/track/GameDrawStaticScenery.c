@@ -320,4 +320,162 @@ void GameSeedFlybyScenery(void) {
  * integrating position from a keyframed heading and feeding a distance-attenuated
  * volume to GameSetPitchedSoundCue. See docs/names.md 1.
  */
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/track/GameDrawStaticScenery", func_8003E590);
+extern s16 g_PlayerLap asm("D_8009E83C");
+extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s32 g_FlybySceneryArmed asm("D_801E4300");
+extern s32 g_FlybySceneryFrame asm("D_801E4304");
+extern s16 g_FlybySceneryKeyIndex asm("D_801E430A");
+extern Vec4i g_FlybySceneryPosRec asm("D_801E430C");
+extern s32 g_FlybySceneryRotX2 asm("D_801E431C");
+extern s32 g_FlybySceneryRotY2 asm("D_801E4320");
+extern s32 g_FlybySceneryRotZ2 asm("D_801E4324");
+extern s32 g_RaceSeriesNV asm("D_801E408C");
+extern s32 g_PlayerCarX asm("D_8009E6D4");
+extern s32 g_PlayerCarY asm("D_8009E6D8");
+extern s32 g_PlayerCarZ asm("D_8009E6DC");
+
+void GameSetPitchedSoundCue(s32 cue, s32 pitch, s32 volume) asm("func_8005C914");
+
+#define KFREC(off) (*(s16 *)(kf + *(s16 *)(state + 0xE) * 12 + (off)))
+
+void GameUpdateFlybyScenery(void) asm("func_8003E590");
+
+void GameUpdateFlybyScenery(void) {
+    Matrix mtxY;
+    Matrix mtxX;
+    s16 dir[4];
+    s32 step[4];
+    s32 delta[4];
+    u8 *base;
+    u8 *state;
+    u8 *src;
+    s32 series;
+    s32 index;
+    s32 recordIndex;
+    u8 *kf;
+    Matrix *mx;
+    s32 dt;
+    s32 cue;
+    s32 pitch;
+    s32 vol;
+    s32 dist;
+    s32 dx;
+    s32 dy;
+    s32 dz;
+
+    base = g_FlybySceneryData;
+    state = g_FlybyScenery;
+
+    if (g_PlayerLap == g_FlybySceneryLap) {
+        series = g_RaceSeries;
+        if (g_PlayerTrackSection == *(s16 *)((series << 2) + (s32)base)) {
+            g_FlybySceneryArmed = 1;
+            *(s32 *)(state + 0) = 1;
+            src = (u8 *)((series << 5) + (s32)base);
+            g_FlybySceneryFrame = 0;
+            g_FlybySceneryLap = 0;
+            g_FlybySceneryKeyIndex = 0;
+            g_FlybySceneryPosRec = *(Vec4i *)(src + 0x10);
+            g_FlybySceneryRotZ2 = 0;
+            g_FlybySceneryRotY2 = 0;
+            g_FlybySceneryRotX2 = 0;
+            recordIndex = *(s16 *)((g_RaceSeriesNV << 2) + (s32)base + 8);
+            index = (recordIndex << 1) + recordIndex;
+            index <<= 2;
+            index += 0x50;
+            g_FlybySceneryKeyframe = base + index;
+        }
+    }
+
+    if (*(s32 *)(state + 0) > 0) {
+        *(s32 *)(state + 0) = *(s32 *)(state + 0) + 1;
+        *(s32 *)(state + 8) = *(s32 *)(state + 8) + 1;
+        if (*(s32 *)(state + 0) >= 0x1C3) {
+            *(s32 *)(state + 0) = 0;
+        }
+        if (*(s16 *)(g_FlybySceneryKeyframe + *(s16 *)(state + 0xE) * 12 + 6) ==
+            *(s32 *)(state + 8)) {
+            *(s16 *)(state + 0xE) = *(s16 *)(state + 0xE) + 1;
+            *(s32 *)(state + 8) = 0;
+        }
+        if (*(s16 *)(g_FlybySceneryKeyframe + *(s16 *)(state + 0xE) * 12 + 6) == -1) {
+            *(s16 *)(state + 0xE) = 0;
+        }
+        kf = g_FlybySceneryKeyframe;
+        *(s32 *)(state + 0x20) =
+            (KFREC(0xC) * *(s32 *)(state + 8) +
+             KFREC(0) * (dt = KFREC(6) - *(s32 *)(state + 8))) / KFREC(6);
+        *(s32 *)(state + 0x24) =
+            (KFREC(0xE) * *(s32 *)(state + 8) + KFREC(2) * dt) / KFREC(6);
+        *(s32 *)(state + 0x28) =
+            (KFREC(0x10) * *(s32 *)(state + 8) + KFREC(4) * dt) / KFREC(6);
+        dir[0] = 0;
+        dir[1] = 0;
+        dir[2] = -KFREC(8) * 4;
+        GameBuildRotMatrixY(&mtxY, 0x800 - *(s32 *)(state + 0x24));
+        mx = &mtxX;
+        GameBuildRotMatrixX(mx, *(s32 *)(state + 0x20));
+        MulMatrix2(&mtxY, mx);
+        GameBuildRotMatrixZ(&mtxY, *(s32 *)(state + 0x28));
+        MulMatrix(mx, &mtxY);
+        ApplyMatrix(mx, dir, step);
+        *(s32 *)(state + 0x10) = step[0] / 4 + *(s32 *)(state + 0x10);
+        *(s32 *)(state + 0x14) = step[1] / 4 + *(s32 *)(state + 0x14);
+        *(s32 *)(state + 0x18) = step[2] / 4 + *(s32 *)(state + 0x18);
+        if (*(s32 *)(state + 4) == 1) {
+            delta[0] = dx = g_PlayerCarX - *(s32 *)(state + 0x10);
+            delta[1] = dy = g_PlayerCarY - *(s32 *)(state + 0x14);
+            delta[2] = dz = g_PlayerCarZ - *(s32 *)(state + 0x18);
+            dist = SquareRoot12(dx * dx / 8 + dy * dy / 16 + dz * dz / 8) >> 12;
+            if (dist < 0) {
+                *(s32 *)(state + 4) = 0;
+                dist = 0x74;
+            }
+            vol = 0x74 - dist;
+            if (vol >= 0x75) {
+                vol = 0x74;
+            }
+            if (vol < 0) {
+                vol = 0;
+            }
+            pitch = 0x1900;
+            *(s32 *)(state + 0x30) = vol;
+        } else {
+            vol = 0;
+            *(s32 *)(state + 0x30) = 0;
+            pitch = 0;
+        }
+    } else {
+        vol = 0;
+        *(s32 *)(state + 0x30) = 0;
+        pitch = 0;
+    }
+
+    if (g_RacePhase >= 3) {
+        pitch = 0;
+        vol = 0;
+    }
+
+    switch (g_CourseIndex & 3) {
+    default:
+        cue = 1;
+        pitch = 0;
+        vol = 0;
+        break;
+    case 0:
+        cue = 1;
+        break;
+    case 1:
+        cue = 1;
+        pitch = 0;
+        vol = 0;
+        break;
+    case 3:
+        cue = 2;
+        break;
+    case 2:
+        cue = 2;
+        break;
+    }
+    GameSetPitchedSoundCue(cue, pitch, vol);
+}
