@@ -19,7 +19,7 @@ extern void (*g_AttractDemoSteps[])(void) asm("D_8007D6D0");
 void GameResetAssetLoader(void) asm("func_80017BE4");
 void GameReturnToTitleScene(void) asm("func_800268EC");
 /* Deliberately raw: see docs/names.md 12d. */
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_PrologueStep asm("D_801E4178");
 extern s32 g_PrologueCutIndex asm("D_801E6824");
 extern u8 g_TextNowLoading[] asm("D_80011010");
@@ -70,7 +70,7 @@ void GameEnterPrologue(void) {
     SetDispMask(0);
     GameSetupDisplay240(0, 0, 0);
 
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
     g_FadeLevel = 0x108;
     g_FadeStep = -4;
     g_SceneId = 0x20;

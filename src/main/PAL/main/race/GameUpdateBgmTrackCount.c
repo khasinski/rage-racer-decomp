@@ -10,7 +10,7 @@ extern volatile s32 g_ClassWinCount asm("D_801E4DA8");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern u8 g_CaptionLostRace asm("D_80010E68");
 void func_80016B7C(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4);
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_LostRaceChoice asm("D_801E3E0C");
 void func_8005B190(s32 arg0, s32 arg1);
 void GameDrawLostRaceCaption(s32 arg0) asm("func_800215B8");
@@ -70,7 +70,7 @@ void GameDrawLostRaceCaption(s32 arg0) {
 
 void GameEnterLostRaceScreen(void) asm("func_800215FC");
 void GameEnterLostRaceScreen(void) {
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
     func_8005B190(0x28, 0x28);
     g_SceneId = 0xE;
     g_LostRaceChoice = 0;
@@ -165,7 +165,7 @@ void func_800218A0(s32 arg0) {
 
 void GameEnterRaceEndScreen(void) asm("func_80021920");
 void GameEnterRaceEndScreen(void) {
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
     g_SceneId = 0x10;
     g_SceneTimer = 0x22B;
     func_800218A0(0x22B);

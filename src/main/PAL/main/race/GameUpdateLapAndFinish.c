@@ -101,7 +101,7 @@ extern s16 g_PauseDebounce asm("D_8019C750");
 
 /* Deliberately raw: see docs/names.md 12d. Written 0x80 / 0x180 on scene
  * entry, and its one reader is never reached in retail. */
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 
 extern u8 *g_CamRow asm("D_8019C9A8");
 
@@ -644,7 +644,7 @@ void GameEnterRaceScene(void) {
     do {
     } while (0);
     g_SceneId = 12;
-    D_8019C768 = 0x180;
+    g_FrameSyncThreshold = 0x180;
     func_8001C974();
     GameDebugPrintf(g_MsgGame0Ok);
 

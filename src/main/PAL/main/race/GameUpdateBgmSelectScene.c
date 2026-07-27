@@ -10,7 +10,7 @@
 extern s32 g_BgmSelectStep asm("D_8019C99C");
 extern void (*g_BgmSelectSteps[])(void) asm("D_8007D6B8");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_AttractDemoStep asm("D_801E682C");
 void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
 void GameInstallCourseAssets(void) asm("func_80019730");
@@ -69,7 +69,7 @@ void GameEnterAttractDemo(void) {
     GameSetupDisplay240(0, 0, 0);
 
     initialValue = 0x80;
-    D_8019C768 = initialValue;
+    g_FrameSyncThreshold = initialValue;
     GameUploadImageAsset((void *)g_ImageBlockBuffer);
     GameInstallCourseAssets();
     GameRequestTrackDataAssets();

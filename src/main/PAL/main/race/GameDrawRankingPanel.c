@@ -36,7 +36,7 @@ extern u16 g_RankingCars[] asm("D_801E7750");
 extern s32 g_TimeRecordTimes asm("D_8019CB80");
 extern u16 g_TimeRecordCars[] asm("D_8019CB84");
 /* Deliberately raw: see docs/names.md 12d. */
-extern s32 D_8019C768;
+extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_RecordEntryState asm("D_801E6C8C");
 void GameInsertRaceRecords(void) asm("func_80022324");
 extern u8 g_NameEntryCharset[] asm("D_80010FB0");
@@ -359,7 +359,7 @@ void GameInsertRaceRecords(void) {
 void GameEnterRecordEntry(void) asm("func_80022748");
 void GameEnterRecordEntry(void) {
     g_SceneTimer = 0x100;
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
     g_RecordEntryState = 0;
     g_SceneId = 0x15;
     GameInsertRaceRecords();
@@ -569,7 +569,7 @@ void GameReturnFromEndingFmv(void) {
     CdControl(9, 0, 0);
     SetDispMask(0);
     GameSetupDisplay240(0, 0, 0);
-    D_8019C768 = 0x80;
+    g_FrameSyncThreshold = 0x80;
     g_FadeStep = 4;
     g_FadeLevel = 0;
     g_SceneId = 0x22;
