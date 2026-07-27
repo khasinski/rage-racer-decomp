@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/cd.h"
+#include "game/memcard.h"
 
 extern u8 D_80082FD9[];
 

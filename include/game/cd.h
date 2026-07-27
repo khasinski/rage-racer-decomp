@@ -2,24 +2,6 @@
 #define GAME_CD_H
 
 #include "common.h"
-
-void GameClearMemoryCardHwEvents(void) asm("func_8005F2AC");
-void GameClearMemoryCardSwEvents(void) asm("func_8005F304");
-s32 GameWaitMemoryCardHwEvent(void) asm("func_8005F4D8");
-s32 GameWaitMemoryCardSwEvent(void) asm("func_8005F55C");
-s32 GamePollMemoryCardHwEvent(void) asm("func_8005F35C");
-s32 GamePollMemoryCardHwEventLimit(s32 attempts) asm("func_8005F420");
-void GameOpenMemoryCardEvents(void) asm("func_8005EFAC");
-void GameEnableMemoryCardEvents(void) asm("func_8005F0D4");
-void GameDisableMemoryCardEvents(void) asm("func_8005F16C");
-void GameCloseMemoryCardEvents(void) asm("func_8005F204");
-/* libcard _card_clear (see psyq/): _new_card() + _card_write(chan, 0x3F, 0). */
-s32 _card_clear(s32 chan) asm("func_80063DEC");
-void GameCdReadAndSetMode(s32 param) asm("func_8005EB20");
-void GameCdSeekParam(s32 param) asm("func_8005EB78");
-s32 GameCdReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
-s32 GameFormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
-
 /*
  * CD-DA (music) front end. Nothing here talks to the drive directly: each call
  * only posts a request into D_8007F600..D_8007F60C, which GameTickCdAudio pumps

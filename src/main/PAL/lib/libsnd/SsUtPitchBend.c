@@ -28,8 +28,8 @@ s32 SsUtChangeADSR(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) a
 s32 SsUtGetDetVVol(s32 arg0, s16 *arg1, s16 *arg2) asm("func_800783D8");
 s32 SsUtSetDetVVol(s32 arg0, s16 arg1, s16 arg2) asm("func_80078430");
 s32 SsUtSetVVol(s32 arg0, s16 arg1, s16 arg2) asm("func_80078528");
-s32 SsUtVibrateOn(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_800785B4");
-s32 SsUtAutoVol(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80078608");
+s32 SsUtAutoVol(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_800785B4");
+s32 SsUtAutoPan(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80078608");
 
 s32 SsUtPitchBend(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     s32 id;
@@ -291,7 +291,7 @@ s32 SsUtSetVVol(s32 arg0, s16 arg1, s16 arg2) {
     return ret;
 }
 
-s32 SsUtVibrateOn(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+s32 SsUtAutoVol(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     if ((u16)arg0 < 0x18U) {
         SpuVmAutoVol((s16)arg0, (s16)arg1, (s16)arg2, (s16)arg3);
         return 0;
@@ -300,7 +300,7 @@ s32 SsUtVibrateOn(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     return -1;
 }
 
-s32 SsUtAutoVol(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+s32 SsUtAutoPan(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     if ((u16)arg0 < 0x18U) {
         SpuVmAutoPan((s16)arg0, (s16)arg1, (s16)arg2, (s16)arg3);
         return 0;

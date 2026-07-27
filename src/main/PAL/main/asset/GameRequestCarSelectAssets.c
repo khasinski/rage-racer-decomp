@@ -140,10 +140,10 @@ state_4:
                 if (carIndex < 10) {
                     indexOffset = carIndex << 3;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-                    func_8001D748(entry->shapeIndex, g_CarModelAsset->imageDataOffset);
+                    func_8001D748(entry->paintColor1, g_CarModelAsset->imageDataOffset);
                     indexOffset = g_PlayerCarIndex << 3;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-                    func_8001D900(entry->textureIndex, g_CarModelAsset->imageDataOffset);
+                    func_8001D900(entry->paintColor2, g_CarModelAsset->imageDataOffset);
                 }
 
                 g_CarModelSlot = 0;
@@ -214,9 +214,9 @@ void GameLoadCarModel(s32 arg0) {
             test = arg < 10;
             if (test != 0) {
                 entry = (u8 *)(index + (s32)g_CarTable);
-                func_8001D748(((GameCarEntry *)entry)->shapeIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
+                func_8001D748(((GameCarEntry *)entry)->paintColor1, ((GameCarModelAsset *)ptr)->imageDataOffset);
                 entry = (u8 *)(index + (s32)g_CarTable);
-                func_8001D900(((GameCarEntry *)entry)->textureIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
+                func_8001D900(((GameCarEntry *)entry)->paintColor2, ((GameCarModelAsset *)ptr)->imageDataOffset);
             }
 
             g_AssetLoadState = 0;

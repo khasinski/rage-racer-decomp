@@ -1101,7 +1101,7 @@ Deliberately **left generic** in this region, because the Sony symbol could not
 be pinned: func_80067F38 and func_80067F04 (the libgpu timeout watchdog — they
 own the `"GPU timeout:que=%d,..."` / `"func=(%08x)(%08x,%08x)"` strings and the
 `VSync(-1) + 240` deadline, but the public name is unknown), func_8006AB5C (a
-libcd error/trace helper), and the software matrix routines func_80069110 /
+libcd interrupt decoder, see section 15d), and the software matrix routines func_80069110 /
 func_80069728 / func_800696C8.
 
 ### Namco game code (< 0x80063200)

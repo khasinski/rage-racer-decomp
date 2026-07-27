@@ -12,8 +12,8 @@ typedef struct GameCarEntry {
     u8 modelVariant;
     u8 tireCompound;  /* +0x01 CUSTOMIZE row 0, five settings */
     u8 transmission;  /* +0x02 CUSTOMIZE row 1, 0 automatic, 1 manual */
-    u8 shapeIndex;
-    u8 textureIndex;
+    u8 paintColor1;
+    u8 paintColor2;
     u8 enabled;
     u8 pad6[2];
 } GameCarEntry;

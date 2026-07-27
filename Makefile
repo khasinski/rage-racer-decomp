@@ -61,34 +61,13 @@ endef
 $(BUILD)/src/%.c.o: src/%.c | $(BUILD)
 	$(call compile_c_object)
 
-$(BUILD)/src/main/PAL/main/func_8003DDAC.c.o: src/main/PAL/main/func_8003DDAC.c | $(BUILD)
-	@mkdir -p $(dir $@)
-	RAGE_CC1_VERSION=2.6.3 $(CC_WRAPPER) $< $@
 
-$(BUILD)/src/main/PAL/main/func_80073748.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8007849C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8006A9D8.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/CdGetToc2.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_800728F4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80072734.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/MatrixApplyVectorComponents.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/MatrixApplyZRotation.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/StFreeRing.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8007B014.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80043134.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/cd/GameSetCdVolume.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80060CB0.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/GameRefreshSequenceVolumeScale.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80020C24.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/boot/GameDrawBootLogo.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/menu/GameDrawClassChangeCurtain.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8006E1A8.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/race/GameDrawSpeedDigits.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80039280.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/race/GameApplyReplayFrame.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_800207E0.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/race/GameInitRecordTables.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80022324.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/car/GameSeedCarLapProgress.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/car/GameAccumulateLapProgress.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/track/GameBlendAngle.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
@@ -96,36 +75,15 @@ $(BUILD)/src/main/PAL/main/track/GameGetReverseTrackAngle.c.o: RAGE_CC1_VERSION_
 $(BUILD)/src/main/PAL/main/track/GameInterpolateTrackPoint.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/track/GameSmoothTrackAngle.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/car/GameAdvanceCarPosition.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80024420.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/save/GameDrawMemoryCardScreen.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80027D84.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80043598.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80037714.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/render/GameBuildRaceHudPrims.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/race/GameUpdateRacePosition.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8003DDAC.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/render/GameUpdateScriptedCamera.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/track/GameTriggerRaceCues.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80079BB4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80079E7C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8007A17C.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8007A2D0.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8007A3A0.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8007A410.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8007A488.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8007AE68.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80047E60.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/lib/libsnd/SsSeqRestartPlayback.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/lib/libsnd/SpuVmCalculateCurrentPitch.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/lib/libsnd/SpuVmCalculateTonePitch.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/race/GameDrawSeriesClearedWash.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8005B070.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 $(BUILD)/src/main/PAL/main/car/GameClampCarLateralOffset.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8001B974.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80017884.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_80075FA4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_800739E8.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/func_8006B0D4.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
 
 # No object needs cc1-psx-272 any more: every unit that was pinned to it now
 # matches under gcc 2.6.3. See docs/names.md, "Was 2.7.2 ever used?".

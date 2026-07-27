@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/cd.h"
+#include "game/memcard.h"
 
 extern s16 g_SeqHandle asm("D_801E6D90");
 extern s16 D_801E6D94;
@@ -32,8 +33,8 @@ void func_8005F55C(void);
 void func_8005F2AC(void);
 void _card_load(s32 arg0) asm("func_80063DBC");
 void func_8005F4D8(void);
-void GameCdReadAndSetMode(s32 arg0) asm("func_8005EB20");
-void GameCdReadAndSetMode(s32 arg0) {
+void GameCardReadAndSetMode(s32 arg0) asm("func_8005EB20");
+void GameCardReadAndSetMode(s32 arg0) {
     func_8005F304(arg0);
     while (_card_clear(arg0 & 0xFF) == 0) {}
     func_8005F55C();

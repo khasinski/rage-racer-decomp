@@ -235,8 +235,8 @@ s32 SsUtChangeADSR(s32 voice, s32 vab_id, s32 program, s32 tone, s32 adsr1, s32 
 s32 SsUtGetDetVVol(s32 voice, s16 *left, s16 *right) asm("func_800783D8");
 s32 SsUtSetDetVVol(s32 voice, s16 left, s16 right) asm("func_80078430");
 s32 SsUtSetVVol(s32 voice, s16 left, s16 right) asm("func_80078528");
-s32 SsUtVibrateOn(s32 voice, s32 width, s32 time, s32 unknown) asm("func_800785B4");
-s32 SsUtAutoVol(s32 voice, s32 start, s32 end, s32 step) asm("func_80078608");
+s32 SsUtAutoVol(s32 voice, s32 start, s32 end, s32 step) asm("func_800785B4");
+s32 SsUtAutoPan(s32 voice, s32 start, s32 end, s32 step) asm("func_80078608");
 void SsSeqSetNoteParam2C(s32 seq, s32 sep, u8 value) asm("func_8006F57C");
 void SsSeqResetChannelNote(s32 seq, s32 sep) asm("func_8006FCE0");
 void SsSeqApplyControlChange(s32 seq, s32 sep, u8 value) asm("func_8006FDA8");

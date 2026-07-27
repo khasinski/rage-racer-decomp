@@ -1,11 +1,12 @@
 #include "common.h"
 #include "game/cd.h"
+#include "game/memcard.h"
 
 s32 _card_info(s32 arg0) asm("func_80063DAC");
 s32 _card_load(s32 arg0) asm("func_80063DBC");
 
-s32 GameCdReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
-s32 GameCdReadStatusPair(s32 high, s32 low) {
+s32 GameCardReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
+s32 GameCardReadStatusPair(s32 high, s32 low) {
     s32 cmd;
     s32 ret;
     s32 event;

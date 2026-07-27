@@ -383,13 +383,13 @@ void GameUpdatePaintColorScreen(void) {
                 s32 val;
                 if (sel == 0) {
                     GamePlaySoundCue(2);
-                    val = g_CarTable[g_PlayerCarIndex].shapeIndex;
+                    val = g_CarTable[g_PlayerCarIndex].paintColor1;
                     GameMenuBusy = -1;
                     g_UiScriptProgress2 = 0;
                     D_80082EB4 = val;
                 } else if (sel == 1) {
                     GamePlaySoundCue(2);
-                    val = g_CarTable[g_PlayerCarIndex].textureIndex;
+                    val = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = -2;
                     g_UiScriptProgress2 = 0;
                     D_80082EB4 = val;
@@ -423,14 +423,14 @@ void GameUpdatePaintColorScreen(void) {
                 u16 *btn = &g_PadEdge2;
                 if (*btn & 0x860) {
                     GamePlaySoundCue(2);
-                    g_CarTable[g_PlayerCarIndex].shapeIndex = D_80082EB4;
-                    g_TimeAttackCars[g_PlayerCarIndex].shapeIndex = D_80082EB4;
-                    g_TimeAttackCars[g_PlayerCarIndex].textureIndex = g_CarTable[g_PlayerCarIndex].textureIndex;
+                    g_CarTable[g_PlayerCarIndex].paintColor1 = D_80082EB4;
+                    g_TimeAttackCars[g_PlayerCarIndex].paintColor1 = D_80082EB4;
+                    g_TimeAttackCars[g_PlayerCarIndex].paintColor2 = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
                     GamePlaySoundCue(3);
-                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].shapeIndex;
+                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].paintColor1;
                     GameMenuBusy = 0;
                 }
                 func_8001D8C4(D_80082EB4);
@@ -438,14 +438,14 @@ void GameUpdatePaintColorScreen(void) {
                 u16 *btn = &g_PadEdge2;
                 if (*btn & 0x860) {
                     GamePlaySoundCue(2);
-                    g_CarTable[g_PlayerCarIndex].textureIndex = D_80082EB4;
-                    g_TimeAttackCars[g_PlayerCarIndex].shapeIndex = g_CarTable[g_PlayerCarIndex].shapeIndex;
-                    g_TimeAttackCars[g_PlayerCarIndex].textureIndex = D_80082EB4;
+                    g_CarTable[g_PlayerCarIndex].paintColor2 = D_80082EB4;
+                    g_TimeAttackCars[g_PlayerCarIndex].paintColor1 = g_CarTable[g_PlayerCarIndex].paintColor1;
+                    g_TimeAttackCars[g_PlayerCarIndex].paintColor2 = D_80082EB4;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
                     GamePlaySoundCue(3);
-                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].textureIndex;
+                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = 0;
                 }
                 func_8001DA74(D_80082EB4);

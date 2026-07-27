@@ -67,9 +67,9 @@ void GameLoadUpgradedCarModel(s32 arg0) {
 
             if (g_PlayerCarIndex < 10) {
                 entry = (GameCarEntry *)(index + (s32)g_CarTable);
-                GameApplyBodyColor1(entry->shapeIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
+                GameApplyBodyColor1(entry->paintColor1, ((GameCarModelAsset *)ptr)->imageDataOffset);
                 entry = (GameCarEntry *)(index + (s32)g_CarTable);
-                GameApplyBodyColor2(entry->textureIndex, ((GameCarModelAsset *)ptr)->imageDataOffset);
+                GameApplyBodyColor2(entry->paintColor2, ((GameCarModelAsset *)ptr)->imageDataOffset);
             }
 
             g_AssetLoadState = 0;
