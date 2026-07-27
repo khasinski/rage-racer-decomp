@@ -112,11 +112,11 @@ void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) {
                 fill = *src & 0x0F00;
                 value |= fill;
             }
-            src0++;
             if ((value & 0xF000) == 0) {
                 fill = *src & 0xF000;
                 value |= fill;
             }
+            src0++;
 
             *dst++ = value;
             src++;

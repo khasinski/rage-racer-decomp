@@ -55,7 +55,7 @@ s32 SpuVmSeKeyOff(s16 seq_sep, s16 vab_id, s16 program, u16 note) {
     u16 bits_lower;
     u8 voice;
     s32 count;
-    s32 selected_voice;
+    u16 selected_voice;
     u32 selected_index;
 
     count = 0;
@@ -72,7 +72,7 @@ s32 SpuVmSeKeyOff(s16 seq_sep, s16 vab_id, s16 program, u16 note) {
             } else {
                 D_801E4BD0.voice = voice;
                 selected_voice = get_selected_voice();
-                selected_index = selected_voice & 0xFFFF;
+                selected_index = selected_voice;
                 if (selected_index < 0x10) {
                     bits_lower = 1 << selected_index;
                     bits_upper = 0;
@@ -81,9 +81,9 @@ s32 SpuVmSeKeyOff(s16 seq_sep, s16 vab_id, s16 program, u16 note) {
                     bits_upper = 1 << (selected_index - 0x10);
                 }
 
-                D_8009E0B8[(u16)selected_voice].active = 0;
-                D_8009E0B8[(u16)selected_voice].pitch = 0;
-                D_8009E0B8[(u16)selected_voice].vag = 0;
+                D_8009E0B8[selected_voice].active = 0;
+                D_8009E0B8[selected_voice].pitch = 0;
+                D_8009E0B8[selected_voice].vag = 0;
 
                 D_801F2A08 = bits_lower | D_801F2A08;
                 D_801F2A0C = bits_upper | D_801F2A0C;

@@ -10,7 +10,7 @@ s32 SsSeqOpen(s32 seq_data, s32 vab_id) asm("func_8006F004");
 s32 SsSeqOpen(s32 seq_data, s32 vab_id) {
     s32 used;
     s32 i;
-    s32 found;
+    u8 found;
     s32 slot;
 
     used = D_801E4B80;
@@ -27,7 +27,7 @@ s32 SsSeqOpen(s32 seq_data, s32 vab_id) {
             found = 1;
         }
         i++;
-    } while ((u8)found == 0);
+    } while (found == 0);
 
     D_801E4B80 = (1 << (s16)slot) | D_801E4B80;
 

@@ -474,6 +474,39 @@ GameForceBasicEffectVoicesEnabled, func_8005C6C0), `DrawPacket`
 (SetTexWindow.c's four packet builders), `GameCarRuntime` (func_80037808's
 func_800383A8 / func_800385FC, 70 offsets).
 
+### Was 2.7.2 ever used?
+
+No. The `Makefile` used to pin eight objects to `cc1-psx-272`; all eight now
+match under gcc 2.6.3 and the pins are gone, so the second toolchain is dead
+weight and the game was almost certainly built entirely with 2.6.3. Every pin
+turned out to be a property of the *decompiled* source rather than of the
+original build:
+
+| Unit | Why it was pinned | What fixed it under 2.6.3 |
+|---|---|---|
+| `track/GameLoadEnvironmentCue` | cc1 2.6.3 **crashes** on `__attribute__((packed))` applied to a struct | move the attribute onto the field; identical `.text` |
+| `race/GameExitBgmSelect` | a `delta = g_FadeStep` temporary flipped the `addu` operand order | drop the temporary, test and add `g_FadeStep` directly |
+| `menu/GameComposeSampleTeamLogo` | `src0++` sat between the third and fourth nibble test, so 2.6.3 filled a delay slot with it instead of duplicating the branch target | move `src0++` to the end of the loop body |
+| `lib/libsnd/SsSeqOpen` | the loop flag was `s32` with a `(u8)` cast at the test, which 2.6.3 folds away | declare the flag `u8` (PsyQ's `unsigned char flag`); the `andi …,0xff` comes back |
+| `lib/libsnd/SpuVmSeKeyOff` | `(u16)` cast on an `s32` fed by an `lhu`; 2.6.3 knows the high bits are clear and drops the mask | declare the voice index `u16` so the truncation is the variable's type |
+| `lib/libspu/_SpuSetAnyVoice` | a pinned `hi` temporary put the `or` result in the wrong register, blocking the cross-jump that merges the two `sh` stores | fold `hi` into the `*reg_hi |= …` / `&= ~…` expressions |
+| `sdk/func_80077A88`, `sdk/func_8006DB74` | nothing — both already matched byte-for-byte under 2.6.3 | no change |
+
+Two further pins (`func_8006DD30`, `func_8006E390`) named `.c` files that no
+longer exist after the subsystem rename and had been inert for some time.
+
+The pattern is consistent: 2.7.2 is the *less* aggressive compiler on narrowing
+casts (it keeps `andi …,0xff` / `andi …,0xffff` that 2.6.3 proves redundant), so
+a decomp written with a redundant cast will look like it "needs" 2.7.2. It does
+not; the cast belongs in the variable's declared type instead. Nothing here
+distinguishes Sony library code from Namco game code — the libsnd/libspu units
+fell to the same class of fix as the game ones.
+
+The `2.7.2` branch in `tools/scripts/cc.sh` is now unreachable from the build
+and can be deleted whenever convenient. Note that `(cc=2.7.2)` annotations in
+the function table above predate this and should be read as "was compared
+against 2.7.2 output at the time", not as a requirement.
+
 ### The gcc 2.6.3 rule that decides whether a struct can be applied
 
 gcc 2.6.3's `true_dependence` treats a `MEM` tagged `MEM_IN_STRUCT_P` and a
@@ -682,7 +715,7 @@ classes, and only the first two are evidence about the original build:
 |---|---:|---|
 | conflicting declaration of a shared symbol | 50 | the two sides spell one `D_` global with different types (`u16`/`s16`, `volatile`/plain) or one callee with a different signature. Both spellings are load-bearing, so the two functions were **not** one unit. |
 | the merged unit does not compile | 27 | the definition's own parameter types disagree with the prototype in a header one side includes — e.g. `GameDrawLeftArrow(…, s32 x, s32 y, …)` against `game/state.h`'s `s16`. The definition side never saw that header. |
-| per-file compiler | 27 | the `Makefile` pins the object to gcc 2.7.2 (or an explicit 2.6.3 rule); a unit compiles as one object, so such a file cannot join a neighbour under a different compiler. |
+| per-file compiler | 27 | the `Makefile` pins the object with an explicit `RAGE_CC1_VERSION_OBJ` rule; a unit compiles as one object, so such a file cannot join a neighbour under a different pin. (Historically some of these pins were to gcc 2.7.2; none are left — see "Was 2.7.2 ever used?".) |
 | named by a `.rodata` subsegment | 27 | the config places an asm rodata block through `[…, .rodata, PAL/main/<unit>]`, and splat emits `<unit>.c.o(.rodata)` for it. Such a file may **lead** a unit but may not be merged away, or the link loses the object. |
 
 Two mechanical constraints are easy to get wrong and both produce a build that
@@ -1356,8 +1389,10 @@ track render audio cd fmv asset save pad gte sdk`. Moving a unit rewrites four
 things in lockstep — the `.c` path, the `configs/PAL/main.yaml` name token, the
 `INCLUDE_ASM` first argument, and (where one exists) the per-object
 `RAGE_CC1_VERSION_OBJ` rule in the `Makefile`, whose target is spelled as an
-object path. Dropping that last one silently demotes a 2.7.2 unit to the 2.6.3
-default and changes the ROM, so it is not optional.
+object path. Dropping that last one silently changes which compiler the unit
+gets and can change the ROM, so it is not optional. (Two such rules survived a
+rename as dead lines pointing at `func_8006DD30.c` / `func_8006E390.c`; they
+have since been removed.)
 
 ### 14a. The scene-handler table `D_8007C268`
 

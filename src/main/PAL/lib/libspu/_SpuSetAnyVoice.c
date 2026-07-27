@@ -31,19 +31,11 @@ u32 _SpuSetAnyVoice(s32 arg0, u32 arg1, s32 arg2, s32 arg3) {
 
         old |= arg1 & 0xFFFFFF;
         *reg_lo |= arg1;
-        hi = (arg1 >> 0x10) & 0xFF;
-        *reg_hi |= hi;
+        *reg_hi |= (arg1 >> 0x10) & 0xFF;
     } else {
-        register u32 low asm("$2");
-        register u32 inv asm("$3");
-
         old &= ~(arg1 & 0xFFFFFF);
-        low = *reg_lo;
-        inv = ~arg1;
-        low &= inv;
-        *reg_lo = low;
-        hi = (arg1 >> 0x10) & 0xFF;
-        *reg_hi &= ~hi;
+        *reg_lo &= ~arg1;
+        *reg_hi &= ~((arg1 >> 0x10) & 0xFF);
     }
 
     return old & 0xFFFFFF;

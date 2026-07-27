@@ -1,8 +1,8 @@
 #include "common.h"
 
 typedef struct {
-    u32 value;
-} __attribute__((packed)) PackedWord;
+    u32 value __attribute__((packed));
+} PackedWord;
 
 extern s16 g_EnvFogEnabled asm("D_801E3FB4");
 extern PackedWord D_801E3FB6;
