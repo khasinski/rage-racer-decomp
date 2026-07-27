@@ -96,7 +96,7 @@ void GameSteerCarToTrackLine(GameCarRuntime *car) {
  * scheduling. Byte-exact INCLUDE_ASM until permuter.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80030030);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/GameSteerCarToTrackLine", func_80030030);
 
 extern s32 D_801E8AA0;
 

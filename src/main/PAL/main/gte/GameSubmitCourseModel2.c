@@ -22,4 +22,4 @@ void GameSubmitCourseModel2(void *ctx, s32 model) asm("func_80029E50");
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029E50);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameSubmitCourseModel2", func_80029E50);

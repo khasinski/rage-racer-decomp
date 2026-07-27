@@ -34,7 +34,7 @@ void func_800512B4(s32 arg0) {
  * permuter run converges.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8005131C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameSwapCarModelSlot", func_8005131C);
 
 typedef struct { s32 a, b, c, d; } Vec16;
 

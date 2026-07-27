@@ -64,4 +64,4 @@ Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
  * impossible; it stays as raw asm to preserve the match. (See commit af632214,
  * which documents this exact function as one of the genuine hand-asm cases.)
  */
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80069D18);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/TransposeMatrix", func_80069D18);

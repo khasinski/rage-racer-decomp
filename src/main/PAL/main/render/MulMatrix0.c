@@ -445,7 +445,7 @@ s32 func_800690E0(s32 *arg0, s32 *arg1, s32 arg2) {
  *           obtained AND verified not to regress already-matched functions.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80069110);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/MulMatrix0", func_80069110);
 
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 

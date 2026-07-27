@@ -26,7 +26,7 @@
  * Current representation: generated assembly stub (INCLUDE_ASM).
  * Revisit condition: none expected; this is verbatim SDK/BIOS syscall glue.
  */
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80063220);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/ExitCriticalSection", func_80063220);
 
 u32 func_80063230[4] __attribute__((section(".text"))) = {
     0x240A00B0,

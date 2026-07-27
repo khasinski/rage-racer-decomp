@@ -29,9 +29,30 @@ C_NAMED_DEF_RE = re.compile(
     r"^[A-Za-z_][A-Za-z0-9_ \t\*]*?(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*\([^;{]*\)\s*\{",
     re.MULTILINE,
 )
+# A unit can also define a symbol without a C function definition: handwritten
+# assembly declares it with .globl inside a top-level asm() block, and a data
+# object can be placed in .text with __attribute__((section(".text"))). Both end
+# the preceding stub, so both must count as boundaries.
+ASM_GLOBL_RE = re.compile(r"\.globl\s+(?P<name>func_[0-9A-Fa-f]{8})")
+TEXT_OBJECT_RE = re.compile(r"\b(?P<name>func_[0-9A-Fa-f]{8})\s*(?:\[[^\]]*\])?\s*__attribute__")
 ASM_ALIAS_RE = re.compile(
     r"(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*\([^;{]*\)\s*asm\(\"(?P<symbol>[A-Za-z0-9_]+)\"\)"
 )
+
+
+def strip_comments(text: str) -> str:
+    """Blank out comments, preserving length and line structure.
+
+    The declaration regexes below allow a parameter list to span lines, so a
+    stray "(" inside a comment above a declaration would otherwise start a match
+    that runs on into the real declaration and captures the wrong name. That is
+    how PushMatrix was read as "x280" and lost its alias, which made the
+    generator swallow the following function into the preceding stub.
+    """
+    def blank(match: re.Match) -> str:
+        return re.sub(r"[^\n]", " ", match.group(0))
+
+    return re.sub(r"/\*.*?\*/|//[^\n]*", blank, text, flags=re.S)
 
 
 def collect_asm_aliases(*roots: Path) -> dict[str, str]:
@@ -42,7 +63,7 @@ def collect_asm_aliases(*roots: Path) -> dict[str, str]:
             continue
         for pattern in ("*.h", "*.c"):
             for path in root.rglob(pattern):
-                for match in ASM_ALIAS_RE.finditer(path.read_text()):
+                for match in ASM_ALIAS_RE.finditer(strip_comments(path.read_text())):
                     aliases.setdefault(match.group("name"), match.group("symbol"))
     return aliases
 
@@ -69,7 +90,7 @@ def parse_wrappers(
     c_funcs_by_unit: dict[str, list[str]] = {}
     rodata_by_name: dict[str, str] = {}
     for path in src_root.rglob("*.c"):
-        text = path.read_text()
+        text = strip_comments(path.read_text())
         rel = path.relative_to(src_root).with_suffix("").as_posix()
         asm_by_unit[f"{version}/{rel}"] = [match.group(1) for match in ASM_WRAP_RE.finditer(text)]
         names = [match.group("name") for match in C_FUNC_RE.finditer(text)]
@@ -77,6 +98,8 @@ def parse_wrappers(
             symbol = aliases.get(match.group("name"))
             if symbol is not None:
                 names.append(symbol)
+        names.extend(match.group("name") for match in ASM_GLOBL_RE.finditer(text))
+        names.extend(match.group("name") for match in TEXT_OBJECT_RE.finditer(text))
         c_funcs_by_unit[f"{version}/{rel}"] = names
         for match in RODATA_WRAP_RE.finditer(text):
             rodata_by_name[match.group(1)] = rel

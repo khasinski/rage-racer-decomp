@@ -28,7 +28,7 @@ void GameSubmitCourseSubdividedFaces(void) asm("func_8002A2CC");
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029EA8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameTransformCourseModel", func_80029EA8);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -48,7 +48,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029EA8);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029FD8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameTransformCourseModel", func_80029FD8);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -68,7 +68,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029FD8);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8002A218);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameTransformCourseModel", func_8002A218);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -88,4 +88,4 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8002A218);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8002A2CC);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameTransformCourseModel", func_8002A2CC);

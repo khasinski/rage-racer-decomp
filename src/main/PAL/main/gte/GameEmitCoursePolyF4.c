@@ -28,7 +28,7 @@ void GameEmitCourseSubdividedFT4Fog(void) asm("func_800298B0");
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8002970C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameEmitCoursePolyF4", func_8002970C);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -48,7 +48,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_8002970C);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029788);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameEmitCoursePolyF4", func_80029788);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -68,7 +68,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029788);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029830);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameEmitCoursePolyF4", func_80029830);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -88,4 +88,4 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029830);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_800298B0);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameEmitCoursePolyF4", func_800298B0);

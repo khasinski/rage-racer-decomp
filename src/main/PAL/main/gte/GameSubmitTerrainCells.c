@@ -35,7 +35,7 @@ void GameEmitPolyFT4Raw(void) asm("func_800290C8");
  * Revisit:  only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80027FF4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameSubmitTerrainCells", func_80027FF4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -55,7 +55,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80027FF4);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80028120);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameSubmitTerrainCells", func_80028120);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -75,7 +75,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80028120);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80028874);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameSubmitTerrainCells", func_80028874);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -95,7 +95,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80028874);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80028C54);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameSubmitTerrainCells", func_80028C54);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -115,7 +115,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80028C54);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80028D84);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameSubmitTerrainCells", func_80028D84);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -135,7 +135,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80028D84);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80028DEC);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameSubmitTerrainCells", func_80028DEC);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -285,7 +285,7 @@ asm(
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029064);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameSubmitTerrainCells", func_80029064);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -305,4 +305,4 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80029064);
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_800290C8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/GameSubmitTerrainCells", func_800290C8);

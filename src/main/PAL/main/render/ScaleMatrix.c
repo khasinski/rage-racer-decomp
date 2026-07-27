@@ -19,4 +19,4 @@
  *           obtained AND verified not to regress already-matched functions.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80069728);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/ScaleMatrix", func_80069728);

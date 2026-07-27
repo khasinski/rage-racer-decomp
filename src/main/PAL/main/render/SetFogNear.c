@@ -187,4 +187,4 @@ void InitGeom(void) {
  *   available to the build, or the routine is confirmed as a shippable
  *   library .s.
  */
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_800689A8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/SetFogNear", func_800689A8);

@@ -12,11 +12,11 @@ OUT="$2"
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 TOOL_DIR="$ROOT/build/toolchain"
 BIN_DIR="$TOOL_DIR/bin"
+# The game was built entirely with gcc 2.6.3; see docs/names.md,
+# "Was 2.7.2 ever used?". The variable is kept so an experiment can still ask
+# for another cc1 by path, but nothing in the build sets it.
 RAGE_CC1_VERSION="${RAGE_CC1_VERSION:-2.6.3}"
 case "$RAGE_CC1_VERSION" in
-    2.7.2)
-        CC1="$BIN_DIR/cc1-psx-272"
-        ;;
     2.6.3)
         CC1="$BIN_DIR/cc1-psx-263"
         ;;
@@ -28,12 +28,8 @@ esac
 if [ "$(uname -s)" = "Darwin" ] && [ "${RAGE_CC1_DARWIN:-1}" != "0" ] && [ -x "$CC1-darwin" ]; then
     CC1="$CC1-darwin"
 fi
-CC1_GZ="$BIN_DIR/cc1-psx-272.gz"
-CC1_SHA="$BIN_DIR/cc1-psx-272.gz.sha256"
 MASPSX_DIR="${MASPSX_DIR:-$TOOL_DIR/maspsx}"
 
-CC1_URL="https://github.com/Xeeynamo/ff7-decomp/releases/download/init/cc1-psx-272.gz"
-CC1_SHA256="1959ced957d8780489874de30d9af79a9154174624b8a00976f4a7f3fad87ac6"
 MASPSX_URL="${MASPSX_URL:-https://github.com/mkst/maspsx.git}"
 
 CPP="${CPP:-mipsel-none-elf-cpp}"
@@ -41,29 +37,6 @@ AS="${AS:-mipsel-none-elf-as}"
 PYTHON="${PYTHON:-python3}"
 
 mkdir -p "$BIN_DIR" "$(dirname "$OUT")"
-
-download() {
-    url="$1"
-    out="$2"
-    if command -v curl >/dev/null 2>&1; then
-        curl -L --fail --silent --show-error -o "$out" "$url"
-    elif command -v wget >/dev/null 2>&1; then
-        wget -q -O "$out" "$url"
-    else
-        echo "rage-pc: need curl or wget to fetch $url" >&2
-        exit 1
-    fi
-}
-
-if [ "$RAGE_CC1_VERSION" = "2.7.2" ] && [ ! -x "$CC1" ]; then
-    if [ ! -f "$CC1_GZ" ]; then
-        download "$CC1_URL" "$CC1_GZ"
-    fi
-    printf '%s  %s\n' "$CC1_SHA256" "$CC1_GZ" > "$CC1_SHA"
-    shasum -a 256 -c "$CC1_SHA" >/dev/null
-    gzip -cd "$CC1_GZ" > "$CC1"
-    chmod +x "$CC1"
-fi
 
 if [ "$RAGE_CC1_VERSION" = "2.6.3" ] && [ ! -x "$CC1" ]; then
     echo "rage-pc: missing $CC1; build/copy gcc2.6.3-psx cc1 there first" >&2

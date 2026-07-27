@@ -153,7 +153,7 @@ const u32 func_8006944C[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  * Revisit:  only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80069458);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/PopMatrix", func_80069458);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -169,7 +169,7 @@ INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80069458);
  * Revisit:  only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/nonmatchings/PAL/main", func_80069568);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/PopMatrix", func_80069568);
 
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
