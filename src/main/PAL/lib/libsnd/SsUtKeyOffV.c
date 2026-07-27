@@ -15,10 +15,11 @@ extern u_char g_SndVoiceState[] asm("D_8009E0B8");
 long SsUtKeyOffV(long voice) asm("func_80078018");
 
 long SsUtKeyOffV(long arg0) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register long one asm("$5") = 1;
-    register u_long value asm("$2");
+    u_long value;
     register u_long highBits asm("$6");
-    register u_long lowBits asm("$7");
+    u_long lowBits;
     register long offset asm("$3");
     register u_long activeLow asm("$4");
     register u_long activeHigh asm("$5");
@@ -30,8 +31,9 @@ long SsUtKeyOffV(long arg0) {
         asm volatile("" : "=r"(value) : "0"(value));
         g_SndUpdateLock = one;
         if (value < 0x18) {
+            /* This pin is load-bearing: removing it changes .text. */
             register u_long channel asm("$4");
-            register u_long masked asm("$3");
+            u_long masked;
 
             g_SndCurrentVoice = arg0;
             channel = g_SndCurrentVoice;
@@ -43,6 +45,7 @@ long SsUtKeyOffV(long arg0) {
                 lowBits = one << masked;
                 highBits = 0;
             } else {
+                /* This pin is load-bearing: removing it changes .text. */
                 register u_long temp asm("$2");
 
                 lowBits = 0;

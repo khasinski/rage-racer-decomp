@@ -78,10 +78,10 @@ extern u8 g_McHelpText[] asm("D_80012ADC");
 void func_80016754(s32, s32, void *, s32);
 
 void GameDrawMemoryCardHelpPrompt(s32 arg0) {
-    register s32 offset asm("$17");
-    register u8 *base asm("$16");
-    register s32 x asm("$4");
-    register s32 y asm("$5");
+    s32 offset;
+    u8 *base;
+    s32 x;
+    s32 y;
 
     offset = arg0 << 4;
     offset -= arg0;

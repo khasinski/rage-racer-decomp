@@ -125,10 +125,11 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a
                    s32 a8, s32 a9, s32 a10);
 
 void func_8004F3EC(s32 arg0, s32 arg1) {
-    register s32 count asm("$23");
-    register s32 a1v asm("$7");
+    s32 count;
+    s32 a1v;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 c17 asm("$17");
-    register s32 c19 asm("$19");
+    s32 c19;
     register s32 c21 asm("$21");
     register s32 r4 asm("$4");
     register s32 r5 asm("$5");
@@ -137,14 +138,10 @@ void func_8004F3EC(s32 arg0, s32 arg1) {
     s32 v0, v1, t, y;
 
     count = arg0;
-    asm("" : "=r"(count) : "0"(count));
     ot = *(void **)0x1F800004;
-    asm("" : "=r"(ot) : "0"(ot));
     a1v = arg1;
-    asm("" : "=r"(a1v) : "0"(a1v));
 
     if (count == 0) {
-        asm("" : "=r"(count) : "0"(count));
         D_8007FB2C = 0;
         return;
     }

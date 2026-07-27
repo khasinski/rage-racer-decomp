@@ -39,8 +39,8 @@ extern s32 g_McPollTicks asm("D_8019C864");
 
 s32 GamePollMemoryCardHwEvent(void) asm("func_8005F35C");
 s32 GamePollMemoryCardHwEvent(void) {
-    register s32 result asm("$16");
-    register s32 ready asm("$17");
+    s32 result;
+    s32 ready;
     s32 count;
 
     ready = 1;
@@ -68,8 +68,9 @@ s32 GamePollMemoryCardHwEvent(void) {
 
 s32 GamePollMemoryCardHwEventLimit(s32 limit) asm("func_8005F420");
 s32 GamePollMemoryCardHwEventLimit(s32 limit) {
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 i asm("$16");
-    register s32 ready asm("$17");
+    s32 ready;
     volatile s32 stack[2];
 
     i = 0;
@@ -97,7 +98,7 @@ s32 GamePollMemoryCardHwEventLimit(s32 limit) {
 
 s32 GameWaitMemoryCardHwEvent(void) asm("func_8005F4D8");
 s32 GameWaitMemoryCardHwEvent(void) {
-    register s32 ready asm("$16");
+    s32 ready;
 
     ready = 1;
     while (1) {
@@ -118,7 +119,7 @@ s32 GameWaitMemoryCardHwEvent(void) {
 
 s32 GameWaitMemoryCardSwEvent(void) asm("func_8005F55C");
 s32 GameWaitMemoryCardSwEvent(void) {
-    register s32 ready asm("$16");
+    s32 ready;
 
     ready = 1;
     while (1) {

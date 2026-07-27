@@ -44,7 +44,8 @@ void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void DrawSync(long mode) asm("func_800658FC");
 
 void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 imageY) {
-    register u8 *blockReg asm("$18");
+    u8 *blockReg;
+    /* These pins are load-bearing: removing any one changes .text. */
     register char *titleReg asm("$3");
     register s32 iconTileReg asm("$16");
     register s32 imageXReg asm("$17");
@@ -52,22 +53,23 @@ void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s3
     register u8 *imageData asm("$5");
     register Rect *rect asm("$19");
     register s32 dataOffset asm("$20");
-    register s32 i asm("$21");
-    register s32 rectW asm("$23");
-    register s32 rectH asm("$22");
+    s32 i;
+    s32 rectW;
+    s32 rectH;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 magic asm("$2");
-    register s32 tileRow asm("$3");
+    s32 tileRow;
     register s32 sign asm("$2");
     s32 tileX;
 
     blockReg = block;
+    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(blockReg) : "0"(blockReg));
     titleReg = title;
     asm("" : "=r"(titleReg) : "0"(titleReg));
     iconTileReg = iconTile;
     asm("" : "=r"(iconTileReg) : "0"(iconTileReg));
     imageXReg = imageX;
-    asm("" : "=r"(imageXReg) : "0"(imageXReg));
 
     blockReg[0] = 'S';
     blockReg[1] = 'C';
@@ -76,13 +78,12 @@ void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s3
     LibcSprintf(blockReg + 4, g_FmtString, (s32)titleReg);
 
     magic = 0x66666667;
-    asm("" : "=r"(magic) : "0"(magic));
     rectArg = &g_SaveIconRect;
-    asm("" : "=r"(rectArg) : "0"(rectArg));
     asm("mult %0,%1" : : "r"(iconTileReg), "r"(magic));
     imageData = blockReg + 0x60;
     i = 0;
     rect = rectArg;
+    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(rect) : "0"(rect));
     rectW = 4;
     asm("" : "=r"(rectW) : "0"(rectW));
@@ -90,6 +91,7 @@ void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s3
     asm("" : "=r"(rectH) : "0"(rectH));
     g_SaveIconRect.w = 0x10;
     g_SaveIconRect.h = 1;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" ::: "memory");
     sign = iconTileReg >> 31;
     asm("mfhi %0" : "=r"(tileRow));
@@ -119,9 +121,10 @@ extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 
 void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) {
     u8 *arg0 = (u8 *)row;
-    register s32 i asm("$5");
+    s32 i;
+    /* This pin is load-bearing: removing it changes .text. */
     register u32 checksum asm("$3");
-    register u16 *scan asm("$6");
+    u16 *scan;
 
     arg0[0] = g_TeamNameLength;
 

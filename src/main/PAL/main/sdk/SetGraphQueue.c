@@ -11,9 +11,10 @@ extern char D_800134F0[];
 /* GP1 queue mode; own trace string D_800134F0 is "SetGrapQue(%d)...". */
 long SetGraphQueue(long mode) asm("func_80065738");
 long SetGraphQueue(long arg0) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long newQueue asm("$16") = arg0;
-    register u_char *queue asm("$17") = &g_GraphQueue;
-    register long oldQueue asm("$18");
+    u_char *queue = &g_GraphQueue;
+    long oldQueue;
 
     oldQueue = *queue;
     if (g_GraphDebug >= 2) {
@@ -65,11 +66,12 @@ void func_80068180(u_char *dst, long value, long count);
 
 void SetDispMask(long arg0) asm("func_80065860");
 void SetDispMask(long arg0) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long enable asm("$16") = arg0;
-    register u_char *debug asm("$17") = &g_GraphDebug;
-    register u_char *clearPtr asm("$4");
-    register GpuCallbacks *gpu asm("$2");
-    register long mask asm("$4");
+    u_char *debug = &g_GraphDebug;
+    u_char *clearPtr;
+    GpuCallbacks *gpu;
+    long mask;
 
     if (*debug >= 2) {
         GPU_printf(D_80013520, enable);
@@ -81,6 +83,7 @@ void SetDispMask(long arg0) {
     }
 
     mask = 0x3000000;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(mask) : "0"(mask));
     gpu = g_GpuFuncs;
     if (enable == 0) {
@@ -113,11 +116,11 @@ void CheckPrim(char *arg0, Rect *rect) asm("func_80065968");
 void CheckPrim(char *arg0, Rect *rect) {
     switch (g_GraphDebug) {
     case 1: {
-        register long w asm("$5") = rect->w;
+        long w = rect->w;
         long maxX = g_VramWidth;
-        register long x asm("$7");
-        register long y asm("$3");
-        register long h asm("$6");
+        long x;
+        long y;
+        long h;
         long maxY;
 
         if (maxX < w) {
@@ -167,14 +170,16 @@ void func_80065968(char *arg0, void *arg1);
 
 void ClearImage(void *arg0, u_long arg1, u_long arg2, u_long arg3) asm("func_80065A90");
 void ClearImage(void *arg0, u_long arg1, u_long arg2, u_long arg3) {
-    register void *rect asm("s3") = arg0;
+    void *rect = arg0;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long b asm("s2") = arg1;
-    register u_long g asm("s1") = arg2;
+    u_long g = arg2;
     register u_long r asm("s0") = arg3;
 
     func_80065968(D_8001356C, rect);
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register void *rectArg asm("$5") = rect;
 
         asm volatile(

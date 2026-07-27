@@ -13,10 +13,11 @@ s32 rcos(s32 arg0) asm("func_80068634");
 void MatrixApplyZRotation(Matrix *arg0, s32 arg1) asm("func_800684B0");
 void MatrixApplyZRotation(Matrix *arg0, s32 arg1) {
     Matrix sp10;
-    register s32 angle asm("$16");
+    s32 angle;
     s32 c;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 s asm("$2");
-    register s32 s_copy asm("$3");
+    s32 s_copy;
 
     angle = arg1 / 360;
     c = rcos(angle);

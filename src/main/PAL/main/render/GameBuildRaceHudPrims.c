@@ -10,11 +10,12 @@ void GameBuildSpriteFromDesc(u8 *arg0, u8 *arg1) asm("func_80032FF0");
 
 void GameBuildRaceHudPrims(s32 arg0) asm("func_80032D5C");
 void GameBuildRaceHudPrims(s32 arg0) {
-    register u8 *cursor __asm("$16");
+    u8 *cursor;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 col __asm("$17");
-    register s32 bufferOffset __asm("$18");
-    register s32 row __asm("$19");
-    register s32 rowOffset __asm("$20");
+    s32 bufferOffset;
+    s32 row;
+    s32 rowOffset;
 
     if (arg0 != 0) {
         row = 0;
@@ -26,8 +27,8 @@ nonzero_outer:
         bufferOffset = 0;
 nonzero_inner:
         {
-            register u8 *dst __asm("$4");
-            register s32 offset __asm("$2");
+            u8 *dst;
+            s32 offset;
 
             dst = D_801C0504;
             dst = bufferOffset + dst;

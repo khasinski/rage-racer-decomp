@@ -8,19 +8,19 @@ void func_80076C58(long seq_sep, u_short left, u_short right, long arg3);
 
 void SsSeqClose(long seq) {
     volatile long pad[2];
-    register long seq_s asm("$16");
-    register volatile SeqStruct **slot asm("$5");
-    register volatile SeqStruct **table asm("$3");
-    register long seq_offset asm("$2");
-    register long offset asm("$4");
-    register long index asm("$6");
-    register long value asm("$7");
+    long seq_s;
+    volatile SeqStruct **slot;
+    volatile SeqStruct **table;
+    long seq_offset;
+    long offset;
+    long index;
+    long value;
+    /* This pin is load-bearing: removing it changes .text. */
     register long current asm("$3");
     long mask;
 
     seq <<= 16;
     seq_s = seq >> 16;
-    asm("" : "=r"(seq_s) : "0"(seq_s), "r"(seq));
     func_80076C58(seq_s, 0, 0, 1);
     SpuVmSeqKeyOff(seq_s);
 

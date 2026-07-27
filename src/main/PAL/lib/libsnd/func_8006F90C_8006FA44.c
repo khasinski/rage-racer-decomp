@@ -3,33 +3,38 @@
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void func_8006F90C(long seq, long sep, long value) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register long seq_arg asm("$7");
     register long sep_arg asm("$8");
-    register long seq_raw asm("$21");
-    register long sep_raw asm("$22");
+    long seq_raw;
+    long sep_raw;
+    /* This pin is load-bearing: removing it changes .text. */
     register long value_raw asm("$23");
-    register SeqStruct *state asm("$18");
-    register long channelStateRaw asm("$16");
-    register SeqStruct *channelCopy asm("$20");
-    register long i asm("$17");
-    register VagAtr *vag asm("$19");
-    register long seq_shift asm("$4");
+    SeqStruct *state;
+    long channelStateRaw;
+    SeqStruct *channelCopy;
+    long i;
+    VagAtr *vag;
+    long seq_shift;
+    /* This pin is load-bearing: removing it changes .text. */
     register long seq_offset asm("$4");
-    register long sep_s asm("$3");
-    register long sep_offset asm("$2");
-    register long channel_offset asm("$2");
-    register long tone_count asm("$2");
-    register SeqStruct *base asm("$3");
-    register ProgAtr *prog asm("$6");
+    long sep_s;
+    long sep_offset;
+    long channel_offset;
+    long tone_count;
+    SeqStruct *base;
+    ProgAtr *prog;
     ProgAtr progAttr;
     VagAtr vagAttr;
     volatile long framePad[2];
 
     seq_arg = seq;
     sep_arg = sep;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(seq_arg), "=r"(sep_arg) : "0"(seq_arg), "1"(sep_arg));
     value_raw = value;
     prog = &progAttr;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(value_raw), "=r"(prog) : "0"(value_raw), "1"(prog));
     seq_shift = seq_arg << 16;
     seq_offset = seq_shift >> 14;
@@ -69,33 +74,38 @@ void func_8006F90C(long seq, long sep, long value) {
 }
 
 void func_8006FA44(long seq, long sep, long value) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register long seq_arg asm("$7");
     register long sep_arg asm("$8");
-    register long seq_raw asm("$21");
-    register long sep_raw asm("$22");
+    long seq_raw;
+    long sep_raw;
+    /* This pin is load-bearing: removing it changes .text. */
     register long value_raw asm("$23");
-    register SeqStruct *state asm("$18");
-    register long channelStateRaw asm("$16");
-    register SeqStruct *channelCopy asm("$20");
-    register long i asm("$17");
-    register VagAtr *vag asm("$19");
-    register long seq_shift asm("$4");
+    SeqStruct *state;
+    long channelStateRaw;
+    SeqStruct *channelCopy;
+    long i;
+    VagAtr *vag;
+    long seq_shift;
+    /* This pin is load-bearing: removing it changes .text. */
     register long seq_offset asm("$4");
-    register long sep_s asm("$3");
-    register long sep_offset asm("$2");
-    register long channel_offset asm("$2");
-    register long tone_count asm("$2");
-    register SeqStruct *base asm("$3");
-    register ProgAtr *prog asm("$6");
+    long sep_s;
+    long sep_offset;
+    long channel_offset;
+    long tone_count;
+    SeqStruct *base;
+    ProgAtr *prog;
     ProgAtr progAttr;
     VagAtr vagAttr;
     volatile long framePad[2];
 
     seq_arg = seq;
     sep_arg = sep;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(seq_arg), "=r"(sep_arg) : "0"(seq_arg), "1"(sep_arg));
     value_raw = value;
     prog = &progAttr;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(value_raw), "=r"(prog) : "0"(value_raw), "1"(prog));
     seq_shift = seq_arg << 16;
     seq_offset = seq_shift >> 14;

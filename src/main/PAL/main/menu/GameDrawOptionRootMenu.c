@@ -53,12 +53,13 @@ void GameDrawSoundOptionScreen(void) asm("func_80024B6C");
 void GameDrawSoundOptionScreen(void);
 
 void GameDrawOptionRootMenu(void) {
-    register u8 *base asm("$16") = g_DrawBuffer;
-    register s32 h18 asm("$19") = 0x18;
-    register s32 h48 asm("$17") = 0x48;
-    register s32 color asm("$18") = 0x7F40;
+    u8 *base = g_DrawBuffer;
+    s32 h18 = 0x18;
+    s32 h48 = 0x48;
+    s32 color = 0x7F40;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 *scratch asm("$21") = (s32 *)0x1F800000;
-    register s32 tmp asm("$20");
+    s32 tmp;
     s32 state;
 
     base += 0xCC;
@@ -343,18 +344,21 @@ void GameDrawVolumeBar(s32 arg0, s32 arg1) {
 
 void GameDrawSoundOptionScreen(void) {
     s32 base;
-    register s32 *scratch asm("$22");
-    register s32 color asm("$18");
-    register s32 s0 asm("$16");
-    register s32 s3 asm("$19");
+    s32 *scratch;
+    s32 color;
+    s32 s0;
+    s32 s3;
     s32 n;
 
 
     {
         s32 a1v = g_SoundOptionCursor;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : : "r"(a1v));
         {
+            /* This pin is load-bearing: removing it changes .text. */
             register s32 a0v asm("$4") = 0x14;
+            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : : "r"(a0v));
             color = 0x7F;
             func_800236C8(a0v, (a1v << 5) + 56);
@@ -383,7 +387,6 @@ void GameDrawSoundOptionScreen(void) {
     n = func_8001705C(base, n, 0x66, 0x12A, s3, 0xC, 0xD4, 0xC4, 0x7F40, color);
     n = GameAddTilePrim(base, n, 0x47, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
     n = GameAddTilePrim(base, n, 0x46, 0x120, 0x58, 0x20, color << 1, color << 1, color << 1);
-    asm("" : : "r"(color));
 
     color = 0x20;
     if (g_MonoOutput != 0) {
@@ -393,7 +396,6 @@ void GameDrawSoundOptionScreen(void) {
     n = func_8001705C(base, n, 0xBA, 0x12A, 0x28, 0xC, 0xB4, 0xD0, 0x7F40, color);
     n = GameAddTilePrim(base, n, 0xA3, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
     n = GameAddTilePrim(base, n, 0xA2, 0x120, 0x58, 0x20, color << 1, color << 1, color << 1);
-    asm("" : : "r"(color));
     {
         s32 a0v = g_BgmVolumeSetting;
         *scratch = n;

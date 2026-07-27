@@ -45,18 +45,19 @@ s32 GameRequestCarSelectAssets(void) {
 
 void GameLoadCarSelectAssets(void) asm("func_80018588");
 void GameLoadCarSelectAssets(void) {
-    register s32 state asm("$3") = g_AssetLoadState;
-    register s32 state2 asm("$16");
-    register u8 *carModelBase asm("$16");
-    register GameAssetTripleHeader *header asm("$2");
-    register GameAssetTripleHeader *headerArg asm("$4");
-    register GameCarModelAsset *model asm("$2");
+    s32 state = g_AssetLoadState;
+    s32 state2;
+    u8 *carModelBase;
+    GameAssetTripleHeader *header;
+    GameAssetTripleHeader *headerArg;
+    GameCarModelAsset *model;
+    /* These pins are load-bearing: removing any one changes .text. */
     register GameCarEntry *entry asm("$2");
-    register s32 carIndex asm("$4");
+    s32 carIndex;
     register s32 indexOffset asm("$2");
-    register s32 firstOffset asm("$3");
+    s32 firstOffset;
     register s32 secondOffset asm("$4");
-    register s32 assetOffset asm("$2");
+    s32 assetOffset;
     register s32 modelPtr asm("$4");
 
     state2 = 2;
@@ -176,8 +177,9 @@ void GameLoadCarModelNow(s32 arg0) {
 
 void GameLoadCarModel(s32 arg0) asm("func_800188B8");
 void GameLoadCarModel(s32 arg0) {
-    register u8 *ptr asm("$16");
-    register s32 index asm("$18");
+    u8 *ptr;
+    s32 index;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 arg asm("$17");
     s32 offset;
 
@@ -192,10 +194,11 @@ void GameLoadCarModel(s32 arg0) {
         }
 
         if (func_80017C78(offset, ptr) != 0) {
+            /* These pins are load-bearing: removing any one changes .text. */
             register s32 fixed asm("$4");
-            register u32 flag asm("$5");
+            u32 flag;
             register s32 test asm("$2");
-            register u8 *entry asm("$2");
+            u8 *entry;
 
             GameSetCarModelSlot(ptr, g_CarModelSlot < 1);
             fixed = *(volatile s32 *)(ptr + 0x20);

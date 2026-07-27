@@ -42,9 +42,10 @@ s32 GameBeginMirrorPass(void) asm("func_8001A9A8");
 s32 GameBeginMirrorPass(void) {
     GameScratchpadRenderState *scratch;
     s32 mirrorEnabled;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 v0reg asm("$2");
-    register s32 v1reg asm("$3");
-    register s32 y0 asm("$4");
+    s32 v1reg;
+    s32 y0;
 
     mirrorEnabled = 0;
     scratch = (GameScratchpadRenderState *)0x1F800000;
@@ -128,8 +129,9 @@ void func_80069A78(s32 arg0);
 void GameEndMirrorPass(void) asm("func_8001ABD8");
 void GameEndMirrorPass(void) {
     GameScratchpadRenderState *scratch;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 v0reg asm("$2");
-    register s32 v1reg asm("$3");
+    s32 v1reg;
 
     scratch = (GameScratchpadRenderState *)0x1F800000;
 
@@ -169,13 +171,13 @@ s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 
 u8 *GameDrawMirrorFrame(u8 *packet) asm("func_8001ACE4");
 u8 *GameDrawMirrorFrame(u8 *packet) {
-    register u8 *otArg asm("$4");
-    register u8 *prim asm("$5");
+    u8 *otArg;
+    u8 *prim;
     u8 *ot;
-    register u8 *base asm("$2");
+    u8 *base;
     u8 *base2;
     s32 colorIndex;
-    register s32 paletteIndex asm("$3");
+    s32 paletteIndex;
     s32 color;
     s32 next;
 

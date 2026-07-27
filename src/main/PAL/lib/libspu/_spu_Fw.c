@@ -40,9 +40,9 @@ void _spu_FsetRXX(long arg0, u_long arg1, long arg2) {
 }
 
 long _spu_FsetRXXa(long arg0, u_long arg1) {
-    register long index asm("$6") = arg0;
-    register u_long shifted asm("$7");
-    register long shift asm("$2");
+    long index = arg0;
+    u_long shifted;
+    long shift;
     u_long divisor;
 
     if (g_SpuMemMode != 0) {
@@ -69,14 +69,15 @@ ret_arg:
 
 store:
     {
-        register long base asm("$4") = (long)g_SpuRegBase;
-        register long offset asm("$3") = index << 1;
+        long base = (long)g_SpuRegBase;
+        long offset = index << 1;
         *(volatile u_short *)(offset + base) = shifted;
     }
     return arg1;
 }
 
 long _spu_FgetRXXa(long arg0, long arg1) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long value asm("a0");
     long ret;
 

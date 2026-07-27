@@ -24,9 +24,9 @@ void DrawOTag(void *arg0) {
 /* Named from its own trace string D_800135E0, "PutDrawEnv(%08x)...". */
 void *PutDrawEnv(void *env) asm("func_80065ED4");
 void *PutDrawEnv(void *arg0) {
-    register u8 *debug asm("$18") = &g_GraphDebug;
-    register void *prim asm("$17") = arg0;
-    register void *tag asm("$16");
+    u8 *debug = &g_GraphDebug;
+    void *prim = arg0;
+    void *tag;
 
     if (*debug >= 2) {
         GPU_printf(D_800135E0, prim);
@@ -35,11 +35,11 @@ void *PutDrawEnv(void *arg0) {
     tag = (u8 *)prim + 0x1C;
     func_8006674C(tag, prim);
     {
-        register u32 mask asm("$4") = 0xFFFFFF;
-        register void *sendTag asm("$5") = tag;
-        register s32 size asm("$6") = 0x40;
-        register u32 word asm("$2") = *(u32 *)tag;
-        register GpuCallbacks *gpu asm("$3") = g_GpuFuncs;
+        u32 mask = 0xFFFFFF;
+        void *sendTag = tag;
+        s32 size = 0x40;
+        u32 word = *(u32 *)tag;
+        GpuCallbacks *gpu = g_GpuFuncs;
 
         word |= mask;
         *(u32 *)tag = word;
@@ -52,10 +52,10 @@ void *PutDrawEnv(void *arg0) {
 /* Named from its own trace string D_800135F8, "DrawOTagEnv(%08x,&08x)...". */
 void *DrawOTagEnv(void *ot, void *env) asm("func_80065F98");
 void *DrawOTagEnv(void *arg0, void *arg1) {
-    register void *src asm("$18") = arg0;
-    register u8 *debug asm("$19") = &g_GraphDebug;
-    register void *prim asm("$17") = arg1;
-    register void *tag asm("$16");
+    void *src = arg0;
+    u8 *debug = &g_GraphDebug;
+    void *prim = arg1;
+    void *tag;
 
     if (*debug >= 2) {
         GPU_printf(D_800135F8, src, prim);
@@ -64,13 +64,15 @@ void *DrawOTagEnv(void *arg0, void *arg1) {
     tag = (u8 *)prim + 0x1C;
     func_8006674C(tag, prim);
     {
-        register u32 mask asm("$4") = 0xFFFFFF;
+        u32 mask = 0xFFFFFF;
+        /* This pin is load-bearing: removing it changes .text. */
         register void *sendTag asm("$5") = tag;
-        register s32 size asm("$6") = 0x40;
-        register u32 highMask asm("$3") = 0xFF000000;
-        register u32 word asm("$2") = *(u32 *)tag;
-        register GpuCallbacks *gpu asm("$3");
+        s32 size = 0x40;
+        u32 highMask = 0xFF000000;
+        u32 word = *(u32 *)tag;
+        GpuCallbacks *gpu;
 
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(size), "=r"(highMask), "=r"(word) : "0"(size), "1"(highMask), "2"(word));
         mask = (u32)src & mask;
         word &= highMask;

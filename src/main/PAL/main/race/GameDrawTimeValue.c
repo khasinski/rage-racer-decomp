@@ -9,17 +9,18 @@ void func_80016754(s32 x, s32 y, void *str, s32 color);
 
 void GameDrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
 void GameDrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
-    register s32 savedX asm("$9");
+    s32 savedX;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 savedY asm("$10");
-    register s32 savedColor asm("$11");
+    s32 savedColor;
     register s32 localDivisor asm("$4");
-    register s32 whole asm("$7");
-    register s32 fraction asm("$5");
-    register s32 minutes asm("$3");
-    register s32 seconds asm("$7");
-    register s32 secondTens asm("$4");
-    register s32 fractionHundreds asm("$6");
-    register s32 fractionTens asm("$3");
+    s32 whole;
+    s32 fraction;
+    s32 minutes;
+    s32 seconds;
+    s32 secondTens;
+    s32 fractionHundreds;
+    s32 fractionTens;
     s32 remainder;
 
     savedX = x;
@@ -127,23 +128,24 @@ void func_800658FC(s32 mode);
 void func_80064FF8(u8 *prim);
 
 void func_800340D8(void) {
-    register u8 **initBuffers asm("$16");
-    register u8 **buffers asm("$18");
-    register s32 row asm("$21");
-    register s32 col asm("$19");
-    register s32 linear asm("$16");
-    register s32 offset asm("$17");
-    register s32 y asm("$22");
-    register s32 color asm("$23");
-    register s32 xStep asm("$20");
-    register s32 yStart;
+    u8 **initBuffers;
+    u8 **buffers;
+    s32 row;
+    s32 col;
+    s32 linear;
+    s32 offset;
+    s32 y;
+    s32 color;
+    s32 xStep;
+    s32 yStart;
     s32 bufferIndex;
     u8 *buffer;
     u8 *firstBuffer;
-    register u8 *addPrimBase asm("$5");
-    register s32 prevOffset asm("$4");
+    u8 *addPrimBase;
+    s32 prevOffset;
+    /* This pin is load-bearing: removing it changes .text. */
     register u8 *storeBaseV1 asm("$3");
-    register u8 *storeBaseV0 asm("$2");
+    u8 *storeBaseV0;
 
     initBuffers = g_TileStripBuffers;
     firstBuffer = g_TileStripStorage;

@@ -96,12 +96,13 @@ void *func_80021CD4(void *dst, s32 value);
 void GameDrawSeriesClearedWash(s32 x, s32 y) asm("func_8001FC30");
 void GameDrawSeriesClearedWash(s32 x, s32 y) {
     void *ot;
-    register void *prim asm("$6");
+    void *prim;
     s32 redStack;
-    register s32 green asm("$8");
+    s32 green;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 temp asm("$3");
     register s32 quotient asm("$2");
-    register s32 red asm("$5");
+    s32 red;
     s32 blue;
     s32 width;
     s32 height;

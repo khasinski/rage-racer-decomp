@@ -12,15 +12,17 @@ void ChangeClearRCnt(long clear) asm("func_8006DF14");
 void ChangeClearInterruptMask(long index, long clear) asm("func_8006DF24");
 Callback SetKernelInterruptCallback(long arg0, Callback arg1) asm("func_8006E390");
 Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
-    register long index asm("$17");
-    register Callback callback asm("$18");
+    long index;
+    Callback callback;
+    /* This pin is load-bearing: removing it changes .text. */
     register Callback *base asm("$5");
-    register long offset asm("$2");
-    register Callback *slot asm("$4");
-    register Callback oldCallback asm("$20");
+    long offset;
+    Callback *slot;
+    Callback oldCallback;
+    /* This pin is load-bearing: removing it changes .text. */
     register u_long pendingValue asm("$3");
-    register u_long pendingMask asm("$19");
-    register long disabled asm("$16");
+    u_long pendingMask;
+    long disabled;
     volatile u_short *maskPtr;
 
     index = arg0;
@@ -48,22 +50,23 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     pendingMask = pendingValue & 0xFFFF;
 
     if (callback != 0) {
-        register u_long bit asm("$3");
+        u_long bit;
 
         bit = 1 << index;
         __asm__("" : "=r"(bit) : "0"(bit));
         pendingMask |= bit;
         *slot = callback;
         {
-            register u_long value asm("$2");
+            u_long value;
 
             value = *(u_short *)(base + 11);
             value |= bit;
             *(u_short *)(base + 11) = value;
         }
     } else {
+        /* These pins are load-bearing: removing any one changes .text. */
         register Callback zero asm("$0");
-        register u_long bit asm("$2");
+        u_long bit;
         register u_long activeMask asm("$3");
 
         bit = 1 << index;

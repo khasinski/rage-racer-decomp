@@ -6,6 +6,7 @@ extern short g_SndReverbAttrMode asm("D_8019C77C");
 
 long SsUtSetReverbType(long type) asm("func_80073614");
 long SsUtSetReverbType(long type) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long normalized asm("v1");
     long negative;
     long mode;

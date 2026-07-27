@@ -25,10 +25,11 @@ void func_8005B9CC(void);
 
 void GameLoadBootAssets(void) asm("func_800180CC");
 void GameLoadBootAssets(void) {
-    register u8 *loaded asm("$16");
-    register u8 *base asm("$17");
+    u8 *loaded;
+    u8 *base;
+    /* This pin is load-bearing: removing it changes .text. */
     register u8 *next asm("$2");
-    register s32 nextState asm("$3");
+    s32 nextState;
 
     switch (g_AssetLoadState) {
     case 1:
@@ -77,7 +78,7 @@ setNextBuffer:
         break;
     case 6:
         if (func_80017C78(5, g_AssetLoadCursor) != 0) {
-            register u8 *finalBase asm("$2");
+            u8 *finalBase;
 
             GameUploadImageAsset(g_AssetLoadCursor);
             StoreImage(&g_TeamLogoClutRect, g_TeamLogoClut);
@@ -94,7 +95,7 @@ setNextBuffer:
 
 s32 GameRequestSaveScreenAssets(void) asm("func_800182D0");
 s32 GameRequestSaveScreenAssets(void) {
-    register s32 state asm("$16");
+    s32 state;
 
     if (g_AssetLoadState != 0) {
         return 1;
@@ -124,7 +125,7 @@ void GameLoadSaveScreenAssets(void) {
 
 s32 GameRequestSelectBgmAssetsNoReset(void) asm("func_8001839C");
 s32 GameRequestSelectBgmAssetsNoReset(void) {
-    register s32 loadType asm("$16");
+    s32 loadType;
 
     if (g_AssetLoadState != 0) {
         return 1;
@@ -144,7 +145,7 @@ s32 GameRequestSelectBgmAssetsNoReset(void) {
 
 s32 GameRequestSelectBgmAssets(void) asm("func_80018410");
 s32 GameRequestSelectBgmAssets(void) {
-    register s32 loadType asm("$16");
+    s32 loadType;
 
     if (g_AssetLoadState != 0) {
         return 1;
@@ -164,10 +165,11 @@ s32 GameRequestSelectBgmAssets(void) {
 
 void GameLoadSelectBgmAssets(void) asm("func_80018484");
 void GameLoadSelectBgmAssets(void) {
-    register GameAssetTripleHeader *header asm("$2");
-    register s32 firstOffset asm("$3");
+    GameAssetTripleHeader *header;
+    s32 firstOffset;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 secondOffset asm("$3");
-    register s32 thirdOffset asm("$4");
+    s32 thirdOffset;
 
     switch (g_AssetLoadState) {
     case 1:

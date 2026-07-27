@@ -146,6 +146,7 @@ void Intpl(void *in, s32 ir0, void *out) {
 
 void * Square12(void *in, void *out) asm("func_80069B38");
 void *Square12(void *in, void *out) {
+    /* This pin is load-bearing: removing it changes .text. */
     register void *p asm("$5") = out;
     gte_ldir(in);
     gte_nop();
@@ -156,6 +157,7 @@ void *Square12(void *in, void *out) {
 
 void * Square0(void *in, void *out) asm("func_80069B60");
 void *Square0(void *in, void *out) {
+    /* This pin is load-bearing: removing it changes .text. */
     register void *p asm("$5") = out;
     gte_ldir(in);
     gte_nop();

@@ -18,18 +18,21 @@ extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
 extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
 
 void _SsVmInit(void) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long i asm("$8");
-    register long ff asm("$9");
-    register long one asm("$10");
+    long ff;
+    long one;
+    /* This pin is load-bearing: removing it changes .text. */
     register long index asm("$4");
-    register long offset asm("$2");
-    register long shifted asm("$4");
+    long offset;
+    long shifted;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long eighteen asm("$3");
-    register u_long lowMask asm("$7");
+    u_long lowMask;
     register u_long highMask asm("$6");
     register u_long lowBits asm("$3");
     register u_long highBits asm("$4");
-    register long next asm("$5");
+    long next;
     volatile u_short *spu;
     u_long bits;
 

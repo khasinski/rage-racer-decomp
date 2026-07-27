@@ -11,16 +11,18 @@ extern volatile u_char D_8009E0DE[];
 
 void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) asm("func_80074D1C");
 void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
-    register long voice asm("$11");
-    register long start asm("$8");
-    register long target asm("$9");
+    long voice;
+    long start;
+    long target;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long step asm("$10");
     register long offset asm("$2");
     long delta;
     register long smallDenom asm("$3");
     long quotient;
-    register long start16 asm("$5");
-    register long target16 asm("$6");
+    long start16;
+    long target16;
+    /* This pin is load-bearing: removing it changes .text. */
     register long stepForSmallDiv asm("$4");
     long step16;
 
@@ -222,16 +224,18 @@ extern u_char D_8009E0EA[];
 
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) asm("func_8007521C");
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
-    register long voice asm("$11");
-    register long start asm("$8");
-    register long target asm("$9");
+    long voice;
+    long start;
+    long target;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long step asm("$10");
     register long offset asm("$2");
     long delta;
     register long smallDenom asm("$3");
     long quotient;
-    register long start16 asm("$5");
-    register long target16 asm("$6");
+    long start16;
+    long target16;
+    /* This pin is load-bearing: removing it changes .text. */
     register long stepForSmallDiv asm("$4");
     long step16;
 
@@ -306,15 +310,16 @@ extern short g_SndMonoMode asm("D_801E3FB0");
 void SpuVmAutoPanTick(long arg0) asm("func_800753CC");
 void SpuVmAutoPanTick(long arg0) {
     long stack[6];
-    register long originalArg asm("$8");
+    long originalArg;
     long offset;
-    register long channel asm("$3");
-    register long index8 asm("$9");
+    long channel;
+    long index8;
     u_short counter;
     long sum;
     long step;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long limit asm("$3");
-    register long current asm("$2");
+    long current;
     register long positiveCompare asm("$2");
     register long negativeCompare asm("$3");
     register long clampValue asm("$4");
@@ -323,9 +328,7 @@ void SpuVmAutoPanTick(long arg0) {
     asm(".globl func_80075420\nfunc_80075420 = SpuVmAutoPanTick + 0x54");
     channel = (short)arg0;
     index8 = channel << 3;
-    asm("" : "=r"(index8) : "0"(index8));
     offset = channel * 52;
-    asm("" : "=r"(offset) : "0"(offset));
     originalArg = arg0;
     if (*(short *)&D_8009E0E4[offset] != 0) {
         counter = *(u_short *)&D_8009E0E6[offset];
@@ -346,7 +349,6 @@ void SpuVmAutoPanTick(long arg0) {
     limit = *(short *)&D_8009E0EA[offset];
     current >>= 16;
     positiveCompare = current < limit;
-    asm("" : "=r"(positiveCompare) : "0"(positiveCompare));
     clampValue = limit;
     if (positiveCompare) {
         goto envelopeDone;
@@ -362,7 +364,6 @@ checkNegativeStep:
     current >>= 16;
     clampValue = limit;
     negativeCompare = limit < current;
-    asm("" : "=r"(negativeCompare) : "0"(negativeCompare));
     if (negativeCompare) {
         goto envelopeDone;
     }
@@ -374,30 +375,28 @@ clampEnvelope:
 envelopeDone:
     envelope = D_8009E0E8[(short)originalArg * 52];
     {
-    register u_char *base asm("$2");
-    register long level asm("$3");
-    register long scaledLevel asm("$2");
-    register long masterVolume asm("$4");
+    u_char *base;
+    long level;
+    long scaledLevel;
+    long masterVolume;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long dividend asm("$3");
     register u_long volume asm("$3");
     u_long pan;
     u_long left;
     u_long right;
     long mixed;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long outputOffset asm("$4");
     register u_long compareLeft asm("$2");
     register u_long compareRight asm("$3");
     register long flagIndex asm("$3");
 
-    asm("" : : : "memory");
     base = (u_char *)g_SndCurrentVabHeader;
-    asm("" : : : "memory");
     D_801E4BD5 = envelope;
-    asm("" : : : "memory");
     level = base[0x18];
     masterVolume = D_801E4BD4;
     scaledLevel = level * 16383;
-    asm("" : "=r"(scaledLevel) : "0"(scaledLevel));
     dividend = masterVolume * scaledLevel;
     volume = dividend / 16129;
     volume = volume * D_801E4BDA;
@@ -407,10 +406,12 @@ envelopeDone:
     pan = D_801E4BDE;
     left = volume;
     if (pan < 0x40) {
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(volume) : "0"(volume));
         left = volume;
         right = ((u_long)(volume * pan)) >> 6;
     } else {
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(left) : "0"(left));
         right = left;
         left = ((u_long)(left * (0x7F - pan))) >> 6;
@@ -458,6 +459,7 @@ envelopeDone:
     outputOffset = (short)index8 << 1;
     flagIndex = (short)originalArg;
     *(u_short *)((u_char *)g_SndVoiceRegsVolRight + outputOffset) = right;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : : "memory");
     *(u_short *)((u_char *)g_SndVoiceRegs + outputOffset) = left;
     g_SndVoiceFlags[flagIndex] |= 3;

@@ -103,7 +103,7 @@ L57:
     func_8006136C(g_McFadeLevel);
 
     {
-    register s32 cur asm("$4") = g_SceneTimer;
+    s32 cur = g_SceneTimer;
     if ((u32) cur < 5) {
         s32 ns = cur + 1;
         g_SceneTimer = ns;
@@ -127,7 +127,7 @@ L57:
 
     /* state >= 5: active-menu entry */
     {
-        register s32 nx asm("$2") = cur + 1;
+        s32 nx = cur + 1;
         g_SceneTimer = nx;
     }
     }
@@ -481,6 +481,7 @@ L_sw4:
     }
 
     case 0x20: {
+        /* These pins are load-bearing: removing any one changes .text. */
         register s32 f asm("$2");
         register s32 one asm("$3");
         f = 0xF;
@@ -503,6 +504,7 @@ L_sw4:
     case 0x22: {
         s32 *s0 = &g_McSlotCursor;
         s32 a0 = *s0;
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 v1x asm("$3");
         s32 dp;
         g_McActionResult = func_800609E4(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));

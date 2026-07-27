@@ -33,10 +33,11 @@ void GameSelectCarModelSlot(s32) asm("func_80017BAC");
 
 void GameLoadUpgradedCarModel(s32 arg0) asm("func_80018A70");
 void GameLoadUpgradedCarModel(s32 arg0) {
-    register u8 *ptr asm("$16");
-    register s32 index asm("$17");
+    u8 *ptr;
+    s32 index;
     GameCarEntry *entry;
-    register s32 offset asm("$2");
+    s32 offset;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 temp asm("$4");
     register u32 mode asm("$3");
     s32 flag;
@@ -155,8 +156,9 @@ void GameLoadRoundAssets(void) {
     case 1:
         kind = 0x55;
         if (g_GrandPrixMode != 0) {
+            /* These pins are load-bearing: removing any one changes .text. */
             register s32 index asm("$2") = g_GrandPrixSeries;
-            register s32 scaled asm("$3");
+            s32 scaled;
             register s32 base asm("$2");
 
             __asm__ volatile("");
@@ -176,10 +178,11 @@ void GameLoadRoundAssets(void) {
         break;
     case 2:
         if (func_80017C78(0x56, (void *)g_AssetBlockPtr2) != 0) {
-            register s32 ptr asm("$4") = g_AssetBlockPtr2;
+            s32 ptr = g_AssetBlockPtr2;
+            /* These pins are load-bearing: removing any one changes .text. */
             register s32 first asm("$2");
             register s32 second asm("$3");
-            register s32 third asm("$2");
+            s32 third;
 
             first = *(s32 *)(ptr + 4);
             second = *(s32 *)(ptr + 8);

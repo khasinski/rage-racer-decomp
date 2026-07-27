@@ -13,7 +13,7 @@ const u32 func_80069C94[1] __attribute__((section(".text"))) = { 0 };
 
 s32 NormalClip(s32 arg0, s32 arg1, s32 arg2) asm("func_80069C98");
 s32 NormalClip(s32 arg0, s32 arg1, s32 arg2) {
-    register s32 ret asm("$2");
+    s32 ret;
     gte_mtc2(arg0, 12);
     gte_mtc2(arg2, 14);
     gte_mtc2(arg1, 13);

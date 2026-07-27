@@ -8,14 +8,15 @@ extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 /* Builds g_TeamLogoCanvas and its CLUT from one sample character and one sample background. */
 void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) asm("func_8001D338");
 void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) {
-    register s32 index asm("a2");
-    register u16 *dst asm("a3");
-    register u16 *src asm("a0");
-    register u16 *src0 asm("a2");
-    register s32 row0 asm("t1");
+    s32 index;
+    u16 *dst;
+    u16 *src;
+    u16 *src0;
+    s32 row0;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 row1 asm("t2");
     register s32 adjusted asm("v0");
-    register s32 outer asm("t0");
+    s32 outer;
     s32 j;
     u16 value;
     u16 fill;
@@ -51,7 +52,7 @@ void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) {
     } while (index < 12);
 
     if (index < 16) {
-        register s32 byteIndex asm("a0");
+        s32 byteIndex;
 
         byteIndex = index * 2;
         __asm__ volatile(

@@ -7,6 +7,7 @@ long SpuGetKeyStatus(u_long arg0) {
     long voice = -1;
     long i = 0;
     u_long mask = 1;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long value asm("$3");
     register long ret asm("$2");
 
@@ -31,13 +32,14 @@ found:
 
 body:
     {
-        register u_long offset asm("$3") = voice << 4;
-        register volatile u_short *base asm("$2") = g_SpuRegBase;
-        register u_long flags asm("$4") = g_SpuKeyStatus;
-        register u_long flag asm("$2");
+        u_long offset = voice << 4;
+        volatile u_short *base = g_SpuRegBase;
+        u_long flags = g_SpuKeyStatus;
+        u_long flag;
 
         offset += (u_long)base;
         flag = (1 << voice) & flags;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(flag) : "0"(flag));
         value = *(volatile u_short *)(offset + 0xC);
         if (flag != 0) {

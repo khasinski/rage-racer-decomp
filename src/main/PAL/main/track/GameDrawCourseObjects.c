@@ -51,8 +51,9 @@ void GameDrawCourseObjects(void) {
         }
         visShift = obj->f4 / 2048;  /* per-sector visibility bit index */
         {
+            /* This pin is load-bearing: removing it changes .text. */
             register s32 r2 asm("$2");
-            register s32 r3 asm("$3");
+            s32 r3;
             r3 = obj->fC / 2048;
             r2 = (s32)g_VisibleCellMask;
             r3 = ((s32 *)r2)[r3];
@@ -66,8 +67,8 @@ void GameDrawCourseObjects(void) {
         GameBuildRotMatrixY(&mtx, obj->f2);
         MulMatrix2((void *)0x1F800028, &mtx);
         {
-            register s32 ov asm("$2");
-            register s32 cv asm("$3");
+            s32 ov;
+            s32 cv;
             ov = (u16)obj->f4;
             cv = *(u16 *)0x1F800008;
             ov -= cv;
@@ -83,7 +84,8 @@ void GameDrawCourseObjects(void) {
         }
         ApplyMatrix((void *)0x1F800028, (void *)0x1F80011C, (void *)0x1F800124);
         {
-            register s32 a asm("$2");
+            s32 a;
+            /* This pin is load-bearing: removing it changes .text. */
             register s32 b asm("$3");
             a = *(s32 *)0x1F800124;
             b = *(s32 *)0x1F80012C;

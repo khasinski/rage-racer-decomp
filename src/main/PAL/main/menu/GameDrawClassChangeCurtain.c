@@ -7,24 +7,25 @@ void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
 
 s32 GameDrawClassChangeCurtain(s32 arg0) asm("func_8005026C");
 s32 GameDrawClassChangeCurtain(s32 arg0) {
-    register void *scratch asm("$23");
-    register s32 delta asm("$22");
+    void *scratch;
+    s32 delta;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$16");
-    register s32 y1 asm("$17");
-    register s32 red asm("$21");
-    register s32 green asm("$20");
-    register s32 blue asm("$19");
-    register s32 alpha asm("$18");
+    s32 y1;
+    s32 red;
+    s32 green;
+    s32 blue;
+    s32 alpha;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 temp asm("$2");
     register s32 zero asm("$5");
     register void *callScratch asm("$4");
-    register s32 yArg asm("$6");
+    s32 yArg;
 
     scratch = *(void **)0x1F800004;
     delta = arg0;
 
     if (delta == 0) {
-        asm("" : "=r"(delta) : "0"(delta));
         D_8007FB3C = 0;
         return temp;
     } else {
@@ -44,7 +45,7 @@ s32 GameDrawClassChangeCurtain(s32 arg0) {
             }
             callScratch = scratch;
             zero = 0;
-            asm("" : "=r"(callScratch) : "0"(callScratch));
+            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(zero) : "0"(zero));
             value = ((u32)(value << 9) >> 5) + 0xFF10;
             yArg = (s16)value;
@@ -56,6 +57,7 @@ s32 GameDrawClassChangeCurtain(s32 arg0) {
             func_80047024(callScratch, zero, yArg, 0x140, y1, red, green, blue, alpha);
             callScratch = scratch;
             zero = 0;
+            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(zero) : "0"(zero));
             value = y1 - value;
             value <<= 0x10;

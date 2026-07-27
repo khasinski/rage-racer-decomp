@@ -25,9 +25,10 @@ void func_8006BAF0(void);
  * message prints as its first %s. arg 0 blocks, non-zero polls. */
 long CD_datasync(long mode) asm("func_8006BF00");
 long CD_datasync(long arg) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long *b60 asm("$19");
-    register u_char *b318 asm("$17");
-    register long *bE0 asm("$16");
+    u_char *b318;
+    long *bE0;
     long result;
 
     /* Forces GCC to reserve the 6-word outgoing-arg frame slot without
@@ -43,12 +44,12 @@ long CD_datasync(long arg) {
     do {
         long status;
         if (VSync(-1) > g_CdTimeoutDeadline || g_CdTimeoutCounter++ > 0x3C0000) {
-            register void *a1v asm("$5");
-            register long a2v asm("$6");
-            register long a3v asm("$7");
-            register long t2 asm("$2");
-            register long t3 asm("$3");
-            register long t4 asm("$4");
+            void *a1v;
+            long a2v;
+            long a3v;
+            long t2;
+            long t3;
+            long t4;
 
             func_80063C38(D_80013814);
             /* GameDebugPrintf(D_80013824, D_8009BB10,

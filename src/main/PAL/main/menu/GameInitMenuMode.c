@@ -14,16 +14,19 @@ extern s32 g_MenuAltLayout asm("D_8019CB0C");
 void func_80046E00();
 
 void func_80050400(s32 arg0, s32 arg1) {
-    register s32 step0 asm("$16");
-    register s32 step1 asm("$17");
-    register void *scratch asm("$18");
+    s32 step0;
+    s32 step1;
+    void *scratch;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 zero asm("$0");
-    register s32 value asm("$2");
-    register s32 offset asm("$8");
-    register s32 x0 asm("$7");
+    s32 value;
+    s32 offset;
+    s32 x0;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 y0 asm("$6");
-    register s32 render1 asm("$3");
-    register s32 y1 asm("$2");
+    s32 render1;
+    s32 y1;
+    /* These pins are load-bearing: removing any one changes .text. */
     register void *callScratch asm("$4");
     register s32 callX asm("$5");
 
@@ -222,6 +225,7 @@ void GameFlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     ApplyMatrixSV((s32 *)&mtx, &verts[3], (s16 *)&out[3]);
 
     {
+        /* These pins are load-bearing: removing any one changes .text. */
         register s32 x0 asm("$5");
         register s32 y0 asm("$6");
         register s32 x1 asm("$7");
@@ -263,9 +267,10 @@ extern volatile s32 D_8007FB4C;
 
 void func_800509C4(s32 arg0) {
     void *scratch = *(void **)0x1F800004;
-    register s32 step asm("s0") = arg0;
+    s32 step = arg0;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 zero asm("$0");
-    register s32 value asm("v0");
+    s32 value;
     s32 renderValue;
     s32 y0;
     s32 y1;

@@ -91,10 +91,11 @@ void GameLoadRaceAssets(void) {
         s32 idx = g_PlayerCarIndex;
         s32 sz = GameGetCarAssetIndex(idx, g_CarTable[idx].modelVariant);
         if (func_80017C78((sz << 1) + 11, g_AssetLoadCursor) != 0) {
+            /* This pin is load-bearing: removing it changes .text. */
             register u8 *base_a0 asm("$4");
-            register u8 *base_a3 asm("$7");
-            register u8 *p1 asm("$5");
-            register u8 *p2 asm("$6");
+            u8 *base_a3;
+            u8 *p1;
+            u8 *p2;
             base_a0 = g_AssetLoadCursor;
             g_AssetBlockPtr = ASSET_SUB(base_a0, 0);
             func_80034DF4();
@@ -120,13 +121,14 @@ void GameLoadRaceAssets(void) {
         }
         break;
     case 5: {
-        register u8 *p asm("$5");
-        register s32 scaled asm("$2");
-        register s32 base_off asm("$4");
+        u8 *p;
+        s32 scaled;
+        s32 base_off;
         p = g_AssetLoadCursor;
         scaled = g_CourseIndex << 1;
         base_off = (g_GrandPrixClass << 3) + 0x57;
         if (func_80017C78(scaled + base_off, p) != 0) {
+            /* This pin is load-bearing: removing it changes .text. */
             register u8 *base_a0 asm("$4");
             u8 *base;
             s32 off0, off1;
@@ -155,13 +157,15 @@ void GameLoadRaceAssets(void) {
         break;
     }
     case 6: {
-        register u8 *p asm("$5");
-        register s32 scaled asm("$3");
+        u8 *p;
+        s32 scaled;
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 result asm("$2");
         p = g_AssetLoadCursor;
         scaled = g_CourseIndex << 1;
         result = (g_GrandPrixClass << 3) + scaled;
         if (func_80017C78(result + 0x58, p) != 0) {
+            /* This pin is load-bearing: removing it changes .text. */
             register u8 *base_a0 asm("$4");
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 0); GameSetTrackCameraTable(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 1); func_8004553C(g_AssetBlockPtr);

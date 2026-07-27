@@ -35,9 +35,10 @@ s32 GameGetCarUnlockLevel(s32 model) {
 
 void GameInitRenderState(s32 arg0) asm("func_80017884");
 void GameInitRenderState(s32 arg0) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 value asm("$2");
     register s32 ptr asm("$2");
-    register s32 tmp asm("$3");
+    s32 tmp;
 
     tmp = g_MirrorMode;
     value = 0xA;
@@ -70,10 +71,11 @@ void GameInitRenderState(s32 arg0) {
 
 void GameRegisterModelBank(s32 *base, s32 index) asm("func_80017948");
 void GameRegisterModelBank(s32 *base, s32 index) {
-    register s32 *ptr asm("$6");
-    register s32 i asm("$5");
+    s32 *ptr;
+    s32 i;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
-    register s32 count asm("$3");
+    s32 count;
     s32 pad[2];
 
     (void)&pad;
@@ -101,10 +103,11 @@ void GameRegisterModelBank(s32 *base, s32 index) {
 
 void GameUnrelocateModelBank(s32 *base, s32 offset) asm("func_800179B4");
 void GameUnrelocateModelBank(s32 *base, s32 offset) {
-    register s32 *ptr asm("$6");
-    register s32 i asm("$7");
+    s32 *ptr;
+    s32 i;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
-    register s32 count asm("$3");
+    s32 count;
     s32 pad[2];
 
     (void)&pad;
@@ -131,9 +134,10 @@ void GameUnrelocateModelBank(s32 *base, s32 offset) {
 
 void GameSelectModelBank(s32 index) asm("func_80017A10");
 void GameSelectModelBank(s32 index) {
-    register s32 *entry asm("$4");
+    s32 *entry;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 ptr asm("$2");
-    register s32 value asm("$3");
+    s32 value;
 
     ptr = (s32)g_ModelBanks;
     entry = (s32 *)((index << 2) + ptr);
@@ -154,11 +158,12 @@ void GameSelectModelBank(s32 index) {
 
 void GameRegisterCourseModels(s32 *base) asm("func_80017A6C");
 void GameRegisterCourseModels(s32 *base) {
-    register s32 *ptr asm("$5");
-    register s32 count asm("$2");
-    register s32 i asm("$6");
-    register s32 limit asm("$7");
-    register s32 *item asm("$3");
+    s32 *ptr;
+    s32 count;
+    s32 i;
+    s32 limit;
+    s32 *item;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 pad[2];
 
@@ -186,9 +191,10 @@ void GameRegisterCourseModels(s32 *base) {
 }
 
 void func_80017AD0(s32 *base) {
-    register s32 *ptr asm("$3");
-    register s32 count asm("$6");
-    register s32 i asm("$5");
+    s32 *ptr;
+    s32 count;
+    s32 i;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 pad[2];
 

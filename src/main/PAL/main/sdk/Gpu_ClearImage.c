@@ -100,28 +100,31 @@ long Gpu_CheckTimeout(void) asm("func_80067F38");
  * issues GP0(A0h) and pushes the odd words by hand, the rest by DMA2. */
 long Gpu_LoadImage(GpuRect *rect, u_long *src) asm("func_80067084");
 long Gpu_LoadImage(GpuRect *rect, u_long *src) {
-    register GpuRect *savedRect asm("$17");
-    register u_long *current asm("$18");
-    register long rem asm("$16");
-    register long blocks asm("$20");
-    register long mode asm("$21");
-    register u_long readyMask asm("$19");
-    register u_long dmaCommand asm("$4");
+    GpuRect *savedRect;
+    u_long *current;
+    long rem;
+    long blocks;
+    long mode;
+    u_long readyMask;
+    u_long dmaCommand;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long w asm("$4");
     register long adjustedWords asm("$2");
-    register long halfWords asm("$4");
+    long halfWords;
     register long quotient asm("$3");
-    register u_long status asm("$2");
-    register u_long gpCommand asm("$3");
+    u_long status;
+    u_long gpCommand;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long dmaSize asm("$2");
     register volatile u_long *dmaReg asm("$2");
-    register volatile u_long *dmaSizeReg asm("$3");
+    volatile u_long *dmaSizeReg;
     short h;
     short clippedW;
     short clippedH;
     volatile long framePadding[2];
 
     savedRect = rect;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(savedRect) : "0"(savedRect));
     current = src;
     Gpu_ArmTimeout();
@@ -161,11 +164,11 @@ long Gpu_LoadImage(GpuRect *rect, u_long *src) {
         return -1;
     }
     rem = adjustedWords >> 5;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(rem) : "0"(rem));
     quotient = rem;
     adjustedWords = quotient << 4;
     rem = halfWords - adjustedWords;
-    asm("" : "=r"(rem) : "0"(rem));
     blocks = quotient;
 
     if ((*g_GpuGp1 & 0x04000000) == 0) {

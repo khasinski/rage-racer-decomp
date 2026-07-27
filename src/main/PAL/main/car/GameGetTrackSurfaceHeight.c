@@ -32,21 +32,21 @@ s32 GameFindTrackSegment(Unk32098 *arg0, s32 arg1) asm("func_80030EB4");
 s32 GameGetTrackSurfaceHeight(Unk32098 *arg0) asm("func_80032098");
 s32 GameGetTrackSurfaceHeight(Unk32098 *arg0) {
     s32 index;
-    register s32 nextIndex asm("$7");
-    register TrackPointWindow *base asm("$6");
-    register TrackPointWindow *cur asm("$17");
-    register TrackPointWindow *next asm("$16");
-    register u32 segmentLengthRaw asm("$18");
-    register s32 curOff asm("$3");
-    register s32 nextOff asm("$2");
+    s32 nextIndex;
+    TrackPointWindow *base;
+    TrackPointWindow *cur;
+    TrackPointWindow *next;
+    u32 segmentLengthRaw;
+    s32 curOff;
+    s32 nextOff;
     Matrix mtx;
     s16 vec[4];
     s32 out[3];
-    register s32 distance asm("$5");
-    register s32 segmentLength asm("$4");
+    s32 distance;
+    s32 segmentLength;
     s32 segmentLengthCompare;
-    register s32 invDistance asm("$6");
-    register s32 outZ asm("$7");
+    s32 invDistance;
+    s32 outZ;
     s32 fieldE;
     s32 y;
     s32 argX;
@@ -59,7 +59,6 @@ s32 GameGetTrackSurfaceHeight(Unk32098 *arg0) {
     nextIndex = (index + 1) % g_TrackPointCount;
 
     base = (TrackPointWindow *)g_TrackPoints;
-    asm("" : "=r"(base) : "0"(base)); /* Match note: materialize base in $a2 before current offset. */
 
     curOff = (index * 3) << 3;
     cur = (TrackPointWindow *)(curOff + (s32)base);

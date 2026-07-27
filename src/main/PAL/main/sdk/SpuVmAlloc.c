@@ -242,13 +242,13 @@ extern short D_801E4BEC;
 extern short D_801E4BEE;
 
 void func_80074134(void) {
-    register long i asm("$6");
-    register short *packedVoicePtr asm("$3");
-    register short *voicePtr asm("$8");
-    register long bit asm("$7");
-    register long voice asm("$4");
-    register u_long *mask asm("$5");
-    register long periodIndex asm("$2");
+    long i;
+    short *packedVoicePtr;
+    short *voicePtr;
+    long bit;
+    long voice;
+    u_long *mask;
+    long periodIndex;
     long tableIndex;
     u_char stackPad[8];
 
@@ -270,7 +270,7 @@ void func_80074134(void) {
     } while (i < 16);
 
     {
-        register u_long periodRaw asm("$3");
+        u_long periodRaw;
 
         periodRaw = D_801E4BE8;
         periodIndex = periodRaw & 1;
@@ -283,12 +283,14 @@ void func_80074134(void) {
     }
 
     if (1) {
+        /* This pin is load-bearing: removing it changes .text. */
         register long voiceOffset asm("$3");
 
         periodIndex = periodIndex >> 16;
         periodIndex = (periodIndex - 1) / 2;
         periodIndex <<= 4;
         {
+            /* This pin is load-bearing: removing it changes .text. */
             register long periodBase asm("$3");
 
             periodBase = g_SndCurrentProgTable;
@@ -303,12 +305,14 @@ void func_80074134(void) {
     } else {
 evenPeriod:
         {
+            /* This pin is load-bearing: removing it changes .text. */
             register long voiceOffset asm("$3");
 
             periodIndex = periodIndex >> 16;
             periodIndex = (periodIndex - 1) / 2;
             periodIndex <<= 4;
             {
+                /* This pin is load-bearing: removing it changes .text. */
                 register long periodBase asm("$3");
 
                 periodBase = g_SndCurrentProgTable;
@@ -322,10 +326,11 @@ evenPeriod:
     }
 
     {
-        register long voiceIndex asm("$3");
-        register long flags asm("$2");
+        long voiceIndex;
+        long flags;
+        /* This pin is load-bearing: removing it changes .text. */
         register short *voiceOffsetPtr asm("$5");
-        register u_long tableBase asm("$4");
+        u_long tableBase;
 
         voiceIndex = g_SndCurrentVoice;
         flags = D_8009E0A0[voiceIndex];

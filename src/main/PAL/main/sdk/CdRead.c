@@ -126,16 +126,17 @@ long CdReadCallback(long arg0) {
 }
 
 void func_80027874(long x, long y, u_char *str, long arg3) {
-    register u_char *packet __asm("$18");
+    u_char *packet;
     long idx;
-    register u_char *next __asm("$20");
+    u_char *next;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_char *sr __asm("$21");
     register u_char *tableA __asm("$23");
-    register long ga __asm("$16");
-    register long gb __asm("$17");
-    register long w __asm("$3");
-    register u_char *oldPacket __asm("$5");
-    register u_char *otv __asm("$4");
+    long ga;
+    long gb;
+    long w;
+    u_char *oldPacket;
+    u_char *otv;
     short a3;
     u_char *tableB;
 

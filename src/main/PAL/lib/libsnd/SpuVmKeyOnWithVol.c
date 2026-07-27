@@ -29,12 +29,13 @@ void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
 }
 
 void SpuVmClearFinishedVoices(void) {
-    register long i asm("$4");
+    long i;
+    /* This pin is load-bearing: removing it changes .text. */
     register long next asm("$2");
-    register long flag asm("$5");
-    register long offset asm("$3");
-    register long bound asm("$3");
-    register u_char *ptr asm("$2");
+    long flag;
+    long offset;
+    long bound;
+    u_char *ptr;
 
     i = 0;
     if (D_801E42F8 == 0) {

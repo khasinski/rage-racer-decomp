@@ -57,19 +57,19 @@ void GameDrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 
 void GameDrawMemoryCardMessage(s32 arg0) asm("func_80027D84");
 void GameDrawMemoryCardMessage(s32 arg0) {
-    register s32 index asm("$17");
-    register s32 *entry asm("$16");
-    register s32 x asm("$19");
-    register s32 y asm("$18");
-    register s16 *table asm("$20");
-    register s32 one asm("$21");
+    s32 index;
+    s32 *entry;
+    s32 x;
+    s32 y;
+    s16 *table;
+    s32 one;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 temp asm("$2");
     s32 next;
     s32 base;
     s32 delta;
 
     index = arg0;
-    asm("" : "=r"(index) : "0"(index));
     entry = D_8007D99C[index];
     x = 0x60;
     y = 0x40;

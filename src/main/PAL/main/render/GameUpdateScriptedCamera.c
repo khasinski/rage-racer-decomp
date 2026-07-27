@@ -18,12 +18,13 @@ s32 GameSetLookAtMatrix(s32 *obj) asm("func_80046248");
  * current and next keyframe and installs the resulting view matrix. */
 void GameUpdateScriptedCamera(void) asm("func_80046600");
 void GameUpdateScriptedCamera(void) {
-    register s32 current asm("$2");
-    register s32 tick asm("$3");
-    register s32 currentOffset asm("$6");
+    s32 current;
+    s32 tick;
+    s32 currentOffset;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 nextOffset asm("$5");
     register s32 currentValue asm("$7");
-    register s32 scale asm("$8");
+    s32 scale;
     s32 blend;
     s32 scaledTick;
     s32 values[8];
@@ -61,7 +62,8 @@ void GameUpdateScriptedCamera(void) {
     GameSetLookAtMatrix(values);
 
     {
-        register s32 tailCurrent asm("$3");
+        s32 tailCurrent;
+        /* These pins are load-bearing: removing any one changes .text. */
         register s32 tailTick asm("$2");
         register s32 tailNext asm("$4");
 

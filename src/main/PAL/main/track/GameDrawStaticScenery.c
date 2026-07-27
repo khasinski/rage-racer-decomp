@@ -30,15 +30,16 @@ void GameDrawStaticScenery(s32 arg0) asm("func_8003DF68");
 void GameDrawStaticScenery(s32 arg0) {
     Matrix mtx;
     Vec4i state;
-    register s32 *statePtr asm("$16");
+    s32 *statePtr;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 bucket asm("$2");
-    register s32 value asm("$6");
-    register u32 *visibility asm("$3");
-    register u32 *wordPtr asm("$4");
-    register s32 bit asm("$5");
-    register s32 visible asm("$3");
-    register s32 drawArg asm("$5");
-    register s32 frameValue asm("$2");
+    s32 value;
+    u32 *visibility;
+    u32 *wordPtr;
+    s32 bit;
+    s32 visible;
+    s32 drawArg;
+    s32 frameValue;
 
     state = g_StaticSceneryPos;
     statePtr = (s32 *)&state;
@@ -98,9 +99,10 @@ void GameDrawHighClassScenery(void) asm("func_8003E0D0");
 void GameDrawHighClassScenery(void) {
     Matrix mtx;
     s32 pad[4];
-    register s32 *state asm("$16");
+    s32 *state;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 frameValue asm("$2");
-    register s32 drawArg asm("$5");
+    s32 drawArg;
 
     (void)pad;
     state = &g_HighClassSceneryYaw;
@@ -136,12 +138,10 @@ void GameDrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
 void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
 
 void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
-    register s32 mode asm("$16") = arg0;
-    register s32 value asm("$18") = arg1;
-    register s32 flag asm("$17");
+    s32 mode = arg0;
+    s32 value = arg1;
+    s32 flag;
 
-    asm("" : "=r"(mode) : "0"(mode));
-    asm("" : "=r"(value) : "0"(value));
 
     flag = arg2;
 
@@ -254,19 +254,21 @@ s32 GameRandom15(void) asm("func_800632B0");
 
 void GameSeedFlybyScenery(void) asm("func_8003E464");
 void GameSeedFlybyScenery(void) {
-    register u8 *base asm("s0");
+    u8 *base;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *out asm("s1");
-    register s32 count asm("a0");
+    s32 count;
     register s32 value asm("v1");
-    register s32 index asm("v0");
+    s32 index;
     register s32 cmp asm("v0");
-    register s32 scene0 asm("v1");
+    s32 scene0;
     register s32 scene1 asm("v0");
-    register u8 *src asm("v1");
-    register s32 recordIndex asm("v1");
-    register s32 word0 asm("a0");
-    register s32 word1 asm("a1");
-    register s32 word2 asm("a2");
+    u8 *src;
+    s32 recordIndex;
+    s32 word0;
+    s32 word1;
+    s32 word2;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 word3 asm("a3");
 
     base = g_FlybySceneryData;

@@ -50,19 +50,22 @@ void DrawSync(long mode) asm("func_800658FC");
 void GameSwapTrackTexturePageNow(void) asm("func_80019D7C");
 void GameSwapTrackTexturePageNow(void) {
     s32 buffer[0xE0];
-    register s32 page asm("$18") = 0;
+    s32 page = 0;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 rectValue asm("$2");
-    register s16 *rectY asm("$22") = &D_8007C70A;
-    register Rect *rect asm("$21") = (Rect *)((s32)&D_8007C70A - 2);
-    register u8 **basePtr asm("$20") = &g_TrackTextureShadow;
-    register u8 *state asm("$17") = D_801E4BF8;
-    register s32 offset asm("$16") = 0;
-    register s32 value asm("$19");
+    s16 *rectY = &D_8007C70A;
+    Rect *rect = (Rect *)((s32)&D_8007C70A - 2);
+    u8 **basePtr = &g_TrackTextureShadow;
+    u8 *state = D_801E4BF8;
+    s32 offset = 0;
+    s32 value;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 one asm("$4");
-    register s32 *src asm("$5");
-    register s32 *dst asm("$3");
+    s32 *src;
+    s32 *dst;
+    /* This pin is load-bearing: removing it changes .text. */
     register u8 *base asm("$2");
-    register s32 count asm("$4");
+    s32 count;
 
     do {
         rectValue = page + 0x100;
@@ -145,16 +148,16 @@ void DrawSync(long mode) asm("func_800658FC");
 void GameSwapTrackTextureRow(void) asm("func_80019F24");
 void GameSwapTrackTextureRow(void) {
     s32 buffer[0xE0];
-    register s16 *rectY asm("$16");
-    register s32 value asm("$17");
-    register s32 one asm("$4");
-    register s32 *dst asm("$3");
-    register s32 *src asm("$5");
-    register s32 count asm("$4");
-    register u8 **basePtr asm("$16");
-    register Rect *rect asm("$4");
-    register s32 copyIndex asm("$3");
-    register s32 copyOffset asm("$2");
+    s16 *rectY;
+    s32 value;
+    s32 one;
+    s32 *dst;
+    s32 *src;
+    s32 count;
+    u8 **basePtr;
+    Rect *rect;
+    s32 copyIndex;
+    s32 copyOffset;
     s32 index;
 
     rectY = &D_8007C70A;

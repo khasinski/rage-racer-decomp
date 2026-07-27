@@ -20,9 +20,10 @@ void func_80043AC8(void *arg0, s32 arg1);
 
 void GameLoadTrackDataAssets(void) asm("func_8001989C");
 void GameLoadTrackDataAssets(void) {
-    register GameSceneAssetHeader *header asm("$4");
+    GameSceneAssetHeader *header;
+    /* This pin is load-bearing: removing it changes .text. */
     register void *dst asm("$5");
-    register s32 offset asm("$2");
+    s32 offset;
 
     switch (g_AssetLoadState) {
     case 1:

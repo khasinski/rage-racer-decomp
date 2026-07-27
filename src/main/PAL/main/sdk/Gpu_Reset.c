@@ -26,7 +26,6 @@ long Gpu_Reset(u_long mode) {
     state = g_GpuQueueReadIdx;
     g_GpuResetIntrMask = intrMask;
     g_GpuQueueWriteIdx = state;
-    asm("" ::: "memory");
 
     switch (mode & 7) {
     case 0:

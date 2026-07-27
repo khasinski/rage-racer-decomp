@@ -89,19 +89,21 @@ void GameUpdateCarBodyKick(GameCarRuntime *car) {
 
 s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) asm("func_80039184");
 s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) {
-    register u8 *base asm("t2");
-    register s32 pos0 asm("a1");
-    register s32 pos1 asm("t0");
-    register s32 row asm("v1");
-    register s32 temp asm("t1");
-    register s32 crossed asm("t3");
+    u8 *base;
+    s32 pos0;
+    s32 pos1;
+    s32 row;
+    s32 temp;
+    s32 crossed;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 i asm("a2");
     register s32 offset asm("a3");
     register s32 sentinel asm("t4");
-    register s32 cursor asm("a1");
-    register s32 diff asm("v0");
-    register s32 cmp asm("v0");
-    register s32 threshold asm("a1");
+    s32 cursor;
+    s32 diff;
+    s32 cmp;
+    s32 threshold;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 resultOffset asm("v0");
 
     base = g_TrackEventData;
@@ -180,11 +182,12 @@ finish:
 
 void GameUpdateCarCrestHop(GameCarRuntime *arg0) asm("func_80039280");
 void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
-    register GameCarRuntime *obj asm("$16");
-    register s32 value asm("$4");
-    register s32 temp asm("$3");
+    GameCarRuntime *obj;
+    s32 value;
+    s32 temp;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 result asm("$2");
-    register s32 one asm("$5");
+    s32 one;
     volatile s32 stack[2];
 
     obj = arg0;
@@ -223,7 +226,6 @@ void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
         return;
     }
 
-    asm("" : "=r"(obj) : "0"(obj));
     value = GameGetCarCrestTrigger((GameCarRuntime *)obj);
     if (value == 0) {
         return;
@@ -335,17 +337,19 @@ decay_field_F4:
 
 void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) asm("func_800394DC");
 void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
-    register GameCarRuntime *objReg asm("$6") = obj;
-    register s32 target asm("$7");
-    register u8 *state asm("$8");
+    GameCarRuntime *objReg = obj;
+    s32 target;
+    u8 *state;
     s32 index;
-    register s32 advanceOffset asm("$4");
-    register s32 scene asm("$3");
+    s32 advanceOffset;
+    s32 scene;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 offset asm("$3");
     register u8 *base asm("$2");
-    register s16 *entry asm("$3");
-    register s32 value asm("$5");
-    register s32 valueRaw asm("$4");
+    s16 *entry;
+    s32 value;
+    s32 valueRaw;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 raw asm("$2");
     s32 stack[2];
 
@@ -402,6 +406,7 @@ below:
 
 advance:
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 next asm("$2");
 
         next = *(s32 *)(state + 0x44);
@@ -430,17 +435,18 @@ clear:
 
 void GameSeedCarRouteMarkers(void) asm("func_80039644");
 void GameSeedCarRouteMarkers(void) {
-    register s32 one asm("t2") = 1;
+    s32 one = 1;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 offset asm("a2") = 0;
     register u8 *base asm("t0");
-    register s32 scene asm("v1");
-    register s32 product asm("v0");
-    register s32 baseOffset asm("t1");
-    register s32 index asm("a0");
-    register s32 tableOffset asm("a1");
-    register s32 raw asm("v0");
-    register s32 target asm("a3");
-    register s32 value asm("v1");
+    s32 scene;
+    s32 product;
+    s32 baseOffset;
+    s32 index;
+    s32 tableOffset;
+    s32 raw;
+    s32 target;
+    s32 value;
 
     scene = g_RaceSeries;
     base = g_TrackEventData;
@@ -486,19 +492,21 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   u8 *p[2];
   u16 lim[4];
   u16 val[2];
+  /* This pin is load-bearing: removing it changes .text. */
   register u8 *sub_R9 asm("$9");
   s32 rpm;
   s32 g0;
   s32 raw;
   u8 *tbl;
   s32 f;
-  register s32 lo_R7 asm("$7");
+  s32 lo_R7;
   s32 hi;
   s32 range;
+  /* This pin is load-bearing: removing it changes .text. */
   register s32 d_R3 asm("$3");
   s32 pitch;
   s32 q;
-  register s32 v20_R4 asm("$4");
+  s32 v20_R4;
   s32 cnt;
   s32 one;
   int new_var;

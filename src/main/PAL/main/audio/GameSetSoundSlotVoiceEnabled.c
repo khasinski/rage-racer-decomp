@@ -7,13 +7,13 @@ extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 
 void GameSetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
     s32 *entry;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 *base asm("$2");
-    register s32 offset asm("$3");
+    s32 offset;
 
     if (arg1 != 0) {
         base = g_SoundSlotActive;
         offset = arg0 << 2;
-        asm("" : "=r"(base), "=r"(offset) : "0"(base), "1"(offset));
         entry = (s32 *)(offset + (s32)base);
         if (*entry == 0) {
             GamePlaySoundSlotVoice(arg0, 0, 3);
@@ -22,7 +22,6 @@ void GameSetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
     } else {
         base = g_SoundSlotActive;
         offset = arg0 << 2;
-        asm("" : "=r"(base), "=r"(offset) : "0"(base), "1"(offset));
         entry = (s32 *)(offset + (s32)base);
         if (*entry != 0) {
             GameStopSoundSlotVoice(arg0);
@@ -58,8 +57,9 @@ extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 
 void GameResetSoundState(void) {
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 i asm("$4");
-        register s32 *ptr asm("$2");
+        s32 *ptr;
 
         i = 5;
         ptr = &g_SoundSlotActive5;
@@ -69,10 +69,11 @@ void GameResetSoundState(void) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 i asm("$4");
-        register s32 neg asm("$6");
-        register s32 *ptr asm("$5");
-        register s32 offset asm("$3");
+        s32 neg;
+        s32 *ptr;
+        s32 offset;
 
         i = 0;
         neg = -1;
@@ -90,9 +91,10 @@ void GameResetSoundState(void) {
     }
 
     {
-        register s32 i asm("$4");
-        register s32 neg asm("$5");
-        register s32 value asm("$6");
+        s32 i;
+        s32 neg;
+        s32 value;
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 offset asm("$3");
 
         i = 0;
@@ -110,8 +112,9 @@ void GameResetSoundState(void) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 eighty asm("$3");
-        register s32 value asm("$2");
+        s32 value;
 
         eighty = 0x80;
         value = -1;
@@ -140,14 +143,14 @@ s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 void func_80063D9C(s32 arg0);
 
 s32 GameInitSoundWithVab(s32 header, s32 body) {
-    register s32 headerReg asm("$16") = header;
-    register s32 bodyReg asm("$18") = body;
-    register s16 *vabIdPtr asm("$17");
+    s32 headerReg = header;
+    s32 bodyReg = body;
+    s16 *vabIdPtr;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 currentVabId asm("$5");
-    register s32 fail asm("$16");
+    s32 fail;
     register s32 ret asm("$2");
 
-    asm("" : "=r"(bodyReg) : "0"(bodyReg));
     SsSetTableSize(g_SndTableArea, 2, 1);
     SsSetTickMode(1);
     SsStartSoundTickMode1();

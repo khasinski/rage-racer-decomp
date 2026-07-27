@@ -83,12 +83,13 @@ long func_800657E4(void);
 
 /* Fills the 0x1C-byte DRAWENV head. */
 void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) {
-    register u_char *envReg asm("$17") = env;
-    register long xReg asm("$19") = x;
-    register long yReg asm("$20") = y;
+    u_char *envReg = env;
+    long xReg = x;
+    long yReg = y;
+    /* This pin is load-bearing: removing it changes .text. */
     register long wReg asm("$16") = w;
-    register long hReg asm("$18") = h;
-    register long cmp asm("$2");
+    long hReg = h;
+    long cmp;
     long dmaState;
     long graphType;
 

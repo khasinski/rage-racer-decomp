@@ -14,17 +14,19 @@ void func_8005C31C(s32 arg0, s32 arg1, s32 arg2);
 
 void GameUpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
 void GameUpdateZoneAmbience(s32 arg0) {
-    register s32 position asm("$9");
-    register s32 base asm("$10");
+    s32 position;
+    s32 base;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 mode asm("$4");
     s32 value;
-    register s32 finalValue asm("$5");
-    register s32 i asm("$7");
-    register s32 sentinel asm("$11");
-    register s32 entryBaseValue asm("$2");
-    register UnkFunc80040DB4Entry *entryBase asm("$6");
+    s32 finalValue;
+    s32 i;
+    s32 sentinel;
+    s32 entryBaseValue;
+    UnkFunc80040DB4Entry *entryBase;
+    /* This pin is load-bearing: removing it changes .text. */
     register UnkFunc80040DB4Entry *entry asm("$3");
-    register s32 selector asm("$4");
+    s32 selector;
 
     position = arg0;
     selector = g_GrandPrixClass;
@@ -60,8 +62,8 @@ void GameUpdateZoneAmbience(s32 arg0) {
     sentinel = -1;
     entry = entryBase;
     while (i < 4) {
-        register s32 start asm("$6");
-        register s32 end asm("$8");
+        s32 start;
+        s32 end;
 
         start = entry->start;
         end = entry->end;
@@ -69,10 +71,10 @@ void GameUpdateZoneAmbience(s32 arg0) {
             break;
         }
         if (!(position < start) && !(end < position)) {
-            register s32 flags asm("$3");
-            register s32 delta asm("$2");
-            register s32 product asm("$3");
-            register s32 flagBit asm("$2");
+            s32 flags;
+            s32 delta;
+            s32 product;
+            s32 flagBit;
 
             flags = entry->flags;
             if (position < start + 0x320 && (flags & 1) > 0) {
@@ -94,6 +96,5 @@ void GameUpdateZoneAmbience(s32 arg0) {
 
     finalValue = value;
     finalValue = (s16)finalValue;
-    asm("" : "=r"(finalValue) : "0"(finalValue));
     func_8005C31C(mode, finalValue, finalValue);
 }

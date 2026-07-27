@@ -45,12 +45,13 @@ void GameUploadTeamNameTexture(void *arg0, s32 arg1) asm("func_8001D530");
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
 void GameEnterCourseSelectScreen(void) asm("func_80052778");
 void GameEnterCourseSelectScreen(void) {
-    register s32 one asm("$16");
+    s32 one;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 initValue asm("$3");
     register s32 mode asm("$4");
-    register s32 largeValue asm("$5");
-    register u8 *table asm("$2");
-    register s32 eight asm("$2");
+    s32 largeValue;
+    u8 *table;
+    s32 eight;
 
     GameDrawNowLoadingText();
     if (GameRequestCarSelectAssets() != 0) {

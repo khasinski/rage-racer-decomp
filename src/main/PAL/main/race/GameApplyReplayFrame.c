@@ -173,9 +173,11 @@ void GameApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
 
 void GameApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) asm("func_8001F8D0");
 void GameApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 index asm("s0");
-    register u8 *primary asm("s1");
-    register u8 *secondary asm("s2");
+    u8 *primary;
+    u8 *secondary;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 next asm("a0");
     register s32 offset asm("v0");
     register u8 *base asm("v1");
@@ -191,7 +193,6 @@ void GameApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
             index >>= 1;
             offset = index * 3;
         } else {
-            asm("");
             index >>= 1;
             next = index + 1;
             if (next == 0x2EE) {
@@ -207,7 +208,6 @@ void GameApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
             index >>= 1;
             offset = index * 7;
         } else {
-            asm("");
             index >>= 1;
             next = index + 1;
             if (next == 0x505) {

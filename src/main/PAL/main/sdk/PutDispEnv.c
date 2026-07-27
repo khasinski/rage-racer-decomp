@@ -95,39 +95,37 @@ Env *PutDispEnv(Env *arg0) {
             bottom = top + s0->xE;
         }
         {
-            register long t asm("$4");
+            long t;
             t = left < 500 ? 500 : (left > 3290 ? 3290 : left);
             left = t;
         }
         {
-            register long t asm("$3");
+            long t;
             t = right < left + 80 ? left + 80 : (right > 3290 ? 3290 : right);
             right = t;
         }
         {
-            register long t asm("$4");
+            long t;
             t = top < 16 ? 16
                 : (top > (s0->x12 ? 310 : 256) ? (s0->x12 ? 310 : 256) : top);
             top = t;
         }
         {
-            register long t asm("$3");
+            long t;
             t = bottom < top + 2 ? top + 2
                 : (bottom > (s0->x12 ? 312 : 258) ? (s0->x12 ? 312 : 258) : bottom);
             bottom = t;
         }
         {
-            register long hi asm("$2") = (right & 0xfff) << 12;
+            long hi = (right & 0xfff) << 12;
             long lo = left & 0xfff;
-            register u_long k asm("$3") = 0x6000000;
-            asm("" : "=r"(lo) : "0"(lo));
+            u_long k = 0x6000000;
             g_GpuFuncs.funcs->submit(hi | (lo | k));
         }
         {
-            register long hi asm("$2") = (bottom & 0x3ff) << 10;
+            long hi = (bottom & 0x3ff) << 10;
             long lo = top & 0x3ff;
-            register u_long k asm("$3") = 0x7000000;
-            asm("" : "=r"(lo) : "0"(lo));
+            u_long k = 0x7000000;
             g_GpuFuncs.funcs->submit(hi | (lo | k));
         }
     }

@@ -36,6 +36,7 @@ void func_8006D0AC(long arg0, u_long arg1) {
     u_long i;
 
     for (i = 0; i < arg1; i++) {
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" ::: "memory");
         ((StRingClearRecord *)g_StRingBase)[i + arg0].value = 0;
     }
@@ -43,7 +44,8 @@ void func_8006D0AC(long arg0, u_long arg1) {
 
 long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) asm("func_8006D0EC");
 long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
-    register StRingEventRecord **out0 asm("$7") = arg0;
+    StRingEventRecord **out0 = arg0;
+    /* This pin is load-bearing: removing it changes .text. */
     register StRingEventRecord **out1 asm("$8") = arg1;
     StRingEventRecord *entry;
     long old_flag;
@@ -61,13 +63,14 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     }
 
     if ((entry->state & 0xFFFF) == 2) {
-        register long track asm("$4");
-        register StRingEventRecord *raw_base asm("$3");
-        register long index asm("$5");
-        register StRingEventRecord *base asm("$4");
-        register long offset asm("$3");
+        long track;
+        StRingEventRecord *raw_base;
+        long index;
+        StRingEventRecord *base;
+        long offset;
 
         entry->state = 4;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" ::: "memory");
         track = g_StRingSize;
         raw_base = (StRingEventRecord *)g_StRingBase;

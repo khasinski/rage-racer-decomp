@@ -200,8 +200,8 @@ void GameInitCdAudio(void) {
 
 void GameTickCdAudio(void) asm("func_80043974");
 void GameTickCdAudio(void) {
-    register s32 temp asm("$16");
-    register s32 status asm("$17");
+    s32 temp;
+    s32 status;
     s32 state;
     s32 value;
 

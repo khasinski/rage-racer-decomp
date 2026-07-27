@@ -7,14 +7,15 @@ void SsSeqDispatchMidiEvent(long arg0, long arg1) asm("func_8006F1E0");
 void SsSeqAdvanceChannelDelta(long seq, long channel) asm("func_8006F0D0");
 
 void SsSeqAdvanceChannelDelta(long seq, long channel) {
-    register long raw0 asm("$7");
-    register long raw1 asm("$5");
-    register long table_offset asm("$4");
-    register long chan_index asm("$3");
-    register long chan asm("$2");
+    long raw0;
+    long raw1;
+    long table_offset;
+    long chan_index;
+    long chan;
     SeqStruct *state;
-    register long remaining asm("$4");
-    register long period asm("$2");
+    long remaining;
+    long period;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long period_copy asm("$6");
     register long delay asm("$3");
     register long store_value asm("$2");
@@ -47,8 +48,9 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
             state->delta_value = remaining;
         }
     } else if (delay <= period) {
-        register long saved0 asm("$19");
-        register long saved1 asm("$18");
+        long saved0;
+        long saved1;
+        /* This pin is load-bearing: removing it changes .text. */
         register long total asm("$16");
         long loop_delay;
 

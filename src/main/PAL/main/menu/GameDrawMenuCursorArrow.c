@@ -27,17 +27,18 @@ void GameDrawMenuCursorArrow(s32 arg0, s32 arg1) {
 /* The bottom hint bar: a left arrow, a caption picked from D_8007D588 by `variant`, and a right arrow. */
 void GameDrawOptionHintBar(s32 arg0) asm("func_80023750");
 void GameDrawOptionHintBar(s32 arg0) {
-    register s32 index asm("$16");
-    register s32 y asm("$17");
-    register s32 which asm("$18");
-    register s32 base asm("$19");
-    register s32 color asm("$20");
-    register s32 h18 asm("$21");
-    register s32 y78 asm("$22");
-    register s32 w0c asm("$23");
+    s32 index;
+    s32 y;
+    s32 which;
+    s32 base;
+    s32 color;
+    s32 h18;
+    s32 y78;
+    s32 w0c;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 raw_base asm("$2");
-    register s32 scratch asm("$5");
-    register s32 width asm("$3");
+    s32 scratch;
+    s32 width;
     s32 next;
 
     raw_base = (s32)g_DrawBuffer;
@@ -49,7 +50,6 @@ void GameDrawOptionHintBar(s32 arg0) {
     if (which == 4) {
         y = 0x5A;
     } else {
-        asm("" : "=r"(which) : "0"(which));
         width = D_8007D58A[which * 4];
         raw_base = 0x120;
         raw_base = raw_base - width;
@@ -82,15 +82,16 @@ void GameDrawOptionHintBar(s32 arg0) {
 /* Two glyphs plus a label naming the connected pad; caches the last valid g_PadType. */
 void GameDrawPadTypeHint(void) asm("func_8002390C");
 void GameDrawPadTypeHint(void) {
-    register s32 color asm("$16");
-    register s32 y2 asm("$17");
-    register s32 h asm("$18");
-    register s32 w asm("$19");
-    register s32 y0 asm("$20");
-    register s32 base asm("$21");
+    s32 color;
+    s32 y2;
+    s32 h;
+    s32 w;
+    s32 y0;
+    s32 base;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 raw_base asm("$2");
     register s32 value asm("$3");
-    register s32 scratch asm("$5");
+    s32 scratch;
     s32 next;
 
     raw_base = (s32)g_DrawBuffer;
@@ -111,6 +112,7 @@ void GameDrawPadTypeHint(void) {
 
 use_current:
     raw_base = g_PadType;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(raw_base) : "0"(raw_base));
     value = raw_base & 0xFF;
     g_LastValidPadType = raw_base;
@@ -125,7 +127,6 @@ have_value:
 
     next = func_80017138(base, next, 0x7A, 0x1A0, w, h, y0, y2, color);
     next = func_80017138(base, next, 0x92, 0x1A0, w, h, y0 + 8, y2, color);
-    asm("" : : "r"(y0));
     next = func_80017138(base, next, 0x58, 0x1A0, 0x90, h, 0, y2, color);
     *(s32 *)0x1F800000 = func_80017390(base, next, 0x3F);
 }

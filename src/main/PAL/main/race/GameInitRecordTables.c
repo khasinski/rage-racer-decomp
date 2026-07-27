@@ -27,27 +27,31 @@ void func_800200D0(void);
 
 void GameInitRecordTables(void) asm("func_80021A08");
 void GameInitRecordTables(void) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r2 asm("$2");
-    register s32 r3 asm("$3");
+    s32 r3;
     register s32 r4 asm("$4");
     register s32 r5 asm("$5");
-    register s32 r6 asm("$6");
+    s32 r6;
     register s32 r7 asm("$7");
-    register s32 r8 asm("$8");
-    register s32 r9 asm("$9");
-    register s32 r10 asm("$10");
-    register s32 r11 asm("$11");
-    register s32 r12 asm("$12");
+    s32 r8;
+    s32 r9;
+    s32 r10;
+    s32 r11;
+    s32 r12;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r13 asm("$13");
     register s32 r14 asm("$14");
-    register s32 r15 asm("$15");
-    register s32 r16 asm("$16");
+    s32 r15;
+    s32 r16;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r17 asm("$17");
     register s32 r18 asm("$18");
-    register s32 r19 asm("$19");
-    register s32 r20 asm("$20");
+    s32 r19;
+    s32 r20;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r21 asm("$21");
-    register s32 r22 asm("$22");
+    s32 r22;
     register s32 r24 asm("$24");
     register s32 r25 asm("$25");
     register s32 r23 asm("$23");

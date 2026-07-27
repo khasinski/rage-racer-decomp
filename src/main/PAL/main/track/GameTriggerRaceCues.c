@@ -11,11 +11,12 @@ extern s32 g_LapCount asm("D_801E4364");
 
 void GameTriggerRaceCues(void) asm("func_80040F24");
 void GameTriggerRaceCues(void) {
-    register u8 *rawBase asm("v0");
-    register u8 *base asm("s0");
-    register s32 i asm("a1");
-    register s32 mask asm("a2");
-    register u8 *stateBase asm("a3");
+    u8 *rawBase;
+    u8 *base;
+    s32 i;
+    s32 mask;
+    u8 *stateBase;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 temp asm("v0");
     register s32 entry asm("v1");
     register s32 loopFlags asm("t0");

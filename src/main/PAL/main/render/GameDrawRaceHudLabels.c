@@ -88,18 +88,19 @@ void func_80033D50(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
 void GameDrawLapTimes(void) asm("func_80033090");
 void GameDrawLapTimes(void) {
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 i __asm("$17");
-    register s32 visibleCount __asm("$22");
-    register s32 activeIndex __asm("$23");
-    register s32 tile __asm("$16");
-    register s32 y __asm("$19");
-    register s32 primOffset __asm("$20");
-    register s32 baseOffset __asm("$21");
-    register s32 *valuePtr __asm("$18");
-    register GameRaceRanking *list __asm("$3");
-    register u8 *base __asm("$2");
-    register void *ot __asm("$4");
-    register void *prim __asm("$5");
+    s32 visibleCount;
+    s32 activeIndex;
+    s32 tile;
+    s32 y;
+    s32 primOffset;
+    s32 baseOffset;
+    s32 *valuePtr;
+    GameRaceRanking *list;
+    u8 *base;
+    void *ot;
+    void *prim;
     s32 framePad[2];
     s32 value;
 
@@ -168,15 +169,15 @@ void GameDrawTimeRemaining(s32 arg0) {
  * blanked below 10 and the colour changes from 4th place down. */
 void GameDrawRacePosition(void) asm("func_80033230");
 void GameDrawRacePosition(void) {
-    register u8 *base asm("$4");
-    register s32 value asm("$5");
-    register u8 *left asm("$7");
-    register u8 *right asm("$6");
+    u8 *base;
+    s32 value;
+    u8 *left;
+    u8 *right;
     s16 tile;
 
     {
-        register s32 leftOffset asm("$2");
-        register s32 rightOffset asm("$3");
+        s32 leftOffset;
+        s32 rightOffset;
 
         leftOffset = 0x237AC;
         rightOffset = 0x237C0;
@@ -193,8 +194,8 @@ void GameDrawRacePosition(void) {
     }
 
     {
-        register s32 quotient asm("$3");
-        register s32 digit asm("$3");
+        s32 quotient;
+        s32 digit;
 
         quotient = value / 10;
         asm volatile("" : "=r"(quotient) : "0"(quotient));
@@ -203,7 +204,7 @@ void GameDrawRacePosition(void) {
     }
 
     {
-        register s32 cond asm("$2");
+        s32 cond;
 
         cond = value < 4;
         if (cond != 0) {
@@ -224,13 +225,14 @@ void func_800332E0(s32 arg0) {
 
 void GameDrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
 void GameDrawSplitDelta(s32 arg0, s32 arg1) {
-    register u8 *base __asm("$16");
+    u8 *base;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *prim __asm("$17");
     register s32 mode __asm("$18");
     register s32 firstOffset __asm("$5");
-    register s32 value __asm("$4");
-    register s32 temp __asm("$2");
-    register u8 *ot __asm("$4");
+    s32 value;
+    s32 temp;
+    u8 *ot;
 
     mode = arg1;
     firstOffset = 0x237AC;

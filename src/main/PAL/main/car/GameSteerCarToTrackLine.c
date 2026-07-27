@@ -19,21 +19,22 @@ s32 func_80068634(s32 arg0);
  */
 void GameSteerCarToTrackLine(GameCarRuntime *car) asm("func_8002FE74");
 void GameSteerCarToTrackLine(GameCarRuntime *car) {
-    register GameCarSpec *spec asm("$2");
-    register s32 timer asm("$19");
+    GameCarSpec *spec;
+    s32 timer;
     s32 index;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 lateral asm("$18");
     register s32 baseIndex asm("$4");
     s32 finalAngle;
     s32 coords[3];
     s32 angle;
     s32 value;
-    register s32 xValue asm("$2");
-    register s32 headingDelta asm("$3");
+    s32 xValue;
+    s32 headingDelta;
     s32 rawIndex;
     s32 trackCount;
     s32 directionFlag;
-    register s32 divisor asm("$16");
+    s32 divisor;
 
     spec = g_CarSpec;
     lateral = car->field_34;

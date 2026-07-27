@@ -22,10 +22,11 @@ void GameDrawPathScenery(void) {
     volatile s32 pad[4];
     s32 drawId;
     s32 frameValue;
+    /* This pin is load-bearing: removing it changes .text. */
     register s16 *anglePtr asm("$16");
-    register Matrix *mtx1Ptr asm("$17");
-    register Matrix *mtx0Ptr asm("$4");
-    register void *scratchVec asm("$4");
+    Matrix *mtx1Ptr;
+    Matrix *mtx0Ptr;
+    void *scratchVec;
 
     mtx0Ptr = &mtx0;
     __asm__("" : "=r"(mtx0Ptr) : "0"(mtx0Ptr));
@@ -53,9 +54,9 @@ void GameDrawPathScenery(void) {
     GameSubmitModel((void *)0x1F800000, drawId);
 
     {
-        register s32 base asm("$3");
-        register s32 acc asm("$5");
-        register s32 tmp asm("$2");
+        s32 base;
+        s32 acc;
+        s32 tmp;
 
         base = g_SceneTimer;
         acc = base << 2;
@@ -208,23 +209,25 @@ typedef struct {
 
 void GameUpdatePointAmbience(s32 arg) asm("func_80040ADC");
 void GameUpdatePointAmbience(s32 arg) {
-    register s32 base asm("v0");
-    register s32 startp asm("a1");
-    register TrackSeg *seg asm("a3");
+    s32 base;
+    s32 startp;
+    TrackSeg *seg;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 v1 asm("v1");
-    register s32 t0 asm("t0");
-    register u16 a1raw asm("a1");
-    register u16 t1raw asm("t1");
-    register s32 sentinel asm("t2");
+    s32 t0;
+    u16 a1raw;
+    u16 t1raw;
+    s32 sentinel;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 s0v asm("s0");
-    register s32 s1 asm("s1");
-    register s32 s2 asm("s2");
-    register s32 s3 asm("s3");
-    register s32 s4 asm("s4");
-    register s32 s5 asm("s5");
-    register s32 s6 asm("s6");
-    register s32 a2v asm("a2");
-    register s32 a1s asm("a1");
+    s32 s1;
+    s32 s2;
+    s32 s3;
+    s32 s4;
+    s32 s5;
+    s32 s6;
+    s32 a2v;
+    s32 a1s;
     s32 v0;
     s32 angle, sinv;
 

@@ -46,17 +46,18 @@ long SsUtKeyOffV(long voice) asm("func_80078018");
 void GameApplyPanVoiceVolume(void) asm("func_8005BF30");
 void GameApplyPanVoiceVolume(void) {
     s32 values[2];
-    register s32 changed asm("$16");
-    register s32 i asm("$6");
-    register s32 *dst asm("$4");
-    register s32 *src asm("$5");
-    register s32 raw asm("$2");
-    register s32 loopValue asm("$3");
-    register s32 scale asm("$3");
-    register s32 left asm("$5");
+    s32 changed;
+    s32 i;
+    s32 *dst;
+    s32 *src;
+    s32 raw;
+    s32 loopValue;
+    s32 scale;
+    s32 left;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 right asm("$6");
     register s32 voice asm("$4");
-    register s32 zeroArg asm("$7");
+    s32 zeroArg;
 
     changed = 0;
     i = 0;
@@ -164,13 +165,15 @@ void GameSetIndexedEffectVoice(s32 index, s32 phase, s32 volume) {
 }
 
 void GameUpdateIndexedEffectVoice(void) {
-    register s32 base asm("$16");
-    register s32 center asm("$17");
-    register s32 fine asm("$18");
+    s32 base;
+    s32 center;
+    s32 fine;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 index asm("$3");
     register s32 raw asm("$2");
-    register s32 product asm("$4");
-    register s32 scale asm("$3");
+    s32 product;
+    s32 scale;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 left asm("$5");
     register s32 right asm("$6");
     register s32 voice asm("$4");
@@ -314,16 +317,16 @@ void func_80078528(s32 voice, s16 left, s16 right);
     *state = neg
 
 void func_8005C6C0(void) {
-    register s32 offset asm("$16");
-    register s32 *state asm("$17");
-    register s32 i asm("$18");
-    register s32 voicePacked asm("$19");
-    register s32 neg asm("$20");
-    register s32 raw asm("$2");
-    register s32 scale asm("$3");
-    register s32 voice asm("$4");
-    register s32 left asm("$5");
-    register s32 right asm("$6");
+    s32 offset;
+    s32 *state;
+    s32 i;
+    s32 voicePacked;
+    s32 neg;
+    s32 raw;
+    s32 scale;
+    s32 voice;
+    s32 left;
+    s32 right;
 
     i = 0;
     neg = -1;

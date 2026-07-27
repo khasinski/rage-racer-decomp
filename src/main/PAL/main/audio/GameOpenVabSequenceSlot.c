@@ -25,18 +25,19 @@ extern s16 g_VabIds[] asm("D_801E6CA8");
 
 s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E4EC");
 s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
-    register s32 slotReg asm("$16") = slot;
-    register s32 bodyReg asm("$18") = body;
-    register s32 seqReg asm("$19") = seq;
-    register s16 *vabIdPtr asm("$16");
+    s32 slotReg = slot;
+    s32 bodyReg = body;
+    s32 seqReg = seq;
+    s16 *vabIdPtr;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 currentVabId asm("$5");
-    register s32 fail asm("$17");
+    s32 fail;
     register s32 ret asm("$2");
 
     g_AudioLoadSlot = slotReg;
     ret = func_80072C4C(header, -1, g_VabSpuAddress[slotReg]);
     {
-        register s16 *vabIdBase asm("$3") = g_VabIds;
+        s16 *vabIdBase = g_VabIds;
         slotReg *= 2;
         vabIdPtr = (s16 *)((s32)vabIdBase + slotReg);
     }
@@ -67,13 +68,14 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
 
 s32 GameCloseAudioSlot(s32 slot) asm("func_8005E600");
 s32 GameCloseAudioSlot(s32 slot) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 slotReg asm("$17") = slot;
-    register s32 bit asm("$3") = 1;
+    s32 bit = 1;
     register s32 *flagsPtr asm("$16") = &g_AudioSlotMask;
-    register s32 flags asm("$5");
-    register s32 zeroArg asm("$4") = 0;
-    register s32 ret asm("$2");
-    register s32 newFlags asm("$2");
+    s32 flags;
+    s32 zeroArg = 0;
+    s32 ret;
+    s32 newFlags;
     s32 offset;
 
     flags = *flagsPtr;
@@ -101,10 +103,9 @@ done:
 
 void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) asm("func_8005E694");
 void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
-    register s32 voiceOffset asm("$2") = voice * 4;
-    register s32 vabOffset asm("$6") = (s16)vabSlot * 2;
+    s32 voiceOffset = voice * 4;
+    s32 vabOffset = (s16)vabSlot * 2;
 
-    asm("" : "=r"(voiceOffset) : "0"(voiceOffset));
     SsUtKeyOnV((s16)voice, *(s16 *)((s32)g_VabIds + vabOffset), *(s16 *)((s32)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
 }
 

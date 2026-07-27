@@ -21,22 +21,23 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
 void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
     s16 sp10[16];
     s16 sp30[16];
-    register s32 frame asm("$23") = arg0;
-    register s32 update asm("$20") = arg1;
-    register u16 *dst asm("$16");
-    register u16 *delta asm("$22");
-    register u16 *deltaBase asm("$2");
-    register s16 *work asm("$18") = sp30;
+    s32 frame = arg0;
+    s32 update = arg1;
+    u16 *dst;
+    u16 *delta;
+    u16 *deltaBase;
+    s16 *work = sp30;
+    /* This pin is load-bearing: removing it changes .text. */
     register u16 *base asm("$21");
-    register s32 offset asm("$17");
-    register s32 end asm("$19");
-    register s32 start asm("$2");
-    register s32 loopIndex asm("$5");
-    register s32 dstOffset asm("$2");
+    s32 offset;
+    s32 end;
+    s32 start;
+    s32 loopIndex;
+    s32 dstOffset;
     s32 limit;
-    register s32 active asm("$3");
-    register s32 activeValue asm("$2");
-    register s32 frameMask asm("$2");
+    s32 active;
+    s32 activeValue;
+    s32 frameMask;
 
     activeValue = g_CourseIndex;
     active = activeValue & 3;
@@ -45,20 +46,18 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
         start = 1;
         end = 4;
     } else {
-        asm("" : "=r"(active) : "0"(active));
         start = 0;
         end = 1;
     }
 
     loopIndex = start;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(loopIndex) : "0"(loopIndex));
     if (loopIndex < end) {
         deltaBase = g_SpinningSceneryRate;
         delta = &deltaBase[active];
-        asm("" : "=r"(delta) : "0"(delta));
         work = sp30;
         base = g_SpinningSceneryAngle;
-        asm("" : "=r"(base) : "0"(base));
         dstOffset = loopIndex << 1;
         dst = (u16 *)(dstOffset + (s32)base);
         offset = loopIndex * 0x10;

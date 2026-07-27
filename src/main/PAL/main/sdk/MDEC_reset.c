@@ -31,6 +31,7 @@ void MDEC_in(volatile u_long *arg0, long arg1) asm("func_800641D0");
 
 void MDEC_reset(long arg0) asm("func_800640D4");
 void MDEC_reset(long arg0) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register long option asm("$5") = arg0;
     register long zero asm("$0");
     volatile u_long *inBuffer = (volatile u_long *)g_MdecQuantCmd;
@@ -115,6 +116,7 @@ long MDEC_out_sync(void) {
 
 long MDEC_timeout(u_char *arg0) {
     u_long status;
+    /* This pin is load-bearing: removing it changes .text. */
     register long ret asm("$2");
 
     GameDebugPrintf(D_80013364, arg0);

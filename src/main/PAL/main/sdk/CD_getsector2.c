@@ -60,7 +60,7 @@ void func_8006C16C(long arg0) {
 }
 
 void func_8006C17C(void) {
-    register u_char *statusByte asm("$18");
+    u_char *statusByte;
     long status;
     long saved;
 
@@ -75,8 +75,8 @@ void func_8006C17C(void) {
         }
 
         if ((status & 2) != 0) {
-            register Callback doneCallback asm("$3");
-            register u_char *resultByte asm("$2");
+            Callback doneCallback;
+            u_char *resultByte;
 
             doneCallback = g_CdSyncCallback;
             if (doneCallback != 0) {

@@ -20,11 +20,11 @@ extern u8 g_CdSearchFile[] asm("D_8009B198");
 
 void GameBuildCdTrackTable(void) asm("func_800431BC");
 void GameBuildCdTrackTable(void) {
-    register CdlLOC *toc asm("$16");
-    register s32 i asm("$17");
-    register CdlLOC *tocDst asm("$18");
-    register u8 *file asm("$19");
-    register s32 count asm("$2");
+    CdlLOC *toc;
+    s32 i;
+    CdlLOC *tocDst;
+    u8 *file;
+    s32 count;
 
     toc = g_CdTrackLocs;
     g_CdTocEntryCount = CdGetToc(toc);

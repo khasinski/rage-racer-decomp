@@ -30,6 +30,7 @@ u32 func_80068A2C[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  */
 void *CompMatrix(s32 *m0, void *m1, void *m2) asm("func_80068A38");
 void *CompMatrix(s32 *m0, void *m1, void *m2) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r0 asm("$8") = m0[0];
     register s32 r1 asm("$9") = m0[1];
     register s32 r2 asm("$10") = m0[2];

@@ -11,7 +11,7 @@ long func_80070D70(short arg0, short arg1);
 long SsSeqParseHeader(long arg0, long arg1, long arg2) asm("func_8006ECDC");
 long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     SeqStruct *s;
-    register u_char *seq asm("$7");
+    u_char *seq;
     u_char *p;
     long i;
     long hi, lo, b0, b1, b2;
@@ -19,6 +19,7 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     long q;
     long ret;
     u_long D;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long prod asm("$6");
     register long vab asm("$4");
     register long slot asm("$9");

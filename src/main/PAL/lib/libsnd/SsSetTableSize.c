@@ -10,19 +10,20 @@ void SsSetTableSize(u_char *arg0, long arg1, long arg2) asm("func_80072310");
 
 void SsSetTableSize(u_char *arg0, long arg1, long arg2) {
     volatile long pad[5];
-    register long signedArg asm("$5");
-    register long outer asm("$7");
-    register long firstOffset asm("$3");
-    register long inner asm("$6");
-    register volatile u_char **table asm("$6");
-    register volatile u_char **row asm("$9");
-    register volatile u_char **slot asm("$5");
-    register long offset asm("$4");
+    long signedArg;
+    long outer;
+    long firstOffset;
+    long inner;
+    volatile u_char **table;
+    volatile u_char **row;
+    volatile u_char **slot;
+    long offset;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long step asm("$8");
-    register long tmp asm("$2");
+    long tmp;
     register long ff asm("$3");
     register long base76 asm("$3");
-    register long keepGoing asm("$2");
+    long keepGoing;
     long limit;
 
     signedArg = arg1;

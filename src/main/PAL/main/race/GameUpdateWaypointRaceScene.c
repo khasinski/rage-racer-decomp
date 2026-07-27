@@ -218,10 +218,11 @@ void GameSeedWaypoints(void) {
     TrackWaypointSeed *seed;
     s32 code;
     s32 field18;
+    /* This pin is load-bearing: removing it changes .text. */
     register char *tail asm("$4");
     s32 track;
-    register s32 temp asm("$2");
-    register s32 seedBase asm("$3");
+    s32 temp;
+    s32 seedBase;
 
     track = g_PlayerLap - 1;
     track = track % 10;

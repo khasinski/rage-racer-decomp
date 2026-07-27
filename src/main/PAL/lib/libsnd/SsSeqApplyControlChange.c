@@ -7,17 +7,18 @@ extern void (*g_SndMarkCallbacks[][0x10])(long seq, long sep, u_char value) asm(
 void SsSeqApplyControlChange(long seq, long sep, u_char value) asm("func_8006FDA8");
 
 void SsSeqApplyControlChange(long seq, long sep, u_char value) {
-    register long seq_raw asm("$17");
-    register long sep_raw asm("$18");
-    register long seq_shift asm("$4");
-    register long sep_s asm("$5");
-    register SeqStruct *state asm("$16");
-    register long seq_offset asm("$4");
-    register long sep_offset asm("$2");
-    register SeqStruct *base asm("$3");
+    long seq_raw;
+    long sep_raw;
+    long seq_shift;
+    long sep_s;
+    SeqStruct *state;
+    long seq_offset;
+    long sep_offset;
+    SeqStruct *base;
 
     seq_raw = seq;
     sep_raw = sep;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(seq_raw), "=r"(sep_raw) : "0"(seq_raw), "1"(sep_raw));
     sep_s = sep;
     seq_shift = seq << 16;
@@ -45,9 +46,10 @@ void SsSeqApplyControlChange(long seq, long sep, u_char value) {
 
 maybe_callback:
     if (state->unk16 == 0x28) {
-        register long seq_cb asm("$4");
-        register long sep_cb asm("$5");
-        register void (*callback)(long, long, u_char) asm("$2");
+        long seq_cb;
+        long sep_cb;
+        void (*callback)(long, long, u_char);
+        /* This pin is load-bearing: removing it changes .text. */
         register long raw_shift asm("$2");
 
         seq_cb = seq_raw << 16;

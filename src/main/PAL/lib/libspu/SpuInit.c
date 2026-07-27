@@ -34,8 +34,9 @@ void _SpuInit(long arg0) {
     _spu_init(arg0);
 
     if (arg0 == 0) {
-        register u_short *ptr asm("$2");
-        register long i asm("$3");
+        u_short *ptr;
+        long i;
+        /* This pin is load-bearing: removing it changes .text. */
         register long value asm("$4");
 
         value = 0xC000;

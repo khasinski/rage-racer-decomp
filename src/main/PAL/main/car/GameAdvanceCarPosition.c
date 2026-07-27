@@ -14,12 +14,13 @@ s32 func_80068634(s32 arg0);
  */
 void GameAdvanceCarPosition(GameCarRuntime *arg0) asm("func_8002F4E4");
 void GameAdvanceCarPosition(GameCarRuntime *arg0) {
+    /* This pin is load-bearing: removing it changes .text. */
     register GameCarRuntime *car asm("$19") = arg0;
     volatile s32 coords[3];
 
     {
-        register s32 angleSin asm("$16");
-        register s32 otherSin asm("$4");
+        s32 angleSin;
+        s32 otherSin;
 
         angleSin = func_80068568(car->headingAngle);
         otherSin = func_80068568(car->field_24);
@@ -27,8 +28,8 @@ void GameAdvanceCarPosition(GameCarRuntime *arg0) {
     }
 
     {
-        register s32 angleCos asm("$16");
-        register s32 otherCos asm("$4");
+        s32 angleCos;
+        s32 otherCos;
 
         angleCos = func_80068634(car->headingAngle);
         otherCos = func_80068634(car->field_24);
@@ -36,9 +37,9 @@ void GameAdvanceCarPosition(GameCarRuntime *arg0) {
     }
 
     {
-        register s32 angleSin asm("$18");
-        register s32 otherSin asm("$17");
-        register s32 angleCos asm("$16");
+        s32 angleSin;
+        s32 otherSin;
+        s32 angleCos;
         s32 otherCos;
 
         angleSin = func_80068568(car->headingAngle);

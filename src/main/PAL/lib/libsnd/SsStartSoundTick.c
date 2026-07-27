@@ -19,10 +19,11 @@ void SsSoundTickVSyncCallback(void) asm("func_80071F2C");
 void SsStartSoundTick(long arg0) asm("func_80071C44");
 
 void SsStartSoundTick(long arg0) {
-    register long size asm("$16");
-    register long channel asm("$17");
+    long size;
+    long channel;
+    /* This pin is load-bearing: removing it changes .text. */
     register u_char *flag asm("$5");
-    register long state asm("$3");
+    long state;
     long wait;
 
     wait = 0x3E8;
@@ -78,11 +79,13 @@ state_2:
 
 derive_size:
     {
-        register long *active asm("$4");
-        register long dividend asm("$2");
+        long *active;
+        long dividend;
+        /* This pin is load-bearing: removing it changes .text. */
         register long quotient asm("$2");
 
         active = &g_SndNoTickFlag;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(active) : "0"(active));
         if (*active != 0) {
             goto done;
@@ -91,6 +94,7 @@ derive_size:
         if (state < 0x46) {
             dividend = 0x204CC0;
             quotient = dividend / state;
+            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(active), "=r"(quotient) : "0"(active), "1"(quotient));
             ((u_char *)active)[0xD] = ((u_char *)active)[0xD] + 1;
         } else {
@@ -112,7 +116,7 @@ setup:
     SetRCnt(channel, size & 0xFFFF, 0x1000);
 
     {
-        register long mode asm("$4");
+        long mode;
         Callback callback;
 
         mode = g_SndTickIrq;

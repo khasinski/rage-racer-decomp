@@ -13,9 +13,10 @@ s32 Lzc(s32 arg0) asm("func_80069C7C");
 
 s32 func_80068738(s32 arg0) {
     s32 data[16];
-    register s32 *hi asm("$8");
+    s32 *hi;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 *lo asm("$6");
-    register s32 i asm("$7");
+    s32 i;
     s32 offset;
     s32 temp;
     s32 nextLo;

@@ -114,6 +114,7 @@ void GameUpdateEnvironment(void) {
         func_80069B14(local, frac, out);
         {
             u8 *idx = (u8 *)(i * 2);
+            /* This pin is load-bearing: removing it changes .text. */
             register s32 palo asm("$5");
             LA_ORDERED(palo, D_801E6DA4, idx);
             dst = (s16 *)(idx + palo);

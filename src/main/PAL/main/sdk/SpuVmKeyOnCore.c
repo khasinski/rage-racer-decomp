@@ -14,11 +14,13 @@ extern volatile u_char *g_SndSpuRegs asm("D_8009A588");
 
 void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_short right) asm("func_80074818");
 void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_short right) {
-    register u_long rawVoice asm("$7");
+    u_long rawVoice;
+    /* This pin is load-bearing: removing it changes .text. */
     register u_long index asm("$2");
-    register u_long lowMask asm("$8");
-    register u_long highMask asm("$6");
-    register u_long i asm("$5");
+    u_long lowMask;
+    u_long highMask;
+    u_long i;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long count asm("$4");
     register u_long voiceIndex asm("$3");
     u_char stackPad[8];

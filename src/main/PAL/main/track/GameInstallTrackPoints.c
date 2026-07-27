@@ -13,13 +13,13 @@ extern s16 g_TrackSectionCount asm("D_8019C9A4");
  */
 void GameInstallTrackPoints(s32 *trackData) asm("func_8002A6B0");
 void GameInstallTrackPoints(s32 *trackData) {
-    register s32 count asm("$3");
-    register s32 limit asm("$4");
-    register GameTrackPoint *points asm("$6");
-    register s32 i asm("$5");
-    register s32 index asm("$3");
-    register GameTrackPoint *point asm("$2");
-    register s32 total asm("$2");
+    s32 count;
+    s32 limit;
+    GameTrackPoint *points;
+    s32 i;
+    s32 index;
+    GameTrackPoint *point;
+    s32 total;
     s32 pad[2];
 
     asm volatile("" : "=m"(pad));

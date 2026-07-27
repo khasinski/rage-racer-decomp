@@ -51,12 +51,14 @@ void LoadImage(void *rect, void *data) asm("func_80065B24");
  */
 s32 GameLoadSaveStateBlock(u8 *arg0) asm("func_8005FED4");
 s32 GameLoadSaveStateBlock(u8 *arg0) {
+    /* This pin is load-bearing: removing it changes .text. */
     register u8 *base asm("$17") = arg0;
     __asm__("" : "=r"(base) : "0"(base));
     {
-        register u32 sum asm("$16");
+        u32 sum;
+        /* This pin is load-bearing: removing it changes .text. */
         register u32 i asm("$13");
-        register u16 *p asm("$3");
+        u16 *p;
 
         i = 0;
         __asm__("" : "=r"(i) : "0"(i));
@@ -108,8 +110,8 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         g_TimeAttackSave.maxClassReached = *(s32 *)(base + 0x44);
         g_TimeAttackSave.unk10 = *(s32 *)(base + 0x48);
         {
-            register s32 h4C asm("$3") = *(s16 *)(base + 0x4C);
-            register u16 h4E asm("$4") = *(u16 *)(base + 0x4E);
+            s32 h4C = *(s16 *)(base + 0x4C);
+            u16 h4E = *(u16 *)(base + 0x4E);
             s32 w54;
             g_MaxClassReached[0] = *(s32 *)(base + 0x50);
             w54 = *(s32 *)(base + 0x54);
@@ -120,8 +122,9 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register u8 *src asm("$6") = base;
-        register s32 offset asm("$5") = 0;
+        s32 offset = 0;
         for (; offset < 0x68; offset += 8) {
             g_GrandPrixCars[offset + 0] = src[0x58 + 0];
             g_GrandPrixCars[offset + 1] = src[0x58 + 1];
@@ -146,8 +149,9 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register u8 *src asm("$4") = base;
-        register s32 offset asm("$3") = 0;
+        s32 offset = 0;
         for (; offset < 0x2C; offset += 4) {
             *(u16 *)((u8 *)g_ClassRecords + offset) = *(u16 *)(src + 0x190);
             *(u16 *)((u8 *)g_ClassRecords + offset + 2) = *(u16 *)(src + 0x192);
@@ -156,9 +160,10 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 count asm("$13") = 0;
-        register u16 *dst asm("$4") = g_TeamLogoClut;
-        register u8 *src asm("$3") = base;
+        u16 *dst = g_TeamLogoClut;
+        u8 *src = base;
         for (; count < 0x10; count++) {
             *dst++ = *(u16 *)(src + 0x1BC);
             src += 2;
@@ -166,9 +171,10 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 count asm("$13") = 0;
-        register u16 *dst asm("$4") = g_TeamLogoCanvas;
-        register u8 *src asm("$3") = base;
+        u16 *dst = g_TeamLogoCanvas;
+        u8 *src = base;
         for (; count < 0x400; count++) {
             *dst++ = *(u16 *)(src + 0x1DC);
             src += 2;
@@ -177,9 +183,10 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
 
     /* g_BestLapTimes / g_BestTotalTimes */
     {
+        /* These pins are load-bearing: removing any one changes .text. */
         register s32 i asm("$13") = 0;
         register s32 j asm("$12");
-        register s32 off asm("$4");
+        s32 off;
         for (; i < 2; i++) {
             j = 0;
             off = i << 5;
@@ -193,27 +200,30 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
 
     /* g_RankingRecords / g_TimeRecords */
     {
-        register s32 i asm("$13") = 0;
-        register s32 j asm("$12");
+        s32 i = 0;
+        s32 j;
+        /* These pins are load-bearing: removing any one changes .text. */
         register s32 k asm("$7");
-        register s32 *cb78 asm("$25") = g_TimeRecords;
+        s32 *cb78 = g_TimeRecords;
         register s32 *d1base asm("$24") = g_RankingRecords;
         register s32 ioff asm("$16") = 0;
         for (; i < 2; i++) {
             register s32 iofc asm("$15");
             register s32 *d1 asm("$14");
-            register s32 joff asm("$10");
+            s32 joff;
             j = 0;
             iofc = ioff;
             d1 = d1base;
             joff = 0;
             for (; j < 4; j++) {
+                /* These pins are load-bearing: removing any one changes .text. */
                 register s32 dc asm("$2");
                 register s32 *dst2 asm("$11");
                 register s32 sb asm("$3");
-                register s32 s2 asm("$2");
-                register s32 *src2 asm("$9");
-                register s32 *dst1 asm("$8");
+                s32 s2;
+                s32 *src2;
+                s32 *dst1;
+                /* This pin is load-bearing: removing it changes .text. */
                 register s32 *src1 asm("$6");
                 s32 s1;
                 k = 0;
@@ -262,23 +272,24 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
 
     /* g_BestSectorTimes */
     {
+        /* These pins are load-bearing: removing any one changes .text. */
         register s32 i asm("$13") = 0;
         register s32 j asm("$12");
         register s32 k asm("$7");
         register s32 *e41e8 asm("$10") = g_BestSectorTimes;
-        register s32 ioff asm("$8") = 0;
+        s32 ioff = 0;
         for (; i < 2; i++) {
-            register s32 iofc asm("$9");
-            register s32 *dbase asm("$6");
-            register s32 joff asm("$5");
+            s32 iofc;
+            s32 *dbase;
+            s32 joff;
             j = 0;
             iofc = ioff;
             dbase = e41e8;
             joff = 0;
             for (; j < 4; j++) {
-                register s32 *dst asm("$4");
-                register s32 sb asm("$2");
-                register s32 *src asm("$3");
+                s32 *dst;
+                s32 sb;
+                s32 *src;
                 k = 0;
                 dst = dbase;
                 sb = iofc + (s32)base + 0xF5C;
@@ -297,8 +308,8 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
 
     /* g_BgmVolumeSetting / g_SfxVolumeSetting / g_MonoOutput clamps */
     {
-        register s32 v asm("$2") = *(s32 *)(base + 0xFBC);
-        register s32 c asm("$3");
+        s32 v = *(s32 *)(base + 0xFBC);
+        s32 c;
         g_BgmVolumeSetting = v;
         if (v >= 0) {
             c = v;

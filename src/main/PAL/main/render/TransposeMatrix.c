@@ -20,8 +20,9 @@ u32 func_80069CBC[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  */
 Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
     s16 *srcp = (s16 *)src;
-    register s16 *dstp asm("$5") = (s16 *)dst;
-    register Matrix *ret asm("$2");
+    s16 *dstp = (s16 *)dst;
+    Matrix *ret;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 value0 asm("$9");
     register s32 value1 asm("$10");
     register s32 value2 asm("$11");

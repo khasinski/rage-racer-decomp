@@ -15,11 +15,12 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/GameInitPlayerCar", func_8002C47
  */
 s32 GameIsCarFacingBackwards(GameCarTrackAngleWindow *arg0) asm("func_8002CD08");
 s32 GameIsCarFacingBackwards(GameCarTrackAngleWindow *arg0) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 index asm("$3") = arg0->trackPointIndex;
-    register s32 scaled asm("$2");
+    s32 scaled;
     register GameTrackPoint *table asm("$3");
     register s32 complement asm("$3");
-    register s32 target asm("$5");
+    s32 target;
     s32 diff;
 
     asm volatile("" : "=r"(index) : "0"(index));

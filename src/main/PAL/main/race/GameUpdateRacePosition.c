@@ -12,9 +12,10 @@ extern GameCarRuntimeProgressWindow g_CarProgressB[] asm("D_801F18C0");
  * result as g_RacePosition (1 = leader). Only runs on the final lap. */
 void GameUpdateRacePosition(void) asm("func_8003AE2C");
 void GameUpdateRacePosition(void) {
-    register s32 active asm("$6");
-    register s32 i asm("$5");
-    register s32 sentinel asm("$8");
+    s32 active;
+    s32 i;
+    s32 sentinel;
+    /* This pin is load-bearing: removing it changes .text. */
     register GameCarRuntimeProgressWindow *entry asm("$4");
     s32 total;
 

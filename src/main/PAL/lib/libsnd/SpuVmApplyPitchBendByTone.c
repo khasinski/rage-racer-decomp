@@ -11,15 +11,17 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
 long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) asm("func_80075EB4");
 
 long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) {
-    register long voice asm("$18");
-    register long x asm("$21");
-    register long y asm("$20");
-    register long extra asm("$19");
-    register long i asm("$16");
+    long voice;
+    long x;
+    long y;
+    long extra;
+    long i;
+    /* This pin is load-bearing: removing it changes .text. */
     register long sum asm("$17");
-    register long bound asm("$3");
-    register long store_voice asm("$2");
-    register long tmp asm("$2");
+    long bound;
+    long store_voice;
+    long tmp;
+    /* This pin is load-bearing: removing it changes .text. */
     register long next asm("$2");
     long stack_pad[2];
     long call_x;

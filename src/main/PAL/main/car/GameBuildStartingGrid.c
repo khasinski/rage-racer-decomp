@@ -42,14 +42,15 @@ void func_8001DFC0(GameCarRuntime *arg0);
 
 void GameBuildStartingGrid(void) asm("func_80038844");
 void GameBuildStartingGrid(void) {
-    register GameCarRuntime *entryBase asm("s2");
+    GameCarRuntime *entryBase;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 *table asm("s3");
-    register s32 i asm("s0");
+    s32 i;
     register s16 *flagPtr asm("s1");
-    register s32 one asm("s5");
-    register s32 *cursor asm("s4");
-    register s32 state asm("v1");
-    register u16 track asm("v0");
+    s32 one;
+    s32 *cursor;
+    s32 state;
+    u16 track;
 
     entryBase = g_Cars;
     state = g_SceneId;
@@ -164,9 +165,10 @@ void GameClearCarMotionState(GameCarRuntime *arg0) {
 
 void GameUpdateCarTiltCounter(GameCarRuntime *arg0) asm("func_80038B04");
 void GameUpdateCarTiltCounter(GameCarRuntime *arg0) {
-    register GameCarRuntime *obj asm("$5");
+    GameCarRuntime *obj;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *ptr asm("$4");
-    register s32 value asm("$2");
+    s32 value;
     register s32 limit asm("$3");
 
     obj = arg0;
@@ -235,7 +237,7 @@ store_value:
 
 void GameApplyCarKnockback(GameCarRuntime *arg0) asm("func_80038C4C");
 void GameApplyCarKnockback(GameCarRuntime *arg0) {
-    register GameCarRuntime *obj asm("$6") = arg0;
+    GameCarRuntime *obj = arg0;
     u32 timer;
 
     __asm__ volatile("" : "=r"(obj) : "0"(obj));
@@ -272,23 +274,25 @@ s32 GameRandom15(void) asm("func_800632B0");
 
 void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) asm("func_80038CE8");
 void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
-    register GameCarRuntime *carReg asm("$17");
-    register s32 x asm("$16");
-    register s32 angle asm("$18");
+    GameCarRuntime *carReg;
+    s32 x;
+    s32 angle;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 savedAngle asm("$19");
-    register s32 z asm("$6") = arg2;
+    s32 z = arg2;
     register s32 adjustedReg asm("$2");
-    register s32 raw asm("$3");
+    s32 raw;
     register s32 rawArg asm("$4");
     register s32 field34 asm("$2");
     s32 adjusted;
     s32 fieldA4;
-    register s32 tmp asm("$2");
+    s32 tmp;
     s32 speed;
     s32 trig;
-    register s32 product asm("$3");
+    s32 product;
 
     carReg = car;
+    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : : "r"(carReg));
     asm("" : : : "$16");
     carReg->motionActive = 1;
@@ -315,6 +319,7 @@ pos_angle_0:
 
 got_angle_0:
     adjustedReg = adjusted & 0xFFF;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(adjustedReg) : "0"(adjustedReg));
     fieldA4 = carReg->field_A4;
     angle = adjustedReg;
@@ -357,7 +362,6 @@ speed_ready:
 
 make_vector:
     savedAngle = angle;
-    asm("" : "=r"(savedAngle) : "0"(savedAngle));
     trig = func_80068568(savedAngle);
     product = speed << 16;
     angle = product >> 16;
@@ -378,7 +382,6 @@ x_nonneg:
 
 z_nonneg:
     z = adjustedReg >> 12;
-    asm("" : "=r"(z) : "0"(z));
     tmp = 0x1E;
     goto store_values;
 

@@ -66,18 +66,19 @@ void *func_80017390(void *arg0, void *arg1, s32 arg2);
 void *func_800173F4(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10);
 
 void GameUpdateTitleAttract(void) {
-    register s32 alpha asm("$18");
+    s32 alpha;
     void *base;
-    register s32 color asm("$20");
-    register s32 h88 asm("$21");
+    s32 color;
+    s32 h88;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 scratch asm("$22");
-    register s32 hF0 asm("$16");
-    register s32 clut0 asm("$17");
+    s32 hF0;
+    s32 clut0;
     void *next;
-    register s32 tmp asm("$2");
-    register s32 clamped asm("$3");
-    register s32 x28 asm("$6");
-    register s32 yA0 asm("$7");
+    s32 tmp;
+    s32 clamped;
+    s32 x28;
+    s32 yA0;
 
     tmp = g_MainMenuSlide;
     tmp <<= 1;
@@ -99,10 +100,12 @@ alpha_done:
 
     x28 = 0x28;
     yA0 = 0xA0;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(x28), "=r"(yA0) : "0"(x28), "1"(yA0)); /* Match note: materialize first-call argument registers before the stack-arg temp. */
     color = 0x7E00;
     scratch = 0x1F800000;
     hF0 = 0xF0;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(scratch), "=r"(hF0) : "0"(scratch), "1"(hF0)); /* Match note: keep scratchpad base and 0xf0 materialized before the first stack-arg temp. */
     tmp = 0x18;
     next = *(void **)scratch;
@@ -233,17 +236,19 @@ void func_80069A78(s32);
 
 void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) asm("func_8001BE9C");
 void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
-    register s32 a2_save asm("$20") = arg2;
-    register u8 *base asm("$16");
-    register s32 height asm("$17");
-    register u16 *src0 asm("$8");
-    register u16 *src1 asm("$7");
-    register s32 i asm("$5");
-    register s32 offset asm("$4");
-    register s32 one asm("$6");
-    register s32 stride asm("$3");
+    s32 a2_save = arg2;
+    u8 *base;
+    s32 height;
+    u16 *src0;
+    u16 *src1;
+    s32 i;
+    s32 offset;
+    s32 one;
+    s32 stride;
+    /* This pin is load-bearing: removing it changes .text. */
     register u16 value asm("$2");
 
     __asm__("" : : "r"(a0_save), "r"(a1_save), "r"(a2_save));
@@ -258,11 +263,12 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
 
     {
+        /* These pins are load-bearing: removing any one changes .text. */
         register void *ptr asm("$4");
         register s32 arg1 asm("$5");
         register s32 arg2 asm("$6");
         register s32 arg3 asm("$7");
-        register s32 small_height asm("$16");
+        s32 small_height;
 
         ptr = base + 0x70;
         arg1 = 0x56;
@@ -308,17 +314,19 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
 
 void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) asm("func_8001C088");
 void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
-    register s32 a2_save asm("$20") = arg2;
-    register u8 *base asm("$17") = (u8 *)g_FrameContexts;
-    register s32 height asm("$16");
-    register u16 *src0 asm("$8");
-    register u16 *src1 asm("$7");
-    register s32 i asm("$5");
-    register s32 offset asm("$4");
-    register s32 one asm("$6");
-    register s32 stride asm("$3");
+    s32 a2_save = arg2;
+    u8 *base = (u8 *)g_FrameContexts;
+    s32 height;
+    u16 *src0;
+    u16 *src1;
+    s32 i;
+    s32 offset;
+    s32 one;
+    s32 stride;
+    /* This pin is load-bearing: removing it changes .text. */
     register u16 value asm("$2");
 
     __asm__("" : : "r"(a0_save), "r"(a1_save), "r"(a2_save));

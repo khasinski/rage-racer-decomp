@@ -31,16 +31,16 @@ void CdMix(u8 *arg0) asm("func_8006A94C");
 void GameStepCdVolumeFade(void) asm("func_80042D10");
 void GameStepCdVolumeFade(void) {
     u8 buf[4];
-    register s32 cnt asm("$13");
+    s32 cnt;
 
     cnt = g_CdFadeFrames;
     if (cnt > 0) {
-        register u32 *p asm("$7");
-        register s32 n asm("$5");
-        register u32 q1 asm("$6");
-        register u32 q2 asm("$4");
-        register u32 q3 asm("$3");
-        register u32 q4 asm("$2");
+        u32 *p;
+        s32 n;
+        u32 q1;
+        u32 q2;
+        u32 q3;
+        u32 q4;
 
         p = &g_CdMixLL;
         n = cnt - 1;
@@ -54,18 +54,19 @@ void GameStepCdVolumeFade(void) {
         g_CdMixRR = q3;
         g_CdMixRL = q4;
     } else if (cnt < 0) {
+        /* This pin is load-bearing: removing it changes .text. */
         register u32 *p asm("$12");
-        register u32 v184 asm("$11");
-        register u32 inv asm("$4");
-        register u32 div2 asm("$3");
-        register u32 d1 asm("$9");
-        register u32 v188 asm("$10");
-        register u32 d2 asm("$7");
-        register u32 v18C asm("$8");
-        register u32 d3 asm("$5");
-        register u32 v190 asm("$6");
-        register u32 d4 asm("$4");
-        register s32 c2 asm("$2");
+        u32 v184;
+        u32 inv;
+        u32 div2;
+        u32 d1;
+        u32 v188;
+        u32 d2;
+        u32 v18C;
+        u32 d3;
+        u32 v190;
+        u32 d4;
+        s32 c2;
 
         p = &g_CdMixLL;
         v184 = g_CdMixFullLL;

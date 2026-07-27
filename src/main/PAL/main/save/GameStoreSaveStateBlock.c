@@ -69,13 +69,14 @@ void GameStoreSaveStateBlock(u8 *arg0) {
     *(s32 *)(arg0 + 0x30) = g_ExtraGrandPrixSave.maxClassReached;
     {
         s32 w34 = g_ExtraGrandPrixSave.unk10;
-        register u16 h4C asm("$3") = g_BgmSelection;
+        u16 h4C = g_BgmSelection;
         *(s32 *)(arg0 + 0x34) = w34;
         *(s32 *)(arg0 + 0x38) = g_TimeAttackSave.course;
         *(s32 *)(arg0 + 0x3C) = g_TimeAttackSave.carIndex;
         *(s32 *)(arg0 + 0x40) = g_TimeAttackSave.classIndex;
         *(s32 *)(arg0 + 0x44) = g_TimeAttackSave.maxClassReached;
         {
+            /* This pin is load-bearing: removing it changes .text. */
             register s32 w48 asm("$4") = g_TimeAttackSave.unk10;
             u16 h4E = g_AdvancedSeriesUnlocked;
             *(u16 *)(arg0 + 0x4C) = h4C;
@@ -87,7 +88,8 @@ void GameStoreSaveStateBlock(u8 *arg0) {
     *(s32 *)(arg0 + 0x54) = g_MaxClassReached[1];
 
     {
-        register s32 offset asm("$3") = 0;
+        s32 offset = 0;
+        /* This pin is load-bearing: removing it changes .text. */
         register u8 *dst asm("$4") = arg0;
 
         for (; offset < 0x68; offset += 8) {
@@ -116,8 +118,9 @@ void GameStoreSaveStateBlock(u8 *arg0) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register u8 *dst asm("$4") = arg0;
-        register s32 offset asm("$3") = 0;
+        s32 offset = 0;
 
         for (; offset < 0x2C; offset += 4) {
             *(u16 *)(dst + 0x190) = *(u16 *)((u8 *)g_ClassRecords + offset);
@@ -127,9 +130,10 @@ void GameStoreSaveStateBlock(u8 *arg0) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 count asm("$13") = 0;
-        register u16 *src asm("$4") = g_TeamLogoClut;
-        register u8 *dst asm("$3") = arg0;
+        u16 *src = g_TeamLogoClut;
+        u8 *dst = arg0;
 
         for (; count < 0x10; count++) {
             *(u16 *)(dst + 0x1BC) = *src++;
@@ -138,9 +142,10 @@ void GameStoreSaveStateBlock(u8 *arg0) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 count asm("$13") = 0;
-        register u16 *src asm("$4") = g_TeamLogoCanvas;
-        register u8 *dst asm("$3") = arg0;
+        u16 *src = g_TeamLogoCanvas;
+        u8 *dst = arg0;
 
         for (; count < 0x400; count++) {
             *(u16 *)(dst + 0x1DC) = *src++;

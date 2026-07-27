@@ -54,15 +54,17 @@ long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4) {
 }
 
 long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) {
-    register long id asm("s2");
-    register long index asm("s1");
-    register long voiceOffset asm("s0");
-    register long stackA asm("s3");
-    register long stackB asm("s4");
-    register long ret asm("v0");
+    long id;
+    long index;
+    long voiceOffset;
+    long stackA;
+    long stackB;
+    long ret;
+    /* This pin is load-bearing: removing it changes .text. */
     register long tmp asm("v0");
-    register long x asm("a0");
-    register long y asm("a1");
+    long x;
+    long y;
+    /* This pin is load-bearing: removing it changes .text. */
     register long flags asm("v1");
 
     id = arg0;
@@ -118,13 +120,14 @@ done:
 }
 
 long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5) {
-    register long ret asm("v0");
-    register long tmp asm("v0");
-    register long index asm("t0");
-    register long voiceOffset asm("a0");
-    register long volOffset asm("v0");
-    register long left asm("t1");
-    register long right asm("t2");
+    long ret;
+    long tmp;
+    long index;
+    long voiceOffset;
+    long volOffset;
+    long left;
+    long right;
+    /* This pin is load-bearing: removing it changes .text. */
     register long field asm("v1");
 
     __asm__ volatile("addiu $sp,$sp,-8" ::: "memory");
@@ -186,8 +189,9 @@ done:
 }
 
 long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long offset asm("$3");
-    register u_char *base asm("$2");
+    u_char *base;
 
     if ((u_short)arg0 < 0x18U) {
         offset = (arg0 << 16) >> 12;
@@ -203,11 +207,13 @@ long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) {
 }
 
 long SsUtSetDetVVol(long arg0, short arg1, short arg2) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long ret asm("$2");
-    register long index asm("$3");
-    register long offset asm("$5");
+    long index;
+    long offset;
+    /* This pin is load-bearing: removing it changes .text. */
     register short valueX asm("$7");
-    register u_char flags asm("$4");
+    u_char flags;
 
     __asm__ volatile("addiu $sp,$sp,-8" ::: "memory");
     valueX = arg1;
@@ -249,13 +255,14 @@ short SsUtGetVVol(short arg0, short *arg1, short *arg2) {
 }
 
 long SsUtSetVVol(long arg0, short arg1, short arg2) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long ret asm("$2");
-    register long yarg asm("$3");
-    register long x asm("$6");
-    register long y asm("$3");
-    register long index asm("$4");
-    register long offset asm("$5");
-    register u_char flags asm("$3");
+    long yarg;
+    long x;
+    long y;
+    long index;
+    long offset;
+    u_char flags;
 
     __asm__ volatile(
         "\t.set\tnoreorder\n"

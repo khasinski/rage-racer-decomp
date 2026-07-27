@@ -16,18 +16,20 @@ extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
 void SpuVmSeqKeyOff(long arg0) asm("func_80076ED8");
 
 void SpuVmSeqKeyOff(long arg0) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register long i asm("$7");
     register long arg0s asm("$9");
     register volatile u_short *current asm("$10");
     register long one asm("$8");
-    register long index asm("$2");
-    register u_long lowMask asm("$6");
+    long index;
+    u_long lowMask;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long highMask asm("$5");
-    register u_long lowBits asm("$3");
+    u_long lowBits;
     register u_long highBits asm("$4");
-    register u_long bits asm("$2");
+    u_long bits;
     register u_long slot asm("$3");
-    register u_long slotIndex asm("$4");
+    u_long slotIndex;
     register long offset asm("$3");
 
     i = 0;

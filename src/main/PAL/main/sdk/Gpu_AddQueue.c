@@ -77,6 +77,7 @@ enqueue:
             *(long *)(pbase + g_GpuQueueWriteIdx * 96 + i * 4) = *src;
             src++;
             i++;
+            /* This barrier is load-bearing: removing it changes .text. */
             asm("");
         }
         g_GpuQueue[g_GpuQueueWriteIdx].arg = (long)g_GpuQueue[g_GpuQueueWriteIdx].params;
@@ -85,6 +86,7 @@ enqueue:
     }
 
     g_GpuQueue[g_GpuQueueWriteIdx].tag = tag;
+    /* These barriers are load-bearing: removing any one changes .text. */
     asm("");
     g_GpuQueue[g_GpuQueueWriteIdx].cb = cb;
     asm("");

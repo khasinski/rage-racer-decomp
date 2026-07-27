@@ -82,7 +82,7 @@ void GameEnterPrologue(void) {
 
 void GameUpdatePrologueLoad(void) asm("func_80026C0C");
 void GameUpdatePrologueLoad(void) {
-    register s32 delta asm("$3");
+    s32 delta;
 
     if (g_SceneTimer == 2) {
         SetDispMask(1);
@@ -90,7 +90,7 @@ void GameUpdatePrologueLoad(void) {
 
     delta = g_FadeStep;
     if (delta < 0) {
-        register s32 value asm("$2");
+        s32 value;
 
         value = g_FadeLevel;
         value = value + delta;
@@ -103,7 +103,7 @@ void GameUpdatePrologueLoad(void) {
 
         GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
     } else if (delta > 0) {
-        register s32 value asm("$4");
+        s32 value;
 
         value = g_FadeLevel;
         value = value + delta;
@@ -203,12 +203,12 @@ void GameDrawPrologueText(void) {
     }
 
     {
-        register s32 camera asm("t1");
-        register s32 *scratch asm("s1");
-        register u8 *ptr asm("s0");
-        register s32 scale_a asm("v1");
-        register s32 tmp asm("v0");
-        register u8 *base asm("v0");
+        s32 camera;
+        s32 *scratch;
+        u8 *ptr;
+        s32 scale_a;
+        s32 tmp;
+        u8 *base;
 
         camera = g_FadeLevel;
         scratch = (s32 *)0x1F800000;

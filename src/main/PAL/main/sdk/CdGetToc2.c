@@ -22,15 +22,15 @@ long CdGetToc2(long arg0, u_char *arg1) asm("func_8006A0AC");
 long CdGetToc2(long arg0, u_char *arg1) {
     u_char command[8];
     u_char response[8];
-    register u_char *toc asm("$20") = arg1;
-    register long oldHandler asm("$21");
-    register long firstTrack asm("$16");
+    u_char *toc = arg1;
+    long oldHandler;
+    long firstTrack;
+    /* This pin is load-bearing: removing it changes .text. */
     register u_char *ptr asm("$17");
-    register long count asm("$18");
-    register long lastTrack asm("$19");
+    long count;
+    long lastTrack;
     u_long value;
 
-    asm("" : "=r"(toc) : "0"(toc));
     command[0] = 1;
     oldHandler = func_8006A574(0);
 
@@ -39,8 +39,9 @@ long CdGetToc2(long arg0, u_char *arg1) {
     }
 
     {
+        /* These pins are load-bearing: removing any one changes .text. */
         register u_long firstBcd asm("$4");
-        register u_long lastBcd asm("$5");
+        u_long lastBcd;
         register u_long high asm("$3");
 
         firstBcd = response[1];
@@ -98,16 +99,17 @@ long CdGetToc2(long arg0, u_char *arg1) {
     ptr = (u_char *)(count - 1);
     if (g_CdDebugLevel >= 2) {
         if ((long)ptr >= 0) {
-            register u_char *entry asm("$16");
+            u_char *entry;
+            /* This pin is load-bearing: removing it changes .text. */
             register u_char *fmt asm("$4");
             u_long first;
             u_long second;
 
             count = 0;
-            asm("" : "=r"(count) : "0"(count));
             entry = toc;
             do {
                 fmt = D_80013688;
+                /* This barrier is load-bearing: removing it changes .text. */
                 asm("" : "=r"(fmt) : "0"(fmt));
                 first = entry[0];
                 second = entry[1];

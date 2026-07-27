@@ -84,14 +84,15 @@ u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("func_800669F0
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
 
 void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
-    register u_long *out asm("$17") = packet;
-    register DrawEnvPacketSource *src asm("$16") = env;
-    register long count asm("$8");
-    register long value asm("$2");
-    register long coord asm("$3");
-    register long limit asm("$4");
+    u_long *out = packet;
+    DrawEnvPacketSource *src = env;
+    long count;
+    long value;
+    long coord;
+    long limit;
     Rect clipped;
 
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(src) : "0"(src));
     out[1] = Gpu_BuildDrawAreaTopLeftCmd(src->clip.x, src->clip.y);
     out[2] = Gpu_BuildDrawAreaBottomRightCmd(
@@ -151,19 +152,19 @@ void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
 
         value = coord & 0x3F;
         if ((value != 0) || (((u_short)clipped.w & 0x3F) != 0)) {
+            /* These pins are load-bearing: removing any one changes .text. */
             register long commandOffset asm("$6");
             register long positionOffset asm("$5");
-            register u_long blue asm("$2");
-            register u_long green asm("$3");
-            register u_long red asm("$4");
+            u_long blue;
+            u_long green;
+            u_long red;
 
             commandOffset = count << 2;
-            asm("" : "=r"(commandOffset) : "0"(commandOffset));
             count++;
             positionOffset = count << 2;
-            asm("" : "=r"(positionOffset) : "0"(positionOffset));
             count++;
             value = (u_short)src->ofs[0];
+            /* These barriers are load-bearing: removing any one changes .text. */
             asm("" : "=r"(value) : "0"(value));
             commandOffset += (long)out;
             asm("" : "=r"(commandOffset) : "0"(commandOffset));
@@ -191,24 +192,21 @@ void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
             clipped.y += src->ofs[1];
             count++;
         } else {
-            register long commandOffset asm("$5");
-            register long positionOffset asm("$6");
-            register long sizeOffset asm("$7");
-            register u_long blue asm("$2");
-            register u_long green asm("$3");
+            long commandOffset;
+            long positionOffset;
+            long sizeOffset;
+            u_long blue;
+            u_long green;
+            /* This pin is load-bearing: removing it changes .text. */
             register u_long red asm("$4");
 
             commandOffset = count << 2;
-            asm("" : "=r"(commandOffset) : "0"(commandOffset));
             count++;
             positionOffset = count << 2;
-            asm("" : "=r"(positionOffset) : "0"(positionOffset));
             count++;
             sizeOffset = count << 2;
-            asm("" : "=r"(sizeOffset) : "0"(sizeOffset));
             count++;
             commandOffset += (long)out;
-            asm("" : "=r"(commandOffset) : "0"(commandOffset));
             red = 0x02000000;
             blue = src->b0;
             green = src->g0;

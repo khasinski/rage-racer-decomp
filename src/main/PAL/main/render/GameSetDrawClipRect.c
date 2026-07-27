@@ -6,19 +6,19 @@ void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
 void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) asm("func_800468FC");
 void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
-    register void *otReg asm("$17");
-    register u8 **scratch asm("$18");
-    register u8 *packet asm("$16");
+    void *otReg;
+    u8 **scratch;
+    u8 *packet;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 xReg asm("$9");
     register s32 yReg asm("$10");
     register s32 wReg asm("$11");
     register s32 hReg asm("$8");
-    register u8 *oldPacket asm("$5");
-    register s32 tmp asm("$2");
+    u8 *oldPacket;
+    s32 tmp;
     Rect rect;
 
     otReg = ot;
-    asm("" : "=r"(otReg) : "0"(otReg));
     xReg = x;
     yReg = y;
     wReg = w;
@@ -74,8 +74,9 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) asm("func_80046A2C");
 void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) {
     SPRT *prim;
-    register s32 shadeReg asm("$18");
-    register s32 semiReg asm("$19");
+    s32 shadeReg;
+    s32 semiReg;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u32 flagsReg asm("$17");
     register s32 y1Reg asm("$20");
     register s32 u0Reg asm("$21");
@@ -95,6 +96,7 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
     prim = *(SPRT **)0x1F800000;
     shadeReg = shadeTex;
     semiReg = semiTrans;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(prim), "r"(shadeReg), "r"(semiReg));
     flagsReg = flags;
     y1Reg = y1;
@@ -106,6 +108,7 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
     x1Local = x1;
     bLocal = b;
     /* Match note: keep stack color load after callee-save argument setup. */
+    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : : "r"(flagsReg), "r"(y1Reg), "r"(u0Reg), "r"(v0Reg), "r"(rReg));
     gLocal = g;
     asm("" : : "r"(gLocal));
@@ -125,6 +128,7 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
     prim->t.g0 = gLocal;
     prim->t.b0 = bLocal;
 
+    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(clutReg) : "0"(clutReg));
     magic = 0xCCCCCCCD;
     asm("" : : "r"(magic));
@@ -152,6 +156,7 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("func_80046BA0");
 void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
     register s32 y1Reg asm("$18");
@@ -207,6 +212,7 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("func_80046CBC");
 void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
     POLY_F4 *prim;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
     register s32 y1Reg asm("$18");
@@ -236,6 +242,7 @@ void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     x1Local = x1;
     bLocal = b;
     /* Match note: keep stack color load after callee-save argument setup. */
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(prim), "r"(semiReg), "r"(flagsReg), "r"(y1Reg), "r"(x2Reg), "r"(y2Reg), "r"(x3Reg), "r"(y3Reg), "r"(rReg));
     gLocal = g;
 
@@ -334,15 +341,16 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
 void GameDrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
-    register s32 x0Reg asm("$17");
-    register s32 y0Reg asm("$18");
-    register s32 x1Reg asm("$19");
+    s32 x0Reg;
+    s32 y0Reg;
+    s32 x1Reg;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 y1Reg asm("$20");
     register s32 rReg asm("$21");
     register s32 gReg asm("$22");
     register s32 bReg asm("$23");
     register u8 alphaReg asm("$16");
-    register u8 *a0Reg asm("$4");
+    u8 *a0Reg;
     TILE *prim;
     u8 *oldPrim;
 
@@ -385,15 +393,16 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
 void GameDrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
-    register s32 x0Reg asm("$17");
-    register s32 y0Reg asm("$18");
-    register s32 x1Reg asm("$19");
+    s32 x0Reg;
+    s32 y0Reg;
+    s32 x1Reg;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 y1Reg asm("$20");
     register s32 rReg asm("$21");
     register s32 gReg asm("$22");
     register s32 bReg asm("$23");
     register u8 alphaReg asm("$16");
-    register u8 *a0Reg asm("$4");
+    u8 *a0Reg;
     LINE_F2 *prim;
     u8 *oldPrim;
 
@@ -471,15 +480,16 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) asm("func_80047330");
 void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 x0Reg asm("$17");
     register s32 y0Reg asm("$18");
     register s32 x1Reg asm("$19");
-    register s32 y1Reg asm("$20");
-    register s32 r0Reg asm("$21");
-    register s32 g0Reg asm("$22");
-    register s32 b0Reg asm("$23");
-    register u8 alphaReg asm("$16");
-    register u8 *a0Reg asm("$4");
+    s32 y1Reg;
+    s32 r0Reg;
+    s32 g0Reg;
+    s32 b0Reg;
+    u8 alphaReg;
+    u8 *a0Reg;
     LINE_G2 *prim;
     u8 *oldPrim;
     u8 r1Local;
@@ -491,6 +501,7 @@ void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0
     r0Reg = r0;
     g0Reg = g0;
     b0Reg = b0;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(y1Reg), "r"(r0Reg), "r"(g0Reg), "r"(b0Reg));
     r1Local = r1;
     alphaReg = alpha;

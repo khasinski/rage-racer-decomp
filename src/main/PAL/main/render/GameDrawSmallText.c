@@ -28,8 +28,8 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047634");
 void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
-    register u8 *str asm("$16");
-    register s32 x asm("$18");
+    u8 *str;
+    s32 x;
     u8 fl = flags;
     void *ot;
     s32 fixed;
@@ -124,8 +124,9 @@ void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, 
             1,
             0x80);
         {
-            register s32 nx asm("$2");
+            s32 nx;
             nx = x + w;
+            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(nx) : "0"(nx));
             x = nx;
         }
@@ -156,8 +157,8 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047958");
 void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
-    register u8 *str asm("$18");
-    register s32 x asm("$17");
+    u8 *str;
+    s32 x;
     u8 fl = flags;
     s32 fixed;
     void *ot;
@@ -245,8 +246,9 @@ void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, 
             1,
             0x80);
         {
-            register s32 nx asm("$2");
+            s32 nx;
             nx = x + w;
+            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(nx) : "0"(nx));
             x = nx;
         }

@@ -225,9 +225,9 @@ s32 GameIsCarNearWaypoint(TrackWaypointRuntime *arg0) {
 
 void GameUpdateWaypoints(void) asm("func_80037860");
 void GameUpdateWaypoints(void) {
-    register TrackWaypointRuntime *waypoint asm("$17");
-    register s32 i asm("$18");
-    register s32 activeState asm("$19");
+    TrackWaypointRuntime *waypoint;
+    s32 i;
+    s32 activeState;
     /*
      * Retail addresses the waypoint's velocity block through a base register
      * biased to &waypoint->velocityMagnitude, so these stay raw:
@@ -237,6 +237,7 @@ void GameUpdateWaypoints(void) {
      * Writing them as waypoint->field drops the second induction variable and
      * re-bases every store on $17.
      */
+    /* This pin is load-bearing: removing it changes .text. */
     register char *tail asm("$16");
 
     if (g_WaypointSpawnCooldown != 0) {
@@ -250,10 +251,11 @@ void GameUpdateWaypoints(void) {
     do {
         if (waypoint->active == 0) {
             if (GameIsCarNearWaypoint(waypoint) != 0) {
+                /* These pins are load-bearing: removing any one changes .text. */
                 register volatile s32 *src asm("$5");
                 register s32 src0 asm("$2");
-                register s32 src1 asm("$3");
-                register s32 src2 asm("$4");
+                s32 src1;
+                s32 src2;
 
                 g_WaypointsCollected++;
                 GamePlaySoundCue(0xA);
@@ -319,9 +321,10 @@ void GameDrawWaypoints(void) asm("func_80037AAC");
 void GameDrawWaypoints(void) {
     Matrix mtx0;
     Matrix mtx1;
-    register s32 drawId asm("$19");
-    register s32 i asm("$18");
-    register Matrix *mtx1Ptr asm("$17");
+    s32 drawId;
+    s32 i;
+    Matrix *mtx1Ptr;
+    /* This pin is load-bearing: removing it changes .text. */
     register char *point asm("$16");
     s32 frameValue;
     s32 drawArg;
@@ -379,11 +382,12 @@ s32 GameCountActiveWaypoints(void) {
 
 void GameDrawLapNumber(void) asm("func_80037C04");
 void GameDrawLapNumber(void) {
-    register u8 *scratch asm("$18");
-    register s32 track asm("$22");
-    register s32 divisor asm("$19");
-    register s32 digitsDrawn asm("$21");
-    register s32 xOffset asm("$20");
+    u8 *scratch;
+    s32 track;
+    s32 divisor;
+    s32 digitsDrawn;
+    s32 xOffset;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 quotient asm("$17");
     register u8 *packet asm("$16");
 
@@ -405,10 +409,11 @@ void GameDrawLapNumber(void) {
 
 drawDigit:
         {
+            /* These pins are load-bearing: removing any one changes .text. */
             register s32 y asm("$3");
-            register s32 x asm("$2");
+            s32 x;
             register s32 magic asm("$4");
-            register u8 *oldPacket asm("$5");
+            u8 *oldPacket;
 
             SetSprt(scratch);
             SetShadeTex(scratch, 1);
@@ -454,9 +459,9 @@ drawDigit:
 
 done:
     {
-        register void *ot asm("$4");
-        register u8 *finalScratch asm("$5");
-        register s32 arg2 asm("$6");
+        void *ot;
+        u8 *finalScratch;
+        s32 arg2;
 
         finalScratch = scratch;
         packet = (u8 *)0x1F800000;
@@ -470,6 +475,7 @@ done:
 void GameUpdateWaypointCollectScene(void) asm("func_80037D90");
 void GameUpdateWaypointCollectScene(void) {
     s16 *p;
+    /* This pin is load-bearing: removing it changes .text. */
     register u32 a asm("$5");
     s32 x = 0;
 
@@ -576,10 +582,11 @@ Lend:
 
 void GameApplyTrackReverbZone(s32 arg0) asm("func_800381EC");
 void GameApplyTrackReverbZone(s32 arg0) {
-    register s32 result asm("$6");
-    register s32 i asm("$5");
+    s32 result;
+    s32 i;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 offset asm("$3");
-    register s32 arg asm("$4");
+    s32 arg;
     register s32 scene asm("$2");
 
     result = 0;
@@ -614,15 +621,15 @@ check:
 
 done:
     arg = result;
-    asm("" : "=r"(arg) : "0"(arg));
     func_8005B190(arg, arg);
 }
 
 s32 func_80038288(s32 arg0) {
-    register s32 trackLength asm("a1");
-    register s32 value asm("v1");
+    s32 trackLength;
+    s32 value;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 temp asm("v0");
-    register s32 angle asm("s0");
+    s32 angle;
     register s32 remainder asm("a0");
     register s32 scale asm("v1");
 
@@ -787,11 +794,12 @@ void GameInitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
 
 void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) asm("func_800385FC");
 void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
-  register s32 pos2_R10 asm("$10");
-  register s32 idx_R8 asm("$8");
+  s32 pos2_R10;
+  s32 idx_R8;
+  /* These pins are load-bearing: removing any one changes .text. */
   register u8 *base_R9 asm("$9");
   register GameCarRuntime *ent2_R7 asm("$7");
-  register GameCarAiBlock *sub_R6 asm("$6");
+  GameCarAiBlock *sub_R6;
   s32 c;
   u16 w;
   pos2_R10 = pos;
@@ -804,8 +812,9 @@ void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
     idx_R8 = 0;
   }
   {
-    register s32 lev1_R3 asm("$3");
+    s32 lev1_R3;
     unsigned int idxoff1_R4;
+    /* This pin is load-bearing: removing it changes .text. */
     register u8 *p1_R4 asm("$4");
     lev1_R3 = g_RaceSeries;
     idxoff1_R4 = idx_R8;
@@ -845,8 +854,9 @@ void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
     sub_R6->field_12C = 15;
   }
   {
-    register s32 lev2_R2 asm("$2");
-    register s32 idxoff2_R4 asm("$4");
+    s32 lev2_R2;
+    s32 idxoff2_R4;
+    /* This pin is load-bearing: removing it changes .text. */
     register u8 *p2_R3 asm("$3");
     lev2_R2 = g_RaceSeries;
     idxoff2_R4 = idx_R8 * 16;
@@ -868,13 +878,14 @@ void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
     }
   }
   {
-    register s32 v_R3 asm("$3");
+    s32 v_R3;
     v_R3 = sub_R6->field_124;
     sub_R6->field_130 = (v_R3 * 6) / 100;
   }
   if (pos2_R10 >= 4)
   {
-    register s32 d_R5 asm("$5");
+    s32 d_R5;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 pm4_R3 asm("$3");
     d_R5 = g_TrackLength;
     pm4_R3 = pos2_R10 - 4;

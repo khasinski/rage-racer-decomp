@@ -57,13 +57,13 @@ s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 
 void GameDrawRankingPanel(u8 *arg0) asm("func_80021DB8");
 void GameDrawRankingPanel(u8 *arg0) {
-    register u8 *panel;
-    register s32 iter;
-    register s32 countOrIndex;
-    register s32 xOrField;
-    register s32 destination;
-    register s32 color;
-    register s32 scoreOrX;
+    u8 *panel;
+    s32 iter;
+    s32 countOrIndex;
+    s32 xOrField;
+    s32 destination;
+    s32 color;
+    s32 scoreOrX;
     char text[56];
     s32 mode;
     s32 row;
@@ -203,11 +203,12 @@ void GameDrawNameEntryCursor(s32 arg0, s32 arg1) {
 void GameInsertRaceRecords(void) asm("func_80022324");
 void GameInsertRaceRecords(void) {
     s32 count;
-    register s32 i asm("$8");
-    register s32 row_offset asm("$9");
-    register s32 best asm("$10");
+    s32 i;
+    s32 row_offset;
+    s32 best;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 j asm("$7");
-    register s32 *score_ptr asm("$4");
+    s32 *score_ptr;
     register s32 entry_addr asm("$5");
     s32 fill_offset;
     register s32 fill_addr asm("$3");
@@ -215,18 +216,20 @@ void GameInsertRaceRecords(void) {
     s32 copy1;
     s32 copy2;
     s32 copy3;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 score_offset asm("$3");
     s32 score_value;
     s32 *entry;
-    register s32 mode asm("$4");
+    s32 mode;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 base_addr asm("$2");
     register s32 course_addr asm("$3");
-    register u8 *name_base asm("$11");
-    register u8 *name_base2 asm("$10");
-    register s32 letter asm("$13");
-    register s32 code asm("$12");
-    register s32 letter2 asm("$12");
-    register s32 code2 asm("$11");
+    u8 *name_base;
+    u8 *name_base2;
+    s32 letter;
+    s32 code;
+    s32 letter2;
+    s32 code2;
 
     count = 3;
     if (g_CourseIndex == 3) {

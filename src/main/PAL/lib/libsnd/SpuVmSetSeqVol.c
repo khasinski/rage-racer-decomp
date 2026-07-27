@@ -15,12 +15,13 @@ short SpuVmGetSeqVolLeft(long arg0) asm("func_80076E38");
 short SpuVmGetSeqVolRight(long arg0) asm("func_80076E88");
 
 short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long offset asm("$2");
     register u_char *base asm("$8");
-    register u_char *entry asm("$3");
-    register u_long index asm("$3");
-    register u_short x asm("$9");
-    register u_short y asm("$8");
+    u_char *entry;
+    u_long index;
+    u_short x;
+    u_short y;
 
     offset = (arg0 & 0xFF) << 2;
     base = *(u_char **)((u_char *)g_SndSeqTable + offset);
@@ -52,10 +53,10 @@ short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) {
     y = offset + index;
 
     if (arg3 == 1) {
-        register long i asm("$6");
-        register u_char *dst asm("$7");
-        register u_char *dstY asm("$10");
-        register long signedIndex asm("$5");
+        long i;
+        u_char *dst;
+        u_char *dstY;
+        long signedIndex;
 
         i = 0;
         if (D_801E42F8 != 0) {
@@ -96,10 +97,10 @@ short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) {
 
 long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) {
     long index;
-    register long offset asm("$2");
-    register u_char *base asm("$3");
-    register u_char *ptr asm("$2");
-    register short *status asm("$7");
+    long offset;
+    u_char *base;
+    u_char *ptr;
+    short *status;
 
     status = &g_SndCurrentSeqSep;
     offset = (arg0 & 0xFF) << 2;
@@ -115,8 +116,8 @@ long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) {
 
 short SpuVmGetSeqVolLeft(long arg0) {
     long index;
-    register long offset asm("$2");
-    register u_char *ptr asm("$3");
+    long offset;
+    u_char *ptr;
 
     offset = (arg0 & 0xFF) << 2;
     ptr = *(u_char **)((u_char *)g_SndSeqTable + offset);
@@ -128,8 +129,8 @@ short SpuVmGetSeqVolLeft(long arg0) {
 
 short SpuVmGetSeqVolRight(long arg0) {
     long index;
-    register long offset asm("$2");
-    register u_char *ptr asm("$3");
+    long offset;
+    u_char *ptr;
 
     offset = (arg0 & 0xFF) << 2;
     ptr = *(u_char **)((u_char *)g_SndSeqTable + offset);

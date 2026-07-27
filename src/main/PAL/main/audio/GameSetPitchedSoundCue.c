@@ -46,16 +46,17 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPitchedSoundCue", func_
     *statePtr = neg
 
 void func_8005CDB0(void) {
-    register s32 *statePtr asm("$16");
-    register s32 *pitchPtr asm("$17");
-    register s16 *f0Ptr asm("$20");
-    register s32 offset asm("$19");
-    register s32 voiceCopy asm("$21");
-    register s32 neg asm("$22");
-    register s32 svArg asm("$4");
+    s32 *statePtr;
+    s32 *pitchPtr;
+    s16 *f0Ptr;
+    s32 offset;
+    s32 voiceCopy;
+    s32 neg;
+    s32 svArg;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 left asm("$5");
-    register s32 right asm("$6");
-    register s32 prod asm("$2");
+    s32 right;
+    s32 prod;
     s32 voice;
     s32 state;
 
@@ -295,10 +296,11 @@ void func_80078528(s32 voice, s16 left, s16 right);
 void func_80078130(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend);
 
 void func_8005D7D4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
-    register s32 voice asm("$4");
+    s32 voice;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 left asm("$5");
-    register s32 right asm("$6");
-    register s32 prod asm("$2");
+    s32 right;
+    s32 prod;
     s32 bend;
     s32 voiceCopy;
 

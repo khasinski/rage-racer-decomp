@@ -39,10 +39,11 @@ long VSync(long mode) asm("func_8006DD30");
 long func_8006E088(void);
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
+    /* This pin is load-bearing: removing it changes .text. */
     register u_char *dstReg asm("$5");
-    register u_char *srcReg asm("$4");
-    register long count asm("$3");
-    register long end asm("$7");
+    u_char *srcReg;
+    long count;
+    long end;
 
     dstReg = dst;
     srcReg = src;
@@ -60,16 +61,18 @@ static __inline__ void copy8(u_char *dst, u_char *src) {
 
 long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
 long CD_sync(long mode, u_char *result) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register long modeReg asm("$21");
     register u_char *resultReg asm("$22");
-    register char **statusNames asm("$19");
-    register volatile CdIntr *intr asm("$18");
-    register u_char *ready asm("$20");
-    register long savedStatus asm("$17");
-    register long interrupt asm("$16");
-    register long alarmStatus asm("$2");
+    char **statusNames;
+    volatile CdIntr *intr;
+    u_char *ready;
+    long savedStatus;
+    long interrupt;
+    long alarmStatus;
 
     modeReg = mode;
+    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(modeReg) : "0"(modeReg));
     resultReg = result;
     asm("" : "=r"(resultReg) : "0"(resultReg));
@@ -98,13 +101,13 @@ long CD_sync(long mode, u_char *result) {
         }
 
         if (func_8006E088()) {
-            register u_long rawStatus asm("$2");
+            u_long rawStatus;
 
             rawStatus = *g_CdReg0;
-            asm("" : "=r"(rawStatus) : "0"(rawStatus));
             savedStatus = rawStatus & 3;
             for (;;) {
-                register long readyBit asm("$2");
+                long readyBit;
+                /* This pin is load-bearing: removing it changes .text. */
                 register long syncBit asm("$2");
 
                 interrupt = func_8006AB5C();
@@ -116,7 +119,6 @@ long CD_sync(long mode, u_char *result) {
                     if (g_CdReadyCallback != 0) {
                         g_CdReadyCallback(*ready, g_CdReadyResult);
                     }
-                    asm("");
                     syncBit = interrupt & 2;
                 } else {
                     syncBit = interrupt & 2;
@@ -129,10 +131,12 @@ long CD_sync(long mode, u_char *result) {
         }
 
         {
+        /* These pins are load-bearing: removing any one changes .text. */
         register long sync asm("$6");
         register u_long syncRaw asm("$2");
 
         syncRaw = intr->sync;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(syncRaw) : "0"(syncRaw));
         sync = syncRaw & 0xFF;
         if (sync == 2 || sync == 5) {

@@ -15,17 +15,18 @@ void func_8005C0E4(void);
 
 void GameForceBasicEffectVoicesEnabled(s32 enabled) asm("func_8005DEF0");
 void GameForceBasicEffectVoicesEnabled(s32 enabled) {
-    register s32 offset asm("$16");
-    register s32 voicePacked asm("$17");
-    register s32 voice asm("$18");
-    register s32 i asm("$19");
-    register s32 unused asm("$21");
-    register s32 raw asm("$2");
-    register s32 scale asm("$3");
-    register s32 left asm("$5");
-    register s32 right asm("$6");
+    s32 offset;
+    s32 voicePacked;
+    s32 voice;
+    s32 i;
+    s32 unused;
+    s32 raw;
+    s32 scale;
+    s32 left;
+    s32 right;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 arg0 asm("$4");
-    register s32 zeroArg asm("$7");
+    s32 zeroArg;
 
     unused = 0;
     i = 0;
@@ -87,13 +88,15 @@ void GameForceBasicEffectVoicesEnabled(s32 enabled) {
 
 void GameForceIndexedEffectVoiceEnabled(s32 enabled) asm("func_8005E058");
 void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
-    register s32 base asm("$16");
+    s32 base;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 center asm("$17");
-    register s32 fine asm("$18");
+    s32 fine;
     register s32 index asm("$3");
     register s32 raw asm("$2");
-    register s32 product asm("$4");
-    register s32 scale asm("$3");
+    s32 product;
+    s32 scale;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 left asm("$5");
     register s32 right asm("$6");
     register s32 voice asm("$4");
@@ -159,18 +162,20 @@ void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
 
 void GameForcePitchEffectVoicesEnabled(s32 enabled) asm("func_8005E1D0");
 void GameForcePitchEffectVoicesEnabled(s32 enabled) {
-    register s32 voicePacked asm("$17");
-    register s32 voice asm("$20");
-    register s32 pitchBase asm("$16");
-    register s32 toneBase asm("$19");
-    register s32 offset asm("$18");
-    register s32 state asm("$21");
+    s32 voicePacked;
+    s32 voice;
+    s32 pitchBase;
+    s32 toneBase;
+    s32 offset;
+    s32 state;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 raw asm("$2");
-    register s32 scale asm("$3");
-    register s32 left asm("$5");
+    s32 scale;
+    s32 left;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 right asm("$6");
     register s32 arg0 asm("$4");
-    register s32 arg3 asm("$7");
+    s32 arg3;
 
     state = enabled;
     voicePacked = 0xA0000;
@@ -257,18 +262,19 @@ void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0"
 void func_8005D7D4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 void GameForceSoundSlotVoicePlayback(s32 arg0) {
-    register s32 saved asm("$16") = arg0;
-    register s32 i asm("$17");
+    s32 saved = arg0;
+    s32 i;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 *base asm("$18");
-    register s32 *active asm("$19");
-    register s32 odd asm("$20");
+    s32 *active;
+    s32 odd;
     s32 first;
     s32 second;
-    register s32 factor asm("$3");
-    register s32 scaled asm("$6");
-    register s32 call_arg0 asm("$4");
-    register s32 call_arg1 asm("$5");
-    register s32 call_arg3 asm("$7");
+    s32 factor;
+    s32 scaled;
+    s32 call_arg0;
+    s32 call_arg1;
+    s32 call_arg3;
 
     GameSetSoundSlotVoicesEnabledWithRegisterArg();
 

@@ -6,13 +6,14 @@ extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 void SsSeqSetChannelMode(long seq, long sep, u_char mode) asm("func_8006FED8");
 
 void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
-    register long seq_raw asm("$7");
-    register long sep_raw asm("$8");
+    long seq_raw;
+    long sep_raw;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long seq_s asm("$4");
     register long sep_s asm("$5");
-    register SeqStruct *state asm("$16");
+    SeqStruct *state;
     register long seq_offset asm("$3");
-    register long sep_offset asm("$2");
+    long sep_offset;
     register SeqStruct *base asm("$3");
     long mode8;
 
@@ -20,6 +21,7 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     sep_raw = sep;
     seq_s = seq;
     sep_s = sep;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(seq_raw), "=r"(sep_raw) : "0"(seq_raw), "1"(sep_raw));
     seq_s = (short)seq_s;
     seq_offset = seq_s * 4;
@@ -57,7 +59,6 @@ mode_1e:
         if (state->unk28 != 0) {
             state->read_pos = state->loop_pos;
         } else {
-            asm("" : "=r"(state) : "0"(state));
             state->unk10 = 0;
         }
         goto done;
@@ -69,6 +70,7 @@ mode_1e:
 
 mode_default:
     {
+        /* These pins are load-bearing: removing any one changes .text. */
         register long seq_arg asm("$4");
         register long sep_arg asm("$5");
 
@@ -76,7 +78,6 @@ mode_default:
         sep_arg = (short)sep_raw;
         state->unk16 = mode;
         state->unk2a++;
-        asm("" : : : "memory");
 read_delta:
         state->delta_value = SsSeqReadDeltaTime(seq_arg, sep_arg);
     }

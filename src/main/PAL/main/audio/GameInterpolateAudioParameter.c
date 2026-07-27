@@ -182,10 +182,11 @@ void GameInitEffectVoiceRuntime(void) {
     SsSetVoiceCount(8);
 
     {
-        register s32 i asm("$4");
-        register s32 neg asm("$6");
+        s32 i;
+        s32 neg;
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 *ptr asm("$5");
-        register s32 offset asm("$3");
+        s32 offset;
 
         i = 0;
         neg = -1;
@@ -203,10 +204,10 @@ void GameInitEffectVoiceRuntime(void) {
     }
 
     {
-        register s32 i asm("$4");
-        register s32 neg asm("$5");
-        register s32 value asm("$6");
-        register s32 offset asm("$3");
+        s32 i;
+        s32 neg;
+        s32 value;
+        s32 offset;
 
         i = 0;
         neg = -1;
@@ -223,7 +224,7 @@ void GameInitEffectVoiceRuntime(void) {
     }
 
     {
-        register s32 value asm("$2");
+        s32 value;
 
         value = -1;
         g_PanVoiceVolumeR = value;
@@ -256,15 +257,16 @@ long SsUtKeyOffV(long voice) asm("func_80078018");
 void GameForcePanVoiceEnabled(s32 enabled) asm("func_8005DDB8");
 void GameForcePanVoiceEnabled(s32 enabled) {
     s32 values[2];
-    register s32 i asm("$7");
-    register s32 *src asm("$6");
-    register s32 *dst asm("$5");
-    register s32 scale asm("$3");
-    register s32 raw asm("$2");
+    s32 i;
+    s32 *src;
+    s32 *dst;
+    s32 scale;
+    s32 raw;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 voice asm("$4");
-    register s32 left asm("$5");
+    s32 left;
     register s32 right asm("$6");
-    register s32 zeroArg asm("$7");
+    s32 zeroArg;
     register s32 unused asm("$16");
 
     i = 0;

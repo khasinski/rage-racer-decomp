@@ -90,12 +90,13 @@ void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void GameScrollTeamLogoUp(void) asm("func_8004B9B8");
 void GameScrollTeamLogoUp(void) {
-    register s32 i asm("$4");
-    register u32 *stackPtr asm("$5");
+    s32 i;
+    u32 *stackPtr;
+    /* This pin is load-bearing: removing it changes .text. */
     register u32 *base asm("$6");
-    register u32 *cursor asm("$3");
+    u32 *cursor;
     u32 saved[8];
-    register u32 value asm("$2");
+    u32 value;
 
     GamePlaySoundCue(1);
 
@@ -181,17 +182,19 @@ void GameScrollTeamLogoDown(void) {
 
 void GameScrollTeamLogoLeft(void) asm("func_8004BAE4");
 void GameScrollTeamLogoLeft(void) {
-    register s32 row asm("$7");
-    register u32 *savePtr asm("$4");
-    register u32 *savePtr2 asm("$10");
+    s32 row;
+    u32 *savePtr;
+    u32 *savePtr2;
+    /* This pin is load-bearing: removing it changes .text. */
     register u32 *rowBase asm("$8");
-    register s32 offset asm("$9");
-    register s32 col asm("$6");
-    register u32 *base asm("$11");
-    register u32 *base2 asm("$5");
-    register u32 *addr asm("$4");
-    register u32 *cursor asm("$3");
+    s32 offset;
+    s32 col;
+    u32 *base;
+    u32 *base2;
+    u32 *addr;
+    u32 *cursor;
     u32 saved[64];
+    /* These pins are load-bearing: removing any one changes .text. */
     register u32 value asm("$2");
     register u32 next asm("$3");
 
@@ -243,19 +246,20 @@ void GameScrollTeamLogoLeft(void) {
 
 void GameScrollTeamLogoRight(void) asm("func_8004BBA8");
 void GameScrollTeamLogoRight(void) {
-    register s32 row asm("$7");
-    register u32 *savePtr asm("$4");
-    register u32 *savePtr2 asm("$10");
-    register u32 *rowBase asm("$8");
-    register s32 offset asm("$9");
-    register s32 col asm("$6");
-    register u32 *base asm("$11");
-    register u32 *base2 asm("$5");
-    register u32 *addr asm("$2");
-    register u32 *cursor asm("$3");
+    s32 row;
+    u32 *savePtr;
+    u32 *savePtr2;
+    u32 *rowBase;
+    s32 offset;
+    s32 col;
+    u32 *base;
+    u32 *base2;
+    u32 *addr;
+    u32 *cursor;
     u32 saved[64];
-    register u32 savedNibble asm("$2");
-    register u32 value asm("$3");
+    u32 savedNibble;
+    u32 value;
+    /* This pin is load-bearing: removing it changes .text. */
     register u32 prev asm("$4");
 
     GamePlaySoundCue(1);

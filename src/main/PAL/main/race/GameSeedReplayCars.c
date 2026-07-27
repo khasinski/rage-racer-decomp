@@ -131,16 +131,17 @@ void GameUpdateReplayCars(void) {
 
 s32 GameGetTrackZoneBlend(s32 position) asm("func_800350B4");
 s32 GameGetTrackZoneBlend(s32 position) {
-    register u8 *base asm("$2");
-    register s32 scene asm("$3");
-    register TrackZone *first asm("$9");
+    u8 *base;
+    s32 scene;
+    TrackZone *first;
+    /* This pin is load-bearing: removing it changes .text. */
     register TrackZone *zone asm("$6");
-    register s32 status asm("$5");
-    register s32 two asm("$10");
-    register s32 start asm("$7");
-    register s32 finish asm("$8");
-    register s32 code asm("$3");
-    register u16 rawCode asm("$2");
+    s32 status;
+    s32 two;
+    s32 start;
+    s32 finish;
+    s32 code;
+    u16 rawCode;
 
     base = g_TrackEventData;
     scene = g_RaceSeries;
@@ -174,6 +175,7 @@ s32 GameGetTrackZoneBlend(s32 position) {
 
         rawCode = zone->code;
         g_TrackZoneCode = rawCode;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : : : "memory");
         code = (s16)rawCode;
         if (code == 0) {

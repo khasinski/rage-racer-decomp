@@ -14,12 +14,13 @@ void GameDrawFlybyScenery(void) asm("func_8003EAF4");
 void GameDrawFlybyScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
+    /* This pin is load-bearing: removing it changes .text. */
     register Matrix *mtx0Ptr asm("$4");
-    register s32 *state asm("$17");
-    register Matrix *mtx1Ptr asm("$16");
-    register s32 angle asm("$2");
-    register s32 baseAngle asm("$5");
-    register void *drawBase asm("$4");
+    s32 *state;
+    Matrix *mtx1Ptr;
+    s32 angle;
+    s32 baseAngle;
+    void *drawBase;
     s32 frameValue;
 
     state = g_FlybyScenery;
@@ -65,16 +66,17 @@ extern u8 *g_RouteSceneryKeyframe asm("D_801E6C88");
 
 void GameSeedRouteScenery(void) asm("func_8003EBCC");
 void GameSeedRouteScenery(void) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 index0 asm("$2");
-    register s32 index1 asm("$3");
+    s32 index1;
     register u8 *base asm("$4");
     register s32 *dst asm("$8");
-    register s32 word0 asm("$5");
+    s32 word0;
     register s32 word1 asm("$6");
     register s32 word2 asm("$7");
     register u8 *src asm("$2");
     register u8 *record asm("$4");
-    register s32 value asm("$2");
+    s32 value;
 
     D_801E433C = 1;
     g_RouteSceneryClock = 1;

@@ -18,13 +18,15 @@ long func_80074A6C(long arg0, long arg1);
 
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) asm("func_80075CB0");
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register long raw asm("$10") = arg0;
     register long cst asm("$2") = 0xFFC0;
-    register long a4 asm("$4");
+    long a4;
     register long i asm("$4");
     long t1;
     long off;
     long w, t, rem, f0;
+    /* These pins are load-bearing: removing any one changes .text. */
     register long prod asm("$4");
     register long q asm("$2");
     long bal;
@@ -58,6 +60,7 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
             q = q >> 6;
             base = f0 + q - 1;
             {
+                /* This pin is load-bearing: removing it changes .text. */
                 register long r asm("$2");
                 r = prod - q * 64;
                 bal = (r << 1) + 0x7F;

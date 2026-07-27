@@ -91,8 +91,8 @@ void *startIntrVSync(void) {
 }
 
 void intrVSyncDispatcher(void) {
-    register long i asm("$17");
-    register void (**callback)(void) asm("$16");
+    long i;
+    void (**callback)(void);
     void (*func)(void);
     long count;
 
@@ -110,8 +110,8 @@ void intrVSyncDispatcher(void) {
 }
 
 void setIntrVSync(long arg0, void *arg1) {
-    register void **base asm("$2");
-    register void **slot asm("$4");
+    void **base;
+    void **slot;
 
     base = g_VSyncCallbacks;
     slot = &base[arg0];
@@ -148,8 +148,8 @@ void intrDMADispatcher(void) {
     void (**handler)(void);
     u_long lowMask;
     u_long one;
-    register void (**handlerBase)(void) asm("$21");
-    register u_char *fmt asm("$4");
+    void (**handlerBase)(void);
+    u_char *fmt;
 
     pendingTemp = *g_DmaIrqControl;
     pending = (pendingTemp >> 0x18) & 0x7F;
@@ -163,9 +163,9 @@ void intrDMADispatcher(void) {
                 handler = handlerBase;
                 while ((pending != 0) && (i < 7)) {
                     if (pending & 1) {
-                        register volatile u_long *bits asm("$4");
-                        register u_long value asm("$2");
-                        register long shift asm("$2");
+                        volatile u_long *bits;
+                        u_long value;
+                        long shift;
 
                         bits = g_DmaIrqControl;
                         shift = i + 0x18;
@@ -198,15 +198,14 @@ void intrDMADispatcher(void) {
 }
 
 u_long setIntrDMA(long arg0, u_long arg1) {
-    register long index asm("$6");
-    register u_long callback asm("$4");
-    register u_long *base asm("$3");
-    register long offset asm("$2");
-    register u_long *slot asm("$3");
-    register u_long oldCallback asm("$7");
+    long index;
+    u_long callback;
+    u_long *base;
+    long offset;
+    u_long *slot;
+    u_long oldCallback;
 
     index = arg0;
-    asm("");
     base = g_DmaCallbacks;
     offset = index << 2;
     slot = (u_long *)((long)base + offset);
@@ -215,8 +214,9 @@ u_long setIntrDMA(long arg0, u_long arg1) {
 
     if (callback != oldCallback) {
         if (callback != 0) {
-            register volatile u_long *bits asm("$5") = g_DmaIrqControl;
-            register u_long value asm("$4");
+            volatile u_long *bits = g_DmaIrqControl;
+            u_long value;
+            /* These pins are load-bearing: removing any one changes .text. */
             register long shift asm("$3");
             register u_long mask asm("$2") = 0xFFFFFF;
 
@@ -231,9 +231,11 @@ u_long setIntrDMA(long arg0, u_long arg1) {
             value |= mask;
             *bits = value;
         } else {
+            /* This pin is load-bearing: removing it changes .text. */
             register volatile u_long *bits asm("$5") = g_DmaIrqControl;
-            register u_long value asm("$3");
-            register long shift asm("$4");
+            u_long value;
+            long shift;
+            /* These pins are load-bearing: removing any one changes .text. */
             register u_long mask asm("$2") = 0xFFFFFF;
             register u_long zero asm("$0");
 

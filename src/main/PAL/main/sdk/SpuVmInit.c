@@ -58,16 +58,19 @@ extern volatile u_short g_SndVabProgMax asm("D_801E40D0");
 
 void SpuVmInit(long arg0) asm("func_80075710");
 void SpuVmInit(long arg0) {
+    /* This pin is load-bearing: removing it changes .text. */
     register long i asm("$5");
-    register long ff asm("$9");
-    register long one asm("$8");
-    register long index asm("$3");
-    register long offset asm("$2");
+    long ff;
+    long one;
+    long index;
+    long offset;
+    /* This pin is load-bearing: removing it changes .text. */
     register long shifted asm("$4");
-    register long eighteen asm("$3");
-    register long mindex asm("$4");
-    register u_long lowMask asm("$7");
-    register u_long highMask asm("$6");
+    long eighteen;
+    long mindex;
+    u_long lowMask;
+    u_long highMask;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long lowBits asm("$3");
     register u_long highBits asm("$4");
     volatile u_short *spu;

@@ -12,15 +12,16 @@ void *func_80017390(void *ot, void *packet, s32 arg2);
 
 void GameDrawWrongWayWarning(void) asm("func_800333DC");
 void GameDrawWrongWayWarning(void) {
+    /* This pin is load-bearing: removing it changes .text. */
     register u8 *packet __asm("$16");
-    register u8 *next __asm("$17");
-    register s32 i __asm("$18");
-    register s32 x __asm("$19");
-    register s32 u __asm("$20");
-    register u8 *ot __asm("$4");
-    register u8 *oldPacket __asm("$5");
-    register s32 temp __asm("$2");
-    register s32 uvOffset __asm("$3");
+    u8 *next;
+    s32 i;
+    s32 x;
+    s32 u;
+    u8 *ot;
+    u8 *oldPacket;
+    s32 temp;
+    s32 uvOffset;
     u8 *ret;
 
     next = *(u8 **)0x1F800000;
@@ -145,6 +146,7 @@ void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
         *(s32 *)(prim + 4) = *(s32 *)(base + 32);
     } else {
         s16 rv = 0x33A8;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(rv) : "0"(rv));
         *(s16 *)(g_DrawBuffer + 0x236F2) = rv;
         g_TachoFaceB = 0x80;
@@ -175,9 +177,9 @@ void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
     { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236D8); }
 
     {
-        register u8 *q asm("$16") = SCRATCH;
-        register u8 *g asm("$4");
-        register u8 *prim asm("$5");
+        u8 *q = SCRATCH;
+        u8 *g;
+        u8 *prim;
         s32 v10;
         func_80064FF8(q);
         prim = q;
@@ -189,10 +191,8 @@ void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
         q[5] = 0x20;
         q[6] = 0x20;
         g = g_DrawBuffer;
-        asm("" : "=r"(v10) : "0"(v10), "r"(g));
         *(s16 *)(q + 10) = v10;
         q += 16;
-        asm("" : "=r"(g) : "0"(g), "r"(q) : "memory");
         AddPrim(g + 0xCC, prim);
         SCRATCH = q;
     }
@@ -208,7 +208,7 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
     u8 *ot = base + 0xCC;
     u8 *packet;
     u8 *next;
-    register u8 *prim asm("$5");
+    u8 *prim;
     s32 height;
 
     if (color < 0) {
@@ -243,12 +243,15 @@ void func_80064EB8(u8 *prim, s32 enabled);
 
 u8 *GameDrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");
 u8 *GameDrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
+    /* This pin is load-bearing: removing it changes .text. */
     register u8 *out asm("$16") = prim;
-    register s32 xReg asm("$18") = x;
-    register s32 yReg asm("$19") = y;
+    s32 xReg = x;
+    s32 yReg = y;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 codeReg asm("$17");
     register s32 arg4Reg asm("$20");
 
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(xReg), "=r"(yReg) : "0"(xReg), "1"(yReg) : "$17");
     codeReg = digit;
     arg4Reg = clut;
@@ -260,7 +263,8 @@ u8 *GameDrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
     out[0xD] = 0x10;
 
     {
-        register u8 *ot asm("$4") = g_DrawBuffer;
+        u8 *ot = g_DrawBuffer;
+        /* This pin is load-bearing: removing it changes .text. */
         register u8 *oldPrim asm("$5") = out;
 
         *(s16 *)&out[0x8] = xReg;

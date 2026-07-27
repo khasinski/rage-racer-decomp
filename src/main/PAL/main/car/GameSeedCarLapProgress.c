@@ -6,18 +6,18 @@
 
 void GameSeedCarLapProgress(u8 *arg0, s32 arg1) asm("func_8002BF68");
 void GameSeedCarLapProgress(u8 *arg0, s32 arg1) {
-    register GameCarRuntime *obj asm("$4") = (GameCarRuntime *)arg0;
-    register s32 state asm("$2") = g_RaceSeries;
-    register s32 cur asm("$9") = obj->trackPointIndex;
-    register s32 total asm("$7") = 0;
-    register s32 index asm("$6");
+    GameCarRuntime *obj = (GameCarRuntime *)arg0;
+    s32 state = g_RaceSeries;
+    s32 cur = obj->trackPointIndex;
+    s32 total = 0;
+    s32 index;
 
     obj->field_68 = 0;
     if (state != 0) {
         index = *(s32 *)g_TrackEventData;
         if (arg1 == 1) {
-            register s32 count asm("$5");
-            register u8 *table asm("$8");
+            s32 count;
+            u8 *table;
             s32 wrapped;
 
             count = g_TrackPointCount;
@@ -31,9 +31,9 @@ advance_forward_add:
             total += ((GameTrackPoint *)table)[wrapped].segmentLength;
             goto advance_forward_add;
         } else {
-            register s32 count asm("$8");
-            register u8 *table asm("$10");
-            register s32 wrapped asm("$5");
+            s32 count;
+            u8 *table;
+            s32 wrapped;
             s32 mod;
 
             count = g_TrackPointCount;
@@ -55,8 +55,8 @@ advance_backward_sub:
     } else {
         index = *(s32 *)g_TrackEventData;
         if (arg1 == 0) {
-            register s32 count asm("$5");
-            register u8 *table asm("$8");
+            s32 count;
+            u8 *table;
             s32 wrapped;
 
             count = g_TrackPointCount;
@@ -69,8 +69,9 @@ advance_forward_sub:
             } while (cur != wrapped);
             goto done;
         } else {
+            /* These pins are load-bearing: removing any one changes .text. */
             register s32 count asm("$8");
-            register u8 *table asm("$10");
+            u8 *table;
             register s32 wrapped asm("$5");
             s32 mod;
 

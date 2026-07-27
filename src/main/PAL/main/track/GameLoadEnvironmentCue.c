@@ -16,13 +16,13 @@ extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
 
 void GameLoadEnvironmentCue(GameEnvColor *arg0) asm("func_800455EC");
 void GameLoadEnvironmentCue(GameEnvColor *arg0) {
-    register GameEnvColor *src asm("a2");
-    register s32 mode asm("v1");
-    register s32 newMode asm("a0");
-    register s32 compareMode asm("v1");
-    register s32 signedMode asm("v0");
+    GameEnvColor *src;
+    s32 mode;
+    s32 newMode;
+    s32 compareMode;
+    s32 signedMode;
     s32 field28;
-    register u32 flag asm("v0");
+    u32 flag;
 
     src = arg0;
     asm volatile("" : "=r"(src) : "0"(src));

@@ -30,11 +30,12 @@ void func_80072698(s32 arg0, s32 arg1, s32 arg2);
 
 void GameUpdateSequenceFadeOut(void) asm("func_8005E900");
 void GameUpdateSequenceFadeOut(void) {
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 *fadeStep asm("$4");
-    register s32 delta asm("$3");
-    register s32 value asm("$2");
-    register s32 arg0 asm("$4");
-    register s32 arg1 asm("$5");
+    s32 delta;
+    s32 value;
+    s32 arg0;
+    s32 arg1;
 
     fadeStep = &g_ReverbFadeStep;
     asm volatile("" : "=r"(fadeStep) : "0"(fadeStep));
@@ -79,10 +80,11 @@ void GameUpdateSequenceFadeOut(void) {
 
 void GameApplyDuckedSequenceAudio(void) asm("func_8005EA14");
 void GameApplyDuckedSequenceAudio(void) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 value asm("$3");
     register s32 scaled asm("$2");
-    register s32 seq asm("$4");
-    register s32 volume asm("$5");
+    s32 seq;
+    s32 volume;
 
     value = g_SeqVolume;
     seq = g_SeqHandle;

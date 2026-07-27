@@ -33,12 +33,13 @@ void SpuVmAutoPanTick(long voice) asm("func_800753CC");
 void SsUtFlush(void) asm("func_80075FA4");
 void SsUtFlush(void) {
     volatile long stack[4];
+    /* These pins are load-bearing: removing any one changes .text. */
     register long i asm("$16");
     register long voiceOffset asm("$17");
-    register long voiceIndex asm("$18");
-    register long two asm("$19");
-    register long oneSaved asm("$20");
-    register u_long commonMask asm("$18");
+    long voiceIndex;
+    long two;
+    long oneSaved;
+    u_long commonMask;
     u_short keyOffLow;
     u_short keyOffHigh;
     u_short keyOnLow;
@@ -47,21 +48,20 @@ void SsUtFlush(void) {
     u_short reverbOnHigh;
 
     {
-        register long count asm("$4");
-        register long historyWork asm("$2");
-        register u_long *historyBase asm("$3");
-        register u_long *history asm("$6");
-        register u_long one asm("$8");
-        register long voiceCount asm("$7");
-        register u_short *pitchPtr asm("$4");
-        register volatile u_short *spu asm("$5");
+        long count;
+        long historyWork;
+        u_long *historyBase;
+        u_long *history;
+        u_long one;
+        long voiceCount;
+        u_short *pitchPtr;
+        volatile u_short *spu;
 
         i = 0;
         historyWork = g_SndVoiceSilenceIndex;
         count = D_801E42F8;
         historyBase = g_SndVoiceSilenceHistory;
         historyWork = (historyWork + 1) & 0xF;
-        asm("" : "=r"(historyWork) : "0"(historyWork));
         g_SndVoiceSilenceIndex = historyWork;
         historyWork = (long)&historyBase[historyWork];
         *(u_long *)historyWork = 0;
@@ -84,7 +84,7 @@ void SsUtFlush(void) {
     }
 
     if (g_SndReservedVoiceCount == 0) {
-        register u_long *historyScan asm("$3");
+        u_long *historyScan;
 
         commonMask = ~0U;
         i = 0;
@@ -95,10 +95,9 @@ void SsUtFlush(void) {
         } while (i < 15);
 
         {
-            register long activeVoices asm("$2");
+            long activeVoices;
 
             activeVoices = D_801E42F8;
-            asm("" : "=r"(activeVoices) : "0"(activeVoices));
         if (activeVoices > 0) {
             i = 0;
             oneSaved = 1;
@@ -112,7 +111,6 @@ noiseLoop:
                 g_SndVoiceStateStatus[voiceOffset] = 0;
             }
             activeVoices = D_801E42F8;
-            asm("" : "=r"(activeVoices) : "0"(activeVoices), "r"(i));
             i++;
             if (i < activeVoices) {
                 voiceOffset += 0x34;
@@ -123,8 +121,8 @@ noiseLoop:
     }
 
     {
-        register u_short mask asm("$2");
-        register u_short activeMask asm("$3");
+        u_short mask;
+        u_short activeMask;
 
         i = 0;
         voiceIndex = 0;
@@ -132,8 +130,8 @@ noiseLoop:
         activeMask = D_8009E670;
         mask = ~mask;
         activeMask &= mask;
-        asm("" : "=r"(activeMask) : "0"(activeMask));
         mask = D_801F2A0C;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(mask) : "0"(mask) : "$17");
         voiceOffset = 0;
         D_8009E670 = activeMask;
@@ -143,6 +141,7 @@ noiseLoop:
         D_8009E674 = activeMask;
     }
     do {
+        /* This pin is load-bearing: removing it changes .text. */
         register long voiceStep asm("$2");
 
         if (*(short *)&g_SndVoiceStateAutoVol[voiceOffset] != 0) {
@@ -158,18 +157,19 @@ noiseLoop:
     } while (i < 24);
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register u_char *flagsPtr asm("$5");
-        register u_char *src0 asm("$6");
-        register u_char *src2 asm("$7");
-        register u_char *src8 asm("$8");
-        register u_char *src10 asm("$9");
-        register long spuOffset asm("$4");
+        u_char *src0;
+        u_char *src2;
+        u_char *src8;
+        u_char *src10;
+        long spuOffset;
+        /* This pin is load-bearing: removing it changes .text. */
         register volatile u_short *spu asm("$2");
-        register u_short value asm("$3");
-        register u_char *srcBase asm("$2");
+        u_short value;
+        u_char *srcBase;
 
         spuOffset = 0;
-        asm("" : : "r"(oneSaved), "r"(two), "r"(spuOffset));
         flagsPtr = g_SndVoiceFlags;
         srcBase = g_SndVoiceRegs;
         src10 = srcBase + 10;

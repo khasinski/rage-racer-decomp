@@ -11,7 +11,8 @@ s32 GameWriteMemoryCardSaveFile(
     void *iconBlock,
     GameSaveHeaderRow *header,
     void *saveBlock) {
-    register s32 fd asm("$16");
+    s32 fd;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 saved asm("$18");
     s32 attempt;
     s32 ok;
@@ -98,14 +99,16 @@ s32 GameWriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 }
 
 s32 GameReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
-    register s32 fd asm("$17");
+    s32 fd;
+    /* These pins are load-bearing: removing any one changes .text. */
     register void *buffer asm("$18");
     register s32 sum asm("$16");
-    register s32 i asm("$3");
+    s32 i;
     register u16 *ptr asm("$4");
 
     fd = arg0;
     buffer = arg1;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(sum) : "r"(fd), "r"(buffer), "0"(0));
 
     GameMenuLoadPhase = 0x120;
@@ -158,11 +161,12 @@ s32 GameReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
 }
 
 s32 GameScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
-    register s32 fd asm("$16");
-    register s32 i asm("$17");
+    s32 fd;
+    s32 i;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 mask asm("$18");
-    register s32 nameOffset asm("$19");
-    register void *buffer asm("$20");
+    s32 nameOffset;
+    void *buffer;
     s32 bit;
 
     mask = 0;
@@ -198,10 +202,10 @@ extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 
 s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     u8 block[0x1000];
-    register void *header asm("$19");
-    register s32 tries asm("$17");
-    register s32 fd asm("$16");
-    register s32 temp asm("$2");
+    void *header;
+    s32 tries;
+    s32 fd;
+    s32 temp;
     s32 i;
 
     header = arg1;
@@ -213,7 +217,8 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     temp += arg0;
 
     {
-        register s32 nameOffset asm("$18") = temp << 1;
+        s32 nameOffset = temp << 1;
+        /* This pin is load-bearing: removing it changes .text. */
         register char *name asm("$4");
 
         do {
@@ -259,15 +264,15 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     g_TeamNameLength = *(u8 *)header;
     i = 0;
     do {
-        register u8 *copy_src asm("$2") = (u8 *)header + i;
+        u8 *copy_src = (u8 *)header + i;
         g_TeamNameChars[i] = copy_src[1];
         i++;
     } while (i < 7);
 
     {
-        register s32 one asm("$2") = 1;
-        register s32 word asm("$4");
-        register s32 status asm("$3");
+        s32 one = 1;
+        s32 word;
+        s32 status;
 
         asm volatile("" : "=r"(one) : "0"(one));
         word = *(s32 *)((u8 *)header + 8);
@@ -294,6 +299,7 @@ s32 GameCountMemoryCardFiles(s32 arg0, s32 arg1) {
     entry = g_McDirEntries;
 
     if (BiosFirstFile(path, entry) == entry) {
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(count) : "0"(count));
         count++;
         do {

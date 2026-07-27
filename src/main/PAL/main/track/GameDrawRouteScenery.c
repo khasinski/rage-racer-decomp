@@ -17,7 +17,7 @@ void GameDrawRouteScenery(void) asm("func_8003F02C");
 void GameDrawRouteScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
-    register Matrix *mtx1Ptr asm("$16");
+    Matrix *mtx1Ptr;
     s32 frameValue;
     s32 drawId;
 
@@ -78,22 +78,26 @@ extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
 void GameInitShuttleScenery(void) asm("func_8003F0F8");
 
 void GameInitShuttleScenery(void) {
-    register GameShuttleScenery *state asm("$7");
-    register s32 *src asm("$5");
+    GameShuttleScenery *state;
+    s32 *src;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 *dst asm("$4");
-    register s32 index asm("$4");
+    s32 index;
     register s32 value asm("$2");
     register s32 v1 asm("$3");
-    register s32 a4 asm("$4");
-    register s32 a5 asm("$5");
+    s32 a4;
+    s32 a5;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 a6 asm("$6");
 
     state = &g_ShuttleScenery[0];
     if ((g_CourseIndex & 3) == 2) {
         g_Shuttle1PathIndex = 2;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" ::: "memory");
         src = g_ShuttlePath2Points;
         dst = &g_Shuttle1X;
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(src), "=r"(dst) : "0"(src), "1"(dst));
         value = src[0];
         v1 = src[1];
@@ -104,6 +108,7 @@ void GameInitShuttleScenery(void) {
         dst[2] = value;
         dst[3] = v1;
 
+        /* This barrier is load-bearing: removing it changes .text. */
         asm("" ::: "memory");
         index = g_Shuttle1PathIndex;
         v1 = index << 3;
@@ -123,8 +128,6 @@ void GameInitShuttleScenery(void) {
 
     state->pathIndex = 0;
 updateState:
-    asm("" ::: "memory");
-    asm("" : "=r"(state) : "0"(state));
     value = state->pathIndex;
     value <<= 5;
     v1 = *(s32 *)((s32)g_ShuttlePathPoints + value);
@@ -135,21 +138,21 @@ updateState:
     state->y = a4;
     state->z = a5;
     state->unk1C = a6;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;
     v1 = *(s16 *)((s32)g_ShuttlePathAngles + value);
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;
     state->angleX = v1;
     v1 = *(s16 *)((s32)g_ShuttlePathAngles + value + 2);
-    asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;
     state->angleY = v1;
     v1 = *(s16 *)((s32)g_ShuttlePathAngles + value + 4);
-    asm("" ::: "memory");
     value = state->pathIndex;
     state->startEndpoint = 0;
     state->travelStep = 0;

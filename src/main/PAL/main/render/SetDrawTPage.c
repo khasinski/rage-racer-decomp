@@ -6,6 +6,7 @@ s32 func_800657E4(void);
 
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) asm("func_800650E4");
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 encoded asm("$2");
     s32 mode;
 
@@ -22,7 +23,7 @@ void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
 
 high_mode:
     {
-        register s32 value asm("$3") = 0xE1000000;
+        s32 value = 0xE1000000;
 
         if (arg2 != 0) {
             value = 0xE1000800;
@@ -37,6 +38,7 @@ high_mode:
 
 low_mode:
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 value asm("$7") = 0xE1000000;
 
         if (arg2 != 0) {
@@ -159,11 +161,11 @@ s32 func_80067C80(s32 arg0);
  * and D_80013498 "ResetGraph(%d)..."; mode&7 of 0 or 3 does the full reset. */
 void ResetGraph(s32 mode) asm("func_80065460");
 void ResetGraph(s32 mode) {
-    register s32 maskedMode asm("$17");
-    register u8 *graphState asm("$16");
-    register s32 graphType asm("$2");
-    register u8 *clearEnv asm("$4");
-    register s32 fillValue asm("$5");
+    s32 maskedMode;
+    u8 *graphState;
+    s32 graphType;
+    u8 *clearEnv;
+    s32 fillValue;
 
     maskedMode = mode & 7;
     if ((maskedMode == 0) || (maskedMode == 3)) {
@@ -174,7 +176,6 @@ void ResetGraph(s32 mode) {
         func_800681AC((void *)((u32)g_GpuFuncs & 0xFFFFFF));
         graphType = func_80067C80(maskedMode != 0);
         clearEnv = graphState + 0x10;
-        asm("" : "=r"(clearEnv) : "0"(clearEnv));
         *(volatile u8 *)graphState = graphType;
         {
             s32 st0 = *(volatile u8 *)graphState;
@@ -209,9 +210,10 @@ extern char D_800134C4[];
 s32 SetGraphReverse(s32 arg0) asm("func_800655B8");
 
 s32 SetGraphReverse(s32 arg0) {
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 newValue asm("$17") = arg0;
-    register u8 *state asm("$16") = &g_GraphReverse;
-    register s32 old asm("$18") = *state;
+    u8 *state = &g_GraphReverse;
+    s32 old = *state;
     GpuCallbacks *callbacks;
     GpuCallbacks *callbacks2;
     s32 value;
@@ -247,16 +249,18 @@ s32 SetGraphReverse(s32 arg0) {
 s32 SetGraphDebug(u8 arg0) asm("func_800656CC");
 
 s32 SetGraphDebug(u8 arg0) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register volatile u8 *ptr asm("$3") = &g_GraphDebug;
     register s32 old asm("$16") = *ptr;
 
     *ptr = arg0;
     if (arg0 != 0) {
         void (*func)(char *, ...) = GPU_printf;
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 a1 asm("$5");
         s32 a2;
         s32 a3;
-        register char *fmt asm("$4");
+        char *fmt;
 
         a1 = *ptr;
         asm volatile("" : "=r"(a1) : "0"(a1));

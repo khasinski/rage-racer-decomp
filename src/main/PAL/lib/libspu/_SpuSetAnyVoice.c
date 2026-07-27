@@ -7,14 +7,15 @@ extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
 u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) asm("func_8007A21C");
 
 u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) {
-    register volatile u_short *reg_hi asm("$7");
-    register volatile u_short *reg_lo asm("$6");
+    volatile u_short *reg_hi;
+    volatile u_short *reg_lo;
+    /* This pin is load-bearing: removing it changes .text. */
     register u_long hi asm("$2");
-    register u_long lo asm("$3");
+    u_long lo;
     u_long old;
 
     {
-        register volatile u_short *base asm("$3") = g_SpuRegBase;
+        volatile u_short *base = g_SpuRegBase;
 
         reg_hi = (volatile u_short *)((u_long)(arg3 << 1) + (u_long)base);
         reg_lo = (volatile u_short *)((u_long)(arg2 << 1) + (u_long)base);

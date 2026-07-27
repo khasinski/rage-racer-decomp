@@ -82,14 +82,15 @@ void StUnSetRing(void) {
     func_8006A58C(0);
     *D_80099360 = 0;
     *D_8009936C = 0;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" ::: "memory");
     ExitCriticalSection();
 }
 
 void data_ready_callback(void) {
-    register long index asm("$2") = D_801E6C84;
-    register StRingEntry *base asm("$3") = g_StRingBase;
-    register StRingEntry *entry asm("$2");
+    long index = D_801E6C84;
+    StRingEntry *base = g_StRingBase;
+    StRingEntry *entry;
 
     entry = (StRingEntry *)((index << 5) + (long)base);
     entry->state = 2;

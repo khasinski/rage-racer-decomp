@@ -17,28 +17,27 @@ long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
  */
 long CdControl(long com, void *param, long result) asm("func_8006A5A4");
 long CdControl(long arg0, void *arg1, long arg2) {
-    register void *arg asm("$17");
-    register long arg2Reg asm("$18");
+    void *arg;
+    long arg2Reg;
+    /* This pin is load-bearing: removing it changes .text. */
     register long cmd asm("$20");
-    register long retries asm("$16");
-    register long command asm("$19");
-    register long *base asm("$3");
-    register long savedMode asm("$21");
-    register long offset asm("$2");
-    register long *commandState asm("$22");
-    register long result asm("$23");
+    long retries;
+    long command;
+    long *base;
+    long savedMode;
+    long offset;
+    long *commandState;
+    long result;
 
     arg = arg1;
     arg2Reg = arg2;
     cmd = arg0;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
     command = cmd & 0xFF;
-    asm("" : "=r"(command) : "0"(command));
     base = g_CdCommandNeedsSetloc;
-    asm("" : "=r"(base) : "0"(base));
     savedMode = g_CdSyncCallback;
-    asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
     commandState = (long *)(offset + (long)base);
     result = 0;
@@ -66,9 +65,7 @@ retry:
         retries--;
     } while (retries != -1);
 
-    asm("");
     g_CdSyncCallback = savedMode;
-    asm("" : "=r"(retries) : "0"(retries));
     result = -1;
 
 done:
@@ -77,26 +74,26 @@ done:
 
 long CdControlF(long arg0, void *arg1) asm("func_8006A6DC");
 long CdControlF(long arg0, void *arg1) {
-    register void *arg asm("$17");
-    register long cmd asm("$19");
-    register long retries asm("$16");
-    register long command asm("$18");
-    register long savedMode asm("$20");
-    register long *base asm("$3");
-    register long offset asm("$2");
-    register long *commandState asm("$21");
-    register long result asm("$22");
+    void *arg;
+    long cmd;
+    long retries;
+    long command;
+    long savedMode;
+    long *base;
+    long offset;
+    long *commandState;
+    long result;
 
     arg = arg1;
     cmd = arg0;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
     command = cmd & 0xFF;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(command) : "0"(command));
     base = g_CdCommandNeedsSetloc;
-    asm("" : "=r"(base) : "0"(base));
     savedMode = g_CdSyncCallback;
-    asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
     commandState = (long *)(offset + (long)base);
     result = 0;
@@ -124,9 +121,7 @@ retry:
         retries--;
     } while (retries != -1);
 
-    asm("");
     g_CdSyncCallback = savedMode;
-    asm("" : "=r"(retries) : "0"(retries));
     result = -1;
 
 done:
@@ -142,29 +137,28 @@ long func_8006B0D4(long arg0, long arg1);
 
 long CdControlB(long arg0, void *arg1, long arg2) asm("func_8006A808");
 long CdControlB(long arg0, void *arg1, long arg2) {
-    register void *arg asm("$17");
-    register long arg2Reg asm("$18");
+    void *arg;
+    long arg2Reg;
+    /* This pin is load-bearing: removing it changes .text. */
     register long cmd asm("$20");
-    register long retries asm("$16");
-    register long command asm("$19");
-    register long savedMode asm("$21");
-    register long *base asm("$3");
-    register long offset asm("$2");
-    register long *commandState asm("$22");
-    register long result asm("$2");
-    register long zero asm("$4");
+    long retries;
+    long command;
+    long savedMode;
+    long *base;
+    long offset;
+    long *commandState;
+    long result;
+    long zero;
 
     arg = arg1;
     arg2Reg = arg2;
     cmd = arg0;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
     command = cmd & 0xFF;
-    asm("" : "=r"(command) : "0"(command));
     base = g_CdCommandNeedsSetloc;
-    asm("" : "=r"(base) : "0"(base));
     savedMode = g_CdSyncCallback;
-    asm("" : "=r"(savedMode) : "0"(savedMode));
     offset = command << 2;
     commandState = (long *)(offset + (long)base);
     result = 0;
@@ -193,8 +187,8 @@ retry:
         retries--;
     } while (retries != -1);
 
-    asm("");
     g_CdSyncCallback = savedMode;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(result));
 
 done:

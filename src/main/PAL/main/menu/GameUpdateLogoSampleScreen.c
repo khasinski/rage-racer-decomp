@@ -230,7 +230,8 @@ void GameUpdateTeamNameScreen(void) {
             if (g_PadEdge & 0x4000) { s32 d = GameMenuCursor; GameMenuCursor = (d < 0x21) ? d + 0xB : d - 0x21; }
             if (g_PadEdge & 0x8000) { s32 l = GameMenuCursor; GameMenuCursor = (l % 11 != 0) ? l - 1 : l + 0xA; }
             if (g_PadEdge & 0x2000) {
-                register s32 r asm("$5");
+                s32 r;
+                /* This pin is load-bearing: removing it changes .text. */
                 register s32 res asm("$2");
                 s32 rn;
                 r = GameMenuCursor;
@@ -287,6 +288,7 @@ pop:
     if (g_TeamNameLength == 0) return;
     GamePlaySoundCue(4);
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 tv asm("$2");
         tv = 0xA;
         g_TeamNameChars[g_TeamNameLength] = tv;
@@ -479,11 +481,11 @@ void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
 s32 GameDrawCarShopScreen(s32 step) asm("func_80059248");
 s32 GameDrawCarShopScreen(s32 arg0) {
-    register s32 value;
-    register s32 limit;
-    register s32 amount;
-    register s32 phase;
-    register s32 channel;
+    s32 value;
+    s32 limit;
+    s32 amount;
+    s32 phase;
+    s32 channel;
 
     if (arg0 == 0) {
         D_8009B2E8 = 0;

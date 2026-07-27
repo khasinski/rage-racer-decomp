@@ -5,6 +5,7 @@
 
 void *MulMatrix0(s32 *matrix, void *src, void *dst) asm("func_80068B98");
 void *MulMatrix0(s32 *matrix, void *src, void *dst) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 m0 asm("$8") = matrix[0];
     register s32 m1 asm("$9") = matrix[1];
     register s32 m2 asm("$10") = matrix[2];
@@ -212,6 +213,7 @@ void *func_80068D88(void *arg0) {
 
 
 void *func_80068E70(s32 *matrix, void *src) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 m0 asm("$8") = matrix[0];
     register s32 m1 asm("$9") = matrix[1];
     register s32 m2 asm("$10") = matrix[2];
@@ -290,8 +292,9 @@ void *func_80068E70(s32 *matrix, void *src) {
 
 void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
 void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
-    register void *m asm("$4") = mtx;
-    register void *v asm("$5") = vec;
+    void *m = mtx;
+    void *v = vec;
+    /* This pin is load-bearing: removing it changes .text. */
     register void *o asm("$6") = out;
 
     asm volatile(
@@ -406,6 +409,7 @@ void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
 
 
 s32 func_800690E0(s32 *arg0, s32 *arg1, s32 arg2) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 xy asm("$8");
     register s32 z asm("$9");
 

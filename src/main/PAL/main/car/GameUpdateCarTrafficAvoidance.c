@@ -21,21 +21,23 @@ extern s32 g_PlayerSpeed asm("D_8009E778");
 
 void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) asm("func_8003A280");
 void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
-    register GameCarAiBlock *state asm("$8") = (GameCarAiBlock *)&car->field_BC;
-    register s32 acc8 asm("$24") = 0;
-    register s32 acc9 asm("$25") = 0;
+    GameCarAiBlock *state = (GameCarAiBlock *)&car->field_BC;
+    s32 acc8 = 0;
+    s32 acc9 = 0;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 i asm("$10") = 0;
-    register s32 k11 asm("$17") = 0xB;
-    register u8 *base asm("$16") = g_PlayerTrackProgress;
-    register s32 carProgress asm("$22");
-    register s32 carField34 asm("$15");
-    register s32 carA4low asm("$21");
+    s32 k11 = 0xB;
+    u8 *base = g_PlayerTrackProgress;
+    s32 carProgress;
+    s32 carField34;
+    s32 carA4low;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *block asm("$11");
     register s32 track asm("$12");
     s32 t6;
     s32 field34minus;
     s32 field34plus;
-    register s32 trackMinus asm("$18");
+    s32 trackMinus;
     s32 total;
     s32 sums[4];
 
@@ -62,6 +64,7 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
         s32 otherField34;
         s32 otherA4;
         s32 a2;
+        /* These pins are load-bearing: removing any one changes .text. */
         register s32 t1 asm("$9");
         s32 diff;
         register s32 angleDiff asm("$3");
@@ -80,7 +83,7 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
         }
 
         if (i == k11) {
-            register s32 op asm("$2") = *(s32 *)(base + 0);
+            s32 op = *(s32 *)(base + 0);
             a2 = op + track;
             otherField34 = *(s32 *)(base - 0x3C);
             if (arg1 >= 4) {
@@ -94,7 +97,7 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
             t1 = 0;
             t6 = 0x1800 - (g_PlayerSpeed << 1);
         } else {
-            register s32 op asm("$2");
+            s32 op;
             otherField34 = *(s32 *)(block - 0x70); /* g_Cars[i].field_34 */
             otherA4 = *(u16 *)block; /* g_Cars[i].field_A4, low half */
             op = *(s32 *)(block - 0x34); /* g_Cars[i].trackProgress */
@@ -133,10 +136,10 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
             if (diff < 0x200) {
                 s32 ad = (s16)angleSaved;
                 if (ad >= 0x41) {
-                    register s32 s asm("$2") = acc9 + 0xC00;
+                    s32 s = acc9 + 0xC00;
                     acc9 = s - diff;
                 } else if (ad < -0x40) {
-                    register s32 s asm("$2") = acc8 + 0xC00;
+                    s32 s = acc8 + 0xC00;
                     acc8 = s - diff;
                 }
             }
@@ -169,8 +172,8 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
         }
         __asm__("" : : "r"(carField34));
         if (sums[3] >= 0x3E9) {
-            register s32 fv asm("$3") = state->field_130;
-            register s32 d asm("$2") = ((fv << 4) - fv) << 1;
+            s32 fv = state->field_130;
+            s32 d = ((fv << 4) - fv) << 1;
             state->field_130 = d / 100;
         }
     } else {

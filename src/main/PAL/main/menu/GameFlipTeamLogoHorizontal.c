@@ -7,18 +7,21 @@ void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void GameFlipTeamLogoHorizontal(void) asm("func_8004BCE4");
 void GameFlipTeamLogoHorizontal(void) {
-    register u32 *base asm("$14");
-    register s32 row asm("$13");
-    register s32 highStart asm("$15");
-    register s32 rowOffset asm("$9");
+    u32 *base;
+    s32 row;
+    s32 highStart;
+    s32 rowOffset;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u32 *lowBase asm("$8");
-    register s32 pairOffset asm("$11");
+    s32 pairOffset;
     register s32 highIndex asm("$7");
-    register s32 nibble asm("$4");
-    register u32 lowPacked asm("$5");
+    s32 nibble;
+    u32 lowPacked;
+    /* This pin is load-bearing: removing it changes .text. */
     register u32 highPacked asm("$6");
-    register u32 lowWord asm("$12");
-    register u32 highWord asm("$10");
+    u32 lowWord;
+    u32 highWord;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u32 shift asm("$2");
     register u32 lowNibble asm("$3");
 
@@ -42,7 +45,6 @@ void GameFlipTeamLogoHorizontal(void) {
                 lowPacked <<= 4;
                 shift = nibble << 2;
                 lowNibble = (lowWord >> shift) & 0xF;
-                asm("" : "=r"(lowNibble) : "0"(lowNibble));
                 highPacked = (highPacked << 4) | ((highWord >> shift) & 0xF);
                 nibble++;
                 lowPacked |= lowNibble;
@@ -63,18 +65,19 @@ void GameFlipTeamLogoHorizontal(void) {
 
 void GameRotateTeamLogoCcw(void) asm("func_8004BDB4");
 void GameRotateTeamLogoCcw(void) {
-    register s32 i asm("$8");
-    register s32 j asm("$9");
-    register s32 k asm("$7");
-    register s32 limit asm("$12");
-    register u32 *base asm("$13");
-    register u32 *srcStart asm("$10");
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 limit;
+    u32 *base;
+    u32 *srcStart;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u32 *src asm("$6");
     register u32 *stackBase asm("$11");
     register u32 *dst asm("$4");
-    register s32 shift asm("$5");
+    s32 shift;
     register u32 value1 asm("$3");
-    register u32 value2 asm("$2");
+    u32 value2;
     u32 saved[512];
 
     asm(".globl func_8004BDEC\nfunc_8004BDEC = func_8004BDB4 + 0x38");
@@ -148,16 +151,17 @@ void GameRotateTeamLogoCcw(void) {
 
 void GameRotateTeamLogoCw(void) asm("func_8004BF48");
 void GameRotateTeamLogoCw(void) {
-    register s32 i asm("$8");
-    register s32 j asm("$9");
-    register s32 k asm("$7");
-    register u32 *rowBase asm("$12");
-    register u32 *base asm("$13");
-    register u32 *srcStart asm("$10");
+    s32 i;
+    s32 j;
+    s32 k;
+    u32 *rowBase;
+    u32 *base;
+    u32 *srcStart;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u32 *src asm("$6");
     register u32 *stackBase asm("$11");
     register u32 *dst asm("$4");
-    register s32 shift asm("$5");
+    s32 shift;
     register u32 value1 asm("$3");
     register u32 value2 asm("$2");
     u32 saved[512];
@@ -175,6 +179,7 @@ void GameRotateTeamLogoCw(void) {
             src = srcStart;
             do {
                 dst = (u32 *)((i * 8 + k) * 8);
+                /* This barrier is load-bearing: removing it changes .text. */
                 asm("" : "=r"(dst) : "0"(dst));
                 dst = (u32 *)((s32)dst + 7);
                 dst = (u32 *)((s32)dst - j);
@@ -293,10 +298,11 @@ void func_8004CF30(s32 arg) {
         s2 = 0;
         s1 = 0x00300000;
         do {
-            register s32 cnt asm("$3") = D_8007FB20;
+            s32 cnt = D_8007FB20;
+            /* These pins are load-bearing: removing any one changes .text. */
             register s32 m11 asm("$2") = cnt * 11;
             register u32 u0 asm("$8");
-            register u8 c1 asm("$3");
+            u8 c1;
             register u32 c0 asm("$2");
             __asm__("" : "=r"(m11) : "0"(m11));
             u0 = (u32)m11 >> 8;
@@ -315,6 +321,7 @@ void func_8004CF30(s32 arg) {
             s32 y0 = l2.b[s0];
             s16 x1 = (0xA0 - (u16)l1.b[s0]) * 2;
             s32 v = (((s32)((u16)l2.b[s0] - 0xAA) << 7) / 309 + 0x16) * D_8007FB20;
+            /* These pins are load-bearing: removing any one changes .text. */
             register s32 vv asm("$2") = v;
             register u32 sh asm("$8");
             register u32 col asm("$2");
@@ -330,6 +337,7 @@ void func_8004CF30(s32 arg) {
         func_80064F58(prim);
         func_80064E90(prim, 0);
         {
+            /* These pins are load-bearing: removing any one changes .text. */
             register s32 x asm("$3") = D_8007FB20;
             register s32 q0 asm("$2") = x / 5 + (x >> 31);
             register u8 col asm("$8");

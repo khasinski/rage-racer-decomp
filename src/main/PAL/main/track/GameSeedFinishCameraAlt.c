@@ -20,20 +20,23 @@ typedef struct CopyBlock8003CDF4 {
 
 void GameSeedFinishCameraAlt(void *arg0) asm("func_8003CDF4");
 void GameSeedFinishCameraAlt(void *arg0) {
+    /* This pin is load-bearing: removing it changes .text. */
     register u32 word0 asm("$2");
-    register u32 word1 asm("$3");
-    register u32 word2 asm("$4");
-    register CopyBlock8003CDF4 *src asm("$6");
-    register CopyBlock8003CDF4 *dst asm("$7");
-    register CopyBlock8003CDF4 *end asm("$9");
-    register u32 *base asm("$8");
-    register GameTrackPoint *track asm("$5");
-    register GameTrackPoint *point asm("$2");
+    u32 word1;
+    u32 word2;
+    CopyBlock8003CDF4 *src;
+    CopyBlock8003CDF4 *dst;
+    CopyBlock8003CDF4 *end;
+    u32 *base;
+    GameTrackPoint *track;
+    GameTrackPoint *point;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 index asm("$3");
-    register s32 lastIndex asm("$4");
+    s32 lastIndex;
     register s32 course asm("$3");
 
     base = arg0;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(base) : "0"(base));
     dst = (CopyBlock8003CDF4 *)g_CameraCar;
     src = (CopyBlock8003CDF4 *)base;

@@ -12,9 +12,9 @@ u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) asm("func_80066BE4");
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
 
 u_long _get_mode(long arg0, long arg1, u_long arg2) {
-    register volatile u_char *modep asm("$2") = g_GraphType;
-    register u_long value asm("$2");
-    register u_long cmd asm("$3");
+    volatile u_char *modep = g_GraphType;
+    u_long value;
+    u_long cmd;
 
     value = *modep;
     value = value - 1;
@@ -44,9 +44,10 @@ u_long _get_mode(long arg0, long arg1, u_long arg2) {
 }
 
 u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
-    register long x asm("$4") = arg0;
-    register long y asm("$3");
-    register long outY asm("$5");
+    long x = arg0;
+    long y;
+    long outY;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long value asm("$2");
     register u_long shiftedY asm("$3");
 
@@ -54,7 +55,8 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
     if (x < 0) {
         value = 0;
     } else {
-        register volatile u_short *widthp asm("$2") = g_VramWidth;
+        volatile u_short *widthp = g_VramWidth;
+        /* This pin is load-bearing: removing it changes .text. */
         register long maxX asm("$6");
 
         value = *widthp;
@@ -72,8 +74,8 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
     y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
-        register volatile u_short *heightp asm("$2") = g_VramHeight;
-        register long maxY asm("$5");
+        volatile u_short *heightp = g_VramHeight;
+        long maxY;
 
         value = *heightp;
         value = (short)value;
@@ -86,7 +88,7 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
     }
 
     {
-        register volatile u_char *modep asm("$2") = g_GraphType;
+        volatile u_char *modep = g_GraphType;
 
         value = *modep;
     }
@@ -108,9 +110,10 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
 }
 
 u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
-    register long x asm("$4") = arg0;
-    register long y asm("$3");
-    register long outY asm("$5");
+    long x = arg0;
+    long y;
+    long outY;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long value asm("$2");
     register u_long shiftedY asm("$3");
 
@@ -118,7 +121,8 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
     if (x < 0) {
         value = 0;
     } else {
-        register volatile u_short *widthp asm("$2") = g_VramWidth;
+        volatile u_short *widthp = g_VramWidth;
+        /* This pin is load-bearing: removing it changes .text. */
         register long maxX asm("$6");
 
         value = *widthp;
@@ -136,8 +140,8 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
     y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
-        register volatile u_short *heightp asm("$2") = g_VramHeight;
-        register long maxY asm("$5");
+        volatile u_short *heightp = g_VramHeight;
+        long maxY;
 
         value = *heightp;
         value = (short)value;
@@ -150,7 +154,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
     }
 
     {
-        register volatile u_char *modep asm("$2") = g_GraphType;
+        volatile u_char *modep = g_GraphType;
 
         value = *modep;
     }
@@ -172,9 +176,10 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
 }
 
 u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long x asm("$2");
     register u_long y asm("$3");
-    register volatile u_char *modep asm("$2") = g_GraphType;
+    volatile u_char *modep = g_GraphType;
 
     x = *modep;
     x = x - 1;
@@ -214,11 +219,13 @@ extern u_char g_GraphReverse asm("D_800941EB");
 u_long get_dx(DispEnv *env) asm("func_80066CB0");
 
 u_long get_dx(DispEnv *env) {
-    register volatile u_char *modep asm("$2") = g_GraphType;
+    volatile u_char *modep = g_GraphType;
+    /* This pin is load-bearing: removing it changes .text. */
     register long value asm("$2");
-    register long mode asm("$3");
+    long mode;
 
     value = *modep;
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(value) : "0"(value));
     mode = value & 0xFF;
 

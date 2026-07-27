@@ -51,11 +51,12 @@ void GameUpdateRouteScenery(void) {
     SVec vin;
     LVec vout;
     volatile s32 pad[6];
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 *cnt asm("$7");
-    register u8 *base asm("$6");
+    u8 *base;
     register KF *kp asm("$5");
     register s32 i asm("$4");
-    register s32 counter asm("$3");
+    s32 counter;
     s32 c;
     s32 r4354;
 
@@ -78,6 +79,7 @@ void GameUpdateRouteScenery(void) {
         g_RouteSceneryFrame = counter;
         __asm__ volatile("" ::: "memory");
         if (rec0->dur == counter) {
+            /* This pin is load-bearing: removing it changes .text. */
             register s32 ni asm("$2");
 
             ni = i + 1;
@@ -88,16 +90,17 @@ void GameUpdateRouteScenery(void) {
 
     i = g_RouteSceneryKeyIndex;
     if ((kp + i)->dur == -1) {
-        register s32 idx asm("$4");
-        register u8 *src asm("$4");
-        register KF *r3 asm("$2");
-        register s32 off asm("$2");
-        register s32 n asm("$3");
-        register s32 value asm("$3");
+        s32 idx;
+        u8 *src;
+        KF *r3;
+        s32 off;
+        s32 n;
+        s32 value;
+        /* These pins are load-bearing: removing any one changes .text. */
         register s32 *dst asm("$6");
         register s32 word0 asm("$2");
-        register s32 word1 asm("$3");
-        register s32 word2 asm("$5");
+        s32 word1;
+        s32 word2;
 
         idx = g_RaceSeries;
         g_RouteSceneryKeyIndex = 0;
@@ -129,9 +132,9 @@ void GameUpdateRouteScenery(void) {
     }
 
     {
-        register KF *rec asm("$6");
-        register s32 t asm("$7");
-        register Matrix *m0 asm("$4");
+        KF *rec;
+        s32 t;
+        Matrix *m0;
         s32 t0v;
 
         rec = g_RouteSceneryKeyframe + (s32)g_RouteSceneryKeyIndex;

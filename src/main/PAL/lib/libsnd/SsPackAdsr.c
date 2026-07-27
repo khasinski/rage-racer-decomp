@@ -5,15 +5,18 @@
 void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) asm("func_80070E84");
 
 void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
-    register u_long mask asm("$4") = 0xFFFF8000;
-    register long has8000 asm("$2") = ((short *)in)[6];
+    u_long mask = 0xFFFF8000;
+    long has8000 = ((short *)in)[6];
+    /* This pin is load-bearing: removing it changes .text. */
     register long has4000 asm("$3") = ((short *)in)[8];
-    register u_long pred asm("$2");
-    register u_long word1High asm("$9");
-    register long hasWord0High asm("$2");
+    u_long pred;
+    u_long word1High;
+    long hasWord0High;
+    /* This pin is load-bearing: removing it changes .text. */
     register u_long word1 asm("$8");
-    register u_long word0High asm("$10");
-    register u_long word0 asm("$4");
+    u_long word0High;
+    u_long word0;
+    /* These pins are load-bearing: removing any one changes .text. */
     register u_long tmp asm("$2");
     register u_long tmp2 asm("$3");
 

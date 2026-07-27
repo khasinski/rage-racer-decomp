@@ -36,12 +36,14 @@ extern char g_MsgVabTransBodyError[] asm("D_80012694");
 
 s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) asm("func_8005B768");
 s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 slotReg asm("$16");
     register s32 bodyReg asm("$17");
-    register s16 *vabIdPtr asm("$16");
+    s16 *vabIdPtr;
     register s32 currentVabId asm("$5");
     register s32 ret asm("$2");
 
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(slotReg) : "0"(slot));
     bodyReg = body;
 
@@ -51,6 +53,7 @@ s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     }
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 seqSlotArg asm("$4") = slotReg;
 
         if (slotReg == 1) {
@@ -72,7 +75,8 @@ loadVab:
     g_AudioLoadSlot = slotReg;
     ret = func_80072C4C(header, -1, g_VabSpuAddress[slotReg]);
     {
-        register s16 *vabIdBase asm("$4") = g_VabIds;
+        s16 *vabIdBase = g_VabIds;
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 offset asm("$3") = slotReg * 2;
         vabIdPtr = (s16 *)((s32)vabIdBase + offset);
     }
@@ -80,7 +84,7 @@ loadVab:
     asm volatile("" : "=r"(ret) : "0"(ret));
 
     {
-        register s32 fail asm("$18");
+        s32 fail;
 
         currentVabId = (s16)ret;
         fail = -1;
@@ -105,10 +109,11 @@ loadVab:
 s32 GamePollAudioSlotLoad(void) asm("func_8005B89C");
 s32 GamePollAudioSlotLoad(void) {
     s32 completed;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 *flagsPtr asm("$4");
     register s32 slot asm("$5");
-    register s32 one asm("$6");
-    register s32 value asm("$3");
+    s32 one;
+    s32 value;
     s32 bit;
 
     completed = func_8007317C(0);
@@ -138,12 +143,13 @@ s32 GamePollAudioSlotLoad(void) {
 }
 
 s32 func_8005B948(s32 slot) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 slotReg asm("$17") = slot;
     register s32 *flagsPtr asm("$16") = &g_AudioSlotMask;
-    register s32 bit asm("$3") = 1;
-    register s32 flags asm("$5") = *flagsPtr;
-    register s32 zeroArg asm("$4") = 0;
-    register s32 ret asm("$2");
+    s32 bit = 1;
+    s32 flags = *flagsPtr;
+    s32 zeroArg = 0;
+    s32 ret;
 
     bit <<= slotReg;
 
@@ -156,7 +162,7 @@ s32 func_8005B948(s32 slot) {
 
 loaded:
     {
-        register s32 newFlags asm("$2") = bit ^ flags;
+        s32 newFlags = bit ^ flags;
         *flagsPtr = newFlags;
         func_80073748(zeroArg, 0);
         func_8007865C(0);
@@ -186,11 +192,12 @@ s32 func_8005B9CC(void) {
 }
 
 s32 func_8005BA20(s32 header, s32 body, u16 *table) {
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 ret asm("$2");
     register s32 currentVabId asm("$5");
-    register s16 *vabIdPtr asm("$18");
-    register s32 fail asm("$16");
-    register s32 tableReg asm("$19") = (s32)table;
+    s16 *vabIdPtr;
+    s32 fail;
+    s32 tableReg = (s32)table;
 
     g_AudioLoadSlot = 3;
     ret = func_80072C4C(header, -1, g_VabSpuAddressExtra);
@@ -223,15 +230,15 @@ s32 func_8005BA20(s32 header, s32 body, u16 *table) {
 }
 
 s32 func_8005BB1C(s32 header, s32 body, s32 table) {
-    register s32 bodyReg asm("$16") = body;
-    register s32 tableReg asm("$19") = table;
-    register s16 *vabIdPtr asm("$18");
+    s32 bodyReg = body;
+    s32 tableReg = table;
+    s16 *vabIdPtr;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 currentVabId asm("$5");
     register s32 fail asm("$17");
     register s32 ret asm("$2");
-    register s32 flags asm("$3");
+    s32 flags;
 
-    asm("" : "=r"(bodyReg), "=r"(tableReg) : "0"(bodyReg), "1"(tableReg));
     ret = func_80072C4C(header, -1, 0x6A000);
     vabIdPtr = &g_VabIds3;
     *vabIdPtr = ret;
@@ -263,10 +270,10 @@ s32 func_8005BB1C(s32 header, s32 body, s32 table) {
 }
 
 void func_8005BC14(void) {
-    register s32 liveSlot asm("$16");
-    register s32 *flagsPtr asm("$4") = &g_AudioSlotMask;
-    register s32 flags asm("$3") = *flagsPtr;
-    register s32 newFlags asm("$2");
+    s32 liveSlot;
+    s32 *flagsPtr = &g_AudioSlotMask;
+    s32 flags = *flagsPtr;
+    s32 newFlags;
 
     if (flags & 0x20) {
         newFlags = flags ^ 0x20;
@@ -279,8 +286,8 @@ void func_8005BC14(void) {
 }
 
 void func_8005BC80(void) {
-    register s32 i asm("$16");
-    register s32 *flag asm("$3") = &g_AudioSlotMask;
+    s32 i;
+    s32 *flag = &g_AudioSlotMask;
 
     asm volatile("" : "=r"(flag) : "0"(flag));
     if (*flag != 0) {

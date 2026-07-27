@@ -15,20 +15,22 @@ void GameUpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
 
 void GameUpdateShuttleScenery(s32 arg0) {
     GameShuttleScenery *entry;
-    register s32 phase asm("$2");
-    register s32 side asm("$10");
-    register s32 step asm("$6");
-    register s32 baseIndex asm("$7");
-    register s32 altIndex asm("$4");
-    register s32 phaseOffset asm("$12");
-    register s32 phaseShift asm("$9");
-    register s16 *limitPtr asm("$8");
-    register s16 *tailLimitPtr asm("$8");
+    s32 phase;
+    s32 side;
+    s32 step;
+    s32 baseIndex;
+    s32 altIndex;
+    s32 phaseOffset;
+    s32 phaseShift;
+    s16 *limitPtr;
+    s16 *tailLimitPtr;
+    /* These pins are load-bearing: removing any one changes .text. */
     register s32 denom asm("$5");
     register s32 temp asm("$3");
     register s32 value asm("$2");
 
     entry = &g_ShuttleScenery[arg0];
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(entry) : "0"(entry));
     limitPtr = g_ShuttlePathTravelMax;
     side = entry->startEndpoint;
@@ -68,7 +70,6 @@ void GameUpdateShuttleScenery(s32 arg0) {
 
     phase = (s32)g_ShuttlePathDwellMax;
     tailLimitPtr = (s16 *)(phaseOffset + phase);
-    asm("" : "=r"(tailLimitPtr) : "0"(tailLimitPtr));
     if (entry->dwellCounter >= *tailLimitPtr) {
         entry->travelStep = entry->travelStep + 1;
         entry->dwellCounter = *tailLimitPtr;
@@ -87,19 +88,21 @@ void GameDrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
 void GameDrawShuttleScenery(s32 arg0) {
     Matrix mtx0;
     Matrix mtx1;
-    register GameShuttleScenery *state asm("$18");
-    register GameShuttleScenery *base asm("$3");
-    register Matrix *mtx1Ptr asm("$17");
+    GameShuttleScenery *state;
+    GameShuttleScenery *base;
+    Matrix *mtx1Ptr;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 drawArg asm("$16");
-    register s32 drawValue asm("$5");
-    register s32 offset asm("$2");
+    s32 drawValue;
+    s32 offset;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 bucket asm("$2");
-    register s32 bit asm("$5");
-    register s32 firstValue asm("$3");
-    register s32 value asm("$6");
-    register u32 *visibility asm("$3");
-    register u32 *wordPtr asm("$4");
-    register s32 visible asm("$3");
+    s32 bit;
+    s32 firstValue;
+    s32 value;
+    u32 *visibility;
+    u32 *wordPtr;
+    s32 visible;
     s32 frameValue;
 
     offset = (((arg0 * 3) << 2) + arg0) << 2;

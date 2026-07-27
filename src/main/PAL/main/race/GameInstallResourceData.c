@@ -45,10 +45,11 @@ void GameSetCarSpec(u32 arg0) {
 
 void GameInstallTrackEventData(u8 *arg0) asm("func_80034E04");
 void GameInstallTrackEventData(u8 *arg0) {
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 offset0 asm("$2");
-    register s32 offset1 asm("$3");
-    register u8 *callArg asm("$4");
-    register u8 *base asm("$5");
+    s32 offset1;
+    u8 *callArg;
+    u8 *base;
 
     offset0 = *(s32 *)(arg0 + 0xB78);
     offset1 = *(s32 *)(arg0 + 0xB68);

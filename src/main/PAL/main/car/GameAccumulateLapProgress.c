@@ -23,6 +23,7 @@ void GameAccumulateLapProgress(GameCarRuntime *car) {
     s32 idx;
     s32 fwd;
     s32 back;
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 bv asm("$2");
     s32 count;
     GameTrackPoint *array;
@@ -46,7 +47,7 @@ void GameAccumulateLapProgress(GameCarRuntime *car) {
                 }
                 fwd = (car->trackPointIndex + n) % count;
                 if (r == back) {
-                    register s32 ir asm("$3");
+                    s32 ir;
                     for (i = 0; i < n; i++) {
                         j = car->trackPointIndex - i;
                         ir = j;
@@ -85,6 +86,7 @@ void GameAccumulateLapProgress(GameCarRuntime *car) {
                     break;
                 }
                 if (r == bv) {
+                    /* This pin is load-bearing: removing it changes .text. */
                     register s32 ir asm("$3");
                     for (i = 1; i <= n; i++) {
                         j = car->trackPointIndex - i;

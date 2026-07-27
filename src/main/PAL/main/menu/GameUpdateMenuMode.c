@@ -34,8 +34,8 @@ void func_80047E60(s32);
 void GameUpdateMenuMode(void) asm("func_8005ACA0");
 void GameUpdateMenuMode(void) {
     void *scratch;
-    register s32 c0 asm("$2");
-    register s32 c1 asm("$3");
+    s32 c0;
+    s32 c1;
 
     c0 = g_AnimTimer;
     c1 = g_SceneTimer;
@@ -66,6 +66,7 @@ void GameUpdateMenuMode(void) {
     func_800496F0(D_8009B324, ((struct Entry_5ACA0 *)g_CarTable)[(g_MenuScreen == 0xB) ? g_CarListCursor : g_PlayerCarIndex].f1);
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 flag asm("$6");
         flag = g_MenuHintBarStep;
         if (flag == 0) {
@@ -156,20 +157,20 @@ void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0"
 
 void GameLoadAudioParameterTable(u16 *table) asm("func_8005B070");
 void GameLoadAudioParameterTable(u16 *table) {
-    register u16 *tableReg asm("$16") = table;
-    register s32 bank asm("$18");
-    register s32 row asm("$17");
-    register s32 col asm("$5");
-    register s32 bankOffset asm("$9");
-    register s32 rowOffset asm("$7");
-    register s32 rowBaseOffset asm("$8");
-    register s32 rowBasePtr asm("$2");
-    register s32 colOffset asm("$3");
-    register s32 *base asm("$10") = g_EngineSoundCurves;
-    register s32 *secondBase asm("$11");
-    register s32 *leftPtr asm("$3");
-    register s32 *rightPtr asm("$6");
-    register s32 step asm("$2");
+    u16 *tableReg = table;
+    s32 bank;
+    s32 row;
+    s32 col;
+    s32 bankOffset;
+    s32 rowOffset;
+    s32 rowBaseOffset;
+    s32 rowBasePtr;
+    s32 colOffset;
+    s32 *base = g_EngineSoundCurves;
+    s32 *secondBase;
+    s32 *leftPtr;
+    s32 *rightPtr;
+    s32 step;
 
     bank = 0;
     secondBase = base + 9;
@@ -182,7 +183,7 @@ void GameLoadAudioParameterTable(u16 *table) {
             rowBaseOffset = rowOffset;
             rightPtr = (s32 *)((s32)rowOffset + (s32)secondBase);
             do {
-                register s32 leftValue asm("$4");
+                s32 leftValue;
 
                 leftValue = *tableReg++;
                 colOffset = col << 2;
@@ -203,6 +204,7 @@ void GameLoadAudioParameterTable(u16 *table) {
     } while (bank < 2);
 
     {
+        /* This pin is load-bearing: removing it changes .text. */
         register s32 scale asm("$6");
 
         scale = *tableReg;
@@ -215,8 +217,8 @@ void GameLoadAudioParameterTable(u16 *table) {
     do {
         row = 0;
         do {
-            register s32 rowArg asm("$4");
-            register s32 tone asm("$6");
+            s32 rowArg;
+            s32 tone;
 
             tone = *tableReg;
             tableReg++;
@@ -302,9 +304,9 @@ void GameSetReverbPreset(s32 type, s32 left, s32 right) {
 }
 
 void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
-    register s16 *base asm("$3") = g_SoundSlotTone;
-    register s16 *row asm("$2");
-    register s16 *entry asm("$3");
+    s16 *base = g_SoundSlotTone;
+    s16 *row;
+    s16 *entry;
 
     row = (s16 *)((s32)base + (slot << 2));
     entry = (s16 *)((tone << 1) + (s32)row);
