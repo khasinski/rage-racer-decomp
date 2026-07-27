@@ -5,8 +5,14 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import dis_sym
 
 
 BASE_VRAM = 0x80010000
@@ -106,6 +112,44 @@ def parse_wrappers(
     return asm_by_unit, c_funcs_by_unit, rodata_by_name
 
 
+SUBSEGMENT_START_RE = re.compile(r"^\s*-\s*\[\s*0x([0-9A-Fa-f]+)")
+
+
+def parse_region_bounds(config: Path) -> list[tuple[int, int]]:
+    """The vram span of each subsegment, the trailing end marker included.
+
+    `parse_subsegments` drops the bare `[0x8B800]` that closes the segment
+    list, which would leave the whole data segment looking like it belongs to
+    no region at all.  Here it is the bound that makes the region before it
+    finite.
+    """
+    starts = [
+        int(match.group(1), 16)
+        for match in (SUBSEGMENT_START_RE.match(line) for line in config.read_text().splitlines())
+        if match is not None
+    ]
+    return [
+        (BASE_VRAM + (start - BASE_OFF), BASE_VRAM + (end - BASE_OFF))
+        for start, end in zip(starts, starts[1:])
+        if end > start
+    ]
+
+
+def function_extents(starts: list[tuple[int, int]]) -> dict[int, int]:
+    """Where each function ends: at the next one, or at the end of its unit."""
+    extents: dict[int, int] = {}
+    ordered = sorted(set(starts))
+    for index, (address, segment_end) in enumerate(ordered):
+        end = segment_end
+        if index + 1 < len(ordered):
+            following = ordered[index + 1][0]
+            if address < following < end:
+                end = following
+        if end > address:
+            extents[address] = min(extents.get(address, end), end)
+    return extents
+
+
 def unit_output_path(name: str, version: str) -> str:
     prefix = f"{version}/"
     if name.startswith(prefix):
@@ -160,8 +204,6 @@ def function_address(
 
 def write_words(path: Path, section: str, data: bytes, vram: int, labels: dict[int, list[str]]) -> None:
     lines = [section, ""]
-    if section.startswith(".section .text"):
-        lines[:0] = [".set noreorder", ".set noat"]
 
     for offset in range(0, len(data), 4):
         address = vram + offset
@@ -169,8 +211,29 @@ def write_words(path: Path, section: str, data: bytes, vram: int, labels: dict[i
             lines.append(f".globl {label}")
             lines.append(f"{label}:")
         word = int.from_bytes(data[offset : offset + 4], "little")
-        lines.append(f".word 0x{word:08X}")
+        lines.append(f"/* {address:08X} {word:08X} */  .word 0x{word:08X}")
 
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n")
+
+
+def write_code(
+    path: Path,
+    data: bytes,
+    target: bytes,
+    vram: int,
+    labels: dict[int, list[str]],
+    table: dis_sym.SymbolTable,
+    stats: dis_sym.Stats,
+) -> None:
+    """Write a function as disassembly instead of an opaque run of `.word`.
+
+    Every call and every address the symbol table accounts for comes out as a
+    symbol reference, so the linker resolves it and the function is free to move
+    once the last of the pinned addresses is gone.
+    """
+    lines = [".set noreorder", ".set noat", '.section .text, "ax"', ""]
+    lines += dis_sym.disassemble(target, vram, len(data), table, labels, stats)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines) + "\n")
 
@@ -184,30 +247,43 @@ def with_entry_label(labels: dict[int, list[str]], address: int, label: str) -> 
     return merged
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--version", default="PAL")
-    parser.add_argument("--basename", default="main")
-    args = parser.parse_args()
+@dataclass
+class Plan:
+    """What the split owes: which stub covers what, and the symbols in scope."""
 
-    root = Path.cwd()
-    config = root / "configs" / args.version / f"{args.basename}.yaml"
-    target = root / "assets" / args.version / f"{args.basename}.exe"
-    src_root = root / "src" / args.basename / args.version
-    out_dir = root / "asm" / args.version / args.basename / "nonmatchings"
-    labels = parse_labels(root / "configs" / args.version / f"nonmatching_labels.{args.basename}.txt")
+    target_bytes: bytes
+    stubs: list[tuple[Path, int, int, dict[int, list[str]]]]
+    rodata: list[tuple[Path, bytes, int, dict[int, list[str]]]]
+    table: dis_sym.SymbolTable
+
+
+def build_plan(root: Path, version: str, basename: str) -> Plan | None:
+    config = root / "configs" / version / f"{basename}.yaml"
+    target = root / "assets" / version / f"{basename}.exe"
+    src_root = root / "src" / basename / version
+    out_dir = root / "asm" / version / basename / "nonmatchings"
+    labels = parse_labels(root / "configs" / version / f"nonmatching_labels.{basename}.txt")
 
     if not config.exists() or not target.exists() or not src_root.exists():
-        return 0
+        return None
 
     aliases = collect_asm_aliases(root / "include", src_root)
     asm_wrappers_by_unit, c_funcs_by_unit, rodata_wrappers = parse_wrappers(
-        src_root, args.version, aliases
+        src_root, version, aliases
     )
     label_addresses = parse_label_addresses(labels)
     target_bytes = target.read_bytes()
 
-    generated = 0
+    # Two passes: the first works out which stub covers which address range, the
+    # second disassembles them.  The symbol table in between needs the first
+    # pass, because a label is only safe to reference once something defines it,
+    # and for these labels that something is the stub the second pass writes.
+    planned: list[tuple[Path, int, int, dict[int, list[str]]]] = []
+    rodata_jobs: list[tuple[Path, bytes, int, dict[int, list[str]]]] = []
+    #: every function start, so a switch table pointing into the middle of one
+    #: can say which function it points into.
+    function_starts: list[tuple[int, int]] = []
+
     for start, kind, name, end in parse_subsegments(config):
         if end <= start:
             continue
@@ -222,6 +298,10 @@ def main() -> int:
                 for c_func in c_funcs_by_unit.get(name, [])
             ]
             c_func_boundaries = [address for address in c_func_boundaries if address is not None]
+            segment_end = BASE_VRAM + (end - BASE_OFF)
+            function_starts += [
+                (address, segment_end) for address in c_func_boundaries if address >= vram
+            ]
             for index, asm_name in enumerate(asm_wrappers):
                 output_labels = labels_for_asm(labels, name, asm_name)
                 func_vram = function_address(asm_name, label_addresses, vram, output_labels)
@@ -245,23 +325,84 @@ def main() -> int:
                 if next_vram is None or next_vram <= func_vram:
                     continue
 
-                func_start = start + (func_vram - vram)
-                func_end = start + (next_vram - vram)
-                output = out_dir / unit_output_path(name, args.version) / f"{asm_name}.s"
-                write_words(
-                    output,
-                    '.section .text, "ax"',
-                    target_bytes[func_start:func_end],
-                    func_vram,
-                    with_entry_label(output_labels, func_vram, asm_name),
+                output = out_dir / unit_output_path(name, version) / f"{asm_name}.s"
+                planned.append(
+                    (
+                        output,
+                        func_vram,
+                        next_vram,
+                        with_entry_label(output_labels, func_vram, asm_name),
+                    )
                 )
-                generated += 1
         elif kind == ".rodata" and f"{stem}_rodata" in rodata_wrappers:
             output = out_dir / rodata_wrappers[f"{stem}_rodata"] / f"{stem}_rodata.s"
-            write_words(output, '.section .rodata, "a"', data, vram, labels.get(output.name, {}))
-            generated += 1
+            rodata_jobs.append((output, data, vram, labels.get(output.name, {})))
+
+    stub_names: dict[int, str] = {}
+    stub_extents: dict[int, int] = function_extents(
+        function_starts + [(start, stop) for _, start, stop, _ in planned]
+    )
+    for _, func_vram, next_vram, stub_labels in planned:
+        stub_extents[func_vram] = next_vram
+        for address, names in stub_labels.items():
+            for label in names:
+                stub_names.setdefault(address, label)
+    # A unit that still spells a function `func_8004F3EC(...)` in C defines
+    # exactly that symbol, so a call to it can use the name.
+    for unit_funcs in c_funcs_by_unit.values():
+        for c_func in unit_funcs:
+            address = fallback_function_address(c_func)
+            if address is not None:
+                stub_names.setdefault(address, c_func)
+    regions = parse_region_bounds(config)
+    table = dis_sym.build_symbol_table(
+        root, version, basename, stub_names, stub_extents, regions
+    )
+    return Plan(target_bytes, planned, rodata_jobs, table)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--version", default="PAL")
+    parser.add_argument("--basename", default="main")
+    args = parser.parse_args()
+
+    plan = build_plan(Path.cwd(), args.version, args.basename)
+    if plan is None:
+        return 0
+
+    target_bytes = plan.target_bytes
+    table = plan.table
+    stats = dis_sym.Stats()
+    generated = 0
+
+    for output, func_vram, next_vram, stub_labels in plan.stubs:
+        write_code(
+            output,
+            target_bytes[
+                func_vram - dis_sym.FILE_TO_VRAM : next_vram - dis_sym.FILE_TO_VRAM
+            ],
+            target_bytes,
+            func_vram,
+            stub_labels,
+            table,
+            stats,
+        )
+        generated += 1
+    for output, data, vram, data_labels in plan.rodata:
+        write_words(output, '.section .rodata, "a"', data, vram, data_labels)
+        generated += 1
 
     print(f"generated {generated} local nonmatching asm files for {args.version}/{args.basename}")
+    print(
+        f"  symbolised {stats.calls_named}/{stats.calls} calls and "
+        f"{stats.pairs_named}/{stats.pairs} RAM address pairs over "
+        f"{stats.words} instructions"
+    )
+    print(
+        f"  left literal: {stats.pairs_absolute} hardware or constant pairs, "
+        f"{stats.pairs_frozen} pairs no relocation can spell"
+    )
     return 0
 
 
