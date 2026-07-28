@@ -3781,6 +3781,27 @@ offset of the last field written. The open question is therefore narrower than i
 **what source shape makes that giv unbiased?** Retail's `move s2,s3` with positive field
 offsets 8 through 14 is a bias of 0.
 
+**The bias rule, established by experiment and reusable.** `combine_givs` takes the head
+of `bl->giv` as the representative and points the others at it, and `record_giv` builds
+that list by prepending, so **the representative is the last giv recorded, and the bias
+is the offset of the last field written through the pointer in source order.** Verified
+directly: writing `x0,y0,u0,v0,clut` gives `addiu s2,s3,14`, and reversing the five
+writes to `clut,v0,u0,y0,x0` gives `addiu s2,s3,8`. This is the same pathology recorded
+for `func_8005C914`.
+
+It also shows why bias 0 is unreachable with this structure. `packet` is the basic
+induction variable; the field accesses at 8 through 14 are its givs, and there is no giv
+at offset 0 because a base-offset use *is* the biv and is never recorded as a giv.
+Passing the cast pointer to `AddPrim` does not create one: four placements of the cast
+across `SetSprt8`, `SetShadeTex` and `AddPrim` all leave the residual at 7.
+
+So retail's second register cannot be a giv over `packet`. Either the original advanced a
+cursor explicitly, which the `move_movables` argument above rules out, or `packet` is
+itself a giv over some other biv, which would make offset 0 a real giv. The conditional
+advance (`packet += 16` only when the cell is non-blank) makes the second reading hard to
+construct, since `str` advances unconditionally and cannot be that biv. This is where the
+next attempt should start.
+
 Down from six residual words to three — **but both figures came from the
 pre-`0568a8af` harness and understate; re-measure before quoting them.** The
 *shape* of the residual below is what matters and is independent of the count.
