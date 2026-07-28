@@ -3726,6 +3726,24 @@ with the `2:` label hack in `lib/libsnd/SsUtPitchBend.c`.
 
 ### 21c. `func_80016754` GameDrawText8x8 — one construct (word count unreliable)
 
+**Converted with both siblings on 2026-07-28.** The accepted source does not
+make `packet` a giv. Instead, a tied empty output makes the first font base a
+source preheader operation before the explicit sprite-cursor assignment:
+
+```c
+asm("" : "=r"(font) : "0"(g_Font8x8Cells));
+sprt = (TextSprt8 *)packet;
+```
+
+The opaque output supplies the U lookup while the V lookup independently
+rematerialises `g_Font8x8Cells + 1`. Thus the exact `.loop` dump orders the
+font `asm_operands` before `sprt = packet`; allocation emits retail's
+`lui/addiu s6` then `move s2,s3`. Short-lived `v0`/`v1`/`t0` pins retain the
+retail lookup allocation. This same shape gives exact 0 for `func_80016754`
+(86 words), `func_800168AC` (91), and `func_80016A18` (89). Full details and
+the shaded sibling's two additional pressure pins are in
+`docs/TASK_FOR_CODEX_2F_REPORT.md`.
+
 **Re-measured 2026-07-28: 86/86 words, exact residual 3, and the residual is now
 characterised exactly.** Retail's loop preheader is `lui/addiu s6` (the hoisted
 `D_8007C2F8` font base) followed by `move s2,s3`; every candidate emits the `move`
