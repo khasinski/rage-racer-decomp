@@ -30,6 +30,7 @@ void GameStepCdPlayRequest(void) asm("func_80043494");
 void GameStepCdResumeRequest(void) asm("func_800437B8");
 void GameBuildCdTrackTable(void) asm("func_800431BC");
 void SsSetSpuInputAttr_Link(u8 source, u8 field, u8 value) asm("SsSetSpuInputAttr");
+void SsSetSerialVol_Link(u8 source, s16 left, s16 right) asm("SsSetSerialVol");
 
 void GameStepCdPauseRequest(void) asm("func_80043598");
 void GameStepCdPauseRequest(void) {
@@ -166,24 +167,13 @@ done:
 
 void GameInitCdAudio(void) asm("func_800438BC");
 void GameInitCdAudio(void) {
+    u8 *status;
+
     SsSetSpuInputAttr_Link(0, 0, 1);
-    asm(".set noreorder\n"
-        "move $4,$0\n"
-        "li $5,0x7FFF\n"
-        ".word 0x0C01BAF8\n"
-        ".globl func_800438E0\n"
-        "func_800438E0:\n"
-        ".word 0x34067FFF\n"
-        ".set noreorder");
-    asm(".set noreorder\n"
-        "li $4,0xE\n"
-        "lui $5,%hi(D_8009B168)\n"
-        "addiu $5,$5,%lo(D_8009B168)\n"
-        "move $6,$0\n"
-        "li $2,0x7\n"
-        ".word 0x0C01A969\n"
-        "sb $2,0($5)\n"
-        ".set noreorder");
+    SsSetSerialVol_Link(0, 0x7FFF, 0x7FFF);
+    status = &D_8009B168;
+    *status = 7;
+    CdControl(0xE, status, 0);
     GameBuildCdTrackTable();
 
     g_CdTrackPending = -1;
