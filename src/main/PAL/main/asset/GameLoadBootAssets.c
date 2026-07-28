@@ -21,7 +21,7 @@ extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern GameAssetTripleHeader *g_AssetBase asm("D_8019C904");
 extern void *g_AssetBlockPtr2 asm("D_8019C754");
 extern void *g_AssetSubBlockPtr asm("D_801E8AB0");
-void func_8005B9CC(void);
+void GameCloseLoadedAudioSlots(void) asm("func_8005B9CC");
 
 void GameLoadBootAssets(void) asm("func_800180CC");
 void GameLoadBootAssets(void) {
@@ -173,7 +173,7 @@ void GameLoadSelectBgmAssets(void) {
 
     switch (g_AssetLoadState) {
     case 1:
-        func_8005B9CC();
+        GameCloseLoadedAudioSlots();
         g_AssetLoadState = 2;
     case 2:
         if (func_80017C78(7, g_AssetBase) != 0) {

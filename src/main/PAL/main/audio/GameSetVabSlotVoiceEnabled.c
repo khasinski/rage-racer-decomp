@@ -27,8 +27,8 @@ void GameSetVabSlotVoiceEnabled(s32 arg0, s32 arg1, s32 arg2) {
 
 extern s16 g_SeqHandle asm("D_801E6D90");
 extern s32 g_SeqVolume asm("D_801E6D94");
-void func_80072698(s32 arg0, s32 arg1, s32 arg2);
+void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2) asm("func_80072698");
 void GameSetSequenceVolume(s32 volume) {
     g_SeqVolume = volume;
-    func_80072698(g_SeqHandle, (s16)volume, (s16)volume);
+    SsSeqSetVol(g_SeqHandle, (s16)volume, (s16)volume);
 }

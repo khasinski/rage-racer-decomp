@@ -7,9 +7,9 @@ s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 s32 func_8005E4EC(s32 slot, s32 header, s32 body, s32 seq);
-s32 func_8005BA20(s32 header, s32 body, u16 *table);
+s32 GameStartVabTransferWithTable(s32 header, s32 body, u16 *table) asm("func_8005BA20");
 s32 func_8005E600(s32 arg0);
-s32 func_8005B948(s32 arg0);
+s32 GameCloseVabOnlyAudioSlot(s32 arg0) asm("func_8005B948");
 void func_80063D9C(s32 arg0);
 void func_800736E8(void);
 void func_80073614(s32 arg0);
@@ -48,7 +48,7 @@ s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     bodyReg = body;
 
     if (slotReg == 3) {
-        ret = func_8005BA20(header, bodyReg, (u16 *)table);
+        ret = GameStartVabTransferWithTable(header, bodyReg, (u16 *)table);
         return (s16)ret;
     }
 
@@ -144,7 +144,7 @@ s32 GamePollAudioSlotLoad(void) {
     return (s16)g_VabTransferDone;
 }
 
-s32 func_8005B948(s32 slot) {
+s32 GameCloseVabOnlyAudioSlot(s32 slot) {
     s32 *flagsPtr = &g_AudioSlotMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;
@@ -174,20 +174,21 @@ done:
     return ret;
 }
 
-s32 func_8005B9CC(void) {
+s32 GameCloseLoadedAudioSlots(void) asm("func_8005B9CC");
+s32 GameCloseLoadedAudioSlots(void) {
     func_800731CC();
     if (func_8005E600(1) == 0) {
         return 0;
     }
-    if (func_8005B948(2) == 0) {
+    if (GameCloseVabOnlyAudioSlot(2) == 0) {
         return 0;
     }
-    if (func_8005B948(3) == 0) {
+    if (GameCloseVabOnlyAudioSlot(3) == 0) {
         return 0;
     }
 }
 
-s32 func_8005BA20(s32 header, s32 body, u16 *table) {
+s32 GameStartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 ret asm("$2");
     register s32 currentVabId asm("$5");
@@ -226,7 +227,8 @@ s32 func_8005BA20(s32 header, s32 body, u16 *table) {
     return g_VabTransferDone;
 }
 
-s32 func_8005BB1C(s32 header, s32 body, s32 table) {
+s32 GameLoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) asm("func_8005BB1C");
+s32 GameLoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     s32 bodyReg = body;
     s32 tableReg = table;
     s16 *vabIdPtr;
@@ -265,7 +267,8 @@ s32 func_8005BB1C(s32 header, s32 body, s32 table) {
     return 0;
 }
 
-void func_8005BC14(void) {
+void GameCloseExtraVabSlot(void) asm("func_8005BC14");
+void GameCloseExtraVabSlot(void) {
     s32 liveSlot;
     s32 *flagsPtr = &g_AudioSlotMask;
     s32 flags = *flagsPtr;
@@ -281,7 +284,8 @@ void func_8005BC14(void) {
     }
 }
 
-void func_8005BC80(void) {
+void GameShutdownSoundSystem(void) asm("func_8005BC80");
+void GameShutdownSoundSystem(void) {
     s32 i;
     s32 *flag = &g_AudioSlotMask;
 

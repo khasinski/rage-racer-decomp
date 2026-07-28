@@ -268,7 +268,8 @@ extern s32 D_8007FB1C;
 extern s32 D_8019CAB8;
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 
-void func_8004C0D8(void) {
+void GameUpdateTeamLogoCanvas(void) asm("func_8004C0D8");
+void GameUpdateTeamLogoCanvas(void) {
     s32 temp_a0;
     s32 temp_v0;
     s32 temp_v0_2;

@@ -2,13 +2,13 @@
 #include "game/audio.h"
 
 extern s16 g_SeqHandle asm("D_801E6D90");
-void func_800725F0(s32 arg0, s32 arg1, s32 arg2);
+void SsSeqPlay(s32 arg0, s32 arg1, s32 arg2) asm("func_800725F0");
 void GamePlaySequence(void) asm("func_8005E88C");
-void GamePlaySequence(void) { func_800725F0(g_SeqHandle, 1, 0); }
+void GamePlaySequence(void) { SsSeqPlay(g_SeqHandle, 1, 0); }
 
-void func_800728A0(s32 arg0);
+void SsSeqStop(s32 arg0) asm("func_800728A0");
 void GameStopSequence(void) asm("func_8005E8B8");
-void GameStopSequence(void) { func_800728A0(g_SeqHandle); }
+void GameStopSequence(void) { SsSeqStop(g_SeqHandle); }
 
 extern s32 g_ReverbFadeStep asm("D_801E6D8C");
 extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
@@ -26,7 +26,7 @@ void func_8005B190(s32 arg0, s32 arg1);
 void func_8005E600(s32 arg0);
 void func_8005E7A0(s32 arg0);
 void func_8005E8B8(void);
-void func_80072698(s32 arg0, s32 arg1, s32 arg2);
+void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2) asm("func_80072698");
 
 void GameUpdateSequenceFadeOut(void) asm("func_8005E900");
 void GameUpdateSequenceFadeOut(void) {
@@ -97,6 +97,6 @@ void GameApplyDuckedSequenceAudio(void) {
     }
     scaled <<= 0xE;
     volume = scaled >> 0x10;
-    func_80072698(seq, volume, volume);
+    SsSeqSetVol(seq, volume, volume);
     func_8005B190(0x3C, 0x3C);
 }

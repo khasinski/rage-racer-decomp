@@ -122,8 +122,8 @@ typedef struct VagAtr {
 #define SS_SEQ_FLAG_TEMPO_INC 0x80
 
 void _SsSndStop(short seq, short sep) asm("func_80072734");
-void SsSeqStop(short seq) asm("func_800728A0");
-void SsSepStop(short seq, short sep) asm("func_800728C8");
+void SsSeqStop(long seq) asm("func_800728A0");
+void SsSepStop(long seq, long sep) asm("func_800728C8");
 void _SsSndTempo(short seq, short sep) asm("func_800728F4");
 void SsUtSetReverbDepth(long left, long right) asm("func_80073748");
 long SsUtSetReverbType(long type) asm("func_80073614");
@@ -185,13 +185,16 @@ void SsSoundTickVSyncCallback(void) asm("func_80071F2C");
 void SsSetTickMode(long mode) asm("func_800720F4");
 void SsStopSoundTick(void) asm("func_80072260");
 void SsSetTableSize(u_char *table, long seq_count, long sep_count) asm("func_80072310");
-void Snd_SetPlayMode(short seq, short sep, u_char play_mode, short loop_count) asm("func_800724F0");
+void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) asm("func_800724F0");
 void SsSeqPlay(long seq, long play_mode, long loop_count) asm("func_800725F0");
 void SsSepPlay(long seq, long sep, long play_mode, long loop_count) asm("func_80072628");
 void _SsSndSetVol(long seq, long sep, long left, long right) asm("func_80072660");
 void SsSeqSetVol(long seq, long left, long right) asm("func_80072698");
 void SsSepSetVol(long seq, long sep, long left, long right) asm("func_800726C8");
-void SsSepSetCrescendo(long seq, long sep, long vol, long v_time) asm("func_80072700");
+/* Recorded here as SsSepSetCrescendo, which the callee rules out: func_80076DCC
+   (SpuVmGetSeqVol) reads the score's 0x74/0x76 volume pair through two
+   out-pointers, and this is a one-line forwarder to it. */
+long SsSepGetVol(long seq, long sep, short *voll, short *volr) asm("func_80072700");
 void SsSetReservedVoice(u_char voices) asm("func_80072AD0");
 void SsSetMono(void) asm("func_80072AE0");
 void SsSetStereo(void) asm("func_80072AF4");
@@ -201,7 +204,7 @@ short SsVabOpen(u_char *addr, VabHdr *vab_header) asm("func_80072BC0");
 short SsVabOpenHead(u_char *addr, short vab_id) asm("func_80072C18");
 short SsVabOpenHeadSticky(u_char *addr, short vab_id, u_long spu_addr) asm("func_80072C4C");
 short SsVabFakeHead(u_char *addr, short vab_id, u_long spu_addr) asm("func_80072C80");
-short SsVabOpenHeadWithMode(u_char *addr, short vab_id, long mode, u_long spu_addr) asm("func_80072CB4");
+short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAddr) asm("func_80072CB4");
 short SsVabTransBody(u_char *addr, short vab_id) asm("func_800730BC");
 short SsVabTransCompleted(short immediate_flag) asm("func_8007317C");
 void SpuVmDamperOff(void) asm("func_800731A8");

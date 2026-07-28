@@ -41,7 +41,7 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
 void func_80048D64(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void func_8004A248(s32 arg0, s32 arg1);
 void GameRampTeamLogoCanvas(s32 arg0, s32 arg1) asm("func_8004B8B4");
-void func_8004C0D8(void);
+void GameUpdateTeamLogoCanvas(void) asm("func_8004C0D8");
 void GameDrawLogoSamplePanel(s32 arg0, s32 arg1) asm("func_8004E368");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8005EA14(void);
@@ -218,7 +218,7 @@ void GameUpdateTeamLogoScreen(void)
           func_8005EA6C();
           GameMenuBusy = -4;
         }
-        func_8004C0D8();
+        GameUpdateTeamLogoCanvas();
       }
       if (g_UiScriptProgress2 >= 8)
       {

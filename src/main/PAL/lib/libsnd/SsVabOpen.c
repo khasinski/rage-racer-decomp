@@ -14,7 +14,8 @@ extern long g_SndVabBodySize[] asm("D_801E8AB8");
 extern long func_8007B2C0(void);
 extern void func_8007B294(long value);
 
-short func_80072BC0(u_char *addr, VabHdr *header) {
+short SsVabOpen(u_char *addr, VabHdr *header) asm("func_80072BC0");
+short SsVabOpen(u_char *addr, VabHdr *header) {
     short vabId;
 
     vabId = SsVabOpenHead(addr, -1);
@@ -24,7 +25,7 @@ short func_80072BC0(u_char *addr, VabHdr *header) {
     return vabId;
 }
 
-short func_80072C18(u_char *addr, short vabId) {
+short SsVabOpenHead(u_char *addr, short vabId) {
     return SsVabOpenHeadWithMode(addr, vabId, 0, 0);
 }
 
@@ -32,11 +33,12 @@ short func_80072C4C(u_char *addr, short vabId, u_long spuAddr) {
     return SsVabOpenHeadWithMode(addr, vabId, 1, spuAddr);
 }
 
-short func_80072C80(u_char *addr, short vabId, u_long spuAddr) {
+short SsVabFakeHead(u_char *addr, short vabId, u_long spuAddr) asm("func_80072C80");
+short SsVabFakeHead(u_char *addr, short vabId, u_long spuAddr) {
     return SsVabOpenHeadWithMode(addr, vabId, 1, spuAddr);
 }
 
-short func_80072CB4(u_char *addr, short vabid, short mode, u_long spuAddr) {
+short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAddr) {
     long vagLengths[256];
     long i;
     long totalSize;

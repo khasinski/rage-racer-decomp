@@ -72,7 +72,7 @@ extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
-void func_8005B9CC(void);
+void GameCloseLoadedAudioSlots(void) asm("func_8005B9CC");
 void GameUploadImageAsset(s32 arg0) asm("func_8001A3C0");
 void GameRelocateCarModel(void) asm("func_80018F08");
 
@@ -87,7 +87,7 @@ void GameEnterRoundScreen(void) {
     g_FrameSyncThreshold = 0x80;
 
     if (g_AssetLoadState != 1) {
-        func_8005B9CC();
+        GameCloseLoadedAudioSlots();
         GameUploadImageAsset(g_ImageBlockBuffer);
         GameRelocateCarModel();
 

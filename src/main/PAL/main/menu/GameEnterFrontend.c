@@ -16,7 +16,7 @@ extern s32 g_FrontendState asm("D_8009F098");
 extern s32 g_TitleExitTimer asm("D_8009E880");
 extern s32 g_TitleAttractTimer asm("D_8019CB70");
 
-void func_8005B9CC(void);
+void GameCloseLoadedAudioSlots(void) asm("func_8005B9CC");
 void GameResetTrackTextureSwap(void) asm("func_80019EBC");
 void func_8001A498(void);
 void func_80021540(void);
@@ -27,7 +27,7 @@ void func_8005DBB4(void);
 void GameEnterFrontend(void) asm("func_8001AF70");
 void GameEnterFrontend(void) {
     SetDispMask(0);
-    func_8005B9CC();
+    GameCloseLoadedAudioSlots();
     GameResetTrackTextureSwap();
     func_8001A498();
 

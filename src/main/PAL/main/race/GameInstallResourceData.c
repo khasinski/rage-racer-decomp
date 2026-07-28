@@ -27,7 +27,7 @@ s32 func_8005B5C4(void);
 
 extern u8 g_MsgInitEngineOk asm("D_8001146C");
 
-void func_8005BB1C(void);
+void GameLoadExtraVabSlotWithTable(void) asm("func_8005BB1C");
 
 void func_8005B468(s32 arg0);
 
@@ -79,7 +79,7 @@ void GameInitSoundSystem(void) {
 
 void GameInitEngineSound(void) asm("func_80034ED0");
 void GameInitEngineSound(void) {
-    func_8005BB1C();
+    GameLoadExtraVabSlotWithTable();
     func_8005B468(1);
     func_8005B204(2, 0, 0);
     GameDebugPrintf(&g_MsgInitEngineOk);
