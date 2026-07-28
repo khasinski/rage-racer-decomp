@@ -387,8 +387,8 @@ void GameDrawLapNumber(void) {
     s32 divisor;
     s32 digitsDrawn;
     s32 xOffset;
-    /* These pins are load-bearing: removing any one changes .text. */
-    register s32 quotient asm("$17");
+    s32 quotient;
+    /* This pin is load-bearing: removing it changes .text. */
     register u8 *packet asm("$16");
 
     scratch = *(u8 **)0x1F800000;
@@ -409,48 +409,27 @@ void GameDrawLapNumber(void) {
 
 drawDigit:
         {
-            /* These pins are load-bearing: removing any one changes .text. */
-            register s32 y asm("$3");
-            s32 x;
-            register s32 magic asm("$4");
+            s32 y;
             u8 *oldPacket;
+            s32 tens;
 
             SetSprt(scratch);
             SetShadeTex(scratch, 1);
 
-            magic = 0x66666667;
-            asm volatile("" : : "r"(magic));
-            divisor *= 10;
             y = 0x120 - xOffset;
+            oldPacket = packet;
+            tens = quotient / 10;
+            divisor *= 10;
             xOffset += 0x18;
             digitsDrawn++;
             scratch += 0x14;
-            oldPacket = packet;
-            asm volatile("" : : "r"(oldPacket));
-            x = 0x48;
-            asm volatile("mult %0,%1" : : "r"(quotient), "r"(magic));
-            packet[0x0D] = x;
-            x = 0x18;
-            *(s16 *)(packet + 0x10) = x;
-            x = 0x20;
-            *(s16 *)(packet + 0x12) = x;
-            x = 0x10;
-            *(s16 *)(packet + 0x0A) = x;
-            x = 0x780B;
-            *(s16 *)(packet + 0x0E) = x;
-            x = quotient >> 31;
+            packet[0x0D] = 0x48;
+            *(s16 *)(packet + 0x10) = 0x18;
+            *(s16 *)(packet + 0x12) = 0x20;
+            *(s16 *)(packet + 0x0A) = 0x10;
+            *(s16 *)(packet + 0x0E) = 0x780B;
             *(s16 *)(packet + 0x08) = y;
-
-            asm volatile("mfhi %0" : "=r"(y));
-            y >>= 2;
-            y -= x;
-            x = (y << 2) + y;
-            x <<= 1;
-            x = quotient - x;
-            y = x << 1;
-            y += x;
-            y <<= 3;
-            packet[0x0C] = y;
+            packet[0x0C] = (quotient - tens * 10) * 24;
 
             packet += 0x14;
             AddPrim(g_DrawBuffer + 0xCC, oldPacket);
