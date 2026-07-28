@@ -61,16 +61,16 @@ void GameDrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
 
             str++;
             if (cell != 0) {
-                register s32 index asm("$2");
-                register u8 *fontUCell asm("$3");
+                s32 index;
+                u8 *fontUCell;
                 register u8 *fontV asm("$8");
                 s32 u;
                 s32 v;
 
                 /*
-                 * These three short-lived pins preserve retail's v0/v1/t0
-                 * address calculation. The empty constraint keeps fontV tied
-                 * to the independently materialised second font base.
+                 * v0/v1 now allocate naturally. The remaining t0 pin and
+                 * empty constraint keep fontV tied to the independently
+                 * materialised second font base.
                  */
                 index = cell * 2;
                 fontUCell = (u8 *)(index + (s32)font);
@@ -128,8 +128,8 @@ void GameDrawText8x8Shaded(
 
                 sprtArg = packet;
                 {
-                    register s32 index asm("$2");
-                    register u8 *fontUCell asm("$3");
+                    s32 index;
+                    u8 *fontUCell;
                     register u8 *fontV asm("$8");
 
                     index = cell * 2;
@@ -187,8 +187,8 @@ void GameDrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
 
             str++;
             if (cell != 0) {
-                register s32 index asm("$2");
-                register u8 *fontUCell asm("$3");
+                s32 index;
+                u8 *fontUCell;
                 register u8 *fontV asm("$8");
                 s32 u;
                 s32 v;

@@ -3724,11 +3724,14 @@ inlining the repeated `index`/`offset` all give **identical** output, so the
 residual is allocation, not source order. It is still the hand-written asm block
 with the `2:` label hack in `lib/libsnd/SsUtPitchBend.c`.
 
-### 21c. `func_80016754` GameDrawText8x8 — one construct (word count unreliable)
+### 21c. `func_80016754` GameDrawText8x8 — converted; GIV question closed
 
-**Converted with both siblings on 2026-07-28.** The accepted source does not
-make `packet` a giv. Instead, a tied empty output makes the first font base a
-source preheader operation before the explicit sprite-cursor assignment:
+**Converted with both siblings on 2026-07-28.** A second audit removed six of
+the eleven register pins (`index` and `fontUCell` in every function), with a
+forced clean link after every trial and a second cumulative pass. The accepted
+source still does not make `packet` a giv. Instead, a tied empty output makes
+the first font base a source preheader operation before the explicit
+sprite-cursor assignment:
 
 ```c
 asm("" : "=r"(font) : "0"(g_Font8x8Cells));
@@ -3738,8 +3741,9 @@ sprt = (TextSprt8 *)packet;
 The opaque output supplies the U lookup while the V lookup independently
 rematerialises `g_Font8x8Cells + 1`. Thus the exact `.loop` dump orders the
 font `asm_operands` before `sprt = packet`; allocation emits retail's
-`lui/addiu s6` then `move s2,s3`. Short-lived `v0`/`v1`/`t0` pins retain the
-retail lookup allocation. This same shape gives exact 0 for `func_80016754`
+`lui/addiu s6` then `move s2,s3`. The `v0`/`v1` allocation now falls out
+naturally; the short-lived `t0` pin retains the second lookup's base. This same
+shape gives exact 0 for `func_80016754`
 (86 words), `func_800168AC` (91), and `func_80016A18` (89). Full details and
 the shaded sibling's two additional pressure pins are in
 `docs/TASK_FOR_CODEX_2F_REPORT.md`.
@@ -3813,12 +3817,36 @@ at offset 0 because a base-offset use *is* the biv and is never recorded as a gi
 Passing the cast pointer to `AddPrim` does not create one: four placements of the cast
 across `SetSprt8`, `SetShadeTex` and `AddPrim` all leave the residual at 7.
 
-So retail's second register cannot be a giv over `packet`. Either the original advanced a
-cursor explicitly, which the `move_movables` argument above rules out, or `packet` is
-itself a giv over some other biv, which would make offset 0 a real giv. The conditional
-advance (`packet += 16` only when the cell is non-blank) makes the second reading hard to
-construct, since `str` advances unconditionally and cannot be that biv. This is where the
-next attempt should start.
+**Closed from GCC 2.6.3 source and new dumps (2G).** A zero-offset memory-address
+GIV is not merely absent in the candidates: `loop.c:find_mem_givs`, lines
+4135-4137, explicitly refuses `DEST_ADDR` when `mult_val == 1 && add_val == 0`.
+Thus a direct `packet` address can never seed a bias-zero entry.
+
+The proposed alternative, making `packet` a register GIV over another BIV, is
+legal and was reached. `2g-count-units-01.i.loop` records the count-derived
+packet as `mult 16, add (reg 76)` and reduces it to a new register. It still
+cannot derive the field addresses: the packet's additive term is the invariant
+runtime base loaded from scratchpad, and `simplify_giv_expr` lines 5060-5075 can
+combine that invariant with a constant field offset only when the invariant is
+`CONSTANT_P`. A register is not, so `(count * 16 + base) + 8` returns failure.
+The byte-count version is rejected independently as `not worth while, 0 vs 33`
+by the benefit test at lines 3739-3769.
+
+An actual BIV copy gives the desired `mult 1, add 0`, but ordinary dominating
+copies are propagated away before `loop`; the two `2g-prim-giv` dumps again
+contain only field GIVs and select offset 14. A loop-condition copy survives and
+is recorded in both `2g-loop-condition-giv` dumps, proving that zero-addend
+register GIVs are accepted, but it is conditional/non-derivable across a label
+(`update_giv_derive`, lines 4706-4709) and rejected as unprofitable
+(`-8400 vs 33`, or `-1176 vs 33` even when its final value is replaceable).
+
+That exhausts the legal zero-bias carriers here: address GIV excluded; packet
+over a count unable to derive through its runtime-base addend; pointer-BIV copy
+either propagated away or conditional and rejected. Preventing propagation of
+the useful copy requires an opaque asm/volatile/fabricated dependency. Under
+the task's source rules the bias therefore cannot be driven to zero. Full
+candidates, dumps, clean-link hashes, and the remaining-crutch accounting are
+in `docs/TASK_FOR_CODEX_2G_REPORT.md`.
 
 Down from six residual words to three — **but both figures came from the
 pre-`0568a8af` harness and understate; re-measure before quoting them.** The
