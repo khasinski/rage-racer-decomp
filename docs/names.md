@@ -3449,13 +3449,12 @@ lever it still sanctions for `func_80032098`.
 ### 21a. The phantom 8-byte stack frame (`addiu $sp,$sp,-8` with no stack use)
 
 Twenty-nine retail functions contain `addiu $sp,$sp,-8` / `addiu $sp,$sp,8`
-around a body that never touches the frame. Three of them are still carried by an
-`__asm__ volatile("addiu $sp,$sp,-8" ::: "memory")` crutch
-(`SsUtChangeADSR`, `SsUtSetVVol` in `lib/libsnd/SsUtPitchBend.c`,
-and `SpuVmSetSeqVol`) — verified still present at `0568a8af` — and one more by a
-fabricated local (`s32 pad[2];` in `track/GameInstallTrackPoints`, also still
-present). The `volatile s32 unused;` in `render/Gpu_WriteGp0Words` was retired
-by this pass and is gone; see the rewrite below.
+around a body that never touches the frame. At `a038e0c7`, the known remaining
+crutches discussed in this subsection are two hand-written stack adjustments
+(`SsUtSetVVol` in `lib/libsnd/SsUtPitchBend.c` and `SpuVmSetSeqVol`) and two
+fabricated arrays (`GameInstallTrackPoints` and
+`SpuVmApplyPitchBendByTone`). `SsUtChangeADSR` and
+`render/Gpu_WriteGp0Words` are now crutch-free; see the rewrites below.
 
 **The mechanism is now known.** gcc emits `.frame $sp,8,$31 # vars= 8`, i.e.
 `get_frame_size()` is non-zero, because `alter_reg` in reload gave a stack slot
@@ -3552,6 +3551,40 @@ confirmed against `-da` dumps:
   from `ST_REGS`, `find_reg` fails, and `alter_reg` gives it a 4-byte slot;
   `MIPS_STACK_ALIGN` rounds `get_frame_size()` up to 8.
 
+**Source-and-control verification, 2026-07-28 (`TASK_FOR_CODEX_2H`).** The
+reading above is confirmed, including the previously missing discriminator.
+The exact source path is:
+
+1. `jump.c:587-603` calls `duplicate_loop_exit_test` only immediately after
+   regscan; `jump.c:2097-2125` gives exit-only values fresh pseudos and
+   `jump.c:2128-2165` copies the test before `NOTE_INSN_LOOP_BEG`.
+2. In crutch-free `SpuVmSeKeyOff`, `.jump` creates pseudo 230 for
+   `ltu(zero_extend(voice), zero_extend(D_801E42F8))`. The loop pass notices
+   that both `voice` and the separately live SI `count` start at zero and uses
+   `count` as the comparison's SI left operand.
+3. Combine therefore sees the three-insn chain `count = 0; p230 = count < bound;
+   branch_zero(p230)`. Because `count` remains live after the branch,
+   `added_sets_1` is true (`combine.c:1430-1445`); the preserved `count = 0`
+   becomes `newi2pat` while the branch becomes a direct zero test
+   (`combine.c:1622-1663, 2138-2156`).
+4. The normal repair for the vanished comparison destination is guarded by
+   `newi2pat == 0` (`combine.c:2275-2285`), so it is skipped. This is exactly
+   the rare stale-`reg_n_refs` case admitted by `combine.c:51-58`.
+5. The resulting `.lreg` line is `Register 230 used 2 times across 2 insns in
+   block 0; dies in 0 places; ST_REGS or none`; `.greg` lists 230 for
+   allocation with no conflicts, then omits it from the dispositions.
+   `regclass.c:703-705, 921-948` explains the all-zero costs/class tie, and
+   `reload1.c:646-656, 2306-2316` assigns a stack home to an unallocated pseudo
+   whose stale `reg_n_refs` is positive. MIPS `BIGGEST_ALIGNMENT` and
+   `STACK_BOUNDARY` are 64 bits, so the four-byte SI home rounds to eight.
+
+The discriminator is therefore not merely “pre-test loop over a nonconstant
+bound.” It is a successful three-insn combine whose first set must survive.
+For the loop carrier, that means a distinct, same-mode value equal to the
+initial induction value and live after the copied entry test. In
+`SpuVmSeKeyOff`, that value is the real SI match count. A pre-test loop without
+such a carrier can have its copied compare folded and accounted for normally.
+
 In the `for`-loop carrier the triple is `i1 = (set i 0)`, `i2 = (set t (lt i n))`,
 `i3` = the duplicated exit branch; `i` is live in the loop, so `newi2pat` is
 `(set i 0)` and the compare temp `t` is the phantom. `while (n > 0)` produces no
@@ -3639,9 +3672,10 @@ plus the two pre-existing `$2` / `$7` pins.
   block 0; dies in 0 places; ST_REGS or none`, and it appears nowhere in the
   final RTL — a dead pseudo whose `REG_N_REFS` combine never refreshed, showing
   up as `vars= 8` in `.frame`. The `short i` candidate here has `vars= 0` and
-  every pseudo allocated to a hard register. So the open question is narrow and
-  precise: **get combine to leave that dead pseudo while the guard still folds
-  to `beqz` and the counter stays `short`.**
+  every pseudo allocated to a hard register. This narrowed the then-open
+  question to getting combine to leave that dead pseudo while the guard still
+  folded to `beqz` and the counter stayed `short`; the 2H closure below answers
+  why no real value in this function can do all three.
 
   **2026-07-28, second pass: the frame IS reachable, and the residual is now five
   named defects.** A two-variable counter,
@@ -3673,7 +3707,38 @@ plus the two pre-existing `$2` / `$7` pins.
   is the counter's `i = 0`, which always precedes the duplicated load).
   Assigning the bound to a local both before and at the end of the loop supplies
   the second set and closes it, but that shape is invented C. With `short i` the
-  question does not arise. The crutch stays for now.
+  question does not arise.
+
+  **Closed as a proven negative by `TASK_FOR_CODEX_2H`.** The body-exact
+  `short i` candidate's copied comparison is pseudo 156. The loop pass reduces
+  the sign extension of the initial HI zero only to a temporary SI zero; there
+  is no distinct live SI value to preserve. Combine deletes the temporary and
+  pseudo 156 normally, `.lreg` has no `ST_REGS` orphan, and `.frame` remains
+  `vars=0`. Reusing the function's genuine `u_long index` as the sole counter
+  with `(short)index` in the condition also fails: GCC transforms the induction
+  sequence, emits no phantom, and measures 90 words (`exact 88`, `aligned 11`).
+  A single `long` counter creates the frame but removes retail's short
+  truncation; adding a second long carrier is exactly the fabricated-local
+  solution forbidden by the task and already has the five code-generation
+  defects above. There is no legal, byte-exact source shape among the real
+  values in this function, so the two-instruction stack crutch remains.
+
+* `SpuVmApplyPitchBendByTone` (func_80075EB4): **also closed as a proven
+  negative by `TASK_FOR_CODEX_2H`.** Removing only `stack_pad[2]` and its
+  `"=m"` constraint gives the full 60-word retail body; all 16 positional
+  differences are the frame size and save/restore offsets, and its compiler
+  frame is `vars=0`. Here the real SI `sum` is a valid carrier: the natural
+  source order `sum = 0; i = 0; while ((short)i < D_801E42F8) ...` reproduces
+  the bug without any fake local. Its `.lreg` has orphan pseudo 121 as
+  `ST_REGS or none` and its compiler frame is the required 64 bytes with
+  `vars=8`. But that legal loop changes the initialization, allocation, and
+  increment body (58 words, `exact 45`, `aligned 21`; the hoisted-voice form is
+  59 words, `exact 34`, `aligned 20`). The hash-exact body is emitted from the
+  existing explicit guard plus do-loop; that RTL has no unconditional jump
+  immediately after `NOTE_INSN_LOOP_BEG`, so `duplicate_loop_exit_test` has
+  nothing to copy. The real carrier and the retail body are thus reachable
+  separately, not together. The fabricated padding remains pending a future
+  compiler-faithful source discovery.
 
 ### 21b. `SsUtChangeADSR` (func_80078300) — crutch-free body
 
