@@ -14,12 +14,156 @@ void GameSetGteLightMatrix(Matrix *view) {
     SetLightMatrix(&m);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameSetGteLightMatrix", func_80014618);
+extern s32 g_GameMode asm("D_8019CB14");
+extern s32 g_AnimTimer asm("D_8009E694");
+extern u8 g_PadType asm("D_801E4369");
+extern s16 g_NegconSteer asm("D_801E437E");
+extern s16 g_NegconMaxTwist asm("D_801E418C");
+extern s16 g_NegconSteerPlay asm("D_8019CAD0");
+extern s16 g_NegconSteerRange[] asm("D_8007C020");
+extern s32 g_NegconPlayScale[] asm("D_8007C140");
+extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
+extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
+extern s32 g_ModelBankCount asm("D_801E4168");
+extern s32 g_Scratch08 asm("0x1F800008");
+extern s32 g_Scratch0C asm("0x1F80000C");
+extern void *g_Scratch0CPointer asm("0x1F80000C");
+extern volatile s32 g_Scratch10Volatile asm("0x1F800010");
+extern void *volatile g_Scratch10Pointer asm("0x1F800010");
+extern s32 g_Scratch18 asm("0x1F800018");
+extern s32 g_Scratch1C asm("0x1F80001C");
+extern s32 g_Scratch20 asm("0x1F800020");
+extern s32 g_Scratch84 asm("0x1F800084");
+
+s32 func_80068568(s32 angle);
+
+/* Builds and submits the controller models shown by the pad and NeGcon setup
+ * screens. The read-only scratchpad base is retained for the three camera
+ * matrix multiplies; write-only scratch locations stay absolute so each store
+ * is independently rematerialized. */
+void func_80014618(s32 variant) {
+    s32 scale[3];
+    Matrix xRot;
+    Matrix yRot;
+    s32 position[3];
+    register s32 steer asm("$18");
+    register s32 product asm("$2");
+    register s32 angle asm("$5");
+    s32 model;
+    u8 *scratchBase = (u8 *)0x1F800000;
+
+    g_Scratch10Volatile = 0;
+    g_Scratch10Pointer = (void *)-0x1080;
+    position[2] = 0;
+    position[1] = 0;
+    position[0] = 0;
+    g_Scratch0C = 0;
+    g_Scratch08 = 0;
+    g_Scratch20 = 0;
+    g_Scratch1C = 0;
+    g_Scratch18 = 0;
+    g_Scratch0CPointer = 0;
+    if ((u32)(g_GameMode - 10) < 2) {
+        g_Scratch10Pointer = (void *)-0xC80;
+    } else {
+        g_Scratch0CPointer = (void *)-0x40;
+    }
+    GameSetCameraRotMatrix();
+
+    if (g_PadType == 0x41) {
+        GameBuildRotMatrixX(&xRot, -0xD0);
+        GameBuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
+        MulMatrix2(&yRot, &xRot);
+        MulMatrix2(scratchBase + 0x28, &xRot);
+        scale[2] = 0x1000;
+        scale[0] = 0x1000;
+        scale[1] = 0x2000;
+        ScaleMatrix(&yRot, scale);
+        MulMatrix2(&yRot, &xRot);
+        GameSetGteLightMatrix(&xRot);
+        GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+        g_Scratch84 = 0;
+        model = g_ModelBankCount < 1;
+        GameSubmitModel((void *)0x1F800000, model);
+        return;
+    }
+
+    if (g_PadType != 0x23) {
+        return;
+    }
+    if (g_GameMode == 11) {
+        product = func_80068568(g_AnimTimer << 4) * g_NegconSteerRange[g_NegconMaxTwist];
+        if (product < 0) {
+            product += 0x1FF;
+        }
+        steer = product >> 9;
+    } else if (g_GameMode == 10) {
+        product =
+            (func_80068568(g_AnimTimer << 4) << 4) * g_NegconPlayScale[g_NegconSteerPlay];
+        if (product < 0) {
+            product += 0xFFF;
+        }
+        steer = product >> 12;
+    } else {
+        product = g_NegconSteer;
+        steer = product << 3;
+    }
+
+    angle = g_ControllerSceneAngleX - 0x40;
+    GameBuildRotMatrixX(&xRot, steer + angle);
+    GameBuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
+    MulMatrix2(&yRot, &xRot);
+    MulMatrix2(scratchBase + 0x28, &xRot);
+    scale[2] = 0x1000;
+    scale[0] = 0x1000;
+    scale[1] = 0x2000;
+    ScaleMatrix(&yRot, scale);
+    MulMatrix2(&yRot, &xRot);
+    GameSetGteLightMatrix(&xRot);
+    GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+    g_Scratch84 = 0;
+    GameSubmitModel((void *)0x1F800000, 1);
+    if (variant != 0) {
+        GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+        g_Scratch84 = 0;
+        model = 1;
+        if (g_ModelBankCount >= 4) {
+            model = 3;
+        }
+        GameSubmitModel((void *)0x1F800000, model);
+    }
+
+    angle = g_ControllerSceneAngleX - 0x40;
+    GameBuildRotMatrixX(&xRot, angle - steer);
+    GameBuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
+    MulMatrix2(&yRot, &xRot);
+    MulMatrix2(scratchBase + 0x28, &xRot);
+    scale[2] = 0x1000;
+    scale[0] = 0x1000;
+    scale[1] = 0x2000;
+    ScaleMatrix(&yRot, scale);
+    MulMatrix2(&yRot, &xRot);
+    GameSetGteLightMatrix(&xRot);
+    GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+    g_Scratch84 = 0;
+    model = 1;
+    if (g_ModelBankCount >= 3) {
+        model = 2;
+    }
+    GameSubmitModel((void *)0x1F800000, model);
+    if (variant != 0) {
+        GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+        g_Scratch84 = 0;
+        model = 1;
+        if (g_ModelBankCount >= 5) {
+            model = 4;
+        }
+        GameSubmitModel((void *)0x1F800000, model);
+    }
+}
 
 /* Free-running angle the controller-setup screens pulse their arrows with. */
 extern s32 g_SetupArrowPulse asm("D_8007C13C");
-
-s32 func_80068568(s32 angle);
 
 /* Wide-parameter view of the packet builders; see GameQueueSprite.c. */
 u8 *QueueSpriteWide(
