@@ -18,9 +18,113 @@ u8 *GameQueueDrawModePrim(void *ot, u8 *prim, u16 tpage) {
     return prim;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameQueueDrawModePrim", func_800173F4);
+u8 *GameQueueShadedTexturedRect(
+    void *ot,
+    u8 *prim,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 u,
+    u8 v,
+    u16 clutIndex,
+    u16 tpage,
+    u8 intensity) {
+    POLY_FT4 *packet;
+    s16 width = w;
+    s16 height = h;
+    u8 u0 = u;
+    u8 v0 = v;
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameQueueDrawModePrim", func_800175A4);
+    SetPolyFT4((POLY_FT4 *)prim);
+    if (width < 0) {
+        width += 1;
+        u0 -= width;
+    }
+    if (height < 0) {
+        height += 1;
+        v0 -= height;
+    }
+
+    (((POLY_FT4 *)prim)->x0 = x,
+     ((POLY_FT4 *)prim)->y0 = y,
+     ((POLY_FT4 *)prim)->x1 = x + (width < 0 ? -width : width),
+     ((POLY_FT4 *)prim)->y1 = y,
+     ((POLY_FT4 *)prim)->x2 = x,
+     ((POLY_FT4 *)prim)->y2 = y + (height < 0 ? -height : height),
+     ((POLY_FT4 *)prim)->x3 = x + (width < 0 ? -width : width),
+     ((POLY_FT4 *)prim)->y3 = y + (height < 0 ? -height : height));
+    ((POLY_FT4 *)prim)->u0 = u0;
+    ((POLY_FT4 *)prim)->v0 = v0;
+    ((POLY_FT4 *)prim)->u1 = u0 + width;
+    ((POLY_FT4 *)prim)->v1 = v0;
+    ((POLY_FT4 *)prim)->u2 = u0;
+    ((POLY_FT4 *)prim)->v2 = v0 + height;
+    ((POLY_FT4 *)prim)->u3 = u0 + width;
+    ((POLY_FT4 *)prim)->v3 = v0 + height;
+    ((POLY_FT4 *)prim)->t.r0 = intensity;
+    ((POLY_FT4 *)prim)->t.g0 = intensity;
+    ((POLY_FT4 *)prim)->t.b0 = intensity;
+    ((POLY_FT4 *)prim)->clut = clutIndex;
+    ((POLY_FT4 *)prim)->tpage = tpage;
+    packet = (POLY_FT4 *)prim;
+    prim += sizeof(POLY_FT4);
+    AddPrim(ot, packet);
+    return prim;
+}
+
+u8 *GameQueueTexturedRect(
+    void *ot,
+    u8 *prim,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 u,
+    u8 v,
+    u8 uSpan,
+    u8 vSpan,
+    u16 clutIndex,
+    u16 tpage) {
+    POLY_FT4 *packet;
+    s16 width = w;
+    s16 height = h;
+    u8 u0 = u;
+    u8 v0 = v;
+
+    SetPolyFT4((POLY_FT4 *)prim);
+    SetShadeTex((POLY_FT4 *)prim, 1);
+
+    if (width < 0) {
+        u0 -= width + 1;
+    }
+    if (height < 0) {
+        v0 -= height + 1;
+    }
+
+    (((POLY_FT4 *)prim)->x0 = x,
+     ((POLY_FT4 *)prim)->y0 = y,
+     ((POLY_FT4 *)prim)->x1 = x + (width < 0 ? -width : width),
+     ((POLY_FT4 *)prim)->y1 = y,
+     ((POLY_FT4 *)prim)->x2 = x,
+     ((POLY_FT4 *)prim)->y2 = y + (height < 0 ? -height : height),
+     ((POLY_FT4 *)prim)->x3 = x + (width < 0 ? -width : width),
+     ((POLY_FT4 *)prim)->y3 = y + (height < 0 ? -height : height));
+    ((POLY_FT4 *)prim)->u0 = u0;
+    ((POLY_FT4 *)prim)->v0 = v0;
+    ((POLY_FT4 *)prim)->u1 = u0 + uSpan;
+    ((POLY_FT4 *)prim)->v1 = v0;
+    ((POLY_FT4 *)prim)->u2 = u0;
+    ((POLY_FT4 *)prim)->v2 = v0 + vSpan;
+    ((POLY_FT4 *)prim)->u3 = u0 + uSpan;
+    ((POLY_FT4 *)prim)->v3 = v0 + vSpan;
+    ((POLY_FT4 *)prim)->clut = clutIndex;
+    ((POLY_FT4 *)prim)->tpage = tpage;
+    packet = (POLY_FT4 *)prim;
+    prim += sizeof(POLY_FT4);
+    AddPrim(ot, packet);
+    return prim;
+}
 
 /* Local alias: retail passes the tpage through as a full word, so the narrow
  * parameter in the shared prototype would insert a truncation. */
