@@ -1,13 +1,14 @@
 #include "common.h"
 
 /*
- * SsSeqApplyDataEntry - a libsnd internal static, named descriptively in the
- * style src/main/PAL/lib/libsnd/ already uses; there is no public Ss* symbol.
+ * ContDataEntry - the real libsnd name, recovered from Runtime Library 2.6's
+ * LIBSND.LIB export table, where SEQREAD.C's helpers are still separate symbols
+ * because that build did not inline them. See docs/LIBSND_NAMES_FROM_RL26.md.
  * Reached from SsSeqDispatchControlChange's `case 6:`. Applies the pending
  * RPN (unk29 == 2) or NRPN (unk2a == 2) to the channel's VAB program by
  * rewriting the VagAtr of every tone. See docs/names.md 17.
  */
-void SsSeqApplyDataEntry(s16 seq, s16 sep, u8 value) asm("func_8007010C");
+void ContDataEntry(s16 seq, s16 sep, u8 value) asm("func_8007010C");
 
 typedef struct SeqStruct {
     u8 unk0;
@@ -137,7 +138,7 @@ static inline s32 SsSeqCheckDataEntryValue(s32 data_entry_value) {
     }
 }
 
-void SsSeqApplyDataEntry(s16 seq, s16 sep, u8 value) {
+void ContDataEntry(s16 seq, s16 sep, u8 value) {
     s32 mask;
     ProgAtr program_attr;
     VagAtr tone_attr;
