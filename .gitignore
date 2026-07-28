@@ -76,3 +76,7 @@ tools/asm_report.html
 tools/asset_map.html
 tools/source_browser.html
 build/**/report.json
+
+# Internal agent briefs and the decompilation guide: kept locally, not published.
+docs/TASK_FOR_*.md
+docs/DECOMPILATION_GUIDE.md
