@@ -3643,6 +3643,29 @@ plus the two pre-existing `$2` / `$7` pins.
   precise: **get combine to leave that dead pseudo while the guard still folds
   to `beqz` and the counter stays `short`.**
 
+  **2026-07-28, second pass: the frame IS reachable, and the residual is now five
+  named defects.** A two-variable counter,
+  `for (counter = 0; (i = (short)counter) < D_801E42F8; counter++)` with `long counter`
+  and `short i`, produces a **93-word** candidate, i.e. retail's exact size, frame
+  included. `exact 27`. Aligned against retail it differs in only five places:
+
+  1. an inserted `move a1,zero` at +0xAC, initialising the second variable;
+  2. `blez` instead of `beqz` at +0xB8 (the `nonzero_bits` half, below);
+  3. `sll v0,a1,16` instead of `sll v0,a2,16` at +0xD0;
+  4. a missing `addiu v0,a2,1` in the delay slot at +0x100;
+  5. the increment/move pair at +0x13C using the wrong registers.
+
+  Defects 1, 3, 4 and 5 are all one cause: **retail has a single counter variable**
+  living in `a2`, sign-extended into `a1` at each use, whereas this candidate has two.
+  So the shape to look for is one variable that both yields the frame and truncates to
+  `short` — a `short` counter alone gives the truncation and no frame (91 words,
+  everything else byte-identical), a `long` counter alone gives the frame and loses the
+  truncation. Six loop-header spellings were swept on top of the two-variable form
+  (`i = counter` uncast, bound cast to `long`, comparison on `counter` with `i` assigned
+  in the body, an explicit `!= 0` conjunct, an unsigned bound); all still emit `blez`,
+  and the three that changed the body were worse. Candidate kept at
+  `scratch/decomp-work/func_80076C58/codex2-93w-exact27.c`.
+
   The `blez` vs `beqz` half needs `nonzero_bits` to know the bound's sign bit is
   clear, which `combine` only manages when the compared pseudo has
   `reg_n_sets > 1` (`set_nonzero_bits_and_sign_copies` ignores single-set
