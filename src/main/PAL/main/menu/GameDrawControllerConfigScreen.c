@@ -9,8 +9,15 @@ extern u8 g_PadType asm("D_801E4369");
 /* The two 0..7 selections; g_PadType picks which one the screen edits. */
 extern s16 g_PadMappingIndex asm("D_8019CE08");
 extern s16 g_NegconMappingIndex asm("D_8019CB08");
+extern u16 g_PadMappingIndexSaved asm("D_8019C7A8");
+extern u16 g_NegconMappingIndexSaved asm("D_8019C76C");
 /* 0 while a controller is present, else the error code the banner reports. */
 extern s32 g_PadErrorState asm("D_801E79C8");
+extern s32 g_SetupArrowPulse asm("D_8007C13C");
+extern s32 g_PadConfigFlipDirection asm("D_801E8264");
+extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
+extern s32 g_PadConfigFlipTimer asm("D_801E7A4C");
+extern s32 g_PadConfigFlipPhase asm("D_801E6C7C");
 
 /* "INSERT CONTROLLER" / "CONTROLLER ERROR" */
 extern char D_80010000[];
@@ -52,6 +59,7 @@ u8 *QueueSpriteTransWide(
     s32 v,
     s32 clutIndex) asm("func_80017138");
 u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("func_80017390");
+void func_80023750(s32 arg0);
 
 /*
  * Game mode 7's screen: either the "no controller" banner, or the two nudge
@@ -102,7 +110,78 @@ void GameDrawControllerConfigScreen(void) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameDrawControllerConfigScreen", func_800155EC);
+/*
+ * The pointer view is load-bearing: it keeps the first three pad-edge reads on
+ * one address register, while the later left/right reads rematerialise the
+ * global.  That is also the actual storage boundary being accessed here.
+ */
+typedef struct PadEdgeView {
+    u16 edge;
+} PadEdgeView;
+
+void GameUpdateControllerConfigScreen(void) {
+    PadEdgeView *pad = (PadEdgeView *)&g_PadEdge2;
+
+    g_AnimTimer++;
+    g_SetupArrowPulse += 96;
+    if (pad->edge & 0x90) {
+        GamePlaySoundCue(3);
+        g_GameMode = 1;
+        g_PadMappingIndex = g_PadMappingIndexSaved;
+        g_NegconMappingIndex = g_NegconMappingIndexSaved;
+    }
+    if (pad->edge & 0x860) {
+        GamePlaySoundCue(2);
+        GameLoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
+        if (g_PadType == 0x23) {
+            g_GameMode = (pad->edge & 0x800) ? 8 : 1;
+        } else {
+            g_GameMode = 1;
+        }
+    }
+    if (g_PadEdge2 & 0x8000) {
+        if (g_PadType == 0x23) {
+            if (g_NegconMappingIndex > 0) {
+                GamePlaySoundCue(8);
+                g_PadConfigFlipTimer = 30;
+                g_PadConfigFlipDirection = 0;
+                g_NegconMappingIndex--;
+                g_ControllerSceneAngleY += 2048;
+            }
+        } else if (g_PadMappingIndex > 0) {
+            GamePlaySoundCue(8);
+            g_PadConfigFlipTimer = 30;
+            g_PadConfigFlipDirection = 0;
+            g_PadMappingIndex--;
+            g_ControllerSceneAngleY += 2048;
+        }
+    }
+    if (g_PadEdge2 & 0x2000) {
+        if (g_PadType == 0x23) {
+            if (g_NegconMappingIndex < 7) {
+                GamePlaySoundCue(8);
+                g_PadConfigFlipDirection = 1;
+                g_PadConfigFlipTimer = 30;
+                g_NegconMappingIndex++;
+                g_ControllerSceneAngleY -= 2048;
+            }
+        } else if (g_PadMappingIndex < 7) {
+            GamePlaySoundCue(8);
+            g_PadConfigFlipDirection = 1;
+            g_PadConfigFlipTimer = 30;
+            g_PadMappingIndex++;
+            g_ControllerSceneAngleY -= 2048;
+        }
+    }
+    if (g_PadConfigFlipTimer > 0) {
+        g_PadConfigFlipTimer--;
+        g_PadConfigFlipPhase = ((u32)g_PadConfigFlipTimer >> 2) & 1;
+    }
+    g_ControllerSceneAngleY = (g_ControllerSceneAngleY * 15) / 16;
+    GameDrawControllerConfigScreen();
+    func_80023750(1);
+    GameDrawControllerSetupScene(0);
+}
 
 /* "Hold the "NeGcon" in an untwisted" / "position and press start button." */
 extern char D_80010028[];
@@ -157,10 +236,7 @@ extern u16 g_NegconSteerPlaySaved asm("D_8019C75C");
 extern u16 g_NegconMaxTwistSaved asm("D_8019CB04");
 
 /* The same four screen counters GameBeginControllerConfig clears. */
-extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
 extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
-extern s32 g_PadConfigFlipTimer asm("D_801E7A4C");
-extern s32 g_PadConfigFlipPhase asm("D_801E6C7C");
 
 /*
  * Entry hook for the NeGcon calibration sequence: snapshots the six live
@@ -213,8 +289,6 @@ extern u8 g_NegconAxisSteer asm("D_801E4040");
 extern u8 g_NegconAxisI asm("D_801E4041");
 extern u8 g_NegconAxisII asm("D_801E4042");
 extern u8 g_NegconAxisL asm("D_801E4043");
-
-void func_80023750(s32 arg0);
 
 /*
  * Game mode 9: hold the NeGcon still and press start. Start latches the four
