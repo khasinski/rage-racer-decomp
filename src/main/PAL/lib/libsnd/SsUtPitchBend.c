@@ -13,8 +13,6 @@ extern volatile u_char g_SndVoiceRegs[] asm("D_8009DF20");
 extern short g_SndVoiceRegs16[] asm("D_8009DF20");
 extern volatile u_char g_SndVoiceRegsVolRight[] asm("D_8009DF22");
 extern volatile u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
-extern volatile u_char g_SndVoiceRegsAdsr1[] asm("D_8009DF28");
-extern volatile u_char g_SndVoiceRegsAdsr2[] asm("D_8009DF2A");
 extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern short g_SndVoiceStateNote[] asm("D_8009E0C4");
 extern short g_SndVoiceStateProg[] asm("D_8009E0CA");
@@ -32,7 +30,7 @@ u_short SpuVmCalculateTonePitch(long arg0, long arg1) asm("func_80074A6C");
 
 long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4) asm("func_80078130");
 long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) asm("func_800781C0");
-long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5) asm("func_80078300");
+long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5) asm("func_80078300");
 long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) asm("func_800783D8");
 long SsUtSetDetVVol(long arg0, short arg1, short arg2) asm("func_80078430");
 long SsUtSetVVol(long arg0, short arg1, short arg2) asm("func_80078528");
@@ -123,28 +121,16 @@ done:
     return ret;
 }
 
-long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5) {
+long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5) {
     long ret;
     long tmp;
     long index;
     long voiceOffset;
     long volOffset;
-    long left;
-    long right;
     /* This pin is load-bearing: removing it changes .text. */
     register long field asm("v1");
 
-    __asm__ volatile("addiu $sp,$sp,-8" ::: "memory");
-
-    tmp = (u_short)arg0 < 0x18U;
-    __asm__ volatile(
-        "lhu %0,0x18($sp)\n\t"
-        "lhu %1,0x1c($sp)"
-        : "=r"(left), "=r"(right)
-        :
-        : "memory");
-
-    if (!tmp) {
+    if ((u_short)arg0 >= 0x18U) {
         goto fail_late;
     }
 
@@ -173,9 +159,9 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, long arg4, long 
         goto fail_late;
     }
 
-    volOffset = index << 4;
-    *(volatile short *)(g_SndVoiceRegsAdsr1 + volOffset) = left;
-    *(volatile short *)(g_SndVoiceRegsAdsr2 + volOffset) = right;
+    volOffset = index << 3;
+    g_SndVoiceRegs16[volOffset + 4] = arg4;
+    g_SndVoiceRegs16[volOffset + 5] = arg5;
     field = g_SndVoiceFlags[index];
     field |= 0x30;
     g_SndVoiceFlags[index] = field;
@@ -188,7 +174,6 @@ fail_late:
     ret = -1;
 
 done:
-    __asm__ volatile("addiu $sp,$sp,8" ::: "memory");
     return ret;
 }
 

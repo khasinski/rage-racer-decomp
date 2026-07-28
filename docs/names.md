@@ -3591,13 +3591,16 @@ plus the two pre-existing `$2` / `$7` pins.
   (`move $3,$6` in the guard's delay slot) because `voll * 129` is computed
   first and lands in `$6`; ours computes `volr * 129` first and spills `voll`
   instead. Swept `x`/`y`/`index`/`j`/`flags` pins × three statement orders.
-* `SsUtChangeADSR` (func_80078300): with `g_SndVoiceRegs16[j + 4]` /
-  `[j + 5]` the frame appears and the store order is retail's, but the third
-  `bne`'s delay slot takes `li $2,-1` (stolen by `dbr` from `fail_late`)
-  instead of retail's `sll $2,$8,4`, costing one word (55 vs 54). With
-  `D_8009DF28[0]` / `[1]` as the base instead, the count is right (54) but
-  `sched` interleaves the flags `lbu` between the two `sh`, where retail has a
-  `nop`; 14 differ.
+* `SsUtChangeADSR` (func_80078300): **CLOSED 2026-07-28**, byte-exact and in
+  the tree with no stack crutch. `g_SndVoiceRegs16[j + 4]` / `[j + 5]` is the
+  right carrier, as recorded here; what closed the last word was the *control
+  flow*, not the carrier. The nested-`&&` form lets `dbr` steal `li $2,-1` into
+  the third `bne`'s delay slot (the 55-vs-54 above). Writing each guard as its
+  own `if` with `ret = -1; goto done;` gives every `bne` its own `li $2,-1` to
+  fill from, which is what retail has. The `sched` interleave of the flags `lbu`
+  between the two `sh` is held off by the pre-existing `asm("" ::: "memory")`
+  barrier, and the `$3` pin stays; both were re-measured as load-bearing (26 and
+  2 words respectively).
 * `SpuVmSetSeqVol` (func_80076C58): the crutch is unnecessary — the retail
   `beqz D_801E42F8` guard *is* a duplicated exit test, so the body is a pre-test
   `for` and the three preheader insns after the guard (`andi`, `la D_8009DF20`,
@@ -3614,13 +3617,15 @@ plus the two pre-existing `$2` / `$7` pins.
 
 ### 21b. `SsUtChangeADSR` (func_80078300) — crutch-free body
 
-> **Partly overtaken.** 21a's loop-free carrier solved the frame problem this
-> subsection was waiting on, and the body below is crutch-free. It is not in the
-> tree: at `0568a8af` `lib/libsnd/SsUtPitchBend.c` still carries the
-> `addiu $sp,$sp,-8` crutch, because the crutch-free form is one word over —
-> the third `bne`'s delay slot takes `li $2,-1` instead of retail's
-> `sll $2,$8,4`. "Blocked only by 18a" was the heading and is no longer the
-> situation.
+> **Closed 2026-07-28.** The function is byte-exact in the tree with no stack
+> crutch: both `addiu $sp,$sp,±8` and both hand-written `lhu` loads are gone.
+> The body below is right about the carrier and about the `u16` parameters, but
+> its nested-`&&` control flow is what cost the extra word; see the
+> `SsUtChangeADSR` bullet in 21a for the fix. Note also that the parameter
+> typing and the frame crutch are **mutually exclusive**: `assign_parms` emits
+> the `lhu` entry loads in the prologue, ahead of any `asm("addiu $sp,$sp,-8")`
+> in the body, whereas retail adjusts `$sp` first. That is why the `lhu` crutch
+> survived so long, and why only the real frame dissolves both at once.
 
 The `lhu`-from-stack-slot crutch is unnecessary. Declaring arguments 5 and 6 as
 `unsigned short` makes `assign_parms` emit the zero-extending entry loads by
@@ -3648,12 +3653,16 @@ This compiles to retail's instruction sequence exactly — `andi/sltiu`, the
 `lhu $9,16($sp)` / `lhu $10,20($sp)` entry loads, the three `lh` compares with
 their `-1` delay-slot fills, the two `sh` stores and the `ori 0x30` — with every
 stack offset 8 lower, because the retail frame is 8 bytes and this body's is 0.
-`SsUtSetDetVVol` did then convert on 21a's mechanism and is plain C. The same
-natural-C reduction applies to `SsUtChangeADSR` and `SsUtSetVVol` (`voll * 129`
-/ `volr * 129` with the `volr` store first, which is what retail does), but
-neither has closed: both are still `INCLUDE_ASM`-or-crutched in
-`lib/libsnd/SsUtPitchBend.c`, and the residuals quoted in 21a for them predate
-the harness fix (see "Measurement" at the top of 21).
+`SsUtSetDetVVol` did then convert on 21a's mechanism and is plain C, and
+`SsUtChangeADSR` closed on 2026-07-28. `SsUtSetVVol` has **not** closed: the
+same natural-C reduction (`voll * 129` / `volr * 129` with the `volr` store
+first, which is what retail does) reaches the frame and retail's shape but sits
+at 37 words against 35, with two surplus `move`s copying incoming argument
+registers. Re-swept 2026-07-28 against the linked-both-sides harness: five
+statement orders, `short` vs `long` parameter types, dropping the `$2` pin, and
+inlining the repeated `index`/`offset` all give **identical** output, so the
+residual is allocation, not source order. It is still the hand-written asm block
+with the `2:` label hack in `lib/libsnd/SsUtPitchBend.c`.
 
 ### 21c. `func_80016754` GameDrawText8x8 — one construct (word count unreliable)
 
