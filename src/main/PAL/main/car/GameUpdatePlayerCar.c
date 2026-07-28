@@ -74,7 +74,7 @@ extern volatile u16 g_PadHeld asm("D_801E436A");
  * The NeGcon's three analog channels, already zeroed against the calibration
  * captured by the controller-config screen: button I, button II and the left
  * shoulder. Full scale is 106 (0x6A), which is why every use divides by 106 --
- * func_80014014 feeds the digital pad through the same three slots by writing
+ * GameUpdatePadState feeds the digital pad through the same three slots by writing
  * a flat 0x6A when the mapped button is held.
  */
 extern s16 g_NegconAnalogI asm("D_801E4374");

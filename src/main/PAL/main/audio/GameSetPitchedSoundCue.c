@@ -6,12 +6,224 @@
 extern s32 g_EffectVoiceState[] asm("D_801E6D38");
 extern u8 g_EffectVoiceTone[] asm("D_801E6D34");
 extern u8 g_EffectVoiceVolume[] asm("D_801E6D40");
+extern s32 g_EffectVoicePitch[] asm("D_801E6D3C");
+
+extern const s32 g_EffectCueTable[] asm("D_80012730");
+extern s32 D_801E6D30;
+extern s32 D_801E6D44;
+extern s32 D_801E6D58;
+extern s32 D_801E6D60;
+extern s32 D_801E6D6C;
+extern const s32 D_80012734;
+extern const s32 D_80012738;
+extern const s32 D_80012740;
+extern const s32 D_80012750;
+extern const s32 D_80012758;
+extern const s32 D_80012768;
+extern const s32 D_80012770;
+
+typedef struct EffectCueRow {
+    s32 count;
+    s32 scale;
+    s32 cue;
+    s32 tone;
+} EffectCueRow;
 
 long SsUtKeyOffV(long voice) asm("func_80078018");
 void func_80078528(s32, s16, s16);
 void func_800781C0(s32, s32, s32, s32, s32, s32, s32);
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPitchedSoundCue", func_8005C914);
+void GameSetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
+    s32 count;
+    s32 loopCount;
+    s32 i;
+    s32 off;
+    /* Load-bearing GCC 2.6.3 register roles for the table loops. */
+    register s32 tblOff asm("$3");
+    register s32 loopTblOff asm("$8");
+    s32 compareOff;
+    s32 scaled;
+    s32 scaleValue;
+    s32 cueValue;
+    s32 toneValue;
+    s32 hasActiveVoice;
+    s32 ok;
+    s32 bankIndex;
+    s32 active;
+    s32 inactive;
+    s32 defaultPitch;
+    register const EffectCueRow *p asm("$7");
+    const s32 *tableBase;
+    s32 *stateBase;
+
+    if (bank >= 0) {
+        if (bank >= 3) {
+            bank = 2;
+        }
+    } else {
+        bank = 0;
+    }
+    if (volume >= 0) {
+        if (volume >= 0x80) {
+            volume = 0x7F;
+        }
+    } else {
+        volume = 0;
+    }
+
+    switch (bank) {
+    case 0:
+        if (volume <= 0) {
+            s32 resetIndex;
+
+            resetIndex = 0;
+            if ((D_801E6D30 >= 0) || (D_801E6D44 >= 0)) {
+                count = g_EffectCueTable[0];
+                if (count > 0) {
+                    active = 1;
+                    inactive = -1;
+                    defaultPitch = 0x1E00;
+                    volume = count;
+                    off = 0;
+                    do {
+                        *(s32 *)((u8 *)g_EffectVoiceState + off) = active;
+                        *(s32 *)((u8 *)&D_801E6D30 + off) = inactive;
+                        *(s32 *)((u8 *)g_EffectVoiceTone + off) = inactive;
+                        *(s32 *)((u8 *)g_EffectVoicePitch + off) = defaultPitch;
+                        *(s32 *)((u8 *)g_EffectVoiceVolume + off) = 0;
+                        /* Keep the two loop updates in the retail schedule. */
+                        asm("");
+                        resetIndex++;
+                        off += 0x14;
+                    } while (resetIndex < volume);
+                }
+            }
+        } else {
+            if ((D_801E6D30 == D_80012738) &&
+                (D_801E6D44 == D_80012740)) {
+                *g_EffectVoiceState = 2;
+            } else {
+                *g_EffectVoiceState = 0;
+            }
+            bankIndex = (bank << 1) + bank;
+            tblOff = bankIndex << 3;
+            count = *(s32 *)((u8 *)g_EffectCueTable + tblOff);
+            i = 0;
+            if (count > i) {
+                stateBase = g_EffectVoiceState;
+                loopCount = count;
+                tableBase = g_EffectCueTable;
+                loopTblOff = tblOff;
+                p = (const EffectCueRow *)((u8 *)tableBase + loopTblOff);
+                off = 0;
+                do {
+                    if (i != 0) {
+                        *(s32 *)((u8 *)g_EffectVoiceState + off) = *stateBase;
+                    }
+                    scaleValue = *(s32 *)((u8 *)&D_80012734 + loopTblOff);
+                    scaled = volume * scaleValue;
+                    cueValue = p->cue;
+                    *(s32 *)((u8 *)&D_801E6D30 + off) = cueValue;
+                    toneValue = p->tone;
+                    *(s32 *)((u8 *)g_EffectVoicePitch + off) = pitch;
+                    *(s32 *)((u8 *)g_EffectVoiceTone + off) = toneValue;
+                    p = (const EffectCueRow *)((u8 *)p + 8);
+                    if (scaled < 0) {
+                        scaled += 0x7F;
+                    }
+                    *(s32 *)((u8 *)g_EffectVoiceVolume + off) = scaled >> 7;
+                    i++;
+                    off += 0x14;
+                } while (i < loopCount);
+            }
+        }
+        break;
+
+    case 1:
+    case 2:
+        if (volume <= 0) {
+            hasActiveVoice = D_801E6D58 >= 0;
+            ok = 0;
+            if (hasActiveVoice || (D_801E6D6C >= 0)) {
+                if (bank == 1) {
+                    if (D_801E6D58 == D_80012750) {
+                        ok = D_801E6D6C == D_80012758;
+                    }
+                } else if ((bank == 2) && (D_801E6D58 == D_80012768) &&
+                           (D_801E6D6C == D_80012770)) {
+                    ok = 1;
+                }
+                if (ok != 0) {
+                    count = g_EffectCueTable[bank * 6];
+                    i = 0;
+                    if (count > i) {
+                        active = 1;
+                        inactive = -1;
+                        defaultPitch = 0x1E00;
+                        volume = count;
+                        off = 0x28;
+                        do {
+                            *(s32 *)((u8 *)g_EffectVoiceState + off) = active;
+                            *(s32 *)((u8 *)&D_801E6D30 + off) = inactive;
+                            *(s32 *)((u8 *)g_EffectVoiceTone + off) = inactive;
+                            *(s32 *)((u8 *)g_EffectVoicePitch + off) = defaultPitch;
+                            *(s32 *)((u8 *)g_EffectVoiceVolume + off) = 0;
+                            /* Keep the two loop updates in the retail schedule. */
+                            asm("");
+                            i++;
+                            off += 0x14;
+                        } while (i < volume);
+                    }
+                }
+            }
+        } else {
+            compareOff = bank * 0x18;
+            if ((D_801E6D58 ==
+                 *(s32 *)((u8 *)&D_80012738 + compareOff)) &&
+                (D_801E6D6C ==
+                 *(s32 *)((u8 *)&D_80012740 + compareOff))) {
+                D_801E6D60 = 2;
+                tblOff = bank * 2;
+            } else {
+                D_801E6D60 = 0;
+                tblOff = bank * 2;
+            }
+            tblOff = (tblOff + bank) * 8;
+            bankIndex = (bank << 1) + bank;
+            tblOff = bankIndex << 3;
+            count = *(s32 *)((u8 *)g_EffectCueTable + tblOff);
+            i = 0;
+            if (count > i) {
+                stateBase = &D_801E6D60;
+                loopCount = count;
+                tableBase = g_EffectCueTable;
+                loopTblOff = tblOff;
+                p = (const EffectCueRow *)((u8 *)tableBase + loopTblOff);
+                off = 0x28;
+                do {
+                    if (i != 0) {
+                        *(s32 *)((u8 *)g_EffectVoiceState + off) = *stateBase;
+                    }
+                    scaleValue = *(s32 *)((u8 *)&D_80012734 + loopTblOff);
+                    scaled = volume * scaleValue;
+                    cueValue = p->cue;
+                    *(s32 *)((u8 *)&D_801E6D30 + off) = cueValue;
+                    toneValue = p->tone;
+                    *(s32 *)((u8 *)g_EffectVoicePitch + off) = pitch;
+                    *(s32 *)((u8 *)g_EffectVoiceTone + off) = toneValue;
+                    p = (const EffectCueRow *)((u8 *)p + 8);
+                    if (scaled < 0) {
+                        scaled += 0x7F;
+                    }
+                    *(s32 *)((u8 *)g_EffectVoiceVolume + off) = scaled >> 7;
+                    i++;
+                    off += 0x14;
+                } while (i < loopCount);
+            }
+        }
+        break;
+    }
+}
 
 /* Loop over the 4 effect voices (indices 10..13). `voice` is kept in the
  * compiler's scaled (<<16) representation of the short voice number, exactly

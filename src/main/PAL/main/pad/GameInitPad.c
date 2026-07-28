@@ -61,4 +61,187 @@ void GameApplyPadButtonMapping(void) {
     GameLoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/pad/GameInitPad", func_80014014);
+typedef struct PadState {
+    /* 0x00 */ u8  unk0;
+    /* 0x01 */ u8  unk1;
+    /* 0x02 */ u16 unk2;
+    /* 0x04 */ u16 unk4;
+    /* 0x06 */ s16 unk6;
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ s16 unkC;
+    /* 0x0E */ s16 unkE;
+    /* 0x10 */ s16 unk10;
+    /* 0x12 */ s16 unk12;
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ s16 unk16;
+} PadState;
+
+extern PadState D_801E4368;
+extern u8 g_PadType asm("D_801E4369");
+extern u8 D_801E403D;
+extern u8 D_801E403E;
+extern u8 D_801E403F;
+extern s32 D_801E4D14;
+extern s32 g_PadErrorState asm("D_801E79C8");
+extern s32 D_8019CB10;
+extern u16 D_8007C138;
+extern u8 D_8009AEEC[];
+extern u16 D_8007C128[][2];
+extern s16 g_NegconSteerPlay asm("D_8019CAD0");
+extern s16 g_NegconSteerRange[] asm("D_8007C020");
+extern s16 g_NegconMaxTwist asm("D_801E418C");
+extern s16 g_NegconNeutralI asm("D_8019CA08");
+extern s16 g_NegconNeutralII asm("D_8019CA0A");
+extern s16 g_NegconNeutralL asm("D_8019CA0C");
+extern s16 g_NegconSteerNeutral asm("D_801E4BF0");
+
+void GameUpdatePadState(void) asm("func_80014014");
+void GameUpdatePadState(void) {
+    s32 mask;
+    s32 v;
+    s32 t;
+    s32 n;
+    s32 c;
+    s16 c1;
+    s16 c2;
+    s16 d;
+    s16 neutral;
+    s16 r;
+    u8 *raw;
+    PadState *pad;
+
+    raw = g_PadBuffers;
+    pad = &D_801E4368;
+
+    pad->unk0 = raw[0];
+    g_PadType = D_801E403D;
+    if (raw[0] != 0) {
+        v = 1;
+    } else {
+        if (D_801E4D14 == 0) {
+            goto after;
+        }
+        D_801E4D14 = D_801E4D14 - 1;
+        if (D_801E403D != 0x23) {
+            goto after;
+        }
+        mask = ~(D_801E403F | (D_801E403E << 8));
+        if (((mask & 0x5000) != 0x5000) && ((mask & 0xA000) != 0xA000) &&
+            ((mask & 0x1C4) == 0)) {
+            goto after;
+        }
+        v = 2;
+    }
+    g_PadErrorState = v;
+    D_801E4D14 = 0x22;
+    D_8019CB10 |= 0x10;
+after:
+    D_8019CB10 = D_8019CB10 >> 1;
+    if (D_8019CB10 != 0) {
+        raw[1] = 0;
+        pad->unk1 = 0;
+    } else {
+        g_PadErrorState = 0;
+    }
+    if (raw[1] == 0x41) {
+        pad->unk4 = pad->unk2;
+        pad->unk2 = ~((raw[2] << 8) | raw[3]);
+        pad->unk6 = pad->unk2 & ~pad->unk4;
+        t = (pad->unk2 >> 13) & 1;
+        n = t;
+        c = g_NegconSteerRange[g_NegconMaxTwist];
+        pad->unkA = ((pad->unk2 & 0x8000) ? ((n - 1) * c) : (n * c)) + 0x80;
+        pad->unkC = (pad->unk2 & 0x40) ? 0x6A : 0;
+        pad->unkE = (pad->unk2 & 0x80) ? 0x6A : 0;
+        pad->unk10 = (pad->unk2 & 0x4) ? 0x6A : 0;
+    } else if (raw[1] == 0x23) {
+        pad->unk4 = pad->unk2;
+        pad->unk2 = ~((raw[2] << 8) | raw[3]);
+        pad->unkA = raw[4];
+        /* This barrier is load-bearing: removing it changes .text. */
+        asm("");
+        pad->unkC = raw[5] - g_NegconNeutralI;
+        pad->unkE = raw[6] - g_NegconNeutralII;
+        pad->unk10 = raw[7] - g_NegconNeutralL;
+        if (pad->unkC < 0) {
+            pad->unkC = 0;
+        }
+        if (pad->unkE < 0) {
+            pad->unkE = 0;
+        }
+        if (pad->unk10 < 0) {
+            pad->unk10 = 0;
+        }
+        if (pad->unkA >= 0xA3) {
+            pad->unk2 |= 0x2000;
+        }
+        if (pad->unkA < 0x5E) {
+            pad->unk2 |= 0x8000;
+        }
+        if (pad->unkC >= 0x36) {
+            pad->unk2 |= 0x40;
+        }
+        if (pad->unkE >= 0x36) {
+            pad->unk2 |= 0x80;
+        }
+        if (pad->unk10 >= 0x36) {
+            pad->unk2 |= 0x4;
+        }
+        pad->unk6 = pad->unk2 & ~pad->unk4;
+    } else {
+        if (g_PadErrorState == 0) {
+            g_PadErrorState = 2;
+        }
+        pad->unk0 = 1;
+        pad->unk2 = 0;
+        pad->unk6 = 0;
+        pad->unk8 = 0;
+        pad->unkA = 0x80;
+        pad->unkC = 0;
+        pad->unkE = 0;
+        pad->unk10 = 0;
+    }
+    pad->unk8 = 0;
+    pad->unk8 = pad->unk2 & ~D_8007C138;
+    if (pad->unk2 != 0 && pad->unk2 == D_8007C138) {
+        if (D_8009AEEC[0] == 0x1E) {
+            pad->unk8 = pad->unk8 | pad->unk2;
+        }
+        D_8009AEEC[0] = (D_8009AEEC[0] < 0x24) ? (D_8009AEEC[0] + 1) : 0x1E;
+    } else {
+        D_8009AEEC[0] = 0;
+    }
+    D_8007C138 = pad->unk2;
+    neutral = g_NegconSteerNeutral + 0x80;
+    d = pad->unkA - neutral;
+    if (d > 0) {
+        r = d - D_8007C128[g_NegconSteerPlay][0];
+        if (r < 0) {
+            r = 0;
+        }
+        c1 = g_NegconSteerRange[g_NegconMaxTwist];
+        if (r > c1) {
+            r = c1;
+        }
+    } else {
+        r = d + D_8007C128[g_NegconSteerPlay][0];
+        if (r > 0) {
+            r = 0;
+        }
+        c2 = g_NegconSteerRange[g_NegconMaxTwist];
+        if (r < -c2) {
+            r = -c2;
+        }
+    }
+    pad->unk16 = r;
+    if (pad->unkC >= 0x6B) {
+        pad->unkC = 0x6A;
+    }
+    if (pad->unkE >= 0x6B) {
+        pad->unkE = 0x6A;
+    }
+    if (pad->unk10 >= 0x6B) {
+        pad->unk10 = 0x6A;
+    }
+}

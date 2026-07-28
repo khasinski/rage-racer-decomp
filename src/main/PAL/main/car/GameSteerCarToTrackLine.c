@@ -91,13 +91,225 @@ void GameSteerCarToTrackLine(GameCarRuntime *car) {
  * Turns the launch spin GameUpdateCarDriving seeded into clamped yaw, recomputes revs /
  * tacho / world velocity, then sets route+0x38 = 0x14 and route+0x98 = 2 to hand
  * the car to the airborne handler GameUpdateCarAirborne. See docs/names.md 1.
- *
- * PERMUTER-CANDIDATE: real C exists (scratch/permuter-seeds/func_80030030.wip.c,
- * DIFFS=68), 505/505 words, structure correct. Residual is s0/s2 CSE +
- * scheduling. Byte-exact INCLUDE_ASM until permuter.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/GameSteerCarToTrackLine", func_80030030);
+extern u8 *D_801E42D8;
+extern s32 D_801E4BF4;
+extern s32 D_801E8AA0;
+
+s32 func_8002A788(s32 arg0, s32 arg1);
+s32 func_8002A7C4(s32 arg0, s32 arg1);
+void func_8002FE74(GameCarRuntime *car);
+s32 func_80068568(s32 arg0);
+s32 func_80068634(s32 arg0);
+
+void func_80030030(GameCarRuntime *arg0) {
+    register GameCarRuntime *car asm("$19") = arg0;
+    register u8 *r asm("$17");
+    register s32 s4val asm("$20");
+    s32 res;
+    register s32 v0 asm("$2");
+    register s32 first24 asm("$4");
+    register s32 firstHeading asm("$5");
+    s32 sinF24;
+    s32 cosF24;
+    /* The two adjacent motion-state handlers use this same vector at sp+0x10. */
+    s32 coords[3];
+
+    first24 = car->field_24;
+    v0 = *(s32 *)((u8 *)car + 0x10C);
+    firstHeading = car->headingAngle;
+    s4val = v0;
+    if (v0 < 0) {
+        s4val = -s4val;
+    }
+
+    res = func_8002A788(first24, firstHeading);
+    r = (u8 *)car + 188;
+    if (res >= 0x600) {
+        car->field_A4 = car->field_A4 * 990 / 1000;
+    }
+
+    if (car->field_98 == 0) {
+        s32 near;
+        s32 phase;
+        s32 volume;
+
+        volume = 0x7F;
+        near = res < 513;
+        if (near) {
+            volume = res / 8 + 0x40;
+            asm("" : "=r"(res) : "0"(res));
+            near = res < 513;
+        }
+        asm("" : "=r"(near) : "0"(near));
+        if (near) {
+            phase = res * 3 + 0x1800;
+        } else {
+            phase = 0x1E00;
+        }
+        func_8005C104(0, phase, volume);
+    } else {
+        func_8005C104(-1, 0, 0);
+    }
+
+    if (res < 0x80 && s4val < 0x800) {
+        *(s32 *)(r + 0x48) -= (0x800 - s4val) * 4000 / 256;
+    }
+    if (car->field_A4 < 0x190) {
+        *(s32 *)(r + 0x48) -= (0x190 - car->field_A4) * 100;
+    }
+
+    if (*(s32 *)(r + 0x48) > 0) {
+        s32 s2;
+
+        *(s16 *)(r + 0x3E) += 10;
+        if (*(s16 *)(r + 0x3E) >= 100) {
+            *(s16 *)(r + 0x3E) = 100;
+        }
+
+        res = func_8002A7C4(car->field_24, *(s32 *)(r + 0x90)) * 98 / 100;
+        s2 = res * (*(s32 *)(r + 0x4C) + 0x800);
+        res = s2 / 2048;
+        *(s32 *)(r + 0x50) += res * 16;
+
+        if ((u32)(*(s32 *)(r + 0x1C) + 127) < 255) {
+            if (func_8002A788(car->field_24, car->headingAngle) < 0x200) {
+                *(s32 *)(r + 0x50) = *(s32 *)(r + 0x50) * 31 / 32;
+                *(s32 *)(r + 0x50) =
+                    func_8002A7C4(car->field_24, car->headingAngle) + *(s32 *)(r + 0x50);
+            } else if (s4val < 0x800) {
+                *(s32 *)(r + 0x50) = res / 2 + *(s32 *)(r + 0x50);
+            }
+        }
+
+        if (*(s32 *)(r + 0x50) > 0x3600) {
+            *(s32 *)(r + 0x50) = 0x3600;
+        }
+        if (*(s32 *)(r + 0x50) < -0x3600) {
+            *(s32 *)(r + 0x50) = -0x3600;
+        }
+
+        car->field_24 = *(s32 *)(r + 0x50) / 256 + car->field_24;
+        *(s32 *)(r + 0x48) -= 64;
+
+        res = func_8002A788(car->field_24, car->headingAngle);
+        *(s32 *)(r + 0x48) -= res * res / 65536;
+        *(s32 *)(r + 0x48) -= (0x3600 - s4val) / 64;
+
+        {
+            s32 a4 = car->field_A4;
+            s32 half = *(s32 *)(r + 0x8C) / 2;
+            if (a4 < half) {
+                *(s32 *)(r + 0x48) -= (half - a4) / 8;
+            }
+        }
+
+        *(s32 *)(r + 0x48) -= *(s16 *)(r + 0xA2) * 4;
+        *(s32 *)(r + 0x48) -= (0x100 - *(s16 *)(r + 0xA0)) * 4;
+        car->field_A4 -= *(s16 *)(r + 0xA2) * 10 / 256;
+        car->field_A4 -= (0x100 - *(s16 *)(r + 0xA0)) * 10 / 256;
+    } else {
+        *(s32 *)(r + 0x50) = *(s32 *)(r + 0x50) * 15 / 16;
+        if (s4val < 0x1000) {
+            s32 lo;
+            u8 *specBase;
+
+            {
+                s32 gain = (100 - (*(s16 *)(r + 0x76) - 1) * 4) * 10000;
+                *(s32 *)(r + 0x94) = gain * car->field_A4 / 100;
+            }
+            *(s32 *)(r + 0x60) = func_8002A7C4(car->headingAngle, car->field_24);
+            *(s32 *)(r + 0x58) = car->headingAngle;
+            car->headingAngle = car->field_24;
+
+            {
+                register s32 t asm("$2");
+                register s32 sq asm("$3");
+
+                t = *(s32 *)(r + 0x60);
+                sq = t;
+                if (t < 0) {
+                    sq = -sq;
+                }
+                if (sq < 0x401) {
+                    sq = sq * sq;
+                } else {
+                    sq = 0x800 - sq;
+                    sq = sq * sq;
+                }
+                *(s32 *)(r + 0x5C) = sq * car->field_A4 / 0x100000;
+            }
+
+            *(s32 *)(r + 0x50) = 0;
+
+            specBase = D_801E42D8;
+            lo = car->field_A4 * 0xA0 / 1168 * 10000 /
+                 *(s32 *)((s32)specBase +
+                          (*(s16 *)(r + 0x76) << 2) + 0xE4);
+            {
+                register s32 phaseValue asm("$5");
+                s32 offset;
+
+                asm volatile("" : : : "memory");
+                offset = *(s16 *)(r + 0x76);
+                phaseValue = *(u16 *)(r + 0x78);
+                offset <<= 2;
+                asm volatile("" : : : "memory");
+                *(s16 *)(r + 0x38) = 0x14;
+                *(s32 *)(r + 0x98) = 2;
+                D_801E4BF4 = lo;
+                *(s16 *)(r + 0x3C) =
+                    *(u16 *)&D_801E4BF4 - phaseValue;
+                specBase += offset;
+            }
+            {
+                *(s16 *)(r + 0x2C) =
+                    lo * *(s32 *)(specBase + 0xCC) / 0x20000;
+                if (*(s16 *)(r + 0x74) == 0) {
+                    *(s16 *)(r + 0x2C) =
+                        *(s16 *)(r + 0x2C) * 985 / 1000;
+                }
+            }
+
+            if ((u32)((*(u16 *)(r + 0x3C) + 99) & 0xFFFF) < 199) {
+                D_801E8AA0 = 1;
+            } else {
+                D_801E8AA0 = 0;
+            }
+        }
+    }
+
+    *(s32 *)(r + 0x90) = car->field_24;
+    func_8002FE74(car);
+
+    res = func_8002A788(car->field_24, car->headingAngle);
+    if (res >= 0x401) {
+        s32 factor;
+        s32 a8;
+
+        factor = (0x3600 - s4val) * 4;
+        a8 = car->field_A8;
+        factor = factor * a8;
+        factor = factor * (res - 0x400);
+        car->field_A8 = a8 / 2 + factor / 14155776;
+    } else {
+        s32 a8 = car->field_A8;
+
+        car->field_A8 = (0x200 - res) * a8 / 512;
+    }
+
+    {
+        s32 saved = car->headingAngle;
+        func_8002F4E4(car);
+        car->headingAngle = saved;
+    }
+
+    sinF24 = func_80068568(car->field_24);
+    cosF24 = func_80068634(car->field_24);
+    *(s32 *)(r + 0x08) = func_80068568(car->headingAngle) * car->field_A4 / 256;
+    *(s32 *)(r + 0x10) = func_80068634(car->headingAngle) * car->field_A4 / 256;
+}
 
 extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
 
