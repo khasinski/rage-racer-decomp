@@ -3605,15 +3605,52 @@ plus the two pre-existing `$2` / `$7` pins.
   `beqz D_801E42F8` guard *is* a duplicated exit test, so the body is a pre-test
   `for` and the three preheader insns after the guard (`andi`, `la D_8009DF20`,
   `addiu +2`) are `move_movables` hoists, i.e. they must be written *inside* the
-  loop. That form is 2 words out. The `blez` vs `beqz` half of it needs
-  `nonzero_bits` to know the bound's sign bit is clear, which `combine` only
-  manages when the compared pseudo has `reg_n_sets > 1` (`set_nonzero_bits_and_
-  sign_copies` ignores single-set pseudos, and the `reg_last_set` fast path is
-  barred because `subst_low_cuid` is the counter's `i = 0`, which always
-  precedes the duplicated load). Assigning the bound to a local both before and
-  at the end of the loop supplies the second set and closes it, leaving one
-  three-word permutation at the loop tail — but that shape is invented C, so
-  the crutch stays for now.
+  loop.
+
+  **Re-measured 2026-07-28 with both sides linked, and the residual is now
+  pinned to exactly two words.** With `short i` as the counter and the stores
+  kept as the two hoisted `u_char *` pointers, the candidate is 91 words and
+  **every one of them is byte-identical to retail** once retail's two frame
+  instructions are removed and branch displacement fields are normalised: zero
+  differences. The whole gap is `addiu $sp,$sp,-8` / `addiu $sp,$sp,8`.
+
+  What was swept, all inert or worse:
+
+  - counter type: `short` 91 words body-exact; `u_short` 88; `u_char` 86;
+    `long`/`int` 89 **with the frame** (see below); declaring `i` at function
+    scope instead of inside the `if (arg3 == 1)` block changes nothing.
+  - the 21a array carrier (`g_SndVoiceRegs16[k]` / `[k + 1]`) inside the loop:
+    90 words and **no** frame. It cannot fire here, because `move_movables`
+    hoists the base out of the loop, so the two accesses no longer share a basic
+    block with the address materialisation, and 21a's fold needs LOG_LINKS that
+    do not cross blocks.
+
+  **`long i` and `int i` do produce the phantom frame**, which 21a did not
+  record. They cost four words elsewhere and so are not the answer: the guard
+  degrades from `beqz` to `blez` (this is the `nonzero_bits` half below, which
+  `short i` gets right for free), and the exit test loses the `(short)`
+  truncation, dropping retail's `sll`/`sra` pair. Routing the index through the
+  `$2`-pinned `offset` in two steps keeps `exact` at 32 rather than 88 but does
+  not recover those four words.
+
+  RTL evidence for what is actually missing, from `-dl` dumps against
+  `SpuVmSeKeyOff` (crutch-free, same `D_801E42F8` bound, and it *does* get the
+  frame): the template's phantom is pseudo 230, `used 2 times across 2 insns in
+  block 0; dies in 0 places; ST_REGS or none`, and it appears nowhere in the
+  final RTL — a dead pseudo whose `REG_N_REFS` combine never refreshed, showing
+  up as `vars= 8` in `.frame`. The `short i` candidate here has `vars= 0` and
+  every pseudo allocated to a hard register. So the open question is narrow and
+  precise: **get combine to leave that dead pseudo while the guard still folds
+  to `beqz` and the counter stays `short`.**
+
+  The `blez` vs `beqz` half needs `nonzero_bits` to know the bound's sign bit is
+  clear, which `combine` only manages when the compared pseudo has
+  `reg_n_sets > 1` (`set_nonzero_bits_and_sign_copies` ignores single-set
+  pseudos, and the `reg_last_set` fast path is barred because `subst_low_cuid`
+  is the counter's `i = 0`, which always precedes the duplicated load).
+  Assigning the bound to a local both before and at the end of the loop supplies
+  the second set and closes it, but that shape is invented C. With `short i` the
+  question does not arise. The crutch stays for now.
 
 ### 21b. `SsUtChangeADSR` (func_80078300) — crutch-free body
 
