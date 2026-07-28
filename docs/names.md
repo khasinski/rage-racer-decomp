@@ -4417,3 +4417,55 @@ Two link-only experiments, neither of which touches the shipped build:
 - insert `. += 0x40;` in the middle of `.text`: everything at or after that
   point moves by 0x40 and nothing is left behind -- including bss, and
   including the `lui`/`ori` halves, whose encoded immediate tracks the symbol.
+
+## 25. Global-allocation priorities are not recoverable from retail assembly
+
+GCC 2.6.3's candidate-side allocation order is reproducible from `.lreg` and
+`.greg`, but there is no corresponding retail order to extract from final
+assembly. This matters for the six large remaining functions: treating
+hard-register use ranges as retail pseudos would manufacture the inputs to the
+comparison.
+
+The exact comparator in `global.c:586-606` is:
+
+```text
+int(floor_log2(allocno_n_refs) * allocno_n_refs
+    / allocno_live_length * 10000 * allocno_size)
+```
+
+Size is **multiplied**, not divided. Ties use allocno number. Nor is there
+necessarily one allocno per pseudo: `global.c:383-423` groups `reg_may_share`
+pseudos, sums their reference counts, and takes their maximum live length.
+
+The required retail inputs disappear before assembly:
+
+- `flow.c:1298-1364,1973-1983` derives weighted references from
+  `NOTE_INSN_LOOP_BEG/END` and adds the current RTL loop depth per mention;
+- live lengths, pseudo boundaries, allocno grouping, conflicts, and preferences
+  all exist before global allocation and reload;
+- `toplev.c:3094-3140` performs allocation/reload and dumps `.greg`, while
+  `toplev.c:3251-3273` emits assembly only later.
+
+The loss is demonstrably many-to-one. The two controls in
+`scratch/decomp-work/gcc263-alloc-diff-impossibility/` use a noted `for` loop
+and an equivalent backward `goto`. Both have allocnos 71/72, dispositions
+`71 in 16, 72 in 17`, and byte-identical 76-byte `.text` sections. Their hidden
+metadata differs:
+
+| form | p71 refs/length/priority | p72 refs/length/priority |
+|---|---|---|
+| noted `for` | 9 / 7 / 38571 | 6 / 9 / 13333 |
+| backward `goto` | 5 / 7 / 14285 | 4 / 9 / 8888 |
+
+No assembly parser can decide which row generated those identical bytes.
+Therefore a retail pseudo order, first inversion, or numeric percentage gap is
+not observable.
+
+The recorded `func_800418D4` 887-to-780 edit remains useful candidate evidence:
+moving `var_t0_395 = 0` earlier changes pseudo 156 from 5 refs across 167 insns
+(priority 598) to 5 across 206 (priority 485), moving it below pseudos 73, 151,
+154, and 82 in `.greg`. It does not reveal the retail values. Such lifetime
+edits must be evaluated by compiling and comparing linked `exact`, preferably
+through permuters, rather than by assigning invented priorities to retail
+assembly. See `docs/TASK_FOR_CODEX_2I_REPORT.md` for the full proof and six
+remeasured starting points.
