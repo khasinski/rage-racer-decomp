@@ -1,34 +1,12 @@
-#include <sys/types.h>
-
 #include "common.h"
 
-u_long Gte_PatchExceptionHandler[28] asm("func_80069FA8") __attribute__((section(".text"))) = {
-    0x3C01800A,
-    0xAC3FAEDC,
-    0x0C018C84,
-    0x00000000,
-    0x240A00B0,
-    0x0140F809,
-    0x24090056,
-    0x3C0A8007,
-    0x3C098007,
-    0x8C420018,
-    0x254AA010,
-    0x2529A048,
-    0x8D430000,
-    0x254A0004,
-    0x24420004,
-    0x1549FFFC,
-    0xAC43FFFC,
-    0x0C01A812,
-    0x00000000,
-    0x0C018C88,
-    0x00000000,
-    0x3C1F800A,
-    0x8FFFAEDC,
-    0x00000000,
-    0x03E00008,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-};
+/*
+ * Installs the GTE-aware exception handler: takes the BIOS exception table
+ * pointer from B0(0x56), then copies the handler body that lives between
+ * func_8006A010 and func_8006A048 into it.
+ *
+ * Hand-written assembly. It was previously carried as a u_long array in
+ * .text, which meant the two block bounds and the saved-$ra slot were baked
+ * in as literals and did not relocate; see docs/names.md on shiftability.
+ */
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/Gte_PatchExceptionHandler", func_80069FA8);

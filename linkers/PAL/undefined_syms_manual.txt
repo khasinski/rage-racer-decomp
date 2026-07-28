@@ -46,6 +46,9 @@ func_80063DDC = func_80063D9C + 0x40;
 func_80063DEC = func_80063D9C + 0x50;
 func_80063E44 = func_80063E34 + 0x10;
 func_800681BC = func_800681AC + 0x10;
+/* Start of the GTE exception-handler body that Gte_PatchExceptionHandler
+   copies into the BIOS vector. It sits inside that unit, 0x68 in. */
+D_8006A010 = func_80069FA8 + 0x68;
 func_8006A048 = func_8006A018 + 0x30;
 func_8006A058 = func_8006A018 + 0x40;
 func_8006A3E8 = func_8006A3D8 + 0x10;
