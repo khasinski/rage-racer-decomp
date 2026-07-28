@@ -3726,6 +3726,38 @@ with the `2:` label hack in `lib/libsnd/SsUtPitchBend.c`.
 
 ### 21c. `func_80016754` GameDrawText8x8 — one construct (word count unreliable)
 
+**Re-measured 2026-07-28: 86/86 words, exact residual 3, and the residual is now
+characterised exactly.** Retail's loop preheader is `lui/addiu s6` (the hoisted
+`D_8007C2F8` font base) followed by `move s2,s3`; every candidate emits the `move`
+first and the hoist after. The two are independent, so this is an emission-order tie
+between a `move_movables` hoist and the preheader statement that initialises the sprite
+cursor, not a scheduling decision inside a block.
+
+Retail's register roles, for reference: `s3` is the packet read from the scratchpad,
+`s2` the sprite cursor copied from it, both advancing by 16; `s6` is the hoisted font
+base used for the first byte, while the second byte rematerialises `D_8007C2F9` inside
+the loop at `0x800167CC`.
+
+Ruled out on top of the nine mechanism classes already swept (see
+`scratch/decomp-work/func_80016754/metrics.md`):
+
+* **An explicit `u8 *font = g_Font8x8Cells;` collapses the function to 83 words**, in
+  either declaration position and whether indexed or dereferenced. Naming the base stops
+  the second byte rematerialising `D_8007C2F9` in the loop, which is three of retail's
+  words. The base must stay spelled as array indexing.
+* **Dropping the explicit cursor and writing through `((TextSprt8 *)packet)->field`
+  does make gcc create the second induction variable by strength reduction, but it
+  biases it**: `addiu s2,s3,14` with negative field offsets, exact 7. That is the same
+  bias pathology recorded for `func_8005C914`. A `volatile` cast in that form drops back
+  to 83 words.
+* Declaration order of `sprt` relative to `packet` and `scratch`, splitting the
+  declaration from the assignment, and initialising `sprt` from a second read of the
+  scratchpad slot are all **inert**: four spellings, all exact 3.
+
+So the shape needed is an *unbiased* second induction variable whose initialisation is
+emitted after the invariant hoist. The explicit cursor gives unbiased-but-early; the
+cast gives late-but-biased. Nothing tried yields both.
+
 Down from six residual words to three — **but both figures came from the
 pre-`0568a8af` harness and understate; re-measure before quoting them.** The
 *shape* of the residual below is what matters and is independent of the count.
