@@ -279,6 +279,10 @@ def build_symbol_table(
             linker_dir / f"undefined_syms_auto.{basename}.txt",
             linker_dir / f"undefined_funcs_auto.{basename}.txt",
             linker_dir / "undefined_syms_manual.txt",
+            # Section markers main.ld computes.  Not linked from here; see the
+            # header of the file.  Without it the boot stub's reference to the
+            # end of bss would come out as a frozen absolute address.
+            linker_dir / f"section_syms.{basename}.txt",
         ),
         collect_asm_alias_symbols(root / "include", root / "src" / basename / version),
     ]
