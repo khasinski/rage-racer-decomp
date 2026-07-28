@@ -19,6 +19,20 @@ void SetRotMatrix(void *m) asm("func_80069858");
 void SetLightMatrix(void *m) asm("func_80069888");
 void SetColorMatrix(void *m) asm("func_800698B8");
 void SetTransMatrix(void *m) asm("func_800698E8");
+/* Direct GTE register writers (libgte REG03_1 through REG03_13). */
+void SetVertex0(void *v) asm("func_80069908");
+void SetVertex1(void *v) asm("func_80069918");
+void SetVertex2(void *v) asm("func_80069928");
+void SetVertexTri(void *v0, void *v1, void *v2) asm("func_80069938");
+void SetRGBfifo(void *rgb0, void *rgb1, void *rgb2) asm("func_80069958");
+void SetIR123(long ir1, long ir2, long ir3) asm("func_8006996C");
+void SetIR0(long ir0) asm("func_80069980");
+void SetSZfifo3(long sz1, long sz2, long sz3) asm("func_8006998C");
+void SetSZfifo4(long sz0, long sz1, long sz2, long sz3) asm("func_800699A0");
+void SetSXSYfifo(long sxy0, long sxy1, long sxy2) asm("func_800699B8");
+void SetRii(long r11, long r22, long r33) asm("func_800699CC");
+void SetMAC123(long mac1, long mac2, long mac3) asm("func_800699E0");
+void SetData32(long data) asm("func_800699F4");
 /* Perspective divide constants (control regs 27 / 28). */
 void SetDQA(long dqa) asm("func_80069A00");
 void SetDQB(long dqb) asm("func_80069A0C");
@@ -39,6 +53,7 @@ void DpqColor3(
     void *o0,
     void *o1,
     void *o2) asm("func_80069AD8");
+void DpqColor(void *v0, void *rgb, long p, void *v1) asm("func_80069AB0");
 void Intpl(void *v0, long p, void *v1) asm("func_80069B14");
 void *Square12(void *v0, void *v1) asm("func_80069B38");
 void *Square0(void *v0, void *v1) asm("func_80069B60");
