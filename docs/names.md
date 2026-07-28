@@ -3758,6 +3758,29 @@ So the shape needed is an *unbiased* second induction variable whose initialisat
 emitted after the invariant hoist. The explicit cursor gives unbiased-but-early; the
 cast gives late-but-biased. Nothing tried yields both.
 
+**Why, from the RTL.** `-dL` on the best candidate shows the preheader as:
+
+```
+insn 27   (set (reg 78) (reg 76))                     ; sprt = packet, from source
+insn 180  (set (reg 83) (symbol_ref "D_8007C2F8"))    ; hoisted font base
+insn 182  (set (reg 91) (const (plus D_8007C2F8 1)))  ; hoisted font base + 1
+insn 188  (set (reg 107) (plus (reg 76) (const_int 14)))  ; biased giv init
+note 29   NOTE_INSN_LOOP_BEG
+```
+
+`move_movables` places every hoist with `emit_insn_before (..., loop_start)`, so hoists
+always land *after* whatever the source already put in the preheader. An explicitly
+initialised cursor is a preheader source insn, therefore **it can never precede the
+hoist** — that is a property of the pass, not a matter of finding the right spelling, and
+it closes off the whole explicit-cursor family rather than one more candidate.
+
+It follows that the original source did **not** initialise a cursor before the loop: the
+second register must come from `loop` itself. Note that gcc already builds such a giv
+here (insn 188) even in the explicit-cursor candidate, and it builds it biased by 14, the
+offset of the last field written. The open question is therefore narrower than it looked:
+**what source shape makes that giv unbiased?** Retail's `move s2,s3` with positive field
+offsets 8 through 14 is a bias of 0.
+
 Down from six residual words to three — **but both figures came from the
 pre-`0568a8af` harness and understate; re-measure before quoting them.** The
 *shape* of the residual below is what matters and is independent of the count.
