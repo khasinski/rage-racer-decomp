@@ -246,7 +246,220 @@ update_state:
     g_IndexedEffectIndexPrev = g_IndexedEffectIndex;
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPanVoiceTargetVolume", func_8005C31C);
+extern s32 D_800126D0[];
+extern s32 D_801E6C9C;
+extern u8 D_801E6D00[];
+extern u8 D_801E6D04[];
+extern s32 D_801E6D08;
+extern u8 D_801E6D10[];
+extern u8 D_801E6D14[];
+extern s32 D_801E6D18;
+
+typedef struct SoundModeSlot {
+    s32 left;
+    s32 right;
+} SoundModeSlot;
+
+typedef struct SoundModeEntry {
+    s32 count;
+    s32 factor;
+    SoundModeSlot slots[2];
+} SoundModeEntry;
+
+void func_8005C31C(s32 arg0, s32 left, s32 right) {
+    s32 offset;
+    s32 count;
+    s32 i;
+    s32 loopTableOffset;
+    s32 average;
+    /* Load-bearing: removing this $v0 pin changes four linked words. */
+    register s32 scaledLeft asm("$2");
+    s32 scaledRight;
+    s32 entryOffset;
+    s32 *table;
+    s32 currentA;
+    s32 currentB;
+    s32 matchValue;
+    s32 flag;
+    s32 *base;
+    SoundModeEntry *entry;
+
+    if (arg0 < 0) {
+        goto clamp_arg0_low;
+    }
+    if (arg0 < 4) {
+        goto clamp_arg0_done;
+    }
+    arg0 = 3;
+    goto clamp_arg0_done;
+clamp_arg0_low:
+    arg0 = 0;
+clamp_arg0_done:
+
+    if (left < 0) {
+        goto clamp_left_low;
+    }
+    if (left < 0x80) {
+        goto clamp_left_done;
+    }
+    left = 0x7F;
+    goto clamp_left_done;
+clamp_left_low:
+    left = 0;
+clamp_left_done:
+
+    if (right < 0) {
+        goto clamp_right_low;
+    }
+    if (right < 0x80) {
+        goto clamp_right_done;
+    }
+    right = 0x7F;
+    goto clamp_right_done;
+clamp_right_low:
+    right = 0;
+clamp_right_done:
+
+    if ((left <= 0) && (right <= 0)) {
+        left = *(s32 *)D_801E6D00;
+        right = 0;
+        if (left < 0) {
+            if (D_801E6D18 < 0) {
+                return;
+            }
+        }
+
+        if ((u32)arg0 < 2) {
+            if (left == *(s32 *)(D_800126D0 + 2)) {
+                currentB = D_801E6D18;
+                if (currentB == *(s32 *)(D_800126D0 + 4)) {
+                    goto found_match;
+                }
+            }
+            if (left == *(s32 *)(D_800126D0 + 8)) {
+                currentB = D_801E6D18;
+                matchValue = *(s32 *)(D_800126D0 + 10);
+                goto test_match;
+            }
+        } else {
+            if (left == *(s32 *)(D_800126D0 + 14)) {
+                currentB = D_801E6D18;
+                if (currentB == *(s32 *)(D_800126D0 + 16)) {
+                    goto found_match;
+                }
+            }
+            if (left == *(s32 *)(D_800126D0 + 20)) {
+                currentB = D_801E6D18;
+                matchValue = *(s32 *)(D_800126D0 + 22);
+                goto test_match;
+            }
+        }
+        goto after_match;
+test_match:
+        if (currentB != matchValue) {
+            goto after_match;
+        }
+found_match:
+        right = 1;
+after_match:
+
+        if (right != 0) {
+            /* Load-bearing: removing this $v0 pin changes 139 linked words. */
+            register s32 resetLoad asm("$2");
+            s32 resetCount;
+            s32 inactiveValue;
+            s32 activeValue;
+
+            resetLoad = *(s32 *)((s32)D_800126D0 + ((arg0 * 3) << 3));
+            i = 0;
+            if (resetLoad <= i) {
+                return;
+            }
+            inactiveValue = -1;
+            activeValue = 1;
+            resetCount = resetLoad;
+            do {
+                offset = i * 0x18;
+                *(s32 *)(D_801E6D00 + offset) = inactiveValue;
+                *(s32 *)(D_801E6D04 + offset) = inactiveValue;
+                *(s32 *)((s32)&D_801E6D08 + offset) = activeValue;
+                table = (s32 *)((s32)&D_801E6C9C + offset);
+                *(s32 *)((s32)table + 0x78) = 0;
+                *(s32 *)((s32)D_801E6D10 + offset) = 0;
+                i++;
+            } while (i < resetCount);
+        }
+        return;
+    }
+
+    currentA = *(s32 *)D_801E6D00;
+    if (currentA == *(s32 *)((s32)D_800126D0 + ((arg0 * 3) << 3) + 8)) {
+        currentB = D_801E6D18;
+        if (currentB == *(s32 *)((s32)D_800126D0 + ((arg0 * 3) << 3) + 0x10)) {
+            D_801E6D08 = 2;
+        } else {
+            D_801E6D08 = 0;
+        }
+    } else {
+        D_801E6D08 = 0;
+    }
+
+    i = 0;
+    loopTableOffset = (arg0 * 3) << 3;
+    arg0 = *(s32 *)((s32)D_800126D0 + loopTableOffset);
+    if (arg0 <= i) {
+        return;
+    }
+
+    average = (left + right) / 2;
+    count = arg0;
+    /* Load-bearing: removal changes five linked preheader words. */
+    asm("" : "=r"(count) : "0"(count));
+    base = D_800126D0;
+    entryOffset = loopTableOffset;
+    entry = (SoundModeEntry *)((s32)base + entryOffset);
+    arg0 = 0;
+    do {
+        if (i != 0) {
+            *(s32 *)((s32)&D_801E6D08 + arg0) = D_801E6D08;
+        }
+
+        flag = g_StereoOutput;
+        *(s32 *)(D_801E6D00 + arg0) = entry->slots[0].left;
+        *(s32 *)(D_801E6D04 + arg0) = entry->slots[0].right;
+        if (flag != 0) {
+            currentB = *(s32 *)((s32)D_800126D0 + entryOffset + 4);
+            scaledLeft = left * currentB;
+            if (scaledLeft < 0) {
+                scaledLeft += 0x7F;
+            }
+            scaledLeft >>= 7;
+            *(volatile s32 *)((s32)D_801E6D10 + arg0) = scaledLeft;
+            scaledRight = right * currentB;
+            entry = (SoundModeEntry *)((s32)entry + 8);
+            if (scaledRight < 0) {
+                scaledRight += 0x7F;
+            }
+            scaledRight >>= 7;
+            *(volatile s32 *)((s32)D_801E6D14 + arg0) = scaledRight;
+            i++;
+        } else {
+            if ((scaledLeft = average * *(s32 *)((s32)D_800126D0 + entryOffset + 4)) < 0) {
+                currentB = scaledLeft + 0x7F;
+            } else {
+                currentB = scaledLeft;
+            }
+            currentB >>= 7;
+            *(volatile s32 *)((s32)D_801E6D10 + arg0) = currentB;
+            *(volatile s32 *)((s32)D_801E6D14 + arg0) = currentB;
+            /* Load-bearing: removal changes eight linked scheduler words. */
+            asm volatile("");
+            entry = (SoundModeEntry *)((s32)entry + 8);
+            i++;
+        }
+        arg0 += 0x18;
+    } while (i < count);
+}
 
 void func_80078528(s32 voice, s16 left, s16 right);
 

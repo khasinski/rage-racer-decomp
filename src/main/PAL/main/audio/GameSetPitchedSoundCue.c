@@ -304,7 +304,116 @@ void func_8005CDB0(void) {
     } while ((s32)statePtr < (s32)&g_EffectVoiceState[20]);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/audio/GameSetPitchedSoundCue", func_8005D050);
+extern s32 g_SoundCueBank asm("D_801E6CA0");
+extern SoundScale g_SoundScale asm("D_801E6CA4");
+extern s32 g_SpecialCueVoiceA asm("D_801E4D90");
+extern s32 g_SpecialCueVoiceB asm("D_801E4D94");
+extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
+extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
+extern const s32 g_SpecialVoiceBits[] asm("D_80011C74");
+extern const char D_80012778[];
+s32 func_8007B088(s32 bit);
+
+s32 func_8005D050(s32 cue, s32 arg1, s32 volL, s32 volR) {
+    const s32 *voiceBits;
+    s32 busy[6];
+    s32 tone2;
+    s32 vab;
+    s32 prog;
+    s32 tone;
+    s32 baseVol;
+    s32 scale;
+    s32 scaled;
+    s32 result;
+    s32 i;
+
+    tone = 0;
+    voiceBits = g_SpecialVoiceBits;
+    tone2 = 1;
+    if (g_SoundCueBank == 1) {
+        tone2 = g_SoundCueParams[cue][4];
+        vab = g_SoundCueParams[cue][1];
+        prog = g_SoundCueParams[cue][2];
+        tone = g_SoundCueParams[cue][3];
+        baseVol = g_SoundCueParams[cue][0];
+    } else {
+        vab = 0;
+        if (g_SoundCueBank == 2) {
+            tone2 = g_SoundCueParams2[cue][4];
+            vab = g_SoundCueParams2[cue][1];
+            prog = g_SoundCueParams2[cue][2];
+            tone = g_SoundCueParams2[cue][3];
+            baseVol = g_SoundCueParams2[cue][0];
+        } else {
+            prog = cue;
+            baseVol = 0x80;
+        }
+    }
+
+    scaled = volL * baseVol;
+    if (scaled < 0) {
+        scaled += 0x7F;
+    }
+    scale = g_SoundScale.scale;
+    scaled = (scaled >> 7) * scale;
+    if (scaled < 0) {
+        scaled += 0x7F;
+    }
+    volL = scaled >> 7;
+    scaled = volR * baseVol;
+    if (scaled < 0) {
+        scaled += 0x7F;
+    }
+    scaled = (scaled >> 7) * scale;
+    if (scaled < 0) {
+        scaled += 0x7F;
+    }
+    volR = scaled >> 7;
+
+    if (g_SoundCueBank == 1) {
+        i = 0;
+        do {
+            busy[i] = func_8007B088(voiceBits[i]);
+            i++;
+        } while (i < 6);
+        i = 0;
+        do {
+            if (busy[i] == 0) {
+                result = (s16)SsUtKeyOnV((s16)(i + 0x12), g_SoundScale.values[vab],
+                                         (s16)prog, (s16)tone, 0x3C, 0,
+                                         (s16)volL, (s16)volR);
+                g_SpecialCueVoiceA = result;
+                busy[i] = 1;
+                break;
+            }
+            i++;
+        } while (i < 6);
+        i = 0;
+        do {
+            if (busy[i] == 0) {
+                result = (s16)SsUtKeyOnV((s16)(i + 0x12), g_SoundScale.values[vab],
+                                         (s16)prog, (s16)tone2, 0x3C, 0,
+                                         (s16)volL, (s16)volR);
+                g_SpecialCueVoiceB = result;
+                busy[i] = 1;
+                break;
+            }
+            i++;
+        } while (i < 6);
+    } else {
+        result = (s16)SsUtKeyOn(g_SoundScale.values[vab], prog, tone, 0x3C, 0,
+                                volL, volR);
+        result = (s16)SsUtKeyOn(g_SoundScale.values[(g_SpecialCueVoiceA = result, vab)],
+                                prog, tone2, 0x3C, 0, volL, volR);
+        g_SpecialCueVoiceB = result;
+    }
+
+    if (result < 0) {
+        GameDebugPrintf(D_80012778);
+        return -1;
+    }
+    return result;
+}
 
 extern s32 g_ActiveSpecialCue asm("D_80082F44");
 extern s32 g_SpecialCueVoiceA asm("D_801E4D90");
@@ -445,7 +554,7 @@ s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
 extern s32 g_SoundCueBank asm("D_801E6CA0");
 extern s32 g_LastSpecialCueRequest asm("D_80082F48");
 
-void func_8005D050(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+s32 func_8005D050(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void GamePlaySoundCue(s32 arg0) {
     s32 test;
