@@ -3740,6 +3740,44 @@ plus the two pre-existing `$2` / `$7` pins.
   separately, not together. The fabricated padding remains pending a future
   compiler-faithful source discovery.
 
+**Explicit-inline follow-up, 2026-07-29 (`TASK_FOR_CODEX_1_PHANTOM`).** An
+explicit `inline` helper can change a caller's frame, but it is not a carrier
+that imports this phantom frame. GCC 2.6.3 enables automatic inlining only at
+`-O3`; this build uses `-O2`, so only a function declared `inline` enters
+`integrate.c`. `finish_inline` records `DECL_FRAME_SIZE` while saving the
+callee's RTL, before the caller's `combine` and `reload` passes. During
+expansion, `copy_rtx_and_substitute` reserves that recorded size only when the
+callee's virtual stack-vars register is actually referenced. The stale
+`REG_N_REFS` slot described above does not exist yet and therefore cannot be
+copied from an inline callee. An inlined pre-test loop can still create its own
+phantom later, because its copied RTL runs through the caller's normal
+`combine`/`reload`; that is the same carrier, not a second mechanism.
+
+This was checked on all three remaining libsnd cases, with each candidate
+linked and compared to the committed byte-exact object:
+
+* Moving `SpuVmApplyPitchBendByTone`'s natural pre-test loop into an explicit
+  inline helper produced the real 64-byte frame, but the `long`-counter version
+  was 56 words (`exact 59`, `aligned 41`) and the `short`-counter version was
+  58 words with the same residual. The helper boundary changed allocation but
+  was otherwise erased; it did not recover the retail body.
+* In `SpuVmSetSeqVol`, inline helpers around the condition, bound, increment
+  and short sign-extension did not create the missing frame on the
+  body-exact short-counter form. The least disruptive increment helper stayed
+  at 91 words with no frame (`aligned 5`); the other forms fell to 83-84 words.
+* In `SsUtSetVVol`, an inline scaling helper could move the natural frame to
+  the function entry, confirming that integration changes pseudo lifetimes,
+  but the best such form was 36 words (`exact 27`, `aligned 26`). Inlining the
+  entire successful path was folded back to the already measured natural C
+  allocation (36 words, `exact 24`, `aligned 22`). The first 1,000
+  permutations of the seven genuine local declarations were also inert, so
+  that sweep was stopped rather than spending time on equivalent RTL.
+
+No production source change was accepted from this follow-up. In particular,
+an inline helper with a dummy local or a semantically empty loop would merely
+replace the existing stack crutch with another fake frame carrier and is not a
+decompilation.
+
 ### 21b. `SsUtChangeADSR` (func_80078300) — crutch-free body
 
 > **Closed 2026-07-28.** The function is byte-exact in the tree with no stack
