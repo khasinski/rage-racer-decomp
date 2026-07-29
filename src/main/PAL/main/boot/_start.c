@@ -20,4 +20,20 @@
  * relocations and the linker resolves them against wherever the symbols
  * actually landed.
  */
+/*
+ * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ *
+ * Symbol:   D_800630B4 = the PAL entry point named by the PS-EXE header.
+ * Reason:   hand-written assembly, and deliberately kept that way. It runs
+ *           before $gp, $sp and $fp exist, so it cannot be expressed as C, and
+ *           the BIOS A0/B0 stubs after it have a register protocol C cannot
+ *           state either.
+ * Evidence: the same block used to be a u32[] in .text. As literal words it
+ *           carried no relocations, so a build whose code changed size still
+ *           jumped to the old addresses and hung at 0x8006317x. Rewriting it as
+ *           real assembly gave it 28 relocation records and made the image
+ *           shiftable, which was proved by sideloading a +0x40 build against the
+ *           retail disc: every sampled pc was the baseline's plus exactly 0x40.
+ *           Decompiling it would undo that.
+ */
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/boot/_start", D_800630B4);

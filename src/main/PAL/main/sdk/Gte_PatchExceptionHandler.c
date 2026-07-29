@@ -9,4 +9,17 @@
  * .text, which meant the two block bounds and the saved-$ra slot were baked
  * in as literals and did not relocate; see docs/names.md on shiftability.
  */
+/*
+ * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ *
+ * Symbol:   func_80069FA8 = Gte_PatchExceptionHandler (PSY-Q libgte).
+ * Reason:   hand-written assembly, and deliberately kept that way. It reads the
+ *           BIOS exception table through B0(0x56) and copies a handler body into
+ *           it, so it manipulates addresses of its own code.
+ * Evidence: it too was carried as a u_long array, which baked the two block
+ *           bounds and the saved-$ra slot in as literals that did not relocate.
+ *           As real assembly those became relocation records and the block
+ *           follows the image when code size changes; see docs/names.md on
+ *           shiftability. Decompiling it would undo that.
+ */
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/Gte_PatchExceptionHandler", func_80069FA8);

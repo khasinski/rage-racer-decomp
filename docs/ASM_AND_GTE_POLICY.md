@@ -124,6 +124,30 @@ Weak evidence is not enough:
 
 Those are matching problems first.
 
+## Assembly Kept Deliberately, For Relocation
+
+There is a second reason to leave a block as assembly, distinct from "the
+original was hand-written": **decompiling it would freeze the image**.
+
+Two blocks are in this category, `D_800630B4` in `main/boot/_start.c` and
+`func_80069FA8` in `main/sdk/Gte_PatchExceptionHandler.c`. Both used to be
+`u32[]` arrays placed in `.text`. An array of literal words carries no
+relocation records, so the addresses inside it did not move when code size
+changed, and a padded build jumped to the old entry point and hung at
+`0x8006317x`. Rewritten as real assembly they gained relocations, and a build
+with `. += 0x40` inserted mid-`.text` was proved to run: every sampled pc was the
+baseline's plus exactly `0x40`, with an identical BIOS banner.
+
+Turning either back into C, or back into a word array, would undo that. They are
+marked `HANDWRITTEN_ASM` and excluded from the totals for the same reason the
+GTE family is: the metric should measure work left to do, and there is none here.
+
+The evidence bar is the same as above. "This function manipulates addresses"
+alone is not enough — the test is whether a source spelling exists that keeps the
+relocations, and for these two it does not, because the entry stub runs before
+`$gp`, `$sp` and `$fp` exist and the handler copies its own code into the BIOS
+exception table.
+
 ## How To Document Exceptions
 
 If a function must stay as assembly or use non-empty inline assembly, add a
