@@ -125,8 +125,19 @@ long CdReadCallback(long arg0) {
     return old;
 }
 
+typedef struct CdReadSprite {
+    u_char tag[8];
+    volatile short x;
+    volatile short y;
+    volatile u_char u;
+    volatile u_char v;
+    volatile u_short clut;
+    volatile short w;
+    volatile short h;
+} CdReadSprite;
+
 void func_80027874(long x, long y, u_char *str, long arg3) {
-    u_char *packet;
+    CdReadSprite *packet;
     long idx;
     u_char *next;
     /* These pins are load-bearing: removing any one changes .text. */
@@ -135,9 +146,8 @@ void func_80027874(long x, long y, u_char *str, long arg3) {
     long ga;
     long gb;
     long w;
-    u_char *oldPacket;
+    CdReadSprite *oldPacket;
     u_char *otv;
-    short a3;
     u_char *tableB;
 
     sr = str;
@@ -145,7 +155,7 @@ void func_80027874(long x, long y, u_char *str, long arg3) {
     if (*sr != 0) {
         tableA = D_8007D7BC;
         tableB = D_8007D7BD;
-        packet = next;
+        packet = (CdReadSprite *)next;
         do {
             idx = *sr++ - 0x20;
             if (idx != 0) {
@@ -156,21 +166,16 @@ void func_80027874(long x, long y, u_char *str, long arg3) {
                 next += 0x14;
                 oldPacket = packet;
                 __asm__ __volatile__("" : : "r"(oldPacket));
-                *(volatile short *)(packet + 0x8) = x;
-                *(volatile short *)(packet + 0xA) = y;
-                *(volatile u_char *)(packet + 0xC) = ga;
-                *(volatile u_char *)(packet + 0xD) = gb;
+                packet->x = x;
+                packet->y = y;
+                packet->u = ga;
+                packet->v = gb;
                 w = D_8007D87C[idx];
-                *(volatile short *)(packet + 0x12) = 0x18;
-                a3 = arg3;
-                __asm__ __volatile__(
-                    "lui %0, %%hi(D_8019C900)\n\t"
-                    "lw %0, %%lo(D_8019C900)(%0)\n\t"
-                    "sh %2, 0xE(%1)"
-                    : "=&r"(otv) : "r"(packet), "r"(a3) : "memory");
-                *(volatile short *)(packet + 0x10) = w;
-                packet += 0x14;
-                __asm__ __volatile__("" : "=r"(otv) : "0"(otv));
+                packet->h = 0x18;
+                otv = g_DrawBuffer;
+                packet->clut = arg3;
+                packet->w = w;
+                packet++;
                 AddPrim(otv + 0xCC, oldPacket);
             }
             x += D_8007D87C[idx];
