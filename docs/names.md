@@ -4651,3 +4651,40 @@ lines carrying `goto block_14`, `goto block_153`, `loop_25` and names like
 is readable, unit-compilable C, so reaching `exact 0` in this form would not be
 a finished function. The readability pass is not free either: it changes
 allocation, and would give back some of the 418.
+
+## 28. Unaligned copies: how to make 2.6.3 emit `lwl`/`lwr`
+
+This blocked one function for two passes and was recorded in 21a as an open
+problem, so the answer belongs somewhere findable. Two source forms produce
+retail's unaligned load/store pairs, and neither needs `packed`.
+
+**An eight-byte `memcpy` between `u8 *` pointers emits `lwl`/`lwr` plus
+`swl`/`swr`.** Proven in `GameStoreSaveStateBlock`, where the two course-progress
+copies are now:
+
+    memcpy(arg0 + 0xFC8, g_GrandPrixCourseProgress, 8);
+    memcpy(arg0 + 0xFD0, g_ExtraGrandPrixCourseProgress, 8);
+
+GCC 2.x expands a small block move of known size inline, and when it cannot
+assume the operands are word-aligned it emits the unaligned pair rather than
+`lw`/`sw`. Copying between `u8` arrays is exactly that situation. The same call
+with a 16-byte length against word-aligned `s32` arrays emits ordinary `lw`/`sw`,
+which is why the record copies in the same function also use `memcpy` and still
+match.
+
+**A four-byte struct assignment does the same for one word.** `GameDrawStartCountdown`
+needed retail's unaligned four-byte palette write and reached it with
+
+    typedef struct CountdownColorCode { u8 r, g, b, code; } CountdownColorCode;
+    *(CountdownColorCode *)color = colors[pattern & 1];
+
+which is an aggregate copy between `u8`-aligned addresses.
+
+**What does not work, and should not be retried.** Struct-level
+`__attribute__((packed))` **crashes `cc1`** in this compiler; member-level packed
+is silently ignored with a warning. Four explicit byte loads and stores do not
+produce the pair either, and they grow the function.
+
+So the rule is that the unaligned pair follows from the compiler not being able
+to prove alignment, and the way to arrange that is a byte-typed aggregate or
+block move, not an attribute and not hand-written assembly.
