@@ -4611,3 +4611,43 @@ the labels somewhere to live. Eight register pins feed it. This is the same
 construction class that was rejected from a contributed `func_8003425C` on
 2026-07-29, and it predates that rule; it is not evidence that the approach is
 sanctioned.
+
+## 27. `func_800418D4`: where schedule search runs out
+
+Recorded because someone will otherwise repeat it. The largest remaining stub
+(1211 words, `main/track/GameDrawTerrainCells.c`) was worked down from 663 to
+**418** differing words, measured independently rather than taken from the
+agent's own notes:
+
+    retail 1211 words, candidate 1211 words
+    exact 418, aligned 393, equal 939 of 1211
+    first differing word at +0x88
+
+Two things are settled by that. The candidate is **exactly the right size**, and
+the first 34 words match, so the frame, the save set and the prologue are right;
+that was the earlier 887 -> 780 result and it has held through everything since.
+
+The method that got there was exhaustive machine search over legal statement
+schedules: all 60 orders of the post-loop reset/scaling prefix, all 1260 orders
+of the seven coordinate-rounding chains, then random jumps with insertion
+descent over the packet field stores. Its trajectory was
+452, 450, 445, 444, 441, 440, 439, 438, 424, 418 — one to five words per
+exhaustive round, each round costing more than the last. At that rate zero is
+not reachable, and the search is at a single-insertion local minimum on every
+block it has touched.
+
+**The diagnostic it did not use.** `aligned 393` is *lower* than `exact 418`.
+Pure allocation divergence gives the two numbers close together, because
+allocation changes which register a word names, not how many words there are.
+A 25-word gap means allowing insertions realigns the stream, so there is a local
+shape difference: an instruction present on one side and absent on the other.
+Statement-schedule permutation cannot fix that by construction, since permuting
+statements does not change the instruction count. That gap is where the next
+attempt should start.
+
+**A second cost, easy to miss.** The candidate is raw m2c-shaped output: 1265
+lines carrying `goto block_14`, `goto block_153`, `loop_25` and names like
+`var_a0_209`. None of that breaks the fabrication rules, but the project's goal
+is readable, unit-compilable C, so reaching `exact 0` in this form would not be
+a finished function. The readability pass is not free either: it changes
+allocation, and would give back some of the 418.
