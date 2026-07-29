@@ -27,80 +27,41 @@ void GameBlendPaintColor(u32 arg0, u32 arg1) {
     g_PaintBlendShade0 = (a + b) | 0x8000;
 }
 
-/*
- * Exact PAL 0x0DDF0 wrapper. The best non-wrapper C proposal is still
- * target-sized but differs in late /3 quotient register allocation.
- */
-
 void GameBlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
 void GameBlendPaintColorThirds(u32 arg0, u32 arg1) {
-    __asm__ volatile(
-        ".set   noat\n"
-        "andi   $11,$4,0x1F\n"
-        "andi   $12,$5,0x1F\n"
-        "lui    $6,0x5555\n"
-        "ori    $6,$6,0x5556\n"
-        "addu   $9,$11,$12\n"
-        "sll    $7,$9,1\n"
-        "mult   $7,$6\n"
-        "andi   $4,$4,0xFFFF\n"
-        "srl    $2,$4,5\n"
-        "andi   $10,$2,0x1F\n"
-        "andi   $5,$5,0xFFFF\n"
-        "srl    $2,$5,5\n"
-        "andi   $3,$2,0x1F\n"
-        "mfhi   $11\n"
-        "addu   $8,$10,$3\n"
-        "sll    $3,$8,1\n"
-        "mult   $3,$6\n"
-        "srl    $4,$4,10\n"
-        "andi   $13,$4,0x1F\n"
-        "srl    $5,$5,10\n"
-        "andi   $2,$5,0x1F\n"
-        "mfhi   $10\n"
-        "addu   $4,$13,$2\n"
-        "sll    $2,$4,1\n"
-        "mult   $2,$6\n"
-        "mfhi   $5\n"
-        "nop\n"
-        "nop\n"
-        "mult   $9,$6\n"
-        "mfhi   $12\n"
-        "nop\n"
-        "nop\n"
-        "mult   $8,$6\n"
-        "sra    $7,$7,31\n"
-        "subu   $11,$11,$7\n"
-        "sra    $3,$3,31\n"
-        "subu   $10,$10,$3\n"
-        "sra    $2,$2,31\n"
-        "sll    $3,$10,5\n"
-        "mfhi   $7\n"
-        "subu   $13,$5,$2\n"
-        "sll    $2,$13,10\n"
-        "mult   $4,$6\n"
-        "addu   $2,$2,$3\n"
-        "addu   $2,$2,$11\n"
-        "addiu  $5,$0,-0x8000\n"
-        "addu   $2,$2,$5\n"
-        "sra    $9,$9,31\n"
-        "lui    $1,%hi(D_8019CB38)\n"
-        "sh     $2,%lo(D_8019CB38)($1)\n"
-        "subu   $12,$12,$9\n"
-        "sra    $8,$8,31\n"
-        "subu   $3,$7,$8\n"
-        "sra    $4,$4,31\n"
-        "sll    $3,$3,5\n"
-        "mfhi   $2\n"
-        "subu   $2,$2,$4\n"
-        "sll    $2,$2,10\n"
-        "addu   $2,$2,$3\n"
-        "addu   $2,$2,$12\n"
-        "addu   $2,$2,$5\n"
-        "lui    $1,%hi(D_8019CB3A)\n"
-        "sh     $2,%lo(D_8019CB3A)($1)\n"
-        ".set   at\n"
-    );
+    u16 color0;
+    u16 color1;
+    s32 r0;
+    s32 r1;
+    s32 g0;
+    s32 g1;
+    s32 b0;
+    s32 b1;
+    s32 r;
+    s32 g;
+    s32 b;
+
+    r0 = arg0 & 0x1F;
+    r1 = arg1 & 0x1F;
+    r = r0 + r1;
+    color0 = arg0;
+    g0 = (color0 >> 5) & 0x1F;
+    color1 = arg1;
+    g1 = (color1 >> 5) & 0x1F;
+    g = g0 + g1;
+    b0 = (color0 >> 10) & 0x1F;
+    b1 = (color1 >> 10) & 0x1F;
+    b = b0 + b1;
+
+    r0 = r * 2 / 3;
+    g0 = g * 2 / 3;
+    b0 = b * 2 / 3;
+    r1 = r / 3;
+    g1 = g / 3;
+    b1 = b / 3;
+
+    g_PaintBlendShade0 = (b0 << 10) + (g0 << 5) + r0 + 0x8000;
+    g_PaintBlendShade1 = (b1 << 10) + (g1 << 5) + r1 + 0x8000;
 }
 
 
