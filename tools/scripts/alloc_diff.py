@@ -355,20 +355,60 @@ def mode_size(mode: str | None, bytes_hint: int, pseudo: int) -> int:
     return (byte_count + 3) // 4
 
 
-def dump_function(dump: str, func: str) -> str:
+def source_identifier(source: Path, symbol: str) -> str | None:
+    """The C name of the function whose asm alias is `symbol`.
+
+    GCC labels its RTL dumps with the C identifier but emits `.ent` with the asm
+    alias, so a function written as `void Foo(void) asm("func_800418D4");` appears
+    as `;; Function Foo` in .lreg/.greg but as `.ent func_800418D4` in the .s.
+    Looking only for the symbol silently missed every renamed function.
+
+    Resolved by walking back from the alias to the parameter list and taking the
+    identifier in front of it. A regex spanning to the alias matches whatever word
+    happens to sit in the preceding comment instead.
+    """
+    try:
+        text = source.read_text(errors="ignore")
+    except OSError:
+        return None
+    for alias in re.finditer(r'asm\s*\(\s*"' + re.escape(symbol) + r'"\s*\)', text):
+        head = text[: alias.start()].rstrip()
+        if not head.endswith(")"):
+            continue
+        depth = 0
+        for i in range(len(head) - 1, -1, -1):
+            if head[i] == ")":
+                depth += 1
+            elif head[i] == "(":
+                depth -= 1
+                if depth == 0:
+                    name = re.search(r"([A-Za-z_]\w*)\s*$", head[:i])
+                    return name.group(1) if name else None
+                    break
+        else:
+            continue
+    return None
+
+
+def dump_function(dump: str, func: str, alias: str | None = None) -> str:
     start = re.search(rf"^;; Function {re.escape(func)}\s*$", dump, re.MULTILINE)
+    if not start and alias:
+        start = re.search(rf"^;; Function {re.escape(alias)}\s*$", dump, re.MULTILINE)
     if not start:
-        raise AllocDiffError(f"missing Function {func} section in dump")
+        names = ", ".join(sorted(set(re.findall(r"^;; Function (\S+)$", dump, re.MULTILINE))))
+        raise AllocDiffError(
+            f"missing Function {func} section in dump; dump contains: {names or 'none'}"
+        )
     next_function = re.search(r"^;; Function \S+\s*$", dump[start.end() :], re.MULTILINE)
     end = start.end() + next_function.start() if next_function else len(dump)
     return dump[start.start() : end]
 
 
 def reconstruct_allocnos(
-    lreg: str, greg: str, func: str
+    lreg: str, greg: str, func: str, alias: str | None = None
 ) -> tuple[list[int], dict[int, Allocno], dict[int, int]]:
-    lreg = dump_function(lreg, func)
-    greg = dump_function(greg, func)
+    lreg = dump_function(lreg, func, alias)
+    greg = dump_function(greg, func, alias)
     order_match = ORDER_RE.search(greg)
     if not order_match:
         raise AllocDiffError("missing 'regs to allocate' line in .greg")
@@ -482,7 +522,8 @@ def compile_candidate(
     raw_asm = raw_asm_path.read_text(errors="replace")
     lreg = lreg_path.read_text(errors="replace")
     greg = greg_path.read_text(errors="replace")
-    order, allocnos, dispositions = reconstruct_allocnos(lreg, greg, func)
+    alias = source_identifier(source, func)
+    order, allocnos, dispositions = reconstruct_allocnos(lreg, greg, func, alias)
     frame, locals_ = parse_frame_and_locals(raw_asm, func)
     exact = measure_exact(func, obj)
     if keep is not None:
@@ -639,8 +680,8 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    if not re.fullmatch(r"func_[0-9A-Fa-f]{8}", args.func):
-        raise SystemExit("function must be spelled func_XXXXXXXX")
+    if not re.fullmatch(r"[A-Za-z_]\w*", args.func):
+        raise SystemExit("function must be a C identifier or func_XXXXXXXX")
     before_path = args.before.resolve()
     after_path = args.after.resolve()
     for path in (before_path, after_path):
