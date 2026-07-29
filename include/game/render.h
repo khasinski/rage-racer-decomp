@@ -285,6 +285,26 @@ void GameDrawFlatTriangle(
     u8 b,
     s32 semiTrans,
     u32 flags) asm("func_80046BA0");
+
+/* The same routine seen through signed coordinates. Retail's two callers
+ * disagree about these three parameters and the disagreement is load-bearing:
+ * the definition in GameSetDrawClipRect.c matches only as u16, while
+ * GameDrawScriptedTriangle sign-extends them, which a u16 prototype cannot
+ * produce. Both views are therefore real. See names.md 30 on width and
+ * signedness being per-use rather than per-field. */
+void GameDrawFlatTriangleSigned(
+    void *ot,
+    s16 x0,
+    s16 y0,
+    s16 x1,
+    s16 y1,
+    s16 x2,
+    s16 y2,
+    u8 r,
+    u8 g,
+    u8 b,
+    s32 semiTrans,
+    u32 flags) asm("func_80046BA0");
 void GameDrawFlatQuad(
     void *ot,
     s16 x0,
@@ -353,9 +373,9 @@ void GameDrawPolyLine3(
     s16 x0,
     s16 y0,
     s16 x1,
-    s16 y1,
-    s16 x2,
-    s16 y2,
+    u16 y1,
+    u16 x2,
+    u16 y2,
     u8 r,
     u8 g,
     u8 b,

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/render.h"
 #include "game/state.h"
 
 void func_80046A2C(
@@ -251,9 +252,6 @@ void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
         alpha);
 }
 
-void func_80046BA0(void *ot, s16 x0, s16 y0, s16 x1, s32 y1, s32 x2, s32 y2,
-                   s32 r, s32 g, s32 b, s32 semiTrans, s32 flags);
-
 void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) asm("func_800483D4");
 void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     u8 *style;
@@ -266,13 +264,10 @@ void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     s32 x;
     s32 y0;
     s32 y;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 y1 asm("$12");
+    s32 y1;
     s32 mode;
     s32 semiTrans;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 flags asm("$4");
-    s32 callArgs[12];
+    s32 flags;
 
     style = styleArg;
     record = recordArg;
@@ -360,49 +355,20 @@ void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
         }
     }
 
-    /* Match note: keep the original o32 stack-argument and delay-slot order. */
-    asm volatile(
-        ".set\tnoreorder\n"
-        "sll $2,$11,16\n"
-        "sra $2,$2,16\n"
-        "sw $2,16($sp)\n"
-        "sll $2,$3,16\n"
-        "sra $2,$2,16\n"
-        "sw $2,20($sp)\n"
-        "sll $2,$12,16\n"
-        "sra $2,$2,16\n"
-        "sll $6,$6,16\n"
-        "sw $2,24($sp)\n"
-        :
-        : "r"(y0), "r"(packedSpeed), "r"(y1), "r"(y)
-        : "memory");
-    asm volatile(
-        ".set\tnoreorder\n"
-        "lbu $2,8($5)\n"
-        "sll $7,$7,16\n"
-        "sw $2,28($sp)\n"
-        "lbu $2,9($5)\n"
-        "sra $6,$6,16\n"
-        "sw $2,32($sp)\n"
-        "lbu $2,10($5)\n"
-        "sra $7,$7,16\n"
-        "sw $4,44($sp)\n"
-        :
-        : "r"(style), "r"(limit), "r"(flags)
-        : "memory");
-    asm volatile(
-        ".set\tnoreorder\n"
-        "sll $4,$10,2\n"
-        "sll $5,$9,16\n"
-        "addu $4,$13,$4\n"
-        "sra $5,$5,16\n"
-        "sw $8,40($sp)\n"
-        "jal func_80046BA0\n"
-        "sw $2,36($sp)\n"
-        ".set\treorder"
-        :
-        : "r"(ot), "r"(x), "r"(mode), "r"(semiTrans), "m"(callArgs[0])
-        : "$31", "memory");
+    asm("" : : "r"(packedSpeed));
+    GameDrawFlatTriangleSigned(
+        (u8 *)ot + (mode << 2),
+        x,
+        y,
+        limit,
+        y0,
+        packedSpeed,
+        y1,
+        style[8],
+        style[9],
+        style[10],
+        semiTrans,
+        flags);
 }
 
 void func_80046E00(u8 *arg0, s16 x0, s16 y0, s16 x1a, s16 y0b, s16 x0b,
@@ -527,13 +493,7 @@ typedef struct {
 
 extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
-void func_80048078(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_80048210(s32 arg0, s32 arg1, s32 arg2);
-void func_800483D4(s32 arg0, s32 arg1, s32 arg2);
-void func_80048580(s32 arg0, s32 arg1, s32 arg2);
-
-s32 GameRunTimedDrawScript(TimedDrawCommand *commands, s32 *progress, s32 step) asm("func_800487D8");
-s32 GameRunTimedDrawScript(TimedDrawCommand *commands, s32 *progress, s32 step) {
+s32 GameRunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     TimedDrawCommand *base = commands;
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 *progressPtr asm("$18") = progress;
@@ -575,44 +535,52 @@ loop_body:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
-                func_80048078(remaining, cmd->arg0, cmd->arg1, type);
+                GameDrawScriptedSprite(
+                    remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1, type);
                 cmd++;
                 goto loop_continue;
             case 0:
             case 1:
-                func_80048078(remaining, cmd->arg0, cmd->arg1, type);
+                GameDrawScriptedSprite(
+                    remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1, type);
                 cmd++;
                 goto loop_continue;
             case 19:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
-                func_80048210(remaining, cmd->arg0, cmd->arg1);
+                GameDrawScriptedLine(
+                    remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
                 cmd++;
                 goto loop_continue;
             case 10:
-                func_80048210(remaining, cmd->arg0, cmd->arg1);
+                GameDrawScriptedLine(
+                    remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
                 cmd++;
                 goto loop_continue;
             case 29:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
-                func_800483D4(remaining, cmd->arg0, cmd->arg1);
+                GameDrawScriptedTriangle(
+                    remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
                 cmd++;
                 goto loop_continue;
             case 20:
-                func_800483D4(remaining, cmd->arg0, cmd->arg1);
+                GameDrawScriptedTriangle(
+                    remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
                 cmd++;
                 goto loop_continue;
             case 39:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
-                func_80048580(remaining, cmd->arg0, cmd->arg1);
+                GameDrawScriptedQuad(
+                    remaining, (u8 *)cmd->arg0, (s32 *)cmd->arg1);
                 goto loop_next;
             case 30:
-                func_80048580(remaining, cmd->arg0, cmd->arg1);
+                GameDrawScriptedQuad(
+                    remaining, (u8 *)cmd->arg0, (s32 *)cmd->arg1);
                 goto loop_next;
             default:
                 break;

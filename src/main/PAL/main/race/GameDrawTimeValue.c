@@ -427,16 +427,6 @@ extern s32 g_RaceOptionPulseAngle asm("D_8007DF2C");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
 s32 func_80068634(s32 angle);
-u8 *QueueSpriteWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex) asm("func_80016EC4");
 u8 *GameAddTilePrim(
     void *ot,
     u8 *prim,
@@ -542,14 +532,14 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
         drawPrim = GameQueueDrawAreaPrim(
             ot, scratchPacket, 0x72, 0x8A, 0x5C, 0xC);
         fontU = 0xD0;
-        prim = QueueSpriteWide(
+        prim = GameQueueSpriteWide(
             ot, drawPrim, 0x88, 0x6A, 0x30, 8, fontU, 0x10, 0x7893);
         if (g_GrandPrixMode != 0) {
-            prim = QueueSpriteWide(
+            prim = GameQueueSpriteWide(
                 ot, prim, 0x88, 0x74, 0x30, 8, 0xA0, 0x28, 0x7893);
-            prim = QueueSpriteWide(
+            prim = GameQueueSpriteWide(
                 ot, prim, 0x84, 0x7E, 0x30, 8, fontU, 0x28, 0x7893);
-            prim = QueueSpriteWide(
+            prim = GameQueueSpriteWide(
                 ot,
                 prim,
                 0xB8,
@@ -559,14 +549,14 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
                 *(s16 *)(g_CourseProgress + 6) * 8,
                 0,
                 0x78CC);
-            prim = QueueSpriteWide(
+            prim = GameQueueSpriteWide(
                 ot, prim, 0x78, 0x7E, 8, 8, 0xD8, 8, 0x78CC);
-            prim = QueueSpriteWide(
+            prim = GameQueueSpriteWide(
                 ot, prim, 0xC0, 0x7E, 8, 8, 0xE8, 8, 0x78CC);
         } else {
-            prim = QueueSpriteWide(
+            prim = GameQueueSpriteWide(
                 ot, prim, 0x85, 0x74, 0x38, 8, 0xA0, 0x40, 0x7893);
-            prim = QueueSpriteWide(
+            prim = GameQueueSpriteWide(
                 ot, prim, 0x90, 0x7E, 0x28, 8, 0xD8, 0x40, 0x7893);
         }
 
