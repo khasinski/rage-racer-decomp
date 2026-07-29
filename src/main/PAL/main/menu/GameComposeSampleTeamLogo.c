@@ -1,21 +1,72 @@
 #include "common.h"
 
-extern u8 *g_TeamLogoSampleData asm("D_8019CA64");
+typedef struct TeamLogoSample {
+    u16 clut[2][16];
+    u16 canvas[64][16];
+} TeamLogoSample;
+
+extern TeamLogoSample *g_TeamLogoSampleData asm("D_8019CA64");
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 g_TeamLogoSwatches[] asm("D_801E444E");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
+static inline s32 TeamLogoParity(s32 value)
+{
+    return value & 1;
+}
+
+static inline s32 TeamLogoRowByteOffset(s32 row)
+{
+    return ((row << 5) + row) << 6;
+}
+
+static inline s32 TeamLogoParityByteOffset(s32 parity)
+{
+    return parity << 5;
+}
+
+static inline u16 *TeamLogoPaletteAddress(
+    TeamLogoSample *samples, s32 row, s32 parity)
+{
+    u32 address;
+    s32 parityOffset;
+
+    address = TeamLogoRowByteOffset(row);
+    address += (u32)samples;
+    parityOffset = TeamLogoParityByteOffset(parity);
+    parityOffset += address;
+    return (u16 *)parityOffset;
+}
+
+static inline u16 *TeamLogoClutAddress(
+    TeamLogoSample *samples, s32 row, s32 parity, s32 index)
+{
+    s32 byteOffset;
+    u32 address;
+    s32 parityOffset;
+
+    byteOffset = index << 1;
+    address = TeamLogoRowByteOffset(row);
+    address += (u32)samples;
+    parityOffset = TeamLogoParityByteOffset(parity);
+    parityOffset += address;
+    byteOffset += parityOffset;
+    return (u16 *)byteOffset;
+}
+
 /* Builds g_TeamLogoCanvas and its CLUT from one sample character and one sample background. */
 void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) asm("func_8001D338");
-void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) {
+void GameComposeSampleTeamLogo(s32 arg0, s32 arg1)
+{
     s32 index;
+    u16 *clutDst0;
+    u16 *clutDst1;
     u16 *dst;
     u16 *src;
     u16 *src0;
     s32 row0;
-    /* These pins are load-bearing: removing any one changes .text. */
-    register s32 row1 asm("t2");
-    register s32 adjusted asm("v0");
+    s32 row1;
+    s32 adjusted;
     s32 outer;
     s32 j;
     u16 value;
@@ -23,79 +74,33 @@ void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) {
 
     adjusted = arg1 + ((u32)arg1 >> 31);
     row1 = (adjusted >> 1) + 10;
-    __asm__("" : "=r"(row1) : "0"(row1));
     arg1 &= 1;
     index = 1;
-    dst = g_TeamLogoSwatches;
-
-    __asm__ volatile(
-        "srl   $v0,$a0,31\n"
-        "addu  $v0,$a0,$v0\n"
-        "sra   $t1,$v0,1\n"
-        "andi  $a0,$a0,1\n"
-        "lui   $v1,%%hi(D_8019CA64)\n"
-        "lw    $v1,%%lo(D_8019CA64)($v1)\n"
-        "sll   $v0,$t1,5\n"
-        "addu  $v0,$v0,$t1\n"
-        "sll   $v0,$v0,6\n"
-        "sll   $a0,$a0,5\n"
-        "addu  $v0,$v0,$v1\n"
-        "addu  $a0,$a0,$v0\n"
-        "addiu $a0,$a0,2\n"
-        : "=r"(src), "=r"(row0)
-        :
-        : "$2", "$3");
+    clutDst0 = g_TeamLogoSwatches;
+    row0 = (s32)(arg0 + ((u32)arg0 >> 31)) >> 1;
+    arg0 = TeamLogoParity(arg0);
+    src = TeamLogoPaletteAddress(g_TeamLogoSampleData, row0, arg0) + 1;
 
     do {
-        *dst++ = *src++;
+        *clutDst0++ = *src++;
         index++;
     } while (index < 12);
 
     if (index < 16) {
-        s32 byteIndex;
-
-        byteIndex = index * 2;
-        __asm__ volatile(
-            "lui   $v0,%%hi(D_801E444C)\n"
-            "addiu $v0,$v0,%%lo(D_801E444C)\n"
-            "addu  $a3,$a0,$v0\n"
-            "lui   $v1,%%hi(D_8019CA64)\n"
-            "lw    $v1,%%lo(D_8019CA64)($v1)\n"
-            "sll   $v0,$t2,5\n"
-            "addu  $v0,$v0,$t2\n"
-            "sll   $v0,$v0,6\n"
-            "addu  $v0,$v0,$v1\n"
-            "sll   $v1,$a1,5\n"
-            "addu  $v1,$v1,$v0\n"
-            "addu  $a0,$a0,$v1\n"
-            : "=r"(src), "=r"(dst)
-            : "0"(byteIndex), "r"(row1), "r"(arg1)
-            : "$2", "$3");
+        clutDst1 = &g_TeamLogoClut[index];
+        src = TeamLogoClutAddress(
+            g_TeamLogoSampleData, row1, arg1, index);
 
         do {
-            *dst++ = *src++;
+            *clutDst1++ = *src++;
             index++;
         } while (index < 16);
     }
 
     dst = g_TeamLogoCanvas;
     outer = 0;
-    __asm__ volatile(
-        "sll   $v0,$t1,5\n"
-        "addu  $v0,$v0,$t1\n"
-        "lui   $v1,%%hi(D_8019CA64)\n"
-        "lw    $v1,%%lo(D_8019CA64)($v1)\n"
-        "sll   $v0,$v0,6\n"
-        "addu  $v0,$v0,$v1\n"
-        "addiu $a2,$v0,0x40\n"
-        "sll   $v0,$t2,5\n"
-        "addu  $v0,$v0,$t2\n"
-        "sll   $v0,$v0,6\n"
-        "addu  $v0,$v0,$v1\n"
-        "addiu $a0,$v0,0x40\n"
-        : "=r"(src0), "=r"(src)
-        : "r"(row1), "r"(row0)
-        : "$2", "$3");
+    src0 = &g_TeamLogoSampleData[row0].canvas[0][0];
+    src = &g_TeamLogoSampleData[row1].canvas[0][0];
 
     for (; outer < 64; outer++) {
         for (j = 0; j < 16; j++) {
@@ -118,7 +123,6 @@ void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) {
                 value |= fill;
             }
             src0++;
-
             *dst++ = value;
             src++;
         }
