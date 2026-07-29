@@ -4688,3 +4688,50 @@ produce the pair either, and they grow the function.
 So the rule is that the unaligned pair follows from the compiler not being able
 to prove alignment, and the way to arrange that is a byte-typed aggregate or
 block move, not an attribute and not hand-written assembly.
+
+## 29. `func_8005F6BC`: two words the scheduler will not give back
+
+`GameBuildSaveIconBlock` reaches **88 words, exact 2, 86 of 88 equal** from ordinary
+C. The remaining two words are a rotation of three adjacent instructions:
+
+    retail:    mult s0,v0 ; addiu a1,s2,0x60 ; move s5,zero
+    candidate: move s5,zero ; addiu a1,s2,0x60 ; mult s0,v0
+
+The `LM43`/`LM44`/`LM45` markers confirm those are three consecutive source
+statements, so retail's source did write the division first.
+
+The cause is that the two versions give the scheduler different information.
+In the committed crutch source the multiply is an opaque `asm_operands` insn with
+priority 1 and no modelled HI/LO dependency on the later `mfhi`, so it stays put.
+Written as real division, GCC expands it to `smulsi3_highpart_internal`, the R3000
+multiply latency enters the model, and the scheduler places `mult` at the latest
+slot that still avoids a stall before `mfhi`. Retail's multiply sits two slots
+earlier than that, with slack the model says is unnecessary.
+
+Moving it earlier would require the two intervening values to depend on the
+quotient, but they are independently `block + 0x60` and zero. Manufacturing that
+dependency needs an algebraic zero such as `iconTile - tileRow * 20 - tileX`,
+which is fabrication.
+
+Searched and rejected, all landing on exact 2: 2520 legal orders of the
+divide/rect/counter/image/width/height initialisation, 1440 prefix and field-order
+combinations, all 128 register-pin subsets, all 768 pin-subset plus tail-order
+combinations, all 64 empty-barrier subsets, plus division spellings, declaration
+orders, local types, storage views, inline helpers and use-site initialisers.
+
+**Also tested and falsified afterwards, so do not retry it.** Retail synthesises
+the times-twenty as `sll`/`addu`/`sll`, which suggested that spelling the remainder
+explicitly as `tileX = iconTile - tileRow * 20` rather than `iconTile % 20` would
+lengthen the visible dependency chain from the multiply and raise its scheduling
+priority. It does not: the explicit form builds and gives **exactly the same two
+differing words**. GCC 2.6.3 expands `%` by a constant into that same shift-add
+chain, so the two spellings are the same RTL.
+
+An inline-helper probe (`scratch/compiler-source/inline_frame_probe.c`) separately
+confirmed that an inlined register-only helper adds no stack area; only an inlined
+stack object or a wider outgoing-argument requirement enlarges the caller frame.
+
+So this function is blocked on the scheduler's latency model, not on a missing
+source shape, and closing it honestly needs either a construct that changes that
+model or evidence that retail was built with different scheduling. It is 86/88 and
+should be left alone rather than forced.
