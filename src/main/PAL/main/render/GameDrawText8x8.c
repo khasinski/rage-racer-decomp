@@ -13,6 +13,16 @@ typedef struct TextSprt8 {
 extern u8 *g_DrawBuffer asm("D_8019C900");
 extern u8 g_Font8x8Cells[] asm("D_8007C2F8");
 extern u8 g_DrawModeEnv[] asm("D_8007BED0");
+extern u8 g_PropFontU[] asm("D_8007C3B8");
+extern u8 g_PropFontV[] asm("D_8007C3B9");
+extern u8 g_WordFontU[] asm("D_8007C438");
+extern u8 g_WordFontV[] asm("D_8007C439");
+extern u8 g_WordFontWidth[] asm("D_8007C43A");
+extern u8 g_WordFontAdvance[] asm("D_8007C43B");
+extern u8 g_HighFontU[] asm("D_8007C460");
+extern u8 g_HighFontV[] asm("D_8007C461");
+extern u8 g_HighFontWidth[] asm("D_8007C462");
+extern u8 g_HighFontYOffset[] asm("D_8007C463");
 
 /*
  * Keep the first font base opaque after materialising it. This empty constraint
@@ -224,8 +234,6 @@ void GameDrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
 
 #undef INIT_TEXT_FONT
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/GameDrawText8x8", func_80016B7C);
-
 /*
  * Local wide-parameter declarations. Retail passes x / y / clutIndex straight
  * through in full words; the s16 / u16 typing in game/render.h would make gcc
@@ -238,6 +246,236 @@ void DrawProportionalTextShadedWide(
     u8 *str,
     s32 clutIndex,
     s32 intensity) asm("func_80016B7C");
+
+void DrawProportionalTextShadedWide(
+    s32 x,
+    s32 y,
+    u8 *str,
+    s32 clutIndex,
+    s32 intensity) {
+#define OPAQUE_VALUE ({ \
+    register s32 opaque asm("$8") = 0x100; \
+    asm("" : "=r"(opaque) : "0"(opaque)); \
+    opaque; \
+})
+    register s32 xPos asm("$20");
+    register u8 *packet asm("$18") = *(u8 **)0x1F800000;
+    register u8 *text asm("$22") = ({
+        asm("" : "=r"(packet), "=r"(xPos) : "0"(packet));
+        str;
+    });
+    register s32 shade asm("$23");
+    u32 first;
+    struct {
+        s32 y;
+        s32 pad;
+        s32 clut;
+    } home;
+
+    home.y = y;
+    home.clut = clutIndex;
+    asm("" : "=m"(home) : "m"(home));
+    first = *text;
+    shade = intensity;
+    xPos = x;
+
+    if (first != 0) {
+        s32 height = 12;
+        register SPRT *sprt asm("$16") = (SPRT *)packet;
+
+        do {
+            s32 advance;
+            register u32 ch asm("$3") = *text;
+
+            asm("" : "=r"(ch) : "0"(ch));
+            if (ch >= 0x76) {
+                register s32 offset asm("$2") = ch - 0x76;
+                register s32 index asm("$17") = offset * 4;
+                register s32 u asm("$21");
+                register s32 v asm("$19");
+                register s32 width asm("$2");
+                register void *prim asm("$5");
+                register u8 *ot asm("$4");
+                register u16 clut asm("$8");
+                register s32 yOffset asm("$2");
+                register s32 yValue asm("$8");
+
+                asm(
+                    "" : "=r"(offset), "=r"(index) :
+                    "0"(offset), "1"(index));
+                text++;
+                asm("" : : "r"(ch));
+                u = g_HighFontU[index];
+                v = g_HighFontV[index];
+                SetSprt(packet);
+                if (shade == OPAQUE_VALUE) {
+                    SetShadeTex(packet, 1);
+                    *(volatile s16 *)((u8 *)sprt + 8) = xPos;
+                } else {
+                    SetSemiTrans(packet, 1);
+                    sprt->t.r0 = shade;
+                    sprt->t.g0 = shade;
+                    sprt->t.b0 = shade;
+                    sprt->x0 = xPos;
+                }
+                yOffset = g_HighFontYOffset[index];
+                yValue = home.y;
+                asm(
+                    "" : "=r"(yOffset), "=r"(yValue) :
+                    "0"(yOffset), "1"(yValue));
+                packet += 20;
+                sprt->y0 = yOffset + yValue;
+                width = g_HighFontWidth[index];
+                asm volatile("" : "=r"(width) : "0"(width));
+                prim = (void *)sprt;
+                asm("" : "=r"(prim) : "0"(prim));
+                sprt->u0 = u;
+                sprt->v0 = v;
+                sprt->h = height;
+                asm volatile("" ::: "memory");
+                ot = g_DrawBuffer;
+                asm("" : "=r"(ot) : "0"(ot));
+                clut = home.clut;
+                asm("" : "=r"(clut) : "0"(clut));
+                ot += 0xCC;
+                sprt->clut = clut;
+                sprt->w = width;
+                AddPrim(ot, prim);
+                advance = g_WordFontWidth[index];
+                goto advance_sprite;
+            }
+            if (ch >= 0x61) {
+                register s32 offset asm("$2") = ch - 0x61;
+                register s32 index asm("$17") = offset * 4;
+                register s32 u asm("$21");
+                register s32 v asm("$19");
+                register s32 width asm("$2");
+                register void *prim asm("$5");
+                register u8 *ot asm("$4");
+                register u16 clut asm("$8");
+                register u16 yValue asm("$8");
+
+                asm(
+                    "" : "=r"(offset), "=r"(index) :
+                    "0"(offset), "1"(index));
+                text++;
+                asm("" : : "r"(ch));
+                u = g_WordFontU[index];
+                v = g_WordFontV[index];
+                SetSprt(packet);
+                if (shade == OPAQUE_VALUE) {
+                    SetShadeTex(packet, 1);
+                    *(volatile s16 *)((u8 *)sprt + 8) = xPos;
+                } else {
+                    SetSemiTrans(packet, 1);
+                    sprt->t.r0 = shade;
+                    sprt->t.g0 = shade;
+                    sprt->t.b0 = shade;
+                    sprt->x0 = xPos;
+                }
+                yValue = home.y;
+                asm("" : "=r"(yValue) : "0"(yValue));
+                packet += 20;
+                sprt->y0 = yValue;
+                width = g_WordFontWidth[index];
+                asm volatile("" : "=r"(width) : "0"(width));
+                prim = (void *)sprt;
+                asm("" : "=r"(prim) : "0"(prim));
+                sprt->u0 = u;
+                sprt->v0 = v;
+                sprt->h = height;
+                asm volatile("" ::: "memory");
+                ot = g_DrawBuffer;
+                asm("" : "=r"(ot) : "0"(ot));
+                clut = home.clut;
+                asm("" : "=r"(clut) : "0"(clut));
+                ot += 0xCC;
+                sprt->clut = clut;
+                sprt->w = width;
+                AddPrim(ot, prim);
+                advance = g_WordFontAdvance[index];
+advance_sprite:
+                sprt++;
+                xPos += advance;
+                goto next_character;
+            }
+            {
+                register s32 cell asm("$17") = ch - 0x20;
+
+                asm("" : "=r"(cell) : "0"(cell));
+                text++;
+                if (cell != 0) {
+                    register s32 index asm("$3") = cell * 2;
+                    register u8 *base asm("$8");
+                    register u8 *uCell asm("$2");
+                    register u8 *vCell asm("$3");
+                    register s32 u asm("$21");
+                    register s32 v asm("$19");
+                    register u16 yValue asm("$8");
+                    register void *prim asm("$5");
+                    register u8 *ot asm("$4");
+                    register u16 clut asm("$8");
+
+                    asm("" : "=r"(index) : "0"(index));
+                    base = g_PropFontU;
+                    asm("" : "=r"(base) : "0"(base));
+                    uCell = (u8 *)(index + (s32)base);
+                    asm("" : "=r"(uCell) : "0"(uCell));
+                    base = g_PropFontV;
+                    asm("" : "=r"(base) : "0"(base));
+                    vCell = (u8 *)(index + (s32)base);
+                    asm("" : "=r"(vCell) : "0"(vCell), "r"(uCell));
+                    u = *uCell;
+                    v = *vCell;
+                    SetSprt(packet);
+                    if (shade == OPAQUE_VALUE) {
+                        SetShadeTex(packet, 1);
+                        *(volatile s16 *)((u8 *)sprt + 8) = xPos;
+                    } else {
+                        SetSemiTrans(packet, 1);
+                        sprt->t.r0 = shade;
+                        sprt->t.g0 = shade;
+                        sprt->t.b0 = shade;
+                        sprt->x0 = xPos;
+                    }
+                    yValue = home.y;
+                    asm("" : "=r"(yValue) : "0"(yValue));
+                    prim = (void *)sprt;
+                    asm("" : "=r"(prim) : "0"(prim));
+                    sprt->u0 = u;
+                    sprt->v0 = v;
+                    ot = g_DrawBuffer;
+                    asm("" : "=r"(ot) : "0"(ot));
+                    packet += 20;
+                    sprt->w = height;
+                    sprt->h = height;
+                    sprt->y0 = yValue;
+                    clut = home.clut;
+                    asm("" : "=r"(clut) : "0"(clut));
+                    ot += 0xCC;
+                    sprt->clut = clut;
+                    asm volatile("" ::: "memory");
+                    sprt++;
+                    AddPrim(ot, prim);
+                }
+                xPos += 12;
+                goto next_character;
+            }
+next_character:
+            ;
+        } while (*text != 0);
+    }
+    SetDrawModeWide8x8(packet, 0, 1, 0x29, g_DrawModeEnv);
+    AddPrim(g_DrawBuffer + 0xCC, packet);
+    *(u8 **)0x1F800000 = ({
+        register u8 *next asm("$2") = packet + 12;
+
+        asm("" : "=r"(next) : "0"(next), "r"(packet));
+        next;
+    });
+#undef OPAQUE_VALUE
+}
+
 void GameDrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex) asm("func_80016EA0");
 
 /* Opaque wrapper over GameDrawProportionalTextShaded: intensity 0x100 selects
