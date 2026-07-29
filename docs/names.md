@@ -4469,3 +4469,107 @@ edits must be evaluated by compiling and comparing linked `exact`, preferably
 through permuters, rather than by assigning invented priorities to retail
 assembly. See `docs/TASK_FOR_CODEX_2I_REPORT.md` for the full proof and six
 remeasured starting points.
+
+## 26. The remaining 27: two populations, not one
+
+The progress counter reports 1078/1105. Running `classify_with_addresses` over
+every unit and grouping the `asm` verdicts shows the 27 outstanding functions are
+not one backlog but two, with very different economics.
+
+**Sixteen are `INCLUDE_ASM` stubs — 11417 words.** These are undecompiled: the
+retail assembly is included verbatim and no C exists for them. They run from
+`func_800458CC` (258) to `func_8004A248` (1435).
+
+**Eleven are already decompiled — 1224 words total.** They read as ordinary C and
+count as unfinished only because they still carry an inline-assembly crutch.
+Each is worth the same one point on the counter as a stub, for roughly a ninth of
+the code. Sizes: `func_8001D338` 108, `func_8001D5F0` 65, `func_80027874` 94,
+`func_800483D4` 107, `func_8005F6BC` 88, `func_8005F88C` 402, `func_8006BF00` 91,
+`func_80075EB4` 60, `func_80076C58` 93, `func_80076ED8` 81, `func_80078528` 35.
+
+Five of the eleven had never been examined. What follows is what their crutches
+actually contain, decoded.
+
+### 26a. `func_8001D5F0` — `GameBlendPaintColorThirds`, 65 words
+
+The entire body is one `__asm__ volatile` block. It is not obscure: it is two
+15-bit RGB blends written out longhand.
+
+`0x55555556` with `mult`/`mfhi` and the `sra 31`/`subu` correction is signed
+division by three (the same family as the `0x66666667` and `0x2AAAAAAB` cases in
+21c). The block extracts each 5-bit channel from both arguments, sums the pair,
+and stores two results: `g_PaintBlendShade0` gets `sum * 2 / 3`, and
+`g_PaintBlendShade1` gets `sum / 3`. The trailing `addiu $5,$0,-0x8000` plus
+`addu` before each `sh` sets the semi-transparency bit, since the accumulated
+value never reaches bit 15.
+
+So the function is two thirds of the way from colour A to colour B, and one third,
+per channel. That is exactly what the name says. Expressed directly:
+
+    r = (arg0 & 0x1F) + (arg1 & 0x1F);
+    g = ((arg0 >> 5) & 0x1F) + ((arg1 >> 5) & 0x1F);
+    b = ((arg0 >> 10) & 0x1F) + ((arg1 >> 10) & 0x1F);
+    g_PaintBlendShade0 = (r*2/3) | ((g*2/3) << 5) | ((b*2/3) << 10) | 0x8000;
+    g_PaintBlendShade1 = (r/3)   | ((g/3)   << 5) | ((b/3)   << 10) | 0x8000;
+
+The `andi $4,$4,0xFFFF` before the green and blue extractions is redundant against
+a `u32` argument and does not need reproducing as a cast.
+
+### 26b. `func_8001D338` — `GameComposeSampleTeamLogo`, 108 words
+
+Three `__asm__ volatile` blocks, and all three compute nothing but addresses. The
+loops around them are already plain C. Every block multiplies a row index by 33
+and shifts by 6, so the stride is 2112 bytes, and the third block offsets by 0x40
+into it. The record behind `g_TeamLogoSampleData` is therefore:
+
+    struct TeamLogoSample {
+        u16 clut[2][16];    /* 64 bytes, one palette per parity */
+        u16 canvas[64][16]; /* 2048 bytes, 4bpp pixels */
+    };                      /* 2112 */
+
+With `row0 = arg0 / 2`, `row1 = arg1 / 2 + 10`, and parity `arg & 1`, the three
+blocks reduce to `&sample[row0].clut[arg0 & 1][1]`, then
+`&g_TeamLogoClut[index]` paired with `&sample[row1].clut[arg1 & 1][index]`, then
+`sample[row0].canvas` and `sample[row1].canvas`.
+
+That also explains the composition: palette entries 1..11 come from the first
+logo, 12..15 from the second, and the pixel loop fills any zero nibble of the
+first logo's canvas from the second's. It is a two-layer overlay where colour zero
+is transparent. `g_TeamLogoSwatches` (`D_801E444E`) is `&g_TeamLogoClut[1]`, which
+is why the first copy needs no explicit index.
+
+The two pins, `row1` in `$t2` and `adjusted` in `$v0`, exist only because the asm
+blocks name `$t1`/`$t2` directly. They should fall away with the blocks.
+
+### 26c. `func_80078528` — `SsUtSetVVol`, 35 words
+
+The same shape as `SsUtChangeADSR` in the same unit before it was cleaned: a
+phantom `addiu $sp,$sp,-8` frame, a matching `addiu $sp,$sp,8`, and an early
+return spelled as `j 2f` past a hand-written label. The arithmetic is `sll 7` plus
+`addu`, so both arguments are scaled by 129, after an explicit 16-bit
+sign-extension of each.
+
+`SsUtChangeADSR` is the precedent worth following rather than the phantom-frame
+note in 21a: there the frame crutch and correctly typed parameters turned out to
+be mutually exclusive, and typing the parameters won. The explicit `sll 16`/`sra
+16` pairs here are the same signal, so the first thing to try is the parameter
+types, not the frame.
+
+### 26d. `func_8005F88C` — `GameStoreSaveStateBlock`, 402 words
+
+Four `asm volatile` blocks, each an entire three-level loop nest written out with
+numeric labels and clobber lists of fourteen to nineteen registers. They copy the
+record arrays into the save block: best lap and total times, ranking and time
+records, sector times, then the volume and progress fields. Mechanical rather than
+subtle, but it is the largest of the eleven and the loop bounds (2 x 4 x 2, 2 x 4 x 3)
+and strides (0x20, 0x30, 0xC) are all visible in the encoding.
+
+### 26e. `func_80076ED8` — `SpuVmSeqKeyOff`, 81 words
+
+The weakest of the five, and the one to leave alone. The loop itself is
+hand-encoded: `asm volatile("1:")` as the head, a final block ending
+`bnez $2,1b`, and a C `for(;;) { ... break; }` wrapped around them purely to give
+the labels somewhere to live. Eight register pins feed it. This is the same
+construction class that was rejected from a contributed `func_8003425C` on
+2026-07-29, and it predates that rule; it is not evidence that the approach is
+sanctioned.
