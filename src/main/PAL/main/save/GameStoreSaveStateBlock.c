@@ -153,194 +153,138 @@ void GameStoreSaveStateBlock(u8 *arg0) {
         }
     }
 
-    asm volatile(
-        "addu $13,$0,$0\n\t"
-        "lui $15,%%hi(D_801E4408)\n\t"
-        "addiu $15,$15,%%lo(D_801E4408)\n\t"
-        "lui $14,%%hi(D_8019C70C)\n\t"
-        "addiu $14,$14,%%lo(D_8019C70C)\n\t"
-        "addu $10,$24,$0\n"
-        "1:\n\t"
-        "addu $12,$0,$0\n\t"
-        "sll $9,$13,5\n\t"
-        "addu $11,$10,$0\n\t"
-        "addiu $8,$10,0x9DC\n"
-        "2:\n\t"
-        "addu $6,$0,$0\n\t"
-        "sll $3,$12,3\n\t"
-        "addiu $2,$11,0xA1C\n\t"
-        "addu $7,$3,$2\n\t"
-        "addu $2,$9,$14\n\t"
-        "addu $5,$3,$2\n\t"
-        "addu $4,$8,$0\n\t"
-        "addu $2,$9,$15\n\t"
-        "addu $3,$3,$2\n"
-        "3:\n\t"
-        "lw $2,0($3)\n\t"
-        "addiu $3,$3,4\n\t"
-        "addiu $6,$6,1\n\t"
-        "sw $2,0($4)\n\t"
-        "lw $2,0($5)\n\t"
-        "addiu $5,$5,4\n\t"
-        "addiu $4,$4,4\n\t"
-        "sw $2,0($7)\n\t"
-        "slti $2,$6,2\n\t"
-        "bnez $2,3b\n\t"
-        "addiu $7,$7,4\n\t"
-        "addiu $12,$12,1\n\t"
-        "slti $2,$12,4\n\t"
-        "bnez $2,2b\n\t"
-        "addiu $8,$8,8\n\t"
-        "addiu $13,$13,1\n\t"
-        "slti $2,$13,2\n\t"
-        "bnez $2,1b\n\t"
-        "addiu $10,$10,0x20"
-        :
-        :
-        : "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12", "$13", "$14", "$15", "memory");
+    {
+        /* The remaining register hints in these loops are load-bearing. */
+        s32 outer = 0;
+        s32 *lapBase = g_BestLapTimes;
+        s32 *totalBase = g_BestTotalTimes;
+        u8 *outerDst = arg0;
 
-    asm volatile(
-        "addu $13,$0,$0\n\t"
-        "lui $19,%%hi(D_801E7744)\n\t"
-        "addiu $19,$19,%%lo(D_801E7744)\n\t"
-        "lui $18,%%hi(D_8019CB78)\n\t"
-        "addiu $18,$18,%%lo(D_8019CB78)\n\t"
-        "addu $25,$24,$0\n\t"
-        "addu $16,$0,$0\n"
-        "4:\n\t"
-        "addu $12,$0,$0\n\t"
-        "addu $15,$16,$0\n\t"
-        "addu $17,$25,$0\n\t"
-        "addiu $14,$25,0xA5C\n\t"
-        "addu $11,$0,$0\n"
-        "5:\n\t"
-        "addu $6,$0,$0\n\t"
-        "addiu $2,$17,0xCDC\n\t"
-        "addu $10,$11,$2\n\t"
-        "addu $2,$15,$18\n\t"
-        "addu $9,$11,$2\n\t"
-        "addu $8,$14,$0\n\t"
-        "addu $2,$15,$19\n\t"
-        "addu $7,$11,$2\n"
-        "6:\n\t"
-        "lw $2,0($7)\n\t"
-        "lw $3,4($7)\n\t"
-        "lw $4,8($7)\n\t"
-        "lw $5,12($7)\n\t"
-        "sw $2,0($8)\n\t"
-        "sw $3,4($8)\n\t"
-        "sw $4,8($8)\n\t"
-        "sw $5,12($8)\n\t"
-        "lw $2,0($9)\n\t"
-        "lw $3,4($9)\n\t"
-        "lw $4,8($9)\n\t"
-        "lw $5,12($9)\n\t"
-        "sw $2,0($10)\n\t"
-        "sw $3,4($10)\n\t"
-        "sw $4,8($10)\n\t"
-        "sw $5,12($10)\n\t"
-        "addiu $10,$10,0x10\n\t"
-        "addiu $9,$9,0x10\n\t"
-        "addiu $8,$8,0x10\n\t"
-        "addiu $6,$6,1\n\t"
-        "slti $2,$6,5\n\t"
-        "bnez $2,6b\n\t"
-        "addiu $7,$7,0x10\n\t"
-        "addiu $14,$14,0x50\n\t"
-        "addiu $12,$12,1\n\t"
-        "slti $2,$12,4\n\t"
-        "bnez $2,5b\n\t"
-        "addiu $11,$11,0x50\n\t"
-        "addiu $25,$25,0x140\n\t"
-        "addiu $13,$13,1\n\t"
-        "slti $2,$13,2\n\t"
-        "bnez $2,4b\n\t"
-        "addiu $16,$16,0x140"
-        :
-        :
-        : "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12", "$13", "$14", "$15", "$16", "$17", "$18", "$19", "$25", "memory");
+        for (; outer < 2; outer++) {
+            register s32 middle asm("$12") = 0;
+            register s32 outerOffset asm("$9") = outer << 5;
+            register u8 *middleDst asm("$11") = outerDst;
+            u8 *lapDst = outerDst + 0x9DC;
 
-    asm volatile(
-        "addu $13,$0,$0\n\t"
-        "lui $11,%%hi(D_801E41E8)\n\t"
-        "addiu $11,$11,%%lo(D_801E41E8)\n\t"
-        "addu $10,$24,$0\n\t"
-        "addu $8,$0,$0\n"
-        "7:\n\t"
-        "addu $12,$0,$0\n\t"
-        "addu $9,$8,$0\n\t"
-        "addiu $7,$10,0xF5C\n\t"
-        "addu $5,$0,$0\n"
-        "8:\n\t"
-        "addu $6,$0,$0\n\t"
-        "addu $4,$7,$0\n\t"
-        "addu $2,$9,$11\n\t"
-        "addu $3,$5,$2\n"
-        "9:\n\t"
-        "lw $2,0($3)\n\t"
-        "addiu $3,$3,4\n\t"
-        "addiu $6,$6,1\n\t"
-        "sw $2,0($4)\n\t"
-        "slti $2,$6,3\n\t"
-        "bnez $2,9b\n\t"
-        "addiu $4,$4,4\n\t"
-        "addiu $7,$7,0xC\n\t"
-        "addiu $12,$12,1\n\t"
-        "slti $2,$12,4\n\t"
-        "bnez $2,8b\n\t"
-        "addiu $5,$5,0xC\n\t"
-        "addiu $10,$10,0x30\n\t"
-        "addiu $13,$13,1\n\t"
-        "slti $2,$13,2\n\t"
-        "bnez $2,7b\n\t"
-        "addiu $8,$8,0x30"
-        :
-        :
-        : "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12", "$13", "memory");
+            for (; middle < 4; middle++) {
+                register s32 inner asm("$6") = 0;
+                s32 middleOffset = middle << 3;
+                s32 *totalOutBase = (s32 *)(middleDst + 0xA1C);
+                s32 *totalOut =
+                    (s32 *)(middleOffset + (s32)totalOutBase);
+                s32 *totalIn =
+                    (s32 *)(middleOffset +
+                            (outerOffset + (s32)totalBase));
+                s32 *lapOut = (s32 *)lapDst;
+                s32 *lapIn =
+                    (s32 *)(middleOffset +
+                            (outerOffset + (s32)lapBase));
 
-    asm volatile(
-        "addu $13,$0,$0\n\t"
-        "addu $6,$0,$0\n\t"
-        "lui $2,%%hi(D_8019C704)\n\t"
-        "lw $2,%%lo(D_8019C704)($2)\n\t"
-        "lui $3,%%hi(D_801E8A50)\n\t"
-        "lw $3,%%lo(D_801E8A50)($3)\n\t"
-        "lui $4,%%hi(D_801E6C70)\n\t"
-        "lw $4,%%lo(D_801E6C70)($4)\n\t"
-        "addu $7,$24,$0\n\t"
-        "sw $2,0xFBC($24)\n\t"
-        "sw $3,0xFC0($24)\n\t"
-        "sw $4,0xFC4($24)\n\t"
-        "lui $5,%%hi(D_801E42EC)\n\t"
-        "addiu $5,$5,%%lo(D_801E42EC)\n\t"
-        "lwl $2,3($5)\n\t"
-        "lwr $2,0($5)\n\t"
-        "lwl $3,7($5)\n\t"
-        "lwr $3,4($5)\n\t"
-        "swl $2,0xFCB(%0)\n\t"
-        "swr $2,0xFC8(%0)\n\t"
-        "swl $3,0xFCF(%0)\n\t"
-        "swr $3,0xFCC(%0)\n\t"
-        "lui $5,%%hi(D_8009E874)\n\t"
-        "addiu $5,$5,%%lo(D_8009E874)\n\t"
-        "lwl $2,3($5)\n\t"
-        "lwr $2,0($5)\n\t"
-        "lwl $3,7($5)\n\t"
-        "lwr $3,4($5)\n\t"
-        "swl $2,0xFD3(%0)\n\t"
-        "swr $2,0xFD0(%0)\n\t"
-        "swl $3,0xFD7(%0)\n\t"
-        "swr $3,0xFD4(%0)\n"
-        "10:\n\t"
-        "lhu $2,0($7)\n\t"
-        "addiu $13,$13,1\n\t"
-        "addu $6,$6,$2\n\t"
-        "sltiu $2,$13,0x7FE\n\t"
-        "bnez $2,10b\n\t"
-        "addiu $7,$7,2\n\t"
-        "nor $6,$0,$6\n\t"
-        "sw $6,0xFFC($24)"
-        :
-        : "r"(arg0)
-        : "$2", "$3", "$4", "$5", "$6", "$7", "$13", "memory");
+                for (; inner < 2; inner++) {
+                    *lapOut = *lapIn++;
+                    *totalOut++ = *totalIn++;
+                    lapOut++;
+                }
+                lapDst += 8;
+            }
+            outerDst += 0x20;
+        }
+    }
+
+    {
+        /* The remaining register hints in these loops are load-bearing. */
+        s32 outer = 0;
+        s32 *rankingBase = g_RankingRecords;
+        s32 *timeBase = g_TimeRecords;
+        register u8 *outerDst asm("$25") = arg0;
+        register s32 outerOffset asm("$16") = 0;
+
+        for (; outer < 2; outer++) {
+            s32 middle = 0;
+            register s32 currentOuterOffset asm("$15") = outerOffset;
+            register u8 *middleDst asm("$17") = outerDst;
+            register u8 *rankingDst asm("$14") = outerDst + 0xA5C;
+            s32 middleOffset = 0;
+
+            for (; middle < 4; middle++) {
+                register s32 inner asm("$6") = 0;
+                s32 *timeDstBase = (s32 *)(middleDst + 0xCDC);
+                s32 *timeDst =
+                    (s32 *)(middleOffset + (s32)timeDstBase);
+                s32 *timeIn =
+                    (s32 *)(middleOffset +
+                            (currentOuterOffset + (s32)timeBase));
+                s32 *rankingOut = (s32 *)rankingDst;
+                s32 *rankingIn =
+                    (s32 *)(middleOffset +
+                            (currentOuterOffset + (s32)rankingBase));
+
+                for (; inner < 5; inner++) {
+                    memcpy(rankingOut, rankingIn, 0x10);
+                    memcpy(timeDst, timeIn, 0x10);
+                    timeDst += 4;
+                    timeIn += 4;
+                    rankingOut += 4;
+                    rankingIn += 4;
+                }
+                rankingDst += 0x50;
+                middleOffset += 0x50;
+            }
+            outerDst += 0x140;
+            outerOffset += 0x140;
+        }
+    }
+
+    {
+        /* The remaining register hints in these loops are load-bearing. */
+        s32 outer = 0;
+        register s32 *sectorBase asm("$11") = g_BestSectorTimes;
+        u8 *outerDst = arg0;
+        s32 outerOffset = 0;
+
+        for (; outer < 2; outer++) {
+            register s32 middle asm("$12") = 0;
+            s32 currentOuterOffset = outerOffset;
+            u8 *sectorDst = outerDst + 0xF5C;
+            s32 middleOffset = 0;
+
+            for (; middle < 4; middle++) {
+                register s32 inner asm("$6") = 0;
+                s32 *sectorOut = (s32 *)sectorDst;
+                s32 *sectorIn =
+                    (s32 *)(middleOffset +
+                            (currentOuterOffset + (s32)sectorBase));
+
+                for (; inner < 3; inner++) {
+                    *sectorOut = *sectorIn++;
+                    sectorOut++;
+                }
+                sectorDst += 0xC;
+                middleOffset += 0xC;
+            }
+            outerDst += 0x30;
+            outerOffset += 0x30;
+        }
+    }
+
+    {
+        /* These two accumulator hints are load-bearing. */
+        register u32 count asm("$13") = 0;
+        register u32 checksum asm("$6") = 0;
+        s32 bgmVolume = g_BgmVolumeSetting;
+        s32 sfxVolume = g_SfxVolumeSetting;
+        s32 monoOutput = g_MonoOutput;
+        u16 *checksumSrc = (u16 *)arg0;
+
+        *(s32 *)(arg0 + 0xFBC) = bgmVolume;
+        *(s32 *)(arg0 + 0xFC0) = sfxVolume;
+        *(s32 *)(arg0 + 0xFC4) = monoOutput;
+        memcpy(arg0 + 0xFC8, g_GrandPrixCourseProgress, 8);
+        memcpy(arg0 + 0xFD0, g_ExtraGrandPrixCourseProgress, 8);
+
+        for (; count < 0x7FE; count++) {
+            checksum += *checksumSrc++;
+        }
+        *(u32 *)(arg0 + 0xFFC) = ~checksum;
+    }
 }
