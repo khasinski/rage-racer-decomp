@@ -77,6 +77,11 @@ tools/asset_map.html
 tools/source_browser.html
 build/**/report.json
 
-# Internal agent briefs and the decompilation guide: kept locally, not published.
+# Internal agent briefs, their reports, and the decompilation guide: kept
+# locally, not published. These describe how a particular session was run and
+# mean nothing to someone cloning the repository; durable findings belong in
+# docs/names.md instead.
 docs/TASK_FOR_*.md
+docs/*_REPORT.md
+docs/*_REPORT_*.md
 docs/DECOMPILATION_GUIDE.md
