@@ -5044,3 +5044,290 @@ second loop of `func_8003B0D4` skips the `func_8003A280` call when
 (`8003B14C slti $v0, $a1, 0x4`). `func_8003BB50` has no such test at all, which
 is the mechanical form of the note already in `car.h` that the attract variant
 runs every car.
+
+## 31. Types pass over `func_80032280` (`GameResetCarTrackState`) and `func_80039980`
+
+Re-triaged targets: the first family was picked by stride-idiom density, which
+section 30 showed is meaningless, so this round used **count of distinct
+non-`$sp` field offsets** instead. That metric put `func_80032280` far in front
+(53 offsets, 88 sites, 596 words, only 5 globals) and it was right to.
+
+**`func_80032280` yielded one new named structure and three recovered fields in
+an existing one.** The new structure is not the one the offset count implied: 34
+of the 53 offsets belong to a **scratchpad work record at `0x1F80011C`**, and
+that record is already fully spelled out in matched code — `func_80031298`
+(`GameUpdateCarTrackState`, `car/GameUpdateCarTrackState.c`) is the *clamping
+twin* of this stub and uses the same base with the same offsets. So the layout
+came out corroborated rather than inferred, which is the strongest evidence this
+pass has produced. The genuinely new type is small: a **12-byte arc-centre
+record** behind `g_TrackArcCenters`.
+
+### 31a. The two functions are one function with the clamp removed
+
+`car.h` already described `func_80032280` as the "non-clamping twin" of
+`GameUpdateCarTrackState`. That is exact, and it is checkable: the set of
+scratchpad offsets the stub touches is a **strict subset** of the set the matched
+twin touches, and the only two the twin has and the stub does not are 0x68 and
+0x70 — the `ApplyMatrix` output that only the clamping path writes.
+
+    stub offsets absent from the twin: (none)
+    twin offsets absent from the stub: 0x68 0x70
+
+Every other difference is on the writer side: the twin returns
+`spad+0x3C` and writes `obj` +0x20/+0x28/+0x34/+0x38/+0x3C/+0x04, while the stub
+returns nothing and writes `car` +0x50/+0x54/+0x58 (the reference triple `car.h`
+already mentions) plus +0x6C/+0x70/+0x74/+0x78/+0xB4. That makes the twin a
+line-by-line model for the conversion, and it is why this section proposes no
+scratchpad typedef: see 31e.
+
+### 31b. The scratchpad geometry record at `0x1F80011C`, 0x98 bytes
+
+Offsets are from `0x1F80011C`. "Both" in the source column means the field is
+written by one function and read by both, or written by both. Every width is
+fixed by an instruction; the twin being matched C makes the signedness column
+unusually solid, because it is a *declaration* rather than an inference.
+
+| off | width | field | evidence |
+|---|---|---|---|
+| 0x00 | s32 | arc centre x | `sw 0x0($s2)` 80032394 from `arcCenter[i].x`; twin `FIELD(spad,s32*,0)` |
+| 0x04 | s32 | arc centre z | `sw 0x120($at)` 800323A0 |
+| 0x08 | s32 | car x - centre x | `sw 0x124($at)` 800323B4 |
+| 0x0C | s32 | car z - centre z | `sw 0x128($at)` 800323C8 |
+| 0x10 | s32 | car radius from the centre | `sw 0x12C($at)` 800324D8, `(cos*dx + sin*dz) >> 12` |
+| 0x14 | s32 | this point's radius, then the interpolated radius | `sw 0x130($at)` 8003253C, rewritten 80032654 |
+| 0x18 | s32 | next point's radius | `sw 0x134($at)` 800325A8 |
+| 0x24 / 0x2C | s32 | this point x / z minus the centre | `sw 0x140/0x148($at)` 80032404/8003240C |
+| 0x28 / 0x30 | s32 | next point x / z minus the centre | `sw 0x144/0x14C($at)` 80032420/80032434 |
+| 0x34 | s32 | `sin(spad+0x8C)` | `sw 0x34($s2)` 80032A8C |
+| 0x38 | s32 | `cos(spad+0x8C)` | `sw 0x38($s2)` 80032A6C |
+| 0x3C | s32 | the twin's return value (knockback magnitude); the stub only zeroes it | `sw $zero, 0x158($at)` 800322A8, first store in the function |
+| 0x40 | `MATRIX` 0x20 | rotation by the interpolated track angle | twin: `GameBuildRotMatrixY(spad+0x40, spad->f90)`; never built by the stub |
+| 0x60 / 0x62 / 0x64 | `SVECTOR` | `{(carX - pX) * 4, 0, (carZ - pZ) * 4}` | `sh 0x60/0x62/0x64($s2)` 80032740/8003274C/8003275C |
+| 0x68 / 0x6C / 0x70 | `VECTOR` | `ApplyMatrix` output; twin only | twin lines 228, 233, 234 |
+| 0x78 | s16 | arc class, `point->arcRef & 3` | `sh 0x194($at)` 8003236C, then `beqz` skips the whole arc block |
+| 0x7A | s16 | arc index, `(s16)point->arcRef >> 4` | `sh 0x196($at)` 80032358 |
+| 0x7C | s16 | angular span of the arc, clamped `>= 1` | `sh 0x198($at)` 800325B8, `sll 16`/`bgtz`, then `ori 1` |
+| 0x7E | s16 | atan2 of the car about the centre, then reused for the car's angular position in the arc | `sh 0x19A($at)` 800323DC and 8003266C |
+| 0x80 / 0x82 | s16 | atan2 of this / the next point about the centre | `sh 0x19C/0x19E($at)` 80032458/80032474 |
+| 0x84 | s16 | signed lateral offset on the arc path, negated when class == 2 | `sh 0x1A0($at)` 80032698 |
+| 0x86 | s16 | `spad+0x88 + spad+0x8A`, the full track width | `sh 0x86($s2)` 800329C4 |
+| 0x88 | s16 | interpolated `field_12` (right half-width) | `sh 0x88($s2)` 80032860 |
+| 0x8A | s16 | interpolated `field_10` (left half-width) | `sh 0x8A($s2)` 800328CC |
+| 0x8C | s16 | `car->field_24 - 0xC00 + spad+0x90`, the car's track-relative heading | `sh 0x8C($s2)` 80032958 |
+| 0x8E | s16 | interpolated `field_E` (cross-slope gradient) | `sh 0x8E($s2)` 80032944 |
+| 0x90 | s16 | interpolated track angle; seeded from `point->angle` and overwritten by the arc blend | `sh 0x1AC($at)` 80032340, `sh 0x1AC($at)` 80032728 |
+| 0x92 | s16 | interpolated `field_C` | `sh 0x92($s2)` 800329CC |
+| 0x94 | s16 | interpolated cross-slope *angle*, `atan2(width, field_E * width >> 7)` | `sh 0x94($s2)` 80032A60 |
+| 0x96 | s16 | `point->segmentLength` clamped `>= 1`; the divisor of every interpolation | `sh 0x1B2($at)` 80032310, `ori 1` at 8003232C |
+
+Gaps at 0x1C..0x23, 0x66, 0x72..0x77. The record therefore runs
+`0x1F80011C..0x1F8001B3`.
+
+**This address is a shared overlay, not a durable object.** `GameDrawCourseObjects`
+uses `0x1F80011C` as an `SVECTOR` for a single vertex, `GameSubmitTerrainCells`
+uses it as a screen-XY array (see §2's note), and six `func_80017794` callers
+pass it as a vector argument. The layout above is what the *car track-state pair*
+puts there and nothing more. Naming it globally would be wrong, and 31e says
+what to do instead.
+
+### 31c. `GameTrackPoint`: three fields recovered out of padding
+
+`track.h` declared `u8 padC[4]` and `u8 pad14[2]`. All three halfwords in that
+padding are real fields, and each is proven twice — once in the stub and once in
+already-matched code, which is why the confidence is high rather than medium:
+
+* **`s16 field_C` (+0x0C).** `lh 0xC($s5)` / `lh 0xC($s4)` at 8003295C /
+  80032970, interpolated into `spad+0x92`. Matched confirmation:
+  `FIELD(temp_s6, s16 *, 0xC)` in `GameUpdateCarTrackState` line 305. It is then
+  rotated with `spad+0x94` by the car's track-relative heading into the two words
+  at `obj` +0x20 and +0x28, so the two together are a surface-tilt vector and
+  `field_C` is its pitch component. **High** on width and signedness, **medium**
+  on that reading of the meaning.
+* **`s16 field_E` (+0x0E).** `lh 0xE($s5)` / `lh 0xE($s4)` at 800328E8 /
+  800328FC and again at 800329D0 / 800329EC. Matched confirmation in
+  `GameUpdateCarTrackState` line 292, and — decisively — in the *same file* as
+  the stub: the already-decompiled `GameGetTrackSurfaceHeight` returns
+  `y + (((s16)fieldE * outZ) >> 7)`, and `GameSampleTrackSurfaceHeight` carries a
+  whole local `TP` typedef whose stated reason for existing is that it "needs
+  0x0E, which GameTrackPoint leaves unnamed". So `field_E` is the cross-slope
+  gradient in 1/128 of a unit per unit of lateral offset. **High** throughout.
+* **`u16 arcRef` (+0x14).** `lhu 0x14($s4)` twice at 80032344 / 8003235C, then
+  `sll 16` / `sra 20` for one half and `andi 3` for the other. Matched
+  confirmation: `FIELD(temp_s4, u16 *, 0x14)` in `GameUpdateCarTrackState` lines
+  95 and 97, declared `u16` there. Bits 0..1 select the cornering model — 0 skips
+  the entire arc block, 2 negates the lateral offset, so 2 is the mirrored hand —
+  and bits 4..15 are a **signed** index into `g_TrackArcCenters`. Bits 2..3 are
+  never read anywhere. **High** on the split, **medium** on "mirrored hand".
+
+Per §30's rule, the `lhu` at +0x14 carries no signedness information by itself;
+the `u16` comes from the matched twin's declaration, and the `sra 20` shows the
+*index* is used signed regardless.
+
+**Applied to `include/game/track.h`.** Size unchanged at 0x18; no unit named
+`padC` or `pad14`, so nothing else moved. Verified by deleting all 30 objects
+whose `.d` lists `include/game/track.h` and rebuilding:
+`2913e15648eddef40821c5f666460abc04155ee6`.
+
+### 31d. `g_TrackArcCenters` (`D_8019C7D0`): the element is 12 bytes, and one existing declaration says 24
+
+The arc block is reached as `((s16)point->arcRef >> 4) * 0xC + g_TrackArcCenters`
+and two words are read from it, +0x00 and +0x04, which the stub subtracts from
+the car's and the two points' x and z before taking `atan2`. The stride 12 is
+proven at three independent sites: 8003237C in the stub,
+`FIELD` line 101 of `GameUpdateCarTrackState`, and line 755 of
+`car/GameUpdateCarDrivetrain.c`, which performs the identical arc computation and
+already spells the symbol `u8 *` with its own `* 0xC`.
+
+**`track/GameInstallTrackPoints.c` declares it `extern GameTrackPoint
+*g_TrackArcCenters`, i.e. a 24-byte element.** That is wrong, and harmless only
+because that unit never subscripts it — it just publishes
+`points + count * sizeof(GameTrackPoint)`, where the 24 is the *point* stride and
+so is correct. Two units, one symbol, two incompatible element types; this is a
+§22-class duplicate that §22 did not catch because the types differ rather than
+the names.
+
+`GameTrackArcCenter` is therefore **added as a typedef to `track.h` with no
+`extern`**: declaring one would collide at compile time with the two existing
+per-file declarations, which is exactly the collision worth documenting rather
+than silently resolving. The third word is never read in the image, so it stays
+`unk08`. Stride **high**, x and z **high**, +0x08 **unknown**.
+
+### 31e. Per-access-site spelling — and why base-register counting cannot answer it here
+
+§30 left the member-versus-raw question open and specified the experiment:
+compile a candidate and count base registers. Run here, it returns a **negative
+that is worth more than the positive would have been.**
+
+The scratchpad base is a *compile-time constant*, so gcc constant-propagates it
+and then chooses, per site, between materialising it in a register and emitting
+`lui $at` plus a `%lo`-style displacement. Comparing the retail stub against the
+built object of its matched twin — whose source spells essentially every one of
+these accesses the same way, through one `spad` variable — the two forms come out
+interleaved in both, and the split is nearly identical:
+
+    stub  absolute (lui $at) form: 0x04 08 0C 10 14 18 24 28 2C 30 3C 78 7A 7C 7E 80 82 84 90 96
+    twin  absolute (lui $at) form: 0x04 08 0C 10 14 18 24 28 2C 30 3C 78 7A 7C 7E 80 82    90 96
+    stub  register ($s2) form:     0x00 34 38 60 62 64 86 88 8A 8C 8E 90 92 94 96
+    twin  register ($s1) form:     0x00 10 14 34 38 3C 60 62 64 68 70 78 7C 7E 84 86 88 8A 8C 8E 90 92 94 96
+
+The twin reaches eight offsets **both** ways (0x10, 0x14, 0x3C, 0x78, 0x7C, 0x7E,
+0x90, 0x96) from a single uniform source spelling. So for a constant base the
+instruction form is pure allocation and carries no information about the source
+at all — the opposite of the §30h situation, where two registers over a *runtime*
+base did discriminate. Anyone tempted to read meaning into `lui $at` versus a
+held base register should stop.
+
+What that buys is a concrete, evidence-backed prescription instead of a guess:
+
+| group | verdict | why |
+|---|---|---|
+| all 34 scratchpad offsets | **raw**, one `void *spad = (void *)0x1F80011C` plus `FIELD(spad, T *, off)` | the twin uses exactly this, uniformly, and matches; and it produces retail's mixed instruction forms without being asked to |
+| `spad+0x3C` at 800322A8 | **raw literal**, `*(s32 *)0x1F800158 = 0` | the twin's first statement is this literal and its object has `lui $at` there, same as the stub |
+| the two `GameTrackPoint` bases `$s4` / `$s5` | **raw**, `FIELD(base, s16 *, off)` off a `void *` | the twin does this for all nine offsets; note the twin does *not* use `GameTrackPoint` even though the header exists |
+| `car` +0x00 / +0x08 in the vector build | **raw with a `(u16)` narrowing**, `(u16)FIELD(car, s32 *, 0)` | `lhu 0x0($s3)` / `lhu 0x8($s3)` at 8003272C / 80032744 read the low half of 32-bit fields; the twin line 192 is character for character this |
+| `car` +0x24 at 80032948 | **raw with `(u16)`** | `lhu 0x24($s3)`, twin line 300 |
+| `car` +0x50/0x54/0x58/0x6C/0x70/0x74/0xB4/0x78 | **raw** | the twin writes the same shapes to `obj` through `FIELD` |
+| `g_TrackArcCenters` element | **raw**, `u8 *` plus `* 0xC` | two matched units already do this; `GameTrackArcCenter` is for readers, not for the conversion |
+
+The one thing the twin does *not* settle is the `$s6`-style biased giv, because
+`func_80032280` has none — its three object bases are all real source pointers
+(`$s3` the parameter, `$s4`/`$s5` the two points), which is itself why its offsets
+are all non-negative.
+
+### 31f. A dead `mult` survives in gcc 2.6.3, and it is not evidence of hand-written asm
+
+Two `mult` at 800327CC and 800327D8 have no `mflo` or `mfhi` before the next
+`mult` on any path — checked against both arms of the branch at 800327E8 and the
+join at 80032804. Their results are unreachable. Read against the twin, the
+expression is unmistakable: it is line 204,
+`(-sin(f90) * (s16)spad->f60) + (cos(f90) * spad->f64)`, the **lateral** component
+of the rotation whose along-track partner at 800327A8 is kept. The twin consumes
+it (`var_a2`, then the boundary clamp); the non-clamping stub has no consumer, so
+the sum, the rounding and the `>> 14` were all deleted and the two multiplies were
+not.
+
+The mechanism, confirmed by probe (`scratch/decomp-work/probe_deadmult.c`):
+
+    s32 f1(s32 a, s32 b, s32 c, s32 d) {
+        s32 v = a * b + c * d;
+        if (v < 0) v += 0xFFF;
+        v = h(a);              /* overwritten before use */
+        return v;
+    }
+
+compiles to `mult $4,$5` … `jal h` … `mult $6,$7` with **no `mflo` at all**. gcc
+2.6.3's MIPS `mulsi3` is a `mult` insn plus a separate `mflo`; RTL dead-code
+elimination removes the `mflo`, but it will not remove the `mult`, because that
+insn sets the HI/LO hard registers and hard-register liveness is not something it
+will prove away. The companion `f2`, whose operands are globals, loses everything
+— the difference is that in `f1` the operands are already live for other reasons,
+so only the product dies.
+
+Three consequences. A `mult` with no `mflo` is **a dead product in the source, not
+hand-written assembly** — worth knowing before anyone marks such a function
+`HANDWRITTEN_ASM`. Converting `func_80032280` **requires writing the dead
+expression**, or the output is two words short. And, third, the negative:
+
+**This is not the explanation for §27's `aligned 393 < exact 418` gap on
+`func_800418D4`.** Scanning every remaining stub for `mult`/`div` with no
+following `mflo`/`mfhi` finds candidates in only three functions, and after
+discarding the delay-slot-then-`j` false positives (`800326C0`, `8003B504`,
+`8003BEBC`, all of which reach an `mflo` through the jump) the genuine count is
+**two, both in `func_80032280`**. `func_800418D4` has none. The missing-or-extra
+instruction §27 is looking for is somewhere else.
+
+### 31g. `func_80039980` (`GameCollideRivalCars`): a cross-check, not a new type
+
+Surveyed rather than fully typed, which was the point of picking it: 18 offsets,
+4 globals, and every one of them lands on `GameCarRuntime`. It **corroborates
+four of §30's corrections and contradicts none.**
+
+The shape: `$s7` is the `car` parameter, `$fp` is `&g_Cars[index + 1]`
+(`D_801F19F0` is `g_Cars + 0x19C`, i.e. `&g_Cars[1]`, plus the same ×412 idiom),
+and `$s6` is a `$fp + 0x24` biased giv over the inner loop — the same +0x24 bias
+§30b explains, with `lw 0x0($s6)` = `field_24` at offset zero again.
+
+* **`field_C8` / `field_D0` are the velocity components.** `lhu 0xC8($fp)` minus
+  `lhu 0xC8($s7)` at 8003A050, `/32` with the `+0x1F` rounding, becomes the second
+  argument of `GameSetCarKnockback` (`func_80038CE8`, named in
+  `GameUpdateCarTrackState.c`); `field_D0` becomes the third. A knockback built
+  from the *difference* of two cars' values at these offsets is a relative
+  velocity and nothing else. That is independent of §30e's derivation, which came
+  from `sin/cos(headingAngle) * field_A4 / 256`.
+* **`field_A8` is an acceleration ramp.** A collision multiplies it by 90/100 on
+  both cars (`0x51EB851F`, `sra 5`, on `90 * field_A8`, at 8003A028 and 8003A0EC).
+  A collision penalising acceleration is coherent; a collision scaling a speed
+  *limit* by 0.9 would not be.
+* **`field_8A` is the collision flag.** Set to exactly 1 on *both* cars in both
+  collision branches (8003A034 / 8003A04C and 8003A108 / 8003A10C), `sh`, 16-bit.
+  §30's first-loop reading now closes: `GameUpdateRaceCars` does
+  `field_8A &= 1` per frame and `GameUpdateAttractCars` does `field_8A = 0`, and
+  the last pass of both branches on `field_8A == 0` to choose the body-kick path.
+  So bit 0 is deliberately sticky in a race and cleared in attract.
+* **`field_98` is not a gearbox field on these objects.** 8003A020 compares
+  `lh 0x74($s6)` (the other car's +0x98) against `lh 0x98($s7)` and skips the pair
+  unless they are equal. `GameUpdatePlayerCar` calls +0x98 `shiftState`; two rival
+  cars gating collision on equal shift states is not a reading anyone would
+  defend, and §30f's two-object explanation covers it.
+* `z` at +0x08 and +0x20/+0x24/+0x28 are read with `lhu`, the low half of 32-bit
+  fields, exactly as in `func_80032280` and its twin. No contradiction with the
+  32-bit widths; §30f's `s32 y` is not exercised here.
+
+One thing worth flagging for whoever takes this function: the stack block it
+builds at `sp+0x18`/`sp+0x30` is copied with `lwl 0x9B($s2)` / `lwr 0x98($s2)`
+into `swl 0x3($a0)` / `swr 0x0($a0)` at 80039B74. Both addresses are in fact
+4-aligned, so this is gcc emitting an unaligned move because the *declared* type
+said it could not prove alignment — the §28 unaligned-copy family, reached from a
+different direction.
+
+### 31h. Triage rule, recorded so it is not rediscovered a third time
+
+Stride-idiom density was the wrong metric (§30). Distinct-field-offset count is a
+better one but still has a failure mode at the bottom of the table rather than the
+top. Of the fifteen remaining stubs, five are a menu cluster —
+`func_8004A248`, `func_8004D384`, `func_8005290C` and neighbours — totalling
+about 4700 words with **one** field-offset access between them, against 43
+globals. They are global-and-array code, not aggregate code, and a types pass
+there would find nothing. The rule: *before typing, check that the function
+addresses objects through pointers at all*; a high global count with a near-zero
+offset count means the data is already named and the work is elsewhere.

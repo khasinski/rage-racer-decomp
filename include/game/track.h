@@ -3,17 +3,56 @@
 
 #include "common.h"
 
+/*
+ * One centreline point, 0x18 bytes. `field_10` / `field_12` are the left and
+ * right half-widths (GameSteerCarAlongRoute clamps the lateral offset to
+ * [-field_10, field_12]); everything from `field_C` up is interpolated between
+ * a segment's two endpoints by GameUpdateCarTrackState and its non-clamping
+ * twin func_80032280. See docs/names.md 31.
+ */
 typedef struct GameTrackPoint {
     s32 x;
     s32 z;
     s16 y;
     s16 angle;
-    u8 padC[4];
+    /* +0x0C the pitch component of the surface tilt: interpolated, then paired
+     * with the cross-slope angle derived from field_E and rotated by the car's
+     * track-relative heading to give the two tilt words at obj +0x20 / +0x28. */
+    s16 field_C;
+    /* +0x0E cross-slope gradient in 1/128 of a unit per unit of lateral
+     * offset. `surfaceY = interp(y) + (interp(field_E) * lateral >> 7)` in
+     * GameGetTrackSurfaceHeight, GameSampleTrackSurfaceHeight and
+     * GameUpdateCarTrackState alike. */
+    s16 field_E;
     s16 field_10;
     s16 field_12;
-    u8 pad14[2];
+    /* +0x14 arc reference, read as one u16 and split: bits 0..1 select the
+     * cornering model (0 = straight, the arc block is skipped entirely; 2
+     * negates the lateral offset, so it is the mirrored hand), and bits 4..15
+     * are a signed index into g_TrackArcCenters (`(s16)arcRef >> 4`). Bits 2..3
+     * are never read. */
+    u16 arcRef;
     s16 segmentLength;
 } GameTrackPoint;
+
+/*
+ * One corner's centre of curvature. `GameTrackPoint.arcRef >> 4` indexes this
+ * array, which GameInstallTrackPoints publishes at `g_TrackArcCenters`
+ * (D_8019C7D0) immediately after the point table. The stride is 12, proven by
+ * three independent `* 0xC` sites (GameUpdateCarDrivetrain, and 8003237C /
+ * func_80031298); the third word is never read anywhere in the image.
+ *
+ * D_8019C7D0 is declared per-file, and the two existing declarations disagree:
+ * `u8 *` in car/GameUpdateCarDrivetrain.c (which does its own `* 0xC`) and
+ * `GameTrackPoint *` in track/GameInstallTrackPoints.c, where the element type
+ * is wrong but harmless because that unit only computes the base address. No
+ * extern is declared here on purpose: adding one would collide with those two.
+ */
+typedef struct GameTrackArcCenter {
+    s32 x;      /* +0x00 */
+    s32 z;      /* +0x04 */
+    s32 unk08;  /* +0x08 never read */
+} GameTrackArcCenter;
 
 /* Track centreline points of the loaded course, g_TrackPointCount of them;
  * walked cyclically. */
