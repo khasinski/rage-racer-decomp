@@ -1,4 +1,9 @@
 #include "common.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/screens.h"
+#include "game/state.h"
+#include "psyq/gpu.h"
 
 /* Static text buffers the two time drawers format into, seeded in .data with
  * "0'00\"000" and "00'00\"". The named split symbols are the digit positions
@@ -201,4 +206,239 @@ void func_800340D8(void) {
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/race/GameDrawTimeValue", func_8003425C);
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/race/GameDrawTimeValue", func_8003479C);
+extern s16 g_RaceOptionScroll0 asm("D_8007DF30");
+extern s16 g_RaceOptionScroll1 asm("D_8007DF32");
+extern char g_RaceOptionMarquee[4][40] asm("D_8007DF34");
+extern s32 g_RaceOptionPulseAngle asm("D_8007DF2C");
+extern u8 *g_CourseProgress asm("D_8009E67C");
+
+s32 func_80068634(s32 angle);
+u8 *QueueSpriteWide(
+    void *ot,
+    u8 *prim,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 clutIndex) asm("func_80016EC4");
+u8 *GameAddTilePrim(
+    void *ot,
+    u8 *prim,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 r,
+    s32 g,
+    s32 b) asm("func_80032F34");
+
+void GameDrawRaceOptionMenu(s32 cursorRow) {
+    register s32 selectedRow asm("$23") = cursorRow;
+    u8 *ot;
+    u8 *firstNext;
+    register s32 brightness asm("$2");
+    s32 marquee;
+
+    ot = g_DrawBuffer + 0xCC;
+    {
+        register SPRT *sprite asm("$18");
+        register void *drawPrim asm("$5");
+
+        sprite = (SPRT *)0x1F800000;
+        sprite = *(SPRT **)sprite;
+        SetSprt(sprite);
+        SetShadeTex(sprite, 0);
+        sprite->x0 = 0x8C;
+        sprite->y0 = 0x5A;
+        sprite->w = 0x28;
+        sprite->h = 8;
+        sprite->u0 = 0xD8;
+        sprite->v0 = 0x38;
+        sprite->clut = 0x7893;
+        if (g_RaceOptionScroll0 & 0x10) {
+            asm("" : : "r"(sprite));
+            brightness = 0x80;
+        } else {
+            brightness = 0x40;
+        }
+        sprite->t.r0 = brightness;
+        sprite->t.g0 = brightness;
+        sprite->t.b0 = brightness;
+        asm("" ::: "memory");
+        drawPrim = sprite;
+        sprite++;
+        AddPrim(ot, drawPrim);
+
+        g_RaceOptionScroll0 -= 4;
+        g_RaceOptionScroll1 -= 4;
+        if ((g_RaceOptionScroll0 >> 2) < -0x9C) {
+            g_RaceOptionScroll0 = 0xF0;
+        }
+        if ((g_RaceOptionScroll1 >> 2) < -0x9C) {
+            g_RaceOptionScroll1 = 0xF0;
+        }
+
+        firstNext =
+            GameQueueDrawAreaPrim(ot, sprite, 0, 0, 0x140, 0xF0);
+    }
+
+    {
+        register u8 *scratchPacket asm("$18");
+        register s32 fontU asm("$22");
+        register s16 scroll0 asm("$4");
+        register char *marqueeBase asm("$16");
+        register u8 *prim asm("$18");
+        u8 *drawPrim;
+
+        {
+            register s32 textY asm("$5") = 0x8A;
+            register s32 textColor asm("$7") = 0x7811;
+
+            asm(
+                "" : "=r"(textY), "=r"(textColor) :
+                "0"(textY), "1"(textColor));
+            scratchPacket = (u8 *)0x1F800000;
+            scroll0 = g_RaceOptionScroll0;
+            marqueeBase = &g_RaceOptionMarquee[0][0];
+            *(u8 **)scratchPacket = firstNext;
+            marquee = (g_SceneTimer & 3) * 40;
+            func_80016754(
+                (scroll0 >> 2) + 0xA0,
+                textY,
+                &marqueeBase[marquee],
+                textColor);
+        }
+        {
+            register s32 secondTextY asm("$5") = 0x8A;
+
+            asm(
+                "" : "=r"(secondTextY) :
+                "0"(secondTextY));
+            marqueeBase += 20;
+            func_80016754(
+                (g_RaceOptionScroll1 >> 2) + 0xA0,
+                secondTextY,
+                &marqueeBase[marquee],
+                0x7811);
+        }
+
+        scratchPacket = *(u8 **)scratchPacket;
+        drawPrim = GameQueueDrawAreaPrim(
+            ot, scratchPacket, 0x72, 0x8A, 0x5C, 0xC);
+        fontU = 0xD0;
+        prim = QueueSpriteWide(
+            ot, drawPrim, 0x88, 0x6A, 0x30, 8, fontU, 0x10, 0x7893);
+        if (g_GrandPrixMode != 0) {
+            prim = QueueSpriteWide(
+                ot, prim, 0x88, 0x74, 0x30, 8, 0xA0, 0x28, 0x7893);
+            prim = QueueSpriteWide(
+                ot, prim, 0x84, 0x7E, 0x30, 8, fontU, 0x28, 0x7893);
+            prim = QueueSpriteWide(
+                ot,
+                prim,
+                0xB8,
+                0x7E,
+                8,
+                8,
+                *(s16 *)(g_CourseProgress + 6) * 8,
+                0,
+                0x78CC);
+            prim = QueueSpriteWide(
+                ot, prim, 0x78, 0x7E, 8, 8, 0xD8, 8, 0x78CC);
+            prim = QueueSpriteWide(
+                ot, prim, 0xC0, 0x7E, 8, 8, 0xE8, 8, 0x78CC);
+        } else {
+            prim = QueueSpriteWide(
+                ot, prim, 0x85, 0x74, 0x38, 8, 0xA0, 0x40, 0x7893);
+            prim = QueueSpriteWide(
+                ot, prim, 0x90, 0x7E, 0x28, 8, 0xD8, 0x40, 0x7893);
+        }
+
+        {
+            s32 y;
+
+            y = selectedRow * 10 + 0x68;
+            prim = GameAddTilePrim(
+                ot, prim, 0x80, y, 0x40, 1, 0xFF, 0xFF, 0);
+            prim = GameAddTilePrim(
+                ot, prim, 0x80, y + 0xB, 0x40, 1, 0xFF, 0xFF, 0);
+            prim = GameAddTilePrim(
+                ot, prim, 0x80, y, 1, 0xB, 0xFF, 0xFF, 0);
+            prim = GameAddTilePrim(
+                ot, prim, 0xBF, y, 1, 0xB, 0xFF, 0xFF, 0);
+        }
+
+        prim =
+            GameQueueTileTrans(ot, prim, 0x70, 0x50, 0x60, 0x48, 8, 8, 8);
+
+        {
+            POLY_FT4 *quadBase;
+
+            quadBase = (POLY_FT4 *)GameQueueTileTrans(
+                ot, prim, 0x70, 0x50, 0x60, 0x48, 8, 8, 8);
+            {
+                register POLY_FT4 *quad asm("$17") = quadBase;
+                register s32 leftTrig asm("$3");
+                s16 left;
+
+                g_RaceOptionPulseAngle += 0x20;
+                SetPolyFT4(quad);
+                quad->t.r0 = 0x60;
+                quad->t.g0 = 0x60;
+                quad->t.b0 = 0x60;
+                g_RaceOptionPulseAngle &= 0xFFF;
+                leftTrig = func_80068634(g_RaceOptionPulseAngle) * 0x2C;
+                if (leftTrig < 0) {
+                    leftTrig += 0xFFF;
+                }
+                left = 0xA0 - (leftTrig >> 12);
+                quad->x2 = left;
+                quad->x0 = left;
+                quad->y1 = 0x58;
+                quad->y0 = 0x58;
+            }
+            {
+                register u8 *drawModePrim asm("$17");
+                register POLY_FT4 *drawPrim asm("$5");
+                s32 rightTrig;
+                s16 right;
+
+                g_RaceOptionPulseAngle &= 0xFFF;
+                rightTrig = ({
+                    register s32 sample asm("$2");
+
+                    sample = func_80068634(g_RaceOptionPulseAngle);
+                    asm volatile("" ::: "memory");
+                    sample * 0x2C;
+                });
+                drawModePrim = (u8 *)(quadBase + 1);
+                if (rightTrig < 0) {
+                    rightTrig += 0xFFF;
+                }
+                right = (rightTrig >> 12) + 0xA0;
+                asm("" : "=r"(right) : "0"(right));
+                drawPrim = quadBase;
+                drawPrim->x3 = right;
+                drawPrim->x1 = right;
+                drawPrim->y3 = 0x90;
+                drawPrim->y2 = 0x90;
+                drawPrim->u0 = 0xA8;
+                drawPrim->v0 = 0xA8;
+                drawPrim->u1 = 0xFF;
+                drawPrim->v1 = 0xA8;
+                drawPrim->u2 = 0xA8;
+                drawPrim->v2 = 0xE0;
+                drawPrim->u3 = 0xFF;
+                drawPrim->v3 = 0xE0;
+                drawPrim->clut = 0x784B;
+                drawPrim->tpage = 9;
+                AddPrim(g_DrawBuffer + 0xCC, drawPrim);
+
+                *(u8 **)0x1F800000 = GameQueueDrawModePrim(
+                    g_DrawBuffer + 0xCC, drawModePrim, 9);
+            }
+        }
+    }
+}

@@ -8,4 +8,4 @@ A function counts as decompiled when it has no INCLUDE_ASM/INCLUDE_RODATA and no
 
 | Binary | Functions | % | Code bytes | % |
 |---|---:|---:|---:|---:|
-| `SCES_006.50 (main)` | 1077/1107 | 97.3% | 355484/408108 | 87.1% |
+| `SCES_006.50 (main)` | 1078/1107 | 97.4% | 357068/408108 | 87.5% |
