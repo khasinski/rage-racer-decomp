@@ -20,8 +20,11 @@ typedef struct GameCarEntry {
 
 typedef struct GameCarRuntime {
     s32 x;
-    s16 y;
-    u8 pad6[2];
+    /* +0x04 32 bits wide, not 16: `lw`/`sw` at nine sites in each of
+     * GameUpdateRaceCars / GameUpdateAttractCars, `s32 unk04` in
+     * GameUpdatePlayerCar's own layout, and the `*(s32 *)&ent->y` cast in
+     * GameInitRivalCar that the old `s16` forced. See names.md 30. */
+    s32 y;
     s32 z;
     s32 field_0C;
     s32 field_10;
@@ -229,7 +232,13 @@ typedef struct GameCarSpec {
 extern GameCarSpec *g_CarSpec asm("D_801E42D8");
 
 /* Drivetrain / input block at `car->field_BC`; the physics code addresses the
- * car's second half through this rather than through GameCarRuntime. */
+ * car's second half through this rather than through GameCarRuntime.
+ *
+ * Calibrated on g_PlayerCar (D_8009E6D4), which is a different 0x19C object from
+ * g_Cars (D_801F1854): it shares the stride but not the meaning of every byte.
+ * +0x30, +0x38, +0x74 and +0x76 are 16-bit gearDisp/unk38/manual/gear on the
+ * player object and 32-bit / AI-speed fields on the rival cars, so use
+ * GameCarAiBlock for a g_Cars[] element. Evidence in names.md 30f. */
 typedef struct GameCarDrive {
     s32 unk00;
     s32 unk04;
@@ -288,7 +297,15 @@ typedef struct GameCarDrive {
 /* A second, halfword-wide view of that same block, for the code that loads
  * 0x104..0x134 as s16 where GameCarDrive declares s32. See names.md 3b. */
 typedef struct GameCarAiBlock {
-    u8 pad0[0x48];
+    u8 pad0[0xC];
+    s32 field_C8;   /* +0x0C world velocity x, sin(headingAngle) * field_A4 / 256 */
+    u8 pad10[4];
+    s32 field_D0;   /* +0x14 world velocity z, cos(headingAngle) * field_A4 / 256 */
+    u8 pad18[0x18];
+    s32 field_EC;   /* +0x30 target angle: field_24 += GameGetAngleDelta(field_24, this) / 5 */
+    u8 pad34[4];
+    s32 field_F4;   /* +0x38 yaw rate, added to both field_44 and field_24 */
+    u8 pad3C[0xC];
     s16 field_104;  /* set to 1 while another car blocks this one */
     u8 pad4A[6];
     u16 field_10C;  /* count of cars close enough to matter this frame */
@@ -301,9 +318,9 @@ typedef struct GameCarAiBlock {
     s16 field_124;  /* grid-seeded speed, clamped >= 0 */
     u8 pad6A[4];
     s16 field_12A;
-    s16 field_12C;  /* clamped to 0..15 */
-    u8 pad72[2];
-    s16 field_130;  /* speed scale, damped to 98% when boxed in */
+    s16 field_12C;  /* clamped to 0..15; the boost-branch step of field_A8 */
+    s16 field_12E;  /* +0x72 slipstream-boost countdown, decremented while > 0 */
+    s16 field_130;  /* speed scale, damped to 98% when boxed in; caps field_A8 */
     s16 field_132;  /* clamped to >= 0x3C */
     s16 field_134;  /* clamped to >= 0 */
     u8 pad7A[0x66];

@@ -4735,3 +4735,312 @@ So this function is blocked on the scheduler's latency model, not on a missing
 source shape, and closing it honestly needs either a construct that changes that
 model or evidence that retail was built with different scheduling. It is 86/88 and
 should be left alone rather than forced.
+
+## 30. Types pass over `func_8003B0D4` / `func_8003BB50` (`GameUpdateRaceCars`, `GameUpdateAttractCars`)
+
+These two stubs, 671 and 622 words, were picked because they carry the highest
+density of the `sll`/`addu`/`sll` non-power-of-two stride idiom of the fifteen
+remaining stubs, on the theory that a dense stride is an undiscovered
+array-of-struct. **It is not. Every one of the six stride idioms in the two
+functions multiplies by 412, and 412 is `sizeof(GameCarRuntime)`.** The pass
+still produced results, but the headline is a negative one and it is worth
+stating first so nobody re-runs the same reasoning on the other thirteen stubs.
+
+### 30a. The stride arithmetic, worked out
+
+The idiom appears at `8003B170`, `8003B76C`, `8003B7E0`, `8003BC00`, `8003C124`
+and `8003C198`, identical in all six:
+
+    sll  $v0, $i,  1      2i
+    addu $v0, $v0, $i     3i
+    sll  $v0, $v0, 2     12i
+    addu $v0, $v0, $i    13i
+    sll  $v0, $v0, 3    104i
+    subu $v0, $v0, $i   103i
+    sll  $v0, $v0, 2    412i
+
+412 = 0x19C, which is the `g_Cars[]` stride already recorded in `car.h`, and the
+`addiu $sN, $sN, 0x19C` at the tail of every walking loop in both functions
+confirms it independently. Compiling `&cars[i]` for a 412-byte element and a
+`short i` against this project's cc1 reproduces the seven instructions plus the
+leading `sll 16`/`sra 16` exactly, which is also what proves the loop counters
+are `short` and not `int` (`scratch/decomp-work/probe_idx.c`). The base symbol in
+each case is one of the split field symbols: `D_801F1900` is
+`&g_Cars[0].activeFlag` (0x1900 - 0x1854 = 0xAC), `D_801F18D6` is
+`&g_Cars[0].motionTimer` (+0x82) and `D_801F1884` is
+`&g_Cars[0].trackPointIndex` (+0x30).
+
+So the two functions contain no aggregate that was not already typed. What they
+do contain is a large, well-conditioned sample of *how* an already-typed
+aggregate is addressed, and that turned out to be the useful part.
+
+### 30b. Reading the biased base registers
+
+Neither function addresses a car from its own base. Every walking loop keeps a
+base register offset into the middle of the element: `+0x8A` in the first loop of
+`func_8003B0D4`, `+0x68` in the first loop of `func_8003BB50`, `+0x24` in the
+third and fourth loops of both, and `+0xA4` in the last. Offsets from those
+registers run negative (`-0xA0`, `-0x66`, `-0x1C`), which no C member reference
+can produce, so these are gcc's loop-strength-reduction givs and **the bias is
+not in the source**.
+
+The bias is not arbitrary either, and the rule is worth writing down because it
+saves guessing at every future loop of this shape: **the giv's zero offset is
+always a field the loop really touches.** `+0x8A` has `lhu 0x0` = `field_8A`,
+`+0x68` has `lw 0x0` = `trackProgress`, `+0x24` has `lw 0x0` = `field_24`, and
+`+0xA4` has `lw 0x0` = `field_A4`. Compiling a three-field walking loop over a
+412-byte element reproduces the `+0x8A` case instruction for instruction, biased
+register and all, from ordinary field references (`probe_idx.c`, function `m3`).
+The consequence for the later conversion is that the bias must be *ignored* when
+reading the assembly: add it back and the result is a plain `car->field`.
+
+### 30c. `lhu` carries no signedness information here
+
+This has to be settled before any width table is trustworthy. Compiled against
+this project's cc1 (`scratch/decomp-work/probe_lhu.c`), gcc 2.6.3 emits `lhu` for
+a 16-bit field in a read-modify-write *regardless of whether the field is signed*,
+and also for a masked read:
+
+| source | code |
+|---|---|
+| `s16 f; p->f = p->f - 1;` | `lhu` / `sh` |
+| `u16 f; p->f = p->f - 1;` | `lhu` / `sh` |
+| `s16 f; s16 v = p->f + 1; p->f = v; return v*v;` | `lhu` / `sll 16` / `sra 16` / `mult` / `sh` |
+| `s16 f; return p->f & 1;` | `lhu` / `andi` |
+| `s16 f; return p->f;` | `lh` |
+| `u16 f; return p->f;` | `lhu` |
+
+So `lh` at a value-read site proves the field is signed, and `lhu` proves
+nothing. That kills three signedness readings that looked available in these two
+functions (0x8A at `8003B11C`, 0x9A at `8003B930`, 0x12E at `8003B348`) and it
+validates the `lh` readings that remain. It also confirms `s16 field_9A` as
+declared: the retail sequence at `8003B930` is `lhu` / `sh` / `sll 16` / `sra 16`
+/ `mult`, which is the fifth row of the table verbatim.
+
+### 30d. Widths and signedness recovered
+
+Every offset below is absolute in `GameCarRuntime`; the address column gives one
+representative site per width, and the base column says whether the site went
+through a giv over the car (`car`) or through the separate `+0xBC` register
+(`drive`). Confidence is **high** where an instruction fixes the width and, for
+16-bit fields, where an `lh` or a signed comparison fixes the sign; **medium**
+where the width is fixed but the sign is not; nothing here is lower than that,
+because a width is never a guess.
+
+| offset | width | sign | site | base | agrees with `car.h`? |
+|---|---|---|---|---|---|
+| 0x00 | 32 | — | `8003B4CC lw 0x0($s2)` | car | yes (`x`) |
+| 0x04 | 32 | — | `8003B8E8 lw -0xA0($s0)` | car | **no — declared `s16 y` + 2 pad** |
+| 0x08 | 32 | — | `8003B4E0 lw -0x1C($s0)` | car | yes (`z`) |
+| 0x0C | 32 | — | `8003B67C sw 0xC($s2)` | car | yes |
+| 0x10 / 0x14 / 0x18 | 32 | — | `8003B4D0 lw -0x14($s0)`, `func_80069678` output | car | yes; the three are one `VECTOR` |
+| 0x20 | 32 | — | `8003B534 lw -0x4($s0)` | car | yes |
+| 0x24 | 32 | — | `8003B3B8 lw 0x0($s0)` | car | yes |
+| 0x28 / 0x2C | 32 | — | `8003B8F4 lw -0x7C($s0)` | car | yes |
+| 0x44 | 32 | — | `8003B680 lw 0x20($s0)` | car | yes |
+| 0x48 | 32 | — | `8003B8C0 lw -0x5C($s0)` | car | yes |
+| 0x50–0x5C | 32 | — | `8003B8FC..908 sw -0x54..-0x48($s0)` | car | yes; one 16-byte block |
+| 0x60 | 32 | — | `8003B92C sw -0x44($s0)` | car | yes |
+| 0x64 | 32 | — | `8003B694 lw 0x40($s0)` | car | yes |
+| 0x68 | 32 | signed | `8003BB94 div` | car | yes (`trackProgress`) |
+| 0x82 | 16 | **signed** | `8003B824 lh` + `blez` | car | **no — declared `u16 motionTimer`** |
+| 0x8A | 16 | signed | `8003BA84 lh` + `bnez` | car | yes |
+| 0x90 / 0x94 | 16 | — | `8003BA74 sh -0x14($s0)` | car | yes |
+| 0x98 | 16 | signed | `8003B920 lh` + `beqz` | car | yes |
+| 0x9A | 16 | — | `8003B930 lhu` (RMW) | car | yes, sign not proven here |
+| 0x9C | 16 | signed | `8003B94C lh` + `mult` | car | yes |
+| 0x9E | 16 | signed | `8003B9C0 lh` + `slt` | car | yes |
+| 0xA0 | 32 | — | `8003B45C lw 0x7C($s0)` | car | yes (`headingAngle`) |
+| 0xA4 / 0xA8 | 32 | signed | `8003B2FC lw`, `8003B304 slti` | car | yes |
+| 0xAC | 16 | signed | `8003B2C8 lh` + `beq -1` | car | yes (`activeFlag`) |
+| 0xC8 | 32 | — | `8003B490 sw 0xA4($s0)` / `8003B5F8 lw 0xC($s4)` | both | yes |
+| 0xD0 | 32 | — | `8003B4B4 sw 0xAC($s0)` / `8003B62C lw 0x14($s4)` | both | yes |
+| 0xEC | 32 | — | `8003B3D4 lw 0x30($s4)` | drive | yes in `car.h`; **no in `GameCarDrive`** |
+| 0xF4 | 32 | — | `8003B4E8 lw 0xD0($s0)` / `8003B6E8 lw 0x38($s4)` | both | yes in `car.h`; **no in `GameCarDrive`** |
+| 0xF8 | 32 | — | `8003B124 sw 0x6E($a1)` | car | yes |
+| 0x108 | 32 | — | `8003B118 lw 0x7E($a1)` | car | yes |
+| 0x126 / 0x128 | 16 | signed | `8003B374 lh`, `8003B2E8 lh` + `slt` | car | yes |
+| 0x12C | 16 | signed | `8003B330 lh 0x70($s4)` + `addu` | drive | yes |
+| 0x12E | 16 | signed | `8003B2D8 lh 0x10A($s0)` + `blez` | car | yes; **`GameCarAiBlock` had it as pad** |
+| 0x130 | 16 | signed | `8003B318 lh 0x74($s4)` + `slt` | drive | yes in `car.h`; see 30f |
+
+### 30e. What the two functions do with those fields
+
+Recorded because several of the widths only make sense with the arithmetic
+attached, and because the semantics are what make the `unkNN` names replaceable
+later.
+
+`field_C8` and `field_D0` are the world velocity components:
+`field_C8 = func_80068568(headingAngle) * field_A4 / 256` and
+`field_D0 = func_80068634(headingAngle) * field_A4 / 256`, with the
+`bgez`/`addiu 0xFF`/`sra 8` rounding that `GameUpdateCarAirborne` already uses on
+the same pair one slot lower (`drive->accelPos`/`brakePos`, 0xC4 / 0xCC). The
+position integration is then `x += field_C8 * 6 / 1280` and
+`z += field_D0 * 6 / 1280`; the divisor is the `0x66666667` / `sra 9` pair, i.e.
+the /5 magic plus eight bits.
+
+`field_F4` is a yaw rate: it is added to `field_44` (clamped to ±0x12C) and to
+`field_24` in the same iteration, and `|field_F4| / 6` (`0x2AAAAAAB`, `mfhi`, no
+shift) becomes the third component of the `SVECTOR` at `sp+0x88`.
+
+`field_EC` is a target angle for `field_24`, not a value:
+`field_24 += GameGetAngleDelta(field_24, field_EC) / 5`, which is character for
+character the shape `GameUpdateCarAirborne` uses with `drive->unk90`.
+
+The AI acceleration ramp is `field_A8`, capped by `field_130` and stepped by
+`field_126` normally or by `field_12C` while the `field_12E` countdown is
+positive; `field_A8` is zeroed instead when `field_128 < field_12E` and
+`field_A4 >= 0x321`. `field_A4` itself decays by 94/100 per frame in the AI pass
+(`0x51EB851F`, `sra 5`, on `94 * field_A4`) and by 97/100 twice in the last pass.
+So `field_130` is a speed cap in acceleration units, which is the reading
+`GameUpdateCarTrafficAvoidance` and `GameIsCarNearWaypoint` already take.
+
+`field_98` is a four-state vertical-hop machine over `field_9A` (frame counter),
+`field_9C` (launch rate) and `field_9E` (target height), writing `y` at 0x04:
+state 1 integrates `field_9C * t + 72 t² / 100`, state 3 integrates
+`field_9E + 216 t² / 100`, and each lands when `y` reaches the entry height minus
+8, at which point `field_90`, `field_94` and `field_98` are cleared and
+`func_80038F0C(1, car)` runs. The `72` and `216` are `(8v+v)*8` and
+`((8v-v)*4-v)*8`; both are then divided by 100.
+
+`field_48` is a 12-bit phase accumulator: `(field_48 + step) & 0xFFF` where
+`step` is `3 * field_A4` clamped to `0x249` once `(s16)(3 * field_A4) >= 0x1001`,
+with bit 12 set separately when `field_A4 >= 0x321`.
+
+### 30f. Contradictions with existing types
+
+**`GameCarRuntime.y` is 32 bits, not 16.** Nine `lw`/`sw` at absolute 0x04 in
+each of the two functions (`8003B8E8`, `8003B914`, `8003B98C`, `8003B998`,
+`8003B9D8`, `8003B9F4`, `8003BA44`, `8003BA70`, plus the `sw 0x4($s2)` of the
+four-word block at `8003B674`, and the same nine at `8003C2A0`.. in
+`func_8003BB50`) settle it, and two independent already-matched units agree:
+`GameUpdatePlayerCar`'s own layout has `s32 unk04`, and `GameInitRivalCar` writes
+it as `*(s32 *)&ent->y = 0`, a cast that only existed to work around the wrong
+declaration. **Fixed in `car.h`; build re-verified at
+`2913e15648eddef40821c5f666460abc04155ee6`.**
+
+**`GameCarAiBlock` was missing four 32-bit fields and one halfword.** The `+0xBC`
+register reads 0x0C, 0x14, 0x30 and 0x38 with `lw` (absolute 0xC8, 0xD0, 0xEC,
+0xF4) and 0x72 with `lhu`/`sh` (absolute 0x12E); all five fell inside `pad0` or
+`pad72`. **Named in `car.h`, size unchanged at 0xE0; build re-verified.**
+
+**`GameCarDrive` is calibrated on `g_PlayerCar`, and using it for a `g_Cars[]`
+element is wrong at four offsets.** `GameCarDrive` declares `s16 gearDisp` /
+`s16 unk32` at +0x30 and `s16 unk38` / `s16 unk3A` at +0x38, and both readings
+have matched-code support: `GameUpdatePlayerCar` does `p->gearDisp = p->gear` and
+`GameSteerCarToTrackLine`'s `GameUpdateCarAirborne` does `r->unk38 * 2 + 80` and
+`r->unk38 <= 0`. These two functions read the same two offsets as full words.
+The resolution is not that one side is wrong: `GameUpdatePlayerCar` is called
+only as `GameUpdatePlayerCar(g_PlayerCar)` / `(&g_PlayerCar)`, i.e. on
+`D_8009E6D4`, which is a *different* 0x19C object from `g_Cars` at `D_801F1854`.
+The two objects share the stride and much of the layout but not the meaning of
+these bytes. The same split explains `manual` / `gear` at `GameCarDrive` +0x74 /
++0x76: absolute 0x130 and 0x132 are the transmission flag and the gear on the
+player object, and an acceleration cap and a clamped speed floor on the AI cars
+(`GameUpdateCarTrafficAvoidance`, `GameIsCarNearWaypoint`). **`GameCarDrive` was
+therefore left alone**, and the four AI-side 32-bit fields were added to
+`GameCarAiBlock` instead, which is the view that already exists for exactly this
+purpose.
+
+**`motionTimer` (absolute 0x82) needs opposite signs in two units, and `car.h`
+must keep the unsigned one.** Retail reads it here as `lh` followed by `blez`
+(`8003B824`, `8003C1DC`), which the probe table in 30c shows is only reachable
+from a signed field or an explicit `(s16)` cast. Declaring it `s16` was tried and
+**moved the sha1**: it changes `GameApplyCarKnockback` in
+`GameBuildStartingGrid.c`, whose matched body is
+`u32 timer = obj->motionTimer - 1; ... if ((s32)(timer << 16) <= 0)` and depends
+on the unsigned promotion. So the declaration stays `u16`, with a comment, and
+the conversion of these two functions must spell the test
+`(s16)car->motionTimer > 0`. Verified by probe: a `u16` field under an explicit
+`(s16)` cast compiles to `lh` + `blez`, identical to a genuine `s16` field.
+
+Nothing found contradicts `GameTrackPoint`, `waypoint.h` or `track.h`; neither
+function touches them.
+
+### 30g. Aggregates on the stack
+
+Four, all in the fourth loop of each function, and all of them ordinary PSY-Q
+types rather than game structures:
+
+* **Two `MATRIX` at `sp+0x48` and `sp+0x68`, 0x20 bytes each.** Proven by the
+  nine `lhu`/`sh` pairs at `8003B574`–`8003B5C4`, which move `0x48/0x4A/0x4C`,
+  `0x4E/0x50/0x52`, `0x54/0x56/0x58` into `0x68/0x6E/0x74`, `0x6A/0x70/0x76`,
+  `0x6C/0x72/0x78` — a 3×3 halfword transpose — and by `ApplyMatrix`
+  (`func_80069678`), whose already-decompiled body loads `matrix[0..4]`, i.e. the
+  nine halfwords plus one word of padding.
+* **One `SVECTOR` at `sp+0x88`**, written `{0, 0, -(|field_F4| / 6) - 0x32}` by
+  three `sh` at `8003B59C`–`8003B5A4`, and passed as `ApplyMatrix`'s second
+  argument.
+* **A 16-byte vector at `sp+0x10`.** `ApplyMatrix` writes three words
+  (`swc2 $25/$26/$27`) to `car+0x10`, so `field_10`/`field_14`/`field_18` is one
+  `VECTOR`; the local at `sp+0x10` is the same shape and is copied as four words
+  into `car+0x00`. **Only `sp+0x10` and `sp+0x18` are ever written** — the
+  four-word copy at `8003B660`–`8003B67C` therefore stores two uninitialised
+  stack words into `car->y` and `car->field_0C` every frame for cars 0..3. That
+  is a retail defect, not a decoding error: no store to `sp+0x14` or `sp+0x1C`
+  exists anywhere in either function, and the o32 argument-save area stops at
+  `sp+0x0F` so a callee cannot have written them. Recorded here because a
+  converter will be tempted to "fix" it.
+* **A two-halfword constant pair at `sp+0x40`**, `{0x3C, -0x3C}`, hoisted out of
+  the loop and passed as the third argument of `func_80031298`.
+
+### 30h. Per-access-site spelling: which sites want a member and which want raw arithmetic
+
+This is the part that carries over to the conversion. Two source-level pointers
+are addressing the same car in the third and fourth loops of both functions: the
+giv over the car itself, and a register that is materialised at the top of every
+iteration as `addiu $s4, $s2, 0xBC`. Five absolute offsets are reached both ways
+in the same function — 0xC8, 0xD0, 0xF4, 0x12E and 0x130 — and one of them,
+0x130, is reached *through different bases in the two arms of one `if`*:
+`8003B318 lh 0x74($s4)` in the boost arm and `8003B35C lh 0x10C($s0)` in the
+other. A single source spelling cannot produce that, because the base register
+choice for one field would be consistent across both arms of the branch. So the
+retail source genuinely has two names for the second half of the car, and the
+`+0xBC` name is used in the boost arm and the plain one in the normal arm.
+
+| site | offset | verdict | why |
+|---|---|---|---|
+| `8003B318 lh 0x74($s4)` | 0x130 | `+0xBC` pointer | branch-correlated against `8003B35C`, see above |
+| `8003B330 lh 0x70($s4)` | 0x12C | `+0xBC` pointer | same arm as the above; no car-base site exists for 0x12C |
+| `8003B348 lhu 0x72($s4)`, `8003B358 sh` | 0x12E | `+0xBC` pointer | read-modify-write in the boost arm, against `8003B2D8 lh 0x10A($s0)` in the guard |
+| `8003B3D4 lw 0x30($s4)` | 0xEC | `+0xBC` pointer | only reference to 0xEC; 32-bit, so `GameCarDrive` cannot be the type |
+| `8003B5F8 lw 0xC($s4)`, `8003B62C lw 0x14($s4)` | 0xC8, 0xD0 | `+0xBC` pointer | written through the car base earlier in the same iteration, read back through this one |
+| `8003B6E8`, `8003B71C lw 0x38($s4)` | 0xF4 | `+0xBC` pointer | against `8003B4E8 lw 0xD0($s0)` in the same loop |
+| `8003B2D8 lh 0x10A($s0)`, `8003B35C lh 0x10C($s0)`, `8003B374 lh 0x102($s0)`, `8003B2E8 lh 0x104($s0)` | 0x12E, 0x130, 0x126, 0x128 | car pointer | all four in the guard and the non-boost arm |
+| `8003B4E8 lw 0xD0($s0)` | 0xF4 | car pointer | inside the `i < 4` block, where the `+0xBC` register is otherwise unused |
+| `8003B490 sw 0xA4($s0)`, `8003B4B4 sw 0xAC($s0)` | 0xC8, 0xD0 | car pointer | the writes; only the reads use `+0xBC` |
+| everything else in the table in 30d | — | car pointer | single base, no competing spelling |
+
+**What is *not* settled, and the experiment that would settle it.** Whether the
+car-base sites want `car->field` or `*(s32 *)((u8 *)car + N)` is *not* decidable
+from the base register, because both spellings compile to the same biased giv:
+`probe_giv.c` (all raw casts) and `probe_giv2.c` (all member references) both
+produce one base register at `cars+0x24`, with the same offsets. Worse,
+`probe_giv2.c` and `probe_giv3.c` show that the obvious spelling of the second
+pointer — `d = &c->drive` or `d = (D *)((char *)c + 0xBC)`, assigned at the top
+of the loop — is *folded into the same giv*, so neither reproduces retail's two
+live bases. Something else keeps `$s2` alive as a pure biv whose only consumer is
+`addiu $s4, $s2, 0xBC`. Finding it is a one-variable search over how the second
+pointer is introduced, and the measurement is cheap: compile the candidate and
+count base registers in the loop body, before spending any effort on the
+arithmetic. Until that is answered, the aliasing question that the whole types
+pass exists to answer — `MEM_IN_STRUCT_P` on which sites — cannot be decided for
+this pair of functions, and guessing it would waste a permuter run.
+
+### 30i. Two smaller findings
+
+**The fifth loop of `func_8003B0D4` walks `g_RankedCars` from `D_801E7740` down
+to 1, never touching index 0.** The count is read with `lh`
+(`8003B270 lh %lo(D_801E7740)`), the first iteration indexes with the
+undecremented count (`8003B27C addu $s3, $v0`), and the guard is
+`bgtz` on the *unshifted* `sll 16`, i.e. the loop runs while
+`(s16)(count - 1)` is in 1..0x7FFF. With `D_801E7740 = 3` that is
+`g_RankedCars[3]`, `[2]`, `[1]`, which fits the declared `[4]` and leaves the
+leader alone. No contradiction, but the off-by-one look of it is deliberate.
+
+**Cars 4..10 are time-sliced on `g_AnimTimer` parity, cars 0..3 are not.** The
+second loop of `func_8003B0D4` skips the `func_8003A280` call when
+`(i & 1) != (g_AnimTimer & 1)`, and jumps straight past that test when `i < 4`
+(`8003B14C slti $v0, $a1, 0x4`). `func_8003BB50` has no such test at all, which
+is the mechanical form of the note already in `car.h` that the attract variant
+runs every car.
