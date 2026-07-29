@@ -605,6 +605,68 @@ u8 *GameQueueTexturedRect(
     u8 vSpan,
     u16 clutIndex,
     u16 tpage) asm("func_800175A4");
+
+/*
+ * Wide forms used by callers whose packet fields are still represented as
+ * words at the call boundary.  The dispatcher selects the compact SPRT packet
+ * when no four-corner geometry is needed, or POLY_FT4 when texture span and
+ * geometry must remain independent.
+ *
+ * This must remain inline.  GCC 2.6.3 records the widest outgoing argument
+ * area before it folds the packet-kind branch; that accounts for the 48-byte
+ * argument area in GameDrawStartCountdown's retail stack frame.
+ */
+u8 *GameQueueSpriteWide(
+    void *ot,
+    u8 *prim,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 clutIndex) asm("func_80016EC4");
+u8 *GameQueueTexturedRectWide(
+    void *ot,
+    u8 *prim,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 uSpan,
+    s32 vSpan,
+    s32 clutIndex,
+    s32 tpage) asm("func_800175A4");
+
+typedef enum GameTexturePacketKind {
+    GAME_TEXTURE_PACKET_SPRT,
+    GAME_TEXTURE_PACKET_FT4
+} GameTexturePacketKind;
+
+static __inline__ u8 *GameQueueTexturePacketWide(
+    void *ot,
+    u8 *prim,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 uSpan,
+    s32 vSpan,
+    s32 clutIndex,
+    s32 tpage,
+    GameTexturePacketKind kind)
+{
+    if (kind == GAME_TEXTURE_PACKET_SPRT) {
+        return GameQueueSpriteWide(
+            ot, prim, x, y, w, h, u, v, clutIndex);
+    }
+    return GameQueueTexturedRectWide(
+        ot, prim, x, y, w, h, u, v, uSpan, vSpan, clutIndex, tpage);
+}
 /*
  * DR_MODE, 12 bytes: SetDrawMode(prim, 0, 1, tpage, &D_8007BED0) + AddPrim.
  * This is the "blend packet" the GameDraw* emitters above append when their

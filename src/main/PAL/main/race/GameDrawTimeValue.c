@@ -204,7 +204,221 @@ void func_800340D8(void) {
     } while (bufferIndex < 2);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/race/GameDrawTimeValue", func_8003425C);
+typedef struct CountdownColorCode {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 code;
+} CountdownColorCode;
+
+extern s32 g_RacePaused asm("D_801E4BAC");
+extern s32 g_CountdownBoardOffset asm("D_8007DF18");
+extern u32 g_CountdownDigitPatterns[16] asm("D_8007DEC0");
+extern CountdownColorCode g_CountdownCellColors[] asm("D_8007DF1C");
+
+s32 GameQueueDrawModePrimWide(
+    s32 ot, s32 prim, s32 tpage) asm("func_80017390");
+void AddPrimsWide(void *ot, void *first, void *last) asm("func_80064E18");
+
+void GameDrawStartCountdown(s32 sceneTimer) {
+    s32 timer;
+    s32 phase;
+    s32 halfStep;
+    s32 wipeStart;
+    s32 row;
+    s32 column;
+    u32 pattern;
+    s32 colorBank;
+    s32 phaseIsNegative;
+    s32 rowOffset;
+    u32 *firstPattern;
+    u32 *patternBeforeFirst;
+    u32 *phasePattern;
+    TILE *tiles;
+    s32 cursor;
+    u8 *packet;
+    s32 rangeTimer;
+    u8 *orderingTable;
+    SPRT *sprite;
+    u8 *backdrop;
+
+    timer = sceneTimer;
+    orderingTable = g_DrawBuffer + 0xD0;
+    if (timer < 105) {
+        return;
+    }
+    rangeTimer = timer - 90;
+    if (rangeTimer >= 210) {
+        return;
+    }
+
+    phase = rangeTimer / 30;
+    if (phase < 0) {
+        phase = 0;
+    } else if (phase >= 5) {
+        phase = -1;
+    }
+
+    halfStep = (timer % 30) / 2;
+
+    if (phase == 4 || phase < 0) {
+        halfStep = (timer & 2) << 2;
+    } else if (phase == 0) {
+        halfStep = 0;
+    } else {
+        if (halfStep >= 8) {
+            halfStep = 8;
+        } else if (halfStep <= 0) {
+            halfStep = 0;
+        }
+    }
+
+    row = 0;
+    phaseIsNegative = phase < row;
+    wipeStart = 7 - halfStep;
+    tiles = (TILE *)g_TileStripBuffers[g_FrameParity];
+
+    do {
+        firstPattern = g_CountdownDigitPatterns;
+        patternBeforeFirst = firstPattern - 64;
+        phasePattern = patternBeforeFirst + (phase << 4);
+        if (phase == 0) {
+            pattern = -1;
+        } else if (phaseIsNegative) {
+            pattern = firstPattern[row];
+        } else {
+            pattern = phasePattern[row];
+        }
+        column = 0;
+        if (wipeStart < row) {
+            if (row < halfStep + 8) {
+                pattern = ~pattern;
+            }
+        }
+        rowOffset = row << 5;
+        do {
+            u8 *color =
+                (u8 *)(((rowOffset + column) << 4) + (s32)tiles) + 4;
+            colorBank = 0;
+            if (phase == 4 || phaseIsNegative) {
+                colorBank = 1;
+            }
+            {
+                CountdownColorCode *colors =
+                    (CountdownColorCode *)(
+                        (u8 *)g_CountdownCellColors + (colorBank << 3));
+                *(CountdownColorCode *)color = colors[pattern & 1];
+            }
+            pattern >>= 1;
+            column++;
+        } while (column < 32);
+        row++;
+    } while (row < 16);
+
+    if (phase < 0) {
+        g_CountdownBoardOffset -= 16;
+        if (g_CountdownBoardOffset < -240) {
+            g_CountdownBoardOffset = -240;
+        }
+    } else {
+        g_CountdownBoardOffset = 0;
+    }
+
+    cursor = *(s32 *)0x1F800000;
+    backdrop =
+        (u8 *)GameQueueDrawModePrimWide(
+            (s32)(g_DrawBuffer + 0xD0), cursor, 9);
+    pattern = g_CountdownBoardOffset;
+    *(u8 **)0x1F800000 = backdrop;
+    cursor = (s32)GameQueueTexturePacketWide(
+        orderingTable,
+        GameQueueTexturePacketWide(
+            orderingTable, backdrop, 0x70, pattern + 66,
+            0x60, 0x18, 0xA0, 0xE8, 0x60, 0x18, 0x784E, 9,
+            GAME_TEXTURE_PACKET_SPRT),
+        0x70, g_CountdownBoardOffset + 122,
+        0x60, 0x18, 0xA0, 0xE8, 0x60, 0x18, 0x784E, 9,
+        GAME_TEXTURE_PACKET_SPRT);
+
+    packet = (u8 *)cursor;
+    sprite = (SPRT *)packet;
+    for (row = 0; row < 6; row++) {
+        SetSprt((void *)cursor);
+        sprite->w = 0x20;
+        sprite->h = 0x18;
+        sprite->u0 = 0xE0;
+        sprite->v0 = 0xD0;
+        sprite->x0 = (row % 3) * 32 + 112;
+        sprite->y0 =
+            (row / 3) * 56 + ((u16)g_CountdownBoardOffset + 66);
+
+        if ((u32)phase < 4) {
+            if (phase - 1 == row % 3) {
+                halfStep = timer % 30;
+                if (halfStep < 16) {
+                    pattern = halfStep * 8;
+                } else {
+                    pattern = 0x80;
+                }
+            } else {
+                pattern = 0x80;
+            }
+            if (phase - 1 >= row % 3) {
+                sprite->clut = 0x7851;
+            } else {
+                sprite->clut = 0x784F;
+            }
+        } else {
+            if (phase == 4) {
+                halfStep = timer % 30;
+                if (halfStep < 10) {
+                    pattern = halfStep * 12;
+                } else {
+                    pattern = 0x80;
+                }
+            } else {
+                pattern = 0x80;
+            }
+            sprite->clut = 0x7850;
+        }
+
+        sprite->t.r0 = pattern;
+        sprite->t.g0 = pattern;
+        sprite->t.b0 = pattern;
+        {
+            SPRT *currentSprite = sprite;
+
+            sprite++;
+            packet += 20;
+            cursor += 20;
+            AddPrim(orderingTable, currentSprite);
+        }
+    }
+
+    *(s32 *)0x1F800000 = cursor;
+    cursor = GameQueueDrawModePrimWide(
+        (s32)(g_DrawBuffer + 0xD0), cursor, 0xC);
+    *(s32 *)0x1F800000 = cursor;
+
+    if (phase > 0) {
+        if (g_RacePaused == 0) {
+            AddPrimsWide(orderingTable, tiles, (u8 *)tiles + 8176);
+        }
+    }
+
+    tiles = *(TILE **)0x1F800000;
+    SetTile(tiles);
+    rangeTimer = (u16)g_CountdownBoardOffset + 88;
+    tiles->w = 0x64;
+    tiles->h = 0x24;
+    tiles->x0 = 0x6E;
+    tiles->t.r0 = 5;
+    tiles->t.g0 = 5;
+    tiles->t.b0 = 5;
+    tiles->y0 = rangeTimer;
+    AddPrim(orderingTable, tiles++);
+    *(TILE **)0x1F800000 = tiles;
+}
 
 extern s16 g_RaceOptionScroll0 asm("D_8007DF30");
 extern s16 g_RaceOptionScroll1 asm("D_8007DF32");
