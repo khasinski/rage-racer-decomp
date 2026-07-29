@@ -204,7 +204,387 @@ void func_800340D8(void) {
     } while (bufferIndex < 2);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/race/GameDrawTimeValue", func_8003425C);
+typedef struct UnalignedColor {
+    u8 bytes[4];
+} UnalignedColor;
+
+extern s32 g_RacePaused asm("D_801E4BAC");
+extern u32 g_CountdownPatterns[] asm("D_8007DEC0");
+extern u32 g_CountdownColors[] asm("D_8007DF1C");
+extern s32 g_CountdownSlideY asm("D_8007DF18");
+
+void func_8003425C(s32 arg0) {
+    register s32 timer asm("$23") = arg0;
+    volatile s32 rawCallArea[6];
+    volatile s32 localPad[2];
+    u8 * volatile ot;
+    register s32 wipe asm("$8");
+    register s32 row asm("$17");
+    register s32 col asm("$9");
+    register s32 startRow asm("$18");
+    register s32 negativePhase asm("$14");
+    register s32 patternWord asm("$7");
+    register s32 colorBank asm("$3");
+    register s32 lamp asm("$17");
+    register s32 intensity asm("$7");
+    register s32 clut asm("$2");
+    register u32 *pattern asm("$13");
+    register u32 *offPattern asm("$12");
+    register u8 *prim asm("$18");
+    register u8 *drawPrim asm("$2");
+    u8 *lampPrim;
+    SPRT *sprite;
+    TILE *tile;
+
+    ot = g_DrawBuffer + 0xD0;
+    if (timer < 105 || (timer - 90) >= 210) {
+        return;
+    }
+    {
+        register u8 *tiles asm("$22");
+        register s32 rowBase asm("$11");
+        register u8 *colorDst asm("$10");
+        register u32 *patternBase asm("$4");
+        register u32 *patternBias asm("$3");
+        register s32 phaseOffset asm("$2");
+        register s32 seven asm("$2");
+        register u8 *colorTable asm("$15");
+        register s32 phaseFour asm("$16");
+        s32 phase;
+
+        phase = (timer - 90) / 30;
+        if (phase < 0) {
+            phase = 0;
+        } else if (phase >= 5) {
+            phase = -1;
+        }
+
+        do {
+            register s32 initialCycle asm("$2");
+            initialCycle = timer % 30;
+            wipe = initialCycle / 2;
+        } while (0);
+
+        asm volatile(
+            ".word 0x34020004\n\t"
+            ".word 0x12A20003\n\t"
+            ".word 0x00008821\n\t"
+            ".word 0x06A10004\n\t"
+            ".word 0x00000000\n\t"
+            ".word 0x32E20002\n\t"
+            ".word 0x0800D0DC\n\t"
+            ".word 0x00024080\n\t"
+            ".word 0x12A00007\n\t"
+            ".word 0x29020008\n\t"
+            ".word 0x14400003\n\t"
+            ".word 0x00000000\n\t"
+            ".word 0x0800D0DB\n\t"
+            ".word 0x34080008\n\t"
+            ".word 0x1D000003\n\t"
+            ".word 0x00008821\n\t"
+            ".word 0x00004021\n\t"
+            ".word 0x00008821"
+            : "=r"(row), "=r"(wipe)
+            : "r"(phase), "r"(timer), "1"(wipe));
+
+        asm("slti %0,%1,0" : "=r"(negativePhase) : "r"(phase));
+        seven = 7;
+        asm("" : "=r"(seven) : "0"(seven));
+        startRow = seven - wipe;
+        phaseFour = 4;
+        asm("" : "=r"(phaseFour) : "0"(phaseFour));
+        colorTable = (u8 *)g_CountdownColors;
+        asm("" : "=r"(colorTable) : "0"(colorTable));
+        patternBase = g_CountdownPatterns;
+        asm("" : "=r"(patternBase) : "0"(patternBase));
+        patternBias = patternBase - 64;
+        asm("" : "=r"(patternBias) : "0"(patternBias));
+        phaseOffset = phase << 6;
+        asm("" : "=r"(phaseOffset) : "0"(phaseOffset));
+        pattern = (u32 *)(phaseOffset + (s32)patternBias);
+        offPattern = patternBase;
+        tiles = g_TileStripBuffers[g_FrameParity];
+        do {
+            patternWord = -1;
+            if (phase != 0) {
+                if (negativePhase) {
+                    patternWord = *offPattern;
+                } else {
+                    patternWord = *pattern;
+                }
+            }
+            col = 0;
+            do {
+                if (startRow < row) {
+                    rowBase = row << 5;
+                    if (row < wipe + 8) {
+                        patternWord = ~patternWord;
+                        goto row_base_ready;
+                    }
+                } else {
+row_base_ready:
+                    rowBase = row << 5;
+                }
+            } while (0);
+            do {
+                colorBank = 0;
+                do {
+                    register u8 *tileCell asm("$2");
+                    tileCell = (u8 *)(((rowBase + col) << 4) + (s32)tiles);
+                    colorDst = tileCell + 4;
+                } while (0);
+                if (phase == phaseFour || negativePhase) {
+                    colorBank = 1;
+                }
+                do {
+                    register s32 patternBit asm("$2");
+                    colorBank <<= 3;
+                    colorBank += (s32)colorTable;
+                    patternBit = patternWord & 1;
+                    patternBit <<= 2;
+                    patternBit += colorBank;
+                    *(UnalignedColor *)colorDst = *(UnalignedColor *)patternBit;
+                } while (0);
+                col++;
+                patternWord = (u32)patternWord >> 1;
+            } while (col < 32);
+            pattern++;
+            offPattern++;
+            row++;
+        } while (row < 16);
+
+        if (phase < 0) {
+            g_CountdownSlideY -= 16;
+            if (g_CountdownSlideY < -240) {
+                g_CountdownSlideY = -240;
+            }
+        } else {
+            g_CountdownSlideY = 0;
+        }
+
+        {
+            register s32 drawModeNine asm("$6");
+            register u8 **firstScratch asm("$16");
+            drawModeNine = 9;
+            asm("" : : "r"(drawModeNine));
+            firstScratch = (u8 **)0x1F800000;
+            drawPrim = *firstScratch;
+            drawPrim = GameQueueDrawModePrim(g_DrawBuffer + 0xD0, drawPrim, drawModeNine);
+            asm("" : : "r"(firstScratch));
+        }
+
+        asm volatile(
+            ".word 0x00402821\n\t"
+            ".word 0x34060070\n\t"
+            ".word 0x34140060\n\t"
+            ".word 0x34130018\n\t"
+            ".word 0x341200A0\n\t"
+            ".word 0x8FA40030\n\t"
+            ".word 0x3C078008\n\t"
+            ".word 0x8CE7DF18\n\t"
+            ".word 0x341100E8\n\t"
+            ".word 0xAE050000\n\t"
+            ".word 0x3410784E\n\t"
+            ".word 0xAFB40010\n\t"
+            ".word 0xAFB30014\n\t"
+            ".word 0xAFB20018\n\t"
+            ".word 0xAFB1001C\n\t"
+            ".word 0xAFB00020\n\t"
+            ".word 0x0C005BB1\n\t"
+            ".word 0x24E70042\n\t"
+            ".word 0x00402821\n\t"
+            ".word 0x8FA40030\n\t"
+            ".word 0x3C078008\n\t"
+            ".word 0x8CE7DF18\n\t"
+            ".word 0x34060070\n\t"
+            ".word 0xAFB40010\n\t"
+            ".word 0xAFB30014\n\t"
+            ".word 0xAFB20018\n\t"
+            ".word 0xAFB1001C\n\t"
+            ".word 0xAFB00020\n\t"
+            ".word 0x0C005BB1\n\t"
+            ".word 0x24E7007A"
+            : "=r"(drawPrim)
+            : "0"(drawPrim)
+            : "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10",
+              "$11", "$12", "$13", "$14", "$15", "$24", "$25",
+              "hi", "lo", "memory");
+
+        {
+            register s32 lampColumn asm("$20");
+            register s32 partialTimerQuotient asm("$19");
+            register s32 lampCycle asm("$8");
+            register s32 timerSign asm("$2");
+            register s32 lampRemainder asm("$4");
+            s32 fpLive;
+
+            asm volatile(
+                ".word 0x3C038888\n\t"
+                ".word 0x34638889\n\t"
+                ".word 0x02E30018\n\t"
+                ".word 0x00008821"
+                : "=r"(lamp)
+                : "r"(drawPrim), "r"(phase), "r"(timer));
+            fpLive = 0x55555556;
+            asm volatile(
+                ".word 0x26B4FFFF\n\t"
+                ".word 0x00409021\n\t"
+                ".word 0x02408021\n\t"
+                ".word 0x00001010\n\t"
+                ".word 0x00571021\n\t"
+                ".word 0x00029903"
+                : "=r"(lampColumn), "=r"(prim), "=r"(sprite),
+                  "=r"(partialTimerQuotient)
+                : "r"(drawPrim), "r"(phase), "r"(timer), "r"(lamp),
+                  "r"(fpLive));
+            do {
+                SetSprt((SPRT *)prim);
+                asm volatile(
+                    ".word 0x023E0018\n\t"
+                    ".word 0x34020020\n\t"
+                    ".word 0xA6020010\n\t"
+                    ".word 0x34020018\n\t"
+                    ".word 0xA6020012\n\t"
+                    ".word 0x340200E0\n\t"
+                    ".word 0xA202000C\n\t"
+                    ".word 0x340200D0\n\t"
+                    ".word 0xA202000D\n\t"
+                    ".word 0x001117C3\n\t"
+                    ".word 0x00001810\n\t"
+                    ".word 0x00621823\n\t"
+                    ".word 0x00031040\n\t"
+                    ".word 0x00431021\n\t"
+                    ".word 0x02222023\n\t"
+                    ".word 0x00041140\n\t"
+                    ".word 0x24420070\n\t"
+                    ".word 0xA6020008\n\t"
+                    ".word 0x000310C0\n\t"
+                    ".word 0x00431023\n\t"
+                    ".word 0x3C038008\n\t"
+                    ".word 0x9463DF18\n\t"
+                    ".word 0x000210C0\n\t"
+                    ".word 0x24630042\n\t"
+                    ".word 0x00431021\n\t"
+                    ".word 0xA602000A"
+                    : "=r"(lampRemainder)
+                    : "r"(lamp), "r"(sprite), "r"(fpLive));
+                if ((u32)phase < 4) {
+                    timerSign = timer >> 31;
+                    if (lampColumn == lampRemainder) {
+                        asm volatile(
+                            "subu %0,$19,$2\n\t"
+                            "sll $2,%0,4\n\t"
+                            "subu $2,$2,%0\n\t"
+                            "sll $2,$2,1\n\t"
+                            "subu %0,$23,$2"
+                            : "=r"(lampCycle)
+                            : "r"(timer), "r"(partialTimerQuotient),
+                              "r"(timerSign));
+                        intensity = 0x80;
+                        if (lampCycle < 16) {
+                            intensity = lampCycle * 8;
+                        }
+                    } else {
+                        intensity = 0x80;
+                        asm volatile("mult $17,$30");
+                    }
+                    asm volatile(
+                        "sra $2,$17,31\n\t"
+                        "mfhi $3\n\t"
+                        "subu $3,$3,$2\n\t"
+                        "sll $2,$3,1\n\t"
+                        "addu $2,$2,$3\n\t"
+                        "subu %0,$17,$2\n\t"
+                        "slt %0,$20,%0"
+                        : "=r"(clut)
+                        : "r"(lamp));
+                    if (clut) {
+                        clut = 0x784F;
+                        goto clut_ready;
+                    }
+                    clut = 0x7851;
+                    goto clut_ready;
+                } else {
+                    intensity = 0x80;
+                    if (phase == 4) {
+                        timerSign = timer >> 31;
+                        asm volatile(
+                            "subu %0,$19,$2\n\t"
+                            "sll $2,%0,4\n\t"
+                            "subu $2,$2,%0\n\t"
+                            "sll $2,$2,1\n\t"
+                            "subu %0,$23,$2"
+                            : "=r"(lampCycle)
+                            : "r"(timer), "r"(partialTimerQuotient),
+                              "r"(timerSign));
+                        if (lampCycle < 10) {
+                            timerSign = lampCycle << 1;
+                            timerSign += lampCycle;
+                            intensity = timerSign << 2;
+                        }
+                    }
+                    asm volatile("");
+                    clut = 0x7850;
+                }
+clut_ready:
+                sprite->clut = clut;
+                asm("" : : : "memory");
+                lampPrim = (u8 *)sprite;
+                asm("" : "=r"(sprite) : "0"(sprite));
+                sprite->t.r0 = intensity;
+                sprite->t.g0 = intensity;
+                sprite->t.b0 = intensity;
+                asm("" : : : "memory");
+                sprite = (SPRT *)((u8 *)sprite + sizeof(SPRT));
+                prim += sizeof(SPRT);
+                AddPrim(ot, lampPrim);
+                lamp++;
+            } while (lamp < 6);
+        }
+
+        *(u8 **)0x1F800000 = prim;
+        prim = GameQueueDrawModePrim(g_DrawBuffer + 0xD0, prim, 12);
+        *(u8 **)0x1F800000 = prim;
+        if (phase > 0 && g_RacePaused == 0) {
+            AddPrims((u_long *)ot, (u_long)tiles, (u_long *)(tiles + 0x1FF0));
+        }
+
+        tiles = *(u8 **)0x1F800000;
+        SetTile((TILE *)tiles);
+        {
+            register u8 *finalPrim asm("$5");
+            register u8 *finalOt asm("$4");
+            register s32 finalY asm("$3");
+            finalPrim = tiles;
+            finalOt = ot;
+            finalY = (u16)g_CountdownSlideY;
+            asm("" : : "r"(finalPrim), "r"(finalOt), "r"(finalY));
+            ((TILE *)tiles)->w = 0x64;
+            asm("" : : : "memory");
+            ((TILE *)tiles)->h = 0x24;
+            asm("" : : : "memory");
+            ((TILE *)tiles)->x0 = 0x6E;
+            asm("" : : : "memory");
+            ((TILE *)tiles)->t.r0 = 5;
+            ((TILE *)tiles)->t.g0 = 5;
+            ((TILE *)tiles)->t.b0 = 5;
+            asm("" : : : "memory");
+            asm volatile(
+                ".word 0x24630058\n\t"
+                ".word 0xA6C3000A"
+                : "=r"(finalY)
+                : "0"(finalY), "r"(tiles)
+                : "memory");
+            asm volatile(
+                ".word 0x0C019377\n\t"
+                ".word 0x26D60010"
+                : "=r"(tiles)
+                : "0"(tiles), "r"(finalPrim), "r"(finalOt), "r"(finalY)
+                : "$31", "memory");
+            *(u8 **)0x1F800000 = tiles;
+        }
+    }
+}
 
 extern s16 g_RaceOptionScroll0 asm("D_8007DF30");
 extern s16 g_RaceOptionScroll1 asm("D_8007DF32");
