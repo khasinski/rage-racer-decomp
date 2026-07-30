@@ -5576,3 +5576,40 @@ exact `sll/lbu/sra/slt/bnez` tail and `beqz` but no frame. No tested cell has fr
 and `slt` together. Shape B (guarded `do…while`) matches retail's 93 words **minus the two
 frame instructions with zero differences across all 91**, which is the cleanest statement of
 where this function actually stands.
+
+## 36. There is no such thing as a compiler limit here
+
+Sections 29, 32c and 35 each end by calling a residual a "compiler limit". **That framing is
+wrong and should not be repeated.** Retail was compiled by this compiler. Whatever bytes it
+contains, some C source produced them under some flags Namco chose. A residual we cannot
+close is a failure of our search, not a property of GCC 2.6.3, and naming it a limit is
+exactly the kind of label that stops people looking.
+
+Read 35 accordingly: what it established is not that `func_80076C58` cannot be written, but
+that **under our flags** `beqz` needs the comparison folded before `combine` while the phantom
+frame needs `combine` to produce it. That is a real and useful mechanism. It is not a proof of
+impossibility, because it holds one variable fixed that we have never varied.
+
+**The unexamined axis is the flags.** Every translation unit in this project is compiled with
+the same string: `-quiet -mcpu=3000 -g -mgas -gcoff -O2 -G0 -funsigned-char`. We have swept
+source shapes exhaustively, types, volatility, statement order, loop form and register hints,
+and we have never once asked whether the original build used the same options for every file.
+
+Two things make that assumption weaker than it looks.
+
+`configs/PAL/main.yaml` carries a per-unit `cc=` field, and **28 units are annotated
+`cc=2.7.2`** against 82 annotated `cc=2.6.3`. Someone once believed the original build mixed
+compilers per file.
+
+Those annotations are **inert**. `tools/scripts/cc.sh` accepts only `2.6.3` and exits with
+"unsupported" for anything else; nothing in the Makefile or the scripts reads the `cc=` field;
+its own comment says "nothing in the build sets it". Both `cc1-psx-272` and `cc1-psx-272-darwin`
+exist in `build/toolchain/bin`, so the machinery is half-built and disconnected.
+
+They are also demonstrably wrong in at least one case: `GameComposeSampleTeamLogo` is annotated
+`cc=2.7.2` and we converted it to a byte-exact match through the default 2.6.3 path. So the
+annotations are stale metadata, not evidence — but the *question* they encode was never
+settled, only abandoned.
+
+The honest position on the two open functions is therefore: a source exists, we have not found
+it, and the axis we have never varied is the one the build hard-codes.
