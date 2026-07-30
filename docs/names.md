@@ -5601,10 +5601,16 @@ Two things make that assumption weaker than it looks.
 `cc=2.7.2`** against 82 annotated `cc=2.6.3`. Someone once believed the original build mixed
 compilers per file.
 
-Those annotations are **inert**. `tools/scripts/cc.sh` accepts only `2.6.3` and exits with
-"unsupported" for anything else; nothing in the Makefile or the scripts reads the `cc=` field;
-its own comment says "nothing in the build sets it". Both `cc1-psx-272` and `cc1-psx-272-darwin`
-exist in `build/toolchain/bin`, so the machinery is half-built and disconnected.
+Those annotations are **inert**, though the mechanism around them is not, and I got this
+wrong on first writing. The `Makefile` does support per-object compiler selection, through
+`RAGE_CC1_VERSION_OBJ` and a list of 26 per-object rules feeding `compile_c_object`. What is
+disconnected is the config's `cc=` field: nothing reads it. And every one of those 26 rules
+sets `2.6.3`, which is already the default, so they restate rather than override. `cc.sh`
+then accepts only `2.6.3` and exits "unsupported" for anything else, while `cc1-psx-272` and
+`cc1-psx-272-darwin` sit built and unreachable in `build/toolchain/bin`.
+
+So the wiring exists and is usable; it has simply never been used to select anything but the
+default. Reaching the other compiler needs one line in `cc.sh`, not new machinery.
 
 They are also demonstrably wrong in at least one case: `GameComposeSampleTeamLogo` is annotated
 `cc=2.7.2` and we converted it to a byte-exact match through the default 2.6.3 path. So the
