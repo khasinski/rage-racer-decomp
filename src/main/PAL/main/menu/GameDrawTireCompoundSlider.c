@@ -189,4 +189,360 @@ void GameDrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
     }
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameDrawTireCompoundSlider", func_800496F0);
+typedef struct CarSpecGraphColor {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 pad;
+} CarSpecGraphColor;
+
+typedef struct CarSpecGraphColors {
+    CarSpecGraphColor colors[4];
+} CarSpecGraphColors;
+
+const CarSpecGraphColors g_CarSpecGraphColors asm("D_80011870") = {{
+    {0xA6, 0x35, 0xAC, 0},
+    {0x7D, 0x27, 0x96, 0},
+    {0x54, 0x1C, 0x94, 0},
+    {0x2C, 0x12, 0x83, 0},
+}};
+extern s32 g_CarSpecGraphProgress asm("D_8007FB08");
+extern s32 g_CarSpecBars[4] asm("D_8009B270");
+extern u8 *g_CarSpecGraphAsset asm("D_8009E698");
+
+void DrawCarSpecSprite(void *ot, s16 x, s16 y, s16 w, u16 h, u16 u, u16 v,
+                       u8 r, u8 g, u8 b, u16 clut, s32 shadeTex,
+                       s32 semiTrans, u32 flags) asm("func_80046A2C");
+void DrawCarSpecQuad(void *ot, s16 x0, s32 y0, s16 x1, s16 y1, s16 x2,
+                     s16 y2, s16 x3, s16 y3, u8 r, u8 g, u8 b,
+                     s32 semiTrans, u32 flags) asm("func_80046CBC");
+void DrawCarSpecQuadSigned(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2,
+                           s16 y2, s16 x3, s16 y3, u8 r, u8 g, u8 b,
+                           s32 semiTrans, u32 flags) asm("func_80046CBC");
+void DrawCarSpecPolyLine(void *ot, s32 x0, s16 y0, s16 x1, s16 y1, s32 x2,
+                         s16 y2, s32 r, s32 g, s32 b,
+                         s32 alpha) asm("func_80047214");
+
+/* The four animated performance bars on the CUSTOMIZE car panel. */
+void GameDrawCarSpecGraph(s32 step, u32 tireGrade) asm("func_800496F0");
+void GameDrawCarSpecGraph(s32 step, u32 tireGrade) {
+    s32 revealed[4];
+    CarSpecGraphColors colors;
+    const CarSpecGraphColors *sourceColors;
+    void *ot;
+    u16 markerClut;
+    u8 baseR;
+    u8 baseG;
+    u8 baseB;
+    u8 lightR;
+    u8 lightG;
+    u8 lightB;
+    u8 darkR;
+    u8 darkG;
+    u8 darkB;
+    s32 *scanBar;
+    s32 *scanRevealed;
+    s32 *revealedBar;
+    s32 *bar;
+    register s32 revealedValue asm("$4");
+    CarSpecGraphColor *color;
+    s32 revealBase;
+    s32 floorProgress;
+    register s32 lineX asm("$16");
+    register s32 lineNearX asm("$5");
+    s32 lineStep;
+    s16 lineFarX;
+    u8 lineColor;
+    u8 lineAlpha;
+    s32 i;
+    s32 offset;
+    register s32 height asm("$16");
+    s32 topY;
+    s32 topRightY;
+    s32 rightX;
+    s32 backY;
+    s32 leftX;
+    s32 topLeftY;
+    s32 farX;
+    s32 topFarY;
+    s32 farY;
+    s32 lightAdjustment;
+    s32 darkAdjustment;
+    s32 lightRValue;
+    s32 lightGValue;
+    s32 lightBValue;
+    s32 darkRValue;
+    s32 darkGValue;
+    s32 darkBValue;
+    register s32 shadowHeight asm("$8");
+    s32 quarterHeight;
+    s32 shadowX;
+    s32 shadowY;
+
+    ot = (u8 *)*(void **)0x1F800004 + 0xC;
+    sourceColors = &g_CarSpecGraphColors;
+    colors = *sourceColors;
+    markerClut = 0x26C;
+
+    {
+        s32 *value = &g_CarSpecBars[0];
+        if ((*value < g_CarSpecGraphAsset[0xB]) && (*value < 0x60)) {
+            (*value)++;
+        } else if ((g_CarSpecGraphAsset[0xB] < *value) && (*value > 0)) {
+            (*value)--;
+        }
+    }
+
+    {
+        s32 *value = &g_CarSpecBars[1];
+        if ((*value < g_CarSpecGraphAsset[0xC]) && (*value < 0x60)) {
+            (*value)++;
+        } else if ((g_CarSpecGraphAsset[0xC] < *value) && (*value > 0)) {
+            (*value)--;
+        }
+    }
+
+    {
+        s32 *value = &g_CarSpecBars[2];
+        if ((*value < g_CarSpecGraphAsset[0xD]) && (*value < 0x60)) {
+            (*value)++;
+        } else if ((g_CarSpecGraphAsset[0xD] < *value) && (*value > 0)) {
+            (*value)--;
+        }
+    }
+
+    switch (tireGrade) {
+    case 0:
+        if (g_CarSpecBars[3] < 10) {
+            g_CarSpecBars[3]++;
+        } else if (g_CarSpecBars[3] > 10) {
+            g_CarSpecBars[3]--;
+        }
+        break;
+    case 1:
+        if (g_CarSpecBars[3] < 30) {
+            g_CarSpecBars[3]++;
+        } else if (g_CarSpecBars[3] > 30) {
+            g_CarSpecBars[3]--;
+        }
+        break;
+    case 2:
+        if (g_CarSpecBars[3] < 50) {
+            g_CarSpecBars[3]++;
+        } else if (g_CarSpecBars[3] > 50) {
+            g_CarSpecBars[3]--;
+        }
+        break;
+    case 3:
+        if (g_CarSpecBars[3] < 70) {
+            g_CarSpecBars[3]++;
+        } else if (g_CarSpecBars[3] > 70) {
+            g_CarSpecBars[3]--;
+        }
+        break;
+    case 4:
+        if (g_CarSpecBars[3] < 90) {
+            g_CarSpecBars[3]++;
+        } else if (g_CarSpecBars[3] > 90) {
+            g_CarSpecBars[3]--;
+        }
+        break;
+    }
+
+    if (step == 0) {
+        g_CarSpecGraphProgress = 0;
+        return;
+    }
+    if (step > 0) {
+        g_CarSpecGraphProgress += step;
+        if (g_CarSpecGraphProgress >= 0x61) {
+            g_CarSpecGraphProgress = 0x60;
+        }
+    } else {
+        g_CarSpecGraphProgress += step;
+        if (g_CarSpecGraphProgress < 0) {
+            g_CarSpecGraphProgress = 0;
+        }
+    }
+
+    i = 0;
+    scanRevealed = revealed;
+    scanBar = g_CarSpecBars;
+    revealBase = g_CarSpecGraphProgress - 0x60;
+    do {
+        *scanRevealed = revealBase + *scanBar;
+        if (*scanRevealed < 0) {
+            *scanRevealed = 0;
+        }
+        scanRevealed++;
+        i++;
+        scanBar++;
+    } while (i < 4);
+
+    floorProgress = g_CarSpecGraphProgress - 0x10;
+    if (floorProgress < 0) {
+        floorProgress = 0;
+    }
+    if (g_CarSpecGraphProgress == 0 || g_MenuAltLayout != 0) {
+        return;
+    }
+
+    DrawCarSpecSprite(ot, 0x4A, 0x166, 4, 8, 0xF0, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
+    DrawCarSpecSprite(ot, 0x4A, 0x173, 4, 8, 0xF4, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
+    DrawCarSpecSprite(ot, 0x4A, 0x180, 4, 8, 0xF8, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
+    DrawCarSpecSprite(ot, 0x4A, 0x18D, 4, 8, 0xFC, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
+
+    DrawCarSpecSprite(ot, 0x50, 0x165, 0x34, 0xC, 0, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
+    DrawCarSpecSprite(ot, 0x50, 0x172, 0x38, 0xC, 0x38, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
+    DrawCarSpecSprite(ot, 0x50, 0x17F, 0x24, 0xC, 0x70, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
+    DrawCarSpecSprite(ot, 0x50, 0x18C, 0x10, 0xC, 0x98, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
+
+    if (floorProgress > 0) {
+        register s32 loopLineColor asm("$18");
+        s32 loopLineFarX;
+        s32 loopLineAlpha;
+
+        loopLineColor = 0xB4;
+        loopLineFarX = 0x99;
+        loopLineAlpha = 0xFF;
+        asm("" : "=r"(loopLineColor), "=r"(loopLineFarX), "=r"(loopLineAlpha)
+               : "0"(loopLineColor), "1"(loopLineFarX), "2"(loopLineAlpha));
+        lineStep = 0;
+        do {
+            lineNearX = 0x52;
+            asm("" : "=r"(lineNearX) : "0"(lineNearX));
+            lineX = 0x13E - lineStep;
+            DrawCarSpecPolyLine(ot, lineNearX, (s16)lineX, 0x61, (s16)lineX,
+                                loopLineFarX, (s16)(lineX + 0x38),
+                                loopLineColor, loopLineColor, loopLineColor,
+                                loopLineAlpha);
+            DrawCarSpecPolyLine(ot, 0x52, (s16)(lineX + 1), 0x61,
+                                (s16)(lineX + 1), loopLineFarX,
+                                (s16)(lineX + 0x39),
+                                loopLineColor, loopLineColor, loopLineColor,
+                                loopLineAlpha);
+            lineStep += 0x10;
+        } while (lineStep < floorProgress);
+    }
+
+    lineFarX = 0x99;
+    lineColor = 0xB4;
+    lineAlpha = 0xFF;
+    lineNearX = 0x52;
+    asm("" : "=r"(lineNearX) : "0"(lineNearX));
+    lineX = 0x13E - floorProgress;
+    DrawCarSpecPolyLine(ot, lineNearX, (s16)lineX, 0x61, (s16)lineX,
+                        lineFarX, (s16)(lineX + 0x38),
+                        lineColor, lineColor, lineColor, lineAlpha);
+    DrawCarSpecPolyLine(ot, 0x52, (s16)(lineX + 1), 0x61,
+                        (s16)(lineX + 1), lineFarX,
+                        (s16)(lineX + 0x39),
+                        lineColor, lineColor, lineColor, lineAlpha);
+
+    {
+        s32 baseYHalf;
+        s32 baseY, baseX;
+
+        i = 0;
+        lightAdjustment = 0x40;
+        darkAdjustment = 0x40;
+        asm("" : "=r"(lightAdjustment) : "0"(0x40));
+        asm("" : "=r"(darkAdjustment) : "0"(lightAdjustment));
+        baseY = 0x144;
+        baseX = 0x66;
+        offset = 0;
+        do {
+        revealedBar = (s32 *)((i << 2) + (u32)revealed);
+        revealedValue = *revealedBar;
+        if (revealedValue != 0) {
+            bar = g_CarSpecBars + i;
+            height = revealedValue;
+            if (*bar < height) {
+                height = *bar;
+            }
+
+            color = &colors.colors[i];
+            rightX = offset + 0x6E;
+            backY = offset + 0x14B;
+            leftX = offset + 0x69;
+            baseR = color->r;
+            lightRValue = baseR + lightAdjustment;
+            topY = baseY - height;
+            topRightY = topY + 7;
+            topLeftY = topY - 4;
+            farX = offset + 0x71;
+            topFarY = topY + 3;
+            farY = offset + 0x147;
+            if (lightRValue >= 0x100) {
+                lightRValue = 0xFF;
+            }
+            lightR = lightRValue;
+
+            baseG = color->g;
+            lightGValue = baseG + lightAdjustment;
+            if (lightGValue >= 0x100) {
+                lightGValue = 0xFF;
+            }
+            lightG = lightGValue;
+
+            baseB = color->b;
+            lightBValue = baseB + lightAdjustment;
+            if (lightBValue >= 0x100) {
+                lightBValue = 0xFF;
+            }
+            lightB = lightBValue;
+
+            darkRValue = baseR - darkAdjustment;
+            if (darkRValue < 0) {
+                darkRValue = 0;
+            }
+            darkR = darkRValue;
+
+            darkGValue = baseG - darkAdjustment;
+            if (darkGValue < 0) {
+                darkGValue = 0;
+            }
+            darkG = darkGValue;
+
+            darkBValue = baseB - darkAdjustment;
+            if (darkBValue < 0) {
+                darkBValue = 0;
+            }
+            darkB = darkBValue;
+
+            DrawCarSpecQuad(ot, (s16)baseX, baseYHalf = (s16)baseY,
+                            (s16)baseX, (s16)topY,
+                            (s16)rightX, (s16)backY,
+                            (s16)rightX, (s16)topRightY,
+                            color->r, color->g, color->b, 0, 0xFF);
+            DrawCarSpecQuadSigned(ot, (s16)baseX, (s16)topY,
+                                  (s16)rightX, (s16)topRightY,
+                                  (s16)leftX, (s16)topLeftY,
+                                  (s16)farX, (s16)topFarY,
+                                  lightR, lightG, lightB, 0, 0xFF);
+            DrawCarSpecQuadSigned(ot, (s16)rightX, (s16)backY,
+                                  (s16)rightX, (s16)topRightY,
+                                  (s16)farX, (s16)farY,
+                                  (s16)farX, (s16)topFarY,
+                                  darkR, darkG, darkB, 0, 0xFF);
+
+            shadowHeight = *revealedBar;
+            if (*bar < shadowHeight) {
+                shadowHeight = *bar;
+            }
+            quarterHeight = shadowHeight / 4;
+            shadowX = baseX - quarterHeight;
+            shadowY = quarterHeight + baseY;
+            DrawCarSpecQuad(ot, (s16)baseX, baseYHalf,
+                            (s16)shadowX, (s16)shadowY,
+                            (s16)rightX, (s16)backY,
+                            (s16)(shadowX + 8), (s16)(shadowY + 8),
+                            0x20, 0x20, 0x20, 1, 0);
+        }
+        offset += 0xC;
+        i++;
+        baseY += 0xC;
+        baseX += 0xC;
+        } while (i < 4);
+    }
+}

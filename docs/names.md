@@ -5404,3 +5404,41 @@ The rewrite also recovered the SPU voice record: a 52-byte struct with 28 named 
 replacing four parallel byte arrays indexed by a hand-computed `52 * i`. It is declared
 locally as `SpuVoice76ED8`; the name is address-derived and the type belongs in a header
 once another unit needs it.
+
+## 33. When C takes ownership of data that was disassembled
+
+`GameDrawCarSpecGraph` (`func_800496F0`) is the first function whose conversion moved data
+out of the disassembly and into C, and the procedure generalises to every remaining function
+containing an ordinary `switch`.
+
+**The symptom.** The function measures at the right size with a tiny residual, and the only
+differing words are the `lui`/`lw` pair that loads the compiler-generated jump table. Here it
+was 675/675 words at `exact 2`, differing at `800498A0` and `800498A8`.
+
+**The cause.** A C `switch` emits a jump table into its unit's `.rodata`. Retail's copy of the
+same table is still present in the disassembled data, so the linked image contains both. Here
+that was 20 bytes of table plus 4 of alignment, and everything after it moved by `0x18` —
+including the function itself, which is why only the table's address differed inside it.
+
+**The fix is a config change, not an edit to `asm/`.** `asm/**` is gitignored and regenerated
+by `make split`, so deleting the duplicated blocks by hand works locally and is undone the
+next time anyone splits. Express it where it survives: in `configs/PAL/main.yaml`, a
+`.rodata` entry with a leading dot names data owned by that C file, and a plain `rodata`
+entry names data still disassembled. Each segment runs to the start of the next one, so
+moving the boundary transfers ownership:
+
+    - [0x205C, .rodata, PAL/main/menu/GameDrawTireCompoundSlider]
+    - [0x2070, rodata, main/002070_main]     <- became 0x2098, main/002098_main
+
+That one line hands `0x2070`..`0x2098` to the C unit, which then supplies those bytes itself:
+the four graph colours as a `const` definition carrying the retail symbol via
+`asm("D_80011870")`, and the jump table as a by-product of the `switch`.
+
+**Verification that actually proves it.** Run `make split VERSION=PAL` to regenerate from the
+config, confirm the first block in the new file is the one that should now follow the C-owned
+range, then delete `main.exe` and `main.elf` and rebuild. A hash that holds only before a
+split proves nothing.
+
+**Do not compensate in the function body.** If the data layout is wrong, the residual appears
+as an address difference, not a code difference; adjusting the body to absorb it would be
+fixing the wrong thing.
