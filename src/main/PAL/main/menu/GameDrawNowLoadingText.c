@@ -7,13 +7,13 @@
 
 s32 GameDrawRankingScreen(s32 arg0);
 
-extern u8 D_80011B60;
+const u8 g_NowLoadingText[] asm("D_80011B60") = "NOW LOADING";
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 /* Blinks the "NOW LOADING" string at D_80011B60. */
 void GameDrawNowLoadingText(void) asm("func_80052738");
 void GameDrawNowLoadingText(void) {
     if (g_SceneTimer & 8) {
-        func_80016754(0x74, 0xEC, &D_80011B60, 0x78CC);
+        func_80016754(0x74, 0xEC, (void *)g_NowLoadingText, 0x78CC);
     }
 }
 
@@ -102,7 +102,368 @@ void GameEnterCourseSelectScreen(void) {
     GameUploadTeamNameTexture(g_TeamNameChars, g_TeamNameLength);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameDrawNowLoadingText", func_8005290C);
+typedef struct CourseSelectSpriteBounds {
+    s32 x;
+    s32 y;
+    s32 w;
+    s32 h;
+} CourseSelectSpriteBounds;
+
+typedef struct CourseSelectPrizeTable {
+    s32 values[4][6][3];
+} CourseSelectPrizeTable;
+
+typedef struct CourseSelectScrollState {
+    s32 value;
+} CourseSelectScrollState;
+
+extern CourseSelectPrizeTable g_CourseSelectPrizeTable asm("D_8007BEEC");
+extern CourseSelectScrollState g_CourseSelectScrollState asm("D_8009B2C0");
+extern s32 D_8009B2C0;
+
+void GameDrawSpriteWide(
+    void *ot,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 clut,
+    s32 shadeTex,
+    s32 semiTrans,
+    s32 flags) asm("func_80046A2C");
+void GameDrawSolidRectWide(
+    void *ot,
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 alpha) asm("func_80047024");
+void GameDrawLineWide(
+    void *ot,
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 alpha) asm("func_8004711C");
+s32 GameDrawNumberWide(
+    s32 x,
+    s32 y,
+    s32 flags,
+    s32 value,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 clut,
+    s32 primitiveCount) asm("func_80047BD4");
+
+/*
+ * The menu lays out several two-sprite labels from the first sprite's sliding
+ * Y. GCC 2.6.3 integrates this explicit inline at -O2; its optional bounds
+ * result also preserves the retail caller frame before null outputs fold away.
+ */
+static __inline__ s32 GameDrawSlidingSprite(
+    void *ot,
+    s32 x,
+    s32 baseY,
+    s32 slide,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 clut,
+    s32 shadeTex,
+    s32 semiTrans,
+    s32 flags,
+    CourseSelectSpriteBounds *bounds)
+{
+    CourseSelectSpriteBounds result;
+    s32 y;
+
+    y = baseY - slide;
+    if (bounds != 0) {
+        result.x = x;
+        result.y = y;
+        result.w = w;
+        result.h = h;
+        *bounds = result;
+    }
+    GameDrawSpriteWide(
+        ot, x, y, w, h, u, v, r, g, b, clut,
+        shadeTex, semiTrans, flags);
+    return y;
+}
+
+s32 GameDrawCourseSelectScreen(s32 step) asm("func_8005290C");
+s32 GameDrawCourseSelectScreen(s32 step)
+{
+    void *otBase;
+    void *ot;
+    u8 fade;
+    u16 slide;
+    s16 headerWidth;
+    s32 deltaY;
+    /* Load-bearing in the prize loop: without this pin the function is 848 words. */
+    register s32 coordinateY asm("$16");
+    s32 lineColor;
+    s32 row;
+    s32 digitCount;
+    s32 prizeOffset;
+    CourseSelectPrizeTable *prizeTable;
+    s32 prizeFade;
+    s32 prizeClut;
+    s32 gpHeight;
+    s32 gpClut;
+    s32 gpSemiTrans;
+    s32 gpFlags;
+    s32 gpSlide;
+    s32 gpFade;
+
+    otBase = *(void **)0x1F800004;
+    ot = (u8 *)otBase + 4;
+    if (step == 0) {
+        D_8009B2C0 = 0;
+        return (s32)otBase;
+    }
+
+    if (step > 0) {
+        D_8009B2C0 += step;
+        if (D_8009B2C0 >= 0x1FD) {
+            D_8009B2C0 = 0x1FC;
+        }
+        slide = 0;
+    } else {
+        D_8009B2C0 += step;
+        if (D_8009B2C0 < 0) {
+            D_8009B2C0 = 0;
+        }
+        deltaY = 0x1FC - D_8009B2C0;
+        slide = (u16)((u32)(deltaY * deltaY) >> 11);
+    }
+
+    if (g_MenuAltLayout != 0) {
+        return g_CourseSelectScrollState.value;
+    }
+
+    slide -= 0x28;
+    fade = (u8)((u32)D_8009B2C0 >> 2);
+
+    if (g_GrandPrixMode != 0) {
+        if (g_SeriesSelection == 0) {
+            switch (g_GrandPrixClass) {
+            case 0:
+                headerWidth = 0x24;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x24, 0x10,
+                    0, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            case 1:
+                headerWidth = 0x20;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x20, 0x10,
+                    0x24, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            case 2:
+                headerWidth = 0x28;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x28, 0x10,
+                    0x44, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            case 3:
+                headerWidth = 0x30;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x30, 0x10,
+                    0x6C, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            case 4:
+                headerWidth = 0x30;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x30, 0x10,
+                    0x9C, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            }
+        } else {
+            switch (g_GrandPrixClass) {
+            case 0:
+                headerWidth = 0x30;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x30, 0x10,
+                    0xCC, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            case 1:
+                headerWidth = 0x40;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x40, 0x10,
+                    0, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            case 2:
+                headerWidth = 0x3C;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x3C, 0x10,
+                    0x40, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            case 3:
+                headerWidth = 0x28;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x28, 0x10,
+                    0x7C, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            case 4:
+                headerWidth = 0x20;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x20, 0x10,
+                    0xA4, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            case 5:
+                headerWidth = 0x28;
+                GameDrawSpriteWide(
+                    ot, 0x50, 0xB0 - (s16)slide, 0x28, 0x10,
+                    0xC4, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
+                break;
+            }
+        }
+
+        gpHeight = 0x10;
+        gpClut = 0x244;
+        gpSemiTrans = 1;
+        gpSlide = (s16)slide;
+        gpFade = fade;
+        gpFlags = 0x5B;
+        GameDrawSpriteWide(
+            ot, headerWidth + 0x50, 0xB0 - gpSlide, 0x10,
+            gpHeight, 0xEC, 0x48, gpFade, gpFade, gpFade,
+            gpClut, 0, gpSemiTrans, gpFlags);
+
+        coordinateY = GameDrawSlidingSprite(
+            ot, 0x50, 0x97, gpSlide, 0x1A, gpHeight, 0x60, 0xCC,
+            gpFade, gpFade, gpFade, gpClut, 0, gpSemiTrans, gpFlags, 0);
+        GameDrawSpriteWide(
+            ot, 0x6C, coordinateY, 8, 0x10,
+            g_GrandPrixClass * 8 + 8, 0x18,
+            gpFade, gpFade, gpFade, gpClut, 0, gpSemiTrans, gpFlags);
+
+        lineColor = (u32)gpFade << 1;
+        GameDrawLineWide(
+            ot, 0x48, 0xAA - gpSlide, 0xAF, 0xAA - gpSlide,
+            lineColor, lineColor, lineColor, 0x40);
+        GameDrawLineWide(
+            ot, 0x48, 0xAB - gpSlide, 0xAF, 0xAB - gpSlide,
+            lineColor, lineColor, lineColor, 0x40);
+        GameDrawSolidRectWide(
+            ot, 0x48, 0x94 - gpSlide, 0x68, 0x30,
+            lineColor, lineColor, lineColor,
+            (u32)gpFade < 0x7F ? 0x20 : 0xFF);
+        GameDrawSpriteWide(
+            ot, 0xB0, 0x94 - (s16)slide, 0x20, 0x30,
+            0x60, 0x88, fade, fade, fade, 0x25B, 0, 1, 0x39);
+    }
+
+    coordinateY = GameDrawSlidingSprite(
+        ot, 0x4C, 0xD0, (s16)slide, 0x18, 0xC, 0x18, 0xDC,
+        fade, fade, fade, 0x244, 0, 1, 0x3A, 0);
+    GameDrawSpriteWide(
+        ot, 0x68, coordinateY, 0x12, 0xC,
+        0x32, 0xDC, fade, fade, fade, 0x244, 0, 1, 0x3A);
+
+    coordinateY = GameDrawSlidingSprite(
+        ot, 0x4C, 0xF8, (s16)slide, 0x18, 0xC, 0x18, 0xDC,
+        fade, fade, fade, 0x244, 0, 1, 0x3A, 0);
+    GameDrawSpriteWide(
+        ot, 0x68, coordinateY, 0x1A, 0xC,
+        0x46, 0xDC, fade, fade, fade, 0x244, 0, 1, 0x3A);
+
+    switch (g_CourseIndex & 3) {
+    case 0:
+        coordinateY = GameDrawSlidingSprite(
+            ot, 0x4C, 0xE0, (s16)slide, 8, 0x10, 8, 0x18,
+            fade, fade, fade, 0x244, 0, 1, 0x3B, 0);
+        GameDrawSpriteWide(
+            ot, 0x54, coordinateY, 0x54, 0x10,
+            0, 0x9C, fade, fade, fade, 0x244, 0, 1, 0x3B);
+        GameDrawSpriteWide(
+            ot, 0x4C, 0x108 - (s16)slide, 0x20, 0x10,
+            0x44, 0xB4, fade, fade, fade, 0x244, 0, 1, 0x3A);
+        break;
+    case 1:
+        coordinateY = GameDrawSlidingSprite(
+            ot, 0x4C, 0xE0, (s16)slide, 8, 0x10, 0x10, 0x18,
+            fade, fade, fade, 0x244, 0, 1, 0x3B, 0);
+        GameDrawSpriteWide(
+            ot, 0x54, coordinateY, 0x4C, 0x10,
+            0x54, 0x9C, fade, fade, fade, 0x244, 0, 1, 0x3B);
+        GameDrawSpriteWide(
+            ot, 0x4C, 0x108 - (s16)slide, 0x20, 0x10,
+            0x64, 0xB4, fade, fade, fade, 0x244, 0, 1, 0x3A);
+        break;
+    case 2:
+        coordinateY = GameDrawSlidingSprite(
+            ot, 0x4C, 0xE0, (s16)slide, 8, 0x10, 0x18, 0x18,
+            fade, fade, fade, 0x244, 0, 1, 0x3B, 0);
+        GameDrawSpriteWide(
+            ot, 0x54, coordinateY, 0x48, 0x10,
+            0, 0xAC, fade, fade, fade, 0x244, 0, 1, 0x3B);
+        GameDrawSpriteWide(
+            ot, 0x4C, 0x108 - (s16)slide, 0x20, 0x10,
+            0x84, 0xB4, fade, fade, fade, 0x244, 0, 1, 0x3A);
+        break;
+    case 3:
+        coordinateY = GameDrawSlidingSprite(
+            ot, 0x4C, 0xE0, (s16)slide, 8, 0x10, 0x20, 0x18,
+            fade, fade, fade, 0x244, 0, 1, 0x3B, 0);
+        GameDrawSpriteWide(
+            ot, 0x54, coordinateY, 0x5C, 0x10,
+            0xA4, 0x9C, fade, fade, fade, 0x244, 0, 1, 0x3B);
+        GameDrawSpriteWide(
+            ot, 0x4C, 0x108 - (s16)slide, 0x1E, 0x10,
+            0xA4, 0xB4, fade, fade, fade, 0x244, 0, 1, 0x3A);
+        break;
+    }
+
+    if (g_GrandPrixMode != 0) {
+        GameDrawSpriteWide(
+            ot, 0x4C, 0x140 - (s16)slide, 0x18, 0x10,
+            0xB4, 0xCC, fade, fade, fade, 0x244, 0, 1, 0x3A);
+        GameDrawSpriteWide(
+            ot, 0x4C, 0x150 - (s16)slide, 0x18, 0x10,
+            0xCC, 0xCC, fade, fade, fade, 0x244, 0, 1, 0x3A);
+        GameDrawSpriteWide(
+            ot, 0x4C, 0x160 - (s16)slide, 0x18, 0x10,
+            0xE4, 0xCC, fade, fade, fade, 0x244, 0, 1, 0x3A);
+
+        row = 0;
+        prizeOffset = (s16)slide - 0x140;
+        prizeTable = &g_CourseSelectPrizeTable;
+        prizeFade = fade;
+        prizeClut = 0x244;
+        do {
+            coordinateY = row * 0x10 - prizeOffset;
+            digitCount = GameDrawNumberWide(
+                0x65, coordinateY, 9,
+                prizeTable->values[g_CourseIndex & 3][g_GrandPrixClass][row],
+                prizeFade, prizeFade, prizeFade, prizeClut, 0x20);
+            row++;
+            GameDrawSpriteWide(
+                ot, digitCount * 8 + 0x65, coordinateY, 0xC, 0x10,
+                0xF4, 0x28, prizeFade, prizeFade, prizeFade,
+                prizeClut, 0, 1, 0x3B);
+        } while (row < 3);
+    }
+
+    return D_8009B2C0;
+}
 
 /* The mirror of GameCanSelectNextCourse. */
 s32 GameCanSelectPrevCourse(void) asm("func_80053650");

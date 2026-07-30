@@ -91,6 +91,8 @@ segments:
       - [0x2248, rodata, main/002248_main]
       - [0x2268, .rodata, PAL/main/menu/GameGetOwnedCarAssetIndex]
       - [0x22B4, rodata, main/0022B4_main]
+      - [0x2360, .rodata, PAL/main/menu/GameDrawNowLoadingText]
+      - [0x23A0, rodata, main/0023A0_main]
       - [0x23A8, .rodata, PAL/main/menu/GameUpdateRankingScreen]
       - [0x23C0, rodata, main/0023C0_main]
       - [0x23F8, .rodata, PAL/main/menu/GameUpdateCarShopScreen]
