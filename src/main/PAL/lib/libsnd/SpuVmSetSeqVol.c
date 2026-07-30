@@ -9,90 +9,60 @@ extern u_char g_SndVoiceRegs[] asm("D_8009DF20");
 extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
 
-short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) asm("func_80076C58");
+short SpuVmSetSeqVol() asm("func_80076C58");
 long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) asm("func_80076DCC");
 short SpuVmGetSeqVolLeft(long arg0) asm("func_80076E38");
 short SpuVmGetSeqVolRight(long arg0) asm("func_80076E88");
 
-short SpuVmSetSeqVol(long arg0, u_short arg1, u_short arg2, short arg3) {
-    /* These pins are load-bearing: removing any one changes .text. */
-    register u_long offset asm("$2");
+short SpuVmSetSeqVol(arg0, arg1, arg2, arg3)
+short arg0;
+u_short arg1;
+u_short arg2;
+short arg3;
+{
+    short i;
     register u_char *base asm("$8");
     u_char *entry;
+    long x;
+    long y;
+    long temp;
+    short pos;
+    u_long offset;
     u_long index;
-    u_short x;
-    u_short y;
 
-    offset = (arg0 & 0xFF) << 2;
-    base = *(u_char **)((u_char *)g_SndSeqTable + offset);
-    __asm__ volatile("addiu $sp,$sp,-8" ::: "memory");
+    base = *(u_char **)((u_char *)g_SndSeqTable + ((arg0 & 0xFF) << 2));
     g_SndCurrentSeqSep = arg0;
-    arg0 <<= 16;
-    index = ((u_long)arg0) >> 24;
-    offset = index * 0xAC;
-    entry = (u_char *)(offset + (long)base);
+    index = (arg0 & 0xFF00) >> 8;
+    entry = (u_char *)((index * 0xAC) + (long)base);
 
     *(u_short *)(entry + 0x74) = arg1;
-    offset = *(volatile u_short *)(entry + 0x74);
-    arg0 >>= 16;
+    offset = *(u_short *)(entry + 0x74);
     *(u_short *)(entry + 0x76) = arg2;
+    temp = arg0;
     if (offset >= 0x80) {
         *(u_short *)(entry + 0x74) = 0x7F;
     }
 
-    offset = *(volatile u_short *)(entry + 0x76);
+    offset = *(u_short *)(entry + 0x76);
     if (offset >= 0x80) {
         *(u_short *)(entry + 0x76) = 0x7F;
     }
 
-    index = arg1 & 0xFFFF;
-    offset = index << 7;
-    x = offset + index;
-    index = arg2 & 0xFFFF;
-    offset = index << 7;
-    y = offset + index;
+    x = arg1 * 0x81;
+    y = arg2 * 0x81;
 
     if (arg3 == 1) {
-        long i;
-        u_char *dst;
-        u_char *dstY;
-        long signedIndex;
-
-        i = 0;
-        if (D_801E42F8 != 0) {
-            arg0 &= 0xFFFF;
-            dst = g_SndVoiceRegs;
-            dstY = dst + 2;
-            do {
-                offset = i << 16;
-                signedIndex = (long)offset >> 16;
-                offset = signedIndex * 3;
-                offset *= 4;
-                offset += signedIndex;
-                offset *= 4;
-
-                if (*(u_short *)&g_SndVoiceStateSeqSep[offset] != arg0) {
-                    offset = i + 1;
-                } else {
-                    offset = signedIndex << 19;
-                    offset = (long)offset >> 15;
-                    *(u_short *)(offset + (long)dst) = x;
-                    *(u_short *)(offset + (long)dstY) = y;
-                    offset = g_SndVoiceFlags[signedIndex];
-                    offset |= 3;
-                    g_SndVoiceFlags[signedIndex] = offset;
-                    offset = i + 1;
-                }
-
-                i = offset;
-                __asm__("" : "=r"(offset) : "0"(offset));
-            } while (((long)(offset << 16) >> 16) < D_801E42F8);
+        for (i = 0; i < D_801E42F8; i++) {
+            offset = (i * 12 + i) * 4;
+            if (*(u_short *)&g_SndVoiceStateSeqSep[offset] == (u_short)temp) {
+                pos = i * 8;
+                ((u_short *)g_SndVoiceRegs)[pos] = x;
+                ((u_short *)g_SndVoiceRegs)[pos + 1] = y;
+                g_SndVoiceFlags[i] |= 3;
+            }
         }
     }
-
-    offset = g_SndCurrentSeqSep;
-    __asm__ volatile("addiu $sp,$sp,8" ::: "memory");
-    return offset;
+    return g_SndCurrentSeqSep;
 }
 
 long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) {

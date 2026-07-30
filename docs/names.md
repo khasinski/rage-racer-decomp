@@ -5619,3 +5619,61 @@ settled, only abandoned.
 
 The honest position on the two open functions is therefore: a source exists, we have not found
 it, and the axis we have never varied is the one the build hard-codes.
+
+## 37. `SpuVmSetSeqVol`: the packed-ID extraction supplies the phantom frame
+
+`SpuVmSetSeqVol` is now closed in plain C. The missing source axis was not a
+second loop counter, a fabricated local, or a different compiler. It was the
+original K&R parameter form combined with the natural extraction of the
+sequence byte from the packed sequence/separation ID:
+
+```c
+short SpuVmSetSeqVol(arg0, arg1, arg2, arg3)
+short arg0;
+u_short arg1;
+u_short arg2;
+short arg3;
+{
+    ...
+    index = (arg0 & 0xFF00) >> 8;
+    ...
+    temp = arg0;
+```
+
+The real `temp` and `pos` locals agree with the recovered PsyQ 3.5
+`VM_SEQ.C` shape. With `short i` and the ordinary `for` loop, this source is
+93 words, `exact 0`, and has `.frame $sp,8,$31 # vars= 8` with no stack
+load or store. The only register pin is the pre-existing `$8` sequence-table
+base, and there are no barriers or instruction-bearing inline-assembly
+blocks.
+
+The frame comes from the packed-ID expression itself. Before `combine`, its
+RTL includes:
+
+```text
+r95 = arg0 << 16
+r94 = r95 >> 16
+r96 = r94 & 0xFF00
+index = r96 >> 8
+```
+
+`r95` must survive because the signed packed ID is also kept in `temp`.
+`combine` rewrites the index to `r95 >> 24`, deleting `r96` but leaving its
+reference count stale. The `.lreg` dump reports:
+
+```text
+Register 96 used 2 times across 2 insns in block 0;
+dies in 0 places; ST_REGS or none.
+```
+
+`regclass` consequently tries the unavailable `ST_REGS` class and reload
+assigns the dead pseudo a four-byte stack home, which MIPS rounds to eight
+bytes. This is the 21a mechanism, but it occurs in the entry-pointer chain
+rather than the loop-exit test.
+
+The operand order is load-bearing evidence, not style. Writing
+`(arg0 >> 8) & 0xFF` emits the same 91 retail body words but no orphan and no
+frame. Likewise, expressing the parameter as an ANSI `long` hid the
+promotion chain and led the earlier searches away from the actual source
+shape. No padding object, range-derived fake zero, manual stack adjustment,
+or extra register pin is needed.
