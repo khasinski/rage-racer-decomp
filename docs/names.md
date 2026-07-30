@@ -5479,3 +5479,35 @@ assignments was tried. Counter type was swept across `short`, signed `long`, `u_
 So the two remaining words in this family are each one instruction, and each sits on a
 different compiler decision: this one on how the entry test is derived, and `func_8005F6BC`
 (section 29) on the scheduler's multiply latency. Neither is a missing source construct.
+
+## 34. The last stubs are bundles, not monsters
+
+A single `nonmatchings` file can cover several retail functions, and splat emits one
+`INCLUDE_ASM` for the whole run. The progress classifier then counts the bundle as **one**
+entry, and any inventory that measures "function size" by the length of the `.s` file
+overstates it badly. Every remaining stub is such a bundle:
+
+| stub | functions | words | breakdown |
+|---|---:|---:|---|
+| `func_800418D4` | **10** | 1211 | 458, 566, then 12, 7, 7, 27, 14, 17, 7, 96 |
+| `func_8004A248` | **5** | 1435 | 1248, then 65, 38, 37, 47 |
+| `func_8004D384` | **2** | 1017 | 830, 187 |
+
+So the two "hardest functions left" are not two twelve-hundred-word monsters.
+`func_800418D4` is a 458-word function, a 566-word function, and **eight small ones
+totalling 187 words**, six of which are under thirty words.
+
+Two consequences that have already bitten:
+
+**A residual is spread across the bundle.** Section 27 records `func_800418D4` at exact 418
+of 1211, and that number is the whole ten-function run, not one function. Attacking it as a
+single body was part of why schedule search plateaued. The small members should be measured
+and closed individually first.
+
+**Converting a bundle can break the linker.** `undefined_syms_manual.txt` expresses many
+symbols as offsets from other symbols, and those anchors are often the *second or later*
+function inside a bundle. When C takes over the code, the anchor loses its definition and the
+link fails outright with `undefined symbol ... referenced in expression`. This happened on
+`func_8005568C`, where eleven entries were anchored on `func_80055FDC`, the second function in
+its file. Re-anchor with a line following that file's existing chain convention, and check by
+building *without* the line first so the need is demonstrated rather than assumed.
