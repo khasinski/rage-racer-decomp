@@ -5385,3 +5385,22 @@ residual words are one scheduling difference, which is the same class as section
 
 These are recorded as low-residual negatives rather than as walls: exact 3 out of 93 is
 not the same statement as "blocked", and either could fall to one more idea.
+
+### 32b. Second confirmation, from the other direction
+
+`SpuVmSeqKeyOff` (`func_80076ED8`) closed at 81 words with **zero pins, zero barriers and
+no assembly**, from a starting position of eight pins, seven `asm` blocks carrying real
+instructions, a hand-written `1:` label and a `bnez $2,1b` closing the loop by hand.
+
+What it needed was `volatile` **removed** from all six globals the unit declared with it:
+`D_801E42F8`, `g_SndCurrentVoice`, and the four key-on/key-off mask words `D_801F2A08`,
+`D_801F2A0C`, `D_8009E670`, `D_8009E674`. So this is 32's corollary confirmed from the
+opposite direction: in 32 a missing `volatile` was blocking the frame carrier, here a
+spurious `volatile` was blocking ordinary codegen, and in both cases the fix was to match
+retail's own inconsistent volatility rather than to reason about what the hardware
+"should" need.
+
+The rewrite also recovered the SPU voice record: a 52-byte struct with 28 named fields,
+replacing four parallel byte arrays indexed by a hand-computed `52 * i`. It is declared
+locally as `SpuVoice76ED8`; the name is address-derived and the type belongs in a header
+once another unit needs it.
