@@ -283,7 +283,7 @@ typedef struct GameCarDrive {
     u8 pad7C[8];
     s32 unk84;       /* +0x84 launch-energy threshold */
     s32 unk88;       /* +0x88 */
-    u8 pad8C[4];
+    s32 unk8C;       /* +0x8C player-car speed scale seeded from the loaded spec */
     s32 unk90;       /* +0x90 */
     s32 unk94;       /* +0x94 */
     s32 state98;     /* +0x98 0 driving, 1 launching, 2 airborne */
@@ -334,8 +334,7 @@ typedef struct GameCarTrackAngleWindow {
 } GameCarTrackAngleWindow;
 
 /*
- * The car pipeline, all still INCLUDE_ASM. docs/names.md 1 has the evidence and
- * the data layouts.
+ * The car pipeline. docs/names.md 1 has the evidence and the data layouts.
  */
 /* Race-entry init for the player object: start pose plus the speed/gear lookup
  * tables g_GearTorqueCurve / D_801E4114 / D_801E4154. Logs "init_car" .. "init_ok". */
