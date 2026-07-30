@@ -2,8 +2,14 @@
 
 #include "common.h"
 
+typedef struct {
+    long deadline;
+    long count;
+    char *name;
+} CdAlarm;
+
 extern long g_CdCommandNames[] asm("D_80099060");
-extern u_char g_CdSyncStatus[] asm("D_80099318");
+extern volatile u_char g_CdSyncStatus[] asm("D_80099318");
 extern long g_CdIntrNames[] asm("D_800990E0");
 extern u_char D_8009905D;
 extern long g_CdTimeoutDeadline asm("D_8009BB08");
@@ -25,15 +31,10 @@ void func_8006BAF0(void);
  * message prints as its first %s. arg 0 blocks, non-zero polls. */
 long CD_datasync(long mode) asm("func_8006BF00");
 long CD_datasync(long arg) {
-    /* This pin is load-bearing: removing it changes .text. */
-    register long *b60 asm("$19");
-    u_char *b318;
+    long *b60;
+    volatile u_char *b318;
     long *bE0;
     long result;
-
-    /* Forces GCC to reserve the 6-word outgoing-arg frame slot without
-       emitting the call (the printf below is issued from inline asm). */
-    if (0) GameDebugPrintf(D_80013824, 0, 0, 0, 0);
 
     g_CdTimeoutDeadline = VSync(-1) + 0x3C0;
     b60 = g_CdCommandNames;
@@ -44,35 +45,12 @@ long CD_datasync(long arg) {
     do {
         long status;
         if (VSync(-1) > g_CdTimeoutDeadline || g_CdTimeoutCounter++ > 0x3C0000) {
-            void *a1v;
-            long a2v;
-            long a3v;
-            long t2;
-            long t3;
-            long t4;
-
             func_80063C38(D_80013814);
-            /* GameDebugPrintf(D_80013824, D_8009BB10,
-                             D_80099060[D_8009905D],
-                             D_800990E0[D_80099318[0]],
-                             D_800990E0[D_80099318[1]]);
-               Emitted as inline asm to reproduce the exact argument
-               evaluation/scheduling order of the original build. */
-            asm volatile("lbu $4, 0($17)\n\tlbu $2, 1($17)"
-                         : "=r"(t4), "=r"(t2) : "r"(b318));
-            asm volatile("lui $5, %%hi(D_8009BB10)\n\tlw $5, %%lo(D_8009BB10)($5)"
-                         : "=r"(a1v));
-            asm volatile("sll $2, $2, 2\n\taddu $2, $2, $16\n\tsll $4, $4, 2\n\tlw $3, 0($2)"
-                         : "=r"(t3), "=r"(t2), "=r"(t4)
-                         : "r"(bE0), "1"(t2), "2"(t4));
-            asm volatile("lui $2, %%hi(D_8009905D)\n\tlbu $2, %%lo(D_8009905D)($2)\n\t"
-                         "addu $4, $4, $16\n\tsll $2, $2, 2\n\taddu $2, $2, $19"
-                         : "=r"(t2), "=r"(t4)
-                         : "r"(bE0), "r"(b60), "1"(t4));
-            asm volatile("sw $3, 16($sp)\n\tlw $6, 0($2)\n\tlw $7, 0($4)"
-                         : "=r"(a2v), "=r"(a3v)
-                         : "r"(t3), "r"(t2), "r"(t4) : "memory");
-            GameDebugPrintf(D_80013824, a1v, a2v, a3v);
+            GameDebugPrintf(D_80013824,
+                            ((CdAlarm *)&g_CdTimeoutDeadline)->name,
+                            b60[D_8009905D],
+                            bE0[b318[0]],
+                            bE0[b318[1]]);
             func_8006BAF0();
             status = -1;
         } else {
