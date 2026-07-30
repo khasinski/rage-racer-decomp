@@ -3,11 +3,13 @@
 #include "game/race.h"
 #include "game/render.h"
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/track/GameSeekEnvironmentScript", func_800458CC);
-
 typedef struct {
     s32 id;
-    u8 pad[0x2C];
+    GameEnvColor colors[9];
+    u16 duration;
+    u16 unk2A;
+    u16 mode;
+    u16 unk2E;
 } Cmd;
 
 extern u8 g_EnvScriptEnabled asm("D_8019C8F4");
@@ -52,7 +54,9 @@ extern s16 D_801E6DA4[];
  * environment mode 2, down to 0x1770 (hazy) in every other mode. */
 extern s32 g_FogNear asm("D_8009B24C");
 
-void GameLoadEnvironmentCue(void *arg0) asm("func_800455EC");
+/* Deliberately unprototyped: the seek path also leaves the cue duration and
+ * clamped frame in a1/a2, while the normal update path passes only the cue. */
+void GameLoadEnvironmentCue() asm("func_800455EC");
 void GameLerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) asm("func_8004554C");
 /* Deliberately unprototyped: the original passes only the rect and leaves
  * a1 live, so the psyq/gpu.h LoadImage prototype cannot be used here. */
@@ -62,6 +66,125 @@ void func_80069B14(void *arg0, s32 arg1, void *arg2);
 void func_800686D4(s32 arg0, s32 arg1);
 
 void GameUpdateEnvironment(void) asm("func_80045CD4");
+void GameSeekEnvironmentScript(s32 targetTime) {
+    s32 clock;
+    u32 count;
+    s32 offset;
+    s32 tailCount;
+    s32 nextId;
+    s32 duration;
+    s32 frame;
+    s32 clampedFrame;
+    s32 signedFrame;
+    s32 fog;
+    Cmd *cue;
+    u8 *rgb;
+    s16 *fogOut;
+    s16 *fogTarget;
+
+    clock = (targetTime + g_EnvScriptLength) % g_EnvScriptLength;
+    targetTime = (s32)g_EnvScriptCues;
+    g_EnvScriptCursor = (Cmd *)targetTime;
+    g_EnvScriptClock = clock;
+    for (count = 0;
+         (s32)((u32 *)targetTime)[count * 12] != -1;
+         count++) {
+        if (clock < (s32)((u32 *)targetTime)[count * 12]) {
+            goto scan_done;
+        }
+    }
+
+scan_done:
+    if ((s32)count >= 2) {
+        offset = count * 0x30 - 0x60;
+        offset += (s32)g_EnvScriptCursor;
+        g_EnvScriptCursor = (Cmd *)offset;
+    } else {
+        targetTime = (s32)g_EnvScriptCursor;
+        for (tailCount = 0;
+             (s32)((u32 *)targetTime)[(tailCount + 1) * 12] != -1;
+             tailCount++) {
+        }
+        offset = tailCount * 0x30;
+        offset += (s32)g_EnvScriptCursor;
+        g_EnvScriptCursor = (Cmd *)offset;
+    }
+
+    rgb = (u8 *)g_EnvColors;
+    g_EnvColors[0].cur =
+        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x04);
+    g_EnvColors[1].cur =
+        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x08);
+    g_EnvColors[2].cur =
+        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x0C);
+    g_EnvColors[3].cur =
+        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x10);
+    g_EnvColors[4].cur =
+        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x14);
+    g_EnvColors[5].cur =
+        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x18);
+    g_EnvColors[6].cur =
+        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x1C);
+    g_EnvColors[7].cur =
+        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x20);
+    g_EnvColors[8].cur =
+        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x24);
+
+    g_EnvironmentMode = g_EnvScriptCursor->mode;
+    nextId = *(s32 *)((u8 *)g_EnvScriptCursor + 0x30);
+    g_EnvScriptCursor = g_EnvScriptCursor + 1;
+    if (nextId < 0) {
+        g_EnvScriptCursor = (Cmd *)g_EnvScriptCues;
+    }
+
+    cue = g_EnvScriptCursor;
+    duration = cue->duration;
+    g_EnvLerpDuration = duration;
+    frame = (u16)g_EnvScriptClock - *(u16 *)cue;
+    g_EnvLerpFrame = frame;
+    clampedFrame = frame;
+    /* Keep the unclamped store and the call-value copy as distinct lifetimes. */
+    asm("" : "=r"(clampedFrame) : "0"(clampedFrame));
+    signedFrame = (s16)frame;
+    if ((s16)duration < signedFrame) {
+        clampedFrame = duration;
+    }
+    g_EnvLerpFrame = clampedFrame;
+    GameLoadEnvironmentCue(cue, duration, clampedFrame);
+
+    nextId = *(s32 *)((u8 *)g_EnvScriptCursor + 0x30);
+    g_EnvScriptCursor = g_EnvScriptCursor + 1;
+    if (nextId < 0) {
+        g_EnvScriptCursor = (Cmd *)g_EnvScriptCues;
+    }
+
+    fogOut = (s16 *)((u8 *)&g_EnvColors[0].from - 6);
+    g_EnvScriptEnabled = 1;
+    *fogOut = 1;
+    GameUpdateEnvironment();
+
+    fog = 0;
+    if (g_GrandPrixClass >= 5) {
+        g_EnvScriptEnabled = 0;
+    }
+    fogTarget = fogOut;
+    if ((*(u32 *)fogOut & 0xFFFF0000) != 0x80800000 ||
+        ((u8 *)g_EnvColors)[2] != 0x80) {
+        fog = 1;
+    }
+    *fogTarget = fog;
+    SetFarColor(((u8 *)g_EnvColors)[0],
+                ((u8 *)g_EnvColors)[1],
+                ((u8 *)g_EnvColors)[2]);
+
+    if (g_EnvironmentMode == 2) {
+        g_FogNear = 0x7FFF;
+    } else {
+        g_FogNear = 0x1770;
+    }
+    SetFogNear(g_FogNear, 0x140);
+}
+
 void GameUpdateEnvironment(void) {
     Rect rect;
     s32 local[3];

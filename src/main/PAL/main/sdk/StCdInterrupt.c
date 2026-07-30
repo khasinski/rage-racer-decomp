@@ -19,7 +19,7 @@ extern volatile u32 *g_MdecOutDmaControl asm("D_800993F0");
 extern volatile u32 *g_CdDmaControl asm("D_80099400");
 
 extern s32 g_StInterruptState asm("D_80099418");
-extern StStrHeader *g_StActiveHeader asm("D_8009DF1C");
+extern volatile StStrHeader *g_StActiveHeader asm("D_8009DF1C");
 extern s32 g_StCurrentFrameCount asm("D_8009E69C");
 extern s16 g_StCurrentSector asm("D_8019C790");
 extern s32 g_StColorMode asm("D_8019C79C");
@@ -37,7 +37,7 @@ extern u8 *g_StCopySource asm("D_801E8274");
 extern u32 g_StEndFrame asm("D_801E8278");
 extern s32 g_StStreamFlag asm("D_801E8A94");
 extern u8 *g_StSectorData asm("D_801E8AA8");
-extern StStrHeader *g_StRingBase asm("D_801E8AAC");
+extern volatile StStrHeader *g_StRingBase asm("D_801E8AAC");
 extern s32 g_StRingSize asm("D_801F1850");
 
 void StClearRingRange(s32 first, u32 count) asm("func_8006D0AC");
@@ -59,7 +59,7 @@ void StCdInterrupt(void) {
     u32 i;
     u32 frameCount;
     u32 dmaControl;
-    u32 headerState;
+    u16 headerState;
     u32 expectedState;
     u32 endFrame;
 
@@ -89,8 +89,9 @@ void StCdInterrupt(void) {
         return;
     }
 
-    g_StActiveHeader = &g_StRingBase[g_StWriteCursor];
-    if (*(u16 *)g_StActiveHeader != 0) {
+    g_StActiveHeader =
+        (StStrHeader *)&g_StRingBase[g_StWriteCursor];
+    if (*(volatile u16 *)g_StActiveHeader != 0) {
         if (g_StCopySource != 0) {
             g_StCopySector++;
         }
@@ -139,7 +140,7 @@ void StCdInterrupt(void) {
     while (*g_CdDmaControl & 0x01000000) {
     }
 
-    g_StActiveHeader->loc = location;
+    ((StStrHeader *)g_StActiveHeader)->loc = location;
     *g_InterruptStatus = 0x20843;
     *g_InterruptMask = 0x1325;
 
@@ -154,11 +155,10 @@ void StCdInterrupt(void) {
         g_StStreamFlag = 0;
     }
 
-    headerState = *(u16 *)g_StActiveHeader;
+    headerState = *(volatile u16 *)g_StActiveHeader;
     /*
-     * The SDK treats the ring state as asynchronously shared.  Keep the
-     * load and its 16-bit normalization separate, and keep v1 available
-     * for the expected state without qualifying ordinary RAM as volatile.
+     * Keep the volatile load and its explicit 16-bit normalization separate,
+     * and keep v1 available for the expected state.
      */
     asm volatile(
         "" : "=r"(headerState) : "0"(headerState) : "$3");
@@ -169,13 +169,10 @@ void StCdInterrupt(void) {
             g_StCopySector = 0;
         } else {
             /* Preserve the SDK's second observation of shared ring state. */
-            asm volatile(
-                "" : "=r"(headerState) : "0"(*(u16 *)g_StActiveHeader));
+            *(volatile u16 *)g_StActiveHeader;
         }
         g_StInterruptState = 5;
-        *(u16 *)g_StActiveHeader = 0;
-        /* Do not move the shared-state clear into the return delay slot. */
-        asm("" ::: "memory");
+        *(volatile u16 *)g_StActiveHeader = 0;
         return;
     }
 
@@ -198,7 +195,8 @@ void StCdInterrupt(void) {
     if (g_StActiveHeader->frame == 0) {
         /* Retain the SDK's explicit unsigned normalization of nFrames. */
         asm volatile(
-            "" : "=r"(frameCount) : "0"(g_StActiveHeader->nFrames));
+            "" : "=r"(frameCount)
+               : "0"(((volatile StStrHeader *)g_StActiveHeader)->nFrames));
         endFrame = g_StEndFrame;
         g_StCurrentSector = 0;
         /* Keep the sector reset ahead of the nFrames normalization. */
@@ -256,7 +254,7 @@ void StCdInterrupt(void) {
                     ((u32 *)g_StActiveHeader)[i];
                 i++;
             } while (i < 8);
-            g_StActiveHeader = g_StRingBase;
+            g_StActiveHeader = (StStrHeader *)g_StRingBase;
         }
 
         g_StReadCursor = g_StWriteCursor;
