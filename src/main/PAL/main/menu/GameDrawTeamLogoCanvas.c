@@ -3,7 +3,133 @@
 extern s32 D_8009B280;
 extern u8 D_8009B284;
 
-void func_80047024(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+typedef struct {
+    s16 cx;
+    s16 cy;
+} TeamLogoClutPos;
+
+typedef struct {
+    s16 tx;
+    u16 ty;
+} TeamLogoTexturePos;
+
+typedef union {
+    s32 value;
+    u16 lo;
+    s16 slo;
+} TeamLogoWord;
+
+extern TeamLogoClutPos D_8007BEDC;
+extern TeamLogoTexturePos D_8007BEE4;
+extern u8 D_8007F930;
+extern TeamLogoWord D_8007F934;
+extern s32 D_8007F938;
+extern TeamLogoWord D_8007F93C;
+extern s32 D_8007F940;
+extern s32 D_8007F944;
+extern s32 D_8007F948;
+extern s32 D_8007F94C;
+extern s32 D_8007F950;
+extern s32 D_8007F954;
+extern s32 D_8007F958;
+extern u16 D_8007F95C;
+extern s32 D_8007FB0C;
+extern s32 D_8007FB10;
+extern s32 D_8009B288;
+extern s32 D_8009B298;
+extern s32 D_8009B29C;
+extern u16 D_8009B2A0[16];
+extern u16 D_801E444C[16];
+extern u16 D_801E444E[];
+extern u8 D_801E4369;
+extern u16 D_801E6F2C;
+
+extern s32 func_80064C7C(s16 x, s16 y);
+extern void func_80065B24(void *rect, void *data);
+extern s32 func_80068568(s32 angle);
+extern void func_800468FC(s32 ot, s16 x, s16 y, s16 w, s16 h);
+extern void func_80046A2C(
+    s32 ot,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    u8 u,
+    u8 v,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clut,
+    s32 shadeTex,
+    s32 semiTrans,
+    s32 flags);
+extern void func_80046A2C_prepared(
+    s32 ot,
+    s16 x,
+    s16 y,
+    s16 w,
+    s16 h,
+    s32 u,
+    s32 v,
+    u8 r,
+    u8 g,
+    u8 b,
+    u16 clut,
+    s32 shadeTex,
+    s32 semiTrans,
+    s32 flags) asm("func_80046A2C");
+extern void func_80046E00(
+    s32 ot,
+    s16 x0,
+    s16 y0,
+    s16 x1,
+    s16 y1,
+    s16 x2,
+    s16 y2,
+    s16 x3,
+    s16 y3,
+    u8 u0,
+    u8 v0,
+    u8 u1,
+    u8 v1,
+    u8 u2,
+    u8 v2,
+    u8 u3,
+    u8 v3,
+    u8 r,
+    u8 g,
+    u8 b,
+    s32 clut,
+    s32 shadeTex,
+    s32 semiTrans,
+    s32 tpage);
+extern void func_8004711C(
+    s32 ot, s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b, u8 alpha);
+extern void func_80047460(
+    s32 ot, s16 x, s16 y, s16 w, s32 h, u8 r, u8 g, u8 b, u8 alpha);
+extern void func_80047BD4(
+    s16 x, s32 y, s16 flags, s32 value, u8 r, u8 g, u8 b, s32 clut, s32 primitiveCount);
+
+void func_80047024(
+    void *arg0,
+    s32 arg1,
+    s32 arg2,
+    s32 arg3,
+    s32 arg4,
+    s32 arg5,
+    s32 arg6,
+    s32 arg7,
+    s32 arg8);
+void func_80047024_prepared(
+    s32 arg0,
+    s16 arg1,
+    s16 arg2,
+    s16 arg3,
+    s16 arg4,
+    u8 arg5,
+    u8 arg6,
+    u8 arg7,
+    u8 arg8) asm("func_80047024");
 
 void func_8004A17C(s32 delta) {
     u8 *scratch;
@@ -37,7 +163,466 @@ void func_8004A17C(s32 delta) {
     func_80047024(scratch + 0x18, 0x48, 0, 0xF8, limit, alpha, alpha, alpha, 0x40);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameDrawTeamLogoCanvas", func_8004A248);
+void func_8004A248(s32 arg0, s32 arg1)
+{
+  s32 kreg;
+  s32 a0v;
+  s32 a1v;
+  s32 ot;
+  s32 i;
+  s32 d;
+  s32 v;
+  s32 ang;
+  s32 gx;
+  s32 gy;
+  s32 gx2;
+  s32 gy2;
+  s32 pal;
+  u8 clut;
+  u16 x0;
+  u16 x1;
+  u16 y1;
+  s32 x2;
+  s32 yA0;
+  s16 yA8;
+  s16 yB8;
+  s16 yC8;
+  a0v = arg0;
+  a1v = arg1;
+  ot = *((s32 *) 0x1F800004);
+  if (arg0 == 0)
+  {
+    D_8007FB0C = 0;
+    D_8007FB10 = 0;
+    return;
+  }
+  D_801E444C[0] = 0x8000;
+  D_801E444C[0] |= ((func_80068568(D_8009B288 % 0x1000) / 128) + 0x20) >> 3;
+  ang = D_8009B288 + 0x55;
+  D_801E444C[0] |= (((func_80068568(ang % 0x1000) / 128) + 0x20) >> 3) << 5;
+  ang = D_8009B288 + 0xAA;
+  d = func_80068568(ang % 0x1000);
+  i = 0;
+  if (d < 0)
+  {
+    d += 0x7F;
+  }
+  {
+    u16 *dst;
+    register s32 acc asm("$4");
+    register s32 red asm("$2");
+    s32 mul;
+    u16 k8;
+    k8 = 0x8000;
+    D_801E444C[0] |= (((d >> 7) + 0x20) >> 3) << 10;
+    D_8009B2A0[0] = D_801E444C[0];
+    dst = D_8009B2A0;
+    D_8009B288 += 0x20;
+    mul = D_8009B298;
+    loop16:
+    {
+      u16 *src = &D_801E444C[i];
+      *dst = k8;
+      red = (((*src) & 0x1F) * mul) / 256;
+      acc = red | ((u16) 0x8000);
+      *dst = acc;
+      acc |= (((((*src) >> 5) & 0x1F) * mul) / 256) << 5;
+      *dst = acc;
+      v = (((*src) >> 10) & 0x1F) * mul;
+      if (v < 0)
+      {
+        v += 0xFF;
+      }
+      i++;
+      red = acc | ((v >> 8) << 10);
+      *dst = red;
+      dst++;
+      if (i < 16)
+      {
+        goto loop16;
+      }
+    }
+
+  }
+  func_80065B24(&D_8007BEE4, &D_801E6F2C);
+  func_80065B24(&D_8007BEDC, D_801E444C);
+  func_80065B24(&D_8007F95C, D_8009B2A0);
+  if (a0v < 0)
+  {
+    D_8007FB0C = a0v + D_8007FB0C;
+    if (D_8007FB0C < 0)
+    {
+      D_8007FB0C = 0;
+    }
+  }
+  if (a1v < 0)
+  {
+    D_8007FB10 = a1v + D_8007FB10;
+    if (D_8007FB10 < 0)
+    {
+      D_8007FB10 = 0;
+    }
+  }
+  d = D_8007FB0C - 0xA;
+  if (d >= 0)
+  {
+    s32 sy2;
+    s32 sy;
+    register s32 drawX asm("$5");
+    register s32 sy2Arg asm("$17");
+    u8 ff;
+    s32 sx;
+    s32 x88;
+    s32 w1;
+    s32 delta;
+    s32 scaleDelta;
+    register s32 gxBase asm("$2");
+    s32 texY;
+    s32 gyTemp;
+    register s32 gxTemp asm("$4");
+    register s32 gyRaw asm("$2");
+    if (d >= 0xC)
+    {
+      d = 0xB;
+    }
+    x0 = 0x87;
+    drawX = 0x87;
+    asm("" : : "r"(drawX));
+    sy = (((u32) (d * 0x460)) >> 5) + 0xFEC9;
+    ff = 0xFF;
+    func_80047460(ot, drawX, sy, 0x82, 0x104, 0xB4, 0xB4, 0xB4, ff);
+    kreg = sy;
+    if (D_8009B29C >= 0x100)
+    {
+      if (D_8007F954 == 0)
+      {
+        register s32 sy2Value asm("$3");
+        s32 syOffset;
+        register s32 angleSource asm("$2");
+        register s32 angleValue asm("$5");
+        register s32 modInput asm("$4");
+        angleSource = D_8009B288;
+        sy2Value = D_8007F934.value;
+        asm("" : : "r"(angleSource));
+        angleValue = angleSource * 2;
+        modInput = angleValue;
+        asm volatile("" : : "r"(modInput));
+        sy2Value *= 4;
+        sy2 = sy2Value + 0x88;
+        sy2Arg = sy2;
+        syOffset = (D_8007F938 * 8) + 2;
+        asm("" : "=r"(sy) : "0"(sy));
+        sy += syOffset;
+        if (angleValue < 0)
+        {
+          modInput = angleValue + 0xFFF;
+        }
+        modInput >>= 12;
+        modInput *= 0x1000;
+        modInput = angleValue - modInput;
+        clut = (func_80068568(modInput) / 64) - 0x41;
+        func_80047460(ot, sy2Arg, sy, D_8007F94C * 4, (s16) (D_8007F94C * 8), 0, clut, 0, ff);
+      }
+    }
+    sx = (s16) kreg;
+    x2 = ((s16) x0) - (D_8007F948 < 0x220);
+    if (D_8007F948 < 0x220)
+    {
+      sx -= 2;
+    }
+    w1 = sx + 0x110;
+    x88 = x2 + 0x88;
+    delta = 0x220 - D_8007F948;
+    scaleDelta = (delta * D_8007F93C.value) / 272;
+    gxBase = (D_8007BEE4.tx * 4) - 1;
+    gxTemp = gxBase + scaleDelta;
+    gx = gxTemp;
+    scaleDelta = (delta * D_8007F940) / 272;
+    texY = (*((u8 *) (&D_8007BEE4.ty))) - 1;
+    gyTemp = texY + scaleDelta;
+    asm("" : : "r"(gyTemp));
+    gyRaw = gyTemp;
+    asm("" : : "r"(gyRaw));
+    gy = gyRaw;
+    gx2 = gxTemp + (D_8007F948 / 8);
+    asm("" : : "r"(gyRaw));
+    asm("" : : "r"(scaleDelta));
+    gy2 = gyRaw + (D_8007F948 / 8);
+    clut = (D_8007BEE4.ty >> 4) & 0x10;
+    clut |= (D_8007BEE4.tx & 0x3FF) >> 6;
+    func_800468FC(ot, 0, 0, 0x140, 0x1E0);
+    func_80046E00(ot, x2, sx, x88, sx, x2, w1, x88, w1, gx, gy, gx2, gy, gx, gy2, gx2, gy2, 0x7F, 0x7F, 0x7F, 0x27F, 1, 0, clut);
+    func_800468FC(ot, x0 + 1, kreg + 2, 0x80, 0x100);
+  }
+  d = D_8007FB0C - 0xE;
+  if (d >= 0)
+  {
+    register s32 sy asm("$16");
+    u32 su;
+    s32 ff;
+    s16 w1;
+    s16 xb;
+    if (d >= 8)
+    {
+      d = 7;
+    }
+    su = ((u32) (-(d * 0x460))) >> 5;
+    sy = su + 0x1FB;
+    x0 = 0x2F;
+    ff = 0xFF;
+    func_80047460(ot, 0x2F, sy, 0x42, 0x84, 0xB4, 0xB4, 0xB4, ff);
+    kreg = sy;
+    if ((D_8009B29C >= 0x100) && (D_8007F944 != 0))
+    {
+      x1 = D_8007F93C.lo + 0x30;
+      y1 = sy + ((D_8007F940 * 2) + 2);
+      clut = (func_80068568((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
+      if (D_8007F944 == 2)
+      {
+        s16 ya;
+        s16 yb;
+        s16 xa;
+        ya = su + 0x1FD;
+        yb = su + 0x27D;
+        xa = x1 + D_8007F934.lo;
+        func_8004711C(ot, xa, ya, xa, yb, clut, clut, clut, ff);
+        xa = ((x1 + D_8007F934.lo) + ((u16) D_8007F94C)) - 1;
+        func_8004711C(ot, xa, ya, xa, yb, clut, clut, clut, ff);
+        xa = y1 + (D_8007F938 * 2);
+        func_8004711C(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
+        {
+          s32 odd;
+          odd = D_8007F938 * 2 + 1;
+          xa = y1 + odd;
+        }
+        func_8004711C(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
+        xa = y1 + (((D_8007F938 + D_8007F94C) - 1) * 2);
+        func_8004711C(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
+        {
+          s32 odd;
+          odd = ((D_8007F938 + D_8007F94C) - 1) * 2 + 1;
+          xa = y1 + odd;
+        }
+        func_8004711C(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
+      }
+      else
+        if (D_8007F94C == 1)
+      {
+        s16 xa = x1 + D_8007F934.lo;
+        s16 ya = y1 + (D_8007F938 * 2);
+        func_8004711C(ot, xa, ya, xa, (s16) (ya + 1), clut, clut, clut, ff);
+      }
+      else
+      {
+        func_80047460(ot, x1 + D_8007F934.lo, y1 + (D_8007F938 * 2), (s16) D_8007F94C, (s16) (D_8007F94C * 2), clut, clut, clut, 0xFF);
+      }
+      func_80047460(ot, x1, y1, 0x20, 0x40, 0, clut, 0, 0xFF);
+    }
+    gx = (D_8007BEE4.tx * 4) - 1;
+    gy = (*((u8 *) (&D_8007BEE4.ty))) - 1;
+    gx2 = gx;
+    gx2 += 0x41;
+    gy2 = gy;
+    gy2 += 0x41;
+    pal = func_80064C7C(D_8007BEDC.cx, D_8007BEDC.cy);
+    clut = (D_8007BEE4.ty >> 4) & 0x10;
+    clut |= (D_8007BEE4.tx & 0x3FF) >> 6;
+    w1 = kreg + 0x83;
+    xb = x0 + 0x41;
+    func_800468FC(ot, 0, 0, 0x140, 0x1E0);
+    asm("" : "=r"(gx2) : "0"(gx2));
+    func_80046E00(ot, x0, kreg, xb, kreg, x0, w1, xb, w1, gx, gy, gx2, gy, gx, gy2, gx2, gy2, 0x7F, 0x7F, 0x7F, pal & 0xFFFF, 1, 0, clut);
+    func_800468FC(ot, x0 + 1, kreg + 2, 0x40, 0x80);
+  }
+  d = D_8007FB10 - 8;
+  if (d >= 0)
+  {
+    s32 j;
+    register s32 vs7 asm("$23");
+    register s32 vs6 asm("$22");
+    u32 panelY;
+    if (d >= 6)
+    {
+      d = 5;
+    }
+    x0 = 0x8A;
+    panelY = ((u32) (-(d * 0x3C0))) >> 5;
+    kreg = panelY + 0x1EA;
+    y1 = panelY + 0x1E7;
+    x1 = (D_8007F950 * 8) + 0x80;
+    if (D_8007F954 == 1)
+    {
+      s32 panelAng;
+      panelAng = D_8009B288 * 2;
+      clut = (func_80068568(panelAng % 0x1000) / 64) - 0x41;
+      func_80047460(ot, x1, y1, 0xD, 0x1A, 0, clut, 0, 0xFF);
+    }
+    else
+    {
+      func_80047460(ot, x1, y1, 0xD, 0x1A, 0xB4, 0xB4, 0xB4, 0xFF);
+    }
+    func_80047024_prepared(ot, x1 + 1, y1 + 2, 0xB, 0x16, (*((u8 *) (&D_801E444C[D_8007F950]))) * 8, (D_801E444C[D_8007F950] >> 2) & 0xF8, (D_801E444C[D_8007F950] >> 7) & 0xF8, 0xFF);
+    {
+      s32 fy2 = (kreg + 2) << 16;
+      i = 0;
+      j = 1;
+      loop15:
+      func_80047024_prepared(ot, x0 + j, fy2 >> 16, 8, 0x10, (*((u8 *) (&D_801E444E[i]))) * 8, (D_801E444E[i] >> 2) & 0xF8, (D_801E444E[i] >> 7) & 0xF8, 0xFF);
+
+      i++;
+      j += 8;
+      if (i < 15)
+      {
+        goto loop15;
+      }
+    }
+    {
+      func_80047460(ot, x0, kreg, 0x7A, 0x14, 0xB4, 0xB4, 0xB4, 0xFF);
+      y1 = kreg + 0x1C;
+    i = 0;
+    yA0 = (kreg + 0x22) << 16;
+    asm("" : : "r"(yA0));
+    kreg = 0x60;
+    asm("" : : "r"(kreg));
+    vs7 = -0x30;
+    vs6 = -0xF;
+    for (; i < 4; i++)
+    {
+      register s32 shade asm("$21");
+      register s32 shadeArg asm("$3");
+      register s32 swatchWidth asm("$7");
+      register s32 otArg asm("$4");
+      s32 gxArg;
+      s32 gyArg;
+      register s32 clutArg asm("$20");
+
+      x1 = x0 + vs6;
+      if (D_801E4369 == 0x23)
+      {
+        gx = vs7;
+        gy = 0;
+        pal = 0x233;
+        clut = 0x1E;
+      }
+      else
+      {
+        gx = kreg;
+        gy = 0x58;
+        pal = 0x1F6;
+        clut = 0x1C;
+      }
+      gxArg = (u8) gx;
+      gyArg = (u8) gy;
+      asm("" : : "r"(gxArg), "r"(gyArg));
+      asm("" : : "r"(pal));
+      swatchWidth = 0xC;
+      asm("" : : "r"(swatchWidth));
+      shade = (u8) (i * 0x24);
+      asm("" : : "r"(shade));
+      otArg = ot;
+      asm("" : : "r"(otArg));
+      asm("" : : "r"(x1));
+      asm("" : "=r"(clutArg) : "0"(clut));
+      func_80046A2C_prepared(otArg, x1 + 0x13, yA0 >> 16, swatchWidth, 0x18,
+                            gxArg, gyArg, 0, 0, 0, (u16) pal, 1, 0, clutArg);
+      asm("" : "=r"(shade) : "0"(shade));
+      shadeArg = (u8) shade;
+      func_80046A2C(ot, x1, y1, 0x22, 0x32, shadeArg, 0xC0,
+                    0, 0, 0, 0x1F5, 1, 0, 0x1D);
+      kreg += 0xC;
+      asm("" : : "r"(kreg));
+      vs7 += 0xC;
+      vs6 += 0x28;
+      }
+    }
+  }
+  d = D_8007FB10 - 7;
+  if (d >= 0)
+  {
+    if (d >= 7)
+    {
+      d = 6;
+    }
+    func_80046A2C(ot, (((u32) (d * 0x250)) >> 5) + 0xFFA1, 0xC0, 0x61, 0x32, 0x90, 0xC0, 0, 0, 0, 0x1F5, 1, 0, 0x1D);
+  }
+  d = D_8007FB10 - 8;
+  if ((d >= 0) && (D_8007F930 != 0))
+  {
+    s16 sy;
+    s16 sx;
+    s16 xa;
+    s16 xb;
+    s16 xc;
+    s32 x0Calc;
+    s32 syBase;
+    register s32 tileSize asm("$19");
+    kreg = 0xC8;
+    if (d >= 6)
+    {
+      d = 5;
+    }
+    x0Calc = (((u32) (-(d * 0x140))) >> 5) + 0x140;
+    asm("" : : "r"(x0Calc) : "memory");
+    syBase = D_8007F958;
+    x0 = (u16) x0Calc;
+    sy = (syBase * 0x30) + 0xD9;
+    if (D_8007F954 == 1)
+    {
+      clut = (func_80068568((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
+      func_80047460(ot, x0, sy, 0x12, 0x15, 0, clut, 0, 0xFF);
+    }
+    yA8 = (s16) (kreg + 0x14);
+    sx = 0x3F;
+    sx = x0 - sx;
+    func_80047BD4(sx, yA8, 3, D_801E444C[D_8007F950] & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    yB8 = (s16) (kreg + 0x44);
+    func_80047BD4(sx, yB8, 3, (D_801E444C[D_8007F950] >> 5) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    yC8 = (s16) (kreg + 0x74);
+    func_80047BD4(sx, yC8, 3, (D_801E444C[D_8007F950] >> 10) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    {
+      s32 alpha;
+      alpha = 0xFF;
+      func_80047460(ot, x0, kreg, 0x12, 0x26, 0xB4, 0xB4, 0xB4, alpha);
+      func_80047460(ot, x0, kreg + 0x30, 0x12, 0x26, 0xB4, 0xB4, 0xB4, alpha);
+      func_80047460(ot, x0, kreg + 0x60, 0x12, 0x26, 0xB4, 0xB4, 0xB4, alpha);
+    }
+    xa = x0 + 1;
+    xb = x0 + 0x11;
+    func_8004711C(ot, xa, kreg + 0x11, xb, kreg + 0x11, 0xB4, 0xB4, 0xB4, 0xFF);
+    func_8004711C(ot, xa, kreg + 0x12, xb, kreg + 0x12, 0xB4, 0xB4, 0xB4, 0xFF);
+    func_8004711C(ot, xa, kreg + 0x41, xb, kreg + 0x41, 0xB4, 0xB4, 0xB4, 0xFF);
+    func_8004711C(ot, xa, kreg + 0x42, xb, kreg + 0x42, 0xB4, 0xB4, 0xB4, 0xFF);
+    func_8004711C(ot, xa, kreg + 0x71, xb, kreg + 0x71, 0xB4, 0xB4, 0xB4, 0xFF);
+    func_8004711C(ot, xa, kreg + 0x72, xb, kreg + 0x72, 0xB4, 0xB4, 0xB4, 0xFF);
+    xc = x0 + 5;
+    tileSize = 0x10;
+    func_80046A2C(ot, xc, kreg + 2, 8, tileSize, 0xD8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
+    func_80046A2C(ot, xc, kreg + 0x32, 8, tileSize, 0x80, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
+    func_80046A2C(ot, xc, kreg + 0x62, 8, tileSize, 0x58, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
+    func_80047024_prepared(ot, xa, kreg + 2, 0x10, tileSize, 0xC0, 0, 0, 0xFF);
+    func_80047024_prepared(ot, xa, yA8, 0x10, tileSize, 0, 0, 0, 0xFF);
+    func_80047024_prepared(ot, xa, kreg + 0x32, 0x10, tileSize, 0, 0xC0, 0, 0xFF);
+    func_80047024_prepared(ot, xa, yB8, 0x10, tileSize, 0, 0, 0, 0xFF);
+    func_80047024_prepared(ot, xa, kreg + 0x62, 0x10, tileSize, 0, 0, 0xC0, 0xFF);
+    func_80047024_prepared(ot, xa, yC8, 0x10, tileSize, 0, 0, 0, 0xFF);
+  }
+  if (a0v > 0)
+  {
+    D_8007FB0C = a0v + D_8007FB0C;
+    if (D_8007FB0C >= 0x1A)
+    {
+      D_8007FB0C = 0x19;
+    }
+  }
+  if (a1v > 0)
+  {
+    D_8007FB10 = a1v + D_8007FB10;
+    if (D_8007FB10 >= 0x11)
+    {
+      D_8007FB10 = 0x10;
+    }
+  }
+}
 
 extern s32 D_8007F948;
 extern s32 D_8009B298;
