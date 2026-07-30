@@ -336,7 +336,367 @@ void GameEnterCarSelectScreen(void) {
     func_8004CF30(-9);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/menu/GameUpdateRankingScreen", func_8005568C);
+extern u8 D_800818CC;
+extern u8 D_800819A4;
+extern u8 g_UiChromeScript2 asm("D_80082790");
+extern u8 D_8008285C;
+extern u8 D_80082874;
+extern u8 *D_801E40B4;
+extern s32 D_8009B324;
+extern s32 D_8009B32C;
+extern s32 D_8009B330;
+extern s32 D_8009B348;
+extern s32 g_MenuHintBarStep asm("D_8009B30C");
+extern s32 D_8009B360;
+extern s32 D_8009B368;
+extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
+extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
+extern s32 g_CarSwapFromIndex asm("D_8009B374");
+extern s32 g_CarSwapToIndex asm("D_8009B378");
+extern s32 D_8019C7B8;
+extern s32 g_PlayerMoney asm("D_8019C908");
+extern s32 D_801E4138;
+extern s32 g_SceneId asm("D_801E42E4");
+extern u16 g_GrandPrixSeriesU16 asm("D_8019CABC");
+extern u8 *g_CourseProgress asm("D_8009E67C");
+
+void GameRequestCarModel(s32 carIndex) asm("func_8001882C");
+s32 GameRequestRoundAssets(void) asm("func_80018C88");
+void GameClearTeamNameTexture(void) asm("func_8001D4E8");
+void GameDrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight)
+    asm("func_80049418");
+void GameDrawCarShopPricePanel(s32 step, s32 money, s32 price)
+    asm("func_8004F650");
+void GameDrawEngineerShopPricePanel(s32 step, s32 arg1, s32 arg2)
+    asm("func_8004F99C");
+s32 GameCountOwnedCars(void) asm("func_80050F68");
+void GameStartSequenceFadeOut(void) asm("func_8005E8E0");
+void func_8004CED0(void);
+void func_8004F3EC(s32 step, s32 count);
+void func_80050400(s32 arg0, s32 arg1);
+
+void GameUpdateCarSelectScreen(void) asm("func_8005568C");
+void GameUpdateCarSelectScreen(void) {
+    s32 mode;
+    u8 *cmdList;
+    s32 lowMode;
+    s32 sel;
+    s32 t;
+    s32 u;
+
+    g_MenuAltLayout = g_MenuAltLayoutSetting;
+    func_8004FCE8(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
+    mode = 2;
+    func_8005131C();
+    func_8004CF30(-9);
+    if (g_GrandPrixMode != 0) {
+        mode = 4;
+    }
+    cmdList = &D_800819A4;
+    if (g_GrandPrixMode != 0) {
+        cmdList = &D_800818CC;
+    }
+
+    if (GameMenuBusy == 0) {
+        g_CarNamePlateStep = 0x14;
+        D_8009B324 = 3;
+        g_MenuPlateCarIndex = g_PlayerCarIndex;
+        func_800487D8(D_801E40B4, &g_UiScriptProgress2, -1);
+        func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
+        GameDrawBrowseArrows(
+            1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
+        {
+            s32 initial;
+
+            initial = -1;
+            if (g_GrandPrixMode == 0) {
+                func_8004F3EC(1, GameCountOwnedCars());
+            }
+            lowMode = mode & 0xFF;
+            func_800489AC(g_UiScriptProgress, lowMode, D_801E4138);
+            func_800487D8(cmdList, &g_UiScriptProgress, 0);
+            if ((func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) !=
+                 0) &&
+                (g_UiScriptProgress2 <= 0)) {
+                g_MenuOverlayPattern = initial;
+                if (g_PadEdge2 & 0x1000) {
+                    GamePlaySoundCue(1);
+                    D_801E4138 =
+                        (D_801E4138 > 0) ? D_801E4138 - 1 : lowMode;
+                }
+                if (g_PadEdge2 & 0x4000) {
+                    GamePlaySoundCue(1);
+                    D_801E4138 =
+                        (D_801E4138 < mode) ? D_801E4138 + 1 : 0;
+                }
+                func_80055454();
+                func_80055524();
+                sel = g_PlayerCarIndex;
+                if ((g_PadHeld & 0x8000) && (g_PrevOwnedCarIndex != -1)) {
+                    t = g_MenuViewAngleTarget;
+                    u = g_MenuViewAngle;
+                    if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
+                        if (g_CarSwapToIndex < 0) {
+                            s32 prev;
+
+                            GamePlaySoundCue(8);
+                            g_PlayerCarIndex = (s32)g_PrevOwnedCarIndex;
+                            GameRequestCarModel(g_PrevOwnedCarIndex);
+                            prev = g_MenuViewAngleTarget;
+                            g_CarSwapFromIndex = sel;
+                            g_MenuViewAngleTarget = 0;
+                            D_8009B330 = -1;
+                            g_CarSwapToIndex = g_PlayerCarIndex;
+                            g_MenuViewAngle =
+                                (g_MenuViewAngle - prev) + 0x927C0;
+                        }
+                    }
+                }
+                if ((g_PadHeld & 0x2000) && (g_NextOwnedCarIndex != -1)) {
+                    t = g_MenuViewAngleTarget;
+                    u = g_MenuViewAngle;
+                    if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
+                        if (g_CarSwapToIndex < 0) {
+                            s32 base;
+                            s32 prev;
+
+                            GamePlaySoundCue(8);
+                            g_PlayerCarIndex = (s32)g_NextOwnedCarIndex;
+                            GameRequestCarModel(g_NextOwnedCarIndex);
+                            base = 0x927C0;
+                            prev = g_MenuViewAngleTarget;
+                            g_MenuViewAngleTarget = 0x124F80;
+                            g_CarSwapFromIndex = sel;
+                            D_8009B330 = -1;
+                            g_CarSwapToIndex = g_PlayerCarIndex;
+                            g_MenuViewAngle =
+                                base - (prev - g_MenuViewAngle);
+                        }
+                    }
+                }
+                t = g_MenuViewAngleTarget;
+                u = g_MenuViewAngle;
+                if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
+                    if (g_CarSwapToIndex < 0) {
+                        if (g_PadEdge2 & 0x860) {
+                            s32 choice;
+
+                            choice = D_801E4138;
+                            if (choice == 0) {
+                                u16 series;
+
+                                GamePlaySoundCue(2);
+                                GameStartSequenceFadeOut();
+                                if (g_GrandPrixMode != 0) {
+                                    series = 0;
+                                    if (g_GrandPrixClass < 5) {
+                                        series = g_GrandPrixSeriesU16;
+                                    }
+                                    g_GrandPrixSeriesU16 = series;
+                                } else {
+                                    g_GrandPrixSeriesU16 = g_CourseIndex >> 2;
+                                }
+                                GameRequestRoundAssets();
+                                GameMenuBusy = 1;
+                                g_MenuHintBarStep = -1;
+                                g_CarNamePlateStep = -10;
+                                g_MenuOverlayPattern = 0;
+                                D_8009B324 = -3;
+                                g_MenuViewOffsetTarget = 0x3D090;
+                                return;
+                            }
+                            if (choice == 1) {
+                                GamePlaySoundCue(2);
+                                GameMenuBusy = 2;
+                                g_MenuOverlayPattern = 1;
+                                g_CarNamePlateStep = -10;
+                                return;
+                            }
+                            if (choice == mode) {
+                                GamePlaySoundCue(3);
+                                GameMenuBusy = 5;
+                                g_MenuOverlayPattern = 2;
+                                g_CarNamePlateStep = -10;
+                                D_8009B324 = -3;
+                                g_MenuViewOffsetTarget = 0x3D090;
+                                return;
+                            }
+                            if (choice == 2) {
+                                s32 car;
+
+                                car = D_8019C7B8;
+                                if (car != -1) {
+                                    s32 base;
+                                    s32 prev;
+
+                                    GamePlaySoundCue(2);
+                                    g_CarListCursor = D_8019C7B8;
+                                    GameRequestCarModel(g_CarListCursor);
+                                    base = 0x927C0;
+                                    prev = g_MenuViewAngleTarget;
+                                    g_MenuViewAngleTarget = 0x124F80;
+                                    GameMenuBusy = 3;
+                                    g_MenuOverlayPattern = 1;
+                                    g_CarSwapFromIndex = g_PlayerCarIndex;
+                                    g_CarSwapToIndex = g_CarListCursor;
+                                    g_MenuViewAngle =
+                                        base - (prev - g_MenuViewAngle);
+                                    return;
+                                }
+                                GamePlaySoundCue(5);
+                                D_801E40B4 = &D_8008285C;
+                                GameMenuBusy = car;
+                                g_UiScriptProgress2 = 0;
+                                return;
+                            }
+                            if (choice == 3) {
+                                s32 unlockLevel;
+
+                                if (g_CarModelAsset[0xA] != 0) {
+                                    unlockLevel =
+                                        GameGetCarUnlockLevel(g_PlayerCarIndex);
+                                    if (g_RaceProgress->maxClassReached >=
+                                        unlockLevel) {
+                                        GameMenuBusy = 4;
+                                        g_MenuOverlayPattern = 1;
+                                        GamePlaySoundCue(2);
+                                        return;
+                                    }
+                                }
+                                GamePlaySoundCue(5);
+                                D_801E40B4 = &D_80082874;
+                                GameMenuBusy = -2;
+                                g_UiScriptProgress2 = 0;
+                                return;
+                            }
+                        } else if ((g_PadEdge2 & 0x90) &&
+                                   ((u32)(g_MenuViewAngle - 0x2710) >
+                                    0x120160U)) {
+                            GamePlaySoundCue(3);
+                            GameMenuBusy = 5;
+                            g_MenuOverlayPattern = 2;
+                            g_CarNamePlateStep = -10;
+                            D_8009B324 = -3;
+                            g_MenuViewOffsetTarget = 0x3D090;
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    }
+
+    if (GameMenuBusy < 0) {
+        func_800487D8(D_801E40B4, &g_UiScriptProgress2, 0);
+        if (func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
+            if (g_PadEdge2 & 0x860) {
+                GameMenuBusy = 0;
+            }
+            if (g_PadEdge2 & 0x90) {
+                GameMenuBusy = 0;
+            }
+        }
+        GameDrawBrowseArrows(
+            1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
+        if (g_GrandPrixMode == 0) {
+            func_8004F3EC(1, GameCountOwnedCars());
+        }
+        func_800489AC(g_UiScriptProgress, mode, D_801E4138);
+        func_800487D8(cmdList, &g_UiScriptProgress, 0);
+        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
+        return;
+    }
+
+    g_MenuHandlerIndex = -1;
+    g_MenuHandlerIndex2 = 4;
+    GameDrawBrowseArrows(
+        -1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
+    if (g_GrandPrixMode == 0) {
+        func_8004F3EC(-1, GameCountOwnedCars());
+    }
+    func_800487D8(cmdList, &g_UiScriptProgress, -1);
+    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
+    func_800489AC(g_UiScriptProgress, mode, D_801E4138);
+    if (g_UiScriptProgress <= 0) {
+        switch (GameMenuBusy) {
+        case 1:
+            if ((D_8009B348 > 0) &&
+                (g_MenuViewOffset <= 0x3D08F)) {
+                return;
+            }
+            g_SceneId = 9;
+            g_CourseIndex &= 3;
+            g_RaceProgress->course = g_CourseIndex;
+            g_RaceProgress->carIndex = g_PlayerCarIndex;
+            g_RaceProgress->classIndex = g_GrandPrixClass;
+            if (g_GrandPrixMode != 0) {
+                g_RaceProgress->unk10 = g_PlayerMoney;
+            } else {
+                g_RaceProgress->unk10 = (s16)g_GrandPrixSeriesU16;
+            }
+            break;
+        case 2:
+            g_MenuScreen = 5;
+            g_MenuHandlerIndex = 5;
+            break;
+        case 3:
+            g_MenuScreen = 0xB;
+            g_MenuHandlerIndex = 0xB;
+            GameDrawCarShopPricePanel(0, 0, 0);
+            GameDrawBrowseArrows(0, 0, 0, 0);
+            func_80050400(0, 0);
+            D_8009B32C = 0;
+            D_8009B330 = 0;
+            GameClearTeamNameTexture();
+            func_8004CED0();
+            break;
+        case 4:
+            g_MenuScreen = 0xC;
+            g_MenuHandlerIndex = 0xC;
+            GameDrawEngineerShopPricePanel(0, 0, 0);
+            break;
+        case 5:
+        {
+            s32 angle;
+            s32 offset;
+            s32 largeValue;
+            s32 course;
+            s32 one;
+            s32 minusOne;
+
+            if (g_MenuViewOffset <= 0x3D08F) {
+                return;
+            }
+            angle = 0x7A120;
+            offset = 0x3D090;
+            largeValue = 0x1F4000;
+            course = g_CourseIndex;
+            one = 1;
+            minusOne = -1;
+            g_MenuViewAngle = angle;
+            g_MenuViewAngleTarget = angle;
+            g_MenuScreen = one;
+            g_MenuHandlerIndex = one;
+            D_801E4138 = 0;
+            g_MenuPendingCourseIndex = minusOne;
+            g_MenuViewOffset = offset;
+            g_MenuViewOffsetTarget = 0;
+            D_8009B360 = largeValue;
+            g_MenuCourseModelIndex = course;
+            D_8009B368 = g_CourseProgress[course & 3];
+            func_800509C4(0);
+            if (g_CourseIndex >= 4) {
+                g_TimeAttackPlateStep = one;
+            } else {
+                g_TimeAttackPlateStep = minusOne;
+            }
+            break;
+        }
+        }
+        g_UiScriptProgress = 0;
+        GameMenuBusy = 0;
+    }
+}
 
 extern s32 D_8009B2D0;
 

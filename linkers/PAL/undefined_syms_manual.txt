@@ -20,6 +20,7 @@ func_80054D10 = func_80053688 + 0x1688;
 func_800551BC = func_80053688 + 0x1B34;
 func_80055618 = func_80055524 + 0xF4;
 func_8005568C = func_80055524 + 0x168;
+func_80055FDC = func_8005568C + 0x950;
 func_800562C8 = func_80055FDC + 0x2EC;
 func_800563A0 = func_80055FDC + 0x3C4;
 func_80056E64 = func_80055FDC + 0xE88;

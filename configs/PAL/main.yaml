@@ -94,7 +94,7 @@ segments:
       - [0x2360, .rodata, PAL/main/menu/GameDrawNowLoadingText]
       - [0x23A0, rodata, main/0023A0_main]
       - [0x23A8, .rodata, PAL/main/menu/GameUpdateRankingScreen]
-      - [0x23C0, rodata, main/0023C0_main]
+      - [0x23D4, rodata, main/0023D4_main]
       - [0x23F8, .rodata, PAL/main/menu/GameUpdateCarShopScreen]
       - [0x242C, rodata, main/00242C_main]
       - [0x2FB8, .rodata, PAL/main/save/GamePollMemoryCardStatus]
