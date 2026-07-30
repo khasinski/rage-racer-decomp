@@ -16,14 +16,9 @@ long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) {
     long y;
     long extra;
     long i;
-    /* This pin is load-bearing: removing it changes .text. */
-    register long sum asm("$17");
+    long sum;
     long bound;
-    long store_voice;
-    long tmp;
-    /* This pin is load-bearing: removing it changes .text. */
-    register long next asm("$2");
-    long stack_pad[2];
+    register long tmp asm("$2");
     long call_x;
     long call_y;
 
@@ -36,25 +31,21 @@ long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) {
     extra = arg3;
 
     SpuVmVSetUp(call_x, call_y);
-    __asm__ volatile("" : "=m"(stack_pad[0]), "=m"(stack_pad[1]) : "m"(stack_pad[0]), "m"(stack_pad[1]));
-    __asm__ volatile(
-        "addu %0,$zero,$zero\n\t"
-        "lui %1,%%hi(D_801E42F8)\n\t"
-        "lbu %1,%%lo(D_801E42F8)(%1)\n\t"
-        "addu %2,%3,$zero"
-        : "=r"(i), "=r"(bound), "=r"(store_voice)
-        : "r"(voice));
-    g_SndCurrentSeqSep = store_voice;
+    i = 0;
     sum = 0;
+    bound = D_801E42F8;
+    __asm__ volatile("");
+    tmp = voice;
+    g_SndCurrentSeqSep = tmp;
 
-    if (bound > 0) {
+    if ((short)i < bound) {
         voice <<= 16;
         do {
             sum += (short)SpuVmApplyPitchBendToVoice((short)i, (short)(voice >> 16), (short)x, (short)y, (u_short)extra);
-            next = i + 1;
-            i = next;
+            tmp = i + 1;
+            i = tmp;
             __asm__("" : "=r"(i) : "0"(i));
-        } while ((short)next < D_801E42F8);
+        } while ((short)tmp < (bound = D_801E42F8));
     }
 
     return sum;
