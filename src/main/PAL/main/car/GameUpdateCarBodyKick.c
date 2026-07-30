@@ -2,6 +2,24 @@
 #include "game/car.h"
 #include "game/track.h"
 #include "game/race.h"
+#include "psyq/gte.h"
+
+typedef struct GameCollisionPoint {
+    s16 x;
+    s16 z;
+} GameCollisionPoint;
+
+typedef struct GameCollisionPointBytes {
+    u8 bytes[4];
+} GameCollisionPointBytes;
+
+extern GameCollisionPoint g_CarCollisionCorners[4] asm("D_8007E23C");
+
+void GameTransformCollisionVector(s32 *input, s32 *output) asm("func_800690E0");
+void GameSetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode)
+    asm("func_80038CE8");
+s32 GameIsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
+    asm("func_8002D2E8");
 
 s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) asm("func_80039184");
 
@@ -597,4 +615,268 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
 
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/car/GameUpdateCarBodyKick", func_80039980);
+s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) {
+    s16 rotation[4];
+    s32 transformed[3];
+    Matrix matrix;
+    s16 velocityDelta[2];
+    GameCollisionPointBytes quads[4][4];
+    GameCollisionPoint samples[5];
+    GameCollisionPoint carCorners[4];
+    GameCollisionPoint otherCorners[4];
+    GameCarRuntime *other;
+    s32 nextIndex;
+    s32 carProgress;
+    s32 carField34;
+    s32 hit;
+    s32 corner;
+    s32 offset;
+    s32 quadIndex;
+    s32 distance;
+    s32 progressDelta;
+    s32 average01X;
+    s32 average01Z;
+    s32 average23X;
+    s32 average23Z;
+    u32 average02X;
+    u32 average02Z;
+    u32 average13X;
+    u32 average13Z;
+    u32 centerX;
+    u32 centerZ;
+
+    other = (GameCarRuntime *)((index * sizeof(GameCarRuntime)) + (s32)&g_Cars[1]);
+    nextIndex = index + 1;
+    hit = 0;
+    carProgress = car->trackProgress;
+    carField34 = car->field_34;
+
+    while (nextIndex < 11) {
+        if (other->activeFlag != -1 && other->field_98 == car->field_98) {
+            progressDelta =
+                (other->trackProgress + g_TrackLength - carProgress) % g_TrackLength;
+            distance = other->field_34 - carField34;
+            if (distance < 0) {
+                distance = -distance;
+            }
+            if (distance < 100 &&
+                (progressDelta < 200 || g_TrackLength - 200 < progressDelta)) {
+                velocityDelta[0] = (u16)other->x - (u16)car->x;
+                velocityDelta[1] = (u16)other->z - (u16)car->z;
+
+                rotation[0] = (u16)car->field_20;
+                rotation[2] = (u16)car->field_28;
+                rotation[1] = (u16)car->field_24;
+                RotMatrix(rotation, &matrix);
+                SetRotMatrix(&matrix);
+
+                for (corner = 0, offset = 0; corner < 4; corner++, offset++) {
+                    rotation[0] = g_CarCollisionCorners[offset].x;
+                    rotation[2] = g_CarCollisionCorners[offset].z;
+                    rotation[1] = 0;
+                    GameTransformCollisionVector((s32 *)rotation, transformed);
+                    carCorners[offset].x = transformed[0] >> 2;
+                    carCorners[offset].z = transformed[2] >> 2;
+                    quads[corner][offset] =
+                        *(GameCollisionPointBytes *)&carCorners[offset];
+                }
+
+                average02X = carCorners[0].x + carCorners[2].x;
+                average02X += average02X >> 31;
+                average02X >>= 1;
+                average02Z = carCorners[0].z + carCorners[2].z;
+                average02Z += average02Z >> 31;
+                average02Z >>= 1;
+                average13X = carCorners[1].x + carCorners[3].x;
+                average13X += average13X >> 31;
+                average13X >>= 1;
+                average13Z = carCorners[1].z + carCorners[3].z;
+                average13Z += average13Z >> 31;
+                average13Z >>= 1;
+
+                average01X = carCorners[0].x + carCorners[1].x;
+                average01X += (u32)average01X >> 31;
+                average01X >>= 1;
+                average23X = carCorners[2].x + carCorners[3].x;
+                average23X += (u32)average23X >> 31;
+                average23X >>= 1;
+                centerX = (s16)average01X + (s16)average23X;
+                centerX += centerX >> 31;
+                centerX >>= 1;
+
+                average01Z = carCorners[0].z + carCorners[1].z;
+                average01Z += (u32)average01Z >> 31;
+                average01Z >>= 1;
+                average23Z = carCorners[2].z + carCorners[3].z;
+                average23Z += (u32)average23Z >> 31;
+                average23Z >>= 1;
+                centerZ = (s16)average01Z + (s16)average23Z;
+                centerZ += centerZ >> 31;
+                centerZ >>= 1;
+
+                ((GameCollisionPoint *)&quads[1][0])->x = average01X;
+                ((GameCollisionPoint *)&quads[0][1])->x = average01X;
+                ((GameCollisionPoint *)&quads[1][0])->z = average01Z;
+                ((GameCollisionPoint *)&quads[0][1])->z = average01Z;
+                ((GameCollisionPoint *)&quads[2][0])->x = average02X;
+                ((GameCollisionPoint *)&quads[0][2])->x = average02X;
+                ((GameCollisionPoint *)&quads[2][0])->z = average02Z;
+                ((GameCollisionPoint *)&quads[0][2])->z = average02Z;
+                ((GameCollisionPoint *)&quads[3][1])->x = average13X;
+                ((GameCollisionPoint *)&quads[1][3])->x = average13X;
+                ((GameCollisionPoint *)&quads[3][1])->z = average13Z;
+                ((GameCollisionPoint *)&quads[1][3])->z = average13Z;
+                ((GameCollisionPoint *)&quads[3][2])->x = average23X;
+                ((GameCollisionPoint *)&quads[2][3])->x = average23X;
+                ((GameCollisionPoint *)&quads[3][2])->z = average23Z;
+                ((GameCollisionPoint *)&quads[2][3])->z = average23Z;
+                ((GameCollisionPoint *)&quads[3][0])->x = centerX;
+                ((GameCollisionPoint *)&quads[2][1])->x = centerX;
+                ((GameCollisionPoint *)&quads[1][2])->x = centerX;
+                ((GameCollisionPoint *)&quads[0][3])->x = centerX;
+                ((GameCollisionPoint *)&quads[3][0])->z = centerZ;
+                ((GameCollisionPoint *)&quads[2][1])->z = centerZ;
+                ((GameCollisionPoint *)&quads[1][2])->z = centerZ;
+                ((GameCollisionPoint *)&quads[0][3])->z = centerZ;
+
+                rotation[0] = (u16)other->field_20;
+                rotation[2] = (u16)other->field_28;
+                rotation[1] = (u16)other->field_24;
+                RotMatrix(rotation, &matrix);
+                SetRotMatrix(&matrix);
+
+                for (corner = 0, offset = 0; corner < 4; corner++, offset += 4) {
+                    rotation[0] = g_CarCollisionCorners[corner].x;
+                    rotation[2] = g_CarCollisionCorners[corner].z;
+                    rotation[1] = 0;
+                    GameTransformCollisionVector((s32 *)rotation, transformed);
+                    otherCorners[corner].x =
+                        (transformed[0] >> 2) + velocityDelta[0];
+                    otherCorners[corner].z =
+                        (transformed[2] >> 2) + velocityDelta[1];
+                }
+
+                samples[0].x =
+                    (otherCorners[0].x + otherCorners[1].x) / 2;
+                samples[0].z =
+                    (otherCorners[0].z + otherCorners[1].z) / 2;
+                samples[1].x =
+                    (otherCorners[0].x + otherCorners[2].x) / 2;
+                samples[1].z =
+                    (otherCorners[0].z + otherCorners[2].z) / 2;
+                samples[2].x =
+                    (otherCorners[1].x + otherCorners[3].x) / 2;
+                samples[2].z =
+                    (otherCorners[1].z + otherCorners[3].z) / 2;
+                samples[3].x =
+                    (otherCorners[2].x + otherCorners[3].x) / 2;
+                samples[3].z =
+                    (otherCorners[2].z + otherCorners[3].z) / 2;
+                samples[4].x =
+                    (samples[0].x + samples[2].x) / 2;
+                samples[4].z =
+                    (samples[0].z + samples[2].z) / 2;
+
+                corner = 0;
+                do {
+                    quadIndex = 0;
+                    do {
+                        hit = GameIsPointInQuad(
+                            *(s32 *)&quads[quadIndex][2],
+                            *(s32 *)&quads[quadIndex][3],
+                            *(s32 *)&quads[quadIndex][0],
+                            *(s32 *)&quads[quadIndex][1],
+                            *(s32 *)&otherCorners[corner]);
+                        if (hit > 0) {
+                            hit = quadIndex + 1;
+                            break;
+                        }
+                        quadIndex++;
+                    } while (quadIndex < 4);
+                    if (hit > 0) {
+                        break;
+                    }
+                    corner++;
+                } while (corner < 4);
+
+                if (hit <= 0) {
+                    corner = 0;
+                    do {
+                        quadIndex = 0;
+                        do {
+                            hit = GameIsPointInQuad(
+                                *(s32 *)&quads[quadIndex][2],
+                                *(s32 *)&quads[quadIndex][3],
+                                *(s32 *)&quads[quadIndex][0],
+                                *(s32 *)&quads[quadIndex][1],
+                                *(s32 *)&samples[corner]);
+                            if (hit > 0) {
+                                hit = quadIndex + 1;
+                                break;
+                            }
+                            quadIndex++;
+                        } while (quadIndex < 4);
+                        if (hit > 0) {
+                            break;
+                        }
+                        corner++;
+                    } while (corner < 5);
+                }
+                if (hit > 0) {
+                    break;
+                }
+            }
+        }
+        other++;
+        nextIndex++;
+    }
+
+    if (hit > 0) {
+        if (hit < 3) {
+            s32 deltaX;
+            s32 deltaZ;
+
+            deltaX =
+                (s16)((u16)other->field_C8 - (u16)car->field_C8);
+            if (deltaX < 0) {
+                deltaX += 31;
+            }
+            velocityDelta[0] = deltaX >> 5;
+            deltaZ =
+                (s16)((u16)other->field_D0 - (u16)car->field_D0);
+            if (deltaZ < 0) {
+                deltaZ += 31;
+            }
+            velocityDelta[1] = deltaZ >> 5;
+            GameSetCarKnockback(car, 0, 0, 4);
+            GameSetCarKnockback(
+                other, velocityDelta[0], velocityDelta[1], 4);
+            car->field_8A = 1;
+            car->field_A8 = (car->field_A8 * 90) / 100;
+            other->field_8A = 1;
+        } else {
+            s32 deltaX;
+            s32 deltaZ;
+
+            deltaX =
+                (s16)((u16)other->field_C8 - (u16)car->field_C8);
+            if (deltaX < 0) {
+                deltaX += 31;
+            }
+            velocityDelta[0] = deltaX >> 5;
+            deltaZ =
+                (s16)((u16)other->field_D0 - (u16)car->field_D0);
+            if (deltaZ < 0) {
+                deltaZ += 31;
+            }
+            velocityDelta[1] = deltaZ >> 5;
+            GameSetCarKnockback(
+                car, -velocityDelta[0], -velocityDelta[1], 4);
+            GameSetCarKnockback(other, 0, 0, 4);
+            other->field_A8 = (other->field_A8 * 90) / 100;
+            car->field_8A = 1;
+            other->field_8A = 1;
+        }
+    }
+    return hit;
+}

@@ -84,4 +84,6 @@ build/**/report.json
 docs/TASK_FOR_*.md
 docs/*_REPORT.md
 docs/*_REPORT_*.md
+# Per-function agent notes: durable findings belong in docs/names.md instead.
+docs/func_*.md
 docs/DECOMPILATION_GUIDE.md
