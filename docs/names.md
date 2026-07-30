@@ -5331,3 +5331,57 @@ globals. They are global-and-array code, not aggregate code, and a types pass
 there would find nothing. The rule: *before typing, check that the function
 addresses objects through pointers at all*; a high global count with a near-zero
 offset count means the data is already named and the work is elsewhere.
+
+## 32. The phantom 8-byte frame: `volatile` blocks the carrier
+
+21a recorded the phantom frame as an open problem and the family was withdrawn once
+as a wall. It is now partly closed, and the mechanism is the opposite of what the
+earlier attempts assumed.
+
+**The carrier is a non-volatile view of the SPU register block, and `volatile`
+destroys it.** Measured on `SsUtSetVVol` (`func_80078528`), all three spellings of the
+same hardware at `D_8009DF20`:
+
+| view of `D_8009DF20` | words | exact | frame |
+|---|---:|---:|---|
+| non-volatile `short[]` | 35 | **0** | retail's 8-byte frame appears |
+| `volatile short[]` | 34 | 32 | none |
+| separate volatile byte symbols with casts | 33 | 35 | none |
+
+So the frame is not something to reserve and not evidence of a pre-test loop in this
+case: it falls out of two ordinary halfword stores through a non-volatile array view,
+exactly as it does for the already-solved twin `SsUtChangeADSR` fifteen lines away,
+which uses the same `g_SndVoiceRegs16` spelling. Every earlier attempt reached for the
+volatile byte views because the registers *are* hardware, and that is precisely what
+prevented the frame from forming.
+
+This does not contradict section 28's rule that `volatile` on genuinely shared or
+hardware-backed state is description rather than fiction. It says something narrower
+and more useful: **`volatile` is not free, and where retail's own code did not use it,
+adding it changes codegen.** `D_8009DF20` is declared eleven times across this tree in
+four element types, and only one of those declarations carries `volatile`; that
+inconsistency is retail's, and it is load-bearing.
+
+**Parameter typing is the other half.** Declaring the two volume arguments `long` and
+casting to `short` at the point of use produces retail's `sll 16` / `sra 16` pairs and
+reaches `exact 0`. Declaring them `short` gives 36 words and `exact 35`, because
+`assign_parms` moves the sign extension ahead of the guard. Same lesson as
+`GameDrawFlatTriangle`: width and signedness are per-use.
+
+### 32a. The two that did not close, and how close they are
+
+Both remain byte-exact in the tree with their crutches; neither was replaced by a
+non-hashing candidate. Their best legal crutch-free candidates:
+
+| function | words | exact | aligned | what is left |
+|---|---:|---:|---:|---|
+| `func_80076C58` (`SpuVmSetSeqVol`) | 93 | **3** | 2 | one scheduling difference at `+0x144` |
+| `func_80075EB4` (`SpuVmApplyPitchBendByTone`) | 60 | **10** | 7 | best over every measured statement order |
+
+`func_80075EB4` does not touch `D_8009DF20` at all, so the volatility lever does not
+apply to it and its residual is a different problem. Three of `func_80076C58`'s
+residual words are one scheduling difference, which is the same class as section 29's
+`func_8005F6BC` and may be equally hard.
+
+These are recorded as low-residual negatives rather than as walls: exact 3 out of 93 is
+not the same statement as "blocked", and either could fall to one more idea.

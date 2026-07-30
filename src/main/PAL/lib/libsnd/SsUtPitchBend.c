@@ -33,7 +33,7 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
 long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5) asm("func_80078300");
 long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) asm("func_800783D8");
 long SsUtSetDetVVol(long arg0, short arg1, short arg2) asm("func_80078430");
-long SsUtSetVVol(long arg0, short arg1, short arg2) asm("func_80078528");
+long SsUtSetVVol(long arg0, long arg1, long arg2) asm("func_80078528");
 long SsUtAutoVol(long arg0, long arg1, long arg2, long arg3) asm("func_800785B4");
 long SsUtAutoPan(long arg0, long arg1, long arg2, long arg3) asm("func_80078608");
 
@@ -242,51 +242,33 @@ short SsUtGetVVol(short arg0, short *arg1, short *arg2) {
     return -1;
 }
 
-long SsUtSetVVol(long arg0, short arg1, short arg2) {
-    /* This pin is load-bearing: removing it changes .text. */
+long SsUtSetVVol(long arg0, long arg1, long arg2) {
+    /* This pin is load-bearing after the other pins are removed. */
     register long ret asm("$2");
-    long yarg;
     long x;
     long y;
     long index;
-    long offset;
+    long volOffset;
     u_char flags;
 
-    __asm__ volatile(
-        "\t.set\tnoreorder\n"
-        "addiu $sp,$sp,-8 # maspsx-keep\n"
-        "andi  $2,%2,0xffff # maspsx-keep\n"
-        "sltiu $2,$2,0x18 # maspsx-keep\n"
-        "bnez  $2,1f # maspsx-keep\n"
-        "addu  %0,%3,$zero # maspsx-keep\n"
-        "j     2f # maspsx-keep\n"
-        "addiu $2,$zero,-1 # maspsx-keep\n"
-        "1: # maspsx-keep\n"
-        "sll   $2,%4,16 # maspsx-keep\n"
-        "sra   $2,$2,16 # maspsx-keep\n"
-        "sll   %1,$2,7 # maspsx-keep\n"
-        "addu  %1,%1,$2 # maspsx-keep\n"
-        "sll   $2,%0,16 # maspsx-keep\n"
-        "sra   $2,$2,16 # maspsx-keep\n"
-        "sll   %0,$2,7 # maspsx-keep\n"
-        "addu  %0,%0,$2 # maspsx-keep\n"
-        "\t.set\treorder\n"
-        : "=r"(yarg), "=r"(x)
-        : "r"(arg0), "r"(arg2), "r"(arg1)
-        : "$2", "memory");
+    y = arg2;
+    if ((u_short)arg0 >= 0x18U) {
+        ret = -1;
+    } else {
+        ret = (short)arg1;
+        x = (ret << 7) + ret;
+        ret = (short)y;
+        y = (ret << 7) + ret;
+        index = (short)arg0;
+        volOffset = index << 3;
+        g_SndVoiceRegs16[volOffset + 1] = y;
+        flags = g_SndVoiceFlags[index];
+        ret = 0;
+        g_SndVoiceRegs16[volOffset] = x;
+        flags |= 3;
+        g_SndVoiceFlags[index] = flags;
+    }
 
-    y = yarg;
-    index = (short)arg0;
-    offset = index << 4;
-    *(volatile short *)(g_SndVoiceRegsVolRight + offset) = y;
-    flags = g_SndVoiceFlags[index];
-    ret = 0;
-    *(volatile short *)(g_SndVoiceRegs + offset) = x;
-    flags |= 3;
-    g_SndVoiceFlags[index] = flags;
-
-    __asm__ volatile("2:");
-    __asm__ volatile("addiu $sp,$sp,8" ::: "memory");
     return ret;
 }
 
