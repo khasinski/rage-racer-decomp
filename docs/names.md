@@ -5511,3 +5511,68 @@ link fails outright with `undefined symbol ... referenced in expression`. This h
 `func_8005568C`, where eleven entries were anchored on `func_80055FDC`, the second function in
 its file. Re-anchor with a line following that file's existing chain convention, and check by
 building *without* the line first so the need is demonstrated rather than assumed.
+
+## 35. Corrections to 29, 31 and 32c, from a dedicated study of the last two crutches
+
+A study of `func_80076C58` and `func_8005F6BC` closed neither, but it corrected four claims
+in the sections above. Artifacts under `scratch/decomp-work/<func>/crutch-study/`.
+
+### 35a. `LM` labels cannot testify about retail — and 29 used them that way
+
+29 argued that "the `LM43`/`LM44`/`LM45` markers confirm those are three consecutive source
+statements, so retail's source did write the division first." **That is circular.** `LM`
+symbols are produced by our own `-g -gcoff` build — there are 34,186 of them in our ELF — and
+`objcopy` strips them, so the ROM contains none. They describe the source we compiled, not
+the source Namco compiled. Any argument of the form "the LM numbering shows retail did X"
+is unsound; delete that step from 29's reasoning. The rest of 29 stands on the instruction
+comparison, which is independent of it.
+
+### 35b. `func_8005F6BC` is closer than 29 says, and the dead-consumer lever is inert
+
+Plain C measures **88 words, exact 4, aligned 2, 87 of 88 equal**, marginally better than the
+"86 of 88" recorded in 29.
+
+The lever suggested by 31 — give the quotient more downstream work so the scheduler raises the
+multiply's priority — **does not fire in its dead form.** `spare = tileRow * imageXReg`,
+`tileRow / 3`, `tileRow + 7` and `tileRow << 5` into a never-read local each produce output
+*identical* to the control: one `mult`, unmoved, `mult`→`mfhi` gap 10 against retail's 13.
+
+It fires only when the consumer is genuinely live: `.h = tileRow` replacing `.h = 1` puts the
+multiply at retail's `0x8005F740` — and changes 46 other words. A partial sweep of the
+statement-order space found 18 orders reproducing retail's *relative* order
+`mult; addiu a1,s2,0x60; move s5,zero`, but always two slots late, best exact 6 against the
+control's 4.
+
+### 35c. 31's dead-`mult` rule needs its precondition stated
+
+31 says a `mult` whose result is never consumed survives DCE. True as measured there, but 31's
+probe kept the value alive by overwriting it with a call result. **A `mult` whose result goes
+to a never-read local is eliminated entirely.** So the rule is not "dead multiplies survive";
+it is that the `mflo` can die while the `mult` remains *when something still forces the
+computation to be emitted*. `func_80032280` needed the dead expression because its operands
+feed a live chain, not because deadness preserves multiplies.
+
+### 35d. 32c's volatility table is superseded and its mechanism is wrong
+
+On the current best shape of `func_80076C58`, plain versus `volatile` on `D_801E42F8` is
+**neutral** — 93 words, exact 1, aligned 1 either way. The harm 32c recorded (exact 3 becoming
+6) belonged to the older source shape and does not generalise.
+
+32c also explained the branch as "where GCC can see the bound's unsigned byte range it reduces
+`0 < bound` to `bound != 0`". That is wrong. The fold lives in `fold()`/`shorten_compare` on
+the C tree and needs a literal zero in the source; it is not a range-based RTL rewrite.
+**GCC 2.6.3 has no `nonzero_bits`-driven GT-to-NE reduction at RTL at all**, verified against
+bounds that are provably non-negative (`B & 0x7F`, `W >> 25`), which still emit `blez`. The
+entry test here is manufactured by `loop.c`'s exit-test duplication, in SImode with no type
+information left, so no declared width can reach it. A 24-cell grid over element type crossed
+with volatility moves the branch in **none** of them.
+
+### 35e. Why `func_80076C58` is a genuine dichotomy
+
+The residual is not a missing spelling. **`beqz` requires the comparison to fold before
+`combine`; the phantom frame requires `combine` to produce it.** Signed comparison folds to
+`blez`; unsigned gives `beqz` but poisons the tail into `sltu`; a `short` counter gives retail's
+exact `sll/lbu/sra/slt/bnez` tail and `beqz` but no frame. No tested cell has frame, `beqz`
+and `slt` together. Shape B (guarded `do…while`) matches retail's 93 words **minus the two
+frame instructions with zero differences across all 91**, which is the cleanest statement of
+where this function actually stands.
