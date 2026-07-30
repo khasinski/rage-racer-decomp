@@ -144,28 +144,9 @@ extern s32 g_ReverbZoneStart asm("D_8007E054");
 extern s32 g_ReverbZoneEnd asm("D_8007E058");
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
- *
- * Symbol:   func_80038288
- * Address:  0x80038288 (PAL/main)
- * Reason:   Tunnel/proximity audio-pitch helper. The surrounding arithmetic is
- *           ordinary C, but the routine ends with a multiply whose product is
- *           never consumed before the function returns.
- * Evidence:
- *   - Dead `mult v0, v1` at the tail (v1 = -0x40): the retail epilogue
- *     (lw ra / lw s0 / addiu sp / jr ra) follows immediately with no mflo/mfhi
- *     and no fall-through consumer. The HI/LO product is discarded.
- *   - No -O2 C compiler emits a pure dead multiply: GCC dead-code-eliminates
- *     any multiply whose result is unused and expressible in C. The retail
- *     bytes therefore cannot be produced from byte-exact plain C - the dead
- *     multiply only exists because it was written by hand.
- * Why C+PSYQ macros are insufficient: a dead multiply is not expressible in C
- *   without an inline-asm `mult` crutch; keeping it as C would require the very
- *   inline assembly this policy forbids for a plain-C match.
- * Current representation: register-pinned C with a single inline-asm `mult`
- *   reproducing the deliberate dead multiply. Byte-exact (tucheck DIFFS=0).
- * Revisit condition: evidence that the product is consumed (e.g. a caller that
- *   reads HI/LO), which would make it ordinary C.
+ * The tail's multiply feeds the discarded rounding path below. GCC 2.6.3
+ * removes that path and its mflo, but leaves the mult that sets the hard HI/LO
+ * registers behind (docs/names.md 31f and 35c).
  */
 
 
@@ -642,8 +623,12 @@ s32 func_80038288(s32 arg0) {
         temp = func_80068568(angle);
         temp = func_80068568(angle);
         scale = -0x40;
-        __asm__ volatile("mult %0,%1" : : "r"(temp), "r"(scale));
+        value = temp * scale;
+        if (value < 0) {
+            value += 0xFFF;
+        }
         asm(".globl func_80038368\nfunc_80038368 = func_80038288 + 0xE0");
+        return temp;
     }
 }
 
