@@ -201,6 +201,26 @@ extern s32 g_RacePaused asm("D_801E4BAC");
 
 s32 GameBeginMirrorPass(void) asm("func_8001A9A8");
 
+/*
+ * Optional trace for the state returned by the lap/finish update. A null
+ * format disables it; otherwise the six named values are the complete
+ * GameDebugPrintf argument list.
+ */
+static __inline__ void GameDebugLapResult(
+    char *format,
+    s32 result,
+    s32 progress,
+    s32 mode,
+    s32 lapCount,
+    s32 racePhase,
+    s32 fadeTimer)
+{
+    if (format != 0) {
+        GameDebugPrintf(
+            format, result, progress, mode, lapCount, racePhase, fadeTimer);
+    }
+}
+
 s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
 
 void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
@@ -308,10 +328,6 @@ s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
     s32 oldTimer;
     s32 timer;
     u8 *route;
-
-    /* Match note: GCC reserves the original 0x48 frame only when it sees
-       this unevaluated seven-argument call shape. It emits no instructions. */
-    if (0) GameDebugPrintf((char *)0, 0, 0, 0, 0, 0, 0);
 
     /*
      * `route` is the car's drive block (GameCarDrive in game/car.h) but this
@@ -532,6 +548,9 @@ update_countdown:
     }
 
     GameUpdateRivalCueGate();
+    GameDebugLapResult(
+        0, returnValue, progress, arg1, g_LapCount,
+        g_RacePhase, g_RaceFadeTimer);
     return returnValue;
 }
 
