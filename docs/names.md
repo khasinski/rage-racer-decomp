@@ -5375,7 +5375,7 @@ non-hashing candidate. Their best legal crutch-free candidates:
 
 | function | words | exact | aligned | what is left |
 |---|---:|---:|---:|---|
-| `func_80076C58` (`SpuVmSetSeqVol`) | 93 | **3** | 2 | one scheduling difference at `+0x144` |
+| `func_80076C58` (`SpuVmSetSeqVol`) | 93 | **1** | 1 | the zero-iteration entry branch at `+0xB8` |
 | `func_80075EB4` (`SpuVmApplyPitchBendByTone`) | 60 | **10** | 7 | best over every measured statement order |
 
 `func_80075EB4` does not touch `D_8009DF20` at all, so the volatility lever does not
@@ -5442,3 +5442,40 @@ split proves nothing.
 **Do not compensate in the function body.** If the data layout is wrong, the residual appears
 as an address difference, not a code difference; adjusting the body to absorb it would be
 fixing the wrong thing.
+
+### 32c. `SpuVmSetSeqVol` is down to one word, and the volatility question is settled
+
+The `+0x144` schedule difference in 32a is gone. The best crutch-free candidate is now
+**93 words, exact 1, aligned 1, 92 of 93 equal**, kept at
+`scratch/decomp-work/func_80076C58/best-exact1.c`. The production source is unchanged and
+still carries its crutch; no non-hashing candidate was installed.
+
+**The volatility hypothesis is falsified, by controlled sweep rather than by argument.** All
+four combinations, measured on the same source shape:
+
+| `D_801E42F8` | `g_SndVoiceFlags` | words | exact | aligned |
+|---|---|---:|---:|---:|
+| volatile | volatile | 93 | 3 | 2 |
+| plain | volatile | 93 | 6 | 5 |
+| volatile | plain | 93 | 3 | 2 |
+| plain | plain | 93 | 6 | 5 |
+
+So removing `volatile` from the voice count is actively **harmful** here, changing the entry
+and loop-bound code and doubling the residual, and the flags' volatility is neutral. This is
+the counterweight to 32 and 32b: volatility is a lever in both directions and the answer is
+per-symbol and per-function, never a rule of thumb. `D_801E42F8` should stay volatile.
+
+**What the last word is.** The sole mismatch is the zero-iteration entry test:
+
+    +0xB8   retail: beqz v0, ...      candidate: blez v0, ...
+
+and it is a genuine trade-off rather than a missed spelling. Where GCC can see the unsigned
+byte range of the bound it reduces the initial `0 < bound` to `bound != 0` and emits retail's
+`beqz` — but that shape schedules the loop tail wrongly. Placing the assignment so the tail
+matches routes the test through the signed comparison and yields `blez`. Supplying both
+assignments was tried. Counter type was swept across `short`, signed `long`, `u_long` and
+`u_char`; `u_long` is codegen-neutral at exact 1, and `short` is much worse at exact 55.
+
+So the two remaining words in this family are each one instruction, and each sits on a
+different compiler decision: this one on how the entry test is derived, and `func_8005F6BC`
+(section 29) on the scheduler's multiply latency. Neither is a missing source construct.
