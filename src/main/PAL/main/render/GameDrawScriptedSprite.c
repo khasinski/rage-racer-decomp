@@ -341,7 +341,7 @@ void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
 
     {
         /* This pin is load-bearing: removing it changes .text. */
-        register s32 alpha asm("$2");
+        register s32 alpha;
 
         alpha = style[0xB];
         semiTrans = alpha & 4;

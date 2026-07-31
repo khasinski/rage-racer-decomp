@@ -153,9 +153,9 @@ void GameUpdateRaceCars(void) {
     Matrix matrixScratch3;
     /* These pins reproduce the retail induction and matrix registers. */
     register GameCarRuntime *base asm("$18");
-    register GameCarAiBlock *drive asm("$20");
-    register Matrix *pm1 asm("$22");
-    register Matrix *pm2 asm("$21");
+    register GameCarAiBlock *drive;
+    register Matrix *pm1;
+    register Matrix *pm2;
     s16 i;
     register u8 *q asm("$5");
     s32 t;
@@ -429,7 +429,7 @@ void GameUpdateAttractCars(void) {
     GameCarShortVector sv1;
     Matrix matrixScratch3;
     /* These pins reproduce the retail induction registers. */
-    register GameCarRuntime *car asm("$18");
+    register GameCarRuntime *car;
     register GameCarRuntime *sub asm("$16");
     s16 i;
     GameCarRuntime *c0;
@@ -464,7 +464,7 @@ void GameUpdateAttractCars(void) {
         car++;
     } while (i < 11);
     {
-        register GameCarAiBlock *drive asm("$20");
+        register GameCarAiBlock *drive;
         i = 0;
         car = g_Cars;
         sub = (GameCarRuntime *)((u8 *)g_Cars + 0x24);

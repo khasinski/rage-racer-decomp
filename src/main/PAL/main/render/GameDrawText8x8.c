@@ -258,9 +258,9 @@ void DrawProportionalTextShadedWide(
     asm("" : "=r"(opaque) : "0"(opaque)); \
     opaque; \
 })
-    register s32 xPos asm("$20");
-    register u8 *packet asm("$18") = *(u8 **)0x1F800000;
-    register u8 *text asm("$22") = ({
+    register s32 xPos;
+    register u8 *packet = *(u8 **)0x1F800000;
+    register u8 *text = ({
         asm("" : "=r"(packet), "=r"(xPos) : "0"(packet));
         str;
     });
@@ -285,17 +285,17 @@ void DrawProportionalTextShadedWide(
 
         do {
             s32 advance;
-            register u32 ch asm("$3") = *text;
+            register u32 ch = *text;
 
             asm("" : "=r"(ch) : "0"(ch));
             if (ch >= 0x76) {
-                register s32 offset asm("$2") = ch - 0x76;
-                register s32 index asm("$17") = offset * 4;
+                register s32 offset = ch - 0x76;
+                register s32 index = offset * 4;
                 register s32 u asm("$21");
-                register s32 v asm("$19");
-                register s32 width asm("$2");
-                register void *prim asm("$5");
-                register u8 *ot asm("$4");
+                register s32 v;
+                register s32 width;
+                register void *prim;
+                register u8 *ot;
                 register u16 clut asm("$8");
                 register s32 yOffset asm("$2");
                 register s32 yValue asm("$8");
@@ -345,13 +345,13 @@ void DrawProportionalTextShadedWide(
                 goto advance_sprite;
             }
             if (ch >= 0x61) {
-                register s32 offset asm("$2") = ch - 0x61;
+                register s32 offset = ch - 0x61;
                 register s32 index asm("$17") = offset * 4;
                 register s32 u asm("$21");
-                register s32 v asm("$19");
-                register s32 width asm("$2");
-                register void *prim asm("$5");
-                register u8 *ot asm("$4");
+                register s32 v;
+                register s32 width;
+                register void *prim;
+                register u8 *ot;
                 register u16 clut asm("$8");
                 register u16 yValue asm("$8");
 
@@ -407,13 +407,13 @@ advance_sprite:
                 if (cell != 0) {
                     register s32 index asm("$3") = cell * 2;
                     register u8 *base asm("$8");
-                    register u8 *uCell asm("$2");
-                    register u8 *vCell asm("$3");
+                    register u8 *uCell;
+                    register u8 *vCell;
                     register s32 u asm("$21");
                     register s32 v asm("$19");
                     register u16 yValue asm("$8");
-                    register void *prim asm("$5");
-                    register u8 *ot asm("$4");
+                    register void *prim;
+                    register u8 *ot;
                     register u16 clut asm("$8");
 
                     asm("" : "=r"(index) : "0"(index));
@@ -468,7 +468,7 @@ next_character:
     SetDrawModeWide8x8(packet, 0, 1, 0x29, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, packet);
     *(u8 **)0x1F800000 = ({
-        register u8 *next asm("$2") = packet + 12;
+        register u8 *next = packet + 12;
 
         asm("" : "=r"(next) : "0"(next), "r"(packet));
         next;

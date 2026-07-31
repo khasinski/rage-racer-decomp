@@ -269,7 +269,7 @@ void func_8004A248(s32 arg0, s32 arg1)
     s32 sy2;
     s32 sy;
     register s32 drawX asm("$5");
-    register s32 sy2Arg asm("$17");
+    register s32 sy2Arg;
     u8 ff;
     s32 sx;
     s32 x88;
@@ -299,7 +299,7 @@ void func_8004A248(s32 arg0, s32 arg1)
         register s32 sy2Value asm("$3");
         s32 syOffset;
         register s32 angleSource asm("$2");
-        register s32 angleValue asm("$5");
+        register s32 angleValue;
         register s32 modInput asm("$4");
         angleSource = D_8009B288;
         sy2Value = D_8007F934.value;
@@ -555,7 +555,7 @@ void func_8004A248(s32 arg0, s32 arg1)
     s16 xc;
     s32 x0Calc;
     s32 syBase;
-    register s32 tileSize asm("$19");
+    register s32 tileSize;
     kreg = 0xC8;
     if (d >= 6)
     {

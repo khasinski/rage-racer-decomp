@@ -3,7 +3,7 @@
 
 #define FAST_LOAD(offset)                              \
     do {                                               \
-        register s32 value asm("$2");                  \
+        register s32 value;                  \
         __asm__ volatile("lw $2, %1($8)"               \
                          : "=r"(value)                 \
                          : "i"(offset), "r"(v));       \

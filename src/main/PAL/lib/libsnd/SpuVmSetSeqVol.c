@@ -21,7 +21,7 @@ u_short arg2;
 short arg3;
 {
     short i;
-    register u_char *base asm("$8");
+    register u_char *base;
     u_char *entry;
     long x;
     long y;

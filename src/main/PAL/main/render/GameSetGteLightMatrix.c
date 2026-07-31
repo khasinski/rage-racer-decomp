@@ -46,7 +46,7 @@ void func_80014618(s32 variant) {
     Matrix xRot;
     Matrix yRot;
     s32 position[3];
-    register s32 steer asm("$18");
+    register s32 steer;
     register s32 product asm("$2");
     register s32 angle asm("$5");
     s32 model;

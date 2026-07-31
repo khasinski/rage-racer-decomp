@@ -105,8 +105,8 @@ s32 func_80068634(s32 arg0);
 
 void func_80030030(GameCarRuntime *arg0) {
     register GameCarRuntime *car asm("$19") = arg0;
-    register u8 *r asm("$17");
-    register s32 s4val asm("$20");
+    register u8 *r;
+    register s32 s4val;
     s32 res;
     register s32 v0 asm("$2");
     register s32 first24 asm("$4");
@@ -224,7 +224,7 @@ void func_80030030(GameCarRuntime *arg0) {
             car->headingAngle = car->field_24;
 
             {
-                register s32 t asm("$2");
+                register s32 t;
                 register s32 sq asm("$3");
 
                 t = *(s32 *)(r + 0x60);

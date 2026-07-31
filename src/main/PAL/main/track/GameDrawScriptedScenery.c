@@ -249,13 +249,13 @@ void func_8003F9C4(void) {
     s32 dz;
     s32 vol;
     s32 pitch;
-    register s32 slew asm("$3");
+    register s32 slew;
     register u16 *frames asm("$5");
-    register u16 posFrame asm("$3");
-    register u16 rotFrame asm("$2");
+    register u16 posFrame;
+    register u16 rotFrame;
     u8 *sinRec;
     s32 product;
-    register s32 oldVolume asm("$2");
+    register s32 oldVolume;
     u8 *stepRec;
 
     if (g_PathSceneryClock.posFrame == g_PathSceneryPosSpanS) {

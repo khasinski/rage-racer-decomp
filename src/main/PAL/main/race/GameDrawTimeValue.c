@@ -442,13 +442,13 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
     register s32 selectedRow asm("$23") = cursorRow;
     u8 *ot;
     u8 *firstNext;
-    register s32 brightness asm("$2");
+    register s32 brightness;
     s32 marquee;
 
     ot = g_DrawBuffer + 0xCC;
     {
         register SPRT *sprite asm("$18");
-        register void *drawPrim asm("$5");
+        register void *drawPrim;
 
         sprite = (SPRT *)0x1F800000;
         sprite = *(SPRT **)sprite;
@@ -489,16 +489,16 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
     }
 
     {
-        register u8 *scratchPacket asm("$18");
-        register s32 fontU asm("$22");
-        register s16 scroll0 asm("$4");
+        register u8 *scratchPacket;
+        register s32 fontU;
+        register s16 scroll0;
         register char *marqueeBase asm("$16");
         register u8 *prim asm("$18");
         u8 *drawPrim;
 
         {
-            register s32 textY asm("$5") = 0x8A;
-            register s32 textColor asm("$7") = 0x7811;
+            register s32 textY = 0x8A;
+            register s32 textColor = 0x7811;
 
             asm(
                 "" : "=r"(textY), "=r"(textColor) :
@@ -515,7 +515,7 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
                 textColor);
         }
         {
-            register s32 secondTextY asm("$5") = 0x8A;
+            register s32 secondTextY = 0x8A;
 
             asm(
                 "" : "=r"(secondTextY) :
@@ -584,7 +584,7 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
                 ot, prim, 0x70, 0x50, 0x60, 0x48, 8, 8, 8);
             {
                 register POLY_FT4 *quad asm("$17") = quadBase;
-                register s32 leftTrig asm("$3");
+                register s32 leftTrig;
                 s16 left;
 
                 g_RaceOptionPulseAngle += 0x20;
@@ -605,13 +605,13 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
             }
             {
                 register u8 *drawModePrim asm("$17");
-                register POLY_FT4 *drawPrim asm("$5");
+                register POLY_FT4 *drawPrim;
                 s32 rightTrig;
                 s16 right;
 
                 g_RaceOptionPulseAngle &= 0xFFF;
                 rightTrig = ({
-                    register s32 sample asm("$2");
+                    register s32 sample;
 
                     sample = func_80068634(g_RaceOptionPulseAngle);
                     asm volatile("" ::: "memory");

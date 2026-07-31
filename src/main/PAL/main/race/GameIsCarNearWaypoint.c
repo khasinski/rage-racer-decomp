@@ -591,7 +591,7 @@ s32 func_80038288(s32 arg0) {
     register s32 temp asm("v0");
     s32 angle;
     register s32 remainder asm("a0");
-    register s32 scale asm("v1");
+    register s32 scale;
 
     trackLength = g_TrackLength;
     temp = 0xB875;
