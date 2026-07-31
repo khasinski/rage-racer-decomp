@@ -354,8 +354,6 @@ segments:
       - [0x5ECE4, c, PAL/main/sdk/StopKernelInterrupts]
       - [0x5ED90, c, PAL/lib/kernel/StartKernelInterrupts]
       - [0x5F2FC, c, PAL/lib/libsnd/SsSetMVol]
-      - [0x5F34C, c, PAL/lib/libsnd/SsSetSpuInputAttr]
-      - [0x5F3E0, c, PAL/lib/libsnd/SsSetSerialVol]
       - [0x5F4DC, c, PAL/main/sdk/SsSeqParseHeader]
       - [0x5F804, c, PAL/lib/libsnd/SsSeqOpen]
       - [0x5F8D0, c, PAL/lib/libsnd/SsSeqAdvanceChannelDelta]
