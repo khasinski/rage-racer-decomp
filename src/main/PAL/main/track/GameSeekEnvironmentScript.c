@@ -90,11 +90,10 @@ void GameSeekEnvironmentScript(s32 targetTime) {
          (s32)((u32 *)targetTime)[count * 12] != -1;
          count++) {
         if (clock < (s32)((u32 *)targetTime)[count * 12]) {
-            goto scan_done;
+            break;
         }
     }
 
-scan_done:
     if ((s32)count >= 2) {
         offset = count * 0x30 - 0x60;
         offset += (s32)g_EnvScriptCursor;
