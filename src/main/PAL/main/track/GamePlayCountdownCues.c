@@ -31,18 +31,12 @@ void GameUpdateRivalCueGate(void) {
     s32 value;
 
     value = g_PlayerTrackProgress;
-    if ((value < 0x7001) || (value >= g_TrackLength - 0x3000)) {
-        if (g_RivalCueEnabled == 1) {
-            g_RivalCueEnabled = 0;
-            goto check_count;
-        }
-    }
-
-    if ((value >= 0x7001) && (value < g_TrackLength - 0x3000)) {
+    if (((value < 0x7001) || (value >= g_TrackLength - 0x3000)) && (g_RivalCueEnabled == 1)) {
+        g_RivalCueEnabled = 0;
+    } else if ((value >= 0x7001) && (value < g_TrackLength - 0x3000)) {
         g_RivalCueEnabled = 1;
     }
 
-check_count:
     if (g_WrongWayTimer >= 0xA) {
         g_RivalCueEnabled = 0;
     }
