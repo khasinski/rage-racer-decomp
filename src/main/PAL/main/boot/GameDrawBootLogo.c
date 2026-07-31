@@ -74,11 +74,11 @@ void GameUpdateBootLogoScene(void) {
             SetDispMask(1);
         }
         func_800230B0();
-        goto inc_timer;
+        g_BootLogoTimer++;
+        return;
     } else if (g_BootLogoTimer == 110) {
         SetDispMask(0);
         GameSetupDisplay480(0, 0, 0);
-inc_timer:
         g_BootLogoTimer++;
         return;
     }
@@ -119,7 +119,6 @@ inc_timer:
         break;
     }
 
-done:
     if (g_BootLogoState != 3) {
         GameDrawBootLogo();
         if ((u32)g_SceneTimer >= 10) {
