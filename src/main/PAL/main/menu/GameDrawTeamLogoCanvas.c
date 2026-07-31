@@ -676,46 +676,21 @@ void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
 void GameScrollTeamLogoUp(void) asm("func_8004B9B8");
 void GameScrollTeamLogoUp(void) {
     s32 i;
-    u32 *stackPtr;
-    /* This pin is load-bearing: removing it changes .text. */
-    register u32 *base asm("$6");
-    u32 *cursor;
+    u32 *base;
     u32 saved[8];
-    u32 value;
 
     GamePlaySoundCue(1);
 
-    i = 0;
-    stackPtr = saved;
     base = g_TeamLogoCanvas;
-    cursor = base;
-    do {
-        value = *cursor;
-        cursor++;
-        i++;
-        *stackPtr = value;
-        stackPtr++;
-    } while (i < 8);
-
-    i = 0;
-    cursor = base;
-    do {
-        value = cursor[8];
-        i++;
-        *cursor = value;
-        cursor++;
-    } while (i < 0x1F8);
-
-    i = 0;
-    stackPtr = saved;
-    cursor = base;
-    do {
-        value = *stackPtr;
-        stackPtr++;
-        i++;
-        cursor[0x1F8] = value;
-        cursor++;
-    } while (i < 8);
+    for (i = 0; i < 8; i++) {
+        saved[i] = base[i];
+    }
+    for (i = 0; i < 0x1F8; i++) {
+        base[i] = base[i + 8];
+    }
+    for (i = 0; i < 8; i++) {
+        base[i + 0x1F8] = saved[i];
+    }
 }
 
 void GameScrollTeamLogoDown(void) asm("func_8004BA50");
