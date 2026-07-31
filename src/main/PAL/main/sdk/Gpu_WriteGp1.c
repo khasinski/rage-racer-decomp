@@ -52,6 +52,7 @@ u_long _param(u_long arg0) {
     return *g_GpuGp0 & 0xFFFFFF;
 }
 
-long func_8006767C(void *callback, void *data, long arg2) {
+long _addque(void *callback, void *data, long arg2) asm("func_8006767C");
+long _addque(void *callback, void *data, long arg2) {
     return func_800676A0(callback, data, 0, arg2);
 }

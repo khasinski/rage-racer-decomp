@@ -81,7 +81,8 @@ void *MulMatrix0(s32 *matrix, void *src, void *dst) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *func_80068CA4(void *arg0, void *arg1) {
+void *MulRotMatrix0(void *arg0, void *arg1) asm("func_80068CA4");
+void *MulRotMatrix0(void *arg0, void *arg1) {
     asm volatile(
         "lhu $8,0($4)\n"
         "lw $9,4($4)\n"
@@ -146,7 +147,8 @@ void *func_80068CA4(void *arg0, void *arg1) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *func_80068D88(void *arg0) {
+void *MulRotMatrix(void *arg0) asm("func_80068D88");
+void *MulRotMatrix(void *arg0) {
     asm volatile(
         "lw $8,0($4)\n"
         "lw $9,4($4)\n"
@@ -212,7 +214,8 @@ void *func_80068D88(void *arg0) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *func_80068E70(s32 *matrix, void *src) {
+void *SetMulMatrix(s32 *matrix, void *src) asm("func_80068E70");
+void *SetMulMatrix(s32 *matrix, void *src) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 m0 asm("$8") = matrix[0];
     register s32 m1 asm("$9") = matrix[1];

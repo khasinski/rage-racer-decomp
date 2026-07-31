@@ -5620,3 +5620,55 @@ frame. Likewise, expressing the parameter as an ANSI `long` hid the
 promotion chain and led the earlier searches away from the actual source
 shape. No padding object, range-derived fake zero, manual stack adjustment,
 or extra register pin is needed.
+
+---
+
+## 25. SDK names byte-matched against the PSY-Q 3.5 library (`scratch/psyq35-lib`)
+
+A naming pass indexed every object in the Release-3.5 library set (GNU `ar`
+archives of ELF objects: `LIBGTE.A`, `LIBGPU.A`, `LIBSND.A`, `LIBSPU.A`,
+`LIBCD.A`, `LIBAPI.A`, ...) by opcode/relocation signature and matched each
+still-`func_XXXX` SDK routine in `build/PAL/main.elf` against it. A match masks
+only relocated fields (data HI16/LO16, `jal`/`j` targets — taken from the
+library object's own `objdump -dr` relocations) and requires every remaining
+opcode word to be **byte-identical**; a short trailing return epilogue
+(`move/jr/nop`) on the library side is tolerated where our symbol boundary
+excludes it.
+
+**Key structural finding.** Only routines authored in *assembly* byte-match:
+the libgte GTE macro/matrix routines (hand-asm) and the BIOS/kernel syscall
+trampolines, plus a handful of trivial leaf functions (< ~10 insns) where GCC
+2.6.3 and the PSY-Q compiler emit the same code. **Compiler-C library
+functions do not byte-match** — the 3.5 objects were built with a different
+GCC than this repo's `cc1-psx-263`, so register allocation and scheduling
+diverge (e.g. `func_800676A0` is `_addque2` semantically but its `s0..s3`
+save order is permuted; `func_8006A9B8`/`func_8006CDA0` match the whole
+`CdSync`/`CdFlush`/`CdReady`/`CdDataSync` accessor family and cannot be told
+apart). Those are left `func_XXXX`.
+
+Names applied this pass (identifier renamed for readability, original
+`asm("func_XXXX")` symbol pin kept, prototype unchanged; clean rebuild stays
+`2913e156…`):
+
+| func_ | PSY-Q name | library object | note |
+|-------|-----------|----------------|------|
+| func_80068CA4 | MulRotMatrix0   | LIBGTE:mtx_00.o | hand-asm, 57/57 exact |
+| func_80068D88 | MulRotMatrix    | LIBGTE:mtx_00.o | hand-asm, 58/58 exact |
+| func_80068E70 | SetMulMatrix    | LIBGTE:mtx_00.o | hand-asm, 68/68 exact |
+| func_80069374 | ReadRotMatrix   | LIBGTE:mtx_00.o | hand-asm, 18/18 exact |
+| func_800693BC | ReadLightMatrix | LIBGTE:mtx_00.o | hand-asm, 18/18 exact |
+| func_80069404 | ReadColorMatrix | LIBGTE:mtx_00.o | hand-asm, 18/18 exact |
+| func_800651FC | MargePrim       | LIBGPU:prim.o   | compiler-C leaf, 14/14 exact |
+| func_8006767C | _addque         | LIBGPU:sys.o    | compiler-C leaf, 9/9 exact (calls `_addque2` = func_800676A0) |
+| func_800681AC | GPU_cw          | LIBAPI:c73.o    | A0-table trampoline `li a2,0xA0; jr; li t1,0x49`, 4/4 exact |
+
+The six libgte routines are `HANDWRITTEN_ASM` (asm-in-C); they are library
+code with now-known names but were **not** converted to compiler-C. They join
+the already-named libgte siblings in the same objects — `MulMatrix0`,
+`CompMatrix`, `ScaleMatrixL`, `PushMatrix`, `PopMatrix`, `ApplyMatrixLV` — all
+of which this pass independently re-confirmed as byte-exact against
+`mtx_00.o`. The header names in `include/psyq/gte.h` (`ScaleMatrix`,
+`MulMatrix`, `MulMatrix2`, `DpqColor3`, `SetVertex0..2`, `InitGeom`, ...) and
+`include/psyq/kernel.h` (`BiosFileOpen`/`Seek`/`Read`/`Write`/`Close`/
+`FormatDevice` = A-table `open`/`lseek`/`read`/`write`/`close`/`format`) also
+byte-match their library symbols and are correct.

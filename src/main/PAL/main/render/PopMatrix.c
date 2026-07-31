@@ -56,7 +56,8 @@ void PopMatrix(void) {
 }
 
 /* Read GTE rotation matrix + translation (control regs $0..$7) into p[0..7]. */
-void func_80069374(volatile u32 *p) {
+void ReadRotMatrix(volatile u32 *p) asm("func_80069374");
+void ReadRotMatrix(volatile u32 *p) {
     /* These pins are load-bearing: removing any one changes .text. */
     register u32 t0 asm("$8");
     register u32 t1 asm("$9");
@@ -83,7 +84,8 @@ void func_80069374(volatile u32 *p) {
 }
 
 /* Read GTE light matrix + back-color (control regs $8..$15) into p[0..7]. */
-void func_800693BC(volatile u32 *p) {
+void ReadLightMatrix(volatile u32 *p) asm("func_800693BC");
+void ReadLightMatrix(volatile u32 *p) {
     /* These pins are load-bearing: removing any one changes .text. */
     register u32 t0 asm("$8");
     register u32 t1 asm("$9");
@@ -110,7 +112,8 @@ void func_800693BC(volatile u32 *p) {
 }
 
 /* Read GTE color matrix + far-color (control regs $16..$23) into p[0..7]. */
-void func_80069404(volatile u32 *p) {
+void ReadColorMatrix(volatile u32 *p) asm("func_80069404");
+void ReadColorMatrix(volatile u32 *p) {
     /* These pins are load-bearing: removing any one changes .text. */
     register u32 t0 asm("$8");
     register u32 t1 asm("$9");

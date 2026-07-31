@@ -78,7 +78,8 @@ void func_80065198(u8 *arg0, u8 *arg1) {
     *(u32 *)&arg0[0x10] = *(u32 *)&arg1[4];
 }
 
-s32 func_800651FC(u8 *arg0, u8 *arg1) {
+s32 MargePrim(u8 *arg0, u8 *arg1) asm("func_800651FC");
+s32 MargePrim(u8 *arg0, u8 *arg1) {
     s32 value;
 
     value = arg0[3] + arg1[3] + 1;
@@ -154,7 +155,7 @@ extern u8 g_VramWidthTable[] asm("D_80094268");
 extern u8 g_VramHeightTable[] asm("D_8009427C");
 
 void func_80068180(u8 *dst, s32 value, s32 count);
-void func_800681AC(void *arg0);
+void GPU_cw(void *arg0) asm("func_800681AC");
 s32 func_80067C80(s32 arg0);
 
 /* libgpu ResetGraph. Own trace strings D_80013478 "ResetGraph:jtb=%08x,env=%08x"
@@ -173,7 +174,7 @@ void ResetGraph(s32 mode) {
         GameDebugPrintf(D_80013478, g_GpuJumpTable, graphState);
         func_80068180(graphState, 0, 0x80);
         KernelCallbackSlot3();
-        func_800681AC((void *)((u32)g_GpuFuncs & 0xFFFFFF));
+        GPU_cw((void *)((u32)g_GpuFuncs & 0xFFFFFF));
         graphType = func_80067C80(maskedMode != 0);
         clearEnv = graphState + 0x10;
         *(volatile u8 *)graphState = graphType;
