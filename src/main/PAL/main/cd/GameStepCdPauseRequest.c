@@ -109,60 +109,34 @@ void GameStepCdPauseRequest(void) {
     }
 }
 void GameStepCdResumeRequest(void) {
-    s32 state;
     s32 status;
 
-    state = g_CdCommandStep;
-    if (state == 1) {
-        goto state_1;
-    }
-    if (state >= 2) {
-        goto state_ge_2;
-    }
-    if (state == 0) {
-        goto state_0;
-    }
-    goto done;
-
-state_ge_2:
-    if (state == 2) {
-        goto state_2;
-    }
-    if (state == 3) {
-        goto state_3;
-    }
-    goto done;
-
-state_0:
-    if (func_8006A534(1, 0) == 0) {
-        goto done;
-    }
-    g_CdCommandStep = 1;
-state_1:
-    if (CdControl(3, 0, 0) == 0) {
-        goto done;
-    }
-    g_CdCommandStep = 2;
-    goto done;
-
-state_2:
-    status = func_8006A534(1, 0);
-    if (status == state) {
-        g_CdCommandStep = 3;
-        goto done;
-    }
-    if (status == 5) {
+    switch (g_CdCommandStep) {
+    case 0:
+        if (func_8006A534(1, 0) == 0) {
+            break;
+        }
         g_CdCommandStep = 1;
-        goto done;
+        /* fall through */
+    case 1:
+        if (CdControl(3, 0, 0) == 0) {
+            break;
+        }
+        g_CdCommandStep = 2;
+        break;
+    case 2:
+        status = func_8006A534(1, 0);
+        if (status == 2) {
+            g_CdCommandStep = 3;
+        } else if (status == 5) {
+            g_CdCommandStep = 1;
+        }
+        break;
+    case 3:
+        g_CdCommandPending = -1;
+        g_CdCommandStep = 0;
+        break;
     }
-    goto done;
-
-state_3:
-    g_CdCommandPending = -1;
-    g_CdCommandStep = 0;
-
-done:
-    return;
 }
 
 void GameInitCdAudio(void) asm("func_800438BC");
@@ -192,53 +166,40 @@ void GameTickCdAudio(void) asm("func_80043974");
 void GameTickCdAudio(void) {
     s32 temp;
     s32 status;
-    s32 state;
     s32 value;
 
     if (g_CdTrackPending < 0) {
-        state = g_CdCommandPending;
-        if (state == 2) {
-            goto state_2;
+        switch (g_CdCommandPending) {
+        case 1:
+            GameStepCdPlayRequest();
+            break;
+        case 2:
+            GameStepCdPauseRequest();
+            break;
+        case 3:
+            GameStepCdResumeRequest();
+            break;
         }
-        if (state < 3) {
-            if (state == 1) {
-                goto state_1;
-            }
-            goto check_cd;
-        }
-        if (state == 3) {
-            goto state_3;
-        }
-        goto check_cd;
-state_1:
-        GameStepCdPlayRequest();
-        goto check_cd;
-state_2:
-        GameStepCdPauseRequest();
-        goto check_cd;
-state_3:
-        GameStepCdResumeRequest();
-        goto check_cd;
     } else {
         GameStepCdTrackRequest();
-check_cd:
-        status = func_8006A554(1, &g_CdLocResult);
-        if (status == 4) {
-            if (g_SceneId == 0x1C) {
-                g_CdTrackEnded = 1;
-            } else {
-                temp = CdPosToInt_Local(&g_CdTrackLoopPoint[g_CdCurrentTrack]);
-                value = CdPosToInt_Local(&g_CdTrackLoopPoint[0]);
-                if (value < temp) {
-                    g_CdTrackStep = status;
-                    g_CdCommandPending = 1;
-                    g_CdCommandStep = 0;
-                    g_CdTrackPending = g_CdCurrentTrack;
-                }
+    }
+
+    status = func_8006A554(1, &g_CdLocResult);
+    if (status == 4) {
+        if (g_SceneId == 0x1C) {
+            g_CdTrackEnded = 1;
+        } else {
+            temp = CdPosToInt_Local(&g_CdTrackLoopPoint[g_CdCurrentTrack]);
+            value = CdPosToInt_Local(&g_CdTrackLoopPoint[0]);
+            if (value < temp) {
+                g_CdTrackStep = status;
+                g_CdCommandPending = 1;
+                g_CdCommandStep = 0;
+                g_CdTrackPending = g_CdCurrentTrack;
             }
         }
     }
-done:
+
     GameStepCdVolumeFade();
 }
 
