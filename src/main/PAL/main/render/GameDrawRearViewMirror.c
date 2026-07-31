@@ -195,7 +195,6 @@ u8 *GameDrawMirrorFrame(u8 *packet) {
     *(s16 *)(packet + 0xC) = color;
     *(s16 *)(packet + 0xA) = *(u16 *)&g_MirrorPanelY - 2;
     *(s16 *)(packet + 0xE) = 0x28;
-    __asm__("" ::: "memory");
     packet += 0x10;
     AddPrim((u32 *)otArg, (u32 *)prim);
 
