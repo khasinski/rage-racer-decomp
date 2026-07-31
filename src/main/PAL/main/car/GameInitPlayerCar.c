@@ -425,22 +425,9 @@ void GameInitPlayerCar(GameCarRuntime *car)
  */
 s32 GameIsCarFacingBackwards(GameCarTrackAngleWindow *arg0) asm("func_8002CD08");
 s32 GameIsCarFacingBackwards(GameCarTrackAngleWindow *arg0) {
-    /* These pins are load-bearing: removing any one changes .text. */
-    register s32 index asm("$3") = arg0->trackPointIndex;
-    s32 scaled;
-    register GameTrackPoint *table asm("$3");
-    register s32 complement asm("$3");
-    s32 target;
-    s32 diff;
-
-    asm volatile("" : "=r"(index) : "0"(index));
-    scaled = index * 3;
-    table = g_TrackPoints;
-    target = ((GameTrackPoint *)((scaled << 3) + (s32)table))->angle;
-    complement = 0xC00;
-    complement -= target;
-    diff = arg0->headingAngle - complement;
-    diff &= 0xFFF;
+    s32 index = arg0->trackPointIndex;
+    s32 complement = 0xC00 - g_TrackPoints[index].angle;
+    s32 diff = (arg0->headingAngle - complement) & 0xFFF;
     return (u32)(diff - 0x401) < 0x7FFU;
 }
 
