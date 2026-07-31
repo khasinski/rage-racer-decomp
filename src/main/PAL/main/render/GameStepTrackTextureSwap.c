@@ -81,11 +81,9 @@ void GameSwapTrackTexturePageNow(void) {
             src = buffer;
             base = *basePtr;
             dst = (s32 *)(offset + (s32)base);
-            count = 0;
-            do {
+            for (count = 0; count < 0xE0; count++) {
                 *dst++ = *src++;
-                count++;
-            } while (count < 0xE0);
+            }
 
             *state = value;
         }
