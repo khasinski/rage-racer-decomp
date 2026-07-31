@@ -459,7 +459,6 @@ advance_sprite:
                     AddPrim(ot, prim);
                 }
                 xPos += 12;
-                goto next_character;
             }
 next_character:
             ;
