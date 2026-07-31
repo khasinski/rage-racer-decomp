@@ -258,7 +258,6 @@ void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
         temp = temp / -4800;
         obj->field_98 = one;
         obj->field_9C = temp;
-        goto finish_setup;
     } else {
         result = 2;
         obj->field_98 = result;
@@ -266,7 +265,6 @@ void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
         obj->field_9C = result;
     }
 
-finish_setup:
     result = (u16)obj->field_20;
     temp = (u16)obj->field_28;
     value = (u16)obj->y;
