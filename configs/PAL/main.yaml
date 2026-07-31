@@ -120,7 +120,6 @@ segments:
       - [0x6378, c, PAL/main/menu/GameDrawNegconSteerPlayScreen]
       - [0x6BC4, c, PAL/main/boot/GameInitSubsystems]
       - [0x6F54, c, PAL/main/render/GameDrawText8x8]
-      - [0x76C4, c, PAL/main/render/GameQueueSprite]
       - [0x7B90, c, PAL/main/render/GameQueueDrawModePrim]
       - [0x8048, c, PAL/main/asset/GameGetCarAssetIndex]
       - [0x83D4, c, PAL/main/track/GameSetTrackCameraTable]
