@@ -646,12 +646,11 @@ s32 GameDrawPlayerTachometer(void) {
                     arg2 = 1;
                 } else {
                     arg2 = 0;
-                    goto clear_arg3;
+                    arg3 = 0;
                 }
             }
         } else {
             arg2 = 2;
-clear_arg3:
             arg3 = 0;
         }
     } else {
