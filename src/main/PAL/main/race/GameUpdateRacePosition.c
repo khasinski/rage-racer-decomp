@@ -14,27 +14,20 @@ void GameUpdateRacePosition(void) asm("func_8003AE2C");
 void GameUpdateRacePosition(void) {
     s32 active;
     s32 i;
-    s32 sentinel;
-    /* This pin is load-bearing: removing it changes .text. */
-    register GameCarRuntimeProgressWindow *entry asm("$4");
     s32 total;
 
     active = 1;
     if (g_LapCount >= g_PlayerLap.count) {
-        i = 0;
-        sentinel = -1;
         total = g_PlayerProgressA + g_PlayerProgressB;
-        entry = g_CarProgressB;
 
-        do {
-            if (entry->activeFlag != sentinel) {
+        for (i = 0; i < 0xB; i++) {
+            GameCarRuntimeProgressWindow *entry = &g_CarProgressB[i];
+            if (entry->activeFlag != -1) {
                 if ((((s32 *)entry)[-1] + entry->field_6C) - total > 0) {
                     active++;
                 }
             }
-            i++;
-            entry++;
-        } while (i < 0xB);
+        }
 
         g_RacePosition = active;
     }
