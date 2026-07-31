@@ -210,7 +210,6 @@ L_state3:
                 g_McMenuState = g_McCardStatus;
             }
         }
-        goto L254;
     }
 L254:
     if (g_McMenuState != 3) {
@@ -603,7 +602,6 @@ L_sw4:
         goto L_sw5;
 
     default:
-        goto L_sw5;
     }
 L_sw5:
     switch (g_McMenuSelection) {
@@ -634,7 +632,6 @@ L_sw5:
                 }
             }
         }
-        goto L_sw5tail;
     }
 L_sw5tail:
     if (g_McMenuState == 1) {
@@ -736,7 +733,6 @@ L_state2:
         g_McMenuState = g_McMenuSelection;
         goto L_sw7;
     default:
-        goto L_sw7;
     }
 
 L_sw7:
@@ -767,7 +763,6 @@ L_sw7:
             if (D_80082FBC != 0) goto L_sw7tail;
         }
         g_McMenuState = g_McCardStatus;
-        goto L_sw7tail;
     }
 
 L_sw7tail:
@@ -909,7 +904,6 @@ L_m2sel:
         if ((pad & 0x90) == 0) goto L_sw10;
         if (fadeBusy) goto L_sw10;
         GamePlaySoundCue(3);
-        goto L_b1420;
     }
 
 L_b1420:
@@ -997,7 +991,6 @@ L_sw9:
         g_McActionState = 0;
         /* fall through to L_sw10 */
     default:
-        goto L_sw10;
     }
 
 L_sw10:
@@ -1032,7 +1025,6 @@ L_sw10:
                 }
             }
         }
-        goto L_sw10tail;
     }
 
 L_sw10tail:
@@ -1071,7 +1063,6 @@ L_stateIdle:
             D_80082FBC = three;
         }
     }
-    goto L_epilogue;
 
 L_epilogue:
     if (D_80082FC8 != 0) {
