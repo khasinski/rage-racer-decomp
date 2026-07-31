@@ -152,11 +152,10 @@ void GameLoadDiscArchiveIndex(void) {
     GameDebugPrintf(g_MsgNowSearching, g_PathRageStr);
     if (DsSearchFile(&stack.file, g_PathRageStr) == 0) {
         GameDebugPrintf(g_MsgFileNotFound, g_PathRageStr);
-        goto loadSmallTable;
+    } else {
+        GameDebugPrintf(g_MsgSearchOk);
     }
 
-    GameDebugPrintf(g_MsgSearchOk);
-loadSmallTable:
     base = CdPosToInt_Local(&stack.file);
     smallSrc = g_StreamCdEntries;
     for (i = 0; i < 11; i++) {
