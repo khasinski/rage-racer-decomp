@@ -89,16 +89,11 @@ void GameSeedRouteScenery(void) {
     g_RouteSceneryFrame = 0;
 
     index1 = *(s16 *)(index1 + 8);
-    value = index1 << 1;
-    value += index1;
-    value <<= 2;
-    value += 0x50;
+    value = ((index1 * 3) << 2) + 0x50;
     record = base + value;
 
-    value = *(s16 *)(record + 0);
-    g_RouteSceneryRotX = value;
-    value = *(s16 *)(record + 2);
-    g_RouteSceneryRotY = value;
+    g_RouteSceneryRotX = *(s16 *)(record + 0);
+    g_RouteSceneryRotY = *(s16 *)(record + 2);
     value = *(s16 *)(record + 4);
     g_RouteSceneryKeyframe = record;
     g_RouteSceneryRotZ = value;
