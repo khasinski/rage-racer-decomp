@@ -7,22 +7,17 @@ extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 
 void GameSetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
     s32 *entry;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 *base asm("$2");
-    s32 offset;
 
     if (arg1 != 0) {
-        base = g_SoundSlotActive;
-        offset = arg0 << 2;
-        entry = (s32 *)(offset + (s32)base);
+        s32 *base = g_SoundSlotActive;
+        entry = (s32 *)((arg0 << 2) + (s32)base);
         if (*entry == 0) {
             GamePlaySoundSlotVoice(arg0, 0, 3);
             *entry = 1;
         }
     } else {
-        base = g_SoundSlotActive;
-        offset = arg0 << 2;
-        entry = (s32 *)(offset + (s32)base);
+        s32 *base = g_SoundSlotActive;
+        entry = (s32 *)((arg0 << 2) + (s32)base);
         if (*entry != 0) {
             GameStopSoundSlotVoice(arg0);
             *entry = 0;
