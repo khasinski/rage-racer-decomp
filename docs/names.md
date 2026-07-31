@@ -5672,3 +5672,50 @@ of which this pass independently re-confirmed as byte-exact against
 `include/psyq/kernel.h` (`BiosFileOpen`/`Seek`/`Read`/`Write`/`Close`/
 `FormatDevice` = A-table `open`/`lseek`/`read`/`write`/`close`/`format`) also
 byte-match their library symbols and are correct.
+
+### 25a. Reconstructing PSY-Q 3.5 object/TU boundaries
+
+A follow-on pass rebuilt our SDK source so each translation unit corresponds to
+exactly one PSY-Q 3.5 library object, named after that object, in link order.
+
+**Method / limit of what is provable.** A complete object↔our-file map was built
+from strong byte-anchors (library functions >= 5 insns matching a unique one of
+ours, exact reloc-masked) plus each object's `.text` size. A single `.o` links
+contiguously, so an anchor pins `[base, base+size)` and every function in that
+range is that object. Only **15 SDK objects across all libs anchor confidently**;
+the rest of the SDK is compiler-C that does not byte-match (section 25's
+finding), so its object boundaries are **unprovable and left untouched**. Also
+note: a clean rebuild does NOT catch a wrong function→object *grouping* (the
+linker places by symbol + yaml offset, so bytes stay identical) — object
+boundaries must therefore be proven from the anchors, not from a passing build.
+
+**Objects reconstructed (each = one commit, clean-rebuild `2913e156`):**
+
+| object | TU file | contents | operation |
+|--------|---------|----------|-----------|
+| LIBGTE mtx_00.o | render/mtx_00.c | CompMatrix, MulMatrix0, MulRotMatrix0/Matrix, SetMulMatrix, ApplyMatrixLV, ApplyRotMatrix, ScaleMatrixL, PushMatrix, PopMatrix, ReadRot/Light/ColorMatrix | merge CompMatrix.c+MulMatrix0.c+PopMatrix head |
+| LIBGTE mtx_03.o | render/mtx_03.c | MulMatrix (func_80069458) | split from PopMatrix.c |
+| LIBGTE mtx_04.o | render/mtx_04.c | MulMatrix2 (func_80069568) | split from PopMatrix.c |
+| LIBGTE reg03.o | render/reg03.c | SetVertex0..SetDQB (15 GTE data-reg writers) | split from SetRotMatrix.c |
+| LIBGTE geo_00.o | render/geo_00.c | rsin, rsinCore, rcos | split from MatrixApplyZRotation.c |
+
+**Skipped (recorded reasons):**
+- **LIBGTE smp_00.o** (LightColor..OuterProduct0): its 0x80069A88 boundary sits
+  under load-bearing `.align 4` padding (func_80069A70/A84) that cannot be moved
+  to a section start without losing the pad → byte-unsafe. Left in the
+  render/SetBackColor.c residual (reg04 + smp_00).
+- **LIBGTE mtx_08.o** (ScaleMatrix) and **geo/MatrixApplyZRotation's own object**:
+  already one-object TUs structurally; only a cosmetic file rename remains
+  (deferred to the directory/header pass).
+- **LIBGTE msc00.o** (InitGeom), and the SetFogNear.c cluster: tangled
+  single-function extraction, low value / high risk — skipped.
+- **LIBGPU sys.o (53 funcs) / prim.o (40) / ext.o**, **LIBCD sys.o (21)**,
+  **LIBPRESS libpress.o (15)**, **LIBETC intr_vb.o**, **LIBAPI counter.o**, and
+  all of **libsnd / libspu / libmath / libcard**: compiler-C with too few
+  byte-anchors (1-4) to prove internal boundaries, or unanchored entirely.
+  Per "prove or skip", left un-split. libgpu sys.o is the largest *placeable*
+  candidate (4 consistent anchors + contiguity would fix all 53), but it spans
+  ~15 of our files and needs several straddle-splits — a focused follow-up.
+
+Directory reorg (into `lib/libgte/` etc.) and header restructuring were
+deliberately deferred; TUs stay in their current directories.
