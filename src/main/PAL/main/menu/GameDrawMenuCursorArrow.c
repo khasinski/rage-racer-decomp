@@ -31,51 +31,31 @@ void GameDrawOptionHintBar(s32 arg0) {
     s32 y;
     s32 which;
     s32 base;
-    s32 color;
-    s32 h18;
-    s32 y78;
-    s32 w0c;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 raw_base asm("$2");
-    s32 scratch;
-    s32 width;
     s32 next;
 
-    raw_base = (s32)g_DrawBuffer;
-    scratch = *(s32 *)0x1F800000;
-    next = scratch;
+    base = (s32)g_DrawBuffer + 0xCC;
+    next = *(s32 *)0x1F800000;
     which = arg0;
-    base = raw_base + 0xCC;
 
     if (which == 4) {
         y = 0x5A;
     } else {
-        width = D_8007D58A[which * 4];
-        raw_base = 0x120;
-        raw_base = raw_base - width;
-        width = (u32)raw_base >> 0x1F;
-        raw_base = raw_base + width;
-        y = raw_base >> 1;
+        y = (0x120 - D_8007D58A[which * 4]) / 2;
     }
 
-    w0c = 0xC;
-    h18 = 0x18;
-    y78 = 0x78;
-    color = 0x7F40;
-
-    next = func_80017138(base, next, y, 0x180, w0c, h18, 0xE0, y78, color);
+    next = func_80017138(base, next, y, 0x180, 0xC, 0x18, 0xE0, 0x78, 0x7F40);
 
     y += 0x10;
     index = which * 4;
-    next = func_80017138(base, next, y, 0x180, D_8007D58A[index], h18, D_8007D588[index], D_8007D589[index], color);
+    next = func_80017138(base, next, y, 0x180, D_8007D58A[index], 0x18, D_8007D588[index], D_8007D589[index], 0x7F40);
 
     y += D_8007D58B[index];
     if (which == 4) {
-        next = func_80017138(base, next, y, 0x180, 0x30, h18, 0, y78, color);
+        next = func_80017138(base, next, y, 0x180, 0x30, 0x18, 0, 0x78, 0x7F40);
         y += 0x34;
     }
 
-    next = func_80017138(base, next, y, 0x180, w0c, h18, 0xEC, y78, color);
+    next = func_80017138(base, next, y, 0x180, 0xC, 0x18, 0xEC, 0x78, 0x7F40);
     *(s32 *)0x1F800000 = func_80017390(base, next, 0x3F);
 }
 
