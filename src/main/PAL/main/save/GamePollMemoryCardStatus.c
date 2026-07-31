@@ -150,7 +150,6 @@ fail_case3:
         g_McStatusState = 0;
 clear_result:
         g_McStatusResult = 0;
-        goto done;
     }
 
 done:
