@@ -87,6 +87,8 @@ segments:
       - [0x1FBC, .rodata, PAL/main/render/GameDrawScriptedSprite]
       - [0x205C, .rodata, PAL/main/menu/GameDrawTireCompoundSlider]
       - [0x2098, rodata, main/002098_main]
+      - [0x2134, .rodata, PAL/main/menu/GameFlipTeamLogoHorizontal]
+      - [0x21A0, rodata, main/0021A0_main]
       - [0x21DC, .rodata, PAL/main/menu/GameDrawCarNamePlate]
       - [0x2248, rodata, main/002248_main]
       - [0x2268, .rodata, PAL/main/menu/GameGetOwnedCarAssetIndex]
