@@ -31,13 +31,12 @@ s32 GameCardReadStatusPair(s32 high, s32 low) {
         GameClearMemoryCardSwEvents();
         _card_clear(cmd);
         GameWaitMemoryCardSwEvent();
-        goto return_minus_one;
+        break;
     default:
         ret = -3;
         break;
     }
 
-return_minus_one:
     if (ret == -1 || ret == -3) {
         return ret;
     }
