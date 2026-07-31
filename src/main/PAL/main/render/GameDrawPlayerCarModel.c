@@ -333,30 +333,15 @@ void GameEndFmv(void) asm("func_8001EA34");
 
 void GameUpdateFmv(void) asm("func_8001E71C");
 void GameUpdateFmv(void) {
-    s32 state = g_FmvState;
-
-    if (state == 1) {
-        goto state_1;
+    switch (g_FmvState) {
+    case 0:
+        GameStartFmvPlayback(g_AssetBase);
+        /* fall through */
+    case 1:
+        GameDecodeFmvFrame();
+        break;
+    case 2:
+        GameEndFmv();
+        break;
     }
-    if (state < 2) {
-        if (state == 0) {
-            goto state_0;
-        }
-        goto done;
-    }
-    if (state == 2) {
-        goto state_2;
-    }
-    goto done;
-
-state_0:
-    GameStartFmvPlayback(g_AssetBase);
-state_1:
-    GameDecodeFmvFrame();
-    goto done;
-
-state_2:
-    GameEndFmv();
-
-done:
 }
