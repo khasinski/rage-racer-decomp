@@ -9,25 +9,21 @@ extern s32 g_PanVoiceVolumeR asm("D_801E6CE8");
 
 void GameSetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
     if (arg0 >= 0) {
-        if (arg0 < 0x81) {
-            goto arg0_done;
+        if (arg0 > 0x80) {
+            arg0 = 0x80;
         }
-        arg0 = 0x80;
     } else {
         arg0 = 0;
     }
 
-arg0_done:
     if (arg1 >= 0) {
-        if (arg1 < 0x81) {
-            goto arg1_done;
+        if (arg1 > 0x80) {
+            arg1 = 0x80;
         }
-        arg1 = 0x80;
     } else {
         arg1 = 0;
     }
 
-arg1_done:
     if (g_StereoOutput != 0) {
         g_PanVoiceVolumeL = arg0;
         g_PanVoiceVolumeR = arg1;
