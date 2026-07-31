@@ -12,10 +12,20 @@ Build verified: `make check VERSION=PAL` -> `build/PAL/main.exe` hashes
 Evidence column: the `include/psyq/*.h` line whose `NAME(...) asm("func_XXXX")`
 declaration is the blessed address->name mapping.
 
-Total symbols renamed: 70
+Total symbols renamed: 77
+
+Dropped (not byte-safe, see note below): func_80063230 -> BiosFileOpen in
+src/main/PAL/main/sdk/ExitCriticalSection.c.
 
 | func_ address | SDK name | kind | evidence (header:line) | files |
 |---|---|---|---|---|
+| func_80063240 | BiosFileSeek | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:68 + B(0x33) FileSeek | src/main/PAL/main/sdk/BiosFileSeek.c |
+| func_80063250 | BiosFileRead | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:69 + B(0x34) FileRead | src/main/PAL/main/sdk/BiosFileRead.c |
+| func_80063260 | BiosFileWrite | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:70 + B(0x35) FileWrite | src/main/PAL/main/sdk/BiosFileWrite.c |
+| func_80063270 | BiosFileClose | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:71 + B(0x36) FileClose | src/main/PAL/main/sdk/BiosFileClose.c |
+| func_80063280 | BiosFormatDevice | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:72 + B(0x41) selector | src/main/PAL/main/sdk/BiosFormatDevice.c |
+| func_80063290 | BiosFirstFile | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:73 + B(0x42) selector | src/main/PAL/main/sdk/BiosFirstFile.c |
+| func_800632A0 | BiosNextFile | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:74 + B(0x43) selector | src/main/PAL/main/sdk/BiosNextFile.c |
 | func_80064C7C | GetClut | call-site alias (local proto pinned) | include/psyq/gpu.h:254 | src/main/PAL/main/menu/GameDrawTeamLogoCanvas.c |
 | func_80064F30 | SetPolyF4 | call-site alias (local proto pinned) | include/psyq/gpu.h:207 | src/main/PAL/main/race/GameDrawWrongWayWarning.c |
 | func_80064F80 | SetSprt8 | call-site alias (local proto pinned) | include/psyq/gpu.h:211 | src/main/PAL/main/race/GameDrawWrongWayWarning.c |
@@ -86,3 +96,27 @@ Total symbols renamed: 70
 | func_8007B014 | SpuTransferStatus | call-site alias (local proto pinned) | include/psyq/spu.h:125 | src/main/PAL/main/menu/GameUpdateMenuMode.c |
 | func_8007B088 | SpuGetKeyStatus | call-site alias (local proto pinned) | include/psyq/spu.h:126 | src/main/PAL/main/audio/GameSetPitchedSoundCue.c |
 | func_8007B294 | _spu_setTransferCompletionFlag | call-site alias (local proto pinned) | include/psyq/spu.h:131 | src/main/PAL/main/sdk/SpuVmInit.c |
+
+## Dropped rename: func_80063230 -> BiosFileOpen (ExitCriticalSection.c)
+
+This rename is NOT byte-safe and was dropped from the salvaged set. Unlike the
+other seven BIOS trampolines (each the sole object in its own `.c` file), the
+`func_80063230` trampoline lives in `ExitCriticalSection.c`, right after an
+`INCLUDE_ASM(... func_80063220)` handwritten-asm stub.
+
+`tools/scripts/gen_nonmatching_asm.py` (TEXT_OBJECT_RE, ~line 43) discovers the
+end of the `func_80063220` disassembly by matching a following C data object
+written literally as `func_80063230[4] __attribute__((section(".text")))`. That
+match sets the boundary so the regenerated `func_80063220.s` stops at
+0x80063230 (4 instructions).
+
+Renaming the object to `BiosFileOpen[4] asm("func_80063230") __attribute__(...)`
+changes the C identifier away from `func_80063230`, so the boundary regex no
+longer matches. On the next `make split` (which does `rm -rf asm/...` and
+regenerates), `func_80063220.s` is emitted with 8 instructions, swallowing the
+16-byte trampoline at 0x80063230. The C array then emits that same trampoline a
+second time, duplicating it, growing `.text` by 0x10 (PS-EXE t_size 0x0800b000
+-> 0x0800b010) and shifting all following code. Result: build hashes
+`cb5243c90db7e4474bd168f851ba6752e1ca4327` instead of the retail
+`2913e15648eddef40821c5f666460abc04155ee6`. Reverting this one file to its
+`func_80063230[4]` form restores byte-exactness.

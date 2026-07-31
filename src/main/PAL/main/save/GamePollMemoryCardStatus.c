@@ -14,7 +14,6 @@ void func_8005F2AC(void);
 void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1) asm("func_800632F0");
 void func_8005F304(void);
 s32 func_8005F35C(void);
-s32 func_80063280(void *device);
 s32 func_8005F55C(void);
 void _card_info(s32 arg0) asm("func_80063DAC");
 void _card_load(s32 arg0) asm("func_80063DBC");
@@ -165,7 +164,7 @@ s32 GameFormatMemoryCard(s32 arg0, s32 arg1) {
 
     LibcSprintf(device, g_FmtCardDevice, arg0, arg1);
     func_8005F304();
-    func_80063280(device);
+    BiosFormatDevice(device);
     status = func_8005F55C();
 
     if (status != 1) {

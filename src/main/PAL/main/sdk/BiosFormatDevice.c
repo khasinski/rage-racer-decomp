@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-u_long func_80063280[4] __attribute__((section(".text"))) = {
+u_long BiosFormatDevice[4] asm("func_80063280") __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090041,

@@ -3,7 +3,7 @@
 #include "common.h"
 #include "game/random.h"
 
-u_long func_800632A0[4] __attribute__((section(".text"))) = {
+u_long BiosNextFile[4] asm("func_800632A0") __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090043,
