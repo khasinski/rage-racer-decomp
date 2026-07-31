@@ -268,15 +268,13 @@ extern volatile s32 D_8007FB4C;
 void func_800509C4(s32 arg0) {
     void *scratch = *(void **)0x1F800004;
     s32 step = arg0;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 zero asm("$0");
     s32 value;
     s32 renderValue;
     s32 y0;
     s32 y1;
 
     if (step == 0) {
-        D_8007FB4C = zero;
+        D_8007FB4C = 0;
         return;
     }
 
