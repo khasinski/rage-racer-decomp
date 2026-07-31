@@ -140,10 +140,7 @@ void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
 void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
     s32 mode = arg0;
     s32 value = arg1;
-    s32 flag;
-
-
-    flag = arg2;
+    s32 flag = arg2;
 
     GameDrawAnimatedScenery(value, 0);
 
@@ -157,7 +154,8 @@ void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
         if (g_GrandPrixClass >= 4) {
             GameDrawHighClassScenery();
         }
-        goto call0;
+        GameDrawStaticScenery(0);
+        break;
     case 1:
         if (g_GrandPrixClass >= 2) {
             GameDrawSpinningScenery(value, flag);
@@ -166,7 +164,8 @@ void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
             GameUpdateShuttleScenery(0);
         }
         GameDrawShuttleScenery(0);
-        goto call0;
+        GameDrawStaticScenery(0);
+        break;
     case 2:
         if (flag != 0) {
             GameUpdateShuttleScenery(0);
@@ -174,19 +173,15 @@ void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
         }
         GameDrawShuttleScenery(0);
         GameDrawShuttleScenery(1);
-        goto call0;
+        GameDrawStaticScenery(0);
+        break;
     case 3:
         GameDrawAnimatedScenery(value, 1);
-        goto call1;
+        GameDrawStaticScenery(1);
+        break;
     default:
-        return;
+        break;
     }
-
-call0:
-    GameDrawStaticScenery(0);
-    return;
-call1:
-    GameDrawStaticScenery(1);
 }
 
 void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
@@ -211,7 +206,8 @@ void GameDrawCourseScenery2(s32 arg0, s32 arg1) {
         if (g_GrandPrixClass >= 4) {
             GameDrawHighClassScenery();
         }
-        goto call0;
+        GameDrawStaticScenery(0);
+        break;
     case 1:
         if (g_GrandPrixClass >= 2) {
             GameDrawSpinningScenery(value, flag);
@@ -220,7 +216,8 @@ void GameDrawCourseScenery2(s32 arg0, s32 arg1) {
             GameUpdateShuttleScenery(0);
         }
         GameDrawShuttleScenery(0);
-        goto call0;
+        GameDrawStaticScenery(0);
+        break;
     case 2:
         if (flag != 0) {
             GameUpdateShuttleScenery(0);
@@ -228,19 +225,15 @@ void GameDrawCourseScenery2(s32 arg0, s32 arg1) {
         }
         GameDrawShuttleScenery(0);
         GameDrawShuttleScenery(1);
-        goto call0;
+        GameDrawStaticScenery(0);
+        break;
     case 3:
         GameDrawAnimatedScenery2(value, 1, g_SceneId == 0x11, flag);
-        goto call1;
+        GameDrawStaticScenery(1);
+        break;
     default:
-        return;
+        break;
     }
-
-call0:
-    GameDrawStaticScenery(0);
-    return;
-call1:
-    GameDrawStaticScenery(1);
 }
 
 extern u8 *g_FlybySceneryData asm("D_801E4448");
