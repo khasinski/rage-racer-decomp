@@ -139,7 +139,6 @@ segments:
       - [0xCA48, c, PAL/main/menu/GameApplyZoneLighting]
       - [0xDB0C, c, PAL/main/render/GameLoadTrackTexturePageRange]
       - [0xDB38, c, PAL/main/menu/GameComposeSampleTeamLogo]
-      - [0xDCE8, c, PAL/main/menu/GameClearTeamNameTexture]
       - [0xDDC8, c, PAL/main/car/GameBlendPaintColor]
       - [0xE2B0, c, PAL/main/render/GameDrawPlayerCarModel]
       - [0xEF9C, c, PAL/main/fmv/GameStartFmvPlayback]
