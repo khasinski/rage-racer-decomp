@@ -1,4 +1,141 @@
 #include "common.h"
+#include "psyq/gte_macros.h"
+
+/*
+ * PSY-Q 3.5 libgte object mtx_00.o (LIBGTE.A) as one translation unit.
+ * Exports, in link order: CompMatrix, MulMatrix0, MulRotMatrix0,
+ * MulRotMatrix, SetMulMatrix, ApplyMatrixLV, ApplyRotMatrix (func_800690E0),
+ * ScaleMatrixL, PushMatrix, PopMatrix, ReadRotMatrix, ReadLightMatrix,
+ * ReadColorMatrix.  Boundaries and names byte-matched against mtx_00.o;
+ * see docs/names.md section 25.  HANDWRITTEN_ASM (asm-in-C), excluded from
+ * progress per docs/ASM_AND_GTE_POLICY.md.
+ */
+
+/*
+ * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * CompMatrix is a hand-inlined PSY-Q libgte CompMatrix routine: batched
+ * cop2 (ctc2/mtc2/mvmva/mfc2) transfers interleaved with by-hand 16-bit column
+ * packing (lui/and/or/sll) that GCC 2.6.3 cannot reproduce from C or from GTE
+ * macros. Same family as the already-HANDWRITTEN siblings MulMatrix0/CA4/
+ * D88/E70/F80. Byte-exact via register-pinned COP2 asm.
+ *
+ * The func_80068A2C TU begins with 12 bytes (three 0x00000000 words) of
+ * inter-object alignment padding that splat over-split into three bogus
+ * single-`nop` "functions" (func_80068A2C/A30/A34).  The previous TU
+ * (func_800689A8, [0x591A8,0x5922C)) ends cleanly at 0x5922C with
+ * `jr ra; li v0,0`, so these three words are leading pad, not its tail.
+ * They are emitted here the same way every other pure-padding TU in this
+ * binary is (compare func_80069CBC: `u32 x[3] __attribute__((section(".text")))`).
+ */
+u32 func_80068A2C[3] __attribute__((section(".text"))) = { 0, 0, 0 };
+
+/*
+ * CompMatrix is a verbatim hand-inlined PSY-Q libgte matrix routine
+ * (CompMatrix-family: R2 = R0 * R1, T2 = R0 * T1 + T0) built from three/four
+ * MVMVA (cop2 0x486012, sf=1, mx=Rot, v=V0, cv=none) commands with the column
+ * vectors packed out of the source MATRIX by hand.  It belongs to the same
+ * family as its neighbours MulMatrix0/CA4/D88/E70 and, like them, only
+ * reaches a byte-exact match through register-pinned COP2 transfers: GCC 2.6.3
+ * will not reproduce the batched 5x lw / 5x ctc2 load block nor the exact
+ * IR/MAC extraction register schedule from natural C.
+ */
+void *CompMatrix(s32 *m0, void *m1, void *m2) asm("func_80068A38");
+void *CompMatrix(s32 *m0, void *m1, void *m2) {
+    /* These pins are load-bearing: removing any one changes .text. */
+    register s32 r0 asm("$8") = m0[0];
+    register s32 r1 asm("$9") = m0[1];
+    register s32 r2 asm("$10") = m0[2];
+    register s32 r3 asm("$11") = m0[3];
+    register s32 r4 asm("$12") = m0[4];
+
+    asm volatile(
+        "ctc2 $8,$0\n"
+        "ctc2 $9,$1\n"
+        "ctc2 $10,$2\n"
+        "ctc2 $11,$3\n"
+        "ctc2 $12,$4\n"
+        "lhu $8,0($5)\n"
+        "lw $9,4($5)\n"
+        "lw $10,12($5)\n"
+        "lui $1,0xFFFF\n"
+        "and $9,$9,$1\n"
+        "or $8,$8,$9\n"
+        "mtc2 $8,$0\n"
+        "mtc2 $10,$1\n"
+        "nop\n"
+        "cop2 0x486012\n"
+        "lhu $8,2($5)\n"
+        "lw $9,8($5)\n"
+        "lh $10,14($5)\n"
+        "sll $9,$9,16\n"
+        "or $8,$8,$9\n"
+        "mfc2 $11,$9\n"
+        "mfc2 $12,$10\n"
+        "mfc2 $13,$11\n"
+        "mtc2 $8,$0\n"
+        "mtc2 $10,$1\n"
+        "nop\n"
+        "cop2 0x486012\n"
+        "lhu $8,4($5)\n"
+        "lw $9,8($5)\n"
+        "lw $10,16($5)\n"
+        "lui $1,0xFFFF\n"
+        "and $9,$9,$1\n"
+        "or $8,$8,$9\n"
+        "mfc2 $14,$9\n"
+        "mfc2 $15,$10\n"
+        "mfc2 $24,$11\n"
+        "mtc2 $8,$0\n"
+        "mtc2 $10,$1\n"
+        "nop\n"
+        "cop2 0x486012\n"
+        "andi $11,$11,0xFFFF\n"
+        "sll $14,$14,16\n"
+        "or $14,$14,$11\n"
+        "sw $14,0($6)\n"
+        "andi $13,$13,0xFFFF\n"
+        "sll $24,$24,16\n"
+        "or $24,$24,$13\n"
+        "sw $24,12($6)\n"
+        "mfc2 $8,$9\n"
+        "mfc2 $9,$10\n"
+        "swc2 $11,16($6)\n"
+        "lhu $13,20($5)\n"
+        "lw $14,24($5)\n"
+        "lw $10,28($5)\n"
+        "sll $14,$14,16\n"
+        "or $13,$13,$14\n"
+        "mtc2 $13,$0\n"
+        "mtc2 $10,$1\n"
+        "nop\n"
+        "cop2 0x486012\n"
+        "sll $12,$12,16\n"
+        "andi $8,$8,0xFFFF\n"
+        "or $8,$8,$12\n"
+        "sw $8,4($6)\n"
+        "andi $15,$15,0xFFFF\n"
+        "sll $9,$9,16\n"
+        "or $9,$9,$15\n"
+        "sw $9,8($6)\n"
+        "mfc2 $8,$25\n"
+        "mfc2 $9,$26\n"
+        "mfc2 $10,$27\n"
+        "lw $11,20($4)\n"
+        "lw $12,24($4)\n"
+        "lw $13,28($4)\n"
+        "add $8,$8,$11\n"
+        "add $9,$9,$12\n"
+        "add $10,$10,$13\n"
+        "sw $8,20($6)\n"
+        "sw $9,24($6)\n"
+        "sw $10,28($6)"
+        :
+        : "r"(r0), "r"(r1), "r"(r2), "r"(r3), "r"(r4),
+          "r"(m0), "r"(m1), "r"(m2)
+        : "memory");
+    asm volatile("move $2,$6");
+}
+
 
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
@@ -452,7 +589,7 @@ s32 func_800690E0(s32 *arg0, s32 *arg1, s32 arg2) {
  *           obtained AND verified not to regress already-matched functions.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/MulMatrix0", func_80069110);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/mtx_00", func_80069110);
 
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
@@ -505,3 +642,141 @@ void PushMatrix(void) {
         "lui $1,0x8009\n"
         "sw $14,0x4CA8($1)");
 }
+
+
+/* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
+
+
+/* libgte PopMatrix: index -= 32, then ctc2 $0..$7 back from the matrix
+ * stack at 0x80094CAC; errors when the index is already 0. */
+void PopMatrix(void) asm("func_800692D4");
+void PopMatrix(void) {
+    asm volatile(
+        ".set noreorder\n"
+        ".set noat\n"
+        "lui $14,0x8009\n"
+        "lw $14,0x4CA8($14)\n"
+        "nop\n"
+        ".word 0x1DC0000A\n"
+        "lui $1,0x8009\n"
+        "sw $31,0x4C9C($1)\n"
+        "lui $4,0x8009\n"
+        ".word 0x0C0059D3\n"
+        "addiu $4,$4,0x4F5D\n"
+        "lui $31,0x8009\n"
+        "lw $31,0x4C9C($31)\n"
+        "nop\n"
+        "jr $31\n"
+        "nop\n"
+        "addi $14,$14,-32\n"
+        "lui $1,0x8009\n"
+        "sw $14,0x4CA8($1)\n"
+        "lui $15,0x8009\n"
+        "addu $15,$15,$14\n"
+        "addiu $15,$15,0x4CAC\n"
+        "lw $8,0($15)\n"
+        "lw $9,4($15)\n"
+        "ctc2 $8,$0\n"
+        "ctc2 $9,$1\n"
+        "lw $8,8($15)\n"
+        "lw $9,12($15)\n"
+        "ctc2 $8,$2\n"
+        "ctc2 $9,$3\n"
+        "lw $8,16($15)\n"
+        "nop\n"
+        "ctc2 $8,$4\n"
+        "nop\n"
+        "lw $8,20($15)\n"
+        "lw $9,24($15)\n"
+        "lw $10,28($15)\n"
+        "ctc2 $8,$5\n"
+        "ctc2 $9,$6\n"
+        "ctc2 $10,$7");
+}
+
+/* Read GTE rotation matrix + translation (control regs $0..$7) into p[0..7]. */
+void ReadRotMatrix(volatile u32 *p) asm("func_80069374");
+void ReadRotMatrix(volatile u32 *p) {
+    /* These pins are load-bearing: removing any one changes .text. */
+    register u32 t0 asm("$8");
+    register u32 t1 asm("$9");
+    register u32 t2 asm("$10");
+    register u32 t3 asm("$11");
+    register u32 t4 asm("$12");
+
+    gte_cfc2(t0, 0);
+    gte_cfc2(t1, 1);
+    gte_cfc2(t2, 2);
+    gte_cfc2(t3, 3);
+    gte_cfc2(t4, 4);
+    p[0] = t0;
+    p[1] = t1;
+    p[2] = t2;
+    p[3] = t3;
+    p[4] = t4;
+    gte_cfc2(t0, 5);
+    gte_cfc2(t1, 6);
+    gte_cfc2(t2, 7);
+    p[5] = t0;
+    p[6] = t1;
+    p[7] = t2;
+}
+
+/* Read GTE light matrix + back-color (control regs $8..$15) into p[0..7]. */
+void ReadLightMatrix(volatile u32 *p) asm("func_800693BC");
+void ReadLightMatrix(volatile u32 *p) {
+    /* These pins are load-bearing: removing any one changes .text. */
+    register u32 t0 asm("$8");
+    register u32 t1 asm("$9");
+    register u32 t2 asm("$10");
+    register u32 t3 asm("$11");
+    register u32 t4 asm("$12");
+
+    gte_cfc2(t0, 8);
+    gte_cfc2(t1, 9);
+    gte_cfc2(t2, 10);
+    gte_cfc2(t3, 11);
+    gte_cfc2(t4, 12);
+    p[0] = t0;
+    p[1] = t1;
+    p[2] = t2;
+    p[3] = t3;
+    p[4] = t4;
+    gte_cfc2(t0, 13);
+    gte_cfc2(t1, 14);
+    gte_cfc2(t2, 15);
+    p[5] = t0;
+    p[6] = t1;
+    p[7] = t2;
+}
+
+/* Read GTE color matrix + far-color (control regs $16..$23) into p[0..7]. */
+void ReadColorMatrix(volatile u32 *p) asm("func_80069404");
+void ReadColorMatrix(volatile u32 *p) {
+    /* These pins are load-bearing: removing any one changes .text. */
+    register u32 t0 asm("$8");
+    register u32 t1 asm("$9");
+    register u32 t2 asm("$10");
+    register u32 t3 asm("$11");
+    register u32 t4 asm("$12");
+
+    gte_cfc2(t0, 16);
+    gte_cfc2(t1, 17);
+    gte_cfc2(t2, 18);
+    gte_cfc2(t3, 19);
+    gte_cfc2(t4, 20);
+    p[0] = t0;
+    p[1] = t1;
+    p[2] = t2;
+    p[3] = t3;
+    p[4] = t4;
+    gte_cfc2(t0, 21);
+    gte_cfc2(t1, 22);
+    gte_cfc2(t2, 23);
+    p[5] = t0;
+    p[6] = t1;
+    p[7] = t2;
+}
+
+/* trailing alignment padding (3 nops) that fills this TU to the next subsegment */
+const u32 func_8006944C[3] __attribute__((section(".text"))) = { 0, 0, 0 };
