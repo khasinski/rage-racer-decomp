@@ -186,9 +186,8 @@ s32 GameUpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
                 FIELD(spad, s16 *, 0x90) = (s16) ((s32) ((temp_a0 * temp_v1_5) + (var_a1_2 * (temp_a0_5 - temp_v1_5))) / temp_a0_5);
             }
         }
-        goto block_21;
     }
-block_21:
+
     FIELD(spad, u16 *, 0x60) = (u16) (((u16) FIELD(obj, s32 *, 0) - (u16) FIELD(temp_s4, s32 *, 0)) * 4);
     temp_a0 = FIELD(spad, s16 *, 0x90);
     FIELD(spad, s16 *, 0x64) = (s16) (((u16) FIELD(obj, s32 *, 8) - (u16) FIELD(temp_s4, s32 *, 4)) * 4);
