@@ -310,6 +310,7 @@ segments:
       - [0x589F0, c, PAL/main/render/MatrixApplyVectorComponents]
       - [0x58B40, c, PAL/main/render/MatrixApplyVector]
       - [0x58CB0, c, PAL/main/render/MatrixApplyZRotation]
+      - [0x58D68, c, PAL/main/render/geo_00]
       - [0x58ED4, c, PAL/main/render/SetFogNear]
       - [0x5922C, c, PAL/main/render/mtx_00]
       - [0x59C58, c, PAL/main/render/mtx_03]
