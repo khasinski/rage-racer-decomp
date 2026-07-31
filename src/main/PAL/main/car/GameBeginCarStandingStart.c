@@ -20,11 +20,9 @@ void GameBeginCarStandingStart(u8 *arg0) {
 
     if (value < 0) {
         value = g_EngineRpm - 1000;
-        if (g_EngineRpm >= 2000) {
-            goto done;
+        if (g_EngineRpm < 2000) {
+            value = 0;
         }
-        value = 0;
-        goto done;
     } else {
         index = *(s16 *)(arg0 + 0x132);
         value *= g_PeakOutputValue / ((index * 200) + 300);
@@ -34,6 +32,5 @@ void GameBeginCarStandingStart(u8 *arg0) {
         }
     }
 
-done:
     g_StandingStartSpin = value;
 }
