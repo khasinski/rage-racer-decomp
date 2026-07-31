@@ -84,7 +84,7 @@ void GameDrawMemoryCardMessage(s32 arg0) {
                 y = 0x60;
             }
             func_80027874(x, y, entry[0], 0x7F81);
-            temp = *(u8 *)((s32)entry + 4);
+            temp = ((u8 *)entry)[4];
             entry += 2;
         } while (temp != 0);
     }
