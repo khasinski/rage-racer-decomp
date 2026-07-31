@@ -100,8 +100,6 @@ void GameDrawHighClassScenery(void) {
     Matrix mtx;
     s32 pad[4];
     s32 *state;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 frameValue asm("$2");
     s32 drawArg;
 
     (void)pad;
@@ -111,19 +109,17 @@ void GameDrawHighClassScenery(void) {
 
     if (g_IsEnvironmentMode4 != 0) {
         func_80017794((void *)0x1F80011C, state - 3, &mtx);
-        frameValue = g_CourseModelCount;
         *(s32 *)0x1F800084 = 0x10000;
         drawArg = 1;
-        if (frameValue >= 0x40) {
+        if (g_CourseModelCount >= 0x40) {
             drawArg = 0x3F;
         }
         GameSubmitCourseModel((void *)0x1F800000, drawArg);
     } else {
         func_80017794((void *)0x1F80011C, state - 3, &mtx);
-        frameValue = g_CourseModelCount;
         *(s32 *)0x1F800084 = 0;
         drawArg = 1;
-        if (frameValue >= 0x40) {
+        if (g_CourseModelCount >= 0x40) {
             drawArg = 0x3F;
         }
         GameSubmitCourseModel2((void *)0x1F800000, drawArg);
