@@ -18,20 +18,11 @@ s32 rcos(s32 arg0) asm("func_80068634");
  */
 
 s32 rsin(s32 arg0) {
-    s32 ret;
-
     if (arg0 < 0) {
-        goto negative;
+        return -rsinCore(-arg0 & 0xFFF);
     }
 
-    ret = rsinCore(arg0 & 0xFFF);
-    goto done;
-
-negative:
-    ret = -rsinCore(-arg0 & 0xFFF);
-
-done:
-    return ret;
+    return rsinCore(arg0 & 0xFFF);
 }
 
 s32 rsinCore(s32 arg0) {
