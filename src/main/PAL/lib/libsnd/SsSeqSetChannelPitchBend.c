@@ -24,3 +24,13 @@ void SsSeqSetChannelPitchBend(long seq, long sep, long arg2, long arg3) {
         }
     }
 }
+
+
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+
+void SsSeqSetNoteParam2C(long seq, long sep, u_char value) {
+    SeqStruct *state = &g_SndSeqTable[(short)seq][(short)sep];
+
+    state->programs[state->channel] = value;
+    state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
+}

@@ -359,7 +359,6 @@ segments:
       - [0x5F8D0, c, PAL/lib/libsnd/SsSeqAdvanceChannelDelta]
       - [0x5F9E0, c, PAL/main/sdk/SsSeqDispatchMidiEvent]
       - [0x5FC8C, c, PAL/lib/libsnd/SsSeqSetChannelPitchBend]
-      - [0x5FD7C, c, PAL/lib/libsnd/SsSeqSetNoteParam2C]
       - [0x5FDF4, c, PAL/main/sdk/SsSeqDispatchControlChange]
       - [0x6010C, c, PAL/lib/libsnd/func_8006F90C_8006FA44]
       - [0x6037C, c, PAL/main/sdk/SsSeqSetPortamento]
