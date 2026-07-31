@@ -499,21 +499,19 @@ s32 GameDrawCarShopScreen(s32 arg0) {
             D_8009B2E8 = 0x1FC;
         }
         value = 0;
-        goto update;
+    } else {
+        value = D_8009B2E8 + arg0;
+        D_8009B2E8 = value;
+        if (value < 0) {
+            D_8009B2E8 = 0;
+        }
+
+        value = D_8009B2E8;
+        limit = 0x1FC;
+        limit -= value;
+        value = (u32)(limit * limit) >> 0xB;
     }
 
-    value = D_8009B2E8 + arg0;
-    D_8009B2E8 = value;
-    if (value < 0) {
-        D_8009B2E8 = 0;
-    }
-
-    value = D_8009B2E8;
-    limit = 0x1FC;
-    limit -= value;
-    value = (u32)(limit * limit) >> 0xB;
-
-update:
     amount = value << 16;
     amount >>= 16;
     limit = g_PlayerCarIndex;
