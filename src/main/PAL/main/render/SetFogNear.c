@@ -107,12 +107,10 @@ s32 SquareRoot12(s32 arg0) {
     shift -= 6;
     if (shift < 0) {
         ret = func_80068738(value) >> -shift;
-        goto done;
+    } else {
+        ret = func_80068738(value) << shift;
     }
 
-    ret = func_80068738(value) << shift;
-
-done:
     return ret;
 }
 
