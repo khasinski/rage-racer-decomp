@@ -3,15 +3,12 @@
 
 void GameSetEffectVolumeScale(s32 arg0) {
     if (arg0 >= 0) {
-        if (arg0 < 0x81) {
-            goto done;
+        if (arg0 >= 0x81) {
+            arg0 = 0x80;
         }
-        arg0 = 0x80;
     } else {
         arg0 = 0;
     }
-
-done:
     g_EffectVolumeScale = arg0;
 }
 
@@ -19,15 +16,12 @@ extern s32 g_SoundSlotVolumeScale asm("D_801E6CE0");
 
 void GameSetLoadedTableVolumeScale(s32 arg0) {
     if (arg0 >= 0) {
-        if (arg0 < 0x81) {
-            goto done;
+        if (arg0 >= 0x81) {
+            arg0 = 0x80;
         }
-        arg0 = 0x80;
     } else {
         arg0 = 0;
     }
-
-done:
     g_SoundSlotVolumeScale = arg0;
 }
 
@@ -68,15 +62,12 @@ call:
 void GameSetEffectVolumeSetting(s32 level) asm("func_8005BDD4");
 void GameSetEffectVolumeSetting(s32 level) {
     if (level >= 0) {
-        if (level < 0x10) {
-            goto done;
+        if (level >= 0x10) {
+            level = 0xF;
         }
-        level = 0xF;
     } else {
         level = 0;
     }
-
-done:
     g_EffectVolumeScale = (level << 7) / 15;
 }
 
