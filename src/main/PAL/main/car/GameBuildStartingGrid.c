@@ -172,7 +172,6 @@ void GameUpdateCarTiltCounter(GameCarRuntime *arg0) {
     register s32 limit asm("$3");
 
     obj = arg0;
-    __asm__ volatile("" : "=r"(obj) : "0"(obj));
 
     ptr = (u8 *)&obj->field_BC;
     if (g_RacePhase >= 2) {
@@ -237,23 +236,20 @@ store_value:
 
 void GameApplyCarKnockback(GameCarRuntime *arg0) asm("func_80038C4C");
 void GameApplyCarKnockback(GameCarRuntime *arg0) {
-    GameCarRuntime *obj = arg0;
     u32 timer;
 
-    __asm__ volatile("" : "=r"(obj) : "0"(obj));
-
-    if (obj->motionActive != 0) {
-        timer = obj->motionTimer - 1;
-        obj->motionTimer = timer;
+    if (arg0->motionActive != 0) {
+        timer = arg0->motionTimer - 1;
+        arg0->motionTimer = timer;
         if ((s32)(timer << 16) <= 0) {
-            obj->motionActive = 0;
-            obj->motionTimer = 0;
+            arg0->motionActive = 0;
+            arg0->motionTimer = 0;
         }
 
-        obj->x -= obj->velocityX;
-        obj->z -= obj->velocityZ;
-        obj->velocityX = obj->velocityX * 7 / 8;
-        obj->velocityZ = obj->velocityZ * 7 / 8;
+        arg0->x -= arg0->velocityX;
+        arg0->z -= arg0->velocityZ;
+        arg0->velocityX = arg0->velocityX * 7 / 8;
+        arg0->velocityZ = arg0->velocityZ * 7 / 8;
     }
 }
 
