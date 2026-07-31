@@ -115,8 +115,7 @@ void GameBlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
 
 void GameApplyBodyColor1(u32 arg0, u32 arg1) asm("func_8001D748");
 void GameApplyBodyColor1(u32 arg0, u32 arg1) {
-    /* This pin is load-bearing: removing it changes .text. */
-    register u32 raw asm("$2");
+    u32 raw;
     u16 *base;
     u16 s1;
     u16 s2;
@@ -128,7 +127,6 @@ void GameApplyBodyColor1(u32 arg0, u32 arg1) {
     raw = arg1;
     arg0 <<= 1;
     base = (u16 *)(raw + 0x7060);
-    __asm__("" : "=r"(raw), "=r"(base), "=r"(arg0) : "0"(raw), "1"(base), "2"(arg0));
     s1 = *(u16 *)((u8 *)g_BodyColorPrimary + arg0);
     s2 = *(u16 *)((u8 *)g_BodyColorSecondary + arg0);
 
