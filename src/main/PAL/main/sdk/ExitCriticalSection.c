@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "game/random.h"
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -36,3 +37,65 @@ u_long func_80063230[4] __attribute__((section(".text"))) = {
     0x24090032,
     0,
 };
+
+u_long BiosFileSeek[4] asm("func_80063240") __attribute__((section(".text"))) = {
+    0x240A00B0,
+    0x01400008,
+    0x24090033,
+    0,
+};
+
+u_long BiosFileRead[4] asm("func_80063250") __attribute__((section(".text"))) = {
+    0x240A00B0,
+    0x01400008,
+    0x24090034,
+    0,
+};
+
+u_long BiosFileWrite[4] asm("func_80063260") __attribute__((section(".text"))) = {
+    0x240A00B0,
+    0x01400008,
+    0x24090035,
+    0,
+};
+
+u_long BiosFileClose[4] asm("func_80063270") __attribute__((section(".text"))) = {
+    0x240A00B0,
+    0x01400008,
+    0x24090036,
+    0,
+};
+
+u_long BiosFormatDevice[4] asm("func_80063280") __attribute__((section(".text"))) = {
+    0x240A00B0,
+    0x01400008,
+    0x24090041,
+    0,
+};
+
+u_long BiosFirstFile[4] asm("func_80063290") __attribute__((section(".text"))) = {
+    0x240A00B0,
+    0x01400008,
+    0x24090042,
+    0,
+};
+
+u_long BiosNextFile[4] asm("func_800632A0") __attribute__((section(".text"))) = {
+    0x240A00B0,
+    0x01400008,
+    0x24090043,
+    0,
+};
+
+extern u32 g_RandomSeed asm("D_8009B9A8");
+
+/* The game's own PRNG, not SDK code: it keeps common.h's typedefs to agree
+ * with its declaration in game/random.h. */
+s32 GameRandom15(void) {
+    u32 value = g_RandomSeed;
+
+    value *= 0x41C64E6D;
+    value += 0x3039;
+    g_RandomSeed = value;
+    return (value >> 0x10) & 0x7FFF;
+}
