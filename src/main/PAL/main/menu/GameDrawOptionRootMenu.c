@@ -351,19 +351,8 @@ void GameDrawSoundOptionScreen(void) {
     s32 n;
 
 
-    {
-        s32 a1v = g_SoundOptionCursor;
-        /* This barrier is load-bearing: removing it changes .text. */
-        asm("" : : "r"(a1v));
-        {
-            /* This pin is load-bearing: removing it changes .text. */
-            register s32 a0v asm("$4") = 0x14;
-            /* This barrier is load-bearing: removing it changes .text. */
-            asm("" : : "r"(a0v));
-            color = 0x7F;
-            func_800236C8(a0v, (a1v << 5) + 56);
-        }
-    }
+    func_800236C8(0x14, (g_SoundOptionCursor << 5) + 56);
+    color = 0x7F;
 
     scratch = (s32 *)0x1F800000;
     s3 = 0x18;
