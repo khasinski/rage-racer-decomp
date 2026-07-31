@@ -577,11 +577,11 @@ loop_body:
                 }
                 GameDrawScriptedQuad(
                     remaining, (u8 *)cmd->arg0, (s32 *)cmd->arg1);
-                goto loop_next;
+                break;
             case 30:
                 GameDrawScriptedQuad(
                     remaining, (u8 *)cmd->arg0, (s32 *)cmd->arg1);
-                goto loop_next;
+                break;
             default:
                 break;
             }

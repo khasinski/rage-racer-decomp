@@ -218,7 +218,7 @@ store_value:
     }
 
     if (status > 0) {
-        goto done;
+        break;
     }
     zone++;
     } while ((s32)zone < (s32)first + 0xF0);
@@ -348,7 +348,7 @@ draw:
     if (g_SplitTimer >= 0x3C) {
         threshold = 0x927BE;
         value = g_LapTimeMs;
-        goto compare_first;
+
     } else if (g_SectorIndex >= 0) {
         if (g_SplitSign != 0) {
             if (g_LapCount >= g_PlayerLap) {

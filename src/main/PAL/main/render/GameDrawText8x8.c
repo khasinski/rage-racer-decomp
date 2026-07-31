@@ -397,7 +397,7 @@ void DrawProportionalTextShadedWide(
 advance_sprite:
                 sprt++;
                 xPos += advance;
-                goto next_character;
+                continue;
             }
             {
                 register s32 cell asm("$17") = ch - 0x20;

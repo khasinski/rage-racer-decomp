@@ -365,7 +365,7 @@ s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
                 *(s32 *)((s32)route + routeFinalOffset + 0xC4);
             goto update_progress;
         }
-        goto update_best;
+
     }
     if (g_LapCount < *(s16 *)((u8 *)arg0 + 0x168)) {
 update_best:
@@ -472,9 +472,9 @@ reset_transition:
             func_8005E4A4(0);
             g_RaceFadeTimer = 0;
             g_MirrorViewEnabled = 0;
-            goto after_progress;
+
         }
-        goto check_finish_transition;
+
     } else {
 progress_failed:
         returnValue = 0;
@@ -510,7 +510,7 @@ check_finish_transition:
             GameBeginReplay();
             GameExitRaceScene(0x11);
             GameStartCdAudio();
-            goto update_countdown;
+
         }
     } else if ((g_GrandPrixMode == 0) &&
                (((*(s32 *)((u8 *)arg0 + 0x6C) +

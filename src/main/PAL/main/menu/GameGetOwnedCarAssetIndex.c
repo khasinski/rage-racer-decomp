@@ -23,7 +23,7 @@ s32 GameGetOwnedCarAssetIndex(s32 arg0) {
         case 5:
             return 3;
         }
-        goto fallback4;
+
 
     case 1:
 fallback4:
@@ -35,7 +35,7 @@ fallback4:
         case 5:
             return 6;
         }
-        goto fallback8;
+
 
     case 2:
 fallback8:
@@ -45,7 +45,7 @@ fallback8:
         case 5:
             return 8;
         }
-        goto fallback9;
+
 
     case 3:
 fallback9:
@@ -76,7 +76,7 @@ fallback9:
         case 5:
             return 17;
         }
-        goto fallback18;
+
 
     case 5:
 fallback18:
@@ -88,7 +88,7 @@ fallback18:
         case 5:
             return 20;
         }
-        goto fallback21;
+
 
     case 6:
 fallback21:
@@ -98,7 +98,7 @@ fallback21:
         case 5:
             return 22;
         }
-        goto fallback23;
+
 
     case 7:
 fallback23:
@@ -110,7 +110,7 @@ fallback23:
         case 5:
             return 25;
         }
-        goto fallback26;
+
 
     case 8:
 fallback26:

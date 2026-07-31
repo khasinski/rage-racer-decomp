@@ -364,7 +364,7 @@ void GameUpdateRivalRubberBand(void) {
                 case 1:
                     goto cue_33;
                 case 0:
-                    goto cue_32;
+                    break;
                 case 2:
                     goto cue_34;
                 }

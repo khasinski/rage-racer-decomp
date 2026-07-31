@@ -67,7 +67,7 @@ void GameDrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
                       shade & 0xFF, shade & 0xFF, 0x244, 0, 1, 0x3B);
         break;
     default:
-        goto end;
+        break;
     }
 
     switch (arg1) {

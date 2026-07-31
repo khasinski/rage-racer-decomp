@@ -19,7 +19,7 @@ void GameDrawSplitTimes(void) {
     if (g_SplitTimer >= 0x3C) {
         threshold = 0x927BE;
         value = g_LapTimeMs;
-        goto compare_first;
+
     } else if (g_SectorIndex >= 0) {
         if (g_SplitSign != 0) {
             if (g_LapCount >= g_PlayerLap) {

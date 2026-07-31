@@ -67,7 +67,7 @@ advance_forward_sub:
                 wrapped = index % count;
                 total -= ((GameTrackPoint *)table)[wrapped].segmentLength;
             } while (cur != wrapped);
-            goto done;
+
         } else {
             /* These pins are load-bearing: removing any one changes .text. */
             register s32 count asm("$8");

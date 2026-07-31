@@ -38,7 +38,7 @@ s32 GamePollMemoryCardStatus(s32 arg0, s32 arg1) {
     case 1:
         status = func_8005F35C();
         if (status == 0) {
-            goto done;
+            break;
         }
 
         two = 2;
@@ -66,7 +66,7 @@ case1_ready:
         } else {
             g_McStatusState = two;
         }
-        goto done;
+        break;
 
 fail_neg1_case1:
         state = -1;
@@ -79,7 +79,7 @@ case1_status4:
         func_8005F55C();
         g_McStatusState = two;
         g_McLastCardStatus = 0;
-        goto done;
+        break;
 
 fail_neg3_case1:
         state = -3;
@@ -88,19 +88,19 @@ fail_case1:
         g_McPollStatus = state;
         g_McStatusState = 4;
         g_McLastCardStatus = 0;
-        goto done;
+        break;
 
     case 2:
         func_8005F2AC();
         _card_load(handle);
         g_McStatusState = 3;
         g_McPollTicks = 0;
-        goto done;
+        break;
 
     case 3:
         status = func_8005F35C();
         if (status == 0) {
-            goto done;
+            break;
         }
 
         g_McStatusState = 4;
@@ -123,7 +123,7 @@ fail_case1:
 
 case3_ready:
         g_McLastCardStatus = status;
-        goto done;
+        break;
 
 fail_neg1_case3:
         state = -1;
@@ -139,12 +139,12 @@ fail_neg3_case3:
 fail_case3:
         g_McPollStatus = state;
         g_McLastCardStatus = 0;
-        goto done;
+        break;
 
     case 4:
         g_McStatusState = 0;
         g_McStatusResult = g_McPollStatus;
-        goto done;
+        break;
 
     default:
         g_McStatusState = 0;

@@ -243,7 +243,7 @@ void GameUpdateTeamNameScreen(void) {
             g_MenuViewAngle = 0x3E8000;
             GameMenuCursorAnim = GameMenuCursor;
             GamePlaySoundCue(1);
-            goto after_sound;
+
         }
         goto after_sound;
     }
