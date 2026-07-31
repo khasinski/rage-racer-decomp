@@ -51,45 +51,34 @@ void GameSwapTrackTexturePageNow(void) asm("func_80019D7C");
 void GameSwapTrackTexturePageNow(void) {
     s32 buffer[0xE0];
     s32 page = 0;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 rectValue asm("$2");
     s16 *rectY = &D_8007C70A;
     Rect *rect = (Rect *)((s32)&D_8007C70A - 2);
     u8 **basePtr = &g_TrackTextureShadow;
-    u8 *state = D_801E4BF8;
-    s32 offset = 0;
     s32 value;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 one asm("$4");
     s32 *src;
     s32 *dst;
-    /* This pin is load-bearing: removing it changes .text. */
-    register u8 *base asm("$2");
     s32 count;
 
     do {
-        rectValue = page + 0x100;
-        one = 1;
-        *rectY = rectValue;
-        value = one - *state;
-        if (*state == g_TrackTexturePageWanted) {
+        *rectY = page + 0x100;
+        value = 1 - D_801E4BF8[page];
+        if (D_801E4BF8[page] == g_TrackTexturePageWanted) {
             StoreImage(rect, buffer);
             DrawSync(0);
-            LoadImage(rect, *basePtr + offset);
+            LoadImage(rect, *basePtr + ((((page * 8) - page) << 7)));
             DrawSync(0);
 
             src = buffer;
-            base = *basePtr;
-            dst = (s32 *)(offset + (s32)base);
-            for (count = 0; count < 0xE0; count++) {
+            dst = (s32 *)(*basePtr + ((((page * 8) - page) << 7)));
+            count = 0;
+            do {
                 *dst++ = *src++;
-            }
+                count++;
+            } while (count < 0xE0);
 
-            *state = value;
+            D_801E4BF8[page] = value;
         }
-        state++;
         page++;
-        offset += 0x380;
     } while (page < 0x100);
 }
 
