@@ -144,8 +144,7 @@ void GameEndMirrorPass(void) {
     g_VisibleCellMask = (s32)&D_8019C86C;
     __asm__("" : : : "memory");
     v0reg = (s32)g_DrawBuffer;
-    v1reg = (s32)&D_8009EC94;
-    g_VisibleCellList = v1reg;
+    g_VisibleCellList = (s32)&D_8009EC94;
     v1reg = scratch->depth;
     scratch->x0 = 0;
     scratch->y0 = 0;
