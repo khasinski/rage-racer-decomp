@@ -381,14 +381,10 @@ void GameDrawLapNumber(void) {
 
     while (1) {
         quotient = track / divisor;
-        if (quotient != 0) {
-            goto drawDigit;
-        }
-        if (digitsDrawn > 0) {
-            goto done;
+        if (quotient == 0 && digitsDrawn > 0) {
+            break;
         }
 
-drawDigit:
         {
             s32 y;
             u8 *oldPacket;
@@ -417,7 +413,6 @@ drawDigit:
         }
     }
 
-done:
     {
         void *ot;
         u8 *finalScratch;
@@ -555,31 +550,17 @@ void GameApplyTrackReverbZone(s32 arg0) {
     }
 
     scene = g_RaceSeries;
-    i = 0;
     offset = scene << 4;
-loop:
-    if (*(s32 *)((u8 *)&g_ReverbZoneStart + offset) >= arg0) {
-        goto next;
-    }
-
-    if (arg0 >= *(s32 *)((u8 *)&g_ReverbZoneEnd + offset)) {
-        i++;
-        goto check;
-    }
-
-    result = 0x46;
-    goto done;
-
-next:
-    i++;
-
-check:
-    if (i < 2) {
+    for (i = 0; i < 2; i++) {
+        if (*(s32 *)((u8 *)&g_ReverbZoneStart + offset) < arg0) {
+            if (arg0 < *(s32 *)((u8 *)&g_ReverbZoneEnd + offset)) {
+                result = 0x46;
+                break;
+            }
+        }
         offset += 8;
-        goto loop;
     }
 
-done:
     arg = result;
     func_8005B190(arg, arg);
 }
