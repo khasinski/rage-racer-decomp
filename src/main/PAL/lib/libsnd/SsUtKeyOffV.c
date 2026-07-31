@@ -62,7 +62,6 @@ long SsUtKeyOffV(long arg0) {
             *(u_short *)&g_SndVoiceState[offset] = 0;
 
             maskLow = D_8009E670;
-            asm volatile("" : "=r"(maskLow) : "0"(maskLow));
             g_SndUpdateLock = 0;
             asm volatile("" ::: "memory");
             activeLow = lowBits | activeLow;

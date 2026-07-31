@@ -230,7 +230,7 @@ void GameSetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
  * as GCC materialises it, and read back with `voice >> 16`. */
 #define VOLPITCH()                                                    \
     svArg = voiceCopy;                                                \
-    asm("" : "=r"(svArg) : "0"(svArg));                               \
+                               \
     prod = *(s32 *)(g_EffectVoiceVolume + offset) * g_EffectVolumeScale;                \
     left = prod;                                                      \
     if (prod < 0) {                                                   \

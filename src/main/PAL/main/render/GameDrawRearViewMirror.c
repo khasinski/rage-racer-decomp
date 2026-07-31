@@ -151,7 +151,6 @@ void GameEndMirrorPass(void) {
     scratch->y0 = 0;
     v0reg += 0xCC;
     scratch->primData = (void *)v0reg;
-    __asm__("" : "=r"(v0reg) : "0"(v0reg) : "memory");
     v0reg = scratch->orderingFlag;
     scratch->depth = v1reg - 0x800;
     scratch->orderingFlag = v0reg ^ 1;

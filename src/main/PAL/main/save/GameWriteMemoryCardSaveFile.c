@@ -274,7 +274,6 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
         s32 word;
         s32 status;
 
-        asm volatile("" : "=r"(one) : "0"(one));
         word = *(s32 *)((u8 *)header + 8);
         status = tries | 0x3900;
         GameMenuLoadPhase = status;

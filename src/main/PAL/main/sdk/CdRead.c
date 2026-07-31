@@ -184,7 +184,6 @@ void func_80027874(long x, long y, u_char *str, long arg3) {
     func_800666F4(next, 0, 1, 0x1D, D_8007BED0);
     AddPrim(g_DrawBuffer + 0xCC, next);
     *(u_char **) 0x1F800000 = next + 0xC;
-    __asm__ __volatile__("" : : "r"(next));
 }
 
 void func_800279EC(long arg0, long arg1, long arg2, long arg3) {

@@ -231,7 +231,6 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
     packet[5] = color;
     packet[6] = color;
 
-    asm volatile("" ::: "memory");
     next = packet + 0x10;
     asm volatile("" : : "r"(next));
     AddPrim((u32 *)ot, (u32 *)prim);

@@ -255,7 +255,7 @@ void DrawProportionalTextShadedWide(
     s32 intensity) {
 #define OPAQUE_VALUE ({ \
     register s32 opaque asm("$8") = 0x100; \
-    asm("" : "=r"(opaque) : "0"(opaque)); \
+ \
     opaque; \
 })
     register s32 xPos;
@@ -470,7 +470,6 @@ next_character:
     *(u8 **)0x1F800000 = ({
         register u8 *next = packet + 12;
 
-        asm("" : "=r"(next) : "0"(next), "r"(packet));
         next;
     });
 #undef OPAQUE_VALUE

@@ -86,7 +86,6 @@ long CdGetToc2(long arg0, u_char *arg1) {
             }
             count++;
             value = response[1];
-            asm volatile("");
             ptr[0] = value;
             value = response[2];
             firstTrack++;

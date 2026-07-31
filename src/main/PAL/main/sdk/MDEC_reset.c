@@ -137,7 +137,6 @@ long MDEC_timeout(u_char *arg0) {
 
     asm volatile("" ::: "memory");
     ret = 0;
-    asm volatile("" : : "r"(ret));
     *g_MdecOutDmaChcr;
     *g_MdecCtrlReg = 0x60000000;
 

@@ -622,7 +622,6 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
                     rightTrig += 0xFFF;
                 }
                 right = (rightTrig >> 12) + 0xA0;
-                asm("" : "=r"(right) : "0"(right));
                 drawPrim = quadBase;
                 drawPrim->x3 = right;
                 drawPrim->x1 = right;

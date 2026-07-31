@@ -11,7 +11,7 @@ u32 func_80069CBC[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  * needed to reproduce the retail allocation/scheduling exactly:
  *   - dstp -> $5 (a1) is the store base for every sh; ret -> $2 (v0) is only
  *     the return value; value0/1/2 -> $9/$10/$11 (t1/t2/t3) cycle the loads.
- *   - The first `__asm__ volatile("")` keeps `ret = dst` from floating above
+ *   - The first `` keeps `ret = dst` from floating above
  *     the first load so the resulting `move v0,a1` lands in that load's delay
  *     slot (offset 0x4), matching retail.
  *   - The second empty barrier (opaque identity on ret) hides $2==dst from the
