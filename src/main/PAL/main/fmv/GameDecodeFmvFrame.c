@@ -36,18 +36,13 @@ void GameDecodeFmvFrame(void) {
     func_80063FB0(g_FmvVlcBuffers[g_FmvVlcIndex], 3);
     DecDCTout(g_FmvStripBuffers[g_FmvStripIndex], (g_FmvStripWidth * g_FmvStripHeight) / 2);
 
-    {
-        s32 fail;
-
-        fail = -1;
-        while (GamePresentFmvFrame(g_FmvVlcBuffers) == fail) {
-            value = StGetBackloc(sp10);
-            GameDebugPrintf(g_MsgFmvSector, value);
-            if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
-                GameStartStreamRead((void *)g_StreamLoc);
-            } else {
-                GameStartStreamRead(sp10);
-            }
+    while (GamePresentFmvFrame(g_FmvVlcBuffers) == -1) {
+        value = StGetBackloc(sp10);
+        GameDebugPrintf(g_MsgFmvSector, value);
+        if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
+            GameStartStreamRead((void *)g_StreamLoc);
+        } else {
+            GameStartStreamRead(sp10);
         }
     }
 
