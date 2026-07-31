@@ -557,56 +557,46 @@ extern s32 g_LastSpecialCueRequest asm("D_80082F48");
 s32 func_8005D050(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void GamePlaySoundCue(s32 arg0) {
-    s32 test;
-
     if (g_SoundCueBank == 1) {
         if (arg0 >= 0) {
-            test = arg0 < 0x1E;
-            if (test != 0) {
-                goto mode1_clamped;
+            if (arg0 >= 0x1E) {
+                arg0 = 0x1D;
             }
-            arg0 = 0x1D;
         } else {
             arg0 = 0;
         }
 
-mode1_clamped:
-        test = arg0 - 0xF;
-        if ((u32)test < 3U) {
-            goto special;
-        }
-        goto middle;
-    }
-
-    if (g_SoundCueBank == 2) {
-        if (arg0 >= 0) {
-            test = arg0 < 0x46;
-            if (test != 0) {
-                goto mode2_clamped;
-            }
-            arg0 = 0x45;
-        } else {
-            arg0 = 0;
-        }
-
-mode2_clamped:
-        test = arg0 - 0xF;
-        if ((u32)test < 3U) {
-special:
+        if ((u32)(arg0 - 0xF) < 3U) {
             if (arg0 != g_LastSpecialCueRequest) {
                 g_LastSpecialCueRequest = arg0;
                 GameStartSingleSpecialCue(arg0, 0x80);
             }
             return;
         }
-        test = arg0 < 0x19;
-        if (test == 0) {
-            goto high;
-        }
-middle:
         func_8005D050(arg0, 0x3C, 0x80, 0x80);
         return;
-high:
+    }
+
+    if (g_SoundCueBank == 2) {
+        if (arg0 >= 0) {
+            if (arg0 >= 0x46) {
+                arg0 = 0x45;
+            }
+        } else {
+            arg0 = 0;
+        }
+
+        if ((u32)(arg0 - 0xF) < 3U) {
+            if (arg0 != g_LastSpecialCueRequest) {
+                g_LastSpecialCueRequest = arg0;
+                GameStartSingleSpecialCue(arg0, 0x80);
+            }
+            return;
+        }
+        if (arg0 < 0x19) {
+            func_8005D050(arg0, 0x3C, 0x80, 0x80);
+            return;
+        }
         func_8005D530(arg0, 0x80, 0x80);
     }
 }
