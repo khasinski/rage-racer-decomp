@@ -1,47 +1,17 @@
 #include "common.h"
 #include "psyq/gte_macros.h"
 
+/*
+ * libgte ApplyMatrix / ApplyMatrixSV (func_80069678 / func_800696C8).
+ * v1 = m * v0 through MVMVA; ApplyMatrix stores a LONG vector, ApplyMatrixSV a
+ * SHORT vector. Not byte-matchable to a named PSY-Q 3.5 object symbol, so this
+ * TU keeps its descriptive name rather than an mtx_NN.o label.
+ * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ */
+
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out);
 /* libgte ApplyMatrixSV: SVECTOR in, SVECTOR out, returns out. */
 s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out) asm("func_800696C8");
-
-/*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
- *
- * Symbol:   func_80069458  (libgte matrix x matrix multiply, cc region 2.6.3)
- * Reason:   hand-written PSY-Q libgte routine (.set noreorder style).
- * Evidence: reached DIFFS=9 as clean C + register pinning + GTE macros, but the
- *           irreducible residual is pure handwritten-asm signature:
- *             - `lui $at; and rN,rN,$at` masks: the assembler expanding an
- *               `and rN,rN,0xffff0000` pseudo-op via the reserved $at temporary;
- *               cc1 never emits $at (it materialises -65536 into a GPR).
- *             - a deliberately unfilled `jr ra; nop` delay slot (GCC -O2 always
- *               fills it), plus in-order stores.
- *           Same family/representation as siblings func_80068E70, ApplyMatrixSV,
- *           ApplyMatrix, func_800690E0.
- * Revisit:  only with proof it was compiler-generated C.
- */
-
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/PopMatrix", func_80069458);
-
-/*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
- *
- * Symbol:   func_80069568  (libgte matrix x matrix multiply, cc region 2.6.3)
- * Reason:   hand-written PSY-Q libgte routine (.set noreorder style); sibling of
- *           MulMatrix / func_80068CA4 / ApplyMatrixSV / func_800690E0.
- * Evidence: `lui $1,0xffff; and rN,rN,$1` masks twice (not CSE'd) using the
- *           reserved assembler temp $at, which cc1 never allocates; register
- *           file is t0-t8 exclusively (GCC prefers v0/v1/a0-a3); reached only
- *           DIFFS=30 as register-pinned C with an irreducible >=3 floor from the
- *           $at/non-CSE constant.
- * Revisit:  only with proof it was compiler-generated C.
- */
-
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/PopMatrix", func_80069568);
-
-/* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
-
 
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) asm("func_80069678");
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
