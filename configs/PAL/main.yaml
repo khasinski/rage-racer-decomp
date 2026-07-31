@@ -317,6 +317,8 @@ segments:
       - [0x59E78, c, PAL/main/render/PopMatrix]
       - [0x59F28, c, PAL/main/render/ScaleMatrix]
       - [0x5A058, c, PAL/main/render/SetRotMatrix]
+      - [0x5A108, c, PAL/main/render/reg03]
+      - [0x5A218, c, PAL/main/render/SetBackColor]
       - [0x5A47C, c, PAL/main/render/Lzc]
       - [0x5A4BC, c, PAL/main/render/TransposeMatrix]
       - [0x5A7A8, c, PAL/main/sdk/Gte_PatchExceptionHandler]
