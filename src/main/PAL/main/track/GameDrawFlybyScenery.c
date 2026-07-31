@@ -14,36 +14,20 @@ void GameDrawFlybyScenery(void) asm("func_8003EAF4");
 void GameDrawFlybyScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
-    /* This pin is load-bearing: removing it changes .text. */
-    register Matrix *mtx0Ptr asm("$4");
     s32 *state;
-    Matrix *mtx1Ptr;
-    s32 angle;
-    s32 baseAngle;
-    void *drawBase;
-    s32 frameValue;
 
     state = g_FlybyScenery;
     if (state[0] > 0) {
-        mtx0Ptr = &mtx0;
-        angle = g_FlybySceneryRotY;
-        __asm__ volatile("" : "=r"(angle) : "0"(angle));
-        baseAngle = 0x800;
-        __asm__ volatile("" : "=r"(baseAngle) : "0"(baseAngle), "r"(angle));
-        GameBuildRotMatrixY(mtx0Ptr, baseAngle - angle);
-        mtx1Ptr = &mtx1;
-        GameBuildRotMatrixX(mtx1Ptr, g_FlybySceneryRotX);
-        MulMatrix2(&mtx0, mtx1Ptr);
-        MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
+        GameBuildRotMatrixY(&mtx0, 0x800 - g_FlybySceneryRotY);
+        GameBuildRotMatrixX(&mtx1, g_FlybySceneryRotX);
+        MulMatrix2(&mtx0, &mtx1);
+        MulMatrix2((Matrix *)0x1F800028, &mtx1);
         GameBuildRotMatrixZ(&mtx0, g_FlybySceneryRotZ);
-        MulMatrix2(mtx1Ptr, &mtx0);
+        MulMatrix2(&mtx1, &mtx0);
         GameSelectModelBank(2);
         func_80017794((void *)0x1F80011C, state + 4, &mtx0);
-        frameValue = g_ModelBankCount;
-        __asm__ volatile("" : "=r"(frameValue) : "0"(frameValue));
-        drawBase = (void *)0x1F800000;
         *(s32 *)0x1F800084 = 0;
-        GameSubmitModel(drawBase, frameValue < 1);
+        GameSubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
     }
 }
 
