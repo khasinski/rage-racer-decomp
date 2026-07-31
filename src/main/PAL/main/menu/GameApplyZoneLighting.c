@@ -122,12 +122,7 @@ s32 func_8001C8F0(s32 arg0) {
     s32 ret;
 
     if (g_SceneId == 10) {
-        s32 offset;
-        s32 counter;
-
-        offset = arg0 << 1;
-        counter = g_SceneTimer;
-        value = (counter << 2) - *(s16 *)((u8 *)g_RoundScreenFadeDelays + offset);
+        value = (g_SceneTimer << 2) - g_RoundScreenFadeDelays[arg0];
     } else {
         value = g_FadeLevel;
         if (value > 0) {
