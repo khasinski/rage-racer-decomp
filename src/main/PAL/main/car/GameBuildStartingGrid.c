@@ -174,55 +174,42 @@ void GameUpdateCarTiltCounter(GameCarRuntime *arg0) {
     obj = arg0;
 
     ptr = (u8 *)&obj->field_BC;
-    if (g_RacePhase >= 2) {
-        goto main_body;
+    if (g_RacePhase < 2) {
+        value = 8;
+        goto store_value;
     }
 
-    value = 8;
-    goto store_value;
-
-main_body:
-    if (obj->field_98 != 0) {
-        goto dampen;
-    }
-
-    if (obj->field_134 < g_CarSpec->redline) {
-        goto side_check;
-    }
-    if (obj->field_15C < 0x81) {
-        goto side_check;
-    }
-    if (obj->field_F0 != 0) {
-        goto side_check;
-    }
-
-    ptr = (u8 *)(s32)(u16)obj->field_8C;
-    value = obj->field_132;
-    ptr -= 4;
-    obj->field_8C = (s32)ptr;
-    ptr = (u8 *)((s32)ptr << 16 >> 16);
-    limit = 9 - value;
-    value = (limit << 2) + limit;
-    value = -value;
-    if ((s32)ptr < value) {
-        obj->field_8C = value;
-    }
-    return;
-
-side_check:
-    if (*(s16 *)(ptr + 0xA2) >= 0x81 || *(s16 *)(ptr + 0x34) > 0) {
-        if (obj->field_A4 >= 0x51) {
-            value = (u16)obj->field_8C + 2;
-            obj->field_8C = value;
-            value = (s16)value;
-            if (value >= 9) {
-                obj->field_8C = 8;
+    if (obj->field_98 == 0) {
+        if (obj->field_134 >= g_CarSpec->redline &&
+            obj->field_15C >= 0x81 &&
+            obj->field_F0 == 0) {
+            ptr = (u8 *)(s32)(u16)obj->field_8C;
+            value = obj->field_132;
+            ptr -= 4;
+            obj->field_8C = (s32)ptr;
+            ptr = (u8 *)((s32)ptr << 16 >> 16);
+            limit = 9 - value;
+            value = (limit << 2) + limit;
+            value = -value;
+            if ((s32)ptr < value) {
+                obj->field_8C = value;
             }
             return;
         }
+
+        if (*(s16 *)(ptr + 0xA2) >= 0x81 || *(s16 *)(ptr + 0x34) > 0) {
+            if (obj->field_A4 >= 0x51) {
+                value = (u16)obj->field_8C + 2;
+                obj->field_8C = value;
+                value = (s16)value;
+                if (value >= 9) {
+                    obj->field_8C = 8;
+                }
+                return;
+            }
+        }
     }
 
-dampen:
     limit = obj->field_8C;
     value = limit * 3;
     if (value < 0) {
