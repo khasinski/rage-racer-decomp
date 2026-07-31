@@ -36,7 +36,7 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     oldCallback = *slot;
 
     if (callback == oldCallback) {
-        goto done;
+        return oldCallback;
     }
 
     if (*((u_short *)base - 2) == 0) {

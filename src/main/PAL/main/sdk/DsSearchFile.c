@@ -51,12 +51,12 @@ Rec *DsSearchFile(Rec *out, char *path) {
         b = buf;
         while (*p != '\\') {
             if (*p == 0) {
-                goto after_tokens;
+                break;
             }
             *b++ = *p++;
         }
         if (*p == 0) {
-            goto after_tokens;
+            break;
         }
         p++;
         *b = 0;

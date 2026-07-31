@@ -59,7 +59,7 @@ long Gpu_CheckTimeout(void) {
     *g_GpuGp1 = 0x01000000;
     SetIntrMask(g_GpuResetIntrMask);
     result = -1;
-    goto done;
+    return result;
 
 return_zero:
     result = 0;

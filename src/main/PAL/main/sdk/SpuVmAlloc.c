@@ -37,7 +37,7 @@ u_char SpuVmAlloc(long unused) {
         if (g_SndVoiceStateStatus[offset] == 0 &&
             *(u_short *)&g_SndVoiceStateEnvx[offset] == 0) {
             selected = voice;
-            goto found;
+            break;
         }
         offset = (u_char)voice * 52;
         if (*(short *)&D_8009E0D0[offset] < threshold) {

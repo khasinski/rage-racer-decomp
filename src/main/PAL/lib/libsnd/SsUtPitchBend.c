@@ -88,13 +88,13 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     x = *(short *)((u_char *)g_SndVoiceStateVabId + voiceOffset);
     if (x != (short)arg1) {
         ret = -1;
-        goto done;
+        return ret;
     }
 
     y = *(short *)((u_char *)g_SndVoiceStateProg + voiceOffset);
     if (y != (short)arg2) {
         ret = -1;
-        goto done;
+        return ret;
     }
 
     if (*(short *)((u_char *)g_SndVoiceStateNote + voiceOffset) != (short)arg3) {
@@ -112,7 +112,7 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     ret = 0;
-    goto done;
+    return ret;
 
 fail_late:
     ret = -1;
@@ -145,13 +145,13 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     field = *(short *)((u_char *)g_SndVoiceStateVabId + voiceOffset);
     if (field != (short)arg1) {
         ret = -1;
-        goto done;
+        return ret;
     }
 
     field = *(short *)((u_char *)g_SndVoiceStateProg + voiceOffset);
     if (field != (short)arg2) {
         ret = -1;
-        goto done;
+        return ret;
     }
 
     field = *(short *)((u_char *)g_SndVoiceStateNote + voiceOffset);
@@ -168,7 +168,7 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     ret = 0;
-    goto done;
+    return ret;
 
 fail_late:
     ret = -1;

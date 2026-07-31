@@ -45,7 +45,7 @@ mode_14:
     state->unk27 = 1;
     state->delta_value = SsSeqReadDeltaTime(seq_s, sep_s);
     state->loop_pos = state->read_pos;
-    goto done;
+    return;
 
 mode_1e:
     state->unk16 = mode;
@@ -61,12 +61,12 @@ mode_1e:
         } else {
             state->unk10 = 0;
         }
-        goto done;
+        return;
     }
     SsSeqReadDeltaTime(seq_s, sep_s);
     state->delta_value = 0;
     state->read_pos = state->loop_pos;
-    goto done;
+    return;
 
 mode_default:
     {

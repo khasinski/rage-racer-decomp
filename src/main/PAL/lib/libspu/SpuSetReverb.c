@@ -14,21 +14,21 @@ long SpuSetReverb(long on_off) {
         if (on_off == 1) {
             goto check_on;
         }
-        goto done;
+        return D_8009A718;
     }
 
 disable:
     cnt = g_SpuRegBase->spucnt;
     D_8009A718 = 0;
     g_SpuRegBase->spucnt = cnt & 0xFF7F;
-    goto done;
+    return D_8009A718;
 
 check_on:
     if (g_SpuRevReserveWa != on_off && _SpuIsInAllocateArea_(g_SpuRevWorkAreaAddr) != 0) {
         cnt = g_SpuRegBase->spucnt;
         D_8009A718 = 0;
         g_SpuRegBase->spucnt = cnt & 0xFF7F;
-        goto done;
+        return D_8009A718;
     }
 
     cnt = g_SpuRegBase->spucnt;

@@ -24,7 +24,7 @@ postscan:
     if (voice != -1) {
         goto body;
     }
-    goto ret_minus_one;
+    return -1;
 
 found:
     voice = i;
@@ -45,14 +45,14 @@ body:
         if (flag != 0) {
             ret = 3;
             if (value == 0) {
-                goto ret_value;
+                return ret;
             }
             ret = 1;
-            goto ret_value;
+            return ret;
         }
 
         ret = value != 0 ? 2 : 0;
-        goto ret_value;
+        return ret;
     }
 
 ret_minus_one:

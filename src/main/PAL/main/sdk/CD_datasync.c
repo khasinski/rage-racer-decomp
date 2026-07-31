@@ -58,7 +58,7 @@ long CD_datasync(long arg) {
         }
         if (status != 0) {
             result = -1;
-            goto done;
+            return result;
         }
         if ((*g_CdDmaChcr & 0x1000000) == 0) {
             result = 0;

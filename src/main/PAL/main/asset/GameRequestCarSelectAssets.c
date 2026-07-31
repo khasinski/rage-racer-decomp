@@ -69,7 +69,7 @@ void GameLoadCarSelectAssets(void) {
         if (state == 1) {
             goto state_1;
         }
-        goto done;
+        return;
     }
     if (state == 3) {
         goto state_3;
@@ -77,20 +77,20 @@ void GameLoadCarSelectAssets(void) {
     if (state == 4) {
         goto state_4;
     }
-    goto done;
+    return;
 
 state_1:
         __asm__ volatile("" ::: "$3");
         func_8005B768(1, g_AssetBlockPtr, g_AssetSubBlockPtr, g_AssetBlockPtr2);
         g_AssetLoadState = state2;
-        goto done;
+        return;
 state_2:
         if ((func_8005B89C() << 16) != 0) {
             func_8005DBD8();
             g_AssetLoadState = 3;
             g_AssetLoadCursor = (GameAssetTripleHeader *)g_AssetSubBlockPtr;
         }
-        goto done;
+        return;
 state_3:
             if (func_80017C78(8, g_AssetLoadCursor) != 0) {
                 GameRegisterModelBank((u8 *)g_AssetLoadCursor + 0xC, 0xE);
@@ -113,7 +113,7 @@ state_3:
                 g_CarModelBuffer = g_AssetBlockPtr;
                 g_ImageBlockBuffer = g_AssetBlockPtr + 0x40000;
             }
-        goto done;
+        return;
 state_4:
             carIndex = g_PlayerCarIndex;
             indexOffset = carIndex << 3;
