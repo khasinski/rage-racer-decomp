@@ -175,17 +175,10 @@ void GameDrawRacePosition(void) {
     u8 *right;
     s16 tile;
 
-    {
-        s32 leftOffset;
-        s32 rightOffset;
-
-        leftOffset = 0x237AC;
-        rightOffset = 0x237C0;
-        base = g_DrawBuffer;
-        value = g_RacePosition;
-        left = base + leftOffset;
-        right = base + rightOffset;
-    }
+    base = g_DrawBuffer;
+    value = g_RacePosition;
+    left = base + 0x237AC;
+    right = base + 0x237C0;
 
     if (value >= 10) {
         *(u8 *)(base + 0x237B8) = 0x18;
@@ -203,16 +196,11 @@ void GameDrawRacePosition(void) {
         *(u8 *)(right + 0xC) = digit;
     }
 
-    {
-        s32 cond;
-
-        cond = value < 4;
-        if (cond != 0) {
-            tile = 0x780B;
-        } else {
-            asm volatile("" ::: "$2");
-            tile = 0x780E;
-        }
+    if (value < 4) {
+        tile = 0x780B;
+    } else {
+        asm volatile("" ::: "$2");
+        tile = 0x780E;
     }
 
     *(s16 *)(left + 0xE) = tile;
@@ -252,20 +240,16 @@ void GameDrawSplitDelta(s32 arg0, s32 arg1) {
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot));
         temp = 0x7810;
-        goto add_second;
-    }
-
-    if (mode >= 0) {
+    } else if (mode < 0) {
+        *(volatile u8 *)(base + 0x237CC) = 0x78;
+        __asm__ volatile("" : : : "memory");
+        ot = g_DrawBuffer;
+        __asm__ volatile("" : : "r"(ot));
+        temp = 0x780F;
+    } else {
         return;
     }
 
-    *(volatile u8 *)(base + 0x237CC) = 0x78;
-    __asm__ volatile("" : : : "memory");
-    ot = g_DrawBuffer;
-    __asm__ volatile("" : : "r"(ot));
-    temp = 0x780F;
-
-add_second:
     *(u16 *)(base + 0x237CE) = temp;
     AddPrim(ot + 0xCC, (void *)firstOffset);
 }
