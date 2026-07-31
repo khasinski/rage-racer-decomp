@@ -80,7 +80,7 @@ void func_80052158(s32 a0raw, s32 arg1) {
                   0x20);
     p += 0xD7;
     /* Written as an operand swap: the target keeps the string length in
-       the higher callee-saved register than the running cursor. */
+       the higher callee-saved than the running cursor. */
     q = n;
     n = p;
     q = n + (q * 6);

@@ -7,7 +7,7 @@
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  * Hand-written PSY-Q libgte routine (.set noreorder style); sibling of mtx_03
  * MulMatrix. The `lui $1,0xffff; and rN,rN,$1` masks (reserved assembler temp
- * $at, never allocated by cc1) and a t0-t8-only register file are an
+ * $at, never allocated by cc1) and a t0-t8-only file are an
  * irreducible handwritten-asm signature not reachable from compiler C.
  */
 

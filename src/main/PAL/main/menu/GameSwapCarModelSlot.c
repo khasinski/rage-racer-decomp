@@ -69,8 +69,8 @@ void func_8005131C(void) {
     s32 outX;
     s32 altLayout;
     s32 result;
-    register s32 outZ;
-    register s32 qValue;
+    s32 outZ;
+    s32 qValue;
     s32 modelSlot;
     s32 *p;
     s32 *q;

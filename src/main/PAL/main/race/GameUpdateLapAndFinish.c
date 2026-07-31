@@ -12,7 +12,7 @@
 
 /* Elements 0, 1 and 2 of g_RefSectorTimes (D_8009AF90). They CANNOT be spelled
  * g_RefSectorTimes[k] here: with one array symbol GCC 2.6.3 CSEs the base
- * address into a register and reschedules around it, which shifts the
+ * address into a and reschedules around it, which shifts the
  * allocation of the whole surrounding block. Three symbols keep three separate
  * %hi/%lo pairs, which is what the retail code has. */
 extern s32 g_RefSectorTime0 asm("D_8009AF90");

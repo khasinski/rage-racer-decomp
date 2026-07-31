@@ -1,6 +1,6 @@
 #include "psyq/spu.h"
 
-/* SPU hardware, from the data segment: register file base 0x1F801C00, DMA
+/* SPU hardware, from the data segment: file base 0x1F801C00, DMA
  * channel 4 (SPU) MADR/BCR/CHCR 0x1F8010C0/C4/C8, SPU_DELAY 0x1F801014. */
 extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
 extern volatile u_long *g_SpuDmaMadr asm("D_8009AB80");
