@@ -46,14 +46,15 @@ s32 GameWriteMemoryCardSaveFile(
         }
 
         if (ok) {
-            goto body;
+            break;
         }
         attempt++;
     } while (attempt < 2);
 
-    return 0;
+    if (!ok) {
+        return 0;
+    }
 
-body:
     GameMenuLoadPhase = attempt | 0x1530;
     if (BiosFileWrite(fd, iconBlock, 0x200) != 0x200) {
         return 0;
