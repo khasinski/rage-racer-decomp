@@ -72,28 +72,23 @@ s32 GameCloseAudioSlot(s32 slot) {
     s32 *flagsPtr = &g_AudioSlotMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;
-    s32 zeroArg = 0;
     s32 ret;
     s16 *ids;
 
     bit <<= slot;
-    if (bit & flags) {
-        goto loaded;
+    if ((bit & flags) == 0) {
+        ret = 0;
+    } else {
+        *flagsPtr = bit ^ flags;
+        func_80073748(0, 0);
+        func_8007865C(0);
+        func_80071AC4(g_SeqHandle);
+        /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
+           (rather than naming the symbol) is what the retail code does. */
+        ids = (s16 *)((s32)flagsPtr + 0xC);
+        func_80072B3C(ids[slot]);
+        ret = 1;
     }
-    ret = 0;
-    goto done;
-
-loaded:
-    *flagsPtr = bit ^ flags;
-    func_80073748(zeroArg, 0);
-    func_8007865C(0);
-    func_80071AC4(g_SeqHandle);
-    /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
-       (rather than naming the symbol) is what the retail code does. */
-    ids = (s16 *)((s32)flagsPtr + 0xC);
-    func_80072B3C(ids[slot]);
-    ret = 1;
-done:
     return ret;
 }
 
