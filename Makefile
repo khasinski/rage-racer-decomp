@@ -64,38 +64,11 @@ $(BUILD)/asm/%.s.o: asm/%.s
 
 define compile_c_object
 	@mkdir -p $(dir $@)
-	$(if $(RAGE_CC1_VERSION_OBJ),RAGE_CC1_VERSION=$(RAGE_CC1_VERSION_OBJ)) $(if $(RAGE_CC1_DARWIN_OBJ),RAGE_CC1_DARWIN=$(RAGE_CC1_DARWIN_OBJ)) $(CC_WRAPPER) $< $@
+	$(CC_WRAPPER) $< $@
 endef
 
 $(BUILD)/src/%.c.o: src/%.c | $(BUILD)
 	$(call compile_c_object)
-
-
-$(BUILD)/src/main/PAL/main/cd/GameSetCdVolume.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/boot/GameDrawBootLogo.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/menu/GameDrawClassChangeCurtain.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/race/GameDrawSpeedDigits.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/race/GameApplyReplayFrame.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/race/GameInitRecordTables.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/car/GameSeedCarLapProgress.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/car/GameAccumulateLapProgress.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/track/GameBlendAngle.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/track/GameGetReverseTrackAngle.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/track/GameInterpolateTrackPoint.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/track/GameSmoothTrackAngle.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/car/GameAdvanceCarPosition.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/save/GameDrawMemoryCardScreen.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/render/GameBuildRaceHudPrims.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/race/GameUpdateRacePosition.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/render/GameUpdateScriptedCamera.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/track/GameTriggerRaceCues.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/lib/libsnd/SsSeqRestartPlayback.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/lib/libsnd/SpuVmCalculateCurrentPitch.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/race/GameDrawSeriesClearedWash.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/car/GameClampCarLateralOffset.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-
-# No object needs cc1-psx-272 any more: every unit that was pinned to it now
-# matches under gcc 2.6.3. See docs/names.md, "Was 2.7.2 ever used?".
 
 $(BUILD):
 	@mkdir -p $@
@@ -149,8 +122,3 @@ help:
 	@echo "  progress          Update docs/PROGRESS.md and badge JSON"
 	@echo "  clean             Remove build/ for selected VERSION"
 	@echo "  distclean         Also remove generated asm/linker output"
-
-# --- per-object overrides for newly decompiled functions (from working tree) ---
-$(BUILD)/src/main/PAL/main/car/GameUpdateCarDrivetrain.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/gte/GameSubmitCourseModel2.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3
-$(BUILD)/src/main/PAL/main/track/GameInstallTrackPoints.c.o: RAGE_CC1_VERSION_OBJ := 2.6.3

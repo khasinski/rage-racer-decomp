@@ -65,7 +65,6 @@ COMPILE_SH = """#!/usr/bin/env bash
 INPUT="$(readlink -f "$1")"; OUTPUT="$3"
 case "$OUTPUT" in /*) ;; *) OUTPUT="$PWD/$3";; esac
 export PATH="$HOME/Projects/rage-pc/tbin:$HOME/.local/bin:$PATH"
-export RAGE_CC1_VERSION=2.6.3
 # the assembler resolves include/macro.inc relative to the working directory
 cd "$HOME/Projects/rage-pc" || exit 1
 exec "$HOME/Projects/rage-pc/tools/scripts/cc.sh" "$INPUT" "$OUTPUT"

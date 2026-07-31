@@ -122,10 +122,6 @@ def hard_reg(regno: int | None) -> str:
 
 
 def cc1_command(tmp: Path) -> list[str]:
-    version = os.environ.get("RAGE_CC1_VERSION", "2.6.3")
-    if version != "2.6.3":
-        raise AllocDiffError(f"unsupported RAGE_CC1_VERSION={version}")
-
     cc1 = BIN_DIR / "cc1-psx-263"
     if (
         platform.system() == "Darwin"

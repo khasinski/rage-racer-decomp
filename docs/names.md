@@ -209,14 +209,14 @@ Note that `EffectVoice`/`MusicChannel` +0x00/+0x04 are the VAB **program** and
 ### Menu / HUD / overlay renderers
 | Name | Addr | Words | Purpose |
 |---|---|---:|---|
-| `GameDrawSkyBackground` | 0x800418D4 | 1211 | The sky/horizon backdrop, drawn by every scene that has a horizon. A 4 × 8 sweep emits the visible half of a 16-segment panorama cylinder as POLY_FT4s, uv rows from `D_8007F510 + 8 * D_8007F470[…]` indexed by `(yaw >> 7) + j`, linked at OT + 0xAFC; the gradient bands underneath are shaded between successive colour slots with the same `g_CourseIndex == 2 ? slots 5,6 : slots 7,8` split func_80045CD4 uses. Yaw and roll are negated when `g_MirrorMode` disagrees with the scratchpad flag at 0x1F800068. **Was described here as a "HUD/billboard primitive builder".** (cc=2.7.2) |
-| `GameDrawTeamLogoCanvas` | 0x8004A248 | 1435 | Draw half of the logo painter (largest non-SDK function). `(0, 0)` resets both panel accumulators `D_8007FB0C` / `D_8007FB10`; otherwise they ramp and gate the outer panel (12 slide steps) and the paint sub-panel. Uploads the 64×64 4bpp canvas `D_801E6F2C`, its raw CLUT `D_801E444C`, and a copy scaled by the fade level `D_8009B298` whose entry 0 is three phase-shifted sines of `D_8009B288` (the colour-cycling cursor), then emits the frame, the zoomed canvas, the 1:1 preview, the swatch boxes and the crosshair. (cc=2.7.2) |
-| `GameUpdateTeamLogoCanvas` | 0x8004C0D8 | 894 | Input half of the same widget, called from the PAINT branch of `GameUpdateTeamLogoScreen`. Plots with Circle held — replaces the nibble at `(u16 *)D_801E6F2C + (y << 4) + (x >> 2)` over a `D_8007F94C`-sized brush — and maps the d-pad through the auto-repeat timer `D_8007FB14` onto the scroll/flip/rotate helpers func_8004B9B8..func_8004BF48. Holding all four shoulder buttons and pressing Select toggles `D_8007F930`, a hidden palette editor over the 5-bit channels of the selected CLUT entry. **Was described here as a "4bpp texture / palette editor debug tool"** — it is the shipped feature. (cc=2.7.2) |
+| `GameDrawSkyBackground` | 0x800418D4 | 1211 | The sky/horizon backdrop, drawn by every scene that has a horizon. A 4 × 8 sweep emits the visible half of a 16-segment panorama cylinder as POLY_FT4s, uv rows from `D_8007F510 + 8 * D_8007F470[…]` indexed by `(yaw >> 7) + j`, linked at OT + 0xAFC; the gradient bands underneath are shaded between successive colour slots with the same `g_CourseIndex == 2 ? slots 5,6 : slots 7,8` split func_80045CD4 uses. Yaw and roll are negated when `g_MirrorMode` disagrees with the scratchpad flag at 0x1F800068. **Was described here as a "HUD/billboard primitive builder".** |
+| `GameDrawTeamLogoCanvas` | 0x8004A248 | 1435 | Draw half of the logo painter (largest non-SDK function). `(0, 0)` resets both panel accumulators `D_8007FB0C` / `D_8007FB10`; otherwise they ramp and gate the outer panel (12 slide steps) and the paint sub-panel. Uploads the 64×64 4bpp canvas `D_801E6F2C`, its raw CLUT `D_801E444C`, and a copy scaled by the fade level `D_8009B298` whose entry 0 is three phase-shifted sines of `D_8009B288` (the colour-cycling cursor), then emits the frame, the zoomed canvas, the 1:1 preview, the swatch boxes and the crosshair. |
+| `GameUpdateTeamLogoCanvas` | 0x8004C0D8 | 894 | Input half of the same widget, called from the PAINT branch of `GameUpdateTeamLogoScreen`. Plots with Circle held — replaces the nibble at `(u16 *)D_801E6F2C + (y << 4) + (x >> 2)` over a `D_8007F94C`-sized brush — and maps the d-pad through the auto-repeat timer `D_8007FB14` onto the scroll/flip/rotate helpers func_8004B9B8..func_8004BF48. Holding all four shoulder buttons and pressing Select toggles `D_8007F930`, a hidden palette editor over the 5-bit channels of the selected CLUT entry. **Was described here as a "4bpp texture / palette editor debug tool"** — it is the shipped feature. |
 | `GameDrawRankingTable` | 0x8004D384 | 1017 | The five record rows, called three times from `GameUpdateRankingScreen` as `(accumulator, step, table)`. Reads the `S22` records from `D_801E7744` (ranking) or `D_8019CB78` (time) and draws the place number, its suffix from the `"ST"/"ND"/"RD"/"TH"` table at `D_80011920`, the holder's name and the row background. Sole caller of `GameFormatLapTime` in the image. |
-| `GameDrawCourseSelectScreen` | 0x8005290C | 849 | Slot 1 of the overlay table `g_MenuScreenDraw`, i.e. the fade/transition overlay of the **COURSE SELECT** screen: scroll accumulator `D_8009B2C0`, wave/colour offsets, sprite/number draws. (cc=2.7.2) |
+| `GameDrawCourseSelectScreen` | 0x8005290C | 849 | Slot 1 of the overlay table `g_MenuScreenDraw`, i.e. the fade/transition overlay of the **COURSE SELECT** screen: scroll accumulator `D_8009B2C0`, wave/colour offsets, sprite/number draws. |
 | `GameUpdateCarSelectScreen` | 0x8005568C | 783 | Slot 4 of `g_MenuScreenUpdate`, the **CAR SELECT** hub (race start / customize / car shop / engineer shop / course select); a jump-table switch on `GameMenuBusy` picks the exit — a race, or screens 5 / 11 / 12 / 1. |
-| `GameDrawCarSpecGraph` | 0x800496F0 | 675 | The car performance bar chart, drawn obliquely: 45°-recession floor lines plus four bars at `x = 0x66 + 12i`, each a front face with a lightened top (+0x40) and darkened right (−0x40) face and a semi-transparent drop shadow, over the four violet colours at `D_80011870`. Bars 0..2 ease towards the car asset's spec bytes +0x0B/0x0C/0x0D, bar 3 towards one of 10/30/50/70/90 selected by the tire grade. func_8005ACA0 calls it every menu frame, but its `step` argument `D_8009B324` only leaves 0 on entry to and exit from CUSTOMIZE, so it is only visible there. **Was described here as a "debug palette/gradient UI renderer".** (cc=2.7.2) |
-| `GameDrawTeamNameEntry` | 0x8004E724 | 585 | The whole **TEAM NAME** widget: the 4×11 grid of 8px glyph cells at `x = 0x56 + 12*col` wiping in as `D_8007FB28` climbs to 25, the cursor cell redrawn with flags 0x5B, the pulsing highlight box (green channel from `rcos(D_8009B28C += 96)`), the 12×24 caret while `g_TeamNameLength < 6`, and the typed `g_TeamNameChars`. Grid cell 10 is a gap, hence the `index >= 11 ? index - 1` glyph fixup. **Was described here as a "HUD/standings renderer".** (cc=2.7.2) |
+| `GameDrawCarSpecGraph` | 0x800496F0 | 675 | The car performance bar chart, drawn obliquely: 45°-recession floor lines plus four bars at `x = 0x66 + 12i`, each a front face with a lightened top (+0x40) and darkened right (−0x40) face and a semi-transparent drop shadow, over the four violet colours at `D_80011870`. Bars 0..2 ease towards the car asset's spec bytes +0x0B/0x0C/0x0D, bar 3 towards one of 10/30/50/70/90 selected by the tire grade. func_8005ACA0 calls it every menu frame, but its `step` argument `D_8009B324` only leaves 0 on entry to and exit from CUSTOMIZE, so it is only visible there. **Was described here as a "debug palette/gradient UI renderer".** |
+| `GameDrawTeamNameEntry` | 0x8004E724 | 585 | The whole **TEAM NAME** widget: the 4×11 grid of 8px glyph cells at `x = 0x56 + 12*col` wiping in as `D_8007FB28` climbs to 25, the cursor cell redrawn with flags 0x5B, the pulsing highlight box (green channel from `rcos(D_8009B28C += 96)`), the 12×24 caret while `g_TeamNameLength < 6`, and the typed `g_TeamNameChars`. Grid cell 10 is a gap, hence the `index >= 11 ? index - 1` glyph fixup. **Was described here as a "HUD/standings renderer".** |
 | `GameDrawRaceOptionMenu` | 0x8003479C | 396 | The in-race option/pause overlay, drawn by both in-race scene handlers after they clamp the cursor `D_801E414C` against `2 - g_GrandPrixMode` and decrement `g_SceneTimer` to freeze the scene; `cursorRow` steps the 64×11 highlight outline 10 pixels per row. `"  RAGE RACER GE"` is not a title — it is the first 0x14-byte half of one entry in the 4 × 0x28 marquee table at `D_8007DF34` (`"  RAGE RACER GETS YOU GOING!  "` twice, `"   KICK BACK AND CHILL OUT!   "`, `"    SLASH THOSE RECORDS!     "`), selected by `g_SceneTimer & 3`, scrolled by the two accumulators `D_8007DF30`/`D_8007DF32` and clipped to (114, 138, 92, 12). **Was named `GameDrawTitleScreen` in screens.h; that alias is retired.** |
 | `GameDrawMenuCarView` | 0x8005131C | 396 | The 3D car view behind screens 3, 4, 5, 6, 10, 11, 12. Installs the menu view matrix from `D_80082D6C`, eases `g_MenuViewOffset` / `g_MenuViewAngle` (angle wraps modulo 600000), and on arrival with no load pending flips the two-slot model double buffer `D_8009E87C` and commits `D_8009B378` into `D_8009B374`. Then submits **two** models: the car through the render object at `D_8009E6D4`, and fixed model 14 (the showroom floor) with the OT cursor bumped 0x78. L2/R2 nudge the tilt `D_8009E718` within ±6144; L1/R1 nudge `D_801E8268` within ±64. |
 | `GameDrawCarEngineSpec` | 0x80052158 | 376 | The two engine spec lines, `MAX POWER <n> ps / <n> rpm` at `y = 0xCC - yOffset` and `MAX TORQUE <n>.<n> kgm / <n> rpm` at `0xDA - yOffset`, each number through `sprintf("%d")` with `x` advanced 6 per digit; values are the car asset header fields +0x10/0x12 and +0x14/0x15/0x16. Its third argument is loaded and discarded. Shared by the id 5 / 11 / 12 draw halves. |
@@ -240,7 +240,7 @@ variant).
 ### CD / streaming
 | Name | Addr | Words | Purpose |
 |---|---|---:|---|
-| `StCdInterrupt` | 0x8006D1D0 | 604 | The libds streaming state machine: advances `D_80099418` through states 1..0xA, reads the CD result (error bit 0x04 → state 3), recomputes the ring cursor as `D_8009DF1C = (D_801E6C74 << 5) + D_801E8AAC`, DMAs sector header then body, compares the chunk against `StStrHeader.nFrames` and calls `StFreeRing`. Named as the public entry point rather than an internal because it takes no arguments, because the `CdReadyCallback` the library installs (func_8006CDA0) is a six-instruction stub whose whole body calls it, and because the game calls it directly — func_8001EBC8 does `if (D_8019CA00) { StCdInterrupt(); D_8019CA00 = 0; }`, the documented `StSetMask` use. Its TU already supplies `StClearRing`, `StGetBackloc` and `StSetStream`. (cc=2.7.2) |
+| `StCdInterrupt` | 0x8006D1D0 | 604 | The libds streaming state machine: advances `D_80099418` through states 1..0xA, reads the CD result (error bit 0x04 → state 3), recomputes the ring cursor as `D_8009DF1C = (D_801E6C74 << 5) + D_801E8AAC`, DMAs sector header then body, compares the chunk against `StStrHeader.nFrames` and calls `StFreeRing`. Named as the public entry point rather than an internal because it takes no arguments, because the `CdReadyCallback` the library installs (func_8006CDA0) is a six-instruction stub whose whole body calls it, and because the game calls it directly — func_8001EBC8 does `if (D_8019CA00) { StCdInterrupt(); D_8019CA00 = 0; }`, the documented `StSetMask` use. Its TU already supplies `StClearRing`, `StGetBackloc` and `StSetStream`. |
 
 ### SDK library
 | Name | Addr | Words | Status | Purpose |
@@ -628,42 +628,10 @@ GameForceBasicEffectVoicesEnabled, func_8005C6C0), `DrawPacket`
 (SetTexWindow.c's four packet builders), `GameCarRuntime` (func_80037808's
 func_800383A8 / func_800385FC, 70 offsets).
 
-### Was 2.7.2 ever used?
+### Compiler
 
-No. The `Makefile` used to pin eight objects to `cc1-psx-272`; all eight now
-match under gcc 2.6.3 and the pins are gone, so the second toolchain is dead
-weight and the game was almost certainly built entirely with 2.6.3. Every pin
-turned out to be a property of the *decompiled* source rather than of the
-original build:
-
-| Unit | Why it was pinned | What fixed it under 2.6.3 |
-|---|---|---|
-| `track/GameLoadEnvironmentCue` | cc1 2.6.3 **crashes** on `__attribute__((packed))` applied to a struct | move the attribute onto the field; identical `.text` |
-| `race/GameExitBgmSelect` | a `delta = g_FadeStep` temporary flipped the `addu` operand order | drop the temporary, test and add `g_FadeStep` directly |
-| `menu/GameComposeSampleTeamLogo` | `src0++` sat between the third and fourth nibble test, so 2.6.3 filled a delay slot with it instead of duplicating the branch target | move `src0++` to the end of the loop body |
-| `lib/libsnd/SsSeqOpen` | the loop flag was `s32` with a `(u8)` cast at the test, which 2.6.3 folds away | declare the flag `u8` (PsyQ's `unsigned char flag`); the `andi …,0xff` comes back |
-| `lib/libsnd/SpuVmSeKeyOff` | `(u16)` cast on an `s32` fed by an `lhu`; 2.6.3 knows the high bits are clear and drops the mask | declare the voice index `u16` so the truncation is the variable's type |
-| `lib/libspu/_SpuSetAnyVoice` | a pinned `hi` temporary put the `or` result in the wrong register, blocking the cross-jump that merges the two `sh` stores | fold `hi` into the `*reg_hi |= …` / `&= ~…` expressions |
-| `sdk/func_80077A88`, `sdk/func_8006DB74` | nothing — both already matched byte-for-byte under 2.6.3 | no change |
-
-Two further pins (`func_8006DD30`, `func_8006E390`) named `.c` files that no
-longer exist after the subsystem rename and had been inert for some time.
-
-The pattern is consistent: 2.7.2 is the *less* aggressive compiler on narrowing
-casts (it keeps `andi …,0xff` / `andi …,0xffff` that 2.6.3 proves redundant), so
-a decomp written with a redundant cast will look like it "needs" 2.7.2. It does
-not; the cast belongs in the variable's declared type instead. Nothing here
-distinguishes Sony library code from Namco game code — the libsnd/libspu units
-fell to the same class of fix as the game ones.
-
-The `2.7.2` branch in `tools/scripts/cc.sh` has since been **deleted**
-(`08a34db5`); `RAGE_CC1_VERSION` survives only so an experiment can point at
-another cc1 by path, and any value but `2.6.3` is now a hard error. The
-`RAGE_CC1_VERSION_OBJ` rules that remain in the `Makefile` all pin `2.6.3`, i.e.
-they are inert and kept only as documentation of which objects were once
-suspect. Note that `(cc=2.7.2)` annotations in the function table above predate
-all of this and should be read as "was compared against 2.7.2 output at the
-time", not as a requirement.
+The game is built entirely with GCC 2.6.3 (`cc1-psx-263`). There is one
+toolchain, declared once, with no per-file compiler selection.
 
 ### The gcc 2.6.3 rule that decides whether a struct can be applied
 
@@ -873,7 +841,7 @@ classes, and only the first two are evidence about the original build:
 |---|---:|---|
 | conflicting declaration of a shared symbol | 50 | the two sides spell one `D_` global with different types (`u16`/`s16`, `volatile`/plain) or one callee with a different signature. Both spellings are load-bearing, so the two functions were **not** one unit. |
 | the merged unit does not compile | 27 | the definition's own parameter types disagree with the prototype in a header one side includes — e.g. `GameDrawLeftArrow(…, s32 x, s32 y, …)` against `game/state.h`'s `s16`. The definition side never saw that header. |
-| per-file compiler | 27 | the `Makefile` pins the object with an explicit `RAGE_CC1_VERSION_OBJ` rule; a unit compiles as one object, so such a file cannot join a neighbour under a different pin. (Historically some of these pins were to gcc 2.7.2; none are left — see "Was 2.7.2 ever used?".) |
+| per-file compiler | 27 | *(historical)* the build once pinned individual objects to a specific compiler, which stopped such a file from merging with a neighbour under a different pin. The game is built entirely with gcc 2.6.3 and no per-file compiler selection remains. |
 | named by a `.rodata` subsegment | 27 | the config places an asm rodata block through `[…, .rodata, PAL/main/<unit>]`, and splat emits `<unit>.c.o(.rodata)` for it. Such a file may **lead** a unit but may not be merged away, or the link loses the object. |
 
 Two mechanical constraints are easy to get wrong and both produce a build that
@@ -1593,14 +1561,9 @@ what makes "apply", not "init", the right verb. `GameSetEffectVolumeSetting`
 ## 14. Subsystem directory pass (`src/main/PAL/main/<subsystem>/`)
 
 Every `PAL/main` unit now lives in a subsystem directory: `boot menu race car
-track render audio cd fmv asset save pad gte sdk`. Moving a unit rewrites four
-things in lockstep — the `.c` path, the `configs/PAL/main.yaml` name token, the
-`INCLUDE_ASM` first argument, and (where one exists) the per-object
-`RAGE_CC1_VERSION_OBJ` rule in the `Makefile`, whose target is spelled as an
-object path. Dropping that last one silently changes which compiler the unit
-gets and can change the ROM, so it is not optional. (Two such rules survived a
-rename as dead lines pointing at `func_8006DD30.c` / `func_8006E390.c`; they
-have since been removed.)
+track render audio cd fmv asset save pad gte sdk`. Moving a unit rewrites three
+things in lockstep — the `.c` path, the `configs/PAL/main.yaml` name token, and
+the `INCLUDE_ASM` first argument.
 
 ### 14a. The scene-handler table `D_8007C268`
 
@@ -5592,30 +5555,10 @@ impossibility, because it holds one variable fixed that we have never varied.
 
 **The unexamined axis is the flags.** Every translation unit in this project is compiled with
 the same string: `-quiet -mcpu=3000 -g -mgas -gcoff -O2 -G0 -funsigned-char`. We have swept
-source shapes exhaustively, types, volatility, statement order, loop form and register hints,
-and we have never once asked whether the original build used the same options for every file.
-
-Two things make that assumption weaker than it looks.
-
-`configs/PAL/main.yaml` carries a per-unit `cc=` field, and **28 units are annotated
-`cc=2.7.2`** against 82 annotated `cc=2.6.3`. Someone once believed the original build mixed
-compilers per file.
-
-Those annotations are **inert**, though the mechanism around them is not, and I got this
-wrong on first writing. The `Makefile` does support per-object compiler selection, through
-`RAGE_CC1_VERSION_OBJ` and a list of 26 per-object rules feeding `compile_c_object`. What is
-disconnected is the config's `cc=` field: nothing reads it. And every one of those 26 rules
-sets `2.6.3`, which is already the default, so they restate rather than override. `cc.sh`
-then accepts only `2.6.3` and exits "unsupported" for anything else, while `cc1-psx-272` and
-`cc1-psx-272-darwin` sit built and unreachable in `build/toolchain/bin`.
-
-So the wiring exists and is usable; it has simply never been used to select anything but the
-default. Reaching the other compiler needs one line in `cc.sh`, not new machinery.
-
-They are also demonstrably wrong in at least one case: `GameComposeSampleTeamLogo` is annotated
-`cc=2.7.2` and we converted it to a byte-exact match through the default 2.6.3 path. So the
-annotations are stale metadata, not evidence — but the *question* they encode was never
-settled, only abandoned.
+source shapes exhaustively — types, volatility, statement order, loop form and register hints —
+but never asked whether the original build used the same options for every file. The game is
+built entirely with gcc 2.6.3, but that flag string is hard-coded and we have never varied it;
+that axis remains untested.
 
 The honest position on the two open functions is therefore: a source exists, we have not found
 it, and the axis we have never varied is the one the build hard-codes.

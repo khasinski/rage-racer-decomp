@@ -12,19 +12,8 @@ OUT="$2"
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 TOOL_DIR="$ROOT/build/toolchain"
 BIN_DIR="$TOOL_DIR/bin"
-# The game was built entirely with gcc 2.6.3; see docs/names.md,
-# "Was 2.7.2 ever used?". The variable is kept so an experiment can still ask
-# for another cc1 by path, but nothing in the build sets it.
-RAGE_CC1_VERSION="${RAGE_CC1_VERSION:-2.6.3}"
-case "$RAGE_CC1_VERSION" in
-    2.6.3)
-        CC1="$BIN_DIR/cc1-psx-263"
-        ;;
-    *)
-        echo "rage-pc: unsupported RAGE_CC1_VERSION=$RAGE_CC1_VERSION" >&2
-        exit 2
-        ;;
-esac
+# The game is built entirely with gcc 2.6.3.
+CC1="$BIN_DIR/cc1-psx-263"
 if [ "$(uname -s)" = "Darwin" ] && [ "${RAGE_CC1_DARWIN:-1}" != "0" ] && [ -x "$CC1-darwin" ]; then
     CC1="$CC1-darwin"
 fi
@@ -38,7 +27,7 @@ PYTHON="${PYTHON:-python3}"
 
 mkdir -p "$BIN_DIR" "$(dirname "$OUT")"
 
-if [ "$RAGE_CC1_VERSION" = "2.6.3" ] && [ ! -x "$CC1" ]; then
+if [ ! -x "$CC1" ]; then
     echo "rage-pc: missing $CC1; build/copy gcc2.6.3-psx cc1 there first" >&2
     exit 1
 fi
