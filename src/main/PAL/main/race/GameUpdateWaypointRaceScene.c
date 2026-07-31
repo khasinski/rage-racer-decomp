@@ -216,13 +216,7 @@ void GameSeedWaypoints(void) {
     TrackWaypointRuntime *waypoint;
     s32 i;
     TrackWaypointSeed *seed;
-    s32 code;
-    s32 field18;
-    /* This pin is load-bearing: removing it changes .text. */
-    register char *tail asm("$4");
     s32 track;
-    s32 temp;
-    s32 seedBase;
 
     track = g_PlayerLap - 1;
     track = track % 10;
@@ -233,28 +227,18 @@ void GameSeedWaypoints(void) {
     }
 
     waypoint = g_Waypoints;
-    temp = (track << 1) + track;
-    temp <<= 2;
-    seedBase = (s32)g_WaypointSeeds;
-    seed = (TrackWaypointSeed *)(temp + seedBase);
-    i = 0;
-    code = 0x1766;
-    field18 = 0x174;
-    tail = (char *)waypoint + 0x1C;
+    seed = &g_WaypointSeeds[track];
 
-    do {
+    for (i = 0; i < 6; i++) {
         waypoint->active = 0;
-        *(s32 *)(tail - 0x18) = seed->x + (seed->stepX * i);
-        *(s32 *)(tail - 0x10) = seed->y + (seed->stepY * i);
-        *(s32 *)(tail - 0x14) = code;
-        *(s32 *)(tail - 0x4) = field18;
-        *(s32 *)(tail - 0x8) = 0;
-        *(s32 *)tail = 0;
-
-        i++;
+        waypoint->x = seed->x + seed->stepX * i;
+        waypoint->y = seed->y + seed->stepY * i;
+        waypoint->height = 0x1766;
+        waypoint->field18 = 0x174;
+        waypoint->scale = 0;
+        waypoint->field1C = 0;
         waypoint++;
-        tail += sizeof(*waypoint);
-    } while (i < 6);
+    }
 
     g_WaypointSpawnCooldown = 0;
 }
