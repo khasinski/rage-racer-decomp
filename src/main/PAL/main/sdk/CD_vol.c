@@ -25,9 +25,9 @@ typedef struct {
 
 extern volatile CdState g_CdSyncStatus asm("D_80099318");
 
-void func_8006DF34(void);
+void KernelCallbackSlot3(void) asm("func_8006DF34");
 void func_8006C17C(void);
-void func_8006DF64(long arg0, void *arg1);
+void KernelCallbackSlot2(long arg0, void *arg1) asm("func_8006DF64");
 long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
 long func_8006B0D4(long arg0, u_char *arg1);
 void func_80063C38(u_char *text);
@@ -103,8 +103,8 @@ void CD_initintr(void) {
     g_CdSyncCallback = 0;
     g_CdErrorByte = 0;
     g_CdStatusByte = 0;
-    func_8006DF34();
-    func_8006DF64(2, (void *)func_8006C17C);
+    KernelCallbackSlot3();
+    KernelCallbackSlot2(2, (void *)func_8006C17C);
 }
 
 long func_8006BD14(void) {
@@ -117,8 +117,8 @@ long func_8006BD14(void) {
     g_CdSyncCallback = 0;
     g_CdErrorByte = 0;
     g_CdStatusByte = 0;
-    func_8006DF34();
-    func_8006DF64(2, func_8006C17C);
+    KernelCallbackSlot3();
+    KernelCallbackSlot2(2, func_8006C17C);
 
     *g_CdReg0 = 1;
     while ((*g_CdReg3 & 7) != 0) {

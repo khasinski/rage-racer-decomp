@@ -29,7 +29,7 @@ short SsVabOpenHead(u_char *addr, short vabId) {
     return SsVabOpenHeadWithMode(addr, vabId, 0, 0);
 }
 
-short func_80072C4C(u_char *addr, short vabId, u_long spuAddr) {
+short SsVabOpenHeadSticky(u_char *addr, short vabId, u_long spuAddr) {
     return SsVabOpenHeadWithMode(addr, vabId, 1, spuAddr);
 }
 

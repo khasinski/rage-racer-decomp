@@ -10,19 +10,19 @@ extern volatile long g_CdReadSectorWords asm("D_8007D7A0");
 extern volatile long g_CdReadStartVSync asm("D_8007D7AC");
 extern volatile long g_CdReadSavedSyncCallback asm("D_8007D7B4");
 extern volatile long g_CdReadSavedReadyCallback asm("D_8007D7B8");
-long func_8006A574(long arg0);
-long func_8006A58C(long arg0);
+long CdSyncCallback(long arg0) asm("func_8006A574");
+long CdReadyCallback(long arg0) asm("func_8006A58C");
 long VSync(long mode) asm("func_8006DD30");
-long func_8006A3E8(void);
-long func_8006A808(long arg0, void *arg1, long arg2);
+long CdStatus(void) asm("func_8006A3E8");
+long CdControlB(long arg0, void *arg1, long arg2) asm("func_8006A808");
 long CdReadRetry(long arg0) asm("func_8002745C");
-void func_8006A554(long arg0, long arg1);
+void CdReady(long arg0, long arg1) asm("func_8006A554");
 extern long g_CdReadCallback asm("D_8007D78C");
 extern u_char D_8007D7BC[];
 extern u_char D_8007D7BD[];
 extern u_char D_8007D87C[];
 extern u_char D_8007BED0[];
-void func_80064FA8(u_char *prim);
+void SetSprt(u_char *prim) asm("func_80064FA8");
 void func_80064EB8(u_char *prim, long enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_800666F4(void *prim, long a, long b, long c, void *d);
@@ -62,12 +62,12 @@ long CdRead(long arg0, long arg1, long arg2) {
     *(volatile long *)mode = value;
     g_CdReadBuffer = arg1;
     g_CdReadSectorCount = savedArg0;
-    g_CdReadSavedSyncCallback = func_8006A574(0);
-    g_CdReadSavedReadyCallback = func_8006A58C(0);
+    g_CdReadSavedSyncCallback = CdSyncCallback(0);
+    g_CdReadSavedReadyCallback = CdReadyCallback(0);
     g_CdReadStartVSync = VSync(-1);
 
-    if ((func_8006A3E8() & 0xE0) != 0) {
-        func_8006A808(9, 0, 0);
+    if ((CdStatus() & 0xE0) != 0) {
+        CdControlB(9, 0, 0);
     }
 
     return CdReadRetry(0) > 0;
@@ -113,7 +113,7 @@ loop_check:
         }
     } while (result > 0);
 
-    func_8006A554(1, savedArg1);
+    CdReady(1, savedArg1);
     return result;
 }
 
@@ -161,7 +161,7 @@ void func_80027874(long x, long y, u_char *str, long arg3) {
             if (idx != 0) {
                 ga = tableA[idx * 2];
                 gb = tableB[idx * 2];
-                func_80064FA8(next);
+                SetSprt(next);
                 func_80064EB8(next, 1);
                 next += 0x14;
                 oldPacket = packet;

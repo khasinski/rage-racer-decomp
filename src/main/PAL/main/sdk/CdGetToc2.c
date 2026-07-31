@@ -8,10 +8,10 @@ extern u_char D_80013688[];
 extern u_char D_800136A4[];
 extern u_char D_800136B8[];
 
-long func_8006A428(long arg0);
-long func_8006A574(long arg0);
-long func_8006A58C(long arg0);
-long func_8006A808(long arg0, u_char *arg1, u_char *arg2);
+long CD_init(long arg0) asm("func_8006A428");
+long CdSyncCallback(long arg0) asm("func_8006A574");
+long CdReadyCallback(long arg0) asm("func_8006A58C");
+long CdControlB(long arg0, u_char *arg1, u_char *arg2) asm("func_8006A808");
 void func_8006A360(void);
 void func_8006A388(void);
 void func_8006A3B0(void);
@@ -32,9 +32,9 @@ long CdGetToc2(long arg0, u_char *arg1) {
     u_long value;
 
     command[0] = 1;
-    oldHandler = func_8006A574(0);
+    oldHandler = CdSyncCallback(0);
 
-    if (func_8006A808(0x13, 0, response) == 0) {
+    if (CdControlB(0x13, 0, response) == 0) {
         goto fail;
     }
 
@@ -65,7 +65,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
     }
 
     command[0] = 0;
-    if (func_8006A808(0x14, command, response) == 0) {
+    if (CdControlB(0x14, command, response) == 0) {
         goto fail;
     }
 
@@ -81,7 +81,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
         ptr = toc + 4;
         do {
             command[0] = ((firstTrack / 10) << 4) + (firstTrack % 10);
-            if (func_8006A808(0x14, command, response) == 0) {
+            if (CdControlB(0x14, command, response) == 0) {
                 goto fail;
             }
             count++;
@@ -120,14 +120,14 @@ long CdGetToc2(long arg0, u_char *arg1) {
         }
     }
 
-    func_8006A574(oldHandler);
+    CdSyncCallback(oldHandler);
     return (long)ptr;
 
 fail:
     if (g_CdDebugLevel != 0) {
         GameDebugPrintf(D_800136A4);
     }
-    func_8006A574(oldHandler);
+    CdSyncCallback(oldHandler);
     return 0;
 }
 
@@ -137,7 +137,7 @@ long CdInit(void) {
 
     retries = 4;
 loop:
-    if (func_8006A428(1) != 1) {
+    if (CD_init(1) != 1) {
         retries--;
         if (retries != -1) {
             goto loop;
@@ -147,8 +147,8 @@ loop:
         return 0;
     }
 
-    func_8006A574((long)func_8006A360);
-    func_8006A58C((long)func_8006A388);
+    CdSyncCallback((long)func_8006A360);
+    CdReadyCallback((long)func_8006A388);
     CdReadCallback(func_8006A3B0);
     return 1;
 }

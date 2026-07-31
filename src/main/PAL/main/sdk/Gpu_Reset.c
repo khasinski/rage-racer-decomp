@@ -10,7 +10,7 @@ extern long g_GpuResetIntrMask asm("D_800942FC");
 extern u_char g_GpuGp1Mirror[] asm("D_8009B9F0");
 extern u_char g_GpuQueue[] asm("D_801E5024");
 
-void func_80068180(u_char *dst, u_char value, long count);
+void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");
 long func_800680A4(u_long arg0);
 
 /* Driver-table slot +0x34, the body of ResetGraph: empties the queue,
@@ -32,8 +32,8 @@ long Gpu_Reset(u_long mode) {
         *g_GpuDmaChcr = 0x401;
         *g_GpuDpcr |= 0x800;
         *g_GpuGp1 = 0;
-        func_80068180(g_GpuGp1Mirror, 0, 0x100);
-        func_80068180(g_GpuQueue, 0, 0x1800);
+        MemFill(g_GpuGp1Mirror, 0, 0x100);
+        MemFill(g_GpuQueue, 0, 0x1800);
         break;
     case 1:
         *g_GpuDmaChcr = 0x401;

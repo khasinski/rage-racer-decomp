@@ -1,12 +1,12 @@
 #include "common.h"
 
-void func_80069A00(s32 arg0);
-void func_80069A0C(s32 arg0);
+void SetDQA(s32 arg0) asm("func_80069A00");
+void SetDQB(s32 arg0) asm("func_80069A0C");
 
 void SetFogNear(s32 arg0, s32 arg1) asm("func_800686D4");
 void SetFogNear(s32 arg0, s32 arg1) {
-    func_80069A00(-((arg0 * 5) << 6) / arg1);
-    func_80069A0C(0x1400000);
+    SetDQA(-((arg0 * 5) << 6) / arg1);
+    SetDQB(0x1400000);
 }
 
 s32 Lzc(s32 arg0) asm("func_80069C7C");

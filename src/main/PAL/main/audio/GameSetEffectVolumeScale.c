@@ -82,13 +82,13 @@ done:
 
 extern s32 g_StereoOutput asm("D_80082F40");
 void GameSetCdMixPreset(s32 arg0) asm("func_8004318C");
-void func_80072AF4(void);
+void SsSetStereo(void) asm("func_80072AF4");
 void GameSetStereoOutput(void) asm("func_8005BE24");
-void GameSetStereoOutput(void) { g_StereoOutput = 1; GameSetCdMixPreset(0); func_80072AF4(); }
+void GameSetStereoOutput(void) { g_StereoOutput = 1; GameSetCdMixPreset(0); SsSetStereo(); }
 
-void func_80072AE0(void);
+void SsSetMono(void) asm("func_80072AE0");
 void GameSetMonoOutput(void) asm("func_8005BE58");
-void GameSetMonoOutput(void) { g_StereoOutput = 0; GameSetCdMixPreset(1); func_80072AE0(); }
+void GameSetMonoOutput(void) { g_StereoOutput = 0; GameSetCdMixPreset(1); SsSetMono(); }
 
 extern u32 g_EngineSoundMaxRpm asm("D_801E6CC4");
 

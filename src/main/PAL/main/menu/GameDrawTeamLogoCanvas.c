@@ -44,8 +44,8 @@ extern u16 D_801E444E[];
 extern u8 D_801E4369;
 extern u16 D_801E6F2C;
 
-extern s32 func_80064C7C(s16 x, s16 y);
-extern void func_80065B24(void *rect, void *data);
+extern s32 GetClut(s16 x, s16 y) asm("func_80064C7C");
+extern void LoadImage(void *rect, void *data) asm("func_80065B24");
 extern s32 func_80068568(s32 angle);
 extern void func_800468FC(s32 ot, s16 x, s16 y, s16 w, s16 h);
 extern void func_80046A2C(
@@ -244,9 +244,9 @@ void func_8004A248(s32 arg0, s32 arg1)
     }
 
   }
-  func_80065B24(&D_8007BEE4, &D_801E6F2C);
-  func_80065B24(&D_8007BEDC, D_801E444C);
-  func_80065B24(&D_8007F95C, D_8009B2A0);
+  LoadImage(&D_8007BEE4, &D_801E6F2C);
+  LoadImage(&D_8007BEDC, D_801E444C);
+  LoadImage(&D_8007F95C, D_8009B2A0);
   if (a0v < 0)
   {
     D_8007FB0C = a0v + D_8007FB0C;
@@ -424,7 +424,7 @@ void func_8004A248(s32 arg0, s32 arg1)
     gx2 += 0x41;
     gy2 = gy;
     gy2 += 0x41;
-    pal = func_80064C7C(D_8007BEDC.cx, D_8007BEDC.cy);
+    pal = GetClut(D_8007BEDC.cx, D_8007BEDC.cy);
     clut = (D_8007BEE4.ty >> 4) & 0x10;
     clut |= (D_8007BEE4.tx & 0x3FF) >> 6;
     w1 = kreg + 0x83;

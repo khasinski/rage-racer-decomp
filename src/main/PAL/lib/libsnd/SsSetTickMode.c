@@ -4,14 +4,14 @@ extern long g_SndTickMode asm("D_8009A558");
 extern long g_SndNoTickFlag asm("D_8009A55C");
 extern long g_SndTickResolution asm("D_801E6C6C");
 
-long func_8006EAEC(long arg);
+long GetDMAInterruptState(long arg) asm("func_8006EAEC");
 
 void SsSetTickMode(long spec) asm("func_800720F4");
 void SsSetTickMode(long spec) {
     long v;
     long m;
 
-    v = func_8006EAEC(spec);
+    v = GetDMAInterruptState(spec);
     if (spec & 0x1000) {
         g_SndNoTickFlag = 1;
         g_SndTickMode = spec & 0xFFF;

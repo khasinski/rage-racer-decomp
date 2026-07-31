@@ -12,13 +12,13 @@ u_long _new_card[4] asm("func_80063E34") __attribute__((section(".text"))) = {
     0,
 };
 
-void func_8006DF34(void);
+void KernelCallbackSlot3(void) asm("func_8006DF34");
 void func_800640D4(long arg0);
 
 void DecDCTReset(long arg0) asm("func_80063E44");
 void DecDCTReset(long arg0) {
     if (arg0 == 0) {
-        func_8006DF34();
+        KernelCallbackSlot3();
     }
     func_800640D4(arg0);
 }

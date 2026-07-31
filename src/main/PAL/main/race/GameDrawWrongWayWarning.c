@@ -82,7 +82,7 @@ extern u8 g_TachoFaceB asm("D_8007DF02");
 
 s32 func_80068568(s32 angle);
 s32 func_80068634(s32 angle);
-void func_80064F30(void *prim);
+void SetPolyF4(void *prim) asm("func_80064F30");
 void func_80064FF8(void *prim);
 void GameDrawSpeedDigits(s32 x, s32 y, s32 speed) asm("func_80033C18");
 
@@ -105,7 +105,7 @@ void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
     s32 i;
     u8 code7;
 
-    func_80064F30(prim);
+    SetPolyF4(prim);
 
     vp = (s16 *)(prim + 8);
     i = 0;
@@ -238,7 +238,7 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
     *(void **)0x1F800000 = func_80017390(g_DrawBuffer + 0xCC, next, arg1);
 }
 
-void func_80064F80(u8 *prim);
+void SetSprt8(u8 *prim) asm("func_80064F80");
 void func_80064EB8(u8 *prim, s32 enabled);
 
 u8 *GameDrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");
@@ -255,7 +255,7 @@ u8 *GameDrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
     asm("" : "=r"(xReg), "=r"(yReg) : "0"(xReg), "1"(yReg) : "$17");
     codeReg = digit;
     arg4Reg = clut;
-    func_80064F80(out);
+    SetSprt8(out);
     func_80064EB8(out, 1);
 
     codeReg <<= 3;

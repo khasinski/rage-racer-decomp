@@ -52,7 +52,7 @@ void GameDrawTimeRecordPanel(u8 *arg0) asm("func_80022068");
 void GameDrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
 void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-void func_8006A534(s32 arg0, s32 arg1);
+void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 
 void GameDrawRankingPanel(u8 *arg0) asm("func_80021DB8");
@@ -560,7 +560,7 @@ void GameUpdateRecordEntry(void) {
 
 void GameReturnFromClassFmv(void) asm("func_80022EE4");
 void GameReturnFromClassFmv(void) {
-    func_8006A534(0, 0);
+    CdSync(0, 0);
     CdControl(9, 0, 0);
     g_SceneId = 6;
     GameRequestSelectBgmAssets();
@@ -568,7 +568,7 @@ void GameReturnFromClassFmv(void) {
 
 void GameReturnFromEndingFmv(void) asm("func_80022F2C");
 void GameReturnFromEndingFmv(void) {
-    func_8006A534(0, 0);
+    CdSync(0, 0);
     CdControl(9, 0, 0);
     SetDispMask(0);
     GameSetupDisplay240(0, 0, 0);

@@ -19,7 +19,7 @@ extern const char D_80013998[];
 extern const char D_800139A4[];
 
 extern long func_8006C560(void);
-extern long func_8006C83C(long type, char *name);
+extern long DS_searchdir(long type, char *name) asm("func_8006C83C");
 extern long func_8006C8E4(long arg0);
 extern long CD_namecmp(char *a, char *b) asm("func_8006C53C");
 
@@ -60,7 +60,7 @@ Rec *DsSearchFile(Rec *out, char *path) {
         }
         p++;
         *b = 0;
-        type = func_8006C83C(type, buf);
+        type = DS_searchdir(type, buf);
         if (type == -1) {
             buf[0] = 0;
             break;

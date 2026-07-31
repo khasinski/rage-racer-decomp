@@ -29,7 +29,7 @@ extern u16 g_DispEnv1Y asm("D_801C067E");
 extern volatile u16 g_DispEnv1W asm("D_801C0680");
 extern volatile u16 g_DispEnv1H asm("D_801C0682");
 long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) asm("func_8006D0EC");
-void func_80065A90(void *arg0, u32 arg1, u32 arg2, u32 arg3);
+void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3) asm("func_80065A90");
 extern char g_MsgFmvDecodeTimeout[] asm("D_80010D34");
 s32 func_8006A534(s32 arg0, s32 arg1);
 long CdControl(long com, void *param, long result) asm("func_8006A5A4");
@@ -101,7 +101,7 @@ process:
         rect[3] = 0x1E0;
         g_FmvFrameWidth = w;
         g_FmvFrameHeight = h;
-        func_80065A90(rect, 0, 0, 0);
+        ClearImage(rect, 0, 0, 0);
     }
 
     dst = (u16 *)arg0;

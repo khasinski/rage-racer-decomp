@@ -312,7 +312,7 @@ extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
 extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
 extern const s32 g_SpecialVoiceBits[] asm("D_80011C74");
 extern const char D_80012778[];
-s32 func_8007B088(s32 bit);
+s32 SpuGetKeyStatus(s32 bit) asm("func_8007B088");
 
 s32 func_8005D050(s32 cue, s32 arg1, s32 volL, s32 volR) {
     const s32 *voiceBits;
@@ -373,7 +373,7 @@ s32 func_8005D050(s32 cue, s32 arg1, s32 volL, s32 volR) {
     if (g_SoundCueBank == 1) {
         i = 0;
         do {
-            busy[i] = func_8007B088(voiceBits[i]);
+            busy[i] = SpuGetKeyStatus(voiceBits[i]);
             i++;
         } while (i < 6);
         i = 0;
@@ -428,7 +428,7 @@ extern s32 D_80011C84;
 extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
 extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
 
-s32 func_8007B088(s32 arg0);
+s32 SpuGetKeyStatus(s32 arg0) asm("func_8007B088");
 
 s32 GameStartSingleSpecialCue(s32 cue, s32 volume) asm("func_8005D414");
 s32 GameStartSingleSpecialCue(s32 cue, s32 volume) {
@@ -524,7 +524,7 @@ s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
     }
     sy = volumeRight >> 7;
 
-    if ((func_8007B088(D_80011C84) == 0) || (id == 0x3D) || (id == 0x2B)) {
+    if ((SpuGetKeyStatus(D_80011C84) == 0) || (id == 0x3D) || (id == 0x2B)) {
         result = (s16)SsUtKeyOnV(
             0x16,
             g_VabIds[pan],

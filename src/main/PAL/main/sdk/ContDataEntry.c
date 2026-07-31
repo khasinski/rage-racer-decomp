@@ -114,10 +114,10 @@ struct Unk {
 
 extern SeqStruct *D_801E79CC[];
 
-s32 func_80070D70(s32 seq, s16 sep);
-s16 func_8007320C(s16 vab_id, s16 program, ProgAtr *out);
-s16 func_800733D8(s16 vab_id, s16 program, s16 tone, VagAtr *out);
-s16 func_80073820(s16 vab_id, s16 program, s16 tone, VagAtr *in);
+s32 SsSeqReadDeltaTime(s32 seq, s16 sep) asm("func_80070D70");
+s16 SsUtGetProgAtr(s16 vab_id, s16 program, ProgAtr *out) asm("func_8007320C");
+s16 SsUtGetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *out) asm("func_800733D8");
+s16 SsUtSetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *in) asm("func_80073820");
 void func_800706AC(
     s16 vab_id,
     s16 program,
@@ -150,11 +150,11 @@ void ContDataEntry(s16 seq, s16 sep, u8 value) {
     mask = 0xFF;
     score = &D_801E79CC[seq][sep];
     channel = score->channel;
-    func_8007320C(score->unk4c, score->programs[channel], &program_attr);
+    SsUtGetProgAtr(score->unk4c, score->programs[channel], &program_attr);
     if (score->unk27 == 1 && score->unk10 == 0) {
         score->unk28 = value;
         score->unk10 = 1;
-        score->delta_value = func_80070D70(seq, sep);
+        score->delta_value = SsSeqReadDeltaTime(seq, sep);
     } else if (score->unk29 == 2) {
         if (score->unk13 == 0 && score->unk14 == 0) {
             tone = 0;
@@ -162,10 +162,10 @@ void ContDataEntry(s16 seq, s16 sep, u8 value) {
                 do {
                     s32 bend = value & 0x7F;
 
-                    func_800733D8(score->unk4c, score->programs[channel], tone,
+                    SsUtGetVagAtr(score->unk4c, score->programs[channel], tone,
                                  &tone_attr);
                     tone_attr.pbmin = tone_attr.pbmax = bend;
-                    func_80073820(score->unk4c, score->programs[channel], tone,
+                    SsUtSetVagAtr(score->unk4c, score->programs[channel], tone,
                                  &tone_attr);
                     tone++;
                 } while (tone < program_attr.tones);
@@ -184,10 +184,10 @@ void ContDataEntry(s16 seq, s16 sep, u8 value) {
             tone = 0;
             if (tone < (program_attr.tones + value) - value) {
                 do {
-                    func_800733D8(
+                    SsUtGetVagAtr(
                         score->unk4c, score->programs[channel], tone, &tone_attr);
                     tone_attr.shift += shift;
-                    func_80073820(
+                    SsUtSetVagAtr(
                         score->unk4c, score->programs[channel], tone, &tone_attr);
                     tone++;
                 } while (tone < program_attr.tones);
@@ -204,16 +204,16 @@ void ContDataEntry(s16 seq, s16 sep, u8 value) {
             tone = 0;
             if (tone < (program_attr.tones + value) - value) {
                 do {
-                    func_800733D8(
+                    SsUtGetVagAtr(
                         score->unk4c, score->programs[channel], tone, &tone_attr);
                     tone_attr.center += center;
-                    func_80073820(
+                    SsUtSetVagAtr(
                         score->unk4c, score->programs[channel], tone, &tone_attr);
                     tone++;
                 } while (tone < program_attr.tones);
             }
         }
-        score->delta_value = func_80070D70(seq, sep);
+        score->delta_value = SsSeqReadDeltaTime(seq, sep);
         score->unk29 = 0;
     } else if (score->unk2a == 2) {
         if (score->unk16 == 0x10) {
@@ -237,9 +237,9 @@ void ContDataEntry(s16 seq, s16 sep, u8 value) {
                 score->unk15,
                 value);
         }
-        score->delta_value = func_80070D70(seq, sep);
+        score->delta_value = SsSeqReadDeltaTime(seq, sep);
         score->unk2a = 0;
     } else {
-        score->delta_value = func_80070D70(seq, sep);
+        score->delta_value = SsSeqReadDeltaTime(seq, sep);
     }
 }

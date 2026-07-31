@@ -25,7 +25,7 @@ extern long g_DrawSyncCallback asm("D_800941F4");
 extern void Gpu_ArmTimeout(void) asm("func_80067F04");
 extern long Gpu_CheckTimeout(void) asm("func_80067F38");
 extern void func_80067984(void);
-extern long func_8006E0B0(long);
+extern long SetIntrMask(long) asm("func_8006E0B0");
 extern void DMACallback(long, void *) asm("func_8006DF94");
 
 /* Driver-table slot +0x08, the `send` entry every libgpu call goes through:
@@ -46,7 +46,7 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
         func_80067984();
     }
 
-    ret = func_8006E0B0(0);
+    ret = SetIntrMask(0);
     *(volatile long *)g_DrawSyncCbPending = 1;
     g_AddQueueIntrMask = ret;
 
@@ -63,7 +63,7 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     *(void (*volatile *)(long, long))g_GpuLastCb = cb;
     g_GpuLastCbArg = arg;
     g_GpuLastCbData = tag;
-    func_8006E0B0(g_AddQueueIntrMask);
+    SetIntrMask(g_AddQueueIntrMask);
     return 0;
 
 enqueue:
@@ -92,7 +92,7 @@ enqueue:
     asm("");
 
     g_GpuQueueWriteIdx = (g_GpuQueueWriteIdx + 1) & 0x3f;
-    func_8006E0B0(g_AddQueueIntrMask);
+    SetIntrMask(g_AddQueueIntrMask);
     func_80067984();
     return (g_GpuQueueWriteIdx - g_GpuQueueReadIdx) & 0x3f;
 }

@@ -25,7 +25,7 @@ extern volatile u_long *g_GpuGp1 asm("D_800942BC");
 extern u_char g_DrawSyncCbPending[] asm("D_800941F0");
 extern volatile long g_DrawSyncCallback asm("D_800941F4");
 
-extern long func_8006E0B0(long);
+extern long SetIntrMask(long) asm("func_8006E0B0");
 extern void DMACallback(long, void *) asm("func_8006DF94");
 
 /* Driver-table slot +0x24, and the DMA2 completion callback: drains the
@@ -37,7 +37,7 @@ long Gpu_ExecuteQueue(void) {
         return 1;
     }
 
-    g_ExecQueueIntrMask = func_8006E0B0(0);
+    g_ExecQueueIntrMask = SetIntrMask(0);
 
     if (g_GpuQueueWriteIdx != g_GpuQueueReadIdx) {
         while ((*g_GpuDmaChcr & 0x01000000) == 0) {
@@ -63,7 +63,7 @@ long Gpu_ExecuteQueue(void) {
         }
     }
 
-    func_8006E0B0(g_ExecQueueIntrMask);
+    SetIntrMask(g_ExecQueueIntrMask);
 
     if ((g_GpuQueueWriteIdx == g_GpuQueueReadIdx) && ((*g_GpuDmaChcr & 0x01000000) == 0) &&
         (*(volatile long *)g_DrawSyncCbPending != 0) && (g_DrawSyncCallback != 0)) {

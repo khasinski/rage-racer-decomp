@@ -12,7 +12,7 @@ extern u_char g_SndCurrentTone asm("D_801E4BDC");
 extern short g_SndCurrentVoice asm("D_801E4BEA");
 extern u_char *g_SndCurrentToneTable asm("D_801E416C");
 
-u_short func_80074A6C(long arg0, long arg1);
+u_short SpuVmCalculateTonePitch(long arg0, long arg1) asm("func_80074A6C");
 
 void SpuVmPitchBendVoice(long arg0, long arg1) asm("func_80074B68");
 void SpuVmPitchBendVoice(long arg0, long arg1) {
@@ -56,7 +56,7 @@ void SpuVmPitchBendVoice(long arg0, long arg1) {
         pitch = qB + 127;
     }
 
-    *(volatile short *)(g_SndVoiceRegsPitch + (dfIndex << 1)) = func_80074A6C(note, pitch);
+    *(volatile short *)(g_SndVoiceRegsPitch + (dfIndex << 1)) = SpuVmCalculateTonePitch(note, pitch);
     g_SndVoiceFlags[voice & 0xFF] |= 4;
 }
 

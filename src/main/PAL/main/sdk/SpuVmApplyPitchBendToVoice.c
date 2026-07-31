@@ -14,7 +14,7 @@ extern u_char *g_SndCurrentToneTable asm("D_801E416C");
 extern u_short g_SndCurrentVoice asm("D_801E4BEA");
 extern u_char g_SndCurrentTone asm("D_801E4BDC");
 
-long func_80074A6C(long arg0, long arg1);
+long SpuVmCalculateTonePitch(long arg0, long arg1) asm("func_80074A6C");
 
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) asm("func_80075CB0");
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) {
@@ -75,7 +75,7 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
         c = *(u_char *)&g_SndVoiceStateTone[off2];
         g_SndCurrentVoice = raw;
         g_SndCurrentTone = c;
-        ret = func_80074A6C((u_short)base, (u_short)bal);
+        ret = SpuVmCalculateTonePitch((u_short)base, (u_short)bal);
         *(short *)&g_SndVoiceRegsPitch[j << 4] = ret;
         g_SndVoiceFlags[j] |= 4;
         return 1;

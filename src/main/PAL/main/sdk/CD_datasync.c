@@ -22,7 +22,7 @@ extern char D_80013824[];
 
 long VSync(long mode) asm("func_8006DD30");
 void func_80063C38(char *);
-void func_8006BAF0(void);
+void CD_flush(void) asm("func_8006BAF0");
 
 /* Waits for the CD data transfer to finish, with a 0x3C0-vblank / 0x3C0000-
  * spin watchdog that prints "CD timeout: " and flushes. Named by the same
@@ -51,7 +51,7 @@ long CD_datasync(long arg) {
                             b60[D_8009905D],
                             bE0[b318[0]],
                             bE0[b318[1]]);
-            func_8006BAF0();
+            CD_flush();
             status = -1;
         } else {
             status = 0;

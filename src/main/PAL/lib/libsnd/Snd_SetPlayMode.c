@@ -76,7 +76,7 @@ long SsSepGetVol(long seq, long sep, short *voll, short *volr) {
 
 void func_80076ED8(long seqSep);
 
-void func_80072734(short seq, short sep) {
+void _SsSndStop(short seq, short sep) {
     long i;
     SeqStruct *score;
 
@@ -120,10 +120,10 @@ void func_80072734(short seq, short sep) {
 
 void SsSeqStop(long seq) asm("func_800728A0");
 void SsSeqStop(long seq) {
-    func_80072734((short)seq, 0);
+    _SsSndStop((short)seq, 0);
 }
 
 void SsSepStop(long seq, long sep) asm("func_800728C8");
 void SsSepStop(long seq, long sep) {
-    func_80072734((short)seq, (short)sep);
+    _SsSndStop((short)seq, (short)sep);
 }

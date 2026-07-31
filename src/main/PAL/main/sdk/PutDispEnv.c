@@ -47,7 +47,7 @@ extern char D_80013614[];
 extern Cache g_DispEnvCache asm("D_80094254");
 
 long func_80066CB0(void *arg0);
-long func_8006EAEC(void);
+long GetDMAInterruptState(void) asm("func_8006EAEC");
 void *MemCopy(void *dst, void *src, long count) asm("func_800681BC");
 
 /* libgpu PutDispEnv: GP1(05h/06h/07h/08h) from a 0x14-byte DISPENV.
@@ -80,7 +80,7 @@ Env *PutDispEnv(Env *arg0) {
         long bottom;
         long xa;
 
-        s0->x12 = func_8006EAEC();
+        s0->x12 = GetDMAInterruptState();
         left = s0->x8 * 10 + 608;
         xa = s0->xA;
         if (s0->x12) {
@@ -133,7 +133,7 @@ Env *PutDispEnv(Env *arg0) {
     if (g_DispEnvCache.x10 != *(u_long *)&s0->x10 || (short)g_DispEnvCache.x0 != s0->x0 ||
         (short)g_DispEnvCache.x2 != s0->x2 || (short)g_DispEnvCache.x4 != s0->x4 ||
         (short)g_DispEnvCache.x6 != s0->x6) {
-        s0->x12 = func_8006EAEC();
+        s0->x12 = GetDMAInterruptState();
         if (s0->x12 == 1) {
             flags |= 8;
         }

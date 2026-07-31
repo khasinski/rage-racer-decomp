@@ -45,7 +45,7 @@ typedef union SpuInitRegisterMap {
     volatile u_short raw[0x100];
 } SpuInitRegisterMap;
 
-extern long func_80078F4C(long addr, long size);
+extern long _spu_writeByIO(long addr, long size) asm("func_80078F4C");
 
 extern char g_SpuTimeoutFmt[] asm("D_80013EC0");
 extern char g_SpuTimeoutMsgReset[] asm("D_80013ED0");
@@ -129,7 +129,7 @@ long _spu_init(long resetMode) {
         g_SpuRegBase->regs.extVol.left = 0;
         g_SpuRegBase->regs.extVol.right = 0;
         g_SpuTransferStartAddr = 0x200;
-        func_80078F4C((long)&g_SpuDummyAdpcmBlock, 0x10);
+        _spu_writeByIO((long)&g_SpuDummyAdpcmBlock, 0x10);
 
         for (channel = 0; channel < 24; channel++) {
             g_SpuRegBase->raw[channel * 8 + 0] = 0;

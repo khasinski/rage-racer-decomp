@@ -43,10 +43,10 @@ extern char D_800138C8[];
 
 void func_80063C38(char *text);
 long func_8006AB5C(void);
-long func_8006B0D4(long mode, u_char *result);
-void func_8006BAF0(void);
+long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
+void CD_flush(void) asm("func_8006BAF0");
 long VSync(long mode) asm("func_8006DD30");
-long func_8006E088(void);
+long GetKernelStatus(void) asm("func_8006E088");
 
 static inline void setAlarm(char *name) {
     g_CdTimeoutDeadline.deadline = VSync(-1) + 0x3C0;
@@ -60,7 +60,7 @@ static inline long getAlarm(void) {
         func_80063C38(D_80013814);
         GameDebugPrintf(D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[D_8009905D],
                       g_CdIntrNames[g_CdSyncStatus.sync], g_CdIntrNames[g_CdSyncStatus.ready]);
-        func_8006BAF0();
+        CD_flush();
         return -1;
     }
     return 0;
@@ -86,7 +86,7 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
         return -2;
     }
 
-    func_8006B0D4(0, 0);
+    CD_sync(0, 0);
 
     if (command == 2) {
         for (i = 0; i < 4; i++) {
@@ -118,7 +118,7 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
             return -1;
         }
 
-        if (func_8006E088() != 0) {
+        if (GetKernelStatus() != 0) {
             interruptState = *g_CdReg0 & 3;
             while ((interrupt = func_8006AB5C()) != 0) {
                 if ((interrupt & 4) != 0 && g_CdReadyCallback != 0) {

@@ -180,11 +180,11 @@ extern ToneAttr771AC *g_SndCurrentToneTable asm("D_801E416C");
 extern long g_SndUpdateLock asm("D_801E40AC");
 extern SvmCurrent771AC g_SndCurrentAttr asm("D_801E4BD0");
 
-long func_80073314(short vab_id, short program);
-u_char func_800739E8(long priority);
+long SpuVmVSetUp(short vab_id, short program) asm("func_80073314");
+u_char SpuVmAlloc(long priority) asm("func_800739E8");
 void func_80074134(void);
 void SpuVmNoiseKeyOn(long voice) asm("func_80074348");
-long func_80074A6C(u_short note, u_short fine);
+long SpuVmCalculateTonePitch(u_short note, u_short fine) asm("func_80074A6C");
 void func_80073C50(long count, long pitch);
 
 long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {
@@ -202,7 +202,7 @@ long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u
     short current_program;
 
     voices_updated = 0;
-    func_80073314(vab_id, program);
+    SpuVmVSetUp(vab_id, program);
     g_SndCurrentSeqSep = seq_sep;
     for (voice = 0; voice < D_801E42F8; voice++) {
         current_program = program;
@@ -291,7 +291,7 @@ short SsUtKeyOn(
     }
     g_SndUpdateLock = 1;
 
-    if (func_80073314(vab_id, program)) {
+    if (SpuVmVSetUp(vab_id, program)) {
         g_SndUpdateLock = 0;
         return -1;
     }
@@ -334,7 +334,7 @@ short SsUtKeyOn(
         return -1;
     }
 
-    voice = func_800739E8(vag);
+    voice = SpuVmAlloc(vag);
     voice_index = voice;
     if (voice_index == D_801E42F8) {
         g_SndUpdateLock = 0;
@@ -356,7 +356,7 @@ short SsUtKeyOn(
     if ((short)g_SndCurrentAttr.vag == 0xFF) {
         SpuVmNoiseKeyOn(voice);
     } else {
-        func_80073C50(1, func_80074A6C(note, fine) & 0xFFFF);
+        func_80073C50(1, SpuVmCalculateTonePitch(note, fine) & 0xFFFF);
     }
     g_SndUpdateLock = 0;
     return voice;

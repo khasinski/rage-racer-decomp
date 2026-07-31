@@ -34,9 +34,9 @@ extern char D_8001389C[];
 
 void func_80063C38(char *text);
 long func_8006AB5C(void);
-void func_8006BAF0(void);
+void CD_flush(void) asm("func_8006BAF0");
 long VSync(long mode) asm("func_8006DD30");
-long func_8006E088(void);
+long GetKernelStatus(void) asm("func_8006E088");
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
     /* This pin is load-bearing: removing it changes .text. */
@@ -90,7 +90,7 @@ long CD_sync(long mode, u_char *result) {
             GameDebugPrintf(D_80013824, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
                           g_CdCommandNames[D_8009905D],
                           statusNames[intr->sync], statusNames[intr->ready]);
-            func_8006BAF0();
+            CD_flush();
             alarmStatus = -1;
         } else {
             alarmStatus = 0;
@@ -100,7 +100,7 @@ long CD_sync(long mode, u_char *result) {
             return -1;
         }
 
-        if (func_8006E088()) {
+        if (GetKernelStatus()) {
             u_long rawStatus;
 
             rawStatus = *g_CdReg0;

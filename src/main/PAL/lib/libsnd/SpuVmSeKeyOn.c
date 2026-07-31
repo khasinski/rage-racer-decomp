@@ -177,12 +177,12 @@ extern u_char D_801E42F8;
 extern SvmCurrent76350 g_SndCurrentAttr asm("D_801E4BD0");
 extern VoiceState76350 g_SndVoiceState[] asm("D_8009E0B8");
 
-long func_80073314(short vab_id, short program);
-long func_80076940(short seq_sep, short vab_id, short program, u_short note);
-u_char func_800739E8(long priority);
+long SpuVmVSetUp(short vab_id, short program) asm("func_80073314");
+long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) asm("func_80076940");
+u_char SpuVmAlloc(long priority) asm("func_800739E8");
 void func_80074134(void);
 void SpuVmNoiseKeyOn(u_char voice) asm("func_80074348");
-u_short func_800749B4(void);
+u_short SpuVmCalculateCurrentPitch(void) asm("func_800749B4");
 void func_80073C50(u_char tone_count, u_short pitch);
 
 static inline u_char func_80076350_select_tones(
@@ -229,7 +229,7 @@ long SpuVmSeKeyOn(
     u_char tone_count;
 
     result = 0;
-    if (func_80073314(vab_id, program)) {
+    if (SpuVmVSetUp(vab_id, program)) {
         return -1;
     }
     g_SndCurrentAttr.seq_sep = seq_sep;
@@ -250,7 +250,7 @@ long SpuVmSeKeyOn(
         return -1;
     }
     if (volume == 0) {
-        result = func_80076940(seq_sep, vab_id, program, note);
+        result = SpuVmSeKeyOff(seq_sep, vab_id, program, note);
     } else {
         tone_count =
             func_80076350_select_tones(tone_indices, vag_indices);
@@ -269,7 +269,7 @@ long SpuVmSeKeyOn(
             g_SndCurrentAttr.mode = g_SndCurrentToneTable[tone].mode;
             g_SndCurrentAttr.min = g_SndCurrentToneTable[tone].min;
             g_SndCurrentAttr.max = g_SndCurrentToneTable[tone].max;
-            g_SndCurrentAttr.voice = func_800739E8(0);
+            g_SndCurrentAttr.voice = SpuVmAlloc(0);
             if (g_SndCurrentAttr.voice < D_801E42F8) {
                 g_SndVoiceState[g_SndCurrentAttr.voice].active = 1;
                 g_SndVoiceState[g_SndCurrentAttr.voice].age = 0;
@@ -296,7 +296,7 @@ long SpuVmSeKeyOn(
                     SpuVmNoiseKeyOn(g_SndCurrentAttr.voice);
                 } else {
                     func_80073C50(
-                        tone_count, func_800749B4() & 0xFFFF);
+                        tone_count, SpuVmCalculateCurrentPitch() & 0xFFFF);
                 }
                 result |= 1 << g_SndCurrentAttr.voice;
             } else {

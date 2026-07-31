@@ -106,10 +106,10 @@ extern VagAtr77C7C *g_SndCurrentToneTable asm("D_801E416C");
 extern SvmCur77C7C g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice77C7C g_SndVoiceState[] asm("D_8009E0B8");
 
-extern long func_80073314(short, short);
+extern long SpuVmVSetUp(short, short) asm("func_80073314");
 extern void func_80074134(void);
 extern void SpuVmNoiseKeyOn(long) asm("func_80074348");
-extern long func_80074A6C(u_short, u_short);
+extern long SpuVmCalculateTonePitch(u_short, u_short) asm("func_80074A6C");
 extern void func_80073C50(long, u_short);
 
 long SsUtKeyOnV(
@@ -147,7 +147,7 @@ long SsUtKeyOnV(
         g_SndUpdateLock = 0;
         return -1;
     }
-    if (func_80073314(vab_id, program) != 0) {
+    if (SpuVmVSetUp(vab_id, program) != 0) {
         g_SndUpdateLock = 0;
         return -1;
     }
@@ -210,7 +210,7 @@ long SsUtKeyOnV(
     if ((short)g_SndCurrentAttr.vag == 0xFF) {
         SpuVmNoiseKeyOn(voice & 0xFF);
     } else {
-        func_80073C50(1, func_80074A6C(note, fine));
+        func_80073C50(1, SpuVmCalculateTonePitch(note, fine));
     }
     g_SndUpdateLock = 0;
     return (short)voice;

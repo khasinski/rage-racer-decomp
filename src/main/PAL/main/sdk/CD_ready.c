@@ -35,9 +35,9 @@ extern char D_800138A4[];
 
 void func_80063C38(char *text);
 long func_8006AB5C(void);
-void func_8006BAF0(void);
+void CD_flush(void) asm("func_8006BAF0");
 long VSync(long mode) asm("func_8006DD30");
-long func_8006E088(void);
+long GetKernelStatus(void) asm("func_8006E088");
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
     long count;
@@ -73,7 +73,7 @@ long CD_ready(long mode, u_char *result) {
                           g_CdCommandNames[D_8009905D],
                           g_CdIntrNames[g_CdSyncStatus.sync],
                           g_CdIntrNames[g_CdSyncStatus.ready]);
-            func_8006BAF0();
+            CD_flush();
             alarmStatus = -1;
         } else {
             alarmStatus = 0;
@@ -83,7 +83,7 @@ long CD_ready(long mode, u_char *result) {
             return -1;
         }
 
-        if (func_8006E088()) {
+        if (GetKernelStatus()) {
             savedStatus = *g_CdReg0 & 3;
             while ((interrupt = func_8006AB5C()) != 0) {
                 if ((interrupt & 4) != 0 && g_CdReadyCallback != 0) {

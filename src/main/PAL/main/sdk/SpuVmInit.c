@@ -2,9 +2,9 @@
 
 #include "common.h"
 
-void func_8007B294(long);
-void func_80079B60(long, u_char *);
-void func_80075FA4(void);
+void _spu_setTransferCompletionFlag(long) asm("func_8007B294");
+void SpuInitMalloc(long, u_char *) asm("func_80079B60");
+void SsUtFlush(void) asm("func_80075FA4");
 
 extern u_char g_SpuMallocArea[] asm("D_8009E5E0");
 
@@ -80,12 +80,12 @@ void SpuVmInit(long arg0) {
 
     {
         u_char *p = g_SpuMallocArea;
-        func_8007B294(0);
+        _spu_setTransferCompletionFlag(0);
         D_801E4B5C = 0;
         g_SndDamper = 0;
         /* This barrier is load-bearing: removing it changes .text. */
         asm volatile("" ::: "memory");
-        func_80079B60(0x20, p);
+        SpuInitMalloc(0x20, p);
     }
 
     for (i = 0; (u_short)i < 192; i++) g_SndVoiceRegs[(u_short)i] = 0;
@@ -196,5 +196,5 @@ void SpuVmInit(long arg0) {
     g_SndReservedVoiceCount = 0;
     g_SndMonoMode = 0;
     g_SndVabProgMax = 0x80;
-    func_80075FA4();
+    SsUtFlush();
 }

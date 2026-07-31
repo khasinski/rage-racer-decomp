@@ -19,7 +19,7 @@ extern char g_MsgFmvSector[] asm("D_80010D30");
 void func_80063FB0(volatile u32 *arg0, s32 arg1);
 void DecDCTout(volatile u32 *arg0, s32 arg1) asm("func_8006402C");
 s32 GamePresentFmvFrame(volatile void *arg0) asm("func_8001ED3C");
-s32 func_8006CF08(void *arg0);
+s32 StGetBackloc(void *arg0) asm("func_8006CF08");
 void GameStartStreamRead(void *arg0) asm("func_8001F018");
 void GameWaitFmvDecode(volatile void *arg0, s32 arg1) asm("func_8001EF54");
 
@@ -41,7 +41,7 @@ void GameDecodeFmvFrame(void) {
 
         fail = -1;
         while (GamePresentFmvFrame(g_FmvVlcBuffers) == fail) {
-            value = func_8006CF08(sp10);
+            value = StGetBackloc(sp10);
             GameDebugPrintf(g_MsgFmvSector, value);
             if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
                 GameStartStreamRead((void *)g_StreamLoc);

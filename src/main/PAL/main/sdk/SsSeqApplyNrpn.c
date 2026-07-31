@@ -27,31 +27,31 @@ typedef struct {
     /*32*/ u_short r32;
 } Arg;
 
-void func_800733D8(short, short, short, Arg *);
-void func_80073820(short, short, short, Arg *);
-void func_80070E28(u_short, u_short, u_short *);
-void func_80070E84(u_short *, u_short *, u_short *);
-void func_80073614(long);
-void func_80073748(long, long);
-void func_80073708(long);
-void func_800737E0(long);
-void func_800736E8(void);
-void func_800736C8(void);
+void SsUtGetVagAtr(short, short, short, Arg *) asm("func_800733D8");
+void SsUtSetVagAtr(short, short, short, Arg *) asm("func_80073820");
+void SsUnpackAdsr(u_short, u_short, u_short *) asm("func_80070E28");
+void SsPackAdsr(u_short *, u_short *, u_short *) asm("func_80070E84");
+void SsUtSetReverbType(long) asm("func_80073614");
+void SsUtSetReverbDepth(long, long) asm("func_80073748");
+void SsUtSetReverbFeedback(long) asm("func_80073708");
+void SsUtSetReverbDelay(long) asm("func_800737E0");
+void SsUtReverbOff(void) asm("func_800736E8");
+void SsUtReverbOn(void) asm("func_800736C8");
 
 void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val) asm("func_800706AC");
 void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val) {
-    func_800733D8(p0, p1, p2, &arg);
+    SsUtGetVagAtr(p0, p1, p2, &arg);
 
     switch (mode) {
     case 0:
         arg.f00 = val;
-        func_80073820(p0, p1, p2, &arg);
+        SsUtSetVagAtr(p0, p1, p2, &arg);
         break;
     case 1:
         arg.f01 = val;
-        func_80073820(p0, p1, p2, &arg);
+        SsUtSetVagAtr(p0, p1, p2, &arg);
         if (val == 0) {
-            func_800736E8();
+            SsUtReverbOff();
             break;
         }
         if (val == 1) {
@@ -64,17 +64,17 @@ void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char va
             break;
         }
         if (val == 4) {
-            func_800736C8();
+            SsUtReverbOn();
             break;
         }
         break;
     case 2:
         arg.f06 = val;
-        func_80073820(p0, p1, p2, &arg);
+        SsUtSetVagAtr(p0, p1, p2, &arg);
         break;
     case 3:
         arg.f07 = val;
-        func_80073820(p0, p1, p2, &arg);
+        SsUtSetVagAtr(p0, p1, p2, &arg);
         break;
     case 4:
     case 5:
@@ -87,7 +87,7 @@ void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char va
     case 12:
     case 13:
     case 14:
-        func_80070E28(arg.f10, arg.f12, &arg.f20);
+        SsUnpackAdsr(arg.f10, arg.f12, &arg.f20);
         switch (mode) {
         case 4:
             arg.f2a = 0;
@@ -133,25 +133,25 @@ void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char va
             arg.f0a = val;
             break;
         }
-        func_80070E84(&arg.f20, &arg.f10, &arg.f12);
-        func_80073820(p0, p1, p2, &arg);
+        SsPackAdsr(&arg.f20, &arg.f10, &arg.f12);
+        SsUtSetVagAtr(p0, p1, p2, &arg);
         break;
     case 15:
-        func_80073614(val);
+        SsUtSetReverbType(val);
         break;
     case 16: {
         /* These pins are load-bearing: removing any one changes .text. */
         register long a0r asm("$4") = val;
         register long a1r asm("$5") = a0r;
-        func_80073748(a0r, a1r);
+        SsUtSetReverbDepth(a0r, a1r);
         break;
     }
     case 17:
-        func_80073708(val);
+        SsUtSetReverbFeedback(val);
         break;
     case 18:
     case 19:
-        func_800737E0(val);
+        SsUtSetReverbDelay(val);
         break;
     case 20:
     case 21:

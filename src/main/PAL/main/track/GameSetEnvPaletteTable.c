@@ -8,8 +8,8 @@ void GameSetEnvPaletteTable(u32 arg0) {
     g_EnvPaletteTable = arg0;
 }
 
-void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
-void func_80069B14(void *arg0, s32 arg1, void *arg2);
+void SetFarColor(s32 arg0, s32 arg1, s32 arg2) asm("func_80069A38");
+void Intpl(void *arg0, s32 arg1, void *arg2) asm("func_80069B14");
 
 void GameLerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) asm("func_8004554C");
 void GameLerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) {
@@ -19,8 +19,8 @@ void GameLerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) {
     local[0] = arg0[0] << 4;
     local[1] = arg0[1] << 4;
     local[2] = arg0[2] << 4;
-    func_80069A38(arg1[0], arg1[1], arg1[2]);
-    func_80069B14(local, arg3, result);
+    SetFarColor(arg1[0], arg1[1], arg1[2]);
+    Intpl(local, arg3, result);
     out[0] = result[0];
     out[1] = result[1];
     out[2] = result[2];
