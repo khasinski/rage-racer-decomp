@@ -277,9 +277,7 @@ void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     asm("" : : : "$16");
     carReg->motionActive = 1;
     x = arg1;
-    if (mode >= 2) {
-        goto mode_ge_2;
-    }
+    if (mode < 2) {
 
     adjustedReg = *(u16 *)&carReg->field_B4;
     raw = 0xC00;
@@ -343,12 +341,7 @@ make_vector:
     }
     z = adjustedReg >> 12;
     tmp = 0x1E;
-    goto store_values;
-
-mode_ge_2:
-    if (mode >= 4) {
-        goto mode_ge_4;
-    }
+    } else if (mode < 4) {
     adjustedReg = *(u16 *)&carReg->field_B4;
     raw = 0xC00;
     raw -= adjustedReg;
@@ -375,9 +368,7 @@ mode_ge_2:
     }
     z = tmp >> 12;
     tmp = 0xF;
-    goto store_values;
-
-mode_ge_4:
+    } else {
     adjustedReg = (u32)x >> 31;
     adjustedReg = x + adjustedReg;
     x = adjustedReg >> 1;
@@ -385,6 +376,7 @@ mode_ge_4:
     adjustedReg = z + adjustedReg;
     z = adjustedReg >> 1;
     tmp = 0xF;
+    }
 
 store_values:
     carReg->motionTimer = tmp;
