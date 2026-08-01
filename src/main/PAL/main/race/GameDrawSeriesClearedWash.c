@@ -123,46 +123,34 @@ void GameDrawSeriesClearedWash(s32 x, s32 y) {
     }
     blue = (x >> 2) + redStack;
 
-    if (redStack < 0) {
-        goto red_zero;
+    if (redStack >= 0) {
+        red = redStack;
+        if (red >= 0x100) {
+            red = 0xFF;
+        }
+    } else {
+        red = 0;
     }
-    red = redStack;
-    if (red < 0x100) {
-        goto red_done;
-    }
-    red = 0xFF;
-    goto red_done;
-red_zero:
-    red = 0;
-red_done:
     redStack = red;
 
-    if (green < 0) {
-        goto green_zero;
+    if (green >= 0) {
+        temp = green;
+        if (temp >= 0x100) {
+            temp = 0xFF;
+        }
+    } else {
+        temp = 0;
     }
-    temp = green;
-    if (temp < 0x100) {
-        goto green_done;
-    }
-    temp = 0xFF;
-    goto green_done;
-green_zero:
-    temp = 0;
-green_done:
     green = temp;
 
-    if (blue < 0) {
-        goto blue_zero;
+    if (blue >= 0) {
+        temp = blue;
+        if (temp >= 0x100) {
+            temp = 0xFF;
+        }
+    } else {
+        temp = 0;
     }
-    temp = blue;
-    if (temp < 0x100) {
-        goto blue_done;
-    }
-    temp = 0xFF;
-    goto blue_done;
-blue_zero:
-    temp = 0;
-blue_done:
 
     width = 0x140;
     height = 0xF0;
