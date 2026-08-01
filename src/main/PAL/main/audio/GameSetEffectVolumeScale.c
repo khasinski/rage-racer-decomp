@@ -32,25 +32,18 @@ void GameSetSequenceVolumeSetting(s32 setting) {
     s32 value;
 
     value = setting;
-    if (value < 0) {
-        goto negative;
+    if (value >= 0) {
+        adjusted = setting;
+        adjusted++;
+        adjusted--;
+        setting = adjusted;
+        if (setting >= 0x10) {
+            setting = 0xF;
+        }
+    } else {
+        setting = 0;
     }
 
-    adjusted = setting;
-    adjusted++;
-    adjusted--;
-    setting = adjusted;
-    if (setting < 0x10) {
-        goto call;
-    }
-
-    setting = 0xF;
-    goto call;
-
-negative:
-    setting = 0;
-
-call:
     value = setting;
     GameSetCdVolumeSetting(setting);
     GameSetSequenceVolumeScale(value);
