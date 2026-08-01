@@ -17,24 +17,17 @@ s32 arg0;
     s32 one;
 
     ret = 0;
-    if (arg0 < g_TrackTextureSectionLo) {
-        goto low;
+    if (arg0 >= g_TrackTextureSectionLo) {
+        ret = 0x100;
+        if (arg0 >= g_TrackTextureSectionHi) {
+            ret = 0;
+        } else {
+            one = 1;
+            g_TrackTexturePageWanted = one;
+            goto done;
+        }
     }
-
-    ret = 0x100;
-    if (arg0 >= g_TrackTextureSectionHi) {
-        goto high;
-    }
-
-    one = 1;
-    g_TrackTexturePageWanted = one;
-    goto done;
-
-high:
-    ret = 0;
-low:
     g_TrackTexturePageWanted = 0;
-
 done:
     return ret;
 }
