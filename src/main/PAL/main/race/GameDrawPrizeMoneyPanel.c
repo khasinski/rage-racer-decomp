@@ -112,28 +112,21 @@ void GameCommitClassProgress(void) {
 
         if (score_index == 4) {
             record = &g_ClassRecord6;
-            goto check_record;
-        }
-        if (score_index != 10) {
-            goto not_special_record;
-        }
-        record = &g_ClassRecord5;
-
-check_record:
-        if (*record == -1) {
-            *record = 0;
-        }
-
-        goto after_record_check;
-
-not_special_record:
-        if (score_index != 5) {
-            if (g_ClassRecords[score_index + 1].value == -1) {
-                g_ClassRecords[score_index + 1].value = 0;
+            if (*record == -1) {
+                *record = 0;
+            }
+        } else if (score_index == 10) {
+            record = &g_ClassRecord5;
+            if (*record == -1) {
+                *record = 0;
+            }
+        } else {
+            if (score_index != 5) {
+                if (g_ClassRecords[score_index + 1].value == -1) {
+                    g_ClassRecords[score_index + 1].value = 0;
+                }
             }
         }
-
-after_record_check:
         value = func_800214B8();
         g_ClassResultPlace = value;
         if (value != 0) {
