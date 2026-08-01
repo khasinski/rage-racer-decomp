@@ -513,10 +513,11 @@ void GameUpdateCarBodyRoll(A *ctx) {
     if (ctx->fB8 != 0) a0v = 1;
     v1 = p->x1C;
     p->x40 = a0v;
-    if (v1 > 0) { p->x1C = 0; goto L108; }
-    if (v1 < -4095) goto L108;
-    p->x1C = v1 - 1536;
-L108:
+    if (v1 > 0) {
+        p->x1C = 0;
+    } else if (v1 >= -4095) {
+        p->x1C = v1 - 1536;
+    }
     ctx->f64 = ctx->f64 - 6;
     goto L_194;
 
@@ -526,10 +527,11 @@ L_11c:
     if (ctx->fB8 != 0) a0v = 2;
     v1 = p->x1C;
     p->x40 = a0v;
-    if (v1 < 0) { p->x1C = 0; goto L160; }
-    if (v1 >= 4096) goto L160;
-    p->x1C = v1 + 1536;
-L160:
+    if (v1 < 0) {
+        p->x1C = 0;
+    } else if (v1 < 4096) {
+        p->x1C = v1 + 1536;
+    }
     ctx->f64 = ctx->f64 + 6;
     goto L_194;
 
@@ -558,18 +560,15 @@ L_1C4:
     if (v1 > 0) {
         ctx->sub.x1C = 0;
         ctx->f44 = 0;
-        goto L_2FC;
-    }
-    if ((a1 - 256) < v1) {
+    } else if ((a1 - 256) < v1) {
         s32 t;
         if (v1 >= 4097) v1 = 4096;
         t = func_80068634(v1 / 8);
         p->x1C = p->x1C - (t / 4);
         ctx->f44 = ctx->f44 + 1536;
-        goto L_2FC;
+    } else {
+        ctx->sub.x1C = v1 / 3;
     }
-    ctx->sub.x1C = v1 / 3;
-L_2FC:
     ctx->f64 = ctx->f64 - 6;
     goto L_414;
 
@@ -582,19 +581,16 @@ L_310:
     if (v1 < 0) {
         ctx->sub.x1C = 0;
         ctx->f44 = 0;
-        goto L_3CC;
-    }
-    if (v1 < (a1 + 256)) {
+    } else if (v1 < (a1 + 256)) {
         s32 t;
         s32 c = v1;
         if (v1 < -4096) { v1 = -4096; c = v1; }
         t = func_80068634(c / 8);
         p->x1C = p->x1C + (t / 4);
         ctx->f44 = ctx->f44 - 1536;
-        goto L_3CC;
+    } else {
+        ctx->sub.x1C = v1 / 3;
     }
-    ctx->sub.x1C = v1 / 3;
-L_3CC:
     ctx->f64 = ctx->f64 + 6;
     goto L_414;
 
