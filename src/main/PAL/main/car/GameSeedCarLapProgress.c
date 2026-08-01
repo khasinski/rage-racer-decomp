@@ -69,8 +69,8 @@ advance_forward_sub:
             } while (cur != wrapped);
 
         } else {
-            /* These pins are load-bearing: removing any one changes .text. */
-            register s32 count asm("$8");
+            /* This pin is load-bearing: removing it changes .text. */
+            s32 count;
             u8 *table;
             register s32 wrapped asm("$5");
             s32 mod;
