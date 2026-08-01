@@ -99,34 +99,33 @@ void GameAdvanceBgmShuffleBag(u32 arg0) {
 void GameUpdateBgmSelect(void) asm("func_80025ED8");
 void GameUpdateBgmSelect(void) {
     s32 t;
-    if (g_BgmChangeDelay <= 0) goto L78;
-    t = g_BgmChangeDelay - 1;
-    g_BgmChangeDelay = t;
-    if (t == 4) goto L13c;
-    if (t != 0) goto L13c;
-    if (g_BgmSelectCdTrack == 12) g_BgmSelectCdTrack = 17;
-    GameRequestCdTrack(g_BgmSelectCdTrack);
-    GameStartCdAudio();
-    g_CdTrackEnded = 0;
-    goto L13c;
-
-L78:
-    if (g_CdTrackEnded == 0) goto L13c;
-    g_BgmChangeDelay = 6;
-    if (g_BgmRandomPlay == 0) goto Ld0;
-    g_BgmSelectTrack = g_BgmShuffleOrder[g_BgmShuffleIndex];
-    GameAdvanceBgmShuffleBag(g_BgmSelectTrack);
-    goto L124;
-Ld0:
-    g_BgmSelectTrack = g_BgmSelectTrack + 1;
-    g_BgmSelectTrack = (g_BgmSelectTrack + g_BgmTrackCount) % g_BgmTrackCount;
-L124:
-    g_BgmSelectCdTrack = g_BgmSelectTrack + 3;
+    if (g_BgmChangeDelay > 0) {
+        t = g_BgmChangeDelay - 1;
+        g_BgmChangeDelay = t;
+        if (t == 4) {
+        } else if (t == 0) {
+            if (g_BgmSelectCdTrack == 12) g_BgmSelectCdTrack = 17;
+            GameRequestCdTrack(g_BgmSelectCdTrack);
+            GameStartCdAudio();
+            g_CdTrackEnded = 0;
+        }
+    } else {
+        if (g_CdTrackEnded != 0) {
+            g_BgmChangeDelay = 6;
+            if (g_BgmRandomPlay != 0) {
+                g_BgmSelectTrack = g_BgmShuffleOrder[g_BgmShuffleIndex];
+                GameAdvanceBgmShuffleBag(g_BgmSelectTrack);
+            } else {
+                g_BgmSelectTrack = g_BgmSelectTrack + 1;
+                g_BgmSelectTrack = (g_BgmSelectTrack + g_BgmTrackCount) % g_BgmTrackCount;
+            }
+            g_BgmSelectCdTrack = g_BgmSelectTrack + 3;
+        }
+    }
 
 L13c:
     if (g_SceneTimer == 2) SetDispMask(1);
-    if (g_FadeStep != 0) goto L424;
-
+    if (g_FadeStep == 0) {
     if (g_PadEdge2 & 0x8000) {
         if (g_BgmSelectCursor > 0) g_BgmSelectCursor = g_BgmSelectCursor - 1;
     }
@@ -191,9 +190,7 @@ L13c:
         if (f & 4) g_BgmSelectShowUi = 1;
         if (f & 8) g_BgmSelectShowUi = 0;
     }
-    goto L48c;
-
-L424:
+    } else {
     GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
     g_FadeLevel = g_FadeLevel + g_FadeStep;
     if (g_FadeLevel >= 256) {
@@ -201,6 +198,7 @@ L424:
         g_BgmSelectStep = 3;
         g_FadeLevel = 256;
         g_FadeStep = -4;
+    }
     }
 
 L48c:
