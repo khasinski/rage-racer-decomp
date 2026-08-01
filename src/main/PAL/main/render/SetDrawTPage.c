@@ -211,9 +211,8 @@ extern char D_800134C4[];
 s32 SetGraphReverse(s32 arg0) asm("func_800655B8");
 
 s32 SetGraphReverse(s32 arg0) {
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 newValue asm("$17") = arg0;
     u8 *state = &g_GraphReverse;
+    s32 newValue = arg0;
     s32 old = *state;
     GpuCallbacks *callbacks;
     GpuCallbacks *callbacks2;
