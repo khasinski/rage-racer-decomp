@@ -291,16 +291,11 @@ void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     raw <<= 16;
     field34 = carReg->field_34;
     raw >>= 16;
-    if (field34 >= 0) {
-        goto pos_angle_0;
+    if (field34 < 0) {
+        adjusted = raw - 0x400;
+    } else {
+        adjusted = raw + 0x400;
     }
-    adjusted = raw - 0x400;
-    goto got_angle_0;
-
-pos_angle_0:
-    adjusted = raw + 0x400;
-
-got_angle_0:
     adjustedReg = adjusted & 0xFFF;
     /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(adjustedReg) : "0"(adjustedReg));
@@ -316,12 +311,9 @@ got_angle_0:
     }
     trig = func_80068568(GameGetAngleDistance((s16)rawArg, carReg->field_24));
     product = (s16)speed * trig;
-    if (product >= 0) {
-        goto nonneg_speed;
+    if (product < 0) {
+        product += 0xFFFF;
     }
-    product += 0xFFFF;
-
-nonneg_speed:
     tmp = product >> 16;
     goto speed_ready;
 
@@ -332,12 +324,9 @@ low_speed:
     product <<= 3;
     product += trig;
     adjustedReg = product << 1;
-    if (adjustedReg >= 0) {
-        goto low_speed_nonneg;
+    if (adjustedReg < 0) {
+        adjustedReg += 0xFFF;
     }
-    adjustedReg += 0xFFF;
-
-low_speed_nonneg:
     tmp = adjustedReg >> 12;
 
 speed_ready:
@@ -349,21 +338,15 @@ make_vector:
     product = speed << 16;
     angle = product >> 16;
     adjustedReg = trig * angle;
-    if (adjustedReg >= 0) {
-        goto x_nonneg;
+    if (adjustedReg < 0) {
+        adjustedReg += 0xFFF;
     }
-    adjustedReg += 0xFFF;
-
-x_nonneg:
     x = adjustedReg >> 12;
     trig = func_80068634(savedAngle);
     adjustedReg = trig * angle;
-    if (adjustedReg >= 0) {
-        goto z_nonneg;
+    if (adjustedReg < 0) {
+        adjustedReg += 0xFFF;
     }
-    adjustedReg += 0xFFF;
-
-z_nonneg:
     z = adjustedReg >> 12;
     tmp = 0x1E;
     goto store_values;
@@ -378,35 +361,24 @@ mode_ge_2:
     raw <<= 16;
     field34 = carReg->field_34;
     raw >>= 16;
-    if (field34 >= 0) {
-        goto pos_angle_2;
+    if (field34 < 0) {
+        adjusted = raw - 0x400;
+    } else {
+        adjusted = raw + 0x400;
     }
-    adjusted = raw - 0x400;
-    goto got_angle_2;
-
-pos_angle_2:
-    adjusted = raw + 0x400;
-
-got_angle_2:
     rawArg = adjusted & 0xFFF;
     angle = rawArg;
     trig = func_80068568(rawArg);
     tmp = trig * 20;
-    if (tmp >= 0) {
-        goto mode2_x_nonneg;
+    if (tmp < 0) {
+        tmp += 0xFFF;
     }
-    tmp += 0xFFF;
-
-mode2_x_nonneg:
     x = tmp >> 12;
     trig = func_80068634(angle);
     tmp = trig * 20;
-    if (tmp >= 0) {
-        goto mode2_z_nonneg;
+    if (tmp < 0) {
+        tmp += 0xFFF;
     }
-    tmp += 0xFFF;
-
-mode2_z_nonneg:
     z = tmp >> 12;
     tmp = 0xF;
     goto store_values;
