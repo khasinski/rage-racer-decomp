@@ -91,10 +91,8 @@ void GameSetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                         *(s32 *)((u8 *)g_EffectVoiceTone + off) = inactive;
                         *(s32 *)((u8 *)g_EffectVoicePitch + off) = defaultPitch;
                         *(s32 *)((u8 *)g_EffectVoiceVolume + off) = 0;
-                        /* Keep the two loop updates in the retail schedule. */
-                        asm("");
-                        resetIndex++;
                         off += 0x14;
+                        resetIndex++;
                     } while (resetIndex < volume);
                 }
             }
@@ -168,10 +166,8 @@ void GameSetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                             *(s32 *)((u8 *)g_EffectVoiceTone + off) = inactive;
                             *(s32 *)((u8 *)g_EffectVoicePitch + off) = defaultPitch;
                             *(s32 *)((u8 *)g_EffectVoiceVolume + off) = 0;
-                            /* Keep the two loop updates in the retail schedule. */
-                            asm("");
-                            i++;
                             off += 0x14;
+                            i++;
                         } while (i < volume);
                     }
                 }
