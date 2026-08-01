@@ -84,18 +84,14 @@ void GameUpdateTitleAttract(void) {
     tmp <<= 1;
     clamped = 0x7F;
     alpha = clamped - tmp;
-    if (alpha < 0x30) {
-        goto low_alpha;
+    if (alpha >= 0x30) {
+        clamped = alpha;
+        if (clamped >= 0x80) {
+            clamped = 0x7F;
+        }
+    } else {
+        clamped = 0x30;
     }
-    clamped = alpha;
-    if (clamped < 0x80) {
-        goto alpha_done;
-    }
-    clamped = 0x7F;
-    goto alpha_done;
-low_alpha:
-    clamped = 0x30;
-alpha_done:
     alpha = clamped;
 
     x28 = 0x28;
