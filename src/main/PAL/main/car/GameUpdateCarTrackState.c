@@ -233,8 +233,9 @@ s32 GameUpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         FIELD(obj, s32 *, 8) = (s32) (FIELD(obj, s32 *, 8) - FIELD(spad, s32 *, 0x70));
         var_a2 = -FIELD(spad, s16 *, 0x8A) - FIELD(clampPair, s16 *, 2);
         FIELD(spad, s32 *, 0x3C) = FIELD(clampPair, s16 *, 6);
-        goto boundary_done;
     }
+    else
+    {
     temp_v1_7 = (s16) temp_lo - FIELD(clampPair, s16 *, 0);
     if (temp_v1_7 < var_a2)
     {
@@ -252,6 +253,7 @@ s32 GameUpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         FIELD(obj, s32 *, 8) = (s32) (FIELD(obj, s32 *, 8) - FIELD(spad, s32 *, 0x70));
         var_a2 = FIELD(spad, s16 *, 0x88) - FIELD(clampPair, s16 *, 0);
         FIELD(spad, s32 *, 0x3C) = (s32) FIELD(clampPair, s16 *, 4);
+    }
     }
 boundary_done:
     if (FIELD(spad, s16 *, 0x96) < var_s3)
