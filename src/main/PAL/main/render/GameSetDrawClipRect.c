@@ -108,13 +108,12 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
     x1Local = x1;
     bLocal = b;
     /* Match note: keep stack color load after callee-save argument setup. */
-    /* These barriers are load-bearing: removing any one changes .text. */
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(flagsReg), "r"(y1Reg), "r"(u0Reg), "r"(v0Reg), "r"(rReg));
     gLocal = g;
-    asm("" : : "r"(gLocal));
-    clutReg = clutX;
-
     func_80064FA8(prim);
+
+    clutReg = clutX;
     func_80064EB8(prim, shadeReg);
     func_80064E90(prim, semiReg);
 
