@@ -245,18 +245,16 @@ void GameUpdateTeamNameScreen(void) {
             GamePlaySoundCue(1);
 
         }
-        goto after_sound;
+    } else {
+        if ((g_PadEdge & 0xA000) && GameMenuCursorAnim < 0) {
+            s32 nc = (GameMenuCursor == 0x2A) ? 0x2B : 0x2A;
+            GameMenuCursor = nc;
+            g_MenuViewAngleTarget = 0;
+            g_MenuViewAngle = 0x3E8000;
+            GameMenuCursorAnim = nc;
+            GamePlaySoundCue(1);
+        }
     }
-
-    if (!((g_PadEdge & 0xA000) && GameMenuCursorAnim < 0)) goto after_sound;
-    {
-        s32 nc = (GameMenuCursor == 0x2A) ? 0x2B : 0x2A;
-        GameMenuCursor = nc;
-        g_MenuViewAngleTarget = 0;
-        g_MenuViewAngle = 0x3E8000;
-        GameMenuCursorAnim = nc;
-    }
-    GamePlaySoundCue(1);
 after_sound:
     pad = g_PadEdge2;
     if (!(pad & 0x860)) goto maybe_pop;
