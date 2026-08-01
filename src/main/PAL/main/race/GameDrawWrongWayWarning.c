@@ -207,7 +207,6 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
     u8 *base = g_DrawBuffer;
     u8 *ot = base + 0xCC;
     u8 *packet;
-    u8 *next;
     u8 *prim;
     s32 height;
 
@@ -223,7 +222,6 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
 
     *(s16 *)(packet + 0xC) = 0x140;
     height = 0xF0;
-    asm volatile("" : "=r"(prim) : "0"(packet));
     *(s16 *)(packet + 0x8) = 0;
     *(s16 *)(packet + 0xA) = 0;
     *(s16 *)(packet + 0xE) = height;
@@ -231,10 +229,10 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
     packet[5] = color;
     packet[6] = color;
 
-    next = packet + 0x10;
-    asm volatile("" : : "r"(next));
+    prim = packet;
+    packet += 0x10;
     AddPrim((u32 *)ot, (u32 *)prim);
-    *(void **)0x1F800000 = func_80017390(g_DrawBuffer + 0xCC, next, arg1);
+    *(void **)0x1F800000 = func_80017390(g_DrawBuffer + 0xCC, packet, arg1);
 }
 
 void SetSprt8(u8 *prim) asm("func_80064F80");
