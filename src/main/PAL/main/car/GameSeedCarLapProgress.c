@@ -22,14 +22,14 @@ void GameSeedCarLapProgress(u8 *arg0, s32 arg1) {
 
             count = g_TrackPointCount;
             table = (u8 *)g_TrackPoints;
-advance_forward_add:
+while (1) {
             index++;
             wrapped = index % count;
             if (cur == wrapped) {
                 goto done;
             }
             total += ((GameTrackPoint *)table)[wrapped].segmentLength;
-            goto advance_forward_add;
+            }
         } else {
             s32 count;
             u8 *table;
@@ -38,7 +38,7 @@ advance_forward_add:
 
             count = g_TrackPointCount;
             table = (u8 *)g_TrackPoints;
-advance_backward_sub:
+while (1) {
             if (index < 0) {
                 wrapped = index + count;
             } else {
@@ -50,7 +50,7 @@ advance_backward_sub:
                 goto done;
             }
             index--;
-            goto advance_backward_sub;
+            }
         }
     } else {
         index = *(s32 *)g_TrackEventData;
