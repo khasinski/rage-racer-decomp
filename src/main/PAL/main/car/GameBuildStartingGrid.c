@@ -272,11 +272,10 @@ void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     s32 product;
 
     carReg = car;
-    /* These barriers are load-bearing: removing any one changes .text. */
+    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(carReg));
-    asm("" : : : "$16");
-    carReg->motionActive = 1;
     x = arg1;
+    carReg->motionActive = 1;
     if (mode < 2) {
 
     adjustedReg = *(u16 *)&carReg->field_B4;
