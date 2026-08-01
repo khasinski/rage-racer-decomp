@@ -607,11 +607,11 @@ backward_done:
                             goto forward_check;
                         }
                         g_NextOwnedCarIndex = index;
-                        goto forward_done;
+                        return;
                     }
                     if (progression >= value) {
                         g_NextOwnedCarIndex = index;
-                        goto forward_done;
+                        return;
                     }
                 }
                 index++;

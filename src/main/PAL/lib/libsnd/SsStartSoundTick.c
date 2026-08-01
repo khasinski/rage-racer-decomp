@@ -57,7 +57,7 @@ void SsStartSoundTick(long arg0) {
 
 state_0:
     g_SndTickIrq = 0xFF;
-    goto done;
+    return;
 
 state_5:
     g_SndTickIrq = 0;
@@ -88,7 +88,7 @@ derive_size:
         /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(active) : "0"(active));
         if (*active != 0) {
-            goto done;
+            return;
         }
         state = active[-1];
         if (state < 0x46) {
