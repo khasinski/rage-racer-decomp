@@ -274,7 +274,7 @@ void func_80055524(void) {
         index = 12;
         enabledBase = (s32)g_CarTable;
         enabledPtr = (GameCarEntry *)(enabledBase + 0x60);
-loop_enabled:
+while (1) {
         byte = enabledPtr->enabled;
         enabledPtr--;
         if (byte == 0) {
@@ -284,7 +284,7 @@ loop_enabled:
         if (index < 0) {
             goto done;
         }
-        goto loop_enabled;
+        }
     }
 
     index = 12;
