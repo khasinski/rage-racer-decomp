@@ -279,41 +279,29 @@ void func_8005C31C(s32 arg0, s32 left, s32 right) {
     s32 *base;
     SoundModeEntry *entry;
 
-    if (arg0 < 0) {
-        goto clamp_arg0_low;
+    if (arg0 >= 0) {
+        if (arg0 >= 4) {
+            arg0 = 3;
+        }
+    } else {
+        arg0 = 0;
     }
-    if (arg0 < 4) {
-        goto clamp_arg0_done;
-    }
-    arg0 = 3;
-    goto clamp_arg0_done;
-clamp_arg0_low:
-    arg0 = 0;
-clamp_arg0_done:
 
-    if (left < 0) {
-        goto clamp_left_low;
+    if (left >= 0) {
+        if (left >= 0x80) {
+            left = 0x7F;
+        }
+    } else {
+        left = 0;
     }
-    if (left < 0x80) {
-        goto clamp_left_done;
-    }
-    left = 0x7F;
-    goto clamp_left_done;
-clamp_left_low:
-    left = 0;
-clamp_left_done:
 
-    if (right < 0) {
-        goto clamp_right_low;
+    if (right >= 0) {
+        if (right >= 0x80) {
+            right = 0x7F;
+        }
+    } else {
+        right = 0;
     }
-    if (right < 0x80) {
-        goto clamp_right_done;
-    }
-    right = 0x7F;
-    goto clamp_right_done;
-clamp_right_low:
-    right = 0;
-clamp_right_done:
 
     if ((left <= 0) && (right <= 0)) {
         left = *(s32 *)D_801E6D00;
