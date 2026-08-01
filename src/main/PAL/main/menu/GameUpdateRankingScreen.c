@@ -288,7 +288,7 @@ while (1) {
     }
 
     index = 12;
-loop_disabled:
+do {
     {
         value = GameGetCarUnlockLevel(index);
         {
@@ -310,9 +310,7 @@ loop_disabled:
         index--;
     }
 loop_disabled_check:
-    if (index >= 0) {
-        goto loop_disabled;
-    }
+    } while (index >= 0);
 
 done:
 }
