@@ -298,7 +298,7 @@ void func_8004A248(s32 arg0, s32 arg1)
       {
         register s32 sy2Value asm("$3");
         s32 syOffset;
-        register s32 angleSource asm("$2");
+        register s32 angleSource;
         register s32 angleValue;
         register s32 modInput asm("$4");
         angleSource = D_8009B288;

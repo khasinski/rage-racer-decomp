@@ -117,7 +117,7 @@ long MDEC_out_sync(void) {
 long MDEC_timeout(u_char *arg0) {
     u_long status;
     /* This pin is load-bearing: removing it changes .text. */
-    register long ret asm("$2");
+    register long ret;
 
     GameDebugPrintf(D_80013364, arg0);
     status = *g_MdecCtrlReg;

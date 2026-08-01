@@ -90,7 +90,7 @@ void GameForceIndexedEffectVoiceEnabled(s32 enabled) asm("func_8005E058");
 void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
     s32 base;
     /* These pins are load-bearing: removing any one changes .text. */
-    register s32 center asm("$17");
+    register s32 center;
     s32 fine;
     register s32 index asm("$3");
     register s32 raw asm("$2");

@@ -264,10 +264,10 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
 
     {
         /* These pins are load-bearing: removing any one changes .text. */
-        register void *ptr asm("$4");
-        register s32 arg1 asm("$5");
-        register s32 arg2 asm("$6");
-        register s32 arg3 asm("$7");
+        register void *ptr;
+        register s32 arg1;
+        register s32 arg2;
+        register s32 arg3;
         s32 small_height;
 
         ptr = base + 0x70;

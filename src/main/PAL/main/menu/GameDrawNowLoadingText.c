@@ -47,7 +47,7 @@ void GameEnterCourseSelectScreen(void) asm("func_80052778");
 void GameEnterCourseSelectScreen(void) {
     s32 one;
     /* These pins are load-bearing: removing any one changes .text. */
-    register s32 initValue asm("$3");
+    register s32 initValue;
     register s32 mode asm("$4");
     s32 largeValue;
     u8 *table;

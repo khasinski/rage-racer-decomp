@@ -74,7 +74,7 @@ s32 func_800632F0(u8 *dest, u8 *format, ...) {
     s32 hash;
     s32 zeroFlag;
     register s32 minus;
-    register s32 plus asm("$21");
+    register s32 plus;
 
     args = (u8 *)&format + 4;
     c = *format;

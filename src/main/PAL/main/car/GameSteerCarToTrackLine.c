@@ -104,7 +104,7 @@ s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
 void func_80030030(GameCarRuntime *arg0) {
-    register GameCarRuntime *car asm("$19") = arg0;
+    register GameCarRuntime *car = arg0;
     register u8 *r;
     register s32 s4val;
     s32 res;

@@ -539,9 +539,9 @@ void GameApplyTrackReverbZone(s32 arg0) {
     s32 result;
     s32 i;
     /* These pins are load-bearing: removing any one changes .text. */
-    register s32 offset asm("$3");
+    register s32 offset;
     s32 arg;
-    register s32 scene asm("$2");
+    register s32 scene;
 
     result = 0;
     if (arg0 < 0) {
@@ -741,8 +741,8 @@ void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   s32 pos2_R10;
   s32 idx_R8;
   /* These pins are load-bearing: removing any one changes .text. */
-  register u8 *base_R9 asm("$9");
-  register GameCarRuntime *ent2_R7 asm("$7");
+  register u8 *base_R9;
+  register GameCarRuntime *ent2_R7;
   GameCarAiBlock *sub_R6;
   s32 c;
   u16 w;
@@ -758,7 +758,7 @@ void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
     s32 lev1_R3;
     unsigned int idxoff1_R4;
     /* This pin is load-bearing: removing it changes .text. */
-    register u8 *p1_R4 asm("$4");
+    register u8 *p1_R4;
     lev1_R3 = g_RaceSeries;
     idxoff1_R4 = idx_R8;
     idxoff1_R4 = idxoff1_R4 * 16;

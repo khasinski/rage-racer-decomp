@@ -439,7 +439,7 @@ u8 *GameAddTilePrim(
     s32 b) asm("func_80032F34");
 
 void GameDrawRaceOptionMenu(s32 cursorRow) {
-    register s32 selectedRow asm("$23") = cursorRow;
+    register s32 selectedRow = cursorRow;
     u8 *ot;
     u8 *firstNext;
     register s32 brightness;
