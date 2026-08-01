@@ -76,11 +76,11 @@ void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8
     SPRT *prim;
     s32 shadeReg;
     s32 semiReg;
-    /* These pins are load-bearing: removing any one changes .text. */
+    /* The pinned locals below are load-bearing: removing a pin changes .text. */
     register u32 flagsReg asm("$17");
     register s32 y1Reg asm("$20");
-    register s32 u0Reg asm("$21");
-    register s32 v0Reg asm("$22");
+    s32 u0Reg;
+    s32 v0Reg;
     register s32 rReg asm("$23");
     register s32 clutReg asm("$16");
     u8 *oldPrim;
