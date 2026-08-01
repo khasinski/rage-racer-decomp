@@ -39,10 +39,9 @@ void GameSteerCarToTrackLine(GameCarRuntime *car) {
     spec = g_CarSpec;
     lateral = car->field_34;
     timer = spec->steerResponse;
-    asm volatile("" : "=r"(timer) : "0"(timer));
-
     directionFlag = *(s32 *)((u8 *)car + 0x110);
-    asm volatile("" : "=r"(directionFlag) : "0"(directionFlag));
+
+    asm volatile("" : "=r"(timer) : "0"(timer));
     baseIndex = car->trackPointIndex;
     index = baseIndex + 2;
     if (directionFlag == 0) {
