@@ -364,8 +364,8 @@ void GameUpdateRaceCars(void) {
                 (*(s32 *)((u8 *)(lastBase) + (0x28))) + (*(s32 *)((u8 *)(lastBase) + (0x64)));
             (*(s32 *)((u8 *)(lastBase) + (0x60))) = (*(s32 *)((u8 *)(lastBase) + (0x04)));
             if ((*(s16 *)((u8 *)(lastBase) + (0x98))) != 0) {
-                register s32 state asm("$4");
                 s32 tick;
+                s32 state;
                 tick = (u16)(*(s16 *)((u8 *)(lastBase) + (0x9A))) + 1;
                 (*(s16 *)((u8 *)(lastBase) + (0x9A))) = tick;
                 state = (*(s16 *)((u8 *)(lastBase) + (0x98)));
@@ -609,8 +609,8 @@ void GameUpdateAttractCars(void) {
             (*(s32 *)((u8 *)(base) + (0x28))) = (*(s32 *)((u8 *)(base) + (0x28))) + (*(s32 *)((u8 *)(base) + (0x64)));
             (*(s32 *)((u8 *)(base) + (0x60))) = (*(s32 *)((u8 *)(base) + (0x04)));
             if ((*(s16 *)((u8 *)(base) + (0x98))) != 0) {
-                register s32 state asm("$4");
                 s32 tick;
+                s32 state;
                 tick = (u16)(*(s16 *)((u8 *)(base) + (0x9A))) + 1;
                 (*(s16 *)((u8 *)(base) + (0x9A))) = tick;
                 state = (*(s16 *)((u8 *)(base) + (0x98)));
