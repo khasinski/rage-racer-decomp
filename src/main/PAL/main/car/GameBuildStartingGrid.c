@@ -176,9 +176,7 @@ void GameUpdateCarTiltCounter(GameCarRuntime *arg0) {
     ptr = (u8 *)&obj->field_BC;
     if (g_RacePhase < 2) {
         value = 8;
-        goto store_value;
-    }
-
+    } else {
     if (obj->field_98 == 0) {
         if (obj->field_134 >= g_CarSpec->redline &&
             obj->field_15C >= 0x81 &&
@@ -216,8 +214,7 @@ void GameUpdateCarTiltCounter(GameCarRuntime *arg0) {
         value += 3;
     }
     value >>= 2;
-
-store_value:
+    }
     obj->field_8C = value;
 }
 
@@ -301,33 +298,30 @@ void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     asm("" : "=r"(adjustedReg) : "0"(adjustedReg));
     fieldA4 = carReg->field_A4;
     angle = adjustedReg;
-    if (fieldA4 < 0x321) {
-        goto low_speed;
-    }
-    if (fieldA4 >= 0x709) {
-        speed = 0x708;
+    if (fieldA4 >= 0x321) {
+        if (fieldA4 >= 0x709) {
+            speed = 0x708;
+        } else {
+            speed = *(u16 *)&carReg->field_A4;
+        }
+        trig = func_80068568(GameGetAngleDistance((s16)rawArg, carReg->field_24));
+        product = (s16)speed * trig;
+        if (product < 0) {
+            product += 0xFFFF;
+        }
+        tmp = product >> 16;
     } else {
-        speed = *(u16 *)&carReg->field_A4;
+        trig = func_80068568(GameGetAngleDistance((s16)rawArg, carReg->field_24));
+        product = trig << 1;
+        product += trig;
+        product <<= 3;
+        product += trig;
+        adjustedReg = product << 1;
+        if (adjustedReg < 0) {
+            adjustedReg += 0xFFF;
+        }
+        tmp = adjustedReg >> 12;
     }
-    trig = func_80068568(GameGetAngleDistance((s16)rawArg, carReg->field_24));
-    product = (s16)speed * trig;
-    if (product < 0) {
-        product += 0xFFFF;
-    }
-    tmp = product >> 16;
-    goto speed_ready;
-
-low_speed:
-    trig = func_80068568(GameGetAngleDistance((s16)rawArg, carReg->field_24));
-    product = trig << 1;
-    product += trig;
-    product <<= 3;
-    product += trig;
-    adjustedReg = product << 1;
-    if (adjustedReg < 0) {
-        adjustedReg += 0xFFF;
-    }
-    tmp = adjustedReg >> 12;
 
 speed_ready:
     speed = tmp + 10;
