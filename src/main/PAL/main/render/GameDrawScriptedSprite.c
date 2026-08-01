@@ -321,7 +321,6 @@ void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(product) : "0"(product));
     limit = product;
-    asm("" : "=r"(limit), "=r"(style) : "0"(limit), "1"(style));
     packedSpeed = x + packedSpeed;
 
     switch (style[0xB] & 3) {
