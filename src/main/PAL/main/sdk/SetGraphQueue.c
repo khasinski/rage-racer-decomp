@@ -11,9 +11,8 @@ extern char D_800134F0[];
 /* GP1 queue mode; own trace string D_800134F0 is "SetGrapQue(%d)...". */
 long SetGraphQueue(long mode) asm("func_80065738");
 long SetGraphQueue(long arg0) {
-    /* This pin is load-bearing: removing it changes .text. */
-    register long newQueue asm("$16") = arg0;
     u_char *queue = &g_GraphQueue;
+    long newQueue = arg0;
     long oldQueue;
 
     oldQueue = *queue;
@@ -66,9 +65,8 @@ void func_80068180(u_char *dst, long value, long count);
 
 void SetDispMask(long arg0) asm("func_80065860");
 void SetDispMask(long arg0) {
-    /* This pin is load-bearing: removing it changes .text. */
-    register long enable asm("$16") = arg0;
     u_char *debug = &g_GraphDebug;
+    long enable = arg0;
     u_char *clearPtr;
     GpuCallbacks *gpu;
     long mask;
