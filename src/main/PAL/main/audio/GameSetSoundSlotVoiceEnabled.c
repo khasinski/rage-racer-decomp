@@ -157,7 +157,6 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
     ret = func_80072C4C(headerReg, -1, 0x1000);
     vabIdPtr = g_VabIds;
     *vabIdPtr = ret;
-    asm volatile("" : "=r"(ret) : "0"(ret));
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {

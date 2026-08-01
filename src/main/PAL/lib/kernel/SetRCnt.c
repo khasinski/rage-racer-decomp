@@ -80,7 +80,6 @@ long StopRCnt(long arg0) {
 
     index = arg0 & 0xFFFF;
     g_IrqRegs[1] = ~g_RootCounterIrqBits[index] & g_IrqRegs[1];
-    asm volatile("" ::: "memory");
     return 1;
 }
 

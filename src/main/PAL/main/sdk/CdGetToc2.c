@@ -70,7 +70,6 @@ long CdGetToc2(long arg0, u_char *arg1) {
     }
 
     value = response[1];
-    asm volatile("");
     toc[0] = value;
     value = response[2];
     toc[2] = 0;

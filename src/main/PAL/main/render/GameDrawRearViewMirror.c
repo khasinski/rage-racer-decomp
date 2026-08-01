@@ -90,7 +90,6 @@ s32 GameBeginMirrorPass(void) {
             D_8019CEAA = 0;
         }
         D_801C0692 = v0reg;
-        __asm__("" ::: "memory");
 
         v0reg = g_MirrorPanelY;
         v1reg = v0reg + 0x24;

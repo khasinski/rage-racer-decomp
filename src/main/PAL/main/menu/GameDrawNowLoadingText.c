@@ -67,7 +67,6 @@ void GameEnterCourseSelectScreen(void) {
     initValue = 0x7A120;
     mode = 0x3D090;
     largeValue = 0x1F0000;
-    asm volatile("" : "=r"(largeValue) : "0"(largeValue));
     g_MenuViewOffset = mode;
     mode = g_CourseIndex;
     eight = 8;

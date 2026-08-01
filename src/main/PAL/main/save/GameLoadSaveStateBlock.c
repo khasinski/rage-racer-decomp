@@ -228,16 +228,12 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
                 s32 s1;
                 k = 0;
                 dc = iofc + (s32)cb78;
-                __asm__("" : "=r"(dc) : "0"(dc));
                 dst2 = (s32 *)(joff + dc);
                 sb = iofc + (s32)base;
-                __asm__("" : "=r"(sb) : "0"(sb));
                 s2 = sb + 0xCDC;
-                __asm__("" : "=r"(s2) : "0"(s2));
                 src2 = (s32 *)(joff + s2);
                 dst1 = d1;
                 s1 = sb + 0xA5C;
-                __asm__("" : "=r"(s1) : "0"(s1));
                 src1 = (s32 *)(joff + s1);
                 do {
                     s32 a0 = src1[0], a1 = src1[1], a2 = src1[2], a3 = src1[3];
@@ -293,7 +289,6 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
                 k = 0;
                 dst = dbase;
                 sb = iofc + (s32)base + 0xF5C;
-                __asm__("" : "=r"(sb) : "0"(sb));
                 src = (s32 *)(joff + sb);
                 for (; k < 3; k++) {
                     *dst++ = *src++;

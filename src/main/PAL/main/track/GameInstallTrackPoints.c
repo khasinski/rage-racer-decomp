@@ -22,7 +22,6 @@ void GameInstallTrackPoints(s32 *trackData) {
     s32 total;
     s32 pad[2];
 
-    asm volatile("" : "=m"(pad));
     count = trackData[0];
     points = (GameTrackPoint *)(trackData + 1);
     g_TrackPoints = points;

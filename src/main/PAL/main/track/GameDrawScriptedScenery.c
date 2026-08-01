@@ -481,12 +481,10 @@ void func_8003F9C4(void) {
      */
     frames = (u16 *)&g_PathSceneryClock;
     posFrame = frames[0];
-    __asm__ volatile("" : "=r"(posFrame) : "0"(posFrame));
     rotFrame = g_PathSceneryRotFrameU;
     __asm__ volatile("" : "=r"(rotFrame) : "0"(rotFrame));
     dx = g_PlayerCarX - g_PathSceneryX.w[0];
     posFrame = posFrame + 1;
-    __asm__ volatile("" : : "r"(dx), "r"(rotFrame));
     frames[0] = posFrame;
     g_PathSceneryRotFrameU = rotFrame + 1;
     delta[0] = dx;
@@ -512,7 +510,6 @@ void func_8003F9C4(void) {
             slew = 0x14;
         }
         oldVolume = slew / 2 + 0x3C;
-        __asm__ volatile("" : : "r"(slew));
         g_PathSceneryVolume = vol;
         pitch = oldVolume << 7;
     } else {

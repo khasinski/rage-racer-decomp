@@ -32,7 +32,6 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     __asm__("" : "=r"(base) : "0"(base));
     offset = index << 2;
     slot = (Callback *)(offset + (long)base);
-    __asm__("" : "=r"(slot) : "0"(slot));
     oldCallback = *slot;
 
     if (callback == oldCallback) {

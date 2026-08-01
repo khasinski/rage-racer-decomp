@@ -37,7 +37,6 @@ void GameLoadBootAssets(void) {
         loaded = (u8 *)func_80017C78(1, base);
         if (loaded != 0) {
             func_8001A498();
-            __asm__ volatile("" ::: "memory");
             next = loaded + (s32)base;
             g_AssetBlockPtr = next;
             g_AssetLoadState = 2;
@@ -182,11 +181,9 @@ void GameLoadSelectBgmAssets(void) {
             thirdOffset = *(volatile s32 *)&header->thirdOffset;
             g_AssetBlockPtr = (void *)((u8 *)header + firstOffset);
             secondOffset = *(volatile s32 *)&header->secondOffset;
-            __asm__ volatile("" ::: "memory");
             g_AssetLoadState = 0;
             secondOffset = (s32)((u8 *)header + secondOffset);
             header = (GameAssetTripleHeader *)((u8 *)header + thirdOffset);
-            __asm__ volatile("" ::: "memory");
             g_AssetBlockPtr2 = (void *)secondOffset;
             g_AssetSubBlockPtr = header;
         }

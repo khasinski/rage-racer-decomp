@@ -274,7 +274,6 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
         arg1 = 0x56;
         arg2 = 0x12;
         arg3 = 0x94;
-        __asm__("" : : "r"(ptr), "r"(arg1), "r"(arg2), "r"(arg3));
         small_height = 0x24;
         SetDefDrawEnv(ptr, arg1, arg2, arg3, small_height);
         SetDefDrawEnv(D_801C0690, 0x56, 0x102, 0x94, small_height);

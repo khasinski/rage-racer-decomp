@@ -25,7 +25,6 @@ void GameLoadEnvironmentCue(GameEnvColor *arg0) {
     u32 flag;
 
     src = arg0;
-    asm volatile("" : "=r"(src) : "0"(src));
     g_EnvFogEnabled = 1;
 
     g_EnvColors[0].to = src[1];

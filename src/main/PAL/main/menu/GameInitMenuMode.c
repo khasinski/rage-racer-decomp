@@ -141,7 +141,6 @@ void func_80050400(s32 arg0, s32 arg1) {
     if (step1 > 0) {
         value = D_8007FB44 + step1;
         D_8007FB44 = value;
-        __asm__ volatile("" ::: "memory");
         if (value >= 0x11) {
             __asm__ volatile("" ::: "memory");
             D_8007FB44 = 0x10;
@@ -321,7 +320,6 @@ void func_800509C4(s32 arg0) {
     if (step > 0) {
         value = D_8007FB4C + step;
         D_8007FB4C = value;
-        __asm__ volatile("" ::: "memory");
         if (value >= 0xD) {
             __asm__ volatile("" ::: "memory");
             D_8007FB4C = 0xC;

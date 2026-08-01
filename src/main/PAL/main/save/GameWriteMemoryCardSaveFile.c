@@ -224,7 +224,6 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 
         do {
             name = g_SaveFilePath;
-            asm volatile("" : "=r"(name) : "0"(name));
             name = (char *)(nameOffset + (s32)name);
             fd = BiosFileOpen(name, 1);
             if (fd >= 0) {

@@ -729,9 +729,7 @@ void GameRunRaceIntroCamera(Obj *obj, s32 mode) {
             *(B16 *) 0x1F800008 = *(B16 *) p;
             q = g_RaceIntroCameraCursor;
             g_RaceIntroCameraDeltaX = -q[0].f0 + q[1].f0;
-            __asm__ volatile("");
             g_RaceIntroCameraDeltaY = -q[0].f4 + q[1].f4;
-            __asm__ volatile("");
             g_RaceIntroCameraDeltaZ = -q[0].f8 + q[1].f8;
             __asm__ volatile("");
             g_RaceIntroCameraTimer = q[0].f12;

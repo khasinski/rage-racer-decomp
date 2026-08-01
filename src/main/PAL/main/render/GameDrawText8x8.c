@@ -274,7 +274,6 @@ void DrawProportionalTextShadedWide(
 
     home.y = y;
     home.clut = clutIndex;
-    asm("" : "=m"(home) : "m"(home));
     first = *text;
     shade = intensity;
     xPos = x;
@@ -287,7 +286,6 @@ void DrawProportionalTextShadedWide(
             s32 advance;
             register u32 ch = *text;
 
-            asm("" : "=r"(ch) : "0"(ch));
             if (ch >= 0x76) {
                 register s32 offset = ch - 0x76;
                 register s32 index = offset * 4;
@@ -304,7 +302,6 @@ void DrawProportionalTextShadedWide(
                     "" : "=r"(offset), "=r"(index) :
                     "0"(offset), "1"(index));
                 text++;
-                asm("" : : "r"(ch));
                 u = g_HighFontU[index];
                 v = g_HighFontV[index];
                 SetSprt(packet);
@@ -374,7 +371,6 @@ void DrawProportionalTextShadedWide(
                     sprt->x0 = xPos;
                 }
                 yValue = home.y;
-                asm("" : "=r"(yValue) : "0"(yValue));
                 packet += 20;
                 sprt->y0 = yValue;
                 width = g_WordFontWidth[index];
@@ -418,11 +414,8 @@ advance_sprite:
 
                     asm("" : "=r"(index) : "0"(index));
                     base = g_PropFontU;
-                    asm("" : "=r"(base) : "0"(base));
                     uCell = (u8 *)(index + (s32)base);
-                    asm("" : "=r"(uCell) : "0"(uCell));
                     base = g_PropFontV;
-                    asm("" : "=r"(base) : "0"(base));
                     vCell = (u8 *)(index + (s32)base);
                     asm("" : "=r"(vCell) : "0"(vCell), "r"(uCell));
                     u = *uCell;
@@ -445,13 +438,11 @@ advance_sprite:
                     sprt->u0 = u;
                     sprt->v0 = v;
                     ot = g_DrawBuffer;
-                    asm("" : "=r"(ot) : "0"(ot));
                     packet += 20;
                     sprt->w = height;
                     sprt->h = height;
                     sprt->y0 = yValue;
                     clut = home.clut;
-                    asm("" : "=r"(clut) : "0"(clut));
                     ot += 0xCC;
                     sprt->clut = clut;
                     asm volatile("" ::: "memory");

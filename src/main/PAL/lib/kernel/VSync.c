@@ -61,7 +61,6 @@ long VSync(long arg0) {
 
         timer2 = g_VSyncGpuStat;
         oldTimer = *timer2;
-        asm volatile("" : "=r"(oldTimer) : "0"(oldTimer));
         waitBase = g_VSyncCount;
         waitVSync(waitBase + 1, 1);
     }

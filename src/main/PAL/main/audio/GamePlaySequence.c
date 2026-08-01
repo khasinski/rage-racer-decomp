@@ -88,7 +88,6 @@ void GameApplyDuckedSequenceAudio(void) {
 
     value = g_SeqVolume;
     seq = g_SeqHandle;
-    asm volatile("" : : "r"(seq));
     scaled = value << 1;
     value = scaled + value;
     scaled = value;

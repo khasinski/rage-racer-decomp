@@ -195,7 +195,6 @@ void func_8005131C(void) {
     qValue = s2 + 30;
     *q = qValue;
     D_8009E6D4.position[2] = -outZ;
-    asm volatile("" : : : "memory");
     D_8009E724 = D_8009E6D4.rotation;
     D_8009E734 = *q;
     GameSelectModelBank(modelSlot);

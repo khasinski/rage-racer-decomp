@@ -112,7 +112,6 @@ void GameDrawLapTimes(void) {
 
     i = 0;
     activeIndex = D_8009E836;
-    asm volatile("" : "=m"(framePad[0]), "=m"(framePad[1]));
     if (g_LapCount > 0) {
         baseOffset = 0x236F8;
         primOffset = 0;
@@ -191,7 +190,6 @@ void GameDrawRacePosition(void) {
         s32 digit;
 
         quotient = value / 10;
-        asm volatile("" : "=r"(quotient) : "0"(quotient));
         digit = (value - quotient * 10) * 24;
         *(u8 *)(right + 0xC) = digit;
     }
@@ -236,13 +234,11 @@ void GameDrawSplitDelta(s32 arg0, s32 arg1) {
 
     if (mode > 0) {
         *(volatile u8 *)(base + 0x237CC) = 0x88;
-        __asm__ volatile("" : : : "memory");
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot));
         temp = 0x7810;
     } else if (mode < 0) {
         *(volatile u8 *)(base + 0x237CC) = 0x78;
-        __asm__ volatile("" : : : "memory");
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot));
         temp = 0x780F;

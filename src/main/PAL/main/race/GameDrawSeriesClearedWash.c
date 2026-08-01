@@ -112,7 +112,6 @@ void GameDrawSeriesClearedWash(s32 x, s32 y) {
 
     redStack = y;
     /* Match note: make GCC materialize the red clamp from a3 into a1. */
-    __asm__("" : "=r"(redStack) : "0"(redStack));
     temp = x;
     if (x < 0) {
         temp = x + 7;

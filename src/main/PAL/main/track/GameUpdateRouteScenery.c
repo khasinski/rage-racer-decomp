@@ -72,7 +72,6 @@ void GameUpdateRouteScenery(void) {
     i = g_RouteSceneryKeyIndex;
     kp = g_RouteSceneryKeyframe;
     counter = counter + 1;
-    __asm__("" : "=r"(counter) : "0"(counter));
     {
         KF *rec0 = (KF *)(i * 12 + (s32)kp);
 
@@ -106,7 +105,6 @@ void GameUpdateRouteScenery(void) {
         g_RouteSceneryKeyIndex = 0;
         n = *(s16 *)((u8 *)((idx << 2) + (s32)base) + 8);
         off = n * 12 + 0x50;
-        __asm__("" : "=r"(off) : "0"(off));
         r3 = (KF *)((s32)base + off);
         value = *(s16 *)((s32)r3 + 0);
         g_RouteSceneryRotX = value;

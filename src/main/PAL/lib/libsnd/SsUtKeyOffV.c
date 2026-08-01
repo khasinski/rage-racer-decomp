@@ -37,9 +37,7 @@ long SsUtKeyOffV(long arg0) {
 
             g_SndCurrentVoice = arg0;
             channel = g_SndCurrentVoice;
-            asm volatile("" : "=r"(channel) : "0"(channel));
             masked = channel & 0xFFFF;
-            asm volatile("" : "=r"(masked) : "0"(masked));
 
             if (masked < 0x10) {
                 lowBits = one << masked;

@@ -147,7 +147,6 @@ void GameSelectModelBank(s32 index) {
     value = *(s32 *)value;
     *(s32 *)0x1F800054 = ptr;
     ptr = *entry;
-    asm volatile("" : "=r"(ptr) : "0"(ptr));
     ptr = *(s32 *)(ptr + 8);
     *(s32 *)0x1F800058 = ptr;
     ptr = *entry;

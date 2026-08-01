@@ -165,7 +165,6 @@ void func_80027874(long x, long y, u_char *str, long arg3) {
                 func_80064EB8(next, 1);
                 next += 0x14;
                 oldPacket = packet;
-                __asm__ __volatile__("" : : "r"(oldPacket));
                 packet->x = x;
                 packet->y = y;
                 packet->u = ga;

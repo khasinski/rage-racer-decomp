@@ -78,7 +78,6 @@ s32 func_800632F0(u8 *dest, u8 *format, ...) {
 
     args = (u8 *)&format + 4;
     c = *format;
-    asm("" : "=r"(c) : "0"(c));
     length = 0;
     if (c == 0) {
         goto finished;
@@ -328,7 +327,6 @@ hexadecimal:
             src = LIBC_NEXT_ARG(u8 *);
             nflags = work.spec.header.flags;
             if (nflags & LIBC_SHORT) {
-                asm("" : : "r"(nflags));
                 *(s16 *)src = length;
             } else {
                 asm("" : : "r"(nflags));

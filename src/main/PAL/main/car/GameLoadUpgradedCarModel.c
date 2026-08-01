@@ -149,7 +149,6 @@ void GameLoadRoundAssets(void) {
             s32 scaled;
             register s32 base asm("$2");
 
-            __asm__ volatile("");
             scaled = index << 1;
             scaled += index;
             base = g_GrandPrixClass;

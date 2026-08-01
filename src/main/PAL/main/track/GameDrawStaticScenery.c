@@ -272,7 +272,6 @@ void GameSeedFlybyScenery(void) {
     if (value <= 0) {
         g_FlybySceneryLap = (u16)g_LapCount - 1;
     } else {
-        __asm__ volatile("" ::: "memory");
         cmp = count < value;
         if (cmp != 0) {
             g_FlybySceneryLap = (u16)g_LapCount;

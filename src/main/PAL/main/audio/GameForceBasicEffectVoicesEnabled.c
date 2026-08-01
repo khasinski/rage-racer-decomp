@@ -119,7 +119,6 @@ void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
         raw = g_IndexedEffectPitch;
         base = *(s32 *)((s32)g_IndexedEffectTones + index);
         center = raw >> 7;
-        asm volatile("" : : "r"(center));
         fine = raw & 0x7F;
         if (product < 0) {
             product += 0x7F;
@@ -197,7 +196,6 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
             raw = g_EffectVolumeScale;
             raw = scale * raw;
             arg0 = voice;
-            asm volatile("" : : "r"(arg0));
             left = raw;
             if (raw < 0) {
                 left = raw + 0x7F;
@@ -224,9 +222,7 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
             SsUtSetVVol((s16)arg0, left, right);
 
             right = *(s16 *)toneBase;
-            asm volatile("" : : "r"(right));
             arg0 = voicePacked >> 16;
-            asm volatile("" : : "r"(arg0));
             SsUtChangePitch(arg0, 0, right, 0x3C, 0,
                             (*(s32 *)pitchBase << 9) >> 16,
                             *(u16 *)pitchBase & 0x7F);

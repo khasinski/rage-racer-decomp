@@ -303,10 +303,8 @@ void func_8004A248(s32 arg0, s32 arg1)
         register s32 modInput asm("$4");
         angleSource = D_8009B288;
         sy2Value = D_8007F934.value;
-        asm("" : : "r"(angleSource));
         angleValue = angleSource * 2;
         modInput = angleValue;
-        asm volatile("" : : "r"(modInput));
         sy2Value *= 4;
         sy2 = sy2Value + 0x88;
         sy2Arg = sy2;
@@ -340,12 +338,9 @@ void func_8004A248(s32 arg0, s32 arg1)
     scaleDelta = (delta * D_8007F940) / 272;
     texY = (*((u8 *) (&D_8007BEE4.ty))) - 1;
     gyTemp = texY + scaleDelta;
-    asm("" : : "r"(gyTemp));
     gyRaw = gyTemp;
-    asm("" : : "r"(gyRaw));
     gy = gyRaw;
     gx2 = gxTemp + (D_8007F948 / 8);
-    asm("" : : "r"(gyRaw));
     asm("" : : "r"(scaleDelta));
     gy2 = gyRaw + (D_8007F948 / 8);
     clut = (D_8007BEE4.ty >> 4) & 0x10;
@@ -483,7 +478,6 @@ void func_8004A248(s32 arg0, s32 arg1)
     yA0 = (kreg + 0x22) << 16;
     asm("" : : "r"(yA0));
     kreg = 0x60;
-    asm("" : : "r"(kreg));
     vs7 = -0x30;
     vs6 = -0xF;
     for (; i < 4; i++)
@@ -530,7 +524,6 @@ void func_8004A248(s32 arg0, s32 arg1)
       func_80046A2C(ot, x1, y1, 0x22, 0x32, shadeArg, 0xC0,
                     0, 0, 0, 0x1F5, 1, 0, 0x1D);
       kreg += 0xC;
-      asm("" : : "r"(kreg));
       vs7 += 0xC;
       vs6 += 0x28;
       }

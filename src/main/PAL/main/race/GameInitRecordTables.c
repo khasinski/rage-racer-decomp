@@ -85,7 +85,6 @@ void GameInitRecordTables(void) {
                     r2 = *(s32 *)r9;
                     *(s32 *)r10 = r2;
                     r2 = (s32)&g_DefaultTotalTimes;
-                    __asm__("" : "=r"(r2) : "0"(r2));
                     r2 = r12 + r2;
                     r2 = r6 + r2;
                     r2 = *(s32 *)r2;

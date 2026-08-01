@@ -25,9 +25,7 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     register long slot asm("$9");
 
     seq = (u_char *)arg2;
-    __asm__("" : "=r"(seq) : "0"(seq));
     slot = arg0;
-    __asm__("" : "=r"(slot) : "0"(slot));
     vab = arg0;
     __asm__("" : "=r"(vab) : "0"(vab));
     s = (SeqStruct *)g_SndSeqTable[(short)vab];

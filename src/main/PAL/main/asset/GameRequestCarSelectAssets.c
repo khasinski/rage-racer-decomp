@@ -80,7 +80,6 @@ void GameLoadCarSelectAssets(void) {
     return;
 
 state_1:
-        __asm__ volatile("" ::: "$3");
         func_8005B768(1, g_AssetBlockPtr, g_AssetSubBlockPtr, g_AssetBlockPtr2);
         g_AssetLoadState = state2;
         return;

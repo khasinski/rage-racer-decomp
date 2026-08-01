@@ -106,7 +106,6 @@ void GameApplyPanVoiceVolume(void) {
         SsUtSetVVol(0x15, left, right);
         if (g_PanVoiceActive == 0) {
             right = 0xF;
-            asm volatile("" : : "r"(right));
             voice = 0x15;
             asm volatile("" : : "r"(voice));
             raw = 0x3C;

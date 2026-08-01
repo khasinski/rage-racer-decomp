@@ -478,7 +478,6 @@ void GameUpdateWaypointCollectScene(void) {
 
     a = g_SceneTimer;
     g_AnimTimer = g_AnimTimer + 1;
-    asm volatile("");
     if (a >= 90) {
         asm volatile("" :: "r"(a));
         if (g_RacePhase == 0) {
@@ -748,7 +747,6 @@ void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   s32 c;
   u16 w;
   pos2_R10 = pos;
-  __asm__("" : "=r"(pos2_R10) : "0"(pos2_R10));
   idx_R8 = arr[pos2_R10];
   base_R9 = g_TrackEventData;
   ent2_R7 = ent;

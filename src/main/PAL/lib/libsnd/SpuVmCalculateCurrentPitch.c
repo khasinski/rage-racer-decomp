@@ -73,7 +73,6 @@ u_short SpuVmCalculateTonePitch(long arg0, long arg1) {
     }
 
     quotient8 = sum >> 3;
-    __asm__ volatile("" : "=r"(quotient8) : "0"(quotient8));
     nibble = quotient8;
     bank = 0;
     if (quotient8 >= 0x10) {

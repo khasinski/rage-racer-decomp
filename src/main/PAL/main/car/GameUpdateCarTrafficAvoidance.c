@@ -170,7 +170,6 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
             state->field_11E = 0x50;
             state->field_120 = (f104 << 1) + 6;
         }
-        __asm__("" : : "r"(carField34));
         if (sums[3] >= 0x3E9) {
             s32 fv = state->field_130;
             s32 d = ((fv << 4) - fv) << 1;
