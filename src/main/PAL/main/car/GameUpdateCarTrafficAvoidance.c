@@ -67,7 +67,7 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
         /* These pins are load-bearing: removing any one changes .text. */
         register s32 t1 asm("$9");
         s32 diff;
-        register s32 angleDiff asm("$3");
+        s32 angleDiff;
         s32 angleSaved;
         s16 bucket;
         s32 val;
@@ -102,8 +102,8 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
             t1 = *(u16 *)&AVOID_BLOCKED(state); /* unsigned load of ->field_104 */
         }
 
-        diff = (a2 - carProgress) % track;
         angleDiff = otherField34 - carField34;
+        diff = (a2 - carProgress) % track;
         angleSaved = angleDiff;
         __asm__("" : "=r"(angleSaved) : "0"(angleSaved));
         otherA4 -= carA4low;
