@@ -86,14 +86,11 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
             s32 op = *(s32 *)(base + 0);
             a2 = op + track;
             otherField34 = *(s32 *)(base - 0x3C);
-            if (arg1 >= 4) {
-                goto loadA4;
+            if (arg1 < 4) {
+                otherA4 = 0;
+            } else {
+                otherA4 = *(u16 *)(base + 0x34);
             }
-            otherA4 = 0;
-            goto afterA4;
-        loadA4:
-            otherA4 = *(u16 *)(base + 0x34);
-        afterA4:
             t1 = 0;
             t6 = 0x1800 - (g_PlayerSpeed << 1);
         } else {
