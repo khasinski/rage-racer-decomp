@@ -80,24 +80,16 @@ void GameDrawPadTypeHint(void) {
     next = scratch;
     base = raw_base + 0xCC;
 
-    if (value == 0x41) {
-        goto use_current;
+    if (value != 0x41 && value != 0x23) {
+        value = g_LastValidPadType;
+    } else {
+        raw_base = g_PadType;
+        /* This barrier is load-bearing: removing it changes .text. */
+        asm("" : "=r"(raw_base) : "0"(raw_base));
+        value = raw_base & 0xFF;
+        g_LastValidPadType = raw_base;
     }
-    if (value == 0x23) {
-        goto use_current;
-    }
 
-    value = g_LastValidPadType;
-    goto have_value;
-
-use_current:
-    raw_base = g_PadType;
-    /* This barrier is load-bearing: removing it changes .text. */
-    asm("" : "=r"(raw_base) : "0"(raw_base));
-    value = raw_base & 0xFF;
-    g_LastValidPadType = raw_base;
-
-have_value:
 
     y0 = value == 0x23 ? 0xA0 : 0x90;
     w = 8;
