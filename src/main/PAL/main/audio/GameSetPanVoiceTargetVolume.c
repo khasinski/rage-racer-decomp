@@ -304,6 +304,7 @@ void func_8005C31C(s32 arg0, s32 left, s32 right) {
     }
 
     if ((left <= 0) && (right <= 0)) {
+        switch (0) { default:
         left = *(s32 *)D_801E6D00;
         right = 0;
         if (left < 0) {
@@ -322,7 +323,7 @@ void func_8005C31C(s32 arg0, s32 left, s32 right) {
             if (left == *(s32 *)(D_800126D0 + 8)) {
                 currentB = D_801E6D18;
                 matchValue = *(s32 *)(D_800126D0 + 10);
-                goto test_match;
+                break;
             }
         } else {
             if (left == *(s32 *)(D_800126D0 + 14)) {
@@ -334,11 +335,11 @@ void func_8005C31C(s32 arg0, s32 left, s32 right) {
             if (left == *(s32 *)(D_800126D0 + 20)) {
                 currentB = D_801E6D18;
                 matchValue = *(s32 *)(D_800126D0 + 22);
-                goto test_match;
+                break;
             }
         }
         goto after_match;
-test_match:
+        }
         if (!(currentB != matchValue)) {
 found_match:
         right = 1;
