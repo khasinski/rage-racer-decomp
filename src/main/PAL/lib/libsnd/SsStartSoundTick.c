@@ -38,39 +38,30 @@ void SsStartSoundTick(long arg0) {
     D_8009A569 = 0;
     g_SndPrevVSyncCallback = 0;
 
-    if (!(state == 2)) {
-    if (state < 3) {
-        if (state == 0) {
-            goto state_0;
-        }
-        goto derive_size;
-    }
-    if (!(state == 3)) {
-    if (!(state == 5)) {
-    goto derive_size;
-
-state_0:
+    switch (state) {
+    case 0:
     g_SndTickIrq = 0xFF;
     return;
-    }
 
+    case 5:
     g_SndTickIrq = 0;
     if (arg0 == 0) {
         *flag = 1;
-        goto setup;
+        break;
     }
     channel = 0xF2000003;
     size = 1;
-    goto setup;
+    break;
 
-    }
+    case 3:
     size = 0x89D0;
+    break;
 
-    } else {
+    case 2:
     size = 0x44E8;
-    goto setup;
+    break;
 
-derive_size:
+    default:
     {
         long *active;
         long dividend;
