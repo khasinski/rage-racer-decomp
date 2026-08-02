@@ -144,7 +144,7 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 currentVabId asm("$5");
     s32 fail;
-    register s32 ret asm("$2");
+    s16 ret;
 
     SsSetTableSize(g_SndTableArea, 2, 1);
     SsSetTickMode(1);
