@@ -278,8 +278,7 @@ after_sound:
         if (d >= 5) GameMenuCursor = 0x2B;
         if (d >= 7) newdepth = d; else newdepth = d + 1;
     }
-    goto set_depth;
-    }
+    } else {
 
     if (!(pad & 0x90)) return;
 pop:
@@ -292,7 +291,7 @@ pop:
         g_TeamNameChars[g_TeamNameLength] = tv;
     }
     newdepth = g_TeamNameLength - 1;
-set_depth:
+    }
     g_TeamNameLength = newdepth;
     return;
     }
