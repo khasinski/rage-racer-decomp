@@ -166,7 +166,7 @@ not_crossed:
     offset = row << 6;
     cursor = (s32)(base + offset);
 
-loop:
+for (;;) {
     if (!(*(s32 *)(cursor + 8) == sentinel)) {
     threshold = *(s32 *)(cursor + 4);
     cmp = temp < threshold;
@@ -181,10 +181,12 @@ loop:
     i++;
     if (i < 8) {
         cursor = (s32)(base + offset);
-        goto loop;
+        continue;
     }
 
     }
+break;
+}
     }
     if (crossed != 0) {
         resultOffset = i << 3;
