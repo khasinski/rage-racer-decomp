@@ -420,8 +420,7 @@ mode2:
     distance = obj->field_A4;
     if (distance < 0x140) {
         obj->motionValue = 0;
-        goto after_store;
-    }
+    } else {
 
     value = distance - 0x140;
     value *= temp;
@@ -433,7 +432,7 @@ mode2:
 store:
     obj->motionValue = value;
 
-after_store:
+    }
     value = 0x1E;
     obj->motionModeTimer = value;
 
