@@ -1670,7 +1670,7 @@ Names that leak into `render/`, `menu/`, `asset/`, `cd/`, `fmv/`, `sdk/` or
 `boot/` were applied **only inside the three gameplay directories**; those files
 keep the raw `D_` / `func_` spelling and still link, because the emitted symbol
 never changed. The same applies to the four inline-`asm` `%hi`/`%lo` references
-in `car/blend_paint_color.c`, which must keep the raw `D_8019CB38` /
+in `car/paint_color.c`, which must keep the raw `D_8019CB38` /
 `D_8019CB3A` spelling (see 12c).
 
 ### 15a. The wrong-way warning — one chain, four names
@@ -1869,7 +1869,7 @@ objdump -d build/PAL/main.elf | grep -cE 'jal[ \t]+8003cdf4 '
 
 
 - **`race/update_waypoint_race_scene.c` and the waypoint half of
-  `race/is_car_near_waypoint.c` are an unreachable game mode.**
+  `race/waypoints.c` are an unreachable game mode.**
   `func_80037200` and `func_80037D90` have zero references and are not in the
   scene table, and with them go `SeedWaypoints`, `UpdateWaypoints`,
   `DrawWaypoints`, `CountActiveWaypoints`, `DrawLapNumber`,
@@ -1929,7 +1929,7 @@ The names are kept: the code is in the ROM and has to be read by someone.
   screen's two rows write them and hand them straight to `SetBodyColor1` /
   `SetBodyColor2`, so they are body colour 1 and body colour 2, not
   geometry/texture selectors. The rename is not done here because
-  `asset/request_car_select_assets.c` and `menu/update_logo_sample_screen.c`
+  `asset/car_assets.c` and `menu/update_logo_sample_screen.c`
   use the current field names and are another pass's territory.
 - **Cue numbers.** Cues can be placed by their trigger conditions (0x1E-0x22
   countdown, 0x23 over-speed, 0x26 record, 0x27-0x29 laps to go, 0x2A final lap,
@@ -2957,7 +2957,7 @@ By directory: `save` 76, `menu` 64, `audio` 50, `fmv` 35, `boot` 25, `cd` 23,
    named `g_CarModelBaseIndex`
    / `g_CarModelUnlockBase` in `car/`. This pass initially coined
    `g_CarAssetBase` / `g_CarUnlockLevelBase` for the same two symbols in
-   `asset/get_car_asset_index.c`; that was caught by an alias-collision check
+   `asset/model_banks.c`; that was caught by an alias-collision check
    and reverted to the existing spellings. **A per-file *type* is allowed; a
    per-file *name* is not.** The check is worth keeping: grep every
    `NAME asm("D_XXXXXXXX")` in `src/` + `include/` and assert one name per
@@ -3156,7 +3156,7 @@ destination while it spins between two cars; `g_CourseSwapDelay` (`D_8009B354`,
 `g_ScreenOffsetEditX/Y` are the live copies the screen-adjust panel edits before
 committing to `g_ScreenOffsetX/Y`.
 
-`g_GrandPrixSeriesU16` in `menu/draw_now_loading_text.c` is the one place the
+`g_GrandPrixSeriesU16` in `menu/course_select.c` is the one place the
 12c "same name, per-file type" rule could not be applied literally: that file
 includes `game/race.h`, which already declares `g_GrandPrixSeries` as `s16`, and
 the unit needs a `u16` view of the same address. A second C spelling was the only
@@ -3228,7 +3228,7 @@ the sha1 moved off `2913e15648eddef40821c5f666460abc04155ee6`.
 | `D_801E4DC8` | `g_PathSceneryRot{X,Y,Z}` and a `Blk8` under a fourth name | one `g_PathSceneryRot`, `s16[3]` in the drawer and `Blk8` in the initialiser | `track/draw_path_scenery.c`, `track/draw_scripted_scenery.c` |
 | `D_801E4DD0` / `D_801E4DD8` | `g_PathScenery{Rot,}HalfDelta{X,Y,Z}` | `s16 g_PathSceneryRotHalfDelta[3]` / `g_PathSceneryHalfDelta[3]` | `track/draw_scripted_scenery.c` |
 | `D_8019C7D4` 8 halfwords | `g_TachoNeedleQuad{X,Y}{0..3}` | `s16 g_TachoNeedleQuad[4][2]` | `car/get_track_surface_height.c` (writer) and `race/draw_wrong_way_warning.c` (reader) |
-| `D_801E4094`, `D_801E6E7C`, `D_8019C980` | three `s32` bases plus 12 split field symbols | three `GameRaceProgress` objects, fields as members | `include/game/race.h`; `save/store_save_state_block.c`, `save/load_save_state_block.c`, `menu/update_prize_money_screen.c`, `menu/enter_frontend.c` |
+| `D_801E4094`, `D_801E6E7C`, `D_8019C980` | three `s32` bases plus 12 split field symbols | three `GameRaceProgress` objects, fields as members | `include/game/race.h`; `save/store_save_state_block.c`, `save/load_save_state_block.c`, `menu/update_prize_money_screen.c`, `menu/title_screen.c` |
 | `D_8009AF84/88` | `g_SectorTime1/2` | `g_SectorTimes[1]/[2]` | `race/update_lap_and_finish.c` |
 | `D_801E41EC/F0` | `g_BestSectorTime1/2` | `&g_BestSectorTimes[0][0][1]/[2]` | same |
 
@@ -4149,7 +4149,7 @@ Each of these compiles fine under one name; it is the *object file* that changes
 | `D_8009AF90` | `g_RefSectorTimes` / `g_RefSectorTime0` | Retested: `g_RefSectorTimes[k]` in `UpdateLapAndFinish` still shifts the whole surrounding allocation. |
 | `D_8009B538` | `g_McEvents` / `g_McHwEventIoe` | Retested: `g_McEvents[k]` in `clear_memory_card_hw_events.c` keeps the base live in a callee-saved register and grows the frame. |
 | `D_8009B720`, `D_8009B72C`, `D_8009B740` | `g_McCardStatus` / `g_McMenuSubState` / `GameMenuLoadPhase` plus a `…V` alias each | `save/update_memory_card_menu.c` reads each of the three **both** ways, and only the volatile spelling forces the reload retail has at those sites. A redeclaration cannot add the qualifier: gcc 2.6.3 keeps the first declaration's type (that is also why the `volatile` at `write_memory_card_save_file.c:196` is a no-op), so the alias needs its own identifier. Convention adopted: the volatile alias is the base name plus `V`. |
-| `D_8019CABC` | `g_GrandPrixSeries` / `g_GrandPrixSeriesU16` | `menu/draw_now_loading_text.c` includes `game/race.h`, and `u16` vs `s16` is a hard "conflicting types" error in gcc 2.6.3, not a warning. |
+| `D_8019CABC` | `g_GrandPrixSeries` / `g_GrandPrixSeriesU16` | `menu/course_select.c` includes `game/race.h`, and `u16` vs `s16` is a hard "conflicting types" error in gcc 2.6.3, not a warning. |
 | `D_801E6CA4` | `g_EffectVolumeScale` / `g_SoundScale` | `SoundScale` is just `{ g_EffectVolumeScale; g_VabIds[3] }`. Spelling the three reads in `set_pitched_sound_cue.c` as those two existing globals compiles but does not match, in either direction: a struct member reference is non-aliasing to gcc 2.6.3 (`MEM_IN_STRUCT_P`) and the volume arithmetic reorders. |
 | `D_8009AB7C` | `g_SpuRegBase` / `g_SpuRegBaseNv` | `_spu_FgetRXXa` reads the SPU register file through a non-volatile pointer; the volatile spelling does not match. |
 
