@@ -247,7 +247,10 @@ extern u8 D_801E6D04[];
 extern s32 D_801E6D08;
 extern u8 D_801E6D10[];
 extern u8 D_801E6D14[];
-extern s32 D_801E6D18;
+
+/* Byte-offset view of g_MusicChannels (see game/sound.h): the retail code
+ * keeps i * 0x18 in a register rather than indexing. */
+#define CHANNEL(byteOffset) (*(MusicChannel *)((s32)g_MusicChannels + (byteOffset)))
 
 typedef struct SoundModeSlot {
     s32 left;
@@ -304,35 +307,35 @@ void func_8005C31C(s32 arg0, s32 left, s32 right) {
 
     if ((left <= 0) && (right <= 0)) {
         switch (0) { default:
-        left = *(s32 *)D_801E6D00;
+        left = g_MusicChannels[0].left;
         right = 0;
         if (left < 0) {
-            if (D_801E6D18 < 0) {
+            if (g_MusicChannels[1].left < 0) {
                 return;
             }
         }
 
         if ((u32)arg0 < 2) {
             if (left == *(s32 *)(D_800126D0 + 2)) {
-                currentB = D_801E6D18;
+                currentB = g_MusicChannels[1].left;
                 if (currentB == *(s32 *)(D_800126D0 + 4)) {
                     goto found_match;
                 }
             }
             if (left == *(s32 *)(D_800126D0 + 8)) {
-                currentB = D_801E6D18;
+                currentB = g_MusicChannels[1].left;
                 matchValue = *(s32 *)(D_800126D0 + 10);
                 break;
             }
         } else {
             if (left == *(s32 *)(D_800126D0 + 14)) {
-                currentB = D_801E6D18;
+                currentB = g_MusicChannels[1].left;
                 if (currentB == *(s32 *)(D_800126D0 + 16)) {
                     goto found_match;
                 }
             }
             if (left == *(s32 *)(D_800126D0 + 20)) {
-                currentB = D_801E6D18;
+                currentB = g_MusicChannels[1].left;
                 matchValue = *(s32 *)(D_800126D0 + 22);
                 break;
             }
@@ -362,28 +365,28 @@ after_match:
             resetCount = resetLoad;
             do {
                 offset = i * 0x18;
-                *(s32 *)(D_801E6D00 + offset) = inactiveValue;
-                *(s32 *)(D_801E6D04 + offset) = inactiveValue;
-                *(s32 *)((s32)&D_801E6D08 + offset) = activeValue;
+                CHANNEL(offset).left = inactiveValue;
+                CHANNEL(offset).right = inactiveValue;
+                CHANNEL(offset).mode = activeValue;
                 table = (s32 *)((s32)&D_801E6C9C + offset);
                 *(s32 *)((s32)table + 0x78) = 0;
-                *(s32 *)((s32)D_801E6D10 + offset) = 0;
+                CHANNEL(offset).volLeft = 0;
                 i++;
             } while (i < resetCount);
         }
         return;
     }
 
-    currentA = *(s32 *)D_801E6D00;
+    currentA = g_MusicChannels[0].left;
     if (currentA == *(s32 *)((s32)D_800126D0 + ((arg0 * 3) << 3) + 8)) {
-        currentB = D_801E6D18;
+        currentB = g_MusicChannels[1].left;
         if (currentB == *(s32 *)((s32)D_800126D0 + ((arg0 * 3) << 3) + 0x10)) {
-            D_801E6D08 = 2;
+            g_MusicChannels[0].mode = 2;
         } else {
-            D_801E6D08 = 0;
+            g_MusicChannels[0].mode = 0;
         }
     } else {
-        D_801E6D08 = 0;
+        g_MusicChannels[0].mode = 0;
     }
 
     i = 0;
@@ -403,12 +406,16 @@ after_match:
     arg0 = 0;
     do {
         if (i != 0) {
-            *(s32 *)((s32)&D_801E6D08 + arg0) = D_801E6D08;
+            /* Asymmetric on purpose: retail writes channel[i].mode through the
+             * indexed form but reads channel[0].mode through its own symbol.
+             * Spelling the read as g_MusicChannels[0].mode costs an
+             * instruction, with or without RAW() on either side. */
+            CHANNEL(arg0).mode = D_801E6D08;
         }
 
         flag = g_StereoOutput;
-        *(s32 *)(D_801E6D00 + arg0) = entry->slots[0].left;
-        *(s32 *)(D_801E6D04 + arg0) = entry->slots[0].right;
+        CHANNEL(arg0).left = entry->slots[0].left;
+        CHANNEL(arg0).right = entry->slots[0].right;
         if (flag != 0) {
             currentB = *(s32 *)((s32)D_800126D0 + entryOffset + 4);
             scaledLeft = left * currentB;
@@ -416,14 +423,14 @@ after_match:
                 scaledLeft += 0x7F;
             }
             scaledLeft >>= 7;
-            *(volatile s32 *)((s32)D_801E6D10 + arg0) = scaledLeft;
+            *(volatile s32 *)&CHANNEL(arg0).volLeft = scaledLeft;
             scaledRight = right * currentB;
             entry = (SoundModeEntry *)((s32)entry + 8);
             if (scaledRight < 0) {
                 scaledRight += 0x7F;
             }
             scaledRight >>= 7;
-            *(volatile s32 *)((s32)D_801E6D14 + arg0) = scaledRight;
+            *(volatile s32 *)&CHANNEL(arg0).volRight = scaledRight;
             i++;
         } else {
             if ((scaledLeft = average * *(s32 *)((s32)D_800126D0 + entryOffset + 4)) < 0) {
@@ -432,8 +439,8 @@ after_match:
                 currentB = scaledLeft;
             }
             currentB >>= 7;
-            *(volatile s32 *)((s32)D_801E6D10 + arg0) = currentB;
-            *(volatile s32 *)((s32)D_801E6D14 + arg0) = currentB;
+            *(volatile s32 *)&CHANNEL(arg0).volLeft = currentB;
+            *(volatile s32 *)&CHANNEL(arg0).volRight = currentB;
             /* Load-bearing: removal changes eight linked scheduler words. */
             asm volatile("");
             entry = (SoundModeEntry *)((s32)entry + 8);
