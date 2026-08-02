@@ -91,7 +91,7 @@ long LibcStrncmp(u_char *arg0, u_char *arg1, long arg2) {
         return 0;
     }
 
-loop:
+for (;;) {
     left = *arg0;
     right = *arg1++;
     if (left != right) {
@@ -102,10 +102,12 @@ loop:
     }
     arg2--;
     if (arg2 >= 0) {
-        goto loop;
+        continue;
     }
 
     }
+break;
+}
     if (arg2 < 0) {
         return 0;
     }
