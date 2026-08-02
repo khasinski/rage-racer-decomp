@@ -264,7 +264,6 @@ segments:
       - [0x4F378, c, PAL/main/save/GameCardSeekParam]
       - [0x4F3B0, c, PAL/main/save/GameCardReadStatusPair]
       - [0x4F4E0, c, PAL/main/save/GamePollMemoryCardStatus]
-      - [0x4FAAC, c, PAL/main/save/GameClearMemoryCardHwEvents]
       - [0x4FE5C, c, PAL/main/save/GameClearSaveHeaderRows]
       - [0x5008C, c, PAL/main/save/GameStoreSaveStateBlock]
       - [0x506D4, c, PAL/main/save/GameLoadSaveStateBlock]
