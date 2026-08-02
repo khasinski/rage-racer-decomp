@@ -83,7 +83,7 @@ void GameUpdateMemoryCardMenu(void) {
             if (g_McFadeLevel > 0) goto L57;
             g_McFadeStep = 0;
             g_McFadeLevel = 0;
-            goto L56;
+
         } else if (step > 0) {
             g_McActionBusy = 1;
             g_McFadeLevel = g_McFadeLevel + g_McFadeStep;
@@ -96,7 +96,6 @@ void GameUpdateMemoryCardMenu(void) {
         } else {
             goto L57;
         }
-    L56:
         fadeBusy = 1;
     }
 L57:
@@ -191,16 +190,16 @@ L_state3:
                 g_McMenuState = g_McCardStatus;
             }
         }
-        goto L254;
+        break;
     case 2:
         g_McMenuState = 2;
-        goto L254;
+        break;
     case -1:
     case -2:
         g_McMenuState = g_McMenuSelection;
-        goto L254;
+        break;
     case 3:
-        goto L254;
+        break;
     case -3:
     default: /* 0 */
         if (g_McCardStatus == -3) {
@@ -211,7 +210,6 @@ L_state3:
             }
         }
     }
-L254:
     if (g_McMenuState != 3) {
         g_McErrorTicks = 0;
     }
@@ -323,7 +321,7 @@ L_sw4:
     L_b477:
         if ((func_8006131C() & 0xFFFF) == 0) goto L_sw5;
         g_McMenuPage = 0;
-        goto L_sw5;
+        break;
     }
 
     case 0x0A: {
@@ -335,7 +333,7 @@ L_sw4:
         if (D_80082FAC == 0) goto L_b518;
         if ((func_800612CC() & 0xFFFF) == 0) goto L_b513;
         g_McActionState = 0xB;
-        goto L_sw5;
+        break;
     L_b513:
         if (D_80082FAC != 0) goto L_b523;
     L_b518:
@@ -349,7 +347,7 @@ L_sw4:
         g_McMenuPhase = 0xF;
         g_McActionTimer = 0xA;
         g_McActionState = 0xC;
-        goto L_sw5;
+        break;
 
     case 0x0C: {
         s32 t = g_McActionTimer;
@@ -357,7 +355,7 @@ L_sw4:
         g_McActionTimer = t - 1;
         if (g_McActionTimer != 0) goto L_sw5;
         g_McActionState = 0xD;
-        goto L_sw5;
+        break;
     }
 
     case 0x0D: {
@@ -379,12 +377,12 @@ L_sw4:
         dp = g_McMenuLoadPhaseV;
         g_McActionState = 0xF;
         g_McSavedLoadPhase = dp;
-        goto L_sw5;
+        break;
     }
 
     case 0x0F:
         g_McActionState = 0x10;
-        goto L_sw5;
+        break;
 
     case 0x10: {
         s32 nv;
@@ -407,13 +405,13 @@ L_sw4:
         nv = 0x11;
     L_b613:
         g_McActionState = nv;
-        goto L_sw5;
+        break;
     }
 
     case 0x11:
         g_McActionTimer = 5;
         g_McActionState = 0x12;
-        goto L_sw5;
+        break;
 
     case 0x12: {
         s32 t = g_McActionTimer;
@@ -421,7 +419,7 @@ L_sw4:
         if (g_McActionTimer != 0) goto L_sw5;
         g_McSettleTicks = 0;
         g_McActionState = 0x13;
-        goto L_sw5;
+        break;
     }
 
     case 0x13: {
@@ -431,7 +429,7 @@ L_sw4:
         g_McSettleTicks = t;
         if (t < 4) goto L_sw5;
         g_McActionState = 0x14;
-        goto L_sw5;
+        break;
     }
 
     case 0x14: {
@@ -445,7 +443,7 @@ L_sw4:
         g_McActionTimer = 0x3C;
         g_McActionBusy = 0;
         g_McActionState = 0x15;
-        goto L_sw5;
+        break;
     }
 
     case 0x15: {
@@ -458,7 +456,7 @@ L_sw4:
         g_McActionState = 0;
         cm1 = cm1 - 1;
         g_McMenuRowCursor = cm1;
-        goto L_sw5;
+        break;
     }
 
     case 0x19:
@@ -469,14 +467,14 @@ L_sw4:
         g_McMenuSubState = 7;
         g_McActionTimer = 5;
         g_McActionState = 0x1F;
-        goto L_sw5;
+        break;
 
     case 0x1F: {
         s32 t = g_McActionTimer;
         g_McActionTimer = t - 1;
         if (g_McActionTimer != 0) goto L_sw5;
         g_McActionState = 0x20;
-        goto L_sw5;
+        break;
     }
 
     case 0x20: {
@@ -489,7 +487,7 @@ L_sw4:
         g_McActionTimer = f;
         g_McActionBusy = one;
         g_McActionState = 0x21;
-        goto L_sw5;
+        break;
     }
 
     case 0x21: {
@@ -497,7 +495,7 @@ L_sw4:
         g_McActionTimer = t - 1;
         if (g_McActionTimer != 0) goto L_sw5;
         g_McActionState = 0x22;
-        goto L_sw5;
+        break;
     }
 
     case 0x22: {
@@ -521,13 +519,13 @@ L_sw4:
         g_McActionTimer = 0x3C;
         g_McActionState = 0x23;
         g_McSavedLoadPhase = dp;
-        goto L_sw5;
+        break;
     }
 
     case 0x23:
         g_McActionTimer = 5;
         g_McActionState = 0x24;
-        goto L_sw5;
+        break;
 
     case 0x24: {
         s32 t = g_McActionTimer;
@@ -535,7 +533,7 @@ L_sw4:
         if (g_McActionTimer != 0) goto L_sw5;
         g_McSettleTicks = 0;
         g_McActionState = 0x25;
-        goto L_sw5;
+        break;
     }
 
     case 0x25: {
@@ -545,7 +543,7 @@ L_sw4:
         g_McSettleTicks = t;
         if (t < 4) goto L_sw5;
         g_McActionState = 0x26;
-        goto L_sw5;
+        break;
     }
 
     case 0x26: {
@@ -559,7 +557,7 @@ L_sw4:
         g_McActionTimer = 0x3C;
         g_McActionBusy = 0;
         g_McActionState = 0x27;
-        goto L_sw5;
+        break;
     }
 
     case 0x27: {
@@ -572,7 +570,7 @@ L_sw4:
         g_McActionState = 0;
         cm1 = cm1 - 1;
         g_McMenuRowCursor = cm1;
-        goto L_sw5;
+        break;
     }
 
     case 0x28:
@@ -584,7 +582,7 @@ L_sw4:
         g_McMenuPage = 0;
     L_b864:
         g_McActionState = 0;
-        goto L_sw5;
+        break;
 
     L_copyreset:
         {
@@ -599,7 +597,7 @@ L_sw4:
             cm1 = cm1 - 1;
             g_McMenuRowCursor = cm1;
         }
-        goto L_sw5;
+        break;
 
     default:
     }
@@ -612,13 +610,13 @@ L_sw5:
     case -1:
     case 2:
         g_McMenuState = g_McMenuSelection;
-        goto L_sw5tail;
+        break;
     case 1:
         if (D_80082FC0 != 0) {
             D_80082FC0 = 0;
             D_80082FBC = 3;
         }
-        goto L_sw5tail;
+        break;
     case -3:
     default: /* 0 */
         {
@@ -633,7 +631,6 @@ L_sw5:
             }
         }
     }
-L_sw5tail:
     if (g_McMenuState == 1) {
         goto L_epilogue;
     }
@@ -673,12 +670,12 @@ L_state2:
         D_8009B700 = 0;
         D_8009B704 = 0;
         g_McActionState = wtmp;
-        goto L_sw7;
+        break;
     case 2:
         g_McActionBusy = 1;
         g_McActionTimer = 5;
         g_McActionState = 3;
-        goto L_sw7;
+        break;
     case 3:
         {
             s32 t = g_McActionTimer;
@@ -686,7 +683,7 @@ L_state2:
             if (g_McActionTimer != 0) goto L_sw7;
         }
         g_McActionState = 5;
-        goto L_sw7;
+        break;
     case 5:
         {
             s32 x = func_80060C3C(1, &g_McSaveHeaders);
@@ -705,11 +702,11 @@ L_state2:
             g_McActionState = 6;
             g_McSavedLoadPhase = w;
         }
-        goto L_sw7;
+        break;
     case 6:
         g_McActionTimer = 5;
         g_McActionState = 7;
-        goto L_sw7;
+        break;
     case 7:
         {
             s32 t = g_McActionTimer;
@@ -719,7 +716,7 @@ L_state2:
         g_McActionTimer = 5;
         g_McActionBusy = 0;
         g_McActionState = 8;
-        goto L_sw7;
+        break;
     case 8:
         {
             s32 t = g_McActionTimer;
@@ -727,11 +724,11 @@ L_state2:
             if (g_McActionTimer != 0) goto L_sw7;
         }
         g_McActionState = 9;
-        goto L_sw7;
+        break;
     case 9:
         if (g_McMenuSelection != 1) goto L_sw7;
         g_McMenuState = g_McMenuSelection;
-        goto L_sw7;
+        break;
     default:
     }
 
@@ -743,15 +740,15 @@ L_sw7:
     case -2:
     case -1:
         g_McMenuState = g_McMenuSelection;
-        goto L_sw7tail;
+        break;
     case 2:
         if (D_80082FC0 != 0) {
             D_80082FC0 = 0;
             D_80082FBC = 3;
         }
-        goto L_sw7tail;
+        break;
     case 1:
-        goto L_sw7tail;
+        break;
     case -3:
     case 0:
     default:
@@ -849,10 +846,10 @@ L_sw8:
         if (D_80082FC0 == 0) goto L_sw8tail;
         D_80082FC0 = 0;
         D_80082FBC = 3;
-        goto L_sw8tail;
+        break;
     case -2:
         g_McMenuState = -2;
-        goto L_sw8tail;
+        break;
     default:
     case -3:
     case 0:
@@ -927,14 +924,14 @@ L_sw9:
         g_McMenuPhase = 6;
         { u16 p = func_800612CC(); if (p == 0) goto L_b1452; }
         g_McActionState = 1;
-        goto L_sw10;
+        break;
     case 1:
         g_McMenuPhase = D_80082FAC + 7;
         func_8006124C(&D_80082FAC);
         if (D_80082FAC == 0) goto L1447;
         { u16 p = func_800612CC(); if (p == 0) goto L1496; }
         g_McActionState = 2;
-        goto L_sw10;
+        break;
     L1496:
         if (D_80082FAC == 0) goto L1447;
         goto L_b1452;
@@ -942,13 +939,13 @@ L_sw9:
         g_McActionBusy = 1;
         g_McActionTimer = 0x14;
         g_McActionState = 3;
-        goto L_sw10;
+        break;
     case 3:
         g_McActionTimer -= 1;
         if (g_McActionTimer == 0) {
             g_McActionState = 5;
         }
-        goto L_sw10;
+        break;
     case 5:
         g_McActionResult = func_8005EF44(0, 0);
         if (g_McActionResult == 1) {
@@ -957,7 +954,7 @@ L_sw9:
         } else {
             g_McActionState = 0xA;
         }
-        goto L_sw10;
+        break;
     case 7:
         g_McMenuPhase = 0x13;
         g_McActionTimer -= 1;
@@ -965,7 +962,7 @@ L_sw9:
             g_McActionBusy = 0;
             g_McActionState = 8;
         }
-        goto L_sw10;
+        break;
     case 8:
         {
         u16 lpad = g_PadEdge2;
@@ -980,7 +977,7 @@ L_sw9:
         if (fadeBusy) goto L_sw10;
         GamePlaySoundCue(3);
         func_8006138C();
-        goto L_sw10;
+        break;
     case 0xA:
         g_McMenuSubState = 0x12;
         g_McMenuPhase = 0x10;
@@ -998,20 +995,20 @@ L_sw10:
     case 1:
     case 2:
         g_McMenuState = 2;
-        goto L_sw10tail;
+        break;
     case 3:
         D_8009B6F4 = g_McMenuState;
         g_McMenuState = 3;
-        goto L_sw10tail;
+        break;
     case -1:
         g_McMenuState = -1;
-        goto L_sw10tail;
+        break;
     case -2:
         if (D_80082FC0 != 0) {
             D_80082FC0 = 0;
             D_80082FBC = 3;
         }
-        goto L_sw10tail;
+        break;
     case -3:
     default:
         {
@@ -1027,7 +1024,6 @@ L_sw10:
         }
     }
 
-L_sw10tail:
     if (g_McMenuState == -2) {
         goto L_epilogue;
     }
