@@ -357,30 +357,26 @@ void GameUpdateRivalRubberBand(void) {
                 s32 flags;
 
                 switch ((u32)g_SceneTimer % 3) {
-                case 1:
-                    goto cue_33;
+                default:
                 case 0:
-                    break;
-                case 2:
-                    goto cue_34;
-                }
                 if (g_RivalCueEnabled != 0) {
                     GamePlaySoundCue(0x32);
                 }
                 bit = 0x200;
-                goto cue_done;
-cue_33:
+                    break;
+                case 1:
                 if (g_RivalCueEnabled != 0) {
                     GamePlaySoundCue(0x33);
                 }
                 bit = 0x200;
-                goto cue_done;
-cue_34:
+                    break;
+                case 2:
                 if (g_RivalCueEnabled != 0) {
                     GamePlaySoundCue(0x34);
                 }
                 bit = 0x200;
-cue_done:
+                }
+
                 flags = g_RivalCueFlags;
                 *s2 = 0;
                 g_RivalCueFlags = (bit >> s0) | flags;
