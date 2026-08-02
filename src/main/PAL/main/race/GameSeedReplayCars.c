@@ -342,6 +342,7 @@ void GameUpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
     }
 
 draw:
+    switch (0) { default:
     if (g_SplitTimer >= 0x3C) {
         threshold = 0x927BE;
         value = g_LapTimeMs;
@@ -361,7 +362,7 @@ draw:
         threshold = 0x927BE;
         value = g_LastSectorTime;
     } else {
-        goto skip_first;
+        break;
     }
 
     if (value <= threshold) {
@@ -371,7 +372,7 @@ draw:
     }
     GameDrawTimeValue(0x12, 0x2A, value, tile, 0x3E8);
 
-skip_first:
+    }
     timeout = 0x3E8;
     GameDrawTimeValue(0x12, 0x20, g_SplitTargetTime, 0x78CC, timeout);
     GameDrawSplitDelta(g_SplitSector, g_SplitSign);
