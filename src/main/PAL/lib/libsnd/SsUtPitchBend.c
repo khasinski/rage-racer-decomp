@@ -104,9 +104,8 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     *(volatile short *)(g_SndVoiceRegsPitch + (index << 4)) = SpuVmCalculateTonePitch(stackA, stackB);
     flags = g_SndVoiceFlags[index];
     flags |= 4;
-    g_SndVoiceFlags[index] = flags;
-    /* This barrier is load-bearing: removing it changes .text. */
-    __asm__ volatile("" ::: "memory");
+    /* RAW() keeps this store ahead of the return value -- see common.h. */
+    RAW(g_SndVoiceFlags[index]) = flags;
     ret = 0;
     return ret;
 
@@ -158,9 +157,8 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     g_SndVoiceRegs16[volOffset + 5] = arg5;
     field = g_SndVoiceFlags[index];
     field |= 0x30;
-    g_SndVoiceFlags[index] = field;
-    /* This barrier is load-bearing: removing it changes .text. */
-    __asm__ volatile("" ::: "memory");
+    /* RAW() keeps this store ahead of the return value -- see common.h. */
+    RAW(g_SndVoiceFlags[index]) = field;
     ret = 0;
     return ret;
 
