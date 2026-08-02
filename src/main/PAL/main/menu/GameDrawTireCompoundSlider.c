@@ -244,7 +244,7 @@ void GameDrawCarSpecGraph(s32 step, u32 tireGrade) {
     s32 *scanRevealed;
     s32 *revealedBar;
     s32 *bar;
-    register s32 revealedValue asm("$4");
+    s32 revealedValue;
     CarSpecGraphColor *color;
     s32 revealBase;
     s32 floorProgress;
@@ -256,7 +256,7 @@ void GameDrawCarSpecGraph(s32 step, u32 tireGrade) {
     u8 lineAlpha;
     s32 i;
     s32 offset;
-    register s32 height asm("$16");
+    s32 height;
     s32 topY;
     s32 topRightY;
     s32 rightX;
