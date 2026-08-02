@@ -773,7 +773,7 @@ L_stateM1:
     g_McMenuPhase = 3;
     g_McActionBusy = 0;
     mst = g_McActionState;
-    if (mst == 1) goto L_h1219;
+    if (!(mst == 1)) {
     if (mst < 2) {
         if (mst == 0) goto L_h1205;
         goto L_sw8;
@@ -788,8 +788,8 @@ L_h1205:
     g_McLastSlot = 0;
     g_McActionState = 1;
     goto L_sw8;
+    }
 
-L_h1219:
     g_McActionTimer -= 1;
     if (g_McActionTimer != 0) goto L_sw8;
     g_McActionState = 3;
