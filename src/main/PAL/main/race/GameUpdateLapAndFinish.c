@@ -337,6 +337,7 @@ s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
      * because that is what reproduces retail's address arithmetic. Left raw on
      * purpose; see the note in docs/names.md.
      */
+    switch (0) { default:
     route = (u8 *)arg0 + 0xBC;
     if (*(s16 *)((u8 *)arg0 + 0x168) > 0) {
         if (g_LapCount >= *(s16 *)((u8 *)arg0 + 0x168)) {
@@ -363,7 +364,7 @@ s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
             routeFinalOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
             g_LapTimeMs =
                 *(s32 *)((s32)route + routeFinalOffset + 0xC4);
-            goto update_progress;
+            break;
         }
 
     }
@@ -374,7 +375,7 @@ s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
         }
     }
 
-update_progress:
+    }
     progress = *(s16 *)(route + 0xAC);
     if (progress * g_TrackLength <= g_PlayerProgressB + g_PlayerProgressA) {
         s32 progressLimit;
