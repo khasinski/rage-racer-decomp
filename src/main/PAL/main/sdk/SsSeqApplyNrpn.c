@@ -140,9 +140,9 @@ void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char va
         SsUtSetReverbType(val);
         break;
     case 16: {
-        /* These pins are load-bearing: removing any one changes .text. */
+        /* This pin is load-bearing: removing it changes .text. */
         register long a0r asm("$4") = val;
-        register long a1r asm("$5") = a0r;
+        long a1r = (u8)a0r;
         SsUtSetReverbDepth(a0r, a1r);
         break;
     }
