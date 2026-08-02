@@ -13,6 +13,17 @@ typedef unsigned int u32;
 typedef float f32;
 
 /*
+ * Reads or writes a struct member without the compiler's "this lives inside a
+ * struct" mark. That mark makes gcc 2.6.3 assume the access cannot alias a
+ * plain global, which lets it move a neighbouring global store across the
+ * access; the retail code keeps the two in source order. Going through an
+ * integer round-trip defeats the fold back to a member reference, so the
+ * access is just a load or store at a computed address, and the ordering is
+ * restored without a memory clobber. Same address, same width, no barrier.
+ */
+#define RAW(x) (*(__typeof__(x) *)((s32)&(x)))
+
+/*
  * The one trace/printf entry point (0x8001674C). Every surviving PSY-Q debug
  * format string in the image is passed to it, from libgpu, libcd, libspu and
  * the game alike, which is what labels most of the arguments in this repo.
