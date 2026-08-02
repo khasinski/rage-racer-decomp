@@ -97,9 +97,7 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
         return ret;
     }
 
-    if (*(short *)((u_char *)g_SndVoiceStateNote + voiceOffset) != (short)arg3) {
-        goto fail_late;
-    }
+    if (!(*(short *)((u_char *)g_SndVoiceStateNote + voiceOffset) != (short)arg3)) {
 
     SpuVmVSetUp(x, y);
     g_SndCurrentSeqSep = 0x21;
@@ -114,6 +112,7 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     ret = 0;
     return ret;
 
+    }
 fail_late:
     ret = -1;
 
