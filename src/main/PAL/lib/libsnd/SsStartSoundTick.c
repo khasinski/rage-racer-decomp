@@ -65,9 +65,8 @@ state_0:
 
     }
     size = 0x89D0;
-    goto setup;
 
-    }
+    } else {
     size = 0x44E8;
     goto setup;
 
@@ -98,6 +97,7 @@ derive_size:
         size = quotient;
     }
 
+    }
 setup:
     if (g_SndTickUsesVSync != 0) {
         EnterCriticalSection();
