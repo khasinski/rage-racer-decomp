@@ -246,12 +246,8 @@ loop:
     }
     a1raw = seg->f08;
     t1raw = seg->f0A;
-    if (arg < v1) {
-        goto next;
-    }
-    if (t0 < arg) {
-        goto next;
-    }
+    if (!(arg < v1)) {
+    if (!(t0 < arg)) {
     v0 = a1raw << 16;
     a1s = v0 >> 16;
     if (arg < v1 + a1s) {
@@ -276,7 +272,8 @@ load:
     s4 = seg->f10;
     s6 = seg->f14;
     goto matched;
-next:
+    }
+    }
     s0v++;
     seg++;
     if (s0v < 2) {

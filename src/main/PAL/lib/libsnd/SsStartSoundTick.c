@@ -38,18 +38,14 @@ void SsStartSoundTick(long arg0) {
     D_8009A569 = 0;
     g_SndPrevVSyncCallback = 0;
 
-    if (state == 2) {
-        goto state_2;
-    }
+    if (!(state == 2)) {
     if (state < 3) {
         if (state == 0) {
             goto state_0;
         }
         goto derive_size;
     }
-    if (state == 3) {
-        goto state_3;
-    }
+    if (!(state == 3)) {
     if (!(state == 5)) {
     goto derive_size;
 
@@ -67,11 +63,11 @@ state_0:
     size = 1;
     goto setup;
 
-state_3:
+    }
     size = 0x89D0;
     goto setup;
 
-state_2:
+    }
     size = 0x44E8;
     goto setup;
 

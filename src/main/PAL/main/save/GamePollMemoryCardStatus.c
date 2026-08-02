@@ -43,18 +43,14 @@ s32 GamePollMemoryCardStatus(s32 arg0, s32 arg1) {
         }
 
         two = 2;
-        if (status == two) {
-            goto fail_neg3_case1;
-        }
+        if (!(status == two)) {
         if (status < 3) {
             if (status == 1) {
                 goto case1_ready;
             }
             goto fail_neg3_case1;
         }
-        if (status == 3) {
-            goto fail_neg1_case1;
-        }
+        if (!(status == 3)) {
         if (status == 4) {
             goto case1_status4;
         }
@@ -69,7 +65,7 @@ case1_ready:
         }
         break;
 
-fail_neg1_case1:
+        }
         state = -1;
         goto fail_case1;
 
@@ -82,6 +78,7 @@ case1_status4:
         g_McLastCardStatus = 0;
         break;
 
+        }
 fail_neg3_case1:
         state = -3;
 
@@ -105,9 +102,7 @@ fail_case1:
         }
 
         g_McStatusState = 4;
-        if (status == 2) {
-            goto fail_neg3_case3;
-        }
+        if (!(status == 2)) {
         if (status < 3) {
             if (status == 1) {
                 goto case3_ready;
@@ -132,6 +127,7 @@ fail_neg2_case3:
         state = -2;
         goto fail_case3;
 
+        }
 fail_neg3_case3:
         state = -3;
 

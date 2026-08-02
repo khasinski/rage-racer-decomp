@@ -1031,9 +1031,7 @@ L_sw10:
         }
     }
 
-    if (g_McMenuState == -2) {
-        goto L_epilogue;
-    }
+    if (!(g_McMenuState == -2)) {
     g_McActionState = 0;
     g_McActionBusy = 0;
 L_b1678:
@@ -1067,6 +1065,7 @@ L_stateIdle:
         }
     }
 
+    }
 L_epilogue:
     if (D_80082FC8 != 0) {
         func_80027A84(g_McMenuPage, g_McFromLoadMenu, g_McMenuRowCursor, g_McSlotCursor);

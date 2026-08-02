@@ -167,9 +167,7 @@ ordered:
     cursor = (s32)(base + offset);
 
 loop:
-    if (*(s32 *)(cursor + 8) == sentinel) {
-        goto finish;
-    }
+    if (!(*(s32 *)(cursor + 8) == sentinel)) {
     threshold = *(s32 *)(cursor + 4);
     cmp = temp < threshold;
     offset += 8;
@@ -188,6 +186,7 @@ next:
         goto loop;
     }
 
+    }
 finish:
     if (crossed != 0) {
         resultOffset = i << 3;

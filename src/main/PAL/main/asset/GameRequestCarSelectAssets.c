@@ -71,9 +71,7 @@ void GameLoadCarSelectAssets(void) {
         }
         return;
     }
-    if (state == 3) {
-        goto state_3;
-    }
+    if (!(state == 3)) {
     if (state == 4) {
         goto state_4;
     }
@@ -90,7 +88,7 @@ state_2:
             g_AssetLoadCursor = (GameAssetTripleHeader *)g_AssetSubBlockPtr;
         }
         return;
-state_3:
+    }
             if (func_80017C78(8, g_AssetLoadCursor) != 0) {
                 GameRegisterModelBank((u8 *)g_AssetLoadCursor + 0xC, 0xE);
 
