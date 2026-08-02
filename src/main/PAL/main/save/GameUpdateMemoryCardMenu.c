@@ -841,7 +841,7 @@ L_sw8:
         g_McMenuState = 2;
         /* fall through */
     case -1:
-        if (D_80082FC0 == 0) goto L_sw8tail;
+        if (D_80082FC0 == 0) break;
         D_80082FC0 = 0;
         D_80082FBC = 3;
         break;
@@ -853,16 +853,15 @@ L_sw8:
     case 0:
         mslot = g_McCardStatus;
         D_80082FC0 = 1;
-        if (mslot != -3) goto L_sw8tail;
+        if (mslot != -3) break;
         D_80082FBC -= 1;
-        if (D_80082FBC != 0) goto L_sw8tail;
+        if (D_80082FBC != 0) break;
         g_McMenuState = mslot;
         /* fall through */
     case 3:
         ;
     }
 
-L_sw8tail:
     if (g_McMenuState == -1) goto L_epilogue;
     g_McActionState = 0;
     goto L_epilogue;
