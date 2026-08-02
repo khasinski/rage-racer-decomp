@@ -166,7 +166,6 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
 
     }
     }
-fail_late:
     ret = -1;
 
     return ret;

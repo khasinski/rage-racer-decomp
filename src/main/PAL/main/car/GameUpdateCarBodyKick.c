@@ -491,7 +491,6 @@ inner:
 
     }
     }
-next:
     if (offset < 0x11B4) {
         goto outer;
     }

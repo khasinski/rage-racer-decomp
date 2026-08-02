@@ -122,7 +122,6 @@ void DumpDrawEnv(DrawEnv *arg0) {
     }
 
     }
-high_mode:
     value = arg0->tpage;
     D_800941E4(D_80013374, (value >> 9) & 3, (value >> 7) & 3, (value << 6) & 0x7C0, (value << 3) & 0x300);
     return;
