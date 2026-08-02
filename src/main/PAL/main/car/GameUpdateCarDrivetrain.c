@@ -509,6 +509,7 @@ void GameUpdateCarDrivetrain(void *base) {
     temp_a0_5 = *((s16 *) (((u8 *) temp_s3) + 0x76));
     if ((*((s16 *) (((u8 *) temp_s3) + 0x30))) != temp_a0_5)
     {
+      switch (0) { default:
       var_a2 = (u8 *) (((s32) ((*((s32 *) (((u8 *) car) + 0xA4))) * 0x2710)) / ((s32) (((*((s32 *) (((u8 *) (config - (-(temp_a0_5 * 4)))) + 0xE4))) * 0x490) / 160)));
       temp_a1_3 = *((u16 *) (((u8 *) car) + 0xA8));
       temp_a0_6 = temp_a1_3;
@@ -522,7 +523,7 @@ void GameUpdateCarDrivetrain(void *base) {
         {
           if (temp_v1_11 < 4)
           {
-            goto block_121;
+            break;
           }
           if (temp_v1_11 == 4)
           {
@@ -546,14 +547,14 @@ void GameUpdateCarDrivetrain(void *base) {
           }
           else
           {
-            goto block_121;
+            break;
           }
           temp_v1_12 = 0x64 - var_v0_10;
           *((u16 *) (((u8 *) temp_s3) + 0x2C)) = (u16) ((temp_a0_6 * temp_v1_12) / 100);
           g_ShiftTargetSpeed = (temp_v1_12 * ((s32) var_a2)) / 100;
         }
       }
-      block_121:
+      }
       var_a0_3 = g_ShiftTargetSpeed;
 
       var_s1 = 0;
