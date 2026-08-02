@@ -122,9 +122,7 @@ void func_8004087C(s16 arg) {
     } while ((s32)p < (s32)end);
 
 after:
-    if (data == 0) {
-        goto zero;
-    }
+    if (!(data == 0)) {
     s0 = g_PlayerField3C;
     if (!(s0 >= 0)) {
     s0 += 0x100;
@@ -182,7 +180,7 @@ chk:
         a1v = s2;
     }
     goto call;
-zero:
+    }
     a0v = 0;
     a1v = 0;
 call:
@@ -241,9 +239,7 @@ void GameUpdatePointAmbience(s32 arg) {
 loop:
     v1 = seg->lo;
     t0 = seg->hi;
-    if (v1 == sentinel) {
-        goto matched;
-    }
+    if (!(v1 == sentinel)) {
     a1raw = seg->f08;
     t1raw = seg->f0A;
     if (!(arg < v1)) {
@@ -280,6 +276,7 @@ load:
         goto loop;
     }
 
+    }
 matched:
     v0 = s2 << 16;
     s0v = v0 >> 16;
