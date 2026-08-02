@@ -33,8 +33,7 @@ zero:
         width += 3;
     }
     rect.w = width >> 2;
-    goto call;
-    }
+    } else {
 
     width = arg5;
     width += (u_long)arg5 >> 31;
@@ -44,6 +43,7 @@ zero:
 two:
     rect.w = arg5;
 
+    }
 call:
     LoadImage(&rect, arg0);
     return func_80064BB4(arg1, arg2, arg3, arg4) & 0xFFFF;
