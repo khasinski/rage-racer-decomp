@@ -17,7 +17,7 @@ s32 GameDrawClassChangeCurtain(s32 arg0) {
     s32 blue;
     s32 alpha;
     /* These pins are load-bearing: removing any one changes .text. */
-    register s32 temp asm("$2");
+    s32 temp;
     register s32 zero asm("$5");
     register void *callScratch asm("$4");
     s32 yArg;
@@ -31,7 +31,7 @@ s32 GameDrawClassChangeCurtain(s32 arg0) {
     } else {
         if (delta < 0) {
             temp = D_8007FB3C;
-            temp = delta + temp;
+            { s32 rel = temp; temp = delta + rel; }
             D_8007FB3C = temp;
             if (temp < 0) {
                 D_8007FB3C = 0;
@@ -67,7 +67,7 @@ s32 GameDrawClassChangeCurtain(s32 arg0) {
 
         if (delta > 0) {
             temp = D_8007FB3C;
-            temp = delta + temp;
+            { s32 rel = temp; temp = delta + rel; }
             D_8007FB3C = temp;
             if (temp >= 0x1A) {
                 D_8007FB3C = 0x19;
