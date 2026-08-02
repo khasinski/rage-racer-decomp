@@ -54,7 +54,6 @@ void StepCdVolumeFade(void) {
         g_CdMixRR = q3;
         g_CdMixRL = q4;
     } else if (cnt < 0) {
-        /* This pin is load-bearing: removing it changes .text. */
         register u32 *p asm("$12");
         u32 v184;
         u32 inv;

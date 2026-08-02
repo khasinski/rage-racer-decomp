@@ -20,7 +20,6 @@ void func_80016754(s32 x, s32 y, void *str, s32 color);
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     s32 savedX;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 savedY asm("$10");
     s32 savedColor;
     register s32 localDivisor asm("$4");
@@ -153,7 +152,6 @@ void func_800340D8(void) {
     u8 *firstBuffer;
     u8 *addPrimBase;
     s32 prevOffset;
-    /* This pin is load-bearing: removing it changes .text. */
     register u8 *storeBaseV1 asm("$3");
     u8 *storeBaseV0;
 

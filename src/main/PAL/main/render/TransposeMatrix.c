@@ -22,13 +22,11 @@ Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
     s16 *srcp = (s16 *)src;
     s16 *dstp = (s16 *)dst;
     Matrix *ret;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 value0 asm("$9");
     register s32 value1 asm("$10");
     register s32 value2 asm("$11");
 
     value0 = srcp[0];
-    /* These barriers are load-bearing: removing any one changes .text. */
     __asm__ volatile("");
     ret = dst;
     __asm__ volatile("" : "=r"(ret) : "0"(ret));

@@ -30,7 +30,6 @@ void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2) asm("func_80072698");
 
 void UpdateSequenceFadeOut(void) asm("func_8005E900");
 void UpdateSequenceFadeOut(void) {
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 *fadeStep asm("$4");
     s32 delta;
     s32 value;
@@ -80,7 +79,6 @@ void UpdateSequenceFadeOut(void) {
 
 void ApplyDuckedSequenceAudio(void) asm("func_8005EA14");
 void ApplyDuckedSequenceAudio(void) {
-    /* These pins are load-bearing: removing any one changes .text. */
     s32 value;
     register s32 scaled asm("$2");
     s32 seq;

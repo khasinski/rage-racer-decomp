@@ -9,7 +9,6 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     void *otReg;
     u8 **scratch;
     u8 *packet;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 xReg asm("$9");
     register s32 yReg asm("$10");
     register s32 wReg asm("$11");
@@ -96,7 +95,6 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     prim = *(SPRT **)0x1F800000;
     shadeReg = shadeTex;
     semiReg = semiTrans;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(prim), "r"(shadeReg), "r"(semiReg));
     flagsReg = flags;
     y1Reg = y1;
@@ -108,7 +106,6 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     x1Local = x1;
     bLocal = b;
     /* Match note: keep stack color load after callee-save argument setup. */
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(flagsReg), "r"(y1Reg), "r"(u0Reg), "r"(v0Reg), "r"(rReg));
     gLocal = g;
     func_80064FA8(prim);
@@ -127,7 +124,6 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     prim->t.g0 = gLocal;
     prim->t.b0 = bLocal;
 
-    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(clutReg) : "0"(clutReg));
     magic = 0xCCCCCCCD;
     asm("" : : "r"(magic));
@@ -155,7 +151,6 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("func_80046BA0");
 void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
     register s32 y1Reg asm("$18");
@@ -211,7 +206,6 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("func_80046CBC");
 void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
     POLY_F4 *prim;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
     register s32 y1Reg asm("$18");
@@ -241,7 +235,6 @@ void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 
     x1Local = x1;
     bLocal = b;
     /* Match note: keep stack color load after callee-save argument setup. */
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(prim), "r"(semiReg), "r"(flagsReg), "r"(y1Reg), "r"(x2Reg), "r"(y2Reg), "r"(x3Reg), "r"(y3Reg), "r"(rReg));
     gLocal = g;
 
@@ -343,7 +336,6 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
     s32 x0Reg;
     s32 y0Reg;
     s32 x1Reg;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 y1Reg asm("$20");
     register s32 rReg asm("$21");
     register s32 gReg asm("$22");
@@ -395,7 +387,6 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
     s32 x0Reg;
     s32 y0Reg;
     s32 x1Reg;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 y1Reg asm("$20");
     register s32 rReg asm("$21");
     register s32 gReg asm("$22");
@@ -479,7 +470,6 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) asm("func_80047330");
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {
-    /* These pins are load-bearing: removing any one changes .text. */
     s16 x0Reg;
     s16 y0Reg;
     s16 x1Reg;
@@ -500,7 +490,6 @@ void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8
     r0Reg = r0;
     g0Reg = g0;
     b0Reg = b0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(y1Reg), "r"(r0Reg), "r"(g0Reg), "r"(b0Reg));
     r1Local = r1;
     alphaReg = alpha;

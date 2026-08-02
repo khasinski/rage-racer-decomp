@@ -91,7 +91,6 @@ void LoadRaceAssets(void) {
         s32 idx = g_PlayerCarIndex;
         s32 sz = GetCarAssetIndex(idx, g_CarTable[idx].modelVariant);
         if (func_80017C78((sz << 1) + 11, g_AssetLoadCursor) != 0) {
-            /* This pin is load-bearing: removing it changes .text. */
             register u8 *base_a0 asm("$4");
             u8 *base_a3;
             u8 *p1;
@@ -128,7 +127,6 @@ void LoadRaceAssets(void) {
         scaled = g_CourseIndex << 1;
         base_off = (g_GrandPrixClass << 3) + 0x57;
         if (func_80017C78(scaled + base_off, p) != 0) {
-            /* This pin is load-bearing: removing it changes .text. */
             register u8 *base_a0 asm("$4");
             u8 *base;
             s32 off0, off1;
@@ -159,13 +157,11 @@ void LoadRaceAssets(void) {
     case 6: {
         u8 *p;
         s32 scaled;
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 result asm("$2");
         p = g_AssetLoadCursor;
         scaled = g_CourseIndex << 1;
         result = (g_GrandPrixClass << 3) + scaled;
         if (func_80017C78(result + 0x58, p) != 0) {
-            /* This pin is load-bearing: removing it changes .text. */
             register u8 *base_a0 asm("$4");
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 0); SetTrackCameraTable(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 1); func_8004553C(g_AssetBlockPtr);

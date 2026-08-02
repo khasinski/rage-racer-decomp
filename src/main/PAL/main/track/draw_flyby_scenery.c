@@ -50,7 +50,6 @@ extern u8 *g_RouteSceneryKeyframe asm("D_801E6C88");
 
 void SeedRouteScenery(void) asm("func_8003EBCC");
 void SeedRouteScenery(void) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 index0 asm("$2");
     s32 index1;
     register u8 *base asm("$4");

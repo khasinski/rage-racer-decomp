@@ -22,7 +22,6 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
     GameCarSpec *spec;
     s32 timer;
     s32 index;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 lateral asm("$18");
     register s32 baseIndex asm("$4");
     s32 finalAngle;

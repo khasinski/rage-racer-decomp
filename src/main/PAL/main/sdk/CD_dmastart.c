@@ -32,13 +32,11 @@ void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal
     }
 
     if (mode == 1) {
-        /* This pin is load-bearing: removing it changes .text. */
         register long bv asm("$4");
         dptr = g_DmaDicr;
         bv = dptr[2];
         dptr[2] = bv | (1 << ch);
     } else {
-        /* This pin is load-bearing: removing it changes .text. */
         register long bv asm("$4");
         dptr = g_DmaDicr;
         bv = dptr[2];
@@ -48,7 +46,6 @@ void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal
     dummy = *(volatile u_long *)g_DmaDicr;
     asm volatile("");
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register long dv asm("$6");
         long bit;
 

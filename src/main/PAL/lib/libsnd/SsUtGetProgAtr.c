@@ -43,7 +43,6 @@ long SsUtGetProgAtr(long arg0, long arg1, ProgAtr *out) {
 }
 
 long SpuVmVSetUp(long arg0, long arg1) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register long raw0 asm("$6") = arg0;
     register long raw1 asm("$7") = arg1;
     long chan;
@@ -68,7 +67,6 @@ long SpuVmVSetUp(long arg0, long arg1) {
     }
     {
         u_char *meta = g_SndVabHeader[chan];
-        /* This pin is load-bearing: removing it changes .text. */
         register u_char *base asm("$4") = g_SndVabProgTable[chan];
 
         data = g_SndVabToneTable[chan];

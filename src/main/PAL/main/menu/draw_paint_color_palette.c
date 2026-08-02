@@ -127,7 +127,6 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a
 void func_8004F3EC(s32 arg0, s32 arg1) {
     s32 count;
     s32 a1v;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 c17 asm("$17");
     s32 c19;
     register s32 c21 asm("$21");

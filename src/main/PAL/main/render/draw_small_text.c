@@ -127,7 +127,6 @@ void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
         {
             s32 nx;
             nx = x + w;
-            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(nx) : "0"(nx));
             x = nx;
         }
@@ -248,7 +247,6 @@ void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
         {
             s32 nx;
             nx = x + w;
-            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(nx) : "0"(nx));
             x = nx;
         }

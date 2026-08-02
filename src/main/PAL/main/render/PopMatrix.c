@@ -15,7 +15,6 @@ s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out) asm("func_800696C8");
 
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) asm("func_80069678");
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 m0 asm("$8") = matrix[0];
     register s32 m1 asm("$9") = matrix[1];
     register s32 m2 asm("$10") = matrix[2];
@@ -45,7 +44,6 @@ s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
 
 
 s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 m0 asm("$8") = matrix[0];
     register s32 m1 asm("$9") = matrix[1];
     register s32 m2 asm("$10") = matrix[2];

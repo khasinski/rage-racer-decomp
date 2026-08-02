@@ -231,7 +231,6 @@ void UpdateTeamNameScreen(void) {
             if (g_PadEdge & 0x8000) { s32 l = GameMenuCursor; GameMenuCursor = (l % 11 != 0) ? l - 1 : l + 0xA; }
             if (g_PadEdge & 0x2000) {
                 s32 r;
-                /* This pin is load-bearing: removing it changes .text. */
                 register s32 res asm("$2");
                 s32 rn;
                 r = GameMenuCursor;
@@ -284,7 +283,6 @@ pop:
     if (g_TeamNameLength == 0) return;
     PlaySoundCue(4);
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 tv asm("$2");
         tv = 0xA;
         g_TeamNameChars[g_TeamNameLength] = tv;

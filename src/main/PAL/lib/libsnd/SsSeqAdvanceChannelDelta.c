@@ -15,7 +15,6 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
     SeqStruct *state;
     long remaining;
     long period;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long period_copy asm("$6");
     register long delay asm("$3");
     register long store_value asm("$2");
@@ -50,7 +49,6 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
     } else if (delay <= period) {
         long saved0;
         long saved1;
-        /* This pin is load-bearing: removing it changes .text. */
         register long total asm("$16");
         long loop_delay;
 

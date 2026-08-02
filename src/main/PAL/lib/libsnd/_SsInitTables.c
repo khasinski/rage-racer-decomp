@@ -16,7 +16,6 @@ void _SsInitTables(void) asm("func_80071B0C");
 void _SsInitTables(void) {
     {
         long i;
-        /* These pins are load-bearing: removing any one changes .text. */
         register long j asm("$5");
         register u_short *dst asm("$6");
         u_short *table;
@@ -36,7 +35,6 @@ void _SsInitTables(void) {
 
     {
         long i;
-        /* This pin is load-bearing: removing it changes .text. */
         register u_short *dst asm("$6");
         u_short *src;
 
@@ -51,7 +49,6 @@ void _SsInitTables(void) {
     SpuVmInit(0x18);
 
     {
-        /* These pins are load-bearing: removing any one changes .text. */
         register long i asm("$5");
         long j;
         register long *row asm("$3");

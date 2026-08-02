@@ -11,7 +11,6 @@ s32 func_80064DC0(u32 *arg0) {
 
 void AddPrim(u32 *arg0, u32 *arg1) asm("func_80064DDC");
 void AddPrim(u32 *arg0, u32 *arg1) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 mask asm("$6") = 0x00FFFFFF;
     u32 tag = 0xFF000000;
 
@@ -21,7 +20,6 @@ void AddPrim(u32 *arg0, u32 *arg1) {
 
 void AddPrims(u32 *arg0, u32 arg1, u32 *arg2) asm("func_80064E18");
 void AddPrims(u32 *arg0, u32 arg1, u32 *arg2) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 mask asm("$7") = 0x00FFFFFF;
     u32 tag = 0xFF000000;
 

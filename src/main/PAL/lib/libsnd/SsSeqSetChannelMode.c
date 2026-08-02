@@ -8,7 +8,6 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) asm("func_8006FED8");
 void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     long seq_raw;
     long sep_raw;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long seq_s asm("$4");
     register long sep_s asm("$5");
     SeqStruct *state;
@@ -21,7 +20,6 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     sep_raw = sep;
     seq_s = seq;
     sep_s = sep;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(seq_raw), "=r"(sep_raw) : "0"(seq_raw), "1"(sep_raw));
     seq_s = (short)seq_s;
     seq_offset = seq_s * 4;

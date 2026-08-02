@@ -23,7 +23,6 @@ long Gpu_CheckTimeout(void) {
     long state;
     long result;
     long *dc;
-    /* These pins are load-bearing: removing any one changes .text. */
     register volatile u_long *gp1ForLog asm("$3");
     register long pending asm("$5");
     long gpuTail;
@@ -37,14 +36,12 @@ long Gpu_CheckTimeout(void) {
     }
 
     gp1ForLog = g_GpuGp1;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(gp1ForLog) : "0"(gp1ForLog));
     (void)*gp1ForLog;
     pending = g_GpuQueueWriteIdx;
     gpuTail = g_GpuQueueReadIdx;
     DebugPrintf(D_8001362C, (pending - gpuTail) & 0x3F, *gp1ForLog, *g_GpuDmaChcr, *g_GpuDmaMadr);
     dc = g_GpuLastCb;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(dc) : "0"(dc));
     DebugPrintf(D_80013660, *dc, g_GpuLastCbArg, g_GpuLastCbData);
 

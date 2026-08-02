@@ -88,7 +88,6 @@ void func_80033D50(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
 void DrawLapTimes(void) asm("func_80033090");
 void DrawLapTimes(void) {
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 i __asm("$17");
     s32 visibleCount;
     s32 activeIndex;
@@ -212,7 +211,6 @@ void func_800332E0(s32 arg0) {
 void DrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
 void DrawSplitDelta(s32 arg0, s32 arg1) {
     u8 *base;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *prim __asm("$17");
     register s32 mode __asm("$18");
     register s32 firstOffset __asm("$5");

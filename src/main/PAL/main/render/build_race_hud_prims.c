@@ -11,7 +11,6 @@ void BuildSpriteFromDesc(u8 *arg0, u8 *arg1) asm("func_80032FF0");
 void BuildRaceHudPrims(s32 arg0) asm("func_80032D5C");
 void BuildRaceHudPrims(s32 arg0) {
     u8 *cursor;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 col __asm("$17");
     s32 bufferOffset;
     s32 row;

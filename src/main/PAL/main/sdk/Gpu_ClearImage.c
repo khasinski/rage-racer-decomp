@@ -107,14 +107,12 @@ long Gpu_LoadImage(GpuRect *rect, u_long *src) {
     long mode;
     u_long readyMask;
     u_long dmaCommand;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long w asm("$4");
     register long adjustedWords asm("$2");
     long halfWords;
     register long quotient asm("$3");
     u_long status;
     u_long gpCommand;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u_long dmaSize asm("$2");
     register volatile u_long *dmaReg asm("$2");
     volatile u_long *dmaSizeReg;
@@ -124,7 +122,6 @@ long Gpu_LoadImage(GpuRect *rect, u_long *src) {
     volatile long framePadding[2];
 
     savedRect = rect;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(savedRect) : "0"(savedRect));
     current = src;
     Gpu_ArmTimeout();
@@ -164,7 +161,6 @@ long Gpu_LoadImage(GpuRect *rect, u_long *src) {
         return -1;
     }
     rem = adjustedWords >> 5;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(rem) : "0"(rem));
     quotient = rem;
     adjustedWords = quotient << 4;

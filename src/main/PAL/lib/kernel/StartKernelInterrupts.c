@@ -245,7 +245,6 @@ u_long setIntrDMA(long arg0, u_long arg1) {
         if (callback != 0) {
             volatile u_long *bits = g_DmaIrqControl;
             u_long value;
-            /* These pins are load-bearing: removing any one changes .text. */
             register long shift asm("$3");
             register u_long mask asm("$2") = 0xFFFFFF;
 
@@ -260,11 +259,9 @@ u_long setIntrDMA(long arg0, u_long arg1) {
             value |= mask;
             *bits = value;
         } else {
-            /* This pin is load-bearing: removing it changes .text. */
             register volatile u_long *bits asm("$5") = g_DmaIrqControl;
             u_long value;
             long shift;
-            /* These pins are load-bearing: removing any one changes .text. */
             register u_long mask asm("$2") = 0xFFFFFF;
             register u_long zero asm("$0");
 

@@ -52,7 +52,6 @@ extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 
 void ResetSoundState(void) {
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 i asm("$4");
         s32 *ptr;
 
@@ -64,7 +63,6 @@ void ResetSoundState(void) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 i asm("$4");
         s32 neg;
         s32 *ptr;
@@ -89,7 +87,6 @@ void ResetSoundState(void) {
         s32 i;
         s32 neg;
         s32 value;
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 offset asm("$3");
 
         i = 0;
@@ -107,7 +104,6 @@ void ResetSoundState(void) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 eighty asm("$3");
         s32 value;
 
@@ -141,7 +137,6 @@ s32 InitSoundWithVab(s32 header, s32 body) {
     s32 headerReg = header;
     s32 bodyReg = body;
     s16 *vabIdPtr;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 currentVabId asm("$5");
     s32 fail;
     s16 ret;
@@ -231,14 +226,12 @@ extern char g_MsgVabTransBodyError[] asm("D_80012694");
 
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) asm("func_8005B768");
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 slotReg asm("$16");
     register s32 bodyReg asm("$17");
     s16 *vabIdPtr;
     register s32 currentVabId asm("$5");
     register s32 ret asm("$2");
 
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(slotReg) : "0"(slot));
     bodyReg = body;
 
@@ -248,12 +241,10 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 seqSlotArg asm("$4") = slotReg;
 
         if (slotReg == 1 || slotReg == 6) {
         {
-            /* This barrier is load-bearing: removing it changes .text. */
             asm volatile("" ::: "$6");
             ret = func_8005E4EC(seqSlotArg, header, bodyReg, table);
             return (s16)ret;
@@ -265,12 +256,10 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     ret = func_80072C4C(header, -1, g_VabSpuAddress[slotReg]);
     {
         s16 *vabIdBase = g_VabIds;
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 offset asm("$3") = slotReg * 2;
         vabIdPtr = (s16 *)((s32)vabIdBase + offset);
     }
     *vabIdPtr = ret;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" : "=r"(ret) : "0"(ret));
 
     {
@@ -299,7 +288,6 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
 s32 PollAudioSlotLoad(void) asm("func_8005B89C");
 s32 PollAudioSlotLoad(void) {
     s32 completed;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 *flagsPtr asm("$4");
     register s32 slot asm("$5");
     s32 one;
@@ -372,7 +360,6 @@ s32 CloseLoadedAudioSlots(void) {
 }
 
 s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 ret asm("$2");
     register s32 currentVabId asm("$5");
     s16 *vabIdPtr;
@@ -383,7 +370,6 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     ret = func_80072C4C(header, -1, g_VabSpuAddressExtra);
     vabIdPtr = &g_VabIds3;
     *vabIdPtr = ret;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" : "=r"(ret) : "0"(ret));
 
     currentVabId = (s16)ret;
@@ -415,7 +401,6 @@ s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     s32 bodyReg = body;
     s32 tableReg = table;
     s16 *vabIdPtr;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 currentVabId asm("$5");
     s32 fail;
     register s32 ret asm("$2");
@@ -634,7 +619,6 @@ void ApplyPanVoiceVolume(void) {
     s32 loopValue;
     s32 scale;
     s32 left;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 right asm("$6");
     register s32 voice asm("$4");
     s32 zeroArg;
@@ -745,12 +729,10 @@ void UpdateIndexedEffectVoice(void) {
     s32 base;
     s32 center;
     s32 fine;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 index asm("$3");
     register s32 raw asm("$2");
     s32 product;
     s32 scale;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 left asm("$5");
     register s32 right asm("$6");
     register s32 voice asm("$4");
@@ -1415,7 +1397,6 @@ void func_8005CDB0(void) {
     s32 voiceCopy;
     s32 neg;
     s32 svArg;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 left asm("$5");
     s32 right;
     s32 prod;
@@ -1757,7 +1738,6 @@ void func_80078130(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend);
 
 void func_8005D7D4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     s32 voice;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 left asm("$5");
     s32 right;
     s32 prod;
@@ -1974,7 +1954,6 @@ void InitEffectVoiceRuntime(void) {
     {
         s32 i;
         s32 neg;
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 *ptr asm("$5");
         s32 offset;
 
@@ -2052,7 +2031,6 @@ void ForcePanVoiceEnabled(s32 enabled) {
     s32 *dst;
     s32 scale;
     s32 raw;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 voice asm("$4");
     s32 left;
     register s32 right asm("$6");
@@ -2145,7 +2123,6 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
     s32 scale;
     s32 left;
     s32 right;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 arg0 asm("$4");
     s32 zeroArg;
 
@@ -2210,14 +2187,12 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
 void ForceIndexedEffectVoiceEnabled(s32 enabled) asm("func_8005E058");
 void ForceIndexedEffectVoiceEnabled(s32 enabled) {
     s32 base;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 center;
     s32 fine;
     register s32 index asm("$3");
     register s32 raw asm("$2");
     s32 product;
     s32 scale;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 left asm("$5");
     register s32 right asm("$6");
     register s32 voice asm("$4");
@@ -2288,11 +2263,9 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
     s32 toneBase;
     s32 offset;
     s32 state;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 raw asm("$2");
     s32 scale;
     s32 left;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 right asm("$6");
     register s32 arg0 asm("$4");
     s32 arg3;
@@ -2378,7 +2351,6 @@ void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
 void ForceSoundSlotVoicePlayback(s32 arg0) {
     s32 saved = arg0;
     s32 i;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 *base asm("$18");
     s32 *active;
     s32 odd;
@@ -2474,7 +2446,6 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     s32 bodyReg = body;
     s32 seqReg = seq;
     s16 *vabIdPtr;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 currentVabId asm("$5");
     s32 fail;
     register s32 ret asm("$2");
@@ -2487,7 +2458,6 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
         vabIdPtr = (s16 *)((s32)vabIdBase + slotReg);
     }
     *vabIdPtr = ret;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" : "=r"(ret) : "0"(ret));
 
     currentVabId = (s16)ret;

@@ -206,7 +206,6 @@ void InsertRaceRecords(void) {
     s32 i;
     s32 row_offset;
     s32 best;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 j asm("$7");
     s32 *score_ptr;
     register s32 entry_addr asm("$5");
@@ -216,12 +215,10 @@ void InsertRaceRecords(void) {
     s32 copy1;
     s32 copy2;
     s32 copy3;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 score_offset asm("$3");
     s32 score_value;
     s32 *entry;
     s32 mode;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 base_addr asm("$2");
     register s32 course_addr asm("$3");
     u8 *name_base;

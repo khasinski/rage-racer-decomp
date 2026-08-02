@@ -71,7 +71,6 @@ long CD_init(long mode) {
         return 0;
     }
 
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("");
     return 1;
 }

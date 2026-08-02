@@ -35,7 +35,6 @@ s32 GetCarUnlockLevel(s32 model) {
 
 void InitRenderState(s32 arg0) asm("func_80017884");
 void InitRenderState(s32 arg0) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 value asm("$2");
     register s32 ptr asm("$2");
     s32 tmp;
@@ -73,7 +72,6 @@ void RegisterModelBank(s32 *base, s32 index) asm("func_80017948");
 void RegisterModelBank(s32 *base, s32 index) {
     s32 *ptr;
     s32 i;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 count;
     s32 pad[2];
@@ -105,7 +103,6 @@ void UnrelocateModelBank(s32 *base, s32 offset) asm("func_800179B4");
 void UnrelocateModelBank(s32 *base, s32 offset) {
     s32 *ptr;
     s32 i;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 count;
     s32 pad[2];
@@ -135,7 +132,6 @@ void UnrelocateModelBank(s32 *base, s32 offset) {
 void SelectModelBank(s32 index) asm("func_80017A10");
 void SelectModelBank(s32 index) {
     s32 *entry;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 ptr asm("$2");
     s32 value;
 
@@ -162,7 +158,6 @@ void RegisterCourseModels(s32 *base) {
     s32 i;
     s32 limit;
     s32 *item;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 pad[2];
 
@@ -193,7 +188,6 @@ void func_80017AD0(s32 *base) {
     s32 *ptr;
     s32 count;
     s32 i;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 pad[2];
 

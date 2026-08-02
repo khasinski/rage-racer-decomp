@@ -81,7 +81,6 @@ void SetDispMask(long arg0) {
     }
 
     mask = 0x3000000;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(mask) : "0"(mask));
     gpu = g_GpuFuncs;
     if (enable == 0) {

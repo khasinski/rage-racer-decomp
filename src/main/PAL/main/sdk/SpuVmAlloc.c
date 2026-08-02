@@ -282,14 +282,12 @@ void func_80074134(void) {
     }
 
     if (1) {
-        /* This pin is load-bearing: removing it changes .text. */
         register long voiceOffset asm("$3");
 
         periodIndex = periodIndex >> 16;
         periodIndex = (periodIndex - 1) / 2;
         periodIndex <<= 4;
         {
-            /* This pin is load-bearing: removing it changes .text. */
             register long periodBase asm("$3");
 
             periodBase = g_SndCurrentProgTable;
@@ -304,14 +302,12 @@ void func_80074134(void) {
     } else {
 evenPeriod:
         {
-            /* This pin is load-bearing: removing it changes .text. */
             register long voiceOffset asm("$3");
 
             periodIndex = periodIndex >> 16;
             periodIndex = (periodIndex - 1) / 2;
             periodIndex <<= 4;
             {
-                /* This pin is load-bearing: removing it changes .text. */
                 register long periodBase asm("$3");
 
                 periodBase = g_SndCurrentProgTable;
@@ -327,7 +323,6 @@ evenPeriod:
     {
         long voiceIndex;
         long flags;
-        /* This pin is load-bearing: removing it changes .text. */
         register short *voiceOffsetPtr asm("$5");
         u_long tableBase;
 

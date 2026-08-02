@@ -27,7 +27,6 @@ void DrawSpinningScenery(s32 arg0, s32 arg1) {
     u16 *delta;
     u16 *deltaBase;
     s16 *work = sp30;
-    /* This pin is load-bearing: removing it changes .text. */
     register u16 *base asm("$21");
     s32 offset;
     s32 end;
@@ -51,7 +50,6 @@ void DrawSpinningScenery(s32 arg0, s32 arg1) {
     }
 
     loopIndex = start;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(loopIndex) : "0"(loopIndex));
     if (loopIndex < end) {
         deltaBase = g_SpinningSceneryRate;

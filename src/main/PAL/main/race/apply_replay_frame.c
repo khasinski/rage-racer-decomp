@@ -173,11 +173,9 @@ void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
 
 void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) asm("func_8001F8D0");
 void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 index asm("s0");
     u8 *primary;
     u8 *secondary;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 next asm("a0");
     register s32 offset asm("v0");
     register u8 *base asm("v1");

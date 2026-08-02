@@ -24,14 +24,12 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
     GameCarAiBlock *state = (GameCarAiBlock *)&car->field_BC;
     s32 acc8 = 0;
     s32 acc9 = 0;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 i asm("$10") = 0;
     s32 k11 = 0xB;
     u8 *base = g_PlayerTrackProgress;
     s32 carProgress;
     s32 carField34;
     s32 carA4low;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *block asm("$11");
     register s32 track asm("$12");
     s32 t6;
@@ -64,7 +62,6 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
         s32 otherField34;
         s32 otherA4;
         s32 a2;
-        /* These pins are load-bearing: removing any one changes .text. */
         register s32 t1 asm("$9");
         s32 diff;
         s32 angleDiff;

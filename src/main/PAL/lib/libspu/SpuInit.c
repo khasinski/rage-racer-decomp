@@ -36,7 +36,6 @@ void _SpuInit(long arg0) {
     if (arg0 == 0) {
         u_short *ptr;
         long i;
-        /* This pin is load-bearing: removing it changes .text. */
         register long value asm("$4");
 
         value = 0xC000;

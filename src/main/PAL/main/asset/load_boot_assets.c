@@ -27,7 +27,6 @@ void LoadBootAssets(void) asm("func_800180CC");
 void LoadBootAssets(void) {
     u8 *loaded;
     u8 *base;
-    /* This pin is load-bearing: removing it changes .text. */
     register u8 *next asm("$2");
     s32 nextState;
 

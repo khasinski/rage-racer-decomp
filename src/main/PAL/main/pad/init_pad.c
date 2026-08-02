@@ -158,7 +158,6 @@ void UpdatePadState(void) {
         pad->unk4 = pad->unk2;
         pad->unk2 = ~((raw[2] << 8) | raw[3]);
         pad->unkA = raw[4];
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("");
         pad->unkC = raw[5] - g_NegconNeutralI;
         pad->unkE = raw[6] - g_NegconNeutralII;

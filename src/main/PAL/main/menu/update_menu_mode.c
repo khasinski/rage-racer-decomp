@@ -66,7 +66,6 @@ void UpdateMenuMode(void) {
     func_800496F0(D_8009B324, ((struct Entry_5ACA0 *)g_CarTable)[(g_MenuScreen == 0xB) ? g_CarListCursor : g_PlayerCarIndex].f1);
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 flag asm("$6");
         flag = g_MenuHintBarStep;
         if (flag == 0) {
@@ -165,7 +164,6 @@ void LoadAudioParameterTable(u16 *table) {
     s32 rowOffset;
     s32 rowBaseOffset;
     s32 colOffset;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 *base asm("$10") = g_EngineSoundCurves;
     s32 *secondBase;
     s32 *leftPtr;
@@ -201,7 +199,6 @@ void LoadAudioParameterTable(u16 *table) {
     } while (bank < 2);
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 scale asm("$6");
 
         scale = *tableReg;

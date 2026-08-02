@@ -70,7 +70,6 @@ void UpdateTitleAttract(void) {
     void *base;
     s32 color;
     s32 h88;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 scratch asm("$22");
     s32 hF0;
     s32 clut0;
@@ -96,12 +95,10 @@ void UpdateTitleAttract(void) {
 
     x28 = 0x28;
     yA0 = 0xA0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(x28), "=r"(yA0) : "0"(x28), "1"(yA0)); /* Match note: materialize first-call argument registers before the stack-arg temp. */
     color = 0x7E00;
     scratch = 0x1F800000;
     hF0 = 0xF0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(scratch), "=r"(hF0) : "0"(scratch), "1"(hF0)); /* Match note: keep scratchpad base and 0xf0 materialized before the first stack-arg temp. */
     tmp = 0x18;
     next = *(void **)scratch;
@@ -231,7 +228,6 @@ void func_80069A78(s32);
 
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) asm("func_8001BE9C");
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
     s32 a2_save = arg2;
@@ -243,7 +239,6 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     s32 offset;
     s32 one;
     s32 stride;
-    /* This pin is load-bearing: removing it changes .text. */
     register u16 value asm("$2");
 
     __asm__("" : : "r"(a0_save), "r"(a1_save), "r"(a2_save));
@@ -258,7 +253,6 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
 
     {
-        /* These pins are load-bearing: removing any one changes .text. */
         register void *ptr;
         register s32 arg1;
         register s32 arg2;
@@ -308,7 +302,6 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
 
 void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) asm("func_8001C088");
 void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
     s32 a2_save = arg2;
@@ -320,7 +313,6 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     s32 offset;
     s32 one;
     s32 stride;
-    /* This pin is load-bearing: removing it changes .text. */
     register u16 value asm("$2");
 
     __asm__("" : : "r"(a0_save), "r"(a1_save), "r"(a2_save));

@@ -18,7 +18,6 @@ void SsSeqApplyControlChange(long seq, long sep, u_char value) {
 
     seq_raw = seq;
     sep_raw = sep;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(seq_raw), "=r"(sep_raw) : "0"(seq_raw), "1"(sep_raw));
     sep_s = sep;
     seq_shift = seq << 16;
@@ -50,7 +49,6 @@ void SsSeqApplyControlChange(long seq, long sep, u_char value) {
         long seq_cb;
         long sep_cb;
         void (*callback)(long, long, u_char);
-        /* This pin is load-bearing: removing it changes .text. */
         register long raw_shift asm("$2");
 
         seq_cb = seq_raw << 16;

@@ -202,7 +202,6 @@ void DrawStartGridScenery(s32 arg0) {
     Vec4i state;
     s32 s1;
     s32 s0;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 drawArg;
     s32 rem;
@@ -270,7 +269,6 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     Matrix mtx;
     Matrix mtx2;
     Vec4i state;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 bucket asm("$2");
     s32 value;
     u32 *visibility;
@@ -279,7 +277,6 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     s32 visible;
     s32 num;
     s32 drawArg;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 sv asm("$2");
     register s32 lim2 asm("$2");
     register s32 *scr asm("$8");
@@ -388,14 +385,12 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Vec4i state;
     s32 bucket;
     s32 value;
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 *visibility asm("$3");
     u32 *wordPtr;
     s32 bit;
     s32 visible;
     s32 num;
     s32 drawArg;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 sv asm("$2");
     register s32 lim2 asm("$2");
     register s32 *scr asm("$8");

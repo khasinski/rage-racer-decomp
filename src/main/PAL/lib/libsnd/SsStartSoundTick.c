@@ -21,7 +21,6 @@ void SsStartSoundTick(long arg0) asm("func_80071C44");
 void SsStartSoundTick(long arg0) {
     long size;
     long channel;
-    /* This pin is load-bearing: removing it changes .text. */
     register u_char *flag asm("$5");
     long state;
     long wait;
@@ -65,11 +64,9 @@ void SsStartSoundTick(long arg0) {
     {
         long *active;
         long dividend;
-        /* This pin is load-bearing: removing it changes .text. */
         register long quotient asm("$2");
 
         active = &g_SndNoTickFlag;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(active) : "0"(active));
         if (*active != 0) {
             return;
@@ -78,7 +75,6 @@ void SsStartSoundTick(long arg0) {
         if (state < 0x46) {
             dividend = 0x204CC0;
             quotient = dividend / state;
-            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(active), "=r"(quotient) : "0"(active), "1"(quotient));
             ((u_char *)active)[0xD] = ((u_char *)active)[0xD] + 1;
         } else {

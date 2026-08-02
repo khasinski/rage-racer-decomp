@@ -14,7 +14,6 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     long voice;
     long start;
     long target;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long step asm("$10");
     register long offset asm("$2");
     long delta;
@@ -22,7 +21,6 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     long quotient;
     long start16;
     long target16;
-    /* This pin is load-bearing: removing it changes .text. */
     register long stepForSmallDiv asm("$4");
     long step16;
 
@@ -227,7 +225,6 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     long voice;
     long start;
     long target;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long step asm("$10");
     register long offset asm("$2");
     long delta;
@@ -235,7 +232,6 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     long quotient;
     long start16;
     long target16;
-    /* This pin is load-bearing: removing it changes .text. */
     register long stepForSmallDiv asm("$4");
     long step16;
 
@@ -317,7 +313,6 @@ void SpuVmAutoPanTick(long arg0) {
     u_short counter;
     long sum;
     long step;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long limit asm("$3");
     long current;
     register long positiveCompare asm("$2");
@@ -377,14 +372,12 @@ void SpuVmAutoPanTick(long arg0) {
     long level;
     long scaledLevel;
     long masterVolume;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long dividend asm("$3");
     register u_long volume asm("$3");
     u_long pan;
     u_long left;
     u_long right;
     long mixed;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long outputOffset asm("$4");
     register u_long compareLeft asm("$2");
     register u_long compareRight asm("$3");
@@ -404,12 +397,10 @@ void SpuVmAutoPanTick(long arg0) {
     pan = D_801E4BDE;
     left = volume;
     if (pan < 0x40) {
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(volume) : "0"(volume));
         left = volume;
         right = ((u_long)(volume * pan)) >> 6;
     } else {
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(left) : "0"(left));
         right = left;
         left = ((u_long)(left * (0x7F - pan))) >> 6;
@@ -457,7 +448,6 @@ void SpuVmAutoPanTick(long arg0) {
     outputOffset = (short)index8 << 1;
     flagIndex = (short)originalArg;
     *(u_short *)((u_char *)g_SndVoiceRegsVolRight + outputOffset) = right;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : : "memory");
     *(u_short *)((u_char *)g_SndVoiceRegs + outputOffset) = left;
     g_SndVoiceFlags[flagIndex] |= 3;

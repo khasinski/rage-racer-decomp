@@ -60,11 +60,9 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
     s32 rem;
     s32 coords[3];
     s32 angle;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 zValue;
     s32 lowerLimit;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 callArg asm("$4");
 
     lateral = car->field_11C;
@@ -713,7 +711,6 @@ void UpdateCamera(void *arg0, s32 arg1) asm("func_80043BCC");
 void RunRaceIntroCamera(Obj *obj, s32 mode) asm("func_8003C508");
 void RunRaceIntroCamera(Obj *obj, s32 mode) {
     s32 *spad = (s32 *) 0x1F800000;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 s0v asm("$16");
     s32 delta[3];
 
@@ -825,7 +822,6 @@ typedef struct CopyBlock16 {
 
 void SeedFinishCamera(void *arg0) asm("func_8003CA14");
 void SeedFinishCamera(void *arg0) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 word0 asm("$2");
     u32 word1;
     u32 word2;
@@ -835,13 +831,11 @@ void SeedFinishCamera(void *arg0) {
     u32 *base;
     GameTrackPoint *track;
     GameTrackPoint *point;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 index asm("$3");
     s32 lastIndex;
     register s32 value asm("$3");
 
     base = arg0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(base) : "0"(base));
     dst = (CopyBlock16 *)g_CameraCar;
     src = (CopyBlock16 *)base;

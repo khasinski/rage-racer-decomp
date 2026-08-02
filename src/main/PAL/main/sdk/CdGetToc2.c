@@ -25,7 +25,6 @@ long CdGetToc2(long arg0, u_char *arg1) {
     u_char *toc = arg1;
     long oldHandler;
     long firstTrack;
-    /* This pin is load-bearing: removing it changes .text. */
     register u_char *ptr asm("$17");
     long count;
     long lastTrack;
@@ -38,7 +37,6 @@ long CdGetToc2(long arg0, u_char *arg1) {
     } else {
 
     {
-        /* These pins are load-bearing: removing any one changes .text. */
         register u_long firstBcd asm("$4");
         u_long lastBcd;
         register u_long high asm("$3");
@@ -96,7 +94,6 @@ long CdGetToc2(long arg0, u_char *arg1) {
     if (g_CdDebugLevel >= 2) {
         if ((long)ptr >= 0) {
             u_char *entry;
-            /* This pin is load-bearing: removing it changes .text. */
             register u_char *fmt asm("$4");
             u_long first;
             u_long second;

@@ -40,7 +40,6 @@
 
 void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) asm("func_80068340");
 void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) {
-    /* This pin is load-bearing: removing it changes .text. */
     register s16 *m asm("$7") = mtx;
     s32 *v = vec;
 

@@ -82,7 +82,6 @@ void StUnSetRing(void) {
     func_8006A58C(0);
     *D_80099360 = 0;
     *D_8009936C = 0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" ::: "memory");
     ExitCriticalSection();
 }

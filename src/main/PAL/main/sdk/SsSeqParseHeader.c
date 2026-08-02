@@ -19,7 +19,6 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     long q;
     long ret;
     u_long D;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long prod asm("$6");
     register long vab asm("$4");
     register long slot;

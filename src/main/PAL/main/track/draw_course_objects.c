@@ -50,7 +50,6 @@ void DrawCourseObjects(void) {
         } else {
         visShift = obj->f4 / 2048;  /* per-sector visibility bit index */
         {
-            /* This pin is load-bearing: removing it changes .text. */
             register s32 r2 asm("$2");
             s32 r3;
             r3 = obj->fC / 2048;
@@ -84,7 +83,6 @@ void DrawCourseObjects(void) {
         ApplyMatrix((void *)0x1F800028, (void *)0x1F80011C, (void *)0x1F800124);
         {
             s32 a;
-            /* This pin is load-bearing: removing it changes .text. */
             register s32 b asm("$3");
             a = *(s32 *)0x1F800124;
             b = *(s32 *)0x1F80012C;

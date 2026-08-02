@@ -46,7 +46,6 @@ void UploadTeamNameTexture(void *arg0, s32 arg1) asm("func_8001D530");
 void EnterCourseSelectScreen(void) asm("func_80052778");
 void EnterCourseSelectScreen(void) {
     s32 one;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 initValue;
     register s32 mode asm("$4");
     s32 largeValue;

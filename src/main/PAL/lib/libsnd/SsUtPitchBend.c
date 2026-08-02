@@ -62,11 +62,9 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     long stackA;
     long stackB;
     long ret;
-    /* This pin is load-bearing: removing it changes .text. */
     register long tmp asm("v0");
     long x;
     long y;
-    /* This pin is load-bearing: removing it changes .text. */
     register long flags asm("v1");
 
     id = arg0;
@@ -122,7 +120,6 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     long index;
     long voiceOffset;
     long volOffset;
-    /* This pin is load-bearing: removing it changes .text. */
     register long field asm("v1");
 
     if ((u_short)arg0 >= 0x18U) {
@@ -170,7 +167,6 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
 }
 
 long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) {
-    /* This pin is load-bearing: removing it changes .text. */
     register long offset asm("$3");
     u_char *base;
 
@@ -188,11 +184,9 @@ long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) {
 }
 
 long SsUtSetDetVVol(long arg0, short arg1, short arg2) {
-    /* This pin is load-bearing: removing it changes .text. */
     register long ret asm("$2");
     long index;
     long j;
-    /* This pin is load-bearing: removing it changes .text. */
     short valueX;
     u_char flags;
 

@@ -68,7 +68,6 @@ void DrawPadTypeHint(void) {
     s32 w;
     s32 y0;
     s32 base;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 raw_base asm("$2");
     register s32 value asm("$3");
     s32 scratch;
@@ -84,7 +83,6 @@ void DrawPadTypeHint(void) {
         value = g_LastValidPadType;
     } else {
         raw_base = g_PadType;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(raw_base) : "0"(raw_base));
         value = raw_base & 0xFF;
         g_LastValidPadType = raw_base;

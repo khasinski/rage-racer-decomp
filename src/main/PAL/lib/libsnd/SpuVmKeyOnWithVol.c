@@ -30,7 +30,6 @@ void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
 
 void SpuVmClearFinishedVoices(void) {
     long i;
-    /* This pin is load-bearing: removing it changes .text. */
     register long next asm("$2");
     long flag;
     long offset;

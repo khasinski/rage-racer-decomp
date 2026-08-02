@@ -113,7 +113,6 @@ s32 GetCarCrestTrigger(GameCarRuntime *arg0) {
     s32 row;
     s32 temp;
     s32 crossed;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 i asm("a2");
     s32 offset;
     s32 sentinel;
@@ -121,7 +120,6 @@ s32 GetCarCrestTrigger(GameCarRuntime *arg0) {
     s32 diff;
     s32 cmp;
     s32 threshold;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 resultOffset asm("v0");
 
     base = g_TrackEventData;
@@ -219,7 +217,6 @@ void UpdateCarCrestHop(GameCarRuntime *arg0) {
         value = value / 6;
         /* These barriers are load-bearing: without them the copy to `result`
          * is scheduled ahead of the divide and the load delay needs a nop. */
-        /* These barriers are load-bearing: removing any one changes .text. */
         asm volatile("" : "=r"(value) : "0"(value));
         result = temp;
         asm volatile("" : "=r"(temp) : "0"(temp));
@@ -358,18 +355,15 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     s32 index;
     s32 advanceOffset;
     s32 scene;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 offset asm("$3");
     register u8 *base asm("$2");
     s16 *entry;
     s32 value;
     s32 valueRaw;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 raw asm("$2");
     s32 stack[2];
 
     raw = objReg->trackProgress;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" : : "r"(stack));
     scene = g_RaceSeries;
     target = raw >> 4;
@@ -401,7 +395,6 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
         valueRaw = objReg->field_11C;
         if (entry[2] < valueRaw) {
             value = valueRaw;
-            /* This barrier is load-bearing: removing it changes .text. */
             asm volatile("" : "=r"(valueRaw) : "0"(valueRaw));
             raw = entry[3];
             raw = valueRaw < raw;
@@ -419,7 +412,6 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     } else {
 advance:
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 next asm("$2");
 
         next = *(s32 *)(state + 0x44);
@@ -448,7 +440,6 @@ advance:
 void SeedCarRouteMarkers(void) asm("func_80039644");
 void SeedCarRouteMarkers(void) {
     s32 one = 1;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 offset asm("a2") = 0;
     register u8 *base asm("t0");
     s32 scene;
@@ -466,7 +457,6 @@ void SeedCarRouteMarkers(void) {
     baseOffset = product << 6;
 
 outer:
-    /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     index = 0;
     raw = *(s32 *)(g_CarTrackProgress + offset);
@@ -484,7 +474,6 @@ inner:
         *(s16 *)(g_CarMarkerIndex + offset) = 0;
         offset += 0x19C;
     } else {
-    /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     index++;
     if (index < 0x30) {
@@ -505,7 +494,6 @@ void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   u8 *p[2];
   u16 lim[4];
   u16 val[2];
-  /* This pin is load-bearing: removing it changes .text. */
   register u8 *sub_R9 asm("$9");
   s32 rpm;
   s32 g0;
@@ -515,7 +503,6 @@ void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   s32 lo_R7;
   s32 hi;
   s32 range;
-  /* This pin is load-bearing: removing it changes .text. */
   register s32 d_R3 asm("$3");
   s32 pitch;
   s32 q;

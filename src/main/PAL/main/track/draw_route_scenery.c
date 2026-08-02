@@ -107,24 +107,20 @@ void InitShuttleScenery(void) asm("func_8003F0F8");
 void InitShuttleScenery(void) {
     GameShuttleScenery *state;
     s32 *src;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 *dst asm("$4");
     s32 index;
     register s32 value asm("$2");
     register s32 v1 asm("$3");
     s32 a4;
     s32 a5;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 a6 asm("$6");
 
     state = &g_ShuttleScenery[0];
     if ((g_CourseIndex & 3) == 2) {
         g_Shuttle1PathIndex = 2;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" ::: "memory");
         src = g_ShuttlePath2Points;
         dst = &g_Shuttle1X;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(src), "=r"(dst) : "0"(src), "1"(dst));
         value = src[0];
         v1 = src[1];
@@ -162,12 +158,10 @@ void InitShuttleScenery(void) {
     state->y = a4;
     state->z = a5;
     state->unk1C = a6;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;
     v1 = RAW(ANGLES(value).x);
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;

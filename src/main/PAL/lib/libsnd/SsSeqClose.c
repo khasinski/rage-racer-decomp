@@ -15,7 +15,6 @@ void SsSeqClose(long seq) {
     long offset;
     long index;
     long value;
-    /* This pin is load-bearing: removing it changes .text. */
     register long current asm("$3");
     long mask;
 

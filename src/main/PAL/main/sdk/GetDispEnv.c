@@ -92,7 +92,6 @@ void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
     long limit;
     Rect clipped;
 
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(src) : "0"(src));
     out[1] = Gpu_BuildDrawAreaTopLeftCmd(src->clip.x, src->clip.y);
     out[2] = Gpu_BuildDrawAreaBottomRightCmd(
@@ -152,7 +151,6 @@ void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
 
         value = coord & 0x3F;
         if ((value != 0) || (((u_short)clipped.w & 0x3F) != 0)) {
-            /* These pins are load-bearing: removing any one changes .text. */
             register long commandOffset asm("$6");
             register long positionOffset asm("$5");
             u_long blue;
@@ -164,7 +162,6 @@ void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
             positionOffset = count << 2;
             count++;
             value = (u_short)src->ofs[0];
-            /* These barriers are load-bearing: removing any one changes .text. */
             asm("" : "=r"(value) : "0"(value));
             commandOffset += (long)out;
             asm("" : "=r"(commandOffset) : "0"(commandOffset));
@@ -197,7 +194,6 @@ void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
             long sizeOffset;
             u_long blue;
             u_long green;
-            /* This pin is load-bearing: removing it changes .text. */
             register u_long red asm("$4");
 
             commandOffset = count << 2;

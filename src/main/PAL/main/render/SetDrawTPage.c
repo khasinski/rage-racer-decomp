@@ -6,7 +6,6 @@ s32 func_800657E4(void);
 
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) asm("func_800650E4");
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 encoded asm("$2");
     s32 mode;
 
@@ -37,7 +36,6 @@ void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
 
     }
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 value asm("$7") = 0xE1000000;
 
         if (arg2 != 0) {
@@ -248,14 +246,12 @@ s32 SetGraphReverse(s32 arg0) {
 s32 SetGraphDebug(u8 arg0) asm("func_800656CC");
 
 s32 SetGraphDebug(u8 arg0) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register volatile u8 *ptr asm("$3") = &g_GraphDebug;
     register s32 old asm("$16") = *ptr;
 
     *ptr = arg0;
     if (arg0 != 0) {
         void (*func)(char *, ...) = GPU_printf;
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 a1 asm("$5");
         s32 a2;
         s32 a3;

@@ -38,13 +38,11 @@ long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) {
     }
     if (arg0->h != 0) {
         u_long *buf;
-        /* These pins are load-bearing: removing any one changes .text. */
         register GpuCallbacks *gpu asm("$3");
         register u_long xy asm("$4");
         long size;
         long data;
         u_long packed;
-        /* This pin is load-bearing: removing it changes .text. */
         register u_long low asm("$3");
         u_long wh;
 
@@ -60,7 +58,6 @@ long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) {
         wh = *(u_long *)&arg0->w;
         data = 0;
         g_MoveImageSize = wh;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : : "r"(wh) : "memory");
         return gpu->send(gpu->sendList, buf - 2, size, data);
     }
@@ -78,7 +75,6 @@ extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 
 void * ClearOTag(u_long *arg0, long count) asm("func_80065CB0");
 void *ClearOTag(u_long *arg0, long count) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u_long *ptr asm("$16") = arg0;
     long remaining = count;
 
@@ -124,11 +120,9 @@ void *ClearOTagR(u_long *arg0, long arg1) {
 
     {
         u_long mask = 0xFFFFFF;
-        /* This pin is load-bearing: removing it changes .text. */
         register u_long *ret asm("$2") = arg0;
         u_long next;
 
-        /* These barriers are load-bearing: removing any one changes .text. */
         asm("" : "=r"(ret), "=r"(mask) : "0"(ret), "1"(mask));
         next = (u_long)&g_OtagTerminator;
         asm("" : "=r"(next) : "0"(next));

@@ -139,7 +139,6 @@ void func_80027874(long x, long y, u_char *str, long arg3) {
     CdReadSprite *packet;
     long idx;
     u_char *next;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u_char *sr __asm("$21");
     register u_char *tableA __asm("$23");
     long ga;

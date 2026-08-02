@@ -134,7 +134,6 @@ s32 GetTrackZoneBlend(s32 position) {
     u8 *base;
     s32 scene;
     TrackZone *first;
-    /* This pin is load-bearing: removing it changes .text. */
     register TrackZone *zone asm("$6");
     s32 status;
     s32 two;
@@ -176,7 +175,6 @@ s32 GetTrackZoneBlend(s32 position) {
 
         rawCode = zone->code;
         g_TrackZoneCode = rawCode;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : : : "memory");
         code = (s16)rawCode;
         if (!(code == 0)) {

@@ -25,7 +25,6 @@ void func_80063C38(char *arg0);
 long VSync(long arg0) {
     long oldTimer;
     long delta;
-    /* This pin is load-bearing: removing it changes .text. */
     register long waitTarget asm("$2");
     long waitCount;
     volatile long *timer;

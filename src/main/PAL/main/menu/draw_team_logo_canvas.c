@@ -738,7 +738,6 @@ void ScrollTeamLogoLeft(void) {
     s32 row;
     u32 *savePtr;
     u32 *savePtr2;
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 *rowBase asm("$8");
     s32 offset;
     s32 col;
@@ -747,7 +746,6 @@ void ScrollTeamLogoLeft(void) {
     u32 *addr;
     u32 *cursor;
     u32 saved[64];
-    /* These pins are load-bearing: removing any one changes .text. */
     register u32 value asm("$2");
     register u32 next asm("$3");
 
@@ -812,7 +810,6 @@ void ScrollTeamLogoRight(void) {
     u32 saved[64];
     u32 savedNibble;
     u32 value;
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 prev asm("$4");
 
     PlaySoundCue(1);

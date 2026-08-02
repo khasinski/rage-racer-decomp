@@ -27,7 +27,6 @@ void func_800200D0(void);
 
 void InitRecordTables(void) asm("func_80021A08");
 void InitRecordTables(void) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r2 asm("$2");
     s32 r3;
     register s32 r4 asm("$4");
@@ -39,17 +38,14 @@ void InitRecordTables(void) {
     s32 r10;
     s32 r11;
     s32 r12;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r13 asm("$13");
     register s32 r14 asm("$14");
     s32 r15;
     s32 r16;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r17 asm("$17");
     register s32 r18 asm("$18");
     s32 r19;
     s32 r20;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r21 asm("$21");
     s32 r22;
     register s32 r24 asm("$24");

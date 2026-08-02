@@ -39,7 +39,6 @@ CdlLOC *CdIntToPos(long i, CdlLOC *p) {
 long CdPosToInt_Local(CdlLOC *arg0) {
     long v0;
     long v1 = arg0->minute;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long a0 asm("$4");
     long a1;
     register long a2 asm("$6") = arg0->second;

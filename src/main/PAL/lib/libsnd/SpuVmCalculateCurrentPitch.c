@@ -14,7 +14,6 @@ u_short SpuVmCalculateCurrentPitch(void) asm("func_800749B4");
 u_short SpuVmCalculateTonePitch(long arg0, long arg1) asm("func_80074A6C");
 
 u_short SpuVmCalculateCurrentPitch(void) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register long delta asm("a0");
     register long nibble asm("a2");
     register long temp asm("v0");
@@ -23,7 +22,6 @@ u_short SpuVmCalculateCurrentPitch(void) {
     delta = (short)(g_SndCurrentNote + 0x3C - g_SndCurrentToneCenter);
     quotient = delta / 12;
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register long raw asm("v1");
         raw = g_SndCurrentToneShift;
         nibble = raw >> 3;
@@ -35,7 +33,6 @@ u_short SpuVmCalculateCurrentPitch(void) {
 
     temp = (delta << 16) >> 12;
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register long value asm("v1");
         value = g_SndPitchTable[nibble + temp];
         temp = (short)(quotient - 5);
@@ -55,7 +52,6 @@ u_short SpuVmCalculateTonePitch(long arg0, long arg1) {
     long bank;
     long quotient8;
     long sum;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long nibble asm("a3");
     register long raw_delta asm("v0");
     long delta;
@@ -92,14 +88,12 @@ u_short SpuVmCalculateTonePitch(long arg0, long arg1) {
     delta -= quotient * 12;
     table_index = (delta << 16) >> 12;
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register long signed_nibble asm("v0") = (short)nibble;
         table_index += signed_nibble;
     }
     shift = (short)(quotient - 5);
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register long value asm("v1");
         value = g_SndPitchTable[table_index];
         if (shift > 0) {

@@ -16,7 +16,6 @@ void TriggerRaceCues(void) {
     s32 i;
     s32 mask;
     u8 *stateBase;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 temp asm("v0");
     register s32 entry asm("v1");
     register s32 loopFlags asm("t0");

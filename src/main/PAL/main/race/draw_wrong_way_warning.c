@@ -12,7 +12,6 @@ void *func_80017390(void *ot, void *packet, s32 arg2);
 
 void DrawWrongWayWarning(void) asm("func_800333DC");
 void DrawWrongWayWarning(void) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u8 *packet __asm("$16");
     u8 *next;
     s32 i;
@@ -146,7 +145,6 @@ void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
         *(s32 *)(prim + 4) = *(s32 *)(base + 32);
     } else {
         s16 rv = 0x33A8;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(rv) : "0"(rv));
         *(s16 *)(g_DrawBuffer + 0x236F2) = rv;
         g_TachoFaceB = 0x80;
@@ -240,15 +238,12 @@ void func_80064EB8(u8 *prim, s32 enabled);
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u8 *out asm("$16") = prim;
     s32 xReg = x;
     s32 yReg = y;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 codeReg asm("$17");
     register s32 arg4Reg asm("$20");
 
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(xReg), "=r"(yReg) : "0"(xReg), "1"(yReg) : "$17");
     codeReg = digit;
     arg4Reg = clut;
@@ -261,7 +256,6 @@ u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
 
     {
         u8 *ot = g_DrawBuffer;
-        /* This pin is load-bearing: removing it changes .text. */
         register u8 *oldPrim asm("$5") = out;
 
         *(s16 *)&out[0x8] = xReg;

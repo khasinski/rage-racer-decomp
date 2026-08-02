@@ -63,7 +63,6 @@ void DrawMemoryCardMessage(s32 arg0) {
     s32 y;
     s16 *table;
     s32 one;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 temp asm("$2");
     s32 next;
     s32 base;

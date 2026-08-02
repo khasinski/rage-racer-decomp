@@ -9,14 +9,12 @@ s32 DrawClassChangeCurtain(s32 arg0) asm("func_8005026C");
 s32 DrawClassChangeCurtain(s32 arg0) {
     void *scratch;
     s32 delta;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$16");
     s32 y1;
     s32 red;
     s32 green;
     s32 blue;
     s32 alpha;
-    /* These pins are load-bearing: removing any one changes .text. */
     s32 temp;
     register s32 zero asm("$5");
     register void *callScratch asm("$4");
@@ -45,7 +43,6 @@ s32 DrawClassChangeCurtain(s32 arg0) {
             }
             callScratch = scratch;
             zero = 0;
-            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(zero) : "0"(zero));
             value = ((u32)(value << 9) >> 5) + 0xFF10;
             yArg = (s16)value;
@@ -57,7 +54,6 @@ s32 DrawClassChangeCurtain(s32 arg0) {
             func_80047024(callScratch, zero, yArg, 0x140, y1, red, green, blue, alpha);
             callScratch = scratch;
             zero = 0;
-            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(zero) : "0"(zero));
             value = y1 - value;
             value <<= 0x10;

@@ -213,7 +213,6 @@ void UpdateWaypoints(void) {
      * Writing them as waypoint->field drops the second induction variable and
      * re-bases every store on $17.
      */
-    /* This pin is load-bearing: removing it changes .text. */
     register char *tail asm("$16");
 
     if (g_WaypointSpawnCooldown != 0) {
@@ -227,7 +226,6 @@ void UpdateWaypoints(void) {
     do {
         if (waypoint->active == 0) {
             if (IsCarNearWaypoint(waypoint) != 0) {
-                /* These pins are load-bearing: removing any one changes .text. */
                 register volatile s32 *src asm("$5");
                 register s32 src0 asm("$2");
                 s32 src1;
@@ -300,7 +298,6 @@ void DrawWaypoints(void) {
     s32 drawId;
     s32 i;
     Matrix *mtx1Ptr;
-    /* This pin is load-bearing: removing it changes .text. */
     register char *point asm("$16");
     s32 frameValue;
     s32 drawArg;
@@ -364,7 +361,6 @@ void DrawLapNumber(void) {
     s32 digitsDrawn;
     s32 xOffset;
     s32 quotient;
-    /* This pin is load-bearing: removing it changes .text. */
     register u8 *packet asm("$16");
 
     scratch = *(u8 **)0x1F800000;
@@ -425,7 +421,6 @@ void DrawLapNumber(void) {
 void UpdateWaypointCollectScene(void) asm("func_80037D90");
 void UpdateWaypointCollectScene(void) {
     s16 *p;
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 a asm("$5");
     s32 x = 0;
 
@@ -534,7 +529,6 @@ void ApplyTrackReverbZone(s32 arg0) asm("func_800381EC");
 void ApplyTrackReverbZone(s32 arg0) {
     s32 result;
     s32 i;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 offset;
     s32 arg;
     register s32 scene;
@@ -563,7 +557,6 @@ void ApplyTrackReverbZone(s32 arg0) {
 s32 func_80038288(s32 arg0) {
     s32 trackLength;
     s32 value;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 temp asm("v0");
     s32 angle;
     register s32 remainder asm("a0");
@@ -669,9 +662,9 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         ent->field_E0 = 0;
         ent->field_DC = 0;
         ent->field_D8 = 0;
-        ent->field_18 = 0;
-        ent->field_14 = 0;
-        ent->field_10 = 0;
+        ent->motionZ = 0;
+        ent->motionY = 0;
+        ent->motionX = 0;
         ent->routeIndex = 0;
         ent->field_116 = 0;
         ent->field_110 = 0;
@@ -736,7 +729,6 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) asm("func_800385FC")
 void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   s32 pos2_R10;
   s32 idx_R8;
-  /* These pins are load-bearing: removing any one changes .text. */
   register u8 *base_R9;
   register GameCarRuntime *ent2_R7;
   GameCarAiBlock *sub_R6;
@@ -753,7 +745,6 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   {
     s32 lev1_R3;
     unsigned int idxoff1_R4;
-    /* This pin is load-bearing: removing it changes .text. */
     register u8 *p1_R4;
     lev1_R3 = g_RaceSeries;
     idxoff1_R4 = idx_R8;
@@ -795,7 +786,6 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   {
     s32 lev2_R2;
     s32 idxoff2_R4;
-    /* This pin is load-bearing: removing it changes .text. */
     register u8 *p2_R3 asm("$3");
     lev2_R2 = g_RaceSeries;
     idxoff2_R4 = idx_R8 * 16;
@@ -824,7 +814,6 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   if (pos2_R10 >= 4)
   {
     s32 d_R5;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 pm4_R3 asm("$3");
     d_R5 = g_TrackLength;
     pm4_R3 = pos2_R10 - 4;

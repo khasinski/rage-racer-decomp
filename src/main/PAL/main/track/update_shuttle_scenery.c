@@ -24,13 +24,11 @@ void UpdateShuttleScenery(s32 arg0) {
     s32 phaseShift;
     s16 *limitPtr;
     s16 *tailLimitPtr;
-    /* These pins are load-bearing: removing any one changes .text. */
     s16 denom;
     register s32 temp asm("$3");
     register s32 value asm("$2");
 
     entry = &g_ShuttleScenery[arg0];
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(entry) : "0"(entry));
     limitPtr = g_ShuttlePathTravelMax;
     side = entry->startEndpoint;
@@ -92,10 +90,8 @@ void DrawShuttleScenery(s32 arg0) {
     GameShuttleScenery *state;
     GameShuttleScenery *base;
     Matrix *mtx1Ptr;
-    /* This pin is load-bearing: removing it changes .text. */
     s32 drawValue;
     s32 offset;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 bucket asm("$2");
     s32 bit;
     s32 firstValue;

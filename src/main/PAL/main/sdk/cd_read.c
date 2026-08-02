@@ -26,7 +26,6 @@ long cd_read(long arg0, long sectorInt, void *buf) {
 void LibcMemcpy(u_char *dst, u_char *src, long count) asm("func_8006CBF4");
 void LibcMemcpy(u_char *dst, u_char *src, long count) {
     u_char scratch[8];
-    /* This pin is load-bearing: removing it changes .text. */
     register long i asm("$3");
     long end;
 

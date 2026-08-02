@@ -68,7 +68,6 @@ while (1) {
             } while (cur != wrapped);
 
         } else {
-            /* This pin is load-bearing: removing it changes .text. */
             s32 count;
             u8 *table;
             register s32 wrapped asm("$5");

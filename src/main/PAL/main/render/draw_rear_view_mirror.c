@@ -42,7 +42,6 @@ s32 BeginMirrorPass(void) asm("func_8001A9A8");
 s32 BeginMirrorPass(void) {
     GameScratchpadRenderState *scratch;
     s32 mirrorEnabled;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 v0reg asm("$2");
     s32 v1reg;
     s32 y0;
@@ -128,7 +127,6 @@ void func_80069A78(s32 arg0);
 void EndMirrorPass(void) asm("func_8001ABD8");
 void EndMirrorPass(void) {
     GameScratchpadRenderState *scratch;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 v0reg asm("$2");
     s32 v1reg;
 

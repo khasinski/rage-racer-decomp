@@ -51,7 +51,6 @@ void UpdateRouteScenery(void) {
     SVec vin;
     LVec vout;
     volatile s32 pad[6];
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 *cnt asm("$7");
     u8 *base;
     register KF *kp asm("$5");
@@ -77,7 +76,6 @@ void UpdateRouteScenery(void) {
 
         g_RouteSceneryFrame = counter;
         if (RAW(rec0->dur) == counter) {
-            /* This pin is load-bearing: removing it changes .text. */
             register s32 ni asm("$2");
 
             ni = i + 1;
@@ -94,7 +92,6 @@ void UpdateRouteScenery(void) {
         s32 off;
         s32 n;
         s32 value;
-        /* These pins are load-bearing: removing any one changes .text. */
         register s32 *dst asm("$6");
         register s32 word0 asm("$2");
         s32 word1;

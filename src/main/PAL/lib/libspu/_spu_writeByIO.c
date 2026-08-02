@@ -16,7 +16,6 @@ void _spu_writeByIO(u_short *addr, u_long size) {
     u_short stat0;
     u_short *paddr = addr;
     u_short saved;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u_short ctrl asm("$4");
     register u_short cmasked asm("$2");
     long chunk;
@@ -40,7 +39,6 @@ void _spu_writeByIO(u_short *addr, u_long size) {
             }
             ctrl = g_SpuRegBase[0xD5];
             cmasked = ctrl & 0xffcf;
-            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(cmasked) : "0"(cmasked));
             ctrl = cmasked | 0x10;
             g_SpuRegBase[0xD5] = ctrl;

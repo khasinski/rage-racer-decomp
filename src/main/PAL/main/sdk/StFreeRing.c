@@ -36,7 +36,6 @@ void func_8006D0AC(long arg0, u_long arg1) {
     u_long i;
 
     for (i = 0; i < arg1; i++) {
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" ::: "memory");
         ((StRingClearRecord *)g_StRingBase)[i + arg0].value = 0;
     }
@@ -45,7 +44,6 @@ void func_8006D0AC(long arg0, u_long arg1) {
 long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) asm("func_8006D0EC");
 long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     StRingEventRecord **out0 = arg0;
-    /* This pin is load-bearing: removing it changes .text. */
     register StRingEventRecord **out1 asm("$8") = arg1;
     StRingEventRecord *entry;
     long old_flag;

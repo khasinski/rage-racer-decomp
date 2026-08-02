@@ -20,14 +20,12 @@ void func_80046A2C(
 
 void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) asm("func_80048078");
 void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *record asm("$10") = arg2;
     register u8 *style asm("$9");
     s32 flags8;
     void *otBase;
     s32 mode;
     s32 flags4;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 limit asm("$8");
     s32 packed;
     s32 x;
@@ -54,13 +52,11 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     }
     interp = (u32)(arg0 * temp) >> 5;
 
-    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" ::: "memory");
     y = *(s16 *)(record + 6);
     x += interp;
     if (packed < 0) {
         s32 hi;
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 mask asm("$3");
 
         hi = packed >> 16;
@@ -71,7 +67,6 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     }
     interp = (u32)(arg0 * temp) >> 5;
     y += interp;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(y) : "0"(y));
 
     switch (style[6] & 3) {
@@ -94,7 +89,6 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     flags4 = flagByte & 4;
     if (arg3 != 0) {
         temp = style[7] & 0x7F;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(temp) : "0"(temp));
         alpha = (u8)temp;
     } else {
@@ -122,12 +116,10 @@ void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u
 
 void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) asm("func_80048210");
 void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u8 *record asm("$8") = arg2;
     u8 *style;
     void *otBase;
     s32 mode;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 y1Reg asm("$2");
     register s32 x0Base asm("$6");
     register s32 x0 asm("$5");
@@ -166,7 +158,6 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
 
     y0 = *(s16 *)(record + 6);
     if (xPacked < 0) {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 hi asm("$2");
         s32 mask;
 
@@ -179,7 +170,6 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     interp = (u32)(arg0 * temp) >> 5;
     y0 += interp;
 
-    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" ::: "memory");
     x1Base = *(s16 *)(record + 8);
     if (yPacked & 0x8000) {
@@ -191,12 +181,10 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     }
     interp = (u32)(arg0 * temp) >> 5;
 
-    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("" ::: "memory");
     y1 = *(s16 *)(record + 0xA);
     x1 = x1Base + interp;
     if (yPacked < 0) {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 hi asm("$2");
         s32 mask;
 
@@ -208,7 +196,6 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     }
     interp = (u32)(arg0 * temp) >> 5;
     y1 += interp;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(y1) : "0"(y1));
 
     switch (style[3] & 3) {
@@ -238,7 +225,6 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     y0Arg = y0Call << 0x10;
     x1 <<= 0x10;
     otPtr = (s32)otBase + arg0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(otPtr) : "0"(otPtr));
     func_8004711C(
         (void *)otPtr,
@@ -258,7 +244,6 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     u8 *record;
     void *ot;
     s32 limit;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 packedSpeed asm("$3");
     register s32 product asm("$2");
     s32 x;
@@ -275,7 +260,6 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
      * scratchpad load past the second record load. */
     limit = *(s32 *)record;
     ot = *(void **)0x1F800004;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm volatile("");
     packedSpeed = *(s32 *)(record + 8);
     if (limit < time) {
@@ -289,11 +273,9 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
         product = packedSpeed & 0x7FFF;
     }
     product = time * product;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(product), "=r"(record) : "0"(product), "1"(record));
     product = (u32)product >> 5;
     product = limit + product;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(product) : "0"(product));
 
     y = *(s16 *)(record + 6);
@@ -306,7 +288,6 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
         product = (packedSpeed >> 16) & 0x7FFF;
     }
     product = time * product;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(product), "=r"(style) : "0"(product), "1"(style));
     product = (u32)product >> 5;
     y += product;
@@ -318,7 +299,6 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     product = *(u16 *)style;
     packedSpeed = *(u16 *)(style + 4);
     product = x + product;
-    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(product) : "0"(product));
     limit = product;
     packedSpeed = x + packedSpeed;
@@ -339,14 +319,12 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 alpha;
 
         alpha = style[0xB];
         semiTrans = alpha & 4;
         if (semiTrans != 0) {
             alpha &= 0x60;
-            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(alpha) : "0"(alpha));
             flags = (u8)alpha;
         } else {
@@ -386,18 +364,15 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     s32 y;
     s32 dx;
     s32 dy;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 index asm("$10");
     s32 posX;
     s32 posY;
     s32 posX2;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 posY2 asm("$6");
     u32 velocityX;
     u32 velocityY;
     u32 velocityX2;
     u32 velocityY2;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 flags;
 
@@ -417,7 +392,6 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
         velocityX = velocity0 & 0x7FFF;
     }
     posX += (time * velocityX) >> 5;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(posX) : "0"(posX));
     x = posX;
 
@@ -430,7 +404,6 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
         velocityY = value & 0x7FFF;
     }
     value = posY + ((time * velocityY) >> 5);
-    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(value) : "0"(value));
     y = value;
     asm("" : "=r"(y) : "0"(y) : "memory");
@@ -442,7 +415,6 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
         velocityX2 = velocity1 & 0x7FFF;
     }
     value = posX2 + ((time * velocityX2) >> 5);
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(value) : "0"(value) : "memory");
     dx = value;
 
@@ -455,7 +427,6 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
         velocityY2 = value & 0x7FFF;
     }
     posY2 += (time * velocityY2) >> 5;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(posY2) : "0"(posY2));
     dy = posY2;
 
@@ -494,7 +465,6 @@ extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     TimedDrawCommand *base = commands;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 *progressPtr asm("$18") = progress;
     register s32 stepReg asm("$19") = step;
     TimedDrawCommand *cmd;
@@ -503,11 +473,9 @@ s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     s32 remaining;
     s32 type;
     s32 nextProgress;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 updatedProgress asm("$6");
     s32 limit;
 
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(base), "=r"(progressPtr), "=r"(stepReg) : "0"(base), "1"(progressPtr), "2"(stepReg));
     if (stepReg < 0) {
         nextProgress = *progressPtr + stepReg;
@@ -616,7 +584,6 @@ void func_80046A2C();
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) asm("func_800489AC");
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     u8 *arg0Ptr;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *arg1Ptr asm("$9");
     void *ot;
     register s32 countReg asm("$21");
@@ -626,19 +593,16 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     s32 xOffset;
     s32 yOffset;
     s32 nextTimer;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 value asm("$2");
     s32 temporary;
     void *basePtr;
     s32 offset;
     s32 done;
     s32 timerValue;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 fade asm("$3");
     s32 drawX;
     s32 drawY;
     s32 drawW;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 drawH asm("$2");
     s32 elapsed;
     s32 limit;
@@ -755,7 +719,6 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                    u8 arg4, u8 arg5, u8 arg6,
                    s32 flags, s32 arg8, s32 arg9, s32 arg10) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 f asm("$16") = flags;
     register s32 p0 asm("$18") = arg0;
     register void *ot asm("$19") = *(void **)0x1F800004;
@@ -776,7 +739,6 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                   0xb4, 0xb4, 0xb4, (f & 4) ? (f & 0x60) : 0xff);
     func_80047024(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
                   arg4, arg5, arg6, (f & 2) ? (f & 0x60) : 0xff);
-    /* This barrier is load-bearing: removing it changes .text. */
     __asm__("" : : "r"(p0), "r"(p1), "r"(p2), "r"(p3), "r"(f));
 }
 
@@ -796,7 +758,6 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
     s32 color;
     s32 white;
     s32 counter;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 phaseBase asm("$4");
 
     ot = *(void **)0x1F800004;

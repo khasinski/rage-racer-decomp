@@ -33,7 +33,6 @@ void SpuVmAutoPanTick(long voice) asm("func_800753CC");
 void SsUtFlush(void) asm("func_80075FA4");
 void SsUtFlush(void) {
     volatile long stack[4];
-    /* These pins are load-bearing: removing any one changes .text. */
     register long i asm("$16");
     register long voiceOffset asm("$17");
     long voiceIndex;
@@ -133,7 +132,6 @@ break;
         mask = ~mask;
         activeMask &= mask;
         mask = D_801F2A0C;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(mask) : "0"(mask) : "$17");
         voiceOffset = 0;
         D_8009E670 = activeMask;
@@ -143,7 +141,6 @@ break;
         D_8009E674 = activeMask;
     }
     do {
-        /* This pin is load-bearing: removing it changes .text. */
         register long voiceStep asm("$2");
 
         if (*(short *)&g_SndVoiceStateAutoVol[voiceOffset] != 0) {
@@ -159,14 +156,12 @@ break;
     } while (i < 24);
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register u_char *flagsPtr asm("$5");
         u_char *src0;
         u_char *src2;
         u_char *src8;
         u_char *src10;
         long spuOffset;
-        /* This pin is load-bearing: removing it changes .text. */
         register volatile u_short *spu asm("$2");
         u_short value;
         u_char *srcBase;

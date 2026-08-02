@@ -74,7 +74,6 @@ void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) {
     u_char *envReg = env;
     long xReg = x;
     long yReg = y;
-    /* This pin is load-bearing: removing it changes .text. */
     register long wReg asm("$16") = w;
     long hReg = h;
     long cmp;

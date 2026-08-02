@@ -39,7 +39,6 @@ void UpdateScriptedCamera(void) {
     s32 current;
     s32 tick;
     s32 currentOffset;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 nextOffset asm("$5");
     register s32 currentValue asm("$7");
     s32 scale;
@@ -81,7 +80,6 @@ void UpdateScriptedCamera(void) {
 
     {
         s32 tailCurrent;
-        /* These pins are load-bearing: removing any one changes .text. */
         register s32 tailTick asm("$2");
         register s32 tailNext asm("$4");
 

@@ -30,7 +30,6 @@ long VSync(long mode) asm("func_8006DD30");
 long GetKernelStatus(void) asm("func_8006E088");
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u_char *dstReg asm("$5");
     u_char *srcReg;
     long count;
@@ -52,7 +51,6 @@ static __inline__ void copy8(u_char *dst, u_char *src) {
 
 long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
 long CD_sync(long mode, u_char *result) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register long modeReg asm("$21");
     register u_char *resultReg asm("$22");
     char **statusNames;
@@ -63,7 +61,6 @@ long CD_sync(long mode, u_char *result) {
     long alarmStatus;
 
     modeReg = mode;
-    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(modeReg) : "0"(modeReg));
     resultReg = result;
     asm("" : "=r"(resultReg) : "0"(resultReg));
@@ -98,7 +95,6 @@ long CD_sync(long mode, u_char *result) {
             savedStatus = rawStatus & 3;
             for (;;) {
                 long readyBit;
-                /* This pin is load-bearing: removing it changes .text. */
                 s16 syncBit;
 
                 interrupt = func_8006AB5C();
@@ -122,12 +118,10 @@ long CD_sync(long mode, u_char *result) {
         }
 
         {
-        /* These pins are load-bearing: removing any one changes .text. */
         long sync;
         s8 syncRaw;
 
         syncRaw = intr->sync;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(syncRaw) : "0"(syncRaw));
         sync = syncRaw & 0xFF;
         if (sync == 2 || sync == 5) {

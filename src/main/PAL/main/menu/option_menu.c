@@ -57,7 +57,6 @@ void DrawOptionRootMenu(void) {
     s32 h18 = 0x18;
     s32 h48 = 0x48;
     s32 color = 0x7F40;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 *scratch asm("$21") = (s32 *)0x1F800000;
     s32 tmp;
     s32 state;

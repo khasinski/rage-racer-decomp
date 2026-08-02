@@ -18,7 +18,6 @@ void SsSetTableSize(u_char *arg0, long arg1, long arg2) {
     volatile u_char **row;
     volatile u_char **slot;
     long offset;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long step asm("$8");
     long tmp;
     register long ff asm("$3");

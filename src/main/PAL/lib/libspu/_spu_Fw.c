@@ -73,7 +73,6 @@ long _spu_FsetRXXa(long arg0, u_long arg1) {
 }
 
 long _spu_FgetRXXa(long arg0, long arg1) {
-    /* This pin is load-bearing: removing it changes .text. */
     register long value asm("a0");
     long ret;
 

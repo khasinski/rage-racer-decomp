@@ -41,7 +41,6 @@ u32 func_80068A2C[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  */
 void *CompMatrix(s32 *m0, void *m1, void *m2) asm("func_80068A38");
 void *CompMatrix(s32 *m0, void *m1, void *m2) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 r0 asm("$8") = m0[0];
     register s32 r1 asm("$9") = m0[1];
     register s32 r2 asm("$10") = m0[2];
@@ -142,7 +141,6 @@ void *CompMatrix(s32 *m0, void *m1, void *m2) {
 
 void *MulMatrix0(s32 *matrix, void *src, void *dst) asm("func_80068B98");
 void *MulMatrix0(s32 *matrix, void *src, void *dst) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 m0 asm("$8") = matrix[0];
     register s32 m1 asm("$9") = matrix[1];
     register s32 m2 asm("$10") = matrix[2];
@@ -353,7 +351,6 @@ void *MulRotMatrix(void *arg0) {
 
 void *SetMulMatrix(s32 *matrix, void *src) asm("func_80068E70");
 void *SetMulMatrix(s32 *matrix, void *src) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 m0 asm("$8") = matrix[0];
     register s32 m1 asm("$9") = matrix[1];
     register s32 m2 asm("$10") = matrix[2];
@@ -434,7 +431,6 @@ void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
 void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
     void *m = mtx;
     void *v = vec;
-    /* This pin is load-bearing: removing it changes .text. */
     register void *o asm("$6") = out;
 
     asm volatile(
@@ -549,7 +545,6 @@ void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
 
 
 s32 func_800690E0(s32 *arg0, s32 *arg1, s32 arg2) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 xy asm("$8");
     register s32 z asm("$9");
 
@@ -697,7 +692,6 @@ void PopMatrix(void) {
 /* Read GTE rotation matrix + translation (control regs $0..$7) into p[0..7]. */
 void ReadRotMatrix(volatile u32 *p) asm("func_80069374");
 void ReadRotMatrix(volatile u32 *p) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register u32 t0 asm("$8");
     register u32 t1 asm("$9");
     register u32 t2 asm("$10");
@@ -725,7 +719,6 @@ void ReadRotMatrix(volatile u32 *p) {
 /* Read GTE light matrix + back-color (control regs $8..$15) into p[0..7]. */
 void ReadLightMatrix(volatile u32 *p) asm("func_800693BC");
 void ReadLightMatrix(volatile u32 *p) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register u32 t0 asm("$8");
     register u32 t1 asm("$9");
     register u32 t2 asm("$10");
@@ -753,7 +746,6 @@ void ReadLightMatrix(volatile u32 *p) {
 /* Read GTE color matrix + far-color (control regs $16..$23) into p[0..7]. */
 void ReadColorMatrix(volatile u32 *p) asm("func_80069404");
 void ReadColorMatrix(volatile u32 *p) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register u32 t0 asm("$8");
     register u32 t1 asm("$9");
     register u32 t2 asm("$10");

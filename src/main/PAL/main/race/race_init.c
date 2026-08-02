@@ -45,7 +45,6 @@ void SetCarSpec(u32 arg0) {
 
 void InstallTrackEventData(u8 *arg0) asm("func_80034E04");
 void InstallTrackEventData(u8 *arg0) {
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 offset0 asm("$2");
     s32 offset1;
     u8 *callArg;

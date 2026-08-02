@@ -17,16 +17,13 @@ void func_80050400(s32 arg0, s32 arg1) {
     s32 step0;
     s32 step1;
     void *scratch;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 zero asm("$0");
     s32 value;
     s32 offset;
     s32 x0;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 y0 asm("$6");
     s32 render1;
     s16 y1;
-    /* These pins are load-bearing: removing any one changes .text. */
     register void *callScratch asm("$4");
     s32 callX;
 
@@ -224,7 +221,6 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     ApplyMatrixSV((s32 *)&mtx, &verts[3], (s16 *)&out[3]);
 
     {
-        /* These pins are load-bearing: removing any one changes .text. */
         register s32 x0 asm("$5");
         register s32 y0 asm("$6");
         register s32 x1 asm("$7");

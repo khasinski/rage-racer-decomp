@@ -16,7 +16,6 @@ void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
 void UpdateZoneAmbience(s32 arg0) {
     s32 position;
     s32 base;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 mode asm("$4");
     s32 value;
     s32 finalValue;
@@ -24,7 +23,6 @@ void UpdateZoneAmbience(s32 arg0) {
     s32 sentinel;
     s32 entryBaseValue;
     UnkFunc80040DB4Entry *entryBase;
-    /* This pin is load-bearing: removing it changes .text. */
     register UnkFunc80040DB4Entry *entry asm("$3");
     s32 selector;
 

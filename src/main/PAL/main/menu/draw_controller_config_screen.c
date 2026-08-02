@@ -249,7 +249,6 @@ extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
  * ordinary C (see docs/ASM_AND_GTE_POLICY.md).
  */
 void BeginNegconCalibration(void) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register u16 twist asm("$3");
     register u16 mode asm("$4");
     u16 *neutral = &g_NegconNeutralI;
@@ -260,7 +259,6 @@ void BeginNegconCalibration(void) {
 
     twist = g_NegconSteerPlay;
     mode = g_NegconMaxTwist;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("");
 
     *neutral = 0;

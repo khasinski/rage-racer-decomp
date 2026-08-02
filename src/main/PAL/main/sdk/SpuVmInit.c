@@ -58,19 +58,16 @@ extern volatile u_short g_SndVabProgMax asm("D_801E40D0");
 
 void SpuVmInit(long arg0) asm("func_80075710");
 void SpuVmInit(long arg0) {
-    /* This pin is load-bearing: removing it changes .text. */
     s16 i;
     long ff;
     long one;
     long index;
     long offset;
-    /* This pin is load-bearing: removing it changes .text. */
     s16 shifted;
     long eighteen;
     long mindex;
     u_long lowMask;
     u_long highMask;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u_long lowBits asm("$3");
     register u_long highBits asm("$4");
     volatile u_short *spu;
@@ -83,7 +80,6 @@ void SpuVmInit(long arg0) {
         _spu_setTransferCompletionFlag(0);
         D_801E4B5C = 0;
         g_SndDamper = 0;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm volatile("" ::: "memory");
         SpuInitMalloc(0x20, p);
     }
@@ -162,14 +158,12 @@ void SpuVmInit(long arg0) {
                 *(short *)&g_SndVoiceState[offset] = 0;
 
                 bits = D_8009E670;
-                /* This barrier is load-bearing: removing it changes .text. */
                 __asm__ volatile("");
                 /* These barriers are load-bearing. Without them `combine` folds
                  * the single-use `zero_extend(mem)` that defines the second
                  * operand into the `ior`, tripping its "complex expression
                  * first" rule and swapping the operands; retail keeps the
                  * written mask-first order. */
-                /* These barriers are load-bearing: removing any one changes .text. */
                 asm("" : "=r"(lowBits) : "0"(lowBits));
                 lowBits = lowMask | lowBits;
                 asm("" : "=r"(highBits) : "0"(highBits));

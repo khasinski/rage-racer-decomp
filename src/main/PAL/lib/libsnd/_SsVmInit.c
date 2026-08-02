@@ -18,15 +18,12 @@ extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
 extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
 
 void _SsVmInit(void) {
-    /* This pin is load-bearing: removing it changes .text. */
     register long i asm("$8");
     long ff;
     long one;
-    /* This pin is load-bearing: removing it changes .text. */
     register long index asm("$4");
     long offset;
     long shifted;
-    /* These pins are load-bearing: removing any one changes .text. */
     register long eighteen asm("$3");
     u_long lowMask;
     register u_long highMask asm("$6");
@@ -68,7 +65,6 @@ void _SsVmInit(void) {
             lowBits = g_SndCurrentVoice;
             /* This barrier is load-bearing: it hides the halfword load, whose
              * known-zero high bits would otherwise let gcc drop the mask. */
-            /* This barrier is load-bearing: removing it changes .text. */
             asm("" : "=r"(lowBits) : "0"(lowBits));
             index = lowBits & 0xFFFF;
             if ((u_long)index < 0x10) {
@@ -87,7 +83,6 @@ void _SsVmInit(void) {
             g_SndVoiceStateStatus[offset] = 0;
             lowBits = D_801F2A08;
             highBits = D_801F2A0C;
-            /* This barrier is load-bearing: removing it changes .text. */
             __asm__ volatile("" ::: "memory");
             next <<= 16;
             *(short *)&g_SndVoiceStatePitch[offset] = 0;

@@ -19,7 +19,6 @@ long CdControl(long com, void *param, long result) asm("func_8006A5A4");
 long CdControl(long arg0, void *arg1, long arg2) {
     void *arg;
     long arg2Reg;
-    /* This pin is load-bearing: removing it changes .text. */
     register long cmd asm("$20");
     long retries;
     long command;
@@ -32,7 +31,6 @@ long CdControl(long arg0, void *arg1, long arg2) {
     arg = arg1;
     arg2Reg = arg2;
     cmd = arg0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
     command = cmd & 0xFF;
@@ -84,11 +82,9 @@ long CdControlF(long arg0, void *arg1) {
 
     arg = arg1;
     cmd = arg0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
     command = cmd & 0xFF;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(command) : "0"(command));
     base = g_CdCommandNeedsSetloc;
     savedMode = g_CdSyncCallback;
@@ -135,7 +131,6 @@ long CdControlB(long arg0, void *arg1, long arg2) asm("func_8006A808");
 long CdControlB(long arg0, void *arg1, long arg2) {
     void *arg;
     long arg2Reg;
-    /* This pin is load-bearing: removing it changes .text. */
     register long cmd asm("$20");
     long retries;
     long command;
@@ -149,7 +144,6 @@ long CdControlB(long arg0, void *arg1, long arg2) {
     arg = arg1;
     arg2Reg = arg2;
     cmd = arg0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
     command = cmd & 0xFF;
@@ -182,7 +176,6 @@ long CdControlB(long arg0, void *arg1, long arg2) {
     } while (--retries != -1);
 
     g_CdSyncCallback = savedMode;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(result));
 
 done:

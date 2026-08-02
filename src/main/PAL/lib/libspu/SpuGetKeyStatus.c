@@ -7,7 +7,6 @@ long SpuGetKeyStatus(u_long arg0) {
     long voice = -1;
     long i = 0;
     u_long mask = 1;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u_long value asm("$3");
     register long ret asm("$2");
 
@@ -37,7 +36,6 @@ break;
 
         offset += (u_long)base;
         flag = (1 << voice) & flags;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(flag) : "0"(flag));
         value = *(volatile u_short *)(offset + 0xC);
         if (flag != 0) {

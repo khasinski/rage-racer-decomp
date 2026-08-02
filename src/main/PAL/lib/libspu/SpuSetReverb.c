@@ -7,7 +7,6 @@ extern long g_SpuRevWorkAreaAddr asm("D_8009A720");
 extern SpuRxx *g_SpuRegBase asm("D_8009AB7C");
 
 long SpuSetReverb(long on_off) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u_short cnt asm("v1");
 
     if (on_off != 0) {

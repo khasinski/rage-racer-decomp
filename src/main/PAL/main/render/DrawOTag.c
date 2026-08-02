@@ -65,14 +65,12 @@ void *DrawOTagEnv(void *arg0, void *arg1) {
     func_8006674C(tag, prim);
     {
         u32 mask = 0xFFFFFF;
-        /* This pin is load-bearing: removing it changes .text. */
         register void *sendTag asm("$5") = tag;
         s32 size = 0x40;
         u32 highMask = 0xFF000000;
         u32 word = *(u32 *)tag;
         GpuCallbacks *gpu;
 
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(size), "=r"(highMask), "=r"(word) : "0"(size), "1"(highMask), "2"(word));
         mask = (u32)src & mask;
         word &= highMask;

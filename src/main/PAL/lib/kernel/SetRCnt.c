@@ -8,14 +8,12 @@ extern volatile u_long *g_IrqRegs asm("D_8009A570");
 extern u_long g_RootCounterIrqBits[] asm("D_8009A578");
 
 long SetRCnt(long arg0, long arg1, long arg2) {
-    /* This pin is load-bearing: removing it changes .text. */
     register long index asm("$8") = arg0 & 0xFFFF;
     u_short flags = 0x48;
     long offset;
     volatile u_short *entry;
     long base_v0;
     long ret;
-    /* This pin is load-bearing: removing it changes .text. */
     register long base asm("$4");
     long small;
 
@@ -49,7 +47,6 @@ long SetRCnt(long arg0, long arg1, long arg2) {
     }
 
     ret = 1;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(ret) : "0"(ret));
     base = (long)g_RootCounterRegs;
     entry = (volatile u_short *)(offset + base);

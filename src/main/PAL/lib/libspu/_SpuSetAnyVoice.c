@@ -9,7 +9,6 @@ u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) asm("func_8
 u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) {
     volatile u_short *reg_hi;
     volatile u_short *reg_lo;
-    /* This pin is load-bearing: removing it changes .text. */
     register u_long hi asm("$2");
     u_long lo;
     u_long old;

@@ -47,7 +47,6 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
     long x = arg0;
     long y;
     long outY;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u_long value asm("$2");
     register u_long shiftedY asm("$3");
 
@@ -56,7 +55,6 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
         value = 0;
     } else {
         volatile u_short *widthp = g_VramWidth;
-        /* This pin is load-bearing: removing it changes .text. */
         register long maxX asm("$6");
 
         value = *widthp;
@@ -113,7 +111,6 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
     long x = arg0;
     long y;
     long outY;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u_long value asm("$2");
     register u_long shiftedY asm("$3");
 
@@ -122,7 +119,6 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
         value = 0;
     } else {
         volatile u_short *widthp = g_VramWidth;
-        /* This pin is load-bearing: removing it changes .text. */
         register long maxX asm("$6");
 
         value = *widthp;
@@ -176,7 +172,6 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
 }
 
 u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) {
-    /* These pins are load-bearing: removing any one changes .text. */
     register u_long x asm("$2");
     register u_long y asm("$3");
     volatile u_char *modep = g_GraphType;
@@ -220,12 +215,10 @@ u_long get_dx(DispEnv *env) asm("func_80066CB0");
 
 u_long get_dx(DispEnv *env) {
     volatile u_char *modep = g_GraphType;
-    /* This pin is load-bearing: removing it changes .text. */
     register long value asm("$2");
     long mode;
 
     value = *modep;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(value) : "0"(value));
     mode = value & 0xFF;
 

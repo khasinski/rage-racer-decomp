@@ -144,7 +144,6 @@ void LoadRoundAssets(void) {
     case 1:
         kind = 0x55;
         if (g_GrandPrixMode != 0) {
-            /* These pins are load-bearing: removing any one changes .text. */
             register s32 index asm("$2") = g_GrandPrixSeries;
             s32 scaled;
             register s32 base asm("$2");
@@ -166,7 +165,6 @@ void LoadRoundAssets(void) {
     case 2:
         if (func_80017C78(0x56, (void *)g_AssetBlockPtr2) != 0) {
             s32 ptr = g_AssetBlockPtr2;
-            /* These pins are load-bearing: removing any one changes .text. */
             register s32 first asm("$2");
             register s32 second asm("$3");
             s32 third;

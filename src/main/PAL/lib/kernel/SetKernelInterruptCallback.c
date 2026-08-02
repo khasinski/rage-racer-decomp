@@ -14,12 +14,10 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) asm("func_8006E390
 Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     long index;
     Callback callback;
-    /* This pin is load-bearing: removing it changes .text. */
     register Callback *base asm("$5");
     long offset;
     Callback *slot;
     Callback oldCallback;
-    /* This pin is load-bearing: removing it changes .text. */
     register u_long pendingValue asm("$3");
     u_long pendingMask;
     long disabled;
@@ -62,7 +60,6 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
             *(u_short *)(base + 11) = value;
         }
     } else {
-        /* These pins are load-bearing: removing any one changes .text. */
         register Callback zero asm("$0");
         u_long bit;
         register u_long activeMask asm("$3");

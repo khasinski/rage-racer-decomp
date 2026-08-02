@@ -12,7 +12,6 @@ void func_80076C50(void);
 void func_80076B30(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5) {
     u_short base;
     long balance;
-    /* This pin is load-bearing: removing it changes .text. */
     register long quotient asm("$2");
 
     if (arg4 == arg5) {

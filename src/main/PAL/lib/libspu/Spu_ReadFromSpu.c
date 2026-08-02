@@ -30,7 +30,6 @@ long SpuSetTransferStartAddr(long arg0) {
 }
 
 void SpuSetTransferMode(long arg0) {
-    /* This pin is load-bearing: removing it changes .text. */
     register long value asm("$2");
 
     value = 1;

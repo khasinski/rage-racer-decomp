@@ -31,7 +31,6 @@ void DrawStaticScenery(s32 arg0) {
     Matrix mtx;
     Vec4i state;
     s32 *statePtr;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 bucket asm("$2");
     s32 value;
     u32 *visibility;
@@ -244,7 +243,6 @@ s32 Random15(void) asm("func_800632B0");
 void SeedFlybyScenery(void) asm("func_8003E464");
 void SeedFlybyScenery(void) {
     u8 *base;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *out asm("s1");
     s32 count;
     register s32 value asm("v1");
@@ -257,7 +255,6 @@ void SeedFlybyScenery(void) {
     s32 word0;
     s32 word1;
     s32 word2;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 word3 asm("a3");
 
     base = g_FlybySceneryData;

@@ -43,7 +43,6 @@ void func_8001DFC0(GameCarRuntime *arg0);
 void BuildStartingGrid(void) asm("func_80038844");
 void BuildStartingGrid(void) {
     GameCarRuntime *entryBase;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 *table asm("s3");
     s32 i;
     register s16 *flagPtr asm("s1");
@@ -166,7 +165,6 @@ void ClearCarMotionState(GameCarRuntime *arg0) {
 void UpdateCarTiltCounter(GameCarRuntime *arg0) asm("func_80038B04");
 void UpdateCarTiltCounter(GameCarRuntime *arg0) {
     GameCarRuntime *obj;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u8 *ptr asm("$4");
     s32 value;
     register s32 limit asm("$3");
@@ -257,7 +255,6 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     GameCarRuntime *carReg;
     s32 x;
     s32 angle;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 savedAngle asm("$19");
     s32 z = arg2;
     register s32 adjustedReg asm("$2");
@@ -272,7 +269,6 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     s32 product;
 
     carReg = car;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : : "r"(carReg));
     x = arg1;
     carReg->motionActive = 1;
@@ -291,7 +287,6 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
         adjusted = raw + 0x400;
     }
     adjustedReg = adjusted & 0xFFF;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(adjustedReg) : "0"(adjustedReg));
     fieldA4 = carReg->field_A4;
     angle = adjustedReg;

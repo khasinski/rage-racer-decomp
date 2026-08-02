@@ -99,7 +99,6 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
     void *prim;
     s32 redStack;
     s32 green;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 temp asm("$3");
     register s32 quotient asm("$2");
     s32 red;

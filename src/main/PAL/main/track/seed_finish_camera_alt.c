@@ -21,7 +21,6 @@ typedef struct CopyBlock16 {
 
 void SeedFinishCameraAlt(void *arg0) asm("func_8003CDF4");
 void SeedFinishCameraAlt(void *arg0) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 word0 asm("$2");
     u32 word1;
     u32 word2;
@@ -31,7 +30,6 @@ void SeedFinishCameraAlt(void *arg0) {
     u32 *base;
     GameTrackPoint *track;
     GameTrackPoint *point;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 index asm("$3");
     s32 lastIndex;
     register s32 course asm("$3");
@@ -42,7 +40,6 @@ void SeedFinishCameraAlt(void *arg0) {
      * access they stop aliasing the unqualified g_CameraCar* stores between
      * them and one of the four reloads is folded away; see common.h. */
     base = arg0;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(base) : "0"(base));
     dst = (CopyBlock16 *)g_CameraCar;
     src = (CopyBlock16 *)base;

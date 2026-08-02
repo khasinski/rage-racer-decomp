@@ -51,7 +51,6 @@ void LoadCarSelectAssets(void) {
     GameAssetTripleHeader *header;
     GameAssetTripleHeader *headerArg;
     GameCarModelAsset *model;
-    /* These pins are load-bearing: removing any one changes .text. */
     register GameCarEntry *entry asm("$2");
     s32 carIndex;
     register s32 indexOffset asm("$2");
@@ -168,7 +167,6 @@ void LoadCarModel(s32 arg0) asm("func_800188B8");
 void LoadCarModel(s32 arg0) {
     u8 *ptr;
     s32 index;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 arg asm("$17");
     s32 offset;
 
@@ -183,7 +181,6 @@ void LoadCarModel(s32 arg0) {
         }
 
         if (func_80017C78(offset, ptr) != 0) {
-            /* These pins are load-bearing: removing any one changes .text. */
             s32 fixed;
             u32 flag;
             register s32 test asm("$2");

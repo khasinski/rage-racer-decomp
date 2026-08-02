@@ -41,18 +41,15 @@ void StCdInterrupt(void) asm("func_8006D1D0");
 void UploadFmvSlice(void) asm("func_8001EBC8");
 void UploadFmvSlice(void) {
     Rect rect;
-    /* This pin is load-bearing: removing it changes .text. */
     register volatile s32 *bufferPtr asm("$6");
     s32 oldBuffer;
     s32 state;
     s32 bufferIndex;
-    /* These pins are load-bearing: removing any one changes .text. */
     register s32 bufferAddr asm("$2");
     s32 pixelCount;
     register s32 next asm("$2");
     s32 oldOffset;
     s32 index;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u16 x asm("$2");
     register u16 step asm("$7");
     register s32 signedStep asm("$2");
@@ -80,13 +77,11 @@ void UploadFmvSlice(void) {
         pixelCount = signedStep * g_FmvStripHeight;
         bufferIndex = g_FmvStripIndex;
         bufferAddr = bufferIndex << 2;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(bufferPtr) : "0"(bufferPtr));
         bufferAddr = (s32)bufferPtr + bufferAddr;
         DecDCTout(*(volatile u32 **)(bufferAddr - 8), pixelCount / 2);
     } else {
         g_FmvStripDone = 1;
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : : : "memory");
         next = index == 0;
         g_FmvStripRectIndex = next;

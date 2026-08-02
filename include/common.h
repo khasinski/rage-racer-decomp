@@ -21,6 +21,13 @@ typedef float f32;
  * access is just a load or store at a computed address, and the ordering is
  * restored without a memory clobber. Same address, same width, no barrier.
  */
+/*
+ * Register pins -- `register T x asm("$N")` and `asm("" : "=r"(x) : "0"(x))` --
+ * and bare `asm("" ::: "memory")` barriers in this tree are load-bearing:
+ * removing one changes .text. They are not annotated individually; assume any
+ * of them matters and verify with `make check` before deleting.
+ */
+
 #define RAW(x) (*(__typeof__(x) *)((s32)&(x)))
 
 /*

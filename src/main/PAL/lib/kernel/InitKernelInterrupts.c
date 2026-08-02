@@ -13,7 +13,6 @@ extern u_short D_8009946C[];
 void intrDispatch(void);
 
 void *InitKernelInterrupts(void) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u_short *state asm("$16");
     volatile u_short *clearMask;
     volatile u_short *mask;
@@ -37,7 +36,6 @@ void *InitKernelInterrupts(void) {
     }
 
     state = D_8009946C;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(state) : "0"(state));
     *(u_long *)state = (long)state + 0xFDC;
     HookEntryInt(state - 2);

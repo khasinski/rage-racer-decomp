@@ -22,7 +22,6 @@ void DrawPathScenery(void) {
     volatile s32 pad[4];
     s32 drawId;
     s32 frameValue;
-    /* This pin is load-bearing: removing it changes .text. */
     register s16 *anglePtr asm("$16");
     Matrix *mtx1Ptr;
     Matrix *mtx0Ptr;
@@ -204,13 +203,11 @@ void UpdatePointAmbience(s32 arg) {
     s32 base;
     s32 startp;
     TrackSeg *seg;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 v1 asm("v1");
     s32 t0;
     u16 a1raw;
     u16 t1raw;
     s32 sentinel;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 s0v asm("s0");
     s32 s1;
     s32 s2;

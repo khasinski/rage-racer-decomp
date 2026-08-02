@@ -298,7 +298,6 @@ s32 PollMemoryCardHwEvent(void) {
 
 s32 PollMemoryCardHwEventLimit(s32 limit) asm("func_8005F420");
 s32 PollMemoryCardHwEventLimit(s32 limit) {
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 i asm("$16");
     s32 ready;
     volatile s32 stack[2];
@@ -434,7 +433,6 @@ void DrawSync(long mode) asm("func_800658FC");
 
 void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 imageY) {
     u8 *blockReg;
-    /* These pins are load-bearing: removing any one changes .text. */
     register char *titleReg asm("$3");
     register s32 iconTileReg asm("$16");
     register s32 imageXReg asm("$17");
@@ -443,14 +441,12 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
     register Rect *rect asm("$19");
     register s32 dataOffset asm("$20");
     s32 i;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 rectW asm("$23");
     s32 rectH;
     s32 tileRow;
     s32 tileX;
 
     blockReg = block;
-    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(blockReg) : "0"(blockReg));
     titleReg = title;
     asm("" : "=r"(titleReg) : "0"(titleReg));
@@ -477,7 +473,6 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
     rectW = 4;
     rectH = 0x10;
     StoreImage(rectArg, imageData);
-    /* These barriers are load-bearing: removing any one changes .text. */
     asm("" : "=r"(rect) : "0"(rect));
     asm("" : "=r"(rectW) : "0"(rectW));
     asm("" : "=r"(rectH) : "0"(rectH));
@@ -502,7 +497,6 @@ extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     u8 *arg0 = (u8 *)row;
     s32 i;
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 checksum asm("$3");
     u16 *scan;
 
@@ -604,7 +598,6 @@ void StoreSaveStateBlock(u8 *arg0) {
         *(s32 *)(arg0 + 0x40) = g_TimeAttackSave.classIndex;
         *(s32 *)(arg0 + 0x44) = g_TimeAttackSave.maxClassReached;
         {
-            /* This pin is load-bearing: removing it changes .text. */
             register s32 w48 asm("$4") = g_TimeAttackSave.unk10;
             u16 h4E = g_AdvancedSeriesUnlocked;
             *(u16 *)(arg0 + 0x4C) = h4C;
@@ -617,7 +610,6 @@ void StoreSaveStateBlock(u8 *arg0) {
 
     {
         s32 offset = 0;
-        /* This pin is load-bearing: removing it changes .text. */
         register u8 *dst asm("$4") = arg0;
 
         for (; offset < 0x68; offset += 8) {
@@ -646,7 +638,6 @@ void StoreSaveStateBlock(u8 *arg0) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register u8 *dst asm("$4") = arg0;
         s32 offset = 0;
 
@@ -658,7 +649,6 @@ void StoreSaveStateBlock(u8 *arg0) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 count asm("$13") = 0;
         u16 *src = g_TeamLogoClut;
         u8 *dst = arg0;
@@ -670,7 +660,6 @@ void StoreSaveStateBlock(u8 *arg0) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 count asm("$13") = 0;
         u16 *src = g_TeamLogoCanvas;
         u8 *dst = arg0;
@@ -874,12 +863,10 @@ void ApplyAudioSettings(void) asm("func_80021224");
  */
 s32 LoadSaveStateBlock(u8 *arg0) asm("func_8005FED4");
 s32 LoadSaveStateBlock(u8 *arg0) {
-    /* This pin is load-bearing: removing it changes .text. */
     register u8 *base asm("$17") = arg0;
     __asm__("" : "=r"(base) : "0"(base));
     {
         u32 sum;
-        /* This pin is load-bearing: removing it changes .text. */
         register u32 i asm("$13");
         u16 *p;
 
@@ -945,7 +932,6 @@ s32 LoadSaveStateBlock(u8 *arg0) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register u8 *src asm("$6") = base;
         s32 offset = 0;
         for (; offset < 0x68; offset += 8) {
@@ -972,7 +958,6 @@ s32 LoadSaveStateBlock(u8 *arg0) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register u8 *src asm("$4") = base;
         s32 offset = 0;
         for (; offset < 0x2C; offset += 4) {
@@ -983,7 +968,6 @@ s32 LoadSaveStateBlock(u8 *arg0) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 count asm("$13") = 0;
         u16 *dst = g_TeamLogoClut;
         u8 *src = base;
@@ -994,7 +978,6 @@ s32 LoadSaveStateBlock(u8 *arg0) {
     }
 
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 count asm("$13") = 0;
         u16 *dst = g_TeamLogoCanvas;
         u8 *src = base;
@@ -1006,7 +989,6 @@ s32 LoadSaveStateBlock(u8 *arg0) {
 
     /* g_BestLapTimes / g_BestTotalTimes */
     {
-        /* These pins are load-bearing: removing any one changes .text. */
         register s32 i asm("$13") = 0;
         register s32 j asm("$12");
         s32 off;
@@ -1025,7 +1007,6 @@ s32 LoadSaveStateBlock(u8 *arg0) {
     {
         s32 i = 0;
         s32 j;
-        /* These pins are load-bearing: removing any one changes .text. */
         register s32 k asm("$7");
         s32 *cb78 = (s32 *)g_TimeRecords;
         register s32 *d1base asm("$24") = (s32 *)g_RankingRecords;
@@ -1039,14 +1020,12 @@ s32 LoadSaveStateBlock(u8 *arg0) {
             d1 = d1base;
             joff = 0;
             for (; j < 4; j++) {
-                /* These pins are load-bearing: removing any one changes .text. */
                 register s32 dc asm("$2");
                 register s32 *dst2 asm("$11");
                 register s32 sb asm("$3");
                 s32 s2;
                 s32 *src2;
                 s32 *dst1;
-                /* This pin is load-bearing: removing it changes .text. */
                 register s32 *src1 asm("$6");
                 s32 s1;
                 k = 0;
@@ -1091,7 +1070,6 @@ s32 LoadSaveStateBlock(u8 *arg0) {
 
     /* g_BestSectorTimes */
     {
-        /* These pins are load-bearing: removing any one changes .text. */
         register s32 i asm("$13") = 0;
         register s32 j asm("$12");
         register s32 k asm("$7");
@@ -1183,7 +1161,6 @@ s32 WriteMemoryCardSaveFile(
     GameSaveHeaderRow *header,
     void *saveBlock) {
     s32 fd;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 saved asm("$18");
     s32 attempt;
     s32 ok;
@@ -1272,7 +1249,6 @@ s32 WriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 
 s32 ReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
     s32 fd;
-    /* These pins are load-bearing: removing any one changes .text. */
     register void *buffer asm("$18");
     register s32 sum asm("$16");
     s32 i;
@@ -1280,7 +1256,6 @@ s32 ReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
 
     fd = arg0;
     buffer = arg1;
-    /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(sum) : "r"(fd), "r"(buffer), "0"(0));
 
     GameMenuLoadPhase = 0x120;
@@ -1335,7 +1310,6 @@ s32 ReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
 s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
     s32 fd;
     s32 i;
-    /* This pin is load-bearing: removing it changes .text. */
     register s32 mask asm("$18");
     s32 nameOffset;
     void *buffer;
@@ -1390,7 +1364,6 @@ s32 LoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 
     {
         s32 nameOffset = temp << 1;
-        /* This pin is load-bearing: removing it changes .text. */
         register char *name asm("$4");
 
         do {
@@ -1469,7 +1442,6 @@ s32 CountMemoryCardFiles(s32 arg0, s32 arg1) {
     entry = g_McDirEntries;
 
     if (BiosFirstFile(path, entry) == entry) {
-        /* This barrier is load-bearing: removing it changes .text. */
         asm("" : "=r"(count) : "0"(count));
         count++;
         do {

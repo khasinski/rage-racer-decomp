@@ -11,17 +11,14 @@ void FlipTeamLogoHorizontal(void) {
     s32 row;
     s32 highStart;
     s32 rowOffset;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u32 *lowBase asm("$8");
     s32 pairOffset;
     register s32 highIndex asm("$7");
     s32 nibble;
     u32 lowPacked;
-    /* This pin is load-bearing: removing it changes .text. */
     register u32 highPacked asm("$6");
     u32 lowWord;
     u32 highWord;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u32 shift asm("$2");
     u32 lowNibble;
 
@@ -74,7 +71,6 @@ void RotateTeamLogoCcw(void) {
     s32 limit;
     u32 *base;
     u32 *srcStart;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u32 *src asm("$6");
     register u32 *stackBase asm("$11");
     register u32 *dst asm("$4");
@@ -160,7 +156,6 @@ void RotateTeamLogoCw(void) {
     u32 *rowBase;
     u32 *base;
     u32 *srcStart;
-    /* These pins are load-bearing: removing any one changes .text. */
     register u32 *src asm("$6");
     register u32 *stackBase asm("$11");
     register u32 *dst asm("$4");
@@ -182,7 +177,6 @@ void RotateTeamLogoCw(void) {
             src = srcStart;
             do {
                 dst = (u32 *)((i * 8 + k) * 8);
-                /* This barrier is load-bearing: removing it changes .text. */
                 asm("" : "=r"(dst) : "0"(dst));
                 dst = (u32 *)((s32)dst + 7);
                 dst = (u32 *)((s32)dst - j);
@@ -783,7 +777,6 @@ void func_8004CF30(s32 arg) {
         s1 = 0x00300000;
         do {
             s32 cnt = D_8007FB20;
-            /* These pins are load-bearing: removing any one changes .text. */
             register s32 m11 asm("$2") = cnt * 11;
             register u32 u0 asm("$8");
             u8 c1;
@@ -803,7 +796,6 @@ void func_8004CF30(s32 arg) {
             s32 y0 = l2.b[s0];
             s16 x1 = (0xA0 - (u16)l1.b[s0]) * 2;
             s32 v = (((s32)((u16)l2.b[s0] - 0xAA) << 7) / 309 + 0x16) * D_8007FB20;
-            /* These pins are load-bearing: removing any one changes .text. */
             register s32 vv asm("$2") = v;
             register u32 sh asm("$8");
             register u32 col asm("$2");
@@ -817,7 +809,6 @@ void func_8004CF30(s32 arg) {
         func_80064F58(prim);
         func_80064E90(prim, 0);
         {
-            /* These pins are load-bearing: removing any one changes .text. */
             register s32 x asm("$3") = D_8007FB20;
             register s32 q0 asm("$2") = x / 5 + (x >> 31);
             register u8 col asm("$8");

@@ -463,7 +463,6 @@ L_sw2:
     }
 
     case 0x20: {
-        /* These pins are load-bearing: removing any one changes .text. */
         register s32 f asm("$2");
         register s32 one asm("$3");
         f = 0xF;
@@ -486,7 +485,6 @@ L_sw2:
     case 0x22: {
         s32 *s0 = &g_McSlotCursor;
         s32 a0 = *s0;
-        /* This pin is load-bearing: removing it changes .text. */
         register s32 v1x asm("$3");
         s32 dp;
         g_McActionResult = func_800609E4(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));

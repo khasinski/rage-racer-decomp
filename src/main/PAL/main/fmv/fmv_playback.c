@@ -71,13 +71,11 @@ void *GetFmvFrame(s32 *arg0) {
     s32 h;
     s32 h32;
     s32 w32;
-    /* This pin is load-bearing: removing it changes .text. */
     register u16 hgt16 asm("$4");
     u16 wid16;
     u16 wdraw;
     s32 half;
     s32 c067e;
-    /* This pin is load-bearing: removing it changes .text. */
     register void *ret asm("$2");
 
     for (count = 0x800000; count != 0; count--) {
@@ -112,7 +110,6 @@ process:
     dst[0xD] = g_DispEnv0Y + half;
     __asm__ __volatile__("" ::: "memory");
     {
-        /* This pin is load-bearing: removing it changes .text. */
         register u32 wsgn asm("$4");
         u32 wm = (u32)w32 * 3;
         wsgn = wm >> 31;
