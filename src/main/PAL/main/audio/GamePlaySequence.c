@@ -81,7 +81,7 @@ void GameUpdateSequenceFadeOut(void) {
 void GameApplyDuckedSequenceAudio(void) asm("func_8005EA14");
 void GameApplyDuckedSequenceAudio(void) {
     /* These pins are load-bearing: removing any one changes .text. */
-    register s32 value asm("$3");
+    s32 value;
     register s32 scaled asm("$2");
     s32 seq;
     s32 volume;
@@ -89,7 +89,10 @@ void GameApplyDuckedSequenceAudio(void) {
     value = g_SeqVolume;
     seq = g_SeqHandle;
     scaled = value << 1;
-    value = scaled + value;
+    {
+        s32 rel = value;
+        value = scaled + rel;
+    }
     scaled = value;
     if (value < 0) {
         scaled = value + 3;
