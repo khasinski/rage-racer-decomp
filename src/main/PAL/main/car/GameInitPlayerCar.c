@@ -541,7 +541,7 @@ void GameUpdateCarBodyRoll(A *ctx) {
     goto L_53C;
     }
 
-    if (g_PadType != 0x23) goto L_43C;
+    if (!(g_PadType != 0x23)) {
     a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconMaxTwist];
     if (g_MirrorMode != 0) a1 = -a1;
     if (!(a1 >= 0)) {
@@ -592,8 +592,8 @@ void GameUpdateCarBodyRoll(A *ctx) {
         ctx->f64 = (ctx->f64 * 7) / 8;
     }
     goto L_53C;
+    }
 
-L_43C:
     ctx->f64 = 0;
     ctx->sub.x1C = 0;
     goto L_53C;
