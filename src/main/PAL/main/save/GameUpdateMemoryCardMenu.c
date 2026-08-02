@@ -509,11 +509,10 @@ L_sw4:
         g_McActionOk = 1;
         g_McMenuSubState = 8;
         g_McLastSlot = v1x;
-        goto L_b762;
-        }
+        } else {
         g_McActionOk = 1;
         g_McMenuSubState = 0xF;
-    L_b762:
+        }
         dp = GameMenuLoadPhase;
         g_McActionTimer = 0x3C;
         g_McActionState = 0x23;
@@ -930,9 +929,11 @@ L_sw9:
         g_McMenuPhase = D_80082FAC + 7;
         func_8006124C(&D_80082FAC);
         if (D_80082FAC == 0) goto L1447;
-        { u16 p = func_800612CC(); if (p == 0) goto L1496; }
+        { u16 p = func_800612CC();
+        if (p != 0) {
         g_McActionState = 2;
         break;
+        } }
     L1496:
         if (D_80082FAC == 0) goto L1447;
         goto L_b1452;
