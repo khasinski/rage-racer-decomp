@@ -282,7 +282,7 @@ while (1) {
         }
         index--;
         if (index < 0) {
-            goto done;
+            return;
         }
         }
     }
@@ -311,7 +311,6 @@ do {
     }
     } while (index >= 0);
 
-done:
 }
 
 extern s32 g_CarNamePlateStep asm("D_8009B31C");
