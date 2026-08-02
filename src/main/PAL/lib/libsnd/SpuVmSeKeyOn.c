@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd_types.h"
 
 typedef struct SeqState76350 {
     u_char unk0;
@@ -54,59 +55,6 @@ typedef struct SeqState76350 {
     short padA8;
     short padAA;
 } SeqState76350;
-
-typedef struct VabHeader76350 {
-    long form;
-    long ver;
-    long id;
-    u_long fsize;
-    u_short reserved0;
-    u_short ps;
-    u_short ts;
-    u_short vs;
-    u_char mvol;
-    u_char pan;
-    u_char attr1;
-    u_char attr2;
-    u_long reserved1;
-} VabHeader76350;
-
-typedef struct ProgAttr76350 {
-    u_char tones;
-    u_char mvol;
-    u_char prior;
-    u_char mode;
-    u_char mpan;
-    signed char reserved0;
-    short attr;
-    u_long reserved1;
-    u_short reserved2;
-    u_short reserved3;
-} ProgAttr76350;
-
-typedef struct ToneAttr76350 {
-    u_char prior;
-    u_char mode;
-    u_char vol;
-    u_char pan;
-    u_char center;
-    u_char shift;
-    u_char min;
-    u_char max;
-    u_char vibW;
-    u_char vibT;
-    u_char porW;
-    u_char porT;
-    u_char pbmin;
-    u_char pbmax;
-    u_char reserved1;
-    u_char reserved2;
-    u_short adsr1;
-    u_short adsr2;
-    short prog;
-    short vag;
-    short reserved[4];
-} ToneAttr76350;
 
 typedef struct VoiceState76350 {
     short vag;
@@ -170,9 +118,9 @@ typedef struct SvmCurrent76350 {
 } SvmCurrent76350;
 
 extern SeqState76350 *g_SndSeqTable[] asm("D_801E79CC");
-extern ProgAttr76350 *g_SndCurrentProgTable asm("D_801E4110");
-extern VabHeader76350 *g_SndCurrentVabHeader asm("D_801E413C");
-extern ToneAttr76350 *g_SndCurrentToneTable asm("D_801E416C");
+extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
+extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
+extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern u_char D_801E42F8;
 extern SvmCurrent76350 g_SndCurrentAttr asm("D_801E4BD0");
 extern VoiceState76350 g_SndVoiceState[] asm("D_8009E0B8");
@@ -189,7 +137,7 @@ static inline u_char func_80076350_select_tones(
     u_char *tone_indices, u_char *vag_indices) {
     u_char tone;
     u_char count;
-    ToneAttr76350 *attr;
+    VagAtr *attr;
 
     count = 0;
     for (tone = 0; tone < g_SndCurrentAttr.tone_count; tone++) {

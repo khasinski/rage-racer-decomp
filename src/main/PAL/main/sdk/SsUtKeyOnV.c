@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd_types.h"
 
 typedef struct ProgAtr77C7C {
     u_char tones;
@@ -14,30 +15,6 @@ typedef struct ProgAtr77C7C {
     u_short reserved2;
     u_short reserved3;
 } ProgAtr77C7C;
-
-typedef struct VagAtr77C7C {
-    u_char prior;
-    u_char mode;
-    u_char vol;
-    u_char pan;
-    u_char center;
-    u_char shift;
-    u_char min;
-    u_char max;
-    u_char vibW;
-    u_char vibT;
-    u_char porW;
-    u_char porT;
-    u_char pbmin;
-    u_char pbmax;
-    u_char reserved1;
-    u_char reserved2;
-    u_short adsr1;
-    u_short adsr2;
-    short prog;
-    short vag;
-    short reserved[4];
-} VagAtr77C7C;
 
 typedef struct SpuVoice77C7C {
     short unk0;
@@ -102,7 +79,7 @@ typedef struct SvmCur77C7C {
 
 extern long g_SndUpdateLock asm("D_801E40AC");
 extern ProgAtr77C7C *g_SndCurrentProgTable asm("D_801E4110");
-extern VagAtr77C7C *g_SndCurrentToneTable asm("D_801E416C");
+extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern SvmCur77C7C g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice77C7C g_SndVoiceState[] asm("D_8009E0B8");
 
@@ -135,7 +112,7 @@ long SsUtKeyOnV(
     u_char tone_value;
     u_short vag;
     ProgAtr77C7C *program_attr;
-    VagAtr77C7C *tone_attr;
+    VagAtr *tone_attr;
     long left_value;
     long right_value;
 

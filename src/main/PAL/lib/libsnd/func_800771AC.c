@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd_types.h"
 
 typedef struct SeqState771AC {
     u_char unk0;
@@ -54,59 +55,6 @@ typedef struct SeqState771AC {
     short padA8;
     short padAA;
 } SeqState771AC;
-
-typedef struct ProgAttr771AC {
-    u_char tones;
-    u_char mvol;
-    u_char prior;
-    u_char mode;
-    u_char mpan;
-    signed char reserved0;
-    short attr;
-    u_long reserved1;
-    u_short reserved2;
-    u_short reserved3;
-} ProgAttr771AC;
-
-typedef struct ToneAttr771AC {
-    u_char prior;
-    u_char mode;
-    u_char vol;
-    u_char pan;
-    u_char center;
-    u_char shift;
-    u_char min;
-    u_char max;
-    u_char vibW;
-    u_char vibT;
-    u_char porW;
-    u_char porT;
-    u_char pbmin;
-    u_char pbmax;
-    u_char reserved1;
-    u_char reserved2;
-    u_short adsr1;
-    u_short adsr2;
-    short prog;
-    short vag;
-    short reserved[4];
-} ToneAttr771AC;
-
-typedef struct VabHeader771AC {
-    long form;
-    long ver;
-    long id;
-    u_long fsize;
-    u_short reserved0;
-    u_short ps;
-    u_short ts;
-    u_short vs;
-    u_char mvol;
-    u_char pan;
-    u_char attr1;
-    u_char attr2;
-    u_long reserved1;
-} VabHeader771AC;
 
 typedef struct VoiceState771AC {
     short vag;
@@ -174,9 +122,9 @@ extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char D_801E42F8;
 extern short g_SndMonoMode asm("D_801E3FB0");
 extern short g_SndCurrentSeqSep asm("D_801E4BE6");
-extern ProgAttr771AC *g_SndCurrentProgTable asm("D_801E4110");
-extern VabHeader771AC *g_SndCurrentVabHeader asm("D_801E413C");
-extern ToneAttr771AC *g_SndCurrentToneTable asm("D_801E416C");
+extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
+extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
+extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern long g_SndUpdateLock asm("D_801E40AC");
 extern SvmCurrent771AC g_SndCurrentAttr asm("D_801E4BD0");
 
