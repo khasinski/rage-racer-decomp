@@ -58,7 +58,7 @@ void GameLoadCarSelectAssets(void) {
     s32 firstOffset;
     register s32 secondOffset asm("$4");
     s32 assetOffset;
-    register s32 modelPtr asm("$4");
+    s32 modelPtr;
 
     state2 = 2;
 
@@ -110,13 +110,19 @@ void GameLoadCarSelectAssets(void) {
 
                 model = g_CarModelAsset;
                 modelPtr = model->modelDataOffset;
-                modelPtr = (s32)(carModelBase + modelPtr);
+                {
+                    s32 rel = modelPtr;
+                    modelPtr = (s32)(carModelBase + rel);
+                }
                 model->modelDataOffset = modelPtr;
                 GameRegisterModelBank((void *)modelPtr, 0);
 
                 model = g_CarModelAsset;
                 modelPtr = model->imageDataOffset;
-                modelPtr = (s32)(carModelBase + modelPtr);
+                {
+                    s32 rel = modelPtr;
+                    modelPtr = (s32)(carModelBase + rel);
+                }
                 model->imageDataOffset = modelPtr;
                 GameSetCarImageSlot((void *)modelPtr, 0);
 
