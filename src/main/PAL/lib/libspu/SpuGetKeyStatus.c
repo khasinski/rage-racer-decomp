@@ -18,15 +18,17 @@ do {
     i++;
 } while (i < 24);
 
-postscan:
+for (;;) {
     if (!(voice != -1)) {
     return -1;
 
 found:
     voice = i;
-    goto postscan;
+    continue;
 
     }
+break;
+}
     {
         u_long offset = voice << 4;
         volatile u_short *base = g_SpuRegBase;
