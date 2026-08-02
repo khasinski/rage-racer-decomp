@@ -124,7 +124,7 @@ u_long StFreeRing(u_long *base) asm("func_8006CFF0");
 /* The libds streaming state machine: advances D_80099418 through states 1..0xA,
  * DMAs sector header then body, drives the StStrHeader ring. Installed via
  * CdReadyCallback behind the stub func_8006CDA0 and also pumped directly from
- * GameUploadFmvSlice. */
+ * UploadFmvSlice. */
 void StCdInterrupt(void) asm("func_8006D1D0");
 
 /*
@@ -176,7 +176,7 @@ void StUnSetRing(void) asm("func_8006CE20");
  * libpress (MDEC) front end - thin wrappers over the MDEC_* primitives, which
  * is what identifies each one. DecDCTin/DecDCTout push a bitstream / pull the
  * decoded macroblocks; the *Callback pair installs the DMA0 (MDECin) and DMA1
- * (MDECout) completion callbacks, which is how GameUploadFmvSlice is reached.
+ * (MDECout) completion callbacks, which is how UploadFmvSlice is reached.
  */
 void DecDCTout(volatile u_long *buf, long size) asm("func_8006402C");
 /* LibRef47 gives both as `long f(long mode)`; these two bodies take no argument

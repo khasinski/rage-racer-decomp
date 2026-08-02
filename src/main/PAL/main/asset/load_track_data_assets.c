@@ -6,20 +6,20 @@
 extern GameSceneAssetHeader *g_AssetLoadCursor asm("D_8019CAFC");
 
 s32 func_80017C78(s32 assetIndex, void *dst);
-s32 GameEnableCdAudioMode(void) asm("func_80017C2C");
-void GameSetTrackCameraTable(void *arg0) asm("func_80017BD4");
+s32 EnableCdAudioMode(void) asm("func_80017C2C");
+void SetTrackCameraTable(void *arg0) asm("func_80017BD4");
 void func_8004553C(void *arg0);
 void func_8004550C(void *arg0);
-void GameRegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
+void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void func_8002A6B0(void *arg0);
-void GameRegisterCourseModels(void *arg0) asm("func_80017A6C");
+void RegisterCourseModels(void *arg0) asm("func_80017A6C");
 void func_80017AD0(void *arg0);
 void func_8004121C(void *arg0);
 void func_80034E04(void *arg0);
 void func_80043AC8(void *arg0, s32 arg1);
 
-void GameLoadTrackDataAssets(void) asm("func_8001989C");
-void GameLoadTrackDataAssets(void) {
+void LoadTrackDataAssets(void) asm("func_8001989C");
+void LoadTrackDataAssets(void) {
     GameSceneAssetHeader *header;
     /* This pin is load-bearing: removing it changes .text. */
     register void *dst asm("$5");
@@ -35,7 +35,7 @@ void GameLoadTrackDataAssets(void) {
             header = g_AssetLoadCursor;
             offset = header->offsets[0];
             g_AssetBlockPtr = (u8 *)header + offset;
-            GameSetTrackCameraTable(g_AssetBlockPtr);
+            SetTrackCameraTable(g_AssetBlockPtr);
 
             header = g_AssetLoadCursor;
             offset = header->offsets[1];
@@ -50,7 +50,7 @@ void GameLoadTrackDataAssets(void) {
             header = g_AssetLoadCursor;
             offset = header->offsets[3];
             g_AssetBlockPtr = (u8 *)header + offset;
-            GameRegisterModelBank(g_AssetBlockPtr, 1);
+            RegisterModelBank(g_AssetBlockPtr, 1);
 
             header = g_AssetLoadCursor;
             offset = header->offsets[4];
@@ -60,12 +60,12 @@ void GameLoadTrackDataAssets(void) {
             header = g_AssetLoadCursor;
             offset = header->offsets[5];
             g_AssetBlockPtr = (u8 *)header + offset;
-            GameRegisterCourseModels(g_AssetBlockPtr);
+            RegisterCourseModels(g_AssetBlockPtr);
 
             header = g_AssetLoadCursor;
             offset = header->offsets[6];
             g_AssetBlockPtr = (u8 *)header + offset;
-            GameRegisterModelBank(g_AssetBlockPtr, 2);
+            RegisterModelBank(g_AssetBlockPtr, 2);
 
             header = g_AssetLoadCursor;
             offset = header->offsets[7];
@@ -91,7 +91,7 @@ void GameLoadTrackDataAssets(void) {
         }
         break;
     case 2:
-        if (GameEnableCdAudioMode() != 0) {
+        if (EnableCdAudioMode() != 0) {
             g_AssetLoadState = 0;
         }
         break;
@@ -102,14 +102,14 @@ extern s32 *g_StreamLoc asm("D_801E8A90");
 extern s32 g_StreamSectorCount asm("D_8019CA1C");
 extern s32 D_8019C708;
 
-void GameBeginFmv(void) asm("func_8001E6B4");
+void BeginFmv(void) asm("func_8001E6B4");
 
-void GameBeginIntroFmv(void) asm("func_80019AF0");
-void GameBeginIntroFmv(void) {
+void BeginIntroFmv(void) asm("func_80019AF0");
+void BeginIntroFmv(void) {
     s32 *ptr;
     s32 value;
 
-    GameBeginFmv();
+    BeginFmv();
 
     ptr = (s32 *)&g_StreamCdEntries[0].size;
     value = *ptr;
@@ -122,16 +122,16 @@ extern s32 *g_StreamLoc;
 extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
-void GameBeginFmv(void) asm("func_8001E6B4");
+void BeginFmv(void) asm("func_8001E6B4");
 
-void GameBeginClassFmv(void) asm("func_80019B3C");
-void GameBeginClassFmv(void) {
+void BeginClassFmv(void) asm("func_80019B3C");
+void BeginClassFmv(void) {
     s32 *base;
     s32 offset;
     s32 index;
     s32 value;
 
-    GameBeginFmv();
+    BeginFmv();
 
     if (g_SeriesSelection != 0) {
         index = 5;
@@ -152,14 +152,14 @@ extern s32 *g_StreamLoc;
 extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
-void GameBeginFmv(void) asm("func_8001E6B4");
+void BeginFmv(void) asm("func_8001E6B4");
 
-void GameBeginEndingFmv(void) asm("func_80019BB8");
-void GameBeginEndingFmv(void) {
+void BeginEndingFmv(void) asm("func_80019BB8");
+void BeginEndingFmv(void) {
     s32 *ptr;
     s32 value;
 
-    GameBeginFmv();
+    BeginFmv();
 
     ptr = (s32 *)&g_StreamCdEntries[10].size;
     value = *ptr;
@@ -170,58 +170,58 @@ void GameBeginEndingFmv(void) {
 
 extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
 
-void GameLoadBootAssets(void) asm("func_800180CC");
-void GameLoadSaveScreenAssets(void) asm("func_80018344");
-void GameLoadSelectBgmAssets(void) asm("func_80018484");
-void GameLoadCarSelectAssets(void) asm("func_80018588");
-void GameLoadCarModel(s32) asm("func_800188B8");
-void GameLoadUpgradedCarModel(s32) asm("func_80018A70");
-void GameLoadOptionScreenAssets(void) asm("func_80018C0C");
-void GameLoadRoundAssets(void) asm("func_80018DF8");
-void GameLoadRaceAssets(void) asm("func_8001901C");
-void GameLoadGrandPrixScreen(void) asm("func_800195F4");
-void GameLoadCourseAssets(void) asm("func_800196B4");
-void GameLoadTrackDataAssets(void) asm("func_8001989C");
+void LoadBootAssets(void) asm("func_800180CC");
+void LoadSaveScreenAssets(void) asm("func_80018344");
+void LoadSelectBgmAssets(void) asm("func_80018484");
+void LoadCarSelectAssets(void) asm("func_80018588");
+void LoadCarModel(s32) asm("func_800188B8");
+void LoadUpgradedCarModel(s32) asm("func_80018A70");
+void LoadOptionScreenAssets(void) asm("func_80018C0C");
+void LoadRoundAssets(void) asm("func_80018DF8");
+void LoadRaceAssets(void) asm("func_8001901C");
+void LoadGrandPrixScreen(void) asm("func_800195F4");
+void LoadCourseAssets(void) asm("func_800196B4");
+void LoadTrackDataAssets(void) asm("func_8001989C");
 
-void GameServiceAssetLoad(void) asm("func_80019C04");
-void GameServiceAssetLoad(void) {
+void ServiceAssetLoad(void) asm("func_80019C04");
+void ServiceAssetLoad(void) {
     if (g_AssetLoadState != 0) {
         switch (g_MainState) {
         case 1:
-            GameLoadBootAssets();
+            LoadBootAssets();
             break;
         case 2:
-            GameLoadSaveScreenAssets();
+            LoadSaveScreenAssets();
             break;
         case 3:
-            GameLoadSelectBgmAssets();
+            LoadSelectBgmAssets();
             break;
         case 4:
-            GameLoadCarSelectAssets();
+            LoadCarSelectAssets();
             break;
         case 5:
-            GameLoadCarModel(g_PendingCarModelIndex);
+            LoadCarModel(g_PendingCarModelIndex);
             break;
         case 6:
-            GameLoadUpgradedCarModel(g_PendingCarModelIndex);
+            LoadUpgradedCarModel(g_PendingCarModelIndex);
             break;
         case 7:
-            GameLoadOptionScreenAssets();
+            LoadOptionScreenAssets();
             break;
         case 8:
-            GameLoadRoundAssets();
+            LoadRoundAssets();
             break;
         case 9:
-            GameLoadRaceAssets();
+            LoadRaceAssets();
             break;
         case 10:
-            GameLoadGrandPrixScreen();
+            LoadGrandPrixScreen();
             break;
         case 11:
-            GameLoadCourseAssets();
+            LoadCourseAssets();
             break;
         case 12:
-            GameLoadTrackDataAssets();
+            LoadTrackDataAssets();
             break;
         }
     }

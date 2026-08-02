@@ -15,18 +15,18 @@ typedef struct GameCollisionPointBytes {
 
 extern GameCollisionPoint g_CarCollisionCorners[4] asm("D_8007E23C");
 
-void GameTransformCollisionVector(s32 *input, s32 *output) asm("func_800690E0");
-void GameSetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode)
+void TransformCollisionVector(s32 *input, s32 *output) asm("func_800690E0");
+void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode)
     asm("func_80038CE8");
-s32 GameIsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
+s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
     asm("func_8002D2E8");
 
-s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) asm("func_80039184");
+s32 GetCarCrestTrigger(GameCarRuntime *arg0) asm("func_80039184");
 
 s32 func_80068568(s32 arg0);
 
 /*
- * Jump / launch setup: when GameGetCarCrestTrigger reports a marker crossing, seeds the
+ * Jump / launch setup: when GetCarCrestTrigger reports a marker crossing, seeds the
  * launch trajectory (field_90/94/98/9A/9C/9E) and snapshots the car's render
  * offsets (field_20/28 and y). field_98 holds the launch state (1 = jump). The
  * inline mult/mfhi block is the compiler's divide idiom; keep it verbatim.
@@ -44,8 +44,8 @@ extern u8 g_CarMarkerIndex[] asm("D_801F198C");
 
 extern u8 g_CarMarkerFlag[] asm("D_801F198E");
 
-void GameUpdateCarBodyKick(GameCarRuntime *car) asm("func_80038FF0");
-void GameUpdateCarBodyKick(GameCarRuntime *car) {
+void UpdateCarBodyKick(GameCarRuntime *car) asm("func_80038FF0");
+void UpdateCarBodyKick(GameCarRuntime *car) {
     s32 value;
     s32 wave;
     s32 amplitude;
@@ -105,8 +105,8 @@ void GameUpdateCarBodyKick(GameCarRuntime *car) {
     }
 }
 
-s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) asm("func_80039184");
-s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) {
+s32 GetCarCrestTrigger(GameCarRuntime *arg0) asm("func_80039184");
+s32 GetCarCrestTrigger(GameCarRuntime *arg0) {
     u8 *base;
     s32 pos0;
     s32 pos1;
@@ -197,8 +197,8 @@ break;
     return 0;
 }
 
-void GameUpdateCarCrestHop(GameCarRuntime *arg0) asm("func_80039280");
-void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
+void UpdateCarCrestHop(GameCarRuntime *arg0) asm("func_80039280");
+void UpdateCarCrestHop(GameCarRuntime *arg0) {
     GameCarRuntime *obj;
     s32 value;
     /* These pins are load-bearing: removing either one changes .text. */
@@ -245,7 +245,7 @@ void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
         return;
     }
 
-    value = GameGetCarCrestTrigger((GameCarRuntime *)obj);
+    value = GetCarCrestTrigger((GameCarRuntime *)obj);
     if (value == 0) {
         return;
     }
@@ -273,8 +273,8 @@ void GameUpdateCarCrestHop(GameCarRuntime *arg0) {
     obj->field_9E = value;
 }
 
-void GameUpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) asm("func_800393AC");
-void GameUpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
+void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) asm("func_800393AC");
+void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     GameCarRuntime *obj = arg0;
     s32 temp;
     s32 value;
@@ -350,8 +350,8 @@ void GameUpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     }
 }
 
-void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) asm("func_800394DC");
-void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
+void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) asm("func_800394DC");
+void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     GameCarRuntime *objReg = obj;
     s32 target;
     u8 *state;
@@ -445,8 +445,8 @@ advance:
     objReg->field_10E = 0;
 }
 
-void GameSeedCarRouteMarkers(void) asm("func_80039644");
-void GameSeedCarRouteMarkers(void) {
+void SeedCarRouteMarkers(void) asm("func_80039644");
+void SeedCarRouteMarkers(void) {
     s32 one = 1;
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 offset asm("a2") = 0;
@@ -500,8 +500,8 @@ inner:
     }
 }
 
-void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) asm("func_800396FC");
-void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
+void UpdateCarAiTargetSpeed(u8 *car, s32 gear) asm("func_800396FC");
+void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   u8 *p[2];
   u16 lim[4];
   u16 val[2];
@@ -601,12 +601,12 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   }
   if ((*((s16 *) (sub_R9 + 0x7E))) != 0)
   {
-    GameUpdateCarSlideAngle((GameCarRuntime *)car, (s16) pitch);
+    UpdateCarSlideAngle((GameCarRuntime *)car, (s16) pitch);
   }
 
 }
 
-s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) {
+s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
     s16 rotation[4];
     s32 transformed[3];
     Matrix matrix;
@@ -665,7 +665,7 @@ s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) {
                     rotation[0] = g_CarCollisionCorners[offset].x;
                     rotation[2] = g_CarCollisionCorners[offset].z;
                     rotation[1] = 0;
-                    GameTransformCollisionVector((s32 *)rotation, transformed);
+                    TransformCollisionVector((s32 *)rotation, transformed);
                     carCorners[offset].x = transformed[0] >> 2;
                     carCorners[offset].z = transformed[2] >> 2;
                     quads[corner][offset] =
@@ -740,7 +740,7 @@ s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) {
                     rotation[0] = g_CarCollisionCorners[corner].x;
                     rotation[2] = g_CarCollisionCorners[corner].z;
                     rotation[1] = 0;
-                    GameTransformCollisionVector((s32 *)rotation, transformed);
+                    TransformCollisionVector((s32 *)rotation, transformed);
                     otherCorners[corner].x =
                         (transformed[0] >> 2) + velocityDelta[0];
                     otherCorners[corner].z =
@@ -772,7 +772,7 @@ s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) {
                 do {
                     quadIndex = 0;
                     do {
-                        hit = GameIsPointInQuad(
+                        hit = IsPointInQuad(
                             *(s32 *)&quads[quadIndex][2],
                             *(s32 *)&quads[quadIndex][3],
                             *(s32 *)&quads[quadIndex][0],
@@ -795,7 +795,7 @@ s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) {
                     do {
                         quadIndex = 0;
                         do {
-                            hit = GameIsPointInQuad(
+                            hit = IsPointInQuad(
                                 *(s32 *)&quads[quadIndex][2],
                                 *(s32 *)&quads[quadIndex][3],
                                 *(s32 *)&quads[quadIndex][0],
@@ -839,8 +839,8 @@ s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) {
                 deltaZ += 31;
             }
             velocityDelta[1] = deltaZ >> 5;
-            GameSetCarKnockback(car, 0, 0, 4);
-            GameSetCarKnockback(
+            SetCarKnockback(car, 0, 0, 4);
+            SetCarKnockback(
                 other, velocityDelta[0], velocityDelta[1], 4);
             car->field_8A = 1;
             car->field_A8 = (car->field_A8 * 90) / 100;
@@ -861,9 +861,9 @@ s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) {
                 deltaZ += 31;
             }
             velocityDelta[1] = deltaZ >> 5;
-            GameSetCarKnockback(
+            SetCarKnockback(
                 car, -velocityDelta[0], -velocityDelta[1], 4);
-            GameSetCarKnockback(other, 0, 0, 4);
+            SetCarKnockback(other, 0, 0, 4);
             other->field_A8 = (other->field_A8 * 90) / 100;
             car->field_8A = 1;
             other->field_8A = 1;

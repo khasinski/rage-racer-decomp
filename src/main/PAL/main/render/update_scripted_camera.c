@@ -29,13 +29,13 @@ extern CameraKey g_CameraPath[] asm("D_8007F628");
  * the compiler compute the base once and drops 20 instructions. */
 #define KEY(byteOffset) (*(CameraKey *)((s32)g_CameraPath + (byteOffset)))
 
-s32 GameBezierEase(s32 t, s32 control) asm("func_80046598");
-s32 GameSetLookAtMatrix(s32 *obj) asm("func_80046248");
+s32 BezierEase(s32 t, s32 control) asm("func_80046598");
+s32 SetLookAtMatrix(s32 *obj) asm("func_80046248");
 
 /* One frame of the scripted camera: eases the six values between the
  * current and next keyframe and installs the resulting view matrix. */
-void GameUpdateScriptedCamera(void) asm("func_80046600");
-void GameUpdateScriptedCamera(void) {
+void UpdateScriptedCamera(void) asm("func_80046600");
+void UpdateScriptedCamera(void) {
     s32 current;
     s32 tick;
     s32 currentOffset;
@@ -50,7 +50,7 @@ void GameUpdateScriptedCamera(void) {
     tick = g_CameraPathTick;
     current = g_CameraPathKey;
     scaledTick = tick * 10000;
-    blend = GameBezierEase(scaledTick / KEY(current << 5).duration,
+    blend = BezierEase(scaledTick / KEY(current << 5).duration,
                            KEY(current << 5).control);
 
     currentOffset = g_CameraPathKey;
@@ -77,7 +77,7 @@ void GameUpdateScriptedCamera(void) {
     tick = KEY(nextOffset).atZ;
     nextOffset = KEY(currentOffset).atZ;
     values[5] = (((tick - nextOffset) * blend) / 10000) + nextOffset;
-    GameSetLookAtMatrix(values);
+    SetLookAtMatrix(values);
 
     {
         s32 tailCurrent;

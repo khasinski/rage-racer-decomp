@@ -36,7 +36,7 @@ extern void func_8006CBF4(char *, u_char *, long);
  * signature, follows it to the path/directory sector, then walks the packed
  * variable-length records (record length in *p, name at p+8) copying each into
  * an Entry (index, header word, flags, name). Returns 1 on success, 0 on error.
- * D_80099048 is the debug-verbosity level gating the GameDebugPrintf logging.
+ * D_80099048 is the debug-verbosity level gating the DebugPrintf logging.
  */
 /* Rebuilds the ISO path-table cache after a disc change: reads the primary
  * volume descriptor at sector 16, checks "CD001", then parses up to 128
@@ -51,26 +51,26 @@ long CD_newmedia(void) {
     r = func_8006CB88(1, 16, g_CdSectorBuf);
     if (r != 1) {
         if (g_CdDebugLevel > 0) {
-            GameDebugPrintf(D_800139B4);
+            DebugPrintf(D_800139B4);
         }
         return 0;
     }
     if (LibcStrncmp(&g_CdSectorBuf[1], D_800139E0, 5) != 0) {
         if (g_CdDebugLevel > 0) {
-            GameDebugPrintf(D_800139E8);
+            DebugPrintf(D_800139E8);
         }
         return 0;
     }
     hdr = D_8009D7A0;
     if (func_8006CB88(1, *(long *)&hdr, g_CdSectorBuf) != r) {
         if (g_CdDebugLevel > 0) {
-            GameDebugPrintf(D_80013A18, *(long *)&hdr);
+            DebugPrintf(D_80013A18, *(long *)&hdr);
         }
         return 0;
     }
     p = g_CdSectorBuf;
     if (g_CdDebugLevel >= 2) {
-        GameDebugPrintf(D_80013A3C);
+        DebugPrintf(D_80013A3C);
     }
     i = 0;
     while (p < &g_CdSectorBuf[0x800]) {
@@ -88,7 +88,7 @@ long CD_newmedia(void) {
         d = (n & 1) + 8;
         p += n + d;
         if (g_CdDebugLevel >= 2) {
-            GameDebugPrintf(D_80013A5C, g_CdPathTable[i].word2,
+            DebugPrintf(D_80013A5C, g_CdPathTable[i].word2,
                           g_CdPathTable[i].index, g_CdPathTable[i].field6,
                           g_CdPathTable[i].name);
         }
@@ -102,7 +102,7 @@ long CD_newmedia(void) {
     }
     g_CdCachedDir = 0;
     if (g_CdDebugLevel >= 2) {
-        GameDebugPrintf(D_80013A70, i);
+        DebugPrintf(D_80013A70, i);
     }
     return 1;
 }

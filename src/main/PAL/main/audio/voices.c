@@ -5,38 +5,38 @@
 
 extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 
-void GameSetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
+void SetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
     s32 *entry;
 
     if (arg1 != 0) {
         s32 *base = g_SoundSlotActive;
         entry = (s32 *)((arg0 << 2) + (s32)base);
         if (*entry == 0) {
-            GamePlaySoundSlotVoice(arg0, 0, 3);
+            PlaySoundSlotVoice(arg0, 0, 3);
             *entry = 1;
         }
     } else {
         s32 *base = g_SoundSlotActive;
         entry = (s32 *)((arg0 << 2) + (s32)base);
         if (*entry != 0) {
-            GameStopSoundSlotVoice(arg0);
+            StopSoundSlotVoice(arg0);
             *entry = 0;
         }
     }
 }
 
-void GameSetSoundSlotVoicesEnabled(s32 arg0) {
+void SetSoundSlotVoicesEnabled(s32 arg0) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
         if (i != 5) {
-            GameSetSoundSlotVoiceEnabled(i, arg0);
+            SetSoundSlotVoiceEnabled(i, arg0);
         }
     }
 }
 
-void GameSetEffectVoicesEnabled(s32 arg0) {
-    GameSetSoundSlotVoicesEnabled(arg0);
+void SetEffectVoicesEnabled(s32 arg0) {
+    SetSoundSlotVoicesEnabled(arg0);
 }
 
 extern s32 g_EngineSoundBank asm("D_801E6CBC");
@@ -50,7 +50,7 @@ extern s32 g_IndexedEffectIndex asm("D_801E6CF0");
 extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
 extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 
-void GameResetSoundState(void) {
+void ResetSoundState(void) {
     {
         /* This pin is load-bearing: removing it changes .text. */
         register s32 i asm("$4");
@@ -137,7 +137,7 @@ s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 void func_80063D9C(s32 arg0);
 
-s32 GameInitSoundWithVab(s32 header, s32 body) {
+s32 InitSoundWithVab(s32 header, s32 body) {
     s32 headerReg = header;
     s32 bodyReg = body;
     s16 *vabIdPtr;
@@ -151,8 +151,8 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
     SsStartSoundTickMode1();
     SsSetVoiceCount(0xA);
     SsUtReverbOff();
-    GameSetReverbPreset(2, 0, 0);
-    GameResetSoundState();
+    SetReverbPreset(2, 0, 0);
+    ResetSoundState();
 
     ret = func_80072C4C(headerReg, -1, 0x1000);
     vabIdPtr = g_VabIds;
@@ -160,14 +160,14 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        GameDebugPrintf(g_MsgVabOpenHeadError);
+        DebugPrintf(g_MsgVabOpenHeadError);
         func_80063D9C(1);
     }
 
     ret = func_800730BC(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
-        GameDebugPrintf(g_MsgVabTransBodyError);
+        DebugPrintf(g_MsgVabTransBodyError);
         func_80063D9C(1);
     }
 
@@ -177,21 +177,21 @@ s32 GameInitSoundWithVab(s32 header, s32 body) {
     return 0;
 }
 
-s32 GameInitSoundRuntime(void) {
+s32 InitSoundRuntime(void) {
     SsSetTableSize(g_SndTableArea, 2, 1);
     SsSetTickMode(0x1000);
     SsStartSoundTickMode1();
     SsSetVoiceCount(0xA);
     SsUtReverbOff();
-    GameSetReverbPreset(2, 0, 0);
-    GameResetSoundState();
+    SetReverbPreset(2, 0, 0);
+    ResetSoundState();
     SsSetMVol(0x3FFF, 0x3FFF);
     SsSetReservedVoice(0);
-    GameInitSequenceAudio();
+    InitSequenceAudio();
     return 0;
 }
 
-/* ---- was GameStartAudioSlotLoad.c ---- */
+/* ---- was StartAudioSlotLoad.c ---- */
 
 #include "common.h"
 #include "game/audio.h"
@@ -202,9 +202,9 @@ s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 s32 func_8005E4EC(s32 slot, s32 header, s32 body, s32 seq);
-s32 GameStartVabTransferWithTable(s32 header, s32 body, u16 *table) asm("func_8005BA20");
+s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) asm("func_8005BA20");
 s32 func_8005E600(s32 arg0);
-s32 GameCloseVabOnlyAudioSlot(s32 arg0) asm("func_8005B948");
+s32 CloseVabOnlyAudioSlot(s32 arg0) asm("func_8005B948");
 void func_80063D9C(s32 arg0);
 void func_800736E8(void);
 void func_80073614(s32 arg0);
@@ -229,8 +229,8 @@ extern s32 g_VabSpuAddressExtra asm("D_800125F8");
 extern char g_MsgVabOpenHeadError[] asm("D_8001267C");
 extern char g_MsgVabTransBodyError[] asm("D_80012694");
 
-s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) asm("func_8005B768");
-s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
+s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) asm("func_8005B768");
+s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 slotReg asm("$16");
     register s32 bodyReg asm("$17");
@@ -243,7 +243,7 @@ s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     bodyReg = body;
 
     if (slotReg == 3) {
-        ret = GameStartVabTransferWithTable(header, bodyReg, (u16 *)table);
+        ret = StartVabTransferWithTable(header, bodyReg, (u16 *)table);
         return (s16)ret;
     }
 
@@ -279,14 +279,14 @@ s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
         currentVabId = (s16)ret;
         fail = -1;
         if (currentVabId == fail) {
-            GameDebugPrintf(g_MsgVabOpenHeadError);
+            DebugPrintf(g_MsgVabOpenHeadError);
             func_80063D9C(1);
         }
 
         ret = func_800730BC(bodyReg, currentVabId);
         *vabIdPtr = ret;
         if ((s16)ret == fail) {
-            GameDebugPrintf(g_MsgVabTransBodyError);
+            DebugPrintf(g_MsgVabTransBodyError);
             func_80063D9C(1);
         }
     }
@@ -296,8 +296,8 @@ s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     return (s16)ret;
 }
 
-s32 GamePollAudioSlotLoad(void) asm("func_8005B89C");
-s32 GamePollAudioSlotLoad(void) {
+s32 PollAudioSlotLoad(void) asm("func_8005B89C");
+s32 PollAudioSlotLoad(void) {
     s32 completed;
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 *flagsPtr asm("$4");
@@ -332,7 +332,7 @@ s32 GamePollAudioSlotLoad(void) {
     return (s16)g_VabTransferDone;
 }
 
-s32 GameCloseVabOnlyAudioSlot(s32 slot) {
+s32 CloseVabOnlyAudioSlot(s32 slot) {
     s32 *flagsPtr = &g_AudioSlotMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;
@@ -357,21 +357,21 @@ s32 GameCloseVabOnlyAudioSlot(s32 slot) {
     return ret;
 }
 
-s32 GameCloseLoadedAudioSlots(void) asm("func_8005B9CC");
-s32 GameCloseLoadedAudioSlots(void) {
+s32 CloseLoadedAudioSlots(void) asm("func_8005B9CC");
+s32 CloseLoadedAudioSlots(void) {
     func_800731CC();
     if (func_8005E600(1) == 0) {
         return 0;
     }
-    if (GameCloseVabOnlyAudioSlot(2) == 0) {
+    if (CloseVabOnlyAudioSlot(2) == 0) {
         return 0;
     }
-    if (GameCloseVabOnlyAudioSlot(3) == 0) {
+    if (CloseVabOnlyAudioSlot(3) == 0) {
         return 0;
     }
 }
 
-s32 GameStartVabTransferWithTable(s32 header, s32 body, u16 *table) {
+s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 ret asm("$2");
     register s32 currentVabId asm("$5");
@@ -389,19 +389,19 @@ s32 GameStartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        GameDebugPrintf(g_MsgVabOpenHeadError);
+        DebugPrintf(g_MsgVabOpenHeadError);
         func_80063D9C(1);
     }
 
     ret = func_800730BC(body, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
-        GameDebugPrintf(g_MsgVabTransBodyError);
+        DebugPrintf(g_MsgVabTransBodyError);
         func_80063D9C(1);
     }
 
     if (tableReg != 0) {
-        GameLoadAudioParameterTable((u16 *)tableReg);
+        LoadAudioParameterTable((u16 *)tableReg);
     }
 
     g_ExtraVabLoaded = 1;
@@ -410,8 +410,8 @@ s32 GameStartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     return g_VabTransferDone;
 }
 
-s32 GameLoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) asm("func_8005BB1C");
-s32 GameLoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
+s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) asm("func_8005BB1C");
+s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     s32 bodyReg = body;
     s32 tableReg = table;
     s16 *vabIdPtr;
@@ -428,20 +428,20 @@ s32 GameLoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        GameDebugPrintf(g_MsgVabOpenHeadError);
+        DebugPrintf(g_MsgVabOpenHeadError);
         func_80063D9C(1);
     }
 
     ret = func_800730BC(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
-        GameDebugPrintf(g_MsgVabTransBodyError);
+        DebugPrintf(g_MsgVabTransBodyError);
         func_80063D9C(1);
     }
 
     func_8007317C(1);
     if (tableReg != 0) {
-        GameLoadAudioParameterTable((u16 *)tableReg);
+        LoadAudioParameterTable((u16 *)tableReg);
     }
 
     flags = g_AudioSlotMask;
@@ -450,8 +450,8 @@ s32 GameLoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     return 0;
 }
 
-void GameCloseExtraVabSlot(void) asm("func_8005BC14");
-void GameCloseExtraVabSlot(void) {
+void CloseExtraVabSlot(void) asm("func_8005BC14");
+void CloseExtraVabSlot(void) {
     s32 liveSlot;
     s32 *flagsPtr = &g_AudioSlotMask;
     s32 flags = *flagsPtr;
@@ -467,8 +467,8 @@ void GameCloseExtraVabSlot(void) {
     }
 }
 
-void GameShutdownSoundSystem(void) asm("func_8005BC80");
-void GameShutdownSoundSystem(void) {
+void ShutdownSoundSystem(void) asm("func_8005BC80");
+void ShutdownSoundSystem(void) {
     s32 i;
     s32 *flag = &g_AudioSlotMask;
 
@@ -490,12 +490,12 @@ void GameShutdownSoundSystem(void) {
     }
 }
 
-/* ---- was GameSetEffectVolumeScale.c ---- */
+/* ---- was SetEffectVolumeScale.c ---- */
 
 #include "common.h"
 #include "game/audio.h"
 
-void GameSetEffectVolumeScale(s32 arg0) {
+void SetEffectVolumeScale(s32 arg0) {
     if (arg0 >= 0) {
         if (arg0 >= 0x81) {
             arg0 = 0x80;
@@ -508,7 +508,7 @@ void GameSetEffectVolumeScale(s32 arg0) {
 
 extern s32 g_SoundSlotVolumeScale asm("D_801E6CE0");
 
-void GameSetLoadedTableVolumeScale(s32 arg0) {
+void SetLoadedTableVolumeScale(s32 arg0) {
     if (arg0 >= 0) {
         if (arg0 >= 0x81) {
             arg0 = 0x80;
@@ -519,9 +519,9 @@ void GameSetLoadedTableVolumeScale(s32 arg0) {
     g_SoundSlotVolumeScale = arg0;
 }
 
-void GameSetCdVolumeSetting(s32 arg0) asm("func_80043134");
+void SetCdVolumeSetting(s32 arg0) asm("func_80043134");
 
-void GameSetSequenceVolumeSetting(s32 setting) {
+void SetSequenceVolumeSetting(s32 setting) {
     u32 adjusted;
     s32 value;
 
@@ -539,15 +539,15 @@ void GameSetSequenceVolumeSetting(s32 setting) {
     }
 
     value = setting;
-    GameSetCdVolumeSetting(setting);
-    GameSetSequenceVolumeScale(value);
+    SetCdVolumeSetting(setting);
+    SetSequenceVolumeScale(value);
 }
 
 /* Set the effect master volume scale (g_EffectVolumeScale = SoundScale.scale) from a
  * 0..15 level, mapping it onto the 0..0x80 fixed-point scale used by the
  * effect-voice volume math. */
-void GameSetEffectVolumeSetting(s32 level) asm("func_8005BDD4");
-void GameSetEffectVolumeSetting(s32 level) {
+void SetEffectVolumeSetting(s32 level) asm("func_8005BDD4");
+void SetEffectVolumeSetting(s32 level) {
     if (level >= 0) {
         if (level >= 0x10) {
             level = 0xF;
@@ -559,28 +559,28 @@ void GameSetEffectVolumeSetting(s32 level) {
 }
 
 extern s32 g_StereoOutput asm("D_80082F40");
-void GameSetCdMixPreset(s32 arg0) asm("func_8004318C");
+void SetCdMixPreset(s32 arg0) asm("func_8004318C");
 void SsSetStereo(void) asm("func_80072AF4");
-void GameSetStereoOutput(void) asm("func_8005BE24");
-void GameSetStereoOutput(void) { g_StereoOutput = 1; GameSetCdMixPreset(0); SsSetStereo(); }
+void SetStereoOutput(void) asm("func_8005BE24");
+void SetStereoOutput(void) { g_StereoOutput = 1; SetCdMixPreset(0); SsSetStereo(); }
 
 void SsSetMono(void) asm("func_80072AE0");
-void GameSetMonoOutput(void) asm("func_8005BE58");
-void GameSetMonoOutput(void) { g_StereoOutput = 0; GameSetCdMixPreset(1); SsSetMono(); }
+void SetMonoOutput(void) asm("func_8005BE58");
+void SetMonoOutput(void) { g_StereoOutput = 0; SetCdMixPreset(1); SsSetMono(); }
 
 extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
 
-u32 GameGetLoadedAudioStep(void) {
+u32 GetLoadedAudioStep(void) {
     return g_EngineSoundMaxRpm;
 }
 
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
 
-s32 GameGetActiveAudioSlots(void) {
+s32 GetActiveAudioSlots(void) {
     return g_AudioSlotMask;
 }
 
-/* ---- was GameSetPanVoiceTargetVolume.c ---- */
+/* ---- was SetPanVoiceTargetVolume.c ---- */
 
 #include "common.h"
 #include "game/audio.h"
@@ -591,7 +591,7 @@ extern s32 g_StereoOutput asm("D_80082F40");
 extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
 extern s32 g_PanVoiceVolumeR asm("D_801E6CE8");
 
-void GameSetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
+void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
     if (arg0 >= 0) {
         if (arg0 > 0x80) {
             arg0 = 0x80;
@@ -623,8 +623,8 @@ extern s32 g_PanVoiceActive asm("D_801E6CEC");
 
 long SsUtKeyOffV(long voice) asm("func_80078018");
 
-void GameApplyPanVoiceVolume(void) asm("func_8005BF30");
-void GameApplyPanVoiceVolume(void) {
+void ApplyPanVoiceVolume(void) asm("func_8005BF30");
+void ApplyPanVoiceVolume(void) {
     s32 values[2];
     s32 changed;
     s32 i;
@@ -709,15 +709,15 @@ extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
 extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
 
-void GameStartIndexedEffectVoice(s32 baseTone) {
+void StartIndexedEffectVoice(s32 baseTone) {
     SsUtKeyOnV(0x14, g_VabIds[0], (s16)baseTone, 0, 0x3C, 0, 0, 0);
 }
 
-void GameStopIndexedEffectVoice(void) {
+void StopIndexedEffectVoice(void) {
     SsUtKeyOffV(0x14);
 }
 
-void GameSetIndexedEffectVoice(s32 index, s32 phase, s32 volume) {
+void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume) {
     if (index >= -1) {
         if (index >= 3) {
             index = 2;
@@ -741,7 +741,7 @@ void GameSetIndexedEffectVoice(s32 index, s32 phase, s32 volume) {
     }
 }
 
-void GameUpdateIndexedEffectVoice(void) {
+void UpdateIndexedEffectVoice(void) {
     s32 base;
     s32 center;
     s32 fine;
@@ -766,11 +766,11 @@ void GameUpdateIndexedEffectVoice(void) {
     } else {
         index = g_IndexedEffectIndex;
         if (index < 0) {
-            GameStopIndexedEffectVoice();
+            StopIndexedEffectVoice();
         } else if (index != raw) {
         start_voice:
             raw = (index * 3) << 2;
-            GameStartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
+            StartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
         }
     }
 
@@ -1150,7 +1150,7 @@ void func_8005C6C0(void) {
     } while (i < 2);
 }
 
-/* ---- was GameSetPitchedSoundCue.c ---- */
+/* ---- was SetPitchedSoundCue.c ---- */
 
 #include "common.h"
 #include "game/audio.h"
@@ -1187,7 +1187,7 @@ long SsUtKeyOffV(long voice) asm("func_80078018");
 void func_80078528(s32, s16, s16);
 void func_800781C0(s32, s32, s32, s32, s32, s32, s32);
 
-void GameSetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
+void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     s32 count;
     s32 loopCount;
     s32 i;
@@ -1559,7 +1559,7 @@ s32 func_8005D050(s32 cue, s32 arg1, s32 volL, s32 volR) {
     }
 
     if (result < 0) {
-        GameDebugPrintf(D_80012778);
+        DebugPrintf(D_80012778);
         return -1;
     }
     return result;
@@ -1580,8 +1580,8 @@ extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
 
 s32 SpuGetKeyStatus(s32 arg0) asm("func_8007B088");
 
-s32 GameStartSingleSpecialCue(s32 cue, s32 volume) asm("func_8005D414");
-s32 GameStartSingleSpecialCue(s32 cue, s32 volume) {
+s32 StartSingleSpecialCue(s32 cue, s32 volume) asm("func_8005D414");
+s32 StartSingleSpecialCue(s32 cue, s32 volume) {
     s32 result = -1;
     s32 *handle;
     s32 value;
@@ -1706,7 +1706,7 @@ extern s32 g_LastSpecialCueRequest asm("D_80082F48");
 
 s32 func_8005D050(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
-void GamePlaySoundCue(s32 arg0) {
+void PlaySoundCue(s32 arg0) {
     if (g_SoundCueBank == 1) {
         if (arg0 >= 0) {
             if (arg0 >= 0x1E) {
@@ -1719,7 +1719,7 @@ void GamePlaySoundCue(s32 arg0) {
         if ((u32)(arg0 - 0xF) < 3U) {
             if (arg0 != g_LastSpecialCueRequest) {
                 g_LastSpecialCueRequest = arg0;
-                GameStartSingleSpecialCue(arg0, 0x80);
+                StartSingleSpecialCue(arg0, 0x80);
             }
             return;
         }
@@ -1739,7 +1739,7 @@ void GamePlaySoundCue(s32 arg0) {
         if ((u32)(arg0 - 0xF) < 3U) {
             if (arg0 != g_LastSpecialCueRequest) {
                 g_LastSpecialCueRequest = arg0;
-                GameStartSingleSpecialCue(arg0, 0x80);
+                StartSingleSpecialCue(arg0, 0x80);
             }
             return;
         }
@@ -1793,7 +1793,7 @@ void func_8005D7D4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     func_80078130((s16)voice, g_VabIds[(s16)bend], g_SoundSlotTone[arg0][arg3], 0x3C, arg1);
 }
 
-/* ---- was GameInterpolateAudioParameter.c ---- */
+/* ---- was InterpolateAudioParameter.c ---- */
 
 #include "common.h"
 #include "game/audio.h"
@@ -1812,8 +1812,8 @@ void func_8005BF30(void);
 void func_8005C6C0(void);
 void func_8005C168(void);
 void func_8005CDB0(void);
-s32 GameInterpolateAudioParameter(s32 parameter, s32 position, s32 bank) asm("func_8005D8EC");
-s32 GameInterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
+s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) asm("func_8005D8EC");
+s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 value = position;
     s32 index;
     s32 index_offset;
@@ -1885,8 +1885,8 @@ s32 GameInterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     return result;
 }
 
-void GameUpdateLoadedAudioVoices(s32 value, s32 bank) asm("func_8005D9F8");
-void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
+void UpdateLoadedAudioVoices(s32 value, s32 bank) asm("func_8005D9F8");
+void UpdateLoadedAudioVoices(s32 value, s32 bank) {
     s32 odd_parameter;
     s32 index;
     s32 second;
@@ -1917,8 +1917,8 @@ void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
     slot = scale_base;
     do {
         if (*slot != 0) {
-            first = GameInterpolateAudioParameter(index * 2, value, bank);
-            second = GameInterpolateAudioParameter(odd_parameter, value, bank);
+            first = InterpolateAudioParameter(index * 2, value, bank);
+            second = InterpolateAudioParameter(odd_parameter, value, bank);
             scaled = second * slot_base[6];
             if (scaled < 0) {
                 scaled += 0x7F;
@@ -1937,8 +1937,8 @@ void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
     func_8005CDB0();
 }
 
-void GameSetDefaultReverbDepth(void) {
-    GameSetReverbDepth(0x28, 0x28);
+void SetDefaultReverbDepth(void) {
+    SetReverbDepth(0x28, 0x28);
 }
 
 extern s32 g_ReverbFadeStep asm("D_801E6D8C");
@@ -1946,8 +1946,8 @@ void func_8007865C(s32 arg0);
 void func_80072B04(s32 arg0);
 void func_8005B190(s32 arg0, s32 arg1);
 void func_8005E7DC(void);
-void GameInitSequenceAudio(void) asm("func_8005DBD8");
-void GameInitSequenceAudio(void) {
+void InitSequenceAudio(void) asm("func_8005DBD8");
+void InitSequenceAudio(void) {
     func_8007865C(0);
     func_80072B04(0x12);
     func_8005B190(0x28, 0x28);
@@ -1966,8 +1966,8 @@ extern s32 g_CarSoundVolumeScales[] asm("D_800125FC");
 
 s32 func_80050FA8(s32 arg0);
 
-void GameInitEffectVoiceRuntime(void) asm("func_8005DC1C");
-void GameInitEffectVoiceRuntime(void) {
+void InitEffectVoiceRuntime(void) asm("func_8005DC1C");
+void InitEffectVoiceRuntime(void) {
     func_8007865C(0);
     SsSetVoiceCount(8);
 
@@ -2026,26 +2026,26 @@ void GameInitEffectVoiceRuntime(void) {
         g_IndexedEffectPitch = value;
     }
 
-    GameSetEffectVoicesEnabled(1);
-    GameSetReverbPreset(2, 0, 0);
-    GameSetLoadedTableVolumeScale(g_CarSoundVolumeScales[func_80050FA8(g_PlayerCarIndex)]);
+    SetEffectVoicesEnabled(1);
+    SetReverbPreset(2, 0, 0);
+    SetLoadedTableVolumeScale(g_CarSoundVolumeScales[func_80050FA8(g_PlayerCarIndex)]);
 }
 
 extern s32 g_ReverbDepthL asm("D_801E6D84");
 extern s32 g_ReverbDepthR asm("D_801E6D88");
 
-void GameRestoreReverbDepth(s32 arg0) {
+void RestoreReverbDepth(s32 arg0) {
     if (arg0 != 0) {
-        GameSetReverbDepth(g_ReverbDepthL, g_ReverbDepthR);
+        SetReverbDepth(g_ReverbDepthL, g_ReverbDepthR);
     } else {
-        GameSetReverbDepth(0, 0);
+        SetReverbDepth(0, 0);
     }
 }
 
 long SsUtKeyOffV(long voice) asm("func_80078018");
 
-void GameForcePanVoiceEnabled(s32 enabled) asm("func_8005DDB8");
-void GameForcePanVoiceEnabled(s32 enabled) {
+void ForcePanVoiceEnabled(s32 enabled) asm("func_8005DDB8");
+void ForcePanVoiceEnabled(s32 enabled) {
     s32 values[2];
     s32 i;
     s32 *src;
@@ -2119,7 +2119,7 @@ void GameForcePanVoiceEnabled(s32 enabled) {
     }
 }
 
-/* ---- was GameForceBasicEffectVoicesEnabled.c ---- */
+/* ---- was ForceBasicEffectVoicesEnabled.c ---- */
 
 #include "common.h"
 #include "game/audio.h"
@@ -2134,8 +2134,8 @@ long SsUtKeyOffV(long voice) asm("func_80078018");
 void func_8005C09C(s32 arg0);
 void func_8005C0E4(void);
 
-void GameForceBasicEffectVoicesEnabled(s32 enabled) asm("func_8005DEF0");
-void GameForceBasicEffectVoicesEnabled(s32 enabled) {
+void ForceBasicEffectVoicesEnabled(s32 enabled) asm("func_8005DEF0");
+void ForceBasicEffectVoicesEnabled(s32 enabled) {
     s32 offset;
     s32 voicePacked;
     s32 voice;
@@ -2207,8 +2207,8 @@ void GameForceBasicEffectVoicesEnabled(s32 enabled) {
     } while (i < 2);
 }
 
-void GameForceIndexedEffectVoiceEnabled(s32 enabled) asm("func_8005E058");
-void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
+void ForceIndexedEffectVoiceEnabled(s32 enabled) asm("func_8005E058");
+void ForceIndexedEffectVoiceEnabled(s32 enabled) {
     s32 base;
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 center;
@@ -2280,8 +2280,8 @@ void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
     }
 }
 
-void GameForcePitchEffectVoicesEnabled(s32 enabled) asm("func_8005E1D0");
-void GameForcePitchEffectVoicesEnabled(s32 enabled) {
+void ForcePitchEffectVoicesEnabled(s32 enabled) asm("func_8005E1D0");
+void ForcePitchEffectVoicesEnabled(s32 enabled) {
     s32 voicePacked;
     s32 voice;
     s32 pitchBase;
@@ -2362,20 +2362,20 @@ void GameForcePitchEffectVoicesEnabled(s32 enabled) {
 /* Mid-function labels the retail build exports (see docs/ASM_AND_GTE_POLICY.md,
  * "symbol labels"). They define symbols only and emit no code. */
 asm(".globl func_8005E078\n"
-    "func_8005E078 = GameForceIndexedEffectVoiceEnabled + 0x20\n"
+    "func_8005E078 = ForceIndexedEffectVoiceEnabled + 0x20\n"
     ".globl func_8005E1B8\n"
-    "func_8005E1B8 = GameForceIndexedEffectVoiceEnabled + 0x160\n"
+    "func_8005E1B8 = ForceIndexedEffectVoiceEnabled + 0x160\n"
     ".globl func_8005E200\n"
-    "func_8005E200 = GameForcePitchEffectVoicesEnabled + 0x30\n"
+    "func_8005E200 = ForcePitchEffectVoicesEnabled + 0x30\n"
     ".globl func_8005E314\n"
-    "func_8005E314 = GameForcePitchEffectVoicesEnabled + 0x144");
+    "func_8005E314 = ForcePitchEffectVoicesEnabled + 0x144");
 
 extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 
-void GameSetSoundSlotVoicesEnabledWithRegisterArg(void) asm("func_8005B40C");
-void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
+void SetSoundSlotVoicesEnabledWithRegisterArg(void) asm("func_8005B40C");
+void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
 
-void GameForceSoundSlotVoicePlayback(s32 arg0) {
+void ForceSoundSlotVoicePlayback(s32 arg0) {
     s32 saved = arg0;
     s32 i;
     /* This pin is load-bearing: removing it changes .text. */
@@ -2390,7 +2390,7 @@ void GameForceSoundSlotVoicePlayback(s32 arg0) {
     s32 call_arg1;
     s32 call_arg3;
 
-    GameSetSoundSlotVoicesEnabledWithRegisterArg();
+    SetSoundSlotVoicesEnabledWithRegisterArg();
 
     i = 0;
     if (saved != 0) {
@@ -2399,7 +2399,7 @@ void GameForceSoundSlotVoicePlayback(s32 arg0) {
         saved = 0;
         do {
             if (*base++ != 0 && g_SoundSlotTone[i][0] != g_SoundSlotTone[i][1]) {
-                GamePlaySoundSlotVoice(i, active[-3], 3);
+                PlaySoundSlotVoice(i, active[-3], 3);
             }
             i++;
             saved += 4;
@@ -2411,8 +2411,8 @@ void GameForceSoundSlotVoicePlayback(s32 arg0) {
         active = base;
         do {
             if (*active != 0) {
-                first = GameInterpolateAudioParameter(i * 2, base[-4], base[-3]);
-                second = GameInterpolateAudioParameter(odd, base[-4], base[-3]);
+                first = InterpolateAudioParameter(i * 2, base[-4], base[-3]);
+                second = InterpolateAudioParameter(odd, base[-4], base[-3]);
                 factor = base[6];
                 scaled = second * factor;
                 if (scaled < 0) {
@@ -2431,15 +2431,15 @@ void GameForceSoundSlotVoicePlayback(s32 arg0) {
     }
 }
 
-void GameForceAllEffectVoicesEnabled(s32 arg0) {
-    GameForcePanVoiceEnabled(arg0);
-    GameForceBasicEffectVoicesEnabled(arg0);
-    GameForceIndexedEffectVoiceEnabled(arg0);
-    GameForcePitchEffectVoicesEnabled(arg0);
-    GameForceSoundSlotVoicePlayback(arg0);
+void ForceAllEffectVoicesEnabled(s32 arg0) {
+    ForcePanVoiceEnabled(arg0);
+    ForceBasicEffectVoicesEnabled(arg0);
+    ForceIndexedEffectVoiceEnabled(arg0);
+    ForcePitchEffectVoicesEnabled(arg0);
+    ForceSoundSlotVoicePlayback(arg0);
 }
 
-/* ---- was GameOpenVabSequenceSlot.c ---- */
+/* ---- was OpenVabSequenceSlot.c ---- */
 
 #include "common.h"
 #include "psyq/snd.h"
@@ -2468,8 +2468,8 @@ void func_80072B3C(s32 arg0);
 
 extern s16 g_VabIds[] asm("D_801E6CA8");
 
-s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E4EC");
-s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
+s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E4EC");
+s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     s32 slotReg = slot;
     s32 bodyReg = body;
     s32 seqReg = seq;
@@ -2493,7 +2493,7 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     currentVabId = (s16)ret;
     fail = -1;
     if (currentVabId == fail) {
-        GameDebugPrintf(g_MsgSeqVabOpenHeadError);
+        DebugPrintf(g_MsgSeqVabOpenHeadError);
         func_80063D9C(1);
     }
 
@@ -2501,7 +2501,7 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     *vabIdPtr = ret;
     currentVabId = (s16)ret;
     if (currentVabId == fail) {
-        GameDebugPrintf(g_MsgSeqVabTransBodyError);
+        DebugPrintf(g_MsgSeqVabTransBodyError);
         func_80063D9C(1);
     }
 
@@ -2512,8 +2512,8 @@ s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     return g_VabTransferDone;
 }
 
-s32 GameCloseAudioSlot(s32 slot) asm("func_8005E600");
-s32 GameCloseAudioSlot(s32 slot) {
+s32 CloseAudioSlot(s32 slot) asm("func_8005E600");
+s32 CloseAudioSlot(s32 slot) {
     s32 *flagsPtr = &g_AudioSlotMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;
@@ -2537,8 +2537,8 @@ s32 GameCloseAudioSlot(s32 slot) {
     return ret;
 }
 
-void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) asm("func_8005E694");
-void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
+void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) asm("func_8005E694");
+void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     s32 voiceOffset = voice * 4;
 
     SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], *(s16 *)((s32)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
@@ -2546,6 +2546,6 @@ void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
 
 long SsUtKeyOffV(long voice) asm("func_80078018");
 
-void GameStopDirectVoice(s32 voice) {
+void StopDirectVoice(s32 voice) {
     SsUtKeyOffV((s16)voice);
 }

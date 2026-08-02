@@ -25,7 +25,7 @@ void func_80016EA0(void *dst, s32 len, void *src, s32 arg3);
 void func_80016754(void *dst, s32 x, void *src, s32 color);
 void *func_80021CD4(void *dst, s32 value);
 void LibcSprintf() asm("func_800632F0");
-s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
+s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 extern volatile s32 g_RaceTotalTime asm("D_801E4BA8");
 extern volatile u16 g_PlayerCarIndex asm("D_801E40D4");
 extern s32 g_RankingTimes asm("D_801E774C");
@@ -38,25 +38,25 @@ extern u16 g_TimeRecordCars[] asm("D_8019CB84");
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_RecordEntryState asm("D_801E6C8C");
-void GameInsertRaceRecords(void) asm("func_80022324");
+void InsertRaceRecords(void) asm("func_80022324");
 extern u8 g_NameEntryCharset[] asm("D_80010FB0");
 extern s32 g_NameEntryCursor asm("D_8019C8F8");
 extern s32 g_RecordPanelSlide asm("D_8019CA14");
 extern u8 g_RankingNameCodes[] asm("D_801E417C");
 extern s32 g_NameEntryChar asm("D_801E6830");
 extern u8 g_TimeRecordNameCodes[] asm("D_801F17FC");
-void GameRequestSelectBgmAssets(void) asm("func_80018410");
+void RequestSelectBgmAssets(void) asm("func_80018410");
 void func_80021D68(void);
-void GameDrawRankingPanel(u8 *arg0) asm("func_80021DB8");
-void GameDrawTimeRecordPanel(u8 *arg0) asm("func_80022068");
-void GameDrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
-void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void DrawRankingPanel(u8 *arg0) asm("func_80021DB8");
+void DrawTimeRecordPanel(u8 *arg0) asm("func_80022068");
+void DrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 
-void GameDrawRankingPanel(u8 *arg0) asm("func_80021DB8");
-void GameDrawRankingPanel(u8 *arg0) {
+void DrawRankingPanel(u8 *arg0) asm("func_80021DB8");
+void DrawRankingPanel(u8 *arg0) {
     u8 *panel;
     s32 iter;
     s32 countOrIndex;
@@ -137,8 +137,8 @@ void GameDrawRankingPanel(u8 *arg0) {
     } while (countOrIndex < 5);
 }
 
-void GameDrawTimeRecordPanel(u8 *s5) asm("func_80022068");
-void GameDrawTimeRecordPanel(u8 *s5) {
+void DrawTimeRecordPanel(u8 *s5) asm("func_80022068");
+void DrawTimeRecordPanel(u8 *s5) {
     char text[48];
     s32 s4, s3;
     s32 s2, color, idx;
@@ -180,13 +180,13 @@ void GameDrawTimeRecordPanel(u8 *s5) {
     }
 }
 
-void GameDrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
-void GameDrawNameEntryCursor(s32 arg0, s32 arg1) {
+void DrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
+void DrawNameEntryCursor(s32 arg0, s32 arg1) {
     s32 *scratch;
 
     if (g_AnimTimer & 8) {
         scratch = (s32 *)0x1F800000;
-        *scratch = GameAddTilePrim(
+        *scratch = AddTilePrim(
             g_DrawBuffer + 0xCC,
             *scratch,
             (arg0 << 3) + 0x7C,
@@ -200,8 +200,8 @@ void GameDrawNameEntryCursor(s32 arg0, s32 arg1) {
 
 }
 
-void GameInsertRaceRecords(void) asm("func_80022324");
-void GameInsertRaceRecords(void) {
+void InsertRaceRecords(void) asm("func_80022324");
+void InsertRaceRecords(void) {
     s32 count;
     s32 i;
     s32 row_offset;
@@ -359,17 +359,17 @@ void GameInsertRaceRecords(void) {
     g_TimeRecordInsertRow = i;
 }
 
-void GameEnterRecordEntry(void) asm("func_80022748");
-void GameEnterRecordEntry(void) {
+void EnterRecordEntry(void) asm("func_80022748");
+void EnterRecordEntry(void) {
     g_SceneTimer = 0x100;
     g_FrameSyncThreshold = 0x80;
     g_RecordEntryState = 0;
     g_SceneId = 0x15;
-    GameInsertRaceRecords();
+    InsertRaceRecords();
 }
 
-void GameUpdateRecordEntry(void) asm("func_80022794");
-void GameUpdateRecordEntry(void) {
+void UpdateRecordEntry(void) asm("func_80022794");
+void UpdateRecordEntry(void) {
     u8 *name;
     s32 i;
 
@@ -378,11 +378,11 @@ void GameUpdateRecordEntry(void) {
     switch (g_RecordEntryState) {
     case 0:
         g_SceneTimer -= 8;
-        GameDrawFullscreenFadeTile(g_SceneTimer, 0x49);
+        DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if (g_SceneTimer == 0) {
             if (g_RankingInsertRow < 5 || g_TimeRecordInsertRow < 5) {
-                GameRequestCdTrack(0xE);
-                GameStartCdAudio();
+                RequestCdTrack(0xE);
+                StartCdAudio();
             }
             if (g_RankingInsertRow < 5) {
                 g_NameEntryChar = 0xB;
@@ -392,7 +392,7 @@ void GameUpdateRecordEntry(void) {
                 g_RecordEntryState = 2;
             }
         }
-        GameDrawRankingPanel((u8 *)0);
+        DrawRankingPanel((u8 *)0);
         break;
 
     case 1: {
@@ -411,14 +411,14 @@ void GameUpdateRecordEntry(void) {
         }
         g_NameEntryChar = (g_NameEntryChar + 42) % 42;
         if (previous != g_NameEntryChar) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
 
         g_RankingNameCodes[g_NameEntryCursor] = g_NameEntryChar;
         buttons = g_PadEdge2;
         name = (u8 *)g_RankingNameCodes;
         if (buttons & 0x860) {
-            GamePlaySoundCue(2);
+            PlaySoundCue(2);
             g_NameEntryCursor++;
             if (g_NameEntryCursor == 6) {
                 g_RecordEntryState = 2;
@@ -440,13 +440,13 @@ void GameUpdateRecordEntry(void) {
             }
             g_NameEntryChar = g_RankingNameCodes[g_NameEntryCursor];
         } else if ((buttons & 0x90) && g_NameEntryCursor > 0) {
-            GamePlaySoundCue(3);
+            PlaySoundCue(3);
             g_NameEntryCursor--;
             g_NameEntryChar = name[g_NameEntryCursor];
         }
 
         if (g_RecordEntryState == 1) {
-            GameDrawNameEntryCursor(g_NameEntryCursor, g_RankingInsertRow);
+            DrawNameEntryCursor(g_NameEntryCursor, g_RankingInsertRow);
         }
         i = 0;
         rankingRecordBase = g_RankingRecords;
@@ -457,7 +457,7 @@ void GameUpdateRecordEntry(void) {
             *record = g_NameEntryCharset[g_RankingNameCodes[i]];
             i++;
         } while (i < 6);
-        GameDrawRankingPanel((u8 *)0);
+        DrawRankingPanel((u8 *)0);
         break;
     }
 
@@ -466,13 +466,13 @@ void GameUpdateRecordEntry(void) {
             g_RecordEntryState = 3;
             g_RecordPanelSlide = 0;
         }
-        GameDrawRankingPanel((u8 *)0);
+        DrawRankingPanel((u8 *)0);
         break;
 
     case 3:
         g_RecordPanelSlide -= 8;
-        GameDrawRankingPanel((u8 *)g_RecordPanelSlide);
-        GameDrawTimeRecordPanel((u8 *)(g_RecordPanelSlide + 0x140));
+        DrawRankingPanel((u8 *)g_RecordPanelSlide);
+        DrawTimeRecordPanel((u8 *)(g_RecordPanelSlide + 0x140));
         if (g_RecordPanelSlide < -0x13F) {
             if (g_TimeRecordInsertRow < 5) {
                 g_NameEntryCursor = 0;
@@ -498,27 +498,27 @@ void GameUpdateRecordEntry(void) {
         }
         g_NameEntryChar = (g_NameEntryChar + 42) % 42;
         if (previous != g_NameEntryChar) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
 
         g_TimeRecordNameCodes[g_NameEntryCursor] = g_NameEntryChar;
         buttons = g_PadEdge2;
         name = (u8 *)g_TimeRecordNameCodes;
         if (buttons & 0x860) {
-            GamePlaySoundCue(2);
+            PlaySoundCue(2);
             g_NameEntryCursor++;
             if (g_NameEntryCursor == 6) {
                 g_RecordEntryState = 5;
             }
             g_NameEntryChar = name[g_NameEntryCursor];
         } else if ((buttons & 0x90) && g_NameEntryCursor > 0) {
-            GamePlaySoundCue(3);
+            PlaySoundCue(3);
             g_NameEntryCursor--;
             g_NameEntryChar = name[g_NameEntryCursor];
         }
 
         if (g_RecordEntryState == 4) {
-            GameDrawNameEntryCursor(g_NameEntryCursor, g_TimeRecordInsertRow);
+            DrawNameEntryCursor(g_NameEntryCursor, g_TimeRecordInsertRow);
         }
         i = 0;
         recordBase = g_TimeRecords;
@@ -528,50 +528,50 @@ void GameUpdateRecordEntry(void) {
             *record = g_NameEntryCharset[g_TimeRecordNameCodes[i]];
             i++;
         } while (i < 6);
-        GameDrawTimeRecordPanel((u8 *)0);
+        DrawTimeRecordPanel((u8 *)0);
         break;
     }
 
     case 5:
         if (g_PadEdge2 & 0x860) {
             if (g_RankingInsertRow < 5 || g_TimeRecordInsertRow < 5) {
-                GameStartCdVolumeFade(0x78);
-                GameStartCdAudio();
+                StartCdVolumeFade(0x78);
+                StartCdAudio();
             }
             g_RecordEntryState = 6;
             g_RecordPanelSlide = 0;
         }
-        GameDrawTimeRecordPanel((u8 *)0);
+        DrawTimeRecordPanel((u8 *)0);
         break;
 
     case 6:
         g_SceneTimer += 2;
-        GameDrawFullscreenFadeTile(g_SceneTimer, 0x49);
+        DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if ((u32)g_SceneTimer >= 0x100) {
-            GameRequestSelectBgmAssets();
+            RequestSelectBgmAssets();
             g_SceneId = 6;
         }
-        GameDrawTimeRecordPanel((u8 *)0);
+        DrawTimeRecordPanel((u8 *)0);
         break;
     }
 
     func_80021D68();
 }
 
-void GameReturnFromClassFmv(void) asm("func_80022EE4");
-void GameReturnFromClassFmv(void) {
+void ReturnFromClassFmv(void) asm("func_80022EE4");
+void ReturnFromClassFmv(void) {
     CdSync(0, 0);
     CdControl(9, 0, 0);
     g_SceneId = 6;
-    GameRequestSelectBgmAssets();
+    RequestSelectBgmAssets();
 }
 
-void GameReturnFromEndingFmv(void) asm("func_80022F2C");
-void GameReturnFromEndingFmv(void) {
+void ReturnFromEndingFmv(void) asm("func_80022F2C");
+void ReturnFromEndingFmv(void) {
     CdSync(0, 0);
     CdControl(9, 0, 0);
     SetDispMask(0);
-    GameSetupDisplay240(0, 0, 0);
+    SetupDisplay240(0, 0, 0);
     g_FrameSyncThreshold = 0x80;
     g_FadeStep = 4;
     g_FadeLevel = 0;

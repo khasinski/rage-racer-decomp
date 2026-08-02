@@ -15,19 +15,19 @@ extern s32 g_PromotionBonus asm("D_8019CE0C");
 extern s32 g_ClassClearFanfareTimer asm("D_801E4D0C");
 extern s32 g_ClassCompleted asm("D_801E4B94");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
-void GameDrawFullscreenFadeTile(s32, s32) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32, s32) asm("func_80033AA0");
 void func_800204F4(s32);
 void func_800206B8(s32);
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_80020D90(void);
-void GameRequestSelectBgmAssets(void) asm("func_80018410");
+void RequestSelectBgmAssets(void) asm("func_80018410");
 void func_80020B08(void);
 void func_800201D4(void);
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
 void func_8005BD84(s32 arg0);
-void GameSetEffectVolumeSetting(s32 arg0) asm("func_8005BDD4");
+void SetEffectVolumeSetting(s32 arg0) asm("func_8005BDD4");
 void func_8005BE24(void);
 void func_8005BE58(void);
 extern UnkCopyChunk D_8007BE68[];
@@ -42,14 +42,14 @@ extern u8 g_GrandPrixCourseProgress asm("D_801E42EC");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern s32 g_BgmSelection asm("D_801E42CC");
-void GameApplyAudioSettings(void) asm("func_80021224");
-void GameResetProgressSlot(void *arg0, s32 *arg1) asm("func_80021288");
-void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
+void ApplyAudioSettings(void) asm("func_80021224");
+void ResetProgressSlot(void *arg0, s32 *arg1) asm("func_80021288");
+void ResetCourseProgress(s32 arg0) asm("func_800212F0");
 void func_8001B488(void);
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
-void GameUpdatePrizeMoneyScreen(void) asm("func_80020DDC");
-void GameUpdatePrizeMoneyScreen(void) {
+void UpdatePrizeMoneyScreen(void) asm("func_80020DDC");
+void UpdatePrizeMoneyScreen(void) {
     s32 lim1 = g_PrizeCountStep;
     s32 lim0 = g_BonusCountStep;
     s32 st;
@@ -63,7 +63,7 @@ void GameUpdatePrizeMoneyScreen(void) {
     switch (g_PrizeScreenState) {
     case 0:
         g_SceneTimer -= 8;
-        GameDrawFullscreenFadeTile(g_SceneTimer, 0x49);
+        DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if (g_SceneTimer == 0) g_PrizeScreenState = 1;
         func_800204F4(0);
         goto L428;
@@ -88,7 +88,7 @@ void GameUpdatePrizeMoneyScreen(void) {
         g_SceneTimer += 1;
         if (!((u32)g_SceneTimer < 121)) {
         if (g_PrizeAmount == 0) goto L248;
-        GamePlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
+        PlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = g_PrizeAmount;
         if (t >= lim1) {
             g_PrizeAmount = t - lim1;
@@ -106,7 +106,7 @@ void GameUpdatePrizeMoneyScreen(void) {
         st = 5;
         goto Lstore;
     case 5:
-        GamePlaySoundCue(0x11);
+        PlaySoundCue(0x11);
         if (!(g_PadEdge2 & 0x860)) break;
         st = 6;
     Lstore:
@@ -115,7 +115,7 @@ void GameUpdatePrizeMoneyScreen(void) {
     case 6:
         func_80020D90();
         if (g_PromotionBonus == 0) { st = 7; goto Lstore; }
-        GamePlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
+        PlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = g_PromotionBonus;
         if (t >= lim0) {
             g_PromotionBonus = t - lim0;
@@ -131,11 +131,11 @@ void GameUpdatePrizeMoneyScreen(void) {
         goto Lstore;
     case 7:
         func_80020D90();
-        GamePlaySoundCue(0x11);
+        PlaySoundCue(0x11);
         if (!(g_PadEdge2 & 0x860)) break;
         if (g_ClassClearFanfareTimer != 0) break;
         if (g_ClassCompleted != 0) { st = 8; goto Lstore; }
-        GameRequestSelectBgmAssets();
+        RequestSelectBgmAssets();
         st = 8;
         goto Lstore;
     case 8:
@@ -143,7 +143,7 @@ void GameUpdatePrizeMoneyScreen(void) {
             g_SceneTimer += 1;
         else
             g_SceneTimer += 2;
-        GameDrawFullscreenFadeTile(g_SceneTimer, 0x49);
+        DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if ((u32)g_SceneTimer < 0x100) break;
         func_80020B08();
         break;
@@ -155,10 +155,10 @@ L428:
     func_800201D4();
 }
 
-void GameApplyAudioSettings(void) asm("func_80021224");
-void GameApplyAudioSettings(void) {
+void ApplyAudioSettings(void) asm("func_80021224");
+void ApplyAudioSettings(void) {
     func_8005BD84(g_BgmVolumeSetting);
-    GameSetEffectVolumeSetting(g_SfxVolumeSetting);
+    SetEffectVolumeSetting(g_SfxVolumeSetting);
     if (g_MonoOutput == 0) {
         func_8005BE24();
     } else {
@@ -166,8 +166,8 @@ void GameApplyAudioSettings(void) {
     }
 }
 
-void GameResetProgressSlot(void *arg0, s32 *arg1) asm("func_80021288");
-void GameResetProgressSlot(void *arg0, s32 *arg1) {
+void ResetProgressSlot(void *arg0, s32 *arg1) asm("func_80021288");
+void ResetProgressSlot(void *arg0, s32 *arg1) {
     UnkCopyChunk *dst;
     UnkCopyChunk *src;
     s32 i;
@@ -188,8 +188,8 @@ void GameResetProgressSlot(void *arg0, s32 *arg1) {
     arg1[4] = 0;
 }
 
-void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
-void GameResetCourseProgress(s32 arg0) {
+void ResetCourseProgress(s32 arg0) asm("func_800212F0");
+void ResetCourseProgress(s32 arg0) {
     u8 *ptr = g_CourseProgress;
 
     *(s16 *)(ptr + 6) = 5;
@@ -205,8 +205,8 @@ void GameResetCourseProgress(s32 arg0) {
     *(s16 *)(g_CourseProgress + 4) = 0;
 }
 
-void GameInitSaveDefaults(void) asm("func_80021338");
-void GameInitSaveDefaults(void) {
+void InitSaveDefaults(void) asm("func_80021338");
+void InitSaveDefaults(void) {
     u8 *src;
     u8 *dst;
     s32 i;
@@ -238,13 +238,13 @@ void GameInitSaveDefaults(void) {
     g_TimeAttackSave.classIndex = 0;
     g_TimeAttackSave.maxClassReached = 0;
     g_TimeAttackSave.unk10 = 0;
-    GameResetProgressSlot(&g_GrandPrixCars, (s32 *)&g_GrandPrixSave);
-    GameResetProgressSlot(&g_ExtraGrandPrixCars, (s32 *)&g_ExtraGrandPrixSave);
+    ResetProgressSlot(&g_GrandPrixCars, (s32 *)&g_GrandPrixSave);
+    ResetProgressSlot(&g_ExtraGrandPrixCars, (s32 *)&g_ExtraGrandPrixSave);
 
     g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
-    GameResetCourseProgress(0);
+    ResetCourseProgress(0);
     g_CourseProgress = &g_GrandPrixCourseProgress;
-    GameResetCourseProgress(0);
+    ResetCourseProgress(0);
 
     g_MaxClassReached[1] = 0;
     g_MaxClassReached[0] = 0;
@@ -254,12 +254,12 @@ void GameInitSaveDefaults(void) {
     g_BgmVolumeSetting = 0xF;
     g_SfxVolumeSetting = 0xF;
     g_MonoOutput = 0;
-    GameApplyAudioSettings();
+    ApplyAudioSettings();
 }
 
 /* Derives the 0..3 class grade from a course-progress block; 0 when an over-class car was used. */
-s32 GameComputeClassGrade(void) asm("func_800214B8");
-s32 GameComputeClassGrade(void) {
+s32 ComputeClassGrade(void) asm("func_800214B8");
+s32 ComputeClassGrade(void) {
     u8 *ptr;
     s32 value;
     u8 *end;

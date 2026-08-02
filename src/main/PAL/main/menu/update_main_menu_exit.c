@@ -6,23 +6,23 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 
-void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
-void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
+void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
+void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 
 extern s32 g_TitlePulse asm("D_801E429C");
 
-void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void GameDrawMainMenuRows(void) asm("func_8001B2D4");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawMainMenuRows(void) asm("func_8001B2D4");
 
-void GameUpdateMainMenuExit(void) asm("func_8001B884");
+void UpdateMainMenuExit(void) asm("func_8001B884");
 
-void GameUpdateMainMenuExit(void) {
+void UpdateMainMenuExit(void) {
     s32 value;
     GameRaceProgress *ptr;
 
     value = g_TitlePulse + 1;
     g_TitlePulse = value;
-    GameDrawFullscreenFadeTile(value * 2, 0x59);
+    DrawFullscreenFadeTile(value * 2, 0x59);
 
     if (g_TitlePulse >= 0x81) {
         switch (g_TitleMenuSelection) {
@@ -51,12 +51,12 @@ void GameUpdateMainMenuExit(void) {
         }
     }
 
-    GameDrawMainMenuRows();
+    DrawMainMenuRows();
 }
 
-void GameUpdateFrontend(void) asm("func_8001BB58");
+void UpdateFrontend(void) asm("func_8001BB58");
 
-void GameUpdateTitleAttract(void) asm("func_8001B974");
+void UpdateTitleAttract(void) asm("func_8001B974");
 
 extern s32 g_MainMenuSlide asm("D_801E6F1C");
 extern s32 g_ClassWinCount asm("D_801E4DA8");
@@ -65,7 +65,7 @@ void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 ar
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 void *func_800173F4(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10);
 
-void GameUpdateTitleAttract(void) {
+void UpdateTitleAttract(void) {
     s32 alpha;
     void *base;
     s32 color;
@@ -127,19 +127,19 @@ extern s32 D_8007C744;
 extern u32 D_801E8260;
 extern void (*g_FrontendDrawHandlers[])(void) asm("D_8007C748");
 
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-s32 GameRequestTrackLoad(void) asm("func_8001965C");
-s32 GameRequestRaceStart(void) asm("func_80019580");
-void GameBeginIntroFmv(int) asm("func_80019AF0");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+s32 RequestTrackLoad(void) asm("func_8001965C");
+s32 RequestRaceStart(void) asm("func_80019580");
+void BeginIntroFmv(int) asm("func_80019AF0");
 
-void GameUpdateFrontend(void) {
+void UpdateFrontend(void) {
     u32 state;
     s32 b, m4;
 
     g_AnimTimer++;
-    GameRandom15();
+    Random15();
 
     if (g_TitleAttractTimer > 0) {
         g_TitleAttractTimer--;
@@ -151,7 +151,7 @@ void GameUpdateFrontend(void) {
     }
     if (g_TitleExitTimer != 0) {
         if (--g_TitleExitTimer == 0) {
-            GamePlaySoundCue(0x1a);
+            PlaySoundCue(0x1a);
         }
     }
 
@@ -162,18 +162,18 @@ void GameUpdateFrontend(void) {
         if (!(g_FrontendState == 3) && !(D_8007C744 & 1)) {
         if (state == 0x1cc) {
             g_GrandPrixSeries = 0;
-            g_GrandPrixClass = (GameRandom15() & 0xfff) % 5;
-            b = GameRandom15() & 0xfff;
+            g_GrandPrixClass = (Random15() & 0xfff) % 5;
+            b = Random15() & 0xfff;
             m4 = b % 4;
             g_CourseIndex = m4;
             if (g_GrandPrixClass < 2 && m4 == 3) {
-                g_CourseIndex = (GameRandom15() & 0xfff) % 3;
+                g_CourseIndex = (Random15() & 0xfff) % 3;
             }
-            GameRequestTrackLoad();
+            RequestTrackLoad();
             g_SceneTimer++;
         } else if (state == 0x1cd) {
             if (g_AssetLoadState == 0) {
-                GameRequestRaceStart();
+                RequestRaceStart();
                 g_SceneTimer++;
             }
         } else if (state == 0x1ce) {
@@ -189,7 +189,7 @@ void GameUpdateFrontend(void) {
         state = g_SceneTimer;
     }
     if (state == 1) {
-        GameSetupDisplay240(0, 0, 0);
+        SetupDisplay240(0, 0, 0);
     }
 
     g_FrontendDrawHandlers[g_FrontendState]();
@@ -198,7 +198,7 @@ void GameUpdateFrontend(void) {
         D_801E8260++;
     } else {
         if (D_8007C744 & 1) {
-            GameBeginIntroFmv(3);
+            BeginIntroFmv(3);
             D_8007C744++;
         } else {
             if (g_SceneTimer == 0x1cf) {
@@ -209,11 +209,11 @@ void GameUpdateFrontend(void) {
         }
     }
 
-    GameUpdateTitleAttract();
+    UpdateTitleAttract();
 }
 
 /*
- * Empty stub; GameSetupDisplay240 and GameSetupDisplay480 both call it with one argument,
+ * Empty stub; SetupDisplay240 and SetupDisplay480 both call it with one argument,
  * so the parameter is declared and ignored.
  */
 void func_8001BE94(int arg0) {
@@ -229,8 +229,8 @@ extern u16 g_ScreenOffsetY asm("D_801E4B9C");
 void func_80069A58(s32, s32);
 void func_80069A78(s32);
 
-void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) asm("func_8001BE9C");
-void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
+void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) asm("func_8001BE9C");
+void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
@@ -306,8 +306,8 @@ void GameSetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     asm(".globl func_8001C05C\nfunc_8001C05C = func_8001BE9C + 0x1C0");
 }
 
-void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) asm("func_8001C088");
-void GameSetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
+void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) asm("func_8001C088");
+void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;

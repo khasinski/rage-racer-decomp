@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-s32 GameRandom15(void) asm("func_800632B0");
-void GameSeedRandom(s32 seed) asm("func_800632E0");
+s32 Random15(void) asm("func_800632B0");
+void SeedRandom(s32 seed) asm("func_800632E0");
 
 #endif

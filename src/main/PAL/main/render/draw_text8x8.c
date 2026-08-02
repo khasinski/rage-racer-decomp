@@ -32,7 +32,7 @@ extern u8 g_HighFontYOffset[] asm("D_8007C463");
 #define INIT_TEXT_FONT(font) \
     asm("" : "=r"(font) : "0"(g_Font8x8Cells))
 
-void GameDrawText8x8(
+void DrawText8x8(
     s32 x,
     s32 y,
     u8 *str,
@@ -43,7 +43,7 @@ void GameDrawText8x8Shaded(
     u8 *str,
     s32 clutIndex,
     u8 intensity) asm("func_800168AC");
-void GameDrawText8x8Trans(
+void DrawText8x8Trans(
     s32 x,
     s32 y,
     u8 *str,
@@ -55,7 +55,7 @@ void SetDrawModeWide8x8(
     s32 tpage,
     void *textureWindow) asm("func_800666F4");
 
-void GameDrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
+void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
     u8 **scratch = (u8 **)0x1F800000;
     u8 *packet;
 
@@ -181,7 +181,7 @@ void GameDrawText8x8Shaded(
     *scratch = packet + sizeof(DrawPacket);
 }
 
-void GameDrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
+void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
     u8 **scratch = (u8 **)0x1F800000;
     u8 *packet;
 
@@ -466,12 +466,12 @@ advance_sprite:
 #undef OPAQUE_VALUE
 }
 
-void GameDrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex) asm("func_80016EA0");
+void DrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex) asm("func_80016EA0");
 
 /* Opaque wrapper over GameDrawProportionalTextShaded: intensity 0x100 selects
  * the raw-texture (SetShadeTex) path instead of a modulated, semi-transparent
  * one. */
-void GameDrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex) {
+void DrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex) {
     DrawProportionalTextShadedWide(x, y, str, clutIndex, 0x100);
 }
 

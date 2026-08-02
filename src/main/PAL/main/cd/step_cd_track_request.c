@@ -14,8 +14,8 @@ extern CdlLOC g_CdTrackLocs[] asm("D_8009AFD4");
 s32 func_8006A534(s32 arg0, s32 arg1);
 long CdControl(long com, void *param, long result) asm("func_8006A5A4");
 
-void GameStepCdTrackRequest(void) asm("func_800432A8");
-void GameStepCdTrackRequest(void) {
+void StepCdTrackRequest(void) asm("func_800432A8");
+void StepCdTrackRequest(void) {
     s32 state;
     s32 status;
     u8 track;
@@ -49,7 +49,7 @@ void GameStepCdTrackRequest(void) {
         track = (g_CdCurrentTrack = *(u8 *)&g_CdTrackPending);
         g_CdTrackPending = -1;
         g_CdTrackStep = 0;
-        GameSetCdVolume(status);
+        SetCdVolume(status);
         break;
     case 4:
         if (func_8006A534(1, 0) == 0) {
@@ -82,8 +82,8 @@ void GameStepCdTrackRequest(void) {
     }
 }
 
-void GameStepCdPlayRequest(void) asm("func_80043494");
-void GameStepCdPlayRequest(void) {
+void StepCdPlayRequest(void) asm("func_80043494");
+void StepCdPlayRequest(void) {
     s32 state;
     s32 status;
 

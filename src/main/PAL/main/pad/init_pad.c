@@ -17,7 +17,7 @@ void GameInitPad(void) {
  * NeGcon. */
 extern u16 g_PadButtonPresets[] asm("D_8007C028");
 extern u16 g_NegconButtonPresets[] asm("D_8007C0A8");
-/* The live mapping GameUpdatePadState reads: the pad's eight masks at +0,
+/* The live mapping UpdatePadState reads: the pad's eight masks at +0,
  * the NeGcon's eight at +0x10. */
 extern u16 g_PadButtonMapping[] asm("D_801E4B60");
 
@@ -26,7 +26,7 @@ extern u16 g_PadButtonMapping[] asm("D_801E4B60");
  * copied in the same 8-iteration loop, hence the pair of source and
  * destination cursors.
  */
-void GameLoadPadButtonMapping(s32 mapping0, s32 mapping1) {
+void LoadPadButtonMapping(s32 mapping0, s32 mapping1) {
     s32 i;
     u16 *dst0;
     u16 *dst1;
@@ -57,8 +57,8 @@ extern s16 g_PadMappingIndex asm("D_8019CE08");
 extern s16 g_NegconMappingIndex asm("D_8019CB08");
 
 /* Re-applies the button mapping from the two saved selections. */
-void GameApplyPadButtonMapping(void) {
-    GameLoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
+void ApplyPadButtonMapping(void) {
+    LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
 }
 
 typedef struct PadState {
@@ -96,8 +96,8 @@ extern s16 g_NegconNeutralII asm("D_8019CA0A");
 extern s16 g_NegconNeutralL asm("D_8019CA0C");
 extern s16 g_NegconSteerNeutral asm("D_801E4BF0");
 
-void GameUpdatePadState(void) asm("func_80014014");
-void GameUpdatePadState(void) {
+void UpdatePadState(void) asm("func_80014014");
+void UpdatePadState(void) {
     s32 mask;
     s32 v;
     s32 t;

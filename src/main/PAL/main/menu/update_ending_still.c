@@ -10,8 +10,8 @@ s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 
 /* Scene 34: the still shown after the ending FMV. Fades in, waits 300
  * frames or a confirm press, fades out and returns to scene 2. */
-void GameUpdateEndingStill(void) asm("func_80022FAC");
-void GameUpdateEndingStill(void) {
+void UpdateEndingStill(void) asm("func_80022FAC");
+void UpdateEndingStill(void) {
     s32 v0, v1;
     if ((g_SceneTimer = g_SceneTimer + 1) == 2) {
         SetDispMask(1);
@@ -36,8 +36,8 @@ void GameUpdateEndingStill(void) {
 }
 
 /* The still itself: a 0x100 + 0x40 wide pair of full-height sprites. */
-void GameDrawEndingStill(void) asm("func_800230B0");
-void GameDrawEndingStill(void) {
+void DrawEndingStill(void) asm("func_800230B0");
+void DrawEndingStill(void) {
     u8 *base;
     s32 clut;
     s32 height;

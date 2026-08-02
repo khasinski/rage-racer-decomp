@@ -60,7 +60,7 @@ extern s32 g_MaxClassReached[2] asm("D_801E772C");
  * swaps left/right in steering, body roll, stereo pan and the sound cue. */
 extern s32 g_MirrorMode asm("D_8019CACC");
 
-/* One save slot's Grand Prix / Time Attack progress; GameInitMenuMode copies it
+/* One save slot's Grand Prix / Time Attack progress; InitMenuMode copies it
  * straight into the live globals and func_80053730 writes it back. */
 typedef struct GameRaceProgress {
     s32 course;
@@ -89,12 +89,12 @@ typedef struct GameRaceRanking {
 
 /* Course-select gate: `g_CourseIndex < (class < 2 ? 2 : 3)`, or 6 : 7 for the
  * advanced series. This is the OVAL unlock; see names.md 5. */
-s32 GameCanSelectNextCourse(void) asm("func_80053688");
+s32 CanSelectNextCourse(void) asm("func_80053688");
 
 /* The race-start signal gantry, live for 105 <= g_SceneTimer < 300: the "3" /
  * "2" / "1" / "GO" dot-matrix board from D_8007DDC0[1..4] plus the six start
  * lamps. See docs/names.md 1. */
-void GameDrawStartCountdown(s32 sceneTimer) asm("func_8003425C");
+void DrawStartCountdown(s32 sceneTimer) asm("func_8003425C");
 
 /*
  * Per-course records, all in the memory-card save block. Per-file types.
@@ -133,7 +133,7 @@ extern s32 g_RefLapTime asm("D_8009AF8C");
  *                                             (L/3, 2L/3, L)
  *   g_RefSectorTimes[3]     D_8009AF90/94/98  the best lap's sector times
  * g_RefSectorTimes is the one exception to one-address-one-name in this header:
- * race/GameUpdateLapAndFinish.c must spell its three elements as the separate
+ * race/UpdateLapAndFinish.c must spell its three elements as the separate
  * scalars g_RefSectorTime0/1/2 or gcc 2.6.3 CSEs the array base into a register
  * and reschedules the surrounding block. g_SectorEndDistance was checked the
  * same way and does not need it, so it is indexed everywhere.
@@ -167,19 +167,19 @@ extern s16 g_PlayerFacingBackwards asm("D_8009E78C");
 extern s16 g_RivalCueEnabled asm("D_8009E6A0");
 
 /* Frame counter of the in-race fade transitions; every use is the brightness
- * argument of GameDrawFullscreenFadeTile plus a frame threshold. */
+ * argument of DrawFullscreenFadeTile plus a frame threshold. */
 extern s16 g_RaceFadeTimer asm("D_801E43FC");
 
 /* Cursor of the in-race option overlay, clamped to 2 - g_GrandPrixMode. */
 extern s16 g_RaceOptionCursor asm("D_801E414C");
 
 /* Best lap of this race so far (D_801E4BCC), seeded from g_BestLapTimes at the
- * grid, and GameDrawTimeValue (func_80033D50), which prints one millisecond
+ * grid, and DrawTimeValue (func_80033D50), which prints one millisecond
  * time as m'ss"fff. Both are also referenced from render/, so they are
  * declared per file rather than here. */
 
 /* The wrong-way warning: three sprites over a backing panel, drawn once
  * g_WrongWayTimer passes 10. */
-void GameDrawWrongWayWarning(void) asm("func_800333DC");
+void DrawWrongWayWarning(void) asm("func_800333DC");
 
 #endif

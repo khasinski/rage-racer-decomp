@@ -26,8 +26,8 @@ void func_80046A2C(
     s32 flags);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047634");
-void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
+void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047634");
+void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
     u8 *str;
     s32 x;
     u8 fl = flags;
@@ -156,8 +156,8 @@ void func_80046A2C(
     s32 flags);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047958");
-void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
+void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047958");
+void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
     u8 *str;
     s32 x;
     u8 fl = flags;
@@ -402,8 +402,8 @@ extern s32 D_8007FB00;
 
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void GameDrawBitPatternOverlay(s32 arg0) asm("func_80047E60");
-void GameDrawBitPatternOverlay(s32 arg0) {
+void DrawBitPatternOverlay(s32 arg0) asm("func_80047E60");
+void DrawBitPatternOverlay(s32 arg0) {
     void *ot = *(void **)0x1F800004;
     u8 *row = D_8007F6E8;
     s32 y;

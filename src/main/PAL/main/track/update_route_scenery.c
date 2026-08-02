@@ -44,8 +44,8 @@ extern s32 g_RouteSceneryRotZ asm("D_801E4358");
 extern KF *g_RouteSceneryKeyframe asm("D_801E6C88");
 
 
-void GameUpdateRouteScenery(void) asm("func_8003EC98");
-void GameUpdateRouteScenery(void) {
+void UpdateRouteScenery(void) asm("func_8003EC98");
+void UpdateRouteScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
     SVec vin;
@@ -148,12 +148,12 @@ void GameUpdateRouteScenery(void) {
         m0 = &mtx0;
         __asm__("" : "=r"(m0) : "0"(m0));
         vin.z = -RAW(rec->rot) * 4;
-        GameBuildRotMatrixY(m0, 0x800 - r4354);
+        BuildRotMatrixY(m0, 0x800 - r4354);
     }
 
-    GameBuildRotMatrixX(&mtx1, g_RouteSceneryRotX);
+    BuildRotMatrixX(&mtx1, g_RouteSceneryRotX);
     MulMatrix2(&mtx0, &mtx1);
-    GameBuildRotMatrixZ(&mtx0, g_RouteSceneryRotZ);
+    BuildRotMatrixZ(&mtx0, g_RouteSceneryRotZ);
     MulMatrix(&mtx1, &mtx0);
     ApplyMatrix((s32 *)&mtx1, (s32 *)&vin, (s32 *)&vout);
 

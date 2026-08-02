@@ -3,7 +3,7 @@
 
 extern u8 *volatile g_DrawBuffer asm("D_8019C900");
 s32 func_80017138(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 color);
-s32 GameAddTilePrim(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("func_80032F34");
+s32 AddTilePrim(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("func_80032F34");
 void func_800236C8(s32 a, s32 b);
 void func_80023750(s32 a);
 void func_8002390C(void);
@@ -14,8 +14,8 @@ void func_80027874(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
 
-void GameDrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80027A84");
-void GameDrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
+void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80027A84");
+void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 {
     s32 base = ((s32) g_DrawBuffer) + 0xCC;
     s32 *scratch = (s32 *) 0x1F800000;
@@ -42,21 +42,21 @@ void GameDrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     func_8002390C();
 
     base = ((s32) g_DrawBuffer) + 0xD8;
-    next = GameAddTilePrim(base, *scratch, 0x5D, 0x3C, 0xE4, 0x40, 0, 0, 0);
-    next = GameAddTilePrim(base, next, 0x5C, 0x3A, 0xE5, 0x44, 0xFF, 0xFF, 0xFF);
+    next = AddTilePrim(base, *scratch, 0x5D, 0x3C, 0xE4, 0x40, 0, 0, 0);
+    next = AddTilePrim(base, next, 0x5C, 0x3A, 0xE5, 0x44, 0xFF, 0xFF, 0xFF);
     for (i = 0; i < 3; i++) {
         next = func_800279EC(base, next, 0x3E, 0xD0 + i * 0x30);
     }
 
     if (arg0 != 0) {
-        next = GameAddTilePrim(base, next, 0x3C, ((arg3 * 3) << 4) + 0xCC, 0xC8, 0x28, 0x89, 0xFF, 0x76);
+        next = AddTilePrim(base, next, 0x3C, ((arg3 * 3) << 4) + 0xCC, 0xC8, 0x28, 0x89, 0xFF, 0x76);
     }
-    next = GameAddTilePrim(base, next, 0, 0, 0x140, 0xF0, 0x85, 0x15, 0xE);
+    next = AddTilePrim(base, next, 0, 0, 0x140, 0xF0, 0x85, 0x15, 0xE);
     *(s32 *)0x1F800000 = next;
 }
 
-void GameDrawMemoryCardMessage(s32 arg0) asm("func_80027D84");
-void GameDrawMemoryCardMessage(s32 arg0) {
+void DrawMemoryCardMessage(s32 arg0) asm("func_80027D84");
+void DrawMemoryCardMessage(s32 arg0) {
     s32 index;
     s32 *entry;
     s32 x;

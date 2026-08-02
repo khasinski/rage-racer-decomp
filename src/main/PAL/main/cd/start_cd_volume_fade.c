@@ -2,8 +2,8 @@
 
 extern s32 g_CdFadeFrames asm("D_8009B1B4");
 
-void GameStartCdVolumeFade(s32 arg0) asm("func_80042CCC");
-void GameStartCdVolumeFade(s32 arg0) {
+void StartCdVolumeFade(s32 arg0) asm("func_80042CCC");
+void StartCdVolumeFade(s32 arg0) {
     g_CdFadeFrames = arg0;
     if (arg0 >= 0x1000) {
         g_CdFadeFrames = 0xFFF;
@@ -28,8 +28,8 @@ extern u32 g_CdMixFullRL asm("D_8009B190");
 
 void CdMix(u8 *arg0) asm("func_8006A94C");
 
-void GameStepCdVolumeFade(void) asm("func_80042D10");
-void GameStepCdVolumeFade(void) {
+void StepCdVolumeFade(void) asm("func_80042D10");
+void StepCdVolumeFade(void) {
     u8 buf[4];
     s32 cnt;
 

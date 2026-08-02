@@ -31,8 +31,8 @@ void func_80047E60(s32);
 
 /* Scene 8: the menu-mode per-frame dispatcher. Runs the two
  * g_MenuScreenDraw overlay slots and then g_MenuScreenUpdate[g_MenuScreen]. */
-void GameUpdateMenuMode(void) asm("func_8005ACA0");
-void GameUpdateMenuMode(void) {
+void UpdateMenuMode(void) asm("func_8005ACA0");
+void UpdateMenuMode(void) {
     void *scratch;
     s32 c0;
     s32 c1;
@@ -129,7 +129,7 @@ s32 func_8005AFD4(void) {
 
 extern s16 g_SoundSlotTone[] asm("D_80082F28");
 
-s32 GameSetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
+s32 SetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
     s16 *base = g_SoundSlotTone;
     s16 *row;
     s16 *entry;
@@ -151,12 +151,12 @@ extern s32 D_801E6D80;
 extern s32 g_EngineSoundCurves[] asm("D_801E446C");
 extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
 
-void GameSetLoadedTableVolumeScale(s32 scale) asm("func_8005BD58");
-s32 GameSetSoundToneTableEntry(s32 row, s32 bank, s32 value) asm("func_8005B040");
-void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
+void SetLoadedTableVolumeScale(s32 scale) asm("func_8005BD58");
+s32 SetSoundToneTableEntry(s32 row, s32 bank, s32 value) asm("func_8005B040");
+void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
 
-void GameLoadAudioParameterTable(u16 *table) asm("func_8005B070");
-void GameLoadAudioParameterTable(u16 *table) {
+void LoadAudioParameterTable(u16 *table) asm("func_8005B070");
+void LoadAudioParameterTable(u16 *table) {
     u16 *tableReg = table;
     s32 bank;
     s32 row;
@@ -207,7 +207,7 @@ void GameLoadAudioParameterTable(u16 *table) {
         scale = *tableReg;
         tableReg++;
         bank = 0;
-        GameSetLoadedTableVolumeScale(scale);
+        SetLoadedTableVolumeScale(scale);
     }
 
     do {
@@ -220,7 +220,7 @@ void GameLoadAudioParameterTable(u16 *table) {
             tableReg++;
             rowArg = row;
             row++;
-            GameSetSoundToneTableEntry(rowArg, bank, tone);
+            SetSoundToneTableEntry(rowArg, bank, tone);
         } while (row < 6);
         bank++;
     } while (bank < 2);
@@ -234,8 +234,8 @@ void GameLoadAudioParameterTable(u16 *table) {
     }
 }
 
-void GameSetReverbDepth(s32 left, s32 right) asm("func_8005B190");
-void GameSetReverbDepth(s32 left, s32 right) {
+void SetReverbDepth(s32 left, s32 right) asm("func_8005B190");
+void SetReverbDepth(s32 left, s32 right) {
     if (left >= 0) {
         if (left >= 0x80) {
             left = 0x7F;
@@ -257,8 +257,8 @@ void GameSetReverbDepth(s32 left, s32 right) {
     SsUtSetReverbDepth((s16)left, (s16)right);
 }
 
-void GameSetReverbPreset(s32 type, s32 left, s32 right) asm("func_8005B204");
-void GameSetReverbPreset(s32 type, s32 left, s32 right) {
+void SetReverbPreset(s32 type, s32 left, s32 right) asm("func_8005B204");
+void SetReverbPreset(s32 type, s32 left, s32 right) {
     s32 tempLeft;
     s32 tempRight;
 
@@ -289,7 +289,7 @@ void GameSetReverbPreset(s32 type, s32 left, s32 right) {
         g_ReverbDepthR = right;
         SsUtSetReverbType((s16)type);
         SsUtReverbOn();
-        GameSetReverbDepth(left, right);
+        SetReverbDepth(left, right);
     } else {
         D_801E6D80 = 0;
         g_ReverbDepthR = 0;
@@ -297,7 +297,7 @@ void GameSetReverbPreset(s32 type, s32 left, s32 right) {
     }
 }
 
-void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
+void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
     s16 *base = g_SoundSlotTone;
     s16 *row;
     s16 *entry;

@@ -19,8 +19,8 @@ void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
 void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
 /* The 18-swatch PAINT COLOR strip with its selection frame and enlarged preview. */
-s32 GameDrawPaintColorPalette(s32 *counter, s32 step, s32 index) asm("func_8004F048");
-s32 GameDrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
+s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) asm("func_8004F048");
+s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
     ColorTable localTable;
     void *ot;
     s32 progress;

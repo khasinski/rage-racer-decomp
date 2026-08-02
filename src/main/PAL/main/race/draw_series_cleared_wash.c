@@ -36,23 +36,23 @@ extern s32 g_ReplayBufferWrapped asm("D_8009EC8C");
 extern u8 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_ReplayReadCursor asm("D_801F179C");
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void GameDrawSeriesClearedWash(s32 arg0, s32 arg1) asm("func_8001FC30");
-void GameUpdateReplayCars(void) asm("func_80035040");
-void GameUpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
-void GameDrawTerrainCellsWide(void) asm("func_80041888");
-void GameDrawPlayerCarOnly(void) asm("func_80038A88");
-void GameDrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawSeriesClearedWash(s32 arg0, s32 arg1) asm("func_8001FC30");
+void UpdateReplayCars(void) asm("func_80035040");
+void UpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
+void DrawTerrainCellsWide(void) asm("func_80041888");
+void DrawPlayerCarOnly(void) asm("func_80038A88");
+void DrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
 void func_800418D4(void);
-void GameDrawReplayBadge(void) asm("func_8001FB8C");
-void GameSetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
-void GameApplyReplayFrame(s32 arg0, void *arg1, void *arg2) asm("func_8001F330");
+void DrawReplayBadge(void) asm("func_8001FB8C");
+void SetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
+void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2) asm("func_8001F330");
 extern char g_TextResult[] asm("D_80010DF0");
 extern char *g_CourseNames[] asm("D_8007D404");
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016A18(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
+s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 extern s32 g_RaceTotalTime asm("D_801E4BA8");
 extern s32 g_ClassResultPlace asm("D_8019C7C4");
 extern s32 g_PrizeScreenState asm("D_8019CB74");
@@ -93,8 +93,8 @@ void LibcSprintf(void *dst, void *fmt, ...) asm("func_800632F0");
 void func_800200D0(void);
 void *func_80021CD4(void *dst, s32 value);
 
-void GameDrawSeriesClearedWash(s32 x, s32 y) asm("func_8001FC30");
-void GameDrawSeriesClearedWash(s32 x, s32 y) {
+void DrawSeriesClearedWash(s32 x, s32 y) asm("func_8001FC30");
+void DrawSeriesClearedWash(s32 x, s32 y) {
     void *ot;
     void *prim;
     s32 redStack;
@@ -158,14 +158,14 @@ void GameDrawSeriesClearedWash(s32 x, s32 y) {
     *(void **)0x1F800000 = func_80017390(ot, prim, 0x49);
 }
 
-void GameUpdateReplayScene(void) asm("func_8001FD3C");
-void GameUpdateReplayScene(void) {
+void UpdateReplayScene(void) asm("func_8001FD3C");
+void UpdateReplayScene(void) {
     g_AnimTimer++;
     g_SceneTimer++;
     if (g_SceneTimer == 0x3C) {
         if (g_GrandPrixMode != 0) {
             if (g_SeriesCleared == 0) {
-                GamePlaySoundCue(g_RacePosition == 1 ? 0x40 : 0x41);
+                PlaySoundCue(g_RacePosition == 1 ? 0x40 : 0x41);
             }
         }
     }
@@ -177,7 +177,7 @@ void GameUpdateReplayScene(void) {
             g_FadeStep = 0;
             g_EndingWashLevel = 0;
         }
-        GameDrawFullscreenFadeTile(g_FadeLevel, 0x29);
+        DrawFullscreenFadeTile(g_FadeLevel, 0x29);
     } else {
         if (g_SeriesCleared != 0) {
             s32 cb = g_ReplayFrameCount;
@@ -202,11 +202,11 @@ void GameUpdateReplayScene(void) {
         if (g_FadeStep == 0) {
             if ((g_PadEdge2 & 0x860) != 0) {
                 g_FadeStep = 4;
-                GameStartCdVolumeFade(0x3C);
+                StartCdVolumeFade(0x3C);
             } else if (g_SceneTimer == g_ReplayFrameCount - 68) {
                 g_FadeStep = 4;
                 if (g_ReplayBufferWrapped == 0) {
-                    GameStartCdVolumeFade(0x3C);
+                    StartCdVolumeFade(0x3C);
                 }
             }
         } else {
@@ -220,38 +220,38 @@ void GameUpdateReplayScene(void) {
 
         if (g_SeriesCleared != 0) {
             if (((u32)(g_ReplayFrameCount - 600) < (u32)g_SceneTimer) || (g_FadeLevel != 0)) {
-                GameDrawSeriesClearedWash(g_EndingWashLevel, g_FadeLevel);
+                DrawSeriesClearedWash(g_EndingWashLevel, g_FadeLevel);
             }
         } else {
             if (g_FadeLevel != 0) {
-                GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
+                DrawFullscreenFadeTile(g_FadeLevel, 0x49);
             }
         }
     }
 
-    GameApplyReplayFrame(g_ReplayReadCursor, &g_PlayerCar, (u8 *)g_Cars);
+    ApplyReplayFrame(g_ReplayReadCursor, &g_PlayerCar, (u8 *)g_Cars);
     g_ReplayReadCursor++;
     if (g_ReplayReadCursor == g_ReplayFrameCount) {
         g_ReplayReadCursor = 0;
     }
-    GameUpdateReplayCars();
-    GameUpdateCamera(2, &g_PlayerCar);
+    UpdateReplayCars();
+    UpdateCamera(2, &g_PlayerCar);
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-    GameDrawTerrainCellsWide();
+    DrawTerrainCellsWide();
     if (g_GrandPrixMode != 0) {
-        GameDrawPlayerCarOnly();
+        DrawPlayerCarOnly();
     }
-    GameDrawCourseObjects();
-    GameDrawCourseScenery2(g_SceneTimer, 1);
-    GameUpdateEnvironment();
+    DrawCourseObjects();
+    DrawCourseScenery2(g_SceneTimer, 1);
+    UpdateEnvironment();
     func_800418D4();
-    GameDrawReplayBadge();
+    DrawReplayBadge();
     if (g_SceneTimer == 1) {
-        GameSetTrackTexturePageNow(g_PlayerTrackSection);
+        SetTrackTexturePageNow(g_PlayerTrackSection);
     }
 }
 
-void GameDrawResultScreen(void) {
+void DrawResultScreen(void) {
     u8 *base;
     s32 *scratch;
     s32 width;
@@ -275,12 +275,12 @@ void GameDrawResultScreen(void) {
     base += 0xCC;
 
     next = *scratch;
-    next = GameAddTilePrim(base, next, 0, 0, width, 0x30, 0x85, 0x15, 0xE);
-    *scratch = GameAddTilePrim(base, next, 0, 0x30, width, 0x18, 0xF0, 0xF0, 0xF0);
+    next = AddTilePrim(base, next, 0, 0, width, 0x30, 0x85, 0x15, 0xE);
+    *scratch = AddTilePrim(base, next, 0, 0x30, width, 0x18, 0xF0, 0xF0, 0xF0);
 }
 
-void GameDrawGrandPrixResultPanel(void) asm("func_800201D4");
-void GameDrawGrandPrixResultPanel(void) {
+void DrawGrandPrixResultPanel(void) asm("func_800201D4");
+void DrawGrandPrixResultPanel(void) {
     u8 *base;
     char text[0x30];
     if ((g_ClassResultPlace != 0) && (g_PrizeScreenState >= 5)) {
@@ -383,8 +383,8 @@ void GameDrawGrandPrixResultPanel(void) {
     func_80016EA0(0x10, 0x50, g_CaptionRanking, 0x7812);
 }
 
-void GameDrawRaceTimePanel(s32 arg0) asm("func_800204F4");
-void GameDrawRaceTimePanel(s32 arg0) {
+void DrawRaceTimePanel(s32 arg0) asm("func_800204F4");
+void DrawRaceTimePanel(s32 arg0) {
     s32 base;
     s32 i;
     s32 *times;

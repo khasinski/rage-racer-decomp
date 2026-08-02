@@ -29,10 +29,10 @@ typedef struct TrackSurfaceCell {
 } TrackSurfaceCell;
 
 
-s32 GameFindTrackSegment(TrackSurfaceCell *arg0, s32 arg1) asm("func_80030EB4");
+s32 FindTrackSegment(TrackSurfaceCell *arg0, s32 arg1) asm("func_80030EB4");
 
-s32 GameGetTrackSurfaceHeight(TrackSurfaceCell *arg0) asm("func_80032098");
-s32 GameGetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
+s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0) asm("func_80032098");
+s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
     s32 index;
     s32 nextIndex;
     TrackPointWindow *base;
@@ -57,7 +57,7 @@ s32 GameGetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
     s32 curZ;
     s32 angle;
 
-    index = GameFindTrackSegment(arg0, arg0->field_30);
+    index = FindTrackSegment(arg0, arg0->field_30);
     nextIndex = (index + 1) % g_TrackPointCount;
 
     base = (TrackPointWindow *)g_TrackPoints;
@@ -78,7 +78,7 @@ s32 GameGetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
     angle = cur->angle;
     nextOff = (nextIndex * 3) << 3;
     next = (TrackPointWindow *)(nextOff + (s32)base);
-    GameBuildRotMatrixY(&mtx, (0x1000 - angle) & 0xFFF);
+    BuildRotMatrixY(&mtx, (0x1000 - angle) & 0xFFF);
 
     ApplyMatrix((s32 *)&mtx, (s32 *)vec, out);
 
@@ -103,7 +103,7 @@ s32 GameGetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
  * Rebuilds a car's position and orientation relative to its current track
  * segment, including the curved-segment path kept in the PS1 scratchpad.
  */
-void GameResetCarTrackState(GameCarRuntime *car) {
+void ResetCarTrackState(GameCarRuntime *car) {
     s32 temp_a0;
     s32 secondResult;
     s16 temp_a0_10;
@@ -181,7 +181,7 @@ void GameResetCarTrackState(GameCarRuntime *car) {
         FIELD(spad, s32 *, 0x08) = temp_a0_3;
         temp_a1 = FIELD(car, s32 *, 8) - temp_v0_3;
         FIELD(spad, s32 *, 0x0C) = temp_a1;
-        FIELD(spad, s16 *, 0x7E) = GameAtan2(temp_a0_3, temp_a1) & 0xFFF;
+        FIELD(spad, s16 *, 0x7E) = Atan2(temp_a0_3, temp_a1) & 0xFFF;
         temp_a0_4 = FIELD(temp_s4, s32 *, 0);
         temp_v1_4 = FIELD(spad, s32 *, 0);
         temp_a2_2 = FIELD(spad, s32 *, 0x04);
@@ -191,9 +191,9 @@ void GameResetCarTrackState(GameCarRuntime *car) {
         FIELD(spad, s32 *, 0x2C) = temp_a1_2;
         FIELD(spad, s32 *, 0x28) = FIELD(temp_s6, s32 *, 0) - temp_v1_4;
         FIELD(spad, s32 *, 0x30) = FIELD(temp_s6, s32 *, 4) - temp_a2_2;
-        FIELD(spad, s16 *, 0x80) = GameAtan2(temp_a0_4, temp_a1_2) & 0xFFF;
+        FIELD(spad, s16 *, 0x80) = Atan2(temp_a0_4, temp_a1_2) & 0xFFF;
         FIELD(spad, s16 *, 0x82) =
-            GameAtan2(FIELD(spad, s32 *, 0x28), FIELD(spad, s32 *, 0x30)) & 0xFFF;
+            Atan2(FIELD(spad, s32 *, 0x28), FIELD(spad, s32 *, 0x30)) & 0xFFF;
         temp_s0 = func_80068634(FIELD(spad, s16 *, 0x7E));
         var_v0 = (temp_s0 * FIELD(spad, s32 *, 0x08)) +
                  (func_80068568(FIELD(spad, s16 *, 0x7E)) * FIELD(spad, s32 *, 0x0C));
@@ -216,12 +216,12 @@ void GameResetCarTrackState(GameCarRuntime *car) {
         }
         FIELD(spad, s32 *, 0x18) = var_v0_3 >> 0xC;
         FIELD(spad, s16 *, 0x7C) =
-            GameGetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x82));
+            GetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x82));
         if (FIELD(spad, s16 *, 0x7C) <= 0) {
             FIELD(spad, s16 *, 0x7C) = 1;
         }
         temp_v0_4 =
-            GameGetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x7E));
+            GetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x7E));
         temp_a1_3 = FIELD(spad, s16 *, 0x7C);
         FIELD(spad, s16 *, 0x7E) = temp_v0_4;
         FIELD(spad, s32 *, 0x14) =
@@ -337,11 +337,11 @@ void GameResetCarTrackState(GameCarRuntime *car) {
               temp_a0_9);
     temp_a0_10 = (u16)FIELD(spad, s16 *, 0x8A) + (u16)FIELD(spad, s16 *, 0x88);
     FIELD(spad, s16 *, 0x86) = temp_a0_10;
-    temp_s0_7 = GameAtan2(
+    temp_s0_7 = Atan2(
         (s32)temp_a0_10,
         (s32)(FIELD(temp_s6, s16 *, 0xE) * temp_a0_10) >> 7);
     temp_a0_11 = FIELD(spad, s16 *, 0x86);
-    secondResult = GameAtan2(
+    secondResult = Atan2(
         (s32)temp_a0_11,
         (s32)(FIELD(temp_s4, s16 *, 0xE) * temp_a0_11) >> 7);
     temp_a1_4 = FIELD(spad, s16 *, 0x96);
@@ -422,7 +422,7 @@ void GameResetCarTrackState(GameCarRuntime *car) {
 
 /* The four corners of the tachometer needle, unrotated, rebuilt from
  * g_CarSpec +0x14C..+0x14F whenever the car changes. [corner][0] is x and
- * [corner][1] is y; GameDrawTachometer walks the same eight halfwords as an
+ * [corner][1] is y; DrawTachometer walks the same eight halfwords as an
  * (x, y) pair array. */
 extern s16 g_TachoNeedleQuad[4][2] asm("D_8019C7D4");
 extern GameSpriteDesc g_TachoNeedleSprite asm("D_8007DAE0");
@@ -434,7 +434,7 @@ extern u8 g_TachoNeedlePrim1[] asm("D_801E3D04");
 extern u8 g_TachoNeedlePrim1PageA[] asm("D_801E3CEC");
 extern u8 g_TachoNeedlePrim1PageB[] asm("D_801E3CF8");
 
-void GameBuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) asm("func_80032FF0");
+void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) asm("func_80032FF0");
 void func_80064EB8(u8 *arg0, s32 arg1);
 void func_800666F4(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4);
 
@@ -447,8 +447,8 @@ void func_800666F4(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4);
  *   +0x138/+0x13A  spec->tachoNeedleX / Y
  *   +0x13C/+0x13E  spec->tachoFaceDX / DY
  */
-void GameBuildTachoNeedleQuad(void) asm("func_80032BD0");
-void GameBuildTachoNeedleQuad(void) {
+void BuildTachoNeedleQuad(void) asm("func_80032BD0");
+void BuildTachoNeedleQuad(void) {
     u8 *data = (u8 *)g_CarSpec;
     u8 *prim0 = g_TachoNeedlePrim0;
     u8 *prim1 = g_TachoNeedlePrim1;
@@ -466,8 +466,8 @@ void GameBuildTachoNeedleQuad(void) {
     src->x = *(u16 *)(data + 0x13C) + *(u16 *)(data + 0x138);
     src->y = *(u16 *)(data + 0x13E) + *(u16 *)(data + 0x13A);
 
-    GameBuildSpriteFromDesc((SPRT *)prim0, src);
-    GameBuildSpriteFromDesc((SPRT *)prim1, src);
+    BuildSpriteFromDesc((SPRT *)prim0, src);
+    BuildSpriteFromDesc((SPRT *)prim1, src);
     func_80064EB8(prim0, 0);
     func_80064EB8(prim1, 0);
     func_800666F4(prim0 - 0x18, 0, 1, 9, 0);

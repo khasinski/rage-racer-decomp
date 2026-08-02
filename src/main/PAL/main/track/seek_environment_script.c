@@ -30,7 +30,7 @@ extern s16 g_EnvFogEnabled asm("D_801E3FB4");
 #define ENV_FOG_RGB ((u8 *)g_EnvColors)
 extern u8 g_EnvSpare asm("D_801E3FB9");
 
-/* GameLerpEnvColor works in bytes, so the eight lerps below address the slots
+/* LerpEnvColor works in bytes, so the eight lerps below address the slots
  * of g_EnvColors through one byte cursor `pp` = &g_EnvColors[0].from. Slot
  * stride 0x0C, field order { cur, from, to }. */
 #define ENV_CUR(k) (pp + 0x0C * (k) - 4)
@@ -56,8 +56,8 @@ extern s32 g_FogNear asm("D_8009B24C");
 
 /* Deliberately unprototyped: the seek path also leaves the cue duration and
  * clamped frame in a1/a2, while the normal update path passes only the cue. */
-void GameLoadEnvironmentCue() asm("func_800455EC");
-void GameLerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) asm("func_8004554C");
+void LoadEnvironmentCue() asm("func_800455EC");
+void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) asm("func_8004554C");
 /* Deliberately unprototyped: the original passes only the rect and leaves
  * a1 live, so the psyq/gpu.h LoadImage prototype cannot be used here. */
 void func_80065B24();
@@ -65,8 +65,8 @@ void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_80069B14(void *arg0, s32 arg1, void *arg2);
 void func_800686D4(s32 arg0, s32 arg1);
 
-void GameUpdateEnvironment(void) asm("func_80045CD4");
-void GameSeekEnvironmentScript(s32 targetTime) {
+void UpdateEnvironment(void) asm("func_80045CD4");
+void SeekEnvironmentScript(s32 targetTime) {
     s32 clock;
     u32 count;
     s32 offset;
@@ -149,7 +149,7 @@ void GameSeekEnvironmentScript(s32 targetTime) {
         clampedFrame = duration;
     }
     g_EnvLerpFrame = clampedFrame;
-    GameLoadEnvironmentCue(cue, duration, clampedFrame);
+    LoadEnvironmentCue(cue, duration, clampedFrame);
 
     nextId = *(s32 *)((u8 *)g_EnvScriptCursor + 0x30);
     g_EnvScriptCursor = g_EnvScriptCursor + 1;
@@ -160,7 +160,7 @@ void GameSeekEnvironmentScript(s32 targetTime) {
     fogOut = (s16 *)((u8 *)&g_EnvColors[0].from - 6);
     g_EnvScriptEnabled = 1;
     *fogOut = 1;
-    GameUpdateEnvironment();
+    UpdateEnvironment();
 
     fog = 0;
     if (g_GrandPrixClass >= 5) {
@@ -184,7 +184,7 @@ void GameSeekEnvironmentScript(s32 targetTime) {
     SetFogNear(g_FogNear, 0x140);
 }
 
-void GameUpdateEnvironment(void) {
+void UpdateEnvironment(void) {
     Rect rect;
     s32 local[3];
     u8 out[4];
@@ -204,7 +204,7 @@ void GameUpdateEnvironment(void) {
     if (cur->id == g_EnvScriptClock) {
         g_EnvLerpFrame = 0;
         g_EnvScriptCursor = cur + 1;
-        GameLoadEnvironmentCue(cur);
+        LoadEnvironmentCue(cur);
         if (g_EnvScriptCursor->id < 0) {
             g_EnvScriptCursor = (Cmd *)g_EnvScriptCues;
         }
@@ -256,17 +256,17 @@ void GameUpdateEnvironment(void) {
     /* cur = lerp(from, to, frac) for slots 0..4, then one of the two alternate
      * pairs. Slot 0 is the fog colour SetFarColor gets three lines below. */
     pp = (u8 *)&g_EnvColors[0].from;
-    GameLerpEnvColor(ENV_FROM(0), ENV_TO(0), ENV_CUR(0), frac);
-    GameLerpEnvColor(ENV_FROM(1), ENV_TO(1), ENV_CUR(1), frac);
-    GameLerpEnvColor(ENV_FROM(2), ENV_TO(2), ENV_CUR(2), frac);
-    GameLerpEnvColor(ENV_FROM(3), ENV_TO(3), ENV_CUR(3), frac);
-    GameLerpEnvColor(ENV_FROM(4), ENV_TO(4), ENV_CUR(4), frac);
+    LerpEnvColor(ENV_FROM(0), ENV_TO(0), ENV_CUR(0), frac);
+    LerpEnvColor(ENV_FROM(1), ENV_TO(1), ENV_CUR(1), frac);
+    LerpEnvColor(ENV_FROM(2), ENV_TO(2), ENV_CUR(2), frac);
+    LerpEnvColor(ENV_FROM(3), ENV_TO(3), ENV_CUR(3), frac);
+    LerpEnvColor(ENV_FROM(4), ENV_TO(4), ENV_CUR(4), frac);
     if (g_CourseIndex == 2) {
-        GameLerpEnvColor(ENV_FROM(5), ENV_TO(5), ENV_CUR(5), frac);
-        GameLerpEnvColor(ENV_FROM(6), ENV_TO(6), ENV_CUR(6), frac);
+        LerpEnvColor(ENV_FROM(5), ENV_TO(5), ENV_CUR(5), frac);
+        LerpEnvColor(ENV_FROM(6), ENV_TO(6), ENV_CUR(6), frac);
     } else {
-        GameLerpEnvColor(ENV_FROM(7), ENV_TO(7), ENV_CUR(7), frac);
-        GameLerpEnvColor(ENV_FROM(8), ENV_TO(8), ENV_CUR(8), frac);
+        LerpEnvColor(ENV_FROM(7), ENV_TO(7), ENV_CUR(7), frac);
+        LerpEnvColor(ENV_FROM(8), ENV_TO(8), ENV_CUR(8), frac);
     }
 
     func_80069A38(ENV_FOG_RGB[0], ENV_FOG_RGB[1], ENV_FOG_RGB[2]);

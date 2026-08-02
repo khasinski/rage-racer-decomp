@@ -10,8 +10,8 @@ extern GameCarRuntimeProgressWindow g_CarProgressB[] asm("D_801F18C0");
 
 /* Counts the cars whose lap progress is ahead of the player and publishes the
  * result as g_RacePosition (1 = leader). Only runs on the final lap. */
-void GameUpdateRacePosition(void) asm("func_8003AE2C");
-void GameUpdateRacePosition(void) {
+void UpdateRacePosition(void) asm("func_8003AE2C");
+void UpdateRacePosition(void) {
     s32 active;
     s32 i;
     s32 total;

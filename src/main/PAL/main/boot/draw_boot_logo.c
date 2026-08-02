@@ -12,9 +12,9 @@ void *func_80017390(void *arg0, void *arg1, s32 arg2);
 extern s32 g_BootLogoState asm("D_8007D53C");
 extern s32 g_BootLogoTimer asm("D_8007D540");
 extern s32 g_BootLogoHoldTimer asm("D_8007D544");
-void GameBeginIntroFmv(s32 arg0) asm("func_80019AF0");
+void BeginIntroFmv(s32 arg0) asm("func_80019AF0");
 void func_800230B0(void);
-void GameDrawBootLogo(void) asm("func_8002317C");
+void DrawBootLogo(void) asm("func_8002317C");
 extern Matrix g_SceneColorMatrix asm("D_8019CAD4");
 extern Matrix g_DefaultColorMatrix asm("D_8007D548");
 extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
@@ -27,12 +27,12 @@ void func_800686D4(s32 arg0, s32 arg1);
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 g_OptionLetterboxHeight asm("D_8009F0A0");
-void GameUploadImageAsset(s32 arg0) asm("func_8001A3C0");
-void GameInitRenderState(s32 arg0) asm("func_80017884");
-void GameInstallSceneLighting(void) asm("func_800234DC");
+void UploadImageAsset(s32 arg0) asm("func_8001A3C0");
+void InitRenderState(s32 arg0) asm("func_80017884");
+void InstallSceneLighting(void) asm("func_800234DC");
 
-void GameDrawBootLogo(void) asm("func_8002317C");
-void GameDrawBootLogo(void) {
+void DrawBootLogo(void) asm("func_8002317C");
+void DrawBootLogo(void) {
     u8 *base;
     s32 height;
     s32 clut;
@@ -65,8 +65,8 @@ void GameDrawBootLogo(void) {
     *scratch = func_80017390(base, next, 5);
 }
 
-void GameUpdateBootLogoScene(void) asm("func_800232B4");
-void GameUpdateBootLogoScene(void) {
+void UpdateBootLogoScene(void) asm("func_800232B4");
+void UpdateBootLogoScene(void) {
     s32 state;
 
     if (g_BootLogoTimer < 110) {
@@ -78,7 +78,7 @@ void GameUpdateBootLogoScene(void) {
         return;
     } else if (g_BootLogoTimer == 110) {
         SetDispMask(0);
-        GameSetupDisplay480(0, 0, 0);
+        SetupDisplay480(0, 0, 0);
         g_BootLogoTimer++;
         return;
     }
@@ -108,27 +108,27 @@ void GameUpdateBootLogoScene(void) {
         g_SceneTimer -= 8;
         if (g_SceneTimer == 0) {
             g_BootLogoState = 3;
-            GameSetupDisplay240(0, 0, 0);
+            SetupDisplay240(0, 0, 0);
         }
         break;
     case 3:
         g_SceneTimer++;
         if ((u32)g_SceneTimer >= 21) {
-            GameBeginIntroFmv(3);
+            BeginIntroFmv(3);
         }
         break;
     }
 
     if (g_BootLogoState != 3) {
-        GameDrawBootLogo();
+        DrawBootLogo();
         if ((u32)g_SceneTimer >= 10) {
             SetDispMask(1);
         }
     }
 }
 
-void GameInstallSceneLighting(void) asm("func_800234DC");
-void GameInstallSceneLighting(void) {
+void InstallSceneLighting(void) asm("func_800234DC");
+void InstallSceneLighting(void) {
     g_SceneColorMatrix = g_DefaultColorMatrix;
     g_SceneLightMatrix = g_DefaultLightMatrix;
     func_800698B8(&g_SceneColorMatrix);
@@ -138,25 +138,25 @@ void GameInstallSceneLighting(void) {
     func_800686D4(0x4E20, 0x140);
 }
 
-void GameEnterAttractScene(void) asm("func_800235D8");
-void GameEnterAttractScene(void) {
+void EnterAttractScene(void) asm("func_800235D8");
+void EnterAttractScene(void) {
     SetDispMask(0);
     g_FrameSyncThreshold = 0x80;
     if (g_AssetLoadState == 0) {
-        GameUploadImageAsset(g_ImageBlockBuffer);
+        UploadImageAsset(g_ImageBlockBuffer);
         g_MirrorMode = 0;
-        GameInitRenderState(5);
-        GameSetupDisplay480(0, 0, 0);
+        InitRenderState(5);
+        SetupDisplay480(0, 0, 0);
         g_SceneId = 0x17;
         g_SceneTimer = 0;
-        GameInstallSceneLighting();
+        InstallSceneLighting();
         *(s32 *)0x1F800008 = 0;
         *(s32 *)0x1F80000C = 0;
         *(s32 *)0x1F800010 = -3520;
         *(s32 *)0x1F800018 = 0;
         *(s32 *)0x1F80001C = 0;
         *(s32 *)0x1F800020 = 0;
-        GameSetCameraRotMatrix();
+        SetCameraRotMatrix();
         g_OptionLetterboxHeight = 0xF0;
         g_FadeLevel = 0x100;
         g_GameMode = 0;

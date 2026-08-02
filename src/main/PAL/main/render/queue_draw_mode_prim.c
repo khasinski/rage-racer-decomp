@@ -8,7 +8,7 @@ extern u8 D_8007BED0[];
 /* DR_MODE, 12 bytes: sets the texture page (and the blend mode packed into it)
  * for the primitives that follow, links it into the ordering table and returns
  * the advanced packet cursor. */
-u8 *GameQueueDrawModePrim(void *ot, u8 *prim, u16 tpage) {
+u8 *QueueDrawModePrim(void *ot, u8 *prim, u16 tpage) {
     u8 *pkt;
 
     SetDrawMode((DrawPacket *)prim, 0, 1, tpage, D_8007BED0);
@@ -130,9 +130,9 @@ u8 *GameQueueTexturedRect(
  * parameter in the shared prototype would insert a truncation. */
 void SetDrawModeWide(DrawPacket *pkt, s32 a, s32 b, s32 tpage, void *tw) asm("func_800666F4");
 
-/* Fills a DR_MODE packet in place; unlike GameQueueDrawModePrim it neither
+/* Fills a DR_MODE packet in place; unlike QueueDrawModePrim it neither
  * links the packet nor advances the scratchpad cursor. No callers in retail. */
-void GameSetDrawModePacket(u8 *prim, s32 tpage) {
+void SetDrawModePacket(u8 *prim, s32 tpage) {
     SetDrawModeWide((DrawPacket *)prim, 0, 1, tpage, D_8007BED0);
 }
 
@@ -165,7 +165,7 @@ typedef struct ObjectMatrixWork {
  * matrix's translation, and programs the GTE with the caller's rotation and
  * that translation.
  */
-void GameSetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) {
+void SetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) {
     ObjectMatrixWork *w = (ObjectMatrixWork *)work;
     WorldPos *pos = (WorldPos *)objectPos;
 

@@ -35,7 +35,7 @@ extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 
-/* Rear-view mirror on/off; render/GameDrawRearViewMirror.c owns it. */
+/* Rear-view mirror on/off; render/DrawRearViewMirror.c owns it. */
 extern s16 g_MirrorViewEnabled asm("D_8019CA10");
 
 
@@ -63,28 +63,28 @@ extern s32 g_RankingTimes[][4][20] asm("D_801E774C");
 extern s32 g_RaceCueFlags asm("D_801E7A50");
 
 
-void GameBeginReplay(void) asm("func_8001FA70");
+void BeginReplay(void) asm("func_8001FA70");
 
-void GameCommitClassProgress(void) asm("func_800207E0");
+void CommitClassProgress(void) asm("func_800207E0");
 
-void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 
-s32 GameFramesToMilliseconds(s32 arg0, s32 arg1) asm("func_80034F18");
+s32 FramesToMilliseconds(s32 arg0, s32 arg1) asm("func_80034F18");
 
-void GameExitRaceScene(s32 arg0) asm("func_80035258");
+void ExitRaceScene(s32 arg0) asm("func_80035258");
 
-void GameSeedFinishCamera(void *arg0) asm("func_8003CA14");
+void SeedFinishCamera(void *arg0) asm("func_8003CA14");
 
-void GameUpdateRivalCueGate(void) asm("func_80041170");
-
-
+void UpdateRivalCueGate(void) asm("func_80041170");
 
 
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+
+
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void func_8005E4A4(s32 arg0);
 
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
@@ -103,7 +103,7 @@ extern u8 *g_CamRow asm("D_8019C9A8");
 
 /* Deliberately raw: the only two writes in the whole image store zero (here
  * and in the car-init routine func_8002CB30), so the one reader --
- * GameUpdateCarBodyRoll skipping the pad read when it is non-zero -- can
+ * UpdateCarBodyRoll skipping the pad read when it is non-zero -- can
  * never fire. Naming it would invent a feature. */
 extern s16 D_8019C9AC;
 
@@ -138,37 +138,37 @@ extern s16 g_RivalCueCooldown3 asm("D_801E6F26");
 extern u8 g_MsgGame0Ok[] asm("D_80011488");
 
 
-void GameInitRenderState(s32) asm("func_80017884");
+void InitRenderState(s32) asm("func_80017884");
 
 void func_8001F100(void);
 
-void GameLoadTrackTexturePageRange(void) asm("func_8001D30C");
+void LoadTrackTexturePageRange(void) asm("func_8001D30C");
 
 void func_8001D210(void);
 
 void func_8002C478(void *);
 
-void GameSetTrackTexturePageNow(s32) asm("func_80019E84");
+void SetTrackTexturePageNow(s32) asm("func_80019E84");
 
-void GameBuildStartingGrid(void) asm("func_80038844");
+void BuildStartingGrid(void) asm("func_80038844");
 
-void GameResetMirrorState(void) asm("func_8001A980");
+void ResetMirrorState(void) asm("func_8001A980");
 
 void func_800458CC(s32);
 
 void func_800340D8(void);
 
-void GameBuildRaceHudPrims(s32) asm("func_80032D5C");
+void BuildRaceHudPrims(s32) asm("func_80032D5C");
 
 void func_8003D6E8(void);
 
-void GameInitShuttleScenery(void) asm("func_8003F0F8");
+void InitShuttleScenery(void) asm("func_8003F0F8");
 
-void GameSeedFlybyScenery(void) asm("func_8003E464");
+void SeedFlybyScenery(void) asm("func_8003E464");
 
-void GameSeedRouteScenery(void) asm("func_8003EBCC");
+void SeedRouteScenery(void) asm("func_8003EBCC");
 
-void GameInitPathScenery(void) asm("func_8003F700");
+void InitPathScenery(void) asm("func_8003F700");
 
 void func_8005DC1C(void);
 
@@ -192,19 +192,19 @@ extern u8 g_PadType asm("D_801E4369");
 
 
 
-/* Mask 6 of each row of the live button mapping (see GameUpdatePlayerCar.c),
+/* Mask 6 of each row of the live button mapping (see UpdatePlayerCar.c),
  * hence the eight-halfword stride. Holding it while paused, in the chase view
  * and mid-race, makes D-pad up/down turn the rear-view mirror on and off. */
 extern s16 g_PadMirrorMasks[] asm("D_801E4B6C");
 
 extern s32 g_RacePaused asm("D_801E4BAC");
 
-s32 GameBeginMirrorPass(void) asm("func_8001A9A8");
+s32 BeginMirrorPass(void) asm("func_8001A9A8");
 
 /*
  * Optional trace for the state returned by the lap/finish update. A null
  * format disables it; otherwise the six named values are the complete
- * GameDebugPrintf argument list.
+ * DebugPrintf argument list.
  */
 static __inline__ void GameDebugLapResult(
     char *format,
@@ -216,84 +216,84 @@ static __inline__ void GameDebugLapResult(
     s32 fadeTimer)
 {
     if (format != 0) {
-        GameDebugPrintf(
+        DebugPrintf(
             format, result, progress, mode, lapCount, racePhase, fadeTimer);
     }
 }
 
-s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
+s32 UpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
 
-void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
 
-void GameEndMirrorPass(void) asm("func_8001ABD8");
+void EndMirrorPass(void) asm("func_8001ABD8");
 
-void GameDrawRearViewMirror(s32 arg0) asm("func_8001ADF4");
+void DrawRearViewMirror(s32 arg0) asm("func_8001ADF4");
 
-void GameRecordReplayFrame(void) asm("func_8001F9D8");
+void RecordReplayFrame(void) asm("func_8001F9D8");
 
-void GameDrawLostRaceCaption(s32 arg0) asm("func_800215B8");
+void DrawLostRaceCaption(s32 arg0) asm("func_800215B8");
 
 void func_800218A0(s32 arg0);
 
-void GameBeginCarStandingStart(void *arg0, s32 arg1) asm("func_8002BE18");
+void BeginCarStandingStart(void *arg0, s32 arg1) asm("func_8002BE18");
 
-void GameUpdatePlayerCar(void *arg0) asm("func_8002DEFC");
+void UpdatePlayerCar(void *arg0) asm("func_8002DEFC");
 
-void GameDrawPlayerTachometer(void) asm("func_8002F458");
+void DrawPlayerTachometer(void) asm("func_8002F458");
 
-void GameDrawRaceHudLabels(s32 arg0) asm("func_80032E9C");
+void DrawRaceHudLabels(s32 arg0) asm("func_80032E9C");
 
 void func_80033090(void);
 
-void GameDrawTimeRemaining(s32 arg0) asm("func_800331F8");
+void DrawTimeRemaining(s32 arg0) asm("func_800331F8");
 
 void func_80033230(void);
 
-void GameDrawWrongWayWarning(void);
+void DrawWrongWayWarning(void);
 
 void func_8003425C(s32 arg0);
 
 void func_8003479C(s32 arg0);
 
-void GameGetTrackZoneBlend(s32 arg0) asm("func_800350B4");
+void GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
 
-void GameUpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) asm("func_800352B8");
+void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) asm("func_800352B8");
 
-void GameDrawSplitTimes(void) asm("func_800357BC");
+void DrawSplitTimes(void) asm("func_800357BC");
 
 
 void func_8003AE2C(void);
 
 void func_8003B0D4(void);
 
-void GameRunRaceIntroCamera(void *arg0, s32 arg1) asm("func_8003C508");
+void RunRaceIntroCamera(void *arg0, s32 arg1) asm("func_8003C508");
 
-void GameUpdateFinishCamera(void *arg0) asm("func_8003CB3C");
+void UpdateFinishCamera(void *arg0) asm("func_8003CB3C");
 
-void GameDrawStartGridScenery(s32 arg0) asm("func_8003D458");
+void DrawStartGridScenery(s32 arg0) asm("func_8003D458");
 
-void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
+void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
 
-void GameDrawScriptedScenery(s32 arg0) asm("func_8003F608");
+void DrawScriptedScenery(s32 arg0) asm("func_8003F608");
 
 void func_8004087C(s32 arg0);
 
-void GameUpdatePointAmbience(s32 arg0) asm("func_80040ADC");
+void UpdatePointAmbience(s32 arg0) asm("func_80040ADC");
 
-void GameUpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
+void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
 
-void GameTriggerRaceCues(void) asm("func_80040F24");
+void TriggerRaceCues(void) asm("func_80040F24");
 
-void GamePlayCountdownCues(s32 arg0) asm("func_800410BC");
+void PlayCountdownCues(s32 arg0) asm("func_800410BC");
 
 
-void GameDrawTerrainCells(void) asm("func_80041840");
+void DrawTerrainCells(void) asm("func_80041840");
 
 void func_800418D4(void);
 
 
 
-void GameUpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
+void UpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
 
 
 void func_8005B190(s32 arg0, s32 arg1);
@@ -306,8 +306,8 @@ void func_8005D9F8(s32 arg0, s32 arg1);
 
 void func_80069888(void *arg0);
 
-s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
-s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
+s32 UpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
+s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
     s32 value;
     s32 result;
     s16 recordIndex;
@@ -351,10 +351,10 @@ s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
             *(s32 *)((s32)route +
                      (routeStoreOffset =
                           *(s16 *)((u8 *)arg0 + 0x168) * 4) +
-                     0xC4) = GameFramesToMilliseconds(
+                     0xC4) = FramesToMilliseconds(
                 (routeCallOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4,
                  *(s32 *)((s32)route + routeCallOffset + 0xAC)),
-                GameRandom15() % 40);
+                Random15() % 40);
             routeCompareOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
             if (*(s32 *)((s32)route + routeCompareOffset + 0xC4) > 0x927BE) {
                 *(s32 *)(route + 0xC4 +
@@ -413,7 +413,7 @@ s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
             }
 
             if (!(g_LapCount < *(s16 *)(route + 0xAC))) {
-                GamePlaySoundCue(0x26);
+                PlaySoundCue(0x26);
                 g_RaceCueDelay = 0x96;
             }
         }
@@ -455,14 +455,14 @@ s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
                         g_RefSectorTime2;
                 }
                 g_RacePhase = 4;
-                GameStartCdVolumeFade(8);
-                GamePlaySoundCue(0x2B);
+                StartCdVolumeFade(8);
+                PlaySoundCue(0x2B);
             } else {
             g_RacePhase = 5;
-            GameSeedFinishCamera(&g_PlayerCar);
-            GameStartCdVolumeFade(0x3C);
+            SeedFinishCamera(&g_PlayerCar);
+            StartCdVolumeFade(0x3C);
             if (*(s16 *)((u8 *)g_CourseProgress + 6) != 0) {
-                GamePlaySoundCue(0x3D);
+                PlaySoundCue(0x3D);
             }
             }
             func_8005E4A4(0);
@@ -478,7 +478,7 @@ progress_failed:
 
     if ((g_LapCount < *(s16 *)(route + 0xAC)) &&
         (g_RacePhase == 4)) {
-        GameDrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
+        DrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
         timer = g_RaceFadeTimer;
         oldTimer = timer;
         timer = timer < 2;
@@ -489,21 +489,21 @@ progress_failed:
         g_RaceFadeTimer = timer;
         if ((s16)timer == 0x3F) {
             if (g_GrandPrixMode != 0) {
-                GameCommitClassProgress();
+                CommitClassProgress();
                 if (g_SeriesCleared == 1) {
-                    GameRequestCdTrack(0x10);
+                    RequestCdTrack(0x10);
                 } else {
-                    GameRequestCdTrack(0xC);
+                    RequestCdTrack(0xC);
                 }
             } else {
                 g_SeriesCleared = 0;
-                GameRequestCdTrack(0xD);
+                RequestCdTrack(0xD);
             }
         }
         if (g_RaceFadeTimer >= 0x83) {
-            GameBeginReplay();
-            GameExitRaceScene(0x11);
-            GameStartCdAudio();
+            BeginReplay();
+            ExitRaceScene(0x11);
+            StartCdAudio();
 
         }
     } else if ((g_GrandPrixMode == 0) &&
@@ -513,23 +513,23 @@ progress_failed:
         g_RacePhase = 5;
         g_BestLapTimes[g_RaceSeries][g_CourseIndex][0] =
             g_RankingTimes[g_RaceSeries][g_CourseIndex][0];
-        GameStartCdVolumeFade(8);
+        StartCdVolumeFade(8);
         func_8005E4A4(0);
         g_RaceFadeTimer = 0;
-        GameSeedFinishCamera(&g_PlayerCar);
+        SeedFinishCamera(&g_PlayerCar);
     }
 
     if (g_RaceCueDelay == 2) {
         value = g_LapCount - *(s16 *)(route + 0xAC);
         switch (value) {
         case 2:
-            GamePlaySoundCue(0x27);
+            PlaySoundCue(0x27);
             break;
         case 1:
-            GamePlaySoundCue(0x28);
+            PlaySoundCue(0x28);
             break;
         case 0:
-            GamePlaySoundCue(0x29);
+            PlaySoundCue(0x29);
             break;
         }
         g_RaceCueDelay--;
@@ -540,15 +540,15 @@ progress_failed:
         g_RaceCueDelay--;
     }
 
-    GameUpdateRivalCueGate();
+    UpdateRivalCueGate();
     GameDebugLapResult(
         0, returnValue, progress, arg1, g_LapCount,
         g_RacePhase, g_RaceFadeTimer);
     return returnValue;
 }
 
-void GameEnterRaceScene(void) asm("func_8003609C");
-void GameEnterRaceScene(void) {
+void EnterRaceScene(void) asm("func_8003609C");
+void EnterRaceScene(void) {
     s32 pad[2];
     u8 *new_var;
     u8 *base;
@@ -563,10 +563,10 @@ void GameEnterRaceScene(void) {
     s32 new_var2;
     s32 *second;
 
-    GameSetupDisplay240(0, 0, 0);
-    GameInitRenderState(5);
+    SetupDisplay240(0, 0, 0);
+    InitRenderState(5);
     func_8001F100();
-    GameLoadTrackTexturePageRange();
+    LoadTrackTexturePageRange();
     func_8001D210();
     g_TrackWalkStart = *(s32 *)g_TrackEventData;
     if (g_CourseIndex == 3) {
@@ -576,8 +576,8 @@ void GameEnterRaceScene(void) {
     }
     base = g_PlayerCar;
     func_8002C478(base);
-    GameSetTrackTexturePageNow(g_PlayerTrackSection);
-    GameBuildStartingGrid();
+    SetTrackTexturePageNow(g_PlayerTrackSection);
+    BuildStartingGrid();
     trackLength = g_TrackLength;
     mode = (count = g_CourseIndex);
     scene = g_RaceSeries;
@@ -622,10 +622,10 @@ void GameEnterRaceScene(void) {
         } while (i < count);
     }
     g_RaceTotalTime = 0;
-    GameResetMirrorState();
+    ResetMirrorState();
     func_800458CC(*(s32 *)(g_CamRow + 8));
     func_800340D8();
-    GameBuildRaceHudPrims(g_GrandPrixMode);
+    BuildRaceHudPrims(g_GrandPrixMode);
     g_AnimTimer = 0;
     g_SceneTimer = 0;
     g_CameraViewMode = 0;
@@ -637,11 +637,11 @@ void GameEnterRaceScene(void) {
     g_RivalCueCooldown1 = 0;
     g_RivalCueCooldown0 = 0;
     func_8003D6E8();
-    GameInitShuttleScenery();
-    GameSeedFlybyScenery();
-    GameSeedRouteScenery();
-    GameInitPathScenery();
-    GameRequestCdTrack(g_BgmTrack + 3);
+    InitShuttleScenery();
+    SeedFlybyScenery();
+    SeedRouteScenery();
+    InitPathScenery();
+    RequestCdTrack(g_BgmTrack + 3);
     g_PauseDebounce = 0;
     g_RaceFadeTimer = 0;
     func_8005DC1C();
@@ -652,13 +652,13 @@ void GameEnterRaceScene(void) {
     g_SceneId = 12;
     g_FrameSyncThreshold = 0x180;
     func_8001C974();
-    GameDebugPrintf(g_MsgGame0Ok);
+    DebugPrintf(g_MsgGame0Ok);
 
     (void)pad;
 }
 
-void GameUpdateRaceScene(void) asm("func_800363D4");
-void GameUpdateRaceScene(void) {
+void UpdateRaceScene(void) asm("func_800363D4");
+void UpdateRaceScene(void) {
     s32 option;
     s32 value;
     s16 selection;
@@ -670,7 +670,7 @@ void GameUpdateRaceScene(void) {
     option = 0;
     if ((u32)value < 0x3D) {
         func_8001C974();
-        GameDrawFullscreenFadeTile(0xFF - ((g_SceneTimer - 6) * 0xB), 0x49);
+        DrawFullscreenFadeTile(0xFF - ((g_SceneTimer - 6) * 0xB), 0x49);
     }
 
     if (g_PauseDebounce > 0) {
@@ -684,10 +684,10 @@ void GameUpdateRaceScene(void) {
         g_RacePaused = value;
 
         if (value != 0) {
-            GamePauseCdAudio();
+            PauseCdAudio();
             func_8005E4A4(0);
             g_RaceOptionCursor = 0;
-            GamePlaySoundCue(2);
+            PlaySoundCue(2);
         } else if (g_RaceOptionCursor == (2 - g_GrandPrixMode)) {
             g_RaceFadeTimer = 0;
             if (g_GrandPrixMode == 0 || (s16)mode < 2) {
@@ -700,19 +700,19 @@ void GameUpdateRaceScene(void) {
                 value = *(s16 *)(g_CourseProgress + 6);
                 g_RacePhase = 5;
                 if (value != 0) {
-                    GamePlaySoundCue(0x3D);
+                    PlaySoundCue(0x3D);
                 }
             }
-            GameSeedFinishCamera(g_PlayerCar);
-            GameStartCdVolumeFade(8);
+            SeedFinishCamera(g_PlayerCar);
+            StartCdVolumeFade(8);
         } else if (g_RaceOptionCursor == 1 && g_GrandPrixMode == 0) {
-            GameExitRaceScene(0xB);
+            ExitRaceScene(0xB);
             g_RacePhase = 8;
         } else {
             g_PauseDebounce = 0x1E;
             func_8005E4A4(1);
             if (g_RacePhase >= 2) {
-                GameResumeCdAudio();
+                ResumeCdAudio();
             }
         }
     }
@@ -722,58 +722,58 @@ void GameUpdateRaceScene(void) {
             (g_GrandPrixMode == 0)) {
             if (g_RaceFadeTimer >= 0x15) {
                 func_800218A0((g_RaceFadeTimer - 0x14) * 3);
-                GameDrawFullscreenFadeTile((g_RaceFadeTimer - 0x14) * 3, 0x49);
+                DrawFullscreenFadeTile((g_RaceFadeTimer - 0x14) * 3, 0x49);
                 option = 0xF;
             }
             if (g_RaceFadeTimer == 0xA) {
-                GameRequestCdTrack(0xF);
-                GameStartCdAudio();
+                RequestCdTrack(0xF);
+                StartCdAudio();
             }
             if (g_RaceFadeTimer >= 0x65) {
-                GameExitRaceScene(option);
+                ExitRaceScene(option);
             }
         } else if ((g_GrandPrixMode == 1) && (*(s16 *)(g_CourseProgress + 6) > 0)) {
-            GameDrawLostRaceCaption(g_RaceFadeTimer * 2);
-            GameDrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x49);
+            DrawLostRaceCaption(g_RaceFadeTimer * 2);
+            DrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x49);
             option = 0xD;
             if (g_RaceFadeTimer >= 0x7E) {
-                GameExitRaceScene(0xD);
+                ExitRaceScene(0xD);
             }
         }
         g_MirrorViewEnabled = 0;
         g_RaceFadeTimer++;
     } else if (g_RacePhase == 7) {
-        GameExitRaceScene(6);
+        ExitRaceScene(6);
     }
 
     if (g_RacePaused != 0) {
         func_8005B190(0x28, 0x28);
         if ((g_PadEdge2 & 0x1000) && g_RaceOptionCursor > 0) {
             g_RaceOptionCursor--;
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
         if (g_PadEdge2 & 0x4000) {
             selection = g_RaceOptionCursor;
             if (selection < (2 - g_GrandPrixMode)) {
                 g_RaceOptionCursor = selection + 1;
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
             }
         }
 
         g_SceneTimer--;
         func_8003479C(g_RaceOptionCursor);
         if (g_GrandPrixMode == 0) {
-            GameDrawSplitTimes();
+            DrawSplitTimes();
         }
-        GameDrawRaceHudLabels(g_GrandPrixMode);
+        DrawRaceHudLabels(g_GrandPrixMode);
         if (g_GrandPrixMode != 0) {
-            GameDrawTimeRemaining(g_RaceTimeRemaining);
+            DrawTimeRemaining(g_RaceTimeRemaining);
             func_80033230();
         }
         func_80033090();
         func_8003425C(g_SceneTimer);
-        GameGetTrackZoneBlend(g_PlayerTrackProgress);
-        GameDrawPlayerTachometer();
+        GetTrackZoneBlend(g_PlayerTrackProgress);
+        DrawPlayerTachometer();
 
         {
             s32 selectorMask;
@@ -792,30 +792,30 @@ void GameUpdateRaceScene(void) {
             }
         }
 
-        GameUpdateCamera(g_CameraViewMode, g_PlayerCar);
-        GameRequestTrackTexturePage(g_PlayerTrackSection);
+        UpdateCamera(g_CameraViewMode, g_PlayerCar);
+        RequestTrackTexturePage(g_PlayerTrackSection);
         if (g_GrandPrixMode != 0) {
-            GameDrawCars();
+            DrawCars();
         }
         if ((g_PlayerFacingBackwards != g_RaceSeries) && (g_WrongWayTimer >= 0xA)) {
-            GameDrawWrongWayWarning();
+            DrawWrongWayWarning();
         }
         func_800418D4();
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-        GameDrawTerrainCells();
-        GameDrawCourseObjects();
+        DrawTerrainCells();
+        DrawCourseObjects();
         if (g_GrandPrixMode != 0) {
             if (g_GrandPrixClass != 5) {
-                GameDrawStartGridScenery(g_SceneTimer);
+                DrawStartGridScenery(g_SceneTimer);
             }
             func_80069888(g_SceneLightMatrix);
-            GameDrawScriptedScenery(0);
-            GameDrawRearViewMirror(g_SceneTimer);
+            DrawScriptedScenery(0);
+            DrawRearViewMirror(g_SceneTimer);
         }
-        GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
-        if (GameBeginMirrorPass() != 0) {
-            GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
-            GameEndMirrorPass();
+        DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
+        if (BeginMirrorPass() != 0) {
+            DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
+            EndMirrorPass();
         }
     } else {
         s32 frameValue;
@@ -833,12 +833,12 @@ void GameUpdateRaceScene(void) {
                 goto update_race;
             }
         } else if (g_RacePhase == 0) {
-            GameRunRaceIntroCamera(g_PlayerCar, frameValue);
+            RunRaceIntroCamera(g_PlayerCar, frameValue);
         } else {
 update_race:
             if ((g_RacePhase == 1) && ((u32)g_SceneTimer >= 0xD3)) {
-                GameBeginCarStandingStart(g_PlayerCar, frameValue);
-                GameStartCdAudio();
+                BeginCarStandingStart(g_PlayerCar, frameValue);
+                StartCdAudio();
                 g_RacePhase = 2;
                 g_PauseDebounce = 0x1E;
             }
@@ -846,12 +846,12 @@ update_race:
 
         if (g_RacePhase < 4) {
             func_8003425C(g_SceneTimer);
-            GamePlayCountdownCues(g_SceneTimer);
+            PlayCountdownCues(g_SceneTimer);
         }
 
         if (g_RacePhase < 5) {
-            option = GameUpdateLapAndFinish((void *)g_PlayerCar, g_GrandPrixMode);
-            GameUpdateSplitTimes(g_PlayerCar, g_GrandPrixMode, option);
+            option = UpdateLapAndFinish((void *)g_PlayerCar, g_GrandPrixMode);
+            UpdateSplitTimes(g_PlayerCar, g_GrandPrixMode, option);
             if (option < 2) {
                 func_80033090();
             }
@@ -859,17 +859,17 @@ update_race:
 
         if (g_RacePhase < 4) {
             if (g_GrandPrixMode != 0) {
-                GameDrawTimeRemaining(g_RaceTimeRemaining);
+                DrawTimeRemaining(g_RaceTimeRemaining);
             }
             if (g_RaceTimeRemaining <= 0) {
                 if (*(s16 *)(g_CourseProgress + 6) != 0) {
-                    GamePlaySoundCue(0x3D);
+                    PlaySoundCue(0x3D);
                 }
                 func_8005E4A4(0);
                 g_RacePhase = 5;
                 g_RaceFadeTimer = 0;
-                GameSeedFinishCamera(g_PlayerCar);
-                GameStartCdVolumeFade(8);
+                SeedFinishCamera(g_PlayerCar);
+                StartCdVolumeFade(8);
             }
         }
 
@@ -880,11 +880,11 @@ update_race:
             }
         }
         if (option < 2 && g_RacePhase < 5) {
-            GameDrawRaceHudLabels(g_GrandPrixMode);
+            DrawRaceHudLabels(g_GrandPrixMode);
         }
 
         if (g_RacePhase > 0) {
-            GameUpdatePlayerCar(g_PlayerCar);
+            UpdatePlayerCar(g_PlayerCar);
         } else if (g_RacePhase == 0) {
             func_8005D9F8(0, 0);
         }
@@ -907,9 +907,9 @@ update_race:
         }
 
         if (g_RacePhase == 5) {
-            GameUpdateFinishCamera(g_PlayerCar);
+            UpdateFinishCamera(g_PlayerCar);
         } else if (g_RacePhase > 0) {
-            GameUpdateCamera(g_CameraViewMode, g_PlayerCar);
+            UpdateCamera(g_CameraViewMode, g_PlayerCar);
         }
 
         if (g_RacePhase != 5) {
@@ -917,12 +917,12 @@ update_race:
         } else {
             next = g_CameraCarTrackSection;
         }
-        GameRequestTrackTexturePage(next);
+        RequestTrackTexturePage(next);
 
         if (g_GrandPrixMode != 0) {
-            GameDrawCars();
+            DrawCars();
         }
-        GameUpdateEnvironment();
+        UpdateEnvironment();
         func_800418D4();
 
         if ((g_PlayerFacingBackwards != g_RaceSeries) && (g_RacePhase < 4)) {
@@ -931,12 +931,12 @@ update_race:
             counter = g_WrongWayTimer + 1;
             g_WrongWayTimer = counter;
             if (counter >= 0xA) {
-                GameDrawWrongWayWarning();
+                DrawWrongWayWarning();
                 if (g_WrongWayTimer >= 0x51) {
                     g_WrongWayTimer = 0xA;
                 }
                 if ((u8)g_SceneTimer == 0) {
-                    GamePlaySoundCue(0x2C);
+                    PlaySoundCue(0x2C);
                 }
             }
         } else {
@@ -944,39 +944,39 @@ update_race:
         }
 
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-        GameDrawTerrainCells();
-        GameDrawCourseObjects();
+        DrawTerrainCells();
+        DrawCourseObjects();
         if (g_GrandPrixMode != 0) {
             if (g_GrandPrixClass != 5) {
-                GameDrawStartGridScenery(g_SceneTimer);
+                DrawStartGridScenery(g_SceneTimer);
             }
             func_80069888(g_SceneLightMatrix);
-            GameDrawScriptedScenery(1);
-            GameDrawRearViewMirror(g_SceneTimer);
+            DrawScriptedScenery(1);
+            DrawRearViewMirror(g_SceneTimer);
         }
-        GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
-        if (GameBeginMirrorPass() != 0) {
-            GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
-            GameEndMirrorPass();
+        DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
+        if (BeginMirrorPass() != 0) {
+            DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
+            EndMirrorPass();
         }
 
-        GameGetTrackZoneBlend(g_PlayerTrackProgress);
+        GetTrackZoneBlend(g_PlayerTrackProgress);
         if (g_RacePhase >= 4) {
             g_ReverbZoneDepth = 0;
         }
         func_8005B190(g_ReverbZoneDepth, g_ReverbZoneDepth);
         if ((g_RacePhase != 0) && (option < 2) && (g_RacePhase < 5)) {
-            GameDrawPlayerTachometer();
+            DrawPlayerTachometer();
         }
 
         if (g_RacePhase < 4) {
             s32 *valuePtr;
 
             valuePtr = &g_PlayerTrackProgress;
-            GameUpdateZoneAmbience(*valuePtr);
-            GameUpdatePointAmbience(*valuePtr);
+            UpdateZoneAmbience(*valuePtr);
+            UpdatePointAmbience(*valuePtr);
             func_8004087C(g_PlayerTrackSection);
-            GameTriggerRaceCues();
+            TriggerRaceCues();
         } else {
             func_8005BEA8(0, 0);
             func_8005C31C(2, 0, 0);
@@ -984,7 +984,7 @@ update_race:
             func_8005C31C(0, 0, 0);
             func_8005C31C(1, 0, 0);
         }
-        GameRecordReplayFrame();
+        RecordReplayFrame();
     }
 
 }

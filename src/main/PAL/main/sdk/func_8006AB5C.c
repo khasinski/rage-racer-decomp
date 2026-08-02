@@ -101,7 +101,7 @@ long func_8006AB5C(void) {
     if (mode == 5) {
         func_80063C38(&D_80013840);
         if (g_CdDebugLevel > 0) {
-            GameDebugPrintf(&D_8001384C, g_CdCommandNames[D_8009905D], g_CdStatusByte, g_CdErrorByte);
+            DebugPrintf(&D_8001384C, g_CdCommandNames[D_8009905D], g_CdStatusByte, g_CdErrorByte);
         }
     }
 
@@ -158,7 +158,7 @@ long func_8006AB5C(void) {
     }
     default:
         func_80063C38(&D_80013868);
-        GameDebugPrintf(&D_8001387C, mode);
+        DebugPrintf(&D_8001387C, mode);
         break;
     }
     return 0;

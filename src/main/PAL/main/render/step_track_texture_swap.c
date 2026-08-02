@@ -6,7 +6,7 @@ extern s32 g_TrackTextureSectionLo asm("D_801E4284");
 extern s32 g_TrackTextureSectionHi asm("D_801E4288");
 extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
 /*
- * Old-style definition on purpose: GameSetTrackTexturePageNow and GameRequestTrackTexturePage call this
+ * Old-style definition on purpose: SetTrackTexturePageNow and RequestTrackTexturePage call this
  * with no argument at all (the original relied on whatever was left in $4), so
  * the unit must not expose a prototype for it.
  */
@@ -41,8 +41,8 @@ void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void DrawSync(long mode) asm("func_800658FC");
 
-void GameSwapTrackTexturePageNow(void) asm("func_80019D7C");
-void GameSwapTrackTexturePageNow(void) {
+void SwapTrackTexturePageNow(void) asm("func_80019D7C");
+void SwapTrackTexturePageNow(void) {
     s32 buffer[0xE0];
     s32 page = 0;
     s16 *rectY = &D_8007C70A;
@@ -78,24 +78,24 @@ void GameSwapTrackTexturePageNow(void) {
 
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
-void GameSwapTrackTexturePageNow(void) asm("func_80019D7C");
+void SwapTrackTexturePageNow(void) asm("func_80019D7C");
 
-void GameSetTrackTexturePageNow(void) asm("func_80019E84");
-void GameSetTrackTexturePageNow(void) {
+void SetTrackTexturePageNow(void) asm("func_80019E84");
+void SetTrackTexturePageNow(void) {
     s32 temp;
 
     temp = GameSelectTrackTexturePage();
     g_TrackTextureTargetRow = temp;
     g_TrackTextureCursorRow = temp;
-    GameSwapTrackTexturePageNow();
+    SwapTrackTexturePageNow();
 }
 
 extern u8 D_801E4CF7;
 extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
-void GameResetTrackTextureSwap(void) asm("func_80019EBC");
-void GameResetTrackTextureSwap(void) {
+void ResetTrackTextureSwap(void) asm("func_80019EBC");
+void ResetTrackTextureSwap(void) {
     s32 value = 1;
     s32 i = 0xFF;
     u8 *ptr = &D_801E4CF7;
@@ -112,8 +112,8 @@ void GameResetTrackTextureSwap(void) {
 }
 
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
-void GameRequestTrackTexturePage(void) asm("func_80019EFC");
-void GameRequestTrackTexturePage(void) {
+void RequestTrackTexturePage(void) asm("func_80019EFC");
+void RequestTrackTexturePage(void) {
     g_TrackTextureTargetRow = GameSelectTrackTexturePage();
 }
 
@@ -126,8 +126,8 @@ void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void DrawSync(long mode) asm("func_800658FC");
 
-void GameSwapTrackTextureRow(void) asm("func_80019F24");
-void GameSwapTrackTextureRow(void) {
+void SwapTrackTextureRow(void) asm("func_80019F24");
+void SwapTrackTextureRow(void) {
     s32 buffer[0xE0];
     s16 *rectY;
     s32 value;
@@ -173,22 +173,22 @@ void GameSwapTrackTextureRow(void) {
 
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
-void GameSwapTrackTextureRow(void) asm("func_80019F24");
+void SwapTrackTextureRow(void) asm("func_80019F24");
 s32 VSync(s32 mode) asm("func_8006DD30");
 
-void GameStepTrackTextureSwap(void) asm("func_8001A030");
-void GameStepTrackTextureSwap(void) {
+void StepTrackTextureSwap(void) asm("func_8001A030");
+void StepTrackTextureSwap(void) {
     while (g_TrackTextureCursorRow != g_TrackTextureTargetRow) {
         if (VSync(1) >= 471) {
             break;
         }
 
         if (g_TrackTextureCursorRow < g_TrackTextureTargetRow) {
-            GameSwapTrackTextureRow();
+            SwapTrackTextureRow();
             g_TrackTextureCursorRow++;
         } else {
             g_TrackTextureCursorRow--;
-            GameSwapTrackTextureRow();
+            SwapTrackTextureRow();
         }
     }
 }
@@ -196,10 +196,10 @@ void GameStepTrackTextureSwap(void) {
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 
-s32 GameCycleBgmSelectCameraCar(s32 mask, s32 current) asm("func_8001A0E4");
-s32 GameCycleBgmSelectCameraCar(s32 mask, s32 current) {
+s32 CycleBgmSelectCameraCar(s32 mask, s32 current) asm("func_8001A0E4");
+s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
     s32 random;
     s32 candidate;
     s32 offset;
@@ -209,7 +209,7 @@ s32 GameCycleBgmSelectCameraCar(s32 mask, s32 current) {
         return current;
     }
     if ((g_TrackTextureCursorRow == 0) || (g_TrackTextureCursorRow == 0x100)) {
-        random = GameRandom15() & 0x7FFF;
+        random = Random15() & 0x7FFF;
         candidate = random % 11;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
@@ -226,10 +226,10 @@ s32 GameCycleBgmSelectCameraCar(s32 mask, s32 current) {
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 
-s32 GameCycleAttractCameraCar(s32 mask, s32 current) asm("func_8001A1F0");
-s32 GameCycleAttractCameraCar(s32 mask, s32 current) {
+s32 CycleAttractCameraCar(s32 mask, s32 current) asm("func_8001A1F0");
+s32 CycleAttractCameraCar(s32 mask, s32 current) {
     s32 random;
     s32 candidate;
     s32 offset;
@@ -239,7 +239,7 @@ s32 GameCycleAttractCameraCar(s32 mask, s32 current) {
         return current;
     }
     if ((g_TrackTextureCursorRow == 0) || (g_TrackTextureCursorRow == 0x100)) {
-        random = GameRandom15() & 0x7FFF;
+        random = Random15() & 0x7FFF;
         candidate = random % 4;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;

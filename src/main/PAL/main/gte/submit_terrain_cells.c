@@ -5,20 +5,20 @@
  * the emitted symbols stay func_XXXXXXXX, so the ROM is unaffected. What each
  * routine emits is worked out in docs/names.md section 17.
  */
-void GameSubmitTerrainCells(void *ctx, void *cells, s32 count) asm("func_80027FF4");
-void GameSubmitTerrainCellFaces(void) asm("func_80028120");
-void GameEmitSubdividedTerrainQuad(void) asm("func_80028874");
-void GameInterpolateSubdivRow(void) asm("func_80028C54");
-void GameSubmitTerrainCellFacesFar(void) asm("func_80028D84");
-void GameSubmitModel(void *ctx, s32 model) asm("func_80028DEC");
-void GameSubmitModelFaces(void) asm("func_80028E9C");
-void GameEmitPolyF4(void) asm("func_80029064");
-void GameEmitPolyFT4Raw(void) asm("func_800290C8");
+void SubmitTerrainCells(void *ctx, void *cells, s32 count) asm("func_80027FF4");
+void SubmitTerrainCellFaces(void) asm("func_80028120");
+void EmitSubdividedTerrainQuad(void) asm("func_80028874");
+void InterpolateSubdivRow(void) asm("func_80028C54");
+void SubmitTerrainCellFacesFar(void) asm("func_80028D84");
+void SubmitModel(void *ctx, s32 model) asm("func_80028DEC");
+void SubmitModelFaces(void) asm("func_80028E9C");
+void EmitPolyF4(void) asm("func_80029064");
+void EmitPolyFT4Raw(void) asm("func_800290C8");
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  *
- * Symbol:   func_80027FF4 = GameSubmitTerrainCells  (cc=2.7.2 region, part of the GTE dispatch engine
+ * Symbol:   func_80027FF4 = SubmitTerrainCells  (cc=2.7.2 region, part of the GTE dispatch engine
  *           adjacent to func_80028120..func_8002A2CC)
  * Reason:   hand-written GTE dispatch loop, outside the O32 C ABI.
  * Evidence: NO stack frame - the function never touches $sp. The prologue saves
@@ -44,7 +44,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80028120 = GameSubmitTerrainCellFaces
+ * Symbol:    func_80028120 = SubmitTerrainCellFaces
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -64,7 +64,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80028874 = GameEmitSubdividedTerrainQuad
+ * Symbol:    func_80028874 = EmitSubdividedTerrainQuad
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -84,7 +84,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80028C54 = GameInterpolateSubdivRow
+ * Symbol:    func_80028C54 = InterpolateSubdivRow
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -104,7 +104,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80028D84 = GameSubmitTerrainCellFacesFar
+ * Symbol:    func_80028D84 = SubmitTerrainCellFacesFar
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -124,7 +124,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80028DEC = GameSubmitModel
+ * Symbol:    func_80028DEC = SubmitModel
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -139,7 +139,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
- * func_80028E9C = GameSubmitModelFaces: the model's per-face RTPT / NCLIP /
+ * func_80028E9C = SubmitModelFaces: the model's per-face RTPT / NCLIP /
  * AVSZ4 loop, dispatching each face through jtbl_8007DA14.
  * Hand-written GTE face loop. This is outside the o32 C ABI: sixteen slt
  * instructions write to the assembler-reserved $at register, and the
@@ -274,7 +274,7 @@ asm(
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029064 = GameEmitPolyF4
+ * Symbol:    func_80029064 = EmitPolyF4
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -294,7 +294,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_800290C8 = GameEmitPolyFT4Raw
+ * Symbol:    func_800290C8 = EmitPolyFT4Raw
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -313,14 +313,14 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * the emitted symbols stay func_XXXXXXXX, so the ROM is unaffected. What each
  * routine emits is worked out in docs/names.md section 17.
  */
-void GameEmitPolyG4(void) asm("func_80029158");
-void GameEmitPolyGT4(void) asm("func_80029230");
-void GameSubmitModel2(void *ctx, s32 model) asm("func_80029340");
-void GameEmitPolyF4Fog(void) asm("func_800293F0");
-void GameEmitPolyFT4Fog(void) asm("func_80029458");
-void GameEmitPolyG4Fog(void) asm("func_800294E4");
-void GameEmitPolyGT4Fog(void) asm("func_800295BC");
-void GameSubmitCourseModel(void *ctx, s32 model) asm("func_800296B4");
+void EmitPolyG4(void) asm("func_80029158");
+void EmitPolyGT4(void) asm("func_80029230");
+void SubmitModel2(void *ctx, s32 model) asm("func_80029340");
+void EmitPolyF4Fog(void) asm("func_800293F0");
+void EmitPolyFT4Fog(void) asm("func_80029458");
+void EmitPolyG4Fog(void) asm("func_800294E4");
+void EmitPolyGT4Fog(void) asm("func_800295BC");
+void SubmitCourseModel(void *ctx, s32 model) asm("func_800296B4");
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -329,7 +329,7 @@ void GameSubmitCourseModel(void *ctx, s32 model) asm("func_800296B4");
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029158 = GameEmitPolyG4
+ * Symbol:    func_80029158 = EmitPolyG4
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -349,7 +349,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029230 = GameEmitPolyGT4
+ * Symbol:    func_80029230 = EmitPolyGT4
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -369,7 +369,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029340 = GameSubmitModel2
+ * Symbol:    func_80029340 = SubmitModel2
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -389,7 +389,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_800293F0 = GameEmitPolyF4Fog
+ * Symbol:    func_800293F0 = EmitPolyF4Fog
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -409,7 +409,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029458 = GameEmitPolyFT4Fog
+ * Symbol:    func_80029458 = EmitPolyFT4Fog
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -429,7 +429,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_800294E4 = GameEmitPolyG4Fog
+ * Symbol:    func_800294E4 = EmitPolyG4Fog
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -449,7 +449,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_800295BC = GameEmitPolyGT4Fog
+ * Symbol:    func_800295BC = EmitPolyGT4Fog
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -488,10 +488,10 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * the emitted symbols stay func_XXXXXXXX, so the ROM is unaffected. What each
  * routine emits is worked out in docs/names.md section 17.
  */
-void GameEmitCoursePolyF4(void) asm("func_8002970C");
-void GameEmitCoursePolyFT4(void) asm("func_80029788");
-void GameEmitCourseSubdividedFT4(void) asm("func_80029830");
-void GameEmitCourseSubdividedFT4Fog(void) asm("func_800298B0");
+void EmitCoursePolyF4(void) asm("func_8002970C");
+void EmitCoursePolyFT4(void) asm("func_80029788");
+void EmitCourseSubdividedFT4(void) asm("func_80029830");
+void EmitCourseSubdividedFT4Fog(void) asm("func_800298B0");
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -500,7 +500,7 @@ void GameEmitCourseSubdividedFT4Fog(void) asm("func_800298B0");
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_8002970C = GameEmitCoursePolyF4
+ * Symbol:    func_8002970C = EmitCoursePolyF4
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -520,7 +520,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029788 = GameEmitCoursePolyFT4
+ * Symbol:    func_80029788 = EmitCoursePolyFT4
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -540,7 +540,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029830 = GameEmitCourseSubdividedFT4
+ * Symbol:    func_80029830 = EmitCourseSubdividedFT4
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -560,7 +560,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_800298B0 = GameEmitCourseSubdividedFT4Fog
+ * Symbol:    func_800298B0 = EmitCourseSubdividedFT4Fog
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -576,7 +576,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
 
 /* Name for this unit's hand-written GTE engine routine. Declaration only -
  * the emitted symbol stays func_80029E50. */
-void GameSubmitCourseModel2(void *ctx, s32 model) asm("func_80029E50");
+void SubmitCourseModel2(void *ctx, s32 model) asm("func_80029E50");
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -585,7 +585,7 @@ void GameSubmitCourseModel2(void *ctx, s32 model) asm("func_80029E50");
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029E50 = GameSubmitCourseModel2
+ * Symbol:    func_80029E50 = SubmitCourseModel2
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -604,10 +604,10 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * the emitted symbols stay func_XXXXXXXX, so the ROM is unaffected. What each
  * routine emits is worked out in docs/names.md section 17.
  */
-void GameTransformCourseModel(void) asm("func_80029EA8");
-void GameEmitCoursePolyF4Fog(void) asm("func_80029FD8");
-void GameEmitCoursePolyFT4Fog(void) asm("func_8002A218");
-void GameSubmitCourseSubdividedFaces(void) asm("func_8002A2CC");
+void TransformCourseModel(void) asm("func_80029EA8");
+void EmitCoursePolyF4Fog(void) asm("func_80029FD8");
+void EmitCoursePolyFT4Fog(void) asm("func_8002A218");
+void SubmitCourseSubdividedFaces(void) asm("func_8002A2CC");
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -616,7 +616,7 @@ void GameSubmitCourseSubdividedFaces(void) asm("func_8002A2CC");
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029EA8 = GameTransformCourseModel
+ * Symbol:    func_80029EA8 = TransformCourseModel
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -636,7 +636,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_80029FD8 = GameEmitCoursePolyF4Fog
+ * Symbol:    func_80029FD8 = EmitCoursePolyF4Fog
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -656,7 +656,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_8002A218 = GameEmitCoursePolyFT4Fog
+ * Symbol:    func_8002A218 = EmitCoursePolyFT4Fog
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a
@@ -676,7 +676,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
  * C; must stay as assembly.
  *
- * Symbol:    func_8002A2CC = GameSubmitCourseSubdividedFaces
+ * Symbol:    func_8002A2CC = SubmitCourseSubdividedFaces
  * Reason:    hand-written GTE engine routine.
  * Evidence:  custom calling convention (arguments/state passed in t0/t6-t9/a2,
  *            not the O32 argument registers); return address stored in a

@@ -21,9 +21,9 @@ typedef struct GameCarEntry {
 typedef struct GameCarRuntime {
     s32 x;
     /* +0x04 32 bits wide, not 16: `lw`/`sw` at nine sites in each of
-     * GameUpdateRaceCars / GameUpdateAttractCars, `s32 unk04` in
-     * GameUpdatePlayerCar's own layout, and the `*(s32 *)&ent->y` cast in
-     * GameInitRivalCar that the old `s16` forced. See names.md 30. */
+     * UpdateRaceCars / UpdateAttractCars, `s32 unk04` in
+     * UpdatePlayerCar's own layout, and the `*(s32 *)&ent->y` cast in
+     * InitRivalCar that the old `s16` forced. See names.md 30. */
     s32 y;
     s32 z;
     s32 field_0C;
@@ -81,8 +81,8 @@ typedef struct GameCarRuntime {
     s32 field_B0;
     s32 field_B4;
     /* +0xB8 0 = travelling with the course, 1 = against it. Seeded to
-     * g_RaceSeries for every car by GameBuildStartingGrid and recomputed each
-     * frame for the player from GameIsCarFacingBackwards; `!= g_RaceSeries`
+     * g_RaceSeries for every car by BuildStartingGrid and recomputed each
+     * frame for the player from IsCarFacingBackwards; `!= g_RaceSeries`
      * is the wrong-way test. */
     s16 facingBackwards;
     u8 padBA[2];
@@ -156,7 +156,7 @@ typedef struct GameCarRuntimeProgressWindow {
 } GameCarRuntimeProgressWindow;
 
 /* The four contenders ordered by race progress (`field_68 + field_6C`), best
- * first; re-sorted every frame by GameRankContenders to rubber-band the AI. */
+ * first; re-sorted every frame by RankContenders to rubber-band the AI. */
 extern GameCarRuntime *g_RankedCars[4] asm("D_801E40BC");
 
 /* Active car-entry table; repointed at one of the three 13-entry tables below
@@ -182,11 +182,11 @@ extern s32 g_PlayerCarIndex asm("D_801E40D4");
 extern s32 g_CarListCursor asm("D_801E4B88");
 
 /* Index of each car model's first grade in the 32-entry asset list; thirteen
- * entries, one per model. GameGetCarAssetIndex adds the owned grade to it. */
+ * entries, one per model. GetCarAssetIndex adds the owned grade to it. */
 extern u8 g_CarModelBaseIndex[] asm("D_8007C464");
 
 /* Per-model base of the progress level a purchase requires; the level needed is
- * this plus the grade being bought (GameGetCarUnlockLevel). */
+ * this plus the grade being bought (GetCarUnlockLevel). */
 extern u8 g_CarModelUnlockBase[] asm("D_8007C474");
 
 
@@ -302,7 +302,7 @@ typedef struct GameCarAiBlock {
     u8 pad10[4];
     s32 field_D0;   /* +0x14 world velocity z, cos(headingAngle) * field_A4 / 256 */
     u8 pad18[0x18];
-    s32 field_EC;   /* +0x30 target angle: field_24 += GameGetAngleDelta(field_24, this) / 5 */
+    s32 field_EC;   /* +0x30 target angle: field_24 += GetAngleDelta(field_24, this) / 5 */
     u8 pad34[4];
     s32 field_F4;   /* +0x38 yaw rate, added to both field_44 and field_24 */
     u8 pad3C[0xC];
@@ -338,30 +338,30 @@ typedef struct GameCarTrackAngleWindow {
  */
 /* Race-entry init for the player object: start pose plus the speed/gear lookup
  * tables g_GearTorqueCurve / D_801E4114 / D_801E4154. Logs "init_car" .. "init_ok". */
-void GameInitPlayerCar(GameCarRuntime *car) asm("func_8002C478");
-/* Non-clamping twin of GameUpdateCarTrackState: recomputes the track-relative placement
+void InitPlayerCar(GameCarRuntime *car) asm("func_8002C478");
+/* Non-clamping twin of UpdateCarTrackState: recomputes the track-relative placement
  * and writes the reference triple at +0x50, for the init/reset paths only. */
-void GameResetCarTrackState(GameCarRuntime *car) asm("func_80032280");
+void ResetCarTrackState(GameCarRuntime *car) asm("func_80032280");
 /* The two variants of the rival-car driver over GameCarRuntime[11]. Race runs
  * only while `g_RacePhase >= 2 && g_GrandPrixMode`, adds three race-only passes
  * and time-slices cars 4..10; attract has no player so every car runs. */
-void GameUpdateRaceCars(void) asm("func_8003B0D4");
-void GameUpdateAttractCars(void) asm("func_8003BB50");
+void UpdateRaceCars(void) asm("func_8003B0D4");
+void UpdateAttractCars(void) asm("func_8003BB50");
 /* Player-vs-field collision (detection, response and the crash cue), called
- * only from GameUpdatePlayerCar; returns the struck sub-quad 1..4 or 0. */
-s32 GameCollidePlayerWithCars(GameCarRuntime *car) asm("func_8002D398");
+ * only from UpdatePlayerCar; returns the struck sub-quad 1..4 or 0. */
+s32 CollidePlayerWithCars(GameCarRuntime *car) asm("func_8002D398");
 /* One row of the AI pairwise sweep: car[index] against car[index + 1 .. 10],
  * push-apart only - no sound, no damage globals, no mode gate. */
-s32 GameCollideRivalCars(GameCarRuntime *car, s32 index) asm("func_80039980");
+s32 CollideRivalCars(GameCarRuntime *car, s32 index) asm("func_80039980");
 /* Draws one car, from the func_800389F0 loop; two LOD tiers plus the mirrored
  * wheel pass, submitted through func_80028DEC. */
-void GameDrawCar(void *car) asm("func_8001DFC0");
-/* Selects model bank 1 and calls GameDrawCar for each of the 11 runtime cars
+void DrawCar(void *car) asm("func_8001DFC0");
+/* Selects model bank 1 and calls DrawCar for each of the 11 runtime cars
  * whose activeFlag != -1 and field_BC == 1. */
-void GameDrawCars(void) asm("func_800389F0");
+void DrawCars(void) asm("func_800389F0");
 /* Car motion-state handler for state98 == 1: the one-frame jump takeoff, which
- * hands over to the airborne handler GameUpdateCarAirborne. */
-void GameUpdateCarLaunch(GameCarRuntime *car) asm("func_80030030");
+ * hands over to the airborne handler UpdateCarAirborne. */
+void UpdateCarLaunch(GameCarRuntime *car) asm("func_80030030");
 
 /*
  * The player's own car object and the fields of it that retail addresses as

@@ -6,7 +6,7 @@ extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
 
 /* Loads the GTE light matrix with g_SceneLightMatrix * `view`, working on a
  * local copy so the caller's view matrix is left alone. */
-void GameSetGteLightMatrix(Matrix *view) {
+void SetGteLightMatrix(Matrix *view) {
     Matrix m;
 
     m = *view;
@@ -68,11 +68,11 @@ void func_80014618(s32 variant) {
     } else {
         g_Scratch0CPointer = (void *)-0x40;
     }
-    GameSetCameraRotMatrix();
+    SetCameraRotMatrix();
 
     if (g_PadType == 0x41) {
-        GameBuildRotMatrixX(&xRot, -0xD0);
-        GameBuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
+        BuildRotMatrixX(&xRot, -0xD0);
+        BuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
         MulMatrix2(&yRot, &xRot);
         MulMatrix2(scratchBase + 0x28, &xRot);
         scale[2] = 0x1000;
@@ -80,11 +80,11 @@ void func_80014618(s32 variant) {
         scale[1] = 0x2000;
         ScaleMatrix(&yRot, scale);
         MulMatrix2(&yRot, &xRot);
-        GameSetGteLightMatrix(&xRot);
-        GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+        SetGteLightMatrix(&xRot);
+        SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
         g_Scratch84 = 0;
         model = g_ModelBankCount < 1;
-        GameSubmitModel((void *)0x1F800000, model);
+        SubmitModel((void *)0x1F800000, model);
         return;
     }
 
@@ -110,8 +110,8 @@ void func_80014618(s32 variant) {
     }
 
     angle = g_ControllerSceneAngleX - 0x40;
-    GameBuildRotMatrixX(&xRot, steer + angle);
-    GameBuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
+    BuildRotMatrixX(&xRot, steer + angle);
+    BuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
     MulMatrix2(&yRot, &xRot);
     MulMatrix2(scratchBase + 0x28, &xRot);
     scale[2] = 0x1000;
@@ -119,23 +119,23 @@ void func_80014618(s32 variant) {
     scale[1] = 0x2000;
     ScaleMatrix(&yRot, scale);
     MulMatrix2(&yRot, &xRot);
-    GameSetGteLightMatrix(&xRot);
-    GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+    SetGteLightMatrix(&xRot);
+    SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
     g_Scratch84 = 0;
-    GameSubmitModel((void *)0x1F800000, 1);
+    SubmitModel((void *)0x1F800000, 1);
     if (variant != 0) {
-        GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+        SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
         g_Scratch84 = 0;
         model = 1;
         if (g_ModelBankCount >= 4) {
             model = 3;
         }
-        GameSubmitModel((void *)0x1F800000, model);
+        SubmitModel((void *)0x1F800000, model);
     }
 
     angle = g_ControllerSceneAngleX - 0x40;
-    GameBuildRotMatrixX(&xRot, angle - steer);
-    GameBuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
+    BuildRotMatrixX(&xRot, angle - steer);
+    BuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
     MulMatrix2(&yRot, &xRot);
     MulMatrix2(scratchBase + 0x28, &xRot);
     scale[2] = 0x1000;
@@ -143,22 +143,22 @@ void func_80014618(s32 variant) {
     scale[1] = 0x2000;
     ScaleMatrix(&yRot, scale);
     MulMatrix2(&yRot, &xRot);
-    GameSetGteLightMatrix(&xRot);
-    GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+    SetGteLightMatrix(&xRot);
+    SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
     g_Scratch84 = 0;
     model = 1;
     if (g_ModelBankCount >= 3) {
         model = 2;
     }
-    GameSubmitModel((void *)0x1F800000, model);
+    SubmitModel((void *)0x1F800000, model);
     if (variant != 0) {
-        GameSetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+        SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
         g_Scratch84 = 0;
         model = 1;
         if (g_ModelBankCount >= 5) {
             model = 4;
         }
-        GameSubmitModel((void *)0x1F800000, model);
+        SubmitModel((void *)0x1F800000, model);
     }
 }
 
@@ -176,7 +176,7 @@ u8 *QueueSpriteWide(
     s32 u,
     s32 v,
     s32 clutIndex) asm("func_80016EC4");
-s32 GameAddTilePrim(
+s32 AddTilePrim(
     s32 ot,
     s32 prim,
     s32 x,
@@ -186,33 +186,33 @@ s32 GameAddTilePrim(
     s32 r,
     s32 g,
     s32 b) asm("func_80032F34");
-u8 *GameDrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) asm("func_80014A60");
+u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) asm("func_80014A60");
 
 /* The 16x32 left arrow, plus - while `pulse` is set - a tile over it whose
  * green channel breathes with rsin of the shared arrow angle. */
-u8 *GameDrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
+u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     prim = QueueSpriteWide(ot, prim, x, y, 0x10, 0x20, 0x48, 0xB8, 0x7F82);
-    prim = GameQueueDrawModePrim(ot, prim, 0x39);
+    prim = QueueDrawModePrim(ot, prim, 0x39);
     if (pulse != 0) {
         u8 glow = func_80068568(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
-        prim = (u8 *)GameAddTilePrim(
+        prim = (u8 *)AddTilePrim(
             (s32)ot, (s32)prim, x, y, 0x10, 0x20, 0, glow, 0);
     }
     return prim;
 }
 
-u8 *GameDrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) asm("func_80014B70");
+u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) asm("func_80014B70");
 
 /* The 16x32 right arrow, plus - while `pulse` is set - a tile over it whose
  * green channel breathes with rsin of the shared arrow angle. */
-u8 *GameDrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
+u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     prim = QueueSpriteWide(ot, prim, x, y, 0x10, 0x20, 0x58, 0xB8, 0x7F82);
-    prim = GameQueueDrawModePrim(ot, prim, 0x39);
+    prim = QueueDrawModePrim(ot, prim, 0x39);
     if (pulse != 0) {
         u8 glow = func_80068568(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
-        prim = (u8 *)GameAddTilePrim(
+        prim = (u8 *)AddTilePrim(
             (s32)ot, (s32)prim, x, y, 0x10, 0x20, 0, glow, 0);
     }
     return prim;
@@ -252,7 +252,7 @@ u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("func_80017390");
 
 /* Local declaration: `selection` is a short here - retail loads the argument
  * slot as a word and sign-extends it into the texel offset. */
-u8 *GameDrawPadConfigSelector(
+u8 *DrawPadConfigSelector(
     void *ot,
     u8 *prim,
     s16 x,
@@ -264,7 +264,7 @@ u8 *GameDrawPadConfigSelector(
  * digit cells (the middle one steps 8 texels per configuration), then the
  * white frame drawn as four nested tiles.
  */
-u8 *GameDrawPadConfigSelector(
+u8 *DrawPadConfigSelector(
     void *ot,
     u8 *prim,
     s16 x,
@@ -280,12 +280,12 @@ u8 *GameDrawPadConfigSelector(
     prim = QueueSpriteTransWide(
         ot, prim, x + 34, y + 32, 8, 0x10, 0x68, 0x28, 0x7F40);
     prim = QueueDrawModePrimWide(ot, prim, 0x5B);
-    prim = (u8 *)GameAddTilePrim(
+    prim = (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, x + 1, y + 2, 0x3A, 0x14, 0, 0, 0);
-    prim = (u8 *)GameAddTilePrim(
+    prim = (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, x + 2, y + 26, 0x38, 0x1A, 0xFF, 0xFF, 0xFF);
-    prim = (u8 *)GameAddTilePrim(
+    prim = (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, x + 1, y + 24, 0x3A, 0x1E, 0, 0, 0);
-    return (u8 *)GameAddTilePrim(
+    return (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, x, y, 0x3C, 0x38, 0xFF, 0xFF, 0xFF);
 }

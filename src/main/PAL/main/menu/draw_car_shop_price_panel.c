@@ -9,8 +9,8 @@ void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8,
                    s32 a9, s32 a10);
 
-void GameDrawCarShopPricePanel(s32 count, s32 arg1, s32 arg2) asm("func_8004F650");
-void GameDrawCarShopPricePanel(s32 count, s32 arg1, s32 arg2) {
+void DrawCarShopPricePanel(s32 count, s32 arg1, s32 arg2) asm("func_8004F650");
+void DrawCarShopPricePanel(s32 count, s32 arg1, s32 arg2) {
     void *ot;
     s32 v0, v1;
     s16 x2, x3;

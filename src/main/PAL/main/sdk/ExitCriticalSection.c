@@ -91,7 +91,7 @@ extern u32 g_RandomSeed asm("D_8009B9A8");
 
 /* The game's own PRNG, not SDK code: it keeps common.h's typedefs to agree
  * with its declaration in game/random.h. */
-s32 GameRandom15(void) {
+s32 Random15(void) {
     u32 value = g_RandomSeed;
 
     value *= 0x41C64E6D;

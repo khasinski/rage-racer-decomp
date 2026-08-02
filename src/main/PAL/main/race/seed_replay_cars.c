@@ -14,21 +14,21 @@ extern s32 g_ReplayReadCursor asm("D_801F179C");
 
 extern s32 g_Car0TrackPoint asm("D_801F1884");
 
-void GameApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2) asm("func_8001F8D0");
+void ApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2) asm("func_8001F8D0");
 
-void GameSeedCarLapProgress(void *arg0, s32 arg1) asm("func_8002BF68");
+void SeedCarLapProgress(void *arg0, s32 arg1) asm("func_8002BF68");
 
 void func_8002C168(void *arg0);
 
-s32 GameFindTrackSegment(void *arg0, s32 arg1) asm("func_80030EB4");
+s32 FindTrackSegment(void *arg0, s32 arg1) asm("func_80030EB4");
 
 void func_80032280(void *arg0);
 
-void GameInitShuttleScenery(void) asm("func_8003F0F8");
+void InitShuttleScenery(void) asm("func_8003F0F8");
 
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
-void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
 
 typedef struct TrackZone {
     s32 start;
@@ -53,7 +53,7 @@ void func_8005E4A4(s32 arg0);
 
 void func_8005B190(s32 arg0, s32 arg1);
 
-void GameRequestSelectBgmAssets(void) asm("func_80018410");
+void RequestSelectBgmAssets(void) asm("func_80018410");
 
 
 
@@ -83,38 +83,38 @@ extern s32 g_BestSectorTimes[][4][3] asm("D_801E41E8");
 
 extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 
-void GameDrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
+void DrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
 
-void GameDrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
+void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
 
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void GameSeedReplayCars(void) asm("func_80034F74");
-void GameSeedReplayCars(void) {
+void SeedReplayCars(void) asm("func_80034F74");
+void SeedReplayCars(void) {
     void *primary;
     void *secondary;
 
-    GameInitShuttleScenery();
+    InitShuttleScenery();
 
     primary = &g_PlayerCar;
     secondary = g_Cars;
-    GameApplyReplayFrameAndTilt(g_ReplayReadCursor, primary, secondary);
+    ApplyReplayFrameAndTilt(g_ReplayReadCursor, primary, secondary);
 
-    g_PlayerTrackPoint = GameFindTrackSegment(primary, g_PlayerTrackPoint);
-    GameSeedCarLapProgress(primary, 1);
+    g_PlayerTrackPoint = FindTrackSegment(primary, g_PlayerTrackPoint);
+    SeedCarLapProgress(primary, 1);
     func_8002C168(primary);
     func_80032280(primary);
 
     if (g_GrandPrixMode == 1) {
-        g_Car0TrackPoint = GameFindTrackSegment(secondary, g_Car0TrackPoint);
-        GameSeedCarLapProgress(secondary, 1);
+        g_Car0TrackPoint = FindTrackSegment(secondary, g_Car0TrackPoint);
+        SeedCarLapProgress(secondary, 1);
         func_8002C168(secondary);
         func_80032280(secondary);
     }
 }
 
-void GameUpdateReplayCars(void) asm("func_80035040");
-void GameUpdateReplayCars(void) {
+void UpdateReplayCars(void) asm("func_80035040");
+void UpdateReplayCars(void) {
     void *ptr = &g_PlayerCar;
 
     func_8002C168(ptr);
@@ -126,11 +126,11 @@ void GameUpdateReplayCars(void) {
         func_80032280(ptr);
     }
 
-    GameRequestTrackTexturePage(g_PlayerTrackSection);
+    RequestTrackTexturePage(g_PlayerTrackSection);
 }
 
-s32 GameGetTrackZoneBlend(s32 position) asm("func_800350B4");
-s32 GameGetTrackZoneBlend(s32 position) {
+s32 GetTrackZoneBlend(s32 position) asm("func_800350B4");
+s32 GetTrackZoneBlend(s32 position) {
     u8 *base;
     s32 scene;
     TrackZone *first;
@@ -234,19 +234,19 @@ done:
     }
 }
 
-void GameExitRaceScene(s32 arg0) asm("func_80035258");
-void GameExitRaceScene(s32 arg0) {
+void ExitRaceScene(s32 arg0) asm("func_80035258");
+void ExitRaceScene(s32 arg0) {
     g_SceneId = arg0;
     func_8005E4A4(0);
     func_8005B190(0, 0);
     if (g_SceneId == 6) {
-        GameRequestSelectBgmAssets();
+        RequestSelectBgmAssets();
     }
-    GameDebugPrintf(&g_MsgGameExit);
+    DebugPrintf(&g_MsgGameExit);
 }
 
-void GameUpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) asm("func_800352B8");
-void GameUpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
+void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) asm("func_800352B8");
+void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
     s32 slot;
     s32 nextSlot;
     s32 delta;
@@ -280,10 +280,10 @@ void GameUpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
                     g_SplitSign = -1;
                     delta = -delta;
                     if (arg2 == 0) {
-                        GamePlaySoundCue(0x3F);
+                        PlaySoundCue(0x3F);
                     }
                 } else if (delta > 0 && arg2 == 0) {
-                    GamePlaySoundCue(0x3E);
+                    PlaySoundCue(0x3E);
                 }
                 g_SplitDelta = delta;
             } else {
@@ -356,7 +356,7 @@ draw:
                 } else {
                     tile = 0x780F;
                 }
-                GameDrawTimeValue(0x80, 0x50, value, tile, 0x3E8);
+                DrawTimeValue(0x80, 0x50, value, tile, 0x3E8);
             }
         }
         threshold = 0x927BE;
@@ -370,14 +370,14 @@ draw:
     } else {
         tile = 0x7890;
     }
-    GameDrawTimeValue(0x12, 0x2A, value, tile, 0x3E8);
+    DrawTimeValue(0x12, 0x2A, value, tile, 0x3E8);
 
     }
     timeout = 0x3E8;
-    GameDrawTimeValue(0x12, 0x20, g_SplitTargetTime, 0x78CC, timeout);
-    GameDrawSplitDelta(g_SplitSector, g_SplitSign);
+    DrawTimeValue(0x12, 0x20, g_SplitTargetTime, 0x78CC, timeout);
+    DrawSplitDelta(g_SplitSector, g_SplitSign);
 
-    GameDrawTimeValue(
+    DrawTimeValue(
         0xFA,
         0x7C,
         g_BestTotalTimes[g_RaceSeries][g_CourseIndex][arg1],

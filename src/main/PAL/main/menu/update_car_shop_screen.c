@@ -3,7 +3,7 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-u32 GameDrawEngineerShopScreen(s32 arg0);
+u32 DrawEngineerShopScreen(s32 arg0);
 
 extern u8 *g_CarModelAsset asm("D_8009E698");
 
@@ -32,8 +32,8 @@ extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 extern s32 D_801E4294;
 extern u8 D_801E438D[];
 
-void GameRequestCarModel(s32 arg0) asm("func_8001882C");
-void GameUploadTeamNameTexture(void *arg0, s32 arg1) asm("func_8001D530");
+void RequestCarModel(s32 arg0) asm("func_8001882C");
+void UploadTeamNameTexture(void *arg0, s32 arg1) asm("func_8001D530");
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
 s32 func_800487D8(u8 *commands, s32 *progress, s32 step);
@@ -43,16 +43,16 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
 void func_80048D64(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void func_80049418(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_8004CF00(void);
-void GameDrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2) asm("func_8004F650");
+void DrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2) asm("func_8004F650");
 void func_8004FCE8(s32 arg0, s32 arg1, s32 arg2);
 void func_80050400(s32 arg0, s32 arg1);
 s32 func_80050FA8(s32 arg0);
 void func_8005131C(void);
 void func_80059320(void);
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void GameUpdateCarShopScreen(void) asm("func_80059558");
-void GameUpdateCarShopScreen(void) {
+void UpdateCarShopScreen(void) asm("func_80059558");
+void UpdateCarShopScreen(void) {
     void *ot;
     s32 value;
     s32 res;
@@ -71,7 +71,7 @@ void GameUpdateCarShopScreen(void) {
         func_800487D8(D_8019CB00, &g_UiScriptProgress2, -1);
         func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
         func_80049418(1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
-        GameDrawCarShopPricePanel(1, g_PlayerMoney, value);
+        DrawCarShopPricePanel(1, g_PlayerMoney, value);
         func_800489AC(g_UiScriptProgress, 1, D_801E4294);
         func_800487D8(&D_800820C4, &g_UiScriptProgress, 0);
         {
@@ -82,11 +82,11 @@ void GameUpdateCarShopScreen(void) {
         if ((res != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = initial;
             if (g_PadEdge2 & 0x1000) {
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 D_801E4294 = (D_801E4294 > 0) ? D_801E4294 - 1 : 1;
             }
             if (g_PadEdge2 & 0x4000) {
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 D_801E4294 = (D_801E4294 <= 0) ? D_801E4294 + 1 : 0;
             }
             func_80059320();
@@ -98,9 +98,9 @@ void GameUpdateCarShopScreen(void) {
                     if (g_CarSwapToIndex < 0) {
                         s32 lprev;
 
-                        GamePlaySoundCue(8);
+                        PlaySoundCue(8);
                         g_CarListCursor = (s32) g_PrevOwnedCarIndex;
-                        GameRequestCarModel(g_PrevOwnedCarIndex);
+                        RequestCarModel(g_PrevOwnedCarIndex);
                         lprev = g_MenuViewAngleTarget;
                         g_CarSwapFromIndex = sel;
                         g_MenuViewAngleTarget = 0;
@@ -118,9 +118,9 @@ void GameUpdateCarShopScreen(void) {
                         s32 base;
                         s32 lprev;
 
-                        GamePlaySoundCue(8);
+                        PlaySoundCue(8);
                         g_CarListCursor = (s32) g_NextOwnedCarIndex;
-                        GameRequestCarModel(g_NextOwnedCarIndex);
+                        RequestCarModel(g_NextOwnedCarIndex);
                         base = 0x927C0;
                         lprev = g_MenuViewAngleTarget;
                         g_MenuViewAngleTarget = 0x124F80;
@@ -150,7 +150,7 @@ void GameUpdateCarShopScreen(void) {
                                 s32 lu;
                                 s32 lprev;
 
-                                GameRequestCarModel(g_PlayerCarIndex);
+                                RequestCarModel(g_PlayerCarIndex);
                                 base = 0x927C0;
                                 current = g_CarListCursor;
                                 selected = g_PlayerCarIndex;
@@ -161,7 +161,7 @@ void GameUpdateCarShopScreen(void) {
                                 g_CarSwapToIndex = selected;
                                 g_MenuViewAngle = (lu - lprev) + base;
                             }
-                            GamePlaySoundCue(3);
+                            PlaySoundCue(3);
                             g_MenuOverlayPattern = 2;
                             GameMenuBusy = sel;
                             goto block_51;
@@ -170,7 +170,7 @@ void GameUpdateCarShopScreen(void) {
                             return;
                         }
                         if (g_CarTable[g_CarListCursor].enabled == 0) {
-                            GamePlaySoundCue(2);
+                            PlaySoundCue(2);
                             GameMenuBusy = -1;
                             g_UiScriptProgress2 = 0;
                             g_MenuSubCursor = 0;
@@ -207,7 +207,7 @@ void GameUpdateCarShopScreen(void) {
                             s32 lu;
                             s32 lprev;
 
-                            GameRequestCarModel(g_PlayerCarIndex);
+                            RequestCarModel(g_PlayerCarIndex);
                             base = 0x927C0;
                             current = g_CarListCursor;
                             selected = g_PlayerCarIndex;
@@ -218,7 +218,7 @@ void GameUpdateCarShopScreen(void) {
                             g_CarSwapToIndex = selected;
                             g_MenuViewAngle = (lu - lprev) + base;
                         }
-                        GamePlaySoundCue(3);
+                        PlaySoundCue(3);
                         GameMenuBusy = 1;
                         g_MenuOverlayPattern = 2;
 block_51:
@@ -240,31 +240,31 @@ block_51:
                         if (g_PadEdge2 & 0x860) {
                             if (g_MenuSubCursor != 0) {
                                 if (g_PlayerMoney >= value) {
-                                    GamePlaySoundCue(2);
+                                    PlaySoundCue(2);
                                     GameMenuBusy = -3;
                                     g_MenuConfirmTimer = 0x23;
                                 } else {
-                                    GamePlaySoundCue(5);
+                                    PlaySoundCue(5);
                                     D_8019CB00 = &D_800828B0;
                                     GameMenuBusy = -2;
                                 }
                             } else {
-                                GamePlaySoundCue(3);
+                                PlaySoundCue(3);
                                 GameMenuBusy = 0;
                             }
                         }
                         pad = &g_PadEdge2;
                         if (*pad & 0x90) {
-                            GamePlaySoundCue(3);
+                            PlaySoundCue(3);
                             GameMenuBusy = 0;
                         }
                         if ((*pad & 0x8000) && (g_MenuSubCursor == 0)) {
-                            GamePlaySoundCue(1);
+                            PlaySoundCue(1);
                             g_MenuSubCursor = 1;
                         }
                         if (g_PadEdge2 & 0x2000) {
                             if (g_MenuSubCursor != 0) {
-                                GamePlaySoundCue(1);
+                                PlaySoundCue(1);
                                 g_MenuSubCursor = 0;
                             }
                         }
@@ -305,7 +305,7 @@ block_51:
                 }
             }
             func_80049418(1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
-            GameDrawCarShopPricePanel(1, g_PlayerMoney, value);
+            DrawCarShopPricePanel(1, g_PlayerMoney, value);
             func_800489AC(g_UiScriptProgress, 1, D_801E4294);
             func_800487D8(&D_800820C4, &g_UiScriptProgress, 0);
             func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
@@ -314,7 +314,7 @@ block_51:
         g_MenuHandlerIndex = -1;
         g_MenuHandlerIndex2 = 0xB;
         func_80049418(-1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
-        GameDrawCarShopPricePanel(-1, g_PlayerMoney, value);
+        DrawCarShopPricePanel(-1, g_PlayerMoney, value);
         func_800487D8(&D_800820C4, &g_UiScriptProgress, -1);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
         func_800489AC(g_UiScriptProgress, 1, D_801E4294);
@@ -327,7 +327,7 @@ block_51:
             g_UiScriptProgress = 0;
             GameMenuBusy = 0;
             D_801E4294 = 0;
-            GameUploadTeamNameTexture(&g_TeamNameChars, g_TeamNameLength);
+            UploadTeamNameTexture(&g_TeamNameChars, g_TeamNameLength);
             func_8004CF00();
         }
     }
@@ -337,8 +337,8 @@ extern u32 D_8009B2EC;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
-u32 GameDrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
-u32 GameDrawEngineerShopScreen(s32 arg0) {
+u32 DrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
+u32 DrawEngineerShopScreen(s32 arg0) {
     u32 value;
     s32 amount;
 
@@ -379,11 +379,11 @@ extern s32 D_80082D80[];
 extern u8 *D_801E4188;
 extern s32 D_801E4290;
 
-void GameRequestUpgradedCarModel(s32 arg0) asm("func_800189E4");
-void GameDrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2) asm("func_8004F99C");
+void RequestUpgradedCarModel(s32 arg0) asm("func_800189E4");
+void DrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2) asm("func_8004F99C");
 
-void GameUpdateEngineerShopScreen(void) asm("func_8005A3A4");
-void GameUpdateEngineerShopScreen(void) {
+void UpdateEngineerShopScreen(void) asm("func_8005A3A4");
+void UpdateEngineerShopScreen(void) {
     void *ot;
     s32 value;
     s32 res;
@@ -398,42 +398,42 @@ void GameUpdateEngineerShopScreen(void) {
     if (GameMenuBusy == 0) {
         func_800487D8(D_801E4188, &g_UiScriptProgress2, -1);
         func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
-        GameDrawEngineerShopPricePanel(1, g_PlayerMoney, value);
+        DrawEngineerShopPricePanel(1, g_PlayerMoney, value);
         func_800489AC(g_UiScriptProgress, 1, D_801E4290);
         func_800487D8(&D_80082130, &g_UiScriptProgress, 0);
         res = func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
         if ((res != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 D_801E4290 = (D_801E4290 > 0) ? D_801E4290 - 1 : 1;
             }
             if (g_PadEdge2 & 0x4000) {
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 D_801E4290 = (D_801E4290 <= 0) ? D_801E4290 + 1 : 0;
             }
             if (g_PadEdge2 & 0x860) {
                 sel = D_801E4290;
                 if (sel == 0) {
                     if (g_PlayerMoney >= value) {
-                        GamePlaySoundCue(2);
+                        PlaySoundCue(2);
                         D_801E4188 = &D_80082A54;
                         GameMenuBusy = -1;
                         g_UiScriptProgress2 = 0;
                         g_MenuSubCursor = 0;
                     } else {
-                        GamePlaySoundCue(5);
+                        PlaySoundCue(5);
                         D_801E4188 = &D_80082898;
                         GameMenuBusy = -3;
                         g_UiScriptProgress2 = 0;
                     }
                 } else if (sel == 1) {
-                    GamePlaySoundCue(3);
+                    PlaySoundCue(3);
                     GameMenuBusy = sel;
                     g_MenuOverlayPattern = 2;
                 }
             } else if (g_PadEdge2 & 0x90) {
-                GamePlaySoundCue(3);
+                PlaySoundCue(3);
                 GameMenuBusy = 1;
                 g_MenuOverlayPattern = 2;
             }
@@ -447,27 +447,27 @@ void GameUpdateEngineerShopScreen(void) {
                 if (func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
                     if (g_PadEdge2 & 0x860) {
                         if (g_MenuSubCursor != 0) {
-                            GamePlaySoundCue(2);
+                            PlaySoundCue(2);
                             GameMenuBusy = -2;
                             g_MenuConfirmTimer = 0x23;
-                            GameRequestUpgradedCarModel(g_PlayerCarIndex);
+                            RequestUpgradedCarModel(g_PlayerCarIndex);
                         } else {
-                            GamePlaySoundCue(3);
+                            PlaySoundCue(3);
                             GameMenuBusy = 0;
                         }
                     }
                     pad = &g_PadEdge2;
                     if (*pad & 0x90) {
-                        GamePlaySoundCue(3);
+                        PlaySoundCue(3);
                         GameMenuBusy = 0;
                     }
                     if ((*pad & 0x8000) && (g_MenuSubCursor == 0)) {
-                        GamePlaySoundCue(1);
+                        PlaySoundCue(1);
                         g_MenuSubCursor = 1;
                     }
                     if (g_PadEdge2 & 0x2000) {
                         if (g_MenuSubCursor != 0) {
-                            GamePlaySoundCue(1);
+                            PlaySoundCue(1);
                             g_MenuSubCursor = 0;
                         }
                     }
@@ -510,7 +510,7 @@ void GameUpdateEngineerShopScreen(void) {
                     }
                 }
             }
-            GameDrawEngineerShopPricePanel(1, g_PlayerMoney, value);
+            DrawEngineerShopPricePanel(1, g_PlayerMoney, value);
             func_800489AC(g_UiScriptProgress, 1, D_801E4290);
             func_800487D8(&D_80082130, &g_UiScriptProgress, 0);
             func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
@@ -518,7 +518,7 @@ void GameUpdateEngineerShopScreen(void) {
         }
         g_MenuHandlerIndex = -1;
         g_MenuHandlerIndex2 = 0xC;
-        GameDrawEngineerShopPricePanel(-1, g_PlayerMoney, value);
+        DrawEngineerShopPricePanel(-1, g_PlayerMoney, value);
         func_800487D8(&D_80082130, &g_UiScriptProgress, -1);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
         func_800489AC(g_UiScriptProgress, 1, D_801E4290);

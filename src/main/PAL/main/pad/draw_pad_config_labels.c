@@ -21,7 +21,7 @@ u8 *QueueSpriteTransWide(
     s32 v,
     s32 clutIndex) asm("func_80017138");
 u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("func_80017390");
-s32 GameAddTilePrim(
+s32 AddTilePrim(
     s32 ot,
     s32 prim,
     s32 x,
@@ -38,7 +38,7 @@ s32 GameAddTilePrim(
  * six sprites cover five slots - followed by the black plate and white frame
  * behind each slot and one DR_MODE packet to close the run.
  */
-u8 *GameDrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
+u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
     u8 k;
     s32 i;
 
@@ -69,11 +69,11 @@ u8 *GameDrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
     i = 0;
     do {
         k = labelRow[i];
-        prim = (u8 *)GameAddTilePrim(
+        prim = (u8 *)AddTilePrim(
             (s32)ot, (s32)prim, g_PadLabelSlots[k].x + 1, g_PadLabelSlots[k].y + 2, 0x46,
             0x1C, 0, 0, 0);
         k = labelRow[i];
-        prim = (u8 *)GameAddTilePrim(
+        prim = (u8 *)AddTilePrim(
             (s32)ot, (s32)prim, g_PadLabelSlots[k].x, g_PadLabelSlots[k].y, 0x48, 0x20,
             0xFF, 0xFF, 0xFF);
         i++;
@@ -111,7 +111,7 @@ u8 *QueueLineWide(
  * vertical drop from the label, then a two-pixel-thick horizontal run to the
  * button. Suppressed while the panel is still sliding.
  */
-u8 *GameDrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
+u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
     s32 i;
 
     if (g_ControllerSceneAngleY > -16 && g_ControllerSceneAngleY < 16) {
@@ -141,9 +141,9 @@ extern s16 g_PadMappingIndex asm("D_8019CE08");
 
 /* One whole standard-pad diagram for the current selection: the five action
  * labels, then the five callout lines from each label to its button. */
-u8 *GameDrawPadConfigDiagram(void *ot, u8 *prim) {
-    prim = GameDrawPadConfigLabels(ot, prim, &g_PadConfigLabelRows[g_PadMappingIndex * 5]);
-    return GameDrawPadConfigCallouts(
+u8 *DrawPadConfigDiagram(void *ot, u8 *prim) {
+    prim = DrawPadConfigLabels(ot, prim, &g_PadConfigLabelRows[g_PadMappingIndex * 5]);
+    return DrawPadConfigCallouts(
         ot, prim, &g_PadConfigLabelRows[g_PadMappingIndex * 5], &g_PadConfigButtonRows[g_PadMappingIndex * 5]);
 }
 
@@ -154,8 +154,8 @@ extern u8 g_NegconConfigButtonRows[] asm("D_8007C238");
 extern s16 g_NegconMappingIndex asm("D_8019CB08");
 
 /* One whole NeGcon diagram for the current selection: labels, then callouts. */
-u8 *GameDrawNegconConfigDiagram(void *ot, u8 *prim) {
-    prim = GameDrawPadConfigLabels(ot, prim, &g_NegconConfigLabelRows[g_NegconMappingIndex * 5]);
-    return GameDrawPadConfigCallouts(
+u8 *DrawNegconConfigDiagram(void *ot, u8 *prim) {
+    prim = DrawPadConfigLabels(ot, prim, &g_NegconConfigLabelRows[g_NegconMappingIndex * 5]);
+    return DrawPadConfigCallouts(
         ot, prim, &g_NegconConfigLabelRows[g_NegconMappingIndex * 5], &g_NegconConfigButtonRows[g_NegconMappingIndex * 5]);
 }

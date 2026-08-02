@@ -19,15 +19,15 @@ extern char g_MsgReadSectors[] asm("D_80010B58");
 extern char g_MsgNowSearching[] asm("D_80010B68");
 extern char g_PathRageStr[] asm("D_80010B80");
 extern char g_MsgSearchOk[] asm("D_80010B8C");
-void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 
-void GameSetTrackCameraTable(u32 value) asm("func_80017BD4");
-void GameSetTrackCameraTable(u32 value) {
+void SetTrackCameraTable(u32 value) asm("func_80017BD4");
+void SetTrackCameraTable(u32 value) {
     *(u32 *)0x8019C9A8 = value;
 }
 
-void GameResetAssetLoader(void) asm("func_80017BE4");
-void GameResetAssetLoader(void) {
+void ResetAssetLoader(void) asm("func_80017BE4");
+void ResetAssetLoader(void) {
     if (g_CdLoadPhase == 4) {
         CdReadBreak();
     }
@@ -37,8 +37,8 @@ void GameResetAssetLoader(void) {
     g_MainState = 0;
 }
 
-s32 GameEnableCdAudioMode(void) asm("func_80017C2C");
-s32 GameEnableCdAudioMode(void) {
+s32 EnableCdAudioMode(void) asm("func_80017C2C");
+s32 EnableCdAudioMode(void) {
     u8 value;
 
     if (func_8006A534(1, 0) == 0) {
@@ -49,13 +49,13 @@ s32 GameEnableCdAudioMode(void) {
     return CdControl(0xE, &value, 0);
 }
 
-s32 GameLoadAsset(s32 assetIndex, void *dst) {
+s32 LoadAsset(s32 assetIndex, void *dst) {
     s32 result;
     s32 size;
 
     switch (g_CdLoadPhase) {
     case 0:
-        GameDebugPrintf(g_MsgNowLoading, g_AssetPaths[assetIndex], dst);
+        DebugPrintf(g_MsgNowLoading, g_AssetPaths[assetIndex], dst);
         if (func_8006A534(1, 0) != 0) {
             g_CdLoadPhase = 1;
         }
@@ -91,12 +91,12 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
 
     case 5:
         size = (g_AssetCdEntries[assetIndex].size >> 2) << 2;
-        GameDebugPrintf(g_MsgReadBytes, size);
+        DebugPrintf(g_MsgReadBytes, size);
         g_CdLoadPhase = 0;
         return size;
 
     case 6:
-        GameDebugPrintf(g_MsgFileReadError, g_AssetPaths[assetIndex], dst);
+        DebugPrintf(g_MsgFileReadError, g_AssetPaths[assetIndex], dst);
         g_CdLoadPhase = 0;
         break;
     }
@@ -104,14 +104,14 @@ s32 GameLoadAsset(s32 assetIndex, void *dst) {
     return 0;
 }
 
-void GameLoadAssetBlocking(s32 arg0, s32 arg1) asm("func_80017E48");
-void GameLoadAssetBlocking(s32 arg0, s32 arg1) {
+void LoadAssetBlocking(s32 arg0, s32 arg1) asm("func_80017E48");
+void LoadAssetBlocking(s32 arg0, s32 arg1) {
     while (func_80017C78(arg0, arg1) == 0) {
     }
 }
 
-void GameLoadDiscArchiveIndex(void) asm("func_80017E8C");
-void GameLoadDiscArchiveIndex(void) {
+void LoadDiscArchiveIndex(void) asm("func_80017E8C");
+void LoadDiscArchiveIndex(void) {
     struct {
         CdlLOC file;
         u8 pad[20];
@@ -124,9 +124,9 @@ void GameLoadDiscArchiveIndex(void) {
     GameCdLoadEntry *dst;
     GameCdLoadEntry *smallSrc;
 
-    GameDebugPrintf(g_MsgNowLoading, g_PathRageBin, g_LoadBuffer);
+    DebugPrintf(g_MsgNowLoading, g_PathRageBin, g_LoadBuffer);
     if (DsSearchFile(&stack.file, g_PathRageBin) == 0) {
-        GameDebugPrintf(g_MsgFileNotFound, g_PathRageBin);
+        DebugPrintf(g_MsgFileNotFound, g_PathRageBin);
     }
 
     one = 1;
@@ -138,7 +138,7 @@ void GameLoadDiscArchiveIndex(void) {
         } while (status > 0);
     } while (status != 0);
 
-    GameDebugPrintf(g_MsgReadSectors, one);
+    DebugPrintf(g_MsgReadSectors, one);
     base = CdPosToInt_Local(&stack.file);
     src = g_LoadBuffer;
     dst = g_AssetCdEntries;
@@ -149,11 +149,11 @@ void GameLoadDiscArchiveIndex(void) {
         dst++;
     }
 
-    GameDebugPrintf(g_MsgNowSearching, g_PathRageStr);
+    DebugPrintf(g_MsgNowSearching, g_PathRageStr);
     if (DsSearchFile(&stack.file, g_PathRageStr) == 0) {
-        GameDebugPrintf(g_MsgFileNotFound, g_PathRageStr);
+        DebugPrintf(g_MsgFileNotFound, g_PathRageStr);
     } else {
-        GameDebugPrintf(g_MsgSearchOk);
+        DebugPrintf(g_MsgSearchOk);
     }
 
     base = CdPosToInt_Local(&stack.file);
@@ -164,18 +164,18 @@ void GameLoadDiscArchiveIndex(void) {
     }
 }
 
-void GameInitAssetSystem(void) asm("func_80018038");
-void GameInitAssetSystem(void) {
+void InitAssetSystem(void) asm("func_80018038");
+void InitAssetSystem(void) {
     void *ptr;
 
-    GameLoadDiscArchiveIndex();
+    LoadDiscArchiveIndex();
     ptr = &g_LoadBuffer;
-    GameLoadAssetBlocking(0, (s32)ptr);
-    GameUploadImageAsset(ptr);
+    LoadAssetBlocking(0, (s32)ptr);
+    UploadImageAsset(ptr);
 }
 
-s32 GameRequestBootAssets(void) asm("func_80018078");
-s32 GameRequestBootAssets(void) {
+s32 RequestBootAssets(void) asm("func_80018078");
+s32 RequestBootAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;
     }

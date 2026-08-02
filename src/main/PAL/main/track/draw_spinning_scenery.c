@@ -14,11 +14,11 @@ extern u8 g_SpinningSceneryYaw[] asm("D_8007E300");
 extern u8 g_SpinningSceneryPos[] asm("D_8007E2F4");
 
 void func_80017794(void *arg0, void *arg1, void *arg2);
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 
-void GameDrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
+void DrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
 
-void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
+void DrawSpinningScenery(s32 arg0, s32 arg1) {
     s16 sp10[16];
     s16 sp30[16];
     s32 frame = arg0;
@@ -68,9 +68,9 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
             }
             *dst &= 0xFFF;
 
-            GameBuildRotMatrixY(sp10, *(s32 *)(g_SpinningSceneryYaw + offset));
+            BuildRotMatrixY(sp10, *(s32 *)(g_SpinningSceneryYaw + offset));
             MulMatrix2((void *)0x1F800028, sp10);
-            GameBuildRotMatrixZ(work, *(s16 *)dst);
+            BuildRotMatrixZ(work, *(s16 *)dst);
             MulMatrix2(sp10, work);
             func_80017794((void *)0x1F80011C, g_SpinningSceneryPos + offset, work);
 
@@ -79,7 +79,7 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
             if (g_CourseModelCount >= 0x3F) {
                 limit = 0x3E;
             }
-            GameSubmitCourseModel2((void *)0x1F800000, limit);
+            SubmitCourseModel2((void *)0x1F800000, limit);
 
             dst++;
             offset += 0x10;
@@ -88,7 +88,7 @@ void GameDrawSpinningScenery(s32 arg0, s32 arg1) {
 
     frameMask = frame & 0x1FF;
     if ((frameMask == 0) && (update != 0)) {
-        g_SpinningSceneryRate[0] = GameRandom15() & 0x1F;
-        g_SpinningSceneryRate[1] = GameRandom15() & 0x3F;
+        g_SpinningSceneryRate[0] = Random15() & 0x1F;
+        g_SpinningSceneryRate[1] = Random15() & 0x3F;
     }
 }

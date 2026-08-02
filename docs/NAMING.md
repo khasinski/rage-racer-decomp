@@ -1,13 +1,26 @@
 # Naming
 
-## Functions and globals
+## Functions
 
-Game code carries a `Game` prefix (`GameUpdateCamera`, `g_CourseIndex`); library
-code carries its own. That prefix is not decoration -- game code and the PSY-Q
-SDK are linked into one binary and sit next to each other in the same
-directories, so `SsUtKeyOnV`, `CdControl` and `GameDrawRankingPanel` have to be
-tellable apart at a glance. It also matches `docs/names.md`, which records for
-every name whether it was recovered from evidence or invented.
+**Game functions carry no prefix.** `UpdateCamera`, `DrawRankingPanel`,
+`IsCarNearWaypoint`.
+
+They used to be `GameUpdateCamera` and so on. The stated reason was that game
+code and the PSY-Q SDK are linked into one binary and had to be tellable apart
+-- but that argument does not survive contact with the symbol table: **the SDK
+prefixes itself**. `SsUtKeyOnV`, `SpuSetReverb`, `CdControl`, `GpuDrawSync`,
+`GteRotTrans` all announce which library they came from. Anything without one
+of those is game code, and a second marker on 617 functions added nothing.
+
+Measured before removing it: of the 618 `Game*` functions, stripping the prefix
+collided with exactly one non-game symbol.
+
+| kept | why |
+| --- | --- |
+| `GameInitPad` | libapi already exports `InitPad` (`func_800631F0`), and this is the game's wrapper around it. A real clash, so the prefix earns its keep here. |
+
+That is the whole exception list. If a future name collides with an SDK symbol,
+extend the table rather than reintroducing the prefix wholesale.
 
 Library names are evidence and must not be tidied:
 
@@ -24,27 +37,28 @@ the real libspu internal naming closely enough that they may be recovered
 symbols. If they are, they are evidence and normalising them would destroy
 information.
 
+Globals keep `g_` (`g_CourseIndex`), because at a use site there is nothing else
+to distinguish a global from a local.
+
 ## Files
 
 **The directory is the subsystem; the file name says what the unit is about,
-in lower snake_case, with no `Game` prefix.**
+in lower snake_case.**
 
     src/main/PAL/main/track/update_route_scenery.c
     src/main/PAL/main/race/draw_ranking_panel.c
     src/main/PAL/main/save/memcard.c
 
-The prefix is dropped because the path already says it: everything under
-`src/main/PAL/main/` is game code, and everything under `src/main/PAL/lib/` is
-library code. Repeating `Game` on 151 file names added nothing that the
-directory did not already carry. Functions keep it, because they are read far
-from their file.
+Everything under `src/main/PAL/main/` is game code and everything under
+`src/main/PAL/lib/` is library code, so the path carries what a prefix would.
 
 Library and SDK files keep their Sony names as file names (`SpuInit.c`,
-`CD_sync.c`, `_spu_writeByIO.c`) -- there the name *is* the recovered symbol.
+`CD_sync.c`, `_spu_writeByIO.c`) -- there the file name *is* the recovered
+symbol.
 
 Two further rules:
 
-- **A file whose name is still `func_XXXXXXXX.c` means the function is genuinely
+- **A file named `func_XXXXXXXX.c` means the function is genuinely
   unidentified.** If the function inside has a name, the file is stale and
   should be renamed (this was true of `func_80078F4C.c`, which had declared
   `_spu_writeByIO` for some time).
@@ -52,6 +66,12 @@ Two further rules:
   function happens to sit first in it.** `save/memcard.c` holds eight former
   files; naming it `poll_memory_card_status.c` would describe an eighth of it.
 
-Renaming a file means renaming its `configs/PAL/<basename>.yaml` segment and any
+## Mechanics
+
+Renaming a function is free: the `asm("func_XXXXXXXX")` alias fixes the symbol,
+so the C identifier is decoration and the emitted code cannot change. Verify
+anyway.
+
+Renaming a file means renaming its `configs/PAL/main.yaml` segment and any
 `INCLUDE_ASM("asm/.../<old name>", ...)` path, then `make split && make check`.
 `asm/` and `linkers/` are generated and need no edits.

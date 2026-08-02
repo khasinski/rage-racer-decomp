@@ -1,15 +1,15 @@
 #include "common.h"
 
 /* Called here with no argument, so this declaration must stay un-prototyped. */
-s32 GameGetCarUnlockLevel() asm("func_8001785C");
+s32 GetCarUnlockLevel() asm("func_8001785C");
 
-/* GameGetCarAssetIndex(model, owned grade) written out longhand; indexes the price and engine tables. */
-s32 GameGetOwnedCarAssetIndex(s32 arg0) asm("func_80050FA8");
-s32 GameGetOwnedCarAssetIndex(s32 arg0) {
+/* GetCarAssetIndex(model, owned grade) written out longhand; indexes the price and engine tables. */
+s32 GetOwnedCarAssetIndex(s32 arg0) asm("func_80050FA8");
+s32 GetOwnedCarAssetIndex(s32 arg0) {
     s32 state;
     s32 value;
 
-    state = GameGetCarUnlockLevel() + 1;
+    state = GetCarUnlockLevel() + 1;
 
     switch (arg0) {
     case 0:
@@ -132,14 +132,14 @@ extern void *g_CarModelSlot asm("D_8009E87C");
 
 /* Declared locally: this unit passes the slot as a pointer, which gcc 2.6.3
  * will not take against the s32 prototype in game/render.h. */
-void GameSelectModelBank(void *index) asm("func_80017A10");
-void GameSelectCarModelSlot(void *arg0) asm("func_80017BAC");
-void GameUploadCarImage(void *arg0) asm("func_80017B5C");
+void SelectModelBank(void *index) asm("func_80017A10");
+void SelectCarModelSlot(void *arg0) asm("func_80017BAC");
+void UploadCarImage(void *arg0) asm("func_80017B5C");
 
 /* Re-registers the showroom car after g_CarModelSlot changes. */
-void GameInstallCarModelSlot(void) asm("func_80051238");
-void GameInstallCarModelSlot(void) {
-    GameSelectCarModelSlot(g_CarModelSlot);
-    GameSelectModelBank(g_CarModelSlot);
-    GameUploadCarImage(g_CarModelSlot);
+void InstallCarModelSlot(void) asm("func_80051238");
+void InstallCarModelSlot(void) {
+    SelectCarModelSlot(g_CarModelSlot);
+    SelectModelBank(g_CarModelSlot);
+    UploadCarImage(g_CarModelSlot);
 }

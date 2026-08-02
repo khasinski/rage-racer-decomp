@@ -3,17 +3,17 @@
 
 extern s16 g_SeqHandle asm("D_801E6D90");
 void SsSeqPlay(s32 arg0, s32 arg1, s32 arg2) asm("func_800725F0");
-void GamePlaySequence(void) asm("func_8005E88C");
-void GamePlaySequence(void) { SsSeqPlay(g_SeqHandle, 1, 0); }
+void PlaySequence(void) asm("func_8005E88C");
+void PlaySequence(void) { SsSeqPlay(g_SeqHandle, 1, 0); }
 
 void SsSeqStop(s32 arg0) asm("func_800728A0");
-void GameStopSequence(void) asm("func_8005E8B8");
-void GameStopSequence(void) { SsSeqStop(g_SeqHandle); }
+void StopSequence(void) asm("func_8005E8B8");
+void StopSequence(void) { SsSeqStop(g_SeqHandle); }
 
 extern s32 g_ReverbFadeStep asm("D_801E6D8C");
 extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
 
-void GameStartSequenceFadeOut(void) {
+void StartSequenceFadeOut(void) {
     g_SeqVolumeFadeStep = -4;
     g_ReverbFadeStep = -3;
 }
@@ -28,8 +28,8 @@ void func_8005E7A0(s32 arg0);
 void func_8005E8B8(void);
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2) asm("func_80072698");
 
-void GameUpdateSequenceFadeOut(void) asm("func_8005E900");
-void GameUpdateSequenceFadeOut(void) {
+void UpdateSequenceFadeOut(void) asm("func_8005E900");
+void UpdateSequenceFadeOut(void) {
     /* This pin is load-bearing: removing it changes .text. */
     register s32 *fadeStep asm("$4");
     s32 delta;
@@ -78,8 +78,8 @@ void GameUpdateSequenceFadeOut(void) {
     func_8005E7A0(g_SeqVolume);
 }
 
-void GameApplyDuckedSequenceAudio(void) asm("func_8005EA14");
-void GameApplyDuckedSequenceAudio(void) {
+void ApplyDuckedSequenceAudio(void) asm("func_8005EA14");
+void ApplyDuckedSequenceAudio(void) {
     /* These pins are load-bearing: removing any one changes .text. */
     s32 value;
     register s32 scaled asm("$2");

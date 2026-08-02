@@ -23,8 +23,8 @@ void func_8005C104(s32 index, s32 phase, s32 volume);
  * (func_8002F4E4), and detects the jump/launch trigger. The drive sub-block is
  * the GameCarDrive view of car->field_BC.
  */
-void GameUpdateCarDriving(GameCarRuntime *car) asm("func_8002F690");
-void GameUpdateCarDriving(GameCarRuntime *car) {
+void UpdateCarDriving(GameCarRuntime *car) asm("func_8002F690");
+void UpdateCarDriving(GameCarRuntime *car) {
     GameCarDrive *route = (GameCarDrive *)&car->field_BC;
     s32 sinA;
     s32 cosA;
@@ -36,7 +36,7 @@ void GameUpdateCarDriving(GameCarRuntime *car) {
     s32 t;
     s32 idx;
 
-    r = GameGetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
+    r = GetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
     base = car->field_24;
     car->field_24 = r / 5 + base;
     func_8002F4E4(car, base);

@@ -4,8 +4,8 @@
 void func_80066604(void *packet, void *rect);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
-void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) asm("func_800468FC");
-void GameSetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
+void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) asm("func_800468FC");
+void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     void *otReg;
     u8 **scratch;
     u8 *packet;
@@ -71,8 +71,8 @@ void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) asm("func_80046A2C");
-void GameDrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) {
+void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) asm("func_80046A2C");
+void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) {
     SPRT *prim;
     s32 shadeReg;
     s32 semiReg;
@@ -153,8 +153,8 @@ void func_80064EE0(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("func_80046BA0");
-void GameDrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
+void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("func_80046BA0");
+void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
@@ -208,8 +208,8 @@ void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("func_80046CBC");
-void GameDrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
+void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("func_80046CBC");
+void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
     POLY_F4 *prim;
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 semiReg asm("$17");
@@ -338,8 +338,8 @@ void func_80064FF8(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void GameDrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
-void GameDrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
+void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
+void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
     s32 x0Reg;
     s32 y0Reg;
     s32 x1Reg;
@@ -390,8 +390,8 @@ void func_8006500C(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void GameDrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
-void GameDrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
+void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
+void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
     s32 x0Reg;
     s32 y0Reg;
     s32 x1Reg;
@@ -443,8 +443,8 @@ void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void GameDrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) asm("func_80047214");
-void GameDrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
+void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) asm("func_80047214");
+void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
     LINE_F3 *prim;
     u8 *oldPrim;
 
@@ -477,8 +477,8 @@ void func_80065020(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) asm("func_80047330");
-void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {
+void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) asm("func_80047330");
+void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {
     /* These pins are load-bearing: removing any one changes .text. */
     s16 x0Reg;
     s16 y0Reg;
@@ -537,8 +537,8 @@ void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0
 }
 
 void func_8004711C(void *buf, s16 x1, s16 y1, s16 x2, s16 y2, s32 r, s32 g, s32 b, s32 code);
-void GameDrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code) asm("func_80047460");
-void GameDrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code)
+void DrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code) asm("func_80047460");
+void DrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code)
 {
   s32 x_R19 = xa;
   s32 y_R18 = ya;

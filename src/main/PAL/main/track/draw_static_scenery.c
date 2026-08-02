@@ -25,9 +25,9 @@ static inline void ClearScratchRenderMode3DF68(void) {
     *(s32 *)0x1F800084 = 0;
 }
 
-void GameDrawStaticScenery(s32 arg0) asm("func_8003DF68");
+void DrawStaticScenery(s32 arg0) asm("func_8003DF68");
 
-void GameDrawStaticScenery(s32 arg0) {
+void DrawStaticScenery(s32 arg0) {
     Matrix mtx;
     Vec4i state;
     s32 *statePtr;
@@ -67,7 +67,7 @@ void GameDrawStaticScenery(s32 arg0) {
     visible &= *wordPtr;
 
     if (visible != 0) {
-        GameBuildRotMatrixY(&mtx, g_StaticSceneryYaw);
+        BuildRotMatrixY(&mtx, g_StaticSceneryYaw);
         MulMatrix2((Matrix *)0x1F800028, &mtx);
 
         if (g_IsEnvironmentMode4 != 0) {
@@ -78,7 +78,7 @@ void GameDrawStaticScenery(s32 arg0) {
             if (frameValue >= 0x3B) {
                 drawArg = 0x3A;
             }
-            GameSubmitCourseModel((void *)0x1F800000, drawArg);
+            SubmitCourseModel((void *)0x1F800000, drawArg);
         } else {
             func_80017794((void *)0x1F80011C, statePtr, &mtx);
             frameValue = g_CourseModelCount;
@@ -87,16 +87,16 @@ void GameDrawStaticScenery(s32 arg0) {
             if (frameValue >= 0x3A) {
                 drawArg = 0x39;
             }
-            GameSubmitCourseModel2((void *)0x1F800000, drawArg);
+            SubmitCourseModel2((void *)0x1F800000, drawArg);
         }
     }
 }
 
 extern s32 g_HighClassSceneryYaw asm("D_8007E35C");
 
-void GameDrawHighClassScenery(void) asm("func_8003E0D0");
+void DrawHighClassScenery(void) asm("func_8003E0D0");
 
-void GameDrawHighClassScenery(void) {
+void DrawHighClassScenery(void) {
     Matrix mtx;
     s32 pad[4];
     s32 *state;
@@ -104,7 +104,7 @@ void GameDrawHighClassScenery(void) {
 
     (void)pad;
     state = &g_HighClassSceneryYaw;
-    GameBuildRotMatrixY(&mtx, state[0]);
+    BuildRotMatrixY(&mtx, state[0]);
     MulMatrix2((Matrix *)0x1F800028, &mtx);
 
     if (g_IsEnvironmentMode4 != 0) {
@@ -114,7 +114,7 @@ void GameDrawHighClassScenery(void) {
         if (g_CourseModelCount >= 0x40) {
             drawArg = 0x3F;
         }
-        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)0x1F800000, drawArg);
     } else {
         func_80017794((void *)0x1F80011C, state - 3, &mtx);
         *(s32 *)0x1F800084 = 0;
@@ -122,23 +122,23 @@ void GameDrawHighClassScenery(void) {
         if (g_CourseModelCount >= 0x40) {
             drawArg = 0x3F;
         }
-        GameSubmitCourseModel2((void *)0x1F800000, drawArg);
+        SubmitCourseModel2((void *)0x1F800000, drawArg);
     }
 }
 
-void GameDrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
-void GameDrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
-void GameUpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
-void GameDrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
+void DrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
+void DrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
+void UpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
+void DrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
 
-void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
+void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
 
-void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
+void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
     s32 mode = arg0;
     s32 value = arg1;
     s32 flag = arg2;
 
-    GameDrawAnimatedScenery(value, 0);
+    DrawAnimatedScenery(value, 0);
 
     if (g_GrandPrixClass == 5) {
         flag = 0;
@@ -146,45 +146,45 @@ void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
 
     switch (mode) {
     case 0:
-        GameDrawSpinningScenery(value, flag);
+        DrawSpinningScenery(value, flag);
         if (g_GrandPrixClass >= 4) {
-            GameDrawHighClassScenery();
+            DrawHighClassScenery();
         }
-        GameDrawStaticScenery(0);
+        DrawStaticScenery(0);
         break;
     case 1:
         if (g_GrandPrixClass >= 2) {
-            GameDrawSpinningScenery(value, flag);
+            DrawSpinningScenery(value, flag);
         }
         if (flag != 0) {
-            GameUpdateShuttleScenery(0);
+            UpdateShuttleScenery(0);
         }
-        GameDrawShuttleScenery(0);
-        GameDrawStaticScenery(0);
+        DrawShuttleScenery(0);
+        DrawStaticScenery(0);
         break;
     case 2:
         if (flag != 0) {
-            GameUpdateShuttleScenery(0);
-            GameUpdateShuttleScenery(1);
+            UpdateShuttleScenery(0);
+            UpdateShuttleScenery(1);
         }
-        GameDrawShuttleScenery(0);
-        GameDrawShuttleScenery(1);
-        GameDrawStaticScenery(0);
+        DrawShuttleScenery(0);
+        DrawShuttleScenery(1);
+        DrawStaticScenery(0);
         break;
     case 3:
-        GameDrawAnimatedScenery(value, 1);
-        GameDrawStaticScenery(1);
+        DrawAnimatedScenery(value, 1);
+        DrawStaticScenery(1);
         break;
     default:
         break;
     }
 }
 
-void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
+void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
 
-void GameDrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
+void DrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
 
-void GameDrawCourseScenery2(s32 arg0, s32 arg1) {
+void DrawCourseScenery2(s32 arg0, s32 arg1) {
     s32 value = arg0;
     s32 flag = arg1;
     s32 mode;
@@ -193,39 +193,39 @@ void GameDrawCourseScenery2(s32 arg0, s32 arg1) {
         flag = 0;
     }
 
-    GameDrawAnimatedScenery2(value, 0, g_SceneId == 0x11, flag);
+    DrawAnimatedScenery2(value, 0, g_SceneId == 0x11, flag);
 
     mode = g_CourseIndex & 3;
     switch (mode) {
     case 0:
-        GameDrawSpinningScenery(value, flag);
+        DrawSpinningScenery(value, flag);
         if (g_GrandPrixClass >= 4) {
-            GameDrawHighClassScenery();
+            DrawHighClassScenery();
         }
-        GameDrawStaticScenery(0);
+        DrawStaticScenery(0);
         break;
     case 1:
         if (g_GrandPrixClass >= 2) {
-            GameDrawSpinningScenery(value, flag);
+            DrawSpinningScenery(value, flag);
         }
         if (flag != 0) {
-            GameUpdateShuttleScenery(0);
+            UpdateShuttleScenery(0);
         }
-        GameDrawShuttleScenery(0);
-        GameDrawStaticScenery(0);
+        DrawShuttleScenery(0);
+        DrawStaticScenery(0);
         break;
     case 2:
         if (flag != 0) {
-            GameUpdateShuttleScenery(0);
-            GameUpdateShuttleScenery(1);
+            UpdateShuttleScenery(0);
+            UpdateShuttleScenery(1);
         }
-        GameDrawShuttleScenery(0);
-        GameDrawShuttleScenery(1);
-        GameDrawStaticScenery(0);
+        DrawShuttleScenery(0);
+        DrawShuttleScenery(1);
+        DrawStaticScenery(0);
         break;
     case 3:
-        GameDrawAnimatedScenery2(value, 1, g_SceneId == 0x11, flag);
-        GameDrawStaticScenery(1);
+        DrawAnimatedScenery2(value, 1, g_SceneId == 0x11, flag);
+        DrawStaticScenery(1);
         break;
     default:
         break;
@@ -239,10 +239,10 @@ extern u8 g_FlybyScenery[] asm("D_801E42FC");
 extern s16 g_FlybySceneryLap asm("D_801E4308");
 extern u8 *g_FlybySceneryKeyframe asm("D_801E43F4");
 
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 
-void GameSeedFlybyScenery(void) asm("func_8003E464");
-void GameSeedFlybyScenery(void) {
+void SeedFlybyScenery(void) asm("func_8003E464");
+void SeedFlybyScenery(void) {
     u8 *base;
     /* These pins are load-bearing: removing any one changes .text. */
     register u8 *out asm("s1");
@@ -261,7 +261,7 @@ void GameSeedFlybyScenery(void) {
     register s32 word3 asm("a3");
 
     base = g_FlybySceneryData;
-    index = GameRandom15();
+    index = Random15();
     count = g_LapCount;
     value = index % count;
     out = g_FlybyScenery;
@@ -306,7 +306,7 @@ void GameSeedFlybyScenery(void) {
  * Ticks the course's one scripted airborne prop and its engine sound; the model
  * is submitted elsewhere. Armed by a scene-counter match, then runs 451 frames,
  * integrating position from a keyframed heading and feeding a distance-attenuated
- * volume to GameSetPitchedSoundCue. See docs/names.md 1.
+ * volume to SetPitchedSoundCue. See docs/names.md 1.
  */
 extern s16 g_PlayerLap asm("D_8009E83C");
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
@@ -322,13 +322,13 @@ extern s32 g_PlayerCarX asm("D_8009E6D4");
 extern s32 g_PlayerCarY asm("D_8009E6D8");
 extern s32 g_PlayerCarZ asm("D_8009E6DC");
 
-void GameSetPitchedSoundCue(s32 cue, s32 pitch, s32 volume) asm("func_8005C914");
+void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume) asm("func_8005C914");
 
 #define KFREC(off) (*(s16 *)(kf + *(s16 *)(state + 0xE) * 12 + (off)))
 
-void GameUpdateFlybyScenery(void) asm("func_8003E590");
+void UpdateFlybyScenery(void) asm("func_8003E590");
 
-void GameUpdateFlybyScenery(void) {
+void UpdateFlybyScenery(void) {
     Matrix mtxY;
     Matrix mtxX;
     s16 dir[4];
@@ -400,11 +400,11 @@ void GameUpdateFlybyScenery(void) {
         dir[0] = 0;
         dir[1] = 0;
         dir[2] = -KFREC(8) * 4;
-        GameBuildRotMatrixY(&mtxY, 0x800 - *(s32 *)(state + 0x24));
+        BuildRotMatrixY(&mtxY, 0x800 - *(s32 *)(state + 0x24));
         mx = &mtxX;
-        GameBuildRotMatrixX(mx, *(s32 *)(state + 0x20));
+        BuildRotMatrixX(mx, *(s32 *)(state + 0x20));
         MulMatrix2(&mtxY, mx);
-        GameBuildRotMatrixZ(&mtxY, *(s32 *)(state + 0x28));
+        BuildRotMatrixZ(&mtxY, *(s32 *)(state + 0x28));
         MulMatrix(mx, &mtxY);
         ApplyMatrix(mx, dir, step);
         *(s32 *)(state + 0x10) = step[0] / 4 + *(s32 *)(state + 0x10);
@@ -465,5 +465,5 @@ void GameUpdateFlybyScenery(void) {
         cue = 2;
         break;
     }
-    GameSetPitchedSoundCue(cue, pitch, vol);
+    SetPitchedSoundCue(cue, pitch, vol);
 }

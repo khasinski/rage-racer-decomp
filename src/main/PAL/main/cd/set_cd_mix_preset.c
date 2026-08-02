@@ -6,10 +6,10 @@ extern s32 g_CdMixPreset asm("D_8007F5FC");
 extern u8 g_CdVolume asm("D_8009B194");
 
 
-void GameSetCdMixPreset(s32 arg0) asm("func_8004318C");
-void GameSetCdMixPreset(s32 arg0) {
+void SetCdMixPreset(s32 arg0) asm("func_8004318C");
+void SetCdMixPreset(s32 arg0) {
     g_CdMixPreset = arg0;
-    GameSetCdVolume(g_CdVolume);
+    SetCdVolume(g_CdVolume);
 }
 
 extern CdlLOC g_CdTrackLocs[] asm("D_8009AFD4");
@@ -18,8 +18,8 @@ extern void *g_CdAudioFileNames[] asm("D_8007F568");
 extern s32 g_CdTocEntryCount asm("D_801E6C80");
 extern u8 g_CdSearchFile[] asm("D_8009B198");
 
-void GameBuildCdTrackTable(void) asm("func_800431BC");
-void GameBuildCdTrackTable(void) {
+void BuildCdTrackTable(void) asm("func_800431BC");
+void BuildCdTrackTable(void) {
     CdlLOC *toc;
     s32 i;
     CdlLOC *tocDst;

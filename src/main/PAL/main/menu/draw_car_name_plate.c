@@ -5,11 +5,11 @@ extern s32 g_CarNamePlateFade asm("D_8007FB38");
 void func_80046A2C(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r,
                    s32 g, s32 b, s32 clut, s32 shadeTex, s32 semiTrans,
                    s32 flags);
-s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
+s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
 
 /* The bottom-right plate: grade digit, manufacturer sprite and model-name sprite. */
-void GameDrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
-void GameDrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
+void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
+void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
     void *ot;
     u32 idx;
     u32 shade;
@@ -30,7 +30,7 @@ void GameDrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
     func_80046A2C(ot, 0x100, 0x168, 0x20, 0x10, 0x7C, 0x7C, shade & 0xFF,
                   shade & 0xFF, shade & 0xFF, 0x244, 0, 1, 0x3B);
 
-    idx = (GameGetCarUnlockLevel(arg1) + arg2) & 0xFFFF;
+    idx = (GetCarUnlockLevel(arg1) + arg2) & 0xFFFF;
     if (idx >= 5) {
         func_80046A2C(ot, 0x11F, 0x168, 8, 0x10, 0x38, 0x28, shade & 0xFF,
                       shade & 0xFF, shade & 0xFF, 0x244, 0, 1, 0x3B);

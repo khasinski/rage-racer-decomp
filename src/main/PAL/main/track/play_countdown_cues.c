@@ -4,21 +4,21 @@
 
 extern s16 g_RaceCueDelay asm("D_801E6C90");
 
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void GamePlayCountdownCues(s32 arg0) asm("func_800410BC");
-void GamePlayCountdownCues(s32 arg0) {
+void PlayCountdownCues(s32 arg0) asm("func_800410BC");
+void PlayCountdownCues(s32 arg0) {
     if (arg0 < 0x110) {
         if (arg0 == 0x79) {
-            GamePlaySoundCue(0x1E);
+            PlaySoundCue(0x1E);
         } else if (arg0 == 0x97) {
-            GamePlaySoundCue(0x1F);
+            PlaySoundCue(0x1F);
         } else if (arg0 == 0xB5) {
-            GamePlaySoundCue(0x20);
+            PlaySoundCue(0x20);
         } else if (arg0 == 0xD3) {
-            GamePlaySoundCue(0x21);
+            PlaySoundCue(0x21);
         } else if ((arg0 == 0x10F) && (g_GrandPrixMode == 1)) {
-            GamePlaySoundCue(0x22);
+            PlaySoundCue(0x22);
             g_RaceCueDelay = 0x5A;
         }
     }
@@ -26,8 +26,8 @@ void GamePlayCountdownCues(s32 arg0) {
 
 extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
-void GameUpdateRivalCueGate(void) asm("func_80041170");
-void GameUpdateRivalCueGate(void) {
+void UpdateRivalCueGate(void) asm("func_80041170");
+void UpdateRivalCueGate(void) {
     s32 value;
 
     value = g_PlayerTrackProgress;
@@ -45,8 +45,8 @@ void GameUpdateRivalCueGate(void) {
 extern u32 *g_CourseObjects asm("D_801E4B2C");
 extern u32 g_CourseObjectCount asm("D_801E4BBC");
 
-void GameSetCourseObjects(u32 *arg0) asm("func_8004121C");
-void GameSetCourseObjects(u32 *arg0) {
+void SetCourseObjects(u32 *arg0) asm("func_8004121C");
+void SetCourseObjects(u32 *arg0) {
     u32 value;
 
     value = *arg0;

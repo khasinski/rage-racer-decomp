@@ -6,7 +6,7 @@
 #include "game/race.h"
 
 /* The looping prop's live orientation: three 12-bit angles copied wholesale out
- * of the current rotation keyframe by GameInitPathScenery, which sees the same
+ * of the current rotation keyframe by InitPathScenery, which sees the same
  * eight bytes as one Blk8. */
 extern s16 g_PathSceneryRot[3] asm("D_801E4DC8");
 extern s16 g_PathSceneryX asm("D_801E4DB8");
@@ -15,8 +15,8 @@ extern s32 g_ScratchRenderMode asm("D_1F800084");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
-void GameDrawPathScenery(void) asm("func_80040730");
-void GameDrawPathScenery(void) {
+void DrawPathScenery(void) asm("func_80040730");
+void DrawPathScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
     volatile s32 pad[4];
@@ -33,14 +33,14 @@ void GameDrawPathScenery(void) {
     anglePtr = &g_PathSceneryRot[1];
     mtx1Ptr = &mtx1;
 
-    GameBuildRotMatrixY(mtx0Ptr, 0x800 - anglePtr[0]);
-    GameBuildRotMatrixX(mtx1Ptr, g_PathSceneryRot[0]);
+    BuildRotMatrixY(mtx0Ptr, 0x800 - anglePtr[0]);
+    BuildRotMatrixX(mtx1Ptr, g_PathSceneryRot[0]);
     MulMatrix2(&mtx0, mtx1Ptr);
     MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
-    GameBuildRotMatrixZ(&mtx0, g_PathSceneryRot[2]);
+    BuildRotMatrixZ(&mtx0, g_PathSceneryRot[2]);
     MulMatrix2(mtx1Ptr, &mtx0);
 
-    GameSelectModelBank(1);
+    SelectModelBank(1);
     scratchVec = (void *)0x1F80011C;
     __asm__("" : "=r"(scratchVec) : "0"(scratchVec));
     anglePtr = (s16 *)((u8 *)anglePtr - 0x12);
@@ -51,7 +51,7 @@ void GameDrawPathScenery(void) {
     if (frameValue >= 0x24) {
         drawId = 0x23;
     }
-    GameSubmitModel((void *)0x1F800000, drawId);
+    SubmitModel((void *)0x1F800000, drawId);
 
     {
         s32 base;
@@ -65,7 +65,7 @@ void GameDrawPathScenery(void) {
         acc += tmp;
         acc <<= 1;
         acc += base;
-        GameBuildRotMatrixY(mtx1Ptr, acc & 0xFFF);
+        BuildRotMatrixY(mtx1Ptr, acc & 0xFFF);
     }
     MulMatrix2(&mtx0, mtx1Ptr);
     func_80017794((void *)0x1F80011C, anglePtr, mtx1Ptr);
@@ -75,7 +75,7 @@ void GameDrawPathScenery(void) {
     if (frameValue >= 0x25) {
         drawId = 0x24;
     }
-    GameSubmitModel((void *)0x1F800000, drawId);
+    SubmitModel((void *)0x1F800000, drawId);
 }
 
 /* g_PlayerCar + 0x3C. Named for its identity only: this caller branches on
@@ -199,8 +199,8 @@ typedef struct TrackSeg {
     s32 f14;   /* 0x14 */
 } TrackSeg;    /* size 0x18 */
 
-void GameUpdatePointAmbience(s32 arg) asm("func_80040ADC");
-void GameUpdatePointAmbience(s32 arg) {
+void UpdatePointAmbience(s32 arg) asm("func_80040ADC");
+void UpdatePointAmbience(s32 arg) {
     s32 base;
     s32 startp;
     TrackSeg *seg;
@@ -294,7 +294,7 @@ matched:
         if ((s16)s1 < 0) {
             s1 = 0;
         }
-        angle = GameAtan2(s3, s4);
+        angle = Atan2(s3, s4);
         v1 = *(s32 *)0x1F80001C;
         v1 -= 0xC00;
         v1 += angle;

@@ -12,11 +12,11 @@ extern void (*g_BgmSelectSteps[])(void) asm("D_8007D6B8");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_AttractDemoStep asm("D_801E682C");
-void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
-void GameInstallCourseAssets(void) asm("func_80019730");
-s32 GameRequestTrackDataAssets(void) asm("func_80019844");
+void UploadImageAsset(void *arg0) asm("func_8001A3C0");
+void InstallCourseAssets(void) asm("func_80019730");
+s32 RequestTrackDataAssets(void) asm("func_80019844");
 extern s16 g_AttractTitleDelays[] asm("D_8007D6CC");
-s32 GameGetAttractTitleFade(s32 arg0) asm("func_8002664C");
+s32 GetAttractTitleFade(s32 arg0) asm("func_8002664C");
 
 void func_80046A2C(
     u8 *arg0,
@@ -37,23 +37,23 @@ void func_80046A2C(
 extern u32 g_BgmShuffleIndex asm("D_8009E6CC");
 extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
 void func_80025940(void);
-void GameAdvanceBgmShuffleBag(s32 arg0) asm("func_80025E54");
-void GameDrawAttractTitle(void) asm("func_800266D0");
+void AdvanceBgmShuffleBag(s32 arg0) asm("func_80025E54");
+void DrawAttractTitle(void) asm("func_800266D0");
 extern u32 g_StreamReturnScene asm("D_8019C760");
 extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
-void GameDrawFullscreenFadeTile(s32 arg0, u32 arg1) asm("func_80033AA0");
-void GameReturnToTitleScene(void) asm("func_800268EC");
-s32 GameCycleAttractCameraCar(u32 arg0, s32 arg1) asm("func_8001A1F0");
+void DrawFullscreenFadeTile(s32 arg0, u32 arg1) asm("func_80033AA0");
+void ReturnToTitleScene(void) asm("func_800268EC");
+s32 CycleAttractCameraCar(u32 arg0, s32 arg1) asm("func_8001A1F0");
 void func_8003BB50(void);
-void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
-void GameUpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
+void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void UpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
-void GameDrawTerrainCellsWide(void) asm("func_80041888");
-void GameDrawCourseScenery2(u32 arg0, u32 arg1) asm("func_8003E2E8");
+void DrawTerrainCellsWide(void) asm("func_80041888");
+void DrawCourseScenery2(u32 arg0, u32 arg1) asm("func_8003E2E8");
 
-void GameUpdateBgmSelectScene(void) asm("func_80026570");
-void GameUpdateBgmSelectScene(void) {
+void UpdateBgmSelectScene(void) asm("func_80026570");
+void UpdateBgmSelectScene(void) {
     void (*func)(void);
 
     func = g_BgmSelectSteps[g_BgmSelectStep];
@@ -61,18 +61,18 @@ void GameUpdateBgmSelectScene(void) {
     func();
 }
 
-void GameEnterAttractDemo(void) asm("func_800265BC");
-void GameEnterAttractDemo(void) {
+void EnterAttractDemo(void) asm("func_800265BC");
+void EnterAttractDemo(void) {
     s32 initialValue;
 
     SetDispMask(0);
-    GameSetupDisplay240(0, 0, 0);
+    SetupDisplay240(0, 0, 0);
 
     initialValue = 0x80;
     g_FrameSyncThreshold = initialValue;
-    GameUploadImageAsset((void *)g_ImageBlockBuffer);
-    GameInstallCourseAssets();
-    GameRequestTrackDataAssets();
+    UploadImageAsset((void *)g_ImageBlockBuffer);
+    InstallCourseAssets();
+    RequestTrackDataAssets();
 
     g_AttractDemoStep = 0;
     g_FadeLevel = initialValue;
@@ -81,8 +81,8 @@ void GameEnterAttractDemo(void) {
     g_CameraCarIndex = 0;
 }
 
-s32 GameGetAttractTitleFade(s32 arg0) asm("func_8002664C");
-s32 GameGetAttractTitleFade(s32 arg0) {
+s32 GetAttractTitleFade(s32 arg0) asm("func_8002664C");
+s32 GetAttractTitleFade(s32 arg0) {
     s32 value;
 
     if (g_AttractDemoStep == 0) {
@@ -97,25 +97,25 @@ s32 GameGetAttractTitleFade(s32 arg0) {
     return value < 0 ? 0 : (value < 0x80 ? value : 0x7F);
 }
 
-void GameDrawAttractTitle(void) asm("func_800266D0");
-void GameDrawAttractTitle(void) {
+void DrawAttractTitle(void) asm("func_800266D0");
+void DrawAttractTitle(void) {
     u8 *ptr;
     s32 value;
     u32 one;
     u32 arg13;
 
     ptr = g_DrawBuffer + 0xCC;
-    value = GameGetAttractTitleFade(0);
+    value = GetAttractTitleFade(0);
     one = 1;
     arg13 = 0x29;
     func_80046A2C(ptr, 0x74, 0x34, 0x58, 0x38, 0xA8, 0xA8, value, value, value, 0x1F, 0, one, arg13);
     func_80046A2C(ptr, 0x44, 0x70, 0xB8, 0x14, 0x48, 0xE8, value, value, value, 0x80, 0, one, arg13);
-    value = GameGetAttractTitleFade(1);
+    value = GetAttractTitleFade(1);
     func_80046A2C(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, arg13);
 }
 
-void GameUpdateAttractDemoStart(void) asm("func_80026824");
-void GameUpdateAttractDemoStart(void) {
+void UpdateAttractDemoStart(void) asm("func_80026824");
+void UpdateAttractDemoStart(void) {
     s32 mode;
     u32 timer;
 
@@ -133,29 +133,29 @@ void GameUpdateAttractDemoStart(void) {
 
         g_AttractDemoStep = 1;
         mode = g_BgmShuffleOrder[g_BgmShuffleIndex];
-        GameAdvanceBgmShuffleBag(mode);
+        AdvanceBgmShuffleBag(mode);
 
         mode += 3;
         if (mode == 0xC) {
             mode = 0x11;
         }
 
-        GameRequestCdTrack(mode);
-        GameStartCdAudio();
+        RequestCdTrack(mode);
+        StartCdAudio();
     }
 
-    GameDrawAttractTitle();
+    DrawAttractTitle();
 }
 
-void GameReturnToTitleScene(void) asm("func_800268EC");
-void GameReturnToTitleScene(void) {
+void ReturnToTitleScene(void) asm("func_800268EC");
+void ReturnToTitleScene(void) {
     g_SceneId = 3;
     g_StreamReturnScene = 0;
-    GameResetCdAudioState();
+    ResetCdAudioState();
 }
 
-void GameUpdateAttractDemoRace(void) asm("func_80026920");
-void GameUpdateAttractDemoRace(void) {
+void UpdateAttractDemoRace(void) asm("func_80026920");
+void UpdateAttractDemoRace(void) {
     u32 value;
     u32 timer;
     s32 index;
@@ -163,41 +163,41 @@ void GameUpdateAttractDemoRace(void) {
 
     g_SceneTimer++;
     if ((u32)g_SceneTimer < 0x3D) {
-        GameDrawAttractTitle();
+        DrawAttractTitle();
         value = g_SceneTimer - 6;
-        GameDrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
+        DrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
     }
 
     timer = g_SceneTimer;
     if (timer == 0x6CC) {
-        GameStartCdVolumeFade(0x38);
+        StartCdVolumeFade(0x38);
         timer = g_SceneTimer;
     }
     if (timer >= 0x6CD) {
         u32 adjusted;
 
         adjusted = timer - 0x6CC;
-        GameDrawFullscreenFadeTile((adjusted * 4) + adjusted, 0x49);
+        DrawFullscreenFadeTile((adjusted * 4) + adjusted, 0x49);
     }
 
     if (g_SceneTimer == 0x708) {
-        GameReturnToTitleScene();
+        ReturnToTitleScene();
     }
 
     g_AnimTimer++;
-    g_CameraCarIndex = GameCycleAttractCameraCar(0xFF, g_CameraCarIndex);
+    g_CameraCarIndex = CycleAttractCameraCar(0xFF, g_CameraCarIndex);
     func_8003BB50();
 
     index = g_CameraCarIndex;
     offset = (((((index * 3) * 4) + index) * 8) - index) * 4;
-    GameRequestTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
+    RequestTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
 
-    GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
-    GameDrawCars();
-    GameUpdateEnvironment();
+    UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
+    DrawCars();
+    UpdateEnvironment();
     func_800418D4();
     *(u32 *)0x1F800084 = (u32)g_IsEnvironmentMode4;
-    GameDrawTerrainCellsWide();
-    GameDrawCourseObjects();
-    GameDrawCourseScenery2(g_AnimTimer, 1);
+    DrawTerrainCellsWide();
+    DrawCourseObjects();
+    DrawCourseScenery2(g_AnimTimer, 1);
 }

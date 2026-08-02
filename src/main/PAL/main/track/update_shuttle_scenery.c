@@ -4,16 +4,16 @@
 #include "game/race.h"
 #include "game/render.h"
 
-/* Per-path authored data; see GameDrawRouteScenery.c for the layout.
+/* Per-path authored data; see DrawRouteScenery.c for the layout.
  * g_ShuttlePathTravelMax is the leg length in steps: the divisor of the
  * endpoint-to-endpoint lerp and the value travelStep counts up to. */
 extern u8 g_ShuttlePathPoints[] asm("D_8007E360");
 extern s16 g_ShuttlePathTravelMax[] asm("D_8007E3D8");
 extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
 
-void GameUpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
+void UpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
 
-void GameUpdateShuttleScenery(s32 arg0) {
+void UpdateShuttleScenery(s32 arg0) {
     GameShuttleScenery *entry;
     s32 phase;
     s32 side;
@@ -83,9 +83,9 @@ extern s32 g_CourseModelCount asm("D_801E40E4");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
-void GameDrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
+void DrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
 
-void GameDrawShuttleScenery(s32 arg0) {
+void DrawShuttleScenery(s32 arg0) {
     s32 drawArg;
     Matrix mtx0;
     Matrix mtx1;
@@ -128,9 +128,9 @@ void GameDrawShuttleScenery(s32 arg0) {
 
     if ((visible != 0) || (g_CourseIndex == 2)) {
         drawArg = 0x3F;
-        GameBuildRotMatrixY(&mtx0, state->angleY);
+        BuildRotMatrixY(&mtx0, state->angleY);
         mtx1Ptr = &mtx1;
-        GameBuildRotMatrixZ(mtx1Ptr, state->angleZ);
+        BuildRotMatrixZ(mtx1Ptr, state->angleZ);
         MulMatrix2(&mtx0, mtx1Ptr);
         MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
         if ((g_CourseIndex & 3) >= 2) {
@@ -143,6 +143,6 @@ void GameDrawShuttleScenery(s32 arg0) {
         if (drawArg < frameValue) {
             drawValue = drawArg;
         }
-        GameSubmitCourseModel((void *)0x1F800000, drawValue);
+        SubmitCourseModel((void *)0x1F800000, drawValue);
     }
 }

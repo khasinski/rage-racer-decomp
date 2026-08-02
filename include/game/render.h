@@ -192,54 +192,54 @@ typedef struct GameRenderPairPoint {
  * translation alone; sin/cos come from rsin/rcos (func_80068568/func_80068634)
  * and 1.0 is 0x1000.
  */
-void GameBuildRotMatrixZ(void *mtx, s32 angle) asm("func_8001A4C0");
-void GameBuildRotMatrixY(void *mtx, s32 angle) asm("func_8001A530");
-void GameBuildRotMatrixX(void *mtx, s32 angle) asm("func_8001A5A0");
+void BuildRotMatrixZ(void *mtx, s32 angle) asm("func_8001A4C0");
+void BuildRotMatrixY(void *mtx, s32 angle) asm("func_8001A530");
+void BuildRotMatrixX(void *mtx, s32 angle) asm("func_8001A5A0");
 /*
  * Composes Y*X*Z from the scratchpad camera angles (0x1F800018 / 0x1C / 0x20)
  * into the scratchpad matrix at 0x1F800028 and installs it with SetRotMatrix;
  * D_8019CB18 gets the same matrix pre-multiplied by a 180-degree Y turn.
  */
-void GameSetCameraRotMatrix(void) asm("func_8001A610");
+void SetCameraRotMatrix(void) asm("func_8001A610");
 /*
  * atan2 over the arctangent table D_8007B664, in 12-bit angle units
  * (0x400 = 90 degrees). Argument order is (x, y), the reverse of C's atan2:
- * GameAtan2(0, +y) is 0x400.
+ * Atan2(0, +y) is 0x400.
  */
-s32 GameAtan2(s32 x, s32 y) asm("func_8001A6AC");
+s32 Atan2(s32 x, s32 y) asm("func_8001A6AC");
 /* Shortest way round the 0x1000 circle between two 12-bit angles: the signed
  * delta from `from` to `to` in (-0x800, 0x800], and its magnitude. */
-s32 GameGetAngleDelta(s32 from, s32 to) asm("func_8002A7C4");
+s32 GetAngleDelta(s32 from, s32 to) asm("func_8002A7C4");
 /* (s32 a, s32 b); left unprototyped because func_8002A810 calls it with two
  * extra arguments that the original left live in a2/a3. */
-s32 GameGetAngleDistance() asm("func_8002A788");
+s32 GetAngleDistance() asm("func_8002A788");
 
 /*
  * Sets up both environments for the frame and clears to (r, g, b):
  * 240 = two 320x240 buffers stacked at y=0 / y=0xF0, 480 = one 320x480 pair.
  * Both also set the GTE projection (SetGeomOffset / SetGeomScreen 0x140).
  */
-void GameSetupDisplay240(s32 r, s32 g, s32 b) asm("func_8001BE9C");
-void GameSetupDisplay480(s32 r, s32 g, s32 b) asm("func_8001C088");
+void SetupDisplay240(s32 r, s32 g, s32 b) asm("func_8001BE9C");
+void SetupDisplay480(s32 r, s32 g, s32 b) asm("func_8001C088");
 
 /*
- * Model banks. GameSelectModelBank points the scratchpad bank cursor
+ * Model banks. SelectModelBank points the scratchpad bank cursor
  * (0x1F800050/54/58) and g_ModelBankCount at entry `index` of the registered
- * bank table D_801E41A8; GameSubmitModel then walks model `index` of that bank
+ * bank table D_801E41A8; SubmitModel then walks model `index` of that bank
  * into the scratchpad ordering table. The Course variants use the separate
  * course object bank at 0x1F800048 (size g_CourseModelCount); ...2 is the same
  * routine running the second opcode table (jtbl_8007DA64, not jtbl_8007DA54).
  * All four are entry points of the hand-written GTE engine, so `ctx` is always
  * the scratchpad base 0x1F800000.
  */
-void GameSelectModelBank(s32 index) asm("func_80017A10");
-void GameSubmitModel(void *ctx, s32 index) asm("func_80028DEC");
-void GameSubmitCourseModel(void *ctx, s32 index) asm("func_800296B4");
-void GameSubmitCourseModel2(void *ctx, s32 index) asm("func_80029E50");
+void SelectModelBank(s32 index) asm("func_80017A10");
+void SubmitModel(void *ctx, s32 index) asm("func_80028DEC");
+void SubmitCourseModel(void *ctx, s32 index) asm("func_800296B4");
+void SubmitCourseModel2(void *ctx, s32 index) asm("func_80029E50");
 
 /* Per-frame draw loop over the world object array D_801E4B2C: culls each entry
  * against the visibility bitmask, transforms it and submits its model. */
-void GameDrawCourseObjects(void) asm("func_8004123C");
+void DrawCourseObjects(void) asm("func_8004123C");
 
 /*
  * Per-frame environment step: advances the course's environment command script
@@ -247,7 +247,7 @@ void GameDrawCourseObjects(void) asm("func_8004123C");
  * g_EnvironmentModePrev and g_EnvironmentMode into VRAM at (0xE0, 0x1E6), and
  * updates the GTE far colour and fog distance. Does not draw anything.
  */
-void GameUpdateEnvironment(void) asm("func_80045CD4");
+void UpdateEnvironment(void) asm("func_80045CD4");
 
 /*
  * 2D/HUD primitive emitters. All of them pack the primitive at the scratchpad
@@ -257,7 +257,7 @@ void GameUpdateEnvironment(void) asm("func_80045CD4");
  * y = 0x1E0). Where an `alpha` argument exists, 0xFF means opaque; anything
  * else enables semi-transparency and appends a blend packet via func_80017390.
  */
-void GameDrawSprite(
+void DrawSprite(
     void *ot,
     s16 x0,
     s16 y0,
@@ -272,7 +272,7 @@ void GameDrawSprite(
     s32 shadeTex,
     s32 semiTrans,
     u32 flags) asm("func_80046A2C");
-void GameDrawFlatTriangle(
+void DrawFlatTriangle(
     void *ot,
     s16 x0,
     s16 y0,
@@ -288,8 +288,8 @@ void GameDrawFlatTriangle(
 
 /* The same routine seen through signed coordinates. Retail's two callers
  * disagree about these three parameters and the disagreement is load-bearing:
- * the definition in GameSetDrawClipRect.c matches only as u16, while
- * GameDrawScriptedTriangle sign-extends them, which a u16 prototype cannot
+ * the definition in SetDrawClipRect.c matches only as u16, while
+ * DrawScriptedTriangle sign-extends them, which a u16 prototype cannot
  * produce. Both views are therefore real. See names.md 30 on width and
  * signedness being per-use rather than per-field. */
 void GameDrawFlatTriangleSigned(
@@ -305,7 +305,7 @@ void GameDrawFlatTriangleSigned(
     u8 b,
     s32 semiTrans,
     u32 flags) asm("func_80046BA0");
-void GameDrawFlatQuad(
+void DrawFlatQuad(
     void *ot,
     s16 x0,
     s16 y0,
@@ -347,7 +347,7 @@ void GameDrawTexturedQuad(
     s32 semiTrans,
     u16 tpage) asm("func_80046E00");
 /* TILE: solid rectangle at (x, y) sized (w, h). */
-void GameDrawSolidRect(
+void DrawSolidRect(
     void *ot,
     s32 x,
     s32 y,
@@ -357,7 +357,7 @@ void GameDrawSolidRect(
     u8 g,
     u8 b,
     u8 alpha) asm("func_80047024");
-void GameDrawLine(
+void DrawLine(
     void *ot,
     s32 x0,
     s32 y0,
@@ -368,7 +368,7 @@ void GameDrawLine(
     u8 b,
     u8 alpha) asm("func_8004711C");
 /* LINE_F3: flat-shaded 3-point polyline. */
-void GameDrawPolyLine3(
+void DrawPolyLine3(
     void *ot,
     s16 x0,
     s16 y0,
@@ -381,7 +381,7 @@ void GameDrawPolyLine3(
     u8 b,
     u8 alpha) asm("func_80047214");
 /* LINE_G2: line interpolating rgb0 -> rgb1. */
-void GameDrawGradientLine(
+void DrawGradientLine(
     void *ot,
     s32 x0,
     s32 y0,
@@ -394,8 +394,8 @@ void GameDrawGradientLine(
     u8 g1,
     u8 b1,
     u8 alpha) asm("func_80047330");
-/* Two-pixel-thick rectangle border, built from six GameDrawLine calls. */
-void GameDrawRectOutline(
+/* Two-pixel-thick rectangle border, built from six DrawLine calls. */
+void DrawRectOutline(
     void *ot,
     s32 x,
     s32 y,
@@ -406,7 +406,7 @@ void GameDrawRectOutline(
     u8 b,
     u8 alpha) asm("func_80047460");
 /* Clips (x, y, w, h) to the 320x480 frame and queues a SetDrawArea packet. */
-void GameSetDrawClipRect(
+void SetDrawClipRect(
     void *ot,
     s32 x,
     s32 y,
@@ -414,12 +414,12 @@ void GameSetDrawClipRect(
     s32 h) asm("func_800468FC");
 
 /*
- * Text and number output, both built on GameDrawSprite. The two fonts differ
+ * Text and number output, both built on DrawSprite. The two fonts differ
  * only in cell size and glyph table: small = 6x12 (D_8007F984), large = 8x16
  * (D_8007FA3C). Bit 0x80 of `flags` selects fixed-width cells instead of the
  * per-glyph widths in the table.
  */
-void GameDrawSmallText(
+void DrawSmallText(
     s32 x,
     s16 y,
     u8 *str,
@@ -428,7 +428,7 @@ void GameDrawSmallText(
     u8 b,
     u16 clutIndex,
     s32 flags) asm("func_80047634");
-void GameDrawLargeText(
+void DrawLargeText(
     s32 x,
     s16 y,
     u8 *str,
@@ -452,7 +452,7 @@ s32 GameDrawNumber(
     u8 primitiveCount) asm("func_80047BD4");
 /* Blits an 8x6 bit pattern from D_8007F6E8 as 4x8 blocks; negative argument
  * animates through the table. */
-void GameDrawBitPatternOverlay(s32 pattern) asm("func_80047E60");
+void DrawBitPatternOverlay(s32 pattern) asm("func_80047E60");
 
 /*
  * Base of the draw work area for the frame being built. Almost every drawing
@@ -468,7 +468,7 @@ extern u8 *g_DrawBuffer asm("D_8019C900");
 
 /*
  * Full-screen fade level, 0..0x100, passed straight to
- * GameDrawFullscreenFadeTile (func_80033AA0) and func_800218A0. Each frame the
+ * DrawFullscreenFadeTile (func_80033AA0) and func_800218A0. Each frame the
  * owning scene adds g_FadeStep and clamps back into range, so a scene fades in
  * or out just by setting the step.
  */
@@ -508,14 +508,14 @@ extern s32 g_UiScriptProgress asm("D_8019C9F0");
  * neutral name (cf. g_PadEdge / g_PadEdge2).
  */
 extern s32 g_UiScriptProgress2 asm("D_8009B2F8");
-void GameDrawScriptedSprite(
+void DrawScriptedSprite(
     s32 elapsed,
     u8 *style,
     u8 *record,
     s32 useAlpha) asm("func_80048078");
-void GameDrawScriptedLine(s32 elapsed, u8 *style, u8 *record) asm("func_80048210");
-void GameDrawScriptedTriangle(s32 elapsed, u8 *style, u8 *record) asm("func_800483D4");
-void GameDrawScriptedQuad(s32 elapsed, u8 *style, s32 *record) asm("func_80048580");
+void DrawScriptedLine(s32 elapsed, u8 *style, u8 *record) asm("func_80048210");
+void DrawScriptedTriangle(s32 elapsed, u8 *style, u8 *record) asm("func_800483D4");
+void DrawScriptedQuad(s32 elapsed, u8 *style, s32 *record) asm("func_80048580");
 
 /*
  * Low-level packet builders from the first 0x3900 bytes of .text (the boot /
@@ -634,7 +634,7 @@ u8 *GameQueueTexturedRect(
  *
  * This must remain inline.  GCC 2.6.3 records the widest outgoing argument
  * area before it folds the packet-kind branch; that accounts for the 48-byte
- * argument area in GameDrawStartCountdown's retail stack frame.
+ * argument area in DrawStartCountdown's retail stack frame.
  */
 u8 *GameQueueSpriteWide(
     void *ot,
@@ -690,11 +690,11 @@ static __inline__ u8 *GameQueueTexturePacketWide(
 /*
  * DR_MODE, 12 bytes: SetDrawMode(prim, 0, 1, tpage, &D_8007BED0) + AddPrim.
  * This is the "blend packet" the GameDraw* emitters above append when their
- * alpha argument is not 0xFF. GameSetDrawModePacket only fills the packet in
+ * alpha argument is not 0xFF. SetDrawModePacket only fills the packet in
  * place (no AddPrim, no cursor advance) and has no callers in the retail EXE.
  */
-u8 *GameQueueDrawModePrim(void *ot, u8 *prim, u16 tpage) asm("func_80017390");
-void GameSetDrawModePacket(u8 *prim, s32 tpage) asm("func_80017760");
+u8 *QueueDrawModePrim(void *ot, u8 *prim, u16 tpage) asm("func_80017390");
+void SetDrawModePacket(u8 *prim, s32 tpage) asm("func_80017760");
 
 /*
  * A third font, separate from the small (6x12) / large (8x16) pair above:
@@ -703,14 +703,14 @@ void GameSetDrawModePacket(u8 *prim, s32 tpage) asm("func_80017760");
  * variant closes the run with its own DR_MODE packet (tpage 9 / 0x29 / 0x49)
  * and stores the scratchpad cursor back itself.
  */
-void GameDrawText8x8(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016754");
+void DrawText8x8(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016754");
 void GameDrawText8x8Shaded(
     s16 x,
     s16 y,
     u8 *str,
     u16 clutIndex,
     u8 intensity) asm("func_800168AC");
-void GameDrawText8x8Trans(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016A18");
+void DrawText8x8Trans(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016A18");
 /*
  * The proportional font: 12-pixel-tall SPRT cells. Characters below 'a' use
  * the {u, v} pairs at D_8007C3B8 with fixed 12x12 cells; 'a'..'u' and 'v'+ use
@@ -718,7 +718,7 @@ void GameDrawText8x8Trans(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016A
  * proportionally spaced. Space advances 12 and emits nothing.
  * `intensity` == 0x100 selects the opaque raw-texture path (SetShadeTex);
  * anything else is written to r = g = b with SetSemiTrans.
- * GameDrawProportionalText is the wrapper that passes 0x100.
+ * DrawProportionalText is the wrapper that passes 0x100.
  */
 void GameDrawProportionalTextShaded(
     s16 x,
@@ -726,14 +726,14 @@ void GameDrawProportionalTextShaded(
     u8 *str,
     u16 clutIndex,
     s32 intensity) asm("func_80016B7C");
-void GameDrawProportionalText(
+void DrawProportionalText(
     s16 x,
     s16 y,
     u8 *str,
     u16 clutIndex) asm("func_80016EA0");
 
 /* Loads the GTE light matrix with D_8009E6AC * `view`. */
-void GameSetGteLightMatrix(Matrix *view) asm("func_8001459C");
+void SetGteLightMatrix(Matrix *view) asm("func_8001459C");
 /*
  * Per-object GTE setup: writes (object position - camera position) as an
  * SVECTOR into `work`, runs it through the scratchpad view matrix at
@@ -741,7 +741,7 @@ void GameSetGteLightMatrix(Matrix *view) asm("func_8001459C");
  * SetRotMatrix(rot) + SetTransMatrix(&work->mtx).
  * `work` layout: SVECTOR @0, VECTOR @8, Matrix @24 (m @24, t @44).
  */
-void GameSetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) asm("func_80017794");
+void SetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) asm("func_80017794");
 
 /*
  * The environment colour timeline and the sky it feeds. The state is nine
@@ -756,8 +756,8 @@ typedef struct GameEnvColor {
 } GameEnvColor;
 
 /* One timeline slot: the live colour and the pair it is being lerped between.
- * GameLoadEnvironmentCue rolls `cur` into `from` and the cue's value into `to`;
- * GameUpdateEnvironment walks `cur` across over g_EnvLerpDuration frames. */
+ * LoadEnvironmentCue rolls `cur` into `from` and the cue's value into `to`;
+ * UpdateEnvironment walks `cur` across over g_EnvLerpDuration frames. */
 typedef struct GameEnvColorSlot {
     GameEnvColor cur;
     GameEnvColor from;
@@ -772,10 +772,10 @@ extern GameEnvColorSlot g_EnvColors[9] asm("D_801E3FB6");
 
 /* Jumps that timeline to `time` and applies one frame, then programs
  * SetFarColor + SetFogNear. */
-void GameSeekEnvironmentScript(s32 time) asm("func_800458CC");
+void SeekEnvironmentScript(s32 time) asm("func_800458CC");
 /* The backdrop: half a 16-segment panorama cylinder over gradient bands shaded
  * between successive colour slots. */
-void GameDrawSkyBackground(void) asm("func_800418D4");
+void DrawSkyBackground(void) asm("func_800418D4");
 
 /* Environment mode of the loaded course variant, from variant data +0x2C. Also
  * the index of the target 48-byte (16 x RGB) sky palette in g_EnvPaletteTable;
@@ -786,7 +786,7 @@ extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
 /* Sky palette records, 48 bytes each, indexed by environment mode. Installed
  * from the loaded environment block by func_8004553C. */
 extern u8 *g_EnvPaletteTable asm("D_801E4140");
-/* g_EnvironmentMode == 4. Picks GameDrawStaticScenery's model 0x3B over 0x3A
+/* g_EnvironmentMode == 4. Picks DrawStaticScenery's model 0x3B over 0x3A
  * and the `flags & 2` prop set over `flags & 1`; also forwarded to scratchpad
  * 0x1F800084 by every car/track renderer. */
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");

@@ -2,40 +2,40 @@
 #include "game/race.h"
 
 void func_8003E590(void);
-void GameDrawFlybyScenery(void) asm("func_8003EAF4");
-void GameUpdateRouteScenery(void) asm("func_8003EC98");
-void GameDrawRouteScenery(void) asm("func_8003F02C");
+void DrawFlybyScenery(void) asm("func_8003EAF4");
+void UpdateRouteScenery(void) asm("func_8003EC98");
+void DrawRouteScenery(void) asm("func_8003F02C");
 void func_8003F9C4(void);
-void GameDrawPathScenery(void) asm("func_80040730");
+void DrawPathScenery(void) asm("func_80040730");
 
-void GameDrawScriptedScenery(s32 arg0) asm("func_8003F608");
-void GameDrawScriptedScenery(s32 arg0) {
+void DrawScriptedScenery(s32 arg0) asm("func_8003F608");
+void DrawScriptedScenery(s32 arg0) {
     switch (g_GrandPrixClass % 5) {
     case 0:
         if (arg0 != 0) {
-            GameUpdateRouteScenery();
+            UpdateRouteScenery();
         }
-        GameDrawRouteScenery();
+        DrawRouteScenery();
         break;
     case 1:
     case 2:
         if (arg0 != 0) {
-            GameUpdateRouteScenery();
+            UpdateRouteScenery();
             func_8003E590();
         }
-        GameDrawRouteScenery();
-        GameDrawFlybyScenery();
+        DrawRouteScenery();
+        DrawFlybyScenery();
         break;
     case 3:
     case 4:
         if (arg0 != 0) {
-            GameUpdateRouteScenery();
+            UpdateRouteScenery();
             func_8003E590();
             func_8003F9C4();
         }
-        GameDrawRouteScenery();
-        GameDrawFlybyScenery();
-        GameDrawPathScenery();
+        DrawRouteScenery();
+        DrawFlybyScenery();
+        DrawPathScenery();
         break;
     case 5:
         break;
@@ -142,10 +142,10 @@ extern PathSceneryCursor g_PathSceneryRotCursor asm("D_801E4DE2");
 s32 rsin(s32 angle) asm("func_80068568");
 s32 rcos(s32 angle) asm("func_80068634");
 s32 SquareRoot12(s32 value) asm("func_8006888C");
-void GameSetPitchedSoundCue(s32 cue, s32 pitch, s32 volume) asm("func_8005C914");
+void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume) asm("func_8005C914");
 
-void GameInitPathScenery(void) asm("func_8003F700");
-void GameInitPathScenery(void) {
+void InitPathScenery(void) asm("func_8003F700");
+void InitPathScenery(void) {
     s32 lev;
     u8 *tblA;
     u8 *tblB;
@@ -522,5 +522,5 @@ void func_8003F9C4(void) {
         pitch = 0;
         vol = 0;
     }
-    GameSetPitchedSoundCue(0, pitch, vol);
+    SetPitchedSoundCue(0, pitch, vol);
 }

@@ -3,7 +3,7 @@
 #include "game/track.h"
 #include "game/render.h"
 
-void GameUpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
+void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
 
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
 s32 func_8002FD9C(s32 arg0, s32 arg1);
@@ -17,8 +17,8 @@ s32 func_80068634(s32 arg0);
  * divided by the spec block's steerResponse. Register pins are
  * match-load-bearing.
  */
-void GameSteerCarToTrackLine(GameCarRuntime *car) asm("func_8002FE74");
-void GameSteerCarToTrackLine(GameCarRuntime *car) {
+void SteerCarToTrackLine(GameCarRuntime *car) asm("func_8002FE74");
+void SteerCarToTrackLine(GameCarRuntime *car) {
     GameCarSpec *spec;
     s32 timer;
     s32 index;
@@ -70,7 +70,7 @@ void GameSteerCarToTrackLine(GameCarRuntime *car) {
     }
     coords[2] += value >> 12;
 
-    finalAngle = 0x400 - GameAtan2(coords[0] - car->x, coords[2] - car->z);
+    finalAngle = 0x400 - Atan2(coords[0] - car->x, coords[2] - car->z);
 
     if (car->field_98 == 0) {
         xValue = timer << 16;
@@ -79,7 +79,7 @@ void GameSteerCarToTrackLine(GameCarRuntime *car) {
             divisor = 1;
         }
 
-        headingDelta = GameGetAngleDelta(car->headingAngle, finalAngle);
+        headingDelta = GetAngleDelta(car->headingAngle, finalAngle);
         headingDelta = ((headingDelta * 5) << 2) / divisor;
         car->headingAngle += headingDelta;
     }
@@ -87,9 +87,9 @@ void GameSteerCarToTrackLine(GameCarRuntime *car) {
 
 /*
  * Car motion-state handler for state98 == 1: the one-frame takeoff of a jump.
- * Turns the launch spin GameUpdateCarDriving seeded into clamped yaw, recomputes revs /
+ * Turns the launch spin UpdateCarDriving seeded into clamped yaw, recomputes revs /
  * tacho / world velocity, then sets route+0x38 = 0x14 and route+0x98 = 2 to hand
- * the car to the airborne handler GameUpdateCarAirborne. See docs/names.md 1.
+ * the car to the airborne handler UpdateCarAirborne. See docs/names.md 1.
  */
 
 extern u8 *D_801E42D8;
@@ -320,8 +320,8 @@ void func_8005C104(s32 index, s32 phase, s32 volume);
  * spin, advances the car (func_8002F4E4), and lands it when it returns to the
  * ground. The drive sub-block is the GameCarDrive view of car->field_BC.
  */
-void GameUpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
-void GameUpdateCarAirborne(GameCarRuntime *car) {
+void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
+void UpdateCarAirborne(GameCarRuntime *car) {
     GameCarDrive *r = (GameCarDrive *)&car->field_BC;
     s32 sinF24;
     s32 cosF24;
@@ -342,7 +342,7 @@ void GameUpdateCarAirborne(GameCarRuntime *car) {
     }
 
     {
-        s32 rr = GameGetAngleDelta(car->field_24, r->unk90);
+        s32 rr = GetAngleDelta(car->field_24, r->unk90);
         s32 base = car->field_24;
         car->field_24 = rr / 5 + base;
         func_8002F4E4(car, base);
@@ -390,16 +390,16 @@ void GameUpdateCarAirborne(GameCarRuntime *car) {
 }
 
 extern s32 g_StandingStartSpin asm("D_8019CA04");
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 
 /*
  * Car motion handler for state98 == 3 (crash / tumble): applies a random shake
- * (GameRandom15) scaled by the remaining shake budget g_StandingStartSpin, advances the
+ * (Random15) scaled by the remaining shake budget g_StandingStartSpin, advances the
  * car (func_8002F4E4), and resets the car once the budget expires. field_15C /
  * field_15E hold the shake magnitude.
  */
-void GameUpdateCarStandingStart(GameCarRuntime *car) asm("func_80030BC4");
-void GameUpdateCarStandingStart(GameCarRuntime *car) {
+void UpdateCarStandingStart(GameCarRuntime *car) asm("func_80030BC4");
+void UpdateCarStandingStart(GameCarRuntime *car) {
     GameCarRuntime *route = (GameCarRuntime *)&car->field_BC;
     s32 sinA;
     s32 cosA;
@@ -407,7 +407,7 @@ void GameUpdateCarStandingStart(GameCarRuntime *car) {
     s32 r;
     s32 coords[3];
 
-    r = GameGetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
+    r = GetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
     base = car->field_24;
     car->field_24 = r / 5 + base;
     func_8002F4E4(car, base);
@@ -439,8 +439,8 @@ void GameUpdateCarStandingStart(GameCarRuntime *car) {
         if (f15c < 127 && f134 >= 2001) {
             sinA += 127;
         }
-        route->field_68 = (GameRandom15() & 3) * sinA / 256;
-        route->field_6C = (GameRandom15() & 7) * sinA / 256;
+        route->field_68 = (Random15() & 3) * sinA / 256;
+        route->field_6C = (Random15() & 7) * sinA / 256;
         g_StandingStartSpin -= sinA;
         if (g_StandingStartSpin <= 0) {
             route->field_68 = 0;
@@ -468,8 +468,8 @@ s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
  * containing segment index, or -1 (snapping the car onto the track) if none.
  * pts[0] is the car-relative point; pts[1..4] are the quad corners.
  */
-s32 GameFindTrackSegment(GameCarRuntime *car, s32 idx) asm("func_80030EB4");
-s32 GameFindTrackSegment(GameCarRuntime *car, s32 idx) {
+s32 FindTrackSegment(GameCarRuntime *car, s32 idx) asm("func_80030EB4");
+s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
     DVEC pts[5];
     s32 i;
     s32 k;

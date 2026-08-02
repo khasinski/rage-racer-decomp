@@ -42,11 +42,11 @@ long Gpu_CheckTimeout(void) {
     (void)*gp1ForLog;
     pending = g_GpuQueueWriteIdx;
     gpuTail = g_GpuQueueReadIdx;
-    GameDebugPrintf(D_8001362C, (pending - gpuTail) & 0x3F, *gp1ForLog, *g_GpuDmaChcr, *g_GpuDmaMadr);
+    DebugPrintf(D_8001362C, (pending - gpuTail) & 0x3F, *gp1ForLog, *g_GpuDmaChcr, *g_GpuDmaMadr);
     dc = g_GpuLastCb;
     /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(dc) : "0"(dc));
-    GameDebugPrintf(D_80013660, *dc, g_GpuLastCbArg, g_GpuLastCbData);
+    DebugPrintf(D_80013660, *dc, g_GpuLastCbArg, g_GpuLastCbData);
 
     intrMask = SetIntrMask(0);
     g_GpuQueueReadIdx = 0;

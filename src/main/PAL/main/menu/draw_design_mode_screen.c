@@ -3,8 +3,8 @@
 #include "game/render.h"
 #include "game/car.h"
 
-s32 GameDrawDesignModeScreen(s32 arg0);
-s32 GameDrawTeamLogoScreen(s32 arg0);
+s32 DrawDesignModeScreen(s32 arg0);
+s32 DrawTeamLogoScreen(s32 arg0);
 
 typedef struct CellMask {
     u8 cells[6][6];
@@ -17,8 +17,8 @@ void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex,
                    s32 semiTrans, s32 flags);
 
-s32 GameDrawDesignModeScreen(s32 step) asm("func_80056E64");
-s32 GameDrawDesignModeScreen(s32 arg0) {
+s32 DrawDesignModeScreen(s32 step) asm("func_80056E64");
+s32 DrawDesignModeScreen(s32 arg0) {
     CellMask mask;
     void *ot;
     s32 limit;
@@ -100,13 +100,13 @@ extern u8 g_UiChromeScript asm("D_80082460");
 void func_8005131C(void);
 s32 func_800487D8(void *a, void *b, s32 c);
 void func_800489AC(s32 a, s32 b, s32 c);
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-void GameRampTeamLogoCanvas(s32 a, s32 b) asm("func_8004B8B4");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void RampTeamLogoCanvas(s32 a, s32 b) asm("func_8004B8B4");
 void func_8004A248(s32 a, s32 b);
 s32 func_8004E724(s32 a, s32 b);
 
-void GameUpdateDesignModeScreen(void) asm("func_80057198");
-void GameUpdateDesignModeScreen(void) {
+void UpdateDesignModeScreen(void) asm("func_80057198");
+void UpdateDesignModeScreen(void) {
     s32 sel;
     u16 edge;
 
@@ -120,41 +120,41 @@ void GameUpdateDesignModeScreen(void) {
         if (func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 g_DesignModeOption = (g_DesignModeOption > 0) ? g_DesignModeOption - 1 : 3;
             }
             if (g_PadEdge2 & 0x4000) {
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 g_DesignModeOption = (g_DesignModeOption < 3) ? g_DesignModeOption + 1 : 0;
             }
             if (g_PadEdge2 & 0x860) {
                 sel = g_DesignModeOption;
                 if (sel == 0) {
-                    GamePlaySoundCue(2);
-                    GameRampTeamLogoCanvas(-256, -256);
+                    PlaySoundCue(2);
+                    RampTeamLogoCanvas(-256, -256);
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 1;
                 } else if (sel == 1) {
-                    GamePlaySoundCue(2);
+                    PlaySoundCue(2);
                     GameMenuBusy = 2;
                     g_MenuOverlayPattern = sel;
                 } else if (sel == 2) {
                     if (g_PlayerCarIndex < 10) {
                         GameMenuBusy = 3;
                         g_MenuOverlayPattern = 1;
-                        GamePlaySoundCue(2);
+                        PlaySoundCue(2);
                     } else {
                         GameMenuBusy = -1;
                         g_UiScriptProgress2 = 0;
-                        GamePlaySoundCue(5);
+                        PlaySoundCue(5);
                     }
                 } else if (sel == 3) {
-                    GamePlaySoundCue(3);
+                    PlaySoundCue(3);
                     GameMenuBusy = 4;
                     g_MenuOverlayPattern = 2;
                 }
             } else if (g_PadEdge2 & 0x90) {
-                GamePlaySoundCue(3);
+                PlaySoundCue(3);
                 GameMenuBusy = 4;
                 g_MenuOverlayPattern = 2;
             }
@@ -216,8 +216,8 @@ void GameUpdateDesignModeScreen(void) {
 
 extern s32 D_8009B2D8;
 
-s32 GameDrawTeamLogoScreen(s32 step) asm("func_800576BC");
-s32 GameDrawTeamLogoScreen(s32 arg0) {
+s32 DrawTeamLogoScreen(s32 step) asm("func_800576BC");
+s32 DrawTeamLogoScreen(s32 arg0) {
     s32 value;
 
     if (arg0 == 0) {

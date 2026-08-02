@@ -12,8 +12,8 @@ extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
 extern s32 g_ScreenOffsetEditX asm("D_801E4D68");
 void func_80024B6C(void);
-void GameApplyAudioSettings(void) asm("func_80021224");
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void ApplyAudioSettings(void) asm("func_80021224");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void func_80023750(s32 arg0);
 extern s32 g_ScreenOffsetEditY asm("D_801E4D6C");
@@ -24,28 +24,28 @@ extern u16 D_8019CE9E;
 extern u16 D_801C0684;
 extern u16 D_801C0686;
 /* The four-arrow reticle of the screen-position panel. */
-void GameDrawScreenAdjustScreen(void) asm("func_800253A4");
-void GameDrawScreenAdjustScreen(void);
+void DrawScreenAdjustScreen(void) asm("func_800253A4");
+void DrawScreenAdjustScreen(void);
 extern s32 g_OptionLetterboxHeight asm("D_8009F0A0");
 void func_8002390C(void);
-s32 GameAddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
+s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 /* The setup scene's per-frame overlay: pad hint, letterbox, and the alignment frame in mode 6. */
-void GameDrawOptionSceneOverlay(void) asm("func_800256B8");
-void GameDrawOptionSceneOverlay(void);
+void DrawOptionSceneOverlay(void) asm("func_800256B8");
+void DrawOptionSceneOverlay(void);
 extern s32 g_CameraViewMode asm("D_8009E870");
 extern s32 g_TrackWalkStart asm("D_801E40CC");
 extern s32 g_CameraCarIndex asm("D_8009E66C");
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 extern s32 *g_CamRow asm("D_8019C9A8");
-void GameInitRenderState(s32 arg0) asm("func_80017884");
-void GameLoadTrackTexturePageRange(void) asm("func_8001D30C");
+void InitRenderState(s32 arg0) asm("func_80017884");
+void LoadTrackTexturePageRange(void) asm("func_8001D30C");
 void func_8001D210(void);
 void func_80038844(void);
-void GameSetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
+void SetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
 void func_800458CC(s32 arg0);
-void GameInitShuttleScenery(void) asm("func_8003F0F8");
+void InitShuttleScenery(void) asm("func_8003F0F8");
 extern s32 g_FrameSyncThreshold;
 extern s32 g_BgmSelectCursor asm("D_801E4B84");
 extern s32 g_BgmSelectShowUi asm("D_801E412C");
@@ -57,16 +57,16 @@ extern s32 g_CdTrackEnded asm("D_8019C7BC");
 extern s32 g_CameraCarIndex asm("D_8009E66C");
 extern s32 g_BgmSelectStep;
 extern u8 g_TextNowLoading[] asm("D_80011010");
-void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80025940(void);
 void func_80016EA0(s32 a0, s32 a1, void *a2, s32 a3);
-void GameInstallCourseAssets(void) asm("func_80019730");
-void GameRequestTrackDataAssets(void) asm("func_80019844");
+void InstallCourseAssets(void) asm("func_80019730");
+void RequestTrackDataAssets(void) asm("func_80019844");
 void func_80025AC8(void);
 
 /* g_GameModeHandlers[5]: left/right edits the selected audio setting, cancel restores it. */
-void GameUpdateSoundSettingAdjust(void) asm("func_800250BC");
-void GameUpdateSoundSettingAdjust(void) {
+void UpdateSoundSettingAdjust(void) asm("func_800250BC");
+void UpdateSoundSettingAdjust(void) {
     s32 old;
     u16 pad;
 
@@ -85,7 +85,7 @@ void GameUpdateSoundSettingAdjust(void) {
             }
         }
         if (old != g_BgmVolumeSetting) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
         pad = g_PadEdge2;
         if (pad & 0x860) {
@@ -108,7 +108,7 @@ void GameUpdateSoundSettingAdjust(void) {
             }
         }
         if (old != g_SfxVolumeSetting) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
         pad = g_PadEdge2;
         if (pad & 0x860) {
@@ -131,7 +131,7 @@ void GameUpdateSoundSettingAdjust(void) {
             }
         }
         if (old != g_MonoOutput) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
         pad = g_PadEdge2;
         if (pad & 0x860) {
@@ -143,16 +143,16 @@ void GameUpdateSoundSettingAdjust(void) {
         break;
     }
 
-    GameApplyAudioSettings();
+    ApplyAudioSettings();
     pad = g_PadEdge2;
     if (pad & 0x860) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
     } else if (pad & 0x90) {
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
     }
 }
 
-void GameDrawScreenAdjustScreen(void) {
+void DrawScreenAdjustScreen(void) {
     s32 base = (s32)g_DrawBuffer;
     s32 color = 0x7F40;
     s32 y48 = 0x48;
@@ -171,8 +171,8 @@ void GameDrawScreenAdjustScreen(void) {
 }
 
 /* g_GameModeHandlers[6]: moves the screen offset and commits it to g_ScreenOffsetX/Y. */
-void GameUpdateScreenAdjustScreen(void) asm("func_800254C8");
-void GameUpdateScreenAdjustScreen(void) {
+void UpdateScreenAdjustScreen(void) asm("func_800254C8");
+void UpdateScreenAdjustScreen(void) {
     s32 oldX;
     s32 oldY;
     u16 input;
@@ -180,7 +180,7 @@ void GameUpdateScreenAdjustScreen(void) {
     u32 confirmMask;
     s32 value;
 
-    GameDrawScreenAdjustScreen();
+    DrawScreenAdjustScreen();
 
     input = g_PadEdge;
     oldX = g_ScreenOffsetEditX;
@@ -212,19 +212,19 @@ void GameUpdateScreenAdjustScreen(void) {
     }
 
     if ((oldX != g_ScreenOffsetEditX) || (oldY != g_ScreenOffsetEditY)) {
-        GamePlaySoundCue(1);
+        PlaySoundCue(1);
     }
 
     confirm = g_PadEdge2;
     if (confirm & 0x860) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         g_GameMode = 1;
         g_ScreenOffsetX = g_ScreenOffsetEditX;
         g_ScreenOffsetY = g_ScreenOffsetEditY;
     } else {
         confirmMask = confirm & 0x90;
         if (confirmMask != 0) {
-            GamePlaySoundCue(3);
+            PlaySoundCue(3);
             g_GameMode = 1;
             g_ScreenOffsetEditX = g_ScreenOffsetX;
             g_ScreenOffsetEditY = g_ScreenOffsetY;
@@ -237,7 +237,7 @@ void GameUpdateScreenAdjustScreen(void) {
     D_801C0686 = g_ScreenOffsetEditY + 29;
 }
 
-void GameDrawOptionSceneOverlay(void) {
+void DrawOptionSceneOverlay(void) {
     s32 *scratch;
     void *base;
     s32 pkt;
@@ -274,47 +274,47 @@ void GameDrawOptionSceneOverlay(void) {
         w120 = 0x120;
         two = 2;
         white = 0xFF;
-        pkt = GameAddTilePrim(base, pkt, 0x10, 0x20, w120, two, white, white, white);
-        pkt = GameAddTilePrim(base, pkt, 0x10, 0x1C0, w120, two, white, white, white);
+        pkt = AddTilePrim(base, pkt, 0x10, 0x20, w120, two, white, white, white);
+        pkt = AddTilePrim(base, pkt, 0x10, 0x1C0, w120, two, white, white, white);
         h1c0 = 0x1C0;
         pkt = func_800172D4(base, pkt, 0x10, 0x20, 0x10, h1c0, white, white, white);
         pkt = func_800172D4(base, pkt, 0x130, 0x20, 0x130, h1c0, white, white, white);
     }
 
-    *scratch = GameAddTilePrim(base, pkt, 0, 0, 0x140, g_OptionLetterboxHeight, 0x85, 0x15, 0xE);
+    *scratch = AddTilePrim(base, pkt, 0, 0, 0x140, g_OptionLetterboxHeight, 0x85, 0x15, 0xE);
 }
 
 /* Scene 23: the setup / OPTION scene, dispatching g_GameModeHandlers[g_GameMode]. */
-void GameUpdateOptionScene(void) asm("func_80025870");
-void GameUpdateOptionScene(void) {
-    *(s32 *)0x1F800000 = GameAddTilePrim(g_DrawBuffer + 204, *(s32 *)0x1F800000, 0, 0, 0x140, 2, 0, 0, 0);
+void UpdateOptionScene(void) asm("func_80025870");
+void UpdateOptionScene(void) {
+    *(s32 *)0x1F800000 = AddTilePrim(g_DrawBuffer + 204, *(s32 *)0x1F800000, 0, 0, 0x140, 2, 0, 0, 0);
     g_AnimTimer = g_AnimTimer + 1;
     g_SceneTimer = g_SceneTimer + 1;
     if (g_SceneTimer == 2) {
         SetDispMask(1);
     }
     g_GameModeHandlers[g_GameMode]();
-    GameDrawOptionSceneOverlay();
+    DrawOptionSceneOverlay();
 }
 
 void func_80025940(void) {
-    GameInitRenderState(5);
-    GameLoadTrackTexturePageRange();
+    InitRenderState(5);
+    LoadTrackTexturePageRange();
     func_8001D210();
     g_TrackWalkStart = *(s32 *)g_TrackEventData;
     func_80038844();
-    GameSetTrackTexturePageNow(*(s16 *)&g_CarTrackSection[g_CameraCarIndex * 412]);
+    SetTrackTexturePageNow(*(s16 *)&g_CarTrackSection[g_CameraCarIndex * 412]);
     func_800458CC(g_CamRow[2]);
     g_CameraViewMode = 2;
     g_AnimTimer = 0;
     g_SceneTimer = 0;
     g_FrameSyncThreshold = 0x180;
-    GameInitShuttleScenery();
+    InitShuttleScenery();
 }
 
 void func_80025A14(void) {
     SetDispMask(0);
-    GameSetupDisplay240(0, 0, 0);
+    SetupDisplay240(0, 0, 0);
     g_FrameSyncThreshold = 0x80;
     g_FadeLevel = 0x13C;
     g_FadeStep = -4;
@@ -345,13 +345,13 @@ void func_80025AC8(void) {
             g_FadeLevel = 0;
             g_FadeStep = 0;
         }
-        GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
+        DrawFullscreenFadeTile(g_FadeLevel, 0x49);
     } else if (d > 0) {
         s32 e = g_FadeLevel;
         e += d;
         v = e;
         g_FadeLevel = v;
-        GameDrawFullscreenFadeTile(v, 0x49);
+        DrawFullscreenFadeTile(v, 0x49);
         if (g_FadeLevel >= 257) {
             SetDispMask(0);
             func_80025940();
@@ -365,8 +365,8 @@ void func_80025AC8(void) {
 
 void func_80025BD8(void) {
     if (g_AssetLoadState == 0) {
-        GameInstallCourseAssets();
-        GameRequestTrackDataAssets();
+        InstallCourseAssets();
+        RequestTrackDataAssets();
         g_BgmSelectStep = 1;
     }
 

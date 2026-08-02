@@ -5,9 +5,9 @@
 #include "game/car.h"
 #include "game/race.h"
 
-s32 GameDrawTeamNameScreen(s32 arg0);
-s32 GameDrawPaintColorScreen(s32 arg0);
-s32 GameDrawCarShopScreen(s32 arg0);
+s32 DrawTeamNameScreen(s32 arg0);
+s32 DrawPaintColorScreen(s32 arg0);
+s32 DrawCarShopScreen(s32 arg0);
 
 extern s32 D_80082EA4;
 extern s32 D_80082EA8;
@@ -21,14 +21,14 @@ extern u8 g_UiChromeScript asm("D_80082460");
 
 extern void func_8001D338(s32, s32);
 extern void func_8004A248(s32, s32);
-extern void GameRampTeamLogoCanvas(s32, s32) asm("func_8004B8B4");
-extern void GameDrawLogoSamplePanel(s32, s32) asm("func_8004E368");
+extern void RampTeamLogoCanvas(s32, s32) asm("func_8004B8B4");
+extern void DrawLogoSamplePanel(s32, s32) asm("func_8004E368");
 extern s32 func_800487D8(void *, void *, s32);
 extern void func_800489AC(s32, s32, s32);
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void GameUpdateLogoSampleScreen(void) asm("func_800580C8");
-void GameUpdateLogoSampleScreen(void) {
+void UpdateLogoSampleScreen(void) asm("func_800580C8");
+void UpdateLogoSampleScreen(void) {
     s32 v0;
     s32 t;
     s32 pl;
@@ -38,8 +38,8 @@ void GameUpdateLogoSampleScreen(void) {
     func_8004A248(1, 0);
     v0 = GameMenuBusy;
     if (v0 == 0) {
-        GameRampTeamLogoCanvas(-10, 0);
-        GameDrawLogoSamplePanel(-1, D_80082EB0 + 1);
+        RampTeamLogoCanvas(-10, 0);
+        DrawLogoSamplePanel(-1, D_80082EB0 + 1);
         func_800487D8(D_8009F0B0, &g_UiScriptProgress2, -1);
         func_800489AC(g_UiScriptProgress, 2, D_8019C770);
         func_800487D8(&D_80081CA4, &g_UiScriptProgress, 0);
@@ -48,7 +48,7 @@ void GameUpdateLogoSampleScreen(void) {
         g_MenuOverlayPattern = -1;
         if (g_PadEdge2 & 0x1000) {
             s32 n, c;
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
             c = D_8019C770;
             n = 2;
             if (c > 0) n = c - 1;
@@ -56,7 +56,7 @@ void GameUpdateLogoSampleScreen(void) {
         }
         if (g_PadEdge2 & 0x4000) {
             s32 n, c;
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
             c = D_8019C770;
             n = 0;
             if (c < 2) n = c + 1;
@@ -65,24 +65,24 @@ void GameUpdateLogoSampleScreen(void) {
         if (g_PadEdge2 & 0x860) {
             pl = D_8019C770;
             if (pl == 0) {
-                GamePlaySoundCue(2);
+                PlaySoundCue(2);
                 GameMenuBusy = -1;
                 g_UiScriptProgress2 = 0;
                 D_8009F0B0 = &D_80082634;
                 D_80082EB0 = D_80082EA4;
             } else if (pl == 1) {
-                GamePlaySoundCue(2);
+                PlaySoundCue(2);
                 GameMenuBusy = -2;
                 g_UiScriptProgress2 = 0;
                 D_8009F0B0 = &D_80082664;
                 D_80082EB0 = D_80082EA8;
             } else if (pl == 2) {
-                GamePlaySoundCue(3);
+                PlaySoundCue(3);
                 GameMenuBusy = 1;
                 g_MenuOverlayPattern = 2;
             }
         } else if (g_PadEdge2 & 0x90) {
-            GamePlaySoundCue(3);
+            PlaySoundCue(3);
             GameMenuBusy = 1;
             g_MenuOverlayPattern = 2;
         }
@@ -90,23 +90,23 @@ void GameUpdateLogoSampleScreen(void) {
     }
 
     if (v0 < 0) {
-        GameRampTeamLogoCanvas(10, 0);
+        RampTeamLogoCanvas(10, 0);
         if (GameMenuBusy == -1) {
             if (func_800487D8(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
                 u16 *p = &g_PadEdge2;
                 if (*p & 0x860) {
-                    GamePlaySoundCue(2);
+                    PlaySoundCue(2);
                     GameMenuBusy = 0;
                     D_80082EB0 = D_80082EA4;
                 }
                 if (*p & 0x90) {
-                    GamePlaySoundCue(3);
+                    PlaySoundCue(3);
                     GameMenuBusy = 0;
                     D_80082EA4 = D_80082EB0;
                 }
                 if (*p & 0x8000) {
                     s32 n, c;
-                    GamePlaySoundCue(1);
+                    PlaySoundCue(1);
                     c = D_80082EA4;
                     n = 0x13;
                     if (c > 0) n = c - 1;
@@ -114,7 +114,7 @@ void GameUpdateLogoSampleScreen(void) {
                 }
                 if (g_PadEdge2 & 0x2000) {
                     s32 n, c;
-                    GamePlaySoundCue(1);
+                    PlaySoundCue(1);
                     c = D_80082EA4;
                     n = 0;
                     if (c < 19) n = c + 1;
@@ -126,18 +126,18 @@ void GameUpdateLogoSampleScreen(void) {
             if (func_800487D8(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
                 u16 *p = &g_PadEdge2;
                 if (*p & 0x860) {
-                    GamePlaySoundCue(2);
+                    PlaySoundCue(2);
                     GameMenuBusy = 0;
                     D_80082EB0 = D_80082EA8;
                 }
                 if (*p & 0x90) {
-                    GamePlaySoundCue(3);
+                    PlaySoundCue(3);
                     GameMenuBusy = 0;
                     D_80082EA8 = D_80082EB0;
                 }
                 if (*p & 0x8000) {
                     s32 n, c;
-                    GamePlaySoundCue(1);
+                    PlaySoundCue(1);
                     c = D_80082EA8;
                     n = 0x13;
                     if (c > 0) n = c - 1;
@@ -145,7 +145,7 @@ void GameUpdateLogoSampleScreen(void) {
                 }
                 if (g_PadEdge2 & 0x2000) {
                     s32 n, c;
-                    GamePlaySoundCue(1);
+                    PlaySoundCue(1);
                     c = D_80082EA8;
                     n = 0;
                     if (c < 19) n = c + 1;
@@ -154,7 +154,7 @@ void GameUpdateLogoSampleScreen(void) {
             }
             t = D_80082EA8;
         }
-        GameDrawLogoSamplePanel(1, t + 1);
+        DrawLogoSamplePanel(1, t + 1);
         func_800489AC(g_UiScriptProgress, 2, D_8019C770);
         func_800487D8(&D_80081CA4, &g_UiScriptProgress, 0);
         func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
@@ -163,7 +163,7 @@ void GameUpdateLogoSampleScreen(void) {
 
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 8;
-    GameDrawLogoSamplePanel(-1, 0);
+    DrawLogoSamplePanel(-1, 0);
     func_800487D8(&D_80081CA4, &g_UiScriptProgress, -1);
     func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, 2, D_8019C770);
@@ -178,8 +178,8 @@ void GameUpdateLogoSampleScreen(void) {
 
 extern s32 D_8009B2E0;
 
-s32 GameDrawTeamNameScreen(s32 step) asm("func_800586B0");
-s32 GameDrawTeamNameScreen(s32 arg0) {
+s32 DrawTeamNameScreen(s32 step) asm("func_800586B0");
+s32 DrawTeamNameScreen(s32 arg0) {
     s32 value;
 
     if (arg0 == 0) {
@@ -209,10 +209,10 @@ extern u32 D_80081D34;
 void func_80051D6C(void);
 s32 func_8004E724(s32 a, s32 b);
 s32 func_800487D8(void *a, void *b, s32 c);
-void GameUploadTeamNameTexture(void *a, s32 b) asm("func_8001D530");
+void UploadTeamNameTexture(void *a, s32 b) asm("func_8001D530");
 
-void GameUpdateTeamNameScreen(void) asm("func_8005873C");
-void GameUpdateTeamNameScreen(void) {
+void UpdateTeamNameScreen(void) asm("func_8005873C");
+void UpdateTeamNameScreen(void) {
     u16 pad;
     s32 newdepth;
 
@@ -242,7 +242,7 @@ void GameUpdateTeamNameScreen(void) {
             g_MenuViewAngleTarget = 0;
             g_MenuViewAngle = 0x3E8000;
             GameMenuCursorAnim = GameMenuCursor;
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
 
         }
     } else {
@@ -252,7 +252,7 @@ void GameUpdateTeamNameScreen(void) {
             g_MenuViewAngleTarget = 0;
             g_MenuViewAngle = 0x3E8000;
             GameMenuCursorAnim = nc;
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
     }
     pad = g_PadEdge2;
@@ -261,7 +261,7 @@ void GameUpdateTeamNameScreen(void) {
         s32 c = GameMenuCursor;
         if (c == 0x2A) goto pop;
         if (!(c != 0x2B)) {
-    GamePlaySoundCue(3);
+    PlaySoundCue(3);
     GameMenuBusy = 1;
     g_MenuOverlayPattern = 2;
     g_MenuViewOffsetTarget = 0x3D090;
@@ -271,7 +271,7 @@ void GameUpdateTeamNameScreen(void) {
 
     {
         u32 d;
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         g_TeamNameChars[g_TeamNameLength] = (u8)GameMenuCursor;
         d = g_TeamNameLength;
         if (d >= 5) GameMenuCursor = 0x2B;
@@ -282,7 +282,7 @@ void GameUpdateTeamNameScreen(void) {
     if (!(pad & 0x90)) return;
 pop:
     if (g_TeamNameLength == 0) return;
-    GamePlaySoundCue(4);
+    PlaySoundCue(4);
     {
         /* This pin is load-bearing: removing it changes .text. */
         register s32 tv asm("$2");
@@ -303,7 +303,7 @@ pop:
     if (0x3D08F < g_MenuViewOffset) {
         g_MenuScreen = 6;
         g_MenuHandlerIndex = 6;
-        GameUploadTeamNameTexture(&g_TeamNameChars, g_TeamNameLength);
+        UploadTeamNameTexture(&g_TeamNameChars, g_TeamNameLength);
         g_UiScriptProgress = 0;
         GameMenuBusy = 0;
     }
@@ -311,8 +311,8 @@ pop:
 
 extern s32 D_8009B2E4;
 
-s32 GameDrawPaintColorScreen(s32 step) asm("func_80058B88");
-s32 GameDrawPaintColorScreen(s32 arg0) {
+s32 DrawPaintColorScreen(s32 step) asm("func_80058B88");
+s32 DrawPaintColorScreen(s32 arg0) {
     s32 value;
 
     if (arg0 == 0) {
@@ -349,8 +349,8 @@ s32 func_800487D8(void *, void *, s32);
 void func_8001D8C4(s32);
 void func_8001DA74(s32);
 
-void GameUpdatePaintColorScreen(void) asm("func_80058C14");
-void GameUpdatePaintColorScreen(void) {
+void UpdatePaintColorScreen(void) asm("func_80058C14");
+void UpdatePaintColorScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_8005131C();
 
@@ -367,11 +367,11 @@ void GameUpdatePaintColorScreen(void) {
         }
         g_MenuOverlayPattern = -1;
         if (g_PadEdge2 & 0x1000) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
             D_801F17A0 = D_801F17A0 > 0 ? D_801F17A0 - 1 : 2;
         }
         if (g_PadEdge2 & 0x4000) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
             D_801F17A0 = D_801F17A0 < 2 ? D_801F17A0 + 1 : 0;
         }
         {
@@ -380,25 +380,25 @@ void GameUpdatePaintColorScreen(void) {
                 s32 sel = D_801F17A0;
                 s32 val;
                 if (sel == 0) {
-                    GamePlaySoundCue(2);
+                    PlaySoundCue(2);
                     val = g_CarTable[g_PlayerCarIndex].paintColor1;
                     GameMenuBusy = -1;
                     g_UiScriptProgress2 = 0;
                     D_80082EB4 = val;
                 } else if (sel == 1) {
-                    GamePlaySoundCue(2);
+                    PlaySoundCue(2);
                     val = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = -2;
                     g_UiScriptProgress2 = 0;
                     D_80082EB4 = val;
                 } else if (sel == 2) {
-                    GamePlaySoundCue(3);
+                    PlaySoundCue(3);
                     GameMenuBusy = 1;
                     g_MenuOverlayPattern = 2;
                     g_MenuViewOffsetTarget = 0x3D090;
                 }
             } else if (f & 0x90) {
-                GamePlaySoundCue(3);
+                PlaySoundCue(3);
                 GameMenuBusy = 3;
                 g_MenuOverlayPattern = 2;
                 g_MenuViewOffsetTarget = 0x3D090;
@@ -410,24 +410,24 @@ void GameUpdatePaintColorScreen(void) {
     if (GameMenuBusy < 0) {
         if (func_8004F048(&g_UiScriptProgress2, 1, D_80082EB4) != 0) {
             if (g_PadEdge & 0x8000) {
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 D_80082EB4 = D_80082EB4 > 0 ? D_80082EB4 - 1 : 0x11;
             }
             if (g_PadEdge & 0x2000) {
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 D_80082EB4 = D_80082EB4 < 17 ? D_80082EB4 + 1 : 0;
             }
             if (GameMenuBusy == -1) {
                 u16 *btn = &g_PadEdge2;
                 if (*btn & 0x860) {
-                    GamePlaySoundCue(2);
+                    PlaySoundCue(2);
                     g_CarTable[g_PlayerCarIndex].paintColor1 = D_80082EB4;
                     g_TimeAttackCars[g_PlayerCarIndex].paintColor1 = D_80082EB4;
                     g_TimeAttackCars[g_PlayerCarIndex].paintColor2 = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
-                    GamePlaySoundCue(3);
+                    PlaySoundCue(3);
                     D_80082EB4 = g_CarTable[g_PlayerCarIndex].paintColor1;
                     GameMenuBusy = 0;
                 }
@@ -435,14 +435,14 @@ void GameUpdatePaintColorScreen(void) {
             } else {
                 u16 *btn = &g_PadEdge2;
                 if (*btn & 0x860) {
-                    GamePlaySoundCue(2);
+                    PlaySoundCue(2);
                     g_CarTable[g_PlayerCarIndex].paintColor2 = D_80082EB4;
                     g_TimeAttackCars[g_PlayerCarIndex].paintColor1 = g_CarTable[g_PlayerCarIndex].paintColor1;
                     g_TimeAttackCars[g_PlayerCarIndex].paintColor2 = D_80082EB4;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
-                    GamePlaySoundCue(3);
+                    PlaySoundCue(3);
                     D_80082EB4 = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = 0;
                 }
@@ -475,8 +475,8 @@ extern s32 D_8009B2E8;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
-s32 GameDrawCarShopScreen(s32 step) asm("func_80059248");
-s32 GameDrawCarShopScreen(s32 arg0) {
+s32 DrawCarShopScreen(s32 step) asm("func_80059248");
+s32 DrawCarShopScreen(s32 arg0) {
     s32 value;
     s32 limit;
     s32 amount;
@@ -522,7 +522,7 @@ extern s32 D_8009B33C;
 extern s16 g_PrevOwnedCarIndex asm("D_8019CA18");
 extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 
-s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
+s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
 
 void func_80059320(void) {
     s32 index;
@@ -549,7 +549,7 @@ void func_80059320(void) {
         if (index >= 0) {
         backward_loop:
             {
-                s32 value = GameGetCarUnlockLevel(index);
+                s32 value = GetCarUnlockLevel(index);
                 if (g_CarTable[index].enabled == 0) {
                     s32 progression = g_RaceProgress->maxClassReached;
                     if (progression < 4) {
@@ -596,7 +596,7 @@ void func_80059320(void) {
         forward_loop:
             switch (0) { default:
             {
-                s32 value = GameGetCarUnlockLevel(index);
+                s32 value = GetCarUnlockLevel(index);
                 if (g_CarTable[index].enabled == 0) {
                     s32 progression = g_RaceProgress->maxClassReached;
                     if (progression < 4) {

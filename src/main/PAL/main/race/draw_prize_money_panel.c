@@ -29,13 +29,13 @@ extern GameScoreRecord g_ClassClears[] asm("D_8019CB42");
 extern s32 g_ClassResultPlace asm("D_8019C7C4");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 extern s32 g_ClassPromoted asm("D_801E419C");
-s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
+s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
 s32 func_800214B8(void);
-void GameUpdateBgmTrackCount(void) asm("func_80021540");
-void GameResetProgressSlot(s32 arg0, s32 arg1) asm("func_80021288");
-void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
-void GameBeginEndingFmv(s32 arg0) asm("func_80019BB8");
-void GameBeginClassFmv(s32 arg0) asm("func_80019B3C");
+void UpdateBgmTrackCount(void) asm("func_80021540");
+void ResetProgressSlot(s32 arg0, s32 arg1) asm("func_80021288");
+void ResetCourseProgress(s32 arg0) asm("func_800212F0");
+void BeginEndingFmv(s32 arg0) asm("func_80019BB8");
+void BeginClassFmv(s32 arg0) asm("func_80019B3C");
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_PrizeScreenState asm("D_8019CB74");
@@ -46,10 +46,10 @@ extern s32 g_BonusCountStep asm("D_801E6C78");
  * step is that figure divided by 80. */
 extern s32 g_PrizeMoney3rd[][6][3] asm("D_8007BEF4");
 extern s32 g_PromotionBonusTable[] asm("D_8007C00C");
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void GameDrawPrizeMoneyPanel(u8 *s0) asm("func_800206B8");
-void GameDrawPrizeMoneyPanel(u8 *s0) {
+void DrawPrizeMoneyPanel(u8 *s0) asm("func_800206B8");
+void DrawPrizeMoneyPanel(u8 *s0) {
     u8 sp[16];
     if (g_RaceProgress->unk10 > 0x3B9AC9FF) {
         g_RaceProgress->unk10 = 0x3B9AC9FF;
@@ -67,8 +67,8 @@ void GameDrawPrizeMoneyPanel(u8 *s0) {
     }
 }
 
-void GameCommitClassProgress(void) asm("func_800207E0");
-void GameCommitClassProgress(void) {
+void CommitClassProgress(void) asm("func_800207E0");
+void CommitClassProgress(void) {
     s32 score_index;
     u8 *slots;
     s32 slot_count;
@@ -85,7 +85,7 @@ void GameCommitClassProgress(void) {
         *slots = g_RacePosition;
     }
 
-    value = GameGetCarUnlockLevel(g_PlayerCarIndex);
+    value = GetCarUnlockLevel(g_PlayerCarIndex);
     slot_count = 4;
     if (g_GrandPrixClass < value) {
         *(s16 *)(g_CourseProgress + 4) = 1;
@@ -139,7 +139,7 @@ void GameCommitClassProgress(void) {
             g_ClassClearFanfareTimer = 0xD2;
         }
 
-        GameUpdateBgmTrackCount();
+        UpdateBgmTrackCount();
         if (g_ClassResultPlace == 1) {
             s32 offset;
 
@@ -169,8 +169,8 @@ void GameCommitClassProgress(void) {
     }
 }
 
-void GameAdvanceGrandPrixClass(void) asm("func_80020B08");
-void GameAdvanceGrandPrixClass(void) {
+void AdvanceGrandPrixClass(void) asm("func_80020B08");
+void AdvanceGrandPrixClass(void) {
     s32 oldValue;
     GameRaceProgress *ptr;
     s32 *entry;
@@ -182,20 +182,20 @@ void GameAdvanceGrandPrixClass(void) {
 
             ptr = g_RaceProgress;
             oldValue = ptr->maxClassReached;
-            GameResetProgressSlot((s32)g_CarTable, (s32)ptr);
+            ResetProgressSlot((s32)g_CarTable, (s32)ptr);
             magic = 0x3B9AC9FF;
             afterPtr = g_RaceProgress;
             afterPtr->unk10 = magic;
             afterPtr->maxClassReached = oldValue;
-            GameResetCourseProgress(0);
-            GameBeginEndingFmv(0x21);
+            ResetCourseProgress(0);
+            BeginEndingFmv(0x21);
         } else {
             s32 current;
             s32 next;
             GameRaceProgress *menuPtr;
             s32 enabled;
 
-            GameBeginClassFmv(7);
+            BeginClassFmv(7);
             current = g_GrandPrixClass;
             menuPtr = g_RaceProgress;
             enabled = g_ClassPromoted;
@@ -212,15 +212,15 @@ void GameAdvanceGrandPrixClass(void) {
                 }
             }
 
-            GameResetCourseProgress(g_GrandPrixClass);
+            ResetCourseProgress(g_GrandPrixClass);
         }
     } else {
         g_SceneId = 6;
     }
 }
 
-void GameEnterPrizeScreen(void) asm("func_80020C24");
-void GameEnterPrizeScreen(void) {
+void EnterPrizeScreen(void) asm("func_80020C24");
+void EnterPrizeScreen(void) {
     s32 mode;
     s32 car;
     s32 value;
@@ -253,12 +253,12 @@ void GameEnterPrizeScreen(void) {
     }
 }
 
-void GameTickClassClearFanfare(void) asm("func_80020D90");
-void GameTickClassClearFanfare(void) {
+void TickClassClearFanfare(void) asm("func_80020D90");
+void TickClassClearFanfare(void) {
     if (g_ClassClearFanfareTimer > 0) {
         g_ClassClearFanfareTimer--;
     }
     if (g_ClassClearFanfareTimer == 0xB4) {
-        GamePlaySoundCue(0x42);
+        PlaySoundCue(0x42);
     }
 }

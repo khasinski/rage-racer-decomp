@@ -19,8 +19,8 @@ typedef struct CopyBlock16 {
     u32 word3;
 } CopyBlock16;
 
-void GameSeedFinishCameraAlt(void *arg0) asm("func_8003CDF4");
-void GameSeedFinishCameraAlt(void *arg0) {
+void SeedFinishCameraAlt(void *arg0) asm("func_8003CDF4");
+void SeedFinishCameraAlt(void *arg0) {
     /* This pin is load-bearing: removing it changes .text. */
     register u32 word0 asm("$2");
     u32 word1;

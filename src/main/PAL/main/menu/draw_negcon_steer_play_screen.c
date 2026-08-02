@@ -3,11 +3,11 @@
 #include "game/audio.h"
 #include "game/menu.h"
 
-void GameDrawNegconMaxTwistScreen(void);
+void DrawNegconMaxTwistScreen(void);
 
 /*
  * Four {u, v} texel pairs copied into a local that is never read back; see
- * GameDrawNegconMaxTwistScreen for why this is spelled as a struct copy.
+ * DrawNegconMaxTwistScreen for why this is spelled as a struct copy.
  */
 typedef struct NegconUvTemplate {
     u8 uv[8];
@@ -26,7 +26,7 @@ extern s16 g_NegconPlayPercent[] asm("D_8007C260");
 
 void func_80027874(s32 x, s32 y, char *str, s32 clutIndex);
 
-/* Local wide-parameter views; see GameQueueSprite.c / GameSetGteLightMatrix.c. */
+/* Local wide-parameter views; see GameQueueSprite.c / SetGteLightMatrix.c. */
 u8 *DrawLeftArrowWide(
     void *ot,
     u8 *prim,
@@ -60,7 +60,7 @@ u8 *QueueLineWide(
     s32 r,
     s32 g,
     s32 b) asm("func_800172D4");
-s32 GameAddTilePrim(
+s32 AddTilePrim(
     s32 ot,
     s32 prim,
     s32 x,
@@ -77,7 +77,7 @@ s32 GameAddTilePrim(
  * either side of the white centre line, spaced by the selected play scaled
  * into pixels.
  */
-void GameDrawNegconSteerPlayScreen(void) {
+void DrawNegconSteerPlayScreen(void) {
     NegconUvTemplate unused;
     u8 *ot;
     u8 *prim;
@@ -97,9 +97,9 @@ void GameDrawNegconSteerPlayScreen(void) {
     prim = QueueSpriteTransWide(
         ot, prim, 0x88, 0x30, 0xC, 0x18, 0x6C, 0x30, 0x7F81);
     prim = QueueDrawModePrimWide(ot, prim, 0x3F);
-    prim = (u8 *)GameAddTilePrim(
+    prim = (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    prim = (u8 *)GameAddTilePrim(
+    prim = (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
     span = ((g_NegconPlayPercent[g_NegconSteerPlay] << 7) / 100) * 2;
     y = 230 - span;
@@ -115,7 +115,7 @@ void GameDrawNegconSteerPlayScreen(void) {
 }
 
 extern u8 g_PadType asm("D_801E4369");
-/* Its backup, taken by GameBeginNegconCalibration. */
+/* Its backup, taken by BeginNegconCalibration. */
 extern u16 g_NegconSteerPlaySaved asm("D_8019C75C");
 /* The arrow pulse angle the setup screens advance every frame. */
 extern s32 g_SetupArrowPulse asm("D_8007C13C");
@@ -130,26 +130,26 @@ void func_80023750(s32 arg0);
  * circle/square. Cancelling - and unplugging the NeGcon - restores the
  * backed-up setting on the way back to mode 1.
  */
-void GameUpdateNegconSteerPlayScreen(void) {
+void UpdateNegconSteerPlayScreen(void) {
     g_AnimTimer++;
     g_SetupArrowPulse += 96;
     if (g_PadEdge2 & 0x90) {
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
         g_GameMode = 1;
         g_NegconSteerPlay = g_NegconSteerPlaySaved;
     } else if (g_PadEdge2 & 0x860) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         g_GameMode = 11;
     }
     if (g_PadEdge2 & 0x8000) {
         if (g_NegconSteerPlay > 0) {
-            GamePlaySoundCue(8);
+            PlaySoundCue(8);
             g_NegconSteerPlay = g_NegconSteerPlay - 1;
         }
     }
     if (g_PadEdge2 & 0x2000) {
         if (g_NegconSteerPlay < 3) {
-            GamePlaySoundCue(8);
+            PlaySoundCue(8);
             g_NegconSteerPlay = g_NegconSteerPlay + 1;
         }
     }
@@ -158,9 +158,9 @@ void GameUpdateNegconSteerPlayScreen(void) {
         g_NegconSteerPlay = g_NegconSteerPlaySaved;
     }
     g_ControllerSceneAngleX = -896;
-    GameDrawNegconSteerPlayScreen();
+    DrawNegconSteerPlayScreen();
     func_80023750(4);
-    GameDrawControllerSetupScene(1);
+    DrawControllerSetupScene(1);
 }
 
 extern NegconUvTemplate D_80010084;
@@ -175,7 +175,7 @@ extern s16 g_NegconMaxTwist asm("D_801E418C");
  * the setting can still move that way), the gauge sprite whose width and texel
  * column follow the 0..3 setting, its end cap, and the framed panel.
  */
-void GameDrawNegconMaxTwistScreen(void) {
+void DrawNegconMaxTwistScreen(void) {
     NegconUvTemplate unused;
     u8 *ot;
     u8 *prim;
@@ -199,13 +199,13 @@ void GameDrawNegconMaxTwistScreen(void) {
         ot, prim, xoff + 0x88, 0x30, w, 0x18, g_NegconMaxTwist * 24, 0x30, 0x7F81);
     prim = QueueSpriteTransWide(ot, prim, 0xAC, 0x30, 4, 0x18, 0x78, 0x30, 0x7F81);
     prim = QueueDrawModePrimWide(ot, prim, 0x3F);
-    prim = (u8 *)GameAddTilePrim(
+    prim = (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    *(s32 *)0x1F800000 = GameAddTilePrim(
+    *(s32 *)0x1F800000 = AddTilePrim(
         (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
 }
 
-/* Its backup, taken by GameBeginNegconCalibration. */
+/* Its backup, taken by BeginNegconCalibration. */
 extern u16 g_NegconMaxTwistSaved asm("D_8019CB04");
 
 /*
@@ -213,25 +213,25 @@ extern u16 g_NegconMaxTwistSaved asm("D_8019CB04");
  * start/cross or cancel with circle/square. Cancelling - and unplugging the
  * NeGcon - restores the backed-up setting on the way back to mode 1.
  */
-void GameUpdateNegconMaxTwistScreen(void) {
+void UpdateNegconMaxTwistScreen(void) {
     g_AnimTimer++;
     if (g_PadEdge2 & 0x90) {
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
         g_GameMode = 1;
         g_NegconMaxTwist = g_NegconMaxTwistSaved;
     } else if (g_PadEdge2 & 0x860) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         g_GameMode = 1;
     }
     if (g_PadEdge2 & 0x8000) {
         if (g_NegconMaxTwist > 0) {
-            GamePlaySoundCue(8);
+            PlaySoundCue(8);
             g_NegconMaxTwist = g_NegconMaxTwist - 1;
         }
     }
     if (g_PadEdge2 & 0x2000) {
         if (g_NegconMaxTwist < 3) {
-            GamePlaySoundCue(8);
+            PlaySoundCue(8);
             g_NegconMaxTwist = g_NegconMaxTwist + 1;
         }
     }
@@ -240,7 +240,7 @@ void GameUpdateNegconMaxTwistScreen(void) {
         g_NegconMaxTwist = g_NegconMaxTwistSaved;
     }
     g_ControllerSceneAngleX = -896;
-    GameDrawNegconMaxTwistScreen();
+    DrawNegconMaxTwistScreen();
     func_80023750(4);
-    GameDrawControllerSetupScene(1);
+    DrawControllerSetupScene(1);
 }

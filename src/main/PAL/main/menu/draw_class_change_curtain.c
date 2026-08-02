@@ -5,8 +5,8 @@ extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 
-s32 GameDrawClassChangeCurtain(s32 arg0) asm("func_8005026C");
-s32 GameDrawClassChangeCurtain(s32 arg0) {
+s32 DrawClassChangeCurtain(s32 arg0) asm("func_8005026C");
+s32 DrawClassChangeCurtain(s32 arg0) {
     void *scratch;
     s32 delta;
     /* This pin is load-bearing: removing it changes .text. */

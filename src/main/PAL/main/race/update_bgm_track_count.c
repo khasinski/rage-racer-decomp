@@ -13,7 +13,7 @@ void func_80016B7C(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4);
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_LostRaceChoice asm("D_801E3E0C");
 void func_8005B190(s32 arg0, s32 arg1);
-void GameDrawLostRaceCaption(s32 arg0) asm("func_800215B8");
+void DrawLostRaceCaption(s32 arg0) asm("func_800215B8");
 extern void *g_CourseProgress asm("D_8009E67C");
 extern char g_TextTryAgain[] asm("D_80010E80");
 extern char g_TextEndRace[] asm("D_80010E8C");
@@ -23,16 +23,16 @@ extern s16 g_ChanceDigits[] asm("D_8007D438");
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 extern volatile u16 g_PadEdge2 asm("D_801E436E");
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-void GameRequestSelectBgmAssets(void) asm("func_80018410");
-void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void RequestSelectBgmAssets(void) asm("func_80018410");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80021654(void);
 void func_80046A2C(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
 void func_800218A0(s32 arg0);
-void GameResetCourseProgress(s32 arg0) asm("func_800212F0");
+void ResetCourseProgress(s32 arg0) asm("func_800212F0");
 
-void GameUpdateBgmTrackCount(void) asm("func_80021540");
-void GameUpdateBgmTrackCount(void) {
+void UpdateBgmTrackCount(void) asm("func_80021540");
+void UpdateBgmTrackCount(void) {
     s32 offset;
     s32 current;
     s32 one;
@@ -59,8 +59,8 @@ void GameUpdateBgmTrackCount(void) {
     g_BgmTrackCount = value;
 }
 
-void GameDrawLostRaceCaption(s32 arg0) asm("func_800215B8");
-void GameDrawLostRaceCaption(s32 arg0) {
+void DrawLostRaceCaption(s32 arg0) asm("func_800215B8");
+void DrawLostRaceCaption(s32 arg0) {
     if (arg0 >= 0x100) {
         arg0 = 0xFF;
     }
@@ -68,17 +68,17 @@ void GameDrawLostRaceCaption(s32 arg0) {
     func_80016B7C(0x28, 0x40, &g_CaptionLostRace, 0x7812, arg0);
 }
 
-void GameEnterLostRaceScreen(void) asm("func_800215FC");
-void GameEnterLostRaceScreen(void) {
+void EnterLostRaceScreen(void) asm("func_800215FC");
+void EnterLostRaceScreen(void) {
     g_FrameSyncThreshold = 0x80;
     func_8005B190(0x28, 0x28);
     g_SceneId = 0xE;
     g_LostRaceChoice = 0;
     g_SceneTimer = -1;
-    GameDrawLostRaceCaption(0xFF);
+    DrawLostRaceCaption(0xFF);
 }
 
-void GameDrawRaceEndPrompt(void) {
+void DrawRaceEndPrompt(void) {
     s32 color = 0x7812;
     s32 drawColor;
     s16 index;
@@ -105,11 +105,11 @@ void GameDrawRaceEndPrompt(void) {
     func_80016EA0(0xBE, 0xB8, &g_ChanceDigits[index], 0x7812);
 
     func_80016754(0x58, 0xD0, g_TextPressStart, 0x78CC);
-    GameDrawLostRaceCaption(0xFF);
+    DrawLostRaceCaption(0xFF);
 }
 
-void GameUpdateLostRaceScreen(void) asm("func_80021748");
-void GameUpdateLostRaceScreen(void) {
+void UpdateLostRaceScreen(void) asm("func_80021748");
+void UpdateLostRaceScreen(void) {
     s32 timer;
     s32 old;
     s32 current;
@@ -127,12 +127,12 @@ void GameUpdateLostRaceScreen(void) {
         }
         current = g_LostRaceChoice;
         if (old != current) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
         if (g_PadEdge2 & 0x800) {
-            GamePlaySoundCue(2);
+            PlaySoundCue(2);
             if (g_LostRaceChoice != 0) {
-                GameRequestSelectBgmAssets();
+                RequestSelectBgmAssets();
             }
             ptr = g_CourseProgress;
             value = *(u16 *)(ptr + 6);
@@ -142,7 +142,7 @@ void GameUpdateLostRaceScreen(void) {
     } else {
         timer += 2;
         g_SceneTimer = timer;
-        GameDrawFullscreenFadeTile(timer, 0x49);
+        DrawFullscreenFadeTile(timer, 0x49);
         if (g_SceneTimer == 0x100) {
             if (g_LostRaceChoice != 0) {
                 g_SceneId = 6;
@@ -163,25 +163,25 @@ void func_800218A0(s32 arg0) {
     func_80046A2C(g_DrawBuffer + 204, 0x50, 0x6C, 0xA0, 0x18, 0, 0x28, arg0, arg0, arg0, 0xC, 0, 1, 0x29);
 }
 
-void GameEnterRaceEndScreen(void) asm("func_80021920");
-void GameEnterRaceEndScreen(void) {
+void EnterRaceEndScreen(void) asm("func_80021920");
+void EnterRaceEndScreen(void) {
     g_FrameSyncThreshold = 0x80;
     g_SceneId = 0x10;
     g_SceneTimer = 0x22B;
     func_800218A0(0x22B);
 }
 
-void GameUpdateRaceEndScreen(void) asm("func_80021964");
-void GameUpdateRaceEndScreen(void) {
+void UpdateRaceEndScreen(void) asm("func_80021964");
+void UpdateRaceEndScreen(void) {
     s32 v = g_SceneTimer - 1;
     g_SceneTimer = v;
     if ((g_PadEdge2 & 0x860) && (u32)v >= 261) {
-        GameStartCdVolumeFade(0xFA);
+        StartCdVolumeFade(0xFA);
         g_SceneTimer = 0xFF;
     }
     if (g_SceneTimer == 0) {
-        GameRequestSelectBgmAssets();
-        GameResetCourseProgress(g_GrandPrixClass);
+        RequestSelectBgmAssets();
+        ResetCourseProgress(g_GrandPrixClass);
         g_SceneId = 6;
     }
     func_800218A0(g_SceneTimer);

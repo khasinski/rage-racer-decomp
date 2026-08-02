@@ -4,18 +4,18 @@
 #include "game/race.h"
 
 
-s32 GameFindTrackSegment(GameCarRuntime *car, s32 idx) asm("func_80030EB4");
+s32 FindTrackSegment(GameCarRuntime *car, s32 idx) asm("func_80030EB4");
 
 /*
  * Lap-progress accumulator. Relocates the car's trackPointIndex to the segment
- * that now contains it (GameFindTrackSegment), then walks the intervening points and
+ * that now contains it (FindTrackSegment), then walks the intervening points and
  * adds (forward) or subtracts (backward) their segmentLength into
  * car->field_68 (progress). The two mirror-image branches select forward vs
  * reverse lap direction from the direction flag g_RaceSeries. Register-pinned
  * locals (bv/ir) are load-bearing for the match.
  */
-void GameAccumulateLapProgress(GameCarRuntime *car) asm("func_8002C168");
-void GameAccumulateLapProgress(GameCarRuntime *car) {
+void AccumulateLapProgress(GameCarRuntime *car) asm("func_8002C168");
+void AccumulateLapProgress(GameCarRuntime *car) {
     s32 r;
     s32 n;
     s32 i;
@@ -29,7 +29,7 @@ void GameAccumulateLapProgress(GameCarRuntime *car) {
     GameTrackPoint *array;
 
     n = 1;
-    r = GameFindTrackSegment(car, car->trackPointIndex);
+    r = FindTrackSegment(car, car->trackPointIndex);
     if (r < 0) {
         car->activeFlag = -1;
         return;

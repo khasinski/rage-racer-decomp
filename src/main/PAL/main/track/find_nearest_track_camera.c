@@ -8,8 +8,8 @@ typedef struct Func80043B18Entry {
 extern u16 g_TrackSectionCount asm("D_8019C9A4");
 extern Func80043B18Entry *g_TrackCameras asm("D_8019C7CC");
 
-s32 GameFindNearestTrackCamera(u8 *arg0, u16 rawValue) asm("func_80043B18");
-s32 GameFindNearestTrackCamera(u8 *arg0, u16 rawValue) {
+s32 FindNearestTrackCamera(u8 *arg0, u16 rawValue) asm("func_80043B18");
+s32 FindNearestTrackCamera(u8 *arg0, u16 rawValue) {
     s32 best;
     Func80043B18Entry *entry;
     s32 index;

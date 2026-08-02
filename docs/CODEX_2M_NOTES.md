@@ -3,7 +3,7 @@
 Data: 2026-07-30
 
 Zakres zadania: `func_8002C478` i `func_8002D398` z
-`src/main/PAL/main/car/GameInitPlayerCar.c`.
+`src/main/PAL/main/car/InitPlayerCar.c`.
 
 Praca została przerwana na prośbę użytkownika przed zmianą kodu produkcyjnego. Nie
 zastąpiono żadnego `INCLUDE_ASM`, nie zmieniono typów i nie uruchamiano końcowego

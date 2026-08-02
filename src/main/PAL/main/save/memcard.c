@@ -20,8 +20,8 @@ void _card_info(s32 arg0) asm("func_80063DAC");
 void _card_load(s32 arg0) asm("func_80063DBC");
 s32 _card_clear(s32 arg0) asm("func_80063DEC");
 
-s32 GamePollMemoryCardStatus(s32 arg0, s32 arg1) asm("func_8005ECE0");
-s32 GamePollMemoryCardStatus(s32 arg0, s32 arg1) {
+s32 PollMemoryCardStatus(s32 arg0, s32 arg1) asm("func_8005ECE0");
+s32 PollMemoryCardStatus(s32 arg0, s32 arg1) {
     s32 handle;
     s32 two;
     s32 status;
@@ -150,8 +150,8 @@ fail_case3:
     return g_McStatusResult;
 }
 
-s32 GameFormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
-s32 GameFormatMemoryCard(s32 arg0, s32 arg1) {
+s32 FormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
+s32 FormatMemoryCard(s32 arg0, s32 arg1) {
     char device[8];
     s32 status;
 
@@ -174,8 +174,8 @@ s32 GameFormatMemoryCard(s32 arg0, s32 arg1) {
 extern s32 g_McEvents[] asm("D_8009B538");
 
 
-void GameOpenMemoryCardEvents(void) asm("func_8005EFAC");
-void GameOpenMemoryCardEvents(void) {
+void OpenMemoryCardEvents(void) asm("func_8005EFAC");
+void OpenMemoryCardEvents(void) {
     EnterCriticalSection();
     g_McEvents[0] = OpenEvent(0xF4000001, 0x0004, 0x2000, 0);
     g_McEvents[1] = OpenEvent(0xF4000001, 0x8000, 0x2000, 0);
@@ -188,8 +188,8 @@ void GameOpenMemoryCardEvents(void) {
     ExitCriticalSection();
 }
 
-void GameEnableMemoryCardEvents(void) asm("func_8005F0D4");
-void GameEnableMemoryCardEvents(void) {
+void EnableMemoryCardEvents(void) asm("func_8005F0D4");
+void EnableMemoryCardEvents(void) {
     EnableEvent(g_McEvents[0]);
     EnableEvent(g_McEvents[1]);
     EnableEvent(g_McEvents[2]);
@@ -200,8 +200,8 @@ void GameEnableMemoryCardEvents(void) {
     EnableEvent(g_McEvents[7]);
 }
 
-void GameDisableMemoryCardEvents(void) asm("func_8005F16C");
-void GameDisableMemoryCardEvents(void) {
+void DisableMemoryCardEvents(void) asm("func_8005F16C");
+void DisableMemoryCardEvents(void) {
     DisableEvent(g_McEvents[0]);
     DisableEvent(g_McEvents[1]);
     DisableEvent(g_McEvents[2]);
@@ -212,8 +212,8 @@ void GameDisableMemoryCardEvents(void) {
     DisableEvent(g_McEvents[7]);
 }
 
-void GameCloseMemoryCardEvents(void) asm("func_8005F204");
-void GameCloseMemoryCardEvents(void) {
+void CloseMemoryCardEvents(void) asm("func_8005F204");
+void CloseMemoryCardEvents(void) {
     EnterCriticalSection();
     CloseEvent(g_McEvents[0]);
     CloseEvent(g_McEvents[1]);
@@ -226,27 +226,27 @@ void GameCloseMemoryCardEvents(void) {
     ExitCriticalSection();
 }
 
-/* ---- was GameClearMemoryCardHwEvents.c ---- */
+/* ---- was ClearMemoryCardHwEvents.c ---- */
 
 #include "common.h"
 #include "psyq/kernel.h"
 #include "game/memcard.h"
 
 /* Elements 0..3 and 4..7 of the eight-descriptor libcard event table
- * g_McEvents (D_8009B538), which save/GamePollMemoryCardStatus.c opens as an
+ * g_McEvents (D_8009B538), which save/PollMemoryCardStatus.c opens as an
  * array: [0..3] are the hardware class 0xF4000001 and [4..7] the software
  * class 0xF0000011, each in the order IOE, Error, Timeout, NewCard -- which is
  * why every poller below returns index + 1. They cannot be spelled
  * g_McEvents[k] in this file: with one array symbol GCC 2.6.3 keeps the base
  * address live in a callee-saved register across the TestEvent calls, which
- * grows GamePollMemoryCardHwEvent's frame from 24 to 32 bytes. */
+ * grows PollMemoryCardHwEvent's frame from 24 to 32 bytes. */
 extern s32 g_McHwEventIoe asm("D_8009B538");
 extern s32 g_McHwEventError asm("D_8009B53C");
 extern s32 g_McHwEventTimeout asm("D_8009B540");
 extern s32 g_McHwEventNew asm("D_8009B544");
 void func_800631C0(s32 arg0);
-void GameClearMemoryCardHwEvents(void) asm("func_8005F2AC");
-void GameClearMemoryCardHwEvents(void) {
+void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
+void ClearMemoryCardHwEvents(void) {
     func_800631C0(g_McHwEventIoe);
     func_800631C0(g_McHwEventError);
     func_800631C0(g_McHwEventTimeout);
@@ -257,8 +257,8 @@ extern s32 g_McSwEventIoe asm("D_8009B548");
 extern s32 g_McSwEventError asm("D_8009B54C");
 extern s32 g_McSwEventTimeout asm("D_8009B550");
 extern s32 g_McSwEventNew asm("D_8009B554");
-void GameClearMemoryCardSwEvents(void) asm("func_8005F304");
-void GameClearMemoryCardSwEvents(void) {
+void ClearMemoryCardSwEvents(void) asm("func_8005F304");
+void ClearMemoryCardSwEvents(void) {
     func_800631C0(g_McSwEventIoe);
     func_800631C0(g_McSwEventError);
     func_800631C0(g_McSwEventTimeout);
@@ -267,8 +267,8 @@ void GameClearMemoryCardSwEvents(void) {
 
 extern s32 g_McPollTicks asm("D_8019C864");
 
-s32 GamePollMemoryCardHwEvent(void) asm("func_8005F35C");
-s32 GamePollMemoryCardHwEvent(void) {
+s32 PollMemoryCardHwEvent(void) asm("func_8005F35C");
+s32 PollMemoryCardHwEvent(void) {
     s32 result;
     s32 ready;
     s32 count;
@@ -296,8 +296,8 @@ s32 GamePollMemoryCardHwEvent(void) {
     return result;
 }
 
-s32 GamePollMemoryCardHwEventLimit(s32 limit) asm("func_8005F420");
-s32 GamePollMemoryCardHwEventLimit(s32 limit) {
+s32 PollMemoryCardHwEventLimit(s32 limit) asm("func_8005F420");
+s32 PollMemoryCardHwEventLimit(s32 limit) {
     /* This pin is load-bearing: removing it changes .text. */
     register s32 i asm("$16");
     s32 ready;
@@ -326,8 +326,8 @@ s32 GamePollMemoryCardHwEventLimit(s32 limit) {
     return 0;
 }
 
-s32 GameWaitMemoryCardHwEvent(void) asm("func_8005F4D8");
-s32 GameWaitMemoryCardHwEvent(void) {
+s32 WaitMemoryCardHwEvent(void) asm("func_8005F4D8");
+s32 WaitMemoryCardHwEvent(void) {
     s32 ready;
 
     ready = 1;
@@ -347,8 +347,8 @@ s32 GameWaitMemoryCardHwEvent(void) {
     }
 }
 
-s32 GameWaitMemoryCardSwEvent(void) asm("func_8005F55C");
-s32 GameWaitMemoryCardSwEvent(void) {
+s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
+s32 WaitMemoryCardSwEvent(void) {
     s32 ready;
 
     ready = 1;
@@ -376,7 +376,7 @@ void func_8005F5E0(void) { InitCARD(1); StartCARD(); func_80063180(); g_SaveElap
 
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 
-void GameAdvanceSaveHeaderCounter(void) {
+void AdvanceSaveHeaderCounter(void) {
     if (g_FrameSyncThreshold == 0x80) {
         g_SaveElapsedTicks++;
     } else {
@@ -384,14 +384,14 @@ void GameAdvanceSaveHeaderCounter(void) {
     }
 }
 
-/* ---- was GameClearSaveHeaderRows.c ---- */
+/* ---- was ClearSaveHeaderRows.c ---- */
 
 #include "common.h"
 #include "game/memcard.h"
 #include "psyq/gpu.h"
 #include "game/menu.h"
 
-void GameClearSaveHeaderRows(GameSaveHeaderRow *rows) {
+void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
     u8 *arg0 = (u8 *)rows;
     s32 i = 0;
     u8 *ptr1 = arg0;
@@ -499,7 +499,7 @@ void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s3
 
 extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 
-void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) {
+void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     u8 *arg0 = (u8 *)row;
     s32 i;
     /* This pin is load-bearing: removing it changes .text. */
@@ -525,7 +525,7 @@ void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) {
     *(u32 *)(arg0 + 0x7C) = ~checksum;
 }
 
-/* ---- was GameStoreSaveStateBlock.c ---- */
+/* ---- was StoreSaveStateBlock.c ---- */
 
 #include "common.h"
 #include "game/race.h"
@@ -565,8 +565,8 @@ extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
  * treating them as aliasing the plain global loads that feed them and hoists
  * every load to the top of the function, which retail does not do.
  */
-void GameStoreSaveStateBlock(u8 *arg0) asm("func_8005F88C");
-void GameStoreSaveStateBlock(u8 *arg0) {
+void StoreSaveStateBlock(u8 *arg0) asm("func_8005F88C");
+void StoreSaveStateBlock(u8 *arg0) {
     {
         u16 h0 = g_PadMappingIndex;
         u16 h1 = g_NegconMappingIndex;
@@ -818,7 +818,7 @@ void GameStoreSaveStateBlock(u8 *arg0) {
     }
 }
 
-/* ---- was GameLoadSaveStateBlock.c ---- */
+/* ---- was LoadSaveStateBlock.c ---- */
 
 #include "common.h"
 #include "game/race.h"
@@ -860,7 +860,7 @@ extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
 extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
 
 void func_80013F80(s32 a, s32 b);
-void GameApplyAudioSettings(void) asm("func_80021224");
+void ApplyAudioSettings(void) asm("func_80021224");
 
 /*
  * Verifies the memory-card payload's checksum and scatters it back into the
@@ -872,8 +872,8 @@ void GameApplyAudioSettings(void) asm("func_80021224");
  * (That is also why the header is not included here: its prototype takes a
  * void *, and gcc 2.6.3 rejects the u8 * signature this body needs.)
  */
-s32 GameLoadSaveStateBlock(u8 *arg0) asm("func_8005FED4");
-s32 GameLoadSaveStateBlock(u8 *arg0) {
+s32 LoadSaveStateBlock(u8 *arg0) asm("func_8005FED4");
+s32 LoadSaveStateBlock(u8 *arg0) {
     /* This pin is load-bearing: removing it changes .text. */
     register u8 *base asm("$17") = arg0;
     __asm__("" : "=r"(base) : "0"(base));
@@ -891,9 +891,9 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             sum += *p++;
             i++;
         } while (i < 0x7FE);
-        GameDebugPrintf(g_MsgSaveChecksumOk);
+        DebugPrintf(g_MsgSaveChecksumOk);
         sum = ~sum;
-        GameDebugPrintf(g_FmtSaveChecksum, *(s32 *)(base + 0xFFC), sum);
+        DebugPrintf(g_FmtSaveChecksum, *(s32 *)(base + 0xFFC), sum);
         if (*(s32 *)(base + 0xFFC) != sum) {
             return 0;
         }
@@ -1161,7 +1161,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
     memcpy(g_ExtraGrandPrixCourseProgress, base + 0xFD0, 8);
 
     func_80013F80(g_PadMappingIndex, g_NegconMappingIndex);
-    GameApplyAudioSettings();
+    ApplyAudioSettings();
     LoadImage((Rect *)g_TeamLogoRect, g_TeamLogoCanvas);
     LoadImage((Rect *)g_TeamLogoClutRect, g_TeamLogoClut);
     return 1;
@@ -1191,7 +1191,7 @@ s32 GameWriteMemoryCardSaveFile(
     GameMenuLoadPhase = 0x1100;
     GameBuildSaveIconBlock(iconBlock, title, 0x222, 0x3C0, 0x1F0);
     GameMenuLoadPhase = 0x1200;
-    GameWriteSaveHeaderRow(header);
+    WriteSaveHeaderRow(header);
     attempt = 0;
     GameMenuLoadPhase = 0x1300;
     func_8005F88C(saveBlock);
@@ -1332,7 +1332,7 @@ s32 GameReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
     return 0;
 }
 
-s32 GameScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
+s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
     s32 fd;
     s32 i;
     /* This pin is load-bearing: removing it changes .text. */
@@ -1427,7 +1427,7 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 
     BiosFileClose(fd);
     GameMenuLoadPhase = 0x3700;
-    if (GameLoadSaveStateBlock(block) == 0) {
+    if (LoadSaveStateBlock(block) == 0) {
         return 0;
     }
 
@@ -1458,7 +1458,7 @@ extern char g_McDirEntries[] asm("D_8009B748");
 
 void LibcSprintf() asm("func_800632F0");
 
-s32 GameCountMemoryCardFiles(s32 arg0, s32 arg1) {
+s32 CountMemoryCardFiles(s32 arg0, s32 arg1) {
     char path[0x20];
     void *entry;
     void *ret;
@@ -1483,7 +1483,7 @@ s32 GameCountMemoryCardFiles(s32 arg0, s32 arg1) {
     return count;
 }
 
-/* ---- was GameCalculateMemoryCardFreeBlocks.c ---- */
+/* ---- was CalculateMemoryCardFreeBlocks.c ---- */
 
 #include "common.h"
 #include "game/memcard.h"
@@ -1491,7 +1491,7 @@ s32 GameCountMemoryCardFiles(s32 arg0, s32 arg1) {
 
 extern char g_McDirEntries[] asm("D_8009B748");
 
-s32 GameCalculateMemoryCardFreeBlocks(s32 arg0) {
+s32 CalculateMemoryCardFreeBlocks(s32 arg0) {
     u8 scratch[8];
     s32 i;
     s32 sum;
@@ -1530,10 +1530,10 @@ s32 GameRefreshMemoryCardSaveStatus(s32 arg0, GameSaveHeaderRow *arg1) {
     s32 ret;
 
     GameMenuLoadPhase = 0x100;
-    GameClearSaveHeaderRows(arg1);
-    g_McCardFileCount = GameCountMemoryCardFiles(0, 0);
-    g_McFreeBlocks = GameCalculateMemoryCardFreeBlocks(g_McCardFileCount);
-    ret = GameScanMemoryCardSaveHeaders(arg1);
+    ClearSaveHeaderRows(arg1);
+    g_McCardFileCount = CountMemoryCardFiles(0, 0);
+    g_McFreeBlocks = CalculateMemoryCardFreeBlocks(g_McCardFileCount);
+    ret = ScanMemoryCardSaveHeaders(arg1);
     GameMenuLoadPhase = 0x200;
 
     return ret;
@@ -1544,7 +1544,7 @@ extern char g_FmtPlayTime[] asm("D_80012FB8");
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf() asm("func_800632F0");
 
-void *GameFormatSaveElapsedTime(void *arg0, u32 arg1) {
+void *FormatSaveElapsedTime(void *arg0, u32 arg1) {
     u32 hours = arg1 / 216000;
     u32 totalMinutes = arg1 / 3600;
     u32 totalSeconds = arg1 / 60;
@@ -1557,7 +1557,7 @@ extern u8 g_McMessageText[] asm("D_800128FC");
 
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 
-void GameDrawMemoryCardMessageLine(s32 arg0, s32 arg1) {
+void DrawMemoryCardMessageLine(s32 arg0, s32 arg1) {
     func_80016754(0x28, 0xB8, &g_McMessageText[arg1 * 30], 0x78CC);
 }
 
@@ -1565,7 +1565,7 @@ extern u8 g_McHelpText[] asm("D_80012ADC");
 
 void func_80016754(s32, s32, void *, s32);
 
-void GameDrawMemoryCardHelpPrompt(s32 arg0) {
+void DrawMemoryCardHelpPrompt(s32 arg0) {
     s32 offset;
     u8 *base;
     s32 x;
@@ -1638,7 +1638,7 @@ void GameDrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
             }
             LibcSprintf(text + 6, g_FmtSaveRowTail);
             func_80047958(0x68, y, text, 0x7F, color, color, width, height);
-            func_80047958(0xB0, y, GameFormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
+            func_80047958(0xB0, y, FormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
         } else if (flags_reg & 0x10000) {
             LibcSprintf(text, g_FmtSaveRow, row_bit);
             func_80047958(0x48, y, text, 0x7F, color, color, width, height);
@@ -1693,46 +1693,46 @@ void GameAdjustMenuSelectionHorizontal(s32 *value, s32 min, s32 max) {
         return;
     }
 
-    GamePlaySoundCue(1);
+    PlaySoundCue(1);
 }
 
-void GameSetMenuBinaryChoiceVertical(s32 *value) {
+void SetMenuBinaryChoiceVertical(s32 *value) {
     u16 input = g_PadEdge;
 
     if (input & 0x8000) {
         if (*value == 0) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
             *value = 1;
         } else {
             *value = 1;
         }
     } else if (input & 0x2000) {
         if (*value == 1) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
         *value = 0;
     }
 }
 
-u16 GamePollMenuConfirmInput(void) {
+u16 PollMenuConfirmInput(void) {
     u16 *state = &g_PadEdge2;
     u16 value;
 
     value = *state & 0x860;
     if (value != 0) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
     }
 
     return *state & 0x860;
 }
 
-u16 GamePollMenuBackInput(void) {
+u16 PollMenuBackInput(void) {
     u16 *state = &g_PadEdge2;
     u16 value;
 
     value = *state & 0x90;
     if (value != 0) {
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
     }
 
     return *state & 0x90;
@@ -1740,14 +1740,14 @@ u16 GamePollMenuBackInput(void) {
 
 void func_80023A60(s32 arg0, s32 arg1);
 
-void GameDrawMenuFadeOverlay(s32 arg0) {
+void DrawMenuFadeOverlay(s32 arg0) {
     func_80023A60(arg0, 0x40);
 }
 
 extern s32 g_McFadeStep asm("D_8009B9A0");
 
-void GameStartMenuExitFade(void) {
-    GameStopMemoryCardEvents();
+void StartMenuExitFade(void) {
+    StopMemoryCardEvents();
     g_McFadeStep = 8;
 }
 
@@ -1758,10 +1758,10 @@ extern s32 g_McFromLoadMenu asm("D_8009B730");
 extern s32 g_McFadeStep;
 extern s32 g_McFadeLevel asm("D_8009B9A4");
 void func_8005EAD0(void);
-void GameEnterMemoryCardMenu(void) asm("func_800613B8");
-void GameEnterMemoryCardMenu(void) {
+void EnterMemoryCardMenu(void) asm("func_800613B8");
+void EnterMemoryCardMenu(void) {
     SetDispMask(0);
-    GameSetupDisplay480(0, 0, 0);
+    SetupDisplay480(0, 0, 0);
     g_McMenuRowCount = 2;
     g_McMenuState = -1;
     g_SceneTimer = 0;

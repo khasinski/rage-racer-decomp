@@ -26,18 +26,18 @@ src/main/PAL/main/sdk/ExitCriticalSection.c.
 | func_80063280 | BiosFormatDevice | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:72 + B(0x41) selector | src/main/PAL/main/sdk/BiosFormatDevice.c |
 | func_80063290 | BiosFirstFile | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:73 + B(0x42) selector | src/main/PAL/main/sdk/BiosFirstFile.c |
 | func_800632A0 | BiosNextFile | BIOS trampoline array (asm-pinned) | include/psyq/kernel.h:74 + B(0x43) selector | src/main/PAL/main/sdk/BiosNextFile.c |
-| func_80064C7C | GetClut | call-site alias (local proto pinned) | include/psyq/gpu.h:254 | src/main/PAL/main/menu/GameDrawTeamLogoCanvas.c |
-| func_80064F30 | SetPolyF4 | call-site alias (local proto pinned) | include/psyq/gpu.h:207 | src/main/PAL/main/race/GameDrawWrongWayWarning.c |
-| func_80064F80 | SetSprt8 | call-site alias (local proto pinned) | include/psyq/gpu.h:211 | src/main/PAL/main/race/GameDrawWrongWayWarning.c |
+| func_80064C7C | GetClut | call-site alias (local proto pinned) | include/psyq/gpu.h:254 | src/main/PAL/main/menu/DrawTeamLogoCanvas.c |
+| func_80064F30 | SetPolyF4 | call-site alias (local proto pinned) | include/psyq/gpu.h:207 | src/main/PAL/main/race/DrawWrongWayWarning.c |
+| func_80064F80 | SetSprt8 | call-site alias (local proto pinned) | include/psyq/gpu.h:211 | src/main/PAL/main/race/DrawWrongWayWarning.c |
 | func_80064FA8 | SetSprt | call-site alias (local proto pinned) | include/psyq/gpu.h:213 | src/main/PAL/main/sdk/CdRead.c |
-| func_80065A90 | ClearImage | call-site alias (local proto pinned) | include/psyq/gpu.h:242 | src/main/PAL/main/fmv/GamePresentFmvFrame.c |
-| func_80065B24 | LoadImage | call-site alias (local proto pinned) | include/psyq/gpu.h:243 | src/main/PAL/main/menu/GameDrawTeamLogoCanvas.c |
+| func_80065A90 | ClearImage | call-site alias (local proto pinned) | include/psyq/gpu.h:242 | src/main/PAL/main/fmv/PresentFmvFrame.c |
+| func_80065B24 | LoadImage | call-site alias (local proto pinned) | include/psyq/gpu.h:243 | src/main/PAL/main/menu/DrawTeamLogoCanvas.c |
 | func_80068180 | MemFill | call-site alias (local proto pinned) | include/psyq/gpu.h:288 | src/main/PAL/main/sdk/Gpu_Reset.c |
 | func_80069A00 | SetDQA | call-site alias (local proto pinned) | include/psyq/gte.h:37 | src/main/PAL/main/render/SetFogNear.c |
 | func_80069A0C | SetDQB | call-site alias (local proto pinned) | include/psyq/gte.h:38 | src/main/PAL/main/render/SetFogNear.c |
-| func_80069A38 | SetFarColor | call-site alias (local proto pinned) | include/psyq/gte.h:43 | src/main/PAL/main/track/GameSetEnvPaletteTable.c |
-| func_80069B14 | Intpl | call-site alias (local proto pinned) | include/psyq/gte.h:57 | src/main/PAL/main/track/GameSetEnvPaletteTable.c |
-| func_8006A058 | StSetRing | call-site alias (local proto pinned) | include/psyq/cd.h:106 | src/main/PAL/main/fmv/GameOpenFmvStream.c |
+| func_80069A38 | SetFarColor | call-site alias (local proto pinned) | include/psyq/gte.h:43 | src/main/PAL/main/track/SetEnvPaletteTable.c |
+| func_80069B14 | Intpl | call-site alias (local proto pinned) | include/psyq/gte.h:57 | src/main/PAL/main/track/SetEnvPaletteTable.c |
+| func_8006A058 | StSetRing | call-site alias (local proto pinned) | include/psyq/cd.h:106 | src/main/PAL/main/fmv/OpenFmvStream.c |
 | func_8006A0AC | CdGetToc2 | call-site alias (local proto pinned) | include/psyq/cd.h:94 | src/main/PAL/main/sdk/StSetRing.c |
 | func_8006A3E8 | CdStatus | call-site alias (local proto pinned) | include/psyq/cd.h:87 | 2 files |
 | func_8006A3F8 | CdMode | call-site alias (local proto pinned) | include/psyq/cd.h:88 | src/main/PAL/main/sdk/CdReadDataReadyCallback.c |
@@ -57,22 +57,22 @@ src/main/PAL/main/sdk/ExitCriticalSection.c.
 | func_8006BAF0 | CD_flush | call-site alias (local proto pinned) | include/psyq/cd.h:97 | 4 files |
 | func_8006C83C | DS_searchdir | call-site alias (local proto pinned) | include/psyq/cd.h:101 | src/main/PAL/main/sdk/DsSearchFile.c |
 | func_8006CDC0 | StClearRing | call-site alias (local proto pinned) | include/psyq/cd.h:102 | src/main/PAL/main/sdk/StSetRing.c |
-| func_8006CF08 | StGetBackloc | call-site alias (local proto pinned) | include/psyq/cd.h:103 | src/main/PAL/main/fmv/GameDecodeFmvFrame.c |
-| func_8006CF68 | StSetStream | call-site alias (local proto pinned) | include/psyq/cd.h:107 | src/main/PAL/main/fmv/GameOpenFmvStream.c |
-| func_8006D1D0 | StCdInterrupt | call-site alias (local proto pinned) | include/psyq/cd.h:113 | src/main/PAL/main/fmv/GameOpenFmvStream.c |
+| func_8006CF08 | StGetBackloc | call-site alias (local proto pinned) | include/psyq/cd.h:103 | src/main/PAL/main/fmv/DecodeFmvFrame.c |
+| func_8006CF68 | StSetStream | call-site alias (local proto pinned) | include/psyq/cd.h:107 | src/main/PAL/main/fmv/OpenFmvStream.c |
+| func_8006D1D0 | StCdInterrupt | call-site alias (local proto pinned) | include/psyq/cd.h:113 | src/main/PAL/main/fmv/OpenFmvStream.c |
 | func_8006DF34 | KernelCallbackSlot3 | call-site alias (local proto pinned) | include/psyq/kernel.h:15 | 2 files |
 | func_8006DF64 | KernelCallbackSlot2 | call-site alias (local proto pinned) | include/psyq/kernel.h:16 | src/main/PAL/main/sdk/CD_vol.c |
 | func_8006E088 | GetKernelStatus | call-site alias (local proto pinned) | include/psyq/kernel.h:24 | 3 files |
 | func_8006E0B0 | SetIntrMask | call-site alias (local proto pinned) | include/psyq/kernel.h:26 | 2 files |
 | func_8006EAEC | GetDMAInterruptState | call-site alias (local proto pinned) | include/psyq/kernel.h:49 | 2 files |
-| func_8006EAFC | SsSetMVol | call-site alias (local proto pinned) | include/psyq/snd.h:155 | src/main/PAL/main/audio/GameApplyCurrentSequenceAudio.c |
+| func_8006EAFC | SsSetMVol | call-site alias (local proto pinned) | include/psyq/snd.h:155 | src/main/PAL/main/audio/ApplyCurrentSequenceAudio.c |
 | func_80070D70 | SsSeqReadDeltaTime | call-site alias (local proto pinned) | include/psyq/snd.h:165 | src/main/PAL/main/sdk/ContDataEntry.c |
 | func_80070E28 | SsUnpackAdsr | call-site alias (local proto pinned) | include/psyq/snd.h:166 | src/main/PAL/main/sdk/SsSeqApplyNrpn.c |
 | func_80070E84 | SsPackAdsr | call-site alias (local proto pinned) | include/psyq/snd.h:167 | src/main/PAL/main/sdk/SsSeqApplyNrpn.c |
 | func_80071B0C | _SsInitTables | call-site alias (local proto pinned) | include/psyq/snd.h:177 | src/main/PAL/lib/libsnd/ssinit.c |
 | func_80072734 | _SsSndStop | definition (renamed, header pin) | include/psyq/snd.h:124 | src/main/PAL/lib/libsnd/Snd_SetPlayMode.c |
-| func_80072AE0 | SsSetMono | call-site alias (local proto pinned) | include/psyq/snd.h:199 | src/main/PAL/main/audio/GameSetEffectVolumeScale.c |
-| func_80072AF4 | SsSetStereo | call-site alias (local proto pinned) | include/psyq/snd.h:200 | src/main/PAL/main/audio/GameSetEffectVolumeScale.c |
+| func_80072AE0 | SsSetMono | call-site alias (local proto pinned) | include/psyq/snd.h:199 | src/main/PAL/main/audio/SetEffectVolumeScale.c |
+| func_80072AF4 | SsSetStereo | call-site alias (local proto pinned) | include/psyq/snd.h:200 | src/main/PAL/main/audio/SetEffectVolumeScale.c |
 | func_80072C4C | SsVabOpenHeadSticky | definition (renamed, header pin) | include/psyq/snd.h:205 | src/main/PAL/lib/libsnd/SsVabOpen.c |
 | func_8007320C | SsUtGetProgAtr | call-site alias (local proto pinned) | include/psyq/snd.h:216 | src/main/PAL/main/sdk/ContDataEntry.c |
 | func_80073314 | SpuVmVSetUp | call-site alias (local proto pinned) | include/psyq/snd.h:217 | 3 files |
@@ -93,8 +93,8 @@ src/main/PAL/main/sdk/ExitCriticalSection.c.
 | func_80078F4C | _spu_writeByIO | call-site alias (local proto pinned) | include/psyq/spu.h:102 | src/main/PAL/lib/libspu/_spu_init.c |
 | func_80079B60 | SpuInitMalloc | call-site alias (local proto pinned) | include/psyq/spu.h:116 | src/main/PAL/main/sdk/SpuVmInit.c |
 | func_8007A1F8 | SpuSetNoiseVoice | call-site alias (local proto pinned) | include/psyq/spu.h:119 | src/main/PAL/main/sdk/SpuVmAlloc.c |
-| func_8007B014 | SpuTransferStatus | call-site alias (local proto pinned) | include/psyq/spu.h:125 | src/main/PAL/main/menu/GameUpdateMenuMode.c |
-| func_8007B088 | SpuGetKeyStatus | call-site alias (local proto pinned) | include/psyq/spu.h:126 | src/main/PAL/main/audio/GameSetPitchedSoundCue.c |
+| func_8007B014 | SpuTransferStatus | call-site alias (local proto pinned) | include/psyq/spu.h:125 | src/main/PAL/main/menu/UpdateMenuMode.c |
+| func_8007B088 | SpuGetKeyStatus | call-site alias (local proto pinned) | include/psyq/spu.h:126 | src/main/PAL/main/audio/SetPitchedSoundCue.c |
 | func_8007B294 | _spu_setTransferCompletionFlag | call-site alias (local proto pinned) | include/psyq/spu.h:131 | src/main/PAL/main/sdk/SpuVmInit.c |
 
 ## Dropped rename: func_80063230 -> BiosFileOpen (ExitCriticalSection.c)

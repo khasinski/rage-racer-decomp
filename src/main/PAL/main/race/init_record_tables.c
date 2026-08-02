@@ -25,8 +25,8 @@ void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 void func_80016A18(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 void func_800200D0(void);
 
-void GameInitRecordTables(void) asm("func_80021A08");
-void GameInitRecordTables(void) {
+void InitRecordTables(void) asm("func_80021A08");
+void InitRecordTables(void) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 r2 asm("$2");
     s32 r3;
@@ -200,7 +200,7 @@ void GameInitRecordTables(void) {
     __asm__("" : : "r"(r23));
 }
 
-void *GameFormatLapTime(void *dst, s32 value) {
+void *FormatLapTime(void *dst, s32 value) {
     s32 minutes = value / 60000;
     s32 ticks = value / 1000;
     s32 seconds = ticks - (minutes * 60);
@@ -210,7 +210,7 @@ void *GameFormatLapTime(void *dst, s32 value) {
     return dst;
 }
 
-void GameDrawCourseIntro(void) {
+void DrawCourseIntro(void) {
     func_80016EA0(0x10, 0x1C, g_TextTimeAttack, 0x7812);
     func_80016A18(0x10, 0x39, g_TextCourseIn, 0x78CC);
     func_800200D0();

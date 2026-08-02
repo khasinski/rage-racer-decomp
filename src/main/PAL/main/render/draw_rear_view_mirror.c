@@ -6,8 +6,8 @@
 extern s16 g_MirrorViewEnabled asm("D_8019CA10");
 extern s32 g_MirrorPanelY asm("D_801E4D18");
 extern s32 g_MirrorUnlocked asm("D_801E8A98");
-void GameResetMirrorState(void) asm("func_8001A980");
-void GameResetMirrorState(void) {
+void ResetMirrorState(void) asm("func_8001A980");
+void ResetMirrorState(void) {
     g_MirrorViewEnabled = 1;
     g_MirrorPanelY = -0x2C;
     g_MirrorUnlocked = 0;
@@ -38,8 +38,8 @@ void func_80069A78(s32 arg0);
  * the pass behind the main scene (depth += 0x800). Returns 1 if the mirror pass
  * is active, else 0.
  */
-s32 GameBeginMirrorPass(void) asm("func_8001A9A8");
-s32 GameBeginMirrorPass(void) {
+s32 BeginMirrorPass(void) asm("func_8001A9A8");
+s32 BeginMirrorPass(void) {
     GameScratchpadRenderState *scratch;
     s32 mirrorEnabled;
     /* This pin is load-bearing: removing it changes .text. */
@@ -120,13 +120,13 @@ void func_80069A58(s32 arg0, s32 arg1);
 void func_80069A78(s32 arg0);
 
 /*
- * Sibling of GameBeginMirrorPass: closes the mirror pass and restores the full-screen
+ * Sibling of BeginMirrorPass: closes the mirror pass and restores the full-screen
  * main viewport render state (mode 0xA, full 0x140x0xF0 clip rect, prim base),
  * flips the ordering flag back, pulls the depth back (-= 0x800) and restores the
  * saved main-view matrix from D_8009AF00.
  */
-void GameEndMirrorPass(void) asm("func_8001ABD8");
-void GameEndMirrorPass(void) {
+void EndMirrorPass(void) asm("func_8001ABD8");
+void EndMirrorPass(void) {
     GameScratchpadRenderState *scratch;
     /* This pin is load-bearing: removing it changes .text. */
     register s32 v0reg asm("$2");
@@ -166,8 +166,8 @@ void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 s32 func_80016EC4(u8 *arg0, u8 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 
-u8 *GameDrawMirrorFrame(u8 *packet) asm("func_8001ACE4");
-u8 *GameDrawMirrorFrame(u8 *packet) {
+u8 *DrawMirrorFrame(u8 *packet) asm("func_8001ACE4");
+u8 *DrawMirrorFrame(u8 *packet) {
     u8 *otArg;
     u8 *prim;
     u8 *ot;
@@ -209,17 +209,17 @@ extern s16 g_MirrorViewEnabled asm("D_8019CA10");
 extern s32 g_MirrorPanelY asm("D_801E4D18");
 extern s32 g_VisibleCellList asm("D_801E4BC8");
 
-u8 *GameDrawMirrorFrame(u8 *packet) asm("func_8001ACE4");
+u8 *DrawMirrorFrame(u8 *packet) asm("func_8001ACE4");
 void func_800418D4(void);
 void func_80066604(u8 *packet, u8 *drawEnv);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void func_800414F0(s32 arg0, s32 arg1);
 void func_80069858(void *arg0);
-void GameSubmitTerrainCells(void *arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
-void GameEndMirrorPass(void) asm("func_8001ABD8");
+void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
+void EndMirrorPass(void) asm("func_8001ABD8");
 
-void GameDrawRearViewMirror(s32 arg0) asm("func_8001ADF4");
-void GameDrawRearViewMirror(s32 arg0) {
+void DrawRearViewMirror(s32 arg0) asm("func_8001ADF4");
+void DrawRearViewMirror(s32 arg0) {
     u8 **scratch;
     u8 *packet;
     u8 *prim;
@@ -237,11 +237,11 @@ void GameDrawRearViewMirror(s32 arg0) {
             g_MirrorPanelY--;
         }
 
-        if (GameBeginMirrorPass() != 0) {
+        if (BeginMirrorPass() != 0) {
             scratch = (u8 **)0x1F800000;
 
             func_800418D4();
-            packet = GameDrawMirrorFrame(*scratch);
+            packet = DrawMirrorFrame(*scratch);
             func_80066604(packet, g_DrawBuffer + 0x70);
             prim = packet;
             packet += 0xC;
@@ -250,7 +250,7 @@ void GameDrawRearViewMirror(s32 arg0) {
             func_800414F0(-0x3000, 0x6000);
             func_80069858((void *)0x1F800028);
             *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-            GameSubmitTerrainCells((void *)0x1F800000, g_VisibleCellList, 0x40);
+            SubmitTerrainCells((void *)0x1F800000, g_VisibleCellList, 0x40);
 
             packet = *scratch;
             func_80066604(packet, g_DrawBuffer);
@@ -258,9 +258,9 @@ void GameDrawRearViewMirror(s32 arg0) {
             packet += 0xC;
             AddPrim((u32 *)(g_DrawBuffer + 0xBD0), (u32 *)prim);
             *scratch = packet;
-            GameDrawCourseObjects();
-            GameDrawCars();
-            GameEndMirrorPass();
+            DrawCourseObjects();
+            DrawCars();
+            EndMirrorPass();
         }
     }
 }

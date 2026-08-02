@@ -3,9 +3,9 @@
 #include "game/race.h"
 
 /* (model, owned grade) -> index of the CAR_xx asset pair, 0..31. */
-s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
+s32 GetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 /* Progress level needed to buy this model's next grade. */
-s32 GameGetCarUnlockLevel(s32 model) asm("func_8001785C");
+s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
 
 extern u8 g_CarModelBaseIndex[] asm("D_8007C464");
 extern u8 g_CarModelUnlockBase[] asm("D_8007C474");
@@ -25,16 +25,16 @@ extern void *g_CarImageSlots[] asm("D_801E424C");
 extern void *g_CarModelSlots[] asm("D_801E8A54");
 void LoadImage(void *rect, void *data) asm("func_80065B24");
 
-s32 GameGetCarAssetIndex(s32 model, s32 grade) {
+s32 GetCarAssetIndex(s32 model, s32 grade) {
     return g_CarModelBaseIndex[model] + grade;
 }
 
-s32 GameGetCarUnlockLevel(s32 model) {
+s32 GetCarUnlockLevel(s32 model) {
     return g_CarTable[model].modelVariant + g_CarModelUnlockBase[model];
 }
 
-void GameInitRenderState(s32 arg0) asm("func_80017884");
-void GameInitRenderState(s32 arg0) {
+void InitRenderState(s32 arg0) asm("func_80017884");
+void InitRenderState(s32 arg0) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 value asm("$2");
     register s32 ptr asm("$2");
@@ -69,8 +69,8 @@ void GameInitRenderState(s32 arg0) {
     *(s32 *)0x1F800068 = tmp;
 }
 
-void GameRegisterModelBank(s32 *base, s32 index) asm("func_80017948");
-void GameRegisterModelBank(s32 *base, s32 index) {
+void RegisterModelBank(s32 *base, s32 index) asm("func_80017948");
+void RegisterModelBank(s32 *base, s32 index) {
     s32 *ptr;
     s32 i;
     /* This pin is load-bearing: removing it changes .text. */
@@ -101,8 +101,8 @@ void GameRegisterModelBank(s32 *base, s32 index) {
     }
 }
 
-void GameUnrelocateModelBank(s32 *base, s32 offset) asm("func_800179B4");
-void GameUnrelocateModelBank(s32 *base, s32 offset) {
+void UnrelocateModelBank(s32 *base, s32 offset) asm("func_800179B4");
+void UnrelocateModelBank(s32 *base, s32 offset) {
     s32 *ptr;
     s32 i;
     /* This pin is load-bearing: removing it changes .text. */
@@ -132,8 +132,8 @@ void GameUnrelocateModelBank(s32 *base, s32 offset) {
     }
 }
 
-void GameSelectModelBank(s32 index) asm("func_80017A10");
-void GameSelectModelBank(s32 index) {
+void SelectModelBank(s32 index) asm("func_80017A10");
+void SelectModelBank(s32 index) {
     s32 *entry;
     /* This pin is load-bearing: removing it changes .text. */
     register s32 ptr asm("$2");
@@ -155,8 +155,8 @@ void GameSelectModelBank(s32 index) {
     *(s32 *)0x1F800050 = ptr;
 }
 
-void GameRegisterCourseModels(s32 *base) asm("func_80017A6C");
-void GameRegisterCourseModels(s32 *base) {
+void RegisterCourseModels(s32 *base) asm("func_80017A6C");
+void RegisterCourseModels(s32 *base) {
     s32 *ptr;
     s32 count;
     s32 i;
@@ -223,23 +223,23 @@ void func_80017AD0(s32 *base) {
     }
 }
 
-void GameSetCarImageSlot(void *asset, s32 index) asm("func_80017B44");
-void GameSetCarImageSlot(void *asset, s32 index) {
+void SetCarImageSlot(void *asset, s32 index) asm("func_80017B44");
+void SetCarImageSlot(void *asset, s32 index) {
     g_CarImageSlots[index] = asset;
 }
 
-void GameUploadCarImage(s32 index) asm("func_80017B5C");
-void GameUploadCarImage(s32 index) {
+void UploadCarImage(s32 index) asm("func_80017B5C");
+void UploadCarImage(s32 index) {
     LoadImage(&g_CarImageRect, g_CarImageSlots[index]);
 }
 
-void GameSetCarModelSlot(void *asset, s32 index) asm("func_80017B94");
-void GameSetCarModelSlot(void *asset, s32 index) {
+void SetCarModelSlot(void *asset, s32 index) asm("func_80017B94");
+void SetCarModelSlot(void *asset, s32 index) {
     g_CarModelSlots[index] = asset;
 }
 
-void GameSelectCarModelSlot(s32 index) asm("func_80017BAC");
-void GameSelectCarModelSlot(s32 index) {
+void SelectCarModelSlot(s32 index) asm("func_80017BAC");
+void SelectCarModelSlot(s32 index) {
     g_CarModelAsset = g_CarModelSlots[index];
 }
 

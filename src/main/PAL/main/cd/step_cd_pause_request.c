@@ -25,15 +25,15 @@ long CdControl(long com, void *param, long result) asm("func_8006A5A4");
 s32 func_8006A534(s32 arg0, s32 arg1);
 s32 func_8006A554(s32 arg0, void *arg1);
 long CdPosToInt_Local(CdlLOC *loc) asm("func_8006AADC");
-void GameStepCdTrackRequest(void) asm("func_800432A8");
-void GameStepCdPlayRequest(void) asm("func_80043494");
-void GameStepCdResumeRequest(void) asm("func_800437B8");
-void GameBuildCdTrackTable(void) asm("func_800431BC");
+void StepCdTrackRequest(void) asm("func_800432A8");
+void StepCdPlayRequest(void) asm("func_80043494");
+void StepCdResumeRequest(void) asm("func_800437B8");
+void BuildCdTrackTable(void) asm("func_800431BC");
 void SsSetSpuInputAttr_Link(u8 source, u8 field, u8 value) asm("SsSetSpuInputAttr");
 void SsSetSerialVol_Link(u8 source, s16 left, s16 right) asm("SsSetSerialVol");
 
-void GameStepCdPauseRequest(void) asm("func_80043598");
-void GameStepCdPauseRequest(void) {
+void StepCdPauseRequest(void) asm("func_80043598");
+void StepCdPauseRequest(void) {
     s32 state;
     s32 result;
     s32 currentTime;
@@ -108,7 +108,7 @@ void GameStepCdPauseRequest(void) {
         break;
     }
 }
-void GameStepCdResumeRequest(void) {
+void StepCdResumeRequest(void) {
     s32 status;
 
     switch (g_CdCommandStep) {
@@ -139,8 +139,8 @@ void GameStepCdResumeRequest(void) {
     }
 }
 
-void GameInitCdAudio(void) asm("func_800438BC");
-void GameInitCdAudio(void) {
+void InitCdAudio(void) asm("func_800438BC");
+void InitCdAudio(void) {
     u8 *status;
 
     SsSetSpuInputAttr_Link(0, 0, 1);
@@ -148,7 +148,7 @@ void GameInitCdAudio(void) {
     status = &D_8009B168;
     *status = 7;
     CdControl(0xE, status, 0);
-    GameBuildCdTrackTable();
+    BuildCdTrackTable();
 
     g_CdTrackPending = -1;
     g_CdCommandPending = -1;
@@ -159,11 +159,11 @@ void GameInitCdAudio(void) {
     g_CdRestartOnResume = 0;
     g_CdVolume = 0x7F;
     g_CdFadeFrames = 0;
-    GameSetCdVolume(0x7F);
+    SetCdVolume(0x7F);
 }
 
-void GameTickCdAudio(void) asm("func_80043974");
-void GameTickCdAudio(void) {
+void TickCdAudio(void) asm("func_80043974");
+void TickCdAudio(void) {
     s32 temp;
     s32 status;
     s32 value;
@@ -171,17 +171,17 @@ void GameTickCdAudio(void) {
     if (g_CdTrackPending < 0) {
         switch (g_CdCommandPending) {
         case 1:
-            GameStepCdPlayRequest();
+            StepCdPlayRequest();
             break;
         case 2:
-            GameStepCdPauseRequest();
+            StepCdPauseRequest();
             break;
         case 3:
-            GameStepCdResumeRequest();
+            StepCdResumeRequest();
             break;
         }
     } else {
-        GameStepCdTrackRequest();
+        StepCdTrackRequest();
     }
 
     status = func_8006A554(1, &g_CdLocResult);
@@ -200,7 +200,7 @@ void GameTickCdAudio(void) {
         }
     }
 
-    GameStepCdVolumeFade();
+    StepCdVolumeFade();
 }
 
 extern void *g_TrackCameras asm("D_8019C7CC");

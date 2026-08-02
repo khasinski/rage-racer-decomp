@@ -9,8 +9,8 @@ extern s16 g_PlayerTrackSection asm("D_8009E74C");
 extern s16 g_PlayerLap asm("D_8009E83C");
 extern s32 g_LapCount asm("D_801E4364");
 
-void GameTriggerRaceCues(void) asm("func_80040F24");
-void GameTriggerRaceCues(void) {
+void TriggerRaceCues(void) asm("func_80040F24");
+void TriggerRaceCues(void) {
     u8 *rawBase;
     u8 *base;
     s32 i;
@@ -34,7 +34,7 @@ void GameTriggerRaceCues(void) {
                 entry = current | 8;
                 g_RaceCueFlags = entry;
                 if (g_WrongWayTimer < 10) {
-                    GamePlaySoundCue(0x2A);
+                    PlaySoundCue(0x2A);
                 }
             }
         }
@@ -73,7 +73,7 @@ void GameTriggerRaceCues(void) {
                     if (temp <= 0) {
                         temp = mask | loopFlags;
                         g_RaceCueFlags = temp;
-                        GamePlaySoundCue(0x23);
+                        PlaySoundCue(0x23);
                     }
                 }
                 return;

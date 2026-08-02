@@ -5,8 +5,8 @@
 s32 _card_info(s32 arg0) asm("func_80063DAC");
 s32 _card_load(s32 arg0) asm("func_80063DBC");
 
-s32 GameCardReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
-s32 GameCardReadStatusPair(s32 high, s32 low) {
+s32 CardReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
+s32 CardReadStatusPair(s32 high, s32 low) {
     s32 cmd;
     s32 ret;
     s32 event;
@@ -14,7 +14,7 @@ s32 GameCardReadStatusPair(s32 high, s32 low) {
     cmd = (high << 4) + low;
 
     _card_info(cmd);
-    event = GameWaitMemoryCardHwEvent();
+    event = WaitMemoryCardHwEvent();
 
     switch (event) {
     case 1:
@@ -28,9 +28,9 @@ s32 GameCardReadStatusPair(s32 high, s32 low) {
         break;
     case 4:
         ret = 2;
-        GameClearMemoryCardSwEvents();
+        ClearMemoryCardSwEvents();
         _card_clear(cmd);
-        GameWaitMemoryCardSwEvent();
+        WaitMemoryCardSwEvent();
         break;
     default:
         ret = -3;
@@ -41,9 +41,9 @@ s32 GameCardReadStatusPair(s32 high, s32 low) {
         return ret;
     }
 
-    GameClearMemoryCardHwEvents();
+    ClearMemoryCardHwEvents();
     _card_load(cmd);
-    event = GameWaitMemoryCardHwEvent();
+    event = WaitMemoryCardHwEvent();
 
     switch (event) {
     case 1:

@@ -4,7 +4,7 @@
 #include "game/track.h"
 #include "game/race.h"
 
-void GameUpdateRivalRubberBand(void) asm("func_8003A974");
+void UpdateRivalRubberBand(void) asm("func_8003A974");
 
 extern u8 g_PlayerTrackProgress[] asm("D_8009E744");
 extern s32 g_PlayerSpeed asm("D_8009E778");
@@ -19,8 +19,8 @@ extern s32 g_PlayerSpeed asm("D_8009E778");
 #define AVOID_BLOCKED(w) (*(s16 *)((u8 *)(w) + 0x48)) /* ->field_104 */
 #define AVOID_NEARBY(w) (*(u16 *)((u8 *)(w) + 0x50))  /* ->field_10C */
 
-void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) asm("func_8003A280");
-void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
+void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) asm("func_8003A280");
+void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
     GameCarAiBlock *state = (GameCarAiBlock *)&car->field_BC;
     s32 acc8 = 0;
     s32 acc9 = 0;
@@ -189,8 +189,8 @@ void GameUpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
  */
 extern GameCarRuntime *D_801E40B8[];
 
-void GameSlowRivalAhead(GameCarRuntime *arg0, s32 arg1) asm("func_8003A6A4");
-void GameSlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
+void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) asm("func_8003A6A4");
+void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
     GameCarRuntime *entry;
     s32 offset;
     s32 pos0Base;
@@ -223,11 +223,11 @@ extern s32 g_CarProgressB asm("D_801F18C0");
 /*
  * Ranks the first four cars by race progress (`field_68 + field_6C`) and
  * publishes the ordering into g_RankedCars: slot 0 the leader, slot 3 the
- * last of the four, slots 1/2 the middle pair in order. GameUpdateRivalRubberBand reads
+ * last of the four, slots 1/2 the middle pair in order. UpdateRivalRubberBand reads
  * the result to rubber-band the AI.
  */
-void GameRankContenders(void) asm("func_8003A728");
-void GameRankContenders(void) {
+void RankContenders(void) asm("func_8003A728");
+void RankContenders(void) {
     s32 i;
     s32 offset;
     s32 maxValue;
@@ -294,10 +294,10 @@ extern s32 g_RivalCueFlags asm("D_801E4BB4");
 extern s32 g_ClosestRivalRank asm("D_801E7740");
 extern s16 g_RivalCueCooldown3 asm("D_801E6F26");
 
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void GameUpdateRivalRubberBand(void) asm("func_8003A974");
-void GameUpdateRivalRubberBand(void) {
+void UpdateRivalRubberBand(void) asm("func_8003A974");
+void UpdateRivalRubberBand(void) {
     s32 s6;
     s32 s5;
     s32 s4;
@@ -360,19 +360,19 @@ void GameUpdateRivalRubberBand(void) {
                 default:
                 case 0:
                 if (g_RivalCueEnabled != 0) {
-                    GamePlaySoundCue(0x32);
+                    PlaySoundCue(0x32);
                 }
                 bit = 0x200;
                     break;
                 case 1:
                 if (g_RivalCueEnabled != 0) {
-                    GamePlaySoundCue(0x33);
+                    PlaySoundCue(0x33);
                 }
                 bit = 0x200;
                     break;
                 case 2:
                 if (g_RivalCueEnabled != 0) {
-                    GamePlaySoundCue(0x34);
+                    PlaySoundCue(0x34);
                 }
                 bit = 0x200;
                 }
@@ -387,14 +387,14 @@ void GameUpdateRivalRubberBand(void) {
         } else {
             if (s1 == 0 && !(g_RivalCueFlags & 1) && a0 < -0x1C00) {
                 if (g_RivalCueEnabled != 0 && g_RacePosition == 1) {
-                    GamePlaySoundCue(0x2D);
+                    PlaySoundCue(0x2D);
                 }
                 g_RivalCueFlags = (g_RivalCueFlags & ~0x10) | 1;
             } else if (a0 >= -0x7FF && !((s3 >> s0) & g_RivalCueFlags)) {
                 if (g_SceneTimer & 1) {
-                    if (g_RivalCueEnabled != 0) GamePlaySoundCue(0x2F);
+                    if (g_RivalCueEnabled != 0) PlaySoundCue(0x2F);
                 } else {
-                    if (g_RivalCueEnabled != 0) GamePlaySoundCue(0x30);
+                    if (g_RivalCueEnabled != 0) PlaySoundCue(0x30);
                 }
                 g_RivalCueFlags |= (s3 >> s0);
             } else {
@@ -403,9 +403,9 @@ void GameUpdateRivalRubberBand(void) {
                 } else if (a0 < -0x800) {
                     if (*s2 >= 0x12D) {
                         if (g_SceneTimer & 1) {
-                            if (g_RivalCueEnabled != 0) GamePlaySoundCue(0x37);
+                            if (g_RivalCueEnabled != 0) PlaySoundCue(0x37);
                         } else {
-                            if (g_RivalCueEnabled != 0) GamePlaySoundCue(0x36);
+                            if (g_RivalCueEnabled != 0) PlaySoundCue(0x36);
                         }
                         *s2 = 0;
                     }

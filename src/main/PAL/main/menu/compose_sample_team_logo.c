@@ -55,8 +55,8 @@ static inline u16 *TeamLogoClutAddress(
 }
 
 /* Builds g_TeamLogoCanvas and its CLUT from one sample character and one sample background. */
-void GameComposeSampleTeamLogo(s32 arg0, s32 arg1) asm("func_8001D338");
-void GameComposeSampleTeamLogo(s32 arg0, s32 arg1)
+void ComposeSampleTeamLogo(s32 arg0, s32 arg1) asm("func_8001D338");
+void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
 {
     s32 index;
     u16 *clutDst0;
@@ -134,8 +134,8 @@ void GameComposeSampleTeamLogo(s32 arg0, s32 arg1)
 extern u8 D_8007D24C;
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 
-void GameClearTeamNameTexture(void) asm("func_8001D4E8");
-void GameClearTeamNameTexture(void) {
+void ClearTeamNameTexture(void) asm("func_8001D4E8");
+void ClearTeamNameTexture(void) {
     s16 sp[4];
     sp[0] = 0x282;
     sp[1] = 0x37;
@@ -145,13 +145,13 @@ void GameClearTeamNameTexture(void) {
 }
 
 extern u8 D_8007C7CC[];
-void GameClearTeamNameTexture(void) asm("func_8001D4E8");
+void ClearTeamNameTexture(void) asm("func_8001D4E8");
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 
-void GameUploadTeamNameTexture(u8 *str, s32 len) asm("func_8001D530");
-void GameUploadTeamNameTexture(u8 *str, s32 len) {
+void UploadTeamNameTexture(u8 *str, s32 len) asm("func_8001D530");
+void UploadTeamNameTexture(u8 *str, s32 len) {
     s16 sp[4];
-    GameClearTeamNameTexture();
+    ClearTeamNameTexture();
     sp[0] = 0x288 - len;
     sp[1] = 0x37;
     sp[2] = 2;

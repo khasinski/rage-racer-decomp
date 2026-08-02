@@ -6,8 +6,8 @@
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void func_800658FC(s32 mode);
 
-void GameUploadImageBlock(void *arg0) asm("func_8001A2E0");
-void GameUploadImageBlock(void *arg0) {
+void UploadImageBlock(void *arg0) asm("func_8001A2E0");
+void UploadImageBlock(void *arg0) {
     GameImageBlock *block;
     u16 rect[4];
     u32 width;
@@ -40,10 +40,10 @@ void GameUploadImageBlock(void *arg0) {
     }
 }
 
-void GameUploadImageBlock(void *arg0) asm("func_8001A2E0");
+void UploadImageBlock(void *arg0) asm("func_8001A2E0");
 
-void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
-void GameUploadImageAsset(void *arg0) {
+void UploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0) {
     union {
         s32 offset;
         u8 *next;
@@ -57,7 +57,7 @@ for (;;) {
     state.offset = (u32)state.offset >> 2;
     state.offset <<= 2;
     state.next = ptr + state.offset;
-    GameUploadImageBlock(ptr);
+    UploadImageBlock(ptr);
     ptr = state.next;
 
 test:
@@ -94,9 +94,9 @@ void func_8001A40C(void *dst) {
 }
 
 
-void GameUploadImageAsset(void *arg0);
+void UploadImageAsset(void *arg0);
 
-void GameUploadLoadBufferImage(void) asm("func_8001A498");
-void GameUploadLoadBufferImage(void) {
-    GameUploadImageAsset(g_LoadBuffer);
+void UploadLoadBufferImage(void) asm("func_8001A498");
+void UploadLoadBufferImage(void) {
+    UploadImageAsset(g_LoadBuffer);
 }

@@ -16,7 +16,7 @@ extern s32 g_PadConfigFlipPhase asm("D_801E6C7C");
 /* Entry hook for the controller-configuration screen: clears the four screen
  * animation counters and snapshots both button-mapping selections so a cancel
  * can put them back. */
-void GameBeginControllerConfig(void) {
+void BeginControllerConfig(void) {
     g_ControllerSceneAngleY = 0;
     g_ControllerSceneAngleX = 0;
     g_PadConfigFlipTimer = 0;

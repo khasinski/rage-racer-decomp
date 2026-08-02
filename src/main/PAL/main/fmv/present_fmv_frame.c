@@ -15,7 +15,7 @@ typedef struct FmvDisplayState {
     s32 field_34;
 } FmvDisplayState;
 
-void *GameGetFmvFrame(s32 *arg0) asm("func_8001EDC4");
+void *GetFmvFrame(s32 *arg0) asm("func_8001EDC4");
 void func_80064588(void *arg0, s32 arg1);
 s32 func_8006CFF0(void *arg0);
 extern s32 g_FmvFrameWidth asm("D_8009AF6C");
@@ -45,12 +45,12 @@ extern s16 D_8009E782;
 extern s32 g_ReplayPlayerModel asm("D_801E4D8C");
 extern s32 g_ReplayRivalModel asm("D_801E4BC0");
 
-s32 GamePresentFmvFrame(s32 *arg0) asm("func_8001ED3C");
-s32 GamePresentFmvFrame(s32 *arg0) {
+s32 PresentFmvFrame(s32 *arg0) asm("func_8001ED3C");
+s32 PresentFmvFrame(s32 *arg0) {
     void *p;
     s32 retry;
     for (retry = 1; retry != 0; retry--) {
-        p = GameGetFmvFrame(arg0);
+        p = GetFmvFrame(arg0);
         if (p != 0) {
             arg0[2] = (arg0[2] == 0);
             func_80064588(p, arg0[arg0[2]]);
@@ -60,8 +60,8 @@ s32 GamePresentFmvFrame(s32 *arg0) {
     return -1;
 }
 
-void * GameGetFmvFrame(s32 *arg0) asm("func_8001EDC4");
-void *GameGetFmvFrame(s32 *arg0) {
+void * GetFmvFrame(s32 *arg0) asm("func_8001EDC4");
+void *GetFmvFrame(s32 *arg0) {
     StRingEventRecord *slot[2];
     u16 rect[4];
     s32 count;
@@ -135,8 +135,8 @@ process:
     return ret;
 }
 
-void GameWaitFmvDecode(FmvDisplayState *arg0) asm("func_8001EF54");
-void GameWaitFmvDecode(FmvDisplayState *arg0) {
+void WaitFmvDecode(FmvDisplayState *arg0) asm("func_8001EF54");
+void WaitFmvDecode(FmvDisplayState *arg0) {
     volatile s32 timeout = 0x800000;
     s32 one;
     u16 x;
@@ -146,7 +146,7 @@ void GameWaitFmvDecode(FmvDisplayState *arg0) {
         do {
             timeout = timeout - 1;
             if (timeout == 0) {
-                GameDebugPrintf(g_MsgFmvDecodeTimeout);
+                DebugPrintf(g_MsgFmvDecodeTimeout);
                 arg0->field_34 = one;
                 arg0->field_28 = arg0->field_28 < 1U;
                 x = ((FmvDisplayState *)((u8 *)arg0 + (arg0->field_28 << 3)))->field_18;
@@ -159,8 +159,8 @@ void GameWaitFmvDecode(FmvDisplayState *arg0) {
     arg0->field_34 = 0;
 }
 
-void GameStartStreamRead(void *arg0) asm("func_8001F018");
-void GameStartStreamRead(void *arg0) {
+void StartStreamRead(void *arg0) asm("func_8001F018");
+void StartStreamRead(void *arg0) {
     u8 byte;
 
 outer:

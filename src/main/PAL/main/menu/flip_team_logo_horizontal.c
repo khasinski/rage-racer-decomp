@@ -3,10 +3,10 @@
 
 extern u32 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void GameFlipTeamLogoHorizontal(void) asm("func_8004BCE4");
-void GameFlipTeamLogoHorizontal(void) {
+void FlipTeamLogoHorizontal(void) asm("func_8004BCE4");
+void FlipTeamLogoHorizontal(void) {
     u32 *base;
     s32 row;
     s32 highStart;
@@ -25,7 +25,7 @@ void GameFlipTeamLogoHorizontal(void) {
     register u32 shift asm("$2");
     u32 lowNibble;
 
-    GamePlaySoundCue(8);
+    PlaySoundCue(8);
 
     base = g_TeamLogoCanvas;
     row = 0;
@@ -66,8 +66,8 @@ void GameFlipTeamLogoHorizontal(void) {
     } while (row < 0x40);
 }
 
-void GameRotateTeamLogoCcw(void) asm("func_8004BDB4");
-void GameRotateTeamLogoCcw(void) {
+void RotateTeamLogoCcw(void) asm("func_8004BDB4");
+void RotateTeamLogoCcw(void) {
     s32 i;
     s32 j;
     s32 k;
@@ -85,7 +85,7 @@ void GameRotateTeamLogoCcw(void) {
 
     asm(".globl func_8004BDEC\nfunc_8004BDEC = func_8004BDB4 + 0x38");
 
-    GamePlaySoundCue(8);
+    PlaySoundCue(8);
 
     base = g_TeamLogoCanvas;
     i = 0;
@@ -152,8 +152,8 @@ void GameRotateTeamLogoCcw(void) {
     } while (i < 512);
 }
 
-void GameRotateTeamLogoCw(void) asm("func_8004BF48");
-void GameRotateTeamLogoCw(void) {
+void RotateTeamLogoCw(void) asm("func_8004BF48");
+void RotateTeamLogoCw(void) {
     s32 i;
     s32 j;
     s32 k;
@@ -169,7 +169,7 @@ void GameRotateTeamLogoCw(void) {
     register u32 value2 asm("$2");
     u32 saved[512];
 
-    GamePlaySoundCue(8);
+    PlaySoundCue(8);
 
     i = 0;
     base = g_TeamLogoCanvas;
@@ -271,8 +271,8 @@ extern s32 D_8007FB1C;
 extern s32 D_8019CAB8;
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 
-void GameUpdateTeamLogoCanvas(void) asm("func_8004C0D8");
-void GameUpdateTeamLogoCanvas(void) {
+void UpdateTeamLogoCanvas(void) asm("func_8004C0D8");
+void UpdateTeamLogoCanvas(void) {
     s32 temp_a0;
     s32 temp_v0;
     s32 temp_v0_2;
@@ -345,7 +345,7 @@ void GameUpdateTeamLogoCanvas(void) {
         u16 *input = &g_PadEdge2;
 
         if (*input & 0x60) {
-            GamePlaySoundCue(2);
+            PlaySoundCue(2);
             D_8007F954 = 0;
             D_8019CAB8 = 0;
         }
@@ -363,7 +363,7 @@ void GameUpdateTeamLogoCanvas(void) {
                 TeamLogoColorSlot output;
                 s32 selected;
 
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 selected = D_8007F950.value;
                 var_v1 = 0xF;
                 if (selected >= 2) {
@@ -376,7 +376,7 @@ void GameUpdateTeamLogoCanvas(void) {
                 TeamLogoColorSlot output;
                 s32 selected;
 
-                GamePlaySoundCue(1);
+                PlaySoundCue(1);
                 selected = D_8007F950.value;
                 var_v1_2 = 1;
                 if (selected < 0xF) {
@@ -389,7 +389,7 @@ void GameUpdateTeamLogoCanvas(void) {
         if (D_8007F930 != 0) {
             if (g_PadHeld & 0xA) {
                 if (g_PadEdge & 0x1000) {
-                    GamePlaySoundCue(4);
+                    PlaySoundCue(4);
                     temp_v1_4 = D_8007F950.value;
                     temp_v1 = g_TeamLogoClut + temp_v1_4;
                     temp_a1 = *temp_v1 | 0x8000;
@@ -434,7 +434,7 @@ void GameUpdateTeamLogoCanvas(void) {
                     }
                 }
                 if (g_PadEdge & 0x4000) {
-                    GamePlaySoundCue(4);
+                    PlaySoundCue(4);
                     temp_v1_4 = D_8007F950.value;
                     temp_v1 = g_TeamLogoClut + temp_v1_4;
                     temp_a1 = *temp_v1 | 0x8000;
@@ -480,7 +480,7 @@ void GameUpdateTeamLogoCanvas(void) {
                 }
             } else {
                 if (g_PadEdge2 & 0x1000) {
-                    GamePlaySoundCue(1);
+                    PlaySoundCue(1);
                     var_v0_3 = 2;
                     if (D_8007F958 > 0) {
                         var_v0_3 = D_8007F958 - 1;
@@ -488,7 +488,7 @@ void GameUpdateTeamLogoCanvas(void) {
                     D_8007F958 = var_v0_3;
                 }
                 if (g_PadEdge2 & 0x4000) {
-                    GamePlaySoundCue(1);
+                    PlaySoundCue(1);
                     var_v1_5 = 0;
                     if (D_8007F958 < 2) {
                         var_v1_5 = D_8007F958 + 1;
@@ -500,7 +500,7 @@ void GameUpdateTeamLogoCanvas(void) {
     } else {
         if ((g_PadHeld & 0x20) && (D_8019CAB8 != 0)) {
             if (g_PadEdge2 & 0x20) {
-                GamePlaySoundCue(4);
+                PlaySoundCue(4);
             }
             for (var_t0 = 0; var_t0 < D_8007F94C; var_t0++) {
                     for (var_a3 = 0; var_a3 < D_8007F94C; var_a3++) {
@@ -540,7 +540,7 @@ void GameUpdateTeamLogoCanvas(void) {
         }
         if (g_PadHeld & 0x80) {
             if (g_PadEdge2 & 0x80) {
-                GamePlaySoundCue(4);
+                PlaySoundCue(4);
             }
             for (var_t0_2 = 0; var_t0_2 < D_8007F94C; var_t0_2++) {
                     for (var_a3_2 = 0; var_a3_2 < D_8007F94C; var_a3_2++) {
@@ -584,11 +584,11 @@ void GameUpdateTeamLogoCanvas(void) {
             u16 *input = &g_PadEdge2;
 
         if (*input & 0x40) {
-            GamePlaySoundCue(2);
+            PlaySoundCue(2);
             D_8007F954 = 1;
         }
         if (*input & 0x10) {
-            GamePlaySoundCue(2);
+            PlaySoundCue(2);
             switch (D_8007F94C) {
             case 1:
                 D_8007F94C = 2;
@@ -615,16 +615,16 @@ void GameUpdateTeamLogoCanvas(void) {
         if ((heldValue & 8) && (D_8007F930 != 0)) {
             if (heldValue & 4) {
                 if (g_PadEdge2 & 0x1000) {
-                    GameRotateTeamLogoCw();
+                    RotateTeamLogoCw();
                 }
                 if (g_PadEdge2 & 0x4000) {
                     func_8004BC68();
                 }
                 if (g_PadEdge2 & 0x8000) {
-                    GameRotateTeamLogoCcw();
+                    RotateTeamLogoCcw();
                 }
                 if (g_PadEdge2 & 0x2000) {
-                    GameFlipTeamLogoHorizontal();
+                    FlipTeamLogoHorizontal();
                 }
             } else if ((D_8007FB14 == 0x14) || (D_8007FB14 == 1)) {
                 if (heldValue & 0x1000) {
@@ -681,13 +681,13 @@ void GameUpdateTeamLogoCanvas(void) {
                     }
                 }
                 if ((g_PadHeld & 0xA0) && ((var_a1 != 0) || (var_a0_7 != 0))) {
-                    GamePlaySoundCue(4);
+                    PlaySoundCue(4);
                 }
             }
         }
         }
         if ((g_PadEdge2 & 2) && (D_8007F930 != 0)) {
-            GamePlaySoundCue(4);
+            PlaySoundCue(4);
             temp_a1_5 = (u16 *)g_TeamLogoCanvas;
             temp_a0 = D_8007F93C + D_8007F934;
             var_a2 = temp_a0;
@@ -879,26 +879,26 @@ typedef struct RaceRecord {
 extern RaceRecord g_RankingRecords[2][4][5] asm("D_801E7744");
 extern RaceRecord g_TimeRecords[2][4][5] asm("D_8019CB78");
 
-void *GameFormatLapTime(void *dst, s32 timeMs) asm("func_80021CD4");
-void GameDrawSprite(void *ot, s32 x, s16 y, s32 w, s32 h, s32 u, s32 v,
+void *FormatLapTime(void *dst, s32 timeMs) asm("func_80021CD4");
+void DrawSprite(void *ot, s32 x, s16 y, s32 w, s32 h, s32 u, s32 v,
                     s32 r, s32 g, s32 b, s32 clut, s32 shadeTex,
                     s32 semiTrans, s32 flags) asm("func_80046A2C");
-void GameDrawLargeText(s32 x, s16 y, u8 *text, s32 r, s32 g, s32 b,
+void DrawLargeText(s32 x, s16 y, u8 *text, s32 r, s32 g, s32 b,
                        s32 clut, s32 flags) asm("func_80047958");
 void GameDrawMenuButton(s32 x, s16 y, s32 w, s32 h, s32 r, s32 g, s32 b,
                         s32 flags, s32 textX, s32 textY,
                         s32 caption) asm("func_80048B88");
-void GameDrawRectOutline(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
+void DrawRectOutline(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
                          s32 g, s32 b, s32 alpha) asm("func_80047460");
-void GameDrawSolidRect(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
+void DrawSolidRect(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
                        s32 g, s32 b, s32 alpha) asm("func_80047024");
 
 /* The animated five-row ranking/time-record panel. */
-s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking)
+s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking)
     asm("func_8004D384");
 asm(".globl func_8004E07C\nfunc_8004E07C = func_8004D384 + 0xCF8");
 
-s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
+s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
     u8 text[16];
     void *ot;
     s32 phase;
@@ -946,10 +946,10 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
         panelY = slide + 0x21A;
 
         if (g_CourseIndex >= 4) {
-            GameDrawSprite(ot, 0xA4, (s16)(slide + 0x1EA), 0x30, 0x18,
+            DrawSprite(ot, 0xA4, (s16)(slide + 0x1EA), 0x30, 0x18,
                              0xCC, 0x38, 0, 0, 0, 0x20F, 1, 0, 0x3C);
         }
-        GameDrawSprite(ot, 0xC8, (s16)(slide + 0x218), 0x20, 0x28,
+        DrawSprite(ot, 0xC8, (s16)(slide + 0x218), 0x20, 0x28,
                          0x48, 0xD8, 0, 0, 0, 0x220, 1, 0, 0x19);
 
         {
@@ -962,35 +962,35 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
             headerTextureU = 0xA4;
             contentYWide = slide + 0x26C;
             contentY = contentYWide;
-            GameDrawSprite(ot, 0xA4, contentY, 0x48, 0x10, 0x48, 0xAC,
+            DrawSprite(ot, 0xA4, contentY, 0x48, 0x10, 0x48, 0xAC,
                              0, 0, 0, headerClut, 1, 1, headerFlags);
             switch (g_CourseIndex & 3) {
             case 0:
-                GameDrawSprite(ot, 0xA4, (s16)(slide + 0x25C), 0x54, 0x10,
+                DrawSprite(ot, 0xA4, (s16)(slide + 0x25C), 0x54, 0x10,
                                  0, 0x9C, 0, 0, 0, headerClut, 1, 1, headerFlags);
-                GameDrawSprite(ot, 0xEC, contentY, 0x20, 0x10, 0x44, 0xB4,
+                DrawSprite(ot, 0xEC, contentY, 0x20, 0x10, 0x44, 0xB4,
                                  0, 0, 0, headerClut, 1, 1, 0x3A);
                 break;
             case 1:
-                GameDrawSprite(ot, 0xA4, (s16)(slide + 0x25C), 0x4C, 0x10,
+                DrawSprite(ot, 0xA4, (s16)(slide + 0x25C), 0x4C, 0x10,
                                  0x54, 0x9C, 0, 0, 0, headerClut, 1, 1,
                                  headerFlags);
-                GameDrawSprite(ot, 0xEC, contentY, 0x20, 0x10, 0x64, 0xB4,
+                DrawSprite(ot, 0xEC, contentY, 0x20, 0x10, 0x64, 0xB4,
                                  0, 0, 0, headerClut, 1, 1, 0x3A);
                 break;
             case 2:
-                GameDrawSprite(ot, 0xA4, (s16)(slide + 0x25C), 0x48, 0x10,
+                DrawSprite(ot, 0xA4, (s16)(slide + 0x25C), 0x48, 0x10,
                                  0, 0xAC, 0, 0, 0, headerClut, 1, 1,
                                  headerFlags);
-                GameDrawSprite(ot, 0xEC, contentY, 0x20, 0x10, 0x84, 0xB4,
+                DrawSprite(ot, 0xEC, contentY, 0x20, 0x10, 0x84, 0xB4,
                                  0, 0, 0, headerClut, 1, 1, 0x3A);
                 break;
             case 3: {
-                GameDrawSprite(ot, 0xA4, (s16)(slide + 0x25C), 0x5C, 0x10,
+                DrawSprite(ot, 0xA4, (s16)(slide + 0x25C), 0x5C, 0x10,
                                  headerTextureU, 0x9C, 0, 0, 0,
                                  headerClut, 1, 1,
                                  headerFlags);
-                GameDrawSprite(ot, 0xEC, contentY, 0x20, 0x10,
+                DrawSprite(ot, 0xEC, contentY, 0x20, 0x10,
                                  headerTextureU, 0xB4, 0, 0, 0,
                                  headerClut, 1, 1, 0x3A);
                 break;
@@ -1000,19 +1000,19 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
 
         if (ranking != 0) {
             rowY = panelY + 0xA;
-            GameDrawSprite(ot, 0x18, rowY, 0x12, 0x10, 0, 0x7C,
+            DrawSprite(ot, 0x18, rowY, 0x12, 0x10, 0, 0x7C,
                              0, 0, 0, 0x244, 1, 1, 0x3B);
-            GameDrawSprite(ot, 0x2B, rowY, 0x14, 0x10, 0xC0, 0x8C,
+            DrawSprite(ot, 0x2B, rowY, 0x14, 0x10, 0xC0, 0x8C,
                              0, 0, 0, 0x244, 1, 1, 0x3B);
-            GameDrawSprite(ot, 0x41, rowY, 0x2C, 0x10, 0xD4, 0x8C,
+            DrawSprite(ot, 0x41, rowY, 0x2C, 0x10, 0xD4, 0x8C,
                              0, 0, 0, 0x244, 1, 1, 0x3B);
         } else {
             rowY = panelY + 0xA;
-            GameDrawSprite(ot, 0x18, rowY, 0x1C, 0x10, 0x44, 0x7C,
+            DrawSprite(ot, 0x18, rowY, 0x1C, 0x10, 0x44, 0x7C,
                              0, 0, 0, 0x244, 1, 1, 0x3B);
-            GameDrawSprite(ot, 0x34, rowY, 0x14, 0x10, 0xC0, 0x8C,
+            DrawSprite(ot, 0x34, rowY, 0x14, 0x10, 0xC0, 0x8C,
                              0, 0, 0, 0x244, 1, 1, 0x3B);
-            GameDrawSprite(ot, 0x4A, rowY, 0x2C, 0x10, 0xD4, 0x8C,
+            DrawSprite(ot, 0x4A, rowY, 0x2C, 0x10, 0xD4, 0x8C,
                              0, 0, 0, 0x244, 1, 1, 0x3B);
         }
         GameDrawMenuButton(0, panelY, 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
@@ -1032,40 +1032,40 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
         rowYStep = 0x82;
         do {
             if (ranking != 0) {
-                GameFormatLapTime(
+                FormatLapTime(
                     text,
                     g_RankingRecords[((g_CourseIndex & 4) >> 2)]
                                     [(g_CourseIndex & 3)][row].time);
                 rowY = panelY + rowYStep;
-                GameDrawLargeText(0x36, rowY, text, 0x7F, 0x7F, 0x7F,
+                DrawLargeText(0x36, rowY, text, 0x7F, 0x7F, 0x7F,
                                   0x244, 0x20);
-                GameDrawLargeText(
+                DrawLargeText(
                     0x77, rowY,
                     g_RankingRecords[((g_CourseIndex & 4) >> 2)]
                                     [(g_CourseIndex & 3)][row].name,
                     0x7F, 0x7F, 0x7F, 0x244, 0xA0);
             } else {
-                GameFormatLapTime(
+                FormatLapTime(
                     text,
                     g_TimeRecords[((g_CourseIndex & 4) >> 2)]
                                  [(g_CourseIndex & 3)][row].time);
                 rowY = panelY + rowYStep;
-                GameDrawLargeText(0x36, rowY, text, 0x7F, 0x7F, 0x7F,
+                DrawLargeText(0x36, rowY, text, 0x7F, 0x7F, 0x7F,
                                   0x244, 0x20);
-                GameDrawLargeText(
+                DrawLargeText(
                     0x77, rowY,
                     g_TimeRecords[((g_CourseIndex & 4) >> 2)]
                                  [(g_CourseIndex & 3)][row].name,
                     0x7F, 0x7F, 0x7F, 0x244, 0xA0);
             }
 
-            GameDrawSprite(ot, 0x17, (s16)(panelY + rowYStep), 8,
+            DrawSprite(ot, 0x17, (s16)(panelY + rowYStep), 8,
                              spriteHeight, (s16)(row * 8 + 8), 0x18,
                              0, 0, 0, 0x244, spriteOne, spriteOne, 0x3B);
-            GameDrawSprite(ot, 0xA7, (s16)(panelY + rowYStep), 8,
+            DrawSprite(ot, 0xA7, (s16)(panelY + rowYStep), 8,
                              spriteHeight, 0x58, 0x28, 0, 0, 0, 0x244,
                              spriteOne, spriteOne, 0x3B);
-            GameDrawSprite(ot, 0xDF, (s16)(panelY + rowYStep), 8,
+            DrawSprite(ot, 0xDF, (s16)(panelY + rowYStep), 8,
                              spriteHeight, 0x58, 0x28, 0, 0, 0, 0x244,
                              spriteOne, spriteOne, 0x3B);
 
@@ -1081,13 +1081,13 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                 case 1:
                 case 2:
                 case 10:
-                    GameDrawSprite(ot, 0xAE, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xAE, (s16)(panelY + rowYStep),
                                      0x14, spriteHeight, 0x50,
                                      0xBC, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3B);
                     break;
                 case 3:
-                    GameDrawSprite(ot, 0xAF, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xAF, (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0,
                                      0xBC, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3B);
@@ -1096,7 +1096,7 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                 case 5:
                 case 6:
                 case 11:
-                    GameDrawSprite(ot, 0xAF, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xAF, (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0x64,
                                      0xBC, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3B);
@@ -1105,7 +1105,7 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                 case 8:
                 case 9:
                 case 12:
-                    GameDrawSprite(ot, 0xAF, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xAF, (s16)(panelY + rowYStep),
                                      0x30, spriteHeight, 0x22,
                                      0xBC, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3B);
@@ -1115,7 +1115,7 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
             switch (car) {
                 case 0:
                     badgeXWord = badgeX.value;
-                    GameDrawSprite(ot, badgeXWord >> 16,
+                    DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x2A, spriteHeight, 0x16,
                                      0x30, 0, 0, 0, 0x244,
@@ -1123,38 +1123,38 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     break;
                 case 1:
                     badgeXWord = badgeX.value;
-                    GameDrawSprite(ot, badgeXWord >> 16,
+                    DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0x48,
                                      0x30, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 2:
-                    GameDrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0x7C,
                                      0x30, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 10:
-                    GameDrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x2C, spriteHeight, 0xA4,
                                      0x30, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 3:
-                    GameDrawSprite(ot, 0xE7, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xE7, (s16)(panelY + rowYStep),
                                      0x34, spriteHeight, 0,
                                      0x40, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 4:
-                    GameDrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x28, spriteHeight, 0x74,
                                      0x50, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 5:
-                    GameDrawSprite(ot, badgeX.value >> 16,
+                    DrawSprite(ot, badgeX.value >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x2A, spriteHeight, 0x3E,
                                      0x50, 0, 0, 0, 0x244,
@@ -1162,7 +1162,7 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     break;
                 case 6:
                     badgeXWord = badgeX.value;
-                    GameDrawSprite(ot, badgeXWord >> 16,
+                    DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0xB0,
                                      0x50, 0, 0, 0, 0x244,
@@ -1170,7 +1170,7 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     break;
                 case 11:
                     badgeXWord = badgeX.value;
-                    GameDrawSprite(ot, badgeXWord >> 16,
+                    DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x2A, spriteHeight, 0x0A,
                                      0x60, 0, 0, 0, 0x244,
@@ -1178,27 +1178,27 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     break;
                 case 7:
                     badgeXWord = badgeX.value;
-                    GameDrawSprite(ot, badgeXWord >> 16,
+                    DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x28, spriteHeight, 0x40,
                                      0x40, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 8:
-                    GameDrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x22, spriteHeight, 0x7A,
                                      0x40, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 9:
-                    GameDrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
+                    DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x30, spriteHeight, 0xA0,
                                      0x40, 0, 0, 0, 0x244,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 12:
                     badgeXWord = badgeX.value;
-                    GameDrawSprite(ot, badgeXWord >> 16,
+                    DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x30, spriteHeight, 0x04,
                                      0x50, 0, 0, 0, 0x244,
@@ -1222,20 +1222,20 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
             textShade = 0x7F;
             textClut = 0x244;
             textFlags = 0x20;
-            GameDrawLargeText(suffixX, (s16)(panelY + 0x82),
+            DrawLargeText(suffixX, (s16)(panelY + 0x82),
                               (u8 *)D_80011920, textShade, textShade,
                               textShade, textClut, textFlags);
-            GameDrawLargeText(suffixX, (s16)(panelY + 0xA2),
+            DrawLargeText(suffixX, (s16)(panelY + 0xA2),
                               (u8 *)D_80011924, textShade, textShade,
                               textShade, textClut, textFlags);
-            GameDrawLargeText(0x1F, (s16)(panelY + 0xC2),
+            DrawLargeText(0x1F, (s16)(panelY + 0xC2),
                               (u8 *)D_80011928, textShade, textShade,
                               textShade, textClut, textFlags);
             lastSuffix = (u8 *)D_8001192C;
-            GameDrawLargeText(suffixX, (s16)(panelY + 0xE2), lastSuffix,
+            DrawLargeText(suffixX, (s16)(panelY + 0xE2), lastSuffix,
                               textShade, textShade, textShade, textClut,
                               textFlags);
-            GameDrawLargeText(suffixX, (s16)(panelY + 0x102), lastSuffix,
+            DrawLargeText(suffixX, (s16)(panelY + 0x102), lastSuffix,
                               textShade, textShade, textShade, textClut,
                               textFlags);
         }
@@ -1254,10 +1254,10 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
             rectY = panelY + 0x7A;
             rectHeight = 0xA0;
             rectAlpha = 0xFF;
-            GameDrawRectOutline(rectCallOt, rectX, rectY, 0x124,
+            DrawRectOutline(rectCallOt, rectX, rectY, 0x124,
                                 rectHeight, 0xB4, 0xB4, 0xB4, rectAlpha);
             rectCallOt = rectOt;
-            GameDrawSolidRect(rectCallOt, rectX, rectY, 0x124, rectHeight,
+            DrawSolidRect(rectCallOt, rectX, rectY, 0x124, rectHeight,
                               0, 0, 0, rectAlpha);
             asm("" : : "r"(panelY));
         }

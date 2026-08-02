@@ -13,22 +13,22 @@ extern s32 g_RouteSceneryRotZ asm("D_801E4358");
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
 
-void GameDrawRouteScenery(void) asm("func_8003F02C");
-void GameDrawRouteScenery(void) {
+void DrawRouteScenery(void) asm("func_8003F02C");
+void DrawRouteScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
     Matrix *mtx1Ptr;
     s32 frameValue;
     s32 drawId;
 
-    GameBuildRotMatrixY(&mtx0, 0x800 - g_RouteSceneryRotY);
+    BuildRotMatrixY(&mtx0, 0x800 - g_RouteSceneryRotY);
     mtx1Ptr = &mtx1;
-    GameBuildRotMatrixX(mtx1Ptr, g_RouteSceneryRotX);
+    BuildRotMatrixX(mtx1Ptr, g_RouteSceneryRotX);
     MulMatrix2(&mtx0, mtx1Ptr);
     MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
-    GameBuildRotMatrixZ(&mtx0, g_RouteSceneryRotZ);
+    BuildRotMatrixZ(&mtx0, g_RouteSceneryRotZ);
     MulMatrix2(mtx1Ptr, &mtx0);
-    GameSelectModelBank(1);
+    SelectModelBank(1);
     func_80017794((void *)0x1F80011C, &g_RouteSceneryX, &mtx0);
     frameValue = g_ModelBankCount;
     *(s32 *)0x1F800084 = 0;
@@ -36,7 +36,7 @@ void GameDrawRouteScenery(void) {
     if (frameValue >= 0x26) {
         drawId = 0x25;
     }
-    GameSubmitModel((void *)0x1F800000, drawId);
+    SubmitModel((void *)0x1F800000, drawId);
 }
 
 /*
@@ -102,9 +102,9 @@ extern ShuttleAngles g_ShuttlePathAngles[] asm("D_8007E3C0");
 #define ANGLES(byteOffset) (*(ShuttleAngles *)((s32)g_ShuttlePathAngles + (byteOffset)))
 extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
 
-void GameInitShuttleScenery(void) asm("func_8003F0F8");
+void InitShuttleScenery(void) asm("func_8003F0F8");
 
-void GameInitShuttleScenery(void) {
+void InitShuttleScenery(void) {
     GameShuttleScenery *state;
     s32 *src;
     /* These pins are load-bearing: removing any one changes .text. */

@@ -6,10 +6,10 @@ extern u8 D_8007DBE4[];
 extern u8 D_801C0504[];
 extern u8 D_801C0618[];
 
-void GameBuildSpriteFromDesc(u8 *arg0, u8 *arg1) asm("func_80032FF0");
+void BuildSpriteFromDesc(u8 *arg0, u8 *arg1) asm("func_80032FF0");
 
-void GameBuildRaceHudPrims(s32 arg0) asm("func_80032D5C");
-void GameBuildRaceHudPrims(s32 arg0) {
+void BuildRaceHudPrims(s32 arg0) asm("func_80032D5C");
+void BuildRaceHudPrims(s32 arg0) {
     u8 *cursor;
     /* This pin is load-bearing: removing it changes .text. */
     register s32 col __asm("$17");
@@ -34,7 +34,7 @@ nonzero_inner:
             dst = bufferOffset + dst;
             offset = rowOffset + 0x2C;
             dst += offset;
-            GameBuildSpriteFromDesc(dst, D_8007DAF4 + rowOffset);
+            BuildSpriteFromDesc(dst, D_8007DAF4 + rowOffset);
         }
         if (g_GrandPrixClass == 5 && row == 0xB) {
             cursor[0] += 0xE8;
@@ -59,7 +59,7 @@ zero_outer:
         col = 0;
         cursor = (u8 *)rowOffset;
 zero_inner:
-        GameBuildSpriteFromDesc(cursor + (bufferOffset + 0x2C), D_8007DBE4 + bufferOffset);
+        BuildSpriteFromDesc(cursor + (bufferOffset + 0x2C), D_8007DBE4 + bufferOffset);
         cursor += 0x237E8;
         col++;
         if (col < 2) {

@@ -12,8 +12,8 @@ typedef struct UnkFunc80040DB4Entry {
 
 void func_8005C31C(s32 arg0, s32 arg1, s32 arg2);
 
-void GameUpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
-void GameUpdateZoneAmbience(s32 arg0) {
+void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
+void UpdateZoneAmbience(s32 arg0) {
     s32 position;
     s32 base;
     /* This pin is load-bearing: removing it changes .text. */

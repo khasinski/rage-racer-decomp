@@ -2,8 +2,8 @@
 
 /*
  * Members declare these three halfwords as u16, s16 and volatile u16;
- * reconciled to the most specific form.  Only GameApplyBodyColor1 and
- * GameApplyBodyColor2 read them, the others just store.
+ * reconciled to the most specific form.  Only ApplyBodyColor1 and
+ * ApplyBodyColor2 read them, the others just store.
  */
 extern volatile u16 g_PaintBlendShade0 asm("D_8019CB38");
 extern volatile u16 g_PaintBlendShade1 asm("D_8019CB3A");
@@ -15,8 +15,8 @@ extern volatile u16 g_PaintBlendShade2 asm("D_8019CB3C");
  * MUST keep the raw D_ spelling: they are referenced from the %hi/%lo pairs in
  * the inline asm below, which does not follow asm() labels. See names.md 12c.
  */
-void GameBlendPaintColor(u32 arg0, u32 arg1) asm("func_8001D5C8");
-void GameBlendPaintColor(u32 arg0, u32 arg1) {
+void BlendPaintColor(u32 arg0, u32 arg1) asm("func_8001D5C8");
+void BlendPaintColor(u32 arg0, u32 arg1) {
     u32 a;
     u32 b;
 
@@ -27,8 +27,8 @@ void GameBlendPaintColor(u32 arg0, u32 arg1) {
     g_PaintBlendShade0 = (a + b) | 0x8000;
 }
 
-void GameBlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
-void GameBlendPaintColorThirds(u32 arg0, u32 arg1) {
+void BlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
+void BlendPaintColorThirds(u32 arg0, u32 arg1) {
     u16 color0;
     u16 color1;
     s32 r0;
@@ -65,8 +65,8 @@ void GameBlendPaintColorThirds(u32 arg0, u32 arg1) {
 }
 
 
-void GameBlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
-void GameBlendPaintColorQuarters(u32 arg0, u32 arg1) {
+void BlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
+void BlendPaintColorQuarters(u32 arg0, u32 arg1) {
     u32 a;
     u32 b;
     u32 c;
@@ -95,7 +95,7 @@ void GameBlendPaintColorQuarters(u32 arg0, u32 arg1) {
 }
 
 /*
- * GameApplyBodyColor1.
+ * ApplyBodyColor1.
  *
  * The store to raw+0x7162 written just before the call is scheduled by the
  * compiler into the jal delay slot; no hand-written asm is needed.
@@ -109,12 +109,12 @@ extern u16 g_BodyColorSecondary[] asm("D_8007D330");
 extern volatile u16 g_PaintSlots3StopA[] asm("D_8007D354");
 extern volatile u16 g_PaintSlots4Stop[] asm("D_8007D378");
 
-void GameBlendPaintColor(u32 arg0, u32 arg1) asm("func_8001D5C8");
-void GameBlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
-void GameBlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
+void BlendPaintColor(u32 arg0, u32 arg1) asm("func_8001D5C8");
+void BlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
+void BlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
 
-void GameApplyBodyColor1(u32 arg0, u32 arg1) asm("func_8001D748");
-void GameApplyBodyColor1(u32 arg0, u32 arg1) {
+void ApplyBodyColor1(u32 arg0, u32 arg1) asm("func_8001D748");
+void ApplyBodyColor1(u32 arg0, u32 arg1) {
     u32 raw;
     u16 *base;
     u16 s1;
@@ -131,7 +131,7 @@ void GameApplyBodyColor1(u32 arg0, u32 arg1) {
     s2 = *(u16 *)((u8 *)g_BodyColorSecondary + arg0);
 
     *(u16 *)(raw + 0x7162) = s1;
-    GameBlendPaintColor(s1, s2);
+    BlendPaintColor(s1, s2);
 
     i = 0;
     color = &g_PaintBlendShade0;
@@ -143,7 +143,7 @@ void GameApplyBodyColor1(u32 arg0, u32 arg1) {
         base[idx[0] + 2] = s2;
     }
 
-    GameBlendPaintColorThirds(s1, s2);
+    BlendPaintColorThirds(s1, s2);
 
     i = 0;
     color = &g_PaintBlendShade0;
@@ -156,7 +156,7 @@ void GameApplyBodyColor1(u32 arg0, u32 arg1) {
         base[idx[0] + 3] = s2;
     }
 
-    GameBlendPaintColorQuarters(s1, s2);
+    BlendPaintColorQuarters(s1, s2);
 
     ((volatile u16 *)base)[0x2C1] = s1;
     ((volatile u16 *)base)[0x2C2] = g_PaintBlendShade0;
@@ -169,13 +169,13 @@ void GameApplyBodyColor1(u32 arg0, u32 arg1) {
 extern u32 g_CarModelAsset asm("D_8009E698");
 extern u32 g_CarModelSlot asm("D_8009E87C");
 
-void GameApplyBodyColor1(u32 arg0, u32 arg1) asm("func_8001D748");
-void GameUploadCarImage(u32 arg0) asm("func_80017B5C");
+void ApplyBodyColor1(u32 arg0, u32 arg1) asm("func_8001D748");
+void UploadCarImage(u32 arg0) asm("func_80017B5C");
 
-void GameSetBodyColor1(u32 arg0) asm("func_8001D8C4");
-void GameSetBodyColor1(u32 arg0) {
-    GameApplyBodyColor1(arg0, *(u32 *)(g_CarModelAsset + 0x24));
-    GameUploadCarImage(g_CarModelSlot);
+void SetBodyColor1(u32 arg0) asm("func_8001D8C4");
+void SetBodyColor1(u32 arg0) {
+    ApplyBodyColor1(arg0, *(u32 *)(g_CarModelAsset + 0x24));
+    UploadCarImage(g_CarModelSlot);
 }
 
 extern u16 g_BodyColorPrimary[] asm("D_8007D30C");
@@ -183,12 +183,12 @@ extern u16 g_BodyColorSecondary[] asm("D_8007D330");
 extern volatile u16 g_PaintSlots3StopB[] asm("D_8007D368");
 extern volatile u16 g_PaintSlots4Stop[] asm("D_8007D378");
 
-void GameBlendPaintColor(u32 arg0, u32 arg1) asm("func_8001D5C8");
-void GameBlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
-void GameBlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
+void BlendPaintColor(u32 arg0, u32 arg1) asm("func_8001D5C8");
+void BlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
+void BlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
 
-void GameApplyBodyColor2(u32 arg0, u32 arg1) asm("func_8001D900");
-void GameApplyBodyColor2(u32 arg0, u32 arg1) {
+void ApplyBodyColor2(u32 arg0, u32 arg1) asm("func_8001D900");
+void ApplyBodyColor2(u32 arg0, u32 arg1) {
     u16 *base;
     u16 s1;
     u16 s2;
@@ -201,7 +201,7 @@ void GameApplyBodyColor2(u32 arg0, u32 arg1) {
     s1 = g_BodyColorPrimary[arg0];
     s2 = g_BodyColorSecondary[arg0];
 
-    GameBlendPaintColor(s1, s2);
+    BlendPaintColor(s1, s2);
 
     i = 0;
     color = &g_PaintBlendShade0;
@@ -213,7 +213,7 @@ void GameApplyBodyColor2(u32 arg0, u32 arg1) {
         base[idx[0] + 5] = s2;
     }
 
-    GameBlendPaintColorThirds(s1, s2);
+    BlendPaintColorThirds(s1, s2);
 
     i = 0;
     color = &g_PaintBlendShade0;
@@ -226,7 +226,7 @@ void GameApplyBodyColor2(u32 arg0, u32 arg1) {
         base[idx[0] + 7] = s2;
     }
 
-    GameBlendPaintColorQuarters(s1, s2);
+    BlendPaintColorQuarters(s1, s2);
 
     ((volatile u16 *)base)[0x2C6] = s1;
     ((volatile u16 *)base)[0x2C7] = g_PaintBlendShade0;
@@ -239,11 +239,11 @@ void GameApplyBodyColor2(u32 arg0, u32 arg1) {
 extern u32 g_CarModelAsset asm("D_8009E698");
 extern u32 g_CarModelSlot asm("D_8009E87C");
 
-void GameApplyBodyColor2(u32 arg0, u32 arg1) asm("func_8001D900");
-void GameUploadCarImage(u32 arg0) asm("func_80017B5C");
+void ApplyBodyColor2(u32 arg0, u32 arg1) asm("func_8001D900");
+void UploadCarImage(u32 arg0) asm("func_80017B5C");
 
-void GameSetBodyColor2(u32 arg0) asm("func_8001DA74");
-void GameSetBodyColor2(u32 arg0) {
-    GameApplyBodyColor2(arg0, *(u32 *)(g_CarModelAsset + 0x24));
-    GameUploadCarImage(g_CarModelSlot);
+void SetBodyColor2(u32 arg0) asm("func_8001DA74");
+void SetBodyColor2(u32 arg0) {
+    ApplyBodyColor2(arg0, *(u32 *)(g_CarModelAsset + 0x24));
+    UploadCarImage(g_CarModelSlot);
 }

@@ -35,40 +35,40 @@ extern s32 g_RacePaused asm("D_801E4BAC");
 
 void func_8001C974(void);
 
-void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
 
-void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 
 void func_8003479C(s32 arg0);
 
-void GameGetTrackZoneBlend(s32 arg0) asm("func_800350B4");
+void GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
 
-void GameExitRaceScene(s32 arg0) asm("func_80035258");
+void ExitRaceScene(s32 arg0) asm("func_80035258");
 
-void GameUpdateFreeLookCamera(u8 *arg0, s32 arg1) asm("func_8003CF14");
+void UpdateFreeLookCamera(u8 *arg0, s32 arg1) asm("func_8003CF14");
 
-void GameDrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
+void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
 
 void func_8003E590(void);
 
-void GameDrawFlybyScenery(void) asm("func_8003EAF4");
+void DrawFlybyScenery(void) asm("func_8003EAF4");
 
-void GameUpdateRouteScenery(void) asm("func_8003EC98");
+void UpdateRouteScenery(void) asm("func_8003EC98");
 
-void GameDrawRouteScenery(void) asm("func_8003F02C");
+void DrawRouteScenery(void) asm("func_8003F02C");
 
 void func_8003F9C4(void);
 
-void GameDrawPathScenery(void) asm("func_80040730");
+void DrawPathScenery(void) asm("func_80040730");
 
 void func_8004087C(s32 arg0);
 
-void GameUpdatePointAmbience(s32 arg0) asm("func_80040ADC");
+void UpdatePointAmbience(s32 arg0) asm("func_80040ADC");
 
-void GameUpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
+void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
 
 
-void GameDrawTerrainCells(void) asm("func_80041840");
+void DrawTerrainCells(void) asm("func_80041840");
 
 void func_800418D4(void);
 
@@ -94,8 +94,8 @@ extern TrackWaypointRuntime g_Waypoints[] asm("D_801E4DF4");
  * inactive. Register pins and the raw tail-offset writes are match-load-bearing.
  */
 
-void GameUpdateWaypointRaceScene(void) asm("func_80037200");
-void GameUpdateWaypointRaceScene(void) {
+void UpdateWaypointRaceScene(void) asm("func_80037200");
+void UpdateWaypointRaceScene(void) {
     s32 value;
     s32 option;
 
@@ -104,7 +104,7 @@ void GameUpdateWaypointRaceScene(void) {
     if ((u32)g_SceneTimer < 0x3D) {
         func_8001C974();
         value = g_SceneTimer - 6;
-        GameDrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
+        DrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
     }
 
     if (g_PauseDebounce > 0) {
@@ -116,20 +116,20 @@ void GameUpdateWaypointRaceScene(void) {
         g_RacePaused = (u32)g_RacePaused < 1;
 
         if (g_RacePaused != 0) {
-            GamePauseCdAudio();
-            GameForceAllEffectVoicesEnabled(0);
+            PauseCdAudio();
+            ForceAllEffectVoicesEnabled(0);
             g_RaceOptionCursor = 0;
-            GamePlaySoundCue(2);
+            PlaySoundCue(2);
         } else if (g_RaceOptionCursor == 2) {
             g_RaceFadeTimer = 0;
             g_RacePhase = 7;
-            GameStartCdVolumeFade(0x1E);
+            StartCdVolumeFade(0x1E);
         } else if (g_RaceOptionCursor == 1) {
-            GameExitRaceScene(0xB);
+            ExitRaceScene(0xB);
         } else {
-            GameForceAllEffectVoicesEnabled(1);
+            ForceAllEffectVoicesEnabled(1);
             if (g_RacePhase >= 2) {
-                GameResumeCdAudio();
+                ResumeCdAudio();
             }
         }
     }
@@ -137,12 +137,12 @@ void GameUpdateWaypointRaceScene(void) {
     if (g_RacePhase == 7) {
         value = g_RaceFadeTimer;
         if (value > 0) {
-            GameDrawFullscreenFadeTile(value * 3, 0x49);
+            DrawFullscreenFadeTile(value * 3, 0x49);
             option = 6;
             value = g_RaceFadeTimer;
         }
         if (value >= 0x3D) {
-            GameExitRaceScene(option);
+            ExitRaceScene(option);
         }
         g_RaceFadeTimer++;
     }
@@ -150,34 +150,34 @@ void GameUpdateWaypointRaceScene(void) {
     if (g_RacePaused != 0) {
         if ((g_PadEdge2 & 0x1000) && g_RaceOptionCursor > 0) {
             g_RaceOptionCursor--;
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
 
         if ((g_PadEdge2 & 0x4000) && g_RaceOptionCursor < (2 - g_GrandPrixMode)) {
             g_RaceOptionCursor++;
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
 
         g_SceneTimer--;
         func_8003479C(g_RaceOptionCursor);
-        GameUpdateFreeLookCamera(g_PlayerCar, 0);
-        GameGetTrackZoneBlend(g_PlayerTrackProgress);
-        GameRequestTrackTexturePage(g_PlayerTrackSection);
+        UpdateFreeLookCamera(g_PlayerCar, 0);
+        GetTrackZoneBlend(g_PlayerTrackProgress);
+        RequestTrackTexturePage(g_PlayerTrackSection);
         func_800418D4();
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-        GameDrawTerrainCells();
-        GameDrawCourseObjects();
-        GameDrawFlybyScenery();
-        GameDrawRouteScenery();
-        GameDrawPathScenery();
-        GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
+        DrawTerrainCells();
+        DrawCourseObjects();
+        DrawFlybyScenery();
+        DrawRouteScenery();
+        DrawPathScenery();
+        DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 0);
         return;
     }
 
     g_AnimTimer++;
 
     if ((u32)g_SceneTimer >= 0x1F && g_RacePhase == 0) {
-        GameStartCdAudio();
+        StartCdAudio();
         g_RacePhase = 2;
         g_PauseDebounce = 0xA;
     }
@@ -185,34 +185,34 @@ void GameUpdateWaypointRaceScene(void) {
     if (g_CameraCarProgressA >= g_TrackLength && g_RacePhase < 3) {
         g_RaceFadeTimer = 0;
         g_RacePhase = 7;
-        GameStartCdVolumeFade(0x1E);
-        GameForceAllEffectVoicesEnabled(0);
+        StartCdVolumeFade(0x1E);
+        ForceAllEffectVoicesEnabled(0);
     }
 
-    GameUpdateLoadedAudioVoices(0, 1);
-    GameUpdateFreeLookCamera(g_PlayerCar, 1);
-    GameRequestTrackTexturePage(g_PlayerTrackSection);
-    GameUpdateEnvironment();
+    UpdateLoadedAudioVoices(0, 1);
+    UpdateFreeLookCamera(g_PlayerCar, 1);
+    RequestTrackTexturePage(g_PlayerTrackSection);
+    UpdateEnvironment();
     func_800418D4();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-    GameDrawTerrainCells();
-    GameDrawCourseObjects();
+    DrawTerrainCells();
+    DrawCourseObjects();
     func_8003E590();
-    GameDrawFlybyScenery();
-    GameUpdateRouteScenery();
-    GameDrawRouteScenery();
+    DrawFlybyScenery();
+    UpdateRouteScenery();
+    DrawRouteScenery();
     func_8003F9C4();
-    GameDrawPathScenery();
-    GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
-    GameGetTrackZoneBlend(g_PlayerTrackProgress);
-    GameSetReverbDepth(g_ReverbZoneDepth, g_ReverbZoneDepth);
-    GameUpdateZoneAmbience(g_PlayerTrackProgress);
-    GameUpdatePointAmbience(g_PlayerTrackProgress);
+    DrawPathScenery();
+    DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
+    GetTrackZoneBlend(g_PlayerTrackProgress);
+    SetReverbDepth(g_ReverbZoneDepth, g_ReverbZoneDepth);
+    UpdateZoneAmbience(g_PlayerTrackProgress);
+    UpdatePointAmbience(g_PlayerTrackProgress);
     func_8004087C(g_PlayerTrackSection);
 }
 
-void GameSeedWaypoints(void) asm("func_80037714");
-void GameSeedWaypoints(void) {
+void SeedWaypoints(void) asm("func_80037714");
+void SeedWaypoints(void) {
     TrackWaypointRuntime *waypoint;
     s32 i;
     TrackWaypointSeed *seed;

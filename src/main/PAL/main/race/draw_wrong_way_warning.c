@@ -2,7 +2,7 @@
 #include "game/render.h"
 #include "game/car.h"
 
-u8 *GameDrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");
+u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");
 
 void SetSprt(u8 *arg0) asm("func_80064FA8");
 void SetShadeTex(u8 *arg0, s32 arg1) asm("func_80064EB8");
@@ -10,8 +10,8 @@ void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_8001720C(void *ot, void *packet, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 void *func_80017390(void *ot, void *packet, s32 arg2);
 
-void GameDrawWrongWayWarning(void) asm("func_800333DC");
-void GameDrawWrongWayWarning(void) {
+void DrawWrongWayWarning(void) asm("func_800333DC");
+void DrawWrongWayWarning(void) {
     /* This pin is load-bearing: removing it changes .text. */
     register u8 *packet __asm("$16");
     u8 *next;
@@ -70,7 +70,7 @@ extern u8 *volatile g_DrawBuffer asm("D_8019C900");
 extern s32 g_PlayerSpeed asm("D_8009E778");
 extern s16 g_PlayerGear asm("D_8009E806");
 extern u16 g_HudGlyphClut asm("D_801E4130");
-/* The needle corner table car/GameGetTrackSurfaceHeight.c rebuilds: four
+/* The needle corner table car/GetTrackSurfaceHeight.c rebuilds: four
  * (x, y) pairs. The loop below biases its cursor to the y of corner 0. */
 extern s16 g_TachoNeedleQuad[4][2] asm("D_8019C7D4");
 /* Tint of the tachometer face: the dial-mode branches set all three to the
@@ -84,10 +84,10 @@ s32 func_80068568(s32 angle);
 s32 func_80068634(s32 angle);
 void SetPolyF4(void *prim) asm("func_80064F30");
 void func_80064FF8(void *prim);
-void GameDrawSpeedDigits(s32 x, s32 y, s32 speed) asm("func_80033C18");
+void DrawSpeedDigits(s32 x, s32 y, s32 speed) asm("func_80033C18");
 
-void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) asm("func_8003351C");
-void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
+void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) asm("func_8003351C");
+void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
     GameCarSpec *p = g_CarSpec;
     s32 cx = p->tachoNeedleX;
     s32 cy = p->tachoNeedleY;
@@ -163,9 +163,9 @@ void GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
     {
         s32 x = cx + *(s16 *)(base + 12);
         s32 y = cy + *(s16 *)(base + 14);
-        u8 *q = GameDrawHudDigit(*(u8 *volatile *)0x1F800000, x, y, g_PlayerGear, g_HudGlyphClut);
+        u8 *q = DrawHudDigit(*(u8 *volatile *)0x1F800000, x, y, g_PlayerGear, g_HudGlyphClut);
         SCRATCH = q;
-        GameDrawSpeedDigits(cx, cy, g_PlayerSpeed * 160 / 1168);
+        DrawSpeedDigits(cx, cy, g_PlayerSpeed * 160 / 1168);
     }
 
     *(u8 *)(g_DrawBuffer + 0x236E8) = g_TachoFaceR;
@@ -202,8 +202,8 @@ void SetSemiTrans(u8 *arg0, s32 arg1) asm("func_80064E90");
 void SetTile(u8 *arg0) asm("func_80064FF8");
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void GameDrawFullscreenFadeTile(s32 color, s32 arg1) asm("func_80033AA0");
-void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
+void DrawFullscreenFadeTile(s32 color, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 color, s32 arg1) {
     u8 *base = g_DrawBuffer;
     u8 *ot = base + 0xCC;
     u8 *packet;
@@ -238,8 +238,8 @@ void GameDrawFullscreenFadeTile(s32 color, s32 arg1) {
 void SetSprt8(u8 *prim) asm("func_80064F80");
 void func_80064EB8(u8 *prim, s32 enabled);
 
-u8 *GameDrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");
-u8 *GameDrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
+u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");
+u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
     /* This pin is load-bearing: removing it changes .text. */
     register u8 *out asm("$16") = prim;
     s32 xReg = x;

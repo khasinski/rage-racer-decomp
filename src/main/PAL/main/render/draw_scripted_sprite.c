@@ -18,8 +18,8 @@ void func_80046A2C(
     s32 arg12,
     s32 arg13);
 
-void GameDrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) asm("func_80048078");
-void GameDrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
+void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) asm("func_80048078");
+void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     /* These pins are load-bearing: removing any one changes .text. */
     register u8 *record asm("$10") = arg2;
     register u8 *style asm("$9");
@@ -120,8 +120,8 @@ void GameDrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
 
 void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
-void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) asm("func_80048210");
-void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
+void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) asm("func_80048210");
+void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     /* This pin is load-bearing: removing it changes .text. */
     register u8 *record asm("$8") = arg2;
     u8 *style;
@@ -252,8 +252,8 @@ void GameDrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
         alpha);
 }
 
-void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) asm("func_800483D4");
-void GameDrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
+void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) asm("func_800483D4");
+void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     u8 *style;
     u8 *record;
     void *ot;
@@ -375,8 +375,8 @@ void func_80046E00(u8 *arg0, s16 x0, s16 y0, s16 x1a, s16 y0b, s16 x0b,
                    s32 d3, s32 d4, s32 d5, s32 d6, s32 d7, s32 dA,
                    s32 dB, s32 dC, s32 h8, s32 f8, s32 f4, s32 dE);
 
-void GameDrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) asm("func_80048580");
-void GameDrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
+void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) asm("func_80048580");
+void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     s32 duration;
     u8 *table;
     u8 *entry;
@@ -534,13 +534,13 @@ loop_body:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
-                GameDrawScriptedSprite(
+                DrawScriptedSprite(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1, type);
                 cmd++;
                 goto loop_continue;
             case 0:
             case 1:
-                GameDrawScriptedSprite(
+                DrawScriptedSprite(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1, type);
                 cmd++;
                 goto loop_continue;
@@ -548,12 +548,12 @@ loop_body:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
-                GameDrawScriptedLine(
+                DrawScriptedLine(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
                 cmd++;
                 goto loop_continue;
             case 10:
-                GameDrawScriptedLine(
+                DrawScriptedLine(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
                 cmd++;
                 goto loop_continue;
@@ -561,12 +561,12 @@ loop_body:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
-                GameDrawScriptedTriangle(
+                DrawScriptedTriangle(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
                 cmd++;
                 goto loop_continue;
             case 20:
-                GameDrawScriptedTriangle(
+                DrawScriptedTriangle(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
                 cmd++;
                 goto loop_continue;
@@ -574,11 +574,11 @@ loop_body:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
-                GameDrawScriptedQuad(
+                DrawScriptedQuad(
                     remaining, (u8 *)cmd->arg0, (s32 *)cmd->arg1);
                 break;
             case 30:
-                GameDrawScriptedQuad(
+                DrawScriptedQuad(
                     remaining, (u8 *)cmd->arg0, (s32 *)cmd->arg1);
                 break;
             default:
@@ -613,8 +613,8 @@ extern s32 D_8009B250[];
 
 void func_80046A2C();
 
-void GameDrawFadingMenuSprites(s32 progress, s32 count, s32 slot) asm("func_800489AC");
-void GameDrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
+void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) asm("func_800489AC");
+void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     u8 *arg0Ptr;
     /* These pins are load-bearing: removing any one changes .text. */
     register u8 *arg1Ptr asm("$9");
@@ -786,8 +786,8 @@ s32 func_80068568(s32 arg0);
 void func_80047460(
     void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7, s32 arg8);
 
-void GameDrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
-void GameDrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
+void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
+void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
     void *ot;
     s32 savedX0;
     s32 savedY0;

@@ -9,8 +9,8 @@ s32 func_8002FB60(s32 arg0, s32 arg1);
  * Smooths the track angle at `pointIndex` by blending it (half weight, 0x200)
  * with the angles two points behind and two points ahead (wrap-aware).
  */
-s32 GameSmoothTrackAngle(s32 pointIndex, s32 weight) asm("func_8002FD9C");
-s32 GameSmoothTrackAngle(s32 pointIndex, s32 weight) {
+s32 SmoothTrackAngle(s32 pointIndex, s32 weight) asm("func_8002FD9C");
+s32 SmoothTrackAngle(s32 pointIndex, s32 weight) {
     s32 center;
     s32 prev_index;
     s32 prev;

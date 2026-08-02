@@ -4,10 +4,10 @@
 #include "game/car.h"
 #include "game/render.h"
 
-void GameUpdateCarDriving() asm("func_8002F690");
+void UpdateCarDriving() asm("func_8002F690");
 void func_80030030();
-void GameUpdateCarAirborne() asm("func_80030814");
-void GameUpdateCarStandingStart() asm("func_80030BC4");
+void UpdateCarAirborne() asm("func_80030814");
+void UpdateCarStandingStart() asm("func_80030BC4");
 s32 func_80068568(s32);
 s32 func_80068634();
 extern s32 g_ShiftTargetSpeed asm("D_8007DA74");
@@ -42,15 +42,15 @@ extern s32 g_ShiftTargetRpm asm("D_801E4BF4");
 extern s16 g_DragScale asm("D_801E4FB4");
 extern u8 g_GearTorqueCurve[] asm("D_801E8884");
 /*
- * AI target-speed / drivetrain physics driver (called by GameUpdatePlayerCar). Reads
+ * AI target-speed / drivetrain physics driver (called by UpdatePlayerCar). Reads
  * the per-car spec block g_CarSpec to compute a target speed, applies steering
  * assist and RPM, and dispatches the state98 motion handlers. `base` is the car
  * runtime, accessed via raw byte-offset pointer arithmetic (e.g.
  * *(s16*)((u8*)base+0x132)) with the drive sub-block at base+0xBC; the raw
  * offsets are what make it match, so it is intentionally left as void*.
  */
-void GameUpdateCarDrivetrain(void *base) asm("func_8002A810");
-void GameUpdateCarDrivetrain(void *base) {
+void UpdateCarDrivetrain(void *base) asm("func_8002A810");
+void UpdateCarDrivetrain(void *base) {
   u8 *var_a2;
   s16 temp_a0;
   s16 temp_a0_2;
@@ -631,7 +631,7 @@ void GameUpdateCarDrivetrain(void *base) {
   {
     var_s1 -= var_t3 / 2;
   }
-  temp_v0_9 = GameGetAngleDistance(*((s32 *) (((u8 *) car) + 0x24)), *((s32 *) (((u8 *) car) + 0xA0)), (s32) var_a2, var_a3);
+  temp_v0_9 = GetAngleDistance(*((s32 *) (((u8 *) car) + 0x24)), *((s32 *) (((u8 *) car) + 0xA0)), (s32) var_a2, var_a3);
   *((s32 *) (((u8 *) temp_s3) + 0x4C)) = temp_v0_9;
   if (temp_v0_9 >= 0x401)
   {
@@ -656,7 +656,7 @@ void GameUpdateCarDrivetrain(void *base) {
       var_s5 -= ((s32) ((temp_a0_7 * 5) / 6)) / var_a1_4;
     }
   }
-  temp_a0_8 = GameGetAngleDistance(*((s32 *) (((u8 *) car) + 0xA0)), 0xC00 - (*((s16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints))) + 0xA))));
+  temp_a0_8 = GetAngleDistance(*((s32 *) (((u8 *) car) + 0xA0)), 0xC00 - (*((s16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints))) + 0xA))));
   var_a0 = temp_a0_8;
   temp_a1_2 = *((s32 *) (((u8 *) car) + 0x30));
   temp_a2 = *((s32 *) (((u8 *) car) + 0x38));
@@ -757,7 +757,7 @@ void GameUpdateCarDrivetrain(void *base) {
       temp_v1_17 = (((((s32) (temp_v1_16 << 0x10)) >> 13) >> 7) * 0xC) + g_TrackArcCenters;
       temp_s2 = (*((s32 *) (((u8 *) car) + 0))) - (*((s32 *) (((u8 *) temp_v1_17) + 0)));
       temp_s1 = (*((s32 *) (((u8 *) car) + 8))) - (*((s32 *) (((u8 *) temp_v1_17) + 4)));
-      temp_v0_12 = GameAtan2(temp_s2, temp_s1);
+      temp_v0_12 = Atan2(temp_s2, temp_s1);
       temp_s0 = func_80068634(temp_v0_12);
       temp_v0_13 = (temp_s0 * temp_s2) + (func_80068568(temp_v0_12) * temp_s1);
       var_a0 = temp_v0_13 >> 0xC;
@@ -849,7 +849,7 @@ void GameUpdateCarDrivetrain(void *base) {
     switch (temp_v1_22)
     {
       case 0:
-        GameUpdateCarDriving(car, var_a1_7);
+        UpdateCarDriving(car, var_a1_7);
         break;
 
       case 1:
@@ -857,11 +857,11 @@ void GameUpdateCarDrivetrain(void *base) {
         break;
 
       case 2:
-        GameUpdateCarAirborne(car, var_a1_7);
+        UpdateCarAirborne(car, var_a1_7);
         break;
 
       case 3:
-        GameUpdateCarStandingStart(car, var_a1_7);
+        UpdateCarStandingStart(car, var_a1_7);
         break;
 
     }

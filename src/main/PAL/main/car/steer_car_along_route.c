@@ -27,31 +27,31 @@ typedef struct GameCarShortVector {
 extern s32 g_AnimTimer asm("D_8009E694");
 extern s16 g_ClosestRivalRank asm("D_801E7740");
 
-void GameRankContenders(void) asm("func_8003A728");
-void GameUpdateCarTrafficAvoidance() asm("func_8003A280");
-void GameUpdateCarAiTargetSpeed() asm("func_800396FC");
-void GameApplyCarRacingLineHint() asm("func_800394DC");
-void GameClampCarLateralOffset() asm("func_8003A148");
-void GameUpdateRivalRubberBand(void) asm("func_8003A974");
-void GameSlowRivalAhead() asm("func_8003A6A4");
-void GameAccumulateLapProgress() asm("func_8002C168");
-void GameApplyCarKnockback() asm("func_80038C4C");
-s32 GameUpdateCarTrackState() asm("func_80031298");
-void GameStartCarBodyKick() asm("func_80038F0C");
-void GameUpdateCarBodyKick() asm("func_80038FF0");
-void GameUpdateCarCrestHop() asm("func_80039280");
+void RankContenders(void) asm("func_8003A728");
+void UpdateCarTrafficAvoidance() asm("func_8003A280");
+void UpdateCarAiTargetSpeed() asm("func_800396FC");
+void ApplyCarRacingLineHint() asm("func_800394DC");
+void ClampCarLateralOffset() asm("func_8003A148");
+void UpdateRivalRubberBand(void) asm("func_8003A974");
+void SlowRivalAhead() asm("func_8003A6A4");
+void AccumulateLapProgress() asm("func_8002C168");
+void ApplyCarKnockback() asm("func_80038C4C");
+s32 UpdateCarTrackState() asm("func_80031298");
+void StartCarBodyKick() asm("func_80038F0C");
+void UpdateCarBodyKick() asm("func_80038FF0");
+void UpdateCarCrestHop() asm("func_80039280");
 
 /*
  * Car route-steering update. Samples a look-ahead track point (two ahead or two
  * behind depending on the lap-direction flag g_RaceSeries), clamps the lateral
  * offset to the track half-width (field_10/field_12), projects the target point
  * off the centre-line along the inward normal (0x1000 - smoothed track angle),
- * then nudges the car's headingAngle toward that target (GameGetAngleDelta). Writes
+ * then nudges the car's headingAngle toward that target (GetAngleDelta). Writes
  * the steer value into field_44 and the route sub-block (field_BC).
  * Register-pinned locals are match-load-bearing.
  */
-void GameSteerCarAlongRoute(GameCarRuntime *car) asm("func_8003AEBC");
-void GameSteerCarAlongRoute(GameCarRuntime *car) {
+void SteerCarAlongRoute(GameCarRuntime *car) asm("func_8003AEBC");
+void SteerCarAlongRoute(GameCarRuntime *car) {
     GameCarRuntime *route;
     GameTrackPoint *point;
     s32 index;
@@ -118,16 +118,16 @@ void GameSteerCarAlongRoute(GameCarRuntime *car) {
     }
     coords[2] += zValue >> 12;
 
-    angle = 0x400 - GameAtan2(coords[0] - car->x, coords[2] - car->z);
+    angle = 0x400 - Atan2(coords[0] - car->x, coords[2] - car->z);
 
     callArg = g_RaceSeries;
     value = car->field_B4;
     callArg = (callArg << 11) + 0xC00;
-    value = -GameGetAngleDelta(callArg - value, angle);
+    value = -GetAngleDelta(callArg - value, angle);
     car->field_44 = value * 3;
 
     if (car->field_98 == 0) {
-        value = GameGetAngleDelta(car->headingAngle, angle);
+        value = GetAngleDelta(car->headingAngle, angle);
         value += car->headingAngle;
         car->headingAngle = value;
         route->trackPointIndex = value;
@@ -139,7 +139,7 @@ void GameSteerCarAlongRoute(GameCarRuntime *car) {
  * Runs the rival-car update passes used by an interactive race. Cars 4..10
  * split their traffic-avoidance work across alternating frames.
  */
-void GameUpdateRaceCars(void) {
+void UpdateRaceCars(void) {
     GameCarVector4 vpos;
     /*
      * GCC 2.6.3 keeps these two Matrix-sized source workspaces in the debug
@@ -168,20 +168,20 @@ void GameUpdateRaceCars(void) {
         i++;
         q += 0x19C;
     } while ((s16)i < 11);
-    GameRankContenders();
+    RankContenders();
     for (i = 0; i < 11; i++) {
         s32 j = (s16)i;
         if (j >= 4 && (i & 1) != (g_AnimTimer & 1)) {
             continue;
         }
         if (g_Cars[j].activeFlag != -1) {
-            GameUpdateCarTrafficAvoidance(&g_Cars[j], j);
+            UpdateCarTrafficAvoidance(&g_Cars[j], j);
         }
     }
     i = 0;
     base = g_Cars;
     do {
-        GameCollideRivalCars(base, (s16)i);
+        CollideRivalCars(base, (s16)i);
         i++;
         base++;
     } while ((s16)i < 10);
@@ -189,19 +189,19 @@ void GameUpdateRaceCars(void) {
     base = g_Cars;
     do {
         s32 j = (s16)i;
-        GameUpdateCarAiTargetSpeed(base, j);
-        GameApplyCarRacingLineHint(base, j);
-        GameClampCarLateralOffset(base, j);
-        GameSteerCarAlongRoute(base);
+        UpdateCarAiTargetSpeed(base, j);
+        ApplyCarRacingLineHint(base, j);
+        ClampCarLateralOffset(base, j);
+        SteerCarAlongRoute(base);
         i++;
         base++;
     } while ((s16)i < 11);
-    GameUpdateRivalRubberBand();
+    UpdateRivalRubberBand();
     i = g_ClosestRivalRank;
     if (i > 0) {
         do {
             s32 j = (s16)i;
-            GameSlowRivalAhead(g_RankedCars[j], j);
+            SlowRivalAhead(g_RankedCars[j], j);
             i--;
         } while ((s16)i > 0);
     }
@@ -230,7 +230,7 @@ void GameUpdateRaceCars(void) {
             (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80))) * 0x5E / 100;
             (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80))) + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84)));
             (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))) =
-                GameGetAngleDelta((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))), drive->field_EC) / 5 + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00)));
+                GetAngleDelta((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))), drive->field_EC) / 5 + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00)));
         }
         i++;
         walk++;
@@ -269,10 +269,10 @@ void GameUpdateRaceCars(void) {
                 } else {
                     sixth = f4 / 6;
                 }
-                GameBuildRotMatrixY(pm1, (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))));
-                GameBuildRotMatrixX(pm2, (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x04))));
+                BuildRotMatrixY(pm1, (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))));
+                BuildRotMatrixX(pm2, (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x04))));
                 MulMatrix2(pm2, pm1);
-                GameBuildRotMatrixZ(pm2, (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x04))));
+                BuildRotMatrixZ(pm2, (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x04))));
                 MulMatrix2(pm2, pm1);
                 sv.vx = 0;
                 sv.vy = 0;
@@ -322,15 +322,15 @@ void GameUpdateRaceCars(void) {
     pair[1] = -0x3C;
     for (i = 0; i < 11; i++) {
         if (g_Cars[(s16)i].activeFlag != -1) {
-            GameAccumulateLapProgress(&g_Cars[(s16)i]);
+            AccumulateLapProgress(&g_Cars[(s16)i]);
         }
     }
     for (i = 0; i < 11; i++) {
         if (g_Cars[(s16)i].activeFlag != -1) {
             if ((s16)g_Cars[(s16)i].motionTimer > 0) {
-                GameApplyCarKnockback(&g_Cars[(s16)i]);
+                ApplyCarKnockback(&g_Cars[(s16)i]);
             }
-            GameUpdateCarTrackState(
+            UpdateCarTrackState(
                 &g_Cars[(s16)i],
                 g_Cars[(s16)i].trackPointIndex,
                 pair);
@@ -399,12 +399,12 @@ void GameUpdateRaceCars(void) {
                     (*(s16 *)((u8 *)(lastBase) + (0x90))) = 0;
                     (*(s16 *)((u8 *)(lastBase) + (0x94))) = 0;
                     (*(s16 *)((u8 *)(lastBase) + (0x98))) = 0;
-                    GameStartCarBodyKick(1, base);
+                    StartCarBodyKick(1, base);
                 }
             }
             if ((*(s16 *)((u8 *)(lastBase) + (0x8A))) == 0) {
-                GameUpdateCarBodyKick(base);
-                GameUpdateCarCrestHop(base);
+                UpdateCarBodyKick(base);
+                UpdateCarCrestHop(base);
             } else {
                 (*(s32 *)((u8 *)(lastBase) + (0xA4))) =
                     (*(s32 *)((u8 *)(lastBase) + (0xA4))) * 97 / 100 * 97 / 100;
@@ -419,9 +419,9 @@ void GameUpdateRaceCars(void) {
 
 
 /* Runs the corresponding all-cars pass for attract and replay scenes. */
-void GameUpdateAttractCars(void) {
+void UpdateAttractCars(void) {
     GameCarVector4 vTmp;
-    /* See GameUpdateRaceCars: these two Matrix workspaces shape retail's frame. */
+    /* See UpdateRaceCars: these two Matrix workspaces shape retail's frame. */
     Matrix matrixScratch0;
     s16 svAng[4];
     Matrix m1;
@@ -443,23 +443,23 @@ void GameUpdateAttractCars(void) {
     }
     for (i = 0; i < 11; i++) {
         if (((g_Cars[(s16)i]).activeFlag != -1)) {
-            GameUpdateCarTrafficAvoidance(&g_Cars[(s16)i], (s16)i);
+            UpdateCarTrafficAvoidance(&g_Cars[(s16)i], (s16)i);
         }
     }
     i = 0;
     car = g_Cars;
     do {
-        GameCollideRivalCars(car, (s16)i);
+        CollideRivalCars(car, (s16)i);
         i++;
         car++;
     } while (i < 10);
     i = 0;
     car = g_Cars;
     do {
-        GameUpdateCarAiTargetSpeed(car, (s16)i);
-        GameApplyCarRacingLineHint(car, (s16)i);
-        GameClampCarLateralOffset(car, (s16)i);
-        GameSteerCarAlongRoute(car);
+        UpdateCarAiTargetSpeed(car, (s16)i);
+        ApplyCarRacingLineHint(car, (s16)i);
+        ClampCarLateralOffset(car, (s16)i);
+        SteerCarAlongRoute(car);
         i++;
         car++;
     } while (i < 11);
@@ -480,7 +480,7 @@ void GameUpdateAttractCars(void) {
             (*(s32 *)((u8 *)(sub) + (0x80))) = (((*(s32 *)((u8 *)(sub) + (0x80)))) * 94 / 100);
             (*(s32 *)((u8 *)(sub) + (0x80))) = (*(s32 *)((u8 *)(sub) + (0x80))) + (*(s32 *)((u8 *)(sub) + (0x84)));
             (*(s32 *)((u8 *)(sub) + (0x00))) =
-                GameGetAngleDelta((*(s32 *)((u8 *)(sub) + (0x00))), drive->field_EC) / 5 + (*(s32 *)((u8 *)(sub) + (0x00)));
+                GetAngleDelta((*(s32 *)((u8 *)(sub) + (0x00))), drive->field_EC) / 5 + (*(s32 *)((u8 *)(sub) + (0x00)));
         }
         i++;
         sub = (GameCarRuntime *)((u8 *)sub + 0x19C);
@@ -514,10 +514,10 @@ void GameUpdateAttractCars(void) {
                 } else {
                     sixth = f4 / 6;
                 }
-                GameBuildRotMatrixY(&m1, (*(s32 *)((u8 *)(base) + (0x24))));
-                GameBuildRotMatrixX(&m2, (*(s32 *)((u8 *)(base) + (0x20))));
+                BuildRotMatrixY(&m1, (*(s32 *)((u8 *)(base) + (0x24))));
+                BuildRotMatrixX(&m2, (*(s32 *)((u8 *)(base) + (0x20))));
                 MulMatrix2(&m2, &m1);
-                GameBuildRotMatrixZ(&m2, (*(s32 *)((u8 *)(base) + (0x28))));
+                BuildRotMatrixZ(&m2, (*(s32 *)((u8 *)(base) + (0x28))));
                 MulMatrix2(&m2, &m1);
                 sv1.vx = 0;
                 sv1.vy = 0;
@@ -568,15 +568,15 @@ void GameUpdateAttractCars(void) {
     svAng[1] = -0x3C;
     for (i = 0; i < 11; i++) {
         if (((g_Cars[(s16)i]).activeFlag != -1)) {
-            GameAccumulateLapProgress(&g_Cars[(s16)i]);
+            AccumulateLapProgress(&g_Cars[(s16)i]);
         }
     }
     for (i = 0; i < 11; i++) {
         if (((g_Cars[(s16)i]).activeFlag != -1)) {
             if ((s16)g_Cars[(s16)i].motionTimer > 0) {
-                GameApplyCarKnockback(&g_Cars[(s16)i]);
+                ApplyCarKnockback(&g_Cars[(s16)i]);
             }
-            GameUpdateCarTrackState(
+            UpdateCarTrackState(
                 &g_Cars[(s16)i],
                 g_Cars[(s16)i].trackPointIndex,
                 svAng);
@@ -641,12 +641,12 @@ void GameUpdateAttractCars(void) {
                     (*(s16 *)((u8 *)(base) + (0x90))) = 0;
                     (*(s16 *)((u8 *)(base) + (0x94))) = 0;
                     (*(s16 *)((u8 *)(base) + (0x98))) = 0;
-                    GameStartCarBodyKick(1, car);
+                    StartCarBodyKick(1, car);
                 }
             }
             if ((*(s16 *)((u8 *)(base) + (0x8A))) == 0) {
-                GameUpdateCarBodyKick(car);
-                GameUpdateCarCrestHop(car);
+                UpdateCarBodyKick(car);
+                UpdateCarCrestHop(car);
             } else {
                 (*(s32 *)((u8 *)(base) + (0xA4))) = (*(s32 *)((u8 *)(base) + (0xA4))) * 97 / 100 * 97 / 100;
             }
@@ -706,12 +706,12 @@ extern s16 g_RaceIntroCameraDeltaZ asm("D_8009AFC0");
 
 s32 func_80068634(s32 angle);
 s32 func_80068568(s32 angle);
-void GameDrawPlayerCarModel(void *arg0) asm("func_8001DAB0");
-void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void GameUpdateCamera(void *arg0, s32 arg1) asm("func_80043BCC");
+void DrawPlayerCarModel(void *arg0) asm("func_8001DAB0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void UpdateCamera(void *arg0, s32 arg1) asm("func_80043BCC");
 
-void GameRunRaceIntroCamera(Obj *obj, s32 mode) asm("func_8003C508");
-void GameRunRaceIntroCamera(Obj *obj, s32 mode) {
+void RunRaceIntroCamera(Obj *obj, s32 mode) asm("func_8003C508");
+void RunRaceIntroCamera(Obj *obj, s32 mode) {
     s32 *spad = (s32 *) 0x1F800000;
     /* This pin is load-bearing: removing it changes .text. */
     register s32 s0v asm("$16");
@@ -767,15 +767,15 @@ void GameRunRaceIntroCamera(Obj *obj, s32 mode) {
             delta[1] = obj->y - s0v - spad[3];
             delta[2] = func_80068634(obj->f24) / 128 + obj->z - spad[4];
             s0v = 0x400;
-            spad[7] = s0v - GameAtan2(delta[0], delta[2]);
-            s0v = s0v - GameAtan2(delta[1], SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]) >> 6);
+            spad[7] = s0v - Atan2(delta[0], delta[2]);
+            s0v = s0v - Atan2(delta[1], SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]) >> 6);
             spad[6] = s0v;
             spad[8] = 0;
-            GameSetCameraRotMatrix();
-            GameSelectModelBank(0);
-            GameDrawPlayerCarModel(obj);
+            SetCameraRotMatrix();
+            SelectModelBank(0);
+            DrawPlayerCarModel(obj);
         } else {
-            GameDrawFullscreenFadeTile(g_RaceIntroCameraTimer * 26, 0x29);
+            DrawFullscreenFadeTile(g_RaceIntroCameraTimer * 26, 0x29);
             {
                 s32 c0 = obj->x;
                 s32 c1 = obj->y;
@@ -799,10 +799,10 @@ void GameRunRaceIntroCamera(Obj *obj, s32 mode) {
                 spad[9] = c3;
             }
             __asm__ volatile("");
-            GameSetCameraRotMatrix();
+            SetCameraRotMatrix();
         }
     } else {
-        GameUpdateCamera(obj, 0);
+        UpdateCamera(obj, 0);
     }
 }
 
@@ -823,8 +823,8 @@ typedef struct CopyBlock16 {
     u32 word3;
 } CopyBlock16;
 
-void GameSeedFinishCamera(void *arg0) asm("func_8003CA14");
-void GameSeedFinishCamera(void *arg0) {
+void SeedFinishCamera(void *arg0) asm("func_8003CA14");
+void SeedFinishCamera(void *arg0) {
     /* This pin is load-bearing: removing it changes .text. */
     register u32 word0 asm("$2");
     u32 word1;

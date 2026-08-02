@@ -75,13 +75,13 @@ void func_8001F274(s32 arg0, u8 *arg1);
 extern s32 g_ReplayReadCursor asm("D_801F179C");
 extern u8 *g_EnvScriptClock asm("D_8019C8FC");
 void func_800458CC(void *arg0);
-void GameSeedReplayCars(void) asm("func_80034F74");
+void SeedReplayCars(void) asm("func_80034F74");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
 
-void GameApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) asm("func_8001F330");
-void GameApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
+void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) asm("func_8001F330");
+void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
     s32 index;
     MenuBigFrame *big;
     MenuSmallFrame *small;
@@ -171,8 +171,8 @@ void GameApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
     }
 }
 
-void GameApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) asm("func_8001F8D0");
-void GameApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
+void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) asm("func_8001F8D0");
+void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
     /* This pin is load-bearing: removing it changes .text. */
     register s32 index asm("s0");
     u8 *primary;
@@ -186,7 +186,7 @@ void GameApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
     primary = arg1;
     secondary = arg2;
 
-    GameApplyReplayFrame(index, (MenuObj *)primary, (MenuObj *)secondary);
+    ApplyReplayFrame(index, (MenuObj *)primary, (MenuObj *)secondary);
 
     if (g_GrandPrixMode != 0) {
         if ((index & 1) == 0) {
@@ -220,8 +220,8 @@ void GameApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
     }
 }
 
-void GameRecordReplayFrame(void) asm("func_8001F9D8");
-void GameRecordReplayFrame(void) {
+void RecordReplayFrame(void) asm("func_8001F9D8");
+void RecordReplayFrame(void) {
     if (g_GrandPrixMode != 0) {
         func_8001F134(g_ReplayWriteCursor, &g_PlayerCar, (u8 *)g_Cars);
     } else {
@@ -235,8 +235,8 @@ void GameRecordReplayFrame(void) {
     }
 }
 
-void GameBeginReplay(void) asm("func_8001FA70");
-void GameBeginReplay(void) {
+void BeginReplay(void) asm("func_8001FA70");
+void BeginReplay(void) {
     s32 mode;
 
     g_FadeLevel = 0xFF;
@@ -266,11 +266,11 @@ void GameBeginReplay(void) {
         }
     }
 
-    GameSeedReplayCars();
+    SeedReplayCars();
 }
 
-void GameDrawReplayBadge(void) asm("func_8001FB8C");
-void GameDrawReplayBadge(void) {
+void DrawReplayBadge(void) asm("func_8001FB8C");
+void DrawReplayBadge(void) {
     volatile s32 *scratch;
     s32 base;
     s32 next;

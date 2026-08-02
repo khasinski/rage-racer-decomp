@@ -10,7 +10,7 @@ extern Rect g_TeamLogoRect asm("D_8007BEE4");
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 s32 func_80017C78(s32 assetIndex, void *dst);
-void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A498(void);
 void func_80034DCC(void *arg0);
 void func_8005B768(s32 arg0, void *arg1, void *arg2, s32 arg3);
@@ -21,10 +21,10 @@ extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern GameAssetTripleHeader *g_AssetBase asm("D_8019C904");
 extern void *g_AssetBlockPtr2 asm("D_8019C754");
 extern void *g_AssetSubBlockPtr asm("D_801E8AB0");
-void GameCloseLoadedAudioSlots(void) asm("func_8005B9CC");
+void CloseLoadedAudioSlots(void) asm("func_8005B9CC");
 
-void GameLoadBootAssets(void) asm("func_800180CC");
-void GameLoadBootAssets(void) {
+void LoadBootAssets(void) asm("func_800180CC");
+void LoadBootAssets(void) {
     u8 *loaded;
     u8 *base;
     /* This pin is load-bearing: removing it changes .text. */
@@ -79,7 +79,7 @@ setNextBuffer:
         if (func_80017C78(5, g_AssetLoadCursor) != 0) {
             u8 *finalBase;
 
-            GameUploadImageAsset(g_AssetLoadCursor);
+            UploadImageAsset(g_AssetLoadCursor);
             StoreImage(&g_TeamLogoClutRect, g_TeamLogoClut);
             StoreImage(&g_TeamLogoRect, g_TeamLogoCanvas);
             DrawSync(0);
@@ -92,8 +92,8 @@ setNextBuffer:
     }
 }
 
-s32 GameRequestSaveScreenAssets(void) asm("func_800182D0");
-s32 GameRequestSaveScreenAssets(void) {
+s32 RequestSaveScreenAssets(void) asm("func_800182D0");
+s32 RequestSaveScreenAssets(void) {
     s32 state;
 
     if (g_AssetLoadState != 0) {
@@ -106,14 +106,14 @@ s32 GameRequestSaveScreenAssets(void) {
         return 0;
     }
 
-    GameResetCdAudioState();
+    ResetCdAudioState();
     g_MainState = state;
     g_AssetLoadState = 1;
     return 1;
 }
 
-void GameLoadSaveScreenAssets(void) asm("func_80018344");
-void GameLoadSaveScreenAssets(void) {
+void LoadSaveScreenAssets(void) asm("func_80018344");
+void LoadSaveScreenAssets(void) {
     if (g_AssetLoadState == 1) {
         if (func_80017C78(6, g_AssetBase) != 0) {
             g_AssetLoadState = 0;
@@ -122,8 +122,8 @@ void GameLoadSaveScreenAssets(void) {
     }
 }
 
-s32 GameRequestSelectBgmAssetsNoReset(void) asm("func_8001839C");
-s32 GameRequestSelectBgmAssetsNoReset(void) {
+s32 RequestSelectBgmAssetsNoReset(void) asm("func_8001839C");
+s32 RequestSelectBgmAssetsNoReset(void) {
     s32 loadType;
 
     if (g_AssetLoadState != 0) {
@@ -136,14 +136,14 @@ s32 GameRequestSelectBgmAssetsNoReset(void) {
         return 0;
     }
 
-    GameResetCdAudioState();
+    ResetCdAudioState();
     g_MainState = loadType;
     g_AssetLoadState = 2;
     return 1;
 }
 
-s32 GameRequestSelectBgmAssets(void) asm("func_80018410");
-s32 GameRequestSelectBgmAssets(void) {
+s32 RequestSelectBgmAssets(void) asm("func_80018410");
+s32 RequestSelectBgmAssets(void) {
     s32 loadType;
 
     if (g_AssetLoadState != 0) {
@@ -156,14 +156,14 @@ s32 GameRequestSelectBgmAssets(void) {
         return 0;
     }
 
-    GameResetCdAudioState();
+    ResetCdAudioState();
     g_MainState = loadType;
     g_AssetLoadState = 1;
     return 1;
 }
 
-void GameLoadSelectBgmAssets(void) asm("func_80018484");
-void GameLoadSelectBgmAssets(void) {
+void LoadSelectBgmAssets(void) asm("func_80018484");
+void LoadSelectBgmAssets(void) {
     GameAssetTripleHeader *header;
     s32 firstOffset;
     s32 secondOffset;
@@ -171,7 +171,7 @@ void GameLoadSelectBgmAssets(void) {
 
     switch (g_AssetLoadState) {
     case 1:
-        GameCloseLoadedAudioSlots();
+        CloseLoadedAudioSlots();
         g_AssetLoadState = 2;
     case 2:
         if (func_80017C78(7, g_AssetBase) != 0) {

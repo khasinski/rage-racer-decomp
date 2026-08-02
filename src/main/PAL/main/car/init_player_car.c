@@ -171,8 +171,8 @@ void func_80038AB8(void *);
 s32 func_80030EB4(void *, s32);
 void func_8002BF68(void *, s32);
 void func_80031298(void *, s32, s16 *);
-s32 GameIsCarFacingBackwards(GameCarTrackAngleWindow *) asm("func_8002CD08");
-void GameInitPlayerCar(GameCarRuntime *car)
+s32 IsCarFacingBackwards(GameCarTrackAngleWindow *) asm("func_8002CD08");
+void InitPlayerCar(GameCarRuntime *car)
 {
   s16 trackState[2];
   int scaledGearRatio;
@@ -200,7 +200,7 @@ void GameInitPlayerCar(GameCarRuntime *car)
   s32 bandSpeed;
   player = (GamePlayerCarInit *) car;
   startData = g_TrackEventData;
-  GameDebugPrintf(D_800113B0);
+  DebugPrintf(D_800113B0);
   value = g_GrandPrixSeries;
   g_RacePhase = 2;
   g_RaceSeries = value & 1;
@@ -230,7 +230,7 @@ void GameInitPlayerCar(GameCarRuntime *car)
   player->f68 = 0;
   player->f6C = 0;
   player->f70 = 0;
-  GameDebugPrintf(D_800113BC);
+  DebugPrintf(D_800113BC);
   startData += g_RaceSeries * 0x90;
   player->f30 = *((s16 *) (startData + 0x35C));
   player->f00 = *((s32 *) (startData + 0x354));
@@ -252,10 +252,10 @@ void GameInitPlayerCar(GameCarRuntime *car)
   player->f74 = player->f70;
   *((GameInitVec4 *) (&player->f50)) = *((GameInitVec4 *) (&player->f20));
   player->f60 = player->f04;
-  GameBuildRotMatrixY(&rotationMatrix, player->f24);
-  GameBuildRotMatrixX(&axisMatrix, player->f20);
+  BuildRotMatrixY(&rotationMatrix, player->f24);
+  BuildRotMatrixX(&axisMatrix, player->f20);
   MulMatrix2(&axisMatrix, &rotationMatrix);
-  GameBuildRotMatrixZ(&axisMatrix, player->f28);
+  BuildRotMatrixZ(&axisMatrix, player->f28);
   MulMatrix2(&axisMatrix, &rotationMatrix);
   rotationOffset.vx = 0;
   rotationOffset.vy = 0;
@@ -293,14 +293,14 @@ void GameInitPlayerCar(GameCarRuntime *car)
   player->f160 = 1;
   player->f00 = player->f00 + player->f10;
   player->f08 = player->f08 + player->f18;
-  player->fB8 = GameIsCarFacingBackwards((GameCarTrackAngleWindow *) car);
+  player->fB8 = IsCarFacingBackwards((GameCarTrackAngleWindow *) car);
   player->fF4 = 0;
   player->fF0 = 0;
   player->fEC = 1;
   player->fF8 = 0;
   D_801E4BF4 = 0;
   drive = (GameCarDrive *) (((u8 *) car) + (divisor = 0xBC));
-  GameDebugPrintf(D_800113C4);
+  DebugPrintf(D_800113C4);
   carSpec = g_PlayerCarInitSpec;
   if (carSpec->f104 < 6)
   {
@@ -314,7 +314,7 @@ void GameInitPlayerCar(GameCarRuntime *car)
     carSpec->f104 = 6;
   }
   drive->unk8C = (g_PlayerCarInitSpec->f15C * 0x490) / 160;
-  GameDebugPrintf(D_800113CC);
+  DebugPrintf(D_800113CC);
   j = 0;
   for (i = 0; i < 16; i++)
   {
@@ -332,8 +332,8 @@ void GameInitPlayerCar(GameCarRuntime *car)
   revLimit = &g_PlayerCarInitSpec->f100;
   D_801E6F1A = ((*revLimit) - ((s16) peakRpm)) / 2;
   D_8019C798 = peakRpm;
-  GameDebugPrintf(D_800113D4);
-  GameDebugPrintf(D_800113DC, g_PlayerCarInitSpec->f104);
+  DebugPrintf(D_800113D4);
+  DebugPrintf(D_800113DC, g_PlayerCarInitSpec->f104);
   for (j = 0; j < 6; j++)
   {
     scaledGearRatio = (g_PlayerCarInitSpec->fE8[j] * 0x490) / 160;
@@ -352,7 +352,7 @@ void GameInitPlayerCar(GameCarRuntime *car)
   {
     g_PlayerCarInitSpec->f112 = 1;
   }
-  GameDebugPrintf(D_800113E0);
+  DebugPrintf(D_800113E0);
   curveSpec = g_PlayerCarInitSpec;
   accelBand = D_801E4154;
   speedBandOffset = 0;
@@ -388,10 +388,10 @@ void GameInitPlayerCar(GameCarRuntime *car)
     torqueBand++;
   }
   while (speedBandOffset < 20);
-  GameDebugPrintf(D_800113E8);
+  DebugPrintf(D_800113E8);
   drive->unk84 = D_8007DAD4[drive->unk28 % 5] * 0xE;
   drive->unk88 = g_PlayerCarInitSpec->f108;
-  GameDebugPrintf(D_800113F0);
+  DebugPrintf(D_800113F0);
   player->f98 = 0;
   drive->unk9E = 0;
   drive->unk9C = 0;
@@ -413,9 +413,9 @@ void GameInitPlayerCar(GameCarRuntime *car)
   D_801E4BA0 = 0;
   g_WrongWayTimer = 0;
   D_8019C9AC = 0;
-  GameDebugPrintf(D_800113F8);
-  GameDebugPrintf(D_80011400, player->f68);
-  GameDebugPrintf(D_80011408);
+  DebugPrintf(D_800113F8);
+  DebugPrintf(D_80011400, player->f68);
+  DebugPrintf(D_80011408);
 }
 
 /*
@@ -424,8 +424,8 @@ void GameInitPlayerCar(GameCarRuntime *car)
  * delta falls inside the 0x401..0x7FF window (i.e. facing roughly backwards).
  * Uses the 0x19C-stride GameCarTrackAngleWindow view onto the car array.
  */
-s32 GameIsCarFacingBackwards(GameCarTrackAngleWindow *arg0) asm("func_8002CD08");
-s32 GameIsCarFacingBackwards(GameCarTrackAngleWindow *arg0) {
+s32 IsCarFacingBackwards(GameCarTrackAngleWindow *arg0) asm("func_8002CD08");
+s32 IsCarFacingBackwards(GameCarTrackAngleWindow *arg0) {
     s32 index = arg0->trackPointIndex;
     s32 complement = 0xC00 - g_TrackPoints[index].angle;
     s32 diff = (arg0->headingAngle - complement) & 0xFFF;
@@ -485,8 +485,8 @@ s32 func_80068634(s32);
  * typedefs are raw-offset overlays onto the car runtime (drive block at +0xBC)
  * shaped to match; retyping them to GameCarRuntime would break the match.
  */
-void GameUpdateCarBodyRoll(A *ctx) asm("func_8002CD4C");
-void GameUpdateCarBodyRoll(A *ctx) {
+void UpdateCarBodyRoll(A *ctx) asm("func_8002CD4C");
+void UpdateCarBodyRoll(A *ctx) {
     SubB *p = &ctx->sub;
     s16 mode = g_RacePhase;
     s32 v1, a1;
@@ -602,7 +602,7 @@ void GameUpdateCarBodyRoll(A *ctx) {
 
     {
         s32 arg1 = (ctx->fB8 << 11) + 3072;
-        r = GameGetAngleDelta(ctx->f24, arg1 - ctx->fB4);
+        r = GetAngleDelta(ctx->f24, arg1 - ctx->fB4);
     }
     s2v = r * 32;
     r = func_80068634(ctx->f34 * 2);
@@ -644,8 +644,8 @@ s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
  * Point-in-quad test: returns 1 if point `pt` is inside the quad with corners
  * p0,p1,p3,p2 (four chained half-plane sign checks via func_80069C98), else 0.
  */
-s32 GameIsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) asm("func_8002D2E8");
-s32 GameIsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) {
+s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) asm("func_8002D2E8");
+s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) {
     s32 result;
     s32 ret = 0;
 
@@ -725,7 +725,7 @@ s32 *func_80069678(void *mtx, void *vec, void *out);
 s32 func_8002D2E8(s32 a, s32 b, s32 c, s32 d, s32 e);
 void func_80038CE8(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void func_8005D6EC(s32 id);
-s32 GameCollidePlayerWithCars(GameCarRuntime *car)
+s32 CollidePlayerWithCars(GameCarRuntime *car)
 {
   SVec rotation;
   s32 opponentX;

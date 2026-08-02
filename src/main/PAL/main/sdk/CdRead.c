@@ -26,7 +26,7 @@ void SetSprt(u_char *prim) asm("func_80064FA8");
 void func_80064EB8(u_char *prim, long enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_800666F4(void *prim, long a, long b, long c, void *d);
-long GameAddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8) asm("func_80032F34");
+long AddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8) asm("func_80032F34");
 
 long CdRead(long arg0, long arg1, long arg2) asm("func_80027688");
 long CdRead(long arg0, long arg1, long arg2) {
@@ -187,6 +187,6 @@ void func_80027874(long x, long y, u_char *str, long arg3) {
 void func_800279EC(long arg0, long arg1, long arg2, long arg3) {
     long temp;
 
-    temp = GameAddTilePrim(arg0, arg1, arg2 + 1, arg3 + 2, 0xC2, 0x1C, 0, 0, 0);
-    GameAddTilePrim(arg0, temp, arg2, arg3, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
+    temp = AddTilePrim(arg0, arg1, arg2 + 1, arg3 + 2, 0xC2, 0x1C, 0, 0, 0);
+    AddTilePrim(arg0, temp, arg2, arg3, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
 }

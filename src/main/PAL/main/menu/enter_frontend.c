@@ -16,19 +16,19 @@ extern s32 g_FrontendState asm("D_8009F098");
 extern s32 g_TitleExitTimer asm("D_8009E880");
 extern s32 g_TitleAttractTimer asm("D_8019CB70");
 
-void GameCloseLoadedAudioSlots(void) asm("func_8005B9CC");
-void GameResetTrackTextureSwap(void) asm("func_80019EBC");
+void CloseLoadedAudioSlots(void) asm("func_8005B9CC");
+void ResetTrackTextureSwap(void) asm("func_80019EBC");
 void func_8001A498(void);
 void func_80021540(void);
 void func_8005DBB4(void);
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
- * state words and hands over to scene 4, GameUpdateFrontend. */
-void GameEnterFrontend(void) asm("func_8001AF70");
-void GameEnterFrontend(void) {
+ * state words and hands over to scene 4, UpdateFrontend. */
+void EnterFrontend(void) asm("func_8001AF70");
+void EnterFrontend(void) {
     SetDispMask(0);
-    GameCloseLoadedAudioSlots();
-    GameResetTrackTextureSwap();
+    CloseLoadedAudioSlots();
+    ResetTrackTextureSwap();
     func_8001A498();
 
     g_FrameSyncThreshold = 0x80;
@@ -57,12 +57,12 @@ extern s32 g_FrontendState;
 void func_8001A498(void);
 void func_80021540(void);
 void func_8005DBB4(void);
-void GameDrawPressStartPrompt(void) asm("func_8001B170");
+void DrawPressStartPrompt(void) asm("func_8001B170");
 
-void GameEnterTitleScreen(void) asm("func_8001B014");
+void EnterTitleScreen(void) asm("func_8001B014");
 
-void GameEnterTitleScreen(void) {
-    GameSetupDisplay240(0, 0, 0);
+void EnterTitleScreen(void) {
+    SetupDisplay240(0, 0, 0);
     if (g_StreamReturnScene != 0) {
         D_801E6F28 = 0xFF;
         g_TitleAttractTimer = 0x190;
@@ -82,7 +82,7 @@ void GameEnterTitleScreen(void) {
     g_FrontendState = 0;
     func_80021540();
     func_8005DBB4();
-    GameDrawPressStartPrompt();
+    DrawPressStartPrompt();
 }
 
 
@@ -93,8 +93,8 @@ void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
 /* Full-width grey box over the title screen at OT slot 0x29; the caller
  * steps its brightness D_801E6F28 down by 2 a frame. */
-void GameDrawTitleFadeOverlay(s32 brightness) asm("func_8001B0F0");
-void GameDrawTitleFadeOverlay(s32 arg0) {
+void DrawTitleFadeOverlay(s32 brightness) asm("func_8001B0F0");
+void DrawTitleFadeOverlay(s32 arg0) {
     void *current;
     void **scratch;
     u8 *base;
@@ -113,13 +113,13 @@ void GameDrawTitleFadeOverlay(s32 arg0) {
 extern s32 D_801E6F28;
 
 s32 func_80068568(s32 arg0);
-void GameDrawTitleFadeOverlay(s32 brightness) asm("func_8001B0F0");
+void DrawTitleFadeOverlay(s32 brightness) asm("func_8001B0F0");
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void GameDrawPressStartPrompt(void) asm("func_8001B170");
+void DrawPressStartPrompt(void) asm("func_8001B170");
 
-void GameDrawPressStartPrompt(void) {
+void DrawPressStartPrompt(void) {
     void **scratch;
     u8 *base;
     void *next;
@@ -127,7 +127,7 @@ void GameDrawPressStartPrompt(void) {
     s32 frame;
 
     if (D_801E6F28 > 0) {
-        GameDrawTitleFadeOverlay((u8)D_801E6F28);
+        DrawTitleFadeOverlay((u8)D_801E6F28);
         D_801E6F28 -= 2;
     }
 
@@ -145,23 +145,23 @@ void GameDrawPressStartPrompt(void) {
 extern s32 g_TitleAttractTimer;
 extern s32 g_FrontendState;
 extern s32 D_801E8260;
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-void GameDrawPressStartPrompt(void) asm("func_8001B170");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void DrawPressStartPrompt(void) asm("func_8001B170");
 
-void GameUpdateTitleScreen(void) asm("func_8001B260");
+void UpdateTitleScreen(void) asm("func_8001B260");
 
-void GameUpdateTitleScreen(void) {
+void UpdateTitleScreen(void) {
     if (g_PadEdge2 & 0x800) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         g_FrontendState = 1;
         D_801E8260 = 0;
         g_TitleMenuSelection = 0;
         if (g_TitleAttractTimer > 0) {
             g_TitleAttractTimer = 0;
-            GameStartCdVolumeFade(1);
+            StartCdVolumeFade(1);
         }
     }
-    GameDrawPressStartPrompt();
+    DrawPressStartPrompt();
 }
 
 extern s32 g_FrontendState;
@@ -170,9 +170,9 @@ extern s32 g_MainMenuSlide;
 
 void *func_800175A4(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11);
 
-void GameDrawMainMenuRows(void) asm("func_8001B2D4");
+void DrawMainMenuRows(void) asm("func_8001B2D4");
 
-void GameDrawMainMenuRows(void) {
+void DrawMainMenuRows(void) {
     void *scratch;
     u8 *base;
     s32 row;
@@ -234,16 +234,16 @@ void GameDrawMainMenuRows(void) {
 extern s32 g_FrontendState;
 extern s32 g_MainMenuSlide;
 
-void GameDrawMainMenuRows(void) asm("func_8001B2D4");
+void DrawMainMenuRows(void) asm("func_8001B2D4");
 
-void GameUpdateMainMenuOpen(void) asm("func_8001B440");
+void UpdateMainMenuOpen(void) asm("func_8001B440");
 
-void GameUpdateMainMenuOpen(void) {
+void UpdateMainMenuOpen(void) {
     if (++g_MainMenuSlide == 0x30) {
         g_FrontendState = 2;
     }
 
-    GameDrawMainMenuRows();
+    DrawMainMenuRows();
 }
 
 extern s32 g_BgmTrackCount asm("D_801E40A8");
@@ -251,12 +251,12 @@ extern volatile u8 g_BgmShuffleOrder[] asm("D_801E7734");
 extern u8 D_801E7733[];
 extern s32 g_BgmShuffleIndex asm("D_8009E6CC");
 
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 
 /* Refills g_BgmShuffleOrder with a random permutation of the
  * g_BgmTrackCount tracks and rewinds g_BgmShuffleIndex. */
-void GameShuffleBgmOrder(void) asm("func_8001B488");
-void GameShuffleBgmOrder(void) {
+void ShuffleBgmOrder(void) asm("func_8001B488");
+void ShuffleBgmOrder(void) {
     s32 i;
     s32 count;
     s32 j;
@@ -274,7 +274,7 @@ void GameShuffleBgmOrder(void) {
             }
         }
 
-        remaining = ((GameRandom15() & 0xFFF) % count) + 1;
+        remaining = ((Random15() & 0xFFF) % count) + 1;
         j = 0;
         while (remaining != 0) {
             if (g_BgmShuffleOrder[j] == 0xFF) {
@@ -303,18 +303,18 @@ extern s32 g_ExtraGrandPrixCars asm("D_8019C914");
 extern s32 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
 extern s32 g_TimeAttackCars asm("D_801E4388");
 
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
-extern void GameResetAssetLoader(void) asm("func_80017BE4");
-extern void GameShuffleBgmOrder(void) asm("func_8001B488");
-s32 GameRequestTrackLoad(void) asm("func_8001965C");
-extern void GameRequestSelectBgmAssetsNoReset(void) asm("func_8001839C");
-extern void GameRequestSaveScreenAssets(void) asm("func_800182D0");
-extern void GameRequestOptionScreenAssets(void) asm("func_80018B98");
-extern void GameDrawMainMenuRows(void) asm("func_8001B2D4");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+extern void ResetAssetLoader(void) asm("func_80017BE4");
+extern void ShuffleBgmOrder(void) asm("func_8001B488");
+s32 RequestTrackLoad(void) asm("func_8001965C");
+extern void RequestSelectBgmAssetsNoReset(void) asm("func_8001839C");
+extern void RequestSaveScreenAssets(void) asm("func_800182D0");
+extern void RequestOptionScreenAssets(void) asm("func_80018B98");
+extern void DrawMainMenuRows(void) asm("func_8001B2D4");
 
-void GameUpdateMainMenuInput(void) asm("func_8001B5DC");
+void UpdateMainMenuInput(void) asm("func_8001B5DC");
 
-void GameUpdateMainMenuInput(void) {
+void UpdateMainMenuInput(void) {
     volatile u16 *flagp = &g_PadEdge2;
     s32 idx;
     u16 flags;
@@ -344,14 +344,14 @@ void GameUpdateMainMenuInput(void) {
         m = m % 5;
         g_TitleMenuSelection = m;
         if (idx != m) {
-            GamePlaySoundCue(1);
+            PlaySoundCue(1);
         }
     }
 
     if (g_PadEdge2 & 0x860) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         if (g_AssetLoadState != 0) {
-            GameResetAssetLoader();
+            ResetAssetLoader();
         }
         func_8001B488();
         switch (g_TitleMenuSelection) {
@@ -363,9 +363,9 @@ void GameUpdateMainMenuInput(void) {
             if (g_GrandPrixSave.maxClassReached == -1) {
                 g_GrandPrixClass = 0;
                 g_CourseIndex = 3;
-                GameRequestTrackLoad();
+                RequestTrackLoad();
             } else {
-                GameRequestSelectBgmAssetsNoReset();
+                RequestSelectBgmAssetsNoReset();
             }
             break;
         case 1:
@@ -376,26 +376,26 @@ void GameUpdateMainMenuInput(void) {
             if (g_ExtraGrandPrixSaveMaxClass == -1) {
                 g_GrandPrixClass = 0;
                 g_CourseIndex = 3;
-                GameRequestTrackLoad();
+                RequestTrackLoad();
             } else {
-                GameRequestSelectBgmAssetsNoReset();
+                RequestSelectBgmAssetsNoReset();
             }
             break;
         case 2:
             g_CarTable = &g_TimeAttackCars;
             g_RaceProgress = &g_TimeAttackSave;
             g_SeriesSelection = 0;
-            GameRequestSelectBgmAssetsNoReset();
+            RequestSelectBgmAssetsNoReset();
             break;
         case 3:
-            GameRequestSaveScreenAssets();
+            RequestSaveScreenAssets();
             break;
         case 4:
-            GameRequestOptionScreenAssets();
+            RequestOptionScreenAssets();
             g_OptionMenuCursor = 0;
             break;
         }
         g_FrontendState = 3;
     }
-    GameDrawMainMenuRows();
+    DrawMainMenuRows();
 }

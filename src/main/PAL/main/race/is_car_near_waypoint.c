@@ -27,11 +27,11 @@ extern s32 g_WaypointsCollected asm("D_801E43F8");
  * starting velocity. */
 extern s32 g_PlayerVelocity[] asm("D_8009E798");
 
-s32 GameIsCarNearWaypoint(TrackWaypointRuntime *waypoint) asm("func_80037808");
+s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) asm("func_80037808");
 
 /*
  * Per-frame waypoint spawn/update state machine over the 6 slots. An idle slot
- * (active==0) that the car is near (GameIsCarNearWaypoint) spawns: increments the spawn
+ * (active==0) that the car is near (IsCarNearWaypoint) spawns: increments the spawn
  * counter g_WaypointsCollected, plays cue 0xA, marks the slot active and seeds its
  * velocity from g_PlayerVelocity. An active slot integrates position from velocity
  * with 15/16 per-frame damping and grows its scale toward 0x400, retiring to
@@ -88,57 +88,57 @@ extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
 extern u8 g_TextCongratulations asm("D_80011494");
 
-void GameDrawFullscreenFadeTile(s32 a, s32 b) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 a, s32 b) asm("func_80033AA0");
 
-void GameSeedWaypoints(void) asm("func_80037714");
+void SeedWaypoints(void) asm("func_80037714");
 
 void func_800218A0(s32 a);
 
-void GameExitRaceScene(s32 a) asm("func_80035258");
+void ExitRaceScene(s32 a) asm("func_80035258");
 
 void func_80016754(s32 a, s32 b, void *c, s32 d);
 
-void GameBeginCarStandingStart(void *a) asm("func_8002BE18");
+void BeginCarStandingStart(void *a) asm("func_8002BE18");
 
-void GameRunRaceIntroCamera(void *a) asm("func_8003C508");
+void RunRaceIntroCamera(void *a) asm("func_8003C508");
 
-void GameUpdatePlayerCar(void *a) asm("func_8002DEFC");
+void UpdatePlayerCar(void *a) asm("func_8002DEFC");
 
 void func_8005D9F8(s32 a, s32 b);
 
-void GameDrawLapNumber(void) asm("func_80037C04");
+void DrawLapNumber(void) asm("func_80037C04");
 
-void GameUpdateCamera(s32 a, void *b) asm("func_80043BCC");
+void UpdateCamera(s32 a, void *b) asm("func_80043BCC");
 
-void GameRequestTrackTexturePage(s32 a) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 a) asm("func_80019EFC");
 
 
 void func_800418D4(void);
 
-void GameDrawTerrainCells(void) asm("func_80041840");
+void DrawTerrainCells(void) asm("func_80041840");
 
 
-void GameDrawCourseScenery(s32 a, s32 b, s32 c) asm("func_8003E1A4");
+void DrawCourseScenery(s32 a, s32 b, s32 c) asm("func_8003E1A4");
 
-void GameGetTrackZoneBlend(s32 a) asm("func_800350B4");
+void GetTrackZoneBlend(s32 a) asm("func_800350B4");
 
 void func_8005B190(s32 a, s32 b);
 
-void GameDrawPlayerTachometer(void) asm("func_8002F458");
+void DrawPlayerTachometer(void) asm("func_8002F458");
 
 void func_8004087C(s32 a);
 
 void func_8003425C(u32 a);
 
-void GamePlayCountdownCues(u32 a) asm("func_800410BC");
+void PlayCountdownCues(u32 a) asm("func_800410BC");
 
-void GameUpdateWaypoints(void) asm("func_80037860");
+void UpdateWaypoints(void) asm("func_80037860");
 
-void GameDrawWaypoints(void) asm("func_80037AAC");
+void DrawWaypoints(void) asm("func_80037AAC");
 
 
 /* Two 8-byte { start, end } reverb spans per series (offset = series * 16):
- * inside one of them GameApplyTrackReverbZone drives the reverb depth to 0x46,
+ * inside one of them ApplyTrackReverbZone drives the reverb depth to 0x46,
  * outside it to 0. */
 extern s32 g_ReverbZoneStart asm("D_8007E054");
 
@@ -159,24 +159,24 @@ extern u8 *g_TrackPoints asm("D_8009E688");
 extern s32 g_TrackLength asm("D_801E40D8");
 extern u8 *g_TrackEventData asm("D_801E4150");
 
-extern s32 GameFindTrackSegment(u8 *ent, s32 arg) asm("func_80030EB4");
+extern s32 FindTrackSegment(u8 *ent, s32 arg) asm("func_80030EB4");
 
-extern void GameSeedCarLapProgress(u8 *ent, s32 arg) asm("func_8002BF68");
+extern void SeedCarLapProgress(u8 *ent, s32 arg) asm("func_8002BF68");
 
-extern void GameUpdateCarTrackState(u8 *ent, s32 arg, void *arg2) asm("func_80031298");
+extern void UpdateCarTrackState(u8 *ent, s32 arg, void *arg2) asm("func_80031298");
 
 
 /*
  * Initializes/spawns a route render object `ent`: reads a start entry from the
  * per-scene table (`arr` indexed by `pos`, g_TrackEventData base), sets the model id
  * (+0xAE / +0x122), start angle (0xC00 - track angle), zeroes the motion state
- * block, resolves the containing track point (GameFindTrackSegment) and builds the
- * initial marker geometry (GameUpdateCarTrackState). `ent` is a render/route object
+ * block, resolves the containing track point (FindTrackSegment) and builds the
+ * initial marker geometry (UpdateCarTrackState). `ent` is a render/route object
  * accessed by raw byte offset (its first 0xE8 mirror GameRenderObject).
  */
 
-s32 GameIsCarNearWaypoint(TrackWaypointRuntime *arg0) asm("func_80037808");
-s32 GameIsCarNearWaypoint(TrackWaypointRuntime *arg0) {
+s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0) asm("func_80037808");
+s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0) {
     s32 center_x = g_PlayerCar;
     s32 x = arg0->x;
     s32 ret = 0;
@@ -199,8 +199,8 @@ s32 GameIsCarNearWaypoint(TrackWaypointRuntime *arg0) {
     return ret;
 }
 
-void GameUpdateWaypoints(void) asm("func_80037860");
-void GameUpdateWaypoints(void) {
+void UpdateWaypoints(void) asm("func_80037860");
+void UpdateWaypoints(void) {
     TrackWaypointRuntime *waypoint;
     s32 i;
     s32 activeState;
@@ -226,7 +226,7 @@ void GameUpdateWaypoints(void) {
     tail = (char *)waypoint + 0x34;
     do {
         if (waypoint->active == 0) {
-            if (GameIsCarNearWaypoint(waypoint) != 0) {
+            if (IsCarNearWaypoint(waypoint) != 0) {
                 /* These pins are load-bearing: removing any one changes .text. */
                 register volatile s32 *src asm("$5");
                 register s32 src0 asm("$2");
@@ -234,7 +234,7 @@ void GameUpdateWaypoints(void) {
                 s32 src2;
 
                 g_WaypointsCollected++;
-                GamePlaySoundCue(0xA);
+                PlaySoundCue(0xA);
 
                 waypoint->active = activeState;
                 asm volatile("" ::: "memory");
@@ -288,13 +288,13 @@ static inline void ClearScratchRenderMode37AAC(void) {
 /*
  * Renders the 6 waypoints. For each active-shaped slot it builds a rotation
  * matrix from the waypoint's angle (point+0x14) and tilt (point+0x10) and emits
- * two GTE draw primitives (GameSubmitModel) into the scratchpad OT: the second is
+ * two GTE draw primitives (SubmitModel) into the scratchpad OT: the second is
  * the same billboard rotated by 0x800 (180 degrees). `point` walks the
  * TrackWaypointRuntime array g_Waypoints via raw offsets. Register pins are
  * match-load-bearing.
  */
-void GameDrawWaypoints(void) asm("func_80037AAC");
-void GameDrawWaypoints(void) {
+void DrawWaypoints(void) asm("func_80037AAC");
+void DrawWaypoints(void) {
     Matrix mtx0;
     Matrix mtx1;
     s32 drawId;
@@ -306,15 +306,15 @@ void GameDrawWaypoints(void) {
     s32 drawArg;
 
     drawId = 2;
-    GameSelectModelBank(0);
+    SelectModelBank(0);
     i = 0;
     mtx1Ptr = &mtx1;
     point = (char *)&g_Waypoints[0].x;
 
     do {
-        GameBuildRotMatrixY(&mtx0, *(s32 *)(point + 0x14));
+        BuildRotMatrixY(&mtx0, *(s32 *)(point + 0x14));
         MulMatrix2((Matrix *)0x1F800028, &mtx0);
-        GameBuildRotMatrixZ(mtx1Ptr, *(s32 *)(point + 0x10));
+        BuildRotMatrixZ(mtx1Ptr, *(s32 *)(point + 0x10));
         MulMatrix(&mtx0, mtx1Ptr);
         func_80017794((void *)0x1F80011C, point, &mtx0);
         frameValue = g_ModelBankCount;
@@ -323,9 +323,9 @@ void GameDrawWaypoints(void) {
         if (drawId < frameValue) {
             drawArg = drawId;
         }
-        GameSubmitModel((void *)0x1F800000, drawArg);
+        SubmitModel((void *)0x1F800000, drawArg);
 
-        GameBuildRotMatrixY(mtx1Ptr, 0x800);
+        BuildRotMatrixY(mtx1Ptr, 0x800);
         MulMatrix2(&mtx0, mtx1Ptr);
         func_80017794((void *)0x1F80011C, point, mtx1Ptr);
         frameValue = g_ModelBankCount;
@@ -334,15 +334,15 @@ void GameDrawWaypoints(void) {
         if (drawId < frameValue) {
             drawArg = drawId;
         }
-        GameSubmitModel((void *)0x1F800000, drawArg);
+        SubmitModel((void *)0x1F800000, drawArg);
 
         i++;
         point += sizeof(TrackWaypointRuntime);
     } while (i < 6);
 }
 
-s32 GameCountActiveWaypoints(void) asm("func_80037BD4");
-s32 GameCountActiveWaypoints(void) {
+s32 CountActiveWaypoints(void) asm("func_80037BD4");
+s32 CountActiveWaypoints(void) {
     TrackWaypointRuntime *ptr = g_Waypoints;
     s32 count = 0;
     s32 i = 5;
@@ -356,8 +356,8 @@ s32 GameCountActiveWaypoints(void) {
     return count;
 }
 
-void GameDrawLapNumber(void) asm("func_80037C04");
-void GameDrawLapNumber(void) {
+void DrawLapNumber(void) asm("func_80037C04");
+void DrawLapNumber(void) {
     u8 *scratch;
     s32 track;
     s32 divisor;
@@ -422,8 +422,8 @@ void GameDrawLapNumber(void) {
     }
 }
 
-void GameUpdateWaypointCollectScene(void) asm("func_80037D90");
-void GameUpdateWaypointCollectScene(void) {
+void UpdateWaypointCollectScene(void) asm("func_80037D90");
+void UpdateWaypointCollectScene(void) {
     s16 *p;
     /* This pin is load-bearing: removing it changes .text. */
     register u32 a asm("$5");
@@ -431,7 +431,7 @@ void GameUpdateWaypointCollectScene(void) {
 
     g_SceneTimer = g_SceneTimer + 1;
     if ((u32)g_SceneTimer < 61) {
-        GameDrawFullscreenFadeTile(255 - (g_SceneTimer - 6) * 11, 0x49);
+        DrawFullscreenFadeTile(255 - (g_SceneTimer - 6) * 11, 0x49);
     }
     if ((u32)g_SceneTimer >= 571 && D_8009EC88 == 0) {
         D_8009EC88 = 1;
@@ -440,7 +440,7 @@ void GameUpdateWaypointCollectScene(void) {
     if (g_PlayerProgressB + g_PlayerProgressA >= g_PlayerLap * g_TrackLength) {
         if (g_PlayerLap < 257) {
             g_PlayerLap = g_PlayerLap + 1;
-            GameSeedWaypoints();
+            SeedWaypoints();
         }
     }
     if (g_PlayerLap >= 257) {
@@ -453,21 +453,21 @@ void GameUpdateWaypointCollectScene(void) {
     if (g_RacePhase == 5) {
         if (g_RaceFadeTimer > 0) {
             func_800218A0(g_RaceFadeTimer * 3);
-            GameDrawFullscreenFadeTile(g_RaceFadeTimer * 3, 0x49);
+            DrawFullscreenFadeTile(g_RaceFadeTimer * 3, 0x49);
             x = 6;
         }
         if (g_RaceFadeTimer >= 101) {
-            GameExitRaceScene(x);
+            ExitRaceScene(x);
         }
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
     } else if (g_RacePhase == 4) {
         func_80016754(0x5c, 0x78, &g_TextCongratulations, 0x7811);
-        GameDrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
+        DrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
         if (g_RaceFadeTimer < 201) {
             g_RaceFadeTimer = g_RaceFadeTimer + 1;
         } else {
-            GameExitRaceScene(6);
+            ExitRaceScene(6);
         }
     }
 
@@ -482,7 +482,7 @@ void GameUpdateWaypointCollectScene(void) {
         }
     } else {
         if (g_RacePhase == 0) {
-            GameRunRaceIntroCamera(&g_PlayerCar);
+            RunRaceIntroCamera(&g_PlayerCar);
             D_8009EC88 = 0;
             g_WaypointsCollected = 0;
             break;
@@ -490,7 +490,7 @@ void GameUpdateWaypointCollectScene(void) {
     }
     if (g_RacePhase == 1) {
         if ((u32)g_SceneTimer >= 211) {
-            GameBeginCarStandingStart(&g_PlayerCar);
+            BeginCarStandingStart(&g_PlayerCar);
             g_RacePhase = 2;
         }
     }
@@ -498,40 +498,40 @@ void GameUpdateWaypointCollectScene(void) {
 
     if (g_RacePhase < 4) {
         func_8003425C(g_SceneTimer);
-        GamePlayCountdownCues(g_SceneTimer);
+        PlayCountdownCues(g_SceneTimer);
     }
 
     if (g_RacePhase > 0) {
-        GameUpdatePlayerCar(&g_PlayerCar);
+        UpdatePlayerCar(&g_PlayerCar);
     } else if (g_RacePhase == 0) {
         func_8005D9F8(0, 1);
     }
-    GameDrawLapNumber();
+    DrawLapNumber();
 
     if (g_RacePhase > 0) {
-        GameUpdateCamera(0, &g_PlayerCar);
+        UpdateCamera(0, &g_PlayerCar);
     }
 
     p = &g_PlayerTrackSection;
-    GameRequestTrackTexturePage(*p);
-    GameUpdateEnvironment();
+    RequestTrackTexturePage(*p);
+    UpdateEnvironment();
     func_800418D4();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-    GameDrawTerrainCells();
-    GameDrawCourseObjects();
-    GameDrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
-    GameGetTrackZoneBlend(g_PlayerTrackProgress);
+    DrawTerrainCells();
+    DrawCourseObjects();
+    DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
+    GetTrackZoneBlend(g_PlayerTrackProgress);
     func_8005B190(g_ReverbZoneDepth, g_ReverbZoneDepth);
-    GameDrawPlayerTachometer();
+    DrawPlayerTachometer();
     func_8004087C(*p);
     if (g_RacePhase < 3) {
-        GameUpdateWaypoints();
-        GameDrawWaypoints();
+        UpdateWaypoints();
+        DrawWaypoints();
     }
 }
 
-void GameApplyTrackReverbZone(s32 arg0) asm("func_800381EC");
-void GameApplyTrackReverbZone(s32 arg0) {
+void ApplyTrackReverbZone(s32 arg0) asm("func_800381EC");
+void ApplyTrackReverbZone(s32 arg0) {
     s32 result;
     s32 i;
     /* These pins are load-bearing: removing any one changes .text. */
@@ -590,7 +590,7 @@ s32 func_80038288(s32 arg0) {
     }
 
     if (value != 0) {
-        temp = GameAtan2(0x29DD - *(s32 *)0x1F800008, 0x6EF3 - *(s32 *)0x1F800010);
+        temp = Atan2(0x29DD - *(s32 *)0x1F800008, 0x6EF3 - *(s32 *)0x1F800010);
         value = 0xC00 - temp;
         temp = *(s32 *)0x1F80001C;
         value &= 0xFFF;
@@ -608,8 +608,8 @@ s32 func_80038288(s32 arg0) {
     }
 }
 
-void GameInitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) asm("func_800383A8");
-void GameInitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
+void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) asm("func_800383A8");
+void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     u8 *base;
     s32 sub;
     u8 *p;
@@ -640,7 +640,7 @@ void GameInitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         *(s32 *)&ent->y = 0;
     }
     {
-        s32 ret = GameFindTrackSegment((u8 *)ent, ent->trackPointIndex);
+        s32 ret = FindTrackSegment((u8 *)ent, ent->trackPointIndex);
         s32 lev = g_RaceSeries;
         s32 idx;
         s32 levShift;
@@ -686,7 +686,7 @@ void GameInitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         ent->field_104 = 0;
         ent->field_C4 = 0;
         ent->field_138 = 0;
-        GameSeedCarLapProgress((u8 *)ent, *(s16 *)(p + 0x35E));
+        SeedCarLapProgress((u8 *)ent, *(s16 *)(p + 0x35E));
     }
 
     sub += g_RaceSeries * 144;
@@ -705,7 +705,7 @@ void GameInitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
 
             pair.a = 20;
             pair.b = -20;
-            GameUpdateCarTrackState((u8 *)ent, ent->trackPointIndex, &pair.a);
+            UpdateCarTrackState((u8 *)ent, ent->trackPointIndex, &pair.a);
             ent->field_60 = *(s32 *)&ent->y;
             ent->previousTrackProgress = ent->trackProgress;
         }
@@ -732,8 +732,8 @@ void GameInitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     }
 }
 
-void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) asm("func_800385FC");
-void GameInitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
+void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) asm("func_800385FC");
+void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   s32 pos2_R10;
   s32 idx_R8;
   /* These pins are load-bearing: removing any one changes .text. */

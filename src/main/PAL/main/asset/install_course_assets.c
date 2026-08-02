@@ -6,22 +6,22 @@ extern u8 *g_AssetBase asm("D_8019C904");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
 extern u8 *g_TrackTextureShadow asm("D_801E42D0");
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
-void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A2E0(void *arg0);
 void func_8001A40C(void *arg0);
-void GameResetTrackTextureSwap(void) asm("func_80019EBC");
+void ResetTrackTextureSwap(void) asm("func_80019EBC");
 
-void GameInstallCourseAssets(void) asm("func_80019730");
-void GameInstallCourseAssets(void) {
+void InstallCourseAssets(void) asm("func_80019730");
+void InstallCourseAssets(void) {
     u8 *base;
     s32 offset0;
     s32 offset1;
 
     g_AssetBlockPtr = g_AssetBase + *(s32 *)(g_AssetBase + 0);
-    GameUploadImageAsset(g_AssetBlockPtr);
+    UploadImageAsset(g_AssetBlockPtr);
 
     g_AssetBlockPtr = g_AssetBase + *(s32 *)(g_AssetBase + 4);
-    GameUploadImageAsset(g_AssetBlockPtr);
+    UploadImageAsset(g_AssetBlockPtr);
 
     g_AssetBlockPtr = g_AssetBase + *(s32 *)(g_AssetBase + 8);
     func_8001A2E0(g_AssetBlockPtr);
@@ -31,18 +31,18 @@ void GameInstallCourseAssets(void) {
     offset1 = *(s32 *)(base + 0x10);
     g_AssetBlockPtr = base + offset0;
     g_AssetSubBlockPtr = base + offset1;
-    GameUploadImageAsset(g_AssetBlockPtr);
+    UploadImageAsset(g_AssetBlockPtr);
 
     func_8001A40C(g_AssetBase);
 
     g_TrackTextureShadow = g_AssetBase;
-    GameUploadImageAsset(g_AssetSubBlockPtr);
-    GameResetTrackTextureSwap();
+    UploadImageAsset(g_AssetSubBlockPtr);
+    ResetTrackTextureSwap();
     g_AssetLoadCursor = g_AssetBase + 0x38000;
 }
 
-s32 GameRequestTrackDataAssets(void) asm("func_80019844");
-s32 GameRequestTrackDataAssets(void) {
+s32 RequestTrackDataAssets(void) asm("func_80019844");
+s32 RequestTrackDataAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;
     }

@@ -64,11 +64,11 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     s->read_pos = seq + 8;
     if (seq[7] == 1) {
     } else {
-    GameDebugPrintf(g_MsgSeqNotSeqData);
+    DebugPrintf(g_MsgSeqNotSeqData);
     return -1;
     }
     } else {
-    GameDebugPrintf(g_MsgSeqOldFormat);
+    DebugPrintf(g_MsgSeqOldFormat);
     return 0;
     }
 

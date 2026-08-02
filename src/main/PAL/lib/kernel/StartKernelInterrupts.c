@@ -219,9 +219,9 @@ void intrDMADispatcher(void) {
 
     if (((*g_DmaIrqControl & 0xFF000000) == 0x80000000) || ((*g_DmaIrqControl & 0x8000) != 0)) {
         fmt = D_80013BA8;
-        GameDebugPrintf(fmt, *g_DmaIrqControl);
+        DebugPrintf(fmt, *g_DmaIrqControl);
         for (i = 0; i < 7; i++) {
-            GameDebugPrintf(D_80013BC4, i, g_DmaChannelRegs[i * 4]);
+            DebugPrintf(D_80013BC4, i, g_DmaChannelRegs[i * 4]);
         }
     }
 }

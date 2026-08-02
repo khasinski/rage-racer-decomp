@@ -109,7 +109,7 @@ void CD_initintr(void) {
 
 long func_8006BD14(void) {
     func_80063C38(D_80013904);
-    GameDebugPrintf(D_80013910, g_CdDebugInfo);
+    DebugPrintf(D_80013910, g_CdDebugInfo);
 
     D_8009905D = 0;
     g_CdModeByte = 0;

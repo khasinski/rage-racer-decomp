@@ -17,7 +17,7 @@ long SsSeqOpen(long seq_data, long vab_id) {
 
     used = g_SndSeqOpenMask;
     if (used == -1) {
-        GameDebugPrintf(g_MsgSeqTableFull);
+        DebugPrintf(g_MsgSeqTableFull);
         return -1;
     }
 

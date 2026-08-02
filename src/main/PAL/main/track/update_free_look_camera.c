@@ -44,21 +44,21 @@ void func_8002FC84(s32 arg0, s32 *out, s32 weight);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 void func_8002C168(void *arg0);
-void GameUpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
+void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
 
 
 /*
- * Fuller sibling of GameUpdateFinishCamera: camera track-follower with bob/shake. Aims
+ * Fuller sibling of UpdateFinishCamera: camera track-follower with bob/shake. Aims
  * the eye object g_CameraCar at a look-ahead centre-line point, and when
  * updateMotion (arg1) is set, ramps the follow distance and applies the shake
  * offsets g_FreeCameraAngleOffset[] driven by the input bits in g_PadHeld. Builds and
  * transposes the view rotation matrices, projects the eye-forward point, and
  * writes the scratchpad view state (view[2..4]=eye XYZ, view[6]=pitch,
  * view[7]=yaw, view[8]=roll). markerClamp is the zeroed clamp record for the
- * track-marker builder GameUpdateCarTrackState.
+ * track-marker builder UpdateCarTrackState.
  */
-void GameUpdateFreeLookCamera(s32 arg0, s32 updateMotion) asm("func_8003CF14");
-void GameUpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
+void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) asm("func_8003CF14");
+void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     s32 *view = (s32 *)0x1F800000;
     s32 delta[3];
     s32 coords[3];
@@ -88,8 +88,8 @@ void GameUpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     index = rem % g_TrackPointCount;
 
     func_8002FC84(index, coords, g_CameraCar.field_38);
-    angle = 0x400 - GameAtan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCar.z);
-    g_CameraCarHeading += GameGetAngleDelta(g_CameraCarHeading, angle);
+    angle = 0x400 - Atan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCar.z);
+    g_CameraCarHeading += GetAngleDelta(g_CameraCarHeading, angle);
     g_CameraCar.field_24 = g_CameraCarHeading;
 
     if (updateMotion != 0) {
@@ -134,17 +134,17 @@ void GameUpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     func_8002C168(&g_CameraCar);
     markerClamp[0] = 0;
     markerClamp[1] = 0;
-    GameUpdateCarTrackState(&g_CameraCar, g_CameraCar.field_30, markerClamp);
+    UpdateCarTrackState(&g_CameraCar, g_CameraCar.field_30, markerClamp);
 
     *(Block16 *)(view + 2) = *(Block16 *)&g_CameraCar.x;
     view[3] -= 48;
     *(Block16 *)(view + 6) = *(Block16 *)&g_CameraCar.field_20;
     view[6] = g_FreeCameraAngleOffset[0] + view[6];
 
-    GameBuildRotMatrixY(&m1, view[7]);
-    GameBuildRotMatrixX(&m2, view[6]);
+    BuildRotMatrixY(&m1, view[7]);
+    BuildRotMatrixX(&m2, view[6]);
     MulMatrix2(&m2, &m1);
-    GameBuildRotMatrixZ(&m2, view[8]);
+    BuildRotMatrixZ(&m2, view[8]);
     MulMatrix2(&m2, &m1);
 
     vec[0] = 0;
@@ -168,15 +168,15 @@ void GameUpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     delta[1] = coords[1] - view[3];
     delta[2] = coords[2] - view[4];
     c400 = 0x400;
-    view[7] = c400 - GameAtan2(delta[0], delta[2]);
+    view[7] = c400 - Atan2(delta[0], delta[2]);
     value = SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]);
-    view[6] = c400 - GameAtan2(delta[1], value >> 6);
+    view[6] = c400 - Atan2(delta[1], value >> 6);
 
     g_PlayerTrackSection = g_CameraCar.field_78;
     g_PlayerProgressA = g_CameraCar.field_68;
     g_PlayerProgressB = g_CameraCar.field_6C;
     g_PlayerTrackProgress = g_CameraCar.field_70;
-    GameSetCameraRotMatrix();
+    SetCameraRotMatrix();
 }
 
 typedef struct Vec4i {
@@ -196,8 +196,8 @@ extern Vec4i g_StartGridSceneryPos[] asm("D_8007E298");
 
 void func_80017794(void *arg0, Vec4i *state, Matrix *mtx);
 
-void GameDrawStartGridScenery(s32 arg0) asm("func_8003D458");
-void GameDrawStartGridScenery(s32 arg0) {
+void DrawStartGridScenery(s32 arg0) asm("func_8003D458");
+void DrawStartGridScenery(s32 arg0) {
     Matrix mtx;
     Vec4i state;
     s32 s1;
@@ -209,7 +209,7 @@ void GameDrawStartGridScenery(s32 arg0) {
     s32 lim;
 
     if (g_RacePhase < 2 && arg0 >= 0x51) {
-        GameBuildRotMatrixY(&mtx, g_StartGridSceneryAngle[g_RaceSeries]);
+        BuildRotMatrixY(&mtx, g_StartGridSceneryAngle[g_RaceSeries]);
         MulMatrix2((Matrix *)0x1F800028, &mtx);
         if (arg0 - 90 > 0) {
             state = g_StartGridSceneryPos[g_RaceSeries];
@@ -238,7 +238,7 @@ void GameDrawStartGridScenery(s32 arg0) {
             *(s32 *)0x1F800084 = 0;
             drawArg = (value < lim) ? value : 1;
         }
-        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)0x1F800000, drawArg);
     }
 }
 
@@ -262,11 +262,11 @@ extern s32 g_AnimSceneryTint asm("D_8007E2E4");
 extern s16 g_AnimSceneryRacePosition asm("D_8007E2E8");
 extern s16 g_AnimSceneryVariant asm("D_8009AFCC");
 extern s16 g_AnimSceneryPitch[] asm("D_8007E2E0");
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 
-void GameDrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
+void DrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
 
-void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
+void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     Matrix mtx;
     Matrix mtx2;
     Vec4i state;
@@ -318,14 +318,14 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
     if (g_AnimSceneryFrame == 0 && (arg0 & 7) == 0 && g_RacePaused == 0) {
         g_AnimSceneryTint = 0;
         g_AnimSceneryRacePosition = g_RacePosition;
-        g_AnimSceneryVariant = (GameRandom15() & 7) / 3;
+        g_AnimSceneryVariant = (Random15() & 7) / 3;
         if (g_AnimSceneryRacePosition >= 4) {
             g_AnimSceneryRacePosition = 0;
         }
     }
 
-    GameBuildRotMatrixY(&mtx, state.w);
-    GameBuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
+    BuildRotMatrixY(&mtx, state.w);
+    BuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
     MulMatrix(&mtx, &mtx2);
     MulMatrix2((Matrix *)0x1F800028, &mtx);
 
@@ -341,13 +341,13 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
             num = g_AnimSceneryFrame + 10;
             *(s32 *)0x1F800084 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
-            GameSubmitCourseModel((void *)0x1F800000, drawArg);
+            SubmitCourseModel((void *)0x1F800000, drawArg);
         } else {
             func_80017794((void *)0x1F80011C, &state, &mtx);
             num = g_AnimSceneryRacePosition;
             *(s32 *)0x1F800084 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
-            GameSubmitCourseModel((void *)0x1F800000, drawArg);
+            SubmitCourseModel((void *)0x1F800000, drawArg);
         }
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
@@ -356,14 +356,14 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
         num = g_AnimSceneryVariant + 4;
         lim2 = g_CourseModelCount;
         drawArg = (num < lim2) ? num : 1;
-        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)0x1F800000, drawArg);
     } else {
         func_80017794((void *)0x1F80011C, &state, &mtx);
         num = g_AnimSceneryFrame + 0x18;
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimSceneryTint;
@@ -372,7 +372,7 @@ void GameDrawAnimatedScenery(s32 arg0, s32 arg1) {
         num = g_AnimSceneryVariant + 7;
         lim2 = g_CourseModelCount;
         drawArg = (num < lim2) ? num : 1;
-        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)0x1F800000, drawArg);
     }
 }
 
@@ -380,9 +380,9 @@ extern s16 g_AnimScenery2Frame asm("D_8007E2F2");
 extern s32 g_AnimScenery2Tint asm("D_8007E2EC");
 extern s16 g_AnimScenery2Variant asm("D_8007E2F0");
 
-void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
+void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
 
-void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Matrix mtx;
     Matrix mtx2;
     Vec4i state;
@@ -436,11 +436,11 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     g_AnimScenery2Frame = (arg0 / 4) % 16;
     if (g_AnimScenery2Frame == 0 && (arg0 & 7) == 0 && arg3 == 1) {
         g_AnimScenery2Tint = 0;
-        g_AnimScenery2Variant = (GameRandom15() & 7) / 3;
+        g_AnimScenery2Variant = (Random15() & 7) / 3;
     }
 
-    GameBuildRotMatrixY(&mtx, state.w);
-    GameBuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
+    BuildRotMatrixY(&mtx, state.w);
+    BuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
     MulMatrix(&mtx, &mtx2);
     MulMatrix2((Matrix *)0x1F800028, &mtx);
 
@@ -452,7 +452,7 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimScenery2Tint;
@@ -469,7 +469,7 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        GameSubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)0x1F800000, drawArg);
 
         func_80017794((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimScenery2Tint;
@@ -485,5 +485,5 @@ void GameDrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     if (num < lim2) {
         drawArg = num;
     }
-    GameSubmitCourseModel((void *)0x1F800000, drawArg);
+    SubmitCourseModel((void *)0x1F800000, drawArg);
 }

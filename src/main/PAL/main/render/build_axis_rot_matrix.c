@@ -8,8 +8,8 @@
  *   0/0x20 -> rotation about X, 1/0x21 -> about Y, 2/0x22 -> about Z.
  * sinTerm/cosTerm are the precomputed sin/cos of the rotation angle.
  */
-void GameBuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axis) asm("func_80046188");
-void GameBuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axisMode) {
+void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axis) asm("func_80046188");
+void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axisMode) {
     s32 one;
 
     switch ((axisMode & 0xFF) - 0x58) {
@@ -71,8 +71,8 @@ void func_800698E8(s32 *matrix);
  * rotation (func_80046188), the translation (func_800681F0), then per-row
  * fixed-point projection scaling (<<1 / <<2). Returns 1 if eye==target, else 0.
  */
-s32 GameSetLookAtMatrix(GameRenderObject *obj) asm("func_80046248");
-s32 GameSetLookAtMatrix(GameRenderObject *obj) {
+s32 SetLookAtMatrix(GameRenderObject *obj) asm("func_80046248");
+s32 SetLookAtMatrix(GameRenderObject *obj) {
     Matrix m;
     GameRenderAxisMatrix am;
     volatile s32 pad[18];
@@ -106,7 +106,7 @@ s32 GameSetLookAtMatrix(GameRenderObject *obj) {
     pitch = -pitch;
     horiz = func_800689A8((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
                           (obj->field_14 - obj->z) * (obj->field_14 - obj->z));
-    GameBuildAxisRotMatrix(&am, (s16)pitch, (s16)((horiz << 12) / len), 0x78);
+    BuildAxisRotMatrix(&am, (s16)pitch, (s16)((horiz << 12) / len), 0x78);
     MulMatrix(&m, &am);
 
     if (horiz != 0) {
@@ -118,7 +118,7 @@ s32 GameSetLookAtMatrix(GameRenderObject *obj) {
         t1 = (horiz << 12) / len;
         horiz = obj->field_14 - obj->z;
         t2 = (horiz << 12) / len;
-        GameBuildAxisRotMatrix(&am, (s16)(-t1), (s16)t2, 0x79);
+        BuildAxisRotMatrix(&am, (s16)(-t1), (s16)t2, 0x79);
         MulMatrix(&m, &am);
     }
 
@@ -146,8 +146,8 @@ s32 GameSetLookAtMatrix(GameRenderObject *obj) {
 // Fixed-point blend in 0..10000 scale.
 /* Quadratic Bezier ease over t in 0..10000 with control point `control`:
  * 2t(1-t)*control + t^2, all in the same 1/10000 scale. */
-s32 GameBezierEase(s32 t, s32 control) asm("func_80046598");
-s32 GameBezierEase(s32 arg0, s32 arg1) {
+s32 BezierEase(s32 t, s32 control) asm("func_80046598");
+s32 BezierEase(s32 arg0, s32 arg1) {
     s32 initial;
     s32 value;
     s32 doubled;

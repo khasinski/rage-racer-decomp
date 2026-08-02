@@ -16,8 +16,8 @@ void func_8002FC84(s32 arg0, s32 *out, s32 weight);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 void func_8002C168(void *arg0);
-void GameUpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
-void GameDrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
+void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
+void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
 
 
 /*
@@ -25,11 +25,11 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
  * g_CameraCar (a GameRenderObject) toward the sampled centre-line point
  * (func_8002FC84 + atan2), nudges its position, then seeds the scratchpad view
  * state (view[2..4]=eye XYZ, view[6]=pitch, view[7]=yaw, view[8]=roll) from the
- * eye object and submits the render object (GameDrawPlayerCarModel). markerClamp is the
- * zeroed clamp record passed to the track-marker builder GameUpdateCarTrackState.
+ * eye object and submits the render object (DrawPlayerCarModel). markerClamp is the
+ * zeroed clamp record passed to the track-marker builder UpdateCarTrackState.
  */
-void GameUpdateFinishCamera(GameRenderObject *obj) asm("func_8003CB3C");
-void GameUpdateFinishCamera(GameRenderObject *obj) {
+void UpdateFinishCamera(GameRenderObject *obj) asm("func_8003CB3C");
+void UpdateFinishCamera(GameRenderObject *obj) {
     s32 *view = (s32 *)0x1F800000;
     s32 delta[3];
     s32 coords[3];
@@ -54,9 +54,9 @@ void GameUpdateFinishCamera(GameRenderObject *obj) {
     index = rem % g_TrackPointCount;
 
     func_8002FC84(index, coords, g_CameraCar.field_38);
-    angle = 0x400 - GameAtan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCarZ);
+    angle = 0x400 - Atan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCarZ);
 
-    g_CameraCarHeading += GameGetAngleDelta(g_CameraCarHeading, angle);
+    g_CameraCarHeading += GetAngleDelta(g_CameraCarHeading, angle);
 
     value = func_80068568(g_CameraCarHeading) * g_CameraCarSpeed;
     if (value < 0) {
@@ -76,7 +76,7 @@ void GameUpdateFinishCamera(GameRenderObject *obj) {
     func_8002C168(&g_CameraCar);
     markerClamp[0] = 0;
     markerClamp[1] = 0;
-    GameUpdateCarTrackState(&g_CameraCar, g_CameraCarTrackPoint, markerClamp);
+    UpdateCarTrackState(&g_CameraCar, g_CameraCarTrackPoint, markerClamp);
 
     *(Block16 *)(view + 2) = *(Block16 *)&g_CameraCar;
     view[3] -= 64;
@@ -85,12 +85,12 @@ void GameUpdateFinishCamera(GameRenderObject *obj) {
     delta[1] = obj->y - view[3];
     delta[2] = obj->z - view[4];
 
-    view[7] = 0x400 - GameAtan2(delta[0], delta[2]);
+    view[7] = 0x400 - Atan2(delta[0], delta[2]);
     value = SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]);
-    view[6] = 0x400 - GameAtan2(delta[1], value >> 6);
+    view[6] = 0x400 - Atan2(delta[1], value >> 6);
     view[8] = 0;
 
-    GameSetCameraRotMatrix();
-    GameSelectModelBank(0);
-    GameDrawPlayerCarModel(obj);
+    SetCameraRotMatrix();
+    SelectModelBank(0);
+    DrawPlayerCarModel(obj);
 }

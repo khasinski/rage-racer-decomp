@@ -19,13 +19,13 @@ void func_8001C794(void);
  * GameRenderObject -> GPU-primitive submitter. Subtracts the active view's
  * horizon from the object's y, builds a stack of rotation matrices from the
  * object's angle sets, loads each transform into the GTE at 0x1F80011C and
- * dispatches the primitive builder GameSubmitModel on the scratchpad OT
+ * dispatches the primitive builder SubmitModel on the scratchpad OT
  * (0x1F800000) at increasing depth buckets. The m_90 negation block and the
  * m_B0[1] block build the mirrored copies (flip X/Z columns). otDepth is the
  * base OT bucket; clipHandle is the optional clip volume from func_800350B4.
  */
-void GameDrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
-void GameDrawPlayerCarModel(GameRenderObject *obj) {
+void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
+void DrawPlayerCarModel(GameRenderObject *obj) {
     GameRenderView *view = g_CarModelAsset;
     Matrix m_10;
     Matrix m_30;
@@ -44,8 +44,8 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
 
     obj->y -= view->horizon_6;
     obj->field_60 -= view->horizon_6;
-    GameBuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
-    GameBuildRotMatrixX(&m_30, obj->angle_20);
+    BuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
+    BuildRotMatrixX(&m_30, obj->angle_20);
     MulMatrix2(&m_10, &m_30);
     MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
 
@@ -67,11 +67,11 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
     m_50 = m_30;
     MulMatrix2((Matrix *)0x1F800028, &m_30);
 
-    GameBuildRotMatrixY(&m_10, 0x800 - obj->angle_54);
-    GameBuildRotMatrixX(&m_70, obj->angle_50);
+    BuildRotMatrixY(&m_10, 0x800 - obj->angle_54);
+    BuildRotMatrixX(&m_70, obj->angle_50);
     MulMatrix2(&m_10, &m_70);
     MulMatrix2((Matrix *)0x1F800028, &m_70);
-    GameBuildRotMatrixZ(&m_10, obj->angle_58);
+    BuildRotMatrixZ(&m_10, obj->angle_58);
     MulMatrix2(&m_70, &m_10);
 
     v_138[0] = obj->x;
@@ -79,30 +79,30 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
     v_138[1] = obj->field_60;
     func_80017794((void *)0x1F80011C, v_138, &m_10);
     g_ScratchRenderMode = 0;
-    GameSubmitModel((void *)0x1F800000, 1);
+    SubmitModel((void *)0x1F800000, 1);
 
     func_80017794((void *)0x1F80011C, v_138, &m_10);
     g_ScratchRenderMode = 0;
-    GameSubmitModel((void *)0x1F800000, 1);
+    SubmitModel((void *)0x1F800000, 1);
 
-    GameBuildRotMatrixZ(&m_70, obj->angle_28);
+    BuildRotMatrixZ(&m_70, obj->angle_28);
     MulMatrix2(&m_30, &m_70);
     func_80017794((void *)0x1F80011C, obj, &m_70);
     g_ScratchRenderMode = 0;
-    GameSubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
+    SubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
 
     otDepth = obj->field_E4 << 1;
     if (obj->flags_48 & 0x1000) {
         otDepth += 10;
     }
-    GameBuildRotMatrixZ(&m_10, obj->angle_28 - obj->field_64);
+    BuildRotMatrixZ(&m_10, obj->angle_28 - obj->field_64);
     MulMatrix(&m_50, &m_10);
     MulMatrix(&m_30, &m_10);
-    GameBuildRotMatrixX(&m_F0, obj->flags_48);
+    BuildRotMatrixX(&m_F0, obj->flags_48);
     MulMatrix2(&m_30, &m_F0);
 
-    GameBuildRotMatrixY(&m_10, obj->angle_44 / 12);
-    GameBuildRotMatrixX(&m_B0[0], obj->flags_48);
+    BuildRotMatrixY(&m_10, obj->angle_44 / 12);
+    BuildRotMatrixX(&m_B0[0], obj->flags_48);
     MulMatrix2(&m_10, &m_B0[0]);
     MulMatrix2(&m_30, &m_B0[0]);
 
@@ -117,7 +117,7 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
     m_B0[1].m[2][2] = -m_B0[0].m[2][2];
     func_80017794((void *)0x1F80011C, obj, &m_F0);
     g_ScratchRenderMode = 0;
-    GameSubmitModel((void *)0x1F800000, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
+    SubmitModel((void *)0x1F800000, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
 
     for (i = 0; i < 2; i++) {
         GameRenderView *v = g_CarModelAsset;
@@ -134,7 +134,7 @@ void GameDrawPlayerCarModel(GameRenderObject *obj) {
         m_118[2] += obj->z;
         func_80017794((void *)0x1F80011C, m_118, &m_B0[i]);
         g_ScratchRenderMode = 0;
-        GameSubmitModel((void *)0x1F800000, (otDepth + 2 < g_ModelBankCount) ? (otDepth + 2) : 1);
+        SubmitModel((void *)0x1F800000, (otDepth + 2 < g_ModelBankCount) ? (otDepth + 2) : 1);
         func_80069888(&m_90);
     }
 
@@ -190,8 +190,8 @@ void func_8001DFC0(GameRenderObject *obj) {
     otDepth = v_128[0] + v_128[2];
     if (v_148[2] >= 0) {
         if (otDepth < 0xD00) {
-            GameBuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
-            GameBuildRotMatrixX(&m_30, obj->angle_20);
+            BuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
+            BuildRotMatrixX(&m_30, obj->angle_20);
             MulMatrix2(&m_10, &m_30);
             MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
             clipHandle = func_800350B4((s32)obj->field_70);
@@ -210,11 +210,11 @@ void func_8001DFC0(GameRenderObject *obj) {
             m_50 = m_30;
             MulMatrix2((Matrix *)0x1F800028, &m_30);
 
-            GameBuildRotMatrixY(&m_10, 0x800 - obj->angle_54);
-            GameBuildRotMatrixX(&m_70, obj->angle_50);
+            BuildRotMatrixY(&m_10, 0x800 - obj->angle_54);
+            BuildRotMatrixX(&m_70, obj->angle_50);
             MulMatrix2(&m_10, &m_70);
             MulMatrix2((Matrix *)0x1F800028, &m_70);
-            GameBuildRotMatrixZ(&m_10, obj->angle_58);
+            BuildRotMatrixZ(&m_10, obj->angle_58);
             MulMatrix2(&m_70, &m_10);
 
             v_138[0] = obj->x;
@@ -222,29 +222,29 @@ void func_8001DFC0(GameRenderObject *obj) {
             v_138[1] = obj->field_60;
             func_80017794((void *)0x1F80011C, v_138, &m_10);
             g_ScratchRenderMode = 0;
-            GameSubmitModel((void *)0x1F800000,
+            SubmitModel((void *)0x1F800000,
                             (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
 
             func_80017794((void *)0x1F80011C, v_138, &m_10);
             g_ScratchRenderMode = 0;
-            GameSubmitModel((void *)0x1F800000,
+            SubmitModel((void *)0x1F800000,
                             (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
 
-            GameBuildRotMatrixZ(&m_70, obj->angle_28);
+            BuildRotMatrixZ(&m_70, obj->angle_28);
             MulMatrix2(&m_30, &m_70);
             func_80017794((void *)0x1F80011C, obj, &m_70);
             g_ScratchRenderMode = lod[1] << 16;
-            GameSubmitModel((void *)0x1F800000,
+            SubmitModel((void *)0x1F800000,
                             (lod[0] < g_ModelBankCount) ? lod[0] : 1);
 
-            GameBuildRotMatrixZ(&m_10, obj->angle_28 - obj->field_64);
+            BuildRotMatrixZ(&m_10, obj->angle_28 - obj->field_64);
             MulMatrix(&m_50, &m_10);
             MulMatrix(&m_30, &m_10);
-            GameBuildRotMatrixX(&m_F0, obj->flags_48);
+            BuildRotMatrixX(&m_F0, obj->flags_48);
             MulMatrix2(&m_30, &m_F0);
 
-            GameBuildRotMatrixY(&m_10, obj->angle_44 * 2);
-            GameBuildRotMatrixX(&m_B0[0], obj->flags_48);
+            BuildRotMatrixY(&m_10, obj->angle_44 * 2);
+            BuildRotMatrixX(&m_B0[0], obj->flags_48);
             MulMatrix2(&m_10, &m_B0[0]);
             MulMatrix2(&m_30, &m_B0[0]);
 
@@ -259,7 +259,7 @@ void func_8001DFC0(GameRenderObject *obj) {
             m_B0[1].m[2][2] = -m_B0[0].m[2][2];
             func_80017794((void *)0x1F80011C, obj, &m_F0);
             g_ScratchRenderMode = 0;
-            GameSubmitModel((void *)0x1F800000,
+            SubmitModel((void *)0x1F800000,
                             (lod[0] + 3 < g_ModelBankCount) ? (lod[0] + 3) : 1);
 
             for (i = 0; i < 2; i++) {
@@ -276,13 +276,13 @@ void func_8001DFC0(GameRenderObject *obj) {
                 m_118[2] += obj->z;
                 func_80017794((void *)0x1F80011C, m_118, &m_B0[i]);
                 g_ScratchRenderMode = 0;
-                GameSubmitModel((void *)0x1F800000,
+                SubmitModel((void *)0x1F800000,
                                 (lod[0] + 2 < g_ModelBankCount) ? (lod[0] + 2) : 1);
                 func_80069888(&m_90);
             }
         } else if (otDepth < 0x2500) {
-            GameBuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
-            GameBuildRotMatrixX(&m_50, obj->angle_20);
+            BuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
+            BuildRotMatrixX(&m_50, obj->angle_20);
             MulMatrix2(&m_10, &m_50);
             MulMatrix0(&g_SceneLightMatrix, &m_50, &m_90);
             clipHandle = func_800350B4((s32)obj->field_70);
@@ -291,12 +291,12 @@ void func_8001DFC0(GameRenderObject *obj) {
             }
             func_80069888(&m_90);
 
-            GameBuildRotMatrixZ(&m_10, obj->angle_28);
+            BuildRotMatrixZ(&m_10, obj->angle_28);
             MulMatrix2(&m_50, &m_10);
             MulMatrix2((Matrix *)0x1F800028, &m_10);
             func_80017794((void *)0x1F80011C, obj, &m_10);
             g_ScratchRenderMode = lod[1] << 16;
-            GameSubmitModel((void *)0x1F800000,
+            SubmitModel((void *)0x1F800000,
                             (lod[0] + 4 < g_ModelBankCount) ? (lod[0] + 4) : 1);
         }
     }
@@ -311,13 +311,13 @@ void func_8001DFC0(GameRenderObject *obj) {
 
 extern s32 g_FmvState asm("D_8009F094");
 extern s32 g_StreamReturnScene asm("D_8019C760");
-s32 GameCloseLoadedAudioSlots(void) asm("func_8005B9CC");
+s32 CloseLoadedAudioSlots(void) asm("func_8005B9CC");
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
-void GameBeginFmv(s32 arg0) asm("func_8001E6B4");
-void GameBeginFmv(s32 arg0) {
-    GameCloseLoadedAudioSlots();
-    GameResetCdAudioState();
+void BeginFmv(s32 arg0) asm("func_8001E6B4");
+void BeginFmv(s32 arg0) {
+    CloseLoadedAudioSlots();
+    ResetCdAudioState();
     g_FmvState = 0;
     g_StreamReturnScene = arg0;
     g_SceneId = 5;
@@ -327,21 +327,21 @@ void GameBeginFmv(s32 arg0) {
 
 extern u32 g_AssetBase asm("D_8019C904");
 
-void GameStartFmvPlayback(u32 arg0) asm("func_8001E79C");
-void GameDecodeFmvFrame(void) asm("func_8001E8A4");
-void GameEndFmv(void) asm("func_8001EA34");
+void StartFmvPlayback(u32 arg0) asm("func_8001E79C");
+void DecodeFmvFrame(void) asm("func_8001E8A4");
+void EndFmv(void) asm("func_8001EA34");
 
-void GameUpdateFmv(void) asm("func_8001E71C");
-void GameUpdateFmv(void) {
+void UpdateFmv(void) asm("func_8001E71C");
+void UpdateFmv(void) {
     switch (g_FmvState) {
     case 0:
-        GameStartFmvPlayback(g_AssetBase);
+        StartFmvPlayback(g_AssetBase);
         /* fall through */
     case 1:
-        GameDecodeFmvFrame();
+        DecodeFmvFrame();
         break;
     case 2:
-        GameEndFmv();
+        EndFmv();
         break;
     }
 }

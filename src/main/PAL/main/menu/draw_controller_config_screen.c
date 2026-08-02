@@ -67,7 +67,7 @@ void func_80023750(s32 arg0);
  * panel and the diagram for whichever controller is plugged in. The NeGcon
  * variant adds a translucent caption strip under the diagram.
  */
-void GameDrawControllerConfigScreen(void) {
+void DrawControllerConfigScreen(void) {
     s32 selection;
     s32 leftLit;
     s32 rightLit;
@@ -98,13 +98,13 @@ void GameDrawControllerConfigScreen(void) {
         prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, rightLit);
         if (g_PadType == 0x23) {
             prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, g_NegconMappingIndex);
-            prim = GameDrawNegconConfigDiagram(ot, prim);
+            prim = DrawNegconConfigDiagram(ot, prim);
             prim = QueueSpriteTransWide(
                 ot, prim, 0x10, 0x40, 0xD8, 0x10, 0, 0xA8, 0x7F40);
             prim = QueueDrawModePrimWide(ot, prim, 0x3F);
         } else {
             prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, g_PadMappingIndex);
-            prim = GameDrawPadConfigDiagram(ot, prim);
+            prim = DrawPadConfigDiagram(ot, prim);
         }
         *(u8 **)0x1F800000 = prim;
     }
@@ -119,20 +119,20 @@ typedef struct PadEdgeView {
     u16 edge;
 } PadEdgeView;
 
-void GameUpdateControllerConfigScreen(void) {
+void UpdateControllerConfigScreen(void) {
     PadEdgeView *pad = (PadEdgeView *)&g_PadEdge2;
 
     g_AnimTimer++;
     g_SetupArrowPulse += 96;
     if (pad->edge & 0x90) {
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
         g_GameMode = 1;
         g_PadMappingIndex = g_PadMappingIndexSaved;
         g_NegconMappingIndex = g_NegconMappingIndexSaved;
     }
     if (pad->edge & 0x860) {
-        GamePlaySoundCue(2);
-        GameLoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
+        PlaySoundCue(2);
+        LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
         if (g_PadType == 0x23) {
             g_GameMode = (pad->edge & 0x800) ? 8 : 1;
         } else {
@@ -142,14 +142,14 @@ void GameUpdateControllerConfigScreen(void) {
     if (g_PadEdge2 & 0x8000) {
         if (g_PadType == 0x23) {
             if (g_NegconMappingIndex > 0) {
-                GamePlaySoundCue(8);
+                PlaySoundCue(8);
                 g_PadConfigFlipTimer = 30;
                 g_PadConfigFlipDirection = 0;
                 g_NegconMappingIndex--;
                 g_ControllerSceneAngleY += 2048;
             }
         } else if (g_PadMappingIndex > 0) {
-            GamePlaySoundCue(8);
+            PlaySoundCue(8);
             g_PadConfigFlipTimer = 30;
             g_PadConfigFlipDirection = 0;
             g_PadMappingIndex--;
@@ -159,14 +159,14 @@ void GameUpdateControllerConfigScreen(void) {
     if (g_PadEdge2 & 0x2000) {
         if (g_PadType == 0x23) {
             if (g_NegconMappingIndex < 7) {
-                GamePlaySoundCue(8);
+                PlaySoundCue(8);
                 g_PadConfigFlipDirection = 1;
                 g_PadConfigFlipTimer = 30;
                 g_NegconMappingIndex++;
                 g_ControllerSceneAngleY -= 2048;
             }
         } else if (g_PadMappingIndex < 7) {
-            GamePlaySoundCue(8);
+            PlaySoundCue(8);
             g_PadConfigFlipDirection = 1;
             g_PadConfigFlipTimer = 30;
             g_PadMappingIndex++;
@@ -178,9 +178,9 @@ void GameUpdateControllerConfigScreen(void) {
         g_PadConfigFlipPhase = ((u32)g_PadConfigFlipTimer >> 2) & 1;
     }
     g_ControllerSceneAngleY = (g_ControllerSceneAngleY * 15) / 16;
-    GameDrawControllerConfigScreen();
+    DrawControllerConfigScreen();
     func_80023750(1);
-    GameDrawControllerSetupScene(0);
+    DrawControllerSetupScene(0);
 }
 
 /* "Hold the "NeGcon" in an untwisted" / "position and press start button." */
@@ -188,7 +188,7 @@ extern char D_80010028[];
 extern char D_8001004C[];
 
 void func_80027874(s32 x, s32 y, char *str, s32 clutIndex);
-s32 GameAddTilePrim(
+s32 AddTilePrim(
     s32 ot,
     s32 prim,
     s32 x,
@@ -202,7 +202,7 @@ s32 GameAddTilePrim(
 /* Game mode 9's own overlay: the two lines of instructions over a black panel
  * inside a white border, both drawn into the 0xD0 sub-buffer of the current
  * draw buffer from the shared scratchpad packet cursor. */
-void GameDrawNegconNeutralScreen(void) {
+void DrawNegconNeutralScreen(void) {
     s32 *cursor = (s32 *)0x1F800000;
     s32 ot;
     s32 prim;
@@ -211,8 +211,8 @@ void GameDrawNegconNeutralScreen(void) {
     func_80027874(0x18, 0x48, D_8001004C, 0x7F81);
     ot = (s32)(g_DrawBuffer + 0xD0);
     prim = *cursor;
-    prim = GameAddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    *cursor = GameAddTilePrim(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
+    prim = AddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
+    *cursor = AddTilePrim(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
 }
 
 /*
@@ -235,7 +235,7 @@ extern u16 g_NegconNeutralLSaved asm("D_8009F0AC");
 extern u16 g_NegconSteerPlaySaved asm("D_8019C75C");
 extern u16 g_NegconMaxTwistSaved asm("D_8019CB04");
 
-/* The same four screen counters GameBeginControllerConfig clears. */
+/* The same four screen counters BeginControllerConfig clears. */
 extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
 
 /*
@@ -248,7 +248,7 @@ extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
  * keep the last two snapshots in the registers retail used; the code itself is
  * ordinary C (see docs/ASM_AND_GTE_POLICY.md).
  */
-void GameBeginNegconCalibration(void) {
+void BeginNegconCalibration(void) {
     /* These pins are load-bearing: removing any one changes .text. */
     register u16 twist asm("$3");
     register u16 mode asm("$4");
@@ -295,10 +295,10 @@ extern u8 g_NegconAxisL asm("D_801E4043");
  * axes as the neutral point and advances to mode 10 (the steering play
  * screen); unplugging the NeGcon drops straight back to mode 1.
  */
-void GameUpdateNegconNeutralScreen(void) {
+void UpdateNegconNeutralScreen(void) {
     g_AnimTimer++;
     if (g_PadEdge2 & 0x800) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         g_GameMode = 10;
         g_NegconSteerNeutral = g_NegconAxisSteer - 128;
         g_NegconNeutralI = g_NegconAxisI;
@@ -308,7 +308,7 @@ void GameUpdateNegconNeutralScreen(void) {
     if (g_PadType != 0x23) {
         g_GameMode = 1;
     }
-    GameDrawNegconNeutralScreen();
+    DrawNegconNeutralScreen();
     func_80023750(4);
-    GameDrawControllerSetupScene(0);
+    DrawControllerSetupScene(0);
 }

@@ -69,25 +69,25 @@ Rec *DsSearchFile(Rec *out, char *path) {
     }
     if (n >= 8) {
         if (g_CdDebugLevel > 0) {
-            GameDebugPrintf(D_80013928, path, n);
+            DebugPrintf(D_80013928, path, n);
         }
         return 0;
     }
     if (buf[0] == 0) {
         if (g_CdDebugLevel > 0) {
-            GameDebugPrintf(D_80013944, path);
+            DebugPrintf(D_80013944, path);
         }
         return 0;
     }
     *b = 0;
     if (func_8006C8E4(type) == 0) {
         if (g_CdDebugLevel > 0) {
-            GameDebugPrintf(D_8001395C);
+            DebugPrintf(D_8001395C);
         }
         return 0;
     }
     if (g_CdDebugLevel >= 2) {
-        GameDebugPrintf(D_80013978, buf);
+        DebugPrintf(D_80013978, buf);
     }
     {
         char *base = g_CdFileCache[0].name;
@@ -100,7 +100,7 @@ Rec *DsSearchFile(Rec *out, char *path) {
         }
         if (CD_namecmp(nm, buf)) {
             if (g_CdDebugLevel >= 2) {
-                GameDebugPrintf(D_80013998, buf);
+                DebugPrintf(D_80013998, buf);
             }
             *out = *rec;
             return rec;
@@ -109,7 +109,7 @@ Rec *DsSearchFile(Rec *out, char *path) {
         nm += 24;
     }
     if (g_CdDebugLevel > 0) {
-        GameDebugPrintf(D_800139A4, buf);
+        DebugPrintf(D_800139A4, buf);
     }
     return 0;
 }

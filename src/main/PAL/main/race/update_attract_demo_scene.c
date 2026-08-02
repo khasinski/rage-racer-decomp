@@ -16,19 +16,19 @@ typedef struct UnkEventPair {
 extern s32 g_AttractDemoStep asm("D_801E682C");
 extern u32 g_StreamReturnScene asm("D_8019C760");
 extern void (*g_AttractDemoSteps[])(void) asm("D_8007D6D0");
-void GameResetAssetLoader(void) asm("func_80017BE4");
-void GameReturnToTitleScene(void) asm("func_800268EC");
+void ResetAssetLoader(void) asm("func_80017BE4");
+void ReturnToTitleScene(void) asm("func_800268EC");
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_PrologueStep asm("D_801E4178");
 extern s32 g_PrologueCutIndex asm("D_801E6824");
 extern u8 g_TextNowLoading[] asm("D_80011010");
-void GameDrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80025940(void);
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-void GameInstallCourseAssets(void) asm("func_80019730");
-void GameRequestTrackDataAssets(void) asm("func_80019844");
-void GameUpdatePrologueLoad(void) asm("func_80026C0C");
+void InstallCourseAssets(void) asm("func_80019730");
+void RequestTrackDataAssets(void) asm("func_80019844");
+void UpdatePrologueLoad(void) asm("func_80026C0C");
 /* Split symbols of the 14-entry prologue table: 8 bytes each, { s16 x,
  * s16 y, char *text }. The scroll drives y and the alpha ramp. */
 extern s16 g_PrologueLineX[] asm("D_8007D6DC");
@@ -37,38 +37,38 @@ extern s32 g_PrologueLineText[] asm("D_8007D6E0");
 void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
-void GameRequestSelectBgmAssets(void) asm("func_80018410");
+void RequestSelectBgmAssets(void) asm("func_80018410");
 extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 extern UnkEventPair g_PrologueCameraCuts[] asm("D_8007D74C");
-void GameExitPrologue(void) asm("func_80026F68");
-void GameDrawPrologueText(void) asm("func_80026DE4");
+void ExitPrologue(void) asm("func_80026F68");
+void DrawPrologueText(void) asm("func_80026DE4");
 void func_8003BB50(void);
-void GameRequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
-void GameUpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
+void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void UpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
-void GameDrawTerrainCellsWide(void) asm("func_80041888");
-void GameDrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
+void DrawTerrainCellsWide(void) asm("func_80041888");
+void DrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
 
-void GameUpdateAttractDemoScene(void) asm("func_80026AE0");
-void GameUpdateAttractDemoScene(void) {
+void UpdateAttractDemoScene(void) asm("func_80026AE0");
+void UpdateAttractDemoScene(void) {
     g_AttractDemoSteps[g_AttractDemoStep]();
 
     if ((g_SceneId == 0x1E) && ((g_PadEdge2 & 0x860) != 0)) {
         if (g_AssetLoadState != 0) {
-            GameResetAssetLoader();
+            ResetAssetLoader();
             g_SceneId = 3;
             g_StreamReturnScene = 0;
         } else {
-            GameReturnToTitleScene();
+            ReturnToTitleScene();
         }
     }
 }
 
-void GameEnterPrologue(void) asm("func_80026B88");
-void GameEnterPrologue(void) {
+void EnterPrologue(void) asm("func_80026B88");
+void EnterPrologue(void) {
     SetDispMask(0);
-    GameSetupDisplay240(0, 0, 0);
+    SetupDisplay240(0, 0, 0);
 
     g_FrameSyncThreshold = 0x80;
     g_FadeLevel = 0x108;
@@ -80,8 +80,8 @@ void GameEnterPrologue(void) {
     g_CameraCarIndex = 3;
 }
 
-void GameUpdatePrologueLoad(void) asm("func_80026C0C");
-void GameUpdatePrologueLoad(void) {
+void UpdatePrologueLoad(void) asm("func_80026C0C");
+void UpdatePrologueLoad(void) {
     s32 delta;
 
     if (g_SceneTimer == 2) {
@@ -101,7 +101,7 @@ void GameUpdatePrologueLoad(void) {
             g_FadeStep = 0;
         }
 
-        GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
+        DrawFullscreenFadeTile(g_FadeLevel, 0x49);
     } else if (delta > 0) {
         s32 value;
 
@@ -109,13 +109,13 @@ void GameUpdatePrologueLoad(void) {
         value = value + delta;
         g_FadeLevel = value;
 
-        GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
+        DrawFullscreenFadeTile(g_FadeLevel, 0x49);
 
         if (g_FadeLevel >= 0x101) {
             SetDispMask(0);
             g_CourseIndex = 0;
             func_80025940();
-            GameStartCdAudio();
+            StartCdAudio();
             g_PrologueStep = 3;
             g_FadeLevel = 0x100;
             g_FadeStep = 0;
@@ -125,35 +125,35 @@ void GameUpdatePrologueLoad(void) {
     func_80016EA0(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
-void GameUpdatePrologueLoadStep0(void) asm("func_80026D30");
-void GameUpdatePrologueLoadStep0(void) {
+void UpdatePrologueLoadStep0(void) asm("func_80026D30");
+void UpdatePrologueLoadStep0(void) {
     if (g_AssetLoadState == 0) {
-        GameInstallCourseAssets();
-        GameRequestTrackDataAssets();
+        InstallCourseAssets();
+        RequestTrackDataAssets();
         g_PrologueStep = 1;
     }
 
-    GameUpdatePrologueLoad();
+    UpdatePrologueLoad();
 }
 
-void GameUpdatePrologueLoadStep1(void) asm("func_80026D78");
-void GameUpdatePrologueLoadStep1(void) {
+void UpdatePrologueLoadStep1(void) asm("func_80026D78");
+void UpdatePrologueLoadStep1(void) {
     if (g_AssetLoadState == 0) {
         g_FadeStep = 4;
-        GameRequestCdTrack(2);
+        RequestCdTrack(2);
         g_PrologueStep = 2;
     }
 
-    GameUpdatePrologueLoad();
+    UpdatePrologueLoad();
 }
 
-void GameUpdatePrologueLoadStep2(void) asm("func_80026DC4");
-void GameUpdatePrologueLoadStep2(void) {
-    GameUpdatePrologueLoad();
+void UpdatePrologueLoadStep2(void) asm("func_80026DC4");
+void UpdatePrologueLoadStep2(void) {
+    UpdatePrologueLoad();
 }
 
-void GameDrawPrologueText(void) asm("func_80026DE4");
-void GameDrawPrologueText(void) {
+void DrawPrologueText(void) asm("func_80026DE4");
+void DrawPrologueText(void) {
     s32 i;
     s32 offset;
     s32 adjusted;
@@ -226,15 +226,15 @@ void GameDrawPrologueText(void) {
     }
 }
 
-void GameExitPrologue(void) asm("func_80026F68");
-void GameExitPrologue(void) {
+void ExitPrologue(void) asm("func_80026F68");
+void ExitPrologue(void) {
     g_SceneId = 6;
-    GamePauseCdAudio();
-    GameRequestSelectBgmAssets();
+    PauseCdAudio();
+    RequestSelectBgmAssets();
 }
 
-void GameUpdatePrologue(void) asm("func_80026F9C");
-void GameUpdatePrologue(void) {
+void UpdatePrologue(void) asm("func_80026F9C");
+void UpdatePrologue(void) {
     s32 timer;
     s32 active;
     s32 eventIndex;
@@ -244,7 +244,7 @@ void GameUpdatePrologue(void) {
     }
 
     if ((u32)g_SceneTimer >= 0x79 && (g_PadEdge2 & 0x860)) {
-        GameExitPrologue();
+        ExitPrologue();
     }
 
     timer = g_SceneTimer;
@@ -253,7 +253,7 @@ void GameUpdatePrologue(void) {
     } else if (timer == 0x42E) {
         g_FadeStep = 2;
     } else if (timer == 0x500) {
-        GameExitPrologue();
+        ExitPrologue();
     }
 
     g_FadeLevel += g_FadeStep;
@@ -265,7 +265,7 @@ void GameUpdatePrologue(void) {
         g_FadeStep = 0;
     }
 
-    GameDrawPrologueText();
+    DrawPrologueText();
 
     active = (u32)(g_SceneTimer - 0x10) < 0x40F;
     if (active) {
@@ -278,16 +278,16 @@ void GameUpdatePrologue(void) {
 
         func_8003BB50();
 
-        GameRequestTrackTexturePage(*(s16 *)&g_CarTrackSection[(((((g_CameraCarIndex * 3) * 4) + g_CameraCarIndex) * 8) - g_CameraCarIndex) * 4]);
+        RequestTrackTexturePage(*(s16 *)&g_CarTrackSection[(((((g_CameraCarIndex * 3) * 4) + g_CameraCarIndex) * 8) - g_CameraCarIndex) * 4]);
 
-        GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
-        GameUpdateEnvironment();
+        UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
+        UpdateEnvironment();
     }
 
-    GameDrawCars();
+    DrawCars();
     func_800418D4();
     *(u32 *)0x1F800084 = (u32)g_IsEnvironmentMode4;
-    GameDrawTerrainCellsWide();
-    GameDrawCourseObjects();
-    GameDrawCourseScenery2(g_AnimTimer, active);
+    DrawTerrainCellsWide();
+    DrawCourseObjects();
+    DrawCourseScenery2(g_AnimTimer, active);
 }

@@ -23,20 +23,20 @@ extern s32 g_BgmSelectStep asm("D_8019C99C");
 extern s32 g_BgmRandomPlay asm("D_8007D6B4");
 extern s32 g_BgmSelectShowUi asm("D_801E412C");
 extern s32 g_CameraViewMode asm("D_8009E870");
-void GameAdvanceBgmShuffleBag() asm("func_80025E54");
-void GameDrawFullscreenFadeTile() asm("func_80033AA0");
-void GameRequestOptionScreenAssets() asm("func_80018B98");
-void GameDrawBgmSelectBar() asm("func_80025C58");
+void AdvanceBgmShuffleBag() asm("func_80025E54");
+void DrawFullscreenFadeTile() asm("func_80033AA0");
+void RequestOptionScreenAssets() asm("func_80018B98");
+void DrawBgmSelectBar() asm("func_80025C58");
 void func_8003BB50();
-void GameRequestTrackTexturePage() asm("func_80019EFC");
-void GameUpdateCamera() asm("func_80043BCC");
+void RequestTrackTexturePage() asm("func_80019EFC");
+void UpdateCamera() asm("func_80043BCC");
 void func_800418D4();
-void GameDrawTerrainCellsWide() asm("func_80041888");
-void GameDrawCourseScenery2() asm("func_8003E2E8");
-int GameCycleBgmSelectCameraCar() asm("func_8001A0E4");
+void DrawTerrainCellsWide() asm("func_80041888");
+void DrawCourseScenery2() asm("func_8003E2E8");
+int CycleBgmSelectCameraCar() asm("func_8001A0E4");
 
-void GameDrawBgmSelectBar(void) asm("func_80025C58");
-void GameDrawBgmSelectBar(void) {
+void DrawBgmSelectBar(void) asm("func_80025C58");
+void DrawBgmSelectBar(void) {
     u8 *base;
     s32 arg4;
     s32 arg5;
@@ -74,8 +74,8 @@ void GameDrawBgmSelectBar(void) {
     *(s32 *)0x1F800000 = func_80017390(base, next, 0xB);
 }
 
-void GameAdvanceBgmShuffleBag(u32 arg0) asm("func_80025E54");
-void GameAdvanceBgmShuffleBag(u32 arg0) {
+void AdvanceBgmShuffleBag(u32 arg0) asm("func_80025E54");
+void AdvanceBgmShuffleBag(u32 arg0) {
     u8 *first;
     u8 *before;
     u8 *other;
@@ -96,8 +96,8 @@ void GameAdvanceBgmShuffleBag(u32 arg0) {
     }
 }
 
-void GameUpdateBgmSelect(void) asm("func_80025ED8");
-void GameUpdateBgmSelect(void) {
+void UpdateBgmSelect(void) asm("func_80025ED8");
+void UpdateBgmSelect(void) {
     s32 t;
     if (g_BgmChangeDelay > 0) {
         t = g_BgmChangeDelay - 1;
@@ -105,8 +105,8 @@ void GameUpdateBgmSelect(void) {
         if (t == 4) {
         } else if (t == 0) {
             if (g_BgmSelectCdTrack == 12) g_BgmSelectCdTrack = 17;
-            GameRequestCdTrack(g_BgmSelectCdTrack);
-            GameStartCdAudio();
+            RequestCdTrack(g_BgmSelectCdTrack);
+            StartCdAudio();
             g_CdTrackEnded = 0;
         }
     } else {
@@ -114,7 +114,7 @@ void GameUpdateBgmSelect(void) {
             g_BgmChangeDelay = 6;
             if (g_BgmRandomPlay != 0) {
                 g_BgmSelectTrack = g_BgmShuffleOrder[g_BgmShuffleIndex];
-                GameAdvanceBgmShuffleBag(g_BgmSelectTrack);
+                AdvanceBgmShuffleBag(g_BgmSelectTrack);
             } else {
                 g_BgmSelectTrack = g_BgmSelectTrack + 1;
                 g_BgmSelectTrack = (g_BgmSelectTrack + g_BgmTrackCount) % g_BgmTrackCount;
@@ -162,25 +162,25 @@ void GameUpdateBgmSelect(void) {
             case 2:
                 if (g_BgmRandomPlay != 0) {
                     g_BgmSelectTrack = g_BgmShuffleOrder[g_BgmShuffleIndex];
-                    GameAdvanceBgmShuffleBag(g_BgmSelectTrack);
+                    AdvanceBgmShuffleBag(g_BgmSelectTrack);
                 } else {
                     g_BgmSelectTrack = g_BgmSelectTrack + 1;
                     g_BgmSelectTrack = (g_BgmSelectTrack + g_BgmTrackCount) % g_BgmTrackCount;
                 }
             lab380:
                 if (g_BgmChangeDelay == 0) {
-                    GameStartCdVolumeFade(60);
+                    StartCdVolumeFade(60);
                     g_BgmChangeDelay = 0x40;
                 }
                 g_BgmSelectCdTrack = g_BgmSelectTrack + 3;
                 break;
             case 1:
-                GameStartCdVolumeFade(60);
+                StartCdVolumeFade(60);
                 g_FadeStep = 4;
                 break;
             }
         } else if (f & 0x90) {
-            GameStartCdVolumeFade(60);
+            StartCdVolumeFade(60);
             g_FadeStep = 4;
         }
     }
@@ -190,27 +190,27 @@ void GameUpdateBgmSelect(void) {
         if (f & 8) g_BgmSelectShowUi = 0;
     }
     } else {
-    GameDrawFullscreenFadeTile(g_FadeLevel, 0x49);
+    DrawFullscreenFadeTile(g_FadeLevel, 0x49);
     g_FadeLevel = g_FadeLevel + g_FadeStep;
     if (g_FadeLevel >= 256) {
-        GameRequestOptionScreenAssets();
+        RequestOptionScreenAssets();
         g_BgmSelectStep = 3;
         g_FadeLevel = 256;
         g_FadeStep = -4;
     }
     }
 
-    if (g_BgmSelectShowUi != 0) GameDrawBgmSelectBar();
+    if (g_BgmSelectShowUi != 0) DrawBgmSelectBar();
     g_AnimTimer = g_AnimTimer + 1;
-    g_CameraCarIndex = GameCycleBgmSelectCameraCar(0xff, g_CameraCarIndex);
+    g_CameraCarIndex = CycleBgmSelectCameraCar(0xff, g_CameraCarIndex);
     func_8003BB50();
-    GameRequestTrackTexturePage(g_Cars[g_CameraCarIndex].field_78);
-    GameUpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
-    GameDrawCars();
-    GameUpdateEnvironment();
+    RequestTrackTexturePage(g_Cars[g_CameraCarIndex].field_78);
+    UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
+    DrawCars();
+    UpdateEnvironment();
     func_800418D4();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-    GameDrawTerrainCellsWide();
-    GameDrawCourseObjects();
-    GameDrawCourseScenery2(g_AnimTimer, 1);
+    DrawTerrainCellsWide();
+    DrawCourseObjects();
+    DrawCourseScenery2(g_AnimTimer, 1);
 }

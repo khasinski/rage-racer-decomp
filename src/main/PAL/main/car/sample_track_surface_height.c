@@ -51,19 +51,19 @@ typedef struct TP {
 extern TP *g_TrackPoints asm("D_8009E688");
 extern s32 g_TrackPointCount asm("D_8009E6A8");
 
-s32 GameFindTrackSegment(Car *car, s32 idx) asm("func_80030EB4");
+s32 FindTrackSegment(Car *car, s32 idx) asm("func_80030EB4");
 
 /*
  * Samples the track surface height under the car. Locates the containing
- * segment (GameFindTrackSegment), rotates the car position into segment-local space,
+ * segment (FindTrackSegment), rotates the car position into segment-local space,
  * clamps the along-segment distance `t` to [0, segmentLength], and linearly
  * interpolates the point height `y` and slope `field_E` between the two segment
  * endpoints. Writes the resulting surface height into car->out4 (and out4 into
  * f60 while f98 is idle). The local TP/Car/SVec/LVec structs mirror
  * GameTrackPoint / the render object by raw offset to stay byte-exact.
  */
-void GameSampleTrackSurfaceHeight(Car *car) asm("func_80031E98");
-void GameSampleTrackSurfaceHeight(Car *car) {
+void SampleTrackSurfaceHeight(Car *car) asm("func_80031E98");
+void SampleTrackSurfaceHeight(Car *car) {
     Matrix mtx;
     SVec v;
     LVec out;
@@ -77,7 +77,7 @@ void GameSampleTrackSurfaceHeight(Car *car) {
     s32 e;
     s32 v8;
 
-    idx = GameFindTrackSegment(car, car->f30);
+    idx = FindTrackSegment(car, car->f30);
     p2 = &g_TrackPoints[(idx + 1) % g_TrackPointCount];
     p1 = &g_TrackPoints[idx];
 
@@ -85,7 +85,7 @@ void GameSampleTrackSurfaceHeight(Car *car) {
     v.x = car->x - p1->x;
     v.z = car->z - p1->z;
     v.y = 0;
-    GameBuildRotMatrixY(&mtx, (0x1000 - p1->angle) & 0xFFF);
+    BuildRotMatrixY(&mtx, (0x1000 - p1->angle) & 0xFFF);
     ApplyMatrix((s32 *)&mtx, (s32 *)&v, (s32 *)&out);
 
     t = out.x;

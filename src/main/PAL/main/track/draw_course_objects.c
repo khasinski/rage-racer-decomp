@@ -26,11 +26,11 @@ void func_800698E8(void *a);
  * against g_VisibleCellMask) it builds a Z-rotation matrix in the scratchpad
  * (0x1F800028), transforms the object position through the GTE
  * (0x1F80011C -> 0x1F800124), sets the primitive shade/semi-trans mode word at
- * 0x1F800084, then dispatches a prim builder (GameSubmitCourseModel2 / GameSubmitCourseModel)
+ * 0x1F800084, then dispatches a prim builder (SubmitCourseModel2 / SubmitCourseModel)
  * on the scratchpad OT at 0x1F800000.
  */
-void GameDrawCourseObjects(void) asm("func_8004123C");
-void GameDrawCourseObjects(void) {
+void DrawCourseObjects(void) asm("func_8004123C");
+void DrawCourseObjects(void) {
     Matrix mtx;
     volatile s32 pad[10];
     Obj *obj;
@@ -63,7 +63,7 @@ void GameDrawCourseObjects(void) {
             }
         }
 
-        GameBuildRotMatrixY(&mtx, obj->f2);
+        BuildRotMatrixY(&mtx, obj->f2);
         MulMatrix2((void *)0x1F800028, &mtx);
         {
             s32 ov;
@@ -109,9 +109,9 @@ void GameDrawCourseObjects(void) {
         }
 
         if (g_IsEnvironmentMode4 ? (obj->flags & 2) : (obj->flags & 1)) {
-            GameSubmitCourseModel2((void *)0x1F800000, obj->id);
+            SubmitCourseModel2((void *)0x1F800000, obj->id);
         } else {
-            GameSubmitCourseModel((void *)0x1F800000, obj->id);
+            SubmitCourseModel((void *)0x1F800000, obj->id);
         }
 
         }
@@ -120,16 +120,16 @@ void GameDrawCourseObjects(void) {
 
 extern u16 *g_TerrainCellGrid asm("D_801E5020");
 
-u32 GameGetCellRegion(s32 arg0, s32 arg1) asm("func_800414A0");
-u32 GameGetCellRegion(s32 arg0, s32 arg1) {
+u32 GetCellRegion(s32 arg0, s32 arg1) asm("func_800414A0");
+u32 GetCellRegion(s32 arg0, s32 arg1) {
     arg1 = (arg1 << 5) + arg0;
     return g_TerrainCellGrid[arg1] >> 10;
 }
 
 extern u8 *g_CellVisibilityTable asm("D_801E4B98");
 
-u32 GameIsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) asm("func_800414C4");
-u32 GameIsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) {
+u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) asm("func_800414C4");
+u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) {
     s32 x = arg0 << 2;
     s32 y;
     u8 *base;
@@ -166,8 +166,8 @@ extern s8 g_CellScanOffsetX[] asm("D_8007E45C");
 extern s8 g_CellScanOffsetY[] asm("D_8007E45D");
 void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
 
-void GameBuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
-void GameBuildVisibleCells(s32 arg0, s32 arg1) {
+void BuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
+void BuildVisibleCells(s32 arg0, s32 arg1) {
     Scr *s = (Scr *)0x1F800008;
     s32 i;
     s32 j;
@@ -188,7 +188,7 @@ void GameBuildVisibleCells(s32 arg0, s32 arg1) {
     oct = (s->f14 / 128) & 0x1F;
     cx = s->f0 / 2048;
     cy = s->f8 / 2048;
-    ret0 = GameGetCellRegion(cx, cy);
+    ret0 = GetCellRegion(cx, cy);
 
     i = 0;
     out = g_VisibleCellList;
@@ -232,7 +232,7 @@ void GameBuildVisibleCells(s32 arg0, s32 arg1) {
             break;
         }
 
-        if (sx < 32U && sy < 32U && GameIsCellVisibleFromRegion(sx, sy, ret0)) {
+        if (sx < 32U && sy < 32U && IsCellVisibleFromRegion(sx, sy, ret0)) {
             s32 clut = g_TerrainCellGrid[((31 - sy) << 5) + sx] & 0x3FF;
 
             out->f12 = clut;

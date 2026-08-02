@@ -11,14 +11,14 @@ extern s32 g_McMenuPage asm("D_80082F50");
 extern s32 g_McFromLoadMenu asm("D_8009B730");
 extern s32 g_McFadeStep asm("D_8009B9A0");
 extern s32 g_McFadeLevel asm("D_8009B9A4");
-void GameUploadImageAsset(s32 arg0) asm("func_8001A3C0");
+void UploadImageAsset(s32 arg0) asm("func_8001A3C0");
 void func_8005EAD0(void);
-void GameEnterMemoryCardMenuFromLoad(void) asm("func_80061458");
-void GameEnterMemoryCardMenuFromLoad(void) {
+void EnterMemoryCardMenuFromLoad(void) asm("func_80061458");
+void EnterMemoryCardMenuFromLoad(void) {
     SetDispMask(0);
-    GameSetupDisplay480(0, 0, 0);
+    SetupDisplay480(0, 0, 0);
     if (g_AssetLoadState == 0) {
-        GameUploadImageAsset(g_ImageBlockBuffer);
+        UploadImageAsset(g_ImageBlockBuffer);
         g_McMenuRowCursor = 2;
         g_McMenuRowCount = 3;
         g_McMenuState = -1;

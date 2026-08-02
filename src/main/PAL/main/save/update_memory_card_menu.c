@@ -57,10 +57,10 @@ u16 func_800612CC(void);
 u16 func_8006131C(void);
 void func_8006136C(s32 level);
 void func_8006138C(void);
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void GameUpdateMemoryCardMenu(void) asm("func_80061520");
-void GameUpdateMemoryCardMenu(void) {
+void UpdateMemoryCardMenu(void) asm("func_80061520");
+void UpdateMemoryCardMenu(void) {
     s32 fadeBusy = 0;
     s32 two = 2;
     s32 code;
@@ -171,7 +171,7 @@ L_sw2:
     g_McMenuPhase = 0xF;
     g_McActionBusy = 0;
     if ((lpad & 0x90) && !fadeBusy) {
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
         func_8006138C();
     }
     }
@@ -219,7 +219,7 @@ L_sw2:
         pad = g_PadEdge2;
         if (!((pad & 0x860) == 0)) {
         if (*p < g_McMenuRowCount - 1) {
-            GamePlaySoundCue(2);
+            PlaySoundCue(2);
             g_McMenuPage = 1;
             g_McActionState = 0;
             g_McActionResult = 0;
@@ -228,10 +228,10 @@ L_sw2:
             break;
         }
         if (fadeBusy) break;
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         } else {
         if ((pad & 0x90) == 0 || fadeBusy) break;
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
         }
         g_McActionBusy = 0;
         func_8006138C();
@@ -252,12 +252,12 @@ L_sw2:
         g_McMenuPhase = 2;
         if ((g_PadEdge2 & 0x860) == 0) break;
         if (!(((a0 >> *s0) & 1) == 0)) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         D_80082FAC = 0;
         nv = 0x1E;
         goto L_b475;
         }
-        GamePlaySoundCue(5);
+        PlaySoundCue(5);
         nv = 0x28;
         goto L_b475;
         }
@@ -270,19 +270,19 @@ L_sw2:
         g_McMenuPhase = 1;
         if ((g_PadEdge2 & 0x860) == 0) break;
         if (!(((a0 >> *s0) & 1) == 0)) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         D_80082FAC = 0;
         nv = 0xA;
         goto L_b475;
         }
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         nv = 0x19;
         goto L_b475;
         }
         g_McMenuPhase = 4;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b439;
         }
-        GamePlaySoundCue(5);
+        PlaySoundCue(5);
         g_McMenuPage = 0;
         break;
     L_b439:
@@ -293,11 +293,11 @@ L_sw2:
         g_McMenuPhase = 1;
         if (!((g_PadEdge2 & 0x860) == 0)) {
         if (!(((g_McSlotUsedMask >> *s0) & 1) == 0)) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         D_80082FAC_v = 0;
         nv = 0xA;
         } else {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         g_McActionTimer = 0x1E;
         nv = 0xB;
         }
@@ -645,7 +645,7 @@ L_sw2:
         D_8009B700 = 0;
         D_8009B704 = 0;
         if (!(fadeBusy != 0)) {
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
         func_8006138C();
         }
             }
@@ -794,11 +794,11 @@ L_sw2:
         if (!(*mp != g_McMenuRowCount - 1)) {
     if (fadeBusy != 0) break;
     g_McActionState = 0;
-    GamePlaySoundCue(2);
+    PlaySoundCue(2);
     goto L_b1288;
         }
 
-    GamePlaySoundCue(5);
+    PlaySoundCue(5);
     break;
         }
     }
@@ -806,13 +806,13 @@ L_sw2:
     if (!((g_PadEdge2 & 0x90) == 0)) {
     if (!(fadeBusy != 0)) {
     g_McActionState = 0;
-    GamePlaySoundCue(3);
+    PlaySoundCue(3);
     goto L_b1288;
 
 L_b1280:
     if (!((g_PadEdge2 & 0x90) == 0)) {
     if (!(fadeBusy != 0)) {
-    GamePlaySoundCue(3);
+    PlaySoundCue(3);
     /* fall through */
 
 L_b1288:
@@ -870,7 +870,7 @@ L_b1288:
         pad = g_PadEdge2;
         if (!((pad & 0x860) == 0)) {
         if (!(*p != 0)) {
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         g_McMenuPage = 1;
         D_80082FAC = 0;
         g_McSaveMode = *p;
@@ -878,16 +878,16 @@ L_b1288:
         }
         if (!(*p != g_McMenuRowCount - 1)) {
         if (fadeBusy) break;
-        GamePlaySoundCue(2);
+        PlaySoundCue(2);
         goto L_b1420;
         }
-        GamePlaySoundCue(5);
+        PlaySoundCue(5);
         g_McMenuPage = 1;
         g_McSaveMode = *p;
         break;
         }
         if ((pad & 0x90) == 0 || fadeBusy) break;
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
     }
 
 L_b1420:
@@ -963,7 +963,7 @@ L_b1420:
         D_80082FAC = 0;
         g_McActionTimer = 0;
         if (fadeBusy) break;
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
         func_8006138C();
         break;
     case 0xA:
@@ -1030,7 +1030,7 @@ L_b1678:
     u16 lpad = g_PadEdge2;
     g_McMenuPhase = 0x10;
     if ((lpad & 0x90) && !fadeBusy) {
-        GamePlaySoundCue(3);
+        PlaySoundCue(3);
         g_McActionBusy = 0;
         func_8006138C();
     }

@@ -60,7 +60,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
     }
 
     if (g_CdDebugLevel >= 2) {
-        GameDebugPrintf(D_80013678, firstTrack, lastTrack);
+        DebugPrintf(D_80013678, firstTrack, lastTrack);
     }
 
     command[0] = 0;
@@ -107,7 +107,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
                 fmt = D_80013688;
                 first = entry[0];
                 second = entry[1];
-                GameDebugPrintf(fmt, first, second);
+                DebugPrintf(fmt, first, second);
                 entry += 4;
                 count++;
             } while (count <= (long)ptr);
@@ -121,7 +121,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
     }
 fail:
     if (g_CdDebugLevel != 0) {
-        GameDebugPrintf(D_800136A4);
+        DebugPrintf(D_800136A4);
     }
     CdSyncCallback(oldHandler);
     return 0;
@@ -135,7 +135,7 @@ long CdInit(void) {
     while (CD_init(1) != 1) {
         retries--;
         if (retries == -1) {
-            GameDebugPrintf(D_800136B8);
+            DebugPrintf(D_800136B8);
             return 0;
         }
     }

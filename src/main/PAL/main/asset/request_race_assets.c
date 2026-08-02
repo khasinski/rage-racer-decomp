@@ -11,13 +11,13 @@
  */
 #define ASSET_SUB(base, k) ((base) + ((GameSceneAssetHeader *)(base))->offsets[k])
 
-s32 GameRequestRaceStart(void) asm("func_80019580");
+s32 RequestRaceStart(void) asm("func_80019580");
 
-void GameLoadGrandPrixScreen(void) asm("func_800195F4");
+void LoadGrandPrixScreen(void) asm("func_800195F4");
 
-void GameLoadCourseAssets(void) asm("func_800196B4");
+void LoadCourseAssets(void) asm("func_800196B4");
 
-s32 GameRequestTrackLoad(void) asm("func_8001965C");
+s32 RequestTrackLoad(void) asm("func_8001965C");
 
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
@@ -26,29 +26,29 @@ extern s32 g_SharedAssetWord0 asm("D_801E4D70");
 extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
 void func_8005B768(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 func_8005B89C(void);
-s32 GameGetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
+s32 GetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
 s32 func_80017C78(s32 arg0, void *arg1);
 void func_80034DF4(void);
-void GameUploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void func_8001A2E0(void *arg0);
 void func_8001A40C(void *arg0);
-void GameResetTrackTextureSwap(void) asm("func_80019EBC");
-void GameSetTrackCameraTable(void *arg0) asm("func_80017BD4");
+void ResetTrackTextureSwap(void) asm("func_80019EBC");
+void SetTrackCameraTable(void *arg0) asm("func_80017BD4");
 void func_8004553C(void *arg0);
 void func_8004550C(void *arg0);
-void GameRegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
+void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void func_8002A6B0(void *arg0);
-void GameRegisterCourseModels(void *arg0) asm("func_80017A6C");
+void RegisterCourseModels(void *arg0) asm("func_80017A6C");
 void func_80017AD0(void *arg0);
 void func_8004121C(void *arg0);
 void func_80034E04(void *arg0);
 void func_80043AC8(void *arg0, s32 arg1);
-s32 GameEnableCdAudioMode(void) asm("func_80017C2C");
+s32 EnableCdAudioMode(void) asm("func_80017C2C");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 g_AssetBase asm("D_8019C904");
 
-s32 GameRequestRaceAssets(void) asm("func_80018FC4");
-s32 GameRequestRaceAssets(void) {
+s32 RequestRaceAssets(void) asm("func_80018FC4");
+s32 RequestRaceAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;
     }
@@ -63,8 +63,8 @@ s32 GameRequestRaceAssets(void) {
     return 1;
 }
 
-void GameLoadRaceAssets(void) asm("func_8001901C");
-void GameLoadRaceAssets(void) {
+void LoadRaceAssets(void) asm("func_8001901C");
+void LoadRaceAssets(void) {
     switch (g_AssetLoadState) {
     case 1: {
         s32 *src = (s32 *)g_AssetBlockPtr;
@@ -89,7 +89,7 @@ void GameLoadRaceAssets(void) {
         break;
     case 3: {
         s32 idx = g_PlayerCarIndex;
-        s32 sz = GameGetCarAssetIndex(idx, g_CarTable[idx].modelVariant);
+        s32 sz = GetCarAssetIndex(idx, g_CarTable[idx].modelVariant);
         if (func_80017C78((sz << 1) + 11, g_AssetLoadCursor) != 0) {
             /* This pin is load-bearing: removing it changes .text. */
             register u8 *base_a0 asm("$4");
@@ -109,7 +109,7 @@ void GameLoadRaceAssets(void) {
             func_8005B768(3, p1, p2, base_a3);
             base_a0 = g_AssetLoadCursor;
             g_AssetBlockPtr = ASSET_SUB(base_a0, 4);
-            GameUploadImageAsset(g_AssetBlockPtr);
+            UploadImageAsset(g_AssetBlockPtr);
             g_AssetLoadState = 4;
             g_AssetLoadCursor = g_AssetSubBlockPtr;
         }
@@ -134,10 +134,10 @@ void GameLoadRaceAssets(void) {
             s32 off0, off1;
             base_a0 = g_AssetLoadCursor;
             g_AssetBlockPtr = ASSET_SUB(base_a0, 0);
-            GameUploadImageAsset(g_AssetBlockPtr);
+            UploadImageAsset(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor;
             g_AssetBlockPtr = ASSET_SUB(base_a0, 1);
-            GameUploadImageAsset(g_AssetBlockPtr);
+            UploadImageAsset(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor;
             g_AssetBlockPtr = ASSET_SUB(base_a0, 2);
             func_8001A2E0(g_AssetBlockPtr);
@@ -146,11 +146,11 @@ void GameLoadRaceAssets(void) {
             off1 = ((GameSceneAssetHeader *)base)->offsets[4];
             g_AssetBlockPtr = base + off0;
             g_AssetSubBlockPtr = base + off1;
-            GameUploadImageAsset(g_AssetBlockPtr);
+            UploadImageAsset(g_AssetBlockPtr);
             func_8001A40C(g_AssetLoadCursor);
             g_TrackTextureShadow = g_AssetLoadCursor;
-            GameUploadImageAsset(g_AssetSubBlockPtr);
-            GameResetTrackTextureSwap();
+            UploadImageAsset(g_AssetSubBlockPtr);
+            ResetTrackTextureSwap();
             g_AssetLoadState = 6;
             g_AssetLoadCursor = g_AssetLoadCursor + 0x38000;
         }
@@ -167,13 +167,13 @@ void GameLoadRaceAssets(void) {
         if (func_80017C78(result + 0x58, p) != 0) {
             /* This pin is load-bearing: removing it changes .text. */
             register u8 *base_a0 asm("$4");
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 0); GameSetTrackCameraTable(g_AssetBlockPtr);
+            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 0); SetTrackCameraTable(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 1); func_8004553C(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 2); func_8004550C(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 3); GameRegisterModelBank(g_AssetBlockPtr, 1);
+            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 3); RegisterModelBank(g_AssetBlockPtr, 1);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 4); func_8002A6B0(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 5); GameRegisterCourseModels(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 6); GameRegisterModelBank(g_AssetBlockPtr, 2);
+            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 5); RegisterCourseModels(g_AssetBlockPtr);
+            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 6); RegisterModelBank(g_AssetBlockPtr, 2);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 7); func_80017AD0(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 8); func_8004121C(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 9); func_80034E04(g_AssetBlockPtr);
@@ -183,14 +183,14 @@ void GameLoadRaceAssets(void) {
         break;
     }
     case 7:
-        if (GameEnableCdAudioMode() != 0) {
+        if (EnableCdAudioMode() != 0) {
             g_AssetLoadState = 0;
         }
         break;
     }
 }
 
-s32 GameRequestRaceStart(void) {
+s32 RequestRaceStart(void) {
     s32 state;
 
     if (g_AssetLoadState != 0) {
@@ -203,13 +203,13 @@ s32 GameRequestRaceStart(void) {
         return 0;
     }
 
-    GameResetCdAudioState();
+    ResetCdAudioState();
     g_MainState = state;
     g_AssetLoadState = 1;
     return 1;
 }
 
-void GameLoadGrandPrixScreen(void) {
+void LoadGrandPrixScreen(void) {
     s32 base;
     s32 offset;
     s32 value;
@@ -224,7 +224,7 @@ void GameLoadGrandPrixScreen(void) {
     }
 }
 
-s32 GameRequestTrackLoad(void) {
+s32 RequestTrackLoad(void) {
     if (g_AssetLoadState != 0) {
         return 1;
     }
@@ -239,7 +239,7 @@ s32 GameRequestTrackLoad(void) {
     return 1;
 }
 
-void GameLoadCourseAssets(void) {
+void LoadCourseAssets(void) {
     s32 value;
 
     if (g_AssetLoadState == 1) {

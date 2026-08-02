@@ -4,7 +4,7 @@
 #include "game/state.h"
 #include "game/render.h"
 
-void GameClearCarMotionState(GameCarRuntime *arg0) asm("func_80038AB8");
+void ClearCarMotionState(GameCarRuntime *arg0) asm("func_80038AB8");
 
 extern s32 g_ClosestRivalRank asm("D_801E7740");
 
@@ -15,11 +15,11 @@ extern s32 g_RaceGridSlots[] asm("D_8007E074");
 
 extern s32 g_AttractGridSlots[] asm("D_8007E0A4");
 
-void GameInitRivalCar(GameCarRuntime *arg0, s32 arg1, s32 *arg2) asm("func_800383A8");
+void InitRivalCar(GameCarRuntime *arg0, s32 arg1, s32 *arg2) asm("func_800383A8");
 
-void GameInitRivalCarAi(GameCarRuntime *arg0, s32 arg1, s32 *arg2) asm("func_800385FC");
+void InitRivalCarAi(GameCarRuntime *arg0, s32 arg1, s32 *arg2) asm("func_800385FC");
 
-void GameSeedCarRouteMarkers(void) asm("func_80039644");
+void SeedCarRouteMarkers(void) asm("func_80039644");
 
 
 void func_8001DFC0(GameCarRuntime *arg0);
@@ -40,8 +40,8 @@ void func_8001DFC0(GameCarRuntime *arg0);
  * must not change.
  */
 
-void GameBuildStartingGrid(void) asm("func_80038844");
-void GameBuildStartingGrid(void) {
+void BuildStartingGrid(void) asm("func_80038844");
+void BuildStartingGrid(void) {
     GameCarRuntime *entryBase;
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 *table asm("s3");
@@ -68,10 +68,10 @@ void GameBuildStartingGrid(void) {
             *(s16 *)flagPtr = 0;
             *(s16 *)(flagPtr + 6) = track;
             if (*cursor >= 0) {
-                GameClearCarMotionState(entryBase);
+                ClearCarMotionState(entryBase);
                 *(s16 *)flagPtr = one;
-                GameInitRivalCar(entryBase, i, table);
-                GameInitRivalCarAi(entryBase, i, table);
+                InitRivalCar(entryBase, i, table);
+                InitRivalCarAi(entryBase, i, table);
             } else {
                 *(s16 *)flagPtr = 0;
             }
@@ -92,10 +92,10 @@ void GameBuildStartingGrid(void) {
             *(s16 *)flagPtr = 0;
             *(s16 *)(flagPtr + 6) = track;
             if (*cursor >= 0) {
-                GameClearCarMotionState(entryBase);
+                ClearCarMotionState(entryBase);
                 *(s16 *)flagPtr = one;
-                GameInitRivalCar(entryBase, i, table);
-                GameInitRivalCarAi(entryBase, i, table);
+                InitRivalCar(entryBase, i, table);
+                InitRivalCarAi(entryBase, i, table);
             } else {
                 *(s16 *)flagPtr = 0;
             }
@@ -106,11 +106,11 @@ void GameBuildStartingGrid(void) {
         } while (i < 0xB);
     }
 
-    GameSeedCarRouteMarkers();
+    SeedCarRouteMarkers();
 }
 
-void GameDrawCars(void) asm("func_800389F0");
-void GameDrawCars(void) {
+void DrawCars(void) asm("func_800389F0");
+void DrawCars(void) {
     GameCarRuntime *base;
     s32 i;
     u8 *entry;
@@ -118,7 +118,7 @@ void GameDrawCars(void) {
     s32 minus_one;
 
     base = g_Cars;
-    GameSelectModelBank(1);
+    SelectModelBank(1);
 
     i = 0;
     minus_one = -1;
@@ -135,14 +135,14 @@ void GameDrawCars(void) {
     } while (i < 11);
 }
 
-void GameDrawPlayerCarOnly(void) asm("func_80038A88");
-void GameDrawPlayerCarOnly(void) {
-    GameSelectModelBank(1);
+void DrawPlayerCarOnly(void) asm("func_80038A88");
+void DrawPlayerCarOnly(void) {
+    SelectModelBank(1);
     func_8001DFC0(g_Cars);
 }
 
-void GameClearCarMotionState(GameCarRuntime *arg0) asm("func_80038AB8");
-void GameClearCarMotionState(GameCarRuntime *arg0) {
+void ClearCarMotionState(GameCarRuntime *arg0) asm("func_80038AB8");
+void ClearCarMotionState(GameCarRuntime *arg0) {
     arg0->field_8A = 0;
     arg0->motionMode = 0;
     arg0->motionModeTimer = 0;
@@ -163,8 +163,8 @@ void GameClearCarMotionState(GameCarRuntime *arg0) {
     arg0->field_9E = 0;
 }
 
-void GameUpdateCarTiltCounter(GameCarRuntime *arg0) asm("func_80038B04");
-void GameUpdateCarTiltCounter(GameCarRuntime *arg0) {
+void UpdateCarTiltCounter(GameCarRuntime *arg0) asm("func_80038B04");
+void UpdateCarTiltCounter(GameCarRuntime *arg0) {
     GameCarRuntime *obj;
     /* These pins are load-bearing: removing any one changes .text. */
     register u8 *ptr asm("$4");
@@ -218,8 +218,8 @@ void GameUpdateCarTiltCounter(GameCarRuntime *arg0) {
     obj->field_8C = value;
 }
 
-void GameApplyCarKnockback(GameCarRuntime *arg0) asm("func_80038C4C");
-void GameApplyCarKnockback(GameCarRuntime *arg0) {
+void ApplyCarKnockback(GameCarRuntime *arg0) asm("func_80038C4C");
+void ApplyCarKnockback(GameCarRuntime *arg0) {
     u32 timer;
 
     if (arg0->motionActive != 0) {
@@ -250,10 +250,10 @@ s32 func_80068634(s32 angle);
 
 s32 func_8002FB60(s32 arg0);
 
-s32 GameRandom15(void) asm("func_800632B0");
+s32 Random15(void) asm("func_800632B0");
 
-void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) asm("func_80038CE8");
-void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
+void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) asm("func_80038CE8");
+void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     GameCarRuntime *carReg;
     s32 x;
     s32 angle;
@@ -301,14 +301,14 @@ void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
         } else {
             speed = *(u16 *)&carReg->field_A4;
         }
-        trig = func_80068568(GameGetAngleDistance((s16)rawArg, carReg->field_24));
+        trig = func_80068568(GetAngleDistance((s16)rawArg, carReg->field_24));
         product = (s16)speed * trig;
         if (product < 0) {
             product += 0xFFFF;
         }
         tmp = product >> 16;
     } else {
-        trig = func_80068568(GameGetAngleDistance((s16)rawArg, carReg->field_24));
+        trig = func_80068568(GetAngleDistance((s16)rawArg, carReg->field_24));
         product = trig << 1;
         product += trig;
         product <<= 3;
@@ -380,8 +380,8 @@ void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     carReg->velocityZ = z;
 }
 
-void GameStartCarBodyKick(s32 arg0, GameCarRuntime *arg1) asm("func_80038F0C");
-void GameStartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
+void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1) asm("func_80038F0C");
+void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
     GameCarRuntime *obj;
     s32 value;
     s32 temp;
@@ -410,7 +410,7 @@ void GameStartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
 
     }
     value = func_8002FB60(obj->trackPointIndex);
-    temp = GameGetAngleDistance(value, obj->field_24);
+    temp = GetAngleDistance(value, obj->field_24);
     if (temp >= 0x401) {
         temp = 0x800 - temp;
     }
@@ -433,7 +433,7 @@ void GameStartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
     value = 0x1E;
     obj->motionModeTimer = value;
 
-    value = GameRandom15();
+    value = Random15();
     if (value & 0x80) {
         value = *(u16 *)&obj->motionValue;
         value = -value;

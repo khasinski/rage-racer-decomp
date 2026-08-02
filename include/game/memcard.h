@@ -14,7 +14,7 @@ typedef struct GameSaveHeaderRow {
 /*
  * The 0x1000-byte memory-card payload: a flat dump of live globals, named per
  * field below. checksum = ~sum(u16[0..0x7FE]). Written by func_8005F88C, read
- * by GameLoadSaveStateBlock - both keep raw offsets, see names.md 3b.
+ * by LoadSaveStateBlock - both keep raw offsets, see names.md 3b.
  */
 typedef struct GameSaveBlock {
     u16 unk00;             /* g_PadMappingIndex */
@@ -49,16 +49,16 @@ typedef struct GameSaveBlock {
     u32 checksum;          /* +0xFFC */
 } GameSaveBlock;
 
-void GameAdvanceSaveHeaderCounter(void) asm("func_8005F618");
-void GameClearSaveHeaderRows(GameSaveHeaderRow *rows) asm("func_8005F65C");
+void AdvanceSaveHeaderCounter(void) asm("func_8005F618");
+void ClearSaveHeaderRows(GameSaveHeaderRow *rows) asm("func_8005F65C");
 void GameBuildSaveIconBlock(
     u8 *block,
     char *title,
     s32 iconTile,
     s32 imageX,
     s32 imageY) asm("func_8005F6BC");
-void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) asm("func_8005F81C");
-s32 GameLoadSaveStateBlock(u8 *block) asm("func_8005FED4");
+void WriteSaveHeaderRow(GameSaveHeaderRow *row) asm("func_8005F81C");
+s32 LoadSaveStateBlock(u8 *block) asm("func_8005FED4");
 s32 GameWriteMemoryCardSaveFile(
     char *path,
     char *title,
@@ -71,18 +71,18 @@ s32 GameWriteMemoryCardSaveSlot(
 s32 GameReadVerifiedSaveHeader(
     s32 fd,
     GameSaveHeaderRow *header) asm("func_800607B8");
-s32 GameScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) asm("func_8006090C");
+s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) asm("func_8006090C");
 s32 GameLoadMemoryCardSaveSlot(
     s32 slot,
     GameSaveHeaderRow *header) asm("func_800609E4");
-s32 GameCountMemoryCardFiles(s32 device, s32 port) asm("func_80060B68");
-s32 GameCalculateMemoryCardFreeBlocks(s32 fileCount) asm("func_80060BE8");
+s32 CountMemoryCardFiles(s32 device, s32 port) asm("func_80060B68");
+s32 CalculateMemoryCardFreeBlocks(s32 fileCount) asm("func_80060BE8");
 s32 GameRefreshMemoryCardSaveStatus(
     s32 unused,
     GameSaveHeaderRow *headers) asm("func_80060C3C");
-void *GameFormatSaveElapsedTime(void *dst, u32 ticks) asm("func_80060CB0");
-void GameDrawMemoryCardMessageLine(s32 unused, s32 messageIndex) asm("func_80060D48");
-void GameDrawMemoryCardHelpPrompt(s32 promptIndex) asm("func_80060D88");
+void *FormatSaveElapsedTime(void *dst, u32 ticks) asm("func_80060CB0");
+void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) asm("func_80060D48");
+void DrawMemoryCardHelpPrompt(s32 promptIndex) asm("func_80060D88");
 void GameDrawMemoryCardSaveRows(
     s32 flags,
     GameSaveHeaderRow *rows) asm("func_80060DF0");
@@ -91,21 +91,21 @@ void GameDrawMemoryCardSaveRows(
  * Memory card BIOS front end. These were labelled Cd until the event classes
  * were decoded: every one operates on SwCARD/HwCARD, never on the drive.
  */
-void GameClearMemoryCardHwEvents(void) asm("func_8005F2AC");
-void GameClearMemoryCardSwEvents(void) asm("func_8005F304");
-s32 GameWaitMemoryCardHwEvent(void) asm("func_8005F4D8");
-s32 GameWaitMemoryCardSwEvent(void) asm("func_8005F55C");
-s32 GamePollMemoryCardHwEvent(void) asm("func_8005F35C");
-s32 GamePollMemoryCardHwEventLimit(s32 attempts) asm("func_8005F420");
-void GameOpenMemoryCardEvents(void) asm("func_8005EFAC");
-void GameEnableMemoryCardEvents(void) asm("func_8005F0D4");
-void GameDisableMemoryCardEvents(void) asm("func_8005F16C");
-void GameCloseMemoryCardEvents(void) asm("func_8005F204");
+void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
+void ClearMemoryCardSwEvents(void) asm("func_8005F304");
+s32 WaitMemoryCardHwEvent(void) asm("func_8005F4D8");
+s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
+s32 PollMemoryCardHwEvent(void) asm("func_8005F35C");
+s32 PollMemoryCardHwEventLimit(s32 attempts) asm("func_8005F420");
+void OpenMemoryCardEvents(void) asm("func_8005EFAC");
+void EnableMemoryCardEvents(void) asm("func_8005F0D4");
+void DisableMemoryCardEvents(void) asm("func_8005F16C");
+void CloseMemoryCardEvents(void) asm("func_8005F204");
 /* libcard _card_clear (see psyq/): _new_card() + _card_write(chan, 0x3F, 0). */
 s32 _card_clear(s32 chan) asm("func_80063DEC");
-void GameCardReadAndSetMode(s32 param) asm("func_8005EB20");
-void GameCardSeekParam(s32 param) asm("func_8005EB78");
-s32 GameCardReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
-s32 GameFormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
+void CardReadAndSetMode(s32 param) asm("func_8005EB20");
+void CardSeekParam(s32 param) asm("func_8005EB78");
+s32 CardReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
+s32 FormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
 
 #endif

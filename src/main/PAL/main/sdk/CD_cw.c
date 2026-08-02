@@ -54,7 +54,7 @@ static inline long getAlarm(void) {
     if (g_CdTimeoutDeadline.deadline < VSync(-1) ||
         g_CdTimeoutDeadline.count++ > 0x3C0000) {
         func_80063C38(D_80013814);
-        GameDebugPrintf(D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[D_8009905D],
+        DebugPrintf(D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[D_8009905D],
                       g_CdIntrNames[g_CdSyncStatus.sync], g_CdIntrNames[g_CdSyncStatus.ready]);
         CD_flush();
         return -1;
@@ -72,12 +72,12 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
     u_char *source;
 
     if (g_CdDebugLevel >= 2) {
-        GameDebugPrintf(D_800138B0, g_CdCommandNames[command]);
+        DebugPrintf(D_800138B0, g_CdCommandNames[command]);
     }
 
     if (g_CdCommandParamCount[command] != 0 && params == 0) {
         if (g_CdDebugLevel > 0) {
-            GameDebugPrintf(D_800138B8, g_CdCommandNames[command]);
+            DebugPrintf(D_800138B8, g_CdCommandNames[command]);
         }
         return -2;
     }

@@ -69,14 +69,14 @@ extern volatile u16 g_PadHeld asm("D_801E436A");
  * The NeGcon's three analog channels, already zeroed against the calibration
  * captured by the controller-config screen: button I, button II and the left
  * shoulder. Full scale is 106 (0x6A), which is why every use divides by 106 --
- * GameUpdatePadState feeds the digital pad through the same three slots by writing
+ * UpdatePadState feeds the digital pad through the same three slots by writing
  * a flat 0x6A when the mapped button is held.
  */
 extern s16 g_NegconAnalogI asm("D_801E4374");
 extern s16 g_NegconAnalogII asm("D_801E4376");
 extern s16 g_NegconAnalogL asm("D_801E4378");
 /*
- * The live button mapping GameLoadPadButtonMapping installs: eight u16 masks
+ * The live button mapping LoadPadButtonMapping installs: eight u16 masks
  * for the standard pad at 0x801E4B60 then eight for the NeGcon at 0x801E4B70.
  * These are masks 2 and 3 of each row; g_PadShiftMasks is the [pad/NeGcon][up,
  * down] view of masks 4 and 5, which is why its row stride is eight halfwords.
@@ -107,20 +107,20 @@ extern s32 g_PlayerTargetRpm asm("D_8009E808");
 extern u16 g_CarCornerOffsetX[] asm("D_8007DAB0");
 extern u16 g_CarCornerOffsetZ[] asm("D_8007DAB2");
 
-s32 GameIsCarFacingBackwards(void *car) asm("func_8002CD08");
-void GameUpdateCarBodyRoll(void *car) asm("func_8002CD4C");
-void GameUpdateCarDrivetrain(void *car) asm("func_8002A810");
+s32 IsCarFacingBackwards(void *car) asm("func_8002CD08");
+void UpdateCarBodyRoll(void *car) asm("func_8002CD4C");
+void UpdateCarDrivetrain(void *car) asm("func_8002A810");
 void func_8002C168(void *car);
-void GameApplyCarKnockback(void *car) asm("func_80038C4C");
-s32 GameUpdateCarTrackState(void *car, s32 arg1, void *arg2) asm("func_80031298");
+void ApplyCarKnockback(void *car) asm("func_80038C4C");
+s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2) asm("func_80031298");
 s32 func_8002D398(void *car);
-void GameStartCarBodyKick(s32 arg0, void *car) asm("func_80038F0C");
-void GameUpdateCarTiltCounter(void *car) asm("func_80038B04");
-void GameUpdateCarCrestHop(void *car) asm("func_80039280");
-void GameUpdateCarBodyKick(void *car) asm("func_80038FF0");
+void StartCarBodyKick(s32 arg0, void *car) asm("func_80038F0C");
+void UpdateCarTiltCounter(void *car) asm("func_80038B04");
+void UpdateCarCrestHop(void *car) asm("func_80039280");
+void UpdateCarBodyKick(void *car) asm("func_80038FF0");
 s32 func_80068568(s32 angle);
-s32 GameRandom15(void) asm("func_800632B0");
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+s32 Random15(void) asm("func_800632B0");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8005C104(s32 arg0, s32 arg1, s32 arg2);
 void func_8005D9F8(s32 value, s32 bank);
 
@@ -130,12 +130,12 @@ void func_8005D9F8(s32 value, s32 bank);
  * the manual/auto gear-shift state machine (using the per-car spec block
  * g_CarSpec for top-gear/upshift/downshift-speed tables and the shift
  * cooldown timers g_SteerHoldFrames/g_AutoShiftCooldown), dispatches the engine audio and the
- * boost/launch handlers, and resolves track-boundary skid via GameUpdateCarTrackState.
+ * boost/launch handlers, and resolves track-boundary skid via UpdateCarTrackState.
  * The local Car struct and the shared GameCarDrive are a distinct hand-rolled layout (drive block
  * at +0xBC) shaped to match; they are NOT GameCarRuntime.
  */
-void GameUpdatePlayerCar(Car *car) asm("func_8002DEFC");
-void GameUpdatePlayerCar(Car *car) {
+void UpdatePlayerCar(Car *car) asm("func_8002DEFC");
+void UpdatePlayerCar(Car *car) {
     Matrix m1;
     Matrix m2;
     SVec sv1;
@@ -158,7 +158,7 @@ void GameUpdatePlayerCar(Car *car) {
     s32 off;
 
     mode23 = g_PadType == 0x23;
-    car->unkB8 = GameIsCarFacingBackwards(car);
+    car->unkB8 = IsCarFacingBackwards(car);
 
     if (car->drive.manual != 0) {
         if (g_PadEdge2 & g_PadShiftMasks[mode23][0]) {
@@ -231,7 +231,7 @@ void GameUpdatePlayerCar(Car *car) {
         }
     }
 
-    GameUpdateCarBodyRoll(car);
+    UpdateCarBodyRoll(car);
 
     if (car->shiftState == 0) {
         s32 spd = car->speed;
@@ -283,7 +283,7 @@ void GameUpdatePlayerCar(Car *car) {
         p->brakeBtn = 0;
     }
 
-    GameUpdateCarDrivetrain(car);
+    UpdateCarDrivetrain(car);
 
     {
         s32 step = car->speed * 3;
@@ -327,10 +327,10 @@ void GameUpdatePlayerCar(Car *car) {
 
     car->unk00 -= car->unk10;
     car->unk08 -= car->unk18;
-    GameBuildRotMatrixY(&m1, car->unk24);
-    GameBuildRotMatrixX(&m2, car->unk20);
+    BuildRotMatrixY(&m1, car->unk24);
+    BuildRotMatrixX(&m2, car->unk20);
     MulMatrix2(&m2, &m1);
-    GameBuildRotMatrixZ(&m2, car->unk28);
+    BuildRotMatrixZ(&m2, car->unk28);
     MulMatrix2(&m2, &m1);
 
     sv1.vx = 0;
@@ -381,9 +381,9 @@ void GameUpdatePlayerCar(Car *car) {
     }
 
     if (car->unk82 > 0) {
-        GameApplyCarKnockback(car);
+        ApplyCarKnockback(car);
     }
-    skid = GameUpdateCarTrackState(car, car->trackPointIndex, arr);
+    skid = UpdateCarTrackState(car, car->trackPointIndex, arr);
     if ((u32)(skid - 2) < 2U && car->speed < 64) {
         skid = 0;
     }
@@ -391,13 +391,13 @@ void GameUpdatePlayerCar(Car *car) {
     if (p->unk3C != 0) {
         s32 d = (g_CarSpec->revLimit + g_CarSpec->redline) / 2 - g_ShiftTargetRpm;
         if (d > 0) {
-            car->unk20 += (d * GameRandom15()) / 3276700;
+            car->unk20 += (d * Random15()) / 3276700;
         }
     }
 
     crash = func_8002D398(car);
     if (skid != 0 || crash != 0) {
-        GameStartCarBodyKick(2, car);
+        StartCarBodyKick(2, car);
     }
 
     {
@@ -441,11 +441,11 @@ void GameUpdatePlayerCar(Car *car) {
             car->unk04 = limit + 8;
             car->unk90 = 0;
             car->unk94 = 0;
-            GameStartCarBodyKick(1, car);
+            StartCarBodyKick(1, car);
             g_ShiftSoundLevel = 0;
             if ((s16)car->shiftTick >= 19) {
                 if (g_RacePhase < 3) {
-                    GamePlaySoundCue(0xE);
+                    PlaySoundCue(0xE);
                 }
             }
             if (p->state98 == 0 && (s16)car->shiftTick >= 3) {
@@ -482,14 +482,14 @@ void GameUpdatePlayerCar(Car *car) {
         }
     }
 
-    GameUpdateCarTiltCounter(car);
-    GameUpdateCarCrestHop(car);
+    UpdateCarTiltCounter(car);
+    UpdateCarCrestHop(car);
 
     if (skid == 0 && crash == 0) {
         car->unk04 += p->unk68;
-        GameUpdateCarBodyKick(car);
+        UpdateCarBodyKick(car);
     } else {
-        slip = GameGetAngleDistance(0xC00 - *(s16 *)(g_TrackPoints + car->trackPointIndex * 24 + 10),
+        slip = GetAngleDistance(0xC00 - *(s16 *)(g_TrackPoints + car->trackPointIndex * 24 + 10),
                              car->unkA0);
         if (crash != 0) {
             p->unk48 -= 1000;
@@ -512,12 +512,12 @@ void GameUpdatePlayerCar(Car *car) {
                     if (car->unk82 >= 15) {
                         if ((u32)(slip - 768) < 257U) {
                             if (skid == 1) {
-                                GamePlaySoundCue(0xA);
+                                PlaySoundCue(0xA);
                             } else if (car->speed >= 81) {
-                                GamePlaySoundCue(0xD);
+                                PlaySoundCue(0xD);
                             }
                         } else {
-                            GamePlaySoundCue(g_MirrorMode == 0 ? 0xB : 0xC);
+                            PlaySoundCue(g_MirrorMode == 0 ? 0xB : 0xC);
                         }
                     }
                     break;
@@ -526,14 +526,14 @@ void GameUpdatePlayerCar(Car *car) {
                     if (car->unk82 >= 15) {
                         if ((u32)(slip - 768) < 257U) {
                             if (skid == 2) {
-                                GamePlaySoundCue(0xA);
+                                PlaySoundCue(0xA);
                             } else if (car->speed >= 81) {
-                                GamePlaySoundCue(0xD);
+                                PlaySoundCue(0xD);
                             }
                         } else if (g_MirrorMode == 0) {
-                            GamePlaySoundCue(0xC);
+                            PlaySoundCue(0xC);
                         } else {
-                            GamePlaySoundCue(0xB);
+                            PlaySoundCue(0xB);
                         }
                     }
                     break;
@@ -564,7 +564,7 @@ void GameUpdatePlayerCar(Car *car) {
     }
 
     if (g_EngineRpm >= g_CarSpec->revLimit - 100 && g_PlayerThrottle >= 129) {
-        s32 r = GameRandom15();
+        s32 r = Random15();
 
         g_TachoNeedleFlash = g_AnimTimer & 2;
         g_EngineRpmJitter = r % 150 / 2;
@@ -572,7 +572,7 @@ void GameUpdatePlayerCar(Car *car) {
         revFlag = 0;
         if (p->unk78 == 0 && (g_AnimTimer & 8)) {
             g_TachoNeedleFlash = 0;
-            g_EngineRpmJitter = func_80068568(GameRandom15() & 0xFFF) * 150 / 4096;
+            g_EngineRpmJitter = func_80068568(Random15() & 0xFFF) * 150 / 4096;
             if (g_EngineRpmJitter <= 0) {
                 g_EngineRpmJitter = 0;
             }
@@ -590,7 +590,7 @@ void GameUpdatePlayerCar(Car *car) {
             if (g_EngineRpm >= g_CarSpec->redline - 2000) {
                 revFlag = 1;
                 if (g_EngineRpm < g_CarSpec->redline) {
-                    revFlag = GameRandom15() & 1;
+                    revFlag = Random15() & 1;
                 }
             }
         } else {
@@ -621,10 +621,10 @@ void GameUpdatePlayerCar(Car *car) {
 extern s16 g_TrackZoneDark asm("D_8019CAB0");
 extern s32 g_EnvScriptClock asm("D_8019C8FC");
 
-s32 GameDrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) asm("func_8003351C");
+s32 DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) asm("func_8003351C");
 
-s32 GameDrawPlayerTachometer(void) asm("func_8002F458");
-s32 GameDrawPlayerTachometer(void) {
+s32 DrawPlayerTachometer(void) asm("func_8002F458");
+s32 DrawPlayerTachometer(void) {
     s32 value;
     s32 arg2;
     s32 arg3;
@@ -653,5 +653,5 @@ s32 GameDrawPlayerTachometer(void) {
         arg3 = 0;
     }
 
-    return GameDrawTachometer(g_EngineRpm + g_EngineRpmJitter, g_TachoNeedleFlash, arg2, arg3);
+    return DrawTachometer(g_EngineRpm + g_EngineRpmJitter, g_TachoNeedleFlash, arg2, arg3);
 }

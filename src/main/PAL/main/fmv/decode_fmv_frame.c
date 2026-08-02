@@ -18,13 +18,13 @@ extern char g_MsgFmvSector[] asm("D_80010D30");
 
 void func_80063FB0(volatile u32 *arg0, s32 arg1);
 void DecDCTout(volatile u32 *arg0, s32 arg1) asm("func_8006402C");
-s32 GamePresentFmvFrame(volatile void *arg0) asm("func_8001ED3C");
+s32 PresentFmvFrame(volatile void *arg0) asm("func_8001ED3C");
 s32 StGetBackloc(void *arg0) asm("func_8006CF08");
-void GameStartStreamRead(void *arg0) asm("func_8001F018");
-void GameWaitFmvDecode(volatile void *arg0, s32 arg1) asm("func_8001EF54");
+void StartStreamRead(void *arg0) asm("func_8001F018");
+void WaitFmvDecode(volatile void *arg0, s32 arg1) asm("func_8001EF54");
 
-void GameDecodeFmvFrame(void) asm("func_8001E8A4");
-void GameDecodeFmvFrame(void) {
+void DecodeFmvFrame(void) asm("func_8001E8A4");
+void DecodeFmvFrame(void) {
     s32 value;
     u8 sp10[16];
 
@@ -36,22 +36,22 @@ void GameDecodeFmvFrame(void) {
     func_80063FB0(g_FmvVlcBuffers[g_FmvVlcIndex], 3);
     DecDCTout(g_FmvStripBuffers[g_FmvStripIndex], (g_FmvStripWidth * g_FmvStripHeight) / 2);
 
-    while (GamePresentFmvFrame(g_FmvVlcBuffers) == -1) {
+    while (PresentFmvFrame(g_FmvVlcBuffers) == -1) {
         value = StGetBackloc(sp10);
-        GameDebugPrintf(g_MsgFmvSector, value);
+        DebugPrintf(g_MsgFmvSector, value);
         if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
-            GameStartStreamRead((void *)g_StreamLoc);
+            StartStreamRead((void *)g_StreamLoc);
         } else {
-            GameStartStreamRead(sp10);
+            StartStreamRead(sp10);
         }
     }
 
-    GameWaitFmvDecode(g_FmvVlcBuffers, 0);
+    WaitFmvDecode(g_FmvVlcBuffers, 0);
     if (g_FmvStreamEnded == 1) {
         g_FmvState = 2;
     }
     if (g_PadEdge2 & 0x800) {
-        GameStartCdVolumeFade(1);
+        StartCdVolumeFade(1);
         g_FmvState = 2;
     }
 }
@@ -59,8 +59,8 @@ void GameDecodeFmvFrame(void) {
 extern s32 g_StreamReturnScene asm("D_8019C760");
 void DecDCToutCallback(s32 arg0) asm("func_800640B0");
 void StUnSetRing(void) asm("func_8006CE20");
-void GameEndFmv(void) asm("func_8001EA34");
-void GameEndFmv(void) {
+void EndFmv(void) asm("func_8001EA34");
+void EndFmv(void) {
     DecDCToutCallback(0);
     StUnSetRing();
     g_SceneId = g_StreamReturnScene;
@@ -77,8 +77,8 @@ extern volatile u16 g_DispEnv1X asm("D_801C067C");
 extern volatile u16 g_DispEnv1Y asm("D_801C067E");
 extern volatile u32 g_FrameParity asm("D_801E4B34");
 
-void GameInitFmvContext(void *arg0, s32 arg1, s32 arg2) asm("func_8001EA7C");
-void GameInitFmvContext(void *arg0, s32 arg1, s32 arg2) {
+void InitFmvContext(void *arg0, s32 arg1, s32 arg2) asm("func_8001EA7C");
+void InitFmvContext(void *arg0, s32 arg1, s32 arg2) {
     volatile u32 *words;
     volatile u16 *halves;
     u32 word0;

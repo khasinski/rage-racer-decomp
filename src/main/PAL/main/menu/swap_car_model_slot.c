@@ -9,8 +9,8 @@ extern u32 g_CarModelSlot asm("D_8009E87C");
 void func_80051238(void);
 
 /* Flips the double-buffered showroom slot and re-registers it. */
-void GameSwapCarModelSlot(void) asm("func_80051280");
-void GameSwapCarModelSlot(void) {
+void SwapCarModelSlot(void) asm("func_80051280");
+void SwapCarModelSlot(void) {
     g_CarModelSlot = g_CarModelSlot < 1;
     func_80051238();
 }
@@ -83,7 +83,7 @@ void func_8005131C(void) {
     *(s32 *)0x1F80001C = 0;
     *(s32 *)0x1F800020 = 0;
 
-    GameSetCameraRotMatrix();
+    SetCameraRotMatrix();
     ScaleMatrix((void *)0x1F800028, &D_80082D6C);
 
     if (249999 < g_MenuViewOffsetTarget) {
@@ -102,7 +102,7 @@ void func_8005131C(void) {
                     if (D_8007BED8 != 0) {
                         return;
                     }
-                    GameSwapCarModelSlot();
+                    SwapCarModelSlot();
                     D_8009B374 = D_8009B378;
                     D_8009B378 = -1;
                 } else {
@@ -116,7 +116,7 @@ void func_8005131C(void) {
                 if (D_8007BED8 != 0) {
                     return;
                 }
-                GameSwapCarModelSlot();
+                SwapCarModelSlot();
                 D_8009B374 = D_8009B378;
                 D_8009B378 = -1;
             } else {
@@ -169,11 +169,11 @@ void func_8005131C(void) {
 
     p = &D_8009E6D4.rotation.b;
     *p = *p + D_801E8268;
-    GameBuildRotMatrixY(&mtxA, *p);
+    BuildRotMatrixY(&mtxA, *p);
     vec.c = (s16)(-((s16)D_8009E698->unk4 / 2));
     func_80068F80(&mtxA, &vec, &out);
-    GameBuildRotMatrixY(&mtxB, 0x800 - *p);
-    GameBuildRotMatrixX(&mtxA, D_8009E6D4.rotation.a);
+    BuildRotMatrixY(&mtxB, 0x800 - *p);
+    BuildRotMatrixX(&mtxA, D_8009E6D4.rotation.a);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2((void *)0x1F800028, &mtxA);
 
@@ -197,7 +197,7 @@ void func_8005131C(void) {
     D_8009E6D4.position[2] = -outZ;
     D_8009E724 = D_8009E6D4.rotation;
     D_8009E734 = *q;
-    GameSelectModelBank(modelSlot);
+    SelectModelBank(modelSlot);
     q--;
     func_8001DAB0(q);
 
@@ -205,16 +205,16 @@ void func_8005131C(void) {
     q = &D_8009E6D4.position[1];
     *q = s2 + 30;
     D_8009E6D4.position[2] = 0;
-    GameSelectModelBank(14);
+    SelectModelBank(14);
     D_1F800004 += 120;
-    GameSetGteObjectMatrix((void *)0x1F80011C, &D_8009E6D4.position[0], &mtxA);
+    SetGteObjectMatrix((void *)0x1F80011C, &D_8009E6D4.position[0], &mtxA);
     *(s32 *)0x1F800084 = 0;
     {
         s32 a1 = 1;
         if (D_801E4168 >= 6) {
             a1 = 5;
         }
-        GameSubmitModel((void *)0x1F800000, a1);
+        SubmitModel((void *)0x1F800000, a1);
     }
     D_1F800004 -= 120;
 }
@@ -236,8 +236,8 @@ extern s32 g_MenuViewSpin asm("D_801E8268");
 void func_80017794(void *a, void *b, void *c);
 
 /* The course diorama behind COURSE SELECT and RANKING, with the carousel easing. */
-void GameDrawMenuCourseView(void) asm("func_8005194C");
-void GameDrawMenuCourseView(void) {
+void DrawMenuCourseView(void) asm("func_8005194C");
+void DrawMenuCourseView(void) {
     Matrix mtxA;
     Matrix mtxB;
     s32 s1;
@@ -252,7 +252,7 @@ void GameDrawMenuCourseView(void) {
     *(s32 *)0x1F80001C = 0;
     *(s32 *)0x1F800020 = 0;
 
-    GameSetCameraRotMatrix();
+    SetCameraRotMatrix();
     ScaleMatrix((Matrix *)0x1F800028, &g_MenuViewScale);
 
     if (249999 < g_MenuViewOffsetTarget) {
@@ -322,11 +322,11 @@ void GameDrawMenuCourseView(void) {
 
     p = &D_8009E6F8;
     *p = *p + g_MenuViewSpin;
-    GameBuildRotMatrixY(&mtxB, 0x800 - *p);
-    GameBuildRotMatrixX(&mtxA, D_8009E6F4);
+    BuildRotMatrixY(&mtxB, 0x800 - *p);
+    BuildRotMatrixX(&mtxA, D_8009E6F4);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2((Matrix *)0x1F800028, &mtxA);
-    GameSelectModelBank(14);
+    SelectModelBank(14);
     func_80017794((void *)0x1F80011C, p - 9, &mtxA);
     *(s32 *)0x1F800084 = 0;
     {
@@ -334,7 +334,7 @@ void GameDrawMenuCourseView(void) {
         if ((s2 & 3) < g_ModelBankCount) {
             a1 = s2 & 3;
         }
-        GameSubmitModel((void *)0x1F800000, a1);
+        SubmitModel((void *)0x1F800000, a1);
     }
 }
 
@@ -346,8 +346,8 @@ extern s32 g_CourseModelCount asm("D_801E40E4");
 s32 func_80068568(s32 arg0);
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */
-void GameDrawTeamNameCharModel(void) asm("func_80051D6C");
-void GameDrawTeamNameCharModel(void) {
+void DrawTeamNameCharModel(void) asm("func_80051D6C");
+void DrawTeamNameCharModel(void) {
     Matrix mtxA;
     Matrix mtxB;
     Poly poly;
@@ -365,7 +365,7 @@ void GameDrawTeamNameCharModel(void) {
     *(s32 *)0x1F80001C = -104;
     *(s32 *)0x1F800020 = 0;
 
-    GameSetCameraRotMatrix();
+    SetCameraRotMatrix();
     ScaleMatrix((Matrix *)0x1F800028, &g_MenuViewScale);
 
     if (249999 < g_MenuViewOffsetTarget) {
@@ -422,8 +422,8 @@ void GameDrawTeamNameCharModel(void) {
     poly.f5 = s1;
     poly.f6 = func_80068568((g_AnimTimer * 20) & 0xFFC) * 72 / 4096;
 
-    GameBuildRotMatrixY(&mtxB, 0x800 - poly.f5);
-    GameBuildRotMatrixZ(&mtxA, poly.f6);
+    BuildRotMatrixY(&mtxB, 0x800 - poly.f5);
+    BuildRotMatrixZ(&mtxA, poly.f6);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2((Matrix *)0x1F800028, &mtxA);
     ScaleMatrix(&mtxA, &vcopy);
@@ -436,7 +436,7 @@ void GameDrawTeamNameCharModel(void) {
         if (g_TeamNameCharModel < g_CourseModelCount) {
             a1 = g_TeamNameCharModel;
         }
-        GameSubmitCourseModel((void *)0x1F800000, a1);
+        SubmitCourseModel((void *)0x1F800000, a1);
     }
 }
 

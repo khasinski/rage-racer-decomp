@@ -621,8 +621,8 @@ extern s32 D_8007F948;
 extern s32 D_8009B298;
 extern s32 D_8009B29C;
 
-void GameRampTeamLogoCanvas(s32 arg0, s32 arg1) asm("func_8004B8B4");
-void GameRampTeamLogoCanvas(s32 arg0, s32 arg1) {
+void RampTeamLogoCanvas(s32 arg0, s32 arg1) asm("func_8004B8B4");
+void RampTeamLogoCanvas(s32 arg0, s32 arg1) {
     s32 temp;
     s32 y;
 
@@ -664,15 +664,15 @@ void GameRampTeamLogoCanvas(s32 arg0, s32 arg1) {
 
 extern u32 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
-void GamePlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void GameScrollTeamLogoUp(void) asm("func_8004B9B8");
-void GameScrollTeamLogoUp(void) {
+void ScrollTeamLogoUp(void) asm("func_8004B9B8");
+void ScrollTeamLogoUp(void) {
     s32 i;
     u32 *base;
     u32 saved[8];
 
-    GamePlaySoundCue(1);
+    PlaySoundCue(1);
 
     base = g_TeamLogoCanvas;
     for (i = 0; i < 8; i++) {
@@ -686,8 +686,8 @@ void GameScrollTeamLogoUp(void) {
     }
 }
 
-void GameScrollTeamLogoDown(void) asm("func_8004BA50");
-void GameScrollTeamLogoDown(void) {
+void ScrollTeamLogoDown(void) asm("func_8004BA50");
+void ScrollTeamLogoDown(void) {
     s32 i;
     u32 *newPtr;
     u32 *stackPtr;
@@ -696,7 +696,7 @@ void GameScrollTeamLogoDown(void) {
     u32 saved[8];
     u32 value;
 
-    GamePlaySoundCue(1);
+    PlaySoundCue(1);
 
     i = 0;
     stackPtr = saved;
@@ -733,8 +733,8 @@ void GameScrollTeamLogoDown(void) {
     } while (8 > i);
 }
 
-void GameScrollTeamLogoLeft(void) asm("func_8004BAE4");
-void GameScrollTeamLogoLeft(void) {
+void ScrollTeamLogoLeft(void) asm("func_8004BAE4");
+void ScrollTeamLogoLeft(void) {
     s32 row;
     u32 *savePtr;
     u32 *savePtr2;
@@ -751,7 +751,7 @@ void GameScrollTeamLogoLeft(void) {
     register u32 value asm("$2");
     register u32 next asm("$3");
 
-    GamePlaySoundCue(1);
+    PlaySoundCue(1);
 
     row = 0;
     savePtr = saved;
@@ -797,8 +797,8 @@ void GameScrollTeamLogoLeft(void) {
     } while (row < 0x40);
 }
 
-void GameScrollTeamLogoRight(void) asm("func_8004BBA8");
-void GameScrollTeamLogoRight(void) {
+void ScrollTeamLogoRight(void) asm("func_8004BBA8");
+void ScrollTeamLogoRight(void) {
     s32 row;
     u32 *savePtr;
     u32 *savePtr2;
@@ -815,7 +815,7 @@ void GameScrollTeamLogoRight(void) {
     /* This pin is load-bearing: removing it changes .text. */
     register u32 prev asm("$4");
 
-    GamePlaySoundCue(1);
+    PlaySoundCue(1);
 
     row = 0;
     savePtr = saved;
@@ -861,14 +861,14 @@ void GameScrollTeamLogoRight(void) {
     } while (row < 0x40);
 }
 
-void GameFlipTeamLogoVertical(void) asm("func_8004BC68");
-void GameFlipTeamLogoVertical(void) {
+void FlipTeamLogoVertical(void) asm("func_8004BC68");
+void FlipTeamLogoVertical(void) {
     s32 i;
     s32 j;
     s32 mirror;
     u32 *base;
 
-    GamePlaySoundCue(8);
+    PlaySoundCue(8);
     base = g_TeamLogoCanvas;
     i = 0;
     mirror = 0x3F;

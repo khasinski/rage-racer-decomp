@@ -27,24 +27,24 @@ s32 func_8005B5C4(void);
 
 extern u8 g_MsgInitEngineOk asm("D_8001146C");
 
-void GameLoadExtraVabSlotWithTable(void) asm("func_8005BB1C");
+void LoadExtraVabSlotWithTable(void) asm("func_8005BB1C");
 
 void func_8005B468(s32 arg0);
 
 void func_8005B204(s32 arg0, s32 arg1, s32 arg2);
 
-void GameInstallResourceData(void) asm("func_80034DCC");
-void GameInstallResourceData(void) {
-    GameDebugPrintf(g_MsgResOk);
+void InstallResourceData(void) asm("func_80034DCC");
+void InstallResourceData(void) {
+    DebugPrintf(g_MsgResOk);
 }
 
-void GameSetCarSpec(u32 arg0) asm("func_80034DF4");
-void GameSetCarSpec(u32 arg0) {
+void SetCarSpec(u32 arg0) asm("func_80034DF4");
+void SetCarSpec(u32 arg0) {
     g_CarSpec = (GameCarSpec *)arg0;
 }
 
-void GameInstallTrackEventData(u8 *arg0) asm("func_80034E04");
-void GameInstallTrackEventData(u8 *arg0) {
+void InstallTrackEventData(u8 *arg0) asm("func_80034E04");
+void InstallTrackEventData(u8 *arg0) {
     /* This pin is load-bearing: removing it changes .text. */
     register s32 offset0 asm("$2");
     s32 offset1;
@@ -66,27 +66,27 @@ void GameInstallTrackEventData(u8 *arg0) {
     base += offset1;
     g_PathSceneryPosData = (u8 *)offset0;
     g_PathSceneryRotData = base;
-    GameDebugPrintf(callArg);
+    DebugPrintf(callArg);
 }
 
-void GameInitSoundSystem(void) asm("func_80034E88");
-void GameInitSoundSystem(void) {
+void InitSoundSystem(void) asm("func_80034E88");
+void InitSoundSystem(void) {
     if (func_8005B5C4() != 0) {
-        GameDebugPrintf(&g_MsgSoundError);
+        DebugPrintf(&g_MsgSoundError);
     }
-    GameDebugPrintf(&g_MsgInitSoundOk);
+    DebugPrintf(&g_MsgInitSoundOk);
 }
 
-void GameInitEngineSound(void) asm("func_80034ED0");
-void GameInitEngineSound(void) {
-    GameLoadExtraVabSlotWithTable();
+void InitEngineSound(void) asm("func_80034ED0");
+void InitEngineSound(void) {
+    LoadExtraVabSlotWithTable();
     func_8005B468(1);
     func_8005B204(2, 0, 0);
-    GameDebugPrintf(&g_MsgInitEngineOk);
+    DebugPrintf(&g_MsgInitEngineOk);
 }
 
-s32 GameFramesToMilliseconds(s32 arg0, s32 arg1) asm("func_80034F18");
-s32 GameFramesToMilliseconds(s32 arg0, s32 arg1) {
+s32 FramesToMilliseconds(s32 arg0, s32 arg1) asm("func_80034F18");
+s32 FramesToMilliseconds(s32 arg0, s32 arg1) {
     s32 quotient;
     s32 quotientPart;
 

@@ -12,8 +12,8 @@ s32 func_80068634(s32 arg0);
  * state98 motion handlers. Register pins and the single-param/two-arg call
  * mismatch are deliberate to match; do not "fix".
  */
-void GameAdvanceCarPosition(GameCarRuntime *arg0) asm("func_8002F4E4");
-void GameAdvanceCarPosition(GameCarRuntime *arg0) {
+void AdvanceCarPosition(GameCarRuntime *arg0) asm("func_8002F4E4");
+void AdvanceCarPosition(GameCarRuntime *arg0) {
     volatile s32 coords[3];
 
     {
@@ -47,5 +47,5 @@ void GameAdvanceCarPosition(GameCarRuntime *arg0) {
 
         arg0->field_A4 += ((((angleSin * otherSin) + (angleCos * otherCos)) / 4096) * arg0->field_A8) / 4096;
     }
-    arg0->headingAngle = 0x400 - GameAtan2(coords[0], coords[2]);
+    arg0->headingAngle = 0x400 - Atan2(coords[0], coords[2]);
 }

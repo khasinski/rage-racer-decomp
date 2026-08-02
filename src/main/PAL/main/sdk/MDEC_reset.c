@@ -55,7 +55,7 @@ void MDEC_reset(long arg0) {
     return;
 
     }
-    GameDebugPrintf(D_800132C8);
+    DebugPrintf(D_800132C8);
 }
 
 void MDEC_in(volatile u_long *arg0, long arg1) {
@@ -112,10 +112,10 @@ long MDEC_timeout(u_char *arg0) {
     /* This pin is load-bearing: removing it changes .text. */
     register long ret;
 
-    GameDebugPrintf(D_80013364, arg0);
+    DebugPrintf(D_80013364, arg0);
     status = *g_MdecCtrlReg;
-    GameDebugPrintf(D_80013304, (*g_MdecInDmaChcr >> 24) & 1, (*g_MdecOutDmaChcr >> 24) & 1, *g_MdecInDmaMadr, *g_MdecOutDmaMadr);
-    GameDebugPrintf(D_8001332C,
+    DebugPrintf(D_80013304, (*g_MdecInDmaChcr >> 24) & 1, (*g_MdecOutDmaChcr >> 24) & 1, *g_MdecInDmaMadr, *g_MdecOutDmaMadr);
+    DebugPrintf(D_8001332C,
                   (~status >> 31) & 1,
                   (status >> 30) & 1,
                   (status >> 29) & 1,

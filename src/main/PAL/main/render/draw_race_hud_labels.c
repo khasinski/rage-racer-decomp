@@ -6,8 +6,8 @@
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void GameDrawRaceHudLabels(s32 arg0) asm("func_80032E9C");
-void GameDrawRaceHudLabels(s32 arg0) {
+void DrawRaceHudLabels(s32 arg0) asm("func_80032E9C");
+void DrawRaceHudLabels(s32 arg0) {
     s32 count;
     s32 i;
     s32 offset;
@@ -42,8 +42,8 @@ void func_80064FF8(u8 *prim);
  * rather than in a header: callers disagree on whether `ot`/`prim` are pointers
  * or s32, and gcc 2.6.3 will not take both against one prototype.
  */
-u8 *GameAddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("func_80032F34");
-u8 *GameAddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) {
+u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("func_80032F34");
+u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) {
     u8 *oldPrim;
 
     func_80064FF8(prim);
@@ -63,8 +63,8 @@ u8 *GameAddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g
 }
 
 /* Expands a GameSpriteDesc into a scratchpad SPRT. */
-void GameBuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) asm("func_80032FF0");
-void GameBuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
+void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) asm("func_80032FF0");
+void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
     SetSprt(prim);
 
     prim->x0 = src->x;
@@ -86,8 +86,8 @@ void func_80033D50(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
-void GameDrawLapTimes(void) asm("func_80033090");
-void GameDrawLapTimes(void) {
+void DrawLapTimes(void) asm("func_80033090");
+void DrawLapTimes(void) {
     /* This pin is load-bearing: removing it changes .text. */
     register s32 i __asm("$17");
     s32 visibleCount;
@@ -153,8 +153,8 @@ void GameDrawLapTimes(void) {
 
 void func_80033F30(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
-void GameDrawTimeRemaining(s32 arg0) asm("func_800331F8");
-void GameDrawTimeRemaining(s32 arg0) {
+void DrawTimeRemaining(s32 arg0) asm("func_800331F8");
+void DrawTimeRemaining(s32 arg0) {
     s32 arg3 = 0x78CC;
 
     if (arg0 < 0x5DC) {
@@ -166,8 +166,8 @@ void GameDrawTimeRemaining(s32 arg0) {
 
 /* The two race-position digits, from g_RacePosition; the tens digit is
  * blanked below 10 and the colour changes from 4th place down. */
-void GameDrawRacePosition(void) asm("func_80033230");
-void GameDrawRacePosition(void) {
+void DrawRacePosition(void) asm("func_80033230");
+void DrawRacePosition(void) {
     u8 *base;
     s32 value;
     u8 *left;
@@ -209,8 +209,8 @@ void func_800332E0(s32 arg0) {
     *(u16 *)(g_DrawBuffer + 0x237A6) = arg0 ? 0x7811 : 0x7800;
 }
 
-void GameDrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
-void GameDrawSplitDelta(s32 arg0, s32 arg1) {
+void DrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
+void DrawSplitDelta(s32 arg0, s32 arg1) {
     u8 *base;
     /* These pins are load-bearing: removing any one changes .text. */
     register u8 *prim __asm("$17");

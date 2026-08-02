@@ -166,8 +166,8 @@ extern SVec D_80011A48[];
 extern s32 D_8007FB48;
 
 
-void GameFlipCourseCard(s32 *p0, s32 *p1, s32 *p2) asm("func_800506BC");
-void GameFlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
+void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) asm("func_800506BC");
+void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     SVec verts[4];
     UVec out[4];
     Matrix mtx;
@@ -217,7 +217,7 @@ void GameFlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
         return;
     }
 
-    GameBuildRotMatrixY(&mtx, n);
+    BuildRotMatrixY(&mtx, n);
     ApplyMatrixSV((s32 *)&mtx, &verts[0], (s16 *)&out[0]);
     ApplyMatrixSV((s32 *)&mtx, &verts[1], (s16 *)&out[1]);
     ApplyMatrixSV((s32 *)&mtx, &verts[2], (s16 *)&out[2]);
@@ -337,9 +337,9 @@ void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
 void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_800686D4(s32 arg0, s32 arg1);
 
-/* The menu-mode twin of GameInitTrackLighting. */
-void GameInitMenuLighting(void) asm("func_80050B1C");
-void GameInitMenuLighting(void) {
+/* The menu-mode twin of InitTrackLighting. */
+void InitMenuLighting(void) asm("func_80050B1C");
+void InitMenuLighting(void) {
     g_SceneColorMatrix = D_80082DFC;
     g_SceneLightMatrix = D_80082E1C;
     func_800698B8(&g_SceneColorMatrix);
@@ -392,7 +392,7 @@ extern s32 g_RankingOption asm("D_8019C7C0");
 extern s32 g_DesignModeOption asm("D_8019C758");
 extern s32 D_801E4D74;
 
-void GameInitRenderState(s32) asm("func_80017884");
+void InitRenderState(s32) asm("func_80017884");
 void func_8005290C(s32);
 void func_80054C84(s32);
 void func_800551BC(s32);
@@ -407,8 +407,8 @@ void func_8005A2CC(s32);
 void func_800496F0(s32);
 void func_8004CF30(s32);
 
-void GameInitMenuMode(void) asm("func_80050C18");
-void GameInitMenuMode(void) {
+void InitMenuMode(void) asm("func_80050C18");
+void InitMenuMode(void) {
     GameRaceProgress *p;
     s32 *scratch;
 
@@ -426,9 +426,9 @@ void GameInitMenuMode(void) {
         g_GrandPrixClass = t2;
         g_PlayerMoney = t3;
     }
-    GameInitRenderState(1);
+    InitRenderState(1);
 
-    GameSetupDisplay480(0, 0, 0);
+    SetupDisplay480(0, 0, 0);
     g_SceneId = 8;
     g_SceneTimer = 0;
     if (g_GrandPrixMode != 0) {
@@ -437,7 +437,7 @@ void GameInitMenuMode(void) {
         g_GrandPrixSeries = *(u16 *)&g_RaceProgress->unk10;
     }
     g_CourseIndex = ((s32)g_GrandPrixSeries << 2) | g_CourseIndex;
-    GameInitMenuLighting();
+    InitMenuLighting();
 
     scratch = (s32 *)0x1F800000;
     scratch[3] = -64;
@@ -446,7 +446,7 @@ void GameInitMenuMode(void) {
     scratch[6] = 0x100;
     scratch[7] = 0;
     scratch[8] = 0;
-    GameSetCameraRotMatrix();
+    SetCameraRotMatrix();
     ScaleMatrix((void *)0x1F800028, &g_MenuViewScale);
 
     D_8019C764 = &D_80082568;
@@ -513,8 +513,8 @@ void GameInitMenuMode(void) {
 }
 
 /* Counts the enabled entries of g_CarTable. */
-s32 GameCountOwnedCars(void) asm("func_80050F68");
-s32 GameCountOwnedCars(void) {
+s32 CountOwnedCars(void) asm("func_80050F68");
+s32 CountOwnedCars(void) {
     s32 count = 0;
     s32 i = 0;
     GameCarEntry *entries = g_CarTable;

@@ -62,7 +62,7 @@ extern s32 (*g_MenuScreenDraw[])(s32 step) asm("D_80082EF0");
 extern s32 g_TitleMenuSelection asm("D_801E4184");
 
 /*
- * Element mask handed to GameDrawBitPatternOverlay (func_80047E60) by
+ * Element mask handed to DrawBitPatternOverlay (func_80047E60) by
  * func_8005ACA0, selecting which parts of the current menu overlay are drawn.
  * -1 while a screen is still opening; screens then set their own pattern.
  */
@@ -75,7 +75,7 @@ extern s32 GameMenuLoadPhase asm("D_8009B740");
  * Alternate menu layout. The garage screens copy the setting into the live
  * flag on entry, RANKING / TEAM LOGO / LOGO SAMPLE force it to 0. Non-zero
  * pulls the 3D car view back (40 -> 64), shifts the HUD left by 0x2C, widens
- * the bottom bar and makes GameDrawScriptedSprite skip element types 9/19/29/39.
+ * the bottom bar and makes DrawScriptedSprite skip element types 9/19/29/39.
  * The setting is only ever written 0, so the layout is unreachable in retail.
  */
 extern s32 g_MenuAltLayout asm("D_8019CB0C");
@@ -92,7 +92,7 @@ extern u8 g_TeamNameLength asm("D_8007F45C");
 extern u8 g_TeamNameChars[] asm("D_8007F460");
 
 /* Memory-card menu sub-state, driven by func_80061520. g_McCardStatus is the
- * last GamePollMemoryCardStatus result (0 no card yet, 1/2 card present,
+ * last PollMemoryCardStatus result (0 no card yet, 1/2 card present,
  * -1/-2/-3 error), not a record pointer; the others are selection/phase words.
  */
 extern s32 g_McMenuState asm("D_8009B71C");
@@ -102,7 +102,7 @@ extern s32 g_McMenuPhase asm("D_8009B728");
 extern s32 g_McMenuSubState asm("D_8009B72C");
 
 /*
- * The pad word block at 0x801E4368, filled by GameUpdatePadState from the raw
+ * The pad word block at 0x801E4368, filled by UpdatePadState from the raw
  * BIOS buffer at D_801E403C:
  *   +0x00 status, +0x01 pad type (0x41 digital, 0x23 NeGcon),
  *   +0x02 g_PadHeld = ~(raw[0] << 8 | raw[1]), +0x04 previous frame,
@@ -127,14 +127,14 @@ void GameAdjustMenuSelectionHorizontal(
     s32 *value,
     s32 min,
     s32 max) asm("func_800611C8");
-void GameSetMenuBinaryChoiceVertical(s32 *value) asm("func_8006124C");
-u16 GamePollMenuConfirmInput(void) asm("func_800612CC");
-u16 GamePollMenuBackInput(void) asm("func_8006131C");
-void GameDrawMenuFadeOverlay(s32 brightness) asm("func_8006136C");
-void GameStartMenuExitFade(void) asm("func_8006138C");
-void GameEnterMemoryCardMenu(void) asm("func_800613B8");
-void GameEnterMemoryCardMenuFromLoad(void) asm("func_80061458");
-void GameUpdateMemoryCardMenu(void) asm("func_80061520");
+void SetMenuBinaryChoiceVertical(s32 *value) asm("func_8006124C");
+u16 PollMenuConfirmInput(void) asm("func_800612CC");
+u16 PollMenuBackInput(void) asm("func_8006131C");
+void DrawMenuFadeOverlay(s32 brightness) asm("func_8006136C");
+void StartMenuExitFade(void) asm("func_8006138C");
+void EnterMemoryCardMenu(void) asm("func_800613B8");
+void EnterMemoryCardMenuFromLoad(void) asm("func_80061458");
+void UpdateMemoryCardMenu(void) asm("func_80061520");
 
 /* Menu widgets: an outlined filled box with optional caption (flags bit 0x10 =
  * caption, bit 1 = large font), the two-ring selection frame, and the timeline
@@ -151,13 +151,13 @@ void GameDrawMenuButton(
     s32 textX,
     s32 textY,
     s32 caption) asm("func_80048B88");
-void GameDrawMenuCursorBox(
+void DrawMenuCursorBox(
     s32 x0,
     s32 y0,
     s32 x1,
     s32 y1,
     s32 flash) asm("func_80048D64");
-void GameDrawFadingMenuSprites(
+void DrawFadingMenuSprites(
     s32 progress,
     s32 count,
     s32 slot) asm("func_800489AC");
@@ -165,7 +165,7 @@ void GameDrawFadingMenuSprites(
 /* Menu-mode entry: reloads the live globals from g_RaceProgress, seeds the
  * scratchpad render state, zeroes 0x8009B2F8..0x8009B378 and resets all
  * fourteen per-screen transition accumulators. */
-void GameInitMenuMode(void) asm("func_80050C18");
+void InitMenuMode(void) asm("func_80050C18");
 
 /*
  * The menu-mode screen table pair: everything the front end shows once
@@ -178,58 +178,58 @@ void GameInitMenuMode(void) asm("func_80050C18");
  */
 
 /* id 1 -- course + class picker; left/right change course, up/down the rows. */
-void GameUpdateCourseSelectScreen(void) asm("func_80053730");
-s32 GameDrawCourseSelectScreen(s32 step) asm("func_8005290C");
+void UpdateCourseSelectScreen(void) asm("func_80053730");
+s32 DrawCourseSelectScreen(s32 step) asm("func_8005290C");
 
 /* id 2 -- "RANKING": total time / lap time tables, or exit back to id 1. */
-void GameUpdateRankingScreen(void) asm("func_80054D10");
-s32 GameDrawRankingScreen(s32 step) asm("func_80054C84");
+void UpdateRankingScreen(void) asm("func_80054D10");
+s32 DrawRankingScreen(s32 step) asm("func_80054C84");
 /* The five record rows: place number + suffix + holder + row background, from
  * the ranking table D_801E7744 or the time table D_8019CB78. */
-s32 GameDrawRankingTable(s32 *accumulator, s32 step, s32 table) asm("func_8004D384");
+s32 DrawRankingTable(s32 *accumulator, s32 step, s32 table) asm("func_8004D384");
 
 /* id 3 -- runs for a single frame on the way from id 1 into id 4. */
-void GameEnterCarSelectScreen(void) asm("func_80055618");
+void EnterCarSelectScreen(void) asm("func_80055618");
 
 /* id 4 -- "CAR SELECT"; the hub that starts a race or opens the shops. */
-void GameUpdateCarSelectScreen(void) asm("func_8005568C");
-s32 GameDrawCarSelectScreen(s32 step) asm("func_800551BC");
+void UpdateCarSelectScreen(void) asm("func_8005568C");
+s32 DrawCarSelectScreen(s32 step) asm("func_800551BC");
 
 /* id 5 -- "CUSTOMIZE": tire compound (5 settings) and transmission (AT/MT). */
-void GameUpdateCustomizeScreen(void) asm("func_800563A0");
-s32 GameDrawCustomizeScreen(s32 step) asm("func_800562C8");
+void UpdateCustomizeScreen(void) asm("func_800563A0");
+s32 DrawCustomizeScreen(s32 step) asm("func_800562C8");
 
 /* id 6 -- "DESIGN MODE": livery hub, branches to team logo / name / colour. */
-void GameUpdateDesignModeScreen(void) asm("func_80057198");
-s32 GameDrawDesignModeScreen(s32 step) asm("func_80056E64");
+void UpdateDesignModeScreen(void) asm("func_80057198");
+s32 DrawDesignModeScreen(s32 step) asm("func_80056E64");
 
 /* id 7 -- "TEAM LOGO": pick a sample logo (id 8) or hand-paint one. */
-void GameUpdateTeamLogoScreen(void) asm("func_80057748");
-s32 GameDrawTeamLogoScreen(s32 step) asm("func_800576BC");
+void UpdateTeamLogoScreen(void) asm("func_80057748");
+s32 DrawTeamLogoScreen(s32 step) asm("func_800576BC");
 
 /* id 8 -- "TEAM LOGO" sample picker: character and background, 20 each. */
-void GameUpdateLogoSampleScreen(void) asm("func_800580C8");
-s32 GameDrawLogoSampleScreen(s32 step) asm("func_8005803C");
+void UpdateLogoSampleScreen(void) asm("func_800580C8");
+s32 DrawLogoSampleScreen(s32 step) asm("func_8005803C");
 
 /*
  * id 9 -- "TEAM NAME": the 4x11 character grid driven by GameMenuCursor, with
  * cell 0x2A = BS and 0x2B = ED. Accepted characters accumulate in
  * g_TeamNameChars[g_TeamNameLength].
  */
-void GameUpdateTeamNameScreen(void) asm("func_8005873C");
-s32 GameDrawTeamNameScreen(s32 step) asm("func_800586B0");
+void UpdateTeamNameScreen(void) asm("func_8005873C");
+s32 DrawTeamNameScreen(s32 step) asm("func_800586B0");
 
 /* id 10 -- "PAINT COLOR": body colour 1 and 2, 18 choices each. */
-void GameUpdatePaintColorScreen(void) asm("func_80058C14");
-s32 GameDrawPaintColorScreen(s32 step) asm("func_80058B88");
+void UpdatePaintColorScreen(void) asm("func_80058C14");
+s32 DrawPaintColorScreen(s32 step) asm("func_80058B88");
 
 /* id 11 -- "SHOP" (car shop): browse every car and buy the selected one. */
-void GameUpdateCarShopScreen(void) asm("func_80059558");
-s32 GameDrawCarShopScreen(s32 step) asm("func_80059248");
+void UpdateCarShopScreen(void) asm("func_80059558");
+s32 DrawCarShopScreen(s32 step) asm("func_80059248");
 
 /* id 12 -- "SHOP" (engineer shop): pay the tune-up fee to grade the car up. */
-void GameUpdateEngineerShopScreen(void) asm("func_8005A3A4");
-u32 GameDrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
+void UpdateEngineerShopScreen(void) asm("func_8005A3A4");
+u32 DrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
 
 /*
  * Menu widgets shared across those screens. Each keeps its own accumulator and
@@ -238,38 +238,38 @@ u32 GameDrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
  * data layouts.
  */
 /* The four-bar car performance chart; only visible on CUSTOMIZE. */
-void GameDrawCarSpecGraph(s32 step, s32 tireGrade) asm("func_800496F0");
+void DrawCarSpecGraph(s32 step, s32 tireGrade) asm("func_800496F0");
 /* "MAX POWER <n> ps / <n> rpm" and "MAX TORQUE <n>.<n> kgm / <n> rpm". */
-void GameDrawCarEngineSpec(s16 yOffset, u8 brightness, s32 unused) asm("func_80052158");
+void DrawCarEngineSpec(s16 yOffset, u8 brightness, s32 unused) asm("func_80052158");
 /* The TEAM NAME 4x11 grid, its highlight and caret, and the typed name. */
-void GameDrawTeamNameEntry(s32 step, s32 cursorIndex) asm("func_8004E724");
+void DrawTeamNameEntry(s32 step, s32 cursorIndex) asm("func_8004E724");
 /* The 3D car view behind screens 3, 4, 5, 6, 10, 11, 12: eases
  * g_MenuViewAngle/Offset, then submits the car and the showroom floor. */
-void GameDrawMenuCarView(void) asm("func_8005131C");
+void DrawMenuCarView(void) asm("func_8005131C");
 /* Draw and input halves of the logo painter. The canvas D_801E6F2C is a 64x64
  * 4bpp bitmap with its own 16-entry CLUT at D_801E444C. */
-void GameDrawTeamLogoCanvas(s32 panelStep, s32 editorStep) asm("func_8004A248");
-void GameUpdateTeamLogoCanvas(void) asm("func_8004C0D8");
+void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep) asm("func_8004A248");
+void UpdateTeamLogoCanvas(void) asm("func_8004C0D8");
 
 /*
- * The eight whole-canvas transforms GameUpdateTeamLogoCanvas offers, each
+ * The eight whole-canvas transforms UpdateTeamLogoCanvas offers, each
  * operating in place on g_TeamLogoCanvas (64 rows x 8 words x 8 nibbles).
  * The four scrolls wrap and play cue 1; the flips and rotations play cue 8.
  * Directions are derived from the arithmetic - see docs/names.md 13.
  */
-void GameScrollTeamLogoUp(void) asm("func_8004B9B8");
-void GameScrollTeamLogoDown(void) asm("func_8004BA50");
-void GameScrollTeamLogoLeft(void) asm("func_8004BAE4");
-void GameScrollTeamLogoRight(void) asm("func_8004BBA8");
+void ScrollTeamLogoUp(void) asm("func_8004B9B8");
+void ScrollTeamLogoDown(void) asm("func_8004BA50");
+void ScrollTeamLogoLeft(void) asm("func_8004BAE4");
+void ScrollTeamLogoRight(void) asm("func_8004BBA8");
 /* Mirror about the horizontal axis: row r <-> row 63 - r. */
-void GameFlipTeamLogoVertical(void) asm("func_8004BC68");
+void FlipTeamLogoVertical(void) asm("func_8004BC68");
 /* Mirror about the vertical axis: nibbles reversed inside each word and word
  * w swapped with word 7 - w. */
-void GameFlipTeamLogoHorizontal(void) asm("func_8004BCE4");
+void FlipTeamLogoHorizontal(void) asm("func_8004BCE4");
 /* dst(y, x) = src(x, 63 - y). func_8004BDEC is its silent second entry point. */
-void GameRotateTeamLogoCcw(void) asm("func_8004BDB4");
+void RotateTeamLogoCcw(void) asm("func_8004BDB4");
 /* dst(y, x) = src(63 - x, y). */
-void GameRotateTeamLogoCw(void) asm("func_8004BF48");
+void RotateTeamLogoCw(void) asm("func_8004BF48");
 
 /*
  * TEAM LOGO editor data, all per-file types; see docs/names.md 12c.

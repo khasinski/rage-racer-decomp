@@ -60,7 +60,7 @@ long CD_ready(long mode, u_char *result) {
         if (g_CdTimeoutDeadline < VSync(-1) ||
             g_CdTimeoutCounter++ > 0x3C0000) {
             func_80063C38(D_80013814);
-            GameDebugPrintf(D_80013824, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
+            DebugPrintf(D_80013824, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
                           g_CdCommandNames[D_8009905D],
                           g_CdIntrNames[g_CdSyncStatus.sync],
                           g_CdIntrNames[g_CdSyncStatus.ready]);

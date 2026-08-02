@@ -10,31 +10,31 @@ extern s32 g_FlybyScenery[] asm("D_801E42FC");
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
-void GameDrawFlybyScenery(void) asm("func_8003EAF4");
-void GameDrawFlybyScenery(void) {
+void DrawFlybyScenery(void) asm("func_8003EAF4");
+void DrawFlybyScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
     s32 *state;
 
     state = g_FlybyScenery;
     if (state[0] > 0) {
-        GameBuildRotMatrixY(&mtx0, 0x800 - g_FlybySceneryRotY);
-        GameBuildRotMatrixX(&mtx1, g_FlybySceneryRotX);
+        BuildRotMatrixY(&mtx0, 0x800 - g_FlybySceneryRotY);
+        BuildRotMatrixX(&mtx1, g_FlybySceneryRotX);
         MulMatrix2(&mtx0, &mtx1);
         MulMatrix2((Matrix *)0x1F800028, &mtx1);
-        GameBuildRotMatrixZ(&mtx0, g_FlybySceneryRotZ);
+        BuildRotMatrixZ(&mtx0, g_FlybySceneryRotZ);
         MulMatrix2(&mtx1, &mtx0);
-        GameSelectModelBank(2);
+        SelectModelBank(2);
         func_80017794((void *)0x1F80011C, state + 4, &mtx0);
         *(s32 *)0x1F800084 = 0;
-        GameSubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
+        SubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
     }
 }
 
 extern volatile s32 g_RaceSeries asm("D_801E408C");
 extern u8 *g_RouteSceneryData asm("D_801E4128");
 /* 0 while the route prop is not running; the seeder sets it to 1 and
- * GameUpdateRouteScenery increments it every frame, so it is both the enable
+ * UpdateRouteScenery increments it every frame, so it is both the enable
  * and the frame count since the seed. */
 extern volatile s32 g_RouteSceneryClock asm("D_801E4330");
 extern volatile s32 g_RouteSceneryFrame asm("D_801E4338");
@@ -48,8 +48,8 @@ extern s32 g_RouteSceneryRotY asm("D_801E4354");
 extern s32 g_RouteSceneryRotZ asm("D_801E4358");
 extern u8 *g_RouteSceneryKeyframe asm("D_801E6C88");
 
-void GameSeedRouteScenery(void) asm("func_8003EBCC");
-void GameSeedRouteScenery(void) {
+void SeedRouteScenery(void) asm("func_8003EBCC");
+void SeedRouteScenery(void) {
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 index0 asm("$2");
     s32 index1;

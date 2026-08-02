@@ -17,8 +17,8 @@ extern u8 g_TimeTextBuffer[] asm("D_8007DF04");
 
 void func_80016754(s32 x, s32 y, void *str, s32 color);
 
-void GameDrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
-void GameDrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
+void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
+void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     s32 savedX;
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 savedY asm("$10");
@@ -73,8 +73,8 @@ extern u8 g_ClockTextMinUnits[] asm("D_8007DF11");
 extern u8 g_ClockTextSecTens asm("D_8007DF13");
 extern u8 g_ClockTextSecUnits asm("D_8007DF14");
 
-void GameDrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) asm("func_80033F30");
-void GameDrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
+void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) asm("func_80033F30");
+void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
     s32 savedY;
     s32 sec;
     s32 tmp;
@@ -110,8 +110,8 @@ extern s32 g_FrameParity asm("D_801E4B34");
 void func_80066604(void *packet, void *rect);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
-void *GameQueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) asm("func_80034058");
-void *GameQueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
+void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) asm("func_80034058");
+void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     void *oldPacket;
     s16 rect[4];
     s32 offset;
@@ -225,7 +225,7 @@ s32 GameQueueDrawModePrimWide(
     s32 ot, s32 prim, s32 tpage) asm("func_80017390");
 void AddPrimsWide(void *ot, void *first, void *last) asm("func_80064E18");
 
-void GameDrawStartCountdown(s32 sceneTimer) {
+void DrawStartCountdown(s32 sceneTimer) {
     s32 timer;
     s32 phase;
     s32 halfStep;
@@ -432,7 +432,7 @@ extern s32 g_RaceOptionPulseAngle asm("D_8007DF2C");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
 s32 func_80068634(s32 angle);
-u8 *GameAddTilePrim(
+u8 *AddTilePrim(
     void *ot,
     u8 *prim,
     s32 x,
@@ -443,7 +443,7 @@ u8 *GameAddTilePrim(
     s32 g,
     s32 b) asm("func_80032F34");
 
-void GameDrawRaceOptionMenu(s32 cursorRow) {
+void DrawRaceOptionMenu(s32 cursorRow) {
     register s32 selectedRow = cursorRow;
     u8 *ot;
     u8 *firstNext;
@@ -490,7 +490,7 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
         }
 
         firstNext =
-            GameQueueDrawAreaPrim(ot, sprite, 0, 0, 0x140, 0xF0);
+            QueueDrawAreaPrim(ot, sprite, 0, 0, 0x140, 0xF0);
     }
 
     {
@@ -534,7 +534,7 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
         }
 
         scratchPacket = *(u8 **)scratchPacket;
-        drawPrim = GameQueueDrawAreaPrim(
+        drawPrim = QueueDrawAreaPrim(
             ot, scratchPacket, 0x72, 0x8A, 0x5C, 0xC);
         fontU = 0xD0;
         prim = GameQueueSpriteWide(
@@ -569,13 +569,13 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
             s32 y;
 
             y = selectedRow * 10 + 0x68;
-            prim = GameAddTilePrim(
+            prim = AddTilePrim(
                 ot, prim, 0x80, y, 0x40, 1, 0xFF, 0xFF, 0);
-            prim = GameAddTilePrim(
+            prim = AddTilePrim(
                 ot, prim, 0x80, y + 0xB, 0x40, 1, 0xFF, 0xFF, 0);
-            prim = GameAddTilePrim(
+            prim = AddTilePrim(
                 ot, prim, 0x80, y, 1, 0xB, 0xFF, 0xFF, 0);
-            prim = GameAddTilePrim(
+            prim = AddTilePrim(
                 ot, prim, 0xBF, y, 1, 0xB, 0xFF, 0xFF, 0);
         }
 
@@ -644,7 +644,7 @@ void GameDrawRaceOptionMenu(s32 cursorRow) {
                 drawPrim->tpage = 9;
                 AddPrim(g_DrawBuffer + 0xCC, drawPrim);
 
-                *(u8 **)0x1F800000 = GameQueueDrawModePrim(
+                *(u8 **)0x1F800000 = QueueDrawModePrim(
                     g_DrawBuffer + 0xCC, drawModePrim, 9);
             }
         }

@@ -7,24 +7,24 @@ extern s16 g_SeqHandle asm("D_801E6D90");
 extern s16 g_SeqVolume asm("D_801E6D94");
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2) asm("func_80072698");
 void func_8005B190(s32 arg0, s32 arg1);
-void GameApplyCurrentSequenceAudio(void) asm("func_8005EA6C");
-void GameApplyCurrentSequenceAudio(void) {
+void ApplyCurrentSequenceAudio(void) asm("func_8005EA6C");
+void ApplyCurrentSequenceAudio(void) {
     SsSeqSetVol(g_SeqHandle, g_SeqVolume, g_SeqVolume);
     func_8005B190(0x28, 0x28);
 }
 
 void SsSetMVol(s32 arg0, s32 arg1) asm("func_8006EAFC");
-void GameSetMasterVolumeMono(s16 arg0) asm("func_8005EAA8");
-void GameSetMasterVolumeMono(s16 arg0) { SsSetMVol(arg0, arg0); }
+void SetMasterVolumeMono(s16 arg0) asm("func_8005EAA8");
+void SetMasterVolumeMono(s16 arg0) { SsSetMVol(arg0, arg0); }
 
-void GameStartMemoryCardEvents(void) {
-    GameOpenMemoryCardEvents();
-    GameEnableMemoryCardEvents();
+void StartMemoryCardEvents(void) {
+    OpenMemoryCardEvents();
+    EnableMemoryCardEvents();
 }
 
-void GameStopMemoryCardEvents(void) {
-    GameDisableMemoryCardEvents();
-    GameCloseMemoryCardEvents();
+void StopMemoryCardEvents(void) {
+    DisableMemoryCardEvents();
+    CloseMemoryCardEvents();
 }
 
 void func_8005F304(s32 arg0);
@@ -33,8 +33,8 @@ void func_8005F55C(void);
 void func_8005F2AC(void);
 void _card_load(s32 arg0) asm("func_80063DBC");
 void func_8005F4D8(void);
-void GameCardReadAndSetMode(s32 arg0) asm("func_8005EB20");
-void GameCardReadAndSetMode(s32 arg0) {
+void CardReadAndSetMode(s32 arg0) asm("func_8005EB20");
+void CardReadAndSetMode(s32 arg0) {
     func_8005F304(arg0);
     while (_card_clear(arg0 & 0xFF) == 0) {}
     func_8005F55C();

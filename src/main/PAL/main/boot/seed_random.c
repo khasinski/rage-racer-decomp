@@ -8,7 +8,7 @@ s32 LibcStrlen(u8 *arg0) asm("func_80063C08");
 
 extern s32 g_RandomSeed asm("D_8009B9A8");
 
-void GameSeedRandom(s32 seed) {
+void SeedRandom(s32 seed) {
     g_RandomSeed = seed;
 }
 

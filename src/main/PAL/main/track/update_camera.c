@@ -8,8 +8,8 @@ typedef struct WordVector {
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
-extern void GameDrawPlayerCarModel(void *) asm("func_8001DAB0");
-extern s32 GameFindNearestTrackCamera() asm("func_80043B18");
+extern void DrawPlayerCarModel(void *) asm("func_8001DAB0");
+extern s32 FindNearestTrackCamera() asm("func_80043B18");
 extern s32 func_80068634(s32);
 extern s32 func_800689A8(s32);
 extern void *ApplyMatrixLV(void *, void *, void *) asm("func_80068F80");
@@ -77,12 +77,12 @@ extern u8 *g_TrackCameras asm("D_8019C7CC");
  * Camera-mode state machine: `cameraModeSel` selects among the camera behaviours
  * (chase / bumper / replay-orbit / intro-pan, etc.); `arg1` is the followed
  * render/target object. Positions the eye and fills the scratchpad view state
- * (view[2..8]) with matrix/atan2/sqrt math, then submits via GameDrawPlayerCarModel.
+ * (view[2..8]) with matrix/atan2/sqrt math, then submits via DrawPlayerCarModel.
  * Field accesses use the FIELD(base,type,offset) raw-offset macro to stay
  * byte-exact, so params/locals are not retyped.
  */
-void GameUpdateCamera(s32 cameraModeSel, void *arg1) asm("func_80043BCC");
-void GameUpdateCamera(s32 cameraModeSel, void *arg1) {
+void UpdateCamera(s32 cameraModeSel, void *arg1) asm("func_80043BCC");
+void UpdateCamera(s32 cameraModeSel, void *arg1) {
     s16 sp10[4];
     s32 sp18[3];
     s32 sp28[3];
@@ -161,7 +161,7 @@ void GameUpdateCamera(s32 cameraModeSel, void *arg1) {
     void *temp_v0_944;
     u32 temp_v1_1373;
 
-    temp_v0_30 = GameFindNearestTrackCamera(arg1);
+    temp_v0_30 = FindNearestTrackCamera(arg1);
     scratch = (s32 *)0x1F800000;
     temp_v1_35 = g_CameraNodeIndex;
     g_CameraNodeIndex = temp_v0_30;
@@ -175,10 +175,10 @@ void GameUpdateCamera(s32 cameraModeSel, void *arg1) {
     case 0:                                         /* switch 1 */
         *(WordVector *)&scratch[2] = *(WordVector *)arg1;
         *(WordVector *)&scratch[6] = *(WordVector *)((u8 *)arg1 + 0x20);
-        GameBuildRotMatrixY(&sp48[0], scratch[7]);
-        GameBuildRotMatrixX(&sp68[0], scratch[6]);
+        BuildRotMatrixY(&sp48[0], scratch[7]);
+        BuildRotMatrixX(&sp68[0], scratch[6]);
         MulMatrix2(&sp68[0], &sp48[0]);
-        GameBuildRotMatrixZ(&sp68[0], scratch[8]);
+        BuildRotMatrixZ(&sp68[0], scratch[8]);
         MulMatrix2(&sp68[0], &sp48[0]);
         sp10[0] = 0;
         sp10[1] = -0x1C0;
@@ -336,14 +336,14 @@ block_36:
             *angleState = var_v1_549;
         }
         angleState = (s32 *)&sp88[0];
-        GameBuildRotMatrixY(angleState, 0 - g_ChaseYawLag);
-        GameBuildRotMatrixX(&sp68[0], -0x80);
+        BuildRotMatrixY(angleState, 0 - g_ChaseYawLag);
+        BuildRotMatrixX(&sp68[0], -0x80);
         MulMatrix2(&sp68[0], &sp88[0]);
         D_8009B1EC = g_ChaseYaw;
-        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
         MulMatrix2(angleState, &sp48[0]);
@@ -378,8 +378,8 @@ block_52:
         scratch[4] -= sp38[2];
         temp_v0_687 = func_800689A8((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
         sp38[3] = temp_v0_687;
-        scratch[6] = 0x400 - (GameAtan2(sp38[1] + 0x28, temp_v0_687) & 0xFFF);
-        scratch[7] = 0x400 - (GameAtan2(sp38[0], sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (Atan2(sp38[1] + 0x28, temp_v0_687) & 0xFFF);
+        scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
         scratch[8] = FIELD(arg1, s32 *, 0x28) - FIELD(arg1, s32 *, 0x64);
         if (g_ChaseCameraPreset == 0) {
             var_v0_713 = scratch[6] - 0x90;
@@ -393,10 +393,10 @@ block_52:
         temp_s2_728 = temp_v0_30 * 0x24;
         temp_v0_732 = temp_s2_728 + g_TrackCameras;
         *(WordVector *)&scratch[2] = *(WordVector *)temp_v0_732;
-        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
         temp_v0_764 = temp_s2_728 + g_TrackCameras;
@@ -419,8 +419,8 @@ block_52:
         temp_v0_859 = scratch[4] - (FIELD(arg1, s32 *, 8) + sp28[2]);
         sp38[2] = temp_v0_859;
         squaredZ = temp_v0_859 * temp_v0_859;
-        scratch[6] = 0x400 - (GameAtan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
-        var_s0_879 = 0x400 - (GameAtan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (Atan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
+        var_s0_879 = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
         var_v0_881 = 2;
         goto block_101;
     case 3:                                         /* switch 1 */
@@ -534,15 +534,15 @@ block_52:
         g_CamPathAngle[CAMPATH_DIST] = temp_v0_1221;
         temp_a1_1227 = temp_a2_1183 - FIELD(arg1, s32 *, 0x24);
         sp38[1] = temp_a1_1227;
-        GameBuildRotMatrixY(&sp88[0], temp_a1_1227);
-        GameBuildRotMatrixX(&sp68[0], sp38[0]);
+        BuildRotMatrixY(&sp88[0], temp_a1_1227);
+        BuildRotMatrixX(&sp68[0], sp38[0]);
         MulMatrix2(&sp68[0], &sp88[0]);
-        GameBuildRotMatrixZ(&sp68[0], sp38[2]);
+        BuildRotMatrixZ(&sp68[0], sp38[2]);
         MulMatrix2(&sp68[0], &sp88[0]);
-        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
@@ -561,17 +561,17 @@ block_52:
         scratch[4] -= sp38[2];
         temp_v0_1320 = func_800689A8((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
         sp38[3] = temp_v0_1320;
-        scratch[6] = 0x400 - (GameAtan2(sp38[1], temp_v0_1320) & 0xFFF);
-        scratch[7] = 0x400 - (GameAtan2(sp38[0], sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (Atan2(sp38[1], temp_v0_1320) & 0xFFF);
+        scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
         scratch[8] = 0;
         sp18[0] = 0x1000;
         sp18[1] = 0;
         sp18[2] = 0;
-        GameBuildRotMatrixY(&sp88[0], 0 - scratch[7]);
+        BuildRotMatrixY(&sp88[0], 0 - scratch[7]);
         ApplyMatrixLV(&sp88[0], &sp18[0], &sp28[0]);
         func_80069CC8(&sp68[0], &sp88[0]);
         ApplyMatrixLV(&sp88[0], &sp28[0], &sp18[0]);
-        scratch[8] = 0x400 - (GameAtan2(sp18[1], sp18[0]) & 0xFFF);
+        scratch[8] = 0x400 - (Atan2(sp18[1], sp18[0]) & 0xFFF);
         g_CameraModePrev = 3;
         break;
     case 4:                                         /* switch 1 */
@@ -584,10 +584,10 @@ block_52:
         } else if (g_CamPathFrame < FIELD((temp_a3_1372 + (u32)g_TrackCameras), s32 *, 0x1C)) {
             g_CamPathFrame += 1;
         }
-        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
         sp18[0] = 0;
@@ -612,8 +612,8 @@ block_52:
         temp_v0_1549 = scratch[4] - (FIELD(arg1, s32 *, 8) + sp28[2]);
         sp38[2] = temp_v0_1549;
         squaredZ = temp_v0_1549 * temp_v0_1549;
-        scratch[6] = 0x400 - (GameAtan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
-        var_s0_879 = 0x400 - (GameAtan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (Atan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
+        var_s0_879 = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
         var_v0_881 = 4;
 block_101:
         scratch[7] = var_s0_879;
@@ -622,11 +622,11 @@ block_101:
         break;
     case 5:                                         /* switch 1 */
         *(WordVector *)&scratch[2] = *(WordVector *)arg1;
-        GameBuildRotMatrixY(&sp88[0], 0 - g_OrbitCameraYaw);
-        GameBuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        GameBuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp88[0], 0 - g_OrbitCameraYaw);
+        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        GameBuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
@@ -642,8 +642,8 @@ block_101:
         scratch[4] += sp28[2];
         sp18[2] = g_OrbitCameraDistance;
         ApplyMatrixLV(&sp68[0], &sp18[0], &sp38[0]);
-        scratch[6] = 0x400 - (GameAtan2(sp38[1], g_OrbitCameraDistance) & 0xFFF);
-        scratch[7] = 0x400 - (GameAtan2(sp38[0], sp38[2]) & 0xFFF);
+        scratch[6] = 0x400 - (Atan2(sp38[1], g_OrbitCameraDistance) & 0xFFF);
+        scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
         scratch[8] = FIELD(arg1, s32 *, 0x28);
         g_CameraModePrev = 5;
         scratch[2] -= sp38[0];
@@ -652,10 +652,10 @@ block_101:
         scratch[4] -= sp38[2];
         break;
     }
-    GameSetCameraRotMatrix();
+    SetCameraRotMatrix();
     if ((cameraModeSel > 0) && (arg1 == &g_PlayerCar)) {
-        GameSelectModelBank(0);
-        GameDrawPlayerCarModel(arg1);
+        SelectModelBank(0);
+        DrawPlayerCarModel(arg1);
     }
 }
 
@@ -665,8 +665,8 @@ extern u32 D_801E4D84;
 extern u32 *g_EnvScriptCues asm("D_801E42F4");
 extern u32 g_EnvScriptLength asm("D_8019C774");
 
-void GameSetEnvironmentScript(u32 *arg0) asm("func_8004550C");
-void GameSetEnvironmentScript(u32 *arg0) {
+void SetEnvironmentScript(u32 *arg0) asm("func_8004550C");
+void SetEnvironmentScript(u32 *arg0) {
     u32 value0;
     u32 value1;
 
