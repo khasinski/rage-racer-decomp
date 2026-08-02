@@ -76,18 +76,20 @@ void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, 
             switch (c2) {
             case 0x9b:
                 idx = 0x2a;
-                goto draw;
+                break;
             case 0xa0:
                 idx = 0x2b;
-                goto draw;
+                break;
             case 0x7e:
                 idx = 0x2c;
-                goto draw;
+                break;
             case 0xa2:
                 idx = 0x2d;
-                goto draw;
+                break;
+            default:
+                continue;
             }
-            continue;
+            break;
         default:
             if (c < '0') {
                 continue;
@@ -103,7 +105,6 @@ void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, 
             }
         }
 
-    draw:
         w = fixed ? 6 : D_8007F984[idx].w;
         u0 = fixed ? (idx % 42) * 6 : D_8007F984[idx].u;
         v0 = fixed ? (idx / 42) * 12 : D_8007F984[idx].v;
