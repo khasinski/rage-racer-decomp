@@ -626,13 +626,12 @@ L_sw5:
             }
         }
     }
-    if (g_McMenuState == 1) {
-        goto L_epilogue;
-    }
+    if (!(g_McMenuState == 1)) {
     g_McActionState = 0;
     g_McActionResult = 0;
     D_80082FAC = 0;
     g_McActionBusy = 0;
+    }
     goto L_epilogue;
 
 L_state2:

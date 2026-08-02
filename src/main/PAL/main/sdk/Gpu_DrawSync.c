@@ -39,12 +39,11 @@ waitReady:
         }
 
         }
-        if (*g_GpuDmaChcr & 0x01000000) {
-            goto waitReady;
-        }
+        if (!(*g_GpuDmaChcr & 0x01000000)) {
 
         if (*g_GpuGp1 & 0x04000000) {
             return 0;
+        }
         }
         goto waitReady;
     }
