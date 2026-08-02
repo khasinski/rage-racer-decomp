@@ -59,7 +59,7 @@ void GameDrawCourseObjects(void) {
             r2 = 1 << visShift;
             r2 &= r3;
             if (r2 == 0) {
-                goto next;
+                continue;
             }
         }
 
@@ -115,10 +115,7 @@ void GameDrawCourseObjects(void) {
         }
 
         }
-    next:
-        i++;
-        obj++;
-    } while (i < g_CourseObjectCount);
+    } while (i++, obj++, i < g_CourseObjectCount);
 }
 
 extern u16 *g_TerrainCellGrid asm("D_801E5020");
