@@ -334,7 +334,7 @@ hexadecimal:
                 asm("" : : "r"(nflags));
                 *(s32 *)src = length;
             }
-            goto next_character;
+            continue;
 
         default:
             if (c != '%') {
@@ -342,7 +342,7 @@ hexadecimal:
             }
 copy_character:
             dest[length++] = c;
-            goto next_character;
+            continue;
         }
 
         if (count < work.spec.width &&
@@ -363,10 +363,7 @@ copy_character:
             }
         }
 
-next_character:
-        format++;
-        c = *format;
-    } while (c != 0);
+    } while (format++, (c = *format) != 0);
 
 finished:
     dest[length] = 0;
