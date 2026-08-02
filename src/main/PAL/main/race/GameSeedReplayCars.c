@@ -178,8 +178,7 @@ s32 GameGetTrackZoneBlend(s32 position) {
         /* This barrier is load-bearing: removing it changes .text. */
         asm("" : : : "memory");
         code = (s16)rawCode;
-        if (code == 0) {
-        } else {
+        if (!(code == 0)) {
         if (code > 0) {
         } else {
         if (code == -3) {
@@ -191,9 +190,8 @@ s32 GameGetTrackZoneBlend(s32 position) {
         if (code == two) {
             goto code_two;
         }
-        goto normalize_code;
 
-        }
+        } else {
         g_TrackZoneDark = 3;
         goto store_value;
 
@@ -206,6 +204,7 @@ code_minus_three:
         g_TrackZoneCode = 1;
         goto store_value;
 
+        }
 normalize_code:
         if (g_TrackZoneCode < 0) {
             g_TrackZoneCode = -g_TrackZoneCode;
