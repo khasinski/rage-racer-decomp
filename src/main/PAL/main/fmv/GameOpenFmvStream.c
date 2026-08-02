@@ -90,9 +90,10 @@ void GameUploadFmvSlice(void) {
         asm("" : : : "memory");
         next = index == 0;
         g_FmvStripRectIndex = next;
-        /* These barriers are load-bearing: removing any one changes .text. */
-        asm("" : : : "memory");
-        g_FmvUploadRectX = g_FmvStripRects[next].x;
+        /* RAW() holds the X store ahead of the Y load -- see common.h. The
+         * remaining barrier is load-bearing: the pair cannot both go, and
+         * widening RAW() over the branch condition does not help either. */
+        g_FmvUploadRectX = RAW(g_FmvStripRects[next].x);
         asm("" : : : "memory");
         g_FmvUploadRectY = g_FmvStripRects[next].y;
     }
