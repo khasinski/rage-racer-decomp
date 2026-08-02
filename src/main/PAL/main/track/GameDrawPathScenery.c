@@ -122,11 +122,12 @@ void func_8004087C(s16 arg) {
     } while ((s32)p < (s32)end);
 
     if (!(data == 0)) {
+    switch (0) { default:
     s0 = g_PlayerField3C;
     if (!(s0 >= 0)) {
     s0 += 0x100;
     if (s0 <= 0) {
-        goto chk;
+        break;
     }
     s0 = 0;
     } else {
@@ -136,7 +137,7 @@ void func_8004087C(s16 arg) {
     s0 = 0;
     }
     }
-chk:
+    }
     if (s0 != 0) {
         s0 = (s0 * g_PlayerSpeed) / 12775;
         t = *(s32 *)0x1F80001C - 0xC00;
