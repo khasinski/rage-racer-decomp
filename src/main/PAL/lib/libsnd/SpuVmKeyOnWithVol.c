@@ -46,7 +46,7 @@ void SpuVmClearFinishedVoices(void) {
     __asm__ volatile("" : "=r"(i) : "0"(i));
     next = i << 16;
 
-loop:
+for (;;) {
     next >>= 16;
     offset = next * 0x34;
     if (g_SndVoiceStateStatus[offset] == flag) {
@@ -66,8 +66,10 @@ loop:
     next = next < bound;
     if (next) {
         next = i << 16;
-        goto loop;
+        continue;
     }
+break;
+}
 }
 
 void SpuVmKeyOnWithDefaultVol(long arg0, long arg1) {
