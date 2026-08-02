@@ -17,6 +17,7 @@ s32 arg0;
     s32 one;
 
     ret = 0;
+    switch (0) { default:
     if (arg0 >= g_TrackTextureSectionLo) {
         ret = 0x100;
         if (arg0 >= g_TrackTextureSectionHi) {
@@ -24,11 +25,11 @@ s32 arg0;
         } else {
             one = 1;
             g_TrackTexturePageWanted = one;
-            goto done;
+            break;
         }
     }
     g_TrackTexturePageWanted = 0;
-done:
+    }
     return ret;
 }
 
