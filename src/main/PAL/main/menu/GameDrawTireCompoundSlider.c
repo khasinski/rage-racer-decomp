@@ -248,7 +248,7 @@ void GameDrawCarSpecGraph(s32 step, u32 tireGrade) {
     CarSpecGraphColor *color;
     s32 revealBase;
     s32 floorProgress;
-    register s32 lineX asm("$16");
+    s16 lineX;
     register s32 lineNearX asm("$5");
     s32 lineStep;
     s16 lineFarX;

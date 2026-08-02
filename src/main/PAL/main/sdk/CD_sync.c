@@ -108,7 +108,7 @@ long CD_sync(long mode, u_char *result) {
             for (;;) {
                 long readyBit;
                 /* This pin is load-bearing: removing it changes .text. */
-                register long syncBit asm("$2");
+                s16 syncBit;
 
                 interrupt = func_8006AB5C();
                 if (interrupt == 0) {

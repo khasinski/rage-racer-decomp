@@ -295,7 +295,7 @@ void DrawProportionalTextShadedWide(
                 register void *prim;
                 register u8 *ot;
                 register u16 clut asm("$8");
-                register s32 yOffset asm("$2");
+                s16 yOffset;
                 register s32 yValue asm("$8");
 
                 asm(

@@ -25,7 +25,7 @@ void GameUpdateShuttleScenery(s32 arg0) {
     s16 *limitPtr;
     s16 *tailLimitPtr;
     /* These pins are load-bearing: removing any one changes .text. */
-    register s32 denom asm("$5");
+    s16 denom;
     register s32 temp asm("$3");
     register s32 value asm("$2");
 

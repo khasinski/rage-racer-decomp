@@ -480,9 +480,9 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) asm("func_80047330");
 void GameDrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {
     /* These pins are load-bearing: removing any one changes .text. */
-    register s32 x0Reg asm("$17");
-    register s32 y0Reg asm("$18");
-    register s32 x1Reg asm("$19");
+    s16 x0Reg;
+    s16 y0Reg;
+    s16 x1Reg;
     s32 y1Reg;
     s32 r0Reg;
     s32 g0Reg;
