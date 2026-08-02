@@ -342,6 +342,7 @@ void SpuVmAutoPanTick(long arg0) {
     step = *(short *)&D_8009E0E2[offset];
     sum = *(u_short *)&D_8009E0E8[offset] + *(u_short *)&D_8009E0E2[offset];
     *(u_short *)&D_8009E0E8[offset] = sum;
+    switch (0) { default:
     if (!(step <= 0)) {
     current = (u_long)sum << 16;
     limit = *(short *)&D_8009E0EA[offset];
@@ -349,12 +350,12 @@ void SpuVmAutoPanTick(long arg0) {
     positiveCompare = current < limit;
     clampValue = limit;
     if (positiveCompare) {
-        goto envelopeDone;
+        break;
     }
 
     } else {
     if (step >= 0) {
-        goto envelopeDone;
+        break;
     }
     current = (u_long)sum << 16;
     limit = *(short *)&D_8009E0EA[offset];
@@ -362,14 +363,14 @@ void SpuVmAutoPanTick(long arg0) {
     clampValue = limit;
     negativeCompare = limit < current;
     if (negativeCompare) {
-        goto envelopeDone;
+        break;
     }
 
     }
     *(u_short *)&D_8009E0E8[offset] = clampValue;
     *(u_short *)&g_SndVoiceStateAutoPan[offset] = 0;
 
-envelopeDone:
+    }
     envelope = D_8009E0E8[(short)originalArg * 52];
     {
     u_char *base;
