@@ -9,7 +9,25 @@
 extern volatile s32 g_CameraPathKey asm("D_8007F61C");
 extern s32 g_CameraPathNextKey asm("D_8007F620");
 extern s32 g_CameraPathTick asm("D_8007F624");
-extern s32 g_CameraPath asm("D_8007F628");
+/* One scripted-camera keyframe: eye position, look-at target, how long the
+ * player dwells on it and the Bezier control value used to ease out of it. */
+typedef struct {
+    s32 eyeX;
+    s32 eyeY;
+    s32 eyeZ;
+    s32 atX;
+    s32 atY;
+    s32 atZ;
+    s32 duration;
+    s32 control;
+} CameraKey;
+
+extern CameraKey g_CameraPath[] asm("D_8007F628");
+
+/* The retail code re-derives the keyframe address at every field access rather
+ * than holding a pointer, so this stays a macro: a real pointer variable lets
+ * the compiler compute the base once and drops 20 instructions. */
+#define KEY(byteOffset) (*(CameraKey *)((s32)g_CameraPath + (byteOffset)))
 
 s32 GameBezierEase(s32 t, s32 control) asm("func_80046598");
 s32 GameSetLookAtMatrix(s32 *obj) asm("func_80046248");
@@ -32,8 +50,8 @@ void GameUpdateScriptedCamera(void) {
     tick = g_CameraPathTick;
     current = g_CameraPathKey;
     scaledTick = tick * 10000;
-    blend = GameBezierEase(scaledTick / *(s32 *)((s32)&g_CameraPath + (current << 5) + 0x18),
-                          *(s32 *)((s32)&g_CameraPath + (current << 5) + 0x1C));
+    blend = GameBezierEase(scaledTick / KEY(current << 5).duration,
+                           KEY(current << 5).control);
 
     currentOffset = g_CameraPathKey;
     nextOffset = g_CameraPathNextKey;
@@ -41,23 +59,23 @@ void GameUpdateScriptedCamera(void) {
     nextOffset <<= 5;
     scale = 0x68DB8BAD;
 
-    tick = *(s32 *)((s32)&g_CameraPath + nextOffset);
-    currentValue = *(s32 *)((s32)&g_CameraPath + currentOffset);
+    tick = KEY(nextOffset).eyeX;
+    currentValue = KEY(currentOffset).eyeX;
     values[0] = (((tick - currentValue) * blend) / 10000) + currentValue;
-    tick = *(s32 *)((s32)&g_CameraPath + nextOffset + 4);
-    currentValue = *(s32 *)((s32)&g_CameraPath + currentOffset + 4);
+    tick = KEY(nextOffset).eyeY;
+    currentValue = KEY(currentOffset).eyeY;
     values[1] = (((tick - currentValue) * blend) / 10000) + currentValue;
-    tick = *(s32 *)((s32)&g_CameraPath + nextOffset + 8);
-    currentValue = *(s32 *)((s32)&g_CameraPath + currentOffset + 8);
+    tick = KEY(nextOffset).eyeZ;
+    currentValue = KEY(currentOffset).eyeZ;
     values[2] = (((tick - currentValue) * blend) / 10000) + currentValue;
-    tick = *(s32 *)((s32)&g_CameraPath + nextOffset + 12);
-    currentValue = *(s32 *)((s32)&g_CameraPath + currentOffset + 12);
+    tick = KEY(nextOffset).atX;
+    currentValue = KEY(currentOffset).atX;
     values[3] = (((tick - currentValue) * blend) / 10000) + currentValue;
-    tick = *(s32 *)((s32)&g_CameraPath + nextOffset + 16);
-    currentValue = *(s32 *)((s32)&g_CameraPath + currentOffset + 16);
+    tick = KEY(nextOffset).atY;
+    currentValue = KEY(currentOffset).atY;
     values[4] = (((tick - currentValue) * blend) / 10000) + currentValue;
-    tick = *(s32 *)((s32)&g_CameraPath + nextOffset + 20);
-    nextOffset = *(s32 *)((s32)&g_CameraPath + currentOffset + 20);
+    tick = KEY(nextOffset).atZ;
+    nextOffset = KEY(currentOffset).atZ;
     values[5] = (((tick - nextOffset) * blend) / 10000) + nextOffset;
     GameSetLookAtMatrix(values);
 
@@ -69,14 +87,14 @@ void GameUpdateScriptedCamera(void) {
 
         tailCurrent = g_CameraPathKey;
         tailTick = g_CameraPathTick;
-        tailCurrent = *(s32 *)((s32)&g_CameraPath + (tailCurrent << 5) + 0x18);
+        tailCurrent = KEY(tailCurrent << 5).duration;
         tailTick++;
         tailTick = (tailTick < tailCurrent) ? tailTick : 0;
         g_CameraPathTick = tailTick;
         if (tailTick == 0) {
             tailNext = g_CameraPathNextKey;
             tailCurrent = tailNext + 1;
-            tailTick = *(s32 *)((s32)&g_CameraPath + (tailCurrent << 5) + 0x18);
+            tailTick = KEY(tailCurrent << 5).duration;
             g_CameraPathKey = tailNext;
             tailTick = ~tailTick;
             tailTick = (tailTick != 0);
