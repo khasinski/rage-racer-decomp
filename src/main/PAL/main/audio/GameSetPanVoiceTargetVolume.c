@@ -124,8 +124,6 @@ extern s32 g_IndexedEffectIndex asm("D_801E6CF0");
 extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
 extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
-extern s32 g_IndexedEffectTones[] asm("D_800126AC");
-extern s32 g_IndexedEffectVolumes[] asm("D_800126B4");
 
 void GameStartIndexedEffectVoice(s32 baseTone) {
     SsUtKeyOnV(0x14, g_VabIds[0], (s16)baseTone, 0, 0x3C, 0, 0, 0);
@@ -188,16 +186,16 @@ void GameUpdateIndexedEffectVoice(void) {
         } else if (index != raw) {
         start_voice:
             raw = (index * 3) << 2;
-            GameStartIndexedEffectVoice(*(s32 *)((s32)g_IndexedEffectTones + raw));
+            GameStartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
         }
     }
 
     raw = g_IndexedEffectIndex;
     if (raw >= 0) {
         index = (raw * 3) << 2;
-        product = g_IndexedEffectVolume * *(s32 *)((s32)g_IndexedEffectVolumes + index);
+        product = g_IndexedEffectVolume * INDEXED_EFFECT(index).volume;
         raw = g_IndexedEffectPitch;
-        base = *(s32 *)((s32)g_IndexedEffectTones + index);
+        base = INDEXED_EFFECT(index).tone;
         center = raw >> 7;
         fine = raw & 0x7F;
         if (product < 0) {

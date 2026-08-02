@@ -63,6 +63,25 @@ extern s32 g_PrizeCountStep; /* +0x20 */
 extern s16 D_801E6DA4[]; /* +0x24 s16 table */
 
 /*
+ * Indexed effect table in rodata at D_800126AC: three entries, twelve bytes
+ * each, selected by GameSetIndexedEffectVoice (index clamped to 0..2). The old
+ * g_IndexedEffectVolumes symbol (D_800126B4) is D_800126AC + 8, the third word
+ * of the same element, which is why both were indexed by the same i * 12.
+ * Retail data: { 14, 0, 64 }, { 14, 0, 64 }, { 16, 0, 90 }.
+ */
+typedef struct IndexedEffect {
+    s32 tone;
+    s32 unused;
+    s32 volume;
+} IndexedEffect; /* sizeof 0xC */
+
+extern IndexedEffect g_IndexedEffects[] asm("D_800126AC");
+
+/* Byte-offset view: the retail code keeps i * 12 in a register rather than
+ * indexing, so the scaled offset is passed in directly. */
+#define INDEXED_EFFECT(byteOffset) (*(IndexedEffect *)((s32)g_IndexedEffects + (byteOffset)))
+
+/*
  * Pre-race BGM picker (scene 0xA, left/right on the pad). Per-file types.
  *   g_BgmSelection    D_801E42CC  0 = shuffle, else track + 1; saved
  *   g_BgmShuffleOrder D_801E7734  the shuffle bag func_8001B488 refills

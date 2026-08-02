@@ -6,8 +6,6 @@
 extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
 extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
-extern s32 g_IndexedEffectTones[] asm("D_800126AC");
-extern s32 g_IndexedEffectVolumes[] asm("D_800126B4");
 
 long SsUtKeyOffV(long voice) asm("func_80078018");
 void func_8005C09C(s32 arg0);
@@ -107,7 +105,7 @@ void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
             return;
         }
         raw = (index * 3) << 2;
-        func_8005C09C(*(s32 *)((s32)g_IndexedEffectTones + raw));
+        func_8005C09C(INDEXED_EFFECT(raw).tone);
     } else {
         func_8005C0E4();
     }
@@ -115,9 +113,9 @@ void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
     raw = g_IndexedEffectIndexPrev;
     if (raw >= 0) {
         index = (raw * 3) << 2;
-        product = g_IndexedEffectVolume * *(s32 *)((s32)g_IndexedEffectVolumes + index);
+        product = g_IndexedEffectVolume * INDEXED_EFFECT(index).volume;
         raw = g_IndexedEffectPitch;
-        base = *(s32 *)((s32)g_IndexedEffectTones + index);
+        base = INDEXED_EFFECT(index).tone;
         center = raw >> 7;
         fine = raw & 0x7F;
         if (product < 0) {
