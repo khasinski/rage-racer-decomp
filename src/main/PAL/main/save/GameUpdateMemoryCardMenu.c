@@ -130,10 +130,10 @@ L57:
         g_SceneTimer = nx;
     }
     }
-    if (g_McActionBusy == 0) goto L_sw1;
+    if (!(g_McActionBusy == 0)) {
     if (D_80082FC0 == 0) goto L_sw2;
 
-L_sw1:
+    }
     {
         s32 st = func_8005ECE0(0, 0);
         s32 c;
@@ -230,7 +230,7 @@ L_copyselect:
         g_McMenuPhase = 0;
         func_800611C8(p, 0, g_McMenuRowCount - 1);
         pad = g_PadEdge2;
-        if ((pad & 0x860) == 0) goto L_cx3;
+        if (!((pad & 0x860) == 0)) {
         if (*p < g_McMenuRowCount - 1) {
             GamePlaySoundCue(2);
             g_McMenuPage = 1;
@@ -243,7 +243,7 @@ L_copyselect:
         if (fadeBusy) goto L_sw5;
         GamePlaySoundCue(2);
         goto L_cxfade;
-    L_cx3:
+        }
         if ((pad & 0x90) == 0) goto L_sw5;
         if (fadeBusy) goto L_sw5;
         GamePlaySoundCue(3);
@@ -260,40 +260,40 @@ L_sw4:
         s32 a0;
         s32 nv;
         func_800611C8(s0, 0, 2);
-        if (g_McSaveMode == 0) goto L_b391;
+        if (!(g_McSaveMode == 0)) {
         a0 = g_McSlotUsedMask;
-        if ((a0 & 7) == 0) goto L_b381;
+        if (!((a0 & 7) == 0)) {
         g_McMenuPhase = 2;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
-        if (((a0 >> *s0) & 1) == 0) goto L_b377;
+        if (!(((a0 >> *s0) & 1) == 0)) {
         GamePlaySoundCue(2);
         D_80082FAC = 0;
         nv = 0x1E;
         goto L_b475;
-    L_b377:
+        }
         GamePlaySoundCue(5);
         nv = 0x28;
         goto L_b475;
-    L_b381:
+        }
         g_McMenuPhase = 5;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
         goto L_b433;
-    L_b391:
+        }
         if (g_McFreeBlocks != 0) goto L_b448;
         a0 = g_McSlotUsedMask;
-        if ((a0 & 7) == 0) goto L_b425;
+        if (!((a0 & 7) == 0)) {
         g_McMenuPhase = 1;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
-        if (((a0 >> *s0) & 1) == 0) goto L_b421;
+        if (!(((a0 >> *s0) & 1) == 0)) {
         GamePlaySoundCue(2);
         D_80082FAC = 0;
         nv = 0xA;
         goto L_b475;
-    L_b421:
+        }
         GamePlaySoundCue(2);
         nv = 0x19;
         goto L_b475;
-    L_b425:
+        }
         g_McMenuPhase = 4;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b439;
     L_b433:
@@ -307,12 +307,12 @@ L_sw4:
     L_b448:
         g_McMenuPhase = 1;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
-        if (((g_McSlotUsedMask >> *s0) & 1) == 0) goto L_b469;
+        if (!(((g_McSlotUsedMask >> *s0) & 1) == 0)) {
         GamePlaySoundCue(2);
         D_80082FAC_v = 0;
         nv = 0xA;
         goto L_b475;
-    L_b469:
+        }
         GamePlaySoundCue(2);
         g_McActionTimer = 0x1E;
         nv = 0xB;
@@ -330,13 +330,13 @@ L_sw4:
         s32 lo = D_80082FAC + 9;
         g_McMenuPhase = hi + lo;
         func_8006124C(p);
-        if (D_80082FAC == 0) goto L_b518;
-        if ((func_800612CC() & 0xFFFF) == 0) goto L_b513;
+        if (!(D_80082FAC == 0)) {
+        if (!((func_800612CC() & 0xFFFF) == 0)) {
         g_McActionState = 0xB;
         break;
-    L_b513:
+        }
         if (D_80082FAC != 0) goto L_b523;
-    L_b518:
+        }
         if ((func_800612CC() & 0xFFFF) != 0) goto L_b864;
     L_b523:
         if ((func_8006131C() & 0xFFFF) == 0) goto L_sw5;
@@ -365,11 +365,11 @@ L_sw4:
         g_McMenuSubState = 5;
         x = func_80060724(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));
         g_McActionResult = x;
-        if (x == 0) goto L_b574;
+        if (!(x == 0)) {
         g_McActionOk = 1;
         x = 6;
         goto L_b577;
-    L_b574:
+        }
         x = 0x10;
         g_McActionOk = 0;
     L_b577:
@@ -390,11 +390,11 @@ L_sw4:
         {
             s32 r = func_80060C3C(0, &g_McSaveHeaders);
             g_McSlotUsedMask = r;
-            if (r == 0) goto L_b605;
+            if (!(r == 0)) {
             if ((r & 0xFFFF) != 0) goto L_b608;
             nv = 0xE;
             goto L_b606;
-        L_b605:
+            }
             nv = 0xC;
         L_b606:
             g_McMenuSubState = nv;
@@ -505,13 +505,13 @@ L_sw4:
         register s32 v1x asm("$3");
         s32 dp;
         g_McActionResult = func_800609E4(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));
-        if (g_McActionResult == 0) goto L_b757;
+        if (!(g_McActionResult == 0)) {
         v1x = *s0;
         g_McActionOk = 1;
         g_McMenuSubState = 8;
         g_McLastSlot = v1x;
         goto L_b762;
-    L_b757:
+        }
         g_McActionOk = 1;
         g_McMenuSubState = 0xF;
     L_b762:
@@ -576,9 +576,9 @@ L_sw4:
     case 0x28:
         g_McMenuPhase = 0x14;
     L_b850:
-        if ((func_800612CC() & 0xFFFF) != 0) goto L_b862;
+        if (!((func_800612CC() & 0xFFFF) != 0)) {
         if ((func_8006131C() & 0xFFFF) == 0) goto L_sw5;
-    L_b862:
+        }
         g_McMenuPage = 0;
     L_b864:
         g_McActionState = 0;
@@ -689,12 +689,12 @@ L_state2:
             s32 x = func_80060C3C(1, &g_McSaveHeaders);
             s32 w;
             g_McSlotUsedMask = x;
-            if (x == 0) goto L1060;
+            if (!(x == 0)) {
             x = x & 7;
             if (x != 0) { x = 2; goto L1061; }
             x = 0xE;
             goto L1061;
-        L1060:
+            }
             x = 0xC;
         L1061:
             g_McMenuSubStateV = x;
@@ -869,35 +869,35 @@ L_sw8tail:
     g_McActionState = 0;
     goto L_epilogue;
 L_stateM2:
-    if (g_McMenuPage == 0) goto L_m2sel;
+    if (!(g_McMenuPage == 0)) {
     if (g_McMenuPage == 1) goto L_sw9;
     goto L_sw10;
 
-L_m2sel:
+    }
     {
         s32 *p = &g_McMenuRowCursor;
         g_McMenuSubState = 0xB;
         g_McMenuPhase = 0;
         func_800611C8(p, 0, g_McMenuRowCount - 1);
         pad = g_PadEdge2;
-        if ((pad & 0x860) == 0) goto L1415;
-        if (*p != 0) goto L1395;
+        if (!((pad & 0x860) == 0)) {
+        if (!(*p != 0)) {
         GamePlaySoundCue(2);
         g_McMenuPage = 1;
         D_80082FAC = 0;
         g_McSaveMode = *p;
         goto L_sw10;
-    L1395:
-        if (*p != g_McMenuRowCount - 1) goto L1405;
+        }
+        if (!(*p != g_McMenuRowCount - 1)) {
         if (fadeBusy) goto L_sw10;
         GamePlaySoundCue(2);
         goto L_b1420;
-    L1405:
+        }
         GamePlaySoundCue(5);
         g_McMenuPage = 1;
         g_McSaveMode = *p;
         goto L_sw10;
-    L1415:
+        }
         if ((pad & 0x90) == 0) goto L_sw10;
         if (fadeBusy) goto L_sw10;
         GamePlaySoundCue(3);
