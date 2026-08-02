@@ -859,18 +859,21 @@ void GameSeedFinishCamera(void *arg0) {
     ((u32 *)dst)[1] = word1;
     ((u32 *)dst)[2] = word2;
 
-    index = *(s32 *)((s32)base + 0x30);
+    /* RAW() on the index reads: as plain member accesses they stop aliasing the
+     * unqualified g_CameraCar* stores between them and a reload is folded away.
+     * See common.h. */
+    index = RAW(((GameCarRuntime *)base)->trackPointIndex);
     track = g_TrackPoints;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((s32)point + (s32)track);
     g_CameraCar[0] = point->x;
 
-    index = *(s32 *)((s32)base + 0x30);
+    index = RAW(((GameCarRuntime *)base)->trackPointIndex);
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((s32)point + (s32)track);
     g_CameraCarZ = point->z;
 
-    index = *(s32 *)((s32)base + 0x30);
+    index = RAW(((GameCarRuntime *)base)->trackPointIndex);
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((s32)point + (s32)track);
     value = g_CameraCarSpeed;
@@ -881,7 +884,7 @@ void GameSeedFinishCamera(void *arg0) {
     g_CameraCarY = word0;
 
     value = *(s16 *)((s32)base + 0xB8);
-    lastIndex = *(s32 *)((s32)base + 0x30);
+    lastIndex = RAW(((GameCarRuntime *)base)->trackPointIndex);
     value <<= 11;
     point = (GameTrackPoint *)((lastIndex * 3) << 3);
     point = (GameTrackPoint *)((s32)point + (s32)track);
