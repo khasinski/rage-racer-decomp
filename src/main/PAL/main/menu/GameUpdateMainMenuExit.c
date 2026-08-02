@@ -159,8 +159,7 @@ void GameUpdateFrontend(void) {
     if (state < 0x1cc) {
         g_SceneTimer = state + 1;
     } else {
-        if (g_FrontendState == 3) goto Lcheck;
-        if (D_8007C744 & 1) goto Lcheck;
+        if (!(g_FrontendState == 3) && !(D_8007C744 & 1)) {
         if (state == 0x1cc) {
             g_GrandPrixSeries = 0;
             g_GrandPrixClass = (GameRandom15() & 0xfff) % 5;
@@ -182,8 +181,8 @@ void GameUpdateFrontend(void) {
                 g_SceneTimer = 0x1cf;
             }
         }
+        }
     }
-Lcheck:
     state = g_SceneTimer;
     if (state == 0xf) {
         SetDispMask(1);
