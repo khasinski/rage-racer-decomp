@@ -264,7 +264,6 @@ segments:
       - [0x4F378, c, PAL/main/save/GameCardSeekParam]
       - [0x4F3B0, c, PAL/main/save/GameCardReadStatusPair]
       - [0x4F4E0, c, PAL/main/save/GamePollMemoryCardStatus]
-      - [0x50D24, c, PAL/main/save/GameWriteMemoryCardSaveFile]
       - [0x513E8, c, PAL/main/save/GameCalculateMemoryCardFreeBlocks]
       - [0x515F0, c, PAL/main/save/GameDrawMemoryCardSaveRows]
       - [0x51C58, c, PAL/main/save/GameEnterMemoryCardMenuFromLoad]
