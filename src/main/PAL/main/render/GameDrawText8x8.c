@@ -344,8 +344,8 @@ void DrawProportionalTextShadedWide(
             if (ch >= 0x61) {
                 register s32 offset = ch - 0x61;
                 register s32 index asm("$17") = offset * 4;
-                register s32 u asm("$21");
                 register s32 v;
+                s32 u;
                 register s32 width;
                 register void *prim;
                 register u8 *ot;
