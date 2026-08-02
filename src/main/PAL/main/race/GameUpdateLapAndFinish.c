@@ -412,14 +412,12 @@ update_progress:
                 g_RefSectorTime1 = g_SectorTimes[1];
             }
 
-            if (g_LapCount < *(s16 *)(route + 0xAC)) {
-                goto record_done;
+            if (!(g_LapCount < *(s16 *)(route + 0xAC))) {
+                GamePlaySoundCue(0x26);
+                g_RaceCueDelay = 0x96;
             }
-            GamePlaySoundCue(0x26);
-            g_RaceCueDelay = 0x96;
         }
 
-record_done:
         count = g_LapCount;
         step = *(s16 *)(route + 0xAC);
         if (step == count + 1) {
@@ -459,14 +457,13 @@ record_done:
                 g_RacePhase = 4;
                 GameStartCdVolumeFade(8);
                 GamePlaySoundCue(0x2B);
-                goto reset_transition;
-            }
-
+            } else {
             g_RacePhase = 5;
             GameSeedFinishCamera(&g_PlayerCar);
             GameStartCdVolumeFade(0x3C);
             if (*(s16 *)((u8 *)g_CourseProgress + 6) != 0) {
                 GamePlaySoundCue(0x3D);
+            }
             }
 reset_transition:
             func_8005E4A4(0);
@@ -712,15 +709,10 @@ void GameUpdateRaceScene(void) {
             }
             GameSeedFinishCamera(g_PlayerCar);
             GameStartCdVolumeFade(8);
-        } else if (g_RaceOptionCursor == 1) {
-            if (g_GrandPrixMode == 0) {
-                GameExitRaceScene(0xB);
-                g_RacePhase = 8;
-            } else {
-                goto set_countdown;
-            }
+        } else if (g_RaceOptionCursor == 1 && g_GrandPrixMode == 0) {
+            GameExitRaceScene(0xB);
+            g_RacePhase = 8;
         } else {
-set_countdown:
             g_PauseDebounce = 0x1E;
             func_8005E4A4(1);
             if (g_RacePhase >= 2) {
