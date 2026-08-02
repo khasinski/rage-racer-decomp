@@ -50,8 +50,9 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     *(volatile long *)g_DrawSyncCbPending = 1;
     g_AddQueueIntrMask = ret;
 
+    switch (0) { default:
     if (g_GraphQueue != 0) {
-        if (g_GpuQueueWriteIdx != g_GpuQueueReadIdx || (*g_GpuDmaChcr & 0x01000000) != 0 || g_DrawSyncCallback != 0) goto enqueue;
+        if (g_GpuQueueWriteIdx != g_GpuQueueReadIdx || (*g_GpuDmaChcr & 0x01000000) != 0 || g_DrawSyncCallback != 0) break;
     }
 
     do {
@@ -64,7 +65,7 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     SetIntrMask(g_AddQueueIntrMask);
     return 0;
 
-enqueue:
+    }
     DMACallback(2, (void *)func_80067984);
 
     if (size != 0) {
