@@ -62,6 +62,11 @@ extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C"); /* step added to g_SeqVolume e
 extern s32 g_PrizeCountStep; /* +0x20 */
 extern s16 D_801E6DA4[]; /* +0x24 s16 table */
 
+/* Per-slot engine tone, one entry per bank; a slot is re-cued when its two
+ * banks disagree. The old g_SoundSlotToneBank1 symbol (D_80082F2A) is [i][1]
+ * of this table. Six slots. */
+extern s16 g_SoundSlotTone[][2] asm("D_80082F28");
+
 /*
  * Indexed effect table in rodata at D_800126AC: three entries, twelve bytes
  * each, selected by GameSetIndexedEffectVoice (index clamped to 0..2). The old

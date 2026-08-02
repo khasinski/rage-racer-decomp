@@ -597,7 +597,6 @@ void GamePlaySoundCue(s32 arg0) {
     }
 }
 
-extern s16 g_SoundSlotTone[][2] asm("D_80082F28");
 
 void func_80078528(s32 voice, s16 left, s16 right);
 void func_80078130(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend);

@@ -247,8 +247,6 @@ asm(".globl func_8005E078\n"
     ".globl func_8005E314\n"
     "func_8005E314 = GameForcePitchEffectVoicesEnabled + 0x144");
 
-extern s16 g_SoundSlotTone[] asm("D_80082F28");
-extern s16 g_SoundSlotToneBank1[] asm("D_80082F2A");
 extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 
 void GameSetSoundSlotVoicesEnabledWithRegisterArg(void) asm("func_8005B40C");
@@ -278,7 +276,7 @@ void GameForceSoundSlotVoicePlayback(s32 arg0) {
         active = base;
         saved = 0;
         do {
-            if (*base++ != 0 && *(s16 *)((s32)g_SoundSlotTone + saved) != *(s16 *)((s32)g_SoundSlotToneBank1 + saved)) {
+            if (*base++ != 0 && g_SoundSlotTone[i][0] != g_SoundSlotTone[i][1]) {
                 GamePlaySoundSlotVoice(i, active[-3], 3);
             }
             i++;

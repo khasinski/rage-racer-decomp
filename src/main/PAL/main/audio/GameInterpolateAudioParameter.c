@@ -4,8 +4,7 @@
 #include "psyq/snd.h"
 #include "game/car.h"
 
-extern s16 g_SoundSlotTone[] asm("D_80082F28");
-extern s16 g_SoundSlotToneBank1[] asm("D_80082F2A");
+
 extern s32 g_EngineSoundPosition asm("D_801E6CB8");
 extern s32 g_EngineSoundBank asm("D_801E6CBC");
 extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
@@ -95,7 +94,6 @@ void GameUpdateLoadedAudioVoices(s32 value, s32 bank) asm("func_8005D9F8");
 void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
     s32 odd_parameter;
     s32 index;
-    s32 tone_offset;
     s32 second;
     s32 scaled;
     s32 *scale_base;
@@ -108,15 +106,12 @@ void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
     if (bank != g_EngineSoundBank) {
         index = 0;
         slot = scale_base + 1;
-        tone_offset = 0;
         do {
             if (*slot++ != 0 &&
-                *(s16 *)((s32)g_SoundSlotTone + tone_offset) !=
-                    *(s16 *)((s32)g_SoundSlotToneBank1 + tone_offset)) {
+                g_SoundSlotTone[index][0] != g_SoundSlotTone[index][1]) {
                 func_8005B2F0(index, bank, 3);
             }
             index++;
-            tone_offset += 4;
         } while (index < 6);
         g_EngineSoundBank = bank;
     }
