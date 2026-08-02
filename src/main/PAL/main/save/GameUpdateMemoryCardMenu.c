@@ -316,7 +316,7 @@ L_sw4:
     L_b475:
         g_McActionState = nv;
     L_b477:
-        if ((func_8006131C() & 0xFFFF) == 0) goto L_sw5;
+        if ((func_8006131C() & 0xFFFF) == 0) break;
         g_McMenuPage = 0;
         break;
     }
@@ -336,7 +336,7 @@ L_sw4:
         }
         if ((func_800612CC() & 0xFFFF) != 0) goto L_b864;
     L_b523:
-        if ((func_8006131C() & 0xFFFF) == 0) goto L_sw5;
+        if ((func_8006131C() & 0xFFFF) == 0) break;
         goto L_b864;
     }
 
@@ -350,7 +350,7 @@ L_sw4:
         s32 t = g_McActionTimer;
         g_McActionBusy = 1;
         g_McActionTimer = t - 1;
-        if (g_McActionTimer != 0) goto L_sw5;
+        if (g_McActionTimer != 0) break;
         g_McActionState = 0xD;
         break;
     }
@@ -411,7 +411,7 @@ L_sw4:
     case 0x12: {
         s32 t = g_McActionTimer;
         g_McActionTimer = t - 1;
-        if (g_McActionTimer != 0) goto L_sw5;
+        if (g_McActionTimer != 0) break;
         g_McSettleTicks = 0;
         g_McActionState = 0x13;
         break;
@@ -419,10 +419,10 @@ L_sw4:
 
     case 0x13: {
         s32 t;
-        if (func_8005ECE0(0, 0) != 1) goto L_sw5;
+        if (func_8005ECE0(0, 0) != 1) break;
         t = g_McSettleTicks + 1;
         g_McSettleTicks = t;
-        if (t < 4) goto L_sw5;
+        if (t < 4) break;
         g_McActionState = 0x14;
         break;
     }
@@ -445,7 +445,7 @@ L_sw4:
         s32 t = g_McActionTimer;
         s32 cm1;
         g_McActionTimer = t - 1;
-        if (g_McActionTimer != 0) goto L_sw5;
+        if (g_McActionTimer != 0) break;
         cm1 = g_McMenuRowCount;
         g_McMenuPage = 0;
         g_McActionState = 0;
@@ -467,7 +467,7 @@ L_sw4:
     case 0x1F: {
         s32 t = g_McActionTimer;
         g_McActionTimer = t - 1;
-        if (g_McActionTimer != 0) goto L_sw5;
+        if (g_McActionTimer != 0) break;
         g_McActionState = 0x20;
         break;
     }
@@ -488,7 +488,7 @@ L_sw4:
     case 0x21: {
         s32 t = g_McActionTimer;
         g_McActionTimer = t - 1;
-        if (g_McActionTimer != 0) goto L_sw5;
+        if (g_McActionTimer != 0) break;
         g_McActionState = 0x22;
         break;
     }
@@ -524,7 +524,7 @@ L_sw4:
     case 0x24: {
         s32 t = g_McActionTimer;
         g_McActionTimer = t - 1;
-        if (g_McActionTimer != 0) goto L_sw5;
+        if (g_McActionTimer != 0) break;
         g_McSettleTicks = 0;
         g_McActionState = 0x25;
         break;
