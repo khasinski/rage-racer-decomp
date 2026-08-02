@@ -462,6 +462,7 @@ void LibcPutChar(s32 arg0) {
     s32 value = arg0;
 
     c = value;
+    switch (0) { default:
     value = c;
     if (!(value == 9)) {
     if (value != 10) {
@@ -469,7 +470,7 @@ void LibcPutChar(s32 arg0) {
 
     LibcPutChar(13);
     g_LibcOutColumn = 0;
-    goto output;
+    break;
 
     }
     } else {
@@ -483,7 +484,7 @@ void LibcPutChar(s32 arg0) {
         g_LibcOutColumn++;
     }
 
-output:
+    }
     BiosFileWrite(1, &c, 1);
 }
 
