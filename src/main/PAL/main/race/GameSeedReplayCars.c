@@ -165,6 +165,7 @@ s32 GameGetTrackZoneBlend(s32 position) {
     }
 
     if ((start < position) && (position < finish)) {
+        switch (0) { default:
         if (position < start + 0x100) {
             status = 1;
         } else if (finish - 0x100 < position) {
@@ -193,7 +194,7 @@ s32 GameGetTrackZoneBlend(s32 position) {
 
         } else {
         g_TrackZoneDark = 3;
-        goto store_value;
+        break;
 
 code_two:
         status = 4;
@@ -202,7 +203,7 @@ code_minus_three:
             status = 3;
         }
         g_TrackZoneCode = 1;
-        goto store_value;
+        break;
 
         }
 normalize_code:
@@ -210,7 +211,7 @@ normalize_code:
             g_TrackZoneCode = -g_TrackZoneCode;
             status = 3;
         }
-store_value:
+        }
         g_ReverbZoneDepth = zone->value;
     }
 
