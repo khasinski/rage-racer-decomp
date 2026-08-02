@@ -242,8 +242,7 @@ L_state1:
         if (fadeBusy) goto L_sw5;
         GamePlaySoundCue(2);
         } else {
-        if ((pad & 0x90) == 0) goto L_sw5;
-        if (fadeBusy) goto L_sw5;
+        if ((pad & 0x90) == 0 || fadeBusy) goto L_sw5;
         GamePlaySoundCue(3);
         }
         g_McActionBusy = 0;
@@ -901,8 +900,7 @@ L_stateM2:
         g_McSaveMode = *p;
         goto L_sw10;
         }
-        if ((pad & 0x90) == 0) goto L_sw10;
-        if (fadeBusy) goto L_sw10;
+        if ((pad & 0x90) == 0 || fadeBusy) goto L_sw10;
         GamePlaySoundCue(3);
     }
 

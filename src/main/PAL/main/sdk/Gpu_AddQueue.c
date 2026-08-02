@@ -51,9 +51,7 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     g_AddQueueIntrMask = ret;
 
     if (g_GraphQueue != 0) {
-        if (g_GpuQueueWriteIdx != g_GpuQueueReadIdx) goto enqueue;
-        if ((*g_GpuDmaChcr & 0x01000000) != 0) goto enqueue;
-        if (g_DrawSyncCallback != 0) goto enqueue;
+        if (g_GpuQueueWriteIdx != g_GpuQueueReadIdx || (*g_GpuDmaChcr & 0x01000000) != 0 || g_DrawSyncCallback != 0) goto enqueue;
     }
 
     do {
