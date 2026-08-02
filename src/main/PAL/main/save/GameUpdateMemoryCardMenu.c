@@ -298,12 +298,12 @@ L_sw4:
         g_McMenuPage = 0;
         goto L_b477;
     L_b439:
-        if ((func_8006131C() & 0xFFFF) == 0) goto L_b477;
+        if (!((func_8006131C() & 0xFFFF) == 0)) {
         g_McMenuPage = 0;
         goto L_b477;
     L_b448:
         g_McMenuPhase = 1;
-        if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
+        if (!((g_PadEdge2 & 0x860) == 0)) {
         if (!(((g_McSlotUsedMask >> *s0) & 1) == 0)) {
         GamePlaySoundCue(2);
         D_80082FAC_v = 0;
@@ -315,6 +315,8 @@ L_sw4:
         }
     L_b475:
         g_McActionState = nv;
+        }
+        }
     L_b477:
         if ((func_8006131C() & 0xFFFF) == 0) break;
         g_McMenuPage = 0;
