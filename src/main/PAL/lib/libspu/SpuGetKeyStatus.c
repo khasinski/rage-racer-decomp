@@ -51,9 +51,7 @@ found:
         return ret;
     }
 
-ret_minus_one:
     return -1;
 
-ret_value:
     return ret;
 }

@@ -364,7 +364,6 @@ void GameUpdateRivalRubberBand(void) {
                 case 2:
                     goto cue_34;
                 }
-cue_32:
                 if (g_RivalCueEnabled != 0) {
                     GamePlaySoundCue(0x32);
                 }

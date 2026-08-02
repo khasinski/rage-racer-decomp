@@ -117,7 +117,6 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
 fail_late:
     ret = -1;
 
-done:
     return ret;
 }
 
@@ -173,7 +172,6 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
 fail_late:
     ret = -1;
 
-done:
     return ret;
 }
 

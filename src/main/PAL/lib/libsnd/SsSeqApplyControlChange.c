@@ -61,6 +61,5 @@ maybe_callback:
         }
     }
 
-read_delta:
     state->delta_value = SsSeqReadDeltaTime((short)seq_raw, (short)sep_raw);
 }

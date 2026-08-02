@@ -255,7 +255,6 @@ void GameUpdateTeamNameScreen(void) {
             GamePlaySoundCue(1);
         }
     }
-after_sound:
     pad = g_PadEdge2;
     if (pad & 0x860) {
     {
@@ -620,6 +619,5 @@ backward_done:
         }
     }
 
-forward_done:
     return;
 }

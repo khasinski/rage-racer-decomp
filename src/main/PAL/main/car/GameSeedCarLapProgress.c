@@ -61,7 +61,6 @@ while (1) {
 
             count = g_TrackPointCount;
             table = (u8 *)g_TrackPoints;
-advance_forward_sub:
             do {
                 index++;
                 wrapped = index % count;
@@ -77,7 +76,6 @@ advance_forward_sub:
 
             count = g_TrackPointCount;
             table = (u8 *)g_TrackPoints;
-advance_backward_add:
             do {
                 if (index < 0) {
                     wrapped = index + count;

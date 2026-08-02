@@ -75,6 +75,5 @@ read_delta:
         state->delta_value = SsSeqReadDeltaTime(seq_arg, sep_arg);
     }
 
-done:
     return;
 }

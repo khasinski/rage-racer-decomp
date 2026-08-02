@@ -320,10 +320,8 @@ void GameSetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
         tmp = adjustedReg >> 12;
     }
 
-speed_ready:
     speed = tmp + 10;
 
-make_vector:
     savedAngle = angle;
     trig = func_80068568(savedAngle);
     product = speed << 16;
@@ -377,7 +375,6 @@ make_vector:
     tmp = 0xF;
     }
 
-store_values:
     carReg->motionTimer = tmp;
     carReg->velocityX = x;
     carReg->velocityZ = z;
@@ -429,7 +426,6 @@ mode2:
     }
     value >>= 12;
 
-store:
     obj->motionValue = value;
 
     }

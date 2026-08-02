@@ -58,7 +58,6 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
         goto large;
     }
 
-small:
     stepForSmallDiv = (short)step;
     smallDenom = (short)start;
     offset = (short)target;
@@ -271,7 +270,6 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
         goto large;
     }
 
-small:
     stepForSmallDiv = (short)step;
     smallDenom = (short)start;
     offset = (short)target;

@@ -34,6 +34,5 @@ long SpuSetReverb(long on_off) {
     D_8009A718 = on_off;
     g_SpuRegBase->spucnt = cnt | 0x80;
 
-done:
     return D_8009A718;
 }

@@ -368,7 +368,6 @@ s32 GameUpdateLapAndFinish(void *arg0, s32 arg1) {
 
     }
     if (g_LapCount < *(s16 *)((u8 *)arg0 + 0x168)) {
-update_best:
         if (g_RaceTotalTime <
             g_BestTotalTimes[g_RaceSeries][g_CourseIndex][arg1]) {
             g_BestTotalTimes[g_RaceSeries][g_CourseIndex][arg1] = g_RaceTotalTime;
@@ -465,7 +464,6 @@ update_progress:
                 GamePlaySoundCue(0x3D);
             }
             }
-reset_transition:
             func_8005E4A4(0);
             g_RaceFadeTimer = 0;
             g_MirrorViewEnabled = 0;
@@ -477,8 +475,6 @@ progress_failed:
         returnValue = 0;
     }
 
-after_progress:
-check_finish_transition:
     if ((g_LapCount < *(s16 *)(route + 0xAC)) &&
         (g_RacePhase == 4)) {
         GameDrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
@@ -522,7 +518,6 @@ check_finish_transition:
         GameSeedFinishCamera(&g_PlayerCar);
     }
 
-update_countdown:
     if (g_RaceCueDelay == 2) {
         value = g_LapCount - *(s16 *)(route + 0xAC);
         switch (value) {

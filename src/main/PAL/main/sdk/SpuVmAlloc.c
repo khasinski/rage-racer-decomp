@@ -61,7 +61,6 @@ u_char SpuVmAlloc(long unused) {
         }
     }
 
-found:
     if ((u_char)selected == 99) {
         if (candidates == 0) {
             selected = D_801E42F8;

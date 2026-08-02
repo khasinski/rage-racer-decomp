@@ -451,7 +451,6 @@ advance_sprite:
                 }
                 xPos += 12;
             }
-next_character:
             ;
         } while (*text != 0);
     }

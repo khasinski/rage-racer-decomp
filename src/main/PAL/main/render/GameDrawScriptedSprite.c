@@ -586,7 +586,6 @@ loop_body:
             }
         }
     }
-loop_next:
     cmd++;
 loop_continue:
     index++;

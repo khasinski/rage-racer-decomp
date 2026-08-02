@@ -62,7 +62,6 @@ long SpuVmVSetUp(long arg0, long arg1) {
         }
     }
 
-fail:
     return -1;
 
 success:

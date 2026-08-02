@@ -67,7 +67,6 @@ Rec *DsSearchFile(Rec *out, char *path) {
         }
         n++;
     }
-after_tokens:
     if (n >= 8) {
         if (g_CdDebugLevel > 0) {
             GameDebugPrintf(D_80013928, path, n);

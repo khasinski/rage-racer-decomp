@@ -38,7 +38,6 @@ void GameDrawSplitTimes(void) {
         goto skip_first;
     }
 
-compare_first:
     if (value <= threshold) {
         tile = 0x78CC;
     } else {

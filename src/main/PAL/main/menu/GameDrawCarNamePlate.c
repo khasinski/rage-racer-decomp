@@ -125,7 +125,6 @@ void GameDrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
         break;
     }
 
-end:
     if (arg0 > 0) {
         g_CarNamePlateFade += arg0;
         if (g_CarNamePlateFade >= 509) {

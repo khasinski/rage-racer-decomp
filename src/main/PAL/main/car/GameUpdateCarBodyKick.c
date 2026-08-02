@@ -307,7 +307,6 @@ void GameUpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
         }
     }
 
-decay_field_F0:
     value = *(s32 *)(base + 0x34);
     value = (value << 5) - value;
     if (value < 0) {

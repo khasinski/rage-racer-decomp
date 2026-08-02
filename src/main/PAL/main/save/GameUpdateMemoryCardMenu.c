@@ -750,7 +750,6 @@ L_sw2:
         }
     }
 
-L_sw7tail:
     if (g_McMenuState == 2) break;
     g_McMenuSubState = 1;
     g_McMenuPhase = 0xF;
@@ -827,7 +826,6 @@ L_b1288:
     default:
     break;
     }
-L_sw8:
     switch (g_McMenuSelection) {
     case 1:
     case 2:
@@ -905,7 +903,6 @@ L_b1420:
     L_b1452:
         { u16 q = func_8006131C(); if (q == 0) break; }
         } }
-    L1457:
         g_McMenuPage = 0;
         goto L_b1606;
         }
@@ -922,7 +919,6 @@ L_b1420:
         g_McActionState = 2;
         break;
         } }
-    L1496:
         if (D_80082FAC == 0) goto L1447;
         goto L_b1452;
     case 2:

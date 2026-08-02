@@ -255,7 +255,6 @@ s32 GameUpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         FIELD(spad, s32 *, 0x3C) = (s32) FIELD(clampPair, s16 *, 4);
     }
     }
-boundary_done:
     if (FIELD(spad, s16 *, 0x96) < var_s3)
     {
         var_s3 = FIELD(spad, s16 *, 0x96);

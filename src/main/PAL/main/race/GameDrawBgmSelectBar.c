@@ -123,7 +123,6 @@ void GameUpdateBgmSelect(void) {
         }
     }
 
-L13c:
     if (g_SceneTimer == 2) SetDispMask(1);
     if (g_FadeStep == 0) {
     if (g_PadEdge2 & 0x8000) {
@@ -201,7 +200,6 @@ L13c:
     }
     }
 
-L48c:
     if (g_BgmSelectShowUi != 0) GameDrawBgmSelectBar();
     g_AnimTimer = g_AnimTimer + 1;
     g_CameraCarIndex = GameCycleBgmSelectCameraCar(0xff, g_CameraCarIndex);

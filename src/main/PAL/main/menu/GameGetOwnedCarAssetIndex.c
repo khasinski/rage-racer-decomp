@@ -26,7 +26,6 @@ s32 GameGetOwnedCarAssetIndex(s32 arg0) {
 
 
     case 1:
-fallback4:
         switch (state) {
         case 3:
             return 4;
@@ -38,7 +37,6 @@ fallback4:
 
 
     case 2:
-fallback8:
         switch (state) {
         case 4:
             return 7;
@@ -48,7 +46,6 @@ fallback8:
 
 
     case 3:
-fallback9:
         value = state - 1;
         if ((u32)value < 5) {
             switch (value) {
@@ -79,7 +76,6 @@ fallback9:
 
 
     case 5:
-fallback18:
         switch (state) {
         case 3:
             return 18;
@@ -91,7 +87,6 @@ fallback18:
 
 
     case 6:
-fallback21:
         switch (state) {
         case 4:
             return 21;
@@ -101,7 +96,6 @@ fallback21:
 
 
     case 7:
-fallback23:
         switch (state) {
         case 3:
             return 23;
@@ -113,7 +107,6 @@ fallback23:
 
 
     case 8:
-fallback26:
         switch (state) {
         case 4:
             return 26;

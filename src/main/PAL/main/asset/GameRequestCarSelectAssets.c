@@ -134,7 +134,6 @@ void GameLoadCarSelectAssets(void) {
                 g_AssetLoadState = 0;
             }
     }
-done:
     return;
 }
 

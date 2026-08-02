@@ -89,7 +89,6 @@ void SsStartSoundTick(long arg0) {
     }
 
     }
-setup:
     if (g_SndTickUsesVSync != 0) {
         EnterCriticalSection();
         func_8006DFC4(g_SndTickCallback);
@@ -120,6 +119,5 @@ setup:
     }
     ExitCriticalSection();
 
-done:
     return;
 }

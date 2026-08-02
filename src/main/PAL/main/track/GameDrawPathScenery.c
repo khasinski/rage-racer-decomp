@@ -121,7 +121,6 @@ void func_8004087C(s16 arg) {
         cur = p;
     } while ((s32)p < (s32)end);
 
-after:
     if (!(data == 0)) {
     s0 = g_PlayerField3C;
     if (!(s0 >= 0)) {

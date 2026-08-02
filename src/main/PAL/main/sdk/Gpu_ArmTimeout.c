@@ -64,7 +64,6 @@ long Gpu_CheckTimeout(void) {
 return_zero:
     result = 0;
 
-done:
     return result;
 }
 
