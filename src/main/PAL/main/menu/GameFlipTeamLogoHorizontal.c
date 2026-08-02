@@ -901,11 +901,11 @@ s32 GameDrawRankingTable(s32 *progress, s32 step, s32 ranking) {
     s32 phase;
     u32 slide;
     s32 headerTextureU;
-    register s16 panelY asm("$23");
+    s16 panelY;
     s16 contentY;
     s16 rowY;
     s32 row;
-    s32 rowYStep;
+    s16 rowYStep;
     register s32 loopClut asm("$21");
     s32 spriteHeight;
     s32 spriteOne;
