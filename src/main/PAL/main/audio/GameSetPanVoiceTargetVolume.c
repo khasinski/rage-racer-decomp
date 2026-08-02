@@ -174,10 +174,11 @@ void GameUpdateIndexedEffectVoice(void) {
     register s32 voice asm("$4");
 
     raw = g_IndexedEffectIndexPrev;
+    switch (0) { default:
     if (raw < 0) {
         index = g_IndexedEffectIndex;
         if (index < 0) {
-            goto update_state;
+            break;
         }
         goto start_voice;
     } else {
@@ -237,7 +238,7 @@ void GameUpdateIndexedEffectVoice(void) {
         SsUtChangePitch(voice, left, right, 0x3C, 0, raw, fine);
     }
 
-update_state:
+    }
     g_IndexedEffectIndexPrev = g_IndexedEffectIndex;
 }
 
