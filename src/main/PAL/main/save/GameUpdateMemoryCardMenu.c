@@ -224,26 +224,20 @@ L_sw2:
             g_McActionResult = 0;
             g_McSlotCursor = g_McLastSlot;
             g_McSaveMode = *p;
-            goto L_sw5;
+            break;
         }
-        if (fadeBusy) goto L_sw5;
+        if (fadeBusy) break;
         GamePlaySoundCue(2);
         } else {
-        if ((pad & 0x90) == 0 || fadeBusy) goto L_sw5;
+        if ((pad & 0x90) == 0 || fadeBusy) break;
         GamePlaySoundCue(3);
         }
         g_McActionBusy = 0;
         func_8006138C();
     }
-    goto L_sw5;
-
-    case 1:
     break;
 
-    default:
-    goto L_copyreset;
-    }
-
+    case 1:
     switch (g_McActionState) {
     case 0x00: {
         s32 *s0 = &g_McSlotCursor;
@@ -589,7 +583,11 @@ L_sw2:
 
     default:
     }
-L_sw5:
+    break;
+
+    default:
+    goto L_copyreset;
+    }
     switch (g_McMenuSelection) {
     case 3:
         D_8009B6F4 = g_McMenuState;
