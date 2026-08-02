@@ -339,11 +339,10 @@ void func_8005C31C(s32 arg0, s32 left, s32 right) {
         }
         goto after_match;
 test_match:
-        if (currentB != matchValue) {
-            goto after_match;
-        }
+        if (!(currentB != matchValue)) {
 found_match:
         right = 1;
+        }
 after_match:
 
         if (right != 0) {

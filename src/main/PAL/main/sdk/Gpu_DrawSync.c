@@ -30,9 +30,7 @@ retry:
         }
 
 pollState:
-        if (g_GpuQueueWriteIdx == g_GpuQueueReadIdx) {
-            goto checkBusy;
-        }
+        if (!(g_GpuQueueWriteIdx == g_GpuQueueReadIdx)) {
         goto retry;
 
 waitReady:
@@ -40,7 +38,7 @@ waitReady:
             return -1;
         }
 
-checkBusy:
+        }
         if (*g_GpuDmaChcr & 0x01000000) {
             goto waitReady;
         }

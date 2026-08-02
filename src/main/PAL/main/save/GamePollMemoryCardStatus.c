@@ -114,9 +114,7 @@ fail_case1:
             }
             goto fail_neg3_case3;
         }
-        if (status == 3) {
-            goto fail_neg1_case3;
-        }
+        if (!(status == 3)) {
         if (status == 4) {
             goto fail_neg2_case3;
         }
@@ -126,7 +124,7 @@ case3_ready:
         g_McLastCardStatus = status;
         break;
 
-fail_neg1_case3:
+        }
         state = -1;
         goto fail_case3;
 
