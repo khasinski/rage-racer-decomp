@@ -33,7 +33,8 @@ s32 GamePollMemoryCardStatus(s32 arg0, s32 arg1) {
         _card_info(handle);
         g_McStatusState = 1;
         g_McPollTicks = 0;
-        goto clear_result;
+        g_McStatusResult = 0;
+        break;
 
     case 1:
         status = func_8005F35C();
@@ -148,11 +149,9 @@ fail_case3:
 
     default:
         g_McStatusState = 0;
-clear_result:
         g_McStatusResult = 0;
     }
 
-done:
     return g_McStatusResult;
 }
 
