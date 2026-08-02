@@ -138,6 +138,7 @@ s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) {
         pos1 = g_TrackLength - pos1;
     }
 
+    switch (0) { default:
     if (pos1 < pos0) {
         temp = pos0;
         diff = temp - pos1;
@@ -146,7 +147,7 @@ s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) {
 
 crossed_label:
     crossed = 1;
-    goto finish;
+    break;
 
 not_crossed:
     temp = pos1;
@@ -184,7 +185,7 @@ loop:
     }
 
     }
-finish:
+    }
     if (crossed != 0) {
         resultOffset = i << 3;
         resultOffset += row << 6;
