@@ -163,16 +163,8 @@ L57:
 
 L_sw2:
     switch (g_McMenuState) {
-    case 3: break;
-    case 1: goto L_state1;
-    case 2: goto L_state2;
-    case -1: goto L_stateM1;
-    case -2: goto L_stateM2;
-    case -3:
-    default: goto L_stateIdle; /* -3 and 0 */
-    }
 
-L_state3:
+    case 3:
     {
     u16 lpad = g_PadEdge2;
     g_McMenuPhase = 0xF;
@@ -216,7 +208,7 @@ L_state3:
     }
     goto L_epilogue;
 
-L_state1:
+    case 1:
     if (g_McMenuPage == 0) {
     } else {
     if (g_McMenuPage == 1) {
@@ -635,7 +627,7 @@ L_sw5:
     }
     goto L_epilogue;
 
-L_state2:
+    case 2:
     g_McMenuSubState = 1;
     g_McMenuPhase = 0xF;
     switch (g_McActionState) {
@@ -766,7 +758,7 @@ L_sw7tail:
     g_McMenuPhase = 0xF;
     g_McActionState = 0;
     goto L_b1678;
-L_stateM1:
+    case -1:
     g_McMenuSubState = 0xA;
     g_McMenuPhase = 3;
     g_McActionBusy = 0;
@@ -871,7 +863,7 @@ L_sw8:
     g_McActionState = 0;
     }
     goto L_epilogue;
-L_stateM2:
+    case -2:
     if (!(g_McMenuPage == 0)) {
     if (g_McMenuPage == 1) goto L_sw9;
     goto L_sw10;
@@ -1037,7 +1029,8 @@ L_b1678:
     g_McActionResult = 0;
     D_80082FAC = 0;
     goto L_epilogue;
-L_stateIdle:
+    case -3:
+    default:
     g_McMenuSubState = 0x11;
     {
     u16 lpad = g_PadEdge2;
@@ -1064,6 +1057,7 @@ L_stateIdle:
         }
     }
 
+    }
     }
 L_epilogue:
     if (D_80082FC8 != 0) {
