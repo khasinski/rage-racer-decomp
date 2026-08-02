@@ -69,9 +69,9 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
         StRingEventRecord *base;
         long offset;
 
-        entry->state = 4;
-        /* This barrier is load-bearing: removing it changes .text. */
-        asm("" ::: "memory");
+        /* RAW() keeps this store ahead of the ring globals below -- see
+         * common.h. */
+        RAW(entry->state) = 4;
         track = g_StRingSize;
         raw_base = (StRingEventRecord *)g_StRingBase;
         index = g_StRingSlot;

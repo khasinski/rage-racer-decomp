@@ -328,8 +328,9 @@ void DrawProportionalTextShadedWide(
                 asm("" : "=r"(prim) : "0"(prim));
                 sprt->u0 = u;
                 sprt->v0 = v;
-                sprt->h = height;
-                asm volatile("" ::: "memory");
+                /* RAW() keeps this store ahead of the g_DrawBuffer load --
+                 * see common.h. */
+                RAW(sprt->h) = height;
                 ot = g_DrawBuffer;
                 asm("" : "=r"(ot) : "0"(ot));
                 clut = home.clut;
@@ -379,8 +380,9 @@ void DrawProportionalTextShadedWide(
                 asm("" : "=r"(prim) : "0"(prim));
                 sprt->u0 = u;
                 sprt->v0 = v;
-                sprt->h = height;
-                asm volatile("" ::: "memory");
+                /* RAW() keeps this store ahead of the g_DrawBuffer load --
+                 * see common.h. */
+                RAW(sprt->h) = height;
                 ot = g_DrawBuffer;
                 asm("" : "=r"(ot) : "0"(ot));
                 clut = home.clut;

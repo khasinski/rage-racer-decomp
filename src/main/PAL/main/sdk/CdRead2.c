@@ -93,9 +93,9 @@ void data_ready_callback(void) {
     StRingEntry *entry;
 
     entry = (StRingEntry *)((index << 5) + (long)base);
-    entry->state = 2;
+    /* RAW() keeps this store ahead of the g_StBack* writes -- see common.h. */
+    RAW(entry->state) = 2;
     *(CdlLOC *)g_StBackLoc = entry->loc;
-    __asm__ volatile("" ::: "memory");
     g_StBackFrame = entry->value;
     D_801E6C84 = D_801E6C74;
     if (g_StFrameCallback != 0) {
