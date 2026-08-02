@@ -550,6 +550,7 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   }
   pitch = 0;
   lo_R7 = *((s16 *) (&lim[0]));
+  switch (0) { default:
   if (rpm < lo_R7)
   {
   } else {
@@ -569,7 +570,7 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   v20_R4 = (new_var = *((s16 *) (&val[0])));
   q = (((*((s16 *) (&val[1]))) - new_var) * d_R3) / range;
   *((s16 *) (sub_R9 + 0x74)) = ((((new_var + q) * 1168) / 160) * 6) / 100;
-  goto OUT;
+  break;
   }
   if ((*((s16 *) (&lim[1]))) < rpm)
   {
@@ -594,7 +595,7 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   {
     *((u16 *) (sub_R9 + 0x7C)) = 0;
   }
-  OUT:
+  }
   if ((*((s16 *) (sub_R9 + 0x7E))) != 0)
   {
     GameUpdateCarSlideAngle((GameCarRuntime *)car, (s16) pitch);
