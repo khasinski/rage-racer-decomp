@@ -432,7 +432,7 @@ void LibcSprintf() asm("func_800632F0");
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void DrawSync(long mode) asm("func_800658FC");
 
-void GameBuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 imageY) {
+void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 imageY) {
     u8 *blockReg;
     /* These pins are load-bearing: removing any one changes .text. */
     register char *titleReg asm("$3");
@@ -1167,7 +1167,7 @@ s32 LoadSaveStateBlock(u8 *arg0) {
     return 1;
 }
 
-/* ---- was GameWriteMemoryCardSaveFile.c ---- */
+/* ---- was WriteMemoryCardSaveFile.c ---- */
 
 #include "common.h"
 #include "game/memcard.h"
@@ -1176,7 +1176,7 @@ s32 LoadSaveStateBlock(u8 *arg0) {
 
 void func_8005F88C(void *arg0);
 
-s32 GameWriteMemoryCardSaveFile(
+s32 WriteMemoryCardSaveFile(
     char *path,
     char *title,
     void *iconBlock,
@@ -1189,7 +1189,7 @@ s32 GameWriteMemoryCardSaveFile(
     s32 ok;
 
     GameMenuLoadPhase = 0x1100;
-    GameBuildSaveIconBlock(iconBlock, title, 0x222, 0x3C0, 0x1F0);
+    BuildSaveIconBlock(iconBlock, title, 0x222, 0x3C0, 0x1F0);
     GameMenuLoadPhase = 0x1200;
     WriteSaveHeaderRow(header);
     attempt = 0;
@@ -1252,7 +1252,7 @@ s32 GameWriteMemoryCardSaveFile(
 extern char g_SaveFilePath[] asm("D_800128AC");
 extern char g_SaveTitleSjis[] asm("D_800127D8");
 
-s32 GameWriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
+s32 WriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     u8 block0[0x200];
     u8 block1[0x1000];
     s32 i;
@@ -1262,7 +1262,7 @@ s32 GameWriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     }
 
     GameMenuLoadPhase = 0x1000;
-    return GameWriteMemoryCardSaveFile(
+    return WriteMemoryCardSaveFile(
         g_SaveFilePath + arg0 * 0x1A,
         g_SaveTitleSjis + arg0 * 0x46,
         block0,
@@ -1270,7 +1270,7 @@ s32 GameWriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
         block1);
 }
 
-s32 GameReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
+s32 ReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
     s32 fd;
     /* These pins are load-bearing: removing any one changes .text. */
     register void *buffer asm("$18");
@@ -1350,7 +1350,7 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
     do {
         fd = BiosFileOpen(g_SaveFilePath + nameOffset, 1);
         if (fd >= 0) {
-            if (GameReadVerifiedSaveHeader(fd, buffer) == 0) {
+            if (ReadVerifiedSaveHeader(fd, buffer) == 0) {
                 BiosFileClose(fd);
                 bit = 0x10000;
             } else {
@@ -1372,7 +1372,7 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
 extern volatile s32 GameMenuLoadPhase asm("D_8009B740");
 extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 
-s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
+s32 LoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     u8 block[0x1000];
     void *header;
     s32 tries;
@@ -1411,7 +1411,7 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     }
 
     GameMenuLoadPhase = 0x3300;
-    if (GameReadVerifiedSaveHeader(fd, header) == 0) {
+    if (ReadVerifiedSaveHeader(fd, header) == 0) {
         return 0;
     }
 
@@ -1526,7 +1526,7 @@ s32 CalculateMemoryCardFreeBlocks(s32 arg0) {
 extern s32 g_McCardFileCount asm("D_8009B738");
 extern s32 g_McFreeBlocks asm("D_8009B73C");
 
-s32 GameRefreshMemoryCardSaveStatus(s32 arg0, GameSaveHeaderRow *arg1) {
+s32 RefreshMemoryCardSaveStatus(s32 arg0, GameSaveHeaderRow *arg1) {
     s32 ret;
 
     GameMenuLoadPhase = 0x100;
@@ -1587,7 +1587,7 @@ void DrawMemoryCardHelpPrompt(s32 arg0) {
     func_80016754(x, y, base + offset, 0x78CC);
 }
 
-/* ---- was GameDrawMemoryCardSaveRows.c ---- */
+/* ---- was DrawMemoryCardSaveRows.c ---- */
 
 #include "common.h"
 #include "game/memcard.h"
@@ -1611,7 +1611,7 @@ extern s32 g_McFreeBlocks asm("D_8009B73C");
 void func_80047958(s32, s32, void *, s32, s32, s32, s32, s32);
 void LibcSprintf() asm("func_800632F0");
 
-void GameDrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
+void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     char text[16];
     u8 *rows_base = (u8 *)rows;
     s32 flags_reg = flags;
@@ -1671,7 +1671,7 @@ void GameDrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     } while ((s32)row < (s32)(rows_base + 0x180));
 }
 
-void GameAdjustMenuSelectionHorizontal(s32 *value, s32 min, s32 max) {
+void AdjustMenuSelectionHorizontal(s32 *value, s32 min, s32 max) {
     u16 input = g_PadEdge;
     s32 next;
 

@@ -105,7 +105,7 @@ grep -rn 'asm("func_8003F9C4")' src/ include/
 ```
 
 and if that finds nothing, the function is either still raw or (like
-`GameSelectTrackTexturePage`) defined under its readable name with no alias.
+`SelectTrackTexturePage`) defined under its readable name with no alias.
 
 Two numbering accidents are left alone because other sections cite them by
 these labels: **sections 8–11 do not exist**, and **section 16's
@@ -401,7 +401,7 @@ All of these keep their original emitted symbol via
 | 0x8019C900 | `g_DrawBuffer` | render.h | Base of the frame's draw work area; the OT lives at +0xCC. |
 | 0x801E42E0 | `g_FadeLevel` | render.h | Full-screen fade level 0..0x100. |
 | 0x801E42A0 | `g_FadeStep` | render.h | Per-frame delta added to `g_FadeLevel`. |
-| 0x8019C9F0 | `g_UiScriptProgress` | render.h | `GameRunTimedDrawScript` progress counter (layer 1). |
+| 0x8019C9F0 | `g_UiScriptProgress` | render.h | `RunTimedDrawScript` progress counter (layer 1). |
 | 0x8009B2F8 | `g_UiScriptProgress2` | render.h | Second, independent script progress counter (layer 2). |
 | 0x8009B340 | `g_MenuHandlerIndex` | menu.h | Index into the overlay handler table `g_MenuScreenDraw`, -1 = none. |
 | 0x8009B318 | `g_MenuOverlayPattern` | menu.h | Element mask passed to `DrawBitPatternOverlay`. |
@@ -1008,7 +1008,7 @@ what the flag is *for* is unrecoverable and any name would be a guess.
 | `D_801E4140` | `g_EnvPaletteTable` | `u8 *` | 2 | base of those records; installed by `func_8004553C` |
 | `D_801E6F2C` | `g_TeamLogoCanvas` | per-file | 13 | 2048 bytes = 64x64 4bpp; VRAM rect `D_8007BEE4` {0x290,0x30,16,64}; the 4-bit nibble-carry scroll helpers only make sense at 4bpp |
 | `D_8009E6D4` | `g_PlayerCar` | per-file | 10 | 0x19C bytes, the `g_Cars[]` stride; `func_80034F74` calls the same helper on it and on `g_Cars[0]` at the same field offsets |
-| `D_80082460` | `g_UiChromeScript` | `u8` | 9 | always `GameRunTimedDrawScript`'s table arg paired with `g_UiScriptProgress`; 15 records + terminator, limit 25 |
+| `D_80082460` | `g_UiChromeScript` | `u8` | 9 | always `RunTimedDrawScript`'s table arg paired with `g_UiScriptProgress`; 15 records + terminator, limit 25 |
 | `D_801E40E4` | `g_CourseModelCount` | `s32` | 9 | written from `bank[0]` by `func_80017848`; every scenery drawer clamps a model id against it and falls back to 1 |
 | `D_8019C70C` | `g_BestTotalTimes` | per-file | 8 | `[series][course][mode]` ms, lower-is-better; the 3x/6x default ratio vs `g_BestLapTimes` proves total-vs-lap |
 | `D_801E6828` | `g_VisibleCellMask` | per-file | 8 | `func_800414F0` rebuilds 32 words as `mask[sy] |= 1 << sx` from `camera / 2048`; consumers cull on the cell bit |
@@ -2515,7 +2515,7 @@ until `VSync(1) >= 471` eats the frame's spare time, and
 
 The trigger is authored per course: `LoadTrackTexturePageRange` (func_8001D30C)
 copies words 0 and 1 of the `.2ND` pack's sub-block 0 into
-`g_TrackTextureSectionLo` / `…Hi`, and `GameSelectTrackTexturePage` (func_80019D24)
+`g_TrackTextureSectionLo` / `…Hi`, and `SelectTrackTexturePage` (func_80019D24)
 returns 0 or 0x100 according to whether the car's track section falls inside that
 window. The clincher that the two pages are two *regions of the course* is the
 attract camera: `CycleAttractCameraCar` and `CycleBgmSelectCameraCar` roll
@@ -3083,7 +3083,7 @@ countdown `g_McActionTimer`, result `g_McActionResult`, target slot
 zero branch prompts LOAD, the non-zero branch prompts OVERWRITE).
 `g_McFadeStep` / `g_McFadeLevel` (`D_8009B9A0` / `D_8009B9A4`) are the ±8 and
 0..0xFF the entry and exit fades ride; `g_McSlotUsedMask` (`D_8009B564`) is
-`GameRefreshMemoryCardSaveStatus`'s return, tested as `(mask >> slot) & 1`;
+`RefreshMemoryCardSaveStatus`'s return, tested as `(mask >> slot) & 1`;
 `g_McSaveHeaders` (`D_8009B568`) is the `GameSaveHeaderRow[3]` the whole file
 indexes with `slot << 7`; `g_McCardFileCount` / `g_McFreeBlocks`
 (`D_8009B738` / `D_8009B73C`) come straight out of that function.
@@ -3175,7 +3175,7 @@ way to keep both the type and the compile.
   `D_8019CB00`, `D_801E4188`). `InitMenuMode` seeds all seven to
   `&D_80082568` and each is then repointed by exactly one screen handler at a
   different script table. The mechanism is certain; which *panel* each one draws
-  is not, because the tables are `GameRunTimedDrawScript` records whose contents
+  is not, because the tables are `RunTimedDrawScript` records whose contents
   are sprite rows, so a name would assert artwork this repo cannot see.
 * **`D_8019C754` → `g_AssetBlockPtr2`, chosen mechanically.** In `asset/` it is
   sub-block 2 of a pack and becomes `StartAudioSlotLoad`'s fourth argument
@@ -4654,7 +4654,7 @@ block move, not an attribute and not hand-written assembly.
 
 ## 29. `func_8005F6BC`: two words the scheduler will not give back
 
-`GameBuildSaveIconBlock` reaches **88 words, exact 2, 86 of 88 equal** from ordinary
+`BuildSaveIconBlock` reaches **88 words, exact 2, 86 of 88 equal** from ordinary
 C. The remaining two words are a rotation of three adjacent instructions:
 
     retail:    mult s0,v0 ; addiu a1,s2,0x60 ; move s5,zero

@@ -123,7 +123,7 @@ extern s32 g_MenuViewAngleTarget asm("D_8009B350");
 extern s32 g_MenuViewOffset asm("D_8009B358");
 extern s32 g_MenuViewOffsetTarget asm("D_8009B35C");
 
-void GameAdjustMenuSelectionHorizontal(
+void AdjustMenuSelectionHorizontal(
     s32 *value,
     s32 min,
     s32 max) asm("func_800611C8");

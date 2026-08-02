@@ -292,7 +292,7 @@ void DrawFlatTriangle(
  * DrawScriptedTriangle sign-extends them, which a u16 prototype cannot
  * produce. Both views are therefore real. See names.md 30 on width and
  * signedness being per-use rather than per-field. */
-void GameDrawFlatTriangleSigned(
+void DrawFlatTriangleSigned(
     void *ot,
     s16 x0,
     s16 y0,
@@ -485,13 +485,13 @@ extern s32 g_FadeStep asm("D_801E42A0");
  * position from a packed s16 velocity pair by (elapsed * velocity) >> 5.
  * Returns 1 once the progress counter has reached the terminator's limit.
  */
-s32 GameRunTimedDrawScript(
+s32 RunTimedDrawScript(
     void *commands,
     s32 *progress,
     s32 step) asm("func_800487D8");
 
 /*
- * The progress counter the menu/UI screens hand to GameRunTimedDrawScript. Each
+ * The progress counter the menu/UI screens hand to RunTimedDrawScript. Each
  * screen resets it to 0 on entry, then passes &g_UiScriptProgress with step +1
  * while opening and -1 while closing, and treats `<= 0` as "the close animation
  * has finished". It is also fed to func_800489AC as the elapsed time of the
@@ -500,7 +500,7 @@ s32 GameRunTimedDrawScript(
 extern s32 g_UiScriptProgress asm("D_8019C9F0");
 
 /*
- * A second, independent GameRunTimedDrawScript progress counter. The menu
+ * A second, independent RunTimedDrawScript progress counter. The menu
  * screens animate two script layers at once and step them separately - see
  * func_80053730, which drives &g_UiScriptProgress against one command table and
  * &g_UiScriptProgress2 against the screen's own tables in the same frame. Which

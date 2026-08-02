@@ -10,7 +10,7 @@ extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
  * with no argument at all (the original relied on whatever was left in $4), so
  * the unit must not expose a prototype for it.
  */
-s32 GameSelectTrackTexturePage(arg0)
+s32 SelectTrackTexturePage(arg0)
 s32 arg0;
 {
     s32 ret;
@@ -84,7 +84,7 @@ void SetTrackTexturePageNow(void) asm("func_80019E84");
 void SetTrackTexturePageNow(void) {
     s32 temp;
 
-    temp = GameSelectTrackTexturePage();
+    temp = SelectTrackTexturePage();
     g_TrackTextureTargetRow = temp;
     g_TrackTextureCursorRow = temp;
     SwapTrackTexturePageNow();
@@ -114,7 +114,7 @@ void ResetTrackTextureSwap(void) {
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
 void RequestTrackTexturePage(void) asm("func_80019EFC");
 void RequestTrackTexturePage(void) {
-    g_TrackTextureTargetRow = GameSelectTrackTexturePage();
+    g_TrackTextureTargetRow = SelectTrackTexturePage();
 }
 
 extern s16 D_8007C70A;
@@ -213,10 +213,10 @@ s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
         candidate = random % 11;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
-        first = GameSelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
+        first = SelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
 
         offset = (((((candidate * 3) * 4) + candidate) * 8) - candidate) * 4;
-        if (first == GameSelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset])) {
+        if (first == SelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset])) {
             return candidate;
         }
     }
@@ -243,10 +243,10 @@ s32 CycleAttractCameraCar(s32 mask, s32 current) {
         candidate = random % 4;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
-        first = GameSelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
+        first = SelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
 
         offset = (((((candidate * 3) * 4) + candidate) * 8) - candidate) * 4;
-        if (first == GameSelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset])) {
+        if (first == SelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset])) {
             return candidate;
         }
     }

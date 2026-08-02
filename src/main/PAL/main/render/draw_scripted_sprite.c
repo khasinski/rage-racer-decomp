@@ -355,7 +355,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     }
 
     asm("" : : "r"(packedSpeed));
-    GameDrawFlatTriangleSigned(
+    DrawFlatTriangleSigned(
         (u8 *)ot + (mode << 2),
         x,
         y,
@@ -492,7 +492,7 @@ typedef struct TimedDrawCommand {
 
 extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
-s32 GameRunTimedDrawScript(void *commands, s32 *progress, s32 step) {
+s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     TimedDrawCommand *base = commands;
     /* These pins are load-bearing: removing any one changes .text. */
     register s32 *progressPtr asm("$18") = progress;
