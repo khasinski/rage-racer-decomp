@@ -639,7 +639,7 @@ L_state2:
     g_McMenuPhase = 0xF;
     switch (g_McActionState) {
     case 0:
-        if ((u32)g_SceneTimer < 0x1F) goto L_sw7;
+        if ((u32)g_SceneTimer < 0x1F) break;
         wtmp = 1;
         goto L_b1017;
     case 1:
@@ -658,9 +658,9 @@ L_state2:
             }
             }
         }
-        if (g_McCardStatus != 1) goto L_sw7;
+        if (g_McCardStatus != 1) break;
         D_8009B700 += 1;
-        if (D_8009B700 < 2) goto L_sw7;
+        if (D_8009B700 < 2) break;
         wtmp = 2;
     L_b1017:
         D_8009B700 = 0;
@@ -676,7 +676,7 @@ L_state2:
         {
             s32 t = g_McActionTimer;
             g_McActionTimer = t - 1;
-            if (g_McActionTimer != 0) goto L_sw7;
+            if (g_McActionTimer != 0) break;
         }
         g_McActionState = 5;
         break;
@@ -709,7 +709,7 @@ L_state2:
         {
             s32 t = g_McActionTimer;
             g_McActionTimer = t - 1;
-            if (g_McActionTimer != 0) goto L_sw7;
+            if (g_McActionTimer != 0) break;
         }
         g_McActionTimer = 5;
         g_McActionBusy = 0;
@@ -719,18 +719,17 @@ L_state2:
         {
             s32 t = g_McActionTimer;
             g_McActionTimer = t - 1;
-            if (g_McActionTimer != 0) goto L_sw7;
+            if (g_McActionTimer != 0) break;
         }
         g_McActionState = 9;
         break;
     case 9:
-        if (g_McMenuSelection != 1) goto L_sw7;
+        if (g_McMenuSelection != 1) break;
         g_McMenuState = g_McMenuSelection;
         break;
     default:
     }
 
-L_sw7:
     switch (g_McMenuSelection) {
     case 3:
         D_8009B6F4 = g_McMenuState;
