@@ -456,7 +456,7 @@ void GameUpdateCarStandingStart(GameCarRuntime *car) {
     }
 }
 
-typedef struct { s16 vx; s16 vy; } DVEC;
+typedef struct DVEC { s16 vx; s16 vy; } DVEC;
 s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
 
 /*

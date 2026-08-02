@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-typedef struct {
+typedef struct CdState {
     u_char sync;
     u_char ready;
     u_char command;

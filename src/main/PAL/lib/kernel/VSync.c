@@ -2,7 +2,7 @@
 
 typedef void (*Callback2)(long, long);
 
-typedef struct {
+typedef struct CallbackTable {
     u_char pad0[0xC];
     void (*callback)(void);
 } CallbackTable;

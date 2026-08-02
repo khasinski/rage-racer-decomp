@@ -3,12 +3,12 @@
 extern s32 D_8009B280;
 extern u8 D_8009B284;
 
-typedef struct {
+typedef struct TeamLogoClutPos {
     s16 cx;
     s16 cy;
 } TeamLogoClutPos;
 
-typedef struct {
+typedef struct TeamLogoTexturePos {
     s16 tx;
     u16 ty;
 } TeamLogoTexturePos;

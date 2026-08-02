@@ -483,7 +483,7 @@ void GameDrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
                   flags & 4, entry[0xE]);
 }
 
-typedef struct {
+typedef struct TimedDrawCommand {
     s16 time;
     s16 type;
     s32 arg0;

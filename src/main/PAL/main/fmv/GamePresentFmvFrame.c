@@ -3,7 +3,7 @@
 #include "psyq/cd.h"
 #include "game/race.h"
 
-typedef struct {
+typedef struct Unk8001EF54 {
     u8 pad0[0x18];
     u16 field_18;
     u16 field_1A;

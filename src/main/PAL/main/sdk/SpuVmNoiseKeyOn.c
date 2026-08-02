@@ -2,14 +2,14 @@
 
 #include "common.h"
 
-typedef struct {
+typedef struct SeqState74348 {
     u_char pad00[0x74];
     u_short left_volume;
     u_short right_volume;
     u_char pad78[0x34];
 } SeqState74348;
 
-typedef struct {
+typedef struct VoiceState74348 {
     short vag;
     short age;
     short pitch;
@@ -40,7 +40,7 @@ typedef struct {
     short end_pan;
 } VoiceState74348;
 
-typedef struct {
+typedef struct SvmCurrent74348 {
     u_char tones;
     u_char vab_id;
     u_char note;

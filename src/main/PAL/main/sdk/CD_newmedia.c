@@ -1,11 +1,11 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-typedef struct {
+typedef struct W4 {
     u_char b[4];
 } W4;
 
-typedef struct {
+typedef struct Entry {
     long index;    /* +0  */
     long field6;   /* +4  */
     long word2;    /* +8  */

@@ -3,7 +3,7 @@
 #include "game/menu.h"
 #include "game/race.h"
 
-typedef struct {
+typedef struct UnkCopyChunk {
     u8 raw[8];
 } UnkCopyChunk;
 

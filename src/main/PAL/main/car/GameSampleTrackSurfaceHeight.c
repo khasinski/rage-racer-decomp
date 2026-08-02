@@ -2,20 +2,20 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 
-typedef struct {
+typedef struct SVec {
     s16 x;
     s16 y;
     s16 z;
     s16 pad;
 } SVec;
 
-typedef struct {
+typedef struct LVec {
     s32 x;
     s32 y;
     s32 z;
 } LVec;
 
-typedef struct {
+typedef struct Car {
     u16 x;         /* 0x00 */
     u16 pad2;      /* 0x02 */
     s32 out4;      /* 0x04 */
@@ -29,7 +29,7 @@ typedef struct {
     s16 f98;       /* 0x98 */
 } Car;
 
-typedef struct {
+typedef struct TP {
     u16 x;             /* 0x00 */
     u16 pad2;          /* 0x02 */
     u16 z;             /* 0x04 */

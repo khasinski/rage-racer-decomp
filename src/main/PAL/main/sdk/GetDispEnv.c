@@ -64,7 +64,7 @@ void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4
 extern u_short g_VramWidth[] asm("D_800941EC");
 extern u_short g_VramHeight[] asm("D_800941EE");
 
-typedef struct {
+typedef struct DrawEnvPacketSource {
     Rect clip;
     short ofs[2];
     GpuTexWindow tw;

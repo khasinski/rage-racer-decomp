@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-typedef struct {
+typedef struct QEntry {
     void (*cb)(long, long);
     long arg;
     long tag;

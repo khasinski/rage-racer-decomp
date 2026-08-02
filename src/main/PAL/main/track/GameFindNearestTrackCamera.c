@@ -1,6 +1,6 @@
 #include "common.h"
 
-typedef struct {
+typedef struct Func80043B18Entry {
     u8 pad[0x22];
     s16 value;
 } Func80043B18Entry;

@@ -42,11 +42,11 @@ void GameDrawScriptedScenery(s32 arg0) {
     }
 }
 
-typedef struct {
+typedef struct Blk16 {
     s32 w[4];
 } Blk16;
 
-typedef struct {
+typedef struct Blk8 {
     s16 h[4];
 } Blk8;
 
@@ -57,7 +57,7 @@ typedef struct {
  * posRateNeg / rotRateNeg record that the keyframe's rate field was negative
  * (the rate itself is stored as a magnitude).
  */
-typedef struct {
+typedef struct PathSceneryClock {
     s16 posFrame;
     s16 rotFrame;
     s16 posRateNeg;
@@ -125,7 +125,7 @@ extern s16 g_PathSceneryRacePhase asm("D_801E6E74");
  * The position and rotation cursors are the same interleaved eight-halfword
  * object viewed from offsets zero and two.
  */
-typedef struct {
+typedef struct PathSceneryCursor {
     s16 phase;
     s16 otherPhase;
     u16 span;

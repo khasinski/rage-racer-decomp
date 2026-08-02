@@ -3,7 +3,7 @@
 #include "game/state.h"
 #include "game/render.h"
 
-typedef struct {
+typedef struct Obj {
     s16 id;    /* 0x0 */
     s16 f2;    /* 0x2 */
     s32 f4;    /* 0x4 */
@@ -143,7 +143,7 @@ u32 GameIsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) {
     return (mask << arg2) & *(u32 *)x;
 }
 
-typedef struct {
+typedef struct Scr {
     s32 f0;
     s32 f4;
     s32 f8;
@@ -152,7 +152,7 @@ typedef struct {
     s32 f14;
 } Scr;
 
-typedef struct {
+typedef struct Out {
     s32 f0;
     s32 f4;
     s32 f8;

@@ -2,7 +2,7 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 
-typedef struct {
+typedef struct WordVector {
     s32 words[4];
 } WordVector;
 

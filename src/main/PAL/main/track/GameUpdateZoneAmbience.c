@@ -3,7 +3,7 @@
 #include "game/track.h"
 
 
-typedef struct {
+typedef struct UnkFunc80040DB4Entry {
     s32 start;
     s32 end;
     u16 unk8;

@@ -189,7 +189,7 @@ void func_8004087C(s16 arg) {
 s32 func_80068568(s32 arg0);
 void func_8005C31C(s32 arg0, s32 arg1, s32 arg2);
 
-typedef struct {
+typedef struct TrackSeg {
     s32 lo;    /* 0x00 */
     s32 hi;    /* 0x04 */
     u16 f08;   /* 0x08 */

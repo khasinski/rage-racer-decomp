@@ -1,6 +1,6 @@
 #include "common.h"
 
-typedef struct {
+typedef struct Rec {
     long w0;
     long w1;
     char name[16];

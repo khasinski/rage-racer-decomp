@@ -740,7 +740,7 @@ void func_80064F58(u8 *prim);
 void func_80064E90(u8 *prim, s32 arg1);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
-typedef struct {
+typedef struct Blob {
     s16 b[33];
 } Blob;
 
@@ -869,7 +869,7 @@ typedef union {
     } parts;
 } PackedCoordinate;
 
-typedef struct {
+typedef struct RaceRecord {
     u8 name[8];
     s32 time;
     u16 car;

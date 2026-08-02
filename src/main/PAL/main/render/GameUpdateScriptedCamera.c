@@ -11,7 +11,7 @@ extern s32 g_CameraPathNextKey asm("D_8007F620");
 extern s32 g_CameraPathTick asm("D_8007F624");
 /* One scripted-camera keyframe: eye position, look-at target, how long the
  * player dwells on it and the Bezier control value used to ease out of it. */
-typedef struct {
+typedef struct CameraKey {
     s32 eyeX;
     s32 eyeY;
     s32 eyeZ;

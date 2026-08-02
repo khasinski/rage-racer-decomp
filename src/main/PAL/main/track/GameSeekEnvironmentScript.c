@@ -3,7 +3,7 @@
 #include "game/race.h"
 #include "game/render.h"
 
-typedef struct {
+typedef struct Cmd {
     s32 id;
     GameEnvColor colors[9];
     u16 duration;

@@ -179,7 +179,7 @@ void GameUpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     GameSetCameraRotMatrix();
 }
 
-typedef struct {
+typedef struct Vec4i {
     s32 x;
     s32 y;
     s32 z;

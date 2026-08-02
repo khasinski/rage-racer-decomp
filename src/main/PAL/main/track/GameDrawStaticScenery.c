@@ -4,7 +4,7 @@
 #include "game/race.h"
 #include "game/state.h"
 
-typedef struct {
+typedef struct Vec4i {
     s32 x;
     s32 y;
     s32 z;

@@ -1,12 +1,12 @@
 #include "common.h"
 
-typedef struct {
+typedef struct ColorTriplet {
     u8 r;
     u8 g;
     u8 b;
 } ColorTriplet;
 
-typedef struct {
+typedef struct ColorTable {
     ColorTriplet colors[18];
 } ColorTable;
 

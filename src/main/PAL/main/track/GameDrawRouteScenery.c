@@ -71,18 +71,18 @@ extern s32 g_Shuttle1AngleZ asm("D_801E5014");
  * g_ShuttlePath2Points is the split symbol for &g_ShuttlePathPoints[2].
  */
 extern s32 g_ShuttlePath2Points[] asm("D_8007E3A0");
-typedef struct {
+typedef struct ShuttleEndpoint {
     s32 x;
     s32 y;
     s32 z;
     s32 unk;
 } ShuttleEndpoint;
 
-typedef struct {
+typedef struct ShuttlePath {
     ShuttleEndpoint endpoint[2];
 } ShuttlePath;
 
-typedef struct {
+typedef struct ShuttleAngles {
     s16 x;
     s16 y;
     s16 z;

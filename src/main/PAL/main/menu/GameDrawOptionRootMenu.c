@@ -5,10 +5,10 @@
 #include "game/render.h"
 #include "game/menu.h"
 
-typedef struct { s16 x, y; } XY;
-typedef struct { u8 r, g, b; } RGB;
-typedef struct { s16 flag; u16 val; } ScoreRec;
-typedef struct { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
+typedef struct XY { s16 x, y; } XY;
+typedef struct RGB { u8 r, g, b; } RGB;
+typedef struct ScoreRec { s16 flag; u16 val; } ScoreRec;
+typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
 extern s32 g_OptionMenuCursor asm("D_8019C7B4");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);

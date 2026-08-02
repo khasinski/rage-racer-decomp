@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-typedef struct {
+typedef struct Env {
     short x0;
     short x2;
     short x4;
@@ -16,7 +16,7 @@ typedef struct {
     u_char  x13;
 } Env;
 
-typedef struct {
+typedef struct Cache {
     volatile u_short x0;
     volatile u_short x2;
     volatile u_short x4;
@@ -28,7 +28,7 @@ typedef struct {
     u_long x10;
 } Cache;
 
-typedef struct {
+typedef struct GfxState {
     GpuCallbacks *funcs;
     void (*printf)(char *, ...);
     u_char e8;

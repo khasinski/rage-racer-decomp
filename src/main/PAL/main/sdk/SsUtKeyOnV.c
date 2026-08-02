@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-typedef struct {
+typedef struct ProgAtr77C7C {
     u_char tones;
     u_char mvol;
     u_char prior;
@@ -15,7 +15,7 @@ typedef struct {
     u_short reserved3;
 } ProgAtr77C7C;
 
-typedef struct {
+typedef struct VagAtr77C7C {
     u_char prior;
     u_char mode;
     u_char vol;
@@ -39,7 +39,7 @@ typedef struct {
     short reserved[4];
 } VagAtr77C7C;
 
-typedef struct {
+typedef struct SpuVoice77C7C {
     short unk0;
     short unk2;
     short unk04;
@@ -70,7 +70,7 @@ typedef struct {
     short end_pan;
 } SpuVoice77C7C;
 
-typedef struct {
+typedef struct SvmCur77C7C {
     u_char tones;
     u_char vab_id;
     u_char note;

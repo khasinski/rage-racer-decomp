@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-typedef struct {
+typedef struct SpuVoice76ED8 {
     short vag;
     short age;
     short pitch;

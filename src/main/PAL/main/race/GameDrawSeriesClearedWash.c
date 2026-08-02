@@ -7,12 +7,12 @@
 #include "game/car.h"
 #include "game/cd.h"
 
-typedef struct {
+typedef struct GrandPrixIntroPosition {
     u8 left;
     u8 right;
 } GrandPrixIntroPosition;
 
-typedef struct {
+typedef struct GrandPrixIntroLayout {
     u8 x;
     u8 y;
     u8 width;

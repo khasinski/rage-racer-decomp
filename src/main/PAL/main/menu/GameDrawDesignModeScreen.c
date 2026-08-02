@@ -6,7 +6,7 @@
 s32 GameDrawDesignModeScreen(s32 arg0);
 s32 GameDrawTeamLogoScreen(s32 arg0);
 
-typedef struct {
+typedef struct CellMask {
     u8 cells[6][6];
 } CellMask;
 

@@ -17,7 +17,7 @@ extern u_char D_80013904[];
 extern u_char D_80013910[];
 extern void *g_CdDebugInfo[] asm("D_8009931C");
 
-typedef struct {
+typedef struct CdState {
     u_char sync;
     u_char ready;
     u_char command;

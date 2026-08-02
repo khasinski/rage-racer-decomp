@@ -87,7 +87,7 @@ extern volatile u_long *g_GpuDmaMadr asm("D_800942C0");
 extern volatile u_long *g_GpuDmaBcr asm("D_800942C4");
 extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
 
-typedef struct {
+typedef struct GpuRect {
     u_long word0;
     short w;
     short h;

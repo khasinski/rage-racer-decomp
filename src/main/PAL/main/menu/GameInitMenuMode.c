@@ -148,14 +148,14 @@ void func_80050400(s32 arg0, s32 arg1) {
     }
 }
 
-typedef struct {
+typedef struct SVec {
     s16 x;
     s16 y;
     s16 z;
     s16 pad;
 } SVec;
 
-typedef struct {
+typedef struct UVec {
     u16 x;
     u16 y;
     u16 z;

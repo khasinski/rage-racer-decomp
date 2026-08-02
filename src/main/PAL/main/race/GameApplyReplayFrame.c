@@ -6,7 +6,7 @@
 
 #define AVG(a, b) ((s32)((a) + (b) + ((u32)((a) + (b)) >> 31)) >> 1)
 
-typedef struct {
+typedef struct MenuObj {
     s32 x;
     s32 y;
     s32 z;
@@ -25,7 +25,7 @@ typedef struct {
     s16 variantAE;
 } MenuObj;
 
-typedef struct {
+typedef struct MenuBigFrame {
     u16 x0;
     s16 y0;
     u16 z0;
@@ -48,7 +48,7 @@ typedef struct {
     s16 field44_1;
 } MenuBigFrame;
 
-typedef struct {
+typedef struct MenuSmallFrame {
     u16 x;
     s16 y;
     u16 z;

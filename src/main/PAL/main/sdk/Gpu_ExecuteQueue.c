@@ -2,14 +2,14 @@
 
 #include "common.h"
 
-typedef struct {
+typedef struct QEntry {
     void (*cb)(long, long);
     long arg;
     long tag;
     long params[21];
 } QEntry;
 
-typedef struct {
+typedef struct LastCb {
     void (*cb)(long, long);
     long arg;
     long tag;

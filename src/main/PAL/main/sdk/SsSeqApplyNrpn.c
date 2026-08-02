@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-typedef struct {
+typedef struct Arg {
     /*00*/ u_char  f00;
     /*01*/ u_char  f01;
     /*02*/ u_char  r02[4];

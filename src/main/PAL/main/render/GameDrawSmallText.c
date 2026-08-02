@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/state.h"
 
-typedef struct {
+typedef struct Glyph {
     u8 u;
     u8 v;
     u16 w;

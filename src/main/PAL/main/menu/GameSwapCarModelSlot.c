@@ -25,10 +25,10 @@ void func_800512B4(s32 arg0) {
     *scratch = func_8001720C(base + 0xCC, value, 0x24, (arg0 << 4) + 0x24, 0x50, 0x10, 0, 0, 0xFF);
 }
 
-typedef struct { s32 a, b, c, d; } SwVec;
-typedef struct { s32 unk0; u16 unk4; } SwObj698;
-typedef struct { u8 b0, b1, b2, b3, b4, b5, b6, b7; } SwCarRec;
-typedef struct {
+typedef struct SwVec { s32 a, b, c, d; } SwVec;
+typedef struct SwObj698 { s32 unk0; u16 unk4; } SwObj698;
+typedef struct SwCarRec { u8 b0, b1, b2, b3, b4, b5, b6, b7; } SwCarRec;
+typedef struct SwModelPose {
     s32 position[4];
     s32 unk10[4];
     SwVec rotation;
@@ -219,7 +219,7 @@ void func_8005131C(void) {
     D_1F800004 -= 120;
 }
 
-typedef struct { s32 a, b, c, d; } Vec16;
+typedef struct Vec16 { s32 a, b, c, d; } Vec16;
 
 extern Vec16 g_MenuViewScale asm("D_80082D6C");
 extern s32 g_CourseSwapDelay asm("D_8009B354");
@@ -338,7 +338,7 @@ void GameDrawMenuCourseView(void) {
     }
 }
 
-typedef struct { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
+typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 
 extern Vec16 D_80011AC4;
 extern s32 g_TeamNameCharModel asm("D_8009B37C");
