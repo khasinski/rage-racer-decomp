@@ -60,18 +60,18 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     s->unk6E = 1;
     s->read_pos = seq;
 
-    if (seq[0] != 'S' && seq[0] != 'p') {
-    } else {
+    if (!(seq[0] != 'S' && seq[0] != 'p')) {
     s->read_pos = seq + 8;
     if (seq[7] == 1) {
-        goto ok;
-    }
+    } else {
     GameDebugPrintf(g_MsgSeqNotSeqData);
     return -1;
     }
+    } else {
     GameDebugPrintf(g_MsgSeqOldFormat);
     return 0;
-ok:
+    }
+
 
     p = s->read_pos; s->read_pos = p + 1; hi = *p;
     p = s->read_pos; s->read_pos = p + 1; lo = *p;
