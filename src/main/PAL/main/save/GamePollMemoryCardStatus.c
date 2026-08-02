@@ -1456,7 +1456,7 @@ s32 GameLoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 extern char g_FmtCardWildcard[] asm("D_80012FAC");
 extern char g_McDirEntries[] asm("D_8009B748");
 
-void LibcSprintf(char *dst, char *fmt, s32 arg0, s32 arg1) asm("func_800632F0");
+void LibcSprintf() asm("func_800632F0");
 
 s32 GameCountMemoryCardFiles(s32 arg0, s32 arg1) {
     char path[0x20];
