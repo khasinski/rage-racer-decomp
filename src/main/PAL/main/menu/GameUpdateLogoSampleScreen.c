@@ -257,7 +257,7 @@ void GameUpdateTeamNameScreen(void) {
     }
 after_sound:
     pad = g_PadEdge2;
-    if (!(pad & 0x860)) goto maybe_pop;
+    if (pad & 0x860) {
     {
         s32 c = GameMenuCursor;
         if (c == 0x2A) goto pop;
@@ -279,8 +279,8 @@ push:
         if (d >= 7) newdepth = d; else newdepth = d + 1;
     }
     goto set_depth;
+    }
 
-maybe_pop:
     if (!(pad & 0x90)) return;
 pop:
     if (g_TeamNameLength == 0) return;
