@@ -257,7 +257,6 @@ segments:
       - [0x4B4A0, c, PAL/main/menu/GameUpdateMenuMode]
       - [0x4BB60, c, PAL/main/audio/GameStopSoundSlotVoice]
       - [0x4BB88, c, PAL/main/audio/GameSetSoundSlotVoiceEnabled]
-      - [0x4BF68, c, PAL/main/audio/GameStartAudioSlotLoad]
       - [0x4C52C, c, PAL/main/audio/GameSetEffectVolumeScale]
       - [0x4C6A8, c, PAL/main/audio/GameSetPanVoiceTargetVolume]
       - [0x4D114, c, PAL/main/audio/GameSetPitchedSoundCue]
