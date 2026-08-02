@@ -2,7 +2,7 @@
 #include "game/memcard.h"
 #include "game/menu.h"
 
-extern s32 g_McDirEntries[] asm("D_8009B748");
+extern char g_McDirEntries[] asm("D_8009B748");
 
 s32 GameCalculateMemoryCardFreeBlocks(s32 arg0) {
     u8 scratch[8];
@@ -54,7 +54,8 @@ s32 GameRefreshMemoryCardSaveStatus(s32 arg0, GameSaveHeaderRow *arg1) {
 
 extern char g_FmtPlayTime[] asm("D_80012FB8");
 
-void LibcSprintf(void *arg0, char *arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_800632F0");
+/* sprintf: every caller declares its own arity; keep it prototypeless. */
+void LibcSprintf() asm("func_800632F0");
 
 void *GameFormatSaveElapsedTime(void *arg0, u32 arg1) {
     u32 hours = arg1 / 216000;
