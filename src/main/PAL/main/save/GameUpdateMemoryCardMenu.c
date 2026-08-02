@@ -876,34 +876,28 @@ L_sw8:
         g_McMenuPage = 1;
         D_80082FAC = 0;
         g_McSaveMode = *p;
-        goto L_sw10;
+        break;
         }
         if (!(*p != g_McMenuRowCount - 1)) {
-        if (fadeBusy) goto L_sw10;
+        if (fadeBusy) break;
         GamePlaySoundCue(2);
         goto L_b1420;
         }
         GamePlaySoundCue(5);
         g_McMenuPage = 1;
         g_McSaveMode = *p;
-        goto L_sw10;
+        break;
         }
-        if ((pad & 0x90) == 0 || fadeBusy) goto L_sw10;
+        if ((pad & 0x90) == 0 || fadeBusy) break;
         GamePlaySoundCue(3);
     }
 
 L_b1420:
     g_McActionBusy = 0;
     func_8006138C();
-    goto L_sw10;
-
-    case 1:
     break;
 
-    default:
-    goto L_sw10;
-    }
-
+    case 1:
     switch (g_McActionState) {
     case 0:
         if (!(g_McSaveMode == 0)) {
@@ -988,8 +982,11 @@ L_b1420:
         /* fall through to L_sw10 */
     default:
     }
+    break;
 
-L_sw10:
+    default:
+    break;
+    }
     switch (g_McMenuSelection) {
     case 1:
     case 2:
