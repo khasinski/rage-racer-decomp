@@ -71,8 +71,35 @@ extern s32 g_Shuttle1AngleZ asm("D_801E5014");
  * g_ShuttlePath2Points is the split symbol for &g_ShuttlePathPoints[2].
  */
 extern s32 g_ShuttlePath2Points[] asm("D_8007E3A0");
-extern s32 g_ShuttlePathPoints[] asm("D_8007E360");
-extern s16 g_ShuttlePathAngles[] asm("D_8007E3C0");
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+    s32 unk;
+} ShuttleEndpoint;
+
+typedef struct {
+    ShuttleEndpoint endpoint[2];
+} ShuttlePath;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 pad;
+} ShuttleAngles;
+
+extern ShuttlePath g_ShuttlePathPoints[] asm("D_8007E360");
+extern ShuttleAngles g_ShuttlePathAngles[] asm("D_8007E3C0");
+
+/* Byte-offset views. These stay macros because the retail code keeps the
+ * scaled index in a register and re-derives the address at every field; a
+ * pointer variable would let the compiler hold the base instead. RAW() is
+ * required on each read: a plain member access is marked as living in an
+ * aggregate, which stops it aliasing the neighbouring state-> loads and
+ * changes what the surrounding barriers do -- see common.h. */
+#define PATH(byteOffset) (*(ShuttlePath *)((s32)g_ShuttlePathPoints + (byteOffset)))
+#define ANGLES(byteOffset) (*(ShuttleAngles *)((s32)g_ShuttlePathAngles + (byteOffset)))
 extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
 
 void GameInitShuttleScenery(void) asm("func_8003F0F8");
@@ -111,9 +138,9 @@ void GameInitShuttleScenery(void) {
         asm(".globl func_8003F1D0\nfunc_8003F1D0 = func_8003F0F8 + 0xD8");
         index = g_Shuttle1PathIndex;
         v1 = index << 3;
-        g_Shuttle1AngleX = *(s16 *)((s32)g_ShuttlePathAngles + v1);
-        g_Shuttle1AngleY = *(s16 *)((s32)g_ShuttlePathAngles + v1 + 2);
-        value = *(s16 *)((s32)g_ShuttlePathAngles + v1 + 4);
+        g_Shuttle1AngleX = RAW(ANGLES(v1).x);
+        g_Shuttle1AngleY = RAW(ANGLES(v1).y);
+        value = RAW(ANGLES(v1).z);
         index <<= 1;
         g_Shuttle1StartEndpoint = 0;
         g_Shuttle1TravelStep = 0;
@@ -127,10 +154,10 @@ void GameInitShuttleScenery(void) {
     }
     value = state->pathIndex;
     value <<= 5;
-    v1 = *(s32 *)((s32)g_ShuttlePathPoints + value);
-    a4 = *(s32 *)((s32)g_ShuttlePathPoints + value + 4);
-    a5 = *(s32 *)((s32)g_ShuttlePathPoints + value + 8);
-    a6 = *(s32 *)((s32)g_ShuttlePathPoints + value + 12);
+    v1 = RAW(PATH(value).endpoint[0].x);
+    a4 = RAW(PATH(value).endpoint[0].y);
+    a5 = RAW(PATH(value).endpoint[0].z);
+    a6 = RAW(PATH(value).endpoint[0].unk);
     state->x = v1;
     state->y = a4;
     state->z = a5;
@@ -139,17 +166,17 @@ void GameInitShuttleScenery(void) {
     asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;
-    v1 = *(s16 *)((s32)g_ShuttlePathAngles + value);
+    v1 = RAW(ANGLES(value).x);
     /* This barrier is load-bearing: removing it changes .text. */
     asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;
     state->angleX = v1;
-    v1 = *(s16 *)((s32)g_ShuttlePathAngles + value + 2);
+    v1 = RAW(ANGLES(value).y);
     value = state->pathIndex;
     value <<= 3;
     state->angleY = v1;
-    v1 = *(s16 *)((s32)g_ShuttlePathAngles + value + 4);
+    v1 = RAW(ANGLES(value).z);
     value = state->pathIndex;
     state->startEndpoint = 0;
     state->travelStep = 0;
