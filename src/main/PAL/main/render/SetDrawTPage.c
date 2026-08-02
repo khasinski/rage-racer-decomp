@@ -10,13 +10,14 @@ void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
     register s32 encoded asm("$2");
     s32 mode;
 
+    switch (0) { default:
     arg0[3] = 1;
     mode = func_800657E4();
     if (!(mode == 1)) {
 
     mode = func_800657E4();
     if (mode != 2) {
-        goto low_mode;
+        break;
     }
 
     }
@@ -34,6 +35,7 @@ void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
         goto done;
     }
 
+    }
 low_mode:
     {
         /* This pin is load-bearing: removing it changes .text. */
