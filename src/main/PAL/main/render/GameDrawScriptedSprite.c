@@ -23,11 +23,11 @@ void GameDrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     /* These pins are load-bearing: removing any one changes .text. */
     register u8 *record asm("$10") = arg2;
     register u8 *style asm("$9");
+    s32 flags8;
     void *otBase;
     s32 mode;
     s32 flags4;
     /* These pins are load-bearing: removing any one changes .text. */
-    register s32 flags8 asm("$4");
     register s32 limit asm("$8");
     s32 packed;
     s32 x;

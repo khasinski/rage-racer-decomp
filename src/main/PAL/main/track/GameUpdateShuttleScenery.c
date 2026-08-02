@@ -86,13 +86,13 @@ void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 void GameDrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
 
 void GameDrawShuttleScenery(s32 arg0) {
+    s32 drawArg;
     Matrix mtx0;
     Matrix mtx1;
     GameShuttleScenery *state;
     GameShuttleScenery *base;
     Matrix *mtx1Ptr;
     /* This pin is load-bearing: removing it changes .text. */
-    register s32 drawArg asm("$16");
     s32 drawValue;
     s32 offset;
     /* This pin is load-bearing: removing it changes .text. */
