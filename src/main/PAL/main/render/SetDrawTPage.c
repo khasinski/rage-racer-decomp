@@ -36,7 +36,6 @@ void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
     }
 
     }
-low_mode:
     {
         /* This pin is load-bearing: removing it changes .text. */
         register s32 value asm("$7") = 0xE1000000;

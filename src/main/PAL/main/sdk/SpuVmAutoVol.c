@@ -72,7 +72,6 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     return;
 
     }
-large:
     stepForSmallDiv = (short)start;
     offset = (short)target;
     stepForSmallDiv -= offset;
