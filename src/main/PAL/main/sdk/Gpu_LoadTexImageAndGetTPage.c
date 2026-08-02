@@ -15,9 +15,7 @@ long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, lo
     rect.y = arg4;
     rect.h = arg6;
 
-    if (arg1 == 1) {
-        goto one;
-    }
+    if (!(arg1 == 1)) {
     if (arg1 < 2) {
         if (arg1 == 0) {
             goto zero;
@@ -36,8 +34,8 @@ zero:
     }
     rect.w = width >> 2;
     goto call;
+    }
 
-one:
     width = arg5;
     width += (u_long)arg5 >> 31;
     rect.w = width >> 1;
@@ -152,16 +150,14 @@ long GetTPage(long arg0, long arg1, long arg2, long arg3) {
     long value;
 
     mode = func_800657E4();
-    if (mode == 1) {
-        goto high_mode;
-    }
+    if (!(mode == 1)) {
 
     mode = func_800657E4();
     if (mode != 2) {
         goto low_mode;
     }
+    }
 
-high_mode:
     value = ((arg0 & 3) << 9) | ((arg1 & 3) << 7) | ((arg3 & 0x300) >> 3);
     return value | ((arg2 & 0x3FF) >> 6);
 
