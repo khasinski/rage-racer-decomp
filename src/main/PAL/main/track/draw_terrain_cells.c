@@ -18,7 +18,7 @@ void GameDrawTerrainCellsWide(void) {
     GameSubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
 }
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/track/GameDrawTerrainCells", func_800418D4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/track/draw_terrain_cells", func_800418D4);
 
 extern s32 g_CdTrackPending asm("D_8007F600");
 extern s32 g_CdCommandPending asm("D_8007F604");

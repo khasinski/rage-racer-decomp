@@ -191,7 +191,7 @@ table shifts on R1|R2 / L1|L2, the NeGcon table on Down / Up.
 | Name | Addr | Words | Purpose |
 |---|---|---:|---|
 | `GameUpdateFlybyScenery` | 0x8003E590 | 345 | The course's one scripted **airborne** prop, updated (not drawn) once a frame from the race scene and twice from func_8003F608. Armed when `D_8009E83C == D_801E4308 && D_8009E74C` matches the per-series entry in the course event block, then lives 0x1C3 = 451 frames. Linearly lerps three Euler angles over each keyframe's `duration` (-1 wraps), builds `rsinY(0x800 - rotY) * rsinX(rotX) * rsinZ(rotZ)` and **integrates** position by rotating the forward vector `(0, 0, -radius * 4)` through it, so the keyframes steer a heading rather than list waypoints. Sound: distance to the listener `D_8009E6D4/D8/DC` as `dx²/8 + dy²/16 + dz²/8` through func_8006888C, mapped to volume `0x74 - dist`, at fixed pitch 0x1900 — the halved vertical term is what says the object is above the track. `g_CourseIndex & 3` picks cue 1 (MYTHICAL COAST), cue 1 forced silent (OVER PASS CITY) or cue 2 (LAKESIDE GATE, THE EXTREME OVAL). **Was filed under "Sound & music" as a "car proximity/engine audio-cue driver".** |
-| `GameUpdatePathScenery` (**name not in the tree** — 0x8003F9C4 is still `INCLUDE_ASM(…, func_8003F9C4)` in `track/GameDrawScriptedScenery.c` with no alias; this row proposed the name and nobody applied it) | 0x8003F9C4 | 859 | The course's **permanently looping** prop, seeded by func_8003F700 and drawn by func_80040730. Two keyframe tracks: A at `D_801E42DC` stride 0x14 `{s32 x,y,z; s16 loopIndex; s16 duration; s16 easeFlag}` drives position `D_801E4DB8/BC/C0`, B at `D_801E42E8` stride 0x0C `{s16 rx,ry,rz; …}` drives rotation `D_801E4DC8/CA/CC`. Motion is a **sinusoidal ease** between waypoints (`P[i+1] - half - half*rcos(t*0x800/dur)>>12` then `P[i] + half + half*rsin(…-0x400)>>12`), not a lerp. Sound is cue 0, culled outside a ±0x1000 box, `vol = 0x64 - (sqrt(dx²/4 + dy²/8 + dz²/4) >> 10)`, slew-limited ±0x14 against `D_801E4DF0`, with pitch `((delta/2) + 0x3C) << 7` — an approximated Doppler shift. **Was described here as a "dual-channel record/marker state machine … stride 20"**, wrong on the framing and on both strides. |
+| `GameUpdatePathScenery` (**name not in the tree** — 0x8003F9C4 is still `INCLUDE_ASM(…, func_8003F9C4)` in `track/draw_scripted_scenery.c` with no alias; this row proposed the name and nobody applied it) | 0x8003F9C4 | 859 | The course's **permanently looping** prop, seeded by func_8003F700 and drawn by func_80040730. Two keyframe tracks: A at `D_801E42DC` stride 0x14 `{s32 x,y,z; s16 loopIndex; s16 duration; s16 easeFlag}` drives position `D_801E4DB8/BC/C0`, B at `D_801E42E8` stride 0x0C `{s16 rx,ry,rz; …}` drives rotation `D_801E4DC8/CA/CC`. Motion is a **sinusoidal ease** between waypoints (`P[i+1] - half - half*rcos(t*0x800/dur)>>12` then `P[i] + half + half*rsin(…-0x400)>>12`), not a lerp. Sound is cue 0, culled outside a ±0x1000 box, `vol = 0x64 - (sqrt(dx²/4 + dy²/8 + dz²/4) >> 10)`, slew-limited ±0x14 against `D_801E4DF0`, with pitch `((delta/2) + 0x3C) << 7` — an approximated Doppler shift. **Was described here as a "dual-channel record/marker state machine … stride 20"**, wrong on the framing and on both strides. |
 
 ### Sound & music
 | Name | Addr | Words | Purpose |
@@ -1108,7 +1108,7 @@ Two mechanical traps worth recording for the next pass:
 
   A full objdump cross-reference finds **nineteen** references, and the load at
   `0x80016684` is inside `GameMainLoop`
-  (`src/main/PAL/main/boot/GameInitSubsystems.c`):
+  (`src/main/PAL/main/boot/init_subsystems.c`):
 
       frameLimit = g_FrameSyncThreshold;
       while (VSync(1) < frameLimit) { }
@@ -1670,7 +1670,7 @@ Names that leak into `render/`, `menu/`, `asset/`, `cd/`, `fmv/`, `sdk/` or
 `boot/` were applied **only inside the three gameplay directories**; those files
 keep the raw `D_` / `func_` spelling and still link, because the emitted symbol
 never changed. The same applies to the four inline-`asm` `%hi`/`%lo` references
-in `car/GameBlendPaintColor.c`, which must keep the raw `D_8019CB38` /
+in `car/blend_paint_color.c`, which must keep the raw `D_8019CB38` /
 `D_8019CB3A` spelling (see 12c).
 
 ### 15a. The wrong-way warning — one chain, four names
@@ -1868,8 +1868,8 @@ objdump -d build/PAL/main.elf | grep -cE 'jal[ \t]+8003cdf4 '
 ```
 
 
-- **`race/GameUpdateWaypointRaceScene.c` and the waypoint half of
-  `race/GameIsCarNearWaypoint.c` are an unreachable game mode.**
+- **`race/update_waypoint_race_scene.c` and the waypoint half of
+  `race/is_car_near_waypoint.c` are an unreachable game mode.**
   `func_80037200` and `func_80037D90` have zero references and are not in the
   scene table, and with them go `GameSeedWaypoints`, `GameUpdateWaypoints`,
   `GameDrawWaypoints`, `GameCountActiveWaypoints`, `GameDrawLapNumber`,
@@ -1929,7 +1929,7 @@ The names are kept: the code is in the ROM and has to be read by someone.
   screen's two rows write them and hand them straight to `GameSetBodyColor1` /
   `GameSetBodyColor2`, so they are body colour 1 and body colour 2, not
   geometry/texture selectors. The rename is not done here because
-  `asset/GameRequestCarSelectAssets.c` and `menu/GameUpdateLogoSampleScreen.c`
+  `asset/request_car_select_assets.c` and `menu/update_logo_sample_screen.c`
   use the current field names and are another pass's territory.
 - **Cue numbers.** Cues can be placed by their trigger conditions (0x1E-0x22
   countdown, 0x23 over-speed, 0x26 record, 0x27-0x29 laps to go, 0x2A final lap,
@@ -2666,16 +2666,16 @@ happened to place in the middle of the game text. They must not be "fixed" into
   (`D_801E4178`, named since), and the four steps are not identified. Its unit is named after the libcd `cdread.c`
   statics that dominate it, which is what section 14c already decided about the
   file's placement.
-* **`func_8004A17C`** (51 words, in `menu/GameDrawTeamLogoCanvas.c`) has **no
+* **`func_8004A17C`** (51 words, in `menu/draw_team_logo_canvas.c`) has **no
   caller anywhere**, and its two globals `D_8009B280` / `D_8009B284` are
   referenced nowhere else in the image. It ramps a level and draws a 248×480
   semi-transparent grey curtain at (72, 0). Dead code with a private accumulator:
   no feature can be attributed to it.
-* **`func_80052128`** (12 words, in `menu/GameDrawCarEngineSpec.c`) also has no
+* **`func_80052128`** (12 words, in `menu/draw_car_engine_spec.c`) also has no
   caller and no data reference. It prints one of the 13 strings
   `"CAR-0"`..`"CAR-C"` from `D_80082E70` through `GameDrawText8x8`. A leftover
   debug label printer; naming it would imply it is reachable.
-* **`func_80050400`** (175 words, in `menu/GameInitMenuMode.c`) provably belongs
+* **`func_80050400`** (175 words, in `menu/init_menu_mode.c`) provably belongs
   to screen id 11 — its reset is welded to `g_MenuHandlerIndex = 11` and its only
   live caller is `GameUpdateCarShopScreen`. But *what its two unfolding textured
   plates depict* is not proven: plate A is gated on `g_CarModelAsset[8]`, an
@@ -2748,7 +2748,7 @@ that turns an individual file from unreadable into readable.
 
 ### 18a. The camera work block at `0x8009B1B8` (37 names, one file)
 
-`track/GameUpdateCamera.c` alone held 38 raw globals, all of one contiguous
+`track/update_camera.c` alone held 38 raw globals, all of one contiguous
 block, and reading it settles what the five camera modes are.
 
 `GameUpdateCamera(mode, object)` takes modes 0 and 1 straight from
@@ -2828,7 +2828,7 @@ keeps. A higher setting needs more twist for full lock.
 
 **The index is `g_NegconMaxTwist` (`D_801E418C`), not `g_NegconSteerPlay`.**
 This paragraph originally said "the 0..3 setting the NEGCON STEER PLAY screen
-edits", and `car/GameInitPlayerCar.c` declared the symbol `g_NegconSteerPlay` to
+edits", and `car/init_player_car.c` declared the symbol `g_NegconSteerPlay` to
 match. Both were wrong; the image settles it at `0x80014464`, where the two
 settings index two different tables at two different strides:
 
@@ -2855,7 +2855,7 @@ alias-collision check 19a asks for (one name per address, one address per name).
   yaw*. Both roles are live, in the same function, and no name is honest for
   both, so the block has a hole and a comment saying why. Aliasing one address
   to two identifiers in one TU would compile, but it would be worse to read.
-* **`D_801E40B8` left raw in `car/GameUpdateCarTrafficAvoidance.c`.** It is
+* **`D_801E40B8` left raw in `car/update_car_traffic_avoidance.c`.** It is
   `g_RankedCars - 1` and the walker never loads the byte at that address. But
   `0x801E40B8` already has a name for what lives there — `g_SceneTimer` — so a
   second alias would tell a reader the scene timer is a car pointer. Raw plus a
@@ -2906,7 +2906,7 @@ alias-collision check 19a asks for (one name per address, one address per name).
   claimed it was never read, so the document states it once.
 * **A second `%hi`/`%lo` trap, in this territory.** `LA_ORDERED(dst, sym, dep)`
   in `include/asm_macros.h` **stringifies** its symbol into an inline-asm `la`.
-  `track/GameSeekEnvironmentScript.c` uses it on `D_801E6DA4` (the 16-entry sky
+  `track/seek_environment_script.c` uses it on `D_801E6DA4` (the 16-entry sky
   CLUT), so that symbol must keep the raw spelling exactly like the
   `%hi`/`%lo` cases in 12c. Renaming it links clean at compile time and fails at
   link. Any future pass touching a `LA_ORDERED` argument must know this.
@@ -2957,7 +2957,7 @@ By directory: `save` 76, `menu` 64, `audio` 50, `fmv` 35, `boot` 25, `cd` 23,
    named `g_CarModelBaseIndex`
    / `g_CarModelUnlockBase` in `car/`. This pass initially coined
    `g_CarAssetBase` / `g_CarUnlockLevelBase` for the same two symbols in
-   `asset/GameGetCarAssetIndex.c`; that was caught by an alias-collision check
+   `asset/get_car_asset_index.c`; that was caught by an alias-collision check
    and reverted to the existing spellings. **A per-file *type* is allowed; a
    per-file *name* is not.** The check is worth keeping: grep every
    `NAME asm("D_XXXXXXXX")` in `src/` + `include/` and assert one name per
@@ -2997,7 +2997,7 @@ CdlModeRept`, which is why `GameTickCdAudio` can detect end-of-track as status 4
 
 ### 19c. `audio/` — the engine-sound curve table
 
-`GameLoadAudioParameterTable` (in `menu/GameUpdateMenuMode.c`) writes the shape
+`GameLoadAudioParameterTable` (in `menu/update_menu_mode.c`) writes the shape
 out longhand: **`g_EngineSoundCurves` (`D_801E446C`) is `[2 banks][12][9][2]`** —
 bank stride `0x360`, row stride `0x48`, nine `{position, value}` breakpoints per
 row — and its last word becomes **`g_EngineSoundMaxRpm`** (`D_801E6CC4`, clamped
@@ -3070,7 +3070,7 @@ diagram has settled. Its companions are `g_PadConfigFlipTimer` (`D_801E7A4C`, a
 `GameOpenMemoryCardEvents` opens eight handles as `D_8009B538[0..7]`, so the four
 `Hw` and four `Sw` slots that 17b identified now carry the spec in the name:
 `g_McHwEventIoe / …Error / …Timeout / …New` and the `g_McSw…` four. The same
-address is declared `s32 g_McEvents[]` in `GamePollMemoryCardStatus.c`, which
+address is declared `s32 g_McEvents[]` in `poll_memory_card_status.c`, which
 indexes it — a textbook 12c per-file type.
 
 `GameEnterMemoryCardMenu` and `GameEnterMemoryCardMenuFromLoad` differ in exactly
@@ -3156,7 +3156,7 @@ destination while it spins between two cars; `g_CourseSwapDelay` (`D_8009B354`,
 `g_ScreenOffsetEditX/Y` are the live copies the screen-adjust panel edits before
 committing to `g_ScreenOffsetX/Y`.
 
-`g_GrandPrixSeriesU16` in `menu/GameDrawNowLoadingText.c` is the one place the
+`g_GrandPrixSeriesU16` in `menu/draw_now_loading_text.c` is the one place the
 12c "same name, per-file type" rule could not be applied literally: that file
 includes `game/race.h`, which already declares `g_GrandPrixSeries` as `s16`, and
 the unit needs a `u16` view of the same address. A second C spelling was the only
@@ -3222,14 +3222,14 @@ the sha1 moved off `2913e15648eddef40821c5f666460abc04155ee6`.
 
 | run | was | is now | where |
 |---|---|---|---|
-| `D_801E3FB6` 27 words | 27 `PackedWord` externs | `GameEnvColorSlot g_EnvColors[9]`, each `{ cur, from, to }` of `GameEnvColor` | `include/game/render.h`; users `track/GameLoadEnvironmentCue.c`, `track/GameSeekEnvironmentScript.c` |
-| `D_8009B1B8/C8/D8` | `g_CamPathOffset{,Start,Delta}{X,Y,Z}` | `s32 g_CamPathOffsetDelta[3]` / `…Start[3]` / `g_CamPathOffset[3]` | `track/GameUpdateCamera.c` |
+| `D_801E3FB6` 27 words | 27 `PackedWord` externs | `GameEnvColorSlot g_EnvColors[9]`, each `{ cur, from, to }` of `GameEnvColor` | `include/game/render.h`; users `track/load_environment_cue.c`, `track/seek_environment_script.c` |
+| `D_8009B1B8/C8/D8` | `g_CamPathOffset{,Start,Delta}{X,Y,Z}` | `s32 g_CamPathOffsetDelta[3]` / `…Start[3]` / `g_CamPathOffset[3]` | `track/update_camera.c` |
 | `D_8009B1E8/F8/B208` | `g_CamPath{Pitch,Yaw,Roll,Dist}{Delta,Start,}` | `s32 g_CamPathAngleDelta[4]` / `…Start[4]` / `g_CamPathAngle[4]` + `CAMPATH_PITCH/YAW/ROLL/DIST` | same |
-| `D_801E4DC8` | `g_PathSceneryRot{X,Y,Z}` and a `Blk8` under a fourth name | one `g_PathSceneryRot`, `s16[3]` in the drawer and `Blk8` in the initialiser | `track/GameDrawPathScenery.c`, `track/GameDrawScriptedScenery.c` |
-| `D_801E4DD0` / `D_801E4DD8` | `g_PathScenery{Rot,}HalfDelta{X,Y,Z}` | `s16 g_PathSceneryRotHalfDelta[3]` / `g_PathSceneryHalfDelta[3]` | `track/GameDrawScriptedScenery.c` |
-| `D_8019C7D4` 8 halfwords | `g_TachoNeedleQuad{X,Y}{0..3}` | `s16 g_TachoNeedleQuad[4][2]` | `car/GameGetTrackSurfaceHeight.c` (writer) and `race/GameDrawWrongWayWarning.c` (reader) |
-| `D_801E4094`, `D_801E6E7C`, `D_8019C980` | three `s32` bases plus 12 split field symbols | three `GameRaceProgress` objects, fields as members | `include/game/race.h`; `save/GameStoreSaveStateBlock.c`, `save/GameLoadSaveStateBlock.c`, `menu/GameUpdatePrizeMoneyScreen.c`, `menu/GameEnterFrontend.c` |
-| `D_8009AF84/88` | `g_SectorTime1/2` | `g_SectorTimes[1]/[2]` | `race/GameUpdateLapAndFinish.c` |
+| `D_801E4DC8` | `g_PathSceneryRot{X,Y,Z}` and a `Blk8` under a fourth name | one `g_PathSceneryRot`, `s16[3]` in the drawer and `Blk8` in the initialiser | `track/draw_path_scenery.c`, `track/draw_scripted_scenery.c` |
+| `D_801E4DD0` / `D_801E4DD8` | `g_PathScenery{Rot,}HalfDelta{X,Y,Z}` | `s16 g_PathSceneryRotHalfDelta[3]` / `g_PathSceneryHalfDelta[3]` | `track/draw_scripted_scenery.c` |
+| `D_8019C7D4` 8 halfwords | `g_TachoNeedleQuad{X,Y}{0..3}` | `s16 g_TachoNeedleQuad[4][2]` | `car/get_track_surface_height.c` (writer) and `race/draw_wrong_way_warning.c` (reader) |
+| `D_801E4094`, `D_801E6E7C`, `D_8019C980` | three `s32` bases plus 12 split field symbols | three `GameRaceProgress` objects, fields as members | `include/game/race.h`; `save/store_save_state_block.c`, `save/load_save_state_block.c`, `menu/update_prize_money_screen.c`, `menu/enter_frontend.c` |
+| `D_8009AF84/88` | `g_SectorTime1/2` | `g_SectorTimes[1]/[2]` | `race/update_lap_and_finish.c` |
 | `D_801E41EC/F0` | `g_BestSectorTime1/2` | `&g_BestSectorTimes[0][0][1]/[2]` | same |
 
 Sixty-eight declarations become nineteen. Three things are worth recording
@@ -3261,7 +3261,7 @@ side by side with a comment saying so.
 ### 20b. Aggregations that do not hold, and what the compiler did instead
 
 * **`g_RefSectorTime0/1/2` (`D_8009AF90`) cannot become `g_RefSectorTimes[k]`**
-  in `race/GameUpdateLapAndFinish.c`. With three symbols gcc emits three
+  in `race/update_lap_and_finish.c`. With three symbols gcc emits three
   independent `%hi`/`%lo` pairs. With one array symbol it CSEs the base into a
   register, and the resulting live range reshuffles the register allocation of
   the whole surrounding block — the diff is not just the relocation form, it
@@ -3270,15 +3270,15 @@ side by side with a comment saying so.
   `g_SectorTimes[0]` is already spelled that way there, so nothing changes
   about how many bases are live.
 * **The eight libcard event descriptors at `D_8009B538` cannot become
-  `g_McEvents[k]`** in `save/GameClearMemoryCardHwEvents.c`, even though
-  `save/GamePollMemoryCardStatus.c` already opens them as an array. The four
+  `g_McEvents[k]`** in `save/clear_memory_card_hw_events.c`, even though
+  `save/poll_memory_card_status.c` already opens them as an array. The four
   pollers call `TestEvent` in a row; with an array base gcc keeps that base in
   a callee-saved register across the calls, and
   `GamePollMemoryCardHwEvent`'s frame grows from 24 to 32 bytes. The eight
   scalars stay, with the array layout and the index-plus-one return convention
   written at the declaration.
 * **`g_Shuttle1*` cannot become `g_ShuttleScenery[1].field`** in
-  `track/GameDrawRouteScenery.c`, although `GameShuttleScenery` is already
+  `track/draw_route_scenery.c`, although `GameShuttleScenery` is already
   typed and `GameUpdateShuttleScenery` indexes the array happily. As member
   references the loads and stores get `MEM_IN_STRUCT_P`, stop aliasing the
   `g_ShuttlePath*` table reads interleaved with them, and gcc hoists one base
@@ -3348,7 +3348,7 @@ names from different directories. **Section 22 resolved ten of them** — see it
 `D_8019C754`, `D_8009B1B0`, `D_801E4B34` and `D_800941E8`. The eleventh,
 `D_801E6CA4` (`g_EffectVolumeScale` / `g_SoundScale`), is **kept split on
 purpose**: a struct member reference is non-aliasing to gcc 2.6.3
-(`MEM_IN_STRUCT_P`) and the volume arithmetic in `GameSetPitchedSoundCue.c`
+(`MEM_IN_STRUCT_P`) and the volume arithmetic in `set_pitched_sound_cue.c`
 reorders, in either direction. Section 22 records the experiment.
 
 The remaining duplicates are the sanctioned array-base-plus-element-zero pattern
@@ -4107,8 +4107,8 @@ pass, i.e. the same sanctioned pattern, but nobody has checked them one by one.
 only asked "does one address have two names" and not the reverse:
 
 - **`g_McCardStatus` is bound to two different addresses.** `game/menu.h` and
-  `save/GameUpdateMemoryCardMenu.c` bind it to `D_8009B720`;
-  `save/GamePollMemoryCardStatus.c` binds it to `D_801E825C`. Both are live, and
+  `save/update_memory_card_menu.c` bind it to `D_8009B720`;
+  `save/poll_memory_card_status.c` binds it to `D_801E825C`. Both are live, and
   a reader who follows the header into the poller reads the wrong global.
 - **`SsUtKeyOnV` is bound to two different addresses** — `func_80077C7C` in
   `psyq/snd.h` and `sdk/SsUtKeyOnV.c`, and `func_80076C50` (an empty two-word
@@ -4131,10 +4131,10 @@ Neither is fixed here; both are recorded so the next pass over `save/` and
 | `D_8019CB08` | `g_NegconMappingIndex` | `g_NegconConfigIndex` | Same reading, seven files to one. |
 | `D_8019CB74` | `g_PrizeScreenState` | `g_PrizeScreenStep` | `GameUpdatePrizeMoneyScreen` switches on it over eight states 0..7; it is not a step size. |
 | `D_8019CE0C` | `g_PromotionBonus` | `g_PendingClassBonus` | Loaded from `g_PromotionBonusTable[class]` and printed under the screen's own "PROMOTION BONUS" caption (`D_80010E40`). That it counts down to zero is documented, not encoded in the name. |
-| `D_801E3FB6` | `g_EnvColors` | `g_EnvFogColor`, and its `G`/`B` siblings | `track/GameSeekEnvironmentScript.c` needed the three bytes of `g_EnvColors[0].cur` individually for SetFarColor; it now reaches them through `ENV_FOG_RGB` = `((u8 *)g_EnvColors)`, which matches. |
+| `D_801E3FB6` | `g_EnvColors` | `g_EnvFogColor`, and its `G`/`B` siblings | `track/seek_environment_script.c` needed the three bytes of `g_EnvColors[0].cur` individually for SetFarColor; it now reaches them through `ENV_FOG_RGB` = `((u8 *)g_EnvColors)`, which matches. |
 | `D_801E4B34` | `g_FrameParity` | `g_DrawBufferParity` | Index of the current frame context in `g_FrameContexts`, written beside `g_DrawBuffer`; the 240-line y bias in `race/` is a consequence, not the definition. |
-| `D_801E4B60` | `g_PadButtonMapping` | `g_PadSteerLeftMask`, `g_PadSteerRightMask` | The aggregate works in `car/GameInitPlayerCar.c` too: masks 0 and 1 are now `g_PadButtonMapping[0]` / `[1]`. |
-| `D_801E4D98` | `g_SectorEndDistance` | `g_SectorEndDistance0/1/2` | The array spelling was assumed to be impossible in `race/GameUpdateLapAndFinish.c` by analogy with `g_RefSectorTimes`; it was retested and matches. |
+| `D_801E4B60` | `g_PadButtonMapping` | `g_PadSteerLeftMask`, `g_PadSteerRightMask` | The aggregate works in `car/init_player_car.c` too: masks 0 and 1 are now `g_PadButtonMapping[0]` / `[1]`. |
+| `D_801E4D98` | `g_SectorEndDistance` | `g_SectorEndDistance0/1/2` | The array spelling was assumed to be impossible in `race/update_lap_and_finish.c` by analogy with `g_RefSectorTimes`; it was retested and matches. |
 | `D_801E6C78` | `g_BonusCountStep` | `g_BonusTickRate` | `bonus / 250`, subtracted from the counter every frame: an amount per tick, not a rate. |
 | `D_801E6DA0` | `g_PrizeCountStep` | `g_PrizeTickRate` | Same, `prize / 80`. |
 | `D_801F17B0` | `g_PrizeAmount` | `g_PendingPrizeMoney` | The figure under the "PRIZE MONEY" caption (`D_80010E30`), counted down into the total. |
@@ -4147,10 +4147,10 @@ Each of these compiles fine under one name; it is the *object file* that changes
 |---|---|---|
 | `D_8009AF4C` | `g_FmvUploadRect` / `g_FmvUploadRectX` | Whole-`Rect` copy and a `volatile s16` x in the same function. `g_FmvUploadRect.x` does not match. |
 | `D_8009AF90` | `g_RefSectorTimes` / `g_RefSectorTime0` | Retested: `g_RefSectorTimes[k]` in `GameUpdateLapAndFinish` still shifts the whole surrounding allocation. |
-| `D_8009B538` | `g_McEvents` / `g_McHwEventIoe` | Retested: `g_McEvents[k]` in `GameClearMemoryCardHwEvents.c` keeps the base live in a callee-saved register and grows the frame. |
-| `D_8009B720`, `D_8009B72C`, `D_8009B740` | `g_McCardStatus` / `g_McMenuSubState` / `GameMenuLoadPhase` plus a `…V` alias each | `save/GameUpdateMemoryCardMenu.c` reads each of the three **both** ways, and only the volatile spelling forces the reload retail has at those sites. A redeclaration cannot add the qualifier: gcc 2.6.3 keeps the first declaration's type (that is also why the `volatile` at `GameWriteMemoryCardSaveFile.c:196` is a no-op), so the alias needs its own identifier. Convention adopted: the volatile alias is the base name plus `V`. |
-| `D_8019CABC` | `g_GrandPrixSeries` / `g_GrandPrixSeriesU16` | `menu/GameDrawNowLoadingText.c` includes `game/race.h`, and `u16` vs `s16` is a hard "conflicting types" error in gcc 2.6.3, not a warning. |
-| `D_801E6CA4` | `g_EffectVolumeScale` / `g_SoundScale` | `SoundScale` is just `{ g_EffectVolumeScale; g_VabIds[3] }`. Spelling the three reads in `GameSetPitchedSoundCue.c` as those two existing globals compiles but does not match, in either direction: a struct member reference is non-aliasing to gcc 2.6.3 (`MEM_IN_STRUCT_P`) and the volume arithmetic reorders. |
+| `D_8009B538` | `g_McEvents` / `g_McHwEventIoe` | Retested: `g_McEvents[k]` in `clear_memory_card_hw_events.c` keeps the base live in a callee-saved register and grows the frame. |
+| `D_8009B720`, `D_8009B72C`, `D_8009B740` | `g_McCardStatus` / `g_McMenuSubState` / `GameMenuLoadPhase` plus a `…V` alias each | `save/update_memory_card_menu.c` reads each of the three **both** ways, and only the volatile spelling forces the reload retail has at those sites. A redeclaration cannot add the qualifier: gcc 2.6.3 keeps the first declaration's type (that is also why the `volatile` at `write_memory_card_save_file.c:196` is a no-op), so the alias needs its own identifier. Convention adopted: the volatile alias is the base name plus `V`. |
+| `D_8019CABC` | `g_GrandPrixSeries` / `g_GrandPrixSeriesU16` | `menu/draw_now_loading_text.c` includes `game/race.h`, and `u16` vs `s16` is a hard "conflicting types" error in gcc 2.6.3, not a warning. |
+| `D_801E6CA4` | `g_EffectVolumeScale` / `g_SoundScale` | `SoundScale` is just `{ g_EffectVolumeScale; g_VabIds[3] }`. Spelling the three reads in `set_pitched_sound_cue.c` as those two existing globals compiles but does not match, in either direction: a struct member reference is non-aliasing to gcc 2.6.3 (`MEM_IN_STRUCT_P`) and the volume arithmetic reorders. |
 | `D_8009AB7C` | `g_SpuRegBase` / `g_SpuRegBaseNv` | `_spu_FgetRXXa` reads the SPU register file through a non-volatile pointer; the volatile spelling does not match. |
 
 ### Hardware register mirrors
@@ -4250,7 +4250,7 @@ index `StGetNext` walks and wraps.
 
 97 addresses that already had a name in one file were still spelled `D_…` in
 others; those uses now use the name. Two were reverted and are commented in
-place: `car/GameUpdateCarTrafficAvoidance.c` reuses `D_801E40B8` for something
+place: `car/update_car_traffic_avoidance.c` reuses `D_801E40B8` for something
 other than `g_SceneTimer`, and `sdk/SpuVmAlloc.c` includes `game/audio.h`, whose
 `g_SndVoiceFlags` is `volatile` — and gcc 2.6.3 rejects a requalified *array*
 redeclaration outright, where it merely warns for a scalar.
@@ -4578,7 +4578,7 @@ sanctioned.
 ## 27. `func_800418D4`: where schedule search runs out
 
 Recorded because someone will otherwise repeat it. The largest remaining stub
-(1211 words, `main/track/GameDrawTerrainCells.c`) was worked down from 663 to
+(1211 words, `main/track/draw_terrain_cells.c`) was worked down from 663 to
 **418** differing words, measured independently rather than taken from the
 agent's own notes:
 
@@ -4910,7 +4910,7 @@ must keep the unsigned one.** Retail reads it here as `lh` followed by `blez`
 (`8003B824`, `8003C1DC`), which the probe table in 30c shows is only reachable
 from a signed field or an explicit `(s16)` cast. Declaring it `s16` was tried and
 **moved the sha1**: it changes `GameApplyCarKnockback` in
-`GameBuildStartingGrid.c`, whose matched body is
+`build_starting_grid.c`, whose matched body is
 `u32 timer = obj->motionTimer - 1; ... if ((s32)(timer << 16) <= 0)` and depends
 on the unsigned promotion. So the declaration stays `u16`, with a comment, and
 the conversion of these two functions must spell the test
@@ -5019,7 +5019,7 @@ non-`$sp` field offsets** instead. That metric put `func_80032280` far in front
 an existing one.** The new structure is not the one the offset count implied: 34
 of the 53 offsets belong to a **scratchpad work record at `0x1F80011C`**, and
 that record is already fully spelled out in matched code — `func_80031298`
-(`GameUpdateCarTrackState`, `car/GameUpdateCarTrackState.c`) is the *clamping
+(`GameUpdateCarTrackState`, `car/update_car_track_state.c`) is the *clamping
 twin* of this stub and uses the same base with the same offsets. So the layout
 came out corroborated rather than inferred, which is the strongest evidence this
 pass has produced. The genuinely new type is small: a **12-byte arc-centre
@@ -5138,10 +5138,10 @@ and two words are read from it, +0x00 and +0x04, which the stub subtracts from
 the car's and the two points' x and z before taking `atan2`. The stride 12 is
 proven at three independent sites: 8003237C in the stub,
 `FIELD` line 101 of `GameUpdateCarTrackState`, and line 755 of
-`car/GameUpdateCarDrivetrain.c`, which performs the identical arc computation and
+`car/update_car_drivetrain.c`, which performs the identical arc computation and
 already spells the symbol `u8 *` with its own `* 0xC`.
 
-**`track/GameInstallTrackPoints.c` declares it `extern GameTrackPoint
+**`track/install_track_points.c` declares it `extern GameTrackPoint
 *g_TrackArcCenters`, i.e. a 24-byte element.** That is wrong, and harmless only
 because that unit never subscripts it — it just publishes
 `points + count * sizeof(GameTrackPoint)`, where the 24 is the *point* stride and
@@ -5253,7 +5253,7 @@ and `$s6` is a `$fp + 0x24` biased giv over the inner loop — the same +0x24 bi
 * **`field_C8` / `field_D0` are the velocity components.** `lhu 0xC8($fp)` minus
   `lhu 0xC8($s7)` at 8003A050, `/32` with the `+0x1F` rounding, becomes the second
   argument of `GameSetCarKnockback` (`func_80038CE8`, named in
-  `GameUpdateCarTrackState.c`); `field_D0` becomes the third. A knockback built
+  `update_car_track_state.c`); `field_D0` becomes the third. A knockback built
   from the *difference* of two cars' values at these offsets is a relative
   velocity and nothing else. That is independent of §30e's derivation, which came
   from `sin/cos(headingAngle) * field_A4 / 256`.
