@@ -11,6 +11,12 @@
  * owns only "DiskError: " and "CDROM: unknown intr", neither of which names a
  * function. CD_intr / CD_getintr / CD_status / CD_readIntr are all
  * unfalsifiable here, so no name is asserted.
+ *
+ * Confirmed under emulation 2026-08-03: across a boot-to-race trace it is the
+ * only writer of g_CdSyncStatus, g_CdSyncResult, g_CdReadyStatus and
+ * g_CdReadyResult, and reads no global at all. That matches the decoder
+ * reading above exactly -- but it still does not pin a Sony name, so the
+ * decision to leave it raw stands.
  */
 
 extern volatile u_char *g_CdReg0 asm("D_80099300");

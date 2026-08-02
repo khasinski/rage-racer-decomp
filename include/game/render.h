@@ -464,6 +464,13 @@ void DrawBitPatternOverlay(s32 pattern) asm("func_80047E60");
  * plain s32) and carry their own aliased declaration so that the name is the
  * same everywhere without changing the generated load.
  */
+/*
+ * Measured under emulation (2026-08-03, in-race, ~/Projects/rage-trace):
+ * Gpu_ClearOTagDma is the only writer of two ordering tables, each exactly
+ * 0x1600 bytes = 1408 entries, at 0x8019CF04 and 0x801C06EC -- one per frame
+ * context, so the contexts are 0x237E8 apart. Those two runs are also the
+ * busiest memory in a race frame.
+ */
 extern u8 *g_DrawBuffer asm("D_8019C900");
 
 /*

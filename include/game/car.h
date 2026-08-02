@@ -26,6 +26,18 @@ typedef struct GameCarRuntime {
      * InitRivalCar that the old `s16` forced. See names.md 30. */
     s32 y;
     s32 z;
+    /*
+     * +0x0C..+0x1C measured under emulation (2026-08-03, first Grand Prix
+     * race, ~/Projects/rage-trace): UpdatePlayerCar's call subtree writes
+     * +0x10, +0x14 and +0x18 every frame and nothing else in this block.
+     * Driving straight under throttle leaves +0x10 near-constant at 49 while
+     * x falls ~5/frame; steering left leaves +0x10 alone and makes +0x18 climb
+     * 0 -> 5 as z starts to grow. +0x14 stays 0 on flat ground and +0x0C/+0x1C
+     * are always 0, which makes this a padded triple like the position above.
+     * So it is a per-frame motion vector -- but NOT the world velocity that
+     * GameCarDrive already documents at +0xC8/+0xD0, and the scale does not
+     * match x's delta 1:1, so the frame of reference is still unpinned.
+     */
     s32 field_0C;
     s32 field_10;
     s32 field_14;
