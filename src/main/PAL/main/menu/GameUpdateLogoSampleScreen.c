@@ -528,6 +528,7 @@ void func_80059320(void) {
     s32 index;
     GameCarEntry *entry;
 
+    switch (0) { default:
     if (D_8009B33C != 0) {
         g_PrevOwnedCarIndex = -1;
         index = g_CarListCursor - 1;
@@ -557,11 +558,11 @@ void func_80059320(void) {
                             goto backward_check;
                         }
                         g_PrevOwnedCarIndex = index;
-                        goto backward_done;
+                        break;
                     }
                     if (progression >= value) {
                         g_PrevOwnedCarIndex = index;
-                        goto backward_done;
+                        break;
                     }
                 }
                 index--;
@@ -573,7 +574,7 @@ void func_80059320(void) {
         }
     }
 
-backward_done:
+    }
     if (D_8009B33C != 0) {
         g_NextOwnedCarIndex = -1;
         index = g_CarListCursor + 1;
