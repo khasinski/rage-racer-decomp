@@ -51,6 +51,7 @@ long SpuVmVSetUp(long arg0, long arg1) {
     u_char *data;
     u_char *entry;
 
+    switch (0) { default:
     if ((u_short)raw0 < 0x10) {
         chan = (short)arg0;
         if (g_SndVabStatus[chan] != 1) {
@@ -58,13 +59,13 @@ long SpuVmVSetUp(long arg0, long arg1) {
         }
         index = (short)arg1;
         if (index < g_SndVabProgMax) {
-            goto success;
+            break;
         }
     }
 
     return -1;
 
-success:
+    }
     {
         u_char *meta = g_SndVabHeader[chan];
         /* This pin is load-bearing: removing it changes .text. */
