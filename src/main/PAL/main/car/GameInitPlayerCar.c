@@ -508,7 +508,7 @@ void GameUpdateCarBodyRoll(A *ctx) {
         a1 = g_PadHeld & g_PadButtonMapping[1];
     }
 
-    if (v1 == 0) goto L_11c;
+    if (!(v1 == 0)) {
     a0v = 2;
     if (ctx->fB8 != 0) a0v = 1;
     v1 = p->x1C;
@@ -521,8 +521,8 @@ void GameUpdateCarBodyRoll(A *ctx) {
     ctx->f64 = ctx->f64 - 6;
     goto L_194;
 
-L_11c:
-    if (a1 == 0) goto L_174;
+    }
+    if (!(a1 == 0)) {
     a0v = 1;
     if (ctx->fB8 != 0) a0v = 2;
     v1 = p->x1C;
@@ -535,7 +535,7 @@ L_11c:
     ctx->f64 = ctx->f64 + 6;
     goto L_194;
 
-L_174:
+    }
     p->x40 = 0;
     p->x1C = p->x1C / 3;
 
@@ -550,7 +550,7 @@ L_1C4:
     if (g_PadType != 0x23) goto L_43C;
     a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconMaxTwist];
     if (g_MirrorMode != 0) a1 = -a1;
-    if (a1 >= 0) goto L_310;
+    if (!(a1 >= 0)) {
 
     /* a1 < 0 */
     a0v = 2;
@@ -572,8 +572,8 @@ L_1C4:
     ctx->f64 = ctx->f64 - 6;
     goto L_414;
 
-L_310:
-    if (a1 <= 0) goto L_3E0;
+    }
+    if (!(a1 <= 0)) {
     a0v = 1;
     if (ctx->fB8 != 0) a0v = 2;
     v1 = ctx->sub.x1C;
@@ -594,7 +594,7 @@ L_310:
     ctx->f64 = ctx->f64 + 6;
     goto L_414;
 
-L_3E0:
+    }
     ctx->sub.x40 = 0;
     ctx->f44 = ctx->f44 / 2;
     ctx->sub.x1C = ctx->sub.x1C / 6;
