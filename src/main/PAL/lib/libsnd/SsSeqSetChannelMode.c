@@ -32,19 +32,15 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     state = (SeqStruct *)(sep_offset + (long)base);
     mode8 = (u_char)mode;
 
-    if (!(mode8 == 0x14)) {
-    if (mode8 == 0x1E) {
-        goto mode_1e;
-    }
-
-    } else {
+    switch (mode8) {
+    case 0x14:
     state->unk16 = mode;
     state->unk27 = 1;
     state->delta_value = SsSeqReadDeltaTime(seq_s, sep_s);
     state->loop_pos = state->read_pos;
     return;
 
-mode_1e:
+    case 0x1E:
     state->unk16 = mode;
     if (state->unk28 == 0) {
         state->unk10 = 0;
