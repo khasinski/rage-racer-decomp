@@ -651,15 +651,17 @@ L_state2:
         {
             s32 t = D_8009B704 + 1;
             D_8009B704 = t;
-            if ((g_PadEdge2 & 0x90) == 0) goto L1003;
-            if (t < 0x79) goto L1003;
-        }
+            if (!((g_PadEdge2 & 0x90) == 0)) {
+            if (!(t < 0x79)) {
         D_8009B700 = 0;
         D_8009B704 = 0;
-        if (fadeBusy != 0) goto L1003;
+        if (!(fadeBusy != 0)) {
         GamePlaySoundCue(3);
         func_8006138C();
-    L1003:
+        }
+            }
+            }
+        }
         if (g_McCardStatus != 1) goto L_sw7;
         D_8009B700 += 1;
         if (D_8009B700 < 2) goto L_sw7;
