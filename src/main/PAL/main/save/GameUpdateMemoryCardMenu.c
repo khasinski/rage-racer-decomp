@@ -308,11 +308,11 @@ L_sw4:
         GamePlaySoundCue(2);
         D_80082FAC_v = 0;
         nv = 0xA;
-        goto L_b475;
-        }
+        } else {
         GamePlaySoundCue(2);
         g_McActionTimer = 0x1E;
         nv = 0xB;
+        }
     L_b475:
         g_McActionState = nv;
     L_b477:

@@ -116,14 +116,14 @@ void DumpDrawEnv(DrawEnv *arg0) {
 
     mode = func_800657E4();
     if (mode == 1) {
-        goto high_mode;
-    }
+    } else {
 
     mode = func_800657E4();
     if (mode != 2) {
         goto low_mode;
     }
 
+    }
 high_mode:
     value = arg0->tpage;
     D_800941E4(D_80013374, (value >> 9) & 3, (value >> 7) & 3, (value << 6) & 0x7C0, (value << 3) & 0x300);

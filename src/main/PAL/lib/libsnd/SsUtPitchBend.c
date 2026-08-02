@@ -156,8 +156,7 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
 
     field = *(short *)((u_char *)g_SndVoiceStateNote + voiceOffset);
     if (field != (short)arg3) {
-        goto fail_late;
-    }
+    } else {
 
     volOffset = index << 3;
     g_SndVoiceRegs16[volOffset + 4] = arg4;
@@ -170,6 +169,7 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     ret = 0;
     return ret;
 
+    }
 fail_late:
     ret = -1;
 

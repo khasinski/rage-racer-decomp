@@ -482,13 +482,11 @@ inner:
     if (target >= value) {
         *(s16 *)(g_CarMarkerIndex + offset) = index;
         offset += 0x19C;
-        goto next;
-    }
+    } else {
     if (value == -1) {
         *(s16 *)(g_CarMarkerIndex + offset) = 0;
         offset += 0x19C;
-        goto next;
-    }
+    } else {
     /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     index++;
@@ -498,6 +496,8 @@ inner:
     }
     offset += 0x19C;
 
+    }
+    }
 next:
     if (offset < 0x11B4) {
         goto outer;
