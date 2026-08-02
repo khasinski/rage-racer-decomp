@@ -1,6 +1,8 @@
 #include "common.h"
 #include "psyq/snd.h"
 
+/* Stride 4, i.e. two s16 per voice, but indexing it as [voice][0] costs an
+ * instruction -- retail keeps voice * 4 in a register. */
 extern s16 g_VabSlotVoiceTone[] asm("D_8009B510");
 extern s32 g_VabSpuAddress[] asm("D_800125EC");
 extern s32 g_AudioLoadSlot asm("D_8009E68C");
@@ -95,9 +97,8 @@ s32 GameCloseAudioSlot(s32 slot) {
 void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) asm("func_8005E694");
 void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     s32 voiceOffset = voice * 4;
-    s32 vabOffset = (s16)vabSlot * 2;
 
-    SsUtKeyOnV((s16)voice, *(s16 *)((s32)g_VabIds + vabOffset), *(s16 *)((s32)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
+    SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], *(s16 *)((s32)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
 }
 
 long SsUtKeyOffV(long voice) asm("func_80078018");

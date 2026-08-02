@@ -142,7 +142,7 @@ void GameBeginClassFmv(void) {
     base = (s32 *)g_StreamCdEntries;
     index += g_GrandPrixClass;
     offset = index << 3;
-    value = *(s32 *)((s32)(s32 *)&g_StreamCdEntries[0].size + offset);
+    value = g_StreamCdEntries[index].size;
     g_StreamLoc = (s32 *)((s32)base + offset);
     g_StreamSectorCount = value;
     D_8019C708 = value * 2;
