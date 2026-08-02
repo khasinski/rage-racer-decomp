@@ -252,6 +252,12 @@ extern u8 D_801E6D14[];
  * keeps i * 0x18 in a register rather than indexing. */
 #define CHANNEL(byteOffset) (*(MusicChannel *)((s32)g_MusicChannels + (byteOffset)))
 
+/* Byte-offset view of the sound-mode table: the retail code keeps
+ * (mode * 3) << 3 in a register rather than indexing, so the scaled offset is
+ * passed in. The comparison sites below index normally and were previously
+ * spelled as word offsets off a s32 * -- D_800126D0 + 14 is entry 2, slot 0. */
+#define MODE(byteOffset) (*(SoundModeEntry *)((s32)D_800126D0 + (byteOffset)))
+
 typedef struct SoundModeSlot {
     s32 left;
     s32 right;
@@ -262,6 +268,8 @@ typedef struct SoundModeEntry {
     s32 factor;
     SoundModeSlot slots[2];
 } SoundModeEntry;
+
+extern SoundModeEntry g_SoundModes[] asm("D_800126D0");
 
 void func_8005C31C(s32 arg0, s32 left, s32 right) {
     s32 offset;
@@ -316,27 +324,27 @@ void func_8005C31C(s32 arg0, s32 left, s32 right) {
         }
 
         if ((u32)arg0 < 2) {
-            if (left == *(s32 *)(D_800126D0 + 2)) {
+            if (left == g_SoundModes[0].slots[0].left) {
                 currentB = g_MusicChannels[1].left;
-                if (currentB == *(s32 *)(D_800126D0 + 4)) {
+                if (currentB == g_SoundModes[0].slots[1].left) {
                     goto found_match;
                 }
             }
-            if (left == *(s32 *)(D_800126D0 + 8)) {
+            if (left == g_SoundModes[1].slots[0].left) {
                 currentB = g_MusicChannels[1].left;
-                matchValue = *(s32 *)(D_800126D0 + 10);
+                matchValue = g_SoundModes[1].slots[1].left;
                 break;
             }
         } else {
-            if (left == *(s32 *)(D_800126D0 + 14)) {
+            if (left == g_SoundModes[2].slots[0].left) {
                 currentB = g_MusicChannels[1].left;
-                if (currentB == *(s32 *)(D_800126D0 + 16)) {
+                if (currentB == g_SoundModes[2].slots[1].left) {
                     goto found_match;
                 }
             }
-            if (left == *(s32 *)(D_800126D0 + 20)) {
+            if (left == g_SoundModes[3].slots[0].left) {
                 currentB = g_MusicChannels[1].left;
-                matchValue = *(s32 *)(D_800126D0 + 22);
+                matchValue = g_SoundModes[3].slots[1].left;
                 break;
             }
         }
@@ -355,7 +363,7 @@ after_match:
             s32 inactiveValue;
             s32 activeValue;
 
-            resetLoad = *(s32 *)((s32)D_800126D0 + ((arg0 * 3) << 3));
+            resetLoad = MODE((arg0 * 3) << 3).count;
             i = 0;
             if (resetLoad <= i) {
                 return;
@@ -378,9 +386,9 @@ after_match:
     }
 
     currentA = g_MusicChannels[0].left;
-    if (currentA == *(s32 *)((s32)D_800126D0 + ((arg0 * 3) << 3) + 8)) {
+    if (currentA == MODE((arg0 * 3) << 3).slots[0].left) {
         currentB = g_MusicChannels[1].left;
-        if (currentB == *(s32 *)((s32)D_800126D0 + ((arg0 * 3) << 3) + 0x10)) {
+        if (currentB == MODE((arg0 * 3) << 3).slots[1].left) {
             g_MusicChannels[0].mode = 2;
         } else {
             g_MusicChannels[0].mode = 0;
@@ -391,7 +399,7 @@ after_match:
 
     i = 0;
     loopTableOffset = (arg0 * 3) << 3;
-    arg0 = *(s32 *)((s32)D_800126D0 + loopTableOffset);
+    arg0 = MODE(loopTableOffset).count;
     if (arg0 <= i) {
         return;
     }
@@ -417,7 +425,7 @@ after_match:
         CHANNEL(arg0).left = entry->slots[0].left;
         CHANNEL(arg0).right = entry->slots[0].right;
         if (flag != 0) {
-            currentB = *(s32 *)((s32)D_800126D0 + entryOffset + 4);
+            currentB = MODE(entryOffset).factor;
             scaledLeft = left * currentB;
             if (scaledLeft < 0) {
                 scaledLeft += 0x7F;
@@ -433,7 +441,7 @@ after_match:
             *(volatile s32 *)&CHANNEL(arg0).volRight = scaledRight;
             i++;
         } else {
-            if ((scaledLeft = average * *(s32 *)((s32)D_800126D0 + entryOffset + 4)) < 0) {
+            if ((scaledLeft = average * MODE(entryOffset).factor) < 0) {
                 currentB = scaledLeft + 0x7F;
             } else {
                 currentB = scaledLeft;
