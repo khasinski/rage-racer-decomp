@@ -3,59 +3,6 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-typedef struct SeqState76350 {
-    u_char unk0;
-    u_char pad1[3];
-    u_char *read_pos;
-    u_char *next_sep_pos;
-    u_char *loop_pos;
-    u_char unk10;
-    u_char unk11;
-    u_char channel;
-    u_char unk13;
-    u_char unk14;
-    u_char unk15;
-    u_char unk16;
-    u_char panpot[16];
-    u_char unk27;
-    u_char unk28;
-    u_char unk29;
-    u_char unk2A;
-    u_char unk2B;
-    u_char programs[16];
-    u_char unk3C;
-    u_char pad3D;
-    short unk3E;
-    short unk40;
-    short unk42;
-    short unk44;
-    short unk46;
-    short unk48;
-    short unk4A;
-    short unk4C;
-    short vol[16];
-    short unk6E;
-    short unk70;
-    short unk72;
-    u_short unk74;
-    u_short unk76;
-    short unk78;
-    short unk7A;
-    long unk7C;
-    u_long unk80;
-    long unk84;
-    long unk88;
-    long unk8C;
-    long unk90;
-    u_long unk94;
-    u_long unk98;
-    long unk9C;
-    u_long unkA0;
-    u_long unkA4;
-    short padA8;
-    short padAA;
-} SeqState76350;
-
 typedef struct SvmCurrent76350 {
     u_char tone_count;
     u_char vab_id;
@@ -86,7 +33,7 @@ typedef struct SvmCurrent76350 {
     short tone_index;
 } SvmCurrent76350;
 
-extern SeqState76350 *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
 extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
@@ -136,7 +83,7 @@ long SpuVmSeKeyOn(
     u_short note,
     u_short volume,
     u_short pan) {
-    SeqState76350 *score =
+    SeqStruct *score =
         &g_SndSeqTable[seq_sep & 0xFF][(seq_sep & 0xFF00) >> 8];
     u_char vag_indices[0x80];
     u_char tone_indices[0x80];

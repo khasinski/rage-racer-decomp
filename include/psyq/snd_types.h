@@ -45,7 +45,7 @@ typedef struct SeqStruct {
     short tick_period;
     short unk72;
     u_short unk74;
-    short unk76;
+    u_short unk76;
     short unk78;
     short unk7A;
     long base_delta_value;

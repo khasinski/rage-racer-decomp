@@ -3,59 +3,6 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-typedef struct SeqState771AC {
-    u_char unk0;
-    u_char pad1[3];
-    u_char *read_pos;
-    u_char *next_sep_pos;
-    u_char *loop_pos;
-    u_char unk10;
-    u_char unk11;
-    u_char channel;
-    u_char unk13;
-    u_char unk14;
-    u_char unk15;
-    u_char unk16;
-    u_char panpot[16];
-    u_char unk27;
-    u_char unk28;
-    u_char unk29;
-    u_char unk2A;
-    u_char unk2B;
-    u_char programs[16];
-    u_char unk3C;
-    u_char pad3D;
-    short unk3E;
-    short unk40;
-    short unk42;
-    short unk44;
-    short unk46;
-    short unk48;
-    short unk4A;
-    short unk4C;
-    short vol[16];
-    short unk6E;
-    short unk70;
-    short unk72;
-    u_short unk74;
-    u_short unk76;
-    short unk78;
-    short unk7A;
-    long unk7C;
-    u_long unk80;
-    long unk84;
-    long delta_value;
-    long unk8C;
-    long unk90;
-    u_long unk94;
-    u_long unk98;
-    long unk9C;
-    u_long unkA0;
-    u_long unkA4;
-    short padA8;
-    short padAA;
-} SeqState771AC;
-
 typedef struct SvmCurrent771AC {
     u_char tones;
     u_char unk1;
@@ -84,7 +31,7 @@ typedef struct SvmCurrent771AC {
     u_short voice;
 } SvmCurrent771AC;
 
-extern SeqState771AC *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern short g_SndVoiceRegs[] asm("D_8009DF20");
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
@@ -105,7 +52,7 @@ long SpuVmCalculateTonePitch(u_short note, u_short fine) asm("func_80074A6C");
 void func_80073C50(long count, long pitch);
 
 long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {
-    SeqState771AC *score =
+    SeqStruct *score =
         &g_SndSeqTable[seq_sep & 0xFF][(seq_sep & 0xFF00) >> 8];
     long voices_updated;
     u_char voice;
