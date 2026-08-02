@@ -71,6 +71,7 @@ void GameUpdateMemoryCardMenu(void) {
     s32 mcue;
     s32 mslot;
 
+    switch (0) { default:
     if (g_SceneTimer == two) {
         SetDispMask(1);
     }
@@ -80,7 +81,7 @@ void GameUpdateMemoryCardMenu(void) {
         if (step < 0) {
             g_McFadeLevel = g_McFadeLevel + g_McFadeStep;
             fadeBusy = 1;
-            if (g_McFadeLevel > 0) goto L57;
+            if (g_McFadeLevel > 0) break;
             g_McFadeStep = 0;
             g_McFadeLevel = 0;
 
@@ -88,17 +89,17 @@ void GameUpdateMemoryCardMenu(void) {
             g_McActionBusy = 1;
             g_McFadeLevel = g_McFadeLevel + g_McFadeStep;
             fadeBusy = 1;
-            if (g_McFadeLevel < 0xFF) goto L57;
+            if (g_McFadeLevel < 0xFF) break;
             g_McFadeStep = 0;
             g_McFadeLevel = 0;
             g_McActionBusy = 0;
             g_SceneId = two;
         } else {
-            goto L57;
+            break;
         }
         fadeBusy = 1;
     }
-L57:
+    }
     func_8006136C(g_McFadeLevel);
 
     {
