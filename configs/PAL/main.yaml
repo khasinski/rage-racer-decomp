@@ -409,7 +409,7 @@ segments:
       - [0x69038, c, PAL/lib/libspu/SpuInit]
       - [0x691A4, c, PAL/lib/libspu/_spu_resetTransferControl]
       - [0x69230, c, PAL/lib/libspu/_spu_init]
-      - [0x6974C, c, PAL/lib/libspu/func_80078F4C]
+      - [0x6974C, c, PAL/lib/libspu/_spu_writeByIO]
       - [0x69A80, c, PAL/lib/libspu/_spu_transferCallback]
       - [0x69C20, c, PAL/lib/libspu/_spu_startDmaTransfer]
       - [0x69E00, c, PAL/lib/libspu/_spu_t]
