@@ -26,7 +26,7 @@ while (1) {
             index++;
             wrapped = index % count;
             if (cur == wrapped) {
-                goto done;
+                break;
             }
             total += ((GameTrackPoint *)table)[wrapped].segmentLength;
             }
@@ -47,7 +47,7 @@ while (1) {
             mod = wrapped % count;
             total -= ((GameTrackPoint *)table)[mod].segmentLength;
             if (cur == wrapped) {
-                goto done;
+                break;
             }
             index--;
             }
@@ -93,6 +93,5 @@ advance_backward_add:
             } while (1);
         }
     }
-done:
     obj->field_68 = total;
 }
