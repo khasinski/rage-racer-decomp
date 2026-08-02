@@ -57,7 +57,7 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
         total = delay;
         saved0 = raw0;
         saved1 = raw1;
-loop_call:
+        for (;;) {
         do {
             SsSeqDispatchMidiEvent(saved0 >> 16, saved1 >> 16);
             loop_delay = state->delta_value;
@@ -67,9 +67,11 @@ loop_call:
         total += loop_delay;
         if (total < count) {
             store_value = total - count;
-            goto loop_call;
+            continue;
         }
         store_value = total - count;
+        break;
+        }
 store_delay:
         state->delta_value = store_value;
     }
