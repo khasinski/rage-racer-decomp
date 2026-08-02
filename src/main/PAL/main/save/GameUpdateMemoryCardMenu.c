@@ -206,7 +206,7 @@ L_sw2:
     if (g_McMenuState != 3) {
         g_McErrorTicks = 0;
     }
-    goto L_epilogue;
+    break;
 
     case 1:
     if (g_McMenuPage == 0) {
@@ -625,7 +625,7 @@ L_sw5:
     D_80082FAC = 0;
     g_McActionBusy = 0;
     }
-    goto L_epilogue;
+    break;
 
     case 2:
     g_McMenuSubState = 1;
@@ -753,7 +753,7 @@ L_sw5:
     }
 
 L_sw7tail:
-    if (g_McMenuState == 2) goto L_epilogue;
+    if (g_McMenuState == 2) break;
     g_McMenuSubState = 1;
     g_McMenuPhase = 0xF;
     g_McActionState = 0;
@@ -862,7 +862,7 @@ L_sw8:
     if (!(g_McMenuState == -1)) {
     g_McActionState = 0;
     }
-    goto L_epilogue;
+    break;
     case -2:
     if (!(g_McMenuPage == 0)) {
     if (g_McMenuPage == 1) goto L_sw9;
@@ -1028,7 +1028,7 @@ L_sw10:
 L_b1678:
     g_McActionResult = 0;
     D_80082FAC = 0;
-    goto L_epilogue;
+    break;
     case -3:
     default:
     g_McMenuSubState = 0x11;
@@ -1044,7 +1044,7 @@ L_b1678:
     {
         s32 sel = g_McMenuSelection;
         s32 three = 3;
-        if (sel == -3) goto L_epilogue;
+        if (sel == -3) break;
         if (sel == three) {
             D_8009B6F4 = g_McMenuState;
         }
