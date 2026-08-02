@@ -907,7 +907,7 @@ L_b1420:
 L_sw9:
     switch (g_McActionState) {
     case 0:
-        if (g_McSaveMode == 0) goto L1461;
+        if (!(g_McSaveMode == 0)) {
         g_McMenuPhase = 5;
     L1447:
         { u16 p = func_800612CC(); if (p) goto L1457; }
@@ -916,7 +916,7 @@ L_sw9:
     L1457:
         g_McMenuPage = 0;
         goto L_b1606;
-    L1461:
+        }
         g_McMenuPhase = 6;
         { u16 p = func_800612CC(); if (p == 0) goto L_b1452; }
         g_McActionState = 1;
