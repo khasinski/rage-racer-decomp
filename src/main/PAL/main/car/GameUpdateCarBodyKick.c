@@ -284,9 +284,7 @@ void GameUpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
 
     base = (u8 *)&obj->field_BC;
     if (*(s32 *)&obj->field_F0 == 0) {
-        if (obj->field_F4 != 0) {
-            goto check_field_F0;
-        }
+        if (!(obj->field_F4 != 0)) {
         if (arg1 != 0) {
             value = obj->field_A4;
             if (value < 0x3C1) {
@@ -304,7 +302,7 @@ void GameUpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
             obj->field_F4 = 0;
             return;
         }
-check_field_F0:
+        }
         temp = *(s32 *)(base + 0x34);
         if (temp == 0) {
             goto decay_field_F4;
