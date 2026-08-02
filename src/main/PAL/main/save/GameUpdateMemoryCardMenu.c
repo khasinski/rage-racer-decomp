@@ -751,13 +751,13 @@ L_sw7:
     case 0:
     default:
         D_80082FC0 = 1;
-        if (g_McCardStatus != -3) goto L_sw7tail;
-        {
+        if (g_McCardStatus == -3) {
             s32 t = D_80082FBC;
             D_80082FBC = t - 1;
-            if (D_80082FBC != 0) goto L_sw7tail;
+            if (D_80082FBC == 0) {
+                g_McMenuState = g_McCardStatus;
+            }
         }
-        g_McMenuState = g_McCardStatus;
     }
 
 L_sw7tail:
