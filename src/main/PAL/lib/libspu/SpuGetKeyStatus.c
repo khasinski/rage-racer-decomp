@@ -11,14 +11,12 @@ long SpuGetKeyStatus(u_long arg0) {
     register u_long value asm("$3");
     register long ret asm("$2");
 
-loop:
+do {
     if (arg0 & (mask << i)) {
         goto found;
     }
     i++;
-    if (i < 24) {
-        goto loop;
-    }
+} while (i < 24);
 
 postscan:
     if (voice != -1) {

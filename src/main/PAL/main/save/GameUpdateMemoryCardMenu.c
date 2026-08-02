@@ -804,19 +804,19 @@ L_m3:
     {
         s32 *mp = &g_McMenuRowCursor;
         func_800611C8(mp, 0, g_McMenuRowCount - 1);
-        if (func_800612CC() == 0) goto L_b1268;
+        if (!(func_800612CC() == 0)) {
         if (!(*mp != g_McMenuRowCount - 1)) {
     if (fadeBusy != 0) goto L_sw8;
     g_McActionState = 0;
     GamePlaySoundCue(2);
     goto L_b1288;
         }
-    }
 
     GamePlaySoundCue(5);
     goto L_sw8;
+        }
+    }
 
-L_b1268:
     if ((g_PadEdge2 & 0x90) == 0) goto L_sw8;
     if (fadeBusy != 0) goto L_sw8;
     g_McActionState = 0;
