@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/race.h"
 #include "game/menu.h"
+#include "psyq/gpu.h"
 
 extern char g_MsgSaveChecksumOk[] asm("D_80012F90");
 extern char g_FmtSaveChecksum[] asm("D_80012F98");
@@ -38,7 +39,6 @@ extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
 
 void func_80013F80(s32 a, s32 b);
 void GameApplyAudioSettings(void) asm("func_80021224");
-void LoadImage(void *rect, void *data) asm("func_80065B24");
 
 /*
  * Verifies the memory-card payload's checksum and scatters it back into the
@@ -340,7 +340,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
 
     func_80013F80(g_PadMappingIndex, g_NegconMappingIndex);
     GameApplyAudioSettings();
-    LoadImage((void *)g_TeamLogoRect, g_TeamLogoCanvas);
-    LoadImage((void *)g_TeamLogoClutRect, g_TeamLogoClut);
+    LoadImage((Rect *)g_TeamLogoRect, g_TeamLogoCanvas);
+    LoadImage((Rect *)g_TeamLogoClutRect, g_TeamLogoClut);
     return 1;
 }

@@ -58,7 +58,7 @@ void GameBuildSaveIconBlock(
     s32 imageX,
     s32 imageY) asm("func_8005F6BC");
 void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) asm("func_8005F81C");
-s32 GameLoadSaveStateBlock(void *block) asm("func_8005FED4");
+s32 GameLoadSaveStateBlock(u8 *block) asm("func_8005FED4");
 s32 GameWriteMemoryCardSaveFile(
     char *path,
     char *title,
