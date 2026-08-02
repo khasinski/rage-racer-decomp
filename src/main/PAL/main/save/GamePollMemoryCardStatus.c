@@ -532,8 +532,8 @@ void GameWriteSaveHeaderRow(GameSaveHeaderRow *row) {
 #include "game/memcard.h"
 #include "game/menu.h"
 
-extern u16 g_PadMappingIndex asm("D_8019CE08");
-extern u16 g_NegconMappingIndex asm("D_8019CB08");
+extern s16 g_PadMappingIndex asm("D_8019CE08");
+extern s16 g_NegconMappingIndex asm("D_8019CB08");
 extern u16 g_NegconSteerNeutral asm("D_801E4BF0");
 extern u16 g_NegconSteerPlay asm("D_8019CAD0");
 extern u16 g_NegconNeutralI asm("D_8019CA08");

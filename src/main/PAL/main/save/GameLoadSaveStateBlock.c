@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/menu.h"
 
 extern char g_MsgSaveChecksumOk[] asm("D_80012F90");
 extern char g_FmtSaveChecksum[] asm("D_80012F98");
@@ -12,7 +13,9 @@ extern u16 g_NegconNeutralI asm("D_8019CA08");
 extern u16 g_NegconNeutralII asm("D_8019CA0A");
 extern u16 g_NegconMaxTwist asm("D_801E418C");
 extern u16 g_NegconNeutralL asm("D_8019CA0C");
-extern s32 g_BgmSelection asm("D_801E42CC");
+/* The loader stores a whole word here; the saver reads only the low half
+ * as g_BgmSelection. Same address, two widths, so two names. */
+extern s32 g_BgmSelectionW asm("D_801E42CC");
 
 extern u8 g_GrandPrixCars[] asm("D_801E4F44");
 extern u8 g_ExtraGrandPrixCars[] asm("D_8019C914");
@@ -22,8 +25,6 @@ extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 extern s32 g_BestLapTimes[] asm("D_801E4408");
 extern s32 g_BestTotalTimes[] asm("D_8019C70C");
-extern s32 g_RankingRecords[] asm("D_801E7744");
-extern s32 g_TimeRecords[] asm("D_8019CB78");
 extern s32 g_BestSectorTimes[] asm("D_801E41E8");
 
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
@@ -115,7 +116,7 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
             s32 w54;
             g_MaxClassReached[0] = *(s32 *)(base + 0x50);
             w54 = *(s32 *)(base + 0x54);
-            g_BgmSelection = h4C;
+            g_BgmSelectionW = h4C;
             g_AdvancedSeriesUnlocked = h4E;
             g_MaxClassReached[1] = w54;
         }
@@ -204,8 +205,8 @@ s32 GameLoadSaveStateBlock(u8 *arg0) {
         s32 j;
         /* These pins are load-bearing: removing any one changes .text. */
         register s32 k asm("$7");
-        s32 *cb78 = g_TimeRecords;
-        register s32 *d1base asm("$24") = g_RankingRecords;
+        s32 *cb78 = (s32 *)g_TimeRecords;
+        register s32 *d1base asm("$24") = (s32 *)g_RankingRecords;
         register s32 ioff asm("$16") = 0;
         for (; i < 2; i++) {
             register s32 iofc asm("$15");
