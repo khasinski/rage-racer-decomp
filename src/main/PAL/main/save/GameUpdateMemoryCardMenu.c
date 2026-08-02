@@ -790,7 +790,7 @@ L_h1205:
     }
 
     g_McActionTimer -= 1;
-    if (g_McActionTimer != 0) goto L_sw8;
+    if (!(g_McActionTimer != 0)) {
     g_McActionState = 3;
     goto L_sw8;
 
@@ -839,6 +839,7 @@ L_b1288:
     }
     }
 
+    }
 L_sw8:
     switch (g_McMenuSelection) {
     case 1:
