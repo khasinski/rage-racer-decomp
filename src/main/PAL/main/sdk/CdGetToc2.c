@@ -132,15 +132,12 @@ long CdInit(void) {
     long retries;
 
     retries = 4;
-loop:
-    if (CD_init(1) != 1) {
+    while (CD_init(1) != 1) {
         retries--;
-        if (retries != -1) {
-            goto loop;
+        if (retries == -1) {
+            GameDebugPrintf(D_800136B8);
+            return 0;
         }
-
-        GameDebugPrintf(D_800136B8);
-        return 0;
     }
 
     CdSyncCallback((long)func_8006A360);

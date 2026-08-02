@@ -39,14 +39,12 @@ void LibcMemcpy(u_char *dst, u_char *src, long count) {
 
     i = count - 1;
     end = -1;
-loop:
-    *dst = *src;
-    src++;
-    i--;
-    dst++;
-    if (i != end) {
-        goto loop;
-    }
+    do {
+        *dst = *src;
+        src++;
+        i--;
+        dst++;
+    } while (i != end);
 }
 
 long LibcStrcmp(u_char *arg0, u_char *arg1) asm("func_8006CC28");
