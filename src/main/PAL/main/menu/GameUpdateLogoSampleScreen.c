@@ -261,15 +261,15 @@ after_sound:
     {
         s32 c = GameMenuCursor;
         if (c == 0x2A) goto pop;
-        if (c != 0x2B) goto push;
-    }
+        if (!(c != 0x2B)) {
     GamePlaySoundCue(3);
     GameMenuBusy = 1;
     g_MenuOverlayPattern = 2;
     g_MenuViewOffsetTarget = 0x3D090;
     return;
+    }
+    }
 
-push:
     {
         u32 d;
         GamePlaySoundCue(2);
