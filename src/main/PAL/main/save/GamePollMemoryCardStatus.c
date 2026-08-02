@@ -52,8 +52,7 @@ s32 GamePollMemoryCardStatus(s32 arg0, s32 arg1) {
         }
         if (!(status == 3)) {
         if (status == 4) {
-            goto case1_status4;
-        }
+        } else {
         goto fail_neg3_case1;
 
 case1_ready:
@@ -66,10 +65,11 @@ case1_ready:
         break;
 
         }
+        } else {
         state = -1;
         goto fail_case1;
 
-case1_status4:
+        }
         g_McPollStatus = two;
         func_8005F304();
         _card_clear(handle);
@@ -111,8 +111,7 @@ fail_case1:
         }
         if (!(status == 3)) {
         if (status == 4) {
-            goto fail_neg2_case3;
-        }
+        } else {
         goto fail_neg3_case3;
 
 case3_ready:
@@ -120,10 +119,11 @@ case3_ready:
         break;
 
         }
+        } else {
         state = -1;
         goto fail_case3;
 
-fail_neg2_case3:
+        }
         state = -2;
         goto fail_case3;
 

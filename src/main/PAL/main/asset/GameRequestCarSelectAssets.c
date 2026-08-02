@@ -73,8 +73,7 @@ void GameLoadCarSelectAssets(void) {
     }
     if (!(state == 3)) {
     if (state == 4) {
-        goto state_4;
-    }
+    } else {
     return;
 
 state_1:
@@ -89,6 +88,7 @@ state_2:
         }
         return;
     }
+    } else {
             if (func_80017C78(8, g_AssetLoadCursor) != 0) {
                 GameRegisterModelBank((u8 *)g_AssetLoadCursor + 0xC, 0xE);
 
@@ -111,7 +111,7 @@ state_2:
                 g_ImageBlockBuffer = g_AssetBlockPtr + 0x40000;
             }
         return;
-state_4:
+    }
             carIndex = g_PlayerCarIndex;
             indexOffset = carIndex << 3;
             entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
