@@ -132,7 +132,7 @@ long CD_sync(long mode, u_char *result) {
 
         {
         /* These pins are load-bearing: removing any one changes .text. */
-        register long sync asm("$6");
+        long sync;
         register u_long syncRaw asm("$2");
 
         syncRaw = intr->sync;
