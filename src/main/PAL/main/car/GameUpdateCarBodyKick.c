@@ -113,10 +113,10 @@ s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) {
     s32 row;
     s32 temp;
     s32 crossed;
-    /* These pins are load-bearing: removing any one changes .text. */
+    /* This pin is load-bearing: removing it changes .text. */
     register s32 i asm("a2");
-    register s32 offset asm("a3");
-    register s32 sentinel asm("t4");
+    s32 offset;
+    s32 sentinel;
     s32 cursor;
     s32 diff;
     s32 cmp;
