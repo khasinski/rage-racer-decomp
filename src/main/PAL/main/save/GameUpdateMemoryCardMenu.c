@@ -763,33 +763,28 @@ L_sw7tail:
     g_McMenuPhase = 3;
     g_McActionBusy = 0;
     mst = g_McActionState;
-    if (!(mst == 1)) {
-    if (mst < 2) {
-        if (mst == 0) goto L_h1205;
-        goto L_sw8;
-    }
-    if (mst == 3) goto L_m3;
-    goto L_sw8;
-
-L_h1205:
+    switch (mst) {
+    case 0:
     g_McActionTimer = 5;
     g_McSlotUsedMask = 0;
     func_8005F65C(&g_McSaveHeaders);
     g_McLastSlot = 0;
     g_McActionState = 1;
-    } else {
+    break;
 
+    case 1:
     g_McActionTimer -= 1;
     if (!(g_McActionTimer != 0)) {
     g_McActionState = 3;
-    goto L_sw8;
+    }
+    break;
 
-L_m3:
+    case 3:
     {
         s32 mph = g_McMenuPage;
         if (!(mph == 0)) {
         if (mph == 1) goto L_b1280;
-        goto L_sw8;
+        break;
         }
     }
 
@@ -798,14 +793,14 @@ L_m3:
         func_800611C8(mp, 0, g_McMenuRowCount - 1);
         if (!(func_800612CC() == 0)) {
         if (!(*mp != g_McMenuRowCount - 1)) {
-    if (fadeBusy != 0) goto L_sw8;
+    if (fadeBusy != 0) break;
     g_McActionState = 0;
     GamePlaySoundCue(2);
     goto L_b1288;
         }
 
     GamePlaySoundCue(5);
-    goto L_sw8;
+    break;
         }
     }
 
@@ -829,7 +824,10 @@ L_b1288:
     }
     }
 
-    }
+    break;
+
+    default:
+    break;
     }
 L_sw8:
     switch (g_McMenuSelection) {
