@@ -50,16 +50,14 @@ void SsStartSoundTick(long arg0) {
     if (state == 3) {
         goto state_3;
     }
-    if (state == 5) {
-        goto state_5;
-    }
+    if (!(state == 5)) {
     goto derive_size;
 
 state_0:
     g_SndTickIrq = 0xFF;
     return;
+    }
 
-state_5:
     g_SndTickIrq = 0;
     if (arg0 == 0) {
         *flag = 1;
