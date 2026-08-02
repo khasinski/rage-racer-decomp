@@ -50,6 +50,7 @@ waitReady:
     }
 
     pending = (g_GpuQueueWriteIdx - g_GpuQueueReadIdx) & 0x3F;
+    switch (0) { default:
     if (pending != 0) {
         func_80067984();
     }
@@ -58,7 +59,7 @@ waitReady:
     } else {
 
     if (*g_GpuGp1 & 0x04000000) {
-        goto returnPending;
+        break;
     }
 
     }
@@ -67,7 +68,7 @@ waitReady:
     }
     return pending;
 
-returnPending:
+    }
     return pending;
 }
 
