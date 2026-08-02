@@ -299,17 +299,16 @@ do {
             if (g_RaceProgress->maxClassReached < 4) {
                 if ((g_RaceProgress->maxClassReached + 1) < value) {
                     index--;
-                    goto loop_disabled_check;
+                    continue;
                 }
             } else if (g_RaceProgress->maxClassReached < value) {
                 index--;
-                goto loop_disabled_check;
+                continue;
             }
             D_8019C7B8 = index;
         }
         index--;
     }
-loop_disabled_check:
     } while (index >= 0);
 
 done:
