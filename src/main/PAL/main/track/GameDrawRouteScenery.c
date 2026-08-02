@@ -108,8 +108,7 @@ void GameInitShuttleScenery(void) {
         dst[2] = value;
         dst[3] = v1;
 
-        /* This barrier is load-bearing: removing it changes .text. */
-        asm("" ::: "memory");
+        asm(".globl func_8003F1D0\nfunc_8003F1D0 = func_8003F0F8 + 0xD8");
         index = g_Shuttle1PathIndex;
         v1 = index << 3;
         g_Shuttle1AngleX = *(s16 *)((s32)g_ShuttlePathAngles + v1);
@@ -122,7 +121,6 @@ void GameInitShuttleScenery(void) {
         v1 = *(s16 *)((s32)g_ShuttlePathDwellMax + index);
         state->pathIndex = 1;
         g_Shuttle1DwellCounter = v1;
-        asm(".globl func_8003F1D0\nfunc_8003F1D0 = func_8003F0F8 + 0xD8");
     } else {
 
     state->pathIndex = 0;
