@@ -988,8 +988,9 @@ L_sw9:
         g_McMenuSubState = 0x12;
         g_McMenuPhase = 0x10;
         g_McActionBusy = 0;
-        { u16 p = func_800612CC(); if (p) goto L_b1606; }
-        { u16 p = func_8006131C(); if (p == 0) break; }
+        { u16 p = func_800612CC(); if (!(p)) {
+        { u16 q = func_8006131C(); if (q == 0) break; }
+        } }
     L_b1606:
         g_McActionState = 0;
         /* fall through to L_sw10 */
