@@ -171,19 +171,20 @@ void DumpTPage(long arg0) {
     u_long value;
 
     mode = func_800657E4();
+    switch (0) { default:
     if (mode == 1) {
     } else {
 
     mode = func_800657E4();
     if (mode != 2) {
-        goto low_mode;
+        break;
     }
 
     }
     GPU_printf(D_80013374, (((u_long)arg0 & 0xFFFF) >> 9) & 3, (((u_long)arg0 & 0xFFFF) >> 7) & 3, (((u_long)arg0 & 0xFFFF) << 6) & 0x7C0, (((u_long)arg0 & 0xFFFF) << 3) & 0x300);
     return;
 
-low_mode:
+    }
     value = arg0 & 0xFFFF;
     GPU_printf(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value << 6) & 0x7C0, ((value << 4) & 0x100) + ((value >> 2) & 0x200));
 }
