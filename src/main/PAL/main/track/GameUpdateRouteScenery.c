@@ -76,8 +76,7 @@ void GameUpdateRouteScenery(void) {
         KF *rec0 = (KF *)(i * 12 + (s32)kp);
 
         g_RouteSceneryFrame = counter;
-        __asm__ volatile("" ::: "memory");
-        if (rec0->dur == counter) {
+        if (*(s16 *)((s32)rec0 + 6) == counter) {
             /* This pin is load-bearing: removing it changes .text. */
             register s32 ni asm("$2");
 
@@ -135,21 +134,26 @@ void GameUpdateRouteScenery(void) {
         Matrix *m0;
         s32 t0v;
 
+        /* The keyframe terms below are read through raw casts rather than as
+         * `rec->y`. A `p->field` load is marked as living inside a struct, so
+         * the compiler assumes it cannot alias a plain global and is free to
+         * sink each g_RouteSceneryRot* store past the next term's loads. The
+         * cast spelling drops that mark, which restores the interleaving the
+         * retail code has: compute a term, commit it, then start the next. */
         rec = g_RouteSceneryKeyframe + (s32)g_RouteSceneryKeyIndex;
         t = g_RouteSceneryFrame;
         t0v = rec->dur - t;
         g_RouteSceneryRotX = (rec[1].x * t + rec->x * t0v) / rec->dur;
-        __asm__ volatile("" ::: "memory");
-        r4354 = (rec[1].y * t + rec->y * t0v) / rec->dur;
+        r4354 = (*(s16 *)((s32)rec + 14) * t + *(s16 *)((s32)rec + 2) * t0v) /
+                *(s16 *)((s32)rec + 6);
         g_RouteSceneryRotY = r4354;
-        __asm__ volatile("" ::: "memory");
-        g_RouteSceneryRotZ = (rec[1].z * t + rec->z * t0v) / rec->dur;
+        g_RouteSceneryRotZ = (*(s16 *)((s32)rec + 16) * t + *(s16 *)((s32)rec + 4) * t0v) /
+                             *(s16 *)((s32)rec + 6);
         vin.x = 0;
         vin.y = 0;
         m0 = &mtx0;
         __asm__("" : "=r"(m0) : "0"(m0));
-        __asm__ volatile("" ::: "memory");
-        vin.z = -rec->rot * 4;
+        vin.z = -*(s16 *)((s32)rec + 8) * 4;
         GameBuildRotMatrixY(m0, 0x800 - r4354);
     }
 
