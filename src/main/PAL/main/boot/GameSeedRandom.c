@@ -373,6 +373,7 @@ finished:
 
 u8 * LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) asm("func_80063B4C");
 u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) {
+    switch (0) { default:
     if (arg0 == 0) {
         return 0;
     }
@@ -380,12 +381,12 @@ u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) {
         return 0;
     }
 
-    goto start;
+    break;
 
 found:
     return arg0 - 1;
 
-start:
+    }
 
     arg2--;
     if (arg2 < 0) {
