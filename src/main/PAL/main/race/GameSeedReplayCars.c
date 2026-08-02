@@ -324,9 +324,7 @@ void GameUpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
         g_SplitTargetTime = g_BestSectorTimes[g_RaceSeries][g_CourseIndex][0];
         g_SplitTimer = 0x3C;
         g_SplitSector = (u16)g_SectorIndex;
-        goto draw;
-    }
-
+    } else {
     nextSlot = g_SectorIndex;
     if (nextSlot >= 0 && g_LapCount >= *(s16 *)(route + 0xAC)) {
         if (g_SplitTimer < 0x3C) {
@@ -342,6 +340,7 @@ void GameUpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
         g_SplitTimer = 0;
         g_SplitSign = 0;
         g_SplitTargetTime = g_RefSectorTimes[0];
+    }
     }
 
 draw:
