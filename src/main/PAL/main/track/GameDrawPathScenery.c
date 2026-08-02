@@ -110,7 +110,8 @@ void func_8004087C(s16 arg) {
         if (arg < lo) {
         } else {
         if (cur[1] >= arg) {
-            goto found;
+            data = p[2];
+            goto after;
         }
         }
         if (lo == -1) {
@@ -134,9 +135,6 @@ after:
     }
     s0 = 0;
     goto chk;
-found:
-    data = p[2];
-    goto after;
 sub:
     s0 -= 0x100;
     if (s0 >= 0) {
