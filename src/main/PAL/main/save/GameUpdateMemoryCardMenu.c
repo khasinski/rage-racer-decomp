@@ -386,24 +386,23 @@ L_sw4:
 
     case 0x10: {
         s32 nv;
-        if (g_McActionResult == 0) goto L_b611;
+        if (g_McActionResult != 0) {
         {
             s32 r = func_80060C3C(0, &g_McSaveHeaders);
             g_McSlotUsedMask = r;
             if (!(r == 0)) {
-            if ((r & 0xFFFF) != 0) goto L_b608;
-            nv = 0xE;
-            goto L_b606;
+                if ((r & 0xFFFF) == 0) {
+                    nv = 0xE;
+                    g_McMenuSubState = nv;
+                }
+            } else {
+                nv = 0xC;
+                g_McMenuSubState = nv;
             }
-            nv = 0xC;
-        L_b606:
-            g_McMenuSubState = nv;
         }
-    L_b608:
         g_McSavedLoadPhase = GameMenuLoadPhase;
-    L_b611:
+        }
         nv = 0x11;
-    L_b613:
         g_McActionState = nv;
         break;
     }
