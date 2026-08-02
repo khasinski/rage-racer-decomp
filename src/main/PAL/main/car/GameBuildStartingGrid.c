@@ -390,12 +390,13 @@ void GameStartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
     obj = arg1;
     value = 1;
     obj->motionMode = arg0;
+    switch (0) { default:
     if (arg0 == value) {
     } else {
 
     value = 2;
     if (arg0 == value) {
-        goto mode2;
+        break;
     }
 
     return;
@@ -407,7 +408,7 @@ void GameStartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
     value <<= 3;
     goto final_store;
 
-mode2:
+    }
     value = func_8002FB60(obj->trackPointIndex);
     temp = GameGetAngleDistance(value, obj->field_24);
     if (temp >= 0x401) {
