@@ -568,7 +568,7 @@ void SsSetMono(void) asm("func_80072AE0");
 void GameSetMonoOutput(void) asm("func_8005BE58");
 void GameSetMonoOutput(void) { g_StereoOutput = 0; GameSetCdMixPreset(1); SsSetMono(); }
 
-extern u32 g_EngineSoundMaxRpm asm("D_801E6CC4");
+extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
 
 u32 GameGetLoadedAudioStep(void) {
     return g_EngineSoundMaxRpm;
@@ -1791,4 +1791,761 @@ void func_8005D7D4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     func_80078528((s16)voiceCopy, left, right);
     voice = arg0 + 0xE;
     func_80078130((s16)voice, g_VabIds[(s16)bend], g_SoundSlotTone[arg0][arg3], 0x3C, arg1);
+}
+
+/* ---- was GameInterpolateAudioParameter.c ---- */
+
+#include "common.h"
+#include "game/audio.h"
+#include "game/sound.h"
+#include "psyq/snd.h"
+#include "game/car.h"
+
+
+extern s32 g_EngineSoundPosition asm("D_801E6CB8");
+extern s32 g_EngineSoundBank asm("D_801E6CBC");
+extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
+extern s32 g_EngineSoundCurves[] asm("D_801E446C");
+
+void func_8005B2F0(s32 slot, s32 tone, s32 vab_slot);
+void func_8005BF30(void);
+void func_8005C6C0(void);
+void func_8005C168(void);
+void func_8005CDB0(void);
+s32 GameInterpolateAudioParameter(s32 parameter, s32 position, s32 bank) asm("func_8005D8EC");
+s32 GameInterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
+    s32 value = position;
+    s32 index;
+    s32 index_offset;
+    s32 *base = g_EngineSoundCurves;
+    s32 row_offset;
+    s32 bank_offset;
+    s32 *base_minus;
+    s32 *entry;
+    s32 *scan;
+    s32 *lower_position;
+    s32 lower_value_base;
+    s32 lower_value_indexed;
+    s32 lower_value_address;
+    s32 upper_value_base;
+    s32 upper_value_banked;
+    s32 upper_value_address;
+    s32 lower_position_value;
+    s32 lower_value_value;
+    s32 upper_value_value;
+    s32 numerator;
+    s32 denominator;
+    s32 raw_result;
+    s32 result;
+
+    index = 1;
+    row_offset = (parameter * 9) << 3;
+    bank_offset = ((((bank * 8) - bank) * 4) - bank) << 5;
+    bank = row_offset + bank_offset;
+    entry = (s32 *)((s32)base + bank);
+    scan = entry + 1;
+    while (index < 9) {
+        raw_result = *scan;
+        if (value < raw_result) {
+            break;
+        }
+        index++;
+        scan++;
+    }
+
+    base_minus = base - 1;
+    index_offset = index << 2;
+    lower_position = (s32 *)(index_offset + (s32)base_minus);
+    lower_position = (s32 *)((s32)lower_position + bank);
+    lower_value_base = (s32)(base + 8);
+    lower_value_indexed = index_offset + lower_value_base;
+    lower_value_address = lower_value_indexed + bank;
+    upper_value_base = (s32)(base + 9);
+    upper_value_banked = bank + upper_value_base;
+    upper_value_address = index_offset + upper_value_banked;
+    lower_value_value = *(s32 *)lower_value_address;
+    upper_value_value = *(s32 *)upper_value_address;
+    lower_position_value = *lower_position;
+    numerator =
+        (upper_value_value - lower_value_value) *
+        (value - lower_position_value);
+    denominator =
+        *(s32 *)(index_offset + (s32)entry) - lower_position_value;
+    raw_result = numerator / denominator + lower_value_value;
+
+    if (raw_result >= 0) {
+        result = raw_result;
+        if (result >= 0x80) {
+            result = 0x7F;
+        }
+    } else {
+        result = 0;
+    }
+
+    return result;
+}
+
+void GameUpdateLoadedAudioVoices(s32 value, s32 bank) asm("func_8005D9F8");
+void GameUpdateLoadedAudioVoices(s32 value, s32 bank) {
+    s32 odd_parameter;
+    s32 index;
+    s32 second;
+    s32 scaled;
+    s32 *scale_base;
+    s32 *slot;
+    s32 *slot_base;
+    s32 first;
+
+    value = ((value * 5) << 11) / *(scale_base = &g_EngineSoundMaxRpm);
+
+    if (bank != g_EngineSoundBank) {
+        index = 0;
+        slot = scale_base + 1;
+        do {
+            if (*slot++ != 0 &&
+                g_SoundSlotTone[index][0] != g_SoundSlotTone[index][1]) {
+                func_8005B2F0(index, bank, 3);
+            }
+            index++;
+        } while (index < 6);
+        g_EngineSoundBank = bank;
+    }
+
+    index = 0;
+    odd_parameter = 1;
+    scale_base = (slot_base = g_SoundSlotActive);
+    slot = scale_base;
+    do {
+        if (*slot != 0) {
+            first = GameInterpolateAudioParameter(index * 2, value, bank);
+            second = GameInterpolateAudioParameter(odd_parameter, value, bank);
+            scaled = second * slot_base[6];
+            if (scaled < 0) {
+                scaled += 0x7F;
+            }
+            func_8005D7D4(index, first, scaled >> 7, bank, 3);
+        }
+        odd_parameter += 2;
+        index++;
+        slot++;
+    } while (index < 6);
+
+    g_EngineSoundPosition = value;
+    func_8005BF30();
+    func_8005C6C0();
+    func_8005C168();
+    func_8005CDB0();
+}
+
+void GameSetDefaultReverbDepth(void) {
+    GameSetReverbDepth(0x28, 0x28);
+}
+
+extern s32 g_ReverbFadeStep asm("D_801E6D8C");
+void func_8007865C(s32 arg0);
+void func_80072B04(s32 arg0);
+void func_8005B190(s32 arg0, s32 arg1);
+void func_8005E7DC(void);
+void GameInitSequenceAudio(void) asm("func_8005DBD8");
+void GameInitSequenceAudio(void) {
+    func_8007865C(0);
+    func_80072B04(0x12);
+    func_8005B190(0x28, 0x28);
+    g_ReverbFadeStep = 0;
+    func_8005E7DC();
+}
+
+extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
+extern s32 g_PanVoiceVolumeR asm("D_801E6CE8");
+extern s32 g_PanVoiceActive asm("D_801E6CEC");
+extern s32 g_IndexedEffectIndex asm("D_801E6CF0");
+extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
+extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
+extern s32 g_CarSoundVolumeScales[] asm("D_800125FC");
+
+s32 func_80050FA8(s32 arg0);
+
+void GameInitEffectVoiceRuntime(void) asm("func_8005DC1C");
+void GameInitEffectVoiceRuntime(void) {
+    func_8007865C(0);
+    SsSetVoiceCount(8);
+
+    {
+        s32 i;
+        s32 neg;
+        /* This pin is load-bearing: removing it changes .text. */
+        register s32 *ptr asm("$5");
+        s32 offset;
+
+        i = 0;
+        neg = -1;
+        ptr = &g_AudioSlotMask;
+        offset = 0;
+        for (; i < 2; i++) {
+            *(s32 *)((u8 *)&g_MusicChannels[0].mode + offset) = neg;
+            *(s32 *)((u8 *)&g_MusicChannels[0].left + offset) = neg;
+            *(s32 *)((u8 *)&g_MusicChannels[0].right + offset) = neg;
+            ptr[0x78 / 4] = 0;
+            ptr = (s32 *)((u8 *)ptr + 0x18);
+            *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset) = 0;
+            offset += 0x18;
+        }
+    }
+
+    {
+        s32 i;
+        s32 neg;
+        s32 value;
+        s32 offset;
+
+        i = 0;
+        neg = -1;
+        value = 0x1E00;
+        offset = 0;
+        for (; i < 4; i++) {
+            *(s32 *)((u8 *)&g_EffectVoices[0].state + offset) = neg;
+            *(s32 *)((u8 *)&g_EffectVoices[0].note + offset) = neg;
+            *(s32 *)((u8 *)&g_EffectVoices[0].tone + offset) = neg;
+            *(s32 *)((u8 *)&g_EffectVoices[0].pitch + offset) = value;
+            *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset) = 0;
+            offset += 0x14;
+        }
+    }
+
+    {
+        s32 value;
+
+        value = -1;
+        g_PanVoiceVolumeR = value;
+        g_PanVoiceVolumeL = value;
+        g_IndexedEffectIndexPrev = value;
+        g_IndexedEffectIndex = value;
+        value = 0x1E00;
+        g_PanVoiceActive = 0;
+        g_IndexedEffectPitch = value;
+    }
+
+    GameSetEffectVoicesEnabled(1);
+    GameSetReverbPreset(2, 0, 0);
+    GameSetLoadedTableVolumeScale(g_CarSoundVolumeScales[func_80050FA8(g_PlayerCarIndex)]);
+}
+
+extern s32 g_ReverbDepthL asm("D_801E6D84");
+extern s32 g_ReverbDepthR asm("D_801E6D88");
+
+void GameRestoreReverbDepth(s32 arg0) {
+    if (arg0 != 0) {
+        GameSetReverbDepth(g_ReverbDepthL, g_ReverbDepthR);
+    } else {
+        GameSetReverbDepth(0, 0);
+    }
+}
+
+long SsUtKeyOffV(long voice) asm("func_80078018");
+
+void GameForcePanVoiceEnabled(s32 enabled) asm("func_8005DDB8");
+void GameForcePanVoiceEnabled(s32 enabled) {
+    s32 values[2];
+    s32 i;
+    s32 *src;
+    s32 *dst;
+    s32 scale;
+    s32 raw;
+    /* These pins are load-bearing: removing any one changes .text. */
+    register s32 voice asm("$4");
+    s32 left;
+    register s32 right asm("$6");
+    s32 zeroArg;
+    register s32 unused asm("$16");
+
+    i = 0;
+    dst = values;
+    src = &g_PanVoiceVolumeL;
+    do {
+        if (*src < 2) {
+            *dst = 0;
+        } else {
+            *dst = *src;
+        }
+        dst++;
+        i++;
+        src++;
+    } while (i < 2);
+
+    if (enabled != 0) {
+        raw = values[0];
+        scale = g_EffectVolumeScale;
+        left = raw * scale;
+        raw = values[1];
+        if (left < 0) {
+            left += 0x7F;
+        }
+        unused = 0;
+        asm volatile("" : : "r"(unused));
+        raw *= scale;
+        left >>= 7;
+        if (raw < 0) {
+            raw += 0x7F;
+        }
+        right = raw >> 7;
+
+        if (left >= 0) {
+            if (left >= 0x81) {
+                left = 0x80;
+            }
+        } else {
+            left = 0;
+        }
+
+        if (right >= 0) {
+            if (right >= 0x81) {
+                right = 0x80;
+            }
+        } else {
+            right = 0;
+        }
+
+        SsUtSetVVol(0x15, left, right);
+        voice = 0x15;
+        right = 0xF;
+        asm volatile("" : : "r"(voice), "r"(right));
+        raw = 0x3C;
+        left = g_VabIds[0];
+        zeroArg = 0;
+        SsUtKeyOnV(voice, left, right, zeroArg, raw, 0, 0, 0);
+    } else {
+        SsUtKeyOffV(0x15);
+    }
+}
+
+/* ---- was GameForceBasicEffectVoicesEnabled.c ---- */
+
+#include "common.h"
+#include "game/audio.h"
+#include "game/sound.h"
+#include "psyq/snd.h"
+
+extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
+extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
+extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
+
+long SsUtKeyOffV(long voice) asm("func_80078018");
+void func_8005C09C(s32 arg0);
+void func_8005C0E4(void);
+
+void GameForceBasicEffectVoicesEnabled(s32 enabled) asm("func_8005DEF0");
+void GameForceBasicEffectVoicesEnabled(s32 enabled) {
+    s32 offset;
+    s32 voicePacked;
+    s32 voice;
+    s32 i;
+    s32 unused;
+    s32 raw;
+    s32 scale;
+    s32 left;
+    s32 right;
+    /* This pin is load-bearing: removing it changes .text. */
+    register s32 arg0 asm("$4");
+    s32 zeroArg;
+
+    unused = 0;
+    i = 0;
+    voicePacked = 0x80000;
+    voice = 8;
+    offset = 0;
+    do {
+        if (enabled != 0) {
+            arg0 = voicePacked >> 16;
+            raw = 0x3C;
+            left = g_VabIds[0];
+            right = *(s16 *)((u8 *)&g_MusicChannels[0].left + offset);
+            zeroArg = 0;
+            SsUtKeyOnV(arg0, left, right, zeroArg, raw, 0, 0, 0);
+            asm volatile("" : : "r"(unused));
+
+            raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);
+            scale = g_EffectVolumeScale;
+            left = raw * scale;
+            raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);
+            arg0 = voice;
+            if (left < 0) {
+                left += 0x7F;
+            }
+            raw *= scale;
+            if (raw < 0) {
+                raw += 0x7F;
+            }
+            left >>= 7;
+            right = raw >> 7;
+
+            if (left >= 0) {
+                if (left >= 0x81) {
+                    left = 0x80;
+                }
+            } else {
+                left = 0;
+            }
+
+            if (right >= 0) {
+                if (right >= 0x81) {
+                    right = 0x80;
+                }
+            } else {
+                right = 0;
+            }
+
+            SsUtSetVVol((s16)arg0, left, right);
+        } else {
+            SsUtKeyOffV(voicePacked >> 16);
+        }
+
+        voicePacked += 0x10000;
+        voice++;
+        i++;
+        offset += 0x18;
+    } while (i < 2);
+}
+
+void GameForceIndexedEffectVoiceEnabled(s32 enabled) asm("func_8005E058");
+void GameForceIndexedEffectVoiceEnabled(s32 enabled) {
+    s32 base;
+    /* These pins are load-bearing: removing any one changes .text. */
+    register s32 center;
+    s32 fine;
+    register s32 index asm("$3");
+    register s32 raw asm("$2");
+    s32 product;
+    s32 scale;
+    /* These pins are load-bearing: removing any one changes .text. */
+    register s32 left asm("$5");
+    register s32 right asm("$6");
+    register s32 voice asm("$4");
+
+    if (enabled != 0) {
+        index = g_IndexedEffectIndexPrev;
+        if (index < 0) {
+            return;
+        }
+        raw = (index * 3) << 2;
+        func_8005C09C(INDEXED_EFFECT(raw).tone);
+    } else {
+        func_8005C0E4();
+    }
+
+    raw = g_IndexedEffectIndexPrev;
+    if (raw >= 0) {
+        index = (raw * 3) << 2;
+        product = g_IndexedEffectVolume * INDEXED_EFFECT(index).volume;
+        raw = g_IndexedEffectPitch;
+        base = INDEXED_EFFECT(index).tone;
+        center = raw >> 7;
+        fine = raw & 0x7F;
+        if (product < 0) {
+            product += 0x7F;
+        }
+        raw = product >> 7;
+        scale = g_EffectVolumeScale;
+        raw *= scale;
+        left = raw;
+        if (raw < 0) {
+            left = raw + 0x7F;
+        }
+        left >>= 7;
+        right = left;
+
+        if (right >= 0) {
+            if (right >= 0x81) {
+                left = 0x80;
+            }
+        } else {
+            left = 0;
+        }
+
+        if (right >= 0) {
+            if (right >= 0x81) {
+                right = 0x80;
+            }
+        } else {
+            right = 0;
+        }
+
+        SsUtSetVVol(0x14, left, right);
+        voice = 0x14;
+        left = 0;
+        asm volatile("" : : "r"(voice), "r"(left));
+        right = (s16)base;
+        raw = (s16)center;
+        SsUtChangePitch(voice, left, right, 0x3C, 0, raw, fine);
+    }
+}
+
+void GameForcePitchEffectVoicesEnabled(s32 enabled) asm("func_8005E1D0");
+void GameForcePitchEffectVoicesEnabled(s32 enabled) {
+    s32 voicePacked;
+    s32 voice;
+    s32 pitchBase;
+    s32 toneBase;
+    s32 offset;
+    s32 state;
+    /* This pin is load-bearing: removing it changes .text. */
+    register s32 raw asm("$2");
+    s32 scale;
+    s32 left;
+    /* These pins are load-bearing: removing any one changes .text. */
+    register s32 right asm("$6");
+    register s32 arg0 asm("$4");
+    s32 arg3;
+
+    state = enabled;
+    voicePacked = 0xA0000;
+    voice = 0xA;
+    pitchBase = (s32)&g_EffectVoices[0].pitch;
+    toneBase = pitchBase - 0xC;
+    offset = 0;
+    do {
+        if (state != 0) {
+            arg0 = voicePacked >> 16;
+            left = g_VabIds[0];
+            right = *(s16 *)toneBase;
+            arg3 = *(s16 *)((u8 *)&g_EffectVoices[0].tone + offset);
+            raw = 0x3C;
+            SsUtKeyOnV(arg0, left, right, arg3, raw, 0, 0, 0);
+
+            scale = *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset);
+            asm volatile("" : : "r"(scale));
+            raw = g_EffectVolumeScale;
+            raw = scale * raw;
+            arg0 = voice;
+            left = raw;
+            if (raw < 0) {
+                left = raw + 0x7F;
+            }
+            left >>= 7;
+            right = left;
+
+            if (right >= 0) {
+                if (right >= 0x81) {
+                    left = 0x80;
+                }
+            } else {
+                left = 0;
+            }
+
+            if (right >= 0) {
+                if (right >= 0x81) {
+                    right = 0x80;
+                }
+            } else {
+                right = 0;
+            }
+
+            SsUtSetVVol((s16)arg0, left, right);
+
+            right = *(s16 *)toneBase;
+            arg0 = voicePacked >> 16;
+            SsUtChangePitch(arg0, 0, right, 0x3C, 0,
+                            (*(s32 *)pitchBase << 9) >> 16,
+                            *(u16 *)pitchBase & 0x7F);
+        } else {
+            SsUtKeyOffV(voicePacked >> 16);
+        }
+
+        voicePacked += 0x10000;
+        voice++;
+        pitchBase += 0x14;
+        toneBase += 0x14;
+        offset += 0x14;
+    } while (pitchBase < (s32)&g_ReverbFadeStep);
+}
+
+/* Mid-function labels the retail build exports (see docs/ASM_AND_GTE_POLICY.md,
+ * "symbol labels"). They define symbols only and emit no code. */
+asm(".globl func_8005E078\n"
+    "func_8005E078 = GameForceIndexedEffectVoiceEnabled + 0x20\n"
+    ".globl func_8005E1B8\n"
+    "func_8005E1B8 = GameForceIndexedEffectVoiceEnabled + 0x160\n"
+    ".globl func_8005E200\n"
+    "func_8005E200 = GameForcePitchEffectVoicesEnabled + 0x30\n"
+    ".globl func_8005E314\n"
+    "func_8005E314 = GameForcePitchEffectVoicesEnabled + 0x144");
+
+extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
+
+void GameSetSoundSlotVoicesEnabledWithRegisterArg(void) asm("func_8005B40C");
+void GamePlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
+
+void GameForceSoundSlotVoicePlayback(s32 arg0) {
+    s32 saved = arg0;
+    s32 i;
+    /* This pin is load-bearing: removing it changes .text. */
+    register s32 *base asm("$18");
+    s32 *active;
+    s32 odd;
+    s32 first;
+    s32 second;
+    s32 factor;
+    s32 scaled;
+    s32 call_arg0;
+    s32 call_arg1;
+    s32 call_arg3;
+
+    GameSetSoundSlotVoicesEnabledWithRegisterArg();
+
+    i = 0;
+    if (saved != 0) {
+        base = g_SoundSlotActive;
+        active = base;
+        saved = 0;
+        do {
+            if (*base++ != 0 && g_SoundSlotTone[i][0] != g_SoundSlotTone[i][1]) {
+                GamePlaySoundSlotVoice(i, active[-3], 3);
+            }
+            i++;
+            saved += 4;
+        } while (i < 6);
+
+        i = 0;
+        odd = 1;
+        base = g_SoundSlotActive;
+        active = base;
+        do {
+            if (*active != 0) {
+                first = GameInterpolateAudioParameter(i * 2, base[-4], base[-3]);
+                second = GameInterpolateAudioParameter(odd, base[-4], base[-3]);
+                factor = base[6];
+                scaled = second * factor;
+                if (scaled < 0) {
+                    scaled += 0x7F;
+                }
+                call_arg0 = i;
+                call_arg1 = first;
+                scaled >>= 7;
+                call_arg3 = base[-3];
+                func_8005D7D4(call_arg0, call_arg1, scaled, call_arg3, 3);
+            }
+            odd += 2;
+            i++;
+            active++;
+        } while (i < 6);
+    }
+}
+
+void GameForceAllEffectVoicesEnabled(s32 arg0) {
+    GameForcePanVoiceEnabled(arg0);
+    GameForceBasicEffectVoicesEnabled(arg0);
+    GameForceIndexedEffectVoiceEnabled(arg0);
+    GameForcePitchEffectVoicesEnabled(arg0);
+    GameForceSoundSlotVoicePlayback(arg0);
+}
+
+/* ---- was GameOpenVabSequenceSlot.c ---- */
+
+#include "common.h"
+#include "psyq/snd.h"
+
+/* Stride 4, i.e. two s16 per voice, but indexing it as [voice][0] costs an
+ * instruction -- retail keeps voice * 4 in a register. */
+extern s16 g_VabSlotVoiceTone[] asm("D_8009B510");
+extern s32 g_VabSpuAddress[] asm("D_800125EC");
+extern s32 g_AudioLoadSlot asm("D_8009E68C");
+extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s16 g_SeqHandle asm("D_801E6D90");
+extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
+extern s32 g_VabTransferDone asm("D_801F17B4");
+extern char g_MsgSeqVabOpenHeadError[] asm("D_80012788");
+extern char g_MsgSeqVabTransBodyError[] asm("D_800127A0");
+
+void func_80063D9C(s32 arg0);
+s32 func_8006F004(s32 arg0);
+s32 func_8007317C(s32 arg0);
+s32 func_800730BC(s32 arg0, s32 arg1);
+s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
+void func_80073748(s32 arg0, s32 arg1);
+void func_8007865C(s32 arg0);
+void func_80071AC4(s32 arg0);
+void func_80072B3C(s32 arg0);
+
+extern s16 g_VabIds[] asm("D_801E6CA8");
+
+s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E4EC");
+s32 GameOpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
+    s32 slotReg = slot;
+    s32 bodyReg = body;
+    s32 seqReg = seq;
+    s16 *vabIdPtr;
+    /* These pins are load-bearing: removing any one changes .text. */
+    register s32 currentVabId asm("$5");
+    s32 fail;
+    register s32 ret asm("$2");
+
+    g_AudioLoadSlot = slotReg;
+    ret = func_80072C4C(header, -1, g_VabSpuAddress[slotReg]);
+    {
+        s16 *vabIdBase = g_VabIds;
+        slotReg *= 2;
+        vabIdPtr = (s16 *)((s32)vabIdBase + slotReg);
+    }
+    *vabIdPtr = ret;
+    /* This barrier is load-bearing: removing it changes .text. */
+    asm volatile("" : "=r"(ret) : "0"(ret));
+
+    currentVabId = (s16)ret;
+    fail = -1;
+    if (currentVabId == fail) {
+        GameDebugPrintf(g_MsgSeqVabOpenHeadError);
+        func_80063D9C(1);
+    }
+
+    ret = func_800730BC(bodyReg, currentVabId);
+    *vabIdPtr = ret;
+    currentVabId = (s16)ret;
+    if (currentVabId == fail) {
+        GameDebugPrintf(g_MsgSeqVabTransBodyError);
+        func_80063D9C(1);
+    }
+
+    *(s32 *)&g_SeqHandle = (s16)func_8006F004(seqReg);
+    g_SeqVolumeFadeStep = 0;
+    ret = func_8007317C(0);
+    g_VabTransferDone = (s16)ret;
+    return g_VabTransferDone;
+}
+
+s32 GameCloseAudioSlot(s32 slot) asm("func_8005E600");
+s32 GameCloseAudioSlot(s32 slot) {
+    s32 *flagsPtr = &g_AudioSlotMask;
+    s32 bit = 1;
+    s32 flags = *flagsPtr;
+    s32 ret;
+    s16 *ids;
+
+    bit <<= slot;
+    if ((bit & flags) == 0) {
+        ret = 0;
+    } else {
+        *flagsPtr = bit ^ flags;
+        func_80073748(0, 0);
+        func_8007865C(0);
+        func_80071AC4(g_SeqHandle);
+        /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
+           (rather than naming the symbol) is what the retail code does. */
+        ids = (s16 *)((s32)flagsPtr + 0xC);
+        func_80072B3C(ids[slot]);
+        ret = 1;
+    }
+    return ret;
+}
+
+void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) asm("func_8005E694");
+void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
+    s32 voiceOffset = voice * 4;
+
+    SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], *(s16 *)((s32)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
+}
+
+long SsUtKeyOffV(long voice) asm("func_80078018");
+
+void GameStopDirectVoice(s32 voice) {
+    SsUtKeyOffV((s16)voice);
 }

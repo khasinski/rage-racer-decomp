@@ -104,7 +104,7 @@ void GameForceBasicEffectVoicesEnabled(s32 enabled) asm("func_8005DEF0");
 void GameForcePitchEffectVoicesEnabled(s32 enabled) asm("func_8005E1D0");
 void GameForceSoundSlotVoicePlayback(s32 enabled) asm("func_8005E364");
 void GameForceAllEffectVoicesEnabled(s32 enabled) asm("func_8005E4A4");
-void GameOpenVabSequenceSlot(s32 slot, s32 vabHeader, s32 vabBody, s32 seqData) asm("func_8005E4EC");
+s32 GameOpenVabSequenceSlot(s32 slot, s32 vabHeader, s32 vabBody, s32 seqData) asm("func_8005E4EC");
 void GameStartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) asm("func_8005E694");
 void GameStopDirectVoice(s32 voice) asm("func_8005E6F4");
 void GameSetVabSlotVoiceEnabled(s32 voice, s32 enabled, s32 vabSlot) asm("func_8005E718");
