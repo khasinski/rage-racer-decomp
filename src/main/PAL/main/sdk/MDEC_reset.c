@@ -36,12 +36,8 @@ void MDEC_reset(long arg0) {
     register long zero asm("$0");
     volatile u_long *inBuffer = (volatile u_long *)g_MdecQuantCmd;
 
-    if (!(option == 0)) {
-    if (option == 1) {
-        goto one;
-    }
-
-    } else {
+    switch (option) {
+    case 0:
     *g_MdecCtrlReg = 0x80000000;
     *g_MdecInDmaChcr = zero;
     *g_MdecOutDmaChcr = zero;
@@ -50,7 +46,7 @@ void MDEC_reset(long arg0) {
     MDEC_in((volatile u_long *)g_MdecIdctCmd, 0x20);
     return;
 
-one:
+    case 1:
     *g_MdecCtrlReg = 0x80000000;
     *g_MdecInDmaChcr = 0;
     *g_MdecOutDmaChcr = 0;
