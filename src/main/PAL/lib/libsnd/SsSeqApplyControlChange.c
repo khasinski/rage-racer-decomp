@@ -29,11 +29,12 @@ void SsSeqApplyControlChange(long seq, long sep, u_char value) {
     sep_offset = sep_offset * 4;
     state = (SeqStruct *)(sep_offset + (long)base);
 
+    switch (0) { default:
     if (state->unk27 == 1) {
         if (state->unk10 == 0) {
             state->unk28 = value;
             state->unk10 = 1;
-            goto maybe_callback;
+            break;
         }
     }
 
@@ -44,7 +45,7 @@ void SsSeqApplyControlChange(long seq, long sep, u_char value) {
         }
     }
 
-maybe_callback:
+    }
     if (state->unk16 == 0x28) {
         long seq_cb;
         long sep_cb;
