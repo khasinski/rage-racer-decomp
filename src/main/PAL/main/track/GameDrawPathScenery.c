@@ -111,7 +111,7 @@ void func_8004087C(s16 arg) {
         } else {
         if (cur[1] >= arg) {
             data = p[2];
-            goto after;
+            break;
         }
         }
         if (lo == -1) {
