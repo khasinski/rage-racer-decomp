@@ -107,13 +107,11 @@ long CdGetToc2(long arg0, u_char *arg1) {
             entry = toc;
             do {
                 fmt = D_80013688;
-                /* This barrier is load-bearing: removing it changes .text. */
-                asm("" : "=r"(fmt) : "0"(fmt));
                 first = entry[0];
                 second = entry[1];
+                GameDebugPrintf(fmt, first, second);
                 entry += 4;
                 count++;
-                GameDebugPrintf(fmt, first, second);
             } while (count <= (long)ptr);
         }
     }
