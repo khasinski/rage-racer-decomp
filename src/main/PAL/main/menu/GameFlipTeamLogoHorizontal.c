@@ -23,7 +23,7 @@ void GameFlipTeamLogoHorizontal(void) {
     u32 highWord;
     /* These pins are load-bearing: removing any one changes .text. */
     register u32 shift asm("$2");
-    register u32 lowNibble asm("$3");
+    u32 lowNibble;
 
     GamePlaySoundCue(8);
 
@@ -54,7 +54,10 @@ void GameFlipTeamLogoHorizontal(void) {
             pairOffset += 4;
             lowNibble = highIndex << 2;
             lowNibble += (s32)base;
-            lowNibble = rowOffset + lowNibble;
+            {
+                s32 rel = lowNibble;
+                lowNibble = rowOffset + rel;
+            }
             *(u32 *)lowNibble = lowPacked;
             *(u32 *)shift = highPacked;
             highIndex--;
