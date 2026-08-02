@@ -179,11 +179,10 @@ chk:
         a0v = s1;
         a1v = s2;
     }
-    goto call;
-    }
+    } else {
     a0v = 0;
     a1v = 0;
-call:
+    }
     func_8005BEA8(a0v, a1v);
 }
 

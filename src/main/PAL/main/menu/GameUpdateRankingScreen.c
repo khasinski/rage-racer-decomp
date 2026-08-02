@@ -820,8 +820,7 @@ set_state:
                     return;
                 }
                 if (sel == mode) {
-                    goto block27;
-                }
+                } else {
                 if (sel == 2) {
                     GamePlaySoundCue(2);
                     GameMenuBusy = 1;
@@ -830,7 +829,7 @@ set_state:
                     g_MenuViewOffsetTarget = 0x3D090;
                 }
             } else if (g_PadEdge2 & 0x90) {
-block27:
+                }
                 GamePlaySoundCue(3);
                 GameMenuBusy = 2;
                 g_MenuOverlayPattern = 2;
