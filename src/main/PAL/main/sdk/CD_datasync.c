@@ -1,12 +1,8 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/cd.h"
 
-typedef struct {
-    long deadline;
-    long count;
-    char *name;
-} CdAlarm;
 
 extern long g_CdCommandNames[] asm("D_80099060");
 extern volatile u_char g_CdSyncStatus[] asm("D_80099318");

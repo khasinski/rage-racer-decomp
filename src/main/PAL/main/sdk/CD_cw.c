@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/cd.h"
 
 typedef struct {
     u_char sync;
@@ -8,11 +9,6 @@ typedef struct {
     u_char command;
 } CdState;
 
-typedef struct {
-    long deadline;
-    long count;
-    char *name;
-} CdAlarm;
 
 typedef void (*CdCallback)(u_char status, u_char *result);
 

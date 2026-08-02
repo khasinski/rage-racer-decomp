@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/race.h"
 #include "game/track.h"
@@ -45,12 +46,6 @@ s32 func_80068634(s32 arg0);
 void func_8002C168(void *arg0);
 void GameUpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
 
-typedef struct Block16 {
-    s32 w0;
-    s32 w1;
-    s32 w2;
-    s32 w3;
-} Block16;
 
 /*
  * Fuller sibling of GameUpdateFinishCamera: camera track-follower with bob/shake. Aims

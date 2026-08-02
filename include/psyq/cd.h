@@ -5,6 +5,21 @@
 
 #include "common.h"
 
+/* libcd's polling deadline: a wall-clock limit, the retries left, and the name
+ * the timeout message prints. Was duplicated in four CD_*.c files. */
+typedef struct CdAlarm {
+    long deadline;
+    long count;
+    char *name;
+} CdAlarm;
+
+/* The three status bytes CD_ready/CD_sync poll. Was duplicated in two files. */
+typedef struct CdIntr {
+    u_char sync;
+    u_char ready;
+    u_char command;
+} CdIntr;
+
 typedef struct CdlLOC {
     u_char minute;
     u_char second;
@@ -172,8 +187,8 @@ void DecDCTinCallback(long callback) asm("func_8006408C");
 void DecDCToutCallback(long callback) asm("func_800640B0");
 
 long CD_init(long mode) asm("func_8006A428");
-long CD_sync(long mode, long result) asm("func_8006B0D4");
-long CD_ready(long mode, long result) asm("func_8006B354");
+long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
+long CD_ready(long mode, u_char *result) asm("func_8006B354");
 long CD_cw(long com, void *param, long result, long wait) asm("func_8006B620");
 
 

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/track.h"
 #include "game/car.h"
 #include "game/race.h"
@@ -667,13 +668,6 @@ typedef struct SVec
   s16 vz;
   s16 pad;
 } SVec;
-typedef struct Vec4
-{
-  s32 x;
-  s32 y;
-  s32 z;
-  s32 w;
-} Vec4;
 typedef struct CPt
 {
   s16 x;

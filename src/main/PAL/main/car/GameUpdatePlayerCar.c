@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/state.h"
 #include "game/menu.h"
@@ -11,12 +12,6 @@ typedef struct GearRange {
     s16 down;
 } GearRange;
 
-typedef struct Vec4 {
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 w;
-} Vec4;
 
 typedef struct SVec {
     s16 vx;

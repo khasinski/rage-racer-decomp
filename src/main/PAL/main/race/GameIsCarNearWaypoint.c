@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/car.h"
 #include "game/audio.h"
 #include "game/waypoint.h"
@@ -164,12 +165,6 @@ extern void GameSeedCarLapProgress(u8 *ent, s32 arg) asm("func_8002BF68");
 
 extern void GameUpdateCarTrackState(u8 *ent, s32 arg, void *arg2) asm("func_80031298");
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 w;
-} Vec4;
 
 /*
  * Initializes/spawns a route render object `ent`: reads a start entry from the

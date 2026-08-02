@@ -1,20 +1,11 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/cd.h"
 
 typedef void (*CdCallback)(long, u_char *);
 
-typedef struct CdIntr {
-    u_char sync;
-    u_char ready;
-    u_char command;
-} CdIntr;
 
-typedef struct CdAlarm {
-    long deadline;
-    long count;
-    char *name;
-} CdAlarm;
 
 extern char *g_CdCommandNames[] asm("D_80099060");
 extern char *g_CdIntrNames[] asm("D_800990E0");

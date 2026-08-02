@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/render.h"
 #include "game/track.h"
 #include "psyq/gte.h"
@@ -18,12 +19,6 @@ void func_8002C168(void *arg0);
 void GameUpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
 void GameDrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
 
-typedef struct Block16 {
-    s32 w0;
-    s32 w1;
-    s32 w2;
-    s32 w3;
-} Block16;
 
 /*
  * Camera track-follower: advances a look-ahead track point, aims the eye object
