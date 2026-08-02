@@ -153,13 +153,9 @@ s32 GameCloseVabOnlyAudioSlot(s32 slot) {
 
     bit <<= slot;
 
-    if (bit & flags) {
-    } else {
-
+    if (!(bit & flags)) {
     ret = 0;
-    goto done;
-
-    }
+    } else {
     *flagsPtr = bit ^ flags;
     func_80073748(zeroArg, 0);
     func_8007865C(0);
@@ -168,7 +164,7 @@ s32 GameCloseVabOnlyAudioSlot(s32 slot) {
     ids = (s16 *)((s32)flagsPtr + 0xC);
     func_80072B3C(ids[slot]);
     ret = 1;
-done:
+    }
     return ret;
 }
 
