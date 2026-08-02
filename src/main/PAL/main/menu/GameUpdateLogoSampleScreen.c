@@ -594,6 +594,7 @@ void func_80059320(void) {
         index = g_CarListCursor + 1;
         if (index < 13) {
         forward_loop:
+            switch (0) { default:
             {
                 s32 value = GameGetCarUnlockLevel(index);
                 if (g_CarTable[index].enabled == 0) {
@@ -601,7 +602,7 @@ void func_80059320(void) {
                     if (progression < 4) {
                         if ((progression + 1) < value) {
                             index++;
-                            goto forward_check;
+                            break;
                         }
                         g_NextOwnedCarIndex = index;
                         return;
@@ -613,7 +614,7 @@ void func_80059320(void) {
                 }
                 index++;
             }
-        forward_check:
+            }
             if (index < 13) {
                 goto forward_loop;
             }
