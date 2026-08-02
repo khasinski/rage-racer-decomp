@@ -463,23 +463,22 @@ void LibcPutChar(s32 arg0) {
 
     c = value;
     value = c;
-    if (value == 9) {
-    } else {
+    if (!(value == 9)) {
     if (value != 10) {
-        goto other;
-    }
+    } else {
 
     LibcPutChar(13);
     g_LibcOutColumn = 0;
     goto output;
 
     }
+    } else {
     do {
         LibcPutChar(0x20);
     } while ((g_LibcOutColumn & 7) != 0);
     return;
+    }
 
-other:
     if (g_LibcCtype[value] & 0x97) {
         g_LibcOutColumn++;
     }
