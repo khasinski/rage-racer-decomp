@@ -28,10 +28,11 @@ long Gpu_CheckTimeout(void) {
     register long pending asm("$5");
     long gpuTail;
 
+    switch (0) { default:
     if (g_GpuTimeoutDeadline >= VSync(-1)) {
         state = g_GpuTimeoutPolls++;
         if (state <= 0xF0000) {
-            goto return_zero;
+            break;
         }
     }
 
@@ -61,7 +62,7 @@ long Gpu_CheckTimeout(void) {
     result = -1;
     return result;
 
-return_zero:
+    }
     result = 0;
 
     return result;
