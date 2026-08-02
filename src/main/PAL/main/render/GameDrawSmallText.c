@@ -54,22 +54,22 @@ void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, 
             continue;
         case '/':
             idx = 0x24;
-            goto draw;
+            break;
         case '.':
             idx = 0x25;
-            goto draw;
+            break;
         case ',':
             idx = 0x26;
-            goto draw;
+            break;
         case '"':
             idx = 0x27;
-            goto draw;
+            break;
         case '\'':
             idx = 0x28;
-            goto draw;
+            break;
         case '-':
             idx = 0x29;
-            goto draw;
+            break;
         case 0x81:
             c2 = *str;
             str++;
@@ -88,19 +88,19 @@ void GameDrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, 
                 goto draw;
             }
             continue;
-        }
-
-        if (c < '0') {
-            continue;
-        }
-        if (c < ':') {
-            idx = c - '0';
-        } else if (c < 'A') {
-            continue;
-        } else if (c < '[') {
-            idx = c - '7';
-        } else {
-            continue;
+        default:
+            if (c < '0') {
+                continue;
+            }
+            if (c < ':') {
+                idx = c - '0';
+            } else if (c < 'A') {
+                continue;
+            } else if (c < '[') {
+                idx = c - '7';
+            } else {
+                continue;
+            }
         }
 
     draw:
