@@ -494,8 +494,7 @@ void GameUpdateCarBodyRoll(A *ctx) {
     if (mode < 2) {
         ctx->sub.x1C = 0;
         ctx->f44 = 0;
-        goto L_53C;
-    }
+    } else {
     if (!(mode >= 4)) {
     if (!(D_8019C9AC != 0)) {
     if (!(g_PadType != 0x41)) {
@@ -629,6 +628,7 @@ void GameUpdateCarBodyRoll(A *ctx) {
     ctx->f44 = a0v;
     ctx->f64 = a0v / 128;
 
+    }
 L_53C:
     v1 = ctx->fA4;
     if (v1 < 800) {

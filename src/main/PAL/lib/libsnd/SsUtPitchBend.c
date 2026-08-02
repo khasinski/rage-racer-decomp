@@ -131,8 +131,7 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     register long field asm("v1");
 
     if ((u_short)arg0 >= 0x18U) {
-        goto fail_late;
-    }
+    } else {
 
     tmp = arg0 << 16;
     index = tmp >> 16;
@@ -169,6 +168,7 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     ret = 0;
     return ret;
 
+    }
     }
 fail_late:
     ret = -1;

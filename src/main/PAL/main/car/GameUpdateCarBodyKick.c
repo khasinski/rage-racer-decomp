@@ -559,8 +559,7 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   lo_R7 = *((s16 *) (&lim[0]));
   if (rpm < lo_R7)
   {
-    goto L2;
-  }
+  } else {
   hi = *((s16 *) (&lim[1]));
   one = hi;
   if (one < rpm)
@@ -578,7 +577,7 @@ void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   q = (((*((s16 *) (&val[1]))) - new_var) * d_R3) / range;
   *((s16 *) (sub_R9 + 0x74)) = ((((new_var + q) * 1168) / 160) * 6) / 100;
   goto OUT;
-  L2:
+  }
   if ((*((s16 *) (&lim[1]))) < rpm)
   {
     L2_inc:

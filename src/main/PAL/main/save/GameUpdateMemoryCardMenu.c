@@ -795,24 +795,24 @@ L_h1205:
 L_m3:
     {
         s32 mph = g_McMenuPage;
-        if (mph == 0) goto L_b1240;
+        if (!(mph == 0)) {
         if (mph == 1) goto L_b1280;
+        goto L_sw8;
+        }
     }
-    goto L_sw8;
 
-L_b1240:
     {
         s32 *mp = &g_McMenuRowCursor;
         func_800611C8(mp, 0, g_McMenuRowCount - 1);
         if (func_800612CC() == 0) goto L_b1268;
-        if (*mp != g_McMenuRowCount - 1) goto L_b1264;
-    }
+        if (!(*mp != g_McMenuRowCount - 1)) {
     if (fadeBusy != 0) goto L_sw8;
     g_McActionState = 0;
     GamePlaySoundCue(2);
     goto L_b1288;
+        }
+    }
 
-L_b1264:
     GamePlaySoundCue(5);
     goto L_sw8;
 

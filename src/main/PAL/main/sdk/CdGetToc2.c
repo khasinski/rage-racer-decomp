@@ -35,8 +35,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
     oldHandler = CdSyncCallback(0);
 
     if (CdControlB(0x13, 0, response) == 0) {
-        goto fail;
-    }
+    } else {
 
     {
         /* These pins are load-bearing: removing any one changes .text. */
@@ -66,8 +65,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
 
     command[0] = 0;
     if (CdControlB(0x14, command, response) == 0) {
-        goto fail;
-    }
+    } else {
 
     value = response[1];
     toc[0] = value;
@@ -119,6 +117,8 @@ long CdGetToc2(long arg0, u_char *arg1) {
     CdSyncCallback(oldHandler);
     return (long)ptr;
 
+    }
+    }
 fail:
     if (g_CdDebugLevel != 0) {
         GameDebugPrintf(D_800136A4);

@@ -47,8 +47,7 @@ void GameDrawCourseObjects(void) {
 
     do {
         if (obj->id == -1) {
-            goto next;
-        }
+        } else {
         visShift = obj->f4 / 2048;  /* per-sector visibility bit index */
         {
             /* This pin is load-bearing: removing it changes .text. */
@@ -115,6 +114,7 @@ void GameDrawCourseObjects(void) {
             GameSubmitCourseModel((void *)0x1F800000, obj->id);
         }
 
+        }
     next:
         i++;
         obj++;

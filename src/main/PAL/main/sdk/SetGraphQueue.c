@@ -122,12 +122,10 @@ void CheckPrim(char *arg0, Rect *rect) {
         long maxY;
 
         if (maxX < w) {
-            goto bad;
-        }
+        } else {
         x = rect->x;
         if (maxX < w + x) {
-            goto bad;
-        }
+        } else {
         y = rect->y;
         maxY = g_VramHeight;
         if (maxY < y) {
@@ -149,7 +147,8 @@ void CheckPrim(char *arg0, Rect *rect) {
         }
         }
         }
-bad:
+        }
+        }
         GPU_printf(D_80013548, arg0);
         GPU_printf(D_80013554, rect->x, rect->y, rect->w, rect->h);
         return;
