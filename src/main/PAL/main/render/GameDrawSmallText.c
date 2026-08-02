@@ -182,50 +182,49 @@ void GameDrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, 
             continue;
         case '.':
             idx = 0x24;
-            goto draw;
+            break;
         case '-':
             idx = 0x25;
-            goto draw;
+            break;
         case '!':
             idx = 0x26;
-            goto draw;
+            break;
         case '?':
             idx = 0x27;
-            goto draw;
+            break;
         case '@':
             idx = 0x28;
-            goto draw;
+            break;
         case '/':
             idx = 0x2b;
-            goto draw;
+            break;
         case ',':
             idx = 0x2c;
-            goto draw;
+            break;
         case '"':
             idx = 0x2d;
-            goto draw;
+            break;
         case '\'':
             idx = 0x2e;
-            goto draw;
+            break;
         case ':':
             idx = 0x30;
-            goto draw;
+            break;
+        default:
+            if (c < '0') {
+                continue;
+            }
+            if (c < ':') {
+                idx = c - '0';
+            } else if (c < 'A') {
+                continue;
+            } else if (c < '[') {
+                idx = c - '7';
+            } else {
+                continue;
+            }
         }
 
-        if (c < '0') {
-            continue;
-        }
-        if (c < ':') {
-            idx = c - '0';
-        } else if (c < 'A') {
-            continue;
-        } else if (c < '[') {
-            idx = c - '7';
-        } else {
-            continue;
-        }
-
-    draw:
         w = fixed ? 8 : D_8007FA3C[idx].w;
         u0 = fixed ? (idx % 32) * 8 : D_8007FA3C[idx].u;
         v0 = fixed ? (idx / 32) * 16 + 24 : D_8007FA3C[idx].v;
