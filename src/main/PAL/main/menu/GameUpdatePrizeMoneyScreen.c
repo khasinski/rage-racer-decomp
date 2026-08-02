@@ -86,7 +86,7 @@ void GameUpdatePrizeMoneyScreen(void) {
         goto L428;
     case 4:
         g_SceneTimer += 1;
-        if ((u32)g_SceneTimer < 121) goto L234;
+        if (!((u32)g_SceneTimer < 121)) {
         if (g_PrizeAmount == 0) goto L248;
         GamePlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = g_PrizeAmount;
@@ -98,7 +98,7 @@ void GameUpdatePrizeMoneyScreen(void) {
             g_PrizeAmount = 0;
             g_RaceProgress->unk10 = e + t;
         }
-    L234:
+        }
         if (g_PrizeAmount != 0) goto L420;
     L248:
         g_SceneTimer = 0;
