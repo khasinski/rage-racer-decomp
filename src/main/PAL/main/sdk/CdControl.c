@@ -52,7 +52,7 @@ long CdControl(long arg0, void *arg1, long arg2) {
 
         if (arg != 0 && *commandState != 0) {
             if (CD_cw(2, arg, arg2Reg, 0) != 0) {
-                goto retry;
+                continue;
             }
         }
 
@@ -61,9 +61,7 @@ long CdControl(long arg0, void *arg1, long arg2) {
             goto done;
         }
 
-retry:
-        retries--;
-    } while (retries != -1);
+    } while (--retries != -1);
 
     g_CdSyncCallback = savedMode;
     result = -1;
@@ -108,7 +106,7 @@ long CdControlF(long arg0, void *arg1) {
 
         if (arg != 0 && *commandState != 0) {
             if (CD_cw(2, arg, 0, 0) != 0) {
-                goto retry;
+                continue;
             }
         }
 
@@ -117,9 +115,7 @@ long CdControlF(long arg0, void *arg1) {
             goto done;
         }
 
-retry:
-        retries--;
-    } while (retries != -1);
+    } while (--retries != -1);
 
     g_CdSyncCallback = savedMode;
     result = -1;
@@ -173,7 +169,7 @@ long CdControlB(long arg0, void *arg1, long arg2) {
 
         if (arg != 0 && *commandState != 0) {
             if (CD_cw(2, arg, arg2Reg, 0) != 0) {
-                goto retry;
+                continue;
             }
         }
 
@@ -183,9 +179,7 @@ long CdControlB(long arg0, void *arg1, long arg2) {
             goto done;
         }
 
-retry:
-        retries--;
-    } while (retries != -1);
+    } while (--retries != -1);
 
     g_CdSyncCallback = savedMode;
     /* This barrier is load-bearing: removing it changes .text. */
