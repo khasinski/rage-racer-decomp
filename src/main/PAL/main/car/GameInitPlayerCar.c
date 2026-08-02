@@ -496,8 +496,8 @@ void GameUpdateCarBodyRoll(A *ctx) {
         ctx->f44 = 0;
         goto L_53C;
     }
-    if (mode >= 4) goto L_448;
-    if (D_8019C9AC != 0) goto L_448;
+    if (!(mode >= 4)) {
+    if (!(D_8019C9AC != 0)) {
     if (!(g_PadType != 0x41)) {
 
     if (g_MirrorMode != 0) {
@@ -597,8 +597,9 @@ void GameUpdateCarBodyRoll(A *ctx) {
     ctx->f64 = 0;
     ctx->sub.x1C = 0;
     goto L_53C;
+    }
+    }
 
-L_448:
     {
         s32 arg1 = (ctx->fB8 << 11) + 3072;
         r = GameGetAngleDelta(ctx->f24, arg1 - ctx->fB4);
