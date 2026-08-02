@@ -53,7 +53,7 @@ void GameUploadImageAsset(void *arg0) {
     ptr = (u8 *)arg0 + 4;
     goto test;
 
-loop:
+for (;;) {
     state.offset = (u32)state.offset >> 2;
     state.offset <<= 2;
     state.next = ptr + state.offset;
@@ -64,8 +64,10 @@ test:
     state.offset = *(s32 *)ptr;
     if (state.offset > 0) {
         ptr += 4;
-        goto loop;
+        continue;
     }
+break;
+}
 }
 
 extern Rect g_TrackTextureRect asm("D_8007C710");
