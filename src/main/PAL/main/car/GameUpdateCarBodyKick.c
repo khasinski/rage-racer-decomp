@@ -465,7 +465,7 @@ void GameSeedCarRouteMarkers(void) {
     product = (scene << 3) + scene;
     baseOffset = product << 6;
 
-for (;;) {
+outer:
     /* This barrier is load-bearing: removing it changes .text. */
     __asm__ volatile("" ::: "memory");
     index = 0;
@@ -496,10 +496,8 @@ inner:
     }
     }
     if (offset < 0x11B4) {
-        continue;
+        goto outer;
     }
-break;
-}
 }
 
 void GameUpdateCarAiTargetSpeed(u8 *car, s32 gear) asm("func_800396FC");
