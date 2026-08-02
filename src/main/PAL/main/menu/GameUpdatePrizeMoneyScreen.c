@@ -99,7 +99,7 @@ void GameUpdatePrizeMoneyScreen(void) {
             g_RaceProgress->unk10 = e + t;
         }
         }
-        if (g_PrizeAmount != 0) goto L420;
+        if (g_PrizeAmount != 0) break;
     L248:
         g_SceneTimer = 0;
         if (g_PromotionBonus == 0) goto Lstore7;
@@ -107,11 +107,11 @@ void GameUpdatePrizeMoneyScreen(void) {
         goto Lstore;
     case 5:
         GamePlaySoundCue(0x11);
-        if (!(g_PadEdge2 & 0x860)) goto L420;
+        if (!(g_PadEdge2 & 0x860)) break;
         st = 6;
     Lstore:
         g_PrizeScreenState = st;
-        goto L420;
+        break;
     case 6:
         func_80020D90();
         if (g_PromotionBonus == 0) { st = 7; goto Lstore; }
@@ -125,15 +125,15 @@ void GameUpdatePrizeMoneyScreen(void) {
             g_PromotionBonus = 0;
             g_RaceProgress->unk10 = e + t;
         }
-        if (g_PromotionBonus != 0) goto L420;
+        if (g_PromotionBonus != 0) break;
     Lstore7:
         st = 7;
         goto Lstore;
     case 7:
         func_80020D90();
         GamePlaySoundCue(0x11);
-        if (!(g_PadEdge2 & 0x860)) goto L420;
-        if (g_ClassClearFanfareTimer != 0) goto L420;
+        if (!(g_PadEdge2 & 0x860)) break;
+        if (g_ClassClearFanfareTimer != 0) break;
         if (g_ClassCompleted != 0) { st = 8; goto Lstore; }
         GameRequestSelectBgmAssets();
         st = 8;
@@ -144,13 +144,12 @@ void GameUpdatePrizeMoneyScreen(void) {
         else
             g_SceneTimer += 2;
         GameDrawFullscreenFadeTile(g_SceneTimer, 0x49);
-        if ((u32)g_SceneTimer < 0x100) goto L420;
+        if ((u32)g_SceneTimer < 0x100) break;
+        func_80020B08();
         break;
     default:
         goto L428;
     }
-    func_80020B08();
-L420:
     func_800206B8(0);
 L428:
     func_800201D4();
