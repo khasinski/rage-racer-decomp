@@ -167,8 +167,8 @@ L_sw2:
     case 2: goto L_state2;
     case -1: goto L_stateM1;
     case -2: goto L_stateM2;
-    case -3: goto L_stateIdle;
-    default: goto L_stateIdle; /* 0 */
+    case -3:
+    default: goto L_stateIdle; /* -3 and 0 */
     }
 
 L_state3:
