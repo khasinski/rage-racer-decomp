@@ -140,8 +140,7 @@ void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char va
         SsUtSetReverbType(val);
         break;
     case 16: {
-        /* This pin is load-bearing: removing it changes .text. */
-        register long a0r asm("$4") = val;
+        long a0r = (u16)val;
         long a1r = (u8)a0r;
         SsUtSetReverbDepth(a0r, a1r);
         break;
