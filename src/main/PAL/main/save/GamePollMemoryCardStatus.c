@@ -125,12 +125,12 @@ case3_ready:
 
         }
         state = -2;
-        goto fail_case3;
 
-        }
+        } else {
 fail_neg3_case3:
         state = -3;
 
+        }
 fail_case3:
         g_McPollStatus = state;
         g_McLastCardStatus = 0;
