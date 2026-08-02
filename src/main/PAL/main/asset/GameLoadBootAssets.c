@@ -166,8 +166,7 @@ void GameLoadSelectBgmAssets(void) asm("func_80018484");
 void GameLoadSelectBgmAssets(void) {
     GameAssetTripleHeader *header;
     s32 firstOffset;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 secondOffset asm("$3");
+    s32 secondOffset;
     s32 thirdOffset;
 
     switch (g_AssetLoadState) {
@@ -182,7 +181,10 @@ void GameLoadSelectBgmAssets(void) {
             g_AssetBlockPtr = (void *)((u8 *)header + firstOffset);
             secondOffset = *(volatile s32 *)&header->secondOffset;
             g_AssetLoadState = 0;
-            secondOffset = (s32)((u8 *)header + secondOffset);
+            {
+                s32 rel = secondOffset;
+                secondOffset = (s32)header + rel;
+            }
             header = (GameAssetTripleHeader *)((u8 *)header + thirdOffset);
             g_AssetBlockPtr2 = (void *)secondOffset;
             g_AssetSubBlockPtr = header;
