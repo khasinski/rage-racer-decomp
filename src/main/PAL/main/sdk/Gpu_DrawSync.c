@@ -21,7 +21,8 @@ long Gpu_DrawSync(long arg0) {
 
     if (arg0 == 0) {
         Gpu_ArmTimeout();
-        goto pollState;
+        switch (0) { default:
+        break;
 
 retry:
         func_80067984();
@@ -29,7 +30,7 @@ retry:
             return -1;
         }
 
-pollState:
+        }
         if (!(g_GpuQueueWriteIdx == g_GpuQueueReadIdx)) {
         goto retry;
 
