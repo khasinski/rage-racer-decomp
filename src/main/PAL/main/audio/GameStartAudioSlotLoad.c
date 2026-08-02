@@ -56,22 +56,16 @@ s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
         /* This pin is load-bearing: removing it changes .text. */
         register s32 seqSlotArg asm("$4") = slotReg;
 
-        if (slotReg == 1) {
-        } else {
-        if (slotReg != 6) {
-            goto loadVab;
-        }
-
-        }
+        if (slotReg == 1 || slotReg == 6) {
         {
             /* This barrier is load-bearing: removing it changes .text. */
             asm volatile("" ::: "$6");
             ret = func_8005E4EC(seqSlotArg, header, bodyReg, table);
             return (s16)ret;
         }
+        }
     }
 
-loadVab:
     g_AudioLoadSlot = slotReg;
     ret = func_80072C4C(header, -1, g_VabSpuAddress[slotReg]);
     {
