@@ -498,7 +498,7 @@ void GameUpdateCarBodyRoll(A *ctx) {
     }
     if (mode >= 4) goto L_448;
     if (D_8019C9AC != 0) goto L_448;
-    if (g_PadType != 0x41) goto L_1C4;
+    if (!(g_PadType != 0x41)) {
 
     if (g_MirrorMode != 0) {
         a1 = g_PadHeld & g_PadButtonMapping[0];
@@ -539,8 +539,8 @@ void GameUpdateCarBodyRoll(A *ctx) {
         ctx->f64 = (ctx->f64 * 7) / 8;
     }
     goto L_53C;
+    }
 
-L_1C4:
     if (g_PadType != 0x23) goto L_43C;
     a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconMaxTwist];
     if (g_MirrorMode != 0) a1 = -a1;
