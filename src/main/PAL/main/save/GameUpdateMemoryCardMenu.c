@@ -917,9 +917,10 @@ L_sw9:
         if (!(g_McSaveMode == 0)) {
         g_McMenuPhase = 5;
     L1447:
-        { u16 p = func_800612CC(); if (p) goto L1457; }
+        { u16 p = func_800612CC(); if (!(p)) {
     L_b1452:
-        { u16 p = func_8006131C(); if (p == 0) break; }
+        { u16 q = func_8006131C(); if (q == 0) break; }
+        } }
     L1457:
         g_McMenuPage = 0;
         goto L_b1606;
