@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/track.h"
 #include "game/race.h"
+#include "game/car.h"
 
 
 extern u32 g_CameraCar[] asm("D_801E3E14");
@@ -35,6 +36,11 @@ void GameSeedFinishCameraAlt(void *arg0) {
     s32 lastIndex;
     register s32 course asm("$3");
 
+    /* arg0 is a car runtime block: the copy below moves 0x19C bytes of it into
+     * g_CameraCar, whose x/y/z and +0x24/+0xA0/+0xA4 externs line up with
+     * GameCarRuntime. RAW() is required on the index reads -- as a plain member
+     * access they stop aliasing the unqualified g_CameraCar* stores between
+     * them and one of the four reloads is folded away; see common.h. */
     base = arg0;
     /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(base) : "0"(base));
@@ -54,18 +60,18 @@ void GameSeedFinishCameraAlt(void *arg0) {
     ((u32 *)dst)[1] = word1;
     ((u32 *)dst)[2] = word2;
 
-    index = *(s32 *)((s32)base + 0x30);
+    index = RAW(((GameCarRuntime *)base)->trackPointIndex);
     track = g_TrackPoints;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((s32)point + (s32)track);
     g_CameraCar[0] = point->x;
 
-    index = *(s32 *)((s32)base + 0x30);
+    index = RAW(((GameCarRuntime *)base)->trackPointIndex);
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((s32)point + (s32)track);
     g_CameraCarZ = point->z;
 
-    index = *(s32 *)((s32)base + 0x30);
+    index = RAW(((GameCarRuntime *)base)->trackPointIndex);
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((s32)point + (s32)track);
     word0 = point->y;
@@ -74,7 +80,7 @@ void GameSeedFinishCameraAlt(void *arg0) {
     g_CameraCarSpeed = 0;
     g_CameraCarY = word0 - 0x30;
 
-    lastIndex = *(s32 *)((s32)base + 0x30);
+    lastIndex = RAW(((GameCarRuntime *)base)->trackPointIndex);
     course <<= 11;
     point = (GameTrackPoint *)((lastIndex * 3) << 3);
     point = (GameTrackPoint *)((s32)point + (s32)track);
