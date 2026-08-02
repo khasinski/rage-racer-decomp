@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-typedef struct SeqStruct71568 {
+typedef struct SeqTempoView {
     u_char pad00[0x3E];
     short unk3E;
     short unk40;
@@ -15,21 +15,21 @@ typedef struct SeqStruct71568 {
     u_long unk94;
     u_long unk98;
     u_char pad9C[0x10];
-} SeqStruct71568;
+} SeqTempoView;
 
 typedef union SeqVolume71568 {
     short output;
     u_short value;
 } SeqVolume71568;
 
-extern SeqStruct71568 *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqTempoView *g_SndSeqTable[] asm("D_801E79CC");
 
 long func_80076C58(short seq_sep, u_short left, u_short right, short update_voices);
 long func_80076DCC(short seq_sep, short *left, short *right);
 
 void _SsSndDecrescendo(short seq, short sep) asm("func_80071568");
 void _SsSndDecrescendo(short seq, short sep) {
-    SeqStruct71568 *score = &g_SndSeqTable[seq][sep];
+    SeqTempoView *score = &g_SndSeqTable[seq][sep];
     SeqVolume71568 left;
     SeqVolume71568 right;
 

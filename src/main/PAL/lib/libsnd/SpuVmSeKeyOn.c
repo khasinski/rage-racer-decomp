@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-typedef struct SvmCurrent76350 {
+typedef struct SvmCurrentAttrKeyOn {
     u_char tone_count;
     u_char vab_id;
     u_char note;
@@ -31,14 +31,14 @@ typedef struct SvmCurrent76350 {
     short voice;
     short register_offset;
     short tone_index;
-} SvmCurrent76350;
+} SvmCurrentAttrKeyOn;
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
 extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern u_char D_801E42F8;
-extern SvmCurrent76350 g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttrKeyOn g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
 long SpuVmVSetUp(short vab_id, short program) asm("func_80073314");

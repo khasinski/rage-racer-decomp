@@ -3,17 +3,17 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-typedef struct SvmCurrent76940 {
+typedef struct SvmVoiceSlotView {
     u_char pad[0x1A];
     short voice;
-} SvmCurrent76940;
+} SvmVoiceSlotView;
 
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern u_short D_8009E670;
 extern u_short D_8009E674;
 extern u_short *g_SndSpuRegs asm("D_8009A588");
 extern u_char D_801E42F8;
-extern SvmCurrent76940 g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmVoiceSlotView g_SndCurrentAttr asm("D_801E4BD0");
 extern u_short D_801F2A08;
 extern u_short D_801F2A0C;
 

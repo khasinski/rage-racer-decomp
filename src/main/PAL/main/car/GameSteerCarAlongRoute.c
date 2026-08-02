@@ -816,12 +816,12 @@ extern s32 g_CameraCarSpeed asm("D_801E3EB8");
  * nowhere in the image. */
 extern s32 D_801E3F60;
 
-typedef struct CopyBlock8003CA14 {
+typedef struct CopyBlock16 {
     u32 word0;
     u32 word1;
     u32 word2;
     u32 word3;
-} CopyBlock8003CA14;
+} CopyBlock16;
 
 void GameSeedFinishCamera(void *arg0) asm("func_8003CA14");
 void GameSeedFinishCamera(void *arg0) {
@@ -829,9 +829,9 @@ void GameSeedFinishCamera(void *arg0) {
     register u32 word0 asm("$2");
     u32 word1;
     u32 word2;
-    CopyBlock8003CA14 *src;
-    CopyBlock8003CA14 *dst;
-    CopyBlock8003CA14 *end;
+    CopyBlock16 *src;
+    CopyBlock16 *dst;
+    CopyBlock16 *end;
     u32 *base;
     GameTrackPoint *track;
     GameTrackPoint *point;
@@ -843,9 +843,9 @@ void GameSeedFinishCamera(void *arg0) {
     base = arg0;
     /* This barrier is load-bearing: removing it changes .text. */
     asm("" : "=r"(base) : "0"(base));
-    dst = (CopyBlock8003CA14 *)g_CameraCar;
-    src = (CopyBlock8003CA14 *)base;
-    end = (CopyBlock8003CA14 *)((s32)base + 0x190);
+    dst = (CopyBlock16 *)g_CameraCar;
+    src = (CopyBlock16 *)base;
+    end = (CopyBlock16 *)((s32)base + 0x190);
     do {
         *dst = *src;
         src++;

@@ -20,19 +20,19 @@ typedef struct TrackPointWindow {
     u16 segmentLength;
 } TrackPointWindow;
 
-typedef struct Unk32098 {
+typedef struct TrackSurfaceCell {
     u16 field_0;
     u8 pad2[6];
     u16 field_8;
     u8 padA[0x26];
     s32 field_30;
-} Unk32098;
+} TrackSurfaceCell;
 
 
-s32 GameFindTrackSegment(Unk32098 *arg0, s32 arg1) asm("func_80030EB4");
+s32 GameFindTrackSegment(TrackSurfaceCell *arg0, s32 arg1) asm("func_80030EB4");
 
-s32 GameGetTrackSurfaceHeight(Unk32098 *arg0) asm("func_80032098");
-s32 GameGetTrackSurfaceHeight(Unk32098 *arg0) {
+s32 GameGetTrackSurfaceHeight(TrackSurfaceCell *arg0) asm("func_80032098");
+s32 GameGetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
     s32 index;
     s32 nextIndex;
     TrackPointWindow *base;

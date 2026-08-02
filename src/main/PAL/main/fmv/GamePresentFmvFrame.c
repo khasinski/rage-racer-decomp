@@ -3,7 +3,7 @@
 #include "psyq/cd.h"
 #include "game/race.h"
 
-typedef struct Unk8001EF54 {
+typedef struct FmvDisplayState {
     u8 pad0[0x18];
     u16 field_18;
     u16 field_1A;
@@ -13,7 +13,7 @@ typedef struct Unk8001EF54 {
     u16 field_2E;
     u8 pad2[0x4];
     s32 field_34;
-} Unk8001EF54;
+} FmvDisplayState;
 
 void *GameGetFmvFrame(s32 *arg0) asm("func_8001EDC4");
 void func_80064588(void *arg0, s32 arg1);
@@ -135,8 +135,8 @@ process:
     return ret;
 }
 
-void GameWaitFmvDecode(Unk8001EF54 *arg0) asm("func_8001EF54");
-void GameWaitFmvDecode(Unk8001EF54 *arg0) {
+void GameWaitFmvDecode(FmvDisplayState *arg0) asm("func_8001EF54");
+void GameWaitFmvDecode(FmvDisplayState *arg0) {
     volatile s32 timeout = 0x800000;
     s32 one;
     u16 x;
@@ -149,9 +149,9 @@ void GameWaitFmvDecode(Unk8001EF54 *arg0) {
                 GameDebugPrintf(g_MsgFmvDecodeTimeout);
                 arg0->field_34 = one;
                 arg0->field_28 = arg0->field_28 < 1U;
-                x = ((Unk8001EF54 *)((u8 *)arg0 + (arg0->field_28 << 3)))->field_18;
+                x = ((FmvDisplayState *)((u8 *)arg0 + (arg0->field_28 << 3)))->field_18;
                 arg0->field_2C = x;
-                arg0->field_2E = ((Unk8001EF54 *)((u8 *)arg0 + (arg0->field_28 << 3)))->field_1A;
+                arg0->field_2E = ((FmvDisplayState *)((u8 *)arg0 + (arg0->field_28 << 3)))->field_1A;
             }
         } while (arg0->field_34 == 0);
     }

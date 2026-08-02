@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-typedef struct ProgAtr77C7C {
+typedef struct ProgAtrView {
     u_char tones;
     u_char mvol;
     u_char prior;
@@ -14,9 +14,9 @@ typedef struct ProgAtr77C7C {
     u_long reserved1;
     u_short reserved2;
     u_short reserved3;
-} ProgAtr77C7C;
+} ProgAtrView;
 
-typedef struct SpuVoice77C7C {
+typedef struct SpuVoiceView {
     short unk0;
     short unk2;
     short unk04;
@@ -45,9 +45,9 @@ typedef struct SpuVoice77C7C {
     short unk2e;
     short start_pan;
     short end_pan;
-} SpuVoice77C7C;
+} SpuVoiceView;
 
-typedef struct SvmCur77C7C {
+typedef struct SvmCurrentAttr {
     u_char tones;
     u_char vab_id;
     u_char note;
@@ -75,13 +75,13 @@ typedef struct SvmCur77C7C {
     u_short voice;
     u_short unk1c;
     u_short unk1e;
-} SvmCur77C7C;
+} SvmCurrentAttr;
 
 extern long g_SndUpdateLock asm("D_801E40AC");
-extern ProgAtr77C7C *g_SndCurrentProgTable asm("D_801E4110");
+extern ProgAtrView *g_SndCurrentProgTable asm("D_801E4110");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
-extern SvmCur77C7C g_SndCurrentAttr asm("D_801E4BD0");
-extern SpuVoice77C7C g_SndVoiceState[] asm("D_8009E0B8");
+extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
+extern SpuVoiceView g_SndVoiceState[] asm("D_8009E0B8");
 
 extern long SpuVmVSetUp(short, short) asm("func_80073314");
 extern void func_80074134(void);
@@ -111,7 +111,7 @@ long SsUtKeyOnV(
     long idx;
     u_char tone_value;
     u_short vag;
-    ProgAtr77C7C *program_attr;
+    ProgAtrView *program_attr;
     VagAtr *tone_attr;
     long left_value;
     long right_value;
