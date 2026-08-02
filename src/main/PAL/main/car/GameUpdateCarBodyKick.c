@@ -170,15 +170,13 @@ loop:
     threshold = *(s32 *)(cursor + 4);
     cmp = temp < threshold;
     offset += 8;
-    if (cmp != 0) {
-        goto next;
-    }
+    if (!(cmp != 0)) {
     cmp = pos1 < threshold;
     if (cmp != 0) {
         goto crossed_label;
     }
 
-next:
+    }
     i++;
     if (i < 8) {
         cursor = (s32)(base + offset);
