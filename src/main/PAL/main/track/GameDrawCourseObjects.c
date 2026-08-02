@@ -193,7 +193,7 @@ void GameBuildVisibleCells(s32 arg0, s32 arg1) {
     i = 0;
     out = g_VisibleCellList;
     j = 0;
-    while (i < 64) {
+    for (; i < 64; j += 2, i++, out++) {
         s32 k;
         s32 dx;
         s32 dy;
@@ -255,14 +255,10 @@ void GameBuildVisibleCells(s32 arg0, s32 arg1) {
                         } while (0);
                     } while (0);
                     out->f8 = proj[2];
-                    goto cont;
+                    continue;
                 }
             }
         }
         out->f12 = invalid;
-cont:
-        j += 2;
-        i++;
-        out++;
     }
 }
