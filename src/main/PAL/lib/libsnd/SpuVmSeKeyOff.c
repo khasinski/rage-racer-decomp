@@ -1,44 +1,14 @@
 #include <sys/types.h>
 
 #include "common.h"
-
-typedef struct SpuVoice76940 {
-    short vag;
-    short age;
-    short pitch;
-    u_short env;
-    short base_volume;
-    signed char pan;
-    signed char unkB;
-    short note;
-    short seq_sep;
-    short program_index;
-    short program;
-    short tone;
-    short vab_id;
-    short priority;
-    u_char pad1A;
-    u_char active;
-    short auto_volume;
-    short unk1E;
-    short unk20;
-    short unk22;
-    short start_volume;
-    short end_volume;
-    short auto_pan;
-    short unk2A;
-    short unk2C;
-    short unk2E;
-    short start_pan;
-    short end_pan;
-} SpuVoice76940;
+#include "psyq/snd_types.h"
 
 typedef struct SvmCurrent76940 {
     u_char pad[0x1A];
     short voice;
 } SvmCurrent76940;
 
-extern SpuVoice76940 g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern u_short D_8009E670;
 extern u_short D_8009E674;
 extern u_short *g_SndSpuRegs asm("D_8009A588");

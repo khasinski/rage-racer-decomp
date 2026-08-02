@@ -56,37 +56,6 @@ typedef struct SeqState76350 {
     short padAA;
 } SeqState76350;
 
-typedef struct VoiceState76350 {
-    short vag;
-    short age;
-    short pitch;
-    u_short env;
-    short base_volume;
-    signed char pan;
-    signed char unkB;
-    short note;
-    short seq_sep;
-    short program_index;
-    short program;
-    short tone;
-    short vab_id;
-    short priority;
-    u_char pad1A;
-    u_char active;
-    short auto_volume;
-    short unk1E;
-    short unk20;
-    short unk22;
-    short start_volume;
-    short end_volume;
-    short auto_pan;
-    short unk2A;
-    short unk2C;
-    short unk2E;
-    short start_pan;
-    short end_pan;
-} VoiceState76350;
-
 typedef struct SvmCurrent76350 {
     u_char tone_count;
     u_char vab_id;
@@ -123,7 +92,7 @@ extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern u_char D_801E42F8;
 extern SvmCurrent76350 g_SndCurrentAttr asm("D_801E4BD0");
-extern VoiceState76350 g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
 long SpuVmVSetUp(short vab_id, short program) asm("func_80073314");
 long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) asm("func_80076940");

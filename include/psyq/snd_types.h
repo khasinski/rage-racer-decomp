@@ -115,4 +115,43 @@ typedef struct VagAtr {
     short reserved[4];
 } VagAtr;
 
+/*
+ * One libsnd voice slot (0x34 bytes). Seven translation units each carried
+ * their own copy of this layout under a name ending in the address of the
+ * function that introduced it; the offsets always agreed. SpuVmAutoVol's copy
+ * named 0x1E..0x26 volumeStep / volumeCounter / volumeCounterReload /
+ * currentVolume / targetVolume, which may be the better reading of the last
+ * two -- the pan fields at 0x30/0x32 are what suggested start/end here.
+ */
+typedef struct SpuVoice {
+    short vag;
+    short age;
+    short pitch;
+    u_short env;
+    short base_volume;
+    signed char pan;
+    signed char unkB;
+    short note;
+    short seq_sep;
+    short program_index;
+    short program;
+    short tone;
+    short vab_id;
+    short priority;
+    u_char pad1A;
+    u_char active;
+    short auto_volume;
+    short unk1E;
+    short unk20;
+    short unk22;
+    short start_volume;
+    short end_volume;
+    short auto_pan;
+    short unk2A;
+    short unk2C;
+    short unk2E;
+    short start_pan;
+    short end_pan;
+} SpuVoice;
+
 #endif

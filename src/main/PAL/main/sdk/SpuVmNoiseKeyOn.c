@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd_types.h"
 
 typedef struct SeqState74348 {
     u_char pad00[0x74];
@@ -8,37 +9,6 @@ typedef struct SeqState74348 {
     u_short right_volume;
     u_char pad78[0x34];
 } SeqState74348;
-
-typedef struct VoiceState74348 {
-    short vag;
-    short age;
-    short pitch;
-    u_short unk6;
-    short base_volume;
-    signed char unkA;
-    signed char unkB;
-    short note;
-    short seq_sep;
-    short program_index;
-    short program;
-    short tone;
-    short vab_id;
-    short priority;
-    u_char pad1A;
-    u_char status;
-    short auto_volume;
-    short unk1E;
-    short unk20;
-    short unk22;
-    short start_volume;
-    short end_volume;
-    short auto_pan;
-    short unk2A;
-    short unk2C;
-    short unk2E;
-    short start_pan;
-    short end_pan;
-} VoiceState74348;
 
 typedef struct SvmCurrent74348 {
     u_char tones;
@@ -69,7 +39,7 @@ typedef struct SvmCurrent74348 {
 } SvmCurrent74348;
 
 extern SeqState74348 *g_SndSeqTable[] asm("D_801E79CC");
-extern VoiceState74348 g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern SvmCurrent74348 g_SndCurrentAttr asm("D_801E4BD0");
 extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
@@ -158,9 +128,9 @@ void SpuVmNoiseKeyOn(u_char voice) {
 
     g_SndVoiceState[voice].pitch = 0xA;
     for (current_voice = 0; current_voice < D_801E42F8; current_voice++) {
-        g_SndVoiceState[current_voice].status &= 1;
+        g_SndVoiceState[current_voice].active &= 1;
     }
-    g_SndVoiceState[voice].status = 2;
+    g_SndVoiceState[voice].active = 2;
 
     D_8009E670 |= bits_lower;
     D_8009E674 |= bits_upper;

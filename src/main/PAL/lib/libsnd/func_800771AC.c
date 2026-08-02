@@ -56,37 +56,6 @@ typedef struct SeqState771AC {
     short padAA;
 } SeqState771AC;
 
-typedef struct VoiceState771AC {
-    short vag;
-    short age;
-    short pitch;
-    u_short unk6;
-    short base_volume;
-    signed char unkA;
-    signed char unkB;
-    short note;
-    short seq_sep;
-    short program_index;
-    short program;
-    short tone;
-    short vab_id;
-    short priority;
-    u_char pad1A;
-    u_char status;
-    short auto_volume;
-    short unk1E;
-    short unk20;
-    short unk22;
-    short start_volume;
-    short end_volume;
-    short auto_pan;
-    short unk2A;
-    short unk2C;
-    short unk2E;
-    short start_pan;
-    short end_pan;
-} VoiceState771AC;
-
 typedef struct SvmCurrent771AC {
     u_char tones;
     u_char unk1;
@@ -116,7 +85,7 @@ typedef struct SvmCurrent771AC {
 } SvmCurrent771AC;
 
 extern SeqState771AC *g_SndSeqTable[] asm("D_801E79CC");
-extern VoiceState771AC g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern short g_SndVoiceRegs[] asm("D_8009DF20");
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char D_801E42F8;
@@ -297,7 +266,7 @@ short SsUtKeyOn(
     g_SndVoiceState[voice_index].vag = g_SndCurrentAttr.vag;
     g_SndVoiceState[voice_index].tone = g_SndCurrentAttr.tone;
     g_SndVoiceState[voice_index].note = note;
-    g_SndVoiceState[voice_index].status = 1;
+    g_SndVoiceState[voice_index].active = 1;
     g_SndVoiceState[voice_index].age = 0;
 
     func_80074134();

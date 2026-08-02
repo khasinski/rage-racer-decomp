@@ -1,37 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
-
-typedef struct SpuVoice76ED8 {
-    short vag;
-    short age;
-    short pitch;
-    u_short env;
-    short base_volume;
-    signed char pan;
-    signed char unkB;
-    short note;
-    short seq_sep;
-    short program_index;
-    short program;
-    short tone;
-    short vab_id;
-    short priority;
-    u_char pad1A;
-    u_char active;
-    short auto_volume;
-    short unk1E;
-    short unk20;
-    short unk22;
-    short start_volume;
-    short end_volume;
-    short auto_pan;
-    short unk2A;
-    short unk2C;
-    short unk2E;
-    short start_pan;
-    short end_pan;
-} SpuVoice76ED8;
+#include "psyq/snd_types.h"
 
 extern u_char D_801E42F8;
 extern u_short g_SndCurrentVoice asm("D_801E4BEA");
@@ -39,7 +9,7 @@ extern u_short D_801F2A08;
 extern u_short D_801F2A0C;
 extern u_short D_8009E670;
 extern u_short D_8009E674;
-extern SpuVoice76ED8 g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
 void SpuVmSeqKeyOff(long arg0) asm("func_80076ED8");
 
