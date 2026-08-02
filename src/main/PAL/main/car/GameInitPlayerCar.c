@@ -508,7 +508,7 @@ void GameUpdateCarBodyRoll(A *ctx) {
         a1 = g_PadHeld & g_PadButtonMapping[1];
     }
 
-    if (!(v1 == 0)) {
+    if (v1 != 0) {
     a0v = 2;
     if (ctx->fB8 != 0) a0v = 1;
     v1 = p->x1C;
@@ -519,10 +519,7 @@ void GameUpdateCarBodyRoll(A *ctx) {
         p->x1C = v1 - 1536;
     }
     ctx->f64 = ctx->f64 - 6;
-    goto L_194;
-
-    }
-    if (!(a1 == 0)) {
+    } else if (a1 != 0) {
     a0v = 1;
     if (ctx->fB8 != 0) a0v = 2;
     v1 = p->x1C;
@@ -533,13 +530,10 @@ void GameUpdateCarBodyRoll(A *ctx) {
         p->x1C = v1 + 1536;
     }
     ctx->f64 = ctx->f64 + 6;
-    goto L_194;
-
-    }
+    } else {
     p->x40 = 0;
     p->x1C = p->x1C / 3;
-
-L_194:
+    }
     ctx->f44 = -p->x1C;
     if (ctx->f64 != 0) {
         ctx->f64 = (ctx->f64 * 7) / 8;
@@ -570,10 +564,7 @@ L_1C4:
         ctx->sub.x1C = v1 / 3;
     }
     ctx->f64 = ctx->f64 - 6;
-    goto L_414;
-
-    }
-    if (!(a1 <= 0)) {
+    } else if (!(a1 <= 0)) {
     a0v = 1;
     if (ctx->fB8 != 0) a0v = 2;
     v1 = ctx->sub.x1C;
@@ -592,14 +583,11 @@ L_1C4:
         ctx->sub.x1C = v1 / 3;
     }
     ctx->f64 = ctx->f64 + 6;
-    goto L_414;
-
-    }
+    } else {
     ctx->sub.x40 = 0;
     ctx->f44 = ctx->f44 / 2;
     ctx->sub.x1C = ctx->sub.x1C / 6;
-
-L_414:
+    }
     if (ctx->f64 != 0) {
         ctx->f64 = (ctx->f64 * 7) / 8;
     }
