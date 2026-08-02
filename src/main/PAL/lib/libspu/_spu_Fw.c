@@ -56,17 +56,14 @@ long _spu_FsetRXXa(long arg0, u_long arg1) {
     shift = _spu_mem_mode_unitM;
     shifted = arg1 >> shift;
 
-    if (index == -2) {
-    } else {
+    if (!(index == -2)) {
     if (index != -1) {
-        goto store;
-    }
+    } else {
     return shifted & 0xFFFF;
-
     }
+    } else {
     return arg1;
-
-store:
+    }
     {
         long base = (long)g_SpuRegBase;
         long offset = index << 1;
