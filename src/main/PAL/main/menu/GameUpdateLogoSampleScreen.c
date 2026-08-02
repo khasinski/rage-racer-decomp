@@ -218,7 +218,7 @@ void GameUpdateTeamNameScreen(void) {
 
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     func_80051D6C();
-    if (GameMenuBusy != 0) goto reopen;
+    if (!(GameMenuBusy != 0)) {
 
     func_8004E724(1, GameMenuCursor);
     if (func_800487D8(&D_80081D34, &g_UiScriptProgress, 1) == 0) return;
@@ -295,8 +295,8 @@ pop:
 set_depth:
     g_TeamNameLength = newdepth;
     return;
+    }
 
-reopen:
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 9;
     func_8004E724(-1, GameMenuCursor);
