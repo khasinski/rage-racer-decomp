@@ -15,36 +15,26 @@ long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, lo
     rect.y = arg4;
     rect.h = arg6;
 
-    if (!(arg1 == 1)) {
-    if (arg1 < 2) {
-        if (arg1 == 0) {
-            goto zero;
-        }
-        goto call;
-    }
-    if (arg1 == 2) {
-        goto two;
-    }
-    goto call;
-
-zero:
+    switch (arg1) {
+    case 0:
     width = arg5;
     if (width < 0) {
         width += 3;
     }
     rect.w = width >> 2;
-    } else {
+    break;
 
+    case 1:
     width = arg5;
     width += (u_long)arg5 >> 31;
     rect.w = width >> 1;
-    goto call;
+    break;
 
-two:
+    case 2:
     rect.w = arg5;
-
+    break;
     }
-call:
+
     LoadImage(&rect, arg0);
     return func_80064BB4(arg1, arg2, arg3, arg4) & 0xFFFF;
 }
