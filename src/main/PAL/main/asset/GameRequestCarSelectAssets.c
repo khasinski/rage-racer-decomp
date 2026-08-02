@@ -62,33 +62,19 @@ void GameLoadCarSelectAssets(void) {
 
     state2 = 2;
 
-    if (state == state2) {
-        goto state_2;
-    }
-    if (state < 3) {
-        if (state == 1) {
-            goto state_1;
-        }
-        return;
-    }
-    if (!(state == 3)) {
-    if (state == 4) {
-    } else {
-    return;
-
-state_1:
+    switch (state) {
+    case 1:
         func_8005B768(1, g_AssetBlockPtr, g_AssetSubBlockPtr, g_AssetBlockPtr2);
         g_AssetLoadState = state2;
         return;
-state_2:
+    case 2:
         if ((func_8005B89C() << 16) != 0) {
             func_8005DBD8();
             g_AssetLoadState = 3;
             g_AssetLoadCursor = (GameAssetTripleHeader *)g_AssetSubBlockPtr;
         }
         return;
-    }
-    } else {
+    case 3:
             if (func_80017C78(8, g_AssetLoadCursor) != 0) {
                 GameRegisterModelBank((u8 *)g_AssetLoadCursor + 0xC, 0xE);
 
@@ -111,7 +97,7 @@ state_2:
                 g_ImageBlockBuffer = g_AssetBlockPtr + 0x40000;
             }
         return;
-    }
+    case 4:
             carIndex = g_PlayerCarIndex;
             indexOffset = carIndex << 3;
             entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
@@ -147,6 +133,7 @@ state_2:
                 g_CarModelSlot = 0;
                 g_AssetLoadState = 0;
             }
+    }
 done:
     return;
 }
