@@ -118,25 +118,24 @@ void GameUpdatePadState(void) {
     g_PadType = D_801E403D;
     if (raw[0] != 0) {
         v = 1;
+        g_PadErrorState = v;
+        D_801E4D14 = 0x22;
+        D_8019CB10 |= 0x10;
     } else {
-        if (D_801E4D14 == 0) {
-            goto after;
+        if (D_801E4D14 != 0) {
+            D_801E4D14 = D_801E4D14 - 1;
+            if (D_801E403D == 0x23) {
+                mask = ~(D_801E403F | (D_801E403E << 8));
+                if (!(((mask & 0x5000) != 0x5000) && ((mask & 0xA000) != 0xA000) &&
+                    ((mask & 0x1C4) == 0))) {
+                    v = 2;
+        g_PadErrorState = v;
+        D_801E4D14 = 0x22;
+        D_8019CB10 |= 0x10;
+                }
+            }
         }
-        D_801E4D14 = D_801E4D14 - 1;
-        if (D_801E403D != 0x23) {
-            goto after;
-        }
-        mask = ~(D_801E403F | (D_801E403E << 8));
-        if (((mask & 0x5000) != 0x5000) && ((mask & 0xA000) != 0xA000) &&
-            ((mask & 0x1C4) == 0)) {
-            goto after;
-        }
-        v = 2;
     }
-    g_PadErrorState = v;
-    D_801E4D14 = 0x22;
-    D_8019CB10 |= 0x10;
-after:
     D_8019CB10 = D_8019CB10 >> 1;
     if (D_8019CB10 != 0) {
         raw[1] = 0;
