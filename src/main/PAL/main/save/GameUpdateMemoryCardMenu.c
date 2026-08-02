@@ -209,14 +209,8 @@ L_sw2:
     break;
 
     case 1:
-    if (g_McMenuPage == 0) {
-    } else {
-    if (g_McMenuPage == 1) {
-        goto L_sw4;
-    }
-    goto L_copyreset;
-
-    }
+    switch (g_McMenuPage) {
+    case 0:
     {
         s32 *p = &g_McMenuRowCursor;
         g_McMenuPhase = 0;
@@ -243,7 +237,13 @@ L_sw2:
     }
     goto L_sw5;
 
-L_sw4:
+    case 1:
+    break;
+
+    default:
+    goto L_copyreset;
+    }
+
     switch (g_McActionState) {
     case 0x00: {
         s32 *s0 = &g_McSlotCursor;
@@ -862,11 +862,8 @@ L_sw8:
     }
     break;
     case -2:
-    if (!(g_McMenuPage == 0)) {
-    if (g_McMenuPage == 1) goto L_sw9;
-    goto L_sw10;
-
-    }
+    switch (g_McMenuPage) {
+    case 0:
     {
         s32 *p = &g_McMenuRowCursor;
         g_McMenuSubState = 0xB;
@@ -900,7 +897,13 @@ L_b1420:
     func_8006138C();
     goto L_sw10;
 
-L_sw9:
+    case 1:
+    break;
+
+    default:
+    goto L_sw10;
+    }
+
     switch (g_McActionState) {
     case 0:
         if (!(g_McSaveMode == 0)) {
