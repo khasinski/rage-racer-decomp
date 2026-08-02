@@ -867,8 +867,9 @@ L_sw8:
         ;
     }
 
-    if (g_McMenuState == -1) goto L_epilogue;
+    if (!(g_McMenuState == -1)) {
     g_McActionState = 0;
+    }
     goto L_epilogue;
 L_stateM2:
     if (!(g_McMenuPage == 0)) {
