@@ -14,9 +14,8 @@ void MatrixApplyZRotation(Matrix *arg0, s32 arg1) {
     Matrix sp10;
     s32 angle;
     s32 c;
-    /* This pin is load-bearing: removing it changes .text. */
-    register s32 s asm("$2");
-    s32 s_copy;
+    s32 s;
+    s16 s_copy;
 
     angle = arg1 / 360;
     c = rcos(angle);
