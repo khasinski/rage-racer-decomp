@@ -107,7 +107,7 @@ L57:
         s32 ns = cur + 1;
         g_SceneTimer = ns;
         g_McMenuPhase = 0xF;
-        if (ns != 3) goto L_epilogue;
+        if (!(ns != 3)) {
         g_McSlotUsedMask = 0;
         func_8005F65C(&g_McSaveHeaders);
         D_8009B6F4 = -1;
@@ -121,6 +121,7 @@ L57:
         g_McActionTimer = 0;
         g_McActionBusy = 0;
         D_80082FC8 = 1;
+        }
         goto L_epilogue;
     }
 
