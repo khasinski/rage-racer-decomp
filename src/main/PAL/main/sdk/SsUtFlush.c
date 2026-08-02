@@ -103,7 +103,7 @@ void SsUtFlush(void) {
             oneSaved = 1;
             two = 2;
             voiceOffset = 0;
-noiseLoop:
+for (;;) {
             if ((commonMask & (oneSaved << i)) != 0) {
                 if (g_SndVoiceStateStatus[voiceOffset] == two) {
                     SpuSetNoiseVoice(0, 0xFFFFFF);
@@ -114,8 +114,10 @@ noiseLoop:
             i++;
             if (i < activeVoices) {
                 voiceOffset += 0x34;
-                goto noiseLoop;
+                continue;
             }
+break;
+}
         }
         }
     }
