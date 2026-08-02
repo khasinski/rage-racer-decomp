@@ -824,14 +824,16 @@ L_m3:
     goto L_b1288;
 
 L_b1280:
-    if ((g_PadEdge2 & 0x90) == 0) goto L_sw8;
-    if (fadeBusy != 0) goto L_sw8;
+    if (!((g_PadEdge2 & 0x90) == 0)) {
+    if (!(fadeBusy != 0)) {
     GamePlaySoundCue(3);
     /* fall through */
 
 L_b1288:
     func_8006138C();
     /* fall through */
+    }
+    }
 
 L_sw8:
     switch (g_McMenuSelection) {
