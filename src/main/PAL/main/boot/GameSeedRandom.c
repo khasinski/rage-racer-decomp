@@ -73,8 +73,8 @@ s32 func_800632F0(u8 *dest, u8 *format, ...) {
     s32 c;
     s32 hash;
     s32 zeroFlag;
-    register s32 minus;
     register s32 plus;
+    register s32 minus;
 
     args = (u8 *)&format + 4;
     c = *format;
@@ -94,27 +94,29 @@ s32 func_800632F0(u8 *dest, u8 *format, ...) {
         hash = '#';
         zeroFlag = '0';
 
-scan_flag:
+        for (;;) {
         c = *++format;
         if (c == minus) {
             work.spec.header.flags |= LIBC_LEFT;
-            goto scan_flag;
+            continue;
         }
         if (c == plus) {
             work.spec.header.flags |= LIBC_PLUS;
-            goto scan_flag;
+            continue;
         }
         if (c == ' ') {
             work.spec.header.bytes.prefix = c;
-            goto scan_flag;
+            continue;
         }
         if (c == hash) {
             work.spec.header.flags |= LIBC_ALT;
-            goto scan_flag;
+            continue;
         }
         if (c == zeroFlag) {
             work.spec.header.flags |= LIBC_ZERO;
-            goto scan_flag;
+            continue;
+        }
+        break;
         }
 
         if (c == '*') {
