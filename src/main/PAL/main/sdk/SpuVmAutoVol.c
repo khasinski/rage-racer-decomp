@@ -45,17 +45,18 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     *(volatile short *)(D_8009E0DC + offset) = start;
     *(volatile short *)(D_8009E0DE + offset) = target;
 
+    switch (0) { default:
     step16 = (short)arg3;
     delta = start16 - target16;
     if (delta < 0) {
         offset = target16 - start16;
         if (offset >= step16) {
-            goto large;
+            break;
         }
     } else if (delta >= step16) {
         do {
         } while (0);
-        goto large;
+        break;
     }
 
     stepForSmallDiv = (short)step;
@@ -70,6 +71,7 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     *(volatile short *)(D_8009E0DA + offset) = quotient;
     return;
 
+    }
 large:
     stepForSmallDiv = (short)start;
     offset = (short)target;
