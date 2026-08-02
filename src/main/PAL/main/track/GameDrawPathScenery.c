@@ -127,20 +127,19 @@ after:
     }
     s0 = g_PlayerField3C;
     if (s0 >= 0) {
-        goto sub;
-    }
+    } else {
     s0 += 0x100;
     if (s0 <= 0) {
         goto chk;
     }
     s0 = 0;
     goto chk;
-sub:
+    }
     s0 -= 0x100;
     if (s0 >= 0) {
-        goto chk;
-    }
+    } else {
     s0 = 0;
+    }
 chk:
     if (s0 != 0) {
         s0 = (s0 * g_PlayerSpeed) / 12775;

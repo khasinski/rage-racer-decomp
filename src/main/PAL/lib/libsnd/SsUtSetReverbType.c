@@ -20,8 +20,7 @@ long SsUtSetReverbType(long type) {
     }
 
     if ((u_long)(normalized & 0xFFFF) >= 10) {
-        goto fail;
-    }
+    } else {
 
     g_SndReverbAttr.mask = 1;
     if (negative != 0) {
@@ -40,7 +39,7 @@ long SsUtSetReverbType(long type) {
     SpuSetReverbModeParam(&g_SndReverbAttr);
     return result;
 
-fail:
+    }
     return -1;
 }
 

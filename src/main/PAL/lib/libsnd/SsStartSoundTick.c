@@ -108,8 +108,7 @@ setup:
     if (g_SndTickUsesVSync != 0) {
         EnterCriticalSection();
         func_8006DFC4(g_SndTickCallback);
-        goto unlock;
-    }
+    } else {
 
     EnterCriticalSection();
     ResetRCnt(channel);
@@ -133,7 +132,7 @@ setup:
         func_8006DF64(mode, callback);
     }
 
-unlock:
+    }
     ExitCriticalSection();
 
 done:

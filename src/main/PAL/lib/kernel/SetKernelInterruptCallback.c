@@ -39,8 +39,7 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     }
 
     if (*((u_short *)base - 2) == 0) {
-        goto done;
-    }
+    } else {
 
     maskPtr = g_IrqMask;
     pendingValue = *maskPtr;
@@ -93,6 +92,6 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     }
 
     *g_IrqMask = pendingMask;
-done:
+    }
     return oldCallback;
 }

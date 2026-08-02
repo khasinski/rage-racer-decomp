@@ -102,11 +102,11 @@ long CdReadSync(long arg0, long arg1) {
 reset_read:
             CdReadRetry(1);
             result = state[-7];
-            goto loop_check;
-        }
+        } else {
 
         result = state[-2];
 
+        }
 loop_check:
         if (savedArg0 != 0) {
             break;

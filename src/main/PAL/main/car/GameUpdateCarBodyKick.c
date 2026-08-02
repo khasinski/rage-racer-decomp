@@ -416,10 +416,10 @@ void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
 
     }
     if (entry[1] < target) {
-        goto advance;
-    }
+    } else {
     goto clear;
 
+    }
 advance:
     {
         /* This pin is load-bearing: removing it changes .text. */

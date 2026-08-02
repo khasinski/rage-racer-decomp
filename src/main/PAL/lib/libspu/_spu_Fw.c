@@ -57,14 +57,13 @@ long _spu_FsetRXXa(long arg0, u_long arg1) {
     shifted = arg1 >> shift;
 
     if (index == -2) {
-        goto ret_arg;
-    }
+    } else {
     if (index != -1) {
         goto store;
     }
     return shifted & 0xFFFF;
 
-ret_arg:
+    }
     return arg1;
 
 store:

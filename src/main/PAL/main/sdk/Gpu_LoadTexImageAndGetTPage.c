@@ -182,15 +182,14 @@ void DumpTPage(long arg0) {
 
     mode = func_800657E4();
     if (mode == 1) {
-        goto high_mode;
-    }
+    } else {
 
     mode = func_800657E4();
     if (mode != 2) {
         goto low_mode;
     }
 
-high_mode:
+    }
     GPU_printf(D_80013374, (((u_long)arg0 & 0xFFFF) >> 9) & 3, (((u_long)arg0 & 0xFFFF) >> 7) & 3, (((u_long)arg0 & 0xFFFF) << 6) & 0x7C0, (((u_long)arg0 & 0xFFFF) << 3) & 0x300);
     return;
 

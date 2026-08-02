@@ -33,14 +33,13 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     mode8 = (u_char)mode;
 
     if (mode8 == 0x14) {
-        goto mode_14;
-    }
+    } else {
     if (mode8 == 0x1E) {
         goto mode_1e;
     }
     goto mode_default;
 
-mode_14:
+    }
     state->unk16 = mode;
     state->unk27 = 1;
     state->delta_value = SsSeqReadDeltaTime(seq_s, sep_s);
