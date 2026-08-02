@@ -413,11 +413,9 @@ void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     return;
 
     }
-    if (entry[1] < target) {
-    } else {
-    goto clear;
+    if (!(entry[1] < target)) {
 
-    }
+    } else {
 advance:
     {
         /* This pin is load-bearing: removing it changes .text. */
@@ -442,7 +440,7 @@ advance:
     *(s16 *)(state + 0x52) = 0;
     return;
 
-clear:
+    }
     objReg->field_10E = 0;
 }
 
