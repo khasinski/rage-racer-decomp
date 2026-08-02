@@ -189,7 +189,7 @@ void DecDCToutCallback(long callback) asm("func_800640B0");
 long CD_init(long mode) asm("func_8006A428");
 long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
 long CD_ready(long mode, u_char *result) asm("func_8006B354");
-long CD_cw(long com, void *param, long result, long wait) asm("func_8006B620");
+long CD_cw(u_char command, u_char *params, u_char *result, long async) asm("func_8006B620");
 
 
 #endif
