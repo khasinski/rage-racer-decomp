@@ -90,8 +90,7 @@ long CdReadSync(long arg0, long arg1) {
         now = VSync(-1);
         if (state[0] + 0x4B0 < now) {
             result = -1;
-            goto loop_check;
-        }
+        } else {
 
         if (state[-2] < 0) {
             goto reset_read;
@@ -107,7 +106,7 @@ reset_read:
         result = state[-2];
 
         }
-loop_check:
+        }
         if (savedArg0 != 0) {
             break;
         }
