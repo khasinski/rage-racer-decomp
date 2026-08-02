@@ -36,14 +36,12 @@ void MDEC_reset(long arg0) {
     register long zero asm("$0");
     volatile u_long *inBuffer = (volatile u_long *)g_MdecQuantCmd;
 
-    if (option == 0) {
-    } else {
+    if (!(option == 0)) {
     if (option == 1) {
         goto one;
     }
-    goto bad;
 
-    }
+    } else {
     *g_MdecCtrlReg = 0x80000000;
     *g_MdecInDmaChcr = zero;
     *g_MdecOutDmaChcr = zero;
@@ -60,7 +58,7 @@ one:
     *g_MdecCtrlReg = 0x60000000;
     return;
 
-bad:
+    }
     GameDebugPrintf(D_800132C8);
 }
 
