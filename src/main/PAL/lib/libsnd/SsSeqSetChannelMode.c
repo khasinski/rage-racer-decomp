@@ -44,7 +44,7 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     state->unk16 = mode;
     if (state->unk28 == 0) {
         state->unk10 = 0;
-        goto read_delta;
+        break;
     }
     if (state->unk28 < 0x7F) {
         state->unk28--;
@@ -61,19 +61,14 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     state->read_pos = state->loop_pos;
     return;
 
-    }
-    {
-        /* These pins are load-bearing: removing any one changes .text. */
-        register long seq_arg asm("$4");
-        register long sep_arg asm("$5");
-
-        seq_arg = (short)seq_raw;
-        sep_arg = (short)sep_raw;
+    default:
+        seq_s = (short)seq_raw;
+        sep_s = (short)sep_raw;
         state->unk16 = mode;
         state->unk2a++;
-read_delta:
-        state->delta_value = SsSeqReadDeltaTime(seq_arg, sep_arg);
+        break;
     }
+    state->delta_value = SsSeqReadDeltaTime(seq_s, sep_s);
 
     return;
 }
