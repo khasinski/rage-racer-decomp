@@ -162,7 +162,7 @@ L57:
 
 L_sw2:
     switch (g_McMenuState) {
-    case 3: goto L_state3;
+    case 3: break;
     case 1: goto L_state1;
     case 2: goto L_state2;
     case -1: goto L_stateM1;
@@ -532,10 +532,10 @@ L_sw4:
 
     case 0x25: {
         s32 t;
-        if (func_8005ECE0(0, 0) != 1) goto L_sw5;
+        if (func_8005ECE0(0, 0) != 1) break;
         t = g_McSettleTicks + 1;
         g_McSettleTicks = t;
-        if (t < 4) goto L_sw5;
+        if (t < 4) break;
         g_McActionState = 0x26;
         break;
     }
@@ -558,7 +558,7 @@ L_sw4:
         s32 t = g_McActionTimer;
         s32 cm1;
         g_McActionTimer = t - 1;
-        if (g_McActionTimer != 0) goto L_sw5;
+        if (g_McActionTimer != 0) break;
         cm1 = g_McMenuRowCount;
         g_McMenuPage = 0;
         g_McActionState = 0;
@@ -571,7 +571,7 @@ L_sw4:
         g_McMenuPhase = 0x14;
     L_b850:
         if (!((func_800612CC() & 0xFFFF) != 0)) {
-        if ((func_8006131C() & 0xFFFF) == 0) goto L_sw5;
+        if ((func_8006131C() & 0xFFFF) == 0) break;
         }
         g_McMenuPage = 0;
     L_b864:
@@ -912,7 +912,7 @@ L_sw9:
     L1447:
         { u16 p = func_800612CC(); if (p) goto L1457; }
     L_b1452:
-        { u16 p = func_8006131C(); if (p == 0) goto L_sw10; }
+        { u16 p = func_8006131C(); if (p == 0) break; }
     L1457:
         g_McMenuPage = 0;
         goto L_b1606;
@@ -965,14 +965,14 @@ L_sw9:
         {
         u16 lpad = g_PadEdge2;
         g_McMenuPhase = 0x13;
-        if ((lpad & 0x90) == 0) goto L_sw10;
+        if ((lpad & 0x90) == 0) break;
         }
         g_McActionBusy = 0;
         g_McActionState = 0;
         g_McActionResult = 0;
         D_80082FAC = 0;
         g_McActionTimer = 0;
-        if (fadeBusy) goto L_sw10;
+        if (fadeBusy) break;
         GamePlaySoundCue(3);
         func_8006138C();
         break;
@@ -981,7 +981,7 @@ L_sw9:
         g_McMenuPhase = 0x10;
         g_McActionBusy = 0;
         { u16 p = func_800612CC(); if (p) goto L_b1606; }
-        { u16 p = func_8006131C(); if (p == 0) goto L_sw10; }
+        { u16 p = func_8006131C(); if (p == 0) break; }
     L_b1606:
         g_McActionState = 0;
         /* fall through to L_sw10 */
