@@ -382,7 +382,7 @@ u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) {
 
     goto start;
 
-found:
+for (;;) {
     return arg0 - 1;
 
 start:
@@ -395,12 +395,14 @@ start:
     arg1 &= 0xFF;
     do {
         if (*arg0++ == arg1) {
-            goto found;
+            continue;
         }
         arg2--;
     } while (arg2 >= 0);
 
     return 0;
+break;
+}
 }
 
 void * LibcMemmove(u8 *dest, u8 *src, s32 count) asm("func_80063B9C");
