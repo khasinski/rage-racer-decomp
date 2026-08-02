@@ -25,10 +25,10 @@ void func_80050400(s32 arg0, s32 arg1) {
     /* This pin is load-bearing: removing it changes .text. */
     register s32 y0 asm("$6");
     s32 render1;
-    s32 y1;
+    s16 y1;
     /* These pins are load-bearing: removing any one changes .text. */
     register void *callScratch asm("$4");
-    register s32 callX asm("$5");
+    s32 callX;
 
     scratch = *(void **)0x1F800004;
     step0 = arg0;
@@ -270,7 +270,7 @@ void func_800509C4(s32 arg0) {
     s32 value;
     s32 renderValue;
     s32 y0;
-    s32 y1;
+    s16 y1;
 
     if (step == 0) {
         D_8007FB4C = 0;
