@@ -280,6 +280,7 @@ void GameUpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     s32 scene;
 
     base = (u8 *)&obj->field_BC;
+    switch (0) { default:
     if (*(s32 *)&obj->field_F0 == 0) {
         if (!(obj->field_F4 != 0)) {
         if (arg1 != 0) {
@@ -302,7 +303,7 @@ void GameUpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
         }
         temp = *(s32 *)(base + 0x34);
         if (temp == 0) {
-            goto decay_field_F4;
+            break;
         }
     }
 
@@ -331,7 +332,7 @@ void GameUpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     }
     return;
 
-decay_field_F4:
+    }
     value = *(s32 *)(base + 0x38);
     if (value != 0) {
         temp = (value << 4) - value;
