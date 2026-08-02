@@ -178,7 +178,7 @@ void GameLoadCarModel(s32 arg0) {
 
         if (func_80017C78(offset, ptr) != 0) {
             /* These pins are load-bearing: removing any one changes .text. */
-            register s32 fixed asm("$4");
+            s32 fixed;
             u32 flag;
             register s32 test asm("$2");
             u8 *entry;
@@ -186,13 +186,19 @@ void GameLoadCarModel(s32 arg0) {
             GameSetCarModelSlot(ptr, g_CarModelSlot < 1);
             fixed = *(volatile s32 *)(ptr + 0x20);
             flag = g_CarModelSlot;
-            fixed = (s32)ptr + fixed;
+            {
+                s32 rel = fixed;
+                fixed = (s32)ptr + rel;
+            }
             flag = flag < 1;
             ((GameCarModelAsset *)ptr)->modelDataOffset = fixed;
             GameRegisterModelBank((void *)fixed, flag);
             fixed = *(volatile s32 *)(ptr + 0x24);
             flag = g_CarModelSlot;
-            fixed = (s32)ptr + fixed;
+            {
+                s32 rel = fixed;
+                fixed = (s32)ptr + rel;
+            }
             flag = flag < 1;
             ((GameCarModelAsset *)ptr)->imageDataOffset = fixed;
             GameSetCarImageSlot((void *)fixed, flag);
