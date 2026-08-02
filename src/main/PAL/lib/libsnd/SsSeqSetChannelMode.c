@@ -32,14 +32,12 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     state = (SeqStruct *)(sep_offset + (long)base);
     mode8 = (u_char)mode;
 
-    if (mode8 == 0x14) {
-    } else {
+    if (!(mode8 == 0x14)) {
     if (mode8 == 0x1E) {
         goto mode_1e;
     }
-    goto mode_default;
 
-    }
+    } else {
     state->unk16 = mode;
     state->unk27 = 1;
     state->delta_value = SsSeqReadDeltaTime(seq_s, sep_s);
@@ -67,7 +65,7 @@ mode_1e:
     state->read_pos = state->loop_pos;
     return;
 
-mode_default:
+    }
     {
         /* These pins are load-bearing: removing any one changes .text. */
         register long seq_arg asm("$4");
