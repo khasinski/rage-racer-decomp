@@ -476,20 +476,21 @@ void GameUpdateWaypointCollectScene(void) {
         }
     }
 
+    switch (0) { default:
     a = g_SceneTimer;
     g_AnimTimer = g_AnimTimer + 1;
     if (a >= 90) {
         asm volatile("" :: "r"(a));
         if (g_RacePhase == 0) {
             g_RacePhase = 1;
-            goto Lend;
+            break;
         }
     } else {
         if (g_RacePhase == 0) {
             GameRunRaceIntroCamera(&g_PlayerCar);
             D_8009EC88 = 0;
             g_WaypointsCollected = 0;
-            goto Lend;
+            break;
         }
     }
     if (g_RacePhase == 1) {
@@ -498,7 +499,7 @@ void GameUpdateWaypointCollectScene(void) {
             g_RacePhase = 2;
         }
     }
-Lend:
+    }
 
     if (g_RacePhase < 4) {
         func_8003425C(g_SceneTimer);
