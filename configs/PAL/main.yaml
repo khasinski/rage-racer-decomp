@@ -57,7 +57,7 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x800, rodata, main/000800_main]
-      - [0x131C, .rodata, PAL/main/track/asset_loader]
+      - [0x131C, .rodata, PAL/main/asset/asset_loader]
       - [0x1338, rodata, main/001338_main]
       - [0x139C, .rodata, PAL/main/asset/load_boot_assets]
       - [0x13B4, .rodata, PAL/main/asset/race_assets]
@@ -122,7 +122,7 @@ segments:
       - [0x6F54, c, PAL/main/render/text]
       - [0x7B90, c, PAL/main/render/queue_draw_mode_prim]
       - [0x8048, c, PAL/main/asset/model_banks]
-      - [0x83D4, c, PAL/main/track/asset_loader]
+      - [0x83D4, c, PAL/main/asset/asset_loader]
       - [0x88CC, c, PAL/main/asset/load_boot_assets]
       - [0x8D30, c, PAL/main/asset/car_assets]
       - [0x9270, c, PAL/main/car/load_upgraded_car_model]
