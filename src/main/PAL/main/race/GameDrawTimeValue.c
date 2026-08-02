@@ -5,6 +5,11 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
+/* The strip buffers hold back-to-back 0x10-byte TILEs; func_80064FF8 is
+ * SetTile. The retail code reloads the buffer base before each field store,
+ * so the base is passed in rather than held in a pointer. */
+#define TILE_AT(base, byteOffset) (*(TILE *)((s32)(byteOffset) + (s32)(base)))
+
 /* Static text buffers the two time drawers format into, seeded in .data with
  * "0'00\"000" and "00'00\"". The named split symbols are the digit positions
  * each writer touches; the separators are never rewritten. */
@@ -174,16 +179,16 @@ void func_800340D8(void) {
                 offset = linear << 4;
                 func_80064FF8((u8 *)((s32)offset + (s32)buffer));
                 storeBaseV1 = buffers[0];
-                *(s16 *)((s32)offset + (s32)storeBaseV1 + 0xC) = 2;
+                TILE_AT(storeBaseV1, offset).w = 2;
                 storeBaseV1 = buffers[0];
-                *(s16 *)((s32)offset + (s32)storeBaseV1 + 0xE) = 1;
+                TILE_AT(storeBaseV1, offset).h = 1;
                 storeBaseV1 = buffers[0];
-                *(s16 *)((s32)offset + (s32)storeBaseV1 + 8) = 0xCD - xStep;
+                TILE_AT(storeBaseV1, offset).x0 = 0xCD - xStep;
                 storeBaseV0 = buffers[0];
-                *(s16 *)((s32)offset + (s32)storeBaseV0 + 0xA) = yStart;
-                buffers[0][offset + 4] = color;
-                buffers[0][offset + 5] = color;
-                buffers[0][offset + 6] = color;
+                TILE_AT(storeBaseV0, offset).y0 = yStart;
+                TILE_AT(buffers[0], offset).t.r0 = color;
+                TILE_AT(buffers[0], offset).t.g0 = color;
+                TILE_AT(buffers[0], offset).t.b0 = color;
 
                 if (linear > 0) {
                     addPrimBase = buffers[0];
