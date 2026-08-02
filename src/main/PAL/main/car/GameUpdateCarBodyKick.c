@@ -141,8 +141,7 @@ s32 GameGetCarCrestTrigger(GameCarRuntime *arg0) {
     if (pos1 < pos0) {
         temp = pos0;
         diff = temp - pos1;
-        goto ordered;
-    }
+    } else {
     goto not_crossed;
 
 crossed_label:
@@ -154,7 +153,7 @@ not_crossed:
     pos1 = pos0;
     diff = temp - pos1;
 
-ordered:
+    }
     if (diff >= 0x1000) {
         temp = 0;
         pos1 = 0;
