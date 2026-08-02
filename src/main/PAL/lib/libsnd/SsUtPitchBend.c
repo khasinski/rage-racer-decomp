@@ -73,9 +73,7 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     stackA = (u_short)arg5;
     stackB = (u_short)arg6;
 
-    if ((u_short)id >= 0x18U) {
-        goto fail_late;
-    }
+    if (!((u_short)id >= 0x18U)) {
 
     tmp = arg0 << 16;
     index = tmp >> 16;
@@ -113,7 +111,7 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     return ret;
 
     }
-fail_late:
+    }
     ret = -1;
 
     return ret;
