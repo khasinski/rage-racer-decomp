@@ -123,11 +123,10 @@ void GameInitShuttleScenery(void) {
         state->pathIndex = 1;
         g_Shuttle1DwellCounter = v1;
         asm(".globl func_8003F1D0\nfunc_8003F1D0 = func_8003F0F8 + 0xD8");
-        goto updateState;
-    }
+    } else {
 
     state->pathIndex = 0;
-updateState:
+    }
     value = state->pathIndex;
     value <<= 5;
     v1 = *(s32 *)((s32)g_ShuttlePathPoints + value);

@@ -179,23 +179,21 @@ s32 GameGetTrackZoneBlend(s32 position) {
         asm("" : : : "memory");
         code = (s16)rawCode;
         if (code == 0) {
-            goto code_zero;
-        }
+        } else {
         if (code > 0) {
-            goto code_positive;
-        }
+        } else {
         if (code == -3) {
             goto code_minus_three;
         }
         goto normalize_code;
 
-code_positive:
+        }
         if (code == two) {
             goto code_two;
         }
         goto normalize_code;
 
-code_zero:
+        }
         g_TrackZoneDark = 3;
         goto store_value;
 

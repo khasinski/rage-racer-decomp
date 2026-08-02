@@ -57,14 +57,13 @@ checkBusy:
     }
 
     if (*g_GpuDmaChcr & 0x01000000) {
-        goto tail;
-    }
+    } else {
 
     if (*g_GpuGp1 & 0x04000000) {
         goto returnPending;
     }
 
-tail:
+    }
     if (pending == 0) {
         return 1;
     }

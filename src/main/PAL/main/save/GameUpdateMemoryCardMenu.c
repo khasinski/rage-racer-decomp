@@ -217,14 +217,13 @@ L_state3:
 
 L_state1:
     if (g_McMenuPage == 0) {
-        goto L_copyselect;
-    }
+    } else {
     if (g_McMenuPage == 1) {
         goto L_sw4;
     }
     goto L_copyreset;
 
-L_copyselect:
+    }
     {
         s32 *p = &g_McMenuRowCursor;
         g_McMenuPhase = 0;
@@ -242,12 +241,11 @@ L_copyselect:
         }
         if (fadeBusy) goto L_sw5;
         GamePlaySoundCue(2);
-        goto L_cxfade;
-        }
+        } else {
         if ((pad & 0x90) == 0) goto L_sw5;
         if (fadeBusy) goto L_sw5;
         GamePlaySoundCue(3);
-    L_cxfade:
+        }
         g_McActionBusy = 0;
         func_8006138C();
     }
@@ -277,8 +275,7 @@ L_sw4:
         }
         g_McMenuPhase = 5;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b477;
-        goto L_b433;
-        }
+        } else {
         if (g_McFreeBlocks != 0) goto L_b448;
         a0 = g_McSlotUsedMask;
         if (!((a0 & 7) == 0)) {
@@ -296,7 +293,7 @@ L_sw4:
         }
         g_McMenuPhase = 4;
         if ((g_PadEdge2 & 0x860) == 0) goto L_b439;
-    L_b433:
+        }
         GamePlaySoundCue(5);
         g_McMenuPage = 0;
         goto L_b477;
@@ -368,11 +365,10 @@ L_sw4:
         if (!(x == 0)) {
         g_McActionOk = 1;
         x = 6;
-        goto L_b577;
-        }
+        } else {
         x = 0x10;
         g_McActionOk = 0;
-    L_b577:
+        }
         g_McMenuSubStateV = x;
         dp = g_McMenuLoadPhaseV;
         g_McActionState = 0xF;

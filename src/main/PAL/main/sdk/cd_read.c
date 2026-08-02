@@ -97,8 +97,7 @@ loop:
     left = *arg0;
     right = *arg1++;
     if (left != right) {
-        goto mismatch;
-    }
+    } else {
     arg0++;
     if (left == 0) {
         return 0;
@@ -108,7 +107,7 @@ loop:
         goto loop;
     }
 
-mismatch:
+    }
     if (arg2 < 0) {
         return 0;
     }

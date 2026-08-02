@@ -394,8 +394,7 @@ void GameStartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
     value = 1;
     obj->motionMode = arg0;
     if (arg0 == value) {
-        goto mode1;
-    }
+    } else {
 
     value = 2;
     if (arg0 == value) {
@@ -404,7 +403,7 @@ void GameStartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
 
     return;
 
-mode1:
+    }
     value = obj->field_9A;
     temp = 0x1E;
     obj->motionModeTimer = temp;

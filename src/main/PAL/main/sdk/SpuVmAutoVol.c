@@ -343,8 +343,7 @@ void SpuVmAutoPanTick(long arg0) {
     sum = *(u_short *)&D_8009E0E8[offset] + *(u_short *)&D_8009E0E2[offset];
     *(u_short *)&D_8009E0E8[offset] = sum;
     if (step <= 0) {
-        goto checkNegativeStep;
-    }
+    } else {
     current = (u_long)sum << 16;
     limit = *(short *)&D_8009E0EA[offset];
     current >>= 16;
@@ -355,7 +354,7 @@ void SpuVmAutoPanTick(long arg0) {
     }
     goto clampEnvelope;
 
-checkNegativeStep:
+    }
     if (step >= 0) {
         goto envelopeDone;
     }

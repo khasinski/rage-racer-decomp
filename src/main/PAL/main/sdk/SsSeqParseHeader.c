@@ -61,15 +61,14 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     s->read_pos = seq;
 
     if (seq[0] != 'S' && seq[0] != 'p') {
-        goto magic_err;
-    }
+    } else {
     s->read_pos = seq + 8;
     if (seq[7] == 1) {
         goto ok;
     }
     GameDebugPrintf(g_MsgSeqNotSeqData);
     return -1;
-magic_err:
+    }
     GameDebugPrintf(g_MsgSeqOldFormat);
     return 0;
 ok:

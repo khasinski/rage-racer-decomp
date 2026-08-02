@@ -464,8 +464,7 @@ void LibcPutChar(s32 arg0) {
     c = value;
     value = c;
     if (value == 9) {
-        goto tab;
-    }
+    } else {
     if (value != 10) {
         goto other;
     }
@@ -474,7 +473,7 @@ void LibcPutChar(s32 arg0) {
     g_LibcOutColumn = 0;
     goto output;
 
-tab:
+    }
     do {
         LibcPutChar(0x20);
     } while ((g_LibcOutColumn & 7) != 0);

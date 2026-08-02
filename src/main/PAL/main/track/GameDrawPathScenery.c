@@ -108,12 +108,11 @@ void func_8004087C(s16 arg) {
     do {
         lo = cur[0];
         if (arg < lo) {
-            goto endchk;
-        }
+        } else {
         if (cur[1] >= arg) {
             goto found;
         }
-    endchk:
+        }
         if (lo == -1) {
             break;
         }

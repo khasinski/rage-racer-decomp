@@ -57,13 +57,12 @@ s32 GameStartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
         register s32 seqSlotArg asm("$4") = slotReg;
 
         if (slotReg == 1) {
-            goto loadSeq;
-        }
+        } else {
         if (slotReg != 6) {
             goto loadVab;
         }
 
-loadSeq:
+        }
         {
             /* This barrier is load-bearing: removing it changes .text. */
             asm volatile("" ::: "$6");
@@ -155,13 +154,12 @@ s32 GameCloseVabOnlyAudioSlot(s32 slot) {
     bit <<= slot;
 
     if (bit & flags) {
-        goto loaded;
-    }
+    } else {
 
     ret = 0;
     goto done;
 
-loaded:
+    }
     *flagsPtr = bit ^ flags;
     func_80073748(zeroArg, 0);
     func_8007865C(0);

@@ -394,8 +394,7 @@ void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     }
 
     if (target < entry[0]) {
-        goto below;
-    }
+    } else {
     if (entry[1] < target) {
         goto advance;
     }
@@ -415,7 +414,7 @@ void GameApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     }
     return;
 
-below:
+    }
     if (entry[1] < target) {
         goto advance;
     }

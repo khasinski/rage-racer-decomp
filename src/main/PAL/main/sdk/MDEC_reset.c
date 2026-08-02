@@ -37,14 +37,13 @@ void MDEC_reset(long arg0) {
     volatile u_long *inBuffer = (volatile u_long *)g_MdecQuantCmd;
 
     if (option == 0) {
-        goto zero;
-    }
+    } else {
     if (option == 1) {
         goto one;
     }
     goto bad;
 
-zero:
+    }
     *g_MdecCtrlReg = 0x80000000;
     *g_MdecInDmaChcr = zero;
     *g_MdecOutDmaChcr = zero;
