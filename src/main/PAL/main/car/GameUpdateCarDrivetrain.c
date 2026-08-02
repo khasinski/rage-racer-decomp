@@ -589,12 +589,13 @@ void GameUpdateCarDrivetrain(void *base) {
       else
       {
         temp_a0_7 = (*((s16 *) (((u8 *) temp_s3) + 0x36))) * ((s16) countdown);
+        switch (0) { default:
         var_v1_4 = temp_a0_7 / 10;
         *((s32 *) (((u8 *) temp_s3) + 0x78)) = g_ShiftTargetSpeed - var_v1_4;
-        goto block_after_129;
+        break;
         block_129:
         *((s32 *) (((u8 *) temp_s3) + 0x78)) = var_v0_9;
-        block_after_129:
+        }
 
       }
       }
