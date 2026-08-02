@@ -689,13 +689,15 @@ L_state2:
             s32 w;
             g_McSlotUsedMask = x;
             if (!(x == 0)) {
-            x = x & 7;
-            if (x != 0) { x = 2; goto L1061; }
-            x = 0xE;
-            goto L1061;
+                x = x & 7;
+                if (x != 0) {
+                    x = 2;
+                } else {
+                    x = 0xE;
+                }
+            } else {
+                x = 0xC;
             }
-            x = 0xC;
-        L1061:
             g_McMenuSubStateV = x;
             w = g_McMenuLoadPhaseV;
             g_McActionState = 6;
