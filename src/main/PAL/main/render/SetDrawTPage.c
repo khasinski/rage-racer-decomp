@@ -12,16 +12,14 @@ void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
 
     arg0[3] = 1;
     mode = func_800657E4();
-    if (mode == 1) {
-        goto high_mode;
-    }
+    if (!(mode == 1)) {
 
     mode = func_800657E4();
     if (mode != 2) {
         goto low_mode;
     }
 
-high_mode:
+    }
     {
         s32 value = 0xE1000000;
 
