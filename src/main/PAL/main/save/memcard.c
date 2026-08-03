@@ -1313,10 +1313,9 @@ s32 ReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
 s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
     s32 fd;
     s32 i;
-    register s32 mask asm("$18");
+    s32 mask;
     s32 nameOffset;
     void *buffer;
-    s32 bit;
 
     mask = 0;
     GameMenuLoadPhase = 0x110;
@@ -1329,12 +1328,11 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
         if (fd >= 0) {
             if (ReadVerifiedSaveHeader(fd, buffer) == 0) {
                 BiosFileClose(fd);
-                bit = 0x10000;
+                mask |= 0x10000 << i;
             } else {
                 BiosFileClose(fd);
-                bit = 1;
+                mask |= 1 << i;
             }
-            mask |= bit << i;
         }
 
         buffer = (void *)((u8 *)buffer + 0x80);
