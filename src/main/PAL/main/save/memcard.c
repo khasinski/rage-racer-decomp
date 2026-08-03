@@ -1539,10 +1539,13 @@ void *FormatSaveElapsedTime(void *arg0, u32 arg1) {
 
 extern u8 g_McMessageText[] asm("D_800128FC");
 
-void DrawText8x8(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
+/* DrawText8x8 again, declared with word-wide parameters: the header
+ * spelling with s16/u16 does not match here. Same convention as
+ * GameQueueSprite vs GameQueueSpriteWide in game/render.h. */
+void DrawText8x8Wide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
 
 void DrawMemoryCardMessageLine(s32 arg0, s32 arg1) {
-    DrawText8x8(0x28, 0xB8, &g_McMessageText[arg1 * 30], 0x78CC);
+    DrawText8x8Wide(0x28, 0xB8, &g_McMessageText[arg1 * 30], 0x78CC);
 }
 
 extern u8 g_McHelpText[] asm("D_80012ADC");
@@ -1561,13 +1564,13 @@ void DrawMemoryCardHelpPrompt(s32 arg0) {
     __asm__("" : "=r"(x), "=r"(y) : "0"(x), "1"(y));
     offset <<= 2;
     base = g_McHelpText;
-    DrawText8x8(x, y, base + offset, 0x78CC);
+    DrawText8x8Wide(x, y, base + offset, 0x78CC);
 
     x = 0x50;
     y = 0x40;
     __asm__("" : "=r"(x), "=r"(y) : "0"(x), "1"(y));
     base += 0x1E;
-    DrawText8x8(x, y, base + offset, 0x78CC);
+    DrawText8x8Wide(x, y, base + offset, 0x78CC);
 }
 
 /* ---- was DrawMemoryCardSaveRows.c ---- */
