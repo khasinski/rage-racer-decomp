@@ -1,14 +1,10 @@
 #include <sys/types.h>
 
 #include "common.h"
-
-typedef struct SpuInitVolume {
-    short left;
-    short right;
-} SpuInitVolume;
+#include "psyq/spu.h"
 
 typedef struct SpuInitVoiceRegister {
-    SpuInitVolume volume;
+    SpuVolume volume;
     u_short pitch;
     u_short addr;
     u_short adsr[2];
@@ -18,8 +14,8 @@ typedef struct SpuInitVoiceRegister {
 
 typedef struct SpuInitControl {
     SpuInitVoiceRegister voice[24];
-    SpuInitVolume mainVol;
-    SpuInitVolume revVol;
+    SpuVolume mainVol;
+    SpuVolume revVol;
     u_short keyOn[2];
     u_short keyOff[2];
     u_short chanFm[2];
@@ -34,10 +30,10 @@ typedef struct SpuInitControl {
     u_short spuCnt;
     u_short dataTrans;
     u_short spuStat;
-    SpuInitVolume cdVol;
-    SpuInitVolume extVol;
-    SpuInitVolume mainVolCurrent;
-    SpuInitVolume unkVol;
+    SpuVolume cdVol;
+    SpuVolume extVol;
+    SpuVolume mainVolCurrent;
+    SpuVolume unkVol;
 } SpuInitControl;
 
 typedef union SpuInitRegisterMap {

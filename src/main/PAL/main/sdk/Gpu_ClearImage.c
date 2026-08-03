@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/gpu.h"
 
 extern u_short g_VramWidth[] asm("D_800941EC");
 extern u_short g_VramHeight[] asm("D_800941EE");
@@ -87,20 +88,14 @@ extern volatile u_long *g_GpuDmaMadr asm("D_800942C0");
 extern volatile u_long *g_GpuDmaBcr asm("D_800942C4");
 extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
 
-typedef struct GpuRect {
-    u_long word0;
-    short w;
-    short h;
-} GpuRect;
-
 void Gpu_ArmTimeout(void) asm("func_80067F04");
 long Gpu_CheckTimeout(void) asm("func_80067F38");
 
 /* Driver-table slot +0x20: the worker LoadImage enqueues. Clips the rect,
  * issues GP0(A0h) and pushes the odd words by hand, the rest by DMA2. */
-long Gpu_LoadImage(GpuRect *rect, u_long *src) asm("func_80067084");
-long Gpu_LoadImage(GpuRect *rect, u_long *src) {
-    GpuRect *savedRect;
+long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) asm("func_80067084");
+long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
+    GpuRectPacked *savedRect;
     u_long *current;
     long rem;
     long blocks;
@@ -181,7 +176,7 @@ long Gpu_LoadImage(GpuRect *rect, u_long *src) {
     *g_GpuGp1 = 0x04000000;
     *g_GpuGp0 = 0x01000000;
     *g_GpuGp0 = mode ? 0xB0000000 : 0xA0000000;
-    *g_GpuGp0 = savedRect->word0;
+    *g_GpuGp0 = savedRect->xy;
     *g_GpuGp0 = *(u_long *)&savedRect->w;
 
     rem--;
@@ -217,8 +212,8 @@ extern volatile u_long *g_GpuGp1 asm("D_800942BC");
 
 /* Driver-table slot +0x1C: the worker StoreImage enqueues. The GP0(C0h)
  * mirror image of Gpu_LoadImage. */
-long Gpu_StoreImage(GpuRect *rect, u_long *dst) asm("func_800672D8");
-long Gpu_StoreImage(GpuRect *rect, u_long *dst) {
+long Gpu_StoreImage(GpuRectPacked *rect, u_long *dst) asm("func_800672D8");
+long Gpu_StoreImage(GpuRectPacked *rect, u_long *dst) {
     short w;
     short h;
     short cw;
@@ -273,7 +268,7 @@ long Gpu_StoreImage(GpuRect *rect, u_long *dst) {
     *g_GpuGp1 = 0x04000000;
     *g_GpuGp0 = 0x01000000;
     *g_GpuGp0 = 0xC0000000;
-    *g_GpuGp0 = rect->word0;
+    *g_GpuGp0 = rect->xy;
     *g_GpuGp0 = *(u_long *)&rect->w;
 
     if ((*g_GpuGp1 & 0x08000000) == 0) {

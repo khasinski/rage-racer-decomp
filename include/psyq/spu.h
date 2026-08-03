@@ -98,7 +98,7 @@ void SpuInit(void) asm("func_80078838");
 void _SpuInit(long reset_voice_center_note) asm("func_80078858");
 void SpuStart(void) asm("func_80078920");
 long _spu_resetTransferControl(void) asm("func_800789A4");
-void _spu_init(long reset_mode) asm("func_80078A30");
+long _spu_init(long reset_mode) asm("func_80078A30");
 long _spu_writeByIO(long addr, long size) asm("func_80078F4C");
 void _spu_transferCallback(void) asm("func_80079280");
 void _spu_startDmaTransfer(u_long addr, u_short mode, u_long size) asm("func_80079420");

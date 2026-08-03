@@ -179,27 +179,20 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     SetCameraRotMatrix();
 }
 
-typedef struct Vec4i {
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 w;
-} Vec4i;
-
 extern s32 g_CourseModelCount asm("D_801E40E4");
 extern s32 g_StartGridSceneryAngle[] asm("D_8007E2B8");
 extern struct {
     s16 x;
     s16 y;
 } g_StartGridSceneryStep[] asm("D_8007E290");
-extern Vec4i g_StartGridSceneryPos[] asm("D_8007E298");
+extern Vec4 g_StartGridSceneryPos[] asm("D_8007E298");
 
-void func_80017794(void *arg0, Vec4i *state, Matrix *mtx);
+void func_80017794(void *arg0, Vec4 *state, Matrix *mtx);
 
 void DrawStartGridScenery(s32 arg0) asm("func_8003D458");
 void DrawStartGridScenery(s32 arg0) {
     Matrix mtx;
-    Vec4i state;
+    Vec4 state;
     s32 s1;
     s32 s0;
     register s32 value asm("$2");
@@ -253,7 +246,7 @@ void func_8003D6E8(void) {
  * position. Tint is (clock >> 3 & 3) << 16, written to the scratchpad render
  * mode word for the second of the two models each board draws.
  */
-extern Vec4i g_AnimSceneryPos[] asm("D_8007E2C0");
+extern Vec4 g_AnimSceneryPos[] asm("D_8007E2C0");
 extern u32 *g_VisibleCellMask asm("D_801E6828");
 extern s16 g_AnimSceneryFrame asm("D_8007E2EA");
 extern s32 g_RacePaused asm("D_801E4BAC");
@@ -268,7 +261,7 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
 void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     Matrix mtx;
     Matrix mtx2;
-    Vec4i state;
+    Vec4 state;
     register s32 bucket asm("$2");
     s32 value;
     u32 *visibility;
@@ -382,7 +375,7 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003
 void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Matrix mtx;
     Matrix mtx2;
-    Vec4i state;
+    Vec4 state;
     s32 bucket;
     s32 value;
     register u32 *visibility asm("$3");

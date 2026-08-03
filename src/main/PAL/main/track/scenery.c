@@ -1,17 +1,11 @@
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/race.h"
 #include "game/state.h"
 
-typedef struct Vec4i {
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 w;
-} Vec4i;
-
-extern Vec4i g_StaticSceneryPos asm("D_8007E340");
+extern Vec4 g_StaticSceneryPos asm("D_8007E340");
 /* +0x0C of the same 4-word record, i.e. its w component used as a Y angle;
  * g_HighClassSceneryYaw is the same field of the record at 0x8007E350. */
 extern s32 g_StaticSceneryYaw asm("D_8007E34C");
@@ -29,7 +23,7 @@ void DrawStaticScenery(s32 arg0) asm("func_8003DF68");
 
 void DrawStaticScenery(s32 arg0) {
     Matrix mtx;
-    Vec4i state;
+    Vec4 state;
     s32 *statePtr;
     register s32 bucket asm("$2");
     s32 value;
@@ -310,7 +304,7 @@ extern s16 g_PlayerTrackSection asm("D_8009E74C");
 extern s32 g_FlybySceneryArmed asm("D_801E4300");
 extern s32 g_FlybySceneryFrame asm("D_801E4304");
 extern s16 g_FlybySceneryKeyIndex asm("D_801E430A");
-extern Vec4i g_FlybySceneryPosRec asm("D_801E430C");
+extern Vec4 g_FlybySceneryPosRec asm("D_801E430C");
 extern s32 g_FlybySceneryRotX2 asm("D_801E431C");
 extern s32 g_FlybySceneryRotY2 asm("D_801E4320");
 extern s32 g_FlybySceneryRotZ2 asm("D_801E4324");
@@ -360,7 +354,7 @@ void UpdateFlybyScenery(void) {
             g_FlybySceneryFrame = 0;
             g_FlybySceneryLap = 0;
             g_FlybySceneryKeyIndex = 0;
-            g_FlybySceneryPosRec = *(Vec4i *)(src + 0x10);
+            g_FlybySceneryPosRec = *(Vec4 *)(src + 0x10);
             g_FlybySceneryRotZ2 = 0;
             g_FlybySceneryRotY2 = 0;
             g_FlybySceneryRotX2 = 0;
