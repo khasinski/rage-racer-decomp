@@ -79,9 +79,9 @@ typedef struct PadState {
 
 extern PadState D_801E4368;
 extern u8 g_PadType asm("D_801E4369");
-extern u8 D_801E403D;
-extern u8 D_801E403E;
-extern u8 D_801E403F;
+extern u8 g_PadBufferType asm("D_801E403D");
+extern u8 g_PadBufferButtonsHigh asm("D_801E403E");
+extern u8 g_PadBufferButtonsLow asm("D_801E403F");
 extern s32 D_801E4D14;
 extern s32 g_PadErrorState asm("D_801E79C8");
 extern s32 D_8019CB10;
@@ -115,7 +115,7 @@ void UpdatePadState(void) {
     pad = &D_801E4368;
 
     pad->unk0 = raw[0];
-    g_PadType = D_801E403D;
+    g_PadType = g_PadBufferType;
     if (raw[0] != 0) {
         v = 1;
         g_PadErrorState = v;
@@ -124,8 +124,8 @@ void UpdatePadState(void) {
     } else {
         if (D_801E4D14 != 0) {
             D_801E4D14 = D_801E4D14 - 1;
-            if (D_801E403D == 0x23) {
-                mask = ~(D_801E403F | (D_801E403E << 8));
+            if (g_PadBufferType == 0x23) {
+                mask = ~(g_PadBufferButtonsLow | (g_PadBufferButtonsHigh << 8));
                 if (!(((mask & 0x5000) != 0x5000) && ((mask & 0xA000) != 0xA000) &&
                     ((mask & 0x1C4) == 0))) {
                     v = 2;
