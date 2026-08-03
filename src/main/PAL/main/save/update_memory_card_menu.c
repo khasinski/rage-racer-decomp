@@ -8,11 +8,11 @@ extern s32 g_McSlotUsedMask asm("D_8009B564");
 extern GameSaveHeaderRow g_McSaveHeaders[] asm("D_8009B568");
 extern s32 g_McNoCardTicks asm("D_8009B6E8");
 extern s32 g_McErrorTicks asm("D_8009B6F0");
-extern s32 D_8009B6F4;
+extern s32 g_McLastMenuState asm("D_8009B6F4");
 extern s32 g_McActionOk asm("D_8009B6F8");
 extern s32 g_McSettleTicks asm("D_8009B6FC");
-extern s32 D_8009B700;
-extern s32 D_8009B704;
+extern s32 g_McCardOkFrames asm("D_8009B700");
+extern s32 g_McActionElapsed asm("D_8009B704");
 extern s32 g_McSavedLoadPhase asm("D_8009B718");
 /* Volatile aliases of three game/menu.h globals, NOT extra objects: this file
  * reads each of them both ways, and only the volatile spelling forces the
@@ -35,13 +35,13 @@ extern s32 g_McActionState asm("D_80082FA4");
 extern s32 g_McActionResult asm("D_80082FA8");
 extern s32 D_80082FAC;
 extern volatile s32 D_80082FAC_v asm("D_80082FAC");
-extern s32 D_80082FB0;
+extern s32 g_McStateChangeCount asm("D_80082FB0");
 extern s32 g_McActionTimer asm("D_80082FB4");
 extern s32 g_McActionBusy asm("D_80082FB8");
-extern s32 D_80082FBC;
-extern s32 D_80082FC0;
+extern s32 g_McErrorCountdown asm("D_80082FBC");
+extern s32 g_McErrorPending asm("D_80082FC0");
 extern s32 g_McLastSlot asm("D_80082FC4");
-extern s32 D_80082FC8;
+extern s32 g_McDrawEnabled asm("D_80082FC8");
 
 s32 PollMemoryCardStatus(s32 a, s32 b) asm("func_8005ECE0");
 void DrawMemoryCardScreen(s32 a0, s32 a1, s32 a2, s32 a3) asm("func_80027A84");
@@ -101,17 +101,17 @@ void UpdateMemoryCardMenu(void) {
         if (!(ns != 3)) {
         g_McSlotUsedMask = 0;
         ClearSaveHeaderRows(g_McSaveHeaders);
-        D_8009B6F4 = -1;
+        g_McLastMenuState = -1;
         g_McMenuPhase = 0;
         g_McMenuSelection = ns;
         g_McMenuState = ns;
         g_McActionState = 0;
         g_McActionResult = 0;
         D_80082FAC = 0;
-        D_80082FB0 = 0;
+        g_McStateChangeCount = 0;
         g_McActionTimer = 0;
         g_McActionBusy = 0;
-        D_80082FC8 = 1;
+        g_McDrawEnabled = 1;
         }
         break;
     }
@@ -124,7 +124,7 @@ void UpdateMemoryCardMenu(void) {
     }
     switch (0) { default:
     if (!(g_McActionBusy == 0)) {
-    if (D_80082FC0 == 0) break;
+    if (g_McErrorPending == 0) break;
 
     }
     {
@@ -170,7 +170,7 @@ L_sw2:
     switch (g_McMenuSelection) {
     case 1:
         if (g_McCardStatus == 1) {
-            if (D_8009B6F4 != 2) {
+            if (g_McLastMenuState != 2) {
                 g_McMenuState = 2;
             } else {
                 g_McMenuState = g_McCardStatus;
@@ -602,7 +602,7 @@ L_sw2:
     }
     switch (g_McMenuSelection) {
     case 3:
-        D_8009B6F4 = g_McMenuState;
+        g_McLastMenuState = g_McMenuState;
         /* fallthrough */
     case -2:
     case -1:
@@ -610,19 +610,19 @@ L_sw2:
         g_McMenuState = g_McMenuSelection;
         break;
     case 1:
-        if (D_80082FC0 != 0) {
-            D_80082FC0 = 0;
-            D_80082FBC = 3;
+        if (g_McErrorPending != 0) {
+            g_McErrorPending = 0;
+            g_McErrorCountdown = 3;
         }
         break;
     case -3:
     default: /* 0 */
         {
             s32 sd = g_McCardStatus;
-            D_80082FC0 = 1;
+            g_McErrorPending = 1;
             if (sd == -3) {
-                s32 r = D_80082FBC - 1;
-                D_80082FBC = r;
+                s32 r = g_McErrorCountdown - 1;
+                g_McErrorCountdown = r;
                 if (r == 0) {
                     g_McMenuState = sd;
                 }
@@ -644,19 +644,19 @@ L_sw2:
     case 0:
         if ((u32)g_SceneTimer < 0x1F) break;
         wtmp = 1;
-        D_8009B700 = 0;
-        D_8009B704 = 0;
+        g_McCardOkFrames = 0;
+        g_McActionElapsed = 0;
         g_McActionState = wtmp;
         break;
     case 1:
         g_McActionBusy = 0;
         {
-            s32 t = D_8009B704 + 1;
-            D_8009B704 = t;
+            s32 t = g_McActionElapsed + 1;
+            g_McActionElapsed = t;
             if (!((g_PadEdge2 & 0x90) == 0)) {
             if (!(t < 0x79)) {
-        D_8009B700 = 0;
-        D_8009B704 = 0;
+        g_McCardOkFrames = 0;
+        g_McActionElapsed = 0;
         if (!(fadeBusy != 0)) {
         PlaySoundCue(3);
         StartMenuExitFade();
@@ -665,11 +665,11 @@ L_sw2:
             }
         }
         if (g_McCardStatus != 1) break;
-        D_8009B700 += 1;
-        if (D_8009B700 < 2) break;
+        g_McCardOkFrames += 1;
+        if (g_McCardOkFrames < 2) break;
         wtmp = 2;
-        D_8009B700 = 0;
-        D_8009B704 = 0;
+        g_McCardOkFrames = 0;
+        g_McActionElapsed = 0;
         g_McActionState = wtmp;
         break;
     case 2:
@@ -737,16 +737,16 @@ L_sw2:
 
     switch (g_McMenuSelection) {
     case 3:
-        D_8009B6F4 = g_McMenuState;
+        g_McLastMenuState = g_McMenuState;
         /* fallthrough */
     case -2:
     case -1:
         g_McMenuState = g_McMenuSelection;
         break;
     case 2:
-        if (D_80082FC0 != 0) {
-            D_80082FC0 = 0;
-            D_80082FBC = 3;
+        if (g_McErrorPending != 0) {
+            g_McErrorPending = 0;
+            g_McErrorCountdown = 3;
         }
         break;
     case 1:
@@ -754,11 +754,11 @@ L_sw2:
     case -3:
     case 0:
     default:
-        D_80082FC0 = 1;
+        g_McErrorPending = 1;
         if (g_McCardStatus == -3) {
-            s32 t = D_80082FBC;
-            D_80082FBC = t - 1;
-            if (D_80082FBC == 0) {
+            s32 t = g_McErrorCountdown;
+            g_McErrorCountdown = t - 1;
+            if (g_McErrorCountdown == 0) {
                 g_McMenuState = g_McCardStatus;
             }
         }
@@ -847,9 +847,9 @@ L_b1280:
         g_McMenuState = 2;
         /* fall through */
     case -1:
-        if (D_80082FC0 == 0) break;
-        D_80082FC0 = 0;
-        D_80082FBC = 3;
+        if (g_McErrorPending == 0) break;
+        g_McErrorPending = 0;
+        g_McErrorCountdown = 3;
         break;
     case -2:
         g_McMenuState = -2;
@@ -858,10 +858,10 @@ L_b1280:
     case -3:
     case 0:
         mslot = g_McCardStatus;
-        D_80082FC0 = 1;
+        g_McErrorPending = 1;
         if (mslot != -3) break;
-        D_80082FBC -= 1;
-        if (D_80082FBC != 0) break;
+        g_McErrorCountdown -= 1;
+        if (g_McErrorCountdown != 0) break;
         g_McMenuState = mslot;
         /* fall through */
     case 3:
@@ -1002,26 +1002,26 @@ L_b1280:
         g_McMenuState = 2;
         break;
     case 3:
-        D_8009B6F4 = g_McMenuState;
+        g_McLastMenuState = g_McMenuState;
         g_McMenuState = 3;
         break;
     case -1:
         g_McMenuState = -1;
         break;
     case -2:
-        if (D_80082FC0 != 0) {
-            D_80082FC0 = 0;
-            D_80082FBC = 3;
+        if (g_McErrorPending != 0) {
+            g_McErrorPending = 0;
+            g_McErrorCountdown = 3;
         }
         break;
     case -3:
     default:
         {
             s32 sd = g_McCardStatus;
-            D_80082FC0 = 1;
+            g_McErrorPending = 1;
             if (sd == -3) {
-                s32 r = D_80082FBC - 1;
-                D_80082FBC = r;
+                s32 r = g_McErrorCountdown - 1;
+                g_McErrorCountdown = r;
                 if (r == 0) {
                     g_McMenuState = sd;
                 }
@@ -1052,21 +1052,21 @@ L_b1280:
         s32 three = 3;
         if (sel == -3) break;
         if (sel == three) {
-            D_8009B6F4 = g_McMenuState;
+            g_McLastMenuState = g_McMenuState;
         }
-        tmp = D_80082FB0;
+        tmp = g_McStateChangeCount;
         g_McMenuState = sel;
-        D_80082FB0 = tmp + 1;
-        if (D_80082FC0 != 0) {
-            D_80082FC0 = 0;
-            D_80082FBC = three;
+        g_McStateChangeCount = tmp + 1;
+        if (g_McErrorPending != 0) {
+            g_McErrorPending = 0;
+            g_McErrorCountdown = three;
         }
     }
 
     }
     }
     }
-    if (D_80082FC8 != 0) {
+    if (g_McDrawEnabled != 0) {
         DrawMemoryCardScreen(g_McMenuPage, g_McFromLoadMenu, g_McMenuRowCursor, g_McSlotCursor);
         if (g_McMenuPhase != 0) {
             DrawMemoryCardMessage(g_McMenuPhase - 1);

@@ -8,8 +8,8 @@ void DrawMenuCursorArrow(s32 a, s32 b) asm("func_800236C8");
 void DrawOptionHintBar(s32 a) asm("func_80023750");
 void DrawPadTypeHint(void) asm("func_8002390C");
 s32 func_800279EC(s32 base, s32 prim, s32 a, s32 b);
-extern s32 *D_8007D99C[];
-extern s16 D_8007D9E8[];
+extern s32 *g_McMessageRows[] asm("D_8007D99C");
+extern s16 g_McMessageColumnX[] asm("D_8007D9E8");
 void func_80027874(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 GameQueueSpriteWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80016EC4");
 s32 SetDrawMode(s32 arg0, s32 arg1, s32 arg2) asm("func_80017390");
@@ -69,12 +69,12 @@ void DrawMemoryCardMessage(s32 arg0) {
     s32 delta;
 
     index = arg0;
-    entry = D_8007D99C[index];
+    entry = g_McMessageRows[index];
     x = 0x60;
     y = 0x40;
     if ((u32)(index - 0x10) >= 2 && index != 0x12) {
         one = 1;
-        table = D_8007D9E8;
+        table = g_McMessageColumnX;
         temp = 1;
         do {
             temp = (u8)temp;
