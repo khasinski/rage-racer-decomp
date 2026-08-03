@@ -404,7 +404,6 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
         lineStep = 0;
         do {
             lineNearX = 0x52;
-            asm("" : "=r"(lineNearX) : "0"(lineNearX));
             lineX = 0x13E - lineStep;
             DrawCarSpecPolyLine(ot, lineNearX, (s16)lineX, 0x61, (s16)lineX,
                                 loopLineFarX, (s16)(lineX + 0x38),
@@ -423,7 +422,6 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
     lineColor = 0xB4;
     lineAlpha = 0xFF;
     lineNearX = 0x52;
-    asm("" : "=r"(lineNearX) : "0"(lineNearX));
     lineX = 0x13E - floorProgress;
     DrawCarSpecPolyLine(ot, lineNearX, (s16)lineX, 0x61, (s16)lineX,
                         lineFarX, (s16)(lineX + 0x38),
