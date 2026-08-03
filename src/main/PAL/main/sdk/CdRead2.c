@@ -20,7 +20,7 @@ extern long g_StDmaBusy asm("D_801E42C8");
 extern long D_801E6C74;
 extern long D_801E6C84;
 extern long g_StRingSlot asm("D_801E6C98");
-extern StRingEntry *g_StRingBase asm("D_801E8AAC");
+extern StStrHeader *g_StRingBase asm("D_801E8AAC");
 extern long D_801E8274;
 extern long g_StRingSize asm("D_801F1850");
 extern long g_StInterruptPending asm("D_8019CA00");
@@ -88,14 +88,15 @@ void StUnSetRing(void) {
 
 void data_ready_callback(void) {
     long index = D_801E6C84;
-    StRingEntry *base = g_StRingBase;
-    StRingEntry *entry;
+    StStrHeader *base = g_StRingBase;
+    StStrHeader *entry;
 
-    entry = (StRingEntry *)((index << 5) + (long)base);
+    entry = (StStrHeader *)((index << 5) + (long)base);
     /* RAW() keeps this store ahead of the g_StBack* writes -- see common.h. */
     RAW(entry->state) = 2;
     *(CdlLOC *)g_StBackLoc = entry->loc;
-    g_StBackFrame = entry->value;
+    /* +0x08 is nFrames; this path reads it as a whole word. */
+    g_StBackFrame = *(long *)&entry->nFrames;
     D_801E6C84 = D_801E6C74;
     if (g_StFrameCallback != 0) {
         g_StFrameCallback();

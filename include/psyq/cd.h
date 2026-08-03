@@ -48,15 +48,6 @@ typedef struct CdRegisterMap {
     u_short status_mode_b;
 } CdRegisterMap;
 
-typedef struct StRingEntry {
-    volatile short state;
-    u_char pad2[4];
-    short nSectors;
-    long value;
-    u_char padC[0x10];
-    CdlLOC loc;
-} StRingEntry;
-
 typedef struct StRingEventRecord {
     volatile u_short state;
     u_char pad2[0x1E];
