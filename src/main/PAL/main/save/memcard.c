@@ -1164,7 +1164,8 @@ s32 WriteMemoryCardSaveFile(
     GameSaveHeaderRow *header,
     void *saveBlock) {
     s32 fd;
-    register s32 saved asm("$18");
+    s32 prevFd;
+    s32 written;
     s32 attempt;
     s32 ok;
 
@@ -1179,15 +1180,15 @@ s32 WriteMemoryCardSaveFile(
 
     do {
         fd = BiosFileOpen(path, 2);
-        saved = fd;
+        prevFd = fd;
         if (fd == -1) {
             fd = BiosFileOpen(path, 0x10200);
-            if (fd == saved) {
+            if (fd == prevFd) {
                 GameMenuLoadPhase = attempt | 0x1520;
             } else {
                 BiosFileClose(fd);
                 fd = BiosFileOpen(path, 2);
-                if (fd == saved) {
+                if (fd == prevFd) {
                     GameMenuLoadPhase = attempt | 0x1510;
                 }
             }
@@ -1211,17 +1212,16 @@ s32 WriteMemoryCardSaveFile(
         return 0;
     }
     GameMenuLoadPhase = attempt | 0x1540;
-    saved = BiosFileWrite(fd, header, 0x80);
-    if (saved != 0x80) {
+    written = BiosFileWrite(fd, header, 0x80);
+    if (written != 0x80) {
         return 0;
     }
-    asm volatile("" : "=r"(saved) : "0"(saved));
     GameMenuLoadPhase = attempt | 0x1550;
     if (BiosFileWrite(fd, saveBlock, 0x1000) != 0x1000) {
         return 0;
     }
     GameMenuLoadPhase = attempt | 0x1560;
-    if (BiosFileWrite(fd, header, 0x80) != saved) {
+    if (BiosFileWrite(fd, header, 0x80) != written) {
         return 0;
     }
     GameMenuLoadPhase = attempt | 0x1570;
