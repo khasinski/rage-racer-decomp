@@ -92,11 +92,11 @@ void UpdatePrizeMoneyScreen(void) {
         t = g_PrizeAmount;
         if (t >= lim1) {
             g_PrizeAmount = t - lim1;
-            g_RaceProgress->unk10 += lim1;
+            g_RaceProgress->money += lim1;
         } else {
-            s32 e = g_RaceProgress->unk10;
+            s32 e = g_RaceProgress->money;
             g_PrizeAmount = 0;
-            g_RaceProgress->unk10 = e + t;
+            g_RaceProgress->money = e + t;
         }
         }
         if (g_PrizeAmount != 0) break;
@@ -119,11 +119,11 @@ void UpdatePrizeMoneyScreen(void) {
         t = g_PromotionBonus;
         if (t >= lim0) {
             g_PromotionBonus = t - lim0;
-            g_RaceProgress->unk10 += lim0;
+            g_RaceProgress->money += lim0;
         } else {
-            s32 e = g_RaceProgress->unk10;
+            s32 e = g_RaceProgress->money;
             g_PromotionBonus = 0;
-            g_RaceProgress->unk10 = e + t;
+            g_RaceProgress->money = e + t;
         }
         if (g_PromotionBonus != 0) break;
     Lstore7:
@@ -237,7 +237,7 @@ void InitSaveDefaults(void) {
     g_TimeAttackSave.carIndex = 3;
     g_TimeAttackSave.classIndex = 0;
     g_TimeAttackSave.maxClassReached = 0;
-    g_TimeAttackSave.unk10 = 0;
+    g_TimeAttackSave.money = 0;
     ResetProgressSlot(&g_GrandPrixCars, (s32 *)&g_GrandPrixSave);
     ResetProgressSlot(&g_ExtraGrandPrixCars, (s32 *)&g_ExtraGrandPrixSave);
 

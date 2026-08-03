@@ -584,13 +584,13 @@ void StoreSaveStateBlock(u8 *arg0) {
     *(s32 *)(arg0 + 0x14) = g_GrandPrixSave.carIndex;
     *(s32 *)(arg0 + 0x18) = g_GrandPrixSave.classIndex;
     *(s32 *)(arg0 + 0x1C) = g_GrandPrixSave.maxClassReached;
-    *(s32 *)(arg0 + 0x20) = g_GrandPrixSave.unk10;
+    *(s32 *)(arg0 + 0x20) = g_GrandPrixSave.money;
     *(s32 *)(arg0 + 0x24) = g_ExtraGrandPrixSave.course;
     *(s32 *)(arg0 + 0x28) = g_ExtraGrandPrixSave.carIndex;
     *(s32 *)(arg0 + 0x2C) = g_ExtraGrandPrixSave.classIndex;
     *(s32 *)(arg0 + 0x30) = g_ExtraGrandPrixSave.maxClassReached;
     {
-        s32 w34 = g_ExtraGrandPrixSave.unk10;
+        s32 w34 = g_ExtraGrandPrixSave.money;
         u16 h4C = g_BgmSelection;
         *(s32 *)(arg0 + 0x34) = w34;
         *(s32 *)(arg0 + 0x38) = g_TimeAttackSave.course;
@@ -598,7 +598,7 @@ void StoreSaveStateBlock(u8 *arg0) {
         *(s32 *)(arg0 + 0x40) = g_TimeAttackSave.classIndex;
         *(s32 *)(arg0 + 0x44) = g_TimeAttackSave.maxClassReached;
         {
-            register s32 w48 asm("$4") = g_TimeAttackSave.unk10;
+            register s32 w48 asm("$4") = g_TimeAttackSave.money;
             u16 h4E = g_AdvancedSeriesUnlocked;
             *(u16 *)(arg0 + 0x4C) = h4C;
             *(u16 *)(arg0 + 0x4E) = h4E;
@@ -901,7 +901,7 @@ s32 LoadSaveStateBlock(u8 *arg0) {
             g_GrandPrixSave.carIndex = *(s32 *)(base + 0x14);
             g_GrandPrixSave.classIndex = *(s32 *)(base + 0x18);
             g_GrandPrixSave.maxClassReached = *(s32 *)(base + 0x1C);
-            g_GrandPrixSave.unk10 = *(s32 *)(base + 0x20);
+            g_GrandPrixSave.money = *(s32 *)(base + 0x20);
             g_ExtraGrandPrixSave.course = *(s32 *)(base + 0x24);
             g_ExtraGrandPrixSave.carIndex = *(s32 *)(base + 0x28);
             g_ExtraGrandPrixSave.classIndex = *(s32 *)(base + 0x2C);
@@ -913,12 +913,12 @@ s32 LoadSaveStateBlock(u8 *arg0) {
             g_NegconMaxTwist = hE;
             g_ExtraGrandPrixSave.maxClassReached = w30;
         }
-        g_ExtraGrandPrixSave.unk10 = *(s32 *)(base + 0x34);
+        g_ExtraGrandPrixSave.money = *(s32 *)(base + 0x34);
         g_TimeAttackSave.course = *(s32 *)(base + 0x38);
         g_TimeAttackSave.carIndex = *(s32 *)(base + 0x3C);
         g_TimeAttackSave.classIndex = *(s32 *)(base + 0x40);
         g_TimeAttackSave.maxClassReached = *(s32 *)(base + 0x44);
-        g_TimeAttackSave.unk10 = *(s32 *)(base + 0x48);
+        g_TimeAttackSave.money = *(s32 *)(base + 0x48);
         {
             s32 h4C = *(s16 *)(base + 0x4C);
             u16 h4E = *(u16 *)(base + 0x4E);

@@ -881,7 +881,7 @@ void UpdateCourseSelectScreen(void) {
                     p->carIndex = d;
                     p->classIndex = lapc;
                     if (half != 0) {
-                        p->unk10 = g_PlayerMoney;
+                        p->money = g_PlayerMoney;
                         goto clear;
                     }
                     goto setlast;
@@ -906,11 +906,11 @@ void UpdateCourseSelectScreen(void) {
                     g_RaceProgress->carIndex = d;
                     g_RaceProgress->classIndex = lapc;
                     if (half != 0) {
-                        g_RaceProgress->unk10 = g_PlayerMoney;
+                        g_RaceProgress->money = g_PlayerMoney;
                     } else {
                         p = g_RaceProgress;
                     setlast:
-                        p->unk10 = (s16)g_GrandPrixSeriesU16;
+                        p->money = (s16)g_GrandPrixSeriesU16;
                     }
                 clear:
                     g_UiScriptProgress = 0;

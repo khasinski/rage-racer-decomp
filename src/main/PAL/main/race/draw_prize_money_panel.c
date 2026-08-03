@@ -51,14 +51,14 @@ void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void DrawPrizeMoneyPanel(u8 *s0) asm("func_800206B8");
 void DrawPrizeMoneyPanel(u8 *s0) {
     u8 sp[16];
-    if (g_RaceProgress->unk10 > 0x3B9AC9FF) {
-        g_RaceProgress->unk10 = 0x3B9AC9FF;
+    if (g_RaceProgress->money > 0x3B9AC9FF) {
+        g_RaceProgress->money = 0x3B9AC9FF;
     }
     func_80016EA0(0x10, s0 + 128, g_CaptionPrizeMoney, 0x7812);
     LibcSprintf(sp, g_FmtMoney, g_PrizeAmount);
     func_80016EA0(0x12, s0 + 140, sp, 0x7812);
     func_80016EA0(0x10, s0 + 160, g_CaptionTotalMoney, 0x7812);
-    LibcSprintf(sp, g_FmtMoney, g_RaceProgress->unk10);
+    LibcSprintf(sp, g_FmtMoney, g_RaceProgress->money);
     func_80016EA0(0x12, s0 + 172, sp, 0x7812);
     if (g_ClassPromoted != 0) {
         func_80016EA0(0x10, s0 + 192, g_CaptionPromotionBonus, 0x7812);
@@ -185,7 +185,7 @@ void AdvanceGrandPrixClass(void) {
             ResetProgressSlot((s32)g_CarTable, (s32)ptr);
             magic = 0x3B9AC9FF;
             afterPtr = g_RaceProgress;
-            afterPtr->unk10 = magic;
+            afterPtr->money = magic;
             afterPtr->maxClassReached = oldValue;
             ResetCourseProgress(0);
             BeginEndingFmv(0x21);

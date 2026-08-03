@@ -67,8 +67,10 @@ typedef struct GameRaceProgress {
     s32 carIndex;
     s32 classIndex;
     s32 maxClassReached; /* highest class unlocked in this slot */
-    s32 unk10;      /* GP: elapsed time, clamped to 999999999.
-                       Time Attack: g_GrandPrixSeries, read back as u16. */
+    s32 money;      /* GP and Extra GP: prize money, capped at 999999999,
+                       confirmed against US and JP saves advertising that cap.
+                       The Time Attack slot reuses the word for
+                       g_GrandPrixSeries, read back as u16. */
 } GameRaceProgress;
 
 /* The save slot the front end is editing; repointed at one of the three below,

@@ -25,7 +25,8 @@ typedef struct GameSaveBlock {
     u16 unk0A;             /* g_NegconNeutralII */
     u16 unk0C;             /* g_NegconNeutralL */
     u16 unk0E;             /* g_NegconMaxTwist */
-    s32 gpFile1[5];        /* +0x10 g_GrandPrixSave..A4, i.e. GameRaceProgress slot 1 */
+    s32 gpFile1[5];        /* +0x10 g_GrandPrixSave, GameRaceProgress: course,
+                              carIndex, classIndex, maxClassReached, money */
     s32 gpFile2[5];        /* +0x24 g_ExtraGrandPrixSave..8C, GameRaceProgress slot 2 */
     s32 timeAttack[5];     /* +0x38 g_TimeAttackSave..990, GameRaceProgress slot 3 */
     u16 unk4C;             /* +0x4C g_BgmSelection */
