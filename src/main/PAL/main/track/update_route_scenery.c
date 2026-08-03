@@ -1,13 +1,7 @@
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/render.h"
-
-typedef struct SVec {
-    s16 x;
-    s16 y;
-    s16 z;
-    s16 pad;
-} SVec;
 
 typedef struct LVec {
     s32 x;
@@ -140,11 +134,11 @@ void UpdateRouteScenery(void) {
         r4354 = (RAW(rec[1].y) * t + RAW(rec->y) * t0v) / RAW(rec->dur);
         g_RouteSceneryRotY = r4354;
         g_RouteSceneryRotZ = (RAW(rec[1].z) * t + RAW(rec->z) * t0v) / RAW(rec->dur);
-        vin.x = 0;
-        vin.y = 0;
+        vin.vx = 0;
+        vin.vy = 0;
         m0 = &mtx0;
         __asm__("" : "=r"(m0) : "0"(m0));
-        vin.z = -RAW(rec->rot) * 4;
+        vin.vz = -RAW(rec->rot) * 4;
         BuildRotMatrixY(m0, 0x800 - r4354);
     }
 

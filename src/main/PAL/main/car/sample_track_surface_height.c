@@ -1,13 +1,7 @@
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/render.h"
-
-typedef struct SVec {
-    s16 x;
-    s16 y;
-    s16 z;
-    s16 pad;
-} SVec;
 
 typedef struct LVec {
     s32 x;
@@ -82,9 +76,9 @@ void SampleTrackSurfaceHeight(Car *car) {
     p1 = &g_TrackPoints[idx];
 
     seg = p1->segmentLength;
-    v.x = car->x - p1->x;
-    v.z = car->z - p1->z;
-    v.y = 0;
+    v.vx = car->x - p1->x;
+    v.vz = car->z - p1->z;
+    v.vy = 0;
     BuildRotMatrixY(&mtx, (0x1000 - p1->angle) & 0xFFF);
     ApplyMatrix((s32 *)&mtx, (s32 *)&v, (s32 *)&out);
 

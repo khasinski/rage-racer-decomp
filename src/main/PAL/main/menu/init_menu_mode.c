@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/race.h"
@@ -144,13 +145,6 @@ void func_80050400(s32 arg0, s32 arg1) {
         }
     }
 }
-
-typedef struct SVec {
-    s16 x;
-    s16 y;
-    s16 z;
-    s16 pad;
-} SVec;
 
 typedef struct UVec {
     u16 x;
