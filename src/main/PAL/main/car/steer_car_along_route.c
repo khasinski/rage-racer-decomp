@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/car.h"
 #include "game/track.h"
 #include "game/race.h"
@@ -16,13 +17,6 @@ typedef struct GameCarVector4 {
     s32 z;
     s32 w;
 } GameCarVector4;
-
-typedef struct GameCarShortVector {
-    s16 vx;
-    s16 vy;
-    s16 vz;
-    s16 pad;
-} GameCarShortVector;
 
 extern s32 g_AnimTimer asm("D_8009E694");
 extern s16 g_ClosestRivalRank asm("D_801E7740");
@@ -147,7 +141,7 @@ void UpdateRaceCars(void) {
     s16 pair[4];
     Matrix m1;
     Matrix m2;
-    GameCarShortVector sv;
+    SVec sv;
     Matrix matrixScratch3;
     /* These pins reproduce the retail induction and matrix registers. */
     register GameCarRuntime *base asm("$18");
@@ -424,7 +418,7 @@ void UpdateAttractCars(void) {
     s16 svAng[4];
     Matrix m1;
     Matrix m2;
-    GameCarShortVector sv1;
+    SVec sv1;
     Matrix matrixScratch3;
     /* These pins reproduce the retail induction registers. */
     register GameCarRuntime *car;

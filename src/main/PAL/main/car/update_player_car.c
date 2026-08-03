@@ -13,13 +13,6 @@ typedef struct GearRange {
 } GearRange;
 
 
-typedef struct SVec {
-    s16 vx;
-    s16 vy;
-    s16 vz;
-    s16 pad;
-} SVec;
-
 typedef struct Car {
     s32 unk00;
     s32 unk04;

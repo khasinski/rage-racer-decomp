@@ -11,6 +11,14 @@ typedef struct Vec4 {
     s32 w;
 } Vec4;
 
+/* Half-word position/rotation vector; the GTE's SVECTOR shape. */
+typedef struct SVec {
+    s16 vx;
+    s16 vy;
+    s16 vz;
+    s16 pad;
+} SVec;
+
 /* Four consecutive words moved as a unit by the camera code. */
 typedef struct Block16 {
     s32 w0;

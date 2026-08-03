@@ -7,13 +7,6 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-typedef struct SVec
-{
-  s16 vx;
-  s16 vy;
-  s16 vz;
-  s16 pad;
-} SVec;
 typedef struct GearCurveRow
 {
   s32 values[16];
