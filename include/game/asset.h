@@ -73,6 +73,11 @@ typedef struct GameSceneAssetHeader {
  *   g_AssetSubBlockPtr D_801E8AB0  base + header->offsets[n + 1]
  *   g_ImageBlockBuffer D_801E4B30  buffer handed to func_8001A3C0
  *   g_CarModelAsset    D_8009E698  registry entry selected by SelectCarModelSlot
+ *
+ * g_CarModelAsset is the one slot whose pointee type really does change with
+ * the screen, so its several spellings are not a naming slip to unify: the
+ * model viewer reads a GameCarModelAsset header, the spec screen reads an
+ * EngineSpecData block and the car-select camera reads a GameRenderView.
  */
 
 /*
