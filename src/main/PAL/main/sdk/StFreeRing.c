@@ -3,7 +3,7 @@
 
 extern long g_StRingSize asm("D_801F1850");
 extern long g_StRingSlot asm("D_801E6C98");
-extern StHEADER_RR *g_StRingBase asm("D_801E8AAC");
+extern StStrHeader *g_StRingBase asm("D_801E8AAC");
 extern long D_801E8278;
 extern long D_801E8A94;
 extern long D_801E3E10;
@@ -12,13 +12,13 @@ u_long StFreeRing(u_long *base) {
     long temp_a1;
     long i;
     short nSectors;
-    StHEADER_RR *temp_v0;
-    StHEADER_RR *temp_v0_2;
+    StStrHeader *temp_v0;
+    StStrHeader *temp_v0_2;
 
     temp_a1 = (base - (u_long *)&g_StRingBase[g_StRingSize]) / 504;
     temp_v0 = &g_StRingBase[temp_a1];
     nSectors = g_StRingBase[temp_a1].nSectors;
-    if ((short)temp_v0->id != 4) {
+    if ((short)temp_v0->state != 4) {
         return 1;
     }
 

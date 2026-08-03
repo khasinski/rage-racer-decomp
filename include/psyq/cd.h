@@ -48,13 +48,6 @@ typedef struct CdRegisterMap {
     u_short status_mode_b;
 } CdRegisterMap;
 
-typedef struct StHEADER_RR {
-    short id;
-    u_char pad2[4];
-    short nSectors;
-    u_char pad8[0x18];
-} StHEADER_RR;
-
 typedef struct StRingEntry {
     volatile short state;
     u_char pad2[4];
