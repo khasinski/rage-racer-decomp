@@ -44,13 +44,13 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
 
     obj->y -= view->horizon_6;
     obj->field_60 -= view->horizon_6;
-    BuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
-    BuildRotMatrixX(&m_30, obj->angle_20);
+    BuildRotMatrixY(&m_10, 0x800 - obj->angleY);
+    BuildRotMatrixX(&m_30, obj->angleX);
     MulMatrix2(&m_10, &m_30);
     MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
 
     if (g_SceneId != 8) {
-        clipHandle = func_800350B4((s32) obj->field_70);
+        clipHandle = func_800350B4((s32) obj->trackProgress);
         if (clipHandle != 0) {
             func_8001C248(clipHandle, &m_90);
         }
@@ -85,7 +85,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     g_ScratchRenderMode = 0;
     SubmitModel((void *)0x1F800000, 1);
 
-    BuildRotMatrixZ(&m_70, obj->angle_28);
+    BuildRotMatrixZ(&m_70, obj->angleZ);
     MulMatrix2(&m_30, &m_70);
     func_80017794((void *)0x1F80011C, obj, &m_70);
     g_ScratchRenderMode = 0;
@@ -95,7 +95,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     if (obj->flags_48 & 0x1000) {
         otDepth += 10;
     }
-    BuildRotMatrixZ(&m_10, obj->angle_28 - obj->field_64);
+    BuildRotMatrixZ(&m_10, obj->angleZ - obj->field_64);
     MulMatrix(&m_50, &m_10);
     MulMatrix(&m_30, &m_10);
     BuildRotMatrixX(&m_F0, obj->flags_48);
@@ -190,11 +190,11 @@ void func_8001DFC0(GameRenderObject *obj) {
     otDepth = v_128[0] + v_128[2];
     if (v_148[2] >= 0) {
         if (otDepth < 0xD00) {
-            BuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
-            BuildRotMatrixX(&m_30, obj->angle_20);
+            BuildRotMatrixY(&m_10, 0x800 - obj->angleY);
+            BuildRotMatrixX(&m_30, obj->angleX);
             MulMatrix2(&m_10, &m_30);
             MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
-            clipHandle = func_800350B4((s32)obj->field_70);
+            clipHandle = func_800350B4((s32)obj->trackProgress);
             if (clipHandle != 0) {
                 func_8001C248(clipHandle, &m_90);
             }
@@ -230,14 +230,14 @@ void func_8001DFC0(GameRenderObject *obj) {
             SubmitModel((void *)0x1F800000,
                             (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
 
-            BuildRotMatrixZ(&m_70, obj->angle_28);
+            BuildRotMatrixZ(&m_70, obj->angleZ);
             MulMatrix2(&m_30, &m_70);
             func_80017794((void *)0x1F80011C, obj, &m_70);
             g_ScratchRenderMode = lod[1] << 16;
             SubmitModel((void *)0x1F800000,
                             (lod[0] < g_ModelBankCount) ? lod[0] : 1);
 
-            BuildRotMatrixZ(&m_10, obj->angle_28 - obj->field_64);
+            BuildRotMatrixZ(&m_10, obj->angleZ - obj->field_64);
             MulMatrix(&m_50, &m_10);
             MulMatrix(&m_30, &m_10);
             BuildRotMatrixX(&m_F0, obj->flags_48);
@@ -281,17 +281,17 @@ void func_8001DFC0(GameRenderObject *obj) {
                 func_80069888(&m_90);
             }
         } else if (otDepth < 0x2500) {
-            BuildRotMatrixY(&m_10, 0x800 - obj->angle_24);
-            BuildRotMatrixX(&m_50, obj->angle_20);
+            BuildRotMatrixY(&m_10, 0x800 - obj->angleY);
+            BuildRotMatrixX(&m_50, obj->angleX);
             MulMatrix2(&m_10, &m_50);
             MulMatrix0(&g_SceneLightMatrix, &m_50, &m_90);
-            clipHandle = func_800350B4((s32)obj->field_70);
+            clipHandle = func_800350B4((s32)obj->trackProgress);
             if (clipHandle != 0) {
                 func_8001C248(clipHandle, &m_90);
             }
             func_80069888(&m_90);
 
-            BuildRotMatrixZ(&m_10, obj->angle_28);
+            BuildRotMatrixZ(&m_10, obj->angleZ);
             MulMatrix2(&m_50, &m_10);
             MulMatrix2((Matrix *)0x1F800028, &m_10);
             func_80017794((void *)0x1F80011C, obj, &m_10);

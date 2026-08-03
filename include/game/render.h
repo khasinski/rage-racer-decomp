@@ -60,20 +60,30 @@ typedef struct GameRenderView {
     s16 horizon_6;  /* 0x06 */
 } GameRenderView;
 
+/*
+ * The camera car object at D_801E3E14. Eleven of its words are also declared
+ * as standalone globals (g_CameraCarY, g_CameraCarAngleY, g_CameraCarSpeed and
+ * so on), which is where the names below come from.
+ *
+ * This is the same block as GameCarRuntime in game/car.h: 45 offsets agree on
+ * type, and both arrive at headingAngle for 0xA0 independently. They are still
+ * two declarations because the tails disagree - car.h reads 0x7C, 0x80, 0x84,
+ * 0x88, 0xAC and 0xBC as halfwords, which shifts every later offset by four.
+ */
 typedef struct GameRenderObject {
     s32 x;          /* 0x00 */
     s32 y;          /* 0x04 */
     s32 z;          /* 0x08 */
     s32 field_0C;
-    s32 field_10;
-    s32 field_14;
-    s32 field_18;
+    s32 motionX;
+    s32 motionY;
+    s32 motionZ;
     s32 field_1C;
-    s32 angle_20;   /* 0x20 */
-    s32 angle_24;   /* 0x24 */
-    s32 angle_28;   /* 0x28 */
+    s32 angleX;   /* 0x20 */
+    s32 angleY;   /* 0x24 */
+    s32 angleZ;   /* 0x28 */
     s32 field_2C;
-    s32 field_30;
+    s32 trackPointIndex;
     s32 field_34;
     s32 field_38;
     s32 field_3C;
@@ -87,11 +97,11 @@ typedef struct GameRenderObject {
     s32 field_5C;
     s32 field_60;   /* 0x60 */
     s32 field_64;   /* 0x64 */
-    s32 field_68;
-    s32 field_6C;
-    s32 field_70;   /* 0x70 */
-    s32 field_74;
-    s32 field_78;
+    s32 progressA;
+    s32 progressB;
+    s32 trackProgress;   /* 0x70 */
+    s32 previousTrackProgress;
+    s32 trackSection;
     s32 field_7C;
     s32 field_80;
     s32 field_84;
@@ -101,18 +111,18 @@ typedef struct GameRenderObject {
     s32 field_94;
     s32 field_98;
     s32 field_9C;
-    s32 field_A0;
-    s32 field_A4;
-    s32 field_A8;
+    s32 headingAngle;
+    s32 speed;
+    s32 speedRamp;
     s32 field_AC;
     s32 field_B0;
     s32 field_B4;
     s32 field_B8;
     s32 field_BC;
     s32 field_C0;
-    s32 field_C4;
+    s32 stepX;
     s32 field_C8;
-    s32 field_CC;
+    s32 stepZ;
     s32 field_D0;
     s32 field_D4;
     s32 field_D8;

@@ -54,7 +54,7 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     s32 zValue;
     s32 c400;
 
-    offset = g_CameraCar.field_30;
+    offset = g_CameraCar.trackPointIndex;
     if (g_GrandPrixSeries != 0) {
         index = offset + 2;
     } else {
@@ -69,7 +69,7 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     func_8002FC84(index, coords, g_CameraCar.field_38);
     angle = 0x400 - Atan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCar.z);
     g_CameraCarHeading += GetAngleDelta(g_CameraCarHeading, angle);
-    g_CameraCar.angle_24 = g_CameraCarHeading;
+    g_CameraCar.angleY = g_CameraCarHeading;
 
     if (updateMotion != 0) {
         if (g_CameraCarSpeedRamp < 50) {
@@ -109,15 +109,15 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
         g_FreeCameraAngleOffset[0] = -256;
     }
 
-    g_CameraCar.angle_24 = g_FreeCameraAngleOffset[1] + g_CameraCar.angle_24;
+    g_CameraCar.angleY = g_FreeCameraAngleOffset[1] + g_CameraCar.angleY;
     func_8002C168(&g_CameraCar);
     markerClamp[0] = 0;
     markerClamp[1] = 0;
-    UpdateCarTrackState(&g_CameraCar, g_CameraCar.field_30, markerClamp);
+    UpdateCarTrackState(&g_CameraCar, g_CameraCar.trackPointIndex, markerClamp);
 
     *(Block16 *)(view + 2) = *(Block16 *)&g_CameraCar.x;
     view[3] -= 48;
-    *(Block16 *)(view + 6) = *(Block16 *)&g_CameraCar.angle_20;
+    *(Block16 *)(view + 6) = *(Block16 *)&g_CameraCar.angleX;
     view[6] = g_FreeCameraAngleOffset[0] + view[6];
 
     BuildRotMatrixY(&m1, view[7]);
@@ -151,10 +151,10 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     value = SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]);
     view[6] = c400 - Atan2(delta[1], value >> 6);
 
-    g_PlayerTrackSection = g_CameraCar.field_78;
-    g_PlayerProgressA = g_CameraCar.field_68;
-    g_PlayerProgressB = g_CameraCar.field_6C;
-    g_PlayerTrackProgress = g_CameraCar.field_70;
+    g_PlayerTrackSection = g_CameraCar.trackSection;
+    g_PlayerProgressA = g_CameraCar.progressA;
+    g_PlayerProgressB = g_CameraCar.progressB;
+    g_PlayerTrackProgress = g_CameraCar.trackProgress;
     SetCameraRotMatrix();
 }
 

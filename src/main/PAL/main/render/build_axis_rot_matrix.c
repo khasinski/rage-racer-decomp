@@ -95,17 +95,17 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
     func_800684B0(&m, 0);
 
     len = func_800689A8((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
-                        (obj->field_10 - obj->y) * (obj->field_10 - obj->y) +
-                        (obj->field_14 - obj->z) * (obj->field_14 - obj->z));
+                        (obj->motionX - obj->y) * (obj->motionX - obj->y) +
+                        (obj->motionY - obj->z) * (obj->motionY - obj->z));
     if (len == 0) {
         return 1;
     }
 
-    horiz = obj->y - obj->field_10;
+    horiz = obj->y - obj->motionX;
     pitch = (horiz << 12) / len;
     pitch = -pitch;
     horiz = func_800689A8((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
-                          (obj->field_14 - obj->z) * (obj->field_14 - obj->z));
+                          (obj->motionY - obj->z) * (obj->motionY - obj->z));
     BuildAxisRotMatrix(&am, (s16)pitch, (s16)((horiz << 12) / len), 0x78);
     MulMatrix(&m, &am);
 
@@ -116,7 +116,7 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
         len = horiz;
         horiz = obj->field_0C - obj->x;
         t1 = (horiz << 12) / len;
-        horiz = obj->field_14 - obj->z;
+        horiz = obj->motionY - obj->z;
         t2 = (horiz << 12) / len;
         BuildAxisRotMatrix(&am, (s16)(-t1), (s16)t2, 0x79);
         MulMatrix(&m, &am);
