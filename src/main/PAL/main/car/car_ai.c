@@ -676,8 +676,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                 average01X += (u32)average01X >> 31;
                 average01X >>= 1;
                 average23X = carCorners[2].x + carCorners[3].x;
-                average23X += (u32)average23X >> 31;
-                average23X >>= 1;
+                average23X /= 2;
                 centerX = (s16)average01X + (s16)average23X;
                 centerX += centerX >> 31;
                 centerX >>= 1;
@@ -686,8 +685,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                 average01Z += (u32)average01Z >> 31;
                 average01Z >>= 1;
                 average23Z = carCorners[2].z + carCorners[3].z;
-                average23Z += (u32)average23Z >> 31;
-                average23Z >>= 1;
+                average23Z /= 2;
                 centerZ = (s16)average01Z + (s16)average23Z;
                 centerZ += centerZ >> 31;
                 centerZ >>= 1;
