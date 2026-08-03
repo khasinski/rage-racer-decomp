@@ -930,7 +930,8 @@ L_b1420:
         { u16 q = func_8006131C(); if (q == 0) break; }
         } }
         g_McMenuPage = 0;
-        goto L_b1606;
+        g_McActionState = 0;
+        break;
         }
         g_McMenuPhase = 6;
         { u16 p = func_800612CC(); if (p == 0) goto L_b1452; }
@@ -997,9 +998,7 @@ L_b1420:
         { u16 p = func_800612CC(); if (!(p)) {
         { u16 q = func_8006131C(); if (q == 0) break; }
         } }
-    L_b1606:
         g_McActionState = 0;
-        /* fall through to L_sw10 */
     default:
     }
     break;
