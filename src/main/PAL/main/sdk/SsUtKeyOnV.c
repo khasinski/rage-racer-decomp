@@ -6,40 +6,10 @@
 /* The key-on path's view of the same block psyq/snd_types.h calls
  * SvmCurrentAttr, but four bytes longer and reading vag unsigned, so the two
  * are not interchangeable. One of them is wrong. */
-typedef struct SvmCurrentAttrKeyOn {
-    u_char tones;
-    u_char vab_id;
-    u_char note;
-    u_char fine;
-    u_char volume;
-    u_char pan;
-    u_char program;
-    u_char fake_program;
-    u_char unk8;
-    u_char unk9;
-    u_char mvol;
-    u_char mpan;
-    u_char tone;
-    u_char tone_volume;
-    u_char tone_pan;
-    u_char priority;
-    u_char center;
-    u_char shift;
-    u_char min;
-    u_char max;
-    u_char mode;
-    u_char pad15;
-    u_short seq_sep;
-    u_short vag;
-    u_short voice;
-    u_short unk1c;
-    u_short unk1e;
-} SvmCurrentAttrKeyOn;
-
 extern long g_SndUpdateLock asm("D_801E40AC");
 extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
-extern SvmCurrentAttrKeyOn g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
 extern long SpuVmVSetUp(short, short) asm("func_80073314");
@@ -107,13 +77,13 @@ long SsUtKeyOnV(
     }
 
     program_attr = &g_SndCurrentProgTable[program];
-    g_SndCurrentAttr.mvol = program_attr->mvol;
-    g_SndCurrentAttr.mpan = program_attr->mpan;
+    g_SndCurrentAttr.master_volume = program_attr->mvol;
+    g_SndCurrentAttr.master_pan = program_attr->mpan;
     g_SndCurrentAttr.tones = program_attr->tones;
 
     tone_attr =
         &g_SndCurrentToneTable[g_SndCurrentAttr.tone +
-                     g_SndCurrentAttr.fake_program * 0x10];
+                     g_SndCurrentAttr.program_index * 0x10];
     g_SndCurrentAttr.priority = tone_attr->prior;
     vag = tone_attr->vag;
     g_SndCurrentAttr.vag = vag;
@@ -134,7 +104,7 @@ long SsUtKeyOnV(
     g_SndCurrentAttr.voice = voice;
     g_SndVoiceState[idx].seq_sep = 0x21;
     g_SndVoiceState[idx].vab_id = vab_id;
-    g_SndVoiceState[idx].program_index = g_SndCurrentAttr.fake_program;
+    g_SndVoiceState[idx].program_index = g_SndCurrentAttr.program_index;
     g_SndVoiceState[idx].program = program;
     g_SndVoiceState[idx].vag = g_SndCurrentAttr.vag;
     tone_value = g_SndCurrentAttr.tone;

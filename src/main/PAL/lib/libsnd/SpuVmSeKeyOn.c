@@ -3,6 +3,9 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
+/* Not SvmCurrentAttr from psyq/snd_types.h, though the layout is identical:
+ * this TU loads seq_sep, vag and voice signed, and folding it onto the
+ * shared u_short spelling turns lh into lhu and stops matching. */
 typedef struct SvmCurrentAttrKeyOn {
     u_char tone_count;
     u_char vab_id;

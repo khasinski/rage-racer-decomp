@@ -163,7 +163,7 @@ typedef struct SvmCurrentAttr {
     u_char volume;
     u_char pan;
     u_char program;
-    u_char fake_program;
+    u_char program_index;
     u_char unk8;
     u_char unk9;
     u_char master_volume;
@@ -181,6 +181,8 @@ typedef struct SvmCurrentAttr {
     u_short seq_sep;
     short vag;
     u_short voice;
+    u_short register_offset;
+    u_short tone_index;
 } SvmCurrentAttr;
 
 #endif

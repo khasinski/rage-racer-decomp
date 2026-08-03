@@ -153,7 +153,7 @@ short SsUtKeyOn(
     g_SndCurrentAttr.master_pan = g_SndCurrentProgTable[program].mpan;
     g_SndCurrentAttr.tones = g_SndCurrentProgTable[program].tones;
 
-    tone_index = g_SndCurrentAttr.tone + (g_SndCurrentAttr.fake_program * 0x10);
+    tone_index = g_SndCurrentAttr.tone + (g_SndCurrentAttr.program_index * 0x10);
     g_SndCurrentAttr.priority = g_SndCurrentToneTable[tone_index].prior;
     vag = g_SndCurrentToneTable[tone_index].vag;
     g_SndCurrentAttr.vag = vag;
@@ -180,7 +180,7 @@ short SsUtKeyOn(
     g_SndCurrentAttr.voice = voice;
     g_SndVoiceState[voice_index].seq_sep = 0x21;
     g_SndVoiceState[voice_index].vab_id = vab_id;
-    g_SndVoiceState[voice_index].program_index = g_SndCurrentAttr.fake_program;
+    g_SndVoiceState[voice_index].program_index = g_SndCurrentAttr.program_index;
     g_SndVoiceState[voice_index].program = program;
     g_SndVoiceState[voice_index].vag = g_SndCurrentAttr.vag;
     g_SndVoiceState[voice_index].tone = g_SndCurrentAttr.tone;
