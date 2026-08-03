@@ -82,7 +82,6 @@ void UploadFmvSlice(void) {
         DecDCTout(*(volatile u32 **)(bufferAddr - 8), pixelCount / 2);
     } else {
         g_FmvStripDone = 1;
-        asm("" : : : "memory");
         next = index == 0;
         g_FmvStripRectIndex = next;
         /* RAW() holds the X store ahead of the Y load -- see common.h. The
