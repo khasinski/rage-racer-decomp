@@ -1445,14 +1445,11 @@ s32 CountMemoryCardFiles(s32 arg0, s32 arg1) {
     entry = g_McDirEntries;
 
     if (BiosFirstFile(path, entry) == entry) {
-        asm("" : "=r"(count) : "0"(count));
-        count++;
         do {
+            count++;
             entry = (char *)entry + 0x28;
             ret = BiosNextFile(entry);
-            count++;
         } while (ret == entry);
-        count--;
     }
 
     return count;
