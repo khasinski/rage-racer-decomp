@@ -4,7 +4,7 @@
 #include "game/render.h"
 #include "game/car.h"
 
-#define AVG(a, b) ((s32)((a) + (b) + ((u32)((a) + (b)) >> 31)) >> 1)
+#define AVG(a, b) (((a) + (b)) / 2)
 
 typedef struct MenuObj {
     s32 x;

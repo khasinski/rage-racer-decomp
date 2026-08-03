@@ -72,8 +72,7 @@ void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
     u16 value;
     u16 fill;
 
-    adjusted = arg1 + ((u32)arg1 >> 31);
-    row1 = (adjusted >> 1) + 10;
+    row1 = arg1 / 2 + 10;
     arg1 &= 1;
     index = 1;
     clutDst0 = g_TeamLogoSwatches;
