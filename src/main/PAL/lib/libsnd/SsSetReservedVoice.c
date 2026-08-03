@@ -2,7 +2,7 @@
 
 extern u_char g_SndReservedVoiceCount asm("D_801E4D88");
 extern short g_SndMonoMode asm("D_801E3FB0");
-extern volatile u_char D_801E42F8;
+extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
 extern u_char g_SndVabStatus[] asm("D_801E4CFC");
 extern u_short g_SndVabOpenCount asm("D_801F17AC");
 extern u_long g_SndVabSpuAddr[] asm("D_801F17BC");
@@ -32,8 +32,8 @@ u_char SsSetVoiceCount(u_char voices) {
         return -1;
     }
 
-    D_801E42F8 = voices;
-    return D_801E42F8;
+    g_SndVoiceCount = voices;
+    return g_SndVoiceCount;
 }
 
 void SsVabClose(short vab_id) asm("func_80072B3C");

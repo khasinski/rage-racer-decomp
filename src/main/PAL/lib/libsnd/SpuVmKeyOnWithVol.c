@@ -3,7 +3,7 @@
 #include "common.h"
 
 extern u_char g_SndCurrentPriority asm("D_801E4BDF");
-extern u_char D_801E42F8;
+extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern u_char g_SndCurrentVoice asm("D_801E4BEA");
 extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
 extern u_char g_SndVoiceStatePitch[] asm("D_8009E0BC");
@@ -23,7 +23,7 @@ void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
     ret = SpuVmAlloc(0xFF) & 0xFF;
     *(u_short *)&g_SndCurrentVoice = ret;
 
-    if (ret < D_801E42F8) {
+    if (ret < g_SndVoiceCount) {
         SpuVmKeyOnCore(g_SndCurrentVoice, arg0, arg1, arg2, arg3);
     }
 }
@@ -37,7 +37,7 @@ void SpuVmClearFinishedVoices(void) {
     u_char *ptr;
 
     i = 0;
-    if (D_801E42F8 == 0) {
+    if (g_SndVoiceCount == 0) {
         return;
     }
 
@@ -60,7 +60,7 @@ for (;;) {
     next = i + 1;
     i = next;
     next <<= 16;
-    bound = D_801E42F8;
+    bound = g_SndVoiceCount;
     next >>= 16;
     next = next < bound;
     if (next) {
@@ -78,7 +78,7 @@ void SpuVmKeyOnWithDefaultVol(long arg0, long arg1) {
     ret = SpuVmAlloc(0xFF) & 0xFF;
     *(u_short *)&g_SndCurrentVoice = ret;
 
-    if (ret < D_801E42F8) {
+    if (ret < g_SndVoiceCount) {
         SpuVmKeyOnCore(g_SndCurrentVoice, arg0, arg1, 0x80FF, 0x5FC8);
     }
 }

@@ -7,7 +7,7 @@ extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern short g_SndVoiceRegs[] asm("D_8009DF20");
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_char D_801E42F8;
+extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern short g_SndMonoMode asm("D_801E3FB0");
 extern short g_SndCurrentSeqSep asm("D_801E4BE6");
 extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
@@ -40,7 +40,7 @@ long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u
     voices_updated = 0;
     SpuVmVSetUp(vab_id, program);
     g_SndCurrentSeqSep = seq_sep;
-    for (voice = 0; voice < D_801E42F8; voice++) {
+    for (voice = 0; voice < g_SndVoiceCount; voice++) {
         current_program = program;
         if ((g_SndVoiceState[voice].seq_sep == seq_sep) &&
             (g_SndVoiceState[voice].program == current_program) &&
@@ -172,7 +172,7 @@ short SsUtKeyOn(
 
     voice = SpuVmAlloc(vag);
     voice_index = voice;
-    if (voice_index == D_801E42F8) {
+    if (voice_index == g_SndVoiceCount) {
         g_SndUpdateLock = 0;
         return -1;
     }

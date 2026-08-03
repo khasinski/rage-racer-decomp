@@ -3,7 +3,7 @@
 #include "common.h"
 #include "game/audio.h"
 
-extern u_char D_801E42F8;
+extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern u_char g_SndCurrentPriority asm("D_801E4BDF");
 extern u_char g_SndVoiceState[] asm("D_8009E0B8");
 extern u_char g_SndVoiceStateAge[] asm("D_8009E0BA");
@@ -32,7 +32,7 @@ u_char SpuVmAlloc(long unused) {
     bestAge = 0;
     threshold = g_SndCurrentPriority;
     candidate = 99;
-    for (voice = 0; voice < D_801E42F8; voice++) {
+    for (voice = 0; voice < g_SndVoiceCount; voice++) {
         offset = (u_char)voice * 52;
         if (g_SndVoiceStateStatus[offset] == 0 &&
             *(u_short *)&g_SndVoiceStateEnvx[offset] == 0) {
@@ -63,12 +63,12 @@ u_char SpuVmAlloc(long unused) {
 
     if ((u_char)selected == 99) {
         if (candidates == 0) {
-            selected = D_801E42F8;
+            selected = g_SndVoiceCount;
         } else {
             selected = candidate;
         }
     }
-    count = D_801E42F8;
+    count = g_SndVoiceCount;
     if ((u_long)(u_char)selected < (u_long)count) {
         voice = 0;
         if (count != 0) {

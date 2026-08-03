@@ -40,7 +40,7 @@ extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
 extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
-extern u_char D_801E42F8;
+extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern SvmCurrentAttrKeyOn g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
@@ -137,7 +137,7 @@ long SpuVmSeKeyOn(
             g_SndCurrentAttr.min = g_SndCurrentToneTable[tone].min;
             g_SndCurrentAttr.max = g_SndCurrentToneTable[tone].max;
             g_SndCurrentAttr.voice = SpuVmAlloc(0);
-            if (g_SndCurrentAttr.voice < D_801E42F8) {
+            if (g_SndCurrentAttr.voice < g_SndVoiceCount) {
                 g_SndVoiceState[g_SndCurrentAttr.voice].active = 1;
                 g_SndVoiceState[g_SndCurrentAttr.voice].age = 0;
                 g_SndVoiceState[g_SndCurrentAttr.voice].seq_sep = seq_sep;

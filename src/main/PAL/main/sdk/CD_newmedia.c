@@ -13,7 +13,7 @@ typedef struct Entry {
 } Entry;
 
 extern u_char g_CdSectorBuf[] asm("D_8009D714");
-extern W4 D_8009D7A0;
+extern W4 g_CdRootDirLba asm("D_8009D7A0");
 extern Entry g_CdPathTable[] asm("D_8009C114");
 extern long g_CdDebugLevel asm("D_80099048");
 extern long g_CdCachedDir asm("D_80099348");
@@ -61,7 +61,7 @@ long CD_newmedia(void) {
         }
         return 0;
     }
-    hdr = D_8009D7A0;
+    hdr = g_CdRootDirLba;
     if (func_8006CB88(1, *(long *)&hdr, g_CdSectorBuf) != r) {
         if (g_CdDebugLevel > 0) {
             DebugPrintf(D_80013A18, *(long *)&hdr);
@@ -108,14 +108,14 @@ long CD_newmedia(void) {
 }
 
 extern volatile long D_8009C118[];
-extern CdSearchDirEntry D_8009C120[];
+extern CdSearchDirEntry g_CdDirEntryName[] asm("D_8009C120");
 
 long func_8006CC28(u_char *arg0, u_char *arg1);
 
 long DS_searchdir(long type, u_char *name) asm("func_8006C83C");
 long DS_searchdir(long type, u_char *name) {
     long i = 0;
-    u_char *entryName = (u_char *)D_8009C120;
+    u_char *entryName = (u_char *)g_CdDirEntryName;
     long offset = 0;
     long entryType;
 

@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern volatile u_char D_801E42F8;
+extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
 extern volatile u_short g_SndCurrentVoice asm("D_801E4BEA");
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
@@ -34,7 +34,7 @@ void _SsVmInit(void) {
     u_long bits;
 
     i = 0;
-    if (D_801E42F8 != 0) {
+    if (g_SndVoiceCount != 0) {
         ff = 0xFF;
         one = 1;
         do {
@@ -100,6 +100,6 @@ void _SsVmInit(void) {
             highBits = highMask | highBits;
             D_801F2A0C = highBits;
             D_8009E674 = bits & ~highBits;
-        } while ((next >> 16) < D_801E42F8);
+        } while ((next >> 16) < g_SndVoiceCount);
     }
 }

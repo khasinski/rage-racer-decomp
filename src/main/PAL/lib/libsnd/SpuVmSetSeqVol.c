@@ -4,7 +4,7 @@
 
 extern u_char *g_SndSeqTable[] asm("D_801E79CC");
 extern short g_SndCurrentSeqSep asm("D_801E4BE6");
-extern volatile u_char D_801E42F8;
+extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
 extern u_char g_SndVoiceRegs[] asm("D_8009DF20");
 extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
@@ -52,7 +52,7 @@ short arg3;
     y = arg2 * 0x81;
 
     if (arg3 == 1) {
-        for (i = 0; i < D_801E42F8; i++) {
+        for (i = 0; i < g_SndVoiceCount; i++) {
             offset = (i * 12 + i) * 4;
             if (*(u_short *)&g_SndVoiceStateSeqSep[offset] == (u_short)temp) {
                 pos = i * 8;

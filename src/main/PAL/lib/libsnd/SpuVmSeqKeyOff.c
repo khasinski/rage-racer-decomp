@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-extern u_char D_801E42F8;
+extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern u_short g_SndCurrentVoice asm("D_801E4BEA");
 extern u_short D_801F2A08;
 extern u_short D_801F2A0C;
@@ -23,7 +23,7 @@ void SpuVmSeqKeyOff(long arg0) {
     u_short *current;
 
     voice = 0;
-    if (D_801E42F8 != 0) {
+    if (g_SndVoiceCount != 0) {
         seq_sep = (short)arg0;
         current = &g_SndCurrentVoice;
         do {
@@ -50,6 +50,6 @@ void SpuVmSeqKeyOff(long arg0) {
                 D_8009E674 &= ~D_801F2A0C;
             }
             voice++;
-        } while (voice < D_801E42F8);
+        } while (voice < g_SndVoiceCount);
     }
 }

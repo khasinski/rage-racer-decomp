@@ -30,7 +30,7 @@ extern u_long g_CdShellOpenCount asm("D_80099054");
 extern u_long g_CdCommandNames[] asm("D_80099060");
 extern u_long g_CdCommandHasComplete[] asm("D_80099100");
 extern u_long g_CdCommandAckHasStatus[] asm("D_80099200");
-extern u_char D_8009905D;
+extern u_char g_CdLastCommand asm("D_8009905D");
 extern volatile u_char g_CdSyncStatus asm("D_80099318");
 extern volatile u_char g_CdReadyStatus asm("D_80099319");
 extern volatile u_char g_CdDataEndStatus asm("D_8009931A");
@@ -94,7 +94,7 @@ long func_8006AB5C(void) {
     *g_CdReg3 = 7;
     *g_CdReg2 = 7;
 
-    if (!(mode == 3 && g_CdCommandAckHasStatus[D_8009905D] == 0)) {
+    if (!(mode == 3 && g_CdCommandAckHasStatus[g_CdLastCommand] == 0)) {
         if (!(g_CdStatusByte & 0x10) && (buf[0] & 0x10)) {
             g_CdShellOpenCount++;
         }
@@ -107,7 +107,7 @@ long func_8006AB5C(void) {
     if (mode == 5) {
         func_80063C38(&D_80013840);
         if (g_CdDebugLevel > 0) {
-            DebugPrintf(&D_8001384C, g_CdCommandNames[D_8009905D], g_CdStatusByte, g_CdErrorByte);
+            DebugPrintf(&D_8001384C, g_CdCommandNames[g_CdLastCommand], g_CdStatusByte, g_CdErrorByte);
         }
     }
 
@@ -119,7 +119,7 @@ long func_8006AB5C(void) {
             copy8(&g_CdSyncResult, (u_char *)buf);
             return 2;
         }
-        if (g_CdCommandHasComplete[D_8009905D] != 0) {
+        if (g_CdCommandHasComplete[g_CdLastCommand] != 0) {
             volatile u_char *sp = &g_CdSyncStatus;
             *sp = 3;
             copy8(&g_CdSyncResult, (u_char *)buf);

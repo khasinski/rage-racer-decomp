@@ -7,7 +7,7 @@
 extern long g_CdCommandNames[] asm("D_80099060");
 extern volatile u_char g_CdSyncStatus[] asm("D_80099318");
 extern long g_CdIntrNames[] asm("D_800990E0");
-extern u_char D_8009905D;
+extern u_char g_CdLastCommand asm("D_8009905D");
 extern long g_CdTimeoutDeadline asm("D_8009BB08");
 extern long g_CdTimeoutCounter asm("D_8009BB0C");
 extern void *D_8009BB10;
@@ -44,7 +44,7 @@ long CD_datasync(long arg) {
             func_80063C38(D_80013814);
             DebugPrintf(D_80013824,
                             ((CdAlarm *)&g_CdTimeoutDeadline)->name,
-                            b60[D_8009905D],
+                            b60[g_CdLastCommand],
                             bE0[b318[0]],
                             bE0[b318[1]]);
             CD_flush();

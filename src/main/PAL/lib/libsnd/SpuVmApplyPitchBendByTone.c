@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern volatile u_char D_801E42F8;
+extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
 extern short g_SndCurrentSeqSep asm("D_801E4BE6");
 
 void SpuVmVSetUp(long arg0, long arg1) asm("func_80073314");
@@ -33,7 +33,7 @@ long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) {
     SpuVmVSetUp(call_x, call_y);
     i = 0;
     sum = 0;
-    bound = D_801E42F8;
+    bound = g_SndVoiceCount;
     __asm__ volatile("");
     tmp = voice;
     g_SndCurrentSeqSep = tmp;
@@ -45,7 +45,7 @@ long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) {
             tmp = i + 1;
             i = tmp;
             __asm__("" : "=r"(i) : "0"(i));
-        } while ((short)tmp < (bound = D_801E42F8));
+        } while ((short)tmp < (bound = g_SndVoiceCount));
     }
 
     return sum;

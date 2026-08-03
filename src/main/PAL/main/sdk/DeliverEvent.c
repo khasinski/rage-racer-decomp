@@ -23,7 +23,7 @@ long CdStatus(void) {
 
 extern CdlLOC g_CdLastPos asm("D_80099058");
 extern u_char g_CdModeByte asm("D_8009905C");
-extern u_char D_8009905D;
+extern u_char g_CdLastCommand asm("D_8009905D");
 
 /* CdMode: returns the last CD mode byte. */
 u_char CdMode(void) asm("func_8006A3F8");
@@ -34,7 +34,7 @@ u_char CdMode(void) {
 /* CdLastCom: returns the last CD command byte issued. */
 u_char CdLastCom(void) asm("func_8006A408");
 u_char CdLastCom(void) {
-    return D_8009905D;
+    return g_CdLastCommand;
 }
 
 /* CdLastPos: returns the last reported disc position. */

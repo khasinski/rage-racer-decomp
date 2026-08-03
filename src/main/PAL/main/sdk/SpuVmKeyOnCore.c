@@ -9,7 +9,7 @@ extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
-extern u_char D_801E42F8;
+extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern volatile u_char *g_SndSpuRegs asm("D_8009A588");
 
 void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_short right) asm("func_80074818");
@@ -44,7 +44,7 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
     voiceIndex = rawVoice & 0xFF;
     index = (((voiceIndex << 1) + voiceIndex) << 2) + voiceIndex;
     index <<= 2;
-    count = D_801E42F8;
+    count = g_SndVoiceCount;
     i = 0;
     *(u_short *)&g_SndVoiceStatePitch[index] = 10;
 
@@ -55,7 +55,7 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
             index <<= 2;
             g_SndVoiceStatePitch[index + 0x17] &= 1;
             i++;
-            voiceIndex = D_801E42F8;
+            voiceIndex = g_SndVoiceCount;
         } while ((u_short)i < voiceIndex);
     }
 

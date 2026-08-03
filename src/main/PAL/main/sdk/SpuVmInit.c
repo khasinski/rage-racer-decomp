@@ -16,7 +16,7 @@ extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char g_SndVabStatus[] asm("D_801E4CFC");
 
-extern volatile u_char D_801E42F8;
+extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
 extern volatile u_short g_SndCurrentVoice asm("D_801E4BEA");
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
@@ -91,11 +91,11 @@ void SpuVmInit(long arg0) {
 
     n = arg0 & 0xff;
     if (n >= 24) {
-        D_801E42F8 = 24;
+        g_SndVoiceCount = 24;
     } else {
-        D_801E42F8 = n;
+        g_SndVoiceCount = n;
     }
-    if (D_801E42F8 != 0) {
+    if (g_SndVoiceCount != 0) {
             i = 0;
             ff = 0xFF;
             one = 1;
@@ -173,7 +173,7 @@ void SpuVmInit(long arg0) {
                 D_801F2A0C = highBits;
                 D_8009E670 = bits;
                 bits = D_8009E674;
-                cond = D_801E42F8;
+                cond = g_SndVoiceCount;
                 D_8009E674 = bits & ~highBits;
             } while ((u_short)i < cond);
     }

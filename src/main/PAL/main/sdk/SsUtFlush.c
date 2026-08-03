@@ -24,7 +24,7 @@ extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
 extern volatile u_short g_SndReverbOnLow asm("D_8009E680");
 extern volatile u_short g_SndReverbOnHigh asm("D_8009E684");
-extern u_char D_801E42F8;
+extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern volatile u_char g_SndReservedVoiceCount asm("D_801E4D88");
 
 void SpuVmAutoVolTick(long voice) asm("func_80074ECC");
@@ -58,7 +58,7 @@ void SsUtFlush(void) {
 
         i = 0;
         historyWork = g_SndVoiceSilenceIndex;
-        count = D_801E42F8;
+        count = g_SndVoiceCount;
         historyBase = g_SndVoiceSilenceHistory;
         historyWork = (historyWork + 1) & 0xF;
         g_SndVoiceSilenceIndex = historyWork;
@@ -96,7 +96,7 @@ void SsUtFlush(void) {
         {
             long activeVoices;
 
-            activeVoices = D_801E42F8;
+            activeVoices = g_SndVoiceCount;
         if (activeVoices > 0) {
             i = 0;
             oneSaved = 1;
@@ -109,7 +109,7 @@ for (;;) {
                 }
                 g_SndVoiceStateStatus[voiceOffset] = 0;
             }
-            activeVoices = D_801E42F8;
+            activeVoices = g_SndVoiceCount;
             i++;
             if (i < activeVoices) {
                 voiceOffset += 0x34;

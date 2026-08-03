@@ -10,7 +10,7 @@ extern long g_CdReadyCallback asm("D_80099040");
 extern long g_CdStatusByte asm("D_8009904C");
 extern long g_CdErrorByte asm("D_80099050");
 extern u_char g_CdModeByte asm("D_8009905C");
-extern u_char D_8009905D;
+extern u_char g_CdLastCommand asm("D_8009905D");
 extern volatile u_long *g_ComDelayReg asm("D_80099310");
 extern CdRegisterMap *volatile g_CdSpuRegs asm("D_80099314");
 extern u_char D_80013904[];
@@ -105,7 +105,7 @@ long func_8006BD14(void) {
     func_80063C38(D_80013904);
     DebugPrintf(D_80013910, g_CdDebugInfo);
 
-    D_8009905D = 0;
+    g_CdLastCommand = 0;
     g_CdModeByte = 0;
     g_CdReadyCallback = 0;
     g_CdSyncCallback = 0;

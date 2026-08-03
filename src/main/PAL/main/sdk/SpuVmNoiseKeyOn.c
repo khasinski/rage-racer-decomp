@@ -8,7 +8,7 @@ extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_char D_801E42F8;
+extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern short g_SndMonoMode asm("D_801E3FB0");
 extern volatile u_short *g_SndSpuRegs asm("D_8009A588");
 extern volatile u_short D_801F2A08;
@@ -92,7 +92,7 @@ void SpuVmNoiseKeyOn(u_char voice) {
     }
 
     g_SndVoiceState[voice].pitch = 0xA;
-    for (current_voice = 0; current_voice < D_801E42F8; current_voice++) {
+    for (current_voice = 0; current_voice < g_SndVoiceCount; current_voice++) {
         g_SndVoiceState[current_voice].active &= 1;
     }
     g_SndVoiceState[voice].active = 2;

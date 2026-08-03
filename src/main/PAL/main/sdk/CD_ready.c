@@ -10,7 +10,7 @@ extern char *g_CdCommandNames[] asm("D_80099060");
 extern char *g_CdIntrNames[] asm("D_800990E0");
 extern CdCallback g_CdSyncCallback asm("D_8009903C");
 extern CdCallback g_CdReadyCallback asm("D_80099040");
-extern u_char D_8009905D;
+extern u_char g_CdLastCommand asm("D_8009905D");
 extern volatile u_char *g_CdReg0 asm("D_80099300");
 extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
 extern u_char g_CdSyncResult[] asm("D_8009BAF0");
@@ -60,7 +60,7 @@ long CD_ready(long mode, u_char *result) {
             g_CdTimeoutCounter++ > 0x3C0000) {
             func_80063C38(D_80013814);
             DebugPrintf(D_80013824, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
-                          g_CdCommandNames[D_8009905D],
+                          g_CdCommandNames[g_CdLastCommand],
                           g_CdIntrNames[g_CdSyncStatus.sync],
                           g_CdIntrNames[g_CdSyncStatus.ready]);
             CD_flush();

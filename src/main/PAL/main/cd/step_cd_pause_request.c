@@ -11,7 +11,7 @@ extern s32 g_CdCommandPending asm("D_8007F604");
 extern s32 g_CdTrackStep asm("D_8007F608");
 extern s32 g_CdCommandStep asm("D_8007F60C");
 extern u8 g_CdTrackElapsedLoc[] asm("D_8009AFD0");
-extern u8 D_8009B168;
+extern u8 g_CdModeParam asm("D_8009B168");
 extern u8 g_CdLocResult asm("D_8009B16C");
 extern u8 g_CdLocMinute asm("D_8009B16E");
 extern u8 g_CdLocSecond asm("D_8009B16F");
@@ -145,7 +145,7 @@ void InitCdAudio(void) {
 
     SsSetSpuInputAttr_Link(0, 0, 1);
     SsSetSerialVol_Link(0, 0x7FFF, 0x7FFF);
-    status = &D_8009B168;
+    status = &g_CdModeParam;
     *status = 7;
     CdControl(0xE, status, 0);
     BuildCdTrackTable();

@@ -10,7 +10,7 @@ extern CdCallback g_CdReadyCallback asm("D_80099040");
 extern long g_CdDebugLevel asm("D_80099048");
 extern u_char g_CdLastPos[4] asm("D_80099058");
 extern u_char g_CdModeByte asm("D_8009905C");
-extern u_char D_8009905D;
+extern u_char g_CdLastCommand asm("D_8009905D");
 extern char *g_CdCommandNames[] asm("D_80099060");
 extern char *g_CdIntrNames[] asm("D_800990E0");
 extern long g_CdCommandClearsReady[] asm("D_80099180");
@@ -47,7 +47,7 @@ static inline long getAlarm(void) {
     if (g_CdTimeoutDeadline.deadline < VSync(-1) ||
         g_CdTimeoutDeadline.count++ > 0x3C0000) {
         func_80063C38(D_80013814);
-        DebugPrintf(D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[D_8009905D],
+        DebugPrintf(D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[g_CdLastCommand],
                       g_CdIntrNames[g_CdSyncStatus.sync], g_CdIntrNames[g_CdSyncStatus.ready]);
         CD_flush();
         return -1;
@@ -93,7 +93,7 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
         *g_CdReg2 = params[i];
     }
 
-    D_8009905D = command;
+    g_CdLastCommand = command;
     *g_CdReg1 = command;
 
     if (async != 0) {
