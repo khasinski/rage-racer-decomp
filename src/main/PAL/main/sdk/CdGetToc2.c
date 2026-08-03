@@ -20,6 +20,7 @@ void CdReadCallback(void *arg0) asm("func_8002785C");
 
 long CdGetToc2(long arg0, u_char *arg1) asm("func_8006A0AC");
 long CdGetToc2(long arg0, u_char *arg1) {
+    u_char *fmt;
     u_char command[8];
     u_char response[8];
     u_char *toc = arg1;
@@ -98,7 +99,6 @@ long CdGetToc2(long arg0, u_char *arg1) {
     if (g_CdDebugLevel >= 2) {
         if ((long)ptr >= 0) {
             u_char *entry;
-            register u_char *fmt asm("$4");
             u_long first;
             u_long second;
 
