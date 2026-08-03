@@ -132,23 +132,20 @@ void UnrelocateModelBank(s32 *base, s32 offset) {
 void SelectModelBank(s32 index) asm("func_80017A10");
 void SelectModelBank(s32 index) {
     s32 *entry;
-    register s32 ptr asm("$2");
+    s32 ptr;
     s32 value;
 
     ptr = (s32)g_ModelBanks;
     entry = (s32 *)((index << 2) + ptr);
-    ptr = *entry;
     value = *(volatile s32 *)entry;
-    ptr = *(s32 *)(ptr + 4);
     value = *(s32 *)value;
-    *(s32 *)0x1F800054 = ptr;
     ptr = *entry;
-    ptr = *(s32 *)(ptr + 8);
-    *(s32 *)0x1F800058 = ptr;
+    *(s32 *)0x1F800054 = *(s32 *)(ptr + 4);
+    ptr = *entry;
+    *(s32 *)0x1F800058 = *(s32 *)(ptr + 8);
     ptr = *entry;
     g_ModelBankCount = value;
-    ptr += 0xC;
-    *(s32 *)0x1F800050 = ptr;
+    *(s32 *)0x1F800050 = ptr + 0xC;
 }
 
 void RegisterCourseModels(s32 *base) asm("func_80017A6C");
