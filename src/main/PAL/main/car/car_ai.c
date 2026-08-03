@@ -83,7 +83,7 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
     case 5:
         car->field_92 = value + amplitude;
         car->field_20 += car->field_92;
-        car->field_92 = value + ((s32)(amplitude + ((u32)amplitude >> 31)) >> 1);
+        car->field_92 = value + amplitude / 2;
         car->field_28 += car->field_92 / 2;
         break;
 

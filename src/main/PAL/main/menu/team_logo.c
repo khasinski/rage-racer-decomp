@@ -77,7 +77,7 @@ void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
     arg1 &= 1;
     index = 1;
     clutDst0 = g_TeamLogoSwatches;
-    row0 = (s32)(arg0 + ((u32)arg0 >> 31)) >> 1;
+    row0 = arg0 / 2;
     arg0 = TeamLogoParity(arg0);
     src = TeamLogoPaletteAddress(g_TeamLogoSampleData, row0, arg0) + 1;
 
