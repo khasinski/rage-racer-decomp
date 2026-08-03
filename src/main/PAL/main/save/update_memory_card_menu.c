@@ -132,8 +132,9 @@ void UpdateMemoryCardMenu(void) {
         g_SceneTimer = nx;
     }
     }
+    switch (0) { default:
     if (!(g_McActionBusy == 0)) {
-    if (D_80082FC0 == 0) goto L_sw2;
+    if (D_80082FC0 == 0) break;
 
     }
     {
@@ -160,6 +161,7 @@ void UpdateMemoryCardMenu(void) {
         g_McNoCardTicks = 0;
         g_McMenuSubState = c;
         g_McMenuSelection = sd;
+    }
     }
 
 L_sw2:
