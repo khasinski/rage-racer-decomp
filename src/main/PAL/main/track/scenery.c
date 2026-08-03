@@ -31,7 +31,7 @@ void DrawStaticScenery(s32 arg0) {
     u32 *wordPtr;
     s32 bit;
     s32 visible;
-    s32 drawArg;
+    s16 drawArg;
     s32 frameValue;
 
     state = g_StaticSceneryPos;
@@ -241,7 +241,7 @@ void SeedFlybyScenery(void) {
     s32 count;
     s16 value;
     s32 index;
-    register s32 cmp asm("v0");
+    s32 cmp;
     s32 scene0;
     register s32 scene1 asm("v0");
     u8 *src;
