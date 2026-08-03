@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/render.h"
 #include "psyq/gte.h"
 #include "game/menu.h"
@@ -219,9 +220,8 @@ void func_8005131C(void) {
     D_1F800004 -= 120;
 }
 
-typedef struct Vec16 { s32 a, b, c, d; } Vec16;
 
-extern Vec16 g_MenuViewScale asm("D_80082D6C");
+extern Vec4 g_MenuViewScale asm("D_80082D6C");
 extern s32 g_CourseSwapDelay asm("D_8009B354");
 extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
 extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
@@ -340,7 +340,7 @@ void DrawMenuCourseView(void) {
 
 typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 
-extern Vec16 D_80011AC4;
+extern Vec4 D_80011AC4;
 extern s32 g_TeamNameCharModel asm("D_8009B37C");
 extern s32 g_CourseModelCount asm("D_801E40E4");
 s32 func_80068568(s32 arg0);
@@ -351,7 +351,7 @@ void DrawTeamNameCharModel(void) {
     Matrix mtxA;
     Matrix mtxB;
     Poly poly;
-    Vec16 vcopy;
+    Vec4 vcopy;
     s32 s1;
     s32 s0;
     s32 s2;

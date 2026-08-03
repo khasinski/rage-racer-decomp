@@ -343,7 +343,7 @@ extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_PlayerMoney asm("D_8019C908");
 
 extern s32 D_80082568;
-extern s32 g_MenuViewScale asm("D_80082D6C");
+extern Vec4 g_MenuViewScale asm("D_80082D6C");
 
 extern void *D_8019C764;
 extern void *D_801E40B4;
