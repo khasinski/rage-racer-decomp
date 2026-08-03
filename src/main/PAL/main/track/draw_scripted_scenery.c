@@ -43,10 +43,6 @@ void DrawScriptedScenery(s32 arg0) {
     }
 }
 
-typedef struct Blk8 {
-    s16 h[4];
-} Blk8;
-
 /*
  * Frame counters and rate signs of the two keyframe tracks. func_8003F9C4
  * compares posFrame against g_PathSceneryPosSpan and rotFrame against
@@ -75,8 +71,11 @@ extern u8 *g_PathSceneryRotData asm("D_801E4174");
 extern u8 *g_PathSceneryPosKeys asm("D_801E42DC");
 extern u8 *g_PathSceneryRotKeys asm("D_801E42E8");
 extern PathSceneryClock g_PathSceneryClock asm("D_801E4DB0");
+/* The three words are the scenery position: g_PathSceneryY and
+ * g_PathSceneryZ alias +4 and +8. It stays a Block16 because respelling
+ * w[0] as a named member of a Vec4 does not match. */
 extern Block16 g_PathSceneryX asm("D_801E4DB8");
-extern Blk8 g_PathSceneryRot asm("D_801E4DC8");
+extern SVec g_PathSceneryRot asm("D_801E4DC8");
 /* The two tracks' cursors, interleaved pos/rot at 0x801E4DE0: phase, span, rate
  * and index are each a two-halfword pair with position first. Left as eight
  * scalars because nothing in the image indexes them by track. Phase is the
@@ -170,7 +169,7 @@ void InitPathScenery(void) {
 
         copySrc = g_PathSceneryRotKeys;
         entryA = g_PathSceneryPosKeys;
-        g_PathSceneryRot = *(Blk8 *)copySrc;
+        g_PathSceneryRot = *(SVec *)copySrc;
         g_PathSceneryPosPhase = 0;
         g_PathSceneryRotPhase = 0;
         g_PathSceneryPosSpan = *(u16 *)(entryA + 0x10);
@@ -413,7 +412,7 @@ void func_8003F9C4(void) {
     if (g_PathSceneryRotCursor.phase <= (s16)g_PathSceneryRotCursor.rate) {
         if (g_PathSceneryRotCursor.phase <=
             (s16)g_PathSceneryRotCursor.rate / 2) {
-            g_PathSceneryRot.h[0] =
+            g_PathSceneryRot.vx =
                 *(u16 *)(g_PathSceneryRotKeys +
                          g_PathSceneryRotCursor.index * 12 + 0xC) -
                 g_PathSceneryRotHalfDelta[0] *
@@ -438,7 +437,7 @@ void func_8003F9C4(void) {
                     4096 -
                 g_PathSceneryRotHalfDelta[2];
         } else {
-            g_PathSceneryRot.h[0] =
+            g_PathSceneryRot.vx =
                 *(u16 *)(g_PathSceneryRotKeys +
                          g_PathSceneryRotCursor.index * 12 + 0x0) +
                 g_PathSceneryRotHalfDelta[0] *
@@ -468,7 +467,7 @@ void func_8003F9C4(void) {
         }
     } else {
         g_PathSceneryRot =
-            *(Blk8 *)(g_PathSceneryRotKeys +
+            *(SVec *)(g_PathSceneryRotKeys +
                       g_PathSceneryRotCursor.index * 12 + 0xC);
     }
 
