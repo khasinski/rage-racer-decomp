@@ -576,7 +576,6 @@ L_sw2:
         g_McActionState = 0;
         break;
 
-    L_copyreset:
         {
             s32 cm1 = g_McMenuRowCount;
             g_McMenuPage = 0;
@@ -596,7 +595,18 @@ L_sw2:
     break;
 
     default:
-    goto L_copyreset;
+        {
+            s32 cm1 = g_McMenuRowCount;
+            g_McMenuPage = 0;
+            g_McSlotCursor = 0;
+            g_McActionState = 0;
+            g_McActionBusy = 0;
+            g_McActionResult = 0;
+            D_80082FAC = 0;
+            g_McActionTimer = 0;
+            cm1 = cm1 - 1;
+            g_McMenuRowCursor = cm1;
+        }
     }
     switch (g_McMenuSelection) {
     case 3:
@@ -766,7 +776,9 @@ L_sw2:
     g_McMenuSubState = 1;
     g_McMenuPhase = 0xF;
     g_McActionState = 0;
-    goto L_b1678;
+    g_McActionResult = 0;
+    D_80082FAC = 0;
+    break;
     case -1:
     g_McMenuSubState = 0xA;
     g_McMenuPhase = 3;
@@ -1028,7 +1040,6 @@ L_b1420:
     if (!(g_McMenuState == -2)) {
     g_McActionState = 0;
     g_McActionBusy = 0;
-L_b1678:
     g_McActionResult = 0;
     D_80082FAC = 0;
     break;
