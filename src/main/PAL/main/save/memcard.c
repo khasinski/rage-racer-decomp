@@ -10,12 +10,12 @@ extern s32 g_McStatusResult asm("D_8019C8F0");
 extern s32 g_McPollStatus asm("D_801E825C");
 extern char g_FmtCardDevice[] asm("D_800127CC");
 
-void func_8005F2AC(void);
+void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf() asm("func_800632F0");
-void func_8005F304(void);
-s32 func_8005F35C(void);
-s32 func_8005F55C(void);
+void ClearMemoryCardSwEvents(void) asm("func_8005F304");
+s32 PollMemoryCardHwEvent(void) asm("func_8005F35C");
+s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
 void _card_info(s32 arg0) asm("func_80063DAC");
 void _card_load(s32 arg0) asm("func_80063DBC");
 s32 _card_clear(s32 arg0) asm("func_80063DEC");
@@ -38,7 +38,7 @@ s32 PollMemoryCardStatus(s32 arg0, s32 arg1) {
         break;
 
     case 1:
-        status = func_8005F35C();
+        status = PollMemoryCardHwEvent();
         if (status == 0) {
             break;
         }
@@ -80,9 +80,9 @@ case1_ready:
 
         }
         g_McPollStatus = two;
-        func_8005F304();
+        ClearMemoryCardSwEvents();
         _card_clear(handle);
-        func_8005F55C();
+        WaitMemoryCardSwEvent();
         g_McStatusState = two;
         g_McLastCardStatus = 0;
         break;
@@ -97,14 +97,14 @@ fail_case1:
         break;
 
     case 2:
-        func_8005F2AC();
+        ClearMemoryCardHwEvents();
         _card_load(handle);
         g_McStatusState = 3;
         g_McPollTicks = 0;
         break;
 
     case 3:
-        status = func_8005F35C();
+        status = PollMemoryCardHwEvent();
         if (status == 0) {
             break;
         }
@@ -169,9 +169,9 @@ s32 FormatMemoryCard(s32 arg0, s32 arg1) {
     s32 status;
 
     LibcSprintf(device, g_FmtCardDevice, arg0, arg1);
-    func_8005F304();
+    ClearMemoryCardSwEvents();
     BiosFormatDevice(device);
-    status = func_8005F55C();
+    status = WaitMemoryCardSwEvent();
 
     if (status != 1) {
         if (status == 3) {
@@ -860,7 +860,7 @@ extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
 extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
 extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
 
-void func_80013F80(s32 a, s32 b);
+void LoadPadButtonMapping(s32 a, s32 b) asm("func_80013F80");
 void ApplyAudioSettings(void) asm("func_80021224");
 
 /*
@@ -1150,7 +1150,7 @@ s32 LoadSaveStateBlock(u8 *arg0) {
     memcpy(g_GrandPrixCourseProgress, base + 0xFC8, 8);
     memcpy(g_ExtraGrandPrixCourseProgress, base + 0xFD0, 8);
 
-    func_80013F80(g_PadMappingIndex, g_NegconMappingIndex);
+    LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
     ApplyAudioSettings();
     LoadImage((Rect *)g_TeamLogoRect, g_TeamLogoCanvas);
     LoadImage((Rect *)g_TeamLogoClutRect, g_TeamLogoClut);
@@ -1539,15 +1539,14 @@ void *FormatSaveElapsedTime(void *arg0, u32 arg1) {
 
 extern u8 g_McMessageText[] asm("D_800128FC");
 
-void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
+void DrawText8x8(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
 
 void DrawMemoryCardMessageLine(s32 arg0, s32 arg1) {
-    func_80016754(0x28, 0xB8, &g_McMessageText[arg1 * 30], 0x78CC);
+    DrawText8x8(0x28, 0xB8, &g_McMessageText[arg1 * 30], 0x78CC);
 }
 
 extern u8 g_McHelpText[] asm("D_80012ADC");
 
-void func_80016754(s32, s32, void *, s32);
 
 void DrawMemoryCardHelpPrompt(s32 arg0) {
     s32 offset;
@@ -1562,13 +1561,13 @@ void DrawMemoryCardHelpPrompt(s32 arg0) {
     __asm__("" : "=r"(x), "=r"(y) : "0"(x), "1"(y));
     offset <<= 2;
     base = g_McHelpText;
-    func_80016754(x, y, base + offset, 0x78CC);
+    DrawText8x8(x, y, base + offset, 0x78CC);
 
     x = 0x50;
     y = 0x40;
     __asm__("" : "=r"(x), "=r"(y) : "0"(x), "1"(y));
     base += 0x1E;
-    func_80016754(x, y, base + offset, 0x78CC);
+    DrawText8x8(x, y, base + offset, 0x78CC);
 }
 
 /* ---- was DrawMemoryCardSaveRows.c ---- */
@@ -1722,10 +1721,10 @@ u16 PollMenuBackInput(void) {
     return *state & 0x90;
 }
 
-void func_80023A60(s32 arg0, s32 arg1);
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80023A60");
 
 void DrawMenuFadeOverlay(s32 arg0) {
-    func_80023A60(arg0, 0x40);
+    DrawFullscreenFadeTile(arg0, 0x40);
 }
 
 extern s32 g_McFadeStep asm("D_8009B9A0");

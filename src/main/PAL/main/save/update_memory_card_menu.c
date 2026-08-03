@@ -45,9 +45,9 @@ extern s32 D_80082FC8;
 
 void func_8005F65C(void *buf);
 s32 func_80060C3C(s32 arg0, void *buf);
-s32 func_8005ECE0(s32 a, s32 b);
-void func_80027A84(s32 a0, s32 a1, s32 a2, s32 a3);
-void func_80027D84(s32 a0);
+s32 PollMemoryCardStatus(s32 a, s32 b) asm("func_8005ECE0");
+void DrawMemoryCardScreen(s32 a0, s32 a1, s32 a2, s32 a3) asm("func_80027A84");
+void DrawMemoryCardMessage(s32 a0) asm("func_80027D84");
 void func_80060DF0(s32 mask, void *buf);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
@@ -131,7 +131,7 @@ void UpdateMemoryCardMenu(void) {
 
     }
     {
-        s32 st = func_8005ECE0(0, 0);
+        s32 st = PollMemoryCardStatus(0, 0);
         s32 c;
         s32 sd;
         g_McCardStatus = st;
@@ -411,7 +411,7 @@ L_sw2:
 
     case 0x13: {
         s32 t;
-        if (func_8005ECE0(0, 0) != 1) break;
+        if (PollMemoryCardStatus(0, 0) != 1) break;
         t = g_McSettleTicks + 1;
         g_McSettleTicks = t;
         if (t < 4) break;
@@ -527,7 +527,7 @@ L_sw2:
 
     case 0x25: {
         s32 t;
-        if (func_8005ECE0(0, 0) != 1) break;
+        if (PollMemoryCardStatus(0, 0) != 1) break;
         t = g_McSettleTicks + 1;
         g_McSettleTicks = t;
         if (t < 4) break;
@@ -1070,9 +1070,9 @@ L_b1280:
     }
     }
     if (D_80082FC8 != 0) {
-        func_80027A84(g_McMenuPage, g_McFromLoadMenu, g_McMenuRowCursor, g_McSlotCursor);
+        DrawMemoryCardScreen(g_McMenuPage, g_McFromLoadMenu, g_McMenuRowCursor, g_McSlotCursor);
         if (g_McMenuPhase != 0) {
-            func_80027D84(g_McMenuPhase - 1);
+            DrawMemoryCardMessage(g_McMenuPhase - 1);
         }
         func_80060DF0(g_McSlotUsedMask, &g_McSaveHeaders);
     }
