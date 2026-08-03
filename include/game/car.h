@@ -99,7 +99,8 @@ typedef struct GameCarRuntime {
     s32 field_DC;
     s32 field_E0;
     s32 field_E4;
-    s32 field_E8;
+    s16 field_E8;
+    s16 field_EA;
     s32 field_EC;
     s16 field_F0;
     s16 field_F2;
@@ -133,17 +134,22 @@ typedef struct GameCarRuntime {
     s32 field_134;
     s16 field_138;
     s16 field_13A;
-    s16 field_13C;
-    s16 field_13E;
+    s32 field_13C;
     u8 pad140[0xC];
     u8 field_14C;
     u8 field_14D;
     u8 field_14E;
     u8 field_14F;
-    u8 pad150[0xC];
+    s32 field_150;
+    s32 field_154;
+    u8 pad158[4];
     s16 field_15C;
     s16 field_15E;
-    u8 pad160[0x3C];
+    s16 field_160;
+    s16 field_162;
+    s32 field_164;
+    s16 field_168;
+    u8 pad16A[0x32];
 } GameCarRuntime;
 
 /* Per-car runtime state, player in slot 0. Individual slots and single fields
