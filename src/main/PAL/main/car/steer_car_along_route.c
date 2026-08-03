@@ -807,13 +807,6 @@ extern s32 g_CameraCarSpeed asm("D_801E3EB8");
  * nowhere in the image. */
 extern s32 D_801E3F60;
 
-typedef struct CopyBlock16 {
-    u32 word0;
-    u32 word1;
-    u32 word2;
-    u32 word3;
-} CopyBlock16;
-
 void SeedFinishCamera(void *arg0) asm("func_8003CA14");
 void SeedFinishCamera(void *arg0) {
     register u32 word0 asm("$2");

@@ -3,12 +3,6 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 
-typedef struct LVec {
-    s32 x;
-    s32 y;
-    s32 z;
-} LVec;
-
 typedef struct KF {
     s16 x;
     s16 y;

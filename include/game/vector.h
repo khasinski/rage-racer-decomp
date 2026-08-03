@@ -19,6 +19,13 @@ typedef struct SVec {
     s16 pad;
 } SVec;
 
+/* Word position vector without a fourth word. */
+typedef struct LVec {
+    s32 x;
+    s32 y;
+    s32 z;
+} LVec;
+
 /* Four consecutive words moved as a unit by the camera code. */
 typedef struct Block16 {
     s32 w0;
@@ -26,5 +33,13 @@ typedef struct Block16 {
     s32 w2;
     s32 w3;
 } Block16;
+
+/* Sixteen bytes copied as a unit. */
+typedef struct CopyBlock16 {
+    u32 word0;
+    u32 word1;
+    u32 word2;
+    u32 word3;
+} CopyBlock16;
 
 #endif

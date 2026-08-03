@@ -3,12 +3,6 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 
-typedef struct LVec {
-    s32 x;
-    s32 y;
-    s32 z;
-} LVec;
-
 typedef struct Car {
     u16 x;         /* 0x00 */
     u16 pad2;      /* 0x02 */
