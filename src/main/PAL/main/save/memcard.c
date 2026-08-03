@@ -505,7 +505,7 @@ extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     u8 *arg0 = (u8 *)row;
     s32 i;
-    register u32 checksum asm("$3");
+    u32 checksum;
     u16 *scan;
 
     arg0[0] = g_TeamNameLength;
@@ -524,7 +524,8 @@ void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
         i++;
     } while ((u32)i < 0x3E);
 
-    *(u32 *)(arg0 + 0x7C) = ~checksum;
+    checksum = ~checksum;
+    *(u32 *)(arg0 + 0x7C) = checksum;
 }
 
 /* ---- was StoreSaveStateBlock.c ---- */
