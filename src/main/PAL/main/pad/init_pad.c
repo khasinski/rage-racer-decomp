@@ -64,10 +64,10 @@ void ApplyPadButtonMapping(void) {
 typedef struct PadState {
     /* 0x00 */ u8  unk0;
     /* 0x01 */ u8  unk1;
-    /* 0x02 */ u16 unk2;
+    /* 0x02 */ u16 held;
     /* 0x04 */ u16 unk4;
     /* 0x06 */ s16 unk6;
-    /* 0x08 */ s16 unk8;
+    /* 0x08 */ s16 pressed;
     /* 0x0A */ s16 unkA;
     /* 0x0C */ s16 unkC;
     /* 0x0E */ s16 unkE;
@@ -77,7 +77,7 @@ typedef struct PadState {
     /* 0x16 */ s16 unk16;
 } PadState;
 
-extern PadState D_801E4368;
+extern PadState g_PadState asm("D_801E4368");
 extern u8 g_PadType asm("D_801E4369");
 extern u8 g_PadBufferType asm("D_801E403D");
 extern u8 g_PadBufferButtonsHigh asm("D_801E403E");
@@ -85,8 +85,8 @@ extern u8 g_PadBufferButtonsLow asm("D_801E403F");
 extern s32 D_801E4D14;
 extern s32 g_PadErrorState asm("D_801E79C8");
 extern s32 D_8019CB10;
-extern u16 D_8007C138;
-extern u8 D_8009AEEC[];
+extern u16 g_PadPrevHeld asm("D_8007C138");
+extern u8 g_PadRepeatTimer[] asm("D_8009AEEC");
 extern u16 D_8007C128[][2];
 extern s16 g_NegconSteerPlay asm("D_8019CAD0");
 extern s16 g_NegconSteerRange[] asm("D_8007C020");
@@ -112,7 +112,7 @@ void UpdatePadState(void) {
     PadState *pad;
 
     raw = g_PadBuffers;
-    pad = &D_801E4368;
+    pad = &g_PadState;
 
     pad->unk0 = raw[0];
     g_PadType = g_PadBufferType;
@@ -144,19 +144,19 @@ void UpdatePadState(void) {
         g_PadErrorState = 0;
     }
     if (raw[1] == 0x41) {
-        pad->unk4 = pad->unk2;
-        pad->unk2 = ~((raw[2] << 8) | raw[3]);
-        pad->unk6 = pad->unk2 & ~pad->unk4;
-        t = (pad->unk2 >> 13) & 1;
+        pad->unk4 = pad->held;
+        pad->held = ~((raw[2] << 8) | raw[3]);
+        pad->unk6 = pad->held & ~pad->unk4;
+        t = (pad->held >> 13) & 1;
         n = t;
         c = g_NegconSteerRange[g_NegconMaxTwist];
-        pad->unkA = ((pad->unk2 & 0x8000) ? ((n - 1) * c) : (n * c)) + 0x80;
-        pad->unkC = (pad->unk2 & 0x40) ? 0x6A : 0;
-        pad->unkE = (pad->unk2 & 0x80) ? 0x6A : 0;
-        pad->unk10 = (pad->unk2 & 0x4) ? 0x6A : 0;
+        pad->unkA = ((pad->held & 0x8000) ? ((n - 1) * c) : (n * c)) + 0x80;
+        pad->unkC = (pad->held & 0x40) ? 0x6A : 0;
+        pad->unkE = (pad->held & 0x80) ? 0x6A : 0;
+        pad->unk10 = (pad->held & 0x4) ? 0x6A : 0;
     } else if (raw[1] == 0x23) {
-        pad->unk4 = pad->unk2;
-        pad->unk2 = ~((raw[2] << 8) | raw[3]);
+        pad->unk4 = pad->held;
+        pad->held = ~((raw[2] << 8) | raw[3]);
         pad->unkA = raw[4];
         asm("");
         pad->unkC = raw[5] - g_NegconNeutralI;
@@ -172,45 +172,45 @@ void UpdatePadState(void) {
             pad->unk10 = 0;
         }
         if (pad->unkA >= 0xA3) {
-            pad->unk2 |= 0x2000;
+            pad->held |= 0x2000;
         }
         if (pad->unkA < 0x5E) {
-            pad->unk2 |= 0x8000;
+            pad->held |= 0x8000;
         }
         if (pad->unkC >= 0x36) {
-            pad->unk2 |= 0x40;
+            pad->held |= 0x40;
         }
         if (pad->unkE >= 0x36) {
-            pad->unk2 |= 0x80;
+            pad->held |= 0x80;
         }
         if (pad->unk10 >= 0x36) {
-            pad->unk2 |= 0x4;
+            pad->held |= 0x4;
         }
-        pad->unk6 = pad->unk2 & ~pad->unk4;
+        pad->unk6 = pad->held & ~pad->unk4;
     } else {
         if (g_PadErrorState == 0) {
             g_PadErrorState = 2;
         }
         pad->unk0 = 1;
-        pad->unk2 = 0;
+        pad->held = 0;
         pad->unk6 = 0;
-        pad->unk8 = 0;
+        pad->pressed = 0;
         pad->unkA = 0x80;
         pad->unkC = 0;
         pad->unkE = 0;
         pad->unk10 = 0;
     }
-    pad->unk8 = 0;
-    pad->unk8 = pad->unk2 & ~D_8007C138;
-    if (pad->unk2 != 0 && pad->unk2 == D_8007C138) {
-        if (D_8009AEEC[0] == 0x1E) {
-            pad->unk8 = pad->unk8 | pad->unk2;
+    pad->pressed = 0;
+    pad->pressed = pad->held & ~g_PadPrevHeld;
+    if (pad->held != 0 && pad->held == g_PadPrevHeld) {
+        if (g_PadRepeatTimer[0] == 0x1E) {
+            pad->pressed = pad->pressed | pad->held;
         }
-        D_8009AEEC[0] = (D_8009AEEC[0] < 0x24) ? (D_8009AEEC[0] + 1) : 0x1E;
+        g_PadRepeatTimer[0] = (g_PadRepeatTimer[0] < 0x24) ? (g_PadRepeatTimer[0] + 1) : 0x1E;
     } else {
-        D_8009AEEC[0] = 0;
+        g_PadRepeatTimer[0] = 0;
     }
-    D_8007C138 = pad->unk2;
+    g_PadPrevHeld = pad->held;
     neutral = g_NegconSteerNeutral + 0x80;
     d = pad->unkA - neutral;
     if (d > 0) {

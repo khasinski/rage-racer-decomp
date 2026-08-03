@@ -30,7 +30,7 @@ void func_8005BD84(s32 arg0);
 void SetEffectVolumeSetting(s32 arg0) asm("func_8005BDD4");
 void func_8005BE24(void);
 void func_8005BE58(void);
-extern UnkCopyChunk D_8007BE68[];
+extern UnkCopyChunk g_SaveDefaults[] asm("D_8007BE68");
 extern u8 g_TimeAttackCars asm("D_801E4388");
 extern s16 g_ClassRecords asm("D_8019CB40");
 extern s16 g_ClassClears asm("D_8019CB42");
@@ -174,7 +174,7 @@ void ResetProgressSlot(void *arg0, s32 *arg1) {
 
     i = 0;
     dst = arg0;
-    src = D_8007BE68;
+    src = g_SaveDefaults;
     do {
         *dst = *src;
         dst++;
@@ -215,7 +215,7 @@ void InitSaveDefaults(void) {
 
     i = 0;
     dst = &g_TimeAttackCars;
-    src = &D_8007BE68;
+    src = &g_SaveDefaults;
     do {
         __builtin_memcpy(dst, src, sizeof(UnkCopyChunk));
         dst += sizeof(UnkCopyChunk);

@@ -148,7 +148,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
 
 extern u8 *g_CamRow2 asm("D_8019C9A8");
 extern s32 g_CourseIdx asm("D_801E428C");
-extern u8 D_8007D3AC[][11];
+extern u8 g_CarModelByCourse[][11] asm("D_8007D3AC");
 extern s16 D_8007D380[][2];
 void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
 
@@ -172,7 +172,7 @@ void func_8001DFC0(GameRenderObject *obj) {
     s32 *cam = (s32 *)0x1F800000;
     s16 *lod;
 
-    model = D_8007D3AC[g_CourseIdx][((GameRenderSourcePoint *)obj)->field_AE];
+    model = g_CarModelByCourse[g_CourseIdx][((GameRenderSourcePoint *)obj)->field_AE];
     lod = D_8007D380[model];
     obj->y -= ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
     obj->field_60 -= ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
