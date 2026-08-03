@@ -5,7 +5,7 @@ extern long g_SpuRevWorkAreaAddr asm("D_8009A720");
 extern SpuRevAttrState g_SpuRevAttr asm("D_8009A728");
 extern long g_SpuTransferEvent asm("D_8009A768");
 extern long g_SpuZeroBuf[] asm("D_8009A770");
-extern SpuRxx *g_SpuRegBase asm("D_8009AB7C");
+extern SpuCommonRegs *g_SpuRegBase asm("D_8009AB7C");
 extern long g_SpuTransferByIo asm("D_8009AB94");
 extern long _spu_mem_mode_unitM asm("D_8009ABA0");
 extern volatile long g_SpuTransferCallback asm("D_8009ABB0");
@@ -127,26 +127,26 @@ long SpuSetReverbModeParam(SpuReverbAttr *attr) {
     }
 
     if (mode_changed) {
-        reenable = (g_SpuRegBase->spucnt >> 7) & 1;
+        reenable = (g_SpuRegBase->spuCnt >> 7) & 1;
         if (reenable) {
-            cnt = g_SpuRegBase->spucnt;
+            cnt = g_SpuRegBase->spuCnt;
             cnt &= ~0x80;
-            g_SpuRegBase->spucnt = cnt;
+            g_SpuRegBase->spuCnt = cnt;
         }
     }
 
     if (!mode_changed) {
         if (set_all || (mask & 0x2)) {
-            g_SpuRegBase->rev_vol_left = attr->depth.left;
+            g_SpuRegBase->revVol.left = attr->depth.left;
             g_SpuRevAttr.depth_left = attr->depth.left;
         }
         if (set_all || (mask & 0x4)) {
-            g_SpuRegBase->rev_vol_right = attr->depth.right;
+            g_SpuRegBase->revVol.right = attr->depth.right;
             g_SpuRevAttr.depth_right = attr->depth.right;
         }
     } else {
-        g_SpuRegBase->rev_vol_left = 0;
-        g_SpuRegBase->rev_vol_right = 0;
+        g_SpuRegBase->revVol.left = 0;
+        g_SpuRegBase->revVol.right = 0;
         g_SpuRevAttr.depth_left = 0;
         g_SpuRevAttr.depth_right = 0;
     }
@@ -160,9 +160,9 @@ long SpuSetReverbModeParam(SpuReverbAttr *attr) {
     if (mode_changed) {
         _spu_FsetRXX(0xD1, g_SpuRevWorkAreaAddr, 0);
         if (reenable) {
-            cnt = g_SpuRegBase->spucnt;
+            cnt = g_SpuRegBase->spuCnt;
             cnt |= 0x80;
-            g_SpuRegBase->spucnt = cnt;
+            g_SpuRegBase->spuCnt = cnt;
         }
     }
     return 0;

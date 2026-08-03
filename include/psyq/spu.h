@@ -34,14 +34,6 @@ typedef struct SpuCommonAttr {
     } ext;
 } SpuCommonAttr;
 
-typedef struct SpuRxx {
-    u_char pad[0x184];
-    short rev_vol_left;
-    short rev_vol_right;
-    u_char pad2[0x22];
-    volatile u_short spucnt;
-} SpuRxx;
-
 typedef struct SpuReverbRegAttr {
     u_long flags;
     short dAPF1;
@@ -159,7 +151,7 @@ typedef struct SpuCommonRegs {
     u_short irqAddr;
     u_short transAddr;
     u_short transFifo;
-    u_short spuCnt;
+    volatile u_short spuCnt;
     u_short dataTrans;
     u_short spuStat;
     SpuVolume cdVol;

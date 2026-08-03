@@ -4,7 +4,7 @@
 extern volatile long D_8009A718;
 extern long g_SpuRevReserveWa asm("D_8009A71C");
 extern long g_SpuRevWorkAreaAddr asm("D_8009A720");
-extern SpuRxx *g_SpuRegBase asm("D_8009AB7C");
+extern SpuCommonRegs *g_SpuRegBase asm("D_8009AB7C");
 
 long SpuSetReverb(long on_off) {
     register u_short cnt asm("v1");
@@ -16,22 +16,22 @@ long SpuSetReverb(long on_off) {
         }
     } else {
 
-    cnt = g_SpuRegBase->spucnt;
+    cnt = g_SpuRegBase->spuCnt;
     D_8009A718 = 0;
-    g_SpuRegBase->spucnt = cnt & 0xFF7F;
+    g_SpuRegBase->spuCnt = cnt & 0xFF7F;
     return D_8009A718;
     }
 
     if (g_SpuRevReserveWa != on_off && _SpuIsInAllocateArea_(g_SpuRevWorkAreaAddr) != 0) {
-        cnt = g_SpuRegBase->spucnt;
+        cnt = g_SpuRegBase->spuCnt;
         D_8009A718 = 0;
-        g_SpuRegBase->spucnt = cnt & 0xFF7F;
+        g_SpuRegBase->spuCnt = cnt & 0xFF7F;
         return D_8009A718;
     }
 
-    cnt = g_SpuRegBase->spucnt;
+    cnt = g_SpuRegBase->spuCnt;
     D_8009A718 = on_off;
-    g_SpuRegBase->spucnt = cnt | 0x80;
+    g_SpuRegBase->spuCnt = cnt | 0x80;
 
     return D_8009A718;
 }

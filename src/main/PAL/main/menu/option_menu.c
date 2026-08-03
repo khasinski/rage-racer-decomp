@@ -29,7 +29,7 @@ void DrawOptionRootMenu(void) asm("func_80023BB4");
 void DrawOptionRootMenu(void);
 s32 Random15(void) asm("func_800632B0");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-/* The eleven class icons, tinted by g_ClassRecords[i].grade. */
+/* The eleven class icons, tinted by g_ClassRecords[i].place. */
 void DrawClassRecordGrid(void) asm("func_80024420");
 void DrawClassRecordGrid(void);
 /* One class record: class digit, grade sprite, clear count. */
