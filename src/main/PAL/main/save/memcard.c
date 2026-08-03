@@ -49,12 +49,14 @@ s32 PollMemoryCardStatus(s32 arg0, s32 arg1) {
             if (status == 1) {
                 goto case1_ready;
             }
-            goto fail_neg3_case1;
+            state = -3;
+            goto fail_case1;
         }
         if (!(status == 3)) {
         if (status == 4) {
         } else {
-        goto fail_neg3_case1;
+        state = -3;
+        goto fail_case1;
 
 case1_ready:
         g_McPollStatus = status;
@@ -80,7 +82,6 @@ case1_ready:
         break;
 
         }
-fail_neg3_case1:
         state = -3;
 
 fail_case1:
@@ -108,12 +109,18 @@ fail_case1:
             if (status == 1) {
                 goto case3_ready;
             }
-            goto fail_neg3_case3;
+            state = -3;
+        g_McPollStatus = state;
+        g_McLastCardStatus = 0;
+        break;
         }
         if (!(status == 3)) {
         if (status == 4) {
         } else {
-        goto fail_neg3_case3;
+        state = -3;
+        g_McPollStatus = state;
+        g_McLastCardStatus = 0;
+        break;
 
 case3_ready:
         g_McLastCardStatus = status;
@@ -122,17 +129,17 @@ case3_ready:
         }
         } else {
         state = -1;
-        goto fail_case3;
+        g_McPollStatus = state;
+        g_McLastCardStatus = 0;
+        break;
 
         }
         state = -2;
 
         } else {
-fail_neg3_case3:
         state = -3;
 
         }
-fail_case3:
         g_McPollStatus = state;
         g_McLastCardStatus = 0;
         break;
