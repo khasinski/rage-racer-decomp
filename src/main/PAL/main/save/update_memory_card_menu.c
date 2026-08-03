@@ -642,7 +642,10 @@ L_sw2:
     case 0:
         if ((u32)g_SceneTimer < 0x1F) break;
         wtmp = 1;
-        goto L_b1017;
+        D_8009B700 = 0;
+        D_8009B704 = 0;
+        g_McActionState = wtmp;
+        break;
     case 1:
         g_McActionBusy = 0;
         {
@@ -663,7 +666,6 @@ L_sw2:
         D_8009B700 += 1;
         if (D_8009B700 < 2) break;
         wtmp = 2;
-    L_b1017:
         D_8009B700 = 0;
         D_8009B704 = 0;
         g_McActionState = wtmp;
