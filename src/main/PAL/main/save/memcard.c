@@ -257,13 +257,12 @@ extern s32 g_McHwEventIoe asm("D_8009B538");
 extern s32 g_McHwEventError asm("D_8009B53C");
 extern s32 g_McHwEventTimeout asm("D_8009B540");
 extern s32 g_McHwEventNew asm("D_8009B544");
-void func_800631C0(s32 arg0);
 void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
 void ClearMemoryCardHwEvents(void) {
-    func_800631C0(g_McHwEventIoe);
-    func_800631C0(g_McHwEventError);
-    func_800631C0(g_McHwEventTimeout);
-    func_800631C0(g_McHwEventNew);
+    TestEvent(g_McHwEventIoe);
+    TestEvent(g_McHwEventError);
+    TestEvent(g_McHwEventTimeout);
+    TestEvent(g_McHwEventNew);
 }
 
 extern s32 g_McSwEventIoe asm("D_8009B548");
@@ -272,10 +271,10 @@ extern s32 g_McSwEventTimeout asm("D_8009B550");
 extern s32 g_McSwEventNew asm("D_8009B554");
 void ClearMemoryCardSwEvents(void) asm("func_8005F304");
 void ClearMemoryCardSwEvents(void) {
-    func_800631C0(g_McSwEventIoe);
-    func_800631C0(g_McSwEventError);
-    func_800631C0(g_McSwEventTimeout);
-    func_800631C0(g_McSwEventNew);
+    TestEvent(g_McSwEventIoe);
+    TestEvent(g_McSwEventError);
+    TestEvent(g_McSwEventTimeout);
+    TestEvent(g_McSwEventNew);
 }
 
 extern s32 g_McPollTicks asm("D_8019C864");
@@ -1742,7 +1741,6 @@ extern s32 g_McMenuRowCursor;
 extern s32 g_McFromLoadMenu asm("D_8009B730");
 extern s32 g_McFadeStep;
 extern s32 g_McFadeLevel asm("D_8009B9A4");
-void func_8005EAD0(void);
 void EnterMemoryCardMenu(void) asm("func_800613B8");
 void EnterMemoryCardMenu(void) {
     SetDispMask(0);
@@ -1754,7 +1752,7 @@ void EnterMemoryCardMenu(void) {
     g_McMenuRowCursor = 0;
     g_McMenuSubState = 1;
     g_McFromLoadMenu = 0;
-    func_8005EAD0();
+    StartMemoryCardEvents();
     g_McFadeStep = -8;
     g_McFadeLevel = 0xFF;
     g_SceneId = 0x1A;

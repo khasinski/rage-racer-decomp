@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/audio.h"
 #include "game/asset.h"
 #include "game/state.h"
 #include "game/menu.h"
@@ -12,7 +13,6 @@ extern s32 g_McFromLoadMenu asm("D_8009B730");
 extern s32 g_McFadeStep asm("D_8009B9A0");
 extern s32 g_McFadeLevel asm("D_8009B9A4");
 void UploadImageAsset(s32 arg0) asm("func_8001A3C0");
-void func_8005EAD0(void);
 void EnterMemoryCardMenuFromLoad(void) asm("func_80061458");
 void EnterMemoryCardMenuFromLoad(void) {
     SetDispMask(0);
@@ -26,7 +26,7 @@ void EnterMemoryCardMenuFromLoad(void) {
         g_McMenuPage = 0;
         g_McMenuSubState = 1;
         g_McFromLoadMenu = 1;
-        func_8005EAD0();
+        StartMemoryCardEvents();
         g_McFadeStep = -8;
         g_McFadeLevel = 0xFF;
         g_SceneId = 0x1A;

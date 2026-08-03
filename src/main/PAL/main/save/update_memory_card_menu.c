@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/memcard.h"
 #include "game/state.h"
 #include "game/menu.h"
 #include "psyq/gpu.h"
@@ -43,20 +44,11 @@ extern s32 g_McLastSlot asm("D_80082FC4");
 extern s32 D_80082FC8;
 
 void func_8005F65C(void *buf);
-s32 func_80060724(s32 off, void *buf);
-s32 func_800609E4(s32 off, void *buf);
 s32 func_80060C3C(s32 arg0, void *buf);
-s32 func_8005EF44(s32 a, s32 b);
 s32 func_8005ECE0(s32 a, s32 b);
 void func_80027A84(s32 a0, s32 a1, s32 a2, s32 a3);
 void func_80027D84(s32 a0);
 void func_80060DF0(s32 mask, void *buf);
-void func_800611C8(s32 *value, s32 lo, s32 hi);
-void func_8006124C(s32 *value);
-u16 func_800612CC(void);
-u16 func_8006131C(void);
-void func_8006136C(s32 level);
-void func_8006138C(void);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void UpdateMemoryCardMenu(void) asm("func_80061520");
@@ -100,7 +92,7 @@ void UpdateMemoryCardMenu(void) {
         fadeBusy = 1;
     }
     }
-    func_8006136C(g_McFadeLevel);
+    DrawMenuFadeOverlay(g_McFadeLevel);
 
     switch (0) { default:
     {
@@ -175,7 +167,7 @@ L_sw2:
     g_McActionBusy = 0;
     if ((lpad & 0x90) && !fadeBusy) {
         PlaySoundCue(3);
-        func_8006138C();
+        StartMenuExitFade();
     }
     }
     switch (g_McMenuSelection) {
@@ -218,7 +210,7 @@ L_sw2:
     {
         s32 *p = &g_McMenuRowCursor;
         g_McMenuPhase = 0;
-        func_800611C8(p, 0, g_McMenuRowCount - 1);
+        AdjustMenuSelectionHorizontal(p, 0, g_McMenuRowCount - 1);
         pad = g_PadEdge2;
         if (!((pad & 0x860) == 0)) {
         if (*p < g_McMenuRowCount - 1) {
@@ -237,7 +229,7 @@ L_sw2:
         PlaySoundCue(3);
         }
         g_McActionBusy = 0;
-        func_8006138C();
+        StartMenuExitFade();
     }
     break;
 
@@ -248,7 +240,7 @@ L_sw2:
         s32 a0;
         s32 nv;
         switch (0) { default:
-        func_800611C8(s0, 0, 2);
+        AdjustMenuSelectionHorizontal(s0, 0, 2);
         if (!(g_McSaveMode == 0)) {
         a0 = g_McSlotUsedMask;
         if (!((a0 & 7) == 0)) {
@@ -289,7 +281,7 @@ L_sw2:
         g_McMenuPage = 0;
         break;
     L_b439:
-        if (!((func_8006131C() & 0xFFFF) == 0)) {
+        if (!((PollMenuBackInput() & 0xFFFF) == 0)) {
         g_McMenuPage = 0;
         break;
     L_b448:
@@ -309,7 +301,7 @@ L_sw2:
         }
         }
         }
-        if ((func_8006131C() & 0xFFFF) == 0) break;
+        if ((PollMenuBackInput() & 0xFFFF) == 0) break;
         g_McMenuPage = 0;
         break;
     }
@@ -319,23 +311,23 @@ L_sw2:
         s32 hi = g_McSlotCursor << 1;
         s32 lo = D_80082FAC + 9;
         g_McMenuPhase = hi + lo;
-        func_8006124C(p);
+        SetMenuBinaryChoiceVertical(p);
         if (!(D_80082FAC == 0)) {
-        if (!((func_800612CC() & 0xFFFF) == 0)) {
+        if (!((PollMenuConfirmInput() & 0xFFFF) == 0)) {
         g_McActionState = 0xB;
         break;
         }
         if (D_80082FAC != 0) {
-            if ((func_8006131C() & 0xFFFF) == 0) break;
+            if ((PollMenuBackInput() & 0xFFFF) == 0) break;
             g_McActionState = 0;
             break;
         }
         }
-        if ((func_800612CC() & 0xFFFF) != 0) {
+        if ((PollMenuConfirmInput() & 0xFFFF) != 0) {
             g_McActionState = 0;
             break;
         }
-        if ((func_8006131C() & 0xFFFF) == 0) break;
+        if ((PollMenuBackInput() & 0xFFFF) == 0) break;
         g_McActionState = 0;
         break;
     }
@@ -360,7 +352,7 @@ L_sw2:
         s32 x;
         s32 dp;
         g_McMenuSubState = 5;
-        x = func_80060724(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));
+        x = WriteMemoryCardSaveSlot(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));
         g_McActionResult = x;
         if (!(x == 0)) {
         g_McActionOk = 1;
@@ -456,8 +448,8 @@ L_sw2:
 
     case 0x19:
         g_McMenuPhase = 4;
-        if (!((func_800612CC() & 0xFFFF) != 0)) {
-        if ((func_8006131C() & 0xFFFF) == 0) break;
+        if (!((PollMenuConfirmInput() & 0xFFFF) != 0)) {
+        if ((PollMenuBackInput() & 0xFFFF) == 0) break;
         }
         g_McMenuPage = 0;
         g_McActionState = 0;
@@ -502,7 +494,7 @@ L_sw2:
         s32 a0 = *s0;
         register s32 v1x asm("$3");
         s32 dp;
-        g_McActionResult = func_800609E4(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));
+        g_McActionResult = LoadMemoryCardSaveSlot(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));
         if (!(g_McActionResult == 0)) {
         v1x = *s0;
         g_McActionOk = 1;
@@ -572,8 +564,8 @@ L_sw2:
 
     case 0x28:
         g_McMenuPhase = 0x14;
-        if (!((func_800612CC() & 0xFFFF) != 0)) {
-        if ((func_8006131C() & 0xFFFF) == 0) break;
+        if (!((PollMenuConfirmInput() & 0xFFFF) != 0)) {
+        if ((PollMenuBackInput() & 0xFFFF) == 0) break;
         }
         g_McMenuPage = 0;
         g_McActionState = 0;
@@ -670,7 +662,7 @@ L_sw2:
         D_8009B704 = 0;
         if (!(fadeBusy != 0)) {
         PlaySoundCue(3);
-        func_8006138C();
+        StartMenuExitFade();
         }
             }
             }
@@ -814,13 +806,13 @@ L_sw2:
 
     {
         s32 *mp = &g_McMenuRowCursor;
-        func_800611C8(mp, 0, g_McMenuRowCount - 1);
-        if (!(func_800612CC() == 0)) {
+        AdjustMenuSelectionHorizontal(mp, 0, g_McMenuRowCount - 1);
+        if (!(PollMenuConfirmInput() == 0)) {
         if (!(*mp != g_McMenuRowCount - 1)) {
     if (fadeBusy != 0) break;
     g_McActionState = 0;
     PlaySoundCue(2);
-    func_8006138C();
+    StartMenuExitFade();
     break;
         }
 
@@ -833,14 +825,14 @@ L_sw2:
     if (!(fadeBusy != 0)) {
     g_McActionState = 0;
     PlaySoundCue(3);
-    func_8006138C();
+    StartMenuExitFade();
     break;
 
 L_b1280:
     if (!((g_PadEdge2 & 0x90) == 0)) {
     if (!(fadeBusy != 0)) {
     PlaySoundCue(3);
-    func_8006138C();
+    StartMenuExitFade();
     /* fall through */
     }
     }
@@ -890,7 +882,7 @@ L_b1280:
         s32 *p = &g_McMenuRowCursor;
         g_McMenuSubState = 0xB;
         g_McMenuPhase = 0;
-        func_800611C8(p, 0, g_McMenuRowCount - 1);
+        AdjustMenuSelectionHorizontal(p, 0, g_McMenuRowCount - 1);
         pad = g_PadEdge2;
         if (!((pad & 0x860) == 0)) {
         if (!(*p != 0)) {
@@ -904,7 +896,7 @@ L_b1280:
         if (fadeBusy) break;
         PlaySoundCue(2);
     g_McActionBusy = 0;
-    func_8006138C();
+    StartMenuExitFade();
     break;
         }
         PlaySoundCue(5);
@@ -917,7 +909,7 @@ L_b1280:
     }
 
     g_McActionBusy = 0;
-    func_8006138C();
+    StartMenuExitFade();
     break;
 
     case 1:
@@ -926,23 +918,23 @@ L_b1280:
         if (!(g_McSaveMode == 0)) {
         g_McMenuPhase = 5;
     L1447:
-        { u16 p = func_800612CC(); if (!(p)) {
+        { u16 p = PollMenuConfirmInput(); if (!(p)) {
     L_b1452:
-        { u16 q = func_8006131C(); if (q == 0) break; }
+        { u16 q = PollMenuBackInput(); if (q == 0) break; }
         } }
         g_McMenuPage = 0;
         g_McActionState = 0;
         break;
         }
         g_McMenuPhase = 6;
-        { u16 p = func_800612CC(); if (p == 0) goto L_b1452; }
+        { u16 p = PollMenuConfirmInput(); if (p == 0) goto L_b1452; }
         g_McActionState = 1;
         break;
     case 1:
         g_McMenuPhase = D_80082FAC + 7;
-        func_8006124C(&D_80082FAC);
+        SetMenuBinaryChoiceVertical(&D_80082FAC);
         if (D_80082FAC == 0) goto L1447;
-        { u16 p = func_800612CC();
+        { u16 p = PollMenuConfirmInput();
         if (p != 0) {
         g_McActionState = 2;
         break;
@@ -961,7 +953,7 @@ L_b1280:
         }
         break;
     case 5:
-        g_McActionResult = func_8005EF44(0, 0);
+        g_McActionResult = FormatMemoryCard(0, 0);
         if (g_McActionResult == 1) {
             g_McActionState = 7;
             g_McActionTimer = 0x3C;
@@ -990,14 +982,14 @@ L_b1280:
         g_McActionTimer = 0;
         if (fadeBusy) break;
         PlaySoundCue(3);
-        func_8006138C();
+        StartMenuExitFade();
         break;
     case 0xA:
         g_McMenuSubState = 0x12;
         g_McMenuPhase = 0x10;
         g_McActionBusy = 0;
-        { u16 p = func_800612CC(); if (!(p)) {
-        { u16 q = func_8006131C(); if (q == 0) break; }
+        { u16 p = PollMenuConfirmInput(); if (!(p)) {
+        { u16 q = PollMenuBackInput(); if (q == 0) break; }
         } }
         g_McActionState = 0;
     default:
@@ -1055,7 +1047,7 @@ L_b1280:
     if ((lpad & 0x90) && !fadeBusy) {
         PlaySoundCue(3);
         g_McActionBusy = 0;
-        func_8006138C();
+        StartMenuExitFade();
     }
     }
     {
