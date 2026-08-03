@@ -17,13 +17,7 @@ extern u_char D_80013904[];
 extern u_char D_80013910[];
 extern void *g_CdDebugInfo[] asm("D_8009931C");
 
-typedef struct CdState {
-    u_char sync;
-    u_char ready;
-    u_char command;
-} CdState;
-
-extern volatile CdState g_CdSyncStatus asm("D_80099318");
+extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
 
 void KernelCallbackSlot3(void) asm("func_8006DF34");
 void func_8006C17C(void);

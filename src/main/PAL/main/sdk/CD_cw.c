@@ -3,12 +3,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-typedef struct CdState {
-    u_char sync;
-    u_char ready;
-    u_char command;
-} CdState;
-
 
 typedef void (*CdCallback)(u_char status, u_char *result);
 
@@ -27,7 +21,7 @@ extern long g_CdCommandParamCount[] asm("D_80099280");
 extern volatile u_char *g_CdReg0 asm("D_80099300");
 extern volatile u_char *g_CdReg1 asm("D_80099304");
 extern volatile u_char *g_CdReg2 asm("D_80099308");
-extern volatile CdState g_CdSyncStatus asm("D_80099318");
+extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
 extern u_char g_CdSyncResult[8] asm("D_8009BAF0");
 extern u_char g_CdReadyResult[8] asm("D_8009BAF8");
 extern CdAlarm g_CdTimeoutDeadline asm("D_8009BB08");
