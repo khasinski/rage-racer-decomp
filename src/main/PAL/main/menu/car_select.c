@@ -800,7 +800,9 @@ void UpdateCustomizeScreen(void) {
                     carByte = g_CarTable[g_PlayerCarIndex].tireCompound;
                     D_8019C794 = &D_80082574;
                     GameMenuBusy = -1;
-                    goto set_state;
+                        g_UiScriptProgress2 = 0;
+                        g_MenuSubCursor = carByte;
+                        return;
                 }
                 if (sel == 1) {
                     if (g_CarModelAsset[8] != 0) {
@@ -808,7 +810,6 @@ void UpdateCustomizeScreen(void) {
                         carByte = g_CarTable[g_PlayerCarIndex].transmission;
                         D_8019C794 = &D_800825A4;
                         GameMenuBusy = -2;
-set_state:
                         g_UiScriptProgress2 = 0;
                         g_MenuSubCursor = carByte;
                         return;

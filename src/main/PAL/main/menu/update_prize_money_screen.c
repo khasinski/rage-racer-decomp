@@ -87,7 +87,12 @@ void UpdatePrizeMoneyScreen(void) {
     case 4:
         g_SceneTimer += 1;
         if (!((u32)g_SceneTimer < 121)) {
-        if (g_PrizeAmount == 0) goto L248;
+        if (g_PrizeAmount == 0) {
+        g_SceneTimer = 0;
+        if (g_PromotionBonus == 0) goto Lstore7;
+        st = 5;
+        goto Lstore;
+        }
         PlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = g_PrizeAmount;
         if (t >= lim1) {
@@ -100,7 +105,6 @@ void UpdatePrizeMoneyScreen(void) {
         }
         }
         if (g_PrizeAmount != 0) break;
-    L248:
         g_SceneTimer = 0;
         if (g_PromotionBonus == 0) goto Lstore7;
         st = 5;

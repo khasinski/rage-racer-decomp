@@ -77,7 +77,11 @@ long CdGetToc2(long arg0, u_char *arg1) {
         do {
             command[0] = ((firstTrack / 10) << 4) + (firstTrack % 10);
             if (CdControlB(0x14, command, response) == 0) {
-                goto fail;
+    if (g_CdDebugLevel != 0) {
+        DebugPrintf(D_800136A4);
+    }
+    CdSyncCallback(oldHandler);
+    return 0;
             }
             count++;
             value = response[1];
@@ -116,7 +120,6 @@ long CdGetToc2(long arg0, u_char *arg1) {
 
     }
     }
-fail:
     if (g_CdDebugLevel != 0) {
         DebugPrintf(D_800136A4);
     }
