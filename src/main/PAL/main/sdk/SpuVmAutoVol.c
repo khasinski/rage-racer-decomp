@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd_types.h"
 
 extern volatile u_char g_SndVoiceStateAutoVol[] asm("D_8009E0D4");
 extern volatile u_char D_8009E0D6[];
@@ -81,39 +82,11 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     *(volatile short *)(D_8009E0D6 + offset) = quotient;
 }
 
-typedef struct SpuVoice {
-    u_char pad0[0x1C];
-    short autoVolume;
-    short volumeStep;
-    short volumeCounter;
-    short volumeCounterReload;
-    short currentVolume;
-    short targetVolume;
-    u_char pad28[0xC];
-} SpuVoice;
-
-typedef struct SvmCurrent {
-    u_char field0[4];
-    u_char currentVolume;
-    u_char pan;
-    u_char field6[4];
-    u_char masterVolume;
-    u_char masterPan;
-    u_char fieldC;
-    u_char volume;
-    u_char currentPan;
-} SvmCurrent;
-
-typedef struct VabHeader {
-    u_char pad0[0x18];
-    u_char masterVolume;
-} VabHeader;
-
 extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
-extern VabHeader *g_SndCurrentVabHeader asm("D_801E413C");
-extern SvmCurrent g_SndCurrentAttr asm("D_801E4BD0");
+extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
+extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 extern short g_SndMonoMode asm("D_801E3FB0");
 
 void SpuVmAutoVolTick(short voice) asm("func_80074ECC");
@@ -127,34 +100,34 @@ void SpuVmAutoVolTick(short voice) {
     long scaledMasterVolume;
 
     registerOffset = voice * 8;
-    if (g_SndVoiceState[voice].volumeCounter != 0) {
-        if (g_SndVoiceState[voice].volumeCounterReload-- > 0) {
+    if (g_SndVoiceState[voice].volume_counter != 0) {
+        if (g_SndVoiceState[voice].volume_counter_reload-- > 0) {
             return;
         }
-        g_SndVoiceState[voice].volumeCounterReload =
-            g_SndVoiceState[voice].volumeCounter;
+        g_SndVoiceState[voice].volume_counter_reload =
+            g_SndVoiceState[voice].volume_counter;
     }
 
-    g_SndVoiceState[voice].currentVolume += g_SndVoiceState[voice].volumeStep;
-    if (g_SndVoiceState[voice].volumeStep > 0) {
-        if (g_SndVoiceState[voice].currentVolume >=
-            g_SndVoiceState[voice].targetVolume) {
-            g_SndVoiceState[voice].currentVolume =
-                g_SndVoiceState[voice].targetVolume;
-            g_SndVoiceState[voice].autoVolume = 0;
+    g_SndVoiceState[voice].start_volume += g_SndVoiceState[voice].volume_step;
+    if (g_SndVoiceState[voice].volume_step > 0) {
+        if (g_SndVoiceState[voice].start_volume >=
+            g_SndVoiceState[voice].end_volume) {
+            g_SndVoiceState[voice].start_volume =
+                g_SndVoiceState[voice].end_volume;
+            g_SndVoiceState[voice].auto_volume = 0;
         }
-    } else if (g_SndVoiceState[voice].volumeStep < 0) {
-        if (g_SndVoiceState[voice].currentVolume <=
-            g_SndVoiceState[voice].targetVolume) {
-            g_SndVoiceState[voice].currentVolume =
-                g_SndVoiceState[voice].targetVolume;
-            g_SndVoiceState[voice].autoVolume = 0;
+    } else if (g_SndVoiceState[voice].volume_step < 0) {
+        if (g_SndVoiceState[voice].start_volume <=
+            g_SndVoiceState[voice].end_volume) {
+            g_SndVoiceState[voice].start_volume =
+                g_SndVoiceState[voice].end_volume;
+            g_SndVoiceState[voice].auto_volume = 0;
         }
     }
 
-    currentVolume = g_SndVoiceState[voice].currentVolume;
-    g_SndCurrentAttr.currentVolume = currentVolume;
-    scaledMasterVolume = g_SndCurrentVabHeader->masterVolume * 0x3FFF;
+    currentVolume = g_SndVoiceState[voice].start_volume;
+    g_SndCurrentAttr.volume = currentVolume;
+    scaledMasterVolume = g_SndCurrentVabHeader->mvol * 0x3FFF;
 
     leftVolumeTemp =
         ((currentVolume * scaledMasterVolume) / 0x7F) / 0x7F;
@@ -162,31 +135,31 @@ void SpuVmAutoVolTick(short voice) {
         ((currentVolume * scaledMasterVolume) / 0x7F) / 0x7F;
 
     leftVolumeTemp =
-        ((leftVolumeTemp * g_SndCurrentAttr.masterVolume *
-          g_SndCurrentAttr.volume) /
+        ((leftVolumeTemp * g_SndCurrentAttr.master_volume *
+          g_SndCurrentAttr.tone_volume) /
          0x7F) /
         0x7F;
     rightVolumeTemp =
-        ((rightVolumeTemp * g_SndCurrentAttr.masterVolume *
-          g_SndCurrentAttr.volume) /
+        ((rightVolumeTemp * g_SndCurrentAttr.master_volume *
+          g_SndCurrentAttr.tone_volume) /
          0x7F) /
         0x7F;
 
-    if (g_SndCurrentAttr.currentPan < 0x40) {
+    if (g_SndCurrentAttr.tone_pan < 0x40) {
         leftVolume = leftVolumeTemp;
         rightVolume =
-            (rightVolumeTemp * g_SndCurrentAttr.currentPan) / 0x40;
+            (rightVolumeTemp * g_SndCurrentAttr.tone_pan) / 0x40;
     } else {
         leftVolume =
-            (leftVolumeTemp * (0x7F - g_SndCurrentAttr.currentPan)) / 0x40;
+            (leftVolumeTemp * (0x7F - g_SndCurrentAttr.tone_pan)) / 0x40;
         rightVolume = rightVolumeTemp;
     }
 
-    if (g_SndCurrentAttr.masterPan < 0x40) {
-        rightVolume = (rightVolume * g_SndCurrentAttr.masterPan) / 0x40;
+    if (g_SndCurrentAttr.master_pan < 0x40) {
+        rightVolume = (rightVolume * g_SndCurrentAttr.master_pan) / 0x40;
     } else {
         leftVolume =
-            (leftVolume * (0x7F - g_SndCurrentAttr.masterPan)) / 0x40;
+            (leftVolume * (0x7F - g_SndCurrentAttr.master_pan)) / 0x40;
     }
 
     if (g_SndCurrentAttr.pan < 0x40) {
