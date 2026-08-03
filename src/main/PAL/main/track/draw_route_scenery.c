@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/race.h"
@@ -71,26 +72,12 @@ extern s32 g_Shuttle1AngleZ asm("D_801E5014");
  * g_ShuttlePath2Points is the split symbol for &g_ShuttlePathPoints[2].
  */
 extern s32 g_ShuttlePath2Points[] asm("D_8007E3A0");
-typedef struct ShuttleEndpoint {
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 unk;
-} ShuttleEndpoint;
-
 typedef struct ShuttlePath {
-    ShuttleEndpoint endpoint[2];
+    Vec4 endpoint[2];
 } ShuttlePath;
 
-typedef struct ShuttleAngles {
-    s16 x;
-    s16 y;
-    s16 z;
-    s16 pad;
-} ShuttleAngles;
-
 extern ShuttlePath g_ShuttlePathPoints[] asm("D_8007E360");
-extern ShuttleAngles g_ShuttlePathAngles[] asm("D_8007E3C0");
+extern SVec g_ShuttlePathAngles[] asm("D_8007E3C0");
 
 /* Byte-offset views. These stay macros because the retail code keeps the
  * scaled index in a register and re-derives the address at every field; a
@@ -99,7 +86,7 @@ extern ShuttleAngles g_ShuttlePathAngles[] asm("D_8007E3C0");
  * aggregate, which stops it aliasing the neighbouring state-> loads and
  * changes what the surrounding barriers do -- see common.h. */
 #define PATH(byteOffset) (*(ShuttlePath *)((s32)g_ShuttlePathPoints + (byteOffset)))
-#define ANGLES(byteOffset) (*(ShuttleAngles *)((s32)g_ShuttlePathAngles + (byteOffset)))
+#define ANGLES(byteOffset) (*(SVec *)((s32)g_ShuttlePathAngles + (byteOffset)))
 extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
 
 void InitShuttleScenery(void) asm("func_8003F0F8");
@@ -134,9 +121,9 @@ void InitShuttleScenery(void) {
         asm(".globl func_8003F1D0\nfunc_8003F1D0 = func_8003F0F8 + 0xD8");
         index = g_Shuttle1PathIndex;
         v1 = index << 3;
-        g_Shuttle1AngleX = RAW(ANGLES(v1).x);
-        g_Shuttle1AngleY = RAW(ANGLES(v1).y);
-        value = RAW(ANGLES(v1).z);
+        g_Shuttle1AngleX = RAW(ANGLES(v1).vx);
+        g_Shuttle1AngleY = RAW(ANGLES(v1).vy);
+        value = RAW(ANGLES(v1).vz);
         index <<= 1;
         g_Shuttle1StartEndpoint = 0;
         g_Shuttle1TravelStep = 0;
@@ -153,7 +140,7 @@ void InitShuttleScenery(void) {
     v1 = RAW(PATH(value).endpoint[0].x);
     a4 = RAW(PATH(value).endpoint[0].y);
     a5 = RAW(PATH(value).endpoint[0].z);
-    a6 = RAW(PATH(value).endpoint[0].unk);
+    a6 = RAW(PATH(value).endpoint[0].w);
     state->x = v1;
     state->y = a4;
     state->z = a5;
@@ -161,16 +148,16 @@ void InitShuttleScenery(void) {
     asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;
-    v1 = RAW(ANGLES(value).x);
+    v1 = RAW(ANGLES(value).vx);
     asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;
     state->angleX = v1;
-    v1 = RAW(ANGLES(value).y);
+    v1 = RAW(ANGLES(value).vy);
     value = state->pathIndex;
     value <<= 3;
     state->angleY = v1;
-    v1 = RAW(ANGLES(value).z);
+    v1 = RAW(ANGLES(value).vz);
     value = state->pathIndex;
     state->startEndpoint = 0;
     state->travelStep = 0;

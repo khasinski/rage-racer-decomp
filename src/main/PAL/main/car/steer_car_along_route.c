@@ -11,13 +11,6 @@ s32 func_8002FD9C(s32 arg0, s32 arg1);
 s32 func_80068568(s32 arg0);
 s32 func_80068634(s32 arg0);
 
-typedef struct GameCarVector4 {
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 w;
-} GameCarVector4;
-
 extern s32 g_AnimTimer asm("D_8009E694");
 extern s16 g_ClosestRivalRank asm("D_801E7740");
 
@@ -132,7 +125,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
  * split their traffic-avoidance work across alternating frames.
  */
 void UpdateRaceCars(void) {
-    GameCarVector4 vpos;
+    Vec4 vpos;
     /*
      * GCC 2.6.3 keeps these two Matrix-sized source workspaces in the debug
      * frame even though their high-level scratch values are optimized away.
@@ -288,7 +281,7 @@ void UpdateRaceCars(void) {
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
              */
-            *(GameCarVector4 *)base = vpos;
+            *(Vec4 *)base = vpos;
             if ((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) >= 0x41) {
                 (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x40))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x40))) - 6;
             } else if ((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) < -0x40) {
@@ -350,8 +343,8 @@ void UpdateRaceCars(void) {
                 (*(s32 *)((u8 *)(lastBase) + (0x48))) = spin | 0x1000;
             }
             limit = (*(s32 *)((u8 *)(lastBase) + (0x04))) - 8;
-            *(GameCarVector4 *)((u8 *)lastBase + 0x50) =
-                *(GameCarVector4 *)((u8 *)lastBase + 0x20);
+            *(Vec4 *)((u8 *)lastBase + 0x50) =
+                *(Vec4 *)((u8 *)lastBase + 0x20);
             (*(s32 *)((u8 *)(lastBase) + (0x28))) =
                 (*(s32 *)((u8 *)(lastBase) + (0x28))) + (*(s32 *)((u8 *)(lastBase) + (0x64)));
             (*(s32 *)((u8 *)(lastBase) + (0x60))) = (*(s32 *)((u8 *)(lastBase) + (0x04)));
@@ -412,7 +405,7 @@ void UpdateRaceCars(void) {
 
 /* Runs the corresponding all-cars pass for attract and replay scenes. */
 void UpdateAttractCars(void) {
-    GameCarVector4 vTmp;
+    Vec4 vTmp;
     /* See UpdateRaceCars: these two Matrix workspaces shape retail's frame. */
     Matrix matrixScratch0;
     s16 svAng[4];
@@ -533,7 +526,7 @@ void UpdateAttractCars(void) {
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
              */
-            *(GameCarVector4 *)car = vTmp;
+            *(Vec4 *)car = vTmp;
             if ((*(s32 *)((u8 *)(base) + (0x44))) >= 0x41) {
                 (*(s32 *)((u8 *)(base) + (0x64))) = (*(s32 *)((u8 *)(base) + (0x64))) - 6;
             } else if ((*(s32 *)((u8 *)(base) + (0x44))) < -0x40) {
@@ -596,8 +589,8 @@ void UpdateAttractCars(void) {
                 (*(s32 *)((u8 *)(base) + (0x48))) = spin | 0x1000;
             }
             limit = (*(s32 *)((u8 *)(base) + (0x04))) - 8;
-            *(GameCarVector4 *)((u8 *)base + 0x50) =
-                *(GameCarVector4 *)((u8 *)base + 0x20);
+            *(Vec4 *)((u8 *)base + 0x50) =
+                *(Vec4 *)((u8 *)base + 0x20);
             (*(s32 *)((u8 *)(base) + (0x28))) = (*(s32 *)((u8 *)(base) + (0x28))) + (*(s32 *)((u8 *)(base) + (0x64)));
             (*(s32 *)((u8 *)(base) + (0x60))) = (*(s32 *)((u8 *)(base) + (0x04)));
             if ((*(s16 *)((u8 *)(base) + (0x98))) != 0) {
@@ -664,13 +657,6 @@ typedef struct KE {
     s16 f12;
 } KE;
 
-typedef struct B16 {
-    s32 a;
-    s32 b;
-    s32 c;
-    s32 d;
-} B16;
-
 typedef struct Obj {
     s32 x;
     s32 y;
@@ -717,7 +703,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             KE *p = (KE *) (off + (s32) base);
             KE *q;
             g_RaceIntroCameraCursor = p;
-            *(B16 *) 0x1F800008 = *(B16 *) p;
+            *(Vec4 *) 0x1F800008 = *(Vec4 *) p;
             q = g_RaceIntroCameraCursor;
             g_RaceIntroCameraDeltaX = -q[0].f0 + q[1].f0;
             g_RaceIntroCameraDeltaY = -q[0].f4 + q[1].f4;

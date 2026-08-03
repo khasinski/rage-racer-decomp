@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/state.h"
 #include "game/render.h"
@@ -150,13 +151,7 @@ typedef struct Scr {
     s32 f14;
 } Scr;
 
-typedef struct Out {
-    s32 f0;
-    s32 f4;
-    s32 f8;
-    s32 f12;
-} Out;
-extern Out *g_VisibleCellList asm("D_801E4BC8");
+extern Vec4 *g_VisibleCellList asm("D_801E4BC8");
 /* Interleaved { dx, dy } terrain-cell offsets, 64 pairs per octant and eight
  * octants; the four switch arms fold the full circle onto that one octant by
  * negating dx and/or dy. */
@@ -172,7 +167,7 @@ void BuildVisibleCells(s32 arg0, s32 arg1) {
     s32 oct;
     s32 cx, cy;
     u32 ret0;
-    Out *out;
+    Vec4 *out;
     s32 sx;
     s32 sy;
     s32 center;
@@ -233,7 +228,7 @@ void BuildVisibleCells(s32 arg0, s32 arg1) {
         if (sx < 32U && sy < 32U && IsCellVisibleFromRegion(sx, sy, ret0)) {
             s32 clut = g_TerrainCellGrid[((31 - sy) << 5) + sx] & 0x3FF;
 
-            out->f12 = clut;
+            out->w = clut;
             g_VisibleCellMask[sy] |= 1 << sx;
             center = 1024;
             if (clut != 0x3FF) {
@@ -242,21 +237,21 @@ void BuildVisibleCells(s32 arg0, s32 arg1) {
                 vec[2] = ((sy << 11) - (s->f8 - center)) << 2;
                 ApplyMatrixLV((void *)0x1F800028, vec, proj);
                 if (proj[2] >= arg0 && arg1 >= proj[2]) {
-                    out->f0 = proj[0];
+                    out->x = proj[0];
                     do {
                         do {
                             do {
                                 do {
-                                    out->f4 = proj[1];
+                                    out->y = proj[1];
                                 } while (0);
                             } while (0);
                         } while (0);
                     } while (0);
-                    out->f8 = proj[2];
+                    out->z = proj[2];
                     continue;
                 }
             }
         }
-        out->f12 = invalid;
+        out->w = invalid;
     }
 }
