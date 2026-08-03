@@ -505,40 +505,34 @@ loop_body:
                 }
                 DrawScriptedSprite(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1, type);
-                cmd++;
-                goto loop_continue;
+                break;
             case 0:
             case 1:
                 DrawScriptedSprite(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1, type);
-                cmd++;
-                goto loop_continue;
+                break;
             case 19:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
                 DrawScriptedLine(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
-                cmd++;
-                goto loop_continue;
+                break;
             case 10:
                 DrawScriptedLine(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
-                cmd++;
-                goto loop_continue;
+                break;
             case 29:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
                 DrawScriptedTriangle(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
-                cmd++;
-                goto loop_continue;
+                break;
             case 20:
                 DrawScriptedTriangle(
                     remaining, (u8 *)cmd->arg0, (u8 *)cmd->arg1);
-                cmd++;
-                goto loop_continue;
+                break;
             case 39:
                 if (g_MenuAltLayout != 0) {
                     break;
@@ -556,7 +550,6 @@ loop_body:
         }
     }
     cmd++;
-loop_continue:
     index++;
     if (cmd->time >= 0) {
         goto loop_body;
