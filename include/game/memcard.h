@@ -15,6 +15,20 @@ typedef struct GameSaveHeaderRow {
  * The 0x1000-byte memory-card payload: a flat dump of live globals, named per
  * field below. checksum = ~sum(u16[0..0x7FE]). Written by func_8005F88C, read
  * by LoadSaveStateBlock - both keep raw offsets, see names.md 3b.
+ *
+ * The file WriteMemoryCardSaveFile lays down around it is four writes:
+ *
+ *     0x0000  0x200  icon block, "SC" + title + CLUT at 0x60 + 16x16 4bpp icon
+ *     0x0200  0x080  GameSaveHeaderRow
+ *     0x0280  0x1000 this struct
+ *     0x1280  0x080  the same header row again
+ *
+ * 0x1300 total, one memory card block. The three slots are named
+ * "bu00:BESCES-00650 RAGE000".."RAGE002" (g_SaveFilePath).
+ *
+ * The payload is region independent: US (BASLUS-00403) and JP (BISLPS-00600)
+ * saves both satisfy the checksum rules above and decode field for field
+ * against this struct, so only the directory filename identifies the region.
  */
 typedef struct GameSaveBlock {
     u16 unk00;             /* g_PadMappingIndex */
@@ -27,8 +41,9 @@ typedef struct GameSaveBlock {
     u16 unk0E;             /* g_NegconMaxTwist */
     s32 gpFile1[5];        /* +0x10 g_GrandPrixSave, GameRaceProgress: course,
                               carIndex, classIndex, maxClassReached, money */
-    s32 gpFile2[5];        /* +0x24 g_ExtraGrandPrixSave..8C, GameRaceProgress slot 2 */
-    s32 timeAttack[5];     /* +0x38 g_TimeAttackSave..990, GameRaceProgress slot 3 */
+    s32 gpFile2[5];        /* +0x24 g_ExtraGrandPrixSave, same five fields */
+    s32 timeAttack[5];     /* +0x38 g_TimeAttackSave; this slot reuses the
+                              money word for g_GrandPrixSeries */
     u16 unk4C;             /* +0x4C g_BgmSelection */
     u16 advancedUnlocked;  /* +0x4E g_AdvancedSeriesUnlocked */
     s32 maxClassReached[2];/* +0x50 g_MaxClassReached */
