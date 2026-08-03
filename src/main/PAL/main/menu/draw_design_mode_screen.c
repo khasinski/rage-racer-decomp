@@ -58,7 +58,7 @@ s32 DrawDesignModeScreen(s32 arg0) {
     }
 
     y = 0xB0 - (s16)offset;
-    intensity = (u32)D_8009B2D4 >> 2;
+    intensity = (u32)D_8009B2D4 / 4;
 
     func_80046A2C(ot, 0xB4, y, 0x18, 0xC, 0x94, 0xDC,
                   intensity & 0xFF, intensity & 0xFF, intensity & 0xFF,

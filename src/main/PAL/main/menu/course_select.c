@@ -257,7 +257,7 @@ s32 DrawCourseSelectScreen(s32 step)
     }
 
     slide -= 0x28;
-    fade = (u8)((u32)D_8009B2C0 >> 2);
+    fade = (u8)((u32)D_8009B2C0 / 4);
 
     if (g_GrandPrixMode != 0) {
         if (g_SeriesSelection == 0) {

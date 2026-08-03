@@ -729,7 +729,7 @@ s32 DrawCustomizeScreen(s32 arg0) {
         value = product >> 11;
     }
 
-    func_80052158((s16)value, ((u32)D_8009B2D0 >> 2) & 0xFF, g_PlayerCarIndex);
+    func_80052158((s16)value, ((u32)D_8009B2D0 / 4) & 0xFF, g_PlayerCarIndex);
     return D_8009B2D0;
 }
 

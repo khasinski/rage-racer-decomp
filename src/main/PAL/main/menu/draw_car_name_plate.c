@@ -26,7 +26,7 @@ void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
         }
     }
 
-    shade = (u32)g_CarNamePlateFade >> 2;
+    shade = (u32)g_CarNamePlateFade / 4;
     func_80046A2C(ot, 0x100, 0x168, 0x20, 0x10, 0x7C, 0x7C, shade & 0xFF,
                   shade & 0xFF, shade & 0xFF, 0x244, 0, 1, 0x3B);
 

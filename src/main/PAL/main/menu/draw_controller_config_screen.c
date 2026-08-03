@@ -175,7 +175,7 @@ void UpdateControllerConfigScreen(void) {
     }
     if (g_PadConfigFlipTimer > 0) {
         g_PadConfigFlipTimer--;
-        g_PadConfigFlipPhase = ((u32)g_PadConfigFlipTimer >> 2) & 1;
+        g_PadConfigFlipPhase = ((u32)g_PadConfigFlipTimer / 4) & 1;
     }
     g_ControllerSceneAngleY = (g_ControllerSceneAngleY * 15) / 16;
     DrawControllerConfigScreen();

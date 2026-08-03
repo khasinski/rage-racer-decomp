@@ -274,7 +274,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     }
     product = time * product;
     asm("" : "=r"(product), "=r"(record) : "0"(product), "1"(record));
-    product = (u32)product >> 5;
+    product = (u32)product / 32;
     product = limit + product;
     asm("" : "=r"(product) : "0"(product));
 
@@ -289,7 +289,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     }
     product = time * product;
     asm("" : "=r"(product), "=r"(style) : "0"(product), "1"(style));
-    product = (u32)product >> 5;
+    product = (u32)product / 32;
     y += product;
 
     product = *(u16 *)(style + 2);
@@ -627,7 +627,7 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
         value = packed & 0x7FFF;
     }
     value = elapsed * value;
-    xOffset = (u32)value >> 5;
+    xOffset = (u32)value / 32;
 
     if (packed < 0) {
         value = packed >> 0x10;
@@ -640,7 +640,7 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     countReg++;
     countReg--;
     value = elapsed * value;
-    yOffset = (u32)value >> 5;
+    yOffset = (u32)value / 32;
 
     if (countReg < i) {
         return;
