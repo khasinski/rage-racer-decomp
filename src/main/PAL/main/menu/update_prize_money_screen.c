@@ -66,24 +66,28 @@ void UpdatePrizeMoneyScreen(void) {
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if (g_SceneTimer == 0) g_PrizeScreenState = 1;
         func_800204F4(0);
-        goto L428;
+        func_800201D4();
+        return;
     case 1:
         func_800204F4(0);
         if (g_PadEdge2 & 0x860) {
             g_PrizeScreenState = 2;
             g_SceneTimer = 0;
         }
-        goto L428;
+        func_800201D4();
+        return;
     case 2:
         g_SceneTimer += 8;
         func_800204F4(g_SceneTimer);
         if ((u32)g_SceneTimer >= 129) g_PrizeScreenState = 3;
-        goto L428;
+        func_800201D4();
+        return;
     case 3:
         g_SceneTimer -= 8;
         func_800206B8(g_SceneTimer);
         if (g_SceneTimer == 0) g_PrizeScreenState = 4;
-        goto L428;
+        func_800201D4();
+        return;
     case 4:
         g_SceneTimer += 1;
         if (!((u32)g_SceneTimer < 121)) {
@@ -118,7 +122,7 @@ void UpdatePrizeMoneyScreen(void) {
         break;
     case 6:
         func_80020D90();
-        if (g_PromotionBonus == 0) { st = 7; goto Lstore; }
+        if (g_PromotionBonus == 0) { goto Lstore7; }
         PlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = g_PromotionBonus;
         if (t >= lim0) {
@@ -152,10 +156,10 @@ void UpdatePrizeMoneyScreen(void) {
         func_80020B08();
         break;
     default:
-        goto L428;
+        func_800201D4();
+        return;
     }
     func_800206B8(0);
-L428:
     func_800201D4();
 }
 
