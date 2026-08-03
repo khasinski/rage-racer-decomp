@@ -3,19 +3,6 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-typedef struct ProgAtrView {
-    u_char tones;
-    u_char mvol;
-    u_char prior;
-    u_char mode;
-    u_char mpan;
-    u_char reserved0;
-    short attr;
-    u_long reserved1;
-    u_short reserved2;
-    u_short reserved3;
-} ProgAtrView;
-
 typedef struct SpuVoiceView {
     short unk0;
     short unk2;
@@ -81,7 +68,7 @@ typedef struct SvmCurrentAttrKeyOn {
 } SvmCurrentAttrKeyOn;
 
 extern long g_SndUpdateLock asm("D_801E40AC");
-extern ProgAtrView *g_SndCurrentProgTable asm("D_801E4110");
+extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern SvmCurrentAttrKeyOn g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoiceView g_SndVoiceState[] asm("D_8009E0B8");
@@ -114,7 +101,7 @@ long SsUtKeyOnV(
     long idx;
     u_char tone_value;
     u_short vag;
-    ProgAtrView *program_attr;
+    ProgAtr *program_attr;
     VagAtr *tone_attr;
     long left_value;
     long right_value;
