@@ -1820,7 +1820,7 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
 
     index = 1;
     row_offset = (parameter * 9) << 3;
-    bank_offset = ((((bank * 8) - bank) * 4) - bank) << 5;
+    bank_offset = (((bank * 7) * 4) - bank) << 5;
     bank = row_offset + bank_offset;
     entry = (s32 *)((s32)base + bank);
     scan = entry + 1;

@@ -74,7 +74,7 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
         raw_base = (StRingEventRecord *)g_StRingBase;
         index = g_StRingSlot;
         base = (StRingEventRecord *)((track * 32) + (long)raw_base);
-        offset = (index * 64) - index;
+        offset = index * 63;
         offset <<= 5;
         base = (StRingEventRecord *)((long)base + offset);
         *out0 = base;

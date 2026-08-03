@@ -166,7 +166,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
         }
         if (sums[3] >= 0x3E9) {
             s32 fv = state->field_130;
-            s32 d = ((fv * 16) - fv) << 1;
+            s32 d = (fv * 15) << 1;
             state->field_130 = d / 100;
         }
     } else {

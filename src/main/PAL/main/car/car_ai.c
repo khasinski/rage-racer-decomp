@@ -307,7 +307,7 @@ void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     }
 
     value = *(s32 *)(base + 0x34);
-    value = (value * 32) - value;
+    value = value * 31;
     if (value < 0) {
         value += 0x1F;
     }
@@ -334,7 +334,7 @@ void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     }
     value = *(s32 *)(base + 0x38);
     if (value != 0) {
-        temp = (value * 16) - value;
+        temp = value * 15;
         temp <<= 1;
         if (temp < 0) {
             temp += 0x1F;

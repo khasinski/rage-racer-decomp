@@ -288,7 +288,7 @@ void func_8001F274(s32 pointIndex, u8 *srcPtr) {
     }
 
     pointIndex >>= 1;
-    dst = (GameRenderSinglePoint *)(((pointIndex * 8) - pointIndex) << 2);
+    dst = (GameRenderSinglePoint *)((pointIndex * 7) << 2);
     base = g_ReplayFramesTimeAttack;
     src = (GameRenderSourcePoint *)srcPtr;
     first = src->field_0;

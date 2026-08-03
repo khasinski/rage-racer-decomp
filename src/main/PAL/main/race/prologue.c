@@ -212,7 +212,7 @@ void DrawPrologueText(void) {
 
         camera = g_FadeLevel;
         scratch = (s32 *)0x1F800000;
-        tmp = (camera * 8) - camera;
+        tmp = camera * 7;
         scale_a = tmp * 32;
         base = g_DrawBuffer;
         arg1 = *scratch;

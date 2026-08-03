@@ -116,7 +116,7 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     s16 rect[4];
     s32 offset;
 
-    offset = ((g_FrameParity * 16) - g_FrameParity) << 4;
+    offset = (g_FrameParity * 15) << 4;
     rect[0] = x;
     rect[1] = y + offset;
     rect[2] = w;

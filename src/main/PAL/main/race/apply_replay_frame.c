@@ -140,7 +140,7 @@ void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
         arg1->variantAE = g_ReplayPlayerModel;
         if ((arg0 % 2) == 0) {
             index = arg0 >> 1;
-            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + (((index * 8) - index) << 2));
+            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + ((index * 7) << 2));
             arg1->x = small->x;
             arg1->y = small->y;
             arg1->z = small->z;
@@ -156,7 +156,7 @@ void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
             if (arg0 == 0x505) {
                 arg0 = 0;
             }
-            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + (((arg0 * 8) - arg0) << 2));
+            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + ((arg0 * 7) << 2));
             arg1->x = AVG(small->x, arg1->x);
             arg1->y = AVG(small->y, arg1->y);
             arg1->z = AVG(small->z, arg1->z);
