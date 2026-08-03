@@ -147,9 +147,9 @@ typedef struct SpuVoice {
     short start_volume;
     short end_volume;
     short auto_pan;
-    short unk2A;
-    short unk2C;
-    short unk2E;
+    short pan_step;
+    short pan_counter;
+    short pan_counter_reload;
     short start_pan;
     short end_pan;
 } SpuVoice;

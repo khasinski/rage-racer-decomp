@@ -187,11 +187,11 @@ void SpuVmAutoVolTick(short voice) {
  * the accesses volatile and both members byte-exact.
  */
 extern u_char g_SndVoiceStateAutoPan[] asm("D_8009E0E0");
-extern u_char D_8009E0E2[];
-extern u_char D_8009E0E4[];
-extern u_char D_8009E0E6[];
-extern u_char D_8009E0E8[];
-extern u_char D_8009E0EA[];
+extern u_char g_SndVoiceStatePanStep[] asm("D_8009E0E2");
+extern u_char g_SndVoiceStatePanCounter[] asm("D_8009E0E4");
+extern u_char g_SndVoiceStatePanCounterReload[] asm("D_8009E0E6");
+extern u_char g_SndVoiceStateStartPan[] asm("D_8009E0E8");
+extern u_char g_SndVoiceStateEndPan[] asm("D_8009E0EA");
 
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) asm("func_8007521C");
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
@@ -224,8 +224,8 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
 
     offset = (((((short)arg0 * 2) + (short)arg0) * 4) + (short)arg0) * 4;
     *(volatile short *)(g_SndVoiceStateAutoPan + offset) = 1;
-    *(volatile short *)(D_8009E0E8 + offset) = start;
-    *(volatile short *)(D_8009E0EA + offset) = target;
+    *(volatile short *)(g_SndVoiceStateStartPan + offset) = start;
+    *(volatile short *)(g_SndVoiceStateEndPan + offset) = target;
 
     switch (0) { default:
     step16 = (short)arg3;
@@ -248,9 +248,9 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     quotient = stepForSmallDiv / smallDenom;
     smallDenom = (short)voice;
     offset = (((smallDenom * 2) + smallDenom) * 4 + smallDenom) * 4;
-    *(volatile short *)(D_8009E0E2 + offset) = 1;
-    *(volatile short *)(D_8009E0E4 + offset) = quotient;
-    *(volatile short *)(D_8009E0E6 + offset) = quotient;
+    *(volatile short *)(g_SndVoiceStatePanStep + offset) = 1;
+    *(volatile short *)(g_SndVoiceStatePanCounter + offset) = quotient;
+    *(volatile short *)(g_SndVoiceStatePanCounterReload + offset) = quotient;
     return;
 
     }
@@ -261,8 +261,8 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     quotient = stepForSmallDiv / offset;
     smallDenom = (short)voice;
     offset = (((smallDenom * 2) + smallDenom) * 4 + smallDenom) * 4;
-    *(volatile short *)(D_8009E0E4 + offset) = 0;
-    *(volatile short *)(D_8009E0E2 + offset) = quotient;
+    *(volatile short *)(g_SndVoiceStatePanCounter + offset) = 0;
+    *(volatile short *)(g_SndVoiceStatePanStep + offset) = quotient;
 }
 
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
@@ -298,22 +298,22 @@ void SpuVmAutoPanTick(long arg0) {
     index8 = channel << 3;
     offset = channel * 52;
     originalArg = arg0;
-    if (*(short *)&D_8009E0E4[offset] != 0) {
-        counter = *(u_short *)&D_8009E0E6[offset];
-        *(u_short *)&D_8009E0E6[offset] = counter - 1;
+    if (*(short *)&g_SndVoiceStatePanCounter[offset] != 0) {
+        counter = *(u_short *)&g_SndVoiceStatePanCounterReload[offset];
+        *(u_short *)&g_SndVoiceStatePanCounterReload[offset] = counter - 1;
         if ((short)counter > 0) {
             return;
         }
-        *(u_short *)&D_8009E0E6[offset] = *(u_short *)&D_8009E0E4[offset];
+        *(u_short *)&g_SndVoiceStatePanCounterReload[offset] = *(u_short *)&g_SndVoiceStatePanCounter[offset];
     }
 
-    step = *(short *)&D_8009E0E2[offset];
-    sum = *(u_short *)&D_8009E0E8[offset] + *(u_short *)&D_8009E0E2[offset];
-    *(u_short *)&D_8009E0E8[offset] = sum;
+    step = *(short *)&g_SndVoiceStatePanStep[offset];
+    sum = *(u_short *)&g_SndVoiceStateStartPan[offset] + *(u_short *)&g_SndVoiceStatePanStep[offset];
+    *(u_short *)&g_SndVoiceStateStartPan[offset] = sum;
     switch (0) { default:
     if (!(step <= 0)) {
     current = (u_long)sum << 16;
-    limit = *(short *)&D_8009E0EA[offset];
+    limit = *(short *)&g_SndVoiceStateEndPan[offset];
     current >>= 16;
     positiveCompare = current < limit;
     clampValue = limit;
@@ -326,7 +326,7 @@ void SpuVmAutoPanTick(long arg0) {
         break;
     }
     current = (u_long)sum << 16;
-    limit = *(short *)&D_8009E0EA[offset];
+    limit = *(short *)&g_SndVoiceStateEndPan[offset];
     current >>= 16;
     clampValue = limit;
     negativeCompare = limit < current;
@@ -335,11 +335,11 @@ void SpuVmAutoPanTick(long arg0) {
     }
 
     }
-    *(u_short *)&D_8009E0E8[offset] = clampValue;
+    *(u_short *)&g_SndVoiceStateStartPan[offset] = clampValue;
     *(u_short *)&g_SndVoiceStateAutoPan[offset] = 0;
 
     }
-    envelope = D_8009E0E8[(short)originalArg * 52];
+    envelope = g_SndVoiceStateStartPan[(short)originalArg * 52];
     {
     u_char *base;
     long level;
