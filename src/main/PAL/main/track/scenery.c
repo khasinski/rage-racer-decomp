@@ -239,7 +239,7 @@ void SeedFlybyScenery(void) {
     u8 *base;
     register u8 *out asm("s1");
     s32 count;
-    register s32 value asm("v1");
+    s16 value;
     s32 index;
     register s32 cmp asm("v0");
     s32 scene0;

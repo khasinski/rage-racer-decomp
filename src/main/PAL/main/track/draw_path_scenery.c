@@ -208,8 +208,8 @@ void UpdatePointAmbience(s32 arg) {
     u16 a1raw;
     u16 t1raw;
     s32 sentinel;
-    register s32 s0v asm("s0");
-    s32 s1;
+    s32 s0v;
+    s16 s1;
     s32 s2;
     s32 s3;
     s32 s4;
