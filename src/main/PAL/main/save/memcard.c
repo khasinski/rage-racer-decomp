@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/car.h"
 #include "psyq/kernel.h"
 
 extern s32 g_McLastCardStatus asm("D_80082F4C");
@@ -549,9 +550,6 @@ extern u16 g_NegconMaxTwist asm("D_801E418C");
 extern u16 g_NegconNeutralL asm("D_8019CA0C");
 extern u16 g_BgmSelection asm("D_801E42CC");
 
-extern u8 g_GrandPrixCars[] asm("D_801E4F44");
-extern u8 g_ExtraGrandPrixCars[] asm("D_8019C914");
-extern u8 g_TimeAttackCars[] asm("D_801E4388");
 extern u16 g_ClassRecords[] asm("D_8019CB40");
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
@@ -622,30 +620,31 @@ void StoreSaveStateBlock(u8 *arg0) {
     *(s32 *)(arg0 + 0x54) = g_MaxClassReached[1];
 
     {
-        s32 offset = 0;
+        s32 i;
         register u8 *dst asm("$4") = arg0;
 
-        for (; offset < 0x68; offset += 8) {
-            dst[0x58 + 0] = g_GrandPrixCars[offset + 0];
-            dst[0x58 + 1] = g_GrandPrixCars[offset + 1];
-            dst[0x58 + 2] = g_GrandPrixCars[offset + 2];
-            dst[0x58 + 3] = g_GrandPrixCars[offset + 3];
-            dst[0x58 + 4] = g_GrandPrixCars[offset + 4];
-            dst[0x58 + 5] = g_GrandPrixCars[offset + 5];
+        for (i = 0; i < 13; i++) {
+            dst[0x58 + 0] = g_GrandPrixCars[i].modelVariant;
+            dst[0x58 + 1] = g_GrandPrixCars[i].tireCompound;
+            dst[0x58 + 2] = g_GrandPrixCars[i].transmission;
+            dst[0x58 + 3] = g_GrandPrixCars[i].paintColor1;
+            dst[0x58 + 4] = g_GrandPrixCars[i].paintColor2;
+            dst[0x58 + 5] = g_GrandPrixCars[i].enabled;
 
-            dst[0xC0 + 0] = g_ExtraGrandPrixCars[offset + 0];
-            dst[0xC0 + 1] = g_ExtraGrandPrixCars[offset + 1];
-            dst[0xC0 + 2] = g_ExtraGrandPrixCars[offset + 2];
-            dst[0xC0 + 3] = g_ExtraGrandPrixCars[offset + 3];
-            dst[0xC0 + 4] = g_ExtraGrandPrixCars[offset + 4];
-            dst[0xC0 + 5] = g_ExtraGrandPrixCars[offset + 5];
+            dst[0xC0 + 0] = g_ExtraGrandPrixCars[i].modelVariant;
+            dst[0xC0 + 1] = g_ExtraGrandPrixCars[i].tireCompound;
+            dst[0xC0 + 2] = g_ExtraGrandPrixCars[i].transmission;
+            dst[0xC0 + 3] = g_ExtraGrandPrixCars[i].paintColor1;
+            dst[0xC0 + 4] = g_ExtraGrandPrixCars[i].paintColor2;
+            dst[0xC0 + 5] = g_ExtraGrandPrixCars[i].enabled;
 
-            dst[0x128 + 0] = g_TimeAttackCars[offset + 0];
-            dst[0x128 + 1] = g_TimeAttackCars[offset + 1];
-            dst[0x128 + 2] = g_TimeAttackCars[offset + 2];
-            dst[0x128 + 3] = g_TimeAttackCars[offset + 3];
-            dst[0x128 + 4] = g_TimeAttackCars[offset + 4];
-            dst[0x128 + 5] = g_TimeAttackCars[offset + 5];
+            dst[0x128 + 0] = g_TimeAttackCars[i].modelVariant;
+            dst[0x128 + 1] = g_TimeAttackCars[i].tireCompound;
+            dst[0x128 + 2] = g_TimeAttackCars[i].transmission;
+            dst[0x128 + 3] = g_TimeAttackCars[i].paintColor1;
+            dst[0x128 + 4] = g_TimeAttackCars[i].paintColor2;
+            dst[0x128 + 5] = g_TimeAttackCars[i].enabled;
+
             dst += 8;
         }
     }
@@ -842,9 +841,6 @@ extern u16 g_NegconNeutralL asm("D_8019CA0C");
  * as g_BgmSelection. Same address, two widths, so two names. */
 extern s32 g_BgmSelectionW asm("D_801E42CC");
 
-extern u8 g_GrandPrixCars[] asm("D_801E4F44");
-extern u8 g_ExtraGrandPrixCars[] asm("D_8019C914");
-extern u8 g_TimeAttackCars[] asm("D_801E4388");
 extern u16 g_ClassRecords[] asm("D_8019CB40");
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
@@ -946,26 +942,26 @@ s32 LoadSaveStateBlock(u8 *arg0) {
 
     {
         register u8 *src asm("$6") = base;
-        s32 offset = 0;
-        for (; offset < 0x68; offset += 8) {
-            g_GrandPrixCars[offset + 0] = src[0x58 + 0];
-            g_GrandPrixCars[offset + 1] = src[0x58 + 1];
-            g_GrandPrixCars[offset + 2] = src[0x58 + 2];
-            g_GrandPrixCars[offset + 3] = src[0x58 + 3];
-            g_GrandPrixCars[offset + 4] = src[0x58 + 4];
-            g_GrandPrixCars[offset + 5] = src[0x58 + 5];
-            g_ExtraGrandPrixCars[offset + 0] = src[0xC0 + 0];
-            g_ExtraGrandPrixCars[offset + 1] = src[0xC0 + 1];
-            g_ExtraGrandPrixCars[offset + 2] = src[0xC0 + 2];
-            g_ExtraGrandPrixCars[offset + 3] = src[0xC0 + 3];
-            g_ExtraGrandPrixCars[offset + 4] = src[0xC0 + 4];
-            g_ExtraGrandPrixCars[offset + 5] = src[0xC0 + 5];
-            g_TimeAttackCars[offset + 0] = src[0x128 + 0];
-            g_TimeAttackCars[offset + 1] = src[0x128 + 1];
-            g_TimeAttackCars[offset + 2] = src[0x128 + 2];
-            g_TimeAttackCars[offset + 3] = src[0x128 + 3];
-            g_TimeAttackCars[offset + 4] = src[0x128 + 4];
-            g_TimeAttackCars[offset + 5] = src[0x128 + 5];
+        s32 i;
+        for (i = 0; i < 13; i++) {
+            g_GrandPrixCars[i].modelVariant = src[0x58 + 0];
+            g_GrandPrixCars[i].tireCompound = src[0x58 + 1];
+            g_GrandPrixCars[i].transmission = src[0x58 + 2];
+            g_GrandPrixCars[i].paintColor1 = src[0x58 + 3];
+            g_GrandPrixCars[i].paintColor2 = src[0x58 + 4];
+            g_GrandPrixCars[i].enabled = src[0x58 + 5];
+            g_ExtraGrandPrixCars[i].modelVariant = src[0xC0 + 0];
+            g_ExtraGrandPrixCars[i].tireCompound = src[0xC0 + 1];
+            g_ExtraGrandPrixCars[i].transmission = src[0xC0 + 2];
+            g_ExtraGrandPrixCars[i].paintColor1 = src[0xC0 + 3];
+            g_ExtraGrandPrixCars[i].paintColor2 = src[0xC0 + 4];
+            g_ExtraGrandPrixCars[i].enabled = src[0xC0 + 5];
+            g_TimeAttackCars[i].modelVariant = src[0x128 + 0];
+            g_TimeAttackCars[i].tireCompound = src[0x128 + 1];
+            g_TimeAttackCars[i].transmission = src[0x128 + 2];
+            g_TimeAttackCars[i].paintColor1 = src[0x128 + 3];
+            g_TimeAttackCars[i].paintColor2 = src[0x128 + 4];
+            g_TimeAttackCars[i].enabled = src[0x128 + 5];
             src += 8;
         }
     }
