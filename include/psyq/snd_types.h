@@ -111,7 +111,7 @@ typedef struct VagAtr {
     u_short adsr1;
     u_short adsr2;
     short prog;
-    short vag;
+    u_short vag;
     short reserved[4];
 } VagAtr;
 
