@@ -3,9 +3,12 @@
 
 #include "common.h"
 
+/* One class row: the best finishing place, -1 until the class is unlocked
+ * and 0 once it is, plus a clear counter capped at 99 and drawn as two
+ * digits. The two halfwords are also reached as separate strided arrays. */
 typedef struct GameScoreRecord {
-    s16 value;
-    s16 count;
+    s16 place;
+    u16 clears;
 } GameScoreRecord;
 
 /* Ranking / time high-score record row; tables D_801E7744 (ranking) and

@@ -122,8 +122,8 @@ void CommitClassProgress(void) {
             }
         } else {
             if (score_index != 5) {
-                if (g_ClassRecords[score_index + 1].value == -1) {
-                    g_ClassRecords[score_index + 1].value = 0;
+                if (g_ClassRecords[score_index + 1].place == -1) {
+                    g_ClassRecords[score_index + 1].place = 0;
                 }
             }
         }
@@ -133,8 +133,8 @@ void CommitClassProgress(void) {
             s32 offset;
 
             offset = score_index * 4;
-            if (g_ClassRecords[score_index].value == 0 || value < g_ClassRecords[score_index].value) {
-                g_ClassRecords[score_index].value = (u16)g_ClassResultPlace;
+            if (g_ClassRecords[score_index].place == 0 || value < g_ClassRecords[score_index].place) {
+                g_ClassRecords[score_index].place = (u16)g_ClassResultPlace;
             }
             g_ClassClearFanfareTimer = 0xD2;
         }

@@ -7,7 +7,6 @@
 
 typedef struct XY { s16 x, y; } XY;
 typedef struct RGB { u8 r, g, b; } RGB;
-typedef struct ScoreRec { s16 flag; u16 val; } ScoreRec;
 typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
 extern s32 g_OptionMenuCursor asm("D_8019C7B4");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -20,7 +19,7 @@ extern s32 g_ScreenOffsetY asm("D_801E4B9C");
 extern s32 g_ScreenOffsetEditX asm("D_801E4D68");
 extern XY D_8007D5A8[];
 extern RGB D_8007D658[];
-extern ScoreRec g_ClassRecords[] asm("D_8019CB40");
+extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
 extern Struct12 D_8007D5D4[];
 s32 func_800153FC(void);
 s32 RequestTrackLoad(void) asm("func_8001965C");
@@ -166,7 +165,7 @@ void DrawClassRecordDetail(void) {
     next = func_80017138(base, next, 0xD8, 0x40, 8, 0x10, g_ScreenOffsetEditX * 8 + 8, 0x18, 0x7F40);
 
     x = 0xB4;
-    if (g_ClassRecords[idx].flag == -1) {
+    if (g_ClassRecords[idx].place == -1) {
         for (i = 0; i < 8; i++) {
             next = func_80017138(base, next, x + 0x30 + i * 8, y + 8, 8, 0x10, 0x38, 0x28, 0x7F40);
         }
@@ -178,9 +177,9 @@ void DrawClassRecordDetail(void) {
 
     next = func_80017138(base, next, x | 8, y + 0x28, 0x44, 0x10, 0x1C, 0x6C, 0x7F40);
     next = func_80017138(base, next, x + 100, y + 0x28, 8, 0x10,
-                         (s16)((s16)g_ClassRecords[idx].val / 10) << 3, 0x18, 0x7F40);
+                         (s16)((s16)g_ClassRecords[idx].clears / 10) << 3, 0x18, 0x7F40);
     next = func_80017138(base, next, x + 108, y + 0x28, 8, 0x10,
-                         (s16)((s16)g_ClassRecords[idx].val % 10) << 3, 0x18, 0x7F40);
+                         (s16)((s16)g_ClassRecords[idx].clears % 10) << 3, 0x18, 0x7F40);
     next = func_80017390(base, next, 0x3B);
     next = AddTilePrim(base, next, x + 78, y + 47, 0x14, 2, 0xFF, 0xFF, 0xFF);
     next = AddTilePrim(base, next, x, y, 0x7C, 0x1E, 0, 0, 0);
@@ -206,7 +205,7 @@ void DrawClassRecordGrid(void) {
     for (i = 0; i < 11; i++) {
         x = D_8007D5A8[i].x;
         y = D_8007D5A8[i].y;
-        flag = g_ClassRecords[i].flag;
+        flag = g_ClassRecords[i].place;
         switch (flag) {
         case 1:
             next = func_80016EC4(base, next, x, y, 0x20, 0x50,
@@ -221,7 +220,7 @@ void DrawClassRecordGrid(void) {
                                  D_8007D5D4[i].b2, D_8007D5D4[i].b3, D_8007D5D4[i].h8);
             break;
         }
-        if (g_ClassRecords[i].flag <= 0) {
+        if (g_ClassRecords[i].place <= 0) {
             next = func_80016EC4(base + 4, next, x, y, 0x20, 0x50, 0x60, 0x70, 0x7E80);
         } else {
             next = func_80016EC4(base + 4, next, x, y, 0x20, 0x50, 0x80, 0x70, 0x7E81);
