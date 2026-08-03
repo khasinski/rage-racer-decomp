@@ -10,34 +10,6 @@ typedef struct SeqVolumeView {
     u_char pad78[0x34];
 } SeqVolumeView;
 
-typedef struct SvmCurrentAttr {
-    u_char tones;
-    u_char vab_id;
-    u_char note;
-    u_char fine;
-    u_char volume;
-    u_char pan;
-    u_char program;
-    u_char fake_program;
-    u_char unk8;
-    u_char unk9;
-    u_char master_volume;
-    u_char master_pan;
-    u_char tone;
-    u_char tone_volume;
-    u_char tone_pan;
-    u_char priority;
-    u_char center;
-    u_char shift;
-    u_char min;
-    u_char max;
-    u_char mode;
-    u_char pad15;
-    u_short seq_sep;
-    short vag;
-    u_short voice;
-} SvmCurrentAttr;
-
 extern SeqVolumeView *g_SndSeqTable[] asm("D_801E79CC");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");

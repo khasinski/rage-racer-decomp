@@ -48,6 +48,15 @@ typedef struct DrawEnv {
  * ordering-table tag that AddPrim links, then the packed command word (rgb of
  * vertex 0 + the primitive code the Set* helpers stamp in).
  */
+/* One deferred GPU operation in g_GpuQueue: a callback, its two arguments and
+ * the packet it was handed. */
+typedef struct QEntry {
+    void (*cb)(long, long);
+    long arg;
+    long tag;
+    long params[21];
+} QEntry;
+
 typedef struct P_TAG {
     u_long tag;
     u_char r0;

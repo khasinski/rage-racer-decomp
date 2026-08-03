@@ -154,4 +154,33 @@ typedef struct SpuVoice {
     short end_pan;
 } SpuVoice;
 
+/* The libsnd "current attributes" block the key-on path fills in. */
+typedef struct SvmCurrentAttr {
+    u_char tones;
+    u_char vab_id;
+    u_char note;
+    u_char fine;
+    u_char volume;
+    u_char pan;
+    u_char program;
+    u_char fake_program;
+    u_char unk8;
+    u_char unk9;
+    u_char master_volume;
+    u_char master_pan;
+    u_char tone;
+    u_char tone_volume;
+    u_char tone_pan;
+    u_char priority;
+    u_char center;
+    u_char shift;
+    u_char min;
+    u_char max;
+    u_char mode;
+    u_char pad15;
+    u_short seq_sep;
+    short vag;
+    u_short voice;
+} SvmCurrentAttr;
+
 #endif

@@ -1,13 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
-
-typedef struct QEntry {
-    void (*cb)(long, long);
-    long arg;
-    long tag;
-    long params[21];
-} QEntry;
+#include "psyq/gpu.h"
 
 extern QEntry g_GpuQueue[] asm("D_801E5024");
 extern volatile long g_GpuQueueWriteIdx asm("D_800942EC");

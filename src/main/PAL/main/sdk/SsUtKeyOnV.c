@@ -47,7 +47,10 @@ typedef struct SpuVoiceView {
     short end_pan;
 } SpuVoiceView;
 
-typedef struct SvmCurrentAttr {
+/* The key-on path's view of the same block psyq/snd_types.h calls
+ * SvmCurrentAttr, but four bytes longer and reading vag unsigned, so the two
+ * are not interchangeable. One of them is wrong. */
+typedef struct SvmCurrentAttrKeyOn {
     u_char tones;
     u_char vab_id;
     u_char note;
@@ -75,12 +78,12 @@ typedef struct SvmCurrentAttr {
     u_short voice;
     u_short unk1c;
     u_short unk1e;
-} SvmCurrentAttr;
+} SvmCurrentAttrKeyOn;
 
 extern long g_SndUpdateLock asm("D_801E40AC");
 extern ProgAtrView *g_SndCurrentProgTable asm("D_801E4110");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
-extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttrKeyOn g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoiceView g_SndVoiceState[] asm("D_8009E0B8");
 
 extern long SpuVmVSetUp(short, short) asm("func_80073314");

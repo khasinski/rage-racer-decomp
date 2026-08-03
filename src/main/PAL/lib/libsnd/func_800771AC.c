@@ -3,34 +3,6 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-typedef struct SvmCurrentAttrMix {
-    u_char tones;
-    u_char unk1;
-    u_char note;
-    u_char fine;
-    u_char volume;
-    u_char pan;
-    u_char unk6;
-    u_char fake_program;
-    u_char unk8;
-    u_char unk9;
-    u_char master_volume;
-    u_char master_pan;
-    u_char tone;
-    u_char tone_volume;
-    u_char tone_pan;
-    u_char priority;
-    u_char center;
-    u_char shift;
-    u_char min;
-    u_char max;
-    u_char mode;
-    u_char unk15;
-    u_short seq_sep;
-    short vag;
-    u_short voice;
-} SvmCurrentAttrMix;
-
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern short g_SndVoiceRegs[] asm("D_8009DF20");
@@ -42,7 +14,7 @@ extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
 extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern long g_SndUpdateLock asm("D_801E40AC");
-extern SvmCurrentAttrMix g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 
 long SpuVmVSetUp(short vab_id, short program) asm("func_80073314");
 u_char SpuVmAlloc(long priority) asm("func_800739E8");
