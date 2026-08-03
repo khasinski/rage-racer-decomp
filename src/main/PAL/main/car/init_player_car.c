@@ -115,10 +115,10 @@ typedef struct GamePlayerCarSpecInit
   s32 fA8[10];
   s32 fD0[6];
   s32 fE8[6];
-  s16 f100;
+  s16 revLimit;
   s16 f102;
-  s16 f104;
-  s16 f106;
+  s16 topGear;
+  s16 redline;
   s16 f108;
   u8 p10A[8];
   s16 f112;
@@ -183,7 +183,7 @@ void InitPlayerCar(GameCarRuntime *car)
   s32 headingBase;
   s32 divisor;
   s32 speedThreshold;
-  s16 *revLimit;
+  s16 *revLimitPtr;
   s32 peakRpm;
   s32 value;
   s32 j;
@@ -298,16 +298,16 @@ void InitPlayerCar(GameCarRuntime *car)
   drive = (GameCarDrive *) (((u8 *) car) + (divisor = 0xBC));
   DebugPrintf(D_800113C4);
   carSpec = g_PlayerCarInitSpec;
-  if (carSpec->f104 < 6)
+  if (carSpec->topGear < 6)
   {
-    if (carSpec->f104 <= 0)
+    if (carSpec->topGear <= 0)
     {
-      carSpec->f104 = 6;
+      carSpec->topGear = 6;
     }
   }
   else
   {
-    carSpec->f104 = 6;
+    carSpec->topGear = 6;
   }
   drive->unk8C = (g_PlayerCarInitSpec->f15C * 0x490) / 160;
   DebugPrintf(D_800113CC);
@@ -324,12 +324,12 @@ void InitPlayerCar(GameCarRuntime *car)
 
   D_801E4B90 = j;
   peakRpm = g_PlayerCarInitSpec->f40.h[D_8019C798 * 2];
-  D_801E6F18 = (((s16) peakRpm) - g_PlayerCarInitSpec->f106) / 2;
-  revLimit = &g_PlayerCarInitSpec->f100;
-  D_801E6F1A = ((*revLimit) - ((s16) peakRpm)) / 2;
+  D_801E6F18 = (((s16) peakRpm) - g_PlayerCarInitSpec->redline) / 2;
+  revLimitPtr = &g_PlayerCarInitSpec->revLimit;
+  D_801E6F1A = ((*revLimitPtr) - ((s16) peakRpm)) / 2;
   D_8019C798 = peakRpm;
   DebugPrintf(D_800113D4);
-  DebugPrintf(D_800113DC, g_PlayerCarInitSpec->f104);
+  DebugPrintf(D_800113DC, g_PlayerCarInitSpec->topGear);
   for (j = 0; j < 6; j++)
   {
     scaledGearRatio = (g_PlayerCarInitSpec->fE8[j] * 0x490) / 160;
