@@ -52,7 +52,7 @@ extern u8 g_LibcLowerDigits[] asm("D_800131F8");
 
 #define LIBC_NEXT_ARG(type) (args += 4, *(type *)(args - 4))
 #define LIBC_NEXT_NUM_ARG(type) ({ \
-    register u8 *oldArgs asm("$3") = args; \
+    oldArgs = args; \
     args = oldArgs + 4; \
     *(type *)oldArgs; \
 })
@@ -66,6 +66,7 @@ s32 func_800632F0(u8 *dest, u8 *format, ...) {
     u8 *end;
     u8 *digits;
     u32 value;
+    u8 *oldArgs;
     u32 nflags;
     s32 length;
     s32 count;
