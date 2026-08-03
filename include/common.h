@@ -29,8 +29,9 @@ typedef float f32;
  *
  * This has been measured exhaustively: every pure barrier and every pin was
  * removed in turn and the object compared against a baseline. Only a handful
- * survive removal, and none hold each other - no function is free when all its
- * pins go at once, and no intra-function pair is removable together.
+ * turned out to be removable, and none hold each other - no function is free
+ * when all its pins go at once, and no intra-function pair is removable
+ * together.
  * Combinations across functions cannot matter, since register allocation is
  * per function.
  *
