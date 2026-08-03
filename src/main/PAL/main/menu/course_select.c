@@ -918,8 +918,9 @@ void UpdateCourseSelectScreen(void) {
                 }
                 break;
             default:
-                goto clear;
-            }
+                    g_UiScriptProgress = 0;
+                    GameMenuBusy = 0;
+                            }
         }
     }
 }

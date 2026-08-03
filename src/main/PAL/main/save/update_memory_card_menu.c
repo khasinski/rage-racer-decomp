@@ -903,7 +903,9 @@ L_b1280:
         if (!(*p != g_McMenuRowCount - 1)) {
         if (fadeBusy) break;
         PlaySoundCue(2);
-        goto L_b1420;
+    g_McActionBusy = 0;
+    func_8006138C();
+    break;
         }
         PlaySoundCue(5);
         g_McMenuPage = 1;
@@ -914,7 +916,6 @@ L_b1280:
         PlaySoundCue(3);
     }
 
-L_b1420:
     g_McActionBusy = 0;
     func_8006138C();
     break;

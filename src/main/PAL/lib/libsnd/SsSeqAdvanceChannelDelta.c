@@ -42,7 +42,8 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
         } else if (count == 0) {
             state->unk6E = period_copy;
             store_value = state->delta_value - 1;
-            goto store_delay;
+        state->delta_value = store_value;
+                return;
         } else {
             state->delta_value = remaining;
         }
@@ -70,7 +71,6 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
         store_value = total - count;
         break;
         }
-store_delay:
         state->delta_value = store_value;
     }
 }
