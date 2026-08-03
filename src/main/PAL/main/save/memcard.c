@@ -50,7 +50,10 @@ s32 PollMemoryCardStatus(s32 arg0, s32 arg1) {
                 goto case1_ready;
             }
             state = -3;
-            goto fail_case1;
+        g_McPollStatus = state;
+        g_McStatusState = 4;
+        g_McLastCardStatus = 0;
+        break;
         }
         if (!(status == 3)) {
         if (status == 4) {
@@ -70,7 +73,10 @@ case1_ready:
         }
         } else {
         state = -1;
-        goto fail_case1;
+        g_McPollStatus = state;
+        g_McStatusState = 4;
+        g_McLastCardStatus = 0;
+        break;
 
         }
         g_McPollStatus = two;
