@@ -1538,25 +1538,11 @@ extern u8 g_McHelpText[] asm("D_80012ADC");
 
 
 void DrawMemoryCardHelpPrompt(s32 arg0) {
-    s32 offset;
-    u8 *base;
-    s32 x;
-    s32 y;
+    s32 i;
 
-    offset = arg0 * 16;
-    offset -= arg0;
-    x = 0x50;
-    y = 0x28;
-    __asm__("" : "=r"(x), "=r"(y) : "0"(x), "1"(y));
-    offset <<= 2;
-    base = g_McHelpText;
-    DrawText8x8Wide(x, y, base + offset, 0x78CC);
-
-    x = 0x50;
-    y = 0x40;
-    __asm__("" : "=r"(x), "=r"(y) : "0"(x), "1"(y));
-    base += 0x1E;
-    DrawText8x8Wide(x, y, base + offset, 0x78CC);
+    i = arg0 * 0x3C;
+    DrawText8x8Wide(0x50, 0x28, &g_McHelpText[i], 0x78CC);
+    DrawText8x8Wide(0x50, 0x40, &g_McHelpText[i + 0x1E], 0x78CC);
 }
 
 /* ---- was DrawMemoryCardSaveRows.c ---- */
