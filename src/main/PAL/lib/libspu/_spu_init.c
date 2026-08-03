@@ -3,51 +3,13 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-typedef struct SpuInitVoiceRegister {
-    SpuVolume volume;
-    u_short pitch;
-    u_short addr;
-    u_short adsr[2];
-    u_short volumex;
-    u_short loopAddr;
-} SpuInitVoiceRegister;
-
-typedef struct SpuInitControl {
-    SpuInitVoiceRegister voice[24];
-    SpuVolume mainVol;
-    SpuVolume revVol;
-    u_short keyOn[2];
-    u_short keyOff[2];
-    u_short chanFm[2];
-    u_short noiseMode[2];
-    u_short revMode[2];
-    u_long chanOn;
-    u_short unk;
-    u_short revWorkAddr;
-    u_short irqAddr;
-    u_short transAddr;
-    u_short transFifo;
-    u_short spuCnt;
-    u_short dataTrans;
-    u_short spuStat;
-    SpuVolume cdVol;
-    SpuVolume extVol;
-    SpuVolume mainVolCurrent;
-    SpuVolume unkVol;
-} SpuInitControl;
-
-typedef union SpuInitRegisterMap {
-    SpuInitControl regs;
-    volatile u_short raw[0x100];
-} SpuInitRegisterMap;
-
 extern long _spu_writeByIO(long addr, long size) asm("func_80078F4C");
 
 extern char g_SpuTimeoutFmt[] asm("D_80013EC0");
 extern char g_SpuTimeoutMsgReset[] asm("D_80013ED0");
 extern long g_SpuWaitCount asm("D_8009AB74");
 extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
-extern volatile SpuInitRegisterMap *g_SpuRegBase asm("D_8009AB7C");
+extern volatile SpuRegisterMap *g_SpuRegBase asm("D_8009AB7C");
 extern volatile long *g_SpuDpcr asm("D_8009AB8C");
 extern long g_SpuTransferByIo asm("D_8009AB94");
 /* Deliberately raw: written zero here and read nowhere in the image. */

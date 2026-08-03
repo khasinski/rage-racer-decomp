@@ -132,4 +132,45 @@ void _spu_setTransferCompletionFlag(long completed) asm("func_8007B294");
 u_long _spu_isTransferIdle(void) asm("func_8007B2C0");
 void SpuSetCommonAttr(SpuCommonAttr *attr) asm("func_8007B2D0");
 
+
+/* The SPU hardware register file at g_SpuRegBase, as a struct and as the raw
+ * half-word window the transfer paths use. */
+typedef struct SpuVoiceRegs {
+    SpuVolume volume;
+    u_short pitch;
+    u_short addr;
+    u_short adsr[2];
+    u_short volumex;
+    u_short loopAddr;
+} SpuVoiceRegs;
+
+typedef struct SpuCommonRegs {
+    SpuVoiceRegs voice[24];
+    SpuVolume mainVol;
+    SpuVolume revVol;
+    u_short keyOn[2];
+    u_short keyOff[2];
+    u_short chanFm[2];
+    u_short noiseMode[2];
+    u_short revMode[2];
+    u_long chanOn;
+    u_short unknown;
+    u_short revWorkAddr;
+    u_short irqAddr;
+    u_short transAddr;
+    u_short transFifo;
+    u_short spuCnt;
+    u_short dataTrans;
+    u_short spuStat;
+    SpuVolume cdVol;
+    SpuVolume extVol;
+    SpuVolume mainVolCurrent;
+    SpuVolume unknownVol;
+} SpuCommonRegs;
+
+typedef union SpuRegisterMap {
+    SpuCommonRegs regs;
+    volatile u_short raw[0x100];
+} SpuRegisterMap;
+
 #endif
