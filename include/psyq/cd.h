@@ -7,6 +7,12 @@
 
 /* libcd's polling deadline: a wall-clock limit, the retries left, and the name
  * the timeout message prints. Was duplicated in four CD_*.c files. */
+/* libcd sync/ready completion callback: status byte plus the 8-byte result. */
+typedef void (*CdCallback)(u_char status, u_char *result);
+
+/* libcd streaming per-frame callback: takes no arguments. */
+typedef void (*StCallback)(void);
+
 typedef struct CdAlarm {
     long deadline;
     long count;

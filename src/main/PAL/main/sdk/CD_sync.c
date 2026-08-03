@@ -3,7 +3,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-typedef void (*CdCallback)(long, u_char *);
 
 
 

@@ -11,10 +11,9 @@ extern volatile u_long *g_CdDmaBcr asm("D_80099340");
 extern volatile u_long *g_CdDmaChcr asm("D_80099344");
 extern long D_800992E4;
 
-typedef void (*Callback)(long, void *);
 
-extern Callback g_CdSyncCallback asm("D_8009903C");
-extern Callback g_CdReadyCallback asm("D_80099040");
+extern CdCallback g_CdSyncCallback asm("D_8009903C");
+extern CdCallback g_CdReadyCallback asm("D_80099040");
 extern u_char g_CdSyncStatus asm("D_80099318");
 extern u_char g_CdReadyStatus asm("D_80099319");
 extern u_char g_CdSyncResult[] asm("D_8009BAF0");
@@ -75,7 +74,7 @@ void func_8006C17C(void) {
         }
 
         if ((status & 2) != 0) {
-            Callback doneCallback;
+            CdCallback doneCallback;
             u_char *resultByte;
 
             doneCallback = g_CdSyncCallback;

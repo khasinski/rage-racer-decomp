@@ -4,7 +4,6 @@
 #include "psyq/cd.h"
 
 
-typedef void (*CdCallback)(u_char status, u_char *result);
 
 extern CdCallback g_CdSyncCallback asm("D_8009903C");
 extern CdCallback g_CdReadyCallback asm("D_80099040");

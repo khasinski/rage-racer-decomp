@@ -2,8 +2,6 @@
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
 
-typedef void (*StCallback)(void);
-
 typedef struct StReadyStatus {
     u16 reserved;
     u16 status;

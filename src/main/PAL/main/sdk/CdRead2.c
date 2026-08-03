@@ -2,7 +2,6 @@
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
 
-typedef void (*Callback)(void);
 
 extern long g_StBackFrame asm("D_8009DF18");
 extern u_char g_StBackLoc[] asm("D_8009DF14");
@@ -12,7 +11,7 @@ extern u_char *D_8009936C;
 extern long g_StNotStream2Mode asm("D_8019C7A0");
 extern short D_8019C790;
 extern long g_StColorMode asm("D_8019C79C");
-extern Callback g_StFrameCallback asm("D_8019C994");
+extern StCallback g_StFrameCallback asm("D_8019C994");
 extern long D_8019C9A0;
 extern long D_801E3E08;
 extern long D_801E4190;
@@ -117,7 +116,7 @@ long StGetBackloc(CdlLOC *arg0) {
 void StSetStream(long mode, long start_frame, long end_frame, long callback, long user_data) {
     func_8006D1B0(1);
     D_801E8274 = 0;
-    g_StFrameCallback = (Callback)callback;
+    g_StFrameCallback = (StCallback)callback;
     g_StColorMode = mode & 1;
     D_801E4190 = 0;
     D_801E3E08 = 0;
