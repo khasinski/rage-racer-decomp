@@ -27,12 +27,17 @@ typedef float f32;
  * removing one changes .text. They are not annotated individually; assume any
  * of them matters and verify with `make check` before deleting.
  *
- * This has been measured exhaustively, so there is no backlog left to work
- * through: every one of the 46 pure barriers and all 643 pins were removed in
- * turn and only three pins survived it. Nor do they hold each other - no
- * function is free when all its pins go at once, and none of the 1635
- * intra-function pairs is removable together. Combinations across functions
- * cannot matter, because register allocation is per function.
+ * This has been measured exhaustively: every pure barrier and every pin was
+ * removed in turn and the object compared against a baseline. Only a handful
+ * survive removal, and none hold each other - no function is free when all its
+ * pins go at once, and no intra-function pair is removable together.
+ * Combinations across functions cannot matter, since register allocation is
+ * per function.
+ *
+ * If you repeat that sweep, compare the *instruction stream*, not whole .o
+ * files and not raw objdump text: -g -gcoff embeds line numbers and <LMnnn>
+ * annotations, so any edit that changes the line count reports a false
+ * difference. Two rounds of this tree's results were wrong for that reason.
  */
 
 #define RAW(x) (*(__typeof__(x) *)((s32)&(x)))
