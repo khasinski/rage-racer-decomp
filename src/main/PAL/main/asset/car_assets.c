@@ -5,7 +5,7 @@
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
 extern GameCarModelAsset *g_CarModelAsset asm("D_8009E698");
-extern GameAssetTripleHeader *g_AssetLoadCursor asm("D_8019CAFC");
+extern GameSceneAssetHeader *g_AssetLoadCursor asm("D_8019CAFC");
 extern s32 g_TeamLogoSampleData asm("D_8019CA64");
 extern u8 *g_CarModelBuffer asm("D_801E4090");
 extern u8 *g_ImageBlockBuffer asm("D_801E4B30");
@@ -48,8 +48,8 @@ void LoadCarSelectAssets(void) {
     s32 state = g_AssetLoadState;
     s32 state2;
     u8 *carModelBase;
-    GameAssetTripleHeader *header;
-    GameAssetTripleHeader *headerArg;
+    GameSceneAssetHeader *header;
+    GameSceneAssetHeader *headerArg;
     GameCarModelAsset *model;
     register GameCarEntry *entry asm("$2");
     s32 carIndex;
@@ -70,7 +70,7 @@ void LoadCarSelectAssets(void) {
         if ((func_8005B89C() << 16) != 0) {
             func_8005DBD8();
             g_AssetLoadState = 3;
-            g_AssetLoadCursor = (GameAssetTripleHeader *)g_AssetSubBlockPtr;
+            g_AssetLoadCursor = (GameSceneAssetHeader *)g_AssetSubBlockPtr;
         }
         return;
     case 3:
@@ -78,16 +78,16 @@ void LoadCarSelectAssets(void) {
                 RegisterModelBank((u8 *)g_AssetLoadCursor + 0xC, 0xE);
 
                 header = g_AssetLoadCursor;
-                secondOffset = header->secondOffset;
-                firstOffset = header->firstOffset;
+                secondOffset = header->offsets[1];
+                firstOffset = header->offsets[0];
                 secondOffset = (s32)((u8 *)header + secondOffset);
-                header = (GameAssetTripleHeader *)((u8 *)header + firstOffset);
+                header = (GameSceneAssetHeader *)((u8 *)header + firstOffset);
                 g_TeamLogoSampleData = (s32)header;
                 g_AssetBlockPtr = (u8 *)secondOffset;
                 RegisterCourseModels();
 
                 headerArg = g_AssetLoadCursor;
-                assetOffset = headerArg->thirdOffset;
+                assetOffset = headerArg->offsets[2];
                 g_AssetBlockPtr = (u8 *)headerArg + assetOffset;
                 UploadImageAsset(g_AssetBlockPtr);
 

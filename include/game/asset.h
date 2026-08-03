@@ -25,12 +25,6 @@ s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
  * wait, success, failure). Sequences one transfer, unlike g_AssetLoadState. */
 extern s16 g_CdLoadPhase asm("D_8007C700");
 
-typedef struct GameAssetTripleHeader {
-    s32 firstOffset;
-    s32 secondOffset;
-    s32 thirdOffset;
-} GameAssetTripleHeader;
-
 typedef struct GameCdLoadEntry {
     u32 position;
     u32 size;
@@ -64,6 +58,8 @@ typedef struct GameImageBlock {
     u8 pixels[4]; /* +0x0C */
 } GameImageBlock;
 
+/* The offset table every asset pack starts with; sub-blocks live at
+ * base + offsets[n]. Some packs only ever use the first three. */
 typedef struct GameSceneAssetHeader {
     s32 offsets[11];
 } GameSceneAssetHeader;

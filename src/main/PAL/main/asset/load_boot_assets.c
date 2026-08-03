@@ -18,7 +18,7 @@ s32 func_8005B89C(void);
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void DrawSync(long mode) asm("func_800658FC");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
-extern GameAssetTripleHeader *g_AssetBase asm("D_8019C904");
+extern GameSceneAssetHeader *g_AssetBase asm("D_8019C904");
 extern void *g_AssetBlockPtr2 asm("D_8019C754");
 extern void *g_AssetSubBlockPtr asm("D_801E8AB0");
 void CloseLoadedAudioSlots(void) asm("func_8005B9CC");
@@ -85,7 +85,7 @@ setNextBuffer:
             finalBase = g_AssetLoadCursor;
             g_TeamLogoClut[0] = 0;
             g_AssetLoadState = 0;
-            g_AssetBase = (GameAssetTripleHeader *)finalBase;
+            g_AssetBase = (GameSceneAssetHeader *)finalBase;
         }
         break;
     }
@@ -163,7 +163,7 @@ s32 RequestSelectBgmAssets(void) {
 
 void LoadSelectBgmAssets(void) asm("func_80018484");
 void LoadSelectBgmAssets(void) {
-    GameAssetTripleHeader *header;
+    GameSceneAssetHeader *header;
     s32 firstOffset;
     s32 secondOffset;
     s32 thirdOffset;
@@ -175,16 +175,16 @@ void LoadSelectBgmAssets(void) {
     case 2:
         if (func_80017C78(7, g_AssetBase) != 0) {
             header = g_AssetBase;
-            firstOffset = *(volatile s32 *)&header->firstOffset;
-            thirdOffset = *(volatile s32 *)&header->thirdOffset;
+            firstOffset = *(volatile s32 *)&header->offsets[0];
+            thirdOffset = *(volatile s32 *)&header->offsets[2];
             g_AssetBlockPtr = (void *)((u8 *)header + firstOffset);
-            secondOffset = *(volatile s32 *)&header->secondOffset;
+            secondOffset = *(volatile s32 *)&header->offsets[1];
             g_AssetLoadState = 0;
             {
                 s32 rel = secondOffset;
                 secondOffset = (s32)header + rel;
             }
-            header = (GameAssetTripleHeader *)((u8 *)header + thirdOffset);
+            header = (GameSceneAssetHeader *)((u8 *)header + thirdOffset);
             g_AssetBlockPtr2 = (void *)secondOffset;
             g_AssetSubBlockPtr = header;
         }
