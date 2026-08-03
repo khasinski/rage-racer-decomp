@@ -63,7 +63,7 @@ void DrawMemoryCardMessage(s32 arg0) {
     s32 y;
     s16 *table;
     s32 one;
-    register s32 temp asm("$2");
+    u8 code;
     s32 next;
     s32 base;
     s32 delta;
@@ -75,17 +75,16 @@ void DrawMemoryCardMessage(s32 arg0) {
     if ((u32)(index - 0x10) >= 2 && index != 0x12) {
         one = 1;
         table = g_McMessageColumnX;
-        temp = 1;
+        code = 1;
         do {
-            temp = (u8)temp;
-            if (temp != one) {
-                x = table[temp];
+            if (code != one) {
+                x = table[code];
                 y = 0x60;
             }
             func_80027874(x, y, entry[0], 0x7F81);
-            temp = ((u8 *)entry)[4];
+            code = ((u8 *)entry)[4];
             entry += 2;
-        } while (temp != 0);
+        } while (code != 0);
     }
 
     base = (s32)g_DrawBuffer + 0xCC;
