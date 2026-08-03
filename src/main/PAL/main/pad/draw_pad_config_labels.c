@@ -1,13 +1,9 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/state.h"
 
 /* Six 4-byte {x, y} label slots; `labelRow` names one per action. */
-typedef struct LabelPoint {
-    s16 x;
-    s16 y;
-} LabelPoint;
-
-extern LabelPoint g_PadLabelSlots[] asm("D_8007C150");
+extern DVec g_PadLabelSlots[] asm("D_8007C150");
 
 /* Local wide-parameter views; see GameQueueSprite.c. */
 u8 *QueueSpriteTransWide(
@@ -44,37 +40,37 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
 
     k = labelRow[0];
     prim = QueueSpriteTransWide(
-        ot, prim, g_PadLabelSlots[k].x + 4, g_PadLabelSlots[k].y + 8, 0x40, 0x10, 0x40,
+        ot, prim, g_PadLabelSlots[k].vx + 4, g_PadLabelSlots[k].vy + 8, 0x40, 0x10, 0x40,
         0xBC, 0x7F40);
     k = labelRow[1];
     prim = QueueSpriteTransWide(
-        ot, prim, g_PadLabelSlots[k].x + 22, g_PadLabelSlots[k].y + 8, 0x1C, 0x10, 0x84,
+        ot, prim, g_PadLabelSlots[k].vx + 22, g_PadLabelSlots[k].vy + 8, 0x1C, 0x10, 0x84,
         0xBC, 0x7F40);
     k = labelRow[2];
     prim = QueueSpriteTransWide(
-        ot, prim, g_PadLabelSlots[k].x + 18, g_PadLabelSlots[k].y + 8, 0x28, 0x10, 0x90,
+        ot, prim, g_PadLabelSlots[k].vx + 18, g_PadLabelSlots[k].vy + 8, 0x28, 0x10, 0x90,
         0xAC, 0x7F40);
     k = labelRow[3];
     prim = QueueSpriteTransWide(
-        ot, prim, g_PadLabelSlots[k].x + 9, g_PadLabelSlots[k].y + 8, 0x18, 0x10, 0x90,
+        ot, prim, g_PadLabelSlots[k].vx + 9, g_PadLabelSlots[k].vy + 8, 0x18, 0x10, 0x90,
         0xAC, 0x7F40);
     k = labelRow[3];
     prim = QueueSpriteTransWide(
-        ot, prim, g_PadLabelSlots[k].x + 33, g_PadLabelSlots[k].y + 8, 0x20, 0x10, 0xB8,
+        ot, prim, g_PadLabelSlots[k].vx + 33, g_PadLabelSlots[k].vy + 8, 0x20, 0x10, 0xB8,
         0xAC, 0x7F40);
     k = labelRow[4];
     prim = QueueSpriteTransWide(
-        ot, prim, g_PadLabelSlots[k].x + 5, g_PadLabelSlots[k].y + 8, 0x40, 0x10, 0,
+        ot, prim, g_PadLabelSlots[k].vx + 5, g_PadLabelSlots[k].vy + 8, 0x40, 0x10, 0,
         0xBC, 0x7F40);
     i = 0;
     do {
         k = labelRow[i];
         prim = (u8 *)AddTilePrim(
-            (s32)ot, (s32)prim, g_PadLabelSlots[k].x + 1, g_PadLabelSlots[k].y + 2, 0x46,
+            (s32)ot, (s32)prim, g_PadLabelSlots[k].vx + 1, g_PadLabelSlots[k].vy + 2, 0x46,
             0x1C, 0, 0, 0);
         k = labelRow[i];
         prim = (u8 *)AddTilePrim(
-            (s32)ot, (s32)prim, g_PadLabelSlots[k].x, g_PadLabelSlots[k].y, 0x48, 0x20,
+            (s32)ot, (s32)prim, g_PadLabelSlots[k].vx, g_PadLabelSlots[k].vy, 0x48, 0x20,
             0xFF, 0xFF, 0xFF);
         i++;
     } while (i < 5);
@@ -83,13 +79,8 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
 
 /* Screen positions, six 4-byte {x, y} rows each: where a label sits and where
  * the button it names sits. */
-typedef struct CalloutPoint {
-    s16 x;
-    s16 y;
-} CalloutPoint;
-
-extern CalloutPoint g_PadCalloutLabelPoints[] asm("D_8007C168");
-extern CalloutPoint g_PadCalloutButtonPoints[] asm("D_8007C180");
+extern DVec g_PadCalloutLabelPoints[] asm("D_8007C168");
+extern DVec g_PadCalloutButtonPoints[] asm("D_8007C180");
 
 /* Screen animation counter; the callouts only draw while it is settled. */
 extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
@@ -117,15 +108,15 @@ u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
     if (g_ControllerSceneAngleY > -16 && g_ControllerSceneAngleY < 16) {
         i = 0;
         do {
-            CalloutPoint *lp = &g_PadCalloutLabelPoints[labelRow[i]];
-            CalloutPoint *bp = &g_PadCalloutButtonPoints[buttonRow[i]];
+            DVec *lp = &g_PadCalloutLabelPoints[labelRow[i]];
+            DVec *bp = &g_PadCalloutButtonPoints[buttonRow[i]];
 
             prim = QueueLineWide(
-                ot, prim, lp->x, lp->y, lp->x, bp->y, 0x20, 0xFF, 0x20);
+                ot, prim, lp->vx, lp->vy, lp->vx, bp->vy, 0x20, 0xFF, 0x20);
             prim = QueueLineWide(
-                ot, prim, lp->x, bp->y, bp->x, bp->y, 0x20, 0xFF, 0x20);
+                ot, prim, lp->vx, bp->vy, bp->vx, bp->vy, 0x20, 0xFF, 0x20);
             prim = QueueLineWide(
-                ot, prim, lp->x, bp->y - 1, bp->x, bp->y - 1, 0x20, 0xFF, 0x20);
+                ot, prim, lp->vx, bp->vy - 1, bp->vx, bp->vy - 1, 0x20, 0xFF, 0x20);
             i++;
         } while (i < 5);
     }

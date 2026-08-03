@@ -26,17 +26,16 @@ void func_800512B4(s32 arg0) {
     *scratch = func_8001720C(base + 0xCC, value, 0x24, (arg0 << 4) + 0x24, 0x50, 0x10, 0, 0, 0xFF);
 }
 
-typedef struct SwVec { s32 a, b, c, d; } SwVec;
 typedef struct SwObj698 { s32 unk0; u16 unk4; } SwObj698;
 typedef struct SwCarRec { u8 b0, b1, b2, b3, b4, b5, b6, b7; } SwCarRec;
 typedef struct SwModelPose {
     s32 position[4];
     s32 unk10[4];
-    SwVec rotation;
+    Vec4 rotation;
 } SwModelPose;
 
-extern SwVec D_80011AB4;
-extern SwVec D_80082D6C;
+extern Vec4 D_80011AB4;
+extern Vec4 D_80082D6C;
 extern s32 D_8009B374;
 extern s32 D_8009B378;
 extern s32 D_8007BED8;
@@ -49,7 +48,7 @@ extern s32 D_8009E71C;
 extern s16 D_8009E804;
 extern s32 D_801E8268;
 extern SwModelPose D_8009E6D4;
-extern SwVec D_8009E724;
+extern Vec4 D_8009E724;
 extern s32 D_8009E734;
 extern s32 D_801E4168;
 extern s32 D_1F800004;
@@ -61,8 +60,8 @@ void func_8001DAB0(void *obj);
 void func_8005131C(void) {
     Matrix mtxA;
     Matrix mtxB;
-    SwVec out;
-    SwVec vec;
+    Vec4 out;
+    Vec4 vec;
     s32 s1, s2, s3;
     s32 x;
     s32 targetAngle;
@@ -168,18 +167,18 @@ void func_8005131C(void) {
         }
     }
 
-    p = &D_8009E6D4.rotation.b;
+    p = &D_8009E6D4.rotation.y;
     *p = *p + D_801E8268;
     BuildRotMatrixY(&mtxA, *p);
-    vec.c = (s16)(-((s16)D_8009E698->unk4 / 2));
+    vec.z = (s16)(-((s16)D_8009E698->unk4 / 2));
     func_80068F80(&mtxA, &vec, &out);
     BuildRotMatrixY(&mtxB, 0x800 - *p);
-    BuildRotMatrixX(&mtxA, D_8009E6D4.rotation.a);
+    BuildRotMatrixX(&mtxA, D_8009E6D4.rotation.x);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2((void *)0x1F800028, &mtxA);
 
     altLayout = g_MenuAltLayout;
-    outX = out.a;
+    outX = out.x;
     asm volatile("" : "=r"(altLayout), "=r"(outX) : "0"(altLayout), "1"(outX));
     p = &D_8009E6D4.position[0];
     if (altLayout != 0) {
@@ -192,7 +191,7 @@ void func_8005131C(void) {
     asm volatile("" : "=r"(result), "=r"(modelSlot) : "0"(result), "1"(modelSlot));
     q = &D_8009E6D4.position[1];
     *p = result;
-    outZ = out.c;
+    outZ = out.z;
     qValue = s2 + 30;
     *q = qValue;
     D_8009E6D4.position[2] = -outZ;

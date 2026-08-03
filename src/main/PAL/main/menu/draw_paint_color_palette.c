@@ -1,13 +1,8 @@
 #include "common.h"
-
-typedef struct ColorTriplet {
-    u8 r;
-    u8 g;
-    u8 b;
-} ColorTriplet;
+#include "game/vector.h"
 
 typedef struct ColorTable {
-    ColorTriplet colors[18];
+    Rgb colors[18];
 } ColorTable;
 
 extern ColorTable g_PaintColorTable asm("D_800119A0");
@@ -41,7 +36,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
     s32 colorIndex;
     s32 next;
     ColorTable *srcTable;
-    ColorTriplet *color;
+    Rgb *color;
 
     ot = *(void **)0x1F800004;
     srcTable = &g_PaintColorTable;
@@ -95,9 +90,9 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
         colorIndex = 1;
         do {
             func_80047024(ot, (s16)(xBaseHalf + colorIndex), (s16)(yBase + 0x210), 8,
-                          0x10, ((ColorTriplet *)((u8 *)localTable.colors + i))->r,
-                          ((ColorTriplet *)((u8 *)localTable.colors + i))->g,
-                          ((ColorTriplet *)((u8 *)localTable.colors + i))->b, 0xFF);
+                          0x10, ((Rgb *)((u8 *)localTable.colors + i))->r,
+                          ((Rgb *)((u8 *)localTable.colors + i))->g,
+                          ((Rgb *)((u8 *)localTable.colors + i))->b, 0xFF);
             i += 3;
             colorIndex += 8;
             xOffset++;

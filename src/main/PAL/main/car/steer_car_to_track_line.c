@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/car.h"
 #include "game/track.h"
 #include "game/render.h"
@@ -455,7 +456,6 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
     }
 }
 
-typedef struct DVEC { s16 vx; s16 vy; } DVEC;
 s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
 
 /*
@@ -469,7 +469,7 @@ s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
  */
 s32 FindTrackSegment(GameCarRuntime *car, s32 idx) asm("func_80030EB4");
 s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
-    DVEC pts[5];
+    DVec pts[5];
     s32 i;
     s32 k;
     s32 nxt;

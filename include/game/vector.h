@@ -19,6 +19,19 @@ typedef struct SVec {
     s16 pad;
 } SVec;
 
+/* Half-word screen/point pair; the GTE's DVECTOR shape. */
+typedef struct DVec {
+    s16 vx;
+    s16 vy;
+} DVec;
+
+/* Eight-bit colour triplet. */
+typedef struct Rgb {
+    u8 r;
+    u8 g;
+    u8 b;
+} Rgb;
+
 /* Word position vector without a fourth word. */
 typedef struct LVec {
     s32 x;

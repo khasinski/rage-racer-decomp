@@ -1,12 +1,11 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/state.h"
 #include "game/audio.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/menu.h"
 
-typedef struct XY { s16 x, y; } XY;
-typedef struct RGB { u8 r, g, b; } RGB;
 typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
 extern s32 g_OptionMenuCursor asm("D_8019C7B4");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -17,8 +16,8 @@ extern s32 g_ClassRecordMenuCursor asm("D_8019C97C");
 extern s32 g_ScreenOffsetX asm("D_801E4B8C");
 extern s32 g_ScreenOffsetY asm("D_801E4B9C");
 extern s32 g_ScreenOffsetEditX asm("D_801E4D68");
-extern XY D_8007D5A8[];
-extern RGB D_8007D658[];
+extern DVec D_8007D5A8[];
+extern Rgb D_8007D658[];
 extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
 extern Struct12 D_8007D5D4[];
 s32 func_800153FC(void);
@@ -158,7 +157,7 @@ void DrawClassRecordDetail(void) {
 
     if (g_GameMode == 3) {
         next = AddTilePrim(raw + 0xD4, next,
-                             D_8007D5A8[idx].x - 2, D_8007D5A8[idx].y - 4,
+                             D_8007D5A8[idx].vx - 2, D_8007D5A8[idx].vy - 4,
                              0x24, 0x58, 0x89, 0xFF, 0x76);
     }
     next = func_80017138(base, next, 0xBC, 0x40, 0x18, 0x10, 0, 0x6C, 0x7F40);
@@ -203,8 +202,8 @@ void DrawClassRecordGrid(void) {
     next = *(s32 *)0x1F800000;
 
     for (i = 0; i < 11; i++) {
-        x = D_8007D5A8[i].x;
-        y = D_8007D5A8[i].y;
+        x = D_8007D5A8[i].vx;
+        y = D_8007D5A8[i].vy;
         flag = g_ClassRecords[i].place;
         switch (flag) {
         case 1:
