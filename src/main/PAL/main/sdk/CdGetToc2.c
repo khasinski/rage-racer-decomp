@@ -44,13 +44,13 @@ long CdGetToc2(long arg0, u_char *arg1) {
 
         firstBcd = response[1];
         lastBcd = response[2];
-        high = firstBcd >> 4;
+        high = firstBcd / 16;
         value = high << 2;
         value += high;
         value <<= 1;
         firstBcd &= 0xF;
         firstTrack = value + firstBcd;
-        value = lastBcd >> 4;
+        value = lastBcd / 16;
         high = value * 4;
         high += value;
         high <<= 1;

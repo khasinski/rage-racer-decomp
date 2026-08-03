@@ -400,7 +400,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
         value = velocity0 >> 16;
         velocityY = value | 0xFFFF0000;
     } else {
-        value = velocity0 >> 16;
+        value = velocity0 / 65536;
         velocityY = value & 0x7FFF;
     }
     value = posY + ((time * velocityY) >> 5);
@@ -423,7 +423,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
         value = velocity1 >> 16;
         velocityY2 = value | 0xFFFF0000;
     } else {
-        value = velocity1 >> 16;
+        value = velocity1 / 65536;
         velocityY2 = value & 0x7FFF;
     }
     posY2 += (time * velocityY2) >> 5;

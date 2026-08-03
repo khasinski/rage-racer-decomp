@@ -20,7 +20,7 @@ extern long func_800676A0(void *callback, void *data, long size, long arg3);
 
 void Gpu_WriteGp1(u_long arg0) {
     *g_GpuGp1 = arg0;
-    g_GpuGp1Mirror[arg0 >> 24] = arg0;
+    g_GpuGp1Mirror[arg0 / 16777216] = arg0;
 }
 
 u_char Gpu_GetControlMirrorByte(long arg0) asm("func_8006759C");

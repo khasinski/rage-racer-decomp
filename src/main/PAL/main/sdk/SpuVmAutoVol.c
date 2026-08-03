@@ -385,13 +385,13 @@ void SpuVmAutoPanTick(long arg0) {
         if (mixed < 0) {
             mixed += 63;
         }
-        right = (u_long)mixed >> 6;
+        right = (u_long)mixed / 64;
     } else {
         mixed = (u_short)left * (0x7F - pan);
         if (mixed < 0) {
             mixed += 63;
         }
-        left = (u_long)mixed >> 6;
+        left = (u_long)mixed / 64;
     }
     pan = envelope;
     if (pan < 0x40) {
@@ -399,13 +399,13 @@ void SpuVmAutoPanTick(long arg0) {
         if (mixed < 0) {
             mixed += 63;
         }
-        right = (u_long)mixed >> 6;
+        right = (u_long)mixed / 64;
     } else {
         mixed = (u_short)left * (0x7F - pan);
         if (mixed < 0) {
             mixed += 63;
         }
-        left = (u_long)mixed >> 6;
+        left = (u_long)mixed / 64;
     }
 
     if (g_SndMonoMode == 1) {

@@ -181,7 +181,7 @@ s32 DrawCarSelectScreen(s32 arg0) {
         }
     }
 
-    v = (u32) D_8009B2CC >> 2;
+    v = (u32) D_8009B2CC / 4;
     col = v & 0xff;
     func_80047460(buf, 0xa3, 0x180, 0x1a, 0x19, col, col, col, 0x20);
 
@@ -726,7 +726,7 @@ s32 DrawCustomizeScreen(s32 arg0) {
         }
         limit = limit - D_8009B2D0;
         product = (u32)(limit * limit);
-        value = product >> 11;
+        value = product / 2048;
     }
 
     func_80052158((s16)value, ((u32)D_8009B2D0 / 4) & 0xFF, g_PlayerCarIndex);

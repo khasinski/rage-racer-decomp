@@ -89,9 +89,9 @@ void StepCdVolumeFade(void) {
         v190 = v190 - d4;
         g_CdMixRL = v190;
     }
-    buf[0] = g_CdMixLL >> 12;
-    buf[1] = g_CdMixLR >> 12;
-    buf[2] = g_CdMixRR >> 12;
-    buf[3] = g_CdMixRL >> 12;
+    buf[0] = g_CdMixLL / 4096;
+    buf[1] = g_CdMixLR / 4096;
+    buf[2] = g_CdMixRR / 4096;
+    buf[3] = g_CdMixRL / 4096;
     CdMix(buf);
 }

@@ -151,7 +151,7 @@ void func_80073C50(long arg0, long val) {
         long idx4 = center * 4;
         t = g << 16;
         sixteen = t >> 16;
-        hi = (u_long)t >> 24;
+        hi = (u_long)t / 16777216;
         base = *(u_char **)((u_char *)g_SndSeqTable + idx4) + hi * 172;
     }
 

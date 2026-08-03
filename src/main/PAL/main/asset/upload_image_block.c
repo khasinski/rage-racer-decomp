@@ -54,7 +54,7 @@ void UploadImageAsset(void *arg0) {
     goto test;
 
 for (;;) {
-    state.offset = (u32)state.offset >> 2;
+    state.offset = (u32)state.offset / 4;
     state.offset <<= 2;
     state.next = ptr + state.offset;
     UploadImageBlock(ptr);

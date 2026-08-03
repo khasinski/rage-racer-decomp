@@ -43,7 +43,7 @@ long CdPosToInt_Local(CdlLOC *arg0) {
     long a1;
     register long a2 asm("$6") = arg0->second;
 
-    a1 = (u_long) v1 >> 4;
+    a1 = (u_long) v1 / 16;
     v0 = a1 * 4;
     v0 += a1;
     v0 <<= 1;
@@ -53,7 +53,7 @@ long CdPosToInt_Local(CdlLOC *arg0) {
     a1 -= v0;
     a1 <<= 2;
 
-    v1 = (u_long) a2 >> 4;
+    v1 = (u_long) a2 / 16;
     v0 = v1 * 4;
     v0 += v1;
     v0 <<= 1;
@@ -66,7 +66,7 @@ long CdPosToInt_Local(CdlLOC *arg0) {
 
     a1 = arg0->sector;
     v0 -= v1;
-    a0 = (u_long) a1 >> 4;
+    a0 = (u_long) a1 / 16;
     v1 = a0 << 2;
     v1 += a0;
     v1 <<= 1;

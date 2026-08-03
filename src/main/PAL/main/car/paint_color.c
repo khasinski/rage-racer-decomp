@@ -20,8 +20,8 @@ void BlendPaintColor(u32 arg0, u32 arg1) {
     u32 a;
     u32 b;
 
-    a = arg0 >> 1;
-    b = arg1 >> 1;
+    a = arg0 / 2;
+    b = arg1 / 2;
     a &= 0x3DEF;
     b &= 0x3DEF;
     g_PaintBlendShade0 = (a + b) | 0x8000;
@@ -73,8 +73,8 @@ void BlendPaintColorQuarters(u32 arg0, u32 arg1) {
     u32 high;
     s32 bias;
 
-    a = arg0 >> 1;
-    b = arg1 >> 1;
+    a = arg0 / 2;
+    b = arg1 / 2;
     a &= 0x3DEF;
     b &= 0x3DEF;
     c = a + b;

@@ -698,7 +698,7 @@ void UpdateTeamLogoCanvas(void) {
                 var_v0_7 = temp_a1_5[0] & 0xF;
                 break;
             case 1:
-                var_v0_7 = *(u8 *)temp_a1_5 >> 4;
+                var_v0_7 = *(u8 *)temp_a1_5 / 16;
                 break;
             case 2:
                 var_v0_7 = *((u8 *)temp_a1_5 + 1) & 0xF;
