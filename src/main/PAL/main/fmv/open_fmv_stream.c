@@ -47,7 +47,7 @@ void UploadFmvSlice(void) {
     s32 bufferIndex;
     register s32 bufferAddr asm("$2");
     s32 pixelCount;
-    register s32 next asm("$2");
+    s32 next;
     s32 oldOffset;
     s32 index;
     register u16 x asm("$2");

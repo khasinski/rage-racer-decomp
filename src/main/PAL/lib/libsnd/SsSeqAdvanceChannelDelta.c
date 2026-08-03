@@ -49,7 +49,7 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
     } else if (delay <= period) {
         long saved0;
         long saved1;
-        register long total asm("$16");
+        long total;
         long loop_delay;
 
         total = delay;
