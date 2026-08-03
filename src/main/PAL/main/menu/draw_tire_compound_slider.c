@@ -268,7 +268,7 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
     s32 darkRValue;
     s32 darkGValue;
     s32 darkBValue;
-    register s32 shadowHeight asm("$8");
+    s32 shadowHeight;
     s32 quarterHeight;
     s32 shadowX;
     s32 shadowY;
