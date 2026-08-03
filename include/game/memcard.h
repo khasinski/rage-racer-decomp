@@ -3,6 +3,27 @@
 
 #include "common.h"
 
+/*
+ * g_McMenuPhase picks the prompt drawn under the slot list; 0 draws none, and
+ * DrawMemoryCardMessage is called with the value minus one. The names come
+ * from the retail strings the index reaches through D_8007D99C, quoted here.
+ */
+#define MC_PROMPT_NONE          0x00
+#define MC_PROMPT_SELECT_SAVE   0x01  /* "Select file to save." */
+#define MC_PROMPT_SELECT_LOAD   0x02  /* "Select file to load." */
+#define MC_PROMPT_NO_CARD       0x03  /* "No Memory card." */
+#define MC_PROMPT_CARD_FULL     0x04  /* "Memory card full." */
+#define MC_PROMPT_NO_DATA       0x05  /* "No data in Memory card." */
+#define MC_PROMPT_NEW_CARD      0x06  /* "New Memory card." */
+#define MC_PROMPT_FORMAT_ASK    0x07  /* "Format Memory card?" */
+#define MC_PROMPT_OVERWRITE_ASK 0x09  /* "Overwrite old file?" */
+#define MC_PROMPT_ACCESSING     0x0F  /* "Now accessing Memory card." */
+#define MC_PROMPT_CARD_ERROR    0x10  /* "Memory card error." */
+#define MC_PROMPT_LOAD_OK       0x11  /* "LOAD DATA OK!" */
+#define MC_PROMPT_SAVE_OK       0x12  /* "SAVE DATA OK!" */
+#define MC_PROMPT_FORMAT_OK     0x13  /* "FORMAT DATA OK!" */
+#define MC_PROMPT_NO_FILE       0x14  /* "No file found." */
+
 typedef struct GameSaveHeaderRow {
     u8 nameLength;
     u8 name[7];
