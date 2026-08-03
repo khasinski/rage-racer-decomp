@@ -87,7 +87,8 @@ s32 func_800632F0(u8 *dest, u8 *format, ...) {
 
     do {
         if (c != '%') {
-            goto copy_character;
+            dest[length++] = c;
+            continue;
         }
 
         work.spec = g_LibcDefaultFormat;
@@ -340,7 +341,6 @@ hexadecimal:
             if (c != '%') {
                 goto finished;
             }
-copy_character:
             dest[length++] = c;
             continue;
         }

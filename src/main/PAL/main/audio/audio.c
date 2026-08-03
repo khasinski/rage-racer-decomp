@@ -744,13 +744,13 @@ void UpdateIndexedEffectVoice(void) {
         if (index < 0) {
             break;
         }
-        goto start_voice;
-    } else {
+            raw = (index * 3) << 2;
+            StartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
+            } else {
         index = g_IndexedEffectIndex;
         if (index < 0) {
             StopIndexedEffectVoice();
         } else if (index != raw) {
-        start_voice:
             raw = (index * 3) << 2;
             StartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
         }

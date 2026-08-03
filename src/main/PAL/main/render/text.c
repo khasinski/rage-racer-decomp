@@ -340,7 +340,9 @@ void DrawProportionalTextShadedWide(
                 sprt->w = width;
                 AddPrim(ot, prim);
                 advance = g_WordFontWidth[index];
-                goto advance_sprite;
+                sprt++;
+                xPos += advance;
+                continue;
             }
             if (ch >= 0x61) {
                 register s32 offset = ch - 0x61;
@@ -392,7 +394,6 @@ void DrawProportionalTextShadedWide(
                 sprt->w = width;
                 AddPrim(ot, prim);
                 advance = g_WordFontAdvance[index];
-advance_sprite:
                 sprt++;
                 xPos += advance;
                 continue;
