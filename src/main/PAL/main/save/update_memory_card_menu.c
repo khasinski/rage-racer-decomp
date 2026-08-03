@@ -325,13 +325,16 @@ L_sw2:
         g_McActionState = 0xB;
         break;
         }
-        if (D_80082FAC != 0) goto L_b523;
+        if (D_80082FAC != 0) {
+            if ((func_8006131C() & 0xFFFF) == 0) break;
+            g_McActionState = 0;
+            break;
+        }
         }
         if ((func_800612CC() & 0xFFFF) != 0) {
             g_McActionState = 0;
             break;
         }
-    L_b523:
         if ((func_8006131C() & 0xFFFF) == 0) break;
         g_McActionState = 0;
         break;
