@@ -287,16 +287,16 @@ s32 PollMemoryCardHwEvent(void) {
     s32 count;
 
     ready = 1;
-    if (TestEvent(g_McHwEventIoe) == ready) {
+    if (TestEvent(g_McHwEventIoe) == 1) {
         result = 1;
     }
-    if (TestEvent(g_McHwEventError) == ready) {
+    if (TestEvent(g_McHwEventError) == 1) {
         result = 2;
     }
-    if (TestEvent(g_McHwEventTimeout) == ready) {
+    if (TestEvent(g_McHwEventTimeout) == 1) {
         result = 3;
     }
-    if (TestEvent(g_McHwEventNew) == ready) {
+    if (TestEvent(g_McHwEventNew) == 1) {
         result = 4;
     }
 
@@ -311,28 +311,22 @@ s32 PollMemoryCardHwEvent(void) {
 
 s32 PollMemoryCardHwEventLimit(s32 limit) asm("func_8005F420");
 s32 PollMemoryCardHwEventLimit(s32 limit) {
-    register s32 i asm("$16");
-    s32 ready;
-    volatile s32 stack[2];
-
+    s32 i;
     i = 0;
-    if (limit > 0) {
-        ready = 1;
-        do {
-            if (TestEvent(g_McHwEventIoe) == ready) {
-                return 1;
-            }
-            if (TestEvent(g_McHwEventError) == ready) {
-                return 2;
-            }
-            if (TestEvent(g_McHwEventTimeout) == ready) {
-                return 3;
-            }
-            if (TestEvent(g_McHwEventNew) == ready) {
-                return 4;
-            }
-            i++;
-        } while (i < limit);
+    while (i < limit) {
+        if (TestEvent(g_McHwEventIoe) == 1) {
+            return 1;
+        }
+        if (TestEvent(g_McHwEventError) == 1) {
+            return 2;
+        }
+        if (TestEvent(g_McHwEventTimeout) == 1) {
+            return 3;
+        }
+        if (TestEvent(g_McHwEventNew) == 1) {
+            return 4;
+        }
+        i++;
     }
 
     return 0;
@@ -344,16 +338,16 @@ s32 WaitMemoryCardHwEvent(void) {
 
     ready = 1;
     while (1) {
-        if (TestEvent(g_McHwEventIoe) == ready) {
+        if (TestEvent(g_McHwEventIoe) == 1) {
             return 1;
         }
-        if (TestEvent(g_McHwEventError) == ready) {
+        if (TestEvent(g_McHwEventError) == 1) {
             return 2;
         }
-        if (TestEvent(g_McHwEventTimeout) == ready) {
+        if (TestEvent(g_McHwEventTimeout) == 1) {
             return 3;
         }
-        if (TestEvent(g_McHwEventNew) == ready) {
+        if (TestEvent(g_McHwEventNew) == 1) {
             return 4;
         }
     }
@@ -365,16 +359,16 @@ s32 WaitMemoryCardSwEvent(void) {
 
     ready = 1;
     while (1) {
-        if (TestEvent(g_McSwEventIoe) == ready) {
+        if (TestEvent(g_McSwEventIoe) == 1) {
             return 1;
         }
-        if (TestEvent(g_McSwEventError) == ready) {
+        if (TestEvent(g_McSwEventError) == 1) {
             return 2;
         }
-        if (TestEvent(g_McSwEventTimeout) == ready) {
+        if (TestEvent(g_McSwEventTimeout) == 1) {
             return 3;
         }
-        if (TestEvent(g_McSwEventNew) == ready) {
+        if (TestEvent(g_McSwEventNew) == 1) {
             return 4;
         }
     }
