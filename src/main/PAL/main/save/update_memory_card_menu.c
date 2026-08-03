@@ -5,7 +5,7 @@
 #include "psyq/gpu.h"
 
 extern s32 g_McSlotUsedMask asm("D_8009B564");
-extern s32 g_McSaveHeaders asm("D_8009B568");
+extern GameSaveHeaderRow g_McSaveHeaders[] asm("D_8009B568");
 extern s32 g_McNoCardTicks asm("D_8009B6E8");
 extern s32 g_McErrorTicks asm("D_8009B6F0");
 extern s32 D_8009B6F4;
@@ -43,12 +43,9 @@ extern s32 D_80082FC0;
 extern s32 g_McLastSlot asm("D_80082FC4");
 extern s32 D_80082FC8;
 
-void func_8005F65C(void *buf);
-s32 func_80060C3C(s32 arg0, void *buf);
 s32 PollMemoryCardStatus(s32 a, s32 b) asm("func_8005ECE0");
 void DrawMemoryCardScreen(s32 a0, s32 a1, s32 a2, s32 a3) asm("func_80027A84");
 void DrawMemoryCardMessage(s32 a0) asm("func_80027D84");
-void func_80060DF0(s32 mask, void *buf);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void UpdateMemoryCardMenu(void) asm("func_80061520");
@@ -103,7 +100,7 @@ void UpdateMemoryCardMenu(void) {
         g_McMenuPhase = 0xF;
         if (!(ns != 3)) {
         g_McSlotUsedMask = 0;
-        func_8005F65C(&g_McSaveHeaders);
+        ClearSaveHeaderRows(g_McSaveHeaders);
         D_8009B6F4 = -1;
         g_McMenuPhase = 0;
         g_McMenuSelection = ns;
@@ -352,7 +349,7 @@ L_sw2:
         s32 x;
         s32 dp;
         g_McMenuSubState = 5;
-        x = WriteMemoryCardSaveSlot(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));
+        x = WriteMemoryCardSaveSlot(a0, &g_McSaveHeaders[a0]);
         g_McActionResult = x;
         if (!(x == 0)) {
         g_McActionOk = 1;
@@ -376,7 +373,7 @@ L_sw2:
         s32 nv;
         if (g_McActionResult != 0) {
         {
-            s32 r = func_80060C3C(0, &g_McSaveHeaders);
+            s32 r = RefreshMemoryCardSaveStatus(0, g_McSaveHeaders);
             g_McSlotUsedMask = r;
             if (!(r == 0)) {
                 if ((r & 0xFFFF) == 0) {
@@ -494,7 +491,7 @@ L_sw2:
         s32 a0 = *s0;
         register s32 v1x asm("$3");
         s32 dp;
-        g_McActionResult = LoadMemoryCardSaveSlot(a0, (void *)((s32)&g_McSaveHeaders + (a0 << 7)));
+        g_McActionResult = LoadMemoryCardSaveSlot(a0, &g_McSaveHeaders[a0]);
         if (!(g_McActionResult == 0)) {
         v1x = *s0;
         g_McActionOk = 1;
@@ -690,7 +687,7 @@ L_sw2:
         break;
     case 5:
         {
-            s32 x = func_80060C3C(1, &g_McSaveHeaders);
+            s32 x = RefreshMemoryCardSaveStatus(1, g_McSaveHeaders);
             s32 w;
             g_McSlotUsedMask = x;
             if (!(x == 0)) {
@@ -783,7 +780,7 @@ L_sw2:
     case 0:
     g_McActionTimer = 5;
     g_McSlotUsedMask = 0;
-    func_8005F65C(&g_McSaveHeaders);
+    ClearSaveHeaderRows(g_McSaveHeaders);
     g_McLastSlot = 0;
     g_McActionState = 1;
     break;
@@ -1074,6 +1071,6 @@ L_b1280:
         if (g_McMenuPhase != 0) {
             DrawMemoryCardMessage(g_McMenuPhase - 1);
         }
-        func_80060DF0(g_McSlotUsedMask, &g_McSaveHeaders);
+        DrawMemoryCardSaveRows(g_McSlotUsedMask, g_McSaveHeaders);
     }
 }

@@ -383,7 +383,8 @@ extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 void InitCARD(s32 arg0) asm("func_80063DCC");
 void StartCARD(void) asm("func_80063DDC");
 void func_80063180(void);
-void func_8005F5E0(void) { InitCARD(1); StartCARD(); func_80063180(); g_SaveElapsedTicks = 0; }
+void RestartMemoryCard(void) asm("func_8005F5E0");
+void RestartMemoryCard(void) { InitCARD(1); StartCARD(); func_80063180(); g_SaveElapsedTicks = 0; }
 
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 
@@ -1164,7 +1165,6 @@ s32 LoadSaveStateBlock(u8 *arg0) {
 #include "psyq/kernel.h"
 #include "game/menu.h"
 
-void func_8005F88C(void *arg0);
 
 s32 WriteMemoryCardSaveFile(
     char *path,
@@ -1183,7 +1183,7 @@ s32 WriteMemoryCardSaveFile(
     WriteSaveHeaderRow(header);
     attempt = 0;
     GameMenuLoadPhase = 0x1300;
-    func_8005F88C(saveBlock);
+    StoreSaveStateBlock(saveBlock);
     GameMenuLoadPhase = 0x1500;
 
     do {
@@ -1594,7 +1594,9 @@ extern s32 g_McMenuPage asm("D_80082F50");
 extern s32 g_McMenuRowCursor asm("D_80082F54");
 extern s32 g_McFreeBlocks asm("D_8009B73C");
 
-void func_80047958(s32, s32, void *, s32, s32, s32, s32, s32);
+/* DrawLargeText with word-wide parameters; the header spelling does not
+ * match here. See DrawText8x8Wide above. */
+void DrawLargeTextWide(s32, s32, void *, s32, s32, s32, s32, s32) asm("func_80047958");
 void LibcSprintf() asm("func_800632F0");
 
 void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
@@ -1614,7 +1616,7 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
             s32 i;
 
             LibcSprintf(text, g_FmtSaveRow, row_bit);
-            func_80047958(0x48, y, text, 0x7F, color, color, width, height);
+            DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
 
             for (i = 0; i < row[0]; i++) {
                 text_ptr[i] = g_SaveNameCharset[*((row + i) + 1)];
@@ -1623,31 +1625,31 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
                 text_ptr[i++] = ' ';
             }
             LibcSprintf(text + 6, g_FmtSaveRowTail);
-            func_80047958(0x68, y, text, 0x7F, color, color, width, height);
-            func_80047958(0xB0, y, FormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
+            DrawLargeTextWide(0x68, y, text, 0x7F, color, color, width, height);
+            DrawLargeTextWide(0xB0, y, FormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
         } else if (flags_reg & 0x10000) {
             LibcSprintf(text, g_FmtSaveRow, row_bit);
-            func_80047958(0x48, y, text, 0x7F, color, color, width, height);
-            func_80047958(0x88, y, g_McSlotLabelError, 0x7F, color, color, width, height);
+            DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
+            DrawLargeTextWide(0x88, y, g_McSlotLabelError, 0x7F, color, color, width, height);
         } else if (g_McFreeBlocks == 0) {
             if (g_McMenuPage == 0) {
                 LibcSprintf(text, g_FmtSaveRowEmpty, row_bit);
-                func_80047958(0x48, y, text, 0x7F, color, color, width, height);
+                DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
             } else if (g_McMenuRowCursor == 0) {
                 LibcSprintf(text, g_FmtSaveRowEmpty, row_bit);
-                func_80047958(0x48, y, text, 0x7F, color, color, width, height);
+                DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
             } else {
                 LibcSprintf(text, g_FmtSaveRow, row_bit);
-                func_80047958(0x48, y, text, 0x7F, color, color, width, height);
-                func_80047958(0x90, y, g_McSlotLabelNoFile, 0x7F, color, color, width, height);
+                DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
+                DrawLargeTextWide(0x90, y, g_McSlotLabelNoFile, 0x7F, color, color, width, height);
             }
         } else if (g_McMenuPage == 0) {
             LibcSprintf(text, g_FmtSaveRowEmpty, row_bit);
-            func_80047958(0x48, y, text, 0x7F, color, color, width, height);
+            DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
         } else {
             LibcSprintf(text, g_FmtSaveRow, row_bit);
-            func_80047958(0x48, y, text, 0x7F, color, color, width, height);
-            func_80047958(0x90, y, g_McSlotLabels + (g_McMenuRowCursor * 10), 0x7F, color, color, width, height);
+            DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
+            DrawLargeTextWide(0x90, y, g_McSlotLabels + (g_McMenuRowCursor * 10), 0x7F, color, color, width, height);
         }
 
         row_bit++;
