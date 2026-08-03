@@ -258,10 +258,10 @@ L_sw2:
         PlaySoundCue(2);
         D_80082FAC = 0;
         nv = 0x1E;
-        goto L_b475;
-        }
+        } else {
         PlaySoundCue(5);
         nv = 0x28;
+        }
         goto L_b475;
         }
         g_McMenuPhase = 5;
@@ -276,10 +276,10 @@ L_sw2:
         PlaySoundCue(2);
         D_80082FAC = 0;
         nv = 0xA;
-        goto L_b475;
-        }
+        } else {
         PlaySoundCue(2);
         nv = 0x19;
+        }
         goto L_b475;
         }
         g_McMenuPhase = 4;
@@ -803,7 +803,8 @@ L_sw2:
     if (fadeBusy != 0) break;
     g_McActionState = 0;
     PlaySoundCue(2);
-    goto L_b1288;
+    func_8006138C();
+    break;
         }
 
     PlaySoundCue(5);
@@ -815,15 +816,13 @@ L_sw2:
     if (!(fadeBusy != 0)) {
     g_McActionState = 0;
     PlaySoundCue(3);
-    goto L_b1288;
+    func_8006138C();
+    break;
 
 L_b1280:
     if (!((g_PadEdge2 & 0x90) == 0)) {
     if (!(fadeBusy != 0)) {
     PlaySoundCue(3);
-    /* fall through */
-
-L_b1288:
     func_8006138C();
     /* fall through */
     }
