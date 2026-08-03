@@ -7,94 +7,90 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-typedef struct GameInitVec4
-{
-  s32 words[4];
-} GameInitVec4;
-typedef struct GearCurveRow
-{
-  s32 values[16];
-} GearCurveRow;
-extern GearCurveRow gearRows[] asm("D_801E8884");
-typedef struct GameInitShortVector
+typedef struct SVec
 {
   s16 vx;
   s16 vy;
   s16 vz;
   s16 pad;
-} GameInitShortVector;
+} SVec;
+typedef struct GearCurveRow
+{
+  s32 values[16];
+} GearCurveRow;
+extern GearCurveRow gearRows[] asm("D_801E8884");
 /* The player object shares GameCarRuntime's 0x19C-byte footprint, but several
  * fields have player-only meanings.  Keep this file-local view for the init
  * sequence while using the shared GameCarDrive view for the +0xBC block. */
 typedef struct GamePlayerCarInit
 {
-  s32 f00;
-  s32 f04;
-  s32 f08;
+  s32 x;
+  s32 y;
+  s32 z;
   u8 p0C[4];
-  s32 f10;
-  s32 f14;
-  s32 f18;
+  s32 motionX;
+  s32 motionY;
+  s32 motionZ;
   u8 p1C[4];
-  s32 f20;
-  s32 f24;
-  s32 f28;
-  s32 f2C;
-  s32 f30;
+  s32 field_20;
+  s32 field_24;
+  s32 field_28;
+  s32 field_2C;
+  s32 trackPointIndex;
   u8 p34[0xC];
-  s32 f40;
-  s32 f44;
-  s32 f48;
+  s32 field_40;
+  s32 field_44;
+  s32 field_48;
   u8 p4C[4];
-  s32 f50;
-  s32 f54;
-  s32 f58;
-  s32 f5C;
-  s32 f60;
-  s32 f64;
-  s32 f68;
-  s32 f6C;
-  s32 f70;
-  s32 f74;
+  s32 field_50;
+  s32 field_54;
+  s32 field_58;
+  s32 field_5C;
+  s32 field_60;
+  s32 field_64;
+  s32 field_68;
+  s32 field_6C;
+  s32 trackProgress;
+  s32 previousTrackProgress;
   u8 p78[0x20];
-  s16 f98;
+  s16 field_98;
   u8 p9A[6];
-  s32 fA0;
-  s32 fA4;
-  s32 fA8;
+  s32 headingAngle;
+  s32 field_A4;
+  s32 field_A8;
   u8 pAC[2];
-  s16 fAE;
+  s16 field_AE;
   u8 pB0[8];
-  s16 fB8;
+  s16 facingBackwards;
   u8 pBA[0xA];
-  s32 fC4;
-  s32 fC8;
-  s32 fCC;
+  s32 field_C4;
+  s32 field_C8;
+  s32 field_CC;
   u8 pD0[4];
-  s32 fD4;
-  s32 fD8;
-  s32 fDC;
+  s32 field_D4;
+  s32 field_D8;
+  s32 field_DC;
   u8 pE0[8];
   s16 fE8;
   s16 fEA;
   s16 fEC;
   s16 fEE;
-  s16 fF0;
-  s16 fF2;
+  s16 field_F0;
+  s16 field_F2;
   s16 fF4;
   u8 pF6[2];
   s16 fF8;
   u16 fFA;
   s16 fFC;
   s16 fFE;
-  s32 f100;
+  s32 routeIndex;
   s32 f104;
   u8 p108[0x1C];
   s32 f124;
   s32 f128;
   u8 p12C[6];
-  s16 f132;
-  s32 f134;
+  s16 field_132;
+  s32 field_134;
   s32 f138;
   s32 f13C;
   u8 p140[0xC];
@@ -178,7 +174,7 @@ void InitPlayerCar(GameCarRuntime *car)
   int scaledGearRatio;
   Matrix rotationMatrix;
   Matrix axisMatrix;
-  GameInitShortVector rotationOffset;
+  SVec rotationOffset;
   GamePlayerCarInit *player;
   GameCarDrive *drive;
   u8 *startData;
@@ -210,52 +206,52 @@ void InitPlayerCar(GameCarRuntime *car)
   D_8019CAB0 = 0;
   D_801E8AA0 = 0;
   D_8007DA78 = 0;
-  player->fAE = 0x17;
-  player->fCC = 0;
-  player->fC8 = 0;
-  player->fC4 = 0;
-  player->fDC = 0;
-  player->fD8 = 0;
-  player->fD4 = 0;
-  player->f18 = 0;
-  player->f14 = 0;
-  player->f10 = 0;
-  player->f48 = 0;
-  player->f44 = 0;
-  player->f40 = 0;
-  player->fA4 = 0;
-  player->fA8 = 0;
+  player->field_AE = 0x17;
+  player->field_CC = 0;
+  player->field_C8 = 0;
+  player->field_C4 = 0;
+  player->field_DC = 0;
+  player->field_D8 = 0;
+  player->field_D4 = 0;
+  player->motionZ = 0;
+  player->motionY = 0;
+  player->motionX = 0;
+  player->field_48 = 0;
+  player->field_44 = 0;
+  player->field_40 = 0;
+  player->field_A4 = 0;
+  player->field_A8 = 0;
   player->f168 = 0;
   player->fFA = 0;
-  player->f68 = 0;
-  player->f6C = 0;
-  player->f70 = 0;
+  player->field_68 = 0;
+  player->field_6C = 0;
+  player->trackProgress = 0;
   DebugPrintf(D_800113BC);
   startData += g_RaceSeries * 0x90;
-  player->f30 = *((s16 *) (startData + 0x35C));
-  player->f00 = *((s32 *) (startData + 0x354));
-  player->f08 = *((s32 *) (startData + 0x358));
-  player->f04 = 0;
-  player->f30 = func_80030EB4(car, player->f30);
-  player->f20 = 0;
+  player->trackPointIndex = *((s16 *) (startData + 0x35C));
+  player->x = *((s32 *) (startData + 0x354));
+  player->z = *((s32 *) (startData + 0x358));
+  player->y = 0;
+  player->trackPointIndex = func_80030EB4(car, player->trackPointIndex);
+  player->field_20 = 0;
   headingBase = 0xC00 - (g_RaceSeries << 11);
-  player->f24 = (headingBase - g_TrackPoints[player->f30].angle) & 0xFFF;
-  player->f28 = 0;
-  player->f64 = 0;
-  player->f164 = player->f30;
-  player->fA0 = player->f24;
-  player->f14C = player->fA0;
+  player->field_24 = (headingBase - g_TrackPoints[player->trackPointIndex].angle) & 0xFFF;
+  player->field_28 = 0;
+  player->field_64 = 0;
+  player->f164 = player->trackPointIndex;
+  player->headingAngle = player->field_24;
+  player->f14C = player->headingAngle;
   func_8002BF68(car, 0);
   trackState[0] = 0;
   trackState[1] = 0;
-  func_80031298(car, player->f30, trackState);
-  player->f74 = player->f70;
-  *((GameInitVec4 *) (&player->f50)) = *((GameInitVec4 *) (&player->f20));
-  player->f60 = player->f04;
-  BuildRotMatrixY(&rotationMatrix, player->f24);
-  BuildRotMatrixX(&axisMatrix, player->f20);
+  func_80031298(car, player->trackPointIndex, trackState);
+  player->previousTrackProgress = player->trackProgress;
+  *((Vec4 *) (&player->field_50)) = *((Vec4 *) (&player->field_20));
+  player->field_60 = player->y;
+  BuildRotMatrixY(&rotationMatrix, player->field_24);
+  BuildRotMatrixX(&axisMatrix, player->field_20);
   MulMatrix2(&axisMatrix, &rotationMatrix);
-  BuildRotMatrixZ(&axisMatrix, player->f28);
+  BuildRotMatrixZ(&axisMatrix, player->field_28);
   MulMatrix2(&axisMatrix, &rotationMatrix);
   rotationOffset.vx = 0;
   rotationOffset.vy = 0;
@@ -269,33 +265,33 @@ void InitPlayerCar(GameCarRuntime *car)
   axisMatrix.m[2][1] = rotationMatrix.m[1][2];
   axisMatrix.m[2][2] = rotationMatrix.m[2][2];
   rotationOffset.vz = (-player->fFA) - 0x32;
-  ApplyMatrix(&axisMatrix, &rotationOffset, &player->f10);
+  ApplyMatrix(&axisMatrix, &rotationOffset, &player->motionX);
   player->f162 = -1;
   player->f154 = 3;
   player->fE8 = 0;
   player->fEA = 1;
-  player->fF2 = 0;
+  player->field_F2 = 0;
   player->fEE = 0;
   player->fFE = 0;
   player->fFC = 0;
   player->fF4 = 0;
-  player->fF0 = 0;
-  player->f100 = 0;
+  player->field_F0 = 0;
+  player->routeIndex = 0;
   player->f104 = 0;
   player->f124 = 0;
   player->f128 = 0;
-  player->f132 = 1;
-  player->f134 = 0;
+  player->field_132 = 1;
+  player->field_134 = 0;
   player->f13C = 0;
   player->f150 = 0;
   player->f138 = 0;
   player->fFA = 0;
   player->f160 = 1;
-  player->f00 = player->f00 + player->f10;
-  player->f08 = player->f08 + player->f18;
-  player->fB8 = IsCarFacingBackwards((GameCarTrackAngleWindow *) car);
+  player->x = player->x + player->motionX;
+  player->z = player->z + player->motionZ;
+  player->facingBackwards = IsCarFacingBackwards((GameCarTrackAngleWindow *) car);
   player->fF4 = 0;
-  player->fF0 = 0;
+  player->field_F0 = 0;
   player->fEC = 1;
   player->fF8 = 0;
   D_801E4BF4 = 0;
@@ -392,7 +388,7 @@ void InitPlayerCar(GameCarRuntime *car)
   drive->unk84 = D_8007DAD4[drive->unk28 % 5] * 0xE;
   drive->unk88 = g_PlayerCarInitSpec->f108;
   DebugPrintf(D_800113F0);
-  player->f98 = 0;
+  player->field_98 = 0;
   drive->unk9E = 0;
   drive->unk9C = 0;
   D_801E4170 = 0;
@@ -414,7 +410,7 @@ void InitPlayerCar(GameCarRuntime *car)
   g_WrongWayTimer = 0;
   D_8019C9AC = 0;
   DebugPrintf(D_800113F8);
-  DebugPrintf(D_80011400, player->f68);
+  DebugPrintf(D_80011400, player->field_68);
   DebugPrintf(D_80011408);
 }
 
@@ -661,13 +657,6 @@ s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) {
     return ret;
 }
 
-typedef struct SVec
-{
-  s16 vx;
-  s16 vy;
-  s16 vz;
-  s16 pad;
-} SVec;
 typedef struct CPt
 {
   s16 x;
