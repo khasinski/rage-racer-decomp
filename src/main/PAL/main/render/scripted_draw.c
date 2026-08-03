@@ -50,7 +50,7 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     } else {
         temp = packed & 0x7FFF;
     }
-    interp = (u32)(arg0 * temp) >> 5;
+    interp = (u32)(arg0 * temp) / 32;
 
     asm volatile("" ::: "memory");
     y = *(s16 *)(record + 6);
@@ -65,7 +65,7 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     } else {
         temp = (packed >> 16) & 0x7FFF;
     }
-    interp = (u32)(arg0 * temp) >> 5;
+    interp = (u32)(arg0 * temp) / 32;
     y += interp;
     asm("" : "=r"(y) : "0"(y));
 
@@ -153,7 +153,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     } else {
         temp = xPacked & 0x7FFF;
     }
-    interp = (u32)(arg0 * temp) >> 5;
+    interp = (u32)(arg0 * temp) / 32;
     x0 = x0Base + interp;
 
     y0 = *(s16 *)(record + 6);
@@ -167,7 +167,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     } else {
         temp = (xPacked >> 16) & 0x7FFF;
     }
-    interp = (u32)(arg0 * temp) >> 5;
+    interp = (u32)(arg0 * temp) / 32;
     y0 += interp;
 
     asm volatile("" ::: "memory");
@@ -179,7 +179,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
         y0Call = y0;
         temp = yPacked & 0x7FFF;
     }
-    interp = (u32)(arg0 * temp) >> 5;
+    interp = (u32)(arg0 * temp) / 32;
 
     asm volatile("" ::: "memory");
     y1 = *(s16 *)(record + 0xA);
@@ -194,7 +194,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     } else {
         temp = (yPacked >> 16) & 0x7FFF;
     }
-    interp = (u32)(arg0 * temp) >> 5;
+    interp = (u32)(arg0 * temp) / 32;
     y1 += interp;
     asm("" : "=r"(y1) : "0"(y1));
 
@@ -486,7 +486,7 @@ s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
         }
     }
 
-    nextProgress = ((index * 2) + index) << 2;
+    nextProgress = (index * 3) << 2;
     cmdTmp = (TimedDrawCommand *)(nextProgress + (s32)base);
     switch (0) { default:
     if (cmdTmp->time < 0) {

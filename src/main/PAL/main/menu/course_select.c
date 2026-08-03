@@ -249,7 +249,7 @@ s32 DrawCourseSelectScreen(s32 step)
             D_8009B2C0 = 0;
         }
         deltaY = 0x1FC - D_8009B2C0;
-        slide = (u16)((u32)(deltaY * deltaY) >> 11);
+        slide = (u16)((u32)(deltaY * deltaY) / 2048);
     }
 
     if (g_MenuAltLayout != 0) {

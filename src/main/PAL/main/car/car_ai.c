@@ -368,13 +368,13 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     scene = g_RaceSeries;
     target = raw >> 4;
     index = objReg->routeIndex;
-    raw = (scene * 2) + scene;
+    raw = scene * 3;
     offset = (raw << 4) - raw;
     offset <<= 3;
     base = g_TrackEventData;
     offset += 0x84;
     entry = (s16 *)(offset + (s32)base);
-    raw = (index * 2) + index;
+    raw = index * 3;
     raw <<= 2;
     entry = (s16 *)((s32)entry + raw);
 
@@ -417,11 +417,11 @@ advance:
         next = *(s32 *)(state + 0x44);
         scene = g_RaceSeries;
         next++;
-        advanceOffset = (next * 2) + next;
+        advanceOffset = next * 3;
         advanceOffset <<= 2;
         *(s32 *)(state + 0x44) = next;
     }
-    raw = (scene * 2) + scene;
+    raw = scene * 3;
     offset = (raw << 4) - raw;
     offset <<= 3;
     base = g_TrackEventData;
@@ -453,7 +453,7 @@ void SeedCarRouteMarkers(void) {
 
     scene = g_RaceSeries;
     base = g_TrackEventData;
-    product = (scene * 8) + scene;
+    product = scene * 9;
     baseOffset = product * 64;
 
 outer:

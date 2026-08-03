@@ -782,7 +782,7 @@ void func_8004CF30(s32 arg) {
             u8 c1;
             register u32 c0 asm("$2");
             u0 = (u32)m11 / 256;
-            c1 = (u32)(cnt * 75) >> 8;
+            c1 = (u32)(cnt * 75) / 256;
             c0 = u0 & 0xFF;
             func_80047330(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, c0, c0, c0, c1, c1, c1, 0x60);
             s2 += 0x000A0000;

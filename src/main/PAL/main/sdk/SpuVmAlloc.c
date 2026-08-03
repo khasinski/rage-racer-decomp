@@ -79,7 +79,7 @@ u_char SpuVmAlloc(long unused) {
                 u_long age;
 
                 ageIndex = (u_char)voice;
-                ageOffset = (ageIndex * 2) + ageIndex;
+                ageOffset = ageIndex * 3;
                 ageOffset = (ageOffset * 4) + ageIndex;
                 ageOffset <<= 2;
                 voice++;

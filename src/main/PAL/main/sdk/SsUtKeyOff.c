@@ -33,7 +33,7 @@ long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) {
 
     if ((u_short)original_voice < 24) {
         index = (short)voice;
-        voice = ((((index * 2) + index) << 2) + index) << 2;
+        voice = (((index * 3) << 2) + index) << 2;
         if (*(short *)((u_char *)g_SndVoiceStateVabId + voice) == (short)vab_id &&
             *(short *)((u_char *)g_SndVoiceStateProg + voice) == (short)program &&
             *(short *)((u_char *)g_SndVoiceStateTone + voice) == (short)tone &&

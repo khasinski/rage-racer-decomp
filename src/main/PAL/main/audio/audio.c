@@ -1239,7 +1239,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
             } else {
                 *g_EffectVoiceState = 0;
             }
-            bankIndex = (bank * 2) + bank;
+            bankIndex = bank * 3;
             tblOff = bankIndex * 8;
             count = *(s32 *)((u8 *)g_EffectCueTable + tblOff);
             i = 0;
@@ -1321,7 +1321,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 tblOff = bank * 2;
             }
             tblOff = (tblOff + bank) * 8;
-            bankIndex = (bank * 2) + bank;
+            bankIndex = bank * 3;
             tblOff = bankIndex * 8;
             count = *(s32 *)((u8 *)g_EffectCueTable + tblOff);
             i = 0;

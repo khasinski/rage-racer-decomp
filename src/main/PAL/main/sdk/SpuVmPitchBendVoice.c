@@ -32,7 +32,7 @@ void SpuVmPitchBendVoice(long arg0, long arg1) {
         return;
     }
 
-    voiceOffset = (((((voiceByte * 2) + voiceByte) << 2) + voiceByte) << 2);
+    voiceOffset = ((((voiceByte * 3) << 2) + voiceByte) << 2);
     pBd7 = &g_SndCurrentProgActual;
     *pBd7 = g_SndVoiceStateProgActual[voiceOffset];
     g_SndCurrentTone = g_SndVoiceStateTone[voiceOffset];

@@ -242,7 +242,7 @@ void func_8001F134(s32 pairIndex, u8 *srcA, u8 *srcB) {
     }
 
     pairIndex >>= 1;
-    dst = (GameRenderPairPoint *)(((pairIndex * 2) + pairIndex) << 4);
+    dst = (GameRenderPairPoint *)((pairIndex * 3) << 4);
     base = g_ReplayFramesGp;
     src1 = (GameRenderSourcePoint *)srcA;
     first = src1->field_0;

@@ -655,7 +655,7 @@ void RampTeamLogoCanvas(s32 arg0, s32 arg1) {
     }
 
     y = D_8009B29C;
-    temp = ((y * 16) + y) << 4;
+    temp = (y * 17) << 4;
     if (temp < 0) {
         temp += 0xFF;
     }

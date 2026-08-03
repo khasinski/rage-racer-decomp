@@ -287,7 +287,7 @@ void SeedFlybyScenery(void) {
     __asm__ volatile("" ::: "memory");
     recordIndex = *(s16 *)((scene1 * 4) + (s32)base + 8);
     *(s32 *)(out + 0x30) = 0;
-    index = (recordIndex * 2) + recordIndex;
+    index = recordIndex * 3;
     index <<= 2;
     index += 0x50;
     g_FlybySceneryKeyframe = base + index;
@@ -359,7 +359,7 @@ void UpdateFlybyScenery(void) {
             g_FlybySceneryRotY2 = 0;
             g_FlybySceneryRotX2 = 0;
             recordIndex = *(s16 *)((g_RaceSeriesNV * 4) + (s32)base + 8);
-            index = (recordIndex * 2) + recordIndex;
+            index = recordIndex * 3;
             index <<= 2;
             index += 0x50;
             g_FlybySceneryKeyframe = base + index;

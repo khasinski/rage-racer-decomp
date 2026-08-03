@@ -54,7 +54,7 @@ s32 DrawDesignModeScreen(s32 arg0) {
             D_8009B2D4 = 0;
         }
         limit = 0x1FC - D_8009B2D4;
-        offset = (u32)(limit * limit) >> 11;
+        offset = (u32)(limit * limit) / 2048;
     }
 
     y = 0xB0 - (s16)offset;

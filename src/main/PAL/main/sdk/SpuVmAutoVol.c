@@ -64,7 +64,7 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     smallDenom -= offset;
     quotient = stepForSmallDiv / smallDenom;
     smallDenom = (short)voice;
-    offset = (((smallDenom * 2) + smallDenom) * 4 + smallDenom) * 4;
+    offset = ((smallDenom * 3) * 4 + smallDenom) * 4;
     *(volatile short *)(D_8009E0D6 + offset) = 1;
     *(volatile short *)(D_8009E0D8 + offset) = quotient;
     *(volatile short *)(D_8009E0DA + offset) = quotient;
@@ -77,7 +77,7 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     offset = (short)step;
     quotient = stepForSmallDiv / offset;
     smallDenom = (short)voice;
-    offset = (((smallDenom * 2) + smallDenom) * 4 + smallDenom) * 4;
+    offset = ((smallDenom * 3) * 4 + smallDenom) * 4;
     *(volatile short *)(D_8009E0D8 + offset) = 0;
     *(volatile short *)(D_8009E0D6 + offset) = quotient;
 }
@@ -247,7 +247,7 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     smallDenom -= offset;
     quotient = stepForSmallDiv / smallDenom;
     smallDenom = (short)voice;
-    offset = (((smallDenom * 2) + smallDenom) * 4 + smallDenom) * 4;
+    offset = ((smallDenom * 3) * 4 + smallDenom) * 4;
     *(volatile short *)(g_SndVoiceStatePanStep + offset) = 1;
     *(volatile short *)(g_SndVoiceStatePanCounter + offset) = quotient;
     *(volatile short *)(g_SndVoiceStatePanCounterReload + offset) = quotient;
@@ -260,7 +260,7 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     offset = (short)step;
     quotient = stepForSmallDiv / offset;
     smallDenom = (short)voice;
-    offset = (((smallDenom * 2) + smallDenom) * 4 + smallDenom) * 4;
+    offset = ((smallDenom * 3) * 4 + smallDenom) * 4;
     *(volatile short *)(g_SndVoiceStatePanCounter + offset) = 0;
     *(volatile short *)(g_SndVoiceStatePanStep + offset) = quotient;
 }

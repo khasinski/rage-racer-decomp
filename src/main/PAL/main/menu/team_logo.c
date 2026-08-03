@@ -17,7 +17,7 @@ static inline s32 TeamLogoParity(s32 value)
 
 static inline s32 TeamLogoRowByteOffset(s32 row)
 {
-    return ((row * 32) + row) << 6;
+    return (row * 33) << 6;
 }
 
 static inline s32 TeamLogoParityByteOffset(s32 parity)

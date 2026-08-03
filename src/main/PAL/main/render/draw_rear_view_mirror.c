@@ -195,7 +195,7 @@ u8 *DrawMirrorFrame(u8 *packet) {
     AddPrim((u32 *)otArg, (u32 *)prim);
 
     colorIndex = D_8007C728[g_PlayerCarIndex];
-    paletteIndex = (colorIndex * 2) + colorIndex;
+    paletteIndex = colorIndex * 3;
     base2 = g_DrawBuffer;
     ot = base2 + 0xBD0;
     next = func_80016EC4(ot, packet, 0x56, g_MirrorPanelY, D_8007C73A[paletteIndex], 8, D_8007C738[paletteIndex], D_8007C739[paletteIndex], 0x7800);

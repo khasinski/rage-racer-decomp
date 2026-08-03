@@ -177,7 +177,7 @@ void UpdateAttractDemoRace(void) {
         u32 adjusted;
 
         adjusted = timer - 0x6CC;
-        DrawFullscreenFadeTile((adjusted * 4) + adjusted, 0x49);
+        DrawFullscreenFadeTile(adjusted * 5, 0x49);
     }
 
     if (g_SceneTimer == 0x708) {

@@ -44,7 +44,7 @@ s32 DrawClassChangeCurtain(s32 arg0) {
             callScratch = scratch;
             zero = 0;
             asm("" : "=r"(zero) : "0"(zero));
-            value = ((u32)(value << 9) >> 5) + 0xFF10;
+            value = ((u32)(value << 9) / 32) + 0xFF10;
             yArg = (s16)value;
             y1 = 0xF0;
             red = 0x95;
