@@ -164,7 +164,9 @@ void UpdateCarShopScreen(void) {
                             PlaySoundCue(3);
                             g_MenuOverlayPattern = 2;
                             GameMenuBusy = sel;
-                            goto block_51;
+                        D_8009B32C = -1;
+                        D_8009B330 = -1;
+                                                return;
                         }
                         if (sel != 0) {
                             return;
@@ -221,7 +223,6 @@ void UpdateCarShopScreen(void) {
                         PlaySoundCue(3);
                         GameMenuBusy = 1;
                         g_MenuOverlayPattern = 2;
-block_51:
                         D_8009B32C = -1;
                         D_8009B330 = -1;
                     }

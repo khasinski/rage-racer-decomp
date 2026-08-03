@@ -821,7 +821,10 @@ void UpdateCustomizeScreen(void) {
                     return;
                 }
                 if (sel == mode) {
-                    goto block27;
+                PlaySoundCue(3);
+                GameMenuBusy = 2;
+                g_MenuOverlayPattern = 2;
+                                return;
                 }
                 if (sel == 2) {
                     PlaySoundCue(2);
@@ -831,7 +834,6 @@ void UpdateCustomizeScreen(void) {
                     g_MenuViewOffsetTarget = 0x3D090;
                 }
             } else if (g_PadEdge2 & 0x90) {
-block27:
                 PlaySoundCue(3);
                 GameMenuBusy = 2;
                 g_MenuOverlayPattern = 2;

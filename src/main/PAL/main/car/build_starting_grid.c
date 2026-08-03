@@ -401,7 +401,8 @@ void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
     temp = 0x1E;
     obj->motionModeTimer = temp;
     value <<= 3;
-    goto final_store;
+        obj->motionValue = value;
+        return;
 
     }
     value = func_8002FB60(obj->trackPointIndex);
@@ -433,7 +434,6 @@ void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
         value = *(u16 *)&obj->motionValue;
         value = -value;
 
-final_store:
         obj->motionValue = value;
     }
 }
