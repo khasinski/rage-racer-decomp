@@ -102,6 +102,7 @@ void UpdateMemoryCardMenu(void) {
     }
     func_8006136C(g_McFadeLevel);
 
+    switch (0) { default:
     {
     s32 cur = g_SceneTimer;
     if ((u32) cur < 5) {
@@ -123,7 +124,7 @@ void UpdateMemoryCardMenu(void) {
         g_McActionBusy = 0;
         D_80082FC8 = 1;
         }
-        goto L_epilogue;
+        break;
     }
 
     /* state >= 5: active-menu entry */
@@ -1053,7 +1054,7 @@ L_b1678:
 
     }
     }
-L_epilogue:
+    }
     if (D_80082FC8 != 0) {
         func_80027A84(g_McMenuPage, g_McFromLoadMenu, g_McMenuRowCursor, g_McSlotCursor);
         if (g_McMenuPhase != 0) {
