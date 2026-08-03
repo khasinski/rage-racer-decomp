@@ -28,20 +28,6 @@ typedef struct Cache {
     u_long x10;
 } Cache;
 
-typedef struct GfxState {
-    GpuCallbacks *funcs;
-    void (*printf)(char *, ...);
-    u_char e8;
-    u_char e9;
-    volatile u_char debug;
-    volatile u_char eb;
-} GfxState;
-
-/* Struct view of the libgpu env head: the same six words other files name
- * g_GpuFuncs, GPU_printf, g_GraphType, g_GraphQueue, g_GraphDebug and
- * g_GraphReverse. Spelling them as those globals here compiles but does not
- * match - gcc 2.6.3 treats a struct member reference as non-aliasing - so
- * this TU keeps the struct, and the base keeps the address's one name. */
 extern GfxState g_GpuFuncs asm("D_800941E0");
 extern char D_80013614[];
 extern Cache g_DispEnvCache asm("D_80094254");
@@ -60,11 +46,11 @@ Env *PutDispEnv(Env *arg0) {
 
     flags = 0x8000000;
 
-    if (g_GpuFuncs.debug >= 2) {
+    if (g_GpuFuncs.graphDebug >= 2) {
         g_GpuFuncs.printf(D_80013614, s0);
     }
 
-    if (g_GpuFuncs.e8 == 1 || g_GpuFuncs.e8 == 2) {
+    if (g_GpuFuncs.graphType == 1 || g_GpuFuncs.graphType == 2) {
         long r = func_80066CB0(s0);
         cmd = (((u_short)s0->x2 & 0xfff) << 12 | (r & 0xfff)) | 0x5000000;
     } else {
@@ -143,7 +129,7 @@ Env *PutDispEnv(Env *arg0) {
         if (s0->x10 != 0) {
             flags |= 0x20;
         }
-        if (g_GpuFuncs.eb != 0) {
+        if (g_GpuFuncs.graphReverse != 0) {
             flags |= 0x80;
         }
         if (s0->x4 < 281) {

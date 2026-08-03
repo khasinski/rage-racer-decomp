@@ -206,6 +206,24 @@ typedef struct GpuCallbacks {
 } GpuCallbacks;
 
 /*
+ * The libgpu global env head at D_800941E0. The same twelve bytes are spelled
+ * as separate globals elsewhere (g_GpuFuncs, the printf hook, g_GraphType,
+ * g_GraphQueue, g_GraphDebug, g_GraphReverse, g_VramWidth, g_VramHeight);
+ * both spellings are load-bearing, because gcc 2.6.3 treats a struct member
+ * reference as non-aliasing and the two forms schedule differently.
+ */
+typedef struct GfxState {
+    GpuCallbacks *funcs;
+    void (*printf)(char *, ...);
+    u_char graphType;
+    u_char graphQueue;
+    volatile u_char graphDebug;
+    volatile u_char graphReverse;
+    short vramWidth;
+    short vramHeight;
+} GfxState;
+
+/*
  * libgpu primitive initialisers. Each stamps the word count into prim[3] and
  * the GPU command byte into prim[7] (see the GP0 opcode in the comment).
  */
