@@ -220,7 +220,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     }
 
     y1Reg = (s16)y1;
-    arg0 = mode << 2;
+    arg0 = mode * 4;
     x0 <<= 0x10;
     y0Arg = y0Call << 0x10;
     x1 <<= 0x10;
@@ -334,7 +334,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
 
     asm("" : : "r"(packedSpeed));
     DrawFlatTriangleSigned(
-        (u8 *)ot + (mode << 2),
+        (u8 *)ot + (mode * 4),
         x,
         y,
         limit,
@@ -486,7 +486,7 @@ s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
         }
     }
 
-    nextProgress = ((index << 1) + index) << 2;
+    nextProgress = ((index * 2) + index) << 2;
     cmdTmp = (TimedDrawCommand *)(nextProgress + (s32)base);
     switch (0) { default:
     if (cmdTmp->time < 0) {
@@ -646,14 +646,14 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
         return;
     }
 
-    offset = i << 1;
+    offset = i * 2;
     basePtr = D_80082520;
     offset = (offset + i) << 2;
     cmd = (TimedDrawCommand *)((s32)basePtr + offset);
 
 loop:
     basePtr = D_8009B250;
-    offset = i << 2;
+    offset = i * 4;
     timer = (s32 *)((s32)basePtr + offset);
 
     fade = *timer & 0x1FF;

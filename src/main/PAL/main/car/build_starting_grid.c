@@ -304,11 +304,11 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
         tmp = product >> 16;
     } else {
         trig = func_80068568(GetAngleDistance((s16)rawArg, carReg->field_24));
-        product = trig << 1;
+        product = trig * 2;
         product += trig;
         product <<= 3;
         product += trig;
-        adjustedReg = product << 1;
+        adjustedReg = product * 2;
         if (adjustedReg < 0) {
             adjustedReg += 0xFFF;
         }

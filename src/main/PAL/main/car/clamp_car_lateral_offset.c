@@ -40,7 +40,7 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 arg1) {
             point = &g_TrackPoints[trackIndex];
             limit = point->field_12;
         }
-        scaled = limit << 2;
+        scaled = limit * 4;
         scaled += limit;
         if (scaled < 0) {
             scaled += 7;
@@ -52,11 +52,11 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 arg1) {
         if (current < 0) {
             trackIndex = carReg->trackPointIndex;
             point = &g_TrackPoints[trackIndex];
-            limit = (point->field_10 << 2) / 7;
+            limit = (point->field_10 * 4) / 7;
         } else {
             trackIndex = carReg->trackPointIndex;
             point = &g_TrackPoints[trackIndex];
-            limit = (point->field_12 << 2) / 7;
+            limit = (point->field_12 * 4) / 7;
         }
     }
 

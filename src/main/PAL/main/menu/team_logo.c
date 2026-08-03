@@ -17,12 +17,12 @@ static inline s32 TeamLogoParity(s32 value)
 
 static inline s32 TeamLogoRowByteOffset(s32 row)
 {
-    return ((row << 5) + row) << 6;
+    return ((row * 32) + row) << 6;
 }
 
 static inline s32 TeamLogoParityByteOffset(s32 parity)
 {
-    return parity << 5;
+    return parity * 32;
 }
 
 static inline u16 *TeamLogoPaletteAddress(
@@ -45,7 +45,7 @@ static inline u16 *TeamLogoClutAddress(
     u32 address;
     s32 parityOffset;
 
-    byteOffset = index << 1;
+    byteOffset = index * 2;
     address = TeamLogoRowByteOffset(row);
     address += (u32)samples;
     parityOffset = TeamLogoParityByteOffset(parity);

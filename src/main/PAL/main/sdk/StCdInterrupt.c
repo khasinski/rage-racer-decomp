@@ -262,7 +262,7 @@ void StCdInterrupt(void) {
     g_StCurrentSector++;
     g_StSectorData =
         (u8 *)g_StRingBase +
-        (g_StRingSize << 5) +
+        (g_StRingSize * 32) +
         g_StWriteCursor * 0x7E0;
 
     dmaControl = 0x11000000;

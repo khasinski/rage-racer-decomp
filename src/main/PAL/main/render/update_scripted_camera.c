@@ -49,7 +49,7 @@ void UpdateScriptedCamera(void) {
     tick = g_CameraPathTick;
     current = g_CameraPathKey;
     scaledTick = tick * 10000;
-    blend = BezierEase(scaledTick / KEY(current << 5).duration,
+    blend = BezierEase(scaledTick / KEY(current * 32).duration,
                            KEY(current << 5).control);
 
     currentOffset = g_CameraPathKey;

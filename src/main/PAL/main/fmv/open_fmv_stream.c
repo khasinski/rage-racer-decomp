@@ -92,6 +92,6 @@ s32 bufferAddr;
         g_FmvUploadRectY = g_FmvStripRects[next].y;
     }
 
-    oldOffset = oldBuffer << 2;
+    oldOffset = oldBuffer * 4;
     LoadImage(&rect, (void *)*(volatile u32 **)((s32)g_FmvStripBuffers + oldOffset));
 }

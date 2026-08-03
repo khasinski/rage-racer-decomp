@@ -42,7 +42,7 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
         *(short *)&g_SndVoiceStateVabId[off] == (short)arg2 &&
         *(short *)&g_SndVoiceStateProg[off] == (short)arg3) {
 
-        t = *(u_short *)&g_SndVoiceStateTone[off] + (g_SndCurrentProgActual << 4);
+        t = *(u_short *)&g_SndVoiceStateTone[off] + (g_SndCurrentProgActual * 16);
         f0 = *(u_short *)&g_SndVoiceStateNote[off];
         w = (short)t1;
 
@@ -73,7 +73,7 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
         g_SndCurrentVoice = raw;
         g_SndCurrentTone = c;
         ret = SpuVmCalculateTonePitch((u_short)base, (u_short)bal);
-        *(short *)&g_SndVoiceRegsPitch[j << 4] = ret;
+        *(short *)&g_SndVoiceRegsPitch[j * 16] = ret;
         g_SndVoiceFlags[j] |= 4;
         return 1;
     }

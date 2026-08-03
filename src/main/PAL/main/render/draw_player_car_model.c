@@ -91,7 +91,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     g_ScratchRenderMode = 0;
     SubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
 
-    otDepth = obj->field_E4 << 1;
+    otDepth = obj->field_E4 * 2;
     if (obj->flags_48 & 0x1000) {
         otDepth += 10;
     }

@@ -120,7 +120,7 @@ void InitShuttleScenery(void) {
 
         asm(".globl func_8003F1D0\nfunc_8003F1D0 = func_8003F0F8 + 0xD8");
         index = g_Shuttle1PathIndex;
-        v1 = index << 3;
+        v1 = index * 8;
         g_Shuttle1AngleX = RAW(ANGLES(v1).vx);
         g_Shuttle1AngleY = RAW(ANGLES(v1).vy);
         value = RAW(ANGLES(v1).vz);

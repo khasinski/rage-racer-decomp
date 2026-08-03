@@ -166,7 +166,7 @@ void UpdateCarDrivetrain(void *base) {
   config = (u8 *)g_CarSpec;
   temp_v1 = *((s16 *) (((u8 *) car) + 0x132));
   new_var3 = ((u8 *) (config + (temp_v1 * 4))) + 0xCC;
-  var_a2 = (temp_v1 << 6) + ((u8 *) base);
+  var_a2 = (temp_v1 * 64) + ((u8 *) base);
   var_s7 = *((s32 *) new_var3);
   temp_s3 = car + 0xBC;
   if (g_RacePhase < 2)

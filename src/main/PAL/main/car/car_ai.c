@@ -161,7 +161,7 @@ not_crossed:
     crossed = 0;
     i = 0;
     sentinel = -1;
-    offset = row << 6;
+    offset = row * 64;
     cursor = (s32)(base + offset);
 
 for (;;) {
@@ -187,8 +187,8 @@ break;
 }
     }
     if (crossed != 0) {
-        resultOffset = i << 3;
-        resultOffset += row << 6;
+        resultOffset = i * 8;
+        resultOffset += row * 64;
         resultOffset = (s32)(base + resultOffset);
         return *(s32 *)(resultOffset + 8);
     }
@@ -307,7 +307,7 @@ void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     }
 
     value = *(s32 *)(base + 0x34);
-    value = (value << 5) - value;
+    value = (value * 32) - value;
     if (value < 0) {
         value += 0x1F;
     }
@@ -334,7 +334,7 @@ void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     }
     value = *(s32 *)(base + 0x38);
     if (value != 0) {
-        temp = (value << 4) - value;
+        temp = (value * 16) - value;
         temp <<= 1;
         if (temp < 0) {
             temp += 0x1F;
@@ -368,13 +368,13 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     scene = g_RaceSeries;
     target = raw >> 4;
     index = objReg->routeIndex;
-    raw = (scene << 1) + scene;
+    raw = (scene * 2) + scene;
     offset = (raw << 4) - raw;
     offset <<= 3;
     base = g_TrackEventData;
     offset += 0x84;
     entry = (s16 *)(offset + (s32)base);
-    raw = (index << 1) + index;
+    raw = (index * 2) + index;
     raw <<= 2;
     entry = (s16 *)((s32)entry + raw);
 
@@ -417,11 +417,11 @@ advance:
         next = *(s32 *)(state + 0x44);
         scene = g_RaceSeries;
         next++;
-        advanceOffset = (next << 1) + next;
+        advanceOffset = (next * 2) + next;
         advanceOffset <<= 2;
         *(s32 *)(state + 0x44) = next;
     }
-    raw = (scene << 1) + scene;
+    raw = (scene * 2) + scene;
     offset = (raw << 4) - raw;
     offset <<= 3;
     base = g_TrackEventData;
@@ -453,8 +453,8 @@ void SeedCarRouteMarkers(void) {
 
     scene = g_RaceSeries;
     base = g_TrackEventData;
-    product = (scene << 3) + scene;
-    baseOffset = product << 6;
+    product = (scene * 8) + scene;
+    baseOffset = product * 64;
 
 outer:
     __asm__ volatile("" ::: "memory");

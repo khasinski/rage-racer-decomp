@@ -189,8 +189,8 @@ void DrawNameEntryCursor(s32 arg0, s32 arg1) {
         *scratch = AddTilePrim(
             g_DrawBuffer + 0xCC,
             *scratch,
-            (arg0 << 3) + 0x7C,
-            (((arg1 << 2) + arg1) << 2) + 0x7E,
+            (arg0 * 8) + 0x7C,
+            (((arg1 * 4) + arg1) << 2) + 0x7E,
             9,
             2,
             0xC0,

@@ -134,8 +134,8 @@ s32 SetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
     s16 *entry;
     s32 old;
 
-    row = (s16 *)((s32)base + (arg0 << 2));
-    entry = (s16 *)((arg1 << 1) + (s32)row);
+    row = (s16 *)((s32)base + (arg0 * 4));
+    entry = (s16 *)((arg1 * 2) + (s32)row);
     old = *entry;
 
     if (arg2 >= 0) {
@@ -184,7 +184,7 @@ void LoadAudioParameterTable(u16 *table) {
                 s32 leftValue;
 
                 leftValue = *tableReg++;
-                colOffset = col << 2;
+                colOffset = col * 4;
                 col++;
                 leftPtr = (s32 *)(colOffset + (rowBaseOffset + (s32)base));
                 *leftPtr = leftValue;
@@ -299,7 +299,7 @@ void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
     s16 *row;
     s16 *entry;
 
-    row = (s16 *)((s32)base + (slot << 2));
-    entry = (s16 *)((tone << 1) + (s32)row);
+    row = (s16 *)((s32)base + (slot * 4));
+    entry = (s16 *)((tone * 2) + (s32)row);
     SsUtKeyOnV((s16)(slot + 0xE), g_VabIds[(s16)vabSlot], *entry, 0, 0x3C, 0, 0, 0);
 }

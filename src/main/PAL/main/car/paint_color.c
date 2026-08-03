@@ -60,8 +60,8 @@ void BlendPaintColorThirds(u32 arg0, u32 arg1) {
     g1 = g / 3;
     b1 = b / 3;
 
-    g_PaintBlendShade0 = (b0 << 10) + (g0 << 5) + r0 + 0x8000;
-    g_PaintBlendShade1 = (b1 << 10) + (g1 << 5) + r1 + 0x8000;
+    g_PaintBlendShade0 = (b0 << 10) + (g0 * 32) + r0 + 0x8000;
+    g_PaintBlendShade1 = (b1 << 10) + (g1 * 32) + r1 + 0x8000;
 }
 
 

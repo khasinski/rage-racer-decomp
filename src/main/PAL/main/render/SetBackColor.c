@@ -15,7 +15,7 @@
 __asm__(".align 4");
 void SetBackColor(s32 a, s32 b, s32 c) asm("func_80069A18");
 void SetBackColor(s32 a, s32 b, s32 c) {
-    s32 x = a << 4, y = b << 4, z = c << 4;
+    s32 x = a * 16, y = b * 16, z = c * 16;
     gte_ctc2(x, 13);
     gte_ctc2(y, 14);
     gte_ctc2(z, 15);
@@ -23,7 +23,7 @@ void SetBackColor(s32 a, s32 b, s32 c) {
 __asm__(".align 4");
 void SetFarColor(s32 a, s32 b, s32 c) asm("func_80069A38");
 void SetFarColor(s32 a, s32 b, s32 c) {
-    s32 x = a << 4, y = b << 4, z = c << 4;
+    s32 x = a * 16, y = b * 16, z = c * 16;
     gte_ctc2(x, 21);
     gte_ctc2(y, 22);
     gte_ctc2(z, 23);

@@ -212,13 +212,13 @@ void DrawPrologueText(void) {
 
         camera = g_FadeLevel;
         scratch = (s32 *)0x1F800000;
-        tmp = (camera << 3) - camera;
-        scale_a = tmp << 5;
+        tmp = (camera * 8) - camera;
+        scale_a = tmp * 32;
         base = g_DrawBuffer;
         arg1 = *scratch;
         ptr = base + 0xD0;
         arg7 = (scale_a / 0x100) + 0x20;
-        scale_b = ((camera << 1) + camera) << 6;
+        scale_b = ((camera * 2) + camera) << 6;
         arg8 = (scale_b / 0x100) + 0x40;
 
         next = func_8001720C(ptr, arg1, 0, 0, 0x140, 0xF0, camera, arg7, arg8);

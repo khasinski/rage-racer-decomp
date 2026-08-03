@@ -140,7 +140,7 @@ void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
         arg1->variantAE = g_ReplayPlayerModel;
         if ((arg0 & 1) == 0) {
             index = arg0 >> 1;
-            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + (((index << 3) - index) << 2));
+            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + (((index * 8) - index) << 2));
             arg1->x = small->x;
             arg1->y = small->y;
             arg1->z = small->z;
@@ -156,7 +156,7 @@ void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
             if (arg0 == 0x505) {
                 arg0 = 0;
             }
-            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + (((arg0 << 3) - arg0) << 2));
+            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + (((arg0 * 8) - arg0) << 2));
             arg1->x = AVG(small->x, arg1->x);
             arg1->y = AVG(small->y, arg1->y);
             arg1->z = AVG(small->z, arg1->z);
@@ -198,7 +198,7 @@ void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
             }
             offset = next * 3;
         }
-        base = (u8 *)((offset << 4) + (s32)g_ReplayFramesGp);
+        base = (u8 *)((offset * 16) + (s32)g_ReplayFramesGp);
         *(s32 *)(primary + 0x30) = *(s32 *)(base + 0x24);
         *(s32 *)(secondary + 0x30) = *(s32 *)(base + 0x28);
     } else {
@@ -213,7 +213,7 @@ void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
             }
             offset = next * 7;
         }
-        offset = (offset << 2) + (s32)g_ReplayFramesTimeAttack;
+        offset = (offset * 4) + (s32)g_ReplayFramesTimeAttack;
         *(s32 *)(primary + 0x30) = *(s32 *)(offset + 0x14);
     }
 }

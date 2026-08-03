@@ -274,7 +274,7 @@ void SeedFlybyScenery(void) {
     scene1 = g_RaceSeries;
     *(s32 *)(out + 0) = 0;
 
-    src = (u8 *)((scene0 << 5) + (s32)base);
+    src = (u8 *)((scene0 * 32) + (s32)base);
     word0 = *(s32 *)(src + 0x10);
     word1 = *(s32 *)(src + 0x14);
     word2 = *(s32 *)(src + 0x18);
@@ -285,9 +285,9 @@ void SeedFlybyScenery(void) {
     *(s32 *)(out + 0x1C) = word3;
 
     __asm__ volatile("" ::: "memory");
-    recordIndex = *(s16 *)((scene1 << 2) + (s32)base + 8);
+    recordIndex = *(s16 *)((scene1 * 4) + (s32)base + 8);
     *(s32 *)(out + 0x30) = 0;
-    index = (recordIndex << 1) + recordIndex;
+    index = (recordIndex * 2) + recordIndex;
     index <<= 2;
     index += 0x50;
     g_FlybySceneryKeyframe = base + index;
@@ -347,10 +347,10 @@ void UpdateFlybyScenery(void) {
 
     if (g_PlayerLap == g_FlybySceneryLap) {
         series = g_RaceSeries;
-        if (g_PlayerTrackSection == *(s16 *)((series << 2) + (s32)base)) {
+        if (g_PlayerTrackSection == *(s16 *)((series * 4) + (s32)base)) {
             g_FlybySceneryArmed = 1;
             *(s32 *)(state + 0) = 1;
-            src = (u8 *)((series << 5) + (s32)base);
+            src = (u8 *)((series * 32) + (s32)base);
             g_FlybySceneryFrame = 0;
             g_FlybySceneryLap = 0;
             g_FlybySceneryKeyIndex = 0;
@@ -358,8 +358,8 @@ void UpdateFlybyScenery(void) {
             g_FlybySceneryRotZ2 = 0;
             g_FlybySceneryRotY2 = 0;
             g_FlybySceneryRotX2 = 0;
-            recordIndex = *(s16 *)((g_RaceSeriesNV << 2) + (s32)base + 8);
-            index = (recordIndex << 1) + recordIndex;
+            recordIndex = *(s16 *)((g_RaceSeriesNV * 4) + (s32)base + 8);
+            index = (recordIndex * 2) + recordIndex;
             index <<= 2;
             index += 0x50;
             g_FlybySceneryKeyframe = base + index;

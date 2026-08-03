@@ -90,7 +90,7 @@ void data_ready_callback(void) {
     StStrHeader *base = g_StRingBase;
     StStrHeader *entry;
 
-    entry = (StStrHeader *)((index << 5) + (long)base);
+    entry = (StStrHeader *)((index * 32) + (long)base);
     /* RAW() keeps this store ahead of the g_StBack* writes -- see common.h. */
     RAW(entry->state) = 2;
     *(CdlLOC *)g_StBackLoc = entry->loc;

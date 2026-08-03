@@ -98,7 +98,7 @@ void LoadCarSelectAssets(void) {
         return;
     case 4:
             carIndex = g_PlayerCarIndex;
-            indexOffset = carIndex << 3;
+            indexOffset = carIndex * 8;
             entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
             assetOffset = GetCarAssetIndex(carIndex, entry->modelVariant) << 1;
             carModelBase = g_CarModelBuffer;
@@ -127,10 +127,10 @@ void LoadCarSelectAssets(void) {
 
                 carIndex = g_PlayerCarIndex;
                 if (carIndex < 10) {
-                    indexOffset = carIndex << 3;
+                    indexOffset = carIndex * 8;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
                     func_8001D748(entry->paintColor1, g_CarModelAsset->imageDataOffset);
-                    indexOffset = g_PlayerCarIndex << 3;
+                    indexOffset = g_PlayerCarIndex * 8;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
                     func_8001D900(entry->paintColor2, g_CarModelAsset->imageDataOffset);
                 }

@@ -23,7 +23,7 @@ void func_800512B4(s32 arg0) {
     u8 *base = g_DrawBuffer;
     s32 value = *scratch;
 
-    *scratch = func_8001720C(base + 0xCC, value, 0x24, (arg0 << 4) + 0x24, 0x50, 0x10, 0, 0, 0xFF);
+    *scratch = func_8001720C(base + 0xCC, value, 0x24, (arg0 * 16) + 0x24, 0x50, 0x10, 0, 0, 0xFF);
 }
 
 typedef struct SwObj698 { s32 unk0; u16 unk4; } SwObj698;

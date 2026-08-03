@@ -116,7 +116,7 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     s16 rect[4];
     s32 offset;
 
-    offset = ((g_FrameParity << 4) - g_FrameParity) << 4;
+    offset = ((g_FrameParity * 16) - g_FrameParity) << 4;
     rect[0] = x;
     rect[1] = y + offset;
     rect[2] = w;
@@ -173,9 +173,9 @@ void func_800340D8(void) {
             yStart = y;
             xStep = 0;
             do {
-                linear = (row << 5) + col;
+                linear = (row * 32) + col;
                 buffer = buffers[0];
-                offset = linear << 4;
+                offset = linear * 16;
                 func_80064FF8((u8 *)((s32)offset + (s32)buffer));
                 storeBaseV1 = buffers[0];
                 TILE_AT(storeBaseV1, offset).w = 2;
@@ -278,7 +278,7 @@ void DrawStartCountdown(s32 sceneTimer) {
     do {
         firstPattern = g_CountdownDigitPatterns;
         patternBeforeFirst = firstPattern - 64;
-        phasePattern = patternBeforeFirst + (phase << 4);
+        phasePattern = patternBeforeFirst + (phase * 16);
         if (phase == 0) {
             pattern = -1;
         } else if (phaseIsNegative) {
@@ -292,7 +292,7 @@ void DrawStartCountdown(s32 sceneTimer) {
                 pattern = ~pattern;
             }
         }
-        rowOffset = row << 5;
+        rowOffset = row * 32;
         do {
             u8 *color =
                 (u8 *)(((rowOffset + column) << 4) + (s32)tiles) + 4;
@@ -303,7 +303,7 @@ void DrawStartCountdown(s32 sceneTimer) {
             {
                 CVec *colors =
                     (CVec *)(
-                        (u8 *)g_CountdownCellColors + (colorBank << 3));
+                        (u8 *)g_CountdownCellColors + (colorBank * 8));
                 *(CVec *)color = colors[pattern & 1];
             }
             pattern >>= 1;

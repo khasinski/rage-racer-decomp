@@ -28,7 +28,7 @@ void FlipTeamLogoHorizontal(void) {
     row = 0;
     highStart = 7;
     do {
-        rowOffset = row << 5;
+        rowOffset = row * 32;
         lowBase = base;
         pairOffset = 0;
         highIndex = highStart;
@@ -40,7 +40,7 @@ void FlipTeamLogoHorizontal(void) {
             highWord = *(u32 *)(rowOffset + (s32)&base[highIndex]);
             do {
                 lowPacked <<= 4;
-                shift = nibble << 2;
+                shift = nibble * 4;
                 lowNibble = (lowWord >> shift) & 0xF;
                 highPacked = (highPacked << 4) | ((highWord >> shift) & 0xF);
                 nibble++;
@@ -49,7 +49,7 @@ void FlipTeamLogoHorizontal(void) {
             shift = rowOffset + (s32)lowBase;
             lowBase++;
             pairOffset += 4;
-            lowNibble = highIndex << 2;
+            lowNibble = highIndex * 4;
             lowNibble += (s32)base;
             {
                 s32 rel = lowNibble;
@@ -180,10 +180,10 @@ void RotateTeamLogoCw(void) {
                 asm("" : "=r"(dst) : "0"(dst));
                 dst = (u32 *)((s32)dst + 7);
                 dst = (u32 *)((s32)dst - j);
-                dst = (u32 *)(((s32)dst << 2) + (s32)(stackBase = saved));
+                dst = (u32 *)(((s32)dst * 4) + (s32)(stackBase = saved));
                 *dst = 0;
                 value1 = src[0x00];
-                shift = k << 2;
+                shift = k * 4;
                 value1 = (value1 >> shift) & 0xF;
                 value1 <<= 4;
                 *dst = value1;
@@ -404,7 +404,7 @@ void UpdateTeamLogoCanvas(void) {
                     case 1:
                         temp_v0_2 = (var_v0_5 >> 5) & 0x1F;
                         if (temp_v0_2 != 0) {
-                            var_a0_3 = (temp_v0_2 << 5) - 0x20;
+                            var_a0_3 = (temp_v0_2 * 32) - 0x20;
                         } else {
                             var_a0_3 = 0x3E0;
                         }

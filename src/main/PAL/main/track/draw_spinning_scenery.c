@@ -56,7 +56,7 @@ void DrawSpinningScenery(s32 arg0, s32 arg1) {
         delta = &deltaBase[active];
         work = sp30;
         base = g_SpinningSceneryAngle;
-        dstOffset = loopIndex << 1;
+        dstOffset = loopIndex * 2;
         dst = (u16 *)(dstOffset + (s32)base);
         offset = loopIndex * 0x10;
 
@@ -81,7 +81,7 @@ void DrawSpinningScenery(s32 arg0, s32 arg1) {
 
             dst++;
             offset += 0x10;
-        } while ((s32)dst < ((end << 1) + (s32)base));
+        } while ((s32)dst < ((end * 2) + (s32)base));
     }
 
     frameMask = frame & 0x1FF;

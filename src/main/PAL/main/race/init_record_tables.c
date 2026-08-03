@@ -60,20 +60,20 @@ void InitRecordTables(void) {
     r16 = (s32)&g_BestLapTimes;
     do {
         r7 = 0;
-        r15 = r14 << 5;
+        r15 = r14 * 32;
         r12 = r14 << 4;
         r11 = r16;
         do {
             r5 = 0;
-            r13 = r7 << 3;
+            r13 = r7 * 8;
             r8 = r11;
             do {
                 r4 = 0;
                 r10 = r8;
                 r2 = r12 + r18;
-                r6 = r7 << 2;
+                r6 = r7 * 4;
                 r9 = r6 + r2;
-                r3 = r5 << 2;
+                r3 = r5 * 4;
                 r2 = r15 + r17;
                 r2 = r13 + r2;
                 r3 = r3 + r2;
@@ -111,7 +111,7 @@ void InitRecordTables(void) {
             r19 = r15;
             r18 = (s32)&g_TimeRecords;
             r21 = r18 + 4;
-            r25 = r7 << 2;
+            r25 = r7 * 4;
             __asm__("" : "=r"(r25) : "0"(r25));
             r2 = (s32)&g_DefaultLapTimes;
             r24 = r14 << 4;
@@ -126,7 +126,7 @@ void InitRecordTables(void) {
             do {
                 r5 = r11 + r16;
                 r11 += 0x10;
-                r4 = r6 << 4;
+                r4 = r6 * 16;
                 r6++;
                 r2 = r16 + r19;
                 r4 = r4 + r2;
@@ -176,7 +176,7 @@ void InitRecordTables(void) {
         r4 = r9;
         do {
             r6 = 0;
-            r2 = r7 << 2;
+            r2 = r7 * 4;
             r5 = r2 + r8;
             r3 = r4;
             do {

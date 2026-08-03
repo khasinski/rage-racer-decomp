@@ -48,7 +48,7 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     StRingEventRecord *entry;
     long old_flag;
 
-    entry = (StRingEventRecord *)((g_StRingSlot << 5) + (long)g_StRingBase);
+    entry = (StRingEventRecord *)((g_StRingSlot * 32) + (long)g_StRingBase);
 
     if ((entry->state & 0xFFFF) == 1) {
         old_flag = D_801E8278;
@@ -57,7 +57,7 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
             entry->state = 0;
         }
 
-        entry = (StRingEventRecord *)((g_StRingSlot << 5) + (long)g_StRingBase);
+        entry = (StRingEventRecord *)((g_StRingSlot * 32) + (long)g_StRingBase);
     }
 
     if ((entry->state & 0xFFFF) == 2) {
@@ -73,8 +73,8 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
         track = g_StRingSize;
         raw_base = (StRingEventRecord *)g_StRingBase;
         index = g_StRingSlot;
-        base = (StRingEventRecord *)((track << 5) + (long)raw_base);
-        offset = (index << 6) - index;
+        base = (StRingEventRecord *)((track * 32) + (long)raw_base);
+        offset = (index * 64) - index;
         offset <<= 5;
         base = (StRingEventRecord *)((long)base + offset);
         *out0 = base;

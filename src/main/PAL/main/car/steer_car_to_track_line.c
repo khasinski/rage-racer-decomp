@@ -518,14 +518,14 @@ s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
         f12b = pb->field_12;
         f10b = pb->field_10;
 
-        pts[1].vx =  (s16)(f10a << 1) * (s16)cos_c / 4096;
-        pts[1].vy = -(s16)(f10a << 1) * (s16)sin_c / 4096;
-        pts[2].vx = -(s16)(f12a << 1) * (s16)cos_c / 4096;
-        pts[2].vy =  (s16)(f12a << 1) * (s16)sin_c / 4096;
-        pts[3].vx = sx + (s16)(f10b << 1) * (s16)cos_n / 4096;
-        pts[3].vy = sz - (s16)(f10b << 1) * (s16)sin_n / 4096;
-        pts[4].vx = sx - (s16)(f12b << 1) * (s16)cos_n / 4096;
-        pts[4].vy = sz + (s16)(f12b << 1) * (s16)sin_n / 4096;
+        pts[1].vx =  (s16)(f10a * 2) * (s16)cos_c / 4096;
+        pts[1].vy = -(s16)(f10a * 2) * (s16)sin_c / 4096;
+        pts[2].vx = -(s16)(f12a * 2) * (s16)cos_c / 4096;
+        pts[2].vy =  (s16)(f12a * 2) * (s16)sin_c / 4096;
+        pts[3].vx = sx + (s16)(f10b * 2) * (s16)cos_n / 4096;
+        pts[3].vy = sz - (s16)(f10b * 2) * (s16)sin_n / 4096;
+        pts[4].vx = sx - (s16)(f12b * 2) * (s16)cos_n / 4096;
+        pts[4].vy = sz + (s16)(f12b * 2) * (s16)sin_n / 4096;
 
         if (func_80069C98(*(s32 *)&pts[1], *(s32 *)&pts[2], *(s32 *)&pts[0]) >= 0 &&
             func_80069C98(*(s32 *)&pts[2], *(s32 *)&pts[4], *(s32 *)&pts[0]) >= 0 &&

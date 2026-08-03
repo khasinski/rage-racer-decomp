@@ -11,7 +11,7 @@ s32 CardReadStatusPair(s32 high, s32 low) {
     s32 ret;
     s32 event;
 
-    cmd = (high << 4) + low;
+    cmd = (high * 16) + low;
 
     _card_info(cmd);
     event = WaitMemoryCardHwEvent();

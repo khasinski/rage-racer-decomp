@@ -221,7 +221,7 @@ void DrawSplitDelta(s32 arg0, s32 arg1) {
     mode = arg1;
     firstOffset = 0x237AC;
     temp = 0x237C0;
-    value = arg0 << 3;
+    value = arg0 * 8;
     base = g_DrawBuffer;
     value += 0x50;
     prim = base + temp;

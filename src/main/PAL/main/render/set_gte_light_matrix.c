@@ -92,21 +92,21 @@ void func_80014618(s32 variant) {
         return;
     }
     if (g_GameMode == 11) {
-        product = func_80068568(g_AnimTimer << 4) * g_NegconSteerRange[g_NegconMaxTwist];
+        product = func_80068568(g_AnimTimer * 16) * g_NegconSteerRange[g_NegconMaxTwist];
         if (product < 0) {
             product += 0x1FF;
         }
         steer = product >> 9;
     } else if (g_GameMode == 10) {
         product =
-            (func_80068568(g_AnimTimer << 4) << 4) * g_NegconPlayScale[g_NegconSteerPlay];
+            (func_80068568(g_AnimTimer * 16) << 4) * g_NegconPlayScale[g_NegconSteerPlay];
         if (product < 0) {
             product += 0xFFF;
         }
         steer = product >> 12;
     } else {
         product = g_NegconSteer;
-        steer = product << 3;
+        steer = product * 8;
     }
 
     angle = g_ControllerSceneAngleX - 0x40;

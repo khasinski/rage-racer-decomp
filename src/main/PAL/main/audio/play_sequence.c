@@ -86,7 +86,7 @@ void ApplyDuckedSequenceAudio(void) {
 
     value = g_SeqVolume;
     seq = g_SeqHandle;
-    scaled = value << 1;
+    scaled = value * 2;
     {
         s32 rel = value;
         value = scaled + rel;

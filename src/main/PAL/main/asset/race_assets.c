@@ -90,7 +90,7 @@ void LoadRaceAssets(void) {
     case 3: {
         s32 idx = g_PlayerCarIndex;
         s32 sz = GetCarAssetIndex(idx, g_CarTable[idx].modelVariant);
-        if (func_80017C78((sz << 1) + 11, g_AssetLoadCursor) != 0) {
+        if (func_80017C78((sz * 2) + 11, g_AssetLoadCursor) != 0) {
             register u8 *base_a0 asm("$4");
             u8 *base_a3;
             u8 *p1;
@@ -124,8 +124,8 @@ void LoadRaceAssets(void) {
         s32 scaled;
         s32 base_off;
         p = g_AssetLoadCursor;
-        scaled = g_CourseIndex << 1;
-        base_off = (g_GrandPrixClass << 3) + 0x57;
+        scaled = g_CourseIndex * 2;
+        base_off = (g_GrandPrixClass * 8) + 0x57;
         if (func_80017C78(scaled + base_off, p) != 0) {
             register u8 *base_a0 asm("$4");
             u8 *base;
@@ -159,8 +159,8 @@ void LoadRaceAssets(void) {
         s32 scaled;
         register s32 result asm("$2");
         p = g_AssetLoadCursor;
-        scaled = g_CourseIndex << 1;
-        result = (g_GrandPrixClass << 3) + scaled;
+        scaled = g_CourseIndex * 2;
+        result = (g_GrandPrixClass * 8) + scaled;
         if (func_80017C78(result + 0x58, p) != 0) {
             register u8 *base_a0 asm("$4");
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 0); SetTrackCameraTable(g_AssetBlockPtr);
@@ -239,8 +239,8 @@ void LoadCourseAssets(void) {
     s32 value;
 
     if (g_AssetLoadState == 1) {
-        s32 left = g_CourseIndex << 1;
-        s32 right = (g_GrandPrixClass << 3) + 0x57;
+        s32 left = g_CourseIndex * 2;
+        s32 right = (g_GrandPrixClass * 8) + 0x57;
 
         value = func_80017C78((s32)(left + right), (void *)g_AssetBase);
         if (value != 0) {

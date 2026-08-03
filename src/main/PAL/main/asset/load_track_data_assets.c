@@ -30,7 +30,7 @@ void LoadTrackDataAssets(void) {
         offset = g_CourseIndex;
         __asm__ volatile("" : "=r"(offset) : "0"(offset));
         header = (GameSceneAssetHeader *)g_GrandPrixClass;
-        if (func_80017C78(((s32)header << 3) + (offset << 1) + 0x58, dst) != 0) {
+        if (func_80017C78(((s32)header * 8) + (offset * 2) + 0x58, dst) != 0) {
             header = g_AssetLoadCursor;
             offset = header->offsets[0];
             g_AssetBlockPtr = (u8 *)header + offset;
@@ -140,7 +140,7 @@ void BeginClassFmv(void) {
 
     base = (s32 *)g_StreamCdEntries;
     index += g_GrandPrixClass;
-    offset = index << 3;
+    offset = index * 8;
     value = g_StreamCdEntries[index].size;
     g_StreamLoc = (s32 *)((s32)base + offset);
     g_StreamSectorCount = value;

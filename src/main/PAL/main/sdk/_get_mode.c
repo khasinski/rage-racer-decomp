@@ -262,7 +262,7 @@ long Gpu_ClearOTagDma(u_long *arg0, long arg1) {
     status = g_GpuDpcr;
     *status |= 0x08000000;
     *g_OtcDmaChcr = 0;
-    offset = (size << 2) - 4;
+    offset = (size * 4) - 4;
     arg0 = (u_long *)((u_char *)arg0 + offset);
     *g_OtcDmaMadr = (u_long)arg0;
     *g_OtcDmaBcr = size;

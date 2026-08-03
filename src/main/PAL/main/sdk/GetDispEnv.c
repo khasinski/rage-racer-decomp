@@ -157,9 +157,9 @@ void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
             u_long green;
             u_long red;
 
-            commandOffset = count << 2;
+            commandOffset = count * 4;
             count++;
-            positionOffset = count << 2;
+            positionOffset = count * 4;
             count++;
             value = (u_short)src->ofs[0];
             asm("" : "=r"(value) : "0"(value));

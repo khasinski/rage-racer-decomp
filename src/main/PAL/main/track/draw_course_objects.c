@@ -121,7 +121,7 @@ extern u16 *g_TerrainCellGrid asm("D_801E5020");
 
 u32 GetCellRegion(s32 arg0, s32 arg1) asm("func_800414A0");
 u32 GetCellRegion(s32 arg0, s32 arg1) {
-    arg1 = (arg1 << 5) + arg0;
+    arg1 = (arg1 * 32) + arg0;
     return g_TerrainCellGrid[arg1] >> 10;
 }
 

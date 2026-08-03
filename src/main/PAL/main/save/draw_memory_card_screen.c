@@ -37,7 +37,7 @@ void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     next = GameQueueSpriteTrans(base, next, 0x68, 0xB8, 0x34, 0x10, 0x10, 0xC8, 0x7F40);
     next = GameQueueSpriteTrans(base, next, 0xB0, 0xB8, 0x14, 0x10, 0x44, 0xC8, 0x7F40);
     *scratch = next;
-    DrawMenuCursorArrow(0x14, (arg2 << 5) + 0x38);
+    DrawMenuCursorArrow(0x14, (arg2 * 32) + 0x38);
     DrawOptionHintBar(arg1 + 5);
     DrawPadTypeHint();
 

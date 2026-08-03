@@ -36,7 +36,7 @@ long CdControl(long arg0, void *arg1, long arg2) {
     command = cmd & 0xFF;
     base = g_CdCommandNeedsSetloc;
     savedMode = g_CdSyncCallback;
-    offset = command << 2;
+    offset = command * 4;
     commandState = (long *)(offset + (long)base);
     result = 0;
 
@@ -88,7 +88,7 @@ long CdControlF(long arg0, void *arg1) {
     asm("" : "=r"(command) : "0"(command));
     base = g_CdCommandNeedsSetloc;
     savedMode = g_CdSyncCallback;
-    offset = command << 2;
+    offset = command * 4;
     commandState = (long *)(offset + (long)base);
     result = 0;
 
@@ -149,7 +149,7 @@ long CdControlB(long arg0, void *arg1, long arg2) {
     command = cmd & 0xFF;
     base = g_CdCommandNeedsSetloc;
     savedMode = g_CdSyncCallback;
-    offset = command << 2;
+    offset = command * 4;
     commandState = (long *)(offset + (long)base);
     result = 0;
 

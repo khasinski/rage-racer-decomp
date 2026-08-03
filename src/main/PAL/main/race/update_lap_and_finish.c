@@ -600,7 +600,7 @@ void EnterRaceScene(void) {
         } while (0);
         new_var = (u8 *)g_BestLapTimes + scene;
         count = mode + (s32)new_var;
-        new_var2 = g_GrandPrixMode << 2;
+        new_var2 = g_GrandPrixMode * 4;
         new_var2 += count;
         entry = (s32 *)new_var2;
         g_RefSectorTime2 = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset + 8);

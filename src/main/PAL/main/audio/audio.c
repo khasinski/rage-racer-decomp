@@ -10,14 +10,14 @@ void SetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
 
     if (arg1 != 0) {
         s32 *base = g_SoundSlotActive;
-        entry = (s32 *)((arg0 << 2) + (s32)base);
+        entry = (s32 *)((arg0 * 4) + (s32)base);
         if (*entry == 0) {
             PlaySoundSlotVoice(arg0, 0, 3);
             *entry = 1;
         }
     } else {
         s32 *base = g_SoundSlotActive;
-        entry = (s32 *)((arg0 << 2) + (s32)base);
+        entry = (s32 *)((arg0 * 4) + (s32)base);
         if (*entry != 0) {
             StopSoundSlotVoice(arg0);
             *entry = 0;
@@ -1239,8 +1239,8 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
             } else {
                 *g_EffectVoiceState = 0;
             }
-            bankIndex = (bank << 1) + bank;
-            tblOff = bankIndex << 3;
+            bankIndex = (bank * 2) + bank;
+            tblOff = bankIndex * 8;
             count = *(s32 *)((u8 *)g_EffectCueTable + tblOff);
             i = 0;
             if (count > i) {
@@ -1321,8 +1321,8 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 tblOff = bank * 2;
             }
             tblOff = (tblOff + bank) * 8;
-            bankIndex = (bank << 1) + bank;
-            tblOff = bankIndex << 3;
+            bankIndex = (bank * 2) + bank;
+            tblOff = bankIndex * 8;
             count = *(s32 *)((u8 *)g_EffectCueTable + tblOff);
             i = 0;
             if (count > i) {
@@ -1834,7 +1834,7 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     }
 
     base_minus = base - 1;
-    index_offset = index << 2;
+    index_offset = index * 4;
     lower_position = (s32 *)(index_offset + (s32)base_minus);
     lower_position = (s32 *)((s32)lower_position + bank);
     lower_value_base = (s32)(base + 8);

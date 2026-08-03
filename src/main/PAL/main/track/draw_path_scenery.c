@@ -58,9 +58,9 @@ void DrawPathScenery(void) {
         s32 tmp;
 
         base = g_SceneTimer;
-        acc = base << 2;
+        acc = base * 4;
         acc += base;
-        tmp = acc << 5;
+        tmp = acc * 32;
         acc += tmp;
         acc <<= 1;
         acc += base;

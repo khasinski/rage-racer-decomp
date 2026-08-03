@@ -28,7 +28,7 @@ s32 PollMemoryCardStatus(s32 arg0, s32 arg1) {
     s32 status;
     s32 state;
 
-    handle = (arg0 << 4) + arg1;
+    handle = (arg0 * 16) + arg1;
 
     switch (g_McStatusState) {
     case 0:
@@ -474,7 +474,7 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
     g_SaveIconRect.w = 0x10;
     g_SaveIconRect.h = 1;
     tileX = iconTileReg % 20;
-    rectArg->x = tileX << 4;
+    rectArg->x = tileX * 16;
     g_SaveIconRect.y = tileRow + 0x1E0;
     i = 0;
     rect = rectArg;
@@ -686,13 +686,13 @@ void StoreSaveStateBlock(u8 *arg0) {
 
         for (; outer < 2; outer++) {
             register s32 middle asm("$12") = 0;
-            register s32 outerOffset asm("$9") = outer << 5;
+            register s32 outerOffset asm("$9") = outer * 32;
             register u8 *middleDst asm("$11") = outerDst;
             u8 *lapDst = outerDst + 0x9DC;
 
             for (; middle < 4; middle++) {
                 register s32 inner asm("$6") = 0;
-                s32 middleOffset = middle << 3;
+                s32 middleOffset = middle * 8;
                 s32 *totalOutBase = (s32 *)(middleDst + 0xA1C);
                 s32 *totalOut =
                     (s32 *)(middleOffset + (s32)totalOutBase);
@@ -998,7 +998,7 @@ s32 LoadSaveStateBlock(u8 *arg0) {
         s32 off;
         for (; i < 2; i++) {
             j = 0;
-            off = i << 5;
+            off = i * 32;
             for (; j < 4; j++) {
                 *(s32 *)((u8 *)g_BestLapTimes + off) = *(s32 *)(base + off + 0x9DC);
                 *(s32 *)((u8 *)g_BestTotalTimes + off) = *(s32 *)(base + off + 0xA1C);
@@ -1358,13 +1358,13 @@ s32 LoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     header = arg1;
     GameMenuLoadPhase = 0x3000;
     tries = 0;
-    temp = arg0 << 1;
+    temp = arg0 * 2;
     temp += arg0;
     temp <<= 2;
     temp += arg0;
 
     {
-        s32 nameOffset = temp << 1;
+        s32 nameOffset = temp * 2;
         register char *name asm("$4");
 
         do {
@@ -1543,7 +1543,7 @@ void DrawMemoryCardHelpPrompt(s32 arg0) {
     s32 x;
     s32 y;
 
-    offset = arg0 << 4;
+    offset = arg0 * 16;
     offset -= arg0;
     x = 0x50;
     y = 0x28;

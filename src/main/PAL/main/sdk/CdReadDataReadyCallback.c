@@ -62,7 +62,7 @@ void CdReadDataReadyCallback(u_char arg0, long arg1) {
             p = &g_CdReadPtr;
             dv = *p;
             CdGetSector2((void *)dv, g_CdReadSectorWords);
-            *p = (g_CdReadSectorWords << 2) + *p;
+            *p = (g_CdReadSectorWords * 4) + *p;
             g_CdReadRemaining = g_CdReadRemaining - 1;
             g_CdReadRemaining;
             g_CdReadExpectedSector = g_CdReadExpectedSector + 1;

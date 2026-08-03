@@ -51,7 +51,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
     sums[0] = 0;
     track = g_TrackLength;
     {
-        s32 tmp = car->field_A4 << 1;
+        s32 tmp = car->field_A4 * 2;
         t6 = tmp + 0xC00;
     }
     field34minus = (s16)(carField34 - 0x30);
@@ -89,7 +89,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
                 otherA4 = *(u16 *)(base + 0x34);
             }
             t1 = 0;
-            t6 = 0x1800 - (g_PlayerSpeed << 1);
+            t6 = 0x1800 - (g_PlayerSpeed * 2);
         } else {
             s32 op;
             otherField34 = *(s32 *)(block - 0x70); /* g_Cars[i].field_34 */
@@ -150,23 +150,23 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
         if (acc8 == 0 && carField34 >= 0x51) {
             s32 f104 = state->field_104;
             state->field_11E = -0x50;
-            state->field_120 = -8 - (f104 << 1);
+            state->field_120 = -8 - (f104 * 2);
         } else if (acc9 == 0 && carField34 < -0x50) {
             s32 f104 = state->field_104;
             state->field_11E = 0x50;
-            state->field_120 = (f104 << 1) + 8;
+            state->field_120 = (f104 * 2) + 8;
         } else if (sums[0] <= sums[1] && sums[0] <= sums[2] && acc8 == 0) {
             s32 f104 = state->field_104;
             state->field_11E = -0x50;
-            state->field_120 = -6 - (f104 << 1);
+            state->field_120 = -6 - (f104 * 2);
         } else if (sums[2] <= sums[1] && sums[2] <= sums[0] && acc9 == 0) {
             s32 f104 = state->field_104;
             state->field_11E = 0x50;
-            state->field_120 = (f104 << 1) + 6;
+            state->field_120 = (f104 * 2) + 6;
         }
         if (sums[3] >= 0x3E9) {
             s32 fv = state->field_130;
-            s32 d = ((fv << 4) - fv) << 1;
+            s32 d = ((fv * 16) - fv) << 1;
             state->field_130 = d / 100;
         }
     } else {
@@ -195,7 +195,7 @@ void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
     s32 pos1;
     s32 value;
 
-    offset = arg1 << 2;
+    offset = arg1 * 4;
     pos0Base = arg0->field_68;
     entry = *(GameCarRuntime **)((u8 *)D_801E40B8 + offset);
     pos0 = pos0Base + arg0->field_6C;

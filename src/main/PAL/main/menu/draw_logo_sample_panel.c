@@ -108,7 +108,7 @@ void func_8004E724(s32 arg0, s32 arg1) {
         if (animationStep >= 0xC) {
             animationStep = 0xB;
         }
-        var_s1 = ((u32)-(animationStep << 6) >> 5) + 0xFB;
+        var_s1 = ((u32)-(animationStep * 64) >> 5) + 0xFB;
         var_a0 = D_8009B28C;
         if (D_8009B28C < 0) {
             var_a0 = D_8009B28C + 0xFFF;
@@ -130,7 +130,7 @@ void func_8004E724(s32 arg0, s32 arg1) {
         if (animationStep >= 9) {
             animationStep = 8;
         }
-        temp_a2 = ((u32)-(animationStep << 6) >> 5) + 0xF9;
+        temp_a2 = ((u32)-(animationStep * 64) >> 5) + 0xF9;
         if (arg1 < 0xA) {
             DrawLogoSprite(temp_s7, (s16)(((arg1 % 11) * 0xC) + 0x56),
                            (s16)(temp_a2 + ((arg1 / 11) * 0x18)), 8,
@@ -182,7 +182,7 @@ void func_8004E724(s32 arg0, s32 arg1) {
         if (animationStep >= 7) {
             animationStep = 6;
         }
-        temp_s0 = (u32)-(animationStep << 6) >> 5;
+        temp_s0 = (u32)-(animationStep * 64) >> 5;
         temp_s2 = animationStep * 2;
         DrawLogoSprite(temp_s7 + 4, 0xDA, (s16)(temp_s0 + 0xF4), 0x1E, (s32)temp_s2, 0xAC,
                        0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);

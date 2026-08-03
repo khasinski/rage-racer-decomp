@@ -222,7 +222,7 @@ void DrawMainMenuRows(void) {
             frame = 0;
         }
 
-        scratch = func_800175A4(base, scratch, 0x68, y, width, frame, 0, (i << 4) + 0xA0, width, 0x10, code, 0x39);
+        scratch = func_800175A4(base, scratch, 0x68, y, width, frame, 0, (i * 16) + 0xA0, width, 0x10, code, 0x39);
         y += 0x18;
         i++;
         row++;

@@ -123,12 +123,12 @@ void DumpDrawEnv(DrawEnv *arg0) {
 
     }
     value = arg0->tpage;
-    D_800941E4(D_80013374, (value >> 9) & 3, (value >> 7) & 3, (value << 6) & 0x7C0, (value << 3) & 0x300);
+    D_800941E4(D_80013374, (value >> 9) & 3, (value >> 7) & 3, (value * 64) & 0x7C0, (value * 8) & 0x300);
     return;
 
     }
     value = arg0->tpage;
-    D_800941E4(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value << 6) & 0x7C0, ((value << 4) & 0x100) + ((value >> 2) & 0x200));
+    D_800941E4(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
 }
 
 void DumpDispEnv(DispEnv *arg0) asm("func_800653B4");

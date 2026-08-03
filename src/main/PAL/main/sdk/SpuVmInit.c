@@ -101,7 +101,7 @@ void SpuVmInit(long arg0) {
             one = 1;
             do {
                 index = (u_short)i;
-                shifted = index << 3;
+                shifted = index * 8;
                 offset = index * 0x34;
                 eighteen = 0x18;   *(short *)&g_SndVoiceStateAge[offset] = eighteen;
                 eighteen = -1;     *(short *)&g_SndVoiceStateSeqSep[offset] = eighteen;

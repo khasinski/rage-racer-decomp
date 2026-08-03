@@ -539,7 +539,7 @@ void ApplyTrackReverbZone(s32 arg0) {
     }
 
     scene = g_RaceSeries;
-    offset = scene << 4;
+    offset = scene * 16;
     for (i = 0; i < 2; i++) {
         if (*(s32 *)((u8 *)&g_ReverbZoneStart + offset) < arg0) {
             if (arg0 < *(s32 *)((u8 *)&g_ReverbZoneEnd + offset)) {

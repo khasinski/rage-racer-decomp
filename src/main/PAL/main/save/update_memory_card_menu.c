@@ -305,7 +305,7 @@ L_sw2:
 
     case 0x0A: {
         s32 *p = &D_80082FAC;
-        s32 hi = g_McSlotCursor << 1;
+        s32 hi = g_McSlotCursor * 2;
         s32 lo = D_80082FAC + 9;
         g_McMenuPhase = hi + lo;
         SetMenuBinaryChoiceVertical(p);

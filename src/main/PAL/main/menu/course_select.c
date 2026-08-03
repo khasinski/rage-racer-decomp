@@ -353,7 +353,7 @@ s32 DrawCourseSelectScreen(s32 step)
             g_GrandPrixClass * 8 + 8, 0x18,
             gpFade, gpFade, gpFade, gpClut, 0, gpSemiTrans, gpFlags);
 
-        lineColor = (u32)gpFade << 1;
+        lineColor = (u32)gpFade * 2;
         GameDrawLineWide(
             ot, 0x48, 0xAA - gpSlide, 0xAF, 0xAA - gpSlide,
             lineColor, lineColor, lineColor, 0x40);

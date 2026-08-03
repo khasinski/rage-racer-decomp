@@ -79,8 +79,8 @@ u_char SpuVmAlloc(long unused) {
                 u_long age;
 
                 ageIndex = (u_char)voice;
-                ageOffset = (ageIndex << 1) + ageIndex;
-                ageOffset = (ageOffset << 2) + ageIndex;
+                ageOffset = (ageIndex * 2) + ageIndex;
+                ageOffset = (ageOffset * 4) + ageIndex;
                 ageOffset <<= 2;
                 voice++;
                 age = *(u_short *)&g_SndVoiceStateAge[ageOffset];
@@ -143,12 +143,12 @@ void func_80073C50(long arg0, long val) {
     a3v = a2v * D_801E4BDA * D_801E4BDD / 16129;
 
     F0 = g_SndCurrentVoice;
-    vidx = F0 << 3;
+    vidx = F0 * 8;
 
     g = g_SndCurrentSeqSep;
     center = g & 0xff;
     {
-        long idx4 = center << 2;
+        long idx4 = center * 4;
         t = g << 16;
         sixteen = t >> 16;
         hi = (u_long)t >> 24;
@@ -258,8 +258,8 @@ void func_80074134(void) {
     voice = g_SndCurrentVoice;
     mask = g_SndVoiceSilenceHistory;
 
-    *packedVoicePtr = voice << 3;
-    D_801E4BEE = (g_SndCurrentProgActual << 4) + g_SndCurrentTone;
+    *packedVoicePtr = voice * 8;
+    D_801E4BEE = (g_SndCurrentProgActual * 16) + g_SndCurrentTone;
     *(u_short *)&g_SndVoiceRegs[0x19E + (voice * 0x34)] = 0x7FFF;
 
     do {

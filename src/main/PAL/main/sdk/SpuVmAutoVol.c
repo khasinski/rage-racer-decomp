@@ -295,7 +295,7 @@ void SpuVmAutoPanTick(long arg0) {
 
     asm(".globl func_80075420\nfunc_80075420 = SpuVmAutoPanTick + 0x54");
     channel = (short)arg0;
-    index8 = channel << 3;
+    index8 = channel * 8;
     offset = channel * 52;
     originalArg = arg0;
     if (*(short *)&g_SndVoiceStatePanCounter[offset] != 0) {
@@ -418,7 +418,7 @@ void SpuVmAutoPanTick(long arg0) {
         }
     }
 
-    outputOffset = (short)index8 << 1;
+    outputOffset = (short)index8 * 2;
     flagIndex = (short)originalArg;
     *(u_short *)((u_char *)g_SndVoiceRegsVolRight + outputOffset) = right;
     asm("" : : : "memory");

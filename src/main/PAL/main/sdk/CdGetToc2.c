@@ -51,7 +51,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
         firstBcd &= 0xF;
         firstTrack = value + firstBcd;
         value = lastBcd >> 4;
-        high = value << 2;
+        high = value * 4;
         high += value;
         high <<= 1;
         lastBcd &= 0xF;

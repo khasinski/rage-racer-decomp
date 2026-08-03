@@ -71,7 +71,7 @@ void DrawOptionRootMenu(void) {
     state = g_GameMode;
     *scratch = tmp;
     if (state == 1) {
-        func_800236C8(0x14, (g_OptionMenuCursor << 5) + 0x94);
+        func_800236C8(0x14, (g_OptionMenuCursor * 32) + 0x94);
     }
 }
 
@@ -198,7 +198,7 @@ void DrawClassRecordGrid(void) {
     next = func_80017138(base, next, 0x24, 0x38, 0x24, 0x18, 0x38, 0x90, 0x7F40);
     next = func_80017138(base, next, 0x24, 0x58, 0x1C, 0x18, 0xD0, 0x60, 0x7F40);
     *(s32 *)0x1F800000 = next;
-    func_800236C8(0x14, (g_ClassRecordMenuCursor << 5) + 56);
+    func_800236C8(0x14, (g_ClassRecordMenuCursor * 32) + 56);
     next = *(s32 *)0x1F800000;
 
     for (i = 0; i < 11; i++) {
@@ -329,7 +329,7 @@ void DrawVolumeBar(s32 arg0, s32 arg1) {
     i = 0;
     if (i <= arg0) {
         do {
-            y = 0x1C + (i << 3);
+            y = 0x1C + (i * 8);
             next = func_80016EC4(base, next, c + y, b + 4, 4, 0x18, 0xFC, 0x40, 0x7E82);
             i++;
         } while (i <= arg0);
@@ -348,7 +348,7 @@ void DrawSoundOptionScreen(void) {
     s32 n;
 
 
-    func_800236C8(0x14, (g_SoundOptionCursor << 5) + 56);
+    func_800236C8(0x14, (g_SoundOptionCursor * 32) + 56);
     color = 0x7F;
 
     scratch = (s32 *)0x1F800000;
@@ -372,7 +372,7 @@ void DrawSoundOptionScreen(void) {
 
     n = func_8001705C(base, n, 0x66, 0x12A, s3, 0xC, 0xD4, 0xC4, 0x7F40, color);
     n = AddTilePrim(base, n, 0x47, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
-    n = AddTilePrim(base, n, 0x46, 0x120, 0x58, 0x20, color << 1, color << 1, color << 1);
+    n = AddTilePrim(base, n, 0x46, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
 
     color = 0x20;
     if (g_MonoOutput != 0) {
@@ -381,7 +381,7 @@ void DrawSoundOptionScreen(void) {
 
     n = func_8001705C(base, n, 0xBA, 0x12A, 0x28, 0xC, 0xB4, 0xD0, 0x7F40, color);
     n = AddTilePrim(base, n, 0xA3, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
-    n = AddTilePrim(base, n, 0xA2, 0x120, 0x58, 0x20, color << 1, color << 1, color << 1);
+    n = AddTilePrim(base, n, 0xA2, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
     {
         s32 a0v = g_BgmVolumeSetting;
         *scratch = n;

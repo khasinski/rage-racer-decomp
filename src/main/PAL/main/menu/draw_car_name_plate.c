@@ -35,7 +35,7 @@ void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
         func_80046A2C(ot, 0x11F, 0x168, 8, 0x10, 0x38, 0x28, shade & 0xFF,
                       shade & 0xFF, shade & 0xFF, 0x244, 0, 1, 0x3B);
     } else {
-        func_80046A2C(ot, 0x11F, 0x168, 8, 0x10, (s16)((idx << 3) + 8), 0x18,
+        func_80046A2C(ot, 0x11F, 0x168, 8, 0x10, (s16)((idx * 8) + 8), 0x18,
                       shade & 0xFF, shade & 0xFF, shade & 0xFF, 0x244, 0, 1,
                       0x3B);
     }

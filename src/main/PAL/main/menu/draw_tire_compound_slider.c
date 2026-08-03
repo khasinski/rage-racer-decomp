@@ -444,7 +444,7 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
         baseX = 0x66;
         offset = 0;
         do {
-        revealedBar = (s32 *)((i << 2) + (u32)revealed);
+        revealedBar = (s32 *)((i * 4) + (u32)revealed);
         revealedValue = *revealedBar;
         if (revealedValue != 0) {
             bar = g_CarSpecBars + i;

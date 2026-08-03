@@ -242,7 +242,7 @@ void func_8001F134(s32 pairIndex, u8 *srcA, u8 *srcB) {
     }
 
     pairIndex >>= 1;
-    dst = (GameRenderPairPoint *)(((pairIndex << 1) + pairIndex) << 4);
+    dst = (GameRenderPairPoint *)(((pairIndex * 2) + pairIndex) << 4);
     base = g_ReplayFramesGp;
     src1 = (GameRenderSourcePoint *)srcA;
     first = src1->field_0;
@@ -288,7 +288,7 @@ void func_8001F274(s32 pointIndex, u8 *srcPtr) {
     }
 
     pointIndex >>= 1;
-    dst = (GameRenderSinglePoint *)(((pointIndex << 3) - pointIndex) << 2);
+    dst = (GameRenderSinglePoint *)(((pointIndex * 8) - pointIndex) << 2);
     base = g_ReplayFramesTimeAttack;
     src = (GameRenderSourcePoint *)srcPtr;
     first = src->field_0;

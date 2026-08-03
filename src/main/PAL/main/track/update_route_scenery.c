@@ -87,7 +87,7 @@ void UpdateRouteScenery(void) {
 
         idx = g_RaceSeries;
         g_RouteSceneryKeyIndex = 0;
-        n = *(s16 *)((u8 *)((idx << 2) + (s32)base) + 8);
+        n = *(s16 *)((u8 *)((idx * 4) + (s32)base) + 8);
         off = n * 12 + 0x50;
         r3 = (KF *)((s32)base + off);
         value = *(s16 *)((s32)r3 + 0);
@@ -95,7 +95,7 @@ void UpdateRouteScenery(void) {
         value = *(s16 *)((s32)r3 + 2);
         g_RouteSceneryRotY = value;
         value = *(s16 *)((s32)r3 + 4);
-        src = (u8 *)((idx << 5) + (s32)base);
+        src = (u8 *)((idx * 32) + (s32)base);
         g_RouteSceneryKeyframe = r3;
         g_RouteSceneryRotZ = value;
         __asm__ volatile("" ::: "memory");

@@ -62,7 +62,7 @@ void DrawBgmSelectBar(void) {
         temp = 0x10;
     } else {
         value = g_BgmSelectTrack;
-        product = value << 1;
+        product = value * 2;
         product += value;
         product <<= 2;
         temp = product + 0x1C;

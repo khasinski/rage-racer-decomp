@@ -655,7 +655,7 @@ void RampTeamLogoCanvas(s32 arg0, s32 arg1) {
     }
 
     y = D_8009B29C;
-    temp = ((y << 4) + y) << 4;
+    temp = ((y * 16) + y) << 4;
     if (temp < 0) {
         temp += 0xFF;
     }
@@ -875,7 +875,7 @@ void FlipTeamLogoVertical(void) {
         s32 rightOffset;
 
         j = 0;
-        leftOffset = i << 5;
+        leftOffset = i * 32;
         rightOffset = (mirror - i) << 5;
         cursor = (u8 *)base;
         do {
