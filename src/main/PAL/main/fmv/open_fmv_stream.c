@@ -45,7 +45,7 @@ void UploadFmvSlice(void) {
     s32 oldBuffer;
     s32 state;
     s32 bufferIndex;
-    register s32 bufferAddr asm("$2");
+s32 bufferAddr;
     s32 pixelCount;
     s32 next;
     s32 oldOffset;
@@ -78,7 +78,7 @@ void UploadFmvSlice(void) {
         bufferIndex = g_FmvStripIndex;
         bufferAddr = bufferIndex << 2;
         asm("" : "=r"(bufferPtr) : "0"(bufferPtr));
-        bufferAddr = (s32)bufferPtr + bufferAddr;
+        { s32 rel = bufferAddr; bufferAddr = (s32)bufferPtr + rel; }
         DecDCTout(*(volatile u32 **)(bufferAddr - 8), pixelCount / 2);
     } else {
         g_FmvStripDone = 1;

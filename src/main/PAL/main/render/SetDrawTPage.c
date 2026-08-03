@@ -6,7 +6,7 @@ s32 func_800657E4(void);
 
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) asm("func_800650E4");
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
-    register s32 encoded asm("$2");
+s32 encoded;
     s32 mode;
 
     switch (0) { default:
@@ -30,7 +30,7 @@ void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
         if (arg1 != 0) {
             encoded |= 0x1000;
         }
-        encoded = value | encoded;
+        { s32 rel = encoded; encoded = value | rel; }
         goto done;
     }
 
@@ -45,7 +45,7 @@ void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
         if (arg1 != 0) {
             encoded |= 0x400;
         }
-        encoded = value | encoded;
+        { s32 rel = encoded; encoded = value | rel; }
     }
 
 done:
