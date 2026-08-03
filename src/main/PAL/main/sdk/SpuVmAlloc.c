@@ -272,7 +272,7 @@ void func_80074134(void) {
         u_long periodRaw;
 
         periodRaw = D_801E4BE8;
-        periodIndex = periodRaw & 1;
+        periodIndex = periodRaw % 2;
         if (periodIndex > 0) {
             periodIndex = periodRaw << 16;
         } else {

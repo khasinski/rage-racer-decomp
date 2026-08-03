@@ -382,13 +382,13 @@ void UpdateRivalRubberBand(void) {
             (*(u16 *)s2)++;
             return;
         } else {
-            if (s1 == 0 && !(g_RivalCueFlags & 1) && a0 < -0x1C00) {
+            if (s1 == 0 && !(g_RivalCueFlags % 2) && a0 < -0x1C00) {
                 if (g_RivalCueEnabled != 0 && g_RacePosition == 1) {
                     PlaySoundCue(0x2D);
                 }
                 g_RivalCueFlags = (g_RivalCueFlags & ~0x10) | 1;
             } else if (a0 >= -0x7FF && !((s3 >> s0) & g_RivalCueFlags)) {
-                if (g_SceneTimer & 1) {
+                if (g_SceneTimer % 2) {
                     if (g_RivalCueEnabled != 0) PlaySoundCue(0x2F);
                 } else {
                     if (g_RivalCueEnabled != 0) PlaySoundCue(0x30);
@@ -399,7 +399,7 @@ void UpdateRivalRubberBand(void) {
                     g_RivalCueFlags &= ~(s3 >> s0);
                 } else if (a0 < -0x800) {
                     if (*s2 >= 0x12D) {
-                        if (g_SceneTimer & 1) {
+                        if (g_SceneTimer % 2) {
                             if (g_RivalCueEnabled != 0) PlaySoundCue(0x37);
                         } else {
                             if (g_RivalCueEnabled != 0) PlaySoundCue(0x36);

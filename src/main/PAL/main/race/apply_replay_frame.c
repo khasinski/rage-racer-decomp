@@ -88,7 +88,7 @@ void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
     if (g_GrandPrixMode != 0) {
         arg1->variantAE = g_ReplayPlayerModel;
         arg2->variantAE = g_ReplayRivalModel;
-        if ((arg0 & 1) == 0) {
+        if ((arg0 % 2) == 0) {
             index = arg0 >> 1;
             big = &g_ReplayFramesGp[index];
             arg1->x = big->x0;
@@ -138,7 +138,7 @@ void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
         arg1->field8C = big->field20;
     } else {
         arg1->variantAE = g_ReplayPlayerModel;
-        if ((arg0 & 1) == 0) {
+        if ((arg0 % 2) == 0) {
             index = arg0 >> 1;
             small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + (((index * 8) - index) << 2));
             arg1->x = small->x;
@@ -187,7 +187,7 @@ void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
     ApplyReplayFrame(index, (MenuObj *)primary, (MenuObj *)secondary);
 
     if (g_GrandPrixMode != 0) {
-        if ((index & 1) == 0) {
+        if ((index % 2) == 0) {
             index >>= 1;
             offset = index * 3;
         } else {
@@ -202,7 +202,7 @@ void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
         *(s32 *)(primary + 0x30) = *(s32 *)(base + 0x24);
         *(s32 *)(secondary + 0x30) = *(s32 *)(base + 0x28);
     } else {
-        if ((index & 1) == 0) {
+        if ((index % 2) == 0) {
             index >>= 1;
             offset = index * 7;
         } else {

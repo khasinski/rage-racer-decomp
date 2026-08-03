@@ -304,7 +304,7 @@ void DrawStartCountdown(s32 sceneTimer) {
                 CVec *colors =
                     (CVec *)(
                         (u8 *)g_CountdownCellColors + (colorBank * 8));
-                *(CVec *)color = colors[pattern & 1];
+                *(CVec *)color = colors[pattern % 2];
             }
             pattern >>= 1;
             column++;

@@ -174,7 +174,7 @@ break;
         src2 = srcBase + 2;
         src0 = srcBase;
         do {
-        if (*flagsPtr & 1) {
+        if (*flagsPtr % 2) {
             spu = (volatile u_short *)((u_char *)g_SndSpuRegs + spuOffset);
             value = *(u_short *)src0;
             spu[0] = value;

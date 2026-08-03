@@ -751,7 +751,7 @@ void UpdateCarDrivetrain(void *base) {
   {
     temp_v1_18 = *((s32 *) (((u8 *) car) + 0x30));
     temp_v1_16 = *((u16 *) (((u8 *) ((temp_v1_18 * 0x18) + ((u8 *) g_TrackPoints))) + 0x14));
-    var_v0_12 = temp_v1_16 & 3;
+    var_v0_12 = temp_v1_16 % 4;
     if (var_v0_12 > 0)
     {
       temp_v1_17 = (((((s32) (temp_v1_16 << 0x10)) >> 13) >> 7) * 0xC) + g_TrackArcCenters;

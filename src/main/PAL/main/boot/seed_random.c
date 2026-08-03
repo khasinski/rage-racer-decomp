@@ -242,7 +242,7 @@ decimal:
             }
             count = 0;
             while (value != 0) {
-                *--src = (value & 7) + '0';
+                *--src = (value % 8) + '0';
                 value >>= 3;
                 count++;
             }
@@ -287,7 +287,7 @@ hexadecimal:
             }
             count = 0;
             while (value != 0) {
-                *--src = digits[value & 0xF];
+                *--src = digits[value % 16];
                 value >>= 4;
                 count++;
             }
@@ -477,7 +477,7 @@ void LibcPutChar(s32 arg0) {
     } else {
     do {
         LibcPutChar(0x20);
-    } while ((g_LibcOutColumn & 7) != 0);
+    } while ((g_LibcOutColumn % 8) != 0);
     return;
     }
 

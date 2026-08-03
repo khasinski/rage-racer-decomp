@@ -107,7 +107,7 @@ void DrawCourseObjects(void) {
             *(s32 *)0x1F800084 = 0;
         }
 
-        if (g_IsEnvironmentMode4 ? (obj->flags & 2) : (obj->flags & 1)) {
+        if (g_IsEnvironmentMode4 ? (obj->flags & 2) : (obj->flags % 2)) {
             SubmitCourseModel2((void *)0x1F800000, obj->id);
         } else {
             SubmitCourseModel((void *)0x1F800000, obj->id);

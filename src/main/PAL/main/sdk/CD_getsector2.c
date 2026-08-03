@@ -63,7 +63,7 @@ void func_8006C17C(void) {
     long status;
     long saved;
 
-    saved = *g_CdReg0 & 3;
+    saved = *g_CdReg0 % 4;
     statusByte = &g_CdReadyStatus;
 
     while ((status = func_8006AB5C()) != 0) {

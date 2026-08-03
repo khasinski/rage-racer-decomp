@@ -96,7 +96,7 @@ void DecDCTin(volatile u_long *arg0, long arg1) asm("func_80063FB0");
 void DecDCTin(volatile u_long *arg0, long arg1) {
     u_long mask;
 
-    if (arg1 & 1) {
+    if (arg1 % 2) {
         arg0[0] &= 0xF7FFFFFF;
     } else {
         arg0[0] |= 0x08000000;

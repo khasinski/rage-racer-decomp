@@ -26,7 +26,7 @@ void SsSeqCalledTbyT(void) {
             continue;
         }
         for (j = 0; j < g_SndSeqTableTMax; j++) {
-            if (g_SndSeqTable[i][j].flags & 0x1) {
+            if (g_SndSeqTable[i][j].flags % 2) {
                 SsSeqAdvanceChannelTick((short)i, (short)j);
                 if (g_SndSeqTable[i][j].flags & 0x10) {
                     _SsSndCrescendo((short)i, (short)j);

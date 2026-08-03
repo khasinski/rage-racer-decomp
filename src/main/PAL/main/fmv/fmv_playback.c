@@ -283,7 +283,7 @@ void func_8001F274(s32 pointIndex, u8 *srcPtr) {
     u32 first;
 
     g_ReplayPlayerModel = D_8009E782;
-    if (pointIndex & 1) {
+    if (pointIndex % 2) {
         return;
     }
 

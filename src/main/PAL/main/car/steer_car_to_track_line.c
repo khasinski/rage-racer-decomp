@@ -535,7 +535,7 @@ s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
         }
 
         k++;
-        if (k & 1) {
+        if (k % 2) {
             i += k;
         } else {
             i -= k;

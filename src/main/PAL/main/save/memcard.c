@@ -1598,7 +1598,7 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     u8 *row = rows_base;
 
     do {
-        if (flags_reg & 1) {
+        if (flags_reg % 2) {
             s32 i;
 
             LibcSprintf(text, g_FmtSaveRow, row_bit);

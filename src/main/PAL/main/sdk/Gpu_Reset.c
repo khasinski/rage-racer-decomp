@@ -27,7 +27,7 @@ long Gpu_Reset(u_long mode) {
     g_GpuResetIntrMask = intrMask;
     g_GpuQueueWriteIdx = state;
 
-    switch (mode & 7) {
+    switch (mode % 8) {
     case 0:
         *g_GpuDmaChcr = 0x401;
         *g_GpuDpcr |= 0x800;
@@ -45,7 +45,7 @@ long Gpu_Reset(u_long mode) {
 
     SetIntrMask(g_GpuResetIntrMask);
 
-    if ((mode & 7) == 0) {
+    if ((mode % 8) == 0) {
         return func_800680A4(mode);
     }
 

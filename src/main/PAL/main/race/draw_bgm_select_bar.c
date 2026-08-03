@@ -131,7 +131,7 @@ void UpdateBgmSelect(void) {
     if (g_PadEdge2 & 0x2000) {
         if (g_BgmSelectCursor < 2) g_BgmSelectCursor = g_BgmSelectCursor + 1;
     }
-    if (g_PadEdge2 & 1) {
+    if (g_PadEdge2 % 2) {
         s32 p;
         s32 h0;
         func_8001B488();

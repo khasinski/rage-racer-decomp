@@ -122,7 +122,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     for (i = 0; i < 2; i++) {
         GameRenderView *v = g_CarModelAsset;
         s32 ax = v->angle_0;
-        if (i & 1) {
+        if (i % 2) {
             ax = -ax;
         }
         v_110[0] = ax;
@@ -264,7 +264,7 @@ void func_8001DFC0(GameRenderObject *obj) {
 
             for (i = 0; i < 2; i++) {
                 s32 ax = ((CamRow *)(g_CamRow2 + (model << 3)))->axis0;
-                if (i & 1) {
+                if (i % 2) {
                     ax = -ax;
                 }
                 v_110[0] = ax;

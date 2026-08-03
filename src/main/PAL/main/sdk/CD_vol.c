@@ -43,12 +43,12 @@ void CD_flush(void) {
 
     *g_CdReg0 = 1;
 
-    if ((*g_CdReg3 & 7) != 0) {
+    if ((*g_CdReg3 % 8) != 0) {
         do {
             *g_CdReg0 = 1;
             *g_CdReg3 = 7;
             *g_CdReg2 = 7;
-        } while ((*g_CdReg3 & 7) != 0);
+        } while ((*g_CdReg3 % 8) != 0);
     }
 
     state = &g_CdSyncStatus.ready;
@@ -115,7 +115,7 @@ long func_8006BD14(void) {
     KernelCallbackSlot2(2, func_8006C17C);
 
     *g_CdReg0 = 1;
-    while ((*g_CdReg3 & 7) != 0) {
+    while ((*g_CdReg3 % 8) != 0) {
         *g_CdReg0 = 1;
         *g_CdReg3 = 7;
         *g_CdReg2 = 7;

@@ -146,7 +146,7 @@ void func_8005131C(void) {
             D_8009E718 = D_8009E718 + 192;
         }
     }
-    if (g_PadHeld & 1) {
+    if (g_PadHeld % 2) {
         s32 *w = &D_8009E718;
         if (*w >= -6143) {
             *w = *w - 192;

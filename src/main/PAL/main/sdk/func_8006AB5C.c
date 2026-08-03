@@ -66,13 +66,13 @@ long func_8006AB5C(void) {
 
     *g_CdReg0 = 1;
     p = g_CdReg3;
-    mode = *p & 7;
+    mode = *p % 8;
     if (mode == 0) {
         return 0;
     }
     flag = 0;
-    while (mode != (*p & 7)) {
-        mode = *p & 7;
+    while (mode != (*p % 8)) {
+        mode = *p % 8;
     }
     i = 0;
     q = buf;

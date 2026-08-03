@@ -721,7 +721,7 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
     s32 p3 = arg3;
 
     if (flags & 0x10) {
-        if (flags & 1) {
+        if (flags % 2) {
             func_80047958((s16)(arg0 + arg8), (s16)(arg1 + arg9), arg10,
                           0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
         } else {

@@ -240,7 +240,7 @@ L_sw2:
         AdjustMenuSelectionHorizontal(s0, 0, 2);
         if (!(g_McSaveMode == 0)) {
         a0 = g_McSlotUsedMask;
-        if (!((a0 & 7) == 0)) {
+        if (!((a0 % 8) == 0)) {
         g_McMenuPhase = MC_PROMPT_SELECT_LOAD;
         if ((g_PadEdge2 & 0x860) == 0) break;
         if (!(((a0 >> *s0) & 1) == 0)) {
@@ -258,7 +258,7 @@ L_sw2:
         } else {
         if (g_McFreeBlocks != 0) goto L_b448;
         a0 = g_McSlotUsedMask;
-        if (!((a0 & 7) == 0)) {
+        if (!((a0 % 8) == 0)) {
         g_McMenuPhase = MC_PROMPT_SELECT_SAVE;
         if ((g_PadEdge2 & 0x860) == 0) break;
         if (!(((a0 >> *s0) & 1) == 0)) {

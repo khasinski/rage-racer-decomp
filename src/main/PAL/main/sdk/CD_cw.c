@@ -108,7 +108,7 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
         }
 
         if (GetKernelStatus() != 0) {
-            interruptState = *g_CdReg0 & 3;
+            interruptState = *g_CdReg0 % 4;
             while ((interrupt = func_8006AB5C()) != 0) {
                 if ((interrupt & 4) != 0 && g_CdReadyCallback != 0) {
                     g_CdReadyCallback(g_CdSyncStatus.ready, g_CdReadyResult);

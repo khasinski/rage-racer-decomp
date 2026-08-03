@@ -156,7 +156,7 @@ void UpdateFrontend(void) {
     if (state < 0x1cc) {
         g_SceneTimer = state + 1;
     } else {
-        if (!(g_FrontendState == 3) && !(D_8007C744 & 1)) {
+        if (!(g_FrontendState == 3) && !(D_8007C744 % 2)) {
         if (state == 0x1cc) {
             g_GrandPrixSeries = 0;
             g_GrandPrixClass = (Random15() & 0xfff) % 5;
@@ -194,7 +194,7 @@ void UpdateFrontend(void) {
     if (D_801E8260 < 900) {
         D_801E8260++;
     } else {
-        if (D_8007C744 & 1) {
+        if (D_8007C744 % 2) {
             BeginIntroFmv(3);
             D_8007C744++;
         } else {

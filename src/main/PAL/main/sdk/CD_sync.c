@@ -91,7 +91,7 @@ long CD_sync(long mode, u_char *result) {
             u_long rawStatus;
 
             rawStatus = *g_CdReg0;
-            savedStatus = rawStatus & 3;
+            savedStatus = rawStatus % 4;
             for (;;) {
                 long readyBit;
                 s16 syncBit;

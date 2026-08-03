@@ -222,7 +222,7 @@ void func_8003D6E8(void) {
  * the second drawer below. Frame cycles 0..15 off the caller's clock; every
  * eighth frame with frame == 0 the board latches g_RacePosition (clamped to
  * 0..3) and rolls a 0..2 variant, so the board is showing the player's
- * position. Tint is (clock >> 3 & 3) << 16, written to the scratchpad render
+ * position. Tint is (clock >> 3 % 4) << 16, written to the scratchpad render
  * mode word for the second of the two models each board draws.
  */
 extern Vec4 g_AnimSceneryPos[] asm("D_8007E2C0");
@@ -284,7 +284,7 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     }
 
     g_AnimSceneryFrame = (arg0 / 4) % 16;
-    if (g_AnimSceneryFrame == 0 && (arg0 & 7) == 0 && g_RacePaused == 0) {
+    if (g_AnimSceneryFrame == 0 && (arg0 % 8) == 0 && g_RacePaused == 0) {
         g_AnimSceneryTint = 0;
         g_AnimSceneryRacePosition = g_RacePosition;
         g_AnimSceneryVariant = (Random15() & 7) / 3;
@@ -401,7 +401,7 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 
     g_AnimScenery2Frame = (arg0 / 4) % 16;
-    if (g_AnimScenery2Frame == 0 && (arg0 & 7) == 0 && arg3 == 1) {
+    if (g_AnimScenery2Frame == 0 && (arg0 % 8) == 0 && arg3 == 1) {
         g_AnimScenery2Tint = 0;
         g_AnimScenery2Variant = (Random15() & 7) / 3;
     }

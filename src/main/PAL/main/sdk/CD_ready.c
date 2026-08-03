@@ -74,7 +74,7 @@ long CD_ready(long mode, u_char *result) {
         }
 
         if (GetKernelStatus()) {
-            savedStatus = *g_CdReg0 & 3;
+            savedStatus = *g_CdReg0 % 4;
             while ((interrupt = func_8006AB5C()) != 0) {
                 if ((interrupt & 4) != 0 && g_CdReadyCallback != 0) {
                     g_CdReadyCallback(g_CdSyncStatus.ready, g_CdReadyResult);
