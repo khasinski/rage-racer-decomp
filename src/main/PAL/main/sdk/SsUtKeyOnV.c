@@ -3,37 +3,6 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-typedef struct SpuVoiceView {
-    short unk0;
-    short unk2;
-    short unk04;
-    u_short unk6;
-    short unk8;
-    u_char unka;
-    u_char unkb;
-    short note;
-    short unke;
-    short unk10;
-    short prog;
-    short tone;
-    short vabId;
-    short unk18;
-    u_char pad19[1];
-    u_char unk1b;
-    short auto_vol;
-    short unk1e;
-    short unk20;
-    short unk22;
-    short start_vol;
-    short end_vol;
-    short auto_pan;
-    short unk2a;
-    short unk2c;
-    short unk2e;
-    short start_pan;
-    short end_pan;
-} SpuVoiceView;
-
 /* The key-on path's view of the same block psyq/snd_types.h calls
  * SvmCurrentAttr, but four bytes longer and reading vag unsigned, so the two
  * are not interchangeable. One of them is wrong. */
@@ -71,7 +40,7 @@ extern long g_SndUpdateLock asm("D_801E40AC");
 extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
 extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern SvmCurrentAttrKeyOn g_SndCurrentAttr asm("D_801E4BD0");
-extern SpuVoiceView g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
 extern long SpuVmVSetUp(short, short) asm("func_80073314");
 extern void func_80074134(void);
@@ -163,15 +132,15 @@ long SsUtKeyOnV(
 
     idx = (short)voice;
     g_SndCurrentAttr.voice = voice;
-    g_SndVoiceState[idx].unke = 0x21;
-    g_SndVoiceState[idx].vabId = vab_id;
-    g_SndVoiceState[idx].unk10 = g_SndCurrentAttr.fake_program;
-    g_SndVoiceState[idx].prog = program;
-    g_SndVoiceState[idx].unk0 = g_SndCurrentAttr.vag;
+    g_SndVoiceState[idx].seq_sep = 0x21;
+    g_SndVoiceState[idx].vab_id = vab_id;
+    g_SndVoiceState[idx].program_index = g_SndCurrentAttr.fake_program;
+    g_SndVoiceState[idx].program = program;
+    g_SndVoiceState[idx].vag = g_SndCurrentAttr.vag;
     tone_value = g_SndCurrentAttr.tone;
     g_SndVoiceState[idx].note = note;
-    g_SndVoiceState[idx].unk1b = 1;
-    g_SndVoiceState[idx].unk2 = 0;
+    g_SndVoiceState[idx].active = 1;
+    g_SndVoiceState[idx].age = 0;
     g_SndVoiceState[idx].tone = tone_value;
     func_80074134();
     if ((short)g_SndCurrentAttr.vag == 0xFF) {
