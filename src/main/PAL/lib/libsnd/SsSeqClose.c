@@ -48,10 +48,10 @@ void SsSeqClose(long seq) {
             ((SeqStruct *)(offset + (long)*slot))->unk9C = 0;
             ((SeqStruct *)(offset + (long)*slot))->tempo_step = 0;
             index++;
-            ((SeqStruct *)(offset + (long)*slot))->unk74 = value;
+            ((SeqStruct *)(offset + (long)*slot))->left_volume = value;
             current = offset + (long)*slot;
             offset += sizeof(SeqStruct);
-            ((SeqStruct *)current)->unk76 = value;
+            ((SeqStruct *)current)->right_volume = value;
         } while (index < g_SndSeqTableTMax);
     }
 }

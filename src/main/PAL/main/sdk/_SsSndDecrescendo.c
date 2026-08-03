@@ -1,35 +1,21 @@
 #include <sys/types.h>
 
 #include "common.h"
-
-typedef struct SeqTempoView {
-    u_char pad00[0x3E];
-    short unk3E;
-    short unk40;
-    short unk42;
-    u_char pad44[0x34];
-    short unk78;
-    short unk7A;
-    u_char pad7C[0x14];
-    long flags;
-    u_long unk94;
-    u_long unk98;
-    u_char pad9C[0x10];
-} SeqTempoView;
+#include "psyq/snd_types.h"
 
 typedef union SeqVolume71568 {
     short output;
     u_short value;
 } SeqVolume71568;
 
-extern SeqTempoView *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 long func_80076C58(short seq_sep, u_short left, u_short right, short update_voices);
 long func_80076DCC(short seq_sep, short *left, short *right);
 
 void _SsSndDecrescendo(short seq, short sep) asm("func_80071568");
 void _SsSndDecrescendo(short seq, short sep) {
-    SeqTempoView *score = &g_SndSeqTable[seq][sep];
+    SeqStruct *score = &g_SndSeqTable[seq][sep];
     SeqVolume71568 left;
     SeqVolume71568 right;
 

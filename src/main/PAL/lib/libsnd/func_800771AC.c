@@ -61,8 +61,8 @@ long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u
                 0x7F;
             right_scaled = left_scaled;
 
-            left_scaled = (left_scaled * score->unk74) / 0x7F;
-            right_scaled = (right_scaled * score->unk76) / 0x7F;
+            left_scaled = (left_scaled * score->left_volume) / 0x7F;
+            right_scaled = (right_scaled * score->right_volume) / 0x7F;
 
             current_pan = g_SndCurrentToneTable[g_SndVoiceState[voice].tone].pan;
             if (current_pan < 0x40) {

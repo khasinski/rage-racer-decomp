@@ -44,8 +44,8 @@ typedef struct SeqStruct {
     short unk6E;
     short tick_period;
     short unk72;
-    u_short unk74;
-    u_short unk76;
+    u_short left_volume;
+    u_short right_volume;
     short unk78;
     short unk7A;
     long base_delta_value;
@@ -54,8 +54,8 @@ typedef struct SeqStruct {
     long delta_value;
     long tempo;
     long flags;
-    long unk94;
-    long unk98;
+    u_long unk94;
+    u_long unk98;
     long unk9C;
     long tempo_countdown;
     u_long target_tempo;

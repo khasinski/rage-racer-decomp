@@ -3,14 +3,7 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-typedef struct SeqVolumeView {
-    u_char pad00[0x74];
-    u_short left_volume;
-    u_short right_volume;
-    u_char pad78[0x34];
-} SeqVolumeView;
-
-extern SeqVolumeView *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
@@ -27,7 +20,7 @@ extern u_short g_SndReverbOnHigh asm("D_8009E684");
 
 void SpuVmNoiseKeyOn(u_char voice) asm("func_80074348");
 void SpuVmNoiseKeyOn(u_char voice) {
-    SeqVolumeView *score =
+    SeqStruct *score =
         &g_SndSeqTable[g_SndCurrentAttr.seq_sep & 0xFF]
                     [(g_SndCurrentAttr.seq_sep & 0xFF00) >> 8];
     short current_voice;

@@ -15,7 +15,7 @@ void SsSeqSetChannelPitchBend(long seq, long sep, long arg2, long arg3) {
     u_char pan = channel_state->panpot[0];
     long bend = arg3 & 0xFF;
 
-    if (((state->padAA >> channel) & 1) == 0 && state->unk74 != 0) {
+    if (((state->padAA >> channel) & 1) == 0 && state->left_volume != 0) {
         if ((u_char)arg3 != 0) {
             SpuVmSeKeyOn((short)(seq_raw | (sep << 8)), state->unk4c, channel_state->programs[0], (u_char)arg2_raw, bend, pan);
             state->padA8 = bend;

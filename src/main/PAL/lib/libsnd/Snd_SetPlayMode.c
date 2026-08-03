@@ -35,7 +35,7 @@ void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
         playState->flags |= 1;
         state->unk48 = 0;
         state->unk2b = 1;
-        func_80076C58((short)(seq | (sep << 8)), state->unk74, state->unk76, 0);
+        func_80076C58((short)(seq | (sep << 8)), state->left_volume, state->right_volume, 0);
     } else if (mode == 0) {
         stopState = (SeqStruct *)(seqOffset + (long)*sequence);
         stopState->flags |= 2;
