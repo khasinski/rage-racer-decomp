@@ -17,28 +17,7 @@ extern s32 g_PlayerProgressA asm("D_8009E73C");
 extern s32 g_PlayerProgressB asm("D_8009E740");
 extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
-typedef struct Cam {
-    s32 x;        /* 0x00 */
-    s32 field_04; /* 0x04 */
-    s32 z;        /* 0x08 */
-    s32 field_0C; /* 0x0C */
-    u8 pad10[0x10];
-    s32 field_20; /* 0x20 */
-    s32 field_24; /* 0x24 */
-    s32 field_28; /* 0x28 */
-    s32 field_2C; /* 0x2C */
-    s32 field_30; /* 0x30 */
-    u8 pad34[4];
-    s32 field_38; /* 0x38 */
-    u8 pad3C[0x2C];
-    s32 field_68; /* 0x68 */
-    s32 field_6C; /* 0x6C */
-    s32 field_70; /* 0x70 */
-    s32 field_74; /* 0x74 */
-    u16 field_78; /* 0x78 */
-} Cam;
-
-extern Cam g_CameraCar asm("D_801E3E14");
+extern GameRenderObject g_CameraCar asm("D_801E3E14");
 
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
 s32 func_80068568(s32 arg0);
@@ -90,7 +69,7 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     func_8002FC84(index, coords, g_CameraCar.field_38);
     angle = 0x400 - Atan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCar.z);
     g_CameraCarHeading += GetAngleDelta(g_CameraCarHeading, angle);
-    g_CameraCar.field_24 = g_CameraCarHeading;
+    g_CameraCar.angle_24 = g_CameraCarHeading;
 
     if (updateMotion != 0) {
         if (g_CameraCarSpeedRamp < 50) {
@@ -130,7 +109,7 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
         g_FreeCameraAngleOffset[0] = -256;
     }
 
-    g_CameraCar.field_24 = g_FreeCameraAngleOffset[1] + g_CameraCar.field_24;
+    g_CameraCar.angle_24 = g_FreeCameraAngleOffset[1] + g_CameraCar.angle_24;
     func_8002C168(&g_CameraCar);
     markerClamp[0] = 0;
     markerClamp[1] = 0;
@@ -138,7 +117,7 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
 
     *(Block16 *)(view + 2) = *(Block16 *)&g_CameraCar.x;
     view[3] -= 48;
-    *(Block16 *)(view + 6) = *(Block16 *)&g_CameraCar.field_20;
+    *(Block16 *)(view + 6) = *(Block16 *)&g_CameraCar.angle_20;
     view[6] = g_FreeCameraAngleOffset[0] + view[6];
 
     BuildRotMatrixY(&m1, view[7]);

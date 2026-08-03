@@ -89,7 +89,7 @@ typedef struct GameRenderObject {
     s32 field_64;   /* 0x64 */
     s32 field_68;
     s32 field_6C;
-    void *field_70; /* 0x70 */
+    s32 field_70;   /* 0x70 */
     s32 field_74;
     s32 field_78;
     s32 field_7C;
