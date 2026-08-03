@@ -261,6 +261,7 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
     }
 
     slot = g_SectorIndex;
+    switch (0) { default:
     if (slot >= 0) {
         if ((*(s16 *)((u8 *)arg0 + 0x168) - 1) * g_TrackLength + g_SectorEndDistance[slot] <=
                 (*(s32 *)((u8 *)arg0 + 0x6C) + *(s32 *)((u8 *)arg0 + 0x68)) ||
@@ -310,7 +311,7 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
             nextSlot %= 3;
             nextSlot <<= 2;
             g_LastSectorTime = *(s32 *)((u8 *)g_SectorTimes + nextSlot);
-            goto draw;
+            break;
         }
     }
 
@@ -339,7 +340,7 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
     }
     }
 
-draw:
+}
     switch (0) { default:
     if (g_SplitTimer >= 0x3C) {
         threshold = 0x927BE;

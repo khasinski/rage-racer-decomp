@@ -235,6 +235,7 @@ void UpdatePointAmbience(s32 arg) {
 loop:
     v1 = seg->lo;
     t0 = seg->hi;
+    switch (0) { default:
     if (!(v1 == sentinel)) {
     a1raw = seg->f08;
     t1raw = seg->f0A;
@@ -264,7 +265,7 @@ load:
     s3 = seg->f0C;
     s4 = seg->f10;
     s6 = seg->f14;
-    goto matched;
+    break;
     }
     }
     s0v++;
@@ -274,7 +275,7 @@ load:
     }
 
     }
-matched:
+}
     v0 = s2 << 16;
     s0v = v0 >> 16;
     if (s0v != 0) {
