@@ -419,7 +419,10 @@ block_52:
         scratch[6] = 0x400 - (Atan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
         var_s0_879 = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
         var_v0_881 = 2;
-        goto block_101;
+        scratch[7] = var_s0_879;
+        scratch[8] = 0;
+        g_CameraModePrev = var_v0_881;
+        break;
     case 3:                                         /* switch 1 */
         *(Block16 *)&scratch[2] = *(Block16 *)arg1;
         if ((temp_v1_40 & 0xFF) || (g_CameraModePrev != 3)) {
@@ -612,7 +615,6 @@ block_52:
         scratch[6] = 0x400 - (Atan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
         var_s0_879 = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
         var_v0_881 = 4;
-block_101:
         scratch[7] = var_s0_879;
         scratch[8] = 0;
         g_CameraModePrev = var_v0_881;

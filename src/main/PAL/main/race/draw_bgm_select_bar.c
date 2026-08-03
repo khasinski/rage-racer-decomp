@@ -158,7 +158,12 @@ void UpdateBgmSelect(void) {
                     g_BgmSelectTrack = g_BgmSelectTrack - 1;
                     g_BgmSelectTrack = (g_BgmSelectTrack + g_BgmTrackCount) % g_BgmTrackCount;
                 }
-                goto lab380;
+                if (g_BgmChangeDelay == 0) {
+                    StartCdVolumeFade(60);
+                    g_BgmChangeDelay = 0x40;
+                }
+                g_BgmSelectCdTrack = g_BgmSelectTrack + 3;
+                break;
             case 2:
                 if (g_BgmRandomPlay != 0) {
                     g_BgmSelectTrack = g_BgmShuffleOrder[g_BgmShuffleIndex];
@@ -167,7 +172,6 @@ void UpdateBgmSelect(void) {
                     g_BgmSelectTrack = g_BgmSelectTrack + 1;
                     g_BgmSelectTrack = (g_BgmSelectTrack + g_BgmTrackCount) % g_BgmTrackCount;
                 }
-            lab380:
                 if (g_BgmChangeDelay == 0) {
                     StartCdVolumeFade(60);
                     g_BgmChangeDelay = 0x40;
