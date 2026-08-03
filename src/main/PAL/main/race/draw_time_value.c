@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/screens.h"
@@ -207,17 +208,10 @@ void func_800340D8(void) {
     } while (bufferIndex < 2);
 }
 
-typedef struct CountdownColorCode {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 code;
-} CountdownColorCode;
-
 extern s32 g_RacePaused asm("D_801E4BAC");
 extern s32 g_CountdownBoardOffset asm("D_8007DF18");
 extern u32 g_CountdownDigitPatterns[16] asm("D_8007DEC0");
-extern CountdownColorCode g_CountdownCellColors[] asm("D_8007DF1C");
+extern CVec g_CountdownCellColors[] asm("D_8007DF1C");
 
 s32 GameQueueDrawModePrimWide(
     s32 ot, s32 prim, s32 tpage) asm("func_80017390");
@@ -307,10 +301,10 @@ void DrawStartCountdown(s32 sceneTimer) {
                 colorBank = 1;
             }
             {
-                CountdownColorCode *colors =
-                    (CountdownColorCode *)(
+                CVec *colors =
+                    (CVec *)(
                         (u8 *)g_CountdownCellColors + (colorBank << 3));
-                *(CountdownColorCode *)color = colors[pattern & 1];
+                *(CVec *)color = colors[pattern & 1];
             }
             pattern >>= 1;
             column++;

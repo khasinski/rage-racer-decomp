@@ -32,6 +32,14 @@ typedef struct Rgb {
     u8 b;
 } Rgb;
 
+/* Colour plus GPU command byte; the SDK's CVECTOR shape. */
+typedef struct CVec {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 cd;
+} CVec;
+
 /* Word position vector without a fourth word. */
 typedef struct LVec {
     s32 x;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/state.h"
 
 extern s32 g_BrowseArrowsFade asm("D_8007FB04");
@@ -189,15 +190,8 @@ void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
     }
 }
 
-typedef struct CarSpecGraphColor {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 pad;
-} CarSpecGraphColor;
-
 typedef struct CarSpecGraphColors {
-    CarSpecGraphColor colors[4];
+    CVec colors[4];
 } CarSpecGraphColors;
 
 const CarSpecGraphColors g_CarSpecGraphColors asm("D_80011870") = {{
@@ -245,7 +239,7 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
     s32 *revealedBar;
     s32 *bar;
     s32 revealedValue;
-    CarSpecGraphColor *color;
+    CVec *color;
     s32 revealBase;
     s32 floorProgress;
     s16 lineX;
