@@ -798,9 +798,9 @@ void SeedFinishCamera(void *arg0) {
     register u32 word0 asm("$2");
     u32 word1;
     u32 word2;
-    CopyBlock16 *src;
-    CopyBlock16 *dst;
-    CopyBlock16 *end;
+    Block16 *src;
+    Block16 *dst;
+    Block16 *end;
     u32 *base;
     GameTrackPoint *track;
     GameTrackPoint *point;
@@ -810,9 +810,9 @@ void SeedFinishCamera(void *arg0) {
 
     base = arg0;
     asm("" : "=r"(base) : "0"(base));
-    dst = (CopyBlock16 *)g_CameraCar;
-    src = (CopyBlock16 *)base;
-    end = (CopyBlock16 *)((s32)base + 0x190);
+    dst = (Block16 *)g_CameraCar;
+    src = (Block16 *)base;
+    end = (Block16 *)((s32)base + 0x190);
     do {
         *dst = *src;
         src++;

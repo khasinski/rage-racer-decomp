@@ -1,10 +1,7 @@
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/render.h"
-
-typedef struct WordVector {
-    s32 words[4];
-} WordVector;
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
@@ -173,8 +170,8 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
     }
     switch (var_v1_44) {                            /* switch 1 */
     case 0:                                         /* switch 1 */
-        *(WordVector *)&scratch[2] = *(WordVector *)arg1;
-        *(WordVector *)&scratch[6] = *(WordVector *)((u8 *)arg1 + 0x20);
+        *(Block16 *)&scratch[2] = *(Block16 *)arg1;
+        *(Block16 *)&scratch[6] = *(Block16 *)((u8 *)arg1 + 0x20);
         BuildRotMatrixY(&sp48[0], scratch[7]);
         BuildRotMatrixX(&sp68[0], scratch[6]);
         MulMatrix2(&sp68[0], &sp48[0]);
@@ -200,7 +197,7 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
         g_CameraModePrev = 0;
         break;
     case 1:                                         /* switch 1 */
-        *(WordVector *)&scratch[2] = *(WordVector *)arg1;
+        *(Block16 *)&scratch[2] = *(Block16 *)arg1;
         temp_v0_200 = FIELD(arg1, s32 *, 0x24);
         temp_a0_157 = temp_v0_200 & 0xFFF;
         temp_v1_541 = FIELD(arg1, s32 *, 0xA4);
@@ -392,7 +389,7 @@ block_52:
     case 2:                                         /* switch 1 */
         temp_s2_728 = temp_v0_30 * 0x24;
         temp_v0_732 = temp_s2_728 + g_TrackCameras;
-        *(WordVector *)&scratch[2] = *(WordVector *)temp_v0_732;
+        *(Block16 *)&scratch[2] = *(Block16 *)temp_v0_732;
         BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
         BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
@@ -424,7 +421,7 @@ block_52:
         var_v0_881 = 2;
         goto block_101;
     case 3:                                         /* switch 1 */
-        *(WordVector *)&scratch[2] = *(WordVector *)arg1;
+        *(Block16 *)&scratch[2] = *(Block16 *)arg1;
         if ((temp_v1_40 & 0xFF) || (g_CameraModePrev != 3)) {
             g_CamPathNode = temp_v0_30;
             g_CamPathFrame = 0;
@@ -578,7 +575,7 @@ block_52:
         case4Base = (u32)g_TrackCameras;
         temp_a3_1372 = temp_v0_30 * 0x24;
         temp_v1_1373 = temp_a3_1372 + case4Base;
-        *(WordVector *)&scratch[2] = *(WordVector *)temp_v1_1373;
+        *(Block16 *)&scratch[2] = *(Block16 *)temp_v1_1373;
         if ((temp_v1_40 & 0xFF) || (g_CameraModePrev != 4)) {
             g_CamPathFrame = 0;
         } else if (g_CamPathFrame < FIELD((temp_a3_1372 + (u32)g_TrackCameras), s32 *, 0x1C)) {
@@ -621,7 +618,7 @@ block_101:
         g_CameraModePrev = var_v0_881;
         break;
     case 5:                                         /* switch 1 */
-        *(WordVector *)&scratch[2] = *(WordVector *)arg1;
+        *(Block16 *)&scratch[2] = *(Block16 *)arg1;
         BuildRotMatrixY(&sp88[0], 0 - g_OrbitCameraYaw);
         BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
         BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));

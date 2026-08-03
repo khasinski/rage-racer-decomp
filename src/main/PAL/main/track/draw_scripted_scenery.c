@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/vector.h"
 #include "game/race.h"
 
 void func_8003E590(void);
@@ -42,10 +43,6 @@ void DrawScriptedScenery(s32 arg0) {
     }
 }
 
-typedef struct Blk16 {
-    s32 w[4];
-} Blk16;
-
 typedef struct Blk8 {
     s16 h[4];
 } Blk8;
@@ -78,7 +75,7 @@ extern u8 *g_PathSceneryRotData asm("D_801E4174");
 extern u8 *g_PathSceneryPosKeys asm("D_801E42DC");
 extern u8 *g_PathSceneryRotKeys asm("D_801E42E8");
 extern PathSceneryClock g_PathSceneryClock asm("D_801E4DB0");
-extern Blk16 g_PathSceneryX asm("D_801E4DB8");
+extern Block16 g_PathSceneryX asm("D_801E4DB8");
 extern Blk8 g_PathSceneryRot asm("D_801E4DC8");
 /* The two tracks' cursors, interleaved pos/rot at 0x801E4DE0: phase, span, rate
  * and index are each a two-halfword pair with position first. Left as eight
@@ -163,7 +160,7 @@ void InitPathScenery(void) {
     g_PathSceneryPosKeys = g_PathSceneryPosKeys + ((ia * 20) + 4);
     g_PathSceneryRotKeys = tblB;
     g_PathSceneryRotKeys = g_PathSceneryRotKeys + ((ib * 12) + 4);
-    g_PathSceneryX = *(Blk16 *)g_PathSceneryPosKeys;
+    g_PathSceneryX = *(Block16 *)g_PathSceneryPosKeys;
 
     {
         u8 *copySrc;
@@ -367,7 +364,7 @@ void func_8003F9C4(void) {
         }
     } else {
         g_PathSceneryX =
-            *(Blk16 *)(g_PathSceneryPosKeys +
+            *(Block16 *)(g_PathSceneryPosKeys +
                        g_PathSceneryPosCursor.index * 20 + 0x14);
     }
 

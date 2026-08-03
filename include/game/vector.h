@@ -39,20 +39,9 @@ typedef struct LVec {
     s32 z;
 } LVec;
 
-/* Four consecutive words moved as a unit by the camera code. */
+/* Sixteen bytes moved as a unit; also indexed a word at a time. */
 typedef struct Block16 {
-    s32 w0;
-    s32 w1;
-    s32 w2;
-    s32 w3;
+    s32 w[4];
 } Block16;
-
-/* Sixteen bytes copied as a unit. */
-typedef struct CopyBlock16 {
-    u32 word0;
-    u32 word1;
-    u32 word2;
-    u32 word3;
-} CopyBlock16;
 
 #endif
