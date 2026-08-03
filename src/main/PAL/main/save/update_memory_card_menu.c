@@ -327,10 +327,14 @@ L_sw2:
         }
         if (D_80082FAC != 0) goto L_b523;
         }
-        if ((func_800612CC() & 0xFFFF) != 0) goto L_b864;
+        if ((func_800612CC() & 0xFFFF) != 0) {
+            g_McActionState = 0;
+            break;
+        }
     L_b523:
         if ((func_8006131C() & 0xFFFF) == 0) break;
-        goto L_b864;
+        g_McActionState = 0;
+        break;
     }
 
     case 0x0B:
@@ -449,7 +453,12 @@ L_sw2:
 
     case 0x19:
         g_McMenuPhase = 4;
-        goto L_b850;
+        if (!((func_800612CC() & 0xFFFF) != 0)) {
+        if ((func_8006131C() & 0xFFFF) == 0) break;
+        }
+        g_McMenuPage = 0;
+        g_McActionState = 0;
+        break;
 
     case 0x1E:
         g_McMenuSubState = 7;
@@ -560,12 +569,10 @@ L_sw2:
 
     case 0x28:
         g_McMenuPhase = 0x14;
-    L_b850:
         if (!((func_800612CC() & 0xFFFF) != 0)) {
         if ((func_8006131C() & 0xFFFF) == 0) break;
         }
         g_McMenuPage = 0;
-    L_b864:
         g_McActionState = 0;
         break;
 
