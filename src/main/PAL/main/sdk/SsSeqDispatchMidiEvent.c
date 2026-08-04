@@ -3,7 +3,7 @@
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void SsSeqDispatchControlChange(long seq, long sep, long value) asm("func_8006F5F4");
-void func_80070A1C(long seq, long sep, long value);
+void SsSeqSetChannelProgram(long seq, long sep, long value) asm("func_80070A1C");
 
 void SsSeqDispatchMidiEvent(short seq, short sep) asm("func_8006F1E0");
 void SsSeqDispatchMidiEvent(short seq, short sep) {
@@ -46,7 +46,7 @@ void SsSeqDispatchMidiEvent(short seq, short sep) {
             state->unk11 = 0xFF;
             state->channel = lo;
             status = *state->read_pos++;
-            func_80070A1C(seq, sep, status);
+            SsSeqSetChannelProgram(seq, sep, status);
             break;
         }
     } else {
@@ -67,7 +67,7 @@ void SsSeqDispatchMidiEvent(short seq, short sep) {
             SsSeqApplyProgramChange(seq, sep);
             break;
         case 0xFF:
-            func_80070A1C(seq, sep, status);
+            SsSeqSetChannelProgram(seq, sep, status);
             break;
         }
     }

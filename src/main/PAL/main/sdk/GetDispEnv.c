@@ -16,7 +16,7 @@ u_long GetODE(void) {
     return ret >> 31;
 }
 
-u_long func_800669F0(long arg0, long arg1, u_long arg2);
+u_long Gpu_BuildDisplayMode(long arg0, long arg1, u_long arg2) asm("func_800669F0");
 u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y) asm("func_80066A4C");
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y) asm("func_80066B18");
 u_long func_80066BE4(short arg0, short arg1);
@@ -59,7 +59,7 @@ void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2) {
 void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4) asm("func_800666F4");
 void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4) {
     pkt->code = 2;
-    pkt->x0y0 = func_800669F0(arg1, arg2, arg3);
+    pkt->x0y0 = Gpu_BuildDisplayMode(arg1, arg2, arg3);
     pkt->x1y1 = func_80066C2C(arg4);
 }
 
