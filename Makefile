@@ -119,6 +119,6 @@ help:
 	@echo "  split VERSION=PAL Run splat for PAL or USA"
 	@echo "  build VERSION=PAL Build split output"
 	@echo "  check VERSION=PAL Verify rebuilt EXE SHA-1"
-	@echo "  progress          Update docs/PROGRESS.md and badge JSON"
+	@echo "  progress          Refresh badge JSON and print the progress table"
 	@echo "  clean             Remove build/ for selected VERSION"
 	@echo "  distclean         Also remove generated asm/linker output"

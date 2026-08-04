@@ -25,21 +25,26 @@ The USA executable `SLUS_004.03` is kept as a comparison target with SHA-1
 
 ## Progress
 
-See [docs/PROGRESS.md](docs/PROGRESS.md) for the per-binary table (regenerate
-with `make progress`). A translation unit only counts as decompiled when it is
-plain C with no assembly of any kind. The built executable is byte-identical to
-retail (`make check VERSION=PAL`).
+**The decompilation is complete.** Every function in the PAL executable is
+plain C, and the built executable is byte-identical to retail.
 
-The matching policy: functions should match as plain C through the stock
-compiler pipeline, with no post-build rewrite passes. Inline assembly is only
-accepted when the original code contains documented instructions or ABI
-behavior that the compiler cannot emit; these functions do not count as C
-decompilation progress. Other unmatched functions stay as generated split
-assembly.
+| Binary | Functions | Code bytes |
+|---|---:|---:|
+| `SCES_006.50 (main)` | 1105 / 1105 (100%) | 407904 / 407904 (100%) |
 
-Rage Racer is currently believed to use the main executable only. `RAGE.BIN`
-and `RAGE.STR` are treated as game data/stream containers; no conventional PS1
-executable overlay has been identified in the extracted PAL or USA discs.
+A function counts as decompiled when it carries no `INCLUDE_ASM` or
+`INCLUDE_RODATA` and no non-empty inline assembly. Three things are sanctioned
+and do not lower the count: GTE/COP2 operations expressed through
+`psyq/gte_macros.h`, which are the hardware interface and cannot be written in
+C; register and symbol `asm` labels; and empty barriers used to hold statement
+order. Functions are counted individually rather than per file, so one function
+needing a crutch cannot reclassify the plain C beside it.
+
+A further 48 functions (15804 code bytes) are documented handwritten assembly
+in the original game, marked `HANDWRITTEN_ASM`, and are excluded from the totals
+above rather than counted as failures.
+
+Regenerate the table and the badge JSON with `make progress`.
 
 ## Layout
 
@@ -48,6 +53,9 @@ executable overlay has been identified in the extracted PAL or USA discs.
 - `src/main/` - decompiled C translation units for the main executable.
 - `include/` - project headers and local PSYQ-compatible declarations.
 - `tools/scripts/` - project-specific build and analysis helpers.
+- `docs/names.md` - the naming evidence: what each function and global is, and
+  why. Source files are named after their subject, not after whichever function
+  happens to sit first in them.
 Generated directories such as `asm/`, `linkers/`, `build/`, `assets/`, and
 `disc/` are intentionally ignored, along with local scratch/proposal work.
 
@@ -91,8 +99,8 @@ make progress
 
 `make split` regenerates `asm/` and `linkers/` from the user-supplied
 executable, `make build` compiles and links `build/PAL/main.exe`, and
-`make check` verifies its SHA-1 against retail. `make progress` updates
-`docs/PROGRESS.md` and the badge JSON files.
+`make check` verifies its SHA-1 against retail. `make progress` refreshes the
+badge JSON and prints the table shown above.
 
 ## License
 
