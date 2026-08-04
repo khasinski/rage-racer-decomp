@@ -23,7 +23,7 @@ void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
 
 void DrawMenuCourseView(void) asm("func_8005194C");
-void func_8004CF30(s32 arg0);
+void DrawMenuLightBurst(s32 arg0) asm("func_8004CF30");
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2) asm("func_800489AC");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 DrawRankingTable(s32 *arg0, s32 arg1, s32 arg2) asm("func_8004D384");
@@ -35,7 +35,7 @@ void UpdateRankingScreen(void) {
 
     g_MenuAltLayout = 0;
     DrawMenuCourseView();
-    func_8004CF30(-9);
+    DrawMenuLightBurst(-9);
     state = GameMenuBusy;
     if (state == 0) {
         g_UiScriptProgress2 = 0;
@@ -328,7 +328,7 @@ void EnterCarSelectScreen(void) {
     func_80055454();
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     func_8005131C();
-    func_8004CF30(-9);
+    DrawMenuLightBurst(-9);
 }
 
 extern u8 D_800818CC;
@@ -383,7 +383,7 @@ void UpdateCarSelectScreen(void) {
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     mode = 2;
     func_8005131C();
-    func_8004CF30(-9);
+    DrawMenuLightBurst(-9);
     if (g_GrandPrixMode != 0) {
         mode = 4;
     }

@@ -745,7 +745,8 @@ extern const char D_80011924[4];
 extern const char D_80011928[4];
 extern const char D_8001192C[8];
 
-void func_8004CF30(s32 arg) {
+void DrawMenuLightBurst(s32 arg) asm("func_8004CF30");
+void DrawMenuLightBurst(s32 arg) {
     void *s3;
     Blob l1;
     Blob l2;

@@ -527,7 +527,7 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, s32 a10);
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
 void DrawBrowseArrows(s32, s32, s32, s32) asm("func_80049418");
-void func_8004CF30(s32 arg0);
+void DrawMenuLightBurst(s32 arg0) asm("func_8004CF30");
 void func_8004F3EC(s32 arg0, s32 arg1);
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
 s32 DrawClassChangeCurtain(s32 arg0) asm("func_8005026C");
@@ -571,7 +571,7 @@ void UpdateCourseSelectScreen(void) {
         DrawBrowseArrows(1, 1, res, CanSelectNextCourse());
         DrawFadingMenuSprites(g_UiScriptProgress, 2, g_CourseSelectOption);
         RunTimedDrawScript(hdr, &g_UiScriptProgress, 0);
-        func_8004CF30(7);
+        DrawMenuLightBurst(7);
         if ((RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
@@ -835,7 +835,7 @@ void UpdateCourseSelectScreen(void) {
         DrawFadingMenuSprites(g_UiScriptProgress, 2, g_CourseSelectOption);
         RunTimedDrawScript(hdr, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
-        func_8004CF30(7);
+        DrawMenuLightBurst(7);
     } else {
         g_MenuHandlerIndex = -1;
         g_MenuHandlerIndex2 = 1;
@@ -844,7 +844,7 @@ void UpdateCourseSelectScreen(void) {
         RunTimedDrawScript(hdr, &g_UiScriptProgress, -1);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
         DrawFadingMenuSprites(g_UiScriptProgress, 2, g_CourseSelectOption);
-        func_8004CF30(-9);
+        DrawMenuLightBurst(-9);
         if (g_UiScriptProgress <= 0) {
             switch (GameMenuBusy) {
             case 1:

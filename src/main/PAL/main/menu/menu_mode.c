@@ -395,7 +395,7 @@ void func_80058B88(s32);
 void func_80059248(s32);
 void func_8005A2CC(s32);
 void func_800496F0(s32);
-void func_8004CF30(s32);
+void DrawMenuLightBurst(s32) asm("func_8004CF30");
 
 void InitMenuMode(void) asm("func_80050C18");
 void InitMenuMode(void) {
@@ -498,7 +498,7 @@ void InitMenuMode(void) {
     func_80059248(0);
     func_8005A2CC(0);
     func_800496F0(0);
-    func_8004CF30(0);
+    DrawMenuLightBurst(0);
     func_800509C4(0);
 }
 
