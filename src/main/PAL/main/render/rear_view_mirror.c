@@ -66,11 +66,11 @@ s32 BeginMirrorPass(void) {
 
         scratch->mode = 9;
         scratch->x0 = 0x56;
-        __asm__("" ::: "memory");
+        __asm__("");
         v0reg = (s32)g_DrawBuffer;
         y0 = *(u16 *)&g_MirrorPanelY;
         scratch->x1 = 0xEA;
-        __asm__("" ::: "memory");
+        __asm__("");
         v1reg = g_MirrorPanelY;
         v0reg += 0xBCC;
         scratch->primData = (void *)v0reg;
@@ -139,7 +139,7 @@ void EndMirrorPass(void) {
     scratch->x1 = 0x140;
     scratch->y1 = 0xF0;
     g_VisibleCellMask = (s32)&D_8019C86C;
-    __asm__("" : : : "memory");
+    __asm__("");
     v0reg = (s32)g_DrawBuffer;
     g_VisibleCellList = (s32)&D_8009EC94;
     v1reg = scratch->depth;

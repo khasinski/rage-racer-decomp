@@ -52,7 +52,7 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     }
     interp = (u32)(arg0 * temp) / 32;
 
-    asm volatile("" ::: "memory");
+    asm volatile("");
     y = *(s16 *)(record + 6);
     x += interp;
     if (packed < 0) {
@@ -170,7 +170,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     interp = (u32)(arg0 * temp) / 32;
     y0 += interp;
 
-    asm volatile("" ::: "memory");
+    asm volatile("");
     x1Base = *(s16 *)(record + 8);
     if (yPacked & 0x8000) {
         y0Call = y0;
@@ -181,7 +181,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     }
     interp = (u32)(arg0 * temp) / 32;
 
-    asm volatile("" ::: "memory");
+    asm volatile("");
     y1 = *(s16 *)(record + 0xA);
     x1 = x1Base + interp;
     if (yPacked < 0) {
@@ -319,7 +319,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     }
 
     {
-        register s32 alpha;
+        s32 alpha;
 
         alpha = style[0xB];
         semiTrans = alpha & 4;

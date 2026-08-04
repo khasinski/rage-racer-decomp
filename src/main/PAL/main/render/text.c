@@ -161,7 +161,7 @@ void GameDrawText8x8Shaded(
                 sprt->tag.r0 = intensity;
                 sprt->tag.g0 = intensity;
                 sprt->tag.b0 = intensity;
-                asm("" ::: "memory");
+                asm("");
                 prim = (u8 *)sprt;
                 {
                     register u16 clutValue asm("$8");
@@ -258,9 +258,9 @@ void DrawProportionalTextShadedWide(
  \
     opaque; \
 })
-    register s32 xPos;
-    register u8 *packet = *(u8 **)0x1F800000;
-    register u8 *text = ({
+    s32 xPos;
+    u8 *packet = *(u8 **)0x1F800000;
+    u8 *text = ({
         asm("" : "=r"(packet), "=r"(xPos) : "0"(packet));
         str;
     });
@@ -284,16 +284,16 @@ void DrawProportionalTextShadedWide(
 
         do {
             s32 advance;
-            register u32 ch = *text;
+            u32 ch = *text;
 
             if (ch >= 0x76) {
-                register s32 offset = ch - 0x76;
-                register s32 index = offset * 4;
-                register s32 v;
+                s32 offset = ch - 0x76;
+                s32 index = offset * 4;
+                s32 v;
     s32 u;
-                register s32 width;
-                register void *prim;
-                register u8 *ot;
+                s32 width;
+                void *prim;
+                u8 *ot;
                 register u16 clut asm("$8");
                 s16 yOffset;
                 register s32 yValue asm("$8");
@@ -345,13 +345,13 @@ void DrawProportionalTextShadedWide(
                 continue;
             }
             if (ch >= 0x61) {
-                register s32 offset = ch - 0x61;
+                s32 offset = ch - 0x61;
                 register s32 index asm("$17") = offset * 4;
-                register s32 v;
+                s32 v;
                 s32 u;
-                register s32 width;
-                register void *prim;
-                register u8 *ot;
+                s32 width;
+                void *prim;
+                u8 *ot;
                 register u16 clut asm("$8");
                 register u16 yValue asm("$8");
 
@@ -402,13 +402,13 @@ void DrawProportionalTextShadedWide(
                 if (cell != 0) {
                     register s32 index asm("$3") = cell * 2;
                     register u8 *base asm("$8");
-                    register u8 *uCell;
-                    register u8 *vCell;
+                    u8 *uCell;
+                    u8 *vCell;
                     register s32 u asm("$21");
                     register s32 v asm("$19");
                     register u16 yValue asm("$8");
-                    register void *prim;
-                    register u8 *ot;
+                    void *prim;
+                    u8 *ot;
                     register u16 clut asm("$8");
 
                     asm("" : "=r"(index) : "0"(index));
@@ -456,7 +456,7 @@ void DrawProportionalTextShadedWide(
     SetDrawModeWide8x8(packet, 0, 1, 0x29, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, packet);
     *(u8 **)0x1F800000 = ({
-        register u8 *next = packet + 12;
+        u8 *next = packet + 12;
 
         next;
     });

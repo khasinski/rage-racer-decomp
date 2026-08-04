@@ -196,7 +196,7 @@ void DrawRacePosition(void) {
     if (value < 4) {
         tile = 0x780B;
     } else {
-        asm volatile("" ::: "$2");
+        asm volatile("");
         tile = 0x780E;
     }
 
