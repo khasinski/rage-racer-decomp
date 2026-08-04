@@ -21,14 +21,14 @@ void _card_info(s32 arg0) asm("func_80063DAC");
 void _card_load(s32 arg0) asm("func_80063DBC");
 s32 _card_clear(s32 arg0) asm("func_80063DEC");
 
-s32 PollMemoryCardStatus(s32 arg0, s32 arg1) asm("func_8005ECE0");
-s32 PollMemoryCardStatus(s32 arg0, s32 arg1) {
+s32 PollMemoryCardStatus(s32 port, s32 slot) asm("func_8005ECE0");
+s32 PollMemoryCardStatus(s32 port, s32 slot) {
     s32 handle;
     s32 two;
     s32 status;
     s32 state;
 
-    handle = (arg0 * 16) + arg1;
+    handle = (port * 16) + slot;
 
     switch (g_McStatusState) {
     case 0:
@@ -164,12 +164,12 @@ case3_ready:
     return g_McStatusResult;
 }
 
-s32 FormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
-s32 FormatMemoryCard(s32 arg0, s32 arg1) {
+s32 FormatMemoryCard(s32 port, s32 slot) asm("func_8005EF44");
+s32 FormatMemoryCard(s32 port, s32 slot) {
     char device[8];
     s32 status;
 
-    LibcSprintf(device, g_FmtCardDevice, arg0, arg1);
+    LibcSprintf(device, g_FmtCardDevice, port, slot);
     ClearMemoryCardSwEvents();
     BiosFormatDevice(device);
     status = WaitMemoryCardSwEvent();
@@ -1432,14 +1432,14 @@ extern char g_McDirEntries[] asm("D_8009B748");
 
 void LibcSprintf() asm("func_800632F0");
 
-s32 CountMemoryCardFiles(s32 arg0, s32 arg1) {
+s32 CountMemoryCardFiles(s32 port, s32 slot) {
     char path[0x20];
     void *entry;
     void *ret;
     s32 count;
 
     count = 0;
-    LibcSprintf(path, g_FmtCardWildcard, arg0, arg1);
+    LibcSprintf(path, g_FmtCardWildcard, port, slot);
     entry = g_McDirEntries;
 
     if (BiosFirstFile(path, entry) == entry) {
@@ -1530,8 +1530,8 @@ extern u8 g_McMessageText[] asm("D_800128FC");
  * GameQueueSprite vs GameQueueSpriteWide in game/render.h. */
 void DrawText8x8Wide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
 
-void DrawMemoryCardMessageLine(s32 arg0, s32 arg1) {
-    DrawText8x8Wide(0x28, 0xB8, &g_McMessageText[arg1 * 30], 0x78CC);
+void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) {
+    DrawText8x8Wide(0x28, 0xB8, &g_McMessageText[messageIndex * 30], 0x78CC);
 }
 
 extern u8 g_McHelpText[] asm("D_80012ADC");
