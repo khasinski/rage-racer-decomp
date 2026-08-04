@@ -1740,7 +1740,8 @@ void PlaySoundCue(s32 arg0) {
 void func_80078528(s32 voice, s16 left, s16 right);
 void func_80078130(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend);
 
-void func_8005D7D4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
+void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) asm("func_8005D7D4");
+void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     s32 voice;
     register s32 left asm("$5");
     s32 right;
@@ -1907,7 +1908,7 @@ void UpdateLoadedAudioVoices(s32 value, s32 bank) {
             if (scaled < 0) {
                 scaled += 0x7F;
             }
-            func_8005D7D4(index, first, scaled >> 7, bank, 3);
+            SetSoundSlotTone(index, first, scaled >> 7, bank, 3);
         }
         odd_parameter += 2;
         index++;
@@ -2398,7 +2399,7 @@ void ForceSoundSlotVoicePlayback(s32 arg0) {
                 call_arg1 = first;
                 scaled >>= 7;
                 call_arg3 = base[-3];
-                func_8005D7D4(call_arg0, call_arg1, scaled, call_arg3, 3);
+                SetSoundSlotTone(call_arg0, call_arg1, scaled, call_arg3, 3);
             }
             odd += 2;
             i++;

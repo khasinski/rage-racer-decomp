@@ -14,7 +14,8 @@ extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 void func_80046E00();
 
-void func_80050400(s32 arg0, s32 arg1) {
+void DrawMenuAltPanel(s32 arg0, s32 arg1) asm("func_80050400");
+void DrawMenuAltPanel(s32 arg0, s32 arg1) {
     s32 step0;
     s32 step1;
     void *scratch;

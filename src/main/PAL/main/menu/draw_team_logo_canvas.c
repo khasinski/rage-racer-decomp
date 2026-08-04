@@ -131,7 +131,8 @@ void func_80047024_prepared(
     u8 arg7,
     u8 arg8) asm("func_80047024");
 
-void func_8004A17C(s32 delta) {
+void DrawTeamLogoCanvasFade(s32 delta) asm("func_8004A17C");
+void DrawTeamLogoCanvasFade(s32 delta) {
     u8 *scratch;
     s32 value;
     s32 sum;

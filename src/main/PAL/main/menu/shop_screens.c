@@ -44,7 +44,7 @@ void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80049418
 void UploadTeamLogoClut(void) asm("func_8004CF00");
 void DrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2) asm("func_8004F650");
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
-void func_80050400(s32 arg0, s32 arg1);
+void DrawMenuAltPanel(s32 arg0, s32 arg1) asm("func_80050400");
 s32 GetOwnedCarAssetIndex(s32 arg0) asm("func_80050FA8");
 void func_8005131C(void);
 void UpdateCarListCursor(void) asm("func_80059320");
@@ -61,7 +61,7 @@ void UpdateCarShopScreen(void) {
 
     ot = *(void **)0x1F800004;
     g_MenuAltLayout = g_MenuAltLayoutSetting;
-    func_80050400(D_8009B32C, D_8009B330);
+    DrawMenuAltPanel(D_8009B32C, D_8009B330);
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     func_8005131C();
     value = g_CarPriceTable[GetOwnedCarAssetIndex(g_CarListCursor)];

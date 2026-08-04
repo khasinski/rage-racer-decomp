@@ -370,7 +370,7 @@ s32 CountOwnedCars(void) asm("func_80050F68");
 void StartSequenceFadeOut(void) asm("func_8005E8E0");
 void RestoreTeamLogoClut(void) asm("func_8004CED0");
 void DrawOwnedCarCounter(s32 step, s32 count) asm("func_8004F3EC");
-void func_80050400(s32 arg0, s32 arg1);
+void DrawMenuAltPanel(s32 arg0, s32 arg1) asm("func_80050400");
 
 void UpdateCarSelectScreen(void) asm("func_8005568C");
 void UpdateCarSelectScreen(void) {
@@ -641,7 +641,7 @@ void UpdateCarSelectScreen(void) {
             g_MenuHandlerIndex = 0xB;
             DrawCarShopPricePanel(0, 0, 0);
             DrawBrowseArrows(0, 0, 0, 0);
-            func_80050400(0, 0);
+            DrawMenuAltPanel(0, 0);
             D_8009B32C = 0;
             D_8009B330 = 0;
             ClearTeamNameTexture();
