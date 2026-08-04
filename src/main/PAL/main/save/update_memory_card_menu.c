@@ -33,8 +33,8 @@ extern s32 g_McMenuRowCursor asm("D_80082F54");
 extern s32 g_McSlotCursor asm("D_80082F58");
 extern s32 g_McActionState asm("D_80082FA4");
 extern s32 g_McActionResult asm("D_80082FA8");
-extern s32 D_80082FAC;
-extern volatile s32 D_80082FAC_v asm("D_80082FAC");
+extern s32 g_McConfirmChoice asm("D_80082FAC");
+extern volatile s32 g_McConfirmChoice_v asm("D_80082FAC");
 extern s32 g_McStateChangeCount asm("D_80082FB0");
 extern s32 g_McActionTimer asm("D_80082FB4");
 extern s32 g_McActionBusy asm("D_80082FB8");
@@ -107,7 +107,7 @@ void UpdateMemoryCardMenu(void) {
         g_McMenuState = ns;
         g_McActionState = 0;
         g_McActionResult = 0;
-        D_80082FAC = 0;
+        g_McConfirmChoice = 0;
         g_McStateChangeCount = 0;
         g_McActionTimer = 0;
         g_McActionBusy = 0;
@@ -245,7 +245,7 @@ L_sw2:
         if ((g_PadEdge2 & 0x860) == 0) break;
         if (!(((a0 >> *s0) & 1) == 0)) {
         PlaySoundCue(2);
-        D_80082FAC = 0;
+        g_McConfirmChoice = 0;
         nv = 0x1E;
         } else {
         PlaySoundCue(5);
@@ -263,7 +263,7 @@ L_sw2:
         if ((g_PadEdge2 & 0x860) == 0) break;
         if (!(((a0 >> *s0) & 1) == 0)) {
         PlaySoundCue(2);
-        D_80082FAC = 0;
+        g_McConfirmChoice = 0;
         nv = 0xA;
         } else {
         PlaySoundCue(2);
@@ -286,7 +286,7 @@ L_sw2:
         if (!((g_PadEdge2 & 0x860) == 0)) {
         if (!(((g_McSlotUsedMask >> *s0) & 1) == 0)) {
         PlaySoundCue(2);
-        D_80082FAC_v = 0;
+        g_McConfirmChoice_v = 0;
         nv = 0xA;
         } else {
         PlaySoundCue(2);
@@ -304,17 +304,17 @@ L_sw2:
     }
 
     case 0x0A: {
-        s32 *p = &D_80082FAC;
+        s32 *p = &g_McConfirmChoice;
         s32 hi = g_McSlotCursor * 2;
-        s32 lo = D_80082FAC + 9;
+        s32 lo = g_McConfirmChoice + 9;
         g_McMenuPhase = hi + lo;
         SetMenuBinaryChoiceVertical(p);
-        if (!(D_80082FAC == 0)) {
+        if (!(g_McConfirmChoice == 0)) {
         if (!((PollMenuConfirmInput() & 0xFFFF) == 0)) {
         g_McActionState = 0xB;
         break;
         }
-        if (D_80082FAC != 0) {
+        if (g_McConfirmChoice != 0) {
             if ((PollMenuBackInput() & 0xFFFF) == 0) break;
             g_McActionState = 0;
             break;
@@ -575,7 +575,7 @@ L_sw2:
             g_McActionState = 0;
             g_McActionBusy = 0;
             g_McActionResult = 0;
-            D_80082FAC = 0;
+            g_McConfirmChoice = 0;
             g_McActionTimer = 0;
             cm1 = cm1 - 1;
             g_McMenuRowCursor = cm1;
@@ -594,7 +594,7 @@ L_sw2:
             g_McActionState = 0;
             g_McActionBusy = 0;
             g_McActionResult = 0;
-            D_80082FAC = 0;
+            g_McConfirmChoice = 0;
             g_McActionTimer = 0;
             cm1 = cm1 - 1;
             g_McMenuRowCursor = cm1;
@@ -632,7 +632,7 @@ L_sw2:
     if (!(g_McMenuState == 1)) {
     g_McActionState = 0;
     g_McActionResult = 0;
-    D_80082FAC = 0;
+    g_McConfirmChoice = 0;
     g_McActionBusy = 0;
     }
     break;
@@ -769,7 +769,7 @@ L_sw2:
     g_McMenuPhase = MC_PROMPT_ACCESSING;
     g_McActionState = 0;
     g_McActionResult = 0;
-    D_80082FAC = 0;
+    g_McConfirmChoice = 0;
     break;
     case -1:
     g_McMenuSubState = 0xA;
@@ -885,7 +885,7 @@ L_b1280:
         if (!(*p != 0)) {
         PlaySoundCue(2);
         g_McMenuPage = 1;
-        D_80082FAC = 0;
+        g_McConfirmChoice = 0;
         g_McSaveMode = *p;
         break;
         }
@@ -928,15 +928,15 @@ L_b1280:
         g_McActionState = 1;
         break;
     case 1:
-        g_McMenuPhase = D_80082FAC + 7;
-        SetMenuBinaryChoiceVertical(&D_80082FAC);
-        if (D_80082FAC == 0) goto L1447;
+        g_McMenuPhase = g_McConfirmChoice + 7;
+        SetMenuBinaryChoiceVertical(&g_McConfirmChoice);
+        if (g_McConfirmChoice == 0) goto L1447;
         { u16 p = PollMenuConfirmInput();
         if (p != 0) {
         g_McActionState = 2;
         break;
         } }
-        if (D_80082FAC == 0) goto L1447;
+        if (g_McConfirmChoice == 0) goto L1447;
         goto L_b1452;
     case 2:
         g_McActionBusy = 1;
@@ -975,7 +975,7 @@ L_b1280:
         g_McActionBusy = 0;
         g_McActionState = 0;
         g_McActionResult = 0;
-        D_80082FAC = 0;
+        g_McConfirmChoice = 0;
         g_McActionTimer = 0;
         if (fadeBusy) break;
         PlaySoundCue(3);
@@ -1033,7 +1033,7 @@ L_b1280:
     g_McActionState = 0;
     g_McActionBusy = 0;
     g_McActionResult = 0;
-    D_80082FAC = 0;
+    g_McConfirmChoice = 0;
     break;
     case -3:
     default:
