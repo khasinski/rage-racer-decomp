@@ -527,7 +527,12 @@ void UpdateCarBodyRoll(A *ctx) {
     if (ctx->f64 != 0) {
         ctx->f64 = (ctx->f64 * 7) / 8;
     }
-    goto L_53C;
+    v1 = ctx->fA4;
+    if (v1 < 800) {
+        s32 f = ctx->f64;
+        ctx->f64 = (f * v1) / 800;
+    }
+    return;
     }
 
     if (!(g_PadType != 0x23)) {
@@ -579,7 +584,12 @@ void UpdateCarBodyRoll(A *ctx) {
     if (ctx->f64 != 0) {
         ctx->f64 = (ctx->f64 * 7) / 8;
     }
-    goto L_53C;
+    v1 = ctx->fA4;
+    if (v1 < 800) {
+        s32 f = ctx->f64;
+        ctx->f64 = (f * v1) / 800;
+    }
+    return;
     }
 
     ctx->f64 = 0;

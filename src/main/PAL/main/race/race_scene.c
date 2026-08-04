@@ -382,8 +382,8 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
 
         progressLimit = g_LapCount;
         if (progress > progressLimit) {
-            goto progress_failed;
-        }
+            returnValue = 0;
+        } else {
         returnValue = 1;
         *(s16 *)(route + 0xAC) = progress + 1;
         g_LapTimeSaturated = 0;
@@ -470,9 +470,9 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
             g_MirrorViewEnabled = 0;
 
         }
+        }
 
     } else {
-progress_failed:
         returnValue = 0;
     }
 

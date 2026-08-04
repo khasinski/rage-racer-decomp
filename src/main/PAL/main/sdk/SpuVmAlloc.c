@@ -277,13 +277,7 @@ void SpuVmRebuildVoiceTable(void) {
         periodIndex = periodRaw % 2;
         if (periodIndex > 0) {
             periodIndex = periodRaw << 16;
-        } else {
-            periodIndex = periodRaw << 16;
-            goto evenPeriod;
-        }
-    }
-
-    if (1) {
+        {
         register long voiceOffset asm("$3");
 
         periodIndex = periodIndex >> 16;
@@ -301,8 +295,9 @@ void SpuVmRebuildVoiceTable(void) {
         periodIndex = *(u_short *)(periodIndex + 0xC);
         voiceOffset <<= 1;
         *(u_short *)&g_SndVoiceRegs[6 + voiceOffset] = periodIndex;
+        }
     } else {
-evenPeriod:
+        periodIndex = periodRaw << 16;
         {
             register long voiceOffset asm("$3");
 
@@ -320,6 +315,7 @@ evenPeriod:
             voiceOffset <<= 1;
             *(u_short *)&g_SndVoiceRegs[6 + voiceOffset] = periodIndex;
         }
+    }
     }
 
     {

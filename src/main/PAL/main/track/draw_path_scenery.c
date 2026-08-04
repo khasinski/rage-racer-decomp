@@ -242,27 +242,24 @@ loop:
     t1raw = seg->f0A;
     if (!(arg < v1)) {
     if (!(t0 < arg)) {
-    switch (0) { default:
     v0 = a1raw << 16;
     a1s = v0 >> 16;
     if (arg < v1 + a1s) {
         v0 = arg - v1;
+        v1 = (v0 * 48) / a1s;
+        s2 = v1;
     } else {
         v0 = t1raw << 16;
         __asm__("" : "=r"(v0) : "0"(v0));
         a1s = v0 >> 16;
         if ((t0 - a1s) < arg) {
             v0 = t0 - arg;
+            v1 = (v0 * 48) / a1s;
+            s2 = v1;
         } else {
-            break;
+            s2 = 0x30;
         }
     }
-    v1 = (v0 * 48) / a1s;
-    s2 = v1;
-    goto load;
-    }
-    s2 = 0x30;
-load:
     s3 = seg->f0C;
     s4 = seg->f10;
     s6 = seg->f14;
@@ -276,7 +273,7 @@ load:
     }
 
     }
-}
+    }
     v0 = s2 << 16;
     s0v = v0 >> 16;
     if (s0v != 0) {

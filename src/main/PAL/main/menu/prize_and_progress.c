@@ -122,7 +122,7 @@ void UpdatePrizeMoneyScreen(void) {
         break;
     case 6:
         TickClassClearFanfare();
-        if (g_PromotionBonus == 0) { goto Lstore7; }
+        if (g_PromotionBonus == 0) { st = 7; goto Lstore; }
         PlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = g_PromotionBonus;
         if (t >= lim0) {
@@ -142,8 +142,7 @@ void UpdatePrizeMoneyScreen(void) {
         PlaySoundCue(0x11);
         if (!(g_PadEdge2 & 0x860)) break;
         if (g_ClassClearFanfareTimer != 0) break;
-        if (g_ClassCompleted != 0) { st = 8; goto Lstore; }
-        RequestSelectBgmAssets();
+        if (g_ClassCompleted == 0) { RequestSelectBgmAssets(); }
         st = 8;
         goto Lstore;
     case 8:

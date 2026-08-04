@@ -881,15 +881,19 @@ void UpdateCourseSelectScreen(void) {
                     p->classIndex = lapc;
                     if (half != 0) {
                         p->money = g_PlayerMoney;
-                        goto clear;
+                    } else {
+                        p->money = (s16)g_GrandPrixSeriesU16;
                     }
-                    goto setlast;
+                    g_UiScriptProgress = 0;
+                    GameMenuBusy = 0;
                 }
                 break;
             case 3:
                 g_MenuScreen = 2;
                 g_MenuHandlerIndex = 2;
-                goto clear;
+                g_UiScriptProgress = 0;
+                GameMenuBusy = 0;
+                break;
             case 4:
                 if ((D_8009B348 <= 0) && (g_MenuViewOffset > 0x3D08F)) {
                     s32 raw;
@@ -908,7 +912,6 @@ void UpdateCourseSelectScreen(void) {
                         g_RaceProgress->money = g_PlayerMoney;
                     } else {
                         p = g_RaceProgress;
-                    setlast:
                         p->money = (s16)g_GrandPrixSeriesU16;
                     }
                 clear:

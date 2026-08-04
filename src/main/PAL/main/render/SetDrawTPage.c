@@ -9,18 +9,9 @@ void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
 s32 encoded;
     s32 mode;
 
-    switch (0) { default:
     arg0[3] = 1;
     mode = func_800657E4();
-    if (!(mode == 1)) {
-
-    mode = func_800657E4();
-    if (mode != 2) {
-        break;
-    }
-
-    }
-    {
+    if ((mode == 1) || (func_800657E4() == 2)) {
         s32 value = 0xE1000000;
 
         if (arg2 != 0) {
@@ -31,11 +22,7 @@ s32 encoded;
             encoded |= 0x1000;
         }
         { s32 rel = encoded; encoded = value | rel; }
-        goto done;
-    }
-
-    }
-    {
+    } else {
         register s32 value asm("$7") = 0xE1000000;
 
         if (arg2 != 0) {
@@ -47,8 +34,6 @@ s32 encoded;
         }
         { s32 rel = encoded; encoded = value | rel; }
     }
-
-done:
     *(u32 *)&arg0[4] = encoded;
 }
 
