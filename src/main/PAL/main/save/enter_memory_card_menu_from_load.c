@@ -5,6 +5,7 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 #include "game/render.h"
+#include "game/memcard.h"
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 g_McMenuRowCursor asm("D_80082F54");
 extern s32 g_McMenuRowCount asm("D_8009B744");

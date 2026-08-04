@@ -145,4 +145,13 @@ void CardSeekParam(s32 param) asm("func_8005EB78");
 s32 CardReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
 s32 FormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
 
+
+/* Moved here from menu.h and audio.h: these belong to the card, not to
+ * the menu or the mixer. */
+void StartMemoryCardEvents(void) asm("func_8005EAD0");
+void StopMemoryCardEvents(void) asm("func_8005EAF8");
+void EnterMemoryCardMenu(void) asm("func_800613B8");
+void EnterMemoryCardMenuFromLoad(void) asm("func_80061458");
+void UpdateMemoryCardMenu(void) asm("func_80061520");
+
 #endif

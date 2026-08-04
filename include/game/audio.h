@@ -45,8 +45,6 @@ void UpdateSequenceFadeOut(void) asm("func_8005E900");
 void ApplyDuckedSequenceAudio(void) asm("func_8005EA14");
 void ApplyCurrentSequenceAudio(void) asm("func_8005EA6C");
 void SetMasterVolumeMono(s16 volume) asm("func_8005EAA8");
-void StartMemoryCardEvents(void) asm("func_8005EAD0");
-void StopMemoryCardEvents(void) asm("func_8005EAF8");
 void SetReverbDepth(s32 left, s32 right) asm("func_8005B190");
 void SetReverbPreset(s32 type, s32 left, s32 right) asm("func_8005B204");
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");

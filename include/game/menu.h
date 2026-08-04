@@ -135,9 +135,6 @@ u16 PollMenuConfirmInput(void) asm("func_800612CC");
 u16 PollMenuBackInput(void) asm("func_8006131C");
 void DrawMenuFadeOverlay(s32 brightness) asm("func_8006136C");
 void StartMenuExitFade(void) asm("func_8006138C");
-void EnterMemoryCardMenu(void) asm("func_800613B8");
-void EnterMemoryCardMenuFromLoad(void) asm("func_80061458");
-void UpdateMemoryCardMenu(void) asm("func_80061520");
 
 /* Menu widgets: an outlined filled box with optional caption (flags bit 0x10 =
  * caption, bit 1 = large font), the two-ring selection frame, and the timeline
