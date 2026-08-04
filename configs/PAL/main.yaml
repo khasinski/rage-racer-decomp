@@ -140,6 +140,7 @@ segments:
       - [0xDB38, c, PAL/main/menu/team_logo]
       - [0xDDC8, c, PAL/main/car/paint_color]
       - [0xE2B0, c, PAL/main/render/draw_player_car_model]
+      - [0xEEB4, c, PAL/main/fmv/fmv_scene]
       - [0xEF9C, c, PAL/main/fmv/start_fmv_playback]
       - [0xF0A4, c, PAL/main/fmv/fmv_decode]
       - [0xF314, c, PAL/main/fmv/setup_fmv_buffers]
