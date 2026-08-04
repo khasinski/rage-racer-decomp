@@ -1617,7 +1617,8 @@ s32 StartSingleSpecialCue(s32 cue, s32 volume) {
     return result;
 }
 
-s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
+s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) asm("func_8005D530");
+s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
     s32 id;
     s32 pan;
     s32 prog;
@@ -1731,7 +1732,7 @@ void PlaySoundCue(s32 arg0) {
             StartSoundCueVoice(arg0, 0x3C, 0x80, 0x80);
             return;
         }
-        func_8005D530(arg0, 0x80, 0x80);
+        StartSpecialCueVoice(arg0, 0x80, 0x80);
     }
 }
 

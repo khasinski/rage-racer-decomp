@@ -554,7 +554,8 @@ void ApplyTrackReverbZone(s32 arg0) {
     SetReverbDepth(arg, arg);
 }
 
-s32 func_80038288(s32 arg0) {
+s32 GetWaypointAngle(s32 arg0) asm("func_80038288");
+s32 GetWaypointAngle(s32 arg0) {
     s32 trackLength;
     s32 value;
     register s32 temp asm("v0");
@@ -596,7 +597,7 @@ s32 func_80038288(s32 arg0) {
         if (value < 0) {
             value += 0xFFF;
         }
-        asm(".globl func_80038368\nfunc_80038368 = func_80038288 + 0xE0");
+        asm(".globl func_80038368\nfunc_80038368 = GetWaypointAngle + 0xE0");
         return temp;
     }
 }
