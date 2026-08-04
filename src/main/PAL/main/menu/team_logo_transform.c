@@ -1253,7 +1253,6 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
             rectCallOt = rectOt;
             DrawSolidRect(rectCallOt, rectX, rectY, 0x124, rectHeight,
                               0, 0, 0, rectAlpha);
-            asm("" : : "r"(panelY));
         }
     }
 

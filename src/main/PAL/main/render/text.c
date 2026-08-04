@@ -377,9 +377,7 @@ void DrawProportionalTextShadedWide(
                 packet += 20;
                 sprt->y0 = yValue;
                 width = g_WordFontWidth[index];
-                asm volatile("" : "=r"(width) : "0"(width));
                 prim = (void *)sprt;
-                asm("" : "=r"(prim) : "0"(prim));
                 sprt->u0 = u;
                 sprt->v0 = v;
                 /* RAW() keeps this store ahead of the g_DrawBuffer load --

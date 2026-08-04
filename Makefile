@@ -1,5 +1,7 @@
 # rage-pc - Rage Racer (PS1) matching decompilation scaffold.
 
+# The game had one European release, SCES-00650. This tree calls it PAL
+# throughout; EUR was a second name for the same build and is gone.
 VERSION    ?= PAL
 BASENAME   := main
 

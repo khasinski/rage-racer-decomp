@@ -392,15 +392,13 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
     DrawCarSpecSprite(ot, 0x50, 0x18C, 0x10, 0xC, 0x98, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
 
     if (floorProgress > 0) {
-        register s32 loopLineColor asm("$18");
+        s32 loopLineColor;
         s32 loopLineFarX;
         s32 loopLineAlpha;
 
         loopLineColor = 0xB4;
         loopLineFarX = 0x99;
         loopLineAlpha = 0xFF;
-        asm("" : "=r"(loopLineColor), "=r"(loopLineFarX), "=r"(loopLineAlpha)
-               : "0"(loopLineColor), "1"(loopLineFarX), "2"(loopLineAlpha));
         lineStep = 0;
         do {
             lineNearX = 0x52;

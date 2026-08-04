@@ -6,8 +6,6 @@ disc/**
 !disc/PAL/.gitkeep
 !disc/USA/
 !disc/USA/.gitkeep
-!disc/EUR/
-!disc/EUR/.gitkeep
 disc/*.bin
 disc/*.cue
 disc/*.7z
@@ -37,10 +35,6 @@ asm/**
 !asm/USA/.gitkeep
 !asm/USA/main/
 !asm/USA/main/.gitkeep
-!asm/EUR/
-!asm/EUR/.gitkeep
-!asm/EUR/main/
-!asm/EUR/main/.gitkeep
 linkers/**/*.ld
 linkers/**/undefined_*.txt
 linkers/**/addr_halves.*.txt

@@ -1,2 +1,0 @@
-// Manual relocation overrides for SCES_006.50.
-// Populate when splat's auto-reloc detection misses something.

@@ -771,7 +771,6 @@ void GameDrawSkyBackground(void)
         screenY3 = GameRoundTerrainCoordinate(new_var3 - temp_lo_117);
         nextPacket = (u8 *)(g4Cursor + 1);
         SetPolyG4(g4Cursor);
-        asm("");
         g4Cursor->x0 = screenX0;
         g4Cursor->x1 = screenX1;
         asm volatile("" : "=r"(geomValueX2) : "0"((u16) screenX2) : "$2");
