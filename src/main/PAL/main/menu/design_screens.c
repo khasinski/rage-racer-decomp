@@ -19,11 +19,11 @@ extern u8 D_80082664;
 extern u8 D_80081CA4;
 extern u8 g_UiChromeScript asm("D_80082460");
 
-extern void func_8001D338(s32, s32);
-extern void func_8004A248(s32, s32);
+extern void ComposeSampleTeamLogo(s32, s32) asm("func_8001D338");
+extern void DrawTeamLogoCanvas(s32, s32) asm("func_8004A248");
 extern void RampTeamLogoCanvas(s32, s32) asm("func_8004B8B4");
 extern void DrawLogoSamplePanel(s32, s32) asm("func_8004E368");
-extern void func_800489AC(s32, s32, s32);
+extern void DrawFadingMenuSprites(s32, s32, s32) asm("func_800489AC");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void UpdateLogoSampleScreen(void) asm("func_800580C8");
@@ -33,14 +33,14 @@ void UpdateLogoSampleScreen(void) {
     s32 pl;
 
     g_MenuAltLayout = 0;
-    func_8001D338(D_80082EA4, D_80082EA8);
-    func_8004A248(1, 0);
+    ComposeSampleTeamLogo(D_80082EA4, D_80082EA8);
+    DrawTeamLogoCanvas(1, 0);
     v0 = GameMenuBusy;
     if (v0 == 0) {
         RampTeamLogoCanvas(-10, 0);
         DrawLogoSamplePanel(-1, D_80082EB0 + 1);
         RunTimedDrawScript(D_8009F0B0, &g_UiScriptProgress2, -1);
-        func_800489AC(g_UiScriptProgress, 2, D_8019C770);
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, D_8019C770);
         RunTimedDrawScript(&D_80081CA4, &g_UiScriptProgress, 0);
         if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) return;
         if (g_UiScriptProgress2 > 0) return;
@@ -154,7 +154,7 @@ void UpdateLogoSampleScreen(void) {
             t = D_80082EA8;
         }
         DrawLogoSamplePanel(1, t + 1);
-        func_800489AC(g_UiScriptProgress, 2, D_8019C770);
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, D_8019C770);
         RunTimedDrawScript(&D_80081CA4, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
@@ -165,7 +165,7 @@ void UpdateLogoSampleScreen(void) {
     DrawLogoSamplePanel(-1, 0);
     RunTimedDrawScript(&D_80081CA4, &g_UiScriptProgress, -1);
     RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
-    func_800489AC(g_UiScriptProgress, 2, D_8019C770);
+    DrawFadingMenuSprites(g_UiScriptProgress, 2, D_8019C770);
     if (g_UiScriptProgress <= 0) {
         g_MenuScreen = 7;
         g_MenuHandlerIndex = 7;
@@ -205,7 +205,7 @@ s32 DrawTeamNameScreen(s32 arg0) {
 
 extern u32 D_80081D34;
 
-void func_80051D6C(void);
+void DrawTeamNameCharModel(void) asm("func_80051D6C");
 s32 func_8004E724(s32 a, s32 b);
 void UploadTeamNameTexture(void *a, s32 b) asm("func_8001D530");
 
@@ -215,7 +215,7 @@ void UpdateTeamNameScreen(void) {
     s32 newdepth;
 
     g_MenuAltLayout = g_MenuAltLayoutSetting;
-    func_80051D6C();
+    DrawTeamNameCharModel();
     if (!(GameMenuBusy != 0)) {
 
     func_8004E724(1, GameMenuCursor);
@@ -338,11 +338,11 @@ extern u8 D_80082010;
 extern s32 D_801F17A0;
 
 void func_8005131C(void);
-s32 func_8004F048(void *, s32, s32);
-void func_80049418(s32, s32, s32, s32);
-void func_800489AC(s32, s32, s32);
-void func_8001D8C4(s32);
-void func_8001DA74(s32);
+s32 DrawPaintColorPalette(void *, s32, s32) asm("func_8004F048");
+void DrawBrowseArrows(s32, s32, s32, s32) asm("func_80049418");
+void DrawFadingMenuSprites(s32, s32, s32) asm("func_800489AC");
+void SetBodyColor1(s32) asm("func_8001D8C4");
+void SetBodyColor2(s32) asm("func_8001DA74");
 
 void UpdatePaintColorScreen(void) asm("func_80058C14");
 void UpdatePaintColorScreen(void) {
@@ -350,9 +350,9 @@ void UpdatePaintColorScreen(void) {
     func_8005131C();
 
     if (GameMenuBusy == 0) {
-        func_8004F048(&g_UiScriptProgress2, -1, D_80082EB4);
-        func_80049418(-1, 0, 1, 1);
-        func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
+        DrawPaintColorPalette(&g_UiScriptProgress2, -1, D_80082EB4);
+        DrawBrowseArrows(-1, 0, 1, 1);
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, D_801F17A0);
         RunTimedDrawScript(&D_80082010, &g_UiScriptProgress, 0);
         if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) {
             return;
@@ -403,7 +403,7 @@ void UpdatePaintColorScreen(void) {
     }
 
     if (GameMenuBusy < 0) {
-        if (func_8004F048(&g_UiScriptProgress2, 1, D_80082EB4) != 0) {
+        if (DrawPaintColorPalette(&g_UiScriptProgress2, 1, D_80082EB4) != 0) {
             if (g_PadEdge & 0x8000) {
                 PlaySoundCue(1);
                 D_80082EB4 = D_80082EB4 > 0 ? D_80082EB4 - 1 : 0x11;
@@ -426,7 +426,7 @@ void UpdatePaintColorScreen(void) {
                     D_80082EB4 = g_CarTable[g_PlayerCarIndex].paintColor1;
                     GameMenuBusy = 0;
                 }
-                func_8001D8C4(D_80082EB4);
+                SetBodyColor1(D_80082EB4);
             } else {
                 u16 *btn = &g_PadEdge2;
                 if (*btn & 0x860) {
@@ -441,12 +441,12 @@ void UpdatePaintColorScreen(void) {
                     D_80082EB4 = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = 0;
                 }
-                func_8001DA74(D_80082EB4);
+                SetBodyColor2(D_80082EB4);
             }
         }
 
-        func_80049418(1, 0, 1, 1);
-        func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
+        DrawBrowseArrows(1, 0, 1, 1);
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, D_801F17A0);
         RunTimedDrawScript(&D_80082010, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
@@ -456,7 +456,7 @@ void UpdatePaintColorScreen(void) {
     g_MenuHandlerIndex2 = 10;
     RunTimedDrawScript(&D_80082010, &g_UiScriptProgress, -1);
     RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
-    func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
+    DrawFadingMenuSprites(g_UiScriptProgress, 2, D_801F17A0);
     if (g_UiScriptProgress <= 0) {
         g_MenuScreen = 6;
         g_MenuHandlerIndex = 6;

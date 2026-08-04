@@ -11,7 +11,7 @@ extern u_char g_GpuGp1Mirror[] asm("D_8009B9F0");
 extern u_char g_GpuQueue[] asm("D_801E5024");
 
 void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");
-long func_800680A4(u_long arg0);
+long Gpu_ProbeType(u_long arg0) asm("func_800680A4");
 
 /* Driver-table slot +0x34, the body of ResetGraph: empties the queue,
  * re-arms DMA2, and issues GP1(00h) (mode 0) or GP1(02h)+GP1(01h)
@@ -46,7 +46,7 @@ long Gpu_Reset(u_long mode) {
     SetIntrMask(g_GpuResetIntrMask);
 
     if ((mode % 8) == 0) {
-        return func_800680A4(mode);
+        return Gpu_ProbeType(mode);
     }
 
     return 0;

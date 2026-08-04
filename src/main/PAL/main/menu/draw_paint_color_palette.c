@@ -113,7 +113,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
 
 extern s32 D_8007FB2C;
 
-void func_80047BD4(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8);
+void GameDrawNumber(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8) asm("func_80047BD4");
 void func_80046A2C(void *a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7,
                    s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7,
@@ -162,8 +162,8 @@ void func_8004F3EC(s32 arg0, s32 arg1) {
         c19 = 0x20;
         asm volatile("" : : "r"(r5), "r"(r6), "r"(c17), "r"(c21), "r"(c19));
         t = t + 0x211;
-        func_80047BD4(r4, r5, r6, a1v, c17, c17, c17, c21, c19);
-        func_80047BD4(0x44, y, 7, 0xD, c17, c17, c17, c21, c19);
+        GameDrawNumber(r4, r5, r6, a1v, c17, c17, c17, c21, c19);
+        GameDrawNumber(0x44, y, 7, 0xD, c17, c17, c17, c21, c19);
         func_80046A2C(ot, 0x17, y, 0x34, 0x10, 0x8C, 0x8C, 0, 0, 0, 0x244, 1, 1, 0x3B);
         func_80046A2C(ot, 0x7C, y, 0x8, 0x10, 0x8C, 0xDC, 0, 0, 0, c21, 1, 1, 0x3B);
         func_80048B88(0, (s16)t, 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);

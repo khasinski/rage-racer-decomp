@@ -9,7 +9,7 @@ extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
 extern long g_GpuQueueWriteIdx asm("D_800942EC");
 extern long g_GpuQueueReadIdx asm("D_800942F0");
 
-void func_80067984(void);
+void Gpu_ExecuteQueue(void) asm("func_80067984");
 long Gpu_CheckTimeout(void) asm("func_80067F38");
 
 /* Driver-table slot +0x3C, the body of DrawSync: mode 0 blocks until the
@@ -25,7 +25,7 @@ long Gpu_DrawSync(long arg0) {
         break;
 
 retry:
-        func_80067984();
+        Gpu_ExecuteQueue();
         if (Gpu_CheckTimeout() != 0) {
             return -1;
         }
@@ -52,7 +52,7 @@ waitReady:
     pending = (g_GpuQueueWriteIdx - g_GpuQueueReadIdx) & 0x3F;
     switch (0) { default:
     if (pending != 0) {
-        func_80067984();
+        Gpu_ExecuteQueue();
     }
 
     if (*g_GpuDmaChcr & 0x01000000) {

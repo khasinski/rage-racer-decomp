@@ -19,10 +19,10 @@ void SetCarImageSlot(void *arg0, s32 arg1) asm("func_80017B44");
 void SetCarModelSlot(void *arg0, s32 arg1) asm("func_80017B94");
 void SelectCarModelSlot(s32 arg0) asm("func_80017BAC");
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
-void func_8001D748(s32 arg0, s32 arg1);
-void func_8001D900(s32 arg0, s32 arg1);
-void func_8005B768(s32 arg0, void *arg1, void *arg2, void *arg3);
-s32 func_8005B89C(void);
+void ApplyBodyColor1(s32 arg0, s32 arg1) asm("func_8001D748");
+void ApplyBodyColor2(s32 arg0, s32 arg1) asm("func_8001D900");
+void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3) asm("func_8005B768");
+s32 PollAudioSlotLoad(void) asm("func_8005B89C");
 void func_8005DBD8(void);
 extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
 void ServiceAssetLoad(void) asm("func_80019C04");
@@ -63,11 +63,11 @@ void LoadCarSelectAssets(void) {
 
     switch (state) {
     case 1:
-        func_8005B768(1, g_AssetBlockPtr, g_AssetSubBlockPtr, g_AssetBlockPtr2);
+        StartAudioSlotLoad(1, g_AssetBlockPtr, g_AssetSubBlockPtr, g_AssetBlockPtr2);
         g_AssetLoadState = state2;
         return;
     case 2:
-        if ((func_8005B89C() << 16) != 0) {
+        if ((PollAudioSlotLoad() << 16) != 0) {
             func_8005DBD8();
             g_AssetLoadState = 3;
             g_AssetLoadCursor = (GameSceneAssetHeader *)g_AssetSubBlockPtr;
@@ -129,10 +129,10 @@ void LoadCarSelectAssets(void) {
                 if (carIndex < 10) {
                     indexOffset = carIndex * 8;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-                    func_8001D748(entry->paintColor1, g_CarModelAsset->imageDataOffset);
+                    ApplyBodyColor1(entry->paintColor1, g_CarModelAsset->imageDataOffset);
                     indexOffset = g_PlayerCarIndex * 8;
                     entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-                    func_8001D900(entry->paintColor2, g_CarModelAsset->imageDataOffset);
+                    ApplyBodyColor2(entry->paintColor2, g_CarModelAsset->imageDataOffset);
                 }
 
                 g_CarModelSlot = 0;
@@ -209,9 +209,9 @@ void LoadCarModel(s32 arg0) {
             test = arg < 10;
             if (test != 0) {
                 entry = (u8 *)(index + (s32)g_CarTable);
-                func_8001D748(((GameCarEntry *)entry)->paintColor1, ((GameCarModelAsset *)ptr)->imageDataOffset);
+                ApplyBodyColor1(((GameCarEntry *)entry)->paintColor1, ((GameCarModelAsset *)ptr)->imageDataOffset);
                 entry = (u8 *)(index + (s32)g_CarTable);
-                func_8001D900(((GameCarEntry *)entry)->paintColor2, ((GameCarModelAsset *)ptr)->imageDataOffset);
+                ApplyBodyColor2(((GameCarEntry *)entry)->paintColor2, ((GameCarModelAsset *)ptr)->imageDataOffset);
             }
 
             g_AssetLoadState = 0;

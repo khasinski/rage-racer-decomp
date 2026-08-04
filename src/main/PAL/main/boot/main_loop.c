@@ -10,13 +10,13 @@
 
 void MainLoop(void);
 
-void func_80065460(s32 arg0);
-void func_800656CC(s32 arg0);
+void ResetGraph(s32 arg0) asm("func_80065460");
+void SetGraphDebug(s32 arg0) asm("func_800656CC");
 void InitGeom(void) asm("func_80068928");
-void func_8005F5E0(void);
+void RestartMemoryCard(void) asm("func_8005F5E0");
 void func_8001F0E0(void);
-void func_80021A08(void);
-void func_80017884(s32 arg0);
+void InitRecordTables(void) asm("func_80021A08");
+void InitRenderState(s32 arg0) asm("func_80017884");
 void func_80021338(void);
 
 extern s32 g_ScreenOffsetY asm("D_801E4B9C");
@@ -45,15 +45,15 @@ extern u16 g_AdvancedSeriesUnlocked asm("D_8019CAC0");
 void InitSubsystems(void) {
     ssinit();
     InitSoundRuntime();
-    func_80065460(0);
-    func_800656CC(0);
+    ResetGraph(0);
+    SetGraphDebug(0);
     SetDispMask(0);
     g_ScreenOffsetY = 0;
     g_ScreenOffsetX = 0;
     SetDMAInterruptState(1);
     InitGeom();
     GameInitPad();
-    func_8005F5E0();
+    RestartMemoryCard();
     g_NegconSteerPlay = 1;
     g_PadMappingIndex = 0;
     g_NegconMappingIndex = 0;
@@ -68,8 +68,8 @@ void InitSubsystems(void) {
     g_MirrorMode = 0;
     func_8001F0E0();
     ApplyPadButtonMapping();
-    func_80021A08();
-    func_80017884(5);
+    InitRecordTables();
+    InitRenderState(5);
     func_80021338();
     *(s32 *)0x1F80000C = -64;
     *(s32 *)0x1F800010 = -256;
@@ -81,7 +81,7 @@ void InitSubsystems(void) {
     SetCameraRotMatrix();
 }
 
-void func_800630AC(void);
+void __main(void) asm("func_800630AC");
 void func_80063190(s32 arg0);
 void func_80018038(void);
 void func_800438BC(void);
@@ -90,9 +90,9 @@ void func_80043974(void);
 void func_8005AF78(void);
 void func_80019C04(void);
 void StepTrackTextureSwap(void) asm("func_8001A030");
-void func_80065ED4(u8 *env);
-void func_800660AC(u8 *arg0);
-void func_80065E60(u8 *ot);
+void PutDrawEnv(u8 *env) asm("func_80065ED4");
+void PutDispEnv(u8 *arg0) asm("func_800660AC");
+void DrawOTag(u8 *ot) asm("func_80065E60");
 
 /* The two 0x237E8-byte frame contexts the loop ping-pongs between. */
 extern u8 g_FrameContexts[] asm("D_8019CE38");
@@ -118,13 +118,13 @@ void MainLoop(void) {
     s32 elapsed;
     s32 ticks;
 
-    func_800630AC();
+    __main();
     KernelCallbackSlot3();
     func_80063190(2);
     CdInit();
     InitSubsystems();
     func_80018038();
-    func_80065460(3);
+    ResetGraph(3);
     func_800438BC();
     g_FrameSyncThreshold = 0x80;
     SetDispMask(0);
@@ -158,10 +158,10 @@ void MainLoop(void) {
         ticks = g_GameClock + 1;
         g_GameClock = ticks + elapsed / 256;
         VSync(0);
-        func_80065ED4(g_DrawBuffer);
-        func_800660AC(g_DrawBuffer + 0x5C);
-        func_80065E60(g_DrawBuffer + 0xBC8);
-        func_80065E60(g_DrawBuffer + 0x16C8);
+        PutDrawEnv(g_DrawBuffer);
+        PutDispEnv(g_DrawBuffer + 0x5C);
+        DrawOTag(g_DrawBuffer + 0xBC8);
+        DrawOTag(g_DrawBuffer + 0x16C8);
         UpdatePadState();
         g_FrameCounter = g_FrameCounter + 1;
     }

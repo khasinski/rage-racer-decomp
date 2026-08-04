@@ -2,7 +2,7 @@
 #include "game/vector.h"
 #include "game/race.h"
 
-void func_8003E590(void);
+void UpdateFlybyScenery(void) asm("func_8003E590");
 void DrawFlybyScenery(void) asm("func_8003EAF4");
 void UpdateRouteScenery(void) asm("func_8003EC98");
 void DrawRouteScenery(void) asm("func_8003F02C");
@@ -22,7 +22,7 @@ void DrawScriptedScenery(s32 arg0) {
     case 2:
         if (arg0 != 0) {
             UpdateRouteScenery();
-            func_8003E590();
+            UpdateFlybyScenery();
         }
         DrawRouteScenery();
         DrawFlybyScenery();
@@ -31,7 +31,7 @@ void DrawScriptedScenery(s32 arg0) {
     case 4:
         if (arg0 != 0) {
             UpdateRouteScenery();
-            func_8003E590();
+            UpdateFlybyScenery();
             func_8003F9C4();
         }
         DrawRouteScenery();

@@ -10,8 +10,8 @@ extern s32 g_MenuAltLayout asm("D_8019CB0C");
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0,
                    u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans,
                    u32 flags);
-void func_80046BA0(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, s16 x2, u16 y2,
-                   u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11);
+void DrawFlatTriangleSigned(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, s16 x2, u16 y2,
+                   u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("func_80046BA0");
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
                    u8 b, u8 alpha);
 void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
@@ -83,7 +83,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
         func_8004711C(ot, (s16)((u8)x - 3), 0x60, (s16)((u8)x - 3), 0x68, zero, green, zero, 0xFF);
         func_8004711C(ot, (s16)((u8)x - 5), 0x60, (s16)((u8)x - 5), 0x68, zero, green, zero, 0xFF);
         func_8004711C(ot, (s16)((u8)x - 7), 0x60, (s16)((u8)x - 7), 0x68, zero, green, zero, 0xFF);
-        func_80046BA0(ot, (s16)((u8)x - 13), 0x64, (s16)((u8)x - 8), 0x5E, (s16)((u8)x - 8), 0x6A,
+        DrawFlatTriangleSigned(ot, (s16)((u8)x - 13), 0x64, (s16)((u8)x - 8), 0x5E, (s16)((u8)x - 8), 0x6A,
                       zero, green, zero, zero, 0x80);
     }
 
@@ -94,7 +94,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
         func_8004711C(ot, (s16)((u8)x + 3), 0x6A, (s16)((u8)x + 3), 0x72, zero, green, zero, 0xFF);
         func_8004711C(ot, (s16)((u8)x + 5), 0x6A, (s16)((u8)x + 5), 0x72, zero, green, zero, 0xFF);
         func_8004711C(ot, (s16)((u8)x + 7), 0x6A, (s16)((u8)x + 7), 0x72, zero, green, zero, 0xFF);
-        func_80046BA0(ot, (s16)((u8)x + 14), 0x6E, (s16)((u8)x + 9), 0x69, (s16)((u8)x + 9), 0x73,
+        DrawFlatTriangleSigned(ot, (s16)((u8)x + 14), 0x6E, (s16)((u8)x + 9), 0x69, (s16)((u8)x + 9), 0x73,
                       zero, green, zero, zero, 0x80);
     }
 
@@ -105,7 +105,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     func_8004711C(ot, 0xD7, 0x4A, 0xD7, yLarge, gray, gray, gray, ySmall);
     func_8004711C(ot, 0xE7, 0x4A, 0xE7, yLarge, gray, gray, gray, ySmall);
 
-    func_80046BA0(ot, 0xB9, 0x87, 0xF7, 0x48, 0xF7, 0x87, 0x1E, 0x8E, 0x95, zero, 0x80);
+    DrawFlatTriangleSigned(ot, 0xB9, 0x87, 0xF7, 0x48, 0xF7, 0x87, 0x1E, 0x8E, 0x95, zero, 0x80);
     func_80047024(ot, 0xB8, 0x48, 0x40, 0x40, 0x95, 0x25, 0x1E, 0xFF);
 
     D_8009B268 += 0x60;

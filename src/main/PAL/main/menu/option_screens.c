@@ -11,11 +11,11 @@ extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
 extern s32 g_ScreenOffsetEditX asm("D_801E4D68");
-void func_80024B6C(void);
+void DrawSoundOptionScreen(void) asm("func_80024B6C");
 void ApplyAudioSettings(void) asm("func_80021224");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-void func_80023750(s32 arg0);
+void DrawOptionHintBar(s32 arg0) asm("func_80023750");
 extern s32 g_ScreenOffsetEditY asm("D_801E4D6C");
 extern s32 g_ScreenOffsetX asm("D_801E4B8C");
 extern s32 g_ScreenOffsetY asm("D_801E4B9C");
@@ -27,7 +27,7 @@ extern u16 D_801C0686;
 void DrawScreenAdjustScreen(void) asm("func_800253A4");
 void DrawScreenAdjustScreen(void);
 extern s32 g_OptionLetterboxHeight asm("D_8009F0A0");
-void func_8002390C(void);
+void DrawPadTypeHint(void) asm("func_8002390C");
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 /* The setup scene's per-frame overlay: pad hint, letterbox, and the alignment frame in mode 6. */
@@ -41,8 +41,8 @@ extern u8 g_CarTrackSection[] asm("D_801F18CC");
 extern s32 *g_CamRow asm("D_8019C9A8");
 void InitRenderState(s32 arg0) asm("func_80017884");
 void LoadTrackTexturePageRange(void) asm("func_8001D30C");
-void func_8001D210(void);
-void func_80038844(void);
+void InitTrackLighting(void) asm("func_8001D210");
+void BuildStartingGrid(void) asm("func_80038844");
 void SetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
 void func_800458CC(s32 arg0);
 void InitShuttleScenery(void) asm("func_8003F0F8");
@@ -70,7 +70,7 @@ void UpdateSoundSettingAdjust(void) {
     s32 old;
     u16 pad;
 
-    func_80024B6C();
+    DrawSoundOptionScreen();
 
     switch (g_SoundOptionCursor) {
     case 0:
@@ -167,7 +167,7 @@ void DrawScreenAdjustScreen(void) {
     next = func_80017138(base, next, 0x9A, 0xB8, w0c, h18, 0xD4, y48, color);
     next = func_80017138(base, next, 0xA6, 0xA0, w0c, h18, 0xE0, y48, color);
     *scratch = func_80017138(base, next, 0x8E, 0xA0, w0c, h18, 0xEC, y48, color);
-    func_80023750(3);
+    DrawOptionHintBar(3);
 }
 
 /* g_GameModeHandlers[6]: moves the screen offset and commits it to g_ScreenOffsetX/Y. */
@@ -250,7 +250,7 @@ void DrawOptionSceneOverlay(void) {
     u8 *rawBase;
 
     if (g_GameMode != 9) {
-        func_8002390C();
+        DrawPadTypeHint();
     }
 
     target = 0xF0;
@@ -300,9 +300,9 @@ void UpdateOptionScene(void) {
 void func_80025940(void) {
     InitRenderState(5);
     LoadTrackTexturePageRange();
-    func_8001D210();
+    InitTrackLighting();
     g_TrackWalkStart = *(s32 *)g_TrackEventData;
-    func_80038844();
+    BuildStartingGrid();
     SetTrackTexturePageNow(*(s16 *)&g_CarTrackSection[g_CameraCarIndex * 412]);
     func_800458CC(g_CamRow[2]);
     g_CameraViewMode = 2;

@@ -24,7 +24,7 @@ void func_8006C17C(void);
 void KernelCallbackSlot2(long arg0, void *arg1) asm("func_8006DF64");
 long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
 long func_8006B0D4(long arg0, u_char *arg1);
-void func_80063C38(u_char *text);
+void LibcPutString(u_char *text) asm("func_80063C38");
 
 long CD_vol(CdlATV *arg0) {
     *g_CdReg0 = 2;
@@ -102,7 +102,7 @@ void CD_initintr(void) {
 }
 
 long func_8006BD14(void) {
-    func_80063C38(D_80013904);
+    LibcPutString(D_80013904);
     DebugPrintf(D_80013910, g_CdDebugInfo);
 
     g_CdLastCommand = 0;

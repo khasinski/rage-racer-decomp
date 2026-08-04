@@ -58,9 +58,9 @@ void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32
     }
 }
 
-void func_800684B0(Matrix *arg0, s32 arg1);
+void MatrixApplyZRotation(Matrix *arg0, s32 arg1) asm("func_800684B0");
 s32 func_800689A8(s32 arg0);
-void func_800681F0(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ);
+void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) asm("func_800681F0");
 void func_80069858(s32 *matrix);
 void func_800698E8(s32 *matrix);
 
@@ -68,7 +68,7 @@ void func_800698E8(s32 *matrix);
  * Builds a billboard / look-at view Matrix for a GameRenderObject: the eye is
  * obj->{x,y,z} and the look-at target is obj->{field_0C,field_10,field_14}.
  * `len` is the distance (func_800689A8 sqrt); computes a pitch and a yaw axis
- * rotation (func_80046188), the translation (func_800681F0), then per-row
+ * rotation (func_80046188), the translation (MatrixApplyVectorComponents), then per-row
  * fixed-point projection scaling (<<1 / <<2). Returns 1 if eye==target, else 0.
  */
 s32 SetLookAtMatrix(GameRenderObject *obj) asm("func_80046248");
@@ -92,7 +92,7 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
     m.m[2][0] = 0;
     m.m[2][1] = 0;
     m.m[2][2] = 0x1000;
-    func_800684B0(&m, 0);
+    MatrixApplyZRotation(&m, 0);
 
     len = func_800689A8((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
                         (obj->motionX - obj->y) * (obj->motionX - obj->y) +
@@ -122,7 +122,7 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
         MulMatrix(&m, &am);
     }
 
-    func_800681F0((s16 *)&m, -obj->x, -obj->y, -obj->z, &outX, &outY, &outZ);
+    MatrixApplyVectorComponents((s16 *)&m, -obj->x, -obj->y, -obj->z, &outX, &outY, &outZ);
     m.t[0] = outX;
     m.t[1] = outY;
     m.t[2] = outZ;

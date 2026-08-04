@@ -9,11 +9,11 @@ extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_ScratchRenderMode asm("D_1F800084");
 
-s32 func_800350B4(s32 arg0);
-void func_8001C248(s32 arg0, Matrix *arg1);
+s32 GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
+void ApplyZoneLighting(s32 arg0, Matrix *arg1) asm("func_8001C248");
 void func_80069888(Matrix *arg0);
 void func_80017794(void *a0, void *a1, void *a2);
-void func_8001C794(void);
+void RestoreColorMatrix(void) asm("func_8001C794");
 
 /*
  * GameRenderObject -> GPU-primitive submitter. Subtracts the active view's
@@ -22,7 +22,7 @@ void func_8001C794(void);
  * dispatches the primitive builder SubmitModel on the scratchpad OT
  * (0x1F800000) at increasing depth buckets. The m_90 negation block and the
  * m_B0[1] block build the mirrored copies (flip X/Z columns). otDepth is the
- * base OT bucket; clipHandle is the optional clip volume from func_800350B4.
+ * base OT bucket; clipHandle is the optional clip volume from GetTrackZoneBlend.
  */
 void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
 void DrawPlayerCarModel(GameRenderObject *obj) {
@@ -50,9 +50,9 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
 
     if (g_SceneId != 8) {
-        clipHandle = func_800350B4((s32) obj->trackProgress);
+        clipHandle = GetTrackZoneBlend((s32) obj->trackProgress);
         if (clipHandle != 0) {
-            func_8001C248(clipHandle, &m_90);
+            ApplyZoneLighting(clipHandle, &m_90);
         }
     }
     func_80069888(&m_90);
@@ -141,7 +141,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     obj->y += g_CarModelAsset->horizon_6;
     obj->field_60 += g_CarModelAsset->horizon_6;
     if (clipHandle != 0) {
-        func_8001C794();
+        RestoreColorMatrix();
     }
 }
 
@@ -194,9 +194,9 @@ void func_8001DFC0(GameRenderObject *obj) {
             BuildRotMatrixX(&m_30, obj->angleX);
             MulMatrix2(&m_10, &m_30);
             MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
-            clipHandle = func_800350B4((s32)obj->trackProgress);
+            clipHandle = GetTrackZoneBlend((s32)obj->trackProgress);
             if (clipHandle != 0) {
-                func_8001C248(clipHandle, &m_90);
+                ApplyZoneLighting(clipHandle, &m_90);
             }
             func_80069888(&m_90);
 
@@ -285,9 +285,9 @@ void func_8001DFC0(GameRenderObject *obj) {
             BuildRotMatrixX(&m_50, obj->angleX);
             MulMatrix2(&m_10, &m_50);
             MulMatrix0(&g_SceneLightMatrix, &m_50, &m_90);
-            clipHandle = func_800350B4((s32)obj->trackProgress);
+            clipHandle = GetTrackZoneBlend((s32)obj->trackProgress);
             if (clipHandle != 0) {
-                func_8001C248(clipHandle, &m_90);
+                ApplyZoneLighting(clipHandle, &m_90);
             }
             func_80069888(&m_90);
 
@@ -304,7 +304,7 @@ void func_8001DFC0(GameRenderObject *obj) {
     obj->y += ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
     obj->field_60 += ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
     if (clipHandle != 0) {
-        func_8001C794();
+        RestoreColorMatrix();
     }
 }
 

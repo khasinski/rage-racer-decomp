@@ -18,8 +18,8 @@ extern s32 g_TitleAttractTimer asm("D_8019CB70");
 
 void CloseLoadedAudioSlots(void) asm("func_8005B9CC");
 void ResetTrackTextureSwap(void) asm("func_80019EBC");
-void func_8001A498(void);
-void func_80021540(void);
+void UploadLoadBufferImage(void) asm("func_8001A498");
+void UpdateBgmTrackCount(void) asm("func_80021540");
 void func_8005DBB4(void);
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
@@ -29,7 +29,7 @@ void EnterFrontend(void) {
     SetDispMask(0);
     CloseLoadedAudioSlots();
     ResetTrackTextureSwap();
-    func_8001A498();
+    UploadLoadBufferImage();
 
     g_FrameSyncThreshold = 0x80;
     g_SceneId = 4;
@@ -42,7 +42,7 @@ void EnterFrontend(void) {
     g_TitleExitTimer = 0;
     g_TitleAttractTimer = -1;
 
-    func_80021540();
+    UpdateBgmTrackCount();
     func_8005DBB4();
 }
 
@@ -54,8 +54,8 @@ extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 D_801E8260;
 extern s32 g_MainMenuSlide;
 extern s32 g_FrontendState;
-void func_8001A498(void);
-void func_80021540(void);
+void UploadLoadBufferImage(void) asm("func_8001A498");
+void UpdateBgmTrackCount(void) asm("func_80021540");
 void func_8005DBB4(void);
 void DrawPressStartPrompt(void) asm("func_8001B170");
 
@@ -69,7 +69,7 @@ void EnterTitleScreen(void) {
         g_TitleExitTimer = 0;
     } else {
         SetDispMask(0);
-        func_8001A498();
+        UploadLoadBufferImage();
         D_801E6F28 = 0;
         g_TitleAttractTimer = 0;
         g_TitleExitTimer = 0x1E;
@@ -80,7 +80,7 @@ void EnterTitleScreen(void) {
     D_801E8260 = 0;
     g_MainMenuSlide = 0;
     g_FrontendState = 0;
-    func_80021540();
+    UpdateBgmTrackCount();
     func_8005DBB4();
     DrawPressStartPrompt();
 }

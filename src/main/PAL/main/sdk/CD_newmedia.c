@@ -26,13 +26,13 @@ extern const char D_80013A3C[];
 extern const char D_80013A5C[];
 extern const char D_80013A70[];
 
-extern long func_8006CB88(long, long, void *);
+extern long cd_read(long, long, void *) asm("func_8006CB88");
 extern long LibcStrncmp(void *, const char *, long) asm("func_8006CC8C");
-extern void func_8006CBF4(char *, u_char *, long);
+extern void LibcMemcpy(char *, u_char *, long) asm("func_8006CBF4");
 
 /*
  * Reads and parses the disc's directory into the Entry table D_8009C114[128].
- * Loads sector 16 (the volume descriptor) via func_8006CB88, validates the "CD"
+ * Loads sector 16 (the volume descriptor) via cd_read, validates the "CD"
  * signature, follows it to the path/directory sector, then walks the packed
  * variable-length records (record length in *p, name at p+8) copying each into
  * an Entry (index, header word, flags, name). Returns 1 on success, 0 on error.
@@ -48,7 +48,7 @@ long CD_newmedia(void) {
     long r;
     W4 hdr;
 
-    r = func_8006CB88(1, 16, g_CdSectorBuf);
+    r = cd_read(1, 16, g_CdSectorBuf);
     if (r != 1) {
         if (g_CdDebugLevel > 0) {
             DebugPrintf(D_800139B4);
@@ -62,7 +62,7 @@ long CD_newmedia(void) {
         return 0;
     }
     hdr = g_CdRootDirLba;
-    if (func_8006CB88(1, *(long *)&hdr, g_CdSectorBuf) != r) {
+    if (cd_read(1, *(long *)&hdr, g_CdSectorBuf) != r) {
         if (g_CdDebugLevel > 0) {
             DebugPrintf(D_80013A18, *(long *)&hdr);
         }
@@ -82,7 +82,7 @@ long CD_newmedia(void) {
         *(W4 *)&g_CdPathTable[i].word2 = *(W4 *)(p + 2);
         g_CdPathTable[i].field6 = *(u_char *)(p + 6);
         g_CdPathTable[i].index = i + 1;
-        func_8006CBF4(g_CdPathTable[i].name, p + 8, *p);
+        LibcMemcpy(g_CdPathTable[i].name, p + 8, *p);
         g_CdPathTable[i].name[*p] = 0;
         n = *p;
         d = (n & 1) + 8;
@@ -110,7 +110,7 @@ long CD_newmedia(void) {
 extern volatile long D_8009C118[];
 extern CdSearchDirEntry g_CdDirEntryName[] asm("D_8009C120");
 
-long func_8006CC28(u_char *arg0, u_char *arg1);
+long LibcStrcmp(u_char *arg0, u_char *arg1) asm("func_8006CC28");
 
 long DS_searchdir(long type, u_char *name) asm("func_8006C83C");
 long DS_searchdir(long type, u_char *name) {
@@ -122,7 +122,7 @@ long DS_searchdir(long type, u_char *name) {
     while (i < 0x80) {
         entryType = *(long *)((u_char *)D_8009C118 + offset);
         if (entryType != 0) {
-            if (entryType == type && func_8006CC28(name, entryName) == 0) {
+            if (entryType == type && LibcStrcmp(name, entryName) == 0) {
                 return i + 1;
             }
 

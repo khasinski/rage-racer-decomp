@@ -13,14 +13,14 @@ u_long _new_card[4] asm("func_80063E34") __attribute__((section(".text"))) = {
 };
 
 void KernelCallbackSlot3(void) asm("func_8006DF34");
-void func_800640D4(long arg0);
+void MDEC_reset(long arg0) asm("func_800640D4");
 
 void DecDCTReset(long arg0) asm("func_80063E44");
 void DecDCTReset(long arg0) {
     if (arg0 == 0) {
         KernelCallbackSlot3();
     }
-    func_800640D4(arg0);
+    MDEC_reset(arg0);
 }
 
 /* The two MDEC parameter blocks, each a command word followed by its table:
@@ -61,7 +61,7 @@ u_long *DecDCTGetEnv(u_long *arg0) {
 extern u_char g_MdecQuantCmd[] asm("D_8008305C");
 extern u_char g_MdecIdctCmd[] asm("D_800830E0");
 
-void func_800641D0(volatile u_long *arg0, long arg1);
+void MDEC_in(volatile u_long *arg0, long arg1) asm("func_800641D0");
 
 u_long * DecDCTPutEnv(u_long *arg0) asm("func_80063F08");
 u_long *DecDCTPutEnv(u_long *arg0) {
@@ -81,8 +81,8 @@ u_long *DecDCTPutEnv(u_long *arg0) {
         *dst++ = *arg0++;
     }
 
-    func_800641D0((volatile u_long *)g_MdecQuantCmd, 0x20);
-    func_800641D0((volatile u_long *)g_MdecIdctCmd, 0x20);
+    MDEC_in((volatile u_long *)g_MdecQuantCmd, 0x20);
+    MDEC_in((volatile u_long *)g_MdecIdctCmd, 0x20);
 
     return ret;
 }
@@ -109,5 +109,5 @@ void DecDCTin(volatile u_long *arg0, long arg1) {
         arg0[0] &= 0xFDFFFFFF;
     }
 
-    func_800641D0(arg0, *(u_short *)arg0);
+    MDEC_in(arg0, *(u_short *)arg0);
 }

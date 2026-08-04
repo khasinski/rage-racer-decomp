@@ -241,7 +241,7 @@ typedef union {
     u16 lo;
 } TeamLogoColorSlot;
 
-void func_8004B9B8(s32 repeat);
+void ScrollTeamLogoUp(s32 repeat) asm("func_8004B9B8");
 void func_8004BA50(void);
 void func_8004BAE4(void);
 void func_8004BBA8(void);
@@ -622,7 +622,7 @@ void UpdateTeamLogoCanvas(void) {
                 }
             } else if ((D_8007FB14 == 0x14) || (D_8007FB14 == 1)) {
                 if (heldValue & 0x1000) {
-                    func_8004B9B8(D_8007FB14);
+                    ScrollTeamLogoUp(D_8007FB14);
                 }
                 if (*held & 0x4000) {
                     func_8004BA50();
@@ -727,8 +727,8 @@ void func_8004CF00(void) { LoadImage((Rect *)&g_TeamLogoClutRect, g_TeamLogoClut
 
 extern s32 D_8007FB20;
 
-void func_800468FC(void *ot, s32 x, s32 y, s32 w, s32 h);
-void func_80047330(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
+void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) asm("func_800468FC");
+void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32 b0, u8 r1, u8 g1, u8 b1, u8 alpha) asm("func_80047330");
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r, u32 g, u32 b, u8 alpha);
 void func_80064F58(u8 *prim);
 void func_80064E90(u8 *prim, s32 arg1);
@@ -770,7 +770,7 @@ void func_8004CF30(s32 arg) {
         s32 s2;
         u8 *prim;
 
-        func_800468FC(s3, 0, 0, 0x140, 0x1E0);
+        SetDrawClipRect(s3, 0, 0, 0x140, 0x1E0);
 
         s0 = 0;
         s2 = 0;
@@ -784,7 +784,7 @@ void func_8004CF30(s32 arg) {
             u0 = (u32)m11 / 256;
             c1 = (u32)(cnt * 75) / 256;
             c0 = u0 & 0xFF;
-            func_80047330(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, c0, c0, c0, c1, c1, c1, 0x60);
+            DrawGradientLine(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, c0, c0, c0, c1, c1, c1, 0x60);
             s2 += 0x000A0000;
             s1 += 0x00070000;
             s0++;
@@ -840,7 +840,7 @@ void func_8004CF30(s32 arg) {
             AddPrim(s3, oldPrim);
         }
         *(u8 **)0x1F800000 = prim;
-        func_800468FC(s3, 0x48, 0, 0x140, 0x1E0);
+        SetDrawClipRect(s3, 0x48, 0, 0x140, 0x1E0);
     }
     if (arg > 0) {
         D_8007FB20 += arg;

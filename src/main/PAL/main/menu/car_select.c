@@ -22,11 +22,11 @@ void func_80047460(void *buf, s32 xa, s32 ya, s32 w, s32 h, s32 r, s32 g, s32 b,
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
 
-void func_8005194C(void);
+void DrawMenuCourseView(void) asm("func_8005194C");
 void func_8004CF30(s32 arg0);
-void func_800489AC(s32 arg0, s32 arg1, s32 arg2);
+void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2) asm("func_800489AC");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-s32 func_8004D384(s32 *arg0, s32 arg1, s32 arg2);
+s32 DrawRankingTable(s32 *arg0, s32 arg1, s32 arg2) asm("func_8004D384");
 void func_800509C4(s32 arg0);
 
 void UpdateRankingScreen(void) asm("func_80054D10");
@@ -34,18 +34,18 @@ void UpdateRankingScreen(void) {
     s32 state;
 
     g_MenuAltLayout = 0;
-    func_8005194C();
+    DrawMenuCourseView();
     func_8004CF30(-9);
     state = GameMenuBusy;
     if (state == 0) {
         g_UiScriptProgress2 = 0;
         GameMenuBusy = -1;
-        func_800489AC(0, 2, D_8019CDF8);
+        DrawFadingMenuSprites(0, 2, D_8019CDF8);
         RunTimedDrawScript(&D_80082724, &g_UiScriptProgress2, 1);
     } else if (state < 0) {
         switch (state) {
         case -1:
-            func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
+            DrawFadingMenuSprites(g_UiScriptProgress2, 2, D_8019CDF8);
             if (RunTimedDrawScript(&D_80082724, &g_UiScriptProgress2, 1) != 0) {
                 g_MenuOverlayPattern = -1;
                 if (g_PadEdge2 & 0x1000) {
@@ -83,14 +83,14 @@ void UpdateRankingScreen(void) {
             break;
         case -2:
             RunTimedDrawScript(&D_80082724, &g_UiScriptProgress2, -1);
-            func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
+            DrawFadingMenuSprites(g_UiScriptProgress2, 2, D_8019CDF8);
             if (g_UiScriptProgress2 > 0) {
                 break;
             }
             GameMenuBusy = D_8009B2C8;
             break;
         case -3:
-            if (func_8004D384(&g_UiScriptProgress2, 1, 0) == 0) {
+            if (DrawRankingTable(&g_UiScriptProgress2, 1, 0) == 0) {
                 break;
             }
             if (!(g_PadEdge2 & 0x8f0)) {
@@ -100,14 +100,14 @@ void UpdateRankingScreen(void) {
             GameMenuBusy = -4;
             break;
         case -4:
-            func_8004D384(&g_UiScriptProgress2, -1, 0);
+            DrawRankingTable(&g_UiScriptProgress2, -1, 0);
             if (g_UiScriptProgress2 > 0) {
                 break;
             }
             GameMenuBusy = -1;
             break;
         case -5:
-            if (func_8004D384(&g_UiScriptProgress2, 1, 1) == 0) {
+            if (DrawRankingTable(&g_UiScriptProgress2, 1, 1) == 0) {
                 break;
             }
             if (!(g_PadEdge2 & 0x8f0)) {
@@ -117,7 +117,7 @@ void UpdateRankingScreen(void) {
             GameMenuBusy = -6;
             break;
         case -6:
-            func_8004D384(&g_UiScriptProgress2, -1, 1);
+            DrawRankingTable(&g_UiScriptProgress2, -1, 1);
             if (g_UiScriptProgress2 > 0) {
                 break;
             }
@@ -134,7 +134,7 @@ pos:
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 2;
     RunTimedDrawScript(&D_80082724, &g_UiScriptProgress2, -1);
-    func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
+    DrawFadingMenuSprites(g_UiScriptProgress2, 2, D_8019CDF8);
     RunTimedDrawScript(&D_80081890, &g_UiScriptProgress, -1);
     RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
     if (g_UiScriptProgress > 0) {
@@ -315,18 +315,18 @@ do {
 extern s32 g_CarNamePlateStep asm("D_8009B31C");
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 
-void func_80051238(void);
-void func_8004FCE8(s32 arg0, s32 arg1, s32 arg2);
+void InstallCarModelSlot(void) asm("func_80051238");
+void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
 void func_8005131C(void);
 
 void EnterCarSelectScreen(void) asm("func_80055618");
 void EnterCarSelectScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
-    func_80051238();
+    InstallCarModelSlot();
     g_MenuScreen = 4;
     g_UiScriptProgress = 0;
     func_80055454();
-    func_8004FCE8(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
+    DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     func_8005131C();
     func_8004CF30(-9);
 }
@@ -380,7 +380,7 @@ void UpdateCarSelectScreen(void) {
     s32 u;
 
     g_MenuAltLayout = g_MenuAltLayoutSetting;
-    func_8004FCE8(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
+    DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     mode = 2;
     func_8005131C();
     func_8004CF30(-9);
@@ -408,7 +408,7 @@ void UpdateCarSelectScreen(void) {
                 func_8004F3EC(1, CountOwnedCars());
             }
             lowMode = mode & 0xFF;
-            func_800489AC(g_UiScriptProgress, lowMode, D_801E4138);
+            DrawFadingMenuSprites(g_UiScriptProgress, lowMode, D_801E4138);
             RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
             if ((RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) !=
                  0) &&
@@ -596,7 +596,7 @@ void UpdateCarSelectScreen(void) {
         if (g_GrandPrixMode == 0) {
             func_8004F3EC(1, CountOwnedCars());
         }
-        func_800489AC(g_UiScriptProgress, mode, D_801E4138);
+        DrawFadingMenuSprites(g_UiScriptProgress, mode, D_801E4138);
         RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
@@ -611,7 +611,7 @@ void UpdateCarSelectScreen(void) {
     }
     RunTimedDrawScript(cmdList, &g_UiScriptProgress, -1);
     RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
-    func_800489AC(g_UiScriptProgress, mode, D_801E4138);
+    DrawFadingMenuSprites(g_UiScriptProgress, mode, D_801E4138);
     if (g_UiScriptProgress <= 0) {
         switch (GameMenuBusy) {
         case 1:
@@ -746,8 +746,8 @@ extern u8 *D_8019C794;
 extern s32 g_RankingOption asm("D_8019C7C0");
 extern u8 D_801E4389[];
 extern u8 D_801E438A[];
-void func_80048ED8(u8 x, s32 useFlag);
-void func_80048D64(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
+void DrawTireCompoundSlider(u8 x, s32 useFlag) asm("func_80048ED8");
+void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, void *a10);
 
@@ -762,7 +762,7 @@ void UpdateCustomizeScreen(void) {
 
     ot = *(void **)0x1F800004;
     g_MenuAltLayout = g_MenuAltLayoutSetting;
-    func_8004FCE8(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
+    DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     mode = 2;
     func_8005131C();
     if (g_GrandPrixMode != 0) {
@@ -777,7 +777,7 @@ void UpdateCustomizeScreen(void) {
         D_8009B324 = 3;
         RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, -1);
         lowMode = mode & 0xFF;
-        func_800489AC(g_UiScriptProgress, lowMode, g_RankingOption);
+        DrawFadingMenuSprites(g_UiScriptProgress, lowMode, g_RankingOption);
         RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
         if ((RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = -1;
@@ -863,7 +863,7 @@ void UpdateCustomizeScreen(void) {
                         g_MenuSubCursor--;
                     }
                 }
-                func_80048ED8(g_MenuSubCursor, 0);
+                DrawTireCompoundSlider(g_MenuSubCursor, 0);
             }
         } else if (GameMenuBusy == -2) {
             if (RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 1) != 0) {
@@ -889,7 +889,7 @@ void UpdateCustomizeScreen(void) {
                         g_MenuSubCursor = 1;
                     }
                 }
-                func_80048D64((g_MenuSubCursor != 0) ? 0xDA : 0xB8, 0x68, 0x20, 0x20, 0);
+                DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xDA : 0xB8, 0x68, 0x20, 0x20, 0);
                 func_80046A2C(ot, 0xC2, 0x70, 0xC, 0x10, 0x60, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80046A2C(ot, 0xE3, 0x70, 0x10, 0x10, 0x6C, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80048B88(0xB8, 0x68, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, &g_MenuBlankCaption);
@@ -922,7 +922,7 @@ void UpdateCustomizeScreen(void) {
             } else {
                 g_MenuConfirmTimer -= 1;
                 RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 1);
-                func_80048ED8(g_MenuSubCursor, 1);
+                DrawTireCompoundSlider(g_MenuSubCursor, 1);
             }
         } else if (GameMenuBusy == -6) {
             if (g_MenuConfirmTimer <= 0) {
@@ -933,14 +933,14 @@ void UpdateCustomizeScreen(void) {
             } else {
                 g_MenuConfirmTimer -= 1;
                 RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 1);
-                func_80048D64((g_MenuSubCursor != 0) ? 0xDA : 0xB8, 0x68, 0x20, 0x20, 1);
+                DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xDA : 0xB8, 0x68, 0x20, 0x20, 1);
                 func_80046A2C(ot, 0xC2, 0x70, 0xC, 0x10, 0x60, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80046A2C(ot, 0xE3, 0x70, 0x10, 0x10, 0x6C, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80048B88(0xB8, 0x68, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, &g_MenuBlankCaption);
                 func_80048B88(0xDA, 0x68, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, &g_MenuBlankCaption);
             }
         }
-        func_800489AC(g_UiScriptProgress, mode, g_RankingOption);
+        DrawFadingMenuSprites(g_UiScriptProgress, mode, g_RankingOption);
         RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
@@ -950,7 +950,7 @@ void UpdateCustomizeScreen(void) {
     g_MenuHandlerIndex2 = 5;
     RunTimedDrawScript(cmdList, &g_UiScriptProgress, -1);
     RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
-    func_800489AC(g_UiScriptProgress, mode, g_RankingOption);
+    DrawFadingMenuSprites(g_UiScriptProgress, mode, g_RankingOption);
     if (g_UiScriptProgress <= 0) {
         switch (GameMenuBusy) {
         case 1:

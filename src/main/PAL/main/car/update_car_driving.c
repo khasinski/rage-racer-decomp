@@ -14,7 +14,7 @@ extern D8007Pair g_LaunchSpeedThresholds[] asm("D_8007DAC0");
 void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
-void func_8005C104(s32 index, s32 phase, s32 volume);
+void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104");
 
 /*
  * Car motion handler for state98 == 0 (normal driving): turns steering into a
@@ -54,10 +54,10 @@ void UpdateCarDriving(GameCarRuntime *car) {
 
     spec1 = g_CarSpec;
     if (spec1->revLimit + 2000 < car->field_134 && g_RacePhase >= 2) {
-        func_8005C104(0, 0x1800,
+        SetIndexedEffectVoice(0, 0x1800,
                       (car->field_134 - spec1->revLimit) / 100 + 128);
     } else {
-        func_8005C104(-1, 0, 0);
+        SetIndexedEffectVoice(-1, 0, 0);
     }
 
     spec = g_CarSpec;
@@ -69,12 +69,12 @@ void UpdateCarDriving(GameCarRuntime *car) {
             if (idx >= 101) {
                 idx = 100;
             }
-            func_8005C104(2, 0x1500, idx);
+            SetIndexedEffectVoice(2, 0x1500, idx);
         } else {
-            func_8005C104(-1, 0, 0);
+            SetIndexedEffectVoice(-1, 0, 0);
         }
     } else {
-        func_8005C104(-1, 0, 0);
+        SetIndexedEffectVoice(-1, 0, 0);
     }
 
     if (route->unk9C == 1) {
@@ -84,7 +84,7 @@ void UpdateCarDriving(GameCarRuntime *car) {
             route->unk48 > route->unk84) {
             route->state98 = 1;
             *(s16 *)&route->unk3E = 0;
-            func_8005C104(0, 0, 0);
+            SetIndexedEffectVoice(0, 0, 0);
             t = 1000 - (route->unk88 - 1000) * 8;
             if (t < 1000) {
                 t = 1000;
@@ -103,7 +103,7 @@ void UpdateCarDriving(GameCarRuntime *car) {
                     route->unk84 < aval) {
                     route->state98 = m9e;
                     *(s16 *)&route->unk3E = 0;
-                    func_8005C104(0, 0, 0);
+                    SetIndexedEffectVoice(0, 0, 0);
                     route->unk50 = -coords[0];
                     route->unk54 = car->facingBackwards;
                 }

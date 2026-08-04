@@ -29,7 +29,7 @@ void CdDataCallback(long arg0) asm("func_8006A994");
 void func_8006A58C(long arg0);
 void func_8006CDA0(void);
 void data_ready_callback(void) asm("func_8006CE78");
-void func_8006D0AC(long arg0, long arg1);
+void StClearRingRange(long arg0, long arg1) asm("func_8006D0AC");
 void func_8006D1B0(long arg0);
 void func_8006D1D0(void);
 
@@ -68,7 +68,7 @@ void StClearRing(void) {
     D_801E6C84 = 0;
     D_801E6C74 = 0;
     g_StDmaBusy = 0;
-    func_8006D0AC(0, g_StRingSize);
+    StClearRingRange(0, g_StRingSize);
     g_StInterruptPending = 0;
     D_8019C790 = 0;
     D_8009E69C = 0;

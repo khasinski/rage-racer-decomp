@@ -13,7 +13,7 @@ extern s32 g_BootLogoState asm("D_8007D53C");
 extern s32 g_BootLogoTimer asm("D_8007D540");
 extern s32 g_BootLogoHoldTimer asm("D_8007D544");
 void BeginIntroFmv(s32 arg0) asm("func_80019AF0");
-void func_800230B0(void);
+void DrawEndingStill(void) asm("func_800230B0");
 void DrawBootLogo(void) asm("func_8002317C");
 extern Matrix g_SceneColorMatrix asm("D_8019CAD4");
 extern Matrix g_DefaultColorMatrix asm("D_8007D548");
@@ -73,7 +73,7 @@ void UpdateBootLogoScene(void) {
         if (g_BootLogoTimer >= 10) {
             SetDispMask(1);
         }
-        func_800230B0();
+        DrawEndingStill();
         g_BootLogoTimer++;
         return;
     } else if (g_BootLogoTimer == 110) {

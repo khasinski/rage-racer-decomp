@@ -31,7 +31,7 @@ extern volatile long g_CdReadSavedSyncCallback asm("D_8007D7B4");
 extern volatile long g_CdReadSavedReadyCallback asm("D_8007D7B8");
 void CdGetSector2(void *arg0, long arg1) asm("func_8006A970");
 long CdPosToInt_Local(void *arg0) asm("func_8006AADC");
-void func_80063C38(void *arg0);
+void LibcPutString(void *arg0) asm("func_80063C38");
 long VSync(long mode) asm("func_8006DD30");
 long CdControl(long com, long param, long result) asm("func_8006A5A4");
 long CdStatus(void) asm("func_8006A3E8");
@@ -55,7 +55,7 @@ void CdReadDataReadyCallback(u_char arg0, long arg1) {
             if (g_CdReadSectorWords == 0x200) {
                 CdGetSector2(buf, 3);
                 if (CdPosToInt_Local(buf) != g_CdReadExpectedSector) {
-                    func_80063C38(&D_800111C4);
+                    LibcPutString(&D_800111C4);
                     *p = -1;
                 }
             }
@@ -103,7 +103,7 @@ long CdReadRetry(long arg0) {
     CdReadyCallback(0);
     if (CdStatus() & 0x10) {
         if ((VSync(-1) & 0x3F) == 0) {
-            func_80063C38(&D_800111DC);
+            LibcPutString(&D_800111DC);
         }
         CdControlF(1, 0);
         {
@@ -114,7 +114,7 @@ long CdReadRetry(long arg0) {
         return g_CdReadRemaining;
     }
     if (arg0 != 0) {
-        func_80063C38(&D_800111F4);
+        LibcPutString(&D_800111F4);
         CdControl(9, 0, 0);
         if (CdControl(2, CdLastPos(), 0) == 0) {
             long value = -1;

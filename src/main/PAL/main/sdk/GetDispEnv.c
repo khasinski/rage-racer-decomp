@@ -16,8 +16,8 @@ u_long func_80066594(void) {
 }
 
 u_long func_800669F0(long arg0, long arg1, u_long arg2);
-u_long func_80066A4C(long x, long y);
-u_long func_80066B18(long x, long y);
+u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y) asm("func_80066A4C");
+u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y) asm("func_80066B18");
 u_long func_80066BE4(short arg0, short arg1);
 u_long func_80066C2C(void *arg0);
 
@@ -31,8 +31,8 @@ void SetTexWindow(DrawPacket *pkt, void *arg1) {
 void SetDrawArea(DrawPacket *pkt, Rect *rect) asm("func_80066604");
 void SetDrawArea(DrawPacket *pkt, Rect *rect) {
     pkt->code = 2;
-    pkt->x0y0 = func_80066A4C(rect->x, rect->y);
-    pkt->x1y1 = func_80066B18((short)(rect->x + rect->w - 1), (short)(rect->y + rect->h - 1));
+    pkt->x0y0 = Gpu_BuildDrawAreaTopLeftCmd(rect->x, rect->y);
+    pkt->x1y1 = Gpu_BuildDrawAreaBottomRightCmd((short)(rect->x + rect->w - 1), (short)(rect->y + rect->h - 1));
 }
 
 void SetDrawOffset(DrawPacket *pkt, short *arg1) asm("func_80066688");

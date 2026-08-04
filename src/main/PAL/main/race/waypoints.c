@@ -104,7 +104,7 @@ void RunRaceIntroCamera(void *a) asm("func_8003C508");
 
 void UpdatePlayerCar(void *a) asm("func_8002DEFC");
 
-void func_8005D9F8(s32 a, s32 b);
+void UpdateLoadedAudioVoices(s32 a, s32 b) asm("func_8005D9F8");
 
 void DrawLapNumber(void) asm("func_80037C04");
 
@@ -122,7 +122,7 @@ void DrawCourseScenery(s32 a, s32 b, s32 c) asm("func_8003E1A4");
 
 void GetTrackZoneBlend(s32 a) asm("func_800350B4");
 
-void func_8005B190(s32 a, s32 b);
+void SetReverbDepth(s32 a, s32 b) asm("func_8005B190");
 
 void DrawPlayerTachometer(void) asm("func_8002F458");
 
@@ -499,7 +499,7 @@ void UpdateWaypointCollectScene(void) {
     if (g_RacePhase > 0) {
         UpdatePlayerCar(&g_PlayerCar);
     } else if (g_RacePhase == 0) {
-        func_8005D9F8(0, 1);
+        UpdateLoadedAudioVoices(0, 1);
     }
     DrawLapNumber();
 
@@ -516,7 +516,7 @@ void UpdateWaypointCollectScene(void) {
     DrawCourseObjects();
     DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
     GetTrackZoneBlend(g_PlayerTrackProgress);
-    func_8005B190(g_ReverbZoneDepth, g_ReverbZoneDepth);
+    SetReverbDepth(g_ReverbZoneDepth, g_ReverbZoneDepth);
     DrawPlayerTachometer();
     func_8004087C(*p);
     if (g_RacePhase < 3) {
@@ -551,7 +551,7 @@ void ApplyTrackReverbZone(s32 arg0) {
     }
 
     arg = result;
-    func_8005B190(arg, arg);
+    SetReverbDepth(arg, arg);
 }
 
 s32 func_80038288(s32 arg0) {

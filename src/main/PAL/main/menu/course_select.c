@@ -38,7 +38,7 @@ extern u8 g_TeamLogoClut[] asm("D_801E444C");
 extern u8 g_TeamLogoCanvas[] asm("D_801E6F2C");
 s32 RequestCarSelectAssets(void) asm("func_80018530");
 void func_8005E88C(void);
-void func_80049418(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80049418");
 void LoadImage(void *rect, void *data) asm("func_80065B24");
 void UploadTeamNameTexture(void *arg0, s32 arg1) asm("func_8001D530");
 
@@ -61,7 +61,7 @@ void EnterCourseSelectScreen(void) {
     func_8005E88C();
     g_MenuHandlerIndex = one;
     g_MenuScreen = one;
-    func_80049418(0, 0, 0, 0);
+    DrawBrowseArrows(0, 0, 0, 0);
 
     initValue = 0x7A120;
     mode = 0x3D090;
@@ -522,18 +522,18 @@ extern u8 g_MenuBlankCaption asm("D_80011BA0");
 void ResetCourseProgress(s32 arg0) asm("func_800212F0");
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
-void func_800489AC(s32 arg0, s32 arg1, s32 arg2);
+void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2) asm("func_800489AC");
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, s32 a10);
-void func_80048D64(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
-void func_80049418(s32, s32, s32, s32);
+void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
+void DrawBrowseArrows(s32, s32, s32, s32) asm("func_80049418");
 void func_8004CF30(s32 arg0);
 void func_8004F3EC(s32 arg0, s32 arg1);
-void func_8004FCE8(s32 arg0, s32 arg1, s32 arg2);
+void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
 s32 DrawClassChangeCurtain(s32 arg0) asm("func_8005026C");
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) asm("func_800506BC");
 void func_800509C4(s32 arg0);
-void func_8005194C(void);
+void DrawMenuCourseView(void) asm("func_8005194C");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8005E8E0(void);
 void UpdateCourseSelectScreen(void) asm("func_80053730");
@@ -557,8 +557,8 @@ void UpdateCourseSelectScreen(void) {
     } else {
         func_800509C4(g_TimeAttackPlateStep);
     }
-    func_8004FCE8(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
-    func_8005194C();
+    DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
+    DrawMenuCourseView();
     hdr = &D_80081818;
     if (g_GrandPrixMode != 0) {
         hdr = &D_800817A0;
@@ -568,8 +568,8 @@ void UpdateCourseSelectScreen(void) {
         g_MenuHintBarStep = 1;
         RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, -1);
         res = CanSelectPrevCourse();
-        func_80049418(1, 1, res, CanSelectNextCourse());
-        func_800489AC(g_UiScriptProgress, 2, g_CourseSelectOption);
+        DrawBrowseArrows(1, 1, res, CanSelectNextCourse());
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, g_CourseSelectOption);
         RunTimedDrawScript(hdr, &g_UiScriptProgress, 0);
         func_8004CF30(7);
         if ((RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
@@ -717,7 +717,7 @@ void UpdateCourseSelectScreen(void) {
                     PlaySoundCue(1);
                     g_MenuSubCursor = 0;
                 }
-                func_80048D64((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 0);
+                DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 0);
                 func_80046A2C(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80046A2C(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80048B88(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
@@ -750,7 +750,7 @@ void UpdateCourseSelectScreen(void) {
                     PlaySoundCue(1);
                     g_MenuSubCursor = (g_MenuSubCursor < g_RaceProgress->maxClassReached) ? g_MenuSubCursor + 1 : 0;
                 }
-                func_80048D64(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 0);
+                DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 0);
                 for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                     func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -776,7 +776,7 @@ void UpdateCourseSelectScreen(void) {
                 RunTimedDrawScript(&D_800827FC, &g_UiScriptProgress2, 0);
                 RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
                 RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
-                func_80048D64((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 1);
+                DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 1);
                 func_80046A2C(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80046A2C(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80048B88(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
@@ -812,7 +812,7 @@ void UpdateCourseSelectScreen(void) {
                         D_8009B368 = g_CourseProgress[0];
                     }
                     RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
-                    func_80048D64(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
+                    DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                     for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                         func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
                         func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -822,7 +822,7 @@ void UpdateCourseSelectScreen(void) {
             } else {
                 g_MenuConfirmTimer = cnt - 1;
                 RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
-                func_80048D64(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
+                DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                 for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                     func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -831,8 +831,8 @@ void UpdateCourseSelectScreen(void) {
             }
         }
         res = CanSelectPrevCourse();
-        func_80049418(1, 1, res, CanSelectNextCourse());
-        func_800489AC(g_UiScriptProgress, 2, g_CourseSelectOption);
+        DrawBrowseArrows(1, 1, res, CanSelectNextCourse());
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, g_CourseSelectOption);
         RunTimedDrawScript(hdr, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         func_8004CF30(7);
@@ -840,10 +840,10 @@ void UpdateCourseSelectScreen(void) {
         g_MenuHandlerIndex = -1;
         g_MenuHandlerIndex2 = 1;
         res = CanSelectPrevCourse();
-        func_80049418(-1, 1, res, CanSelectNextCourse());
+        DrawBrowseArrows(-1, 1, res, CanSelectNextCourse());
         RunTimedDrawScript(hdr, &g_UiScriptProgress, -1);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
-        func_800489AC(g_UiScriptProgress, 2, g_CourseSelectOption);
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, g_CourseSelectOption);
         func_8004CF30(-9);
         if (g_UiScriptProgress <= 0) {
             switch (GameMenuBusy) {
@@ -852,7 +852,7 @@ void UpdateCourseSelectScreen(void) {
                     g_MenuScreen = 3;
                     g_MenuHandlerIndex = 4;
                     func_8004F3EC(0, 0);
-                    func_80049418(0, 0, 0, 0);
+                    DrawBrowseArrows(0, 0, 0, 0);
                     g_CarSwapToIndex = -1;
                     g_MenuViewAngle = 0;
                     g_MenuViewAngleTarget = 0;

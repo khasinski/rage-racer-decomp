@@ -98,10 +98,10 @@ extern u8 D_80081B54;
 extern u8 g_UiChromeScript asm("D_80082460");
 
 void func_8005131C(void);
-void func_800489AC(s32 a, s32 b, s32 c);
+void DrawFadingMenuSprites(s32 a, s32 b, s32 c) asm("func_800489AC");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void RampTeamLogoCanvas(s32 a, s32 b) asm("func_8004B8B4");
-void func_8004A248(s32 a, s32 b);
+void DrawTeamLogoCanvas(s32 a, s32 b) asm("func_8004A248");
 s32 func_8004E724(s32 a, s32 b);
 
 void UpdateDesignModeScreen(void) asm("func_80057198");
@@ -114,7 +114,7 @@ void UpdateDesignModeScreen(void) {
     if (GameMenuBusy == 0) {
         RunTimedDrawScript(&D_800828EC, &g_UiScriptProgress2, -1);
         RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
-        func_800489AC(g_UiScriptProgress, 3, g_DesignModeOption);
+        DrawFadingMenuSprites(g_UiScriptProgress, 3, g_DesignModeOption);
         RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, 0);
         if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) {
             g_MenuOverlayPattern = -1;
@@ -165,7 +165,7 @@ void UpdateDesignModeScreen(void) {
             if (edge & 0x860) GameMenuBusy = 0;
             if (edge & 0x90) GameMenuBusy = 0;
         }
-        func_800489AC(g_UiScriptProgress, 3, g_DesignModeOption);
+        DrawFadingMenuSprites(g_UiScriptProgress, 3, g_DesignModeOption);
         RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
     } else {
@@ -173,13 +173,13 @@ void UpdateDesignModeScreen(void) {
         g_MenuHandlerIndex2 = 6;
         RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, -1);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
-        func_800489AC(g_UiScriptProgress, 3, g_DesignModeOption);
+        DrawFadingMenuSprites(g_UiScriptProgress, 3, g_DesignModeOption);
         if (g_UiScriptProgress <= 0) {
             switch (GameMenuBusy) {
             case 1:
                 g_MenuScreen = 7;
                 g_MenuHandlerIndex = 7;
-                func_8004A248(0, 0);
+                DrawTeamLogoCanvas(0, 0);
                 break;
             case 2:
                 g_MenuScreen = 9;

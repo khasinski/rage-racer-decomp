@@ -32,7 +32,7 @@ extern GfxState g_GpuFuncs asm("D_800941E0");
 extern char D_80013614[];
 extern Cache g_DispEnvCache asm("D_80094254");
 
-long func_80066CB0(void *arg0);
+long get_dx(void *arg0) asm("func_80066CB0");
 long GetDMAInterruptState(void) asm("func_8006EAEC");
 void *MemCopy(void *dst, void *src, long count) asm("func_800681BC");
 
@@ -51,7 +51,7 @@ Env *PutDispEnv(Env *arg0) {
     }
 
     if (g_GpuFuncs.graphType == 1 || g_GpuFuncs.graphType == 2) {
-        long r = func_80066CB0(s0);
+        long r = get_dx(s0);
         cmd = (((u_short)s0->x2 & 0xfff) << 12 | (r & 0xfff)) | 0x5000000;
     } else {
         cmd = (((u_short)s0->x2 & 0x3ff) << 10 | ((u_short)s0->x0 & 0x3ff)) | 0x5000000;

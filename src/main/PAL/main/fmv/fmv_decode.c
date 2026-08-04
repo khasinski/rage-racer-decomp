@@ -16,7 +16,7 @@ extern s32 g_StreamSectorCount asm("D_8019CA1C");
 extern s32 g_StreamLoc asm("D_801E8A90");
 extern char g_MsgFmvSector[] asm("D_80010D30");
 
-void func_80063FB0(volatile u32 *arg0, s32 arg1);
+void DecDCTin(volatile u32 *arg0, s32 arg1) asm("func_80063FB0");
 void DecDCTout(volatile u32 *arg0, s32 arg1) asm("func_8006402C");
 s32 PresentFmvFrame(volatile void *arg0) asm("func_8001ED3C");
 s32 StGetBackloc(void *arg0) asm("func_8006CF08");
@@ -33,7 +33,7 @@ void DecodeFmvFrame(void) {
         SetDispMask(1);
     }
 
-    func_80063FB0(g_FmvVlcBuffers[g_FmvVlcIndex], 3);
+    DecDCTin(g_FmvVlcBuffers[g_FmvVlcIndex], 3);
     DecDCTout(g_FmvStripBuffers[g_FmvStripIndex], (g_FmvStripWidth * g_FmvStripHeight) / 2);
 
     while (PresentFmvFrame(g_FmvVlcBuffers) == -1) {

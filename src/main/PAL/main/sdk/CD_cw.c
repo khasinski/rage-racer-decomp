@@ -30,7 +30,7 @@ extern char D_800138B0[];
 extern char D_800138B8[];
 extern char D_800138C8[];
 
-void func_80063C38(char *text);
+void LibcPutString(char *text) asm("func_80063C38");
 long func_8006AB5C(void);
 long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
 void CD_flush(void) asm("func_8006BAF0");
@@ -46,7 +46,7 @@ static inline void setAlarm(char *name) {
 static inline long getAlarm(void) {
     if (g_CdTimeoutDeadline.deadline < VSync(-1) ||
         g_CdTimeoutDeadline.count++ > 0x3C0000) {
-        func_80063C38(D_80013814);
+        LibcPutString(D_80013814);
         DebugPrintf(D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[g_CdLastCommand],
                       g_CdIntrNames[g_CdSyncStatus.sync], g_CdIntrNames[g_CdSyncStatus.ready]);
         CD_flush();

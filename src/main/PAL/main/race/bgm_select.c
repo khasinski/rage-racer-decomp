@@ -15,7 +15,7 @@ s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 extern u32 g_BgmShuffleIndex asm("D_8009E6CC");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
-void func_8001B488(void);
+void ShuffleBgmOrder(void) asm("func_8001B488");
 extern s32 g_BgmChangeDelay asm("D_8019CAF4");
 extern s32 g_BgmSelectCdTrack asm("D_8019CE00");
 extern s32 g_CdTrackEnded asm("D_8019C7BC");
@@ -83,7 +83,7 @@ void AdvanceBgmShuffleBag(u32 arg0) {
 
     g_BgmShuffleIndex++;
     if (g_BgmShuffleIndex == g_BgmTrackCount) {
-        func_8001B488();
+        ShuffleBgmOrder();
 
         first = g_BgmShuffleOrder;
         before = first - 1;
@@ -134,7 +134,7 @@ void UpdateBgmSelect(void) {
     if (g_PadEdge2 % 2) {
         s32 p;
         s32 h0;
-        func_8001B488();
+        ShuffleBgmOrder();
         h0 = g_BgmShuffleOrder[0];
         p = g_BgmSelectTrack;
         if (p == h0) {

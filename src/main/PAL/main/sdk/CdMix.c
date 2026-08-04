@@ -4,7 +4,7 @@
 void func_8006BA68(void);
 long func_8006C06C(void);
 void DMACallback(long arg0, long arg1) asm("func_8006DF94");
-void func_8006BF00(void);
+void CD_datasync(void) asm("func_8006BF00");
 
 long CdMix(void) asm("func_8006A94C");
 long CdMix(void) {
@@ -23,7 +23,7 @@ void CdDataCallback(long arg0) {
 }
 
 void func_8006A9B8(void) {
-    func_8006BF00();
+    CD_datasync();
 }
 
 CdlLOC *CdIntToPos(long i, CdlLOC *p) {

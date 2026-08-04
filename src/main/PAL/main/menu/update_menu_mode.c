@@ -27,7 +27,7 @@ void func_80047024(void *, s32, s32, s32, s32, s32, s32, s32, s32);
 s32 RunTimedDrawScript(void *, void *) asm("func_800487D8");
 void func_800496F0(s32, s32);
 void func_80046A2C(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32);
-void func_80047E60(s32);
+void DrawBitPatternOverlay(s32) asm("func_80047E60");
 
 /* Scene 8: the menu-mode per-frame dispatcher. Runs the two
  * g_MenuScreenDraw overlay slots and then g_MenuScreenUpdate[g_MenuScreen]. */
@@ -87,7 +87,7 @@ void UpdateMenuMode(void) {
             func_80046A2C(scratch, 0xF0, 0x1A1, 0x2C, 0xC, 0xB4, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3B);
         }
     }
-    func_80047E60(g_MenuOverlayPattern);
+    DrawBitPatternOverlay(g_MenuOverlayPattern);
 }
 
 extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");

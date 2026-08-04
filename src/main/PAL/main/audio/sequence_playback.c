@@ -22,9 +22,9 @@ extern s32 g_ReverbDepthL asm("D_801E6D84");
 extern s32 g_ReverbDepthR asm("D_801E6D88");
 extern s32 g_SeqVolume asm("D_801E6D94");
 
-void func_8005B190(s32 arg0, s32 arg1);
+void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
 void func_8005E600(s32 arg0);
-void func_8005E7A0(s32 arg0);
+void SetSequenceVolume(s32 arg0) asm("func_8005E7A0");
 void func_8005E8B8(void);
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2) asm("func_80072698");
 
@@ -58,7 +58,7 @@ void UpdateSequenceFadeOut(void) {
         }
     }
 
-    func_8005B190(g_ReverbDepthL, g_ReverbDepthR);
+    SetReverbDepth(g_ReverbDepthL, g_ReverbDepthR);
 
     value = g_SeqVolume;
     delta = g_SeqVolumeFadeStep;
@@ -71,10 +71,10 @@ void UpdateSequenceFadeOut(void) {
         func_8005E600(6);
         arg0 = 0x28;
         arg1 = 0x28;
-        func_8005B190(arg0, arg1);
+        SetReverbDepth(arg0, arg1);
     }
 
-    func_8005E7A0(g_SeqVolume);
+    SetSequenceVolume(g_SeqVolume);
 }
 
 void ApplyDuckedSequenceAudio(void) asm("func_8005EA14");
@@ -98,5 +98,5 @@ void ApplyDuckedSequenceAudio(void) {
     scaled <<= 0xE;
     volume = scaled >> 0x10;
     SsSeqSetVol(seq, volume, volume);
-    func_8005B190(0x3C, 0x3C);
+    SetReverbDepth(0x3C, 0x3C);
 }

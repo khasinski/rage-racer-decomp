@@ -155,11 +155,11 @@ extern s16 D_801E4FB4;
 extern s16 D_801F17A4;
 extern s16 D_801E4BA0;
 extern s16 D_8019C9AC;
-void func_80032BD0(void);
-void func_80038AB8(void *);
-s32 func_80030EB4(void *, s32);
-void func_8002BF68(void *, s32);
-void func_80031298(void *, s32, s16 *);
+void BuildTachoNeedleQuad(void) asm("func_80032BD0");
+void ClearCarMotionState(void *) asm("func_80038AB8");
+s32 FindTrackSegment(void *, s32) asm("func_80030EB4");
+void SeedCarLapProgress(void *, s32) asm("func_8002BF68");
+void UpdateCarTrackState(void *, s32, s16 *) asm("func_80031298");
 s32 IsCarFacingBackwards(GameCarTrackAngleWindow *) asm("func_8002CD08");
 void InitPlayerCar(GameCarRuntime *car)
 {
@@ -193,8 +193,8 @@ void InitPlayerCar(GameCarRuntime *car)
   value = g_GrandPrixSeries;
   g_RacePhase = 2;
   g_RaceSeries = value & 1;
-  func_80032BD0();
-  func_80038AB8(car);
+  BuildTachoNeedleQuad();
+  ClearCarMotionState(car);
   D_801F17B8 = 0;
   D_8019CAB0 = 0;
   D_801E8AA0 = 0;
@@ -225,7 +225,7 @@ void InitPlayerCar(GameCarRuntime *car)
   player->x = *((s32 *) (startData + 0x354));
   player->z = *((s32 *) (startData + 0x358));
   player->y = 0;
-  player->trackPointIndex = func_80030EB4(car, player->trackPointIndex);
+  player->trackPointIndex = FindTrackSegment(car, player->trackPointIndex);
   player->field_20 = 0;
   headingBase = 0xC00 - (g_RaceSeries << 11);
   player->field_24 = (headingBase - g_TrackPoints[player->trackPointIndex].angle) & 0xFFF;
@@ -234,10 +234,10 @@ void InitPlayerCar(GameCarRuntime *car)
   player->f164 = player->trackPointIndex;
   player->headingAngle = player->field_24;
   player->f14C = player->headingAngle;
-  func_8002BF68(car, 0);
+  SeedCarLapProgress(car, 0);
   trackState[0] = 0;
   trackState[1] = 0;
-  func_80031298(car, player->trackPointIndex, trackState);
+  UpdateCarTrackState(car, player->trackPointIndex, trackState);
   player->previousTrackProgress = player->trackProgress;
   *((Vec4 *) (&player->field_50)) = *((Vec4 *) (&player->field_20));
   player->field_60 = player->y;
@@ -705,8 +705,8 @@ extern s16 D_801E8A8C;
 void func_80069D18(void *rot, void *mtx);
 s32 *func_80069678(void *mtx, void *vec, void *out);
 s32 func_8002D2E8(s32 a, s32 b, s32 c, s32 d, s32 e);
-void func_80038CE8(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
-void func_8005D6EC(s32 id);
+void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) asm("func_80038CE8");
+void PlaySoundCue(s32 id) asm("func_8005D6EC");
 s32 CollidePlayerWithCars(GameCarRuntime *car)
 {
   SVec rotation;
@@ -950,7 +950,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
         sid = 0xB;
       }
     }
-    func_8005D6EC(sid);
+    PlaySoundCue(sid);
   }
 
   trackDelta = (*((s32 *) (((u8 *) car) + 0x34))) - (*((s32 *) (((u8 *) opponent) + 0x34)));
@@ -986,20 +986,20 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     }
     if ((((*((s16 *) (((u8 *) car) + 0xB8))) != D_801E408C) && ((*((s32 *) (((u8 *) car) + 0xA4))) >= 0x51)) && (D_801E8A8C >= 0xA))
     {
-      func_80038CE8(opponent, 0, 0, 4);
-      func_80038CE8(car, 0, 0, 4);
+      SetCarKnockback(opponent, 0, 0, 4);
+      SetCarKnockback(car, 0, 0, 4);
     }
     else
     {
       if ((*((s32 *) (((u8 *) car) + 0xA4))) >= 0x29)
       {
-        func_80038CE8(car, 0, 0, 4);
+        SetCarKnockback(car, 0, 0, 4);
       }
       else
       {
-        func_80038CE8(car, -((s16) velocityDelta.x), -((s16) velocityDelta.y), 4);
+        SetCarKnockback(car, -((s16) velocityDelta.x), -((s16) velocityDelta.y), 4);
       }
-      func_80038CE8(opponent, (s16) velocityDelta.x, (s16) velocityDelta.y, 4);
+      SetCarKnockback(opponent, (s16) velocityDelta.x, (s16) velocityDelta.y, 4);
     }
   }
   else
@@ -1017,13 +1017,13 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     velocityDelta.y = velocityDelta.y - (*((u16 *) (((u8 *) opponent) + 0x7E)));
     if ((((*((s16 *) (((u8 *) car) + 0xB8))) != D_801E408C) && ((*((s32 *) (((u8 *) car) + 0xA4))) >= 0x51)) && (D_801E8A8C >= 0xA))
     {
-      func_80038CE8(opponent, 0, 0, 4);
-      func_80038CE8(car, 0, 0, 4);
+      SetCarKnockback(opponent, 0, 0, 4);
+      SetCarKnockback(car, 0, 0, 4);
     }
     else
     {
-      func_80038CE8(car, -((s16) velocityDelta.x), -((s16) velocityDelta.y), 4);
-      func_80038CE8(opponent, 0, 0, 4);
+      SetCarKnockback(car, -((s16) velocityDelta.x), -((s16) velocityDelta.y), 4);
+      SetCarKnockback(opponent, 0, 0, 4);
     }
   }
   *((s16 *) (((u8 *) opponent) + 0x8A)) = 1;

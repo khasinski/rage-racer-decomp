@@ -7,13 +7,13 @@
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
 
-void func_80051238(void);
+void InstallCarModelSlot(void) asm("func_80051238");
 
 /* Flips the double-buffered showroom slot and re-registers it. */
 void SwapCarModelSlot(void) asm("func_80051280");
 void SwapCarModelSlot(void) {
     g_CarModelSlot = g_CarModelSlot < 1;
-    func_80051238();
+    InstallCarModelSlot();
 }
 
 s32 func_8001720C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -53,9 +53,9 @@ extern s32 D_8009E734;
 extern s32 D_801E4168;
 extern s32 D_1F800004;
 
-s32 func_80017848(s32 arg0, s32 arg1);
-void *func_80068F80(void *m, void *v0, void *v1);
-void func_8001DAB0(void *obj);
+s32 GetCarAssetIndex(s32 arg0, s32 arg1) asm("func_80017848");
+void *ApplyMatrixLV(void *m, void *v0, void *v1) asm("func_80068F80");
+void DrawPlayerCarModel(void *obj) asm("func_8001DAB0");
 
 void func_8005131C(void) {
     Matrix mtxA;
@@ -138,7 +138,7 @@ void func_8005131C(void) {
 
     g_MenuViewOffset = s2 + g_MenuViewOffset;
     s2 = g_MenuViewOffset / 1000;
-    D_8009E782 = func_80017848(s1, D_8019C7C8[s1].b0);
+    D_8009E782 = GetCarAssetIndex(s1, D_8019C7C8[s1].b0);
     D_8009E7B8 = D_8019C7C8[s1].b1;
 
     if (g_PadHeld & 2) {
@@ -171,7 +171,7 @@ void func_8005131C(void) {
     *p = *p + D_801E8268;
     BuildRotMatrixY(&mtxA, *p);
     vec.z = (s16)(-((s16)D_8009E698->unk4 / 2));
-    func_80068F80(&mtxA, &vec, &out);
+    ApplyMatrixLV(&mtxA, &vec, &out);
     BuildRotMatrixY(&mtxB, 0x800 - *p);
     BuildRotMatrixX(&mtxA, D_8009E6D4.rotation.x);
     MulMatrix2(&mtxB, &mtxA);
@@ -199,7 +199,7 @@ void func_8005131C(void) {
     D_8009E734 = *q;
     SelectModelBank(modelSlot);
     q--;
-    func_8001DAB0(q);
+    DrawPlayerCarModel(q);
 
     *q = (g_MenuAltLayout != 0 ? 23 : 52) - s3;
     q = &D_8009E6D4.position[1];

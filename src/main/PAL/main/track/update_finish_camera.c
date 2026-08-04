@@ -12,10 +12,10 @@ extern s32 g_CameraCarSpeed asm("D_801E3EB8");
 extern s32 g_CameraCarStepX asm("D_801E3ED8");
 extern s32 g_CameraCarStepZ asm("D_801E3EE0");
 
-void func_8002FC84(s32 arg0, s32 *out, s32 weight);
+void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight) asm("func_8002FC84");
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
-void func_8002C168(void *arg0);
+void AccumulateLapProgress(void *arg0) asm("func_8002C168");
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
 void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
 
@@ -23,7 +23,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
 /*
  * Camera track-follower: advances a look-ahead track point, aims the eye object
  * g_CameraCar (a GameRenderObject) toward the sampled centre-line point
- * (func_8002FC84 + atan2), nudges its position, then seeds the scratchpad view
+ * (InterpolateTrackPoint + atan2), nudges its position, then seeds the scratchpad view
  * state (view[2..4]=eye XYZ, view[6]=pitch, view[7]=yaw, view[8]=roll) from the
  * eye object and submits the render object (DrawPlayerCarModel). markerClamp is the
  * zeroed clamp record passed to the track-marker builder UpdateCarTrackState.
@@ -53,7 +53,7 @@ void UpdateFinishCamera(GameRenderObject *obj) {
     }
     index = rem % g_TrackPointCount;
 
-    func_8002FC84(index, coords, g_CameraCar.field_38);
+    InterpolateTrackPoint(index, coords, g_CameraCar.field_38);
     angle = 0x400 - Atan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCarZ);
 
     g_CameraCarHeading += GetAngleDelta(g_CameraCarHeading, angle);
@@ -73,7 +73,7 @@ void UpdateFinishCamera(GameRenderObject *obj) {
     g_CameraCar.x = g_CameraCarStepX / 256 + g_CameraCar.x;
     g_CameraCarZ = g_CameraCarStepZ / 256 + g_CameraCarZ;
 
-    func_8002C168(&g_CameraCar);
+    AccumulateLapProgress(&g_CameraCar);
     markerClamp[0] = 0;
     markerClamp[1] = 0;
     UpdateCarTrackState(&g_CameraCar, g_CameraCarTrackPoint, markerClamp);

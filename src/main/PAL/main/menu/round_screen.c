@@ -164,7 +164,7 @@ void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32
                    s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags);
 void LibcSprintf(void *dst, void *fmt, s32 v) asm("func_800632F0");
 void func_80016B7C(u32 a0, u32 a1, void *a2, u32 a3, u32 a4);
-void func_80021CD4(void *dst, s32 v);
+void FormatLapTime(void *dst, s32 v) asm("func_80021CD4");
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
 void DrawRoundScreen(void) asm("func_8001C974");
@@ -199,10 +199,10 @@ void DrawRoundScreen(void) {
         func_80016B7C(0x56, 0xb0, buf, 0x7812, col);
     } else {
         func_80016B7C(0x62, 0x7c, D_80010C68, 0x7812, col);
-        func_80021CD4(buf, g_BestTotalTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
+        FormatLapTime(buf, g_BestTotalTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
         func_80016B7C(0x6a, 0x8c, buf, 0x7812, col);
         func_80016B7C(0x6a, 0x9c, D_80010C70, 0x7812, col);
-        func_80021CD4(buf, g_BestLapTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
+        FormatLapTime(buf, g_BestLapTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
         func_80016B7C(0x6a, 0xac, buf, 0x7812, col);
     }
 }

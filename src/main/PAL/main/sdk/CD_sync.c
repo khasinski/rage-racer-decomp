@@ -22,7 +22,7 @@ extern char D_80013814[];
 extern char D_80013824[];
 extern char D_8001389C[];
 
-void func_80063C38(char *text);
+void LibcPutString(char *text) asm("func_80063C38");
 long func_8006AB5C(void);
 void CD_flush(void) asm("func_8006BAF0");
 long VSync(long mode) asm("func_8006DD30");
@@ -73,7 +73,7 @@ long CD_sync(long mode, u_char *result) {
     for (;;) {
         if (g_CdTimeoutDeadline < VSync(-1) ||
             g_CdTimeoutCounter++ > 0x3C0000) {
-            func_80063C38(D_80013814);
+            LibcPutString(D_80013814);
             DebugPrintf(D_80013824, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
                           g_CdCommandNames[g_CdLastCommand],
                           statusNames[intr->sync], statusNames[intr->ready]);

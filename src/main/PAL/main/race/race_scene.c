@@ -82,7 +82,7 @@ void UpdateRivalCueGate(void) asm("func_80041170");
 
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void func_8005E4A4(s32 arg0);
+void ForceAllEffectVoicesEnabled(s32 arg0) asm("func_8005E4A4");
 
 s32 Random15(void) asm("func_800632B0");
 
@@ -144,7 +144,7 @@ void func_8001F100(void);
 
 void LoadTrackTexturePageRange(void) asm("func_8001D30C");
 
-void func_8001D210(void);
+void InitTrackLighting(void) asm("func_8001D210");
 
 void func_8002C478(void *);
 
@@ -172,7 +172,7 @@ void InitPathScenery(void) asm("func_8003F700");
 
 void func_8005DC1C(void);
 
-void func_8001C974(void);
+void DrawRoundScreen(void) asm("func_8001C974");
 
 
 
@@ -243,17 +243,17 @@ void DrawPlayerTachometer(void) asm("func_8002F458");
 
 void DrawRaceHudLabels(s32 arg0) asm("func_80032E9C");
 
-void func_80033090(void);
+void DrawLapTimes(void) asm("func_80033090");
 
 void DrawTimeRemaining(s32 arg0) asm("func_800331F8");
 
-void func_80033230(void);
+void DrawRacePosition(void) asm("func_80033230");
 
 void DrawWrongWayWarning(void);
 
 void func_8003425C(s32 arg0);
 
-void func_8003479C(s32 arg0);
+void DrawRaceOptionMenu(s32 arg0) asm("func_8003479C");
 
 void GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
 
@@ -262,7 +262,7 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) asm("func_800352B8");
 void DrawSplitTimes(void) asm("func_800357BC");
 
 
-void func_8003AE2C(void);
+void UpdateRacePosition(void) asm("func_8003AE2C");
 
 void func_8003B0D4(void);
 
@@ -296,13 +296,13 @@ void func_800418D4(void);
 void UpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
 
 
-void func_8005B190(s32 arg0, s32 arg1);
+void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
 
-void func_8005BEA8(s32 arg0, s32 arg1);
+void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) asm("func_8005BEA8");
 
-void func_8005C31C(s32 arg0, s32 arg1, s32 arg2);
+void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C31C");
 
-void func_8005D9F8(s32 arg0, s32 arg1);
+void UpdateLoadedAudioVoices(s32 arg0, s32 arg1) asm("func_8005D9F8");
 
 void func_80069888(void *arg0);
 
@@ -465,7 +465,7 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
                 PlaySoundCue(0x3D);
             }
             }
-            func_8005E4A4(0);
+            ForceAllEffectVoicesEnabled(0);
             g_RaceFadeTimer = 0;
             g_MirrorViewEnabled = 0;
 
@@ -514,7 +514,7 @@ progress_failed:
         g_BestLapTimes[g_RaceSeries][g_CourseIndex][0] =
             g_RankingTimes[g_RaceSeries][g_CourseIndex][0];
         StartCdVolumeFade(8);
-        func_8005E4A4(0);
+        ForceAllEffectVoicesEnabled(0);
         g_RaceFadeTimer = 0;
         SeedFinishCamera(&g_PlayerCar);
     }
@@ -567,7 +567,7 @@ void EnterRaceScene(void) {
     InitRenderState(5);
     func_8001F100();
     LoadTrackTexturePageRange();
-    func_8001D210();
+    InitTrackLighting();
     g_TrackWalkStart = *(s32 *)g_TrackEventData;
     if (g_CourseIndex == 3) {
         g_LapCount = 6;
@@ -651,7 +651,7 @@ void EnterRaceScene(void) {
     } while (0);
     g_SceneId = 12;
     g_FrameSyncThreshold = 0x180;
-    func_8001C974();
+    DrawRoundScreen();
     DebugPrintf(g_MsgGame0Ok);
 
     (void)pad;
@@ -669,7 +669,7 @@ void UpdateRaceScene(void) {
     g_SceneTimer = value;
     option = 0;
     if ((u32)value < 0x3D) {
-        func_8001C974();
+        DrawRoundScreen();
         DrawFullscreenFadeTile(0xFF - ((g_SceneTimer - 6) * 0xB), 0x49);
     }
 
@@ -685,7 +685,7 @@ void UpdateRaceScene(void) {
 
         if (value != 0) {
             PauseCdAudio();
-            func_8005E4A4(0);
+            ForceAllEffectVoicesEnabled(0);
             g_RaceOptionCursor = 0;
             PlaySoundCue(2);
         } else if (g_RaceOptionCursor == (2 - g_GrandPrixMode)) {
@@ -710,7 +710,7 @@ void UpdateRaceScene(void) {
             g_RacePhase = 8;
         } else {
             g_PauseDebounce = 0x1E;
-            func_8005E4A4(1);
+            ForceAllEffectVoicesEnabled(1);
             if (g_RacePhase >= 2) {
                 ResumeCdAudio();
             }
@@ -747,7 +747,7 @@ void UpdateRaceScene(void) {
     }
 
     if (g_RacePaused != 0) {
-        func_8005B190(0x28, 0x28);
+        SetReverbDepth(0x28, 0x28);
         if ((g_PadEdge2 & 0x1000) && g_RaceOptionCursor > 0) {
             g_RaceOptionCursor--;
             PlaySoundCue(1);
@@ -761,16 +761,16 @@ void UpdateRaceScene(void) {
         }
 
         g_SceneTimer--;
-        func_8003479C(g_RaceOptionCursor);
+        DrawRaceOptionMenu(g_RaceOptionCursor);
         if (g_GrandPrixMode == 0) {
             DrawSplitTimes();
         }
         DrawRaceHudLabels(g_GrandPrixMode);
         if (g_GrandPrixMode != 0) {
             DrawTimeRemaining(g_RaceTimeRemaining);
-            func_80033230();
+            DrawRacePosition();
         }
-        func_80033090();
+        DrawLapTimes();
         func_8003425C(g_SceneTimer);
         GetTrackZoneBlend(g_PlayerTrackProgress);
         DrawPlayerTachometer();
@@ -853,7 +853,7 @@ update_race:
             option = UpdateLapAndFinish((void *)g_PlayerCar, g_GrandPrixMode);
             UpdateSplitTimes(g_PlayerCar, g_GrandPrixMode, option);
             if (option < 2) {
-                func_80033090();
+                DrawLapTimes();
             }
         }
 
@@ -865,7 +865,7 @@ update_race:
                 if (*(s16 *)(g_CourseProgress + 6) != 0) {
                     PlaySoundCue(0x3D);
                 }
-                func_8005E4A4(0);
+                ForceAllEffectVoicesEnabled(0);
                 g_RacePhase = 5;
                 g_RaceFadeTimer = 0;
                 SeedFinishCamera(g_PlayerCar);
@@ -875,8 +875,8 @@ update_race:
 
         if (g_GrandPrixMode != 0) {
             if (g_RacePhase < 4) {
-                func_8003AE2C();
-                func_80033230();
+                UpdateRacePosition();
+                DrawRacePosition();
             }
         }
         if (option < 2 && g_RacePhase < 5) {
@@ -886,7 +886,7 @@ update_race:
         if (g_RacePhase > 0) {
             UpdatePlayerCar(g_PlayerCar);
         } else if (g_RacePhase == 0) {
-            func_8005D9F8(0, 0);
+            UpdateLoadedAudioVoices(0, 0);
         }
 
         if ((g_RacePhase >= 2) && (g_GrandPrixMode != 0)) {
@@ -964,7 +964,7 @@ update_race:
         if (g_RacePhase >= 4) {
             g_ReverbZoneDepth = 0;
         }
-        func_8005B190(g_ReverbZoneDepth, g_ReverbZoneDepth);
+        SetReverbDepth(g_ReverbZoneDepth, g_ReverbZoneDepth);
         if ((g_RacePhase != 0) && (option < 2) && (g_RacePhase < 5)) {
             DrawPlayerTachometer();
         }
@@ -978,11 +978,11 @@ update_race:
             func_8004087C(g_PlayerTrackSection);
             TriggerRaceCues();
         } else {
-            func_8005BEA8(0, 0);
-            func_8005C31C(2, 0, 0);
-            func_8005C31C(3, 0, 0);
-            func_8005C31C(0, 0, 0);
-            func_8005C31C(1, 0, 0);
+            SetPanVoiceTargetVolume(0, 0);
+            SetStereoSoundCue(2, 0, 0);
+            SetStereoSoundCue(3, 0, 0);
+            SetStereoSoundCue(0, 0, 0);
+            SetStereoSoundCue(1, 0, 0);
         }
         RecordReplayFrame();
     }

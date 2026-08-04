@@ -10,7 +10,7 @@ typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
 extern s32 g_OptionMenuCursor asm("D_8019C7B4");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
-void func_800236C8(s32 arg0, s32 arg1);
+void DrawMenuCursorArrow(s32 arg0, s32 arg1) asm("func_800236C8");
 extern s32 g_SoundOptionCursor asm("D_8019C868");
 extern s32 g_ClassRecordMenuCursor asm("D_8019C97C");
 extern s32 g_ScreenOffsetX asm("D_801E4B8C");
@@ -22,7 +22,7 @@ extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
 extern Struct12 D_8007D5D4[];
 s32 func_800153FC(void);
 s32 RequestTrackLoad(void) asm("func_8001965C");
-void func_80023B08(s32 arg0);
+void StartOptionMenuExit(s32 arg0) asm("func_80023B08");
 /* The six rows of the setup menu, plus the cursor when g_GameMode is 1. */
 void DrawOptionRootMenu(void) asm("func_80023BB4");
 void DrawOptionRootMenu(void);
@@ -41,7 +41,7 @@ s32 AddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 
 extern s32 g_MonoOutput asm("D_801E6C70");
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
-void func_80023750(s32 arg0);
+void DrawOptionHintBar(s32 arg0) asm("func_80023750");
 s32 func_8001705C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 /* One volume slider row: `level` filled 4x0x18 bars between two end glyphs. */
 void DrawVolumeBar(s32 arg0, s32 arg1) asm("func_800249A4");
@@ -71,7 +71,7 @@ void DrawOptionRootMenu(void) {
     state = g_GameMode;
     *scratch = tmp;
     if (state == 1) {
-        func_800236C8(0x14, (g_OptionMenuCursor * 32) + 0x94);
+        DrawMenuCursorArrow(0x14, (g_OptionMenuCursor * 32) + 0x94);
     }
 }
 
@@ -124,7 +124,7 @@ void UpdateOptionRootMenu(void) {
                 g_CourseIndex = (Random15() & 0xFFF) % 3;
             }
             RequestTrackLoad();
-            func_80023B08(0x1B);
+            StartOptionMenuExit(0x1B);
             break;
         case 4:
             g_GameMode = 6;
@@ -132,7 +132,7 @@ void UpdateOptionRootMenu(void) {
             g_ScreenOffsetEditY = g_ScreenOffsetY;
             break;
         case 5:
-            func_80023B08(2);
+            StartOptionMenuExit(2);
             break;
         }
     } else {
@@ -141,7 +141,7 @@ void UpdateOptionRootMenu(void) {
         masked = buttons & 0x90;
         if (masked) {
             PlaySoundCue(3);
-            func_80023B08(2);
+            StartOptionMenuExit(2);
         }
     }
 }
@@ -198,7 +198,7 @@ void DrawClassRecordGrid(void) {
     next = func_80017138(base, next, 0x24, 0x38, 0x24, 0x18, 0x38, 0x90, 0x7F40);
     next = func_80017138(base, next, 0x24, 0x58, 0x1C, 0x18, 0xD0, 0x60, 0x7F40);
     *(s32 *)0x1F800000 = next;
-    func_800236C8(0x14, (g_ClassRecordMenuCursor * 32) + 56);
+    DrawMenuCursorArrow(0x14, (g_ClassRecordMenuCursor * 32) + 56);
     next = *(s32 *)0x1F800000;
 
     for (i = 0; i < 11; i++) {
@@ -229,7 +229,7 @@ void DrawClassRecordGrid(void) {
     next = func_80017390(base, next, 0x3E);
     next = func_80017390(base + 4, next, 0x3C);
     *(s32 *)0x1F800000 = next;
-    func_80023750(0);
+    DrawOptionHintBar(0);
 }
 
 /* g_GameModeHandlers[2]: two-row menu into the class-record grid. */
@@ -348,7 +348,7 @@ void DrawSoundOptionScreen(void) {
     s32 n;
 
 
-    func_800236C8(0x14, (g_SoundOptionCursor * 32) + 56);
+    DrawMenuCursorArrow(0x14, (g_SoundOptionCursor * 32) + 56);
     color = 0x7F;
 
     scratch = (s32 *)0x1F800000;
@@ -363,7 +363,7 @@ void DrawSoundOptionScreen(void) {
     n = func_80017138(base, n, 0x24, 0x98, 0x1C, s3, 0xD0, 0x60, 0x7F40);
     *scratch = n;
 
-    func_80023750(2);
+    DrawOptionHintBar(2);
 
     n = *scratch;
     if (g_MonoOutput != 0) {

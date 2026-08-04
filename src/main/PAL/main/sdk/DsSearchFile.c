@@ -18,9 +18,9 @@ extern const char D_80013978[];
 extern const char D_80013998[];
 extern const char D_800139A4[];
 
-extern long func_8006C560(void);
+extern long CD_newmedia(void) asm("func_8006C560");
 extern long DS_searchdir(long type, char *name) asm("func_8006C83C");
-extern long func_8006C8E4(long arg0);
+extern long CD_cachefile(long arg0) asm("func_8006C8E4");
 extern long CD_namecmp(char *a, char *b) asm("func_8006C53C");
 
 Rec * DsSearchFile(Rec *out, char *path) asm("func_8006C25C");
@@ -35,7 +35,7 @@ Rec *DsSearchFile(Rec *out, char *path) {
     char *nm;
 
     if (g_CdCachedShellOpenCount != g_CdShellOpenCount) {
-        if (!func_8006C560()) {
+        if (!CD_newmedia()) {
             return 0;
         }
         g_CdCachedShellOpenCount = g_CdShellOpenCount;
@@ -80,7 +80,7 @@ Rec *DsSearchFile(Rec *out, char *path) {
         return 0;
     }
     *b = 0;
-    if (func_8006C8E4(type) == 0) {
+    if (CD_cachefile(type) == 0) {
         if (g_CdDebugLevel > 0) {
             DebugPrintf(D_8001395C);
         }

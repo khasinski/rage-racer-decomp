@@ -6,8 +6,8 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-void func_8002FC84(s32 arg0, s32 *out, s32 weight);
-s32 func_8002FD9C(s32 arg0, s32 arg1);
+void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight) asm("func_8002FC84");
+s32 SmoothTrackAngle(s32 arg0, s32 arg1) asm("func_8002FD9C");
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 
@@ -88,8 +88,8 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
         }
     }
 
-    func_8002FC84(index, coords, car->field_38);
-    angle = 0x1000 - func_8002FD9C(index, car->field_38);
+    InterpolateTrackPoint(index, coords, car->field_38);
+    angle = 0x1000 - SmoothTrackAngle(index, car->field_38);
 
     value = rsin(angle) * lateral;
     if (value < 0) {

@@ -85,7 +85,7 @@ extern s32 g_PlayerSpeed asm("D_8009E778");
 extern s32 g_PlayerTrackPoint asm("D_8009E704");
 
 s32 rcos(s32 arg0) asm("func_80068634");
-void func_8005BEA8(s32 arg0, s32 arg1);
+void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) asm("func_8005BEA8");
 
 void func_8004087C(s16 arg) {
     s32 base;
@@ -182,11 +182,11 @@ void func_8004087C(s16 arg) {
     a0v = 0;
     a1v = 0;
     }
-    func_8005BEA8(a0v, a1v);
+    SetPanVoiceTargetVolume(a0v, a1v);
 }
 
 s32 rsin(s32 arg0) asm("func_80068568");
-void func_8005C31C(s32 arg0, s32 arg1, s32 arg2);
+void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C31C");
 
 typedef struct TrackSeg {
     s32 lo;    /* 0x00 */
@@ -312,15 +312,15 @@ load:
 
     if (s6 == 1) {
         if (g_MirrorMode != 0) {
-            func_8005C31C(2, (s16)s5, (s16)a2v);
+            SetStereoSoundCue(2, (s16)s5, (s16)a2v);
         } else {
-            func_8005C31C(2, (s16)a2v, (s16)s5);
+            SetStereoSoundCue(2, (s16)a2v, (s16)s5);
         }
     } else {
         if (g_MirrorMode != 0) {
-            func_8005C31C(3, (s16)s5, (s16)a2v);
+            SetStereoSoundCue(3, (s16)s5, (s16)a2v);
         } else {
-            func_8005C31C(3, (s16)a2v, (s16)s5);
+            SetStereoSoundCue(3, (s16)a2v, (s16)s5);
         }
     }
 }

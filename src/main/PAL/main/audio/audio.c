@@ -196,7 +196,7 @@ s32 func_800731CC(void);
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
-s32 func_8005E4EC(s32 slot, s32 header, s32 body, s32 seq);
+s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E4EC");
 s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) asm("func_8005BA20");
 s32 func_8005E600(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0) asm("func_8005B948");
@@ -246,7 +246,7 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
         if (slotReg == 1 || slotReg == 6) {
         {
             asm volatile("" ::: "$6");
-            ret = func_8005E4EC(seqSlotArg, header, bodyReg, table);
+            ret = OpenVabSequenceSlot(seqSlotArg, header, bodyReg, table);
             return (s16)ret;
         }
         }
@@ -1787,7 +1787,7 @@ extern s32 g_EngineSoundBank asm("D_801E6CBC");
 extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 extern s32 g_EngineSoundCurves[] asm("D_801E446C");
 
-void func_8005B2F0(s32 slot, s32 tone, s32 vab_slot);
+void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vab_slot) asm("func_8005B2F0");
 void func_8005BF30(void);
 void func_8005C6C0(void);
 void func_8005C168(void);
@@ -1884,7 +1884,7 @@ void UpdateLoadedAudioVoices(s32 value, s32 bank) {
         do {
             if (*slot++ != 0 &&
                 g_SoundSlotTone[index][0] != g_SoundSlotTone[index][1]) {
-                func_8005B2F0(index, bank, 3);
+                PlaySoundSlotVoice(index, bank, 3);
             }
             index++;
         } while (index < 6);
@@ -1924,13 +1924,13 @@ void SetDefaultReverbDepth(void) {
 extern s32 g_ReverbFadeStep asm("D_801E6D8C");
 void func_8007865C(s32 arg0);
 void func_80072B04(s32 arg0);
-void func_8005B190(s32 arg0, s32 arg1);
+void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
 void func_8005E7DC(void);
 void InitSequenceAudio(void) asm("func_8005DBD8");
 void InitSequenceAudio(void) {
     func_8007865C(0);
     func_80072B04(0x12);
-    func_8005B190(0x28, 0x28);
+    SetReverbDepth(0x28, 0x28);
     g_ReverbFadeStep = 0;
     func_8005E7DC();
 }
@@ -1944,7 +1944,7 @@ extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
 extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 extern s32 g_CarSoundVolumeScales[] asm("D_800125FC");
 
-s32 func_80050FA8(s32 arg0);
+s32 GetOwnedCarAssetIndex(s32 arg0) asm("func_80050FA8");
 
 void InitEffectVoiceRuntime(void) asm("func_8005DC1C");
 void InitEffectVoiceRuntime(void) {
@@ -2007,7 +2007,7 @@ void InitEffectVoiceRuntime(void) {
 
     SetEffectVoicesEnabled(1);
     SetReverbPreset(2, 0, 0);
-    SetLoadedTableVolumeScale(g_CarSoundVolumeScales[func_80050FA8(g_PlayerCarIndex)]);
+    SetLoadedTableVolumeScale(g_CarSoundVolumeScales[GetOwnedCarAssetIndex(g_PlayerCarIndex)]);
 }
 
 extern s32 g_ReverbDepthL asm("D_801E6D84");
@@ -2109,7 +2109,7 @@ extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
 
 long SsUtKeyOffV(long voice) asm("func_80078018");
-void func_8005C09C(s32 arg0);
+void StartIndexedEffectVoice(s32 arg0) asm("func_8005C09C");
 void func_8005C0E4(void);
 
 void ForceBasicEffectVoicesEnabled(s32 enabled) asm("func_8005DEF0");
@@ -2203,7 +2203,7 @@ void ForceIndexedEffectVoiceEnabled(s32 enabled) {
             return;
         }
         raw = (index * 3) << 2;
-        func_8005C09C(INDEXED_EFFECT(raw).tone);
+        StartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
     } else {
         func_8005C0E4();
     }

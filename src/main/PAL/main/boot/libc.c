@@ -437,7 +437,7 @@ s32 LibcStrlen(u8 *arg0) {
 
 extern u8 g_LibcNullText[] asm("D_800132C0");
 
-void func_80063C88(s32 arg0);
+void LibcPutChar(s32 arg0) asm("func_80063C88");
 
 void LibcPutString(u8 *arg0) asm("func_80063C38");
 void LibcPutString(u8 *arg0) {
@@ -450,7 +450,7 @@ void LibcPutString(u8 *arg0) {
     }
 
     while (value = *ptr++, value != 0) {
-        func_80063C88(value);
+        LibcPutChar(value);
     }
 }
 

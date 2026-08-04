@@ -47,7 +47,7 @@ extern u16 D_801E6F2C;
 extern s32 GetClut(s16 x, s16 y) asm("func_80064C7C");
 extern void LoadImage(void *rect, void *data) asm("func_80065B24");
 extern s32 rsin(s32 angle) asm("func_80068568");
-extern void func_800468FC(s32 ot, s16 x, s16 y, s16 w, s16 h);
+extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h) asm("func_800468FC");
 extern void func_80046A2C(
     s32 ot,
     s16 x,
@@ -107,8 +107,8 @@ extern void func_8004711C(
     s32 ot, s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b, u8 alpha);
 extern void func_80047460(
     s32 ot, s16 x, s16 y, s16 w, s32 h, u8 r, u8 g, u8 b, u8 alpha);
-extern void func_80047BD4(
-    s16 x, s32 y, s16 flags, s32 value, u8 r, u8 g, u8 b, s32 clut, s32 primitiveCount);
+extern void GameDrawNumber(
+    s16 x, s32 y, s16 flags, s32 value, u8 r, u8 g, u8 b, s32 clut, s32 primitiveCount) asm("func_80047BD4");
 
 void func_80047024(
     void *arg0,
@@ -345,9 +345,9 @@ void func_8004A248(s32 arg0, s32 arg1)
     gy2 = gyRaw + (D_8007F948 / 8);
     clut = (D_8007BEE4.ty >> 4) & 0x10;
     clut |= (D_8007BEE4.tx & 0x3FF) >> 6;
-    func_800468FC(ot, 0, 0, 0x140, 0x1E0);
+    SetDrawClipRect(ot, 0, 0, 0x140, 0x1E0);
     func_80046E00(ot, x2, sx, x88, sx, x2, w1, x88, w1, gx, gy, gx2, gy, gx, gy2, gx2, gy2, 0x7F, 0x7F, 0x7F, 0x27F, 1, 0, clut);
-    func_800468FC(ot, x0 + 1, kreg + 2, 0x80, 0x100);
+    SetDrawClipRect(ot, x0 + 1, kreg + 2, 0x80, 0x100);
   }
   d = D_8007FB0C - 0xE;
   if (d >= 0)
@@ -424,10 +424,10 @@ void func_8004A248(s32 arg0, s32 arg1)
     clut |= (D_8007BEE4.tx & 0x3FF) >> 6;
     w1 = kreg + 0x83;
     xb = x0 + 0x41;
-    func_800468FC(ot, 0, 0, 0x140, 0x1E0);
+    SetDrawClipRect(ot, 0, 0, 0x140, 0x1E0);
     asm("" : "=r"(gx2) : "0"(gx2));
     func_80046E00(ot, x0, kreg, xb, kreg, x0, w1, xb, w1, gx, gy, gx2, gy, gx, gy2, gx2, gy2, 0x7F, 0x7F, 0x7F, pal & 0xFFFF, 1, 0, clut);
-    func_800468FC(ot, x0 + 1, kreg + 2, 0x40, 0x80);
+    SetDrawClipRect(ot, x0 + 1, kreg + 2, 0x40, 0x80);
   }
   d = D_8007FB10 - 8;
   if (d >= 0)
@@ -567,11 +567,11 @@ void func_8004A248(s32 arg0, s32 arg1)
     yA8 = (s16) (kreg + 0x14);
     sx = 0x3F;
     sx = x0 - sx;
-    func_80047BD4(sx, yA8, 3, D_801E444C[D_8007F950] & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    GameDrawNumber(sx, yA8, 3, D_801E444C[D_8007F950] & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
     yB8 = (s16) (kreg + 0x44);
-    func_80047BD4(sx, yB8, 3, (D_801E444C[D_8007F950] >> 5) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    GameDrawNumber(sx, yB8, 3, (D_801E444C[D_8007F950] >> 5) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
     yC8 = (s16) (kreg + 0x74);
-    func_80047BD4(sx, yC8, 3, (D_801E444C[D_8007F950] >> 10) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    GameDrawNumber(sx, yC8, 3, (D_801E444C[D_8007F950] >> 10) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
     {
       s32 alpha;
       alpha = 0xFF;

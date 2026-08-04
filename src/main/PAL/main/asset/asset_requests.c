@@ -11,10 +11,10 @@ extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 s32 func_80017C78(s32 assetIndex, void *dst);
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
-void func_8001A498(void);
-void func_80034DCC(void *arg0);
-void func_8005B768(s32 arg0, void *arg1, void *arg2, s32 arg3);
-s32 func_8005B89C(void);
+void UploadLoadBufferImage(void) asm("func_8001A498");
+void InstallResourceData(void *arg0) asm("func_80034DCC");
+void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, s32 arg3) asm("func_8005B768");
+s32 PollAudioSlotLoad(void) asm("func_8005B89C");
 void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 void DrawSync(long mode) asm("func_800658FC");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
@@ -35,7 +35,7 @@ void LoadBootAssets(void) {
         base = (u8 *)g_LoadBuffer;
         loaded = (u8 *)func_80017C78(1, base);
         if (loaded != 0) {
-            func_8001A498();
+            UploadLoadBufferImage();
             next = loaded + (s32)base;
             g_AssetBlockPtr = next;
             g_AssetLoadState = 2;
@@ -51,19 +51,19 @@ void LoadBootAssets(void) {
         break;
     case 3:
         if (func_80017C78(3, g_AssetLoadCursor) != 0) {
-            func_8005B768(0, g_AssetBlockPtr, g_AssetLoadCursor, 0);
+            StartAudioSlotLoad(0, g_AssetBlockPtr, g_AssetLoadCursor, 0);
             g_AssetLoadState = 4;
         }
         break;
     case 4:
-        if ((func_8005B89C() << 16) != 0) {
+        if ((PollAudioSlotLoad() << 16) != 0) {
             g_AssetLoadState = 5;
         }
         break;
     case 5:
         loaded = (u8 *)func_80017C78(4, g_AssetLoadCursor);
         if (loaded != 0) {
-            func_80034DCC(g_AssetLoadCursor);
+            InstallResourceData(g_AssetLoadCursor);
             next = g_AssetLoadCursor;
             __asm__ volatile("" : "=r"(next) : "0"(next));
             nextState = 6;

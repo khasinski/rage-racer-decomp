@@ -91,7 +91,7 @@ s32 func_80016EC4(
 
 void LibcSprintf(void *dst, void *fmt, ...) asm("func_800632F0");
 void func_800200D0(void);
-void *func_80021CD4(void *dst, s32 value);
+void *FormatLapTime(void *dst, s32 value) asm("func_80021CD4");
 
 void DrawSeriesClearedWash(s32 x, s32 y) asm("func_8001FC30");
 void DrawSeriesClearedWash(s32 x, s32 y) {
@@ -403,7 +403,7 @@ void DrawRaceTimePanel(s32 arg0) {
 
     text[0] = 0x54;
     text[1] = 0x2F;
-    func_80021CD4(&text[2], g_RaceTotalTime);
+    FormatLapTime(&text[2], g_RaceTotalTime);
 
     color = 0x7812;
     if (g_BestTotalTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode] == g_RaceTotalTime) {
@@ -434,7 +434,7 @@ void DrawRaceTimePanel(s32 arg0) {
             text[0] = i + 0x31;
             columnBase = 0xB0;
             textPos = column * 0xC + (base + columnBase);
-            func_80021CD4(&text[2], *times);
+            FormatLapTime(&text[2], *times);
             color = 0x7812;
             if (*(s16 *)((char *)selectedPtr - 0x22) == i) {
                 color = 0x784C;

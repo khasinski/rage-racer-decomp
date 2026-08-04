@@ -122,7 +122,7 @@ extern s32 g_SetupArrowPulse asm("D_8007C13C");
 /* One of the four controller-screen animation counters. */
 extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
 
-void func_80023750(s32 arg0);
+void DrawOptionHintBar(s32 arg0) asm("func_80023750");
 
 /*
  * Game mode 10: pick the steering play with left/right, confirm with
@@ -159,7 +159,7 @@ void UpdateNegconSteerPlayScreen(void) {
     }
     g_ControllerSceneAngleX = -896;
     DrawNegconSteerPlayScreen();
-    func_80023750(4);
+    DrawOptionHintBar(4);
     DrawControllerSetupScene(1);
 }
 
@@ -241,6 +241,6 @@ void UpdateNegconMaxTwistScreen(void) {
     }
     g_ControllerSceneAngleX = -896;
     DrawNegconMaxTwistScreen();
-    func_80023750(4);
+    DrawOptionHintBar(4);
     DrawControllerSetupScene(1);
 }

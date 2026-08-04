@@ -7,8 +7,8 @@ extern u_short g_VramWidth[] asm("D_800941EC");
 extern u_short g_VramHeight[] asm("D_800941EE");
 extern u_long g_ClearImagePacket[] asm("D_8009B9B0");
 
-u_long func_8006764C(long arg0);
-void func_80067600(void *arg0);
+u_long _param(long arg0) asm("func_8006764C");
+void Gpu_StartDmaTransfer(void *arg0) asm("func_80067600");
 
 /* Driver-table slot +0x0C: the worker ClearImage enqueues. Fills the rect
  * with GP0(02h) when both x and w are 64-aligned, otherwise draws a flat
@@ -67,9 +67,9 @@ long Gpu_ClearImage(short *env, u_long rgb) {
         g_ClearImagePacket[6] = ((u_long *)env)[0];
         g_ClearImagePacket[7] = ((u_long *)env)[1];
         *p8 = 0x03FFFFFF;
-        g_ClearImagePacket[9] = func_8006764C(3) | c3;
-        g_ClearImagePacket[10] = func_8006764C(4) | 0xE4000000;
-        g_ClearImagePacket[11] = func_8006764C(5) | c5;
+        g_ClearImagePacket[9] = _param(3) | c3;
+        g_ClearImagePacket[10] = _param(4) | 0xE4000000;
+        g_ClearImagePacket[11] = _param(5) | c5;
     } else {
         g_ClearImagePacket[0] = 0x04FFFFFF;
         g_ClearImagePacket[1] = 0xE6000000;
@@ -78,7 +78,7 @@ long Gpu_ClearImage(short *env, u_long rgb) {
         g_ClearImagePacket[4] = ((u_long *)env)[1];
     }
 
-    func_80067600(&g_ClearImagePacket[0]);
+    Gpu_StartDmaTransfer(&g_ClearImagePacket[0]);
     return 0;
 }
 

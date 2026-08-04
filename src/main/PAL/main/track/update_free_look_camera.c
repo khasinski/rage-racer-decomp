@@ -19,10 +19,10 @@ extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
 extern GameRenderObject g_CameraCar asm("D_801E3E14");
 
-void func_8002FC84(s32 arg0, s32 *out, s32 weight);
+void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight) asm("func_8002FC84");
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
-void func_8002C168(void *arg0);
+void AccumulateLapProgress(void *arg0) asm("func_8002C168");
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
 
 
@@ -66,7 +66,7 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     }
     index = rem % g_TrackPointCount;
 
-    func_8002FC84(index, coords, g_CameraCar.field_38);
+    InterpolateTrackPoint(index, coords, g_CameraCar.field_38);
     angle = 0x400 - Atan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCar.z);
     g_CameraCarHeading += GetAngleDelta(g_CameraCarHeading, angle);
     g_CameraCar.angleY = g_CameraCarHeading;
@@ -110,7 +110,7 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     }
 
     g_CameraCar.angleY = g_FreeCameraAngleOffset[1] + g_CameraCar.angleY;
-    func_8002C168(&g_CameraCar);
+    AccumulateLapProgress(&g_CameraCar);
     markerClamp[0] = 0;
     markerClamp[1] = 0;
     UpdateCarTrackState(&g_CameraCar, g_CameraCar.trackPointIndex, markerClamp);

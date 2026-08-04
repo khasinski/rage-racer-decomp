@@ -17,7 +17,7 @@ extern char D_80013814[];
 extern char D_80013824[];
 
 long VSync(long mode) asm("func_8006DD30");
-void func_80063C38(char *);
+void LibcPutString(char *) asm("func_80063C38");
 void CD_flush(void) asm("func_8006BAF0");
 
 /* Waits for the CD data transfer to finish, with a 0x3C0-vblank / 0x3C0000-
@@ -41,7 +41,7 @@ long CD_datasync(long arg) {
     do {
         long status;
         if (VSync(-1) > g_CdTimeoutDeadline || g_CdTimeoutCounter++ > 0x3C0000) {
-            func_80063C38(D_80013814);
+            LibcPutString(D_80013814);
             DebugPrintf(D_80013824,
                             ((CdAlarm *)&g_CdTimeoutDeadline)->name,
                             b60[g_CdLastCommand],

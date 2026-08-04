@@ -18,7 +18,7 @@ extern long g_DrawSyncCallback asm("D_800941F4");
 
 extern void Gpu_ArmTimeout(void) asm("func_80067F04");
 extern long Gpu_CheckTimeout(void) asm("func_80067F38");
-extern void func_80067984(void);
+extern void Gpu_ExecuteQueue(void) asm("func_80067984");
 extern long SetIntrMask(long) asm("func_8006E0B0");
 extern void DMACallback(long, void *) asm("func_8006DF94");
 
@@ -37,7 +37,7 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
         if (Gpu_CheckTimeout() != 0) {
             return -1;
         }
-        func_80067984();
+        Gpu_ExecuteQueue();
     }
 
     ret = SetIntrMask(0);
@@ -60,7 +60,7 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     return 0;
 
     }
-    DMACallback(2, (void *)func_80067984);
+    DMACallback(2, (void *)Gpu_ExecuteQueue);
 
     if (size != 0) {
         u_char *pbase = (u_char *)g_GpuQueue + 12;
@@ -84,6 +84,6 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
 
     g_GpuQueueWriteIdx = (g_GpuQueueWriteIdx + 1) & 0x3f;
     SetIntrMask(g_AddQueueIntrMask);
-    func_80067984();
+    Gpu_ExecuteQueue();
     return (g_GpuQueueWriteIdx - g_GpuQueueReadIdx) & 0x3f;
 }

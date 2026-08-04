@@ -246,7 +246,7 @@ s32 rcos(s32 angle) asm("func_80068634");
  * arg1/arg2). Register-pinned, goto-structured decompilation; do not restructure.
  */
 
-s32 func_8002FB60(s32 arg0);
+s32 InterpolateTrackAngle(s32 arg0) asm("func_8002FB60");
 
 s32 Random15(void) asm("func_800632B0");
 
@@ -405,7 +405,7 @@ void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
         return;
 
     }
-    value = func_8002FB60(obj->trackPointIndex);
+    value = InterpolateTrackAngle(obj->trackPointIndex);
     temp = GetAngleDistance(value, obj->field_24);
     if (temp >= 0x401) {
         temp = 0x800 - temp;

@@ -103,7 +103,7 @@ extern u16 g_CarCornerOffsetZ[] asm("D_8007DAB2");
 s32 IsCarFacingBackwards(void *car) asm("func_8002CD08");
 void UpdateCarBodyRoll(void *car) asm("func_8002CD4C");
 void UpdateCarDrivetrain(void *car) asm("func_8002A810");
-void func_8002C168(void *car);
+void AccumulateLapProgress(void *car) asm("func_8002C168");
 void ApplyCarKnockback(void *car) asm("func_80038C4C");
 s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2) asm("func_80031298");
 s32 func_8002D398(void *car);
@@ -114,8 +114,8 @@ void UpdateCarBodyKick(void *car) asm("func_80038FF0");
 s32 rsin(s32 angle) asm("func_80068568");
 s32 Random15(void) asm("func_800632B0");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-void func_8005C104(s32 arg0, s32 arg1, s32 arg2);
-void func_8005D9F8(s32 value, s32 bank);
+void SetIndexedEffectVoice(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C104");
+void UpdateLoadedAudioVoices(s32 value, s32 bank) asm("func_8005D9F8");
 
 /*
  * Per-car physics / gear-shift driver (matched sibling of the ASM
@@ -343,7 +343,7 @@ void UpdatePlayerCar(Car *car) {
     tmp.x = (p->accelPos * 6) / 1280 + car->unk00 + car->unk10;
     tmp.z = (p->brakePos * 6) / 1280 + car->unk08 + car->unk18;
     *(Vec4 *)&car->unk00 = tmp;
-    func_8002C168(car);
+    AccumulateLapProgress(car);
 
     {
         s32 base = car->unk24 - 0xC00;
@@ -592,11 +592,11 @@ void UpdatePlayerCar(Car *car) {
     }
 
     if (g_RacePhase >= 4) {
-        func_8005C104(-1, 0, 0);
+        SetIndexedEffectVoice(-1, 0, 0);
     }
 
     if (p->manual != 0) {
-        func_8005D9F8(g_EngineRpm + g_EngineRpmJitter,
+        UpdateLoadedAudioVoices(g_EngineRpm + g_EngineRpmJitter,
                       (0 < g_PlayerThrottle) & (p->clutch == 0) & revFlag);
     } else {
         s32 flag = 0;
@@ -605,7 +605,7 @@ void UpdatePlayerCar(Car *car) {
         if (g_PlayerThrottle > 0) {
             flag = revFlag & 1;
         }
-        func_8005D9F8(vol, flag);
+        UpdateLoadedAudioVoices(vol, flag);
     }
 
     p->gearDisp = p->gear;

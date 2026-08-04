@@ -3,7 +3,7 @@
 extern s32 D_8007FB34;
 extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
-void func_80047BD4(s32 a0, s16 a1, s32 a2, s32 a3, s32 s4, s32 s5, s32 s6, s32 s7, s32 s8);
+void GameDrawNumber(s32 a0, s16 a1, s32 a2, s32 a3, s32 s4, s32 s5, s32 s6, s32 s7, s32 s8) asm("func_80047BD4");
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
 void func_80048B88(s32 a0, s16 a1, s32 a2, s32 a3, s32 s4, s32 s5, s32 s6, s32 s7, s32 s8, s32 s9, s32 s10);
 
@@ -33,9 +33,9 @@ void DrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2) {
             }
             base = (u32)-(v1 * 1120) >> 5;
             s2 = base + 502;
-            func_80047BD4(0x39, s2, 7, arg1, 0x7f, 0x7f, 0x7f, 0x259, 0x20);
+            GameDrawNumber(0x39, s2, 7, arg1, 0x7f, 0x7f, 0x7f, 0x259, 0x20);
             s3 = base + 542;
-            func_80047BD4(0x39, s3, 7, arg2, 0x7f, 0x7f, 0x7f, 0x259, 0x20);
+            GameDrawNumber(0x39, s3, 7, arg2, 0x7f, 0x7f, 0x7f, 0x259, 0x20);
             func_80046A2C(ot, 0x17, s2, 0x1d, 0x10, 0x1b, 0x8c, 0, 0, 0, 0x244, 1, 1, 0x3b);
             func_80046A2C(ot, 0x18, s3, 0x34, 0x10, 0x54, 0x8c, 0, 0, 0, 0x244, 1, 1, 0x3b);
             func_80046A2C(ot, 0x89, s2, 0xc, 0x10, 0x50, 0xdc, 0, 0, 0, 0x259, 1, 1, 0x3b);

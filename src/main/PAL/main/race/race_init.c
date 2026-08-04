@@ -29,9 +29,9 @@ extern u8 g_MsgInitEngineOk asm("D_8001146C");
 
 void LoadExtraVabSlotWithTable(void) asm("func_8005BB1C");
 
-void func_8005B468(s32 arg0);
+void SetEffectVoicesEnabled(s32 arg0) asm("func_8005B468");
 
-void func_8005B204(s32 arg0, s32 arg1, s32 arg2);
+void SetReverbPreset(s32 arg0, s32 arg1, s32 arg2) asm("func_8005B204");
 
 void InstallResourceData(void) asm("func_80034DCC");
 void InstallResourceData(void) {
@@ -79,8 +79,8 @@ void InitSoundSystem(void) {
 void InitEngineSound(void) asm("func_80034ED0");
 void InitEngineSound(void) {
     LoadExtraVabSlotWithTable();
-    func_8005B468(1);
-    func_8005B204(2, 0, 0);
+    SetEffectVoicesEnabled(1);
+    SetReverbPreset(2, 0, 0);
     DebugPrintf(&g_MsgInitEngineOk);
 }
 

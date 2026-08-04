@@ -3,7 +3,7 @@
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 long func_80070D70(long seq, short sep);
-void func_8007010C(short seq, short sep, u_char value);
+void ContDataEntry(short seq, short sep, u_char value) asm("func_8007010C");
 void func_800771AC(long channel, short vab, u_char prog, short volume, long pan);
 void func_8007701C(short vab, u_char prog, u_char volume);
 void func_800731A8(void);
@@ -37,7 +37,7 @@ void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
         state->delta_value = func_80070D70(seq, sep);
         return;
     case 6:
-        func_8007010C(seq, sep, value);
+        ContDataEntry(seq, sep, value);
         return;
     case 7:
         func_800771AC((sep << 8) | seq, state->unk4c,

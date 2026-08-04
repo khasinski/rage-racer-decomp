@@ -6,8 +6,8 @@
 
 void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
 
-void func_8002FC84(s32 arg0, s32 *out, s32 weight);
-s32 func_8002FD9C(s32 arg0, s32 arg1);
+void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight) asm("func_8002FC84");
+s32 SmoothTrackAngle(s32 arg0, s32 arg1) asm("func_8002FD9C");
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 
@@ -55,8 +55,8 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
     trackCount = g_TrackPointCount;
     index = rawIndex % trackCount;
 
-    func_8002FC84(index, coords, car->field_38);
-    angle = 0x1000 - func_8002FD9C(index, car->field_38);
+    InterpolateTrackPoint(index, coords, car->field_38);
+    angle = 0x1000 - SmoothTrackAngle(index, car->field_38);
 
     xValue = rsin(angle) * lateral;
     if (xValue < 0) {
@@ -97,7 +97,7 @@ extern s32 D_801E4BF4;
 extern s32 D_801E8AA0;
 
 s32 func_8002A788(s32 arg0, s32 arg1);
-s32 func_8002A7C4(s32 arg0, s32 arg1);
+s32 GetAngleDelta(s32 arg0, s32 arg1) asm("func_8002A7C4");
 void func_8002FE74(GameCarRuntime *car);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
@@ -167,7 +167,7 @@ void func_80030030(GameCarRuntime *arg0) {
             *(s16 *)(r + 0x3E) = 100;
         }
 
-        res = func_8002A7C4(car->field_24, *(s32 *)(r + 0x90)) * 98 / 100;
+        res = GetAngleDelta(car->field_24, *(s32 *)(r + 0x90)) * 98 / 100;
         s2 = res * (*(s32 *)(r + 0x4C) + 0x800);
         res = s2 / 2048;
         *(s32 *)(r + 0x50) += res * 16;
@@ -176,7 +176,7 @@ void func_80030030(GameCarRuntime *arg0) {
             if (func_8002A788(car->field_24, car->headingAngle) < 0x200) {
                 *(s32 *)(r + 0x50) = *(s32 *)(r + 0x50) * 31 / 32;
                 *(s32 *)(r + 0x50) =
-                    func_8002A7C4(car->field_24, car->headingAngle) + *(s32 *)(r + 0x50);
+                    GetAngleDelta(car->field_24, car->headingAngle) + *(s32 *)(r + 0x50);
             } else if (s4val < 0x800) {
                 *(s32 *)(r + 0x50) = res / 2 + *(s32 *)(r + 0x50);
             }
@@ -218,7 +218,7 @@ void func_80030030(GameCarRuntime *arg0) {
                 s32 gain = (100 - (*(s16 *)(r + 0x76) - 1) * 4) * 10000;
                 *(s32 *)(r + 0x94) = gain * car->field_A4 / 100;
             }
-            *(s32 *)(r + 0x60) = func_8002A7C4(car->headingAngle, car->field_24);
+            *(s32 *)(r + 0x60) = GetAngleDelta(car->headingAngle, car->field_24);
             *(s32 *)(r + 0x58) = car->headingAngle;
             car->headingAngle = car->field_24;
 

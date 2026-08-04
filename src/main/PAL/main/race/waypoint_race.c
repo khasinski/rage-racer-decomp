@@ -33,13 +33,13 @@ extern s32 g_RacePaused asm("D_801E4BAC");
 
 
 
-void func_8001C974(void);
+void DrawRoundScreen(void) asm("func_8001C974");
 
 void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 
-void func_8003479C(s32 arg0);
+void DrawRaceOptionMenu(s32 arg0) asm("func_8003479C");
 
 void GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
 
@@ -49,7 +49,7 @@ void UpdateFreeLookCamera(u8 *arg0, s32 arg1) asm("func_8003CF14");
 
 void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
 
-void func_8003E590(void);
+void UpdateFlybyScenery(void) asm("func_8003E590");
 
 void DrawFlybyScenery(void) asm("func_8003EAF4");
 
@@ -102,7 +102,7 @@ void UpdateWaypointRaceScene(void) {
     option = 0;
     g_SceneTimer++;
     if ((u32)g_SceneTimer < 0x3D) {
-        func_8001C974();
+        DrawRoundScreen();
         value = g_SceneTimer - 6;
         DrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
     }
@@ -159,7 +159,7 @@ void UpdateWaypointRaceScene(void) {
         }
 
         g_SceneTimer--;
-        func_8003479C(g_RaceOptionCursor);
+        DrawRaceOptionMenu(g_RaceOptionCursor);
         UpdateFreeLookCamera(g_PlayerCar, 0);
         GetTrackZoneBlend(g_PlayerTrackProgress);
         RequestTrackTexturePage(g_PlayerTrackSection);
@@ -197,7 +197,7 @@ void UpdateWaypointRaceScene(void) {
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     DrawTerrainCells();
     DrawCourseObjects();
-    func_8003E590();
+    UpdateFlybyScenery();
     DrawFlybyScenery();
     UpdateRouteScenery();
     DrawRouteScenery();

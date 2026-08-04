@@ -16,7 +16,7 @@ void Gpu_WriteGp1(u_long arg0) asm("func_80067574");
 long Gpu_WriteGp0Words(u_long *src, long count) asm("func_800675B0");
 void Gpu_StartDmaTransfer(u_long arg0) asm("func_80067600");
 u_long _param(u_long arg0) asm("func_8006764C");
-extern long func_800676A0(void *callback, void *data, long size, long arg3);
+extern long Gpu_AddQueue(void *callback, void *data, long size, long arg3) asm("func_800676A0");
 
 void Gpu_WriteGp1(u_long arg0) {
     *g_GpuGp1 = arg0;
@@ -54,5 +54,5 @@ u_long _param(u_long arg0) {
 
 long _addque(void *callback, void *data, long arg2) asm("func_8006767C");
 long _addque(void *callback, void *data, long arg2) {
-    return func_800676A0(callback, data, 0, arg2);
+    return Gpu_AddQueue(callback, data, 0, arg2);
 }

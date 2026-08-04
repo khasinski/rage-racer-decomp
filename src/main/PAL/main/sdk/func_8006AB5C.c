@@ -42,7 +42,7 @@ extern u_char D_8001384C;
 extern u_char D_80013868;
 extern u_char D_8001387C;
 
-void func_80063C38();
+void LibcPutString() asm("func_80063C38");
 
 static __inline__ void copy8(u_char *d, u_char *s) {
     long n;
@@ -105,7 +105,7 @@ long func_8006AB5C(void) {
     }
 
     if (mode == 5) {
-        func_80063C38(&D_80013840);
+        LibcPutString(&D_80013840);
         if (g_CdDebugLevel > 0) {
             DebugPrintf(&D_8001384C, g_CdCommandNames[g_CdLastCommand], g_CdStatusByte, g_CdErrorByte);
         }
@@ -163,7 +163,7 @@ long func_8006AB5C(void) {
         return 6;
     }
     default:
-        func_80063C38(&D_80013868);
+        LibcPutString(&D_80013868);
         DebugPrintf(&D_8001387C, mode);
         break;
     }

@@ -16,17 +16,17 @@ extern s32 g_ClassClearFanfareTimer asm("D_801E4D0C");
 extern s32 g_ClassCompleted asm("D_801E4B94");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 void DrawFullscreenFadeTile(s32, s32) asm("func_80033AA0");
-void func_800204F4(s32);
-void func_800206B8(s32);
+void DrawRaceTimePanel(s32) asm("func_800204F4");
+void DrawPrizeMoneyPanel(s32) asm("func_800206B8");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-void func_80020D90(void);
+void TickClassClearFanfare(void) asm("func_80020D90");
 void RequestSelectBgmAssets(void) asm("func_80018410");
-void func_80020B08(void);
+void AdvanceGrandPrixClass(void) asm("func_80020B08");
 void func_800201D4(void);
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
-void func_8005BD84(s32 arg0);
+void SetSequenceVolumeSetting(s32 arg0) asm("func_8005BD84");
 void SetEffectVolumeSetting(s32 arg0) asm("func_8005BDD4");
 void func_8005BE24(void);
 void func_8005BE58(void);
@@ -45,7 +45,7 @@ extern s32 g_BgmSelection asm("D_801E42CC");
 void ApplyAudioSettings(void) asm("func_80021224");
 void ResetProgressSlot(void *arg0, s32 *arg1) asm("func_80021288");
 void ResetCourseProgress(s32 arg0) asm("func_800212F0");
-void func_8001B488(void);
+void ShuffleBgmOrder(void) asm("func_8001B488");
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
 void UpdatePrizeMoneyScreen(void) asm("func_80020DDC");
@@ -65,11 +65,11 @@ void UpdatePrizeMoneyScreen(void) {
         g_SceneTimer -= 8;
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if (g_SceneTimer == 0) g_PrizeScreenState = 1;
-        func_800204F4(0);
+        DrawRaceTimePanel(0);
         func_800201D4();
         return;
     case 1:
-        func_800204F4(0);
+        DrawRaceTimePanel(0);
         if (g_PadEdge2 & 0x860) {
             g_PrizeScreenState = 2;
             g_SceneTimer = 0;
@@ -78,13 +78,13 @@ void UpdatePrizeMoneyScreen(void) {
         return;
     case 2:
         g_SceneTimer += 8;
-        func_800204F4(g_SceneTimer);
+        DrawRaceTimePanel(g_SceneTimer);
         if ((u32)g_SceneTimer >= 129) g_PrizeScreenState = 3;
         func_800201D4();
         return;
     case 3:
         g_SceneTimer -= 8;
-        func_800206B8(g_SceneTimer);
+        DrawPrizeMoneyPanel(g_SceneTimer);
         if (g_SceneTimer == 0) g_PrizeScreenState = 4;
         func_800201D4();
         return;
@@ -121,7 +121,7 @@ void UpdatePrizeMoneyScreen(void) {
         g_PrizeScreenState = st;
         break;
     case 6:
-        func_80020D90();
+        TickClassClearFanfare();
         if (g_PromotionBonus == 0) { goto Lstore7; }
         PlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
         t = g_PromotionBonus;
@@ -138,7 +138,7 @@ void UpdatePrizeMoneyScreen(void) {
         st = 7;
         goto Lstore;
     case 7:
-        func_80020D90();
+        TickClassClearFanfare();
         PlaySoundCue(0x11);
         if (!(g_PadEdge2 & 0x860)) break;
         if (g_ClassClearFanfareTimer != 0) break;
@@ -153,19 +153,19 @@ void UpdatePrizeMoneyScreen(void) {
             g_SceneTimer += 2;
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if ((u32)g_SceneTimer < 0x100) break;
-        func_80020B08();
+        AdvanceGrandPrixClass();
         break;
     default:
         func_800201D4();
         return;
     }
-    func_800206B8(0);
+    DrawPrizeMoneyPanel(0);
     func_800201D4();
 }
 
 void ApplyAudioSettings(void) asm("func_80021224");
 void ApplyAudioSettings(void) {
-    func_8005BD84(g_BgmVolumeSetting);
+    SetSequenceVolumeSetting(g_BgmVolumeSetting);
     SetEffectVolumeSetting(g_SfxVolumeSetting);
     if (g_MonoOutput == 0) {
         func_8005BE24();
@@ -258,7 +258,7 @@ void InitSaveDefaults(void) {
     g_MaxClassReached[0] = 0;
     g_BgmTrackCount = 9;
     g_BgmSelection = 0;
-    func_8001B488();
+    ShuffleBgmOrder();
     g_BgmVolumeSetting = 0xF;
     g_SfxVolumeSetting = 0xF;
     g_MonoOutput = 0;

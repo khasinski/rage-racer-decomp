@@ -18,7 +18,7 @@ void ApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2) asm("func_8001F8D
 
 void SeedCarLapProgress(void *arg0, s32 arg1) asm("func_8002BF68");
 
-void func_8002C168(void *arg0);
+void AccumulateLapProgress(void *arg0) asm("func_8002C168");
 
 s32 FindTrackSegment(void *arg0, s32 arg1) asm("func_80030EB4");
 
@@ -49,9 +49,9 @@ extern s16 g_TrackZoneDark asm("D_8019CAB0");
 
 extern u8 g_MsgGameExit asm("D_8001147C");
 
-void func_8005E4A4(s32 arg0);
+void ForceAllEffectVoicesEnabled(s32 arg0) asm("func_8005E4A4");
 
-void func_8005B190(s32 arg0, s32 arg1);
+void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
 
 void RequestSelectBgmAssets(void) asm("func_80018410");
 
@@ -102,13 +102,13 @@ void SeedReplayCars(void) {
 
     g_PlayerTrackPoint = FindTrackSegment(primary, g_PlayerTrackPoint);
     SeedCarLapProgress(primary, 1);
-    func_8002C168(primary);
+    AccumulateLapProgress(primary);
     func_80032280(primary);
 
     if (g_GrandPrixMode == 1) {
         g_Car0TrackPoint = FindTrackSegment(secondary, g_Car0TrackPoint);
         SeedCarLapProgress(secondary, 1);
-        func_8002C168(secondary);
+        AccumulateLapProgress(secondary);
         func_80032280(secondary);
     }
 }
@@ -117,12 +117,12 @@ void UpdateReplayCars(void) asm("func_80035040");
 void UpdateReplayCars(void) {
     void *ptr = &g_PlayerCar;
 
-    func_8002C168(ptr);
+    AccumulateLapProgress(ptr);
     func_80032280(ptr);
 
     if (g_GrandPrixMode == 1) {
         ptr = g_Cars;
-        func_8002C168(ptr);
+        AccumulateLapProgress(ptr);
         func_80032280(ptr);
     }
 
@@ -234,8 +234,8 @@ done:
 void ExitRaceScene(s32 arg0) asm("func_80035258");
 void ExitRaceScene(s32 arg0) {
     g_SceneId = arg0;
-    func_8005E4A4(0);
-    func_8005B190(0, 0);
+    ForceAllEffectVoicesEnabled(0);
+    SetReverbDepth(0, 0);
     if (g_SceneId == 6) {
         RequestSelectBgmAssets();
     }

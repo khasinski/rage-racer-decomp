@@ -211,7 +211,7 @@ u8 *DrawMirrorFrame(u8 *packet) asm("func_8001ACE4");
 void func_800418D4(void);
 void func_80066604(u8 *packet, u8 *drawEnv);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
-void func_800414F0(s32 arg0, s32 arg1);
+void BuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
 void func_80069858(void *arg0);
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
 void EndMirrorPass(void) asm("func_8001ABD8");
@@ -245,7 +245,7 @@ void DrawRearViewMirror(s32 arg0) {
             packet += 0xC;
             AddPrim((u32 *)(g_DrawBuffer + 0x16C8), (u32 *)prim);
             *scratch = packet;
-            func_800414F0(-0x3000, 0x6000);
+            BuildVisibleCells(-0x3000, 0x6000);
             func_80069858((void *)0x1F800028);
             *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
             SubmitTerrainCells((void *)0x1F800000, g_VisibleCellList, 0x40);

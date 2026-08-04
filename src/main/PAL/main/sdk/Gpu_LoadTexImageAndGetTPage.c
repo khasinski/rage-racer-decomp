@@ -4,7 +4,7 @@
 
 
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
-long func_80064BB4(long arg0, long arg1, long arg2, long arg3);
+long GetTPage(long arg0, long arg1, long arg2, long arg3) asm("func_80064BB4");
 
 long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) asm("func_800648EC");
 long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) {
@@ -36,10 +36,10 @@ long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, lo
     }
 
     LoadImage(&rect, arg0);
-    return func_80064BB4(arg1, arg2, arg3, arg4) & 0xFFFF;
+    return GetTPage(arg1, arg2, arg3, arg4) & 0xFFFF;
 }
 
-long func_80064C7C(long arg0, long arg1);
+long GetClut(long arg0, long arg1) asm("func_80064C7C");
 
 long LoadClut2(void *arg0, long arg1, long arg2) asm("func_800649D8");
 long LoadClut2(void *arg0, long arg1, long arg2) {
@@ -51,7 +51,7 @@ long LoadClut2(void *arg0, long arg1, long arg2) {
     rect.h = 1;
 
     LoadImage(&rect, arg0);
-    return func_80064C7C(arg1, arg2) & 0xFFFF;
+    return GetClut(arg1, arg2) & 0xFFFF;
 }
 
 long LoadClut(void *arg0, long arg1, long arg2) asm("func_80064A40");
@@ -64,7 +64,7 @@ long LoadClut(void *arg0, long arg1, long arg2) {
     rect.h = 1;
 
     LoadImage(&rect, arg0);
-    return func_80064C7C(arg1, arg2) & 0xFFFF;
+    return GetClut(arg1, arg2) & 0xFFFF;
 }
 
 long func_800657E4(void);

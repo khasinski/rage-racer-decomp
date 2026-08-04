@@ -118,14 +118,14 @@ s32 SsSeqReadDeltaTime(s32 seq, s16 sep) asm("func_80070D70");
 s16 SsUtGetProgAtr(s16 vab_id, s16 program, ProgAtr *out) asm("func_8007320C");
 s16 SsUtGetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *out) asm("func_800733D8");
 s16 SsUtSetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *in) asm("func_80073820");
-void func_800706AC(
+void SsSeqApplyNrpn(
     s16 vab_id,
     s16 program,
     s16 tone,
     VagAtr tone_attr,
     struct Unk adsr,
     s16 index,
-    u8 value);
+    u8 value) asm("func_800706AC");
 
 static inline s32 SsSeqCheckDataEntryValue(s32 data_entry_value) {
     switch (data_entry_value) {
@@ -218,7 +218,7 @@ void ContDataEntry(s16 seq, s16 sep, u8 value) {
     } else if (score->unk2a == 2) {
         if (score->unk16 == 0x10) {
             for (tone = 0; tone < program_attr.tones; tone++) {
-                func_800706AC(
+                SsSeqApplyNrpn(
                     score->unk4c,
                     score->programs[channel],
                     tone,
@@ -228,7 +228,7 @@ void ContDataEntry(s16 seq, s16 sep, u8 value) {
                     value);
             }
         } else {
-            func_800706AC(
+            SsSeqApplyNrpn(
                 score->unk4c,
                 score->programs[channel],
                 score->unk16,

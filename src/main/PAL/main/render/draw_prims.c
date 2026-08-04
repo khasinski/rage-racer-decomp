@@ -64,7 +64,7 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     }
 }
 
-void func_80064FA8(void *arg0);
+void SetSprt(void *arg0) asm("func_80064FA8");
 void func_80064EB8(void *arg0, s32 enabled);
 void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
@@ -108,7 +108,7 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     /* Match note: keep stack color load after callee-save argument setup. */
     asm("" : : "r"(flagsReg), "r"(y1Reg), "r"(u0Reg), "r"(v0Reg), "r"(rReg));
     gLocal = g;
-    func_80064FA8(prim);
+    SetSprt(prim);
 
     clutReg = clutX;
     func_80064EB8(prim, shadeReg);
@@ -145,7 +145,7 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     *(SPRT **)0x1F800000 = prim;
 }
 
-void func_80064EE0(void *arg0);
+void SetPolyF3(void *arg0) asm("func_80064EE0");
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
@@ -172,7 +172,7 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     gReg = g;
     bReg = b;
 
-    func_80064EE0(prim);
+    SetPolyF3(prim);
     SetSemiTrans(prim, semiReg);
 
     prim->x0 = x0;
@@ -198,7 +198,7 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     *(POLY_F3 **)0x1F800000 = prim;
 }
 
-void func_80064F30(void *arg0);
+void SetPolyF4(void *arg0) asm("func_80064F30");
 void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
@@ -238,7 +238,7 @@ void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 
     asm("" : : "r"(prim), "r"(semiReg), "r"(flagsReg), "r"(y1Reg), "r"(x2Reg), "r"(y2Reg), "r"(x3Reg), "r"(y3Reg), "r"(rReg));
     gLocal = g;
 
-    func_80064F30(prim);
+    SetPolyF4(prim);
     func_80064E90(prim, semiReg);
 
     prim->x0 = x0Local;
@@ -378,7 +378,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
     *(TILE **)0x1F800000 = prim;
 }
 
-void func_8006500C(void *arg0);
+void SetLineF2(void *arg0) asm("func_8006500C");
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
@@ -406,7 +406,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
     y0Reg = y0;
     x1Reg = x1;
 
-    func_8006500C(prim);
+    SetLineF2(prim);
     a0Reg = (u8 *)prim;
     SetSemiTrans(a0Reg, alphaReg != 0xFF);
 
@@ -429,7 +429,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
     *(LINE_F2 **)0x1F800000 = prim;
 }
 
-void func_80065034(void *arg0);
+void SetLineF3(void *arg0) asm("func_80065034");
 void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
@@ -440,7 +440,7 @@ void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 
     u8 *oldPrim;
 
     prim = *(LINE_F3 **)0x1F800000;
-    func_80065034(prim);
+    SetLineF3(prim);
     func_80064E90(prim, arg10 != 0xFF);
 
     prim->x0 = x0;
@@ -464,7 +464,7 @@ void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 
     *(LINE_F3 **)0x1F800000 = prim;
 }
 
-void func_80065020(void *arg0);
+void SetLineG2(void *arg0) asm("func_80065020");
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
@@ -499,7 +499,7 @@ void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8
     g1Local = g1;
     b1Local = b1;
 
-    func_80065020(prim);
+    SetLineG2(prim);
     a0Reg = (u8 *)prim;
     SetSemiTrans(a0Reg, alphaReg != 0xFF);
 

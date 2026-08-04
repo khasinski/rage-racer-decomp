@@ -23,7 +23,7 @@ extern s32 g_CarClassNames[] asm("D_8007D508");
 extern s32 g_CarNames[] asm("D_8007D4D4");
 void func_80016EA0(void *dst, s32 len, void *src, s32 arg3);
 void func_80016754(void *dst, s32 x, void *src, s32 color);
-void *func_80021CD4(void *dst, s32 value);
+void *FormatLapTime(void *dst, s32 value) asm("func_80021CD4");
 void LibcSprintf() asm("func_800632F0");
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 extern volatile s32 g_RaceTotalTime asm("D_801E4BA8");
@@ -90,7 +90,7 @@ void DrawRankingPanel(u8 *arg0) {
             value = iter - doubledRow;
             value <<= 3;
             xOrField = value + 0x58;
-            func_80021CD4(
+            FormatLapTime(
                 &text[2],
                 ({
                     (void)(*(volatile char *)&text[0] = iter + 0x31);
@@ -119,7 +119,7 @@ void DrawRankingPanel(u8 *arg0) {
         text[1] = g_PlaceSuffixNames[countOrIndex][1];
         text[2] = g_PlaceSuffixNames[countOrIndex][2];
         text[3] = 0x2F;
-        func_80021CD4(&text[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].v8);
+        FormatLapTime(&text[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].v8);
         xOrField = g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].vC;
         LibcSprintf(&text[0xC], g_FmtRecordName,
                       &g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex],
@@ -147,7 +147,7 @@ void DrawTimeRecordPanel(u8 *s5) {
 
     text[0] = 0x54;
     text[1] = 0x2F;
-    func_80021CD4(&text[2], g_RaceTotalTime);
+    FormatLapTime(&text[2], g_RaceTotalTime);
     func_80016754(s5 + 0x14, 0x58, text, 0x78CC);
 
     func_80016EA0(s5 + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
@@ -160,7 +160,7 @@ void DrawTimeRecordPanel(u8 *s5) {
         text[1] = g_PlaceSuffixNames[s2][1];
         text[2] = g_PlaceSuffixNames[s2][2];
         text[3] = 0x2F;
-        func_80021CD4(&text[4], g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].v8);
+        FormatLapTime(&text[4], g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].v8);
 
         idx = g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].vC;
         LibcSprintf(&text[0xC], g_FmtRecordName,

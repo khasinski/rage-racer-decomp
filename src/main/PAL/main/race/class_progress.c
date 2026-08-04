@@ -30,7 +30,7 @@ extern s32 g_ClassResultPlace asm("D_8019C7C4");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 extern s32 g_ClassPromoted asm("D_801E419C");
 s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
-s32 func_800214B8(void);
+s32 ComputeClassGrade(void) asm("func_800214B8");
 void UpdateBgmTrackCount(void) asm("func_80021540");
 void ResetProgressSlot(s32 arg0, s32 arg1) asm("func_80021288");
 void ResetCourseProgress(s32 arg0) asm("func_800212F0");
@@ -127,7 +127,7 @@ void CommitClassProgress(void) {
                 }
             }
         }
-        value = func_800214B8();
+        value = ComputeClassGrade();
         g_ClassResultPlace = value;
         if (value != 0) {
             s32 offset;

@@ -59,7 +59,7 @@ u8 *QueueSpriteTransWide(
     s32 v,
     s32 clutIndex) asm("func_80017138");
 u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("func_80017390");
-void func_80023750(s32 arg0);
+void DrawOptionHintBar(s32 arg0) asm("func_80023750");
 
 /*
  * Game mode 7's screen: either the "no controller" banner, or the two nudge
@@ -179,7 +179,7 @@ void UpdateControllerConfigScreen(void) {
     }
     g_ControllerSceneAngleY = (g_ControllerSceneAngleY * 15) / 16;
     DrawControllerConfigScreen();
-    func_80023750(1);
+    DrawOptionHintBar(1);
     DrawControllerSetupScene(0);
 }
 
@@ -307,6 +307,6 @@ void UpdateNegconNeutralScreen(void) {
         g_GameMode = 1;
     }
     DrawNegconNeutralScreen();
-    func_80023750(4);
+    DrawOptionHintBar(4);
     DrawControllerSetupScene(0);
 }

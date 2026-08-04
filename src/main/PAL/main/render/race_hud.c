@@ -82,7 +82,7 @@ extern s32 g_LapCount asm("D_801E4364");
 extern s32 g_BestLapThisRace asm("D_801E4BCC");
 extern GameRaceRanking g_PlayerLap asm("D_8009E83C");
 extern s16 D_8009E836;
-void func_80033D50(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void DrawTimeValue(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_80033D50");
 
 /* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
@@ -132,7 +132,7 @@ void DrawLapTimes(void) {
                 value = -1;
             }
 
-            func_80033D50(0xFA, y, value, tile, 0x3E8);
+            DrawTimeValue(0xFA, y, value, tile, 0x3E8);
             y += 0xA;
             valuePtr++;
             asm volatile("" : "=r"(valuePtr) : "0"(valuePtr));
@@ -147,10 +147,10 @@ void DrawLapTimes(void) {
         } while (i < g_LapCount);
     }
 
-    func_80033D50(0xFA, 0x20, g_BestLapThisRace, 0x78CC, 0x3E8);
+    DrawTimeValue(0xFA, 0x20, g_BestLapThisRace, 0x78CC, 0x3E8);
 }
 
-void func_80033F30(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void DrawMinuteSecondTime(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80033F30");
 
 void DrawTimeRemaining(s32 arg0) asm("func_800331F8");
 void DrawTimeRemaining(s32 arg0) {
@@ -160,7 +160,7 @@ void DrawTimeRemaining(s32 arg0) {
         arg3 = 0x7811;
     }
 
-    func_80033F30(0xE, 0xD2, arg0, arg3);
+    DrawMinuteSecondTime(0xE, 0xD2, arg0, arg3);
 }
 
 /* The two race-position digits, from g_RacePosition; the tens digit is
