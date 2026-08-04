@@ -187,7 +187,7 @@ void UpdateControllerConfigScreen(void) {
 extern char D_80010028[];
 extern char D_8001004C[];
 
-void func_80027874(s32 x, s32 y, char *str, s32 clutIndex);
+void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex) asm("func_80027874");
 s32 AddTilePrim(
     s32 ot,
     s32 prim,
@@ -207,8 +207,8 @@ void DrawNegconNeutralScreen(void) {
     s32 ot;
     s32 prim;
 
-    func_80027874(0x18, 0x30, D_80010028, 0x7F81);
-    func_80027874(0x18, 0x48, D_8001004C, 0x7F81);
+    DrawSpriteString(0x18, 0x30, D_80010028, 0x7F81);
+    DrawSpriteString(0x18, 0x48, D_8001004C, 0x7F81);
     ot = (s32)(g_DrawBuffer + 0xD0);
     prim = *cursor;
     prim = AddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);

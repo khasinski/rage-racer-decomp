@@ -24,7 +24,7 @@ extern s16 g_NegconSteerPlay asm("D_8019CAD0");
 /* Play in hundredths of a degree per setting; the gauge marks scale from it. */
 extern s16 g_NegconPlayPercent[] asm("D_8007C260");
 
-void func_80027874(s32 x, s32 y, char *str, s32 clutIndex);
+void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex) asm("func_80027874");
 
 /* Local wide-parameter views; see GameQueueSprite.c / SetGteLightMatrix.c. */
 u8 *DrawLeftArrowWide(
@@ -85,7 +85,7 @@ void DrawNegconSteerPlayScreen(void) {
     s32 y;
 
     unused = D_80010070;
-    func_80027874(0x18, 0x30, D_80010078, 0x7F81);
+    DrawSpriteString(0x18, 0x30, D_80010078, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
     prim = *(u8 **)0x1F800000;
     prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, g_NegconSteerPlay != 0);
@@ -183,7 +183,7 @@ void DrawNegconMaxTwistScreen(void) {
     s32 w;
 
     unused = D_80010084;
-    func_80027874(0x18, 0x30, D_8001008C, 0x7F81);
+    DrawSpriteString(0x18, 0x30, D_8001008C, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
     prim = *(u8 **)0x1F800000;
     prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, g_NegconMaxTwist != 0);

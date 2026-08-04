@@ -80,7 +80,8 @@ void StoreImage(Rect *rect, void *data) asm("func_80065B88");
 s32 func_80065BEC(GpuRectPacked *rect, u32 x, u32 y);
 void func_800658FC(s32 mode);
 
-void func_8001A40C(void *dst) {
+void StoreTeamLogoImage(void *dst) asm("func_8001A40C");
+void StoreTeamLogoImage(void *dst) {
     g_TeamLogoClut[0] = 0x8000;
     LoadImage(&g_TeamLogoClutLoadRect, g_TeamLogoClut);
 

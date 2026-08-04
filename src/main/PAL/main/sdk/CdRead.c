@@ -135,7 +135,8 @@ typedef struct CdReadSprite {
     volatile short h;
 } CdReadSprite;
 
-void func_80027874(long x, long y, u_char *str, long arg3) {
+void DrawSpriteString(long x, long y, u_char *str, long arg3) asm("func_80027874");
+void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     CdReadSprite *packet;
     long idx;
     u_char *next;

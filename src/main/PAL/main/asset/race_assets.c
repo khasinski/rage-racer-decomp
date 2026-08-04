@@ -31,7 +31,7 @@ s32 func_80017C78(s32 arg0, void *arg1);
 void SetCarSpec(void) asm("func_80034DF4");
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void UploadImageBlock(void *arg0) asm("func_8001A2E0");
-void func_8001A40C(void *arg0);
+void StoreTeamLogoImage(void *arg0) asm("func_8001A40C");
 void ResetTrackTextureSwap(void) asm("func_80019EBC");
 void SetTrackCameraTable(void *arg0) asm("func_80017BD4");
 void SetEnvPaletteTable(void *arg0) asm("func_8004553C");
@@ -145,7 +145,7 @@ void LoadRaceAssets(void) {
             g_AssetBlockPtr = base + off0;
             g_AssetSubBlockPtr = base + off1;
             UploadImageAsset(g_AssetBlockPtr);
-            func_8001A40C(g_AssetLoadCursor);
+            StoreTeamLogoImage(g_AssetLoadCursor);
             g_TrackTextureShadow = g_AssetLoadCursor;
             UploadImageAsset(g_AssetSubBlockPtr);
             ResetTrackTextureSwap();

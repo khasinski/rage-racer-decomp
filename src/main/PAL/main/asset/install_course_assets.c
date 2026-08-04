@@ -8,7 +8,7 @@ extern u8 *g_TrackTextureShadow asm("D_801E42D0");
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void UploadImageBlock(void *arg0) asm("func_8001A2E0");
-void func_8001A40C(void *arg0);
+void StoreTeamLogoImage(void *arg0) asm("func_8001A40C");
 void ResetTrackTextureSwap(void) asm("func_80019EBC");
 
 void InstallCourseAssets(void) asm("func_80019730");
@@ -33,7 +33,7 @@ void InstallCourseAssets(void) {
     g_AssetSubBlockPtr = base + offset1;
     UploadImageAsset(g_AssetBlockPtr);
 
-    func_8001A40C(g_AssetBase);
+    StoreTeamLogoImage(g_AssetBase);
 
     g_TrackTextureShadow = g_AssetBase;
     UploadImageAsset(g_AssetSubBlockPtr);

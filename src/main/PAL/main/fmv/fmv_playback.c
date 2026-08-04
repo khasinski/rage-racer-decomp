@@ -196,7 +196,8 @@ pollNext:
     }
 }
 
-void func_8001F0E0(void) {
+void ResetReplayFrameCounts(void) asm("func_8001F0E0");
+void ResetReplayFrameCounts(void) {
     g_ReplayFramesGp = &D_801E8AFC;
     g_ReplayFramesTimeAttack = &D_801E8AFC;
 }
