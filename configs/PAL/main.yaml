@@ -214,7 +214,7 @@ segments:
       - [0x318BC, c, PAL/main/track/play_countdown_cues]
       - [0x31A3C, c, PAL/main/track/draw_course_objects]
       - [0x32040, c, PAL/main/track/draw_terrain_cells]
-      - [0x334CC, c, PAL/main/cd/start_cd_volume_fade]
+      - [0x333C0, c, PAL/main/cd/cd_audio_control]
       - [0x337A0, c, PAL/main/cd/set_cd_volume]
       - [0x3390C, c, PAL/main/cd/apply_cd_volume]
       - [0x33934, c, PAL/main/cd/set_cd_volume_setting]
