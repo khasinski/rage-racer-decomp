@@ -10,7 +10,7 @@ typedef union SeqVolume71568 {
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
-long func_80076C58(short seq_sep, u_short left, u_short right, short update_voices);
+long SpuVmValidateSeqVol(short seq_sep, u_short left, u_short right, short update_voices) asm("func_80076C58");
 long func_80076DCC(short seq_sep, short *left, short *right);
 
 void _SsSndDecrescendo(short seq, short sep) asm("func_80071568");
@@ -29,12 +29,12 @@ void _SsSndDecrescendo(short seq, short sep) {
                 if (((left.value - score->unk40) > 0) &&
                     ((right.value - score->unk40) > 0) &&
                     (left.value != 1)) {
-                    func_80076C58(seq | (sep << 8),
+                    SpuVmValidateSeqVol(seq | (sep << 8),
                                   left.value - 1,
                                   right.value - 1,
                                   0);
                 } else {
-                    func_80076C58(seq | (sep << 8), 1, 1, 0);
+                    SpuVmValidateSeqVol(seq | (sep << 8), 1, 1, 0);
                 }
             } else {
                 g_SndSeqTable[seq][sep].flags &= ~0x20;
@@ -50,12 +50,12 @@ void _SsSndDecrescendo(short seq, short sep) {
             if (((u_long)(long)score->unk3E >=
                  ((score->unk94 - score->unk98) * -score->unk42)) &&
                 (-score->unk42 < left.value)) {
-                func_80076C58(seq | (sep << 8),
+                SpuVmValidateSeqVol(seq | (sep << 8),
                               left.value + score->unk42,
                               right.value + score->unk42,
                               0);
             } else {
-                func_80076C58(seq | (sep << 8), 1, 1, 0);
+                SpuVmValidateSeqVol(seq | (sep << 8), 1, 1, 0);
             }
         } else {
             g_SndSeqTable[seq][sep].flags &= ~0x20;

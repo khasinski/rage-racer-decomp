@@ -192,7 +192,7 @@ s32 InitSoundRuntime(void) {
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-s32 func_800731CC(void);
+s32 SpuVmDamperStep(void) asm("func_800731CC");
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
@@ -347,7 +347,7 @@ s32 CloseVabOnlyAudioSlot(s32 slot) {
 
 s32 CloseLoadedAudioSlots(void) asm("func_8005B9CC");
 s32 CloseLoadedAudioSlots(void) {
-    func_800731CC();
+    SpuVmDamperStep();
     if (func_8005E600(1) == 0) {
         return 0;
     }

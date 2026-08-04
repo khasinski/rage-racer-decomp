@@ -61,7 +61,7 @@ typedef union SeqVolume7128C {
     u_short value;
 } SeqVolume7128C;
 
-long func_80076C58(short seq_sep, u_short left, u_short right, short update_voices);
+long SpuVmValidateSeqVol(short seq_sep, u_short left, u_short right, short update_voices) asm("func_80076C58");
 long func_80076DCC(short seq_sep, short *left, short *right);
 
 void _SsSndCrescendo(short seq, short sep) asm("func_8007128C");
@@ -80,13 +80,13 @@ void _SsSndCrescendo(short seq, short sep) {
                 func_80076DCC(seq | (sep << 8), &left.output, &right.output);
                 next_left = left.value + 1;
                 if ((left.value + score->unk40) >= next_left) {
-                    func_80076C58(seq | (sep << 8),
+                    SpuVmValidateSeqVol(seq | (sep << 8),
                                   left.value + 1,
                                   right.value + 1,
                                   0);
                 }
             } else {
-                func_80076C58(seq | (sep << 8), 0x7F, 0x7F, 0);
+                SpuVmValidateSeqVol(seq | (sep << 8), 0x7F, 0x7F, 0);
                 g_SndSeqTable[seq][sep].flags &= ~0x10;
             }
             if ((score->unk98 == 0) || (score->unk40 == 0)) {
@@ -99,17 +99,17 @@ void _SsSndCrescendo(short seq, short sep) {
             func_80076DCC(seq | (sep << 8), &left.output, &right.output);
             if (((left.value - score->unk42) >= 0x7F) &&
                 ((right.value - score->unk42) >= 0x7F)) {
-                func_80076C58(seq | (sep << 8), 0x7F, 0x7F, 0);
+                SpuVmValidateSeqVol(seq | (sep << 8), 0x7F, 0x7F, 0);
             }
             if ((u_long)((score->unk94 - score->unk98) * -score->unk42) <
                 (u_long)(long)score->unk3E) {
-                func_80076C58(seq | (sep << 8),
+                SpuVmValidateSeqVol(seq | (sep << 8),
                               left.value - score->unk42,
                               right.value - score->unk42,
                               0);
             }
         } else {
-            func_80076C58(seq | (sep << 8), 0x7F, 0x7F, 0);
+            SpuVmValidateSeqVol(seq | (sep << 8), 0x7F, 0x7F, 0);
             g_SndSeqTable[seq][sep].flags &= ~0x10;
         }
         if ((score->unk98 == 0) || (score->unk40 == 0)) {

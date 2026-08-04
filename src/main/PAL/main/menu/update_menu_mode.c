@@ -91,13 +91,13 @@ void UpdateMenuMode(void) {
 }
 
 extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
-void func_800731CC(void);
+void SpuVmDamperStep(void) asm("func_800731CC");
 void SsSeqCalledTbyT(void) asm("func_80071018");
 void func_8005E900(void);
 void TickSequenceAudio(void) asm("func_8005AF78");
 void TickSequenceAudio(void) {
     if (g_SceneId == 0xC) {
-        func_800731CC();
+        SpuVmDamperStep();
     } else {
         SsSeqCalledTbyT();
         if (g_SeqVolumeFadeStep != 0) {
