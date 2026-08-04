@@ -253,11 +253,7 @@ void DrawProportionalTextShadedWide(
     u8 *str,
     s32 clutIndex,
     s32 intensity) {
-#define OPAQUE_VALUE ({ \
-    register s32 opaque asm("$8") = 0x100; \
- \
-    opaque; \
-})
+#define OPAQUE_VALUE (t0 = 0x100)
     s32 xPos;
     u8 *packet = *(u8 **)0x1F800000;
     u8 *text = ({
@@ -265,6 +261,8 @@ void DrawProportionalTextShadedWide(
         str;
     });
     register s32 shade asm("$23");
+    register s32 t0 asm("$8");
+    register s32 s1 asm("$17");
     u32 first;
     struct {
         s32 y;
@@ -296,7 +294,6 @@ void DrawProportionalTextShadedWide(
                 u8 *ot;
                 register u16 clut asm("$8");
                 s16 yOffset;
-                register s32 yValue asm("$8");
 
                 asm(
                     "" : "=r"(offset), "=r"(index) :
@@ -316,12 +313,12 @@ void DrawProportionalTextShadedWide(
                     sprt->x0 = xPos;
                 }
                 yOffset = g_HighFontYOffset[index];
-                yValue = home.y;
+                t0 = home.y;
                 asm(
-                    "" : "=r"(yOffset), "=r"(yValue) :
-                    "0"(yOffset), "1"(yValue));
+                    "" : "=r"(yOffset), "=r"(t0) :
+                    "0"(yOffset), "1"(t0));
                 packet += 20;
-                sprt->y0 = yOffset + yValue;
+                sprt->y0 = yOffset + t0;
                 width = g_HighFontWidth[index];
                 asm volatile("" : "=r"(width) : "0"(width));
                 prim = (void *)sprt;
@@ -346,7 +343,6 @@ void DrawProportionalTextShadedWide(
             }
             if (ch >= 0x61) {
                 s32 offset = ch - 0x61;
-                register s32 index asm("$17") = offset * 4;
                 s32 v;
                 s32 u;
                 s32 width;
@@ -354,13 +350,14 @@ void DrawProportionalTextShadedWide(
                 u8 *ot;
                 register u16 clut asm("$8");
 
+                s1 = offset * 4;
                 asm(
-                    "" : "=r"(offset), "=r"(index) :
-                    "0"(offset), "1"(index));
+                    "" : "=r"(offset), "=r"(s1) :
+                    "0"(offset), "1"(s1));
                 text++;
                 asm("" : : "r"(ch));
-                u = g_WordFontU[index];
-                v = g_WordFontV[index];
+                u = g_WordFontU[s1];
+                v = g_WordFontV[s1];
                 SetSprt(packet);
                 if (shade == OPAQUE_VALUE) {
                     SetShadeTex(packet, 1);
@@ -375,7 +372,7 @@ void DrawProportionalTextShadedWide(
                 clut = home.y;
                 packet += 20;
                 sprt->y0 = clut;
-                width = g_WordFontWidth[index];
+                width = g_WordFontWidth[s1];
                 prim = (void *)sprt;
                 sprt->u0 = u;
                 sprt->v0 = v;
@@ -388,19 +385,18 @@ void DrawProportionalTextShadedWide(
                 sprt->clut = clut;
                 sprt->w = width;
                 AddPrim(ot, prim);
-                advance = g_WordFontAdvance[index];
+                advance = g_WordFontAdvance[s1];
                 sprt++;
                 xPos += advance;
                 continue;
             }
             {
-                register s32 cell asm("$17") = ch - 0x20;
+                s1 = ch - 0x20;
 
-                asm("" : "=r"(cell) : "0"(cell));
+                asm("" : "=r"(s1) : "0"(s1));
                 text++;
-                if (cell != 0) {
-                    register s32 index asm("$3") = cell * 2;
-                    register u8 *base asm("$8");
+                if (s1 != 0) {
+                    register s32 index asm("$3") = s1 * 2;
                     u8 *uCell;
                     u8 *vCell;
                     register s32 u asm("$21");
@@ -410,10 +406,10 @@ void DrawProportionalTextShadedWide(
                     register u16 clut asm("$8");
 
                     asm("" : "=r"(index) : "0"(index));
-                    base = g_PropFontU;
-                    uCell = (u8 *)(index + (s32)base);
-                    base = g_PropFontV;
-                    vCell = (u8 *)(index + (s32)base);
+                    t0 = (s32)g_PropFontU;
+                    uCell = (u8 *)(index + t0);
+                    t0 = (s32)g_PropFontV;
+                    vCell = (u8 *)(index + t0);
                     asm("" : "=r"(vCell) : "0"(vCell), "r"(uCell));
                     u = *uCell;
                     v = *vCell;
