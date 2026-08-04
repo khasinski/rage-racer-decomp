@@ -465,7 +465,7 @@ extern s16 g_NegconSteer asm("D_801E437E");
 extern s16 g_NegconMaxTwist asm("D_801E418C");
 extern s16 g_NegconSteerRange[] asm("D_8007C020");
 
-s32 func_80068634(s32);
+s32 rcos(s32) asm("func_80068634");
 
 /*
  * Steering-lean / body-roll state machine for the car `ctx`: drives the lean
@@ -546,7 +546,7 @@ void UpdateCarBodyRoll(A *ctx) {
     } else if ((a1 - 256) < v1) {
         s32 t;
         if (v1 >= 4097) v1 = 4096;
-        t = func_80068634(v1 / 8);
+        t = rcos(v1 / 8);
         p->x1C = p->x1C - (t / 4);
         ctx->f44 = ctx->f44 + 1536;
     } else {
@@ -565,7 +565,7 @@ void UpdateCarBodyRoll(A *ctx) {
         s32 t;
         s32 c = v1;
         if (v1 < -4096) { v1 = -4096; c = v1; }
-        t = func_80068634(c / 8);
+        t = rcos(c / 8);
         p->x1C = p->x1C + (t / 4);
         ctx->f44 = ctx->f44 - 1536;
     } else {
@@ -594,7 +594,7 @@ void UpdateCarBodyRoll(A *ctx) {
         r = GetAngleDelta(ctx->f24, arg1 - ctx->fB4);
     }
     s2v = r * 32;
-    r = func_80068634(ctx->f34 * 2);
+    r = rcos(ctx->f34 * 2);
     a0v = 4096 - r;
     if (ctx->fA4 < 800) {
         a0v = a0v * 6;

@@ -342,7 +342,7 @@ typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 extern Vec4 D_80011AC4;
 extern s32 g_TeamNameCharModel asm("D_8009B37C");
 extern s32 g_CourseModelCount asm("D_801E40E4");
-s32 func_80068568(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */
 void DrawTeamNameCharModel(void) asm("func_80051D6C");
@@ -415,11 +415,11 @@ void DrawTeamNameCharModel(void) {
     }
 
     poly.f0 = 0;
-    poly.f1 = (s0 - s2) + func_80068568((g_AnimTimer * 32) & 0xFE0) * 12 / 4096;
+    poly.f1 = (s0 - s2) + rsin((g_AnimTimer * 32) & 0xFE0) * 12 / 4096;
     poly.f2 = 0;
     poly.f4 = 0;
     poly.f5 = s1;
-    poly.f6 = func_80068568((g_AnimTimer * 20) & 0xFFC) * 72 / 4096;
+    poly.f6 = rsin((g_AnimTimer * 20) & 0xFFC) * 72 / 4096;
 
     BuildRotMatrixY(&mtxB, 0x800 - poly.f5);
     BuildRotMatrixZ(&mtxA, poly.f6);

@@ -84,7 +84,7 @@ extern s32 g_PlayerField3C asm("D_8009E710");
 extern s32 g_PlayerSpeed asm("D_8009E778");
 extern s32 g_PlayerTrackPoint asm("D_8009E704");
 
-s32 func_80068634(s32 arg0);
+s32 rcos(s32 arg0) asm("func_80068634");
 void func_8005BEA8(s32 arg0, s32 arg1);
 
 void func_8004087C(s16 arg) {
@@ -142,23 +142,23 @@ void func_8004087C(s16 arg) {
         t = *(s32 *)0x1F80001C - 0xC00;
         s3 = (t + g_TrackPoints[g_PlayerTrackPoint].angle) & 0xFFF;
         if (s0 < 0 && (data & 2) > 0) {
-            val = s0 * func_80068634(s3);
+            val = s0 * rcos(s3);
             if (val < 0) {
                 val += 0xFFF;
             }
             s1 = -(s0 + (val >> 12));
-            val = (-s0) * func_80068634(s3);
+            val = (-s0) * rcos(s3);
             if (val < 0) {
                 val += 0xFFF;
             }
             s2 = -(s0 + (val >> 12));
         } else if (s0 > 0 && (data & 1) > 0) {
-            val = s0 * func_80068634(s3);
+            val = s0 * rcos(s3);
             if (val < 0) {
                 val += 0xFFF;
             }
             s2 = s0 + (val >> 12);
-            val = (-s0) * func_80068634(s3);
+            val = (-s0) * rcos(s3);
             if (val < 0) {
                 val += 0xFFF;
             }
@@ -185,7 +185,7 @@ void func_8004087C(s16 arg) {
     func_8005BEA8(a0v, a1v);
 }
 
-s32 func_80068568(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
 void func_8005C31C(s32 arg0, s32 arg1, s32 arg2);
 
 typedef struct TrackSeg {
@@ -296,12 +296,12 @@ load:
         v1 -= 0xC00;
         v1 += angle;
         s0v = v1 & 0xFFF;
-        sinv = func_80068568(s0v);
+        sinv = rsin(s0v);
         v1 = s1 << 16;
         s1 = v1 >> 16;
         v0 = s2 + (s1 * sinv) / 4096;
         s5 = v0 + 0x20;
-        sinv = func_80068568(s0v);
+        sinv = rsin(s0v);
         v1 = -s1;
         v0 = s2 + (v1 * sinv) / 4096;
         a2v = v0 + 0x20;

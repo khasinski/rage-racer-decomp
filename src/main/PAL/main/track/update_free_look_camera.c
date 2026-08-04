@@ -20,8 +20,8 @@ extern s32 g_PlayerTrackProgress asm("D_8009E744");
 extern GameRenderObject g_CameraCar asm("D_801E3E14");
 
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
-s32 func_80068568(s32 arg0);
-s32 func_80068634(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
+s32 rcos(s32 arg0) asm("func_80068634");
 void func_8002C168(void *arg0);
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
 
@@ -77,13 +77,13 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
         }
         g_CameraCarSpeed = (g_CameraCarSpeed + g_CameraCarSpeedRamp) * 94 / 100;
 
-        value = func_80068568(g_CameraCarHeading) * g_CameraCarSpeed;
+        value = rsin(g_CameraCarHeading) * g_CameraCarSpeed;
         if (value < 0) {
             value += 0xFF;
         }
         g_CameraCarStepX = value >> 8;
 
-        zValue = func_80068634(g_CameraCarHeading) * g_CameraCarSpeed;
+        zValue = rcos(g_CameraCarHeading) * g_CameraCarSpeed;
         if (zValue < 0) {
             zValue += 0xFF;
         }

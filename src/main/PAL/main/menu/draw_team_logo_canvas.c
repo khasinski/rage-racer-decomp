@@ -46,7 +46,7 @@ extern u16 D_801E6F2C;
 
 extern s32 GetClut(s16 x, s16 y) asm("func_80064C7C");
 extern void LoadImage(void *rect, void *data) asm("func_80065B24");
-extern s32 func_80068568(s32 angle);
+extern s32 rsin(s32 angle) asm("func_80068568");
 extern void func_800468FC(s32 ot, s16 x, s16 y, s16 w, s16 h);
 extern void func_80046A2C(
     s32 ot,
@@ -197,11 +197,11 @@ void func_8004A248(s32 arg0, s32 arg1)
     return;
   }
   D_801E444C[0] = 0x8000;
-  D_801E444C[0] |= ((func_80068568(D_8009B288 % 0x1000) / 128) + 0x20) >> 3;
+  D_801E444C[0] |= ((rsin(D_8009B288 % 0x1000) / 128) + 0x20) >> 3;
   ang = D_8009B288 + 0x55;
-  D_801E444C[0] |= (((func_80068568(ang % 0x1000) / 128) + 0x20) >> 3) << 5;
+  D_801E444C[0] |= (((rsin(ang % 0x1000) / 128) + 0x20) >> 3) << 5;
   ang = D_8009B288 + 0xAA;
-  d = func_80068568(ang % 0x1000);
+  d = rsin(ang % 0x1000);
   i = 0;
   if (d < 0)
   {
@@ -318,7 +318,7 @@ void func_8004A248(s32 arg0, s32 arg1)
         modInput >>= 12;
         modInput *= 0x1000;
         modInput = angleValue - modInput;
-        clut = (func_80068568(modInput) / 64) - 0x41;
+        clut = (rsin(modInput) / 64) - 0x41;
         func_80047460(ot, sy2Arg, sy, D_8007F94C * 4, (s16) (D_8007F94C * 8), 0, clut, 0, ff);
       }
     }
@@ -371,7 +371,7 @@ void func_8004A248(s32 arg0, s32 arg1)
     {
       x1 = D_8007F93C.lo + 0x30;
       y1 = sy + ((D_8007F940 * 2) + 2);
-      clut = (func_80068568((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
+      clut = (rsin((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
       if (D_8007F944 == 2)
       {
         s16 ya;
@@ -449,7 +449,7 @@ void func_8004A248(s32 arg0, s32 arg1)
     {
       s32 panelAng;
       panelAng = D_8009B288 * 2;
-      clut = (func_80068568(panelAng % 0x1000) / 64) - 0x41;
+      clut = (rsin(panelAng % 0x1000) / 64) - 0x41;
       func_80047460(ot, x1, y1, 0xD, 0x1A, 0, clut, 0, 0xFF);
     }
     else
@@ -561,7 +561,7 @@ void func_8004A248(s32 arg0, s32 arg1)
     sy = (syBase * 0x30) + 0xD9;
     if (D_8007F954 == 1)
     {
-      clut = (func_80068568((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
+      clut = (rsin((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
       func_80047460(ot, x0, sy, 0x12, 0x15, 0, clut, 0, 0xFF);
     }
     yA8 = (s16) (kreg + 0x14);

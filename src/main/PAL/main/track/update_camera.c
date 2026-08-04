@@ -7,7 +7,7 @@
 
 extern void DrawPlayerCarModel(void *) asm("func_8001DAB0");
 extern s32 FindNearestTrackCamera() asm("func_80043B18");
-extern s32 func_80068634(s32);
+extern s32 rcos(s32) asm("func_80068634");
 extern s32 func_800689A8(s32);
 extern void *ApplyMatrixLV(void *, void *, void *) asm("func_80068F80");
 extern void *func_80069CC8(void *, void *);
@@ -482,7 +482,7 @@ block_52:
         } else if (g_CamPathFrame < FIELD(((g_CamPathNode * 0x24) + g_TrackCameras), s32 *, 0x1C)) {
             g_CamPathFrame += 1;
         }
-        temp_a1_1117 = 0x1000 - func_80068634((s32) (g_CamPathFrame << 0xB) / (s32) FIELD(((g_CamPathNode * 0x24) + g_TrackCameras), s32 *, 0x1C));
+        temp_a1_1117 = 0x1000 - rcos((s32) (g_CamPathFrame << 0xB) / (s32) FIELD(((g_CamPathNode * 0x24) + g_TrackCameras), s32 *, 0x1C));
         var_a0_1119 = temp_a1_1117 * g_CamPathOffsetDelta[0];
         if (var_a0_1119 < 0) {
             var_a0_1119 += 0x1FFF;

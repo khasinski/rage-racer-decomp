@@ -12,8 +12,8 @@ extern s16 g_SteerHoldFrames asm("D_801F17A4");
 extern D8007Pair g_LaunchSpeedThresholds[] asm("D_8007DAC0");
 
 void func_8002F4E4(GameCarRuntime *car, s32 arg1);
-s32 func_80068568(s32 arg0);
-s32 func_80068634(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
+s32 rcos(s32 arg0) asm("func_80068634");
 void func_8005C104(s32 index, s32 phase, s32 volume);
 
 /*
@@ -41,11 +41,11 @@ void UpdateCarDriving(GameCarRuntime *car) {
     car->field_24 = r / 5 + base;
     func_8002F4E4(car, base);
 
-    sinA = func_80068568(car->field_24);
-    cosA = func_80068634(car->field_24);
+    sinA = rsin(car->field_24);
+    cosA = rcos(car->field_24);
 
-    car->field_C4 = func_80068568(car->headingAngle) * car->field_A4 / 256;
-    car->field_CC = func_80068634(car->headingAngle) * car->field_A4 / 256;
+    car->field_C4 = rsin(car->headingAngle) * car->field_A4 / 256;
+    car->field_CC = rcos(car->headingAngle) * car->field_A4 / 256;
 
     coords[0] = (cosA * car->field_C4 - sinA * car->field_CC) / 4096;
     coords[2] = (sinA * car->field_C4 + cosA * car->field_CC) / 4096;

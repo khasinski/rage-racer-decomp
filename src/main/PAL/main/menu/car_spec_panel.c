@@ -17,7 +17,7 @@ void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
 void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
                    u8 b, u8 alpha);
 void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
-s32 func_80068568(s32 angle);
+s32 rsin(s32 angle) asm("func_80068568");
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */
 void DrawTireCompoundSlider(u8 x, s32 useFlag) asm("func_80048ED8");
@@ -61,7 +61,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
         }
     } else {
         angle = D_8009B268;
-        color = func_80068568(angle % 0x1000);
+        color = rsin(angle % 0x1000);
         if (color < 0) {
             color += 0x3F;
         }
@@ -158,7 +158,7 @@ void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
         }
 
         leftX = (((u32)(phase * 0x250)) >> 5) + 0xFFE7;
-        wave = func_80068568(D_8009B26C % 0x1000);
+        wave = rsin(D_8009B26C % 0x1000);
         intensity = (wave / 64) - intensityBias;
         leftEdge = leftX - halfWidth;
         D_8009B26C += 0x60;

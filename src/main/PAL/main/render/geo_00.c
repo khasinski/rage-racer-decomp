@@ -12,8 +12,8 @@ s32 rcos(s32 arg0) asm("func_80068634");
 
 /*
  * PSY-Q 3.5 libgte object geo_00.o (LIBGTE.A): the fixed-point sine/cosine
- * helpers rsin (func_80068568), rsinCore (func_800685A4) and rcos
- * (func_80068634) that read the 0x80094308 sine table.  Byte-matched against
+ * helpers rsin (rsin), rsinCore (func_800685A4) and rcos
+ * (rcos) that read the 0x80094308 sine table.  Byte-matched against
  * geo_00.o (rsin anchor); see docs/names.md section 25.
  */
 

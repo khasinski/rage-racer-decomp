@@ -111,7 +111,7 @@ void StartCarBodyKick(s32 arg0, void *car) asm("func_80038F0C");
 void UpdateCarTiltCounter(void *car) asm("func_80038B04");
 void UpdateCarCrestHop(void *car) asm("func_80039280");
 void UpdateCarBodyKick(void *car) asm("func_80038FF0");
-s32 func_80068568(s32 angle);
+s32 rsin(s32 angle) asm("func_80068568");
 s32 Random15(void) asm("func_800632B0");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8005C104(s32 arg0, s32 arg1, s32 arg2);
@@ -494,10 +494,10 @@ void UpdatePlayerCar(Car *car) {
             }
         } else {
             p->unk48 -= 5000;
-            p->unk94 = (85 - func_80068568(slip) * 20 / 4096) * p->unk94 / 100;
-            car->speed = (87 - func_80068568(slip) * 40 / 4096) * car->speed / 100;
-            p->unk2C = p->unk2C * (85 - func_80068568(slip) * 20 / 4096) / 100;
-            g_ShiftTargetRpm = (85 - func_80068568(slip) * 20 / 4096) * g_ShiftTargetRpm / 100;
+            p->unk94 = (85 - rsin(slip) * 20 / 4096) * p->unk94 / 100;
+            car->speed = (87 - rsin(slip) * 40 / 4096) * car->speed / 100;
+            p->unk2C = p->unk2C * (85 - rsin(slip) * 20 / 4096) / 100;
+            g_ShiftTargetRpm = (85 - rsin(slip) * 20 / 4096) * g_ShiftTargetRpm / 100;
             if (g_RacePhase < 3) {
                 switch (skid) {
                 case 1:
@@ -565,7 +565,7 @@ void UpdatePlayerCar(Car *car) {
         revFlag = 0;
         if (p->unk78 == 0 && (g_AnimTimer & 8)) {
             g_TachoNeedleFlash = 0;
-            g_EngineRpmJitter = func_80068568(Random15() & 0xFFF) * 150 / 4096;
+            g_EngineRpmJitter = rsin(Random15() & 0xFFF) * 150 / 4096;
             if (g_EngineRpmJitter <= 0) {
                 g_EngineRpmJitter = 0;
             }

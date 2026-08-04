@@ -112,7 +112,7 @@ void DrawTitleFadeOverlay(s32 arg0) {
 
 extern s32 D_801E6F28;
 
-s32 func_80068568(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
 void DrawTitleFadeOverlay(s32 brightness) asm("func_8001B0F0");
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
@@ -131,7 +131,7 @@ void DrawPressStartPrompt(void) {
         D_801E6F28 -= 2;
     }
 
-    sinValue = func_80068568(((g_AnimTimer * 3) << 5) & 0xFE0);
+    sinValue = rsin(((g_AnimTimer * 3) << 5) & 0xFE0);
     frame = (sinValue / 64) + 0x80;
 
     scratch = (void **)0x1F800000;

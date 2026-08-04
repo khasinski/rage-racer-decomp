@@ -23,7 +23,6 @@ extern void func_8001D338(s32, s32);
 extern void func_8004A248(s32, s32);
 extern void RampTeamLogoCanvas(s32, s32) asm("func_8004B8B4");
 extern void DrawLogoSamplePanel(s32, s32) asm("func_8004E368");
-extern s32 func_800487D8(void *, void *, s32);
 extern void func_800489AC(s32, s32, s32);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
@@ -40,10 +39,10 @@ void UpdateLogoSampleScreen(void) {
     if (v0 == 0) {
         RampTeamLogoCanvas(-10, 0);
         DrawLogoSamplePanel(-1, D_80082EB0 + 1);
-        func_800487D8(D_8009F0B0, &g_UiScriptProgress2, -1);
+        RunTimedDrawScript(D_8009F0B0, &g_UiScriptProgress2, -1);
         func_800489AC(g_UiScriptProgress, 2, D_8019C770);
-        func_800487D8(&D_80081CA4, &g_UiScriptProgress, 0);
-        if (func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) return;
+        RunTimedDrawScript(&D_80081CA4, &g_UiScriptProgress, 0);
+        if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) return;
         if (g_UiScriptProgress2 > 0) return;
         g_MenuOverlayPattern = -1;
         if (g_PadEdge2 & 0x1000) {
@@ -92,7 +91,7 @@ void UpdateLogoSampleScreen(void) {
     if (v0 < 0) {
         RampTeamLogoCanvas(10, 0);
         if (GameMenuBusy == -1) {
-            if (func_800487D8(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
+            if (RunTimedDrawScript(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
                 u16 *p = &g_PadEdge2;
                 if (*p & 0x860) {
                     PlaySoundCue(2);
@@ -123,7 +122,7 @@ void UpdateLogoSampleScreen(void) {
             }
             t = D_80082EA4;
         } else {
-            if (func_800487D8(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
+            if (RunTimedDrawScript(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
                 u16 *p = &g_PadEdge2;
                 if (*p & 0x860) {
                     PlaySoundCue(2);
@@ -156,16 +155,16 @@ void UpdateLogoSampleScreen(void) {
         }
         DrawLogoSamplePanel(1, t + 1);
         func_800489AC(g_UiScriptProgress, 2, D_8019C770);
-        func_800487D8(&D_80081CA4, &g_UiScriptProgress, 0);
-        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
+        RunTimedDrawScript(&D_80081CA4, &g_UiScriptProgress, 0);
+        RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
     }
 
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 8;
     DrawLogoSamplePanel(-1, 0);
-    func_800487D8(&D_80081CA4, &g_UiScriptProgress, -1);
-    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
+    RunTimedDrawScript(&D_80081CA4, &g_UiScriptProgress, -1);
+    RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, 2, D_8019C770);
     if (g_UiScriptProgress <= 0) {
         g_MenuScreen = 7;
@@ -208,7 +207,6 @@ extern u32 D_80081D34;
 
 void func_80051D6C(void);
 s32 func_8004E724(s32 a, s32 b);
-s32 func_800487D8(void *a, void *b, s32 c);
 void UploadTeamNameTexture(void *a, s32 b) asm("func_8001D530");
 
 void UpdateTeamNameScreen(void) asm("func_8005873C");
@@ -221,7 +219,7 @@ void UpdateTeamNameScreen(void) {
     if (!(GameMenuBusy != 0)) {
 
     func_8004E724(1, GameMenuCursor);
-    if (func_800487D8(&D_80081D34, &g_UiScriptProgress, 1) == 0) return;
+    if (RunTimedDrawScript(&D_80081D34, &g_UiScriptProgress, 1) == 0) return;
     g_MenuOverlayPattern = -1;
 
     if (g_TeamNameLength < 6) {
@@ -296,7 +294,7 @@ pop:
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 9;
     func_8004E724(-1, GameMenuCursor);
-    func_800487D8(&D_80081D34, &g_UiScriptProgress, -1);
+    RunTimedDrawScript(&D_80081D34, &g_UiScriptProgress, -1);
     if (g_UiScriptProgress > 0) return;
     if (0x3D08F < g_MenuViewOffset) {
         g_MenuScreen = 6;
@@ -343,7 +341,6 @@ void func_8005131C(void);
 s32 func_8004F048(void *, s32, s32);
 void func_80049418(s32, s32, s32, s32);
 void func_800489AC(s32, s32, s32);
-s32 func_800487D8(void *, void *, s32);
 void func_8001D8C4(s32);
 void func_8001DA74(s32);
 
@@ -356,8 +353,8 @@ void UpdatePaintColorScreen(void) {
         func_8004F048(&g_UiScriptProgress2, -1, D_80082EB4);
         func_80049418(-1, 0, 1, 1);
         func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
-        func_800487D8(&D_80082010, &g_UiScriptProgress, 0);
-        if (func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) {
+        RunTimedDrawScript(&D_80082010, &g_UiScriptProgress, 0);
+        if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) {
             return;
         }
         if (g_UiScriptProgress2 > 0) {
@@ -450,15 +447,15 @@ void UpdatePaintColorScreen(void) {
 
         func_80049418(1, 0, 1, 1);
         func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
-        func_800487D8(&D_80082010, &g_UiScriptProgress, 0);
-        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
+        RunTimedDrawScript(&D_80082010, &g_UiScriptProgress, 0);
+        RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
     }
 
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 10;
-    func_800487D8(&D_80082010, &g_UiScriptProgress, -1);
-    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
+    RunTimedDrawScript(&D_80082010, &g_UiScriptProgress, -1);
+    RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, 2, D_801F17A0);
     if (g_UiScriptProgress <= 0) {
         g_MenuScreen = 6;

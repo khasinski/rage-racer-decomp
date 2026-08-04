@@ -152,7 +152,7 @@ extern s32 g_ReverbZoneEnd asm("D_8007E058");
 
 
 
-s32 func_80068568(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
 
 
 extern u8 *g_TrackPoints asm("D_8009E688");
@@ -589,8 +589,8 @@ s32 func_80038288(s32 arg0) {
         value &= 0xFFF;
         temp -= value;
         angle = temp & 0xFFF;
-        temp = func_80068568(angle);
-        temp = func_80068568(angle);
+        temp = rsin(angle);
+        temp = rsin(angle);
         scale = -0x40;
         value = temp * scale;
         if (value < 0) {

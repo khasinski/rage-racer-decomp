@@ -8,8 +8,8 @@ void UpdateCarDriving() asm("func_8002F690");
 void func_80030030();
 void UpdateCarAirborne() asm("func_80030814");
 void UpdateCarStandingStart() asm("func_80030BC4");
-s32 func_80068568(s32);
-s32 func_80068634();
+s32 rsin(s32) asm("func_80068568");
+s32 rcos() asm("func_80068634");
 extern s32 g_ShiftTargetSpeed asm("D_8007DA74");
 extern s32 g_RoadGrade asm("D_8007DA78");
 extern u8 *g_TrackArcCenters asm("D_8019C7D0");
@@ -669,7 +669,7 @@ void UpdateCarDrivetrain(void *base) {
     var_v0_11 += 0x3FF;
   }
   var_s0 = var_v0_11 >> 0xA;
-  temp_lo_2 = var_s0 * func_80068634(var_a0);
+  temp_lo_2 = var_s0 * rcos(var_a0);
   var_s0 = temp_lo_2 >> 0xC;
   if (temp_lo_2 < 0)
   {
@@ -684,7 +684,7 @@ void UpdateCarDrivetrain(void *base) {
   {
     var_s0 = 0xEE;
   }
-  temp_v1_13 = (-func_80068568(var_s0)) * 0x708;
+  temp_v1_13 = (-rsin(var_s0)) * 0x708;
   g_RoadGrade = var_s0;
   var_a0 = temp_v1_13 / 0xA000;
   steeringNonnegative = var_s0 >= 0;
@@ -758,8 +758,8 @@ void UpdateCarDrivetrain(void *base) {
       temp_s2 = (*((s32 *) (((u8 *) car) + 0))) - (*((s32 *) (((u8 *) temp_v1_17) + 0)));
       temp_s1 = (*((s32 *) (((u8 *) car) + 8))) - (*((s32 *) (((u8 *) temp_v1_17) + 4)));
       temp_v0_12 = Atan2(temp_s2, temp_s1);
-      temp_s0 = func_80068634(temp_v0_12);
-      temp_v0_13 = (temp_s0 * temp_s2) + (func_80068568(temp_v0_12) * temp_s1);
+      temp_s0 = rcos(temp_v0_12);
+      temp_v0_13 = (temp_s0 * temp_s2) + (rsin(temp_v0_12) * temp_s1);
       var_a0 = temp_v0_13 >> 0xC;
       if (temp_v0_13 < 0)
       {

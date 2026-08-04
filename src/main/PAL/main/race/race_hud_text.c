@@ -423,7 +423,7 @@ extern char g_RaceOptionMarquee[4][40] asm("D_8007DF34");
 extern s32 g_RaceOptionPulseAngle asm("D_8007DF2C");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
-s32 func_80068634(s32 angle);
+s32 rcos(s32 angle) asm("func_80068634");
 u8 *AddTilePrim(
     void *ot,
     u8 *prim,
@@ -590,7 +590,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 quad->t.g0 = 0x60;
                 quad->t.b0 = 0x60;
                 g_RaceOptionPulseAngle &= 0xFFF;
-                leftTrig = func_80068634(g_RaceOptionPulseAngle) * 0x2C;
+                leftTrig = rcos(g_RaceOptionPulseAngle) * 0x2C;
                 if (leftTrig < 0) {
                     leftTrig += 0xFFF;
                 }
@@ -610,7 +610,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 rightTrig = ({
                     register s32 sample;
 
-                    sample = func_80068634(g_RaceOptionPulseAngle);
+                    sample = rcos(g_RaceOptionPulseAngle);
                     asm volatile("" ::: "memory");
                     sample * 0x2C;
                 });

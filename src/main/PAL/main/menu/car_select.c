@@ -25,7 +25,6 @@ void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
 void func_8005194C(void);
 void func_8004CF30(s32 arg0);
 void func_800489AC(s32 arg0, s32 arg1, s32 arg2);
-s32 func_800487D8(u8 *arg0, s32 *arg1, s32 arg2);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_8004D384(s32 *arg0, s32 arg1, s32 arg2);
 void func_800509C4(s32 arg0);
@@ -42,12 +41,12 @@ void UpdateRankingScreen(void) {
         g_UiScriptProgress2 = 0;
         GameMenuBusy = -1;
         func_800489AC(0, 2, D_8019CDF8);
-        func_800487D8(&D_80082724, &g_UiScriptProgress2, 1);
+        RunTimedDrawScript(&D_80082724, &g_UiScriptProgress2, 1);
     } else if (state < 0) {
         switch (state) {
         case -1:
             func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
-            if (func_800487D8(&D_80082724, &g_UiScriptProgress2, 1) != 0) {
+            if (RunTimedDrawScript(&D_80082724, &g_UiScriptProgress2, 1) != 0) {
                 g_MenuOverlayPattern = -1;
                 if (g_PadEdge2 & 0x1000) {
                     PlaySoundCue(1);
@@ -83,7 +82,7 @@ void UpdateRankingScreen(void) {
             }
             break;
         case -2:
-            func_800487D8(&D_80082724, &g_UiScriptProgress2, -1);
+            RunTimedDrawScript(&D_80082724, &g_UiScriptProgress2, -1);
             func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
             if (g_UiScriptProgress2 > 0) {
                 break;
@@ -128,16 +127,16 @@ void UpdateRankingScreen(void) {
     } else {
         goto pos;
     }
-    func_800487D8(&D_80081890, &g_UiScriptProgress, 0);
-    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
+    RunTimedDrawScript(&D_80081890, &g_UiScriptProgress, 0);
+    RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
     return;
 pos:
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 2;
-    func_800487D8(&D_80082724, &g_UiScriptProgress2, -1);
+    RunTimedDrawScript(&D_80082724, &g_UiScriptProgress2, -1);
     func_800489AC(g_UiScriptProgress2, 2, D_8019CDF8);
-    func_800487D8(&D_80081890, &g_UiScriptProgress, -1);
-    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
+    RunTimedDrawScript(&D_80081890, &g_UiScriptProgress, -1);
+    RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
     if (g_UiScriptProgress > 0) {
         return;
     }
@@ -397,8 +396,8 @@ void UpdateCarSelectScreen(void) {
         g_CarNamePlateStep = 0x14;
         D_8009B324 = 3;
         g_MenuPlateCarIndex = g_PlayerCarIndex;
-        func_800487D8(D_801E40B4, &g_UiScriptProgress2, -1);
-        func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
+        RunTimedDrawScript(D_801E40B4, &g_UiScriptProgress2, -1);
+        RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
         DrawBrowseArrows(
             1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
         {
@@ -410,8 +409,8 @@ void UpdateCarSelectScreen(void) {
             }
             lowMode = mode & 0xFF;
             func_800489AC(g_UiScriptProgress, lowMode, D_801E4138);
-            func_800487D8(cmdList, &g_UiScriptProgress, 0);
-            if ((func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) !=
+            RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
+            if ((RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) !=
                  0) &&
                 (g_UiScriptProgress2 <= 0)) {
                 g_MenuOverlayPattern = initial;
@@ -583,8 +582,8 @@ void UpdateCarSelectScreen(void) {
     }
 
     if (GameMenuBusy < 0) {
-        func_800487D8(D_801E40B4, &g_UiScriptProgress2, 0);
-        if (func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
+        RunTimedDrawScript(D_801E40B4, &g_UiScriptProgress2, 0);
+        if (RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
             if (g_PadEdge2 & 0x860) {
                 GameMenuBusy = 0;
             }
@@ -598,8 +597,8 @@ void UpdateCarSelectScreen(void) {
             func_8004F3EC(1, CountOwnedCars());
         }
         func_800489AC(g_UiScriptProgress, mode, D_801E4138);
-        func_800487D8(cmdList, &g_UiScriptProgress, 0);
-        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
+        RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
+        RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
     }
 
@@ -610,8 +609,8 @@ void UpdateCarSelectScreen(void) {
     if (g_GrandPrixMode == 0) {
         func_8004F3EC(-1, CountOwnedCars());
     }
-    func_800487D8(cmdList, &g_UiScriptProgress, -1);
-    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
+    RunTimedDrawScript(cmdList, &g_UiScriptProgress, -1);
+    RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, mode, D_801E4138);
     if (g_UiScriptProgress <= 0) {
         switch (GameMenuBusy) {
@@ -747,7 +746,6 @@ extern u8 *D_8019C794;
 extern s32 g_RankingOption asm("D_8019C7C0");
 extern u8 D_801E4389[];
 extern u8 D_801E438A[];
-s32 func_800487D8(u8 *commands, s32 *progress, s32 step);
 void func_80048ED8(u8 x, s32 useFlag);
 void func_80048D64(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
@@ -777,11 +775,11 @@ void UpdateCustomizeScreen(void) {
 
     if (GameMenuBusy == 0) {
         D_8009B324 = 3;
-        func_800487D8(D_8019C794, &g_UiScriptProgress2, -1);
+        RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, -1);
         lowMode = mode & 0xFF;
         func_800489AC(g_UiScriptProgress, lowMode, g_RankingOption);
-        func_800487D8(cmdList, &g_UiScriptProgress, 0);
-        if ((func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
+        RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
+        if ((RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = -1;
             if (g_PadEdge2 & 0x1000) {
                 PlaySoundCue(1);
@@ -844,7 +842,7 @@ void UpdateCustomizeScreen(void) {
 
     if (GameMenuBusy < 0) {
         if (GameMenuBusy == -1) {
-            if (func_800487D8(D_8019C794, &g_UiScriptProgress2, 1) != 0) {
+            if (RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 1) != 0) {
                 pad = &g_PadEdge2;
                 if (*pad & 0x860) {
                     PlaySoundCue(2);
@@ -868,7 +866,7 @@ void UpdateCustomizeScreen(void) {
                 func_80048ED8(g_MenuSubCursor, 0);
             }
         } else if (GameMenuBusy == -2) {
-            if (func_800487D8(D_8019C794, &g_UiScriptProgress2, 1) != 0) {
+            if (RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 1) != 0) {
                 pad = &g_PadEdge2;
                 if (*pad & 0x860) {
                     PlaySoundCue(2);
@@ -898,8 +896,8 @@ void UpdateCustomizeScreen(void) {
                 func_80048B88(0xDA, 0x68, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, &g_MenuBlankCaption);
             }
         } else if (GameMenuBusy == -3) {
-            func_800487D8(D_8019C794, &g_UiScriptProgress2, 0);
-            if (func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
+            RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 0);
+            if (RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
                 if (g_PadEdge2 & 0x860) {
                     GameMenuBusy = -4;
                 }
@@ -908,14 +906,14 @@ void UpdateCustomizeScreen(void) {
                 }
             }
         } else if (GameMenuBusy == -4) {
-            func_800487D8(D_8019C794, &g_UiScriptProgress2, -1);
-            func_800487D8(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
+            RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, -1);
+            RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
             if (g_UiScriptProgress2 <= 0) {
                 GameMenuBusy = 0;
             }
         } else if (GameMenuBusy == -5) {
             if (g_MenuConfirmTimer <= 0) {
-                func_800487D8(D_8019C794, &g_UiScriptProgress2, -1);
+                RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, -1);
                 if (g_UiScriptProgress2 <= 0) {
                     GameMenuBusy = 0;
                     g_CarTable[g_PlayerCarIndex].tireCompound = g_MenuSubCursor;
@@ -923,18 +921,18 @@ void UpdateCustomizeScreen(void) {
                 }
             } else {
                 g_MenuConfirmTimer -= 1;
-                func_800487D8(D_8019C794, &g_UiScriptProgress2, 1);
+                RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 1);
                 func_80048ED8(g_MenuSubCursor, 1);
             }
         } else if (GameMenuBusy == -6) {
             if (g_MenuConfirmTimer <= 0) {
-                func_800487D8(D_8019C794, &g_UiScriptProgress2, -1);
+                RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, -1);
                 if (g_UiScriptProgress2 <= 0) {
                     GameMenuBusy = 0;
                 }
             } else {
                 g_MenuConfirmTimer -= 1;
-                func_800487D8(D_8019C794, &g_UiScriptProgress2, 1);
+                RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 1);
                 func_80048D64((g_MenuSubCursor != 0) ? 0xDA : 0xB8, 0x68, 0x20, 0x20, 1);
                 func_80046A2C(ot, 0xC2, 0x70, 0xC, 0x10, 0x60, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80046A2C(ot, 0xE3, 0x70, 0x10, 0x10, 0x6C, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -943,15 +941,15 @@ void UpdateCustomizeScreen(void) {
             }
         }
         func_800489AC(g_UiScriptProgress, mode, g_RankingOption);
-        func_800487D8(cmdList, &g_UiScriptProgress, 0);
-        func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 1);
+        RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
+        RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
     }
 
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 5;
-    func_800487D8(cmdList, &g_UiScriptProgress, -1);
-    func_800487D8(&g_UiChromeScript, &g_UiScriptProgress, 0);
+    RunTimedDrawScript(cmdList, &g_UiScriptProgress, -1);
+    RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
     func_800489AC(g_UiScriptProgress, mode, g_RankingOption);
     if (g_UiScriptProgress <= 0) {
         switch (GameMenuBusy) {

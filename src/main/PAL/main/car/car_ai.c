@@ -23,7 +23,7 @@ s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
 
 s32 GetCarCrestTrigger(GameCarRuntime *arg0) asm("func_80039184");
 
-s32 func_80068568(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
 
 /*
  * Jump / launch setup: when GetCarCrestTrigger reports a marker crossing, seeds the
@@ -71,7 +71,7 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
         }
         amplitude = product >> 7;
 
-        wave = func_80068568(((timer * 3) << 12) / 30) * amplitude;
+        wave = rsin(((timer * 3) << 12) / 30) * amplitude;
     }
     if (wave < 0) {
         wave += 0x7FF;

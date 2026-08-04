@@ -235,9 +235,9 @@ void ApplyCarKnockback(GameCarRuntime *arg0) {
     }
 }
 
-s32 func_80068568(s32 angle);
+s32 rsin(s32 angle) asm("func_80068568");
 
-s32 func_80068634(s32 angle);
+s32 rcos(s32 angle) asm("func_80068634");
 
 /*
  * Collision / boundary response: sets the car's knock-back motion vector
@@ -296,14 +296,14 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
         } else {
             speed = *(u16 *)&carReg->field_A4;
         }
-        trig = func_80068568(GetAngleDistance((s16)rawArg, carReg->field_24));
+        trig = rsin(GetAngleDistance((s16)rawArg, carReg->field_24));
         product = (s16)speed * trig;
         if (product < 0) {
             product += 0xFFFF;
         }
         tmp = product >> 16;
     } else {
-        trig = func_80068568(GetAngleDistance((s16)rawArg, carReg->field_24));
+        trig = rsin(GetAngleDistance((s16)rawArg, carReg->field_24));
         product = trig * 2;
         product += trig;
         product <<= 3;
@@ -318,7 +318,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     speed = tmp + 10;
 
     savedAngle = angle;
-    trig = func_80068568(savedAngle);
+    trig = rsin(savedAngle);
     product = speed << 16;
     angle = product >> 16;
     adjustedReg = trig * angle;
@@ -326,7 +326,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
         adjustedReg += 0xFFF;
     }
     x = adjustedReg >> 12;
-    trig = func_80068634(savedAngle);
+    trig = rcos(savedAngle);
     adjustedReg = trig * angle;
     if (adjustedReg < 0) {
         adjustedReg += 0xFFF;
@@ -347,13 +347,13 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     }
     rawArg = adjusted & 0xFFF;
     angle = rawArg;
-    trig = func_80068568(rawArg);
+    trig = rsin(rawArg);
     tmp = trig * 20;
     if (tmp < 0) {
         tmp += 0xFFF;
     }
     x = tmp >> 12;
-    trig = func_80068634(angle);
+    trig = rcos(angle);
     tmp = trig * 20;
     if (tmp < 0) {
         tmp += 0xFFF;

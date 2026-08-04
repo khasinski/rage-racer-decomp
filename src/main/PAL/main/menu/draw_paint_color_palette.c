@@ -9,7 +9,7 @@ extern ColorTable g_PaintColorTable asm("D_800119A0");
 extern s32 D_8009B290;
 extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
-s32 func_80068568(s32 angle);
+s32 rsin(s32 angle) asm("func_80068568");
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
@@ -68,7 +68,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
         xFocus = xBase + xFocusOffset;
         yTop = yBase + 0x20B;
 
-        sineColor = func_80068568(phase % 0x1000);
+        sineColor = rsin(phase % 0x1000);
         if (sineColor < 0) {
             sineColor += 0x3F;
         }

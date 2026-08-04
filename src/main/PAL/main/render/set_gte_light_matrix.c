@@ -35,7 +35,7 @@ extern s32 g_Scratch1C asm("0x1F80001C");
 extern s32 g_Scratch20 asm("0x1F800020");
 extern s32 g_Scratch84 asm("0x1F800084");
 
-s32 func_80068568(s32 angle);
+s32 rsin(s32 angle) asm("func_80068568");
 
 /* Builds and submits the controller models shown by the pad and NeGcon setup
  * screens. The read-only scratchpad base is retained for the three camera
@@ -92,14 +92,14 @@ void func_80014618(s32 variant) {
         return;
     }
     if (g_GameMode == 11) {
-        product = func_80068568(g_AnimTimer * 16) * g_NegconSteerRange[g_NegconMaxTwist];
+        product = rsin(g_AnimTimer * 16) * g_NegconSteerRange[g_NegconMaxTwist];
         if (product < 0) {
             product += 0x1FF;
         }
         steer = product >> 9;
     } else if (g_GameMode == 10) {
         product =
-            (func_80068568(g_AnimTimer * 16) << 4) * g_NegconPlayScale[g_NegconSteerPlay];
+            (rsin(g_AnimTimer * 16) << 4) * g_NegconPlayScale[g_NegconSteerPlay];
         if (product < 0) {
             product += 0xFFF;
         }
@@ -194,7 +194,7 @@ u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     prim = QueueSpriteWide(ot, prim, x, y, 0x10, 0x20, 0x48, 0xB8, 0x7F82);
     prim = QueueDrawModePrim(ot, prim, 0x39);
     if (pulse != 0) {
-        u8 glow = func_80068568(g_SetupArrowPulse % 0x1000) / 64 - 65;
+        u8 glow = rsin(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
         prim = (u8 *)AddTilePrim(
             (s32)ot, (s32)prim, x, y, 0x10, 0x20, 0, glow, 0);
@@ -210,7 +210,7 @@ u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     prim = QueueSpriteWide(ot, prim, x, y, 0x10, 0x20, 0x58, 0xB8, 0x7F82);
     prim = QueueDrawModePrim(ot, prim, 0x39);
     if (pulse != 0) {
-        u8 glow = func_80068568(g_SetupArrowPulse % 0x1000) / 64 - 65;
+        u8 glow = rsin(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
         prim = (u8 *)AddTilePrim(
             (s32)ot, (s32)prim, x, y, 0x10, 0x20, 0, glow, 0);

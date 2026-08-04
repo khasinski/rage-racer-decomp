@@ -24,7 +24,7 @@ extern u8 g_PadType asm("D_801E4369");
 
 
 void func_80047024(void *, s32, s32, s32, s32, s32, s32, s32, s32);
-s32 func_800487D8(void *, void *);
+s32 RunTimedDrawScript(void *, void *) asm("func_800487D8");
 void func_800496F0(s32, s32);
 void func_80046A2C(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32);
 void func_80047E60(s32);
@@ -72,7 +72,7 @@ void UpdateMenuMode(void) {
             return;
         }
     }
-    if (func_800487D8(&g_MenuHintBarScript, &g_MenuHintBarProgress) == 0) {
+    if (RunTimedDrawScript(&g_MenuHintBarScript, &g_MenuHintBarProgress) == 0) {
         return;
     }
 

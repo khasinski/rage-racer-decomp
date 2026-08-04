@@ -8,8 +8,8 @@
 
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
 s32 func_8002FD9C(s32 arg0, s32 arg1);
-s32 func_80068568(s32 arg0);
-s32 func_80068634(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
+s32 rcos(s32 arg0) asm("func_80068634");
 
 extern s32 g_AnimTimer asm("D_8009E694");
 extern s16 g_ClosestRivalRank asm("D_801E7740");
@@ -91,13 +91,13 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
     func_8002FC84(index, coords, car->field_38);
     angle = 0x1000 - func_8002FD9C(index, car->field_38);
 
-    value = func_80068568(angle) * lateral;
+    value = rsin(angle) * lateral;
     if (value < 0) {
         value += 0xFFF;
     }
     coords[0] += value >> 12;
 
-    zValue = func_80068634(angle) * lateral;
+    zValue = rcos(angle) * lateral;
     if (zValue < 0) {
         zValue += 0xFFF;
     }
@@ -233,12 +233,12 @@ void UpdateRaceCars(void) {
         drive = (GameCarAiBlock *)&base->field_BC;
         if ((*(s16 *)((u8 *)(((u8 *)walk + 0x24)) + (0x88))) != -1) {
             (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0xE4))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00)));
-            t = func_80068568((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x7C)))) * (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80)));
+            t = rsin((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x7C)))) * (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80)));
             if (t < 0) {
                 t += 0xFF;
             }
             (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0xA4))) = t >> 8;
-            t = func_80068634((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x7C)))) * (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80)));
+            t = rcos((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x7C)))) * (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80)));
             if (t < 0) {
                 t += 0xFF;
             }
@@ -482,12 +482,12 @@ void UpdateAttractCars(void) {
         if ((*(s16 *)((u8 *)(base) + (0xAC))) != -1) {
             s32 t;
             (*(s32 *)((u8 *)(base) + (0x108))) = (*(s32 *)((u8 *)(base) + (0x24)));
-            t = func_80068568((*(s32 *)((u8 *)(base) + (0xA0)))) * (*(s32 *)((u8 *)(base) + (0xA4)));
+            t = rsin((*(s32 *)((u8 *)(base) + (0xA0)))) * (*(s32 *)((u8 *)(base) + (0xA4)));
             if (t < 0) {
                 t += 0xFF;
             }
             (*(s32 *)((u8 *)(base) + (0xC8))) = t >> 8;
-            (*(s32 *)((u8 *)(base) + (0xD0))) = func_80068634((*(s32 *)((u8 *)(base) + (0xA0)))) * (*(s32 *)((u8 *)(base) + (0xA4))) / 256;
+            (*(s32 *)((u8 *)(base) + (0xD0))) = rcos((*(s32 *)((u8 *)(base) + (0xA0)))) * (*(s32 *)((u8 *)(base) + (0xA4))) / 256;
             if ((s16)i < 4) {
                 s32 sixth;
                 s32 f4;
@@ -682,8 +682,8 @@ extern s16 g_RaceIntroCameraDeltaX asm("D_8009AFBC");
 extern s16 g_RaceIntroCameraDeltaY asm("D_8009AFBE");
 extern s16 g_RaceIntroCameraDeltaZ asm("D_8009AFC0");
 
-s32 func_80068634(s32 angle);
-s32 func_80068568(s32 angle);
+s32 rcos(s32 angle) asm("func_80068634");
+s32 rsin(s32 angle) asm("func_80068568");
 void DrawPlayerCarModel(void *arg0) asm("func_8001DAB0");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void UpdateCamera(void *arg0, s32 arg1) asm("func_80043BCC");
@@ -734,15 +734,15 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
 
         if (g_RaceIntroCameraCursor->fC == 0) {
             spad[2] = ((s32 *) g_RaceIntroCameraCursor)[0]
-                      + ((s32) g_RaceIntroCameraDeltaX * func_80068634((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDeltaX * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
             spad[3] = ((s32 *) g_RaceIntroCameraCursor)[1]
-                      + ((s32) g_RaceIntroCameraDeltaY * func_80068634((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDeltaY * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
             spad[4] = ((s32 *) g_RaceIntroCameraCursor)[2]
-                      + ((s32) g_RaceIntroCameraDeltaZ * func_80068634((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDeltaZ * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
 
-            delta[0] = func_80068568(obj->f24) / 128 + obj->x - spad[2];
+            delta[0] = rsin(obj->f24) / 128 + obj->x - spad[2];
             delta[1] = obj->y - s0v - spad[3];
-            delta[2] = func_80068634(obj->f24) / 128 + obj->z - spad[4];
+            delta[2] = rcos(obj->f24) / 128 + obj->z - spad[4];
             s0v = 0x400;
             spad[7] = s0v - Atan2(delta[0], delta[2]);
             s0v = s0v - Atan2(delta[1], SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]) >> 6);

@@ -13,8 +13,8 @@ extern s32 g_CameraCarStepX asm("D_801E3ED8");
 extern s32 g_CameraCarStepZ asm("D_801E3EE0");
 
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
-s32 func_80068568(s32 arg0);
-s32 func_80068634(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
+s32 rcos(s32 arg0) asm("func_80068634");
 void func_8002C168(void *arg0);
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
 void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
@@ -58,13 +58,13 @@ void UpdateFinishCamera(GameRenderObject *obj) {
 
     g_CameraCarHeading += GetAngleDelta(g_CameraCarHeading, angle);
 
-    value = func_80068568(g_CameraCarHeading) * g_CameraCarSpeed;
+    value = rsin(g_CameraCarHeading) * g_CameraCarSpeed;
     if (value < 0) {
         value += 0xFF;
     }
     g_CameraCarStepX = value >> 8;
 
-    zValue = func_80068634(g_CameraCarHeading) * g_CameraCarSpeed;
+    zValue = rcos(g_CameraCarHeading) * g_CameraCarSpeed;
     if (zValue < 0) {
         zValue += 0xFF;
     }

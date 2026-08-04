@@ -79,8 +79,8 @@ extern u8 g_TachoFaceR asm("D_8007DF00");
 extern u8 g_TachoFaceG asm("D_8007DF01");
 extern u8 g_TachoFaceB asm("D_8007DF02");
 
-s32 func_80068568(s32 angle);
-s32 func_80068634(s32 angle);
+s32 rsin(s32 angle) asm("func_80068568");
+s32 rcos(s32 angle) asm("func_80068634");
 void SetPolyF4(void *prim) asm("func_80064F30");
 void func_80064FF8(void *prim);
 void DrawSpeedDigits(s32 x, s32 y, s32 speed) asm("func_80033C18");
@@ -95,8 +95,8 @@ void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
     u8 *base = (u8 *)&p->tachoNeedleX;
     s32 b = p->needleAngleMin;
     s32 angle = b + rpm * (p->needleAngleMax - b) / 10000;
-    s32 cos = func_80068568(angle);
-    s32 sin = func_80068634(angle);
+    s32 cos = rsin(angle);
+    s32 sin = rcos(angle);
     u8 *prim = SCRATCH;
     s16 *vp;
     s16 *pa;

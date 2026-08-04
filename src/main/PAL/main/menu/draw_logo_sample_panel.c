@@ -12,7 +12,7 @@ void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r,
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7,
                    s32 arg8);
-s32 func_80068568(s32 angle);
+s32 rsin(s32 angle) asm("func_80068568");
 
 void DrawLogoSprite() asm("func_80046A2C");
 void DrawLogoRect() asm("func_80047024");
@@ -113,7 +113,7 @@ void func_8004E724(s32 arg0, s32 arg1) {
         if (D_8009B28C < 0) {
             var_a0 = D_8009B28C + 0xFFF;
         }
-        var_v0 = func_80068568(D_8009B28C - ((var_a0 >> 0xC) << 0xC));
+        var_v0 = rsin(D_8009B28C - ((var_a0 >> 0xC) << 0xC));
         if (var_v0 < 0) {
             var_v0 += 0x3F;
         }

@@ -6,15 +6,17 @@
 #define FIELD(base, type, offset) (*(type)((s32)(base) + (offset)))
 
 void SetCarKnockback(void *, s32, s32, s32) asm("func_80038CE8");            /* extern */
-s32 func_80068568(s32);                               /* extern */
-s32 func_80068634(s32);                               /* extern */
+s32 rsin(s32) asm("func_80068568");
+/* extern */
+s32 rcos(s32) asm("func_80068634");
+/* extern */
 extern u8 g_PlayerCar asm("D_8009E6D4");
 
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the
  * GameTrackPoint at `trackPointIndex` (*(GameTrackPoint*)0x8009E688 + i*0x18)
  * and its successor: computes route angles/heights via atan2 (Atan2)
- * and rsin/rcos (func_80068568/func_80068634), builds the collision-boundary
+ * and rsin/rcos (rsin/rcos), builds the collision-boundary
  * offset, and writes the interpolated position/angle/height into the render
  * object `obj`. The scratchpad struct at 0x1F80011C ("spad") is the GTE
  * per-primitive transform scratch. `clampPair` supplies the s16 margin values
@@ -119,22 +121,22 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         FIELD(spad, s32 *, 0x30) = FIELD(temp_s6, s32 *, 4) - temp_a2_2;
         FIELD(spad, s16 *, 0x80) = Atan2(temp_a0_4, temp_a1_2) & 0xFFF;
         FIELD(spad, s16 *, 0x82) = Atan2(FIELD(spad, s32 *, 0x28), FIELD(spad, s32 *, 0x30)) & 0xFFF;
-        temp_s0 = func_80068634(FIELD(spad, s16 *, 0x7E));
-        var_v0 = (temp_s0 * FIELD(spad, s32 *, 0x08)) + (func_80068568(FIELD(spad, s16 *, 0x7E)) * FIELD(spad, s32 *, 0x0C));
+        temp_s0 = rcos(FIELD(spad, s16 *, 0x7E));
+        var_v0 = (temp_s0 * FIELD(spad, s32 *, 0x08)) + (rsin(FIELD(spad, s16 *, 0x7E)) * FIELD(spad, s32 *, 0x0C));
         if (var_v0 < 0)
         {
             var_v0 += 0xFFF;
         }
         FIELD(spad, s32 *, 0x10) = var_v0 >> 0xC;
-        temp_s0_2 = func_80068634(FIELD(spad, s16 *, 0x80));
-        var_v0_2 = (temp_s0_2 * FIELD(spad, s32 *, 0x24)) + (func_80068568(FIELD(spad, s16 *, 0x80)) * FIELD(spad, s32 *, 0x2C));
+        temp_s0_2 = rcos(FIELD(spad, s16 *, 0x80));
+        var_v0_2 = (temp_s0_2 * FIELD(spad, s32 *, 0x24)) + (rsin(FIELD(spad, s16 *, 0x80)) * FIELD(spad, s32 *, 0x2C));
         if (var_v0_2 < 0)
         {
             var_v0_2 += 0xFFF;
         }
         FIELD(spad, s32 *, 0x14) = var_v0_2 >> 0xC;
-        temp_s0_3 = func_80068634(FIELD(spad, s16 *, 0x82));
-        var_v0_3 = (temp_s0_3 * FIELD(spad, s32 *, 0x28)) + (func_80068568(FIELD(spad, s16 *, 0x82)) * FIELD(spad, s32 *, 0x30));
+        temp_s0_3 = rcos(FIELD(spad, s16 *, 0x82));
+        var_v0_3 = (temp_s0_3 * FIELD(spad, s32 *, 0x28)) + (rsin(FIELD(spad, s16 *, 0x82)) * FIELD(spad, s32 *, 0x30));
         if (var_v0_3 < 0)
         {
             var_v0_3 += 0xFFF;
@@ -192,15 +194,15 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     temp_a0 = FIELD(spad, s16 *, 0x90);
     FIELD(spad, s16 *, 0x64) = (s16) (((u16) FIELD(obj, s32 *, 8) - (u16) FIELD(temp_s4, s32 *, 4)) * 4);
     FIELD(spad, s16 *, 0x62) = 0;
-    temp_s0_4 = func_80068634(temp_a0);
-    var_v1 = (temp_s0_4 * (s16) FIELD(spad, u16 *, 0x60)) + (func_80068568(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
+    temp_s0_4 = rcos(temp_a0);
+    var_v1 = (temp_s0_4 * (s16) FIELD(spad, u16 *, 0x60)) + (rsin(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
     if (var_v1 < 0)
     {
         var_v1 += 0xFFF;
     }
     var_s3 = var_v1 >> 0xE;
-    temp_s0_5 = func_80068568(FIELD(spad, s16 *, 0x90));
-    var_v1 = ((0 - temp_s0_5) * (s16) FIELD(spad, u16 *, 0x60)) + (func_80068634(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
+    temp_s0_5 = rsin(FIELD(spad, s16 *, 0x90));
+    var_v1 = ((0 - temp_s0_5) * (s16) FIELD(spad, u16 *, 0x60)) + (rcos(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
     if (var_v1 < 0)
     {
         var_v1 += 0xFFF;
@@ -310,13 +312,13 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     secondResult = Atan2((s32) temp_a0_12, (s32) (FIELD(temp_s4, s16 *, 0xE) * temp_a0_12) >> 7);
     temp_a1_4 = FIELD(spad, s16 *, 0x96);
     FIELD(spad, s16 *, 0x94) = (s16) ((s32) ((temp_s0_7 * var_s3) + (secondResult * (temp_a1_4 - var_s3))) / temp_a1_4);
-    FIELD(spad, s32 *, 0x38) = func_80068634(FIELD(spad, s16 *, 0x8C));
+    FIELD(spad, s32 *, 0x38) = rcos(FIELD(spad, s16 *, 0x8C));
     {
         s32 firstProduct;
         s32 sinValue;
         s32 secondProduct;
 
-        sinValue = func_80068568(FIELD(spad, s16 *, 0x8C));
+        sinValue = rsin(FIELD(spad, s16 *, 0x8C));
         FIELD(spad, s32 *, 0x34) = sinValue;
         firstProduct = FIELD(spad, s16 *, 0x92) * FIELD(spad, s32 *, 0x38);
         if (firstProduct < 0)

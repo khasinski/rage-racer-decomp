@@ -1,8 +1,8 @@
 #include "common.h"
 #include "psyq/gte.h"
 
-s32 func_80068568(s32 arg0);
-s32 func_80068634(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
+s32 rcos(s32 arg0) asm("func_80068634");
 
 void BuildRotMatrixZ(Matrix *mtx, s32 angle) asm("func_8001A4C0");
 void BuildRotMatrixY(Matrix *mtx, s32 angle) asm("func_8001A530");
@@ -14,8 +14,8 @@ void BuildRotMatrixZ(Matrix *mtx, s32 angle) {
     s32 s;
     s32 c;
 
-    s = func_80068568(angle);
-    c = func_80068634(angle);
+    s = rsin(angle);
+    c = rcos(angle);
     mtx->m[0][0] = c;
     mtx->m[0][1] = -s;
     mtx->m[0][2] = 0;
@@ -27,15 +27,15 @@ void BuildRotMatrixZ(Matrix *mtx, s32 angle) {
     mtx->m[2][2] = 0x1000;
 }
 
-s32 func_80068568(s32 arg0);
-s32 func_80068634(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
+s32 rcos(s32 arg0) asm("func_80068634");
 
 void BuildRotMatrixY(Matrix *mtx, s32 angle) {
     s32 s;
     s32 c;
 
-    s = func_80068568(angle);
-    c = func_80068634(angle);
+    s = rsin(angle);
+    c = rcos(angle);
     mtx->m[0][0] = c;
     mtx->m[0][1] = 0;
     mtx->m[0][2] = -s;
@@ -47,15 +47,15 @@ void BuildRotMatrixY(Matrix *mtx, s32 angle) {
     mtx->m[2][2] = c;
 }
 
-s32 func_80068568(s32 arg0);
-s32 func_80068634(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
+s32 rcos(s32 arg0) asm("func_80068634");
 
 void BuildRotMatrixX(Matrix *mtx, s32 angle) {
     s32 s;
     s32 c;
 
-    s = func_80068568(angle);
-    c = func_80068634(angle);
+    s = rsin(angle);
+    c = rcos(angle);
     mtx->m[0][0] = 0x1000;
     mtx->m[0][1] = 0;
     mtx->m[0][2] = 0;

@@ -4,6 +4,8 @@
 #include "game/render.h"
 #include "game/car.h"
 #include "psyq/gpu.h"
+s32 rcos() asm("func_80068634");
+s32 rsin() asm("func_80068568");
 
 #define FIELD(base, type, offset) (*(type)((s32)(base) + (offset)))
 
@@ -194,23 +196,23 @@ void ResetCarTrackState(GameCarRuntime *car) {
         FIELD(spad, s16 *, 0x80) = Atan2(temp_a0_4, temp_a1_2) & 0xFFF;
         FIELD(spad, s16 *, 0x82) =
             Atan2(FIELD(spad, s32 *, 0x28), FIELD(spad, s32 *, 0x30)) & 0xFFF;
-        temp_s0 = func_80068634(FIELD(spad, s16 *, 0x7E));
+        temp_s0 = rcos(FIELD(spad, s16 *, 0x7E));
         var_v0 = (temp_s0 * FIELD(spad, s32 *, 0x08)) +
-                 (func_80068568(FIELD(spad, s16 *, 0x7E)) * FIELD(spad, s32 *, 0x0C));
+                 (rsin(FIELD(spad, s16 *, 0x7E)) * FIELD(spad, s32 *, 0x0C));
         if (var_v0 < 0) {
             var_v0 += 0xFFF;
         }
         FIELD(spad, s32 *, 0x10) = var_v0 >> 0xC;
-        temp_s0_2 = func_80068634(FIELD(spad, s16 *, 0x80));
+        temp_s0_2 = rcos(FIELD(spad, s16 *, 0x80));
         var_v0_2 = (temp_s0_2 * FIELD(spad, s32 *, 0x24)) +
-                   (func_80068568(FIELD(spad, s16 *, 0x80)) * FIELD(spad, s32 *, 0x2C));
+                   (rsin(FIELD(spad, s16 *, 0x80)) * FIELD(spad, s32 *, 0x2C));
         if (var_v0_2 < 0) {
             var_v0_2 += 0xFFF;
         }
         FIELD(spad, s32 *, 0x14) = var_v0_2 >> 0xC;
-        temp_s0_3 = func_80068634(FIELD(spad, s16 *, 0x82));
+        temp_s0_3 = rcos(FIELD(spad, s16 *, 0x82));
         var_v0_3 = (temp_s0_3 * FIELD(spad, s32 *, 0x28)) +
-                   (func_80068568(FIELD(spad, s16 *, 0x82)) * FIELD(spad, s32 *, 0x30));
+                   (rsin(FIELD(spad, s16 *, 0x82)) * FIELD(spad, s32 *, 0x30));
         if (var_v0_3 < 0) {
             var_v0_3 += 0xFFF;
         }
@@ -267,9 +269,9 @@ void ResetCarTrackState(GameCarRuntime *car) {
     FIELD(spad, s16 *, 0x64) =
         (s16)(((u16)FIELD(car, s32 *, 8) - (u16)FIELD(temp_s4, s32 *, 4)) * 4);
     FIELD(spad, s16 *, 0x62) = 0;
-    temp_s0_4 = func_80068634(temp_a0);
+    temp_s0_4 = rcos(temp_a0);
     var_v1 = (temp_s0_4 * (s16)FIELD(spad, u16 *, 0x60)) +
-             (func_80068568(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
+             (rsin(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
     if (var_v1 < 0) {
         var_v1 += 0xFFF;
     }
@@ -279,9 +281,9 @@ void ResetCarTrackState(GameCarRuntime *car) {
      * The non-clamping path does not consume the lateral component. GCC 2.6.3
      * removes its mflo/add/round/shift but leaves the two HI/LO-setting mults.
      */
-    temp_s0_5 = func_80068568(FIELD(spad, s16 *, 0x90));
+    temp_s0_5 = rsin(FIELD(spad, s16 *, 0x90));
     var_v1 = ((0 - temp_s0_5) * (s16)FIELD(spad, u16 *, 0x60)) +
-             (func_80068634(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
+             (rcos(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
     if (var_v1 < 0) {
         var_v1 += 0xFFF;
     }
@@ -349,13 +351,13 @@ void ResetCarTrackState(GameCarRuntime *car) {
         (s16)(((temp_s0_7 * var_s3) +
                (secondResult * (temp_a1_4 - var_s3))) /
               temp_a1_4);
-    FIELD(spad, s32 *, 0x38) = func_80068634(FIELD(spad, s16 *, 0x8C));
+    FIELD(spad, s32 *, 0x38) = rcos(FIELD(spad, s16 *, 0x8C));
     {
         s32 firstProduct;
         s32 sinValue;
         s32 secondProduct;
 
-        sinValue = func_80068568(FIELD(spad, s16 *, 0x8C));
+        sinValue = rsin(FIELD(spad, s16 *, 0x8C));
         FIELD(spad, s32 *, 0x34) = sinValue;
         firstProduct = FIELD(spad, s16 *, 0x92) * FIELD(spad, s32 *, 0x38);
         if (firstProduct < 0) {

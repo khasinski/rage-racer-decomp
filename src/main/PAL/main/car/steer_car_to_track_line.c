@@ -8,8 +8,8 @@ void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
 
 void func_8002FC84(s32 arg0, s32 *out, s32 weight);
 s32 func_8002FD9C(s32 arg0, s32 arg1);
-s32 func_80068568(s32 arg0);
-s32 func_80068634(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
+s32 rcos(s32 arg0) asm("func_80068634");
 
 /*
  * AI route steering: projects a target point ahead of (or behind, per the
@@ -58,13 +58,13 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
     func_8002FC84(index, coords, car->field_38);
     angle = 0x1000 - func_8002FD9C(index, car->field_38);
 
-    xValue = func_80068568(angle) * lateral;
+    xValue = rsin(angle) * lateral;
     if (xValue < 0) {
         xValue += 0xFFF;
     }
     coords[0] += xValue >> 12;
 
-    value = func_80068634(angle) * lateral;
+    value = rcos(angle) * lateral;
     if (value < 0) {
         value += 0xFFF;
     }
@@ -99,8 +99,8 @@ extern s32 D_801E8AA0;
 s32 func_8002A788(s32 arg0, s32 arg1);
 s32 func_8002A7C4(s32 arg0, s32 arg1);
 void func_8002FE74(GameCarRuntime *car);
-s32 func_80068568(s32 arg0);
-s32 func_80068634(s32 arg0);
+s32 rsin(s32 arg0) asm("func_80068568");
+s32 rcos(s32 arg0) asm("func_80068634");
 
 void func_80030030(GameCarRuntime *arg0) {
     register GameCarRuntime *car = arg0;
@@ -304,10 +304,10 @@ void func_80030030(GameCarRuntime *arg0) {
         car->headingAngle = saved;
     }
 
-    sinF24 = func_80068568(car->field_24);
-    cosF24 = func_80068634(car->field_24);
-    *(s32 *)(r + 0x08) = func_80068568(car->headingAngle) * car->field_A4 / 256;
-    *(s32 *)(r + 0x10) = func_80068634(car->headingAngle) * car->field_A4 / 256;
+    sinF24 = rsin(car->field_24);
+    cosF24 = rcos(car->field_24);
+    *(s32 *)(r + 0x08) = rsin(car->headingAngle) * car->field_A4 / 256;
+    *(s32 *)(r + 0x10) = rcos(car->headingAngle) * car->field_A4 / 256;
 }
 
 extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
@@ -348,19 +348,19 @@ void UpdateCarAirborne(GameCarRuntime *car) {
         func_8002F4E4(car, base);
     }
 
-    sinF24 = func_80068568(car->field_24);
-    cosF24 = func_80068634(car->field_24);
+    sinF24 = rsin(car->field_24);
+    cosF24 = rcos(car->field_24);
 
-    r->accelPos = func_80068568(car->headingAngle + r->unk60) * car->field_A4 / 256;
-    r->brakePos = func_80068634(car->headingAngle + r->unk60) * car->field_A4 / 256;
+    r->accelPos = rsin(car->headingAngle + r->unk60) * car->field_A4 / 256;
+    r->brakePos = rcos(car->headingAngle + r->unk60) * car->field_A4 / 256;
 
     coords[0] = (cosF24 * r->accelPos - sinF24 * r->brakePos) / 4096;
     coords[2] = (sinF24 * r->accelPos + cosF24 * r->brakePos) / 4096;
 
     r->accelPos =
-        func_80068568(r->unk58) * r->unk5C / 256 + sinF24 * coords[2] / 4096;
+        rsin(r->unk58) * r->unk5C / 256 + sinF24 * coords[2] / 4096;
     r->brakePos =
-        func_80068634(r->unk58) * r->unk5C / 256 + cosF24 * coords[2] / 4096;
+        rcos(r->unk58) * r->unk5C / 256 + cosF24 * coords[2] / 4096;
 
     if (r->unk9C != 1 && r->unk9E != 1 && r->accelBtn < 128) {
         r->unk44 += 1;
@@ -412,11 +412,11 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
     car->field_24 = r / 5 + base;
     func_8002F4E4(car, base);
 
-    sinA = func_80068568(car->field_24);
-    cosA = func_80068634(car->field_24);
+    sinA = rsin(car->field_24);
+    cosA = rcos(car->field_24);
 
-    car->field_C4 = func_80068568(car->headingAngle) * car->field_A4 / 256;
-    car->field_CC = func_80068634(car->headingAngle) * car->field_A4 / 256;
+    car->field_C4 = rsin(car->headingAngle) * car->field_A4 / 256;
+    car->field_CC = rcos(car->headingAngle) * car->field_A4 / 256;
 
     coords[0] = (cosA * car->field_C4 - sinA * car->field_CC) / 4096;
     coords[2] = (sinA * car->field_C4 + cosA * car->field_CC) / 4096;
@@ -508,10 +508,10 @@ s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
         pts[0].vx = carx - pax;
         pts[0].vy = carz - paz;
 
-        cos_c = func_80068634(0xC00 - pa->angle);
-        sin_c = func_80068568(0xC00 - pa->angle);
-        cos_n = func_80068634(0xC00 - pb->angle);
-        sin_n = func_80068568(0xC00 - pb->angle);
+        cos_c = rcos(0xC00 - pa->angle);
+        sin_c = rsin(0xC00 - pa->angle);
+        cos_n = rcos(0xC00 - pb->angle);
+        sin_n = rsin(0xC00 - pb->angle);
 
         f10a = pa->field_10;
         f12a = pa->field_12;
