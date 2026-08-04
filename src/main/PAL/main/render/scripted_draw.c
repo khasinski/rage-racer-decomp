@@ -122,7 +122,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     s32 mode;
     register s32 y1Reg asm("$2");
     register s32 x0 asm("$5");
-    register s32 y0Call asm("$12");
+    s32 y0Call;
     register s32 x1Base asm("$3");
     s32 x1;
     s32 y1;
