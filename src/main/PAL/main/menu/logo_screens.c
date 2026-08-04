@@ -56,7 +56,7 @@ void UpdateTeamLogoScreen(void)
   s32 edge;
   s32 cnt;
   int new_var;
-  ot = *((void **)0x1F800004);
+  ot = *(void **)0x1F800004;
   g_MenuAltLayout = 0;
   state = GameMenuBusy;
   if (state == 0)

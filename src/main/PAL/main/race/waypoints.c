@@ -751,11 +751,11 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
     idxoff1_R4 = idx_R8;
     idxoff1_R4 = idxoff1_R4 * 16;
     p1_R4 = base_R9 + (idxoff1_R4 + (lev1_R3 * 192));
-    ent2_R7->field_124 = ((*((s16 *)(p1_R4 + 0x8F4))) * 1168) / 160;
-    *(u16 *)&ent2_R7->field_126 = *((u16 *)(p1_R4 + 0x8F6));
-    *(u16 *)&ent2_R7->field_128 = *((u16 *)(p1_R4 + 0x8F8));
-    *(u16 *)&ent2_R7->field_12A = *((u16 *)(p1_R4 + 0x8FA));
-    *(u16 *)&ent2_R7->field_12C = *((u16 *)(p1_R4 + 0x8FC));
+    ent2_R7->field_124 = ((*(s16 *)(p1_R4 + 0x8F4)) * 1168) / 160;
+    *(u16 *)&ent2_R7->field_126 = *(u16 *)(p1_R4 + 0x8F6);
+    *(u16 *)&ent2_R7->field_128 = *(u16 *)(p1_R4 + 0x8F8);
+    *(u16 *)&ent2_R7->field_12A = *(u16 *)(p1_R4 + 0x8FA);
+    *(u16 *)&ent2_R7->field_12C = *(u16 *)(p1_R4 + 0x8FC);
   }
   __asm__ volatile("");
   c = ent2_R7->field_128;
@@ -791,7 +791,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
     lev2_R2 = g_RaceSeries;
     idxoff2_R4 = idx_R8 * 16;
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
-    w = *((u16 *)(p2_R3 + 0x8FE));
+    w = *(u16 *)(p2_R3 + 0x8FE);
     sub_R6->field_132 = w;
     if (((s16) w) < 0x3D)
     {
@@ -800,7 +800,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
     lev2_R2 = g_RaceSeries;
     __asm__("" : "=r"(idxoff2_R4) : "0"(idxoff2_R4));
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
-    w = *((u16 *)(p2_R3 + 0x900));
+    w = *(u16 *)(p2_R3 + 0x900);
     sub_R6->field_134 = w;
     if (((s16) w) <= 0)
     {

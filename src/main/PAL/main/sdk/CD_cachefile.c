@@ -63,7 +63,7 @@ long CD_cachefile(long arg0)
       break;
     }
     __builtin_memcpy(&lba, p + 2, 4);
- do { CdIntToPos(lba & 0xFFFFFFFFFFFFFFFFu, &g_CdFileCache[i]); __builtin_memcpy(&g_CdFileCache[i].size, p + 0xA, 4); switch (i) { case 0: *((u_short *)g_CdFileCache[0].name) = D_80013AD0; break; case 1: { long hi = D_80013AD4; long lo = D_80013AD6; *((short *)g_CdFileCache[1].name) = hi; *(volatile u_char *)&g_CdFileCache[1].name[2] = lo; break; } default: LibcMemcpy(g_CdFileCache[i].name, p + 0x21, p[0x20]); g_CdFileCache[i].name[p[0x20]] = 0; break; } if (g_CdDebugLevel >= 2) { DebugPrintf(D_80013AD8, g_CdFileCache[i].min, g_CdFileCache[i].sec, g_CdFileCache[i].frame, g_CdFileCache[i].size, g_CdFileCache[i].name); } } while (0);
+ do { CdIntToPos(lba & 0xFFFFFFFFFFFFFFFFu, &g_CdFileCache[i]); __builtin_memcpy(&g_CdFileCache[i].size, p + 0xA, 4); switch (i) { case 0: *(u_short *)g_CdFileCache[0].name = D_80013AD0; break; case 1: { long hi = D_80013AD4; long lo = D_80013AD6; *(short *)g_CdFileCache[1].name = hi; *(volatile u_char *)&g_CdFileCache[1].name[2] = lo; break; } default: LibcMemcpy(g_CdFileCache[i].name, p + 0x21, p[0x20]); g_CdFileCache[i].name[p[0x20]] = 0; break; } if (g_CdDebugLevel >= 2) { DebugPrintf(D_80013AD8, g_CdFileCache[i].min, g_CdFileCache[i].sec, g_CdFileCache[i].frame, g_CdFileCache[i].size, g_CdFileCache[i].name); } } while (0);
     p = p + (*p);
     i++;
     if (i >= 0x40)

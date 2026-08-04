@@ -746,7 +746,7 @@ void GameDrawSkyBackground(void)
         s32 x3Raw;
         s32 doubleStepX;
         asm volatile("" : : "r"(xWork));
-        asm volatile("" : "=r"(screenX0) : "0"(*((s32 *)(stackPointer + 0x90))));
+        asm volatile("" : "=r"(screenX0) : "0"(*(s32 *)(stackPointer + 0x90)));
         doubleStepX = rowStepX * 2;
         screenX1 = screenX3;
         leftXWorkFixed = doubleStepX + rowStepX;

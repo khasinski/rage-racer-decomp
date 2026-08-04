@@ -510,83 +510,83 @@ void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   s32 cnt;
   s32 one;
   int new_var;
-  raw = *((s32 *)(car + 0x70));
+  raw = *(s32 *)(car + 0x70);
   rpm = raw >> 4;
-  g0 = *((s16 *)(car + 0x138));
+  g0 = *(s16 *)(car + 0x138);
   sub_R9 = car + 0xBC;
   if (rpm < 0x20)
   {
-    *((s16 *)(car + 0x138)) = 0;
+    *(s16 *)(car + 0x138) = 0;
   }
   if (g0 < 0)
   {
-    *((s16 *)(car + 0x138)) = 0;
+    *(s16 *)(car + 0x138) = 0;
   }
   tbl = g_TrackEventData + ((g_RaceSeries * 576) + 0x474);
   p[0] = tbl + (g0 * 12);
   p[1] = tbl + ((g0 * 12) + 12);
-  lim[0] = *((u16 *)p[0]);
-  lim[1] = *((u16 *)p[1]);
+  lim[0] = *(u16 *)p[0];
+  lim[1] = *(u16 *)p[1];
   if (gear < 4)
   {
-    val[0] = *((u16 *)((p[0] + (gear * 2)) + 4));
-    val[1] = *((u16 *)((p[1] + (gear * 2)) + 4));
+    val[0] = *(u16 *)((p[0] + (gear * 2)) + 4);
+    val[1] = *(u16 *)((p[1] + (gear * 2)) + 4);
   }
   else
   {
     f = 0x55 - gear;
-    val[0] = ((*((s16 *)(p[0] + 0xA))) * f) / 100;
-    val[1] = ((*((s16 *)(p[1] + 0xA))) * f) / 100;
+    val[0] = ((*(s16 *)(p[0] + 0xA)) * f) / 100;
+    val[1] = ((*(s16 *)(p[1] + 0xA)) * f) / 100;
   }
   pitch = 0;
-  lo_R7 = *((s16 *)(&lim[0]));
+  lo_R7 = *(s16 *)(&lim[0]);
   switch (0) { default:
   if (rpm < lo_R7)
   {
   } else {
-  hi = *((s16 *)(&lim[1]));
+  hi = *(s16 *)(&lim[1]);
   one = hi;
   if (one < rpm)
   {
     goto L2_inc;
   }
   range = hi - lo_R7;
-  pitch = *((u16 *)(p[0] + 2));
+  pitch = *(u16 *)(p[0] + 2);
   if (!(range > 0))
   {
     range = 1;
   }
   d_R3 = rpm - lo_R7;
-  v20_R4 = (new_var = *((s16 *)(&val[0])));
-  q = (((*((s16 *)(&val[1]))) - new_var) * d_R3) / range;
-  *((s16 *)(sub_R9 + 0x74)) = ((((new_var + q) * 1168) / 160) * 6) / 100;
+  v20_R4 = (new_var = *(s16 *)(&val[0]));
+  q = (((*(s16 *)(&val[1])) - new_var) * d_R3) / range;
+  *(s16 *)(sub_R9 + 0x74) = ((((new_var + q) * 1168) / 160) * 6) / 100;
   break;
   }
-  if ((*((s16 *)(&lim[1]))) < rpm)
+  if ((*(s16 *)(&lim[1])) < rpm)
   {
     L2_inc:
-    cnt = *((u16 *)(sub_R9 + 0x7C));
+    cnt = *(u16 *)(sub_R9 + 0x7C);
     d_R3 = 1;
     q = d_R3;
     g0 = q;
-    *((s16 *)(sub_R9 + 0x7E)) = g0;
+    *(s16 *)(sub_R9 + 0x7E) = g0;
     cnt = cnt + 1;
   }
   else
   {
-    cnt = *((u16 *)(sub_R9 + 0x7C));
+    cnt = *(u16 *)(sub_R9 + 0x7C);
     one = 1;
-    *((s16 *)(sub_R9 + 0x7E)) = one;
+    *(s16 *)(sub_R9 + 0x7E) = one;
     cnt = cnt - 1;
   }
 
-  *((u16 *)(sub_R9 + 0x7C)) = cnt;
+  *(u16 *)(sub_R9 + 0x7C) = cnt;
   if (rpm < 0x20)
   {
-    *((u16 *)(sub_R9 + 0x7C)) = 0;
+    *(u16 *)(sub_R9 + 0x7C) = 0;
   }
   }
-  if ((*((s16 *)(sub_R9 + 0x7E))) != 0)
+  if ((*(s16 *)(sub_R9 + 0x7E)) != 0)
   {
     UpdateCarSlideAngle((GameCarRuntime *)car, (s16) pitch);
   }

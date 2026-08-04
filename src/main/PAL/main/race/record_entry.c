@@ -95,7 +95,7 @@ void DrawRankingPanel(u8 *arg0) {
                 ({
                     (void)(*(volatile char *)&text[0] = iter + 0x31);
                     doubledRow = (doubledRow + row) << 5;
-                    scoreValue = *((s32 *)scoreOrX);
+                    scoreValue = *(s32 *)scoreOrX;
                     value = (destination = (s32)(panel + 0x14));
                     scoreValue;
                 }));
@@ -255,7 +255,7 @@ void InsertRaceRecords(void) {
     while (i < 5) {
         score_offset = row_offset + (g_CourseIndex * 0x50);
         score_offset += g_GrandPrixSeries * 0x140;
-        if (best < *((s32 *)((u8 *)&g_RankingTimes + score_offset))) {
+        if (best < *(s32 *)((u8 *)&g_RankingTimes + score_offset)) {
             if (i < 4) {
                 j = 4;
                 do {
@@ -280,7 +280,7 @@ void InsertRaceRecords(void) {
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *((s32 *)((u8 *)&g_RankingTimes + score_offset)) = best;
+            *(s32 *)((u8 *)&g_RankingTimes + score_offset) = best;
             j = 0;
             fill_offset = row_offset;
             for (; j < 6; j++) {
@@ -292,7 +292,7 @@ void InsertRaceRecords(void) {
 
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *((u16 *)((u8 *)g_RankingCars + score_offset)) = g_PlayerCarIndex;
+            *(u16 *)((u8 *)g_RankingCars + score_offset) = g_PlayerCarIndex;
             break;
         }
         i++;
@@ -308,7 +308,7 @@ void InsertRaceRecords(void) {
     while (i < 5) {
         score_offset = row_offset + (g_CourseIndex * 0x50);
         score_offset += g_GrandPrixSeries * 0x140;
-        score_value = *((s32 *)((u8 *)&g_TimeRecordTimes + score_offset));
+        score_value = *(s32 *)((u8 *)&g_TimeRecordTimes + score_offset);
         if (g_RaceTotalTime < score_value) {
             if (i < 4) {
                 j = 4;
@@ -334,7 +334,7 @@ void InsertRaceRecords(void) {
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *((s32 *)((u8 *)&g_TimeRecordTimes + score_offset)) = g_RaceTotalTime;
+            *(s32 *)((u8 *)&g_TimeRecordTimes + score_offset) = g_RaceTotalTime;
             j = 0;
             fill_offset = row_offset;
             for (; j < 6; j++) {
@@ -346,7 +346,7 @@ void InsertRaceRecords(void) {
 
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *((u16 *)((u8 *)g_TimeRecordCars + score_offset)) = g_PlayerCarIndex;
+            *(u16 *)((u8 *)g_TimeRecordCars + score_offset) = g_PlayerCarIndex;
             break;
         }
         i++;
