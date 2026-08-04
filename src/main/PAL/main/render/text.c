@@ -353,7 +353,6 @@ void DrawProportionalTextShadedWide(
                 void *prim;
                 u8 *ot;
                 register u16 clut asm("$8");
-                register u16 yValue asm("$8");
 
                 asm(
                     "" : "=r"(offset), "=r"(index) :
@@ -373,9 +372,9 @@ void DrawProportionalTextShadedWide(
                     sprt->t.b0 = shade;
                     sprt->x0 = xPos;
                 }
-                yValue = home.y;
+                clut = home.y;
                 packet += 20;
-                sprt->y0 = yValue;
+                sprt->y0 = clut;
                 width = g_WordFontWidth[index];
                 prim = (void *)sprt;
                 sprt->u0 = u;
@@ -406,7 +405,6 @@ void DrawProportionalTextShadedWide(
                     u8 *vCell;
                     register s32 u asm("$21");
                     register s32 v asm("$19");
-                    register u16 yValue asm("$8");
                     void *prim;
                     u8 *ot;
                     register u16 clut asm("$8");
@@ -430,8 +428,8 @@ void DrawProportionalTextShadedWide(
                         sprt->t.b0 = shade;
                         sprt->x0 = xPos;
                     }
-                    yValue = home.y;
-                    asm("" : "=r"(yValue) : "0"(yValue));
+                    clut = home.y;
+                    asm("" : "=r"(clut) : "0"(clut));
                     prim = (void *)sprt;
                     asm("" : "=r"(prim) : "0"(prim));
                     sprt->u0 = u;
@@ -440,7 +438,7 @@ void DrawProportionalTextShadedWide(
                     packet += 20;
                     sprt->w = height;
                     sprt->h = height;
-                    sprt->y0 = yValue;
+                    sprt->y0 = clut;
                     clut = home.clut;
                     ot += 0xCC;
                     sprt->clut = clut;

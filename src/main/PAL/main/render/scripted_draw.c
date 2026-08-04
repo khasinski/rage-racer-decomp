@@ -121,11 +121,8 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     void *otBase;
     s32 mode;
     register s32 y1Reg asm("$2");
-    register s32 x0Base asm("$6");
     register s32 x0 asm("$5");
-    register s32 y0 asm("$6");
     register s32 y0Call asm("$12");
-    register s32 y0Arg asm("$6");
     register s32 x1Base asm("$3");
     s32 x1;
     s32 y1;
@@ -147,36 +144,35 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
         arg0 = limit;
     }
 
-    x0Base = *(s16 *)(record + 4);
+    y1 = *(s16 *)(record + 4);
     if (xPacked & 0x8000) {
         temp = xPacked | 0xFFFF0000;
     } else {
         temp = xPacked & 0x7FFF;
     }
     interp = (u32)(arg0 * temp) / 32;
-    x0 = x0Base + interp;
+    x0 = y1 + interp;
 
-    y0 = *(s16 *)(record + 6);
+    y1 = *(s16 *)(record + 6);
     if (xPacked < 0) {
-        register s32 hi asm("$2");
         s32 mask;
 
-        hi = xPacked >> 16;
+        y1Reg = xPacked >> 16;
         mask = 0xFFFF0000;
-        temp = hi | mask;
+        temp = y1Reg | mask;
     } else {
         temp = (xPacked >> 16) & 0x7FFF;
     }
     interp = (u32)(arg0 * temp) / 32;
-    y0 += interp;
+    y1 += interp;
 
     asm volatile("");
     x1Base = *(s16 *)(record + 8);
     if (yPacked & 0x8000) {
-        y0Call = y0;
+        y0Call = y1;
         temp = yPacked | 0xFFFF0000;
     } else {
-        y0Call = y0;
+        y0Call = y1;
         temp = yPacked & 0x7FFF;
     }
     interp = (u32)(arg0 * temp) / 32;
@@ -185,12 +181,11 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     y1 = *(s16 *)(record + 0xA);
     x1 = x1Base + interp;
     if (yPacked < 0) {
-        register s32 hi asm("$2");
         s32 mask;
 
-        hi = yPacked >> 16;
+        y1Reg = yPacked >> 16;
         mask = 0xFFFF0000;
-        temp = hi | mask;
+        temp = y1Reg | mask;
     } else {
         temp = (yPacked >> 16) & 0x7FFF;
     }
@@ -222,14 +217,14 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     y1Reg = (s16)y1;
     arg0 = mode * 4;
     x0 <<= 0x10;
-    y0Arg = y0Call << 0x10;
+    y1 = y0Call << 0x10;
     x1 <<= 0x10;
     otPtr = (s32)otBase + arg0;
     asm("" : "=r"(otPtr) : "0"(otPtr));
     func_8004711C(
         (void *)otPtr,
         x0 >> 0x10,
-        y0Arg >> 0x10,
+        y1 >> 0x10,
         x1 >> 0x10,
         y1Reg,
         style[0],
@@ -597,7 +592,6 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     s32 drawX;
     s32 drawY;
     s32 drawW;
-    register s32 drawH asm("$2");
     s32 elapsed;
     s32 limit;
     s32 packed;
@@ -660,7 +654,7 @@ loop:
     *timer = fade;
     fade >>= 2;
 
-    drawH = *(s16 *)(arg0Ptr + 2);
+    value = *(s16 *)(arg0Ptr + 2);
     drawX = *(u16 *)(arg1Ptr + 4);
     drawY = *(u16 *)(arg1Ptr + 6);
     drawW = *(s16 *)arg0Ptr;
@@ -675,7 +669,7 @@ loop:
                   drawX,
                   drawY,
                   drawW,
-                  drawH,
+                  value,
                   arg0Ptr[4],
                   arg0Ptr[5],
                   fade,
