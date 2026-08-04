@@ -52,7 +52,8 @@ done:
     *(u32 *)&arg0[4] = encoded;
 }
 
-void func_80065198(u8 *arg0, u8 *arg1) {
+void SetDrawLoad(u8 *arg0, u8 *arg1) asm("func_80065198");
+void SetDrawLoad(u8 *arg0, u8 *arg1) {
     s32 sign;
     s32 value;
     s32 size;
