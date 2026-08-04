@@ -568,22 +568,22 @@ extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
 void StoreSaveStateBlock(u8 *arg0) asm("func_8005F88C");
 void StoreSaveStateBlock(u8 *block) {
     {
-        u16 h0 = g_PadMappingIndex;
-        u16 h1 = g_NegconMappingIndex;
-        u16 h2 = g_NegconSteerNeutral;
-        u16 h3 = g_NegconSteerPlay;
-        *(u16 *)(block + 0x0) = h0;
-        *(u16 *)(block + 0x2) = h1;
-        *(u16 *)(block + 0x4) = h2;
-        *(u16 *)(block + 0x6) = h3;
+        u16 padMappingIndex = g_PadMappingIndex;
+        u16 negconMappingIndex = g_NegconMappingIndex;
+        u16 negconSteerNeutral = g_NegconSteerNeutral;
+        u16 negconSteerPlay = g_NegconSteerPlay;
+        *(u16 *)(block + 0x0) = padMappingIndex;
+        *(u16 *)(block + 0x2) = negconMappingIndex;
+        *(u16 *)(block + 0x4) = negconSteerNeutral;
+        *(u16 *)(block + 0x6) = negconSteerPlay;
     }
     *(u16 *)(block + 0x8) = g_NegconNeutralI;
     *(u16 *)(block + 0xA) = g_NegconNeutralII;
     {
-        u16 h0 = g_NegconMaxTwist;
-        u16 h1 = g_NegconNeutralL;
-        *(u16 *)(block + 0xE) = h0;
-        *(u16 *)(block + 0xC) = h1;
+        u16 negconMaxTwist = g_NegconMaxTwist;
+        u16 negconNeutralL = g_NegconNeutralL;
+        *(u16 *)(block + 0xE) = negconMaxTwist;
+        *(u16 *)(block + 0xC) = negconNeutralL;
     }
 
     *(s32 *)(block + 0x10) = g_GrandPrixSave.course;
