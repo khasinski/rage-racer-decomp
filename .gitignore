@@ -90,3 +90,10 @@ docs/DECOMPILATION_GUIDE.md
 
 # Debug dump written by decomp-permuter when a compile fails.
 debug_source.c
+
+# Compiler dumps (cc1 -dl/-dg) and cpp -MD dependency files. cc.sh feeds the
+# source on stdin, so cc1 names its dumps after "-".
+*.lreg
+*.greg
+*.d
+-.*
