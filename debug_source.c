@@ -38,9 +38,18 @@ typedef struct
   s16 x3;
   s16 y3;
 } POLY_F4;
+typedef union 
+{
+  struct 
+  {
+    u8 u;
+    u8 v;
+  } bytes;
+  u16 packed;
+} SkyUV;
 typedef struct 
 {
-  u16 corner[4];
+  SkyUV corner[4];
 } SkyTileUV;
 typedef struct 
 {
@@ -72,23 +81,19 @@ typedef struct
   P_TAG t;
   s16 x0;
   s16 y0;
-  u8 u0;
-  u8 v0;
+  SkyUV uv0;
   u16 clut;
   s16 x1;
   s16 y1;
-  u8 u1;
-  u8 v1;
+  SkyUV uv1;
   u16 tpage;
   s16 x2;
   s16 y2;
-  u8 u2;
-  u8 v2;
+  SkyUV uv2;
   u16 pad1E;
   s16 x3;
   s16 y3;
-  u8 u3;
-  u8 v3;
+  SkyUV uv3;
   u16 pad26;
 } POLY_FT4;
 typedef struct 
@@ -123,12 +128,16 @@ typedef struct
   u8 b;
   u8 cd;
 } SkyCVec;
-typedef struct 
+typedef union 
 {
-  u8 chan0;
-  u8 chan1;
-  u8 chan2;
-  u8 chan3;
+  u32 rgb;
+  struct 
+  {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 unused;
+  } bytes;
 } GameEnvColor;
 typedef struct 
 {
@@ -137,6 +146,16 @@ typedef struct
   GameEnvColor to;
 } GameEnvColorSlot;
 extern GameEnvColorSlot g_EnvColors[] asm("D_801E3FB6");
+inline static s32 DivideSigned32(s32 value)
+{
+  s32 adjustedValue = value;
+  s32 divisionInput = value;
+  s32 isNonNegative = divisionInput >= 0;
+  if (!isNonNegative)
+    adjustedValue += 31;
+  return adjustedValue >> 5;
+}
+
 inline static s32 GameRoundTerrainCoordinate(s32 value)
 {
   return value / 256;
@@ -147,693 +166,693 @@ inline static s32 GameRoundTerrainCoordinate11(s32 value)
   return value / 2048;
 }
 
-void func_800418D4(void);
+enum SkyOrderingTableIndex
+{
+  SKY_OT_FAR = 702,
+  SKY_OT_NEAR = 703
+};
 void func_800418D4(void)
 {
   SkyRenderScratchpad *scratch = (SkyRenderScratchpad *) 0x1F800000;
-  s32 sp20;
-  s32 sp28;
-  s32 sp30;
-  s32 sp38;
-  s32 sp40;
-  s32 sp48;
-  s32 sp50;
-  s32 sp58;
-  s32 sp60;
-  s32 sp68;
-  s32 sp70;
-  s32 sp78;
-  s32 sp80;
-  s32 sp88;
-  s32 sp90;
-  s32 sp98;
-  s32 spA0;
-  s32 spA8;
-  s32 spB0;
-  s32 spB8;
-  s32 spC0;
-  s32 spC8;
-  s32 spD0;
-  s32 spE0;
-  s32 temp_a0_1048;
-  s32 temp_a0_1170;
-  s32 temp_a0_248;
-  s32 temp_a1_1150;
-  s32 temp_a1_208;
-  s32 temp_a3_53;
-  s32 temp_fp_714;
-  s32 temp_lo_117;
-  s32 temp_s0_104;
-  s32 temp_s1_89;
-  s32 temp_s3_496;
-  s32 temp_s3_86;
-  s32 temp_s4_489;
-  s32 temp_s4_95;
-  s32 temp_s5_482;
-  s32 temp_s6_474;
-  s32 temp_s7_747;
-  s32 negSin;
-  s32 baseX1;
-  s32 gridIndex;
-  s32 roundedRow;
-  s32 temp_v0_103;
-  s32 temp_v0_431;
-  s32 temp_v1_1063;
-  s32 temp_v1_1140;
-  s32 temp_v1_1161;
-  s32 temp_v1_223;
-  s32 temp_v1_257;
-  s32 temp_v1_408;
-  s32 temp_v1_475;
-  s32 temp_v1_55;
-  s32 var_a0_44;
-  s32 var_a1_47;
-  s32 var_a3_184;
-  s32 var_fp_360;
-  s32 var_s0_92;
-  s32 var_s7_357;
-  s32 var_v0_1007;
-  s32 var_v0_112;
-  s32 var_v0_127;
-  s32 var_v0_38;
-  s32 var_v0_69;
-  s32 var_v0_854;
-  s32 var_v0_928;
-  s32 var_v0_941;
-  s32 var_v0_947;
-  SkyTileUV *temp_s1_215;
-  s16 textureStageA;
-  POLY_FT4 *texturedQuad;
-  u8 *nextPacket;
-  POLY_FT4 *texturedQuadRow;
-  u8 *packetCursor;
-  s32 divisionInputRow;
-  s32 divisionInputX0;
-  s32 divisionInputX1;
-  s32 isNonNegativeRow;
-  s32 isNonNegativeX0;
-  s32 isNonNegativeX1;
-  packetCursor = scratch->packetCursor;
-  if (scratch->mirrorFlag != g_MirrorMode)
+  s32 panelXFixed;
+  s32 panelYFixed;
+  s32 columnStepX;
+  s32 columnStepY;
+  s32 rowStepX;
+  s32 rowStepY;
+  s32 savedSinRoll;
+  s32 savedCosRoll;
+  s32 textureColumn;
+  s32 bandOriginXFixed;
+  s32 bandOriginYFixed;
+  s32 horizonTopY;
+  s32 screenX0;
+  s32 screenX1;
+  s32 screenX2;
+  s32 screenX3;
+  s32 savedCourseX0;
+  s32 savedCourseX1;
+  s32 xWork;
+  s32 savedCourseY1;
+  s32 doubleRowStepY;
+  s32 nextCellXFixed;
+  s32 rowOffsetYFixed;
+  s32 lowerPanelXFixed;
+  s32 cellXFixed;
+  s32 coordinateAccumulator;
+  u8 *packetCursor = scratch->packetCursor;
   {
-    var_v0_38 = -scratch->pitch;
-  }
-  else
-  {
-    var_v0_38 = scratch->pitch;
-  }
-  var_a0_44 = var_v0_38 & 0xFFF;
-  var_a1_47 = var_a0_44;
-  if (var_a1_47 >= 0x800)
-  {
-    var_a1_47 -= 0x1000;
-  }
-  if (var_a0_44 >= 0x800)
-  {
-    var_a0_44 -= 0x1000;
-  }
-  temp_a3_53 = scratch->cameraY;
-  {
-    s32 adjustedRow;
-    s32 leftPlusTwo;
-    s32 rightPlusTwo;
-    temp_v1_55 = temp_a3_53 - 0x1770;
-    leftPlusTwo = var_a1_47 + 2;
-    adjustedRow = temp_v1_55;
-    divisionInputRow = temp_v1_55;
-    isNonNegativeRow = divisionInputRow >= 0;
-    if (!isNonNegativeRow)
+    s32 cameraY;
+    s32 var_a3_184;
+    s32 temp_lo_117;
+    s32 sinRoll;
+    s32 nearVerticalFixed;
+    s32 horizontalFixed;
+    s32 farVerticalFixed;
+    s32 negativeSinRoll;
+    s32 cosRoll;
+    s32 angleWork;
+    s32 leftViewAngle;
+    s32 rollAngle;
+    s32 rotatedX;
+    s32 rotatedY;
+    s32 pitchAngle;
+    s32 yawAngle;
+    s32 unroundedX;
+    s32 unroundedY;
+    s32 xIsNonNegative;
+    s32 yIsNonNegative;
+    if (scratch->mirrorFlag != g_MirrorMode)
     {
-      adjustedRow = temp_a3_53 - 0x1751;
+      pitchAngle = -scratch->pitch;
     }
-    roundedRow = adjustedRow >> 5;
-    var_a1_47 = leftPlusTwo + roundedRow;
-    rightPlusTwo = var_a0_44 + 2;
-    var_a0_44 = rightPlusTwo + roundedRow;
-    var_v0_69 = scratch->mirrorFlag;
-  }
-  temp_v1_55 = scratch->yaw;
-  if (var_v0_69 != 0)
-  {
-    temp_v1_55 = -temp_v1_55;
-    var_v0_69 = temp_v1_55 + 0x200;
-  }
-  else
-  {
-    var_v0_69 = temp_v1_55 + 0x200;
-  }
-  temp_v1_55 = var_v0_69 & 0xFFF;
-  var_a1_47 /= 2;
-  var_a0_44 = (var_a0_44 / 2) + 0x50;
-  sp60 = temp_v1_55 >> 7;
-  temp_s3_86 = (s32) (((u32) ((-0x100) - ((temp_v1_55 >> 1) & 0x3F))) << 8);
-  temp_s1_89 = (s32) (((u32) ((-0x80) - var_a1_47)) << 8);
-  var_s0_92 = scratch->roll;
-  temp_s4_95 = (s32) (((u32) ((-0x80) - var_a0_44)) << 8);
-  if (g_MirrorMode == 0)
-  {
-    var_s0_92 = -var_s0_92;
-  }
-  temp_s0_104 = GameSin(var_s0_92);
-  temp_v0_103 = GameCos(var_s0_92);
-  var_a0_44 = temp_v0_103 * temp_s3_86;
-  var_v0_112 = var_a0_44 + (temp_s0_104 * temp_s1_89);
-  divisionInputX0 = var_v0_112;
-  isNonNegativeX0 = divisionInputX0 >= 0;
-  if (!isNonNegativeX0)
-  {
-    var_v0_112 += 0xFFF;
-  }
-  negSin = -temp_s0_104;
-  temp_lo_117 = negSin * temp_s3_86;
-  var_v0_112 >>= 0xC;
-  var_a1_47 = 0xA000;
-  sp20 = var_v0_112 + var_a1_47;
-  var_v0_127 = temp_lo_117 + (temp_v0_103 * temp_s1_89);
-  divisionInputX1 = var_v0_127;
-  isNonNegativeX1 = divisionInputX1 >= 0;
-  if (!isNonNegativeX1)
-  {
-    var_v0_127 += 0xFFF;
-  }
-  var_a3_184 = var_v0_127 >> 0xC;
-  var_a0_44 += temp_s0_104 * temp_s4_95;
-  sp28 = var_a3_184 + 0x7800;
-  if (var_a0_44 < 0)
-  {
-    var_a0_44 += 0xFFF;
-  }
-  var_v0_127 = temp_v0_103 * temp_s4_95;
-  temp_lo_117 += var_v0_127;
-  var_v0_127 = var_a0_44 >> 0xC;
-  baseX1 = var_v0_127 + 0xA000;
-  if (temp_lo_117 < 0)
-  {
-    temp_lo_117 += 0xFFF;
-  }
-  var_a1_47 = temp_lo_117 >> 0xC;
-  var_a0_44 = var_a1_47 + 0x7800;
-  if (g_MirrorMode != D_1F800068)
-  {
-    sp28 = var_a3_184 + 0x2400;
-    var_a0_44 = var_a1_47 + 0x2400;
-  }
-  sp30 = temp_v0_103 * 4;
-  sp38 = negSin * 4;
-  sp50 = temp_s0_104;
-  sp58 = temp_v0_103;
-  sp68 = sp20;
-  sp70 = sp28;
-  sp40 = temp_s0_104 * 8;
-  sp48 = temp_v0_103 * 8;
-  if (g_SkyRowBase != 0)
-  {
+    else
     {
-      s32 temp_s7_256;
-      s32 var_fp_181;
-      s32 spF0 = 0;
-      s32 spF8 = 0;
-      gridIndex = 0;
-      do
+      pitchAngle = scratch->pitch;
+    }
+    coordinateAccumulator = pitchAngle & 0xFFF;
+    leftViewAngle = coordinateAccumulator;
+    if (leftViewAngle >= 0x800)
+    {
+      leftViewAngle -= 0x1000;
+    }
+    if (coordinateAccumulator >= 0x800)
+    {
+      coordinateAccumulator -= 0x1000;
+    }
+    cameraY = scratch->cameraY;
+    {
+      s32 leftPlusTwo;
+      s32 rightPlusTwo;
+      angleWork = cameraY - 6000;
+      leftPlusTwo = leftViewAngle + 2;
+      cellXFixed = DivideSigned32(angleWork);
+      leftViewAngle = leftPlusTwo + cellXFixed;
+      rightPlusTwo = coordinateAccumulator + 2;
+      coordinateAccumulator = rightPlusTwo + cellXFixed;
+      yawAngle = scratch->mirrorFlag;
+    }
+    angleWork = scratch->yaw;
+    if (yawAngle != 0)
+    {
+      angleWork = -angleWork;
+      yawAngle = angleWork + 0x200;
+    }
+    else
+    {
+      yawAngle = angleWork + 0x200;
+    }
+    angleWork = yawAngle & 0xFFF;
+    leftViewAngle /= 2;
+    coordinateAccumulator = (coordinateAccumulator / 2) + 0x50;
+    textureColumn = angleWork >> 7;
+    horizontalFixed = (s32) (((u32) ((-0x100) - ((angleWork >> 1) & 0x3F))) << 8);
+    nearVerticalFixed = (s32) (((u32) ((-0x80) - leftViewAngle)) << 8);
+    rollAngle = scratch->roll;
+    farVerticalFixed = (s32) (((u32) ((-0x80) - coordinateAccumulator)) << 8);
+    if (g_MirrorMode == 0)
+    {
+      rollAngle = -rollAngle;
+    }
+    sinRoll = GameSin(rollAngle);
+    cosRoll = GameCos(rollAngle);
+    coordinateAccumulator = cosRoll * horizontalFixed;
+    rotatedX = coordinateAccumulator + (sinRoll * nearVerticalFixed);
+    unroundedX = rotatedX;
+    xIsNonNegative = unroundedX >= 0;
+    if (!xIsNonNegative)
+    {
+      rotatedX += 0xFFF;
+    }
+    negativeSinRoll = -sinRoll;
+    temp_lo_117 = negativeSinRoll * horizontalFixed;
+    rotatedX >>= 0xC;
+    leftViewAngle = 0xA000;
+    panelXFixed = rotatedX + leftViewAngle;
+    rotatedY = temp_lo_117 + (cosRoll * nearVerticalFixed);
+    unroundedY = rotatedY;
+    yIsNonNegative = unroundedY >= 0;
+    if (!yIsNonNegative)
+    {
+      rotatedY += 0xFFF;
+    }
+    var_a3_184 = rotatedY >> 0xC;
+    coordinateAccumulator += sinRoll * farVerticalFixed;
+    panelYFixed = var_a3_184 + 0x7800;
+    if (coordinateAccumulator < 0)
+    {
+      coordinateAccumulator += 0xFFF;
+    }
+    rotatedY = cosRoll * farVerticalFixed;
+    temp_lo_117 += rotatedY;
+    rotatedY = coordinateAccumulator >> 0xC;
+    lowerPanelXFixed = rotatedY + 0xA000;
+    if (temp_lo_117 < 0)
+    {
+      temp_lo_117 += 0xFFF;
+    }
+    leftViewAngle = temp_lo_117 >> 0xC;
+    coordinateAccumulator = leftViewAngle + 0x7800;
+    if (g_MirrorMode != D_1F800068)
+    {
+      panelYFixed = var_a3_184 + 0x2400;
+      coordinateAccumulator = leftViewAngle + 0x2400;
+    }
+    columnStepX = cosRoll * 4;
+    columnStepY = negativeSinRoll * 4;
+    savedSinRoll = sinRoll;
+    savedCosRoll = cosRoll;
+    bandOriginXFixed = panelXFixed;
+    bandOriginYFixed = panelYFixed;
+    rowStepX = sinRoll * 8;
+    rowStepY = cosRoll * 8;
+  }
+  {
+    s32 screenY3;
+    s32 screenY2;
+    s32 screenY1;
+    s32 screenY0;
+    s32 temp_s7_747;
+    s32 gridRow;
+    s32 leftXWorkFixed;
+    s32 rightXWorkFixed;
+    SkyTileUV *tileUv;
+    u8 *nextPacket;
+    if (g_SkyRowBase != 0)
+    {
       {
-        var_fp_181 = 0;
-        texturedQuadRow = (POLY_FT4 *) packetCursor;
-        spC0 = spF8;
-        spD0 = spF0;
-        var_a3_184 = sp28;
-        roundedRow = sp20;
+        s32 temp_s7_256;
+        s32 var_a3_184;
+        POLY_FT4 *quad;
+        POLY_FT4 *quadRow;
+        s16 tileIndex;
+        s32 temp_v1_257;
+        s32 temp_v1_223;
+        s32 temp_a1_208;
+        s32 temp_a0_248;
+        s32 var_fp_181;
+        s32 spF0 = 0;
+        s32 spF8 = 0;
+        gridRow = 0;
         do
         {
-          texturedQuad = texturedQuadRow + var_fp_181;
-          textureStageA = g_SkyTileMap[(gridIndex % 2) + g_SkyRowBase][(sp60 + var_fp_181) & 0xF];
-          temp_s1_215 = &g_SkyTileUV[textureStageA];
-          temp_a1_208 = roundedRow - spC0;
-          sp80 = GameRoundTerrainCoordinate(temp_a1_208);
-          spC8 = roundedRow + sp30;
-          temp_v1_223 = spC8 - spC0;
-          sp88 = GameRoundTerrainCoordinate(temp_v1_223);
-          sp90 = GameRoundTerrainCoordinate(temp_a1_208 + sp40);
-          sp98 = GameRoundTerrainCoordinate(temp_v1_223 + sp40);
-          temp_a0_248 = var_a3_184 - spD0;
-          temp_s6_474 = GameRoundTerrainCoordinate(temp_a0_248);
-          temp_s7_256 = var_a3_184 + sp38;
-          temp_v1_257 = temp_s7_256 - spD0;
-          temp_s5_482 = GameRoundTerrainCoordinate(temp_v1_257);
-          temp_s4_489 = GameRoundTerrainCoordinate(temp_a0_248 + sp48);
-          temp_s3_496 = GameRoundTerrainCoordinate(temp_v1_257 + sp48);
-          SetPolyFT4(packetCursor);
-          SetShadeTex(packetCursor, 0);
-          texturedQuad->tpage = 0x18;
-          *((u16 *) (&texturedQuad->u0)) = temp_s1_215->corner[0];
-          packetCursor += 0x28;
-          *((u16 *) (&texturedQuad->u1)) = temp_s1_215->corner[1];
-          *((u16 *) (&texturedQuad->u2)) = temp_s1_215->corner[2];
-          *((u16 *) (&texturedQuad->u3)) = temp_s1_215->corner[3];
-          texturedQuad->x0 = sp80;
-          texturedQuad->x1 = sp88;
-          texturedQuad->x2 = sp90;
-          *((u16 *) (&texturedQuad->x3)) = sp98;
-          texturedQuad->t.r0 = 0x80;
-          texturedQuad->t.g0 = 0x80;
-          texturedQuad->t.b0 = 0x80;
-          texturedQuad->y0 = temp_s6_474;
-          texturedQuad->y1 = temp_s5_482;
-          texturedQuad->y2 = temp_s4_489;
-          texturedQuad->y3 = temp_s3_496;
-          texturedQuad->clut = 0x798E;
-          AddPrim(scratch->orderingTable + 0x2BF, texturedQuad);
-          var_fp_181 += 1;
-          roundedRow = spC8;
-          var_a3_184 = temp_s7_256;
+          var_fp_181 = 0;
+          quadRow = (POLY_FT4 *) packetCursor;
+          doubleRowStepY = spF8;
+          rowOffsetYFixed = spF0;
+          var_a3_184 = panelYFixed;
+          cellXFixed = panelXFixed;
+          do
+          {
+            quad = quadRow + var_fp_181;
+            tileIndex = g_SkyTileMap[(gridRow % 2) + g_SkyRowBase][(textureColumn + var_fp_181) & 0xF];
+            tileUv = &g_SkyTileUV[tileIndex];
+            temp_a1_208 = cellXFixed - doubleRowStepY;
+            screenX0 = GameRoundTerrainCoordinate(temp_a1_208);
+            nextCellXFixed = cellXFixed + columnStepX;
+            temp_v1_223 = nextCellXFixed - doubleRowStepY;
+            screenX1 = GameRoundTerrainCoordinate(temp_v1_223);
+            screenX2 = GameRoundTerrainCoordinate(temp_a1_208 + rowStepX);
+            screenX3 = GameRoundTerrainCoordinate(temp_v1_223 + rowStepX);
+            temp_a0_248 = var_a3_184 - rowOffsetYFixed;
+            screenY0 = GameRoundTerrainCoordinate(temp_a0_248);
+            temp_s7_256 = var_a3_184 + columnStepY;
+            temp_v1_257 = temp_s7_256 - rowOffsetYFixed;
+            screenY1 = GameRoundTerrainCoordinate(temp_v1_257);
+            screenY2 = GameRoundTerrainCoordinate(temp_a0_248 + rowStepY);
+            screenY3 = GameRoundTerrainCoordinate(temp_v1_257 + rowStepY);
+            SetPolyFT4(packetCursor);
+            SetShadeTex(packetCursor, 0);
+            quad->tpage = 0x18;
+            quad->uv0.packed = tileUv->corner[0].packed;
+            packetCursor += 0x28;
+            quad->uv1.packed = tileUv->corner[1].packed;
+            quad->uv2.packed = tileUv->corner[2].packed;
+            quad->uv3.packed = tileUv->corner[3].packed;
+            quad->x0 = screenX0;
+            quad->x1 = screenX1;
+            quad->x2 = screenX2;
+            quad->x3 = screenX3;
+            quad->t.r0 = 0x80;
+            quad->t.g0 = 0x80;
+            quad->t.b0 = 0x80;
+            quad->y0 = screenY0;
+            quad->y1 = screenY1;
+            quad->y2 = screenY2;
+            quad->y3 = screenY3;
+            quad->clut = 0x798E;
+            AddPrim(&scratch->orderingTable[SKY_OT_NEAR], quad);
+            var_fp_181 += 1;
+            cellXFixed = nextCellXFixed;
+            var_a3_184 = temp_s7_256;
+          }
+          while (var_fp_181 < 8);
+          gridRow += 1;
+          spF0 += rowStepY;
+          spF8 += rowStepX;
         }
-        while (var_fp_181 < 8);
-        gridIndex += 1;
-        spF0 += sp48;
-        spF8 += sp40;
+        while (gridRow < 4);
       }
-      while (gridIndex < 4);
+      columnStepX *= 8;
+      columnStepY *= 8;
     }
-    sp30 *= 8;
-    sp38 *= 8;
-  }
-  else
-  {
-    SkyClipBounds clip;
-    sp28 = var_a0_44;
+    else
     {
-      sp20 = baseX1;
-      sp78 = GameRoundTerrainCoordinate(sp28);
-      var_fp_360 = GameRoundTerrainCoordinate(sp28 + sp48);
-      var_s7_357 = 0xF0;
-      clip.xMinTop = (clip.xMinBottom = 0x140);
-      clip.xMaxBottom = 0;
-      clip.xMaxTop = 0;
-      clip.yEdge0 = (sp38 > 0) ? (0xF0) : (-0xF0);
-      clip.yEdge1 = (sp38 > 0) ? (-0xF0) : (0xF0);
-      clip.yEdge2 = (sp38 > 0) ? (0xF0) : (-0xF0);
-      clip.yEdge3 = (sp38 > 0) ? (-0xF0) : (0xF0);
-      gridIndex = 0;
-      texturedQuad = (POLY_FT4 *) packetCursor;
-      do
+      SkyClipBounds clip;
+      s32 temp_lo_117;
+      POLY_FT4 *quad;
+      s32 temp_fp_714;
+      s32 temp_v0_431;
+      s32 temp_v1_408;
+      s32 temp_v1_475;
+      s32 var_fp_360;
+      s32 var_s7_357;
+      s32 upperBandYFixed;
+      s32 rightBandYFixed;
+      s32 var_v0_941;
+      s32 var_v0_947;
+      panelYFixed = coordinateAccumulator;
       {
-        sp80 = GameRoundTerrainCoordinate(sp20);
-        temp_v1_408 = sp20 + sp30;
-        sp88 = GameRoundTerrainCoordinate(temp_v1_408);
-        sp90 = GameRoundTerrainCoordinate(sp20 + sp40);
-        temp_v0_431 = GameRoundTerrainCoordinate(temp_v1_408 + sp40);
-        sp98 = temp_v0_431;
-        if (((((sp80 >= 0) || (sp88 >= 0)) || (sp90 >= 0)) || (temp_v0_431 >= 0)) && ((((sp80 < 0x140) || (sp88 < 0x140)) || (sp90 < 0x140)) || (sp98 < 0x140)))
+        panelXFixed = lowerPanelXFixed;
+        horizonTopY = GameRoundTerrainCoordinate(panelYFixed);
+        var_fp_360 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
+        var_s7_357 = 0xF0;
+        clip.xMinTop = (clip.xMinBottom = 0x140);
+        clip.xMaxBottom = 0;
+        clip.xMaxTop = 0;
+        clip.yEdge0 = (columnStepY > 0) ? (0xF0) : (-0xF0);
+        clip.yEdge1 = (columnStepY > 0) ? (-0xF0) : (0xF0);
+        clip.yEdge2 = (columnStepY > 0) ? (0xF0) : (-0xF0);
+        clip.yEdge3 = (columnStepY > 0) ? (-0xF0) : (0xF0);
+        gridRow = 0;
+        quad = (POLY_FT4 *) packetCursor;
+        do
         {
-          temp_s6_474 = GameRoundTerrainCoordinate(sp28);
-          temp_v1_475 = sp28 + sp38;
-          temp_s5_482 = GameRoundTerrainCoordinate(temp_v1_475);
-          temp_s4_489 = GameRoundTerrainCoordinate(sp28 + sp48);
-          temp_s3_496 = GameRoundTerrainCoordinate(temp_v1_475 + sp48);
-          if (sp78 < temp_s6_474)
+          screenX0 = GameRoundTerrainCoordinate(panelXFixed);
+          temp_v1_408 = panelXFixed + columnStepX;
+          screenX1 = GameRoundTerrainCoordinate(temp_v1_408);
+          screenX2 = GameRoundTerrainCoordinate(panelXFixed + rowStepX);
+          temp_v0_431 = GameRoundTerrainCoordinate(temp_v1_408 + rowStepX);
+          screenX3 = temp_v0_431;
+          if (((((screenX0 >= 0) || (screenX1 >= 0)) || (screenX2 >= 0)) || (temp_v0_431 >= 0)) && ((((screenX0 < 0x140) || (screenX1 < 0x140)) || (screenX2 < 0x140)) || (screenX3 < 0x140)))
           {
-            sp78 = temp_s6_474;
-          }
-          if (sp78 < temp_s5_482)
-          {
-            sp78 = temp_s5_482;
-          }
-          if (temp_s4_489 < var_fp_360)
-          {
-            var_fp_360 = temp_s4_489;
-          }
-          if (temp_s3_496 < var_fp_360)
-          {
-            var_fp_360 = temp_s3_496;
-          }
-          if (temp_s4_489 < temp_s3_496)
-          {
-            if (temp_s4_489 < var_s7_357)
+            screenY0 = GameRoundTerrainCoordinate(panelYFixed);
+            temp_v1_475 = panelYFixed + columnStepY;
+            screenY1 = GameRoundTerrainCoordinate(temp_v1_475);
+            screenY2 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
+            screenY3 = GameRoundTerrainCoordinate(temp_v1_475 + rowStepY);
+            if (horizonTopY < screenY0)
             {
-              var_s7_357 = temp_s4_489;
+              horizonTopY = screenY0;
             }
-          }
-          else
-            if (temp_s3_496 < var_s7_357)
-          {
-            var_s7_357 = temp_s3_496;
-          }
-          if (sp80 < clip.xMinTop)
-          {
-            clip.xMinTop = sp80;
-          }
-          if (sp90 < clip.xMinBottom)
-          {
-            clip.xMinBottom = sp90;
-          }
-          if (clip.xMaxTop < sp88)
-          {
-            clip.xMaxTop = sp88;
-          }
-          if (clip.xMaxBottom < sp98)
-          {
-            clip.xMaxBottom = sp98;
-          }
-          if (sp38 > 0)
-          {
-            if (temp_s6_474 < clip.yEdge0)
+            if (horizonTopY < screenY1)
             {
-              clip.yEdge0 = temp_s6_474;
+              horizonTopY = screenY1;
             }
-            if (clip.yEdge1 < temp_s5_482)
+            if (screenY2 < var_fp_360)
             {
-              clip.yEdge1 = temp_s5_482;
+              var_fp_360 = screenY2;
             }
-            if (temp_s4_489 < clip.yEdge2)
+            if (screenY3 < var_fp_360)
             {
-              clip.yEdge2 = temp_s4_489;
+              var_fp_360 = screenY3;
             }
-            if (clip.yEdge3 < temp_s3_496)
+            if (screenY2 < screenY3)
             {
-              clip.yEdge3 = temp_s3_496;
+              if (screenY2 < var_s7_357)
+              {
+                var_s7_357 = screenY2;
+              }
             }
+            else
+              if (screenY3 < var_s7_357)
+            {
+              var_s7_357 = screenY3;
+            }
+            if (screenX0 < clip.xMinTop)
+            {
+              clip.xMinTop = screenX0;
+            }
+            if (screenX2 < clip.xMinBottom)
+            {
+              clip.xMinBottom = screenX2;
+            }
+            if (clip.xMaxTop < screenX1)
+            {
+              clip.xMaxTop = screenX1;
+            }
+            if (clip.xMaxBottom < screenX3)
+            {
+              clip.xMaxBottom = screenX3;
+            }
+            if (columnStepY > 0)
+            {
+              if (screenY0 < clip.yEdge0)
+              {
+                clip.yEdge0 = screenY0;
+              }
+              if (clip.yEdge1 < screenY1)
+              {
+                clip.yEdge1 = screenY1;
+              }
+              if (screenY2 < clip.yEdge2)
+              {
+                clip.yEdge2 = screenY2;
+              }
+              if (clip.yEdge3 < screenY3)
+              {
+                clip.yEdge3 = screenY3;
+              }
+            }
+            else
+            {
+              if (clip.yEdge0 < screenY0)
+              {
+                clip.yEdge0 = screenY0;
+              }
+              if (screenY1 < clip.yEdge1)
+              {
+                clip.yEdge1 = screenY1;
+              }
+              if (clip.yEdge2 < screenY2)
+              {
+                clip.yEdge2 = screenY2;
+              }
+              if (screenY3 < clip.yEdge3)
+              {
+                clip.yEdge3 = screenY3;
+              }
+            }
+            temp_lo_117 = g_SkyTileMap[0][(textureColumn + gridRow) & 0xF];
+            tileUv = &g_SkyTileUV[temp_lo_117];
+            SetPolyFT4(packetCursor);
+            SetShadeTex(packetCursor, 0);
+            quad->tpage = 0x18;
+            quad->uv0.packed = tileUv->corner[0].packed;
+            packetCursor += 0x28;
+            quad->uv1.packed = tileUv->corner[1].packed;
+            quad->uv2.packed = tileUv->corner[2].packed;
+            quad->uv3.packed = tileUv->corner[3].packed;
+            quad->x0 = screenX0;
+            quad->x1 = screenX1;
+            quad->x2 = screenX2;
+            quad->x3 = screenX3;
+            quad->t.r0 = 0x80;
+            quad->t.g0 = 0x80;
+            quad->t.b0 = 0x80;
+            quad->y0 = screenY0;
+            quad->y1 = screenY1;
+            quad->y2 = screenY2;
+            quad->y3 = screenY3;
+            quad->clut = 0x798E;
+            AddPrim(&scratch->orderingTable[SKY_OT_NEAR], quad++);
           }
-          else
-          {
-            if (clip.yEdge0 < temp_s6_474)
-            {
-              clip.yEdge0 = temp_s6_474;
-            }
-            if (temp_s5_482 < clip.yEdge1)
-            {
-              clip.yEdge1 = temp_s5_482;
-            }
-            if (clip.yEdge2 < temp_s4_489)
-            {
-              clip.yEdge2 = temp_s4_489;
-            }
-            if (temp_s3_496 < clip.yEdge3)
-            {
-              clip.yEdge3 = temp_s3_496;
-            }
-          }
-          temp_lo_117 = g_SkyTileMap[0][(sp60 + gridIndex) & 0xF];
-          temp_s1_215 = &g_SkyTileUV[temp_lo_117];
-          SetPolyFT4(packetCursor);
-          SetShadeTex(packetCursor, 0);
-          texturedQuad->tpage = 0x18;
-          *((u16 *) (&texturedQuad->u0)) = temp_s1_215->corner[0];
-          packetCursor += 0x28;
-          *((u16 *) (&texturedQuad->u1)) = temp_s1_215->corner[1];
-          *((u16 *) (&texturedQuad->u2)) = temp_s1_215->corner[2];
-          *((u16 *) (&texturedQuad->u3)) = temp_s1_215->corner[3];
-          texturedQuad->x0 = sp80;
-          texturedQuad->x1 = sp88;
-          texturedQuad->x2 = sp90;
-          *((u16 *) (&texturedQuad->x3)) = sp98;
-          texturedQuad->t.r0 = 0x80;
-          texturedQuad->t.g0 = 0x80;
-          texturedQuad->t.b0 = 0x80;
-          texturedQuad->y0 = temp_s6_474;
-          texturedQuad->y1 = temp_s5_482;
-          texturedQuad->y2 = temp_s4_489;
-          texturedQuad->y3 = temp_s3_496;
-          texturedQuad->clut = 0x798E;
-          AddPrim(scratch->orderingTable + 0x2BF, texturedQuad++);
+          gridRow += 1;
+          panelXFixed += columnStepX;
+          panelYFixed += columnStepY;
         }
-        gridIndex += 1;
-        sp20 += sp30;
-        sp28 += sp38;
+        while (gridRow < 8);
       }
-      while (gridIndex < 8);
-    }
-    sp20 = sp68;
-    sp28 = sp70;
-    sp30 *= 8;
-    sp38 *= 8;
-    sp80 = GameRoundTerrainCoordinate(sp20);
-    temp_fp_714 = sp20 + sp30;
-    sp88 = GameRoundTerrainCoordinate(temp_fp_714);
-    sp90 = GameRoundTerrainCoordinate(sp20 + sp40);
-    sp98 = GameRoundTerrainCoordinate(temp_fp_714 + sp40);
-    temp_s6_474 = GameRoundTerrainCoordinate(sp28);
-    temp_s7_747 = sp28 + sp38;
-    temp_s5_482 = GameRoundTerrainCoordinate(temp_s7_747);
-    {
-      u8 color;
-      POLY_G4 *packetColorBase;
-      s32 var_v0_762;
-      temp_s4_489 = GameRoundTerrainCoordinate(sp28 + sp48);
-      var_v0_762 = temp_s7_747 + sp48;
-      temp_s3_496 = var_v0_762 / 256;
-      nextPacket = packetCursor + 0x24;
-      packetColorBase = (POLY_G4 *) packetCursor;
-      SetPolyG4(packetCursor);
-      packetColorBase->x0 = sp80;
-      packetColorBase->x1 = sp88;
-      packetColorBase->x2 = sp90;
-      packetColorBase->x3 = sp98;
-      packetColorBase->y0 = temp_s6_474;
-      packetColorBase->y1 = temp_s5_482;
-      packetColorBase->y2 = temp_s4_489;
-      packetColorBase->y3 = temp_s3_496;
-      color = ((SkyCVec *) (&g_EnvColors[2].cur))->r;
-      packetColorBase->r1 = color;
-      packetColorBase->t.r0 = color;
-      color = ((SkyCVec *) (&g_EnvColors[3].cur))->r;
-      packetColorBase->r3 = color;
-      packetColorBase->r2 = color;
-      color = ((SkyCVec *) (&g_EnvColors[2].cur))->g;
-      packetColorBase->g1 = color;
-      packetColorBase->t.g0 = color;
-      color = ((SkyCVec *) (&g_EnvColors[3].cur))->g;
-      packetColorBase->g3 = color;
-      packetColorBase->g2 = color;
-      packetColorBase->b1 = (color = ((SkyCVec *) (&g_EnvColors[2].cur))->b);
-      packetColorBase->t.b0 = color;
-      color = ((SkyCVec *) (&g_EnvColors[3].cur))->b;
-      packetCursor = nextPacket;
-      packetColorBase->b2 = (packetColorBase->b3 = color);
-      AddPrim(scratch->orderingTable + 0x2BF, packetColorBase);
-    }
-    {
-      u8 color;
-      POLY_G4 *g4Cursor = (POLY_G4 *) packetCursor;
-      s32 spE8;
-      u32 *orderingTableBase;
-      spE0 = sp28 - sp48;
-      var_v0_941 = temp_s7_747;
-      sp98 = (temp_fp_714 - sp40) / 256;
-      spB0 = sp20 - sp40;
-      sp90 = spB0 / 256;
-      temp_s4_489 = spE0 / 256;
-      nextPacket = packetCursor + 0x24;
-      spE8 = var_v0_941 - sp48;
-      temp_s3_496 = spE8 / 256;
-      g4Cursor->y3 = temp_s3_496;
-      g4Cursor->x2 = sp90;
-      g4Cursor->x3 = sp98;
-      g4Cursor->x0 = sp80;
-      g4Cursor->x1 = sp88;
-      color = ((SkyCVec *) (&g_EnvColors[1].cur))->b;
-      g4Cursor->y2 = temp_s4_489;
-      g4Cursor->y0 = temp_s6_474;
-      g4Cursor->y1 = temp_s5_482;
-      g4Cursor->b2 = color;
-      g4Cursor->b3 = color;
-      SetPolyG4(g4Cursor);
-      color = ((SkyCVec *) (&g_EnvColors[2].cur))->r;
-      g4Cursor->r1 = color;
-      g4Cursor->t.r0 = color;
-      color = ((SkyCVec *) (&g_EnvColors[1].cur))->r;
-      g4Cursor->r3 = color;
-      g4Cursor->r2 = color;
-      color = ((SkyCVec *) (&g_EnvColors[2].cur))->g;
-      g4Cursor->g1 = color;
-      g4Cursor->t.g0 = color;
-      color = ((SkyCVec *) (&g_EnvColors[1].cur))->g;
-      g4Cursor->g3 = color;
-      g4Cursor->g2 = color;
-      color = ((SkyCVec *) (&g_EnvColors[2].cur))->b;
-      do
+      panelXFixed = bandOriginXFixed;
+      panelYFixed = bandOriginYFixed;
+      columnStepX *= 8;
+      columnStepY *= 8;
+      screenX0 = GameRoundTerrainCoordinate(panelXFixed);
+      temp_fp_714 = panelXFixed + columnStepX;
+      screenX1 = GameRoundTerrainCoordinate(temp_fp_714);
+      screenX2 = GameRoundTerrainCoordinate(panelXFixed + rowStepX);
+      screenX3 = GameRoundTerrainCoordinate(temp_fp_714 + rowStepX);
+      screenY0 = GameRoundTerrainCoordinate(panelYFixed);
+      temp_s7_747 = panelYFixed + columnStepY;
+      screenY1 = GameRoundTerrainCoordinate(temp_s7_747);
       {
-        g4Cursor->b1 = color;
+        u8 color;
+        POLY_G4 *packetColorBase;
+        s32 var_v0_762;
+        screenY2 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
+        var_v0_762 = temp_s7_747 + rowStepY;
+        screenY3 = var_v0_762 / 256;
+        nextPacket = packetCursor + 0x24;
+        packetColorBase = (POLY_G4 *) packetCursor;
+        SetPolyG4(packetCursor);
+        packetColorBase->x0 = screenX0;
+        packetColorBase->x1 = screenX1;
+        packetColorBase->x2 = screenX2;
+        packetColorBase->x3 = screenX3;
+        packetColorBase->y0 = screenY0;
+        packetColorBase->y1 = screenY1;
+        packetColorBase->y2 = screenY2;
+        packetColorBase->y3 = screenY3;
+        color = g_EnvColors[2].cur.bytes.r;
+        packetColorBase->r1 = color;
+        packetColorBase->t.r0 = color;
+        color = g_EnvColors[3].cur.bytes.r;
+        packetColorBase->r3 = color;
+        packetColorBase->r2 = color;
+        color = g_EnvColors[2].cur.bytes.g;
+        packetColorBase->g1 = color;
+        packetColorBase->t.g0 = color;
+        color = g_EnvColors[3].cur.bytes.g;
+        packetColorBase->g3 = color;
+        packetColorBase->g2 = color;
+        color = g_EnvColors[2].cur.bytes.b;
+        packetColorBase->b1 = color;
+        packetColorBase->t.b0 = color;
+        color = g_EnvColors[3].cur.bytes.b;
+        packetCursor = nextPacket;
+        packetColorBase->b3 = color;
+        packetColorBase->b2 = color;
+        AddPrim(&scratch->orderingTable[SKY_OT_NEAR], packetColorBase);
       }
-      while (0);
-      g4Cursor->t.b0 = color;
-      orderingTableBase = scratch->orderingTable;
-      AddPrim(orderingTableBase + 0x2BF, g4Cursor++);
-      packetCursor = (u8 *) g4Cursor;
-    }
-    {
-      u8 packetColor;
-      u8 lowerRed;
-      POLY_G4 *g4Cursor = (POLY_G4 *) packetCursor;
-      spC0 = sp48 * 2;
-      var_v0_941 = spE0 - spC0;
-      var_v0_947 = (temp_s7_747 - spC0) - sp48;
-      sp80 = sp90;
-      temp_s5_482 = temp_s3_496;
-      temp_s3_496 = var_v0_947 / 256;
-      spB0 -= sp40;
-      spB0 -= sp40;
-      sp88 = sp98;
-      var_v0_854 = sp40 * 2;
-      var_v0_928 = var_v0_854;
-      var_v0_928 = (temp_fp_714 - var_v0_928) - sp40;
-      sp90 = GameRoundTerrainCoordinate(spB0);
-      temp_s6_474 = temp_s4_489;
-      sp98 = var_v0_928 / 256;
-      temp_s4_489 = var_v0_941 / 256;
-      nextPacket = (u8 *) (g4Cursor + 1);
-      SetPolyG4(g4Cursor);
-      g4Cursor->x0 = sp80;
-      g4Cursor->x1 = sp88;
-      g4Cursor->x2 = sp90;
-      g4Cursor->x3 = sp98;
-      g4Cursor->y0 = temp_s6_474;
-      g4Cursor->y1 = temp_s5_482;
-      g4Cursor->y2 = temp_s4_489;
-      g4Cursor->y3 = temp_s3_496;
-      lowerRed = ((SkyCVec *) (&g_EnvColors[1].cur))->r;
-      g4Cursor->r3 = 0;
-      g4Cursor->r1 = lowerRed;
-      g4Cursor->t.r0 = lowerRed;
-      g4Cursor->r2 = 0;
       {
-        packetColor = ((SkyCVec *) (&g_EnvColors[1].cur))->g;
-        g4Cursor->g2 = (g4Cursor->g3 = 0);
-        g4Cursor->t.g0 = (g4Cursor->g1 = packetColor);
+        u8 color;
+        POLY_G4 *g4Cursor = (POLY_G4 *) packetCursor;
+        u32 *orderingTableBase;
+        upperBandYFixed = panelYFixed - rowStepY;
+        screenY2 = upperBandYFixed / 256;
+        screenX3 = (temp_fp_714 - rowStepX) / 256;
+        nextPacket = packetCursor + 0x24;
+        xWork = panelXFixed - rowStepX;
+        screenX2 = xWork / 256;
+        var_v0_941 = temp_s7_747;
+        rightBandYFixed = var_v0_941 - rowStepY;
+        screenY3 = rightBandYFixed / 256;
+        SetPolyG4(g4Cursor);
+        g4Cursor->x0 = screenX0;
+        g4Cursor->x1 = screenX1;
+        g4Cursor->x2 = screenX2;
+        g4Cursor->x3 = screenX3;
+        g4Cursor->y0 = screenY0;
+        g4Cursor->y1 = screenY1;
+        g4Cursor->y2 = screenY2;
+        g4Cursor->y3 = screenY3;
+        color = g_EnvColors[1].cur.bytes.b;
+        g4Cursor->b2 = color;
+        g4Cursor->b3 = color;
+        color = g_EnvColors[2].cur.bytes.r;
+        g4Cursor->r1 = color;
+        g4Cursor->t.r0 = color;
+        color = g_EnvColors[1].cur.bytes.r;
+        g4Cursor->r3 = color;
+        g4Cursor->r2 = color;
+        color = g_EnvColors[2].cur.bytes.g;
+        g4Cursor->g1 = color;
+        g4Cursor->t.g0 = color;
+        color = g_EnvColors[1].cur.bytes.g;
+        g4Cursor->g3 = color;
+        g4Cursor->g2 = color;
+        screenX1 = screenX3;
+        color = g_EnvColors[2].cur.bytes.b;
+        do
         {
-          u8 packetColor = ((SkyCVec *) (&g_EnvColors[1].cur))->b;
-          g4Cursor->t.b0 = (g4Cursor->b1 = packetColor);
-          g4Cursor->b2 = (g4Cursor->b3 = 0x10);
+          g4Cursor->b1 = color;
         }
-        AddPrim(g_FinalSkyOrderingTable + 0x2BF, g4Cursor);
+        while (0);
+        g4Cursor->t.b0 = color;
+        orderingTableBase = scratch->orderingTable;
+        AddPrim(&orderingTableBase[SKY_OT_NEAR], g4Cursor++);
+        packetCursor = (u8 *) g4Cursor;
       }
-      packetCursor = (u8 *) (g4Cursor + 1);
+      {
+        u8 packetColor;
+        u8 lowerRed;
+        POLY_G4 *g4Cursor = (POLY_G4 *) packetCursor;
+        screenX0 = screenX2;
+        leftXWorkFixed = rowStepX * 3;
+        screenX3 = GameRoundTerrainCoordinate(temp_fp_714 - leftXWorkFixed);
+        screenX2 = GameRoundTerrainCoordinate(panelXFixed - leftXWorkFixed);
+        screenY0 = screenY2;
+        screenY1 = screenY3;
+        screenY2 = GameRoundTerrainCoordinate(upperBandYFixed - (rowStepY * 2));
+        screenY3 = GameRoundTerrainCoordinate(rightBandYFixed - (rowStepY * 2));
+        nextPacket = (u8 *) (g4Cursor + 1);
+        SetPolyG4(g4Cursor);
+        g4Cursor->x0 = screenX0;
+        g4Cursor->x1 = screenX1;
+        g4Cursor->x2 = screenX2;
+        g4Cursor->x3 = screenX3;
+        g4Cursor->y0 = screenY0;
+        g4Cursor->y1 = screenY1;
+        g4Cursor->y2 = screenY2;
+        g4Cursor->y3 = screenY3;
+        lowerRed = g_EnvColors[1].cur.bytes.r;
+        g4Cursor->r3 = 0;
+        g4Cursor->r1 = lowerRed;
+        g4Cursor->t.r0 = lowerRed;
+        g4Cursor->r2 = 0;
+        {
+          packetColor = g_EnvColors[1].cur.bytes.g;
+          g4Cursor->g3 = 0;
+          g4Cursor->g2 = 0;
+          g4Cursor->t.g0 = (g4Cursor->g1 = packetColor);
+          {
+            u8 packetColor = g_EnvColors[1].cur.bytes.b;
+            g4Cursor->t.b0 = (g4Cursor->b1 = packetColor);
+            g4Cursor->b3 = 16;
+            g4Cursor->b2 = 16;
+          }
+          AddPrim(&g_FinalSkyOrderingTable[SKY_OT_NEAR], g4Cursor);
+        }
+        packetCursor = nextPacket;
+      }
     }
-  }
-  sp60 = sp40 * 4;
-  if (g_CourseIndex != 2)
-  {
-    u8 color;
-    POLY_G4 *courseG4 = (POLY_G4 *) packetCursor;
-    var_v0_854 = (sp20 + sp40) * 8;
-    var_v0_1007 = var_v0_854 - sp50;
-    sp80 = var_v0_1007 / 2048;
-    var_v0_928 = ((sp20 + sp30) + sp40) * 8;
-    sp88 = GameRoundTerrainCoordinate11(var_v0_928 - sp50);
-    sp90 = GameRoundTerrainCoordinate11(var_v0_854 + sp50);
-    spA0 = sp90;
-    sp98 = GameRoundTerrainCoordinate11(var_v0_928 + sp50);
-    temp_a0_1048 = (sp28 + sp48) * 8;
-    spA8 = sp98;
-    temp_s6_474 = GameRoundTerrainCoordinate11(temp_a0_1048 - sp58);
-    temp_v1_1063 = ((sp28 + sp38) + sp48) * 8;
-    temp_s5_482 = GameRoundTerrainCoordinate11(temp_v1_1063 - sp58);
-    temp_s4_489 = GameRoundTerrainCoordinate11(temp_a0_1048 + sp58);
-    spB0 = temp_s4_489;
-    temp_s3_496 = GameRoundTerrainCoordinate11(temp_v1_1063 + sp58);
-    SetPolyG4(courseG4);
-    courseG4->x0 = sp80;
-    courseG4->x1 = sp88;
-    courseG4->x2 = sp90;
-    courseG4->x3 = sp98;
-    courseG4->y0 = temp_s6_474;
-    courseG4->y1 = temp_s5_482;
-    courseG4->y2 = temp_s4_489;
-    courseG4->y3 = temp_s3_496;
-    color = ((SkyCVec *) (&g_EnvColors[7].cur))->r;
-    courseG4->r1 = color;
-    courseG4->t.r0 = color;
-    color = ((SkyCVec *) (&g_EnvColors[8].cur))->r;
-    courseG4->r3 = color;
-    courseG4->r2 = color;
-    color = ((SkyCVec *) (&g_EnvColors[7].cur))->g;
-    courseG4->g1 = color;
-    courseG4->t.g0 = color;
-    spB8 = temp_s3_496;
-    color = ((SkyCVec *) (&g_EnvColors[8].cur))->g;
-    courseG4->g3 = color;
-    courseG4->g2 = color;
-    color = ((SkyCVec *) (&g_EnvColors[7].cur))->b;
-    courseG4->b1 = color;
-    courseG4->t.b0 = color;
-    nextPacket = (u8 *) (courseG4 + 1);
-    color = ((SkyCVec *) (&g_EnvColors[8].cur))->b;
-    courseG4->b3 = color;
-    courseG4->b2 = color;
-    AddPrim(((u8 *) scratch->orderingTable) + 0xAF8, courseG4);
-    packetCursor = nextPacket;
-  }
-  temp_v1_1140 = sp40 * 3;
-  sp90 = GameRoundTerrainCoordinate(sp20 + temp_v1_1140);
-  temp_a1_1150 = sp20 + sp30;
-  sp98 = GameRoundTerrainCoordinate(temp_a1_1150 + temp_v1_1140);
-  temp_v1_1161 = sp48 * 3;
-  temp_s4_489 = GameRoundTerrainCoordinate(sp28 + temp_v1_1161);
-  temp_a0_1170 = sp28 + sp38;
-  temp_s3_496 = GameRoundTerrainCoordinate(temp_a0_1170 + temp_v1_1161);
-  if (g_CourseIndex == 2)
-  {
-    u8 color;
-    POLY_G4 *courseG4 = (POLY_G4 *) packetCursor;
-    sp80 = GameRoundTerrainCoordinate(sp20 + sp40);
-    sp88 = GameRoundTerrainCoordinate(temp_a1_1150 + (sp40 + (sp40 - sp40)));
-    temp_s6_474 = GameRoundTerrainCoordinate(sp28 + sp48);
-    temp_s5_482 = GameRoundTerrainCoordinate(temp_a0_1170 + sp48);
-    nextPacket = (u8 *) (courseG4 + 1);
-    SetPolyG4(courseG4);
-    courseG4->x0 = sp80;
-    courseG4->x1 = sp88;
-    courseG4->x2 = sp90;
-    courseG4->x3 = sp98;
-    courseG4->y0 = temp_s6_474;
-    courseG4->y1 = temp_s5_482;
-    courseG4->y2 = temp_s4_489;
-    courseG4->y3 = temp_s3_496;
-    color = ((SkyCVec *) (&g_EnvColors[5].cur))->r;
-    courseG4->r1 = color;
-    courseG4->t.r0 = color;
-    color = ((SkyCVec *) (&g_EnvColors[6].cur))->r;
-    courseG4->r3 = color;
-    courseG4->r2 = color;
-    color = ((SkyCVec *) (&g_EnvColors[5].cur))->g;
-    courseG4->g1 = color;
-    courseG4->t.g0 = color;
-    color = ((SkyCVec *) (&g_EnvColors[6].cur))->g;
-    courseG4->g3 = color;
-    courseG4->g2 = color;
-    color = ((SkyCVec *) (&g_EnvColors[5].cur))->b;
-    courseG4->b1 = color;
-    courseG4->t.b0 = color;
-    color = ((SkyCVec *) (&g_EnvColors[6].cur))->b;
-    courseG4->b3 = color;
-    courseG4->b2 = color;
-    AddPrim(scratch->orderingTable + 0x2BF, courseG4);
-    packetCursor = nextPacket;
-  }
-  else
-  {
-    POLY_F4 *courseF4 = (POLY_F4 *) packetCursor;
-    sp80 = spA0;
-    sp88 = spA8;
-    temp_s6_474 = spB0;
-    temp_s5_482 = spB8;
-    SetPolyF4(courseF4);
-    courseF4->x0 = sp80;
-    courseF4->x1 = sp88;
-    courseF4->x2 = sp90;
-    courseF4->x3 = sp98;
-    courseF4->y0 = temp_s6_474;
-    courseF4->y1 = temp_s5_482;
-    courseF4->y2 = temp_s4_489;
-    courseF4->y3 = temp_s3_496;
-    courseF4->t.r0 = (u8) ((SkyCVec *) (&g_EnvColors[4].cur))->r;
-    courseF4->t.g0 = (u8) ((SkyCVec *) (&g_EnvColors[4].cur))->g;
     {
-      u8 *nextPacket;
-      nextPacket = (u8 *) (courseF4 + 1);
-      courseF4->t.b0 = (u8) ((SkyCVec *) (&g_EnvColors[4].cur))->b;
-      AddPrim(scratch->orderingTable + 0x2BF, courseF4);
-      packetCursor = nextPacket;
+      s32 temp_a0_1048;
+      s32 temp_a0_1170;
+      s32 temp_a1_1150;
+      s32 temp_v1_1063;
+      s32 temp_v1_1140;
+      s32 temp_v1_1161;
+      s32 var_v0_1007;
+      textureColumn = rowStepX * 4;
+      if (g_CourseIndex != 2)
+      {
+        u8 color;
+        POLY_G4 *courseG4 = (POLY_G4 *) packetCursor;
+        leftXWorkFixed = (panelXFixed + rowStepX) * 8;
+        var_v0_1007 = leftXWorkFixed - savedSinRoll;
+        screenX0 = var_v0_1007 / 2048;
+        rightXWorkFixed = ((panelXFixed + columnStepX) + rowStepX) * 8;
+        screenX1 = GameRoundTerrainCoordinate11(rightXWorkFixed - savedSinRoll);
+        screenX2 = GameRoundTerrainCoordinate11(leftXWorkFixed + savedSinRoll);
+        savedCourseX0 = screenX2;
+        screenX3 = GameRoundTerrainCoordinate11(rightXWorkFixed + savedSinRoll);
+        temp_a0_1048 = (panelYFixed + rowStepY) * 8;
+        savedCourseX1 = screenX3;
+        screenY0 = GameRoundTerrainCoordinate11(temp_a0_1048 - savedCosRoll);
+        temp_v1_1063 = ((panelYFixed + columnStepY) + rowStepY) * 8;
+        screenY1 = GameRoundTerrainCoordinate11(temp_v1_1063 - savedCosRoll);
+        screenY2 = GameRoundTerrainCoordinate11(temp_a0_1048 + savedCosRoll);
+        xWork = screenY2;
+        screenY3 = GameRoundTerrainCoordinate11(temp_v1_1063 + savedCosRoll);
+        SetPolyG4(courseG4);
+        courseG4->x0 = screenX0;
+        courseG4->x1 = screenX1;
+        courseG4->x2 = screenX2;
+        courseG4->x3 = screenX3;
+        courseG4->y0 = screenY0;
+        courseG4->y1 = screenY1;
+        courseG4->y2 = screenY2;
+        courseG4->y3 = screenY3;
+        color = g_EnvColors[7].cur.bytes.r;
+        courseG4->r1 = color;
+        courseG4->t.r0 = color;
+        color = g_EnvColors[8].cur.bytes.r;
+        courseG4->r3 = color;
+        courseG4->r2 = color;
+        color = g_EnvColors[7].cur.bytes.g;
+        courseG4->g1 = color;
+        courseG4->t.g0 = color;
+        savedCourseY1 = screenY3;
+        color = g_EnvColors[8].cur.bytes.g;
+        courseG4->g3 = color;
+        courseG4->g2 = color;
+        color = g_EnvColors[7].cur.bytes.b;
+        courseG4->b1 = color;
+        courseG4->t.b0 = color;
+        nextPacket = (u8 *) (courseG4 + 1);
+        color = g_EnvColors[8].cur.bytes.b;
+        courseG4->b3 = color;
+        courseG4->b2 = color;
+        AddPrim(&scratch->orderingTable[SKY_OT_FAR], courseG4);
+        packetCursor = nextPacket;
+      }
+      temp_v1_1140 = rowStepX * 3;
+      screenX2 = GameRoundTerrainCoordinate(panelXFixed + temp_v1_1140);
+      temp_a1_1150 = panelXFixed + columnStepX;
+      screenX3 = GameRoundTerrainCoordinate(temp_a1_1150 + temp_v1_1140);
+      temp_v1_1161 = rowStepY * 3;
+      screenY2 = GameRoundTerrainCoordinate(panelYFixed + temp_v1_1161);
+      temp_a0_1170 = panelYFixed + columnStepY;
+      screenY3 = GameRoundTerrainCoordinate(temp_a0_1170 + temp_v1_1161);
+      if (g_CourseIndex == 2)
+      {
+        u8 color;
+        POLY_G4 *courseG4 = (POLY_G4 *) packetCursor;
+        rightXWorkFixed = panelXFixed;
+        screenX0 = GameRoundTerrainCoordinate(rightXWorkFixed + rowStepX);
+        screenX1 = GameRoundTerrainCoordinate(temp_a1_1150 + (rowStepX + (rowStepX - rowStepX)));
+        screenY0 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
+        screenY1 = GameRoundTerrainCoordinate(temp_a0_1170 + rowStepY);
+        nextPacket = (u8 *) (courseG4 + 1);
+        SetPolyG4(courseG4);
+        courseG4->x0 = screenX0;
+        courseG4->x1 = screenX1;
+        courseG4->x2 = screenX2;
+        courseG4->x3 = screenX3;
+        courseG4->y0 = screenY0;
+        courseG4->y1 = screenY1;
+        courseG4->y2 = screenY2;
+        courseG4->y3 = screenY3;
+        color = g_EnvColors[5].cur.bytes.r;
+        courseG4->r1 = color;
+        courseG4->t.r0 = color;
+        color = g_EnvColors[6].cur.bytes.r;
+        courseG4->r3 = color;
+        courseG4->r2 = color;
+        color = g_EnvColors[5].cur.bytes.g;
+        courseG4->g1 = color;
+        courseG4->t.g0 = color;
+        color = g_EnvColors[6].cur.bytes.g;
+        courseG4->g3 = color;
+        courseG4->g2 = color;
+        color = g_EnvColors[5].cur.bytes.b;
+        courseG4->b1 = color;
+        courseG4->t.b0 = color;
+        color = g_EnvColors[6].cur.bytes.b;
+        courseG4->b3 = color;
+        courseG4->b2 = color;
+        AddPrim(&scratch->orderingTable[SKY_OT_NEAR], courseG4);
+        packetCursor = nextPacket;
+      }
+      else
+      {
+        POLY_F4 *courseF4 = (POLY_F4 *) packetCursor;
+        screenX0 = savedCourseX0;
+        screenX1 = savedCourseX1;
+        screenY0 = xWork;
+        screenY1 = savedCourseY1;
+        SetPolyF4(courseF4);
+        courseF4->x0 = screenX0;
+        courseF4->x1 = screenX1;
+        courseF4->x2 = screenX2;
+        courseF4->x3 = screenX3;
+        courseF4->y0 = screenY0;
+        courseF4->y1 = screenY1;
+        courseF4->y2 = screenY2;
+        courseF4->y3 = screenY3;
+        courseF4->t.r0 = (u8) g_EnvColors[4].cur.bytes.r;
+        courseF4->t.g0 = (u8) g_EnvColors[4].cur.bytes.g;
+        {
+          u8 *nextPacket;
+          nextPacket = (u8 *) (courseF4 + 1);
+          courseF4->t.b0 = (u8) g_EnvColors[4].cur.bytes.b;
+          AddPrim(&scratch->orderingTable[SKY_OT_NEAR], courseF4);
+          packetCursor = nextPacket;
+        }
+      }
+      scratch->packetCursor = packetCursor;
     }
   }
-  scratch->packetCursor = packetCursor;
   return;
 }
