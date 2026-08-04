@@ -18,7 +18,8 @@ void SwapCarModelSlot(void) {
 
 s32 func_8001720C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 
-void func_800512B4(s32 arg0) {
+void DrawCarSlotHighlight(s32 arg0) asm("func_800512B4");
+void DrawCarSlotHighlight(s32 arg0) {
     s32 *scratch = (s32 *)0x1F800000;
     u8 *base = g_DrawBuffer;
     s32 value = *scratch;
@@ -441,4 +442,5 @@ void DrawTeamNameCharModel(void) {
 
 extern s32 D_80082E3C[];
 void func_80016754(s32 arg0, s32 arg1, s32 arg2);
-void func_800520F8(s32 arg0, s32 arg1, s32 arg2) { func_80016754(arg0, arg1, D_80082E3C[arg2]); }
+void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2) asm("func_800520F8");
+void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2) { func_80016754(arg0, arg1, D_80082E3C[arg2]); }
