@@ -9,7 +9,7 @@ extern char D_800135CC[];
 extern char D_800135E0[];
 extern char D_800135F8[];
 
-void func_8006674C(void *arg0, void *arg1);
+void Gpu_BuildDrawEnvCmds(void *arg0, void *arg1) asm("func_8006674C");
 void *MemCopy(void *dst, void *src, s32 count) asm("func_800681BC");
 
 void DrawOTag(void *arg0) asm("func_80065E60");
@@ -33,7 +33,7 @@ void *PutDrawEnv(void *arg0) {
     }
 
     tag = (u8 *)prim + 0x1C;
-    func_8006674C(tag, prim);
+    Gpu_BuildDrawEnvCmds(tag, prim);
     {
         u32 mask = 0xFFFFFF;
         void *sendTag = tag;
@@ -62,7 +62,7 @@ void *DrawOTagEnv(void *arg0, void *arg1) {
     }
 
     tag = (u8 *)prim + 0x1C;
-    func_8006674C(tag, prim);
+    Gpu_BuildDrawEnvCmds(tag, prim);
     {
         u32 mask = 0xFFFFFF;
         register void *sendTag asm("$5") = tag;

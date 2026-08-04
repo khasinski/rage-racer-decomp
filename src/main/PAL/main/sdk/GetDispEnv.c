@@ -83,7 +83,8 @@ u_long Gpu_BuildDrawOffsetCmd(long x, long y) asm("func_80066BE4");
 u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("func_800669F0");
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
 
-void func_8006674C(u_long *packet, DrawEnvPacketSource *env) {
+void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) asm("func_8006674C");
+void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {
     u_long *out = packet;
     DrawEnvPacketSource *src = env;
     long count;

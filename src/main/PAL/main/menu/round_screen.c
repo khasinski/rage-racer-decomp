@@ -117,7 +117,8 @@ void EnterRoundScreen(void) {
 
 extern s16 g_RoundScreenFadeDelays[] asm("D_8007C798");
 
-s32 func_8001C8F0(s32 arg0) {
+s32 UpdateRoundScreenFade(s32 arg0) asm("func_8001C8F0");
+s32 UpdateRoundScreenFade(s32 arg0) {
     s32 value;
     s32 ret;
 
@@ -159,7 +160,7 @@ extern char D_80010C70[];
 extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 extern s32 g_BestLapTimes[][4][2] asm("D_801E4408");
 
-s32 func_8001C8F0(s32 arg0);
+s32 UpdateRoundScreenFade(s32 arg0) asm("func_8001C8F0");
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
                    s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags);
 void LibcSprintf(void *dst, void *fmt, s32 v) asm("func_800632F0");
@@ -174,11 +175,11 @@ void DrawRoundScreen(void) {
     s32 y0;
     void *ot = g_DrawBuffer + 204;
 
-    col = func_8001C8F0(0);
+    col = UpdateRoundScreenFade(0);
     func_80046A2C(ot, 0x74, 0x14, 0x58, 0x38, 0xa8, 0xa8, col, col, col, 0x1f, 0, 1, 0x29);
     func_80046A2C(ot, 0x44, 0x50, 0xb8, 0x14, 0x48, 0xe8, col, col, col, 0x80, 0, 1, 0x29);
 
-    col = func_8001C8F0(1);
+    col = UpdateRoundScreenFade(1);
     if (g_GrandPrixMode != 0) {
         LibcSprintf(buf, D_80010C30, g_GrandPrixRound);
         func_80016B7C(0x5e, 0x68, buf, 0x7812, col);
@@ -188,7 +189,7 @@ void DrawRoundScreen(void) {
     }
     func_80046A2C(ot, 0x5e, y0, 0x84, 0xc, 0, g_CourseIndex * 12 + 156, col, col, col, 0x12, 0, 1, 0x29);
 
-    col = func_8001C8F0(2);
+    col = UpdateRoundScreenFade(2);
     if (g_GrandPrixMode != 0) {
         func_80016B7C(0x80, 0x88, D_80010C40, 0x7812, col);
         LibcSprintf(buf, D_80010C44, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][0]);

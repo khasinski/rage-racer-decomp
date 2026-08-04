@@ -1445,7 +1445,8 @@ extern const s32 g_SpecialVoiceBits[] asm("D_80011C74");
 extern const char D_80012778[];
 s32 SpuGetKeyStatus(s32 bit) asm("func_8007B088");
 
-s32 func_8005D050(s32 cue, s32 arg1, s32 volL, s32 volR) {
+s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) asm("func_8005D050");
+s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) {
     const s32 *voiceBits;
     s32 busy[6];
     s32 tone2;
@@ -1685,7 +1686,7 @@ s32 func_8005D530(s32 cue, s32 volumeLeft, s32 volumeRight) {
 extern s32 g_SoundCueBank asm("D_801E6CA0");
 extern s32 g_LastSpecialCueRequest asm("D_80082F48");
 
-s32 func_8005D050(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+s32 StartSoundCueVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8005D050");
 
 void PlaySoundCue(s32 arg0) {
     if (g_SoundCueBank == 1) {
@@ -1704,7 +1705,7 @@ void PlaySoundCue(s32 arg0) {
             }
             return;
         }
-        func_8005D050(arg0, 0x3C, 0x80, 0x80);
+        StartSoundCueVoice(arg0, 0x3C, 0x80, 0x80);
         return;
     }
 
@@ -1725,7 +1726,7 @@ void PlaySoundCue(s32 arg0) {
             return;
         }
         if (arg0 < 0x19) {
-            func_8005D050(arg0, 0x3C, 0x80, 0x80);
+            StartSoundCueVoice(arg0, 0x3C, 0x80, 0x80);
             return;
         }
         func_8005D530(arg0, 0x80, 0x80);
