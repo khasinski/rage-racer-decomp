@@ -6,7 +6,8 @@
 extern long g_PrologueStep asm("D_801E4178");
 extern void (*D_8007D778[])(void);
 
-void func_800271EC(void) {
+void TickPrologueStep(void) asm("func_800271EC");
+void TickPrologueStep(void) {
     void (*func)(void);
 
     func = D_8007D778[g_PrologueStep];

@@ -8,7 +8,8 @@ long GetDispEnv(long arg0) { MemCopy(arg0, &g_DispEnvCache, 0x14); return arg0; 
 
 extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 
-u_long func_80066594(void) {
+u_long GetODE(void) asm("func_80066594");
+u_long GetODE(void) {
     u_long ret;
 
     ret = g_GpuFuncs->status();
@@ -42,7 +43,8 @@ void SetDrawOffset(DrawPacket *pkt, short *arg1) {
     pkt->x1y1 = 0;
 }
 
-void func_800666CC(DrawPacket *pkt, long arg1, u_long arg2) {
+void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2) asm("func_800666CC");
+void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2) {
     u_long cmd;
 
     pkt->code = 2;
