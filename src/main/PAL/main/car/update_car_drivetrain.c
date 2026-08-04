@@ -94,7 +94,7 @@ void UpdateCarDrivetrain(void *base) {
   s32 temp_v0_11;
   s32 temp_v0_12;
   s32 temp_v0_13;
-  s32 temp_v0_14;
+  s32 shiftTargetRpm;
   s32 temp_v0_2;
   u8 *new_var3;
   s32 temp_v0_4;
@@ -495,9 +495,9 @@ void UpdateCarDrivetrain(void *base) {
         temp_a1 = *(s16 *)(((u8 *)temp_s3) + 0x76);
         if ((*(s16 *)(((u8 *)temp_s3) + 0x30)) != temp_a1)
         {
-          temp_v0_14 = ((s32) ((((*(s32 *)(((u8 *)car) + 0xA4)) * 0xA0) / 1168) * 0x2710)) / ((s32) (*(s32 *)(((u8 *)((u8 *)g_CarSpec - (-(temp_a1 * 4)))) + 0xE4)));
+          shiftTargetRpm = ((s32) ((((*(s32 *)(((u8 *)car) + 0xA4)) * 0xA0) / 1168) * 0x2710)) / ((s32) (*(s32 *)(((u8 *)((u8 *)g_CarSpec - (-(temp_a1 * 4)))) + 0xE4)));
           temp_v1_23 = *(u16 *)(((u8 *)temp_s3) + 0x78);
-          g_ShiftTargetRpm = temp_v0_14;
+          g_ShiftTargetRpm = shiftTargetRpm;
           *(s16 *)(((u8 *)temp_s3) + 0x3C) = (s16) (((u16) g_ShiftTargetRpm) - temp_v1_23);
         }
         temp_t1 = ((*(s16 *)(((u8 *)temp_s3) + 0x3C)) * (*(s16 *)(((u8 *)temp_s3) + 0x38))) / 20;

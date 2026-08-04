@@ -23,16 +23,16 @@ long CdReadInterruptStatus(void) asm("func_8006AB5C");
 
 long CD_getsector2(long arg0, u_long arg1) {
     volatile u_char *status;
-    volatile u_long *temp_v1;
-    volatile u_long *temp_a0;
+    volatile u_long *cdDpcr;
+    volatile u_long *cdDmaChcr;
 
     *g_CdReg0 = 0;
     *g_CdReg3 = 0x80;
     *g_CdromDelayReg = 0x20943;
     *g_ComDelayReg = 0x1323;
 
-    temp_v1 = g_CdDpcr;
-    *temp_v1 |= 0x8000;
+    cdDpcr = g_CdDpcr;
+    *cdDpcr |= 0x8000;
 
     *g_CdDmaMadr = arg0;
     *g_CdDmaBcr = arg1 | 0x10000;
@@ -43,11 +43,11 @@ long CD_getsector2(long arg0, u_long arg1) {
 
     *g_CdDmaChcr = 0x11000000;
 
-    temp_a0 = g_CdDmaChcr;
-    if ((*temp_a0 & 0x1000000) != 0) {
-        temp_v1 = temp_a0;
+    cdDmaChcr = g_CdDmaChcr;
+    if ((*cdDmaChcr & 0x1000000) != 0) {
+        cdDpcr = cdDmaChcr;
         do {
-        } while ((*temp_v1 & 0x1000000) != 0);
+        } while ((*cdDpcr & 0x1000000) != 0);
     }
 
     *g_ComDelayReg = 0x1325;

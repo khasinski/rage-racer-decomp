@@ -100,7 +100,7 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
     s32 *modeAngle;
     s32 *scratch;
     s32 var_v1_44;
-    s32 temp_a0_157;
+    s32 chaseTargetYaw;
     s32 temp_a0_272;
     s32 temp_a1_1117;
     s32 temp_a1_1227;
@@ -115,28 +115,28 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
     s32 temp_s2_728;
     s32 temp_t0_1157;
     s32 temp_t1_1144;
-    s32 temp_t2_1131;
-    s32 temp_v0_1221;
+    s32 camPathOffset;
+    s32 camPathAngle;
     s32 temp_v0_1320;
     s32 temp_v0_1452;
     s32 temp_v0_1458;
     s32 temp_v0_1463;
     s32 temp_v0_1535;
     s32 temp_v0_1549;
-    s32 temp_v0_200;
-    s32 temp_v0_288;
-    s32 temp_v0_30;
+    s32 chaseYawDamping;
+    s32 chaseYawStepLimit;
+    s32 cameraNodeIndex;
     s32 temp_v0_340;
     s32 temp_v0_399;
     s32 temp_v0_466;
-    s32 temp_v0_546;
+    s32 chaseYawLag;
     s32 temp_v0_687;
     s32 temp_v0_845;
     s32 temp_v0_859;
     s32 temp_v1_1196;
     s32 temp_v1_35;
     u8 temp_v1_40;
-    s32 temp_v1_541;
+    s32 chaseCarSpeed;
     s32 var_a0_1119;
     s32 var_a0_1132;
     s32 var_a0_1145;
@@ -158,15 +158,15 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
     void *temp_v0_944;
     u32 temp_v1_1373;
 
-    temp_v0_30 = FindNearestTrackCamera(arg1);
+    cameraNodeIndex = FindNearestTrackCamera(arg1);
     scratch = (s32 *)0x1F800000;
     temp_v1_35 = g_CameraNodeIndex;
-    g_CameraNodeIndex = temp_v0_30;
-    temp_v1_40 = temp_v0_30 != temp_v1_35;
+    g_CameraNodeIndex = cameraNodeIndex;
+    temp_v1_40 = cameraNodeIndex != temp_v1_35;
     if (cameraModeSel < 2) {
         var_v1_44 = cameraModeSel;
     } else {
-        var_v1_44 = FIELD(((temp_v0_30 * 0x24) + g_TrackCameras), s16 *, 0x20);
+        var_v1_44 = FIELD(((cameraNodeIndex * 0x24) + g_TrackCameras), s16 *, 0x20);
     }
     switch (var_v1_44) {                            /* switch 1 */
     case 0:                                         /* switch 1 */
@@ -198,26 +198,26 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
         break;
     case 1:                                         /* switch 1 */
         *(Block16 *)&scratch[2] = *(Block16 *)arg1;
-        temp_v0_200 = FIELD(arg1, s32 *, 0x24);
-        temp_a0_157 = temp_v0_200 & 0xFFF;
-        temp_v1_541 = FIELD(arg1, s32 *, 0xA4);
-        g_ChaseCarSpeed = temp_v1_541;
+        chaseYawDamping = FIELD(arg1, s32 *, 0x24);
+        chaseTargetYaw = chaseYawDamping & 0xFFF;
+        chaseCarSpeed = FIELD(arg1, s32 *, 0xA4);
+        g_ChaseCarSpeed = chaseCarSpeed;
         previousMode = g_CameraModePrev;
-        g_ChaseTargetYaw = temp_a0_157;
+        g_ChaseTargetYaw = chaseTargetYaw;
         if (previousMode == 1) {
             modeAngle = &D_8009B1EC;
             *modeAngle &= 0xFFF;
             g_ChaseYawRampNeg &= 0xFFF;
             g_ChaseYawRampPos &= 0xFFF;
         } else {
-            D_8009B1EC = temp_a0_157;
+            D_8009B1EC = chaseTargetYaw;
             g_ChaseYawRampNeg = 0;
             g_ChaseYawRampPos = 0;
         }
         if (g_ChaseCarSpeed >= 0x321) {
-            temp_v0_200 = 0x4E2 - g_ChaseCarSpeed;
-            g_ChaseYawDamping = temp_v0_200;
-            if (temp_v0_200 < 6) {
+            chaseYawDamping = 0x4E2 - g_ChaseCarSpeed;
+            g_ChaseYawDamping = chaseYawDamping;
+            if (chaseYawDamping < 6) {
                 g_ChaseYawDamping = 6;
             }
             g_ChaseYawDamping = ((((g_ChaseYawDamping * 8) / 50) + 8) / 10) + 1;
@@ -229,9 +229,9 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
         temp_a0_272 = g_ChaseTargetYaw - D_8009B1EC;
         if (temp_a0_272 >= 5) {
             if (temp_a0_272 >= 0x800) {
-                temp_v0_288 = (((0x1000 - temp_a0_272) / 17) * 2) & 0xFFF;
-                g_ChaseYawStepLimit = temp_v0_288;
-                if (temp_v0_288 >= 0x41) {
+                chaseYawStepLimit = (((0x1000 - temp_a0_272) / 17) * 2) & 0xFFF;
+                g_ChaseYawStepLimit = chaseYawStepLimit;
+                if (chaseYawStepLimit >= 0x41) {
                     g_ChaseYawStepLimit = 0x40;
                 }
                 turnFactor = g_ChaseYawDamping;
@@ -311,21 +311,21 @@ block_36:
             g_ChaseYawRampPos = 0;
         }
         rawAngle = g_ChaseTargetYaw;
-        temp_v1_541 = (D_8009B1EC + g_ChaseYawLag) & 0xFFF;
-        g_ChaseYaw = temp_v1_541;
-        if (rawAngle < temp_v1_541) {
-            temp_v0_546 = rawAngle - temp_v1_541;
-            g_ChaseYawLag = temp_v0_546;
-            var_v1_549 = temp_v0_546;
+        chaseCarSpeed = (D_8009B1EC + g_ChaseYawLag) & 0xFFF;
+        g_ChaseYaw = chaseCarSpeed;
+        if (rawAngle < chaseCarSpeed) {
+            chaseYawLag = rawAngle - chaseCarSpeed;
+            g_ChaseYawLag = chaseYawLag;
+            var_v1_549 = chaseYawLag;
             if (var_v1_549 < -0x7FF) {
                 var_v1_549 += 0x1000;
             }
             angleState = &g_ChaseYawLag;
             *angleState = var_v1_549;
         } else {
-            temp_v0_546 = rawAngle - temp_v1_541;
-            g_ChaseYawLag = temp_v0_546;
-            var_v1_549 = temp_v0_546;
+            chaseYawLag = rawAngle - chaseCarSpeed;
+            g_ChaseYawLag = chaseYawLag;
+            var_v1_549 = chaseYawLag;
             if (var_v1_549 >= 0x800) {
                 var_v1_549 -= 0x1000;
             }
@@ -387,7 +387,7 @@ block_52:
         g_CameraModePrev = 1;
         break;
     case 2:                                         /* switch 1 */
-        temp_s2_728 = temp_v0_30 * 0x24;
+        temp_s2_728 = cameraNodeIndex * 0x24;
         temp_v0_732 = temp_s2_728 + g_TrackCameras;
         *(Block16 *)&scratch[2] = *(Block16 *)temp_v0_732;
         BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
@@ -426,7 +426,7 @@ block_52:
     case 3:                                         /* switch 1 */
         *(Block16 *)&scratch[2] = *(Block16 *)arg1;
         if ((temp_v1_40 & 0xFF) || (g_CameraModePrev != 3)) {
-            g_CamPathNode = temp_v0_30;
+            g_CamPathNode = cameraNodeIndex;
             g_CamPathFrame = 0;
             if (g_CameraModePrev == 3) {
                 g_CamPathOffsetStart[0] = g_CamPathOffset[0];
@@ -437,7 +437,7 @@ block_52:
                 g_CamPathAngleStart[CAMPATH_ROLL] = g_CamPathAngle[CAMPATH_ROLL];
                 g_CamPathAngleStart[CAMPATH_DIST] = g_CamPathAngle[CAMPATH_DIST];
             } else {
-                temp_v0_944 = (temp_v0_30 * 0x24) + g_TrackCameras;
+                temp_v0_944 = (cameraNodeIndex * 0x24) + g_TrackCameras;
                 g_CamPathOffsetStart[0] = FIELD(temp_v0_944, s32 *, 0x10);
                 g_CamPathOffsetStart[1] = FIELD(temp_v0_944, s32 *, 0x14);
                 g_CamPathOffsetStart[2] = FIELD(temp_v0_944, s32 *, 0x18);
@@ -487,9 +487,9 @@ block_52:
         if (var_a0_1119 < 0) {
             var_a0_1119 += 0x1FFF;
         }
-        temp_t2_1131 = (var_a0_1119 >> 0xD) + g_CamPathOffsetStart[0];
+        camPathOffset = (var_a0_1119 >> 0xD) + g_CamPathOffsetStart[0];
         var_a0_1132 = temp_a1_1117 * g_CamPathOffsetDelta[1];
-        sp18[0] = temp_t2_1131;
+        sp18[0] = camPathOffset;
         if (var_a0_1132 < 0) {
             var_a0_1132 += 0x1FFF;
         }
@@ -526,12 +526,12 @@ block_52:
         g_CamPathAngle[CAMPATH_PITCH] = temp_a3_1170 & 0xFFF;
         g_CamPathAngle[CAMPATH_YAW] = temp_a2_1183 & 0xFFF;
         g_CamPathAngle[CAMPATH_ROLL] = temp_v1_1196 & 0xFFF;
-        g_CamPathOffset[0] = temp_t2_1131;
+        g_CamPathOffset[0] = camPathOffset;
         g_CamPathOffset[1] = temp_t1_1144;
         g_CamPathOffset[2] = temp_t0_1157;
-        temp_v0_1221 = (var_a0_1197 >> 0xD) + g_CamPathAngleStart[CAMPATH_DIST];
-        sp38[3] = temp_v0_1221;
-        g_CamPathAngle[CAMPATH_DIST] = temp_v0_1221;
+        camPathAngle = (var_a0_1197 >> 0xD) + g_CamPathAngleStart[CAMPATH_DIST];
+        sp38[3] = camPathAngle;
+        g_CamPathAngle[CAMPATH_DIST] = camPathAngle;
         temp_a1_1227 = temp_a2_1183 - FIELD(arg1, s32 *, 0x24);
         sp38[1] = temp_a1_1227;
         BuildRotMatrixY(&sp88[0], temp_a1_1227);
@@ -576,7 +576,7 @@ block_52:
         break;
     case 4:                                         /* switch 1 */
         case4Base = (u32)g_TrackCameras;
-        temp_a3_1372 = temp_v0_30 * 0x24;
+        temp_a3_1372 = cameraNodeIndex * 0x24;
         temp_v1_1373 = temp_a3_1372 + case4Base;
         *(Block16 *)&scratch[2] = *(Block16 *)temp_v1_1373;
         if ((temp_v1_40 & 0xFF) || (g_CameraModePrev != 4)) {
@@ -591,7 +591,7 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         func_80069CC8(&sp48[0], &spA8[0]);
         sp18[0] = 0;
-        temp_s0_1437 = temp_v0_30 * 0x24;
+        temp_s0_1437 = cameraNodeIndex * 0x24;
         sp18[1] = FIELD((temp_s0_1437 + (u32)g_TrackCameras), s32 *, 0xC);
         sp18[2] = 0x32;
         ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);

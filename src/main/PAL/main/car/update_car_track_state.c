@@ -47,7 +47,7 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     s32 temp_a0_4;
     s32 temp_a1;
     s32 temp_a1_2;
-    s32 temp_a2;
+    s32 trackLength;
     s32 temp_a2_2;
     s32 temp_a3;
     s32 temp_hi;
@@ -344,15 +344,15 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     {
         var_a1 += 0xFFF;
     }
-    temp_a2 = g_TrackLength;
-    temp_hi = (s32) (FIELD(obj, s32 *, 0x68) + FIELD(obj, s32 *, 0x6C)) % temp_a2;
+    trackLength = g_TrackLength;
+    temp_hi = (s32) (FIELD(obj, s32 *, 0x68) + FIELD(obj, s32 *, 0x6C)) % trackLength;
     FIELD(obj, s32 *, 0x28) = (s32) (temp_a3 + (var_a1 >> 0xC));
     FIELD(obj, s32 *, 0xB4) = (s32) FIELD(spad, s16 *, 0x90);
     FIELD(obj, s32 *, 0x74) = (s32) FIELD(obj, s32 *, 0x70);
     FIELD(obj, s32 *, 0x70) = temp_hi;
     if (temp_hi < 0)
     {
-        FIELD(obj, s32 *, 0x70) = (s32) (temp_hi + temp_a2);
+        FIELD(obj, s32 *, 0x70) = (s32) (temp_hi + trackLength);
     }
     {
         s32 finalAngle;

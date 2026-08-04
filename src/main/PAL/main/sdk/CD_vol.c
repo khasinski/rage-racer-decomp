@@ -62,19 +62,19 @@ void CD_flush(void) {
 }
 
 long CD_initvol(void) {
-    CdRegisterMap *temp_v1;
+    CdRegisterMap *cdSpuRegs;
     u_char sp0[4];
 
-    temp_v1 = g_CdSpuRegs;
-    if (temp_v1->status_mode_a == 0 && temp_v1->status_mode_b == 0) {
-        temp_v1->cd_left_volume = 0x3FFF;
-        temp_v1->cd_right_volume = 0x3FFF;
-        temp_v1 = g_CdSpuRegs;
+    cdSpuRegs = g_CdSpuRegs;
+    if (cdSpuRegs->status_mode_a == 0 && cdSpuRegs->status_mode_b == 0) {
+        cdSpuRegs->cd_left_volume = 0x3FFF;
+        cdSpuRegs->cd_right_volume = 0x3FFF;
+        cdSpuRegs = g_CdSpuRegs;
     }
 
-    temp_v1->output_left_volume = 0x3FFF;
-    temp_v1->output_right_volume = 0x3FFF;
-    temp_v1->audio_control = 0xC001;
+    cdSpuRegs->output_left_volume = 0x3FFF;
+    cdSpuRegs->output_right_volume = 0x3FFF;
+    cdSpuRegs->audio_control = 0xC001;
 
     sp0[2] = 0x80;
     sp0[0] = 0x80;
