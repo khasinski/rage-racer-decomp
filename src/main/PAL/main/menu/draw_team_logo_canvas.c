@@ -190,7 +190,7 @@ void func_8004A248(s32 arg0, s32 arg1)
   s16 yC8;
   a0v = arg0;
   a1v = arg1;
-  ot = *((s32 *) 0x1F800004);
+  ot = *((s32 *)0x1F800004);
   if (arg0 == 0)
   {
     D_8007FB0C = 0;
@@ -337,7 +337,7 @@ void func_8004A248(s32 arg0, s32 arg1)
     gxTemp = gxBase + scaleDelta;
     gx = gxTemp;
     scaleDelta = (delta * D_8007F940) / 272;
-    texY = (*((u8 *) (&D_8007BEE4.ty))) - 1;
+    texY = (*((u8 *)(&D_8007BEE4.ty))) - 1;
     gyTemp = texY + scaleDelta;
     gyRaw = gyTemp;
     gy = gyRaw;
@@ -415,7 +415,7 @@ void func_8004A248(s32 arg0, s32 arg1)
       func_80047460(ot, x1, y1, 0x20, 0x40, 0, clut, 0, 0xFF);
     }
     gx = (D_8007BEE4.tx * 4) - 1;
-    gy = (*((u8 *) (&D_8007BEE4.ty))) - 1;
+    gy = (*((u8 *)(&D_8007BEE4.ty))) - 1;
     gx2 = gx;
     gx2 += 0x41;
     gy2 = gy;
@@ -457,13 +457,13 @@ void func_8004A248(s32 arg0, s32 arg1)
     {
       func_80047460(ot, x1, y1, 0xD, 0x1A, 0xB4, 0xB4, 0xB4, 0xFF);
     }
-    func_80047024_prepared(ot, x1 + 1, y1 + 2, 0xB, 0x16, (*((u8 *) (&D_801E444C[D_8007F950]))) * 8, (D_801E444C[D_8007F950] >> 2) & 0xF8, (D_801E444C[D_8007F950] >> 7) & 0xF8, 0xFF);
+    func_80047024_prepared(ot, x1 + 1, y1 + 2, 0xB, 0x16, (*((u8 *)(&D_801E444C[D_8007F950]))) * 8, (D_801E444C[D_8007F950] >> 2) & 0xF8, (D_801E444C[D_8007F950] >> 7) & 0xF8, 0xFF);
     {
       s32 fy2 = (kreg + 2) << 16;
       i = 0;
       j = 1;
       loop15:
-      func_80047024_prepared(ot, x0 + j, fy2 >> 16, 8, 0x10, (*((u8 *) (&D_801E444E[i]))) * 8, (D_801E444E[i] >> 2) & 0xF8, (D_801E444E[i] >> 7) & 0xF8, 0xFF);
+      func_80047024_prepared(ot, x0 + j, fy2 >> 16, 8, 0x10, (*((u8 *)(&D_801E444E[i]))) * 8, (D_801E444E[i] >> 2) & 0xF8, (D_801E444E[i] >> 7) & 0xF8, 0xFF);
 
       i++;
       j += 8;

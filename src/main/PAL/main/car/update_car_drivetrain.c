@@ -164,75 +164,75 @@ void UpdateCarDrivetrain(void *base) {
   car = base;
   base = g_GearTorqueCurve;
   config = (u8 *)g_CarSpec;
-  temp_v1 = *((s16 *) (((u8 *) car) + 0x132));
-  new_var3 = ((u8 *) (config + (temp_v1 * 4))) + 0xCC;
-  var_a2 = (temp_v1 * 64) + ((u8 *) base);
-  var_s7 = *((s32 *) new_var3);
+  temp_v1 = *((s16 *)(((u8 *)car) + 0x132));
+  new_var3 = ((u8 *)(config + (temp_v1 * 4))) + 0xCC;
+  var_a2 = (temp_v1 * 64) + ((u8 *)base);
+  var_s7 = *((s32 *)new_var3);
   temp_s3 = car + 0xBC;
   if (g_RacePhase < 2)
   {
-    *((s16 *) (((u8 *) car) + 0xEC)) = temp_v1;
-    var_s7 = *((s32 *) (((u8 *) config) + 0xD0));
+    *((s16 *)(((u8 *)car) + 0xEC)) = temp_v1;
+    var_s7 = *((s32 *)(((u8 *)config) + 0xD0));
     var_a2 = base;
   }
   else
-    if (((*((s32 *) (((u8 *) car) + 0x154))) == 3) && (((*((s16 *) (((u8 *) car) + 0x15C))) < 0x40) || ((*((s16 *) (((u8 *) car) + 0x15E))) >= 0x80)))
+    if (((*((s32 *)(((u8 *)car) + 0x154))) == 3) && (((*((s16 *)(((u8 *)car) + 0x15C))) < 0x40) || ((*((s16 *)(((u8 *)car) + 0x15E))) >= 0x80)))
   {
     var_a2 = base;
   }
-  temp_v1_2 = *((s16 *) (((u8 *) temp_s3) + 0x9C));
+  temp_v1_2 = *((s16 *)(((u8 *)temp_s3) + 0x9C));
   if (temp_v1_2 == 0)
   {
-    if ((*((s16 *) (((u8 *) temp_s3) + 0xA0))) >= 0x85)
+    if ((*((s16 *)(((u8 *)temp_s3) + 0xA0))) >= 0x85)
     {
-      *((s16 *) (((u8 *) temp_s3) + 0x9C)) = 1;
+      *((s16 *)(((u8 *)temp_s3) + 0x9C)) = 1;
     }
   }
   else
     if (temp_v1_2 == 1)
   {
-    *((s16 *) (((u8 *) temp_s3) + 0x9C)) = 2;
+    *((s16 *)(((u8 *)temp_s3) + 0x9C)) = 2;
   }
   else
-    if ((*((s16 *) (((u8 *) temp_s3) + 0xA0))) < 0x7C)
+    if ((*((s16 *)(((u8 *)temp_s3) + 0xA0))) < 0x7C)
   {
-    *((s16 *) (((u8 *) temp_s3) + 0x9C)) = 0;
+    *((s16 *)(((u8 *)temp_s3) + 0x9C)) = 0;
   }
-  temp_v1_3 = *((s16 *) (((u8 *) temp_s3) - -0x9E));
+  temp_v1_3 = *((s16 *)(((u8 *)temp_s3) + 0x9E));
   if (temp_v1_3 == 0)
   {
-    if ((*((s16 *) (((u8 *) temp_s3) + 0xA2))) >= 0x85)
+    if ((*((s16 *)(((u8 *)temp_s3) + 0xA2))) >= 0x85)
     {
-      *((s16 *) (((u8 *) temp_s3) + 0x9E)) = 1;
+      *((s16 *)(((u8 *)temp_s3) + 0x9E)) = 1;
     }
   }
   else
     if (temp_v1_3 == 1)
   {
-    *((s16 *) (((u8 *) temp_s3) + 0x9E)) = 2;
+    *((s16 *)(((u8 *)temp_s3) + 0x9E)) = 2;
   }
   else
-    if ((*((s16 *) (((u8 *) temp_s3) + 0xA2))) < 0x7C)
+    if ((*((s16 *)(((u8 *)temp_s3) + 0xA2))) < 0x7C)
   {
-    *((s16 *) (((u8 *) temp_s3) + 0x9E)) = 0;
+    *((s16 *)(((u8 *)temp_s3) + 0x9E)) = 0;
   }
-  temp_v0 = (*((s16 *) (((u8 *) temp_s3) + 0xA0))) * 0x64;
+  temp_v0 = (*((s16 *)(((u8 *)temp_s3) + 0xA0))) * 0x64;
   var_a0 = temp_v0 >> 8;
   if (temp_v0 < 0)
   {
     var_a0 = ((s32) (temp_v0 + 0xFF)) >> 8;
   }
   var_a1 = 0x17C - var_a0;
-  var_a1 += ((s32) ((*((s16 *) (((u8 *) temp_s3) + 0xA2))) * 0x64)) / 256;
-  if ((*((s32 *) (((u8 *) temp_s3) + 0x98))) == 1)
+  var_a1 += ((s32) ((*((s16 *)(((u8 *)temp_s3) + 0xA2))) * 0x64)) / 256;
+  if ((*((s32 *)(((u8 *)temp_s3) + 0x98))) == 1)
   {
-    temp_v1_4 = *((s16 *) (((u8 *) temp_s3) + 0x40));
-    temp_v0_2 = (*((u16 *) (((u8 *) ((((*((s32 *) (((u8 *) car) + 0x30))) * 3) * 8) + ((u8 *) g_TrackPoints))) + 0x14))) & 3;
+    temp_v1_4 = *((s16 *)(((u8 *)temp_s3) + 0x40));
+    temp_v0_2 = (*((u16 *)(((u8 *)((((*((s32 *)(((u8 *)car) + 0x30))) * 3) * 8) + ((u8 *)g_TrackPoints))) + 0x14))) & 3;
     if (temp_v1_4 != temp_v0_2)
     {
       if (temp_v1_4 != 0)
       {
-        var_v0 = (*((u16 *) (((u8 *) temp_s3) + 0x42))) - 1;
+        var_v0 = (*((u16 *)(((u8 *)temp_s3) + 0x42))) - 1;
         goto block_29;
       }
       if (temp_v0_2 == 0)
@@ -243,34 +243,34 @@ void UpdateCarDrivetrain(void *base) {
     else
     {
       block_27:
-      if ((*((s16 *) (((u8 *) temp_s3) + 0x40))) != 0)
+      if ((*((s16 *)(((u8 *)temp_s3) + 0x40))) != 0)
       {
-        var_v0 = (*((u16 *) (((u8 *) temp_s3) + 0x42))) + 2;
+        var_v0 = (*((u16 *)(((u8 *)temp_s3) + 0x42))) + 2;
         block_29:
-        *((u16 *) (((u8 *) temp_s3) + 0x42)) = var_v0;
+        *((u16 *)(((u8 *)temp_s3) + 0x42)) = var_v0;
 
       }
 
     }
-    temp_v1_5 = (s16) (*((u16 *) (((u8 *) temp_s3) + 0x42)));
+    temp_v1_5 = (s16) (*((u16 *)(((u8 *)temp_s3) + 0x42)));
     if (temp_v1_5 >= 0x1F)
     {
-      *((s16 *) (((u8 *) temp_s3) + 0x42)) = 0x1E;
+      *((s16 *)(((u8 *)temp_s3) + 0x42)) = 0x1E;
     }
     else if (temp_v1_5 < (-0x1E))
     {
-      *((s16 *) (((u8 *) temp_s3) + 0x42)) = -0x1E;
+      *((s16 *)(((u8 *)temp_s3) + 0x42)) = -0x1E;
     }
-    var_a1 += (g_CarSpec->unk112) - (((s16) (*((u16 *) (((u8 *) temp_s3) + 0x42)))) * 0xA);
-    *((s16 *) (((u8 *) temp_s3) + 0x32)) = (s16) var_a1;
+    var_a1 += (g_CarSpec->unk112) - (((s16) (*((u16 *)(((u8 *)temp_s3) + 0x42)))) * 0xA);
+    *((s16 *)(((u8 *)temp_s3) + 0x32)) = (s16) var_a1;
   }
   else
   {
-    temp_v1_6 = ((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints);
-    temp_a0 = *((s16 *) (((u8 *) temp_s3) + 0x40));
-    if ((temp_a0 != ((*((u16 *) (((u8 *) temp_v1_6) + 0x14))) & 3)) && (temp_a0 != 0))
+    temp_v1_6 = ((*((s32 *)(((u8 *)car) + 0x30))) * 0x18) + ((u8 *)g_TrackPoints);
+    temp_a0 = *((s16 *)(((u8 *)temp_s3) + 0x40));
+    if ((temp_a0 != ((*((u16 *)(((u8 *)temp_v1_6) + 0x14))) & 3)) && (temp_a0 != 0))
     {
-      var_a0_2 = *((s16 *) (((u8 *) temp_v1_6) + 0xE));
+      var_a0_2 = *((s16 *)(((u8 *)temp_v1_6) + 0xE));
       if (var_a0_2 < (-0x32))
       {
         var_a0_2 = -0x32;
@@ -280,7 +280,7 @@ void UpdateCarDrivetrain(void *base) {
       {
         var_a0_2 = 0x32;
       }
-      if (((*((u16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints))) + 0x14))) & 3) == 1)
+      if (((*((u16 *)(((u8 *)(((*((s32 *)(((u8 *)car) + 0x30))) * 0x18) + ((u8 *)g_TrackPoints))) + 0x14))) & 3) == 1)
       {
         var_v0_3 = (-(var_a0_2 * 0x3C)) / 20;
       }
@@ -290,13 +290,13 @@ void UpdateCarDrivetrain(void *base) {
       }
       var_a1 += var_v0_3;
     }
-    *((s16 *) (((u8 *) temp_s3) + 0x32)) = (s16) (((s32) ((*((s16 *) (((u8 *) temp_s3) + 0x32))) + ((var_a1 * (*((s32 *) (((u8 *) temp_s3) + 0x88)))) / 1000))) / 2);
+    *((s16 *)(((u8 *)temp_s3) + 0x32)) = (s16) (((s32) ((*((s16 *)(((u8 *)temp_s3) + 0x32))) + ((var_a1 * (*((s32 *)(((u8 *)temp_s3) + 0x88)))) / 1000))) / 2);
   }
-  temp_lo = var_s7 * (*((s32 *) (((u8 *) temp_s3) + 0x78)));
+  temp_lo = var_s7 * (*((s32 *)(((u8 *)temp_s3) + 0x78)));
   var_s5 = 0;
-  temp_v1_7 = *((s32 *) (((u8 *) temp_s3) + 0x94));
+  temp_v1_7 = *((s32 *)(((u8 *)temp_s3) + 0x94));
   var_t3 = temp_lo - temp_v1_7;
-  temp_v1_8 = *((s32 *) (((u8 *) temp_s3) + 0x98));
+  temp_v1_8 = *((s32 *)(((u8 *)temp_s3) + 0x98));
   var_s1 = 0;
   if (temp_v1_8 == 1)
   {
@@ -336,14 +336,14 @@ void UpdateCarDrivetrain(void *base) {
     var_s1 = var_v0_5 >> 0xB;
   }
   temp_a0_2 = ((GameCarSpec *)config)->revLimit;
-  if ((*((s32 *) (((u8 *) temp_s3) + 0x78))) >= temp_a0_2)
+  if ((*((s32 *)(((u8 *)temp_s3) + 0x78))) >= temp_a0_2)
   {
     var_s2 = 0;
-    var_t3 = ((temp_a0_2 - (*((s32 *) (((u8 *) temp_s3) + 0x78)))) * 4) / 5;
+    var_t3 = ((temp_a0_2 - (*((s32 *)(((u8 *)temp_s3) + 0x78)))) * 4) / 5;
   }
   else
   {
-    temp_t2 = (*((s32 *) (((u8 *) temp_s3) + 0x78))) / 1000;
+    temp_t2 = (*((s32 *)(((u8 *)temp_s3) + 0x78))) / 1000;
     if (temp_t2 == 0)
     {
       var_v1_2 = 0;
@@ -364,21 +364,21 @@ void UpdateCarDrivetrain(void *base) {
     var_a1_2 = var_v1_2;
     if (var_a1_2 < temp_t1)
     {
-      temp_t0 = *((s32 *) (((u8 *) temp_s3) + 0x78));
-      var_a3 = (void *) ((var_a1_2 * 4) + ((s32) var_a2));
-      var_v1_3 = (void *) ((var_a1_2 * 4) + ((s32) config));
+      temp_t0 = *((s32 *)(((u8 *)temp_s3) + 0x78));
+      var_a3 = (void *)((var_a1_2 * 4) + ((s32) var_a2));
+      var_v1_3 = (void *)((var_a1_2 * 4) + ((s32) config));
       loop_68:
-      temp_a0_3 = *((s32 *) (((u8 *) var_v1_3) + 0x40));
+      temp_a0_3 = *((s32 *)(((u8 *)var_v1_3) + 0x40));
 
-      if ((temp_t0 >= temp_a0_3) && ((var_a2 = *((u8 **) (((u8 *) var_v1_3) + 0x44)), (((s32) var_a2) < temp_t0) == 0)))
+      if ((temp_t0 >= temp_a0_3) && ((var_a2 = *((u8 **)(((u8 *)var_v1_3) + 0x44)), (((s32) var_a2) < temp_t0) == 0)))
       {
         var_a1_3 = ((s32) var_a2) - temp_a0_3;
         if (var_a1_3 <= 0)
         {
           var_a1_3 = 1;
         }
-        var_a0 = ((temp_t0 - temp_a0_3) * (*((s32 *) (((u8 *) var_a3) + 4))));
-        var_a0 += (((s32) var_a2) - temp_t0) * (*((s32 *) (((u8 *) var_a3) + 0)));
+        var_a0 = ((temp_t0 - temp_a0_3) * (*((s32 *)(((u8 *)var_a3) + 4))));
+        var_a0 += (((s32) var_a2) - temp_t0) * (*((s32 *)(((u8 *)var_a3) + 0)));
         var_t3 = var_a0 / ((s32) (var_a1_3 * 0xA));
       }
       else
@@ -414,14 +414,14 @@ void UpdateCarDrivetrain(void *base) {
     var_s2 = 0;
     if (var_a1_4 < temp_t1)
     {
-      temp_t0_2 = *((s32 *) (((u8 *) temp_s3) + 0x78));
-      var_a2 = (u8 *) ((var_a1_4 * 4) + ((s32) config));
+      temp_t0_2 = *((s32 *)(((u8 *)temp_s3) + 0x78));
+      var_a2 = (u8 *)((var_a1_4 * 4) + ((s32) config));
       loop_83:
-      temp_a0_4 = *((s32 *) (((u8 *) var_a2) + 0xA8));
+      temp_a0_4 = *((s32 *)(((u8 *)var_a2) + 0xA8));
 
       if (temp_t0_2 >= temp_a0_4)
       {
-        var_a3 = *((void **) (((u8 *) var_a2) + 0xAC));
+        var_a3 = *((void **)(((u8 *)var_a2) + 0xAC));
         var_a1_4 += 1;
         if (((s32) var_a3) >= temp_t0_2)
         {
@@ -430,7 +430,7 @@ void UpdateCarDrivetrain(void *base) {
           {
             var_a1_5 = 1;
           }
-          var_s2 = ((s32) (((temp_t0_2 - temp_a0_4) * (*((s32 *) (((u8 *) var_a2) + 0x84)))) + ((((s32) var_a3) - temp_t0_2) * (*((s32 *) (((u8 *) var_a2) + 0x80)))))) / var_a1_5;
+          var_s2 = ((s32) (((temp_t0_2 - temp_a0_4) * (*((s32 *)(((u8 *)var_a2) + 0x84)))) + ((((s32) var_a3) - temp_t0_2) * (*((s32 *)(((u8 *)var_a2) + 0x80)))))) / var_a1_5;
           var_v0_8 = var_s2 < 0x64;
         }
         else
@@ -466,60 +466,60 @@ void UpdateCarDrivetrain(void *base) {
     {
       var_s2 = 0;
     }
-    if (((*((s16 *) (((u8 *) temp_s3) + 0x76))) == 1) && ((*((s32 *) (((u8 *) temp_s3) + 0x78))) < (g_CarSpec->redline)))
+    if (((*((s16 *)(((u8 *)temp_s3) + 0x76))) == 1) && ((*((s32 *)(((u8 *)temp_s3) + 0x78))) < (g_CarSpec->redline)))
     {
       var_s2 *= 2;
     }
   }
-  temp_v1_10 = *((s32 *) (((u8 *) temp_s3) + 0x98));
+  temp_v1_10 = *((s32 *)(((u8 *)temp_s3) + 0x98));
   if ((temp_v1_10 == 1) || (temp_v1_10 == 3))
   {
-    *((s16 *) (((u8 *) temp_s3) + 0x38)) = 0;
-    *((u16 *) (((u8 *) temp_s3) + 0x34)) = 0U;
+    *((s16 *)(((u8 *)temp_s3) + 0x38)) = 0;
+    *((u16 *)(((u8 *)temp_s3) + 0x34)) = 0U;
   }
   else
   {
     if (temp_v1_10 == 2)
     {
-      temp_v0_6 = *((s16 *) (((u8 *) temp_s3) + 0x38));
+      temp_v0_6 = *((s16 *)(((u8 *)temp_s3) + 0x38));
       new_var = temp_v0_6 >= 0;
       if (new_var)
       {
         temp_v0_7 = temp_v0_6 - 1;
-        *((s16 *) (((u8 *) temp_s3) + 0x38)) = temp_v0_7;
+        *((s16 *)(((u8 *)temp_s3) + 0x38)) = temp_v0_7;
         var_s1 = 0;
         if (temp_v0_7 < 0)
         {
-          *((s16 *) (((u8 *) temp_s3) + 0x38)) = 0;
+          *((s16 *)(((u8 *)temp_s3) + 0x38)) = 0;
         }
-        temp_a1 = *((s16 *) (((u8 *) temp_s3) + 0x76));
-        if ((*((s16 *) (((u8 *) temp_s3) + 0x30))) != temp_a1)
+        temp_a1 = *((s16 *)(((u8 *)temp_s3) + 0x76));
+        if ((*((s16 *)(((u8 *)temp_s3) + 0x30))) != temp_a1)
         {
-          temp_v0_14 = ((s32) ((((*((s32 *) (((u8 *) car) + 0xA4))) * 0xA0) / 1168) * 0x2710)) / ((s32) (*((s32 *) (((u8 *) ((u8 *)g_CarSpec - (-(temp_a1 * 4)))) + 0xE4))));
-          temp_v1_23 = *((u16 *) (((u8 *) temp_s3) + 0x78));
+          temp_v0_14 = ((s32) ((((*((s32 *)(((u8 *)car) + 0xA4))) * 0xA0) / 1168) * 0x2710)) / ((s32) (*((s32 *)(((u8 *)((u8 *)g_CarSpec - (-(temp_a1 * 4)))) + 0xE4))));
+          temp_v1_23 = *((u16 *)(((u8 *)temp_s3) + 0x78));
           g_ShiftTargetRpm = temp_v0_14;
-          *((s16 *) (((u8 *) temp_s3) + 0x3C)) = (s16) (((u16) g_ShiftTargetRpm) - temp_v1_23);
+          *((s16 *)(((u8 *)temp_s3) + 0x3C)) = (s16) (((u16) g_ShiftTargetRpm) - temp_v1_23);
         }
-        temp_t1 = ((*((s16 *) (((u8 *) temp_s3) + 0x3C))) * (*((s16 *) (((u8 *) temp_s3) + 0x38)))) / 20;
+        temp_t1 = ((*((s16 *)(((u8 *)temp_s3) + 0x3C))) * (*((s16 *)(((u8 *)temp_s3) + 0x38)))) / 20;
         var_v0_9 = temp_t1;
         var_v0_9 = var_v0_9 + g_ShiftTargetRpm;
         goto block_129;
       }
     }
-    temp_a0_5 = *((s16 *) (((u8 *) temp_s3) + 0x76));
-    if ((*((s16 *) (((u8 *) temp_s3) + 0x30))) != temp_a0_5)
+    temp_a0_5 = *((s16 *)(((u8 *)temp_s3) + 0x76));
+    if ((*((s16 *)(((u8 *)temp_s3) + 0x30))) != temp_a0_5)
     {
       switch (0) { default:
-      var_a2 = (u8 *) (((s32) ((*((s32 *) (((u8 *) car) + 0xA4))) * 0x2710)) / ((s32) (((*((s32 *) (((u8 *) (config - (-(temp_a0_5 * 4)))) + 0xE4))) * 0x490) / 160)));
-      temp_a1_3 = *((u16 *) (((u8 *) car) + 0xA8));
+      var_a2 = (u8 *)(((s32) ((*((s32 *)(((u8 *)car) + 0xA4))) * 0x2710)) / ((s32) (((*((s32 *)(((u8 *)(config - (-(temp_a0_5 * 4)))) + 0xE4))) * 0x490) / 160)));
+      temp_a1_3 = *((u16 *)(((u8 *)car) + 0xA8));
       temp_a0_6 = temp_a1_3;
-      temp_v0_15 = *((s16 *) (((u8 *) temp_s3) + 0x74));
-      *((u16 *) (((u8 *) temp_s3) + 0x2C)) = temp_a0_6;
+      temp_v0_15 = *((s16 *)(((u8 *)temp_s3) + 0x74));
+      *((u16 *)(((u8 *)temp_s3) + 0x2C)) = temp_a0_6;
       g_ShiftTargetSpeed = (s32) var_a2;
       if (temp_v0_15 != 0)
       {
-        temp_v1_11 = *((s16 *) (((u8 *) temp_s3) + 0x76));
-        if (((*((s16 *) (((u8 *) temp_s3) + 0x30))) < temp_v1_11) && (g_RoadGrade < 0))
+        temp_v1_11 = *((s16 *)(((u8 *)temp_s3) + 0x76));
+        if (((*((s16 *)(((u8 *)temp_s3) + 0x30))) < temp_v1_11) && (g_RoadGrade < 0))
         {
           if (temp_v1_11 < 4)
           {
@@ -550,7 +550,7 @@ void UpdateCarDrivetrain(void *base) {
             break;
           }
           temp_v1_12 = 0x64 - var_v0_10;
-          *((u16 *) (((u8 *) temp_s3) + 0x2C)) = (u16) ((temp_a0_6 * temp_v1_12) / 100);
+          *((u16 *)(((u8 *)temp_s3) + 0x2C)) = (u16) ((temp_a0_6 * temp_v1_12) / 100);
           g_ShiftTargetSpeed = (temp_v1_12 * ((s32) var_a2)) / 100;
         }
       }
@@ -558,50 +558,50 @@ void UpdateCarDrivetrain(void *base) {
       var_a0_3 = g_ShiftTargetSpeed;
 
       var_s1 = 0;
-      if ((*((s16 *) (((u8 *) temp_s3) + 0x30))) > (*((s16 *) (((u8 *) temp_s3) + 0x76))))
+      if ((*((s16 *)(((u8 *)temp_s3) + 0x30))) > (*((s16 *)(((u8 *)temp_s3) + 0x76))))
       {
         var_a0_3 += 0x1F4;
       }
       g_ShiftTargetSpeed = var_a0_3;
       {
         u16 targetSpeed = (u16) g_ShiftTargetSpeed;
-        u16 currentSpeed = *((u16 *) (((u8 *) temp_s3) + 0x78));
-        *((u16 *) (((u8 *) temp_s3) + 0x34)) = 0xAU;
-        *((s16 *) (((u8 *) temp_s3) + 0x2E)) = 0;
-        *((s16 *) (((u8 *) temp_s3) + 0x36)) = (s16) (targetSpeed - currentSpeed);
+        u16 currentSpeed = *((u16 *)(((u8 *)temp_s3) + 0x78));
+        *((u16 *)(((u8 *)temp_s3) + 0x34)) = 0xAU;
+        *((s16 *)(((u8 *)temp_s3) + 0x2E)) = 0;
+        *((s16 *)(((u8 *)temp_s3) + 0x36)) = (s16) (targetSpeed - currentSpeed);
       }
     }
     else
     {
       {
-        s32 countdown = --(*((u16 *) (((u8 *) temp_s3) + 0x34)));
+        s32 countdown = --(*((u16 *)(((u8 *)temp_s3) + 0x34)));
       if (((s16) countdown) <= 0)
       {
-        *((s16 *) (((u8 *) temp_s3) + 0x2E)) = 1;
-        *((u16 *) (((u8 *) temp_s3) + 0x2C)) = 0U;
-        *((u16 *) (((u8 *) temp_s3) + 0x34)) = 0U;
+        *((s16 *)(((u8 *)temp_s3) + 0x2E)) = 1;
+        *((u16 *)(((u8 *)temp_s3) + 0x2C)) = 0U;
+        *((u16 *)(((u8 *)temp_s3) + 0x34)) = 0U;
       }
       else
-        if ((*((s16 *) (((u8 *) temp_s3) + 0x74))) != 0)
+        if ((*((s16 *)(((u8 *)temp_s3) + 0x74))) != 0)
       {
-        *((s32 *) (((u8 *) temp_s3) + 0x78)) = (s32) (g_ShiftTargetSpeed - (((*((s16 *) (((u8 *) temp_s3) + 0x36))) * ((s16) countdown)) / 15));
+        *((s32 *)(((u8 *)temp_s3) + 0x78)) = (s32) (g_ShiftTargetSpeed - (((*((s16 *)(((u8 *)temp_s3) + 0x36))) * ((s16) countdown)) / 15));
       }
       else
       {
-        temp_a0_7 = (*((s16 *) (((u8 *) temp_s3) + 0x36))) * ((s16) countdown);
+        temp_a0_7 = (*((s16 *)(((u8 *)temp_s3) + 0x36))) * ((s16) countdown);
         switch (0) { default:
         var_v1_4 = temp_a0_7 / 10;
-        *((s32 *) (((u8 *) temp_s3) + 0x78)) = g_ShiftTargetSpeed - var_v1_4;
+        *((s32 *)(((u8 *)temp_s3) + 0x78)) = g_ShiftTargetSpeed - var_v1_4;
         break;
         block_129:
-        *((s32 *) (((u8 *) temp_s3) + 0x78)) = var_v0_9;
+        *((s32 *)(((u8 *)temp_s3) + 0x78)) = var_v0_9;
         }
 
       }
       }
     }
   }
-  var_v1_7 = (var_t3 * (*((s16 *) (((u8 *) temp_s3) + 0xA0)))) * (*((s16 *) (((u8 *) temp_s3) + 0x2E)));
+  var_v1_7 = (var_t3 * (*((s16 *)(((u8 *)temp_s3) + 0xA0)))) * (*((s16 *)(((u8 *)temp_s3) + 0x2E)));
   if (var_v1_7 < 0)
   {
     var_v1_7 += 0xFF;
@@ -615,14 +615,14 @@ void UpdateCarDrivetrain(void *base) {
   {
     g_GripLossTimer = 0;
   }
-  if ((*((s16 *) (((u8 *) car) + 0x98))) == 0)
+  if ((*((s16 *)(((u8 *)car) + 0x98))) == 0)
   {
-    var_s5 += ((s32) (*((s32 *) (((u8 *) temp_s3) + 0x78)))) / 256;
+    var_s5 += ((s32) (*((s32 *)(((u8 *)temp_s3) + 0x78)))) / 256;
   }
-  var_s1 += ((s32) ((*((s16 *) (((u8 *) temp_s3) + 0xA2))) * (*((s32 *) (((u8 *) temp_s3) + 0x78))))) / 8192;
+  var_s1 += ((s32) ((*((s16 *)(((u8 *)temp_s3) + 0xA2))) * (*((s32 *)(((u8 *)temp_s3) + 0x78))))) / 8192;
   if (var_t3 > 0)
   {
-    if ((*((s16 *) (((u8 *) temp_s3) + 0xA0))) < 0x7F)
+    if ((*((s16 *)(((u8 *)temp_s3) + 0xA0))) < 0x7F)
     {
       var_s1 += var_t3 / 2;
     }
@@ -631,21 +631,21 @@ void UpdateCarDrivetrain(void *base) {
   {
     var_s1 -= var_t3 / 2;
   }
-  temp_v0_9 = GetAngleDistance(*((s32 *) (((u8 *) car) + 0x24)), *((s32 *) (((u8 *) car) + 0xA0)), (s32) var_a2, var_a3);
-  *((s32 *) (((u8 *) temp_s3) + 0x4C)) = temp_v0_9;
+  temp_v0_9 = GetAngleDistance(*((s32 *)(((u8 *)car) + 0x24)), *((s32 *)(((u8 *)car) + 0xA0)), (s32) var_a2, var_a3);
+  *((s32 *)(((u8 *)temp_s3) + 0x4C)) = temp_v0_9;
   if (temp_v0_9 >= 0x401)
   {
-    *((s32 *) (((u8 *) temp_s3) + 0x4C)) = (s32) (0x800 - temp_v0_9);
+    *((s32 *)(((u8 *)temp_s3) + 0x4C)) = (s32) (0x800 - temp_v0_9);
   }
-  var_s5 += ((s32) (*((s32 *) (((u8 *) temp_s3) + 0x4C)))) / 256;
-  if (((*((s32 *) (((u8 *) temp_s3) + 0x98))) != 1) && (g_PadType == 0x41))
+  var_s5 += ((s32) (*((s32 *)(((u8 *)temp_s3) + 0x4C)))) / 256;
+  if (((*((s32 *)(((u8 *)temp_s3) + 0x98))) != 1) && (g_PadType == 0x41))
   {
-    var_a1_4 = ((g_CarSpec->unk10E) * (*((s32 *) (((u8 *) temp_s3) + 0x88)))) / 1000;
+    var_a1_4 = ((g_CarSpec->unk10E) * (*((s32 *)(((u8 *)temp_s3) + 0x88)))) / 1000;
     if (var_a1_4 <= 0)
     {
       var_a1_4 = 1;
     }
-    temp_a0_7 = *((s32 *) (((u8 *) temp_s3) + 0x1C));
+    temp_a0_7 = *((s32 *)(((u8 *)temp_s3) + 0x1C));
     new_var2 = temp_a0_7 >= 0;
     if (new_var2)
     {
@@ -656,13 +656,13 @@ void UpdateCarDrivetrain(void *base) {
       var_s5 -= ((s32) ((temp_a0_7 * 5) / 6)) / var_a1_4;
     }
   }
-  temp_a0_8 = GetAngleDistance(*((s32 *) (((u8 *) car) + 0xA0)), 0xC00 - (*((s16 *) (((u8 *) (((*((s32 *) (((u8 *) car) + 0x30))) * 0x18) + ((u8 *) g_TrackPoints))) + 0xA))));
+  temp_a0_8 = GetAngleDistance(*((s32 *)(((u8 *)car) + 0xA0)), 0xC00 - (*((s16 *)(((u8 *)(((*((s32 *)(((u8 *)car) + 0x30))) * 0x18) + ((u8 *)g_TrackPoints))) + 0xA))));
   var_a0 = temp_a0_8;
-  temp_a1_2 = *((s32 *) (((u8 *) car) + 0x30));
-  temp_a2 = *((s32 *) (((u8 *) car) + 0x38));
-  temp_t0 = (*((s16 *) (((u8 *) ((temp_a1_2 * 0x18) + ((u8 *) g_TrackPoints))) + 0xC))) * (0x400 - temp_a2);
+  temp_a1_2 = *((s32 *)(((u8 *)car) + 0x30));
+  temp_a2 = *((s32 *)(((u8 *)car) + 0x38));
+  temp_t0 = (*((s16 *)(((u8 *)((temp_a1_2 * 0x18) + ((u8 *)g_TrackPoints))) + 0xC))) * (0x400 - temp_a2);
   temp_a1_2 += 1;
-  var_v0_11 = temp_t0 + ((*((s16 *) (((u8 *) (((temp_a1_2 % ((s32) g_TrackPointCount)) * 0x18) + ((u8 *) g_TrackPoints))) + 0xC))) * temp_a2);
+  var_v0_11 = temp_t0 + ((*((s16 *)(((u8 *)(((temp_a1_2 % ((s32) g_TrackPointCount)) * 0x18) + ((u8 *)g_TrackPoints))) + 0xC))) * temp_a2);
   secondNonnegative = var_v0_11 >= 0;
   if (!secondNonnegative)
   {
@@ -696,7 +696,7 @@ void UpdateCarDrivetrain(void *base) {
   {
     var_s5 += var_a0 / 10;
   }
-  if ((g_RacePhase == 2) && ((*((s32 *) (((u8 *) temp_s3) + 0x98))) == 3))
+  if ((g_RacePhase == 2) && ((*((s32 *)(((u8 *)temp_s3) + 0x98))) == 3))
   {
     var_s5 += (g_StandingStartSpin & 0x1F) * 5;
   }
@@ -709,11 +709,11 @@ void UpdateCarDrivetrain(void *base) {
       D_8019C998 = counter - 1;
     }
   }
-  if ((*((s32 *) (((u8 *) temp_s3) + 0x98))) == 1)
+  if ((*((s32 *)(((u8 *)temp_s3) + 0x98))) == 1)
   {
     var_s6 = (var_s6 * 4) / 5;
   }
-  var_a0_3 = (temp_v1_15 = ((*((s32 *) (((u8 *) car) + 0xA4))) * 0xA0) / 1168);
+  var_a0_3 = (temp_v1_15 = ((*((s32 *)(((u8 *)car) + 0xA4))) * 0xA0) / 1168);
   var_v0_12 = (s32) ((g_CarSpec->unk110) * 0x3E8);
   var_a1_7 = var_v0_12 / ((s16) g_DragScale);
   if (var_a1_7 <= 0)
@@ -722,7 +722,7 @@ void UpdateCarDrivetrain(void *base) {
   }
   var_s5 += ((s32) (temp_v1_15 * temp_v1_15)) / var_a1_7;
   g_DragScale = 0x3E8;
-  if ((*((s16 *) (((u8 *) car) + 0x98))) == 0)
+  if ((*((s16 *)(((u8 *)car) + 0x98))) == 0)
   {
     var_s5 = (var_s5 * (0x64 - var_s2)) / 100;
   }
@@ -731,32 +731,32 @@ void UpdateCarDrivetrain(void *base) {
     var_s6 *= 2;
     var_s5 = 0;
   }
-  if (((*((s16 *) (((u8 *) temp_s3) + 0x38))) <= 0) && (((s16) (*((u16 *) (((u8 *) temp_s3) + 0x34)))) <= 0))
+  if (((*((s16 *)(((u8 *)temp_s3) + 0x38))) <= 0) && (((s16) (*((u16 *)(((u8 *)temp_s3) + 0x34)))) <= 0))
   {
-    *((s32 *) (((u8 *) temp_s3) + 0x78)) = (s32) (((var_s6 - var_s1) - var_s5) + (*((s32 *) (((u8 *) temp_s3) + 0x78))));
+    *((s32 *)(((u8 *)temp_s3) + 0x78)) = (s32) (((var_s6 - var_s1) - var_s5) + (*((s32 *)(((u8 *)temp_s3) + 0x78))));
   }
-  temp_v0_11 = *((s32 *) (((u8 *) temp_s3) + 0x78));
+  temp_v0_11 = *((s32 *)(((u8 *)temp_s3) + 0x78));
   if (temp_v0_11 < 0)
   {
-    *((s32 *) (((u8 *) temp_s3) + 0x78)) = 0;
+    *((s32 *)(((u8 *)temp_s3) + 0x78)) = 0;
   }
   else
     if (temp_v0_11 >= 0x3A99)
   {
-    *((s32 *) (((u8 *) temp_s3) + 0x78)) = 0x3A98;
+    *((s32 *)(((u8 *)temp_s3) + 0x78)) = 0x3A98;
   }
-  temp_lo_3 = var_s7 * (*((s32 *) (((u8 *) temp_s3) + 0x78)));
-  *((s32 *) (((u8 *) temp_s3) + 0x94)) = temp_lo_3;
-  if ((*((s32 *) (((u8 *) temp_s3) + 0x98))) == 1)
+  temp_lo_3 = var_s7 * (*((s32 *)(((u8 *)temp_s3) + 0x78)));
+  *((s32 *)(((u8 *)temp_s3) + 0x94)) = temp_lo_3;
+  if ((*((s32 *)(((u8 *)temp_s3) + 0x98))) == 1)
   {
-    temp_v1_18 = *((s32 *) (((u8 *) car) + 0x30));
-    temp_v1_16 = *((u16 *) (((u8 *) ((temp_v1_18 * 0x18) + ((u8 *) g_TrackPoints))) + 0x14));
+    temp_v1_18 = *((s32 *)(((u8 *)car) + 0x30));
+    temp_v1_16 = *((u16 *)(((u8 *)((temp_v1_18 * 0x18) + ((u8 *)g_TrackPoints))) + 0x14));
     var_v0_12 = temp_v1_16 % 4;
     if (var_v0_12 > 0)
     {
       temp_v1_17 = (((((s32) (temp_v1_16 << 0x10)) >> 13) >> 7) * 0xC) + g_TrackArcCenters;
-      temp_s2 = (*((s32 *) (((u8 *) car) + 0))) - (*((s32 *) (((u8 *) temp_v1_17) + 0)));
-      temp_s1 = (*((s32 *) (((u8 *) car) + 8))) - (*((s32 *) (((u8 *) temp_v1_17) + 4)));
+      temp_s2 = (*((s32 *)(((u8 *)car) + 0))) - (*((s32 *)(((u8 *)temp_v1_17) + 0)));
+      temp_s1 = (*((s32 *)(((u8 *)car) + 8))) - (*((s32 *)(((u8 *)temp_v1_17) + 4)));
       temp_v0_12 = Atan2(temp_s2, temp_s1);
       temp_s0 = rcos(temp_v0_12);
       temp_v0_13 = (temp_s0 * temp_s2) + (rsin(temp_v0_12) * temp_s1);
@@ -779,42 +779,42 @@ void UpdateCarDrivetrain(void *base) {
     {
       var_a0_6 = 1;
     }
-    var_a1_7 = (*((s16 *) (((u8 *) temp_s3) + 0xA2))) * 0x14;
+    var_a1_7 = (*((s16 *)(((u8 *)temp_s3) + 0xA2))) * 0x14;
     coefficientBase = 0x26FC - var_a0_6;
     coefficient = coefficientBase - (var_s5 * 2);
     if (var_a1_7 < 0)
     {
       var_a1_7 += 0xFF;
     }
-    *((s32 *) (((u8 *) car) + 0xA4)) = (s32) (((coefficient - (var_a1_7 >> 8)) * (*((s32 *) (((u8 *) car) + 0xA4)))) / 10000);
-    temp_v1_18 = *((s32 *) (((u8 *) temp_s3) + 0x94));
+    *((s32 *)(((u8 *)car) + 0xA4)) = (s32) (((coefficient - (var_a1_7 >> 8)) * (*((s32 *)(((u8 *)car) + 0xA4)))) / 10000);
+    temp_v1_18 = *((s32 *)(((u8 *)temp_s3) + 0x94));
     if (temp_v1_18 < 0)
     {
       temp_v1_18 += 0x1FFFFF;
     }
     var_v0_12 = temp_v1_18 >> 0x15;
-    *((s32 *) (((u8 *) car) + 0xA8)) = var_v0_12;
+    *((s32 *)(((u8 *)car) + 0xA8)) = var_v0_12;
   }
   else
   {
-    if ((*((s16 *) (((u8 *) car) + 0x98))) != 0)
+    if ((*((s16 *)(((u8 *)car) + 0x98))) != 0)
     {
-      temp_v1_19 = *((s32 *) (((u8 *) car) + 0xA4));
-      *((s32 *) (((u8 *) car) + 0xA8)) = 0;
+      temp_v1_19 = *((s32 *)(((u8 *)car) + 0xA4));
+      *((s32 *)(((u8 *)car) + 0xA8)) = 0;
       var_v1_8 = (temp_v1_19 * 0x3E7) / 1000;
     }
     else
     {
-      if (((s16) (*((u16 *) (((u8 *) temp_s3) + 0x34)))) > 0)
+      if (((s16) (*((u16 *)(((u8 *)temp_s3) + 0x34)))) > 0)
       {
-        *((s32 *) (((u8 *) car) + 0xA8)) = (s32) ((s16) (*((u16 *) (((u8 *) temp_s3) + 0x2C))));
+        *((s32 *)(((u8 *)car) + 0xA8)) = (s32) ((s16) (*((u16 *)(((u8 *)temp_s3) + 0x2C))));
       }
       else
       {
         var_v1_9 = temp_lo_3;
-        if ((*((s16 *) (((u8 *) temp_s3) + 0x38))) > 0)
+        if ((*((s16 *)(((u8 *)temp_s3) + 0x38))) > 0)
         {
-          *((s32 *) (((u8 *) car) + 0xA8)) = (s32) ((s16) (*((u16 *) (((u8 *) temp_s3) + 0x2C))));
+          *((s32 *)(((u8 *)car) + 0xA8)) = (s32) ((s16) (*((u16 *)(((u8 *)temp_s3) + 0x2C))));
         }
         else
         {
@@ -823,29 +823,29 @@ void UpdateCarDrivetrain(void *base) {
             var_v1_9 += 0x1FFFF;
           }
           temp_v1_20 = var_v1_9 >> 0x11;
-          *((s32 *) (((u8 *) car) + 0xA8)) = temp_v1_20;
-          if ((*((s16 *) (((u8 *) temp_s3) + 0x74))) == 0)
+          *((s32 *)(((u8 *)car) + 0xA8)) = temp_v1_20;
+          if ((*((s16 *)(((u8 *)temp_s3) + 0x74))) == 0)
           {
-            *((s32 *) (((u8 *) car) + 0xA8)) = (s32) (((g_CarSpec->unk102) * temp_v1_20) / 1000);
+            *((s32 *)(((u8 *)car) + 0xA8)) = (s32) (((g_CarSpec->unk102) * temp_v1_20) / 1000);
           }
         }
       }
       if (g_GripLossTimer > 0)
       {
-        *((s32 *) (((u8 *) car) + 0xA8)) /= 2;
+        *((s32 *)(((u8 *)car) + 0xA8)) /= 2;
       }
-      temp_v1_21 = *((s32 *) (((u8 *) car) + 0xA4));
+      temp_v1_21 = *((s32 *)(((u8 *)car) + 0xA4));
       var_v1_8 = (temp_v1_21 * 0x5E) / 100;
     }
-    *((s32 *) (((u8 *) car) + 0xA4)) = var_v1_8;
+    *((s32 *)(((u8 *)car) + 0xA4)) = var_v1_8;
   }
-  if ((*((s32 *) (((u8 *) car) + 0xA4))) < 8)
+  if ((*((s32 *)(((u8 *)car) + 0xA4))) < 8)
   {
-    *((s32 *) (((u8 *) car) + 0xA0)) = (s32) (*((s32 *) (((u8 *) car) + 0x24)));
+    *((s32 *)(((u8 *)car) + 0xA0)) = (s32) (*((s32 *)(((u8 *)car) + 0x24)));
   }
   if (g_RacePhase >= 2)
   {
-    temp_v1_22 = *((s32 *) (((u8 *) temp_s3) + 0x98));
+    temp_v1_22 = *((s32 *)(((u8 *)temp_s3) + 0x98));
     switch (temp_v1_22)
     {
       case 0:
@@ -869,10 +869,10 @@ void UpdateCarDrivetrain(void *base) {
   }
   else
   {
-    *((s32 *) (((u8 *) car) + 0xA4)) = 0;
+    *((s32 *)(((u8 *)car) + 0xA4)) = 0;
   }
-  if ((*((s32 *) (((u8 *) car) + 0xA4))) < 8)
+  if ((*((s32 *)(((u8 *)car) + 0xA4))) < 8)
   {
-    *((s32 *) (((u8 *) car) + 0xA0)) = (s32) (*((s32 *) (((u8 *) car) + 0x24)));
+    *((s32 *)(((u8 *)car) + 0xA0)) = (s32) (*((s32 *)(((u8 *)car) + 0x24)));
   }
 }

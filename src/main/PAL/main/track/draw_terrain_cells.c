@@ -21,9 +21,9 @@ void DrawTerrainCellsWide(void) {
 extern u32 *g_FinalSkyOrderingTable asm("D_1F800004");
 void AddPrim(void *, void *) asm("func_80064DDC");
 void SetShadeTex(void *, s32) asm("func_80064EB8");
-void SetPolyF4(void *) asm("func_80064F30");
-void SetPolyFT4(void *) asm("func_80064F44");
-void SetPolyG4(void *) asm("func_80064F58");
+void SetPolyF4(void *)asm("func_80064F30");
+void SetPolyFT4(void *)asm("func_80064F44");
+void SetPolyG4(void *)asm("func_80064F58");
 s32 GameSin(s32) asm("func_80068568");
 s32 GameCos(s32) asm("func_80068634");
 extern s16 g_SkyTileMap[][16] asm("D_8007F470");
@@ -210,7 +210,7 @@ register u8 *stackPointer asm("$29");
 void GameDrawSkyBackground(void) asm("func_800418D4");
 void GameDrawSkyBackground(void)
 {
-  SkyRenderScratchpad *scratch = (SkyRenderScratchpad *) 0x1F800000;
+  SkyRenderScratchpad *scratch = (SkyRenderScratchpad *)0x1F800000;
   s32 panelXFixed;
   s32 panelYFixed;
   s32 columnStepX;
@@ -397,7 +397,7 @@ void GameDrawSkyBackground(void)
         do
         {
           var_fp_181 = 0;
-          quadRow = (POLY_FT4 *) packetCursor;
+          quadRow = (POLY_FT4 *)packetCursor;
           doubleRowStepY = spF8;
           rowOffsetYFixed = spF0;
           var_a3_184 = panelYFixed;
@@ -485,7 +485,7 @@ void GameDrawSkyBackground(void)
         clip.yEdge2 = (columnStepY > 0) ? (0xF0) : (-0xF0);
         clip.yEdge3 = (columnStepY > 0) ? (-0xF0) : (0xF0);
         gridRow = 0;
-        quad = (POLY_FT4 *) packetCursor;
+        quad = (POLY_FT4 *)packetCursor;
         do
         {
           screenX0 = GameRoundTerrainCoordinate(panelXFixed);
@@ -635,34 +635,34 @@ void GameDrawSkyBackground(void)
         screenY3 = var_v0_762 / 256;
         nextPacket = packetCursor + 0x24;
         SetPolyG4(packetCursor);
-        ((POLY_G4 *) packetCursor)->x0 = screenX0;
-        ((POLY_G4 *) packetCursor)->x1 = screenX1;
-        ((POLY_G4 *) packetCursor)->x2 = screenX2;
-        ((POLY_G4 *) packetCursor)->x3 = screenX3;
-        ((POLY_G4 *) packetCursor)->y0 = screenY0;
-        ((POLY_G4 *) packetCursor)->y1 = screenY1;
-        ((POLY_G4 *) packetCursor)->y2 = screenY2;
-        ((POLY_G4 *) packetCursor)->y3 = screenY3;
+        ((POLY_G4 *)packetCursor)->x0 = screenX0;
+        ((POLY_G4 *)packetCursor)->x1 = screenX1;
+        ((POLY_G4 *)packetCursor)->x2 = screenX2;
+        ((POLY_G4 *)packetCursor)->x3 = screenX3;
+        ((POLY_G4 *)packetCursor)->y0 = screenY0;
+        ((POLY_G4 *)packetCursor)->y1 = screenY1;
+        ((POLY_G4 *)packetCursor)->y2 = screenY2;
+        ((POLY_G4 *)packetCursor)->y3 = screenY3;
         color = g_EnvColor2Red.bytes.r;
-        ((POLY_G4 *) packetCursor)->r1 = color;
-        ((POLY_G4 *) packetCursor)->t.r0 = color;
+        ((POLY_G4 *)packetCursor)->r1 = color;
+        ((POLY_G4 *)packetCursor)->t.r0 = color;
         color = g_EnvColor3R;
-        ((POLY_G4 *) packetCursor)->r3 = color;
-        ((POLY_G4 *) packetCursor)->r2 = color;
+        ((POLY_G4 *)packetCursor)->r3 = color;
+        ((POLY_G4 *)packetCursor)->r2 = color;
         color = g_EnvColor2G;
-        ((POLY_G4 *) packetCursor)->g1 = color;
-        ((POLY_G4 *) packetCursor)->t.g0 = color;
+        ((POLY_G4 *)packetCursor)->g1 = color;
+        ((POLY_G4 *)packetCursor)->t.g0 = color;
         color = g_EnvColor3G;
-        ((POLY_G4 *) packetCursor)->g3 = color;
-        ((POLY_G4 *) packetCursor)->g2 = color;
+        ((POLY_G4 *)packetCursor)->g3 = color;
+        ((POLY_G4 *)packetCursor)->g2 = color;
         color = g_EnvColor2B;
-        ((POLY_G4 *) packetCursor)->b1 = color;
-        ((POLY_G4 *) packetCursor)->t.b0 = color;
+        ((POLY_G4 *)packetCursor)->b1 = color;
+        ((POLY_G4 *)packetCursor)->t.b0 = color;
         color = g_EnvColor3B;
-        ((POLY_G4 *) packetCursor)->b3 = color;
-        ((POLY_G4 *) packetCursor)->b2 = color;
+        ((POLY_G4 *)packetCursor)->b3 = color;
+        ((POLY_G4 *)packetCursor)->b2 = color;
         {
-          POLY_G4 *firstG4 = (POLY_G4 *) packetCursor;
+          POLY_G4 *firstG4 = (POLY_G4 *)packetCursor;
           packetCursor = nextPacket;
           asm("" : : "r"(packetCursor));
           AddPrim(&scratch->orderingTable[SKY_OT_NEAR], firstG4);
@@ -670,7 +670,7 @@ void GameDrawSkyBackground(void)
       }
       {
         u8 color;
-        POLY_G4 *g4Cursor = (POLY_G4 *) packetCursor;
+        POLY_G4 *g4Cursor = (POLY_G4 *)packetCursor;
         u32 *orderingTableBase;
         register POLY_G4 *primCursor asm("$5");
         xWork = panelXFixed - rowStepX;
@@ -734,7 +734,7 @@ void GameDrawSkyBackground(void)
         primCursor->b2 = color;
         orderingTableBase = scratch->orderingTable;
         AddPrim(&orderingTableBase[SKY_OT_NEAR], g4Cursor++);
-        nextPacket = (u8 *) g4Cursor;
+        nextPacket = (u8 *)g4Cursor;
         asm("" : : "r"(upperBandXFixed));
       }
       {
@@ -746,7 +746,7 @@ void GameDrawSkyBackground(void)
         s32 x3Raw;
         s32 doubleStepX;
         asm volatile("" : : "r"(xWork));
-        asm volatile("" : "=r"(screenX0) : "0"(*((s32 *) (stackPointer + 0x90))));
+        asm volatile("" : "=r"(screenX0) : "0"(*((s32 *)(stackPointer + 0x90))));
         doubleStepX = rowStepX * 2;
         screenX1 = screenX3;
         leftXWorkFixed = doubleStepX + rowStepX;
@@ -754,7 +754,7 @@ void GameDrawSkyBackground(void)
         screenX2 = GameRoundTerrainCoordinate(panelXFixed - rightXWorkFixed);
 
         packetCursor = nextPacket;
-        g4Cursor = (POLY_G4 *) packetCursor;
+        g4Cursor = (POLY_G4 *)packetCursor;
         x3Raw = temp_fp_714 - leftXWorkFixed;
         if (x3Raw < 0)
         {
@@ -769,7 +769,7 @@ void GameDrawSkyBackground(void)
         screenY1 = screenY3;
         screenY2 = GameRoundTerrainCoordinate(panelYFixed - temp_lo_117);
         screenY3 = GameRoundTerrainCoordinate(new_var3 - temp_lo_117);
-        nextPacket = (u8 *) (g4Cursor + 1);
+        nextPacket = (u8 *)(g4Cursor + 1);
         SetPolyG4(g4Cursor);
         asm("");
         g4Cursor->x0 = screenX0;
@@ -809,7 +809,7 @@ void GameDrawSkyBackground(void)
       if (g_CourseIndex != 2)
       {
         u8 color;
-        POLY_G4 *courseG4 = (POLY_G4 *) packetCursor;
+        POLY_G4 *courseG4 = (POLY_G4 *)packetCursor;
         leftXWorkFixed = (panelXFixed + rowStepX) * 8;
         var_v0_1007 = leftXWorkFixed - savedSinRoll;
         screenX0 = var_v0_1007 / 2048;
@@ -851,7 +851,7 @@ void GameDrawSkyBackground(void)
         color = g_EnvColor7B;
         courseG4->b1 = color;
         courseG4->t.b0 = color;
-        nextPacket = (u8 *) (courseG4 + 1);
+        nextPacket = (u8 *)(courseG4 + 1);
         color = g_EnvColor8B;
         courseG4->b3 = color;
         courseG4->b2 = color;
@@ -869,13 +869,13 @@ void GameDrawSkyBackground(void)
       if (g_CourseIndex == 2)
       {
         u8 color;
-        POLY_G4 *courseG4 = (POLY_G4 *) packetCursor;
+        POLY_G4 *courseG4 = (POLY_G4 *)packetCursor;
         rightXWorkFixed = panelXFixed;
         screenX0 = GameRoundTerrainCoordinate(rightXWorkFixed + rowStepX);
         screenX1 = GameRoundTerrainCoordinate(temp_a1_1150 + (rowStepX + (rowStepX - rowStepX)));
         screenY0 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
         screenY1 = GameRoundTerrainCoordinate(temp_a0_1170 + rowStepY);
-        nextPacket = (u8 *) (courseG4 + 1);
+        nextPacket = (u8 *)(courseG4 + 1);
         SetPolyG4(courseG4);
         courseG4->x0 = screenX0;
         courseG4->x1 = screenX1;
@@ -908,7 +908,7 @@ void GameDrawSkyBackground(void)
       }
       else
       {
-        POLY_F4 *courseF4 = (POLY_F4 *) packetCursor;
+        POLY_F4 *courseF4 = (POLY_F4 *)packetCursor;
         screenX0 = savedCourseX0;
         screenX1 = savedCourseX1;
         screenY0 = xWork_late;
@@ -926,7 +926,7 @@ void GameDrawSkyBackground(void)
         courseF4->t.g0 = (u8) g_EnvColor4G;
         {
           u8 *nextPacket;
-          nextPacket = (u8 *) (courseF4 + 1);
+          nextPacket = (u8 *)(courseF4 + 1);
           courseF4->t.b0 = (u8) g_EnvColor4B;
           AddPrim(&scratch->orderingTable[SKY_OT_NEAR], courseF4);
           packetCursor = nextPacket;

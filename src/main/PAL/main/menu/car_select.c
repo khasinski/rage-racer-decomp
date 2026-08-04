@@ -155,8 +155,8 @@ pos:
 
 s32 DrawCarSelectScreen(s32 step) asm("func_800551BC");
 s32 DrawCarSelectScreen(s32 arg0) {
-    s32 p = (s32) *(void **) 0x1F800004;
-    u8 *buf = (u8 *) p + 4;
+    s32 p = (s32) *(void **)0x1F800004;
+    u8 *buf = (u8 *)p + 4;
     s32 v;
     s32 col;
     s32 xpos;
@@ -184,7 +184,7 @@ s32 DrawCarSelectScreen(s32 arg0) {
     col = v & 0xff;
     func_80047460(buf, 0xa3, 0x180, 0x1a, 0x19, col, col, col, 0x20);
 
-    tex = ((u8 *) g_CarTable)[g_PlayerCarIndex * 8 + 2];
+    tex = ((u8 *)g_CarTable)[g_PlayerCarIndex * 8 + 2];
     if (tex != 0) {
         func_80046A2C(buf, 0xad, 0x185, 0x10, 0x10, 0x6c, 0x7c, col, col, col,
                       0x244, 0, 1, 0x3b);

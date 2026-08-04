@@ -5,7 +5,7 @@
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
-extern void DrawPlayerCarModel(void *) asm("func_8001DAB0");
+extern void DrawPlayerCarModel(void *)asm("func_8001DAB0");
 extern s32 FindNearestTrackCamera() asm("func_80043B18");
 extern s32 rcos(s32) asm("func_80068634");
 extern s32 SquareRoot0(s32) asm("func_800689A8");

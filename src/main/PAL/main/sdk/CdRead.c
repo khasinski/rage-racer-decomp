@@ -150,7 +150,7 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     u_char *tableB;
 
     sr = str;
-    next = *(u_char **) 0x1F800000;
+    next = *(u_char **)0x1F800000;
     if (*sr != 0) {
         tableA = D_8007D7BC;
         tableB = D_8007D7BD;
@@ -181,7 +181,7 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     }
     func_800666F4(next, 0, 1, 0x1D, D_8007BED0);
     AddPrim(g_DrawBuffer + 0xCC, next);
-    *(u_char **) 0x1F800000 = next + 0xC;
+    *(u_char **)0x1F800000 = next + 0xC;
 }
 
 void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3) asm("func_800279EC");

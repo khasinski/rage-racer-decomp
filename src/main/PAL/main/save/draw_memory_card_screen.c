@@ -18,7 +18,7 @@ void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8002
 void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 {
     s32 base = ((s32) g_DrawBuffer) + 0xCC;
-    s32 *scratch = (s32 *) 0x1F800000;
+    s32 *scratch = (s32 *)0x1F800000;
     s32 next;
     s32 i;
     s32 y;
