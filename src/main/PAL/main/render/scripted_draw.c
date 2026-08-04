@@ -654,7 +654,7 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
 loop:
     basePtr = D_8009B250;
     offset = i * 4;
-    timer = (s32 *)((s32)basePtr + offset);
+    timer = (s32 *)((u8 *)basePtr + offset);
 
     fade = *timer & 0x1FF;
     *timer = fade;

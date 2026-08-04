@@ -344,26 +344,26 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
             routeOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
             *(s32 *)((u8 *)route + routeOffset + 0xAC) += 1;
             routeOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
-            if (*(s32 *)((s32)route + routeOffset + 0xAC) > 0xFFFF) {
+            if (*(s32 *)((u8 *)route + routeOffset + 0xAC) > 0xFFFF) {
                 *(s32 *)(route + 0xAC +
                          *(s16 *)((u8 *)arg0 + 0x168) * 4) = 0x10000;
             }
-            *(s32 *)((s32)route +
+            *(s32 *)((u8 *)route +
                      (routeStoreOffset =
                           *(s16 *)((u8 *)arg0 + 0x168) * 4) +
                      0xC4) = FramesToMilliseconds(
                 (routeCallOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4,
-                 *(s32 *)((s32)route + routeCallOffset + 0xAC)),
+                 *(s32 *)((u8 *)route + routeCallOffset + 0xAC)),
                 Random15() % 40);
             routeCompareOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
-            if (*(s32 *)((s32)route + routeCompareOffset + 0xC4) > 0x927BE) {
+            if (*(s32 *)((u8 *)route + routeCompareOffset + 0xC4) > 0x927BE) {
                 *(s32 *)(route + 0xC4 +
                          *(s16 *)((u8 *)arg0 + 0x168) * 4) = 0x927BF;
                 g_LapTimeSaturated = 1;
             }
             routeFinalOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
             g_LapTimeMs =
-                *(s32 *)((s32)route + routeFinalOffset + 0xC4);
+                *(s32 *)((u8 *)route + routeFinalOffset + 0xC4);
             break;
         }
 
@@ -395,7 +395,7 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
         progressLimit = g_BestLapThisRace;
         recordOffset = recordIndex * 4;
         candidateTime =
-            *(s32 *)((s32)route + recordOffset + 0xC0);
+            *(s32 *)((u8 *)route + recordOffset + 0xC0);
         tableOffset = progressLimit;
         step = candidateTime < tableOffset;
         if (step && (recordIndex != 1)) {
@@ -403,7 +403,7 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
             *(s16 *)(route + 0xA6) = routeProgress - 2;
             resultOffset = *(s16 *)(route + 0xAC) * 4;
             result =
-                *(s32 *)((s32)route + resultOffset + 0xC0);
+                *(s32 *)((u8 *)route + resultOffset + 0xC0);
             g_BestLapThisRace = candidateTime;
             g_SectorTimes[2] = result;
             if (arg1 == 0) {

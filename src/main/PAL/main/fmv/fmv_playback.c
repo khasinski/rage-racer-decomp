@@ -296,7 +296,7 @@ void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
     base = g_ReplayFramesTimeAttack;
     src = (GameRenderSourcePoint *)srcPtr;
     first = src->field_0;
-    dst = (GameRenderSinglePoint *)((s32)dst + (s32)base);
+    dst = (GameRenderSinglePoint *)((u8 *)dst + (s32)base);
     dst->field_0 = first;
     dst->field_2 = src->field_4;
     dst->field_4 = src->field_8;

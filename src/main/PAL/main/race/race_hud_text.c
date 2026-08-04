@@ -193,7 +193,7 @@ void BuildTileStrips(void) {
                 if (linear > 0) {
                     addPrimBase = buffers[0];
                     prevOffset = offset - 0x10;
-                    AddPrim((void *)(prevOffset + (s32)addPrimBase), (void *)((s32)offset + (s32)addPrimBase));
+                    AddPrim((void *)(prevOffset + (s32)addPrimBase), (void *)((u8 *)offset + (s32)addPrimBase));
                 }
 
                 col++;

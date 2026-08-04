@@ -2460,7 +2460,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     {
         s16 *vabIdBase = g_VabIds;
         slotReg *= 2;
-        vabIdPtr = (s16 *)((s32)vabIdBase + slotReg);
+        vabIdPtr = (s16 *)((u8 *)vabIdBase + slotReg);
     }
     *vabIdPtr = ret;
     asm volatile("" : "=r"(ret) : "0"(ret));
@@ -2505,7 +2505,7 @@ s32 CloseAudioSlot(s32 slot) {
         func_80071AC4(g_SeqHandle);
         /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
            (rather than naming the symbol) is what the retail code does. */
-        ids = (s16 *)((s32)flagsPtr + 0xC);
+        ids = (s16 *)((u8 *)flagsPtr + 0xC);
         func_80072B3C(ids[slot]);
         ret = 1;
     }

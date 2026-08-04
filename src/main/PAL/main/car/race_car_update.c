@@ -837,12 +837,12 @@ void SeedFinishCamera(void *arg0) {
 
     index = RAW(((GameCarRuntime *)base)->trackPointIndex);
     point = (GameTrackPoint *)((index * 3) << 3);
-    point = (GameTrackPoint *)((s32)point + (s32)track);
+    point = (GameTrackPoint *)((u8 *)point + (s32)track);
     g_CameraCarZ = point->z;
 
     index = RAW(((GameCarRuntime *)base)->trackPointIndex);
     point = (GameTrackPoint *)((index * 3) << 3);
-    point = (GameTrackPoint *)((s32)point + (s32)track);
+    point = (GameTrackPoint *)((u8 *)point + (s32)track);
     value = g_CameraCarSpeed;
     word0 = point->y;
     value += 0x40;
@@ -850,11 +850,11 @@ void SeedFinishCamera(void *arg0) {
     g_CameraCarSpeed = value;
     g_CameraCarY = word0;
 
-    value = *(s16 *)((s32)base + 0xB8);
+    value = *(s16 *)((u8 *)base + 0xB8);
     lastIndex = RAW(((GameCarRuntime *)base)->trackPointIndex);
     value <<= 11;
     point = (GameTrackPoint *)((lastIndex * 3) << 3);
-    point = (GameTrackPoint *)((s32)point + (s32)track);
+    point = (GameTrackPoint *)((u8 *)point + (s32)track);
     value += 0xC00;
     value -= point->angle;
     g_CameraCarHeading = value;

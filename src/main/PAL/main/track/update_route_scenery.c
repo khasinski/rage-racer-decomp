@@ -92,9 +92,9 @@ void UpdateRouteScenery(void) {
         r3 = (KF *)((s32)base + off);
         value = *(s16 *)((u8 *)r3 + 0);
         g_RouteSceneryRotX = value;
-        value = *(s16 *)((s32)r3 + 2);
+        value = *(s16 *)((u8 *)r3 + 2);
         g_RouteSceneryRotY = value;
-        value = *(s16 *)((s32)r3 + 4);
+        value = *(s16 *)((u8 *)r3 + 4);
         src = (u8 *)((idx * 32) + (s32)base);
         g_RouteSceneryKeyframe = r3;
         g_RouteSceneryRotZ = value;

@@ -163,6 +163,6 @@ void InitShuttleScenery(void) {
     state->travelStep = 0;
     value <<= 1;
     state->angleZ = v1;
-    value = *(s16 *)((s32)g_ShuttlePathDwellMax + value);
+    value = *(s16 *)((u8 *)g_ShuttlePathDwellMax + value);
     state->dwellCounter = value;
 }

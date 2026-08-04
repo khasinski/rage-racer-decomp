@@ -85,13 +85,13 @@ void RegisterModelBank(s32 *base, s32 index) {
     base[1] = value;
     value = base[2];
     count = base[0];
-    value = (s32)base + value;
+    value = (u8 *)base + value;
     base[2] = value;
     if (count != 0) {
         do {
             value = *ptr;
             i++;
-            value = (s32)base + value;
+            value = (u8 *)base + value;
             *ptr = value;
             value = base[0];
             ptr++;
@@ -170,11 +170,11 @@ void RegisterCourseModels(s32 *base) {
         do {
             value = *ptr;
             i++;
-            { s32 rel = value; value = (s32)base + rel; }
+            { s32 rel = value; value = (u8 *)base + rel; }
             *ptr = value;
             value = *item;
             ptr += 3;
-            { s32 rel = value; value = (s32)base + rel; }
+            { s32 rel = value; value = (u8 *)base + rel; }
             *item = value;
             item += 3;
         } while (i < limit);
@@ -191,15 +191,15 @@ void InstallTerrainCellData(s32 *base) {
 
     (void)&pad;
     g_TerrainCellGrid = base;
-    base = (s32 *)((s32)base + 0x800);
+    base = (s32 *)((u8 *)base + 0x800);
     g_CellVisibilityTable = base;
-    base = (s32 *)((s32)base + 0x1000);
+    base = (s32 *)((u8 *)base + 0x1000);
     ptr = base + 2;
     count = base[0];
     asm volatile("" : "=r"(count) : "0"(count));
     value = base[1];
     *(s32 *)0x1F80005C = (s32)ptr;
-    value = (s32)base + value;
+    value = (u8 *)base + value;
     asm volatile("" : "=r"(value) : "0"(value));
     D_801E4144 = count;
     *(s32 *)0x1F800060 = value;
@@ -208,7 +208,7 @@ void InstallTerrainCellData(s32 *base) {
         do {
             value = *ptr;
             i++;
-            value = (s32)base + value;
+            value = (u8 *)base + value;
             *ptr = value;
             ptr++;
         } while (i < count);
