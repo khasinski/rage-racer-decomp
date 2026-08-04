@@ -11,7 +11,8 @@ void SetFogNear(s32 arg0, s32 arg1) {
 
 s32 Lzc(s32 arg0) asm("func_80069C7C");
 
-s32 func_80068738(s32 arg0) {
+s32 SquareRoot0(s32 arg0) asm("func_80068738");
+s32 SquareRoot0(s32 arg0) {
     s32 data[16];
     s32 *hi;
     register s32 *lo asm("$6");
@@ -105,9 +106,9 @@ s32 SquareRoot12(s32 arg0) {
 
     shift -= 6;
     if (shift < 0) {
-        ret = func_80068738(value) >> -shift;
+        ret = SquareRoot0(value) >> -shift;
     } else {
-        ret = func_80068738(value) << shift;
+        ret = SquareRoot0(value) << shift;
     }
 
     return ret;

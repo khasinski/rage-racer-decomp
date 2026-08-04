@@ -27,7 +27,7 @@ extern long g_StInterruptPending asm("D_8019CA00");
 long CdControl(long com, void *param, long result) asm("func_8006A5A4");
 void CdDataCallback(long arg0) asm("func_8006A994");
 void func_8006A58C(long arg0);
-void func_8006CDA0(void);
+void CdRead2Callback(void) asm("func_8006CDA0");
 void data_ready_callback(void) asm("func_8006CE78");
 void StClearRingRange(long arg0, long arg1) asm("func_8006D0AC");
 void StSetRingParams(long arg0) asm("func_8006D1B0");
@@ -53,13 +53,14 @@ long CdRead2(long arg0) {
             g_StNotStream2Mode = 1;
         }
         CdDataCallback((long)data_ready_callback);
-        func_8006A58C((long)func_8006CDA0);
+        func_8006A58C((long)CdRead2Callback);
     }
 
     return CdControl(0x1B, 0, 0);
 }
 
-void func_8006CDA0(void) {
+void CdRead2Callback(void) asm("func_8006CDA0");
+void CdRead2Callback(void) {
     func_8006D1D0();
 }
 
