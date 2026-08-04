@@ -257,6 +257,7 @@ segments:
       - [0x4EFDC, c, PAL/main/audio/refresh_sequence_volume_scale]
       - [0x4F08C, c, PAL/main/audio/sequence_playback]
       - [0x4F26C, c, PAL/main/audio/apply_current_sequence_audio]
+      - [0x4F2D0, c, PAL/main/save/memcard_events]
       - [0x4F378, c, PAL/main/save/card_seek_param]
       - [0x4F3B0, c, PAL/main/save/card_read_status_pair]
       - [0x4F4E0, c, PAL/main/save/memcard]
