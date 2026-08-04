@@ -58,7 +58,8 @@ extern u8 g_LibcLowerDigits[] asm("D_800131F8");
 })
 #define LIBC_LOCAL_ZERO ({ s32 zero = '0'; zero; })
 
-s32 func_800632F0(u8 *dest, u8 *format, ...) {
+s32 LibcSprintf(u8 *dest, u8 *format, ...) asm("func_800632F0");
+s32 LibcSprintf(u8 *dest, u8 *format, ...) {
     LibcFormatWork work;
     u8 *argState[2];
 #define args argState[0]
