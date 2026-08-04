@@ -3,7 +3,7 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 
-#define FIELD(base, type, offset) (*(type)((s32)(base) + (offset)))
+#define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
 void SetCarKnockback(void *, s32, s32, s32) asm("func_80038CE8");            /* extern */
 s32 rsin(s32) asm("func_80068568");

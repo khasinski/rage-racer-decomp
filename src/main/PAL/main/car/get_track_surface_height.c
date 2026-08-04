@@ -7,7 +7,7 @@
 s32 rcos() asm("func_80068634");
 s32 rsin() asm("func_80068568");
 
-#define FIELD(base, type, offset) (*(type)((s32)(base) + (offset)))
+#define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
 typedef struct TrackPointWindow {
     s32 x;
