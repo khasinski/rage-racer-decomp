@@ -128,7 +128,7 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     return packet;
 }
 
-/* The two 12000-byte TILE strips func_800340D8 builds, backed by
+/* The two 12000-byte TILE strips BuildTileStrips builds, backed by
  * g_TileStripStorage. Nothing in the decompiled tree reads them back, so what
  * the strip renders is still unestablished -- see docs/names.md 15g. */
 extern u8 *g_TileStripBuffers[2] asm("D_8019C90C");
@@ -137,7 +137,8 @@ extern u8 g_TileStripStorage[] asm("D_801EB9DC");
 void func_800658FC(s32 mode);
 void func_80064FF8(u8 *prim);
 
-void func_800340D8(void) {
+void BuildTileStrips(void) asm("func_800340D8");
+void BuildTileStrips(void) {
     u8 **initBuffers;
     u8 **buffers;
     s32 row;

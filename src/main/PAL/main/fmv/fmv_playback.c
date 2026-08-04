@@ -202,7 +202,8 @@ void ResetReplayFrameCounts(void) {
     g_ReplayFramesTimeAttack = &D_801E8AFC;
 }
 
-void func_8001F100(void) {
+void ResetReplayWriteCursor(void) asm("func_8001F100");
+void ResetReplayWriteCursor(void) {
     u32 value;
 
     value = g_GrandPrixMode;

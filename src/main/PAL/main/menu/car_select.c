@@ -260,7 +260,8 @@ extern s32 D_8019C7B8;
 
 s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
 
-void func_80055524(void) {
+void RefreshCarUnlockState(void) asm("func_80055524");
+void RefreshCarUnlockState(void) {
     s32 index;
     s32 value;
     GameCarEntry *ptr;
@@ -426,7 +427,7 @@ void UpdateCarSelectScreen(void) {
                         (D_801E4138 < mode) ? D_801E4138 + 1 : 0;
                 }
                 UpdateOwnedCarNeighbours();
-                func_80055524();
+                RefreshCarUnlockState();
                 sel = g_PlayerCarIndex;
                 if ((g_PadHeld & 0x8000) && (g_PrevOwnedCarIndex != -1)) {
                     t = g_MenuViewAngleTarget;

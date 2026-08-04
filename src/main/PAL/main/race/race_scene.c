@@ -140,7 +140,7 @@ extern u8 g_MsgGame0Ok[] asm("D_80011488");
 
 void InitRenderState(s32) asm("func_80017884");
 
-void func_8001F100(void);
+void ResetReplayWriteCursor(void) asm("func_8001F100");
 
 void LoadTrackTexturePageRange(void) asm("func_8001D30C");
 
@@ -156,7 +156,7 @@ void ResetMirrorState(void) asm("func_8001A980");
 
 void func_800458CC(s32);
 
-void func_800340D8(void);
+void BuildTileStrips(void) asm("func_800340D8");
 
 void BuildRaceHudPrims(s32) asm("func_80032D5C");
 
@@ -565,7 +565,7 @@ void EnterRaceScene(void) {
 
     SetupDisplay240(0, 0, 0);
     InitRenderState(5);
-    func_8001F100();
+    ResetReplayWriteCursor();
     LoadTrackTexturePageRange();
     InitTrackLighting();
     g_TrackWalkStart = *(s32 *)g_TrackEventData;
@@ -624,7 +624,7 @@ void EnterRaceScene(void) {
     g_RaceTotalTime = 0;
     ResetMirrorState();
     func_800458CC(*(s32 *)(g_CamRow + 8));
-    func_800340D8();
+    BuildTileStrips();
     BuildRaceHudPrims(g_GrandPrixMode);
     g_AnimTimer = 0;
     g_SceneTimer = 0;
