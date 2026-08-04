@@ -65,21 +65,21 @@ typedef struct GameSaveBlock {
     s32 gpFile2[5];        /* +0x24 g_ExtraGrandPrixSave, same five fields */
     s32 timeAttack[5];     /* +0x38 g_TimeAttackSave; this slot reuses the
                               money word for g_GrandPrixSeries */
-    u16 unk4C;             /* +0x4C g_BgmSelection */
+    u16 bgmSelection;             /* +0x4C g_BgmSelection */
     u16 advancedUnlocked;  /* +0x4E g_AdvancedSeriesUnlocked */
     s32 maxClassReached[2];/* +0x50 g_MaxClassReached */
     u8 carTables[3][0x68]; /* +0x58 the three GameCarEntry tables, 13 rows of 8 */
-    u16 unk190[0x16];      /* +0x190 g_ClassRecords */
-    u16 unk1BC[0x10];      /* +0x1BC D_801E444C */
-    u16 unk1DC[0x400];     /* +0x1DC g_TeamLogoCanvas, the 0x800-byte scroll/VRAM buffer */
-    s32 unk9DC[0x10];      /* +0x9DC D_801E4408, [2][4] pairs on an 8-byte stride */
-    s32 unkA1C[0x10];      /* +0xA1C D_8019C70C, same shape */
+    u16 classRecords[0x16];      /* +0x190 g_ClassRecords */
+    u16 unlockFlags[0x10];      /* +0x1BC D_801E444C */
+    u16 teamLogoCanvas[0x400];     /* +0x1DC g_TeamLogoCanvas, the 0x800-byte scroll/VRAM buffer */
+    s32 ghostSamplesA[0x10];      /* +0x9DC D_801E4408, [2][4] pairs on an 8-byte stride */
+    s32 ghostSamplesB[0x10];      /* +0xA1C D_8019C70C, same shape */
     s32 rankRecords[2][4][5][4]; /* +0xA5C D_801E7744 ranking rows */
     s32 timeRecords[2][4][5][4]; /* +0xCDC D_8019CB78 time rows */
-    s32 unkF5C[2][4][3];   /* +0xF5C D_801E41E8 */
-    s32 unkFBC;            /* +0xFBC g_BgmVolumeSetting, clamped to 0..0xF on load */
-    s32 unkFC0;            /* +0xFC0 g_SfxVolumeSetting, clamped to 0..0xF on load */
-    s32 unkFC4;            /* +0xFC4 g_MonoOutput, forced to 0/1 on load */
+    s32 classTotals[2][4][3];   /* +0xF5C D_801E41E8 */
+    s32 bgmVolume;            /* +0xFBC g_BgmVolumeSetting, clamped to 0..0xF on load */
+    s32 sfxVolume;            /* +0xFC0 g_SfxVolumeSetting, clamped to 0..0xF on load */
+    s32 monoOutput;            /* +0xFC4 g_MonoOutput, forced to 0/1 on load */
     u8 courseProgress1[8]; /* +0xFC8 D_801E42EC */
     u8 courseProgress2[8]; /* +0xFD0 D_8009E874 */
     u8 padFD8[0x24];
