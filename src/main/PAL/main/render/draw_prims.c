@@ -75,8 +75,7 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     SPRT *prim;
     s32 shadeReg;
     s32 semiReg;
-    /* The pinned locals below are load-bearing: removing a pin changes .text. */
-    register u32 flagsReg asm("$17");
+    /* The remaining pinned local is load-bearing: removing it changes .text. */
     s32 y1Reg;
     s32 u0Reg;
     s32 v0Reg;
@@ -96,7 +95,6 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     shadeReg = shadeTex;
     semiReg = semiTrans;
     asm("" : : "r"(prim), "r"(shadeReg), "r"(semiReg));
-    flagsReg = flags;
     y1Reg = y1;
     u0Reg = u0;
     v0Reg = v0;
@@ -106,7 +104,7 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     x1Local = x1;
     bLocal = b;
     /* Match note: keep stack color load after callee-save argument setup. */
-    asm("" : : "r"(flagsReg), "r"(y1Reg), "r"(u0Reg), "r"(v0Reg), "r"(rReg));
+    asm("" : : "r"(flags), "r"(y1Reg), "r"(u0Reg), "r"(v0Reg), "r"(rReg));
     gLocal = g;
     SetSprt(prim);
 
@@ -136,9 +134,9 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     prim++;
     AddPrim(ot, oldPrim);
 
-    clutReg = flagsReg;
-    flagsReg &= 0x80;
-    if (flagsReg == 0) {
+    clutReg = flags;
+    flags &= 0x80;
+    if (flags == 0) {
         prim = func_80017390(ot, prim, clutReg & 0xFFFF);
     }
 
