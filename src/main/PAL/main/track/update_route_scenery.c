@@ -87,10 +87,10 @@ void UpdateRouteScenery(void) {
 
         idx = g_RaceSeries;
         g_RouteSceneryKeyIndex = 0;
-        n = *(s16 *)((u8 *)((idx * 4) + (s32)base) + 8);
+        n = *(s16 *)((u8 *)((idx * 4) + (u8 *)base) + 8);
         off = n * 12 + 0x50;
         r3 = (KF *)((s32)base + off);
-        value = *(s16 *)((s32)r3 + 0);
+        value = *(s16 *)((u8 *)r3 + 0);
         g_RouteSceneryRotX = value;
         value = *(s16 *)((s32)r3 + 2);
         g_RouteSceneryRotY = value;

@@ -10,7 +10,7 @@ void SetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
 
     if (arg1 != 0) {
         s32 *base = g_SoundSlotActive;
-        entry = (s32 *)((arg0 * 4) + (s32)base);
+        entry = (s32 *)((arg0 * 4) + (u8 *)base);
         if (*entry == 0) {
             PlaySoundSlotVoice(arg0, 0, 3);
             *entry = 1;
@@ -257,7 +257,7 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     {
         s16 *vabIdBase = g_VabIds;
         register s32 offset asm("$3") = slotReg * 2;
-        vabIdPtr = (s16 *)((s32)vabIdBase + offset);
+        vabIdPtr = (s16 *)((u8 *)vabIdBase + offset);
     }
     *vabIdPtr = ret;
     asm volatile("" : "=r"(ret) : "0"(ret));
@@ -338,7 +338,7 @@ s32 CloseVabOnlyAudioSlot(s32 slot) {
     func_8007865C(0);
     /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
        (rather than naming the symbol) is what the retail code does. */
-    ids = (s16 *)((s32)flagsPtr + 0xC);
+    ids = (s16 *)((u8 *)flagsPtr + 0xC);
     func_80072B3C(ids[slot]);
     ret = 1;
     }
@@ -816,13 +816,13 @@ extern u8 D_801E6D14[];
 
 /* Byte-offset view of g_MusicChannels (see game/sound.h): the retail code
  * keeps i * 0x18 in a register rather than indexing. */
-#define CHANNEL(byteOffset) (*(MusicChannel *)((s32)g_MusicChannels + (byteOffset)))
+#define CHANNEL(byteOffset) (*(MusicChannel *)((u8 *)g_MusicChannels + (byteOffset)))
 
 /* Byte-offset view of the sound-mode table: the retail code keeps
  * (mode * 3) << 3 in a register rather than indexing, so the scaled offset is
  * passed in. The comparison sites below index normally and were previously
  * spelled as word offsets off a s32 * -- D_800126D0 + 14 is entry 2, slot 0. */
-#define MODE(byteOffset) (*(SoundModeEntry *)((s32)D_800126D0 + (byteOffset)))
+#define MODE(byteOffset) (*(SoundModeEntry *)((u8 *)D_800126D0 + (byteOffset)))
 
 typedef struct SoundModeSlot {
     s32 left;
@@ -999,7 +999,7 @@ after_match:
             scaledLeft >>= 7;
             *(volatile s32 *)&CHANNEL(arg0).volLeft = scaledLeft;
             scaledRight = right * currentB;
-            entry = (SoundModeEntry *)((s32)entry + 8);
+            entry = (SoundModeEntry *)((u8 *)entry + 8);
             if (scaledRight < 0) {
                 scaledRight += 0x7F;
             }
@@ -1126,7 +1126,7 @@ void UpdateBasicEffectVoices(void) {
             *state = neg;
             break;
         }
-        state = (s32 *)((s32)state + 0x18);
+        state = (s32 *)((u8 *)state + 0x18);
         voicePacked += 0x10000;
         i++;
         offset += 0x18;
@@ -1841,7 +1841,7 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     base_minus = base - 1;
     index_offset = index * 4;
     lower_position = (s32 *)(index_offset + (s32)base_minus);
-    lower_position = (s32 *)((s32)lower_position + bank);
+    lower_position = (s32 *)((u8 *)lower_position + bank);
     lower_value_base = (s32)(base + 8);
     lower_value_indexed = index_offset + lower_value_base;
     lower_value_address = lower_value_indexed + bank;
@@ -2516,7 +2516,7 @@ void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) asm("func_8005E694");
 void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     s32 voiceOffset = voice * 4;
 
-    SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], *(s16 *)((s32)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
+    SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], *(s16 *)((u8 *)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
 }
 
 long SsUtKeyOffV(long voice) asm("func_80078018");

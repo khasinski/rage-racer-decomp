@@ -177,7 +177,7 @@ void BuildTileStrips(void) {
                 linear = (row * 32) + col;
                 buffer = buffers[0];
                 offset = linear * 16;
-                func_80064FF8((u8 *)((s32)offset + (s32)buffer));
+                func_80064FF8((u8 *)((u8 *)offset + (s32)buffer));
                 storeBaseV1 = buffers[0];
                 TILE_AT(storeBaseV1, offset).w = 2;
                 storeBaseV1 = buffers[0];

@@ -81,7 +81,7 @@ void RegisterModelBank(s32 *base, s32 index) {
     g_ModelBanks[index] = base;
     value = base[1];
     i = 0;
-    value = (s32)base + value;
+    value = (u8 *)base + value;
     base[1] = value;
     value = base[2];
     count = base[0];

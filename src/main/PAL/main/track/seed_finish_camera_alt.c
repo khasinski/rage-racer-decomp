@@ -37,7 +37,7 @@ void SeedFinishCameraAlt(void *arg0) {
     asm("" : "=r"(base) : "0"(base));
     dst = (Block16 *)g_CameraCar;
     src = (Block16 *)base;
-    end = (Block16 *)((s32)base + 0x190);
+    end = (Block16 *)((u8 *)base + 0x190);
     do {
         *dst = *src;
         src++;
@@ -54,7 +54,7 @@ void SeedFinishCameraAlt(void *arg0) {
     index = RAW(((GameCarRuntime *)base)->trackPointIndex);
     track = g_TrackPoints;
     point = (GameTrackPoint *)((index * 3) << 3);
-    point = (GameTrackPoint *)((s32)point + (s32)track);
+    point = (GameTrackPoint *)((u8 *)point + (s32)track);
     g_CameraCar[0] = point->x;
 
     index = RAW(((GameCarRuntime *)base)->trackPointIndex);

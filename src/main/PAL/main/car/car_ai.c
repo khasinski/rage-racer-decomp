@@ -376,7 +376,7 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     entry = (s16 *)(offset + (s32)base);
     raw = index * 3;
     raw <<= 2;
-    entry = (s16 *)((s32)entry + raw);
+    entry = (s16 *)((u8 *)entry + raw);
 
     if (target < 0x20) {
         state = (u8 *)&objReg->field_BC;

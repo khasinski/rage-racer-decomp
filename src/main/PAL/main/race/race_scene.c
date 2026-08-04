@@ -342,7 +342,7 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
     if (*(s16 *)((u8 *)arg0 + 0x168) > 0) {
         if (g_LapCount >= *(s16 *)((u8 *)arg0 + 0x168)) {
             routeOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
-            *(s32 *)((s32)route + routeOffset + 0xAC) += 1;
+            *(s32 *)((u8 *)route + routeOffset + 0xAC) += 1;
             routeOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
             if (*(s32 *)((s32)route + routeOffset + 0xAC) > 0xFFFF) {
                 *(s32 *)(route + 0xAC +

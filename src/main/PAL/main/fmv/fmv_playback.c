@@ -249,7 +249,7 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     base = g_ReplayFramesGp;
     src1 = (GameRenderSourcePoint *)srcA;
     first = src1->field_0;
-    dst = (GameRenderPairPoint *)((s32)dst + (s32)base);
+    dst = (GameRenderPairPoint *)((u8 *)dst + (s32)base);
     dst->first_0 = first;
     dst->first_2 = src1->field_4;
     dst->first_4 = src1->field_8;

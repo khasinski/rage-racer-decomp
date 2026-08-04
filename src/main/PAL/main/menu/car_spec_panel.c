@@ -69,7 +69,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     }
 
     gray = 0xB4;
-    ot = (void *)((s32)scratch + 8);
+    ot = (void *)((u8 *)scratch + 8);
 
     func_80046A2C(ot, 0xBC, 0x50, 0x14, 0x10, 0, 0xB4, 0, 0, 0, 0x244, 1, 1, 0x3A);
     func_80046A2C(ot, 0xE0, 0x72, 0x14, 0x10, 0x14, 0xB4, 0, 0, 0, 0x244, 1, 1, 0x3A);

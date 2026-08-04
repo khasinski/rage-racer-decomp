@@ -27,7 +27,7 @@ extern CameraKey g_CameraPath[] asm("D_8007F628");
 /* The retail code re-derives the keyframe address at every field access rather
  * than holding a pointer, so this stays a macro: a real pointer variable lets
  * the compiler compute the base once and drops 20 instructions. */
-#define KEY(byteOffset) (*(CameraKey *)((s32)g_CameraPath + (byteOffset)))
+#define KEY(byteOffset) (*(CameraKey *)((u8 *)g_CameraPath + (byteOffset)))
 
 s32 BezierEase(s32 t, s32 control) asm("func_80046598");
 s32 SetLookAtMatrix(s32 *obj) asm("func_80046248");

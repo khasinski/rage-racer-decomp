@@ -38,7 +38,7 @@ void UpdateShuttleScenery(s32 arg0) {
     phaseShift = phase * 32;
     baseIndex += phaseShift;
     phaseOffset = phase << 1;
-    limitPtr = (s16 *)((s32)limitPtr + phaseOffset);
+    limitPtr = (s16 *)((u8 *)limitPtr + phaseOffset);
     denom = *limitPtr;
     temp = *(s32 *)(g_ShuttlePathPoints + baseIndex);
     value = (denom - step) * temp;

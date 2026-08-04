@@ -244,7 +244,7 @@ void func_80030030(GameCarRuntime *arg0) {
 
             specBase = D_801E42D8;
             lo = car->field_A4 * 0xA0 / 1168 * 10000 /
-                 *(s32 *)((s32)specBase +
+                 *(s32 *)((u8 *)specBase +
                           (*(s16 *)(r + 0x76) << 2) + 0xE4);
             {
                 register s32 phaseValue asm("$5");

@@ -78,7 +78,7 @@ void UpdateMenuMode(void) {
 
     if (g_MenuHintButtonsVisible != 0) {
         if (g_PadType == 0x23) {
-            scratch = (void *)((s32)scratch + 4);
+            scratch = (void *)((u8 *)scratch + 4);
             func_80046A2C(scratch, 0xC0, 0x1A1, 0x20, 0xC, 0x94, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
             func_80046A2C(scratch, 0xF0, 0x1A1, 0x2C, 0xC, 0xB4, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
         } else {
@@ -118,7 +118,7 @@ s32 IsSpuTransferDone(void) {
 
     base = &D_801E8AFC;
     value1 = SpuTransferStatus(base, 0);
-    value1 = (value1 << 9) + (s32)base;
+    value1 = (value1 << 9) + (u8 *)base;
     value0 = *(s16 *)(value1 + 0x800);
     value1 = *(s16 *)(value1 + 0xC00);
 
@@ -181,7 +181,7 @@ void LoadAudioParameterTable(u16 *table) {
         do {
             col = 0;
             rowBaseOffset = rowOffset;
-            rightPtr = (s32 *)((s32)rowOffset + (s32)secondBase);
+            rightPtr = (s32 *)((u8 *)rowOffset + (s32)secondBase);
             do {
                 s32 leftValue;
 

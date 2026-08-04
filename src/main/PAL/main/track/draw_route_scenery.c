@@ -85,8 +85,8 @@ extern SVec g_ShuttlePathAngles[] asm("D_8007E3C0");
  * required on each read: a plain member access is marked as living in an
  * aggregate, which stops it aliasing the neighbouring state-> loads and
  * changes what the surrounding barriers do -- see common.h. */
-#define PATH(byteOffset) (*(ShuttlePath *)((s32)g_ShuttlePathPoints + (byteOffset)))
-#define ANGLES(byteOffset) (*(SVec *)((s32)g_ShuttlePathAngles + (byteOffset)))
+#define PATH(byteOffset) (*(ShuttlePath *)((u8 *)g_ShuttlePathPoints + (byteOffset)))
+#define ANGLES(byteOffset) (*(SVec *)((u8 *)g_ShuttlePathAngles + (byteOffset)))
 extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
 
 void InitShuttleScenery(void) asm("func_8003F0F8");
@@ -128,7 +128,7 @@ void InitShuttleScenery(void) {
         g_Shuttle1StartEndpoint = 0;
         g_Shuttle1TravelStep = 0;
         g_Shuttle1AngleZ = value;
-        v1 = *(s16 *)((s32)g_ShuttlePathDwellMax + index);
+        v1 = *(s16 *)((u8 *)g_ShuttlePathDwellMax + index);
         state->pathIndex = 1;
         g_Shuttle1DwellCounter = v1;
     } else {

@@ -649,7 +649,7 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     offset = i * 2;
     basePtr = D_80082520;
     offset = (offset + i) << 2;
-    cmd = (TimedDrawCommand *)((s32)basePtr + offset);
+    cmd = (TimedDrawCommand *)((u8 *)basePtr + offset);
 
 loop:
     basePtr = D_8009B250;
