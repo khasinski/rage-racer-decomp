@@ -1232,7 +1232,7 @@ s32 WriteMemoryCardSaveFile(
 extern char g_SaveFilePath[] asm("D_800128AC");
 extern char g_SaveTitleSjis[] asm("D_800127D8");
 
-s32 WriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
+s32 WriteMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *header) {
     u8 block0[0x200];
     u8 block1[MC_BLOCK_SIZE];
     s32 i;
@@ -1243,22 +1243,22 @@ s32 WriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
 
     GameMenuLoadPhase = 0x1000;
     return WriteMemoryCardSaveFile(
-        g_SaveFilePath + arg0 * 0x1A,
-        g_SaveTitleSjis + arg0 * 0x46,
+        g_SaveFilePath + slot * 0x1A,
+        g_SaveTitleSjis + slot * 0x46,
         block0,
-        arg1,
+        header,
         block1);
 }
 
-s32 ReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
+s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
     s32 fd;
     register void *buffer asm("$18");
     register s32 sum asm("$16");
     s32 i;
     register u16 *ptr asm("$4");
 
-    fd = arg0;
-    buffer = arg1;
+    fd = slot;
+    buffer = header;
     asm("" : "=r"(sum) : "r"(fd), "r"(buffer), "0"(0));
 
     GameMenuLoadPhase = 0x120;
@@ -1310,7 +1310,7 @@ s32 ReadVerifiedSaveHeader(s32 arg0, GameSaveHeaderRow *arg1) {
     return 0;
 }
 
-s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
+s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) {
     s32 fd;
     s32 i;
     s32 mask;
@@ -1320,7 +1320,7 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
     mask = 0;
     GameMenuLoadPhase = 0x110;
     i = 0;
-    buffer = arg0;
+    buffer = headers;
     nameOffset = 0;
 
     do {
@@ -1347,7 +1347,7 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *arg0) {
 extern volatile s32 GameMenuLoadPhase asm("D_8009B740");
 extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 
-s32 LoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
+s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     u8 block[MC_BLOCK_SIZE];
     void *header;
     s32 tries;
@@ -1355,13 +1355,13 @@ s32 LoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     s32 temp;
     s32 i;
 
-    header = arg1;
+    header = outHeader;
     GameMenuLoadPhase = 0x3000;
     tries = 0;
-    temp = arg0 * 2;
-    temp += arg0;
+    temp = slot * 2;
+    temp += slot;
     temp <<= 2;
-    temp += arg0;
+    temp += slot;
 
     {
         s32 nameOffset = temp * 2;
@@ -1461,7 +1461,7 @@ s32 CountMemoryCardFiles(s32 arg0, s32 arg1) {
 
 extern char g_McDirEntries[] asm("D_8009B748");
 
-s32 CalculateMemoryCardFreeBlocks(s32 arg0) {
+s32 CalculateMemoryCardFreeBlocks(s32 port) {
     u8 scratch[8];
     s32 i;
     s32 sum;
@@ -1471,13 +1471,13 @@ s32 CalculateMemoryCardFreeBlocks(s32 arg0) {
     i = 0;
     sum = 0;
 
-    if (arg0 > 0) {
+    if (port > 0) {
         ptr = (u8 *)g_McDirEntries;
         do {
             value = *(s32 *)(ptr + 0x18);
             sum += value;
             ptr += 0x28;
-        } while (++i < arg0);
+        } while (++i < port);
     }
 
     {
@@ -1496,14 +1496,14 @@ s32 CalculateMemoryCardFreeBlocks(s32 arg0) {
 extern s32 g_McCardFileCount asm("D_8009B738");
 extern s32 g_McFreeBlocks asm("D_8009B73C");
 
-s32 RefreshMemoryCardSaveStatus(s32 arg0, GameSaveHeaderRow *arg1) {
+s32 RefreshMemoryCardSaveStatus(s32 slot, GameSaveHeaderRow *header) {
     s32 ret;
 
     GameMenuLoadPhase = 0x100;
-    ClearSaveHeaderRows(arg1);
+    ClearSaveHeaderRows(header);
     g_McCardFileCount = CountMemoryCardFiles(0, 0);
     g_McFreeBlocks = CalculateMemoryCardFreeBlocks(g_McCardFileCount);
-    ret = ScanMemoryCardSaveHeaders(arg1);
+    ret = ScanMemoryCardSaveHeaders(header);
     GameMenuLoadPhase = 0x200;
 
     return ret;
@@ -1514,13 +1514,13 @@ extern char g_FmtPlayTime[] asm("D_80012FB8");
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf() asm("func_800632F0");
 
-void *FormatSaveElapsedTime(void *arg0, u32 arg1) {
-    u32 hours = arg1 / 216000;
-    u32 totalMinutes = arg1 / 3600;
-    u32 totalSeconds = arg1 / 60;
+void *FormatSaveElapsedTime(void *dst, u32 seconds) {
+    u32 hours = seconds / 216000;
+    u32 totalMinutes = seconds / 3600;
+    u32 totalSeconds = seconds / 60;
 
-    LibcSprintf(arg0, g_FmtPlayTime, hours, totalMinutes - (hours * 60), totalSeconds - (totalMinutes * 60));
-    return (u8 *)arg0 + 2;
+    LibcSprintf(dst, g_FmtPlayTime, hours, totalMinutes - (hours * 60), totalSeconds - (totalMinutes * 60));
+    return (u8 *)dst + 2;
 }
 
 extern u8 g_McMessageText[] asm("D_800128FC");
@@ -1537,10 +1537,10 @@ void DrawMemoryCardMessageLine(s32 arg0, s32 arg1) {
 extern u8 g_McHelpText[] asm("D_80012ADC");
 
 
-void DrawMemoryCardHelpPrompt(s32 arg0) {
+void DrawMemoryCardHelpPrompt(s32 page) {
     s32 i;
 
-    i = arg0 * 0x3C;
+    i = page * 0x3C;
     DrawText8x8Wide(0x50, 0x28, &g_McHelpText[i], 0x78CC);
     DrawText8x8Wide(0x50, 0x40, &g_McHelpText[i + 0x1E], 0x78CC);
 }
@@ -1700,8 +1700,8 @@ u16 PollMenuBackInput(void) {
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80023A60");
 
-void DrawMenuFadeOverlay(s32 arg0) {
-    DrawFullscreenFadeTile(arg0, 0x40);
+void DrawMenuFadeOverlay(s32 level) {
+    DrawFullscreenFadeTile(level, 0x40);
 }
 
 extern s32 g_McFadeStep asm("D_8009B9A0");
