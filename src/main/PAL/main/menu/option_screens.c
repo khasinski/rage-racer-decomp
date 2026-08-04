@@ -313,7 +313,8 @@ void InitTrackScene(void) {
     InitShuttleScenery();
 }
 
-void func_80025A14(void) {
+void EnterBgmSelectScreen(void) asm("func_80025A14");
+void EnterBgmSelectScreen(void) {
     SetDispMask(0);
     SetupDisplay240(0, 0, 0);
     g_FrameSyncThreshold = 0x80;
@@ -365,7 +366,8 @@ void UpdateOptionSceneFade(void) {
     func_80016EA0(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
-void func_80025BD8(void) {
+void UpdateBgmSelectLoad(void) asm("func_80025BD8");
+void UpdateBgmSelectLoad(void) {
     if (g_AssetLoadState == 0) {
         InstallCourseAssets();
         RequestTrackDataAssets();
@@ -375,7 +377,8 @@ void func_80025BD8(void) {
     UpdateOptionSceneFade();
 }
 
-void func_80025C20(void) {
+void UpdateBgmSelectFadeIn(void) asm("func_80025C20");
+void UpdateBgmSelectFadeIn(void) {
     if (g_AssetLoadState == 0) {
         g_FadeStep = 4;
     }

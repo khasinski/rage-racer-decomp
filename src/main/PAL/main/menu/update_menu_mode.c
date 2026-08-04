@@ -110,7 +110,8 @@ extern u8 D_801E8AFC;
 
 s32 SpuTransferStatus(void *arg0, s32 arg1) asm("func_8007B014");
 
-s32 func_8005AFD4(void) {
+s32 IsSpuTransferDone(void) asm("func_8005AFD4");
+s32 IsSpuTransferDone(void) {
     u8 *base;
     s32 value0;
     s32 value1;
