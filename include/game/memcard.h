@@ -8,6 +8,11 @@
  * DrawMemoryCardMessage is called with the value minus one. The names come
  * from the retail strings the index reaches through D_8007D99C, quoted here.
  */
+/* Geometry of the payload. The file around it is icon + header + this block
+ * + header again; see the layout note above. */
+#define MC_BLOCK_SIZE         0x1000
+#define MC_BLOCK_CHECKSUM_OFS 0xFFC
+
 #define MC_PROMPT_NONE          0x00
 #define MC_PROMPT_SELECT_SAVE   0x01  /* "Select file to save." */
 #define MC_PROMPT_SELECT_LOAD   0x02  /* "Select file to load." */

@@ -810,7 +810,7 @@ void StoreSaveStateBlock(u8 *arg0) {
         for (; count < 0x7FE; count++) {
             checksum += *checksumSrc++;
         }
-        *(u32 *)(arg0 + 0xFFC) = ~checksum;
+        *(u32 *)(arg0 + MC_BLOCK_CHECKSUM_OFS) = ~checksum;
     }
 }
 
@@ -884,8 +884,8 @@ s32 LoadSaveStateBlock(u8 *arg0) {
         } while (i < 0x7FE);
         DebugPrintf(g_MsgSaveChecksumOk);
         sum = ~sum;
-        DebugPrintf(g_FmtSaveChecksum, *(s32 *)(base + 0xFFC), sum);
-        if (*(s32 *)(base + 0xFFC) != sum) {
+        DebugPrintf(g_FmtSaveChecksum, *(s32 *)(base + MC_BLOCK_CHECKSUM_OFS), sum);
+        if (*(s32 *)(base + MC_BLOCK_CHECKSUM_OFS) != sum) {
             return 0;
         }
     }
@@ -1217,7 +1217,7 @@ s32 WriteMemoryCardSaveFile(
         return 0;
     }
     GameMenuLoadPhase = attempt | 0x1550;
-    if (BiosFileWrite(fd, saveBlock, 0x1000) != 0x1000) {
+    if (BiosFileWrite(fd, saveBlock, MC_BLOCK_SIZE) != MC_BLOCK_SIZE) {
         return 0;
     }
     GameMenuLoadPhase = attempt | 0x1560;
@@ -1234,7 +1234,7 @@ extern char g_SaveTitleSjis[] asm("D_800127D8");
 
 s32 WriteMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     u8 block0[0x200];
-    u8 block1[0x1000];
+    u8 block1[MC_BLOCK_SIZE];
     s32 i;
 
     for (i = 0x1FF; i >= 0; i--) {
@@ -1348,7 +1348,7 @@ extern volatile s32 GameMenuLoadPhase asm("D_8009B740");
 extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 
 s32 LoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
-    u8 block[0x1000];
+    u8 block[MC_BLOCK_SIZE];
     void *header;
     s32 tries;
     s32 fd;
@@ -1395,7 +1395,7 @@ s32 LoadMemoryCardSaveSlot(s32 arg0, GameSaveHeaderRow *arg1) {
     }
 
     GameMenuLoadPhase = 0x3600;
-    if (BiosFileRead(fd, block, 0x1000) != 0x1000) {
+    if (BiosFileRead(fd, block, MC_BLOCK_SIZE) != MC_BLOCK_SIZE) {
         return 0;
     }
 
