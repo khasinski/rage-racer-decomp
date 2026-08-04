@@ -22,7 +22,7 @@
  * The func_80068A2C TU begins with 12 bytes (three 0x00000000 words) of
  * inter-object alignment padding that splat over-split into three bogus
  * single-`nop` "functions" (func_80068A2C/A30/A34).  The previous TU
- * (func_800689A8, [0x591A8,0x5922C)) ends cleanly at 0x5922C with
+ * (SquareRoot0, [0x591A8,0x5922C)) ends cleanly at 0x5922C with
  * `jr ra; li v0,0`, so these three words are leading pad, not its tail.
  * They are emitted here the same way every other pure-padding TU in this
  * binary is (compare func_80069CBC: `u32 x[3] __attribute__((section(".text")))`).

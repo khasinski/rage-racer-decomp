@@ -8,7 +8,7 @@
 extern void DrawPlayerCarModel(void *) asm("func_8001DAB0");
 extern s32 FindNearestTrackCamera() asm("func_80043B18");
 extern s32 rcos(s32) asm("func_80068634");
-extern s32 func_800689A8(s32);
+extern s32 SquareRoot0(s32) asm("func_800689A8");
 extern void *ApplyMatrixLV(void *, void *, void *) asm("func_80068F80");
 extern void *func_80069CC8(void *, void *);
 /* Chase-view (mode 1) distance preset, 0..2: eye height 0x3A / 0x59 / 0x97 and
@@ -278,7 +278,7 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
                 if (turnLimit < turnAccel) {
 block_29:
                     g_ChaseYawLag = turnLimit;
-                    g_ChaseYawRampPos = func_800689A8(turnLimit * turnFactor);
+                    g_ChaseYawRampPos = SquareRoot0(turnLimit * turnFactor);
                 } else {
 block_30:
                     g_ChaseYawLag = turnAccel;
@@ -298,7 +298,7 @@ block_30:
                 if (turnLimit < turnAccel) {
 block_34:
                     g_ChaseYawLag = 0 - turnLimit;
-                    g_ChaseYawRampNeg = func_800689A8(turnLimit * turnFactor);
+                    g_ChaseYawRampNeg = SquareRoot0(turnLimit * turnFactor);
                 } else {
                     var_v0_713 = 0 - turnAccel;
 block_36:
@@ -373,7 +373,7 @@ block_52:
         scratch[2] -= sp38[0];
         scratch[3] -= sp38[1];
         scratch[4] -= sp38[2];
-        temp_v0_687 = func_800689A8((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
+        temp_v0_687 = SquareRoot0((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
         sp38[3] = temp_v0_687;
         scratch[6] = 0x400 - (Atan2(sp38[1] + 0x28, temp_v0_687) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
@@ -416,7 +416,7 @@ block_52:
         temp_v0_859 = scratch[4] - (FIELD(arg1, s32 *, 8) + sp28[2]);
         sp38[2] = temp_v0_859;
         squaredZ = temp_v0_859 * temp_v0_859;
-        scratch[6] = 0x400 - (Atan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
+        scratch[6] = 0x400 - (Atan2(0 - sp38[1], SquareRoot0(squaredX + squaredZ)) & 0xFFF);
         var_s0_879 = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
         var_v0_881 = 2;
         scratch[7] = var_s0_879;
@@ -559,7 +559,7 @@ block_52:
         scratch[2] -= sp38[0];
         scratch[3] -= sp38[1];
         scratch[4] -= sp38[2];
-        temp_v0_1320 = func_800689A8((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
+        temp_v0_1320 = SquareRoot0((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
         sp38[3] = temp_v0_1320;
         scratch[6] = 0x400 - (Atan2(sp38[1], temp_v0_1320) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
@@ -612,7 +612,7 @@ block_52:
         temp_v0_1549 = scratch[4] - (FIELD(arg1, s32 *, 8) + sp28[2]);
         sp38[2] = temp_v0_1549;
         squaredZ = temp_v0_1549 * temp_v0_1549;
-        scratch[6] = 0x400 - (Atan2(0 - sp38[1], func_800689A8(squaredX + squaredZ)) & 0xFFF);
+        scratch[6] = 0x400 - (Atan2(0 - sp38[1], SquareRoot0(squaredX + squaredZ)) & 0xFFF);
         var_s0_879 = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
         var_v0_881 = 4;
         scratch[7] = var_s0_879;

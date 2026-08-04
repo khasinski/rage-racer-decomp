@@ -11,8 +11,8 @@ void SetFogNear(s32 arg0, s32 arg1) {
 
 s32 Lzc(s32 arg0) asm("func_80069C7C");
 
-s32 SquareRoot0(s32 arg0) asm("func_80068738");
-s32 SquareRoot0(s32 arg0) {
+s32 CordicRotate(s32 arg0) asm("func_80068738");
+s32 CordicRotate(s32 arg0) {
     s32 data[16];
     s32 *hi;
     register s32 *lo asm("$6");
@@ -106,9 +106,9 @@ s32 SquareRoot12(s32 arg0) {
 
     shift -= 6;
     if (shift < 0) {
-        ret = SquareRoot0(value) >> -shift;
+        ret = CordicRotate(value) >> -shift;
     } else {
-        ret = SquareRoot0(value) << shift;
+        ret = CordicRotate(value) << shift;
     }
 
     return ret;
@@ -156,7 +156,7 @@ void InitGeom(void) {
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  *
- * Symbol:   func_800689A8
+ * Symbol:   SquareRoot0
  * Address:  0x800689A8 (PAL/main, retail range [0x591A8, 0x5922C))
  * Reason:   GTE-LZC fixed-point square-root helper. Reads leading-sign-bit
  *           count from LZCR ($31), normalises the operand by an even shift,
