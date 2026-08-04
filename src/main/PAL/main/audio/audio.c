@@ -131,7 +131,7 @@ extern char g_MsgVabTransBodyError[] asm("D_80012694");
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
-void func_80063D9C(s32 arg0);
+void BiosExit(s32 arg0) asm("func_80063D9C");
 
 s32 InitSoundWithVab(s32 header, s32 body) {
     s32 headerReg = header;
@@ -156,14 +156,14 @@ s32 InitSoundWithVab(s32 header, s32 body) {
     fail = -1;
     if (currentVabId == fail) {
         DebugPrintf(g_MsgVabOpenHeadError);
-        func_80063D9C(1);
+        BiosExit(1);
     }
 
     ret = func_800730BC(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
         DebugPrintf(g_MsgVabTransBodyError);
-        func_80063D9C(1);
+        BiosExit(1);
     }
 
     func_8007317C(1);
@@ -200,7 +200,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E
 s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) asm("func_8005BA20");
 s32 func_8005E600(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0) asm("func_8005B948");
-void func_80063D9C(s32 arg0);
+void BiosExit(s32 arg0) asm("func_80063D9C");
 void func_800736E8(void);
 void func_80073614(s32 arg0);
 void func_80073748(s32 arg0, s32 arg1);
@@ -269,14 +269,14 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
         fail = -1;
         if (currentVabId == fail) {
             DebugPrintf(g_MsgVabOpenHeadError);
-            func_80063D9C(1);
+            BiosExit(1);
         }
 
         ret = func_800730BC(bodyReg, currentVabId);
         *vabIdPtr = ret;
         if ((s16)ret == fail) {
             DebugPrintf(g_MsgVabTransBodyError);
-            func_80063D9C(1);
+            BiosExit(1);
         }
     }
 
@@ -376,14 +376,14 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     fail = -1;
     if (currentVabId == fail) {
         DebugPrintf(g_MsgVabOpenHeadError);
-        func_80063D9C(1);
+        BiosExit(1);
     }
 
     ret = func_800730BC(body, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
         DebugPrintf(g_MsgVabTransBodyError);
-        func_80063D9C(1);
+        BiosExit(1);
     }
 
     if (tableReg != 0) {
@@ -414,14 +414,14 @@ s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     fail = -1;
     if (currentVabId == fail) {
         DebugPrintf(g_MsgVabOpenHeadError);
-        func_80063D9C(1);
+        BiosExit(1);
     }
 
     ret = func_800730BC(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
         DebugPrintf(g_MsgVabTransBodyError);
-        func_80063D9C(1);
+        BiosExit(1);
     }
 
     func_8007317C(1);
@@ -2433,7 +2433,7 @@ extern s32 g_VabTransferDone asm("D_801F17B4");
 extern char g_MsgSeqVabOpenHeadError[] asm("D_80012788");
 extern char g_MsgSeqVabTransBodyError[] asm("D_800127A0");
 
-void func_80063D9C(s32 arg0);
+void BiosExit(s32 arg0) asm("func_80063D9C");
 s32 func_8006F004(s32 arg0);
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
@@ -2469,7 +2469,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     fail = -1;
     if (currentVabId == fail) {
         DebugPrintf(g_MsgSeqVabOpenHeadError);
-        func_80063D9C(1);
+        BiosExit(1);
     }
 
     ret = func_800730BC(bodyReg, currentVabId);
@@ -2477,7 +2477,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     currentVabId = (s16)ret;
     if (currentVabId == fail) {
         DebugPrintf(g_MsgSeqVabTransBodyError);
-        func_80063D9C(1);
+        BiosExit(1);
     }
 
     *(s32 *)&g_SeqHandle = (s16)func_8006F004(seqReg);

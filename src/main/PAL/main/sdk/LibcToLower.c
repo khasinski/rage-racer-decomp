@@ -17,7 +17,7 @@ long LibcToLower(long arg0) {
     return value & 0xFF;
 }
 
-u_long func_80063D9C[20] __attribute__((section(".text"))) = {
+u_long g_BiosCallStubs[20] asm("func_80063D9C") __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090038,
