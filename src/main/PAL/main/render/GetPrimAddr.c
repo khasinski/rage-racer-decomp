@@ -209,7 +209,8 @@ void func_800650B4(u8 *arg0) {
     arg0[7] = 2;
 }
 
-void func_800650C8(u8 *arg0) {
+void SetDrawMove(u8 *arg0) asm("func_800650C8");
+void SetDrawMove(u8 *arg0) {
     arg0[3] = 5;
     arg0[7] = 1;
     *(u32 *)&arg0[8] = 0x80000000;
