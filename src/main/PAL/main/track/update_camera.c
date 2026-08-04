@@ -425,7 +425,7 @@ block_52:
         break;
     case 3:
         *(Block16 *)&scratch[2] = *(Block16 *)arg1;
-        if ((temp_v1_40 & 0xFF) || (g_CameraModePrev != 3)) {
+        if (((u8)temp_v1_40) || (g_CameraModePrev != 3)) {
             g_CamPathNode = cameraNodeIndex;
             g_CamPathFrame = 0;
             if (g_CameraModePrev == 3) {
@@ -579,7 +579,7 @@ block_52:
         temp_a3_1372 = cameraNodeIndex * 0x24;
         temp_v1_1373 = temp_a3_1372 + case4Base;
         *(Block16 *)&scratch[2] = *(Block16 *)temp_v1_1373;
-        if ((temp_v1_40 & 0xFF) || (g_CameraModePrev != 4)) {
+        if (((u8)temp_v1_40) || (g_CameraModePrev != 4)) {
             g_CamPathFrame = 0;
         } else if (g_CamPathFrame < FIELD((temp_a3_1372 + (u32)g_TrackCameras), s32 *, 0x1C)) {
             g_CamPathFrame += 1;

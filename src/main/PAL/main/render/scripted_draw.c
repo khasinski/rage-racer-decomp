@@ -787,10 +787,10 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
         (s16)(savedX1 + 2),
         (s16)(savedY1 + 4),
         0,
-        color & 0xFF,
+        (u8)color,
         0,
         white);
     func_80047460(
-        ot, (s16)savedX0, (s16)savedY0, (s16)savedX1, (s16)(savedY1 + 0), 0, color & 0xFF, 0, white);
+        ot, (s16)savedX0, (s16)savedY0, (s16)savedX1, (s16)(savedY1 + 0), 0, (u8)color, 0, white);
     D_8009B264 += 0x60;
 }

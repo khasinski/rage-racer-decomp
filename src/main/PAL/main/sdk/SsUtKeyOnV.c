@@ -114,7 +114,7 @@ long SsUtKeyOnV(
     g_SndVoiceState[idx].tone = tone_value;
     SpuVmRebuildVoiceTable();
     if ((short)g_SndCurrentAttr.vag == 0xFF) {
-        SpuVmNoiseKeyOn(voice & 0xFF);
+        SpuVmNoiseKeyOn((u8)voice);
     } else {
         SpuVmScaleVabVolume(1, SpuVmCalculateTonePitch(note, fine));
     }

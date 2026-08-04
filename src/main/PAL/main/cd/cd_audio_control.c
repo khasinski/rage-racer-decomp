@@ -11,7 +11,7 @@ extern s32 g_CdCommandStep asm("D_8007F60C");
 
 void RequestCdTrack(s32 arg0);
 void RequestCdTrack(s32 arg0) {
-    g_CdTrackPending = arg0 & 0xFF;
+    g_CdTrackPending = (u8)arg0;
     g_CdTrackStep = 0;
     g_CdCommandPending = -1;
     g_CdCommandStep = 0;

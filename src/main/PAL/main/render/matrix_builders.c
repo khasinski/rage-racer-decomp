@@ -4,7 +4,7 @@
 
 /*
  * Builds a single-axis rotation matrix into `out` (0x1000 == 1.0 fixed-point).
- * axisMode selects the axis from (axisMode & 0xFF) - 0x58:
+ * axisMode selects the axis from ((u8)axisMode) - 0x58:
  *   0/0x20 -> rotation about X, 1/0x21 -> about Y, 2/0x22 -> about Z.
  * sinTerm/cosTerm are the precomputed sin/cos of the rotation angle.
  */
@@ -12,7 +12,7 @@ void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32
 void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axisMode) {
     s32 one;
 
-    switch ((axisMode & 0xFF) - 0x58) {
+    switch (((u8)axisMode) - 0x58) {
     case 0:   /* X-axis rotation */
     case 32:
         one = 0x1000;

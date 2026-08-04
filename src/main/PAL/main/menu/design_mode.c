@@ -61,10 +61,10 @@ s32 DrawDesignModeScreen(s32 arg0) {
     intensity = (u32)D_8009B2D4 / 4;
 
     func_80046A2C(ot, 0xB4, y, 0x18, 0xC, 0x94, 0xDC,
-                  intensity & 0xFF, intensity & 0xFF, intensity & 0xFF,
+                  (u8)intensity, (u8)intensity, (u8)intensity,
                   0x244, 0, 1, 0x3B);
     func_80046A2C(ot, 0xCE, y, 0x14, 0xC, 0xE0, 0xDC,
-                  intensity & 0xFF, intensity & 0xFF, intensity & 0xFF,
+                  (u8)intensity, (u8)intensity, (u8)intensity,
                   0x244, 0, 1, 0x3B);
 
     for (row = 0; row < 6; row++) {
@@ -80,8 +80,8 @@ s32 DrawDesignModeScreen(s32 arg0) {
             func_80046A2C(ot, 0xB4 + column * 0x10,
                           0xC0 + row * 0x20 - (s16)offset,
                           0xC, 0x18, 0xF4, 0x60,
-                          intensity & 0xFF, intensity & 0xFF,
-                          intensity & 0xFF,
+                          (u8)intensity, (u8)intensity,
+                          (u8)intensity,
                           clutX, 0, 1, 0x39);
         }
     }

@@ -368,7 +368,7 @@ u32 DrawEngineerShopScreen(s32 arg0) {
         amount = (u32)product / 2048;
     }
 
-    func_80052158((s16)amount, (D_8009B2EC >> 2) & 0xFF, g_PlayerCarIndex);
+    func_80052158((s16)amount, (u8)(D_8009B2EC >> 2), g_PlayerCarIndex);
     return D_8009B2EC;
 }
 

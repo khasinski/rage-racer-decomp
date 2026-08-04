@@ -506,7 +506,7 @@ s32 DrawCarShopScreen(s32 arg0) {
     amount = value << 16;
     amount >>= 16;
     limit = g_PlayerCarIndex;
-    phase = ((u32)D_8009B2E8 / 4) & 0xFF;
+    phase = (u8)((u32)D_8009B2E8 / 4);
     channel = limit;
     func_80052158(amount, phase, channel);
 

@@ -131,7 +131,7 @@ long CdReadRetry(long arg0) {
         t = *q;
     }
     buf[0] = t;
-    if ((t & 0xFF) != CdMode() || arg0 != 0) {
+    if (((u8)t) != CdMode() || arg0 != 0) {
         if (CdControl(0xE, (long)buf, 0) == 0) {
             g_CdReadRemaining = -1;
             return g_CdReadRemaining;

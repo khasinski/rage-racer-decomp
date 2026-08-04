@@ -494,9 +494,9 @@ s32 LibcToUpper(s32 arg0);
 s32 LibcToUpper(s32 arg0) {
     u8 value = arg0;
 
-    if (g_LibcCtype[value & 0xFF] & 2) {
+    if (g_LibcCtype[(u8)value] & 2) {
         value = arg0 - 0x20;
     }
 
-    return value & 0xFF;
+    return (u8)value;
 }

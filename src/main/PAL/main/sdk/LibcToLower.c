@@ -10,11 +10,11 @@ long LibcToLower(long arg0);
 long LibcToLower(long arg0) {
     u_char value = arg0;
 
-    if (g_LibcCtype[value & 0xFF] & 1) {
+    if (g_LibcCtype[(u8)value] & 1) {
         value = arg0 + 0x20;
     }
 
-    return value & 0xFF;
+    return (u8)value;
 }
 
 u_long g_BiosCallStubs[20] asm("func_80063D9C") __attribute__((section(".text"))) = {

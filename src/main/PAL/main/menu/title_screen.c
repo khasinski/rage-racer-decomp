@@ -101,7 +101,7 @@ void DrawTitleFadeOverlay(s32 arg0) {
     void *next;
     s32 color;
 
-    color = arg0 & 0xFF;
+    color = (u8)arg0;
     base = g_DrawBuffer;
     base += 0xCC;
     scratch = (void **)0x1F800000;

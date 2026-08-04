@@ -786,7 +786,7 @@ void DrawMenuLightBurst(s32 arg) {
             register u32 c0 asm("$2");
             u0 = (u32)m11 / 256;
             c1 = (u32)(cnt * 75) / 256;
-            c0 = u0 & 0xFF;
+            c0 = (u8)u0;
             DrawGradientLine(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, c0, c0, c0, c1, c1, c1, 0x60);
             s2 += 0x000A0000;
             s1 += 0x00070000;
@@ -803,7 +803,7 @@ void DrawMenuLightBurst(s32 arg) {
             register u32 sh asm("$8");
             register u32 col asm("$2");
             sh = (u32)vv / 512;
-            col = sh & 0xFF;
+            col = (u8)sh;
             func_80047024(s3, x0, y0, x1, 2, col, col, col, 0x60);
             s0++;
         } while (s0 < 0x21);

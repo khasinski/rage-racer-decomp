@@ -84,7 +84,7 @@ void DrawPadTypeHint(void) {
     } else {
         raw_base = g_PadType;
         asm("" : "=r"(raw_base) : "0"(raw_base));
-        value = raw_base & 0xFF;
+        value = (u8)raw_base;
         g_LastValidPadType = raw_base;
     }
 

@@ -147,7 +147,7 @@ void SpuVmScaleVabVolume(long arg0, long val) {
     vidx = F0 * 8;
 
     g = g_SndCurrentSeqSep;
-    center = g & 0xff;
+    center = (u8)g;
     {
         long idx4 = center * 4;
         t = g << 16;

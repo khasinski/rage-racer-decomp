@@ -13,7 +13,7 @@ void SsSeqSetChannelPitchBend(long seq, long sep, long arg2, long arg3) {
     u_char channel = state->channel;
     SeqStruct *channel_state = (SeqStruct *)((u_char *)state + channel);
     u_char pan = channel_state->panpot[0];
-    long bend = arg3 & 0xFF;
+    long bend = (u8)arg3;
 
     if (((state->padAA >> channel) & 1) == 0 && state->left_volume != 0) {
         if ((u_char)arg3 != 0) {

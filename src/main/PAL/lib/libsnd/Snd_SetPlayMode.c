@@ -26,7 +26,7 @@ void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
     state = (SeqStruct *)(sepOffset + (long)*sequence);
     state->flags &= ~0x200;
     flagsState = (SeqStruct *)(sepOffset + (long)*sequence);
-    mode = playMode & 0xFF;
+    mode = (u8)playMode;
     flagsState->flags &= ~4;
     state->unk46 = loopCount;
 
@@ -44,12 +44,12 @@ void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
 
 void SsSeqPlay(long seq, long playMode, long loopCount) asm("func_800725F0");
 void SsSeqPlay(long seq, long playMode, long loopCount) {
-    Snd_SetPlayMode((short)seq, 0, playMode & 0xFF, (short)loopCount);
+    Snd_SetPlayMode((short)seq, 0, (u8)playMode, (short)loopCount);
 }
 
 void SsSepPlay(long seq, long sep, long playMode, long loopCount) asm("func_80072628");
 void SsSepPlay(long seq, long sep, long playMode, long loopCount) {
-    Snd_SetPlayMode((short)seq, (short)sep, playMode & 0xFF, (short)loopCount);
+    Snd_SetPlayMode((short)seq, (short)sep, (u8)playMode, (short)loopCount);
 }
 
 void _SsSndSetVol(long seq, long sep, long left, long right) asm("func_80072660");

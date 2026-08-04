@@ -198,10 +198,10 @@ u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {
     u_long pad[4];
 
     if (tw != 0) {
-        pad[0] = (tw->x & 0xFF) >> 3;
-        pad[2] = (-tw->w & 0xFF) >> 3;
-        pad[1] = (tw->y & 0xFF) >> 3;
-        pad[3] = (-tw->h & 0xFF) >> 3;
+        pad[0] = ((u8)tw->x) >> 3;
+        pad[2] = ((u8)(-tw->w)) >> 3;
+        pad[1] = ((u8)tw->y) >> 3;
+        pad[3] = ((u8)(-tw->h)) >> 3;
         return 0xE2000000 | (pad[1] << 0xF) | (pad[0] << 0xA) |
                (pad[3] << 5) | pad[2];
     }
@@ -220,7 +220,7 @@ u_long get_dx(DispEnv *env) {
 
     value = *modep;
     asm("" : "=r"(value) : "0"(value));
-    mode = value & 0xFF;
+    mode = (u8)value;
 
     switch (mode) {
     case 1:

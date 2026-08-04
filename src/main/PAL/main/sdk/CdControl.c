@@ -33,7 +33,7 @@ long CdControl(long arg0, void *arg1, long arg2) {
     cmd = arg0;
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
-    command = cmd & 0xFF;
+    command = (u8)cmd;
     base = g_CdCommandNeedsSetloc;
     savedMode = g_CdSyncCallback;
     offset = command * 4;
@@ -55,7 +55,7 @@ long CdControl(long arg0, void *arg1, long arg2) {
         }
 
         g_CdSyncCallback = savedMode;
-        if (CD_cw(cmd & 0xFF, arg, arg2Reg, 0) == 0) {
+        if (CD_cw((u8)cmd, arg, arg2Reg, 0) == 0) {
             goto done;
         }
 
@@ -84,7 +84,7 @@ long CdControlF(long arg0, void *arg1) {
     cmd = arg0;
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
-    command = cmd & 0xFF;
+    command = (u8)cmd;
     asm("" : "=r"(command) : "0"(command));
     base = g_CdCommandNeedsSetloc;
     savedMode = g_CdSyncCallback;
@@ -107,7 +107,7 @@ long CdControlF(long arg0, void *arg1) {
         }
 
         g_CdSyncCallback = savedMode;
-        if (CD_cw(cmd & 0xFF, arg, 0, 1) == 0) {
+        if (CD_cw((u8)cmd, arg, 0, 1) == 0) {
             goto done;
         }
 
@@ -146,7 +146,7 @@ long CdControlB(long arg0, void *arg1, long arg2) {
     cmd = arg0;
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
-    command = cmd & 0xFF;
+    command = (u8)cmd;
     base = g_CdCommandNeedsSetloc;
     savedMode = g_CdSyncCallback;
     offset = command * 4;
@@ -168,7 +168,7 @@ long CdControlB(long arg0, void *arg1, long arg2) {
         }
 
         g_CdSyncCallback = savedMode;
-        if (CD_cw(cmd & 0xFF, arg, arg2Reg, 0) == 0) {
+        if (CD_cw((u8)cmd, arg, arg2Reg, 0) == 0) {
             result = 0;
             goto done;
         }

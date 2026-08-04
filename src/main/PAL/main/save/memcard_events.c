@@ -25,9 +25,9 @@ void func_8005F4D8(void);
 void CardReadAndSetMode(s32 arg0);
 void CardReadAndSetMode(s32 arg0) {
     func_8005F304(arg0);
-    while (_card_clear(arg0 & 0xFF) == 0) {}
+    while (_card_clear((u8)arg0) == 0) {}
     func_8005F55C();
     func_8005F2AC();
-    _card_load(arg0 & 0xFF);
+    _card_load((u8)arg0);
     func_8005F4D8();
 }

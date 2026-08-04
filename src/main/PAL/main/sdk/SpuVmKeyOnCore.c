@@ -24,7 +24,7 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
     u_char stackPad[8];
 
     rawVoice = voice;
-    voice = rawVoice & 0xFF;
+    voice = (u8)rawVoice;
     index = voice * 16;
     *(u_short *)&g_SndVoiceRegs[index + 2] = fine;
     g_SndVoiceFlags[voice] |= 3;
@@ -41,7 +41,7 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
         highMask = index << voiceIndex;
     }
 
-    voiceIndex = rawVoice & 0xFF;
+    voiceIndex = (u8)rawVoice;
     index = ((voiceIndex * 3) << 2) + voiceIndex;
     index <<= 2;
     count = g_SndVoiceCount;
@@ -59,7 +59,7 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
         } while ((u_short)i < voiceIndex);
     }
 
-    voiceIndex = rawVoice & 0xFF;
+    voiceIndex = (u8)rawVoice;
     index = ((voiceIndex * 3) << 2) + voiceIndex;
     index <<= 2;
     g_SndVoiceStatePitch[index + 0x17] = 2;

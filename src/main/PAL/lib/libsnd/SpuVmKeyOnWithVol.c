@@ -20,7 +20,7 @@ void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
     long ret;
 
     g_SndCurrentPriority = 0x7F;
-    ret = SpuVmAlloc(0xFF) & 0xFF;
+    ret = (u8)SpuVmAlloc(0xFF);
     *(u_short *)&g_SndCurrentVoice = ret;
 
     if (ret < g_SndVoiceCount) {
@@ -75,7 +75,7 @@ void SpuVmKeyOnWithDefaultVol(long arg0, long arg1) {
     long ret;
 
     g_SndCurrentPriority = 0x7F;
-    ret = SpuVmAlloc(0xFF) & 0xFF;
+    ret = (u8)SpuVmAlloc(0xFF);
     *(u_short *)&g_SndCurrentVoice = ret;
 
     if (ret < g_SndVoiceCount) {

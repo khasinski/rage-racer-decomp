@@ -36,7 +36,7 @@ void SpuVmPitchBendVoice(long arg0, long arg1) {
     pBd7 = &g_SndCurrentProgActual;
     *pBd7 = g_SndVoiceStateProgActual[voiceOffset];
     g_SndCurrentTone = g_SndVoiceStateTone[voiceOffset];
-    beaVal = voice & 0xFF;
+    beaVal = (u8)voice;
     g_SndCurrentVoice = beaVal;
 
     sh4 = *pBd7 * 16;
@@ -57,7 +57,7 @@ void SpuVmPitchBendVoice(long arg0, long arg1) {
     }
 
     *(volatile short *)(g_SndVoiceRegsPitch + (dfIndex << 1)) = SpuVmCalculateTonePitch(note, pitch);
-    g_SndVoiceFlags[voice & 0xFF] |= 4;
+    g_SndVoiceFlags[(u8)voice] |= 4;
 }
 
 void SpuVmPitchBendNoOpA(void);

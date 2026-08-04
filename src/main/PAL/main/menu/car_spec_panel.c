@@ -77,7 +77,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     xTest = (u8)x;
     zero = 0;
     if (xTest != 0xB8) {
-        s32 green = alpha & 0xFF;
+        s32 green = (u8)alpha;
 
         func_8004711C(ot, (s16)((u8)x - 1), 0x4C, (s16)((u8)x - 1), 0x84, zero, green, zero, 0xFF);
         func_8004711C(ot, (s16)((u8)x - 3), 0x60, (s16)((u8)x - 3), 0x68, zero, green, zero, 0xFF);
@@ -88,7 +88,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     }
 
     if (xTest != 0xF7) {
-        s32 green = alpha & 0xFF;
+        s32 green = (u8)alpha;
 
         func_8004711C(ot, (s16)((u8)x + 1), 0x4C, (s16)((u8)x + 1), 0x84, zero, green, zero, 0xFF);
         func_8004711C(ot, (s16)((u8)x + 3), 0x6A, (s16)((u8)x + 3), 0x72, zero, green, zero, 0xFF);

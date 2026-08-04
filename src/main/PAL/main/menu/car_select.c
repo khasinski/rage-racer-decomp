@@ -181,7 +181,7 @@ s32 DrawCarSelectScreen(s32 arg0) {
     }
 
     v = (u32) D_8009B2CC / 4;
-    col = v & 0xff;
+    col = (u8)v;
     func_80047460(buf, 0xa3, 0x180, 0x1a, 0x19, col, col, col, 0x20);
 
     tex = ((u8 *)g_CarTable)[g_PlayerCarIndex * 8 + 2];
@@ -198,16 +198,16 @@ s32 DrawCarSelectScreen(s32 arg0) {
     mode = g_CarModelAsset[9];
     switch (mode) {
     case 4:
-        func_80046A2C(buf, xpos, 0x185, 8, 0x10, 0x20, 0x18, v & 0xff, v & 0xff,
-                      v & 0xff, 0x244, 0, 1, 0x3b);
+        func_80046A2C(buf, xpos, 0x185, 8, 0x10, 0x20, 0x18, (u8)v, (u8)v,
+                      (u8)v, 0x244, 0, 1, 0x3b);
         break;
     case 5:
-        func_80046A2C(buf, xpos, 0x185, 8, 0x10, 0x28, 0x18, v & 0xff, v & 0xff,
-                      v & 0xff, 0x244, 0, 1, 0x3b);
+        func_80046A2C(buf, xpos, 0x185, 8, 0x10, 0x28, 0x18, (u8)v, (u8)v,
+                      (u8)v, 0x244, 0, 1, 0x3b);
         break;
     case 6:
-        func_80046A2C(buf, xpos, 0x185, 8, 0x10, 0x30, 0x18, v & 0xff, v & 0xff,
-                      v & 0xff, 0x244, 0, 1, 0x3b);
+        func_80046A2C(buf, xpos, 0x185, 8, 0x10, 0x30, 0x18, (u8)v, (u8)v,
+                      (u8)v, 0x244, 0, 1, 0x3b);
         break;
     }
 
@@ -409,7 +409,7 @@ void UpdateCarSelectScreen(void) {
             if (g_GrandPrixMode == 0) {
                 DrawOwnedCarCounter(1, CountOwnedCars());
             }
-            lowMode = mode & 0xFF;
+            lowMode = (u8)mode;
             DrawFadingMenuSprites(g_UiScriptProgress, lowMode, D_801E4138);
             RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
             if ((RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) !=
@@ -730,7 +730,7 @@ s32 DrawCustomizeScreen(s32 arg0) {
         value = product / 2048;
     }
 
-    func_80052158((s16)value, ((u32)D_8009B2D0 / 4) & 0xFF, g_PlayerCarIndex);
+    func_80052158((s16)value, (u8)((u32)D_8009B2D0 / 4), g_PlayerCarIndex);
     return D_8009B2D0;
 }
 
@@ -778,7 +778,7 @@ void UpdateCustomizeScreen(void) {
     if (GameMenuBusy == 0) {
         D_8009B324 = 3;
         RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, -1);
-        lowMode = mode & 0xFF;
+        lowMode = (u8)mode;
         DrawFadingMenuSprites(g_UiScriptProgress, lowMode, g_RankingOption);
         RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
         if ((RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) && (g_UiScriptProgress2 <= 0)) {

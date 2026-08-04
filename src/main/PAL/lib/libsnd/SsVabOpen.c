@@ -94,7 +94,7 @@ short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAdd
         g_SndVabOpenCount--;
         return -1;
     }
-    if ((magic & 0xFF) == 'p') {
+    if (((u8)magic) == 'p') {
         if (header->ver >= 5) {
             g_SndVabProgMax = 0x80;
         } else {

@@ -24,7 +24,7 @@ void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
     u_char *readPos;
     SeqStruct *state;
 
-    control = arg2 & 0xFF;
+    control = (u8)arg2;
     state = &g_SndSeqTable[seq][sep];
     readPos = state->read_pos;
     channel = state->channel;

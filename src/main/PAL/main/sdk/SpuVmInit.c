@@ -89,7 +89,7 @@ void SpuVmInit(long arg0) {
     g_SndVabOpenCount = 0;
     for (i = 0; (u_short)i < 16; i++) g_SndVabStatus[(u_short)i] = 0;
 
-    n = arg0 & 0xff;
+    n = (u8)arg0;
     if (n >= 24) {
         g_SndVoiceCount = 24;
     } else {
