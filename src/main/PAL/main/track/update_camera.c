@@ -168,8 +168,8 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
     } else {
         var_v1_44 = FIELD(((cameraNodeIndex * 0x24) + g_TrackCameras), s16 *, 0x20);
     }
-    switch (var_v1_44) {                            /* switch 1 */
-    case 0:                                         /* switch 1 */
+    switch (var_v1_44) {
+    case 0:
         *(Block16 *)&scratch[2] = *(Block16 *)arg1;
         *(Block16 *)&scratch[6] = *(Block16 *)((u8 *)arg1 + 0x20);
         BuildRotMatrixY(&sp48[0], scratch[7]);
@@ -196,7 +196,7 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
         scratch[6] += FIELD(arg1, s16 *, 0x8C);
         g_CameraModePrev = 0;
         break;
-    case 1:                                         /* switch 1 */
+    case 1:
         *(Block16 *)&scratch[2] = *(Block16 *)arg1;
         chaseYawDamping = FIELD(arg1, s32 *, 0x24);
         chaseTargetYaw = chaseYawDamping & 0xFFF;
@@ -353,16 +353,16 @@ block_36:
         scratch[2] += sp28[0];
         scratch[3] += sp28[1];
         scratch[4] += sp28[2];
-        switch (g_ChaseCameraPreset) {                       /* switch 2; irregular */
-        case 0:                                     /* switch 2 */
+        switch (g_ChaseCameraPreset) {
+        case 0:
             sp18[1] = 0x3A;
             var_v0_652 = 0x118;
             goto block_52;
-        case 1:                                     /* switch 2 */
+        case 1:
             sp18[1] = 0x59;
             var_v0_652 = 0x140;
             goto block_52;
-        case 2:                                     /* switch 2 */
+        case 2:
             sp18[1] = 0x97;
             var_v0_652 = 0x190;
 block_52:
@@ -386,7 +386,7 @@ block_52:
         scratch[6] = var_v0_713;
         g_CameraModePrev = 1;
         break;
-    case 2:                                         /* switch 1 */
+    case 2:
         temp_s2_728 = cameraNodeIndex * 0x24;
         temp_v0_732 = temp_s2_728 + g_TrackCameras;
         *(Block16 *)&scratch[2] = *(Block16 *)temp_v0_732;
@@ -423,7 +423,7 @@ block_52:
         scratch[8] = 0;
         g_CameraModePrev = var_v0_881;
         break;
-    case 3:                                         /* switch 1 */
+    case 3:
         *(Block16 *)&scratch[2] = *(Block16 *)arg1;
         if ((temp_v1_40 & 0xFF) || (g_CameraModePrev != 3)) {
             g_CamPathNode = cameraNodeIndex;
@@ -574,7 +574,7 @@ block_52:
         scratch[8] = 0x400 - (Atan2(sp18[1], sp18[0]) & 0xFFF);
         g_CameraModePrev = 3;
         break;
-    case 4:                                         /* switch 1 */
+    case 4:
         case4Base = (u32)g_TrackCameras;
         temp_a3_1372 = cameraNodeIndex * 0x24;
         temp_v1_1373 = temp_a3_1372 + case4Base;
@@ -619,7 +619,7 @@ block_52:
         scratch[8] = 0;
         g_CameraModePrev = var_v0_881;
         break;
-    case 5:                                         /* switch 1 */
+    case 5:
         *(Block16 *)&scratch[2] = *(Block16 *)arg1;
         BuildRotMatrixY(&sp88[0], 0 - g_OrbitCameraYaw);
         BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));

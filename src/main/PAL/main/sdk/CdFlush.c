@@ -12,7 +12,6 @@ void func_8006BAF0(void);
 long func_8006B0D4(long arg0, long arg1);
 long func_8006B354(long arg0, long arg1);
 
-/* CdFlush. */
 void CdFlush(void) asm("func_8006A494");
 void CdFlush(void) {
     func_8006BAF0();

@@ -4,7 +4,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 
-/* A ready-made SPRT description; func_80032FF0 expands it into a scratchpad
+/* A ready-made SPRT description; BuildSpriteFromDesc expands it into a scratchpad
  * SPRT. D_8007DAE0 is the one instance. */
 typedef struct GameSpriteDesc {
     u16 x;
@@ -220,7 +220,7 @@ s32 Atan2(s32 x, s32 y) asm("func_8001A6AC");
 /* Shortest way round the 0x1000 circle between two 12-bit angles: the signed
  * delta from `from` to `to` in (-0x800, 0x800], and its magnitude. */
 s32 GetAngleDelta(s32 from, s32 to) asm("func_8002A7C4");
-/* (s32 a, s32 b); left unprototyped because func_8002A810 calls it with two
+/* (s32 a, s32 b); left unprototyped because UpdateCarDrivetrain calls it with two
  * extra arguments that the original left live in a2/a3. */
 s32 GetAngleDistance() asm("func_8002A788");
 
@@ -467,7 +467,7 @@ void DrawBitPatternOverlay(s32 pattern) asm("func_80047E60");
 /*
  * Base of the draw work area for the frame being built. Almost every drawing
  * routine takes its ordering table from g_DrawBuffer + 0xCC and links
- * primitives into it (func_80064DDC / func_80017390); further sub-buffers live
+ * primitives into it (AddPrim / QueueDrawModePrim); further sub-buffers live
  * at +0x70, +0xBD0 and +0x16C8. Set by the display swap, not from C yet.
  *
  * Six translation units need a different declared type (four `volatile`, one
@@ -485,7 +485,7 @@ extern u8 *g_DrawBuffer asm("D_8019C900");
 
 /*
  * Full-screen fade level, 0..0x100, passed straight to
- * DrawFullscreenFadeTile (func_80033AA0) and func_800218A0. Each frame the
+ * DrawFullscreenFadeTile and DrawRaceEndBanner. Each frame the
  * owning scene adds g_FadeStep and clamps back into range, so a scene fades in
  * or out just by setting the step.
  */
@@ -511,7 +511,7 @@ s32 RunTimedDrawScript(
  * The progress counter the menu/UI screens hand to RunTimedDrawScript. Each
  * screen resets it to 0 on entry, then passes &g_UiScriptProgress with step +1
  * while opening and -1 while closing, and treats `<= 0` as "the close animation
- * has finished". It is also fed to func_800489AC as the elapsed time of the
+ * has finished". It is also fed to DrawFadingMenuSprites as the elapsed time of the
  * panel it is animating.
  */
 extern s32 g_UiScriptProgress asm("D_8019C9F0");
@@ -519,7 +519,7 @@ extern s32 g_UiScriptProgress asm("D_8019C9F0");
 /*
  * A second, independent RunTimedDrawScript progress counter. The menu
  * screens animate two script layers at once and step them separately - see
- * func_80053730, which drives &g_UiScriptProgress against one command table and
+ * UpdateCourseSelectScreen, which drives &g_UiScriptProgress against one command table and
  * &g_UiScriptProgress2 against the screen's own tables in the same frame. Which
  * layer is "background" and which is "foreground" is not settled, hence the
  * neutral name (cf. g_PadEdge / g_PadEdge2).
@@ -763,7 +763,7 @@ void SetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) asm("func_8001
 /*
  * The environment colour timeline and the sky it feeds. The state is nine
  * 12-byte { cur, from, to } RGB slots at D_801E3FB6 + 0x0C * k - slot 0 the GTE
- * far/fog colour, 1..8 the sky gradient - lerped every frame by func_80045CD4.
+ * far/fog colour, 1..8 the sky gradient - lerped every frame by UpdateEnvironment.
  */
 /* One packed RGB triple of that timeline. The block starts at 0x801E3FB6, i.e.
  * 2 mod 4, so every word in it is half-aligned and must be declared packed --
@@ -801,7 +801,7 @@ extern s16 g_EnvironmentMode asm("D_801E4026");
 /* The mode the previous variant had; the sky-CLUT lerp's source palette. */
 extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
 /* Sky palette records, 48 bytes each, indexed by environment mode. Installed
- * from the loaded environment block by func_8004553C. */
+ * from the loaded environment block by SetEnvPaletteTable. */
 extern u8 *g_EnvPaletteTable asm("D_801E4140");
 /* g_EnvironmentMode == 4. Picks DrawStaticScenery's model 0x3B over 0x3A
  * and the `flags & 2` prop set over `flags & 1`; also forwarded to scratchpad
@@ -809,7 +809,7 @@ extern u8 *g_EnvPaletteTable asm("D_801E4140");
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
 /*
- * Per-view cell culling, rebuilt every frame by func_800414F0 and swapped in
+ * Per-view cell culling, rebuilt every frame by BuildVisibleCells and swapped in
  * lockstep for the mirror pass. Per-file types; see docs/names.md 12c.
  *   g_VisibleCellMask  D_801E6828  32 words, mask[sy] |= 1 << sx over the grid
  *   g_VisibleCellList  D_801E4BC8  the matching visible-cell record list

@@ -1,6 +1,6 @@
 #include "common.h"
 /*
- * func_80057748: sound/menu state machine. The redundant
+ * UpdateTeamLogoScreen: sound/menu state machine. The redundant
  * `if (g_PadEdge2) { ... } else { ... }` around the state>0 block is a
  * deliberate no-op guard (both arms identical): its presence forces GCC 2.6.3
  * to rematerialize the literal 2 at both the direction ternary and the switch

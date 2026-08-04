@@ -186,8 +186,6 @@ s32 InitSoundRuntime(void) {
     return 0;
 }
 
-/* ---- was StartAudioSlotLoad.c ---- */
-
 #include "common.h"
 #include "game/audio.h"
 #include "psyq/snd.h"
@@ -475,8 +473,6 @@ void ShutdownSoundSystem(void) {
     }
 }
 
-/* ---- was SetEffectVolumeScale.c ---- */
-
 #include "common.h"
 #include "game/audio.h"
 
@@ -564,8 +560,6 @@ extern s32 g_AudioSlotMask asm("D_801E6C9C");
 s32 GetActiveAudioSlots(void) {
     return g_AudioSlotMask;
 }
-
-/* ---- was SetPanVoiceTargetVolume.c ---- */
 
 #include "common.h"
 #include "game/audio.h"
@@ -1132,8 +1126,6 @@ void UpdateBasicEffectVoices(void) {
         offset += 0x18;
     } while (i < 2);
 }
-
-/* ---- was SetPitchedSoundCue.c ---- */
 
 #include "common.h"
 #include "game/audio.h"
@@ -1778,8 +1770,6 @@ void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     func_80078130((s16)voice, g_VabIds[(s16)bend], g_SoundSlotTone[arg0][arg3], 0x3C, arg1);
 }
 
-/* ---- was InterpolateAudioParameter.c ---- */
-
 #include "common.h"
 #include "game/audio.h"
 #include "game/sound.h"
@@ -2102,8 +2092,6 @@ void ForcePanVoiceEnabled(s32 enabled) {
     }
 }
 
-/* ---- was ForceBasicEffectVoicesEnabled.c ---- */
-
 #include "common.h"
 #include "game/audio.h"
 #include "game/sound.h"
@@ -2415,8 +2403,6 @@ void ForceAllEffectVoicesEnabled(s32 arg0) {
     ForcePitchEffectVoicesEnabled(arg0);
     ForceSoundSlotVoicePlayback(arg0);
 }
-
-/* ---- was OpenVabSequenceSlot.c ---- */
 
 #include "common.h"
 #include "psyq/snd.h"

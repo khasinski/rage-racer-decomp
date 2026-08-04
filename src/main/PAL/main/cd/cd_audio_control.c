@@ -61,8 +61,6 @@ void ResetCdAudioState(void) {
     g_CdCurrentTrack = 2;
 }
 
-/* ---- was start_cd_volume_fade.c ---- */
-
 #include "common.h"
 
 extern s32 g_CdFadeFrames asm("D_8009B1B4");

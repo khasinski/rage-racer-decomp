@@ -12,7 +12,7 @@ typedef struct Matrix {
 
 /*
  * libgte leaf routines. These load GTE (COP2) control/data registers or run a
- * single COP2 command; the bodies live in src/main/PAL/main/func_80069858.c and
+ * single COP2 command; the bodies live in render/SetRotMatrix.c and
  * are written with the gte_* macros from psyq/gte_macros.h.
  */
 void SetRotMatrix(void *m) asm("func_80069858");
@@ -88,7 +88,7 @@ void *ScaleMatrixL(void *m, void *v) asm("func_80069110");
 /* Rotation matrix from an SVECTOR of Z/Y/X Euler angles (raw asm sibling). */
 void *RotMatrix(void *r, void *m) asm("func_80069D18");
 /* Square root in 12-bit fixed point: returns sqrt(a << 12), i.e. 64*sqrt(a).
- * Normalises with Lzc, then runs the hyperbolic CORDIC in func_80068738. */
+ * Normalises with Lzc, then runs the hyperbolic CORDIC in CordicRotate. */
 long SquareRoot12(long a) asm("func_8006888C");
 
 #endif

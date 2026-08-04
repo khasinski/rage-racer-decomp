@@ -3,11 +3,11 @@
 
 #include "common.h"
 
-/* Asset-load state machine phase (0 idle; 1..6 drive func_80017C78 loads). */
+/* Asset-load state machine phase (0 idle; 1..6 drive LoadAsset loads). */
 extern s32 g_AssetLoadState asm("D_8007BED8");
 
 /* The asset sub-block currently being installed: `assetBase + <header offset>`,
- * then handed to func_8001A3C0 / func_8001A2E0. */
+ * then handed to UploadImageAsset / UploadImageBlock. */
 extern u8 *g_AssetBlockPtr asm("D_801F17A8");
 
 /*
@@ -47,8 +47,8 @@ typedef struct GameCarModelAsset {
     s32 imageDataOffset;
 } GameCarModelAsset;
 
-/* One VRAM upload record inside an image asset; func_8001A3C0 walks a chain of
- * them and func_8001A2E0 uploads each. */
+/* One VRAM upload record inside an image asset; UploadImageAsset walks a chain of
+ * them and UploadImageBlock uploads each. */
 typedef struct GameImageBlock {
     s32 size;   /* +0x00 block size in bytes, rounded down to a word */
     u16 x;      /* +0x04 VRAM destination */

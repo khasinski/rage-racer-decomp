@@ -32,7 +32,7 @@ extern s32 GameMenuCursor asm("D_8009B2F4");
 extern s32 GameMenuBusy asm("D_8009B308");
 /* Cursor animation gate: input is only accepted while this is negative. */
 extern s32 GameMenuCursorAnim asm("D_8009B380");
-/* Which g_MenuScreenDraw entry to run this frame, -1 for none; func_8005ACA0
+/* Which g_MenuScreenDraw entry to run this frame, -1 for none; UpdateMenuMode
  * calls it with a step of 0x14. */
 extern s32 g_MenuHandlerIndex asm("D_8009B340");
 
@@ -45,7 +45,7 @@ extern s32 g_MenuHandlerIndex2 asm("D_8009B344");
 extern s32 g_MenuScreen asm("D_8019C9F8");
 
 /*
- * The two parallel screen tables func_8005ACA0 dispatches through, both indexed
+ * The two parallel screen tables UpdateMenuMode dispatches through, both indexed
  * by the same screen id: g_MenuScreenUpdate holds the per-frame state machines
  * (selected by g_MenuScreen) and g_MenuScreenDraw the matching fade/transition
  * overlays (selected by g_MenuHandlerIndex / g_MenuHandlerIndex2). See the
@@ -55,18 +55,18 @@ extern void (*g_MenuScreenUpdate[])(void) asm("D_80082EB8");
 extern s32 (*g_MenuScreenDraw[])(s32 step) asm("D_80082EF0");
 
 /*
- * Title-menu cursor, 0..4 (func_8001B5DC wraps it with `(sel + 5) % 5` on the
+ * Title-menu cursor, 0..4 (UpdateMainMenuInput wraps it with `(sel + 5) % 5` on the
  * up/down pad edges and skips entry 1 while g_AdvancedSeriesUnlocked is 0). 0 and 1 are the
  * two Grand Prix save files - they repoint g_CarTable / D_801E4FAC / D_8009E67C
  * at that file's tables and set g_GrandPrixMode to 1 - 2 is Time Attack
  * (g_GrandPrixMode 0), 3 starts the attract demo and 4 opens the options.
- * func_8001B2D4 draws the row whose index equals it as selected.
+ * DrawMainMenuRows draws the row whose index equals it as selected.
  */
 extern s32 g_TitleMenuSelection asm("D_801E4184");
 
 /*
- * Element mask handed to DrawBitPatternOverlay (func_80047E60) by
- * func_8005ACA0, selecting which parts of the current menu overlay are drawn.
+ * Element mask handed to DrawBitPatternOverlay by
+ * UpdateMenuMode, selecting which parts of the current menu overlay are drawn.
  * -1 while a screen is still opening; screens then set their own pattern.
  */
 extern s32 g_MenuOverlayPattern asm("D_8009B318");
@@ -94,7 +94,7 @@ extern S22 g_TimeRecords[][4][5] asm("D_8019CB78");
 extern u8 g_TeamNameLength asm("D_8007F45C");
 extern u8 g_TeamNameChars[] asm("D_8007F460");
 
-/* Memory-card menu sub-state, driven by func_80061520. g_McCardStatus is the
+/* Memory-card menu sub-state, driven by UpdateMemoryCardMenu. g_McCardStatus is the
  * last PollMemoryCardStatus result (0 no card yet, 1/2 card present,
  * -1/-2/-3 error), not a record pointer; the others are selection/phase words.
  */
@@ -169,7 +169,7 @@ void InitMenuMode(void) asm("func_80050C18");
 
 /*
  * The menu-mode screen table pair: everything the front end shows once
- * g_MainState == 3 is one of fourteen screens, dispatched from func_8005ACA0
+ * g_MainState == 3 is one of fourteen screens, dispatched from UpdateMenuMode
  * through g_MenuScreenUpdate[g_MenuScreen] (state machine) and
  * g_MenuScreenDraw[g_MenuHandlerIndex] (fade overlay). Each Draw entry owns a
  * private accumulator in 0x8009B2C4..0x8009B2EC, clamped to [0, 0x1FC]; a

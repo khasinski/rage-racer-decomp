@@ -29,8 +29,6 @@ s32 BlendAngle(s32 angleA, s32 angleB, s32 weight) {
     return (sum >> 10) & 0xFFF;
 }
 
-/* ---- was interpolate_track_angle.c ---- */
-
 #include "common.h"
 #include "game/track.h"
 
@@ -44,8 +42,6 @@ s32 InterpolateTrackAngle(s32 pointIndex, s32 weight) {
 
     return func_8002FAE8(g_TrackPoints[pointIndex].angle, g_TrackPoints[next].angle, weight);
 }
-
-/* ---- was get_reverse_track_angle.c ---- */
 
 #include "common.h"
 #include "game/track.h"
@@ -65,8 +61,6 @@ s32 GetReverseTrackAngle(s32 pointIndex) {
 
     return 0x800 - func_8002FAE8(g_TrackPoints[pointIndex].angle, g_TrackPoints[next].angle, g_PlayerSegmentWeight);
 }
-
-/* ---- was interpolate_track_point.c ---- */
 
 #include "common.h"
 #include "game/track.h"
@@ -103,8 +97,6 @@ void InterpolateTrackPoint(s32 pointIndex, s32 *out, s32 weight) {
     }
     out[2] = sum >> 10;
 }
-
-/* ---- was smooth_track_angle.c ---- */
 
 #include "common.h"
 #include "game/track.h"

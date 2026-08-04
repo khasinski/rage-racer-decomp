@@ -107,8 +107,8 @@ typedef struct GameShuttleScenery {
     s32 z;             /* +0x18 */
     s32 unk1C;         /* +0x1C fourth word copied out of the endpoint record */
     s32 angleX;        /* +0x20 seeded from g_ShuttlePathAngles, never read by the drawer */
-    s32 angleY;        /* +0x24 Y rotation (func_8001A530) */
-    s32 angleZ;        /* +0x28 Z rotation (func_8001A4C0) */
+    s32 angleY;        /* +0x24 Y rotation (BuildRotMatrixY) */
+    s32 angleZ;        /* +0x28 Z rotation (BuildRotMatrixZ) */
     u8 pad2C[8];
 } GameShuttleScenery;
 
@@ -124,7 +124,7 @@ void InitShuttleScenery(void) asm("func_8003F0F8");
  * track progress uses the same units. */
 extern s32 g_TrackLength asm("D_801E40D8");
 
-/* Base of the course's event/marker block (func_80034E04 installs it). Starts
+/* Base of the course's event/marker block (InstallTrackEventData installs it). Starts
  * with the s32 track-walk start index; sub-table offsets are at +0xB64..+0xB78
  * and the per-series marker rows at + g_RaceSeries * 576 + 0x474. */
 extern u8 *g_TrackEventData asm("D_801E4150");

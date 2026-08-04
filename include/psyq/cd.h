@@ -66,7 +66,7 @@ typedef struct StRingClearRecord {
 
 /*
  * CD stream ring header (Rage Racer streaming). Ring pointer D_8009DF1C, ring
- * base D_801E8AAC. `.state` is read as u_short (lhu). See func_8006D1D0.
+ * base D_801E8AAC. `.state` is read as u_short (lhu). See StCdInterrupt.
  */
 typedef struct StStrHeader {
     u_short state;        /* 0x00 */
@@ -113,7 +113,7 @@ void StSetStream(long mode, long start_frame, long end_frame, long callback, lon
 u_long StFreeRing(u_long *base) asm("func_8006CFF0");
 /* The libds streaming state machine: advances D_80099418 through states 1..0xA,
  * DMAs sector header then body, drives the StStrHeader ring. Installed via
- * CdReadyCallback behind the stub func_8006CDA0 and also pumped directly from
+ * CdReadyCallback behind the stub CdRead2Callback and also pumped directly from
  * UploadFmvSlice. */
 void StCdInterrupt(void) asm("func_8006D1D0");
 
@@ -133,9 +133,10 @@ long CdReadyCallback(long callback) asm("func_8006A58C");
 
 /*
  * libcd internals. CD_init resets the drive (CD_initvol + CD_initintr + the
- * register-level reset func_8006BD14) and is what CdInit retries up to 5 times.
- * func_8006C17C is the IRQ2 handler installed by that reset; it drains the
- * interrupt status via func_8006AB5C and fans out to the sync/ready callbacks.
+ * register-level reset CdResetState) and is what CdInit retries up to 5 times.
+ * CdDispatchInterrupts is the IRQ2 handler installed by that reset; it drains
+ * the interrupt status via CdReadInterruptStatus and fans out to the sync/ready
+ * callbacks.
  */
 /*
  * libcd's cdread.c, linked into the game's own .text range instead of the

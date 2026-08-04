@@ -61,7 +61,7 @@ extern s32 g_MaxClassReached[2] asm("D_801E772C");
 extern s32 g_MirrorMode asm("D_8019CACC");
 
 /* One save slot's Grand Prix / Time Attack progress; InitMenuMode copies it
- * straight into the live globals and func_80053730 writes it back. */
+ * straight into the live globals and UpdateCourseSelectScreen writes it back. */
 typedef struct GameRaceProgress {
     s32 course;
     s32 carIndex;

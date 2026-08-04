@@ -65,7 +65,7 @@ typedef struct P_TAG {
     u_char code;
 } P_TAG;
 
-/* Flat triangle, 0x14 bytes. func_80064EE0 = SetPolyF3. */
+/* Flat triangle, 0x14 bytes. Built by SetPolyF3. */
 typedef struct POLY_F3 {
     P_TAG t;
     short x0;
@@ -76,7 +76,7 @@ typedef struct POLY_F3 {
     short y2;
 } POLY_F3;
 
-/* Flat quad, 0x18 bytes. func_80064F30 = SetPolyF4. */
+/* Flat quad, 0x18 bytes. Built by SetPolyF4. */
 typedef struct POLY_F4 {
     P_TAG t;
     short x0;
@@ -89,7 +89,7 @@ typedef struct POLY_F4 {
     short y3;
 } POLY_F4;
 
-/* Textured quad, 0x28 bytes. func_80064F44 = SetPolyFT4. */
+/* Textured quad, 0x28 bytes. Built by SetPolyFT4. */
 typedef struct POLY_FT4 {
     P_TAG t;
     short x0;
@@ -114,7 +114,7 @@ typedef struct POLY_FT4 {
     u_short pad26;
 } POLY_FT4;
 
-/* Textured sprite, 0x14 bytes. func_80064FA8 = SetSprt. */
+/* Textured sprite, 0x14 bytes. Built by SetSprt. */
 typedef struct SPRT {
     P_TAG t;
     short x0;
@@ -126,7 +126,7 @@ typedef struct SPRT {
     short h;
 } SPRT;
 
-/* Solid rectangle, 0x10 bytes. func_80064FF8 = SetTile. */
+/* Solid rectangle, 0x10 bytes. Built by SetTile. */
 typedef struct TILE {
     P_TAG t;
     short x0;
@@ -135,7 +135,7 @@ typedef struct TILE {
     short h;
 } TILE;
 
-/* Flat line, 0x10 bytes. func_8006500C = SetLineF2. */
+/* Flat line, 0x10 bytes. Built by SetLineF2. */
 typedef struct LINE_F2 {
     P_TAG t;
     short x0;
@@ -144,7 +144,7 @@ typedef struct LINE_F2 {
     short y1;
 } LINE_F2;
 
-/* Flat 3-point polyline, 0x18 bytes. func_80065034 = SetLineF3. */
+/* Flat 3-point polyline, 0x18 bytes. Built by SetLineF3. */
 typedef struct LINE_F3 {
     P_TAG t;
     short x0;
@@ -156,7 +156,7 @@ typedef struct LINE_F3 {
     u_long pad14;
 } LINE_F3;
 
-/* Gradient line, 0x14 bytes. func_80065020 = SetLineG2. */
+/* Gradient line, 0x14 bytes. Built by SetLineG2. */
 typedef struct LINE_G2 {
     P_TAG t;
     short x0;
@@ -180,7 +180,7 @@ typedef struct DrawPacket {
  * The libgpu driver table at 0x800941A0 (D_800941E0 points at it), dumped in
  * asm/PAL/main/data/main/6BE64.data.s. Slots holding a `u_long` are worker
  * function addresses passed to `send` rather than called directly:
- *   +0x04 func_8006767C  +0x08 Gpu_AddQueue      +0x0C Gpu_ClearImage
+ *   +0x04 _addque        +0x08 Gpu_AddQueue      +0x0C Gpu_ClearImage
  *   +0x10 Gpu_WriteGp1   +0x14 Gpu_WriteGp0Words +0x18 Gpu_StartDmaTransfer
  *   +0x1C Gpu_StoreImage +0x20 Gpu_LoadImage     +0x24 Gpu_ExecuteQueue
  *   +0x28 Gpu_GetControlMirrorByte               +0x2C Gpu_ClearOTagDma
@@ -283,7 +283,7 @@ long GetTPage(long tp, long abr, long x, long y) asm("func_80064BB4");
 long GetDispEnv(long env) asm("func_8006655C");
 long GetDrawEnv(long env) asm("func_80066074");
 /* Draws one primitive immediately (DrawSync + push prim[4..] for prim[3]
- * words). The real PutDispEnv is func_800660AC. */
+ * words). */
 void DrawPrim(u_char *prim) asm("func_80065E00");
 /* Fills the 0x1C-byte DRAWENV head: clip, ofs, tw, tpage, dtd, dfe, isbg, rgb.
  * `dfe` comes from the buffer height and the DMA interrupt state. */

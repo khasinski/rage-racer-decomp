@@ -5,11 +5,9 @@
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
-void SetCarKnockback(void *, s32, s32, s32) asm("func_80038CE8");            /* extern */
+void SetCarKnockback(void *, s32, s32, s32) asm("func_80038CE8");
 s32 rsin(s32) asm("func_80068568");
-/* extern */
 s32 rcos(s32) asm("func_80068634");
-/* extern */
 extern u8 g_PlayerCar asm("D_8009E6D4");
 
 /*

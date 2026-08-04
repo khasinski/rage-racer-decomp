@@ -12,7 +12,7 @@ extern Matrix g_SceneColorMatrix asm("D_8019CAD4");
 extern Matrix D_8007C778;
 void func_800698B8(Matrix *arg0);
 
-/* Darkens the scene colour matrix by func_800350B4's 0..0x100 track-zone ramp; RestoreColorMatrix puts it back. */
+/* Darkens the scene colour matrix by GetTrackZoneBlend's 0..0x100 track-zone ramp; RestoreColorMatrix puts it back. */
 void ApplyZoneLighting(s32 a0, Matrix *a1) asm("func_8001C248");
 void ApplyZoneLighting(s32 a0, Matrix *a1) {
     Matrix out;

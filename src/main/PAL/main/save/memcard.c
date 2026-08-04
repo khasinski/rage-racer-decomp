@@ -240,8 +240,6 @@ void CloseMemoryCardEvents(void) {
     ExitCriticalSection();
 }
 
-/* ---- was ClearMemoryCardHwEvents.c ---- */
-
 #include "common.h"
 #include "psyq/kernel.h"
 #include "game/memcard.h"
@@ -391,8 +389,6 @@ void AdvanceSaveHeaderCounter(void) {
     }
 }
 
-/* ---- was ClearSaveHeaderRows.c ---- */
-
 #include "common.h"
 #include "game/memcard.h"
 #include "psyq/gpu.h"
@@ -527,8 +523,6 @@ void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     checksum = ~checksum;
     *(u32 *)(rowBytes + 0x7C) = checksum;
 }
-
-/* ---- was StoreSaveStateBlock.c ---- */
 
 #include "common.h"
 #include "game/race.h"
@@ -813,8 +807,6 @@ void StoreSaveStateBlock(u8 *block) {
         *(u32 *)(block + MC_BLOCK_CHECKSUM_OFS) = ~checksum;
     }
 }
-
-/* ---- was LoadSaveStateBlock.c ---- */
 
 #include "common.h"
 #include "game/race.h"
@@ -1149,8 +1141,6 @@ s32 LoadSaveStateBlock(u8 *block) {
     return 1;
 }
 
-/* ---- was WriteMemoryCardSaveFile.c ---- */
-
 #include "common.h"
 #include "game/memcard.h"
 #include "psyq/kernel.h"
@@ -1453,8 +1443,6 @@ s32 CountMemoryCardFiles(s32 port, s32 slot) {
     return count;
 }
 
-/* ---- was CalculateMemoryCardFreeBlocks.c ---- */
-
 #include "common.h"
 #include "game/memcard.h"
 #include "game/menu.h"
@@ -1544,8 +1532,6 @@ void DrawMemoryCardHelpPrompt(s32 page) {
     DrawText8x8Wide(0x50, 0x28, &g_McHelpText[i], 0x78CC);
     DrawText8x8Wide(0x50, 0x40, &g_McHelpText[i + 0x1E], 0x78CC);
 }
-
-/* ---- was DrawMemoryCardSaveRows.c ---- */
 
 #include "common.h"
 #include "game/memcard.h"

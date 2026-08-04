@@ -68,7 +68,7 @@ void func_800698E8(s32 *matrix);
  * Builds a billboard / look-at view Matrix for a GameRenderObject: the eye is
  * obj->{x,y,z} and the look-at target is obj->{field_0C,field_10,field_14}.
  * `len` is the distance (SquareRoot0 sqrt); computes a pitch and a yaw axis
- * rotation (func_80046188), the translation (MatrixApplyVectorComponents), then per-row
+ * rotation (BuildAxisRotMatrix), the translation (MatrixApplyVectorComponents), then per-row
  * fixed-point projection scaling (<<1 / <<2). Returns 1 if eye==target, else 0.
  */
 s32 SetLookAtMatrix(GameRenderObject *obj) asm("func_80046248");

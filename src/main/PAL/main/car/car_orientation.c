@@ -535,7 +535,6 @@ void UpdateCarBodyRoll(A *ctx) {
     if (g_MirrorMode != 0) a1 = -a1;
     if (!(a1 >= 0)) {
 
-    /* a1 < 0 */
     a0v = 2;
     if (ctx->fB8 != 0) a0v = 1;
     v1 = ctx->sub.x1C;

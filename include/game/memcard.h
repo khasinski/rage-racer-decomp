@@ -45,7 +45,7 @@ typedef struct GameSaveHeaderRow {
 
 /*
  * The 0x1000-byte memory-card payload: a flat dump of live globals, named per
- * field below. checksum = ~sum(u16[0..0x7FE]). Written by func_8005F88C, read
+ * field below. checksum = ~sum(u16[0..0x7FE]). Written by StoreSaveStateBlock, read
  * by LoadSaveStateBlock - both keep raw offsets, see names.md 3b.
  *
  * The file WriteMemoryCardSaveFile lays down around it is four writes:

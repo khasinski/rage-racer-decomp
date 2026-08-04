@@ -361,8 +361,8 @@ s32 CollidePlayerWithCars(GameCarRuntime *car) asm("func_8002D398");
 /* One row of the AI pairwise sweep: car[index] against car[index + 1 .. 10],
  * push-apart only - no sound, no damage globals, no mode gate. */
 s32 CollideRivalCars(GameCarRuntime *car, s32 index) asm("func_80039980");
-/* Draws one car, from the func_800389F0 loop; two LOD tiers plus the mirrored
- * wheel pass, submitted through func_80028DEC. */
+/* Draws one car, from the DrawCars loop; two LOD tiers plus the mirrored
+ * wheel pass, submitted through SubmitModel. */
 void DrawCar(void *car) asm("func_8001DFC0");
 /* Selects model bank 1 and calls DrawCar for each of the 11 runtime cars
  * whose activeFlag != -1 and field_BC == 1. */

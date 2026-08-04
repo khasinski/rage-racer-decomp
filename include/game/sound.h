@@ -29,7 +29,7 @@ typedef struct MusicChannel {
 
 extern MusicChannel g_MusicChannels[] asm("D_801E6D00");
 
-/* Effect voice, 4 elements for hardware voices 10..13. func_8005C914 walks it
+/* Effect voice, 4 elements for hardware voices 10..13. SetPitchedSoundCue walks it
  * with a pointer to `.state`. */
 typedef struct EffectVoice {
     s16 note;      /* +0x00 note/detune base  (g_EffectVoices) */
@@ -89,7 +89,7 @@ extern IndexedEffect g_IndexedEffects[] asm("D_800126AC");
 /*
  * Pre-race BGM picker (scene 0xA, left/right on the pad). Per-file types.
  *   g_BgmSelection    D_801E42CC  0 = shuffle, else track + 1; saved
- *   g_BgmShuffleOrder D_801E7734  the shuffle bag func_8001B488 refills
+ *   g_BgmShuffleOrder D_801E7734  the shuffle bag ShuffleBgmOrder refills
  *   g_BgmShuffleIndex D_8009E6CC  cursor into it, wraps at g_BgmTrackCount
  *   g_BgmTrack        D_801E40E0  the chosen track; RequestCdTrack(n + 3)
  */

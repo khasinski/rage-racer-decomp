@@ -53,7 +53,6 @@ void InitRecordTables(void) {
     register s32 r23 asm("$23");
     s32 r30;
 
-    /* section 1 */
     r14 = 0;
     r18 = (s32)&g_DefaultLapTimes;
     r17 = (s32)&g_BestTotalTimes;
@@ -97,7 +96,6 @@ void InitRecordTables(void) {
         r16 += 0x20;
     } while (r14 < 2);
 
-    /* section 2 */
     r14 = 0;
     r22 = (s32)&g_RankingRecords;
     r30 = r22 + 4;
@@ -167,7 +165,6 @@ void InitRecordTables(void) {
         r20 += 0x140;
     } while (r14 < 2);
 
-    /* section 3 */
     r14 = 0;
     r8 = (s32)&g_DefaultLapTimes;
     r9 = (s32)&g_BestSectorTimes;

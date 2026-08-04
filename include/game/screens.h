@@ -28,11 +28,11 @@ void DrawRaceOptionMenu(s32 cursorRow) asm("func_8003479C");
  */
 
 /* Enters the title screen (g_GameModeHandlers slot 3, requested when an attract
- * or real race ends); func_8001AF70 is its twin on slot 2. */
+ * or real race ends); EnterFrontend is its twin on slot 2. */
 void EnterTitleScreen(void) asm("func_8001B014");
 
 /* The pulsing "PRESS START" sprite: a 112x16 cell at (0x68, 0xC8), brightness
- * from func_80068568(g_AnimTimer * 96). Also drains D_801E6F28. */
+ * from rsin(g_AnimTimer * 96). Also drains D_801E6F28. */
 void DrawPressStartPrompt(void) asm("func_8001B170");
 
 /* Frontend state 0: hold on the title screen until Start is pressed. */

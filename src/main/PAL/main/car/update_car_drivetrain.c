@@ -13,14 +13,14 @@ s32 rcos() asm("func_80068634");
 extern s32 g_ShiftTargetSpeed asm("D_8007DA74");
 extern s32 g_RoadGrade asm("D_8007DA78");
 extern u8 *g_TrackArcCenters asm("D_8019C7D0");
-/* Deliberately raw: the only initialiser anywhere is func_8002C478 writing
+/* Deliberately raw: the only initialiser anywhere is InitPlayerCar writing
  * zero, and the only other write is this decrement, so the boost it would add
  * can never fire. See docs/names.md 15g. */
 extern s32 D_8019C998;
 extern s32 g_StandingStartSpin asm("D_8019CA04");
 /*
  * Rpm-band indexes into the car spec's two rpm->value curves, rebuilt per car
- * by func_8002C478: entry b holds how many curve points sit at or below rpm
+ * by InitPlayerCar: entry b holds how many curve points sit at or below rpm
  * band b, where band = drive->rpm / 1000. `Start` is the same table one
  * halfword earlier, i.e. band b - 1, so [Start[b], End[b]) is the range of
  * curve points this rpm can land in. The first curve (spec +0x40 / +0x44 x,
@@ -36,7 +36,7 @@ extern s16 g_GripLossTimer asm("D_801E4BA0");
 extern s32 g_ShiftTargetRpm asm("D_801E4BF4");
 /* Divisor of the speed-squared drag term: drag = v^2 / (spec->unk110 * 1000 /
  * this). Reset to 1000 at the end of every frame, so writers elsewhere
- * (func_8002CB30, func_8002D398) change the drag for exactly one frame.
+ * (func_8002CB30, CollidePlayerWithCars) change the drag for exactly one frame.
  * NOTE: docs/names.md 15g listed this as written-but-never-read; that is
  * wrong, the read is right here. */
 extern s16 g_DragScale asm("D_801E4FB4");

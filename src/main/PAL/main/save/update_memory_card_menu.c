@@ -187,7 +187,7 @@ L_sw2:
     case 3:
         break;
     case -3:
-    default: /* 0 */
+    default:
         if (g_McCardStatus == -3) {
             s32 r = g_McErrorTicks;
             g_McErrorTicks = r + 1;
@@ -616,7 +616,7 @@ L_sw2:
         }
         break;
     case -3:
-    default: /* 0 */
+    default:
         {
             s32 sd = g_McCardStatus;
             g_McErrorPending = 1;
