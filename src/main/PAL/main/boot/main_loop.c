@@ -82,7 +82,7 @@ void InitSubsystems(void) {
 }
 
 void __main(void) asm("func_800630AC");
-void func_80063190(s32 arg0);
+void BiosSetMemSize(s32 arg0) asm("func_80063190");
 void func_80018038(void);
 void func_800438BC(void);
 void func_80018078(void);
@@ -120,7 +120,7 @@ void MainLoop(void) {
 
     __main();
     KernelCallbackSlot3();
-    func_80063190(2);
+    BiosSetMemSize(2);
     CdInit();
     InitSubsystems();
     func_80018038();

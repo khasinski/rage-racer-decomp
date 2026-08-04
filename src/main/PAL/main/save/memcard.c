@@ -377,9 +377,9 @@ s32 WaitMemoryCardSwEvent(void) {
 extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 void InitCARD(s32 arg0) asm("func_80063DCC");
 void StartCARD(void) asm("func_80063DDC");
-void func_80063180(void);
+void BiosBuInit(void) asm("func_80063180");
 void RestartMemoryCard(void) asm("func_8005F5E0");
-void RestartMemoryCard(void) { InitCARD(1); StartCARD(); func_80063180(); g_SaveElapsedTicks = 0; }
+void RestartMemoryCard(void) { InitCARD(1); StartCARD(); BiosBuInit(); g_SaveElapsedTicks = 0; }
 
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 
