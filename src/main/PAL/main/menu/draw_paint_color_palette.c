@@ -119,7 +119,8 @@ void func_80046A2C(void *a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7,
                    s32 a8, s32 a9, s32 a10);
 
-void func_8004F3EC(s32 arg0, s32 arg1) {
+void DrawOwnedCarCounter(s32 arg0, s32 arg1) asm("func_8004F3EC");
+void DrawOwnedCarCounter(s32 arg0, s32 arg1) {
     s32 count;
     s32 a1v;
     register s32 c17 asm("$17");

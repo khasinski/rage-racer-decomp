@@ -254,7 +254,8 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
 
 extern volatile s32 D_8007FB4C;
 
-void func_800509C4(s32 arg0) {
+void DrawTimeAttackPlate(s32 arg0) asm("func_800509C4");
+void DrawTimeAttackPlate(s32 arg0) {
     void *scratch = *(void **)0x1F800004;
     s32 step = arg0;
     s32 value;
@@ -499,7 +500,7 @@ void InitMenuMode(void) {
     func_8005A2CC(0);
     func_800496F0(0);
     DrawMenuLightBurst(0);
-    func_800509C4(0);
+    DrawTimeAttackPlate(0);
 }
 
 /* Counts the enabled entries of g_CarTable. */

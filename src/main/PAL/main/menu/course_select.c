@@ -528,11 +528,11 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
 void DrawBrowseArrows(s32, s32, s32, s32) asm("func_80049418");
 void DrawMenuLightBurst(s32 arg0) asm("func_8004CF30");
-void func_8004F3EC(s32 arg0, s32 arg1);
+void DrawOwnedCarCounter(s32 arg0, s32 arg1) asm("func_8004F3EC");
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
 s32 DrawClassChangeCurtain(s32 arg0) asm("func_8005026C");
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) asm("func_800506BC");
-void func_800509C4(s32 arg0);
+void DrawTimeAttackPlate(s32 arg0) asm("func_800509C4");
 void DrawMenuCourseView(void) asm("func_8005194C");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void func_8005E8E0(void);
@@ -555,7 +555,7 @@ void UpdateCourseSelectScreen(void) {
     if (g_GrandPrixMode != 0) {
         FlipCourseCard(&D_8009B364, &D_8009B360, &D_8009B368);
     } else {
-        func_800509C4(g_TimeAttackPlateStep);
+        DrawTimeAttackPlate(g_TimeAttackPlateStep);
     }
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     DrawMenuCourseView();
@@ -851,7 +851,7 @@ void UpdateCourseSelectScreen(void) {
                 if (g_MenuViewOffset > 0x3D08F) {
                     g_MenuScreen = 3;
                     g_MenuHandlerIndex = 4;
-                    func_8004F3EC(0, 0);
+                    DrawOwnedCarCounter(0, 0);
                     DrawBrowseArrows(0, 0, 0, 0);
                     g_CarSwapToIndex = -1;
                     g_MenuViewAngle = 0;

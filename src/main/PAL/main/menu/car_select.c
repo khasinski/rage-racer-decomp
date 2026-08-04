@@ -27,7 +27,7 @@ void DrawMenuLightBurst(s32 arg0) asm("func_8004CF30");
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2) asm("func_800489AC");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 DrawRankingTable(s32 *arg0, s32 arg1, s32 arg2) asm("func_8004D384");
-void func_800509C4(s32 arg0);
+void DrawTimeAttackPlate(s32 arg0) asm("func_800509C4");
 
 void UpdateRankingScreen(void) asm("func_80054D10");
 void UpdateRankingScreen(void) {
@@ -145,7 +145,7 @@ pos:
     D_8019CDF8 = 0;
     g_UiScriptProgress = 0;
     GameMenuBusy = 0;
-    func_800509C4(0);
+    DrawTimeAttackPlate(0);
     if (g_CourseIndex >= 4) {
         g_TimeAttackPlateStep = 1;
     } else {
@@ -367,7 +367,7 @@ void DrawEngineerShopPricePanel(s32 step, s32 arg1, s32 arg2)
 s32 CountOwnedCars(void) asm("func_80050F68");
 void StartSequenceFadeOut(void) asm("func_8005E8E0");
 void func_8004CED0(void);
-void func_8004F3EC(s32 step, s32 count);
+void DrawOwnedCarCounter(s32 step, s32 count) asm("func_8004F3EC");
 void func_80050400(s32 arg0, s32 arg1);
 
 void UpdateCarSelectScreen(void) asm("func_8005568C");
@@ -405,7 +405,7 @@ void UpdateCarSelectScreen(void) {
 
             initial = -1;
             if (g_GrandPrixMode == 0) {
-                func_8004F3EC(1, CountOwnedCars());
+                DrawOwnedCarCounter(1, CountOwnedCars());
             }
             lowMode = mode & 0xFF;
             DrawFadingMenuSprites(g_UiScriptProgress, lowMode, D_801E4138);
@@ -594,7 +594,7 @@ void UpdateCarSelectScreen(void) {
         DrawBrowseArrows(
             1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
         if (g_GrandPrixMode == 0) {
-            func_8004F3EC(1, CountOwnedCars());
+            DrawOwnedCarCounter(1, CountOwnedCars());
         }
         DrawFadingMenuSprites(g_UiScriptProgress, mode, D_801E4138);
         RunTimedDrawScript(cmdList, &g_UiScriptProgress, 0);
@@ -607,7 +607,7 @@ void UpdateCarSelectScreen(void) {
     DrawBrowseArrows(
         -1, 0, ~g_PrevOwnedCarIndex != 0, ~g_NextOwnedCarIndex != 0);
     if (g_GrandPrixMode == 0) {
-        func_8004F3EC(-1, CountOwnedCars());
+        DrawOwnedCarCounter(-1, CountOwnedCars());
     }
     RunTimedDrawScript(cmdList, &g_UiScriptProgress, -1);
     RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
@@ -679,7 +679,7 @@ void UpdateCarSelectScreen(void) {
             D_8009B360 = largeValue;
             g_MenuCourseModelIndex = course;
             D_8009B368 = g_CourseProgress[course & 3];
-            func_800509C4(0);
+            DrawTimeAttackPlate(0);
             if (g_CourseIndex >= 4) {
                 g_TimeAttackPlateStep = one;
             } else {
