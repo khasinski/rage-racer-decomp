@@ -484,10 +484,8 @@ void UpdateCarBodyRoll(A *ctx) {
     if (mode < 2) {
         ctx->sub.x1C = 0;
         ctx->f44 = 0;
-    } else {
-    if (!(mode >= 4)) {
-    if (!(D_8019C9AC != 0)) {
-    if (!(g_PadType != 0x41)) {
+    } else if ((mode < 4) && (D_8019C9AC == 0)) {
+    if (g_PadType == 0x41) {
 
     if (g_MirrorMode != 0) {
         a1 = g_PadHeld & g_PadButtonMapping[0];
@@ -527,15 +525,7 @@ void UpdateCarBodyRoll(A *ctx) {
     if (ctx->f64 != 0) {
         ctx->f64 = (ctx->f64 * 7) / 8;
     }
-    v1 = ctx->fA4;
-    if (v1 < 800) {
-        s32 f = ctx->f64;
-        ctx->f64 = (f * v1) / 800;
-    }
-    return;
-    }
-
-    if (!(g_PadType != 0x23)) {
+    } else if (g_PadType == 0x23) {
     a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconMaxTwist];
     if (g_MirrorMode != 0) a1 = -a1;
     if (!(a1 >= 0)) {
@@ -584,20 +574,11 @@ void UpdateCarBodyRoll(A *ctx) {
     if (ctx->f64 != 0) {
         ctx->f64 = (ctx->f64 * 7) / 8;
     }
-    v1 = ctx->fA4;
-    if (v1 < 800) {
-        s32 f = ctx->f64;
-        ctx->f64 = (f * v1) / 800;
-    }
-    return;
-    }
-
+    } else {
     ctx->f64 = 0;
     ctx->sub.x1C = 0;
-    goto L_53C;
     }
-    }
-
+    } else {
     {
         s32 arg1 = (ctx->fB8 << 11) + 3072;
         r = GetAngleDelta(ctx->f24, arg1 - ctx->fB4);
@@ -628,7 +609,6 @@ void UpdateCarBodyRoll(A *ctx) {
     ctx->f64 = a0v / 128;
 
     }
-L_53C:
     v1 = ctx->fA4;
     if (v1 < 800) {
         s32 f = ctx->f64;
