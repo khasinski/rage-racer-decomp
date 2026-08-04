@@ -32,12 +32,13 @@ u_long StFreeRing(u_long *base) {
     return 0;
 }
 
-void func_8006D0AC(long arg0, u_long arg1) {
+/* Returns a value the callers ignore; declaring it void changes codegen.
+ * RAW() on the store replaces the barrier that used to hold it in place. */
+s32 func_8006D0AC(long arg0, u_long arg1) {
     u_long i;
 
     for (i = 0; i < arg1; i++) {
-        asm("" ::: "memory");
-        ((StRingClearRecord *)g_StRingBase)[i + arg0].value = 0;
+        RAW(((StRingClearRecord *)g_StRingBase)[i + arg0].value) = 0;
     }
 }
 
