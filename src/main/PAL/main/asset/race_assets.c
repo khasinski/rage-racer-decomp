@@ -39,7 +39,7 @@ void SetEnvironmentScript(void *arg0) asm("func_8004550C");
 void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void InstallTrackPoints(void *arg0) asm("func_8002A6B0");
 void RegisterCourseModels(void *arg0) asm("func_80017A6C");
-void func_80017AD0(void *arg0);
+void InstallTerrainCellData(void *arg0) asm("func_80017AD0");
 void SetCourseObjects(void *arg0) asm("func_8004121C");
 void InstallTrackEventData(void *arg0) asm("func_80034E04");
 void func_80043AC8(void *arg0, s32 arg1);
@@ -170,7 +170,7 @@ void LoadRaceAssets(void) {
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 4); InstallTrackPoints(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 5); RegisterCourseModels(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 6); RegisterModelBank(g_AssetBlockPtr, 2);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 7); func_80017AD0(g_AssetBlockPtr);
+            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 7); InstallTerrainCellData(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 8); SetCourseObjects(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 9); InstallTrackEventData(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 10); func_80043AC8(g_AssetBlockPtr, 1);

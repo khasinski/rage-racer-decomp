@@ -13,7 +13,7 @@ void SetEnvironmentScript(void *arg0) asm("func_8004550C");
 void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void InstallTrackPoints(void *arg0) asm("func_8002A6B0");
 void RegisterCourseModels(void *arg0) asm("func_80017A6C");
-void func_80017AD0(void *arg0);
+void InstallTerrainCellData(void *arg0) asm("func_80017AD0");
 void SetCourseObjects(void *arg0) asm("func_8004121C");
 void InstallTrackEventData(void *arg0) asm("func_80034E04");
 void func_80043AC8(void *arg0, s32 arg1);
@@ -69,7 +69,7 @@ void LoadTrackDataAssets(void) {
             header = g_AssetLoadCursor;
             offset = header->offsets[7];
             g_AssetBlockPtr = (u8 *)header + offset;
-            func_80017AD0(g_AssetBlockPtr);
+            InstallTerrainCellData(g_AssetBlockPtr);
 
             header = g_AssetLoadCursor;
             offset = header->offsets[8];

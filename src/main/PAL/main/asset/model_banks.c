@@ -181,7 +181,8 @@ void RegisterCourseModels(s32 *base) {
     }
 }
 
-void func_80017AD0(s32 *base) {
+void InstallTerrainCellData(s32 *base) asm("func_80017AD0");
+void InstallTerrainCellData(s32 *base) {
     s32 *ptr;
     s32 count;
     s32 i;
