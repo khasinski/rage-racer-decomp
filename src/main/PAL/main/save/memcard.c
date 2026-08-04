@@ -566,57 +566,57 @@ extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
  * every load to the top of the function, which retail does not do.
  */
 void StoreSaveStateBlock(u8 *arg0) asm("func_8005F88C");
-void StoreSaveStateBlock(u8 *arg0) {
+void StoreSaveStateBlock(u8 *block) {
     {
         u16 h0 = g_PadMappingIndex;
         u16 h1 = g_NegconMappingIndex;
         u16 h2 = g_NegconSteerNeutral;
         u16 h3 = g_NegconSteerPlay;
-        *(u16 *)(arg0 + 0x0) = h0;
-        *(u16 *)(arg0 + 0x2) = h1;
-        *(u16 *)(arg0 + 0x4) = h2;
-        *(u16 *)(arg0 + 0x6) = h3;
+        *(u16 *)(block + 0x0) = h0;
+        *(u16 *)(block + 0x2) = h1;
+        *(u16 *)(block + 0x4) = h2;
+        *(u16 *)(block + 0x6) = h3;
     }
-    *(u16 *)(arg0 + 0x8) = g_NegconNeutralI;
-    *(u16 *)(arg0 + 0xA) = g_NegconNeutralII;
+    *(u16 *)(block + 0x8) = g_NegconNeutralI;
+    *(u16 *)(block + 0xA) = g_NegconNeutralII;
     {
         u16 h0 = g_NegconMaxTwist;
         u16 h1 = g_NegconNeutralL;
-        *(u16 *)(arg0 + 0xE) = h0;
-        *(u16 *)(arg0 + 0xC) = h1;
+        *(u16 *)(block + 0xE) = h0;
+        *(u16 *)(block + 0xC) = h1;
     }
 
-    *(s32 *)(arg0 + 0x10) = g_GrandPrixSave.course;
-    *(s32 *)(arg0 + 0x14) = g_GrandPrixSave.carIndex;
-    *(s32 *)(arg0 + 0x18) = g_GrandPrixSave.classIndex;
-    *(s32 *)(arg0 + 0x1C) = g_GrandPrixSave.maxClassReached;
-    *(s32 *)(arg0 + 0x20) = g_GrandPrixSave.money;
-    *(s32 *)(arg0 + 0x24) = g_ExtraGrandPrixSave.course;
-    *(s32 *)(arg0 + 0x28) = g_ExtraGrandPrixSave.carIndex;
-    *(s32 *)(arg0 + 0x2C) = g_ExtraGrandPrixSave.classIndex;
-    *(s32 *)(arg0 + 0x30) = g_ExtraGrandPrixSave.maxClassReached;
+    *(s32 *)(block + 0x10) = g_GrandPrixSave.course;
+    *(s32 *)(block + 0x14) = g_GrandPrixSave.carIndex;
+    *(s32 *)(block + 0x18) = g_GrandPrixSave.classIndex;
+    *(s32 *)(block + 0x1C) = g_GrandPrixSave.maxClassReached;
+    *(s32 *)(block + 0x20) = g_GrandPrixSave.money;
+    *(s32 *)(block + 0x24) = g_ExtraGrandPrixSave.course;
+    *(s32 *)(block + 0x28) = g_ExtraGrandPrixSave.carIndex;
+    *(s32 *)(block + 0x2C) = g_ExtraGrandPrixSave.classIndex;
+    *(s32 *)(block + 0x30) = g_ExtraGrandPrixSave.maxClassReached;
     {
-        s32 w34 = g_ExtraGrandPrixSave.money;
-        u16 h4C = g_BgmSelection;
-        *(s32 *)(arg0 + 0x34) = w34;
-        *(s32 *)(arg0 + 0x38) = g_TimeAttackSave.course;
-        *(s32 *)(arg0 + 0x3C) = g_TimeAttackSave.carIndex;
-        *(s32 *)(arg0 + 0x40) = g_TimeAttackSave.classIndex;
-        *(s32 *)(arg0 + 0x44) = g_TimeAttackSave.maxClassReached;
+        s32 extraMoney = g_ExtraGrandPrixSave.money;
+        u16 bgmSelection = g_BgmSelection;
+        *(s32 *)(block + 0x34) = extraMoney;
+        *(s32 *)(block + 0x38) = g_TimeAttackSave.course;
+        *(s32 *)(block + 0x3C) = g_TimeAttackSave.carIndex;
+        *(s32 *)(block + 0x40) = g_TimeAttackSave.classIndex;
+        *(s32 *)(block + 0x44) = g_TimeAttackSave.maxClassReached;
         {
-            register s32 w48 asm("$4") = g_TimeAttackSave.money;
-            u16 h4E = g_AdvancedSeriesUnlocked;
-            *(u16 *)(arg0 + 0x4C) = h4C;
-            *(u16 *)(arg0 + 0x4E) = h4E;
-            *(s32 *)(arg0 + 0x48) = w48;
+            register s32 timeAttackMoney asm("$4") = g_TimeAttackSave.money;
+            u16 advancedUnlocked = g_AdvancedSeriesUnlocked;
+            *(u16 *)(block + 0x4C) = bgmSelection;
+            *(u16 *)(block + 0x4E) = advancedUnlocked;
+            *(s32 *)(block + 0x48) = timeAttackMoney;
         }
     }
-    *(s32 *)(arg0 + 0x50) = g_MaxClassReached[0];
-    *(s32 *)(arg0 + 0x54) = g_MaxClassReached[1];
+    *(s32 *)(block + 0x50) = g_MaxClassReached[0];
+    *(s32 *)(block + 0x54) = g_MaxClassReached[1];
 
     {
         s32 i;
-        register u8 *dst asm("$4") = arg0;
+        register u8 *dst asm("$4") = block;
 
         for (i = 0; i < 13; i++) {
             dst[0x58 + 0] = g_GrandPrixCars[i].modelVariant;
@@ -645,7 +645,7 @@ void StoreSaveStateBlock(u8 *arg0) {
     }
 
     {
-        register u8 *dst asm("$4") = arg0;
+        register u8 *dst asm("$4") = block;
         s32 offset = 0;
 
         for (; offset < 0x2C; offset += 4) {
@@ -658,7 +658,7 @@ void StoreSaveStateBlock(u8 *arg0) {
     {
         register s32 count asm("$13") = 0;
         u16 *src = g_TeamLogoClut;
-        u8 *dst = arg0;
+        u8 *dst = block;
 
         for (; count < 0x10; count++) {
             *(u16 *)(dst + 0x1BC) = *src++;
@@ -669,7 +669,7 @@ void StoreSaveStateBlock(u8 *arg0) {
     {
         register s32 count asm("$13") = 0;
         u16 *src = g_TeamLogoCanvas;
-        u8 *dst = arg0;
+        u8 *dst = block;
 
         for (; count < 0x400; count++) {
             *(u16 *)(dst + 0x1DC) = *src++;
@@ -682,7 +682,7 @@ void StoreSaveStateBlock(u8 *arg0) {
         s32 outer = 0;
         s32 *lapBase = g_BestLapTimes;
         s32 *totalBase = g_BestTotalTimes;
-        u8 *outerDst = arg0;
+        u8 *outerDst = block;
 
         for (; outer < 2; outer++) {
             register s32 middle asm("$12") = 0;
@@ -721,7 +721,7 @@ void StoreSaveStateBlock(u8 *arg0) {
         /* Serialised as a flat run of words, hence the cast. */
         s32 *rankingBase = (s32 *)g_RankingRecords;
         s32 *timeBase = (s32 *)g_TimeRecords;
-        register u8 *outerDst asm("$25") = arg0;
+        register u8 *outerDst asm("$25") = block;
         register s32 outerOffset asm("$16") = 0;
 
         for (; outer < 2; outer++) {
@@ -764,7 +764,7 @@ void StoreSaveStateBlock(u8 *arg0) {
         /* The remaining register hints in these loops are load-bearing. */
         s32 outer = 0;
         register s32 *sectorBase asm("$11") = g_BestSectorTimes;
-        u8 *outerDst = arg0;
+        u8 *outerDst = block;
         s32 outerOffset = 0;
 
         for (; outer < 2; outer++) {
@@ -799,18 +799,18 @@ void StoreSaveStateBlock(u8 *arg0) {
         s32 bgmVolume = g_BgmVolumeSetting;
         s32 sfxVolume = g_SfxVolumeSetting;
         s32 monoOutput = g_MonoOutput;
-        u16 *checksumSrc = (u16 *)arg0;
+        u16 *checksumSrc = (u16 *)block;
 
-        *(s32 *)(arg0 + 0xFBC) = bgmVolume;
-        *(s32 *)(arg0 + 0xFC0) = sfxVolume;
-        *(s32 *)(arg0 + 0xFC4) = monoOutput;
-        memcpy(arg0 + 0xFC8, g_GrandPrixCourseProgress, 8);
-        memcpy(arg0 + 0xFD0, g_ExtraGrandPrixCourseProgress, 8);
+        *(s32 *)(block + 0xFBC) = bgmVolume;
+        *(s32 *)(block + 0xFC0) = sfxVolume;
+        *(s32 *)(block + 0xFC4) = monoOutput;
+        memcpy(block + 0xFC8, g_GrandPrixCourseProgress, 8);
+        memcpy(block + 0xFD0, g_ExtraGrandPrixCourseProgress, 8);
 
         for (; count < 0x7FE; count++) {
             checksum += *checksumSrc++;
         }
-        *(u32 *)(arg0 + MC_BLOCK_CHECKSUM_OFS) = ~checksum;
+        *(u32 *)(block + MC_BLOCK_CHECKSUM_OFS) = ~checksum;
     }
 }
 
@@ -866,8 +866,8 @@ void ApplyAudioSettings(void) asm("func_80021224");
  * void *, and gcc 2.6.3 rejects the u8 * signature this body needs.)
  */
 s32 LoadSaveStateBlock(u8 *arg0) asm("func_8005FED4");
-s32 LoadSaveStateBlock(u8 *arg0) {
-    register u8 *base asm("$17") = arg0;
+s32 LoadSaveStateBlock(u8 *block) {
+    register u8 *base asm("$17") = block;
     __asm__("" : "=r"(base) : "0"(base));
     {
         u32 sum;
@@ -900,7 +900,7 @@ s32 LoadSaveStateBlock(u8 *arg0) {
         g_NegconNeutralL = *(u16 *)(base + 0xC);
         {
             u16 hE = *(u16 *)(base + 0xE);
-            s32 w30;
+            s32 extraMaxClass;
             g_GrandPrixSave.course = *(s32 *)(base + 0x10);
             g_GrandPrixSave.carIndex = *(s32 *)(base + 0x14);
             g_GrandPrixSave.classIndex = *(s32 *)(base + 0x18);
@@ -909,13 +909,13 @@ s32 LoadSaveStateBlock(u8 *arg0) {
             g_ExtraGrandPrixSave.course = *(s32 *)(base + 0x24);
             g_ExtraGrandPrixSave.carIndex = *(s32 *)(base + 0x28);
             g_ExtraGrandPrixSave.classIndex = *(s32 *)(base + 0x2C);
-            w30 = *(s32 *)(base + 0x30);
+            extraMaxClass = *(s32 *)(base + 0x30);
             g_PadMappingIndex = h0;
             g_NegconMappingIndex = h1;
             g_NegconSteerNeutral = h2;
             g_NegconSteerPlay = h3;
             g_NegconMaxTwist = hE;
-            g_ExtraGrandPrixSave.maxClassReached = w30;
+            g_ExtraGrandPrixSave.maxClassReached = extraMaxClass;
         }
         g_ExtraGrandPrixSave.money = *(s32 *)(base + 0x34);
         g_TimeAttackSave.course = *(s32 *)(base + 0x38);
@@ -924,14 +924,14 @@ s32 LoadSaveStateBlock(u8 *arg0) {
         g_TimeAttackSave.maxClassReached = *(s32 *)(base + 0x44);
         g_TimeAttackSave.money = *(s32 *)(base + 0x48);
         {
-            s32 h4C = *(s16 *)(base + 0x4C);
-            u16 h4E = *(u16 *)(base + 0x4E);
-            s32 w54;
+            s32 bgmSelection = *(s16 *)(base + 0x4C);
+            u16 advancedUnlocked = *(u16 *)(base + 0x4E);
+            s32 maxClassReached1;
             g_MaxClassReached[0] = *(s32 *)(base + 0x50);
-            w54 = *(s32 *)(base + 0x54);
-            g_BgmSelectionW = h4C;
-            g_AdvancedSeriesUnlocked = h4E;
-            g_MaxClassReached[1] = w54;
+            maxClassReached1 = *(s32 *)(base + 0x54);
+            g_BgmSelectionW = bgmSelection;
+            g_AdvancedSeriesUnlocked = advancedUnlocked;
+            g_MaxClassReached[1] = maxClassReached1;
         }
     }
 
