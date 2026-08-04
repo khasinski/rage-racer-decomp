@@ -213,7 +213,8 @@ void DrawStartGridScenery(s32 arg0) {
     }
 }
 
-void func_8003D6E8(void) {
+void ResetFreeLookCamera(void) asm("func_8003D6E8");
+void ResetFreeLookCamera(void) {
 }
 
 /*

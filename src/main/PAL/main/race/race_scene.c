@@ -160,7 +160,7 @@ void BuildTileStrips(void) asm("func_800340D8");
 
 void BuildRaceHudPrims(s32) asm("func_80032D5C");
 
-void func_8003D6E8(void);
+void ResetFreeLookCamera(void) asm("func_8003D6E8");
 
 void InitShuttleScenery(void) asm("func_8003F0F8");
 
@@ -636,7 +636,7 @@ void EnterRaceScene(void) {
     g_RivalCueCooldown2 = 0;
     g_RivalCueCooldown1 = 0;
     g_RivalCueCooldown0 = 0;
-    func_8003D6E8();
+    ResetFreeLookCamera();
     InitShuttleScenery();
     SeedFlybyScenery();
     SeedRouteScenery();

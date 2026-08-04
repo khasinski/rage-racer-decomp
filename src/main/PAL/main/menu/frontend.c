@@ -213,7 +213,8 @@ void UpdateFrontend(void) {
  * Empty stub; SetupDisplay240 and SetupDisplay480 both call it with one argument,
  * so the parameter is declared and ignored.
  */
-void func_8001BE94(int arg0) {
+void ResetFrameContext(int arg0) asm("func_8001BE94");
+void ResetFrameContext(int arg0) {
 }
 
 extern volatile u8 g_FrameContexts[] asm("D_8019CE38");
@@ -294,8 +295,8 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
         offset += stride;
     } while (i < 2);
 
-    func_8001BE94(0);
-    func_8001BE94(1);
+    ResetFrameContext(0);
+    ResetFrameContext(1);
 
     asm(".globl func_8001C05C\nfunc_8001C05C = func_8001BE9C + 0x1C0");
 }
@@ -351,8 +352,8 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
         offset += stride;
     } while (i < 2);
 
-    func_8001BE94(0);
-    func_8001BE94(1);
+    ResetFrameContext(0);
+    ResetFrameContext(1);
 
     *(u16 *)0x1F80007E = 0x1E0;
     asm(".globl func_8001C218\nfunc_8001C218 = func_8001C088 + 0x190");
