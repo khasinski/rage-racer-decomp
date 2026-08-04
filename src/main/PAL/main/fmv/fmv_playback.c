@@ -76,16 +76,21 @@ void *GetFmvFrame(s32 *arg0) {
     u16 wdraw;
     s32 half;
     s32 c067e;
+    s32 frameStatus;
     register void *ret asm("$2");
 
-    for (count = 0x800000; count != 0; count--) {
-        if (StGetNext(&slot[0], &slot[1]) == 0) {
-            goto process;
+    count = 0x800000;
+    do {
+        frameStatus = StGetNext(&slot[0], &slot[1]);
+        count--;
+        if (frameStatus == 0) {
+            break;
         }
+    } while (count != 0);
+    if (frameStatus != 0) {
+        return 0;
     }
-    return 0;
 
-process:
     entry = slot[1];
     if (*(u32 *)((char *)entry + 8) >= (u32)g_StreamSectorCount) {
         g_FmvStreamEnded = 1;
