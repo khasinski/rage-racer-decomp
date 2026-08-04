@@ -891,10 +891,10 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     {
-        u16 h0 = *(u16 *)(base + 0x0);
-        u16 h1 = *(u16 *)(base + 0x2);
-        u16 h2 = *(u16 *)(base + 0x4);
-        u16 h3 = *(u16 *)(base + 0x6);
+        u16 padMappingIndex = *(u16 *)(base + 0x0);
+        u16 negconMappingIndex = *(u16 *)(base + 0x2);
+        u16 negconSteerNeutral = *(u16 *)(base + 0x4);
+        u16 negconSteerPlay = *(u16 *)(base + 0x6);
         g_NegconNeutralI = *(u16 *)(base + 0x8);
         g_NegconNeutralII = *(u16 *)(base + 0xA);
         g_NegconNeutralL = *(u16 *)(base + 0xC);
@@ -910,10 +910,10 @@ s32 LoadSaveStateBlock(u8 *block) {
             g_ExtraGrandPrixSave.carIndex = *(s32 *)(base + 0x28);
             g_ExtraGrandPrixSave.classIndex = *(s32 *)(base + 0x2C);
             extraMaxClass = *(s32 *)(base + 0x30);
-            g_PadMappingIndex = h0;
-            g_NegconMappingIndex = h1;
-            g_NegconSteerNeutral = h2;
-            g_NegconSteerPlay = h3;
+            g_PadMappingIndex = padMappingIndex;
+            g_NegconMappingIndex = negconMappingIndex;
+            g_NegconSteerNeutral = negconSteerNeutral;
+            g_NegconSteerPlay = negconSteerPlay;
             g_NegconMaxTwist = hE;
             g_ExtraGrandPrixSave.maxClassReached = extraMaxClass;
         }
