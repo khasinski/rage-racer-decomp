@@ -30,7 +30,7 @@ void func_8006A58C(long arg0);
 void func_8006CDA0(void);
 void data_ready_callback(void) asm("func_8006CE78");
 void StClearRingRange(long arg0, long arg1) asm("func_8006D0AC");
-void func_8006D1B0(long arg0);
+void StSetRingParams(long arg0) asm("func_8006D1B0");
 void func_8006D1D0(void);
 
 /*
@@ -114,7 +114,7 @@ long StGetBackloc(CdlLOC *arg0) {
 /* Arms CD streaming: installs the data-ready `callback`/`user_data` and mode
  * (bit 0 = one-shot vs looping). start_frame/end_frame bound the stream. */
 void StSetStream(long mode, long start_frame, long end_frame, long callback, long user_data) {
-    func_8006D1B0(1);
+    StSetRingParams(1);
     D_801E8274 = 0;
     g_StFrameCallback = (StCallback)callback;
     g_StColorMode = mode & 1;

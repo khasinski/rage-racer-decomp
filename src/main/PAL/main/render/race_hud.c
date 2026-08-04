@@ -204,7 +204,8 @@ void DrawRacePosition(void) {
     *(s16 *)(right + 0xE) = tile;
 }
 
-void func_800332E0(s32 arg0) {
+void SetHudBlinkColor(s32 arg0) asm("func_800332E0");
+void SetHudBlinkColor(s32 arg0) {
     *(u16 *)(g_DrawBuffer + 0x237A6) = arg0 ? 0x7811 : 0x7800;
 }
 

@@ -86,7 +86,8 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     return 1;
 }
 
-void func_8006D1B0(long arg0, long arg1, long arg2) {
+void StSetRingParams(long arg0, long arg1, long arg2) asm("func_8006D1B0");
+void StSetRingParams(long arg0, long arg1, long arg2) {
     D_801E8A94 = arg0;
     D_801E3E10 = arg1;
     D_801E8278 = arg2;

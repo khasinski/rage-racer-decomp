@@ -54,7 +54,8 @@ long CD_getsector2(long arg0, u_long arg1) {
     return 0;
 }
 
-void func_8006C16C(long arg0) {
+void CdSetSectorParam(long arg0) asm("func_8006C16C");
+void CdSetSectorParam(long arg0) {
     D_800992E4 = arg0;
 }
 

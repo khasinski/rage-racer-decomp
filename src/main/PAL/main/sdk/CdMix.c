@@ -22,7 +22,8 @@ void CdDataCallback(long arg0) {
     DMACallback(3, arg0);
 }
 
-void func_8006A9B8(void) {
+void CdMixDataSync(void) asm("func_8006A9B8");
+void CdMixDataSync(void) {
     CD_datasync();
 }
 
