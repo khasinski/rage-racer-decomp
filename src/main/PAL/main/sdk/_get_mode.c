@@ -219,7 +219,6 @@ u_long get_dx(DispEnv *env) {
     long mode;
 
     value = *modep;
-    asm("" : "=r"(value) : "0"(value));
     mode = (u8)value;
 
     switch (mode) {

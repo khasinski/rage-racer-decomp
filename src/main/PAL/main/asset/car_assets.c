@@ -53,7 +53,7 @@ void LoadCarSelectAssets(void) {
     GameCarModelAsset *model;
     register GameCarEntry *entry asm("$2");
     s32 carIndex;
-    register s32 indexOffset;
+    s32 indexOffset;
     s32 firstOffset;
     register s32 secondOffset asm("$4");
     s32 assetOffset;

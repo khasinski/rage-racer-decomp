@@ -250,7 +250,6 @@ loop:
         s2 = v1;
     } else {
         v0 = t1raw << 16;
-        __asm__("" : "=r"(v0) : "0"(v0));
         a1s = v0 >> 16;
         if ((t0 - a1s) < arg) {
             v0 = t0 - arg;

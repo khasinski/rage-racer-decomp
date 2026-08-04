@@ -65,7 +65,7 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     register long tmp asm("v0");
     long x;
     long y;
-    register long flags asm("v1");
+    long flags;
 
     id = arg0;
     stackA = (u_short)arg5;
@@ -120,7 +120,7 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     long index;
     long voiceOffset;
     long volOffset;
-    register long field asm("v1");
+    long field;
 
     if ((u_short)arg0 >= 0x18U) {
     } else {

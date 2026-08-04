@@ -918,7 +918,7 @@ after_match:
 
         if (right != 0) {
             /* Load-bearing: removing this $v0 pin changes 139 linked words. */
-            register s32 resetLoad;
+            s32 resetLoad;
             s32 resetCount;
             s32 inactiveValue;
             s32 activeValue;

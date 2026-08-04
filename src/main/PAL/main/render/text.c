@@ -384,9 +384,7 @@ void DrawProportionalTextShadedWide(
                  * see common.h. */
                 RAW(sprt->h) = height;
                 ot = g_DrawBuffer;
-                asm("" : "=r"(ot) : "0"(ot));
                 clut = home.clut;
-                asm("" : "=r"(clut) : "0"(clut));
                 ot += 0xCC;
                 sprt->clut = clut;
                 sprt->w = width;

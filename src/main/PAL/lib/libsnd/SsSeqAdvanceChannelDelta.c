@@ -16,7 +16,7 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
     long remaining;
     long period;
     register long period_copy asm("$6");
-    register long delay;
+    long delay;
     register long store_value asm("$2");
     long count;
     volatile long pad[4];
