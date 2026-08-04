@@ -87,3 +87,6 @@ docs/*_REPORT_*.md
 # Per-function agent notes: durable findings belong in docs/names.md instead.
 docs/func_*.md
 docs/DECOMPILATION_GUIDE.md
+
+# Debug dump written by decomp-permuter when a compile fails.
+debug_source.c
