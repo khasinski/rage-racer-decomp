@@ -619,26 +619,26 @@ void StoreSaveStateBlock(u8 *block) {
         register u8 *dst asm("$4") = block;
 
         for (i = 0; i < 13; i++) {
-            dst[0x58 + 0] = g_GrandPrixCars[i].modelVariant;
-            dst[0x58 + 1] = g_GrandPrixCars[i].tireCompound;
-            dst[0x58 + 2] = g_GrandPrixCars[i].transmission;
-            dst[0x58 + 3] = g_GrandPrixCars[i].paintColor1;
-            dst[0x58 + 4] = g_GrandPrixCars[i].paintColor2;
-            dst[0x58 + 5] = g_GrandPrixCars[i].enabled;
+            dst[MC_GP_CARS_OFS + 0] = g_GrandPrixCars[i].modelVariant;
+            dst[MC_GP_CARS_OFS + 1] = g_GrandPrixCars[i].tireCompound;
+            dst[MC_GP_CARS_OFS + 2] = g_GrandPrixCars[i].transmission;
+            dst[MC_GP_CARS_OFS + 3] = g_GrandPrixCars[i].paintColor1;
+            dst[MC_GP_CARS_OFS + 4] = g_GrandPrixCars[i].paintColor2;
+            dst[MC_GP_CARS_OFS + 5] = g_GrandPrixCars[i].enabled;
 
-            dst[0xC0 + 0] = g_ExtraGrandPrixCars[i].modelVariant;
-            dst[0xC0 + 1] = g_ExtraGrandPrixCars[i].tireCompound;
-            dst[0xC0 + 2] = g_ExtraGrandPrixCars[i].transmission;
-            dst[0xC0 + 3] = g_ExtraGrandPrixCars[i].paintColor1;
-            dst[0xC0 + 4] = g_ExtraGrandPrixCars[i].paintColor2;
-            dst[0xC0 + 5] = g_ExtraGrandPrixCars[i].enabled;
+            dst[MC_EXTRA_CARS_OFS + 0] = g_ExtraGrandPrixCars[i].modelVariant;
+            dst[MC_EXTRA_CARS_OFS + 1] = g_ExtraGrandPrixCars[i].tireCompound;
+            dst[MC_EXTRA_CARS_OFS + 2] = g_ExtraGrandPrixCars[i].transmission;
+            dst[MC_EXTRA_CARS_OFS + 3] = g_ExtraGrandPrixCars[i].paintColor1;
+            dst[MC_EXTRA_CARS_OFS + 4] = g_ExtraGrandPrixCars[i].paintColor2;
+            dst[MC_EXTRA_CARS_OFS + 5] = g_ExtraGrandPrixCars[i].enabled;
 
-            dst[0x128 + 0] = g_TimeAttackCars[i].modelVariant;
-            dst[0x128 + 1] = g_TimeAttackCars[i].tireCompound;
-            dst[0x128 + 2] = g_TimeAttackCars[i].transmission;
-            dst[0x128 + 3] = g_TimeAttackCars[i].paintColor1;
-            dst[0x128 + 4] = g_TimeAttackCars[i].paintColor2;
-            dst[0x128 + 5] = g_TimeAttackCars[i].enabled;
+            dst[MC_TIME_CARS_OFS + 0] = g_TimeAttackCars[i].modelVariant;
+            dst[MC_TIME_CARS_OFS + 1] = g_TimeAttackCars[i].tireCompound;
+            dst[MC_TIME_CARS_OFS + 2] = g_TimeAttackCars[i].transmission;
+            dst[MC_TIME_CARS_OFS + 3] = g_TimeAttackCars[i].paintColor1;
+            dst[MC_TIME_CARS_OFS + 4] = g_TimeAttackCars[i].paintColor2;
+            dst[MC_TIME_CARS_OFS + 5] = g_TimeAttackCars[i].enabled;
 
             dst += 8;
         }
@@ -939,24 +939,24 @@ s32 LoadSaveStateBlock(u8 *block) {
         register u8 *src asm("$6") = base;
         s32 i;
         for (i = 0; i < 13; i++) {
-            g_GrandPrixCars[i].modelVariant = src[0x58 + 0];
-            g_GrandPrixCars[i].tireCompound = src[0x58 + 1];
-            g_GrandPrixCars[i].transmission = src[0x58 + 2];
-            g_GrandPrixCars[i].paintColor1 = src[0x58 + 3];
-            g_GrandPrixCars[i].paintColor2 = src[0x58 + 4];
-            g_GrandPrixCars[i].enabled = src[0x58 + 5];
-            g_ExtraGrandPrixCars[i].modelVariant = src[0xC0 + 0];
-            g_ExtraGrandPrixCars[i].tireCompound = src[0xC0 + 1];
-            g_ExtraGrandPrixCars[i].transmission = src[0xC0 + 2];
-            g_ExtraGrandPrixCars[i].paintColor1 = src[0xC0 + 3];
-            g_ExtraGrandPrixCars[i].paintColor2 = src[0xC0 + 4];
-            g_ExtraGrandPrixCars[i].enabled = src[0xC0 + 5];
-            g_TimeAttackCars[i].modelVariant = src[0x128 + 0];
-            g_TimeAttackCars[i].tireCompound = src[0x128 + 1];
-            g_TimeAttackCars[i].transmission = src[0x128 + 2];
-            g_TimeAttackCars[i].paintColor1 = src[0x128 + 3];
-            g_TimeAttackCars[i].paintColor2 = src[0x128 + 4];
-            g_TimeAttackCars[i].enabled = src[0x128 + 5];
+            g_GrandPrixCars[i].modelVariant = src[MC_GP_CARS_OFS + 0];
+            g_GrandPrixCars[i].tireCompound = src[MC_GP_CARS_OFS + 1];
+            g_GrandPrixCars[i].transmission = src[MC_GP_CARS_OFS + 2];
+            g_GrandPrixCars[i].paintColor1 = src[MC_GP_CARS_OFS + 3];
+            g_GrandPrixCars[i].paintColor2 = src[MC_GP_CARS_OFS + 4];
+            g_GrandPrixCars[i].enabled = src[MC_GP_CARS_OFS + 5];
+            g_ExtraGrandPrixCars[i].modelVariant = src[MC_EXTRA_CARS_OFS + 0];
+            g_ExtraGrandPrixCars[i].tireCompound = src[MC_EXTRA_CARS_OFS + 1];
+            g_ExtraGrandPrixCars[i].transmission = src[MC_EXTRA_CARS_OFS + 2];
+            g_ExtraGrandPrixCars[i].paintColor1 = src[MC_EXTRA_CARS_OFS + 3];
+            g_ExtraGrandPrixCars[i].paintColor2 = src[MC_EXTRA_CARS_OFS + 4];
+            g_ExtraGrandPrixCars[i].enabled = src[MC_EXTRA_CARS_OFS + 5];
+            g_TimeAttackCars[i].modelVariant = src[MC_TIME_CARS_OFS + 0];
+            g_TimeAttackCars[i].tireCompound = src[MC_TIME_CARS_OFS + 1];
+            g_TimeAttackCars[i].transmission = src[MC_TIME_CARS_OFS + 2];
+            g_TimeAttackCars[i].paintColor1 = src[MC_TIME_CARS_OFS + 3];
+            g_TimeAttackCars[i].paintColor2 = src[MC_TIME_CARS_OFS + 4];
+            g_TimeAttackCars[i].enabled = src[MC_TIME_CARS_OFS + 5];
             src += 8;
         }
     }

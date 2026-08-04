@@ -10,6 +10,12 @@
  */
 /* Geometry of the payload. The file around it is icon + header + this block
  * + header again; see the layout note above. */
+/* The three GameCarEntry tables inside the block: grand prix, extra grand
+ * prix and time attack, 13 rows of 8 bytes each. */
+#define MC_GP_CARS_OFS    0x58
+#define MC_EXTRA_CARS_OFS 0xC0
+#define MC_TIME_CARS_OFS  0x128
+
 #define MC_BLOCK_SIZE         0x1000
 #define MC_BLOCK_CHECKSUM_OFS 0xFFC
 
