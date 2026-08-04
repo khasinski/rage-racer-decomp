@@ -184,7 +184,8 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     *(u_char **) 0x1F800000 = next + 0xC;
 }
 
-void func_800279EC(long arg0, long arg1, long arg2, long arg3) {
+void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3) asm("func_800279EC");
+void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3) {
     long temp;
 
     temp = AddTilePrim(arg0, arg1, arg2 + 1, arg3 + 2, 0xC2, 0x1C, 0, 0, 0);

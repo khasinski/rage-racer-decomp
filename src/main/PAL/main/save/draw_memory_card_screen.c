@@ -7,7 +7,7 @@ s32 AddTilePrim(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s3
 void DrawMenuCursorArrow(s32 a, s32 b) asm("func_800236C8");
 void DrawOptionHintBar(s32 a) asm("func_80023750");
 void DrawPadTypeHint(void) asm("func_8002390C");
-s32 func_800279EC(s32 base, s32 prim, s32 a, s32 b);
+s32 DrawShadowedTile(s32 base, s32 prim, s32 a, s32 b) asm("func_800279EC");
 extern s32 *g_McMessageRows[] asm("D_8007D99C");
 extern s16 g_McMessageColumnX[] asm("D_8007D9E8");
 void DrawSpriteString(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80027874");
@@ -45,7 +45,7 @@ void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     next = AddTilePrim(base, *scratch, 0x5D, 0x3C, 0xE4, 0x40, 0, 0, 0);
     next = AddTilePrim(base, next, 0x5C, 0x3A, 0xE5, 0x44, 0xFF, 0xFF, 0xFF);
     for (i = 0; i < 3; i++) {
-        next = func_800279EC(base, next, 0x3E, 0xD0 + i * 0x30);
+        next = DrawShadowedTile(base, next, 0x3E, 0xD0 + i * 0x30);
     }
 
     if (arg0 != 0) {

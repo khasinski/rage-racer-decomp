@@ -367,7 +367,7 @@ void DrawEngineerShopPricePanel(s32 step, s32 arg1, s32 arg2)
     asm("func_8004F99C");
 s32 CountOwnedCars(void) asm("func_80050F68");
 void StartSequenceFadeOut(void) asm("func_8005E8E0");
-void func_8004CED0(void);
+void RestoreTeamLogoClut(void) asm("func_8004CED0");
 void DrawOwnedCarCounter(s32 step, s32 count) asm("func_8004F3EC");
 void func_80050400(s32 arg0, s32 arg1);
 
@@ -644,7 +644,7 @@ void UpdateCarSelectScreen(void) {
             D_8009B32C = 0;
             D_8009B330 = 0;
             ClearTeamNameTexture();
-            func_8004CED0();
+            RestoreTeamLogoClut();
             break;
         case 4:
             g_MenuScreen = 0xC;
