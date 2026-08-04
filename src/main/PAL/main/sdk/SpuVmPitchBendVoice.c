@@ -60,8 +60,10 @@ void SpuVmPitchBendVoice(long arg0, long arg1) {
     g_SndVoiceFlags[voice & 0xFF] |= 4;
 }
 
-void func_80074D0C(void) {
+void SpuVmPitchBendNoOpA(void) asm("func_80074D0C");
+void SpuVmPitchBendNoOpA(void) {
 }
 
-void func_80074D14(void) {
+void SpuVmPitchBendNoOpB(void) asm("func_80074D14");
+void SpuVmPitchBendNoOpB(void) {
 }

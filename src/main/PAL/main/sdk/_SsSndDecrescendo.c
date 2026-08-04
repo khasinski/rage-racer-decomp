@@ -11,7 +11,7 @@ typedef union SeqVolume71568 {
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 long SpuVmValidateSeqVol(short seq_sep, u_short left, u_short right, short update_voices) asm("func_80076C58");
-long func_80076DCC(short seq_sep, short *left, short *right);
+long SpuVmSplitSeqIndex(short seq_sep, short *left, short *right) asm("func_80076DCC");
 
 void _SsSndDecrescendo(short seq, short sep) asm("func_80071568");
 void _SsSndDecrescendo(short seq, short sep) {
@@ -25,7 +25,7 @@ void _SsSndDecrescendo(short seq, short sep) {
         if ((score->unk98 % score->unk42) == 0) {
             score->unk40--;
             if (score->unk40 > 0) {
-                func_80076DCC(seq | (sep << 8), &left.output, &right.output);
+                SpuVmSplitSeqIndex(seq | (sep << 8), &left.output, &right.output);
                 if (((left.value - score->unk40) > 0) &&
                     ((right.value - score->unk40) > 0) &&
                     (left.value != 1)) {
@@ -46,7 +46,7 @@ void _SsSndDecrescendo(short seq, short sep) {
     } else {
         score->unk40 += score->unk42;
         if (score->unk40 > 0) {
-            func_80076DCC(seq | (sep << 8), &left.output, &right.output);
+            SpuVmSplitSeqIndex(seq | (sep << 8), &left.output, &right.output);
             if (((u_long)(long)score->unk3E >=
                  ((score->unk94 - score->unk98) * -score->unk42)) &&
                 (-score->unk42 < left.value)) {
@@ -65,5 +65,5 @@ void _SsSndDecrescendo(short seq, short sep) {
         }
     }
 
-    func_80076DCC(seq | (sep << 8), &score->unk78, &score->unk7A);
+    SpuVmSplitSeqIndex(seq | (sep << 8), &score->unk78, &score->unk7A);
 }

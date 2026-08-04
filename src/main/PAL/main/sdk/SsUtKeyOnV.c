@@ -13,10 +13,10 @@ extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
 extern long SpuVmVSetUp(short, short) asm("func_80073314");
-extern void func_80074134(void);
+extern void SpuVmRebuildVoiceTable(void) asm("func_80074134");
 extern void SpuVmNoiseKeyOn(long) asm("func_80074348");
 extern long SpuVmCalculateTonePitch(u_short, u_short) asm("func_80074A6C");
-extern void func_80073C50(long, u_short);
+extern void SpuVmScaleVabVolume(long, u_short) asm("func_80073C50");
 
 long SsUtKeyOnV(
     long voice,
@@ -112,11 +112,11 @@ long SsUtKeyOnV(
     g_SndVoiceState[idx].active = 1;
     g_SndVoiceState[idx].age = 0;
     g_SndVoiceState[idx].tone = tone_value;
-    func_80074134();
+    SpuVmRebuildVoiceTable();
     if ((short)g_SndCurrentAttr.vag == 0xFF) {
         SpuVmNoiseKeyOn(voice & 0xFF);
     } else {
-        func_80073C50(1, SpuVmCalculateTonePitch(note, fine));
+        SpuVmScaleVabVolume(1, SpuVmCalculateTonePitch(note, fine));
     }
     g_SndUpdateLock = 0;
     return (short)voice;

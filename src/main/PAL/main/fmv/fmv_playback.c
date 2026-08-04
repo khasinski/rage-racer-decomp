@@ -16,7 +16,7 @@ typedef struct FmvDisplayState {
 } FmvDisplayState;
 
 void *GetFmvFrame(s32 *arg0) asm("func_8001EDC4");
-void func_80064588(void *arg0, s32 arg1);
+void MdecUnpackStatus(void *arg0, s32 arg1) asm("func_80064588");
 s32 func_8006CFF0(void *arg0);
 extern s32 g_FmvFrameWidth asm("D_8009AF6C");
 extern s32 g_FmvFrameHeight asm("D_8009AF70");
@@ -53,7 +53,7 @@ s32 PresentFmvFrame(s32 *arg0) {
         p = GetFmvFrame(arg0);
         if (p != 0) {
             arg0[2] = (arg0[2] == 0);
-            func_80064588(p, arg0[arg0[2]]);
+            MdecUnpackStatus(p, arg0[arg0[2]]);
             return func_8006CFF0(p);
         }
     }

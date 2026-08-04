@@ -156,7 +156,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/MDEC_reset", D_80064554);
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  *
- * Symbol:   func_80064588  (0x54D88, cc region 2.6.3, TU range 217 words)
+ * Symbol:   MdecUnpackStatus  (0x54D88, cc region 2.6.3, TU range 217 words)
  * Reason:   hand-written PSY-Q MDEC/DCT bitstream-decoder inner loop with a
  *           COP0 Status-register epilogue - not expressible as compiler C.
  * Evidence: (1) COP0 ops `mfc0 t1,$12` / `mtc0 t1,$12` read/modify/write the

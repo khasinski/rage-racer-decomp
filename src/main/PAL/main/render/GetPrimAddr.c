@@ -204,7 +204,8 @@ void SetLineG4(u8 *arg0) {
     *(u32 *)&arg0[0x24] = value;
 }
 
-void func_800650B4(u8 *arg0) {
+void SetDrawPacketTag(u8 *arg0) asm("func_800650B4");
+void SetDrawPacketTag(u8 *arg0) {
     arg0[3] = 3;
     arg0[7] = 2;
 }

@@ -235,5 +235,6 @@ void SelectCarModelSlot(s32 index) {
     g_CarModelAsset = g_CarModelSlots[index];
 }
 
-void func_80017BCC(void) {
+void ModelBankNoOp(void) asm("func_80017BCC");
+void ModelBankNoOp(void) {
 }
