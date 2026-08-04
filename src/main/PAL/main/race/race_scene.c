@@ -276,7 +276,7 @@ void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
 
 void DrawScriptedScenery(s32 arg0) asm("func_8003F608");
 
-void func_8004087C(s32 arg0);
+void UpdateTrackEventSound(s32 arg0) asm("func_8004087C");
 
 void UpdatePointAmbience(s32 arg0) asm("func_80040ADC");
 
@@ -975,7 +975,7 @@ update_race:
             valuePtr = &g_PlayerTrackProgress;
             UpdateZoneAmbience(*valuePtr);
             UpdatePointAmbience(*valuePtr);
-            func_8004087C(g_PlayerTrackSection);
+            UpdateTrackEventSound(g_PlayerTrackSection);
             TriggerRaceCues();
         } else {
             SetPanVoiceTargetVolume(0, 0);

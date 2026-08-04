@@ -126,7 +126,7 @@ void SetReverbDepth(s32 a, s32 b) asm("func_8005B190");
 
 void DrawPlayerTachometer(void) asm("func_8002F458");
 
-void func_8004087C(s32 a);
+void UpdateTrackEventSound(s32 a) asm("func_8004087C");
 
 void func_8003425C(u32 a);
 
@@ -518,7 +518,7 @@ void UpdateWaypointCollectScene(void) {
     GetTrackZoneBlend(g_PlayerTrackProgress);
     SetReverbDepth(g_ReverbZoneDepth, g_ReverbZoneDepth);
     DrawPlayerTachometer();
-    func_8004087C(*p);
+    UpdateTrackEventSound(*p);
     if (g_RacePhase < 3) {
         UpdateWaypoints();
         DrawWaypoints();

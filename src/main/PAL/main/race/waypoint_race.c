@@ -57,11 +57,11 @@ void UpdateRouteScenery(void) asm("func_8003EC98");
 
 void DrawRouteScenery(void) asm("func_8003F02C");
 
-void func_8003F9C4(void);
+void UpdatePathScenerySound(void) asm("func_8003F9C4");
 
 void DrawPathScenery(void) asm("func_80040730");
 
-void func_8004087C(s32 arg0);
+void UpdateTrackEventSound(s32 arg0) asm("func_8004087C");
 
 void UpdatePointAmbience(s32 arg0) asm("func_80040ADC");
 
@@ -201,14 +201,14 @@ void UpdateWaypointRaceScene(void) {
     DrawFlybyScenery();
     UpdateRouteScenery();
     DrawRouteScenery();
-    func_8003F9C4();
+    UpdatePathScenerySound();
     DrawPathScenery();
     DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
     GetTrackZoneBlend(g_PlayerTrackProgress);
     SetReverbDepth(g_ReverbZoneDepth, g_ReverbZoneDepth);
     UpdateZoneAmbience(g_PlayerTrackProgress);
     UpdatePointAmbience(g_PlayerTrackProgress);
-    func_8004087C(g_PlayerTrackSection);
+    UpdateTrackEventSound(g_PlayerTrackSection);
 }
 
 void SeedWaypoints(void) asm("func_80037714");

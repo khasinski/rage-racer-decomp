@@ -6,7 +6,7 @@ void UpdateFlybyScenery(void) asm("func_8003E590");
 void DrawFlybyScenery(void) asm("func_8003EAF4");
 void UpdateRouteScenery(void) asm("func_8003EC98");
 void DrawRouteScenery(void) asm("func_8003F02C");
-void func_8003F9C4(void);
+void UpdatePathScenerySound(void) asm("func_8003F9C4");
 void DrawPathScenery(void) asm("func_80040730");
 
 void DrawScriptedScenery(s32 arg0) asm("func_8003F608");
@@ -32,7 +32,7 @@ void DrawScriptedScenery(s32 arg0) {
         if (arg0 != 0) {
             UpdateRouteScenery();
             UpdateFlybyScenery();
-            func_8003F9C4();
+            UpdatePathScenerySound();
         }
         DrawRouteScenery();
         DrawFlybyScenery();
@@ -44,7 +44,7 @@ void DrawScriptedScenery(s32 arg0) {
 }
 
 /*
- * Frame counters and rate signs of the two keyframe tracks. func_8003F9C4
+ * Frame counters and rate signs of the two keyframe tracks. UpdatePathScenerySound
  * compares posFrame against g_PathSceneryPosSpan and rotFrame against
  * g_PathSceneryRotSpan to decide when to step to the next keyframe;
  * posRateNeg / rotRateNeg record that the keyframe's rate field was negative
@@ -234,7 +234,8 @@ void InitPathScenery(void) {
  * g_PathSceneryRotKeys) are eased sinusoidally between waypoints. The sound is
  * cue zero with distance attenuation and a Doppler-like pitch shift.
  */
-void func_8003F9C4(void) {
+void UpdatePathScenerySound(void) asm("func_8003F9C4");
+void UpdatePathScenerySound(void) {
     s32 delta[3];
     u8 *keys;
     register u8 *rec asm("$4");
