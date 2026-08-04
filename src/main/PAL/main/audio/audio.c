@@ -1092,7 +1092,8 @@ void func_80078528(s32 voice, s16 left, s16 right);
     func_80078528((s16)voice, (s16)left, (s16)right);                  \
     *state = neg
 
-void func_8005C6C0(void) {
+void UpdateBasicEffectVoices(void) asm("func_8005C6C0");
+void UpdateBasicEffectVoices(void) {
     s32 offset;
     s32 *state;
     s32 i;
@@ -1389,7 +1390,8 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                   (s16)(*pitchPtr >> 7), *(u16 *)pitchPtr & 0x7F);    \
     *statePtr = neg
 
-void func_8005CDB0(void) {
+void UpdateEffectVoiceStates(void) asm("func_8005CDB0");
+void UpdateEffectVoiceStates(void) {
     s32 *statePtr;
     s32 *pitchPtr;
     s16 *f0Ptr;
@@ -1790,9 +1792,9 @@ extern s32 g_EngineSoundCurves[] asm("D_801E446C");
 
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vab_slot) asm("func_8005B2F0");
 void func_8005BF30(void);
-void func_8005C6C0(void);
+void UpdateBasicEffectVoices(void) asm("func_8005C6C0");
 void func_8005C168(void);
-void func_8005CDB0(void);
+void UpdateEffectVoiceStates(void) asm("func_8005CDB0");
 s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) asm("func_8005D8EC");
 s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 value = position;
@@ -1913,9 +1915,9 @@ void UpdateLoadedAudioVoices(s32 value, s32 bank) {
 
     g_EngineSoundPosition = value;
     func_8005BF30();
-    func_8005C6C0();
+    UpdateBasicEffectVoices();
     func_8005C168();
-    func_8005CDB0();
+    UpdateEffectVoiceStates();
 }
 
 void SetDefaultReverbDepth(void) {
