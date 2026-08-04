@@ -519,7 +519,8 @@ extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 
 s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
 
-void func_80059320(void) {
+void UpdateCarListCursor(void) asm("func_80059320");
+void UpdateCarListCursor(void) {
     s32 index;
     GameCarEntry *entry;
 

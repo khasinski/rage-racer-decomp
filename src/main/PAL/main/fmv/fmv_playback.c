@@ -222,7 +222,8 @@ void func_8001F100(void) {
  * output ring g_ReplayFramesGp, keyed by pairIndex>>1. Only even indices hold a pair
  * (odd indices are skipped). Stride is ((n<<1)+n)<<4 == n*0x30 (sizeof pair).
  */
-void func_8001F134(s32 pairIndex, u8 *srcA, u8 *srcB) {
+void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) asm("func_8001F134");
+void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     GameRenderPairPoint *dst;
     u8 *base;
     GameRenderSourcePoint *src1;
@@ -272,12 +273,13 @@ void func_8001F134(s32 pairIndex, u8 *srcA, u8 *srcB) {
 }
 
 /*
- * Single-point variant of func_8001F134: packs a GameRenderSinglePoint from a
+ * Single-point variant of StoreReplayCarFrame: packs a GameRenderSinglePoint from a
  * GameRenderSourcePoint into the single-point output buffer g_ReplayFramesTimeAttack, keyed
  * by pointIndex>>1 (odd indices skipped). Stride ((n<<3)-n)<<2 == n*0x1C
  * (sizeof GameRenderSinglePoint).
  */
-void func_8001F274(s32 pointIndex, u8 *srcPtr) {
+void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) asm("func_8001F274");
+void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
     GameRenderSinglePoint *dst;
     u8 *base;
     GameRenderSourcePoint *src;

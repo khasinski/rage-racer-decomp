@@ -70,8 +70,8 @@ extern s32 g_ReplayWriteCursor asm("D_801E4BB0");
 extern s32 g_ReplayFrameCount asm("D_8019CB6C");
 extern s32 g_ReplayBufferWrapped asm("D_8009EC8C");
 extern u8 g_PlayerCar asm("D_8009E6D4");
-void func_8001F134(s32 arg0, u8 *arg1, u8 *arg2);
-void func_8001F274(s32 arg0, u8 *arg1);
+void StoreReplayCarFrame(s32 arg0, u8 *arg1, u8 *arg2) asm("func_8001F134");
+void StoreReplayTimeAttackFrame(s32 arg0, u8 *arg1) asm("func_8001F274");
 extern s32 g_ReplayReadCursor asm("D_801F179C");
 extern u8 *g_EnvScriptClock asm("D_8019C8FC");
 void func_800458CC(void *arg0);
@@ -221,9 +221,9 @@ void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
 void RecordReplayFrame(void) asm("func_8001F9D8");
 void RecordReplayFrame(void) {
     if (g_GrandPrixMode != 0) {
-        func_8001F134(g_ReplayWriteCursor, &g_PlayerCar, (u8 *)g_Cars);
+        StoreReplayCarFrame(g_ReplayWriteCursor, &g_PlayerCar, (u8 *)g_Cars);
     } else {
-        func_8001F274(g_ReplayWriteCursor, &g_PlayerCar);
+        StoreReplayTimeAttackFrame(g_ReplayWriteCursor, &g_PlayerCar);
     }
 
     g_ReplayWriteCursor++;

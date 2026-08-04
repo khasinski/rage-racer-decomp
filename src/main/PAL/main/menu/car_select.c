@@ -217,7 +217,8 @@ s32 DrawCarSelectScreen(s32 arg0) {
 extern s16 g_PrevOwnedCarIndex asm("D_8019CA18");
 extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 
-void func_80055454(void) {
+void UpdateOwnedCarNeighbours(void) asm("func_80055454");
+void UpdateOwnedCarNeighbours(void) {
     s32 index;
     GameCarEntry *ptr;
 
@@ -325,7 +326,7 @@ void EnterCarSelectScreen(void) {
     InstallCarModelSlot();
     g_MenuScreen = 4;
     g_UiScriptProgress = 0;
-    func_80055454();
+    UpdateOwnedCarNeighbours();
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     func_8005131C();
     DrawMenuLightBurst(-9);
@@ -424,7 +425,7 @@ void UpdateCarSelectScreen(void) {
                     D_801E4138 =
                         (D_801E4138 < mode) ? D_801E4138 + 1 : 0;
                 }
-                func_80055454();
+                UpdateOwnedCarNeighbours();
                 func_80055524();
                 sel = g_PlayerCarIndex;
                 if ((g_PadHeld & 0x8000) && (g_PrevOwnedCarIndex != -1)) {

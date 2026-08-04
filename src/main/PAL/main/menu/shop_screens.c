@@ -47,7 +47,7 @@ void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
 void func_80050400(s32 arg0, s32 arg1);
 s32 GetOwnedCarAssetIndex(s32 arg0) asm("func_80050FA8");
 void func_8005131C(void);
-void func_80059320(void);
+void UpdateCarListCursor(void) asm("func_80059320");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void UpdateCarShopScreen(void) asm("func_80059558");
@@ -88,7 +88,7 @@ void UpdateCarShopScreen(void) {
                 PlaySoundCue(1);
                 D_801E4294 = (D_801E4294 <= 0) ? D_801E4294 + 1 : 0;
             }
-            func_80059320();
+            UpdateCarListCursor();
             sel = g_CarListCursor;
             if ((g_PadHeld & 0x8000) && (g_PrevOwnedCarIndex != -1)) {
                 t = g_MenuViewAngleTarget;
