@@ -105,3 +105,27 @@ Two traps cost a wrong answer here on 2026-08-04:
   the script, not just a file count, before believing any zero.
 - Confirm a rename by grepping the file for its own name first. Four files
   looked misnamed and each defined its namesake on a single line.
+
+## Raw func_ call sites
+
+Most `func_XXXXXXXX(...)` calls are **not** unnamed functions. On 2026-08-04 the
+2310 raw call sites split as:
+
+- ~900 simply had not been switched over, and now use the name the function
+  already carried. The safe transform is narrow: rewrite the prototype the file
+  already has, keeping its exact parameter types, and rename the uses. Do not
+  insert or delete declarations, and skip a file whose call *precedes* its
+  prototype: that call relied on an implicit declaration of the raw symbol, and
+  renaming it emits a symbol nothing defines.
+- **1105 in 153 functions are blocked by a signature disagreement.** The name
+  exists, but the header and the call sites do not agree. `DrawSprite` is
+  declared `u32 flags` in `game/render.h` while callers declare `s32 flags`;
+  `UpdateCarLaunch` takes one parameter in `game/car.h` and is called with two.
+  The raw name hid this. Renaming exposes it as a compile error, so these need
+  the signature settled first, one function at a time.
+- 272 in 80 functions are genuinely unnamed and need real evidence.
+
+Substituting a header's types for a caller's own can also crash cc1 2.6.3
+outright (segfault or bus error, not a diagnostic) - `SetDrawMode`,
+`SetShadeTex` and `SetGteObjectMatrix` all did. Treat a compiler crash as a
+signal that the declaration changed, not as a toolchain glitch.
