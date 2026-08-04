@@ -2,7 +2,7 @@
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
-void SsSeqResume(long arg0, long arg1) asm("func_800718E0");
+void SsSeqResume(long arg0, long arg1);
 
 void SsSeqResume(long arg0, long arg1) {
     long raw;

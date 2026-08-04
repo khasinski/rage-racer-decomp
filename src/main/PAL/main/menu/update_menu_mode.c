@@ -94,7 +94,7 @@ extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
 void SpuVmDamperStep(void) asm("func_800731CC");
 void SsSeqCalledTbyT(void) asm("func_80071018");
 void func_8005E900(void);
-void TickSequenceAudio(void) asm("func_8005AF78");
+void TickSequenceAudio(void);
 void TickSequenceAudio(void) {
     if (g_SceneId == 0xC) {
         SpuVmDamperStep();
@@ -108,7 +108,7 @@ void TickSequenceAudio(void) {
 
 extern u8 D_801E8AFC;
 
-s32 SpuTransferStatus(void *arg0, s32 arg1) asm("func_8007B014");
+s32 SpuTransferStatus(void *arg0, s32 arg1);
 
 s32 IsSpuTransferDone(void) asm("func_8005AFD4");
 s32 IsSpuTransferDone(void) {
@@ -152,11 +152,11 @@ extern s32 D_801E6D80;
 extern s32 g_EngineSoundCurves[] asm("D_801E446C");
 extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
 
-void SetLoadedTableVolumeScale(s32 scale) asm("func_8005BD58");
-s32 SetSoundToneTableEntry(s32 row, s32 bank, s32 value) asm("func_8005B040");
+void SetLoadedTableVolumeScale(s32 scale);
+s32 SetSoundToneTableEntry(s32 row, s32 bank, s32 value);
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
 
-void LoadAudioParameterTable(u16 *table) asm("func_8005B070");
+void LoadAudioParameterTable(u16 *table);
 void LoadAudioParameterTable(u16 *table) {
     u16 *tableReg = table;
     s32 bank;

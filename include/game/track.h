@@ -72,8 +72,8 @@ extern s32 g_TrackPointCount asm("D_8009E6A8");
  * index. ...Scenery is the race copy (course passed in), ...Scenery2 the copy
  * for the replay/attract scenes (reads g_CourseIndex); they keep separate
  * animation state. `animate` == 0 draws a frozen frame. */
-void DrawCourseScenery(s32 course, s32 timer, s32 animate) asm("func_8003E1A4");
-void DrawCourseScenery2(s32 timer, s32 animate) asm("func_8003E2E8");
+void DrawCourseScenery(s32 course, s32 timer, s32 animate);
+void DrawCourseScenery2(s32 timer, s32 animate);
 
 /* The two-part animated prop at D_8007E2C0[0..1]: a 16-phase model swap plus a
  * companion part. Grand Prix only, nothing drawn in class 5. */

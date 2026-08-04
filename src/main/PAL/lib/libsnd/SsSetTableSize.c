@@ -6,7 +6,7 @@ extern u_char *g_SndSeqTable[] asm("D_801E79CC");
 extern short g_SndSeqTableSMax asm("D_801E826C");
 extern short g_SndSeqTableTMax asm("D_801E8270");
 
-void SsSetTableSize(u_char *arg0, long arg1, long arg2) asm("func_80072310");
+void SsSetTableSize(u_char *arg0, long arg1, long arg2);
 
 void SsSetTableSize(u_char *arg0, long arg1, long arg2) {
     volatile long pad[5];

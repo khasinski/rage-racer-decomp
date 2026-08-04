@@ -70,7 +70,7 @@ extern volatile u_long *g_GpuGp1 asm("D_800942BC");
 
 /* GPU-type probe: GP1(10h) info word 7, then a texture-window write-back
  * test. Returns 0..4; ResetGraph stores it as the graph type. */
-long Gpu_ProbeType(u_long mode) asm("func_800680A4");
+long Gpu_ProbeType(u_long mode);
 long Gpu_ProbeType(u_long arg0) {
     volatile u_long *gp0;
     u_long status;

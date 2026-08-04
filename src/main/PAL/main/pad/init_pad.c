@@ -96,7 +96,7 @@ extern s16 g_NegconNeutralII asm("D_8019CA0A");
 extern s16 g_NegconNeutralL asm("D_8019CA0C");
 extern s16 g_NegconSteerNeutral asm("D_801E4BF0");
 
-void UpdatePadState(void) asm("func_80014014");
+void UpdatePadState(void);
 void UpdatePadState(void) {
     s32 mask;
     s32 v;

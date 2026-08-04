@@ -11,11 +11,11 @@ extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 s32 func_80017C78(s32 assetIndex, void *dst);
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
-void UploadLoadBufferImage(void) asm("func_8001A498");
-void InstallResourceData(void *arg0) asm("func_80034DCC");
+void UploadLoadBufferImage(void);
+void InstallResourceData(void *arg0);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, s32 arg3) asm("func_8005B768");
 s32 PollAudioSlotLoad(void) asm("func_8005B89C");
-void StoreImage(Rect *rect, void *data) asm("func_80065B88");
+void StoreImage(Rect *rect, void *data);
 void DrawSync(long mode) asm("func_800658FC");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern GameSceneAssetHeader *g_AssetBase asm("D_8019C904");
@@ -111,7 +111,7 @@ s32 RequestSaveScreenAssets(void) {
     return 1;
 }
 
-void LoadSaveScreenAssets(void) asm("func_80018344");
+void LoadSaveScreenAssets(void);
 void LoadSaveScreenAssets(void) {
     if (g_AssetLoadState == 1) {
         if (func_80017C78(6, g_AssetBase) != 0) {

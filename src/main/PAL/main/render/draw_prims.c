@@ -64,7 +64,7 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     }
 }
 
-void SetSprt(void *arg0) asm("func_80064FA8");
+void SetSprt(void *arg0);
 void func_80064EB8(void *arg0, s32 enabled);
 void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
@@ -145,7 +145,7 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     *(SPRT **)0x1F800000 = prim;
 }
 
-void SetPolyF3(void *arg0) asm("func_80064EE0");
+void SetPolyF3(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
@@ -378,7 +378,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
     *(TILE **)0x1F800000 = prim;
 }
 
-void SetLineF2(void *arg0) asm("func_8006500C");
+void SetLineF2(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
@@ -429,7 +429,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
     *(LINE_F2 **)0x1F800000 = prim;
 }
 
-void SetLineF3(void *arg0) asm("func_80065034");
+void SetLineF3(void *arg0);
 void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_80017390(void *ot, void *prim, s32 arg2);
@@ -464,7 +464,7 @@ void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 
     *(LINE_F3 **)0x1F800000 = prim;
 }
 
-void SetLineG2(void *arg0) asm("func_80065020");
+void SetLineG2(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 

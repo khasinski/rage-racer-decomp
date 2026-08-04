@@ -505,7 +505,7 @@ void InitMenuMode(void) {
 }
 
 /* Counts the enabled entries of g_CarTable. */
-s32 CountOwnedCars(void) asm("func_80050F68");
+s32 CountOwnedCars(void);
 s32 CountOwnedCars(void) {
     s32 count = 0;
     s32 i = 0;

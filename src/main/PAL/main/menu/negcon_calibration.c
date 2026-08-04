@@ -122,7 +122,7 @@ extern s32 g_SetupArrowPulse asm("D_8007C13C");
 /* One of the four controller-screen animation counters. */
 extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
 
-void DrawOptionHintBar(s32 arg0) asm("func_80023750");
+void DrawOptionHintBar(s32 arg0);
 
 /*
  * Game mode 10: pick the steering play with left/right, confirm with

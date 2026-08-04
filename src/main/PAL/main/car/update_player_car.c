@@ -100,16 +100,16 @@ extern s32 g_PlayerTargetRpm asm("D_8009E808");
 extern u16 g_CarCornerOffsetX[] asm("D_8007DAB0");
 extern u16 g_CarCornerOffsetZ[] asm("D_8007DAB2");
 
-s32 IsCarFacingBackwards(void *car) asm("func_8002CD08");
+s32 IsCarFacingBackwards(void *car);
 void UpdateCarBodyRoll(void *car) asm("func_8002CD4C");
 void UpdateCarDrivetrain(void *car) asm("func_8002A810");
-void AccumulateLapProgress(void *car) asm("func_8002C168");
-void ApplyCarKnockback(void *car) asm("func_80038C4C");
+void AccumulateLapProgress(void *car);
+void ApplyCarKnockback(void *car);
 s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2) asm("func_80031298");
 s32 func_8002D398(void *car);
 void StartCarBodyKick(s32 arg0, void *car) asm("func_80038F0C");
-void UpdateCarTiltCounter(void *car) asm("func_80038B04");
-void UpdateCarCrestHop(void *car) asm("func_80039280");
+void UpdateCarTiltCounter(void *car);
+void UpdateCarCrestHop(void *car);
 void UpdateCarBodyKick(void *car) asm("func_80038FF0");
 s32 rsin(s32 angle) asm("func_80068568");
 s32 Random15(void) asm("func_800632B0");
@@ -616,7 +616,7 @@ extern s32 g_EnvScriptClock asm("D_8019C8FC");
 
 s32 DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) asm("func_8003351C");
 
-s32 DrawPlayerTachometer(void) asm("func_8002F458");
+s32 DrawPlayerTachometer(void);
 s32 DrawPlayerTachometer(void) {
     s32 value;
     s32 arg2;

@@ -97,15 +97,15 @@ typedef struct GameSaveBlock {
     u32 checksum;          /* +0xFFC */
 } GameSaveBlock;
 
-void AdvanceSaveHeaderCounter(void) asm("func_8005F618");
-void ClearSaveHeaderRows(GameSaveHeaderRow *rows) asm("func_8005F65C");
+void AdvanceSaveHeaderCounter(void);
+void ClearSaveHeaderRows(GameSaveHeaderRow *rows);
 void BuildSaveIconBlock(
     u8 *block,
     char *title,
     s32 iconTile,
     s32 imageX,
     s32 imageY) asm("func_8005F6BC");
-void WriteSaveHeaderRow(GameSaveHeaderRow *row) asm("func_8005F81C");
+void WriteSaveHeaderRow(GameSaveHeaderRow *row);
 s32 LoadSaveStateBlock(u8 *block) asm("func_8005FED4");
 s32 WriteMemoryCardSaveFile(
     char *path,
@@ -115,25 +115,25 @@ s32 WriteMemoryCardSaveFile(
     void *saveBlock) asm("func_80060524");
 s32 WriteMemoryCardSaveSlot(
     s32 slot,
-    GameSaveHeaderRow *header) asm("func_80060724");
+    GameSaveHeaderRow *header);
 s32 ReadVerifiedSaveHeader(
     s32 fd,
-    GameSaveHeaderRow *header) asm("func_800607B8");
-s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) asm("func_8006090C");
+    GameSaveHeaderRow *header);
+s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers);
 s32 LoadMemoryCardSaveSlot(
     s32 slot,
-    GameSaveHeaderRow *header) asm("func_800609E4");
-s32 CountMemoryCardFiles(s32 device, s32 port) asm("func_80060B68");
-s32 CalculateMemoryCardFreeBlocks(s32 fileCount) asm("func_80060BE8");
+    GameSaveHeaderRow *header);
+s32 CountMemoryCardFiles(s32 device, s32 port);
+s32 CalculateMemoryCardFreeBlocks(s32 fileCount);
 s32 RefreshMemoryCardSaveStatus(
     s32 unused,
-    GameSaveHeaderRow *headers) asm("func_80060C3C");
-void *FormatSaveElapsedTime(void *dst, u32 ticks) asm("func_80060CB0");
-void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) asm("func_80060D48");
-void DrawMemoryCardHelpPrompt(s32 promptIndex) asm("func_80060D88");
+    GameSaveHeaderRow *headers);
+void *FormatSaveElapsedTime(void *dst, u32 ticks);
+void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex);
+void DrawMemoryCardHelpPrompt(s32 promptIndex);
 void DrawMemoryCardSaveRows(
     s32 flags,
-    GameSaveHeaderRow *rows) asm("func_80060DF0");
+    GameSaveHeaderRow *rows);
 
 /*
  * Memory card BIOS front end. These were labelled Cd until the event classes
@@ -151,16 +151,16 @@ void DisableMemoryCardEvents(void) asm("func_8005F16C");
 void CloseMemoryCardEvents(void) asm("func_8005F204");
 /* libcard _card_clear (see psyq/): _new_card() + _card_write(chan, 0x3F, 0). */
 s32 _card_clear(s32 chan) asm("func_80063DEC");
-void CardReadAndSetMode(s32 param) asm("func_8005EB20");
-void CardSeekParam(s32 param) asm("func_8005EB78");
+void CardReadAndSetMode(s32 param);
+void CardSeekParam(s32 param);
 s32 CardReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
 s32 FormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
 
 
 /* Moved here from menu.h and audio.h: these belong to the card, not to
  * the menu or the mixer. */
-void StartMemoryCardEvents(void) asm("func_8005EAD0");
-void StopMemoryCardEvents(void) asm("func_8005EAF8");
+void StartMemoryCardEvents(void);
+void StopMemoryCardEvents(void);
 void EnterMemoryCardMenu(void) asm("func_800613B8");
 void EnterMemoryCardMenuFromLoad(void) asm("func_80061458");
 void UpdateMemoryCardMenu(void) asm("func_80061520");

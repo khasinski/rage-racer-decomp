@@ -18,7 +18,7 @@ extern char D_80013584[];
 extern char D_80013590[];
 
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
-void StoreImage(Rect *arg0, void *arg1) asm("func_80065B88");
+void StoreImage(Rect *arg0, void *arg1);
 long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) asm("func_80065BEC");
 
 void LoadImage(Rect *arg0, void *arg1) {
@@ -73,7 +73,7 @@ extern u_long g_OtagTerminator asm("D_800942A4");
 
 extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 
-void * ClearOTag(u_long *arg0, long count) asm("func_80065CB0");
+void * ClearOTag(u_long *arg0, long count);
 void *ClearOTag(u_long *arg0, long count) {
     register u_long *ptr asm("$16") = arg0;
     long remaining = count;
@@ -110,7 +110,7 @@ void *ClearOTag(u_long *arg0, long count) {
     return ptr;
 }
 
-void * ClearOTagR(u_long *arg0, long arg1) asm("func_80065D68");
+void * ClearOTagR(u_long *arg0, long arg1);
 void *ClearOTagR(u_long *arg0, long arg1) {
     if (g_GraphDebug >= 2) {
         GPU_printf(D_800135B4, arg0, arg1);
@@ -136,7 +136,7 @@ extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 
 /* libgpu DrawPrim: waits for the drawing to finish, then pushes the single
  * primitive at arg0 + 4, whose word count is the tag's length byte arg0[3]. */
-void DrawPrim(u_char *prim) asm("func_80065E00");
+void DrawPrim(u_char *prim);
 void DrawPrim(u_char *arg0) {
     u_long mode = arg0[3];
 

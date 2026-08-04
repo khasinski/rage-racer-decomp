@@ -26,8 +26,8 @@ extern char D_800138A4[];
 void LibcPutString(char *text) asm("func_80063C38");
 long CdReadInterruptStatus(void) asm("func_8006AB5C");
 void CD_flush(void) asm("func_8006BAF0");
-long VSync(long mode) asm("func_8006DD30");
-long GetKernelStatus(void) asm("func_8006E088");
+long VSync(long mode);
+long GetKernelStatus(void);
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
     long count;

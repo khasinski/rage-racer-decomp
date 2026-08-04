@@ -12,10 +12,10 @@ extern s32 g_CameraCarSpeed asm("D_801E3EB8");
 extern s32 g_CameraCarStepX asm("D_801E3ED8");
 extern s32 g_CameraCarStepZ asm("D_801E3EE0");
 
-void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight) asm("func_8002FC84");
+void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
-void AccumulateLapProgress(void *arg0) asm("func_8002C168");
+void AccumulateLapProgress(void *arg0);
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
 void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
 

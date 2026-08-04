@@ -63,26 +63,26 @@ extern s32 g_RankingTimes[][4][20] asm("D_801E774C");
 extern s32 g_RaceCueFlags asm("D_801E7A50");
 
 
-void BeginReplay(void) asm("func_8001FA70");
+void BeginReplay(void);
 
-void CommitClassProgress(void) asm("func_800207E0");
+void CommitClassProgress(void);
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 
-s32 FramesToMilliseconds(s32 arg0, s32 arg1) asm("func_80034F18");
+s32 FramesToMilliseconds(s32 arg0, s32 arg1);
 
-void ExitRaceScene(s32 arg0) asm("func_80035258");
+void ExitRaceScene(s32 arg0);
 
 void SeedFinishCamera(void *arg0) asm("func_8003CA14");
 
-void UpdateRivalCueGate(void) asm("func_80041170");
+void UpdateRivalCueGate(void);
 
 
 
 
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void ForceAllEffectVoicesEnabled(s32 arg0) asm("func_8005E4A4");
+void ForceAllEffectVoicesEnabled(s32 arg0);
 
 s32 Random15(void) asm("func_800632B0");
 
@@ -140,33 +140,33 @@ extern u8 g_MsgGame0Ok[] asm("D_80011488");
 
 void InitRenderState(s32) asm("func_80017884");
 
-void ResetReplayWriteCursor(void) asm("func_8001F100");
+void ResetReplayWriteCursor(void);
 
-void LoadTrackTexturePageRange(void) asm("func_8001D30C");
+void LoadTrackTexturePageRange(void);
 
-void InitTrackLighting(void) asm("func_8001D210");
+void InitTrackLighting(void);
 
 void func_8002C478(void *);
 
-void SetTrackTexturePageNow(s32) asm("func_80019E84");
+void SetTrackTexturePageNow(s32);
 
-void BuildStartingGrid(void) asm("func_80038844");
+void BuildStartingGrid(void);
 
-void ResetMirrorState(void) asm("func_8001A980");
+void ResetMirrorState(void);
 
 void func_800458CC(s32);
 
 void BuildTileStrips(void) asm("func_800340D8");
 
-void BuildRaceHudPrims(s32) asm("func_80032D5C");
+void BuildRaceHudPrims(s32);
 
-void ResetFreeLookCamera(void) asm("func_8003D6E8");
+void ResetFreeLookCamera(void);
 
 void InitShuttleScenery(void) asm("func_8003F0F8");
 
 void SeedFlybyScenery(void) asm("func_8003E464");
 
-void SeedRouteScenery(void) asm("func_8003EBCC");
+void SeedRouteScenery(void);
 
 void InitPathScenery(void) asm("func_8003F700");
 
@@ -223,31 +223,31 @@ static __inline__ void GameDebugLapResult(
 
 s32 UpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
 
-void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 arg0);
 
 void EndMirrorPass(void) asm("func_8001ABD8");
 
 void DrawRearViewMirror(s32 arg0) asm("func_8001ADF4");
 
-void RecordReplayFrame(void) asm("func_8001F9D8");
+void RecordReplayFrame(void);
 
-void DrawLostRaceCaption(s32 arg0) asm("func_800215B8");
+void DrawLostRaceCaption(s32 arg0);
 
-void DrawRaceEndBanner(s32 arg0) asm("func_800218A0");
+void DrawRaceEndBanner(s32 arg0);
 
 void BeginCarStandingStart(void *arg0, s32 arg1) asm("func_8002BE18");
 
 void UpdatePlayerCar(void *arg0) asm("func_8002DEFC");
 
-void DrawPlayerTachometer(void) asm("func_8002F458");
+void DrawPlayerTachometer(void);
 
 void DrawRaceHudLabels(s32 arg0) asm("func_80032E9C");
 
 void DrawLapTimes(void) asm("func_80033090");
 
-void DrawTimeRemaining(s32 arg0) asm("func_800331F8");
+void DrawTimeRemaining(s32 arg0);
 
-void DrawRacePosition(void) asm("func_80033230");
+void DrawRacePosition(void);
 
 void DrawWrongWayWarning(void);
 
@@ -259,10 +259,10 @@ void GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
 
 void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) asm("func_800352B8");
 
-void DrawSplitTimes(void) asm("func_800357BC");
+void DrawSplitTimes(void);
 
 
-void UpdateRacePosition(void) asm("func_8003AE2C");
+void UpdateRacePosition(void);
 
 void func_8003B0D4(void);
 
@@ -272,7 +272,7 @@ void UpdateFinishCamera(void *arg0) asm("func_8003CB3C");
 
 void DrawStartGridScenery(s32 arg0) asm("func_8003D458");
 
-void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
+void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
 void DrawScriptedScenery(s32 arg0) asm("func_8003F608");
 
@@ -287,7 +287,7 @@ void TriggerRaceCues(void) asm("func_80040F24");
 void PlayCountdownCues(s32 arg0) asm("func_800410BC");
 
 
-void DrawTerrainCells(void) asm("func_80041840");
+void DrawTerrainCells(void);
 
 void func_800418D4(void);
 
@@ -298,7 +298,7 @@ void UpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
 
 void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
 
-void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) asm("func_8005BEA8");
+void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
 
 void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C31C");
 

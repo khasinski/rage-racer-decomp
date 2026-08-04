@@ -203,8 +203,8 @@ void func_800736E8(void);
 void func_80073614(s32 arg0);
 void func_80073748(s32 arg0, s32 arg1);
 void func_8007865C(s32 arg0);
-long SsUtKeyOffV(long voice) asm("func_80078018");
-s32 VSync(s32 mode) asm("func_8006DD30");
+long SsUtKeyOffV(long voice);
+s32 VSync(s32 mode);
 void func_80072B3C(s32 arg0);
 void func_80072260(void);
 void func_80071C24(void);
@@ -500,7 +500,7 @@ void SetLoadedTableVolumeScale(s32 arg0) {
     g_SoundSlotVolumeScale = arg0;
 }
 
-void SetCdVolumeSetting(s32 arg0) asm("func_80043134");
+void SetCdVolumeSetting(s32 arg0);
 
 void SetSequenceVolumeSetting(s32 setting) {
     u32 adjusted;
@@ -527,7 +527,7 @@ void SetSequenceVolumeSetting(s32 setting) {
 /* Set the effect master volume scale (g_EffectVolumeScale = SoundScale.scale) from a
  * 0..15 level, mapping it onto the 0..0x80 fixed-point scale used by the
  * effect-voice volume math. */
-void SetEffectVolumeSetting(s32 level) asm("func_8005BDD4");
+void SetEffectVolumeSetting(s32 level);
 void SetEffectVolumeSetting(s32 level) {
     if (level >= 0) {
         if (level >= 0x10) {
@@ -540,12 +540,12 @@ void SetEffectVolumeSetting(s32 level) {
 }
 
 extern s32 g_StereoOutput asm("D_80082F40");
-void SetCdMixPreset(s32 arg0) asm("func_8004318C");
-void SsSetStereo(void) asm("func_80072AF4");
+void SetCdMixPreset(s32 arg0);
+void SsSetStereo(void);
 void SetStereoOutput(void) asm("func_8005BE24");
 void SetStereoOutput(void) { g_StereoOutput = 1; SetCdMixPreset(0); SsSetStereo(); }
 
-void SsSetMono(void) asm("func_80072AE0");
+void SsSetMono(void);
 void SetMonoOutput(void) asm("func_8005BE58");
 void SetMonoOutput(void) { g_StereoOutput = 0; SetCdMixPreset(1); SsSetMono(); }
 
@@ -600,7 +600,7 @@ void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
 
 extern s32 g_PanVoiceActive asm("D_801E6CEC");
 
-long SsUtKeyOffV(long voice) asm("func_80078018");
+long SsUtKeyOffV(long voice);
 
 void ApplyPanVoiceVolume(void) asm("func_8005BF30");
 void ApplyPanVoiceVolume(void) {
@@ -1158,7 +1158,7 @@ typedef struct EffectCueRow {
     s32 tone;
 } EffectCueRow;
 
-long SsUtKeyOffV(long voice) asm("func_80078018");
+long SsUtKeyOffV(long voice);
 void func_80078528(s32, s16, s16);
 void func_800781C0(s32, s32, s32, s32, s32, s32, s32);
 
@@ -1437,7 +1437,7 @@ extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
 extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
 extern const s32 g_SpecialVoiceBits[] asm("D_80011C74");
 extern const char D_80012778[];
-s32 SpuGetKeyStatus(s32 bit) asm("func_8007B088");
+s32 SpuGetKeyStatus(s32 bit);
 
 s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) asm("func_8005D050");
 s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) {
@@ -1554,7 +1554,7 @@ extern s32 D_80011C84;
 extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
 extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
 
-s32 SpuGetKeyStatus(s32 arg0) asm("func_8007B088");
+s32 SpuGetKeyStatus(s32 arg0);
 
 s32 StartSingleSpecialCue(s32 cue, s32 volume) asm("func_8005D414");
 s32 StartSingleSpecialCue(s32 cue, s32 volume) {
@@ -2016,7 +2016,7 @@ void RestoreReverbDepth(s32 arg0) {
     }
 }
 
-long SsUtKeyOffV(long voice) asm("func_80078018");
+long SsUtKeyOffV(long voice);
 
 void ForcePanVoiceEnabled(s32 enabled) asm("func_8005DDB8");
 void ForcePanVoiceEnabled(s32 enabled) {
@@ -2101,8 +2101,8 @@ extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
 extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
 
-long SsUtKeyOffV(long voice) asm("func_80078018");
-void StartIndexedEffectVoice(s32 arg0) asm("func_8005C09C");
+long SsUtKeyOffV(long voice);
+void StartIndexedEffectVoice(s32 arg0);
 void func_8005C0E4(void);
 
 void ForceBasicEffectVoicesEnabled(s32 enabled) asm("func_8005DEF0");
@@ -2505,7 +2505,7 @@ void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], *(s16 *)((u8 *)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
 }
 
-long SsUtKeyOffV(long voice) asm("func_80078018");
+long SsUtKeyOffV(long voice);
 
 void StopDirectVoice(s32 voice) {
     SsUtKeyOffV((s16)voice);

@@ -6,8 +6,8 @@ extern u_short g_VramWidth[] asm("D_800941EC");
 extern u_short g_VramHeight[] asm("D_800941EE");
 
 u_long _get_mode(long arg0, long arg1, u_long arg2) asm("func_800669F0");
-u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) asm("func_80066A4C");
-u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) asm("func_80066B18");
+u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1);
+u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1);
 u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) asm("func_80066BE4");
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
 
@@ -211,7 +211,7 @@ u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {
 
 extern u_char g_GraphReverse asm("D_800941EB");
 
-u_long get_dx(DispEnv *env) asm("func_80066CB0");
+u_long get_dx(DispEnv *env);
 
 u_long get_dx(DispEnv *env) {
     volatile u_char *modep = g_GraphType;
@@ -245,7 +245,7 @@ extern volatile u_long *g_OtcDmaBcr asm("D_800942D0");
 extern volatile u_long *g_OtcDmaChcr asm("D_800942D4");
 extern volatile u_long *g_GpuDpcr asm("D_800942D8");
 
-void Gpu_ArmTimeout(void) asm("func_80067F04");
+void Gpu_ArmTimeout(void);
 long Gpu_CheckTimeout(void) asm("func_80067F38");
 
 /* Driver-table slot +0x2C: clears an ordering table through the hardware

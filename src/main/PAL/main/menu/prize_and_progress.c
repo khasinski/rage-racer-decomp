@@ -17,17 +17,17 @@ extern s32 g_ClassCompleted asm("D_801E4B94");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 void DrawFullscreenFadeTile(s32, s32) asm("func_80033AA0");
 void DrawRaceTimePanel(s32) asm("func_800204F4");
-void DrawPrizeMoneyPanel(s32) asm("func_800206B8");
+void DrawPrizeMoneyPanel(s32);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-void TickClassClearFanfare(void) asm("func_80020D90");
+void TickClassClearFanfare(void);
 void RequestSelectBgmAssets(void) asm("func_80018410");
-void AdvanceGrandPrixClass(void) asm("func_80020B08");
+void AdvanceGrandPrixClass(void);
 void func_800201D4(void);
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
 void SetSequenceVolumeSetting(s32 arg0) asm("func_8005BD84");
-void SetEffectVolumeSetting(s32 arg0) asm("func_8005BDD4");
+void SetEffectVolumeSetting(s32 arg0);
 void func_8005BE24(void);
 void func_8005BE58(void);
 extern UnkCopyChunk g_SaveDefaults[] asm("D_8007BE68");
@@ -42,9 +42,9 @@ extern u8 g_GrandPrixCourseProgress asm("D_801E42EC");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern s32 g_BgmSelection asm("D_801E42CC");
-void ApplyAudioSettings(void) asm("func_80021224");
-void ResetProgressSlot(void *arg0, s32 *arg1) asm("func_80021288");
-void ResetCourseProgress(s32 arg0) asm("func_800212F0");
+void ApplyAudioSettings(void);
+void ResetProgressSlot(void *arg0, s32 *arg1);
+void ResetCourseProgress(s32 arg0);
 void ShuffleBgmOrder(void) asm("func_8001B488");
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
@@ -163,7 +163,7 @@ void UpdatePrizeMoneyScreen(void) {
     func_800201D4();
 }
 
-void ApplyAudioSettings(void) asm("func_80021224");
+void ApplyAudioSettings(void);
 void ApplyAudioSettings(void) {
     SetSequenceVolumeSetting(g_BgmVolumeSetting);
     SetEffectVolumeSetting(g_SfxVolumeSetting);
@@ -174,7 +174,7 @@ void ApplyAudioSettings(void) {
     }
 }
 
-void ResetProgressSlot(void *arg0, s32 *arg1) asm("func_80021288");
+void ResetProgressSlot(void *arg0, s32 *arg1);
 void ResetProgressSlot(void *arg0, s32 *arg1) {
     UnkCopyChunk *dst;
     UnkCopyChunk *src;
@@ -196,7 +196,7 @@ void ResetProgressSlot(void *arg0, s32 *arg1) {
     arg1[4] = 0;
 }
 
-void ResetCourseProgress(s32 arg0) asm("func_800212F0");
+void ResetCourseProgress(s32 arg0);
 void ResetCourseProgress(s32 arg0) {
     u8 *ptr = g_CourseProgress;
 
@@ -266,7 +266,7 @@ void InitSaveDefaults(void) {
 }
 
 /* Derives the 0..3 class grade from a course-progress block; 0 when an over-class car was used. */
-s32 ComputeClassGrade(void) asm("func_800214B8");
+s32 ComputeClassGrade(void);
 s32 ComputeClassGrade(void) {
     u8 *ptr;
     s32 value;

@@ -10,7 +10,7 @@ typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
 extern s32 g_OptionMenuCursor asm("D_8019C7B4");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
-void DrawMenuCursorArrow(s32 arg0, s32 arg1) asm("func_800236C8");
+void DrawMenuCursorArrow(s32 arg0, s32 arg1);
 extern s32 g_SoundOptionCursor asm("D_8019C868");
 extern s32 g_ClassRecordMenuCursor asm("D_8019C97C");
 extern s32 g_ScreenOffsetX asm("D_801E4B8C");
@@ -21,15 +21,15 @@ extern Rgb D_8007D658[];
 extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
 extern Struct12 D_8007D5D4[];
 s32 func_800153FC(void);
-s32 RequestTrackLoad(void) asm("func_8001965C");
-void StartOptionMenuExit(s32 arg0) asm("func_80023B08");
+s32 RequestTrackLoad(void);
+void StartOptionMenuExit(s32 arg0);
 /* The six rows of the setup menu, plus the cursor when g_GameMode is 1. */
-void DrawOptionRootMenu(void) asm("func_80023BB4");
+void DrawOptionRootMenu(void);
 void DrawOptionRootMenu(void);
 s32 Random15(void) asm("func_800632B0");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 /* The eleven class icons, tinted by g_ClassRecords[i].place. */
-void DrawClassRecordGrid(void) asm("func_80024420");
+void DrawClassRecordGrid(void);
 void DrawClassRecordGrid(void);
 /* One class record: class digit, grade sprite, clear count. */
 void DrawClassRecordDetail(void) asm("func_80023FE8");
@@ -41,7 +41,7 @@ s32 AddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 
 extern s32 g_MonoOutput asm("D_801E6C70");
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
-void DrawOptionHintBar(s32 arg0) asm("func_80023750");
+void DrawOptionHintBar(s32 arg0);
 s32 func_8001705C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 /* One volume slider row: `level` filled 4x0x18 bars between two end glyphs. */
 void DrawVolumeBar(s32 arg0, s32 arg1) asm("func_800249A4");

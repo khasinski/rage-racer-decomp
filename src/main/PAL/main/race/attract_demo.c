@@ -13,10 +13,10 @@ extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_AttractDemoStep asm("D_801E682C");
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
-void InstallCourseAssets(void) asm("func_80019730");
-s32 RequestTrackDataAssets(void) asm("func_80019844");
+void InstallCourseAssets(void);
+s32 RequestTrackDataAssets(void);
 extern s16 g_AttractTitleDelays[] asm("D_8007D6CC");
-s32 GetAttractTitleFade(s32 arg0) asm("func_8002664C");
+s32 GetAttractTitleFade(s32 arg0);
 
 void func_80046A2C(
     u8 *arg0,
@@ -36,21 +36,21 @@ void func_80046A2C(
 
 extern u32 g_BgmShuffleIndex asm("D_8009E6CC");
 extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
-void InitTrackScene(void) asm("func_80025940");
-void AdvanceBgmShuffleBag(s32 arg0) asm("func_80025E54");
-void DrawAttractTitle(void) asm("func_800266D0");
+void InitTrackScene(void);
+void AdvanceBgmShuffleBag(s32 arg0);
+void DrawAttractTitle(void);
 extern u32 g_StreamReturnScene asm("D_8019C760");
 extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 void DrawFullscreenFadeTile(s32 arg0, u32 arg1) asm("func_80033AA0");
-void ReturnToTitleScene(void) asm("func_800268EC");
+void ReturnToTitleScene(void);
 s32 CycleAttractCameraCar(u32 arg0, s32 arg1) asm("func_8001A1F0");
 void func_8003BB50(void);
-void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
-void DrawTerrainCellsWide(void) asm("func_80041888");
-void DrawCourseScenery2(u32 arg0, u32 arg1) asm("func_8003E2E8");
+void DrawTerrainCellsWide(void);
+void DrawCourseScenery2(u32 arg0, u32 arg1);
 
 void UpdateBgmSelectScene(void) asm("func_80026570");
 void UpdateBgmSelectScene(void) {
@@ -81,7 +81,7 @@ void EnterAttractDemo(void) {
     g_CameraCarIndex = 0;
 }
 
-s32 GetAttractTitleFade(s32 arg0) asm("func_8002664C");
+s32 GetAttractTitleFade(s32 arg0);
 s32 GetAttractTitleFade(s32 arg0) {
     s32 value;
 
@@ -97,7 +97,7 @@ s32 GetAttractTitleFade(s32 arg0) {
     return value < 0 ? 0 : (value < 0x80 ? value : 0x7F);
 }
 
-void DrawAttractTitle(void) asm("func_800266D0");
+void DrawAttractTitle(void);
 void DrawAttractTitle(void) {
     u8 *ptr;
     s32 value;
@@ -147,7 +147,7 @@ void UpdateAttractDemoStart(void) {
     DrawAttractTitle();
 }
 
-void ReturnToTitleScene(void) asm("func_800268EC");
+void ReturnToTitleScene(void);
 void ReturnToTitleScene(void) {
     g_SceneId = 3;
     g_StreamReturnScene = 0;

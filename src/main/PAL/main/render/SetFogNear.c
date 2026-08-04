@@ -11,7 +11,7 @@ void SetFogNear(s32 arg0, s32 arg1) {
 
 s32 Lzc(s32 arg0) asm("func_80069C7C");
 
-s32 CordicRotate(s32 arg0) asm("func_80068738");
+s32 CordicRotate(s32 arg0);
 s32 CordicRotate(s32 arg0) {
     s32 data[16];
     s32 *hi;
@@ -84,7 +84,7 @@ s32 CordicRotate(s32 arg0) {
     return data[7];
 }
 
-s32 SquareRoot12(s32 arg0) asm("func_8006888C");
+s32 SquareRoot12(s32 arg0);
 s32 SquareRoot12(s32 arg0) {
     s32 bits;
     s32 shift;
@@ -116,7 +116,7 @@ s32 SquareRoot12(s32 arg0) {
 
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
-void InitGeom(void) asm("func_80068928");
+void InitGeom(void);
 void InitGeom(void) {
     asm volatile(
         ".set noreorder\n"

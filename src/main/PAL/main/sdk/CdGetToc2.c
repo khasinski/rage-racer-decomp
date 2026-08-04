@@ -12,13 +12,13 @@ long CD_init(long arg0) asm("func_8006A428");
 long CdSyncCallback(long arg0) asm("func_8006A574");
 long CdReadyCallback(long arg0) asm("func_8006A58C");
 long CdControlB(long arg0, u_char *arg1, u_char *arg2) asm("func_8006A808");
-void CdDefaultSyncCallback(void) asm("func_8006A360");
-void CdDefaultReadyCallback(void) asm("func_8006A388");
-void CdDefaultReadCallback(void) asm("func_8006A3B0");
+void CdDefaultSyncCallback(void);
+void CdDefaultReadyCallback(void);
+void CdDefaultReadCallback(void);
 void DeliverEvent(u_long arg0, long arg1) asm("func_8006A3D8");
-void CdReadCallback(void *arg0) asm("func_8002785C");
+void CdReadCallback(void *arg0);
 
-long CdGetToc2(long arg0, u_char *arg1) asm("func_8006A0AC");
+long CdGetToc2(long arg0, u_char *arg1);
 long CdGetToc2(long arg0, u_char *arg1) {
     u_char *fmt;
     u_char command[8];
@@ -127,7 +127,7 @@ long CdGetToc2(long arg0, u_char *arg1) {
     return 0;
 }
 
-long CdInit(void) asm("func_8006A2D0");
+long CdInit(void);
 long CdInit(void) {
     long retries;
 
@@ -146,17 +146,17 @@ long CdInit(void) {
     return 1;
 }
 
-void CdDefaultSyncCallback(void) asm("func_8006A360");
+void CdDefaultSyncCallback(void);
 void CdDefaultSyncCallback(void) {
     DeliverEvent(0xF0000003, 0x20);
 }
 
-void CdDefaultReadyCallback(void) asm("func_8006A388");
+void CdDefaultReadyCallback(void);
 void CdDefaultReadyCallback(void) {
     DeliverEvent(0xF0000003, 0x40);
 }
 
-void CdDefaultReadCallback(void) asm("func_8006A3B0");
+void CdDefaultReadCallback(void);
 void CdDefaultReadCallback(void) {
     DeliverEvent(0xF0000003, 0x40);
 }

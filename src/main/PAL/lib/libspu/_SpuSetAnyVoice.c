@@ -4,7 +4,7 @@
 
 extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
 
-u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) asm("func_8007A21C");
+u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3);
 
 u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) {
     volatile u_short *reg_hi;

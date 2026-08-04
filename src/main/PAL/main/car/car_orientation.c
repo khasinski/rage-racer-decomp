@@ -156,11 +156,11 @@ extern s16 D_801F17A4;
 extern s16 D_801E4BA0;
 extern s16 D_8019C9AC;
 void BuildTachoNeedleQuad(void) asm("func_80032BD0");
-void ClearCarMotionState(void *)asm("func_80038AB8");
+void ClearCarMotionState(void *);
 s32 FindTrackSegment(void *, s32) asm("func_80030EB4");
-void SeedCarLapProgress(void *, s32) asm("func_8002BF68");
+void SeedCarLapProgress(void *, s32);
 void UpdateCarTrackState(void *, s32, s16 *) asm("func_80031298");
-s32 IsCarFacingBackwards(GameCarTrackAngleWindow *)asm("func_8002CD08");
+s32 IsCarFacingBackwards(GameCarTrackAngleWindow *);
 void InitPlayerCar(GameCarRuntime *car)
 {
   s16 trackState[2];
@@ -413,7 +413,7 @@ void InitPlayerCar(GameCarRuntime *car)
  * delta falls inside the 0x401..0x7FF window (i.e. facing roughly backwards).
  * Uses the 0x19C-stride GameCarTrackAngleWindow view onto the car array.
  */
-s32 IsCarFacingBackwards(GameCarTrackAngleWindow *arg0) asm("func_8002CD08");
+s32 IsCarFacingBackwards(GameCarTrackAngleWindow *arg0);
 s32 IsCarFacingBackwards(GameCarTrackAngleWindow *arg0) {
     s32 index = arg0->trackPointIndex;
     s32 complement = 0xC00 - g_TrackPoints[index].angle;

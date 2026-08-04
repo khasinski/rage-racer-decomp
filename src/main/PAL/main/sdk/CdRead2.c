@@ -25,12 +25,12 @@ extern long g_StRingSize asm("D_801F1850");
 extern long g_StInterruptPending asm("D_8019CA00");
 
 long CdControl(long com, void *param, long result) asm("func_8006A5A4");
-void CdDataCallback(long arg0) asm("func_8006A994");
+void CdDataCallback(long arg0);
 void func_8006A58C(long arg0);
-void CdRead2Callback(void) asm("func_8006CDA0");
-void data_ready_callback(void) asm("func_8006CE78");
+void CdRead2Callback(void);
+void data_ready_callback(void);
 void StClearRingRange(long arg0, long arg1) asm("func_8006D0AC");
-void StSetRingParams(long arg0) asm("func_8006D1B0");
+void StSetRingParams(long arg0);
 void func_8006D1D0(void);
 
 /*
@@ -39,7 +39,7 @@ void func_8006D1D0(void);
  * and the CDDA/sync handler, then issues command 0x1B (read-S). Returns the
  * second command's result.
  */
-long CdRead2(long arg0) asm("func_8006CD0C");
+long CdRead2(long arg0);
 long CdRead2(long arg0) {
     u_char byte;
 
@@ -59,7 +59,7 @@ long CdRead2(long arg0) {
     return CdControl(0x1B, 0, 0);
 }
 
-void CdRead2Callback(void) asm("func_8006CDA0");
+void CdRead2Callback(void);
 void CdRead2Callback(void) {
     func_8006D1D0();
 }
@@ -75,7 +75,7 @@ void StClearRing(void) {
     D_8009E69C = 0;
 }
 
-void StUnSetRing(void) asm("func_8006CE20");
+void StUnSetRing(void);
 void StUnSetRing(void) {
     EnterCriticalSection();
     CdDataCallback(0);

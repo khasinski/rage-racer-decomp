@@ -22,7 +22,7 @@ void func_8005F55C(void);
 void func_8005F2AC(void);
 void _card_load(s32 arg0) asm("func_80063DBC");
 void func_8005F4D8(void);
-void CardReadAndSetMode(s32 arg0) asm("func_8005EB20");
+void CardReadAndSetMode(s32 arg0);
 void CardReadAndSetMode(s32 arg0) {
     func_8005F304(arg0);
     while (_card_clear(arg0 & 0xFF) == 0) {}

@@ -10,8 +10,8 @@ extern u_char g_SndCurrentToneShift asm("D_801E4BE1");
 extern u_char *g_SndCurrentToneTable asm("D_801E416C");
 extern u_short g_SndPitchTable[] asm("D_8009A58C");
 
-u_short SpuVmCalculateCurrentPitch(void) asm("func_800749B4");
-u_short SpuVmCalculateTonePitch(long arg0, long arg1) asm("func_80074A6C");
+u_short SpuVmCalculateCurrentPitch(void);
+u_short SpuVmCalculateTonePitch(long arg0, long arg1);
 
 u_short SpuVmCalculateCurrentPitch(void) {
     register long delta asm("a0");

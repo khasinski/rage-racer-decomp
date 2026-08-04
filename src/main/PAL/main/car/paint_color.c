@@ -15,7 +15,7 @@ extern volatile u16 g_PaintBlendShade2 asm("D_8019CB3C");
  * MUST keep the raw D_ spelling: they are referenced from the %hi/%lo pairs in
  * the inline asm below, which does not follow asm() labels. See names.md 12c.
  */
-void BlendPaintColor(u32 arg0, u32 arg1) asm("func_8001D5C8");
+void BlendPaintColor(u32 arg0, u32 arg1);
 void BlendPaintColor(u32 arg0, u32 arg1) {
     u32 a;
     u32 b;
@@ -27,7 +27,7 @@ void BlendPaintColor(u32 arg0, u32 arg1) {
     g_PaintBlendShade0 = (a + b) | 0x8000;
 }
 
-void BlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
+void BlendPaintColorThirds(u32 arg0, u32 arg1);
 void BlendPaintColorThirds(u32 arg0, u32 arg1) {
     u16 color0;
     u16 color1;
@@ -65,7 +65,7 @@ void BlendPaintColorThirds(u32 arg0, u32 arg1) {
 }
 
 
-void BlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
+void BlendPaintColorQuarters(u32 arg0, u32 arg1);
 void BlendPaintColorQuarters(u32 arg0, u32 arg1) {
     u32 a;
     u32 b;
@@ -109,11 +109,11 @@ extern u16 g_BodyColorSecondary[] asm("D_8007D330");
 extern volatile u16 g_PaintSlots3StopA[] asm("D_8007D354");
 extern volatile u16 g_PaintSlots4Stop[] asm("D_8007D378");
 
-void BlendPaintColor(u32 arg0, u32 arg1) asm("func_8001D5C8");
-void BlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
-void BlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
+void BlendPaintColor(u32 arg0, u32 arg1);
+void BlendPaintColorThirds(u32 arg0, u32 arg1);
+void BlendPaintColorQuarters(u32 arg0, u32 arg1);
 
-void ApplyBodyColor1(u32 arg0, u32 arg1) asm("func_8001D748");
+void ApplyBodyColor1(u32 arg0, u32 arg1);
 void ApplyBodyColor1(u32 arg0, u32 arg1) {
     u32 raw;
     u16 *base;
@@ -169,10 +169,10 @@ void ApplyBodyColor1(u32 arg0, u32 arg1) {
 extern u32 g_CarModelAsset asm("D_8009E698");
 extern u32 g_CarModelSlot asm("D_8009E87C");
 
-void ApplyBodyColor1(u32 arg0, u32 arg1) asm("func_8001D748");
+void ApplyBodyColor1(u32 arg0, u32 arg1);
 void UploadCarImage(u32 arg0) asm("func_80017B5C");
 
-void SetBodyColor1(u32 arg0) asm("func_8001D8C4");
+void SetBodyColor1(u32 arg0);
 void SetBodyColor1(u32 arg0) {
     ApplyBodyColor1(arg0, *(u32 *)(g_CarModelAsset + 0x24));
     UploadCarImage(g_CarModelSlot);
@@ -183,11 +183,11 @@ extern u16 g_BodyColorSecondary[] asm("D_8007D330");
 extern volatile u16 g_PaintSlots3StopB[] asm("D_8007D368");
 extern volatile u16 g_PaintSlots4Stop[] asm("D_8007D378");
 
-void BlendPaintColor(u32 arg0, u32 arg1) asm("func_8001D5C8");
-void BlendPaintColorThirds(u32 arg0, u32 arg1) asm("func_8001D5F0");
-void BlendPaintColorQuarters(u32 arg0, u32 arg1) asm("func_8001D6F4");
+void BlendPaintColor(u32 arg0, u32 arg1);
+void BlendPaintColorThirds(u32 arg0, u32 arg1);
+void BlendPaintColorQuarters(u32 arg0, u32 arg1);
 
-void ApplyBodyColor2(u32 arg0, u32 arg1) asm("func_8001D900");
+void ApplyBodyColor2(u32 arg0, u32 arg1);
 void ApplyBodyColor2(u32 arg0, u32 arg1) {
     u16 *base;
     u16 s1;
@@ -239,10 +239,10 @@ void ApplyBodyColor2(u32 arg0, u32 arg1) {
 extern u32 g_CarModelAsset asm("D_8009E698");
 extern u32 g_CarModelSlot asm("D_8009E87C");
 
-void ApplyBodyColor2(u32 arg0, u32 arg1) asm("func_8001D900");
+void ApplyBodyColor2(u32 arg0, u32 arg1);
 void UploadCarImage(u32 arg0) asm("func_80017B5C");
 
-void SetBodyColor2(u32 arg0) asm("func_8001DA74");
+void SetBodyColor2(u32 arg0);
 void SetBodyColor2(u32 arg0) {
     ApplyBodyColor2(arg0, *(u32 *)(g_CarModelAsset + 0x24));
     UploadCarImage(g_CarModelSlot);

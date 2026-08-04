@@ -13,11 +13,11 @@
 
 s32 RequestRaceStart(void) asm("func_80019580");
 
-void LoadGrandPrixScreen(void) asm("func_800195F4");
+void LoadGrandPrixScreen(void);
 
-void LoadCourseAssets(void) asm("func_800196B4");
+void LoadCourseAssets(void);
 
-s32 RequestTrackLoad(void) asm("func_8001965C");
+s32 RequestTrackLoad(void);
 
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
@@ -26,28 +26,28 @@ extern s32 g_SharedAssetWord0 asm("D_801E4D70");
 extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3) asm("func_8005B768");
 s32 PollAudioSlotLoad(void) asm("func_8005B89C");
-s32 GetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
+s32 GetCarAssetIndex(s32 model, s32 grade);
 s32 func_80017C78(s32 arg0, void *arg1);
-void SetCarSpec(void) asm("func_80034DF4");
+void SetCarSpec(void);
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void UploadImageBlock(void *arg0) asm("func_8001A2E0");
 void StoreTeamLogoImage(void *arg0) asm("func_8001A40C");
-void ResetTrackTextureSwap(void) asm("func_80019EBC");
-void SetTrackCameraTable(void *arg0) asm("func_80017BD4");
-void SetEnvPaletteTable(void *arg0) asm("func_8004553C");
-void SetEnvironmentScript(void *arg0) asm("func_8004550C");
+void ResetTrackTextureSwap(void);
+void SetTrackCameraTable(void *arg0);
+void SetEnvPaletteTable(void *arg0);
+void SetEnvironmentScript(void *arg0);
 void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void InstallTrackPoints(void *arg0) asm("func_8002A6B0");
 void RegisterCourseModels(void *arg0) asm("func_80017A6C");
 void InstallTerrainCellData(void *arg0) asm("func_80017AD0");
-void SetCourseObjects(void *arg0) asm("func_8004121C");
-void InstallTrackEventData(void *arg0) asm("func_80034E04");
-void SelectTrackCameraTable(void *arg0, s32 arg1) asm("func_80043AC8");
+void SetCourseObjects(void *arg0);
+void InstallTrackEventData(void *arg0);
+void SelectTrackCameraTable(void *arg0, s32 arg1);
 s32 EnableCdAudioMode(void) asm("func_80017C2C");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 g_AssetBase asm("D_8019C904");
 
-s32 RequestRaceAssets(void) asm("func_80018FC4");
+s32 RequestRaceAssets(void);
 s32 RequestRaceAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;

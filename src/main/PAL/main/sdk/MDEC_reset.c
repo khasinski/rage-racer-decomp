@@ -23,13 +23,13 @@ extern u_char D_80013364[];
 extern u_char g_MdecQuantCmd[] asm("D_8008305C");
 extern u_char g_MdecIdctCmd[] asm("D_800830E0");
 
-long MDEC_in_sync(void) asm("func_800642F4");
-long MDEC_out_sync(void) asm("func_8006438C");
-long MDEC_timeout(u_char *arg0) asm("func_80064424");
+long MDEC_in_sync(void);
+long MDEC_out_sync(void);
+long MDEC_timeout(u_char *arg0);
 
-void MDEC_in(volatile u_long *arg0, long arg1) asm("func_800641D0");
+void MDEC_in(volatile u_long *arg0, long arg1);
 
-void MDEC_reset(long arg0) asm("func_800640D4");
+void MDEC_reset(long arg0);
 void MDEC_reset(long arg0) {
     register long option asm("$5") = arg0;
     register long zero asm("$0");
@@ -66,7 +66,7 @@ void MDEC_in(volatile u_long *arg0, long arg1) {
     *g_MdecInDmaChcr = 0x01000201;
 }
 
-void MDEC_out(volatile u_long *arg0, long arg1) asm("func_80064264");
+void MDEC_out(volatile u_long *arg0, long arg1);
 void MDEC_out(volatile u_long *arg0, long arg1) {
     MDEC_out_sync();
     *g_MdecDpcr |= 0x88;

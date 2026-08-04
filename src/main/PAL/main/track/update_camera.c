@@ -6,7 +6,7 @@
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
 extern void DrawPlayerCarModel(void *)asm("func_8001DAB0");
-extern s32 FindNearestTrackCamera() asm("func_80043B18");
+extern s32 FindNearestTrackCamera();
 extern s32 rcos(s32) asm("func_80068634");
 extern s32 SquareRoot0(s32) asm("func_800689A8");
 extern void *ApplyMatrixLV(void *, void *, void *) asm("func_80068F80");
@@ -664,7 +664,7 @@ extern u32 D_801E4D84;
 extern u32 *g_EnvScriptCues asm("D_801E42F4");
 extern u32 g_EnvScriptLength asm("D_8019C774");
 
-void SetEnvironmentScript(u32 *arg0) asm("func_8004550C");
+void SetEnvironmentScript(u32 *arg0);
 void SetEnvironmentScript(u32 *arg0) {
     u32 value0;
     u32 value1;

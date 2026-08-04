@@ -6,7 +6,7 @@
 extern s16 g_MirrorViewEnabled asm("D_8019CA10");
 extern s32 g_MirrorPanelY asm("D_801E4D18");
 extern s32 g_MirrorUnlocked asm("D_801E8A98");
-void ResetMirrorState(void) asm("func_8001A980");
+void ResetMirrorState(void);
 void ResetMirrorState(void) {
     g_MirrorViewEnabled = 1;
     g_MirrorPanelY = -0x2C;

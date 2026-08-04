@@ -217,7 +217,7 @@ s32 DrawCarSelectScreen(s32 arg0) {
 extern s16 g_PrevOwnedCarIndex asm("D_8019CA18");
 extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 
-void UpdateOwnedCarNeighbours(void) asm("func_80055454");
+void UpdateOwnedCarNeighbours(void);
 void UpdateOwnedCarNeighbours(void) {
     s32 index;
     GameCarEntry *ptr;
@@ -258,7 +258,7 @@ void UpdateOwnedCarNeighbours(void) {
 extern s32 D_8009B33C;
 extern s32 D_8019C7B8;
 
-s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
+s32 GetCarUnlockLevel(s32 model);
 
 void RefreshCarUnlockState(void) asm("func_80055524");
 void RefreshCarUnlockState(void) {
@@ -317,7 +317,7 @@ do {
 extern s32 g_CarNamePlateStep asm("D_8009B31C");
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 
-void InstallCarModelSlot(void) asm("func_80051238");
+void InstallCarModelSlot(void);
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
 void func_8005131C(void);
 
@@ -357,18 +357,18 @@ extern s32 g_SceneId asm("D_801E42E4");
 extern u16 g_GrandPrixSeriesU16 asm("D_8019CABC");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
-void RequestCarModel(s32 carIndex) asm("func_8001882C");
+void RequestCarModel(s32 carIndex);
 s32 RequestRoundAssets(void) asm("func_80018C88");
-void ClearTeamNameTexture(void) asm("func_8001D4E8");
+void ClearTeamNameTexture(void);
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight)
     asm("func_80049418");
 void DrawCarShopPricePanel(s32 step, s32 money, s32 price)
     asm("func_8004F650");
 void DrawEngineerShopPricePanel(s32 step, s32 arg1, s32 arg2)
     asm("func_8004F99C");
-s32 CountOwnedCars(void) asm("func_80050F68");
+s32 CountOwnedCars(void);
 void StartSequenceFadeOut(void) asm("func_8005E8E0");
-void RestoreTeamLogoClut(void) asm("func_8004CED0");
+void RestoreTeamLogoClut(void);
 void DrawOwnedCarCounter(s32 step, s32 count) asm("func_8004F3EC");
 void DrawMenuAltPanel(s32 arg0, s32 arg1) asm("func_80050400");
 

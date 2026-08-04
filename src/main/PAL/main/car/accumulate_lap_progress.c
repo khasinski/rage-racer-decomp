@@ -14,7 +14,7 @@ s32 FindTrackSegment(GameCarRuntime *car, s32 idx) asm("func_80030EB4");
  * reverse lap direction from the direction flag g_RaceSeries. Register-pinned
  * locals (bv/ir) are load-bearing for the match.
  */
-void AccumulateLapProgress(GameCarRuntime *car) asm("func_8002C168");
+void AccumulateLapProgress(GameCarRuntime *car);
 void AccumulateLapProgress(GameCarRuntime *car) {
     s32 r;
     s32 n;

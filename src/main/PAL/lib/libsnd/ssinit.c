@@ -2,7 +2,7 @@
 #include "psyq/kernel.h"
 
 
-void SpuInit(void) asm("func_80078838");
+void SpuInit(void);
 void _SsInitTables(void) asm("func_80071B0C");
 
 void ssinit(void) asm("func_80071BF4");

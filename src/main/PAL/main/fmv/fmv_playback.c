@@ -28,13 +28,13 @@ extern volatile u16 g_DispEnv0H asm("D_8019CE9A");
 extern u16 g_DispEnv1Y asm("D_801C067E");
 extern volatile u16 g_DispEnv1W asm("D_801C0680");
 extern volatile u16 g_DispEnv1H asm("D_801C0682");
-long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) asm("func_8006D0EC");
-void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3) asm("func_80065A90");
+long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1);
+void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3);
 extern char g_MsgFmvDecodeTimeout[] asm("D_80010D34");
 s32 func_8006A534(s32 arg0, s32 arg1);
 long CdControl(long com, void *param, long result) asm("func_8006A5A4");
-s32 VSync(s32 mode) asm("func_8006DD30");
-s32 CdRead2(s32 arg0) asm("func_8006CD0C");
+s32 VSync(s32 mode);
+s32 CdRead2(s32 arg0);
 extern u8 D_801E8AFC;
 extern u8 *g_ReplayFramesGp asm("D_8009F0A4");
 extern u8 *g_ReplayFramesTimeAttack asm("D_8019C7A4");
@@ -45,7 +45,7 @@ extern s16 D_8009E782;
 extern s32 g_ReplayPlayerModel asm("D_801E4D8C");
 extern s32 g_ReplayRivalModel asm("D_801E4BC0");
 
-s32 PresentFmvFrame(s32 *arg0) asm("func_8001ED3C");
+s32 PresentFmvFrame(s32 *arg0);
 s32 PresentFmvFrame(s32 *arg0) {
     void *p;
     s32 retry;
@@ -132,7 +132,7 @@ process:
     return ret;
 }
 
-void WaitFmvDecode(FmvDisplayState *arg0) asm("func_8001EF54");
+void WaitFmvDecode(FmvDisplayState *arg0);
 void WaitFmvDecode(FmvDisplayState *arg0) {
     volatile s32 timeout = 0x800000;
     s32 one;
@@ -156,7 +156,7 @@ void WaitFmvDecode(FmvDisplayState *arg0) {
     arg0->field_34 = 0;
 }
 
-void StartStreamRead(void *arg0) asm("func_8001F018");
+void StartStreamRead(void *arg0);
 void StartStreamRead(void *arg0) {
     u8 byte;
 
@@ -196,13 +196,13 @@ pollNext:
     }
 }
 
-void ResetReplayFrameCounts(void) asm("func_8001F0E0");
+void ResetReplayFrameCounts(void);
 void ResetReplayFrameCounts(void) {
     g_ReplayFramesGp = &D_801E8AFC;
     g_ReplayFramesTimeAttack = &D_801E8AFC;
 }
 
-void ResetReplayWriteCursor(void) asm("func_8001F100");
+void ResetReplayWriteCursor(void);
 void ResetReplayWriteCursor(void) {
     u32 value;
 
@@ -223,7 +223,7 @@ void ResetReplayWriteCursor(void) {
  * output ring g_ReplayFramesGp, keyed by pairIndex>>1. Only even indices hold a pair
  * (odd indices are skipped). Stride is ((n<<1)+n)<<4 == n*0x30 (sizeof pair).
  */
-void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) asm("func_8001F134");
+void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB);
 void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     GameRenderPairPoint *dst;
     u8 *base;
@@ -279,7 +279,7 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
  * by pointIndex>>1 (odd indices skipped). Stride ((n<<3)-n)<<2 == n*0x1C
  * (sizeof GameRenderSinglePoint).
  */
-void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) asm("func_8001F274");
+void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr);
 void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
     GameRenderSinglePoint *dst;
     u8 *base;

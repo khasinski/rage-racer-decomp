@@ -119,7 +119,7 @@ void DrawCourseObjects(void) {
 
 extern u16 *g_TerrainCellGrid asm("D_801E5020");
 
-u32 GetCellRegion(s32 arg0, s32 arg1) asm("func_800414A0");
+u32 GetCellRegion(s32 arg0, s32 arg1);
 u32 GetCellRegion(s32 arg0, s32 arg1) {
     arg1 = (arg1 * 32) + arg0;
     return g_TerrainCellGrid[arg1] >> 10;
@@ -127,7 +127,7 @@ u32 GetCellRegion(s32 arg0, s32 arg1) {
 
 extern u8 *g_CellVisibilityTable asm("D_801E4B98");
 
-u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) asm("func_800414C4");
+u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2);
 u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) {
     s32 x = arg0 << 2;
     s32 y;

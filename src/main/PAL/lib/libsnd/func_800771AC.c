@@ -16,11 +16,11 @@ extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern long g_SndUpdateLock asm("D_801E40AC");
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 
-long SpuVmVSetUp(short vab_id, short program) asm("func_80073314");
+long SpuVmVSetUp(short vab_id, short program);
 u_char SpuVmAlloc(long priority) asm("func_800739E8");
 void func_80074134(void);
 void SpuVmNoiseKeyOn(long voice) asm("func_80074348");
-long SpuVmCalculateTonePitch(u_short note, u_short fine) asm("func_80074A6C");
+long SpuVmCalculateTonePitch(u_short note, u_short fine);
 void func_80073C50(long count, long pitch);
 
 long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {

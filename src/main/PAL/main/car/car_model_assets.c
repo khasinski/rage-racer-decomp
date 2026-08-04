@@ -10,13 +10,13 @@ extern u8 *g_CarModelAsset asm("D_8009E698");
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
 extern u8 *g_CarModelBuffer asm("D_801E4090");
-s32 GetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
+s32 GetCarAssetIndex(s32 model, s32 grade);
 s32 func_80017C78(s32 arg0, void *arg1);
 void SetCarModelSlot(void *arg0, s32 arg1) asm("func_80017B94");
 void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void SetCarImageSlot(void *arg0, s32 arg1) asm("func_80017B44");
-void ApplyBodyColor1(s32 arg0, s32 arg1) asm("func_8001D748");
-void ApplyBodyColor2(s32 arg0, s32 arg1) asm("func_8001D900");
+void ApplyBodyColor1(s32 arg0, s32 arg1);
+void ApplyBodyColor2(s32 arg0, s32 arg1);
 extern s32 g_AssetBase asm("D_8019C904");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 s32 Random15(void) asm("func_800632B0");
@@ -31,7 +31,7 @@ extern u32 g_AssetLoadCursor asm("D_8019CAFC");
 void UnrelocateModelBank(void *, s32) asm("func_800179B4");
 void SelectCarModelSlot(s32) asm("func_80017BAC");
 
-void LoadUpgradedCarModel(s32 arg0) asm("func_80018A70");
+void LoadUpgradedCarModel(s32 arg0);
 void LoadUpgradedCarModel(s32 arg0) {
     u8 *ptr;
     GameCarModelAsset *asset;
@@ -89,7 +89,7 @@ s32 RequestOptionScreenAssets(void) {
     return 1;
 }
 
-void LoadOptionScreenAssets(void) asm("func_80018C0C");
+void LoadOptionScreenAssets(void);
 void LoadOptionScreenAssets(void) {
     s32 ptr;
     s32 offset;
@@ -133,7 +133,7 @@ s32 RequestRoundAssets(void) {
     return 1;
 }
 
-void LoadRoundAssets(void) asm("func_80018DF8");
+void LoadRoundAssets(void);
 void LoadRoundAssets(void) {
     s32 state;
     s32 kind;
@@ -183,7 +183,7 @@ void LoadRoundAssets(void) {
     }
 }
 
-void RelocateCarModel(void) asm("func_80018F08");
+void RelocateCarModel(void);
 void RelocateCarModel(void) {
     u32 temp;
     u32 *dst;

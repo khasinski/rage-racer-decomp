@@ -16,14 +16,14 @@ extern s32 g_StreamSectorCount asm("D_8019CA1C");
 extern s32 g_StreamLoc asm("D_801E8A90");
 extern char g_MsgFmvSector[] asm("D_80010D30");
 
-void DecDCTin(volatile u32 *arg0, s32 arg1) asm("func_80063FB0");
+void DecDCTin(volatile u32 *arg0, s32 arg1);
 void DecDCTout(volatile u32 *arg0, s32 arg1) asm("func_8006402C");
-s32 PresentFmvFrame(volatile void *arg0) asm("func_8001ED3C");
-s32 StGetBackloc(void *arg0) asm("func_8006CF08");
-void StartStreamRead(void *arg0) asm("func_8001F018");
-void WaitFmvDecode(volatile void *arg0, s32 arg1) asm("func_8001EF54");
+s32 PresentFmvFrame(volatile void *arg0);
+s32 StGetBackloc(void *arg0);
+void StartStreamRead(void *arg0);
+void WaitFmvDecode(volatile void *arg0, s32 arg1);
 
-void DecodeFmvFrame(void) asm("func_8001E8A4");
+void DecodeFmvFrame(void);
 void DecodeFmvFrame(void) {
     s32 value;
     u8 sp10[16];
@@ -58,8 +58,8 @@ void DecodeFmvFrame(void) {
 
 extern s32 g_StreamReturnScene asm("D_8019C760");
 void DecDCToutCallback(s32 arg0) asm("func_800640B0");
-void StUnSetRing(void) asm("func_8006CE20");
-void EndFmv(void) asm("func_8001EA34");
+void StUnSetRing(void);
+void EndFmv(void);
 void EndFmv(void) {
     DecDCToutCallback(0);
     StUnSetRing();
@@ -77,7 +77,7 @@ extern volatile u16 g_DispEnv1X asm("D_801C067C");
 extern volatile u16 g_DispEnv1Y asm("D_801C067E");
 extern volatile u32 g_FrameParity asm("D_801E4B34");
 
-void InitFmvContext(void *arg0, s32 arg1, s32 arg2) asm("func_8001EA7C");
+void InitFmvContext(void *arg0, s32 arg1, s32 arg2);
 void InitFmvContext(void *arg0, s32 arg1, s32 arg2) {
     volatile u32 *words;
     volatile u16 *halves;

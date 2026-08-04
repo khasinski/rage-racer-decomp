@@ -3,8 +3,8 @@
 extern long _spu_mem_mode_unitM asm("D_8009ABA0");
 extern SpuMallocEntry *_spu_memList asm("D_8009ABDC");
 
-long _SpuIsInAllocateArea(u_long arg0) asm("func_8007A3A0");
-long _SpuIsInAllocateArea_(u_long arg0) asm("func_8007A410");
+long _SpuIsInAllocateArea(u_long arg0);
+long _SpuIsInAllocateArea_(u_long arg0);
 
 long _SpuIsInAllocateArea(u_long arg0) {
     SpuMallocEntry *var_a1;

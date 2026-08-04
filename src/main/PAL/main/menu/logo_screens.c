@@ -39,7 +39,7 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, s32 a10);
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
 void DrawTeamLogoCanvas(s32 arg0, s32 arg1) asm("func_8004A248");
-void RampTeamLogoCanvas(s32 arg0, s32 arg1) asm("func_8004B8B4");
+void RampTeamLogoCanvas(s32 arg0, s32 arg1);
 void UpdateTeamLogoCanvas(void) asm("func_8004C0D8");
 void DrawLogoSamplePanel(s32 arg0, s32 arg1) asm("func_8004E368");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");

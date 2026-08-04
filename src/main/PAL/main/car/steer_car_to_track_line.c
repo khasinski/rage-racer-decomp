@@ -6,8 +6,8 @@
 
 void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
 
-void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight) asm("func_8002FC84");
-s32 SmoothTrackAngle(s32 arg0, s32 arg1) asm("func_8002FD9C");
+void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
+s32 SmoothTrackAngle(s32 arg0, s32 arg1);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 
@@ -97,7 +97,7 @@ extern s32 D_801E4BF4;
 extern s32 D_801E8AA0;
 
 s32 func_8002A788(s32 arg0, s32 arg1);
-s32 GetAngleDelta(s32 arg0, s32 arg1) asm("func_8002A7C4");
+s32 GetAngleDelta(s32 arg0, s32 arg1);
 void func_8002FE74(GameCarRuntime *car);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");

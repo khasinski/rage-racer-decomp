@@ -721,10 +721,10 @@ extern s32 g_TeamLogoClutRect asm("D_8007BEDC");
 extern s32 D_8007F964;
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 
-void RestoreTeamLogoClut(void) asm("func_8004CED0");
+void RestoreTeamLogoClut(void);
 void RestoreTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, &D_8007F964); }
 
-void UploadTeamLogoClut(void) asm("func_8004CF00");
+void UploadTeamLogoClut(void);
 void UploadTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, g_TeamLogoClut); }
 
 extern s32 D_8007FB20;
@@ -873,7 +873,7 @@ typedef struct RaceRecord {
 extern RaceRecord g_RankingRecords[2][4][5] asm("D_801E7744");
 extern RaceRecord g_TimeRecords[2][4][5] asm("D_8019CB78");
 
-void *FormatLapTime(void *dst, s32 timeMs) asm("func_80021CD4");
+void *FormatLapTime(void *dst, s32 timeMs);
 void DrawSprite(void *ot, s32 x, s16 y, s32 w, s32 h, s32 u, s32 v,
                     s32 r, s32 g, s32 b, s32 clut, s32 shadeTex,
                     s32 semiTrans, s32 flags) asm("func_80046A2C");

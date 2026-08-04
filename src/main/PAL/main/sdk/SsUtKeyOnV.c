@@ -12,10 +12,10 @@ extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
-extern long SpuVmVSetUp(short, short) asm("func_80073314");
+extern long SpuVmVSetUp(short, short);
 extern void SpuVmRebuildVoiceTable(void) asm("func_80074134");
 extern void SpuVmNoiseKeyOn(long) asm("func_80074348");
-extern long SpuVmCalculateTonePitch(u_short, u_short) asm("func_80074A6C");
+extern long SpuVmCalculateTonePitch(u_short, u_short);
 extern void SpuVmScaleVabVolume(long, u_short) asm("func_80073C50");
 
 long SsUtKeyOnV(

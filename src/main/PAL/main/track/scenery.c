@@ -124,7 +124,7 @@ void DrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
 void UpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
 void DrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
 
-void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
+void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
 void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
     s32 mode = arg0;
@@ -175,7 +175,7 @@ void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
 
 void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
 
-void DrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
+void DrawCourseScenery2(s32 arg0, s32 arg1);
 
 void DrawCourseScenery2(s32 arg0, s32 arg1) {
     s32 value = arg0;

@@ -16,27 +16,27 @@ extern void (*g_GameModeHandlers[])(void) asm("D_8007D67C");
  * endless per-frame loop (CD audio, sequencer, asset loads, the current
  * g_GameModeHandlers entry, VSync, display swap, UpdatePadState). */
 void MainLoop(void) asm("func_80016510");
-void InitSubsystems(void) asm("func_800163C4");
+void InitSubsystems(void);
 
 /* Controller layer. GameInitPad hands the BIOS the two 0x28-byte buffers at
  * D_801E403C / D_801E4064. UpdatePadState maintains the held / previous /
  * newly-pressed halfwords in the block at D_801E4368 (see menu.h). */
-void GameInitPad(void) asm("func_80013F48");
-void UpdatePadState(void) asm("func_80014014");
-void LoadPadButtonMapping(s32 mapping0, s32 mapping1) asm("func_80013F80");
-void ApplyPadButtonMapping(void) asm("func_80013FE4");
+void GameInitPad(void);
+void UpdatePadState(void);
+void LoadPadButtonMapping(s32 mapping0, s32 mapping1);
+void ApplyPadButtonMapping(void);
 
 /* Controller-config and NeGcon calibration screens: g_GameModeHandlers entries
  * 7..11, each drawing its own screen plus the shared 3D backdrop. */
 void UpdateControllerConfigScreen(void) asm("func_800155EC");
-void DrawControllerConfigScreen(void) asm("func_80015444");
+void DrawControllerConfigScreen(void);
 void BeginNegconCalibration(void) asm("func_800159F8");
 void UpdateNegconNeutralScreen(void) asm("func_80015AAC");
-void DrawNegconNeutralScreen(void) asm("func_80015928");
+void DrawNegconNeutralScreen(void);
 void UpdateNegconSteerPlayScreen(void) asm("func_80015EDC");
-void DrawNegconSteerPlayScreen(void) asm("func_80015B78");
+void DrawNegconSteerPlayScreen(void);
 void UpdateNegconMaxTwistScreen(void) asm("func_80016250");
-void DrawNegconMaxTwistScreen(void) asm("func_80016064");
+void DrawNegconMaxTwistScreen(void);
 void DrawControllerSetupScene(s32 variant) asm("func_80014618");
 
 /*
@@ -50,11 +50,11 @@ u8 *DrawRightArrow(void *ot, u8 *prim, s16 x, s16 y, s32 pulse) asm("func_80014B
 /* Framed panel showing the selected configuration number. */
 u8 *DrawPadConfigSelector(void *ot, u8 *prim, s16 x, s16 y, s32 selection) asm("func_80014C80");
 /* The five action labels, and the five lines from each label to its button. */
-u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) asm("func_80014EAC");
-u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) asm("func_800151B0");
+u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow);
+u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow);
 /* One whole controller diagram for the current selection: labels + callouts. */
-u8 *DrawPadConfigDiagram(void *ot, u8 *prim) asm("func_8001530C");
-u8 *DrawNegconConfigDiagram(void *ot, u8 *prim) asm("func_80015384");
+u8 *DrawPadConfigDiagram(void *ot, u8 *prim);
+u8 *DrawNegconConfigDiagram(void *ot, u8 *prim);
 /* Entry hook: backs both selections up to D_8019C7A8 / D_8019C76C so a cancel
  * can restore them. Its caller sets g_GameMode = 7 in the same breath. */
 void BeginControllerConfig(void) asm("func_800153FC");
@@ -86,9 +86,9 @@ extern s32 g_AnimTimer asm("D_8009E694");
 void UpdateFmv(void) asm("func_8001E71C");
 /* One decoded frame: DecDCTin the next bitstream chunk, DecDCTout the previous
  * one, then top the ring up from the drive. */
-void DecodeFmvFrame(void) asm("func_8001E8A4");
+void DecodeFmvFrame(void);
 /* Clear the DecDCTout callback, unhook the streamer, restore g_SceneId. */
-void EndFmv(void) asm("func_8001EA34");
+void EndFmv(void);
 /* Pull the next ready ring frame and resize the display when the stream's
  * frame size changes; returns 0 when nothing is ready. */
 void *GetFmvFrame(s32 *ctx) asm("func_8001EDC4");
@@ -104,6 +104,6 @@ void UploadFmvSlice(void) asm("func_8001EBC8");
  */
 void InitSaveDefaults(void) asm("func_80021338");
 /* Reset the current g_CourseProgress block (arg < 2 also marks slot 3 free). */
-void ResetCourseProgress(s32 mode) asm("func_800212F0");
+void ResetCourseProgress(s32 mode);
 
 #endif

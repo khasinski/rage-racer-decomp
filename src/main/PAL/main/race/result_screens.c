@@ -38,16 +38,16 @@ extern s32 g_ReplayReadCursor asm("D_801F179C");
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void DrawSeriesClearedWash(s32 arg0, s32 arg1) asm("func_8001FC30");
-void UpdateReplayCars(void) asm("func_80035040");
+void DrawSeriesClearedWash(s32 arg0, s32 arg1);
+void UpdateReplayCars(void);
 void UpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
-void DrawTerrainCellsWide(void) asm("func_80041888");
-void DrawPlayerCarOnly(void) asm("func_80038A88");
-void DrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
+void DrawTerrainCellsWide(void);
+void DrawPlayerCarOnly(void);
+void DrawCourseScenery2(s32 arg0, s32 arg1);
 void func_800418D4(void);
-void DrawReplayBadge(void) asm("func_8001FB8C");
-void SetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
-void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2) asm("func_8001F330");
+void DrawReplayBadge(void);
+void SetTrackTexturePageNow(s32 arg0);
+void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
 extern char g_TextResult[] asm("D_80010DF0");
 extern char *g_CourseNames[] asm("D_8007D404");
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
@@ -91,9 +91,9 @@ s32 func_80016EC4(
 
 void LibcSprintf(void *dst, void *fmt, ...) asm("func_800632F0");
 void func_800200D0(void);
-void *FormatLapTime(void *dst, s32 value) asm("func_80021CD4");
+void *FormatLapTime(void *dst, s32 value);
 
-void DrawSeriesClearedWash(s32 x, s32 y) asm("func_8001FC30");
+void DrawSeriesClearedWash(s32 x, s32 y);
 void DrawSeriesClearedWash(s32 x, s32 y) {
     void *ot;
     void *prim;

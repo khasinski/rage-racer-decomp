@@ -115,9 +115,9 @@ struct Unk {
 extern SeqStruct *D_801E79CC[];
 
 s32 SsSeqReadDeltaTime(s32 seq, s16 sep) asm("func_80070D70");
-s16 SsUtGetProgAtr(s16 vab_id, s16 program, ProgAtr *out) asm("func_8007320C");
-s16 SsUtGetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *out) asm("func_800733D8");
-s16 SsUtSetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *in) asm("func_80073820");
+s16 SsUtGetProgAtr(s16 vab_id, s16 program, ProgAtr *out);
+s16 SsUtGetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *out);
+s16 SsUtSetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *in);
 void SsSeqApplyNrpn(
     s16 vab_id,
     s16 program,

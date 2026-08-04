@@ -4,7 +4,7 @@
 extern volatile u8 g_CdVolume asm("D_8009B194");
 
 
-void SetCdVolumeSetting(s32 arg0) asm("func_80043134");
+void SetCdVolumeSetting(s32 arg0);
 void SetCdVolumeSetting(s32 arg0) {
     s32 product = (arg0 << 7) - arg0;
 

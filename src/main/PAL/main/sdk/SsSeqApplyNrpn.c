@@ -27,10 +27,10 @@ typedef struct Arg {
     /*32*/ u_short r32;
 } Arg;
 
-void SsUtGetVagAtr(short, short, short, Arg *) asm("func_800733D8");
-void SsUtSetVagAtr(short, short, short, Arg *) asm("func_80073820");
-void SsUnpackAdsr(u_short, u_short, u_short *) asm("func_80070E28");
-void SsPackAdsr(u_short *, u_short *, u_short *) asm("func_80070E84");
+void SsUtGetVagAtr(short, short, short, Arg *);
+void SsUtSetVagAtr(short, short, short, Arg *);
+void SsUnpackAdsr(u_short, u_short, u_short *);
+void SsPackAdsr(u_short *, u_short *, u_short *);
 void SsUtSetReverbType(long) asm("func_80073614");
 void SsUtSetReverbDepth(long, long) asm("func_80073748");
 void SsUtSetReverbFeedback(long) asm("func_80073708");

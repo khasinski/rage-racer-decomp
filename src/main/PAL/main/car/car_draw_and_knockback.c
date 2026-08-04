@@ -4,7 +4,7 @@
 #include "game/state.h"
 #include "game/render.h"
 
-void ClearCarMotionState(GameCarRuntime *arg0) asm("func_80038AB8");
+void ClearCarMotionState(GameCarRuntime *arg0);
 
 extern s32 g_ClosestRivalRank asm("D_801E7740");
 
@@ -19,7 +19,7 @@ void InitRivalCar(GameCarRuntime *arg0, s32 arg1, s32 *arg2) asm("func_800383A8"
 
 void InitRivalCarAi(GameCarRuntime *arg0, s32 arg1, s32 *arg2) asm("func_800385FC");
 
-void SeedCarRouteMarkers(void) asm("func_80039644");
+void SeedCarRouteMarkers(void);
 
 
 void func_8001DFC0(GameCarRuntime *arg0);
@@ -40,7 +40,7 @@ void func_8001DFC0(GameCarRuntime *arg0);
  * must not change.
  */
 
-void BuildStartingGrid(void) asm("func_80038844");
+void BuildStartingGrid(void);
 void BuildStartingGrid(void) {
     GameCarRuntime *entryBase;
     register s32 *table asm("s3");
@@ -108,7 +108,7 @@ void BuildStartingGrid(void) {
     SeedCarRouteMarkers();
 }
 
-void DrawCars(void) asm("func_800389F0");
+void DrawCars(void);
 void DrawCars(void) {
     GameCarRuntime *base;
     s32 i;
@@ -134,13 +134,13 @@ void DrawCars(void) {
     } while (i < 11);
 }
 
-void DrawPlayerCarOnly(void) asm("func_80038A88");
+void DrawPlayerCarOnly(void);
 void DrawPlayerCarOnly(void) {
     SelectModelBank(1);
     func_8001DFC0(g_Cars);
 }
 
-void ClearCarMotionState(GameCarRuntime *arg0) asm("func_80038AB8");
+void ClearCarMotionState(GameCarRuntime *arg0);
 void ClearCarMotionState(GameCarRuntime *arg0) {
     arg0->field_8A = 0;
     arg0->motionMode = 0;
@@ -162,7 +162,7 @@ void ClearCarMotionState(GameCarRuntime *arg0) {
     arg0->field_9E = 0;
 }
 
-void UpdateCarTiltCounter(GameCarRuntime *arg0) asm("func_80038B04");
+void UpdateCarTiltCounter(GameCarRuntime *arg0);
 void UpdateCarTiltCounter(GameCarRuntime *arg0) {
     GameCarRuntime *obj;
     register u8 *ptr asm("$4");
@@ -216,7 +216,7 @@ void UpdateCarTiltCounter(GameCarRuntime *arg0) {
     obj->field_8C = value;
 }
 
-void ApplyCarKnockback(GameCarRuntime *arg0) asm("func_80038C4C");
+void ApplyCarKnockback(GameCarRuntime *arg0);
 void ApplyCarKnockback(GameCarRuntime *arg0) {
     u32 timer;
 

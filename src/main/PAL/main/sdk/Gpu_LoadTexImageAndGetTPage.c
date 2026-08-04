@@ -4,9 +4,9 @@
 
 
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
-long GetTPage(long arg0, long arg1, long arg2, long arg3) asm("func_80064BB4");
+long GetTPage(long arg0, long arg1, long arg2, long arg3);
 
-long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) asm("func_800648EC");
+long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6);
 long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) {
     Rect rect;
     long width;
@@ -39,9 +39,9 @@ long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, lo
     return GetTPage(arg1, arg2, arg3, arg4) & 0xFFFF;
 }
 
-long GetClut(long arg0, long arg1) asm("func_80064C7C");
+long GetClut(long arg0, long arg1);
 
-long LoadClut2(void *arg0, long arg1, long arg2) asm("func_800649D8");
+long LoadClut2(void *arg0, long arg1, long arg2);
 long LoadClut2(void *arg0, long arg1, long arg2) {
     Rect rect;
 
@@ -54,7 +54,7 @@ long LoadClut2(void *arg0, long arg1, long arg2) {
     return GetClut(arg1, arg2) & 0xFFFF;
 }
 
-long LoadClut(void *arg0, long arg1, long arg2) asm("func_80064A40");
+long LoadClut(void *arg0, long arg1, long arg2);
 long LoadClut(void *arg0, long arg1, long arg2) {
     Rect rect;
 
@@ -113,7 +113,7 @@ void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) {
 }
 
 /* Fills the 0x14-byte DISPENV. */
-u_char * SetDefDispEnv(u_char *arg0, long arg1, long arg2, long arg3, long arg4) asm("func_80064B78");
+u_char * SetDefDispEnv(u_char *arg0, long arg1, long arg2, long arg3, long arg4);
 u_char *SetDefDispEnv(u_char *arg0, long arg1, long arg2, long arg3, long arg4) {
     u_char *ret;
 
@@ -133,7 +133,7 @@ u_char *SetDefDispEnv(u_char *arg0, long arg1, long arg2, long arg3, long arg4) 
     return ret;
 }
 
-long GetTPage(long arg0, long arg1, long arg2, long arg3) asm("func_80064BB4");
+long GetTPage(long arg0, long arg1, long arg2, long arg3);
 long GetTPage(long arg0, long arg1, long arg2, long arg3) {
     long mode;
     long value;
@@ -156,7 +156,7 @@ long GetTPage(long arg0, long arg1, long arg2, long arg3) {
     return value | ((arg3 & 0x200) << 2);
 }
 
-long GetClut(long arg0, long arg1) asm("func_80064C7C");
+long GetClut(long arg0, long arg1);
 long GetClut(long arg0, long arg1) {
     return ((arg1 << 6) | ((arg0 >> 4) & 0x3F)) & 0xFFFF;
 }
@@ -165,7 +165,7 @@ extern char D_80013374[];
 /* libgpu's printf hook; every GPU trace string goes through it. */
 extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
 
-void DumpTPage(long arg0) asm("func_80064C94");
+void DumpTPage(long arg0);
 void DumpTPage(long arg0) {
     long mode;
     u_long value;

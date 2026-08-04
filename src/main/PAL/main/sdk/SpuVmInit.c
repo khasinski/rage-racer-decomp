@@ -3,7 +3,7 @@
 #include "common.h"
 
 void _spu_setTransferCompletionFlag(long) asm("func_8007B294");
-void SpuInitMalloc(long, u_char *) asm("func_80079B60");
+void SpuInitMalloc(long, u_char *);
 void SsUtFlush(void) asm("func_80075FA4");
 
 extern u_char g_SpuMallocArea[] asm("D_8009E5E0");

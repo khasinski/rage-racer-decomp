@@ -366,7 +366,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) asm("func_80039980");
 void DrawCar(void *car) asm("func_8001DFC0");
 /* Selects model bank 1 and calls DrawCar for each of the 11 runtime cars
  * whose activeFlag != -1 and field_BC == 1. */
-void DrawCars(void) asm("func_800389F0");
+void DrawCars(void);
 /* Car motion-state handler for state98 == 1: the one-frame jump takeoff, which
  * hands over to the airborne handler UpdateCarAirborne. */
 void UpdateCarLaunch(GameCarRuntime *car) asm("func_80030030");

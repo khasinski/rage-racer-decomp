@@ -12,9 +12,9 @@ extern u_char *g_SndSpuRegs asm("D_8009A588");
 u_char SpuVmAlloc(long arg0) asm("func_800739E8");
 void SpuVmKeyOnCore(long arg0, u_short arg1, u_short arg2, u_short arg3, u_short arg4) asm("func_80074818");
 
-void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) asm("func_80075AE0");
-void SpuVmClearFinishedVoices(void) asm("func_80075B78");
-void SpuVmKeyOnWithDefaultVol(long arg0, long arg1) asm("func_80075C30");
+void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3);
+void SpuVmClearFinishedVoices(void);
+void SpuVmKeyOnWithDefaultVol(long arg0, long arg1);
 
 void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
     long ret;

@@ -3,26 +3,26 @@
 
 void func_8006BA68(void);
 long func_8006C06C(void);
-void DMACallback(long arg0, long arg1) asm("func_8006DF94");
+void DMACallback(long arg0, long arg1);
 void CD_datasync(void) asm("func_8006BF00");
 
-long CdMix(void) asm("func_8006A94C");
+long CdMix(void);
 long CdMix(void) {
     func_8006BA68();
     return 1;
 }
 
-long CdGetSector2(void) asm("func_8006A970");
+long CdGetSector2(void);
 long CdGetSector2(void) {
     return func_8006C06C() == 0;
 }
 
-void CdDataCallback(long arg0) asm("func_8006A994");
+void CdDataCallback(long arg0);
 void CdDataCallback(long arg0) {
     DMACallback(3, arg0);
 }
 
-void CdMixDataSync(void) asm("func_8006A9B8");
+void CdMixDataSync(void);
 void CdMixDataSync(void) {
     CD_datasync();
 }

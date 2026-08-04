@@ -14,5 +14,5 @@ void ApplyCurrentSequenceAudio(void) {
 }
 
 void SsSetMVol(s32 arg0, s32 arg1) asm("func_8006EAFC");
-void SetMasterVolumeMono(s16 arg0) asm("func_8005EAA8");
+void SetMasterVolumeMono(s16 arg0);
 void SetMasterVolumeMono(s16 arg0) { SsSetMVol(arg0, arg0); }

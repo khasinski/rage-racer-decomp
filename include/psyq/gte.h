@@ -89,6 +89,6 @@ void *ScaleMatrixL(void *m, void *v) asm("func_80069110");
 void *RotMatrix(void *r, void *m) asm("func_80069D18");
 /* Square root in 12-bit fixed point: returns sqrt(a << 12), i.e. 64*sqrt(a).
  * Normalises with Lzc, then runs the hyperbolic CORDIC in CordicRotate. */
-long SquareRoot12(long a) asm("func_8006888C");
+long SquareRoot12(long a);
 
 #endif

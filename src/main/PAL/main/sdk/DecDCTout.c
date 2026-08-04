@@ -1,9 +1,9 @@
 #include "common.h"
 
-void MDEC_out(void) asm("func_80064264");
-void MDEC_in_sync(void) asm("func_800642F4");
-void MDEC_out_sync(void) asm("func_8006438C");
-void DMACallback(long arg0, long arg1) asm("func_8006DF94");
+void MDEC_out(void);
+void MDEC_in_sync(void);
+void MDEC_out_sync(void);
+void DMACallback(long arg0, long arg1);
 
 void DecDCTout(void) asm("func_8006402C");
 void DecDCTout(void) {

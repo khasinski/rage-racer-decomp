@@ -19,10 +19,10 @@ extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
 extern GameRenderObject g_CameraCar asm("D_801E3E14");
 
-void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight) asm("func_8002FC84");
+void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
-void AccumulateLapProgress(void *arg0) asm("func_8002C168");
+void AccumulateLapProgress(void *arg0);
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
 
 
@@ -213,7 +213,7 @@ void DrawStartGridScenery(s32 arg0) {
     }
 }
 
-void ResetFreeLookCamera(void) asm("func_8003D6E8");
+void ResetFreeLookCamera(void);
 void ResetFreeLookCamera(void) {
 }
 

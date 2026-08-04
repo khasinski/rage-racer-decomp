@@ -14,7 +14,7 @@ extern u_char *g_SndCurrentToneTable asm("D_801E416C");
 extern u_short g_SndCurrentVoice asm("D_801E4BEA");
 extern u_char g_SndCurrentTone asm("D_801E4BDC");
 
-long SpuVmCalculateTonePitch(long arg0, long arg1) asm("func_80074A6C");
+long SpuVmCalculateTonePitch(long arg0, long arg1);
 
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) asm("func_80075CB0");
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) {

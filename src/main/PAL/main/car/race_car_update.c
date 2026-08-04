@@ -6,8 +6,8 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight) asm("func_8002FC84");
-s32 SmoothTrackAngle(s32 arg0, s32 arg1) asm("func_8002FD9C");
+void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
+s32 SmoothTrackAngle(s32 arg0, s32 arg1);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 
@@ -17,16 +17,16 @@ extern s16 g_ClosestRivalRank asm("D_801E7740");
 void RankContenders(void) asm("func_8003A728");
 void UpdateCarTrafficAvoidance() asm("func_8003A280");
 void UpdateCarAiTargetSpeed() asm("func_800396FC");
-void ApplyCarRacingLineHint() asm("func_800394DC");
-void ClampCarLateralOffset() asm("func_8003A148");
+void ApplyCarRacingLineHint();
+void ClampCarLateralOffset();
 void UpdateRivalRubberBand(void) asm("func_8003A974");
 void SlowRivalAhead() asm("func_8003A6A4");
-void AccumulateLapProgress() asm("func_8002C168");
-void ApplyCarKnockback() asm("func_80038C4C");
+void AccumulateLapProgress();
+void ApplyCarKnockback();
 s32 UpdateCarTrackState() asm("func_80031298");
 void StartCarBodyKick() asm("func_80038F0C");
 void UpdateCarBodyKick() asm("func_80038FF0");
-void UpdateCarCrestHop() asm("func_80039280");
+void UpdateCarCrestHop();
 
 /*
  * Car route-steering update. Samples a look-ahead track point (two ahead or two

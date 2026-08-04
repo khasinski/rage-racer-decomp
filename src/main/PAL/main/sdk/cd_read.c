@@ -13,7 +13,7 @@ long CdReadSync(long arg0, long arg1) asm("func_80027790");
 /* libcd's static cd_read, named from CD_newmedia's own error text
  * "Read error in cd_read(PVD)"; CD_newmedia and CD_cachefile are its
  * only callers. */
-long cd_read(long count, long sectorInt, void *buf) asm("func_8006CB88");
+long cd_read(long count, long sectorInt, void *buf);
 long cd_read(long arg0, long sectorInt, void *buf) {
     long scratch[2];
 
@@ -23,7 +23,7 @@ long cd_read(long arg0, long sectorInt, void *buf) {
     return CdReadSync(0, 0) < 1U;
 }
 
-void LibcMemcpy(u_char *dst, u_char *src, long count) asm("func_8006CBF4");
+void LibcMemcpy(u_char *dst, u_char *src, long count);
 void LibcMemcpy(u_char *dst, u_char *src, long count) {
     u_char scratch[8];
     register long i asm("$3");
@@ -46,7 +46,7 @@ void LibcMemcpy(u_char *dst, u_char *src, long count) {
     } while (i != end);
 }
 
-long LibcStrcmp(u_char *arg0, u_char *arg1) asm("func_8006CC28");
+long LibcStrcmp(u_char *arg0, u_char *arg1);
 long LibcStrcmp(u_char *arg0, u_char *arg1) {
     long left;
 
@@ -70,7 +70,7 @@ long LibcStrcmp(u_char *arg0, u_char *arg1) {
     return *arg0 - arg1[-1];
 }
 
-long LibcStrncmp(u_char *arg0, u_char *arg1, long arg2) asm("func_8006CC8C");
+long LibcStrncmp(u_char *arg0, u_char *arg1, long arg2);
 long LibcStrncmp(u_char *arg0, u_char *arg1, long arg2) {
     long left;
     long right;

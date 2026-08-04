@@ -39,7 +39,7 @@ extern volatile StStrHeader *g_StRingBase asm("D_801E8AAC");
 extern s32 g_StRingSize asm("D_801F1850");
 
 void StClearRingRange(s32 first, u32 count) asm("func_8006D0AC");
-void data_ready_callback(void) asm("func_8006CE78");
+void data_ready_callback(void);
 void CD_dmastart(
     s32 channel,
     u32 address,
@@ -47,7 +47,7 @@ void CD_dmastart(
     u32 size,
     u32 control,
     u8 mode,
-    u32 unused) asm("func_8006DB74");
+    u32 unused);
 
 void StCdInterrupt(void) {
     StReadyStatus readyStatus;

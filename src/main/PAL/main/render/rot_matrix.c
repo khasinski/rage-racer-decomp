@@ -8,7 +8,7 @@ void BuildRotMatrixZ(Matrix *mtx, s32 angle) asm("func_8001A4C0");
 void BuildRotMatrixY(Matrix *mtx, s32 angle) asm("func_8001A530");
 void BuildRotMatrixX(Matrix *mtx, s32 angle) asm("func_8001A5A0");
 void SetCameraRotMatrix(void) asm("func_8001A610");
-s32 Atan2(s32 x, s32 y) asm("func_8001A6AC");
+s32 Atan2(s32 x, s32 y);
 
 void BuildRotMatrixZ(Matrix *mtx, s32 angle) {
     s32 s;

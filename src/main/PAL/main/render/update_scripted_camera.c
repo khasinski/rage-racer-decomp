@@ -34,7 +34,7 @@ s32 SetLookAtMatrix(s32 *obj) asm("func_80046248");
 
 /* One frame of the scripted camera: eases the six values between the
  * current and next keyframe and installs the resulting view matrix. */
-void UpdateScriptedCamera(void) asm("func_80046600");
+void UpdateScriptedCamera(void);
 void UpdateScriptedCamera(void) {
     s32 current;
     s32 tick;

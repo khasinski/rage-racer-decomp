@@ -12,7 +12,7 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 extern s32 g_TitlePulse asm("D_801E429C");
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void DrawMainMenuRows(void) asm("func_8001B2D4");
+void DrawMainMenuRows(void);
 
 void UpdateMainMenuExit(void) asm("func_8001B884");
 
@@ -56,7 +56,7 @@ void UpdateMainMenuExit(void) {
 
 void UpdateFrontend(void) asm("func_8001BB58");
 
-void UpdateTitleAttract(void) asm("func_8001B974");
+void UpdateTitleAttract(void);
 
 extern s32 g_MainMenuSlide asm("D_801E6F1C");
 extern s32 g_ClassWinCount asm("D_801E4DA8");
@@ -127,9 +127,9 @@ extern void (*g_FrontendDrawHandlers[])(void) asm("D_8007C748");
 s32 Random15(void) asm("func_800632B0");
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-s32 RequestTrackLoad(void) asm("func_8001965C");
+s32 RequestTrackLoad(void);
 s32 RequestRaceStart(void) asm("func_80019580");
-void BeginIntroFmv(int) asm("func_80019AF0");
+void BeginIntroFmv(int);
 
 void UpdateFrontend(void) {
     u32 state;
@@ -213,7 +213,7 @@ void UpdateFrontend(void) {
  * Empty stub; SetupDisplay240 and SetupDisplay480 both call it with one argument,
  * so the parameter is declared and ignored.
  */
-void ResetFrameContext(int arg0) asm("func_8001BE94");
+void ResetFrameContext(int arg0);
 void ResetFrameContext(int arg0) {
 }
 
@@ -227,7 +227,7 @@ extern u16 g_ScreenOffsetY asm("D_801E4B9C");
 void func_80069A58(s32, s32);
 void func_80069A78(s32);
 
-void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) asm("func_8001BE9C");
+void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
@@ -301,7 +301,7 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     asm(".globl func_8001C05C\nfunc_8001C05C = func_8001BE9C + 0x1C0");
 }
 
-void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) asm("func_8001C088");
+void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;

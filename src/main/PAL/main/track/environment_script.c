@@ -56,7 +56,7 @@ extern s32 g_FogNear asm("D_8009B24C");
 
 /* Deliberately unprototyped: the seek path also leaves the cue duration and
  * clamped frame in a1/a2, while the normal update path passes only the cue. */
-void LoadEnvironmentCue() asm("func_800455EC");
+void LoadEnvironmentCue();
 void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) asm("func_8004554C");
 /* Deliberately unprototyped: the original passes only the rect and leaves
  * a1 live, so the psyq/gpu.h LoadImage prototype cannot be used here. */

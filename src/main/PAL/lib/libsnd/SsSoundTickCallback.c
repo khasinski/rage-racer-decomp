@@ -5,7 +5,7 @@ typedef void (*Callback)(void);
 extern Callback g_SndTickCallback asm("D_8009A560");
 extern Callback g_SndPrevVSyncCallback asm("D_8009A564");
 
-void SsSoundTickCallback(void) asm("func_80071EEC");
+void SsSoundTickCallback(void);
 
 void SsSoundTickCallback(void) {
     if (g_SndPrevVSyncCallback != 0) {

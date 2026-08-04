@@ -12,9 +12,9 @@ void *func_80017390(void *arg0, void *arg1, s32 arg2);
 extern s32 g_BootLogoState asm("D_8007D53C");
 extern s32 g_BootLogoTimer asm("D_8007D540");
 extern s32 g_BootLogoHoldTimer asm("D_8007D544");
-void BeginIntroFmv(s32 arg0) asm("func_80019AF0");
-void DrawEndingStill(void) asm("func_800230B0");
-void DrawBootLogo(void) asm("func_8002317C");
+void BeginIntroFmv(s32 arg0);
+void DrawEndingStill(void);
+void DrawBootLogo(void);
 extern Matrix g_SceneColorMatrix asm("D_8019CAD4");
 extern Matrix g_DefaultColorMatrix asm("D_8007D548");
 extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
@@ -29,9 +29,9 @@ extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 g_OptionLetterboxHeight asm("D_8009F0A0");
 void UploadImageAsset(s32 arg0) asm("func_8001A3C0");
 void InitRenderState(s32 arg0) asm("func_80017884");
-void InstallSceneLighting(void) asm("func_800234DC");
+void InstallSceneLighting(void);
 
-void DrawBootLogo(void) asm("func_8002317C");
+void DrawBootLogo(void);
 void DrawBootLogo(void) {
     u8 *base;
     s32 height;
@@ -127,7 +127,7 @@ void UpdateBootLogoScene(void) {
     }
 }
 
-void InstallSceneLighting(void) asm("func_800234DC");
+void InstallSceneLighting(void);
 void InstallSceneLighting(void) {
     g_SceneColorMatrix = g_DefaultColorMatrix;
     g_SceneLightMatrix = g_DefaultLightMatrix;

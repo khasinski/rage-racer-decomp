@@ -4,7 +4,7 @@
 #include "game/car.h"
 
 
-void SeedCarLapProgress(u8 *arg0, s32 arg1) asm("func_8002BF68");
+void SeedCarLapProgress(u8 *arg0, s32 arg1);
 void SeedCarLapProgress(u8 *arg0, s32 arg1) {
     GameCarRuntime *obj = (GameCarRuntime *)arg0;
     s32 state = g_RaceSeries;

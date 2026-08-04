@@ -3,12 +3,12 @@
 
 extern u_char g_DispEnvCache asm("D_80094254");
 void MemCopy(long arg0, void *arg1, long arg2) asm("func_800681BC");
-long GetDispEnv(long arg0) asm("func_8006655C");
+long GetDispEnv(long arg0);
 long GetDispEnv(long arg0) { MemCopy(arg0, &g_DispEnvCache, 0x14); return arg0; }
 
 extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
 
-u_long GetODE(void) asm("func_80066594");
+u_long GetODE(void);
 u_long GetODE(void) {
     u_long ret;
 
@@ -17,12 +17,12 @@ u_long GetODE(void) {
 }
 
 u_long Gpu_BuildDisplayMode(long arg0, long arg1, u_long arg2) asm("func_800669F0");
-u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y) asm("func_80066A4C");
-u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y) asm("func_80066B18");
+u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
+u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long func_80066BE4(short arg0, short arg1);
 u_long func_80066C2C(void *arg0);
 
-void SetTexWindow(DrawPacket *pkt, void *arg1) asm("func_800665C8");
+void SetTexWindow(DrawPacket *pkt, void *arg1);
 void SetTexWindow(DrawPacket *pkt, void *arg1) {
     pkt->code = 2;
     pkt->x0y0 = func_80066C2C(arg1);
@@ -36,14 +36,14 @@ void SetDrawArea(DrawPacket *pkt, Rect *rect) {
     pkt->x1y1 = Gpu_BuildDrawAreaBottomRightCmd((short)(rect->x + rect->w - 1), (short)(rect->y + rect->h - 1));
 }
 
-void SetDrawOffset(DrawPacket *pkt, short *arg1) asm("func_80066688");
+void SetDrawOffset(DrawPacket *pkt, short *arg1);
 void SetDrawOffset(DrawPacket *pkt, short *arg1) {
     pkt->code = 2;
     pkt->x0y0 = func_80066BE4(arg1[0], arg1[1]);
     pkt->x1y1 = 0;
 }
 
-void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2) asm("func_800666CC");
+void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2);
 void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2) {
     u_long cmd;
 
@@ -79,8 +79,8 @@ typedef struct DrawEnvPacketSource {
     u_char b0;
 } DrawEnvPacketSource;
 
-u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y) asm("func_80066A4C");
-u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y) asm("func_80066B18");
+u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
+u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y) asm("func_80066BE4");
 u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("func_800669F0");
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");

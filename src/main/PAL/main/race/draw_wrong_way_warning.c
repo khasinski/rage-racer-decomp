@@ -4,7 +4,7 @@
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");
 
-void SetSprt(u8 *arg0) asm("func_80064FA8");
+void SetSprt(u8 *arg0);
 void SetShadeTex(u8 *arg0, s32 arg1) asm("func_80064EB8");
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_8001720C(void *ot, void *packet, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
@@ -83,7 +83,7 @@ s32 rsin(s32 angle) asm("func_80068568");
 s32 rcos(s32 angle) asm("func_80068634");
 void SetPolyF4(void *prim) asm("func_80064F30");
 void func_80064FF8(void *prim);
-void DrawSpeedDigits(s32 x, s32 y, s32 speed) asm("func_80033C18");
+void DrawSpeedDigits(s32 x, s32 y, s32 speed);
 
 void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) asm("func_8003351C");
 void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
@@ -233,7 +233,7 @@ void DrawFullscreenFadeTile(s32 color, s32 arg1) {
     *(void **)0x1F800000 = func_80017390(g_DrawBuffer + 0xCC, packet, arg1);
 }
 
-void SetSprt8(u8 *prim) asm("func_80064F80");
+void SetSprt8(u8 *prim);
 void func_80064EB8(u8 *prim, s32 enabled);
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");

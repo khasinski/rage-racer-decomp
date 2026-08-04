@@ -24,7 +24,7 @@ typedef SeqStruct SequenceState;
 void _SsSndStop(short seq, short sep) asm("func_80072734");
 void SsSeqStop(long seq) asm("func_800728A0");
 void SsSepStop(long seq, long sep) asm("func_800728C8");
-void _SsSndTempo(short seq, short sep) asm("func_800728F4");
+void _SsSndTempo(short seq, short sep);
 void SsUtSetReverbDepth(long left, long right) asm("func_80073748");
 long SsUtSetReverbType(long type) asm("func_80073614");
 long SsUtGetReverbType(void) asm("func_800736B8");
@@ -32,7 +32,7 @@ void SsUtReverbOn(void) asm("func_800736C8");
 void SsUtReverbOff(void) asm("func_800736E8");
 void SsUtSetReverbFeedback(long feedback) asm("func_80073708");
 void SsUtSetReverbDelay(long delay) asm("func_800737E0");
-short SsUtGetVVol(short voice, short *left, short *right) asm("func_8007849C");
+short SsUtGetVVol(short voice, short *left, short *right);
 /*
  * Key-on a named hardware voice: rejects voice >= 24 or an unknown program,
  * stamps the utility sep number 0x21 into the current-voice record D_801E4BD0,
@@ -59,32 +59,32 @@ void SsSetSpuInputAttr(u_char source, u_char field, u_char value) asm("func_8006
  * here takes one argument, so this is the one-argument internal entry, not the
  * documented API. */
 long SsSeqOpen(long seq_data) asm("func_8006F004");
-void SsSeqAdvanceChannelDelta(long seq, long channel) asm("func_8006F0D0");
+void SsSeqAdvanceChannelDelta(long seq, long channel);
 void SsSeqSetChannelPitchBend(long seq, long channel, long pitch, long amount) asm("func_8006F48C");
 void SsSeqApplyProgramChange(long seq, long channel) asm("func_80070970");
 long SsSeqReadDeltaTime(long seq, long channel) asm("func_80070D70");
-void SsUnpackAdsr(u_long adsr1, u_long adsr2, u_short *out) asm("func_80070E28");
-void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) asm("func_80070E84");
-void SsSeqRestartPlayback(short seq, short sep) asm("func_80070F10");
+void SsUnpackAdsr(u_long adsr1, u_long adsr2, u_short *out);
+void SsPackAdsr(u_short *in, u_short *out0, u_short *out1);
+void SsSeqRestartPlayback(short seq, short sep);
 /* LibRef47 declares SsSeqPause with one argument (seq access number); this
  * entry takes seq and sep, so it is really the shared _SsSndPause body. */
 void SsSeqPause(long seq, long sep) asm("func_80071814");
-void SsSeqAdvanceChannelTick(long seq, long sep) asm("func_800718B4");
-void SsSeqResume(long seq, long sep) asm("func_800718E0");
+void SsSeqAdvanceChannelTick(long seq, long sep);
+void SsSeqResume(long seq, long sep);
 void SsSeqClose(long seq) asm("func_80071948");
 void SsSeqCloseWrapper(short seq) asm("func_80071AC4");
-void SsSepCloseWrapper(short seq) asm("func_80071AE8");
+void SsSepCloseWrapper(short seq);
 void _SsInitTables(void) asm("func_80071B0C");
 void ssinit(void) asm("func_80071BF4");
 void SsQuit(void) asm("func_80071C24");
-void SsStartSoundTick(long mode) asm("func_80071C44");
-void SsStartSoundTickMode1(void) asm("func_80071EAC");
-void SsStartSoundTickMode0(void) asm("func_80071ECC");
-void SsSoundTickCallback(void) asm("func_80071EEC");
-void SsSoundTickVSyncCallback(void) asm("func_80071F2C");
+void SsStartSoundTick(long mode);
+void SsStartSoundTickMode1(void);
+void SsStartSoundTickMode0(void);
+void SsSoundTickCallback(void);
+void SsSoundTickVSyncCallback(void);
 void SsSetTickMode(long mode) asm("func_800720F4");
 void SsStopSoundTick(void) asm("func_80072260");
-void SsSetTableSize(u_char *table, long seq_count, long sep_count) asm("func_80072310");
+void SsSetTableSize(u_char *table, long seq_count, long sep_count);
 void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) asm("func_800724F0");
 void SsSeqPlay(long seq, long play_mode, long loop_count) asm("func_800725F0");
 void SsSepPlay(long seq, long sep, long play_mode, long loop_count) asm("func_80072628");
@@ -95,15 +95,15 @@ void SsSepSetVol(long seq, long sep, long left, long right) asm("func_800726C8")
    (SpuVmGetSeqVol) reads the score's 0x74/0x76 volume pair through two
    out-pointers, and this is a one-line forwarder to it. */
 long SsSepGetVol(long seq, long sep, short *voll, short *volr) asm("func_80072700");
-void SsSetReservedVoice(u_char voices) asm("func_80072AD0");
-void SsSetMono(void) asm("func_80072AE0");
-void SsSetStereo(void) asm("func_80072AF4");
+void SsSetReservedVoice(u_char voices);
+void SsSetMono(void);
+void SsSetStereo(void);
 u_char SsSetVoiceCount(u_char voices) asm("func_80072B04");
 void SsVabClose(short vab_id) asm("func_80072B3C");
-short SsVabOpen(u_char *addr, VabHdr *vab_header) asm("func_80072BC0");
-short SsVabOpenHead(u_char *addr, short vab_id) asm("func_80072C18");
+short SsVabOpen(u_char *addr, VabHdr *vab_header);
+short SsVabOpenHead(u_char *addr, short vab_id);
 short SsVabOpenHeadSticky(u_char *addr, short vab_id, u_long spu_addr) asm("func_80072C4C");
-short SsVabFakeHead(u_char *addr, short vab_id, u_long spu_addr) asm("func_80072C80");
+short SsVabFakeHead(u_char *addr, short vab_id, u_long spu_addr);
 short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAddr) asm("func_80072CB4");
 short SsVabTransBody(u_char *addr, short vab_id) asm("func_800730BC");
 short SsVabTransCompleted(short immediate_flag) asm("func_8007317C");
@@ -113,40 +113,40 @@ void SpuVmDamperOn(void) asm("func_800731B8");
  * (LibRef47 14-32). It is the only caller of SsSeqAdvanceChannelTick.
  * Was bound to func_800731CC here; that was wrong (docs/names.md 17). */
 void SsSeqCalledTbyT(void) asm("func_80071018");
-long SsUtGetProgAtr(long vab_id, long program, ProgAtr *out) asm("func_8007320C");
-long SpuVmVSetUp(long vab_id, long program) asm("func_80073314");
-long SsUtGetVagAtr(long vab_id, long program, long tone, VagAtr *out) asm("func_800733D8");
-long SsUtSetVagAtr(long vab_id, long program, long tone, VagAtr *in) asm("func_80073820");
-u_short SpuVmCalculateCurrentPitch(void) asm("func_800749B4");
-u_short SpuVmCalculateTonePitch(long center, long fine) asm("func_80074A6C");
+long SsUtGetProgAtr(long vab_id, long program, ProgAtr *out);
+long SpuVmVSetUp(long vab_id, long program);
+long SsUtGetVagAtr(long vab_id, long program, long tone, VagAtr *out);
+long SsUtSetVagAtr(long vab_id, long program, long tone, VagAtr *in);
+u_short SpuVmCalculateCurrentPitch(void);
+u_short SpuVmCalculateTonePitch(long center, long fine);
 u_char SpuVmAlloc(long priority) asm("func_800739E8");
 void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_short right) asm("func_80074818");
-void SpuVmKeyOnWithVol(long note, long fine, long left, long right) asm("func_80075AE0");
-void SpuVmClearFinishedVoices(void) asm("func_80075B78");
-void SpuVmKeyOnWithDefaultVol(long note, long fine) asm("func_80075C30");
+void SpuVmKeyOnWithVol(long note, long fine, long left, long right);
+void SpuVmClearFinishedVoices(void);
+void SpuVmKeyOnWithDefaultVol(long note, long fine);
 long SpuVmApplyPitchBendToVoice(long voice, long note, long vab_id, long program, long bend) asm("func_80075CB0");
-long SpuVmApplyPitchBendByTone(long note, long vab_id, long program, long bend) asm("func_80075EB4");
+long SpuVmApplyPitchBendByTone(long note, long vab_id, long program, long bend);
 void SsUtFlush(void) asm("func_80075FA4");
 void SpuVmSeKeyOn(long seq, long vab_id, long program, long tone, long volume, long pan) asm("func_80076350");
 void SpuVmSeKeyOff(long seq, long vab_id, long program, long tone) asm("func_80076940");
 /* LibRef47 14-103/14-104. func_80076B30 (6 args, void) and func_80076C1C
  * (3 args) cannot be these; they are left raw (docs/names.md 17). */
 short SsUtKeyOn(short vabId, short prog, short tone, short note, short fine, short volL, short volR) asm("func_800776E4");
-long SsUtKeyOff(long voice, long vabId, long prog, long tone, long note) asm("func_80077A88");
+long SsUtKeyOff(long voice, long vabId, long prog, long tone, long note);
 void SpuVmSeqKeyOff(long seq_sep) asm("func_80076ED8");
 long SsUtSetProgVol(long vab_id, long program, long volume) asm("func_8007701C");
-long SsUtGetProgVol(long vab_id, long program) asm("func_80077090");
-long SsUtSetProgPan(long vab_id, long program, long pan) asm("func_800770E4");
-long SsUtGetProgPan(long vab_id, long program) asm("func_80077158");
-long SsUtKeyOffV(long voice) asm("func_80078018");
+long SsUtGetProgVol(long vab_id, long program);
+long SsUtSetProgPan(long vab_id, long program, long pan);
+long SsUtGetProgPan(long vab_id, long program);
+long SsUtKeyOffV(long voice);
 long SsUtPitchBend(long voice, long vab_id, long program, long note, u_short pbend) asm("func_80078130");
 long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long old_fine, long new_note, long new_fine) asm("func_800781C0");
-long SsUtChangeADSR(long voice, long vab_id, long program, long old_note, long adsr1, long adsr2) asm("func_80078300");
-long SsUtGetDetVVol(long voice, short *left, short *right) asm("func_800783D8");
-long SsUtSetDetVVol(long voice, short left, short right) asm("func_80078430");
+long SsUtChangeADSR(long voice, long vab_id, long program, long old_note, long adsr1, long adsr2);
+long SsUtGetDetVVol(long voice, short *left, short *right);
+long SsUtSetDetVVol(long voice, short left, short right);
 long SsUtSetVVol(long voice, short left, short right) asm("func_80078528");
-long SsUtAutoVol(long voice, long start_vol, long end_vol, long delta_time) asm("func_800785B4");
-long SsUtAutoPan(long voice, long start_pan, long end_pan, long delta_time) asm("func_80078608");
+long SsUtAutoVol(long voice, long start_vol, long end_vol, long delta_time);
+long SsUtAutoPan(long voice, long start_pan, long end_pan, long delta_time);
 void SsSeqSetNoteParam2C(long seq, long sep, u_char value) asm("func_8006F57C");
 void SsSeqResetChannelNote(long seq, long sep) asm("func_8006FCE0");
 void SsSeqApplyControlChange(long seq, long sep, u_char value) asm("func_8006FDA8");

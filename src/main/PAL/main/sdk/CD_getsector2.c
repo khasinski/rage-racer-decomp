@@ -54,12 +54,12 @@ long CD_getsector2(long arg0, u_long arg1) {
     return 0;
 }
 
-void CdSetSectorParam(long arg0) asm("func_8006C16C");
+void CdSetSectorParam(long arg0);
 void CdSetSectorParam(long arg0) {
     D_800992E4 = arg0;
 }
 
-void CdDispatchInterrupts(void) asm("func_8006C17C");
+void CdDispatchInterrupts(void);
 void CdDispatchInterrupts(void) {
     u_char *statusByte;
     long status;

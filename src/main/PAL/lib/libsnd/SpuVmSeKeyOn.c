@@ -44,12 +44,12 @@ extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern SvmCurrentAttrKeyOn g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
-long SpuVmVSetUp(short vab_id, short program) asm("func_80073314");
+long SpuVmVSetUp(short vab_id, short program);
 long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) asm("func_80076940");
 u_char SpuVmAlloc(long priority) asm("func_800739E8");
 void func_80074134(void);
 void SpuVmNoiseKeyOn(u_char voice) asm("func_80074348");
-u_short SpuVmCalculateCurrentPitch(void) asm("func_800749B4");
+u_short SpuVmCalculateCurrentPitch(void);
 void func_80073C50(u_char tone_count, u_short pitch);
 
 static inline u_char func_80076350_select_tones(

@@ -26,9 +26,9 @@ extern const char D_80013A3C[];
 extern const char D_80013A5C[];
 extern const char D_80013A70[];
 
-extern long cd_read(long, long, void *) asm("func_8006CB88");
-extern long LibcStrncmp(void *, const char *, long) asm("func_8006CC8C");
-extern void LibcMemcpy(char *, u_char *, long) asm("func_8006CBF4");
+extern long cd_read(long, long, void *);
+extern long LibcStrncmp(void *, const char *, long);
+extern void LibcMemcpy(char *, u_char *, long);
 
 /*
  * Reads and parses the disc's directory into the Entry table D_8009C114[128].
@@ -110,7 +110,7 @@ long CD_newmedia(void) {
 extern volatile long D_8009C118[];
 extern CdSearchDirEntry g_CdDirEntryName[] asm("D_8009C120");
 
-long LibcStrcmp(u_char *arg0, u_char *arg1) asm("func_8006CC28");
+long LibcStrcmp(u_char *arg0, u_char *arg1);
 
 long DS_searchdir(long type, u_char *name) asm("func_8006C83C");
 long DS_searchdir(long type, u_char *name) {

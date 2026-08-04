@@ -5,7 +5,7 @@ extern s32 g_CarNamePlateFade asm("D_8007FB38");
 void func_80046A2C(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r,
                    s32 g, s32 b, s32 clut, s32 shadeTex, s32 semiTrans,
                    s32 flags);
-s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
+s32 GetCarUnlockLevel(s32 model);
 
 /* The bottom-right plate: grade digit, manufacturer sprite and model-name sprite. */
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");

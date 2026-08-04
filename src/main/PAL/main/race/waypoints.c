@@ -27,7 +27,7 @@ extern s32 g_WaypointsCollected asm("D_801E43F8");
  * starting velocity. */
 extern s32 g_PlayerVelocity[] asm("D_8009E798");
 
-s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) asm("func_80037808");
+s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
 
 /*
  * Per-frame waypoint spawn/update state machine over the 6 slots. An idle slot
@@ -62,7 +62,7 @@ void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 
 void SetShadeTex(u8 *prim, s32 enabled) asm("func_80064EB8");
 
-void SetSprt(u8 *prim) asm("func_80064FA8");
+void SetSprt(u8 *prim);
 
 
 /* Deliberately raw: set to 1 once g_SceneTimer passes 571 and cleared during
@@ -92,9 +92,9 @@ void DrawFullscreenFadeTile(s32 a, s32 b) asm("func_80033AA0");
 
 void SeedWaypoints(void) asm("func_80037714");
 
-void DrawRaceEndBanner(s32 a) asm("func_800218A0");
+void DrawRaceEndBanner(s32 a);
 
-void ExitRaceScene(s32 a) asm("func_80035258");
+void ExitRaceScene(s32 a);
 
 void func_80016754(s32 a, s32 b, void *c, s32 d);
 
@@ -110,21 +110,21 @@ void DrawLapNumber(void) asm("func_80037C04");
 
 void UpdateCamera(s32 a, void *b) asm("func_80043BCC");
 
-void RequestTrackTexturePage(s32 a) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 a);
 
 
 void func_800418D4(void);
 
-void DrawTerrainCells(void) asm("func_80041840");
+void DrawTerrainCells(void);
 
 
-void DrawCourseScenery(s32 a, s32 b, s32 c) asm("func_8003E1A4");
+void DrawCourseScenery(s32 a, s32 b, s32 c);
 
 void GetTrackZoneBlend(s32 a) asm("func_800350B4");
 
 void SetReverbDepth(s32 a, s32 b) asm("func_8005B190");
 
-void DrawPlayerTachometer(void) asm("func_8002F458");
+void DrawPlayerTachometer(void);
 
 void UpdateTrackEventSound(s32 a) asm("func_8004087C");
 
@@ -161,7 +161,7 @@ extern u8 *g_TrackEventData asm("D_801E4150");
 
 extern s32 FindTrackSegment(u8 *ent, s32 arg) asm("func_80030EB4");
 
-extern void SeedCarLapProgress(u8 *ent, s32 arg) asm("func_8002BF68");
+extern void SeedCarLapProgress(u8 *ent, s32 arg);
 
 extern void UpdateCarTrackState(u8 *ent, s32 arg, void *arg2) asm("func_80031298");
 
@@ -175,7 +175,7 @@ extern void UpdateCarTrackState(u8 *ent, s32 arg, void *arg2) asm("func_80031298
  * accessed by raw byte offset (its first 0xE8 mirror GameRenderObject).
  */
 
-s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0) asm("func_80037808");
+s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0);
 s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0) {
     s32 center_x = g_PlayerCar;
     s32 x = arg0->x;
@@ -338,7 +338,7 @@ void DrawWaypoints(void) {
     } while (i < 6);
 }
 
-s32 CountActiveWaypoints(void) asm("func_80037BD4");
+s32 CountActiveWaypoints(void);
 s32 CountActiveWaypoints(void) {
     TrackWaypointRuntime *ptr = g_Waypoints;
     s32 count = 0;

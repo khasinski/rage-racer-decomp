@@ -84,19 +84,19 @@ typedef struct CdSearchDirEntry {
     u_char name[0x24];
 } CdSearchDirEntry;
 
-char *CdComstr(long cmd) asm("func_8006A4CC");
-char *CdIntstr(long intr) asm("func_8006A500");
-long CdSetDebug(long level) asm("func_8006A4B4");
-void CdFlush(void) asm("func_8006A494");
-long CdInit(void) asm("func_8006A2D0");
+char *CdComstr(long cmd);
+char *CdIntstr(long intr);
+long CdSetDebug(long level);
+void CdFlush(void);
+long CdInit(void);
 long CdStatus(void) asm("func_8006A3E8");
-u_char CdMode(void) asm("func_8006A3F8");
-u_char CdLastCom(void) asm("func_8006A408");
-CdlLOC *CdLastPos(void) asm("func_8006A418");
-CdlLOC *CdIntToPos(long i, CdlLOC *p) asm("func_8006A9D8");
-long CdPosToInt_Local(CdlLOC *loc) asm("func_8006AADC");
-long CdGetToc(CdlLOC *toc) asm("func_8006A088");
-long CdGetToc2(long n, CdlLOC *toc) asm("func_8006A0AC");
+u_char CdMode(void);
+u_char CdLastCom(void);
+CdlLOC *CdLastPos(void);
+CdlLOC *CdIntToPos(long i, CdlLOC *p);
+long CdPosToInt_Local(CdlLOC *loc);
+long CdGetToc(CdlLOC *toc);
+long CdGetToc2(long n, CdlLOC *toc);
 void CD_initintr(void) asm("func_8006BCC4");
 long CD_initvol(void) asm("func_8006BBD0");
 void CD_flush(void) asm("func_8006BAF0");
@@ -104,12 +104,12 @@ long CD_getsector2(long madr, u_long size) asm("func_8006C06C");
 long CD_vol(CdlATV *vol) asm("func_8006BA68");
 long DsSearchFile(void *file, void *name) asm("func_8006C25C");
 long DS_searchdir(long type, u_char *name) asm("func_8006C83C");
-void StClearRing(void) asm("func_8006CDC0");
-long StGetBackloc(CdlLOC *loc) asm("func_8006CF08");
+void StClearRing(void);
+long StGetBackloc(CdlLOC *loc);
 /* LibRef47 spells these `u_long *ring_addr, u_long ring_size` and StSetStream's
  * last two arguments as function pointers; kept as-is to match the call sites. */
 void StSetRing(void *base, long size) asm("func_8006A058");
-void StSetStream(long mode, long start_frame, long end_frame, long callback, long user_data) asm("func_8006CF68");
+void StSetStream(long mode, long start_frame, long end_frame, long callback, long user_data);
 u_long StFreeRing(u_long *base) asm("func_8006CFF0");
 /* The libds streaming state machine: advances D_80099418 through states 1..0xA,
  * DMAs sector header then body, drives the StStrHeader ring. Installed via
@@ -155,13 +155,13 @@ void CdReadDataReadyCallback(u_char intr, long result) asm("func_80027238");
 long CdReadRetry(long mode) asm("func_8002745C");
 
 /* Install the DMA3 (CD-ROM) data callback; returns the previous one. */
-void CdDataCallback(long callback) asm("func_8006A994");
+void CdDataCallback(long callback);
 /* Fetch the next ready ring frame: *addr = its data, *header = its ring entry;
  * returns 0 when one was handed out. */
-long StGetNext(StRingEventRecord **addr, StRingEventRecord **header) asm("func_8006D0EC");
+long StGetNext(StRingEventRecord **addr, StRingEventRecord **header);
 /* Tear the stream down: clears the CD data / ready callbacks and both kernel
  * callback slots inside a critical section. */
-void StUnSetRing(void) asm("func_8006CE20");
+void StUnSetRing(void);
 
 /*
  * libpress (MDEC) front end - thin wrappers over the MDEC_* primitives, which

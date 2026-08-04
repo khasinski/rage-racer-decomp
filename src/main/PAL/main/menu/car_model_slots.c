@@ -1,7 +1,7 @@
 #include "common.h"
 
 /* Called here with no argument, so this declaration must stay un-prototyped. */
-s32 GetCarUnlockLevel() asm("func_8001785C");
+s32 GetCarUnlockLevel();
 
 /* GetCarAssetIndex(model, owned grade) written out longhand; indexes the price and engine tables. */
 s32 GetOwnedCarAssetIndex(s32 arg0) asm("func_80050FA8");
@@ -137,7 +137,7 @@ void SelectCarModelSlot(void *arg0) asm("func_80017BAC");
 void UploadCarImage(void *arg0) asm("func_80017B5C");
 
 /* Re-registers the showroom car after g_CarModelSlot changes. */
-void InstallCarModelSlot(void) asm("func_80051238");
+void InstallCarModelSlot(void);
 void InstallCarModelSlot(void) {
     SelectCarModelSlot(g_CarModelSlot);
     SelectModelBank(g_CarModelSlot);

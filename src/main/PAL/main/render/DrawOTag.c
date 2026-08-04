@@ -12,7 +12,7 @@ extern char D_800135F8[];
 void Gpu_BuildDrawEnvCmds(void *arg0, void *arg1) asm("func_8006674C");
 void *MemCopy(void *dst, void *src, s32 count) asm("func_800681BC");
 
-void DrawOTag(void *arg0) asm("func_80065E60");
+void DrawOTag(void *arg0);
 
 void DrawOTag(void *arg0) {
     if (g_GraphDebug >= 2) {

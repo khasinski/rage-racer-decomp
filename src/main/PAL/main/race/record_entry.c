@@ -23,7 +23,7 @@ extern s32 g_CarClassNames[] asm("D_8007D508");
 extern s32 g_CarNames[] asm("D_8007D4D4");
 void func_80016EA0(void *dst, s32 len, void *src, s32 arg3);
 void func_80016754(void *dst, s32 x, void *src, s32 color);
-void *FormatLapTime(void *dst, s32 value) asm("func_80021CD4");
+void *FormatLapTime(void *dst, s32 value);
 void LibcSprintf() asm("func_800632F0");
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 extern volatile s32 g_RaceTotalTime asm("D_801E4BA8");
@@ -38,7 +38,7 @@ extern u16 g_TimeRecordCars[] asm("D_8019CB84");
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_RecordEntryState asm("D_801E6C8C");
-void InsertRaceRecords(void) asm("func_80022324");
+void InsertRaceRecords(void);
 extern u8 g_NameEntryCharset[] asm("D_80010FB0");
 extern s32 g_NameEntryCursor asm("D_8019C8F8");
 extern s32 g_RecordPanelSlide asm("D_8019CA14");
@@ -200,7 +200,7 @@ void DrawNameEntryCursor(s32 arg0, s32 arg1) {
 
 }
 
-void InsertRaceRecords(void) asm("func_80022324");
+void InsertRaceRecords(void);
 void InsertRaceRecords(void) {
     s32 count;
     s32 i;

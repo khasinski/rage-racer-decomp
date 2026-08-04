@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-void Gpu_ArmTimeout(void) asm("func_80067F04");
+void Gpu_ArmTimeout(void);
 
 extern volatile u_long *g_GpuGp1 asm("D_800942BC");
 extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
@@ -74,5 +74,5 @@ waitReady:
 
 extern long g_GpuTimeoutDeadline asm("D_80094300");
 extern long g_GpuTimeoutPolls asm("D_80094304");
-long VSync(long mode) asm("func_8006DD30");
+long VSync(long mode);
 void Gpu_ArmTimeout(void) { g_GpuTimeoutDeadline = VSync(-1) + 240; g_GpuTimeoutPolls = 0; }

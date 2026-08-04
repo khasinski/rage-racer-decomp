@@ -13,7 +13,7 @@ void func_80016B7C(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4);
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_LostRaceChoice asm("D_801E3E0C");
 void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
-void DrawLostRaceCaption(s32 arg0) asm("func_800215B8");
+void DrawLostRaceCaption(s32 arg0);
 extern void *g_CourseProgress asm("D_8009E67C");
 extern char g_TextTryAgain[] asm("D_80010E80");
 extern char g_TextEndRace[] asm("D_80010E8C");
@@ -28,10 +28,10 @@ void RequestSelectBgmAssets(void) asm("func_80018410");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80021654(void);
 void func_80046A2C(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
-void DrawRaceEndBanner(s32 arg0) asm("func_800218A0");
-void ResetCourseProgress(s32 arg0) asm("func_800212F0");
+void DrawRaceEndBanner(s32 arg0);
+void ResetCourseProgress(s32 arg0);
 
-void UpdateBgmTrackCount(void) asm("func_80021540");
+void UpdateBgmTrackCount(void);
 void UpdateBgmTrackCount(void) {
     s32 offset;
     s32 current;
@@ -59,7 +59,7 @@ void UpdateBgmTrackCount(void) {
     g_BgmTrackCount = value;
 }
 
-void DrawLostRaceCaption(s32 arg0) asm("func_800215B8");
+void DrawLostRaceCaption(s32 arg0);
 void DrawLostRaceCaption(s32 arg0) {
     if (arg0 >= 0x100) {
         arg0 = 0xFF;
@@ -155,7 +155,7 @@ void UpdateLostRaceScreen(void) {
     func_80021654();
 }
 
-void DrawRaceEndBanner(s32 arg0) asm("func_800218A0");
+void DrawRaceEndBanner(s32 arg0);
 void DrawRaceEndBanner(s32 arg0) {
     if (arg0 >= 256) {
         arg0 = 0xFF;

@@ -26,19 +26,19 @@ extern u_char g_CdModeByte asm("D_8009905C");
 extern u_char g_CdLastCommand asm("D_8009905D");
 
 /* CdMode: returns the last CD mode byte. */
-u_char CdMode(void) asm("func_8006A3F8");
+u_char CdMode(void);
 u_char CdMode(void) {
     return g_CdModeByte;
 }
 
 /* CdLastCom: returns the last CD command byte issued. */
-u_char CdLastCom(void) asm("func_8006A408");
+u_char CdLastCom(void);
 u_char CdLastCom(void) {
     return g_CdLastCommand;
 }
 
 /* CdLastPos: returns the last reported disc position. */
-CdlLOC * CdLastPos(void) asm("func_8006A418");
+CdlLOC * CdLastPos(void);
 CdlLOC *CdLastPos(void) {
     return &g_CdLastPos;
 }

@@ -100,7 +100,7 @@ extern u8 g_UiChromeScript asm("D_80082460");
 void func_8005131C(void);
 void DrawFadingMenuSprites(s32 a, s32 b, s32 c) asm("func_800489AC");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-void RampTeamLogoCanvas(s32 a, s32 b) asm("func_8004B8B4");
+void RampTeamLogoCanvas(s32 a, s32 b);
 void DrawTeamLogoCanvas(s32 a, s32 b) asm("func_8004A248");
 s32 func_8004E724(s32 a, s32 b);
 

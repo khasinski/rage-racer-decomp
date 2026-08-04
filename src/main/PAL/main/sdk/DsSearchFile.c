@@ -21,7 +21,7 @@ extern const char D_800139A4[];
 extern long CD_newmedia(void) asm("func_8006C560");
 extern long DS_searchdir(long type, char *name) asm("func_8006C83C");
 extern long CD_cachefile(long arg0) asm("func_8006C8E4");
-extern long CD_namecmp(char *a, char *b) asm("func_8006C53C");
+extern long CD_namecmp(char *a, char *b);
 
 Rec * DsSearchFile(Rec *out, char *path) asm("func_8006C25C");
 Rec *DsSearchFile(Rec *out, char *path) {

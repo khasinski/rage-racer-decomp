@@ -137,7 +137,7 @@ extern PathSceneryCursor g_PathSceneryRotCursor asm("D_801E4DE2");
 
 s32 rsin(s32 angle) asm("func_80068568");
 s32 rcos(s32 angle) asm("func_80068634");
-s32 SquareRoot12(s32 value) asm("func_8006888C");
+s32 SquareRoot12(s32 value);
 void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume) asm("func_8005C914");
 
 void InitPathScenery(void) asm("func_8003F700");

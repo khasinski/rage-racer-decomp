@@ -3,9 +3,9 @@
 #include "game/race.h"
 
 /* (model, owned grade) -> index of the CAR_xx asset pair, 0..31. */
-s32 GetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
+s32 GetCarAssetIndex(s32 model, s32 grade);
 /* Progress level needed to buy this model's next grade. */
-s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
+s32 GetCarUnlockLevel(s32 model);
 
 extern u8 g_CarModelBaseIndex[] asm("D_8007C464");
 extern u8 g_CarModelUnlockBase[] asm("D_8007C474");
@@ -235,6 +235,6 @@ void SelectCarModelSlot(s32 index) {
     g_CarModelAsset = g_CarModelSlots[index];
 }
 
-void ModelBankNoOp(void) asm("func_80017BCC");
+void ModelBankNoOp(void);
 void ModelBankNoOp(void) {
 }

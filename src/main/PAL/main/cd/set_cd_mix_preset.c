@@ -6,7 +6,7 @@ extern s32 g_CdMixPreset asm("D_8007F5FC");
 extern u8 g_CdVolume asm("D_8009B194");
 
 
-void SetCdMixPreset(s32 arg0) asm("func_8004318C");
+void SetCdMixPreset(s32 arg0);
 void SetCdMixPreset(s32 arg0) {
     g_CdMixPreset = arg0;
     SetCdVolume(g_CdVolume);

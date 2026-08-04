@@ -37,7 +37,7 @@ long GetGraphType(void) {
     return g_GraphType;
 }
 
-long GetGraphDebug(void) asm("func_800657F4");
+long GetGraphDebug(void);
 long GetGraphDebug(void) {
     return g_GraphDebug;
 }
@@ -46,7 +46,7 @@ extern char D_80013504[];
 extern void (*D_800941E4)(char *, ...);
 extern u_long g_DrawSyncCallback asm("D_800941F4");
 
-u_long DrawSyncCallback(u_long arg0) asm("func_80065804");
+u_long DrawSyncCallback(u_long arg0);
 u_long DrawSyncCallback(u_long arg0) {
     u_long ret;
 
@@ -164,7 +164,7 @@ extern char D_8001356C[];
 
 void func_80065968(char *arg0, void *arg1);
 
-void ClearImage(void *rect, u_char r, u_char g, u_char b) asm("func_80065A90");
+void ClearImage(void *rect, u_char r, u_char g, u_char b);
 void ClearImage(void *rect, u_char r, u_char g, u_char b) {
     func_80065968(D_8001356C, rect);
     g_GpuFuncs->send(g_GpuFuncs->cmd0C, rect, 8, (b << 16) | (g << 8) | r);

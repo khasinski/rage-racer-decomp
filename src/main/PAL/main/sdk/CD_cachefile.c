@@ -27,9 +27,9 @@ extern u_short D_80013AD0;
 extern short D_80013AD4;
 extern signed char D_80013AD6;
 extern void DebugPrintf() asm("func_8001674C");
-long cd_read(long arg0, long arg1, void *arg2) asm("func_8006CB88");
-void CdIntToPos(u_long arg0, Entry *arg1) asm("func_8006A9D8");
-void LibcMemcpy(char *dst, u_char *src, long n) asm("func_8006CBF4");
+long cd_read(long arg0, long arg1, void *arg2);
+void CdIntToPos(u_long arg0, Entry *arg1);
+void LibcMemcpy(char *dst, u_char *src, long n);
 /* Fills the 64-entry file cache from one ISO directory, converting each
  * record's extent to a CdlLOC. Owns its three "CD_cachefile: ..." messages. */
 long CD_cachefile(long dir) asm("func_8006C8E4");

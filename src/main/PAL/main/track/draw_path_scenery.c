@@ -85,7 +85,7 @@ extern s32 g_PlayerSpeed asm("D_8009E778");
 extern s32 g_PlayerTrackPoint asm("D_8009E704");
 
 s32 rcos(s32 arg0) asm("func_80068634");
-void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) asm("func_8005BEA8");
+void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
 
 void UpdateTrackEventSound(s16 arg) asm("func_8004087C");
 void UpdateTrackEventSound(s16 arg) {

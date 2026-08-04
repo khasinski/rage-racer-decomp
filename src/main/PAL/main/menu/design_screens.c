@@ -19,9 +19,9 @@ extern u8 D_80082664;
 extern u8 D_80081CA4;
 extern u8 g_UiChromeScript asm("D_80082460");
 
-extern void ComposeSampleTeamLogo(s32, s32) asm("func_8001D338");
+extern void ComposeSampleTeamLogo(s32, s32);
 extern void DrawTeamLogoCanvas(s32, s32) asm("func_8004A248");
-extern void RampTeamLogoCanvas(s32, s32) asm("func_8004B8B4");
+extern void RampTeamLogoCanvas(s32, s32);
 extern void DrawLogoSamplePanel(s32, s32) asm("func_8004E368");
 extern void DrawFadingMenuSprites(s32, s32, s32) asm("func_800489AC");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
@@ -207,7 +207,7 @@ extern u32 D_80081D34;
 
 void DrawTeamNameCharModel(void) asm("func_80051D6C");
 s32 func_8004E724(s32 a, s32 b);
-void UploadTeamNameTexture(void *a, s32 b) asm("func_8001D530");
+void UploadTeamNameTexture(void *a, s32 b);
 
 void UpdateTeamNameScreen(void) asm("func_8005873C");
 void UpdateTeamNameScreen(void) {
@@ -341,8 +341,8 @@ void func_8005131C(void);
 s32 DrawPaintColorPalette(void *, s32, s32) asm("func_8004F048");
 void DrawBrowseArrows(s32, s32, s32, s32) asm("func_80049418");
 void DrawFadingMenuSprites(s32, s32, s32) asm("func_800489AC");
-void SetBodyColor1(s32) asm("func_8001D8C4");
-void SetBodyColor2(s32) asm("func_8001DA74");
+void SetBodyColor1(s32);
+void SetBodyColor2(s32);
 
 void UpdatePaintColorScreen(void) asm("func_80058C14");
 void UpdatePaintColorScreen(void) {
@@ -517,7 +517,7 @@ extern s32 D_8009B33C;
 extern s16 g_PrevOwnedCarIndex asm("D_8019CA18");
 extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 
-s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
+s32 GetCarUnlockLevel(s32 model);
 
 void UpdateCarListCursor(void) asm("func_80059320");
 void UpdateCarListCursor(void) {

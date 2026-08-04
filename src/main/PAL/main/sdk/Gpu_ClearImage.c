@@ -88,7 +88,7 @@ extern volatile u_long *g_GpuDmaMadr asm("D_800942C0");
 extern volatile u_long *g_GpuDmaBcr asm("D_800942C4");
 extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
 
-void Gpu_ArmTimeout(void) asm("func_80067F04");
+void Gpu_ArmTimeout(void);
 long Gpu_CheckTimeout(void) asm("func_80067F38");
 
 /* Driver-table slot +0x20: the worker LoadImage enqueues. Clips the rect,

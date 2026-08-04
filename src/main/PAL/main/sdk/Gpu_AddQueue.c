@@ -16,11 +16,11 @@ extern u_char g_DrawSyncCbPending[] asm("D_800941F0");
 extern volatile u_char g_GraphQueue asm("D_800941E9");
 extern long g_DrawSyncCallback asm("D_800941F4");
 
-extern void Gpu_ArmTimeout(void) asm("func_80067F04");
+extern void Gpu_ArmTimeout(void);
 extern long Gpu_CheckTimeout(void) asm("func_80067F38");
 extern void Gpu_ExecuteQueue(void) asm("func_80067984");
-extern long SetIntrMask(long) asm("func_8006E0B0");
-extern void DMACallback(long, void *) asm("func_8006DF94");
+extern long SetIntrMask(long);
+extern void DMACallback(long, void *);
 
 /* Driver-table slot +0x08, the `send` entry every libgpu call goes through:
  * runs the worker immediately when the queue is empty and the GPU idle,

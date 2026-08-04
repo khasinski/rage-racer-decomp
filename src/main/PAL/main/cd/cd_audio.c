@@ -24,7 +24,7 @@ extern CdlLOC g_CdTrackLoopPoint[] asm("D_8007F5B0");
 long CdControl(long com, void *param, long result) asm("func_8006A5A4");
 s32 func_8006A534(s32 arg0, s32 arg1);
 s32 func_8006A554(s32 arg0, void *arg1);
-long CdPosToInt_Local(CdlLOC *loc) asm("func_8006AADC");
+long CdPosToInt_Local(CdlLOC *loc);
 void StepCdTrackRequest(void) asm("func_800432A8");
 void StepCdPlayRequest(void) asm("func_80043494");
 void StepCdResumeRequest(void) asm("func_800437B8");
@@ -205,7 +205,7 @@ void TickCdAudio(void) {
 
 extern void *g_TrackCameras asm("D_8019C7CC");
 
-void SelectTrackCameraTable(u8 *arg0, s32 arg1) asm("func_80043AC8");
+void SelectTrackCameraTable(u8 *arg0, s32 arg1);
 void SelectTrackCameraTable(u8 *arg0, s32 arg1) {
     void *ptr;
 

@@ -10,7 +10,7 @@ s32 DrawRankingScreen(s32 arg0);
 const u8 g_NowLoadingText[] asm("D_80011B60") = "NOW LOADING";
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 /* Blinks the "NOW LOADING" string at D_80011B60. */
-void DrawNowLoadingText(void) asm("func_80052738");
+void DrawNowLoadingText(void);
 void DrawNowLoadingText(void) {
     if (g_SceneTimer & 8) {
         func_80016754(0x74, 0xEC, (void *)g_NowLoadingText, 0x78CC);
@@ -36,11 +36,11 @@ extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
 extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
 extern u8 g_TeamLogoClut[] asm("D_801E444C");
 extern u8 g_TeamLogoCanvas[] asm("D_801E6F2C");
-s32 RequestCarSelectAssets(void) asm("func_80018530");
+s32 RequestCarSelectAssets(void);
 void func_8005E88C(void);
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80049418");
 void LoadImage(void *rect, void *data) asm("func_80065B24");
-void UploadTeamNameTexture(void *arg0, s32 arg1) asm("func_8001D530");
+void UploadTeamNameTexture(void *arg0, s32 arg1);
 
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
 void EnterCourseSelectScreen(void) asm("func_80052778");
@@ -464,7 +464,7 @@ s32 DrawCourseSelectScreen(s32 step)
 }
 
 /* The mirror of CanSelectNextCourse. */
-s32 CanSelectPrevCourse(void) asm("func_80053650");
+s32 CanSelectPrevCourse(void);
 s32 CanSelectPrevCourse(void) {
     s32 v1 = 0;
     if (g_GrandPrixMode != 0) {
@@ -519,7 +519,7 @@ extern u8 g_UiChromeScript2 asm("D_80082790");
 extern u8 D_80082604;
 extern u8 D_800825A4;
 extern u8 g_MenuBlankCaption asm("D_80011BA0");
-void ResetCourseProgress(s32 arg0) asm("func_800212F0");
+void ResetCourseProgress(s32 arg0);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2) asm("func_800489AC");
@@ -530,7 +530,7 @@ void DrawBrowseArrows(s32, s32, s32, s32) asm("func_80049418");
 void DrawMenuLightBurst(s32 arg0) asm("func_8004CF30");
 void DrawOwnedCarCounter(s32 arg0, s32 arg1) asm("func_8004F3EC");
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
-s32 DrawClassChangeCurtain(s32 arg0) asm("func_8005026C");
+s32 DrawClassChangeCurtain(s32 arg0);
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) asm("func_800506BC");
 void DrawTimeAttackPlate(s32 arg0) asm("func_800509C4");
 void DrawMenuCourseView(void) asm("func_8005194C");

@@ -9,9 +9,9 @@ extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void UploadImageBlock(void *arg0) asm("func_8001A2E0");
 void StoreTeamLogoImage(void *arg0) asm("func_8001A40C");
-void ResetTrackTextureSwap(void) asm("func_80019EBC");
+void ResetTrackTextureSwap(void);
 
-void InstallCourseAssets(void) asm("func_80019730");
+void InstallCourseAssets(void);
 void InstallCourseAssets(void) {
     u8 *base;
     s32 offset0;
@@ -41,7 +41,7 @@ void InstallCourseAssets(void) {
     g_AssetLoadCursor = g_AssetBase + 0x38000;
 }
 
-s32 RequestTrackDataAssets(void) asm("func_80019844");
+s32 RequestTrackDataAssets(void);
 s32 RequestTrackDataAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;

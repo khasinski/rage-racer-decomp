@@ -14,11 +14,11 @@ extern s32 g_ReplayReadCursor asm("D_801F179C");
 
 extern s32 g_Car0TrackPoint asm("D_801F1884");
 
-void ApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2) asm("func_8001F8D0");
+void ApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2);
 
-void SeedCarLapProgress(void *arg0, s32 arg1) asm("func_8002BF68");
+void SeedCarLapProgress(void *arg0, s32 arg1);
 
-void AccumulateLapProgress(void *arg0) asm("func_8002C168");
+void AccumulateLapProgress(void *arg0);
 
 s32 FindTrackSegment(void *arg0, s32 arg1) asm("func_80030EB4");
 
@@ -28,7 +28,7 @@ void InitShuttleScenery(void) asm("func_8003F0F8");
 
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
-void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 arg0);
 
 typedef struct TrackZone {
     s32 start;
@@ -49,7 +49,7 @@ extern s16 g_TrackZoneDark asm("D_8019CAB0");
 
 extern u8 g_MsgGameExit asm("D_8001147C");
 
-void ForceAllEffectVoicesEnabled(s32 arg0) asm("func_8005E4A4");
+void ForceAllEffectVoicesEnabled(s32 arg0);
 
 void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
 
@@ -89,7 +89,7 @@ void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80
 
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void SeedReplayCars(void) asm("func_80034F74");
+void SeedReplayCars(void);
 void SeedReplayCars(void) {
     void *primary;
     void *secondary;
@@ -113,7 +113,7 @@ void SeedReplayCars(void) {
     }
 }
 
-void UpdateReplayCars(void) asm("func_80035040");
+void UpdateReplayCars(void);
 void UpdateReplayCars(void) {
     void *ptr = &g_PlayerCar;
 
@@ -231,7 +231,7 @@ done:
     }
 }
 
-void ExitRaceScene(s32 arg0) asm("func_80035258");
+void ExitRaceScene(s32 arg0);
 void ExitRaceScene(s32 arg0) {
     g_SceneId = arg0;
     ForceAllEffectVoicesEnabled(0);

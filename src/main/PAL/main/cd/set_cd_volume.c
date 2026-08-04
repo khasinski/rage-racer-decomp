@@ -14,7 +14,7 @@ extern s32 g_CdMixRR asm("D_8009B17C");
 extern s32 g_CdMixRL asm("D_8009B180");
 
 
-void SetCdVolume(s32 arg0) asm("func_80042FA0");
+void SetCdVolume(s32 arg0);
 void SetCdVolume(s32 arg0) {
     s32 offset;
     s32 scale;

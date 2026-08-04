@@ -5,9 +5,9 @@ extern u_char g_SndVabStatus[] asm("D_801E4CFC");
 extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
 extern volatile u_char *g_SndCurrentToneTable asm("D_801E416C");
 
-long SpuVmVSetUp(long arg0, long arg1) asm("func_80073314");
+long SpuVmVSetUp(long arg0, long arg1);
 
-long SsUtSetVagAtr(long arg0, long arg1, long arg2, VagAtr *arg3) asm("func_80073820");
+long SsUtSetVagAtr(long arg0, long arg1, long arg2, VagAtr *arg3);
 
 long SsUtSetVagAtr(long arg0, long arg1, long arg2, VagAtr *arg3) {
     long index;

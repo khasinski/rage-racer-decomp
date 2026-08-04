@@ -14,10 +14,10 @@ extern SpuMallocEntry *_spu_memList asm("D_8009ABDC");
 #define BLK_IS_FREE(i) (BLK(i)->addr & 0x80000000)
 #define BLK_IS_END(i) (BLK(i)->addr & 0x40000000)
 
-long SpuInitMalloc(long arg0, u_long *arg1) asm("func_80079B60");
-long SpuMalloc(long size) asm("func_80079BB4");
-void _spu_gcSPU(void) asm("func_80079E7C");
-void SpuFree(u_long arg0) asm("func_8007A17C");
+long SpuInitMalloc(long arg0, u_long *arg1);
+long SpuMalloc(long size);
+void _spu_gcSPU(void);
+void SpuFree(u_long arg0);
 
 long SpuInitMalloc(long arg0, u_long *arg1) {
     long ret = arg0;

@@ -35,7 +35,7 @@ extern s32 g_RacePaused asm("D_801E4BAC");
 
 void DrawRoundScreen(void) asm("func_8001C974");
 
-void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 arg0);
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 
@@ -43,11 +43,11 @@ void DrawRaceOptionMenu(s32 arg0) asm("func_8003479C");
 
 void GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
 
-void ExitRaceScene(s32 arg0) asm("func_80035258");
+void ExitRaceScene(s32 arg0);
 
 void UpdateFreeLookCamera(u8 *arg0, s32 arg1) asm("func_8003CF14");
 
-void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) asm("func_8003E1A4");
+void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateFlybyScenery(void) asm("func_8003E590");
 
@@ -68,7 +68,7 @@ void UpdatePointAmbience(s32 arg0) asm("func_80040ADC");
 void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
 
 
-void DrawTerrainCells(void) asm("func_80041840");
+void DrawTerrainCells(void);
 
 void func_800418D4(void);
 

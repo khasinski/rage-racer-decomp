@@ -8,7 +8,7 @@ extern u8 D_801C0618[];
 
 void BuildSpriteFromDesc(u8 *arg0, u8 *arg1) asm("func_80032FF0");
 
-void BuildRaceHudPrims(s32 arg0) asm("func_80032D5C");
+void BuildRaceHudPrims(s32 arg0);
 void BuildRaceHudPrims(s32 arg0) {
     u8 *cursor;
     register s32 col __asm("$17");

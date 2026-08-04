@@ -11,7 +11,7 @@ extern u8 *g_CarModelBuffer asm("D_801E4090");
 extern u8 *g_ImageBlockBuffer asm("D_801E4B30");
 extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
-s32 GetCarAssetIndex(s32 model, s32 grade) asm("func_80017848");
+s32 GetCarAssetIndex(s32 model, s32 grade);
 s32 func_80017C78(s32 assetIndex, void *dst);
 void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void RegisterCourseModels(void) asm("func_80017A6C");
@@ -19,15 +19,15 @@ void SetCarImageSlot(void *arg0, s32 arg1) asm("func_80017B44");
 void SetCarModelSlot(void *arg0, s32 arg1) asm("func_80017B94");
 void SelectCarModelSlot(s32 arg0) asm("func_80017BAC");
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
-void ApplyBodyColor1(s32 arg0, s32 arg1) asm("func_8001D748");
-void ApplyBodyColor2(s32 arg0, s32 arg1) asm("func_8001D900");
+void ApplyBodyColor1(s32 arg0, s32 arg1);
+void ApplyBodyColor2(s32 arg0, s32 arg1);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3) asm("func_8005B768");
 s32 PollAudioSlotLoad(void) asm("func_8005B89C");
 void func_8005DBD8(void);
 extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
 void ServiceAssetLoad(void) asm("func_80019C04");
 
-s32 RequestCarSelectAssets(void) asm("func_80018530");
+s32 RequestCarSelectAssets(void);
 s32 RequestCarSelectAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;
@@ -142,7 +142,7 @@ void LoadCarSelectAssets(void) {
     return;
 }
 
-s32 RequestCarModel(s32 arg0) asm("func_8001882C");
+s32 RequestCarModel(s32 arg0);
 s32 RequestCarModel(s32 arg0) {
     if (g_AssetLoadState != 0) {
         return 1;
@@ -154,7 +154,7 @@ s32 RequestCarModel(s32 arg0) {
     return 1;
 }
 
-void LoadCarModelNow(s32 arg0) asm("func_80018868");
+void LoadCarModelNow(s32 arg0);
 void LoadCarModelNow(s32 arg0) {
     RequestCarModel(arg0);
 
@@ -163,7 +163,7 @@ void LoadCarModelNow(s32 arg0) {
     }
 }
 
-void LoadCarModel(s32 arg0) asm("func_800188B8");
+void LoadCarModel(s32 arg0);
 void LoadCarModel(s32 arg0) {
     u8 *ptr;
     s32 index;
@@ -219,7 +219,7 @@ void LoadCarModel(s32 arg0) {
     }
 }
 
-s32 RequestUpgradedCarModel(s32 arg0) asm("func_800189E4");
+s32 RequestUpgradedCarModel(s32 arg0);
 s32 RequestUpgradedCarModel(s32 arg0) {
     if (g_AssetLoadState != 0) {
         return 1;
@@ -231,7 +231,7 @@ s32 RequestUpgradedCarModel(s32 arg0) {
     return 1;
 }
 
-void LoadUpgradedCarModelNow(s32 arg0) asm("func_80018A20");
+void LoadUpgradedCarModelNow(s32 arg0);
 void LoadUpgradedCarModelNow(s32 arg0) {
     RequestUpgradedCarModel(arg0);
 

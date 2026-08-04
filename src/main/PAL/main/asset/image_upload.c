@@ -76,7 +76,7 @@ extern GpuRectPacked g_TeamLogoClutMoveRect asm("D_8007C720");
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
-void StoreImage(Rect *rect, void *data) asm("func_80065B88");
+void StoreImage(Rect *rect, void *data);
 s32 func_80065BEC(GpuRectPacked *rect, u32 x, u32 y);
 void func_800658FC(s32 mode);
 
@@ -97,7 +97,7 @@ void StoreTeamLogoImage(void *dst) {
 
 void UploadImageAsset(void *arg0);
 
-void UploadLoadBufferImage(void) asm("func_8001A498");
+void UploadLoadBufferImage(void);
 void UploadLoadBufferImage(void) {
     UploadImageAsset(g_LoadBuffer);
 }

@@ -216,10 +216,10 @@ void SetCameraRotMatrix(void) asm("func_8001A610");
  * (0x400 = 90 degrees). Argument order is (x, y), the reverse of C's atan2:
  * Atan2(0, +y) is 0x400.
  */
-s32 Atan2(s32 x, s32 y) asm("func_8001A6AC");
+s32 Atan2(s32 x, s32 y);
 /* Shortest way round the 0x1000 circle between two 12-bit angles: the signed
  * delta from `from` to `to` in (-0x800, 0x800], and its magnitude. */
-s32 GetAngleDelta(s32 from, s32 to) asm("func_8002A7C4");
+s32 GetAngleDelta(s32 from, s32 to);
 /* (s32 a, s32 b); left unprototyped because UpdateCarDrivetrain calls it with two
  * extra arguments that the original left live in a2/a3. */
 s32 GetAngleDistance() asm("func_8002A788");
@@ -229,8 +229,8 @@ s32 GetAngleDistance() asm("func_8002A788");
  * 240 = two 320x240 buffers stacked at y=0 / y=0xF0, 480 = one 320x480 pair.
  * Both also set the GTE projection (SetGeomOffset / SetGeomScreen 0x140).
  */
-void SetupDisplay240(s32 r, s32 g, s32 b) asm("func_8001BE9C");
-void SetupDisplay480(s32 r, s32 g, s32 b) asm("func_8001C088");
+void SetupDisplay240(s32 r, s32 g, s32 b);
+void SetupDisplay480(s32 r, s32 g, s32 b);
 
 /*
  * Model banks. SelectModelBank points the scratchpad bank cursor
@@ -711,7 +711,7 @@ static __inline__ u8 *GameQueueTexturePacketWide(
  * place (no AddPrim, no cursor advance) and has no callers in the retail EXE.
  */
 u8 *QueueDrawModePrim(void *ot, u8 *prim, u16 tpage) asm("func_80017390");
-void SetDrawModePacket(u8 *prim, s32 tpage) asm("func_80017760");
+void SetDrawModePacket(u8 *prim, s32 tpage);
 
 /*
  * A third font, separate from the small (6x12) / large (8x16) pair above:
@@ -750,7 +750,7 @@ void DrawProportionalText(
     u16 clutIndex) asm("func_80016EA0");
 
 /* Loads the GTE light matrix with D_8009E6AC * `view`. */
-void SetGteLightMatrix(Matrix *view) asm("func_8001459C");
+void SetGteLightMatrix(Matrix *view);
 /*
  * Per-object GTE setup: writes (object position - camera position) as an
  * SVECTOR into `work`, runs it through the scratchpad view matrix at

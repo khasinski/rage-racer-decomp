@@ -193,7 +193,7 @@ extern u_char g_SndVoiceStatePanCounterReload[] asm("D_8009E0E6");
 extern u_char g_SndVoiceStateStartPan[] asm("D_8009E0E8");
 extern u_char g_SndVoiceStateEndPan[] asm("D_8009E0EA");
 
-void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) asm("func_8007521C");
+void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3);
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     long voice;
     long start;

@@ -44,7 +44,7 @@ extern u16 D_801E444E[];
 extern u8 D_801E4369;
 extern u16 D_801E6F2C;
 
-extern s32 GetClut(s16 x, s16 y) asm("func_80064C7C");
+extern s32 GetClut(s16 x, s16 y);
 extern void LoadImage(void *rect, void *data) asm("func_80065B24");
 extern s32 rsin(s32 angle) asm("func_80068568");
 extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h) asm("func_800468FC");
@@ -622,7 +622,7 @@ extern s32 D_8007F948;
 extern s32 D_8009B298;
 extern s32 D_8009B29C;
 
-void RampTeamLogoCanvas(s32 arg0, s32 arg1) asm("func_8004B8B4");
+void RampTeamLogoCanvas(s32 arg0, s32 arg1);
 void RampTeamLogoCanvas(s32 arg0, s32 arg1) {
     s32 temp;
     s32 y;

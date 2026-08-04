@@ -17,9 +17,9 @@ extern s32 g_TitleExitTimer asm("D_8009E880");
 extern s32 g_TitleAttractTimer asm("D_8019CB70");
 
 void CloseLoadedAudioSlots(void) asm("func_8005B9CC");
-void ResetTrackTextureSwap(void) asm("func_80019EBC");
-void UploadLoadBufferImage(void) asm("func_8001A498");
-void UpdateBgmTrackCount(void) asm("func_80021540");
+void ResetTrackTextureSwap(void);
+void UploadLoadBufferImage(void);
+void UpdateBgmTrackCount(void);
 void func_8005DBB4(void);
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
@@ -54,10 +54,10 @@ extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 D_801E8260;
 extern s32 g_MainMenuSlide;
 extern s32 g_FrontendState;
-void UploadLoadBufferImage(void) asm("func_8001A498");
-void UpdateBgmTrackCount(void) asm("func_80021540");
+void UploadLoadBufferImage(void);
+void UpdateBgmTrackCount(void);
 void func_8005DBB4(void);
-void DrawPressStartPrompt(void) asm("func_8001B170");
+void DrawPressStartPrompt(void);
 
 void EnterTitleScreen(void) asm("func_8001B014");
 
@@ -93,7 +93,7 @@ void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
 /* Full-width grey box over the title screen at OT slot 0x29; the caller
  * steps its brightness D_801E6F28 down by 2 a frame. */
-void DrawTitleFadeOverlay(s32 brightness) asm("func_8001B0F0");
+void DrawTitleFadeOverlay(s32 brightness);
 void DrawTitleFadeOverlay(s32 arg0) {
     void *current;
     void **scratch;
@@ -113,11 +113,11 @@ void DrawTitleFadeOverlay(s32 arg0) {
 extern s32 D_801E6F28;
 
 s32 rsin(s32 arg0) asm("func_80068568");
-void DrawTitleFadeOverlay(s32 brightness) asm("func_8001B0F0");
+void DrawTitleFadeOverlay(s32 brightness);
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void DrawPressStartPrompt(void) asm("func_8001B170");
+void DrawPressStartPrompt(void);
 
 void DrawPressStartPrompt(void) {
     void **scratch;
@@ -146,7 +146,7 @@ extern s32 g_TitleAttractTimer;
 extern s32 g_FrontendState;
 extern s32 D_801E8260;
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-void DrawPressStartPrompt(void) asm("func_8001B170");
+void DrawPressStartPrompt(void);
 
 void UpdateTitleScreen(void) asm("func_8001B260");
 
@@ -170,7 +170,7 @@ extern s32 g_MainMenuSlide;
 
 void *func_800175A4(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11);
 
-void DrawMainMenuRows(void) asm("func_8001B2D4");
+void DrawMainMenuRows(void);
 
 void DrawMainMenuRows(void) {
     void *scratch;
@@ -234,7 +234,7 @@ void DrawMainMenuRows(void) {
 extern s32 g_FrontendState;
 extern s32 g_MainMenuSlide;
 
-void DrawMainMenuRows(void) asm("func_8001B2D4");
+void DrawMainMenuRows(void);
 
 void UpdateMainMenuOpen(void) asm("func_8001B440");
 
@@ -306,11 +306,11 @@ extern s32 g_TimeAttackCars asm("D_801E4388");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 extern void ResetAssetLoader(void) asm("func_80017BE4");
 extern void ShuffleBgmOrder(void) asm("func_8001B488");
-s32 RequestTrackLoad(void) asm("func_8001965C");
+s32 RequestTrackLoad(void);
 extern void RequestSelectBgmAssetsNoReset(void) asm("func_8001839C");
 extern void RequestSaveScreenAssets(void) asm("func_800182D0");
 extern void RequestOptionScreenAssets(void) asm("func_80018B98");
-extern void DrawMainMenuRows(void) asm("func_8001B2D4");
+extern void DrawMainMenuRows(void);
 
 void UpdateMainMenuInput(void) asm("func_8001B5DC");
 

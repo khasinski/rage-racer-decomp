@@ -25,7 +25,7 @@ void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 void func_80016A18(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 void func_800200D0(void);
 
-void InitRecordTables(void) asm("func_80021A08");
+void InitRecordTables(void);
 void InitRecordTables(void) {
     register s32 r2 asm("$2");
     s32 r3;

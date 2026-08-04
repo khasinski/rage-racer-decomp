@@ -13,7 +13,7 @@ u_long _new_card[4] asm("func_80063E34") __attribute__((section(".text"))) = {
 };
 
 void KernelCallbackSlot3(void) asm("func_8006DF34");
-void MDEC_reset(long arg0) asm("func_800640D4");
+void MDEC_reset(long arg0);
 
 void DecDCTReset(long arg0) asm("func_80063E44");
 void DecDCTReset(long arg0) {
@@ -31,7 +31,7 @@ extern u_long g_MdecQuantLuma[] asm("D_80083060");
 extern u_long g_MdecQuantChroma[] asm("D_800830A0");
 extern u_long g_MdecIdctTable[] asm("D_800830E4");
 
-u_long * DecDCTGetEnv(u_long *arg0) asm("func_80063E7C");
+u_long * DecDCTGetEnv(u_long *arg0);
 u_long *DecDCTGetEnv(u_long *arg0) {
     u_long *dst;
     u_long *src;
@@ -61,9 +61,9 @@ u_long *DecDCTGetEnv(u_long *arg0) {
 extern u_char g_MdecQuantCmd[] asm("D_8008305C");
 extern u_char g_MdecIdctCmd[] asm("D_800830E0");
 
-void MDEC_in(volatile u_long *arg0, long arg1) asm("func_800641D0");
+void MDEC_in(volatile u_long *arg0, long arg1);
 
-u_long * DecDCTPutEnv(u_long *arg0) asm("func_80063F08");
+u_long * DecDCTPutEnv(u_long *arg0);
 u_long *DecDCTPutEnv(u_long *arg0) {
     u_long *ret;
     u_long *dst;
@@ -87,12 +87,12 @@ u_long *DecDCTPutEnv(u_long *arg0) {
     return ret;
 }
 
-long DecDCTBufSize(u_short *arg0) asm("func_80063FA4");
+long DecDCTBufSize(u_short *arg0);
 long DecDCTBufSize(u_short *arg0) {
     return *arg0;
 }
 
-void DecDCTin(volatile u_long *arg0, long arg1) asm("func_80063FB0");
+void DecDCTin(volatile u_long *arg0, long arg1);
 void DecDCTin(volatile u_long *arg0, long arg1) {
     u_long mask;
 

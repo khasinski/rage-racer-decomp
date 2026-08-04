@@ -34,8 +34,8 @@ void LibcPutString(char *text) asm("func_80063C38");
 long CdReadInterruptStatus(void) asm("func_8006AB5C");
 long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
 void CD_flush(void) asm("func_8006BAF0");
-long VSync(long mode) asm("func_8006DD30");
-long GetKernelStatus(void) asm("func_8006E088");
+long VSync(long mode);
+long GetKernelStatus(void);
 
 static inline void setAlarm(char *name) {
     g_CdTimeoutDeadline.deadline = VSync(-1) + 0x3C0;

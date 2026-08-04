@@ -12,7 +12,7 @@ extern volatile long g_CdReadSavedSyncCallback asm("D_8007D7B4");
 extern volatile long g_CdReadSavedReadyCallback asm("D_8007D7B8");
 long CdSyncCallback(long arg0) asm("func_8006A574");
 long CdReadyCallback(long arg0) asm("func_8006A58C");
-long VSync(long mode) asm("func_8006DD30");
+long VSync(long mode);
 long CdStatus(void) asm("func_8006A3E8");
 long CdControlB(long arg0, void *arg1, long arg2) asm("func_8006A808");
 long CdReadRetry(long arg0) asm("func_8002745C");
@@ -22,7 +22,7 @@ extern u_char D_8007D7BC[];
 extern u_char D_8007D7BD[];
 extern u_char D_8007D87C[];
 extern u_char D_8007BED0[];
-void SetSprt(u_char *prim) asm("func_80064FA8");
+void SetSprt(u_char *prim);
 void func_80064EB8(u_char *prim, long enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_800666F4(void *prim, long a, long b, long c, void *d);
@@ -116,7 +116,7 @@ reset_read:
     return result;
 }
 
-long CdReadCallback(long arg0) asm("func_8002785C");
+long CdReadCallback(long arg0);
 long CdReadCallback(long arg0) {
     long old = g_CdReadCallback;
 
@@ -184,7 +184,7 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     *(u_char **)0x1F800000 = next + 0xC;
 }
 
-void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3) asm("func_800279EC");
+void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3);
 void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3) {
     long temp;
 

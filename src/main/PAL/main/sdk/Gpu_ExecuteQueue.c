@@ -19,8 +19,8 @@ extern volatile u_long *g_GpuGp1 asm("D_800942BC");
 extern u_char g_DrawSyncCbPending[] asm("D_800941F0");
 extern volatile long g_DrawSyncCallback asm("D_800941F4");
 
-extern long SetIntrMask(long) asm("func_8006E0B0");
-extern void DMACallback(long, void *) asm("func_8006DF94");
+extern long SetIntrMask(long);
+extern void DMACallback(long, void *);
 
 /* Driver-table slot +0x24, and the DMA2 completion callback: drains the
  * Gpu_AddQueue ring, then fires the DrawSyncCallback when it empties.

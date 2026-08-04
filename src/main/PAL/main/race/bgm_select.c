@@ -23,19 +23,19 @@ extern s32 g_BgmSelectStep asm("D_8019C99C");
 extern s32 g_BgmRandomPlay asm("D_8007D6B4");
 extern s32 g_BgmSelectShowUi asm("D_801E412C");
 extern s32 g_CameraViewMode asm("D_8009E870");
-void AdvanceBgmShuffleBag() asm("func_80025E54");
+void AdvanceBgmShuffleBag();
 void DrawFullscreenFadeTile() asm("func_80033AA0");
 void RequestOptionScreenAssets() asm("func_80018B98");
-void DrawBgmSelectBar() asm("func_80025C58");
+void DrawBgmSelectBar();
 void func_8003BB50();
-void RequestTrackTexturePage() asm("func_80019EFC");
+void RequestTrackTexturePage();
 void UpdateCamera() asm("func_80043BCC");
 void func_800418D4();
-void DrawTerrainCellsWide() asm("func_80041888");
-void DrawCourseScenery2() asm("func_8003E2E8");
+void DrawTerrainCellsWide();
+void DrawCourseScenery2();
 int CycleBgmSelectCameraCar() asm("func_8001A0E4");
 
-void DrawBgmSelectBar(void) asm("func_80025C58");
+void DrawBgmSelectBar(void);
 void DrawBgmSelectBar(void) {
     u8 *base;
     s32 arg4;
@@ -74,7 +74,7 @@ void DrawBgmSelectBar(void) {
     *(s32 *)0x1F800000 = func_80017390(base, next, 0xB);
 }
 
-void AdvanceBgmShuffleBag(u32 arg0) asm("func_80025E54");
+void AdvanceBgmShuffleBag(u32 arg0);
 void AdvanceBgmShuffleBag(u32 arg0) {
     u8 *first;
     u8 *before;

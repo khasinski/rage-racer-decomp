@@ -55,7 +55,7 @@ s32 func_8002FAE8(s32 arg0, s32 arg1, s32 arg2);
  * the current-point index g_PlayerSegmentWeight), returned as the opposite direction
  * (0x800 - angle).
  */
-s32 GetReverseTrackAngle(s32 pointIndex) asm("func_8002FBEC");
+s32 GetReverseTrackAngle(s32 pointIndex);
 s32 GetReverseTrackAngle(s32 pointIndex) {
     s32 next = (pointIndex + 1) % g_TrackPointCount;
 
@@ -71,7 +71,7 @@ s32 GetReverseTrackAngle(s32 pointIndex) {
  * and its successor by `weight` (0..0x400), writing the result to out[0..2].
  * The +0x3FF/+0x7FF bias before the >>10 / >>11 shifts rounds toward zero.
  */
-void InterpolateTrackPoint(s32 pointIndex, s32 *out, s32 weight) asm("func_8002FC84");
+void InterpolateTrackPoint(s32 pointIndex, s32 *out, s32 weight);
 void InterpolateTrackPoint(s32 pointIndex, s32 *out, s32 weight) {
     s32 next = (pointIndex + 1) % g_TrackPointCount;
     s32 inv = 0x400 - weight;
@@ -109,7 +109,7 @@ s32 func_8002FB60(s32 arg0, s32 arg1);
  * Smooths the track angle at `pointIndex` by blending it (half weight, 0x200)
  * with the angles two points behind and two points ahead (wrap-aware).
  */
-s32 SmoothTrackAngle(s32 pointIndex, s32 weight) asm("func_8002FD9C");
+s32 SmoothTrackAngle(s32 pointIndex, s32 weight);
 s32 SmoothTrackAngle(s32 pointIndex, s32 weight) {
     s32 center;
     s32 prev_index;

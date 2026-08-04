@@ -22,20 +22,20 @@ extern u_char g_SndCurrentTone asm("D_801E4BDC");
 extern short g_SndCurrentSeqSep asm("D_801E4BE6");
 extern short g_SndCurrentVoice asm("D_801E4BEA");
 
-long SpuVmVSetUp(long arg0, long arg1) asm("func_80073314");
+long SpuVmVSetUp(long arg0, long arg1);
 long SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) asm("func_80074D1C");
-long SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) asm("func_8007521C");
+long SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3);
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg4) asm("func_80075CB0");
-u_short SpuVmCalculateTonePitch(long arg0, long arg1) asm("func_80074A6C");
+u_short SpuVmCalculateTonePitch(long arg0, long arg1);
 
 long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4) asm("func_80078130");
 long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) asm("func_800781C0");
-long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5) asm("func_80078300");
-long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) asm("func_800783D8");
-long SsUtSetDetVVol(long arg0, short arg1, short arg2) asm("func_80078430");
+long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5);
+long SsUtGetDetVVol(long arg0, short *arg1, short *arg2);
+long SsUtSetDetVVol(long arg0, short arg1, short arg2);
 long SsUtSetVVol(long arg0, long arg1, long arg2) asm("func_80078528");
-long SsUtAutoVol(long arg0, long arg1, long arg2, long arg3) asm("func_800785B4");
-long SsUtAutoPan(long arg0, long arg1, long arg2, long arg3) asm("func_80078608");
+long SsUtAutoVol(long arg0, long arg1, long arg2, long arg3);
+long SsUtAutoPan(long arg0, long arg1, long arg2, long arg3);
 
 long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4) {
     long id;

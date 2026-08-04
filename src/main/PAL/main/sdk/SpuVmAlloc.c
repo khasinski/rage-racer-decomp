@@ -11,7 +11,7 @@ extern u_char g_SndVoiceStateEnvx[] asm("D_8009E0BE");
 extern u_char D_8009E0D0[];
 extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
 
-u_long SpuSetNoiseVoice(long on_off, u_long voice_bit) asm("func_8007A1F8");
+u_long SpuSetNoiseVoice(long on_off, u_long voice_bit);
 
 u_char SpuVmAlloc(long unused) asm("func_800739E8");
 u_char SpuVmAlloc(long unused) {

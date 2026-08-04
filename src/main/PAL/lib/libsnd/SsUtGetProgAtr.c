@@ -13,10 +13,10 @@ extern u_char *g_SndVabHeader[] asm("D_8019CA20");
 extern u_char *g_SndVabProgTable[] asm("D_8019C9B0");
 extern u_char *g_SndVabToneTable[] asm("D_8019CA70");
 
-long SpuVmVSetUp(long arg0, long arg1) asm("func_80073314");
-long SsUtGetVagAtr(long arg0, long arg1, long arg2, VagAtr *out) asm("func_800733D8");
+long SpuVmVSetUp(long arg0, long arg1);
+long SsUtGetVagAtr(long arg0, long arg1, long arg2, VagAtr *out);
 
-long SsUtGetProgAtr(long arg0, long arg1, ProgAtr *out) asm("func_8007320C");
+long SsUtGetProgAtr(long arg0, long arg1, ProgAtr *out);
 
 long SsUtGetProgAtr(long arg0, long arg1, ProgAtr *out) {
     long chan = (short)arg0;

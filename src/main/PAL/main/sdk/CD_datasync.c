@@ -16,7 +16,7 @@ extern char D_8001391C[];
 extern char D_80013814[];
 extern char D_80013824[];
 
-long VSync(long mode) asm("func_8006DD30");
+long VSync(long mode);
 void LibcPutString(char *)asm("func_80063C38");
 void CD_flush(void) asm("func_8006BAF0");
 

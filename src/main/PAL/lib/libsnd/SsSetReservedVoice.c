@@ -7,19 +7,19 @@ extern u_char g_SndVabStatus[] asm("D_801E4CFC");
 extern u_short g_SndVabOpenCount asm("D_801F17AC");
 extern u_long g_SndVabSpuAddr[] asm("D_801F17BC");
 
-void SsSetReservedVoice(u_char arg0) asm("func_80072AD0");
+void SsSetReservedVoice(u_char arg0);
 
 void SsSetReservedVoice(u_char arg0) {
     g_SndReservedVoiceCount = arg0;
 }
 
-void SsSetMono(void) asm("func_80072AE0");
+void SsSetMono(void);
 
 void SsSetMono(void) {
     g_SndMonoMode = 1;
 }
 
-void SsSetStereo(void) asm("func_80072AF4");
+void SsSetStereo(void);
 
 void SsSetStereo(void) {
     g_SndMonoMode = 0;

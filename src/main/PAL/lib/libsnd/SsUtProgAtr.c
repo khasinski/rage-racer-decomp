@@ -4,12 +4,12 @@
 
 extern u_char *g_SndCurrentProgTable asm("D_801E4110");
 
-long SpuVmVSetUp(long arg0, long arg1) asm("func_80073314");
+long SpuVmVSetUp(long arg0, long arg1);
 
 long SsUtSetProgVol(long arg0, long arg1, long arg2) asm("func_8007701C");
-long SsUtGetProgVol(long arg0, long arg1) asm("func_80077090");
-long SsUtSetProgPan(long arg0, long arg1, long arg2) asm("func_800770E4");
-long SsUtGetProgPan(long arg0, long arg1) asm("func_80077158");
+long SsUtGetProgVol(long arg0, long arg1);
+long SsUtSetProgPan(long arg0, long arg1, long arg2);
+long SsUtGetProgPan(long arg0, long arg1);
 
 long SsUtSetProgVol(long arg0, long arg1, long arg2) {
     long value;

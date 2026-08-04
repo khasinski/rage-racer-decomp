@@ -11,8 +11,8 @@ extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
 
 short SpuVmSetSeqVol() asm("func_80076C58");
 long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) asm("func_80076DCC");
-short SpuVmGetSeqVolLeft(long arg0) asm("func_80076E38");
-short SpuVmGetSeqVolRight(long arg0) asm("func_80076E88");
+short SpuVmGetSeqVolLeft(long arg0);
+short SpuVmGetSeqVolRight(long arg0);
 
 short SpuVmSetSeqVol(arg0, arg1, arg2, arg3)
 short arg0;

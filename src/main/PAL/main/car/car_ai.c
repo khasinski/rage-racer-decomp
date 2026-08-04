@@ -21,7 +21,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode)
 s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
     asm("func_8002D2E8");
 
-s32 GetCarCrestTrigger(GameCarRuntime *arg0) asm("func_80039184");
+s32 GetCarCrestTrigger(GameCarRuntime *arg0);
 
 s32 rsin(s32 arg0) asm("func_80068568");
 
@@ -105,7 +105,7 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
     }
 }
 
-s32 GetCarCrestTrigger(GameCarRuntime *arg0) asm("func_80039184");
+s32 GetCarCrestTrigger(GameCarRuntime *arg0);
 s32 GetCarCrestTrigger(GameCarRuntime *arg0) {
     u8 *base;
     s32 pos0;
@@ -195,7 +195,7 @@ break;
     return 0;
 }
 
-void UpdateCarCrestHop(GameCarRuntime *arg0) asm("func_80039280");
+void UpdateCarCrestHop(GameCarRuntime *arg0);
 void UpdateCarCrestHop(GameCarRuntime *arg0) {
     GameCarRuntime *obj;
     s32 value;
@@ -347,7 +347,7 @@ void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     }
 }
 
-void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) asm("func_800394DC");
+void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1);
 void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     GameCarRuntime *objReg = obj;
     s32 target;
@@ -437,7 +437,7 @@ advance:
     objReg->field_10E = 0;
 }
 
-void SeedCarRouteMarkers(void) asm("func_80039644");
+void SeedCarRouteMarkers(void);
 void SeedCarRouteMarkers(void) {
     s32 one = 1;
     register s32 offset asm("a2") = 0;

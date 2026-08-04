@@ -15,16 +15,16 @@ extern u8 g_DispEnv1Rgb24 asm("D_801C068D");
 extern u8 g_DispEnv0Rgb24 asm("D_8019CEA5");
 extern s32 g_StreamLoc asm("D_801E8A90");
 
-void ApplyCdVolume(void) asm("func_8004310C");
-void SetupFmvBuffers(s32 arg0) asm("func_8001EB14");
-void InitFmvContext(volatile void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_8001EA7C");
+void ApplyCdVolume(void);
+void SetupFmvBuffers(s32 arg0);
+void InitFmvContext(volatile void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void UploadFmvSlice(void) asm("func_8001EBC8");
-void OpenFmvStream(void (*arg0)(void)) asm("func_8001EB5C");
-s32 PresentFmvFrame(volatile void *arg0) asm("func_8001ED3C");
-void StartStreamRead(s32 arg0) asm("func_8001F018");
-s32 VSync(s32 mode) asm("func_8006DD30");
+void OpenFmvStream(void (*arg0)(void));
+s32 PresentFmvFrame(volatile void *arg0);
+void StartStreamRead(s32 arg0);
+s32 VSync(s32 mode);
 
-void StartFmvPlayback(s32 arg0) asm("func_8001E79C");
+void StartFmvPlayback(s32 arg0);
 void StartFmvPlayback(s32 arg0) {
     s32 fail;
     char frame_pad[8];

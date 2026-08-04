@@ -7,16 +7,16 @@ extern GameSceneAssetHeader *g_AssetLoadCursor asm("D_8019CAFC");
 
 s32 func_80017C78(s32 assetIndex, void *dst);
 s32 EnableCdAudioMode(void) asm("func_80017C2C");
-void SetTrackCameraTable(void *arg0) asm("func_80017BD4");
-void SetEnvPaletteTable(void *arg0) asm("func_8004553C");
-void SetEnvironmentScript(void *arg0) asm("func_8004550C");
+void SetTrackCameraTable(void *arg0);
+void SetEnvPaletteTable(void *arg0);
+void SetEnvironmentScript(void *arg0);
 void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void InstallTrackPoints(void *arg0) asm("func_8002A6B0");
 void RegisterCourseModels(void *arg0) asm("func_80017A6C");
 void InstallTerrainCellData(void *arg0) asm("func_80017AD0");
-void SetCourseObjects(void *arg0) asm("func_8004121C");
-void InstallTrackEventData(void *arg0) asm("func_80034E04");
-void SelectTrackCameraTable(void *arg0, s32 arg1) asm("func_80043AC8");
+void SetCourseObjects(void *arg0);
+void InstallTrackEventData(void *arg0);
+void SelectTrackCameraTable(void *arg0, s32 arg1);
 
 void LoadTrackDataAssets(void) asm("func_8001989C");
 void LoadTrackDataAssets(void) {
@@ -101,9 +101,9 @@ extern s32 *g_StreamLoc asm("D_801E8A90");
 extern s32 g_StreamSectorCount asm("D_8019CA1C");
 extern s32 D_8019C708;
 
-void BeginFmv(void) asm("func_8001E6B4");
+void BeginFmv(void);
 
-void BeginIntroFmv(void) asm("func_80019AF0");
+void BeginIntroFmv(void);
 void BeginIntroFmv(void) {
     s32 *ptr;
     s32 value;
@@ -121,9 +121,9 @@ extern s32 *g_StreamLoc;
 extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
-void BeginFmv(void) asm("func_8001E6B4");
+void BeginFmv(void);
 
-void BeginClassFmv(void) asm("func_80019B3C");
+void BeginClassFmv(void);
 void BeginClassFmv(void) {
     s32 *base;
     s32 offset;
@@ -151,9 +151,9 @@ extern s32 *g_StreamLoc;
 extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
-void BeginFmv(void) asm("func_8001E6B4");
+void BeginFmv(void);
 
-void BeginEndingFmv(void) asm("func_80019BB8");
+void BeginEndingFmv(void);
 void BeginEndingFmv(void) {
     s32 *ptr;
     s32 value;
@@ -170,16 +170,16 @@ void BeginEndingFmv(void) {
 extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
 
 void LoadBootAssets(void) asm("func_800180CC");
-void LoadSaveScreenAssets(void) asm("func_80018344");
+void LoadSaveScreenAssets(void);
 void LoadSelectBgmAssets(void) asm("func_80018484");
 void LoadCarSelectAssets(void) asm("func_80018588");
-void LoadCarModel(s32) asm("func_800188B8");
-void LoadUpgradedCarModel(s32) asm("func_80018A70");
-void LoadOptionScreenAssets(void) asm("func_80018C0C");
-void LoadRoundAssets(void) asm("func_80018DF8");
+void LoadCarModel(s32);
+void LoadUpgradedCarModel(s32);
+void LoadOptionScreenAssets(void);
+void LoadRoundAssets(void);
 void LoadRaceAssets(void) asm("func_8001901C");
-void LoadGrandPrixScreen(void) asm("func_800195F4");
-void LoadCourseAssets(void) asm("func_800196B4");
+void LoadGrandPrixScreen(void);
+void LoadCourseAssets(void);
 void LoadTrackDataAssets(void) asm("func_8001989C");
 
 void ServiceAssetLoad(void) asm("func_80019C04");

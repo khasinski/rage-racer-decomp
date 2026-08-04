@@ -29,13 +29,13 @@ extern GameScoreRecord g_ClassClears[] asm("D_8019CB42");
 extern s32 g_ClassResultPlace asm("D_8019C7C4");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 extern s32 g_ClassPromoted asm("D_801E419C");
-s32 GetCarUnlockLevel(s32 model) asm("func_8001785C");
-s32 ComputeClassGrade(void) asm("func_800214B8");
-void UpdateBgmTrackCount(void) asm("func_80021540");
-void ResetProgressSlot(s32 arg0, s32 arg1) asm("func_80021288");
-void ResetCourseProgress(s32 arg0) asm("func_800212F0");
-void BeginEndingFmv(s32 arg0) asm("func_80019BB8");
-void BeginClassFmv(s32 arg0) asm("func_80019B3C");
+s32 GetCarUnlockLevel(s32 model);
+s32 ComputeClassGrade(void);
+void UpdateBgmTrackCount(void);
+void ResetProgressSlot(s32 arg0, s32 arg1);
+void ResetCourseProgress(s32 arg0);
+void BeginEndingFmv(s32 arg0);
+void BeginClassFmv(s32 arg0);
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_PrizeScreenState asm("D_8019CB74");
@@ -48,7 +48,7 @@ extern s32 g_PrizeMoney3rd[][6][3] asm("D_8007BEF4");
 extern s32 g_PromotionBonusTable[] asm("D_8007C00C");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void DrawPrizeMoneyPanel(u8 *s0) asm("func_800206B8");
+void DrawPrizeMoneyPanel(u8 *s0);
 void DrawPrizeMoneyPanel(u8 *s0) {
     u8 sp[16];
     if (g_RaceProgress->money > 0x3B9AC9FF) {
@@ -67,7 +67,7 @@ void DrawPrizeMoneyPanel(u8 *s0) {
     }
 }
 
-void CommitClassProgress(void) asm("func_800207E0");
+void CommitClassProgress(void);
 void CommitClassProgress(void) {
     s32 score_index;
     u8 *slots;
@@ -169,7 +169,7 @@ void CommitClassProgress(void) {
     }
 }
 
-void AdvanceGrandPrixClass(void) asm("func_80020B08");
+void AdvanceGrandPrixClass(void);
 void AdvanceGrandPrixClass(void) {
     s32 oldValue;
     GameRaceProgress *ptr;
@@ -253,7 +253,7 @@ void EnterPrizeScreen(void) {
     }
 }
 
-void TickClassClearFanfare(void) asm("func_80020D90");
+void TickClassClearFanfare(void);
 void TickClassClearFanfare(void) {
     if (g_ClassClearFanfareTimer > 0) {
         g_ClassClearFanfareTimer--;

@@ -376,7 +376,7 @@ extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 void InitCARD(s32 padEnable) asm("func_80063DCC");
 void StartCARD(void) asm("func_80063DDC");
 void BiosBuInit(void) asm("func_80063180");
-void RestartMemoryCard(void) asm("func_8005F5E0");
+void RestartMemoryCard(void);
 void RestartMemoryCard(void) { InitCARD(1); StartCARD(); BiosBuInit(); g_SaveElapsedTicks = 0; }
 
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
@@ -432,7 +432,7 @@ extern Rect g_SaveIconRect asm("D_8009B55C");
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf() asm("func_800632F0");
-void StoreImage(Rect *rect, void *data) asm("func_80065B88");
+void StoreImage(Rect *rect, void *data);
 void DrawSync(long mode) asm("func_800658FC");
 
 void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 imageY) {
@@ -559,7 +559,7 @@ extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
  * treating them as aliasing the plain global loads that feed them and hoists
  * every load to the top of the function, which retail does not do.
  */
-void StoreSaveStateBlock(u8 *rowBytes) asm("func_8005F88C");
+void StoreSaveStateBlock(u8 *rowBytes);
 void StoreSaveStateBlock(u8 *block) {
     {
         u16 padMappingIndex = g_PadMappingIndex;
@@ -844,8 +844,8 @@ extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
 extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
 extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
 
-void LoadPadButtonMapping(s32 a, s32 b) asm("func_80013F80");
-void ApplyAudioSettings(void) asm("func_80021224");
+void LoadPadButtonMapping(s32 a, s32 b);
+void ApplyAudioSettings(void);
 
 /*
  * Verifies the memory-card payload's checksum and scatters it back into the

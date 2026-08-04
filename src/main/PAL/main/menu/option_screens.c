@@ -12,10 +12,10 @@ extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
 extern s32 g_ScreenOffsetEditX asm("D_801E4D68");
 void DrawSoundOptionScreen(void) asm("func_80024B6C");
-void ApplyAudioSettings(void) asm("func_80021224");
+void ApplyAudioSettings(void);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-void DrawOptionHintBar(s32 arg0) asm("func_80023750");
+void DrawOptionHintBar(s32 arg0);
 extern s32 g_ScreenOffsetEditY asm("D_801E4D6C");
 extern s32 g_ScreenOffsetX asm("D_801E4B8C");
 extern s32 g_ScreenOffsetY asm("D_801E4B9C");
@@ -24,14 +24,14 @@ extern u16 D_8019CE9E;
 extern u16 D_801C0684;
 extern u16 D_801C0686;
 /* The four-arrow reticle of the screen-position panel. */
-void DrawScreenAdjustScreen(void) asm("func_800253A4");
+void DrawScreenAdjustScreen(void);
 void DrawScreenAdjustScreen(void);
 extern s32 g_OptionLetterboxHeight asm("D_8009F0A0");
-void DrawPadTypeHint(void) asm("func_8002390C");
+void DrawPadTypeHint(void);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
 s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 /* The setup scene's per-frame overlay: pad hint, letterbox, and the alignment frame in mode 6. */
-void DrawOptionSceneOverlay(void) asm("func_800256B8");
+void DrawOptionSceneOverlay(void);
 void DrawOptionSceneOverlay(void);
 extern s32 g_CameraViewMode asm("D_8009E870");
 extern s32 g_TrackWalkStart asm("D_801E40CC");
@@ -40,10 +40,10 @@ extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 extern s32 *g_CamRow asm("D_8019C9A8");
 void InitRenderState(s32 arg0) asm("func_80017884");
-void LoadTrackTexturePageRange(void) asm("func_8001D30C");
-void InitTrackLighting(void) asm("func_8001D210");
-void BuildStartingGrid(void) asm("func_80038844");
-void SetTrackTexturePageNow(s32 arg0) asm("func_80019E84");
+void LoadTrackTexturePageRange(void);
+void InitTrackLighting(void);
+void BuildStartingGrid(void);
+void SetTrackTexturePageNow(s32 arg0);
 void func_800458CC(s32 arg0);
 void InitShuttleScenery(void) asm("func_8003F0F8");
 extern s32 g_FrameSyncThreshold;
@@ -58,11 +58,11 @@ extern s32 g_CameraCarIndex asm("D_8009E66C");
 extern s32 g_BgmSelectStep;
 extern u8 g_TextNowLoading[] asm("D_80011010");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void InitTrackScene(void) asm("func_80025940");
+void InitTrackScene(void);
 void func_80016EA0(s32 a0, s32 a1, void *a2, s32 a3);
-void InstallCourseAssets(void) asm("func_80019730");
-void RequestTrackDataAssets(void) asm("func_80019844");
-void UpdateOptionSceneFade(void) asm("func_80025AC8");
+void InstallCourseAssets(void);
+void RequestTrackDataAssets(void);
+void UpdateOptionSceneFade(void);
 
 /* g_GameModeHandlers[5]: left/right edits the selected audio setting, cancel restores it. */
 void UpdateSoundSettingAdjust(void) asm("func_800250BC");
@@ -297,7 +297,7 @@ void UpdateOptionScene(void) {
     DrawOptionSceneOverlay();
 }
 
-void InitTrackScene(void) asm("func_80025940");
+void InitTrackScene(void);
 void InitTrackScene(void) {
     InitRenderState(5);
     LoadTrackTexturePageRange();
@@ -332,7 +332,7 @@ void EnterBgmSelectScreen(void) {
     g_CameraCarIndex = 0;
 }
 
-void UpdateOptionSceneFade(void) asm("func_80025AC8");
+void UpdateOptionSceneFade(void);
 void UpdateOptionSceneFade(void) {
     s32 d;
     s32 v;

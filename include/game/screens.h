@@ -8,7 +8,7 @@
  * best-effort. */
 
 /* Formats a lap/race time into dst as %1d'%02d"%03d, returns the write cursor. */
-void *FormatLapTime(void *dst, s32 timeMs) asm("func_80021CD4");
+void *FormatLapTime(void *dst, s32 timeMs);
 
 void DrawResultScreen(void) asm("func_800200D0");         /* "RESULT" */
 void DrawRaceEndPrompt(void) asm("func_80021654");        /* "PRESS START BUTTON" */
@@ -33,7 +33,7 @@ void EnterTitleScreen(void) asm("func_8001B014");
 
 /* The pulsing "PRESS START" sprite: a 112x16 cell at (0x68, 0xC8), brightness
  * from rsin(g_AnimTimer * 96). Also drains D_801E6F28. */
-void DrawPressStartPrompt(void) asm("func_8001B170");
+void DrawPressStartPrompt(void);
 
 /* Frontend state 0: hold on the title screen until Start is pressed. */
 void UpdateTitleScreen(void) asm("func_8001B260");
@@ -41,7 +41,7 @@ void UpdateTitleScreen(void) asm("func_8001B260");
 /* Draws the five main-menu rows (112x16 cells at x = 0x68, y = 0x64 + 0x18*row);
  * the cursor row uses CLUT 0x7E86 instead of 0x7E85 and entry 1 is skipped
  * while g_AdvancedSeriesUnlocked == 0, leaving four visible rows. */
-void DrawMainMenuRows(void) asm("func_8001B2D4");
+void DrawMainMenuRows(void);
 
 /* Frontend state 1: the 48-frame menu wipe-in (counter D_801E6F1C to 0x30). */
 void UpdateMainMenuOpen(void) asm("func_8001B440");

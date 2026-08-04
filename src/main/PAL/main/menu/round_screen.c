@@ -65,7 +65,7 @@ void ApplyZoneLighting(s32 a0, Matrix *a1) {
 extern Matrix g_SceneColorMatrix;
 void func_800698B8(Matrix *arg0);
 /* Puts the unmodified colour matrix back after ApplyZoneLighting. */
-void RestoreColorMatrix(void) asm("func_8001C794");
+void RestoreColorMatrix(void);
 void RestoreColorMatrix(void) { func_800698B8(&g_SceneColorMatrix); }
 
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
@@ -74,7 +74,7 @@ extern u8 *g_CourseProgress asm("D_8009E67C");
 
 void CloseLoadedAudioSlots(void) asm("func_8005B9CC");
 void UploadImageAsset(s32 arg0) asm("func_8001A3C0");
-void RelocateCarModel(void) asm("func_80018F08");
+void RelocateCarModel(void);
 
 /* Scene 9: finishes the asset load, relocates the car model and derives g_GrandPrixRound. */
 void EnterRoundScreen(void) asm("func_8001C7BC");
@@ -117,7 +117,7 @@ void EnterRoundScreen(void) {
 
 extern s16 g_RoundScreenFadeDelays[] asm("D_8007C798");
 
-s32 UpdateRoundScreenFade(s32 arg0) asm("func_8001C8F0");
+s32 UpdateRoundScreenFade(s32 arg0);
 s32 UpdateRoundScreenFade(s32 arg0) {
     s32 value;
     s32 ret;
@@ -160,12 +160,12 @@ extern char D_80010C70[];
 extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 extern s32 g_BestLapTimes[][4][2] asm("D_801E4408");
 
-s32 UpdateRoundScreenFade(s32 arg0) asm("func_8001C8F0");
+s32 UpdateRoundScreenFade(s32 arg0);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
                    s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags);
 void LibcSprintf(void *dst, void *fmt, s32 v) asm("func_800632F0");
 void func_80016B7C(u32 a0, u32 a1, void *a2, u32 a3, u32 a4);
-void FormatLapTime(void *dst, s32 v) asm("func_80021CD4");
+void FormatLapTime(void *dst, s32 v);
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
 void DrawRoundScreen(void) asm("func_8001C974");
@@ -246,7 +246,7 @@ extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
 extern s32 g_BgmTrack asm("D_801E40E0");
 
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-s32 RequestRaceAssets(void) asm("func_80018FC4");
+s32 RequestRaceAssets(void);
 
 /* Scene 10: draws the ROUND screen, takes the BGM choice and starts the race at frame 121. */
 void UpdateRoundScreen(void) asm("func_8001CFB4");
@@ -312,7 +312,7 @@ void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
 void func_800686D4(s32 arg0, s32 arg1);
 void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 /* Installs the track colour/light matrices, back and far colours and the fog near distance. */
-void InitTrackLighting(void) asm("func_8001D210");
+void InitTrackLighting(void);
 void InitTrackLighting(void) {
     g_SceneColorMatrix = D_8007C758;
     g_SceneLightMatrix = D_8007C778;

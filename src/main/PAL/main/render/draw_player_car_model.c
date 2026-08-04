@@ -13,7 +13,7 @@ s32 GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
 void ApplyZoneLighting(s32 arg0, Matrix *arg1) asm("func_8001C248");
 void func_80069888(Matrix *arg0);
 void func_80017794(void *a0, void *a1, void *a2);
-void RestoreColorMatrix(void) asm("func_8001C794");
+void RestoreColorMatrix(void);
 
 /*
  * GameRenderObject -> GPU-primitive submitter. Subtracts the active view's

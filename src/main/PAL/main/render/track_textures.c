@@ -37,7 +37,7 @@ extern s16 D_8007C70A;
 extern u8 D_801E4BF8[];
 extern u8 *g_TrackTextureShadow asm("D_801E42D0");
 extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
-void StoreImage(Rect *rect, void *data) asm("func_80065B88");
+void StoreImage(Rect *rect, void *data);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void DrawSync(long mode) asm("func_800658FC");
 
@@ -80,7 +80,7 @@ extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
 void SwapTrackTexturePageNow(void) asm("func_80019D7C");
 
-void SetTrackTexturePageNow(void) asm("func_80019E84");
+void SetTrackTexturePageNow(void);
 void SetTrackTexturePageNow(void) {
     s32 temp;
 
@@ -94,7 +94,7 @@ extern u8 D_801E4CF7;
 extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
-void ResetTrackTextureSwap(void) asm("func_80019EBC");
+void ResetTrackTextureSwap(void);
 void ResetTrackTextureSwap(void) {
     s32 value = 1;
     s32 i = 0xFF;
@@ -112,7 +112,7 @@ void ResetTrackTextureSwap(void) {
 }
 
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
-void RequestTrackTexturePage(void) asm("func_80019EFC");
+void RequestTrackTexturePage(void);
 void RequestTrackTexturePage(void) {
     g_TrackTextureTargetRow = SelectTrackTexturePage();
 }
@@ -122,7 +122,7 @@ extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
 extern u8 D_801E4BF8[];
 extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
 extern u8 *g_TrackTextureShadow asm("D_801E42D0");
-void StoreImage(Rect *rect, void *data) asm("func_80065B88");
+void StoreImage(Rect *rect, void *data);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void DrawSync(long mode) asm("func_800658FC");
 
@@ -174,7 +174,7 @@ void SwapTrackTextureRow(void) {
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
 void SwapTrackTextureRow(void) asm("func_80019F24");
-s32 VSync(s32 mode) asm("func_8006DD30");
+s32 VSync(s32 mode);
 
 void StepTrackTextureSwap(void) asm("func_8001A030");
 void StepTrackTextureSwap(void) {

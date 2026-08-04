@@ -152,7 +152,7 @@ void DrawLapTimes(void) {
 
 void DrawMinuteSecondTime(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80033F30");
 
-void DrawTimeRemaining(s32 arg0) asm("func_800331F8");
+void DrawTimeRemaining(s32 arg0);
 void DrawTimeRemaining(s32 arg0) {
     s32 arg3 = 0x78CC;
 
@@ -165,7 +165,7 @@ void DrawTimeRemaining(s32 arg0) {
 
 /* The two race-position digits, from g_RacePosition; the tens digit is
  * blanked below 10 and the colour changes from 4th place down. */
-void DrawRacePosition(void) asm("func_80033230");
+void DrawRacePosition(void);
 void DrawRacePosition(void) {
     u8 *base;
     s32 value;
@@ -204,7 +204,7 @@ void DrawRacePosition(void) {
     *(s16 *)(right + 0xE) = tile;
 }
 
-void SetHudBlinkColor(s32 arg0) asm("func_800332E0");
+void SetHudBlinkColor(s32 arg0);
 void SetHudBlinkColor(s32 arg0) {
     *(u16 *)(g_DrawBuffer + 0x237A6) = arg0 ? 0x7811 : 0x7800;
 }

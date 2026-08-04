@@ -7,10 +7,10 @@
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
 
-void InstallCarModelSlot(void) asm("func_80051238");
+void InstallCarModelSlot(void);
 
 /* Flips the double-buffered showroom slot and re-registers it. */
-void SwapCarModelSlot(void) asm("func_80051280");
+void SwapCarModelSlot(void);
 void SwapCarModelSlot(void) {
     g_CarModelSlot = g_CarModelSlot < 1;
     InstallCarModelSlot();
@@ -18,7 +18,7 @@ void SwapCarModelSlot(void) {
 
 s32 func_8001720C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 
-void DrawCarSlotHighlight(s32 arg0) asm("func_800512B4");
+void DrawCarSlotHighlight(s32 arg0);
 void DrawCarSlotHighlight(s32 arg0) {
     s32 *scratch = (s32 *)0x1F800000;
     u8 *base = g_DrawBuffer;
@@ -54,7 +54,7 @@ extern s32 D_8009E734;
 extern s32 D_801E4168;
 extern s32 D_1F800004;
 
-s32 GetCarAssetIndex(s32 arg0, s32 arg1) asm("func_80017848");
+s32 GetCarAssetIndex(s32 arg0, s32 arg1);
 void *ApplyMatrixLV(void *m, void *v0, void *v1) asm("func_80068F80");
 void DrawPlayerCarModel(void *obj) asm("func_8001DAB0");
 
@@ -442,5 +442,5 @@ void DrawTeamNameCharModel(void) {
 
 extern s32 D_80082E3C[];
 void func_80016754(s32 arg0, s32 arg1, s32 arg2);
-void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2) asm("func_800520F8");
+void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2);
 void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2) { func_80016754(arg0, arg1, D_80082E3C[arg2]); }

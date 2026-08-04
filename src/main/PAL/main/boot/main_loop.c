@@ -11,11 +11,11 @@
 void MainLoop(void);
 
 void ResetGraph(s32 arg0) asm("func_80065460");
-void SetGraphDebug(s32 arg0) asm("func_800656CC");
-void InitGeom(void) asm("func_80068928");
-void RestartMemoryCard(void) asm("func_8005F5E0");
-void ResetReplayFrameCounts(void) asm("func_8001F0E0");
-void InitRecordTables(void) asm("func_80021A08");
+void SetGraphDebug(s32 arg0);
+void InitGeom(void);
+void RestartMemoryCard(void);
+void ResetReplayFrameCounts(void);
+void InitRecordTables(void);
 void InitRenderState(s32 arg0) asm("func_80017884");
 void func_80021338(void);
 
@@ -81,18 +81,18 @@ void InitSubsystems(void) {
     SetCameraRotMatrix();
 }
 
-void __main(void) asm("func_800630AC");
+void __main(void);
 void BiosSetMemSize(s32 arg0) asm("func_80063190");
 void func_80018038(void);
 void func_800438BC(void);
 void func_80018078(void);
 void func_80043974(void);
-void TickSequenceAudio(void) asm("func_8005AF78");
+void TickSequenceAudio(void);
 void func_80019C04(void);
 void StepTrackTextureSwap(void) asm("func_8001A030");
 void PutDrawEnv(u8 *env) asm("func_80065ED4");
 void PutDispEnv(u8 *arg0) asm("func_800660AC");
-void DrawOTag(u8 *ot) asm("func_80065E60");
+void DrawOTag(u8 *ot);
 
 /* The two 0x237E8-byte frame contexts the loop ping-pongs between. */
 extern u8 g_FrameContexts[] asm("D_8019CE38");

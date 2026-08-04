@@ -9,7 +9,7 @@ extern s32 g_CdCommandPending asm("D_8007F604");
 extern s32 g_CdTrackStep asm("D_8007F608");
 extern s32 g_CdCommandStep asm("D_8007F60C");
 
-void RequestCdTrack(s32 arg0) asm("func_80042BC0");
+void RequestCdTrack(s32 arg0);
 void RequestCdTrack(s32 arg0) {
     g_CdTrackPending = arg0 & 0xFF;
     g_CdTrackStep = 0;
@@ -17,13 +17,13 @@ void RequestCdTrack(s32 arg0) {
     g_CdCommandStep = 0;
 }
 
-void StartCdAudio(void) asm("func_80042BF0");
+void StartCdAudio(void);
 void StartCdAudio(void) {
     g_CdCommandPending = 1;
     g_CdCommandStep = 0;
 }
 
-void PauseCdAudio(void) asm("func_80042C0C");
+void PauseCdAudio(void);
 void PauseCdAudio(void) {
     g_CdCommandPending = 2;
     g_CdCommandStep = 0;
@@ -35,7 +35,7 @@ void PauseCdAudio(void) {
 extern s32 g_CdRestartOnResume asm("D_8007F5F8");
 extern u8 g_CdCurrentTrack asm("D_8009B1B0");
 
-void ResumeCdAudio(void) asm("func_80042C28");
+void ResumeCdAudio(void);
 void ResumeCdAudio(void) {
     if (g_CdRestartOnResume != 0) {
         u8 value;
@@ -52,7 +52,7 @@ void ResumeCdAudio(void) {
     }
 }
 
-void ResetCdAudioState(void) asm("func_80042C94");
+void ResetCdAudioState(void);
 void ResetCdAudioState(void) {
     g_CdTrackPending = -1;
     g_CdCommandPending = -1;
@@ -65,7 +65,7 @@ void ResetCdAudioState(void) {
 
 extern s32 g_CdFadeFrames asm("D_8009B1B4");
 
-void StartCdVolumeFade(s32 arg0) asm("func_80042CCC");
+void StartCdVolumeFade(s32 arg0);
 void StartCdVolumeFade(s32 arg0) {
     g_CdFadeFrames = arg0;
     if (arg0 >= 0x1000) {
@@ -89,7 +89,7 @@ extern u32 g_CdMixFullLR asm("D_8009B188");
 extern u32 g_CdMixFullRR asm("D_8009B18C");
 extern u32 g_CdMixFullRL asm("D_8009B190");
 
-void CdMix(u8 *arg0) asm("func_8006A94C");
+void CdMix(u8 *arg0);
 
 void StepCdVolumeFade(void) asm("func_80042D10");
 void StepCdVolumeFade(void) {

@@ -14,7 +14,7 @@ extern char D_80013B14[];
  * then programs MADR/BCR/CHCR to start a transfer of `count` blocks of `size`
  * words. `mode` selects between the block-mode / linked-list setups.
  */
-void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal, u_char mode) asm("func_8006DB74");
+void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal, u_char mode);
 void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal, u_char mode) {
     volatile long dummy;
     long i;

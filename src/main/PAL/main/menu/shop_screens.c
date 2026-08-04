@@ -32,8 +32,8 @@ extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
 extern s32 D_801E4294;
 extern u8 D_801E438D[];
 
-void RequestCarModel(s32 arg0) asm("func_8001882C");
-void UploadTeamNameTexture(void *arg0, s32 arg1) asm("func_8001D530");
+void RequestCarModel(s32 arg0);
+void UploadTeamNameTexture(void *arg0, s32 arg1);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2) asm("func_800489AC");
@@ -41,7 +41,7 @@ void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, void *a10);
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80049418");
-void UploadTeamLogoClut(void) asm("func_8004CF00");
+void UploadTeamLogoClut(void);
 void DrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2) asm("func_8004F650");
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
 void DrawMenuAltPanel(s32 arg0, s32 arg1) asm("func_80050400");
@@ -379,7 +379,7 @@ extern s32 D_80082D80[];
 extern u8 *D_801E4188;
 extern s32 D_801E4290;
 
-void RequestUpgradedCarModel(s32 arg0) asm("func_800189E4");
+void RequestUpgradedCarModel(s32 arg0);
 void DrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2) asm("func_8004F99C");
 
 void UpdateEngineerShopScreen(void) asm("func_8005A3A4");

@@ -11,7 +11,7 @@ extern volatile u8 g_PadType asm("D_801E4369");
 extern u8 g_LastValidPadType asm("D_8007D5A4");
 
 /* The 0xC x 0x18 selection arrow every setup-menu list draws at x = 0x14. */
-void DrawMenuCursorArrow(s32 arg0, s32 arg1) asm("func_800236C8");
+void DrawMenuCursorArrow(s32 arg0, s32 arg1);
 void DrawMenuCursorArrow(s32 arg0, s32 arg1) {
     u8 *base = g_DrawBuffer;
     s32 *scratch = (s32 *)0x1F800000;
@@ -25,7 +25,7 @@ void DrawMenuCursorArrow(s32 arg0, s32 arg1) {
 }
 
 /* The bottom hint bar: a left arrow, a caption picked from D_8007D588 by `variant`, and a right arrow. */
-void DrawOptionHintBar(s32 arg0) asm("func_80023750");
+void DrawOptionHintBar(s32 arg0);
 void DrawOptionHintBar(s32 arg0) {
     s32 index;
     s32 y;
@@ -60,7 +60,7 @@ void DrawOptionHintBar(s32 arg0) {
 }
 
 /* Two glyphs plus a label naming the connected pad; caches the last valid g_PadType. */
-void DrawPadTypeHint(void) asm("func_8002390C");
+void DrawPadTypeHint(void);
 void DrawPadTypeHint(void) {
     s32 color;
     s32 y2;

@@ -6,7 +6,7 @@ extern u32 g_FmvVlcBuffer1 asm("D_8009AF60");
 extern u32 g_FmvStripBuffer0 asm("D_8009AF64");
 extern u32 g_FmvStripBuffer1 asm("D_8009AF68");
 
-void SetupFmvBuffers(u32 arg0) asm("func_8001EB14");
+void SetupFmvBuffers(u32 arg0);
 void SetupFmvBuffers(u32 arg0) {
     u32 step;
     u32 temp;

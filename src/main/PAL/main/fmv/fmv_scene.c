@@ -11,7 +11,7 @@ s32 GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
 void ApplyZoneLighting(s32 arg0, Matrix *arg1) asm("func_8001C248");
 void func_80069888(Matrix *arg0);
 void func_80017794(void *a0, void *a1, void *a2);
-void RestoreColorMatrix(void) asm("func_8001C794");
+void RestoreColorMatrix(void);
 void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
 extern u8 *g_CamRow2 asm("D_8019C9A8");
 extern s32 g_CourseIdx asm("D_801E428C");
@@ -23,14 +23,14 @@ extern s32 g_StreamReturnScene asm("D_8019C760");
 s32 CloseLoadedAudioSlots(void) asm("func_8005B9CC");
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
 s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
-void BeginFmv(s32 arg0) asm("func_8001E6B4");
+void BeginFmv(s32 arg0);
 extern u32 g_AssetBase asm("D_8019C904");
-void StartFmvPlayback(u32 arg0) asm("func_8001E79C");
-void DecodeFmvFrame(void) asm("func_8001E8A4");
-void EndFmv(void) asm("func_8001EA34");
+void StartFmvPlayback(u32 arg0);
+void DecodeFmvFrame(void);
+void EndFmv(void);
 void UpdateFmv(void) asm("func_8001E71C");
 
-void BeginFmv(s32 arg0) asm("func_8001E6B4");
+void BeginFmv(s32 arg0);
 void BeginFmv(s32 arg0) {
     CloseLoadedAudioSlots();
     ResetCdAudioState();
@@ -43,9 +43,9 @@ void BeginFmv(s32 arg0) {
 
 extern u32 g_AssetBase asm("D_8019C904");
 
-void StartFmvPlayback(u32 arg0) asm("func_8001E79C");
-void DecodeFmvFrame(void) asm("func_8001E8A4");
-void EndFmv(void) asm("func_8001EA34");
+void StartFmvPlayback(u32 arg0);
+void DecodeFmvFrame(void);
+void EndFmv(void);
 
 void UpdateFmv(void) asm("func_8001E71C");
 void UpdateFmv(void) {

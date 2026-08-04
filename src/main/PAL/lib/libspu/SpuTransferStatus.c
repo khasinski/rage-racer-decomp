@@ -4,9 +4,9 @@
 
 extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
 
-void _spu_startDmaTransfer(long arg0, long arg1, long arg2) asm("func_80079420");
+void _spu_startDmaTransfer(long arg0, long arg1, long arg2);
 
-long SpuTransferStatus(long arg0, long arg1) asm("func_8007B014");
+long SpuTransferStatus(long arg0, long arg1);
 
 long SpuTransferStatus(long arg0, long arg1) {
     long size;

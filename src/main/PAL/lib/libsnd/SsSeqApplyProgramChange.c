@@ -124,7 +124,7 @@ long SsSeqReadDeltaTime(long arg0, long arg1) {
 }
 
 
-void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out) asm("func_80070E28");
+void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out);
 
 void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out) {
     out[5] = arg0 & 0x8000;
@@ -139,7 +139,7 @@ void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out) {
 }
 
 
-void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) asm("func_80070E84");
+void SsPackAdsr(u_short *in, u_short *out0, u_short *out1);
 
 void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
     u_long mask = 0xFFFF8000;
@@ -187,7 +187,7 @@ void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
-void SsSeqRestartPlayback(short arg0, short arg1) asm("func_80070F10");
+void SsSeqRestartPlayback(short arg0, short arg1);
 
 void SsSeqRestartPlayback(short arg0, short arg1) {
     SeqStruct *state;

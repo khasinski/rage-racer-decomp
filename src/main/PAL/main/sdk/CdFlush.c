@@ -12,13 +12,13 @@ void func_8006BAF0(void);
 long func_8006B0D4(long arg0, long arg1);
 long func_8006B354(long arg0, long arg1);
 
-void CdFlush(void) asm("func_8006A494");
+void CdFlush(void);
 void CdFlush(void) {
     func_8006BAF0();
 }
 
 /* CdSetDebug: sets the CD debug-verbosity `level`, returns the previous one. */
-long CdSetDebug(long level) asm("func_8006A4B4");
+long CdSetDebug(long level);
 long CdSetDebug(long level) {
     long old = g_CdDebugLevel;
     g_CdDebugLevel = level;
@@ -27,7 +27,7 @@ long CdSetDebug(long level) {
 
 /* CdComstr: returns the human-readable name for CD command `cmd` (or a default
  * string if out of range). */
-char * CdComstr(long cmd) asm("func_8006A4CC");
+char * CdComstr(long cmd);
 char *CdComstr(long cmd) {
     cmd &= 0xFF;
     if ((u_long)cmd >= 0x1C) {
@@ -37,7 +37,7 @@ char *CdComstr(long cmd) {
 }
 
 /* CdIntstr: returns the human-readable name for CD interrupt code `intr`. */
-char * CdIntstr(long intr) asm("func_8006A500");
+char * CdIntstr(long intr);
 char *CdIntstr(long intr) {
     intr &= 0xFF;
     if ((u_long)intr >= 7) {

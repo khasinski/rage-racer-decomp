@@ -55,7 +55,7 @@ static inline u16 *TeamLogoClutAddress(
 }
 
 /* Builds g_TeamLogoCanvas and its CLUT from one sample character and one sample background. */
-void ComposeSampleTeamLogo(s32 arg0, s32 arg1) asm("func_8001D338");
+void ComposeSampleTeamLogo(s32 arg0, s32 arg1);
 void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
 {
     s32 index;
@@ -133,7 +133,7 @@ void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
 extern u8 D_8007D24C;
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 
-void ClearTeamNameTexture(void) asm("func_8001D4E8");
+void ClearTeamNameTexture(void);
 void ClearTeamNameTexture(void) {
     s16 sp[4];
     sp[0] = 0x282;
@@ -144,10 +144,10 @@ void ClearTeamNameTexture(void) {
 }
 
 extern u8 D_8007C7CC[];
-void ClearTeamNameTexture(void) asm("func_8001D4E8");
+void ClearTeamNameTexture(void);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 
-void UploadTeamNameTexture(u8 *str, s32 len) asm("func_8001D530");
+void UploadTeamNameTexture(u8 *str, s32 len);
 void UploadTeamNameTexture(u8 *str, s32 len) {
     s16 sp[4];
     ClearTeamNameTexture();

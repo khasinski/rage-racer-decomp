@@ -2,9 +2,9 @@
 #include "game/random.h"
 #include "psyq/kernel.h"
 
-u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) asm("func_80063B4C");
-void *LibcMemmove(u8 *dest, u8 *src, s32 count) asm("func_80063B9C");
-s32 LibcStrlen(u8 *arg0) asm("func_80063C08");
+u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2);
+void *LibcMemmove(u8 *dest, u8 *src, s32 count);
+s32 LibcStrlen(u8 *arg0);
 
 extern s32 g_RandomSeed asm("D_8009B9A8");
 
@@ -373,7 +373,7 @@ finished:
 #undef args
 }
 
-u8 * LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) asm("func_80063B4C");
+u8 * LibcMemchr(u8 *arg0, s32 arg1, s32 arg2);
 u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) {
     switch (0) { default:
     if (arg0 == 0) {
@@ -406,7 +406,7 @@ found:
     return 0;
 }
 
-void * LibcMemmove(u8 *dest, u8 *src, s32 count) asm("func_80063B9C");
+void * LibcMemmove(u8 *dest, u8 *src, s32 count);
 void *LibcMemmove(u8 *dest, u8 *src, s32 count) {
     if (dest >= src) {
         while (count-- > 0) {
@@ -421,7 +421,7 @@ void *LibcMemmove(u8 *dest, u8 *src, s32 count) {
     return dest;
 }
 
-s32 LibcStrlen(u8 *arg0) asm("func_80063C08");
+s32 LibcStrlen(u8 *arg0);
 s32 LibcStrlen(u8 *arg0) {
     s32 count = 0;
 
@@ -438,7 +438,7 @@ s32 LibcStrlen(u8 *arg0) {
 
 extern u8 g_LibcNullText[] asm("D_800132C0");
 
-void LibcPutChar(s32 arg0) asm("func_80063C88");
+void LibcPutChar(s32 arg0);
 
 void LibcPutString(u8 *arg0) asm("func_80063C38");
 void LibcPutString(u8 *arg0) {
@@ -458,7 +458,7 @@ void LibcPutString(u8 *arg0) {
 extern u8 g_LibcCtype[] asm("D_80082FD9");
 extern s32 g_LibcOutColumn asm("D_8009B9AC");
 
-void LibcPutChar(s32 arg0) asm("func_80063C88");
+void LibcPutChar(s32 arg0);
 void LibcPutChar(s32 arg0) {
     u8 c;
     s32 value = arg0;
@@ -490,7 +490,7 @@ void LibcPutChar(s32 arg0) {
     BiosFileWrite(1, &c, 1);
 }
 
-s32 LibcToUpper(s32 arg0) asm("func_80063D3C");
+s32 LibcToUpper(s32 arg0);
 s32 LibcToUpper(s32 arg0) {
     u8 value = arg0;
 

@@ -129,12 +129,12 @@ extern s32 g_MenuViewOffsetTarget asm("D_8009B35C");
 void AdjustMenuSelectionHorizontal(
     s32 *value,
     s32 min,
-    s32 max) asm("func_800611C8");
-void SetMenuBinaryChoiceVertical(s32 *value) asm("func_8006124C");
-u16 PollMenuConfirmInput(void) asm("func_800612CC");
-u16 PollMenuBackInput(void) asm("func_8006131C");
-void DrawMenuFadeOverlay(s32 brightness) asm("func_8006136C");
-void StartMenuExitFade(void) asm("func_8006138C");
+    s32 max);
+void SetMenuBinaryChoiceVertical(s32 *value);
+u16 PollMenuConfirmInput(void);
+u16 PollMenuBackInput(void);
+void DrawMenuFadeOverlay(s32 brightness);
+void StartMenuExitFade(void);
 
 /* Menu widgets: an outlined filled box with optional caption (flags bit 0x10 =
  * caption, bit 1 = large font), the two-ring selection frame, and the timeline

@@ -12,7 +12,7 @@ extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
 extern u_char g_SndVoiceStatePitch[] asm("D_8009E0BC");
 extern u_char g_SndVoiceState[] asm("D_8009E0B8");
 
-long SsUtKeyOffV(long voice) asm("func_80078018");
+long SsUtKeyOffV(long voice);
 
 long SsUtKeyOffV(long arg0) {
     register long one asm("$5") = 1;

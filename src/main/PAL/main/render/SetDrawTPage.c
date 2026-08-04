@@ -4,7 +4,7 @@
 
 s32 func_800657E4(void);
 
-void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) asm("func_800650E4");
+void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3);
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
 s32 encoded;
     s32 mode;
@@ -52,7 +52,7 @@ done:
     *(u32 *)&arg0[4] = encoded;
 }
 
-void SetDrawLoad(u8 *arg0, u8 *arg1) asm("func_80065198");
+void SetDrawLoad(u8 *arg0, u8 *arg1);
 void SetDrawLoad(u8 *arg0, u8 *arg1) {
     s32 sign;
     s32 value;
@@ -76,7 +76,7 @@ void SetDrawLoad(u8 *arg0, u8 *arg1) {
     *(u32 *)&arg0[0x10] = *(u32 *)&arg1[4];
 }
 
-s32 MargePrim(u8 *arg0, u8 *arg1) asm("func_800651FC");
+s32 MargePrim(u8 *arg0, u8 *arg1);
 s32 MargePrim(u8 *arg0, u8 *arg1) {
     s32 value;
 
@@ -101,7 +101,7 @@ extern char D_8001342C[];
 extern char D_80013438[];
 extern void (*D_800941E4)(char *, ...);
 
-void DumpDrawEnv(DrawEnv *arg0) asm("func_80065234");
+void DumpDrawEnv(DrawEnv *arg0);
 void DumpDrawEnv(DrawEnv *arg0) {
     s32 mode;
     u32 value;
@@ -132,7 +132,7 @@ void DumpDrawEnv(DrawEnv *arg0) {
     D_800941E4(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
 }
 
-void DumpDispEnv(DispEnv *arg0) asm("func_800653B4");
+void DumpDispEnv(DispEnv *arg0);
 void DumpDispEnv(DispEnv *arg0) {
     D_800941E4(D_800133F4, arg0->disp.x, arg0->disp.y, arg0->disp.w, arg0->disp.h);
     D_800941E4(D_80013410, arg0->screen.x, arg0->screen.y, arg0->screen.w, arg0->screen.h);
@@ -206,7 +206,7 @@ extern u8 g_GraphReverse asm("D_800941EB");
 extern char D_800134AC[];
 extern char D_800134C4[];
 
-s32 SetGraphReverse(s32 arg0) asm("func_800655B8");
+s32 SetGraphReverse(s32 arg0);
 
 s32 SetGraphReverse(s32 arg0) {
     u8 *state = &g_GraphReverse;
@@ -244,7 +244,7 @@ s32 SetGraphReverse(s32 arg0) {
     return old;
 }
 
-s32 SetGraphDebug(u8 arg0) asm("func_800656CC");
+s32 SetGraphDebug(u8 arg0);
 
 s32 SetGraphDebug(u8 arg0) {
     register volatile u8 *ptr asm("$3") = &g_GraphDebug;

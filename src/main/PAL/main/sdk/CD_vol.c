@@ -20,7 +20,7 @@ extern void *g_CdDebugInfo[] asm("D_8009931C");
 extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
 
 void KernelCallbackSlot3(void) asm("func_8006DF34");
-void CdDispatchInterrupts(void) asm("func_8006C17C");
+void CdDispatchInterrupts(void);
 void KernelCallbackSlot2(long arg0, void *arg1) asm("func_8006DF64");
 long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
 long func_8006B0D4(long arg0, u_char *arg1);

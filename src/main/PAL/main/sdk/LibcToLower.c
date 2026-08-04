@@ -6,7 +6,7 @@
 
 extern u_char g_LibcCtype[] asm("D_80082FD9");
 
-long LibcToLower(long arg0) asm("func_80063D6C");
+long LibcToLower(long arg0);
 long LibcToLower(long arg0) {
     u_char value = arg0;
 
@@ -40,7 +40,7 @@ u_long g_BiosCallStubs[20] asm("func_80063D9C") __attribute__((section(".text"))
     0,
 };
 
-void _card_write(long arg0, long arg1, long arg2) asm("func_80063E24");
+void _card_write(long arg0, long arg1, long arg2);
 void _new_card(long arg0) asm("func_80063E34");
 
 /* libcard, but declared in game/memcard.h, so it keeps common.h's typedefs. */

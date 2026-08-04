@@ -29,21 +29,21 @@ extern u8 g_MsgInitEngineOk asm("D_8001146C");
 
 void LoadExtraVabSlotWithTable(void) asm("func_8005BB1C");
 
-void SetEffectVoicesEnabled(s32 arg0) asm("func_8005B468");
+void SetEffectVoicesEnabled(s32 arg0);
 
 void SetReverbPreset(s32 arg0, s32 arg1, s32 arg2) asm("func_8005B204");
 
-void InstallResourceData(void) asm("func_80034DCC");
+void InstallResourceData(void);
 void InstallResourceData(void) {
     DebugPrintf(g_MsgResOk);
 }
 
-void SetCarSpec(u32 arg0) asm("func_80034DF4");
+void SetCarSpec(u32 arg0);
 void SetCarSpec(u32 arg0) {
     g_CarSpec = (GameCarSpec *)arg0;
 }
 
-void InstallTrackEventData(u8 *arg0) asm("func_80034E04");
+void InstallTrackEventData(u8 *arg0);
 void InstallTrackEventData(u8 *arg0) {
     register s32 offset0 asm("$2");
     s32 offset1;
@@ -68,7 +68,7 @@ void InstallTrackEventData(u8 *arg0) {
     DebugPrintf(callArg);
 }
 
-void InitSoundSystem(void) asm("func_80034E88");
+void InitSoundSystem(void);
 void InitSoundSystem(void) {
     if (func_8005B5C4() != 0) {
         DebugPrintf(&g_MsgSoundError);
@@ -76,7 +76,7 @@ void InitSoundSystem(void) {
     DebugPrintf(&g_MsgInitSoundOk);
 }
 
-void InitEngineSound(void) asm("func_80034ED0");
+void InitEngineSound(void);
 void InitEngineSound(void) {
     LoadExtraVabSlotWithTable();
     SetEffectVoicesEnabled(1);
@@ -84,7 +84,7 @@ void InitEngineSound(void) {
     DebugPrintf(&g_MsgInitEngineOk);
 }
 
-s32 FramesToMilliseconds(s32 arg0, s32 arg1) asm("func_80034F18");
+s32 FramesToMilliseconds(s32 arg0, s32 arg1);
 s32 FramesToMilliseconds(s32 arg0, s32 arg1) {
     s32 quotient;
     s32 quotientPart;

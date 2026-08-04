@@ -26,7 +26,7 @@ void PlayCountdownCues(s32 arg0) {
 
 extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
-void UpdateRivalCueGate(void) asm("func_80041170");
+void UpdateRivalCueGate(void);
 void UpdateRivalCueGate(void) {
     s32 value;
 
@@ -45,7 +45,7 @@ void UpdateRivalCueGate(void) {
 extern u32 *g_CourseObjects asm("D_801E4B2C");
 extern u32 g_CourseObjectCount asm("D_801E4BBC");
 
-void SetCourseObjects(u32 *arg0) asm("func_8004121C");
+void SetCourseObjects(u32 *arg0);
 void SetCourseObjects(u32 *arg0) {
     u32 value;
 

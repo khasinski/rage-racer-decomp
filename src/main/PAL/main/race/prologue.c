@@ -17,17 +17,17 @@ extern s32 g_AttractDemoStep asm("D_801E682C");
 extern u32 g_StreamReturnScene asm("D_8019C760");
 extern void (*g_AttractDemoSteps[])(void) asm("D_8007D6D0");
 void ResetAssetLoader(void) asm("func_80017BE4");
-void ReturnToTitleScene(void) asm("func_800268EC");
+void ReturnToTitleScene(void);
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_PrologueStep asm("D_801E4178");
 extern s32 g_PrologueCutIndex asm("D_801E6824");
 extern u8 g_TextNowLoading[] asm("D_80011010");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void InitTrackScene(void) asm("func_80025940");
+void InitTrackScene(void);
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-void InstallCourseAssets(void) asm("func_80019730");
-void RequestTrackDataAssets(void) asm("func_80019844");
+void InstallCourseAssets(void);
+void RequestTrackDataAssets(void);
 void UpdatePrologueLoad(void) asm("func_80026C0C");
 /* Split symbols of the 14-entry prologue table: 8 bytes each, { s16 x,
  * s16 y, char *text }. The scroll drives y and the alpha ramp. */
@@ -41,14 +41,14 @@ void RequestSelectBgmAssets(void) asm("func_80018410");
 extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 extern UnkEventPair g_PrologueCameraCuts[] asm("D_8007D74C");
-void ExitPrologue(void) asm("func_80026F68");
-void DrawPrologueText(void) asm("func_80026DE4");
+void ExitPrologue(void);
+void DrawPrologueText(void);
 void func_8003BB50(void);
-void RequestTrackTexturePage(s32 arg0) asm("func_80019EFC");
+void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
-void DrawTerrainCellsWide(void) asm("func_80041888");
-void DrawCourseScenery2(s32 arg0, s32 arg1) asm("func_8003E2E8");
+void DrawTerrainCellsWide(void);
+void DrawCourseScenery2(s32 arg0, s32 arg1);
 
 void UpdateAttractDemoScene(void) asm("func_80026AE0");
 void UpdateAttractDemoScene(void) {
@@ -152,7 +152,7 @@ void UpdatePrologueLoadStep2(void) {
     UpdatePrologueLoad();
 }
 
-void DrawPrologueText(void) asm("func_80026DE4");
+void DrawPrologueText(void);
 void DrawPrologueText(void) {
     s32 i;
     s32 offset;
@@ -226,7 +226,7 @@ void DrawPrologueText(void) {
     }
 }
 
-void ExitPrologue(void) asm("func_80026F68");
+void ExitPrologue(void);
 void ExitPrologue(void) {
     g_SceneId = 6;
     PauseCdAudio();
