@@ -16,7 +16,7 @@ void RegisterCourseModels(void *arg0) asm("func_80017A6C");
 void InstallTerrainCellData(void *arg0) asm("func_80017AD0");
 void SetCourseObjects(void *arg0) asm("func_8004121C");
 void InstallTrackEventData(void *arg0) asm("func_80034E04");
-void func_80043AC8(void *arg0, s32 arg1);
+void SelectTrackCameraTable(void *arg0, s32 arg1) asm("func_80043AC8");
 
 void LoadTrackDataAssets(void) asm("func_8001989C");
 void LoadTrackDataAssets(void) {
@@ -84,7 +84,7 @@ void LoadTrackDataAssets(void) {
             header = g_AssetLoadCursor;
             offset = header->offsets[10];
             g_AssetBlockPtr = (u8 *)header + offset;
-            func_80043AC8(g_AssetBlockPtr, 0);
+            SelectTrackCameraTable(g_AssetBlockPtr, 0);
 
             g_AssetLoadState = 2;
         }

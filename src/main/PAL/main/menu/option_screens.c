@@ -62,7 +62,7 @@ void InitTrackScene(void) asm("func_80025940");
 void func_80016EA0(s32 a0, s32 a1, void *a2, s32 a3);
 void InstallCourseAssets(void) asm("func_80019730");
 void RequestTrackDataAssets(void) asm("func_80019844");
-void func_80025AC8(void);
+void UpdateOptionSceneFade(void) asm("func_80025AC8");
 
 /* g_GameModeHandlers[5]: left/right edits the selected audio setting, cancel restores it. */
 void UpdateSoundSettingAdjust(void) asm("func_800250BC");
@@ -331,7 +331,8 @@ void func_80025A14(void) {
     g_CameraCarIndex = 0;
 }
 
-void func_80025AC8(void) {
+void UpdateOptionSceneFade(void) asm("func_80025AC8");
+void UpdateOptionSceneFade(void) {
     s32 d;
     s32 v;
     if (g_SceneTimer == 0xF) {
@@ -371,12 +372,12 @@ void func_80025BD8(void) {
         g_BgmSelectStep = 1;
     }
 
-    func_80025AC8();
+    UpdateOptionSceneFade();
 }
 
 void func_80025C20(void) {
     if (g_AssetLoadState == 0) {
         g_FadeStep = 4;
     }
-    func_80025AC8();
+    UpdateOptionSceneFade();
 }

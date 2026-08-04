@@ -205,7 +205,8 @@ void TickCdAudio(void) {
 
 extern void *g_TrackCameras asm("D_8019C7CC");
 
-void func_80043AC8(u8 *arg0, s32 arg1) {
+void SelectTrackCameraTable(u8 *arg0, s32 arg1) asm("func_80043AC8");
+void SelectTrackCameraTable(u8 *arg0, s32 arg1) {
     void *ptr;
 
     if (arg1 != 0) {
