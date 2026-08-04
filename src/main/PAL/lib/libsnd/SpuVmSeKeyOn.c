@@ -87,7 +87,7 @@ long SpuVmSeKeyOn(
     u_short volume,
     u_short pan) {
     SeqStruct *score =
-        &g_SndSeqTable[(u8)seq_sep][(seq_sep & 0xFF00) >> 8];
+        &g_SndSeqTable[seq_sep & 0xFF][(seq_sep & 0xFF00) >> 8];
     u_char vag_indices[0x80];
     u_char tone_indices[0x80];
     u_char i;

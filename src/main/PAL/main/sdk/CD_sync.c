@@ -121,7 +121,8 @@ long CD_sync(long mode, u_char *result) {
         s8 syncRaw;
 
         syncRaw = intr->sync;
-        sync = (u8)syncRaw;
+        asm("" : "=r"(syncRaw) : "0"(syncRaw));
+        sync = syncRaw & 0xFF;
         if (sync == 2 || sync == 5) {
             intr->sync = 2;
             copy8(resultReg, (u_char *)g_CdSyncResult);

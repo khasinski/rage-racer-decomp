@@ -25,7 +25,7 @@ void func_80073C50(long count, long pitch);
 
 long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {
     SeqStruct *score =
-        &g_SndSeqTable[(u8)seq_sep][(seq_sep & 0xFF00) >> 8];
+        &g_SndSeqTable[seq_sep & 0xFF][(seq_sep & 0xFF00) >> 8];
     long voices_updated;
     u_char voice;
     long base_volume;

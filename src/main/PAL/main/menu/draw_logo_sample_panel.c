@@ -122,7 +122,7 @@ void func_8004E724(s32 arg0, s32 arg1) {
         colour -= 0x41;
         DrawLogoRect(temp_s7 + 4, (s16)(((arg1 % 11) * 0xC) + 0x54),
                      (s16)(var_s1 + ((arg1 / 11) * 0x18)), 0xB,
-                     (s32)(s16)(animationStep * 2), 0, (u8)colour, 0, 0xFF);
+                     (s32)(s16)(animationStep * 2), 0, colour & 0xFF, 0, 0xFF);
         D_8009B28C += 0x60;
     }
     animationStep = D_8007FB28 - 0x11;

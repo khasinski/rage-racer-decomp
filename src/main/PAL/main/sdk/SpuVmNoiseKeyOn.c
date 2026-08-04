@@ -21,7 +21,7 @@ extern u_short g_SndReverbOnHigh asm("D_8009E684");
 void SpuVmNoiseKeyOn(u_char voice) asm("func_80074348");
 void SpuVmNoiseKeyOn(u_char voice) {
     SeqStruct *score =
-        &g_SndSeqTable[(u8)g_SndCurrentAttr.seq_sep]
+        &g_SndSeqTable[g_SndCurrentAttr.seq_sep & 0xFF]
                     [(g_SndCurrentAttr.seq_sep & 0xFF00) >> 8];
     short current_voice;
     u_short bits_upper;

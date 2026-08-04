@@ -30,7 +30,7 @@ short arg3;
     u_long offset;
     u_long index;
 
-    base = *(u_char **)((u_char *)g_SndSeqTable + (((u8)arg0) << 2));
+    base = *(u_char **)((u_char *)g_SndSeqTable + ((arg0 & 0xFF) << 2));
     g_SndCurrentSeqSep = arg0;
     index = (arg0 & 0xFF00) >> 8;
     entry = (u_char *)((index * 0xAC) + (long)base);
@@ -73,7 +73,7 @@ long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) {
     short *status;
 
     status = &g_SndCurrentSeqSep;
-    offset = ((u8)arg0) << 2;
+    offset = (arg0 & 0xFF) << 2;
     base = *(u_char **)((u_char *)g_SndSeqTable + offset);
     *status = arg0;
     index = (arg0 & 0xFF00) >> 8;
@@ -89,7 +89,7 @@ short SpuVmGetSeqVolLeft(long arg0) {
     long offset;
     u_char *ptr;
 
-    offset = ((u8)arg0) << 2;
+    offset = (arg0 & 0xFF) << 2;
     ptr = *(u_char **)((u_char *)g_SndSeqTable + offset);
     g_SndCurrentSeqSep = arg0;
     index = (arg0 & 0xFF00) >> 8;
@@ -102,7 +102,7 @@ short SpuVmGetSeqVolRight(long arg0) {
     long offset;
     u_char *ptr;
 
-    offset = ((u8)arg0) << 2;
+    offset = (arg0 & 0xFF) << 2;
     ptr = *(u_char **)((u_char *)g_SndSeqTable + offset);
     g_SndCurrentSeqSep = arg0;
     index = (arg0 & 0xFF00) >> 8;

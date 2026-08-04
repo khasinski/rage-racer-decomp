@@ -33,11 +33,11 @@ u_long _SpuSetAnyVoice(long arg0, u_long arg1, long arg2, long arg3) {
 
         old |= arg1 & 0xFFFFFF;
         *reg_lo |= arg1;
-        *reg_hi |= (u8)(arg1 >> 0x10);
+        *reg_hi |= (arg1 >> 0x10) & 0xFF;
     } else {
         old &= ~(arg1 & 0xFFFFFF);
         *reg_lo &= ~arg1;
-        *reg_hi &= ~((u8)(arg1 >> 0x10));
+        *reg_hi &= ~((arg1 >> 0x10) & 0xFF);
     }
 
     return old & 0xFFFFFF;
