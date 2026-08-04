@@ -17,9 +17,9 @@ void LibcSprintf() asm("func_800632F0");
 void ClearMemoryCardSwEvents(void) asm("func_8005F304");
 s32 PollMemoryCardHwEvent(void) asm("func_8005F35C");
 s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
-void _card_info(s32 arg0) asm("func_80063DAC");
-void _card_load(s32 arg0) asm("func_80063DBC");
-s32 _card_clear(s32 arg0) asm("func_80063DEC");
+void _card_info(s32 chan) asm("func_80063DAC");
+void _card_load(s32 chan) asm("func_80063DBC");
+s32 _card_clear(s32 chan) asm("func_80063DEC");
 
 s32 PollMemoryCardStatus(s32 port, s32 slot) asm("func_8005ECE0");
 s32 PollMemoryCardStatus(s32 port, s32 slot) {
@@ -375,7 +375,7 @@ s32 WaitMemoryCardSwEvent(void) {
 }
 
 extern s32 g_SaveElapsedTicks asm("D_801E7A54");
-void InitCARD(s32 arg0) asm("func_80063DCC");
+void InitCARD(s32 padEnable) asm("func_80063DCC");
 void StartCARD(void) asm("func_80063DDC");
 void BiosBuInit(void) asm("func_80063180");
 void RestartMemoryCard(void) asm("func_8005F5E0");
@@ -399,24 +399,24 @@ void AdvanceSaveHeaderCounter(void) {
 #include "game/menu.h"
 
 void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
-    u8 *arg0 = (u8 *)rows;
+    u8 *rowBytes = (u8 *)rows;
     s32 i = 0;
-    u8 *ptr1 = arg0;
+    u8 *ptr1 = rowBytes;
     s32 j;
     u8 *ptr2;
     u8 *ptr3;
 
     do {
-        arg0[0] = 0;
+        rowBytes[0] = 0;
         j = 5;
-        ptr2 = arg0 + 5;
+        ptr2 = rowBytes + 5;
         do {
             ptr2[1] = 0;
             ptr2--;
             j--;
         } while (j >= 0);
 
-        *(volatile u32 *)&arg0[8] = 0;
+        *(volatile u32 *)&rowBytes[8] = 0;
 
         j = 0;
         ptr3 = ptr1;
@@ -424,8 +424,8 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
             j++;
         } while ((*(u16 *)&ptr3[0xC] = 0, j < 0x38));
 
-        *(volatile u32 *)&arg0[0x7C] = 0;
-        arg0 += 0x80;
+        *(volatile u32 *)&rowBytes[0x7C] = 0;
+        rowBytes += 0x80;
         i++;
         ptr1 += 0x82;
     } while (i < 3);
@@ -503,21 +503,21 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
 extern s32 g_SaveElapsedTicks asm("D_801E7A54");
 
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
-    u8 *arg0 = (u8 *)row;
+    u8 *rowBytes = (u8 *)row;
     s32 i;
     u32 checksum;
     u16 *scan;
 
-    arg0[0] = g_TeamNameLength;
+    rowBytes[0] = g_TeamNameLength;
 
     for (i = 0; i < 7; i++) {
-        *((arg0 + i) + 1) = g_TeamNameChars[i];
+        *((rowBytes + i) + 1) = g_TeamNameChars[i];
     }
 
     i = 0;
     checksum = 0;
-    *(s32 *)(arg0 + 8) = g_SaveElapsedTicks;
-    scan = (u16 *)arg0;
+    *(s32 *)(rowBytes + 8) = g_SaveElapsedTicks;
+    scan = (u16 *)rowBytes;
 
     do {
         checksum += *scan++;
@@ -525,7 +525,7 @@ void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     } while ((u32)i < 0x3E);
 
     checksum = ~checksum;
-    *(u32 *)(arg0 + 0x7C) = checksum;
+    *(u32 *)(rowBytes + 0x7C) = checksum;
 }
 
 /* ---- was StoreSaveStateBlock.c ---- */
@@ -565,7 +565,7 @@ extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
  * treating them as aliasing the plain global loads that feed them and hoists
  * every load to the top of the function, which retail does not do.
  */
-void StoreSaveStateBlock(u8 *arg0) asm("func_8005F88C");
+void StoreSaveStateBlock(u8 *rowBytes) asm("func_8005F88C");
 void StoreSaveStateBlock(u8 *block) {
     {
         u16 padMappingIndex = g_PadMappingIndex;
@@ -865,7 +865,7 @@ void ApplyAudioSettings(void) asm("func_80021224");
  * (That is also why the header is not included here: its prototype takes a
  * void *, and gcc 2.6.3 rejects the u8 * signature this body needs.)
  */
-s32 LoadSaveStateBlock(u8 *arg0) asm("func_8005FED4");
+s32 LoadSaveStateBlock(u8 *rowBytes) asm("func_8005FED4");
 s32 LoadSaveStateBlock(u8 *block) {
     register u8 *base asm("$17") = block;
     __asm__("" : "=r"(base) : "0"(base));
@@ -1528,7 +1528,7 @@ extern u8 g_McMessageText[] asm("D_800128FC");
 /* DrawText8x8 again, declared with word-wide parameters: the header
  * spelling with s16/u16 does not match here. Same convention as
  * GameQueueSprite vs GameQueueSpriteWide in game/render.h. */
-void DrawText8x8Wide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
+void DrawText8x8Wide(s32 x, s32 y, void *text, s32 color) asm("func_80016754");
 
 void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) {
     DrawText8x8Wide(0x28, 0xB8, &g_McMessageText[messageIndex * 30], 0x78CC);
@@ -1698,7 +1698,7 @@ u16 PollMenuBackInput(void) {
     return *state & 0x90;
 }
 
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80023A60");
+void DrawFullscreenFadeTile(s32 level, s32 tpage) asm("func_80023A60");
 
 void DrawMenuFadeOverlay(s32 level) {
     DrawFullscreenFadeTile(level, 0x40);
