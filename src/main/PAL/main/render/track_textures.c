@@ -46,7 +46,7 @@ void SwapTrackTexturePageNow(void) {
     s32 buffer[0xE0];
     s32 page = 0;
     s16 *rectY = &D_8007C70A;
-    Rect *rect = (Rect *)((s32)&D_8007C70A - 2);
+    Rect *rect = (Rect *)((u8 *)&D_8007C70A - 2);
     u8 **basePtr = &g_TrackTextureShadow;
     s32 value;
     s32 *src;

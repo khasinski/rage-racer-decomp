@@ -942,7 +942,7 @@ after_match:
                 CHANNEL(offset).left = inactiveValue;
                 CHANNEL(offset).right = inactiveValue;
                 CHANNEL(offset).mode = activeValue;
-                table = (s32 *)((s32)&D_801E6C9C + offset);
+                table = (s32 *)((u8 *)&D_801E6C9C + offset);
                 *(s32 *)((s32)table + 0x78) = 0;
                 CHANNEL(offset).volLeft = 0;
                 i++;
