@@ -55,7 +55,8 @@ static __inline__ void copy8(u_char *d, u_char *s) {
     } while (--n != -1);
 }
 
-long func_8006AB5C(void) {
+long CdReadInterruptStatus(void) asm("func_8006AB5C");
+long CdReadInterruptStatus(void) {
     volatile u_char mode;
     volatile u_char buf[8];
     long i;

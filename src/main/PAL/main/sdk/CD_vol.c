@@ -20,7 +20,7 @@ extern void *g_CdDebugInfo[] asm("D_8009931C");
 extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
 
 void KernelCallbackSlot3(void) asm("func_8006DF34");
-void func_8006C17C(void);
+void CdDispatchInterrupts(void) asm("func_8006C17C");
 void KernelCallbackSlot2(long arg0, void *arg1) asm("func_8006DF64");
 long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
 long func_8006B0D4(long arg0, u_char *arg1);
@@ -98,10 +98,11 @@ void CD_initintr(void) {
     g_CdErrorByte = 0;
     g_CdStatusByte = 0;
     KernelCallbackSlot3();
-    KernelCallbackSlot2(2, (void *)func_8006C17C);
+    KernelCallbackSlot2(2, (void *)CdDispatchInterrupts);
 }
 
-long func_8006BD14(void) {
+long CdResetState(void) asm("func_8006BD14");
+long CdResetState(void) {
     LibcPutString(D_80013904);
     DebugPrintf(D_80013910, g_CdDebugInfo);
 
@@ -112,7 +113,7 @@ long func_8006BD14(void) {
     g_CdErrorByte = 0;
     g_CdStatusByte = 0;
     KernelCallbackSlot3();
-    KernelCallbackSlot2(2, func_8006C17C);
+    KernelCallbackSlot2(2, CdDispatchInterrupts);
 
     *g_CdReg0 = 1;
     while ((*g_CdReg3 % 8) != 0) {

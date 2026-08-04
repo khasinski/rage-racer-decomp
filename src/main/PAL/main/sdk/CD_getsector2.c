@@ -19,7 +19,7 @@ extern u_char g_CdReadyStatus asm("D_80099319");
 extern u_char g_CdSyncResult[] asm("D_8009BAF0");
 extern u_char g_CdReadyResult[] asm("D_8009BAF8");
 
-long func_8006AB5C(void);
+long CdReadInterruptStatus(void) asm("func_8006AB5C");
 
 long CD_getsector2(long arg0, u_long arg1) {
     volatile u_char *status;
@@ -58,7 +58,8 @@ void func_8006C16C(long arg0) {
     D_800992E4 = arg0;
 }
 
-void func_8006C17C(void) {
+void CdDispatchInterrupts(void) asm("func_8006C17C");
+void CdDispatchInterrupts(void) {
     u_char *statusByte;
     long status;
     long saved;
@@ -66,7 +67,7 @@ void func_8006C17C(void) {
     saved = *g_CdReg0 % 4;
     statusByte = &g_CdReadyStatus;
 
-    while ((status = func_8006AB5C()) != 0) {
+    while ((status = CdReadInterruptStatus()) != 0) {
         if ((status & 4) != 0) {
             if (g_CdReadyCallback != 0) {
                 g_CdReadyCallback(*statusByte, g_CdReadyResult);

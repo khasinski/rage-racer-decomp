@@ -50,7 +50,7 @@ long func_8006BBD0_entry(void) asm("func_8006BBD0");
 /*
  * CD reset/init sequence keyed by `mode`: mode 2 only (re)installs the CD
  * interrupt handler (CD_initintr); otherwise it runs the CD flush/sync
- * (func_8006BD14) and, for mode 1, the volume init (CD_initvol). Returns 1 on
+ * (CdResetState) and, for mode 1, the volume init (CD_initvol). Returns 1 on
  * success, 0 if a sub-step failed.
  */
 long CD_init(long mode) asm("func_8006A428");

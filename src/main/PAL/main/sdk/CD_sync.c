@@ -23,7 +23,7 @@ extern char D_80013824[];
 extern char D_8001389C[];
 
 void LibcPutString(char *text) asm("func_80063C38");
-long func_8006AB5C(void);
+long CdReadInterruptStatus(void) asm("func_8006AB5C");
 void CD_flush(void) asm("func_8006BAF0");
 long VSync(long mode) asm("func_8006DD30");
 long GetKernelStatus(void) asm("func_8006E088");
@@ -96,7 +96,7 @@ long CD_sync(long mode, u_char *result) {
                 long readyBit;
                 s16 syncBit;
 
-                interrupt = func_8006AB5C();
+                interrupt = CdReadInterruptStatus();
                 if (interrupt == 0) {
                     break;
                 }

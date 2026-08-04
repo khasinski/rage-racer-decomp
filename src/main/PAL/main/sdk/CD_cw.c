@@ -31,7 +31,7 @@ extern char D_800138B8[];
 extern char D_800138C8[];
 
 void LibcPutString(char *text) asm("func_80063C38");
-long func_8006AB5C(void);
+long CdReadInterruptStatus(void) asm("func_8006AB5C");
 long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
 void CD_flush(void) asm("func_8006BAF0");
 long VSync(long mode) asm("func_8006DD30");
@@ -109,7 +109,7 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
 
         if (GetKernelStatus() != 0) {
             interruptState = *g_CdReg0 % 4;
-            while ((interrupt = func_8006AB5C()) != 0) {
+            while ((interrupt = CdReadInterruptStatus()) != 0) {
                 if ((interrupt & 4) != 0 && g_CdReadyCallback != 0) {
                     g_CdReadyCallback(g_CdSyncStatus.ready, g_CdReadyResult);
                 }
