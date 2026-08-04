@@ -75,3 +75,33 @@ anyway.
 Renaming a file means renaming its `configs/PAL/main.yaml` segment and any
 `INCLUDE_ASM("asm/.../<old name>", ...)` path, then `make split && make check`.
 `asm/` and `linkers/` are generated and need no edits.
+
+## Auditing the file names
+
+Two criteria find real mistakes; both need a human pass afterwards, because
+each has a large false-positive class.
+
+1. **The name promises a function the file does not define.** This is the
+   reliable one. It caught `PopMatrix.c` (holds `ApplyMatrix`), and
+   `Gpu_ArmTimeout.c` (holds `Gpu_CheckTimeout`).
+2. **The name describes one behaviour of a larger subsystem.** `init_menu_mode.c`
+   also flipped the course card and counted owned cars; `draw_rear_view_mirror.c`
+   also reset the mirror and bracketed its pass. Both are now named after the
+   subsystem.
+
+**A thematic name matching no single function is correct, not a finding.**
+`draw_prims.c` holds ten drawing primitives and `cd_audio_control.c` holds the
+whole start/pause/resume/fade set. Renaming either after its first function
+would describe a tenth of the file and contradict the rule above. Any audit
+counting "functions whose name contains the file's words" will rank these low
+purely because the code uses synonyms: `title_screen.c` scores 2 of 9 and is
+exactly right.
+
+Two traps cost a wrong answer here on 2026-08-04:
+
+- A definition regex that misses one-liners (`void StSetRing(long b, long s)
+  { ... }`) or definitions with a return type reports **zero** findings, which
+  reads identically to a clean tree. Assert a plausible function count inside
+  the script, not just a file count, before believing any zero.
+- Confirm a rename by grepping the file for its own name first. Four files
+  looked misnamed and each defined its namesake on a single line.
