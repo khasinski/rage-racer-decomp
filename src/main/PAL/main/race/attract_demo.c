@@ -36,7 +36,7 @@ void func_80046A2C(
 
 extern u32 g_BgmShuffleIndex asm("D_8009E6CC");
 extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
-void func_80025940(void);
+void InitTrackScene(void) asm("func_80025940");
 void AdvanceBgmShuffleBag(s32 arg0) asm("func_80025E54");
 void DrawAttractTitle(void) asm("func_800266D0");
 extern u32 g_StreamReturnScene asm("D_8019C760");
@@ -129,7 +129,7 @@ void UpdateAttractDemoStart(void) {
     }
 
     if (g_AssetLoadState == 0) {
-        func_80025940();
+        InitTrackScene();
 
         g_AttractDemoStep = 1;
         mode = g_BgmShuffleOrder[g_BgmShuffleIndex];

@@ -4,7 +4,7 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 
-void func_800218A0(s32 arg0);
+void DrawRaceEndBanner(s32 arg0) asm("func_800218A0");
 s32 func_80016EC4(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 
@@ -32,7 +32,7 @@ void UpdateEndingStill(void) {
     } else if (v0 == 0) {
         g_SceneId = 2;
     }
-    func_800218A0(g_FadeLevel);
+    DrawRaceEndBanner(g_FadeLevel);
 }
 
 /* The still itself: a 0x100 + 0x40 wide pair of full-height sprites. */

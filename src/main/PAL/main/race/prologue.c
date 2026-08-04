@@ -24,7 +24,7 @@ extern s32 g_PrologueStep asm("D_801E4178");
 extern s32 g_PrologueCutIndex asm("D_801E6824");
 extern u8 g_TextNowLoading[] asm("D_80011010");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void func_80025940(void);
+void InitTrackScene(void) asm("func_80025940");
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void InstallCourseAssets(void) asm("func_80019730");
 void RequestTrackDataAssets(void) asm("func_80019844");
@@ -114,7 +114,7 @@ void UpdatePrologueLoad(void) {
         if (g_FadeLevel >= 0x101) {
             SetDispMask(0);
             g_CourseIndex = 0;
-            func_80025940();
+            InitTrackScene();
             StartCdAudio();
             g_PrologueStep = 3;
             g_FadeLevel = 0x100;

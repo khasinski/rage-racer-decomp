@@ -233,7 +233,7 @@ void RecordReplayFrame(void) asm("func_8001F9D8");
 
 void DrawLostRaceCaption(s32 arg0) asm("func_800215B8");
 
-void func_800218A0(s32 arg0);
+void DrawRaceEndBanner(s32 arg0) asm("func_800218A0");
 
 void BeginCarStandingStart(void *arg0, s32 arg1) asm("func_8002BE18");
 
@@ -721,7 +721,7 @@ void UpdateRaceScene(void) {
         if (((g_GrandPrixMode == 1) && (*(s16 *)(g_CourseProgress + 6) == 0)) ||
             (g_GrandPrixMode == 0)) {
             if (g_RaceFadeTimer >= 0x15) {
-                func_800218A0((g_RaceFadeTimer - 0x14) * 3);
+                DrawRaceEndBanner((g_RaceFadeTimer - 0x14) * 3);
                 DrawFullscreenFadeTile((g_RaceFadeTimer - 0x14) * 3, 0x49);
                 option = 0xF;
             }

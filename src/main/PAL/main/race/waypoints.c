@@ -92,7 +92,7 @@ void DrawFullscreenFadeTile(s32 a, s32 b) asm("func_80033AA0");
 
 void SeedWaypoints(void) asm("func_80037714");
 
-void func_800218A0(s32 a);
+void DrawRaceEndBanner(s32 a) asm("func_800218A0");
 
 void ExitRaceScene(s32 a) asm("func_80035258");
 
@@ -447,7 +447,7 @@ void UpdateWaypointCollectScene(void) {
 
     if (g_RacePhase == 5) {
         if (g_RaceFadeTimer > 0) {
-            func_800218A0(g_RaceFadeTimer * 3);
+            DrawRaceEndBanner(g_RaceFadeTimer * 3);
             DrawFullscreenFadeTile(g_RaceFadeTimer * 3, 0x49);
             x = 6;
         }

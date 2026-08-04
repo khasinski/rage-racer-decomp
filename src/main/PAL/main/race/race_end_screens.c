@@ -28,7 +28,7 @@ void RequestSelectBgmAssets(void) asm("func_80018410");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void func_80021654(void);
 void func_80046A2C(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
-void func_800218A0(s32 arg0);
+void DrawRaceEndBanner(s32 arg0) asm("func_800218A0");
 void ResetCourseProgress(s32 arg0) asm("func_800212F0");
 
 void UpdateBgmTrackCount(void) asm("func_80021540");
@@ -155,7 +155,8 @@ void UpdateLostRaceScreen(void) {
     func_80021654();
 }
 
-void func_800218A0(s32 arg0) {
+void DrawRaceEndBanner(s32 arg0) asm("func_800218A0");
+void DrawRaceEndBanner(s32 arg0) {
     if (arg0 >= 256) {
         arg0 = 0xFF;
     }
@@ -168,7 +169,7 @@ void EnterRaceEndScreen(void) {
     g_FrameSyncThreshold = 0x80;
     g_SceneId = 0x10;
     g_SceneTimer = 0x22B;
-    func_800218A0(0x22B);
+    DrawRaceEndBanner(0x22B);
 }
 
 void UpdateRaceEndScreen(void) asm("func_80021964");
@@ -184,5 +185,5 @@ void UpdateRaceEndScreen(void) {
         ResetCourseProgress(g_GrandPrixClass);
         g_SceneId = 6;
     }
-    func_800218A0(g_SceneTimer);
+    DrawRaceEndBanner(g_SceneTimer);
 }

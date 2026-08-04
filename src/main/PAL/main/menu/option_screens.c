@@ -58,7 +58,7 @@ extern s32 g_CameraCarIndex asm("D_8009E66C");
 extern s32 g_BgmSelectStep;
 extern u8 g_TextNowLoading[] asm("D_80011010");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void func_80025940(void);
+void InitTrackScene(void) asm("func_80025940");
 void func_80016EA0(s32 a0, s32 a1, void *a2, s32 a3);
 void InstallCourseAssets(void) asm("func_80019730");
 void RequestTrackDataAssets(void) asm("func_80019844");
@@ -297,7 +297,8 @@ void UpdateOptionScene(void) {
     DrawOptionSceneOverlay();
 }
 
-void func_80025940(void) {
+void InitTrackScene(void) asm("func_80025940");
+void InitTrackScene(void) {
     InitRenderState(5);
     LoadTrackTexturePageRange();
     InitTrackLighting();
@@ -354,7 +355,7 @@ void func_80025AC8(void) {
         DrawFullscreenFadeTile(v, 0x49);
         if (g_FadeLevel >= 257) {
             SetDispMask(0);
-            func_80025940();
+            InitTrackScene();
             g_FadeStep = 0;
             g_FadeLevel = 0;
             g_BgmSelectStep = 2;
