@@ -12,7 +12,6 @@ extern s16 g_PauseDebounce;
 
 extern s16 g_ReverbZoneDepth;
 
-
 extern u8 g_PlayerCar[];
 
 extern s32 g_PlayerTrackProgress;
@@ -21,17 +20,7 @@ extern s16 g_PlayerTrackSection;
 
 extern s32 g_CameraCarProgressA;
 
-extern s32 g_IsEnvironmentMode4;
-
-
-
-
-
-
 extern s32 g_RacePaused;
-
-
-
 
 void DrawRoundScreen(void);
 
@@ -67,15 +56,7 @@ void UpdatePointAmbience(s32 arg0);
 
 void UpdateZoneAmbience(s32 arg0);
 
-
 void DrawTerrainCells(void);
-
-void DrawSkyBackground(void);
-
-
-
-
-
 
 extern s16 g_PlayerLap;
 

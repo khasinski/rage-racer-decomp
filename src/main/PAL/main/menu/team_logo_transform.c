@@ -728,7 +728,6 @@ extern s32 D_8007FB20;
 void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h);
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
 void DrawLogoRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r, u32 g, u32 b, u8 alpha) asm("DrawSolidRect");
-void AddPrim(void *ot, void *prim);
 
 typedef struct Blob {
     s16 b[33];

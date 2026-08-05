@@ -41,20 +41,13 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
 
 extern s32 g_ModelBankCount;
 
-
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
-
-
-
-
-
 
 extern u32 g_ScratchRenderMode;
 
 /* Counts how many of the 6 waypoint slots are active (active != 0). */
 
 extern s16 g_PlayerLap;
-
 
 void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("QueueDrawModePrim");
 
@@ -64,21 +57,14 @@ void SetShadeTex(u8 *prim, s32 enabled);
 
 void SetSprt(u8 *prim);
 
-
 /* Deliberately raw: set to 1 once g_SceneTimer passes 571 and cleared during
  * race phase 0, but its only reader is the guard on its own write, so it has
  * no effect at all -- and this whole scene is unreachable (names.md 15f). */
 extern s16 D_8009EC88;
 
-
 extern s32 g_PlayerProgressA;
 
 extern s32 g_PlayerProgressB;
-
-
-
-
-
 
 extern s32 g_PlayerTrackProgress;
 
@@ -96,7 +82,6 @@ void DrawRaceEndBanner(s32 a);
 
 void ExitRaceScene(s32 a);
 
-
 void BeginCarStandingStart(void *a);
 
 void RunRaceIntroCamera(void *a);
@@ -111,11 +96,7 @@ void UpdateCamera(s32 a, void *b);
 
 void RequestTrackTexturePage(s32 a);
 
-
-void DrawSkyBackground(void);
-
 void DrawTerrainCells(void);
-
 
 void DrawCourseScenery(s32 a, s32 b, s32 c);
 
@@ -127,13 +108,11 @@ void DrawPlayerTachometer(void);
 
 void UpdateTrackEventSound(s32 a);
 
-
 void PlayCountdownCues(u32 a);
 
 void UpdateWaypoints(void);
 
 void DrawWaypoints(void);
-
 
 /* Two 8-byte { start, end } reverb spans per series (offset = series * 16):
  * inside one of them ApplyTrackReverbZone drives the reverb depth to 0x46,
@@ -148,10 +127,7 @@ extern s32 g_ReverbZoneEnd;
  * registers behind (docs/names.md 31f and 35c).
  */
 
-
-
 s32 rsin(s32 arg0);
-
 
 extern u8 *g_TrackPoints;
 extern s32 g_TrackLength;
@@ -162,7 +138,6 @@ extern s32 FindTrackSegment(u8 *ent, s32 arg);
 extern void SeedCarLapProgress(u8 *ent, s32 arg);
 
 extern void UpdateCarTrackState(u8 *ent, s32 arg, void *arg2);
-
 
 /*
  * Initializes/spawns a route render object `ent`: reads a start entry from the

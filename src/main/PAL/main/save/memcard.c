@@ -199,7 +199,6 @@ extern s32 g_McSwEventError;
 extern s32 g_McSwEventTimeout;
 extern s32 g_McSwEventNew;
 
-
 void OpenMemoryCardEvents(void) {
     EnterCriticalSection();
     g_McHwEventIoe = OpenEvent(0xF4000001, 0x0004, 0x2000, 0);
@@ -418,8 +417,6 @@ extern Rect g_SaveIconRect;
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf();
-void StoreImage(Rect *rect, void *data);
-void DrawSync(long mode);
 
 void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 imageY) {
     u8 *blockReg;
@@ -813,7 +810,6 @@ extern u16 g_NegconNeutralL;
 /* The loader stores a whole word here; the saver reads only the low half
  * as g_BgmSelection. Same address, two widths, so two names. */
 
-
 extern u16 g_ClassRecords[];
 extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[];
@@ -1131,7 +1127,6 @@ s32 LoadSaveStateBlock(u8 *block) {
 #include "game/memcard.h"
 #include "psyq/kernel.h"
 #include "game/menu.h"
-
 
 s32 WriteMemoryCardSaveFile(
     char *path,
@@ -1507,7 +1502,6 @@ void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) {
 }
 
 extern u8 g_McHelpText[];
-
 
 void DrawMemoryCardHelpPrompt(s32 page) {
     s32 i;

@@ -23,8 +23,6 @@ extern s32 g_PadConfigFlipPhase;
 extern char D_80010000[];
 extern char D_80010014[];
 
-extern u8 *g_DrawBuffer;
-
 u8 *DrawLeftArrowWide(
     void *ot,
     u8 *prim,

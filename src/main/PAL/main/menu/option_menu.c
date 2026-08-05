@@ -26,7 +26,6 @@ void StartOptionMenuExit(s32 arg0);
 void DrawOptionRootMenu(void);
 void DrawOptionRootMenu(void);
 s32 Random15(void);
-void PlaySoundCue(s32 cue);
 /* The eleven class icons, tinted by g_ClassRecords[i].place. */
 void DrawClassRecordGrid(void);
 void DrawClassRecordGrid(void);
@@ -341,7 +340,6 @@ void DrawSoundOptionScreen(void) {
     s32 s0;
     s32 s3;
     s32 n;
-
 
     DrawMenuCursorArrow(0x14, (g_SoundOptionCursor * 32) + 56);
     color = 0x7F;

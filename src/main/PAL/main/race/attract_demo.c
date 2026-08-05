@@ -6,7 +6,6 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
-void UpdateAttractCars(void);
 
 extern s32 g_BgmSelectStep;
 extern void (*g_BgmSelectSteps[])(void);
@@ -14,7 +13,6 @@ extern s32 g_ImageBlockBuffer;
 extern s32 g_FrameSyncThreshold;
 extern s32 g_AttractDemoStep;
 void UploadImageAsset(void *arg0);
-void InstallCourseAssets(void);
 s32 RequestTrackDataAssets(void);
 extern s16 g_AttractTitleDelays[];
 s32 GetAttractTitleFade(s32 arg0);
@@ -48,7 +46,6 @@ void ReturnToTitleScene(void);
 s32 CycleAttractCameraCar(u32 arg0, s32 arg1);
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
-void DrawSkyBackground(void);
 void DrawTerrainCellsWide(void);
 void DrawCourseScenery2(u32 arg0, u32 arg1);
 

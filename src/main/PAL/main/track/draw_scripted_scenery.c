@@ -108,7 +108,6 @@ extern s16 g_PathSceneryRotZ;
 extern s32 g_PlayerCar;
 extern s32 g_PlayerCarY;
 extern s32 g_PlayerCarZ;
-extern s16 g_RacePhase;
 
 /*
  * The position and rotation cursors are the same interleaved eight-halfword

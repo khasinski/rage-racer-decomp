@@ -8,9 +8,7 @@ extern s32 g_PlayerCar;
 
 extern s32 g_PlayerTrackPoint;
 
-
 extern s32 g_ReplayReadCursor;
-
 
 extern s32 g_Car0TrackPoint;
 
@@ -21,9 +19,6 @@ void SeedCarLapProgress(void *arg0, s32 arg1);
 void AccumulateLapProgress(void *arg0);
 
 s32 FindTrackSegment(void *arg0, s32 arg1);
-
-
-void InitShuttleScenery(void);
 
 extern s16 g_PlayerTrackSection;
 
@@ -36,15 +31,11 @@ typedef struct TrackZone {
     s16 value;
 } TrackZone;
 
-
-
-
 extern s16 g_TrackZoneCode;
 
 extern s16 g_ReverbZoneDepth;
 
 extern s16 g_TrackZoneDark;
-
 
 extern u8 g_MsgGameExit;
 
@@ -54,25 +45,11 @@ void SetReverbDepth(s32 arg0, s32 arg1);
 
 void RequestSelectBgmAssets(void);
 
-
-
-
-
 extern s16 g_PlayerLap;
-
-
-
-
-
-
-
-
 
 extern s32 g_LapCount;
 
 extern s32 g_BestLapThisRace;
-
-
 
 extern s32 g_SectorEndDistance[];
 

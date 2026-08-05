@@ -15,8 +15,6 @@ extern SpuMallocEntry *_spu_memList;
 #define BLK_IS_END(i) (BLK(i)->addr & 0x40000000)
 
 long SpuInitMalloc(long arg0, u_long *arg1);
-long SpuMalloc(long size);
-void _spu_gcSPU(void);
 void SpuFree(u_long arg0);
 
 long SpuInitMalloc(long arg0, u_long *arg1) {

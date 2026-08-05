@@ -11,9 +11,7 @@ extern Vec4 g_StaticSceneryPos;
  * g_HighClassSceneryYaw is the same field of the record at 0x8007E350. */
 extern s32 g_StaticSceneryYaw;
 extern u32 *g_VisibleCellMask;
-extern s32 g_IsEnvironmentMode4;
 extern s32 g_CourseModelCount;
-
 
 static inline void ClearScratchRenderMode3DF68(void) {
     *(s32 *)0x1F800084 = 0;
@@ -307,7 +305,6 @@ extern Vec4 g_FlybySceneryPosRec;
 extern s32 g_FlybySceneryRotX;
 extern s32 g_FlybySceneryRotY;
 extern s32 g_FlybySceneryRotZ;
-extern s32 g_RaceSeries;
 extern s32 g_PlayerCar;
 extern s32 g_PlayerCarY;
 extern s32 g_PlayerCarZ;

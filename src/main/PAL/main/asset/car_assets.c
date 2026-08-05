@@ -3,7 +3,6 @@
 #include "game/asset.h"
 #include "game/car.h"
 void InitSequenceAudio(void);
-s32 LoadAsset(s32 assetIndex, void *dst);
 
 extern u32 g_CarModelSlot;
 extern GameCarModelAsset *g_CarModelAsset;
@@ -25,7 +24,6 @@ void ApplyBodyColor2(s32 arg0, s32 arg1);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 PollAudioSlotLoad(void);
 extern s32 g_PendingCarModelIndex;
-void ServiceAssetLoad(void);
 
 s32 RequestCarSelectAssets(void) {
     if (g_AssetLoadState != 0) {

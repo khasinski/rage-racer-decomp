@@ -19,7 +19,6 @@ extern Matrix g_SceneColorMatrix;
 extern Matrix g_DefaultColorMatrix;
 extern Matrix g_SceneLightMatrix;
 extern Matrix g_DefaultLightMatrix;
-void SetColorMatrix(void *m);
 extern s32 g_FrameSyncThreshold;
 extern s32 g_ImageBlockBuffer;
 extern s32 g_OptionLetterboxHeight;

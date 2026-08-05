@@ -203,7 +203,6 @@ static __inline__ s32 GameDrawSlidingSprite(
     return y;
 }
 
-s32 DrawCourseSelectScreen(s32 step);
 s32 DrawCourseSelectScreen(s32 step)
 {
     void *otBase;
@@ -469,8 +468,6 @@ s32 CanSelectPrevCourse(void) {
     }
     return v1 < g_CourseIndex;
 }
-
-s32 CanSelectNextCourse(void);
 
 s32 CanSelectNextCourse(void) {
     s32 limit;
@@ -919,7 +916,6 @@ void UpdateCourseSelectScreen(void) {
 
 extern s32 D_8009B2C4;
 
-s32 DrawRankingScreen(s32 step);
 s32 DrawRankingScreen(s32 arg0) {
     s32 value;
 

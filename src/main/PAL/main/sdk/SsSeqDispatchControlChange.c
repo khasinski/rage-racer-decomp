@@ -4,8 +4,6 @@ extern SeqStruct *g_SndSeqTable[];
 
 void ContDataEntry(short seq, short sep, u_char value);
 void SsSeqIndexChannel(long channel, short vab, u_char prog, short volume, long pan);
-void SpuVmDamperOff(void);
-void SpuVmDamperOn(void);
 void SsSeqSetPortamento(short seq, short sep, u_char value);
 
 void SsSeqDispatchControlChange(short seq, short sep, long arg2) {

@@ -84,9 +84,6 @@ void EnterTitleScreen(void) {
     DrawPressStartPrompt();
 }
 
-
-extern u8 *g_DrawBuffer;
-
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
 
 /* Full-width grey box over the title screen at OT slot 0x29; the caller

@@ -3,7 +3,6 @@
 void SetTile(void *arg0);
 
 void SetDrawArea(void *packet, void *rect);
-void AddPrim(void *ot, void *prim);
 
 void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     void *otReg;
@@ -65,7 +64,6 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
 }
 
 void SetSprt(void *arg0);
-void AddPrim(void *ot, void *prim);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) {
@@ -189,7 +187,6 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
 }
 
 void SetPolyF4(void *arg0);
-void AddPrim(void *ot, void *prim);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
@@ -253,8 +250,6 @@ void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 
 
     *(POLY_F4 **)0x1F800000 = prim;
 }
-
-void SetPolyFT4(void *prim);
 
 /*
  * Packs a POLY_FT4 (textured quad) at the scratchpad cursor and links it into
@@ -417,7 +412,6 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
 }
 
 void SetLineF3(void *arg0);
-void AddPrim(void *ot, void *prim);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {

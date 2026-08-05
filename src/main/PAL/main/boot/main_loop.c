@@ -12,9 +12,6 @@ void TickCdAudio(void);
 void RequestBootAssets(void);
 void InitCdAudio(void);
 void InitAssetSystem(void);
-void InitSaveDefaults(void);
-
-void MainLoop(void);
 
 void ResetGraph(s32 arg0);
 void SetGraphDebug(s32 arg0);

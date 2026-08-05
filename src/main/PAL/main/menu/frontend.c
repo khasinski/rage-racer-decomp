@@ -223,9 +223,6 @@ extern u8 D_801C0690[];
 extern u16 g_ScreenOffsetX;
 extern u16 g_ScreenOffsetY;
 
-void SetGeomOffset(long ofx, long ofy);
-void SetGeomScreen(long h);
-
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;

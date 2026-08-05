@@ -43,7 +43,6 @@ void InstallTerrainCellData(void *arg0);
 void SetCourseObjects(void *arg0);
 void InstallTrackEventData(void *arg0);
 void SelectTrackCameraTable(void *arg0, s32 arg1);
-s32 EnableCdAudioMode(void);
 extern s32 g_ImageBlockBuffer;
 extern s32 g_AssetBase;
 

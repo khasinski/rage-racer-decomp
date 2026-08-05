@@ -11,8 +11,6 @@ extern u8 g_CdCurrentTrack;
 extern s32 g_CdFadeFrames;
 extern CdlLOC g_CdTrackLocs[];
 
-long CdControl(long com, void *param, long result);
-
 void StepCdTrackRequest(void) {
     s32 state;
     s32 status;

@@ -16,9 +16,7 @@ void StopMemoryCardEvents(void) {
     CloseMemoryCardEvents();
 }
 
-void ClearMemoryCardSwEvents();
 s32 _card_clear(s32 arg0);
-void ClearMemoryCardHwEvents();
 void _card_load(s32 arg0);
 void CardReadAndSetMode(s32 arg0) {
     ClearMemoryCardSwEvents(arg0);

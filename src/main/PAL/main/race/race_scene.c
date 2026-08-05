@@ -7,13 +7,9 @@
 #include "game/cd.h"
 #include "game/car.h"
 void SetLightMatrix(void *arg0);
-void UpdateRaceCars(void);
 void DrawStartCountdown(s32 arg0);
 void InitEffectVoiceRuntime(void);
 void SeekEnvironmentScript(s32);
-
-
-
 
 /* Elements 0, 1 and 2 of g_RefSectorTimes. They CANNOT be spelled
  * g_RefSectorTimes[k] here: with one array symbol GCC 2.6.3 CSEs the base
@@ -23,8 +19,6 @@ void SeekEnvironmentScript(s32);
 extern s32 g_RefSectorTimes;
 extern s32 g_RefSectorTime1;
 extern s32 g_RefSectorTime2;
-
-
 
 extern u8 g_PlayerCar[];
 
@@ -43,30 +37,21 @@ extern s32 g_SeriesCleared;
 /* Rear-view mirror on/off; render/DrawRearViewMirror.c owns it. */
 extern s16 g_MirrorViewEnabled;
 
-
-
-
 extern s32 g_LapCount;
-
 
 extern s32 g_BestLapTimes[][4][2];
 
 extern s32 g_BestSectorTimes[][4][3];
 
-
 extern s32 g_RaceTotalTime;
 
 extern s32 g_BestLapThisRace;
 
-
-
 extern s16 g_RaceCueDelay;
-
 
 extern s32 g_RankingTimes[][4][20];
 
 extern s32 g_RaceCueFlags;
-
 
 void BeginReplay(void);
 
@@ -82,9 +67,6 @@ void SeedFinishCamera(void *arg0);
 
 void UpdateRivalCueGate(void);
 
-
-
-
 void PlaySoundCue(s32 cue);
 
 void ForceAllEffectVoicesEnabled(s32 arg0);
@@ -93,10 +75,7 @@ s32 Random15(void);
 
 extern s16 g_PlayerTrackSection;
 
-
 extern s32 g_CameraViewMode;
-
-
 
 extern s16 g_PauseDebounce;
 
@@ -112,25 +91,19 @@ extern u8 *g_CamRow;
  * never fire. Naming it would invent a feature. */
 extern s16 D_8019C9AC;
 
-
 extern s32 g_TrackWalkStart;
 
 extern s32 g_BgmTrack;
 
-
-
 /* Deliberately raw: written zero at race init and read nowhere in the image. */
 extern s32 D_801E4248;
-
 
 extern s32 g_RivalCueFlags;
 
 /* Deliberately raw: written zero at race init and read nowhere in the image. */
 extern s16 D_801E4CF8;
 
-
 extern s32 g_SectorEndDistance[];
-
 
 extern s16 g_RivalCueCooldown0;
 
@@ -141,7 +114,6 @@ extern s16 g_RivalCueCooldown2;
 extern s16 g_RivalCueCooldown3;
 
 extern u8 g_MsgGame0Ok[];
-
 
 void InitRenderState(s32);
 
@@ -159,14 +131,11 @@ void BuildStartingGrid(void);
 
 void ResetMirrorState(void);
 
-
 void BuildTileStrips(void);
 
 void BuildRaceHudPrims(s32);
 
 void ResetFreeLookCamera(void);
-
-void InitShuttleScenery(void);
 
 void SeedFlybyScenery(void);
 
@@ -174,26 +143,17 @@ void SeedRouteScenery(void);
 
 void InitPathScenery(void);
 
-
 void DrawRoundScreen(void);
-
-
 
 extern u8 g_SceneLightMatrix[];
 
 extern s32 g_PlayerTrackProgress;
 
-
 extern s16 g_ReverbZoneDepth;
 
 extern s16 g_CameraCarTrackSection;
 
-extern s32 g_IsEnvironmentMode4;
-
-
 extern u8 g_PadType;
-
-
 
 /* Mask 6 of each row of the live button mapping (see UpdatePlayerCar.c),
  * hence the eight-halfword stride. Holding it while paused, in the chase view
@@ -252,9 +212,6 @@ void DrawTimeRemaining(s32 arg0);
 
 void DrawRacePosition(void);
 
-void DrawWrongWayWarning(void);
-
-
 void DrawRaceOptionMenu(s32 arg0);
 
 void GetTrackZoneBlend(s32 arg0);
@@ -263,9 +220,7 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2);
 
 void DrawSplitTimes(void);
 
-
 void UpdateRacePosition(void);
-
 
 void RunRaceIntroCamera(void *arg0, s32 arg1);
 
@@ -287,15 +242,9 @@ void TriggerRaceCues(void);
 
 void PlayCountdownCues(s32 arg0);
 
-
 void DrawTerrainCells(void);
 
-void DrawSkyBackground(void);
-
-
-
 void UpdateCamera(s32 arg0, void *arg1);
-
 
 void SetReverbDepth(s32 arg0, s32 arg1);
 
@@ -304,7 +253,6 @@ void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
 void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateLoadedAudioVoices(s32 arg0, s32 arg1);
-
 
 s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
     s32 value;

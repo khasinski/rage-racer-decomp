@@ -58,8 +58,6 @@ u_long DrawSyncCallback(u_long arg0) {
 
 extern char D_80013520[];
 
-void MemFill(u_char *dst, long value, long count);
-
 void SetDispMask(long arg0) {
     u_char *debug = &g_GraphDebug;
     long enable = arg0;
@@ -91,7 +89,6 @@ void SetDispMask(long arg0) {
 extern GpuCallbacks *g_GpuFuncs;
 extern char D_80013534[];
 
-void DrawSync(long mode);
 void DrawSync(long arg0) {
     if (g_GraphDebug >= 2) {
         GPU_printf(D_80013534, arg0);
@@ -156,7 +153,6 @@ void CheckPrim(char *arg0, Rect *rect) {
 
 extern GpuCallbacks *g_GpuFuncs;
 extern char D_8001356C[];
-
 
 void ClearImage(void *rect, u_char r, u_char g, u_char b) {
     CheckPrim(D_8001356C, rect);

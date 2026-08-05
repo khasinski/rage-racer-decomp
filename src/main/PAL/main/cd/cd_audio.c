@@ -21,13 +21,7 @@ extern s32 g_CdFadeFrames;
 extern s32 g_CdTrackEnded;
 extern CdlLOC g_CdTrackLoopPoint[];
 
-long CdControl(long com, void *param, long result);
 long CdReady(long arg0, void *arg1);
-long CdPosToInt_Local(CdlLOC *loc);
-void StepCdTrackRequest(void);
-void StepCdPlayRequest(void);
-void StepCdResumeRequest(void);
-void BuildCdTrackTable(void);
 void SsSetSpuInputAttr_Link(u8 source, u8 field, u8 value) asm("SsSetSpuInputAttr");
 void SsSetSerialVol_Link(u8 source, s16 left, s16 right) asm("SsSetSerialVol");
 

@@ -2,7 +2,6 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 
-
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
 s32 encoded;
     s32 mode;
@@ -131,7 +130,6 @@ extern u16 g_VramHeight;
 extern u8 g_VramWidthTable[];
 extern u8 g_VramHeightTable[];
 
-void MemFill(u_char *dst, long value, long count);
 void GPU_cw(void *arg0);
 s32 Gpu_Reset(s32 arg0);
 

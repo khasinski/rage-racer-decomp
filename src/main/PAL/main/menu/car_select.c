@@ -9,7 +9,6 @@ s32 DrawCustomizeScreen(s32 arg0);
 
 extern u8 *g_CarModelAsset;
 
-
 extern s32 D_8009B2CC;
 extern s32 D_8009B2C8;
 extern s32 g_TimeAttackPlateStep;
@@ -152,7 +151,6 @@ pos:
     }
 }
 
-s32 DrawCarSelectScreen(s32 step);
 s32 DrawCarSelectScreen(s32 arg0) {
     s32 p = (s32) *(void **)0x1F800004;
     u8 *buf = (u8 *)p + 4;
@@ -316,7 +314,6 @@ extern s32 g_MenuPlateCarIndex;
 
 void InstallCarModelSlot(void);
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
-void DrawMenuCarView(void);
 
 void EnterCarSelectScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
@@ -691,7 +688,6 @@ void UpdateCarSelectScreen(void) {
 
 extern s32 D_8009B2D0;
 
-s32 DrawCustomizeScreen(s32 step);
 s32 DrawCustomizeScreen(s32 arg0) {
     s32 value;
 

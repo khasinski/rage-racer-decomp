@@ -7,8 +7,6 @@ s32 GetCarAssetIndex(s32 model, s32 grade);
 /* Progress level needed to buy this model's next grade. */
 s32 GetCarUnlockLevel(s32 model);
 
-extern u8 g_CarModelBaseIndex[];
-extern u8 g_CarModelUnlockBase[];
 extern u32 g_CarImageRect;
 extern u8 D_8019C86C;
 extern u8 D_8009EC94;

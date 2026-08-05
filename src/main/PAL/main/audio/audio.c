@@ -193,16 +193,11 @@ s32 SpuVmDamperStep(void);
 s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("SsVabTransBody");
 s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("SsVabOpenHeadSticky");
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
-s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table);
 s32 CloseAudioSlot(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0);
 void BiosExit(s32 arg0);
-void SsUtReverbOff(void);
 void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
-long SsUtKeyOffV(long voice);
 s32 VSync(s32 mode);
-void SsStopSoundTick(void);
-void SsQuit(void);
 
 extern s32 g_AudioSlotMask;
 extern s32 g_SoundCueBank;
@@ -529,12 +524,8 @@ void SetEffectVolumeSetting(s32 level) {
 
 extern s32 g_StereoOutput;
 void SetCdMixPreset(s32 arg0);
-void SsSetStereo(void);
-void SetStereoOutput(void);
 void SetStereoOutput(void) { g_StereoOutput = 1; SetCdMixPreset(0); SsSetStereo(); }
 
-void SsSetMono(void);
-void SetMonoOutput(void);
 void SetMonoOutput(void) { g_StereoOutput = 0; SetCdMixPreset(1); SsSetMono(); }
 
 extern s32 g_EngineSoundMaxRpm;
@@ -587,8 +578,6 @@ void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
 }
 
 extern s32 g_PanVoiceActive;
-
-long SsUtKeyOffV(long voice);
 
 void ApplyPanVoiceVolume(void) {
     s32 values[2];
@@ -1141,8 +1130,6 @@ typedef struct EffectCueRow {
     s32 cue;
     s32 tone;
 } EffectCueRow;
-
-long SsUtKeyOffV(long voice);
 
 void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     s32 count;
@@ -1699,7 +1686,6 @@ void PlaySoundCue(s32 arg0) {
     }
 }
 
-
 void SsUtPitchBendWide(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend) asm("SsUtPitchBend");
 
 void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
@@ -1745,16 +1731,13 @@ void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
 #include "psyq/snd.h"
 #include "game/car.h"
 
-
 extern s32 g_EngineSoundPosition;
 extern s32 g_EngineSoundBank;
 extern s32 g_SoundSlotActive[];
 extern s32 g_EngineSoundCurves[];
 
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vab_slot);
-void ApplyPanVoiceVolume(void);
 void UpdateBasicEffectVoices(void);
-void UpdateIndexedEffectVoice(void);
 void UpdateEffectVoiceStates(void);
 s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 value = position;
@@ -1883,10 +1866,8 @@ void SetDefaultReverbDepth(void) {
     SetReverbDepth(0x28, 0x28);
 }
 
-extern s32 g_ReverbFadeStep;
 void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
 void SetReverbDepth(s32 arg0, s32 arg1);
-void RefreshSequenceVolumeScale(void);
 void InitSequenceAudio(void) {
     _SsVmInitWide(0);
     SsSetVoiceCount(0x12);
@@ -1969,9 +1950,6 @@ void InitEffectVoiceRuntime(void) {
     SetLoadedTableVolumeScale(g_CarSoundVolumeScales[GetOwnedCarAssetIndex(g_PlayerCarIndex)]);
 }
 
-extern s32 g_ReverbDepthL;
-extern s32 g_ReverbDepthR;
-
 void RestoreReverbDepth(s32 arg0) {
     if (arg0 != 0) {
         SetReverbDepth(g_ReverbDepthL, g_ReverbDepthR);
@@ -1979,8 +1957,6 @@ void RestoreReverbDepth(s32 arg0) {
         SetReverbDepth(0, 0);
     }
 }
-
-long SsUtKeyOffV(long voice);
 
 void ForcePanVoiceEnabled(s32 enabled) {
     s32 values[2];
@@ -2064,9 +2040,7 @@ extern s32 g_IndexedEffectIndexPrev;
 extern s32 g_IndexedEffectPitch;
 extern s32 g_IndexedEffectVolume;
 
-long SsUtKeyOffV(long voice);
 void StartIndexedEffectVoice(s32 arg0);
-void StopIndexedEffectVoice(void);
 
 void ForceBasicEffectVoicesEnabled(s32 enabled) {
     s32 offset;
@@ -2299,7 +2273,6 @@ asm(".globl func_8005E078\n"
 extern s32 g_SoundSlotActive[];
 
 void SetSoundSlotVoicesEnabledWithRegisterArg(void) asm("SetSoundSlotVoicesEnabled");
-void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot);
 
 void ForceSoundSlotVoicePlayback(s32 arg0) {
     s32 saved = arg0;
@@ -2373,8 +2346,6 @@ extern s16 g_VabSlotVoiceTone[];
 extern s32 g_VabSpuAddress[];
 extern s32 g_AudioLoadSlot;
 extern s32 g_AudioSlotMask;
-extern s16 g_SeqHandle;
-extern s32 g_SeqVolumeFadeStep;
 extern s32 g_VabTransferDone;
 extern char g_MsgSeqVabOpenHeadError[];
 extern char g_MsgSeqVabTransBodyError[];
@@ -2383,8 +2354,6 @@ void BiosExit(s32 arg0);
 s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("SsVabTransBody");
 s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("SsVabOpenHeadSticky");
 void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
-
-extern s16 g_VabIds[];
 
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     s32 slotReg = slot;
@@ -2456,8 +2425,6 @@ void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
 
     SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], *(s16 *)((u8 *)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
 }
-
-long SsUtKeyOffV(long voice);
 
 void StopDirectVoice(s32 voice) {
     SsUtKeyOffV((s16)voice);

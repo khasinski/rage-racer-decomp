@@ -10,7 +10,6 @@
 extern s16 g_TrackZoneCode;
 extern Matrix g_SceneColorMatrix;
 extern Matrix D_8007C778;
-void SetColorMatrix(void *m);
 
 /* Darkens the scene colour matrix by GetTrackZoneBlend's 0..0x100 track-zone ramp; RestoreColorMatrix puts it back. */
 void ApplyZoneLighting(s32 a0, Matrix *a1) {
@@ -62,7 +61,6 @@ void ApplyZoneLighting(s32 a0, Matrix *a1) {
 }
 
 extern Matrix g_SceneColorMatrix;
-void SetColorMatrix(void *m);
 /* Puts the unmodified colour matrix back after ApplyZoneLighting. */
 void RestoreColorMatrix(void);
 void RestoreColorMatrix(void) { SetColorMatrix(&g_SceneColorMatrix); }
@@ -73,7 +71,6 @@ extern u8 *g_CourseProgress;
 
 void CloseLoadedAudioSlots(void);
 void UploadImageAsset(s32 arg0);
-void RelocateCarModel(void);
 
 /* Scene 9: finishes the asset load, relocates the car model and derives g_GrandPrixRound. */
 void EnterRoundScreen(void) {
@@ -238,7 +235,6 @@ extern u8 g_BgmShuffleOrder[];
 extern s32 g_BgmTrack;
 
 void PlaySoundCue(s32 cue);
-s32 RequestRaceAssets(void);
 
 /* Scene 10: draws the ROUND screen, takes the BGM choice and starts the race at frame 121. */
 void UpdateRoundScreen(void) {
@@ -297,7 +293,6 @@ extern Matrix g_SceneColorMatrix;
 extern Matrix D_8007C758;
 extern Matrix g_SceneLightMatrix;
 extern Matrix D_8007C778;
-void SetColorMatrix(void *m);
 /* Installs the track colour/light matrices, back and far colours and the fog near distance. */
 void InitTrackLighting(void) {
     g_SceneColorMatrix = D_8007C758;

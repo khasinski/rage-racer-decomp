@@ -3,8 +3,6 @@
 
 extern SeqStruct *g_SndSeqTable[];
 
-void SsSeqSetChannelMode(long seq, long sep, u_char mode);
-
 void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     long seq_raw;
     long sep_raw;

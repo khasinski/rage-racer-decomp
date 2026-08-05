@@ -18,8 +18,6 @@ typedef struct Obj {
 extern Obj *g_CourseObjects;
 extern s32 g_CourseObjectCount;
 extern s32 *g_VisibleCellMask;
-extern s32 g_IsEnvironmentMode4;
-
 
 /*
  * Draw loop over the world-object array g_CourseObjects (g_CourseObjectCount entries). For

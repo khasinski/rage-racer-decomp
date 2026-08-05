@@ -4,7 +4,6 @@
 #include "psyq/gpu.h"
 #include "game/audio.h"
 #include "psyq/snd.h"
-void UpdateSequenceFadeOut(void);
 void DrawCarSpecGraph(s32, s32);
 
 extern s32 D_8009B348;
@@ -23,7 +22,6 @@ extern u8 g_MenuHintBarScript;
 extern s32 g_MenuHintBarProgress;
 extern s32 g_MenuHintButtonsVisible;
 extern u8 g_PadType;
-
 
 void GameDrawSolidRectWide(void *, s32, s32, s32, s32, s32, s32, s32, s32) asm("DrawSolidRect");
 s32 RunTimedDrawScript(void *, void *);
@@ -92,7 +90,6 @@ void UpdateMenuMode(void) {
 
 extern s32 g_SeqVolumeFadeStep;
 void SpuVmDamperStep(void);
-void SsSeqCalledTbyT(void);
 void TickSequenceAudio(void) {
     if (g_SceneId == 0xC) {
         SpuVmDamperStep();
@@ -148,10 +145,6 @@ extern s32 g_ReverbDepthR;
 extern s32 D_801E6D80;
 extern s32 g_EngineSoundCurves[];
 extern s32 g_EngineSoundMaxRpm;
-
-void SetLoadedTableVolumeScale(s32 scale);
-s32 SetSoundToneTableEntry(s32 row, s32 bank, s32 value);
-void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot);
 
 void LoadAudioParameterTable(u16 *table) {
     u16 *tableReg = table;

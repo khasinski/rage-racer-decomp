@@ -28,8 +28,6 @@ extern s32 D_8019C7E4;
 extern s32 g_VisibleCellList;
 extern s32 D_8009E888;
 extern s32 g_MirrorPanelY;
-void SetGeomOffset(long ofx, long ofy);
-void SetGeomScreen(long h);
 
 /*
  * Sets up the scratchpad render state (0x1F800000) for the rear-view mirror
@@ -115,9 +113,6 @@ extern s32 g_VisibleCellMask;
 extern s32 D_8019C86C;
 extern s32 g_VisibleCellList;
 extern s32 D_8009EC94;
-
-void SetGeomOffset(long ofx, long ofy);
-void SetGeomScreen(long h);
 
 /*
  * Sibling of BeginMirrorPass: closes the mirror pass and restores the full-screen
@@ -209,7 +204,6 @@ extern s32 g_MirrorPanelY;
 extern s32 g_VisibleCellList;
 
 u8 *DrawMirrorFrame(u8 *packet);
-void DrawSkyBackground(void);
 void AddPrim(void *ot, void *prim);
 void BuildVisibleCells(s32 arg0, s32 arg1);
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2);

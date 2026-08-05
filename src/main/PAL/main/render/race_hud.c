@@ -3,7 +3,6 @@
 #include "psyq/gpu.h"
 #include "game/race.h"
 
-void AddPrim(void *ot, void *prim);
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
 
 void DrawRaceHudLabels(s32 arg0) {
@@ -32,7 +31,6 @@ void DrawRaceHudLabels(s32 arg0) {
     scratch = (void **)0x1F800000;
     *scratch = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, *scratch, 9);
 }
-
 
 /*
  * Packs a TILE (SetTile + AddPrim) at `prim`, links it into `ot` and returns

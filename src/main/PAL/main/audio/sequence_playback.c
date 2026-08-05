@@ -3,11 +3,9 @@
 
 extern s16 g_SeqHandle;
 void SsSeqPlay(s32 arg0, s32 arg1, s32 arg2);
-void PlaySequence(void);
 void PlaySequence(void) { SsSeqPlay(g_SeqHandle, 1, 0); }
 
 void SsSeqStop(s32 arg0);
-void StopSequence(void);
 void StopSequence(void) { SsSeqStop(g_SeqHandle); }
 
 extern s32 g_ReverbFadeStep;
@@ -24,7 +22,6 @@ extern s32 g_SeqVolume;
 
 void SetReverbDepth(s32 arg0, s32 arg1);
 void SetSequenceVolume(s32 arg0);
-void StopSequence(void);
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateSequenceFadeOut(void) {

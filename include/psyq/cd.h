@@ -84,7 +84,10 @@ typedef struct CdSearchDirEntry {
     u_char name[0x24];
 } CdSearchDirEntry;
 
+/* Returns the human-readable name for CD command `cmd`, or a default string if
+ * out of range. */
 char *CdComstr(long cmd);
+/* Returns the human-readable name for CD interrupt code `intr`. */
 char *CdIntstr(long intr);
 long CdSetDebug(long level);
 void CdFlush(void);
@@ -92,6 +95,7 @@ long CdInit(void);
 long CdStatus(void);
 u_char CdMode(void);
 u_char CdLastCom(void);
+/* Returns the last reported disc position. */
 CdlLOC *CdLastPos(void);
 CdlLOC *CdIntToPos(long i, CdlLOC *p);
 long CdPosToInt_Local(CdlLOC *loc);

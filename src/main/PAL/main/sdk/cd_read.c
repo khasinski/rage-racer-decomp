@@ -1,7 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-long CdControl(long com, void *param, long result);
 void CdRead(long arg0, void *arg1, long arg2);
 long CdReadSync(long arg0, long arg1);
 

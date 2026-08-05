@@ -12,8 +12,6 @@ extern s32 g_RouteSceneryRotX;
 extern volatile s32 g_RouteSceneryRotY;
 extern s32 g_RouteSceneryRotZ;
 
-
-
 void DrawRouteScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
@@ -87,8 +85,6 @@ extern SVec g_ShuttlePathAngles[];
 #define PATH(byteOffset) (*(ShuttlePath *)((u8 *)g_ShuttlePathPoints + (byteOffset)))
 #define ANGLES(byteOffset) (*(SVec *)((u8 *)g_ShuttlePathAngles + (byteOffset)))
 extern s16 g_ShuttlePathDwellMax[];
-
-void InitShuttleScenery(void);
 
 void InitShuttleScenery(void) {
     GameShuttleScenery *state;

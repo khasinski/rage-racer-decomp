@@ -11,8 +11,6 @@
 #include "game/asset.h"
 #include "psyq/cd.h"
 
-void CdReadBreak(void);
-long CdControl(long com, void *param, long result);
 extern char g_MsgNowLoading[];
 extern char g_MsgReadBytes[];
 extern char g_MsgFileReadError[];

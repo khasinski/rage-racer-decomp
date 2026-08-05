@@ -10,7 +10,6 @@
 
 extern s32 D_8007FB40;
 extern s32 D_8007FB44;
-extern s32 g_MenuAltLayout;
 
 void GameDrawTexturedQuadWide() asm("GameDrawTexturedQuad");
 
@@ -155,7 +154,6 @@ typedef struct UVec {
 
 extern SVec D_80011A48[];
 extern s32 D_8007FB48;
-
 
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     SVec verts[4];
@@ -320,7 +318,6 @@ extern Matrix g_SceneColorMatrix;
 extern Matrix D_80082DFC;
 extern Matrix g_SceneLightMatrix;
 extern Matrix D_80082E1C;
-void SetColorMatrix(void *m);
 
 /* The menu-mode twin of InitTrackLighting. */
 void InitMenuLighting(void) {
@@ -377,16 +374,6 @@ extern s32 g_DesignModeOption;
 extern s32 D_801E4D74;
 
 void InitRenderState(s32);
-s32 DrawCourseSelectScreen(s32 step);
-s32 DrawRankingScreen(s32 step);
-s32 DrawCarSelectScreen(s32 step);
-s32 DrawCustomizeScreen(s32 step);
-s32 DrawDesignModeScreen(s32 step);
-s32 DrawTeamLogoScreen(s32 step);
-s32 DrawLogoSampleScreen(s32 step);
-s32 DrawTeamNameScreen(s32 step);
-s32 DrawPaintColorScreen(s32 step);
-u32 DrawEngineerShopScreen(s32 step);
 void DrawCarSpecGraph(s32);
 void DrawMenuLightBurst(s32);
 

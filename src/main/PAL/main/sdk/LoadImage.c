@@ -134,9 +134,6 @@ void *ClearOTagR(u_long *arg0, long arg1) {
 
 extern GpuCallbacks *g_GpuFuncs;
 
-/* libgpu DrawPrim: waits for the drawing to finish, then pushes the single
- * primitive at arg0 + 4, whose word count is the tag's length byte arg0[3]. */
-void DrawPrim(u_char *prim);
 void DrawPrim(u_char *arg0) {
     u_long mode = arg0[3];
 

@@ -24,7 +24,6 @@ extern void DrawTeamLogoCanvas(s32, s32);
 extern void RampTeamLogoCanvas(s32, s32);
 extern void DrawLogoSamplePanel(s32, s32);
 extern void DrawFadingMenuSprites(s32, s32, s32);
-void PlaySoundCue(s32 cue);
 
 void UpdateLogoSampleScreen(void) {
     s32 v0;
@@ -176,7 +175,6 @@ void UpdateLogoSampleScreen(void) {
 
 extern s32 D_8009B2E0;
 
-s32 DrawTeamNameScreen(s32 step);
 s32 DrawTeamNameScreen(s32 arg0) {
     s32 value;
 
@@ -304,7 +302,6 @@ pop:
 
 extern s32 D_8009B2E4;
 
-s32 DrawPaintColorScreen(s32 step);
 s32 DrawPaintColorScreen(s32 arg0) {
     s32 value;
 
@@ -334,7 +331,6 @@ extern s32 D_80082EB4;
 extern u8 D_80082010;
 extern s32 D_801F17A0;
 
-void DrawMenuCarView(void);
 s32 DrawPaintColorPalette(void *, s32, s32);
 void DrawBrowseArrows(s32, s32, s32, s32);
 void DrawFadingMenuSprites(s32, s32, s32);
@@ -466,7 +462,6 @@ extern s32 D_8009B2E8;
 
 void DrawCarEngineSpec(s32 arg0, s32 arg1, s32 arg2);
 
-s32 DrawCarShopScreen(s32 step);
 s32 DrawCarShopScreen(s32 arg0) {
     s32 value;
     s32 limit;

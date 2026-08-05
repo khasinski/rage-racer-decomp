@@ -1,8 +1,6 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
-long GetGraphType(void);
-
 
 void LoadImage(Rect *rect, void *data);
 long GetTPage(long arg0, long arg1, long arg2, long arg3);
@@ -64,7 +62,6 @@ long LoadClut(void *arg0, long arg1, long arg2) {
     LoadImage(&rect, arg0);
     return GetClut(arg1, arg2) & 0xFFFF;
 }
-
 
 /* Fills the 0x1C-byte DRAWENV head. */
 void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) {

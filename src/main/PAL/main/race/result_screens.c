@@ -44,7 +44,6 @@ void UpdateCamera(s32 arg0, void *arg1);
 void DrawTerrainCellsWide(void);
 void DrawPlayerCarOnly(void);
 void DrawCourseScenery2(s32 arg0, s32 arg1);
-void DrawSkyBackground(void);
 void DrawReplayBadge(void);
 void SetTrackTexturePageNow(s32 arg0);
 void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
@@ -78,7 +77,6 @@ extern GrandPrixIntroLayout g_ResultPlaceSprites[];
 extern GrandPrixIntroPosition g_ClassPlaceBarSizes[];
 
 void LibcSprintf(void *dst, void *fmt, ...);
-void DrawResultScreen(void);
 void *FormatLapTime(void *dst, s32 value);
 
 void DrawSeriesClearedWash(s32 x, s32 y) {

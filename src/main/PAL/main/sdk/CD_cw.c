@@ -3,8 +3,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-
-
 extern CdCallback g_CdSyncCallback;
 extern CdCallback g_CdReadyCallback;
 extern long g_CdDebugLevel;
@@ -33,7 +31,6 @@ extern char D_800138C8[];
 void LibcPutString(char *text);
 long CdReadInterruptStatus(void);
 long CD_sync(long mode, u_char *result);
-void CD_flush(void);
 long VSync(long mode);
 long GetKernelStatus(void);
 

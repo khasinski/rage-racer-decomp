@@ -1,11 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-long CdStatus(void);
-u_char CdMode(void);
-u_char CdLastCom(void);
-CdlLOC *CdLastPos(void);
-
 u_long DeliverEvent[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
@@ -34,8 +29,6 @@ u_char CdLastCom(void) {
     return g_CdLastCommand;
 }
 
-/* CdLastPos: returns the last reported disc position. */
-CdlLOC * CdLastPos(void);
 CdlLOC *CdLastPos(void) {
     return &g_CdLastPos;
 }

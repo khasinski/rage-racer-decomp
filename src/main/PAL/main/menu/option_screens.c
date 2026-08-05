@@ -45,7 +45,6 @@ void LoadTrackTexturePageRange(void);
 void InitTrackLighting(void);
 void BuildStartingGrid(void);
 void SetTrackTexturePageNow(s32 arg0);
-void InitShuttleScenery(void);
 extern s32 g_FrameSyncThreshold;
 extern s32 g_BgmSelectCursor;
 extern s32 g_BgmSelectShowUi;
@@ -59,7 +58,6 @@ extern s32 g_BgmSelectStep;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void InitTrackScene(void);
-void InstallCourseAssets(void);
 void RequestTrackDataAssets(void);
 void UpdateOptionSceneFade(void);
 

@@ -3,8 +3,6 @@
 #include "game/audio.h"
 #include "game/menu.h"
 
-void DrawNegconMaxTwistScreen(void);
-
 /*
  * Four {u, v} texel pairs copied into a local that is never read back; see
  * DrawNegconMaxTwistScreen for why this is spelled as a struct copy.

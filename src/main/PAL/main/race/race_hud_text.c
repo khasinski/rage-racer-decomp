@@ -16,7 +16,6 @@
  * each writer touches; the separators are never rewritten. */
 extern u8 g_TimeTextBuffer[];
 
-
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     s32 savedX;
     register s32 savedY asm("$10");
@@ -105,7 +104,6 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
 extern s32 g_FrameParity;
 
 void SetDrawArea(void *packet, void *rect);
-void AddPrim(void *ot, void *prim);
 
 void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     void *oldPacket;
@@ -129,8 +127,6 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
  * the strip renders is still unestablished -- see docs/names.md 15g. */
 extern u8 *g_TileStripBuffers[2];
 extern u8 g_TileStripStorage[];
-
-void DrawSync(long mode);
 
 void BuildTileStrips(void) {
     u8 **initBuffers;

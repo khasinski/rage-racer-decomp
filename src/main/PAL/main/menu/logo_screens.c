@@ -40,12 +40,10 @@ void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawTeamLogoCanvas(s32 arg0, s32 arg1);
 void RampTeamLogoCanvas(s32 arg0, s32 arg1);
-void UpdateTeamLogoCanvas(void);
 void DrawLogoSamplePanel(s32 arg0, s32 arg1);
 void PlaySoundCue(s32 cue);
 void LoadImage(Rect *rect, void *data);
 
-void UpdateTeamLogoScreen(void);
 void UpdateTeamLogoScreen(void)
 {
   void *ot;
@@ -292,7 +290,6 @@ void UpdateTeamLogoScreen(void)
 
 extern s32 D_8009B2DC;
 
-s32 DrawLogoSampleScreen(s32 step);
 s32 DrawLogoSampleScreen(s32 arg0) {
     s32 value;
 

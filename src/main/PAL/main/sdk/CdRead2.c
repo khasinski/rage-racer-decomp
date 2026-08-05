@@ -1,8 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
-void StCdInterrupt(void);
-
 
 extern long g_StBackFrame;
 extern u_char g_StBackLoc[];
@@ -25,7 +23,6 @@ extern long g_StCopySource;
 extern long g_StRingSize;
 extern long g_StInterruptPending;
 
-long CdControl(long com, void *param, long result);
 void CdDataCallback(long arg0);
 void CdRead2Callback(void);
 void data_ready_callback(void);

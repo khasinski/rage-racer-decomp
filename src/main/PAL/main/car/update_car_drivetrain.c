@@ -5,7 +5,6 @@
 #include "game/render.h"
 
 void UpdateCarDriving();
-void UpdateCarLaunch();
 void UpdateCarAirborne();
 void UpdateCarStandingStart();
 s32 rsin(s32);

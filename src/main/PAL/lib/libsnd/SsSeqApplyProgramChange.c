@@ -1,6 +1,5 @@
 #include "psyq/snd.h"
 
-
 extern SeqStruct *g_SndSeqTable[];
 
 void SsSeqApplyProgramChange(long seq, long sep) {
@@ -11,7 +10,6 @@ void SsSeqApplyProgramChange(long seq, long sep) {
     SpuVmApplyPitchBendByTone(((short)sep << 8) | (short)seq, state->unk4c, *((u_char *)((long)state->channel + (long)state + 0x2C)), *read_pos);
     state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
 }
-
 
 extern SeqStruct *g_SndSeqTable[];
 extern long g_SndTickResolution;
@@ -86,7 +84,6 @@ void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
     }
 }
 
-
 extern SeqStruct *g_SndSeqTable[];
 
 long SsSeqReadDeltaTime(long arg0, long arg1);
@@ -123,7 +120,6 @@ long SsSeqReadDeltaTime(long arg0, long arg1) {
     return ret;
 }
 
-
 void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out);
 
 void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out) {
@@ -137,9 +133,6 @@ void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out) {
     out[3] = (arg1 >> 6) & 0x7F;
     out[4] = arg1 & 0x1F;
 }
-
-
-void SsPackAdsr(u_short *in, u_short *out0, u_short *out1);
 
 void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
     u_long mask = 0xFFFF8000;
@@ -183,7 +176,6 @@ void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
     word1 = tmp | tmp2;
     *out1 = word1;
 }
-
 
 extern SeqStruct *g_SndSeqTable[];
 

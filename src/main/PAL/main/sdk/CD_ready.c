@@ -3,9 +3,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-
-
-
 extern char *g_CdCommandNames[];
 extern char *g_CdIntrNames[];
 extern CdCallback g_CdSyncCallback;
@@ -25,7 +22,6 @@ extern char D_800138A4[];
 
 void LibcPutString(char *text);
 long CdReadInterruptStatus(void);
-void CD_flush(void);
 long VSync(long mode);
 long GetKernelStatus(void);
 

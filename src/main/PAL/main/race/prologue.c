@@ -7,7 +7,6 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
-void UpdateAttractCars(void);
 
 typedef struct UnkEventPair {
     s16 timer;
@@ -17,7 +16,6 @@ typedef struct UnkEventPair {
 extern s32 g_AttractDemoStep;
 extern u32 g_StreamReturnScene;
 extern void (*g_AttractDemoSteps[])(void);
-void ResetAssetLoader(void);
 void ReturnToTitleScene(void);
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold;
@@ -26,7 +24,6 @@ extern s32 g_PrologueCutIndex;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void InitTrackScene(void);
-void InstallCourseAssets(void);
 void RequestTrackDataAssets(void);
 void UpdatePrologueLoad(void);
 /* Split symbols of the 14-entry prologue table: 8 bytes each, { s16 x,
@@ -45,7 +42,6 @@ void ExitPrologue(void);
 void DrawPrologueText(void);
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
-void DrawSkyBackground(void);
 void DrawTerrainCellsWide(void);
 void DrawCourseScenery2(s32 arg0, s32 arg1);
 

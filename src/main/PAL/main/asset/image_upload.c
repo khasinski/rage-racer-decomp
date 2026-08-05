@@ -4,7 +4,6 @@
 #include "game/asset.h"
 
 void LoadImage(Rect *rect, void *data);
-void DrawSync(long mode);
 
 void UploadImageBlock(void *arg0) {
     GameImageBlock *block;
@@ -74,8 +73,6 @@ extern GpuRectPacked g_TeamLogoClutMoveRect;
 extern u16 g_TeamLogoClut[];
 
 void LoadImage(Rect *rect, void *data);
-void StoreImage(Rect *rect, void *data);
-void DrawSync(long mode);
 
 void StoreTeamLogoImage(void *dst) {
     g_TeamLogoClut[0] = 0x8000;
@@ -89,7 +86,6 @@ void StoreTeamLogoImage(void *dst) {
     DrawSync(0);
     g_TeamLogoClut[0] = 0;
 }
-
 
 void UploadImageAsset(void *arg0);
 

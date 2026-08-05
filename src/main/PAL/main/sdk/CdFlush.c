@@ -8,7 +8,6 @@ extern char *g_CdCommandNames[];
 extern char *g_CdIntrNames[];
 extern u_char D_800136D0[];
 
-void CD_flush(void);
 long CD_sync(long arg0, long arg1);
 long CD_ready(long arg0, long arg1);
 
@@ -23,9 +22,6 @@ long CdSetDebug(long level) {
     return old;
 }
 
-/* CdComstr: returns the human-readable name for CD command `cmd` (or a default
- * string if out of range). */
-char * CdComstr(long cmd);
 char *CdComstr(long cmd) {
     cmd &= 0xFF;
     if ((u_long)cmd >= 0x1C) {
@@ -34,8 +30,6 @@ char *CdComstr(long cmd) {
     return g_CdCommandNames[cmd];
 }
 
-/* CdIntstr: returns the human-readable name for CD interrupt code `intr`. */
-char * CdIntstr(long intr);
 char *CdIntstr(long intr) {
     intr &= 0xFF;
     if ((u_long)intr >= 7) {

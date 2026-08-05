@@ -46,7 +46,6 @@ void DrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
 void DrawMenuAltPanel(s32 arg0, s32 arg1);
 s32 GetOwnedCarAssetIndex(s32 arg0);
-void DrawMenuCarView(void);
 void UpdateCarListCursor(void);
 void PlaySoundCue(s32 cue);
 
@@ -334,7 +333,6 @@ void UpdateCarShopScreen(void) {
 
 extern u32 D_8009B2EC;
 
-u32 DrawEngineerShopScreen(s32 step);
 u32 DrawEngineerShopScreen(s32 arg0) {
     u32 value;
     s32 amount;

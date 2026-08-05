@@ -39,12 +39,9 @@ extern u8 g_EnvSpare;
 
 extern s16 g_EnvLerpFrame;
 extern s16 g_EnvLerpDuration;
-extern s16 g_EnvironmentMode;
 extern s16 g_EnvSpareLerp;
 extern s16 g_EnvSpareFrom;
 extern s16 g_EnvSpareTo;
-extern s32 g_EnvironmentModePrev;
-extern u8 *g_EnvPaletteTable;
 /* The 16-entry sky CLUT staged here and uploaded through the (0xE0, 0x1E6)
  * 16x1 VRAM rect. It MUST keep the raw D_ spelling: LA_ORDERED stringifies the
  * symbol into an inline-asm `la`, which does not follow asm() labels. */
@@ -58,11 +55,7 @@ extern s32 g_FogNear;
  * clamped frame in a1/a2, while the normal update path passes only the cue. */
 void LoadEnvironmentCue();
 void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3);
-/* Deliberately unprototyped: the original passes only the rect and leaves
- * a1 live, so the psyq/gpu.h LoadImage prototype cannot be used here. */
-void LoadImage();
 
-void UpdateEnvironment(void);
 void SeekEnvironmentScript(s32 targetTime) {
     s32 clock;
     u32 count;

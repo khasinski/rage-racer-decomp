@@ -2,11 +2,9 @@
 #include "game/asset.h"
 #include "game/race.h"
 #include "game/state.h"
-s32 LoadAsset(s32 assetIndex, void *dst);
 
 extern GameSceneAssetHeader *g_AssetLoadCursor;
 
-s32 EnableCdAudioMode(void);
 void SetTrackCameraTable(void *arg0);
 void SetEnvPaletteTable(void *arg0);
 void SetEnvironmentScript(void *arg0);
@@ -165,18 +163,10 @@ void BeginEndingFmv(void) {
 
 extern s32 g_PendingCarModelIndex;
 
-void LoadBootAssets(void);
-void LoadSaveScreenAssets(void);
-void LoadSelectBgmAssets(void);
-void LoadCarSelectAssets(void);
 void LoadCarModel(s32);
 void LoadUpgradedCarModel(s32);
-void LoadOptionScreenAssets(void);
-void LoadRoundAssets(void);
-void LoadRaceAssets(void);
 void LoadGrandPrixScreen(void);
 void LoadCourseAssets(void);
-void LoadTrackDataAssets(void);
 
 void ServiceAssetLoad(void) {
     if (g_AssetLoadState != 0) {

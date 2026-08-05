@@ -30,7 +30,6 @@ extern volatile u16 g_DispEnv1H;
 long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1);
 void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3);
 extern char g_MsgFmvDecodeTimeout[];
-long CdControl(long com, void *param, long result);
 s32 VSync(s32 mode);
 s32 CdRead2(s32 arg0);
 extern u8 D_801E8AFC;

@@ -3,7 +3,6 @@
 #include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
-s32 LoadAsset(s32 assetIndex, void *dst);
 
 extern u8 *g_AssetLoadCursor;
 extern Rect g_TeamLogoClutRect;
@@ -15,8 +14,6 @@ void UploadLoadBufferImage(void);
 void InstallResourceData(void *arg0);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, s32 arg3);
 s32 PollAudioSlotLoad(void);
-void StoreImage(Rect *rect, void *data);
-void DrawSync(long mode);
 extern s32 g_ImageBlockBuffer;
 extern GameSceneAssetHeader *g_AssetBase;
 extern void *g_AssetBlockPtr2;

@@ -7,7 +7,6 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-extern GearCurveRow g_GearTorqueCurve[];
 /* The player object shares GameCarRuntime's 0x19C-byte footprint, but several
  * fields have player-only meanings.  Keep this file-local view for the init
  * sequence while using the shared GameCarDrive view for the +0xBC block. */
@@ -609,7 +608,6 @@ void UpdateCarBodyRoll(A *ctx) {
     }
 }
 
-
 /*
  * Point-in-quad test: returns 1 if point `pt` is inside the quad with corners
  * p0,p1,p3,p2 (four chained half-plane sign checks via NormalClip), else 0.
@@ -669,19 +667,13 @@ typedef struct CollisionContext
 /* GCC 2.6.3 lays the separately named geometry locals out as this context.
  * The typed view gives the three point-test passes one in-bounds coordinate
  * system and names the final collision-response delta at the same location. */
-extern s16 g_GrandPrixMode;
 extern GameCarRuntime g_Cars[];
 extern u16 D_8007DA88[];
 extern u16 D_8007DA8A[];
 extern u16 D_8007DAA0[];
 extern u16 D_8007DAA2[];
-extern s32 g_TrackLength;
 extern s16 g_DragScale;
-extern s16 g_RacePhase;
-extern s32 g_MirrorMode;
 extern s16 g_GripLossTimer;
-extern s32 g_RaceSeries;
-extern s16 g_WrongWayTimer;
 s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void PlaySoundCue(s32 id);
