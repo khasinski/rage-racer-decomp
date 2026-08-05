@@ -10,7 +10,7 @@ void UpdateAttractCars(void);
 
 extern s32 g_BgmSelectStep;
 extern void (*g_BgmSelectSteps[])(void) asm("D_8007D6B8");
-extern s32 g_ImageBlockBuffer asm("D_801E4B30");
+extern s32 g_ImageBlockBuffer;
 extern s32 g_FrameSyncThreshold;
 extern s32 g_AttractDemoStep;
 void UploadImageAsset(void *arg0);
@@ -35,8 +35,8 @@ void func_80046A2C(
     u32 arg12,
     u32 arg13);
 
-extern u32 g_BgmShuffleIndex asm("D_8009E6CC");
-extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
+extern u32 g_BgmShuffleIndex;
+extern u8 g_BgmShuffleOrder[];
 void InitTrackScene(void);
 void AdvanceBgmShuffleBag(s32 arg0);
 void DrawAttractTitle(void);

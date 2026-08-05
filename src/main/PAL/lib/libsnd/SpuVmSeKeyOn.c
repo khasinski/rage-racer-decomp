@@ -36,12 +36,12 @@ typedef struct SvmCurrentAttrKeyOn {
     short tone_index;
 } SvmCurrentAttrKeyOn;
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 extern ProgAtr *g_SndCurrentProgTable;
 extern VabHdr *g_SndCurrentVabHeader;
 extern VagAtr *g_SndCurrentToneTable;
 extern u_char g_SndVoiceCount;
-extern SvmCurrentAttrKeyOn g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttrKeyOn g_SndCurrentAttr;
 extern SpuVoice g_SndVoiceState[];
 
 long SpuVmVSetUp(short vab_id, short program);

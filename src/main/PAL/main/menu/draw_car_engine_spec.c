@@ -20,7 +20,7 @@ typedef struct EngineSpecData {
     s16 unk16;      /* 0x16 */
 } EngineSpecData;
 
-extern EngineSpecData *g_CarModelAsset asm("D_8009E698");
+extern EngineSpecData *g_CarModelAsset;
 extern u8 D_80011B5C[];
 
 void drawSprite(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r,

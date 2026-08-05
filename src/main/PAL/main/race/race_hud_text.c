@@ -422,7 +422,7 @@ extern s16 g_RaceOptionScroll0 asm("D_8007DF30");
 extern s16 g_RaceOptionScroll1 asm("D_8007DF32");
 extern char g_RaceOptionMarquee[4][40] asm("D_8007DF34");
 extern s32 g_RaceOptionPulseAngle asm("D_8007DF2C");
-extern u8 *g_CourseProgress asm("D_8009E67C");
+extern u8 *g_CourseProgress;
 
 s32 rcos(s32 angle) asm("func_80068634");
 u8 *AddTilePrim(

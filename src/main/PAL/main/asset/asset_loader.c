@@ -2,7 +2,7 @@
  * The disc asset loader: open RAGE.BIN, read a numbered asset into the load
  * buffer, and hand out its sub-blocks. SetTrackCameraTable looks like track
  * code from its name but is part of this: it installs sub-block 0 of the
- * loaded .2ND track pack as the CamRow base (D_8019C9A8), and its only callers
+ * loaded .2ND track pack as the CamRow base (g_CamRow), and its only callers
  * are load_track_data_assets.c and race_assets.c. That name is why this unit
  * sat in track/ until 2026-08-03.
  */

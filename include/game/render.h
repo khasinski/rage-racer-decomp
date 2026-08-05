@@ -25,7 +25,7 @@ typedef struct GameRenderAxisMatrix {
 } GameRenderAxisMatrix;
 
 /*
- * Camera / horizon row. Base D_8019C9A8, indexed +8*screen. `horizon` is added
+ * Camera / horizon row. Base g_CamRow, indexed +8*screen. `horizon` is added
  * to / subtracted from a GameRenderObject's y during the view transform.
  */
 typedef struct CamRow {
@@ -61,7 +61,7 @@ typedef struct GameRenderView {
 } GameRenderView;
 
 /*
- * The camera car object at D_801E3E14. Eleven of its words are also declared
+ * The camera car object at g_CameraCar. Eleven of its words are also declared
  * as standalone globals (g_CameraCarY, g_CameraCarAngleY, g_CameraCarSpeed and
  * so on), which is where the names below come from.
  *
@@ -235,7 +235,7 @@ void SetupDisplay480(s32 r, s32 g, s32 b);
 /*
  * Model banks. SelectModelBank points the scratchpad bank cursor
  * (0x1F800050/54/58) and g_ModelBankCount at entry `index` of the registered
- * bank table D_801E41A8; SubmitModel then walks model `index` of that bank
+ * bank table g_ModelBanks; SubmitModel then walks model `index` of that bank
  * into the scratchpad ordering table. The Course variants use the separate
  * course object bank at 0x1F800048 (size g_CourseModelCount); ...2 is the same
  * routine running the second opcode table (jtbl_8007DA64, not jtbl_8007DA54).
@@ -247,13 +247,13 @@ void SubmitModel(void *ctx, s32 index) asm("func_80028DEC");
 void SubmitCourseModel(void *ctx, s32 index) asm("func_800296B4");
 void SubmitCourseModel2(void *ctx, s32 index) asm("func_80029E50");
 
-/* Per-frame draw loop over the world object array D_801E4B2C: culls each entry
+/* Per-frame draw loop over the world object array g_CourseObjects: culls each entry
  * against the visibility bitmask, transforms it and submits its model. */
 void DrawCourseObjects(void);
 
 /*
  * Per-frame environment step: advances the course's environment command script
- * (D_801E40E8), cross-fades the 16-entry sky/fog CLUT between
+ * (g_EnvScriptCursor), cross-fades the 16-entry sky/fog CLUT between
  * g_EnvironmentModePrev and g_EnvironmentMode into VRAM at (0xE0, 0x1E6), and
  * updates the GTE far colour and fog distance. Does not draw anything.
  */
@@ -498,7 +498,7 @@ extern s32 g_FadeStep;
  * Timed draw script: a table of {time, type, arg0, arg1} entries replayed
  * against a progress counter, terminated by time < 0. Element types 0/1/9 draw
  * a sprite, 10/19 a line, 20/29 a triangle and 30/39 a textured quad; the +9
- * variants are skipped while D_8019CB0C is set. Each element interpolates its
+ * variants are skipped while g_MenuAltLayout is set. Each element interpolates its
  * position from a packed s16 velocity pair by (elapsed * velocity) >> 5.
  * Returns 1 once the progress counter has reached the terminator's limit.
  */
@@ -749,7 +749,7 @@ void DrawProportionalText(
     u8 *str,
     u16 clutIndex) asm("func_80016EA0");
 
-/* Loads the GTE light matrix with D_8009E6AC * `view`. */
+/* Loads the GTE light matrix with g_SceneLightMatrix * `view`. */
 void SetGteLightMatrix(Matrix *view);
 /*
  * Per-object GTE setup: writes (object position - camera position) as an
@@ -762,7 +762,7 @@ void SetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) asm("func_8001
 
 /*
  * The environment colour timeline and the sky it feeds. The state is nine
- * 12-byte { cur, from, to } RGB slots at D_801E3FB6 + 0x0C * k - slot 0 the GTE
+ * 12-byte { cur, from, to } RGB slots at g_EnvColors + 0x0C * k - slot 0 the GTE
  * far/fog colour, 1..8 the sky gradient - lerped every frame by UpdateEnvironment.
  */
 /* One packed RGB triple of that timeline. The block starts at 0x801E3FB6, i.e.
@@ -785,7 +785,7 @@ typedef struct GameEnvColorSlot {
  * bytes; g_EnvSpare is its unused fourth byte), [1..8] the sky-gradient bands.
  * Only six are lerped on a given course: [5]/[6] and [7]/[8] are alternates
  * picked by g_CourseIndex == 2. */
-extern GameEnvColorSlot g_EnvColors[9] asm("D_801E3FB6");
+extern GameEnvColorSlot g_EnvColors[9];
 
 /* Jumps that timeline to `time` and applies one frame, then programs
  * SetFarColor + SetFogNear. */
@@ -806,14 +806,14 @@ extern u8 *g_EnvPaletteTable;
 /* g_EnvironmentMode == 4. Picks DrawStaticScenery's model 0x3B over 0x3A
  * and the `flags & 2` prop set over `flags & 1`; also forwarded to scratchpad
  * 0x1F800084 by every car/track renderer. */
-extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
+extern s32 g_IsEnvironmentMode4;
 
 /*
  * Per-view cell culling, rebuilt every frame by BuildVisibleCells and swapped in
  * lockstep for the mirror pass. Per-file types; see docs/names.md 12c.
- *   g_VisibleCellMask  D_801E6828  32 words, mask[sy] |= 1 << sx over the grid
- *   g_VisibleCellList  D_801E4BC8  the matching visible-cell record list
- *   g_SceneLightMatrix D_8009E6AC  assigned from a per-scene constant, then
+ *   g_VisibleCellMask  g_VisibleCellMask  32 words, mask[sy] |= 1 << sx over the grid
+ *   g_VisibleCellList  g_VisibleCellList  the matching visible-cell record list
+ *   g_SceneLightMatrix g_SceneLightMatrix  assigned from a per-scene constant, then
  *                                  combined per object and set with gte_SetLightMatrix
  */
 

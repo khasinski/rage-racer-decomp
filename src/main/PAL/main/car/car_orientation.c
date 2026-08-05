@@ -128,27 +128,27 @@ extern char D_800113F0[];
 extern char D_800113F8[];
 extern char D_80011400[];
 extern char D_80011408[];
-extern s32 D_801F17B8;
-extern s16 D_8019CAB0;
-extern s32 D_801E8AA0;
+extern s32 g_AutoShiftCooldown;
+extern s16 g_TrackZoneDark;
+extern s32 g_ShiftSoundLevel;
 extern s32 D_8007DA78;
-extern s32 D_801E4BF4;
-extern s16 D_8019C798;
-extern s16 D_801E4B90;
+extern s32 g_ShiftTargetRpm;
+extern s16 g_PeakOutputRpm;
+extern s16 g_PeakOutputValue;
 extern s16 D_801E6F18;
 extern s16 D_801E6F1A;
-extern s16 D_801E4114[];
-extern s16 D_801E4154[];
+extern s16 g_TorqueBandEnd[];
+extern s16 g_TorqueLossBandEnd[];
 extern s16 D_8007DAD4[];
-extern s32 D_801E4170;
-extern s32 D_8019CAB4;
+extern s32 g_EngineRpmJitter;
+extern s32 g_EngineRpm;
 extern s32 D_801E4194;
-extern s32 D_8019CA04;
+extern s32 g_StandingStartSpin;
 extern s32 D_8019C998;
-extern u16 D_801E4130;
-extern s16 D_801E4FB4;
-extern s16 D_801F17A4;
-extern s16 D_801E4BA0;
+extern u16 g_HudGlyphClut;
+extern s16 g_DragScale;
+extern s16 g_SteerHoldFrames;
+extern s16 g_GripLossTimer;
 extern s16 D_8019C9AC;
 void BuildTachoNeedleQuad(void);
 void ClearCarMotionState(void *);
@@ -190,9 +190,9 @@ void InitPlayerCar(GameCarRuntime *car)
   g_RaceSeries = value & 1;
   BuildTachoNeedleQuad();
   ClearCarMotionState(car);
-  D_801F17B8 = 0;
-  D_8019CAB0 = 0;
-  D_801E8AA0 = 0;
+  g_AutoShiftCooldown = 0;
+  g_TrackZoneDark = 0;
+  g_ShiftSoundLevel = 0;
   D_8007DA78 = 0;
   player->field_AE = 0x17;
   player->field_CC = 0;
@@ -282,7 +282,7 @@ void InitPlayerCar(GameCarRuntime *car)
   player->field_F0 = 0;
   player->fEC = 1;
   player->fF8 = 0;
-  D_801E4BF4 = 0;
+  g_ShiftTargetRpm = 0;
   drive = (GameCarDrive *)(((u8 *)car) + (divisor = 0xBC));
   DebugPrintf(D_800113C4);
   carSpec = g_PlayerCarInitSpec;
@@ -305,17 +305,17 @@ void InitPlayerCar(GameCarRuntime *car)
     g_GearTorqueCurve[0].values[i] = g_PlayerCarInitSpec->curve[i] / 20;
     if (j < g_GearTorqueCurve[0].values[i])
     {
-      D_8019C798 = i;
+      g_PeakOutputRpm = i;
       j = g_GearTorqueCurve[0].values[i];
     }
   }
 
-  D_801E4B90 = j;
-  peakRpm = g_PlayerCarInitSpec->f40.h[D_8019C798 * 2];
+  g_PeakOutputValue = j;
+  peakRpm = g_PlayerCarInitSpec->f40.h[g_PeakOutputRpm * 2];
   D_801E6F18 = (((s16) peakRpm) - g_PlayerCarInitSpec->redline) / 2;
   revLimitPtr = &g_PlayerCarInitSpec->revLimit;
   D_801E6F1A = ((*revLimitPtr) - ((s16) peakRpm)) / 2;
-  D_8019C798 = peakRpm;
+  g_PeakOutputRpm = peakRpm;
   DebugPrintf(D_800113D4);
   DebugPrintf(D_800113DC, g_PlayerCarInitSpec->topGear);
   for (j = 0; j < 6; j++)
@@ -338,10 +338,10 @@ void InitPlayerCar(GameCarRuntime *car)
   }
   DebugPrintf(D_800113E0);
   curveSpec = g_PlayerCarInitSpec;
-  accelBand = D_801E4154;
+  accelBand = g_TorqueLossBandEnd;
   speedBandOffset = 0;
   speedThreshold = 0x3E8;
-  torqueBand = D_801E4114;
+  torqueBand = g_TorqueBandEnd;
   do
   {
     for (i = 0; i < 16; i++)
@@ -379,22 +379,22 @@ void InitPlayerCar(GameCarRuntime *car)
   player->field_98 = 0;
   drive->unk9E = 0;
   drive->unk9C = 0;
-  D_801E4170 = 0;
-  D_8019CAB4 = 0;
+  g_EngineRpmJitter = 0;
+  g_EngineRpm = 0;
   D_801E4194 = 0;
-  D_8019CA04 = 0;
+  g_StandingStartSpin = 0;
   D_8019C998 = 0;
   if (drive->manual != 0)
   {
-    D_801E4130 = 0x7800;
+    g_HudGlyphClut = 0x7800;
   }
   else
   {
-    D_801E4130 = 0x78CF;
+    g_HudGlyphClut = 0x78CF;
   }
-  D_801E4FB4 = 0x3E8;
-  D_801F17A4 = 0;
-  D_801E4BA0 = 0;
+  g_DragScale = 0x3E8;
+  g_SteerHoldFrames = 0;
+  g_GripLossTimer = 0;
   g_WrongWayTimer = 0;
   D_8019C9AC = 0;
   DebugPrintf(D_800113F8);
@@ -444,20 +444,20 @@ typedef struct A {
 /* Deliberately raw: both writes in the image store zero, so this branch --
  * ignore the pad and freeze the steering -- is unreachable in retail. */
 extern s16 D_8019C9AC;
-extern u8 g_PadType asm("D_801E4369");
+extern u8 g_PadType;
 /* The live button mapping; masks 0 and 1 steer, g_MirrorMode swaps them. */
 extern s16 g_PadButtonMapping[];
 /* NeGcon steering: the raw twist minus the calibrated centre, minus the dead
- * zone indexed by the separate NEGCON STEER PLAY setting at D_8019CAD0 (a
+ * zone indexed by the separate NEGCON STEER PLAY setting at g_NegconSteerPlay (a
  * word table at 0x8007C128), then clamped to
  * +-g_NegconSteerRange[g_NegconMaxTwist].
  * g_NegconMaxTwist is the 0..3 setting the MAXIMUM TWIST screen edits and the
  * save file keeps; the range table is { 25, 38, 75, 113 }, so a higher setting
- * needs more twist for full lock. This file used to spell D_801E418C
+ * needs more twist for full lock. This file used to spell g_NegconMaxTwist
  * g_NegconSteerPlay, which is the name of that other setting -- see
  * docs/names.md 20. */
 extern s16 g_NegconSteer;
-extern s16 g_NegconMaxTwist asm("D_801E418C");
+extern s16 g_NegconMaxTwist;
 extern s16 g_NegconSteerRange[] asm("D_8007C020");
 
 s32 rcos(s32) asm("func_80068634");
@@ -673,19 +673,19 @@ typedef struct CollisionContext
 /* GCC 2.6.3 lays the separately named geometry locals out as this context.
  * The typed view gives the three point-test passes one in-bounds coordinate
  * system and names the final collision-response delta at the same location. */
-extern s16 D_801E4DAC;
-extern GameCarRuntime D_801F1854[];
+extern s16 g_GrandPrixMode;
+extern GameCarRuntime g_Cars[];
 extern u16 D_8007DA88[];
 extern u16 D_8007DA8A[];
 extern u16 D_8007DAA0[];
 extern u16 D_8007DAA2[];
-extern s32 D_801E40D8;
-extern s16 D_801E4FB4;
-extern s16 D_801E6E74;
-extern s32 D_8019CACC;
-extern s16 D_801E4BA0;
-extern s32 D_801E408C;
-extern s16 D_801E8A8C;
+extern s32 g_TrackLength;
+extern s16 g_DragScale;
+extern s16 g_RacePhase;
+extern s32 g_MirrorMode;
+extern s16 g_GripLossTimer;
+extern s32 g_RaceSeries;
+extern s16 g_WrongWayTimer;
 void func_80069D18(void *rot, void *mtx);
 s32 *func_80069678(void *mtx, void *vec, void *out);
 s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
@@ -717,11 +717,11 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
   s32 playerX;
   s32 trackDelta;
   CollisionContext *context;
-  if (D_801E4DAC == 0)
+  if (g_GrandPrixMode == 0)
   {
     return 0;
   }
-  opponent = D_801F1854;
+  opponent = g_Cars;
   collisionRegion = 0;
   rotation.vx = *(u16 *)(((u8 *)car) + 0x20);
   rotation.vz = *(u16 *)(((u8 *)car) + 0x28);
@@ -772,7 +772,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     {
       s32 aDist;
       *(s16 *)(((u8 *)opponent) + 0x8A) = 0;
-      progressDelta = ((s32) (((*(s32 *)(((u8 *)opponent) + 0x70)) + D_801E40D8) - playerProgress)) % ((s32) D_801E40D8);
+      progressDelta = ((s32) (((*(s32 *)(((u8 *)opponent) + 0x70)) + g_TrackLength) - playerProgress)) % ((s32) g_TrackLength);
       opponentX = *(s32 *)(((u8 *)opponent) + 0x04);
       trackDelta = (*(s32 *)(((u8 *)opponent) + 0x34)) - playerTrackOffset;
       if (trackDelta < 0)
@@ -786,11 +786,11 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
       }
       if (((*(s16 *)(((u8 *)opponent) + 0x98)) == (*(s16 *)(((u8 *)car) + 0x98))) || (aDist < 0x1A))
       {
-        if (((trackDelta < 0x64) && ((progressDelta < 0xC8) || ((D_801E40D8 - 0xC8) < progressDelta))) && (aDist < 0x3C))
+        if (((trackDelta < 0x64) && ((progressDelta < 0xC8) || ((g_TrackLength - 0xC8) < progressDelta))) && (aDist < 0x3C))
         {
           if ((progressDelta < 0xC8) && (trackDelta < 0x32))
           {
-            D_801E4FB4 = 0x2BC;
+            g_DragScale = 0x2BC;
           }
           velocityDelta.x = (*(u16 *)(((u8 *)opponent) + 0x00)) - (*(u16 *)(((u8 *)car) + 0x00));
           velocityDelta.y = (*(u16 *)(((u8 *)opponent) + 0x08)) - (*(u16 *)(((u8 *)car) + 0x08));
@@ -904,7 +904,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
           {
             v += 3;
           }
-          D_801E4FB4 = 0x3E8 - (v >> 2);
+          g_DragScale = 0x3E8 - (v >> 2);
         }
       }
     }
@@ -915,7 +915,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     return collisionRegion;
   }
   collision_found:
-  if (((*(s16 *)(((u8 *)car) + 0x82)) < 0xB) && (D_801E6E74 < 3))
+  if (((*(s16 *)(((u8 *)car) + 0x82)) < 0xB) && (g_RacePhase < 3))
   {
     s32 sid;
     if (((u32) (trackDelta + 0x1D)) < 0x3B)
@@ -929,7 +929,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     else
     {
       sid = 0xC;
-      if ((collisionRegion & 1) != D_8019CACC)
+      if ((collisionRegion & 1) != g_MirrorMode)
       {
         sid = 0xB;
       }
@@ -938,11 +938,11 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
   }
 
   trackDelta = (*(s32 *)(((u8 *)car) + 0x34)) - (*(s32 *)(((u8 *)opponent) + 0x34));
-  D_801E4BA0 = 0;
+  g_GripLossTimer = 0;
   ((CollisionContext *) &rotation)->trackDelta = trackDelta;
   if (collisionRegion < 3)
   {
-    if ((*(s16 *)(((u8 *)car) + 0xB8)) != D_801E408C)
+    if ((*(s16 *)(((u8 *)car) + 0xB8)) != g_RaceSeries)
     {
       *(s32 *)(((u8 *)car) + 0x150) = 0;
       *(s32 *)(((u8 *)car) + 0xA8) = 0;
@@ -954,11 +954,11 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     }
     if (((*(s32 *)(((u8 *)car) + 0xA4)) - (*(s32 *)(((u8 *)opponent) + 0xA4))) >= 0x191)
     {
-      D_801E4BA0 = 0x1E;
+      g_GripLossTimer = 0x1E;
     }
     else
     {
-      D_801E4BA0 = 0xF;
+      g_GripLossTimer = 0xF;
     }
     {
       s32 vx;
@@ -968,7 +968,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
       vz = (s16) ((*(u16 *)(((u8 *)opponent) + 0xD0)) - (*(u16 *)(((u8 *)car) + 0xCC)));
       velocityDelta.y = vz / 0x20;
     }
-    if ((((*(s16 *)(((u8 *)car) + 0xB8)) != D_801E408C) && ((*(s32 *)(((u8 *)car) + 0xA4)) >= 0x51)) && (D_801E8A8C >= 0xA))
+    if ((((*(s16 *)(((u8 *)car) + 0xB8)) != g_RaceSeries) && ((*(s32 *)(((u8 *)car) + 0xA4)) >= 0x51)) && (g_WrongWayTimer >= 0xA))
     {
       SetCarKnockback(opponent, 0, 0, 4);
       SetCarKnockback(car, 0, 0, 4);
@@ -999,7 +999,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     velocityDelta.y = vz / 0x20;
     velocityDelta.x = velocityDelta.x - (*(u16 *)(((u8 *)opponent) + 0x7C));
     velocityDelta.y = velocityDelta.y - (*(u16 *)(((u8 *)opponent) + 0x7E));
-    if ((((*(s16 *)(((u8 *)car) + 0xB8)) != D_801E408C) && ((*(s32 *)(((u8 *)car) + 0xA4)) >= 0x51)) && (D_801E8A8C >= 0xA))
+    if ((((*(s16 *)(((u8 *)car) + 0xB8)) != g_RaceSeries) && ((*(s32 *)(((u8 *)car) + 0xA4)) >= 0x51)) && (g_WrongWayTimer >= 0xA))
     {
       SetCarKnockback(opponent, 0, 0, 4);
       SetCarKnockback(car, 0, 0, 4);

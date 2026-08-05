@@ -6,7 +6,7 @@
 extern s32 g_FmvFrameWidth asm("D_8009AF6C");
 extern s32 g_FmvFrameHeight asm("D_8009AF70");
 extern s32 g_FmvStreamEnded asm("D_8009AF74");
-extern s32 g_FmvState asm("D_8009F094");
+extern s32 g_FmvState;
 extern s32 g_GameClock;
 extern volatile u8 g_FmvVlcBuffers asm("D_8009AF20");
 extern u8 g_DrawEnv1Dither;

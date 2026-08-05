@@ -37,21 +37,21 @@ typedef struct SwModelPose {
 
 extern Vec4 D_80011AB4;
 extern Vec4 D_80082D6C;
-extern s32 D_8009B374;
-extern s32 D_8009B378;
+extern s32 g_CarSwapFromIndex;
+extern s32 g_CarSwapToIndex;
 extern s32 D_8007BED8;
-extern SwCarRec *D_8019C7C8;
-extern SwObj698 *g_CarModelAsset asm("D_8009E698");
+extern SwCarRec *g_CarTable;
+extern SwObj698 *g_CarModelAsset;
 extern s16 D_8009E782;
 extern s32 D_8009E7B8;
 extern s32 D_8009E718;
 extern s32 D_8009E71C;
 extern s16 D_8009E804;
-extern s32 D_801E8268;
+extern s32 g_MenuViewSpin;
 extern SwModelPose D_8009E6D4;
 extern Vec4 D_8009E724;
 extern s32 D_8009E734;
-extern s32 D_801E4168;
+extern s32 g_ModelBankCount;
 extern s32 D_1F800004;
 
 s32 GetCarAssetIndex(s32 arg0, s32 arg1);
@@ -99,13 +99,13 @@ void DrawMenuCarView(void) {
     if (s3 != 0) {
         if (s3 < 0) {
             if (x <= 299999) {
-                if (D_8009B378 >= 0) {
+                if (g_CarSwapToIndex >= 0) {
                     if (D_8007BED8 != 0) {
                         return;
                     }
                     SwapCarModelSlot();
-                    D_8009B374 = D_8009B378;
-                    D_8009B378 = -1;
+                    g_CarSwapFromIndex = g_CarSwapToIndex;
+                    g_CarSwapToIndex = -1;
                 } else {
                     g_MenuViewAngle = (s3 - 24) / 24 + x;
                 }
@@ -113,13 +113,13 @@ void DrawMenuCarView(void) {
                 g_MenuViewAngle = (s3 - 24) / 24 + x;
             }
         } else {
-            if (x > 900000 && D_8009B378 >= 0) {
+            if (x > 900000 && g_CarSwapToIndex >= 0) {
                 if (D_8007BED8 != 0) {
                     return;
                 }
                 SwapCarModelSlot();
-                D_8009B374 = D_8009B378;
-                D_8009B378 = -1;
+                g_CarSwapFromIndex = g_CarSwapToIndex;
+                g_CarSwapToIndex = -1;
             } else {
                 g_MenuViewAngle = (s3 + 24) / 24 + x;
             }
@@ -127,7 +127,7 @@ void DrawMenuCarView(void) {
     }
 
     s3 = ((g_MenuViewAngle + 300000) % 600000 - 300000) / 1000;
-    s1 = D_8009B374;
+    s1 = g_CarSwapFromIndex;
     s2 = g_MenuViewOffsetTarget - g_MenuViewOffset;
     if (s2 != 0) {
         if (s2 > 0) {
@@ -139,8 +139,8 @@ void DrawMenuCarView(void) {
 
     g_MenuViewOffset = s2 + g_MenuViewOffset;
     s2 = g_MenuViewOffset / 1000;
-    D_8009E782 = GetCarAssetIndex(s1, D_8019C7C8[s1].b0);
-    D_8009E7B8 = D_8019C7C8[s1].b1;
+    D_8009E782 = GetCarAssetIndex(s1, g_CarTable[s1].b0);
+    D_8009E7B8 = g_CarTable[s1].b1;
 
     if (g_PadHeld & 2) {
         if (D_8009E718 < 6144) {
@@ -154,22 +154,22 @@ void DrawMenuCarView(void) {
         }
     }
 
-    D_8009E804 = D_8019C7C8[s1].b2;
+    D_8009E804 = g_CarTable[s1].b2;
     D_8009E71C = (D_8009E71C + 68) & 0xFFF;
 
     if (g_PadHeld & 4) {
-        if (D_801E8268 < 64) {
-            D_801E8268 = D_801E8268 + 1;
+        if (g_MenuViewSpin < 64) {
+            g_MenuViewSpin = g_MenuViewSpin + 1;
         }
     }
     if (g_PadHeld & 8) {
-        if (D_801E8268 >= -63) {
-            D_801E8268 = D_801E8268 - 1;
+        if (g_MenuViewSpin >= -63) {
+            g_MenuViewSpin = g_MenuViewSpin - 1;
         }
     }
 
     p = &D_8009E6D4.rotation.y;
-    *p = *p + D_801E8268;
+    *p = *p + g_MenuViewSpin;
     BuildRotMatrixY(&mtxA, *p);
     vec.z = (s16)(-((s16)g_CarModelAsset->unk4 / 2));
     ApplyMatrixLV(&mtxA, &vec, &out);
@@ -212,7 +212,7 @@ void DrawMenuCarView(void) {
     *(s32 *)0x1F800084 = 0;
     {
         s32 a1 = 1;
-        if (D_801E4168 >= 6) {
+        if (g_ModelBankCount >= 6) {
             a1 = 5;
         }
         SubmitModel((void *)0x1F800000, a1);
@@ -226,12 +226,12 @@ extern s32 g_CourseSwapDelay;
 extern s32 g_MenuCourseModelIndex;
 extern s32 g_MenuPendingCourseIndex;
 extern s32 g_PlayerCar asm("D_8009E6D4");
-extern s32 D_8009E6D8;
+extern s32 g_PlayerCarY;
 extern s32 g_PlayerCarZ;
 extern s32 D_8009E6F4;
 extern s32 D_8009E6F8;
-extern s32 g_ModelBankCount asm("D_801E4168");
-extern s32 g_MenuViewSpin asm("D_801E8268");
+extern s32 g_ModelBankCount;
+extern s32 g_MenuViewSpin;
 
 void func_80017794(void *a, void *b, void *c);
 
@@ -307,7 +307,7 @@ void DrawMenuCourseView(void) {
     g_MenuViewOffset = s0 + g_MenuViewOffset;
     g_PlayerCarZ = -20;
     s0 = g_MenuViewOffset / 1000;
-    D_8009E6D8 = s0 + 15;
+    g_PlayerCarY = s0 + 15;
 
     if (g_PadHeld & 4) {
         if (g_MenuViewSpin < 64) {

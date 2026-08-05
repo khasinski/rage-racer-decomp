@@ -4,9 +4,9 @@
 #include "game/state.h"
 #include "game/cd.h"
 
-extern GameRenderView *g_CarModelAsset asm("D_8009E698");
-extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
-extern s32 g_ModelBankCount asm("D_801E4168");
+extern GameRenderView *g_CarModelAsset;
+extern Matrix g_SceneLightMatrix;
+extern s32 g_ModelBankCount;
 extern s32 g_ScratchRenderMode asm("D_1F800084");
 
 s32 GetTrackZoneBlend(s32 arg0);
@@ -146,7 +146,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
 }
 
 
-extern u8 *g_CamRow asm("D_8019C9A8");
+extern u8 *g_CamRow;
 extern s32 g_CourseIndex;
 extern u8 g_CarModelByCourse[][11] asm("D_8007D3AC");
 extern s16 D_8007D380[][2];
@@ -309,7 +309,7 @@ void func_8001DFC0(GameRenderObject *obj) {
 }
 
 
-extern s32 g_FmvState asm("D_8009F094");
+extern s32 g_FmvState;
 extern s32 g_StreamReturnScene;
 s32 CloseLoadedAudioSlots(void);
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");

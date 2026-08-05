@@ -81,18 +81,18 @@ typedef struct GameSaveBlock {
     s32 maxClassReached[2];/* +0x50 g_MaxClassReached */
     u8 carTables[3][0x68]; /* +0x58 the three GameCarEntry tables, 13 rows of 8 */
     u16 classRecords[0x16];      /* +0x190 g_ClassRecords */
-    u16 unlockFlags[0x10];      /* +0x1BC D_801E444C */
+    u16 unlockFlags[0x10];      /* +0x1BC g_TeamLogoClut */
     u16 teamLogoCanvas[0x400];     /* +0x1DC g_TeamLogoCanvas, the 0x800-byte scroll/VRAM buffer */
-    s32 ghostSamplesA[0x10];      /* +0x9DC D_801E4408, [2][4] pairs on an 8-byte stride */
-    s32 ghostSamplesB[0x10];      /* +0xA1C D_8019C70C, same shape */
-    s32 rankRecords[2][4][5][4]; /* +0xA5C D_801E7744 ranking rows */
-    s32 timeRecords[2][4][5][4]; /* +0xCDC D_8019CB78 time rows */
-    s32 classTotals[2][4][3];   /* +0xF5C D_801E41E8 */
+    s32 ghostSamplesA[0x10];      /* +0x9DC g_BestLapTimes, [2][4] pairs on an 8-byte stride */
+    s32 ghostSamplesB[0x10];      /* +0xA1C g_BestTotalTimes, same shape */
+    s32 rankRecords[2][4][5][4]; /* +0xA5C g_RankingRecords ranking rows */
+    s32 timeRecords[2][4][5][4]; /* +0xCDC g_TimeRecords time rows */
+    s32 classTotals[2][4][3];   /* +0xF5C g_BestSectorTimes */
     s32 bgmVolume;            /* +0xFBC g_BgmVolumeSetting, clamped to 0..0xF on load */
     s32 sfxVolume;            /* +0xFC0 g_SfxVolumeSetting, clamped to 0..0xF on load */
     s32 monoOutput;            /* +0xFC4 g_MonoOutput, forced to 0/1 on load */
-    u8 courseProgress1[8]; /* +0xFC8 D_801E42EC */
-    u8 courseProgress2[8]; /* +0xFD0 D_8009E874 */
+    u8 courseProgress1[8]; /* +0xFC8 g_GrandPrixCourseProgress */
+    u8 courseProgress2[8]; /* +0xFD0 g_ExtraGrandPrixCourseProgress */
     u8 padFD8[0x24];
     u32 checksum;          /* +0xFFC */
 } GameSaveBlock;

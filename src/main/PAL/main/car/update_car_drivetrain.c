@@ -12,12 +12,12 @@ s32 rsin(s32) asm("func_80068568");
 s32 rcos() asm("func_80068634");
 extern s32 g_ShiftTargetSpeed asm("D_8007DA74");
 extern s32 g_RoadGrade asm("D_8007DA78");
-extern u8 *g_TrackArcCenters asm("D_8019C7D0");
+extern u8 *g_TrackArcCenters;
 /* Deliberately raw: the only initialiser anywhere is InitPlayerCar writing
  * zero, and the only other write is this decrement, so the boost it would add
  * can never fire. See docs/names.md 15g. */
 extern s32 D_8019C998;
-extern s32 g_StandingStartSpin asm("D_8019CA04");
+extern s32 g_StandingStartSpin;
 /*
  * Rpm-band indexes into the car spec's two rpm->value curves, rebuilt per car
  * by InitPlayerCar: entry b holds how many curve points sit at or below rpm
@@ -28,18 +28,18 @@ extern s32 g_StandingStartSpin asm("D_8019CA04");
  * +0x80 / +0x84 y) a 0..100 percentage that is subtracted from it.
  */
 extern s16 g_TorqueBandStart;
-extern s16 g_TorqueBandEnd asm("D_801E4114");
+extern s16 g_TorqueBandEnd;
 extern s16 g_TorqueLossBandStart;
-extern s16 g_TorqueLossBandEnd asm("D_801E4154");
-extern u8 g_PadType asm("D_801E4369");
-extern s16 g_GripLossTimer asm("D_801E4BA0");
-extern s32 g_ShiftTargetRpm asm("D_801E4BF4");
+extern s16 g_TorqueLossBandEnd;
+extern u8 g_PadType;
+extern s16 g_GripLossTimer;
+extern s32 g_ShiftTargetRpm;
 /* Divisor of the speed-squared drag term: drag = v^2 / (spec->unk110 * 1000 /
  * this). Reset to 1000 at the end of every frame, so writers elsewhere
  * (func_8002CB30, CollidePlayerWithCars) change the drag for exactly one frame.
  * NOTE: docs/names.md 15g listed this as written-but-never-read; that is
  * wrong, the read is right here. */
-extern s16 g_DragScale asm("D_801E4FB4");
+extern s16 g_DragScale;
 /*
  * AI target-speed / drivetrain physics driver (called by UpdatePlayerCar). Reads
  * the per-car spec block g_CarSpec to compute a target speed, applies steering

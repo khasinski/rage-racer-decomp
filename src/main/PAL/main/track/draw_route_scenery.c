@@ -6,7 +6,7 @@
 #include "game/track.h"
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
-extern s32 g_ModelBankCount asm("D_801E4168");
+extern s32 g_ModelBankCount;
 extern s32 g_RouteSceneryX;
 extern s32 g_RouteSceneryRotX;
 extern volatile s32 g_RouteSceneryRotY;
@@ -53,7 +53,7 @@ void DrawRouteScenery(void) {
  * (0x34-relative offsets 52/60/64/66/84/88/92 appear, and the branch layout
  * moves). Eleven separate symbols are what retail's codegen requires.
  */
-extern s32 g_Shuttle1DwellCounter asm("D_801E4FEC");
+extern s32 g_Shuttle1DwellCounter;
 extern s32 g_Shuttle1TravelStep;
 extern s16 g_Shuttle1StartEndpoint;
 extern s16 g_Shuttle1PathIndex;
@@ -63,7 +63,7 @@ extern s32 g_Shuttle1Z;
 extern s32 g_Shuttle1Unk1C;
 extern s32 g_Shuttle1AngleX;
 extern s32 g_Shuttle1AngleY;
-extern s32 g_Shuttle1AngleZ asm("D_801E5014");
+extern s32 g_Shuttle1AngleZ;
 /*
  * The shuttle's authored paths, indexed by GameShuttleScenery.pathIndex:
  * g_ShuttlePathPoints is 0x20 bytes per path, two 16-byte { x, y, z, unk }

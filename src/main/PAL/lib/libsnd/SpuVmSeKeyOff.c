@@ -8,7 +8,7 @@ extern u_short D_8009E670;
 extern u_short D_8009E674;
 extern u_short *g_SndSpuRegs asm("D_8009A588");
 extern u_char g_SndVoiceCount;
-extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttr g_SndCurrentAttr;
 extern u_short D_801F2A08;
 extern u_short D_801F2A0C;
 

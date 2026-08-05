@@ -783,7 +783,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
     }
 }
 
-extern u32 g_CameraCar[] asm("D_801E3E14");
+extern u32 g_CameraCar[];
 extern s32 g_CameraCarY;
 extern s32 g_CameraCarZ;
 extern s32 g_CameraCarAngleY;

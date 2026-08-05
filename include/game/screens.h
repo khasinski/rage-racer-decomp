@@ -15,7 +15,7 @@ void DrawRaceEndPrompt(void);        /* "PRESS START BUTTON" */
 void DrawCourseIntro(void);          /* "COURSE IN" / "TIME ATTACK" */
 void DrawGrandprixIntro(void) asm("func_800201D4");       /* "CLASS%d %s GRANDPRIX" */
 void DrawEndingScreen(void) asm("func_80037D90");         /* "CONGRATULATIONS!!" */
-/* The in-race option/pause overlay; `cursorRow` is D_801E414C. The
+/* The in-race option/pause overlay; `cursorRow` is g_RaceOptionCursor. The
  * "RAGE RACER GE" string is one half of a scrolling marquee, not a title -
  * this is not the title screen. See docs/names.md 1. */
 void DrawRaceOptionMenu(s32 cursorRow);
@@ -23,7 +23,7 @@ void DrawRaceOptionMenu(s32 cursorRow);
 /*
  * Title screen and main menu. UpdateFrontend (UpdateFrontend) runs one of the
  * four handlers below each frame via the jump table at D_8007C748, indexed by
- * the sub-state D_8009F098: 0 title -> 1 menu wipe-in -> 2 cursor/confirm ->
+ * the sub-state g_FrontendState: 0 title -> 1 menu wipe-in -> 2 cursor/confirm ->
  * 3 fade out and request the selected scene. Details in names.md section 5.
  */
 
@@ -43,11 +43,11 @@ void UpdateTitleScreen(void);
  * while g_AdvancedSeriesUnlocked == 0, leaving four visible rows. */
 void DrawMainMenuRows(void);
 
-/* Frontend state 1: the 48-frame menu wipe-in (counter D_801E6F1C to 0x30). */
+/* Frontend state 1: the 48-frame menu wipe-in (counter g_MainMenuSlide to 0x30). */
 void UpdateMainMenuOpen(void);
 
 /* Frontend state 2: cursor (wrapped % 5, skipping the locked entry 1) and
- * confirm, which repoints g_CarTable / g_RaceProgress / D_8009E67C at the
+ * confirm, which repoints g_CarTable / g_RaceProgress / g_CourseProgress at the
  * chosen mode's records and then enters state 3. */
 void UpdateMainMenuInput(void);
 

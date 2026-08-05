@@ -38,11 +38,11 @@ typedef struct GameTrackPoint {
 /*
  * One corner's centre of curvature. `GameTrackPoint.arcRef >> 4` indexes this
  * array, which InstallTrackPoints publishes at `g_TrackArcCenters`
- * (D_8019C7D0) immediately after the point table. The stride is 12, proven by
+ * (g_TrackArcCenters) immediately after the point table. The stride is 12, proven by
  * three independent `* 0xC` sites (UpdateCarDrivetrain, and 8003237C /
  * UpdateCarTrackState); the third word is never read anywhere in the image.
  *
- * D_8019C7D0 is declared per-file, and the two existing declarations disagree:
+ * g_TrackArcCenters is declared per-file, and the two existing declarations disagree:
  * `u8 *` in car/UpdateCarDrivetrain.c (which does its own `* 0xC`) and
  * `GameTrackPoint *` in track/InstallTrackPoints.c, where the element type
  * is wrong but harmless because that unit only computes the base address. No
@@ -65,7 +65,7 @@ extern s32 g_TrackPointCount;
  * Animated course scenery (func_8003Dxxx / func_8003Fxxx). All four courses
  * share one coordinate space, so prop positions are one static table at
  * 0x8007E2C0 and each prop culls itself against the visible-terrain bitmask
- * D_801E6828. Full write-up in docs/names.md section 5b.
+ * g_VisibleCellMask. Full write-up in docs/names.md section 5b.
  */
 
 /* Per-frame update+draw of the current course's props, dispatched on the course
@@ -87,7 +87,7 @@ void DrawSpinningScenery(s32 timer, s32 animate);
 
 /* The static landmark at D_8007E340 (40594, 6002, 11940), on all four courses;
  * pass 1 for THE EXTREME OVAL's +0x5000 z shift. Model 0x3A or 0x3B depending
- * on D_801E4030. */
+ * on g_IsEnvironmentMode4. */
 void DrawStaticScenery(s32 shifted);
 
 /* A second static landmark at (29266, 6039, 45612): MYTHICAL COAST only, from
@@ -113,7 +113,7 @@ typedef struct GameShuttleScenery {
 } GameShuttleScenery;
 
 /* The two shuttle instances. Instance 1's fields also carry their own split
- * symbols D_801E4FEC..D_801E5014. */
+ * symbols g_Shuttle1DwellCounter..g_Shuttle1AngleZ. */
 extern GameShuttleScenery g_ShuttleScenery[2];
 
 void UpdateShuttleScenery(s32 instance);
@@ -122,7 +122,7 @@ void InitShuttleScenery(void);
 
 /* Lap distance: the sum of every g_TrackPoints[].segmentLength. Cars' along-
  * track progress uses the same units. */
-extern s32 g_TrackLength asm("D_801E40D8");
+extern s32 g_TrackLength;
 
 /* Base of the course's event/marker block (InstallTrackEventData installs it). Starts
  * with the s32 track-walk start index; sub-table offsets are at +0xB64..+0xB78

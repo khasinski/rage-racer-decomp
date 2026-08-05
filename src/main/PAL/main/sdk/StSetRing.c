@@ -24,7 +24,7 @@ u_long func_8006A018[16] __attribute__((section(".text"))) = {
     0x00000000,
 };
 
-extern long g_StRingBase asm("D_801E8AAC");
+extern long g_StRingBase;
 extern long g_StRingSize;
 void StClearRing(void);
 

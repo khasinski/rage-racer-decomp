@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 
 long func_80070D70(long seq, short sep);
 void ContDataEntry(short seq, short sep, u_char value);

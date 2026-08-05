@@ -5,8 +5,8 @@
 #include "game/track.h"
 
 extern s32 g_RaceCueFlags;
-extern s16 g_PlayerTrackSection asm("D_8009E74C");
-extern s16 g_PlayerLap asm("D_8009E83C");
+extern s16 g_PlayerTrackSection;
+extern s16 g_PlayerLap;
 extern s32 g_LapCount;
 
 void TriggerRaceCues(void);

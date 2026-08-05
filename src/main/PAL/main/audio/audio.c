@@ -40,7 +40,7 @@ void SetEffectVoicesEnabled(s32 arg0) {
 }
 
 extern s32 g_EngineSoundBank;
-extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s32 g_AudioSlotMask;
 extern s32 g_SoundSlotActive5;
 extern s32 g_SoundSlotVolumeScale;
 extern s32 g_PanVoiceVolumeL;
@@ -209,7 +209,7 @@ void func_80072B3C(s32 arg0);
 void SsStopSoundTick(void);
 void SsQuit(void);
 
-extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s32 g_AudioSlotMask;
 extern s32 g_SoundCueBank;
 extern s16 g_VabIds4;
 extern s16 g_VabIds5;
@@ -555,7 +555,7 @@ u32 GetLoadedAudioStep(void) {
     return g_EngineSoundMaxRpm;
 }
 
-extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s32 g_AudioSlotMask;
 
 s32 GetActiveAudioSlots(void) {
     return g_AudioSlotMask;
@@ -801,7 +801,7 @@ void UpdateIndexedEffectVoice(void) {
 }
 
 extern s32 D_800126D0[];
-extern s32 D_801E6C9C;
+extern s32 g_AudioSlotMask;
 extern u8 D_801E6D00[];
 extern u8 D_801E6D04[];
 extern s32 D_801E6D08;
@@ -936,7 +936,7 @@ after_match:
                 CHANNEL(offset).left = inactiveValue;
                 CHANNEL(offset).right = inactiveValue;
                 CHANNEL(offset).mode = activeValue;
-                table = (s32 *)((u8 *)&D_801E6C9C + offset);
+                table = (s32 *)((u8 *)&g_AudioSlotMask + offset);
                 *(s32 *)((s32)table + 0x78) = 0;
                 CHANNEL(offset).volLeft = 0;
                 i++;
@@ -1135,7 +1135,7 @@ void UpdateBasicEffectVoices(void) {
 extern s32 g_EffectVoiceState[];
 extern u8 g_EffectVoiceTone[];
 extern u8 g_EffectVoiceVolume[];
-extern s32 g_EffectVoicePitch[] asm("D_801E6D3C");
+extern s32 g_EffectVoicePitch[];
 
 extern const s32 g_EffectCueTable[] asm("D_80012730");
 extern s32 D_801E6D30;
@@ -1909,7 +1909,7 @@ void SetDefaultReverbDepth(void) {
     SetReverbDepth(0x28, 0x28);
 }
 
-extern s32 g_ReverbFadeStep asm("D_801E6D8C");
+extern s32 g_ReverbFadeStep;
 void func_8007865C(s32 arg0);
 void func_80072B04(s32 arg0);
 void SetReverbDepth(s32 arg0, s32 arg1);
@@ -1923,7 +1923,7 @@ void InitSequenceAudio(void) {
     RefreshSequenceVolumeScale();
 }
 
-extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s32 g_AudioSlotMask;
 extern s32 g_PanVoiceVolumeL;
 extern s32 g_PanVoiceVolumeR;
 extern s32 g_PanVoiceActive;
@@ -2405,7 +2405,7 @@ void ForceAllEffectVoicesEnabled(s32 arg0) {
 extern s16 g_VabSlotVoiceTone[];
 extern s32 g_VabSpuAddress[] asm("D_800125EC");
 extern s32 g_AudioLoadSlot;
-extern s32 g_AudioSlotMask asm("D_801E6C9C");
+extern s32 g_AudioSlotMask;
 extern s16 g_SeqHandle;
 extern s32 g_SeqVolumeFadeStep;
 extern s32 g_VabTransferDone;

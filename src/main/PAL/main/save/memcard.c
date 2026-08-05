@@ -527,28 +527,28 @@ void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
 #include "game/memcard.h"
 #include "game/menu.h"
 
-extern s16 g_PadMappingIndex asm("D_8019CE08");
-extern s16 g_NegconMappingIndex asm("D_8019CB08");
+extern s16 g_PadMappingIndex;
+extern s16 g_NegconMappingIndex;
 extern u16 g_NegconSteerNeutral;
-extern u16 g_NegconSteerPlay asm("D_8019CAD0");
+extern u16 g_NegconSteerPlay;
 extern u16 g_NegconNeutralI;
 extern u16 g_NegconNeutralII;
-extern u16 g_NegconMaxTwist asm("D_801E418C");
+extern u16 g_NegconMaxTwist;
 extern u16 g_NegconNeutralL;
-extern u16 g_BgmSelection asm("D_801E42CC");
+extern u16 g_BgmSelection;
 
-extern u16 g_ClassRecords[] asm("D_8019CB40");
-extern u16 g_TeamLogoClut[] asm("D_801E444C");
+extern u16 g_ClassRecords[];
+extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
-extern s32 g_BestLapTimes[] asm("D_801E4408");
-extern s32 g_BestTotalTimes[] asm("D_8019C70C");
-extern s32 g_BestSectorTimes[] asm("D_801E41E8");
+extern s32 g_BestLapTimes[];
+extern s32 g_BestTotalTimes[];
+extern s32 g_BestSectorTimes[];
 
 extern s32 g_BgmVolumeSetting;
 extern s32 g_SfxVolumeSetting;
 extern s32 g_MonoOutput;
-extern u8 g_GrandPrixCourseProgress[] asm("D_801E42EC");
-extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
+extern u8 g_GrandPrixCourseProgress[];
+extern u8 g_ExtraGrandPrixCourseProgress[];
 
 /*
  * Serialises every live global into the 0x1000-byte memory-card payload. The
@@ -814,30 +814,30 @@ void StoreSaveStateBlock(u8 *block) {
 extern char g_MsgSaveChecksumOk[] asm("D_80012F90");
 extern char g_FmtSaveChecksum[] asm("D_80012F98");
 
-extern s16 g_PadMappingIndex asm("D_8019CE08");
-extern s16 g_NegconMappingIndex asm("D_8019CB08");
+extern s16 g_PadMappingIndex;
+extern s16 g_NegconMappingIndex;
 extern u16 g_NegconSteerNeutral;
-extern u16 g_NegconSteerPlay asm("D_8019CAD0");
+extern u16 g_NegconSteerPlay;
 extern u16 g_NegconNeutralI;
 extern u16 g_NegconNeutralII;
-extern u16 g_NegconMaxTwist asm("D_801E418C");
+extern u16 g_NegconMaxTwist;
 extern u16 g_NegconNeutralL;
 /* The loader stores a whole word here; the saver reads only the low half
  * as g_BgmSelection. Same address, two widths, so two names. */
 
 
-extern u16 g_ClassRecords[] asm("D_8019CB40");
-extern u16 g_TeamLogoClut[] asm("D_801E444C");
+extern u16 g_ClassRecords[];
+extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
-extern s32 g_BestLapTimes[] asm("D_801E4408");
-extern s32 g_BestTotalTimes[] asm("D_8019C70C");
-extern s32 g_BestSectorTimes[] asm("D_801E41E8");
+extern s32 g_BestLapTimes[];
+extern s32 g_BestTotalTimes[];
+extern s32 g_BestSectorTimes[];
 
 extern s32 g_BgmVolumeSetting;
 extern s32 g_SfxVolumeSetting;
 extern s32 g_MonoOutput;
-extern u8 g_GrandPrixCourseProgress[] asm("D_801E42EC");
-extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
+extern u8 g_GrandPrixCourseProgress[];
+extern u8 g_ExtraGrandPrixCourseProgress[];
 
 extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
 extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");

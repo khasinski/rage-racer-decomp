@@ -68,7 +68,7 @@ void DrawWrongWayWarning(void) {
 extern u8 *volatile g_DrawBuffer;
 extern s32 g_PlayerSpeed;
 extern s16 g_PlayerGear;
-extern u16 g_HudGlyphClut asm("D_801E4130");
+extern u16 g_HudGlyphClut;
 /* The needle corner table car/GetTrackSurfaceHeight.c rebuilds: four
  * (x, y) pairs. The loop below biases its cursor to the y of corner 0. */
 extern s16 g_TachoNeedleQuad[4][2];

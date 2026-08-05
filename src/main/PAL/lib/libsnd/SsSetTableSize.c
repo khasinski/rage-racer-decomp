@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern u_char *g_SndSeqTable[] asm("D_801E79CC");
+extern u_char *g_SndSeqTable[];
 extern short g_SndSeqTableSMax;
 extern short g_SndSeqTableTMax;
 

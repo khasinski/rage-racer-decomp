@@ -5,7 +5,7 @@
 #include "game/render.h"
 #include "game/cd.h"
 
-extern s16 g_ClassRecords[] asm("D_8019CB40");
+extern s16 g_ClassRecords[];
 extern volatile s32 g_ClassWinCount;
 extern s32 g_BgmTrackCount;
 extern u8 g_CaptionLostRace asm("D_80010E68");
@@ -14,7 +14,7 @@ extern s32 g_FrameSyncThreshold;
 extern s32 g_LostRaceChoice;
 void SetReverbDepth(s32 arg0, s32 arg1);
 void DrawLostRaceCaption(s32 arg0);
-extern void *g_CourseProgress asm("D_8009E67C");
+extern void *g_CourseProgress;
 extern char g_TextTryAgain[] asm("D_80010E80");
 extern char g_TextEndRace[] asm("D_80010E8C");
 extern char g_TextChance[] asm("D_80010E98");

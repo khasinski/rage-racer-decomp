@@ -9,7 +9,7 @@ void DrawCarSpecGraph(s32, s32) asm("func_800496F0");
 
 extern s32 D_8009B348;
 extern s32 D_8009B324;
-extern s32 g_CarTable asm("D_8019C7C8");
+extern s32 g_CarTable;
 extern s32 g_PlayerCarIndex;
 extern s32 g_CarListCursor;
 
@@ -22,7 +22,7 @@ extern s32 g_MenuHintBarStep;
 extern u8 g_MenuHintBarScript asm("D_80082A90");
 extern s32 g_MenuHintBarProgress;
 extern s32 g_MenuHintButtonsVisible;
-extern u8 g_PadType asm("D_801E4369");
+extern u8 g_PadType;
 
 
 void func_80047024(void *, s32, s32, s32, s32, s32, s32, s32, s32);

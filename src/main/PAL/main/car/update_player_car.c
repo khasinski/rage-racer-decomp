@@ -56,7 +56,7 @@ typedef struct Car {
     GameCarDrive drive;  /* 0xBC */
 } Car;
 
-extern u8 g_PadType asm("D_801E4369");
+extern u8 g_PadType;
 extern volatile u16 g_PadHeld;
 /*
  * The NeGcon's three analog channels, already zeroed against the calibration
@@ -80,17 +80,17 @@ extern s16 g_PadShiftMasks[2][8];
 extern s16 g_NegconAccelMask;
 extern s16 g_NegconBrakeMask;
 extern s32 g_TachoNeedleFlash;
-extern s32 g_EngineRpmJitter asm("D_801E4170");
+extern s32 g_EngineRpmJitter;
 extern s32 D_801E4194;
-extern s32 g_ShiftTargetRpm asm("D_801E4BF4");
-extern s16 g_SteerHoldFrames asm("D_801F17A4");
-extern s32 g_AutoShiftCooldown asm("D_801F17B8");
+extern s32 g_ShiftTargetRpm;
+extern s16 g_SteerHoldFrames;
+extern s32 g_AutoShiftCooldown;
 /* Latched from car->shiftTick & 0x3F when a gear change lands under power, and
  * cleared on every other shift and on touchdown. Its only effect is to raise
  * the volume of continuous sound 0 (flag + 25) while the car is airborne. */
-extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
-extern s16 g_NegconMappingIndex asm("D_8019CB08");
-extern s32 g_EngineRpm asm("D_8019CAB4");
+extern s32 g_ShiftSoundLevel;
+extern s16 g_NegconMappingIndex;
+extern s32 g_EngineRpm;
 extern u8 *g_TrackPoints;
 /* g_PlayerCar drive +0xA0 / +0xA4: the throttle the input layer produced this
  * frame (0..0x100) and the drivetrain's own rpm, which g_EngineRpm is slewed
@@ -611,7 +611,7 @@ void UpdatePlayerCar(Car *car) {
     p->gearDisp = p->gear;
 }
 
-extern s16 g_TrackZoneDark asm("D_8019CAB0");
+extern s16 g_TrackZoneDark;
 extern s32 g_EnvScriptClock;
 
 s32 DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt);

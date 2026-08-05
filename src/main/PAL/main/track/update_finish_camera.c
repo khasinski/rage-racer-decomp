@@ -4,7 +4,7 @@
 #include "game/track.h"
 #include "psyq/gte.h"
 
-extern GameRenderObject g_CameraCar asm("D_801E3E14");
+extern GameRenderObject g_CameraCar;
 extern s32 g_CameraCarTrackPoint;
 extern s32 g_CameraCarZ;
 extern s32 g_CameraCarHeading;

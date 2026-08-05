@@ -73,7 +73,7 @@ break;
 extern Rect g_TrackTextureRect asm("D_8007C710");
 extern Rect g_TeamLogoClutLoadRect asm("D_8007C718");
 extern GpuRectPacked g_TeamLogoClutMoveRect asm("D_8007C720");
-extern u16 g_TeamLogoClut[] asm("D_801E444C");
+extern u16 g_TeamLogoClut[];
 
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void StoreImage(Rect *rect, void *data);

@@ -107,9 +107,9 @@ extern s32 g_PathSceneryZ;
 extern s16 g_PathSceneryRotY;
 extern s16 g_PathSceneryRotZ;
 extern s32 g_PlayerCar asm("D_8009E6D4");
-extern s32 g_PlayerCarY asm("D_8009E6D8");
+extern s32 g_PlayerCarY;
 extern s32 g_PlayerCarZ;
-extern s16 g_RacePhase asm("D_801E6E74");
+extern s16 g_RacePhase;
 
 /*
  * The position and rotation cursors are the same interleaved eight-halfword

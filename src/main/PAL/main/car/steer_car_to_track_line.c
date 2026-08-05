@@ -94,8 +94,8 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
  * the car to the airborne handler UpdateCarAirborne. See docs/names.md 1.
  */
 
-extern s32 D_801E4BF4;
-extern s32 D_801E8AA0;
+extern s32 g_ShiftTargetRpm;
+extern s32 g_ShiftSoundLevel;
 
 s32 func_8002A788(s32 arg0, s32 arg1);
 s32 GetAngleDelta(s32 arg0, s32 arg1);
@@ -258,9 +258,9 @@ void func_80030030(GameCarRuntime *arg0) {
                 asm volatile("" : : : "memory");
                 *(s16 *)(r + 0x38) = 0x14;
                 *(s32 *)(r + 0x98) = 2;
-                D_801E4BF4 = lo;
+                g_ShiftTargetRpm = lo;
                 *(s16 *)(r + 0x3C) =
-                    *(u16 *)&D_801E4BF4 - phaseValue;
+                    *(u16 *)&g_ShiftTargetRpm - phaseValue;
                 specBase += offset;
             }
             {
@@ -273,9 +273,9 @@ void func_80030030(GameCarRuntime *arg0) {
             }
 
             if ((u32)((*(u16 *)(r + 0x3C) + 99) & 0xFFFF) < 199) {
-                D_801E8AA0 = 1;
+                g_ShiftSoundLevel = 1;
             } else {
-                D_801E8AA0 = 0;
+                g_ShiftSoundLevel = 0;
             }
         }
     }
@@ -311,7 +311,7 @@ void func_80030030(GameCarRuntime *arg0) {
     *(s32 *)(r + 0x10) = rcos(car->headingAngle) * car->field_A4 / 256;
 }
 
-extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
+extern s32 g_ShiftSoundLevel;
 
 
 /*
@@ -388,7 +388,7 @@ void UpdateCarAirborne(GameCarRuntime *car) {
     }
 }
 
-extern s32 g_StandingStartSpin asm("D_8019CA04");
+extern s32 g_StandingStartSpin;
 s32 Random15(void);
 
 /*

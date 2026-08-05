@@ -458,7 +458,7 @@ typedef struct TimedDrawCommand {
     s32 arg1;
 } TimedDrawCommand;
 
-extern s32 g_MenuAltLayout asm("D_8019CB0C");
+extern s32 g_MenuAltLayout;
 
 s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     TimedDrawCommand *base = commands;

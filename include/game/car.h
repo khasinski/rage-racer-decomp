@@ -154,7 +154,7 @@ typedef struct GameCarRuntime {
 
 /* Per-car runtime state, player in slot 0. Individual slots and single fields
  * also have their own split symbols; see docs/names.md section 3b. */
-extern GameCarRuntime g_Cars[11] asm("D_801F1854");
+extern GameCarRuntime g_Cars[11];
 
 typedef struct GameCarRuntimeProgressWindow {
     s32 field_6C;
@@ -169,7 +169,7 @@ extern GameCarRuntime *g_RankedCars[4];
 
 /* Active car-entry table; repointed at one of the three 13-entry tables below
  * per title-menu row, so it is a pointer rather than a fixed array. */
-extern GameCarEntry *g_CarTable asm("D_8019C7C8");
+extern GameCarEntry *g_CarTable;
 
 /* The three saved car-entry tables, one per title-menu race row (0 GRAND PRIX,
  * 1 EXTRA GRAND PRIX, 2 TIME ATTACK); save block +0x50 / +0xC0 / +0x128. The
@@ -251,7 +251,7 @@ extern GearCurveRow g_GearTorqueCurve[];
  * car's second half through this rather than through GameCarRuntime.
  *
  * Calibrated on g_PlayerCar (D_8009E6D4), which is a different 0x19C object from
- * g_Cars (D_801F1854): it shares the stride but not the meaning of every byte.
+ * g_Cars (g_Cars): it shares the stride but not the meaning of every byte.
  * +0x30, +0x38, +0x74 and +0x76 are 16-bit gearDisp/unk38/manual/gear on the
  * player object and 32-bit / AI-speed fields on the rival cars, so use
  * GameCarAiBlock for a g_Cars[] element. Evidence in names.md 30f. */
@@ -353,7 +353,7 @@ typedef struct GameCarTrackAngleWindow {
  * The car pipeline. docs/names.md 1 has the evidence and the data layouts.
  */
 /* Race-entry init for the player object: start pose plus the speed/gear lookup
- * tables g_GearTorqueCurve / D_801E4114 / D_801E4154. Logs "init_car" .. "init_ok". */
+ * tables g_GearTorqueCurve / g_TorqueBandEnd / g_TorqueLossBandEnd. Logs "init_car" .. "init_ok". */
 void InitPlayerCar(GameCarRuntime *car) asm("func_8002C478");
 /* Non-clamping twin of UpdateCarTrackState: recomputes the track-relative placement
  * and writes the reference triple at +0x50, for the init/reset paths only. */
@@ -383,10 +383,10 @@ void UpdateCarLaunch(GameCarRuntime *car) asm("func_80030030");
  * The player's own car object and the fields of it that retail addresses as
  * separate absolute symbols. Per-file types; see docs/names.md 12c.
  *   g_PlayerCar           D_8009E6D4  0x19C bytes, the g_Cars[] stride
- *   g_PlayerProgressA/B   D_8009E73C / D_8009E740  +0x68 / +0x6C, sum = progress
- *   g_PlayerTrackProgress D_8009E744  +0x70
- *   g_PlayerTrackSection  D_8009E74C  +0x78
- *   g_PlayerLap           D_8009E83C  +0x168, also the lap-time record header
+ *   g_PlayerProgressA/B   g_PlayerProgressA / g_PlayerProgressB  +0x68 / +0x6C, sum = progress
+ *   g_PlayerTrackProgress g_PlayerTrackProgress  +0x70
+ *   g_PlayerTrackSection  g_PlayerTrackSection  +0x78
+ *   g_PlayerLap           g_PlayerLap  +0x168, also the lap-time record header
  */
 
 

@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern s32 g_VisibleCellList asm("D_801E4BC8");
+extern s32 g_VisibleCellList;
 
 
 

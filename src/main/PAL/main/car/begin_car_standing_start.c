@@ -2,11 +2,11 @@
 #include "game/car.h"
 
 
-extern s16 g_PeakOutputRpm asm("D_8019C798");
-extern s32 g_EngineRpm asm("D_8019CAB4");
-extern s32 g_StandingStartSpin asm("D_8019CA04");
-extern s16 g_PeakOutputValue asm("D_801E4B90");
-extern s16 g_GripLossTimer asm("D_801E4BA0");
+extern s16 g_PeakOutputRpm;
+extern s32 g_EngineRpm;
+extern s32 g_StandingStartSpin;
+extern s16 g_PeakOutputValue;
+extern s16 g_GripLossTimer;
 /* Deliberately raw: written here, read nowhere in the image (names.md 15g). */
 extern s16 D_801E8A4C;
 

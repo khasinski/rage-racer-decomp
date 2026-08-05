@@ -24,7 +24,7 @@ extern u8 g_MenuSubCursor;
 extern s32 D_8019CAB8;
 extern void *D_801E8A44;
 extern s32 D_801F1804;
-extern u16 g_TeamLogoClut[] asm("D_801E444C");
+extern u16 g_TeamLogoClut[];
 extern Rect g_TeamLogoClutRect asm("D_8007BEDC");
 extern u8 D_80082844;
 extern u8 g_UiChromeScript2 asm("D_80082790");

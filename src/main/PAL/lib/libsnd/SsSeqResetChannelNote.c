@@ -1,7 +1,7 @@
 #include "psyq/snd.h"
 
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 
 void SsSeqResetChannelNote(long seq, long sep) {
     SeqStruct *state = &g_SndSeqTable[(short)seq][(short)sep];

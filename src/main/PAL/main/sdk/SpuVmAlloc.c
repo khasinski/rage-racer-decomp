@@ -116,7 +116,7 @@ extern u_char D_801E4BE4;
 extern u_short g_SndCurrentSeqSep;
 extern short g_SndCurrentVoice;
 extern short g_SndMonoMode;
-extern u_char *g_SndSeqTable[] asm("D_801E79CC");
+extern u_char *g_SndSeqTable[];
 extern u_char g_SndVoiceRegs[];
 /* Kept raw: this is game/audio.h's g_SndVoiceFlags, but that header is included
  * here and declares it volatile, and gcc 2.6.3 rejects a requalified array

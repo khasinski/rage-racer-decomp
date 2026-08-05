@@ -86,7 +86,7 @@ extern u_short g_SndVoiceRegs[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern SpuVoice g_SndVoiceState[];
 extern VabHdr *g_SndCurrentVabHeader;
-extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttr g_SndCurrentAttr;
 extern short g_SndMonoMode;
 
 void SpuVmAutoVolTick(short voice);
@@ -187,10 +187,10 @@ void SpuVmAutoVolTick(short voice) {
  * the accesses volatile and both members byte-exact.
  */
 extern u_char g_SndVoiceStateAutoPan[];
-extern u_char g_SndVoiceStatePanStep[] asm("D_8009E0E2");
-extern u_char g_SndVoiceStatePanCounter[] asm("D_8009E0E4");
-extern u_char g_SndVoiceStatePanCounterReload[] asm("D_8009E0E6");
-extern u_char g_SndVoiceStateStartPan[] asm("D_8009E0E8");
+extern u_char g_SndVoiceStatePanStep[];
+extern u_char g_SndVoiceStatePanCounter[];
+extern u_char g_SndVoiceStatePanCounterReload[];
+extern u_char g_SndVoiceStateStartPan[];
 extern u_char g_SndVoiceStateEndPan[];
 
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3);

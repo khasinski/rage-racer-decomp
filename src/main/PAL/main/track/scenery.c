@@ -10,8 +10,8 @@ extern Vec4 g_StaticSceneryPos asm("D_8007E340");
 /* +0x0C of the same 4-word record, i.e. its w component used as a Y angle;
  * g_HighClassSceneryYaw is the same field of the record at 0x8007E350. */
 extern s32 g_StaticSceneryYaw asm("D_8007E34C");
-extern u32 *g_VisibleCellMask asm("D_801E6828");
-extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
+extern u32 *g_VisibleCellMask;
+extern s32 g_IsEnvironmentMode4;
 extern s32 g_CourseModelCount;
 
 
@@ -227,7 +227,7 @@ void DrawCourseScenery2(s32 arg0, s32 arg1) {
 
 extern u8 *g_FlybySceneryData;
 extern s32 g_LapCount;
-extern volatile s32 g_RaceSeries asm("D_801E408C");
+extern volatile s32 g_RaceSeries;
 extern u8 g_FlybyScenery[];
 extern s16 g_FlybySceneryLap;
 extern u8 *g_FlybySceneryKeyframe;
@@ -299,8 +299,8 @@ void SeedFlybyScenery(void) {
  * integrating position from a keyframed heading and feeding a distance-attenuated
  * volume to SetPitchedSoundCue. See docs/names.md 1.
  */
-extern s16 g_PlayerLap asm("D_8009E83C");
-extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s16 g_PlayerLap;
+extern s16 g_PlayerTrackSection;
 extern s32 g_FlybySceneryArmed;
 extern s32 g_FlybySceneryFrame;
 extern s16 g_FlybySceneryKeyIndex;
@@ -308,9 +308,9 @@ extern Vec4 g_FlybySceneryPosRec;
 extern s32 g_FlybySceneryRotX;
 extern s32 g_FlybySceneryRotY;
 extern s32 g_FlybySceneryRotZ;
-extern s32 g_RaceSeries asm("D_801E408C");
+extern s32 g_RaceSeries;
 extern s32 g_PlayerCar asm("D_8009E6D4");
-extern s32 g_PlayerCarY asm("D_8009E6D8");
+extern s32 g_PlayerCarY;
 extern s32 g_PlayerCarZ;
 
 void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);

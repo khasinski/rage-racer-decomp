@@ -660,7 +660,7 @@ block_52:
 
 /* Deliberately raw: the environment script header word 0 is stored here and
  * never read anywhere in the image (docs/names.md 15g). */
-extern u32 D_801E4D84;
+extern u32 g_SkyRowBase;
 extern u32 *g_EnvScriptCues;
 extern u32 g_EnvScriptLength;
 
@@ -671,7 +671,7 @@ void SetEnvironmentScript(u32 *arg0) {
 
     value0 = *arg0;
     arg0++;
-    D_801E4D84 = value0;
+    g_SkyRowBase = value0;
     value1 = *arg0;
     arg0++;
     g_EnvScriptCues = arg0;

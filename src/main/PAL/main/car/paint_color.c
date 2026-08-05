@@ -5,13 +5,13 @@
  * reconciled to the most specific form.  Only ApplyBodyColor1 and
  * ApplyBodyColor2 read them, the others just store.
  */
-extern volatile u16 g_PaintBlendShade0 asm("D_8019CB38");
-extern volatile u16 g_PaintBlendShade1 asm("D_8019CB3A");
+extern volatile u16 g_PaintBlendShade0;
+extern volatile u16 g_PaintBlendShade1;
 extern volatile u16 g_PaintBlendShade2;
 
 
 /*
- * D_8019CB38 / D_8019CB3A (the two blended shade words this routine emits)
+ * g_PaintBlendShade0 / g_PaintBlendShade1 (the two blended shade words this routine emits)
  * MUST keep the raw D_ spelling: they are referenced from the %hi/%lo pairs in
  * the inline asm below, which does not follow asm() labels. See names.md 12c.
  */
@@ -166,7 +166,7 @@ void ApplyBodyColor1(u32 arg0, u32 arg1) {
     ((volatile u16 *)base)[0x2C4] = c;
 }
 
-extern u32 g_CarModelAsset asm("D_8009E698");
+extern u32 g_CarModelAsset;
 extern u32 g_CarModelSlot;
 
 void ApplyBodyColor1(u32 arg0, u32 arg1);
@@ -236,7 +236,7 @@ void ApplyBodyColor2(u32 arg0, u32 arg1) {
     ((volatile u16 *)base)[0x2C9] = c;
 }
 
-extern u32 g_CarModelAsset asm("D_8009E698");
+extern u32 g_CarModelAsset;
 extern u32 g_CarModelSlot;
 
 void ApplyBodyColor2(u32 arg0, u32 arg1);

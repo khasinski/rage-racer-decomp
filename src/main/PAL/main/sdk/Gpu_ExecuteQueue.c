@@ -9,7 +9,7 @@ typedef struct LastCb {
     long tag;
 } LastCb;
 
-extern volatile QEntry g_GpuQueue[] asm("D_801E5024");
+extern volatile QEntry g_GpuQueue[];
 extern volatile long g_GpuQueueWriteIdx asm("D_800942EC");
 extern volatile long g_GpuQueueReadIdx asm("D_800942F0");
 extern long g_ExecQueueIntrMask asm("D_800942F8");

@@ -1,7 +1,7 @@
 #include "psyq/snd.h"
 
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 
 void SsSeqApplyProgramChange(long seq, long sep) {
     SeqStruct *state = &g_SndSeqTable[(short)seq][(short)sep];
@@ -13,7 +13,7 @@ void SsSeqApplyProgramChange(long seq, long sep) {
 }
 
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 extern long g_SndTickResolution;
 
 void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2);
@@ -87,7 +87,7 @@ void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
 }
 
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 
 long SsSeqReadDeltaTime(long arg0, long arg1) asm("func_80070D70");
 
@@ -185,7 +185,7 @@ void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
 }
 
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 
 void SsSeqRestartPlayback(short arg0, short arg1);
 

@@ -8,7 +8,7 @@ typedef union SeqVolume71568 {
     u_short value;
 } SeqVolume71568;
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 
 long SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices);
 long SpuVmGetSeqVol(short seq_sep, short *left, short *right);

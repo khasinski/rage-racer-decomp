@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern QEntry g_GpuQueue[] asm("D_801E5024");
+extern QEntry g_GpuQueue[];
 extern volatile long g_GpuQueueWriteIdx asm("D_800942EC");
 extern long g_GpuQueueReadIdx asm("D_800942F0");
 extern long g_AddQueueIntrMask asm("D_800942F4");
@@ -25,7 +25,7 @@ extern void DMACallback(long, void *);
 /* Driver-table slot +0x08, the `send` entry every libgpu call goes through:
  * runs the worker immediately when the queue is empty and the GPU idle,
  * otherwise copies `size` bytes of parameters into the 64-entry, 96-byte
- * queue at D_801E5024 and arms the DMA2 callback Gpu_ExecuteQueue. */
+ * queue at g_GpuQueue and arms the DMA2 callback Gpu_ExecuteQueue. */
 long Gpu_AddQueue(void (*worker)(long, long), long param, long size, long data);
 long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     long i;

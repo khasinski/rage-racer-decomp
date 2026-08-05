@@ -9,7 +9,7 @@
 extern long g_SndUpdateLock;
 extern ProgAtr *g_SndCurrentProgTable;
 extern VagAtr *g_SndCurrentToneTable;
-extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttr g_SndCurrentAttr;
 extern SpuVoice g_SndVoiceState[];
 
 extern long SpuVmVSetUp(short, short);

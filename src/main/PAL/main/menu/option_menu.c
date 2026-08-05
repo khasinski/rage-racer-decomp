@@ -18,7 +18,7 @@ extern s32 g_ScreenOffsetY;
 extern s32 g_ScreenOffsetEditX;
 extern DVec D_8007D5A8[];
 extern Rgb D_8007D658[];
-extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
+extern GameScoreRecord g_ClassRecords[];
 extern Struct12 D_8007D5D4[];
 s32 func_800153FC(void);
 s32 RequestTrackLoad(void);

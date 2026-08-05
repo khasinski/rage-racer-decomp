@@ -12,12 +12,12 @@ extern s32 g_CameraCarSpeedRamp;
 extern s32 g_CameraCarStepX;
 extern s32 g_CameraCarStepZ;
 extern s16 g_FreeCameraAngleOffset[] asm("D_8007E288");
-extern s16 g_PlayerTrackSection asm("D_8009E74C");
-extern s32 g_PlayerProgressA asm("D_8009E73C");
-extern s32 g_PlayerProgressB asm("D_8009E740");
-extern s32 g_PlayerTrackProgress asm("D_8009E744");
+extern s16 g_PlayerTrackSection;
+extern s32 g_PlayerProgressA;
+extern s32 g_PlayerProgressB;
+extern s32 g_PlayerTrackProgress;
 
-extern GameRenderObject g_CameraCar asm("D_801E3E14");
+extern GameRenderObject g_CameraCar;
 
 void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 rsin(s32 arg0) asm("func_80068568");
@@ -227,7 +227,7 @@ void ResetFreeLookCamera(void) {
  * mode word for the second of the two models each board draws.
  */
 extern Vec4 g_AnimSceneryPos[] asm("D_8007E2C0");
-extern u32 *g_VisibleCellMask asm("D_801E6828");
+extern u32 *g_VisibleCellMask;
 extern s16 g_AnimSceneryFrame asm("D_8007E2EA");
 extern s32 g_RacePaused;
 extern s32 g_AnimSceneryTint asm("D_8007E2E4");

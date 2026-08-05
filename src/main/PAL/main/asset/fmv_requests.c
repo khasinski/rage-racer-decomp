@@ -4,7 +4,7 @@
 #include "game/state.h"
 s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
 
-extern GameSceneAssetHeader *g_AssetLoadCursor asm("D_8019CAFC");
+extern GameSceneAssetHeader *g_AssetLoadCursor;
 
 s32 EnableCdAudioMode(void);
 void SetTrackCameraTable(void *arg0);

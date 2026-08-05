@@ -9,7 +9,7 @@ extern volatile u32 *g_FmvStripBuffers[] asm("D_8009AF2C");
 extern s32 g_FmvVlcIndex asm("D_8009AF28");
 extern s32 g_FmvStripIndex asm("D_8009AF34");
 extern s32 g_FmvStreamEnded asm("D_8009AF74");
-extern s32 g_FmvState asm("D_8009F094");
+extern s32 g_FmvState;
 extern s16 g_FmvStripWidth asm("D_8009AF50");
 extern s16 g_FmvStripHeight asm("D_8009AF52");
 extern s32 g_StreamSectorCount;

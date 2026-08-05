@@ -28,15 +28,15 @@ extern s32 g_RefSectorTime2 asm("D_8009AF98");
 
 extern u8 g_PlayerCar[] asm("D_8009E6D4");
 
-extern u8 *g_CourseProgress asm("D_8009E67C");
+extern u8 *g_CourseProgress;
 
-extern s32 g_PlayerProgressA asm("D_8009E73C");
+extern s32 g_PlayerProgressA;
 
-extern s32 g_PlayerProgressB asm("D_8009E740");
+extern s32 g_PlayerProgressB;
 
-extern s16 g_PlayerLap asm("D_8009E83C");
+extern s16 g_PlayerLap;
 
-extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
+extern s32 g_BestTotalTimes[][4][2];
 
 extern s32 g_SeriesCleared;
 
@@ -49,14 +49,14 @@ extern s16 g_MirrorViewEnabled;
 extern s32 g_LapCount;
 
 
-extern s32 g_BestLapTimes[][4][2] asm("D_801E4408");
+extern s32 g_BestLapTimes[][4][2];
 
-extern s32 g_BestSectorTimes[][4][3] asm("D_801E41E8");
+extern s32 g_BestSectorTimes[][4][3];
 
 
 extern s32 g_RaceTotalTime;
 
-extern s32 g_BestLapThisRace asm("D_801E4BCC");
+extern s32 g_BestLapThisRace;
 
 
 
@@ -91,7 +91,7 @@ void ForceAllEffectVoicesEnabled(s32 arg0);
 
 s32 Random15(void);
 
-extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s16 g_PlayerTrackSection;
 
 
 extern s32 g_CameraViewMode;
@@ -104,7 +104,7 @@ extern s16 g_PauseDebounce;
  * entry, and its one reader is never reached in retail. */
 extern s32 g_FrameSyncThreshold;
 
-extern u8 *g_CamRow asm("D_8019C9A8");
+extern u8 *g_CamRow;
 
 /* Deliberately raw: the only two writes in the whole image store zero (here
  * and in the car-init routine func_8002CB30), so the one reader --
@@ -115,7 +115,7 @@ extern s16 D_8019C9AC;
 
 extern s32 g_TrackWalkStart;
 
-extern s32 g_BgmTrack asm("D_801E40E0");
+extern s32 g_BgmTrack;
 
 
 
@@ -129,7 +129,7 @@ extern s32 g_RivalCueFlags;
 extern s16 D_801E4CF8;
 
 
-extern s32 g_SectorEndDistance[] asm("D_801E4D98");
+extern s32 g_SectorEndDistance[];
 
 
 extern s16 g_RivalCueCooldown0;
@@ -179,19 +179,19 @@ void DrawRoundScreen(void);
 
 
 
-extern u8 g_SceneLightMatrix[] asm("D_8009E6AC");
+extern u8 g_SceneLightMatrix[];
 
-extern s32 g_PlayerTrackProgress asm("D_8009E744");
+extern s32 g_PlayerTrackProgress;
 
 
 extern s16 g_ReverbZoneDepth;
 
 extern s16 g_CameraCarTrackSection;
 
-extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
+extern s32 g_IsEnvironmentMode4;
 
 
-extern u8 g_PadType asm("D_801E4369");
+extern u8 g_PadType;
 
 
 

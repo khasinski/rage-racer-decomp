@@ -12,7 +12,7 @@ extern u8 g_CaptionTotalMoney[] asm("D_80010E38");
 extern u8 g_CaptionPromotionBonus[] asm("D_80010E40");
 void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
 void LibcSprintf(void *dst, void *fmt, s32 val) asm("func_800632F0");
-extern s32 g_CourseProgress asm("D_8009E67C");
+extern s32 g_CourseProgress;
 extern s32 g_ClassClearFanfareTimer;
 extern s32 g_ClassCompleted;
 /*
@@ -24,7 +24,7 @@ extern s32 g_ClassCompleted;
  */
 extern s16 g_ClassRecord6;
 extern s16 g_ClassRecord5;
-extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
+extern GameScoreRecord g_ClassRecords[];
 extern GameScoreRecord g_ClassClears[];
 extern s32 g_ClassResultPlace;
 extern s32 g_SeriesCleared;

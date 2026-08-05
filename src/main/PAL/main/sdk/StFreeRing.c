@@ -3,10 +3,10 @@
 
 extern long g_StRingSize;
 extern long g_StRingSlot;
-extern StStrHeader *g_StRingBase asm("D_801E8AAC");
-extern long D_801E8278;
-extern long D_801E8A94;
-extern long D_801E3E10;
+extern StStrHeader *g_StRingBase;
+extern long g_StEndFrame;
+extern long g_StStreamFlag;
+extern long g_StStartFrame;
 
 u_long StFreeRing(u_long *base) {
     long temp_a1;
@@ -52,7 +52,7 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     entry = (StRingEventRecord *)((g_StRingSlot * 32) + (long)g_StRingBase);
 
     if ((entry->state & 0xFFFF) == 1) {
-        old_flag = D_801E8278;
+        old_flag = g_StEndFrame;
         g_StRingSlot = 0;
         if (old_flag != 0) {
             entry->state = 0;
@@ -88,7 +88,7 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
 
 void StSetRingParams(long arg0, long arg1, long arg2);
 void StSetRingParams(long arg0, long arg1, long arg2) {
-    D_801E8A94 = arg0;
-    D_801E3E10 = arg1;
-    D_801E8278 = arg2;
+    g_StStreamFlag = arg0;
+    g_StStartFrame = arg1;
+    g_StEndFrame = arg2;
 }

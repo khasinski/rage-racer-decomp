@@ -24,9 +24,9 @@ extern s16 D_8019CEAA;
 extern s16 D_801C0692;
 extern s16 D_8019CEAE;
 extern s16 D_801C0696;
-extern s32 g_VisibleCellMask asm("D_801E6828");
+extern s32 g_VisibleCellMask;
 extern s32 D_8019C7E4;
-extern s32 g_VisibleCellList asm("D_801E4BC8");
+extern s32 g_VisibleCellList;
 extern s32 D_8009E888;
 extern s32 g_MirrorPanelY;
 void func_80069A58(s32 arg0, s32 arg1);
@@ -113,9 +113,9 @@ s32 BeginMirrorPass(void) {
 }
 
 extern Matrix D_8009AF00;
-extern s32 g_VisibleCellMask asm("D_801E6828");
+extern s32 g_VisibleCellMask;
 extern s32 D_8019C86C;
-extern s32 g_VisibleCellList asm("D_801E4BC8");
+extern s32 g_VisibleCellList;
 extern s32 D_8009EC94;
 
 void func_80069A58(s32 arg0, s32 arg1);
@@ -211,7 +211,7 @@ u8 *DrawMirrorFrame(u8 *packet) {
 extern s32 g_MirrorUnlocked;
 extern s16 g_MirrorViewEnabled;
 extern s32 g_MirrorPanelY;
-extern s32 g_VisibleCellList asm("D_801E4BC8");
+extern s32 g_VisibleCellList;
 
 u8 *DrawMirrorFrame(u8 *packet);
 void func_800418D4(void);

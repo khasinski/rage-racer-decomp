@@ -6,8 +6,8 @@ typedef struct TeamLogoSample {
 } TeamLogoSample;
 
 extern TeamLogoSample *g_TeamLogoSampleData;
-extern u16 g_TeamLogoClut[] asm("D_801E444C");
-extern u16 g_TeamLogoSwatches[] asm("D_801E444E");
+extern u16 g_TeamLogoClut[];
+extern u16 g_TeamLogoSwatches[];
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
 static inline s32 TeamLogoParity(s32 value)

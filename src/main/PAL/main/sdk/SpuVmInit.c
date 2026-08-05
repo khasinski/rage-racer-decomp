@@ -41,10 +41,10 @@ extern u_char D_8009E0D8[];
 extern u_char D_8009E0DA[];
 extern u_char D_8009E0DC[];
 extern u_char g_SndVoiceStateAutoPan[];
-extern u_char D_8009E0E2[];
-extern u_char D_8009E0E4[];
-extern u_char D_8009E0E6[];
-extern u_char D_8009E0E8[];
+extern u_char g_SndVoiceStatePanStep[];
+extern u_char g_SndVoiceStatePanCounter[];
+extern u_char g_SndVoiceStatePanCounterReload[];
+extern u_char g_SndVoiceStateStartPan[];
 
 extern volatile u_short g_SndReverbAttrDepthLeft;
 extern volatile u_short g_SndReverbAttrDepthRight;
@@ -119,10 +119,10 @@ void SpuVmInit(long arg0) {
                 *(short *)&D_8009E0D8[offset] = 0;
                 *(short *)&D_8009E0DA[offset] = 0;
                 *(short *)&g_SndVoiceStateAutoPan[offset] = 0;
-                *(short *)&D_8009E0E2[offset] = 0;
-                *(short *)&D_8009E0E4[offset] = 0;
-                *(short *)&D_8009E0E6[offset] = 0;
-                *(short *)&D_8009E0E8[offset] = 0;
+                *(short *)&g_SndVoiceStatePanStep[offset] = 0;
+                *(short *)&g_SndVoiceStatePanCounter[offset] = 0;
+                *(short *)&g_SndVoiceStatePanCounterReload[offset] = 0;
+                *(short *)&g_SndVoiceStateStartPan[offset] = 0;
                 *(short *)&D_8009E0DC[offset] = 0;
 
                 spu = (volatile u_short *)&g_SndSpuRegs[(u_short)shifted];

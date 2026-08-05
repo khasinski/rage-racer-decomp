@@ -1,10 +1,10 @@
 #include "common.h"
 
-extern s32 g_CamRow asm("D_8019C9A8");
+extern s32 g_CamRow;
 extern s32 g_TrackTextureSectionLo;
 extern s32 g_TrackTextureSectionHi;
 /*
- * Copies the first two words of the active camera row (D_8019C9A8 holds a
+ * Copies the first two words of the active camera row (g_CamRow holds a
  * pointer to the current CamRow) into the active view-param globals.
  */
 void LoadTrackTexturePageRange(void);

@@ -10,7 +10,7 @@ void SsSeqStop(s32 arg0);
 void StopSequence(void);
 void StopSequence(void) { SsSeqStop(g_SeqHandle); }
 
-extern s32 g_ReverbFadeStep asm("D_801E6D8C");
+extern s32 g_ReverbFadeStep;
 extern s32 g_SeqVolumeFadeStep;
 
 void StartSequenceFadeOut(void) {

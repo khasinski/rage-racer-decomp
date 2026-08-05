@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/track.h"
 
-extern GameTrackPoint *g_TrackArcCenters asm("D_8019C7D0");
+extern GameTrackPoint *g_TrackArcCenters;
 extern s16 g_TrackSectionCount;
 
 /*

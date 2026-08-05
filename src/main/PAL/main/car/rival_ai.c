@@ -6,7 +6,7 @@
 
 void UpdateRivalRubberBand(void);
 
-extern u8 g_PlayerTrackProgress[] asm("D_8009E744");
+extern u8 g_PlayerTrackProgress[];
 extern s32 g_PlayerSpeed;
 
 /*
@@ -285,8 +285,8 @@ void RankContenders(void) {
     }
 }
 
-extern s32 g_PlayerProgressA asm("D_8009E73C");
-extern s32 g_PlayerProgressB asm("D_8009E740");
+extern s32 g_PlayerProgressA;
+extern s32 g_PlayerProgressB;
 extern s32 g_RivalCueFlags;
 extern s32 g_ClosestRivalRank;
 extern s16 g_RivalCueCooldown3;

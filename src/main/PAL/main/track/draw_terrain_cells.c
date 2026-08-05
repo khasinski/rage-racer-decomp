@@ -1,7 +1,7 @@
 #include "common.h"
 void SetRotMatrix(s32 arg0) asm("func_80069858");
 
-extern s32 g_VisibleCellList asm("D_801E4BC8");
+extern s32 g_VisibleCellList;
 void BuildVisibleCells(s32 arg0, s32 arg1);
 void SubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
 void DrawTerrainCells(void);
@@ -27,9 +27,9 @@ void SetPolyG4(void *)asm("func_80064F58");
 s32 GameSin(s32) asm("func_80068568");
 s32 GameCos(s32) asm("func_80068634");
 extern s16 g_SkyTileMap[][16] asm("D_8007F470");
-extern s32 g_MirrorMode asm("D_8019CACC");
+extern s32 g_MirrorMode;
 extern s32 g_CourseIndex;
-extern s32 g_SkyRowBase asm("D_801E4D84");
+extern s32 g_SkyRowBase;
 typedef struct
 {
   u32 tag;
@@ -157,7 +157,7 @@ typedef struct
   GameEnvColor from;
   GameEnvColor to;
 } GameEnvColorSlot;
-extern GameEnvColorSlot g_EnvColors[] asm("D_801E3FB6");
+extern GameEnvColorSlot g_EnvColors[];
 extern GameEnvColor g_EnvColor1Red;
 extern GameEnvColor g_EnvColor2Red;
 extern GameEnvColor g_EnvColor4Red;

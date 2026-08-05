@@ -5,7 +5,7 @@
 
 u32 DrawEngineerShopScreen(s32 arg0);
 
-extern u8 *g_CarModelAsset asm("D_8009E698");
+extern u8 *g_CarModelAsset;
 
 extern u8 g_MenuBlankCaption asm("D_80011BA0");
 extern u8 D_800820C4;
@@ -23,8 +23,8 @@ extern s32 g_CarNamePlateStep;
 extern s32 g_MenuPlateCarIndex;
 extern s32 D_8009B32C;
 extern s32 D_8009B330;
-extern s32 g_CarSwapFromIndex asm("D_8009B374");
-extern s32 g_CarSwapToIndex asm("D_8009B378");
+extern s32 g_CarSwapFromIndex;
+extern s32 g_CarSwapToIndex;
 extern s32 g_PlayerMoney;
 extern s16 g_PrevOwnedCarIndex;
 extern u8 *D_8019CB00;

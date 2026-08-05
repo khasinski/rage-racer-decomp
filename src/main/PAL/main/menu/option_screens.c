@@ -39,7 +39,7 @@ extern s32 g_TrackWalkStart;
 extern s32 g_CameraCarIndex;
 extern s32 g_FrameSyncThreshold;
 extern u8 g_CarTrackSection[];
-extern s32 *g_CamRow asm("D_8019C9A8");
+extern s32 *g_CamRow;
 void InitRenderState(s32 arg0) asm("func_80017884");
 void LoadTrackTexturePageRange(void);
 void InitTrackLighting(void);

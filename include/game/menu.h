@@ -11,8 +11,8 @@ typedef struct GameScoreRecord {
     u16 clears;
 } GameScoreRecord;
 
-/* Ranking / time high-score record row; tables D_801E7744 (ranking) and
- * D_8019CB78 (time), both [][4][5]. */
+/* Ranking / time high-score record row; tables g_RankingRecords (ranking) and
+ * g_TimeRecords (time), both [][4][5]. */
 typedef struct S22 {
     s8 pad[8];   /* 0x00 name[8] */
     s32 v8;      /* 0x08 */
@@ -57,7 +57,7 @@ extern s32 (*g_MenuScreenDraw[])(s32 step) asm("D_80082EF0");
 /*
  * Title-menu cursor, 0..4 (UpdateMainMenuInput wraps it with `(sel + 5) % 5` on the
  * up/down pad edges and skips entry 1 while g_AdvancedSeriesUnlocked is 0). 0 and 1 are the
- * two Grand Prix save files - they repoint g_CarTable / D_801E4FAC / D_8009E67C
+ * two Grand Prix save files - they repoint g_CarTable / g_RaceProgress / g_CourseProgress
  * at that file's tables and set g_GrandPrixMode to 1 - 2 is Time Attack
  * (g_GrandPrixMode 0), 3 starts the attract demo and 4 opens the options.
  * DrawMainMenuRows draws the row whose index equals it as selected.
@@ -81,13 +81,13 @@ extern s32 GameMenuLoadPhase;
  * the bottom bar and makes DrawScriptedSprite skip element types 9/19/29/39.
  * The setting is only ever written 0, so the layout is unreachable in retail.
  */
-extern s32 g_MenuAltLayout asm("D_8019CB0C");
+extern s32 g_MenuAltLayout;
 extern s32 g_MenuAltLayoutSetting;
 
 /* The two S22[series][course][5] high-score tables kept in the save block:
  * race ranking (+0x9A4) and time ranking (+0x8DC). */
-extern S22 g_RankingRecords[][4][5] asm("D_801E7744");
-extern S22 g_TimeRecords[][4][5] asm("D_8019CB78");
+extern S22 g_RankingRecords[][4][5];
+extern S22 g_TimeRecords[][4][5];
 
 /* The team-name entry buffer and its length, capped at 6 characters. The pair is
  * also the first bytes of the memory-card save header row. */
@@ -106,7 +106,7 @@ extern s32 g_McMenuSubState;
 
 /*
  * The pad word block at 0x801E4368, filled by UpdatePadState from the raw
- * BIOS buffer at D_801E403C:
+ * BIOS buffer at g_PadBuffers:
  *   +0x00 status, +0x01 pad type (0x41 digital, 0x23 NeGcon),
  *   +0x02 g_PadHeld = ~(raw[0] << 8 | raw[1]), +0x04 previous frame,
  *   +0x06 g_PadEdge2 = held & ~previous, +0x08 g_PadEdge, +0x0A.. analog axes.
@@ -185,7 +185,7 @@ s32 DrawCourseSelectScreen(s32 step) asm("func_8005290C");
 void UpdateRankingScreen(void);
 s32 DrawRankingScreen(s32 step) asm("func_80054C84");
 /* The five record rows: place number + suffix + holder + row background, from
- * the ranking table D_801E7744 or the time table D_8019CB78. */
+ * the ranking table g_RankingRecords or the time table g_TimeRecords. */
 s32 DrawRankingTable(s32 *accumulator, s32 step, s32 table);
 
 /* id 3 -- runs for a single frame on the way from id 1 into id 4. */
@@ -247,7 +247,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) asm("func_8004E724");
  * g_MenuViewAngle/Offset, then submits the car and the showroom floor. */
 void DrawMenuCarView(void);
 /* Draw and input halves of the logo painter. The canvas D_801E6F2C is a 64x64
- * 4bpp bitmap with its own 16-entry CLUT at D_801E444C. */
+ * 4bpp bitmap with its own 16-entry CLUT at g_TeamLogoClut. */
 void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep);
 void UpdateTeamLogoCanvas(void);
 
@@ -274,10 +274,10 @@ void RotateTeamLogoCw(void);
 /*
  * TEAM LOGO editor data, all per-file types; see docs/names.md 12c.
  *   g_TeamLogoCanvas   D_801E6F2C  2048 bytes = 64x64 4bpp
- *   g_TeamLogoClut     D_801E444C  16 x u16
+ *   g_TeamLogoClut     g_TeamLogoClut  16 x u16
  *   g_TeamLogoRect     D_8007BEE4  RECT{0x290,0x30,64,16} for the canvas
  *   g_TeamLogoClutRect D_8007BEDC  RECT{16,480,16,1} for the CLUT
- * g_ClassRecords D_8019CB40 is the 11 x {s16 grade, s16 clears} table.
+ * g_ClassRecords g_ClassRecords is the 11 x {s16 grade, s16 clears} table.
  */
 
 

@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 extern long g_SndSeqOpenMask;
 extern short g_SndSeqTableTMax;
 

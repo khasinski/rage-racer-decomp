@@ -3,7 +3,7 @@
 #include "game/render.h"
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
-extern s32 g_ModelBankCount asm("D_801E4168");
+extern s32 g_ModelBankCount;
 extern s32 g_FlybySceneryRotX;
 extern s32 g_FlybySceneryRotY;
 extern s32 g_FlybySceneryRotZ;
@@ -31,7 +31,7 @@ void DrawFlybyScenery(void) {
     }
 }
 
-extern volatile s32 g_RaceSeries asm("D_801E408C");
+extern volatile s32 g_RaceSeries;
 extern u8 *g_RouteSceneryData;
 /* 0 while the route prop is not running; the seeder sets it to 1 and
  * UpdateRouteScenery increments it every frame, so it is both the enable

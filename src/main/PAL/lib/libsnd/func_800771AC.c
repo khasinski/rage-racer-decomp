@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 extern SpuVoice g_SndVoiceState[];
 extern short g_SndVoiceRegs[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
@@ -14,7 +14,7 @@ extern ProgAtr *g_SndCurrentProgTable;
 extern VabHdr *g_SndCurrentVabHeader;
 extern VagAtr *g_SndCurrentToneTable;
 extern long g_SndUpdateLock;
-extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttr g_SndCurrentAttr;
 
 long SpuVmVSetUp(short vab_id, short program);
 u_char SpuVmAlloc(long priority);

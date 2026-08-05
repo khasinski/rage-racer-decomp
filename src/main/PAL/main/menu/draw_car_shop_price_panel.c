@@ -3,7 +3,7 @@ void GameDrawMenuButton(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, 
                    s32 a9, s32 a10) asm("func_80048B88");
 
 extern s32 D_8007FB30;
-extern s32 g_MenuAltLayout asm("D_8019CB0C");
+extern s32 g_MenuAltLayout;
 
 void GameDrawNumber(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8) asm("func_80047BD4");
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g,

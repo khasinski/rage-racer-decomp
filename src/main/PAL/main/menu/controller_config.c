@@ -4,13 +4,13 @@
 #include "game/audio.h"
 #include "game/menu.h"
 
-extern u8 g_PadType asm("D_801E4369");
+extern u8 g_PadType;
 
 /* The two 0..7 selections; g_PadType picks which one the screen edits. */
-extern s16 g_PadMappingIndex asm("D_8019CE08");
-extern s16 g_NegconMappingIndex asm("D_8019CB08");
-extern u16 g_PadMappingIndexSaved asm("D_8019C7A8");
-extern u16 g_NegconMappingIndexSaved asm("D_8019C76C");
+extern s16 g_PadMappingIndex;
+extern s16 g_NegconMappingIndex;
+extern u16 g_PadMappingIndexSaved;
+extern u16 g_NegconMappingIndexSaved;
 /* 0 while a controller is present, else the error code the banner reports. */
 extern s32 g_PadErrorState;
 extern s32 g_SetupArrowPulse asm("D_8007C13C");
@@ -223,8 +223,8 @@ extern u16 g_NegconSteerNeutral;
 extern u16 g_NegconNeutralI;
 extern u16 g_NegconNeutralII;
 extern u16 g_NegconNeutralL;
-extern u16 g_NegconSteerPlay asm("D_8019CAD0");
-extern u16 g_NegconMaxTwist asm("D_801E418C");
+extern u16 g_NegconSteerPlay;
+extern u16 g_NegconMaxTwist;
 
 /* ...and where each of them is parked while the calibration screens run, so a
  * cancel can put every one of them back. */

@@ -5,10 +5,10 @@
 #include "game/cd.h"
 s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
 
-extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
+extern u8 *g_AssetLoadCursor;
 extern Rect g_TeamLogoClutRect asm("D_8007BEDC");
 extern Rect g_TeamLogoRect asm("D_8007BEE4");
-extern u16 g_TeamLogoClut[] asm("D_801E444C");
+extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 void UploadImageAsset(void *arg0);
 void UploadLoadBufferImage(void);
@@ -17,10 +17,10 @@ void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, s32 arg3);
 s32 PollAudioSlotLoad(void);
 void StoreImage(Rect *rect, void *data);
 void DrawSync(long mode) asm("func_800658FC");
-extern s32 g_ImageBlockBuffer asm("D_801E4B30");
-extern GameSceneAssetHeader *g_AssetBase asm("D_8019C904");
+extern s32 g_ImageBlockBuffer;
+extern GameSceneAssetHeader *g_AssetBase;
 extern void *g_AssetBlockPtr2;
-extern void *g_AssetSubBlockPtr asm("D_801E8AB0");
+extern void *g_AssetSubBlockPtr;
 void CloseLoadedAudioSlots(void);
 
 void LoadBootAssets(void);

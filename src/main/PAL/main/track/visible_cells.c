@@ -15,10 +15,10 @@ typedef struct Obj {
     s32 flags; /* 0x10 */
 } Obj;
 
-extern Obj *g_CourseObjects asm("D_801E4B2C");
+extern Obj *g_CourseObjects;
 extern s32 g_CourseObjectCount;
-extern s32 *g_VisibleCellMask asm("D_801E6828");
-extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
+extern s32 *g_VisibleCellMask;
+extern s32 g_IsEnvironmentMode4;
 
 
 /*
@@ -151,7 +151,7 @@ typedef struct Scr {
     s32 f14;
 } Scr;
 
-extern Vec4 *g_VisibleCellList asm("D_801E4BC8");
+extern Vec4 *g_VisibleCellList;
 /* Interleaved { dx, dy } terrain-cell offsets, 64 pairs per octant and eight
  * octants; the four switch arms fold the full circle onto that one octant by
  * negating dx and/or dy. */

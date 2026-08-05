@@ -68,11 +68,11 @@ typedef struct GameSceneAssetHeader {
  * Asset-region pointers. Spelled with a different type per translation unit
  * (u8 * / u32 / a typed header pointer), so each file carries its own aliased
  * extern rather than one declaration here; see docs/names.md 12c.
- *   g_AssetBase        D_8019C904  base of the resident block, base + base[n]
- *   g_AssetLoadCursor  D_8019CAFC  load destination, advanced by each load
- *   g_AssetSubBlockPtr D_801E8AB0  base + header->offsets[n + 1]
- *   g_ImageBlockBuffer D_801E4B30  buffer handed to UploadImageAsset
- *   g_CarModelAsset    D_8009E698  registry entry selected by SelectCarModelSlot
+ *   g_AssetBase        g_AssetBase  base of the resident block, base + base[n]
+ *   g_AssetLoadCursor  g_AssetLoadCursor  load destination, advanced by each load
+ *   g_AssetSubBlockPtr g_AssetSubBlockPtr  base + header->offsets[n + 1]
+ *   g_ImageBlockBuffer g_ImageBlockBuffer  buffer handed to UploadImageAsset
+ *   g_CarModelAsset    g_CarModelAsset  registry entry selected by SelectCarModelSlot
  *
  * g_CarModelAsset is the one slot whose pointee type really does change with
  * the screen, so its several spellings are not a naming slip to unify: the

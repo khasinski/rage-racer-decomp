@@ -12,7 +12,7 @@ typedef struct KF {
     s16 pad;
 } KF;
 
-extern volatile s32 g_RaceSeries asm("D_801E408C");
+extern volatile s32 g_RaceSeries;
 extern u8 *g_RouteSceneryData;
 extern s32 g_RouteSceneryClock;
 extern volatile s32 g_RouteSceneryFrame;

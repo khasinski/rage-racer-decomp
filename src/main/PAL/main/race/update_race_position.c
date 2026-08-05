@@ -2,9 +2,9 @@
 #include "game/car.h"
 #include "game/race.h"
 
-extern s32 g_PlayerProgressA asm("D_8009E73C");
-extern s32 g_PlayerProgressB asm("D_8009E740");
-extern GameRaceRanking g_PlayerLap asm("D_8009E83C");
+extern s32 g_PlayerProgressA;
+extern s32 g_PlayerProgressB;
+extern GameRaceRanking g_PlayerLap;
 extern s32 g_LapCount;
 extern GameCarRuntimeProgressWindow g_CarProgressB[];
 

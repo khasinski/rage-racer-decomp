@@ -77,7 +77,7 @@ void UpdateShuttleScenery(s32 arg0) {
     entry->dwellCounter = entry->dwellCounter + 1;
 }
 
-extern u32 *g_VisibleCellMask asm("D_801E6828");
+extern u32 *g_VisibleCellMask;
 extern s32 g_CourseModelCount;
 
 

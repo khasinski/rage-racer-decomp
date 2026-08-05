@@ -39,7 +39,7 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
  * offsets are match-load-bearing.
  */
 
-extern s32 g_ModelBankCount asm("D_801E4168");
+extern s32 g_ModelBankCount;
 
 
 void func_80017794(void *arg0, void *arg1, Matrix *mtx);
@@ -53,7 +53,7 @@ extern u32 g_ScratchRenderMode asm("D_1F800084");
 
 /* Counts how many of the 6 waypoint slots are active (active != 0). */
 
-extern s16 g_PlayerLap asm("D_8009E83C");
+extern s16 g_PlayerLap;
 
 
 void *func_80017390(void *ot, void *packet, s32 arg2);
@@ -71,20 +71,20 @@ void SetSprt(u8 *prim);
 extern s16 D_8009EC88;
 
 
-extern s32 g_PlayerProgressA asm("D_8009E73C");
+extern s32 g_PlayerProgressA;
 
-extern s32 g_PlayerProgressB asm("D_8009E740");
-
-
+extern s32 g_PlayerProgressB;
 
 
 
 
-extern s32 g_PlayerTrackProgress asm("D_8009E744");
+
+
+extern s32 g_PlayerTrackProgress;
 
 extern s16 g_ReverbZoneDepth;
 
-extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s16 g_PlayerTrackSection;
 
 extern u8 g_TextCongratulations asm("D_80011494");
 
@@ -156,7 +156,7 @@ s32 rsin(s32 arg0) asm("func_80068568");
 
 
 extern u8 *g_TrackPoints;
-extern s32 g_TrackLength asm("D_801E40D8");
+extern s32 g_TrackLength;
 extern u8 *g_TrackEventData;
 
 extern s32 FindTrackSegment(u8 *ent, s32 arg);

@@ -26,7 +26,7 @@ void func_80032280(void *arg0);
 
 void InitShuttleScenery(void);
 
-extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s16 g_PlayerTrackSection;
 
 void RequestTrackTexturePage(s32 arg0);
 
@@ -44,7 +44,7 @@ extern s16 g_TrackZoneCode;
 
 extern s16 g_ReverbZoneDepth;
 
-extern s16 g_TrackZoneDark asm("D_8019CAB0");
+extern s16 g_TrackZoneDark;
 
 
 extern u8 g_MsgGameExit asm("D_8001147C");
@@ -59,7 +59,7 @@ void RequestSelectBgmAssets(void);
 
 
 
-extern s16 g_PlayerLap asm("D_8009E83C");
+extern s16 g_PlayerLap;
 
 
 
@@ -71,17 +71,17 @@ extern s16 g_PlayerLap asm("D_8009E83C");
 
 extern s32 g_LapCount;
 
-extern s32 g_BestLapThisRace asm("D_801E4BCC");
+extern s32 g_BestLapThisRace;
 
 
 
-extern s32 g_SectorEndDistance[] asm("D_801E4D98");
+extern s32 g_SectorEndDistance[];
 
 extern s32 g_RefSectorTimes[] asm("D_8009AF90");
 
-extern s32 g_BestSectorTimes[][4][3] asm("D_801E41E8");
+extern s32 g_BestSectorTimes[][4][3];
 
-extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
+extern s32 g_BestTotalTimes[][4][2];
 
 void DrawSplitDelta(s32 arg0, s32 arg1);
 

@@ -112,7 +112,7 @@ struct Unk {
     s16 unk10;
 };
 
-extern SeqStruct *D_801E79CC[];
+extern SeqStruct *g_SndSeqTable[];
 
 s32 SsSeqReadDeltaTime(s32 seq, s16 sep) asm("func_80070D70");
 s16 SsUtGetProgAtr(s16 vab_id, s16 program, ProgAtr *out);
@@ -148,7 +148,7 @@ void ContDataEntry(s16 seq, s16 sep, u8 value) {
     u8 channel;
 
     mask = 0xFF;
-    score = &D_801E79CC[seq][sep];
+    score = &g_SndSeqTable[seq][sep];
     channel = score->channel;
     SsUtGetProgAtr(score->unk4c, score->programs[channel], &program_attr);
     if (score->unk27 == 1 && score->unk10 == 0) {

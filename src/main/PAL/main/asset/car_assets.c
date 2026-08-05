@@ -6,13 +6,13 @@ void InitSequenceAudio(void);
 s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
 
 extern u32 g_CarModelSlot;
-extern GameCarModelAsset *g_CarModelAsset asm("D_8009E698");
-extern GameSceneAssetHeader *g_AssetLoadCursor asm("D_8019CAFC");
+extern GameCarModelAsset *g_CarModelAsset;
+extern GameSceneAssetHeader *g_AssetLoadCursor;
 extern s32 g_TeamLogoSampleData;
 extern u8 *g_CarModelBuffer;
-extern u8 *g_ImageBlockBuffer asm("D_801E4B30");
+extern u8 *g_ImageBlockBuffer;
 extern u8 *g_AssetBlockPtr2;
-extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
+extern u8 *g_AssetSubBlockPtr;
 s32 GetCarAssetIndex(s32 model, s32 grade);
 void RegisterModelBank(void *arg0, s32 arg1);
 void RegisterCourseModels(void);

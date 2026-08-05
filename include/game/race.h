@@ -33,16 +33,16 @@ extern s32 g_GrandPrixRound;
 /* 1 = Grand Prix (championship), 0 = Time Attack. Picks the pre-race panel, the
  * innermost index of the record tables, and the in-race option count
  * (2 - mode). See names.md 3. */
-extern s16 g_GrandPrixMode asm("D_801E4DAC");
+extern s16 g_GrandPrixMode;
 
 /* In-race copy of g_GrandPrixSeries, latched when the grid is built. Outer
  * index of the per-series tables and, because the advanced series runs the
  * courses backwards, also the lap-direction flag. See names.md 3. */
-extern s32 g_RaceSeries asm("D_801E408C");
+extern s32 g_RaceSeries;
 
 /* Race phase: 0 pre-start (physics frozen), 1 countdown, 2 racing, 4/5
  * finished, 7 goal/retire, 8 aborted. */
-extern s16 g_RacePhase asm("D_801E6E74");
+extern s16 g_RacePhase;
 
 /* Series / save file the title menu picked (0 first, 1 advanced); also indexes
  * g_MaxClassReached. Final class is 4 for the first series, 5 for advanced. */
@@ -58,7 +58,7 @@ extern s32 g_MaxClassReached[2];
 
 /* Mirror mode, armed by holding the 0x80C pad combination as the race starts:
  * swaps left/right in steering, body roll, stereo pan and the sound cue. */
-extern s32 g_MirrorMode asm("D_8019CACC");
+extern s32 g_MirrorMode;
 
 /* One save slot's Grand Prix / Time Attack progress; InitMenuMode copies it
  * straight into the live globals and UpdateCourseSelectScreen writes it back. */
@@ -76,7 +76,7 @@ typedef struct GameRaceProgress {
 /* The save slot the front end is editing; repointed at one of the three below,
  * matching the title-menu row that g_CarTable was repointed for. Declared s32
  * because most translation units only touch the first word. */
-extern GameRaceProgress *g_RaceProgress asm("D_801E4FAC");
+extern GameRaceProgress *g_RaceProgress;
 /* The three slots themselves. Their fields used to be spelled as separate
  * symbols per serialiser (g_GrandPrixSaveCar and friends); they are members. */
 extern GameRaceProgress g_GrandPrixSave;
@@ -100,12 +100,12 @@ void DrawStartCountdown(s32 sceneTimer) asm("func_8003425C");
 
 /*
  * Per-course records, all in the memory-card save block. Per-file types.
- *   g_BestTotalTimes  D_8019C70C  [series][course][mode] ms
- *   g_BestLapTimes    D_801E4408  same shape, best single lap
- *   g_BestSectorTimes D_801E41E8  [series][course][3] sector splits
- *   g_CourseProgress  D_8009E67C  -> the running file's course-result record
- *   g_GrandPrixCourseProgress      D_801E42EC  row 0's record
- *   g_ExtraGrandPrixCourseProgress D_8009E874  row 1's record
+ *   g_BestTotalTimes  g_BestTotalTimes  [series][course][mode] ms
+ *   g_BestLapTimes    g_BestLapTimes  same shape, best single lap
+ *   g_BestSectorTimes g_BestSectorTimes  [series][course][3] sector splits
+ *   g_CourseProgress  g_CourseProgress  -> the running file's course-result record
+ *   g_GrandPrixCourseProgress      g_GrandPrixCourseProgress  row 0's record
+ *   g_ExtraGrandPrixCourseProgress g_ExtraGrandPrixCourseProgress  row 1's record
  */
 
 /*
@@ -131,7 +131,7 @@ extern s32 g_SectorTimes[3] asm("D_8009AF80");
 extern s32 g_RefLapTime asm("D_8009AF8C");
 
 /* Two 3-element arrays:
- *   g_SectorEndDistance[3]  D_801E4D98/9C/A0  lap distance ending each sector
+ *   g_SectorEndDistance[3]  g_SectorEndDistance/9C/A0  lap distance ending each sector
  *                                             (L/3, 2L/3, L)
  *   g_RefSectorTimes[3]     D_8009AF90/94/98  the best lap's sector times
  * g_RefSectorTimes is the one exception to one-address-one-name in this header:
@@ -158,7 +158,7 @@ extern s32 g_LapTimeSaturated asm("D_8009AFA0");
 
 /* Frames the player has been driving the wrong way. Past 10 the warning shows
  * and rival cues are muted; in Time Attack 60 on lap 0 aborts the run. */
-extern s16 g_WrongWayTimer asm("D_801E8A8C");
+extern s16 g_WrongWayTimer;
 
 /* g_PlayerCar.facingBackwards. Wrong way is `!= g_RaceSeries`, because the
  * advanced series drives the course in the other direction. */
@@ -173,9 +173,9 @@ extern s16 g_RivalCueEnabled;
 extern s16 g_RaceFadeTimer;
 
 /* Cursor of the in-race option overlay, clamped to 2 - g_GrandPrixMode. */
-extern s16 g_RaceOptionCursor asm("D_801E414C");
+extern s16 g_RaceOptionCursor;
 
-/* Best lap of this race so far (D_801E4BCC), seeded from g_BestLapTimes at the
+/* Best lap of this race so far (g_BestLapThisRace), seeded from g_BestLapTimes at the
  * grid, and DrawTimeValue (DrawTimeValue), which prints one millisecond
  * time as m'ss"fff. Both are also referenced from render/, so they are
  * declared per file rather than here. */

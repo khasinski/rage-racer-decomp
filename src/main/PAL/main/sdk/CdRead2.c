@@ -6,22 +6,22 @@ void StCdInterrupt(void);
 
 extern long g_StBackFrame;
 extern u_char g_StBackLoc[];
-extern long D_8009E69C;
+extern long g_StCurrentFrameCount;
 extern u_char *D_80099360;
 extern u_char *D_8009936C;
 extern long g_StNotStream2Mode;
-extern short D_8019C790;
+extern short g_StCurrentSector;
 extern long g_StColorMode;
 extern StCallback g_StFrameCallback;
-extern long D_8019C9A0;
-extern long D_801E3E08;
-extern long D_801E4190;
+extern long g_StEndCallback;
+extern long g_StNextChannel;
+extern long g_StCurrentChannel;
 extern long g_StDmaBusy;
-extern long D_801E6C74;
-extern long D_801E6C84;
+extern long g_StWriteCursor;
+extern long g_StReadCursor;
 extern long g_StRingSlot;
-extern StStrHeader *g_StRingBase asm("D_801E8AAC");
-extern long D_801E8274;
+extern StStrHeader *g_StRingBase;
+extern long g_StCopySource;
 extern long g_StRingSize;
 extern long g_StInterruptPending;
 
@@ -66,13 +66,13 @@ void CdRead2Callback(void) {
 
 void StClearRing(void) {
     g_StRingSlot = 0;
-    D_801E6C84 = 0;
-    D_801E6C74 = 0;
+    g_StReadCursor = 0;
+    g_StWriteCursor = 0;
     g_StDmaBusy = 0;
     StClearRingRange(0, g_StRingSize);
     g_StInterruptPending = 0;
-    D_8019C790 = 0;
-    D_8009E69C = 0;
+    g_StCurrentSector = 0;
+    g_StCurrentFrameCount = 0;
 }
 
 void StUnSetRing(void);
@@ -87,7 +87,7 @@ void StUnSetRing(void) {
 }
 
 void data_ready_callback(void) {
-    long index = D_801E6C84;
+    long index = g_StReadCursor;
     StStrHeader *base = g_StRingBase;
     StStrHeader *entry;
 
@@ -97,7 +97,7 @@ void data_ready_callback(void) {
     *(CdlLOC *)g_StBackLoc = entry->loc;
     /* +0x08 is nFrames; this path reads it as a whole word. */
     g_StBackFrame = *(long *)&entry->nFrames;
-    D_801E6C84 = D_801E6C74;
+    g_StReadCursor = g_StWriteCursor;
     if (g_StFrameCallback != 0) {
         g_StFrameCallback();
     }
@@ -116,12 +116,12 @@ long StGetBackloc(CdlLOC *arg0) {
  * (bit 0 = one-shot vs looping). start_frame/end_frame bound the stream. */
 void StSetStream(long mode, long start_frame, long end_frame, long callback, long user_data) {
     StSetRingParams(1);
-    D_801E8274 = 0;
+    g_StCopySource = 0;
     g_StFrameCallback = (StCallback)callback;
     g_StColorMode = mode & 1;
-    D_801E4190 = 0;
-    D_801E3E08 = 0;
-    D_8019C790 = 0;
-    D_8009E69C = 0;
-    D_8019C9A0 = user_data;
+    g_StCurrentChannel = 0;
+    g_StNextChannel = 0;
+    g_StCurrentSector = 0;
+    g_StCurrentFrameCount = 0;
+    g_StEndCallback = user_data;
 }

@@ -3,9 +3,9 @@
 #include "game/render.h"
 #include "game/state.h"
 #include "game/cd.h"
-extern GameRenderView *g_CarModelAsset asm("D_8009E698");
-extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
-extern s32 g_ModelBankCount asm("D_801E4168");
+extern GameRenderView *g_CarModelAsset;
+extern Matrix g_SceneLightMatrix;
+extern s32 g_ModelBankCount;
 extern s32 g_ScratchRenderMode asm("D_1F800084");
 s32 GetTrackZoneBlend(s32 arg0);
 void ApplyZoneLighting(s32 arg0, Matrix *arg1);
@@ -13,18 +13,18 @@ void func_80069888(Matrix *arg0);
 void func_80017794(void *a0, void *a1, void *a2);
 void RestoreColorMatrix(void);
 void DrawPlayerCarModel(GameRenderObject *obj);
-extern u8 *g_CamRow asm("D_8019C9A8");
+extern u8 *g_CamRow;
 extern s32 g_CourseIndex;
 extern u8 g_CarModelByCourse[][11] asm("D_8007D3AC");
 extern s16 D_8007D380[][2];
 void *ApplyMatrixLV(void *mtx, void *vec, void *out);
-extern s32 g_FmvState asm("D_8009F094");
+extern s32 g_FmvState;
 extern s32 g_StreamReturnScene;
 s32 CloseLoadedAudioSlots(void);
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
 s32 CdControl(s32 com, void *param, s32 result);
 void BeginFmv(s32 arg0);
-extern u32 g_AssetBase asm("D_8019C904");
+extern u32 g_AssetBase;
 void StartFmvPlayback(u32 arg0);
 void DecodeFmvFrame(void);
 void EndFmv(void);
@@ -41,7 +41,7 @@ void BeginFmv(s32 arg0) {
     CdControl(9, 0, 0);
 }
 
-extern u32 g_AssetBase asm("D_8019C904");
+extern u32 g_AssetBase;
 
 void StartFmvPlayback(u32 arg0);
 void DecodeFmvFrame(void);

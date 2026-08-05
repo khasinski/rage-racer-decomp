@@ -11,7 +11,7 @@ extern s16 g_EnvironmentMode;
 extern s16 g_EnvSpareLerp;
 extern s16 g_EnvSpareFrom;
 extern s16 g_EnvSpareTo;
-extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
+extern s32 g_IsEnvironmentMode4;
 extern s32 g_EnvironmentModePrev;
 
 void LoadEnvironmentCue(GameEnvColor *arg0);

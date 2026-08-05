@@ -58,7 +58,7 @@ void UpdateFrontend(void);
 
 void UpdateTitleAttract(void);
 
-extern s32 g_MainMenuSlide asm("D_801E6F1C");
+extern s32 g_MainMenuSlide;
 extern s32 g_ClassWinCount;
 
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
@@ -119,7 +119,7 @@ void UpdateTitleAttract(void) {
 }
 extern s32 g_TitleAttractTimer;
 extern s32 g_TitleExitTimer;
-extern s32 g_FrontendState asm("D_8009F098");
+extern s32 g_FrontendState;
 extern s32 D_8007C744;
 extern u32 D_801E8260;
 extern void (*g_FrontendDrawHandlers[])(void) asm("D_8007C748");

@@ -2,11 +2,11 @@
 #include "game/state.h"
 
 /* The two live 0..7 selections: standard pad and NeGcon. */
-extern u16 g_PadMappingIndex asm("D_8019CE08");
-extern u16 g_NegconMappingIndex asm("D_8019CB08");
+extern u16 g_PadMappingIndex;
+extern u16 g_NegconMappingIndex;
 /* Their backups, restored if the screen is cancelled. */
-extern u16 g_PadMappingIndexSaved asm("D_8019C7A8");
-extern u16 g_NegconMappingIndexSaved asm("D_8019C76C");
+extern u16 g_PadMappingIndexSaved;
+extern u16 g_NegconMappingIndexSaved;
 
 extern s32 g_ControllerSceneAngleY;
 extern s32 g_ControllerSceneAngleX;

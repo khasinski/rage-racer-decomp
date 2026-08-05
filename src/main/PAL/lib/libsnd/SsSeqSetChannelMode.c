@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 
 void SsSeqSetChannelMode(long seq, long sep, u_char mode) asm("func_8006FED8");
 

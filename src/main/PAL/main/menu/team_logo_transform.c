@@ -263,7 +263,7 @@ extern s32 D_8007FB14;
 extern s32 D_8007FB18;
 extern s32 D_8007FB1C;
 extern s32 D_8019CAB8;
-extern u16 g_TeamLogoClut[] asm("D_801E444C");
+extern u16 g_TeamLogoClut[];
 
 void UpdateTeamLogoCanvas(void);
 void UpdateTeamLogoCanvas(void) {
@@ -870,8 +870,8 @@ typedef struct RaceRecord {
     u16 unused;
 } RaceRecord;
 
-extern RaceRecord g_RankingRecords[2][4][5] asm("D_801E7744");
-extern RaceRecord g_TimeRecords[2][4][5] asm("D_8019CB78");
+extern RaceRecord g_RankingRecords[2][4][5];
+extern RaceRecord g_TimeRecords[2][4][5];
 
 void *FormatLapTime(void *dst, s32 timeMs);
 void DrawSprite(void *ot, s32 x, s16 y, s32 w, s32 h, s32 u, s32 v,

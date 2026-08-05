@@ -65,8 +65,8 @@ typedef struct StRingClearRecord {
 } StRingClearRecord;
 
 /*
- * CD stream ring header (Rage Racer streaming). Ring pointer D_8009DF1C, ring
- * base D_801E8AAC. `.state` is read as u_short (lhu). See StCdInterrupt.
+ * CD stream ring header (Rage Racer streaming). Ring pointer g_StActiveHeader, ring
+ * base g_StRingBase. `.state` is read as u_short (lhu). See StCdInterrupt.
  */
 typedef struct StStrHeader {
     u_short state;        /* 0x00 */

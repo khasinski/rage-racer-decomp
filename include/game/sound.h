@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-/* Volume-scale table at D_801E6CA4. */
+/* Volume-scale table at g_SoundScale. */
 typedef struct SoundScale {
     s32 scale;
     s16 values[3];
@@ -15,7 +15,7 @@ typedef struct SoundScale {
  * clamps into that range and the voice code multiplies a cue's nominal volume
  * by it before writing the SPU. `.values` is the VAB id table at 0x801E6CA8.
  */
-extern SoundScale g_SoundScale asm("D_801E6CA4");
+extern SoundScale g_SoundScale;
 
 /*
  * Shared sound work area at 0x801E6D00..0x801E6DA8, three contiguous regions:
@@ -45,7 +45,7 @@ typedef struct EffectVoice {
     s16 tone;      /* +0x04 tone              (g_EffectVoiceTone) */
     s16 unk06;     /* +0x06                                */
     s32 state;     /* +0x08 state 0/1/2/-1    (g_EffectVoiceState) */
-    s32 pitch;     /* +0x0C pitch             (D_801E6D3C) */
+    s32 pitch;     /* +0x0C pitch             (g_EffectVoicePitch) */
     s32 volume;    /* +0x10 volume            (g_EffectVoiceVolume) */
 } EffectVoice; /* sizeof 0x14 */
 
@@ -58,9 +58,9 @@ extern s32 g_ReverbDepthL; /* reverb depth left  */
 extern s32 g_ReverbDepthR; /* reverb depth right */
 /* Per-frame step added to g_ReverbDepthL/R by UpdateSequenceFadeOut; -3
  * while a BGM fade-out runs, 0 when it has finished. Kept on the raw spelling
- * because ForceBasicEffectVoicesEnabled also uses &D_801E6D8C as the end
+ * because ForceBasicEffectVoicesEnabled also uses &g_ReverbFadeStep as the end
  * address of g_EffectVoices (= &g_EffectVoices[4].pitch). */
-extern s32 g_ReverbFadeStep asm("D_801E6D8C");
+extern s32 g_ReverbFadeStep;
 /* libsnd access number of the open SEQ, returned by SsSeqOpen in
  * OpenVabSequenceSlot; the `seq` handle for SsSeqPlay/Stop/SetVol. */
 extern s16 g_SeqHandle;
@@ -96,10 +96,10 @@ extern IndexedEffect g_IndexedEffects[] asm("D_800126AC");
 
 /*
  * Pre-race BGM picker (scene 0xA, left/right on the pad). Per-file types.
- *   g_BgmSelection    D_801E42CC  0 = shuffle, else track + 1; saved
- *   g_BgmShuffleOrder D_801E7734  the shuffle bag ShuffleBgmOrder refills
- *   g_BgmShuffleIndex D_8009E6CC  cursor into it, wraps at g_BgmTrackCount
- *   g_BgmTrack        D_801E40E0  the chosen track; RequestCdTrack(n + 3)
+ *   g_BgmSelection    g_BgmSelection  0 = shuffle, else track + 1; saved
+ *   g_BgmShuffleOrder g_BgmShuffleOrder  the shuffle bag ShuffleBgmOrder refills
+ *   g_BgmShuffleIndex g_BgmShuffleIndex  cursor into it, wraps at g_BgmTrackCount
+ *   g_BgmTrack        g_BgmTrack  the chosen track; RequestCdTrack(n + 3)
  */
 
 

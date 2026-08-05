@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 
 void SsSeqSetPortamento(short seq, short sep, u_char value);
 void SsSeqSetPortamento(short seq, short sep, u_char value) {

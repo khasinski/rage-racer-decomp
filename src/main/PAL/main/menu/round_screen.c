@@ -69,8 +69,8 @@ void RestoreColorMatrix(void);
 void RestoreColorMatrix(void) { func_800698B8(&g_SceneColorMatrix); }
 
 extern s32 g_FrameSyncThreshold;
-extern s32 g_ImageBlockBuffer asm("D_801E4B30");
-extern u8 *g_CourseProgress asm("D_8009E67C");
+extern s32 g_ImageBlockBuffer;
+extern u8 *g_CourseProgress;
 
 void CloseLoadedAudioSlots(void);
 void UploadImageAsset(s32 arg0);
@@ -145,7 +145,7 @@ s32 UpdateRoundScreenFade(s32 arg0) {
     return ret;
 }
 
-extern s32 g_BgmSelection asm("D_801E42CC");
+extern s32 g_BgmSelection;
 extern char *g_BgmTrackNames[] asm("D_8007C7A0");
 extern char D_80010D2C[];
 
@@ -157,8 +157,8 @@ extern char D_80010C5C[];
 extern char D_80010C68[];
 extern char D_80010C70[];
 
-extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
-extern s32 g_BestLapTimes[][4][2] asm("D_801E4408");
+extern s32 g_BestTotalTimes[][4][2];
+extern s32 g_BestLapTimes[][4][2];
 
 s32 UpdateRoundScreenFade(s32 arg0);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
@@ -240,10 +240,10 @@ void DrawBgmSelector(void) {
     func_80016754(0x90, 0xce, g_BgmTrackNames[g_BgmSelection], 0x78cc);
 }
 
-extern s32 g_BgmShuffleIndex asm("D_8009E6CC");
+extern s32 g_BgmShuffleIndex;
 extern s32 g_BgmTrackCount;
-extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
-extern s32 g_BgmTrack asm("D_801E40E0");
+extern u8 g_BgmShuffleOrder[];
+extern s32 g_BgmTrack;
 
 void PlaySoundCue(s32 cue);
 s32 RequestRaceAssets(void);
@@ -304,7 +304,7 @@ void UpdateRoundScreen(void) {
 
 extern Matrix g_SceneColorMatrix;
 extern Matrix D_8007C758;
-extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
+extern Matrix g_SceneLightMatrix;
 extern Matrix D_8007C778;
 void func_800698B8(Matrix *arg0);
 void func_80069888(Matrix *arg0);

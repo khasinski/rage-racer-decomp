@@ -7,7 +7,7 @@
 #include "game/cd.h"
 s32 LoadAsset(s32 arg0, void *arg1) asm("func_80017C78");
 
-extern u8 *g_CarModelAsset asm("D_8009E698");
+extern u8 *g_CarModelAsset;
 
 extern u32 g_CarModelSlot;
 extern u8 *g_CarModelBuffer;
@@ -17,8 +17,8 @@ void RegisterModelBank(void *arg0, s32 arg1);
 void SetCarImageSlot(void *arg0, s32 arg1);
 void ApplyBodyColor1(s32 arg0, s32 arg1);
 void ApplyBodyColor2(s32 arg0, s32 arg1);
-extern s32 g_AssetBase asm("D_8019C904");
-extern s32 g_ImageBlockBuffer asm("D_801E4B30");
+extern s32 g_AssetBase;
+extern s32 g_ImageBlockBuffer;
 s32 Random15(void);
 void ResetAssetLoader(void);
 /* Where asset 0x56 lands: g_ImageBlockBuffer advanced past the car texture
@@ -26,8 +26,8 @@ void ResetAssetLoader(void);
  * g_AssetBlockPtr / g_AssetSubBlockPtr and word 0 is kept as-is. */
 extern s32 g_AssetBlockPtr2;
 extern s32 g_SharedAssetWord0;
-extern s32 g_AssetSubBlockPtr asm("D_801E8AB0");
-extern u32 g_AssetLoadCursor asm("D_8019CAFC");
+extern s32 g_AssetSubBlockPtr;
+extern u32 g_AssetLoadCursor;
 void UnrelocateModelBank(void *, s32);
 void SelectCarModelSlot(s32);
 

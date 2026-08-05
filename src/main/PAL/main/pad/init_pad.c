@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/state.h"
 
-extern u8 g_PadBuffers[] asm("D_801E403C");
+extern u8 g_PadBuffers[];
 
 void InitPad(void *buf0, s32 len0, void *buf1, s32 len1);
 void StartPad(void);
@@ -53,8 +53,8 @@ void LoadPadButtonMapping(s32 mapping0, s32 mapping1) {
     } while (i < 8);
 }
 
-extern s16 g_PadMappingIndex asm("D_8019CE08");
-extern s16 g_NegconMappingIndex asm("D_8019CB08");
+extern s16 g_PadMappingIndex;
+extern s16 g_NegconMappingIndex;
 
 /* Re-applies the button mapping from the two saved selections. */
 void ApplyPadButtonMapping(void) {
@@ -77,8 +77,8 @@ typedef struct PadState {
     /* 0x16 */ s16 unk16;
 } PadState;
 
-extern PadState g_PadState asm("D_801E4368");
-extern u8 g_PadType asm("D_801E4369");
+extern PadState g_PadState;
+extern u8 g_PadType;
 extern u8 g_PadBufferType;
 extern u8 g_PadBufferButtonsHigh;
 extern u8 g_PadBufferButtonsLow;
@@ -88,9 +88,9 @@ extern s32 D_8019CB10;
 extern u16 g_PadPrevHeld asm("D_8007C138");
 extern u8 g_PadRepeatTimer[] asm("D_8009AEEC");
 extern u16 D_8007C128[][2];
-extern s16 g_NegconSteerPlay asm("D_8019CAD0");
+extern s16 g_NegconSteerPlay;
 extern s16 g_NegconSteerRange[] asm("D_8007C020");
-extern s16 g_NegconMaxTwist asm("D_801E418C");
+extern s16 g_NegconMaxTwist;
 extern s16 g_NegconNeutralI;
 extern s16 g_NegconNeutralII;
 extern s16 g_NegconNeutralL;

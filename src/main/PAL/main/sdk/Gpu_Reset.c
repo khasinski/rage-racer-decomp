@@ -8,7 +8,7 @@ extern long g_GpuQueueWriteIdx asm("D_800942EC");
 extern volatile long g_GpuQueueReadIdx asm("D_800942F0");
 extern long g_GpuResetIntrMask asm("D_800942FC");
 extern u_char g_GpuGp1Mirror[];
-extern u_char g_GpuQueue[] asm("D_801E5024");
+extern u_char g_GpuQueue[];
 
 void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");
 long Gpu_ProbeType(u_long arg0);

@@ -128,7 +128,7 @@ u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
 extern u8 g_PadConfigLabelRows[] asm("D_8007C1C0");
 extern u8 g_PadConfigButtonRows[] asm("D_8007C1E8");
 
-extern s16 g_PadMappingIndex asm("D_8019CE08");
+extern s16 g_PadMappingIndex;
 
 /* One whole standard-pad diagram for the current selection: the five action
  * labels, then the five callout lines from each label to its button. */
@@ -142,7 +142,7 @@ u8 *DrawPadConfigDiagram(void *ot, u8 *prim) {
 extern u8 g_NegconConfigLabelRows[] asm("D_8007C210");
 extern u8 g_NegconConfigButtonRows[] asm("D_8007C238");
 
-extern s16 g_NegconMappingIndex asm("D_8019CB08");
+extern s16 g_NegconMappingIndex;
 
 /* One whole NeGcon diagram for the current selection: labels, then callouts. */
 u8 *DrawNegconConfigDiagram(void *ot, u8 *prim) {

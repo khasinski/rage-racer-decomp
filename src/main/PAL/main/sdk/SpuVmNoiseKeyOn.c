@@ -3,9 +3,9 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 extern SpuVoice g_SndVoiceState[];
-extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
+extern SvmCurrentAttr g_SndCurrentAttr;
 extern u_short g_SndVoiceRegs[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char g_SndVoiceCount;

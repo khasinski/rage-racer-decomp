@@ -35,7 +35,7 @@ extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_ReplayReadCursor;
-extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s16 g_PlayerTrackSection;
 void PlaySoundCue(s32 cue);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void DrawSeriesClearedWash(s32 arg0, s32 arg1);
@@ -56,7 +56,7 @@ s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s3
 extern s32 g_RaceTotalTime;
 extern s32 g_ClassResultPlace;
 extern s32 g_PrizeScreenState;
-extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
+extern s32 g_BestTotalTimes[][4][2];
 extern s32 g_PlayerLapTimes[];
 /* Grand Prix result panel: the finishing-position graphic's per-place sprite
  * geometry and the two clut tables its two sprites pick from. */

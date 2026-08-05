@@ -7,7 +7,7 @@
 s32 DrawCarSelectScreen(s32 arg0);
 s32 DrawCustomizeScreen(s32 arg0);
 
-extern u8 *g_CarModelAsset asm("D_8009E698");
+extern u8 *g_CarModelAsset;
 
 
 extern s32 D_8009B2CC;
@@ -348,13 +348,13 @@ extern s32 D_8009B360;
 extern s32 D_8009B368;
 extern s32 g_MenuCourseModelIndex;
 extern s32 g_MenuPendingCourseIndex;
-extern s32 g_CarSwapFromIndex asm("D_8009B374");
-extern s32 g_CarSwapToIndex asm("D_8009B378");
+extern s32 g_CarSwapFromIndex;
+extern s32 g_CarSwapToIndex;
 extern s32 D_8019C7B8;
 extern s32 g_PlayerMoney;
 extern s32 D_801E4138;
 extern s32 g_SceneId;
-extern u8 *g_CourseProgress asm("D_8009E67C");
+extern u8 *g_CourseProgress;
 
 void RequestCarModel(s32 carIndex);
 s32 RequestRoundAssets(void);

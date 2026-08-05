@@ -66,9 +66,9 @@ extern s32 D_8009B288;
 extern s32 D_8009B298;
 extern s32 D_8009B29C;
 extern u16 D_8009B2A0[16];
-extern u16 D_801E444C[16];
-extern u16 D_801E444E[];
-extern u8 D_801E4369;
+extern u16 g_TeamLogoClut[16];
+extern u16 g_TeamLogoSwatches[];
+extern u8 g_PadType;
 extern u16 D_801E6F2C;
 
 extern s32 GetClut(s16 x, s16 y);
@@ -197,10 +197,10 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     D_8007FB10 = 0;
     return;
   }
-  D_801E444C[0] = 0x8000;
-  D_801E444C[0] |= ((rsin(D_8009B288 % 0x1000) / 128) + 0x20) >> 3;
+  g_TeamLogoClut[0] = 0x8000;
+  g_TeamLogoClut[0] |= ((rsin(D_8009B288 % 0x1000) / 128) + 0x20) >> 3;
   ang = D_8009B288 + 0x55;
-  D_801E444C[0] |= (((rsin(ang % 0x1000) / 128) + 0x20) >> 3) << 5;
+  g_TeamLogoClut[0] |= (((rsin(ang % 0x1000) / 128) + 0x20) >> 3) << 5;
   ang = D_8009B288 + 0xAA;
   d = rsin(ang % 0x1000);
   i = 0;
@@ -215,14 +215,14 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     s32 mul;
     u16 k8;
     k8 = 0x8000;
-    D_801E444C[0] |= (((d >> 7) + 0x20) >> 3) << 10;
-    D_8009B2A0[0] = D_801E444C[0];
+    g_TeamLogoClut[0] |= (((d >> 7) + 0x20) >> 3) << 10;
+    D_8009B2A0[0] = g_TeamLogoClut[0];
     dst = D_8009B2A0;
     D_8009B288 += 0x20;
     mul = D_8009B298;
     loop16:
     {
-      u16 *src = &D_801E444C[i];
+      u16 *src = &g_TeamLogoClut[i];
       *dst = k8;
       red = (((*src) & 0x1F) * mul) / 256;
       acc = red | ((u16) 0x8000);
@@ -246,7 +246,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
 
   }
   LoadImage(&D_8007BEE4, &D_801E6F2C);
-  LoadImage(&D_8007BEDC, D_801E444C);
+  LoadImage(&D_8007BEDC, g_TeamLogoClut);
   LoadImage(&D_8007F95C, D_8009B2A0);
   if (a0v < 0)
   {
@@ -457,13 +457,13 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     {
       DrawRectOutline(ot, x1, y1, 0xD, 0x1A, 0xB4, 0xB4, 0xB4, 0xFF);
     }
-    func_80047024_prepared(ot, x1 + 1, y1 + 2, 0xB, 0x16, (*(u8 *)(&D_801E444C[D_8007F950])) * 8, (D_801E444C[D_8007F950] >> 2) & 0xF8, (D_801E444C[D_8007F950] >> 7) & 0xF8, 0xFF);
+    func_80047024_prepared(ot, x1 + 1, y1 + 2, 0xB, 0x16, (*(u8 *)(&g_TeamLogoClut[D_8007F950])) * 8, (g_TeamLogoClut[D_8007F950] >> 2) & 0xF8, (g_TeamLogoClut[D_8007F950] >> 7) & 0xF8, 0xFF);
     {
       s32 fy2 = (kreg + 2) << 16;
       i = 0;
       j = 1;
       loop15:
-      func_80047024_prepared(ot, x0 + j, fy2 >> 16, 8, 0x10, (*(u8 *)(&D_801E444E[i])) * 8, (D_801E444E[i] >> 2) & 0xF8, (D_801E444E[i] >> 7) & 0xF8, 0xFF);
+      func_80047024_prepared(ot, x0 + j, fy2 >> 16, 8, 0x10, (*(u8 *)(&g_TeamLogoSwatches[i])) * 8, (g_TeamLogoSwatches[i] >> 2) & 0xF8, (g_TeamLogoSwatches[i] >> 7) & 0xF8, 0xFF);
 
       i++;
       j += 8;
@@ -492,7 +492,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
       register s32 clutArg asm("$20");
 
       x1 = x0 + vs6;
-      if (D_801E4369 == 0x23)
+      if (g_PadType == 0x23)
       {
         gx = vs7;
         gy = 0;
@@ -568,11 +568,11 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     yA8 = (s16) (kreg + 0x14);
     sx = 0x3F;
     sx = x0 - sx;
-    GameDrawNumber(sx, yA8, 3, D_801E444C[D_8007F950] & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    GameDrawNumber(sx, yA8, 3, g_TeamLogoClut[D_8007F950] & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
     yB8 = (s16) (kreg + 0x44);
-    GameDrawNumber(sx, yB8, 3, (D_801E444C[D_8007F950] >> 5) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    GameDrawNumber(sx, yB8, 3, (g_TeamLogoClut[D_8007F950] >> 5) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
     yC8 = (s16) (kreg + 0x74);
-    GameDrawNumber(sx, yC8, 3, (D_801E444C[D_8007F950] >> 10) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    GameDrawNumber(sx, yC8, 3, (g_TeamLogoClut[D_8007F950] >> 10) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
     {
       s32 alpha;
       alpha = 0xFF;

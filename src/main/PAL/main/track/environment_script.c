@@ -18,14 +18,14 @@ extern s32 g_EnvScriptLength;
 
 /* Next cue of g_EnvScriptCues due to fire; wraps back to the head when the
  * record it lands on has a negative id (the terminator). */
-extern Cmd *g_EnvScriptCursor asm("D_801E40E8");
+extern Cmd *g_EnvScriptCursor;
 extern u32 *g_EnvScriptCues;
 
 extern s16 g_EnvFogEnabled;
 /* The three bytes of the packed slot-0 colour g_EnvColors[0].cur, addressed
  * individually because SetFarColor takes R, G and B separately. The cast is
  * what the byte view costs: render.h is included here, so this TU cannot
- * redeclare D_801E3FB6 as u8[] under a second name. g_EnvSpare is the fourth,
+ * redeclare g_EnvColors as u8[] under a second name. g_EnvSpare is the fourth,
  * unused byte of the same word. */
 #define ENV_FOG_RGB ((u8 *)g_EnvColors)
 extern u8 g_EnvSpare;

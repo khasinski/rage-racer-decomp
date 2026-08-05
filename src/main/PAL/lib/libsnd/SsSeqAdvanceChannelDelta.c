@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern u_char *g_SndSeqTable[] asm("D_801E79CC");
+extern u_char *g_SndSeqTable[];
 
 void SsSeqDispatchMidiEvent(long arg0, long arg1);
 

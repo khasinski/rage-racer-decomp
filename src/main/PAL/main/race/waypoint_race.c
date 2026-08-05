@@ -15,13 +15,13 @@ extern s16 g_ReverbZoneDepth;
 
 extern u8 g_PlayerCar[] asm("D_8009E6D4");
 
-extern s32 g_PlayerTrackProgress asm("D_8009E744");
+extern s32 g_PlayerTrackProgress;
 
-extern s16 g_PlayerTrackSection asm("D_8009E74C");
+extern s16 g_PlayerTrackSection;
 
 extern s32 g_CameraCarProgressA;
 
-extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
+extern s32 g_IsEnvironmentMode4;
 
 
 
@@ -77,7 +77,7 @@ void func_800418D4(void);
 
 
 
-extern s16 g_PlayerLap asm("D_8009E83C");
+extern s16 g_PlayerLap;
 
 extern s32 g_WaypointSpawnCooldown;
 

@@ -7,7 +7,7 @@ extern s32 D_8007FB28;
 extern s32 D_8009B28C;
 extern u8 D_8007F45C;
 extern u8 D_8007F460[];
-extern u16 g_TeamLogoSwatches[] asm("D_801E444E");
+extern u16 g_TeamLogoSwatches[];
 
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
                    u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);

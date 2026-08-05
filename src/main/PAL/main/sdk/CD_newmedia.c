@@ -14,7 +14,7 @@ typedef struct Entry {
 
 extern u_char g_CdSectorBuf[];
 extern W4 g_CdRootDirLba;
-extern Entry g_CdPathTable[] asm("D_8009C114");
+extern Entry g_CdPathTable[];
 extern long g_CdDebugLevel asm("D_80099048");
 extern long g_CdCachedDir asm("D_80099348");
 
@@ -31,7 +31,7 @@ extern long LibcStrncmp(void *, const char *, long);
 extern void LibcMemcpy(char *, u_char *, long);
 
 /*
- * Reads and parses the disc's directory into the Entry table D_8009C114[128].
+ * Reads and parses the disc's directory into the Entry table g_CdPathTable[128].
  * Loads sector 16 (the volume descriptor) via cd_read, validates the "CD"
  * signature, follows it to the path/directory sector, then walks the packed
  * variable-length records (record length in *p, name at p+8) copying each into

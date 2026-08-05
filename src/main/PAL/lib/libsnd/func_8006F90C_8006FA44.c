@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 
 void func_8006F90C(long seq, long sep, long value) {
     register long seq_arg asm("$7");

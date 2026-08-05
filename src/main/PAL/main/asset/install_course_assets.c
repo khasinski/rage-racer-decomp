@@ -2,10 +2,10 @@
 #include "game/state.h"
 #include "game/asset.h"
 
-extern u8 *g_AssetBase asm("D_8019C904");
-extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
+extern u8 *g_AssetBase;
+extern u8 *g_AssetSubBlockPtr;
 extern u8 *g_TrackTextureShadow;
-extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
+extern u8 *g_AssetLoadCursor;
 void UploadImageAsset(void *arg0);
 void UploadImageBlock(void *arg0);
 void StoreTeamLogoImage(void *arg0);

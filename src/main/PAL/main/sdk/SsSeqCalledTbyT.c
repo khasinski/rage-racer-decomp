@@ -3,7 +3,7 @@
 void _SsSndCrescendo(short seq, short sep);
 
 extern volatile long g_SndUpdateLock;
-extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
+extern SeqStruct *g_SndSeqTable[];
 extern long g_SndSeqOpenMask;
 extern short g_SndSeqTableSMax;
 extern short g_SndSeqTableTMax;

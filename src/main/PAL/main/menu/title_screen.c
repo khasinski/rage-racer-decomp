@@ -10,9 +10,9 @@
 extern s32 g_FrameSyncThreshold;
 extern s32 D_801E8260;
 extern s32 D_801E6F28;
-extern s32 g_MainMenuSlide asm("D_801E6F1C");
+extern s32 g_MainMenuSlide;
 extern s32 g_TitlePulse;
-extern s32 g_FrontendState asm("D_8009F098");
+extern s32 g_FrontendState;
 extern s32 g_TitleExitTimer;
 extern s32 g_TitleAttractTimer;
 
@@ -247,9 +247,9 @@ void UpdateMainMenuOpen(void) {
 }
 
 extern s32 g_BgmTrackCount;
-extern volatile u8 g_BgmShuffleOrder[] asm("D_801E7734");
+extern volatile u8 g_BgmShuffleOrder[];
 extern u8 D_801E7733[];
-extern s32 g_BgmShuffleIndex asm("D_8009E6CC");
+extern s32 g_BgmShuffleIndex;
 
 s32 Random15(void);
 
@@ -291,16 +291,16 @@ void ShuffleBgmOrder(void) {
 extern volatile u16 g_PadEdge2;
 extern s32 D_801E8260;
 
-extern s32 *g_CarTable asm("D_8019C7C8");
-extern s32 *g_CourseProgress asm("D_8009E67C");
+extern s32 *g_CarTable;
+extern s32 *g_CourseProgress;
 extern s32 g_ExtraGrandPrixSaveMaxClass;
 extern s32 g_FrontendState;
 extern s32 g_OptionMenuCursor;
 
 extern s32 g_GrandPrixCars;
-extern s32 g_GrandPrixCourseProgress asm("D_801E42EC");
+extern s32 g_GrandPrixCourseProgress;
 extern s32 g_ExtraGrandPrixCars;
-extern s32 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
+extern s32 g_ExtraGrandPrixCourseProgress;
 extern s32 g_TimeAttackCars;
 
 void PlaySoundCue(s32 cue);

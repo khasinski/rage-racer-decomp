@@ -20,8 +20,8 @@ void LoadCourseAssets(void);
 
 s32 RequestTrackLoad(void);
 
-extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
-extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
+extern u8 *g_AssetLoadCursor;
+extern u8 *g_AssetSubBlockPtr;
 extern u8 *g_TrackTextureShadow;
 extern s32 g_SharedAssetWord0;
 extern u8 *g_AssetBlockPtr2;
@@ -44,8 +44,8 @@ void SetCourseObjects(void *arg0);
 void InstallTrackEventData(void *arg0);
 void SelectTrackCameraTable(void *arg0, s32 arg1);
 s32 EnableCdAudioMode(void);
-extern s32 g_ImageBlockBuffer asm("D_801E4B30");
-extern s32 g_AssetBase asm("D_8019C904");
+extern s32 g_ImageBlockBuffer;
+extern s32 g_AssetBase;
 
 s32 RequestRaceAssets(void);
 s32 RequestRaceAssets(void) {

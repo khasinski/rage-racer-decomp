@@ -35,7 +35,7 @@ void SsUtSetReverbDelay(long delay);
 short SsUtGetVVol(short voice, short *left, short *right);
 /*
  * Key-on a named hardware voice: rejects voice >= 24 or an unknown program,
- * stamps the utility sep number 0x21 into the current-voice record D_801E4BD0,
+ * stamps the utility sep number 0x21 into the current-voice record g_SndCurrentAttr,
  * derives volume/pan from (volL, volR), copies the program and tone attributes
  * and starts the note; returns the voice number, or -1. Declared with long
  * parameters, not the SDK's short, because the game calls it unprototyped and

@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern u_char *g_SndSeqTable[] asm("D_801E79CC");
+extern u_char *g_SndSeqTable[];
 extern short g_SndCurrentSeqSep;
 extern volatile u_char g_SndVoiceCount;
 extern u_char g_SndVoiceRegs[];

@@ -10,7 +10,7 @@
 
 extern s32 D_8007FB40;
 extern s32 D_8007FB44;
-extern s32 g_MenuAltLayout asm("D_8019CB0C");
+extern s32 g_MenuAltLayout;
 
 void func_80046E00();
 
@@ -321,7 +321,7 @@ void DrawTimeAttackPlate(s32 arg0) {
 
 extern Matrix g_SceneColorMatrix;
 extern Matrix D_80082DFC;
-extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
+extern Matrix g_SceneLightMatrix;
 extern Matrix D_80082E1C;
 void func_800698B8(Matrix *arg0);
 void func_80069888(Matrix *arg0);
@@ -375,8 +375,8 @@ extern s32 D_8009B364;
 extern s32 D_8009B368;
 extern s32 g_MenuCourseModelIndex;
 extern s32 g_MenuPendingCourseIndex;
-extern s32 g_CarSwapFromIndex asm("D_8009B374");
-extern s32 g_CarSwapToIndex asm("D_8009B378");
+extern s32 g_CarSwapFromIndex;
+extern s32 g_CarSwapToIndex;
 
 extern s32 g_CourseSelectOption;
 extern s32 D_801E4138;

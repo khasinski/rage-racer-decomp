@@ -2,7 +2,7 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
+extern Matrix g_SceneLightMatrix;
 
 /* Loads the GTE light matrix with g_SceneLightMatrix * `view`, working on a
  * local copy so the caller's view matrix is left alone. */
@@ -16,15 +16,15 @@ void SetGteLightMatrix(Matrix *view) {
 
 extern s32 g_GameMode;
 extern s32 g_AnimTimer asm("D_8009E694");
-extern u8 g_PadType asm("D_801E4369");
+extern u8 g_PadType;
 extern s16 g_NegconSteer;
-extern s16 g_NegconMaxTwist asm("D_801E418C");
-extern s16 g_NegconSteerPlay asm("D_8019CAD0");
+extern s16 g_NegconMaxTwist;
+extern s16 g_NegconSteerPlay;
 extern s16 g_NegconSteerRange[] asm("D_8007C020");
 extern s32 g_NegconPlayScale[] asm("D_8007C140");
 extern s32 g_ControllerSceneAngleX;
 extern s32 g_ControllerSceneAngleY;
-extern s32 g_ModelBankCount asm("D_801E4168");
+extern s32 g_ModelBankCount;
 extern s32 g_Scratch08 asm("0x1F800008");
 extern s32 g_Scratch0C asm("0x1F80000C");
 extern void *g_Scratch0CPointer asm("0x1F80000C");

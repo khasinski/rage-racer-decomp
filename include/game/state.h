@@ -19,8 +19,8 @@ void MainLoop(void) asm("func_80016510");
 void InitSubsystems(void);
 
 /* Controller layer. GameInitPad hands the BIOS the two 0x28-byte buffers at
- * D_801E403C / D_801E4064. UpdatePadState maintains the held / previous /
- * newly-pressed halfwords in the block at D_801E4368 (see menu.h). */
+ * g_PadBuffers / D_801E4064. UpdatePadState maintains the held / previous /
+ * newly-pressed halfwords in the block at g_PadState (see menu.h). */
 void GameInitPad(void);
 void UpdatePadState(void);
 void LoadPadButtonMapping(s32 mapping0, s32 mapping1);
@@ -41,7 +41,7 @@ void DrawControllerSetupScene(s32 variant);
 
 /*
  * Controller-configuration screen widgets. Two independent 0..7 selections:
- * D_8019CE08 for the standard pad, D_8019CB08 for the NeGcon (pad type byte
+ * g_PadMappingIndex for the standard pad, g_NegconMappingIndex for the NeGcon (pad type byte
  * g_PadType == 0x23 picks which diagram is drawn). See docs/names.md 1.
  */
 /* 16x32 arrow sprites at (0x28, 0xE0) and (0x108, 0xE0); `pulse` adds the glow. */
@@ -55,7 +55,7 @@ u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow);
 /* One whole controller diagram for the current selection: labels + callouts. */
 u8 *DrawPadConfigDiagram(void *ot, u8 *prim);
 u8 *DrawNegconConfigDiagram(void *ot, u8 *prim);
-/* Entry hook: backs both selections up to D_8019C7A8 / D_8019C76C so a cancel
+/* Entry hook: backs both selections up to g_PadMappingIndexSaved / g_NegconMappingIndexSaved so a cancel
  * can restore them. Its caller sets g_GameMode = 7 in the same breath. */
 void BeginControllerConfig(void) asm("func_800153FC");
 
@@ -76,7 +76,7 @@ extern s32 g_AnimTimer asm("D_8009E694");
  * FMV playback ("\RAGE.STR;1" streams). One of the three GameBegin*Fmv wrappers
  * picks the stream entry in g_StreamCdEntries, records the scene to come back to
  * in g_StreamReturnScene and sets g_SceneId = 5; from then on UpdateFmv runs
- * per frame and walks D_8009F094 through 0 (start) -> 1 (decode) -> 2 (finish).
+ * per frame and walks g_FmvState through 0 (start) -> 1 (decode) -> 2 (finish).
  * Start (pad bit 0x800) or the end of the stream both move it to 2.
  * The per-TU-typed members of the family - BeginFmv, StartFmvPlayback,
  * SetupFmvBuffers, InitFmvContext, OpenFmvStream,

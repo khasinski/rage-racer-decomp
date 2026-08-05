@@ -1,9 +1,9 @@
 #include "common.h"
 #include "game/race.h"
 
-extern s16 g_PlayerLap asm("D_8009E83C");
+extern s16 g_PlayerLap;
 extern s32 g_LapCount;
-extern u8 g_BestTotalTimes[] asm("D_8019C70C");
+extern u8 g_BestTotalTimes[];
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 void DrawSplitDelta(s32 arg0, s32 arg1);
