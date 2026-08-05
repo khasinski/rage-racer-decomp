@@ -27,7 +27,6 @@ void UploadImageAsset(s32 arg0);
 void InitRenderState(s32 arg0);
 void InstallSceneLighting(void);
 
-void DrawBootLogo(void);
 void DrawBootLogo(void) {
     u8 *base;
     s32 height;
@@ -61,7 +60,6 @@ void DrawBootLogo(void) {
     *scratch = GameQueueDrawModePrimWide(base, next, 5);
 }
 
-void UpdateBootLogoScene(void);
 void UpdateBootLogoScene(void) {
     s32 state;
 
@@ -123,7 +121,6 @@ void UpdateBootLogoScene(void) {
     }
 }
 
-void InstallSceneLighting(void);
 void InstallSceneLighting(void) {
     g_SceneColorMatrix = g_DefaultColorMatrix;
     g_SceneLightMatrix = g_DefaultLightMatrix;
@@ -134,7 +131,6 @@ void InstallSceneLighting(void) {
     SetFogNear(0x4E20, 0x140);
 }
 
-void EnterAttractScene(void);
 void EnterAttractScene(void) {
     SetDispMask(0);
     g_FrameSyncThreshold = 0x80;

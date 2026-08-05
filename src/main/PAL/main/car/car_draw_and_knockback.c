@@ -39,7 +39,6 @@ void SeedCarRouteMarkers(void);
  * must not change.
  */
 
-void BuildStartingGrid(void);
 void BuildStartingGrid(void) {
     GameCarRuntime *entryBase;
     register s32 *table asm("s3");
@@ -107,7 +106,6 @@ void BuildStartingGrid(void) {
     SeedCarRouteMarkers();
 }
 
-void DrawCars(void);
 void DrawCars(void) {
     GameCarRuntime *base;
     s32 i;
@@ -133,13 +131,11 @@ void DrawCars(void) {
     } while (i < 11);
 }
 
-void DrawPlayerCarOnly(void);
 void DrawPlayerCarOnly(void) {
     SelectModelBank(1);
     DrawCar(g_Cars);
 }
 
-void ClearCarMotionState(GameCarRuntime *arg0);
 void ClearCarMotionState(GameCarRuntime *arg0) {
     arg0->field_8A = 0;
     arg0->motionMode = 0;
@@ -161,7 +157,6 @@ void ClearCarMotionState(GameCarRuntime *arg0) {
     arg0->field_9E = 0;
 }
 
-void UpdateCarTiltCounter(GameCarRuntime *arg0);
 void UpdateCarTiltCounter(GameCarRuntime *arg0) {
     GameCarRuntime *obj;
     register u8 *ptr asm("$4");
@@ -215,7 +210,6 @@ void UpdateCarTiltCounter(GameCarRuntime *arg0) {
     obj->field_8C = value;
 }
 
-void ApplyCarKnockback(GameCarRuntime *arg0);
 void ApplyCarKnockback(GameCarRuntime *arg0) {
     u32 timer;
 
@@ -249,7 +243,6 @@ s32 InterpolateTrackAngle(s32 arg0);
 
 s32 Random15(void);
 
-void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     GameCarRuntime *carReg;
     s32 x;
@@ -374,7 +367,6 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     carReg->velocityZ = z;
 }
 
-void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1);
 void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
     GameCarRuntime *obj;
     s32 value;

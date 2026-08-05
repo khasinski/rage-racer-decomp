@@ -42,7 +42,6 @@ s32 StClearRingRange(long arg0, u_long arg1) {
     }
 }
 
-long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1);
 long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     StRingEventRecord **out0 = arg0;
     register StRingEventRecord **out1 asm("$8") = arg1;
@@ -86,7 +85,6 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
     return 1;
 }
 
-void StSetRingParams(long arg0, long arg1, long arg2);
 void StSetRingParams(long arg0, long arg1, long arg2) {
     g_StStreamFlag = arg0;
     g_StStartFrame = arg1;

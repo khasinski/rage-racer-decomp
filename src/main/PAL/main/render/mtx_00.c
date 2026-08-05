@@ -39,7 +39,6 @@ u32 func_80068A2C[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  * will not reproduce the batched 5x lw / 5x ctc2 load block nor the exact
  * IR/MAC extraction register schedule from natural C.
  */
-void *CompMatrix(s32 *m0, void *m1, void *m2);
 void *CompMatrix(s32 *m0, void *m1, void *m2) {
     asm volatile(
         "lw $8,0(%0)\n"
@@ -137,7 +136,6 @@ void *CompMatrix(s32 *m0, void *m1, void *m2) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *MulMatrix0(s32 *matrix, void *src, void *dst);
 void *MulMatrix0(s32 *matrix, void *src, void *dst) {
     asm volatile(
         "lw $8,0(%0)\n"
@@ -213,7 +211,6 @@ void *MulMatrix0(s32 *matrix, void *src, void *dst) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *MulRotMatrix0(void *arg0, void *arg1);
 void *MulRotMatrix0(void *arg0, void *arg1) {
     asm volatile(
         "lhu $8,0($4)\n"
@@ -279,7 +276,6 @@ void *MulRotMatrix0(void *arg0, void *arg1) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *MulRotMatrix(void *arg0);
 void *MulRotMatrix(void *arg0) {
     asm volatile(
         "lw $8,0($4)\n"
@@ -346,7 +342,6 @@ void *MulRotMatrix(void *arg0) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *SetMulMatrix(s32 *matrix, void *src);
 void *SetMulMatrix(s32 *matrix, void *src) {
     asm volatile(
         "lw $8,0(%0)\n"
@@ -423,7 +418,6 @@ void *SetMulMatrix(s32 *matrix, void *src) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
     void *m = mtx;
     void *v = vec;
@@ -585,7 +579,6 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/mtx_00", ScaleMatrixL);
 /* libgte PushMatrix: cfc2 $0..$7 into the matrix stack at 0x80094CAC,
  * indexed by 0x80094CA8, then index += 32; errors once index reaches
  * 0x280 (20 levels). PopMatrix is the exact inverse. */
-void PushMatrix(void);
 void PushMatrix(void) {
     asm volatile(
         ".set noreorder\n"
@@ -637,7 +630,6 @@ void PushMatrix(void) {
 
 /* libgte PopMatrix: index -= 32, then ctc2 $0..$7 back from the matrix
  * stack at 0x80094CAC; errors when the index is already 0. */
-void PopMatrix(void);
 void PopMatrix(void) {
     asm volatile(
         ".set noreorder\n"
@@ -683,7 +675,6 @@ void PopMatrix(void) {
 }
 
 /* Read GTE rotation matrix + translation (control regs $0..$7) into p[0..7]. */
-void ReadRotMatrix(volatile u32 *p);
 void ReadRotMatrix(volatile u32 *p) {
     asm volatile(
         "cfc2 $8,$0\n"
@@ -708,7 +699,6 @@ void ReadRotMatrix(volatile u32 *p) {
 }
 
 /* Read GTE light matrix + back-color (control regs $8..$15) into p[0..7]. */
-void ReadLightMatrix(volatile u32 *p);
 void ReadLightMatrix(volatile u32 *p) {
     asm volatile(
         "cfc2 $8,$8\n"
@@ -733,7 +723,6 @@ void ReadLightMatrix(volatile u32 *p) {
 }
 
 /* Read GTE color matrix + far-color (control regs $16..$23) into p[0..7]. */
-void ReadColorMatrix(volatile u32 *p);
 void ReadColorMatrix(volatile u32 *p) {
     asm volatile(
         "cfc2 $8,$16\n"

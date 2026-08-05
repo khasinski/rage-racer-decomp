@@ -3,7 +3,6 @@
 #include "psyq/kernel.h"
 
 
-void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3);
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
 s32 encoded;
     s32 mode;
@@ -36,7 +35,6 @@ s32 encoded;
     *(u32 *)&arg0[4] = encoded;
 }
 
-void SetDrawLoad(u8 *arg0, u8 *arg1);
 void SetDrawLoad(u8 *arg0, u8 *arg1) {
     s32 sign;
     s32 value;
@@ -60,7 +58,6 @@ void SetDrawLoad(u8 *arg0, u8 *arg1) {
     *(u32 *)&arg0[0x10] = *(u32 *)&arg1[4];
 }
 
-s32 MargePrim(u8 *arg0, u8 *arg1);
 s32 MargePrim(u8 *arg0, u8 *arg1) {
     s32 value;
 
@@ -85,7 +82,6 @@ extern char D_8001342C[];
 extern char D_80013438[];
 extern void (*GPU_printf)(char *, ...);
 
-void DumpDrawEnv(DrawEnv *arg0);
 void DumpDrawEnv(DrawEnv *arg0) {
     s32 mode;
     u32 value;
@@ -116,7 +112,6 @@ void DumpDrawEnv(DrawEnv *arg0) {
     GPU_printf(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
 }
 
-void DumpDispEnv(DispEnv *arg0);
 void DumpDispEnv(DispEnv *arg0) {
     GPU_printf(D_800133F4, arg0->disp.x, arg0->disp.y, arg0->disp.w, arg0->disp.h);
     GPU_printf(D_80013410, arg0->screen.x, arg0->screen.y, arg0->screen.w, arg0->screen.h);
@@ -142,7 +137,6 @@ s32 Gpu_Reset(s32 arg0);
 
 /* libgpu ResetGraph. Own trace strings D_80013478 "ResetGraph:jtb=%08x,env=%08x"
  * and D_80013498 "ResetGraph(%d)..."; mode&7 of 0 or 3 does the full reset. */
-void ResetGraph(s32 mode);
 void ResetGraph(s32 mode) {
     s32 maskedMode;
     u8 *graphState;

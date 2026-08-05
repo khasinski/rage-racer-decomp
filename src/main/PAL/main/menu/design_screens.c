@@ -26,7 +26,6 @@ extern void DrawLogoSamplePanel(s32, s32);
 extern void DrawFadingMenuSprites(s32, s32, s32);
 void PlaySoundCue(s32 cue);
 
-void UpdateLogoSampleScreen(void);
 void UpdateLogoSampleScreen(void) {
     s32 v0;
     s32 t;
@@ -208,7 +207,6 @@ extern u32 D_80081D34;
 void DrawTeamNameCharModel(void);
 void UploadTeamNameTexture(void *a, s32 b);
 
-void UpdateTeamNameScreen(void);
 void UpdateTeamNameScreen(void) {
     u16 pad;
     s32 newdepth;
@@ -343,7 +341,6 @@ void DrawFadingMenuSprites(s32, s32, s32);
 void SetBodyColor1(s32);
 void SetBodyColor2(s32);
 
-void UpdatePaintColorScreen(void);
 void UpdatePaintColorScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawMenuCarView();
@@ -518,7 +515,6 @@ extern s16 g_NextOwnedCarIndex;
 
 s32 GetCarUnlockLevel(s32 model);
 
-void UpdateCarListCursor(void);
 void UpdateCarListCursor(void) {
     s32 index;
     GameCarEntry *entry;

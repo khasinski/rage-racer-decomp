@@ -15,7 +15,6 @@ void SetVertex1(void *v);
 void SetVertex1(void *v) { gte_ldv1(v); }
 void SetVertex2(void *v);
 void SetVertex2(void *v) { gte_ldv2(v); }
-void SetVertexTri(void *v0, void *v1, void *v2);
 void SetVertexTri(void *v0, void *v1, void *v2) {
     gte_ldv0(v0);
     gte_ldv1(v1);
@@ -24,13 +23,11 @@ void SetVertexTri(void *v0, void *v1, void *v2) {
 
 /* --- SetRGBfifo.s --- */
 
-void SetRGBfifo(void *a, void *b, void *c);
 void SetRGBfifo(void *a, void *b, void *c) {
     gte_lwc2(20, a);
     gte_lwc2(21, b);
     gte_lwc2(22, c);
 }
-void SetIR123(s32 a, s32 b, s32 c);
 void SetIR123(s32 a, s32 b, s32 c) {
     gte_mtc2(a, 9);
     gte_mtc2(b, 10);
@@ -38,32 +35,27 @@ void SetIR123(s32 a, s32 b, s32 c) {
 }
 void SetIR0(s32 a);
 void SetIR0(s32 a) { gte_mtc2(a, 8); }
-void SetSZfifo3(s32 a, s32 b, s32 c);
 void SetSZfifo3(s32 a, s32 b, s32 c) {
     gte_mtc2(a, 17);
     gte_mtc2(b, 18);
     gte_mtc2(c, 19);
 }
-void SetSZfifo4(s32 a, s32 b, s32 c, s32 d);
 void SetSZfifo4(s32 a, s32 b, s32 c, s32 d) {
     gte_mtc2(a, 16);
     gte_mtc2(b, 17);
     gte_mtc2(c, 18);
     gte_mtc2(d, 19);
 }
-void SetSXSYfifo(s32 a, s32 b, s32 c);
 void SetSXSYfifo(s32 a, s32 b, s32 c) {
     gte_mtc2(a, 12);
     gte_mtc2(b, 13);
     gte_mtc2(c, 14);
 }
-void SetRii(s32 a, s32 b, s32 c);
 void SetRii(s32 a, s32 b, s32 c) {
     gte_ctc2(a, 0);
     gte_ctc2(b, 2);
     gte_ctc2(c, 4);
 }
-void SetMAC123(s32 a, s32 b, s32 c);
 void SetMAC123(s32 a, s32 b, s32 c) {
     gte_mtc2(a, 25);
     gte_mtc2(b, 26);

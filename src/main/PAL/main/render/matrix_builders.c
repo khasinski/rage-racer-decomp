@@ -69,7 +69,6 @@ void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *
  * rotation (BuildAxisRotMatrix), the translation (MatrixApplyVectorComponents), then per-row
  * fixed-point projection scaling (<<1 / <<2). Returns 1 if eye==target, else 0.
  */
-s32 SetLookAtMatrix(GameRenderObject *obj);
 s32 SetLookAtMatrix(GameRenderObject *obj) {
     Matrix m;
     GameRenderAxisMatrix am;

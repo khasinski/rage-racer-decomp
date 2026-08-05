@@ -6,7 +6,6 @@
 extern long g_PrologueStep;
 extern void (*D_8007D778[])(void);
 
-void TickPrologueStep(void);
 void TickPrologueStep(void) {
     void (*func)(void);
 
@@ -44,7 +43,6 @@ long CdReadRetry(long arg0);
 void CdSyncCallback(long arg0);
 void CdReadyCallback(long arg0);
 
-void CdReadDataReadyCallback(u_char arg0, long arg1);
 void CdReadDataReadyCallback(u_char arg0, long arg1) {
     volatile long *p;
     long dv;
@@ -149,7 +147,6 @@ long CdReadRetry(long arg0) {
     return g_CdReadRemaining;
 }
 
-void CdReadBreak(void);
 void CdReadBreak(void) {
     volatile long *ptr;
 

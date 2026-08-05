@@ -9,7 +9,6 @@ extern s16 g_PlayerTrackSection;
 extern s16 g_PlayerLap;
 extern s32 g_LapCount;
 
-void TriggerRaceCues(void);
 void TriggerRaceCues(void) {
     u8 *rawBase;
     u8 *base;

@@ -10,7 +10,6 @@ extern s32 g_FlybySceneryRotZ;
 extern s32 g_FlybyScenery[];
 
 
-void DrawFlybyScenery(void);
 void DrawFlybyScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
@@ -48,7 +47,6 @@ extern s32 g_RouteSceneryRotY;
 extern s32 g_RouteSceneryRotZ;
 extern u8 *g_RouteSceneryKeyframe;
 
-void SeedRouteScenery(void);
 void SeedRouteScenery(void) {
     register s32 index0 asm("$2");
     s32 index1;

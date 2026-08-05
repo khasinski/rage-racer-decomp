@@ -50,7 +50,6 @@ void DrawMenuCarView(void);
 void UpdateCarListCursor(void);
 void PlaySoundCue(s32 cue);
 
-void UpdateCarShopScreen(void);
 void UpdateCarShopScreen(void) {
     void *ot;
     s32 value;
@@ -380,7 +379,6 @@ extern s32 D_801E4290;
 void RequestUpgradedCarModel(s32 arg0);
 void DrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
 
-void UpdateEngineerShopScreen(void);
 void UpdateEngineerShopScreen(void) {
     void *ot;
     s32 value;
@@ -537,6 +535,5 @@ void UpdateEngineerShopScreen(void) {
     }
 }
 
-void ShopScreenNoOp(void);
 void ShopScreenNoOp(void) {
 }

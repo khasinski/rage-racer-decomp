@@ -25,7 +25,6 @@ extern char g_TextTimeAttack[];
 extern char g_TextCourseIn[];
 void DrawProportionalText(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 
-void InitRecordTables(void);
 void InitRecordTables(void) {
     register s32 r2 asm("$2");
     s32 r3;

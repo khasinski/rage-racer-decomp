@@ -16,7 +16,6 @@ static inline u_short get_selected_voice(void) {
     return g_SndCurrentAttr.voice;
 }
 
-long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note);
 long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) {
     u_short bits_upper;
     u_short bits_lower;

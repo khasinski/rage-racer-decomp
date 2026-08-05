@@ -18,7 +18,6 @@ void CdDefaultReadCallback(void);
 void DeliverEvent(u_long arg0, long arg1);
 void CdReadCallback(void *arg0);
 
-long CdGetToc2(long arg0, u_char *arg1);
 long CdGetToc2(long arg0, u_char *arg1) {
     u_char *fmt;
     u_char command[8];
@@ -127,7 +126,6 @@ long CdGetToc2(long arg0, u_char *arg1) {
     return 0;
 }
 
-long CdInit(void);
 long CdInit(void) {
     long retries;
 
@@ -146,17 +144,14 @@ long CdInit(void) {
     return 1;
 }
 
-void CdDefaultSyncCallback(void);
 void CdDefaultSyncCallback(void) {
     DeliverEvent(0xF0000003, 0x20);
 }
 
-void CdDefaultReadyCallback(void);
 void CdDefaultReadyCallback(void) {
     DeliverEvent(0xF0000003, 0x40);
 }
 
-void CdDefaultReadCallback(void);
 void CdDefaultReadCallback(void) {
     DeliverEvent(0xF0000003, 0x40);
 }

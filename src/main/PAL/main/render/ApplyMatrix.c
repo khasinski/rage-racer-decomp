@@ -13,7 +13,6 @@ s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out);
 /* libgte ApplyMatrixSV: SVECTOR in, SVECTOR out, returns out. */
 s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out);
 
-s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out);
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
     asm volatile(
         "lw $8,0(%0)\n"

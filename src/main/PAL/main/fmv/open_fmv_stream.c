@@ -8,7 +8,6 @@ void DecDCToutCallback(s32 arg0);
 void StSetRing(s32 arg0, s32 arg1);
 void StSetStream(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 StartStreamRead(s32 arg0);
-void OpenFmvStream(s32 arg0);
 void OpenFmvStream(s32 arg0) {
     DecDCTReset(0);
     DecDCToutCallback(arg0);
@@ -37,7 +36,6 @@ void DecDCTout(volatile u32 *arg0, s32 arg1);
 void LoadImage(Rect *rect, void *data);
 void StCdInterrupt(void);
 
-void UploadFmvSlice(void);
 void UploadFmvSlice(void) {
     Rect rect;
     register volatile s32 *bufferPtr asm("$6");

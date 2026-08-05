@@ -7,7 +7,6 @@ extern s16 g_SeqHandle;
 extern s16 g_SeqVolume;
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
 void SetReverbDepth(s32 arg0, s32 arg1);
-void ApplyCurrentSequenceAudio(void);
 void ApplyCurrentSequenceAudio(void) {
     SsSeqSetVol(g_SeqHandle, g_SeqVolume, g_SeqVolume);
     SetReverbDepth(0x28, 0x28);

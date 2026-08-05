@@ -16,7 +16,6 @@ extern u_char g_SndCurrentTone;
 
 long SpuVmCalculateTonePitch(long arg0, long arg1);
 
-long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5);
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) {
     register long raw asm("$10") = arg0;
     register long cst asm("$2") = 0xFFC0;

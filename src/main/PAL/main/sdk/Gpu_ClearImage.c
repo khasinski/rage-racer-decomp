@@ -93,7 +93,6 @@ long Gpu_CheckTimeout(void);
 
 /* Driver-table slot +0x20: the worker LoadImage enqueues. Clips the rect,
  * issues GP0(A0h) and pushes the odd words by hand, the rest by DMA2. */
-long Gpu_LoadImage(GpuRectPacked *rect, u_long *src);
 long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
     GpuRectPacked *savedRect;
     u_long *current;
@@ -212,7 +211,6 @@ extern volatile u_long *g_GpuGp1;
 
 /* Driver-table slot +0x1C: the worker StoreImage enqueues. The GP0(C0h)
  * mirror image of Gpu_LoadImage. */
-long Gpu_StoreImage(GpuRectPacked *rect, u_long *dst);
 long Gpu_StoreImage(GpuRectPacked *rect, u_long *dst) {
     short w;
     short h;

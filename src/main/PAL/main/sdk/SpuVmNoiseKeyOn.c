@@ -18,7 +18,6 @@ extern u_short D_8009E674;
 extern u_short g_SndReverbOnLow;
 extern u_short g_SndReverbOnHigh;
 
-void SpuVmNoiseKeyOn(u_char voice);
 void SpuVmNoiseKeyOn(u_char voice) {
     SeqStruct *score =
         &g_SndSeqTable[g_SndCurrentAttr.seq_sep & 0xFF]

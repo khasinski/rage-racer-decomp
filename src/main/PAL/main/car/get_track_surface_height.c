@@ -33,7 +33,6 @@ typedef struct TrackSurfaceCell {
 
 s32 FindTrackSegment(TrackSurfaceCell *arg0, s32 arg1);
 
-s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0);
 s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
     s32 index;
     s32 nextIndex;
@@ -448,7 +447,6 @@ void SetDrawModeWide(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4) asm("Se
  *   +0x138/+0x13A  spec->tachoNeedleX / Y
  *   +0x13C/+0x13E  spec->tachoFaceDX / DY
  */
-void BuildTachoNeedleQuad(void);
 void BuildTachoNeedleQuad(void) {
     u8 *data = (u8 *)g_CarSpec;
     u8 *prim0 = g_TachoNeedlePrim0;

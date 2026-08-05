@@ -6,7 +6,6 @@ extern s32 g_CdMixPreset;
 extern u8 g_CdVolume;
 
 
-void SetCdMixPreset(s32 arg0);
 void SetCdMixPreset(s32 arg0) {
     g_CdMixPreset = arg0;
     SetCdVolume(g_CdVolume);
@@ -18,7 +17,6 @@ extern void *g_CdAudioFileNames[];
 extern s32 g_CdTocEntryCount;
 extern u8 g_CdSearchFile[];
 
-void BuildCdTrackTable(void);
 void BuildCdTrackTable(void) {
     CdlLOC *toc;
     s32 i;

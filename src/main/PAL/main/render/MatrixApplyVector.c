@@ -38,7 +38,6 @@
         out[(dst)] = value;                            \
     } while (0)
 
-void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out);
 void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) {
     s16 *m = mtx;
     s32 *v = vec;

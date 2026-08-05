@@ -31,7 +31,6 @@ extern u32 g_AssetLoadCursor;
 void UnrelocateModelBank(void *, s32);
 void SelectCarModelSlot(s32);
 
-void LoadUpgradedCarModel(s32 arg0);
 void LoadUpgradedCarModel(s32 arg0) {
     u8 *ptr;
     GameCarModelAsset *asset;
@@ -69,7 +68,6 @@ void LoadUpgradedCarModel(s32 arg0) {
     }
 }
 
-s32 RequestOptionScreenAssets(void);
 s32 RequestOptionScreenAssets(void) {
     s32 state;
 
@@ -89,7 +87,6 @@ s32 RequestOptionScreenAssets(void) {
     return 1;
 }
 
-void LoadOptionScreenAssets(void);
 void LoadOptionScreenAssets(void) {
     s32 ptr;
     s32 offset;
@@ -107,7 +104,6 @@ void LoadOptionScreenAssets(void) {
     }
 }
 
-s32 RequestRoundAssets(void);
 s32 RequestRoundAssets(void) {
     s32 value;
 
@@ -133,7 +129,6 @@ s32 RequestRoundAssets(void) {
     return 1;
 }
 
-void LoadRoundAssets(void);
 void LoadRoundAssets(void) {
     s32 state;
     s32 kind;
@@ -183,7 +178,6 @@ void LoadRoundAssets(void) {
     }
 }
 
-void RelocateCarModel(void);
 void RelocateCarModel(void) {
     u32 temp;
     u32 *dst;

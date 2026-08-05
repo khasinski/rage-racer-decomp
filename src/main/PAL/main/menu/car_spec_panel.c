@@ -20,7 +20,6 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
 s32 rsin(s32 angle);
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */
-void DrawTireCompoundSlider(u8 x, s32 useFlag);
 void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     void *ot;
     void *scratch;
@@ -112,7 +111,6 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
 }
 
 /* The two side browse arrows, each lit only when that direction has somewhere to go. */
-void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight);
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
     void *ot;
     s32 halfWidth;
@@ -218,7 +216,6 @@ void DrawCarSpecPolyLine(void *ot, s32 x0, s16 y0, s16 x1, s16 y1, s32 x2,
                          s32 alpha) asm("DrawPolyLine3");
 
 /* The four animated performance bars on the CUSTOMIZE car panel. */
-void DrawCarSpecGraph(s32 step, u32 tireGrade);
 void DrawCarSpecGraph(s32 step, u32 tireGrade) {
     s32 revealed[4];
     CarSpecGraphColors colors;

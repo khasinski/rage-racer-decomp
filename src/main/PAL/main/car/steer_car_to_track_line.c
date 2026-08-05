@@ -20,7 +20,6 @@ s32 rcos(s32 arg0);
  * divided by the spec block's steerResponse. Register pins are
  * match-load-bearing.
  */
-void SteerCarToTrackLine(GameCarRuntime *car);
 void SteerCarToTrackLine(GameCarRuntime *car) {
     GameCarSpec *spec;
     s32 timer;
@@ -319,7 +318,6 @@ extern s32 g_ShiftSoundLevel;
  * spin, advances the car (AdvanceCarPosition), and lands it when it returns to the
  * ground. The drive sub-block is the GameCarDrive view of car->field_BC.
  */
-void UpdateCarAirborne(GameCarRuntime *car);
 void UpdateCarAirborne(GameCarRuntime *car) {
     GameCarDrive *r = (GameCarDrive *)&car->field_BC;
     s32 sinF24;
@@ -397,7 +395,6 @@ s32 Random15(void);
  * car (AdvanceCarPosition), and resets the car once the budget expires. field_15C /
  * field_15E hold the shake magnitude.
  */
-void UpdateCarStandingStart(GameCarRuntime *car);
 void UpdateCarStandingStart(GameCarRuntime *car) {
     GameCarRuntime *route = (GameCarRuntime *)&car->field_BC;
     s32 sinA;
@@ -465,7 +462,6 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
  * containing segment index, or -1 (snapping the car onto the track) if none.
  * pts[0] is the car-relative point; pts[1..4] are the quad corners.
  */
-s32 FindTrackSegment(GameCarRuntime *car, s32 idx);
 s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
     DVec pts[5];
     s32 i;

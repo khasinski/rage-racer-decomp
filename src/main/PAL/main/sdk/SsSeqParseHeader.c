@@ -7,7 +7,6 @@ extern char g_MsgSeqNotSeqData[];
 extern char g_MsgSeqOldFormat[];
 
 
-long SsSeqParseHeader(long arg0, long arg1, long arg2);
 long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     SeqStruct *s;
     u_char *seq;

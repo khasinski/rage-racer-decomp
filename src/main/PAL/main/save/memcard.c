@@ -21,7 +21,6 @@ void _card_info(s32 chan);
 void _card_load(s32 chan);
 s32 _card_clear(s32 chan);
 
-s32 PollMemoryCardStatus(s32 port, s32 slot);
 s32 PollMemoryCardStatus(s32 port, s32 slot) {
     s32 handle;
     s32 two;
@@ -164,7 +163,6 @@ case3_ready:
     return g_McStatusResult;
 }
 
-s32 FormatMemoryCard(s32 port, s32 slot);
 s32 FormatMemoryCard(s32 port, s32 slot) {
     char device[8];
     s32 status;
@@ -202,7 +200,6 @@ extern s32 g_McSwEventTimeout;
 extern s32 g_McSwEventNew;
 
 
-void OpenMemoryCardEvents(void);
 void OpenMemoryCardEvents(void) {
     EnterCriticalSection();
     g_McHwEventIoe = OpenEvent(0xF4000001, 0x0004, 0x2000, 0);
@@ -216,7 +213,6 @@ void OpenMemoryCardEvents(void) {
     ExitCriticalSection();
 }
 
-void EnableMemoryCardEvents(void);
 void EnableMemoryCardEvents(void) {
     EnableEvent(g_McHwEventIoe);
     EnableEvent(g_McHwEventError);
@@ -228,7 +224,6 @@ void EnableMemoryCardEvents(void) {
     EnableEvent(g_McSwEventNew);
 }
 
-void DisableMemoryCardEvents(void);
 void DisableMemoryCardEvents(void) {
     DisableEvent(g_McHwEventIoe);
     DisableEvent(g_McHwEventError);
@@ -240,7 +235,6 @@ void DisableMemoryCardEvents(void) {
     DisableEvent(g_McSwEventNew);
 }
 
-void CloseMemoryCardEvents(void);
 void CloseMemoryCardEvents(void) {
     EnterCriticalSection();
     CloseEvent(g_McHwEventIoe);
@@ -258,7 +252,6 @@ void CloseMemoryCardEvents(void) {
 #include "psyq/kernel.h"
 #include "game/memcard.h"
 
-void ClearMemoryCardHwEvents(void);
 void ClearMemoryCardHwEvents(void) {
     TestEvent(g_McHwEventIoe);
     TestEvent(g_McHwEventError);
@@ -266,7 +259,6 @@ void ClearMemoryCardHwEvents(void) {
     TestEvent(g_McHwEventNew);
 }
 
-void ClearMemoryCardSwEvents(void);
 void ClearMemoryCardSwEvents(void) {
     TestEvent(g_McSwEventIoe);
     TestEvent(g_McSwEventError);
@@ -276,7 +268,6 @@ void ClearMemoryCardSwEvents(void) {
 
 extern s32 g_McPollTicks;
 
-s32 PollMemoryCardHwEvent(void);
 s32 PollMemoryCardHwEvent(void) {
     s32 result;
     s32 ready;
@@ -305,7 +296,6 @@ s32 PollMemoryCardHwEvent(void) {
     return result;
 }
 
-s32 PollMemoryCardHwEventLimit(s32 limit);
 s32 PollMemoryCardHwEventLimit(s32 limit) {
     s32 i;
     i = 0;
@@ -328,7 +318,6 @@ s32 PollMemoryCardHwEventLimit(s32 limit) {
     return 0;
 }
 
-s32 WaitMemoryCardHwEvent(void);
 s32 WaitMemoryCardHwEvent(void) {
     s32 ready;
 
@@ -349,7 +338,6 @@ s32 WaitMemoryCardHwEvent(void) {
     }
 }
 
-s32 WaitMemoryCardSwEvent(void);
 s32 WaitMemoryCardSwEvent(void) {
     s32 ready;
 
@@ -1699,7 +1687,6 @@ extern s32 g_McMenuRowCursor;
 extern s32 g_McFromLoadMenu;
 extern s32 g_McFadeStep;
 extern s32 g_McFadeLevel;
-void EnterMemoryCardMenu(void);
 void EnterMemoryCardMenu(void) {
     SetDispMask(0);
     SetupDisplay480(0, 0, 0);

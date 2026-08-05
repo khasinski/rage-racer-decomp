@@ -52,7 +52,6 @@ u_long _param(u_long arg0) {
     return *g_GpuGp0 & 0xFFFFFF;
 }
 
-long _addque(void *callback, void *data, long arg2);
 long _addque(void *callback, void *data, long arg2) {
     return Gpu_AddQueue(callback, data, 0, arg2);
 }

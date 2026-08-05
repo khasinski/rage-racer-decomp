@@ -31,7 +31,6 @@ void BuildCdTrackTable(void);
 void SsSetSpuInputAttr_Link(u8 source, u8 field, u8 value) asm("SsSetSpuInputAttr");
 void SsSetSerialVol_Link(u8 source, s16 left, s16 right) asm("SsSetSerialVol");
 
-void StepCdPauseRequest(void);
 void StepCdPauseRequest(void) {
     s32 state;
     s32 result;
@@ -138,7 +137,6 @@ void StepCdResumeRequest(void) {
     }
 }
 
-void InitCdAudio(void);
 void InitCdAudio(void) {
     u8 *status;
 
@@ -161,7 +159,6 @@ void InitCdAudio(void) {
     SetCdVolume(0x7F);
 }
 
-void TickCdAudio(void);
 void TickCdAudio(void) {
     s32 temp;
     s32 status;
@@ -204,7 +201,6 @@ void TickCdAudio(void) {
 
 extern void *g_TrackCameras;
 
-void SelectTrackCameraTable(u8 *arg0, s32 arg1);
 void SelectTrackCameraTable(u8 *arg0, s32 arg1) {
     void *ptr;
 

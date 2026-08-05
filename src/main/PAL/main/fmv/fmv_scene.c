@@ -29,7 +29,6 @@ void DecodeFmvFrame(void);
 void EndFmv(void);
 void UpdateFmv(void);
 
-void BeginFmv(s32 arg0);
 void BeginFmv(s32 arg0) {
     CloseLoadedAudioSlots();
     ResetCdAudioState();
@@ -46,7 +45,6 @@ void StartFmvPlayback(u32 arg0);
 void DecodeFmvFrame(void);
 void EndFmv(void);
 
-void UpdateFmv(void);
 void UpdateFmv(void) {
     switch (g_FmvState) {
     case 0:

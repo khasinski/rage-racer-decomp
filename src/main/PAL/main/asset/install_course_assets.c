@@ -11,7 +11,6 @@ void UploadImageBlock(void *arg0);
 void StoreTeamLogoImage(void *arg0);
 void ResetTrackTextureSwap(void);
 
-void InstallCourseAssets(void);
 void InstallCourseAssets(void) {
     u8 *base;
     s32 offset0;
@@ -41,7 +40,6 @@ void InstallCourseAssets(void) {
     g_AssetLoadCursor = g_AssetBase + 0x38000;
 }
 
-s32 RequestTrackDataAssets(void);
 s32 RequestTrackDataAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;

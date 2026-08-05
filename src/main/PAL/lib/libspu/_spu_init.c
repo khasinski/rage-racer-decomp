@@ -35,7 +35,6 @@ extern long g_SpuDummyAdpcmBlock;
         delayValue *= 3;                    \
     }
 
-long _spu_init(long resetMode);
 long _spu_init(long resetMode) {
     volatile long delay;
     volatile long delayValue;

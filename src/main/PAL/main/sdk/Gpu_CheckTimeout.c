@@ -17,7 +17,6 @@ extern char D_8001362C[];
 extern char D_80013660[];
 
 
-long Gpu_CheckTimeout(void);
 long Gpu_CheckTimeout(void) {
     long intrMask;
     long state;
@@ -103,7 +102,6 @@ long Gpu_ProbeType(u_long arg0) {
     return 4;
 }
 
-void MemFill(u_char *dst, u_char value, long count);
 void MemFill(u_char *dst, u_char value, long count) {
     volatile long unused;
     long i = count - 1;
@@ -126,7 +124,6 @@ u_long GPU_cw[4] __attribute__((section(".text"))) = {
     0,
 };
 
-u_char *MemCopy(u_char *dst, u_char *src, long count);
 u_char *MemCopy(u_char *dst, u_char *src, long count) {
     u_char *ret;
 

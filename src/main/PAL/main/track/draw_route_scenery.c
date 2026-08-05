@@ -14,7 +14,6 @@ extern s32 g_RouteSceneryRotZ;
 
 
 
-void DrawRouteScenery(void);
 void DrawRouteScenery(void) {
     Matrix mtx0;
     Matrix mtx1;

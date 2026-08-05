@@ -28,7 +28,6 @@ void GameDrawSpriteWide(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 
 void DrawRaceEndBanner(s32 arg0);
 void ResetCourseProgress(s32 arg0);
 
-void UpdateBgmTrackCount(void);
 void UpdateBgmTrackCount(void) {
     s32 offset;
     s32 current;
@@ -56,7 +55,6 @@ void UpdateBgmTrackCount(void) {
     g_BgmTrackCount = value;
 }
 
-void DrawLostRaceCaption(s32 arg0);
 void DrawLostRaceCaption(s32 arg0) {
     if (arg0 >= 0x100) {
         arg0 = 0xFF;
@@ -65,7 +63,6 @@ void DrawLostRaceCaption(s32 arg0) {
     GameDrawProportionalTextShaded(0x28, 0x40, &g_CaptionLostRace, 0x7812, arg0);
 }
 
-void EnterLostRaceScreen(void);
 void EnterLostRaceScreen(void) {
     g_FrameSyncThreshold = 0x80;
     SetReverbDepth(0x28, 0x28);
@@ -105,7 +102,6 @@ void DrawRaceEndPrompt(void) {
     DrawLostRaceCaption(0xFF);
 }
 
-void UpdateLostRaceScreen(void);
 void UpdateLostRaceScreen(void) {
     s32 timer;
     s32 old;
@@ -152,7 +148,6 @@ void UpdateLostRaceScreen(void) {
     DrawRaceEndPrompt();
 }
 
-void DrawRaceEndBanner(s32 arg0);
 void DrawRaceEndBanner(s32 arg0) {
     if (arg0 >= 256) {
         arg0 = 0xFF;
@@ -161,7 +156,6 @@ void DrawRaceEndBanner(s32 arg0) {
     GameDrawSpriteWide(g_DrawBuffer + 204, 0x50, 0x6C, 0xA0, 0x18, 0, 0x28, arg0, arg0, arg0, 0xC, 0, 1, 0x29);
 }
 
-void EnterRaceEndScreen(void);
 void EnterRaceEndScreen(void) {
     g_FrameSyncThreshold = 0x80;
     g_SceneId = 0x10;
@@ -169,7 +163,6 @@ void EnterRaceEndScreen(void) {
     DrawRaceEndBanner(0x22B);
 }
 
-void UpdateRaceEndScreen(void);
 void UpdateRaceEndScreen(void) {
     s32 v = g_SceneTimer - 1;
     g_SceneTimer = v;

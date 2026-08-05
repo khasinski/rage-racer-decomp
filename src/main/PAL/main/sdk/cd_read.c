@@ -23,7 +23,6 @@ long cd_read(long arg0, long sectorInt, void *buf) {
     return CdReadSync(0, 0) < 1U;
 }
 
-void LibcMemcpy(u_char *dst, u_char *src, long count);
 void LibcMemcpy(u_char *dst, u_char *src, long count) {
     u_char scratch[8];
     register long i asm("$3");
@@ -46,7 +45,6 @@ void LibcMemcpy(u_char *dst, u_char *src, long count) {
     } while (i != end);
 }
 
-long LibcStrcmp(u_char *arg0, u_char *arg1);
 long LibcStrcmp(u_char *arg0, u_char *arg1) {
     long left;
 
@@ -70,7 +68,6 @@ long LibcStrcmp(u_char *arg0, u_char *arg1) {
     return *arg0 - arg1[-1];
 }
 
-long LibcStrncmp(u_char *arg0, u_char *arg1, long arg2);
 long LibcStrncmp(u_char *arg0, u_char *arg1, long arg2) {
     long left;
     long right;

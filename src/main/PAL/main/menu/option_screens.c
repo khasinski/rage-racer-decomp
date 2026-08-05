@@ -64,7 +64,6 @@ void RequestTrackDataAssets(void);
 void UpdateOptionSceneFade(void);
 
 /* g_GameModeHandlers[5]: left/right edits the selected audio setting, cancel restores it. */
-void UpdateSoundSettingAdjust(void);
 void UpdateSoundSettingAdjust(void) {
     s32 old;
     u16 pad;
@@ -170,7 +169,6 @@ void DrawScreenAdjustScreen(void) {
 }
 
 /* g_GameModeHandlers[6]: moves the screen offset and commits it to g_ScreenOffsetX/Y. */
-void UpdateScreenAdjustScreen(void);
 void UpdateScreenAdjustScreen(void) {
     s32 oldX;
     s32 oldY;
@@ -284,7 +282,6 @@ void DrawOptionSceneOverlay(void) {
 }
 
 /* Scene 23: the setup / OPTION scene, dispatching g_GameModeHandlers[g_GameMode]. */
-void UpdateOptionScene(void);
 void UpdateOptionScene(void) {
     *(s32 *)0x1F800000 = AddTilePrim(g_DrawBuffer + 204, *(s32 *)0x1F800000, 0, 0, 0x140, 2, 0, 0, 0);
     g_AnimTimer = g_AnimTimer + 1;
@@ -296,7 +293,6 @@ void UpdateOptionScene(void) {
     DrawOptionSceneOverlay();
 }
 
-void InitTrackScene(void);
 void InitTrackScene(void) {
     InitRenderState(5);
     LoadTrackTexturePageRange();
@@ -312,7 +308,6 @@ void InitTrackScene(void) {
     InitShuttleScenery();
 }
 
-void EnterBgmSelectScreen(void);
 void EnterBgmSelectScreen(void) {
     SetDispMask(0);
     SetupDisplay240(0, 0, 0);
@@ -331,7 +326,6 @@ void EnterBgmSelectScreen(void) {
     g_CameraCarIndex = 0;
 }
 
-void UpdateOptionSceneFade(void);
 void UpdateOptionSceneFade(void) {
     s32 d;
     s32 v;
@@ -365,7 +359,6 @@ void UpdateOptionSceneFade(void) {
     DrawProportionalText(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
-void UpdateBgmSelectLoad(void);
 void UpdateBgmSelectLoad(void) {
     if (g_AssetLoadState == 0) {
         InstallCourseAssets();
@@ -376,7 +369,6 @@ void UpdateBgmSelectLoad(void) {
     UpdateOptionSceneFade();
 }
 
-void UpdateBgmSelectFadeIn(void);
 void UpdateBgmSelectFadeIn(void) {
     if (g_AssetLoadState == 0) {
         g_FadeStep = 4;

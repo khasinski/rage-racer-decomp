@@ -4,14 +4,12 @@ void SetRotMatrix(s32 arg0);
 extern s32 g_VisibleCellList;
 void BuildVisibleCells(s32 arg0, s32 arg1);
 void SubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2);
-void DrawTerrainCells(void);
 void DrawTerrainCells(void) {
     BuildVisibleCells(-12288, 0x14000);
     SetRotMatrix(0x1F800028);
     SubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
 }
 
-void DrawTerrainCellsWide(void);
 void DrawTerrainCellsWide(void) {
     BuildVisibleCells(0xFFFF6000, 0x14000);
     SetRotMatrix(0x1F800028);

@@ -81,7 +81,6 @@ void LibcSprintf(void *dst, void *fmt, ...);
 void DrawResultScreen(void);
 void *FormatLapTime(void *dst, s32 value);
 
-void DrawSeriesClearedWash(s32 x, s32 y);
 void DrawSeriesClearedWash(s32 x, s32 y) {
     void *ot;
     void *prim;
@@ -145,7 +144,6 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
     *(void **)0x1F800000 = GameQueueDrawModePrimWide(ot, prim, 0x49);
 }
 
-void UpdateReplayScene(void);
 void UpdateReplayScene(void) {
     g_AnimTimer++;
     g_SceneTimer++;
@@ -370,7 +368,6 @@ void DrawGrandPrixResultPanel(void) {
     DrawProportionalText(0x10, 0x50, g_CaptionRanking, 0x7812);
 }
 
-void DrawRaceTimePanel(s32 arg0);
 void DrawRaceTimePanel(s32 arg0) {
     s32 base;
     s32 i;

@@ -10,7 +10,6 @@ extern short g_SndSeqTableTMax;
 void _SsSndDecrescendo(short seq, short sep);
 void _SsSndStopWide(long seq, long sep) asm("_SsSndStop");
 
-void SsSeqCalledTbyT(void);
 void SsSeqCalledTbyT(void) {
     long i;
     long j;
@@ -64,7 +63,6 @@ typedef union SeqVolume7128C {
 long SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices);
 long SpuVmGetSeqVol(short seq_sep, short *left, short *right);
 
-void _SsSndCrescendo(short seq, short sep);
 void _SsSndCrescendo(short seq, short sep) {
     SeqStruct *score = &g_SndSeqTable[seq][sep];
     SeqVolume7128C left;

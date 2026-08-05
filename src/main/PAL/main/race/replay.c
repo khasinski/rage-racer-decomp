@@ -79,7 +79,6 @@ void SeedReplayCars(void);
 extern s32 g_SeriesCleared;
 s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 
-void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2);
 void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
     s32 index;
     MenuBigFrame *big;
@@ -170,7 +169,6 @@ void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
     }
 }
 
-void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2);
 void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
     register s32 index asm("s0");
     u8 *primary;
@@ -217,7 +215,6 @@ void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
     }
 }
 
-void RecordReplayFrame(void);
 void RecordReplayFrame(void) {
     if (g_GrandPrixMode != 0) {
         StoreReplayCarFrame(g_ReplayWriteCursor, &g_PlayerCar, (u8 *)g_Cars);
@@ -232,7 +229,6 @@ void RecordReplayFrame(void) {
     }
 }
 
-void BeginReplay(void);
 void BeginReplay(void) {
     s32 mode;
 
@@ -266,7 +262,6 @@ void BeginReplay(void) {
     SeedReplayCars();
 }
 
-void DrawReplayBadge(void);
 void DrawReplayBadge(void) {
     volatile s32 *scratch;
     s32 base;

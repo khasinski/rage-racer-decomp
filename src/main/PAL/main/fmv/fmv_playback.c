@@ -43,7 +43,6 @@ extern s16 D_8009E782;
 extern s32 g_ReplayPlayerModel;
 extern s32 g_ReplayRivalModel;
 
-s32 PresentFmvFrame(s32 *arg0);
 s32 PresentFmvFrame(s32 *arg0) {
     void *p;
     s32 retry;
@@ -135,7 +134,6 @@ void *GetFmvFrame(s32 *arg0) {
     return ret;
 }
 
-void WaitFmvDecode(FmvDisplayState *arg0);
 void WaitFmvDecode(FmvDisplayState *arg0) {
     volatile s32 timeout = 0x800000;
     s32 one;
@@ -159,7 +157,6 @@ void WaitFmvDecode(FmvDisplayState *arg0) {
     arg0->field_34 = 0;
 }
 
-void StartStreamRead(void *arg0);
 void StartStreamRead(void *arg0) {
     u8 byte;
 
@@ -199,13 +196,11 @@ pollNext:
     }
 }
 
-void ResetReplayFrameCounts(void);
 void ResetReplayFrameCounts(void) {
     g_ReplayFramesGp = &D_801E8AFC;
     g_ReplayFramesTimeAttack = &D_801E8AFC;
 }
 
-void ResetReplayWriteCursor(void);
 void ResetReplayWriteCursor(void) {
     u32 value;
 
@@ -226,7 +221,6 @@ void ResetReplayWriteCursor(void) {
  * output ring g_ReplayFramesGp, keyed by pairIndex>>1. Only even indices hold a pair
  * (odd indices are skipped). Stride is ((n<<1)+n)<<4 == n*0x30 (sizeof pair).
  */
-void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB);
 void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     GameRenderPairPoint *dst;
     u8 *base;
@@ -282,7 +276,6 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
  * by pointIndex>>1 (odd indices skipped). Stride ((n<<3)-n)<<2 == n*0x1C
  * (sizeof GameRenderSinglePoint).
  */
-void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr);
 void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
     GameRenderSinglePoint *dst;
     u8 *base;

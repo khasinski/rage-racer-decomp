@@ -7,7 +7,6 @@ s32 GetAngleDelta(s32 arg0, s32 arg1);
  * (takes the shorter way around the 0x1000 circle). Signed companion is
  * GetAngleDelta.
  */
-s32 GetAngleDistance(s32 arg0, s32 arg1);
 s32 GetAngleDistance(s32 arg0, s32 arg1) {
     s32 lhs = arg0 & 0xFFF;
     s32 rhs = arg1 & 0xFFF;
@@ -31,7 +30,6 @@ s32 GetAngleDistance(s32 arg0, s32 arg1) {
  * result in (-0x800, 0x800]. Signed companion of GetAngleDistance (which returns
  * the unsigned magnitude).
  */
-s32 GetAngleDelta(s32 arg0, s32 arg1);
 s32 GetAngleDelta(s32 arg0, s32 arg1) {
     s32 lhs = arg0 & 0xFFF;
     s32 rhs = arg1 & 0xFFF;

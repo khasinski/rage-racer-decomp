@@ -30,7 +30,6 @@ extern volatile u_char g_SndReservedVoiceCount;
 void SpuVmAutoVolTick(long voice);
 void SpuVmAutoPanTick(long voice);
 
-void SsUtFlush(void);
 void SsUtFlush(void) {
     volatile long stack[4];
     register long i asm("$16");

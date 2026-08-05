@@ -127,7 +127,6 @@ void UpdateLoadedAudioVoices(s32 value, s32 bank);
  * The local Car struct and the shared GameCarDrive are a distinct hand-rolled layout (drive block
  * at +0xBC) shaped to match; they are NOT GameCarRuntime.
  */
-void UpdatePlayerCar(Car *car);
 void UpdatePlayerCar(Car *car) {
     Matrix m1;
     Matrix m2;
@@ -616,7 +615,6 @@ extern s32 g_EnvScriptClock;
 
 s32 DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt);
 
-s32 DrawPlayerTachometer(void);
 s32 DrawPlayerTachometer(void) {
     s32 value;
     s32 arg2;

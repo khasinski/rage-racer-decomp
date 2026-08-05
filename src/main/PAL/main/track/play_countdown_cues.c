@@ -6,7 +6,6 @@ extern s16 g_RaceCueDelay;
 
 void PlaySoundCue(s32 cue);
 
-void PlayCountdownCues(s32 arg0);
 void PlayCountdownCues(s32 arg0) {
     if (arg0 < 0x110) {
         if (arg0 == 0x79) {
@@ -26,7 +25,6 @@ void PlayCountdownCues(s32 arg0) {
 
 extern s32 g_PlayerTrackProgress;
 
-void UpdateRivalCueGate(void);
 void UpdateRivalCueGate(void) {
     s32 value;
 
@@ -45,7 +43,6 @@ void UpdateRivalCueGate(void) {
 extern u32 *g_CourseObjects;
 extern u32 g_CourseObjectCount;
 
-void SetCourseObjects(u32 *arg0);
 void SetCourseObjects(u32 *arg0) {
     u32 value;
 

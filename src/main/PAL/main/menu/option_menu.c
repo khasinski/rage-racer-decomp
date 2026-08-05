@@ -74,7 +74,6 @@ void DrawOptionRootMenu(void) {
 }
 
 /* g_GameModeHandlers[1]: the six-row root menu and where each row goes. */
-void UpdateOptionRootMenu(void);
 void UpdateOptionRootMenu(void) {
     s32 old;
     s32 value;
@@ -231,7 +230,6 @@ void DrawClassRecordGrid(void) {
 }
 
 /* g_GameModeHandlers[2]: two-row menu into the class-record grid. */
-void UpdateClassRecordMenu(void);
 void UpdateClassRecordMenu(void) {
     u16 *buttonPtr;
     s32 oldCursor;
@@ -271,7 +269,6 @@ void UpdateClassRecordMenu(void) {
 }
 
 /* g_GameModeHandlers[3]: moves the cursor over the eleven class cells. */
-void UpdateClassRecordBrowse(void);
 void UpdateClassRecordBrowse(void) {
     s32 oldCursor;
     s32 oldFlag;
@@ -407,7 +404,6 @@ void DrawSoundOptionScreen(void) {
 }
 
 /* g_GameModeHandlers[4]: the four-row sound menu; confirm backs the setting up and enters mode 5. */
-void UpdateSoundOptionMenu(void);
 void UpdateSoundOptionMenu(void) {
     u16 *buttonsPtr;
     u16 buttons;

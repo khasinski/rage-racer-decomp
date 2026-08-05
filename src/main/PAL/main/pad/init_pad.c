@@ -96,7 +96,6 @@ extern s16 g_NegconNeutralII;
 extern s16 g_NegconNeutralL;
 extern s16 g_NegconSteerNeutral;
 
-void UpdatePadState(void);
 void UpdatePadState(void) {
     s32 mask;
     s32 v;

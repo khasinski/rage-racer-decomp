@@ -6,7 +6,6 @@
 void LoadImage(Rect *rect, void *data);
 void DrawSync(long mode);
 
-void UploadImageBlock(void *arg0);
 void UploadImageBlock(void *arg0) {
     GameImageBlock *block;
     u16 rect[4];
@@ -42,7 +41,6 @@ void UploadImageBlock(void *arg0) {
 
 void UploadImageBlock(void *arg0);
 
-void UploadImageAsset(void *arg0);
 void UploadImageAsset(void *arg0) {
     union {
         s32 offset;
@@ -79,7 +77,6 @@ void LoadImage(Rect *rect, void *data);
 void StoreImage(Rect *rect, void *data);
 void DrawSync(long mode);
 
-void StoreTeamLogoImage(void *dst);
 void StoreTeamLogoImage(void *dst) {
     g_TeamLogoClut[0] = 0x8000;
     LoadImage(&g_TeamLogoClutLoadRect, g_TeamLogoClut);
@@ -96,7 +93,6 @@ void StoreTeamLogoImage(void *dst) {
 
 void UploadImageAsset(void *arg0);
 
-void UploadLoadBufferImage(void);
 void UploadLoadBufferImage(void) {
     UploadImageAsset(g_LoadBuffer);
 }

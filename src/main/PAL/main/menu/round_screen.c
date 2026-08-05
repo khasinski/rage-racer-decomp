@@ -13,7 +13,6 @@ extern Matrix D_8007C778;
 void SetColorMatrix(void *m);
 
 /* Darkens the scene colour matrix by GetTrackZoneBlend's 0..0x100 track-zone ramp; RestoreColorMatrix puts it back. */
-void ApplyZoneLighting(s32 a0, Matrix *a1);
 void ApplyZoneLighting(s32 a0, Matrix *a1) {
     Matrix out;
     s32 s1;
@@ -77,7 +76,6 @@ void UploadImageAsset(s32 arg0);
 void RelocateCarModel(void);
 
 /* Scene 9: finishes the asset load, relocates the car model and derives g_GrandPrixRound. */
-void EnterRoundScreen(void);
 void EnterRoundScreen(void) {
     s32 count;
     u8 *ptr;
@@ -117,7 +115,6 @@ void EnterRoundScreen(void) {
 
 extern s16 g_RoundScreenFadeDelays[];
 
-s32 UpdateRoundScreenFade(s32 arg0);
 s32 UpdateRoundScreenFade(s32 arg0) {
     s32 value;
     s32 ret;
@@ -167,7 +164,6 @@ void LibcSprintf(void *dst, void *fmt, s32 v);
 void FormatLapTime(void *dst, s32 v);
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
-void DrawRoundScreen(void);
 void DrawRoundScreen(void) {
     char buf[88];
     s32 col;
@@ -211,7 +207,6 @@ s32 GameQueueDrawModePrimWide(void *ot, s32 p, s32 a) asm("QueueDrawModePrim");
 s32 AddTilePrim(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
 
 /* The BGM row: the selection number and the track title from g_BgmTrackNames. */
-void DrawBgmSelector(void);
 void DrawBgmSelector(void) {
     s32 x;
     char buf[88];
@@ -246,7 +241,6 @@ void PlaySoundCue(s32 cue);
 s32 RequestRaceAssets(void);
 
 /* Scene 10: draws the ROUND screen, takes the BGM choice and starts the race at frame 121. */
-void UpdateRoundScreen(void);
 void UpdateRoundScreen(void) {
     if ((u32)g_SceneTimer < 10000) {
         g_SceneTimer = g_SceneTimer + 1;
@@ -305,7 +299,6 @@ extern Matrix g_SceneLightMatrix;
 extern Matrix D_8007C778;
 void SetColorMatrix(void *m);
 /* Installs the track colour/light matrices, back and far colours and the fog near distance. */
-void InitTrackLighting(void);
 void InitTrackLighting(void) {
     g_SceneColorMatrix = D_8007C758;
     g_SceneLightMatrix = D_8007C778;

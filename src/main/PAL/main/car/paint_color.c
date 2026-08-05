@@ -15,7 +15,6 @@ extern volatile u16 g_PaintBlendShade2;
  * MUST keep the raw D_ spelling: they are referenced from the %hi/%lo pairs in
  * the inline asm below, which does not follow asm() labels. See names.md 12c.
  */
-void BlendPaintColor(u32 arg0, u32 arg1);
 void BlendPaintColor(u32 arg0, u32 arg1) {
     u32 a;
     u32 b;
@@ -27,7 +26,6 @@ void BlendPaintColor(u32 arg0, u32 arg1) {
     g_PaintBlendShade0 = (a + b) | 0x8000;
 }
 
-void BlendPaintColorThirds(u32 arg0, u32 arg1);
 void BlendPaintColorThirds(u32 arg0, u32 arg1) {
     u16 color0;
     u16 color1;
@@ -65,7 +63,6 @@ void BlendPaintColorThirds(u32 arg0, u32 arg1) {
 }
 
 
-void BlendPaintColorQuarters(u32 arg0, u32 arg1);
 void BlendPaintColorQuarters(u32 arg0, u32 arg1) {
     u32 a;
     u32 b;
@@ -113,7 +110,6 @@ void BlendPaintColor(u32 arg0, u32 arg1);
 void BlendPaintColorThirds(u32 arg0, u32 arg1);
 void BlendPaintColorQuarters(u32 arg0, u32 arg1);
 
-void ApplyBodyColor1(u32 arg0, u32 arg1);
 void ApplyBodyColor1(u32 arg0, u32 arg1) {
     u32 raw;
     u16 *base;
@@ -172,7 +168,6 @@ extern u32 g_CarModelSlot;
 void ApplyBodyColor1(u32 arg0, u32 arg1);
 void UploadCarImage(u32 arg0);
 
-void SetBodyColor1(u32 arg0);
 void SetBodyColor1(u32 arg0) {
     ApplyBodyColor1(arg0, *(u32 *)(g_CarModelAsset + 0x24));
     UploadCarImage(g_CarModelSlot);
@@ -187,7 +182,6 @@ void BlendPaintColor(u32 arg0, u32 arg1);
 void BlendPaintColorThirds(u32 arg0, u32 arg1);
 void BlendPaintColorQuarters(u32 arg0, u32 arg1);
 
-void ApplyBodyColor2(u32 arg0, u32 arg1);
 void ApplyBodyColor2(u32 arg0, u32 arg1) {
     u16 *base;
     u16 s1;
@@ -242,7 +236,6 @@ extern u32 g_CarModelSlot;
 void ApplyBodyColor2(u32 arg0, u32 arg1);
 void UploadCarImage(u32 arg0);
 
-void SetBodyColor2(u32 arg0);
 void SetBodyColor2(u32 arg0) {
     ApplyBodyColor2(arg0, *(u32 *)(g_CarModelAsset + 0x24));
     UploadCarImage(g_CarModelSlot);

@@ -47,7 +47,6 @@ s32 EnableCdAudioMode(void);
 extern s32 g_ImageBlockBuffer;
 extern s32 g_AssetBase;
 
-s32 RequestRaceAssets(void);
 s32 RequestRaceAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;
@@ -63,7 +62,6 @@ s32 RequestRaceAssets(void) {
     return 1;
 }
 
-void LoadRaceAssets(void);
 void LoadRaceAssets(void) {
     switch (g_AssetLoadState) {
     case 1: {

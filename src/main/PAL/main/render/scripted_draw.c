@@ -18,7 +18,6 @@ void GameDrawSpriteWide(
     s32 arg12,
     s32 arg13) asm("DrawSprite");
 
-void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3);
 void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
     register u8 *record asm("$10") = arg2;
     register u8 *style asm("$9");
@@ -114,7 +113,6 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
 
 void GameDrawLineWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha) asm("DrawLine");
 
-void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2);
 void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     register u8 *record asm("$8") = arg2;
     u8 *style;
@@ -231,7 +229,6 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
         alpha);
 }
 
-void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg);
 void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     u8 *style;
     u8 *record;
@@ -351,7 +348,6 @@ void GameDrawTexturedQuadWide(u8 *arg0, s16 x0, s16 y0, s16 x1a, s16 y0b, s16 x0
                    s32 d3, s32 d4, s32 d5, s32 d6, s32 d7, s32 dA,
                    s32 dB, s32 dC, s32 h8, s32 f8, s32 f4, s32 dE) asm("GameDrawTexturedQuad");
 
-void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx);
 void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     s32 duration;
     u8 *table;
@@ -572,7 +568,6 @@ extern s32 D_8009B250[];
 
 void GameDrawSpriteWide();
 
-void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot);
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     u8 *arg0Ptr;
     register u8 *arg1Ptr asm("$9");
@@ -736,7 +731,6 @@ extern s32 D_8009B264;
 
 s32 rsin(s32 arg0);
 
-void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
     void *ot;
     s32 savedX0;

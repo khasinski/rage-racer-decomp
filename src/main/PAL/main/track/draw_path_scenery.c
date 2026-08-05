@@ -15,7 +15,6 @@ extern s32 g_ModelBankCount;
 extern s32 g_ScratchRenderMode;
 
 
-void DrawPathScenery(void);
 void DrawPathScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
@@ -87,7 +86,6 @@ extern s32 g_PlayerTrackPoint;
 s32 rcos(s32 arg0);
 void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
 
-void UpdateTrackEventSound(s16 arg);
 void UpdateTrackEventSound(s16 arg) {
     s32 base;
     s16 *p;
@@ -199,7 +197,6 @@ typedef struct TrackSeg {
     s32 f14;   /* 0x14 */
 } TrackSeg;    /* size 0x18 */
 
-void UpdatePointAmbience(s32 arg);
 void UpdatePointAmbience(s32 arg) {
     s32 base;
     s32 startp;

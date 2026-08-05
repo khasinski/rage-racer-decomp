@@ -10,7 +10,6 @@ extern u_char g_SpuTimeoutMsgWrdy[];
 extern u_char g_SpuTimeoutMsgDmaf[];
 
 
-void _spu_writeByIO(u_short *addr, u_long size);
 void _spu_writeByIO(u_short *addr, u_long size) {
     volatile long di, dj;
     u_short stat0;

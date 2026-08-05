@@ -12,7 +12,6 @@ extern volatile u_short D_801F2A0C;
 extern u_char g_SndVoiceCount;
 extern volatile u_char *g_SndSpuRegs;
 
-void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_short right);
 void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_short right) {
     u_long rawVoice;
     register u_long index asm("$2");

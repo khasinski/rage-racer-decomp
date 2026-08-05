@@ -7,7 +7,6 @@ extern s32 g_TrackTextureSectionHi;
  * Copies the first two words of the active camera row (g_CamRow holds a
  * pointer to the current CamRow) into the active view-param globals.
  */
-void LoadTrackTexturePageRange(void);
 void LoadTrackTexturePageRange(void) {
     s32 *camRow;
 

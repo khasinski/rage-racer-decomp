@@ -48,7 +48,6 @@ void ResetCourseProgress(s32 arg0);
 void ShuffleBgmOrder(void);
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
-void UpdatePrizeMoneyScreen(void);
 void UpdatePrizeMoneyScreen(void) {
     s32 lim1 = g_PrizeCountStep;
     s32 lim0 = g_BonusCountStep;
@@ -162,7 +161,6 @@ void UpdatePrizeMoneyScreen(void) {
     DrawGrandprixIntro();
 }
 
-void ApplyAudioSettings(void);
 void ApplyAudioSettings(void) {
     SetSequenceVolumeSetting(g_BgmVolumeSetting);
     SetEffectVolumeSetting(g_SfxVolumeSetting);
@@ -173,7 +171,6 @@ void ApplyAudioSettings(void) {
     }
 }
 
-void ResetProgressSlot(void *arg0, s32 *arg1);
 void ResetProgressSlot(void *arg0, s32 *arg1) {
     UnkCopyChunk *dst;
     UnkCopyChunk *src;
@@ -195,7 +192,6 @@ void ResetProgressSlot(void *arg0, s32 *arg1) {
     arg1[4] = 0;
 }
 
-void ResetCourseProgress(s32 arg0);
 void ResetCourseProgress(s32 arg0) {
     u8 *ptr = g_CourseProgress;
 
@@ -212,7 +208,6 @@ void ResetCourseProgress(s32 arg0) {
     *(s16 *)(g_CourseProgress + 4) = 0;
 }
 
-void InitSaveDefaults(void);
 void InitSaveDefaults(void) {
     u8 *src;
     u8 *dst;
@@ -265,7 +260,6 @@ void InitSaveDefaults(void) {
 }
 
 /* Derives the 0..3 class grade from a course-progress block; 0 when an over-class car was used. */
-s32 ComputeClassGrade(void);
 s32 ComputeClassGrade(void) {
     u8 *ptr;
     s32 value;

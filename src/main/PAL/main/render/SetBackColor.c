@@ -13,7 +13,6 @@
  */
 
 __asm__(".align 4");
-void SetBackColor(s32 a, s32 b, s32 c);
 void SetBackColor(s32 a, s32 b, s32 c) {
     s32 x = a * 16, y = b * 16, z = c * 16;
     gte_ctc2(x, 13);
@@ -21,7 +20,6 @@ void SetBackColor(s32 a, s32 b, s32 c) {
     gte_ctc2(z, 15);
 }
 __asm__(".align 4");
-void SetFarColor(s32 a, s32 b, s32 c);
 void SetFarColor(s32 a, s32 b, s32 c) {
     s32 x = a * 16, y = b * 16, z = c * 16;
     gte_ctc2(x, 21);
@@ -29,7 +27,6 @@ void SetFarColor(s32 a, s32 b, s32 c) {
     gte_ctc2(z, 23);
 }
 __asm__(".align 4");
-void SetGeomOffset(s32 a, s32 b);
 void SetGeomOffset(s32 a, s32 b) {
     s32 x = a << 16, y = b << 16;
     gte_ctc2(x, 24);
@@ -42,7 +39,6 @@ void SetGeomScreen(s32 a) { gte_ctc2(a, 26); }
 /* --- LightColor.s .. OuterProduct0.s --- */
 
 __asm__(".align 4");
-void LightColor(void *in, void *out);
 void LightColor(void *in, void *out) {
     gte_ldir(in);
     gte_nop();
@@ -50,7 +46,6 @@ void LightColor(void *in, void *out) {
     gte_stir(out);
 }
 
-void DpqColor(void *in, void *rgb, s32 ir0, void *out);
 void DpqColor(void *in, void *rgb, s32 ir0, void *out) {
     gte_ldir(in);
     gte_lwc2(6, rgb);
@@ -70,7 +65,6 @@ void DpqColor3(void *v0, void *v1, void *v2, s32 ir0, void *o0, void *o1,
     gte_dpct3(v0, v1, v2, ir0);
 }
 
-void Intpl(void *in, s32 ir0, void *out);
 void Intpl(void *in, s32 ir0, void *out) {
     gte_ldir(in);
     gte_mtc2(ir0, 8);
@@ -99,7 +93,6 @@ void *Square0(void *in, void *out) {
     return p;
 }
 
-s32 AverageZ3(s32 a, s32 b, s32 c);
 s32 AverageZ3(s32 a, s32 b, s32 c) {
     s32 r;
     gte_mtc2(a, 17);
@@ -111,7 +104,6 @@ s32 AverageZ3(s32 a, s32 b, s32 c) {
     return r;
 }
 
-s32 AverageZ4(s32 a, s32 b, s32 c, s32 d);
 s32 AverageZ4(s32 a, s32 b, s32 c, s32 d) {
     s32 r;
     gte_mtc2(a, 16);
@@ -124,12 +116,10 @@ s32 AverageZ4(s32 a, s32 b, s32 c, s32 d) {
     return r;
 }
 
-void OuterProduct12(void *m, void *v, void *out);
 void OuterProduct12(void *m, void *v, void *out) {
     gte_op12_diag(m, v, out);
 }
 
-void OuterProduct0(void *m, void *v, void *out);
 void OuterProduct0(void *m, void *v, void *out) {
     gte_op0_diag(m, v, out);
 }

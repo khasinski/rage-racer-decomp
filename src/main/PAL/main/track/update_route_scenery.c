@@ -32,7 +32,6 @@ extern s32 g_RouteSceneryRotZ;
 extern KF *g_RouteSceneryKeyframe;
 
 
-void UpdateRouteScenery(void);
 void UpdateRouteScenery(void) {
     Matrix mtx0;
     Matrix mtx1;

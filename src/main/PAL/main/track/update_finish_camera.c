@@ -28,7 +28,6 @@ void DrawPlayerCarModel(GameRenderObject *obj);
  * eye object and submits the render object (DrawPlayerCarModel). markerClamp is the
  * zeroed clamp record passed to the track-marker builder UpdateCarTrackState.
  */
-void UpdateFinishCamera(GameRenderObject *obj);
 void UpdateFinishCamera(GameRenderObject *obj) {
     s32 *view = (s32 *)0x1F800000;
     s32 delta[3];

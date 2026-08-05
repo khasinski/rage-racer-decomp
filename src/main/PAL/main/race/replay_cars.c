@@ -88,7 +88,6 @@ void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 
 void PlaySoundCue(s32 cue);
 
-void SeedReplayCars(void);
 void SeedReplayCars(void) {
     void *primary;
     void *secondary;
@@ -112,7 +111,6 @@ void SeedReplayCars(void) {
     }
 }
 
-void UpdateReplayCars(void);
 void UpdateReplayCars(void) {
     void *ptr = &g_PlayerCar;
 
@@ -128,7 +126,6 @@ void UpdateReplayCars(void) {
     RequestTrackTexturePage(g_PlayerTrackSection);
 }
 
-s32 GetTrackZoneBlend(s32 position);
 s32 GetTrackZoneBlend(s32 position) {
     u8 *base;
     s32 scene;
@@ -230,7 +227,6 @@ done:
     }
 }
 
-void ExitRaceScene(s32 arg0);
 void ExitRaceScene(s32 arg0) {
     g_SceneId = arg0;
     ForceAllEffectVoicesEnabled(0);
@@ -241,7 +237,6 @@ void ExitRaceScene(s32 arg0) {
     DebugPrintf(&g_MsgGameExit);
 }
 
-void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2);
 void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
     s32 slot;
     s32 nextSlot;

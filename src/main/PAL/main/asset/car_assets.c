@@ -27,7 +27,6 @@ s32 PollAudioSlotLoad(void);
 extern s32 g_PendingCarModelIndex;
 void ServiceAssetLoad(void);
 
-s32 RequestCarSelectAssets(void);
 s32 RequestCarSelectAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;
@@ -43,7 +42,6 @@ s32 RequestCarSelectAssets(void) {
     return 1;
 }
 
-void LoadCarSelectAssets(void);
 void LoadCarSelectAssets(void) {
     s32 state = g_AssetLoadState;
     s32 state2;
@@ -142,7 +140,6 @@ void LoadCarSelectAssets(void) {
     return;
 }
 
-s32 RequestCarModel(s32 arg0);
 s32 RequestCarModel(s32 arg0) {
     if (g_AssetLoadState != 0) {
         return 1;
@@ -154,7 +151,6 @@ s32 RequestCarModel(s32 arg0) {
     return 1;
 }
 
-void LoadCarModelNow(s32 arg0);
 void LoadCarModelNow(s32 arg0) {
     RequestCarModel(arg0);
 
@@ -163,7 +159,6 @@ void LoadCarModelNow(s32 arg0) {
     }
 }
 
-void LoadCarModel(s32 arg0);
 void LoadCarModel(s32 arg0) {
     u8 *ptr;
     s32 index;
@@ -219,7 +214,6 @@ void LoadCarModel(s32 arg0) {
     }
 }
 
-s32 RequestUpgradedCarModel(s32 arg0);
 s32 RequestUpgradedCarModel(s32 arg0) {
     if (g_AssetLoadState != 0) {
         return 1;
@@ -231,7 +225,6 @@ s32 RequestUpgradedCarModel(s32 arg0) {
     return 1;
 }
 
-void LoadUpgradedCarModelNow(s32 arg0);
 void LoadUpgradedCarModelNow(s32 arg0) {
     RequestUpgradedCarModel(arg0);
 

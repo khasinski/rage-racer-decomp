@@ -36,7 +36,6 @@ long CdGetToc2(long arg0, long arg1);
 
 /* CdGetToc: reads the disc table of contents into `toc` (thin wrapper over
  * CdGetToc2 / CdGetToc2 with track count 1). */
-long CdGetToc(long toc);
 long CdGetToc(long toc) {
     return CdGetToc2(1, toc);
 }

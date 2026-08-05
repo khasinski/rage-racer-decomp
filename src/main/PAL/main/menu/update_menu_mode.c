@@ -32,7 +32,6 @@ void DrawBitPatternOverlay(s32);
 
 /* Scene 8: the menu-mode per-frame dispatcher. Runs the two
  * g_MenuScreenDraw overlay slots and then g_MenuScreenUpdate[g_MenuScreen]. */
-void UpdateMenuMode(void);
 void UpdateMenuMode(void) {
     void *scratch;
     s32 c0;
@@ -94,7 +93,6 @@ void UpdateMenuMode(void) {
 extern s32 g_SeqVolumeFadeStep;
 void SpuVmDamperStep(void);
 void SsSeqCalledTbyT(void);
-void TickSequenceAudio(void);
 void TickSequenceAudio(void) {
     if (g_SceneId == 0xC) {
         SpuVmDamperStep();
@@ -110,7 +108,6 @@ extern u8 D_801E8AFC;
 
 s32 SpuTransferStatus(void *arg0, s32 arg1);
 
-s32 IsSpuTransferDone(void);
 s32 IsSpuTransferDone(void) {
     u8 *base;
     s32 value0;
@@ -156,7 +153,6 @@ void SetLoadedTableVolumeScale(s32 scale);
 s32 SetSoundToneTableEntry(s32 row, s32 bank, s32 value);
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot);
 
-void LoadAudioParameterTable(u16 *table);
 void LoadAudioParameterTable(u16 *table) {
     u16 *tableReg = table;
     s32 bank;
@@ -233,7 +229,6 @@ void LoadAudioParameterTable(u16 *table) {
     }
 }
 
-void SetReverbDepth(s32 left, s32 right);
 void SetReverbDepth(s32 left, s32 right) {
     if (left >= 0) {
         if (left >= 0x80) {
@@ -256,7 +251,6 @@ void SetReverbDepth(s32 left, s32 right) {
     SsUtSetReverbDepth((s16)left, (s16)right);
 }
 
-void SetReverbPreset(s32 type, s32 left, s32 right);
 void SetReverbPreset(s32 type, s32 left, s32 right) {
     s32 tempLeft;
     s32 tempRight;

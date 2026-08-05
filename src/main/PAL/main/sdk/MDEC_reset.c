@@ -29,7 +29,6 @@ long MDEC_timeout(u_char *arg0);
 
 void MDEC_in(volatile u_long *arg0, long arg1);
 
-void MDEC_reset(long arg0);
 void MDEC_reset(long arg0) {
     register long option asm("$5") = arg0;
     register long zero asm("$0");
@@ -66,7 +65,6 @@ void MDEC_in(volatile u_long *arg0, long arg1) {
     *g_MdecInDmaChcr = 0x01000201;
 }
 
-void MDEC_out(volatile u_long *arg0, long arg1);
 void MDEC_out(volatile u_long *arg0, long arg1) {
     MDEC_out_sync();
     *g_MdecDpcr |= 0x88;

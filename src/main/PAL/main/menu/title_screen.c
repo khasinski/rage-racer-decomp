@@ -24,7 +24,6 @@ void SetDefaultReverbDepth(void);
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
  * state words and hands over to scene 4, UpdateFrontend. */
-void EnterFrontend(void);
 void EnterFrontend(void) {
     SetDispMask(0);
     CloseLoadedAudioSlots();
@@ -259,7 +258,6 @@ s32 Random15(void);
 
 /* Refills g_BgmShuffleOrder with a random permutation of the
  * g_BgmTrackCount tracks and rewinds g_BgmShuffleIndex. */
-void ShuffleBgmOrder(void);
 void ShuffleBgmOrder(void) {
     s32 i;
     s32 count;

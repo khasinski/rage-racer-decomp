@@ -68,7 +68,6 @@ done:
     return result + 1;
 }
 
-long CdControlF(long arg0, void *arg1);
 long CdControlF(long arg0, void *arg1) {
     void *arg;
     long cmd;
@@ -127,7 +126,6 @@ extern u_char g_CdStatusByte;
 long CD_cw(long arg0, void *arg1, long arg2, long arg3);
 long CD_sync(long arg0, long arg1);
 
-long CdControlB(long arg0, void *arg1, long arg2);
 long CdControlB(long arg0, void *arg1, long arg2) {
     void *arg;
     long arg2Reg;

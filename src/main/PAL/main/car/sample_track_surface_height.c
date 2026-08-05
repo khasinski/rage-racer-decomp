@@ -50,7 +50,6 @@ s32 FindTrackSegment(Car *car, s32 idx);
  * f60 while f98 is idle). The local TP/Car/SVec/LVec structs mirror
  * GameTrackPoint / the render object by raw offset to stay byte-exact.
  */
-void SampleTrackSurfaceHeight(Car *car);
 void SampleTrackSurfaceHeight(Car *car) {
     Matrix mtx;
     SVec v;

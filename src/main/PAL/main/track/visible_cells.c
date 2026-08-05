@@ -30,7 +30,6 @@ extern s32 g_IsEnvironmentMode4;
  * 0x1F800084, then dispatches a prim builder (SubmitCourseModel2 / SubmitCourseModel)
  * on the scratchpad OT at 0x1F800000.
  */
-void DrawCourseObjects(void);
 void DrawCourseObjects(void) {
     Matrix mtx;
     volatile s32 pad[10];
@@ -119,7 +118,6 @@ void DrawCourseObjects(void) {
 
 extern u16 *g_TerrainCellGrid;
 
-u32 GetCellRegion(s32 arg0, s32 arg1);
 u32 GetCellRegion(s32 arg0, s32 arg1) {
     arg1 = (arg1 * 32) + arg0;
     return g_TerrainCellGrid[arg1] >> 10;
@@ -127,7 +125,6 @@ u32 GetCellRegion(s32 arg0, s32 arg1) {
 
 extern u8 *g_CellVisibilityTable;
 
-u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2);
 u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) {
     s32 x = arg0 << 2;
     s32 y;
@@ -159,7 +156,6 @@ extern s8 g_CellScanOffsetX[];
 extern s8 g_CellScanOffsetY[];
 void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 
-void BuildVisibleCells(s32 arg0, s32 arg1);
 void BuildVisibleCells(s32 arg0, s32 arg1) {
     Scr *s = (Scr *)0x1F800008;
     s32 i;

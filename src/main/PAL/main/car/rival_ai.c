@@ -19,7 +19,6 @@ extern s32 g_PlayerSpeed;
 #define AVOID_BLOCKED(w) (*(s16 *)((u8 *)(w) + 0x48)) /* ->field_104 */
 #define AVOID_NEARBY(w) (*(u16 *)((u8 *)(w) + 0x50))  /* ->field_10C */
 
-void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1);
 void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
     GameCarAiBlock *state = (GameCarAiBlock *)&car->field_BC;
     s32 acc8 = 0;
@@ -187,7 +186,6 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
  */
 extern GameCarRuntime *D_801E40B8[] asm("g_SceneTimer");
 
-void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1);
 void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
     GameCarRuntime *entry;
     s32 offset;
@@ -224,7 +222,6 @@ extern s32 g_CarProgressB;
  * last of the four, slots 1/2 the middle pair in order. UpdateRivalRubberBand reads
  * the result to rubber-band the AI.
  */
-void RankContenders(void);
 void RankContenders(void) {
     s32 i;
     s32 offset;
@@ -294,7 +291,6 @@ extern s16 g_RivalCueCooldown3;
 
 void PlaySoundCue(s32 cue);
 
-void UpdateRivalRubberBand(void);
 void UpdateRivalRubberBand(void) {
     s32 s6;
     s32 s5;

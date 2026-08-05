@@ -53,7 +53,6 @@ void PlaySoundCue(s32 cue);
 void CdSync(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result);
 
-void DrawRankingPanel(u8 *arg0);
 void DrawRankingPanel(u8 *arg0) {
     u8 *panel;
     s32 iter;
@@ -135,7 +134,6 @@ void DrawRankingPanel(u8 *arg0) {
     } while (countOrIndex < 5);
 }
 
-void DrawTimeRecordPanel(u8 *s5);
 void DrawTimeRecordPanel(u8 *s5) {
     char text[48];
     s32 s4, s3;
@@ -178,7 +176,6 @@ void DrawTimeRecordPanel(u8 *s5) {
     }
 }
 
-void DrawNameEntryCursor(s32 arg0, s32 arg1);
 void DrawNameEntryCursor(s32 arg0, s32 arg1) {
     s32 *scratch;
 
@@ -198,7 +195,6 @@ void DrawNameEntryCursor(s32 arg0, s32 arg1) {
 
 }
 
-void InsertRaceRecords(void);
 void InsertRaceRecords(void) {
     s32 count;
     s32 i;
@@ -354,7 +350,6 @@ void InsertRaceRecords(void) {
     g_TimeRecordInsertRow = i;
 }
 
-void EnterRecordEntry(void);
 void EnterRecordEntry(void) {
     g_SceneTimer = 0x100;
     g_FrameSyncThreshold = 0x80;
@@ -363,7 +358,6 @@ void EnterRecordEntry(void) {
     InsertRaceRecords();
 }
 
-void UpdateRecordEntry(void);
 void UpdateRecordEntry(void) {
     u8 *name;
     s32 i;
@@ -553,7 +547,6 @@ void UpdateRecordEntry(void) {
     DrawCourseIntro();
 }
 
-void ReturnFromClassFmv(void);
 void ReturnFromClassFmv(void) {
     CdSync(0, 0);
     CdControl(9, 0, 0);
@@ -561,7 +554,6 @@ void ReturnFromClassFmv(void) {
     RequestSelectBgmAssets();
 }
 
-void ReturnFromEndingFmv(void);
 void ReturnFromEndingFmv(void) {
     CdSync(0, 0);
     CdControl(9, 0, 0);

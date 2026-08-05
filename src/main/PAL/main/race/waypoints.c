@@ -173,7 +173,6 @@ extern void UpdateCarTrackState(u8 *ent, s32 arg, void *arg2);
  * accessed by raw byte offset (its first 0xE8 mirror GameRenderObject).
  */
 
-s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0);
 s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0) {
     s32 center_x = g_PlayerCar;
     s32 x = arg0->x;
@@ -197,7 +196,6 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0) {
     return ret;
 }
 
-void UpdateWaypoints(void);
 void UpdateWaypoints(void) {
     TrackWaypointRuntime *waypoint;
     s32 i;
@@ -289,7 +287,6 @@ static inline void ClearScratchRenderMode37AAC(void) {
  * TrackWaypointRuntime array g_Waypoints via raw offsets. Register pins are
  * match-load-bearing.
  */
-void DrawWaypoints(void);
 void DrawWaypoints(void) {
     Matrix mtx0;
     Matrix mtx1;
@@ -336,7 +333,6 @@ void DrawWaypoints(void) {
     } while (i < 6);
 }
 
-s32 CountActiveWaypoints(void);
 s32 CountActiveWaypoints(void) {
     TrackWaypointRuntime *ptr = g_Waypoints;
     s32 count = 0;
@@ -351,7 +347,6 @@ s32 CountActiveWaypoints(void) {
     return count;
 }
 
-void DrawLapNumber(void);
 void DrawLapNumber(void) {
     u8 *scratch;
     s32 track;
@@ -523,7 +518,6 @@ void UpdateWaypointCollectScene(void) {
     }
 }
 
-void ApplyTrackReverbZone(s32 arg0);
 void ApplyTrackReverbZone(s32 arg0) {
     s32 result;
     s32 i;
@@ -552,7 +546,6 @@ void ApplyTrackReverbZone(s32 arg0) {
     SetReverbDepth(arg, arg);
 }
 
-s32 GetWaypointAngle(s32 arg0);
 s32 GetWaypointAngle(s32 arg0) {
     s32 trackLength;
     s32 value;
@@ -600,7 +593,6 @@ s32 GetWaypointAngle(s32 arg0) {
     }
 }
 
-void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr);
 void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     u8 *base;
     s32 sub;
@@ -724,7 +716,6 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     }
 }
 
-void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr);
 void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   s32 pos2_R10;
   s32 idx_R8;

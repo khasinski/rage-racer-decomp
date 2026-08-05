@@ -17,7 +17,6 @@ s32 rsin(s32 angle);
 void DrawLogoSprite() asm("DrawSprite");
 void DrawLogoRect() asm("DrawSolidRect");
 
-void DrawLogoSamplePanel(s32 arg0, s32 arg1);
 void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
     void *ot = *(void **)0x1F800004;
     s32 idx;

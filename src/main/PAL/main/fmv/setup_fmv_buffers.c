@@ -6,7 +6,6 @@ extern u32 g_FmvVlcBuffer1;
 extern u32 g_FmvStripBuffer0;
 extern u32 g_FmvStripBuffer1;
 
-void SetupFmvBuffers(u32 arg0);
 void SetupFmvBuffers(u32 arg0) {
     u32 step;
     u32 temp;

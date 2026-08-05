@@ -10,7 +10,6 @@ extern u32 g_CarModelSlot;
 void InstallCarModelSlot(void);
 
 /* Flips the double-buffered showroom slot and re-registers it. */
-void SwapCarModelSlot(void);
 void SwapCarModelSlot(void) {
     g_CarModelSlot = g_CarModelSlot < 1;
     InstallCarModelSlot();
@@ -18,7 +17,6 @@ void SwapCarModelSlot(void) {
 
 s32 GameQueueTileTransWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
 
-void DrawCarSlotHighlight(s32 arg0);
 void DrawCarSlotHighlight(s32 arg0) {
     s32 *scratch = (s32 *)0x1F800000;
     u8 *base = g_DrawBuffer;
@@ -236,7 +234,6 @@ extern s32 g_MenuViewSpin;
 void SetGteObjectMatrix(void *a, void *b, void *c);
 
 /* The course diorama behind COURSE SELECT and RANKING, with the carousel easing. */
-void DrawMenuCourseView(void);
 void DrawMenuCourseView(void) {
     Matrix mtxA;
     Matrix mtxB;
@@ -346,7 +343,6 @@ extern s32 g_CourseModelCount;
 s32 rsin(s32 arg0);
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */
-void DrawTeamNameCharModel(void);
 void DrawTeamNameCharModel(void) {
     Matrix mtxA;
     Matrix mtxB;

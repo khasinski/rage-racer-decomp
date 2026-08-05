@@ -8,23 +8,19 @@ void CD_datasync(void);
  * m2c saw them as (void): the values are already in a0/a1 when the tail call
  * is made. The signatures below are the ones the callers use -- CdMix from
  * cd/cd_audio_control.c and CdGetSector2 from sdk/CdReadDataReadyCallback.c. */
-long CdMix(CdlATV *vol);
 long CdMix(CdlATV *vol) {
     CD_vol(vol);
     return 1;
 }
 
-long CdGetSector2(long madr, u_long size);
 long CdGetSector2(long madr, u_long size) {
     return CD_getsector2(madr, size) == 0;
 }
 
-void CdDataCallback(long arg0);
 void CdDataCallback(long arg0) {
     DMACallback(3, arg0);
 }
 
-void CdMixDataSync(void);
 void CdMixDataSync(void) {
     CD_datasync();
 }

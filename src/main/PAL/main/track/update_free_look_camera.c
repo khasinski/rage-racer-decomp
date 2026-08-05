@@ -36,7 +36,6 @@ void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2);
  * view[7]=yaw, view[8]=roll). markerClamp is the zeroed clamp record for the
  * track-marker builder UpdateCarTrackState.
  */
-void UpdateFreeLookCamera(s32 arg0, s32 updateMotion);
 void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     s32 *view = (s32 *)0x1F800000;
     s32 delta[3];
@@ -168,7 +167,6 @@ extern Vec4 g_StartGridSceneryPos[];
 
 void SetGteObjectMatrix(void *arg0, Vec4 *state, Matrix *mtx);
 
-void DrawStartGridScenery(s32 arg0);
 void DrawStartGridScenery(s32 arg0) {
     Matrix mtx;
     Vec4 state;
@@ -213,7 +211,6 @@ void DrawStartGridScenery(s32 arg0) {
     }
 }
 
-void ResetFreeLookCamera(void);
 void ResetFreeLookCamera(void) {
 }
 

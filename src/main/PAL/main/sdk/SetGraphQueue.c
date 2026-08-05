@@ -32,12 +32,10 @@ long SetGraphQueue(long arg0) {
 extern u_char g_GraphType;
 extern u_char g_GraphDebug;
 
-long GetGraphType(void);
 long GetGraphType(void) {
     return g_GraphType;
 }
 
-long GetGraphDebug(void);
 long GetGraphDebug(void) {
     return g_GraphDebug;
 }
@@ -46,7 +44,6 @@ extern char D_80013504[];
 extern void (*GPU_printf)(char *, ...);
 extern u_long g_DrawSyncCallback;
 
-u_long DrawSyncCallback(u_long arg0);
 u_long DrawSyncCallback(u_long arg0) {
     u_long ret;
 
@@ -63,7 +60,6 @@ extern char D_80013520[];
 
 void MemFill(u_char *dst, long value, long count);
 
-void SetDispMask(long arg0);
 void SetDispMask(long arg0) {
     u_char *debug = &g_GraphDebug;
     long enable = arg0;
@@ -109,7 +105,6 @@ extern char D_80013548[];
 extern char D_80013554[];
 extern char D_80013568[];
 
-void CheckPrim(char *arg0, Rect *rect);
 void CheckPrim(char *arg0, Rect *rect) {
     switch (g_GraphDebug) {
     case 1: {
@@ -163,7 +158,6 @@ extern GpuCallbacks *g_GpuFuncs;
 extern char D_8001356C[];
 
 
-void ClearImage(void *rect, u_char r, u_char g, u_char b);
 void ClearImage(void *rect, u_char r, u_char g, u_char b) {
     CheckPrim(D_8001356C, rect);
     g_GpuFuncs->send(g_GpuFuncs->cmd0C, rect, 8, (b << 16) | (g << 8) | r);

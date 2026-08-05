@@ -44,7 +44,6 @@ static __inline__ void copy8(u_char *dst, u_char *src) {
     } while (--count != end);
 }
 
-long CD_ready(long mode, u_char *result);
 long CD_ready(long mode, u_char *result) {
     long savedStatus;
     long interrupt;

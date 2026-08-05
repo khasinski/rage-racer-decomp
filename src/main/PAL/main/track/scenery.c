@@ -234,7 +234,6 @@ extern u8 *g_FlybySceneryKeyframe;
 
 s32 Random15(void);
 
-void SeedFlybyScenery(void);
 void SeedFlybyScenery(void) {
     u8 *base;
     register u8 *out asm("s1");

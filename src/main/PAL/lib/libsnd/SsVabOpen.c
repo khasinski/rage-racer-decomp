@@ -13,7 +13,6 @@ extern long g_SndVabBodySize[];
 
 extern void _spu_setTransferCompletionFlag(long value);
 
-short SsVabOpen(u_char *addr, VabHdr *header);
 short SsVabOpen(u_char *addr, VabHdr *header) {
     short vabId;
 
@@ -32,7 +31,6 @@ short SsVabOpenHeadSticky(u_char *addr, short vabId, u_long spuAddr) {
     return SsVabOpenHeadWithMode(addr, vabId, 1, spuAddr);
 }
 
-short SsVabFakeHead(u_char *addr, short vabId, u_long spuAddr);
 short SsVabFakeHead(u_char *addr, short vabId, u_long spuAddr) {
     return SsVabOpenHeadWithMode(addr, vabId, 1, spuAddr);
 }

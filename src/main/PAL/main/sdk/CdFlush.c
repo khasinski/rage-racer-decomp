@@ -12,13 +12,11 @@ void CD_flush(void);
 long CD_sync(long arg0, long arg1);
 long CD_ready(long arg0, long arg1);
 
-void CdFlush(void);
 void CdFlush(void) {
     CD_flush();
 }
 
 /* CdSetDebug: sets the CD debug-verbosity `level`, returns the previous one. */
-long CdSetDebug(long level);
 long CdSetDebug(long level) {
     long old = g_CdDebugLevel;
     g_CdDebugLevel = level;
@@ -46,17 +44,14 @@ char *CdIntstr(long intr) {
     return g_CdIntrNames[intr];
 }
 
-long CdSync(long arg0, long arg1);
 long CdSync(long arg0, long arg1) {
     return CD_sync(arg0, arg1);
 }
 
-long CdReady(long arg0, long arg1);
 long CdReady(long arg0, long arg1) {
     return CD_ready(arg0, arg1);
 }
 
-long CdSyncCallback(long arg0);
 long CdSyncCallback(long arg0) {
     long old = g_CdSyncCallback;
 
@@ -64,7 +59,6 @@ long CdSyncCallback(long arg0) {
     return old;
 }
 
-long CdReadyCallback(long arg0);
 long CdReadyCallback(long arg0) {
     long old = g_CdReadyCallback;
 

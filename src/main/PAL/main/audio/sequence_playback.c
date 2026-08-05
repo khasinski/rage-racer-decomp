@@ -27,7 +27,6 @@ void SetSequenceVolume(s32 arg0);
 void StopSequence(void);
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
 
-void UpdateSequenceFadeOut(void);
 void UpdateSequenceFadeOut(void) {
     register s32 *fadeStep asm("$4");
     s32 delta;
@@ -76,7 +75,6 @@ void UpdateSequenceFadeOut(void) {
     SetSequenceVolume(g_SeqVolume);
 }
 
-void ApplyDuckedSequenceAudio(void);
 void ApplyDuckedSequenceAudio(void) {
     s32 value;
     register s32 scaled asm("$2");

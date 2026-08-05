@@ -34,7 +34,6 @@ void DrawTerrainCellsWide();
 void DrawCourseScenery2();
 int CycleBgmSelectCameraCar();
 
-void DrawBgmSelectBar(void);
 void DrawBgmSelectBar(void) {
     u8 *base;
     s32 arg4;
@@ -73,7 +72,6 @@ void DrawBgmSelectBar(void) {
     *(s32 *)0x1F800000 = GameQueueDrawModePrimWide(base, next, 0xB);
 }
 
-void AdvanceBgmShuffleBag(u32 arg0);
 void AdvanceBgmShuffleBag(u32 arg0) {
     u8 *first;
     u8 *before;
@@ -95,7 +93,6 @@ void AdvanceBgmShuffleBag(u32 arg0) {
     }
 }
 
-void UpdateBgmSelect(void);
 void UpdateBgmSelect(void) {
     s32 t;
     if (g_BgmChangeDelay > 0) {

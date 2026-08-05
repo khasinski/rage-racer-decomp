@@ -55,7 +55,6 @@ static inline long getAlarm(void) {
     return 0;
 }
 
-long CD_cw(u_char command, u_char *params, u_char *result, long async);
 long CD_cw(u_char command, u_char *params, u_char *result, long async) {
     long i;
     long interrupt;

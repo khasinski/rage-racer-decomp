@@ -9,7 +9,6 @@ s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePr
 
 /* Scene 34: the still shown after the ending FMV. Fades in, waits 300
  * frames or a confirm press, fades out and returns to scene 2. */
-void UpdateEndingStill(void);
 void UpdateEndingStill(void) {
     s32 v0, v1;
     if ((g_SceneTimer = g_SceneTimer + 1) == 2) {
@@ -35,7 +34,6 @@ void UpdateEndingStill(void) {
 }
 
 /* The still itself: a 0x100 + 0x40 wide pair of full-height sprites. */
-void DrawEndingStill(void);
 void DrawEndingStill(void) {
     u8 *base;
     s32 clut;

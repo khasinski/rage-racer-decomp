@@ -9,7 +9,6 @@ void DrawRouteScenery(void);
 void UpdatePathScenerySound(void);
 void DrawPathScenery(void);
 
-void DrawScriptedScenery(s32 arg0);
 void DrawScriptedScenery(s32 arg0) {
     switch (g_GrandPrixClass % 5) {
     case 0:
@@ -134,7 +133,6 @@ s32 rcos(s32 angle);
 s32 SquareRoot12(s32 value);
 void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);
 
-void InitPathScenery(void);
 void InitPathScenery(void) {
     s32 lev;
     u8 *tblA;
@@ -228,7 +226,6 @@ void InitPathScenery(void) {
  * g_PathSceneryRotKeys) are eased sinusoidally between waypoints. The sound is
  * cue zero with distance attenuation and a Doppler-like pitch shift.
  */
-void UpdatePathScenerySound(void);
 void UpdatePathScenerySound(void) {
     s32 delta[3];
     u8 *keys;

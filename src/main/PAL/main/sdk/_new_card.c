@@ -15,7 +15,6 @@ u_long _new_card[4] __attribute__((section(".text"))) = {
 void KernelCallbackSlot3(void);
 void MDEC_reset(long arg0);
 
-void DecDCTReset(long arg0);
 void DecDCTReset(long arg0) {
     if (arg0 == 0) {
         KernelCallbackSlot3();
@@ -87,12 +86,10 @@ u_long *DecDCTPutEnv(u_long *arg0) {
     return ret;
 }
 
-long DecDCTBufSize(u_short *arg0);
 long DecDCTBufSize(u_short *arg0) {
     return *arg0;
 }
 
-void DecDCTin(volatile u_long *arg0, long arg1);
 void DecDCTin(volatile u_long *arg0, long arg1) {
     u_long mask;
 

@@ -38,7 +38,6 @@ void SsUtSetReverbDelay(long);
 void SsUtReverbOff(void);
 void SsUtReverbOn(void);
 
-void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val);
 void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val) {
     SsUtGetVagAtr(p0, p1, p2, &arg);
 

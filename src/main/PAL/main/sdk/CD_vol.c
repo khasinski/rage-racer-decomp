@@ -101,7 +101,6 @@ void CD_initintr(void) {
     KernelCallbackSlot2(2, (void *)CdDispatchInterrupts);
 }
 
-long CdResetState(void);
 long CdResetState(void) {
     LibcPutString(D_80013904);
     DebugPrintf(D_80013910, g_CdDebugInfo);

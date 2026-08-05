@@ -10,7 +10,6 @@ extern volatile u_short *g_IrqMask;
 
 void ChangeClearRCnt(long clear);
 void ChangeClearInterruptMask(long index, long clear);
-Callback SetKernelInterruptCallback(long arg0, Callback arg1);
 Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     long index;
     Callback callback;

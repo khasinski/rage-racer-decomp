@@ -13,7 +13,6 @@ extern u_char g_SndVoiceStateStatus[];
 
 u_long SpuSetNoiseVoice(long on_off, u_long voice_bit);
 
-u_char SpuVmAlloc(long unused);
 u_char SpuVmAlloc(long unused) {
     u_char candidates;
     u_short bestAge;
@@ -129,7 +128,6 @@ extern u_short D_8009E674;
 extern u_short D_801F2A08;
 extern u_short D_801F2A0C;
 
-void SpuVmScaleVabVolume(long arg0, long val);
 void SpuVmScaleVabVolume(long arg0, long val) {
     u_long a1v, a2v, a3v;
     u_short vidx;
@@ -241,7 +239,6 @@ extern u_short D_801E4BE8;
 extern short D_801E4BEC;
 extern short D_801E4BEE;
 
-void SpuVmRebuildVoiceTable(void);
 void SpuVmRebuildVoiceTable(void) {
     long i;
     short *packedVoicePtr;

@@ -52,7 +52,6 @@ void DrawSkyBackground(void);
 void DrawTerrainCellsWide(void);
 void DrawCourseScenery2(u32 arg0, u32 arg1);
 
-void UpdateBgmSelectScene(void);
 void UpdateBgmSelectScene(void) {
     void (*func)(void);
 
@@ -61,7 +60,6 @@ void UpdateBgmSelectScene(void) {
     func();
 }
 
-void EnterAttractDemo(void);
 void EnterAttractDemo(void) {
     s32 initialValue;
 
@@ -81,7 +79,6 @@ void EnterAttractDemo(void) {
     g_CameraCarIndex = 0;
 }
 
-s32 GetAttractTitleFade(s32 arg0);
 s32 GetAttractTitleFade(s32 arg0) {
     s32 value;
 
@@ -97,7 +94,6 @@ s32 GetAttractTitleFade(s32 arg0) {
     return value < 0 ? 0 : (value < 0x80 ? value : 0x7F);
 }
 
-void DrawAttractTitle(void);
 void DrawAttractTitle(void) {
     u8 *ptr;
     s32 value;
@@ -114,7 +110,6 @@ void DrawAttractTitle(void) {
     DrawCarSpecSprite(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, arg13);
 }
 
-void UpdateAttractDemoStart(void);
 void UpdateAttractDemoStart(void) {
     s32 mode;
     u32 timer;
@@ -147,14 +142,12 @@ void UpdateAttractDemoStart(void) {
     DrawAttractTitle();
 }
 
-void ReturnToTitleScene(void);
 void ReturnToTitleScene(void) {
     g_SceneId = 3;
     g_StreamReturnScene = 0;
     ResetCdAudioState();
 }
 
-void UpdateAttractDemoRace(void);
 void UpdateAttractDemoRace(void) {
     u32 value;
     u32 timer;

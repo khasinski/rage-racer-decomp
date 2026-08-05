@@ -7,7 +7,6 @@ extern char g_TextNowLoading[];
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 
-void ExitBgmSelect(void);
 void ExitBgmSelect(void) {
     if (g_AssetLoadState == 0) {
         g_FadeStep = 4;

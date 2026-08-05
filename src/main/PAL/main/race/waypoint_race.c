@@ -94,7 +94,6 @@ extern TrackWaypointRuntime g_Waypoints[];
  * inactive. Register pins and the raw tail-offset writes are match-load-bearing.
  */
 
-void UpdateWaypointRaceScene(void);
 void UpdateWaypointRaceScene(void) {
     s32 value;
     s32 option;
@@ -211,7 +210,6 @@ void UpdateWaypointRaceScene(void) {
     UpdateTrackEventSound(g_PlayerTrackSection);
 }
 
-void SeedWaypoints(void);
 void SeedWaypoints(void) {
     TrackWaypointRuntime *waypoint;
     s32 i;

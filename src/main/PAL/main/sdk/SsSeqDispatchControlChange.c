@@ -8,7 +8,6 @@ void SpuVmDamperOff(void);
 void SpuVmDamperOn(void);
 void SsSeqSetPortamento(short seq, short sep, u_char value);
 
-void SsSeqDispatchControlChange(short seq, short sep, long arg2);
 void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
     u_long control;
     short value;

@@ -14,7 +14,6 @@ extern u_char *g_SndCurrentToneTable;
 
 u_short SpuVmCalculateTonePitch(long arg0, long arg1);
 
-void SpuVmPitchBendVoice(long arg0, long arg1);
 void SpuVmPitchBendVoice(long arg0, long arg1) {
     long voice = arg0;
     u_char voiceByte = voice;
@@ -60,10 +59,8 @@ void SpuVmPitchBendVoice(long arg0, long arg1) {
     g_SndVoiceFlags[voice & 0xFF] |= 4;
 }
 
-void SpuVmPitchBendNoOpA(void);
 void SpuVmPitchBendNoOpA(void) {
 }
 
-void SpuVmPitchBendNoOpB(void);
 void SpuVmPitchBendNoOpB(void) {
 }

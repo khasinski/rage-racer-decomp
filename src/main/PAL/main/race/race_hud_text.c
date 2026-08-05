@@ -17,7 +17,6 @@
 extern u8 g_TimeTextBuffer[];
 
 
-void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     s32 savedX;
     register s32 savedY asm("$10");
@@ -72,7 +71,6 @@ extern u8 g_ClockTextMinUnits[];
 extern u8 g_ClockTextSecTens;
 extern u8 g_ClockTextSecUnits;
 
-void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color);
 void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
     s32 savedY;
     s32 sec;
@@ -109,7 +107,6 @@ extern s32 g_FrameParity;
 void SetDrawArea(void *packet, void *rect);
 void AddPrim(void *ot, void *prim);
 
-void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h);
 void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     void *oldPacket;
     s16 rect[4];
@@ -135,7 +132,6 @@ extern u8 g_TileStripStorage[];
 
 void DrawSync(long mode);
 
-void BuildTileStrips(void);
 void BuildTileStrips(void) {
     u8 **initBuffers;
     u8 **buffers;

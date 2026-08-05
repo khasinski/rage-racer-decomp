@@ -48,7 +48,6 @@ extern s16 g_DragScale;
  * *(s16*)((u8*)base+0x132)) with the drive sub-block at base+0xBC; the raw
  * offsets are what make it match, so it is intentionally left as void*.
  */
-void UpdateCarDrivetrain(void *base);
 void UpdateCarDrivetrain(void *base) {
   u8 *var_a2;
   s16 temp_a0;

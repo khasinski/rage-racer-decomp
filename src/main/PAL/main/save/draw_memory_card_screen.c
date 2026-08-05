@@ -55,7 +55,6 @@ void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     *(s32 *)0x1F800000 = next;
 }
 
-void DrawMemoryCardMessage(s32 arg0);
 void DrawMemoryCardMessage(s32 arg0) {
     s32 index;
     s32 *entry;

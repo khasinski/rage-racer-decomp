@@ -23,7 +23,6 @@ extern long g_SpuTransferIsRead;
 extern long g_SpuDmaTransferAddr;
 extern long g_SpuDmaBlockCount;
 
-long _spu_t(long op, ...);
 long _spu_t(long op, ...) {
     long dmaControl;
     long i;

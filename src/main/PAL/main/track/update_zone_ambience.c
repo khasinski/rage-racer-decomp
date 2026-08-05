@@ -12,7 +12,6 @@ typedef struct UnkFunc80040DB4Entry {
 
 void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
 
-void UpdateZoneAmbience(s32 arg0);
 void UpdateZoneAmbience(s32 arg0) {
     s32 position;
     s32 base;

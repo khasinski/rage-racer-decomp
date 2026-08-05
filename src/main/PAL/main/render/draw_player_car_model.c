@@ -23,7 +23,6 @@ void RestoreColorMatrix(void);
  * m_B0[1] block build the mirrored copies (flip X/Z columns). otDepth is the
  * base OT bucket; clipHandle is the optional clip volume from GetTrackZoneBlend.
  */
-void DrawPlayerCarModel(GameRenderObject *obj);
 void DrawPlayerCarModel(GameRenderObject *obj) {
     GameRenderView *view = g_CarModelAsset;
     Matrix m_10;

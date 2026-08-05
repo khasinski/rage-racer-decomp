@@ -55,7 +55,6 @@ static __inline__ void copy8(u_char *d, u_char *s) {
     } while (--n != -1);
 }
 
-long CdReadInterruptStatus(void);
 long CdReadInterruptStatus(void) {
     volatile u_char mode;
     volatile u_char buf[8];

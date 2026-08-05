@@ -18,7 +18,6 @@ void SetCourseObjects(void *arg0);
 void InstallTrackEventData(void *arg0);
 void SelectTrackCameraTable(void *arg0, s32 arg1);
 
-void LoadTrackDataAssets(void);
 void LoadTrackDataAssets(void) {
     GameSceneAssetHeader *header;
     register void *dst asm("$5");
@@ -103,7 +102,6 @@ extern s32 D_8019C708;
 
 void BeginFmv(void);
 
-void BeginIntroFmv(void);
 void BeginIntroFmv(void) {
     s32 *ptr;
     s32 value;
@@ -123,7 +121,6 @@ extern s32 D_8019C708;
 
 void BeginFmv(void);
 
-void BeginClassFmv(void);
 void BeginClassFmv(void) {
     s32 *base;
     s32 offset;
@@ -153,7 +150,6 @@ extern s32 D_8019C708;
 
 void BeginFmv(void);
 
-void BeginEndingFmv(void);
 void BeginEndingFmv(void) {
     s32 *ptr;
     s32 value;
@@ -182,7 +178,6 @@ void LoadGrandPrixScreen(void);
 void LoadCourseAssets(void);
 void LoadTrackDataAssets(void);
 
-void ServiceAssetLoad(void);
 void ServiceAssetLoad(void) {
     if (g_AssetLoadState != 0) {
         switch (g_MainState) {

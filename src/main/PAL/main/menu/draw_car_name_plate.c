@@ -8,7 +8,6 @@ void GameDrawSpriteWide(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 
 s32 GetCarUnlockLevel(s32 model);
 
 /* The bottom-right plate: grade digit, manufacturer sprite and model-name sprite. */
-void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
     void *ot;
     u32 idx;

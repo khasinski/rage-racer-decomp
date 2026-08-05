@@ -26,7 +26,6 @@ void GameDrawSpriteWide(
     s32 flags) asm("DrawSprite");
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
-void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags);
 void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
     u8 *str;
     s32 x;
@@ -155,7 +154,6 @@ void GameDrawSpriteWide(
     s32 flags);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
-void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags);
 void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
     u8 *str;
     s32 x;
@@ -400,7 +398,6 @@ extern s32 D_8007FB00;
 
 void *QueueDrawModePrim(void *arg0, void *arg1, s32 arg2);
 
-void DrawBitPatternOverlay(s32 arg0);
 void DrawBitPatternOverlay(s32 arg0) {
     void *ot = *(void **)0x1F800004;
     u8 *row = D_8007F6E8;

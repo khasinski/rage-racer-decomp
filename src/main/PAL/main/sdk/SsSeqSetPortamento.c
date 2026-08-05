@@ -2,7 +2,6 @@
 
 extern SeqStruct *g_SndSeqTable[];
 
-void SsSeqSetPortamento(short seq, short sep, u_char value);
 void SsSeqSetPortamento(short seq, short sep, u_char value) {
     SeqStruct *state;
     u_char channel;

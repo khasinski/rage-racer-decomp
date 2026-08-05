@@ -37,7 +37,6 @@ void UpdateCarCrestHop();
  * the steer value into field_44 and the route sub-block (field_BC).
  * Register-pinned locals are match-load-bearing.
  */
-void SteerCarAlongRoute(GameCarRuntime *car);
 void SteerCarAlongRoute(GameCarRuntime *car) {
     GameCarRuntime *route;
     GameTrackPoint *point;
@@ -688,7 +687,6 @@ void DrawPlayerCarModel(void *arg0);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void UpdateCamera(void *arg0, s32 arg1);
 
-void RunRaceIntroCamera(Obj *obj, s32 mode);
 void RunRaceIntroCamera(Obj *obj, s32 mode) {
     s32 *spad = (s32 *)0x1F800000;
     register s32 s0v asm("$16");
@@ -793,7 +791,6 @@ extern s32 g_CameraCarSpeed;
  * nowhere in the image. */
 extern s32 D_801E3F60;
 
-void SeedFinishCamera(void *arg0);
 void SeedFinishCamera(void *arg0) {
     register u32 word0 asm("$2");
     u32 word1;

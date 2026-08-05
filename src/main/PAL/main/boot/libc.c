@@ -58,7 +58,6 @@ extern u8 g_LibcLowerDigits[];
 })
 #define LIBC_LOCAL_ZERO ({ s32 zero = '0'; zero; })
 
-s32 LibcSprintf(u8 *dest, u8 *format, ...);
 s32 LibcSprintf(u8 *dest, u8 *format, ...) {
     LibcFormatWork work;
     u8 *argState[2];
@@ -421,7 +420,6 @@ void *LibcMemmove(u8 *dest, u8 *src, s32 count) {
     return dest;
 }
 
-s32 LibcStrlen(u8 *arg0);
 s32 LibcStrlen(u8 *arg0) {
     s32 count = 0;
 
@@ -440,7 +438,6 @@ extern u8 g_LibcNullText[];
 
 void LibcPutChar(s32 arg0);
 
-void LibcPutString(u8 *arg0);
 void LibcPutString(u8 *arg0) {
     u8 *ptr;
     s32 value;
@@ -458,7 +455,6 @@ void LibcPutString(u8 *arg0) {
 extern u8 g_LibcCtype[];
 extern s32 g_LibcOutColumn;
 
-void LibcPutChar(s32 arg0);
 void LibcPutChar(s32 arg0) {
     u8 c;
     s32 value = arg0;
@@ -490,7 +486,6 @@ void LibcPutChar(s32 arg0) {
     BiosFileWrite(1, &c, 1);
 }
 
-s32 LibcToUpper(s32 arg0);
 s32 LibcToUpper(s32 arg0) {
     u8 value = arg0;
 

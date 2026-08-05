@@ -6,7 +6,6 @@
 
 extern u_char g_LibcCtype[];
 
-long LibcToLower(long arg0);
 long LibcToLower(long arg0) {
     u_char value = arg0;
 

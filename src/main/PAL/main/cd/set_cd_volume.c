@@ -14,7 +14,6 @@ extern s32 g_CdMixRR;
 extern s32 g_CdMixRL;
 
 
-void SetCdVolume(s32 arg0);
 void SetCdVolume(s32 arg0) {
     s32 offset;
     s32 scale;

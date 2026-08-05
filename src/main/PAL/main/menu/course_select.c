@@ -10,7 +10,6 @@ s32 DrawRankingScreen(s32 arg0);
 
 const u8 g_NowLoadingText[] = "NOW LOADING";
 /* Blinks the "NOW LOADING" string at g_NowLoadingText. */
-void DrawNowLoadingText(void);
 void DrawNowLoadingText(void) {
     if (g_SceneTimer & 8) {
         DrawText8x8(0x74, 0xEC, (void *)g_NowLoadingText, 0x78CC);
@@ -43,7 +42,6 @@ void LoadImage(void *rect, void *data);
 void UploadTeamNameTexture(void *arg0, s32 arg1);
 
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
-void EnterCourseSelectScreen(void);
 void EnterCourseSelectScreen(void) {
     s32 one;
     register s32 initValue;
@@ -464,7 +462,6 @@ s32 DrawCourseSelectScreen(s32 step)
 }
 
 /* The mirror of CanSelectNextCourse. */
-s32 CanSelectPrevCourse(void);
 s32 CanSelectPrevCourse(void) {
     s32 v1 = 0;
     if (g_GrandPrixMode != 0) {
@@ -530,7 +527,6 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
 void DrawTimeAttackPlate(s32 arg0);
 void DrawMenuCourseView(void);
 void PlaySoundCue(s32 cue);
-void UpdateCourseSelectScreen(void);
 void UpdateCourseSelectScreen(void) {
     void *ot;
     u8 *hdr;

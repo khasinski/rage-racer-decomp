@@ -235,7 +235,6 @@ u_long get_dx(DispEnv *env) {
 
 extern u_long *g_GpuGp1;
 
-u_long _status(void);
 u_long _status(void) {
     return *g_GpuGp1;
 }

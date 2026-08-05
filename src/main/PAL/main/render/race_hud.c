@@ -6,7 +6,6 @@
 void AddPrim(void *ot, void *prim);
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
 
-void DrawRaceHudLabels(s32 arg0);
 void DrawRaceHudLabels(s32 arg0) {
     s32 count;
     s32 i;
@@ -41,7 +40,6 @@ void DrawRaceHudLabels(s32 arg0) {
  * rather than in a header: callers disagree on whether `ot`/`prim` are pointers
  * or s32, and gcc 2.6.3 will not take both against one prototype.
  */
-u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) {
     u8 *oldPrim;
 
@@ -62,7 +60,6 @@ u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s3
 }
 
 /* Expands a GameSpriteDesc into a scratchpad SPRT. */
-void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
 void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
     SetSprt(prim);
 
@@ -85,7 +82,6 @@ void DrawTimeValue(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
-void DrawLapTimes(void);
 void DrawLapTimes(void) {
     s32 i;
     s32 visibleCount;
@@ -150,7 +146,6 @@ void DrawLapTimes(void) {
 
 void DrawMinuteSecondTime(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
-void DrawTimeRemaining(s32 arg0);
 void DrawTimeRemaining(s32 arg0) {
     s32 arg3 = 0x78CC;
 
@@ -163,7 +158,6 @@ void DrawTimeRemaining(s32 arg0) {
 
 /* The two race-position digits, from g_RacePosition; the tens digit is
  * blanked below 10 and the colour changes from 4th place down. */
-void DrawRacePosition(void);
 void DrawRacePosition(void) {
     u8 *base;
     s32 value;
@@ -199,12 +193,10 @@ void DrawRacePosition(void) {
     }
 }
 
-void SetHudBlinkColor(s32 arg0);
 void SetHudBlinkColor(s32 arg0) {
     *(u16 *)(g_DrawBuffer + 0x237A6) = arg0 ? 0x7811 : 0x7800;
 }
 
-void DrawSplitDelta(s32 arg0, s32 arg1);
 void DrawSplitDelta(s32 arg0, s32 arg1) {
     u8 *base;
     register u8 *prim;

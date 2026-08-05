@@ -23,7 +23,6 @@ extern void *g_AssetBlockPtr2;
 extern void *g_AssetSubBlockPtr;
 void CloseLoadedAudioSlots(void);
 
-void LoadBootAssets(void);
 void LoadBootAssets(void) {
     u8 *loaded;
     u8 *base;
@@ -91,7 +90,6 @@ setNextBuffer:
     }
 }
 
-s32 RequestSaveScreenAssets(void);
 s32 RequestSaveScreenAssets(void) {
     s32 state;
 
@@ -111,7 +109,6 @@ s32 RequestSaveScreenAssets(void) {
     return 1;
 }
 
-void LoadSaveScreenAssets(void);
 void LoadSaveScreenAssets(void) {
     if (g_AssetLoadState == 1) {
         if (LoadAsset(6, g_AssetBase) != 0) {
@@ -121,7 +118,6 @@ void LoadSaveScreenAssets(void) {
     }
 }
 
-s32 RequestSelectBgmAssetsNoReset(void);
 s32 RequestSelectBgmAssetsNoReset(void) {
     s32 loadType;
 
@@ -141,7 +137,6 @@ s32 RequestSelectBgmAssetsNoReset(void) {
     return 1;
 }
 
-s32 RequestSelectBgmAssets(void);
 s32 RequestSelectBgmAssets(void) {
     s32 loadType;
 
@@ -161,7 +156,6 @@ s32 RequestSelectBgmAssets(void) {
     return 1;
 }
 
-void LoadSelectBgmAssets(void);
 void LoadSelectBgmAssets(void) {
     GameSceneAssetHeader *header;
     s32 firstOffset;

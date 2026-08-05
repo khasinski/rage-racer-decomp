@@ -56,7 +56,6 @@ extern volatile u_char g_SndReservedVoiceCount;
 extern volatile u_short g_SndMonoMode;
 extern volatile u_short g_SndVabProgMax;
 
-void SpuVmInit(long arg0);
 void SpuVmInit(long arg0) {
     s16 i;
     long ff;

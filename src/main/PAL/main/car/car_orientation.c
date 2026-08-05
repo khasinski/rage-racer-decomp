@@ -408,7 +408,6 @@ void InitPlayerCar(GameCarRuntime *car)
  * delta falls inside the 0x401..0x7FF window (i.e. facing roughly backwards).
  * Uses the 0x19C-stride GameCarTrackAngleWindow view onto the car array.
  */
-s32 IsCarFacingBackwards(GameCarTrackAngleWindow *arg0);
 s32 IsCarFacingBackwards(GameCarTrackAngleWindow *arg0) {
     s32 index = arg0->trackPointIndex;
     s32 complement = 0xC00 - g_TrackPoints[index].angle;
@@ -469,7 +468,6 @@ s32 rcos(s32);
  * typedefs are raw-offset overlays onto the car runtime (drive block at +0xBC)
  * shaped to match; retyping them to GameCarRuntime would break the match.
  */
-void UpdateCarBodyRoll(A *ctx);
 void UpdateCarBodyRoll(A *ctx) {
     SubB *p = &ctx->sub;
     s16 mode = g_RacePhase;
@@ -616,7 +614,6 @@ void UpdateCarBodyRoll(A *ctx) {
  * Point-in-quad test: returns 1 if point `pt` is inside the quad with corners
  * p0,p1,p3,p2 (four chained half-plane sign checks via NormalClip), else 0.
  */
-s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt);
 s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) {
     s32 result;
     s32 ret = 0;

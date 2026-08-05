@@ -44,7 +44,6 @@ extern u8 g_CarMarkerIndex[];
 
 extern u8 g_CarMarkerFlag[];
 
-void UpdateCarBodyKick(GameCarRuntime *car);
 void UpdateCarBodyKick(GameCarRuntime *car) {
     s32 value;
     s32 wave;
@@ -105,7 +104,6 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
     }
 }
 
-s32 GetCarCrestTrigger(GameCarRuntime *arg0);
 s32 GetCarCrestTrigger(GameCarRuntime *arg0) {
     u8 *base;
     s32 pos0;
@@ -195,7 +193,6 @@ break;
     return 0;
 }
 
-void UpdateCarCrestHop(GameCarRuntime *arg0);
 void UpdateCarCrestHop(GameCarRuntime *arg0) {
     GameCarRuntime *obj;
     s32 value;
@@ -270,7 +267,6 @@ void UpdateCarCrestHop(GameCarRuntime *arg0) {
     obj->field_9E = value;
 }
 
-void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1);
 void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     GameCarRuntime *obj = arg0;
     s32 temp;
@@ -347,7 +343,6 @@ void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     }
 }
 
-void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1);
 void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     GameCarRuntime *objReg = obj;
     s32 target;
@@ -437,7 +432,6 @@ advance:
     objReg->field_10E = 0;
 }
 
-void SeedCarRouteMarkers(void);
 void SeedCarRouteMarkers(void) {
     s32 one = 1;
     register s32 offset asm("a2") = 0;
@@ -489,7 +483,6 @@ inner:
     }
 }
 
-void UpdateCarAiTargetSpeed(u8 *car, s32 gear);
 void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   u8 *p[2];
   u16 lim[4];

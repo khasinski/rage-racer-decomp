@@ -54,12 +54,10 @@ long CD_getsector2(long arg0, u_long arg1) {
     return 0;
 }
 
-void CdSetSectorParam(long arg0);
 void CdSetSectorParam(long arg0) {
     D_800992E4 = arg0;
 }
 
-void CdDispatchInterrupts(void);
 void CdDispatchInterrupts(void) {
     u_char *statusByte;
     long status;

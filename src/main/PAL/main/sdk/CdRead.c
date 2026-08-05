@@ -28,7 +28,6 @@ void AddPrim(void *ot, void *prim);
 void *SetDrawMode(void *prim, long a, long b, long c, void *d);
 long AddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8);
 
-long CdRead(long arg0, long arg1, long arg2);
 long CdRead(long arg0, long arg1, long arg2) {
     long savedArg0;
     long mode;
@@ -73,7 +72,6 @@ long CdRead(long arg0, long arg1, long arg2) {
     return CdReadRetry(0) > 0;
 }
 
-long CdReadSync(long arg0, long arg1);
 long CdReadSync(long arg0, long arg1) {
     long savedArg0;
     long savedArg1;
@@ -117,7 +115,6 @@ long CdReadSync(long arg0, long arg1) {
     return result;
 }
 
-long CdReadCallback(long arg0);
 long CdReadCallback(long arg0) {
     long old = g_CdReadCallback;
 
@@ -136,7 +133,6 @@ typedef struct CdReadSprite {
     volatile short h;
 } CdReadSprite;
 
-void DrawSpriteString(long x, long y, u_char *str, long arg3);
 void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     CdReadSprite *packet;
     long idx;
@@ -185,7 +181,6 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     *(u_char **)0x1F800000 = next + 0xC;
 }
 
-void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3);
 void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3) {
     long temp;
 

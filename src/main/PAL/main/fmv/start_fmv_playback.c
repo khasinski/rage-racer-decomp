@@ -24,7 +24,6 @@ s32 PresentFmvFrame(volatile void *arg0);
 void StartStreamRead(s32 arg0);
 s32 VSync(s32 mode);
 
-void StartFmvPlayback(s32 arg0);
 void StartFmvPlayback(s32 arg0) {
     s32 fail;
     char frame_pad[8];

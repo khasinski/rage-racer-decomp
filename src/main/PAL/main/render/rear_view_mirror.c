@@ -8,7 +8,6 @@ void SetDrawArea(u8 *packet, u8 *drawEnv);
 extern s16 g_MirrorViewEnabled;
 extern s32 g_MirrorPanelY;
 extern s32 g_MirrorUnlocked;
-void ResetMirrorState(void);
 void ResetMirrorState(void) {
     g_MirrorViewEnabled = 1;
     g_MirrorPanelY = -0x2C;
@@ -40,7 +39,6 @@ void SetGeomScreen(long h);
  * the pass behind the main scene (depth += 0x800). Returns 1 if the mirror pass
  * is active, else 0.
  */
-s32 BeginMirrorPass(void);
 s32 BeginMirrorPass(void) {
     GameScratchpadRenderState *scratch;
     s32 mirrorEnabled;
@@ -127,7 +125,6 @@ void SetGeomScreen(long h);
  * flips the ordering flag back, pulls the depth back (-= 0x800) and restores the
  * saved main-view matrix from D_8009AF00.
  */
-void EndMirrorPass(void);
 void EndMirrorPass(void) {
     GameScratchpadRenderState *scratch;
     register s32 v0reg asm("$2");
@@ -169,7 +166,6 @@ void SetTile(u8 *arg0);
 void AddPrim(void *ot, void *prim);
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 
-u8 *DrawMirrorFrame(u8 *packet);
 u8 *DrawMirrorFrame(u8 *packet) {
     u8 *otArg;
     u8 *prim;
@@ -219,7 +215,6 @@ void BuildVisibleCells(s32 arg0, s32 arg1);
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2);
 void EndMirrorPass(void);
 
-void DrawRearViewMirror(s32 arg0);
 void DrawRearViewMirror(s32 arg0) {
     u8 **scratch;
     u8 *packet;

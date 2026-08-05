@@ -48,7 +48,6 @@ extern s32 g_PrizeMoney3rd[][6][3];
 extern s32 g_PromotionBonusTable[];
 void PlaySoundCue(s32 cue);
 
-void DrawPrizeMoneyPanel(u8 *s0);
 void DrawPrizeMoneyPanel(u8 *s0) {
     u8 sp[16];
     if (g_RaceProgress->money > 0x3B9AC9FF) {
@@ -67,7 +66,6 @@ void DrawPrizeMoneyPanel(u8 *s0) {
     }
 }
 
-void CommitClassProgress(void);
 void CommitClassProgress(void) {
     s32 score_index;
     u8 *slots;
@@ -169,7 +167,6 @@ void CommitClassProgress(void) {
     }
 }
 
-void AdvanceGrandPrixClass(void);
 void AdvanceGrandPrixClass(void) {
     s32 oldValue;
     GameRaceProgress *ptr;
@@ -219,7 +216,6 @@ void AdvanceGrandPrixClass(void) {
     }
 }
 
-void EnterPrizeScreen(void);
 void EnterPrizeScreen(void) {
     s32 mode;
     s32 car;
@@ -253,7 +249,6 @@ void EnterPrizeScreen(void) {
     }
 }
 
-void TickClassClearFanfare(void);
 void TickClassClearFanfare(void) {
     if (g_ClassClearFanfareTimer > 0) {
         g_ClassClearFanfareTimer--;

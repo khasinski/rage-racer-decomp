@@ -4,7 +4,6 @@
 s32 GetCarUnlockLevel();
 
 /* GetCarAssetIndex(model, owned grade) written out longhand; indexes the price and engine tables. */
-s32 GetOwnedCarAssetIndex(s32 arg0);
 s32 GetOwnedCarAssetIndex(s32 arg0) {
     s32 state;
     s32 value;
@@ -137,7 +136,6 @@ void SelectCarModelSlot(void *arg0);
 void UploadCarImage(void *arg0);
 
 /* Re-registers the showroom car after g_CarModelSlot changes. */
-void InstallCarModelSlot(void);
 void InstallCarModelSlot(void) {
     SelectCarModelSlot(g_CarModelSlot);
     SelectModelBank(g_CarModelSlot);

@@ -78,7 +78,6 @@ extern u8 *g_TrackCameras;
  * Field accesses use the FIELD(base,type,offset) raw-offset macro to stay
  * byte-exact, so params/locals are not retyped.
  */
-void UpdateCamera(s32 cameraModeSel, void *arg1);
 void UpdateCamera(s32 cameraModeSel, void *arg1) {
     s16 sp10[4];
     s32 sp18[3];
@@ -664,7 +663,6 @@ extern u32 g_SkyRowBase;
 extern u32 *g_EnvScriptCues;
 extern u32 g_EnvScriptLength;
 
-void SetEnvironmentScript(u32 *arg0);
 void SetEnvironmentScript(u32 *arg0) {
     u32 value0;
     u32 value1;

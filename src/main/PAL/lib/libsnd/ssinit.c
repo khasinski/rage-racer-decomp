@@ -5,7 +5,6 @@
 void SpuInit(void);
 void _SsInitTables(void);
 
-void ssinit(void);
 void ssinit(void) {
     KernelCallbackSlot3();
     SpuInit();

@@ -16,7 +16,6 @@ u_long DeliverEvent[4] __attribute__((section(".text"))) = {
 extern u_char g_CdStatusByte;
 
 /* CdStatus: returns the last cached CD drive status byte. */
-long CdStatus(void);
 long CdStatus(void) {
     return g_CdStatusByte;
 }
@@ -26,13 +25,11 @@ extern u_char g_CdModeByte;
 extern u_char g_CdLastCommand;
 
 /* CdMode: returns the last CD mode byte. */
-u_char CdMode(void);
 u_char CdMode(void) {
     return g_CdModeByte;
 }
 
 /* CdLastCom: returns the last CD command byte issued. */
-u_char CdLastCom(void);
 u_char CdLastCom(void) {
     return g_CdLastCommand;
 }
@@ -53,7 +50,6 @@ long func_8006BBD0_entry(void) asm("CD_initvol");
  * (CdResetState) and, for mode 1, the volume init (CD_initvol). Returns 1 on
  * success, 0 if a sub-step failed.
  */
-long CD_init(long mode);
 long CD_init(long mode) {
     if (mode == 2) {
         func_8006BCC4_entry();

@@ -133,7 +133,6 @@ void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
 extern u8 D_8007D24C;
 void LoadImage(Rect *rect, void *data);
 
-void ClearTeamNameTexture(void);
 void ClearTeamNameTexture(void) {
     s16 sp[4];
     sp[0] = 0x282;
@@ -147,7 +146,6 @@ extern u8 D_8007C7CC[];
 void ClearTeamNameTexture(void);
 void LoadImage(Rect *rect, void *data);
 
-void UploadTeamNameTexture(u8 *str, s32 len);
 void UploadTeamNameTexture(u8 *str, s32 len) {
     s16 sp[4];
     ClearTeamNameTexture();

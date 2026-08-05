@@ -213,7 +213,6 @@ void UpdateFrontend(void) {
  * Empty stub; SetupDisplay240 and SetupDisplay480 both call it with one argument,
  * so the parameter is declared and ignored.
  */
-void ResetFrameContext(int arg0);
 void ResetFrameContext(int arg0) {
 }
 
@@ -227,7 +226,6 @@ extern u16 g_ScreenOffsetY;
 void SetGeomOffset(long ofx, long ofy);
 void SetGeomScreen(long h);
 
-void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;
@@ -301,7 +299,6 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     asm(".globl func_8001C05C\nfunc_8001C05C = func_8001BE9C + 0x1C0");
 }
 
-void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     register s32 a0_save asm("$18") = arg0;
     register s32 a1_save asm("$19") = arg1;

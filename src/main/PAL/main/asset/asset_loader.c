@@ -27,12 +27,10 @@ extern char g_PathRageStr[];
 extern char g_MsgSearchOk[];
 void UploadImageAsset(void *arg0);
 
-void SetTrackCameraTable(u32 value);
 void SetTrackCameraTable(u32 value) {
     *(u32 *)0x8019C9A8 = value;
 }
 
-void ResetAssetLoader(void);
 void ResetAssetLoader(void) {
     if (g_CdLoadPhase == 4) {
         CdReadBreak();
@@ -43,7 +41,6 @@ void ResetAssetLoader(void) {
     g_MainState = 0;
 }
 
-s32 EnableCdAudioMode(void);
 s32 EnableCdAudioMode(void) {
     u8 value;
 
@@ -110,13 +107,11 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
     return 0;
 }
 
-void LoadAssetBlocking(s32 arg0, s32 arg1);
 void LoadAssetBlocking(s32 arg0, s32 arg1) {
     while (LoadAssetWide(arg0, arg1) == 0) {
     }
 }
 
-void LoadDiscArchiveIndex(void);
 void LoadDiscArchiveIndex(void) {
     struct {
         CdlLOC file;
@@ -170,7 +165,6 @@ void LoadDiscArchiveIndex(void) {
     }
 }
 
-void InitAssetSystem(void);
 void InitAssetSystem(void) {
     void *ptr;
 
@@ -180,7 +174,6 @@ void InitAssetSystem(void) {
     UploadImageAsset(ptr);
 }
 
-s32 RequestBootAssets(void);
 s32 RequestBootAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;

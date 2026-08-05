@@ -41,7 +41,6 @@ void StoreImage(Rect *rect, void *data);
 void LoadImage(Rect *rect, void *data);
 void DrawSync(long mode);
 
-void SwapTrackTexturePageNow(void);
 void SwapTrackTexturePageNow(void) {
     s32 buffer[0xE0];
     s32 page = 0;
@@ -80,7 +79,6 @@ extern s32 g_TrackTextureTargetRow;
 extern s32 g_TrackTextureCursorRow;
 void SwapTrackTexturePageNow(void);
 
-void SetTrackTexturePageNow(void);
 void SetTrackTexturePageNow(void) {
     s32 temp;
 
@@ -94,7 +92,6 @@ extern u8 D_801E4CF7;
 extern s32 g_TrackTexturePageWanted;
 extern s32 g_TrackTextureTargetRow;
 extern s32 g_TrackTextureCursorRow;
-void ResetTrackTextureSwap(void);
 void ResetTrackTextureSwap(void) {
     s32 value = 1;
     s32 i = 0xFF;
@@ -112,7 +109,6 @@ void ResetTrackTextureSwap(void) {
 }
 
 extern s32 g_TrackTextureTargetRow;
-void RequestTrackTexturePage(void);
 void RequestTrackTexturePage(void) {
     g_TrackTextureTargetRow = SelectTrackTexturePage();
 }
@@ -126,7 +122,6 @@ void StoreImage(Rect *rect, void *data);
 void LoadImage(Rect *rect, void *data);
 void DrawSync(long mode);
 
-void SwapTrackTextureRow(void);
 void SwapTrackTextureRow(void) {
     s32 buffer[0xE0];
     s16 *rectY;
@@ -176,7 +171,6 @@ extern s32 g_TrackTextureTargetRow;
 void SwapTrackTextureRow(void);
 s32 VSync(s32 mode);
 
-void StepTrackTextureSwap(void);
 void StepTrackTextureSwap(void) {
     while (g_TrackTextureCursorRow != g_TrackTextureTargetRow) {
         if (VSync(1) >= 471) {
@@ -198,7 +192,6 @@ extern u8 g_CarTrackSection[];
 
 s32 Random15(void);
 
-s32 CycleBgmSelectCameraCar(s32 mask, s32 current);
 s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
     s32 random;
     s32 candidate;
@@ -228,7 +221,6 @@ extern u8 g_CarTrackSection[];
 
 s32 Random15(void);
 
-s32 CycleAttractCameraCar(s32 mask, s32 current);
 s32 CycleAttractCameraCar(s32 mask, s32 current) {
     s32 random;
     s32 candidate;

@@ -10,7 +10,6 @@ extern GameCarRuntimeProgressWindow g_CarProgressB[];
 
 /* Counts the cars whose lap progress is ahead of the player and publishes the
  * result as g_RacePosition (1 = leader). Only runs on the final lap. */
-void UpdateRacePosition(void);
 void UpdateRacePosition(void) {
     s32 active;
     s32 i;

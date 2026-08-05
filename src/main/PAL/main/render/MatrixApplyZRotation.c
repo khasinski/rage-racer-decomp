@@ -9,7 +9,6 @@ extern s16 g_SinTable[];
 s32 rsin(s32 arg0);
 s32 rsinCore(s32 arg0);
 s32 rcos(s32 arg0);
-void MatrixApplyZRotation(Matrix *arg0, s32 arg1);
 void MatrixApplyZRotation(Matrix *arg0, s32 arg1) {
     Matrix sp10;
     s32 angle;

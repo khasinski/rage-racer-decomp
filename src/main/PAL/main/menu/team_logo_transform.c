@@ -5,7 +5,6 @@ extern u32 g_TeamLogoCanvas[];
 
 void PlaySoundCue(s32 cue);
 
-void FlipTeamLogoHorizontal(void);
 void FlipTeamLogoHorizontal(void) {
     u32 *base;
     s32 row;
@@ -63,7 +62,6 @@ void FlipTeamLogoHorizontal(void) {
     } while (row < 0x40);
 }
 
-void RotateTeamLogoCcw(void);
 void RotateTeamLogoCcw(void) {
     s32 i;
     s32 j;
@@ -148,7 +146,6 @@ void RotateTeamLogoCcw(void) {
     } while (i < 512);
 }
 
-void RotateTeamLogoCw(void);
 void RotateTeamLogoCw(void) {
     s32 i;
     s32 j;
@@ -265,7 +262,6 @@ extern s32 D_8007FB1C;
 extern s32 D_8019CAB8;
 extern u16 g_TeamLogoClut[];
 
-void UpdateTeamLogoCanvas(void);
 void UpdateTeamLogoCanvas(void) {
     s32 temp_a0;
     s32 temp_v0;
@@ -745,7 +741,6 @@ extern const char D_80011924[4];
 extern const char D_80011928[4];
 extern const char D_8001192C[8];
 
-void DrawMenuLightBurst(s32 arg);
 void DrawMenuLightBurst(s32 arg) {
     void *s3;
     Blob l1;

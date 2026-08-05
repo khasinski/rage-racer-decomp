@@ -9,7 +9,6 @@ extern s32 g_CdCommandPending;
 extern s32 g_CdTrackStep;
 extern s32 g_CdCommandStep;
 
-void RequestCdTrack(s32 arg0);
 void RequestCdTrack(s32 arg0) {
     g_CdTrackPending = (u8)arg0;
     g_CdTrackStep = 0;
@@ -17,13 +16,11 @@ void RequestCdTrack(s32 arg0) {
     g_CdCommandStep = 0;
 }
 
-void StartCdAudio(void);
 void StartCdAudio(void) {
     g_CdCommandPending = 1;
     g_CdCommandStep = 0;
 }
 
-void PauseCdAudio(void);
 void PauseCdAudio(void) {
     g_CdCommandPending = 2;
     g_CdCommandStep = 0;
@@ -35,7 +32,6 @@ void PauseCdAudio(void) {
 extern s32 g_CdRestartOnResume;
 extern u8 g_CdCurrentTrack;
 
-void ResumeCdAudio(void);
 void ResumeCdAudio(void) {
     if (g_CdRestartOnResume != 0) {
         u8 value;
@@ -52,7 +48,6 @@ void ResumeCdAudio(void) {
     }
 }
 
-void ResetCdAudioState(void);
 void ResetCdAudioState(void) {
     g_CdTrackPending = -1;
     g_CdCommandPending = -1;
@@ -65,7 +60,6 @@ void ResetCdAudioState(void) {
 
 extern s32 g_CdFadeFrames;
 
-void StartCdVolumeFade(s32 arg0);
 void StartCdVolumeFade(s32 arg0) {
     g_CdFadeFrames = arg0;
     if (arg0 >= 0x1000) {
@@ -91,7 +85,6 @@ extern u32 g_CdMixFullRL;
 
 void CdMix(u8 *arg0);
 
-void StepCdVolumeFade(void);
 void StepCdVolumeFade(void) {
     u8 buf[4];
     s32 cnt;

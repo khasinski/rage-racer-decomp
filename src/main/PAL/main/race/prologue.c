@@ -49,7 +49,6 @@ void DrawSkyBackground(void);
 void DrawTerrainCellsWide(void);
 void DrawCourseScenery2(s32 arg0, s32 arg1);
 
-void UpdateAttractDemoScene(void);
 void UpdateAttractDemoScene(void) {
     g_AttractDemoSteps[g_AttractDemoStep]();
 
@@ -64,7 +63,6 @@ void UpdateAttractDemoScene(void) {
     }
 }
 
-void EnterPrologue(void);
 void EnterPrologue(void) {
     SetDispMask(0);
     SetupDisplay240(0, 0, 0);
@@ -79,7 +77,6 @@ void EnterPrologue(void) {
     g_CameraCarIndex = 3;
 }
 
-void UpdatePrologueLoad(void);
 void UpdatePrologueLoad(void) {
     s32 delta;
 
@@ -124,7 +121,6 @@ void UpdatePrologueLoad(void) {
     DrawProportionalText(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
-void UpdatePrologueLoadStep0(void);
 void UpdatePrologueLoadStep0(void) {
     if (g_AssetLoadState == 0) {
         InstallCourseAssets();
@@ -135,7 +131,6 @@ void UpdatePrologueLoadStep0(void) {
     UpdatePrologueLoad();
 }
 
-void UpdatePrologueLoadStep1(void);
 void UpdatePrologueLoadStep1(void) {
     if (g_AssetLoadState == 0) {
         g_FadeStep = 4;
@@ -146,12 +141,10 @@ void UpdatePrologueLoadStep1(void) {
     UpdatePrologueLoad();
 }
 
-void UpdatePrologueLoadStep2(void);
 void UpdatePrologueLoadStep2(void) {
     UpdatePrologueLoad();
 }
 
-void DrawPrologueText(void);
 void DrawPrologueText(void) {
     s32 i;
     s32 offset;
@@ -225,14 +218,12 @@ void DrawPrologueText(void) {
     }
 }
 
-void ExitPrologue(void);
 void ExitPrologue(void) {
     g_SceneId = 6;
     PauseCdAudio();
     RequestSelectBgmAssets();
 }
 
-void UpdatePrologue(void);
 void UpdatePrologue(void) {
     s32 timer;
     s32 active;

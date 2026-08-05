@@ -23,7 +23,6 @@ s32 StGetBackloc(void *arg0);
 void StartStreamRead(void *arg0);
 void WaitFmvDecode(volatile void *arg0, s32 arg1);
 
-void DecodeFmvFrame(void);
 void DecodeFmvFrame(void) {
     s32 value;
     u8 sp10[16];
@@ -59,7 +58,6 @@ void DecodeFmvFrame(void) {
 extern s32 g_StreamReturnScene;
 void DecDCToutCallback(s32 arg0);
 void StUnSetRing(void);
-void EndFmv(void);
 void EndFmv(void) {
     DecDCToutCallback(0);
     StUnSetRing();
@@ -77,7 +75,6 @@ extern volatile u16 g_DispEnv1X;
 extern volatile u16 g_DispEnv1Y;
 extern volatile u32 g_FrameParity;
 
-void InitFmvContext(void *arg0, s32 arg1, s32 arg2);
 void InitFmvContext(void *arg0, s32 arg1, s32 arg2) {
     volatile u32 *words;
     volatile u16 *halves;

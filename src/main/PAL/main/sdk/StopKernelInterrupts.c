@@ -7,7 +7,6 @@ extern volatile u_short *g_IrqStatus;
 extern volatile u_short *g_IrqMask;
 extern volatile u_long *g_KernelDpcr;
 
-void *StopKernelInterrupts(void);
 void *StopKernelInterrupts(void) {
     u_short *state;
     volatile u_short *initialMask;

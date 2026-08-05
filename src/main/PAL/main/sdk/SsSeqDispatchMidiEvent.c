@@ -5,7 +5,6 @@ extern SeqStruct *g_SndSeqTable[];
 void SsSeqDispatchControlChange(long seq, long sep, long value);
 void SsSeqSetChannelProgram(long seq, long sep, long value);
 
-void SsSeqDispatchMidiEvent(short seq, short sep);
 void SsSeqDispatchMidiEvent(short seq, short sep) {
     SeqStruct *state = &g_SndSeqTable[seq][sep];
     u_char *p;

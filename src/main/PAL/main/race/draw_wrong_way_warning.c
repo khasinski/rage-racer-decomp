@@ -9,7 +9,6 @@ void SetShadeTex(u8 *arg0, s32 arg1);
 void AddPrim(void *ot, void *prim);
 void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("QueueDrawModePrim");
 
-void DrawWrongWayWarning(void);
 void DrawWrongWayWarning(void) {
     register u8 *packet __asm("$16");
     u8 *next;
@@ -84,7 +83,6 @@ void SetPolyF4(void *prim);
 void SetTile(void *prim);
 void DrawSpeedDigits(s32 x, s32 y, s32 speed);
 
-void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt);
 void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
     GameCarSpec *p = g_CarSpec;
     s32 cx = p->tachoNeedleX;
@@ -198,7 +196,6 @@ void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
 void SetSemiTrans(u8 *arg0, s32 arg1);
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2);
 
-void DrawFullscreenFadeTile(s32 color, s32 arg1);
 void DrawFullscreenFadeTile(s32 color, s32 arg1) {
     u8 *base = g_DrawBuffer;
     u8 *ot = base + 0xCC;
@@ -234,7 +231,6 @@ void DrawFullscreenFadeTile(s32 color, s32 arg1) {
 void SetSprt8(u8 *prim);
 void SetShadeTex(u8 *prim, s32 enabled);
 
-u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut);
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
     register u8 *out asm("$16") = prim;
     s32 xReg = x;

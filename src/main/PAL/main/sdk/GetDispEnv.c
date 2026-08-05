@@ -8,7 +8,6 @@ long GetDispEnv(long arg0) { MemCopy(arg0, &g_DispEnvCache, 0x14); return arg0; 
 
 extern GpuCallbacks *g_GpuFuncs;
 
-u_long GetODE(void);
 u_long GetODE(void) {
     u_long ret;
 
@@ -22,7 +21,6 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y);
 u_long Gpu_BuildTexWindowCmd(void *arg0);
 
-void SetTexWindow(DrawPacket *pkt, void *arg1);
 void SetTexWindow(DrawPacket *pkt, void *arg1) {
     pkt->code = 2;
     pkt->x0y0 = Gpu_BuildTexWindowCmd(arg1);
@@ -36,14 +34,12 @@ void SetDrawArea(DrawPacket *pkt, Rect *rect) {
     pkt->x1y1 = Gpu_BuildDrawAreaBottomRightCmd((short)(rect->x + rect->w - 1), (short)(rect->y + rect->h - 1));
 }
 
-void SetDrawOffset(DrawPacket *pkt, short *arg1);
 void SetDrawOffset(DrawPacket *pkt, short *arg1) {
     pkt->code = 2;
     pkt->x0y0 = Gpu_BuildDrawOffsetCmd(arg1[0], arg1[1]);
     pkt->x1y1 = 0;
 }
 
-void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2);
 void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2) {
     u_long cmd;
 
@@ -56,7 +52,6 @@ void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2) {
     pkt->x1y1 = 0;
 }
 
-void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4);
 void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4) {
     pkt->code = 2;
     pkt->x0y0 = Gpu_BuildDisplayMode(arg1, arg2, arg3);
@@ -84,7 +79,6 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y);
 u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("_get_mode");
 
-void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env);
 void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {
     u_long *out = packet;
     DrawEnvPacketSource *src = env;

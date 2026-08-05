@@ -306,7 +306,6 @@ void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
 void UpdateLoadedAudioVoices(s32 arg0, s32 arg1);
 
 
-s32 UpdateLapAndFinish(void *arg0, s32 arg1);
 s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
     s32 value;
     s32 result;
@@ -547,7 +546,6 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
     return returnValue;
 }
 
-void EnterRaceScene(void);
 void EnterRaceScene(void) {
     s32 pad[2];
     u8 *new_var;
@@ -657,7 +655,6 @@ void EnterRaceScene(void) {
     (void)pad;
 }
 
-void UpdateRaceScene(void);
 void UpdateRaceScene(void) {
     s32 option;
     s32 value;

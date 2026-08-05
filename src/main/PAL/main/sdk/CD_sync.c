@@ -48,7 +48,6 @@ static __inline__ void copy8(u_char *dst, u_char *src) {
     } while (--count != end);
 }
 
-long CD_sync(long mode, u_char *result);
 long CD_sync(long mode, u_char *result) {
     register long modeReg asm("$21");
     register u_char *resultReg asm("$22");

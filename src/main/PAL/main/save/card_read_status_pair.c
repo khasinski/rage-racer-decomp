@@ -5,7 +5,6 @@
 s32 _card_info(s32 arg0);
 s32 _card_load(s32 arg0);
 
-s32 CardReadStatusPair(s32 high, s32 low);
 s32 CardReadStatusPair(s32 high, s32 low) {
     s32 cmd;
     s32 ret;

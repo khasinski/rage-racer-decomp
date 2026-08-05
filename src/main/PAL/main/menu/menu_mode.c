@@ -14,7 +14,6 @@ extern s32 g_MenuAltLayout;
 
 void GameDrawTexturedQuadWide() asm("GameDrawTexturedQuad");
 
-void DrawMenuAltPanel(s32 arg0, s32 arg1);
 void DrawMenuAltPanel(s32 arg0, s32 arg1) {
     s32 step0;
     s32 step1;
@@ -158,7 +157,6 @@ extern SVec D_80011A48[];
 extern s32 D_8007FB48;
 
 
-void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     SVec verts[4];
     UVec out[4];
@@ -255,7 +253,6 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
 
 extern volatile s32 D_8007FB4C;
 
-void DrawTimeAttackPlate(s32 arg0);
 void DrawTimeAttackPlate(s32 arg0) {
     void *scratch = *(void **)0x1F800004;
     s32 step = arg0;
@@ -326,7 +323,6 @@ extern Matrix D_80082E1C;
 void SetColorMatrix(void *m);
 
 /* The menu-mode twin of InitTrackLighting. */
-void InitMenuLighting(void);
 void InitMenuLighting(void) {
     g_SceneColorMatrix = D_80082DFC;
     g_SceneLightMatrix = D_80082E1C;
@@ -394,7 +390,6 @@ u32 DrawEngineerShopScreen(s32 step);
 void DrawCarSpecGraph(s32);
 void DrawMenuLightBurst(s32);
 
-void InitMenuMode(void);
 void InitMenuMode(void) {
     GameRaceProgress *p;
     s32 *scratch;
@@ -500,7 +495,6 @@ void InitMenuMode(void) {
 }
 
 /* Counts the enabled entries of g_CarTable. */
-s32 CountOwnedCars(void);
 s32 CountOwnedCars(void) {
     s32 count = 0;
     s32 i = 0;

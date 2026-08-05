@@ -3,7 +3,6 @@
 void SetDQA(s32 arg0);
 void SetDQB(s32 arg0);
 
-void SetFogNear(s32 arg0, s32 arg1);
 void SetFogNear(s32 arg0, s32 arg1) {
     SetDQA(-((arg0 * 5) << 6) / arg1);
     SetDQB(0x1400000);
@@ -11,7 +10,6 @@ void SetFogNear(s32 arg0, s32 arg1) {
 
 s32 Lzc(s32 arg0);
 
-s32 CordicRotate(s32 arg0);
 s32 CordicRotate(s32 arg0) {
     s32 data[16];
     s32 *hi;
@@ -84,7 +82,6 @@ s32 CordicRotate(s32 arg0) {
     return data[7];
 }
 
-s32 SquareRoot12(s32 arg0);
 s32 SquareRoot12(s32 arg0) {
     s32 bits;
     s32 shift;
@@ -116,7 +113,6 @@ s32 SquareRoot12(s32 arg0) {
 
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
-void InitGeom(void);
 void InitGeom(void) {
     asm volatile(
         ".set noreorder\n"

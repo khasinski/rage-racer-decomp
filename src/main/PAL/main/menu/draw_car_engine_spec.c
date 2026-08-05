@@ -5,7 +5,6 @@ extern s32 D_80082E70[];
 
 void DrawText8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
-void DrawEngineSpecLabel(s32 arg0, s32 arg1, s32 arg2);
 void DrawEngineSpecLabel(s32 arg0, s32 arg1, s32 arg2) {
     DrawText8x8(arg0, arg1, D_80082E70[arg2], 0x78CC);
 }

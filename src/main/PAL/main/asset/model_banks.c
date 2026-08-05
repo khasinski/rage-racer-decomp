@@ -33,7 +33,6 @@ s32 GetCarUnlockLevel(s32 model) {
     return g_CarTable[model].modelVariant + g_CarModelUnlockBase[model];
 }
 
-void InitRenderState(s32 arg0);
 void InitRenderState(s32 arg0) {
     register s32 value asm("$2");
     register s32 ptr asm("$2");
@@ -68,7 +67,6 @@ void InitRenderState(s32 arg0) {
     *(s32 *)0x1F800068 = tmp;
 }
 
-void RegisterModelBank(s32 *base, s32 index);
 void RegisterModelBank(s32 *base, s32 index) {
     s32 *ptr;
     s32 i;
@@ -99,7 +97,6 @@ void RegisterModelBank(s32 *base, s32 index) {
     }
 }
 
-void UnrelocateModelBank(s32 *base, s32 offset);
 void UnrelocateModelBank(s32 *base, s32 offset) {
     s32 *ptr;
     s32 i;
@@ -129,7 +126,6 @@ void UnrelocateModelBank(s32 *base, s32 offset) {
     }
 }
 
-void SelectModelBank(s32 index);
 void SelectModelBank(s32 index) {
     s32 *entry;
     s32 ptr;
@@ -148,7 +144,6 @@ void SelectModelBank(s32 index) {
     *(s32 *)0x1F800050 = ptr + 0xC;
 }
 
-void RegisterCourseModels(s32 *base);
 void RegisterCourseModels(s32 *base) {
     s32 *ptr;
     s32 count;
@@ -181,7 +176,6 @@ void RegisterCourseModels(s32 *base) {
     }
 }
 
-void InstallTerrainCellData(s32 *base);
 void InstallTerrainCellData(s32 *base) {
     s32 *ptr;
     s32 count;
@@ -215,26 +209,21 @@ void InstallTerrainCellData(s32 *base) {
     }
 }
 
-void SetCarImageSlot(void *asset, s32 index);
 void SetCarImageSlot(void *asset, s32 index) {
     g_CarImageSlots[index] = asset;
 }
 
-void UploadCarImage(s32 index);
 void UploadCarImage(s32 index) {
     LoadImage(&g_CarImageRect, g_CarImageSlots[index]);
 }
 
-void SetCarModelSlot(void *asset, s32 index);
 void SetCarModelSlot(void *asset, s32 index) {
     g_CarModelSlots[index] = asset;
 }
 
-void SelectCarModelSlot(s32 index);
 void SelectCarModelSlot(s32 index) {
     g_CarModelAsset = g_CarModelSlots[index];
 }
 
-void ModelBankNoOp(void);
 void ModelBankNoOp(void) {
 }

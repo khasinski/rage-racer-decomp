@@ -103,7 +103,6 @@ void PlaySoundCue(s32 cue);
 void RampTeamLogoCanvas(s32 a, s32 b);
 void DrawTeamLogoCanvas(s32 a, s32 b);
 
-void UpdateDesignModeScreen(void);
 void UpdateDesignModeScreen(void) {
     s32 sel;
     u16 edge;
