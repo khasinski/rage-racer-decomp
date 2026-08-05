@@ -3,6 +3,7 @@
 #include "game/car.h"
 #include "game/track.h"
 #include "game/render.h"
+void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104");
 void AdvanceCarPosition() asm("func_8002F4E4");
 
 void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
@@ -148,9 +149,9 @@ void func_80030030(GameCarRuntime *arg0) {
         } else {
             phase = 0x1E00;
         }
-        func_8005C104(0, phase, volume);
+        SetIndexedEffectVoice(0, phase, volume);
     } else {
-        func_8005C104(-1, 0, 0);
+        SetIndexedEffectVoice(-1, 0, 0);
     }
 
     if (res < 0x80 && s4val < 0x800) {
@@ -313,7 +314,6 @@ void func_80030030(GameCarRuntime *arg0) {
 
 extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
 
-void func_8005C104(s32 index, s32 phase, s32 volume);
 
 /*
  * Car motion handler for state98 == 2 (airborne / jump): decays velocity and
@@ -336,9 +336,9 @@ void UpdateCarAirborne(GameCarRuntime *car) {
         } else {
             phase = 0x1e00;
         }
-        func_8005C104(0, phase, r->unk38 * 2 + 80);
+        SetIndexedEffectVoice(0, phase, r->unk38 * 2 + 80);
     } else {
-        func_8005C104(0, 0x1800, flag + 25);
+        SetIndexedEffectVoice(0, 0x1800, flag + 25);
     }
 
     {
@@ -378,7 +378,7 @@ void UpdateCarAirborne(GameCarRuntime *car) {
     }
 
     if (r->unk38 <= 0) {
-        func_8005C104(-1, 0, 0);
+        SetIndexedEffectVoice(-1, 0, 0);
         car->field_24 -= r->unk50;
         g_ShiftSoundLevel = 0;
         r->unk3C = 0;
@@ -423,7 +423,7 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
     car->field_C4 = sinA * coords[2] / 16384;
     car->field_CC = cosA * coords[2] / 16384;
 
-    func_8005C104(0, 0x1A80, (0x60 - (g_StandingStartSpin & 0x1F) * 2) * car->field_15C / 256);
+    SetIndexedEffectVoice(0, 0x1A80, (0x60 - (g_StandingStartSpin & 0x1F) * 2) * car->field_15C / 256);
 
     car->field_A4 = car->field_A4 / 10;
 
@@ -446,10 +446,10 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
             route->field_68 = 0;
             route->field_6C = 0;
             *(s32 *)&route->field_98 = 0;
-            func_8005C104(-1, 0, 0);
+            SetIndexedEffectVoice(-1, 0, 0);
         }
     } else {
-        func_8005C104(-1, 0, 0);
+        SetIndexedEffectVoice(-1, 0, 0);
         *(s32 *)((u8 *)car + 0x154) = 0;
         *(s32 *)&car->field_124 = 0;
         *(s32 *)&car->field_128 = 0;
