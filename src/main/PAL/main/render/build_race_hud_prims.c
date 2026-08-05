@@ -11,12 +11,13 @@ void BuildSpriteFromDesc(u8 *arg0, u8 *arg1) asm("func_80032FF0");
 void BuildRaceHudPrims(s32 arg0);
 void BuildRaceHudPrims(s32 arg0) {
     u8 *cursor;
-    register s32 col __asm("$17");
-    s32 bufferOffset;
+    s32 col;
     s32 row;
     s32 rowOffset;
 
     if (arg0 != 0) {
+        s32 bufferOffset;
+
         row = 0;
         rowOffset = 0;
 
@@ -50,6 +51,8 @@ nonzero_inner:
             goto nonzero_outer;
         }
     } else {
+        s32 bufferOffset;
+
         row = 0;
         rowOffset = (s32)D_801C0504;
         bufferOffset = 0;
