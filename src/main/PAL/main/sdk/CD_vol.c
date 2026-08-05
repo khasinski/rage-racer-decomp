@@ -22,7 +22,7 @@ extern volatile CdIntr g_CdSyncStatus;
 
 void KernelCallbackSlot3(void);
 void CdDispatchInterrupts(void);
-void KernelCallbackSlot2(long arg0, void *arg1) asm("func_8006DF64");
+void KernelCallbackSlot2(long arg0, void *arg1);
 long CD_cw(u_char command, u_char *params, u_char *result, long async);
 void LibcPutString(u_char *text);
 

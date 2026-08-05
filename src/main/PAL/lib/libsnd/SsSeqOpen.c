@@ -7,7 +7,7 @@ extern char g_MsgSeqTableFull[];
 
 long SsSeqParseHeader(long arg0, long arg1, long arg2);
 
-long SsSeqOpen(long seq_data, long vab_id) asm("func_8006F004");
+long SsSeqOpen(long seq_data, long vab_id);
 
 long SsSeqOpen(long seq_data, long vab_id) {
     long used;

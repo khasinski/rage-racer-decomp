@@ -167,7 +167,7 @@ extern u8 D_8007C73A[];
 
 void SetTile(u8 *arg0);
 void AddPrim(void *ot, void *prim);
-s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("func_80017390");
+s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 
 u8 *DrawMirrorFrame(u8 *packet);
 u8 *DrawMirrorFrame(u8 *packet) {

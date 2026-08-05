@@ -3,7 +3,7 @@
 #include "game/asset.h"
 #include "game/car.h"
 void InitSequenceAudio(void);
-s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
+s32 LoadAsset(s32 assetIndex, void *dst);
 
 extern u32 g_CarModelSlot;
 extern GameCarModelAsset *g_CarModelAsset;

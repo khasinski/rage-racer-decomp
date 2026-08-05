@@ -64,7 +64,7 @@ void OuterProduct0(void *v0, void *v1, void *v2);
 long NormalClip(long sxy0, long sxy1, long sxy2);
 long Lzc(long data);
 /* Transposes the 3x3 rotation part of m0 into m1, leaving the translation. */
-Matrix *TransposeMatrix(Matrix *m0, Matrix *m1) asm("func_80069CC8");
+Matrix *TransposeMatrix(Matrix *m0, Matrix *m1);
 
 /*
  * Matrix multiply family. Each loads m0 into the GTE rotation control registers

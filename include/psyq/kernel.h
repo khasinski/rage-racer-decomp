@@ -13,7 +13,7 @@ void waitVSync(long target, long timeoutFrames);
 void ChangeClearRCnt(long clear);
 void ChangeClearInterruptMask(long index, long clear);
 void KernelCallbackSlot3(void);
-void KernelCallbackSlot2(void) asm("func_8006DF64");
+void KernelCallbackSlot2(void);
 /* BIOS DMA callback installer: spec 0=MDECin 1=MDECout 2=GPU 3=CD-ROM 4=SPU.
  * Was declared ResetCallback here; that was wrong (docs/names.md 17). */
 void DMACallback(long spec, long callback);

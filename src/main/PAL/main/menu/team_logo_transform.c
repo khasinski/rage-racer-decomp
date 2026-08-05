@@ -731,7 +731,7 @@ extern s32 D_8007FB20;
 
 void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h);
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
-void DrawLogoRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r, u32 g, u32 b, u8 alpha) asm("func_80047024");
+void DrawLogoRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r, u32 g, u32 b, u8 alpha) asm("DrawSolidRect");
 void AddPrim(void *ot, void *prim);
 
 typedef struct Blob {
@@ -874,16 +874,16 @@ extern RaceRecord g_TimeRecords[2][4][5];
 void *FormatLapTime(void *dst, s32 timeMs);
 void DrawSprite(void *ot, s32 x, s16 y, s32 w, s32 h, s32 u, s32 v,
                     s32 r, s32 g, s32 b, s32 clut, s32 shadeTex,
-                    s32 semiTrans, s32 flags) asm("func_80046A2C");
+                    s32 semiTrans, s32 flags);
 void DrawLargeText(s32 x, s16 y, u8 *text, s32 r, s32 g, s32 b,
-                       s32 clut, s32 flags) asm("func_80047958");
+                       s32 clut, s32 flags);
 void GameDrawMenuButton(s32 x, s16 y, s32 w, s32 h, s32 r, s32 g, s32 b,
                         s32 flags, s32 textX, s32 textY,
-                        s32 caption) asm("func_80048B88");
+                        s32 caption);
 void DrawRectOutline(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
-                         s32 g, s32 b, s32 alpha) asm("func_80047460");
+                         s32 g, s32 b, s32 alpha);
 void DrawSolidRect(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
-                       s32 g, s32 b, s32 alpha) asm("func_80047024");
+                       s32 g, s32 b, s32 alpha);
 
 /* The animated five-row ranking/time-record panel. */
 s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking)

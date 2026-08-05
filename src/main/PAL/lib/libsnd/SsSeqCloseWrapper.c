@@ -2,7 +2,7 @@
 
 void SsSeqClose(short arg0);
 
-void SsSeqCloseWrapper(short arg0) asm("func_80071AC4");
+void SsSeqCloseWrapper(short arg0);
 
 void SsSeqCloseWrapper(short arg0) {
     SsSeqClose(arg0);

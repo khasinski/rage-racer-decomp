@@ -129,7 +129,7 @@ u8 *GameQueueTexturedRect(
 
 /* Local alias: retail passes the tpage through as a full word, so the narrow
  * parameter in the shared prototype would insert a truncation. */
-void SetDrawModeWide(DrawPacket *pkt, s32 a, s32 b, s32 tpage, void *tw) asm("func_800666F4");
+void SetDrawModeWide(DrawPacket *pkt, s32 a, s32 b, s32 tpage, void *tw) asm("SetDrawMode");
 
 /* Fills a DR_MODE packet in place; unlike QueueDrawModePrim it neither
  * links the packet nor advances the scratchpad cursor. No callers in retail. */

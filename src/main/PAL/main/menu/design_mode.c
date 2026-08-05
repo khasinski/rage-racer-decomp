@@ -15,7 +15,7 @@ extern s32 D_8009B2D4;
 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex,
-                   s32 semiTrans, s32 flags) asm("func_80046A2C");
+                   s32 semiTrans, s32 flags) asm("DrawSprite");
 
 s32 DrawDesignModeScreen(s32 step);
 s32 DrawDesignModeScreen(s32 arg0) {

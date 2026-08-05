@@ -25,7 +25,7 @@ void SsSetStereo(void) {
     g_SndMonoMode = 0;
 }
 
-u_char SsSetVoiceCount(u_char voices) asm("func_80072B04");
+u_char SsSetVoiceCount(u_char voices);
 
 u_char SsSetVoiceCount(u_char voices) {
     if (voices >= 25 || voices == 0) {
@@ -36,7 +36,7 @@ u_char SsSetVoiceCount(u_char voices) {
     return g_SndVoiceCount;
 }
 
-void SsVabClose(short vab_id) asm("func_80072B3C");
+void SsVabClose(short vab_id);
 
 void SsVabClose(short vab_id) {
     short id;

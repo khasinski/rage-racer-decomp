@@ -12,7 +12,7 @@ extern s32 D_8007FB40;
 extern s32 D_8007FB44;
 extern s32 g_MenuAltLayout;
 
-void GameDrawTexturedQuadWide() asm("func_80046E00");
+void GameDrawTexturedQuadWide() asm("GameDrawTexturedQuad");
 
 void DrawMenuAltPanel(s32 arg0, s32 arg1);
 void DrawMenuAltPanel(s32 arg0, s32 arg1) {

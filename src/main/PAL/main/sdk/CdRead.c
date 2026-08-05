@@ -25,7 +25,7 @@ extern u_char D_8007D87C[];
 extern u_char g_DrawModeEnv[];
 void SetSprt(u_char *prim);
 void AddPrim(void *ot, void *prim);
-void *SetDrawMode(void *prim, long a, long b, long c, void *d) asm("func_800666F4");
+void *SetDrawMode(void *prim, long a, long b, long c, void *d);
 long AddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8);
 
 long CdRead(long arg0, long arg1, long arg2);

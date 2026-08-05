@@ -56,7 +56,7 @@ void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2) {
     pkt->x1y1 = 0;
 }
 
-void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4) asm("func_800666F4");
+void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4);
 void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4) {
     pkt->code = 2;
     pkt->x0y0 = Gpu_BuildDisplayMode(arg1, arg2, arg3);

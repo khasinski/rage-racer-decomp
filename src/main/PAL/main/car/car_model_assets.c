@@ -5,7 +5,7 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/cd.h"
-s32 LoadAsset(s32 arg0, void *arg1) asm("func_80017C78");
+s32 LoadAsset(s32 arg0, void *arg1);
 
 extern u8 *g_CarModelAsset;
 

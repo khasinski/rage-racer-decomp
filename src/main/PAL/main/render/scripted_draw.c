@@ -16,7 +16,7 @@ void GameDrawSpriteWide(
     s32 arg10,
     s32 arg11,
     s32 arg12,
-    s32 arg13) asm("func_80046A2C");
+    s32 arg13) asm("DrawSprite");
 
 void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3);
 void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
@@ -112,7 +112,7 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
         alpha);
 }
 
-void GameDrawLineWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
+void GameDrawLineWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha) asm("DrawLine");
 
 void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2);
 void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
@@ -349,7 +349,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
 void GameDrawTexturedQuadWide(u8 *arg0, s16 x0, s16 y0, s16 x1a, s16 y0b, s16 x0b,
                    s16 y1a, s16 x1b, s16 y1b, s32 d0, s32 d1, s32 d2,
                    s32 d3, s32 d4, s32 d5, s32 d6, s32 d7, s32 dA,
-                   s32 dB, s32 dC, s32 h8, s32 f8, s32 f4, s32 dE) asm("func_80046E00");
+                   s32 dB, s32 dC, s32 h8, s32 f8, s32 f4, s32 dE) asm("GameDrawTexturedQuad");
 
 void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx);
 void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
@@ -698,13 +698,13 @@ loop:
     }
 }
 
-void DrawLargeTextWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("func_80047958");
-void drawSmallText(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("func_80047634");
-void GameDrawSolidRectWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8) asm("func_80047024");
+void DrawLargeTextWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("DrawLargeText");
+void drawSmallText(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("DrawSmallText");
+void GameDrawSolidRectWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8) asm("DrawSolidRect");
 
 void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                    u8 arg4, u8 arg5, u8 arg6,
-                   s32 flags, s32 arg8, s32 arg9, s32 arg10) asm("func_80048B88");
+                   s32 flags, s32 arg8, s32 arg9, s32 arg10);
 void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                    u8 arg4, u8 arg5, u8 arg6,
                    s32 flags, s32 arg8, s32 arg9, s32 arg10) {

@@ -8,7 +8,7 @@ extern long g_SndSeqOpenMask;
 extern short g_SndSeqTableSMax;
 extern short g_SndSeqTableTMax;
 void _SsSndDecrescendo(short seq, short sep);
-void _SsSndStopWide(long seq, long sep) asm("func_80072734");
+void _SsSndStopWide(long seq, long sep) asm("_SsSndStop");
 
 void SsSeqCalledTbyT(void);
 void SsSeqCalledTbyT(void) {

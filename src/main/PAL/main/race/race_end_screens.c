@@ -24,7 +24,7 @@ void PlaySoundCue(s32 cue);
 void RequestSelectBgmAssets(void);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void DrawRaceEndPrompt(void);
-void GameDrawSpriteWide(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13) asm("func_80046A2C");
+void GameDrawSpriteWide(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13) asm("DrawSprite");
 void DrawRaceEndBanner(s32 arg0);
 void ResetCourseProgress(s32 arg0);
 

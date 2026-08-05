@@ -88,7 +88,7 @@ void EnterTitleScreen(void) {
 
 extern u8 *g_DrawBuffer;
 
-void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("func_80017390");
+void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
 
 /* Full-width grey box over the title screen at OT slot 0x29; the caller
  * steps its brightness D_801E6F28 down by 2 a frame. */
@@ -113,7 +113,7 @@ extern s32 D_801E6F28;
 
 s32 rsin(s32 arg0);
 void DrawTitleFadeOverlay(s32 brightness);
-void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("func_80016F8C");
+void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSprite");
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2);
 
 void DrawPressStartPrompt(void);

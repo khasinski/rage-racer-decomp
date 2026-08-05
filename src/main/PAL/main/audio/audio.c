@@ -128,8 +128,8 @@ extern u8 g_SndTableArea[];
 extern char g_MsgVabOpenHeadError[];
 extern char g_MsgVabTransBodyError[];
 
-s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("func_800730BC");
-s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80072C4C");
+s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("SsVabTransBody");
+s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("SsVabOpenHeadSticky");
 void BiosExit(s32 arg0);
 
 s32 InitSoundWithVab(s32 header, s32 body) {
@@ -190,15 +190,15 @@ s32 InitSoundRuntime(void) {
 #include "psyq/snd.h"
 
 s32 SpuVmDamperStep(void);
-s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("func_800730BC");
-s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80072C4C");
+s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("SsVabTransBody");
+s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("SsVabOpenHeadSticky");
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
 s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table);
 s32 CloseAudioSlot(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0);
 void BiosExit(s32 arg0);
 void SsUtReverbOff(void);
-void _SsVmInitWide(s32 arg0) asm("func_8007865C");
+void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
 long SsUtKeyOffV(long voice);
 s32 VSync(s32 mode);
 void SsStopSoundTick(void);
@@ -1713,7 +1713,7 @@ void PlaySoundCue(s32 arg0) {
 }
 
 
-void SsUtPitchBendWide(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend) asm("func_80078130");
+void SsUtPitchBendWide(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend) asm("SsUtPitchBend");
 
 void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
 void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
@@ -1900,7 +1900,7 @@ void SetDefaultReverbDepth(void) {
 }
 
 extern s32 g_ReverbFadeStep;
-void _SsVmInitWide(s32 arg0) asm("func_8007865C");
+void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
 void SetReverbDepth(s32 arg0, s32 arg1);
 void RefreshSequenceVolumeScale(void);
 void InitSequenceAudio(void);
@@ -2402,9 +2402,9 @@ extern char g_MsgSeqVabOpenHeadError[];
 extern char g_MsgSeqVabTransBodyError[];
 
 void BiosExit(s32 arg0);
-s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("func_800730BC");
-s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80072C4C");
-void _SsVmInitWide(s32 arg0) asm("func_8007865C");
+s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("SsVabTransBody");
+s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("SsVabOpenHeadSticky");
+void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
 
 extern s16 g_VabIds[];
 

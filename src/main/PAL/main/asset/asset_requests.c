@@ -3,7 +3,7 @@
 #include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
-s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
+s32 LoadAsset(s32 assetIndex, void *dst);
 
 extern u8 *g_AssetLoadCursor;
 extern Rect g_TeamLogoClutRect;

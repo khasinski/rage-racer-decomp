@@ -213,7 +213,7 @@ extern u32 g_CountdownDigitPatterns[16];
 extern CVec g_CountdownCellColors[];
 
 s32 GameQueueDrawModePrimWide(
-    s32 ot, s32 prim, s32 tpage) asm("func_80017390");
+    s32 ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 void AddPrimsWide(void *ot, void *first, void *last) asm("AddPrims");
 
 void DrawStartCountdown(s32 sceneTimer) {

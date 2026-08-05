@@ -281,7 +281,7 @@ void DrawSprite(
     u16 clutIndex,
     s32 shadeTex,
     s32 semiTrans,
-    u32 flags) asm("func_80046A2C");
+    u32 flags);
 void DrawFlatTriangle(
     void *ot,
     s16 x0,
@@ -355,7 +355,7 @@ void GameDrawTexturedQuad(
     u16 clutIndex,
     s32 shadeTex,
     s32 semiTrans,
-    u16 tpage) asm("func_80046E00");
+    u16 tpage);
 /* TILE: solid rectangle at (x, y) sized (w, h). */
 void DrawSolidRect(
     void *ot,
@@ -366,7 +366,7 @@ void DrawSolidRect(
     u8 r,
     u8 g,
     u8 b,
-    u8 alpha) asm("func_80047024");
+    u8 alpha);
 void DrawLine(
     void *ot,
     s32 x0,
@@ -376,7 +376,7 @@ void DrawLine(
     u8 r,
     u8 g,
     u8 b,
-    u8 alpha) asm("func_8004711C");
+    u8 alpha);
 /* LINE_F3: flat-shaded 3-point polyline. */
 void DrawPolyLine3(
     void *ot,
@@ -414,7 +414,7 @@ void DrawRectOutline(
     u8 r,
     u8 g,
     u8 b,
-    u8 alpha) asm("func_80047460");
+    u8 alpha);
 /* Clips (x, y, w, h) to the 320x480 frame and queues a SetDrawArea packet. */
 void SetDrawClipRect(
     void *ot,
@@ -437,7 +437,7 @@ void DrawSmallText(
     u8 g,
     u8 b,
     u16 clutIndex,
-    s32 flags) asm("func_80047634");
+    s32 flags);
 void DrawLargeText(
     s32 x,
     s16 y,
@@ -446,7 +446,7 @@ void DrawLargeText(
     u8 g,
     u8 b,
     u16 clutIndex,
-    s32 flags) asm("func_80047958");
+    s32 flags);
 /* Right-aligned decimal, up to 10 digits, leading zeros blanked. Returns the
  * number of digit sprites emitted. flags: 1 = large font, 4 = fixed digits at
  * v=0xDC, 8 = draw into the overlay OT layer. */
@@ -557,7 +557,7 @@ u8 *GameQueueShadedSprite(
     u8 u,
     u8 v,
     u16 clutIndex,
-    u8 intensity) asm("func_80016F8C");
+    u8 intensity);
 u8 *GameQueueShadedSpriteTrans(
     void *ot,
     u8 *prim,
@@ -568,7 +568,7 @@ u8 *GameQueueShadedSpriteTrans(
     u8 u,
     u8 v,
     u16 clutIndex,
-    u8 intensity) asm("func_8001705C");
+    u8 intensity);
 u8 *GameQueueSpriteTrans(
     void *ot,
     u8 *prim,
@@ -578,7 +578,7 @@ u8 *GameQueueSpriteTrans(
     s16 h,
     u8 u,
     u8 v,
-    u16 clutIndex) asm("func_80017138");
+    u16 clutIndex);
 /* TILE, 16 bytes. */
 u8 *GameQueueTileTrans(
     void *ot,
@@ -589,7 +589,7 @@ u8 *GameQueueTileTrans(
     s16 h,
     u8 r,
     u8 g,
-    u8 b) asm("func_8001720C");
+    u8 b);
 /* LINE_F2, 16 bytes. */
 u8 *GameQueueLine(
     void *ot,
@@ -600,7 +600,7 @@ u8 *GameQueueLine(
     s16 y1,
     u8 r,
     u8 g,
-    u8 b) asm("func_800172D4");
+    u8 b);
 /*
  * POLY_FT4, 40 bytes, built as an axis-aligned rectangle at (x, y) sized
  * (w, h). A negative w or h flips the u or v axis instead of the geometry.
@@ -618,7 +618,7 @@ u8 *GameQueueShadedTexturedRect(
     u8 v,
     u16 clutIndex,
     u16 tpage,
-    u8 intensity) asm("func_800173F4");
+    u8 intensity);
 
 /*
  * Wide forms used by callers whose packet fields are still represented as
@@ -682,7 +682,7 @@ static __inline__ u8 *GameQueueTexturePacketWide(
  * alpha argument is not 0xFF. SetDrawModePacket only fills the packet in
  * place (no AddPrim, no cursor advance) and has no callers in the retail EXE.
  */
-u8 *QueueDrawModePrim(void *ot, u8 *prim, u16 tpage) asm("func_80017390");
+u8 *QueueDrawModePrim(void *ot, u8 *prim, u16 tpage);
 void SetDrawModePacket(u8 *prim, s32 tpage);
 
 /*

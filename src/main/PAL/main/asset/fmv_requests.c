@@ -2,7 +2,7 @@
 #include "game/asset.h"
 #include "game/race.h"
 #include "game/state.h"
-s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
+s32 LoadAsset(s32 assetIndex, void *dst);
 
 extern GameSceneAssetHeader *g_AssetLoadCursor;
 

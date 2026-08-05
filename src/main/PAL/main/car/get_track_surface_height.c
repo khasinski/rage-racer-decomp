@@ -437,7 +437,7 @@ extern u8 g_TachoNeedlePrim1PageA[];
 extern u8 g_TachoNeedlePrim1PageB[];
 
 void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
-void SetDrawModeWide(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4) asm("func_800666F4");
+void SetDrawModeWide(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4) asm("SetDrawMode");
 
 /*
  * Rebuilds the tachometer needle quad from the car spec block. The spec is

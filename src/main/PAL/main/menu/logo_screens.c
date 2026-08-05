@@ -35,7 +35,7 @@ extern u8 D_80082664;
 extern u8 g_MenuBlankCaption;
 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
-                   s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("func_80046A2C");
+                   s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawTeamLogoCanvas(s32 arg0, s32 arg1);

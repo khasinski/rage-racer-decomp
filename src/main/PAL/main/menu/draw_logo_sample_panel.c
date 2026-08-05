@@ -1,6 +1,6 @@
 #include "common.h"
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7,
-                   s32 arg8) asm("func_80047460");
+                   s32 arg8);
 
 extern s32 D_8007FB24;
 extern s32 D_8007FB28;
@@ -10,12 +10,12 @@ extern u8 g_TeamNameChars[];
 extern u16 g_TeamLogoSwatches[];
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
-                   u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) asm("func_80046A2C");
-void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
+                   u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
+void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 s32 rsin(s32 angle);
 
-void DrawLogoSprite() asm("func_80046A2C");
-void DrawLogoRect() asm("func_80047024");
+void DrawLogoSprite() asm("DrawSprite");
+void DrawLogoRect() asm("DrawSolidRect");
 
 void DrawLogoSamplePanel(s32 arg0, s32 arg1);
 void DrawLogoSamplePanel(s32 arg0, s32 arg1) {

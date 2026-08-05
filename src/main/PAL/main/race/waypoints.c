@@ -56,7 +56,7 @@ extern u32 g_ScratchRenderMode;
 extern s16 g_PlayerLap;
 
 
-void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("func_80017390");
+void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("QueueDrawModePrim");
 
 void AddPrim(void *ot, void *prim);
 

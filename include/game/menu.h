@@ -150,7 +150,7 @@ void GameDrawMenuButton(
     s32 flags,
     s32 textX,
     s32 textY,
-    s32 caption) asm("func_80048B88");
+    s32 caption);
 void DrawMenuCursorBox(
     s32 x0,
     s32 y0,
@@ -246,7 +246,7 @@ void DrawCarSpecGraph();
  * and truncates them itself, while car_select.c, shop_screens.c and
  * design_screens.c all pass a third argument.  The empty list lets each
  * caller keep the argument list it was compiled with. */
-void DrawCarEngineSpec() asm("func_80052158");
+void DrawCarEngineSpec();
 /* The TEAM NAME 4x11 grid, its highlight and caret, and the typed name. */
 void DrawTeamNameEntry(s32 step, s32 cursorIndex);
 /* The 3D car view behind screens 3, 4, 5, 6, 10, 11, 12: eases

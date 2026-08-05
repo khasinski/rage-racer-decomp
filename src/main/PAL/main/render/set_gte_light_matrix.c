@@ -221,7 +221,7 @@ u8 *QueueShadedSpriteNine(
     s32 h,
     s32 u,
     s32 v,
-    s32 clutIndex) asm("func_80016F8C");
+    s32 clutIndex) asm("GameQueueShadedSprite");
 
 /* Local wide-parameter views; see GameQueueSprite.c. */
 u8 *QueueSpriteTransWide(
@@ -233,8 +233,8 @@ u8 *QueueSpriteTransWide(
     s32 h,
     s32 u,
     s32 v,
-    s32 clutIndex) asm("func_80017138");
-u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("func_80017390");
+    s32 clutIndex) asm("GameQueueSpriteTrans");
+u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("QueueDrawModePrim");
 
 /* Local declaration: `selection` is a short here - retail loads the argument
  * slot as a word and sign-extends it into the texel offset. */

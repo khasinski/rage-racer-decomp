@@ -4,7 +4,7 @@
 #include "game/car.h"
 #include "game/race.h"
 #include "game/cd.h"
-s32 LoadAsset(s32 arg0, void *arg1) asm("func_80017C78");
+s32 LoadAsset(s32 arg0, void *arg1);
 
 /*
  * Every `X + *(s32 *)(X + 4*k)` below is sub-block k of the loaded asset

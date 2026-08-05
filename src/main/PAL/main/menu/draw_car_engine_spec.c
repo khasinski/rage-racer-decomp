@@ -25,10 +25,10 @@ extern u8 D_80011B5C[];
 
 void drawSprite(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r,
                 s32 g, s32 b, s32 clut, s32 shadeTex, s32 semiTrans,
-                s32 flags) asm("func_80046A2C");
+                s32 flags) asm("DrawSprite");
 void drawSmallText(s32 x, s32 y, u8 *str, s32 r, s32 g, s32 b, s32 clut,
-                   s32 flags) asm("func_80047634");
-s32 gsprintf(u8 *buf, u8 *fmt, s32 val) asm("func_800632F0");
+                   s32 flags) asm("DrawSmallText");
+s32 gsprintf(u8 *buf, u8 *fmt, s32 val) asm("LibcSprintf");
 
 void DrawCarEngineSpec(s32 a0raw, s32 arg1) {
     void *ot;

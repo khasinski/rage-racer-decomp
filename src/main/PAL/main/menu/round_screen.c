@@ -162,8 +162,8 @@ extern s32 g_BestLapTimes[][4][2];
 
 s32 UpdateRoundScreenFade(s32 arg0);
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
-                   s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags) asm("func_80046A2C");
-void LibcSprintf(void *dst, void *fmt, s32 v) asm("func_800632F0");
+                   s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags) asm("DrawSprite");
+void LibcSprintf(void *dst, void *fmt, s32 v);
 void FormatLapTime(void *dst, s32 v);
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
@@ -207,7 +207,7 @@ void DrawRoundScreen(void) {
     }
 }
 
-s32 GameQueueDrawModePrimWide(void *ot, s32 p, s32 a) asm("func_80017390");
+s32 GameQueueDrawModePrimWide(void *ot, s32 p, s32 a) asm("QueueDrawModePrim");
 s32 AddTilePrim(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
 
 /* The BGM row: the selection number and the track title from g_BgmTrackNames. */

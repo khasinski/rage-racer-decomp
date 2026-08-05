@@ -23,10 +23,10 @@ void GameDrawSpriteWide(
     s32 clut,
     s32 sh,
     s32 st,
-    s32 flags) asm("func_80046A2C");
-void *QueueDrawModePrim(void *ot, void *prim, s32 arg2) asm("func_80017390");
+    s32 flags) asm("DrawSprite");
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
-void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047634");
+void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags);
 void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
     u8 *str;
     s32 x;
@@ -155,7 +155,7 @@ void GameDrawSpriteWide(
     s32 flags);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
-void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047958");
+void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags);
 void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
     u8 *str;
     s32 x;

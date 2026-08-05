@@ -26,9 +26,9 @@ typedef union {
 } GrandPrixIntroSelection;
 
 void *GameQueueTileTransWide(
-    void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("func_8001720C");
+    void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
 
-void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 arg2) asm("func_80017390");
+void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 arg2) asm("QueueDrawModePrim");
 extern s32 g_SeriesCleared;
 extern s32 g_EndingWashLevel;
 extern s32 g_ReplayFrameCount;
@@ -77,7 +77,7 @@ extern char g_CaptionLapTime[];
 extern GrandPrixIntroLayout g_ResultPlaceSprites[];
 extern GrandPrixIntroPosition g_ClassPlaceBarSizes[];
 
-void LibcSprintf(void *dst, void *fmt, ...) asm("func_800632F0");
+void LibcSprintf(void *dst, void *fmt, ...);
 void DrawResultScreen(void);
 void *FormatLapTime(void *dst, s32 value);
 

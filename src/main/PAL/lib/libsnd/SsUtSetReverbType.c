@@ -4,7 +4,7 @@
 extern SpuReverbAttr g_SndReverbAttr;
 extern short g_SndReverbAttrMode;
 
-long SsUtSetReverbType(long type) asm("func_80073614");
+long SsUtSetReverbType(long type);
 long SsUtSetReverbType(long type) {
     register long normalized asm("v1");
     long negative;
@@ -65,7 +65,7 @@ void SsUtSetReverbFeedback(long feedback) {
     SpuSetReverbModeParam(&g_SndReverbAttr);
 }
 
-void SsUtSetReverbDepth(long left, long right) asm("func_80073748");
+void SsUtSetReverbDepth(long left, long right);
 void SsUtSetReverbDepth(long left, long right) {
     g_SndReverbAttr.mask = 0x6;
     g_SndReverbAttr.depth.left = ((short)left * 0x7FFF) / 0x7F;

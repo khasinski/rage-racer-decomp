@@ -19,7 +19,7 @@ extern u8 *g_AssetBlockPtr;
 extern char *g_AssetPaths[];
 
 /* Load asset assetIndex into dst; returns loaded size/status. */
-s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
+s32 LoadAsset(s32 assetIndex, void *dst);
 
 /* Phase of LoadAsset's own CD state machine, 0..6 (seek, SetLoc, CdRead,
  * wait, success, failure). Sequences one transfer, unlike g_AssetLoadState. */

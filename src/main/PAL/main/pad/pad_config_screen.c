@@ -15,8 +15,8 @@ u8 *QueueSpriteTransWide(
     s32 h,
     s32 u,
     s32 v,
-    s32 clutIndex) asm("func_80017138");
-u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("func_80017390");
+    s32 clutIndex) asm("GameQueueSpriteTrans");
+u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("QueueDrawModePrim");
 s32 AddTilePrim(
     s32 ot,
     s32 prim,
@@ -95,7 +95,7 @@ u8 *QueueLineWide(
     s32 y1,
     s32 r,
     s32 g,
-    s32 b) asm("func_800172D4");
+    s32 b) asm("GameQueueLine");
 
 /*
  * The five green callout lines joining each action label to its button: one

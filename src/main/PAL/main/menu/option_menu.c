@@ -8,8 +8,8 @@
 
 typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
 extern s32 g_OptionMenuCursor;
-s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80017138");
-s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80017390");
+s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueSpriteTrans");
+s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 void DrawMenuCursorArrow(s32 arg0, s32 arg1);
 extern s32 g_SoundOptionCursor;
 extern s32 g_ClassRecordMenuCursor;
@@ -40,7 +40,7 @@ extern s32 g_MonoOutput;
 extern s32 g_BgmVolumeSetting;
 extern s32 g_SfxVolumeSetting;
 void DrawOptionHintBar(s32 arg0);
-s32 GameQueueShadedSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("func_8001705C");
+s32 GameQueueShadedSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSpriteTrans");
 /* One volume slider row: `level` filled 4x0x18 bars between two end glyphs. */
 void DrawVolumeBar(s32 arg0, s32 arg1);
 void DrawVolumeBar(s32 arg0, s32 arg1);

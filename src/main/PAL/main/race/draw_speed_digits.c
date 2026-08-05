@@ -5,7 +5,7 @@
 extern u16 g_HudGlyphClut;
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut);
-void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("func_80017390");
+void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("QueueDrawModePrim");
 
 void DrawSpeedDigits(s32 x, s32 y, s32 value);
 void DrawSpeedDigits(s32 x, s32 y, s32 value) {

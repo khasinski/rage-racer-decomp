@@ -13,7 +13,7 @@ extern char g_FmtCardDevice[];
 
 void ClearMemoryCardHwEvents(void);
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
-void LibcSprintf() asm("func_800632F0");
+void LibcSprintf();
 void ClearMemoryCardSwEvents(void);
 s32 PollMemoryCardHwEvent(void);
 s32 WaitMemoryCardSwEvent(void);
@@ -429,7 +429,7 @@ extern char g_FmtString[];
 extern Rect g_SaveIconRect;
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
-void LibcSprintf() asm("func_800632F0");
+void LibcSprintf();
 void StoreImage(Rect *rect, void *data);
 void DrawSync(long mode);
 
@@ -1418,7 +1418,7 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
 extern char g_FmtCardWildcard[];
 extern char g_McDirEntries[];
 
-void LibcSprintf() asm("func_800632F0");
+void LibcSprintf();
 
 s32 CountMemoryCardFiles(s32 port, s32 slot) {
     char path[0x20];
@@ -1498,7 +1498,7 @@ s32 RefreshMemoryCardSaveStatus(s32 slot, GameSaveHeaderRow *header) {
 extern char g_FmtPlayTime[];
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
-void LibcSprintf() asm("func_800632F0");
+void LibcSprintf();
 
 void *FormatSaveElapsedTime(void *dst, u32 seconds) {
     u32 hours = seconds / 216000;
@@ -1550,8 +1550,8 @@ extern s32 g_McFreeBlocks;
 
 /* DrawLargeText with word-wide parameters; the header spelling does not
  * match here. See DrawText8x8 above. */
-void DrawLargeTextWide(s32, s32, void *, s32, s32, s32, s32, s32) asm("func_80047958");
-void LibcSprintf() asm("func_800632F0");
+void DrawLargeTextWide(s32, s32, void *, s32, s32, s32, s32, s32) asm("DrawLargeText");
+void LibcSprintf();
 
 void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     char text[16];
@@ -1680,7 +1680,7 @@ u16 PollMenuBackInput(void) {
     return *state & 0x90;
 }
 
-void DrawFullscreenFadeTile(s32 level, s32 tpage) asm("func_80023A60");
+void DrawFullscreenFadeTile(s32 level, s32 tpage) asm("DrawFullscreenFadeTile480");
 
 void DrawMenuFadeOverlay(s32 level) {
     DrawFullscreenFadeTile(level, 0x40);

@@ -39,7 +39,7 @@ extern long D_8009A51C;
 extern u_char D_80013BA8[];
 extern u_char D_80013BC4[];
 
-void RegisterKernelCallback(long slot, void *callback) asm("func_8006DF64");
+void RegisterKernelCallback(long slot, void *callback) asm("KernelCallbackSlot2");
 void *setIntrVSyncAddress(void) asm("setIntrVSync");
 void *setIntrDMAAddress(void) asm("setIntrDMA");
 

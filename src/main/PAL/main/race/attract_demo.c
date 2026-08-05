@@ -33,7 +33,7 @@ void DrawCarSpecSprite(
     u32 arg10,
     u32 arg11,
     u32 arg12,
-    u32 arg13) asm("func_80046A2C");
+    u32 arg13) asm("DrawSprite");
 
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];

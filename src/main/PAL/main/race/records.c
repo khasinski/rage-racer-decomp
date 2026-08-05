@@ -20,7 +20,7 @@ extern s32 g_TimeRecordTimes;
 extern u16 g_TimeRecordCars;
 extern s32 g_BestSectorTimes;
 extern char g_FmtLapTime[];
-void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2) asm("func_800632F0");
+void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2);
 extern char g_TextTimeAttack[];
 extern char g_TextCourseIn[];
 void DrawProportionalText(s32 arg0, s32 arg1, char *arg2, s32 arg3);

@@ -21,12 +21,12 @@ typedef SeqStruct SequenceState;
 #define SS_SEQ_FLAG_TEMPO_DEC 0x40
 #define SS_SEQ_FLAG_TEMPO_INC 0x80
 
-void _SsSndStop(short seq, short sep) asm("func_80072734");
+void _SsSndStop(short seq, short sep);
 void SsSeqStop(long seq);
 void SsSepStop(long seq, long sep);
 void _SsSndTempo(short seq, short sep);
-void SsUtSetReverbDepth(long left, long right) asm("func_80073748");
-long SsUtSetReverbType(long type) asm("func_80073614");
+void SsUtSetReverbDepth(long left, long right);
+long SsUtSetReverbType(long type);
 long SsUtGetReverbType(void);
 void SsUtReverbOn(void);
 void SsUtReverbOff(void);
@@ -50,7 +50,7 @@ long SsUtKeyOnV(
     long fine,
     long volL,
     long volR);
-void _SsVmInit(void) asm("func_8007865C");
+void _SsVmInit(void);
 
 void SsSetMVol(short left, short right);
 void SsSetSerialVol(u_char source, short left, short right);
@@ -58,7 +58,7 @@ void SsSetSpuInputAttr(u_char source, u_char field, u_char value);
 /* LibRef47 14-13 gives `short SsSeqOpen(u_long *addr, short vab_id)`. The body
  * here takes one argument, so this is the one-argument internal entry, not the
  * documented API. */
-long SsSeqOpen(long seq_data) asm("func_8006F004");
+long SsSeqOpen(long seq_data);
 void SsSeqAdvanceChannelDelta(long seq, long channel);
 void SsSeqSetChannelPitchBend(long seq, long channel, long pitch, long amount);
 void SsSeqApplyProgramChange(long seq, long channel);
@@ -72,7 +72,7 @@ void SsSeqPause(long seq, long sep);
 void SsSeqAdvanceChannelTick(long seq, long sep);
 void SsSeqResume(long seq, long sep);
 void SsSeqClose(long seq);
-void SsSeqCloseWrapper(short seq) asm("func_80071AC4");
+void SsSeqCloseWrapper(short seq);
 void SsSepCloseWrapper(short seq);
 void _SsInitTables(void);
 void ssinit(void);
@@ -98,15 +98,15 @@ long SsSepGetVol(long seq, long sep, short *voll, short *volr);
 void SsSetReservedVoice(u_char voices);
 void SsSetMono(void);
 void SsSetStereo(void);
-u_char SsSetVoiceCount(u_char voices) asm("func_80072B04");
-void SsVabClose(short vab_id) asm("func_80072B3C");
+u_char SsSetVoiceCount(u_char voices);
+void SsVabClose(short vab_id);
 short SsVabOpen(u_char *addr, VabHdr *vab_header);
 short SsVabOpenHead(u_char *addr, short vab_id);
-short SsVabOpenHeadSticky(u_char *addr, short vab_id, u_long spu_addr) asm("func_80072C4C");
+short SsVabOpenHeadSticky(u_char *addr, short vab_id, u_long spu_addr);
 short SsVabFakeHead(u_char *addr, short vab_id, u_long spu_addr);
 short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAddr);
-short SsVabTransBody(u_char *addr, short vab_id) asm("func_800730BC");
-short SsVabTransCompleted(short immediate_flag) asm("func_8007317C");
+short SsVabTransBody(u_char *addr, short vab_id);
+short SsVabTransCompleted(short immediate_flag);
 void SpuVmDamperOff(void);
 void SpuVmDamperOn(void);
 /* The tick entry point: interprets SEQ/SEP data and carries out playback
@@ -139,12 +139,12 @@ long SsUtGetProgVol(long vab_id, long program);
 long SsUtSetProgPan(long vab_id, long program, long pan);
 long SsUtGetProgPan(long vab_id, long program);
 long SsUtKeyOffV(long voice);
-long SsUtPitchBend(long voice, long vab_id, long program, long note, u_short pbend) asm("func_80078130");
-long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long old_fine, long new_note, long new_fine) asm("func_800781C0");
+long SsUtPitchBend(long voice, long vab_id, long program, long note, u_short pbend);
+long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long old_fine, long new_note, long new_fine);
 long SsUtChangeADSR(long voice, long vab_id, long program, long old_note, long adsr1, long adsr2);
 long SsUtGetDetVVol(long voice, short *left, short *right);
 long SsUtSetDetVVol(long voice, short left, short right);
-long SsUtSetVVol(long voice, short left, short right) asm("func_80078528");
+long SsUtSetVVol(long voice, short left, short right);
 long SsUtAutoVol(long voice, long start_vol, long end_vol, long delta_time);
 long SsUtAutoPan(long voice, long start_pan, long end_pan, long delta_time);
 void SsSeqSetNoteParam2C(long seq, long sep, u_char value);

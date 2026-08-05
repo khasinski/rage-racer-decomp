@@ -10,7 +10,7 @@ extern s32 FindNearestTrackCamera();
 extern s32 rcos(s32);
 extern s32 SquareRoot0(s32);
 extern void *ApplyMatrixLV(void *, void *, void *);
-extern void *TransposeMatrixWide(void *, void *) asm("func_80069CC8");
+extern void *TransposeMatrixWide(void *, void *) asm("TransposeMatrix");
 /* Chase-view (mode 1) distance preset, 0..2: eye height 0x3A / 0x59 / 0x97 and
  * pull-back 0x118 / 0x140 / 0x190, plus a -0x90 vs -0x60 pitch bias. Sits in
  * .data at 0, and nothing in the image ever writes it, so retail is always 0. */

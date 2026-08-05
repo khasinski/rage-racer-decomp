@@ -23,7 +23,7 @@ extern u8 *g_PlaceSuffixNames[];
 extern s32 g_CarClassNames[];
 extern s32 g_CarNames[];
 void *FormatLapTime(void *dst, s32 value);
-void LibcSprintf() asm("func_800632F0");
+void LibcSprintf();
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern volatile s32 g_RaceTotalTime;
 extern volatile u16 g_PlayerCarIndex;

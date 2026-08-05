@@ -11,7 +11,7 @@ extern u8 g_FmtMoney[];
 extern u8 g_CaptionTotalMoney[];
 extern u8 g_CaptionPromotionBonus[];
 void DrawProportionalText(s32 id, void *dst, void *src, s32 arg3);
-void LibcSprintf(void *dst, void *fmt, s32 val) asm("func_800632F0");
+void LibcSprintf(void *dst, void *fmt, s32 val);
 extern s32 g_CourseProgress;
 extern s32 g_ClassClearFanfareTimer;
 extern s32 g_ClassCompleted;

@@ -23,12 +23,12 @@ long SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3);
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg4);
 u_short SpuVmCalculateTonePitch(long arg0, long arg1);
 
-long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4) asm("func_80078130");
-long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) asm("func_800781C0");
+long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4);
+long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6);
 long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5);
 long SsUtGetDetVVol(long arg0, short *arg1, short *arg2);
 long SsUtSetDetVVol(long arg0, short arg1, short arg2);
-long SsUtSetVVol(long arg0, long arg1, long arg2) asm("func_80078528");
+long SsUtSetVVol(long arg0, long arg1, long arg2);
 long SsUtAutoVol(long arg0, long arg1, long arg2, long arg3);
 long SsUtAutoPan(long arg0, long arg1, long arg2, long arg3);
 

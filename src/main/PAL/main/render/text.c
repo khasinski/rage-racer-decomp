@@ -53,7 +53,7 @@ void SetDrawModeWide8x8(
     s32 dither,
     s32 drawToDisplay,
     s32 tpage,
-    void *textureWindow) asm("func_800666F4");
+    void *textureWindow) asm("SetDrawMode");
 
 void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
     u8 **scratch = (u8 **)0x1F800000;
@@ -484,7 +484,7 @@ u8 *GameQueueShadedSprite(
     s32 u,
     s32 v,
     s32 clutIndex,
-    s32 intensity) asm("func_80016F8C");
+    s32 intensity);
 
 /* SPRT, 20 bytes: a textured sprite modulated by `intensity` on all three
  * channels (no SetShadeTex, so the texel is shaded). */
@@ -528,7 +528,7 @@ u8 *GameQueueShadedSpriteTrans(
     s32 u,
     s32 v,
     s32 clutIndex,
-    s32 intensity) asm("func_8001705C");
+    s32 intensity);
 
 /* SPRT, 20 bytes: GameQueueShadedSprite plus SetSemiTrans. */
 u8 *GameQueueShadedSpriteTrans(
@@ -571,7 +571,7 @@ u8 *GameQueueSpriteTrans(
     s32 h,
     s32 u,
     s32 v,
-    s32 clutIndex) asm("func_80017138");
+    s32 clutIndex);
 
 /* SPRT, 20 bytes: GameQueueSprite plus SetSemiTrans. */
 u8 *GameQueueSpriteTrans(
@@ -611,7 +611,7 @@ u8 *GameQueueTileTrans(
     s32 h,
     s32 r,
     s32 g,
-    s32 b) asm("func_8001720C");
+    s32 b);
 
 /* TILE, 16 bytes: a semi-transparent solid rectangle linked into `ot`.
  * Returns the advanced packet cursor. */
@@ -657,7 +657,7 @@ u8 *GameQueueLine(
     s32 y1,
     s32 r,
     s32 g,
-    s32 b) asm("func_800172D4");
+    s32 b);
 
 /* LINE_F2, 16 bytes: one flat-shaded line, linked into `ot`. Returns the
  * advanced packet cursor. */

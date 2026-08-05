@@ -15,7 +15,7 @@ extern s32 g_ScreenOffsetEditX;
 void DrawSoundOptionScreen(void);
 void ApplyAudioSettings(void);
 void PlaySoundCue(s32 cue);
-s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80017138");
+s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueSpriteTrans");
 void DrawOptionHintBar(s32 arg0);
 extern s32 g_ScreenOffsetEditY;
 extern s32 g_ScreenOffsetX;
@@ -30,7 +30,7 @@ void DrawScreenAdjustScreen(void);
 extern s32 g_OptionLetterboxHeight;
 void DrawPadTypeHint(void);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 QueueLineWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_800172D4");
+s32 QueueLineWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueLine");
 /* The setup scene's per-frame overlay: pad hint, letterbox, and the alignment frame in mode 6. */
 void DrawOptionSceneOverlay(void);
 void DrawOptionSceneOverlay(void);

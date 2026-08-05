@@ -1,6 +1,6 @@
 #include "common.h"
 extern void DrawRectOutline(
-    s32 ot, s16 x, s16 y, s16 w, s32 h, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047460");
+    s32 ot, s16 x, s16 y, s16 w, s32 h, u8 r, u8 g, u8 b, u8 alpha);
 extern void GameDrawTexturedQuad(
     s32 ot,
     s16 x0,
@@ -25,7 +25,7 @@ extern void GameDrawTexturedQuad(
     s32 clut,
     s32 shadeTex,
     s32 semiTrans,
-    s32 tpage) asm("func_80046E00");
+    s32 tpage);
 
 extern s32 D_8009B280;
 extern u8 D_8009B284;
@@ -89,7 +89,7 @@ extern void DrawSprite(
     u16 clut,
     s32 shadeTex,
     s32 semiTrans,
-    s32 flags) asm("func_80046A2C");
+    s32 flags);
 extern void func_80046A2C_prepared(
     s32 ot,
     s16 x,
@@ -104,9 +104,9 @@ extern void func_80046A2C_prepared(
     u16 clut,
     s32 shadeTex,
     s32 semiTrans,
-    s32 flags) asm("func_80046A2C");
+    s32 flags) asm("DrawSprite");
 extern void DrawLine(
-    s32 ot, s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
+    s32 ot, s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b, u8 alpha);
 extern void GameDrawNumber(
     s16 x, s32 y, s16 flags, s32 value, u8 r, u8 g, u8 b, s32 clut, s32 primitiveCount);
 
@@ -119,7 +119,7 @@ void GameDrawSolidRectWide(
     s32 arg5,
     s32 arg6,
     s32 arg7,
-    s32 arg8) asm("func_80047024");
+    s32 arg8) asm("DrawSolidRect");
 void func_80047024_prepared(
     s32 arg0,
     s16 arg1,
@@ -129,7 +129,7 @@ void func_80047024_prepared(
     u8 arg5,
     u8 arg6,
     u8 arg7,
-    u8 arg8) asm("func_80047024");
+    u8 arg8) asm("DrawSolidRect");
 
 void DrawTeamLogoCanvasFade(s32 delta);
 void DrawTeamLogoCanvasFade(s32 delta) {

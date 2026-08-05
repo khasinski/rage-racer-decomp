@@ -94,7 +94,7 @@ SysEnqIntRP = SysEnqIntRPStub;
 .L8002E3E4_main = UpdatePlayerCar + 0x4E8;
 .L800390D4_main = UpdateCarBodyKick + 0xE4;
 .L80040E20 = UpdateZoneAmbience + 0x6C;
-.L800479F0_main = func_80047958 + 0x98;
+.L800479F0_main = DrawLargeText + 0x98;
 .L800498B8_main = DrawCarSpecGraph + 0x1C8;
 .L8004DD30_main = DrawRankingTable + 0x9AC;
 .L8004DE18_main = DrawRankingTable + 0xA94;
@@ -105,7 +105,7 @@ SysEnqIntRP = SysEnqIntRPStub;
 .L80055050_main = CanSelectNextCourse + 0x19C8;
 .L80056060_main = func_80055FDC + 0x84;
 .L80059B54_main = UpdateCarListCursor + 0x834;
-.L800635D0_main = func_800632F0 + 0x2E0;
+.L800635D0_main = LibcSprintf + 0x2E0;
 .L80070740_main = SsSeqApplyNrpn + 0x94;
 .L8007082C_main = SsSeqApplyNrpn + 0x180;
 

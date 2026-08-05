@@ -25,9 +25,9 @@ extern s32 g_MenuHintButtonsVisible;
 extern u8 g_PadType;
 
 
-void GameDrawSolidRectWide(void *, s32, s32, s32, s32, s32, s32, s32, s32) asm("func_80047024");
+void GameDrawSolidRectWide(void *, s32, s32, s32, s32, s32, s32, s32, s32) asm("DrawSolidRect");
 s32 RunTimedDrawScript(void *, void *);
-void GameDrawSpriteWide(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32) asm("func_80046A2C");
+void GameDrawSpriteWide(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32) asm("DrawSprite");
 void DrawBitPatternOverlay(s32);
 
 /* Scene 8: the menu-mode per-frame dispatcher. Runs the two

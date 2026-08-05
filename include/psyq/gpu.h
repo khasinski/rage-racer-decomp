@@ -304,7 +304,7 @@ void SetDrawMode(
     long dfe,
     long dtd,
     u_short tpage,
-    void *tw) asm("func_800666F4");
+    void *tw);
 long LoadClut(void *clut, long x, long y);
 long LoadClut2(void *clut, long x, long y);
 /* g_GraphType (mode) and g_GraphDebug (debug level) accessors. */
