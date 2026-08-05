@@ -6,7 +6,7 @@
 extern char g_TextNowLoading[];
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
-void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
+void DrawProportionalTextWide(s32 arg0, s32 arg1, char *arg2, s32 arg3) asm("func_80016EA0");
 
 void ExitBgmSelect(void);
 void ExitBgmSelect(void) {
@@ -29,5 +29,5 @@ void ExitBgmSelect(void) {
         }
     }
 
-    func_80016EA0(0x5E, 0x72, g_TextNowLoading, 0x7812);
+    DrawProportionalTextWide(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }

@@ -9,9 +9,9 @@ extern u8 g_TeamNameLength;
 extern u8 g_TeamNameChars[];
 extern u16 g_TeamLogoSwatches[];
 
-void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
-                   u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
-void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
+void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
+                   u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) asm("func_80046A2C");
+void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
 s32 rsin(s32 angle);
 
 void DrawLogoSprite() asm("func_80046A2C");
@@ -44,14 +44,14 @@ void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
         }
         t = (u32) - (idx * 960) >> 5;
         y = t + 494;
-        func_80046A2C(ot, 0xDA, y, 8, 0x10, (arg1 / 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
-        func_80046A2C(ot, 0xE2, y, 8, 0x10, (arg1 % 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
-        func_80046A2C(ot, 0xA2, y, 4, 0x10, 0x78, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
-        func_80046A2C(ot, 0xA8, y, 0x34, 0x10, 0x7C, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
-        func_80046A2C(ot, 0xEA, y, 4, 0x10, 0xB0, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
+        DrawSprite(ot, 0xDA, y, 8, 0x10, (arg1 / 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+        DrawSprite(ot, 0xE2, y, 8, 0x10, (arg1 % 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+        DrawSprite(ot, 0xA2, y, 4, 0x10, 0x78, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
+        DrawSprite(ot, 0xA8, y, 0x34, 0x10, 0x7C, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
+        DrawSprite(ot, 0xEA, y, 4, 0x10, 0xB0, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
 
         for (i = 0, xoff = -23; i < 15; i++) {
-            func_80047024(ot, (s16)(xc + xoff), (s16)(t + 528), 8, 0x10,
+            DrawSolidRect(ot, (s16)(xc + xoff), (s16)(t + 528), 8, 0x10,
                           *(u8 *)&g_TeamLogoSwatches[i] << 3, (g_TeamLogoSwatches[i] >> 2) & 0xf8,
                           (g_TeamLogoSwatches[i] >> 7) & 0xf8, 0xFF);
             xoff += 8;

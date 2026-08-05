@@ -28,7 +28,7 @@ typedef union {
 void *func_8001720C(
     void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 
-void *func_80017390(void *ot, void *prim, s32 arg2);
+void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 arg2) asm("func_80017390");
 extern s32 g_SeriesCleared;
 extern s32 g_EndingWashLevel;
 extern s32 g_ReplayFrameCount;
@@ -50,7 +50,7 @@ void SetTrackTexturePageNow(s32 arg0);
 void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
 extern char g_TextResult[];
 extern char *g_CourseNames[];
-void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
+void DrawProportionalTextWide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016EA0");
 void DrawText8x8Trans(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_RaceTotalTime;
@@ -78,7 +78,7 @@ extern char g_CaptionLapTime[];
 extern GrandPrixIntroLayout g_ResultPlaceSprites[];
 extern GrandPrixIntroPosition g_ClassPlaceBarSizes[];
 
-s32 func_80016EC4(
+s32 QueueSpriteWide(
     void *arg0,
     s32 arg1,
     s32 arg2,
@@ -87,7 +87,7 @@ s32 func_80016EC4(
     s32 arg5,
     s32 arg6,
     s32 arg7,
-    s32 arg8);
+    s32 arg8) asm("func_80016EC4");
 
 void LibcSprintf(void *dst, void *fmt, ...) asm("func_800632F0");
 void DrawResultScreen(void);
@@ -154,7 +154,7 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
     width = 0x140;
     height = 0xF0;
     prim = func_8001720C(ot, prim, 0, 0, width, height, redStack, green, temp);
-    *(void **)0x1F800000 = func_80017390(ot, prim, 0x49);
+    *(void **)0x1F800000 = GameQueueDrawModePrimWide(ot, prim, 0x49);
 }
 
 void UpdateReplayScene(void);
@@ -259,7 +259,7 @@ void DrawResultScreen(void) {
     s32 next;
 
     (void)pad;
-    func_80016EA0(0xDC, 0x1C, g_TextResult, 0x7812);
+    DrawProportionalTextWide(0xDC, 0x1C, g_TextResult, 0x7812);
 
     if (g_GrandPrixMode != 0) {
         y = 0x3C;
@@ -292,9 +292,9 @@ void DrawGrandPrixResultPanel(void) {
         base = g_DrawBuffer + 0xCC;
         height = 8;
         color = 0x78CB;
-        next = func_80016EC4(
+        next = QueueSpriteWide(
             base, *scratch, 0x14, 0x1C, 0x38, height, 0, 0xE8, color);
-        next = func_80016EC4(
+        next = QueueSpriteWide(
             base,
             next,
             0x4C,
@@ -304,7 +304,7 @@ void DrawGrandPrixResultPanel(void) {
             0x84,
             g_ClassPlaceBarSizes[g_ClassResultPlace - 1].left,
             color);
-        next = func_80016EC4(
+        next = QueueSpriteWide(
             base,
             next,
             g_ClassPlaceBarSizes[g_ClassResultPlace - 1].right + 0x4E,
@@ -314,7 +314,7 @@ void DrawGrandPrixResultPanel(void) {
             0,
             0xF0,
             color);
-        next = func_80016EC4(
+        next = QueueSpriteWide(
             base,
             next,
             g_ClassPlaceBarSizes[g_ClassResultPlace - 1].right + 0x7C,
@@ -353,7 +353,7 @@ void DrawGrandPrixResultPanel(void) {
 
         base = g_DrawBuffer + 0xCC;
         selection = (GrandPrixIntroSelection *)&g_RacePosition;
-        next = func_80016EC4(
+        next = QueueSpriteWide(
             base,
             *scratch,
             0xB4,
@@ -366,7 +366,7 @@ void DrawGrandPrixResultPanel(void) {
 
         selectionIndex = selection->layout;
         selectionIndex -= 1;
-        next = func_80016EC4(
+        next = QueueSpriteWide(
             base,
             next,
             g_ResultPlaceSprites[selectionIndex].x,
@@ -379,7 +379,7 @@ void DrawGrandPrixResultPanel(void) {
         *scratch = next;
     }
 
-    func_80016EA0(0x10, 0x50, g_CaptionRanking, 0x7812);
+    DrawProportionalTextWide(0x10, 0x50, g_CaptionRanking, 0x7812);
 }
 
 void DrawRaceTimePanel(s32 arg0);
@@ -399,7 +399,7 @@ void DrawRaceTimePanel(s32 arg0) {
     s32 color;
 
     base = arg0;
-    func_80016EA0(0x10, base + 0x80, g_CaptionTotalTime, 0x7812);
+    DrawProportionalTextWide(0x10, base + 0x80, g_CaptionTotalTime, 0x7812);
 
     text[0] = 0x54;
     text[1] = 0x2F;
@@ -411,9 +411,9 @@ void DrawRaceTimePanel(s32 arg0) {
     }
     drawColor = color;
     count = base + 0x90;
-    func_80016EA0(0x14, count, text, drawColor);
+    DrawProportionalTextWide(0x14, count, text, drawColor);
 
-    func_80016EA0(0x10, base + 0xA4, g_CaptionLapTime, 0x7812);
+    DrawProportionalTextWide(0x10, base + 0xA4, g_CaptionLapTime, 0x7812);
 
     count = 6;
     if (g_CourseIndex != 3) {
@@ -439,7 +439,7 @@ void DrawRaceTimePanel(s32 arg0) {
             if (*(s16 *)((char *)selectedPtr - 0x22) == i) {
                 color = 0x784C;
             }
-            func_80016EA0(x, textPos, text, color);
+            DrawProportionalTextWide(x, textPos, text, color);
             i++;
             times++;
         } while (i < count);

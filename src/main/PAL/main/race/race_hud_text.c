@@ -16,7 +16,7 @@
  * each writer touches; the separators are never rewritten. */
 extern u8 g_TimeTextBuffer[];
 
-void func_80016754(s32 x, s32 y, void *str, s32 color);
+void DrawText8x8Wide(s32 x, s32 y, void *str, s32 color) asm("func_80016754");
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
@@ -65,7 +65,7 @@ void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
         g_TimeTextBuffer[7] = '-';
     }
 
-    func_80016754(savedX, savedY, g_TimeTextBuffer, savedColor);
+    DrawText8x8Wide(savedX, savedY, g_TimeTextBuffer, savedColor);
 }
 
 extern u8 g_ClockTextBuffer;
@@ -99,7 +99,7 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
     *p = min - tens * 10 + '0';
     g_ClockTextSecTens = tens2 + '0';
     g_ClockTextSecUnits = tmp - tens2 * 10 + '0';
-    func_80016754(x, savedY, p - 1, color);
+    DrawText8x8Wide(x, savedY, p - 1, color);
 }
 
 /* Which of the two frame buffers is being drawn, 0 or 1; the main loop sets
@@ -505,7 +505,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
             marqueeBase = &g_RaceOptionMarquee[0][0];
             *(u8 **)scratchPacket = firstNext;
             marquee = (g_SceneTimer & 3) * 40;
-            func_80016754(
+            DrawText8x8Wide(
                 (scroll0 >> 2) + 0xA0,
                 textY,
                 &marqueeBase[marquee],
@@ -518,7 +518,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 "" : "=r"(secondTextY) :
                 "0"(secondTextY));
             marqueeBase += 20;
-            func_80016754(
+            DrawText8x8Wide(
                 (g_RaceOptionScroll1 >> 2) + 0xA0,
                 secondTextY,
                 &marqueeBase[marquee],

@@ -8,8 +8,8 @@
 
 typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
 extern s32 g_OptionMenuCursor;
-s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
+s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80017138");
+s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80017390");
 void DrawMenuCursorArrow(s32 arg0, s32 arg1);
 extern s32 g_SoundOptionCursor;
 extern s32 g_ClassRecordMenuCursor;
@@ -35,7 +35,7 @@ void DrawClassRecordDetail(void);
 void DrawClassRecordDetail(void);
 extern s32 g_ScreenOffsetEditX;
 extern s32 g_ScreenOffsetEditY;
-s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 QueueSpriteWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80016EC4");
 s32 AddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_MonoOutput;
 extern s32 g_BgmVolumeSetting;
@@ -59,13 +59,13 @@ void DrawOptionRootMenu(void) {
     s32 state;
 
     base += 0xCC;
-    tmp = func_80017138((s32)base, *scratch, 0x24, 0x94, 0x3C, h18, 0, h48, color);
-    tmp = func_80017138((s32)base, tmp, 0x24, 0xB4, 0x88, h18, 0x40, h48, color);
-    tmp = func_80017138((s32)base, tmp, 0x24, 0xD4, 0x74, h18, 0, 0x60, color);
-    tmp = func_80017138((s32)base, tmp, 0x24, 0xF4, 0x5C, h18, 0x74, 0x60, color);
-    tmp = func_80017138((s32)base, tmp, 0x24, 0x114, 0x64, h18, 0, 0x78, color);
-    tmp = func_80017138((s32)base, tmp, 0x24, 0x134, 0x1C, h18, 0xD0, 0x60, color);
-    tmp = func_80017390((s32)base, tmp, 0x3F);
+    tmp = QueueSpriteTransWide((s32)base, *scratch, 0x24, 0x94, 0x3C, h18, 0, h48, color);
+    tmp = QueueSpriteTransWide((s32)base, tmp, 0x24, 0xB4, 0x88, h18, 0x40, h48, color);
+    tmp = QueueSpriteTransWide((s32)base, tmp, 0x24, 0xD4, 0x74, h18, 0, 0x60, color);
+    tmp = QueueSpriteTransWide((s32)base, tmp, 0x24, 0xF4, 0x5C, h18, 0x74, 0x60, color);
+    tmp = QueueSpriteTransWide((s32)base, tmp, 0x24, 0x114, 0x64, h18, 0, 0x78, color);
+    tmp = QueueSpriteTransWide((s32)base, tmp, 0x24, 0x134, 0x1C, h18, 0xD0, 0x60, color);
+    tmp = GameQueueDrawModePrimWide((s32)base, tmp, 0x3F);
 
     state = g_GameMode;
     *scratch = tmp;
@@ -159,26 +159,26 @@ void DrawClassRecordDetail(void) {
                              D_8007D5A8[idx].vx - 2, D_8007D5A8[idx].vy - 4,
                              0x24, 0x58, 0x89, 0xFF, 0x76);
     }
-    next = func_80017138(base, next, 0xBC, 0x40, 0x18, 0x10, 0, 0x6C, 0x7F40);
-    next = func_80017138(base, next, 0xD8, 0x40, 8, 0x10, g_ScreenOffsetEditX * 8 + 8, 0x18, 0x7F40);
+    next = QueueSpriteTransWide(base, next, 0xBC, 0x40, 0x18, 0x10, 0, 0x6C, 0x7F40);
+    next = QueueSpriteTransWide(base, next, 0xD8, 0x40, 8, 0x10, g_ScreenOffsetEditX * 8 + 8, 0x18, 0x7F40);
 
     x = 0xB4;
     if (g_ClassRecords[idx].place == -1) {
         for (i = 0; i < 8; i++) {
-            next = func_80017138(base, next, x + 0x30 + i * 8, y + 8, 8, 0x10, 0x38, 0x28, 0x7F40);
+            next = QueueSpriteTransWide(base, next, x + 0x30 + i * 8, y + 8, 8, 0x10, 0x38, 0x28, 0x7F40);
         }
     } else {
-        next = func_80017138(base, next, 0xE4, 0x40,
+        next = QueueSpriteTransWide(base, next, 0xE4, 0x40,
                              D_8007D658[idx].b, 0x10,
                              D_8007D658[idx].r, D_8007D658[idx].g, 0x7F40);
     }
 
-    next = func_80017138(base, next, x | 8, y + 0x28, 0x44, 0x10, 0x1C, 0x6C, 0x7F40);
-    next = func_80017138(base, next, x + 100, y + 0x28, 8, 0x10,
+    next = QueueSpriteTransWide(base, next, x | 8, y + 0x28, 0x44, 0x10, 0x1C, 0x6C, 0x7F40);
+    next = QueueSpriteTransWide(base, next, x + 100, y + 0x28, 8, 0x10,
                          (s16)((s16)g_ClassRecords[idx].clears / 10) << 3, 0x18, 0x7F40);
-    next = func_80017138(base, next, x + 108, y + 0x28, 8, 0x10,
+    next = QueueSpriteTransWide(base, next, x + 108, y + 0x28, 8, 0x10,
                          (s16)((s16)g_ClassRecords[idx].clears % 10) << 3, 0x18, 0x7F40);
-    next = func_80017390(base, next, 0x3B);
+    next = GameQueueDrawModePrimWide(base, next, 0x3B);
     next = AddTilePrim(base, next, x + 78, y + 47, 0x14, 2, 0xFF, 0xFF, 0xFF);
     next = AddTilePrim(base, next, x, y, 0x7C, 0x1E, 0, 0, 0);
     next = AddTilePrim(base, next, x, y + 32, 0x7C, 0x1E, 0, 0, 0);
@@ -194,8 +194,8 @@ void DrawClassRecordGrid(void) {
 
     base = (s32)g_DrawBuffer + 0xCC;
     next = *(s32 *)0x1F800000;
-    next = func_80017138(base, next, 0x24, 0x38, 0x24, 0x18, 0x38, 0x90, 0x7F40);
-    next = func_80017138(base, next, 0x24, 0x58, 0x1C, 0x18, 0xD0, 0x60, 0x7F40);
+    next = QueueSpriteTransWide(base, next, 0x24, 0x38, 0x24, 0x18, 0x38, 0x90, 0x7F40);
+    next = QueueSpriteTransWide(base, next, 0x24, 0x58, 0x1C, 0x18, 0xD0, 0x60, 0x7F40);
     *(s32 *)0x1F800000 = next;
     DrawMenuCursorArrow(0x14, (g_ClassRecordMenuCursor * 32) + 56);
     next = *(s32 *)0x1F800000;
@@ -206,27 +206,27 @@ void DrawClassRecordGrid(void) {
         flag = g_ClassRecords[i].place;
         switch (flag) {
         case 1:
-            next = func_80016EC4(base, next, x, y, 0x20, 0x50,
+            next = QueueSpriteWide(base, next, x, y, 0x20, 0x50,
                                  D_8007D5D4[i].b0, D_8007D5D4[i].b1, D_8007D5D4[i].h4);
             break;
         case 2:
-            next = func_80016EC4(base, next, x, y, 0x20, 0x50,
+            next = QueueSpriteWide(base, next, x, y, 0x20, 0x50,
                                  D_8007D5D4[i].b2, D_8007D5D4[i].b3, D_8007D5D4[i].h6);
             break;
         case 3:
-            next = func_80016EC4(base, next, x, y, 0x20, 0x50,
+            next = QueueSpriteWide(base, next, x, y, 0x20, 0x50,
                                  D_8007D5D4[i].b2, D_8007D5D4[i].b3, D_8007D5D4[i].h8);
             break;
         }
         if (g_ClassRecords[i].place <= 0) {
-            next = func_80016EC4(base + 4, next, x, y, 0x20, 0x50, 0x60, 0x70, 0x7E80);
+            next = QueueSpriteWide(base + 4, next, x, y, 0x20, 0x50, 0x60, 0x70, 0x7E80);
         } else {
-            next = func_80016EC4(base + 4, next, x, y, 0x20, 0x50, 0x80, 0x70, 0x7E81);
+            next = QueueSpriteWide(base + 4, next, x, y, 0x20, 0x50, 0x80, 0x70, 0x7E81);
         }
     }
 
-    next = func_80017390(base, next, 0x3E);
-    next = func_80017390(base + 4, next, 0x3C);
+    next = GameQueueDrawModePrimWide(base, next, 0x3E);
+    next = GameQueueDrawModePrimWide(base + 4, next, 0x3C);
     *(s32 *)0x1F800000 = next;
     DrawOptionHintBar(0);
 }
@@ -321,19 +321,19 @@ void DrawVolumeBar(s32 arg0, s32 arg1) {
     s32 y;
     s32 c;
 
-    next = func_80017138(base, *(s32 *)0x1F800000, 0x4E, b + 0xA, 0x10, 0xC, 0xB4, 0xC4, 0x7F40);
-    next = func_80017138(base, next, 0xE4, b + 0xA, 0x10, 0xC, 0xC4, 0xC4, 0x7F40);
-    next = func_80017390(base, next, 0x3A);
+    next = QueueSpriteTransWide(base, *(s32 *)0x1F800000, 0x4E, b + 0xA, 0x10, 0xC, 0xB4, 0xC4, 0x7F40);
+    next = QueueSpriteTransWide(base, next, 0xE4, b + 0xA, 0x10, 0xC, 0xC4, 0xC4, 0x7F40);
+    next = GameQueueDrawModePrimWide(base, next, 0x3A);
     c = 0x46;
     i = 0;
     if (i <= arg0) {
         do {
             y = 0x1C + (i * 8);
-            next = func_80016EC4(base, next, c + y, b + 4, 4, 0x18, 0xFC, 0x40, 0x7E82);
+            next = QueueSpriteWide(base, next, c + y, b + 4, 4, 0x18, 0xFC, 0x40, 0x7E82);
             i++;
         } while (i <= arg0);
     }
-    next = func_80017390(base, next, 0x39);
+    next = GameQueueDrawModePrimWide(base, next, 0x39);
     next = AddTilePrim(base, next, c | 1, b + 2, 0xB2, 0x1C, 0, 0, 0);
     *(s32 *)0x1F800000 = AddTilePrim(base, next, c, b, 0xB4, 0x20, 0xFF, 0xFF, 0xFF);
 }
@@ -356,10 +356,10 @@ void DrawSoundOptionScreen(void) {
     base = (s32)g_DrawBuffer + 0xCC;
 
     n = *scratch;
-    n = func_80017138(base, n, 0x24, 0x38, 0x2C, s3, 0x9C, s0, 0x7F40);
-    n = func_80017138(base, n, 0x24, 0x58, s3, s3, 0xC8, s0, 0x7F40);
-    n = func_80017138(base, n, 0x24, 0x78, 0x38, s3, 0, 0x90, 0x7F40);
-    n = func_80017138(base, n, 0x24, 0x98, 0x1C, s3, 0xD0, 0x60, 0x7F40);
+    n = QueueSpriteTransWide(base, n, 0x24, 0x38, 0x2C, s3, 0x9C, s0, 0x7F40);
+    n = QueueSpriteTransWide(base, n, 0x24, 0x58, s3, s3, 0xC8, s0, 0x7F40);
+    n = QueueSpriteTransWide(base, n, 0x24, 0x78, 0x38, s3, 0, 0x90, 0x7F40);
+    n = QueueSpriteTransWide(base, n, 0x24, 0x98, 0x1C, s3, 0xD0, 0x60, 0x7F40);
     *scratch = n;
 
     DrawOptionHintBar(2);

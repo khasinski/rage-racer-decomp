@@ -22,8 +22,8 @@ extern s32 g_RankingInsertRow;
 extern u8 *g_PlaceSuffixNames[];
 extern s32 g_CarClassNames[];
 extern s32 g_CarNames[];
-void func_80016EA0(void *dst, s32 len, void *src, s32 arg3);
-void func_80016754(void *dst, s32 x, void *src, s32 color);
+void DrawProportionalTextWide(void *dst, s32 len, void *src, s32 arg3) asm("func_80016EA0");
+void DrawText8x8Wide(void *dst, s32 x, void *src, s32 color) asm("func_80016754");
 void *FormatLapTime(void *dst, s32 value);
 void LibcSprintf() asm("func_800632F0");
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -73,7 +73,7 @@ void DrawRankingPanel(u8 *arg0) {
     s32 limit;
 
     panel = arg0;
-    func_80016EA0(panel + 0x10, 0x4C, g_CaptionLapTime2, 0x7852);
+    DrawProportionalTextWide(panel + 0x10, 0x4C, g_CaptionLapTime2, 0x7852);
     mode = g_CourseIndex;
     text[1] = 0x2F;
     limit = 6;
@@ -105,12 +105,12 @@ void DrawRankingPanel(u8 *arg0) {
             if (g_BestLapIndex == iter) {
                 color = 0x780F;
             }
-            func_80016754((void *)destination, xOrField, text, color);
+            DrawText8x8Wide((void *)destination, xOrField, text, color);
             iter++;
             scoreOrX += 4;
         } while (iter < limit);
     }
-    func_80016EA0(panel + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
+    DrawProportionalTextWide(panel + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
     countOrIndex = 0;
     scoreOrX = 0x82;
     destination = 0x78;
@@ -128,9 +128,9 @@ void DrawRankingPanel(u8 *arg0) {
         if (g_RankingInsertRow == countOrIndex) {
             color = 0x780F;
         }
-        func_80016754(panel + 0x14, destination, text, color);
+        DrawText8x8Wide(panel + 0x14, destination, text, color);
         LibcSprintf(text, g_FmtCarName, g_CarNames[xOrField]);
-        func_80016754(panel + 0x2C, scoreOrX, text, color);
+        DrawText8x8Wide(panel + 0x2C, scoreOrX, text, color);
         destination += 0x14;
         scoreOrX += 0x14;
         countOrIndex++;
@@ -143,14 +143,14 @@ void DrawTimeRecordPanel(u8 *s5) {
     s32 s4, s3;
     s32 s2, color, idx;
 
-    func_80016EA0(s5 + 0x10, 0x4C, g_CaptionTotalTime2, 0x7852);
+    DrawProportionalTextWide(s5 + 0x10, 0x4C, g_CaptionTotalTime2, 0x7852);
 
     text[0] = 0x54;
     text[1] = 0x2F;
     FormatLapTime(&text[2], g_RaceTotalTime);
-    func_80016754(s5 + 0x14, 0x58, text, 0x78CC);
+    DrawText8x8Wide(s5 + 0x14, 0x58, text, 0x78CC);
 
-    func_80016EA0(s5 + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
+    DrawProportionalTextWide(s5 + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
 
     s2 = 0;
     s4 = 0x82;
@@ -170,11 +170,11 @@ void DrawTimeRecordPanel(u8 *s5) {
         if (g_TimeRecordInsertRow == s2) {
             color = 0x780F;
         }
-        func_80016754(s5 + 0x14, s3, text, color);
+        DrawText8x8Wide(s5 + 0x14, s3, text, color);
 
         LibcSprintf(text, g_FmtCarName, g_CarNames[idx]);
 
-        func_80016754(s5 + 0x2C, s4, text, color);
+        DrawText8x8Wide(s5 + 0x2C, s4, text, color);
         s3 += 0x14;
         s4 += 0x14;
     }

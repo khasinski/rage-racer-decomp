@@ -5,7 +5,7 @@
 extern u16 g_HudGlyphClut;
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut);
-void *func_80017390(void *ot, void *packet, s32 arg2);
+void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("func_80017390");
 
 void DrawSpeedDigits(s32 x, s32 y, s32 value);
 void DrawSpeedDigits(s32 x, s32 y, s32 value) {
@@ -37,5 +37,5 @@ void DrawSpeedDigits(s32 x, s32 y, s32 value) {
     prim = DrawHudDigit(prim, screenX, screenY, hundreds, color);
     prim = DrawHudDigit(prim, screenX + 8, screenY, tens, color);
     prim = DrawHudDigit(prim, screenX + 0x10, screenY, ones, color);
-    *scratch = func_80017390(g_DrawBuffer + 0xCC, prim, 9);
+    *scratch = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, prim, 9);
 }

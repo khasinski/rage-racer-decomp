@@ -25,9 +25,9 @@ extern s32 g_MenuHintButtonsVisible;
 extern u8 g_PadType;
 
 
-void func_80047024(void *, s32, s32, s32, s32, s32, s32, s32, s32);
+void GameDrawSolidRectWide(void *, s32, s32, s32, s32, s32, s32, s32, s32) asm("func_80047024");
 s32 RunTimedDrawScript(void *, void *);
-void func_80046A2C(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32);
+void GameDrawSpriteWide(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32) asm("func_80046A2C");
 void DrawBitPatternOverlay(s32);
 
 /* Scene 8: the menu-mode per-frame dispatcher. Runs the two
@@ -48,7 +48,7 @@ void UpdateMenuMode(void) {
     if (c1 == 2) {
         SetDispMask(1);
     }
-    func_80047024(scratch, 0, 0, 0x140, 2, 0, 0, 0, 0xFF);
+    GameDrawSolidRectWide(scratch, 0, 0, 0x140, 2, 0, 0, 0, 0xFF);
 
     if ((u32)(g_MenuScreen - 1) < 2) {
         *(s32 *)0x1F800064 = 1;
@@ -80,12 +80,12 @@ void UpdateMenuMode(void) {
     if (g_MenuHintButtonsVisible != 0) {
         if (g_PadType == 0x23) {
             scratch = (void *)((u8 *)scratch + 4);
-            func_80046A2C(scratch, 0xC0, 0x1A1, 0x20, 0xC, 0x94, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
-            func_80046A2C(scratch, 0xF0, 0x1A1, 0x2C, 0xC, 0xB4, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
+            GameDrawSpriteWide(scratch, 0xC0, 0x1A1, 0x20, 0xC, 0x94, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
+            GameDrawSpriteWide(scratch, 0xF0, 0x1A1, 0x2C, 0xC, 0xB4, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
         } else {
             scratch = (void *)((u8 *)scratch + 4);
-            func_80046A2C(scratch, 0xC0, 0x1A1, 0x20, 0xC, 0x94, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3B);
-            func_80046A2C(scratch, 0xF0, 0x1A1, 0x2C, 0xC, 0xB4, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3B);
+            GameDrawSpriteWide(scratch, 0xC0, 0x1A1, 0x20, 0xC, 0x94, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3B);
+            GameDrawSpriteWide(scratch, 0xF0, 0x1A1, 0x2C, 0xC, 0xB4, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3B);
         }
     }
     DrawBitPatternOverlay(g_MenuOverlayPattern);

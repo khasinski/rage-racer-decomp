@@ -7,7 +7,6 @@ void SsSeqIndexChannel(long channel, short vab, u_char prog, short volume, long 
 void SpuVmDamperOff(void);
 void SpuVmDamperOn(void);
 void SsSeqSetPortamento(short seq, short sep, u_char value);
-void func_80073748(long left, long right);
 
 void SsSeqDispatchControlChange(short seq, short sep, long arg2);
 void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
@@ -65,7 +64,7 @@ void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
         SsSeqSetPortamento(seq, sep, value);
         return;
     case 91:
-        func_80073748(value, value);
+        SsUtSetReverbDepth(value, value);
         state->delta_value = SsSeqReadDeltaTime(seq, sep);
         return;
     case 98:

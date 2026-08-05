@@ -13,7 +13,7 @@ extern s32 D_8009B290;
 extern s32 g_MenuAltLayout;
 
 s32 rsin(s32 angle);
-void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
+void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
 
 /* The 18-swatch PAINT COLOR strip with its selection frame and enlarged preview. */
 s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index);
@@ -82,7 +82,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
                       sineByte = (u8)sineColor, 0, 0xFF);
 
         color = &localTable.colors[index];
-        func_80047024(ot, (s16)(xFocus + 1), (s16)(yBase + 0x20D), 0xB, 0x16, color->r,
+        DrawSolidRect(ot, (s16)(xFocus + 1), (s16)(yBase + 0x20D), 0xB, 0x16, color->r,
                       color->g, color->b, 0xFF);
 
         DrawRectOutline(ot, xBase, (s16)yBorder, 0x92, 0x14, 0xB4, 0xB4, 0xB4, 0xFF);
@@ -91,7 +91,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
         i = 0;
         colorIndex = 1;
         do {
-            func_80047024(ot, (s16)(xBaseHalf + colorIndex), (s16)(yBase + 0x210), 8,
+            DrawSolidRect(ot, (s16)(xBaseHalf + colorIndex), (s16)(yBase + 0x210), 8,
                           0x10, ((Rgb *)((u8 *)localTable.colors + i))->r,
                           ((Rgb *)((u8 *)localTable.colors + i))->g,
                           ((Rgb *)((u8 *)localTable.colors + i))->b, 0xFF);
@@ -116,8 +116,8 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
 extern s32 D_8007FB2C;
 
 void GameDrawNumber(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8);
-void func_80046A2C(void *a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7,
-                   s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
+void GameDrawSpriteWide(void *a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7,
+                   s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13) asm("func_80046A2C");
 
 void DrawOwnedCarCounter(s32 arg0, s32 arg1);
 void DrawOwnedCarCounter(s32 arg0, s32 arg1) {
@@ -165,8 +165,8 @@ void DrawOwnedCarCounter(s32 arg0, s32 arg1) {
         t = t + 0x211;
         GameDrawNumber(r4, r5, r6, a1v, c17, c17, c17, c21, c19);
         GameDrawNumber(0x44, y, 7, 0xD, c17, c17, c17, c21, c19);
-        func_80046A2C(ot, 0x17, y, 0x34, 0x10, 0x8C, 0x8C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-        func_80046A2C(ot, 0x7C, y, 0x8, 0x10, 0x8C, 0xDC, 0, 0, 0, c21, 1, 1, 0x3B);
+        GameDrawSpriteWide(ot, 0x17, y, 0x34, 0x10, 0x8C, 0x8C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+        GameDrawSpriteWide(ot, 0x7C, y, 0x8, 0x10, 0x8C, 0xDC, 0, 0, 0, c21, 1, 1, 0x3B);
         GameDrawMenuButton(0, (s16)t, 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
     }
     if (count > 0) {

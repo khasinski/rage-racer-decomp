@@ -25,7 +25,7 @@ extern u_char D_8007D87C[];
 extern u_char g_DrawModeEnv[];
 void SetSprt(u_char *prim);
 void AddPrim(void *ot, void *prim);
-void *func_800666F4(void *prim, long a, long b, long c, void *d);
+void *SetDrawMode(void *prim, long a, long b, long c, void *d) asm("func_800666F4");
 long AddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8);
 
 long CdRead(long arg0, long arg1, long arg2);
@@ -180,7 +180,7 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
             x += D_8007D87C[idx];
         } while (*sr != 0);
     }
-    func_800666F4(next, 0, 1, 0x1D, g_DrawModeEnv);
+    SetDrawMode(next, 0, 1, 0x1D, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, next);
     *(u_char **)0x1F800000 = next + 0xC;
 }

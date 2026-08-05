@@ -9,12 +9,12 @@ void StartSequenceFadeOut(void);
 s32 DrawRankingScreen(s32 arg0);
 
 const u8 g_NowLoadingText[] = "NOW LOADING";
-void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
+void DrawText8x8Wide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
 /* Blinks the "NOW LOADING" string at g_NowLoadingText. */
 void DrawNowLoadingText(void);
 void DrawNowLoadingText(void) {
     if (g_SceneTimer & 8) {
-        func_80016754(0x74, 0xEC, (void *)g_NowLoadingText, 0x78CC);
+        DrawText8x8Wide(0x74, 0xEC, (void *)g_NowLoadingText, 0x78CC);
     }
 }
 
@@ -518,8 +518,8 @@ extern u8 D_80082604;
 extern u8 D_800825A4;
 extern u8 g_MenuBlankCaption;
 void ResetCourseProgress(s32 arg0);
-void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
-                   s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
+void drawSprite(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
+                   s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("func_80046A2C");
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, s32 a10);
@@ -715,8 +715,8 @@ void UpdateCourseSelectScreen(void) {
                     g_MenuSubCursor = 0;
                 }
                 DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 0);
-                func_80046A2C(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                func_80046A2C(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                drawSprite(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                drawSprite(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80048B88(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 func_80048B88(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&g_MenuBlankCaption);
             }
@@ -749,8 +749,8 @@ void UpdateCourseSelectScreen(void) {
                 }
                 DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 0);
                 for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
-                    func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                    func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                    drawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                    drawSprite(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 }
             }
@@ -774,8 +774,8 @@ void UpdateCourseSelectScreen(void) {
                 RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
                 RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
                 DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 1);
-                func_80046A2C(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                func_80046A2C(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                drawSprite(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                drawSprite(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 func_80048B88(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 func_80048B88(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&g_MenuBlankCaption);
             }
@@ -811,8 +811,8 @@ void UpdateCourseSelectScreen(void) {
                     RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
                     DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                     for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
-                        func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                        func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                        drawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                        drawSprite(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
                         func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                     }
                 }
@@ -821,8 +821,8 @@ void UpdateCourseSelectScreen(void) {
                 RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
                 DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                 for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
-                    func_80046A2C(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                    func_80046A2C(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                    drawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                    drawSprite(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     func_80048B88(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 }
             }

@@ -61,8 +61,8 @@ void UpdateTitleAttract(void);
 extern s32 g_MainMenuSlide;
 extern s32 g_ClassWinCount;
 
-void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
-void *func_80017390(void *arg0, void *arg1, s32 arg2);
+void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("func_80016F8C");
+void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("func_80017390");
 void *func_800173F4(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10);
 
 void UpdateTitleAttract(void) {
@@ -105,16 +105,16 @@ void UpdateTitleAttract(void) {
     h88 = 0x88;
     clut0 = 0x7DC0;
 
-    next = func_80016F8C(base = g_DrawBuffer + 0xD0, next, x28, yA0, hF0, tmp, 0, h88, clut0, alpha);
-    next = func_80016F8C(base, next, 0x20, 0xB8, 0x100, 0x10, 0, hF0, 0x7DC1, alpha);
-    next = func_80016F8C(base, next, 0x11A, 0xAF, 0xC, 8, 0xE0, 0xB0, clut0, alpha);
-    next = func_80017390(base, next, 0x19);
+    next = QueueShadedSpriteNine(base = g_DrawBuffer + 0xD0, next, x28, yA0, hF0, tmp, 0, h88, clut0, alpha);
+    next = QueueShadedSpriteNine(base, next, 0x20, 0xB8, 0x100, 0x10, 0, hF0, 0x7DC1, alpha);
+    next = QueueShadedSpriteNine(base, next, 0x11A, 0xAF, 0xC, 8, 0xE0, 0xB0, clut0, alpha);
+    next = GameQueueDrawModePrimWide(base, next, 0x19);
 
     if (g_ClassWinCount >= 0xB) {
         color = 0x7D80;
     }
 
-    next = func_80016F8C(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
+    next = QueueShadedSpriteNine(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
     *(void **)scratch = func_800173F4(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
 extern s32 g_TitleAttractTimer;

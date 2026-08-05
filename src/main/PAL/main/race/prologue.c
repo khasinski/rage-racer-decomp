@@ -26,7 +26,7 @@ extern s32 g_PrologueCutIndex;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void InitTrackScene(void);
-void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
+void DrawProportionalTextWide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016EA0");
 void InstallCourseAssets(void);
 void RequestTrackDataAssets(void);
 void UpdatePrologueLoad(void);
@@ -37,7 +37,7 @@ extern s16 g_PrologueLineY[];
 extern s32 g_PrologueLineText[];
 void GameDrawText8x8Shaded(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
+s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("func_80017390");
 void RequestSelectBgmAssets(void);
 extern u32 g_CameraViewMode;
 extern u8 g_CarTrackSection[];
@@ -122,7 +122,7 @@ void UpdatePrologueLoad(void) {
         }
     }
 
-    func_80016EA0(0x5E, 0x72, g_TextNowLoading, 0x7812);
+    DrawProportionalTextWide(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
 void UpdatePrologueLoadStep0(void);
@@ -222,7 +222,7 @@ void DrawPrologueText(void) {
         arg8 = (scale_b / 0x100) + 0x40;
 
         next = func_8001720C(ptr, arg1, 0, 0, 0x140, 0xF0, camera, arg7, arg8);
-        *scratch = func_80017390(ptr, next, 0x49);
+        *scratch = GameQueueDrawModePrimWide(ptr, next, 0x49);
     }
 }
 

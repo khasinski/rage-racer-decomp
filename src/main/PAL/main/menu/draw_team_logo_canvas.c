@@ -75,7 +75,7 @@ extern s32 GetClut(s16 x, s16 y);
 extern void LoadImage(void *rect, void *data);
 extern s32 rsin(s32 angle);
 extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h);
-extern void func_80046A2C(
+extern void DrawSprite(
     s32 ot,
     s16 x,
     s16 y,
@@ -89,7 +89,7 @@ extern void func_80046A2C(
     u16 clut,
     s32 shadeTex,
     s32 semiTrans,
-    s32 flags);
+    s32 flags) asm("func_80046A2C");
 extern void func_80046A2C_prepared(
     s32 ot,
     s16 x,
@@ -105,12 +105,12 @@ extern void func_80046A2C_prepared(
     s32 shadeTex,
     s32 semiTrans,
     s32 flags) asm("func_80046A2C");
-extern void func_8004711C(
-    s32 ot, s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b, u8 alpha);
+extern void DrawLine(
+    s32 ot, s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
 extern void GameDrawNumber(
     s16 x, s32 y, s16 flags, s32 value, u8 r, u8 g, u8 b, s32 clut, s32 primitiveCount);
 
-void func_80047024(
+void GameDrawSolidRectWide(
     void *arg0,
     s32 arg1,
     s32 arg2,
@@ -119,7 +119,7 @@ void func_80047024(
     s32 arg5,
     s32 arg6,
     s32 arg7,
-    s32 arg8);
+    s32 arg8) asm("func_80047024");
 void func_80047024_prepared(
     s32 arg0,
     s16 arg1,
@@ -161,7 +161,7 @@ void DrawTeamLogoCanvasFade(s32 delta) {
     limit = 0x1E0;
     D_8009B284 = D_8009B280 >> 8;
     alpha = D_8009B284;
-    func_80047024(scratch + 0x18, 0x48, 0, 0xF8, limit, alpha, alpha, alpha, 0x40);
+    GameDrawSolidRectWide(scratch + 0x18, 0x48, 0, 0xF8, limit, alpha, alpha, alpha, 0x40);
 }
 
 void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
@@ -381,32 +381,32 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
         ya = su + 0x1FD;
         yb = su + 0x27D;
         xa = x1 + D_8007F934.lo;
-        func_8004711C(ot, xa, ya, xa, yb, clut, clut, clut, ff);
+        DrawLine(ot, xa, ya, xa, yb, clut, clut, clut, ff);
         xa = ((x1 + D_8007F934.lo) + ((u16) D_8007F94C)) - 1;
-        func_8004711C(ot, xa, ya, xa, yb, clut, clut, clut, ff);
+        DrawLine(ot, xa, ya, xa, yb, clut, clut, clut, ff);
         xa = y1 + (D_8007F938 * 2);
-        func_8004711C(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
+        DrawLine(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
         {
           s32 odd;
           odd = D_8007F938 * 2 + 1;
           xa = y1 + odd;
         }
-        func_8004711C(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
+        DrawLine(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
         xa = y1 + (((D_8007F938 + D_8007F94C) - 1) * 2);
-        func_8004711C(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
+        DrawLine(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
         {
           s32 odd;
           odd = ((D_8007F938 + D_8007F94C) - 1) * 2 + 1;
           xa = y1 + odd;
         }
-        func_8004711C(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
+        DrawLine(ot, 0x30, xa, 0x70, xa, clut, clut, clut, ff);
       }
       else
         if (D_8007F94C == 1)
       {
         s16 xa = x1 + D_8007F934.lo;
         s16 ya = y1 + (D_8007F938 * 2);
-        func_8004711C(ot, xa, ya, xa, (s16) (ya + 1), clut, clut, clut, ff);
+        DrawLine(ot, xa, ya, xa, (s16) (ya + 1), clut, clut, clut, ff);
       }
       else
       {
@@ -522,7 +522,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
                             gxArg, gyArg, 0, 0, 0, (u16) pal, 1, 0, clutArg);
       asm("" : "=r"(shade) : "0"(shade));
       shadeArg = (u8) shade;
-      func_80046A2C(ot, x1, y1, 0x22, 0x32, shadeArg, 0xC0,
+      DrawSprite(ot, x1, y1, 0x22, 0x32, shadeArg, 0xC0,
                     0, 0, 0, 0x1F5, 1, 0, 0x1D);
       kreg += 0xC;
       vs7 += 0xC;
@@ -537,7 +537,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     {
       d = 6;
     }
-    func_80046A2C(ot, (((u32) (d * 0x250)) >> 5) + 0xFFA1, 0xC0, 0x61, 0x32, 0x90, 0xC0, 0, 0, 0, 0x1F5, 1, 0, 0x1D);
+    DrawSprite(ot, (((u32) (d * 0x250)) >> 5) + 0xFFA1, 0xC0, 0x61, 0x32, 0x90, 0xC0, 0, 0, 0, 0x1F5, 1, 0, 0x1D);
   }
   d = D_8007FB10 - 8;
   if ((d >= 0) && (D_8007F930 != 0))
@@ -582,17 +582,17 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     }
     xa = x0 + 1;
     xb = x0 + 0x11;
-    func_8004711C(ot, xa, kreg + 0x11, xb, kreg + 0x11, 0xB4, 0xB4, 0xB4, 0xFF);
-    func_8004711C(ot, xa, kreg + 0x12, xb, kreg + 0x12, 0xB4, 0xB4, 0xB4, 0xFF);
-    func_8004711C(ot, xa, kreg + 0x41, xb, kreg + 0x41, 0xB4, 0xB4, 0xB4, 0xFF);
-    func_8004711C(ot, xa, kreg + 0x42, xb, kreg + 0x42, 0xB4, 0xB4, 0xB4, 0xFF);
-    func_8004711C(ot, xa, kreg + 0x71, xb, kreg + 0x71, 0xB4, 0xB4, 0xB4, 0xFF);
-    func_8004711C(ot, xa, kreg + 0x72, xb, kreg + 0x72, 0xB4, 0xB4, 0xB4, 0xFF);
+    DrawLine(ot, xa, kreg + 0x11, xb, kreg + 0x11, 0xB4, 0xB4, 0xB4, 0xFF);
+    DrawLine(ot, xa, kreg + 0x12, xb, kreg + 0x12, 0xB4, 0xB4, 0xB4, 0xFF);
+    DrawLine(ot, xa, kreg + 0x41, xb, kreg + 0x41, 0xB4, 0xB4, 0xB4, 0xFF);
+    DrawLine(ot, xa, kreg + 0x42, xb, kreg + 0x42, 0xB4, 0xB4, 0xB4, 0xFF);
+    DrawLine(ot, xa, kreg + 0x71, xb, kreg + 0x71, 0xB4, 0xB4, 0xB4, 0xFF);
+    DrawLine(ot, xa, kreg + 0x72, xb, kreg + 0x72, 0xB4, 0xB4, 0xB4, 0xFF);
     xc = x0 + 5;
     tileSize = 0x10;
-    func_80046A2C(ot, xc, kreg + 2, 8, tileSize, 0xD8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
-    func_80046A2C(ot, xc, kreg + 0x32, 8, tileSize, 0x80, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
-    func_80046A2C(ot, xc, kreg + 0x62, 8, tileSize, 0x58, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
+    DrawSprite(ot, xc, kreg + 2, 8, tileSize, 0xD8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
+    DrawSprite(ot, xc, kreg + 0x32, 8, tileSize, 0x80, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
+    DrawSprite(ot, xc, kreg + 0x62, 8, tileSize, 0x58, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
     func_80047024_prepared(ot, xa, kreg + 2, 0x10, tileSize, 0xC0, 0, 0, 0xFF);
     func_80047024_prepared(ot, xa, yA8, 0x10, tileSize, 0, 0, 0, 0xFF);
     func_80047024_prepared(ot, xa, kreg + 0x32, 0x10, tileSize, 0, 0xC0, 0, 0xFF);

@@ -1,7 +1,7 @@
 #include "common.h"
 
-s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
+s32 GameQueueSpriteTrans(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80017138");
+s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80017390");
 extern u8 D_8007D588[];
 extern u8 D_8007D589[];
 extern u8 D_8007D58A[];
@@ -20,8 +20,8 @@ void DrawMenuCursorArrow(s32 arg0, s32 arg1) {
 
     base += 0xCC;
     scratchValue = *scratch;
-    value = func_80017138((s32)base, scratchValue, arg0, arg1, 0xC, 0x18, 0xE0, 0x48, 0x7F40);
-    *scratch = func_80017390((s32)base, value, 0x3F);
+    value = GameQueueSpriteTrans((s32)base, scratchValue, arg0, arg1, 0xC, 0x18, 0xE0, 0x48, 0x7F40);
+    *scratch = GameQueueDrawModePrimWide((s32)base, value, 0x3F);
 }
 
 /* The bottom hint bar: a left arrow, a caption picked from D_8007D588 by `variant`, and a right arrow. */
@@ -43,20 +43,20 @@ void DrawOptionHintBar(s32 arg0) {
         y = (0x120 - D_8007D58A[which * 4]) / 2;
     }
 
-    next = func_80017138(base, next, y, 0x180, 0xC, 0x18, 0xE0, 0x78, 0x7F40);
+    next = GameQueueSpriteTrans(base, next, y, 0x180, 0xC, 0x18, 0xE0, 0x78, 0x7F40);
 
     y += 0x10;
     index = which * 4;
-    next = func_80017138(base, next, y, 0x180, D_8007D58A[index], 0x18, D_8007D588[index], D_8007D589[index], 0x7F40);
+    next = GameQueueSpriteTrans(base, next, y, 0x180, D_8007D58A[index], 0x18, D_8007D588[index], D_8007D589[index], 0x7F40);
 
     y += D_8007D58B[index];
     if (which == 4) {
-        next = func_80017138(base, next, y, 0x180, 0x30, 0x18, 0, 0x78, 0x7F40);
+        next = GameQueueSpriteTrans(base, next, y, 0x180, 0x30, 0x18, 0, 0x78, 0x7F40);
         y += 0x34;
     }
 
-    next = func_80017138(base, next, y, 0x180, 0xC, 0x18, 0xEC, 0x78, 0x7F40);
-    *(s32 *)0x1F800000 = func_80017390(base, next, 0x3F);
+    next = GameQueueSpriteTrans(base, next, y, 0x180, 0xC, 0x18, 0xEC, 0x78, 0x7F40);
+    *(s32 *)0x1F800000 = GameQueueDrawModePrimWide(base, next, 0x3F);
 }
 
 /* Two glyphs plus a label naming the connected pad; caches the last valid g_PadType. */
@@ -95,8 +95,8 @@ void DrawPadTypeHint(void) {
     y2 = 0xB8;
     color = 0x7F40;
 
-    next = func_80017138(base, next, 0x7A, 0x1A0, w, h, y0, y2, color);
-    next = func_80017138(base, next, 0x92, 0x1A0, w, h, y0 + 8, y2, color);
-    next = func_80017138(base, next, 0x58, 0x1A0, 0x90, h, 0, y2, color);
-    *(s32 *)0x1F800000 = func_80017390(base, next, 0x3F);
+    next = GameQueueSpriteTrans(base, next, 0x7A, 0x1A0, w, h, y0, y2, color);
+    next = GameQueueSpriteTrans(base, next, 0x92, 0x1A0, w, h, y0 + 8, y2, color);
+    next = GameQueueSpriteTrans(base, next, 0x58, 0x1A0, 0x90, h, 0, y2, color);
+    *(s32 *)0x1F800000 = GameQueueDrawModePrimWide(base, next, 0x3F);
 }

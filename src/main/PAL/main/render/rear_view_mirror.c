@@ -167,8 +167,8 @@ extern u8 D_8007C73A[];
 
 void SetTile(u8 *arg0);
 void AddPrim(void *ot, void *prim);
-s32 func_80016EC4(u8 *arg0, u8 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
+s32 QueueSpriteWide(u8 *arg0, u8 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80016EC4");
+s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("func_80017390");
 
 u8 *DrawMirrorFrame(u8 *packet);
 u8 *DrawMirrorFrame(u8 *packet) {
@@ -204,8 +204,8 @@ u8 *DrawMirrorFrame(u8 *packet) {
     paletteIndex = colorIndex * 3;
     base2 = g_DrawBuffer;
     ot = base2 + 0xBD0;
-    next = func_80016EC4(ot, packet, 0x56, g_MirrorPanelY, D_8007C73A[paletteIndex], 8, D_8007C738[paletteIndex], D_8007C739[paletteIndex], 0x7800);
-    return (u8 *)func_80017390(ot, next, 9);
+    next = QueueSpriteWide(ot, packet, 0x56, g_MirrorPanelY, D_8007C73A[paletteIndex], 8, D_8007C738[paletteIndex], D_8007C739[paletteIndex], 0x7800);
+    return (u8 *)GameQueueDrawModePrimWide(ot, next, 9);
 }
 
 extern s32 g_MirrorUnlocked;

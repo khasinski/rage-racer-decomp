@@ -8,15 +8,15 @@ extern s32 D_8009B268;
 extern s32 D_8009B26C;
 extern s32 g_MenuAltLayout;
 
-void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0,
+void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0,
                    u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans,
-                   u32 flags);
+                   u32 flags) asm("func_80046A2C");
 void DrawFlatTriangleSigned(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, s16 x2, u16 y2,
                    u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("DrawFlatTriangle");
-void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
-                   u8 b, u8 alpha);
-void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
-                   u8 b, u8 alpha);
+void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
+                   u8 b, u8 alpha) asm("func_80047024");
+void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
+                   u8 b, u8 alpha) asm("func_8004711C");
 s32 rsin(s32 angle);
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */
@@ -71,18 +71,18 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     gray = 0xB4;
     ot = (void *)((u8 *)scratch + 8);
 
-    func_80046A2C(ot, 0xBC, 0x50, 0x14, 0x10, 0, 0xB4, 0, 0, 0, 0x244, 1, 1, 0x3A);
-    func_80046A2C(ot, 0xE0, 0x72, 0x14, 0x10, 0x14, 0xB4, 0, 0, 0, 0x244, 1, 1, 0x3A);
+    DrawSprite(ot, 0xBC, 0x50, 0x14, 0x10, 0, 0xB4, 0, 0, 0, 0x244, 1, 1, 0x3A);
+    DrawSprite(ot, 0xE0, 0x72, 0x14, 0x10, 0x14, 0xB4, 0, 0, 0, 0x244, 1, 1, 0x3A);
 
     xTest = (u8)x;
     zero = 0;
     if (xTest != 0xB8) {
         s32 green = (u8)alpha;
 
-        func_8004711C(ot, (s16)((u8)x - 1), 0x4C, (s16)((u8)x - 1), 0x84, zero, green, zero, 0xFF);
-        func_8004711C(ot, (s16)((u8)x - 3), 0x60, (s16)((u8)x - 3), 0x68, zero, green, zero, 0xFF);
-        func_8004711C(ot, (s16)((u8)x - 5), 0x60, (s16)((u8)x - 5), 0x68, zero, green, zero, 0xFF);
-        func_8004711C(ot, (s16)((u8)x - 7), 0x60, (s16)((u8)x - 7), 0x68, zero, green, zero, 0xFF);
+        DrawLine(ot, (s16)((u8)x - 1), 0x4C, (s16)((u8)x - 1), 0x84, zero, green, zero, 0xFF);
+        DrawLine(ot, (s16)((u8)x - 3), 0x60, (s16)((u8)x - 3), 0x68, zero, green, zero, 0xFF);
+        DrawLine(ot, (s16)((u8)x - 5), 0x60, (s16)((u8)x - 5), 0x68, zero, green, zero, 0xFF);
+        DrawLine(ot, (s16)((u8)x - 7), 0x60, (s16)((u8)x - 7), 0x68, zero, green, zero, 0xFF);
         DrawFlatTriangleSigned(ot, (s16)((u8)x - 13), 0x64, (s16)((u8)x - 8), 0x5E, (s16)((u8)x - 8), 0x6A,
                       zero, green, zero, zero, 0x80);
     }
@@ -90,10 +90,10 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     if (xTest != 0xF7) {
         s32 green = (u8)alpha;
 
-        func_8004711C(ot, (s16)((u8)x + 1), 0x4C, (s16)((u8)x + 1), 0x84, zero, green, zero, 0xFF);
-        func_8004711C(ot, (s16)((u8)x + 3), 0x6A, (s16)((u8)x + 3), 0x72, zero, green, zero, 0xFF);
-        func_8004711C(ot, (s16)((u8)x + 5), 0x6A, (s16)((u8)x + 5), 0x72, zero, green, zero, 0xFF);
-        func_8004711C(ot, (s16)((u8)x + 7), 0x6A, (s16)((u8)x + 7), 0x72, zero, green, zero, 0xFF);
+        DrawLine(ot, (s16)((u8)x + 1), 0x4C, (s16)((u8)x + 1), 0x84, zero, green, zero, 0xFF);
+        DrawLine(ot, (s16)((u8)x + 3), 0x6A, (s16)((u8)x + 3), 0x72, zero, green, zero, 0xFF);
+        DrawLine(ot, (s16)((u8)x + 5), 0x6A, (s16)((u8)x + 5), 0x72, zero, green, zero, 0xFF);
+        DrawLine(ot, (s16)((u8)x + 7), 0x6A, (s16)((u8)x + 7), 0x72, zero, green, zero, 0xFF);
         DrawFlatTriangleSigned(ot, (s16)((u8)x + 14), 0x6E, (s16)((u8)x + 9), 0x69, (s16)((u8)x + 9), 0x73,
                       zero, green, zero, zero, 0x80);
     }
@@ -101,12 +101,12 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     DrawRectOutline(ot, 0xB8, 0x48, 0x40, 0x40, gray, gray, gray, 0xFF);
     yLarge = 0x85;
     ySmall = 0x60;
-    func_8004711C(ot, 0xC7, 0x4A, 0xC7, yLarge, gray, gray, gray, ySmall);
-    func_8004711C(ot, 0xD7, 0x4A, 0xD7, yLarge, gray, gray, gray, ySmall);
-    func_8004711C(ot, 0xE7, 0x4A, 0xE7, yLarge, gray, gray, gray, ySmall);
+    DrawLine(ot, 0xC7, 0x4A, 0xC7, yLarge, gray, gray, gray, ySmall);
+    DrawLine(ot, 0xD7, 0x4A, 0xD7, yLarge, gray, gray, gray, ySmall);
+    DrawLine(ot, 0xE7, 0x4A, 0xE7, yLarge, gray, gray, gray, ySmall);
 
     DrawFlatTriangleSigned(ot, 0xB9, 0x87, 0xF7, 0x48, 0xF7, 0x87, 0x1E, 0x8E, 0x95, zero, 0x80);
-    func_80047024(ot, 0xB8, 0x48, 0x40, 0x40, 0x95, 0x25, 0x1E, 0xFF);
+    DrawSolidRect(ot, 0xB8, 0x48, 0x40, 0x40, 0x95, 0x25, 0x1E, 0xFF);
 
     D_8009B268 += 0x60;
 }
@@ -165,18 +165,18 @@ void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
         callY = y;
         flags = 0x19;
 
-        func_80046A2C(ot, leftEdge, callY, 0x10, 0x20, 0x48, 0xB8,
+        DrawSprite(ot, leftEdge, callY, 0x10, 0x20, 0x48, 0xB8,
                       0, 0, 0, 0x25A, 1, 0, flags);
         rightEdge = 0x1BF - leftX;
-        func_80046A2C(ot, rightEdge, callY, 0x10, 0x20, 0x58, 0xB8,
+        DrawSprite(ot, rightEdge, callY, 0x10, 0x20, 0x58, 0xB8,
                       0, 0, 0, 0x25A, 1, 0, flags);
 
         if (drawLeft != 0) {
-            func_80047024(ot, leftEdge, callY, 0x10, 0x20,
+            DrawSolidRect(ot, leftEdge, callY, 0x10, 0x20,
                            0, intensity, 0, 0xFF);
         }
         if (drawRight != 0) {
-            func_80047024(ot, rightEdge, callY, 0x10, 0x20,
+            DrawSolidRect(ot, rightEdge, callY, 0x10, 0x20,
                            0, intensity, 0, 0xFF);
         }
     }

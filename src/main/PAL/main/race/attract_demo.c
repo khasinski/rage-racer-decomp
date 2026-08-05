@@ -19,7 +19,7 @@ s32 RequestTrackDataAssets(void);
 extern s16 g_AttractTitleDelays[];
 s32 GetAttractTitleFade(s32 arg0);
 
-void func_80046A2C(
+void DrawCarSpecSprite(
     u8 *arg0,
     u32 arg1,
     u32 arg2,
@@ -33,7 +33,7 @@ void func_80046A2C(
     u32 arg10,
     u32 arg11,
     u32 arg12,
-    u32 arg13);
+    u32 arg13) asm("func_80046A2C");
 
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
@@ -108,10 +108,10 @@ void DrawAttractTitle(void) {
     value = GetAttractTitleFade(0);
     one = 1;
     arg13 = 0x29;
-    func_80046A2C(ptr, 0x74, 0x34, 0x58, 0x38, 0xA8, 0xA8, value, value, value, 0x1F, 0, one, arg13);
-    func_80046A2C(ptr, 0x44, 0x70, 0xB8, 0x14, 0x48, 0xE8, value, value, value, 0x80, 0, one, arg13);
+    DrawCarSpecSprite(ptr, 0x74, 0x34, 0x58, 0x38, 0xA8, 0xA8, value, value, value, 0x1F, 0, one, arg13);
+    DrawCarSpecSprite(ptr, 0x44, 0x70, 0xB8, 0x14, 0x48, 0xE8, value, value, value, 0x80, 0, one, arg13);
     value = GetAttractTitleFade(1);
-    func_80046A2C(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, arg13);
+    DrawCarSpecSprite(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, arg13);
 }
 
 void UpdateAttractDemoStart(void);

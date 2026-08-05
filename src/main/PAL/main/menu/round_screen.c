@@ -161,10 +161,10 @@ extern s32 g_BestTotalTimes[][4][2];
 extern s32 g_BestLapTimes[][4][2];
 
 s32 UpdateRoundScreenFade(s32 arg0);
-void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
-                   s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags);
+void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
+                   s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags) asm("func_80046A2C");
 void LibcSprintf(void *dst, void *fmt, s32 v) asm("func_800632F0");
-void func_80016B7C(u32 a0, u32 a1, void *a2, u32 a3, u32 a4);
+void DrawProportionalTextShadedWide(u32 a0, u32 a1, void *a2, u32 a3, u32 a4) asm("func_80016B7C");
 void FormatLapTime(void *dst, s32 v);
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
@@ -176,42 +176,42 @@ void DrawRoundScreen(void) {
     void *ot = g_DrawBuffer + 204;
 
     col = UpdateRoundScreenFade(0);
-    func_80046A2C(ot, 0x74, 0x14, 0x58, 0x38, 0xa8, 0xa8, col, col, col, 0x1f, 0, 1, 0x29);
-    func_80046A2C(ot, 0x44, 0x50, 0xb8, 0x14, 0x48, 0xe8, col, col, col, 0x80, 0, 1, 0x29);
+    GameDrawSpriteWide(ot, 0x74, 0x14, 0x58, 0x38, 0xa8, 0xa8, col, col, col, 0x1f, 0, 1, 0x29);
+    GameDrawSpriteWide(ot, 0x44, 0x50, 0xb8, 0x14, 0x48, 0xe8, col, col, col, 0x80, 0, 1, 0x29);
 
     col = UpdateRoundScreenFade(1);
     if (g_GrandPrixMode != 0) {
         LibcSprintf(buf, D_80010C30, g_GrandPrixRound);
-        func_80016B7C(0x5e, 0x68, buf, 0x7812, col);
+        DrawProportionalTextShadedWide(0x5e, 0x68, buf, 0x7812, col);
         y0 = 0x78;
     } else {
         y0 = 0x68;
     }
-    func_80046A2C(ot, 0x5e, y0, 0x84, 0xc, 0, g_CourseIndex * 12 + 156, col, col, col, 0x12, 0, 1, 0x29);
+    GameDrawSpriteWide(ot, 0x5e, y0, 0x84, 0xc, 0, g_CourseIndex * 12 + 156, col, col, col, 0x12, 0, 1, 0x29);
 
     col = UpdateRoundScreenFade(2);
     if (g_GrandPrixMode != 0) {
-        func_80016B7C(0x80, 0x88, D_80010C40, 0x7812, col);
+        DrawProportionalTextShadedWide(0x80, 0x88, D_80010C40, 0x7812, col);
         LibcSprintf(buf, D_80010C44, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][0]);
-        func_80016B7C(0x56, 0x98, buf, 0x7812, col);
+        DrawProportionalTextShadedWide(0x56, 0x98, buf, 0x7812, col);
         LibcSprintf(buf, D_80010C50, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][1]);
-        func_80016B7C(0x56, 0xa4, buf, 0x7812, col);
+        DrawProportionalTextShadedWide(0x56, 0xa4, buf, 0x7812, col);
         LibcSprintf(buf, D_80010C5C, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][2]);
-        func_80016B7C(0x56, 0xb0, buf, 0x7812, col);
+        DrawProportionalTextShadedWide(0x56, 0xb0, buf, 0x7812, col);
     } else {
-        func_80016B7C(0x62, 0x7c, D_80010C68, 0x7812, col);
+        DrawProportionalTextShadedWide(0x62, 0x7c, D_80010C68, 0x7812, col);
         FormatLapTime(buf, g_BestTotalTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
-        func_80016B7C(0x6a, 0x8c, buf, 0x7812, col);
-        func_80016B7C(0x6a, 0x9c, D_80010C70, 0x7812, col);
+        DrawProportionalTextShadedWide(0x6a, 0x8c, buf, 0x7812, col);
+        DrawProportionalTextShadedWide(0x6a, 0x9c, D_80010C70, 0x7812, col);
         FormatLapTime(buf, g_BestLapTimes[g_GrandPrixSeries][g_CourseIndex][g_GrandPrixMode]);
-        func_80016B7C(0x6a, 0xac, buf, 0x7812, col);
+        DrawProportionalTextShadedWide(0x6a, 0xac, buf, 0x7812, col);
     }
 }
 
-s32 func_80016EC4(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
-s32 func_80017390(void *ot, s32 p, s32 a);
+s32 QueueSpriteWide(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g) asm("func_80016EC4");
+s32 GameQueueDrawModePrimWide(void *ot, s32 p, s32 a) asm("func_80017390");
 s32 AddTilePrim(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
-void func_80016754(s32 x, s32 y, void *str, s32 col);
+void DrawText8x8Wide(s32 x, s32 y, void *str, s32 col) asm("func_80016754");
 
 /* The BGM row: the selection number and the track title from g_BgmTrackNames. */
 void DrawBgmSelector(void);
@@ -223,11 +223,11 @@ void DrawBgmSelector(void) {
     void *ot = g_DrawBuffer + 208;
 
     p = *scr;
-    p = func_80016EC4(ot, p, 0x14, 0xce, 0x58, 8, 0xa8, 0xe0, 0x7812);
+    p = QueueSpriteWide(ot, p, 0x14, 0xce, 0x58, 8, 0xa8, 0xe0, 0x7812);
     x = (g_BgmSelection == 0xa) ? 0x6c : 0x70;
-    p = func_80016EC4(ot, p, x, 0xce, 8, 8, 0x84, 0xc4, 0x7812);
-    p = func_80016EC4(ot, p, (g_BgmSelection == 0xa) ? 0x84 : 0x80, 0xce, 8, 8, 0x8c, 0xc4, 0x7812);
-    p = func_80017390(ot, p, 0x29);
+    p = QueueSpriteWide(ot, p, x, 0xce, 8, 8, 0x84, 0xc4, 0x7812);
+    p = QueueSpriteWide(ot, p, (g_BgmSelection == 0xa) ? 0x84 : 0x80, 0xce, 8, 8, 0x8c, 0xc4, 0x7812);
+    p = GameQueueDrawModePrimWide(ot, p, 0x29);
     p = AddTilePrim(ot, p, 0x10, 0xcc, 0x5b, 0xc, 0x85, 0x15, 0xe);
     p = AddTilePrim(ot, p, 0x6c, 0xcc, 0x1f, 0xc, 0x40, 0x40, 0x40);
     p = AddTilePrim(ot, p, 0x8c, 0xcc, 0xa4, 0xc, 0, 0, 0);
@@ -236,8 +236,8 @@ void DrawBgmSelector(void) {
 
     LibcSprintf(buf, D_80010D2C, g_BgmSelection);
     x = (g_BgmSelection == 0xa) ? 0x74 : 0x78;
-    func_80016754(x, 0xce, buf, 0x78cc);
-    func_80016754(0x90, 0xce, g_BgmTrackNames[g_BgmSelection], 0x78cc);
+    DrawText8x8Wide(x, 0xce, buf, 0x78cc);
+    DrawText8x8Wide(0x90, 0xce, g_BgmTrackNames[g_BgmSelection], 0x78cc);
 }
 
 extern s32 g_BgmShuffleIndex;

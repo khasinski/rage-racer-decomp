@@ -9,7 +9,7 @@ extern s16 g_ClassRecords[];
 extern volatile s32 g_ClassWinCount;
 extern s32 g_BgmTrackCount;
 extern u8 g_CaptionLostRace;
-void func_80016B7C(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4);
+void DrawProportionalTextShadedWide(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4) asm("func_80016B7C");
 extern s32 g_FrameSyncThreshold;
 extern s32 g_LostRaceChoice;
 void SetReverbDepth(s32 arg0, s32 arg1);
@@ -20,14 +20,14 @@ extern char g_TextEndRace[];
 extern char g_TextChance[];
 extern char g_TextPressStart[];
 extern s16 g_ChanceDigits[];
-void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
+void DrawProportionalTextWide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016EA0");
+void DrawText8x8Wide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
 extern volatile u16 g_PadEdge2;
 void PlaySoundCue(s32 cue);
 void RequestSelectBgmAssets(void);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void DrawRaceEndPrompt(void);
-void func_80046A2C(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
+void GameDrawSpriteWide(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13) asm("func_80046A2C");
 void DrawRaceEndBanner(s32 arg0);
 void ResetCourseProgress(s32 arg0);
 
@@ -65,7 +65,7 @@ void DrawLostRaceCaption(s32 arg0) {
         arg0 = 0xFF;
     }
     arg0 >>= 1;
-    func_80016B7C(0x28, 0x40, &g_CaptionLostRace, 0x7812, arg0);
+    DrawProportionalTextShadedWide(0x28, 0x40, &g_CaptionLostRace, 0x7812, arg0);
 }
 
 void EnterLostRaceScreen(void);
@@ -91,20 +91,20 @@ void DrawRaceEndPrompt(void) {
     if (g_LostRaceChoice == 0) {
         drawColor = color;
     }
-    func_80016EA0(0x6A, 0x68, g_TextTryAgain, drawColor);
+    DrawProportionalTextWide(0x6A, 0x68, g_TextTryAgain, drawColor);
 
     drawColor = 0x7812;
     if (g_LostRaceChoice != 0) {
         drawColor = color;
     }
-    func_80016EA0(0x70, 0x78, g_TextEndRace, drawColor);
+    DrawProportionalTextWide(0x70, 0x78, g_TextEndRace, drawColor);
 
-    func_80016EA0(0x76, 0xB8, g_TextChance, 0x7812);
+    DrawProportionalTextWide(0x76, 0xB8, g_TextChance, 0x7812);
 
     index = *(s16 *)((u8 *)g_CourseProgress + 6);
-    func_80016EA0(0xBE, 0xB8, &g_ChanceDigits[index], 0x7812);
+    DrawProportionalTextWide(0xBE, 0xB8, &g_ChanceDigits[index], 0x7812);
 
-    func_80016754(0x58, 0xD0, g_TextPressStart, 0x78CC);
+    DrawText8x8Wide(0x58, 0xD0, g_TextPressStart, 0x78CC);
     DrawLostRaceCaption(0xFF);
 }
 
@@ -161,7 +161,7 @@ void DrawRaceEndBanner(s32 arg0) {
         arg0 = 0xFF;
     }
     arg0 >>= 1;
-    func_80046A2C(g_DrawBuffer + 204, 0x50, 0x6C, 0xA0, 0x18, 0, 0x28, arg0, arg0, arg0, 0xC, 0, 1, 0x29);
+    GameDrawSpriteWide(g_DrawBuffer + 204, 0x50, 0x6C, 0xA0, 0x18, 0, 0x28, arg0, arg0, arg0, 0xC, 0, 1, 0x29);
 }
 
 void EnterRaceEndScreen(void);

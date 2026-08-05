@@ -56,7 +56,7 @@ extern u32 g_ScratchRenderMode;
 extern s16 g_PlayerLap;
 
 
-void *func_80017390(void *ot, void *packet, s32 arg2);
+void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("func_80017390");
 
 void AddPrim(void *ot, void *prim);
 
@@ -96,7 +96,7 @@ void DrawRaceEndBanner(s32 a);
 
 void ExitRaceScene(s32 a);
 
-void func_80016754(s32 a, s32 b, void *c, s32 d);
+void DrawText8x8Wide(s32 a, s32 b, void *c, s32 d) asm("func_80016754");
 
 void BeginCarStandingStart(void *a);
 
@@ -413,7 +413,7 @@ void DrawLapNumber(void) {
         ot = g_DrawBuffer + 0xCC;
         arg2 = 9;
         *(u8 **)packet = finalScratch;
-        *(u8 **)packet = func_80017390(ot, finalScratch, arg2);
+        *(u8 **)packet = GameQueueDrawModePrimWide(ot, finalScratch, arg2);
     }
 }
 
@@ -455,7 +455,7 @@ void UpdateWaypointCollectScene(void) {
         }
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
     } else if (g_RacePhase == 4) {
-        func_80016754(0x5c, 0x78, &g_TextCongratulations, 0x7811);
+        DrawText8x8Wide(0x5c, 0x78, &g_TextCongratulations, 0x7811);
         DrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
         if (g_RaceFadeTimer < 201) {

@@ -2,7 +2,7 @@
 #include "game/render.h"
 #include "game/state.h"
 
-void func_80046A2C(
+void GameDrawSpriteWide(
     void *ot,
     s32 x,
     s32 y,
@@ -16,7 +16,7 @@ void func_80046A2C(
     s32 arg10,
     s32 arg11,
     s32 arg12,
-    s32 arg13);
+    s32 arg13) asm("func_80046A2C");
 
 void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3);
 void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
@@ -95,7 +95,7 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
         alpha = 0x80;
     }
 
-    func_80046A2C(
+    GameDrawSpriteWide(
         (u8 *)otBase + (mode * 4),
         (s16)x,
         (s16)y,
@@ -112,7 +112,7 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
         alpha);
 }
 
-void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
+void GameDrawLineWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
 
 void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2);
 void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
@@ -219,7 +219,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     x1 <<= 0x10;
     otPtr = (s32)otBase + arg0;
     asm("" : "=r"(otPtr), "=r"(x0) : "0"(otPtr), "1"(x0));
-    func_8004711C(
+    GameDrawLineWide(
         (void *)otPtr,
         x0 >> 0x10,
         y1 >> 0x10,
@@ -570,7 +570,7 @@ loop_body:
 extern TimedDrawCommand D_80082520[];
 extern s32 D_8009B250[];
 
-void func_80046A2C();
+void GameDrawSpriteWide();
 
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot);
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
@@ -667,7 +667,7 @@ loop:
     drawX >>= 16;
     drawY >>= 16;
 
-    func_80046A2C((u8 *)ot + 8,
+    GameDrawSpriteWide((u8 *)ot + 8,
                   drawX,
                   drawY,
                   drawW,
@@ -698,9 +698,9 @@ loop:
     }
 }
 
-void func_80047958(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
-void func_80047634(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
-void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8);
+void DrawLargeTextWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("func_80047958");
+void drawSmallText(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("func_80047634");
+void GameDrawSolidRectWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8) asm("func_80047024");
 void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8);
 
 void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
@@ -718,16 +718,16 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 
     if (flags & 0x10) {
         if (flags % 2) {
-            func_80047958((s16)(arg0 + arg8), (s16)(arg1 + arg9), arg10,
+            DrawLargeTextWide((s16)(arg0 + arg8), (s16)(arg1 + arg9), arg10,
                           0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
         } else {
-            func_80047634((s16)(arg0 + arg8), (s16)(arg1 + arg9), arg10,
+            drawSmallText((s16)(arg0 + arg8), (s16)(arg1 + arg9), arg10,
                           0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
         }
     }
     func_80047460(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
                   0xb4, 0xb4, 0xb4, (f & 4) ? (f & 0x60) : 0xff);
-    func_80047024(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
+    GameDrawSolidRectWide(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
                   arg4, arg5, arg6, (f & 2) ? (f & 0x60) : 0xff);
     /* The second p3 use keeps it ahead of ot in global-alloc priority. */
     __asm__("" : : "r"(p0), "r"(p1), "r"(p2), "r"(p3), "r"(p3), "r"(f), "r"(ot));

@@ -13,9 +13,9 @@ typedef struct CellMask {
 extern CellMask D_80011BD4;
 extern s32 D_8009B2D4;
 
-void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
+void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex,
-                   s32 semiTrans, s32 flags);
+                   s32 semiTrans, s32 flags) asm("func_80046A2C");
 
 s32 DrawDesignModeScreen(s32 step);
 s32 DrawDesignModeScreen(s32 arg0) {
@@ -60,10 +60,10 @@ s32 DrawDesignModeScreen(s32 arg0) {
     y = 0xB0 - (s16)offset;
     intensity = (u32)D_8009B2D4 / 4;
 
-    func_80046A2C(ot, 0xB4, y, 0x18, 0xC, 0x94, 0xDC,
+    GameDrawSpriteWide(ot, 0xB4, y, 0x18, 0xC, 0x94, 0xDC,
                   (u8)intensity, (u8)intensity, (u8)intensity,
                   0x244, 0, 1, 0x3B);
-    func_80046A2C(ot, 0xCE, y, 0x14, 0xC, 0xE0, 0xDC,
+    GameDrawSpriteWide(ot, 0xCE, y, 0x14, 0xC, 0xE0, 0xDC,
                   (u8)intensity, (u8)intensity, (u8)intensity,
                   0x244, 0, 1, 0x3B);
 
@@ -77,7 +77,7 @@ s32 DrawDesignModeScreen(s32 arg0) {
                 clutX = 0x244;
             }
 
-            func_80046A2C(ot, 0xB4 + column * 0x10,
+            GameDrawSpriteWide(ot, 0xB4 + column * 0x10,
                           0xC0 + row * 0x20 - (s16)offset,
                           0xC, 0x18, 0xF4, 0x60,
                           (u8)intensity, (u8)intensity,

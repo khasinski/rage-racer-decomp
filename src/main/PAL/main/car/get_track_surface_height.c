@@ -437,7 +437,7 @@ extern u8 g_TachoNeedlePrim1PageA[];
 extern u8 g_TachoNeedlePrim1PageB[];
 
 void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
-void func_800666F4(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4);
+void SetDrawModeWide(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4) asm("func_800666F4");
 
 /*
  * Rebuilds the tachometer needle quad from the car spec block. The spec is
@@ -471,8 +471,8 @@ void BuildTachoNeedleQuad(void) {
     BuildSpriteFromDesc((SPRT *)prim1, src);
     SetShadeTex(prim0, 0);
     SetShadeTex(prim1, 0);
-    func_800666F4(prim0 - 0x18, 0, 1, 9, 0);
-    func_800666F4(prim0 - 0x0C, 0, 1, 0xA, 0);
-    func_800666F4(g_TachoNeedlePrim1PageA, 0, 1, 9, 0);
-    func_800666F4(g_TachoNeedlePrim1PageB, 0, 1, 0xA, 0);
+    SetDrawModeWide(prim0 - 0x18, 0, 1, 9, 0);
+    SetDrawModeWide(prim0 - 0x0C, 0, 1, 0xA, 0);
+    SetDrawModeWide(g_TachoNeedlePrim1PageA, 0, 1, 9, 0);
+    SetDrawModeWide(g_TachoNeedlePrim1PageB, 0, 1, 0xA, 0);
 }

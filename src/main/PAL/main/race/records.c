@@ -23,7 +23,7 @@ extern char g_FmtLapTime[];
 void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2) asm("func_800632F0");
 extern char g_TextTimeAttack[];
 extern char g_TextCourseIn[];
-void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
+void DrawProportionalTextWide(s32 arg0, s32 arg1, char *arg2, s32 arg3) asm("func_80016EA0");
 
 void InitRecordTables(void);
 void InitRecordTables(void) {
@@ -204,7 +204,7 @@ void *FormatLapTime(void *dst, s32 value) {
 }
 
 void DrawCourseIntro(void) {
-    func_80016EA0(0x10, 0x1C, g_TextTimeAttack, 0x7812);
+    DrawProportionalTextWide(0x10, 0x1C, g_TextTimeAttack, 0x7812);
     DrawText8x8Trans(0x10, 0x39, g_TextCourseIn, 0x78CC);
     DrawResultScreen();
 }

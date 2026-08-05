@@ -10,7 +10,7 @@ extern u8 g_CaptionPrizeMoney[];
 extern u8 g_FmtMoney[];
 extern u8 g_CaptionTotalMoney[];
 extern u8 g_CaptionPromotionBonus[];
-void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
+void DrawProportionalText(s32 id, void *dst, void *src, s32 arg3) asm("func_80016EA0");
 void LibcSprintf(void *dst, void *fmt, s32 val) asm("func_800632F0");
 extern s32 g_CourseProgress;
 extern s32 g_ClassClearFanfareTimer;
@@ -54,16 +54,16 @@ void DrawPrizeMoneyPanel(u8 *s0) {
     if (g_RaceProgress->money > 0x3B9AC9FF) {
         g_RaceProgress->money = 0x3B9AC9FF;
     }
-    func_80016EA0(0x10, s0 + 128, g_CaptionPrizeMoney, 0x7812);
+    DrawProportionalText(0x10, s0 + 128, g_CaptionPrizeMoney, 0x7812);
     LibcSprintf(sp, g_FmtMoney, g_PrizeAmount);
-    func_80016EA0(0x12, s0 + 140, sp, 0x7812);
-    func_80016EA0(0x10, s0 + 160, g_CaptionTotalMoney, 0x7812);
+    DrawProportionalText(0x12, s0 + 140, sp, 0x7812);
+    DrawProportionalText(0x10, s0 + 160, g_CaptionTotalMoney, 0x7812);
     LibcSprintf(sp, g_FmtMoney, g_RaceProgress->money);
-    func_80016EA0(0x12, s0 + 172, sp, 0x7812);
+    DrawProportionalText(0x12, s0 + 172, sp, 0x7812);
     if (g_ClassPromoted != 0) {
-        func_80016EA0(0x10, s0 + 192, g_CaptionPromotionBonus, 0x7812);
+        DrawProportionalText(0x10, s0 + 192, g_CaptionPromotionBonus, 0x7812);
         LibcSprintf(sp, g_FmtMoney, g_PromotionBonus);
-        func_80016EA0(0x12, s0 + 204, sp, 0x7812);
+        DrawProportionalText(0x12, s0 + 204, sp, 0x7812);
     }
 }
 

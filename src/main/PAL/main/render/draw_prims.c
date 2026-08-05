@@ -67,7 +67,7 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
 
 void SetSprt(void *arg0);
 void AddPrim(void *ot, void *prim);
-void *func_80017390(void *ot, void *prim, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2) asm("func_80017390");
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) asm("func_80046A2C");
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) {
@@ -132,14 +132,14 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     clutReg = flags;
     flags &= 0x80;
     if (flags == 0) {
-        prim = func_80017390(ot, prim, clutReg & 0xFFFF);
+        prim = QueueDrawModePrim(ot, prim, clutReg & 0xFFFF);
     }
 
     *(SPRT **)0x1F800000 = prim;
 }
 
 void SetPolyF3(void *arg0);
-void *func_80017390(void *ot, void *prim, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11);
 void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
@@ -185,7 +185,7 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     semiReg = flagsReg;
     flagsReg &= 0x80;
     if (flagsReg == 0) {
-        prim = func_80017390(ot, prim, semiReg & 0xFFFF);
+        prim = QueueDrawModePrim(ot, prim, semiReg & 0xFFFF);
     }
 
     *(POLY_F3 **)0x1F800000 = prim;
@@ -193,7 +193,7 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
 
 void SetPolyF4(void *arg0);
 void AddPrim(void *ot, void *prim);
-void *func_80017390(void *ot, void *prim, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags);
 void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
@@ -252,7 +252,7 @@ void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 
     semiReg = flagsReg;
     flagsReg &= 0x80;
     if (flagsReg == 0) {
-        prim = func_80017390(ot, prim, semiReg & 0xFFFF);
+        prim = QueueDrawModePrim(ot, prim, semiReg & 0xFFFF);
     }
 
     *(POLY_F4 **)0x1F800000 = prim;
@@ -318,7 +318,7 @@ void GameDrawTexturedQuad(s32 ot, s16 x0, s16 y0, s16 x1,
 }
 
 void SetSemiTrans(void *arg0, long enabled);
-void *func_80017390(void *ot, void *prim, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
@@ -363,7 +363,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     if (alphaReg != 0xFF) {
-        prim = func_80017390(ot, prim, alphaReg);
+        prim = QueueDrawModePrim(ot, prim, alphaReg);
     }
 
     *(TILE **)0x1F800000 = prim;
@@ -371,7 +371,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
 
 void SetLineF2(void *arg0);
 void SetSemiTrans(void *arg0, long enabled);
-void *func_80017390(void *ot, void *prim, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
 void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
@@ -416,7 +416,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     if (alphaReg != 0xFF) {
-        prim = func_80017390(ot, prim, alphaReg);
+        prim = QueueDrawModePrim(ot, prim, alphaReg);
     }
 
     *(LINE_F2 **)0x1F800000 = prim;
@@ -424,7 +424,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
 
 void SetLineF3(void *arg0);
 void AddPrim(void *ot, void *prim);
-void *func_80017390(void *ot, void *prim, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10);
 void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
@@ -450,14 +450,14 @@ void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 
     AddPrim(ot, oldPrim);
 
     if (arg10 != 0xFF) {
-        prim = func_80017390(ot, prim, arg10);
+        prim = QueueDrawModePrim(ot, prim, arg10);
     }
 
     *(LINE_F3 **)0x1F800000 = prim;
 }
 
 void SetLineG2(void *arg0);
-void *func_80017390(void *ot, void *prim, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {
@@ -510,13 +510,13 @@ void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     if (alphaReg != 0xFF) {
-        prim = func_80017390(ot, prim, alphaReg);
+        prim = QueueDrawModePrim(ot, prim, alphaReg);
     }
 
     *(LINE_G2 **)0x1F800000 = prim;
 }
 
-void func_8004711C(void *buf, s16 x1, s16 y1, s16 x2, s16 y2, s32 r, s32 g, s32 b, s32 code);
+void GameDrawLineWide(void *buf, s16 x1, s16 y1, s16 x2, s16 y2, s32 r, s32 g, s32 b, s32 code) asm("func_8004711C");
 void DrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code) asm("func_80047460");
 void DrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code)
 {
@@ -538,13 +538,13 @@ void DrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, 
   x1 = (s16) (new_var3 + new_var4);
   new_var2 = (s16) y_R18;
   h = (((((((((h - 1) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
-  func_8004711C(buf, x0, new_var2, x1, new_var2, r, g, b, code);
-  func_8004711C(buf, x0, (s16) (y_R18 + 1), x1, (s16) (y_R18 + 1), r, g, b, code);
+  GameDrawLineWide(buf, x0, new_var2, x1, new_var2, r, g, b, code);
+  GameDrawLineWide(buf, x0, (s16) (y_R18 + 1), x1, (s16) (y_R18 + 1), r, g, b, code);
   ytop2 = (s16) (y_R18 + 2);
   ybot = y_R18 + h;
   ybi = (s16) (ybot - 2);
-  func_8004711C(buf, x0, ytop2, x0, ybi, r, g, b, code);
-  func_8004711C(buf, x1, ytop2, x1, ybi, r, g, b, code);
-  func_8004711C(buf, x0, (s16) ybot, x1, (s16) ybot, r, g, b, code);
-  func_8004711C(buf, x0, (s16) (ybot - 1), x1, (s16) (ybot - 1), r, g, b, code);
+  GameDrawLineWide(buf, x0, ytop2, x0, ybi, r, g, b, code);
+  GameDrawLineWide(buf, x1, ytop2, x1, ybi, r, g, b, code);
+  GameDrawLineWide(buf, x0, (s16) ybot, x1, (s16) ybot, r, g, b, code);
+  GameDrawLineWide(buf, x0, (s16) (ybot - 1), x1, (s16) (ybot - 1), r, g, b, code);
 }

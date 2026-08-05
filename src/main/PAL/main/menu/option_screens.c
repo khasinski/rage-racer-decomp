@@ -15,7 +15,7 @@ extern s32 g_ScreenOffsetEditX;
 void DrawSoundOptionScreen(void);
 void ApplyAudioSettings(void);
 void PlaySoundCue(s32 cue);
-s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80017138");
 void DrawOptionHintBar(s32 arg0);
 extern s32 g_ScreenOffsetEditY;
 extern s32 g_ScreenOffsetX;
@@ -30,7 +30,7 @@ void DrawScreenAdjustScreen(void);
 extern s32 g_OptionLetterboxHeight;
 void DrawPadTypeHint(void);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 QueueLineWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_800172D4");
 /* The setup scene's per-frame overlay: pad hint, letterbox, and the alignment frame in mode 6. */
 void DrawOptionSceneOverlay(void);
 void DrawOptionSceneOverlay(void);
@@ -59,7 +59,7 @@ extern s32 g_BgmSelectStep;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void InitTrackScene(void);
-void func_80016EA0(s32 a0, s32 a1, void *a2, s32 a3);
+void DrawProportionalTextWide(s32 a0, s32 a1, void *a2, s32 a3) asm("func_80016EA0");
 void InstallCourseAssets(void);
 void RequestTrackDataAssets(void);
 void UpdateOptionSceneFade(void);
@@ -163,10 +163,10 @@ void DrawScreenAdjustScreen(void) {
 
     base += 0xCC;
     next = *scratch;
-    next = func_80017138(base, next, 0x9A, 0x88, w0c, h18, 0xC8, y48, color);
-    next = func_80017138(base, next, 0x9A, 0xB8, w0c, h18, 0xD4, y48, color);
-    next = func_80017138(base, next, 0xA6, 0xA0, w0c, h18, 0xE0, y48, color);
-    *scratch = func_80017138(base, next, 0x8E, 0xA0, w0c, h18, 0xEC, y48, color);
+    next = QueueSpriteTransWide(base, next, 0x9A, 0x88, w0c, h18, 0xC8, y48, color);
+    next = QueueSpriteTransWide(base, next, 0x9A, 0xB8, w0c, h18, 0xD4, y48, color);
+    next = QueueSpriteTransWide(base, next, 0xA6, 0xA0, w0c, h18, 0xE0, y48, color);
+    *scratch = QueueSpriteTransWide(base, next, 0x8E, 0xA0, w0c, h18, 0xEC, y48, color);
     DrawOptionHintBar(3);
 }
 
@@ -277,8 +277,8 @@ void DrawOptionSceneOverlay(void) {
         pkt = AddTilePrim(base, pkt, 0x10, 0x20, w120, two, white, white, white);
         pkt = AddTilePrim(base, pkt, 0x10, 0x1C0, w120, two, white, white, white);
         h1c0 = 0x1C0;
-        pkt = func_800172D4(base, pkt, 0x10, 0x20, 0x10, h1c0, white, white, white);
-        pkt = func_800172D4(base, pkt, 0x130, 0x20, 0x130, h1c0, white, white, white);
+        pkt = QueueLineWide(base, pkt, 0x10, 0x20, 0x10, h1c0, white, white, white);
+        pkt = QueueLineWide(base, pkt, 0x130, 0x20, 0x130, h1c0, white, white, white);
     }
 
     *scratch = AddTilePrim(base, pkt, 0, 0, 0x140, g_OptionLetterboxHeight, 0x85, 0x15, 0xE);
@@ -363,7 +363,7 @@ void UpdateOptionSceneFade(void) {
             g_BgmSelectStep = 2;
         }
     }
-    func_80016EA0(0x5E, 0x72, g_TextNowLoading, 0x7812);
+    DrawProportionalTextWide(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
 void UpdateBgmSelectLoad(void);

@@ -4,7 +4,7 @@
 #include "game/race.h"
 
 void AddPrim(void *ot, void *prim);
-void *func_80017390(void *arg0, void *arg1, s32 arg2);
+void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("func_80017390");
 
 void DrawRaceHudLabels(s32 arg0);
 void DrawRaceHudLabels(s32 arg0) {
@@ -31,7 +31,7 @@ void DrawRaceHudLabels(s32 arg0) {
     }
 
     scratch = (void **)0x1F800000;
-    *scratch = func_80017390(g_DrawBuffer + 0xCC, *scratch, 9);
+    *scratch = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, *scratch, 9);
 }
 
 

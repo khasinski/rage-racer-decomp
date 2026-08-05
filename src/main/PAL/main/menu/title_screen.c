@@ -89,7 +89,7 @@ void EnterTitleScreen(void) {
 extern u8 *g_DrawBuffer;
 
 void *func_8001720C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-void *func_80017390(void *arg0, void *arg1, s32 arg2);
+void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("func_80017390");
 
 /* Full-width grey box over the title screen at OT slot 0x29; the caller
  * steps its brightness D_801E6F28 down by 2 a frame. */
@@ -107,15 +107,15 @@ void DrawTitleFadeOverlay(s32 arg0) {
     scratch = (void **)0x1F800000;
     current = *scratch;
     next = func_8001720C(base, current, 0, 0x18, 0x140, 0xC0, color, color, color);
-    *scratch = func_80017390(base, next, 0x29);
+    *scratch = GameQueueDrawModePrimWide(base, next, 0x29);
 }
 
 extern s32 D_801E6F28;
 
 s32 rsin(s32 arg0);
 void DrawTitleFadeOverlay(s32 brightness);
-void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
-void *func_80017390(void *arg0, void *arg1, s32 arg2);
+void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("func_80016F8C");
+void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2);
 
 void DrawPressStartPrompt(void);
 
@@ -138,8 +138,8 @@ void DrawPressStartPrompt(void) {
     base = g_DrawBuffer;
     base += 0xCC;
     next = *scratch;
-    next = func_80016F8C(base, next, 0x68, 0xC8, 0x70, 0x10, 0x70, 0xA0, 0x7E84, frame);
-    *scratch = func_80017390(base, next, 0x39);
+    next = QueueShadedSpriteNine(base, next, 0x68, 0xC8, 0x70, 0x10, 0x70, 0xA0, 0x7E84, frame);
+    *scratch = GameQueueDrawModePrimWide(base, next, 0x39);
 }
 
 extern s32 g_TitleAttractTimer;

@@ -9,7 +9,7 @@ typedef struct Glyph {
 
 extern Glyph D_8007F984[];
 
-void func_80046A2C(
+void GameDrawSpriteWide(
     void *ot,
     s32 x0,
     s32 y0,
@@ -23,8 +23,8 @@ void func_80046A2C(
     s32 clut,
     s32 sh,
     s32 st,
-    s32 flags);
-void *func_80017390(void *ot, void *prim, s32 arg2);
+    s32 flags) asm("func_80046A2C");
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2) asm("func_80017390");
 
 void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047634");
 void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
@@ -109,7 +109,7 @@ void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
         u0 = fixed ? (idx % 42) * 6 : D_8007F984[idx].u;
         v0 = fixed ? (idx / 42) * 12 : D_8007F984[idx].v;
 
-        func_80046A2C(
+        GameDrawSpriteWide(
             (u8 *)ot + 4,
             (s16)x,
             (s16)y,
@@ -133,12 +133,12 @@ void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
     }
 
     *(void **)0x1F800000 =
-        func_80017390((u8 *)ot + 4, *(void **)0x1F800000, (fl & 0x7f) + 27);
+        QueueDrawModePrim((u8 *)ot + 4, *(void **)0x1F800000, (fl & 0x7f) + 27);
 }
 
 extern Glyph D_8007FA3C[];
 
-void func_80046A2C(
+void GameDrawSpriteWide(
     void *ot,
     s32 x0,
     s32 y0,
@@ -153,7 +153,7 @@ void func_80046A2C(
     s32 sh,
     s32 st,
     s32 flags);
-void *func_80017390(void *ot, void *prim, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) asm("func_80047958");
 void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
@@ -229,7 +229,7 @@ void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
         u0 = fixed ? (idx % 32) * 8 : D_8007FA3C[idx].u;
         v0 = fixed ? (idx / 32) * 16 + 24 : D_8007FA3C[idx].v;
 
-        func_80046A2C(
+        GameDrawSpriteWide(
             (u8 *)ot + 4,
             (s16)x,
             (s16)y,
@@ -253,10 +253,10 @@ void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
     }
 
     *(void **)0x1F800000 =
-        func_80017390((u8 *)ot + 4, *(void **)0x1F800000, (fl & 0x7f) + 27);
+        QueueDrawModePrim((u8 *)ot + 4, *(void **)0x1F800000, (fl & 0x7f) + 27);
 }
 
-void func_80046A2C(
+void GameDrawSpriteWide(
     void *ot,
     s32 x,
     s32 y,
@@ -271,7 +271,7 @@ void func_80046A2C(
     s32 arg11,
     s32 arg12,
     s32 flags);
-void *func_80017390(void *ot, void *prim, s32 count);
+void *QueueDrawModePrim(void *ot, void *prim, s32 count);
 
 s32 GameDrawNumber(
     s32 x,
@@ -361,7 +361,7 @@ s32 GameDrawNumber(
                 continue;
             }
 
-            func_80046A2C(
+            GameDrawSpriteWide(
                 ot,
                 (s16)x,
                 y,
@@ -391,14 +391,14 @@ s32 GameDrawNumber(
     }
 
     *(void **)0x1F800000 =
-        func_80017390(ot, *(void **)0x1F800000, primitiveCount + 27);
+        QueueDrawModePrim(ot, *(void **)0x1F800000, primitiveCount + 27);
     return drawn;
 }
 
 extern u8 D_8007F6E8[];
 extern s32 D_8007FB00;
 
-void *func_80017390(void *arg0, void *arg1, s32 arg2);
+void *QueueDrawModePrim(void *arg0, void *arg1, s32 arg2);
 
 void DrawBitPatternOverlay(s32 arg0);
 void DrawBitPatternOverlay(s32 arg0) {
@@ -438,7 +438,7 @@ void DrawBitPatternOverlay(s32 arg0) {
         bit = 0;
         do {
             if (((*row << bit) & 0x80) != 0) {
-                func_80046A2C(
+                GameDrawSpriteWide(
                     (u8 *)ot + 4,
                     (s16)x,
                     (s16)y,
@@ -466,7 +466,7 @@ void DrawBitPatternOverlay(s32 arg0) {
     x = 1;
     bit = 0x4C0000;
     do {
-        func_80046A2C(
+        GameDrawSpriteWide(
             (u8 *)ot + 4,
             (s16)(bit >> 16),
             0x33,
@@ -485,5 +485,5 @@ void DrawBitPatternOverlay(s32 arg0) {
         outer++;
     } while (outer < 0x10);
 
-    *(void **)0x1F800000 = func_80017390((u8 *)ot + 4, *(void **)0x1F800000, 0x39);
+    *(void **)0x1F800000 = QueueDrawModePrim((u8 *)ot + 4, *(void **)0x1F800000, 0x39);
 }
