@@ -60,6 +60,21 @@ func_8006E664 = func_8006E644 + 0x20;
 func_8006E674 = func_8006E644 + 0x30;
 func_8006E684 = func_8006E644 + 0x40;
 
+/* BIOS A0/B0 call stubs that live inside a hand-written block, so no object
+   file gives them their real names.  Spelled through the func_ aliases above
+   rather than as literal addresses, so they move with the code. */
+BiosSetMemSize = func_80063190;
+InitPad = func_800631F0;
+StartPad = func_80063200;
+_card_info = func_80063DAC;
+_card_load = func_80063DBC;
+InitCARD = func_80063DCC;
+StartCARD = func_80063DDC;
+ReturnFromException = func_8006E654;
+ResetEntryInt = func_8006E664;
+HookEntryInt = func_8006E674;
+SaveKernelRegisters = func_8006E684;
+
 /* Branch targets inside a function, reached from a sibling function that
    is still hand-written assembly. */
 .L80028ED4 = func_80028E9C + 0x38;

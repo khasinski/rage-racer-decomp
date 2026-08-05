@@ -427,3 +427,5 @@ segments:
       - [0x6BAD0, c, PAL/lib/libspu/SpuSetCommonAttr]
       - [0x6BE64, data, main/6BE64]
       - [0x8B800]
+
+  - [0x8B800]
