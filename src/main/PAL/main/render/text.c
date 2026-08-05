@@ -233,12 +233,9 @@ void DrawProportionalTextShadedWide(
     s32 clutIndex,
     s32 intensity) {
 #define OPAQUE_VALUE (t0 = 0x100)
-    s32 xPos;
+    s32 xPos = x;
     u8 *packet = *(u8 **)0x1F800000;
-    u8 *text = ({
-        asm("" : "=r"(packet), "=r"(xPos) : "0"(packet));
-        str;
-    });
+    u8 *text = str;
     register s32 shade asm("$23");
     register s32 t0 asm("$8");
     s32 s1;
@@ -255,7 +252,6 @@ void DrawProportionalTextShadedWide(
     home.clut = clutIndex;
     first = *text;
     shade = intensity;
-    xPos = x;
 
     if (first != 0) {
         s32 height = 12;
