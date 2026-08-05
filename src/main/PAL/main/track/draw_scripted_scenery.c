@@ -115,7 +115,7 @@ extern s16 g_PathSceneryRotZ asm("D_801E4DCC");
 extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_PlayerCarY asm("D_8009E6D8");
 extern s32 g_PlayerCarZ asm("D_8009E6DC");
-extern s16 g_PathSceneryRacePhase asm("D_801E6E74");
+extern s16 g_RacePhase asm("D_801E6E74");
 
 /*
  * The position and rotation cursors are the same interleaved eight-halfword
@@ -515,7 +515,7 @@ void UpdatePathScenerySound(void) {
         pitch = 0;
     }
 
-    if (g_PathSceneryRacePhase >= 3) {
+    if (g_RacePhase >= 3) {
         pitch = 0;
         vol = 0;
     }

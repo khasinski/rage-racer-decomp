@@ -15,7 +15,7 @@
  * address into a and reschedules around it, which shifts the
  * allocation of the whole surrounding block. Three symbols keep three separate
  * %hi/%lo pairs, which is what the retail code has. */
-extern s32 g_RefSectorTime0 asm("D_8009AF90");
+extern s32 g_RefSectorTimes asm("D_8009AF90");
 extern s32 g_RefSectorTime1 asm("D_8009AF94");
 extern s32 g_RefSectorTime2 asm("D_8009AF98");
 
@@ -408,7 +408,7 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
             g_SectorTimes[2] = result;
             if (arg1 == 0) {
                 g_RefSectorTime2 = result;
-                g_RefSectorTime0 = g_SectorTimes[0];
+                g_RefSectorTimes = g_SectorTimes[0];
                 g_RefSectorTime1 = g_SectorTimes[1];
             }
 
@@ -448,7 +448,7 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
                 }
                 if (arg1 == 0) {
                     tableOffset = g_CourseIndex * 12 + g_RaceSeries * 48;
-                    *(s32 *)((u8 *)g_BestSectorTimes + tableOffset) = g_RefSectorTime0;
+                    *(s32 *)((u8 *)g_BestSectorTimes + tableOffset) = g_RefSectorTimes;
                     *(s32 *)((u8 *)&g_BestSectorTimes[0][0][1] + tableOffset) =
                         g_RefSectorTime1;
                     *(s32 *)((u8 *)&g_BestSectorTimes[0][0][2] + tableOffset) =
@@ -588,7 +588,7 @@ void EnterRaceScene(void) {
     g_SectorEndDistance[0] = trackLength / 3;
     g_SectorEndDistance[1] = g_SectorEndDistance[0] * 2;
     tableOffset = (mode * 12) + (scene * 48);
-    g_RefSectorTime0 = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset);
+    g_RefSectorTimes = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset);
     scene *= 32;
     g_RefSectorTime1 = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset + 4);
     mode *= 8;

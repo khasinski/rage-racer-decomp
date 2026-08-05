@@ -20,7 +20,7 @@ extern s32 g_McSavedLoadPhase asm("D_8009B718");
  * qualifier (gcc 2.6.3 keeps the first declaration's type), so the alias needs
  * its own identifier. */
 extern volatile s32 g_McCardStatusV asm("D_8009B720");
-extern volatile s32 g_McMenuSubStateV asm("D_8009B72C");
+extern volatile s32 g_McMenuSubState asm("D_8009B72C");
 extern s32 g_McFromLoadMenu asm("D_8009B730");
 extern s32 g_McSaveMode asm("D_8009B734");
 extern s32 g_McFreeBlocks asm("D_8009B73C");
@@ -358,7 +358,7 @@ L_sw2:
         x = 0x10;
         g_McActionOk = 0;
         }
-        g_McMenuSubStateV = x;
+        g_McMenuSubState = x;
         dp = GameMenuLoadPhase;
         g_McActionState = 0xF;
         g_McSavedLoadPhase = dp;
@@ -700,7 +700,7 @@ L_sw2:
             } else {
                 x = 0xC;
             }
-            g_McMenuSubStateV = x;
+            g_McMenuSubState = x;
             w = GameMenuLoadPhase;
             g_McActionState = 6;
             g_McSavedLoadPhase = w;
