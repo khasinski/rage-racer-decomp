@@ -64,9 +64,10 @@ s32 BeginMirrorPass(void) {
         func_80069A58(0xA0, 0x24);
         func_80069A78(0xC0);
 
-        scratch->mode = 9;
-        scratch->x0 = 0x56;
-        __asm__("");
+        v0reg = 9;
+        scratch->mode = v0reg;
+        v0reg = 0x56;
+        scratch->x0 = v0reg;
         v0reg = (s32)g_DrawBuffer;
         y0 = *(u16 *)&g_MirrorPanelY;
         scratch->x1 = 0xEA;
