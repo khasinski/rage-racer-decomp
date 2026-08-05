@@ -4,8 +4,8 @@
 
 .globl D_800630B4
 D_800630B4:
-/* 800630B4 3C02800A */  lui $v0, %hi(D_8009AC30 + 0x2A8)
-/* 800630B8 2442AED8 */  addiu $v0, $v0, %lo(D_8009AC30 + 0x2A8)
+/* 800630B4 3C02800A */  lui $v0, %hi(g_SpuRevAttrTable + 0x2A8)
+/* 800630B8 2442AED8 */  addiu $v0, $v0, %lo(g_SpuRevAttrTable + 0x2A8)
 /* 800630BC 3C03801F */  lui $v1, %hi(main_BSS_END)
 /* 800630C0 24632A10 */  addiu $v1, $v1, %lo(main_BSS_END)
 .L800630C4:
@@ -35,15 +35,15 @@ D_800630B4:
 /* 80063120 00432823 */  subu $a1, $v0, $v1
 /* 80063124 00A42823 */  subu $a1, $a1, $a0
 /* 80063128 00882025 */  or $a0, $a0, $t0
-/* 8006312C 3C01800A */  lui $at, %hi(D_8009AC30 + 0x2A8)
-/* 80063130 AC3FAED8 */  sw $ra, %lo(D_8009AC30 + 0x2A8)($at)
-/* 80063134 3C1C800A */  lui $gp, %hi(D_8009AC30 + 0x2A8)
-/* 80063138 279CAED8 */  addiu $gp, $gp, %lo(D_8009AC30 + 0x2A8)
+/* 8006312C 3C01800A */  lui $at, %hi(g_SpuRevAttrTable + 0x2A8)
+/* 80063130 AC3FAED8 */  sw $ra, %lo(g_SpuRevAttrTable + 0x2A8)($at)
+/* 80063134 3C1C800A */  lui $gp, %hi(g_SpuRevAttrTable + 0x2A8)
+/* 80063138 279CAED8 */  addiu $gp, $gp, %lo(g_SpuRevAttrTable + 0x2A8)
 /* 8006313C 03A0F021 */  addu $fp, $sp, $zero
 /* 80063140 0C018C5C */  jal func_80063170
 /* 80063144 20840004 */  addi $a0, $a0, 0x4
-/* 80063148 3C1F800A */  lui $ra, %hi(D_8009AC30 + 0x2A8)
-/* 8006314C 8FFFAED8 */  lw $ra, %lo(D_8009AC30 + 0x2A8)($ra)
+/* 80063148 3C1F800A */  lui $ra, %hi(g_SpuRevAttrTable + 0x2A8)
+/* 8006314C 8FFFAED8 */  lw $ra, %lo(g_SpuRevAttrTable + 0x2A8)($ra)
 /* 80063150 00000000 */  nop
 /* 80063154 0C005944 */  jal func_80016510
 /* 80063158 00000000 */  nop
