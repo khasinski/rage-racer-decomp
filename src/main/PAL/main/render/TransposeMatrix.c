@@ -7,31 +7,33 @@ u32 func_80069CBC[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  * 3x3 s16 matrix transpose: dst[i][j] = src[j][i].
  * Reads src words 0,3,6,1,4,7,2,5,8; writes dst 0..8; returns dst.
  *
- * Register pinning + two empty barriers (no ordinary-MIPS inline asm) are
- * needed to reproduce the retail allocation/scheduling exactly:
+ * One register pin + two empty allocation barriers (no ordinary-MIPS inline
+ * asm) reproduce the retail allocation/scheduling exactly:
  *   - dstp -> $5 (a1) is the store base for every sh; ret -> $2 (v0) is only
  *     the return value; value0/1/2 -> $9/$10/$11 (t1/t2/t3) cycle the loads.
- *   - The first `` keeps `ret = dst` from floating above
- *     the first load so the resulting `move v0,a1` lands in that load's delay
- *     slot (offset 0x4), matching retail.
- *   - The second empty barrier (opaque identity on ret) hides $2==dst from the
- *     optimizer so it keeps addressing the stores through $5 instead of reusing
- *     $2 as the base pointer.
+ *     Only value2 still needs a hard register name; the barriers allocate the
+ *     first two values.
+ *   - The first tied barrier keeps `ret = dst` from floating above the first
+ *     load and assigns value0 to $t1, so `move v0,a1` lands in that load's
+ *     delay slot (offset 0x4), matching retail.
+ *   - The second tied barrier assigns the first value1 load to $t2 and hides
+ *     $2==dst from the optimizer, so stores remain addressed through $5 rather
+ *     than reusing $2 as the base pointer.
  */
 Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
     s16 *srcp = (s16 *)src;
     s16 *dstp = (s16 *)dst;
     Matrix *ret;
-    register s32 value0 asm("$9");
-    register s32 value1 asm("$10");
+    s32 value0;
+    s32 value1;
     register s32 value2 asm("$11");
 
     value0 = srcp[0];
-    __asm__ volatile("");
+    __asm__ volatile("" : "=r"(value0) : "0"(value0) : "$2", "$3", "$6", "$7", "$8");
     ret = dst;
-    __asm__ volatile("" : "=r"(ret) : "0"(ret));
     dstp[0] = value0;
     value1 = srcp[3];
+    __asm__ volatile("" : "=r"(ret), "=r"(value1) : "0"(ret), "1"(value1) : "$3", "$6", "$7", "$8", "$9");
     value0 = srcp[6];
     dstp[1] = value1;
     value2 = srcp[1];
