@@ -4,8 +4,6 @@
 #include "game/memcard.h"
 #include "game/sound.h"
 
-extern s16 g_SeqHandle;
-
 void StartMemoryCardEvents(void) {
     OpenMemoryCardEvents();
     EnableMemoryCardEvents();

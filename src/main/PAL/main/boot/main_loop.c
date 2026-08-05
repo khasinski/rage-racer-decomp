@@ -10,15 +10,12 @@
 #include "game/cd.h"
 #include "game/asset.h"
 #include "game/race.h"
-void ServiceAssetLoad(void);
-void InitAssetSystem(void);
 
 void SetGraphDebug(s32 arg0);
 void InitRenderState(s32 arg0);
 
 extern s32 g_ScreenOffsetY;
 extern s32 g_ScreenOffsetX;
-extern s32 g_MirrorMode;
 
 extern u16 g_NegconSteerPlay;
 extern u16 g_PadMappingIndex;

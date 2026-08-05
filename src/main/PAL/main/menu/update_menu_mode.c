@@ -7,9 +7,6 @@
 #include "game/car.h"
 #include "game/sound.h"
 
-extern s32 g_PlayerCarIndex;
-extern s32 g_CarListCursor;
-
 struct Entry_5ACA0 {
     u8 f0;
     u8 f1;
@@ -82,7 +79,6 @@ void UpdateMenuMode(void) {
     DrawBitPatternOverlay(g_MenuOverlayPattern);
 }
 
-extern s32 g_SeqVolumeFadeStep;
 void SpuVmDamperStep(void);
 void TickSequenceAudio(void) {
     if (g_SceneId == 0xC) {
@@ -131,10 +127,6 @@ s32 SetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
     }
     return old;
 }
-
-extern s32 g_ReverbDepthL;
-extern s32 g_ReverbDepthR;
-extern s32 D_801E6D80;
 
 void LoadAudioParameterTable(u16 *table) {
     u16 *tableReg = table;

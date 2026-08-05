@@ -137,7 +137,6 @@ void EndMirrorPass(void) {
     scratch->matrix = D_8009AF00;
 }
 
-void AddPrim(void *ot, void *prim);
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 
 u8 *DrawMirrorFrame(u8 *packet) {
@@ -179,7 +178,6 @@ u8 *DrawMirrorFrame(u8 *packet) {
 
 extern s32 g_VisibleCellList;
 
-void AddPrim(void *ot, void *prim);
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2);
 
 void DrawRearViewMirror(s32 arg0) {

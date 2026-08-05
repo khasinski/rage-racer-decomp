@@ -4,16 +4,13 @@
 #include "psyq/snd.h"
 
 extern u_char g_SndVoiceStateNote[];
-extern u_char g_SndVoiceStateSeqSep[];
 extern u_char g_SndVoiceStateProg[];
 extern u_char g_SndVoiceStateTone[];
 extern u_char g_SndVoiceStateVabId[];
 extern u_char g_SndVoiceRegsPitch[];
 extern u_char g_SndVoiceFlags[];
-extern u_char g_SndCurrentProgActual;
 extern u_char *g_SndCurrentToneTable;
 extern u_short g_SndCurrentVoice;
-extern u_char g_SndCurrentTone;
 
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) {
     register long raw asm("$10") = arg0;

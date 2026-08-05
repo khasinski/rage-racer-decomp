@@ -3,12 +3,8 @@
 #include "psyq/gpu.h"
 
 extern volatile u_long *g_GpuGp1;
-extern volatile u_long *g_GpuDmaChcr;
-extern volatile u_long *g_GpuDpcr;
 extern long g_GpuQueueWriteIdx;
 extern volatile long g_GpuQueueReadIdx;
-extern long g_GpuResetIntrMask;
-extern u_char g_GpuGp1Mirror[];
 extern u_char g_GpuQueue[];
 
 long Gpu_ProbeType(u_long arg0);

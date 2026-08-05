@@ -215,8 +215,6 @@ void DrawBgmSelector(void) {
 extern s32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
 
-void PlaySoundCue(s32 cue);
-
 /* Scene 10: draws the ROUND screen, takes the BGM choice and starts the race at frame 121. */
 void UpdateRoundScreen(void) {
     if ((u32)g_SceneTimer < 10000) {

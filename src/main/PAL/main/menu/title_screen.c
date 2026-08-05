@@ -12,8 +12,6 @@
 
 extern s32 D_801E8260;
 
-void SetDefaultReverbDepth(void);
-
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
  * state words and hands over to scene 4, UpdateFrontend. */
 void EnterFrontend(void) {
@@ -39,7 +37,6 @@ void EnterFrontend(void) {
 
 extern s32 g_StreamReturnScene;
 extern s32 D_801E8260;
-void SetDefaultReverbDepth(void);
 
 void EnterTitleScreen(void) {
     SetupDisplay240(0, 0, 0);
@@ -111,7 +108,6 @@ void DrawPressStartPrompt(void) {
 }
 
 extern s32 D_801E8260;
-void PlaySoundCue(s32 cue);
 
 void UpdateTitleScreen(void) {
     if (g_PadEdge2 & 0x800) {
@@ -249,7 +245,6 @@ extern s32 g_ExtraGrandPrixCars;
 extern s32 g_ExtraGrandPrixCourseProgress;
 extern s32 g_TimeAttackCars;
 
-void PlaySoundCue(s32 cue);
 extern void ShuffleBgmOrder(void);
 extern void RequestOptionScreenAssets(void);
 

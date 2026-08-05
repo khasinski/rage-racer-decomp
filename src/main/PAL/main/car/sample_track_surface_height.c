@@ -31,8 +31,6 @@ typedef struct TP {
     u16 segmentLength; /* 0x16 */
 } TP;
 
-extern s32 g_TrackPointCount;
-
 s32 FindTrackSegment(Car *car, s32 idx);
 
 /*
