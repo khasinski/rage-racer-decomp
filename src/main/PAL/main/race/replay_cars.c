@@ -4,7 +4,7 @@
 #include "game/track.h"
 #include "game/car.h"
 
-extern s32 g_PlayerCar asm("D_8009E6D4");
+extern s32 g_PlayerCar;
 
 extern s32 g_PlayerTrackPoint;
 

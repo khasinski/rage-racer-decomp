@@ -309,7 +309,7 @@ extern s32 g_FlybySceneryRotX;
 extern s32 g_FlybySceneryRotY;
 extern s32 g_FlybySceneryRotZ;
 extern s32 g_RaceSeries;
-extern s32 g_PlayerCar asm("D_8009E6D4");
+extern s32 g_PlayerCar;
 extern s32 g_PlayerCarY;
 extern s32 g_PlayerCarZ;
 

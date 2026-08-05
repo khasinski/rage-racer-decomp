@@ -8,7 +8,7 @@ extern short *g_SndSpuRegs;
 extern short g_SndVoiceRegs[];
 extern volatile u_char g_SndVoiceRegsVolRight[];
 extern volatile u_char g_SndVoiceRegsPitch[];
-extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern volatile u_char g_SndVoiceFlags[];
 extern short g_SndVoiceStateNote[];
 extern short g_SndVoiceStateProg[];
 extern u_char g_SndVoiceStateTone[];

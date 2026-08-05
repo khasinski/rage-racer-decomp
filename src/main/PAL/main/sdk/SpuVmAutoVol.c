@@ -83,7 +83,7 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
 }
 
 extern u_short g_SndVoiceRegs[];
-extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern u_char g_SndVoiceFlags[];
 extern SpuVoice g_SndVoiceState[];
 extern VabHdr *g_SndCurrentVabHeader;
 extern SvmCurrentAttr g_SndCurrentAttr;
@@ -265,7 +265,7 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     *(volatile short *)(g_SndVoiceStatePanStep + offset) = quotient;
 }
 
-extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern u_char g_SndVoiceFlags[];
 extern u_short g_SndVoiceRegs[];
 extern u_short g_SndVoiceRegsVolRight[];
 extern u_char D_801E4BD4;

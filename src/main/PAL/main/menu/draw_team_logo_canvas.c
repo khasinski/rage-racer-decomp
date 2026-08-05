@@ -69,7 +69,7 @@ extern u16 D_8009B2A0[16];
 extern u16 g_TeamLogoClut[16];
 extern u16 g_TeamLogoSwatches[];
 extern u8 g_PadType;
-extern u16 D_801E6F2C;
+extern u16 D_801E6F2C asm("g_TeamLogoCanvas");
 
 extern s32 GetClut(s16 x, s16 y);
 extern void LoadImage(void *rect, void *data);
@@ -663,7 +663,7 @@ void RampTeamLogoCanvas(s32 arg0, s32 arg1) {
     D_8007F948 = 0x220 - (temp >> 8);
 }
 
-extern u32 g_TeamLogoCanvas[] asm("D_801E6F2C");
+extern u32 g_TeamLogoCanvas[];
 
 void PlaySoundCue(s32 cue);
 

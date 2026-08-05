@@ -13,7 +13,7 @@ extern s16 g_PauseDebounce;
 extern s16 g_ReverbZoneDepth;
 
 
-extern u8 g_PlayerCar[] asm("D_8009E6D4");
+extern u8 g_PlayerCar[];
 
 extern s32 g_PlayerTrackProgress;
 

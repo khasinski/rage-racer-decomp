@@ -180,11 +180,12 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
 
 /*
  * g_RankedCars - 1: this walker is indexed from the slot before the leader,
- * so the byte at 0x801E40B8 itself is never loaded. It stays raw because that
- * address already has a name for what actually lives there -- g_SceneTimer in
- * game/state.h -- and aliasing it a second time would be misleading.
+ * so the byte at 0x801E40B8 itself is never loaded. The identifier stays raw
+ * because what lives at that address is g_SceneTimer (game/state.h) and calling
+ * this array by that name would be misleading; the alias names the symbol so
+ * the address itself never appears in C.
  */
-extern GameCarRuntime *D_801E40B8[];
+extern GameCarRuntime *D_801E40B8[] asm("g_SceneTimer");
 
 void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1);
 void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {

@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern u32 g_TeamLogoCanvas[] asm("D_801E6F2C");
+extern u32 g_TeamLogoCanvas[];
 
 void PlaySoundCue(s32 cue);
 

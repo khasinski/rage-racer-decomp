@@ -1207,3 +1207,6 @@ SsUtPitchBend = 0x80078130; // type:func
 SsUtChangePitch = 0x800781C0; // type:func
 SsUtSetVVol = 0x80078528; // type:func
 _SsVmInit = 0x8007865C; // type:func
+CD_vol = 0x8006BA68; // type:func
+CD_getsector2 = 0x8006C06C; // type:func
+g_SoundModes = 0x800126D0;

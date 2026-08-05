@@ -35,7 +35,7 @@ typedef struct MusicChannel {
     s32 volRight;  /* +0x14 scaled right volume      (D_801E6D14) */
 } MusicChannel; /* sizeof 0x18 */
 
-extern MusicChannel g_MusicChannels[] asm("D_801E6D00");
+extern MusicChannel g_MusicChannels[];
 
 /* Effect voice, 4 elements for hardware voices 10..13. SetPitchedSoundCue walks it
  * with a pointer to `.state`. */
@@ -49,7 +49,7 @@ typedef struct EffectVoice {
     s32 volume;    /* +0x10 volume            (g_EffectVoiceVolume) */
 } EffectVoice; /* sizeof 0x14 */
 
-extern EffectVoice g_EffectVoices[] asm("D_801E6D30");
+extern EffectVoice g_EffectVoices[];
 
 /* Scalar control block at 0x6D80. Retail addresses these individually by
  * symbol, never base+index, so they stay independent externs. */

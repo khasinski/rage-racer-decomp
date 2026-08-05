@@ -67,7 +67,7 @@ extern s32 g_ChaseCarSpeed;
 extern s32 g_CameraNodeIndex;
 extern s32 g_CamPathFrame;
 extern s32 g_CamPathNode;
-extern s32 g_PlayerCar asm("D_8009E6D4");
+extern s32 g_PlayerCar;
 extern u8 *g_TrackCameras;
 
 /*

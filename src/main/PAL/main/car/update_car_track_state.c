@@ -8,7 +8,7 @@
 void SetCarKnockback(void *, s32, s32, s32);
 s32 rsin(s32);
 s32 rcos(s32);
-extern u8 g_PlayerCar asm("D_8009E6D4");
+extern u8 g_PlayerCar;
 
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the

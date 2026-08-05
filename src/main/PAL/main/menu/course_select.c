@@ -23,7 +23,7 @@ extern s32 D_8009B364;
 extern s32 D_8009B368;
 extern s32 g_MenuViewSpin;
 extern u8 *g_CourseProgress;
-extern s32 g_PlayerCar asm("D_8009E6D4");
+extern s32 g_PlayerCar;
 extern s32 g_PlayerCarY;
 extern s32 g_PlayerCarZ;
 extern s32 D_8009E6F4;
@@ -35,7 +35,7 @@ extern s32 g_PlayerTrackProgress;
 extern u8 g_TeamLogoClutRect[];
 extern u8 g_TeamLogoRect[];
 extern u8 g_TeamLogoClut[];
-extern u8 g_TeamLogoCanvas[] asm("D_801E6F2C");
+extern u8 g_TeamLogoCanvas[];
 s32 RequestCarSelectAssets(void);
 void PlaySequence(void);
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -116,8 +116,8 @@ typedef struct CourseSelectScrollState {
 } CourseSelectScrollState;
 
 extern CourseSelectPrizeTable g_CourseSelectPrizeTable asm("g_PrizeMoney");
-extern CourseSelectScrollState g_CourseSelectScrollState asm("D_8009B2C0");
-extern s32 D_8009B2C0;
+extern CourseSelectScrollState g_CourseSelectScrollState;
+extern s32 D_8009B2C0 asm("g_CourseSelectScrollState");
 
 void GameDrawSpriteWide(
     void *ot,

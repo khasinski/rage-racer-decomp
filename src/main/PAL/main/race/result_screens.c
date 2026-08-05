@@ -33,7 +33,7 @@ extern s32 g_SeriesCleared;
 extern s32 g_EndingWashLevel;
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
-extern u8 g_PlayerCar asm("D_8009E6D4");
+extern u8 g_PlayerCar;
 extern s32 g_ReplayReadCursor;
 extern s16 g_PlayerTrackSection;
 void PlaySoundCue(s32 cue);

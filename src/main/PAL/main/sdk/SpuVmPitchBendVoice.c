@@ -6,7 +6,7 @@ extern u_char g_SndVoiceStateProgActual[];
 extern short g_SndVoiceStateNote[];
 extern u_char g_SndVoiceStateTone[];
 extern volatile u_char g_SndVoiceRegsPitch[];
-extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern volatile u_char g_SndVoiceFlags[];
 extern u_char g_SndCurrentProgActual;
 extern u_char g_SndCurrentTone;
 extern short g_SndCurrentVoice;

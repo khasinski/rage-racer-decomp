@@ -8,7 +8,7 @@
 #include "game/state.h"
 #include "game/render.h"
 
-extern s32 g_PlayerCar asm("D_8009E6D4");
+extern s32 g_PlayerCar;
 
 extern s32 g_PlayerCarZ;
 

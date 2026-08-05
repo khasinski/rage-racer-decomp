@@ -539,7 +539,7 @@ extern u16 g_BgmSelection;
 
 extern u16 g_ClassRecords[];
 extern u16 g_TeamLogoClut[];
-extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
+extern u16 g_TeamLogoCanvas[];
 extern s32 g_BestLapTimes[];
 extern s32 g_BestTotalTimes[];
 extern s32 g_BestSectorTimes[];
@@ -828,7 +828,7 @@ extern u16 g_NegconNeutralL;
 
 extern u16 g_ClassRecords[];
 extern u16 g_TeamLogoClut[];
-extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
+extern u16 g_TeamLogoCanvas[];
 extern s32 g_BestLapTimes[];
 extern s32 g_BestTotalTimes[];
 extern s32 g_BestSectorTimes[];

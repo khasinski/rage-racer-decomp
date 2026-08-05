@@ -66,7 +66,7 @@ extern s32 g_SceneId;
 /* Per-scene frame counter, reset with every g_SceneId write. Scenes sequence
  * themselves against fixed thresholds. Four TUs need it as u32 and carry their
  * own unsigned declaration of the same symbol. */
-extern s32 g_SceneTimer asm("D_801E40B8");
+extern s32 g_SceneTimer;
 
 /* Free-running animation phase counter: drives cyclic effects (sine offsets,
  * blink tests `& 2` / `& 8`, `% 6` cycles), never a deadline. */

@@ -13,7 +13,7 @@ extern volatile u_short g_SndDamper;
 extern volatile u_short g_SndVabOpenCount;
 
 extern u_short g_SndVoiceRegs[];
-extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern u_char g_SndVoiceFlags[];
 extern u_char g_SndVabStatus[];
 
 extern volatile u_char g_SndVoiceCount;

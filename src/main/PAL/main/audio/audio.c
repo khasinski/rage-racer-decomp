@@ -795,9 +795,9 @@ void UpdateIndexedEffectVoice(void) {
     g_IndexedEffectIndexPrev = g_IndexedEffectIndex;
 }
 
-extern s32 D_800126D0[];
+extern s32 D_800126D0[] asm("g_SoundModes");
 extern s32 g_AudioSlotMask;
-extern u8 D_801E6D00[];
+extern u8 D_801E6D00[] asm("g_MusicChannels");
 extern u8 D_801E6D04[];
 extern s32 D_801E6D08;
 extern u8 D_801E6D10[];
@@ -824,7 +824,7 @@ typedef struct SoundModeEntry {
     SoundModeSlot slots[2];
 } SoundModeEntry;
 
-extern SoundModeEntry g_SoundModes[] asm("D_800126D0");
+extern SoundModeEntry g_SoundModes[];
 
 void SetStereoSoundCue(s32 arg0, s32 left, s32 right) {
     s32 offset;
@@ -1131,7 +1131,7 @@ extern u8 g_EffectVoiceVolume[];
 extern s32 g_EffectVoicePitch[];
 
 extern const s32 g_EffectCueTable[];
-extern s32 D_801E6D30;
+extern s32 D_801E6D30 asm("g_EffectVoices");
 extern s32 D_801E6D44;
 extern s32 D_801E6D58;
 extern s32 D_801E6D60;

@@ -69,7 +69,7 @@ extern u8 *g_ReplayFramesTimeAttack;
 extern s32 g_ReplayWriteCursor;
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
-extern u8 g_PlayerCar asm("D_8009E6D4");
+extern u8 g_PlayerCar;
 void StoreReplayCarFrame(s32 arg0, u8 *arg1, u8 *arg2);
 void StoreReplayTimeAttackFrame(s32 arg0, u8 *arg1);
 extern s32 g_ReplayReadCursor;

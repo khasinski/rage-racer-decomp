@@ -9,7 +9,7 @@ extern u8 *g_AssetLoadCursor;
 extern Rect g_TeamLogoClutRect;
 extern Rect g_TeamLogoRect;
 extern u16 g_TeamLogoClut[];
-extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
+extern u16 g_TeamLogoCanvas[];
 void UploadImageAsset(void *arg0);
 void UploadLoadBufferImage(void);
 void InstallResourceData(void *arg0);

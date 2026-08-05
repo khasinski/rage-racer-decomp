@@ -15,7 +15,7 @@
  * the mislabelled SpuVmKeyOnCore prototype whose 2nd/3rd arguments are really
  * the left and right volumes.)
  */
-extern volatile u8 g_SndVoiceFlags[] asm("D_8009E0A0");
+extern volatile u8 g_SndVoiceFlags[];
 
 /*
  * The libsnd VAB ids of the loaded banks, one per bank slot.

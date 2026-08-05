@@ -6,7 +6,7 @@
 extern SeqStruct *g_SndSeqTable[];
 extern SpuVoice g_SndVoiceState[];
 extern short g_SndVoiceRegs[];
-extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
+extern u_char g_SndVoiceFlags[];
 extern u_char g_SndVoiceCount;
 extern short g_SndMonoMode;
 extern short g_SndCurrentSeqSep;
