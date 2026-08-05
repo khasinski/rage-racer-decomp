@@ -151,7 +151,6 @@ extern struct {
     s16 x;
     s16 y;
 } g_StartGridSceneryStep[];
-extern Vec4 g_StartGridSceneryPos[];
 
 void DrawStartGridScenery(s32 arg0) {
     Matrix mtx;
@@ -200,16 +199,6 @@ void DrawStartGridScenery(s32 arg0) {
 void ResetFreeLookCamera(void) {
 }
 
-/*
- * The animated trackside boards. Position and pitch are authored per
- * instance; the rest is shared animation state, and the "2" set belongs to
- * the second drawer below. Frame cycles 0..15 off the caller's clock; every
- * eighth frame with frame == 0 the board latches g_RacePosition (clamped to
- * 0..3) and rolls a 0..2 variant, so the board is showing the player's
- * position. Tint is (clock >> 3 % 4) << 16, written to the scratchpad render
- * mode word for the second of the two models each board draws.
- */
-extern Vec4 g_AnimSceneryPos[];
 extern u32 *g_VisibleCellMask;
 
 void DrawAnimatedScenery(s32 arg0, s32 arg1) {

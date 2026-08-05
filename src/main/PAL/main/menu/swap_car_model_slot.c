@@ -34,12 +34,9 @@ typedef struct SwModelPose {
     Vec4 rotation;
 } SwModelPose;
 
-extern Vec4 D_80011AB4;
-extern Vec4 g_MenuViewScale;
 extern SwCarRec *g_CarTable;
 extern SwObj698 *g_CarModelAsset;
 extern SwModelPose D_8009E6D4 asm("g_PlayerCar");
-extern Vec4 D_8009E724;
 
 s32 GetCarAssetIndex(s32 arg0, s32 arg1);
 void *ApplyMatrixLV(void *m, void *v0, void *v1);
@@ -207,7 +204,6 @@ void DrawMenuCarView(void) {
     D_1F800004 -= 120;
 }
 
-extern Vec4 g_MenuViewScale;
 extern s32 g_PlayerCar;
 
 /* The course diorama behind COURSE SELECT and RANKING, with the carousel easing. */
@@ -314,7 +310,6 @@ void DrawMenuCourseView(void) {
 
 typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 
-extern Vec4 D_80011AC4;
 s32 rsin(s32 arg0);
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */

@@ -27,10 +27,6 @@ void UpdateTrackEventSound(s32 arg0);
 
 extern s16 g_PlayerLap;
 
-extern TrackWaypointSeed g_WaypointSeeds[];
-
-extern TrackWaypointRuntime g_Waypoints[];
-
 /*
  * Initializes the 6 TrackWaypointRuntime slots for the current course. The
  * `magic`/mult/mfhi block is the compiler's divide-by-10 idiom computing the

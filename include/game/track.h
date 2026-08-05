@@ -282,4 +282,13 @@ extern s32 FindNearestTrackCamera();
 void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3);
 void LoadEnvironmentCue();
 
+/* Declared identically by 5 translation units before this
+ * header carried them. */
+
+extern Vec4 g_AnimSceneryPos[];
+extern Vec4 g_FlybySceneryPosRec;
+extern SVec g_ShuttlePathAngles[];
+extern Vec4 g_StartGridSceneryPos[];
+extern Vec4 g_StaticSceneryPos;
+
 #endif

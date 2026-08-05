@@ -394,4 +394,13 @@ void UpdateRivalCueGate(void);
 void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2);
 void UpdateWaypoints(void);
 
+/* Declared identically by 5 translation units before this
+ * header carried them. */
+
+extern CVec g_CountdownCellColors[];
+extern TrackWaypointSeed g_WaypointSeeds[];
+extern TrackWaypointRuntime g_Waypoints[];
+
+s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
+
 #endif

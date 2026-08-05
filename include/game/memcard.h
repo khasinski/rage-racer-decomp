@@ -247,4 +247,9 @@ s32 PollMemoryCardStatus(s32 a, s32 b);
 void StartCARD(void);
 void StoreSaveStateBlock(u8 *rowBytes);
 
+/* Declared identically by 1 translation units before this
+ * header carried them. */
+
+extern Rect g_SaveIconRect;
+
 #endif

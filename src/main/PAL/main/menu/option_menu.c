@@ -13,8 +13,6 @@ s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePr
 void DrawMenuCursorArrow(s32 arg0, s32 arg1);
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
-extern DVec D_8007D5A8[];
-extern Rgb D_8007D658[];
 extern GameScoreRecord g_ClassRecords[];
 extern Struct12 D_8007D5D4[];
 void StartOptionMenuExit(s32 arg0);

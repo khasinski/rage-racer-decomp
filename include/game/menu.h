@@ -567,4 +567,20 @@ void UpdateOptionSceneFade(void);
 s32 UpdateRoundScreenFade(s32 arg0);
 void UpdateTitleAttract(void);
 
+/* Declared identically by 15 translation units before this
+ * header carried them. */
+
+extern SVec D_80011A48[];
+extern Vec4 D_80011AB4;
+extern Vec4 D_80011AC4;
+extern Matrix D_8007C758;
+extern Matrix D_8007C778;
+extern DVec D_8007D5A8[];
+extern Rgb D_8007D658[];
+extern Matrix D_80082DFC;
+extern Matrix D_80082E1C;
+extern Vec4 D_8009E724;
+extern Vec4 g_MenuViewScale;
+extern Matrix g_SceneColorMatrix;
+
 #endif

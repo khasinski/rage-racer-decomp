@@ -181,8 +181,6 @@ void BuildTileStrips(void) {
     } while (bufferIndex < 2);
 }
 
-extern CVec g_CountdownCellColors[];
-
 s32 GameQueueDrawModePrimWide(
     s32 ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 void AddPrimsWide(void *ot, void *first, void *last) asm("AddPrims");

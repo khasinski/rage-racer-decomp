@@ -149,8 +149,6 @@ typedef struct UVec {
     u16 pad;
 } UVec;
 
-extern SVec D_80011A48[];
-
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     SVec verts[4];
     UVec out[4];
@@ -308,10 +306,7 @@ void DrawTimeAttackPlate(s32 arg0) {
     }
 }
 
-extern Matrix g_SceneColorMatrix;
-extern Matrix D_80082DFC;
 extern Matrix g_SceneLightMatrix;
-extern Matrix D_80082E1C;
 
 /* The menu-mode twin of InitTrackLighting. */
 void InitMenuLighting(void) {
@@ -323,8 +318,6 @@ void InitMenuLighting(void) {
     SetFarColor(0, 0, 0);
     SetFogNear(0x4E20, 0x140);
 }
-
-extern Vec4 g_MenuViewScale;
 
 extern void *D_8019C764;
 extern void *D_801E40B4;

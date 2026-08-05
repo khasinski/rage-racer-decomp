@@ -63,9 +63,6 @@ break;
 }
 }
 
-extern Rect g_TrackTextureRect;
-extern Rect g_TeamLogoClutLoadRect;
-extern GpuRectPacked g_TeamLogoClutMoveRect;
 extern u16 g_TeamLogoClut[];
 
 void StoreTeamLogoImage(void *dst) {

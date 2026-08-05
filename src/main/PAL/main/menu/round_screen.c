@@ -9,9 +9,6 @@
 #include "game/audio.h"
 #include "game/screens.h"
 
-extern Matrix g_SceneColorMatrix;
-extern Matrix D_8007C778;
-
 /* Darkens the scene colour matrix by GetTrackZoneBlend's 0..0x100 track-zone ramp; RestoreColorMatrix puts it back. */
 void ApplyZoneLighting(s32 a0, Matrix *a1) {
     Matrix out;
@@ -61,7 +58,6 @@ void ApplyZoneLighting(s32 a0, Matrix *a1) {
     }
 }
 
-extern Matrix g_SceneColorMatrix;
 void RestoreColorMatrix(void) { SetColorMatrix(&g_SceneColorMatrix); }
 
 extern s32 g_ImageBlockBuffer;
@@ -268,10 +264,7 @@ void UpdateRoundScreen(void) {
     }
 }
 
-extern Matrix g_SceneColorMatrix;
-extern Matrix D_8007C758;
 extern Matrix g_SceneLightMatrix;
-extern Matrix D_8007C778;
 /* Installs the track colour/light matrices, back and far colours and the fog near distance. */
 void InitTrackLighting(void) {
     g_SceneColorMatrix = D_8007C758;

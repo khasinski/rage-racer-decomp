@@ -9,7 +9,6 @@
 #include "game/track.h"
 #include "game/menu.h"
 
-extern Vec4 g_StaticSceneryPos;
 extern u32 *g_VisibleCellMask;
 
 static inline void ClearScratchRenderMode3DF68(void) {
@@ -274,7 +273,6 @@ void SeedFlybyScenery(void) {
  * volume to SetPitchedSoundCue. See docs/names.md 1.
  */
 extern s16 g_PlayerLap;
-extern Vec4 g_FlybySceneryPosRec;
 extern s32 g_PlayerCar;
 
 #define KFREC(off) (*(s16 *)(kf + *(s16 *)(state + 0xE) * 12 + (off)))

@@ -2,9 +2,6 @@
 #include "game/vector.h"
 #include "game/state.h"
 
-/* Six 4-byte {x, y} label slots; `labelRow` names one per action. */
-extern DVec g_PadLabelSlots[];
-
 /* Local wide-parameter views; see GameQueueSprite.c. */
 u8 *QueueSpriteTransWide(
     void *ot,
@@ -76,11 +73,6 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
     } while (i < 5);
     return QueueDrawModePrimWide(ot, prim, 0x3B);
 }
-
-/* Screen positions, six 4-byte {x, y} rows each: where a label sits and where
- * the button it names sits. */
-extern DVec g_PadCalloutLabelPoints[];
-extern DVec g_PadCalloutButtonPoints[];
 
 /* Local wide-parameter view of GameQueueLine; see GameQueueSprite.c. */
 u8 *QueueLineWide(

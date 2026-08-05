@@ -15,10 +15,6 @@ extern s32 g_PlayerCar;
  * +/-0x40 box around the car centre (g_PlayerCar / g_PlayerCarZ), else 0.
  */
 
-extern TrackWaypointRuntime g_Waypoints[];
-
-s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
-
 /*
  * Per-frame waypoint spawn/update state machine over the 6 slots. An idle slot
  * (active==0) that the car is near (IsCarNearWaypoint) spawns: increments the spawn

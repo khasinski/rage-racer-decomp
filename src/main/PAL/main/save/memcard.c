@@ -401,8 +401,6 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
     } while (i < 3);
 }
 
-extern Rect g_SaveIconRect;
-
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf();
 

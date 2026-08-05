@@ -191,4 +191,11 @@ void LoadCarModel(s32);
 void LoadUpgradedCarModel(s32);
 void SetCarSpec(void);
 
+/* Declared identically by 3 translation units before this
+ * header carried them. */
+
+extern Rect g_TeamLogoClutLoadRect;
+extern GpuRectPacked g_TeamLogoClutMoveRect;
+extern Rect g_TrackTextureRect;
+
 #endif

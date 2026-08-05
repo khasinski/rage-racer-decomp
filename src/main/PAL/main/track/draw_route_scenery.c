@@ -37,7 +37,6 @@ typedef struct ShuttlePath {
 } ShuttlePath;
 
 extern ShuttlePath g_ShuttlePathPoints[];
-extern SVec g_ShuttlePathAngles[];
 
 /* Byte-offset views. These stay macros because the retail code keeps the
  * scaled index in a register and re-derives the address at every field; a
