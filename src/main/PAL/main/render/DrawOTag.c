@@ -64,20 +64,12 @@ void *DrawOTagEnv(void *arg0, void *arg1) {
     tag = (u8 *)prim + 0x1C;
     Gpu_BuildDrawEnvCmds(tag, prim);
     {
-        u32 mask = 0xFFFFFF;
-        register void *sendTag asm("$5") = tag;
-        s32 size = 0x40;
-        u32 highMask = 0xFF000000;
-        u32 word = *(u32 *)tag;
-        GpuCallbacks *gpu;
+        u32 word = (*(u32 *)tag & 0xFF000000) |
+                   ((u32)src & 0xFFFFFF);
+        GpuCallbacks *gpu = g_GpuFuncs;
 
-        asm("" : "=r"(size), "=r"(highMask), "=r"(word) : "0"(size), "1"(highMask), "2"(word));
-        mask = (u32)src & mask;
-        word &= highMask;
-        gpu = g_GpuFuncs;
-        word |= mask;
         *(u32 *)tag = word;
-        gpu->send(gpu->sendList, sendTag, size, 0);
+        gpu->send(gpu->sendList, tag, 0x40, 0);
     }
     return MemCopy(debug + 0xE, prim, 0x5C);
 }

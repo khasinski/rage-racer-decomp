@@ -73,21 +73,13 @@ void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
             if (cell != 0) {
                 s32 index;
                 u8 *fontUCell;
-                register u8 *fontV asm("$8");
+                u8 *fontV;
                 s32 u;
                 s32 v;
 
-                /*
-                 * v0/v1 now allocate naturally. The remaining t0 pin and
-                 * empty constraint keep fontV tied to the independently
-                 * materialised second font base.
-                 */
                 index = cell * 2;
                 fontUCell = (u8 *)(index + (s32)font);
-                asm(
-                    "" : "=r"(fontV) :
-                    "0"(&g_Font8x8Cells[1]),
-                    "r"(fontUCell), "r"(index));
+                fontV = &g_Font8x8Cells[1];
                 u = *fontUCell * 8;
                 v = *(u8 *)(index + (s32)fontV) * 8;
 
@@ -132,27 +124,22 @@ void GameDrawText8x8Shaded(
 
             str++;
             if (cell != 0) {
-                register u8 *sprtArg asm("$4");
                 s32 u;
                 s32 v;
 
-                sprtArg = packet;
                 {
                     s32 index;
                     u8 *fontUCell;
-                    register u8 *fontV asm("$8");
+                    u8 *fontV;
 
                     index = cell * 2;
                     fontUCell = (u8 *)(index + (s32)font);
-                    asm(
-                        "" : "=r"(fontV) :
-                        "0"(&g_Font8x8Cells[1]),
-                        "r"(fontUCell), "r"(index));
+                    fontV = &g_Font8x8Cells[1];
                     u = *fontUCell * 8;
                     v = *(u8 *)(index + (s32)fontV) * 8;
                 }
 
-                SetSprt8(sprtArg);
+                SetSprt8(packet);
                 SetSemiTrans(packet, 1);
                 sprt->x0 = x;
                 sprt->y0 = y;
@@ -163,12 +150,7 @@ void GameDrawText8x8Shaded(
                 sprt->tag.b0 = intensity;
                 asm("");
                 prim = (u8 *)sprt;
-                {
-                    register u16 clutValue asm("$8");
-
-                    clutValue = clutIndex;
-                    sprt->clut = clutValue;
-                }
+                sprt->clut = clutIndex;
                 AddPrim(g_DrawBuffer + 0xCC, prim);
                 sprt++;
                 packet += sizeof(TextSprt8);
@@ -199,16 +181,13 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
             if (cell != 0) {
                 s32 index;
                 u8 *fontUCell;
-                register u8 *fontV asm("$8");
+                u8 *fontV;
                 s32 u;
                 s32 v;
 
                 index = cell * 2;
                 fontUCell = (u8 *)(index + (s32)font);
-                asm(
-                    "" : "=r"(fontV) :
-                    "0"(&g_Font8x8Cells[1]),
-                    "r"(fontUCell), "r"(index));
+                fontV = &g_Font8x8Cells[1];
                 u = *fontUCell * 8;
                 v = *(u8 *)(index + (s32)fontV) * 8;
 
@@ -292,7 +271,6 @@ void DrawProportionalTextShadedWide(
                 s32 width;
                 void *prim;
                 u8 *ot;
-                register u16 clut asm("$8");
                 s16 yOffset;
 
                 asm(
@@ -330,10 +308,10 @@ void DrawProportionalTextShadedWide(
                 RAW(sprt->h) = height;
                 ot = g_DrawBuffer;
                 asm("" : "=r"(ot) : "0"(ot));
-                clut = home.clut;
-                asm("" : "=r"(clut) : "0"(clut));
+                t0 = (u16)home.clut;
+                asm("" : "=r"(t0) : "0"(t0));
                 ot += 0xCC;
-                sprt->clut = clut;
+                sprt->clut = t0;
                 sprt->w = width;
                 AddPrim(ot, prim);
                 advance = g_WordFontWidth[index];
@@ -348,7 +326,6 @@ void DrawProportionalTextShadedWide(
                 s32 width;
                 void *prim;
                 u8 *ot;
-                register u16 clut asm("$8");
 
                 s1 = offset * 4;
                 asm(
@@ -369,9 +346,9 @@ void DrawProportionalTextShadedWide(
                     sprt->t.b0 = shade;
                     sprt->x0 = xPos;
                 }
-                clut = home.y;
+                t0 = (u16)home.y;
                 packet += 20;
-                sprt->y0 = clut;
+                sprt->y0 = t0;
                 width = g_WordFontWidth[s1];
                 prim = (void *)sprt;
                 sprt->u0 = u;
@@ -380,9 +357,9 @@ void DrawProportionalTextShadedWide(
                  * see common.h. */
                 RAW(sprt->h) = height;
                 ot = g_DrawBuffer;
-                clut = home.clut;
+                t0 = (u16)home.clut;
                 ot += 0xCC;
-                sprt->clut = clut;
+                sprt->clut = t0;
                 sprt->w = width;
                 AddPrim(ot, prim);
                 advance = g_WordFontAdvance[s1];
@@ -403,7 +380,6 @@ void DrawProportionalTextShadedWide(
                     register s32 v asm("$19");
                     void *prim;
                     u8 *ot;
-                    register u16 clut asm("$8");
 
                     asm("" : "=r"(index) : "0"(index));
                     t0 = (s32)g_PropFontU;
@@ -424,8 +400,8 @@ void DrawProportionalTextShadedWide(
                         sprt->t.b0 = shade;
                         sprt->x0 = xPos;
                     }
-                    clut = home.y;
-                    asm("" : "=r"(clut) : "0"(clut));
+                    t0 = (u16)home.y;
+                    asm("" : "=r"(t0) : "0"(t0));
                     prim = (void *)sprt;
                     asm("" : "=r"(prim) : "0"(prim));
                     sprt->u0 = u;
@@ -434,10 +410,10 @@ void DrawProportionalTextShadedWide(
                     packet += 20;
                     sprt->w = height;
                     sprt->h = height;
-                    sprt->y0 = clut;
-                    clut = home.clut;
+                    sprt->y0 = t0;
+                    t0 = (u16)home.clut;
                     ot += 0xCC;
-                    sprt->clut = clut;
+                    sprt->clut = t0;
                     asm volatile("" ::: "memory");
                     sprt++;
                     AddPrim(ot, prim);
