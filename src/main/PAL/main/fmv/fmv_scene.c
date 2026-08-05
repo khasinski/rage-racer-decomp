@@ -9,7 +9,7 @@ extern s32 g_ModelBankCount;
 extern s32 g_ScratchRenderMode asm("D_1F800084");
 s32 GetTrackZoneBlend(s32 arg0);
 void ApplyZoneLighting(s32 arg0, Matrix *arg1);
-void func_80017794(void *a0, void *a1, void *a2);
+void SetGteObjectMatrix(void *a0, void *a1, void *a2);
 void RestoreColorMatrix(void);
 void DrawPlayerCarModel(GameRenderObject *obj);
 extern u8 *g_CamRow;

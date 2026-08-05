@@ -166,7 +166,7 @@ extern struct {
 } g_StartGridSceneryStep[];
 extern Vec4 g_StartGridSceneryPos[];
 
-void func_80017794(void *arg0, Vec4 *state, Matrix *mtx);
+void SetGteObjectMatrix(void *arg0, Vec4 *state, Matrix *mtx);
 
 void DrawStartGridScenery(s32 arg0);
 void DrawStartGridScenery(s32 arg0) {
@@ -190,7 +190,7 @@ void DrawStartGridScenery(s32 arg0) {
             if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }
-            func_80017794((void *)0x1F80011C, &state, &mtx);
+            SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
             rem = s1 - s0 * 15;
             lim = g_CourseModelCount;
             __asm__ __volatile__("");
@@ -202,7 +202,7 @@ void DrawStartGridScenery(s32 arg0) {
             if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }
-            func_80017794((void *)0x1F80011C, &state, &mtx);
+            SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
             lim = g_CourseModelCount;
             __asm__ __volatile__("");
             value = 0x28;
@@ -307,20 +307,20 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
 
     if (g_AnimSceneryRacePosition != 0) {
         if (g_AnimSceneryFrame < 13) {
-            func_80017794((void *)0x1F80011C, &state, &mtx);
+            SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
             num = g_AnimSceneryFrame + 10;
             *(s32 *)0x1F800084 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
             SubmitCourseModel((void *)0x1F800000, drawArg);
         } else {
-            func_80017794((void *)0x1F80011C, &state, &mtx);
+            SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
             num = g_AnimSceneryRacePosition;
             *(s32 *)0x1F800084 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
             SubmitCourseModel((void *)0x1F800000, drawArg);
         }
 
-        func_80017794((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimSceneryTint;
         *(s32 *)0x1F800084 = sv;
         num = g_AnimSceneryVariant + 4;
@@ -328,14 +328,14 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
         drawArg = (num < lim2) ? num : 1;
         SubmitCourseModel((void *)0x1F800000, drawArg);
     } else {
-        func_80017794((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         num = g_AnimSceneryFrame + 0x18;
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
         SubmitCourseModel((void *)0x1F800000, drawArg);
 
-        func_80017794((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimSceneryTint;
         scr = (s32 *)0x1F800084;
         *scr = sv;
@@ -415,14 +415,14 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     g_AnimScenery2Tint = ((arg0 >> 3) & 3) << 16;
 
     if (arg2 != 0) {
-        func_80017794((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         num = g_AnimScenery2Frame + 0xA;
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
         SubmitCourseModel((void *)0x1F800000, drawArg);
 
-        func_80017794((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimScenery2Tint;
         drawArg = 1;
         scr = (s32 *)0x1F800084;
@@ -432,14 +432,14 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         __asm__("" : "=r"(num) : "0"(num), "r"(lim2));
         num = num + 4;
     } else {
-        func_80017794((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         num = g_AnimScenery2Frame + 0x18;
         scr = (s32 *)0x1F800084;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
         SubmitCourseModel((void *)0x1F800000, drawArg);
 
-        func_80017794((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimScenery2Tint;
         drawArg = 1;
         scr = (s32 *)0x1F800084;

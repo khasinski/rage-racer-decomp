@@ -13,7 +13,7 @@ extern u8 g_SpinningSceneryYaw[];
  * are re-rolled to rand & 0x1F / rand & 0x3F every 512 frames. */
 extern u8 g_SpinningSceneryPos[];
 
-void func_80017794(void *arg0, void *arg1, void *arg2);
+void SetGteObjectMatrix(void *arg0, void *arg1, void *arg2);
 s32 Random15(void);
 
 void DrawSpinningScenery(s32 arg0, s32 arg1);
@@ -70,7 +70,7 @@ void DrawSpinningScenery(s32 arg0, s32 arg1) {
             MulMatrix2((void *)0x1F800028, sp10);
             BuildRotMatrixZ(work, *(s16 *)dst);
             MulMatrix2(sp10, work);
-            func_80017794((void *)0x1F80011C, g_SpinningSceneryPos + offset, work);
+            SetGteObjectMatrix((void *)0x1F80011C, g_SpinningSceneryPos + offset, work);
 
             *(s32 *)0x1F800084 = 0;
             limit = 1;

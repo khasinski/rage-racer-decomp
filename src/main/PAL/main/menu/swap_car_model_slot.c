@@ -233,7 +233,7 @@ extern s32 D_8009E6F8;
 extern s32 g_ModelBankCount;
 extern s32 g_MenuViewSpin;
 
-void func_80017794(void *a, void *b, void *c);
+void SetGteObjectMatrix(void *a, void *b, void *c);
 
 /* The course diorama behind COURSE SELECT and RANKING, with the carousel easing. */
 void DrawMenuCourseView(void);
@@ -327,7 +327,7 @@ void DrawMenuCourseView(void) {
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2((Matrix *)0x1F800028, &mtxA);
     SelectModelBank(14);
-    func_80017794((void *)0x1F80011C, p - 9, &mtxA);
+    SetGteObjectMatrix((void *)0x1F80011C, p - 9, &mtxA);
     *(s32 *)0x1F800084 = 0;
     {
         s32 a1 = 1;
@@ -430,7 +430,7 @@ void DrawTeamNameCharModel(void) {
 
     if (g_TeamNameCharModel != 10 && (u32)(g_TeamNameCharModel - 42) >= 2) {
         s32 a1;
-        func_80017794((void *)0x1F80011C, &poly, &mtxA);
+        SetGteObjectMatrix((void *)0x1F80011C, &poly, &mtxA);
         *(s32 *)0x1F800084 = 0;
         a1 = 1;
         if (g_TeamNameCharModel < g_CourseModelCount) {

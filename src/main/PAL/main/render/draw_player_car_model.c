@@ -11,7 +11,7 @@ extern s32 g_ScratchRenderMode asm("D_1F800084");
 
 s32 GetTrackZoneBlend(s32 arg0);
 void ApplyZoneLighting(s32 arg0, Matrix *arg1);
-void func_80017794(void *a0, void *a1, void *a2);
+void SetGteObjectMatrix(void *a0, void *a1, void *a2);
 void RestoreColorMatrix(void);
 
 /*
@@ -76,17 +76,17 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     v_138[0] = obj->x;
     v_138[2] = obj->z;
     v_138[1] = obj->field_60;
-    func_80017794((void *)0x1F80011C, v_138, &m_10);
+    SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
     g_ScratchRenderMode = 0;
     SubmitModel((void *)0x1F800000, 1);
 
-    func_80017794((void *)0x1F80011C, v_138, &m_10);
+    SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
     g_ScratchRenderMode = 0;
     SubmitModel((void *)0x1F800000, 1);
 
     BuildRotMatrixZ(&m_70, obj->angleZ);
     MulMatrix2(&m_30, &m_70);
-    func_80017794((void *)0x1F80011C, obj, &m_70);
+    SetGteObjectMatrix((void *)0x1F80011C, obj, &m_70);
     g_ScratchRenderMode = 0;
     SubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
 
@@ -114,7 +114,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     m_B0[1].m[2][0] = -m_B0[0].m[2][0];
     m_B0[1].m[2][1] = m_B0[0].m[2][1];
     m_B0[1].m[2][2] = -m_B0[0].m[2][2];
-    func_80017794((void *)0x1F80011C, obj, &m_F0);
+    SetGteObjectMatrix((void *)0x1F80011C, obj, &m_F0);
     g_ScratchRenderMode = 0;
     SubmitModel((void *)0x1F800000, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
 
@@ -131,7 +131,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
         m_118[0] += obj->x;
         m_118[1] += obj->y;
         m_118[2] += obj->z;
-        func_80017794((void *)0x1F80011C, m_118, &m_B0[i]);
+        SetGteObjectMatrix((void *)0x1F80011C, m_118, &m_B0[i]);
         g_ScratchRenderMode = 0;
         SubmitModel((void *)0x1F800000, (otDepth + 2 < g_ModelBankCount) ? (otDepth + 2) : 1);
         SetLightMatrix(&m_90);
@@ -219,19 +219,19 @@ void DrawCar(GameRenderObject *obj) {
             v_138[0] = obj->x;
             v_138[2] = obj->z;
             v_138[1] = obj->field_60;
-            func_80017794((void *)0x1F80011C, v_138, &m_10);
+            SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
             g_ScratchRenderMode = 0;
             SubmitModel((void *)0x1F800000,
                             (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
 
-            func_80017794((void *)0x1F80011C, v_138, &m_10);
+            SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
             g_ScratchRenderMode = 0;
             SubmitModel((void *)0x1F800000,
                             (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
 
             BuildRotMatrixZ(&m_70, obj->angleZ);
             MulMatrix2(&m_30, &m_70);
-            func_80017794((void *)0x1F80011C, obj, &m_70);
+            SetGteObjectMatrix((void *)0x1F80011C, obj, &m_70);
             g_ScratchRenderMode = lod[1] << 16;
             SubmitModel((void *)0x1F800000,
                             (lod[0] < g_ModelBankCount) ? lod[0] : 1);
@@ -256,7 +256,7 @@ void DrawCar(GameRenderObject *obj) {
             m_B0[1].m[2][0] = -m_B0[0].m[2][0];
             m_B0[1].m[2][1] = m_B0[0].m[2][1];
             m_B0[1].m[2][2] = -m_B0[0].m[2][2];
-            func_80017794((void *)0x1F80011C, obj, &m_F0);
+            SetGteObjectMatrix((void *)0x1F80011C, obj, &m_F0);
             g_ScratchRenderMode = 0;
             SubmitModel((void *)0x1F800000,
                             (lod[0] + 3 < g_ModelBankCount) ? (lod[0] + 3) : 1);
@@ -273,7 +273,7 @@ void DrawCar(GameRenderObject *obj) {
                 m_118[0] += obj->x;
                 m_118[1] += obj->y;
                 m_118[2] += obj->z;
-                func_80017794((void *)0x1F80011C, m_118, &m_B0[i]);
+                SetGteObjectMatrix((void *)0x1F80011C, m_118, &m_B0[i]);
                 g_ScratchRenderMode = 0;
                 SubmitModel((void *)0x1F800000,
                                 (lod[0] + 2 < g_ModelBankCount) ? (lod[0] + 2) : 1);
@@ -293,7 +293,7 @@ void DrawCar(GameRenderObject *obj) {
             BuildRotMatrixZ(&m_10, obj->angleZ);
             MulMatrix2(&m_50, &m_10);
             MulMatrix2((Matrix *)0x1F800028, &m_10);
-            func_80017794((void *)0x1F80011C, obj, &m_10);
+            SetGteObjectMatrix((void *)0x1F80011C, obj, &m_10);
             g_ScratchRenderMode = lod[1] << 16;
             SubmitModel((void *)0x1F800000,
                             (lod[0] + 4 < g_ModelBankCount) ? (lod[0] + 4) : 1);

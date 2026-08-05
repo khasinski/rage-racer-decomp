@@ -367,7 +367,9 @@ void UpdateRaceCars(void);
 void UpdateAttractCars(void);
 /* Player-vs-field collision (detection, response and the crash cue), called
  * only from UpdatePlayerCar; returns the struck sub-quad 1..4 or 0. */
-s32 CollidePlayerWithCars(GameCarRuntime *car) asm("func_8002D398");
+/* update_player_car.c spells the argument void *; the body reads
+ * GameCarRuntime *. */
+s32 CollidePlayerWithCars();
 /* One row of the AI pairwise sweep: car[index] against car[index + 1 .. 10],
  * push-apart only - no sound, no damage globals, no mode gate. */
 s32 CollideRivalCars(GameCarRuntime *car, s32 index);

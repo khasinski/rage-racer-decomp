@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 #include "game/render.h"
-void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
+void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 extern s32 g_ModelBankCount;
 extern s32 g_FlybySceneryRotX;

@@ -4,7 +4,7 @@
 #include "game/render.h"
 #include "game/track.h"
 #include "game/race.h"
-void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
+void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 /* The looping prop's live orientation: three 12-bit angles copied wholesale out
  * of the current rotation keyframe by InitPathScenery, which sees the same

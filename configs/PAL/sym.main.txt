@@ -1164,3 +1164,5 @@ g_BiosCallStubs = 0x80063D9C;
 ChangeClearRCntStub = 0x8006DF14;
 ChangeClearInterruptMaskStub = 0x8006DF24;
 SysEnqIntRPStub = 0x8006E644;
+SetGteObjectMatrix = 0x80017794; // type:func
+CollidePlayerWithCars = 0x8002D398; // type:func

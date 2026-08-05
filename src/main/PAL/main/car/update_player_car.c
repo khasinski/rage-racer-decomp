@@ -106,7 +106,7 @@ void UpdateCarDrivetrain(void *car);
 void AccumulateLapProgress(void *car);
 void ApplyCarKnockback(void *car);
 s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2);
-s32 func_8002D398(void *car);
+s32 CollidePlayerWithCars(void *car);
 void StartCarBodyKick(s32 arg0, void *car);
 void UpdateCarTiltCounter(void *car);
 void UpdateCarCrestHop(void *car);
@@ -388,7 +388,7 @@ void UpdatePlayerCar(Car *car) {
         }
     }
 
-    crash = func_8002D398(car);
+    crash = CollidePlayerWithCars(car);
     if (skid != 0 || crash != 0) {
         StartCarBodyKick(2, car);
     }

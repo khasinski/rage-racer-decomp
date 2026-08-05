@@ -756,7 +756,10 @@ void SetGteLightMatrix(Matrix *view);
  * SetRotMatrix(rot) + SetTransMatrix(&work->mtx).
  * `work` layout: SVECTOR @0, VECTOR @8, Matrix @24 (m @24, t @44).
  */
-void SetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) asm("func_80017794");
+/* Callers spell the third argument Matrix *, void * or Vec4 *; an empty
+ * parameter list lets each keep its own.  The body reads
+ * (void *work, void *objectPos, Matrix *rot). */
+void SetGteObjectMatrix();
 
 /*
  * The environment colour timeline and the sky it feeds. The state is nine

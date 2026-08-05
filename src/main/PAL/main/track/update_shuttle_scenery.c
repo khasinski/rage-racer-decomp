@@ -3,7 +3,7 @@
 #include "psyq/gte.h"
 #include "game/race.h"
 #include "game/render.h"
-void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
+void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 /* Per-path authored data; see DrawRouteScenery.c for the layout.
  * g_ShuttlePathTravelMax is the leg length in steps: the divisor of the
