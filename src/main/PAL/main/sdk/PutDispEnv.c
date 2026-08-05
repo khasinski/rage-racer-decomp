@@ -34,7 +34,7 @@ extern Cache g_DispEnvCache asm("D_80094254");
 
 long get_dx(void *arg0);
 long GetDMAInterruptState(void);
-void *MemCopy(void *dst, void *src, long count) asm("func_800681BC");
+void *MemCopy(void *dst, void *src, long count);
 
 /* libgpu PutDispEnv: GP1(05h/06h/07h/08h) from a 0x14-byte DISPENV.
  * Named from its own trace string D_80013614, "PutDispEnv(%08x)...". */

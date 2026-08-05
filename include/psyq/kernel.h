@@ -12,7 +12,7 @@ long VSync(long mode);
 void waitVSync(long target, long timeoutFrames);
 void ChangeClearRCnt(long clear) asm("func_8006DF14");
 void ChangeClearInterruptMask(long index, long clear) asm("func_8006DF24");
-void KernelCallbackSlot3(void) asm("func_8006DF34");
+void KernelCallbackSlot3(void);
 void KernelCallbackSlot2(void) asm("func_8006DF64");
 /* BIOS DMA callback installer: spec 0=MDECin 1=MDECout 2=GPU 3=CD-ROM 4=SPU.
  * Was declared ResetCallback here; that was wrong (docs/names.md 17). */
@@ -31,10 +31,10 @@ KernelCallback SetKernelInterruptCallback(long index, KernelCallback callback);
 void *StartKernelInterrupts(void);
 void clearKernelInterruptState(u_long *dst, long count);
 void SysEnqIntRP(void *rp) asm("func_8006E644");
-void ReturnFromException(void) asm("func_8006E654");
-void ResetEntryInt(void) asm("func_8006E664");
-void HookEntryInt(void *entry) asm("func_8006E674");
-long SaveKernelRegisters(void *state) asm("func_8006E684");
+void ReturnFromException(void);
+void ResetEntryInt(void);
+void HookEntryInt(void *entry);
+long SaveKernelRegisters(void *state);
 void RestoreKernelRegisters(void *state, long ret) asm("func_8006E6C0");
 
 void *startIntrVSync(void);
@@ -71,6 +71,6 @@ long BiosFileWrite(long fd, void *buf, long len);
 long BiosFileClose(long fd);
 long BiosFormatDevice(void *device);
 void *BiosFirstFile(char *path, void *entry);
-void *BiosNextFile(void *entry) asm("func_800632A0");
+void *BiosNextFile(void *entry);
 
 #endif

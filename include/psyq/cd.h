@@ -89,7 +89,7 @@ char *CdIntstr(long intr);
 long CdSetDebug(long level);
 void CdFlush(void);
 long CdInit(void);
-long CdStatus(void) asm("func_8006A3E8");
+long CdStatus(void);
 u_char CdMode(void);
 u_char CdLastCom(void);
 CdlLOC *CdLastPos(void);
@@ -108,7 +108,7 @@ void StClearRing(void);
 long StGetBackloc(CdlLOC *loc);
 /* LibRef47 spells these `u_long *ring_addr, u_long ring_size` and StSetStream's
  * last two arguments as function pointers; kept as-is to match the call sites. */
-void StSetRing(void *base, long size) asm("func_8006A058");
+void StSetRing(void *base, long size);
 void StSetStream(long mode, long start_frame, long end_frame, long callback, long user_data);
 u_long StFreeRing(u_long *base) asm("func_8006CFF0");
 /* The libds streaming state machine: advances D_80099418 through states 1..0xA,

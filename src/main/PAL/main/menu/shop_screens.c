@@ -43,14 +43,14 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void UploadTeamLogoClut(void);
 void DrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
-void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
+void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
 void DrawMenuAltPanel(s32 arg0, s32 arg1);
 s32 GetOwnedCarAssetIndex(s32 arg0);
 void DrawMenuCarView(void);
-void UpdateCarListCursor(void) asm("func_80059320");
+void UpdateCarListCursor(void);
 void PlaySoundCue(s32 cue);
 
-void UpdateCarShopScreen(void) asm("func_80059558");
+void UpdateCarShopScreen(void);
 void UpdateCarShopScreen(void) {
     void *ot;
     s32 value;
@@ -382,7 +382,7 @@ extern s32 D_801E4290;
 void RequestUpgradedCarModel(s32 arg0);
 void DrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
 
-void UpdateEngineerShopScreen(void) asm("func_8005A3A4");
+void UpdateEngineerShopScreen(void);
 void UpdateEngineerShopScreen(void) {
     void *ot;
     s32 value;

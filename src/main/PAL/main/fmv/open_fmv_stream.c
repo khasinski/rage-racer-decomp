@@ -3,9 +3,9 @@
 
 extern s32 g_FmvRingBuffer asm("D_8009AF58");
 extern s32 g_StreamLoc asm("D_801E8A90");
-void DecDCTReset(s32 arg0) asm("func_80063E44");
+void DecDCTReset(s32 arg0);
 void DecDCToutCallback(s32 arg0);
-void StSetRing(s32 arg0, s32 arg1) asm("func_8006A058");
+void StSetRing(s32 arg0, s32 arg1);
 void StSetStream(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 StartStreamRead(s32 arg0);
 void OpenFmvStream(s32 arg0);

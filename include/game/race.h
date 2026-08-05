@@ -91,7 +91,7 @@ typedef struct GameRaceRanking {
 
 /* Course-select gate: `g_CourseIndex < (class < 2 ? 2 : 3)`, or 6 : 7 for the
  * advanced series. This is the OVAL unlock; see names.md 5. */
-s32 CanSelectNextCourse(void) asm("func_80053688");
+s32 CanSelectNextCourse(void);
 
 /* The race-start signal gantry, live for 105 <= g_SceneTimer < 300: the "3" /
  * "2" / "1" / "GO" dot-matrix board from D_8007DDC0[1..4] plus the six start

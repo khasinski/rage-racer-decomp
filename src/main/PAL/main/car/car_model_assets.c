@@ -19,7 +19,7 @@ void ApplyBodyColor1(s32 arg0, s32 arg1);
 void ApplyBodyColor2(s32 arg0, s32 arg1);
 extern s32 g_AssetBase asm("D_8019C904");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 void ResetAssetLoader(void);
 /* Where asset 0x56 lands: g_ImageBlockBuffer advanced past the car texture
  * block just loaded. Its header words 1 and 2 are relocated into

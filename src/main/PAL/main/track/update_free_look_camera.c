@@ -234,7 +234,7 @@ extern s32 g_AnimSceneryTint asm("D_8007E2E4");
 extern s16 g_AnimSceneryRacePosition asm("D_8007E2E8");
 extern s16 g_AnimSceneryVariant asm("D_8009AFCC");
 extern s16 g_AnimSceneryPitch[] asm("D_8007E2E0");
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 
 void DrawAnimatedScenery(s32 arg0, s32 arg1);
 

@@ -27,10 +27,9 @@ C_FUNC_RE = re.compile(
     re.MULTILINE,
 )
 # A decompiled function that carries a real name is defined as `Name(...) {` and
-# gets its address from an `asm("func_XXXXXXXX")` alias on a declaration, either
-# in the same file or in a header. Both halves are needed so that a unit which
-# mixes named C functions with INCLUDE_ASM stubs still bounds each stub at the
-# next C function instead of swallowing it.
+# gets its address from splat's symbol_addrs. Both halves are needed so that a
+# unit which mixes named C functions with INCLUDE_ASM stubs still bounds each
+# stub at the next C function instead of swallowing it.
 C_NAMED_DEF_RE = re.compile(
     r"^[A-Za-z_][A-Za-z0-9_ \t\*]*?(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*\([^;{]*\)\s*\{",
     re.MULTILINE,
@@ -42,12 +41,9 @@ C_NAMED_DEF_RE = re.compile(
 ASM_GLOBL_RE = re.compile(r"\.globl\s+(?P<name>func_[0-9A-Fa-f]{8})")
 FUNC_NAME_RE = re.compile(r"func_[0-9A-Fa-f]{8}")
 # The object may carry its real name rather than func_XXXXXXXX, in which case
-# the address comes from the same alias map the named function definitions use.
+# the address comes from symbol_addrs like a named function's does.
 TEXT_OBJECT_RE = re.compile(
-    r"\b(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*(?:\[[^\]]*\])?\s*(?:asm\(\"(?P<symbol>[A-Za-z0-9_]+)\"\)\s*)?__attribute__"
-)
-ASM_ALIAS_RE = re.compile(
-    r"(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*(?:\([^;{]*\)|\[[^\]]*\])\s*asm\(\"(?P<symbol>[A-Za-z0-9_]+)\"\)"
+    r"\b(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*(?:\[[^\]]*\])?\s*__attribute__"
 )
 
 
@@ -73,13 +69,12 @@ SYMBOL_ADDR_RE = re.compile(
 
 
 def collect_symbol_addrs(path: Path) -> dict[str, str]:
-    """Map C function name -> asm symbol, for the names splat already knows.
+    """Map C function name -> asm symbol, read from splat's symbol_addrs.
 
-    This is the same map `collect_asm_aliases` builds, but taken from splat's
-    symbol_addrs file rather than from an asm() label in the source. A name that
-    lives here needs no label: splat emits it into the disassembly and the
-    linker script, so `Name` is the address, and this generator only has to
-    agree about where the function starts.
+    This is the whole of what this generator knows about names. A name that
+    lives in symbol_addrs needs no asm() label in the source: splat emits it
+    into the disassembly and the linker script, so `Name` is the address, and
+    this generator only has to agree about where the function starts.
     """
     if not path.exists():
         return {}
@@ -87,19 +82,6 @@ def collect_symbol_addrs(path: Path) -> dict[str, str]:
         match.group("name"): f"func_{match.group('address').upper()}"
         for match in SYMBOL_ADDR_RE.finditer(path.read_text())
     }
-
-
-def collect_asm_aliases(*roots: Path) -> dict[str, str]:
-    """Map C function name -> the asm symbol its declaration aliases it to."""
-    aliases: dict[str, str] = {}
-    for root in roots:
-        if not root.exists():
-            continue
-        for pattern in ("*.h", "*.c"):
-            for path in root.rglob(pattern):
-                for match in ASM_ALIAS_RE.finditer(strip_comments(path.read_text())):
-                    aliases.setdefault(match.group("name"), match.group("symbol"))
-    return aliases
 
 
 def parse_subsegments(config: Path) -> list[tuple[int, str, str, int]]:
@@ -134,7 +116,7 @@ def parse_wrappers(
                 names.append(symbol)
         names.extend(match.group("name") for match in ASM_GLOBL_RE.finditer(text))
         for match in TEXT_OBJECT_RE.finditer(text):
-            symbol = match.group("symbol") or aliases.get(match.group("name"))
+            symbol = aliases.get(match.group("name"))
             if symbol is None and FUNC_NAME_RE.fullmatch(match.group("name")):
                 symbol = match.group("name")
             if symbol is not None:
@@ -301,7 +283,6 @@ def build_plan(root: Path, version: str, basename: str) -> Plan | None:
         return None
 
     aliases = collect_symbol_addrs(root / "configs" / version / f"sym.{basename}.txt")
-    aliases.update(collect_asm_aliases(root / "include", src_root))
     asm_wrappers_by_unit, c_funcs_by_unit, rodata_wrappers = parse_wrappers(
         src_root, version, aliases
     )

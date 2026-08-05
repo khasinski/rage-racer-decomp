@@ -474,7 +474,7 @@ s32 CanSelectPrevCourse(void) {
     return v1 < g_CourseIndex;
 }
 
-s32 CanSelectNextCourse(void) asm("func_80053688");
+s32 CanSelectNextCourse(void);
 
 s32 CanSelectNextCourse(void) {
     s32 limit;
@@ -527,13 +527,13 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawBrowseArrows(s32, s32, s32, s32);
 void DrawMenuLightBurst(s32 arg0);
 void DrawOwnedCarCounter(s32 arg0, s32 arg1);
-void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
+void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
 s32 DrawClassChangeCurtain(s32 arg0);
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
 void DrawTimeAttackPlate(s32 arg0);
 void DrawMenuCourseView(void);
 void PlaySoundCue(s32 cue);
-void UpdateCourseSelectScreen(void) asm("func_80053730");
+void UpdateCourseSelectScreen(void);
 void UpdateCourseSelectScreen(void) {
     void *ot;
     u8 *hdr;

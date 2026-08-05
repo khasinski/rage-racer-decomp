@@ -29,7 +29,7 @@ extern long g_StRingSize asm("D_801F1850");
 void StClearRing(void);
 
 /* StSetRing: installs the stream ring buffer (`base`, `size`) then clears it. */
-void StSetRing(long base, long size) asm("func_8006A058");
+void StSetRing(long base, long size);
 void StSetRing(long base, long size) { g_StRingBase = base; g_StRingSize = size; StClearRing(); }
 
 long CdGetToc2(long arg0, long arg1);

@@ -687,7 +687,7 @@ void ScrollTeamLogoUp(void) {
     }
 }
 
-void ScrollTeamLogoDown(void) asm("func_8004BA50");
+void ScrollTeamLogoDown(void);
 void ScrollTeamLogoDown(void) {
     s32 i;
     u32 *newPtr;

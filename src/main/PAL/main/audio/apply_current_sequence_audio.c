@@ -13,6 +13,6 @@ void ApplyCurrentSequenceAudio(void) {
     SetReverbDepth(0x28, 0x28);
 }
 
-void SsSetMVol(s32 arg0, s32 arg1) asm("func_8006EAFC");
+void SsSetMVol(s32 arg0, s32 arg1);
 void SetMasterVolumeMono(s16 arg0);
 void SetMasterVolumeMono(s16 arg0) { SsSetMVol(arg0, arg0); }

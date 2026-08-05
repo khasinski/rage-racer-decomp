@@ -26,10 +26,10 @@ void DrawMenuCourseView(void);
 void DrawMenuLightBurst(s32 arg0);
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
 void PlaySoundCue(s32 cue);
-s32 DrawRankingTable(s32 *arg0, s32 arg1, s32 arg2) asm("func_8004D384");
+s32 DrawRankingTable(s32 *arg0, s32 arg1, s32 arg2);
 void DrawTimeAttackPlate(s32 arg0);
 
-void UpdateRankingScreen(void) asm("func_80054D10");
+void UpdateRankingScreen(void);
 void UpdateRankingScreen(void) {
     s32 state;
 
@@ -260,7 +260,7 @@ extern s32 D_8019C7B8;
 
 s32 GetCarUnlockLevel(s32 model);
 
-void RefreshCarUnlockState(void) asm("func_80055524");
+void RefreshCarUnlockState(void);
 void RefreshCarUnlockState(void) {
     s32 index;
     s32 value;
@@ -318,10 +318,10 @@ extern s32 g_CarNamePlateStep asm("D_8009B31C");
 extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 
 void InstallCarModelSlot(void);
-void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
+void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
 void DrawMenuCarView(void);
 
-void EnterCarSelectScreen(void) asm("func_80055618");
+void EnterCarSelectScreen(void);
 void EnterCarSelectScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     InstallCarModelSlot();
@@ -371,7 +371,7 @@ void RestoreTeamLogoClut(void);
 void DrawOwnedCarCounter(s32 step, s32 count);
 void DrawMenuAltPanel(s32 arg0, s32 arg1);
 
-void UpdateCarSelectScreen(void) asm("func_8005568C");
+void UpdateCarSelectScreen(void);
 void UpdateCarSelectScreen(void) {
     s32 mode;
     u8 *cmdList;
@@ -752,7 +752,7 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, void *a10);
 
-void UpdateCustomizeScreen(void) asm("func_800563A0");
+void UpdateCustomizeScreen(void);
 void UpdateCustomizeScreen(void) {
     void *ot;
     s32 mode;

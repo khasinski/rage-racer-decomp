@@ -1,11 +1,11 @@
 /* Manual PAL linker symbols go here. */
 
 func_8006EAFC = SsSetMVol;
-func_80022038 = func_80021DB8 + 0x280;
-func_800222F4 = func_8002229C + 0x58;
-func_8004BAC8 = func_8004BA50 + 0x78;
-func_8005B004 = func_8005AFD4 + 0x30;
-func_8005BDB0 = func_8005BD84 + 0x2C;
+func_80022038 = DrawRankingPanel + 0x280;
+func_800222F4 = DrawNameEntryCursor + 0x58;
+func_8004BAC8 = ScrollTeamLogoDown + 0x78;
+func_8005B004 = IsSpuTransferDone + 0x30;
+func_8005BDB0 = SetSequenceVolumeSetting + 0x2C;
 
 /* Mid-function entry points, as offsets from the function that contains
    them.  Written this way so .text can change size: an absolute address
@@ -14,13 +14,13 @@ func_80028874 = func_80028120_mode_2 + 0x154;
 func_80028C54 = func_80028120_mode_2 + 0x534;
 func_80028D84 = func_80028120_mode_2 + 0x664;
 func_800296B4 = func_800295BC + 0xF8;
-func_80053730 = func_80053688 + 0xA8;
-func_80054C84 = func_80053688 + 0x15FC;
-func_80054D10 = func_80053688 + 0x1688;
-func_800551BC = func_80053688 + 0x1B34;
-func_80055618 = func_80055524 + 0xF4;
-func_8005568C = func_80055524 + 0x168;
-func_80055FDC = func_8005568C + 0x950;
+func_80053730 = CanSelectNextCourse + 0xA8;
+func_80054C84 = CanSelectNextCourse + 0x15FC;
+func_80054D10 = CanSelectNextCourse + 0x1688;
+func_800551BC = CanSelectNextCourse + 0x1B34;
+func_80055618 = RefreshCarUnlockState + 0xF4;
+func_8005568C = RefreshCarUnlockState + 0x168;
+func_80055FDC = UpdateCarSelectScreen + 0x950;
 func_800562C8 = func_80055FDC + 0x2EC;
 func_800563A0 = func_80055FDC + 0x3C4;
 func_80056E64 = func_80055FDC + 0xE88;
@@ -33,26 +33,26 @@ func_800586B0 = func_80055FDC + 0x26D4;
 func_8005873C = func_80055FDC + 0x2760;
 func_80058B88 = func_80055FDC + 0x2BAC;
 func_80058C14 = func_80055FDC + 0x2C38;
-func_80059558 = func_80059320 + 0x238;
+func_80059558 = UpdateCarListCursor + 0x238;
 func_8005A3A4 = func_8005A2CC + 0xD8;
 func_80063180 = func_80063170 + 0x10;
 func_80063190 = func_80063170 + 0x20;
 func_800631F0 = func_800631E0 + 0x10;
 func_80063200 = func_800631E0 + 0x20;
-func_800632B0 = func_800632A0 + 0x10;
+func_800632B0 = BiosNextFile + 0x10;
 func_80063DAC = func_80063D9C + 0x10;
 func_80063DBC = func_80063D9C + 0x20;
 func_80063DCC = func_80063D9C + 0x30;
 func_80063DDC = func_80063D9C + 0x40;
 func_80063DEC = func_80063D9C + 0x50;
-func_80063E44 = func_80063E34 + 0x10;
-func_800681BC = func_800681AC + 0x10;
+func_80063E44 = _new_card + 0x10;
+func_800681BC = GPU_cw + 0x10;
 /* Start of the GTE exception-handler body that Gte_PatchExceptionHandler
    copies into the BIOS vector. It sits inside that unit, 0x68 in. */
 D_8006A010 = func_80069FA8 + 0x68;
 func_8006A048 = func_8006A018 + 0x30;
 func_8006A058 = func_8006A018 + 0x40;
-func_8006A3E8 = func_8006A3D8 + 0x10;
+func_8006A3E8 = DeliverEvent + 0x10;
 func_8006DF24 = func_8006DF14 + 0x10;
 func_8006DF34 = func_8006DF14 + 0x20;
 func_8006E654 = func_8006E644 + 0x10;
@@ -64,22 +64,22 @@ func_8006E684 = func_8006E644 + 0x40;
    is still hand-written assembly. */
 .L80028ED4 = func_80028E9C + 0x38;
 .L8002E3E4_main = func_8002DEFC + 0x4E8;
-.L800390D4_main = func_80038FF0 + 0xE4;
-.L80040E20 = func_80040DB4 + 0x6C;
+.L800390D4_main = UpdateCarBodyKick + 0xE4;
+.L80040E20 = UpdateZoneAmbience + 0x6C;
 .L800479F0_main = func_80047958 + 0x98;
 .L800498B8_main = func_800496F0 + 0x1C8;
-.L8004DD30_main = func_8004D384 + 0x9AC;
-.L8004DE18_main = func_8004D384 + 0xA94;
-.L8004FE7C_main = func_8004FCE8 + 0x194;
-.L8004FF84_main = func_8004FCE8 + 0x29C;
+.L8004DD30_main = DrawRankingTable + 0x9AC;
+.L8004DE18_main = DrawRankingTable + 0xA94;
+.L8004FE7C_main = DrawCarNamePlate + 0x194;
+.L8004FF84_main = DrawCarNamePlate + 0x29C;
 .L80052A6C_main = func_8005290C + 0x160;
 .L80052BE0_main = func_8005290C + 0x2D4;
-.L80055050_main = func_80053688 + 0x19C8;
+.L80055050_main = CanSelectNextCourse + 0x19C8;
 .L80056060_main = func_80055FDC + 0x84;
-.L80059B54_main = func_80059320 + 0x834;
+.L80059B54_main = UpdateCarListCursor + 0x834;
 .L800635D0_main = func_800632F0 + 0x2E0;
-.L80070740_main = func_800706AC + 0x94;
-.L8007082C_main = func_800706AC + 0x180;
+.L80070740_main = SsSeqApplyNrpn + 0x94;
+.L8007082C_main = SsSeqApplyNrpn + 0x180;
 
 /* Size the BIOS loads, for the PS-EXE header. Kept as one absolute symbol
    because the assembler cannot emit a difference of two linker symbols in a

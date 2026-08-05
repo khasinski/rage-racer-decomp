@@ -248,7 +248,7 @@ s32 rcos(s32 angle) asm("func_80068634");
 
 s32 InterpolateTrackAngle(s32 arg0);
 
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {

@@ -41,7 +41,7 @@ u_long g_BiosCallStubs[20] asm("func_80063D9C") __attribute__((section(".text"))
 };
 
 void _card_write(long arg0, long arg1, long arg2);
-void _new_card(long arg0) asm("func_80063E34");
+void _new_card(long arg0);
 
 /* libcard, but declared in game/memcard.h, so it keeps common.h's typedefs. */
 s32 _card_clear(s32 arg0) {

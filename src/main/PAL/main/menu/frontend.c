@@ -54,7 +54,7 @@ void UpdateMainMenuExit(void) {
     DrawMainMenuRows();
 }
 
-void UpdateFrontend(void) asm("func_8001BB58");
+void UpdateFrontend(void);
 
 void UpdateTitleAttract(void);
 
@@ -124,7 +124,7 @@ extern s32 D_8007C744;
 extern u32 D_801E8260;
 extern void (*g_FrontendDrawHandlers[])(void) asm("D_8007C748");
 
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 s32 CdControl(s32 com, void *param, s32 result);
 void PlaySoundCue(s32 cue);
 s32 RequestTrackLoad(void);

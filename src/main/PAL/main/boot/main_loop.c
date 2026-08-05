@@ -87,7 +87,7 @@ void InitSubsystems(void) {
 }
 
 void __main(void);
-void BiosSetMemSize(s32 arg0) asm("func_80063190");
+void BiosSetMemSize(s32 arg0);
 void TickSequenceAudio(void);
 void StepTrackTextureSwap(void);
 void PutDrawEnv(u8 *env);

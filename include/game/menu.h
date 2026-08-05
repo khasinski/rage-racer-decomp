@@ -178,37 +178,37 @@ void InitMenuMode(void);
  */
 
 /* id 1 -- course + class picker; left/right change course, up/down the rows. */
-void UpdateCourseSelectScreen(void) asm("func_80053730");
+void UpdateCourseSelectScreen(void);
 s32 DrawCourseSelectScreen(s32 step) asm("func_8005290C");
 
 /* id 2 -- "RANKING": total time / lap time tables, or exit back to id 1. */
-void UpdateRankingScreen(void) asm("func_80054D10");
+void UpdateRankingScreen(void);
 s32 DrawRankingScreen(s32 step) asm("func_80054C84");
 /* The five record rows: place number + suffix + holder + row background, from
  * the ranking table D_801E7744 or the time table D_8019CB78. */
-s32 DrawRankingTable(s32 *accumulator, s32 step, s32 table) asm("func_8004D384");
+s32 DrawRankingTable(s32 *accumulator, s32 step, s32 table);
 
 /* id 3 -- runs for a single frame on the way from id 1 into id 4. */
-void EnterCarSelectScreen(void) asm("func_80055618");
+void EnterCarSelectScreen(void);
 
 /* id 4 -- "CAR SELECT"; the hub that starts a race or opens the shops. */
-void UpdateCarSelectScreen(void) asm("func_8005568C");
+void UpdateCarSelectScreen(void);
 s32 DrawCarSelectScreen(s32 step) asm("func_800551BC");
 
 /* id 5 -- "CUSTOMIZE": tire compound (5 settings) and transmission (AT/MT). */
-void UpdateCustomizeScreen(void) asm("func_800563A0");
+void UpdateCustomizeScreen(void);
 s32 DrawCustomizeScreen(s32 step) asm("func_800562C8");
 
 /* id 6 -- "DESIGN MODE": livery hub, branches to team logo / name / colour. */
-void UpdateDesignModeScreen(void) asm("func_80057198");
+void UpdateDesignModeScreen(void);
 s32 DrawDesignModeScreen(s32 step) asm("func_80056E64");
 
 /* id 7 -- "TEAM LOGO": pick a sample logo (id 8) or hand-paint one. */
-void UpdateTeamLogoScreen(void) asm("func_80057748");
+void UpdateTeamLogoScreen(void);
 s32 DrawTeamLogoScreen(s32 step) asm("func_800576BC");
 
 /* id 8 -- "TEAM LOGO" sample picker: character and background, 20 each. */
-void UpdateLogoSampleScreen(void) asm("func_800580C8");
+void UpdateLogoSampleScreen(void);
 s32 DrawLogoSampleScreen(s32 step) asm("func_8005803C");
 
 /*
@@ -216,19 +216,19 @@ s32 DrawLogoSampleScreen(s32 step) asm("func_8005803C");
  * cell 0x2A = BS and 0x2B = ED. Accepted characters accumulate in
  * g_TeamNameChars[g_TeamNameLength].
  */
-void UpdateTeamNameScreen(void) asm("func_8005873C");
+void UpdateTeamNameScreen(void);
 s32 DrawTeamNameScreen(s32 step) asm("func_800586B0");
 
 /* id 10 -- "PAINT COLOR": body colour 1 and 2, 18 choices each. */
-void UpdatePaintColorScreen(void) asm("func_80058C14");
+void UpdatePaintColorScreen(void);
 s32 DrawPaintColorScreen(s32 step) asm("func_80058B88");
 
 /* id 11 -- "SHOP" (car shop): browse every car and buy the selected one. */
-void UpdateCarShopScreen(void) asm("func_80059558");
+void UpdateCarShopScreen(void);
 s32 DrawCarShopScreen(s32 step) asm("func_80059248");
 
 /* id 12 -- "SHOP" (engineer shop): pay the tune-up fee to grade the car up. */
-void UpdateEngineerShopScreen(void) asm("func_8005A3A4");
+void UpdateEngineerShopScreen(void);
 u32 DrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
 
 /*
@@ -258,7 +258,7 @@ void UpdateTeamLogoCanvas(void);
  * Directions are derived from the arithmetic - see docs/names.md 13.
  */
 void ScrollTeamLogoUp(void);
-void ScrollTeamLogoDown(void) asm("func_8004BA50");
+void ScrollTeamLogoDown(void);
 void ScrollTeamLogoLeft(void);
 void ScrollTeamLogoRight(void);
 /* Mirror about the horizontal axis: row r <-> row 63 - r. */

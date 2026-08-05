@@ -2,7 +2,7 @@
 #include "psyq/gpu.h"
 
 extern u_char g_DispEnvCache asm("D_80094254");
-void MemCopy(long arg0, void *arg1, long arg2) asm("func_800681BC");
+void MemCopy(long arg0, void *arg1, long arg2);
 long GetDispEnv(long arg0);
 long GetDispEnv(long arg0) { MemCopy(arg0, &g_DispEnvCache, 0x14); return arg0; }
 

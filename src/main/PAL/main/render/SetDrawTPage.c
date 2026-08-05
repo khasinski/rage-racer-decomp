@@ -138,7 +138,7 @@ extern u8 g_VramWidthTable[] asm("D_80094268");
 extern u8 g_VramHeightTable[] asm("D_8009427C");
 
 void func_80068180(u8 *dst, s32 value, s32 count);
-void GPU_cw(void *arg0) asm("func_800681AC");
+void GPU_cw(void *arg0);
 s32 Gpu_Reset(s32 arg0);
 
 /* libgpu ResetGraph. Own trace strings D_80013478 "ResetGraph:jtb=%08x,env=%08x"

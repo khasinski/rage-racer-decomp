@@ -196,7 +196,7 @@ void StepTrackTextureSwap(void) {
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 
 s32 CycleBgmSelectCameraCar(s32 mask, s32 current);
 s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
@@ -226,7 +226,7 @@ s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 
 s32 CycleAttractCameraCar(s32 mask, s32 current);
 s32 CycleAttractCameraCar(s32 mask, s32 current) {

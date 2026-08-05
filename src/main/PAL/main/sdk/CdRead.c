@@ -14,7 +14,7 @@ extern volatile long g_CdReadSavedReadyCallback asm("D_8007D7B8");
 long CdSyncCallback(long arg0);
 long CdReadyCallback(long arg0) asm("func_8006A58C");
 long VSync(long mode);
-long CdStatus(void) asm("func_8006A3E8");
+long CdStatus(void);
 long CdControlB(long arg0, void *arg1, long arg2);
 long CdReadRetry(long arg0);
 void CdReady(long arg0, long arg1) asm("func_8006A554");

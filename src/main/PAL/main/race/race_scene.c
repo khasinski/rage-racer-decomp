@@ -89,7 +89,7 @@ void PlaySoundCue(s32 cue);
 
 void ForceAllEffectVoicesEnabled(s32 arg0);
 
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
@@ -281,7 +281,7 @@ void UpdateTrackEventSound(s32 arg0);
 
 void UpdatePointAmbience(s32 arg0);
 
-void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
+void UpdateZoneAmbience(s32 arg0);
 
 void TriggerRaceCues(void);
 

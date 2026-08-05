@@ -35,7 +35,7 @@ long CdPosToInt_Local(void *arg0);
 void LibcPutString(void *arg0);
 long VSync(long mode);
 long CdControl(long com, long param, long result);
-long CdStatus(void) asm("func_8006A3E8");
+long CdStatus(void);
 long CdLastPos(void);
 long CdMode(void);
 void CdFlush(void);

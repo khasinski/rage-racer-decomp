@@ -47,7 +47,7 @@ void DrawLogoSamplePanel(s32 arg0, s32 arg1);
 void PlaySoundCue(s32 cue);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 
-void UpdateTeamLogoScreen(void) asm("func_80057748");
+void UpdateTeamLogoScreen(void);
 void UpdateTeamLogoScreen(void)
 {
   void *ot;

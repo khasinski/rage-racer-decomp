@@ -17,10 +17,10 @@ void StopMemoryCardEvents(void) {
 }
 
 void func_8005F304(s32 arg0);
-s32 _card_clear(s32 arg0) asm("func_80063DEC");
+s32 _card_clear(s32 arg0);
 void func_8005F55C(void);
 void func_8005F2AC(void);
-void _card_load(s32 arg0) asm("func_80063DBC");
+void _card_load(s32 arg0);
 void func_8005F4D8(void);
 void CardReadAndSetMode(s32 arg0);
 void CardReadAndSetMode(s32 arg0) {

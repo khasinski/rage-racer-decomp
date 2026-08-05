@@ -125,7 +125,7 @@ void SsSeqApplyNrpn(
     VagAtr tone_attr,
     struct Unk adsr,
     s16 index,
-    u8 value) asm("func_800706AC");
+    u8 value);
 
 static inline s32 SsSeqCheckDataEntryValue(s32 data_entry_value) {
     switch (data_entry_value) {

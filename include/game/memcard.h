@@ -150,7 +150,7 @@ void EnableMemoryCardEvents(void);
 void DisableMemoryCardEvents(void);
 void CloseMemoryCardEvents(void);
 /* libcard _card_clear (see psyq/): _new_card() + _card_write(chan, 0x3F, 0). */
-s32 _card_clear(s32 chan) asm("func_80063DEC");
+s32 _card_clear(s32 chan);
 void CardReadAndSetMode(s32 param);
 void CardSeekParam(s32 param);
 s32 CardReadStatusPair(s32 high, s32 low);

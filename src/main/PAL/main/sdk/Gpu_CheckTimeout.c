@@ -119,14 +119,14 @@ void MemFill(u_char *dst, u_char value, long count) {
     }
 }
 
-u_long GPU_cw[4] asm("func_800681AC") __attribute__((section(".text"))) = {
+u_long GPU_cw[4] __attribute__((section(".text"))) = {
     0x240A00A0,
     0x01400008,
     0x24090049,
     0,
 };
 
-u_char *MemCopy(u_char *dst, u_char *src, long count) asm("func_800681BC");
+u_char *MemCopy(u_char *dst, u_char *src, long count);
 u_char *MemCopy(u_char *dst, u_char *src, long count) {
     u_char *ret;
 

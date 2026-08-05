@@ -17,9 +17,9 @@ void LibcSprintf() asm("func_800632F0");
 void ClearMemoryCardSwEvents(void) asm("func_8005F304");
 s32 PollMemoryCardHwEvent(void);
 s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
-void _card_info(s32 chan) asm("func_80063DAC");
-void _card_load(s32 chan) asm("func_80063DBC");
-s32 _card_clear(s32 chan) asm("func_80063DEC");
+void _card_info(s32 chan);
+void _card_load(s32 chan);
+s32 _card_clear(s32 chan);
 
 s32 PollMemoryCardStatus(s32 port, s32 slot);
 s32 PollMemoryCardStatus(s32 port, s32 slot) {
@@ -371,8 +371,8 @@ s32 WaitMemoryCardSwEvent(void) {
 }
 
 extern s32 g_SaveElapsedTicks asm("D_801E7A54");
-void InitCARD(s32 padEnable) asm("func_80063DCC");
-void StartCARD(void) asm("func_80063DDC");
+void InitCARD(s32 padEnable);
+void StartCARD(void);
 void BiosBuInit(void) asm("func_80063180");
 void RestartMemoryCard(void);
 void RestartMemoryCard(void) { InitCARD(1); StartCARD(); BiosBuInit(); g_SaveElapsedTicks = 0; }

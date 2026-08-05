@@ -44,7 +44,7 @@ extern u8 g_CarMarkerIndex[] asm("D_801F198C");
 
 extern u8 g_CarMarkerFlag[] asm("D_801F198E");
 
-void UpdateCarBodyKick(GameCarRuntime *car) asm("func_80038FF0");
+void UpdateCarBodyKick(GameCarRuntime *car);
 void UpdateCarBodyKick(GameCarRuntime *car) {
     s32 value;
     s32 wave;

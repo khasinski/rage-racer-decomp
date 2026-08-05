@@ -389,7 +389,7 @@ void UpdateCarAirborne(GameCarRuntime *car) {
 }
 
 extern s32 g_StandingStartSpin asm("D_8019CA04");
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 
 /*
  * Car motion handler for state98 == 3 (crash / tumble): applies a random shake

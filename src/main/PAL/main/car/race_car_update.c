@@ -25,7 +25,7 @@ void AccumulateLapProgress();
 void ApplyCarKnockback();
 s32 UpdateCarTrackState();
 void StartCarBodyKick();
-void UpdateCarBodyKick() asm("func_80038FF0");
+void UpdateCarBodyKick();
 void UpdateCarCrestHop();
 
 /*

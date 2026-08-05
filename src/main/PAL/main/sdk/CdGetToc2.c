@@ -15,7 +15,7 @@ long CdControlB(long arg0, u_char *arg1, u_char *arg2);
 void CdDefaultSyncCallback(void);
 void CdDefaultReadyCallback(void);
 void CdDefaultReadCallback(void);
-void DeliverEvent(u_long arg0, long arg1) asm("func_8006A3D8");
+void DeliverEvent(u_long arg0, long arg1);
 void CdReadCallback(void *arg0);
 
 long CdGetToc2(long arg0, u_char *arg1);

@@ -65,7 +65,7 @@ void UpdateTrackEventSound(s32 arg0);
 
 void UpdatePointAmbience(s32 arg0);
 
-void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
+void UpdateZoneAmbience(s32 arg0);
 
 
 void DrawTerrainCells(void);

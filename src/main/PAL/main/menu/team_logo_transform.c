@@ -242,7 +242,7 @@ typedef union {
 } TeamLogoColorSlot;
 
 void ScrollTeamLogoUp(s32 repeat);
-void func_8004BA50(void);
+void ScrollTeamLogoDown(void);
 void ScrollTeamLogoLeft(void);
 void ScrollTeamLogoRight(void);
 void FlipTeamLogoVertical(void);
@@ -625,7 +625,7 @@ void UpdateTeamLogoCanvas(void) {
                     ScrollTeamLogoUp(D_8007FB14);
                 }
                 if (*held & 0x4000) {
-                    func_8004BA50();
+                    ScrollTeamLogoDown();
                 }
                 if (*held & 0x8000) {
                     ScrollTeamLogoLeft();
@@ -889,8 +889,8 @@ void DrawSolidRect(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
 
 /* The animated five-row ranking/time-record panel. */
 s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking)
-    asm("func_8004D384");
-asm(".globl func_8004E07C\nfunc_8004E07C = func_8004D384 + 0xCF8");
+;
+asm(".globl func_8004E07C\nfunc_8004E07C = DrawRankingTable + 0xCF8");
 
 s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
     u8 text[16];

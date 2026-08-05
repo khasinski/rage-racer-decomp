@@ -10,7 +10,7 @@ extern char D_800135E0[];
 extern char D_800135F8[];
 
 void Gpu_BuildDrawEnvCmds(void *arg0, void *arg1);
-void *MemCopy(void *dst, void *src, s32 count) asm("func_800681BC");
+void *MemCopy(void *dst, void *src, s32 count);
 
 void DrawOTag(void *arg0);
 

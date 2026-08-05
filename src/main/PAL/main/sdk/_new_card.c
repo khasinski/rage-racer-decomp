@@ -5,17 +5,17 @@
 u_long *DecDCTGetEnv(u_long *arg0);
 u_long *DecDCTPutEnv(u_long *arg0);
 
-u_long _new_card[4] asm("func_80063E34") __attribute__((section(".text"))) = {
+u_long _new_card[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090050,
     0,
 };
 
-void KernelCallbackSlot3(void) asm("func_8006DF34");
+void KernelCallbackSlot3(void);
 void MDEC_reset(long arg0);
 
-void DecDCTReset(long arg0) asm("func_80063E44");
+void DecDCTReset(long arg0);
 void DecDCTReset(long arg0) {
     if (arg0 == 0) {
         KernelCallbackSlot3();

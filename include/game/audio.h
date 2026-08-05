@@ -52,7 +52,7 @@ void CloseExtraVabSlot(void);
 void ShutdownSoundSystem(void);
 void SetEffectVolumeScale(s32 scale);
 void SetLoadedTableVolumeScale(s32 scale);
-void SetSequenceVolumeSetting(s32 setting) asm("func_8005BD84");
+void SetSequenceVolumeSetting(s32 setting);
 /* The effect-side twin of SetSequenceVolumeSetting: clamps the 0..15
  * option-screen level and scales it onto g_SoundScale.scale's 0..0x80 range. */
 void SetEffectVolumeSetting(s32 setting);

@@ -26,7 +26,7 @@ void StartOptionMenuExit(s32 arg0);
 /* The six rows of the setup menu, plus the cursor when g_GameMode is 1. */
 void DrawOptionRootMenu(void);
 void DrawOptionRootMenu(void);
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 void PlaySoundCue(s32 cue);
 /* The eleven class icons, tinted by g_ClassRecords[i].place. */
 void DrawClassRecordGrid(void);

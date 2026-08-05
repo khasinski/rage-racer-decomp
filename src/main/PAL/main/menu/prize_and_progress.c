@@ -28,7 +28,7 @@ void func_800201D4(void);
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
-void SetSequenceVolumeSetting(s32 arg0) asm("func_8005BD84");
+void SetSequenceVolumeSetting(s32 arg0);
 void SetEffectVolumeSetting(s32 arg0);
 extern UnkCopyChunk g_SaveDefaults[] asm("D_8007BE68");
 extern u8 g_TimeAttackCars asm("D_801E4388");

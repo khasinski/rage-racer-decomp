@@ -4,7 +4,7 @@ extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
 extern volatile long g_SpuTransferCallback asm("D_8009ABB0");
 extern long g_SpuTransferIsRead asm("D_8009ABC8");
 
-void DeliverEvent(long arg0, long arg1) asm("func_8006A3D8");
+void DeliverEvent(long arg0, long arg1);
 
 void _spu_transferCallback(void) {
     volatile long i;

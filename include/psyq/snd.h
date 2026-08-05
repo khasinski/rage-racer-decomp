@@ -52,7 +52,7 @@ long SsUtKeyOnV(
     long volR);
 void _SsVmInit(void) asm("func_8007865C");
 
-void SsSetMVol(short left, short right) asm("func_8006EAFC");
+void SsSetMVol(short left, short right);
 void SsSetSerialVol(u_char source, short left, short right);
 void SsSetSpuInputAttr(u_char source, u_char field, u_char value);
 /* LibRef47 14-13 gives `short SsSeqOpen(u_long *addr, short vab_id)`. The body

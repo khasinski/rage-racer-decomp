@@ -21,7 +21,7 @@ void DrawEndingScreen(void) asm("func_80037D90");         /* "CONGRATULATIONS!!"
 void DrawRaceOptionMenu(s32 cursorRow);
 
 /*
- * Title screen and main menu. UpdateFrontend (func_8001BB58) runs one of the
+ * Title screen and main menu. UpdateFrontend (UpdateFrontend) runs one of the
  * four handlers below each frame via the jump table at D_8007C748, indexed by
  * the sub-state D_8009F098: 0 title -> 1 menu wipe-in -> 2 cursor/confirm ->
  * 3 fade out and request the selected scene. Details in names.md section 5.

@@ -251,7 +251,7 @@ extern volatile u8 g_BgmShuffleOrder[] asm("D_801E7734");
 extern u8 D_801E7733[];
 extern s32 g_BgmShuffleIndex asm("D_8009E6CC");
 
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 
 /* Refills g_BgmShuffleOrder with a random permutation of the
  * g_BgmTrackCount tracks and rewinds g_BgmShuffleIndex. */

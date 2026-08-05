@@ -16,7 +16,7 @@ extern long g_IntrStuckCount asm("D_8009A4C8");
 extern u_char D_80013B70[];
 extern u_char D_80013B8C[];
 
-void func_8006E654(void);
+void ReturnFromException(void);
 
 void intrDispatch(void) {
     u_short *state;
@@ -30,7 +30,7 @@ void intrDispatch(void) {
     state = g_IntrState;
     if (state[0] == 0) {
         DebugPrintf(D_80013B70, *g_IrqStatus);
-        func_8006E654();
+        ReturnFromException();
     }
     g_IntrInDispatch = 1;
     s0 = (g_IntrCallbackMask & *g_IrqStatus) & *g_IrqMask;
@@ -68,5 +68,5 @@ void intrDispatch(void) {
         g_IntrStuckCount = 0;
     }
     g_IntrInDispatch = 0;
-    func_8006E654();
+    ReturnFromException();
 }

@@ -47,15 +47,15 @@ extern u8 g_RankingNameCodes[] asm("D_801E417C");
 extern s32 g_NameEntryChar asm("D_801E6830");
 extern u8 g_TimeRecordNameCodes[] asm("D_801F17FC");
 void RequestSelectBgmAssets(void);
-void DrawRankingPanel(u8 *arg0) asm("func_80021DB8");
+void DrawRankingPanel(u8 *arg0);
 void DrawTimeRecordPanel(u8 *arg0);
-void DrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
+void DrawNameEntryCursor(s32 arg0, s32 arg1);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void PlaySoundCue(s32 cue);
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
 s32 CdControl(s32 com, void *param, s32 result);
 
-void DrawRankingPanel(u8 *arg0) asm("func_80021DB8");
+void DrawRankingPanel(u8 *arg0);
 void DrawRankingPanel(u8 *arg0) {
     u8 *panel;
     s32 iter;
@@ -180,7 +180,7 @@ void DrawTimeRecordPanel(u8 *s5) {
     }
 }
 
-void DrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
+void DrawNameEntryCursor(s32 arg0, s32 arg1);
 void DrawNameEntryCursor(s32 arg0, s32 arg1) {
     s32 *scratch;
 

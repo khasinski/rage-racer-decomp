@@ -232,7 +232,7 @@ extern u8 g_FlybyScenery[] asm("D_801E42FC");
 extern s16 g_FlybySceneryLap asm("D_801E4308");
 extern u8 *g_FlybySceneryKeyframe asm("D_801E43F4");
 
-s32 Random15(void) asm("func_800632B0");
+s32 Random15(void);
 
 void SeedFlybyScenery(void);
 void SeedFlybyScenery(void) {
