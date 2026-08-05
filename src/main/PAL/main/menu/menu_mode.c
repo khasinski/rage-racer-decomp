@@ -12,7 +12,7 @@ extern s32 D_8007FB40;
 extern s32 D_8007FB44;
 extern s32 g_MenuAltLayout;
 
-void func_80046E00();
+void GameDrawTexturedQuadWide() asm("func_80046E00");
 
 void DrawMenuAltPanel(s32 arg0, s32 arg1);
 void DrawMenuAltPanel(s32 arg0, s32 arg1) {
@@ -65,7 +65,7 @@ void DrawMenuAltPanel(s32 arg0, s32 arg1) {
         y0 = (s16)(y0 - offset);
         x0 += 0x1C;
         y1 = (s16)(offset + 0x9F);
-        func_80046E00(
+        GameDrawTexturedQuadWide(
             callScratch,
             callX,
             y0,
@@ -102,7 +102,7 @@ void DrawMenuAltPanel(s32 arg0, s32 arg1) {
         y0 = (s16)(y0 - offset);
         x0 += 0x4E;
         y1 = (s16)(render1 + 0x128);
-        func_80046E00(
+        GameDrawTexturedQuadWide(
             callScratch,
             callX,
             y0,
@@ -243,7 +243,7 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
         y3 = (s16)(y3 + 0x58);
         x1 = (s16)(x1 + 0xE4);
 
-        func_80046E00(scratch2,
+        GameDrawTexturedQuadWide(scratch2,
             x0, y0, x1, y1, x2, y2, x3, y3,
             0xA0, 0x70, 0xDF, 0x70, 0xA0, 0xBF, 0xDF, 0xBF,
             0x7F, 0x7F, 0x7F,
@@ -282,7 +282,7 @@ void DrawTimeAttackPlate(s32 arg0) {
     if (renderValue != 0) {
         y0 = (s16)(y0 - renderValue);
         y1 = (s16)(renderValue + 0xD8);
-        func_80046E00(
+        GameDrawTexturedQuadWide(
             scratch,
             0x4C,
             y0,

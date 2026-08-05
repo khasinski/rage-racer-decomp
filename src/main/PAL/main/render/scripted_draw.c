@@ -346,10 +346,10 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
         flags);
 }
 
-void func_80046E00(u8 *arg0, s16 x0, s16 y0, s16 x1a, s16 y0b, s16 x0b,
+void GameDrawTexturedQuadWide(u8 *arg0, s16 x0, s16 y0, s16 x1a, s16 y0b, s16 x0b,
                    s16 y1a, s16 x1b, s16 y1b, s32 d0, s32 d1, s32 d2,
                    s32 d3, s32 d4, s32 d5, s32 d6, s32 d7, s32 dA,
-                   s32 dB, s32 dC, s32 h8, s32 f8, s32 f4, s32 dE);
+                   s32 dB, s32 dC, s32 h8, s32 f8, s32 f4, s32 dE) asm("func_80046E00");
 
 void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx);
 void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
@@ -444,7 +444,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     }
 
     flags = entry[0xD];
-    func_80046E00(table + index * 4, x, y, x + dx, y, x, y + dy,
+    GameDrawTexturedQuadWide(table + index * 4, x, y, x + dx, y, x, y + dy,
                   x + dx, y + dy, entry[0], entry[1], entry[2], entry[3],
                   entry[4], entry[5], entry[6], entry[7], entry[0xA],
                   entry[0xB], entry[0xC], *(u16 *)(entry + 8), flags & 8,

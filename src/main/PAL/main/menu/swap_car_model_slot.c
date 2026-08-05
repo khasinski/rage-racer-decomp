@@ -16,7 +16,7 @@ void SwapCarModelSlot(void) {
     InstallCarModelSlot();
 }
 
-s32 func_8001720C(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 GameQueueTileTransWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_8001720C");
 
 void DrawCarSlotHighlight(s32 arg0);
 void DrawCarSlotHighlight(s32 arg0) {
@@ -24,7 +24,7 @@ void DrawCarSlotHighlight(s32 arg0) {
     u8 *base = g_DrawBuffer;
     s32 value = *scratch;
 
-    *scratch = func_8001720C(base + 0xCC, value, 0x24, (arg0 * 16) + 0x24, 0x50, 0x10, 0, 0, 0xFF);
+    *scratch = GameQueueTileTransWide(base + 0xCC, value, 0x24, (arg0 * 16) + 0x24, 0x50, 0x10, 0, 0, 0xFF);
 }
 
 typedef struct SwObj698 { s32 unk0; u16 unk4; } SwObj698;

@@ -41,7 +41,7 @@ extern s32 g_MonoOutput;
 extern s32 g_BgmVolumeSetting;
 extern s32 g_SfxVolumeSetting;
 void DrawOptionHintBar(s32 arg0);
-s32 func_8001705C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
+s32 GameQueueShadedSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("func_8001705C");
 /* One volume slider row: `level` filled 4x0x18 bars between two end glyphs. */
 void DrawVolumeBar(s32 arg0, s32 arg1);
 void DrawVolumeBar(s32 arg0, s32 arg1);
@@ -369,7 +369,7 @@ void DrawSoundOptionScreen(void) {
         color = 0x20;
     }
 
-    n = func_8001705C(base, n, 0x66, 0x12A, s3, 0xC, 0xD4, 0xC4, 0x7F40, color);
+    n = GameQueueShadedSpriteTransWide(base, n, 0x66, 0x12A, s3, 0xC, 0xD4, 0xC4, 0x7F40, color);
     n = AddTilePrim(base, n, 0x47, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
     n = AddTilePrim(base, n, 0x46, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
 
@@ -378,7 +378,7 @@ void DrawSoundOptionScreen(void) {
         color = 0x7F;
     }
 
-    n = func_8001705C(base, n, 0xBA, 0x12A, 0x28, 0xC, 0xB4, 0xD0, 0x7F40, color);
+    n = GameQueueShadedSpriteTransWide(base, n, 0xBA, 0x12A, 0x28, 0xC, 0xB4, 0xD0, 0x7F40, color);
     n = AddTilePrim(base, n, 0xA3, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
     n = AddTilePrim(base, n, 0xA2, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
     {

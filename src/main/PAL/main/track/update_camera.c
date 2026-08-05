@@ -10,7 +10,7 @@ extern s32 FindNearestTrackCamera();
 extern s32 rcos(s32);
 extern s32 SquareRoot0(s32);
 extern void *ApplyMatrixLV(void *, void *, void *);
-extern void *func_80069CC8(void *, void *);
+extern void *TransposeMatrixWide(void *, void *) asm("func_80069CC8");
 /* Chase-view (mode 1) distance preset, 0..2: eye height 0x3A / 0x59 / 0x97 and
  * pull-back 0x118 / 0x140 / 0x190, plus a -0x90 vs -0x60 pitch bias. Sits in
  * .data at 0, and nothing in the image ever writes it, so retail is always 0. */
@@ -342,9 +342,9 @@ block_36:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        func_80069CC8(&sp48[0], &spA8[0]);
+        TransposeMatrixWide(&sp48[0], &spA8[0]);
         MulMatrix2(angleState, &sp48[0]);
-        func_80069CC8(&sp48[0], &sp68[0]);
+        TransposeMatrixWide(&sp48[0], &sp68[0]);
         sp18[1] = -0x3C;
         sp18[0] = 0;
         sp18[2] = 0x32;
@@ -395,7 +395,7 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        func_80069CC8(&sp48[0], &spA8[0]);
+        TransposeMatrixWide(&sp48[0], &spA8[0]);
         temp_v0_764 = temp_s2_728 + g_TrackCameras;
         sp18[0] = FIELD(temp_v0_764, s32 *, 0x10);
         sp18[1] = FIELD(temp_v0_764, s32 *, 0x14);
@@ -544,9 +544,9 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        func_80069CC8(&sp48[0], &spA8[0]);
+        TransposeMatrixWide(&sp48[0], &spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
-        func_80069CC8(&sp48[0], &sp68[0]);
+        TransposeMatrixWide(&sp48[0], &sp68[0]);
         sp18[2] += 0x32;
         ApplyMatrixLV(&spA8[0], &sp18[0], &sp38[0]);
         sp28[0] = 0;
@@ -569,7 +569,7 @@ block_52:
         sp18[2] = 0;
         BuildRotMatrixY(&sp88[0], 0 - scratch[7]);
         ApplyMatrixLV(&sp88[0], &sp18[0], &sp28[0]);
-        func_80069CC8(&sp68[0], &sp88[0]);
+        TransposeMatrixWide(&sp68[0], &sp88[0]);
         ApplyMatrixLV(&sp88[0], &sp28[0], &sp18[0]);
         scratch[8] = 0x400 - (Atan2(sp18[1], sp18[0]) & 0xFFF);
         g_CameraModePrev = 3;
@@ -589,7 +589,7 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        func_80069CC8(&sp48[0], &spA8[0]);
+        TransposeMatrixWide(&sp48[0], &spA8[0]);
         sp18[0] = 0;
         temp_s0_1437 = cameraNodeIndex * 0x24;
         sp18[1] = FIELD((temp_s0_1437 + (u32)g_TrackCameras), s32 *, 0xC);
@@ -627,9 +627,9 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        func_80069CC8(&sp48[0], &spA8[0]);
+        TransposeMatrixWide(&sp48[0], &spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
-        func_80069CC8(&sp48[0], &sp68[0]);
+        TransposeMatrixWide(&sp48[0], &sp68[0]);
         sp18[0] = 0;
         sp18[1] = 0;
         sp18[2] = 0x32;

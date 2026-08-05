@@ -2,7 +2,7 @@
 #include "game/state.h"
 #include "game/render.h"
 
-s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_8001720C");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("func_80017390");
 extern u32 g_OptionMenuExitScene;
 /* The 0x140x0x1E0 twin of DrawFullscreenFadeTile, for the 480-line setup scene. */
@@ -29,7 +29,7 @@ void DrawFullscreenFadeTile480(s32 color, s32 arg1) {
     height = 0x1E0;
     scratch = (s32 *)0x1F800000;
     scratchValue = *scratch;
-    next = func_8001720C(base, scratchValue, 0, 0, width, height, color, color, color);
+    next = GameQueueTileTransWide(base, scratchValue, 0, 0, width, height, color, color, color);
     *scratch = GameQueueDrawModePrimWide(base, next, arg1);
 }
 

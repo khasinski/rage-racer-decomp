@@ -36,7 +36,7 @@ extern s16 g_PrologueLineX[];
 extern s16 g_PrologueLineY[];
 extern s32 g_PrologueLineText[];
 void GameDrawText8x8Shaded(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_8001720C");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("func_80017390");
 void RequestSelectBgmAssets(void);
 extern u32 g_CameraViewMode;
@@ -221,7 +221,7 @@ void DrawPrologueText(void) {
         scale_b = (camera * 3) << 6;
         arg8 = (scale_b / 0x100) + 0x40;
 
-        next = func_8001720C(ptr, arg1, 0, 0, 0x140, 0xF0, camera, arg7, arg8);
+        next = GameQueueTileTransWide(ptr, arg1, 0, 0, 0x140, 0xF0, camera, arg7, arg8);
         *scratch = GameQueueDrawModePrimWide(ptr, next, 0x49);
     }
 }

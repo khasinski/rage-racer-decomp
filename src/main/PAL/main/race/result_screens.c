@@ -25,8 +25,8 @@ typedef union {
     s16 color;
 } GrandPrixIntroSelection;
 
-void *func_8001720C(
-    void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
+void *GameQueueTileTransWide(
+    void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("func_8001720C");
 
 void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 arg2) asm("func_80017390");
 extern s32 g_SeriesCleared;
@@ -153,7 +153,7 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
 
     width = 0x140;
     height = 0xF0;
-    prim = func_8001720C(ot, prim, 0, 0, width, height, redStack, green, temp);
+    prim = GameQueueTileTransWide(ot, prim, 0, 0, width, height, redStack, green, temp);
     *(void **)0x1F800000 = GameQueueDrawModePrimWide(ot, prim, 0x49);
 }
 
