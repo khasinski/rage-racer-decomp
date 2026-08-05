@@ -121,7 +121,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     void *otBase;
     s32 mode;
     register s32 y1Reg asm("$2");
-    register s32 x0 asm("$5");
+    s32 x0;
     s32 y0Call;
     s32 x1Base;
     s32 x1;
@@ -218,7 +218,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     y1 = y0Call << 0x10;
     x1 <<= 0x10;
     otPtr = (s32)otBase + arg0;
-    asm("" : "=r"(otPtr) : "0"(otPtr));
+    asm("" : "=r"(otPtr), "=r"(x0) : "0"(otPtr), "1"(x0));
     func_8004711C(
         (void *)otPtr,
         x0 >> 0x10,
