@@ -128,8 +128,8 @@ extern u8 g_SndTableArea[];
 extern char g_MsgVabOpenHeadError[];
 extern char g_MsgVabTransBodyError[];
 
-s32 func_800730BC(s32 arg0, s32 arg1);
-s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
+s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("func_800730BC");
+s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80072C4C");
 void BiosExit(s32 arg0);
 
 s32 InitSoundWithVab(s32 header, s32 body) {
@@ -148,7 +148,7 @@ s32 InitSoundWithVab(s32 header, s32 body) {
     SetReverbPreset(2, 0, 0);
     ResetSoundState();
 
-    ret = func_80072C4C(headerReg, -1, 0x1000);
+    ret = SsVabOpenHeadStickyWide(headerReg, -1, 0x1000);
     vabIdPtr = g_VabIds;
     *vabIdPtr = ret;
     currentVabId = (s16)ret;
@@ -158,7 +158,7 @@ s32 InitSoundWithVab(s32 header, s32 body) {
         BiosExit(1);
     }
 
-    ret = func_800730BC(bodyReg, currentVabId);
+    ret = SsVabTransBodyWide(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
         DebugPrintf(g_MsgVabTransBodyError);
@@ -190,15 +190,15 @@ s32 InitSoundRuntime(void) {
 #include "psyq/snd.h"
 
 s32 SpuVmDamperStep(void);
-s32 func_800730BC(s32 arg0, s32 arg1);
-s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
+s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("func_800730BC");
+s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80072C4C");
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
 s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table);
 s32 CloseAudioSlot(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0);
 void BiosExit(s32 arg0);
 void SsUtReverbOff(void);
-void func_8007865C(s32 arg0);
+void _SsVmInitWide(s32 arg0) asm("func_8007865C");
 long SsUtKeyOffV(long voice);
 s32 VSync(s32 mode);
 void SsStopSoundTick(void);
@@ -246,7 +246,7 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     }
 
     g_AudioLoadSlot = slotReg;
-    ret = func_80072C4C(header, -1, g_VabSpuAddress[slotReg]);
+    ret = SsVabOpenHeadStickyWide(header, -1, g_VabSpuAddress[slotReg]);
     {
         s16 *vabIdBase = g_VabIds;
         register s32 offset asm("$3") = slotReg * 2;
@@ -265,7 +265,7 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
             BiosExit(1);
         }
 
-        ret = func_800730BC(bodyReg, currentVabId);
+        ret = SsVabTransBodyWide(bodyReg, currentVabId);
         *vabIdPtr = ret;
         if ((s16)ret == fail) {
             DebugPrintf(g_MsgVabTransBodyError);
@@ -328,7 +328,7 @@ s32 CloseVabOnlyAudioSlot(s32 slot) {
     } else {
     *flagsPtr = bit ^ flags;
     SsUtSetReverbDepth(zeroArg, 0);
-    func_8007865C(0);
+    _SsVmInitWide(0);
     /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
        (rather than naming the symbol) is what the retail code does. */
     ids = (s16 *)((u8 *)flagsPtr + 0xC);
@@ -360,7 +360,7 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     s32 tableReg = (s32)table;
 
     g_AudioLoadSlot = 3;
-    ret = func_80072C4C(header, -1, g_VabSpuAddressExtra);
+    ret = SsVabOpenHeadStickyWide(header, -1, g_VabSpuAddressExtra);
     vabIdPtr = &g_VabIds3;
     *vabIdPtr = ret;
     asm volatile("" : "=r"(ret) : "0"(ret));
@@ -372,7 +372,7 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
         BiosExit(1);
     }
 
-    ret = func_800730BC(body, currentVabId);
+    ret = SsVabTransBodyWide(body, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
         DebugPrintf(g_MsgVabTransBodyError);
@@ -399,7 +399,7 @@ s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     register s32 ret asm("$2");
     s32 flags;
 
-    ret = func_80072C4C(header, -1, 0x6A000);
+    ret = SsVabOpenHeadStickyWide(header, -1, 0x6A000);
     vabIdPtr = &g_VabIds3;
     *vabIdPtr = ret;
 
@@ -410,7 +410,7 @@ s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
         BiosExit(1);
     }
 
-    ret = func_800730BC(bodyReg, currentVabId);
+    ret = SsVabTransBodyWide(bodyReg, currentVabId);
     *vabIdPtr = ret;
     if ((s16)ret == fail) {
         DebugPrintf(g_MsgVabTransBodyError);
@@ -1713,7 +1713,7 @@ void PlaySoundCue(s32 arg0) {
 }
 
 
-void func_80078130(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend);
+void SsUtPitchBendWide(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend) asm("func_80078130");
 
 void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
 void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
@@ -1750,7 +1750,7 @@ void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     }
     SsUtSetVVol((s16)voiceCopy, left, right);
     voice = arg0 + 0xE;
-    func_80078130((s16)voice, g_VabIds[(s16)bend], g_SoundSlotTone[arg0][arg3], 0x3C, arg1);
+    SsUtPitchBendWide((s16)voice, g_VabIds[(s16)bend], g_SoundSlotTone[arg0][arg3], 0x3C, arg1);
 }
 
 #include "common.h"
@@ -1900,12 +1900,12 @@ void SetDefaultReverbDepth(void) {
 }
 
 extern s32 g_ReverbFadeStep;
-void func_8007865C(s32 arg0);
+void _SsVmInitWide(s32 arg0) asm("func_8007865C");
 void SetReverbDepth(s32 arg0, s32 arg1);
 void RefreshSequenceVolumeScale(void);
 void InitSequenceAudio(void);
 void InitSequenceAudio(void) {
-    func_8007865C(0);
+    _SsVmInitWide(0);
     SsSetVoiceCount(0x12);
     SetReverbDepth(0x28, 0x28);
     g_ReverbFadeStep = 0;
@@ -1925,7 +1925,7 @@ s32 GetOwnedCarAssetIndex(s32 arg0);
 
 void InitEffectVoiceRuntime(void);
 void InitEffectVoiceRuntime(void) {
-    func_8007865C(0);
+    _SsVmInitWide(0);
     SsSetVoiceCount(8);
 
     {
@@ -2402,9 +2402,9 @@ extern char g_MsgSeqVabOpenHeadError[];
 extern char g_MsgSeqVabTransBodyError[];
 
 void BiosExit(s32 arg0);
-s32 func_800730BC(s32 arg0, s32 arg1);
-s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
-void func_8007865C(s32 arg0);
+s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("func_800730BC");
+s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80072C4C");
+void _SsVmInitWide(s32 arg0) asm("func_8007865C");
 
 extern s16 g_VabIds[];
 
@@ -2419,7 +2419,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     register s32 ret asm("$2");
 
     g_AudioLoadSlot = slotReg;
-    ret = func_80072C4C(header, -1, g_VabSpuAddress[slotReg]);
+    ret = SsVabOpenHeadStickyWide(header, -1, g_VabSpuAddress[slotReg]);
     {
         s16 *vabIdBase = g_VabIds;
         slotReg *= 2;
@@ -2435,7 +2435,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
         BiosExit(1);
     }
 
-    ret = func_800730BC(bodyReg, currentVabId);
+    ret = SsVabTransBodyWide(bodyReg, currentVabId);
     *vabIdPtr = ret;
     currentVabId = (s16)ret;
     if (currentVabId == fail) {
@@ -2464,7 +2464,7 @@ s32 CloseAudioSlot(s32 slot) {
     } else {
         *flagsPtr = bit ^ flags;
         SsUtSetReverbDepth(0, 0);
-        func_8007865C(0);
+        _SsVmInitWide(0);
         SsSeqCloseWrapper(g_SeqHandle);
         /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
            (rather than naming the symbol) is what the retail code does. */
