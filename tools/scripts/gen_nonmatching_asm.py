@@ -40,9 +40,14 @@ C_NAMED_DEF_RE = re.compile(
 # object can be placed in .text with __attribute__((section(".text"))). Both end
 # the preceding stub, so both must count as boundaries.
 ASM_GLOBL_RE = re.compile(r"\.globl\s+(?P<name>func_[0-9A-Fa-f]{8})")
-TEXT_OBJECT_RE = re.compile(r"\b(?P<name>func_[0-9A-Fa-f]{8})\s*(?:\[[^\]]*\])?\s*__attribute__")
+FUNC_NAME_RE = re.compile(r"func_[0-9A-Fa-f]{8}")
+# The object may carry its real name rather than func_XXXXXXXX, in which case
+# the address comes from the same alias map the named function definitions use.
+TEXT_OBJECT_RE = re.compile(
+    r"\b(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*(?:\[[^\]]*\])?\s*(?:asm\(\"(?P<symbol>[A-Za-z0-9_]+)\"\)\s*)?__attribute__"
+)
 ASM_ALIAS_RE = re.compile(
-    r"(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*\([^;{]*\)\s*asm\(\"(?P<symbol>[A-Za-z0-9_]+)\"\)"
+    r"(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*(?:\([^;{]*\)|\[[^\]]*\])\s*asm\(\"(?P<symbol>[A-Za-z0-9_]+)\"\)"
 )
 
 
@@ -59,6 +64,29 @@ def strip_comments(text: str) -> str:
         return re.sub(r"[^\n]", " ", match.group(0))
 
     return re.sub(r"/\*.*?\*/|//[^\n]*", blank, text, flags=re.S)
+
+
+SYMBOL_ADDR_RE = re.compile(
+    r"^\s*(?P<name>[A-Za-z_][A-Za-z0-9_]*)\s*=\s*0x(?P<address>[0-9A-Fa-f]{8})\s*;",
+    re.MULTILINE,
+)
+
+
+def collect_symbol_addrs(path: Path) -> dict[str, str]:
+    """Map C function name -> asm symbol, for the names splat already knows.
+
+    This is the same map `collect_asm_aliases` builds, but taken from splat's
+    symbol_addrs file rather than from an asm() label in the source. A name that
+    lives here needs no label: splat emits it into the disassembly and the
+    linker script, so `Name` is the address, and this generator only has to
+    agree about where the function starts.
+    """
+    if not path.exists():
+        return {}
+    return {
+        match.group("name"): f"func_{match.group('address').upper()}"
+        for match in SYMBOL_ADDR_RE.finditer(path.read_text())
+    }
 
 
 def collect_asm_aliases(*roots: Path) -> dict[str, str]:
@@ -105,7 +133,12 @@ def parse_wrappers(
             if symbol is not None:
                 names.append(symbol)
         names.extend(match.group("name") for match in ASM_GLOBL_RE.finditer(text))
-        names.extend(match.group("name") for match in TEXT_OBJECT_RE.finditer(text))
+        for match in TEXT_OBJECT_RE.finditer(text):
+            symbol = match.group("symbol") or aliases.get(match.group("name"))
+            if symbol is None and FUNC_NAME_RE.fullmatch(match.group("name")):
+                symbol = match.group("name")
+            if symbol is not None:
+                names.append(symbol)
         c_funcs_by_unit[f"{version}/{rel}"] = names
         for match in RODATA_WRAP_RE.finditer(text):
             rodata_by_name[match.group(1)] = rel
@@ -267,7 +300,8 @@ def build_plan(root: Path, version: str, basename: str) -> Plan | None:
     if not config.exists() or not target.exists() or not src_root.exists():
         return None
 
-    aliases = collect_asm_aliases(root / "include", src_root)
+    aliases = collect_symbol_addrs(root / "configs" / version / f"sym.{basename}.txt")
+    aliases.update(collect_asm_aliases(root / "include", src_root))
     asm_wrappers_by_unit, c_funcs_by_unit, rodata_wrappers = parse_wrappers(
         src_root, version, aliases
     )
