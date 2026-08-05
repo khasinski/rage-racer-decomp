@@ -12,14 +12,12 @@
 #include "psyq/cd.h"
 
 void CdReadBreak(void);
-s32 func_8006A534(s32 arg0, s32 arg1);
 long CdControl(long com, void *param, long result);
 extern char g_MsgNowLoading[];
 extern char g_MsgReadBytes[];
 extern char g_MsgFileReadError[];
 s32 CdRead(s32 arg0, void *arg1, s32 arg2);
 long CdReadSync(long arg0, long arg1);
-void func_8006A6DC(s32 arg0, void *arg1);
 s32 func_80017C78(s32 arg0, s32 arg1);
 extern char g_PathRageBin[];
 extern char g_MsgFileNotFound[];
@@ -49,7 +47,7 @@ s32 EnableCdAudioMode(void);
 s32 EnableCdAudioMode(void) {
     u8 value;
 
-    if (func_8006A534(1, 0) == 0) {
+    if (CdSync(1, 0) == 0) {
         return 0;
     }
 
@@ -64,18 +62,18 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
     switch (g_CdLoadPhase) {
     case 0:
         DebugPrintf(g_MsgNowLoading, g_AssetPaths[assetIndex], dst);
-        if (func_8006A534(1, 0) != 0) {
+        if (CdSync(1, 0) != 0) {
             g_CdLoadPhase = 1;
         }
         return 0;
 
     case 1:
-        func_8006A6DC(2, &g_AssetCdEntries[assetIndex]);
+        CdControlF(2, &g_AssetCdEntries[assetIndex]);
         g_CdLoadPhase = 2;
         return 0;
 
     case 2:
-        if (func_8006A534(1, 0) != 0) {
+        if (CdSync(1, 0) != 0) {
             g_CdLoadPhase = 3;
         }
         return 0;

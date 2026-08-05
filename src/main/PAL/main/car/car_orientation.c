@@ -611,21 +611,20 @@ void UpdateCarBodyRoll(A *ctx) {
     }
 }
 
-s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
 
 /*
  * Point-in-quad test: returns 1 if point `pt` is inside the quad with corners
- * p0,p1,p3,p2 (four chained half-plane sign checks via func_80069C98), else 0.
+ * p0,p1,p3,p2 (four chained half-plane sign checks via NormalClip), else 0.
  */
 s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt);
 s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) {
     s32 result;
     s32 ret = 0;
 
-    if (func_80069C98(p0, p1, pt) >= 0) {
-        if (func_80069C98(p1, p3, pt) >= 0) {
-            if (func_80069C98(p3, p2, pt) >= 0) {
-                result = func_80069C98(p2, p0, pt) >= 0;
+    if (NormalClip(p0, p1, pt) >= 0) {
+        if (NormalClip(p1, p3, pt) >= 0) {
+            if (NormalClip(p3, p2, pt) >= 0) {
+                result = NormalClip(p2, p0, pt) >= 0;
                 ret = result;
             }
         }
@@ -687,7 +686,6 @@ extern s16 g_GripLossTimer;
 extern s32 g_RaceSeries;
 extern s16 g_WrongWayTimer;
 void func_80069D18(void *rot, void *mtx);
-s32 *func_80069678(void *mtx, void *vec, void *out);
 s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void PlaySoundCue(s32 id);
@@ -736,7 +734,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     rotation.vx = *(u16 *)(((u8 *)D_8007DA88) + pointOffset);
     rotation.vz = *(u16 *)(((u8 *)D_8007DA8A) + pointOffset);
     rotation.vy = 0;
-    func_80069678(&rotationMatrix, &rotation, &transformed);
+    ApplyMatrix(&rotationMatrix, &rotation, &transformed);
     (*(CPt *)(((u8 *)playerOutline) + pointOffset)).x = transformed.x >> 1;
     (*(CPt *)(((u8 *)playerOutline) + pointOffset)).y = transformed.z >> 1;
     if (index < 4)
@@ -803,7 +801,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
             rotation.vx = *(u16 *)(((u8 *)D_8007DAA0) + cornerOffset);
             rotation.vz = *(u16 *)(((u8 *)D_8007DAA2) + cornerOffset);
             rotation.vy = 0;
-            func_80069678(&rotationMatrix, &rotation, &transformed);
+            ApplyMatrix(&rotationMatrix, &rotation, &transformed);
             ((CPt *)(((u8 *)(&opponentCorners[0])) + cornerOffset))->x = (transformed.x >> 1) + (velocityDelta.x / 2);
             ((CPt *)(((u8 *)(&opponentCorners[0])) + cornerOffset))->y = (transformed.z >> 1) + (velocityDelta.y / 2);
           }

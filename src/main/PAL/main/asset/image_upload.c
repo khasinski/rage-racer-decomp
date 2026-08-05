@@ -77,7 +77,6 @@ extern u16 g_TeamLogoClut[];
 
 void LoadImage(Rect *rect, void *data);
 void StoreImage(Rect *rect, void *data);
-s32 func_80065BEC(GpuRectPacked *rect, u32 x, u32 y);
 void func_800658FC(s32 mode);
 
 void StoreTeamLogoImage(void *dst);
@@ -86,7 +85,7 @@ void StoreTeamLogoImage(void *dst) {
     LoadImage(&g_TeamLogoClutLoadRect, g_TeamLogoClut);
 
     if (g_GrandPrixSeries != 0) {
-        func_80065BEC(&g_TeamLogoClutMoveRect, 0x3F0, 0xE2);
+        MoveImage(&g_TeamLogoClutMoveRect, 0x3F0, 0xE2);
     }
 
     StoreImage(&g_TrackTextureRect, dst);

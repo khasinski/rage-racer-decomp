@@ -9,7 +9,7 @@ u_long _get_mode(long arg0, long arg1, u_long arg2);
 u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1);
 u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) asm("func_80066BE4");
-u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
+u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw);
 
 u_long _get_mode(long arg0, long arg1, u_long arg2) {
     volatile u_char *modep = g_GraphType;

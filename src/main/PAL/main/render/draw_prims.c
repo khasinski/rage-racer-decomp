@@ -1,6 +1,6 @@
 #include "common.h"
 #include "psyq/gpu.h"
-void SetTile(void *arg0) asm("func_80064FF8");
+void SetTile(void *arg0);
 
 void func_80066604(void *packet, void *rect);
 void AddPrim(void *ot, void *prim);
@@ -66,8 +66,6 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
 }
 
 void SetSprt(void *arg0);
-void func_80064EB8(void *arg0, s32 enabled);
-void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
@@ -109,8 +107,8 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     SetSprt(prim);
 
     clutReg = clutX;
-    func_80064EB8(prim, shadeReg);
-    func_80064E90(prim, semiReg);
+    SetShadeTex(prim, shadeReg);
+    SetSemiTrans(prim, semiReg);
 
     prim->x0 = x0Local;
     prim->y0 = y0Local;
@@ -141,7 +139,6 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
 }
 
 void SetPolyF3(void *arg0);
-void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11);
@@ -195,7 +192,6 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
 }
 
 void SetPolyF4(void *arg0);
-void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
@@ -235,7 +231,7 @@ void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 
     gLocal = g;
 
     SetPolyF4(prim);
-    func_80064E90(prim, semiReg);
+    SetSemiTrans(prim, semiReg);
 
     prim->x0 = x0Local;
     prim->y0 = y0Local;
@@ -263,8 +259,6 @@ void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 
 }
 
 void SetPolyFT4(void *prim);
-void SetShadeTex(void *prim, long enabled) asm("func_80064EB8");
-void SetSemiTrans(void *prim, long enabled) asm("func_80064E90");
 
 /*
  * Packs a POLY_FT4 (textured quad) at the scratchpad cursor and links it into
@@ -323,7 +317,7 @@ void GameDrawTexturedQuad(s32 ot, s16 x0, s16 y0, s16 x1,
     *(POLY_FT4 **)0x1F800000 = prim;
 }
 
-void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
+void SetSemiTrans(void *arg0, long enabled);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
@@ -376,7 +370,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
 }
 
 void SetLineF2(void *arg0);
-void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
+void SetSemiTrans(void *arg0, long enabled);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
@@ -429,7 +423,6 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
 }
 
 void SetLineF3(void *arg0);
-void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
@@ -440,7 +433,7 @@ void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 
 
     prim = *(LINE_F3 **)0x1F800000;
     SetLineF3(prim);
-    func_80064E90(prim, arg10 != 0xFF);
+    SetSemiTrans(prim, arg10 != 0xFF);
 
     prim->x0 = x0;
     prim->y0 = y0;
@@ -464,7 +457,6 @@ void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 
 }
 
 void SetLineG2(void *arg0);
-void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha);

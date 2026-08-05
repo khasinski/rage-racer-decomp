@@ -225,7 +225,7 @@ s32 DrawPaintColorScreen(s32 step) asm("func_80058B88");
 
 /* id 11 -- "SHOP" (car shop): browse every car and buy the selected one. */
 void UpdateCarShopScreen(void);
-s32 DrawCarShopScreen(s32 step) asm("func_80059248");
+s32 DrawCarShopScreen(s32 step);
 
 /* id 12 -- "SHOP" (engineer shop): pay the tune-up fee to grade the car up. */
 void UpdateEngineerShopScreen(void);
@@ -242,7 +242,7 @@ void DrawCarSpecGraph(s32 step, s32 tireGrade) asm("func_800496F0");
 /* "MAX POWER <n> ps / <n> rpm" and "MAX TORQUE <n>.<n> kgm / <n> rpm". */
 void DrawCarEngineSpec(s16 yOffset, u8 brightness, s32 unused) asm("func_80052158");
 /* The TEAM NAME 4x11 grid, its highlight and caret, and the typed name. */
-void DrawTeamNameEntry(s32 step, s32 cursorIndex) asm("func_8004E724");
+void DrawTeamNameEntry(s32 step, s32 cursorIndex);
 /* The 3D car view behind screens 3, 4, 5, 6, 10, 11, 12: eases
  * g_MenuViewAngle/Offset, then submits the car and the showroom floor. */
 void DrawMenuCarView(void);

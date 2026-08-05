@@ -102,7 +102,6 @@ void DrawFadingMenuSprites(s32 a, s32 b, s32 c);
 void PlaySoundCue(s32 cue);
 void RampTeamLogoCanvas(s32 a, s32 b);
 void DrawTeamLogoCanvas(s32 a, s32 b);
-s32 func_8004E724(s32 a, s32 b);
 
 void UpdateDesignModeScreen(void);
 void UpdateDesignModeScreen(void) {
@@ -184,7 +183,7 @@ void UpdateDesignModeScreen(void) {
             case 2:
                 g_MenuScreen = 9;
                 g_MenuHandlerIndex = 9;
-                func_8004E724(0, 0);
+                DrawTeamNameEntry(0, 0);
                 g_MenuViewOffset = 0x3D090;
                 g_MenuViewOffsetTarget = 0;
                 g_MenuViewAngleTarget = 0;

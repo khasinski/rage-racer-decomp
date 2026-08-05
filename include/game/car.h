@@ -357,7 +357,7 @@ typedef struct GameCarTrackAngleWindow {
 void InitPlayerCar(GameCarRuntime *car) asm("func_8002C478");
 /* Non-clamping twin of UpdateCarTrackState: recomputes the track-relative placement
  * and writes the reference triple at +0x50, for the init/reset paths only. */
-void ResetCarTrackState(GameCarRuntime *car) asm("func_80032280");
+void ResetCarTrackState(GameCarRuntime *car);
 /* The two variants of the rival-car driver over GameCarRuntime[11]. Race runs
  * only while `g_RacePhase >= 2 && g_GrandPrixMode`, adds three race-only passes
  * and time-slices cars 4..10; attract has no player so every car runs. */
@@ -371,7 +371,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car) asm("func_8002D398");
 s32 CollideRivalCars(GameCarRuntime *car, s32 index);
 /* Draws one car, from the DrawCars loop; two LOD tiers plus the mirrored
  * wheel pass, submitted through SubmitModel. */
-void DrawCar(void *car) asm("func_8001DFC0");
+void DrawCar(void *car);
 /* Selects model bank 1 and calls DrawCar for each of the 11 runtime cars
  * whose activeFlag != -1 and field_BC == 1. */
 void DrawCars(void);

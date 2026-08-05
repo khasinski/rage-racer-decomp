@@ -16,7 +16,7 @@ void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
 void LibcSprintf() asm("func_800632F0");
 void ClearMemoryCardSwEvents(void) asm("func_8005F304");
 s32 PollMemoryCardHwEvent(void);
-s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
+s32 WaitMemoryCardSwEvent(void);
 void _card_info(s32 chan);
 void _card_load(s32 chan);
 s32 _card_clear(s32 chan);
@@ -328,7 +328,7 @@ s32 PollMemoryCardHwEventLimit(s32 limit) {
     return 0;
 }
 
-s32 WaitMemoryCardHwEvent(void) asm("func_8005F4D8");
+s32 WaitMemoryCardHwEvent(void);
 s32 WaitMemoryCardHwEvent(void) {
     s32 ready;
 
@@ -349,7 +349,7 @@ s32 WaitMemoryCardHwEvent(void) {
     }
 }
 
-s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
+s32 WaitMemoryCardSwEvent(void);
 s32 WaitMemoryCardSwEvent(void) {
     s32 ready;
 

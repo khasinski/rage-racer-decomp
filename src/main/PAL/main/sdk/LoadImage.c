@@ -12,14 +12,14 @@ extern u_long g_MoveImageSrc;
 extern u_long g_MoveImageDst;
 extern u_long g_MoveImageSize;
 
-void CheckPrim(char *arg0, void *arg1) asm("func_80065968");
+void CheckPrim(char *arg0, void *arg1);
 extern char D_80013578[];
 extern char D_80013584[];
 extern char D_80013590[];
 
 void LoadImage(Rect *rect, void *data);
 void StoreImage(Rect *arg0, void *arg1);
-long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) asm("func_80065BEC");
+long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2);
 
 void LoadImage(Rect *arg0, void *arg1) {
     CheckPrim(D_80013578, arg0);

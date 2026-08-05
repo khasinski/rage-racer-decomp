@@ -22,7 +22,6 @@ void InitRivalCarAi(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
 void SeedCarRouteMarkers(void);
 
 
-void func_8001DFC0(GameCarRuntime *arg0);
 
 
 
@@ -126,7 +125,7 @@ void DrawCars(void) {
     do {
         if (*(s16 *)(entry - 0x10) != (i++, minus_one)) {
             if (*(s32 *)entry == one) {
-                func_8001DFC0(base);
+                DrawCar(base);
             }
         }
         entry += 0x19C;
@@ -137,7 +136,7 @@ void DrawCars(void) {
 void DrawPlayerCarOnly(void);
 void DrawPlayerCarOnly(void) {
     SelectModelBank(1);
-    func_8001DFC0(g_Cars);
+    DrawCar(g_Cars);
 }
 
 void ClearCarMotionState(GameCarRuntime *arg0);

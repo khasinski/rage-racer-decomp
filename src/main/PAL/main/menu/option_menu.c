@@ -20,7 +20,6 @@ extern DVec D_8007D5A8[];
 extern Rgb D_8007D658[];
 extern GameScoreRecord g_ClassRecords[];
 extern Struct12 D_8007D5D4[];
-s32 func_800153FC(void);
 s32 RequestTrackLoad(void);
 void StartOptionMenuExit(s32 arg0);
 /* The six rows of the setup menu, plus the cursor when g_GameMode is 1. */
@@ -107,7 +106,7 @@ void UpdateOptionRootMenu(void) {
             g_ScreenOffsetEditX = 0;
             break;
         case 1:
-            func_800153FC();
+            BeginControllerConfig();
             g_GameMode = 7;
             break;
         case 2:

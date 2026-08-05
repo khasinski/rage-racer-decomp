@@ -60,7 +60,7 @@ void *func_80017390(void *ot, void *packet, s32 arg2);
 
 void AddPrim(void *ot, void *prim);
 
-void SetShadeTex(u8 *prim, s32 enabled) asm("func_80064EB8");
+void SetShadeTex(u8 *prim, s32 enabled);
 
 void SetSprt(u8 *prim);
 
@@ -128,7 +128,6 @@ void DrawPlayerTachometer(void);
 
 void UpdateTrackEventSound(s32 a);
 
-void func_8003425C(u32 a);
 
 void PlayCountdownCues(u32 a);
 
@@ -492,7 +491,7 @@ void UpdateWaypointCollectScene(void) {
     }
 
     if (g_RacePhase < 4) {
-        func_8003425C(g_SceneTimer);
+        DrawStartCountdown(g_SceneTimer);
         PlayCountdownCues(g_SceneTimer);
     }
 

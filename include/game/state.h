@@ -57,7 +57,7 @@ u8 *DrawPadConfigDiagram(void *ot, u8 *prim);
 u8 *DrawNegconConfigDiagram(void *ot, u8 *prim);
 /* Entry hook: backs both selections up to g_PadMappingIndexSaved / g_NegconMappingIndexSaved so a cancel
  * can restore them. Its caller sets g_GameMode = 7 in the same breath. */
-void BeginControllerConfig(void) asm("func_800153FC");
+void BeginControllerConfig(void);
 
 /* Identity of the running scene: queried (`== 0xC`, `== 0x11`, `== 0x1E`, ...)
  * but never dispatched. Every writer also resets g_SceneTimer. */

@@ -3,8 +3,8 @@
 #include "psyq/gte.h"
 #include "game/state.h"
 #include "game/render.h"
-void SetTransMatrix(void *a) asm("func_800698E8");
-void SetRotMatrix(void *a) asm("func_80069858");
+void SetTransMatrix(void *a);
+void SetRotMatrix(void *a);
 
 typedef struct Obj {
     s16 id;    /* 0x0 */

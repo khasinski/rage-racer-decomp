@@ -69,7 +69,6 @@ void BuildRotMatrixX(Matrix *mtx, s32 angle) {
 
 extern Matrix D_8019CB18;
 
-void func_80069858(Matrix *mtx);
 
 void SetCameraRotMatrix(void) {
     Matrix mtx;
@@ -82,7 +81,7 @@ void SetCameraRotMatrix(void) {
     MulMatrix2(&mtx, scratch);
     BuildRotMatrixY(&mtx, 0x800);
     MulMatrix0(&mtx, scratch, &D_8019CB18);
-    func_80069858(scratch);
+    SetRotMatrix(scratch);
 }
 
 extern s16 g_AtanTable[];

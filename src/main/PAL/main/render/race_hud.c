@@ -34,7 +34,6 @@ void DrawRaceHudLabels(s32 arg0) {
     *scratch = func_80017390(g_DrawBuffer + 0xCC, *scratch, 9);
 }
 
-void func_80064FF8(u8 *prim);
 
 /*
  * Packs a TILE (SetTile + AddPrim) at `prim`, links it into `ot` and returns
@@ -46,7 +45,7 @@ u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s3
 u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) {
     u8 *oldPrim;
 
-    func_80064FF8(prim);
+    SetTile(prim);
 
     oldPrim = prim;
     *(s16 *)(prim + 0x08) = x;

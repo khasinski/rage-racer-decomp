@@ -100,6 +100,6 @@ void SetVabSlotVoiceEnabled(s32 voice, s32 enabled, s32 vabSlot);
 void SetDefaultReverbDepth(void);
 void InitSequenceAudio(void);
 void RestoreReverbDepth(s32 enabled);
-int CloseAudioSlot(s32 slot) asm("func_8005E600");
+int CloseAudioSlot(s32 slot);
 
 #endif

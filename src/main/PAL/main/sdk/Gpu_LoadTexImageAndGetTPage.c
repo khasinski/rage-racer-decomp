@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
-long GetGraphType(void) asm("func_800657E4");
+long GetGraphType(void);
 
 
 void LoadImage(Rect *rect, void *data);

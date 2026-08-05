@@ -11,7 +11,6 @@ extern s32 g_ScratchRenderMode asm("D_1F800084");
 
 s32 GetTrackZoneBlend(s32 arg0);
 void ApplyZoneLighting(s32 arg0, Matrix *arg1);
-void func_80069888(Matrix *arg0);
 void func_80017794(void *a0, void *a1, void *a2);
 void RestoreColorMatrix(void);
 
@@ -55,7 +54,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
             ApplyZoneLighting(clipHandle, &m_90);
         }
     }
-    func_80069888(&m_90);
+    SetLightMatrix(&m_90);
 
     m_90.m[0][0] = -m_90.m[0][0];
     m_90.m[0][2] = -m_90.m[0][2];
@@ -135,7 +134,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
         func_80017794((void *)0x1F80011C, m_118, &m_B0[i]);
         g_ScratchRenderMode = 0;
         SubmitModel((void *)0x1F800000, (otDepth + 2 < g_ModelBankCount) ? (otDepth + 2) : 1);
-        func_80069888(&m_90);
+        SetLightMatrix(&m_90);
     }
 
     obj->y += g_CarModelAsset->horizon_6;
@@ -152,7 +151,7 @@ extern u8 g_CarModelByCourse[][11];
 extern s16 D_8007D380[][2];
 void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 
-void func_8001DFC0(GameRenderObject *obj) {
+void DrawCar(GameRenderObject *obj) {
     Matrix m_10;
     Matrix m_30;
     Matrix m_50;
@@ -198,7 +197,7 @@ void func_8001DFC0(GameRenderObject *obj) {
             if (clipHandle != 0) {
                 ApplyZoneLighting(clipHandle, &m_90);
             }
-            func_80069888(&m_90);
+            SetLightMatrix(&m_90);
 
             m_90.m[0][0] = -m_90.m[0][0];
             m_90.m[0][2] = -m_90.m[0][2];
@@ -278,7 +277,7 @@ void func_8001DFC0(GameRenderObject *obj) {
                 g_ScratchRenderMode = 0;
                 SubmitModel((void *)0x1F800000,
                                 (lod[0] + 2 < g_ModelBankCount) ? (lod[0] + 2) : 1);
-                func_80069888(&m_90);
+                SetLightMatrix(&m_90);
             }
         } else if (otDepth < 0x2500) {
             BuildRotMatrixY(&m_10, 0x800 - obj->angleY);
@@ -289,7 +288,7 @@ void func_8001DFC0(GameRenderObject *obj) {
             if (clipHandle != 0) {
                 ApplyZoneLighting(clipHandle, &m_90);
             }
-            func_80069888(&m_90);
+            SetLightMatrix(&m_90);
 
             BuildRotMatrixZ(&m_10, obj->angleZ);
             MulMatrix2(&m_50, &m_10);
@@ -312,5 +311,5 @@ void func_8001DFC0(GameRenderObject *obj) {
 extern s32 g_FmvState;
 extern s32 g_StreamReturnScene;
 s32 CloseLoadedAudioSlots(void);
-void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
+void CdSync(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result);

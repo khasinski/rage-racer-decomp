@@ -10,7 +10,7 @@ extern u_char D_800136B8[];
 
 long CD_init(long arg0);
 long CdSyncCallback(long arg0);
-long CdReadyCallback(long arg0) asm("func_8006A58C");
+long CdReadyCallback(long arg0);
 long CdControlB(long arg0, u_char *arg1, u_char *arg2);
 void CdDefaultSyncCallback(void);
 void CdDefaultReadyCallback(void);

@@ -110,7 +110,7 @@ long StGetBackloc(CdlLOC *loc);
  * last two arguments as function pointers; kept as-is to match the call sites. */
 void StSetRing(void *base, long size);
 void StSetStream(long mode, long start_frame, long end_frame, long callback, long user_data);
-u_long StFreeRing(u_long *base) asm("func_8006CFF0");
+u_long StFreeRing(u_long *base);
 /* The libds streaming state machine: advances g_StInterruptState through states 1..0xA,
  * DMAs sector header then body, drives the StStrHeader ring. Installed via
  * CdReadyCallback behind the stub CdRead2Callback and also pumped directly from
@@ -123,13 +123,13 @@ void StCdInterrupt(void);
  * command without collecting a result.
  */
 long CdControl(long com, void *param, long result);
-long CdControlF(long com, void *param) asm("func_8006A6DC");
+long CdControlF(long com, void *param);
 long CdControlB(long com, void *param, long result);
-long CdSync(long mode, long result) asm("func_8006A534");
+long CdSync(long mode, long result);
 long CdReady(long mode, long result) asm("func_8006A554");
 /* Install a completion / data-ready callback; returns the previous one. */
 long CdSyncCallback(long callback);
-long CdReadyCallback(long callback) asm("func_8006A58C");
+long CdReadyCallback(long callback);
 
 /*
  * libcd internals. CD_init resets the drive (CD_initvol + CD_initintr + the

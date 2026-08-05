@@ -61,8 +61,6 @@ void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32
 void MatrixApplyZRotation(Matrix *arg0, s32 arg1);
 s32 SquareRoot0(s32 arg0) asm("func_800689A8");
 void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ);
-void func_80069858(s32 *matrix);
-void func_800698E8(s32 *matrix);
 
 /*
  * Builds a billboard / look-at view Matrix for a GameRenderObject: the eye is
@@ -138,8 +136,8 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
     m.t[0] <<= 1;
     m.t[1] <<= 1;
     m.t[2] <<= 1;
-    func_80069858((s32 *)&m);
-    func_800698E8((s32 *)&m);
+    SetRotMatrix((s32 *)&m);
+    SetTransMatrix((s32 *)&m);
     return 0;
 }
 

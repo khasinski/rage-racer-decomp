@@ -6,7 +6,7 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-/* The strip buffers hold back-to-back 0x10-byte TILEs; func_80064FF8 is
+/* The strip buffers hold back-to-back 0x10-byte TILEs; SetTile is
  * SetTile. The retail code reloads the buffer base before each field store,
  * so the base is passed in rather than held in a pointer. */
 #define TILE_AT(base, byteOffset) (*(TILE *)((s32)(byteOffset) + (s32)(base)))
@@ -135,7 +135,6 @@ extern u8 *g_TileStripBuffers[2];
 extern u8 g_TileStripStorage[];
 
 void func_800658FC(s32 mode);
-void func_80064FF8(u8 *prim);
 
 void BuildTileStrips(void);
 void BuildTileStrips(void) {
@@ -177,7 +176,7 @@ void BuildTileStrips(void) {
                 linear = (row * 32) + col;
                 buffer = buffers[0];
                 offset = linear * 16;
-                func_80064FF8((u8 *)((u8 *)offset + (s32)buffer));
+                SetTile((u8 *)((u8 *)offset + (s32)buffer));
                 storeBaseV1 = buffers[0];
                 TILE_AT(storeBaseV1, offset).w = 2;
                 storeBaseV1 = buffers[0];

@@ -3,7 +3,7 @@
 void SetDQA(s32 arg0);
 void SetDQB(s32 arg0);
 
-void SetFogNear(s32 arg0, s32 arg1) asm("func_800686D4");
+void SetFogNear(s32 arg0, s32 arg1);
 void SetFogNear(s32 arg0, s32 arg1) {
     SetDQA(-((arg0 * 5) << 6) / arg1);
     SetDQB(0x1400000);

@@ -141,8 +141,8 @@ void DrawMemoryCardSaveRows(
  */
 void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
 void ClearMemoryCardSwEvents(void) asm("func_8005F304");
-s32 WaitMemoryCardHwEvent(void) asm("func_8005F4D8");
-s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
+s32 WaitMemoryCardHwEvent(void);
+s32 WaitMemoryCardSwEvent(void);
 s32 PollMemoryCardHwEvent(void);
 s32 PollMemoryCardHwEventLimit(s32 attempts);
 void OpenMemoryCardEvents(void);

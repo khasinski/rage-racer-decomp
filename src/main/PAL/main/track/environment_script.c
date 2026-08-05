@@ -61,9 +61,6 @@ void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3);
 /* Deliberately unprototyped: the original passes only the rect and leaves
  * a1 live, so the psyq/gpu.h LoadImage prototype cannot be used here. */
 void LoadImage();
-void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
-void func_80069B14(void *arg0, s32 arg1, void *arg2);
-void func_800686D4(s32 arg0, s32 arg1);
 
 void UpdateEnvironment(void);
 void SeekEnvironmentScript(s32 targetTime) {
@@ -232,8 +229,8 @@ void UpdateEnvironment(void) {
         local[1] = p1[1] << 4;
         local[2] = p1[2] << 4;
         p2 = (u8 *)(i * 3) + (g_EnvironmentMode * 48 + (s32)g_EnvPaletteTable);
-        func_80069A38(p2[0], p2[1], p2[2]);
-        func_80069B14(local, frac, out);
+        SetFarColor(p2[0], p2[1], p2[2]);
+        Intpl(local, frac, out);
         {
             u8 *idx = (u8 *)(i * 2);
             register s32 palo asm("$5");
@@ -268,7 +265,7 @@ void UpdateEnvironment(void) {
         LerpEnvColor(ENV_FROM(8), ENV_TO(8), ENV_CUR(8), frac);
     }
 
-    func_80069A38(ENV_FOG_RGB[0], ENV_FOG_RGB[1], ENV_FOG_RGB[2]);
+    SetFarColor(ENV_FOG_RGB[0], ENV_FOG_RGB[1], ENV_FOG_RGB[2]);
 
     if (g_EnvSpareLerp != 0) {
         g_EnvSpare = (g_EnvSpareFrom * diff + g_EnvSpareTo * g_EnvLerpFrame) / g_EnvLerpDuration;
@@ -292,5 +289,5 @@ void UpdateEnvironment(void) {
         }
     }
 
-    func_800686D4(g_FogNear, 0x140);
+    SetFogNear(g_FogNear, 0x140);
 }

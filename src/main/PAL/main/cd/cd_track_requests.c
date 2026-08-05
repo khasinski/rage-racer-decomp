@@ -11,7 +11,6 @@ extern u8 g_CdCurrentTrack;
 extern s32 g_CdFadeFrames;
 extern CdlLOC g_CdTrackLocs[];
 
-s32 func_8006A534(s32 arg0, s32 arg1);
 long CdControl(long com, void *param, long result);
 
 void StepCdTrackRequest(void);
@@ -22,7 +21,7 @@ void StepCdTrackRequest(void) {
 
     switch (g_CdTrackStep) {
     case 0:
-        if (func_8006A534(1, 0) == 0) {
+        if (CdSync(1, 0) == 0) {
             break;
         }
         g_CdFadeFrames = 0;
@@ -34,7 +33,7 @@ void StepCdTrackRequest(void) {
         g_CdTrackStep = 2;
         break;
     case 2:
-        state = func_8006A534(1, 0);
+        state = CdSync(1, 0);
         if (state == 2) {
             g_CdTrackStep = 3;
             break;
@@ -52,7 +51,7 @@ void StepCdTrackRequest(void) {
         SetCdVolume(status);
         break;
     case 4:
-        if (func_8006A534(1, 0) == 0) {
+        if (CdSync(1, 0) == 0) {
             break;
         }
         g_CdTrackStep = 5;
@@ -63,7 +62,7 @@ void StepCdTrackRequest(void) {
         g_CdTrackStep = 6;
         break;
     case 6:
-        state = func_8006A534(1, 0);
+        state = CdSync(1, 0);
         if (state == 2) {
             g_CdTrackStep = 7;
             break;
@@ -90,7 +89,7 @@ void StepCdPlayRequest(void) {
     state = g_CdCommandStep;
     switch (state) {
     case 0:
-        if (func_8006A534(1, 0) == 0) {
+        if (CdSync(1, 0) == 0) {
             break;
         }
         g_CdCommandStep = 1;
@@ -101,7 +100,7 @@ void StepCdPlayRequest(void) {
         g_CdCommandStep = 2;
         break;
     case 2:
-        status = func_8006A534(1, 0);
+        status = CdSync(1, 0);
         if (status == state) {
             g_CdCommandStep = 3;
             break;

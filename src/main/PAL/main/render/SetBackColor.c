@@ -4,7 +4,7 @@
 /*
  * GTE COP2 leaf routines after reg03: the fog/colour control writers
  * (SetBackColor/SetFarColor/SetGeomOffset/SetGeomScreen, reg04.o family,
- * func_80069A18..) and the single-command colour/vector ops (LightColor,
+ * SetBackColor..) and the single-command colour/vector ops (LightColor,
  * DpqColor, DpqColor3, Intpl, Square12/0, AverageZ3/4, OuterProduct12/0 =
  * smp_00.o).  Kept as one residual TU: the smp_00.o boundary at 0x80069A88
  * sits under load-bearing `.align 4` padding (func_80069A70/A84) that cannot
@@ -13,7 +13,7 @@
  */
 
 __asm__(".align 4");
-void SetBackColor(s32 a, s32 b, s32 c) asm("func_80069A18");
+void SetBackColor(s32 a, s32 b, s32 c);
 void SetBackColor(s32 a, s32 b, s32 c) {
     s32 x = a * 16, y = b * 16, z = c * 16;
     gte_ctc2(x, 13);
@@ -21,7 +21,7 @@ void SetBackColor(s32 a, s32 b, s32 c) {
     gte_ctc2(z, 15);
 }
 __asm__(".align 4");
-void SetFarColor(s32 a, s32 b, s32 c) asm("func_80069A38");
+void SetFarColor(s32 a, s32 b, s32 c);
 void SetFarColor(s32 a, s32 b, s32 c) {
     s32 x = a * 16, y = b * 16, z = c * 16;
     gte_ctc2(x, 21);
@@ -70,7 +70,7 @@ void DpqColor3(void *v0, void *v1, void *v2, s32 ir0, void *o0, void *o1,
     gte_dpct3(v0, v1, v2, ir0);
 }
 
-void Intpl(void *in, s32 ir0, void *out) asm("func_80069B14");
+void Intpl(void *in, s32 ir0, void *out);
 void Intpl(void *in, s32 ir0, void *out) {
     gte_ldir(in);
     gte_mtc2(ir0, 8);

@@ -22,7 +22,6 @@ extern s32 g_CdTrackEnded;
 extern CdlLOC g_CdTrackLoopPoint[];
 
 long CdControl(long com, void *param, long result);
-s32 func_8006A534(s32 arg0, s32 arg1);
 s32 func_8006A554(s32 arg0, void *arg1);
 long CdPosToInt_Local(CdlLOC *loc);
 void StepCdTrackRequest(void);
@@ -44,7 +43,7 @@ void StepCdPauseRequest(void) {
 
     switch (state) {
     case 0:
-        if (func_8006A534(1, 0) == 0) {
+        if (CdSync(1, 0) == 0) {
             break;
         }
         g_CdCommandStep = 1;
@@ -57,7 +56,7 @@ void StepCdPauseRequest(void) {
         break;
 
     case 2:
-        result = func_8006A534(1, 0);
+        result = CdSync(1, 0);
         if (result == 2) {
             g_CdCommandStep = 3;
         } else if (result == 5) {
@@ -94,7 +93,7 @@ void StepCdPauseRequest(void) {
         break;
 
     case 5:
-        result = func_8006A534(1, 0);
+        result = CdSync(1, 0);
         if (result == 2) {
             g_CdCommandStep = 6;
         } else if (result == 5) {
@@ -113,7 +112,7 @@ void StepCdResumeRequest(void) {
 
     switch (g_CdCommandStep) {
     case 0:
-        if (func_8006A534(1, 0) == 0) {
+        if (CdSync(1, 0) == 0) {
             break;
         }
         g_CdCommandStep = 1;
@@ -125,7 +124,7 @@ void StepCdResumeRequest(void) {
         g_CdCommandStep = 2;
         break;
     case 2:
-        status = func_8006A534(1, 0);
+        status = CdSync(1, 0);
         if (status == 2) {
             g_CdCommandStep = 3;
         } else if (status == 5) {

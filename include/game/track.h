@@ -8,7 +8,7 @@
  * right half-widths (SteerCarAlongRoute clamps the lateral offset to
  * [-field_10, field_12]); everything from `field_C` up is interpolated between
  * a segment's two endpoints by UpdateCarTrackState and its non-clamping
- * twin func_80032280. See docs/names.md 31.
+ * twin ResetCarTrackState. See docs/names.md 31.
  */
 typedef struct GameTrackPoint {
     s32 x;

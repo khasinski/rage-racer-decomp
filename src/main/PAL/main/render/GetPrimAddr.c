@@ -38,7 +38,7 @@ void TermPrim(u32 *arg0) {
     *arg0 |= 0x00FFFFFF;
 }
 
-void SetSemiTrans(u8 *arg0, s32 arg1) asm("func_80064E90");
+void SetSemiTrans(u8 *arg0, s32 arg1);
 void SetSemiTrans(u8 *arg0, s32 arg1) {
     s32 value;
 
@@ -50,7 +50,7 @@ void SetSemiTrans(u8 *arg0, s32 arg1) {
     arg0[7] = value;
 }
 
-void SetShadeTex(u8 *arg0, s32 arg1) asm("func_80064EB8");
+void SetShadeTex(u8 *arg0, s32 arg1);
 void SetShadeTex(u8 *arg0, s32 arg1) {
     s32 value;
 
@@ -98,7 +98,7 @@ void SetPolyFT4(u8 *arg0) {
     arg0[7] = 0x2C;
 }
 
-void SetPolyG4(u8 *arg0) asm("func_80064F58");
+void SetPolyG4(u8 *arg0);
 void SetPolyG4(u8 *arg0) {
     arg0[3] = 8;
     arg0[7] = 0x38;
@@ -146,7 +146,7 @@ void SetTile16(u8 *arg0) {
     arg0[7] = 0x78;
 }
 
-void SetTile(u8 *arg0) asm("func_80064FF8");
+void SetTile(u8 *arg0);
 void SetTile(u8 *arg0) {
     arg0[3] = 3;
     arg0[7] = 0x60;

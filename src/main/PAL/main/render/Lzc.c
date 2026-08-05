@@ -11,7 +11,7 @@ s32 Lzc(s32 x) {
 /* lone-nop alignment padding (func_80069C94) that 8-byte-aligns the next TU */
 const u32 func_80069C94[1] __attribute__((section(".text"))) = { 0 };
 
-s32 NormalClip(s32 arg0, s32 arg1, s32 arg2) asm("func_80069C98");
+s32 NormalClip(s32 arg0, s32 arg1, s32 arg2);
 s32 NormalClip(s32 arg0, s32 arg1, s32 arg2) {
     s32 ret;
     gte_mtc2(arg0, 12);

@@ -2,7 +2,6 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 
-s32 func_800657E4(void);
 
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3);
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
@@ -10,8 +9,8 @@ s32 encoded;
     s32 mode;
 
     arg0[3] = 1;
-    mode = func_800657E4();
-    if ((mode == 1) || (func_800657E4() == 2)) {
+    mode = GetGraphType();
+    if ((mode == 1) || (GetGraphType() == 2)) {
         s32 value = 0xE1000000;
 
         if (arg2 != 0) {
@@ -97,12 +96,12 @@ void DumpDrawEnv(DrawEnv *arg0) {
     GPU_printf(D_800133DC, arg0->dtd);
     GPU_printf(D_800133E8, arg0->dfe);
 
-    mode = func_800657E4();
+    mode = GetGraphType();
     switch (0) { default:
     if (mode == 1) {
     } else {
 
-    mode = func_800657E4();
+    mode = GetGraphType();
     if (mode != 2) {
         break;
     }

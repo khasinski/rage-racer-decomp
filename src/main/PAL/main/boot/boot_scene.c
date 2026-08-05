@@ -20,10 +20,6 @@ extern Matrix g_DefaultColorMatrix;
 extern Matrix g_SceneLightMatrix;
 extern Matrix g_DefaultLightMatrix;
 void func_800698B8(Matrix *arg0);
-void func_80069888(Matrix *arg0);
-void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
-void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
-void func_800686D4(s32 arg0, s32 arg1);
 extern s32 g_FrameSyncThreshold;
 extern s32 g_ImageBlockBuffer;
 extern s32 g_OptionLetterboxHeight;
@@ -132,10 +128,10 @@ void InstallSceneLighting(void) {
     g_SceneColorMatrix = g_DefaultColorMatrix;
     g_SceneLightMatrix = g_DefaultLightMatrix;
     func_800698B8(&g_SceneColorMatrix);
-    func_80069888(&g_SceneLightMatrix);
-    func_80069A18(0x20, 0x20, 0x20);
-    func_80069A38(0, 0, 0);
-    func_800686D4(0x4E20, 0x140);
+    SetLightMatrix(&g_SceneLightMatrix);
+    SetBackColor(0x20, 0x20, 0x20);
+    SetFarColor(0, 0, 0);
+    SetFogNear(0x4E20, 0x140);
 }
 
 void EnterAttractScene(void);

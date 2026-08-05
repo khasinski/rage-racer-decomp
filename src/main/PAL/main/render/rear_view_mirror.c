@@ -2,7 +2,7 @@
 #include "game/render.h"
 #include "game/race.h"
 #include "game/car.h"
-void SetRotMatrix(void *arg0) asm("func_80069858");
+void SetRotMatrix(void *arg0);
 void SetDrawArea(u8 *packet, u8 *drawEnv) asm("func_80066604");
 
 extern s16 g_MirrorViewEnabled;
@@ -165,7 +165,7 @@ extern u8 D_8007C738[];
 extern u8 D_8007C739[];
 extern u8 D_8007C73A[];
 
-void SetTile(u8 *arg0) asm("func_80064FF8");
+void SetTile(u8 *arg0);
 void AddPrim(void *ot, void *prim);
 s32 func_80016EC4(u8 *arg0, u8 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);

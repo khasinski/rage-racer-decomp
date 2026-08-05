@@ -23,7 +23,6 @@ extern s32 g_ReverbDepthR;
 extern s32 g_SeqVolume;
 
 void SetReverbDepth(s32 arg0, s32 arg1);
-void func_8005E600(s32 arg0);
 void SetSequenceVolume(s32 arg0);
 void StopSequence(void);
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
@@ -68,7 +67,7 @@ void UpdateSequenceFadeOut(void) {
         g_SeqVolume = 0;
         g_SeqVolumeFadeStep = 0;
         StopSequence();
-        func_8005E600(6);
+        CloseAudioSlot(6);
         arg0 = 0x28;
         arg1 = 0x28;
         SetReverbDepth(arg0, arg1);

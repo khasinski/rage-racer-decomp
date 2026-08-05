@@ -455,14 +455,13 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
     }
 }
 
-s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
 
 /*
  * Finds the track segment whose (rotated, half-width) quad currently contains
  * the car. Starting at `idx` it spirals outward over neighbouring segments
  * (k alternately added/subtracted), and for each builds the segment quad from
  * the two endpoints' angle + left/right half-widths (field_10/field_12) and
- * runs four half-plane cross-product tests (func_80069C98). Returns the
+ * runs four half-plane cross-product tests (NormalClip). Returns the
  * containing segment index, or -1 (snapping the car onto the track) if none.
  * pts[0] is the car-relative point; pts[1..4] are the quad corners.
  */
@@ -526,10 +525,10 @@ s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
         pts[4].vx = sx - (s16)(f12b * 2) * (s16)cos_n / 4096;
         pts[4].vy = sz + (s16)(f12b * 2) * (s16)sin_n / 4096;
 
-        if (func_80069C98(*(s32 *)&pts[1], *(s32 *)&pts[2], *(s32 *)&pts[0]) >= 0 &&
-            func_80069C98(*(s32 *)&pts[2], *(s32 *)&pts[4], *(s32 *)&pts[0]) >= 0 &&
-            func_80069C98(*(s32 *)&pts[4], *(s32 *)&pts[3], *(s32 *)&pts[0]) > 0 &&
-            func_80069C98(*(s32 *)&pts[3], *(s32 *)&pts[1], *(s32 *)&pts[0]) >= 0) {
+        if (NormalClip(*(s32 *)&pts[1], *(s32 *)&pts[2], *(s32 *)&pts[0]) >= 0 &&
+            NormalClip(*(s32 *)&pts[2], *(s32 *)&pts[4], *(s32 *)&pts[0]) >= 0 &&
+            NormalClip(*(s32 *)&pts[4], *(s32 *)&pts[3], *(s32 *)&pts[0]) > 0 &&
+            NormalClip(*(s32 *)&pts[3], *(s32 *)&pts[1], *(s32 *)&pts[0]) >= 0) {
             return i;
         }
 

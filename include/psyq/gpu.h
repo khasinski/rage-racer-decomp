@@ -233,7 +233,7 @@ void SetPolyG3(void *prim);   /* 0x30 */
 void SetPolyGT3(void *prim);  /* 0x34 */
 void SetPolyF4(void *prim);   /* 0x28 */
 void SetPolyFT4(void *prim);  /* 0x2C */
-void SetPolyG4(void *prim) asm("func_80064F58");   /* 0x38 */
+void SetPolyG4(void *prim);   /* 0x38 */
 void SetPolyGT4(void *prim);  /* 0x3C */
 void SetSprt8(void *prim);    /* 0x74 */
 void SetSprt16(void *prim);   /* 0x7C */
@@ -241,7 +241,7 @@ void SetSprt(void *prim);     /* 0x64 */
 void SetTile1(void *prim);    /* 0x68 */
 void SetTile8(void *prim);    /* 0x70 */
 void SetTile16(void *prim);   /* 0x78 */
-void SetTile(void *prim) asm("func_80064FF8");     /* 0x60 */
+void SetTile(void *prim);     /* 0x60 */
 void SetLineF2(void *prim);   /* 0x40 */
 void SetLineG2(void *prim);   /* 0x50 */
 void SetLineF3(void *prim);   /* 0x48 */
@@ -250,8 +250,8 @@ void SetLineF4(void *prim);   /* 0x4C */
 void SetLineG4(void *prim);   /* 0x5C */
 
 /* Primitive attribute bits (bit 1 = semi-transparency, bit 0 = shade-texture). */
-void SetSemiTrans(void *prim, long enabled) asm("func_80064E90");
-void SetShadeTex(void *prim, long enabled) asm("func_80064EB8");
+void SetSemiTrans(void *prim, long enabled);
+void SetShadeTex(void *prim, long enabled);
 
 /* Ordering-table / primitive-list plumbing (24-bit "next" pointer in the tag). */
 void SetPrimAddr(u_long *prim, u_long addr);
@@ -263,7 +263,7 @@ void *ClearOTag(u_long *ot, long count);
 void *ClearOTagR(u_long *ot, long count);
 
 /* Draw/display environment and texture-page helpers. */
-/* CheckPrim (func_80065968) is declared locally per TU: callers pass either a
+/* CheckPrim is declared locally per TU: callers pass either a
  * Rect * or a GpuRectPacked *, and gcc 2.6.3 will not accept both against one
  * prototype. */
 void ClearImage(void *rect, u_char r, u_char g, u_char b);
@@ -271,7 +271,7 @@ void ClearImage(void *rect, u_char r, u_char g, u_char b);
  * the preceding code.  TUs that want the checked form redeclare it locally. */
 void LoadImage();
 void StoreImage(Rect *rect, void *data);
-long MoveImage(GpuRectPacked *rect, u_long x, u_long y) asm("func_80065BEC");
+long MoveImage(GpuRectPacked *rect, u_long x, u_long y);
 /* LibRef47 6-33 returns long (queue length for mode 1); no caller here uses the
  * result, so it is declared void. */
 void DrawSync(long mode) asm("func_800658FC");
@@ -306,7 +306,7 @@ void SetDrawMode(
 long LoadClut(void *clut, long x, long y);
 long LoadClut2(void *clut, long x, long y);
 /* g_GraphType (mode) and g_GraphDebug (debug level) accessors. */
-long GetGraphType(void) asm("func_800657E4");
+long GetGraphType(void);
 long GetGraphDebug(void);
 /* GP1(03h) display enable: 0 blanks the screen (and clears the cached
  * DISPENV), non-zero shows it. Named from its own "SetDispMask(%d)..." trace

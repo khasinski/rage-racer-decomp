@@ -32,7 +32,7 @@ long SetGraphQueue(long arg0) {
 extern u_char g_GraphType;
 extern u_char g_GraphDebug;
 
-long GetGraphType(void) asm("func_800657E4");
+long GetGraphType(void);
 long GetGraphType(void) {
     return g_GraphType;
 }
@@ -109,7 +109,7 @@ extern char D_80013548[];
 extern char D_80013554[];
 extern char D_80013568[];
 
-void CheckPrim(char *arg0, Rect *rect) asm("func_80065968");
+void CheckPrim(char *arg0, Rect *rect);
 void CheckPrim(char *arg0, Rect *rect) {
     switch (g_GraphDebug) {
     case 1: {
@@ -162,10 +162,9 @@ void CheckPrim(char *arg0, Rect *rect) {
 extern GpuCallbacks *g_GpuFuncs;
 extern char D_8001356C[];
 
-void func_80065968(char *arg0, void *arg1);
 
 void ClearImage(void *rect, u_char r, u_char g, u_char b);
 void ClearImage(void *rect, u_char r, u_char g, u_char b) {
-    func_80065968(D_8001356C, rect);
+    CheckPrim(D_8001356C, rect);
     g_GpuFuncs->send(g_GpuFuncs->cmd0C, rect, 8, (b << 16) | (g << 8) | r);
 }

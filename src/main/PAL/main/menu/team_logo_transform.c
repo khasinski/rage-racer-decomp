@@ -732,8 +732,6 @@ extern s32 D_8007FB20;
 void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h);
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r, u32 g, u32 b, u8 alpha);
-void func_80064F58(u8 *prim);
-void func_80064E90(u8 *prim, s32 arg1);
 void AddPrim(void *ot, void *prim);
 
 typedef struct Blob {
@@ -809,8 +807,8 @@ void DrawMenuLightBurst(s32 arg) {
         } while (s0 < 0x21);
 
         prim = *(u8 **)0x1F800000;
-        func_80064F58(prim);
-        func_80064E90(prim, 0);
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 0);
         {
             register s32 x asm("$3") = D_8007FB20;
             register s32 q0 asm("$2") = x / 5 + (x >> 31);

@@ -52,7 +52,7 @@ void DrawTimeRecordPanel(u8 *arg0);
 void DrawNameEntryCursor(s32 arg0, s32 arg1);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void PlaySoundCue(s32 cue);
-void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
+void CdSync(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result);
 
 void DrawRankingPanel(u8 *arg0);

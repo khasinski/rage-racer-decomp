@@ -324,10 +324,6 @@ extern Matrix D_80082DFC;
 extern Matrix g_SceneLightMatrix;
 extern Matrix D_80082E1C;
 void func_800698B8(Matrix *arg0);
-void func_80069888(Matrix *arg0);
-void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
-void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
-void func_800686D4(s32 arg0, s32 arg1);
 
 /* The menu-mode twin of InitTrackLighting. */
 void InitMenuLighting(void);
@@ -335,10 +331,10 @@ void InitMenuLighting(void) {
     g_SceneColorMatrix = D_80082DFC;
     g_SceneLightMatrix = D_80082E1C;
     func_800698B8(&g_SceneColorMatrix);
-    func_80069888(&g_SceneLightMatrix);
-    func_80069A18(0x20, 0x20, 0x20);
-    func_80069A38(0, 0, 0);
-    func_800686D4(0x4E20, 0x140);
+    SetLightMatrix(&g_SceneLightMatrix);
+    SetBackColor(0x20, 0x20, 0x20);
+    SetFarColor(0, 0, 0);
+    SetFogNear(0x4E20, 0x140);
 }
 
 extern s32 g_FrameSyncThreshold;
@@ -394,7 +390,6 @@ void func_800576BC(s32);
 void func_8005803C(s32);
 void func_800586B0(s32);
 void func_80058B88(s32);
-void func_80059248(s32);
 void func_8005A2CC(s32);
 void func_800496F0(s32);
 void DrawMenuLightBurst(s32);
@@ -497,7 +492,7 @@ void InitMenuMode(void) {
     func_8005803C(0);
     func_800586B0(0);
     func_80058B88(0);
-    func_80059248(0);
+    DrawCarShopScreen(0);
     func_8005A2CC(0);
     func_800496F0(0);
     DrawMenuLightBurst(0);

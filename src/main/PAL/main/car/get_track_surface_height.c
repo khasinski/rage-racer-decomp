@@ -437,7 +437,6 @@ extern u8 g_TachoNeedlePrim1PageA[];
 extern u8 g_TachoNeedlePrim1PageB[];
 
 void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
-void func_80064EB8(u8 *arg0, s32 arg1);
 void func_800666F4(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4);
 
 /*
@@ -470,8 +469,8 @@ void BuildTachoNeedleQuad(void) {
 
     BuildSpriteFromDesc((SPRT *)prim0, src);
     BuildSpriteFromDesc((SPRT *)prim1, src);
-    func_80064EB8(prim0, 0);
-    func_80064EB8(prim1, 0);
+    SetShadeTex(prim0, 0);
+    SetShadeTex(prim1, 0);
     func_800666F4(prim0 - 0x18, 0, 1, 9, 0);
     func_800666F4(prim0 - 0x0C, 0, 1, 0xA, 0);
     func_800666F4(g_TachoNeedlePrim1PageA, 0, 1, 9, 0);

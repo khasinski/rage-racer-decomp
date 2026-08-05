@@ -6,9 +6,9 @@
 #include "game/render.h"
 #include "game/cd.h"
 #include "game/car.h"
-void SetLightMatrix(void *arg0) asm("func_80069888");
+void SetLightMatrix(void *arg0);
 void UpdateRaceCars(void);
-void DrawStartCountdown(s32 arg0) asm("func_8003425C");
+void DrawStartCountdown(s32 arg0);
 void InitEffectVoiceRuntime(void);
 void SeekEnvironmentScript(s32) asm("func_800458CC");
 

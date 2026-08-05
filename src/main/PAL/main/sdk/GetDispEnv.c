@@ -20,12 +20,12 @@ u_long Gpu_BuildDisplayMode(long arg0, long arg1, u_long arg2) asm("_get_mode");
 u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long func_80066BE4(short arg0, short arg1);
-u_long func_80066C2C(void *arg0);
+u_long Gpu_BuildTexWindowCmd(void *arg0);
 
 void SetTexWindow(DrawPacket *pkt, void *arg1);
 void SetTexWindow(DrawPacket *pkt, void *arg1) {
     pkt->code = 2;
-    pkt->x0y0 = func_80066C2C(arg1);
+    pkt->x0y0 = Gpu_BuildTexWindowCmd(arg1);
     pkt->x1y1 = 0;
 }
 
@@ -60,7 +60,7 @@ void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4
 void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4) {
     pkt->code = 2;
     pkt->x0y0 = Gpu_BuildDisplayMode(arg1, arg2, arg3);
-    pkt->x1y1 = func_80066C2C(arg4);
+    pkt->x1y1 = Gpu_BuildTexWindowCmd(arg4);
 }
 
 extern u_short g_VramWidth[];
@@ -83,7 +83,6 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y) asm("func_80066BE4");
 u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("_get_mode");
-u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
 
 void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env);
 void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {

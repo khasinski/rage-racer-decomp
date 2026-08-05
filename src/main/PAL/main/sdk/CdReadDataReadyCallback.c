@@ -39,10 +39,10 @@ long CdStatus(void);
 long CdLastPos(void);
 long CdMode(void);
 void CdFlush(void);
-void CdControlF(long arg0, long arg1) asm("func_8006A6DC");
+void CdControlF(long arg0, long arg1);
 long CdReadRetry(long arg0);
 void CdSyncCallback(long arg0);
-void CdReadyCallback(long arg0) asm("func_8006A58C");
+void CdReadyCallback(long arg0);
 
 void CdReadDataReadyCallback(u_char arg0, long arg1);
 void CdReadDataReadyCallback(u_char arg0, long arg1) {

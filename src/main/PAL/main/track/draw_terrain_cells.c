@@ -1,5 +1,5 @@
 #include "common.h"
-void SetRotMatrix(s32 arg0) asm("func_80069858");
+void SetRotMatrix(s32 arg0);
 
 extern s32 g_VisibleCellList;
 void BuildVisibleCells(s32 arg0, s32 arg1);
@@ -20,10 +20,10 @@ void DrawTerrainCellsWide(void) {
 
 extern u32 *g_FinalSkyOrderingTable asm("D_1F800004");
 void AddPrim(void *, void *);
-void SetShadeTex(void *, s32) asm("func_80064EB8");
+void SetShadeTex(void *, s32);
 void SetPolyF4(void *);
 void SetPolyFT4(void *);
-void SetPolyG4(void *)asm("func_80064F58");
+void SetPolyG4(void *);
 s32 GameSin(s32) asm("rsin");
 s32 GameCos(s32) asm("rcos");
 extern s16 g_SkyTileMap[][16];

@@ -196,7 +196,7 @@ s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
 s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table);
-s32 func_8005E600(s32 arg0);
+s32 CloseAudioSlot(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0);
 void BiosExit(s32 arg0) asm("func_80063D9C");
 void SsUtReverbOff(void);
@@ -346,7 +346,7 @@ s32 CloseVabOnlyAudioSlot(s32 slot) {
 s32 CloseLoadedAudioSlots(void);
 s32 CloseLoadedAudioSlots(void) {
     SpuVmDamperStep();
-    if (func_8005E600(1) == 0) {
+    if (CloseAudioSlot(1) == 0) {
         return 0;
     }
     if (CloseVabOnlyAudioSlot(2) == 0) {
@@ -2466,7 +2466,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     return g_VabTransferDone;
 }
 
-s32 CloseAudioSlot(s32 slot) asm("func_8005E600");
+s32 CloseAudioSlot(s32 slot);
 s32 CloseAudioSlot(s32 slot) {
     s32 *flagsPtr = &g_AudioSlotMask;
     s32 bit = 1;

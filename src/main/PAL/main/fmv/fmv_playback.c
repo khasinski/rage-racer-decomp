@@ -17,7 +17,6 @@ typedef struct FmvDisplayState {
 
 void *GetFmvFrame(s32 *arg0);
 void MdecUnpackStatus(void *arg0, s32 arg1) asm("func_80064588");
-s32 func_8006CFF0(void *arg0);
 extern s32 g_FmvFrameWidth;
 extern s32 g_FmvFrameHeight;
 extern s32 g_FmvStreamEnded;
@@ -31,7 +30,6 @@ extern volatile u16 g_DispEnv1H;
 long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1);
 void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3);
 extern char g_MsgFmvDecodeTimeout[];
-s32 func_8006A534(s32 arg0, s32 arg1);
 long CdControl(long com, void *param, long result);
 s32 VSync(s32 mode);
 s32 CdRead2(s32 arg0);
@@ -54,7 +52,7 @@ s32 PresentFmvFrame(s32 *arg0) {
         if (p != 0) {
             arg0[2] = (arg0[2] == 0);
             MdecUnpackStatus(p, arg0[arg0[2]]);
-            return func_8006CFF0(p);
+            return StFreeRing(p);
         }
     }
     return -1;
@@ -166,7 +164,7 @@ void StartStreamRead(void *arg0) {
     u8 byte;
 
 outer:
-    while (func_8006A534(1, 0) == 0) {
+    while (CdSync(1, 0) == 0) {
     }
 
     byte = 0x80;
@@ -174,7 +172,7 @@ outer:
     }
 
 pollFirst:
-    switch (func_8006A534(1, 0)) {
+    switch (CdSync(1, 0)) {
     case 0:
         goto pollFirst;
     case 2:
@@ -187,7 +185,7 @@ send:
     }
 
 pollNext:
-    switch (func_8006A534(1, 0)) {
+    switch (CdSync(1, 0)) {
     case 0:
         goto pollNext;
     case 2:

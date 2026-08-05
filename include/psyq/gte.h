@@ -15,10 +15,10 @@ typedef struct Matrix {
  * single COP2 command; the bodies live in render/SetRotMatrix.c and
  * are written with the gte_* macros from psyq/gte_macros.h.
  */
-void SetRotMatrix(void *m) asm("func_80069858");
-void SetLightMatrix(void *m) asm("func_80069888");
+void SetRotMatrix(void *m);
+void SetLightMatrix(void *m);
 void SetColorMatrix(void *m) asm("func_800698B8");
-void SetTransMatrix(void *m) asm("func_800698E8");
+void SetTransMatrix(void *m);
 /* Direct GTE register writers (libgte REG03_1 through REG03_13). */
 void SetVertex0(void *v);
 void SetVertex1(void *v);
@@ -37,10 +37,10 @@ void SetData32(long data);
 void SetDQA(long dqa);
 void SetDQB(long dqb);
 /* Fog: derives dqa from the near distance `a` and projection distance `h`. */
-void SetFogNear(long a, long h) asm("func_800686D4");
+void SetFogNear(long a, long h);
 /* Background / far colours; each component is shifted left by 4 on the way in. */
-void SetBackColor(long rbk, long gbk, long bbk) asm("func_80069A18");
-void SetFarColor(long rfc, long gfc, long bfc) asm("func_80069A38");
+void SetBackColor(long rbk, long gbk, long bbk);
+void SetFarColor(long rfc, long gfc, long bfc);
 void SetGeomOffset(long ofx, long ofy) asm("func_80069A58");
 void SetGeomScreen(long h) asm("func_80069A78");
 /* Single COP2 commands. */
@@ -54,14 +54,14 @@ void DpqColor3(
     void *o1,
     void *o2);
 void DpqColor(void *v0, void *rgb, long p, void *v1);
-void Intpl(void *v0, long p, void *v1) asm("func_80069B14");
+void Intpl(void *v0, long p, void *v1);
 void *Square12(void *v0, void *v1);
 void *Square0(void *v0, void *v1);
 long AverageZ3(long sz0, long sz1, long sz2);
 long AverageZ4(long sz0, long sz1, long sz2, long sz3);
 void OuterProduct12(void *v0, void *v1, void *v2);
 void OuterProduct0(void *v0, void *v1, void *v2);
-long NormalClip(long sxy0, long sxy1, long sxy2) asm("func_80069C98");
+long NormalClip(long sxy0, long sxy1, long sxy2);
 long Lzc(long data);
 /* Transposes the 3x3 rotation part of m0 into m1, leaving the translation. */
 Matrix *TransposeMatrix(Matrix *m0, Matrix *m1) asm("func_80069CC8");
@@ -77,7 +77,7 @@ void *MulMatrix(void *m0, void *m1) asm("func_80069458");
 void *MulMatrix2(void *m0, void *m1) asm("func_80069568");
 void *MulMatrix0(void *m0, void *m1, void *m2);
 /* v1 = m * v0 through the same MVMVA; v0 is a short vector, v1 gets MAC1..3. */
-void *ApplyMatrix(void *m, void *v0, void *v1) asm("func_80069678");
+void *ApplyMatrix(void *m, void *v0, void *v1);
 /* SVECTOR in, SVECTOR out; returns v1. LibRef47 8-23. */
 short *ApplyMatrixSV(void *m, void *v0, short *v1);
 

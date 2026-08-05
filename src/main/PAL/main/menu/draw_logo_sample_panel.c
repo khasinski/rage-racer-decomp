@@ -67,7 +67,7 @@ void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
     }
 }
 
-void func_8004E724(s32 arg0, s32 arg1) {
+void DrawTeamNameEntry(s32 arg0, s32 arg1) {
     s16 temp_a2;
     s16 temp_s2;
     s16 var_a2;

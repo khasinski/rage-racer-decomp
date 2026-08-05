@@ -22,7 +22,6 @@ void AccumulateLapProgress(void *arg0);
 
 s32 FindTrackSegment(void *arg0, s32 arg1);
 
-void func_80032280(void *arg0);
 
 void InitShuttleScenery(void);
 
@@ -103,13 +102,13 @@ void SeedReplayCars(void) {
     g_PlayerTrackPoint = FindTrackSegment(primary, g_PlayerTrackPoint);
     SeedCarLapProgress(primary, 1);
     AccumulateLapProgress(primary);
-    func_80032280(primary);
+    ResetCarTrackState(primary);
 
     if (g_GrandPrixMode == 1) {
         g_Car0TrackPoint = FindTrackSegment(secondary, g_Car0TrackPoint);
         SeedCarLapProgress(secondary, 1);
         AccumulateLapProgress(secondary);
-        func_80032280(secondary);
+        ResetCarTrackState(secondary);
     }
 }
 
@@ -118,12 +117,12 @@ void UpdateReplayCars(void) {
     void *ptr = &g_PlayerCar;
 
     AccumulateLapProgress(ptr);
-    func_80032280(ptr);
+    ResetCarTrackState(ptr);
 
     if (g_GrandPrixMode == 1) {
         ptr = g_Cars;
         AccumulateLapProgress(ptr);
-        func_80032280(ptr);
+        ResetCarTrackState(ptr);
     }
 
     RequestTrackTexturePage(g_PlayerTrackSection);

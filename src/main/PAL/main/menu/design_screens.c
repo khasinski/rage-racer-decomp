@@ -206,7 +206,6 @@ s32 DrawTeamNameScreen(s32 arg0) {
 extern u32 D_80081D34;
 
 void DrawTeamNameCharModel(void);
-s32 func_8004E724(s32 a, s32 b);
 void UploadTeamNameTexture(void *a, s32 b);
 
 void UpdateTeamNameScreen(void);
@@ -218,7 +217,7 @@ void UpdateTeamNameScreen(void) {
     DrawTeamNameCharModel();
     if (!(GameMenuBusy != 0)) {
 
-    func_8004E724(1, GameMenuCursor);
+    DrawTeamNameEntry(1, GameMenuCursor);
     if (RunTimedDrawScript(&D_80081D34, &g_UiScriptProgress, 1) == 0) return;
     g_MenuOverlayPattern = -1;
 
@@ -293,7 +292,7 @@ pop:
 
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 9;
-    func_8004E724(-1, GameMenuCursor);
+    DrawTeamNameEntry(-1, GameMenuCursor);
     RunTimedDrawScript(&D_80081D34, &g_UiScriptProgress, -1);
     if (g_UiScriptProgress > 0) return;
     if (0x3D08F < g_MenuViewOffset) {
@@ -470,7 +469,7 @@ extern s32 D_8009B2E8;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
-s32 DrawCarShopScreen(s32 step) asm("func_80059248");
+s32 DrawCarShopScreen(s32 step);
 s32 DrawCarShopScreen(s32 arg0) {
     s32 value;
     s32 limit;

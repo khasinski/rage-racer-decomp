@@ -46,7 +46,7 @@ char *CdIntstr(long intr) {
     return g_CdIntrNames[intr];
 }
 
-long CdSync(long arg0, long arg1) asm("func_8006A534");
+long CdSync(long arg0, long arg1);
 long CdSync(long arg0, long arg1) {
     return func_8006B0D4(arg0, arg1);
 }
@@ -64,7 +64,7 @@ long CdSyncCallback(long arg0) {
     return old;
 }
 
-long CdReadyCallback(long arg0) asm("func_8006A58C");
+long CdReadyCallback(long arg0);
 long CdReadyCallback(long arg0) {
     long old = g_CdReadyCallback;
 

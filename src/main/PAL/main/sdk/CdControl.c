@@ -68,7 +68,7 @@ done:
     return result + 1;
 }
 
-long CdControlF(long arg0, void *arg1) asm("func_8006A6DC");
+long CdControlF(long arg0, void *arg1);
 long CdControlF(long arg0, void *arg1) {
     void *arg;
     long cmd;

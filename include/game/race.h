@@ -96,7 +96,7 @@ s32 CanSelectNextCourse(void);
 /* The race-start signal gantry, live for 105 <= g_SceneTimer < 300: the "3" /
  * "2" / "1" / "GO" dot-matrix board from D_8007DDC0[1..4] plus the six start
  * lamps. See docs/names.md 1. */
-void DrawStartCountdown(s32 sceneTimer) asm("func_8003425C");
+void DrawStartCountdown(s32 sceneTimer);
 
 /*
  * Per-course records, all in the memory-card save block. Per-file types.

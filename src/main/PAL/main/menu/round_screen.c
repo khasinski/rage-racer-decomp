@@ -307,18 +307,14 @@ extern Matrix D_8007C758;
 extern Matrix g_SceneLightMatrix;
 extern Matrix D_8007C778;
 void func_800698B8(Matrix *arg0);
-void func_80069888(Matrix *arg0);
-void func_80069A18(s32 arg0, s32 arg1, s32 arg2);
-void func_800686D4(s32 arg0, s32 arg1);
-void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 /* Installs the track colour/light matrices, back and far colours and the fog near distance. */
 void InitTrackLighting(void);
 void InitTrackLighting(void) {
     g_SceneColorMatrix = D_8007C758;
     g_SceneLightMatrix = D_8007C778;
     func_800698B8(&g_SceneColorMatrix);
-    func_80069888(&g_SceneLightMatrix);
-    func_80069A18(0x20, 0x20, 0x20);
-    func_800686D4(0x1770, 0x140);
-    func_80069A38(0x80, 0x80, 0x80);
+    SetLightMatrix(&g_SceneLightMatrix);
+    SetBackColor(0x20, 0x20, 0x20);
+    SetFogNear(0x1770, 0x140);
+    SetFarColor(0x80, 0x80, 0x80);
 }
