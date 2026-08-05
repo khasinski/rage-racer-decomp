@@ -238,7 +238,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     void *ot;
     s32 limit;
     register s32 packedSpeed asm("$3");
-    register s32 product asm("$2");
+    s32 product;
     s32 x;
     s32 y0;
     s32 y;
@@ -246,6 +246,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     s32 mode;
     s32 semiTrans;
     s32 flags;
+    s32 productResult;
 
     style = styleArg;
     record = recordArg;
@@ -265,10 +266,12 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     } else {
         product = packedSpeed & 0x7FFF;
     }
-    product = time * product;
+    productResult = time * product;
+    product = productResult;
     asm("" : "=r"(product), "=r"(record) : "0"(product), "1"(record));
     product = (u32)product / 32;
-    product = limit + product;
+    productResult = limit + product;
+    product = productResult;
     asm("" : "=r"(product) : "0"(product));
 
     y = *(s16 *)(record + 6);
@@ -278,9 +281,11 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
         packedSpeed = 0xFFFF0000;
         product |= packedSpeed;
     } else {
-        product = (packedSpeed >> 16) & 0x7FFF;
+        product = packedSpeed >> 16;
+        product &= 0x7FFF;
     }
-    product = time * product;
+    productResult = time * product;
+    product = productResult;
     asm("" : "=r"(product), "=r"(style) : "0"(product), "1"(style));
     product = (u32)product / 32;
     y += product;
@@ -291,7 +296,8 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     y1 = packedSpeed + y;
     product = *(u16 *)style;
     packedSpeed = *(u16 *)(style + 4);
-    product = x + product;
+    productResult = x + product;
+    product = productResult;
     asm("" : "=r"(product) : "0"(product));
     limit = product;
     packedSpeed = x + packedSpeed;
