@@ -83,7 +83,7 @@ extern DVec g_PadCalloutLabelPoints[] asm("D_8007C168");
 extern DVec g_PadCalloutButtonPoints[] asm("D_8007C180");
 
 /* Screen animation counter; the callouts only draw while it is settled. */
-extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
+extern s32 g_ControllerSceneAngleY;
 
 /* Local wide-parameter view of GameQueueLine; see GameQueueSprite.c. */
 u8 *QueueLineWide(

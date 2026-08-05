@@ -10,18 +10,18 @@ void DrawCarSpecGraph(s32, s32) asm("func_800496F0");
 extern s32 D_8009B348;
 extern s32 D_8009B324;
 extern s32 g_CarTable asm("D_8019C7C8");
-extern s32 g_PlayerCarIndex asm("D_801E40D4");
-extern s32 g_CarListCursor asm("D_801E4B88");
+extern s32 g_PlayerCarIndex;
+extern s32 g_CarListCursor;
 
 struct Entry_5ACA0 {
     u8 f0;
     u8 f1;
     u8 pad[6];
 };
-extern s32 g_MenuHintBarStep asm("D_8009B30C");
+extern s32 g_MenuHintBarStep;
 extern u8 g_MenuHintBarScript asm("D_80082A90");
-extern s32 g_MenuHintBarProgress asm("D_8009B2FC");
-extern s32 g_MenuHintButtonsVisible asm("D_8009B314");
+extern s32 g_MenuHintBarProgress;
+extern s32 g_MenuHintButtonsVisible;
 extern u8 g_PadType asm("D_801E4369");
 
 
@@ -91,7 +91,7 @@ void UpdateMenuMode(void) {
     DrawBitPatternOverlay(g_MenuOverlayPattern);
 }
 
-extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
+extern s32 g_SeqVolumeFadeStep;
 void SpuVmDamperStep(void);
 void SsSeqCalledTbyT(void);
 void TickSequenceAudio(void);
@@ -146,11 +146,11 @@ s32 SetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
     return old;
 }
 
-extern s32 g_ReverbDepthL asm("D_801E6D84");
-extern s32 g_ReverbDepthR asm("D_801E6D88");
+extern s32 g_ReverbDepthL;
+extern s32 g_ReverbDepthR;
 extern s32 D_801E6D80;
-extern s32 g_EngineSoundCurves[] asm("D_801E446C");
-extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
+extern s32 g_EngineSoundCurves[];
+extern s32 g_EngineSoundMaxRpm;
 
 void SetLoadedTableVolumeScale(s32 scale);
 s32 SetSoundToneTableEntry(s32 row, s32 bank, s32 value);

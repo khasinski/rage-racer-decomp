@@ -9,8 +9,8 @@ void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794"
 /* The looping prop's live orientation: three 12-bit angles copied wholesale out
  * of the current rotation keyframe by InitPathScenery, which sees the same
  * eight bytes as one Blk8. */
-extern s16 g_PathSceneryRot[3] asm("D_801E4DC8");
-extern s16 g_PathSceneryX asm("D_801E4DB8");
+extern s16 g_PathSceneryRot[3];
+extern s16 g_PathSceneryX;
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_ScratchRenderMode asm("D_1F800084");
 
@@ -80,9 +80,9 @@ void DrawPathScenery(void) {
 /* g_PlayerCar + 0x3C. Named for its identity only: this caller branches on
  * its sign while the other user treats it as an unsigned 0..0x800 width
  * fraction, and docs/names.md 15g leaves that unreconciled. */
-extern s32 g_PlayerField3C asm("D_8009E710");
-extern s32 g_PlayerSpeed asm("D_8009E778");
-extern s32 g_PlayerTrackPoint asm("D_8009E704");
+extern s32 g_PlayerField3C;
+extern s32 g_PlayerSpeed;
+extern s32 g_PlayerTrackPoint;
 
 s32 rcos(s32 arg0) asm("func_80068634");
 void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);

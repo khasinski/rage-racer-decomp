@@ -7,8 +7,8 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 
-extern s16 g_TrackZoneCode asm("D_8019CE34");
-extern Matrix g_SceneColorMatrix asm("D_8019CAD4");
+extern s16 g_TrackZoneCode;
+extern Matrix g_SceneColorMatrix;
 extern Matrix D_8007C778;
 void func_800698B8(Matrix *arg0);
 
@@ -68,7 +68,7 @@ void func_800698B8(Matrix *arg0);
 void RestoreColorMatrix(void);
 void RestoreColorMatrix(void) { func_800698B8(&g_SceneColorMatrix); }
 
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
+extern s32 g_FrameSyncThreshold;
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
@@ -241,7 +241,7 @@ void DrawBgmSelector(void) {
 }
 
 extern s32 g_BgmShuffleIndex asm("D_8009E6CC");
-extern s32 g_BgmTrackCount asm("D_801E40A8");
+extern s32 g_BgmTrackCount;
 extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
 extern s32 g_BgmTrack asm("D_801E40E0");
 

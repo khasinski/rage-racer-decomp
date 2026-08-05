@@ -9,16 +9,16 @@ extern u8 g_MsgResOk[] asm("D_80011438");
 
 extern u8 g_MsgEventOk[] asm("D_80011440");
 
-extern u8 *volatile g_RaceIntroCameraScript asm("D_8019CAF8");
+extern u8 *volatile g_RaceIntroCameraScript;
 
-extern u8 *volatile g_RouteSceneryData asm("D_801E4128");
+extern u8 *volatile g_RouteSceneryData;
 
 
-extern u8 *volatile g_PathSceneryRotData asm("D_801E4174");
+extern u8 *volatile g_PathSceneryRotData;
 
-extern u8 *volatile g_FlybySceneryData asm("D_801E4448");
+extern u8 *volatile g_FlybySceneryData;
 
-extern u8 *volatile g_PathSceneryPosData asm("D_801E4BA4");
+extern u8 *volatile g_PathSceneryPosData;
 
 extern u8 g_MsgSoundError asm("D_8001144C");
 

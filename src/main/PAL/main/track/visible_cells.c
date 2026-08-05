@@ -16,7 +16,7 @@ typedef struct Obj {
 } Obj;
 
 extern Obj *g_CourseObjects asm("D_801E4B2C");
-extern s32 g_CourseObjectCount asm("D_801E4BBC");
+extern s32 g_CourseObjectCount;
 extern s32 *g_VisibleCellMask asm("D_801E6828");
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
@@ -117,7 +117,7 @@ void DrawCourseObjects(void) {
     } while (i++, obj++, i < g_CourseObjectCount);
 }
 
-extern u16 *g_TerrainCellGrid asm("D_801E5020");
+extern u16 *g_TerrainCellGrid;
 
 u32 GetCellRegion(s32 arg0, s32 arg1);
 u32 GetCellRegion(s32 arg0, s32 arg1) {
@@ -125,7 +125,7 @@ u32 GetCellRegion(s32 arg0, s32 arg1) {
     return g_TerrainCellGrid[arg1] >> 10;
 }
 
-extern u8 *g_CellVisibilityTable asm("D_801E4B98");
+extern u8 *g_CellVisibilityTable;
 
 u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2);
 u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) {

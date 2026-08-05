@@ -1,18 +1,18 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-extern long g_SndVoiceSilenceIndex asm("D_8009E598");
-extern u_long g_SndVoiceSilenceHistory[] asm("D_8009E59C");
+extern long g_SndVoiceSilenceIndex;
+extern u_long g_SndVoiceSilenceHistory[];
 extern volatile u_short *g_SndSpuRegs asm("D_8009A588");
-extern u_char g_SndVoiceRegs[] asm("D_8009DF20");
-extern u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
-extern u_char g_SndVoiceRegsAddr[] asm("D_8009DF26");
+extern u_char g_SndVoiceRegs[];
+extern u_char g_SndVoiceRegsPitch[];
+extern u_char g_SndVoiceRegsAddr[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_char g_SndVoiceState[] asm("D_8009E0B8");
-extern u_char g_SndVoiceStateEnvx[] asm("D_8009E0BE");
-extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
-extern u_char g_SndVoiceStateAutoVol[] asm("D_8009E0D4");
-extern u_char g_SndVoiceStateAutoPan[] asm("D_8009E0E0");
+extern u_char g_SndVoiceState[];
+extern u_char g_SndVoiceStateEnvx[];
+extern u_char g_SndVoiceStateStatus[];
+extern u_char g_SndVoiceStateAutoVol[];
+extern u_char g_SndVoiceStateAutoPan[];
 /* The four pending key registers, flushed below into the SPU as
  * spu[0xC4]/[0xC5] = KON 0x1F801D88 and spu[0xC6]/[0xC7] = KOFF 0x1F801D8C.
  * So D_8009E670/74 are key-ON and D_801F2A08/0C key-OFF, not the other way
@@ -22,10 +22,10 @@ extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
-extern volatile u_short g_SndReverbOnLow asm("D_8009E680");
-extern volatile u_short g_SndReverbOnHigh asm("D_8009E684");
-extern u_char g_SndVoiceCount asm("D_801E42F8");
-extern volatile u_char g_SndReservedVoiceCount asm("D_801E4D88");
+extern volatile u_short g_SndReverbOnLow;
+extern volatile u_short g_SndReverbOnHigh;
+extern u_char g_SndVoiceCount;
+extern volatile u_char g_SndReservedVoiceCount;
 
 void SpuVmAutoVolTick(long voice);
 void SpuVmAutoPanTick(long voice);

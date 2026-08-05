@@ -6,11 +6,11 @@
 
 
 extern u32 g_CameraCar[] asm("D_801E3E14");
-extern s32 g_CameraCarY asm("D_801E3E18");
-extern s32 g_CameraCarZ asm("D_801E3E1C");
-extern s32 g_CameraCarAngleY asm("D_801E3E38");
-extern s32 g_CameraCarHeading asm("D_801E3EB4");
-extern s32 g_CameraCarSpeed asm("D_801E3EB8");
+extern s32 g_CameraCarY;
+extern s32 g_CameraCarZ;
+extern s32 g_CameraCarAngleY;
+extern s32 g_CameraCarHeading;
+extern s32 g_CameraCarSpeed;
 extern s32 D_801E3F60;
 
 void SeedFinishCameraAlt(void *arg0);

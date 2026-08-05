@@ -514,8 +514,8 @@ s32 DrawCarShopScreen(s32 arg0) {
 }
 
 extern s32 D_8009B33C;
-extern s16 g_PrevOwnedCarIndex asm("D_8019CA18");
-extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
+extern s16 g_PrevOwnedCarIndex;
+extern s16 g_NextOwnedCarIndex;
 
 s32 GetCarUnlockLevel(s32 model);
 

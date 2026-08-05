@@ -7,7 +7,7 @@ extern volatile u_long *g_GpuDpcr asm("D_800942D8");
 extern long g_GpuQueueWriteIdx asm("D_800942EC");
 extern volatile long g_GpuQueueReadIdx asm("D_800942F0");
 extern long g_GpuResetIntrMask asm("D_800942FC");
-extern u_char g_GpuGp1Mirror[] asm("D_8009B9F0");
+extern u_char g_GpuGp1Mirror[];
 extern u_char g_GpuQueue[] asm("D_801E5024");
 
 void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");

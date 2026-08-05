@@ -2,12 +2,12 @@
 
 #include "common.h"
 
-extern u_char g_SndCurrentNote asm("D_801E4BD2");
-extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
-extern u_char g_SndCurrentTone asm("D_801E4BDC");
-extern u_char g_SndCurrentToneCenter asm("D_801E4BE0");
-extern u_char g_SndCurrentToneShift asm("D_801E4BE1");
-extern u_char *g_SndCurrentToneTable asm("D_801E416C");
+extern u_char g_SndCurrentNote;
+extern u_char g_SndCurrentProgActual;
+extern u_char g_SndCurrentTone;
+extern u_char g_SndCurrentToneCenter;
+extern u_char g_SndCurrentToneShift;
+extern u_char *g_SndCurrentToneTable;
 extern u_short g_SndPitchTable[] asm("D_8009A58C");
 
 u_short SpuVmCalculateCurrentPitch(void);

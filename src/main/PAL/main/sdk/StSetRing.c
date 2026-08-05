@@ -25,7 +25,7 @@ u_long func_8006A018[16] __attribute__((section(".text"))) = {
 };
 
 extern long g_StRingBase asm("D_801E8AAC");
-extern long g_StRingSize asm("D_801F1850");
+extern long g_StRingSize;
 void StClearRing(void);
 
 /* StSetRing: installs the stream ring buffer (`base`, `size`) then clears it. */

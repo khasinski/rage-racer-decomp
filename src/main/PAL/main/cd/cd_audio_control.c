@@ -33,7 +33,7 @@ void PauseCdAudio(void) {
  * a play of g_CdCurrentTrack from the top instead of an unpause. g_CdCurrentTrack is the
  * track the CD-DA driver last selected; ResetCdAudioState parks it at 2. */
 extern s32 g_CdRestartOnResume asm("D_8007F5F8");
-extern u8 g_CdCurrentTrack asm("D_8009B1B0");
+extern u8 g_CdCurrentTrack;
 
 void ResumeCdAudio(void);
 void ResumeCdAudio(void) {
@@ -63,7 +63,7 @@ void ResetCdAudioState(void) {
 
 #include "common.h"
 
-extern s32 g_CdFadeFrames asm("D_8009B1B4");
+extern s32 g_CdFadeFrames;
 
 void StartCdVolumeFade(s32 arg0);
 void StartCdVolumeFade(s32 arg0) {
@@ -80,14 +80,14 @@ void StartCdVolumeFade(s32 arg0) {
  * right 12 to make the 0..0x7F bytes CdMix wants, so 0x7F000 is full. The
  * matching g_CdMixFull* four at +0x10 are the target the fade ramps toward.
  * Channel order is CdlATV's: L->L, L->R, R->R, R->L. */
-extern u32 g_CdMixLL asm("D_8009B174");
-extern u32 g_CdMixLR asm("D_8009B178");
-extern u32 g_CdMixRR asm("D_8009B17C");
-extern u32 g_CdMixRL asm("D_8009B180");
-extern u32 g_CdMixFullLL asm("D_8009B184");
-extern u32 g_CdMixFullLR asm("D_8009B188");
-extern u32 g_CdMixFullRR asm("D_8009B18C");
-extern u32 g_CdMixFullRL asm("D_8009B190");
+extern u32 g_CdMixLL;
+extern u32 g_CdMixLR;
+extern u32 g_CdMixRR;
+extern u32 g_CdMixRL;
+extern u32 g_CdMixFullLL;
+extern u32 g_CdMixFullLR;
+extern u32 g_CdMixFullRR;
+extern u32 g_CdMixFullRL;
 
 void CdMix(u8 *arg0);
 

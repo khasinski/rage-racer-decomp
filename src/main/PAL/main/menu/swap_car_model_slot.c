@@ -5,7 +5,7 @@
 #include "game/menu.h"
 #include "game/state.h"
 
-extern u32 g_CarModelSlot asm("D_8009E87C");
+extern u32 g_CarModelSlot;
 
 void InstallCarModelSlot(void);
 
@@ -222,12 +222,12 @@ void DrawMenuCarView(void) {
 
 
 extern Vec4 g_MenuViewScale asm("D_80082D6C");
-extern s32 g_CourseSwapDelay asm("D_8009B354");
-extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
-extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
+extern s32 g_CourseSwapDelay;
+extern s32 g_MenuCourseModelIndex;
+extern s32 g_MenuPendingCourseIndex;
 extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 D_8009E6D8;
-extern s32 g_PlayerCarZ asm("D_8009E6DC");
+extern s32 g_PlayerCarZ;
 extern s32 D_8009E6F4;
 extern s32 D_8009E6F8;
 extern s32 g_ModelBankCount asm("D_801E4168");
@@ -341,8 +341,8 @@ void DrawMenuCourseView(void) {
 typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 
 extern Vec4 D_80011AC4;
-extern s32 g_TeamNameCharModel asm("D_8009B37C");
-extern s32 g_CourseModelCount asm("D_801E40E4");
+extern s32 g_TeamNameCharModel;
+extern s32 g_CourseModelCount;
 s32 rsin(s32 arg0) asm("func_80068568");
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */

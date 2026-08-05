@@ -6,7 +6,7 @@ extern u8 D_8007D588[];
 extern u8 D_8007D589[];
 extern u8 D_8007D58A[];
 extern u8 D_8007D58B[];
-extern u8 * volatile g_DrawBuffer asm("D_8019C900");
+extern u8 * volatile g_DrawBuffer;
 extern volatile u8 g_PadType asm("D_801E4369");
 extern u8 g_LastValidPadType asm("D_8007D5A4");
 

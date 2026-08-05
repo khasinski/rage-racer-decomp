@@ -12,8 +12,8 @@ typedef struct Entry {
     char name[32];/* +12 */
 } Entry;
 
-extern u_char g_CdSectorBuf[] asm("D_8009D714");
-extern W4 g_CdRootDirLba asm("D_8009D7A0");
+extern u_char g_CdSectorBuf[];
+extern W4 g_CdRootDirLba;
 extern Entry g_CdPathTable[] asm("D_8009C114");
 extern long g_CdDebugLevel asm("D_80099048");
 extern long g_CdCachedDir asm("D_80099348");
@@ -108,7 +108,7 @@ long CD_newmedia(void) {
 }
 
 extern volatile long D_8009C118[];
-extern CdSearchDirEntry g_CdDirEntryName[] asm("D_8009C120");
+extern CdSearchDirEntry g_CdDirEntryName[];
 
 long LibcStrcmp(u_char *arg0, u_char *arg1);
 

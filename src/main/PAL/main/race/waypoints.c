@@ -10,22 +10,22 @@
 
 extern s32 g_PlayerCar asm("D_8009E6D4");
 
-extern s32 g_PlayerCarZ asm("D_8009E6DC");
+extern s32 g_PlayerCarZ;
 
 /*
  * Waypoint proximity test: returns 1 if the waypoint's (x,y) lies within a
  * +/-0x40 box around the car centre (g_PlayerCar / g_PlayerCarZ), else 0.
  */
 
-extern s32 g_WaypointSpawnCooldown asm("D_8019C700");
+extern s32 g_WaypointSpawnCooldown;
 
-extern TrackWaypointRuntime g_Waypoints[] asm("D_801E4DF4");
+extern TrackWaypointRuntime g_Waypoints[];
 
-extern s32 g_WaypointsCollected asm("D_801E43F8");
+extern s32 g_WaypointsCollected;
 
 /* g_PlayerCar + 0xC4: the four words a spawning waypoint copies as its own
  * starting velocity. */
-extern s32 g_PlayerVelocity[] asm("D_8009E798");
+extern s32 g_PlayerVelocity[];
 
 s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
 
@@ -82,7 +82,7 @@ extern s32 g_PlayerProgressB asm("D_8009E740");
 
 extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
-extern s16 g_ReverbZoneDepth asm("D_8019C78C");
+extern s16 g_ReverbZoneDepth;
 
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
@@ -155,9 +155,9 @@ extern s32 g_ReverbZoneEnd asm("D_8007E058");
 s32 rsin(s32 arg0) asm("func_80068568");
 
 
-extern u8 *g_TrackPoints asm("D_8009E688");
+extern u8 *g_TrackPoints;
 extern s32 g_TrackLength asm("D_801E40D8");
-extern u8 *g_TrackEventData asm("D_801E4150");
+extern u8 *g_TrackEventData;
 
 extern s32 FindTrackSegment(u8 *ent, s32 arg);
 

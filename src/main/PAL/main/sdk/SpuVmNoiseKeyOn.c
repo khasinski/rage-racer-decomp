@@ -4,19 +4,19 @@
 #include "psyq/snd_types.h"
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
-extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[];
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
-extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_short g_SndVoiceRegs[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_char g_SndVoiceCount asm("D_801E42F8");
-extern short g_SndMonoMode asm("D_801E3FB0");
+extern u_char g_SndVoiceCount;
+extern short g_SndMonoMode;
 extern volatile u_short *g_SndSpuRegs asm("D_8009A588");
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern u_short D_8009E670;
 extern u_short D_8009E674;
-extern u_short g_SndReverbOnLow asm("D_8009E680");
-extern u_short g_SndReverbOnHigh asm("D_8009E684");
+extern u_short g_SndReverbOnLow;
+extern u_short g_SndReverbOnHigh;
 
 void SpuVmNoiseKeyOn(u_char voice);
 void SpuVmNoiseKeyOn(u_char voice) {

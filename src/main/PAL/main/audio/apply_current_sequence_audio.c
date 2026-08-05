@@ -3,8 +3,8 @@
 #include "game/cd.h"
 #include "game/memcard.h"
 
-extern s16 g_SeqHandle asm("D_801E6D90");
-extern s16 g_SeqVolume asm("D_801E6D94");
+extern s16 g_SeqHandle;
+extern s16 g_SeqVolume;
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
 void SetReverbDepth(s32 arg0, s32 arg1);
 void ApplyCurrentSequenceAudio(void);

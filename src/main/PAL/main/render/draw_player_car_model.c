@@ -147,7 +147,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
 
 
 extern u8 *g_CamRow asm("D_8019C9A8");
-extern s32 g_CourseIndex asm("D_801E428C");
+extern s32 g_CourseIndex;
 extern u8 g_CarModelByCourse[][11] asm("D_8007D3AC");
 extern s16 D_8007D380[][2];
 void *ApplyMatrixLV(void *mtx, void *vec, void *out);
@@ -310,7 +310,7 @@ void func_8001DFC0(GameRenderObject *obj) {
 
 
 extern s32 g_FmvState asm("D_8009F094");
-extern s32 g_StreamReturnScene asm("D_8019C760");
+extern s32 g_StreamReturnScene;
 s32 CloseLoadedAudioSlots(void);
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
 s32 CdControl(s32 com, void *param, s32 result);

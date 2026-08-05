@@ -2,7 +2,7 @@
 #include "game/track.h"
 
 extern GameTrackPoint *g_TrackArcCenters asm("D_8019C7D0");
-extern s16 g_TrackSectionCount asm("D_8019C9A4");
+extern s16 g_TrackSectionCount;
 
 /*
  * Installs the track-point table from a loaded blob: word 0 is the point count,

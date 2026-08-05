@@ -3,11 +3,11 @@
 #include "common.h"
 
 extern u_char *g_SndSeqTable[] asm("D_801E79CC");
-extern short g_SndCurrentSeqSep asm("D_801E4BE6");
-extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
-extern u_char g_SndVoiceRegs[] asm("D_8009DF20");
+extern short g_SndCurrentSeqSep;
+extern volatile u_char g_SndVoiceCount;
+extern u_char g_SndVoiceRegs[];
 extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
+extern u_char g_SndVoiceStateSeqSep[];
 
 short SpuVmSetSeqVol();
 long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2);

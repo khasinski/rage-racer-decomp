@@ -57,7 +57,7 @@ typedef struct Car {
 } Car;
 
 extern u8 g_PadType asm("D_801E4369");
-extern volatile u16 g_PadHeld asm("D_801E436A");
+extern volatile u16 g_PadHeld;
 /*
  * The NeGcon's three analog channels, already zeroed against the calibration
  * captured by the controller-config screen: button I, button II and the left
@@ -65,21 +65,21 @@ extern volatile u16 g_PadHeld asm("D_801E436A");
  * UpdatePadState feeds the digital pad through the same three slots by writing
  * a flat 0x6A when the mapped button is held.
  */
-extern s16 g_NegconAnalogI asm("D_801E4374");
-extern s16 g_NegconAnalogII asm("D_801E4376");
-extern s16 g_NegconAnalogL asm("D_801E4378");
+extern s16 g_NegconAnalogI;
+extern s16 g_NegconAnalogII;
+extern s16 g_NegconAnalogL;
 /*
  * The live button mapping LoadPadButtonMapping installs: eight u16 masks
  * for the standard pad at 0x801E4B60 then eight for the NeGcon at 0x801E4B70.
  * These are masks 2 and 3 of each row; g_PadShiftMasks is the [pad/NeGcon][up,
  * down] view of masks 4 and 5, which is why its row stride is eight halfwords.
  */
-extern s16 g_PadAccelMask asm("D_801E4B64");
-extern s16 g_PadBrakeMask asm("D_801E4B66");
-extern s16 g_PadShiftMasks[2][8] asm("D_801E4B68");
-extern s16 g_NegconAccelMask asm("D_801E4B74");
-extern s16 g_NegconBrakeMask asm("D_801E4B76");
-extern s32 g_TachoNeedleFlash asm("D_801E40B0");
+extern s16 g_PadAccelMask;
+extern s16 g_PadBrakeMask;
+extern s16 g_PadShiftMasks[2][8];
+extern s16 g_NegconAccelMask;
+extern s16 g_NegconBrakeMask;
+extern s32 g_TachoNeedleFlash;
 extern s32 g_EngineRpmJitter asm("D_801E4170");
 extern s32 D_801E4194;
 extern s32 g_ShiftTargetRpm asm("D_801E4BF4");
@@ -91,12 +91,12 @@ extern s32 g_AutoShiftCooldown asm("D_801F17B8");
 extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
 extern s16 g_NegconMappingIndex asm("D_8019CB08");
 extern s32 g_EngineRpm asm("D_8019CAB4");
-extern u8 *g_TrackPoints asm("D_8009E688");
+extern u8 *g_TrackPoints;
 /* g_PlayerCar drive +0xA0 / +0xA4: the throttle the input layer produced this
  * frame (0..0x100) and the drivetrain's own rpm, which g_EngineRpm is slewed
  * towards by a half (clutch in) or a quarter (clutch out) of the gap. */
-extern s16 g_PlayerThrottle asm("D_8009E830");
-extern s32 g_PlayerTargetRpm asm("D_8009E808");
+extern s16 g_PlayerThrottle;
+extern s32 g_PlayerTargetRpm;
 extern u16 g_CarCornerOffsetX[] asm("D_8007DAB0");
 extern u16 g_CarCornerOffsetZ[] asm("D_8007DAB2");
 
@@ -612,7 +612,7 @@ void UpdatePlayerCar(Car *car) {
 }
 
 extern s16 g_TrackZoneDark asm("D_8019CAB0");
-extern s32 g_EnvScriptClock asm("D_8019C8FC");
+extern s32 g_EnvScriptClock;
 
 s32 DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt);
 

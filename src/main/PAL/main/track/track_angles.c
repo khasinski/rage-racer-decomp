@@ -46,7 +46,7 @@ s32 InterpolateTrackAngle(s32 pointIndex, s32 weight) {
 #include "common.h"
 #include "game/track.h"
 
-extern s32 g_PlayerSegmentWeight asm("D_8009E70C");
+extern s32 g_PlayerSegmentWeight;
 
 s32 BlendAngle(s32 arg0, s32 arg1, s32 arg2);
 

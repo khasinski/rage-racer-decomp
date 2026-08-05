@@ -3,12 +3,12 @@
 #include "psyq/kernel.h"
 
 extern s32 g_McLastCardStatus asm("D_80082F4C");
-extern s32 g_McStatusState asm("D_8009E668");
-extern s32 g_McPollTicks asm("D_8019C864");
-extern s32 g_McStatusResult asm("D_8019C8F0");
+extern s32 g_McStatusState;
+extern s32 g_McPollTicks;
+extern s32 g_McStatusResult;
 /* The poller's own working status word. Distinct from menu.h's
  * g_McPollStatus (D_8009B720), which is the code the menu reads. */
-extern s32 g_McPollStatus asm("D_801E825C");
+extern s32 g_McPollStatus;
 extern char g_FmtCardDevice[] asm("D_800127CC");
 
 void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
@@ -192,14 +192,14 @@ s32 FormatMemoryCard(s32 port, s32 slot) {
  * array symbol gcc 2.6.3 keeps the base address live in a callee-saved
  * register across the TestEvent calls, which grows PollMemoryCardHwEvent's
  * frame from 24 to 32 bytes. */
-extern s32 g_McHwEventIoe asm("D_8009B538");
-extern s32 g_McHwEventError asm("D_8009B53C");
-extern s32 g_McHwEventTimeout asm("D_8009B540");
-extern s32 g_McHwEventNew asm("D_8009B544");
-extern s32 g_McSwEventIoe asm("D_8009B548");
-extern s32 g_McSwEventError asm("D_8009B54C");
-extern s32 g_McSwEventTimeout asm("D_8009B550");
-extern s32 g_McSwEventNew asm("D_8009B554");
+extern s32 g_McHwEventIoe;
+extern s32 g_McHwEventError;
+extern s32 g_McHwEventTimeout;
+extern s32 g_McHwEventNew;
+extern s32 g_McSwEventIoe;
+extern s32 g_McSwEventError;
+extern s32 g_McSwEventTimeout;
+extern s32 g_McSwEventNew;
 
 
 void OpenMemoryCardEvents(void);
@@ -274,7 +274,7 @@ void ClearMemoryCardSwEvents(void) {
     TestEvent(g_McSwEventNew);
 }
 
-extern s32 g_McPollTicks asm("D_8019C864");
+extern s32 g_McPollTicks;
 
 s32 PollMemoryCardHwEvent(void);
 s32 PollMemoryCardHwEvent(void) {
@@ -370,14 +370,14 @@ s32 WaitMemoryCardSwEvent(void) {
     }
 }
 
-extern s32 g_SaveElapsedTicks asm("D_801E7A54");
+extern s32 g_SaveElapsedTicks;
 void InitCARD(s32 padEnable);
 void StartCARD(void);
 void BiosBuInit(void) asm("func_80063180");
 void RestartMemoryCard(void);
 void RestartMemoryCard(void) { InitCARD(1); StartCARD(); BiosBuInit(); g_SaveElapsedTicks = 0; }
 
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
+extern s32 g_FrameSyncThreshold;
 
 void AdvanceSaveHeaderCounter(void) {
     if (g_FrameSyncThreshold == 0x80) {
@@ -426,7 +426,7 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
 }
 
 extern char g_FmtString[] asm("D_80012F8C");
-extern Rect g_SaveIconRect asm("D_8009B55C");
+extern Rect g_SaveIconRect;
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf() asm("func_800632F0");
@@ -494,7 +494,7 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
     } while (i <= 0);
 }
 
-extern s32 g_SaveElapsedTicks asm("D_801E7A54");
+extern s32 g_SaveElapsedTicks;
 
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     u8 *rowBytes = (u8 *)row;
@@ -529,12 +529,12 @@ void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
 
 extern s16 g_PadMappingIndex asm("D_8019CE08");
 extern s16 g_NegconMappingIndex asm("D_8019CB08");
-extern u16 g_NegconSteerNeutral asm("D_801E4BF0");
+extern u16 g_NegconSteerNeutral;
 extern u16 g_NegconSteerPlay asm("D_8019CAD0");
-extern u16 g_NegconNeutralI asm("D_8019CA08");
-extern u16 g_NegconNeutralII asm("D_8019CA0A");
+extern u16 g_NegconNeutralI;
+extern u16 g_NegconNeutralII;
 extern u16 g_NegconMaxTwist asm("D_801E418C");
-extern u16 g_NegconNeutralL asm("D_8019CA0C");
+extern u16 g_NegconNeutralL;
 extern u16 g_BgmSelection asm("D_801E42CC");
 
 extern u16 g_ClassRecords[] asm("D_8019CB40");
@@ -544,9 +544,9 @@ extern s32 g_BestLapTimes[] asm("D_801E4408");
 extern s32 g_BestTotalTimes[] asm("D_8019C70C");
 extern s32 g_BestSectorTimes[] asm("D_801E41E8");
 
-extern s32 g_BgmVolumeSetting asm("D_8019C704");
-extern s32 g_SfxVolumeSetting asm("D_801E8A50");
-extern s32 g_MonoOutput asm("D_801E6C70");
+extern s32 g_BgmVolumeSetting;
+extern s32 g_SfxVolumeSetting;
+extern s32 g_MonoOutput;
 extern u8 g_GrandPrixCourseProgress[] asm("D_801E42EC");
 extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
 
@@ -816,12 +816,12 @@ extern char g_FmtSaveChecksum[] asm("D_80012F98");
 
 extern s16 g_PadMappingIndex asm("D_8019CE08");
 extern s16 g_NegconMappingIndex asm("D_8019CB08");
-extern u16 g_NegconSteerNeutral asm("D_801E4BF0");
+extern u16 g_NegconSteerNeutral;
 extern u16 g_NegconSteerPlay asm("D_8019CAD0");
-extern u16 g_NegconNeutralI asm("D_8019CA08");
-extern u16 g_NegconNeutralII asm("D_8019CA0A");
+extern u16 g_NegconNeutralI;
+extern u16 g_NegconNeutralII;
 extern u16 g_NegconMaxTwist asm("D_801E418C");
-extern u16 g_NegconNeutralL asm("D_8019CA0C");
+extern u16 g_NegconNeutralL;
 /* The loader stores a whole word here; the saver reads only the low half
  * as g_BgmSelection. Same address, two widths, so two names. */
 
@@ -833,9 +833,9 @@ extern s32 g_BestLapTimes[] asm("D_801E4408");
 extern s32 g_BestTotalTimes[] asm("D_8019C70C");
 extern s32 g_BestSectorTimes[] asm("D_801E41E8");
 
-extern s32 g_BgmVolumeSetting asm("D_8019C704");
-extern s32 g_SfxVolumeSetting asm("D_801E8A50");
-extern s32 g_MonoOutput asm("D_801E6C70");
+extern s32 g_BgmVolumeSetting;
+extern s32 g_SfxVolumeSetting;
+extern s32 g_MonoOutput;
 extern u8 g_GrandPrixCourseProgress[] asm("D_801E42EC");
 extern u8 g_ExtraGrandPrixCourseProgress[] asm("D_8009E874");
 
@@ -1332,8 +1332,8 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) {
     return mask;
 }
 
-extern volatile s32 GameMenuLoadPhase asm("D_8009B740");
-extern s32 g_SaveElapsedTicks asm("D_801E7A54");
+extern volatile s32 GameMenuLoadPhase;
+extern s32 g_SaveElapsedTicks;
 
 s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     u8 block[MC_BLOCK_SIZE];
@@ -1416,7 +1416,7 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
 }
 
 extern char g_FmtCardWildcard[] asm("D_80012FAC");
-extern char g_McDirEntries[] asm("D_8009B748");
+extern char g_McDirEntries[];
 
 void LibcSprintf() asm("func_800632F0");
 
@@ -1445,7 +1445,7 @@ s32 CountMemoryCardFiles(s32 port, s32 slot) {
 #include "game/memcard.h"
 #include "game/menu.h"
 
-extern char g_McDirEntries[] asm("D_8009B748");
+extern char g_McDirEntries[];
 
 s32 CalculateMemoryCardFreeBlocks(s32 port) {
     u8 scratch[8];
@@ -1479,8 +1479,8 @@ s32 CalculateMemoryCardFreeBlocks(s32 port) {
     }
 }
 
-extern s32 g_McCardFileCount asm("D_8009B738");
-extern s32 g_McFreeBlocks asm("D_8009B73C");
+extern s32 g_McCardFileCount;
+extern s32 g_McFreeBlocks;
 
 s32 RefreshMemoryCardSaveStatus(s32 slot, GameSaveHeaderRow *header) {
     s32 ret;
@@ -1548,7 +1548,7 @@ extern char g_McSlotLabelNoFile[] asm("D_80082F86");
 extern char g_McSlotLabelError[] asm("D_80082F9A");
 extern s32 g_McMenuPage asm("D_80082F50");
 extern s32 g_McMenuRowCursor asm("D_80082F54");
-extern s32 g_McFreeBlocks asm("D_8009B73C");
+extern s32 g_McFreeBlocks;
 
 /* DrawLargeText with word-wide parameters; the header spelling does not
  * match here. See DrawText8x8Wide above. */
@@ -1688,19 +1688,19 @@ void DrawMenuFadeOverlay(s32 level) {
     DrawFullscreenFadeTile(level, 0x40);
 }
 
-extern s32 g_McFadeStep asm("D_8009B9A0");
+extern s32 g_McFadeStep;
 
 void StartMenuExitFade(void) {
     StopMemoryCardEvents();
     g_McFadeStep = 8;
 }
 
-extern s32 g_McMenuRowCount asm("D_8009B744");
+extern s32 g_McMenuRowCount;
 extern s32 g_McMenuPage;
 extern s32 g_McMenuRowCursor;
-extern s32 g_McFromLoadMenu asm("D_8009B730");
+extern s32 g_McFromLoadMenu;
 extern s32 g_McFadeStep;
-extern s32 g_McFadeLevel asm("D_8009B9A4");
+extern s32 g_McFadeLevel;
 void EnterMemoryCardMenu(void);
 void EnterMemoryCardMenu(void) {
     SetDispMask(0);

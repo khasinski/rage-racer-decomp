@@ -17,12 +17,12 @@ extern void *g_VisibleCellMask asm("D_801E6828");
 extern void *g_VisibleCellList asm("D_801E4BC8");
 extern void *g_ModelBanks[] asm("D_801E41A8");
 extern s32 g_ModelBankCount asm("D_801E4168");
-extern s32 g_CourseModelCount asm("D_801E40E4");
-extern void *g_TerrainCellGrid asm("D_801E5020");
-extern void *g_CellVisibilityTable asm("D_801E4B98");
+extern s32 g_CourseModelCount;
+extern void *g_TerrainCellGrid;
+extern void *g_CellVisibilityTable;
 extern s32 D_801E4144;
-extern void *g_CarImageSlots[] asm("D_801E424C");
-extern void *g_CarModelSlots[] asm("D_801E8A54");
+extern void *g_CarImageSlots[];
+extern void *g_CarModelSlots[];
 void LoadImage(void *rect, void *data) asm("func_80065B24");
 
 s32 GetCarAssetIndex(s32 model, s32 grade) {

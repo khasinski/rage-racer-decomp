@@ -10,7 +10,7 @@ extern volatile u_long *g_GpuGp0 asm("D_800942B8");
 extern volatile u_long *g_GpuDmaMadr asm("D_800942C0");
 extern volatile u_long *g_GpuDmaBcr asm("D_800942C4");
 extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
-extern u_char g_GpuGp1Mirror[] asm("D_8009B9F0");
+extern u_char g_GpuGp1Mirror[];
 
 void Gpu_WriteGp1(u_long arg0);
 long Gpu_WriteGp0Words(u_long *src, long count);

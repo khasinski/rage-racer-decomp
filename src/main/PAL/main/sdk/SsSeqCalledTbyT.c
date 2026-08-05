@@ -2,11 +2,11 @@
 
 void _SsSndCrescendo(short seq, short sep);
 
-extern volatile long g_SndUpdateLock asm("D_801E40AC");
+extern volatile long g_SndUpdateLock;
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
-extern long g_SndSeqOpenMask asm("D_801E4B80");
-extern short g_SndSeqTableSMax asm("D_801E826C");
-extern short g_SndSeqTableTMax asm("D_801E8270");
+extern long g_SndSeqOpenMask;
+extern short g_SndSeqTableSMax;
+extern short g_SndSeqTableTMax;
 void _SsSndDecrescendo(short seq, short sep);
 void func_80072734(long seq, long sep);
 

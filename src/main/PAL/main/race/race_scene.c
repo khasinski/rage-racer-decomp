@@ -38,15 +38,15 @@ extern s16 g_PlayerLap asm("D_8009E83C");
 
 extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 
-extern s32 g_SeriesCleared asm("D_8019C8EC");
+extern s32 g_SeriesCleared;
 
 /* Rear-view mirror on/off; render/DrawRearViewMirror.c owns it. */
-extern s16 g_MirrorViewEnabled asm("D_8019CA10");
+extern s16 g_MirrorViewEnabled;
 
 
 
 
-extern s32 g_LapCount asm("D_801E4364");
+extern s32 g_LapCount;
 
 
 extern s32 g_BestLapTimes[][4][2] asm("D_801E4408");
@@ -54,18 +54,18 @@ extern s32 g_BestLapTimes[][4][2] asm("D_801E4408");
 extern s32 g_BestSectorTimes[][4][3] asm("D_801E41E8");
 
 
-extern s32 g_RaceTotalTime asm("D_801E4BA8");
+extern s32 g_RaceTotalTime;
 
 extern s32 g_BestLapThisRace asm("D_801E4BCC");
 
 
 
-extern s16 g_RaceCueDelay asm("D_801E6C90");
+extern s16 g_RaceCueDelay;
 
 
-extern s32 g_RankingTimes[][4][20] asm("D_801E774C");
+extern s32 g_RankingTimes[][4][20];
 
-extern s32 g_RaceCueFlags asm("D_801E7A50");
+extern s32 g_RaceCueFlags;
 
 
 void BeginReplay(void);
@@ -94,15 +94,15 @@ s32 Random15(void);
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
 
-extern s32 g_CameraViewMode asm("D_8009E870");
+extern s32 g_CameraViewMode;
 
 
 
-extern s16 g_PauseDebounce asm("D_8019C750");
+extern s16 g_PauseDebounce;
 
 /* Deliberately raw: see docs/names.md 12d. Written 0x80 / 0x180 on scene
  * entry, and its one reader is never reached in retail. */
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
+extern s32 g_FrameSyncThreshold;
 
 extern u8 *g_CamRow asm("D_8019C9A8");
 
@@ -113,7 +113,7 @@ extern u8 *g_CamRow asm("D_8019C9A8");
 extern s16 D_8019C9AC;
 
 
-extern s32 g_TrackWalkStart asm("D_801E40CC");
+extern s32 g_TrackWalkStart;
 
 extern s32 g_BgmTrack asm("D_801E40E0");
 
@@ -123,7 +123,7 @@ extern s32 g_BgmTrack asm("D_801E40E0");
 extern s32 D_801E4248;
 
 
-extern s32 g_RivalCueFlags asm("D_801E4BB4");
+extern s32 g_RivalCueFlags;
 
 /* Deliberately raw: written zero at race init and read nowhere in the image. */
 extern s16 D_801E4CF8;
@@ -132,13 +132,13 @@ extern s16 D_801E4CF8;
 extern s32 g_SectorEndDistance[] asm("D_801E4D98");
 
 
-extern s16 g_RivalCueCooldown0 asm("D_801E6F20");
+extern s16 g_RivalCueCooldown0;
 
-extern s16 g_RivalCueCooldown1 asm("D_801E6F22");
+extern s16 g_RivalCueCooldown1;
 
-extern s16 g_RivalCueCooldown2 asm("D_801E6F24");
+extern s16 g_RivalCueCooldown2;
 
-extern s16 g_RivalCueCooldown3 asm("D_801E6F26");
+extern s16 g_RivalCueCooldown3;
 
 extern u8 g_MsgGame0Ok[] asm("D_80011488");
 
@@ -184,9 +184,9 @@ extern u8 g_SceneLightMatrix[] asm("D_8009E6AC");
 extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
 
-extern s16 g_ReverbZoneDepth asm("D_8019C78C");
+extern s16 g_ReverbZoneDepth;
 
-extern s16 g_CameraCarTrackSection asm("D_801E3E8C");
+extern s16 g_CameraCarTrackSection;
 
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
@@ -198,9 +198,9 @@ extern u8 g_PadType asm("D_801E4369");
 /* Mask 6 of each row of the live button mapping (see UpdatePlayerCar.c),
  * hence the eight-halfword stride. Holding it while paused, in the chase view
  * and mid-race, makes D-pad up/down turn the rear-view mirror on and off. */
-extern s16 g_PadMirrorMasks[] asm("D_801E4B6C");
+extern s16 g_PadMirrorMasks[];
 
-extern s32 g_RacePaused asm("D_801E4BAC");
+extern s32 g_RacePaused;
 
 s32 BeginMirrorPass(void);
 

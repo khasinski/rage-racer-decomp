@@ -6,15 +6,15 @@
 /* Grand Prix class index, 0-based; displayed as CLASS(n+1). Also the track
  * tier: course asset index = 0x57 + (course << 1) + (class << 3). OVAL is
  * gated to class >= 2. See names.md 3. */
-extern s32 g_GrandPrixClass asm("D_8009E6A4");
+extern s32 g_GrandPrixClass;
 
 /* Course selector: low 2 bits are the course (0 BIG, 1 MID, 2 HI, 3 OVAL).
  * Bits 2+ transiently carry g_GrandPrixSeries, so mask with 3. */
-extern s32 g_CourseIndex asm("D_801E428C");
+extern s32 g_CourseIndex;
 
 /* Which Grand Prix series is played: 0 = first (6 classes), non-zero =
  * advanced (5 classes). Outer index of every per-series table. */
-extern s16 g_GrandPrixSeries asm("D_8019CABC");
+extern s16 g_GrandPrixSeries;
 
 /* Display names: [0..5] first-series classes, [6..10] advanced-series classes,
  * [11..13] course names. */
@@ -22,13 +22,13 @@ extern char *g_GrandPrixNames[] asm("D_8007D3D8");
 
 /* Race position, 1 = leading; recomputed each frame from how many cars are
  * further along. At the finish it indexes g_PrizeMoney. */
-extern s16 g_RacePosition asm("D_8009E834");
+extern s16 g_RacePosition;
 
 /* Prize money per [course][class][place], place 0 = 1st. */
 extern s32 g_PrizeMoney[][6][3] asm("D_8007BEEC");
 
 /* Round number within the current class; drives the "R O U N D %d" overlay. */
-extern s32 g_GrandPrixRound asm("D_8009EC90");
+extern s32 g_GrandPrixRound;
 
 /* 1 = Grand Prix (championship), 0 = Time Attack. Picks the pre-race panel, the
  * innermost index of the record tables, and the in-race option count
@@ -46,15 +46,15 @@ extern s16 g_RacePhase asm("D_801E6E74");
 
 /* Series / save file the title menu picked (0 first, 1 advanced); also indexes
  * g_MaxClassReached. Final class is 4 for the first series, 5 for advanced. */
-extern s16 g_SeriesSelection asm("D_801E4034");
+extern s16 g_SeriesSelection;
 
 /* Non-zero once the advanced series is unlocked (first series' last class
  * cleared). Saved at save+0x4E; gates title-menu entry 1. */
-extern s16 g_AdvancedSeriesUnlocked asm("D_8019CAC0");
+extern s16 g_AdvancedSeriesUnlocked;
 
 /* Highest class reached per series/save file ([1] is the old D_801E7730).
  * Unlocks courses and bounds the attract-demo class roll. Saved at save+0x50. */
-extern s32 g_MaxClassReached[2] asm("D_801E772C");
+extern s32 g_MaxClassReached[2];
 
 /* Mirror mode, armed by holding the 0x80C pad combination as the race starts:
  * swaps left/right in steering, body roll, stereo pan and the sound cue. */
@@ -79,9 +79,9 @@ typedef struct GameRaceProgress {
 extern GameRaceProgress *g_RaceProgress asm("D_801E4FAC");
 /* The three slots themselves. Their fields used to be spelled as separate
  * symbols per serialiser (g_GrandPrixSaveCar and friends); they are members. */
-extern GameRaceProgress g_GrandPrixSave asm("D_801E4094");
-extern GameRaceProgress g_ExtraGrandPrixSave asm("D_801E6E7C");
-extern GameRaceProgress g_TimeAttackSave asm("D_8019C980");
+extern GameRaceProgress g_GrandPrixSave;
+extern GameRaceProgress g_ExtraGrandPrixSave;
+extern GameRaceProgress g_TimeAttackSave;
 
 typedef struct GameRaceRanking {
     s16 count;
@@ -114,14 +114,14 @@ void DrawStartCountdown(s32 sceneTimer) asm("func_8003425C");
  */
 
 /* Elapsed time of the lap in progress. */
-extern s32 g_LapTimeMs asm("D_801E4D64");
+extern s32 g_LapTimeMs;
 
 /* Grand Prix time limit, in frames; counts down while g_RacePhase >= 2 and
  * forces g_RacePhase = 5 when it reaches 0. Seeded to 15000. */
 extern s32 g_RaceTimeRemaining asm("D_8009AF9C");
 
 /* Sector being timed, 0..2; -2 before the first start-line crossing. */
-extern s32 g_SectorIndex asm("D_801E4148");
+extern s32 g_SectorIndex;
 
 /* This lap's three sector times, filled in as each boundary is crossed. */
 extern s32 g_SectorTimes[3] asm("D_8009AF80");
@@ -162,15 +162,15 @@ extern s16 g_WrongWayTimer asm("D_801E8A8C");
 
 /* g_PlayerCar.facingBackwards. Wrong way is `!= g_RaceSeries`, because the
  * advanced series drives the course in the other direction. */
-extern s16 g_PlayerFacingBackwards asm("D_8009E78C");
+extern s16 g_PlayerFacingBackwards;
 
 /* Non-zero while rival proximity / position sound cues may play: set only in
  * the middle of a lap and cleared by the wrong-way warning. */
-extern s16 g_RivalCueEnabled asm("D_8009E6A0");
+extern s16 g_RivalCueEnabled;
 
 /* Frame counter of the in-race fade transitions; every use is the brightness
  * argument of DrawFullscreenFadeTile plus a frame threshold. */
-extern s16 g_RaceFadeTimer asm("D_801E43FC");
+extern s16 g_RaceFadeTimer;
 
 /* Cursor of the in-race option overlay, clamped to 2 - g_GrandPrixMode. */
 extern s16 g_RaceOptionCursor asm("D_801E414C");

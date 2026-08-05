@@ -12,7 +12,7 @@ extern u8 *g_CarModelAsset asm("D_8009E698");
 
 extern s32 D_8009B2CC;
 extern s32 D_8009B2C8;
-extern s32 g_TimeAttackPlateStep asm("D_8009B334");
+extern s32 g_TimeAttackPlateStep;
 extern s32 D_8019CDF8;
 extern u8 D_80082724;
 extern u8 D_80081890;
@@ -214,8 +214,8 @@ s32 DrawCarSelectScreen(s32 arg0) {
     return D_8009B2CC;
 }
 
-extern s16 g_PrevOwnedCarIndex asm("D_8019CA18");
-extern s16 g_NextOwnedCarIndex asm("D_801E41A4");
+extern s16 g_PrevOwnedCarIndex;
+extern s16 g_NextOwnedCarIndex;
 
 void UpdateOwnedCarNeighbours(void);
 void UpdateOwnedCarNeighbours(void) {
@@ -314,8 +314,8 @@ do {
 
 }
 
-extern s32 g_CarNamePlateStep asm("D_8009B31C");
-extern s32 g_MenuPlateCarIndex asm("D_8009B320");
+extern s32 g_CarNamePlateStep;
+extern s32 g_MenuPlateCarIndex;
 
 void InstallCarModelSlot(void);
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
@@ -343,17 +343,17 @@ extern s32 D_8009B324;
 extern s32 D_8009B32C;
 extern s32 D_8009B330;
 extern s32 D_8009B348;
-extern s32 g_MenuHintBarStep asm("D_8009B30C");
+extern s32 g_MenuHintBarStep;
 extern s32 D_8009B360;
 extern s32 D_8009B368;
-extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
-extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
+extern s32 g_MenuCourseModelIndex;
+extern s32 g_MenuPendingCourseIndex;
 extern s32 g_CarSwapFromIndex asm("D_8009B374");
 extern s32 g_CarSwapToIndex asm("D_8009B378");
 extern s32 D_8019C7B8;
-extern s32 g_PlayerMoney asm("D_8019C908");
+extern s32 g_PlayerMoney;
 extern s32 D_801E4138;
-extern s32 g_SceneId asm("D_801E42E4");
+extern s32 g_SceneId;
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
 void RequestCarModel(s32 carIndex);
@@ -740,11 +740,11 @@ extern u8 D_80082574;
 extern u8 D_800825A4;
 extern u8 g_UiChromeScript2 asm("D_80082790");
 extern u8 D_80082814;
-extern u8 g_MenuSubCursor asm("D_8009B2F0");
-extern s32 g_MenuConfirmTimer asm("D_8009B300");
+extern u8 g_MenuSubCursor;
+extern s32 g_MenuConfirmTimer;
 extern s32 D_8009B324;
 extern u8 *D_8019C794;
-extern s32 g_RankingOption asm("D_8019C7C0");
+extern s32 g_RankingOption;
 extern u8 D_801E4389[];
 extern u8 D_801E438A[];
 void DrawTireCompoundSlider(u8 x, s32 useFlag);

@@ -1,9 +1,9 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndVabStatus[] asm("D_801E4CFC");
-extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
-extern volatile u_char *g_SndCurrentToneTable asm("D_801E416C");
+extern u_char g_SndVabStatus[];
+extern u_char g_SndCurrentProgActual;
+extern volatile u_char *g_SndCurrentToneTable;
 
 long SpuVmVSetUp(long arg0, long arg1);
 

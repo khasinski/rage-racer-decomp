@@ -14,16 +14,16 @@ void SetGteLightMatrix(Matrix *view) {
     SetLightMatrix(&m);
 }
 
-extern s32 g_GameMode asm("D_8019CB14");
+extern s32 g_GameMode;
 extern s32 g_AnimTimer asm("D_8009E694");
 extern u8 g_PadType asm("D_801E4369");
-extern s16 g_NegconSteer asm("D_801E437E");
+extern s16 g_NegconSteer;
 extern s16 g_NegconMaxTwist asm("D_801E418C");
 extern s16 g_NegconSteerPlay asm("D_8019CAD0");
 extern s16 g_NegconSteerRange[] asm("D_8007C020");
 extern s32 g_NegconPlayScale[] asm("D_8007C140");
-extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
-extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
+extern s32 g_ControllerSceneAngleX;
+extern s32 g_ControllerSceneAngleY;
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_Scratch08 asm("0x1F800008");
 extern s32 g_Scratch0C asm("0x1F80000C");

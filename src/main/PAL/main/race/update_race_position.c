@@ -5,8 +5,8 @@
 extern s32 g_PlayerProgressA asm("D_8009E73C");
 extern s32 g_PlayerProgressB asm("D_8009E740");
 extern GameRaceRanking g_PlayerLap asm("D_8009E83C");
-extern s32 g_LapCount asm("D_801E4364");
-extern GameCarRuntimeProgressWindow g_CarProgressB[] asm("D_801F18C0");
+extern s32 g_LapCount;
+extern GameCarRuntimeProgressWindow g_CarProgressB[];
 
 /* Counts the cars whose lap progress is ahead of the player and publishes the
  * result as g_RacePosition (1 = leader). Only runs on the final lap. */

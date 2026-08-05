@@ -12,7 +12,7 @@ extern Vec4 g_StaticSceneryPos asm("D_8007E340");
 extern s32 g_StaticSceneryYaw asm("D_8007E34C");
 extern u32 *g_VisibleCellMask asm("D_801E6828");
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
-extern s32 g_CourseModelCount asm("D_801E40E4");
+extern s32 g_CourseModelCount;
 
 
 static inline void ClearScratchRenderMode3DF68(void) {
@@ -225,12 +225,12 @@ void DrawCourseScenery2(s32 arg0, s32 arg1) {
     }
 }
 
-extern u8 *g_FlybySceneryData asm("D_801E4448");
-extern s32 g_LapCount asm("D_801E4364");
+extern u8 *g_FlybySceneryData;
+extern s32 g_LapCount;
 extern volatile s32 g_RaceSeries asm("D_801E408C");
-extern u8 g_FlybyScenery[] asm("D_801E42FC");
-extern s16 g_FlybySceneryLap asm("D_801E4308");
-extern u8 *g_FlybySceneryKeyframe asm("D_801E43F4");
+extern u8 g_FlybyScenery[];
+extern s16 g_FlybySceneryLap;
+extern u8 *g_FlybySceneryKeyframe;
 
 s32 Random15(void);
 
@@ -301,17 +301,17 @@ void SeedFlybyScenery(void) {
  */
 extern s16 g_PlayerLap asm("D_8009E83C");
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
-extern s32 g_FlybySceneryArmed asm("D_801E4300");
-extern s32 g_FlybySceneryFrame asm("D_801E4304");
-extern s16 g_FlybySceneryKeyIndex asm("D_801E430A");
-extern Vec4 g_FlybySceneryPosRec asm("D_801E430C");
-extern s32 g_FlybySceneryRotX asm("D_801E431C");
-extern s32 g_FlybySceneryRotY asm("D_801E4320");
-extern s32 g_FlybySceneryRotZ asm("D_801E4324");
+extern s32 g_FlybySceneryArmed;
+extern s32 g_FlybySceneryFrame;
+extern s16 g_FlybySceneryKeyIndex;
+extern Vec4 g_FlybySceneryPosRec;
+extern s32 g_FlybySceneryRotX;
+extern s32 g_FlybySceneryRotY;
+extern s32 g_FlybySceneryRotZ;
 extern s32 g_RaceSeries asm("D_801E408C");
 extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_PlayerCarY asm("D_8009E6D8");
-extern s32 g_PlayerCarZ asm("D_8009E6DC");
+extern s32 g_PlayerCarZ;
 
 void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);
 

@@ -1,11 +1,11 @@
 #include "psyq/spu.h"
 
-extern u_char g_SndReservedVoiceCount asm("D_801E4D88");
-extern short g_SndMonoMode asm("D_801E3FB0");
-extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
-extern u_char g_SndVabStatus[] asm("D_801E4CFC");
-extern u_short g_SndVabOpenCount asm("D_801F17AC");
-extern u_long g_SndVabSpuAddr[] asm("D_801F17BC");
+extern u_char g_SndReservedVoiceCount;
+extern short g_SndMonoMode;
+extern volatile u_char g_SndVoiceCount;
+extern u_char g_SndVabStatus[];
+extern u_short g_SndVabOpenCount;
+extern u_long g_SndVabSpuAddr[];
 
 void SsSetReservedVoice(u_char arg0);
 

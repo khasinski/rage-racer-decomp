@@ -2,7 +2,7 @@
 
 extern long g_SndTickMode asm("D_8009A558");
 extern long g_SndNoTickFlag asm("D_8009A55C");
-extern long g_SndTickResolution asm("D_801E6C6C");
+extern long g_SndTickResolution;
 
 long GetDMAInterruptState(long arg);
 

@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern u_char *g_SndCurrentProgTable asm("D_801E4110");
+extern u_char *g_SndCurrentProgTable;
 
 long SpuVmVSetUp(long arg0, long arg1);
 

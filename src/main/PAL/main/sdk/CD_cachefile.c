@@ -16,9 +16,9 @@ typedef struct
 } Rec44;
 extern long g_CdCachedDir asm("D_80099348");
 extern long g_CdDebugLevel asm("D_80099048");
-extern Entry g_CdFileCache[64] asm("D_8009BB14");
+extern Entry g_CdFileCache[64];
 extern Rec44 D_8009C0F0[];
-extern u_char g_CdSectorBuf[0x800] asm("D_8009D714");
+extern u_char g_CdSectorBuf[0x800];
 extern u_char D_80013A94[];
 extern u_char D_80013AB4[];
 extern u_char D_80013AD8[];

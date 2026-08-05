@@ -36,8 +36,8 @@ typedef struct TP {
  * GameTrackPoint leaves unnamed, and an unsigned segmentLength), so it carries
  * its own aliased declarations instead of including the header.
  */
-extern TP *g_TrackPoints asm("D_8009E688");
-extern s32 g_TrackPointCount asm("D_8009E6A8");
+extern TP *g_TrackPoints;
+extern s32 g_TrackPointCount;
 
 s32 FindTrackSegment(Car *car, s32 idx);
 

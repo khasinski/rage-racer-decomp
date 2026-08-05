@@ -7,10 +7,10 @@
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
 extern s32 g_ModelBankCount asm("D_801E4168");
-extern s32 g_RouteSceneryX asm("D_801E4340");
-extern s32 g_RouteSceneryRotX asm("D_801E4350");
-extern volatile s32 g_RouteSceneryRotY asm("D_801E4354");
-extern s32 g_RouteSceneryRotZ asm("D_801E4358");
+extern s32 g_RouteSceneryX;
+extern s32 g_RouteSceneryRotX;
+extern volatile s32 g_RouteSceneryRotY;
+extern s32 g_RouteSceneryRotZ;
 
 
 
@@ -54,15 +54,15 @@ void DrawRouteScenery(void) {
  * moves). Eleven separate symbols are what retail's codegen requires.
  */
 extern s32 g_Shuttle1DwellCounter asm("D_801E4FEC");
-extern s32 g_Shuttle1TravelStep asm("D_801E4FF4");
-extern s16 g_Shuttle1StartEndpoint asm("D_801E4FF8");
-extern s16 g_Shuttle1PathIndex asm("D_801E4FFA");
-extern s32 g_Shuttle1X asm("D_801E4FFC");
+extern s32 g_Shuttle1TravelStep;
+extern s16 g_Shuttle1StartEndpoint;
+extern s16 g_Shuttle1PathIndex;
+extern s32 g_Shuttle1X;
 extern s32 g_Shuttle1Y;
 extern s32 g_Shuttle1Z;
 extern s32 g_Shuttle1Unk1C;
-extern s32 g_Shuttle1AngleX asm("D_801E500C");
-extern s32 g_Shuttle1AngleY asm("D_801E5010");
+extern s32 g_Shuttle1AngleX;
+extern s32 g_Shuttle1AngleY;
 extern s32 g_Shuttle1AngleZ asm("D_801E5014");
 /*
  * The shuttle's authored paths, indexed by GameShuttleScenery.pathIndex:

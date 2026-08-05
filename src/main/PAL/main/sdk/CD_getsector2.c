@@ -17,7 +17,7 @@ extern CdCallback g_CdReadyCallback asm("D_80099040");
 extern u_char g_CdSyncStatus asm("D_80099318");
 extern u_char g_CdReadyStatus asm("D_80099319");
 extern u_char g_CdSyncResult[] asm("D_8009BAF0");
-extern u_char g_CdReadyResult[] asm("D_8009BAF8");
+extern u_char g_CdReadyResult[];
 
 long CdReadInterruptStatus(void);
 

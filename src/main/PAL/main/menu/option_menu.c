@@ -7,15 +7,15 @@
 #include "game/menu.h"
 
 typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
-extern s32 g_OptionMenuCursor asm("D_8019C7B4");
+extern s32 g_OptionMenuCursor;
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
 void DrawMenuCursorArrow(s32 arg0, s32 arg1);
-extern s32 g_SoundOptionCursor asm("D_8019C868");
-extern s32 g_ClassRecordMenuCursor asm("D_8019C97C");
-extern s32 g_ScreenOffsetX asm("D_801E4B8C");
-extern s32 g_ScreenOffsetY asm("D_801E4B9C");
-extern s32 g_ScreenOffsetEditX asm("D_801E4D68");
+extern s32 g_SoundOptionCursor;
+extern s32 g_ClassRecordMenuCursor;
+extern s32 g_ScreenOffsetX;
+extern s32 g_ScreenOffsetY;
+extern s32 g_ScreenOffsetEditX;
 extern DVec D_8007D5A8[];
 extern Rgb D_8007D658[];
 extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
@@ -35,12 +35,12 @@ void DrawClassRecordGrid(void);
 void DrawClassRecordDetail(void);
 void DrawClassRecordDetail(void);
 extern s32 g_ScreenOffsetEditX;
-extern s32 g_ScreenOffsetEditY asm("D_801E4D6C");
+extern s32 g_ScreenOffsetEditY;
 s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 AddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-extern s32 g_MonoOutput asm("D_801E6C70");
-extern s32 g_BgmVolumeSetting asm("D_8019C704");
-extern s32 g_SfxVolumeSetting asm("D_801E8A50");
+extern s32 g_MonoOutput;
+extern s32 g_BgmVolumeSetting;
+extern s32 g_SfxVolumeSetting;
 void DrawOptionHintBar(s32 arg0);
 s32 func_8001705C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 /* One volume slider row: `level` filled 4x0x18 bars between two end glyphs. */

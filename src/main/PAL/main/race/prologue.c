@@ -14,15 +14,15 @@ typedef struct UnkEventPair {
     s16 carIndex;
 } UnkEventPair;
 
-extern s32 g_AttractDemoStep asm("D_801E682C");
-extern u32 g_StreamReturnScene asm("D_8019C760");
+extern s32 g_AttractDemoStep;
+extern u32 g_StreamReturnScene;
 extern void (*g_AttractDemoSteps[])(void) asm("D_8007D6D0");
 void ResetAssetLoader(void);
 void ReturnToTitleScene(void);
 /* Deliberately raw: see docs/names.md 12d. */
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
-extern s32 g_PrologueStep asm("D_801E4178");
-extern s32 g_PrologueCutIndex asm("D_801E6824");
+extern s32 g_FrameSyncThreshold;
+extern s32 g_PrologueStep;
+extern s32 g_PrologueCutIndex;
 extern u8 g_TextNowLoading[] asm("D_80011010");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void InitTrackScene(void);
@@ -39,8 +39,8 @@ void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 void RequestSelectBgmAssets(void);
-extern u32 g_CameraViewMode asm("D_8009E870");
-extern u8 g_CarTrackSection[] asm("D_801F18CC");
+extern u32 g_CameraViewMode;
+extern u8 g_CarTrackSection[];
 extern UnkEventPair g_PrologueCameraCuts[] asm("D_8007D74C");
 void ExitPrologue(void);
 void DrawPrologueText(void);

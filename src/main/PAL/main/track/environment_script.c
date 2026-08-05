@@ -12,23 +12,23 @@ typedef struct Cmd {
     u16 unk2E;
 } Cmd;
 
-extern u8 g_EnvScriptEnabled asm("D_8019C8F4");
-extern s32 g_EnvScriptClock asm("D_8019C8FC");
-extern s32 g_EnvScriptLength asm("D_8019C774");
+extern u8 g_EnvScriptEnabled;
+extern s32 g_EnvScriptClock;
+extern s32 g_EnvScriptLength;
 
 /* Next cue of g_EnvScriptCues due to fire; wraps back to the head when the
  * record it lands on has a negative id (the terminator). */
 extern Cmd *g_EnvScriptCursor asm("D_801E40E8");
-extern u32 *g_EnvScriptCues asm("D_801E42F4");
+extern u32 *g_EnvScriptCues;
 
-extern s16 g_EnvFogEnabled asm("D_801E3FB4");
+extern s16 g_EnvFogEnabled;
 /* The three bytes of the packed slot-0 colour g_EnvColors[0].cur, addressed
  * individually because SetFarColor takes R, G and B separately. The cast is
  * what the byte view costs: render.h is included here, so this TU cannot
  * redeclare D_801E3FB6 as u8[] under a second name. g_EnvSpare is the fourth,
  * unused byte of the same word. */
 #define ENV_FOG_RGB ((u8 *)g_EnvColors)
-extern u8 g_EnvSpare asm("D_801E3FB9");
+extern u8 g_EnvSpare;
 
 /* LerpEnvColor works in bytes, so the eight lerps below address the slots
  * of g_EnvColors through one byte cursor `pp` = &g_EnvColors[0].from. Slot
@@ -37,14 +37,14 @@ extern u8 g_EnvSpare asm("D_801E3FB9");
 #define ENV_FROM(k) (pp + 0x0C * (k))
 #define ENV_TO(k) (pp + 0x0C * (k) + 4)
 
-extern s16 g_EnvLerpFrame asm("D_801E4022");
-extern s16 g_EnvLerpDuration asm("D_801E4024");
-extern s16 g_EnvironmentMode asm("D_801E4026");
-extern s16 g_EnvSpareLerp asm("D_801E4028");
-extern s16 g_EnvSpareFrom asm("D_801E402A");
-extern s16 g_EnvSpareTo asm("D_801E402C");
-extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
-extern u8 *g_EnvPaletteTable asm("D_801E4140");
+extern s16 g_EnvLerpFrame;
+extern s16 g_EnvLerpDuration;
+extern s16 g_EnvironmentMode;
+extern s16 g_EnvSpareLerp;
+extern s16 g_EnvSpareFrom;
+extern s16 g_EnvSpareTo;
+extern s32 g_EnvironmentModePrev;
+extern u8 *g_EnvPaletteTable;
 /* The 16-entry sky CLUT staged here and uploaded through the (0xE0, 0x1E6)
  * 16x1 VRAM rect. It MUST keep the raw D_ spelling: LA_ORDERED stringifies the
  * symbol into an inline-asm `la`, which does not follow asm() labels. */
@@ -52,7 +52,7 @@ extern s16 D_801E6DA4[];
 
 /* GTE fog-near distance, ramped +-0xFA a frame: up to 0x7FFF (clear) in
  * environment mode 2, down to 0x1770 (hazy) in every other mode. */
-extern s32 g_FogNear asm("D_8009B24C");
+extern s32 g_FogNear;
 
 /* Deliberately unprototyped: the seek path also leaves the cue duration and
  * clamped frame in a1/a2, while the normal update path passes only the cue. */

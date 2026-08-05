@@ -8,11 +8,11 @@
 #include "game/cd.h"
 void UpdateAttractCars(void);
 
-extern s32 g_BgmSelectStep asm("D_8019C99C");
+extern s32 g_BgmSelectStep;
 extern void (*g_BgmSelectSteps[])(void) asm("D_8007D6B8");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
-extern s32 g_AttractDemoStep asm("D_801E682C");
+extern s32 g_FrameSyncThreshold;
+extern s32 g_AttractDemoStep;
 void UploadImageAsset(void *arg0);
 void InstallCourseAssets(void);
 s32 RequestTrackDataAssets(void);
@@ -40,9 +40,9 @@ extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
 void InitTrackScene(void);
 void AdvanceBgmShuffleBag(s32 arg0);
 void DrawAttractTitle(void);
-extern u32 g_StreamReturnScene asm("D_8019C760");
-extern u32 g_CameraViewMode asm("D_8009E870");
-extern u8 g_CarTrackSection[] asm("D_801F18CC");
+extern u32 g_StreamReturnScene;
+extern u32 g_CameraViewMode;
+extern u8 g_CarTrackSection[];
 void DrawFullscreenFadeTile(s32 arg0, u32 arg1);
 void ReturnToTitleScene(void);
 s32 CycleAttractCameraCar(u32 arg0, s32 arg1);

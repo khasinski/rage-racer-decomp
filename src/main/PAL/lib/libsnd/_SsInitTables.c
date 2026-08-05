@@ -4,9 +4,9 @@
 
 extern u_short g_SndVoiceRegDefaults[] asm("D_8009A528");
 extern u_short g_SndSpuCtrlDefaults[] asm("D_8009A538");
-extern long g_SndTickResolution asm("D_801E6C6C");
-extern long g_SndSeqOpenMask asm("D_801E4B80");
-extern long g_SndUpdateLock asm("D_801E40AC");
+extern long g_SndTickResolution;
+extern long g_SndSeqOpenMask;
+extern long g_SndUpdateLock;
 extern long g_SndMarkCallbacks[][0x10] asm("D_801E7A58");
 
 void SpuVmInit(long arg0);

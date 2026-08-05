@@ -18,7 +18,7 @@ extern NegconUvTemplate D_80010070;
 /* "Steer play." */
 extern char D_80010078[];
 
-extern u8 *g_DrawBuffer asm("D_8019C900");
+extern u8 *g_DrawBuffer;
 /* The 0..3 steering-play setting this screen edits. */
 extern s16 g_NegconSteerPlay asm("D_8019CAD0");
 /* Play in hundredths of a degree per setting; the gauge marks scale from it. */
@@ -116,11 +116,11 @@ void DrawNegconSteerPlayScreen(void) {
 
 extern u8 g_PadType asm("D_801E4369");
 /* Its backup, taken by BeginNegconCalibration. */
-extern u16 g_NegconSteerPlaySaved asm("D_8019C75C");
+extern u16 g_NegconSteerPlaySaved;
 /* The arrow pulse angle the setup screens advance every frame. */
 extern s32 g_SetupArrowPulse asm("D_8007C13C");
 /* One of the four controller-screen animation counters. */
-extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
+extern s32 g_ControllerSceneAngleX;
 
 void DrawOptionHintBar(s32 arg0);
 
@@ -206,7 +206,7 @@ void DrawNegconMaxTwistScreen(void) {
 }
 
 /* Its backup, taken by BeginNegconCalibration. */
-extern u16 g_NegconMaxTwistSaved asm("D_8019CB04");
+extern u16 g_NegconMaxTwistSaved;
 
 /*
  * Game mode 11: pick the maximum twist range with left/right, confirm with

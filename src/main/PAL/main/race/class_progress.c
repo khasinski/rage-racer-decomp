@@ -4,8 +4,8 @@
 #include "game/car.h"
 #include "game/state.h"
 
-extern s32 g_PrizeAmount asm("D_801F17B0");
-extern s32 g_PromotionBonus asm("D_8019CE0C");
+extern s32 g_PrizeAmount;
+extern s32 g_PromotionBonus;
 extern u8 g_CaptionPrizeMoney[] asm("D_80010E30");
 extern u8 g_FmtMoney[] asm("D_80010E34");
 extern u8 g_CaptionTotalMoney[] asm("D_80010E38");
@@ -13,8 +13,8 @@ extern u8 g_CaptionPromotionBonus[] asm("D_80010E40");
 void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
 void LibcSprintf(void *dst, void *fmt, s32 val) asm("func_800632F0");
 extern s32 g_CourseProgress asm("D_8009E67C");
-extern s32 g_ClassClearFanfareTimer asm("D_801E4D0C");
-extern s32 g_ClassCompleted asm("D_801E4B94");
+extern s32 g_ClassClearFanfareTimer;
+extern s32 g_ClassCompleted;
 /*
  * Two split symbols of g_ClassRecords, unlocked out of sequence: finishing
  * class 4 of the first series opens entry 6 (the advanced series' first
@@ -22,13 +22,13 @@ extern s32 g_ClassCompleted asm("D_801E4B94");
  * last class) is what finally opens entry 5, the first series' sixth class.
  * g_ClassClears is &g_ClassRecords[0].clears, the second halfword.
  */
-extern s16 g_ClassRecord6 asm("D_8019CB58");
-extern s16 g_ClassRecord5 asm("D_8019CB54");
+extern s16 g_ClassRecord6;
+extern s16 g_ClassRecord5;
 extern GameScoreRecord g_ClassRecords[] asm("D_8019CB40");
-extern GameScoreRecord g_ClassClears[] asm("D_8019CB42");
-extern s32 g_ClassResultPlace asm("D_8019C7C4");
-extern s32 g_SeriesCleared asm("D_8019C8EC");
-extern s32 g_ClassPromoted asm("D_801E419C");
+extern GameScoreRecord g_ClassClears[];
+extern s32 g_ClassResultPlace;
+extern s32 g_SeriesCleared;
+extern s32 g_ClassPromoted;
 s32 GetCarUnlockLevel(s32 model);
 s32 ComputeClassGrade(void);
 void UpdateBgmTrackCount(void);
@@ -37,11 +37,11 @@ void ResetCourseProgress(s32 arg0);
 void BeginEndingFmv(s32 arg0);
 void BeginClassFmv(s32 arg0);
 /* Deliberately raw: see docs/names.md 12d. */
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
-extern s32 g_PrizeScreenState asm("D_8019CB74");
-extern s32 g_PrizeAmount asm("D_801F17B0");
-extern s32 g_PrizeCountStep asm("D_801E6DA0");
-extern s32 g_BonusCountStep asm("D_801E6C78");
+extern s32 g_FrameSyncThreshold;
+extern s32 g_PrizeScreenState;
+extern s32 g_PrizeAmount;
+extern s32 g_PrizeCountStep;
+extern s32 g_BonusCountStep;
 /* &g_PrizeMoney[0][0][2], i.e. the third-place column; the prize counter's
  * step is that figure divided by 80. */
 extern s32 g_PrizeMoney3rd[][6][3] asm("D_8007BEF4");

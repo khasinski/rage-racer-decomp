@@ -24,7 +24,7 @@ extern volatile u8 g_SndVoiceFlags[] asm("D_8009E0A0");
  * (`g_VabIds[slot]`), and the callers that only ever use the first bank read
  * `g_VabIds[0]`.
  */
-extern s16 g_VabIds[] asm("D_801E6CA8");
+extern s16 g_VabIds[];
 
 void SetSequenceVolume(s32 volume);
 void RefreshSequenceVolumeScale(void);

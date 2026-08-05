@@ -2,7 +2,7 @@
 #include "game/race.h"
 
 extern s16 g_PlayerLap asm("D_8009E83C");
-extern s32 g_LapCount asm("D_801E4364");
+extern s32 g_LapCount;
 extern u8 g_BestTotalTimes[] asm("D_8019C70C");
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);

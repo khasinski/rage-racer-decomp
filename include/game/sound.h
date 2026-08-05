@@ -54,8 +54,8 @@ extern EffectVoice g_EffectVoices[] asm("D_801E6D30");
 /* Scalar control block at 0x6D80. Retail addresses these individually by
  * symbol, never base+index, so they stay independent externs. */
 extern s32 D_801E6D80; /* +0x00 */
-extern s32 g_ReverbDepthL asm("D_801E6D84"); /* reverb depth left  */
-extern s32 g_ReverbDepthR asm("D_801E6D88"); /* reverb depth right */
+extern s32 g_ReverbDepthL; /* reverb depth left  */
+extern s32 g_ReverbDepthR; /* reverb depth right */
 /* Per-frame step added to g_ReverbDepthL/R by UpdateSequenceFadeOut; -3
  * while a BGM fade-out runs, 0 when it has finished. Kept on the raw spelling
  * because ForceBasicEffectVoicesEnabled also uses &D_801E6D8C as the end
@@ -63,10 +63,10 @@ extern s32 g_ReverbDepthR asm("D_801E6D88"); /* reverb depth right */
 extern s32 g_ReverbFadeStep asm("D_801E6D8C");
 /* libsnd access number of the open SEQ, returned by SsSeqOpen in
  * OpenVabSequenceSlot; the `seq` handle for SsSeqPlay/Stop/SetVol. */
-extern s16 g_SeqHandle asm("D_801E6D90");
-extern s32 g_SeqVolume asm("D_801E6D94"); /* current SEQ volume, also read as s16 */
-extern s32 g_SeqVolumeSetting asm("D_801E6D98"); /* 0..15 OPTIONS level; volume = n * 114 / 15 */
-extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C"); /* step added to g_SeqVolume each frame; -4 while fading out */
+extern s16 g_SeqHandle;
+extern s32 g_SeqVolume; /* current SEQ volume, also read as s16 */
+extern s32 g_SeqVolumeSetting; /* 0..15 OPTIONS level; volume = n * 114 / 15 */
+extern s32 g_SeqVolumeFadeStep; /* step added to g_SeqVolume each frame; -4 while fading out */
 extern s32 g_PrizeCountStep; /* +0x20 */
 extern s16 D_801E6DA4[]; /* +0x24 s16 table */
 

@@ -87,7 +87,7 @@ u_long BiosNextFile[4] __attribute__((section(".text"))) = {
     0,
 };
 
-extern u32 g_RandomSeed asm("D_8009B9A8");
+extern u32 g_RandomSeed;
 
 /* The game's own PRNG, not SDK code: it keeps common.h's typedefs to agree
  * with its declaration in game/random.h. */

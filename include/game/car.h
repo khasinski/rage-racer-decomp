@@ -165,7 +165,7 @@ typedef struct GameCarRuntimeProgressWindow {
 
 /* The four contenders ordered by race progress (`field_68 + field_6C`), best
  * first; re-sorted every frame by RankContenders to rubber-band the AI. */
-extern GameCarRuntime *g_RankedCars[4] asm("D_801E40BC");
+extern GameCarRuntime *g_RankedCars[4];
 
 /* Active car-entry table; repointed at one of the three 13-entry tables below
  * per title-menu row, so it is a pointer rather than a fixed array. */
@@ -174,20 +174,20 @@ extern GameCarEntry *g_CarTable asm("D_8019C7C8");
 /* The three saved car-entry tables, one per title-menu race row (0 GRAND PRIX,
  * 1 EXTRA GRAND PRIX, 2 TIME ATTACK); save block +0x50 / +0xC0 / +0x128. The
  * shops raise the Time Attack row to the best spec reached in either GP file. */
-extern GameCarEntry g_GrandPrixCars[] asm("D_801E4F44");
-extern GameCarEntry g_ExtraGrandPrixCars[] asm("D_8019C914");
-extern GameCarEntry g_TimeAttackCars[] asm("D_801E4388");
+extern GameCarEntry g_GrandPrixCars[];
+extern GameCarEntry g_ExtraGrandPrixCars[];
+extern GameCarEntry g_TimeAttackCars[];
 
 /* g_Cars index the replay / attract camera is following. */
-extern s32 g_CameraCarIndex asm("D_8009E66C");
+extern s32 g_CameraCarIndex;
 
 /* Index into g_CarTable of the car the player drives; selects the model and
  * texture pack to install. Distinct from g_CarListCursor (names.md 3). */
-extern s32 g_PlayerCarIndex asm("D_801E40D4");
+extern s32 g_PlayerCarIndex;
 
 /* Cursor of the car list being browsed in the shop; steps to the next entry
  * with `enabled == 0`. Buying it copies it into g_PlayerCarIndex. */
-extern s32 g_CarListCursor asm("D_801E4B88");
+extern s32 g_CarListCursor;
 
 /* Index of each car model's first grade in the 32-entry asset list; thirteen
  * entries, one per model. GetCarAssetIndex adds the owned grade to it. */
@@ -237,7 +237,7 @@ typedef struct GameCarSpec {
     u8 needleColorAlt[4]; /* +0x158 */
 } GameCarSpec;
 
-extern GameCarSpec *g_CarSpec asm("D_801E42D8");
+extern GameCarSpec *g_CarSpec;
 
 /* Per-gear torque curve, one 16-entry row per gear: row 0 is the engine's own
  * curve, rows 1..6 are it divided by each gear's ratio. */
@@ -245,7 +245,7 @@ typedef struct GearCurveRow {
     s32 values[16];
 } GearCurveRow;
 
-extern GearCurveRow g_GearTorqueCurve[] asm("D_801E8884");
+extern GearCurveRow g_GearTorqueCurve[];
 
 /* Drivetrain / input block at `car->field_BC`; the physics code addresses the
  * car's second half through this rather than through GameCarRuntime.

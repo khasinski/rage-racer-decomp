@@ -2,17 +2,17 @@
 
 #include "common.h"
 
-extern u_char g_SndVoiceStateNote[] asm("D_8009E0C4");
-extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
-extern u_char g_SndVoiceStateProg[] asm("D_8009E0CA");
-extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
-extern u_char g_SndVoiceStateVabId[] asm("D_8009E0CE");
-extern u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
+extern u_char g_SndVoiceStateNote[];
+extern u_char g_SndVoiceStateSeqSep[];
+extern u_char g_SndVoiceStateProg[];
+extern u_char g_SndVoiceStateTone[];
+extern u_char g_SndVoiceStateVabId[];
+extern u_char g_SndVoiceRegsPitch[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
-extern u_char *g_SndCurrentToneTable asm("D_801E416C");
-extern u_short g_SndCurrentVoice asm("D_801E4BEA");
-extern u_char g_SndCurrentTone asm("D_801E4BDC");
+extern u_char g_SndCurrentProgActual;
+extern u_char *g_SndCurrentToneTable;
+extern u_short g_SndCurrentVoice;
+extern u_char g_SndCurrentTone;
 
 long SpuVmCalculateTonePitch(long arg0, long arg1);
 

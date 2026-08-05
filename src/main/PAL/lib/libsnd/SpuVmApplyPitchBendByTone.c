@@ -2,8 +2,8 @@
 
 #include "common.h"
 
-extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
-extern short g_SndCurrentSeqSep asm("D_801E4BE6");
+extern volatile u_char g_SndVoiceCount;
+extern short g_SndCurrentSeqSep;
 
 void SpuVmVSetUp(long arg0, long arg1);
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg4);

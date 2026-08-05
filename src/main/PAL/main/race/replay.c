@@ -62,21 +62,21 @@ typedef struct MenuSmallFrame {
     s16 field44;
 } MenuSmallFrame;
 
-extern u16 g_ReplayPlayerModel asm("D_801E4D8C");
-extern u16 g_ReplayRivalModel asm("D_801E4BC0");
-extern MenuBigFrame *g_ReplayFramesGp asm("D_8009F0A4");
-extern u8 *g_ReplayFramesTimeAttack asm("D_8019C7A4");
-extern s32 g_ReplayWriteCursor asm("D_801E4BB0");
-extern s32 g_ReplayFrameCount asm("D_8019CB6C");
-extern s32 g_ReplayBufferWrapped asm("D_8009EC8C");
+extern u16 g_ReplayPlayerModel;
+extern u16 g_ReplayRivalModel;
+extern MenuBigFrame *g_ReplayFramesGp;
+extern u8 *g_ReplayFramesTimeAttack;
+extern s32 g_ReplayWriteCursor;
+extern s32 g_ReplayFrameCount;
+extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar asm("D_8009E6D4");
 void StoreReplayCarFrame(s32 arg0, u8 *arg1, u8 *arg2);
 void StoreReplayTimeAttackFrame(s32 arg0, u8 *arg1);
-extern s32 g_ReplayReadCursor asm("D_801F179C");
-extern u8 *g_EnvScriptClock asm("D_8019C8FC");
+extern s32 g_ReplayReadCursor;
+extern u8 *g_EnvScriptClock;
 void func_800458CC(void *arg0);
 void SeedReplayCars(void);
-extern s32 g_SeriesCleared asm("D_8019C8EC");
+extern s32 g_SeriesCleared;
 s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(s32 arg0, s32 arg1, s32 arg2);
 

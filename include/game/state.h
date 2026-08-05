@@ -9,7 +9,7 @@ extern s32 g_MainState asm("D_8007C704");
 
 /* Current top-level game mode; indexes g_GameModeHandlers, dispatched each
  * frame by UpdateOptionScene. Distinct from g_MainState (the scene dispatcher). */
-extern s32 g_GameMode asm("D_8019CB14");
+extern s32 g_GameMode;
 extern void (*g_GameModeHandlers[])(void) asm("D_8007D67C");
 
 /* MainLoop is the PS-EXE `main` and never returns: init chain, then an
@@ -61,7 +61,7 @@ void BeginControllerConfig(void) asm("func_800153FC");
 
 /* Identity of the running scene: queried (`== 0xC`, `== 0x11`, `== 0x1E`, ...)
  * but never dispatched. Every writer also resets g_SceneTimer. */
-extern s32 g_SceneId asm("D_801E42E4");
+extern s32 g_SceneId;
 
 /* Per-scene frame counter, reset with every g_SceneId write. Scenes sequence
  * themselves against fixed thresholds. Four TUs need it as u32 and carry their

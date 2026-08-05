@@ -246,9 +246,9 @@ void ScrollTeamLogoDown(void);
 void ScrollTeamLogoLeft(void);
 void ScrollTeamLogoRight(void);
 void FlipTeamLogoVertical(void);
-extern u16 g_PadHeld asm("D_801E436A");
-extern u16 g_PadEdge asm("D_801E4370");
-extern u16 g_PadEdge2 asm("D_801E436E");
+extern u16 g_PadHeld;
+extern u16 g_PadEdge;
+extern u16 g_PadEdge2;
 extern u8 D_8007F930;
 extern s32 D_8007F934;
 extern s32 D_8007F938;
@@ -853,7 +853,7 @@ void DrawMenuLightBurst(s32 arg) {
     }
 }
 
-extern s32 g_CourseIndex asm("D_801E428C");
+extern s32 g_CourseIndex;
 
 typedef union {
     s32 value;

@@ -2,7 +2,7 @@
 #include "psyq/snd.h"
 
 extern u_char *g_SndSeqTable[] asm("D_801E79CC");
-extern u_long g_SndTickResolution asm("D_801E6C6C");
+extern u_long g_SndTickResolution;
 extern char g_MsgSeqNotSeqData[] asm("D_80013BD4");
 extern char g_MsgSeqOldFormat[] asm("D_80013BEC");
 

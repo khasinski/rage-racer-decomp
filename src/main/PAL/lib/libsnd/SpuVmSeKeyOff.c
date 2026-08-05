@@ -3,11 +3,11 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[];
 extern u_short D_8009E670;
 extern u_short D_8009E674;
 extern u_short *g_SndSpuRegs asm("D_8009A588");
-extern u_char g_SndVoiceCount asm("D_801E42F8");
+extern u_char g_SndVoiceCount;
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 extern u_short D_801F2A08;
 extern u_short D_801F2A0C;

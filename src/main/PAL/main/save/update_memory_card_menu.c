@@ -4,30 +4,30 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 
-extern s32 g_McSlotUsedMask asm("D_8009B564");
-extern GameSaveHeaderRow g_McSaveHeaders[] asm("D_8009B568");
-extern s32 g_McNoCardTicks asm("D_8009B6E8");
-extern s32 g_McErrorTicks asm("D_8009B6F0");
-extern s32 g_McLastMenuState asm("D_8009B6F4");
-extern s32 g_McActionOk asm("D_8009B6F8");
-extern s32 g_McSettleTicks asm("D_8009B6FC");
-extern s32 g_McCardOkFrames asm("D_8009B700");
-extern s32 g_McActionElapsed asm("D_8009B704");
-extern s32 g_McSavedLoadPhase asm("D_8009B718");
+extern s32 g_McSlotUsedMask;
+extern GameSaveHeaderRow g_McSaveHeaders[];
+extern s32 g_McNoCardTicks;
+extern s32 g_McErrorTicks;
+extern s32 g_McLastMenuState;
+extern s32 g_McActionOk;
+extern s32 g_McSettleTicks;
+extern s32 g_McCardOkFrames;
+extern s32 g_McActionElapsed;
+extern s32 g_McSavedLoadPhase;
 /* Volatile aliases of three game/menu.h globals, NOT extra objects: this file
  * reads each of them both ways, and only the volatile spelling forces the
  * reload the retail code has at those few sites. A redeclaration cannot add the
  * qualifier (gcc 2.6.3 keeps the first declaration's type), so the alias needs
  * its own identifier. */
 extern volatile s32 g_McCardStatusV asm("D_8009B720");
-extern volatile s32 g_McMenuSubState asm("D_8009B72C");
-extern s32 g_McFromLoadMenu asm("D_8009B730");
-extern s32 g_McSaveMode asm("D_8009B734");
-extern s32 g_McFreeBlocks asm("D_8009B73C");
-extern volatile s32 GameMenuLoadPhase asm("D_8009B740");
-extern s32 g_McMenuRowCount asm("D_8009B744");
-extern s32 g_McFadeStep asm("D_8009B9A0");
-extern s32 g_McFadeLevel asm("D_8009B9A4");
+extern volatile s32 g_McMenuSubState;
+extern s32 g_McFromLoadMenu;
+extern s32 g_McSaveMode;
+extern s32 g_McFreeBlocks;
+extern volatile s32 GameMenuLoadPhase;
+extern s32 g_McMenuRowCount;
+extern s32 g_McFadeStep;
+extern s32 g_McFadeLevel;
 extern s32 g_McMenuPage asm("D_80082F50");
 extern s32 g_McMenuRowCursor asm("D_80082F54");
 extern s32 g_McSlotCursor asm("D_80082F58");

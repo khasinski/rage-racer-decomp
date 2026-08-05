@@ -8,7 +8,7 @@ extern s32 g_AssetLoadState asm("D_8007BED8");
 
 /* The asset sub-block currently being installed: `assetBase + <header offset>`,
  * then handed to UploadImageAsset / UploadImageBlock. */
-extern u8 *g_AssetBlockPtr asm("D_801F17A8");
+extern u8 *g_AssetBlockPtr;
 
 /*
  * CD path of every loadable asset, 135 entries indexed by assetIndex:
@@ -32,14 +32,14 @@ typedef struct GameCdLoadEntry {
 
 /* Disc location + size of every asset, one per g_AssetPaths[] slot, read from
  * the "\RAGE.BIN;1" index by LoadDiscArchiveIndex and rebased onto its LBA. */
-extern GameCdLoadEntry g_AssetCdEntries[] asm("D_801E6834");
+extern GameCdLoadEntry g_AssetCdEntries[];
 
 /* The same for the 11 streams in "\RAGE.STR;1"; BeginClassFmv picks
  * `1 + class` in the first series and `5 + class` in the advanced one. */
 extern GameCdLoadEntry g_StreamCdEntries[] asm("D_8007C6A8");
 
 /* Boot CD scratch buffer: the RAGE.BIN index first, then asset 0. */
-extern s32 g_LoadBuffer[] asm("D_8009F0B8");
+extern s32 g_LoadBuffer[];
 
 typedef struct GameCarModelAsset {
     u8 pad0[0x20];

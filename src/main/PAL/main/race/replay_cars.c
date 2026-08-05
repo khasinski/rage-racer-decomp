@@ -6,13 +6,13 @@
 
 extern s32 g_PlayerCar asm("D_8009E6D4");
 
-extern s32 g_PlayerTrackPoint asm("D_8009E704");
+extern s32 g_PlayerTrackPoint;
 
 
-extern s32 g_ReplayReadCursor asm("D_801F179C");
+extern s32 g_ReplayReadCursor;
 
 
-extern s32 g_Car0TrackPoint asm("D_801F1884");
+extern s32 g_Car0TrackPoint;
 
 void ApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2);
 
@@ -40,9 +40,9 @@ typedef struct TrackZone {
 
 
 
-extern s16 g_TrackZoneCode asm("D_8019CE34");
+extern s16 g_TrackZoneCode;
 
-extern s16 g_ReverbZoneDepth asm("D_8019C78C");
+extern s16 g_ReverbZoneDepth;
 
 extern s16 g_TrackZoneDark asm("D_8019CAB0");
 
@@ -69,7 +69,7 @@ extern s16 g_PlayerLap asm("D_8009E83C");
 
 
 
-extern s32 g_LapCount asm("D_801E4364");
+extern s32 g_LapCount;
 
 extern s32 g_BestLapThisRace asm("D_801E4BCC");
 

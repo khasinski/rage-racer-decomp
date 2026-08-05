@@ -27,9 +27,9 @@ extern s32 g_OrbitCameraDistance asm("D_8007F618");
  * position -- the record is a union keyed on `node->mode`. */
 /* The offset triples, each padded to 16 bytes: delta at 0x8009B1B8, start at
  * +0x10, current at +0x20. Indices 0/1/2 are x/y/z. */
-extern s32 g_CamPathOffsetDelta[3] asm("D_8009B1B8");
-extern s32 g_CamPathOffsetStart[3] asm("D_8009B1C8");
-extern s32 g_CamPathOffset[3] asm("D_8009B1D8");
+extern s32 g_CamPathOffsetDelta[3];
+extern s32 g_CamPathOffsetStart[3];
+extern s32 g_CamPathOffset[3];
 /* The orientation quads, same three-group shape as the offsets: delta at
  * 0x8009B1E8, start at +0x10, current at +0x20. Elements 0..2 are pitch, yaw
  * and roll -- 12-bit angles, wrapped to +-0x800 on load and masked with 0xFFF
@@ -38,37 +38,37 @@ extern s32 g_CamPathOffset[3] asm("D_8009B1D8");
 #define CAMPATH_YAW 1
 #define CAMPATH_ROLL 2
 #define CAMPATH_DIST 3
-extern s32 g_CamPathAngleDelta[4] asm("D_8009B1E8");
-extern s32 g_CamPathAngleStart[4] asm("D_8009B1F8");
-extern s32 g_CamPathAngle[4] asm("D_8009B208");
+extern s32 g_CamPathAngleDelta[4];
+extern s32 g_CamPathAngleStart[4];
+extern s32 g_CamPathAngle[4];
 /* Same word as g_CamPathAngleDelta[CAMPATH_YAW]. Mode 1 reuses it for the chase
  * camera's yaw carried over from the previous frame, which the quad name would
  * misdescribe, so the mode-1 code below keeps the raw spelling and only the
  * mode-3 half goes through the array. (Section 18d left the whole slot raw.) */
 extern s32 D_8009B1EC;
 /* Camera mode the previous frame ran (0..5); every case ends by writing it. */
-extern u8 g_CameraModePrev asm("D_8009B218");
+extern u8 g_CameraModePrev;
 /* Mode-1 chase smoothing. The target is the car heading; the camera walks
  * towards it by a quadratic ramp (ramp += 8 each frame, step = ramp^2/damping),
  * clamped to g_ChaseYawStepLimit. Damping falls from ~222 at rest to 1 at top
  * speed, i.e. the camera snaps to the car the faster it goes. */
-extern s32 g_ChaseTargetYaw asm("D_8009B21C");
-extern s32 g_ChaseYaw asm("D_8009B220");
-extern s32 g_ChaseYawLag asm("D_8009B224");
-extern s32 g_ChaseYawRampNeg asm("D_8009B228");
-extern s32 g_ChaseYawRampPos asm("D_8009B22C");
-extern s32 g_ChaseYawStepLimit asm("D_8009B230");
-extern s32 g_ChaseYawStep asm("D_8009B234");
-extern s32 g_ChaseYawDamping asm("D_8009B238");
-extern s32 g_ChaseCarSpeed asm("D_8009B23C");
+extern s32 g_ChaseTargetYaw;
+extern s32 g_ChaseYaw;
+extern s32 g_ChaseYawLag;
+extern s32 g_ChaseYawRampNeg;
+extern s32 g_ChaseYawRampPos;
+extern s32 g_ChaseYawStepLimit;
+extern s32 g_ChaseYawStep;
+extern s32 g_ChaseYawDamping;
+extern s32 g_ChaseCarSpeed;
 /* Track-camera node nearest the followed car this frame; a change arms the
  * mode-3 / mode-4 hand-over. g_CamPathNode is the node being eased towards and
  * g_CamPathFrame the elapsed frames of that ease. */
-extern s32 g_CameraNodeIndex asm("D_8009B240");
-extern s32 g_CamPathFrame asm("D_8009B244");
-extern s32 g_CamPathNode asm("D_8009B248");
+extern s32 g_CameraNodeIndex;
+extern s32 g_CamPathFrame;
+extern s32 g_CamPathNode;
 extern s32 g_PlayerCar asm("D_8009E6D4");
-extern u8 *g_TrackCameras asm("D_8019C7CC");
+extern u8 *g_TrackCameras;
 
 /*
  * Camera-mode state machine: `cameraModeSel` selects among the camera behaviours
@@ -661,8 +661,8 @@ block_52:
 /* Deliberately raw: the environment script header word 0 is stored here and
  * never read anywhere in the image (docs/names.md 15g). */
 extern u32 D_801E4D84;
-extern u32 *g_EnvScriptCues asm("D_801E42F4");
-extern u32 g_EnvScriptLength asm("D_8019C774");
+extern u32 *g_EnvScriptCues;
+extern u32 g_EnvScriptLength;
 
 void SetEnvironmentScript(u32 *arg0);
 void SetEnvironmentScript(u32 *arg0) {

@@ -6,11 +6,11 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-extern s32 g_CameraCarHeading asm("D_801E3EB4");
-extern s32 g_CameraCarSpeed asm("D_801E3EB8");
-extern s32 g_CameraCarSpeedRamp asm("D_801E3EBC");
-extern s32 g_CameraCarStepX asm("D_801E3ED8");
-extern s32 g_CameraCarStepZ asm("D_801E3EE0");
+extern s32 g_CameraCarHeading;
+extern s32 g_CameraCarSpeed;
+extern s32 g_CameraCarSpeedRamp;
+extern s32 g_CameraCarStepX;
+extern s32 g_CameraCarStepZ;
 extern s16 g_FreeCameraAngleOffset[] asm("D_8007E288");
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 extern s32 g_PlayerProgressA asm("D_8009E73C");
@@ -158,7 +158,7 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     SetCameraRotMatrix();
 }
 
-extern s32 g_CourseModelCount asm("D_801E40E4");
+extern s32 g_CourseModelCount;
 extern s32 g_StartGridSceneryAngle[] asm("D_8007E2B8");
 extern struct {
     s16 x;
@@ -229,7 +229,7 @@ void ResetFreeLookCamera(void) {
 extern Vec4 g_AnimSceneryPos[] asm("D_8007E2C0");
 extern u32 *g_VisibleCellMask asm("D_801E6828");
 extern s16 g_AnimSceneryFrame asm("D_8007E2EA");
-extern s32 g_RacePaused asm("D_801E4BAC");
+extern s32 g_RacePaused;
 extern s32 g_AnimSceneryTint asm("D_8007E2E4");
 extern s16 g_AnimSceneryRacePosition asm("D_8007E2E8");
 extern s16 g_AnimSceneryVariant asm("D_8009AFCC");

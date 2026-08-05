@@ -6,9 +6,9 @@ extern s32 g_CdTrackPending asm("D_8007F600");
 extern s32 g_CdCommandPending asm("D_8007F604");
 extern s32 g_CdTrackStep asm("D_8007F608");
 extern s32 g_CdCommandStep asm("D_8007F60C");
-extern u8 g_CdVolume asm("D_8009B194");
-extern u8 g_CdCurrentTrack asm("D_8009B1B0");
-extern s32 g_CdFadeFrames asm("D_8009B1B4");
+extern u8 g_CdVolume;
+extern u8 g_CdCurrentTrack;
+extern s32 g_CdFadeFrames;
 extern CdlLOC g_CdTrackLocs[] asm("D_8009AFD4");
 
 s32 func_8006A534(s32 arg0, s32 arg1);

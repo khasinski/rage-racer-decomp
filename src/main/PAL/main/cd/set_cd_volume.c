@@ -3,15 +3,15 @@
 
 extern s32 g_CdMixPreset asm("D_8007F5FC");
 extern u8 g_CdMixPresets[] asm("D_8007F5A8");
-extern u8 g_CdVolume asm("D_8009B194");
-extern s32 g_CdMixFullLL asm("D_8009B184");
-extern s32 g_CdMixFullLR asm("D_8009B188");
-extern s32 g_CdMixFullRR asm("D_8009B18C");
-extern s32 g_CdMixFullRL asm("D_8009B190");
-extern s32 g_CdMixLL asm("D_8009B174");
-extern s32 g_CdMixLR asm("D_8009B178");
-extern s32 g_CdMixRR asm("D_8009B17C");
-extern s32 g_CdMixRL asm("D_8009B180");
+extern u8 g_CdVolume;
+extern s32 g_CdMixFullLL;
+extern s32 g_CdMixFullLR;
+extern s32 g_CdMixFullRR;
+extern s32 g_CdMixFullRL;
+extern s32 g_CdMixLL;
+extern s32 g_CdMixLR;
+extern s32 g_CdMixRR;
+extern s32 g_CdMixRL;
 
 
 void SetCdVolume(s32 arg0);

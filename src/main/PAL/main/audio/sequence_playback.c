@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/audio.h"
 
-extern s16 g_SeqHandle asm("D_801E6D90");
+extern s16 g_SeqHandle;
 void SsSeqPlay(s32 arg0, s32 arg1, s32 arg2);
 void PlaySequence(void);
 void PlaySequence(void) { SsSeqPlay(g_SeqHandle, 1, 0); }
@@ -11,16 +11,16 @@ void StopSequence(void);
 void StopSequence(void) { SsSeqStop(g_SeqHandle); }
 
 extern s32 g_ReverbFadeStep asm("D_801E6D8C");
-extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
+extern s32 g_SeqVolumeFadeStep;
 
 void StartSequenceFadeOut(void) {
     g_SeqVolumeFadeStep = -4;
     g_ReverbFadeStep = -3;
 }
 
-extern s32 g_ReverbDepthL asm("D_801E6D84");
-extern s32 g_ReverbDepthR asm("D_801E6D88");
-extern s32 g_SeqVolume asm("D_801E6D94");
+extern s32 g_ReverbDepthL;
+extern s32 g_ReverbDepthR;
+extern s32 g_SeqVolume;
 
 void SetReverbDepth(s32 arg0, s32 arg1);
 void func_8005E600(s32 arg0);

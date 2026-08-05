@@ -29,12 +29,12 @@ void *func_8001720C(
     void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 
 void *func_80017390(void *ot, void *prim, s32 arg2);
-extern s32 g_SeriesCleared asm("D_8019C8EC");
-extern s32 g_EndingWashLevel asm("D_801E6E78");
-extern s32 g_ReplayFrameCount asm("D_8019CB6C");
-extern s32 g_ReplayBufferWrapped asm("D_8009EC8C");
+extern s32 g_SeriesCleared;
+extern s32 g_EndingWashLevel;
+extern s32 g_ReplayFrameCount;
+extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar asm("D_8009E6D4");
-extern s32 g_ReplayReadCursor asm("D_801F179C");
+extern s32 g_ReplayReadCursor;
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 void PlaySoundCue(s32 cue);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
@@ -53,11 +53,11 @@ extern char *g_CourseNames[] asm("D_8007D404");
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016A18(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-extern s32 g_RaceTotalTime asm("D_801E4BA8");
-extern s32 g_ClassResultPlace asm("D_8019C7C4");
-extern s32 g_PrizeScreenState asm("D_8019CB74");
+extern s32 g_RaceTotalTime;
+extern s32 g_ClassResultPlace;
+extern s32 g_PrizeScreenState;
 extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
-extern s32 g_PlayerLapTimes[] asm("D_8009E858");
+extern s32 g_PlayerLapTimes[];
 /* Grand Prix result panel: the finishing-position graphic's per-place sprite
  * geometry and the two clut tables its two sprites pick from. */
 extern u16 g_ResultPlaceCluts[] asm("D_8007D41E");

@@ -3,8 +3,8 @@
 #include "common.h"
 
 extern u_char *g_SndSeqTable[] asm("D_801E79CC");
-extern short g_SndSeqTableSMax asm("D_801E826C");
-extern short g_SndSeqTableTMax asm("D_801E8270");
+extern short g_SndSeqTableSMax;
+extern short g_SndSeqTableTMax;
 
 void SsSetTableSize(u_char *arg0, long arg1, long arg2);
 

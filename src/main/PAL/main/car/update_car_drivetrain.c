@@ -27,9 +27,9 @@ extern s32 g_StandingStartSpin asm("D_8019CA04");
  * +0x00 / +0x04 y) yields the torque term; the second (spec +0xA8 / +0xAC x,
  * +0x80 / +0x84 y) a 0..100 percentage that is subtracted from it.
  */
-extern s16 g_TorqueBandStart asm("D_801E4112");
+extern s16 g_TorqueBandStart;
 extern s16 g_TorqueBandEnd asm("D_801E4114");
-extern s16 g_TorqueLossBandStart asm("D_801E4152");
+extern s16 g_TorqueLossBandStart;
 extern s16 g_TorqueLossBandEnd asm("D_801E4154");
 extern u8 g_PadType asm("D_801E4369");
 extern s16 g_GripLossTimer asm("D_801E4BA0");

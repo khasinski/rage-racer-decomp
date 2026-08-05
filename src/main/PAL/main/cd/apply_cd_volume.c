@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/cd.h"
 
-extern u8 g_CdVolume asm("D_8009B194");
+extern u8 g_CdVolume;
 
 
 void ApplyCdVolume(void);

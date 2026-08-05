@@ -78,7 +78,7 @@ void UpdateShuttleScenery(s32 arg0) {
 }
 
 extern u32 *g_VisibleCellMask asm("D_801E6828");
-extern s32 g_CourseModelCount asm("D_801E40E4");
+extern s32 g_CourseModelCount;
 
 
 void DrawShuttleScenery(s32 arg0);

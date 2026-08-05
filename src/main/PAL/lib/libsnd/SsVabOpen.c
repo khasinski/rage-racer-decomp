@@ -1,15 +1,15 @@
 #include "psyq/snd.h"
 #include "psyq/spu.h"
 
-extern u_char g_SndVabStatus[] asm("D_801E4CFC");
-extern u_short g_SndVabOpenCount asm("D_801F17AC");
-extern VabHdr *g_SndVabHeader[] asm("D_8019CA20");
-extern short g_SndVabProgMax asm("D_801E40D0");
-extern ProgAtr *g_SndVabProgTable[] asm("D_8019C9B0");
-extern VagAtr *g_SndVabToneTable[] asm("D_8019CA70");
-extern u_long g_SndVabSpuAddr[] asm("D_801F17BC");
-extern u_short *g_SndVabBodyAddr[] asm("D_801F180C");
-extern long g_SndVabBodySize[] asm("D_801E8AB8");
+extern u_char g_SndVabStatus[];
+extern u_short g_SndVabOpenCount;
+extern VabHdr *g_SndVabHeader[];
+extern short g_SndVabProgMax;
+extern ProgAtr *g_SndVabProgTable[];
+extern VagAtr *g_SndVabToneTable[];
+extern u_long g_SndVabSpuAddr[];
+extern u_short *g_SndVabBodyAddr[];
+extern long g_SndVabBodySize[];
 
 extern long func_8007B2C0(void);
 extern void _spu_setTransferCompletionFlag(long value);

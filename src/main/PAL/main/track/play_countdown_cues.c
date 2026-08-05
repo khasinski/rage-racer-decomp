@@ -2,7 +2,7 @@
 #include "game/race.h"
 #include "game/track.h"
 
-extern s16 g_RaceCueDelay asm("D_801E6C90");
+extern s16 g_RaceCueDelay;
 
 void PlaySoundCue(s32 cue);
 
@@ -43,7 +43,7 @@ void UpdateRivalCueGate(void) {
 }
 
 extern u32 *g_CourseObjects asm("D_801E4B2C");
-extern u32 g_CourseObjectCount asm("D_801E4BBC");
+extern u32 g_CourseObjectCount;
 
 void SetCourseObjects(u32 *arg0);
 void SetCourseObjects(u32 *arg0) {

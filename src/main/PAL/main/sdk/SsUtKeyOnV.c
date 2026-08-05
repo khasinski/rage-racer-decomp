@@ -6,11 +6,11 @@
 /* The key-on path's view of the same block psyq/snd_types.h calls
  * SvmCurrentAttr, but four bytes longer and reading vag unsigned, so the two
  * are not interchangeable. One of them is wrong. */
-extern long g_SndUpdateLock asm("D_801E40AC");
-extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
-extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
+extern long g_SndUpdateLock;
+extern ProgAtr *g_SndCurrentProgTable;
+extern VagAtr *g_SndCurrentToneTable;
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
-extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[];
 
 extern long SpuVmVSetUp(short, short);
 extern void SpuVmRebuildVoiceTable(void);

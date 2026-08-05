@@ -1,18 +1,18 @@
 #include "common.h"
 #include "game/render.h"
 
-extern s16 g_EnvFogEnabled asm("D_801E3FB4");
-extern u8 g_EnvSpare asm("D_801E3FB9");
-extern s16 g_EnvLerpDuration asm("D_801E4024");
-extern s16 g_EnvironmentMode asm("D_801E4026");
+extern s16 g_EnvFogEnabled;
+extern u8 g_EnvSpare;
+extern s16 g_EnvLerpDuration;
+extern s16 g_EnvironmentMode;
 /* Cue halfword +0x2E, bit 15 inverted. Its only effect anywhere is to enable
  * the g_EnvSpareFrom -> g_EnvSpareTo lerp of g_EnvSpare; the name states that
  * and nothing more, because no reader of g_EnvSpare survives in the image. */
-extern s16 g_EnvSpareLerp asm("D_801E4028");
-extern s16 g_EnvSpareFrom asm("D_801E402A");
-extern s16 g_EnvSpareTo asm("D_801E402C");
+extern s16 g_EnvSpareLerp;
+extern s16 g_EnvSpareFrom;
+extern s16 g_EnvSpareTo;
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
-extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
+extern s32 g_EnvironmentModePrev;
 
 void LoadEnvironmentCue(GameEnvColor *arg0);
 void LoadEnvironmentCue(GameEnvColor *arg0) {

@@ -6,12 +6,12 @@
 #include "game/cd.h"
 
 extern s16 g_ClassRecords[] asm("D_8019CB40");
-extern volatile s32 g_ClassWinCount asm("D_801E4DA8");
-extern s32 g_BgmTrackCount asm("D_801E40A8");
+extern volatile s32 g_ClassWinCount;
+extern s32 g_BgmTrackCount;
 extern u8 g_CaptionLostRace asm("D_80010E68");
 void func_80016B7C(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4);
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
-extern s32 g_LostRaceChoice asm("D_801E3E0C");
+extern s32 g_FrameSyncThreshold;
+extern s32 g_LostRaceChoice;
 void SetReverbDepth(s32 arg0, s32 arg1);
 void DrawLostRaceCaption(s32 arg0);
 extern void *g_CourseProgress asm("D_8009E67C");
@@ -22,7 +22,7 @@ extern char g_TextPressStart[] asm("D_80010EA0");
 extern s16 g_ChanceDigits[] asm("D_8007D438");
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-extern volatile u16 g_PadEdge2 asm("D_801E436E");
+extern volatile u16 g_PadEdge2;
 void PlaySoundCue(s32 cue);
 void RequestSelectBgmAssets(void);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);

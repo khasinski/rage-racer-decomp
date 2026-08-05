@@ -18,7 +18,7 @@ void DrawNowLoadingText(void) {
     }
 }
 
-extern s32 g_TimeAttackPlateStep asm("D_8009B334");
+extern s32 g_TimeAttackPlateStep;
 extern s32 D_8009B360;
 extern s32 D_8009B364;
 extern s32 D_8009B368;
@@ -26,7 +26,7 @@ extern s32 g_MenuViewSpin asm("D_801E8268");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 D_8009E6D8;
-extern s32 g_PlayerCarZ asm("D_8009E6DC");
+extern s32 g_PlayerCarZ;
 extern s32 D_8009E6F4;
 extern s32 D_8009E6F8;
 extern s32 D_8009E6FC;
@@ -494,21 +494,21 @@ s32 CanSelectNextCourse(void) {
     return g_CourseIndex < limit;
 }
 
-extern s32 g_CarNamePlateStep asm("D_8009B31C");
-extern s32 g_MenuPlateCarIndex asm("D_8009B320");
-extern s32 g_MenuHintBarStep asm("D_8009B30C");
-extern s32 g_MenuConfirmTimer asm("D_8009B300");
+extern s32 g_CarNamePlateStep;
+extern s32 g_MenuPlateCarIndex;
+extern s32 g_MenuHintBarStep;
+extern s32 g_MenuConfirmTimer;
 extern s32 D_8009B310;
 extern s32 D_8009B348;
-extern s32 g_CourseSwapDelay asm("D_8009B354");
-extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
-extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
+extern s32 g_CourseSwapDelay;
+extern s32 g_MenuCourseModelIndex;
+extern s32 g_MenuPendingCourseIndex;
 extern s32 g_CarSwapFromIndex asm("D_8009B374");
 extern s32 g_CarSwapToIndex asm("D_8009B378");
-extern u8 g_MenuSubCursor asm("D_8009B2F0");
+extern u8 g_MenuSubCursor;
 extern u8 *D_8019C764;
-extern s32 g_CourseSelectOption asm("D_8019C7AC");
-extern s32 g_PlayerMoney asm("D_8019C908");
+extern s32 g_CourseSelectOption;
+extern s32 g_PlayerMoney;
 extern u8 D_80081818;
 extern u8 D_800817A0;
 extern u8 g_UiChromeScript asm("D_80082460");

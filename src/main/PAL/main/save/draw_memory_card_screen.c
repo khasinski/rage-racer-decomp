@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/state.h"
 
-extern u8 *volatile g_DrawBuffer asm("D_8019C900");
+extern u8 *volatile g_DrawBuffer;
 s32 GameQueueSpriteTrans(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 color) asm("func_80017138");
 s32 AddTilePrim(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 void DrawMenuCursorArrow(s32 a, s32 b);

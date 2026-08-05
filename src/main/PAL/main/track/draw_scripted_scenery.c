@@ -57,8 +57,8 @@ typedef struct PathSceneryClock {
     s16 rotRateNeg;
 } PathSceneryClock;
 
-extern u8 *g_PathSceneryPosData asm("D_801E4BA4");
-extern u8 *g_PathSceneryRotData asm("D_801E4174");
+extern u8 *g_PathSceneryPosData;
+extern u8 *g_PathSceneryRotData;
 /*
  * The looping prop's two keyframe tracks for the running series: 20-byte
  * position records { s32 x, y, z; u16 loopTo @0x0C; u16 span @0x10;
@@ -68,47 +68,47 @@ extern u8 *g_PathSceneryRotData asm("D_801E4174");
  * g_PathSceneryPosIndex / …RotIndex the record currently being eased out of.
  * A span field of -1 terminates and sends the index back to `loopTo`.
  */
-extern u8 *g_PathSceneryPosKeys asm("D_801E42DC");
-extern u8 *g_PathSceneryRotKeys asm("D_801E42E8");
-extern PathSceneryClock g_PathSceneryClock asm("D_801E4DB0");
+extern u8 *g_PathSceneryPosKeys;
+extern u8 *g_PathSceneryRotKeys;
+extern PathSceneryClock g_PathSceneryClock;
 /* The three words are the scenery position: g_PathSceneryY and
  * g_PathSceneryZ alias +4 and +8. It stays a Block16 because respelling
  * w[0] as a named member of a Vec4 does not match. */
-extern Block16 g_PathSceneryX asm("D_801E4DB8");
-extern SVec g_PathSceneryRot asm("D_801E4DC8");
+extern Block16 g_PathSceneryX;
+extern SVec g_PathSceneryRot;
 /* The two tracks' cursors, interleaved pos/rot at 0x801E4DE0: phase, span, rate
  * and index are each a two-halfword pair with position first. Left as eight
  * scalars because nothing in the image indexes them by track. Phase is the
  * cosine-ease argument, 0..0x1000. */
 extern u16 g_PathSceneryPosPhase asm("D_801E4DE0");
 extern u16 g_PathSceneryRotPhase asm("D_801E4DE2");
-extern s16 g_PathSceneryPosSpan asm("D_801E4DE4");
-extern s16 g_PathSceneryRotSpan asm("D_801E4DE6");
-extern u16 g_PathSceneryPosRate asm("D_801E4DE8");
-extern u16 g_PathSceneryRotRate asm("D_801E4DEA");
-extern s16 g_PathSceneryPosIndex asm("D_801E4DEC");
-extern s16 g_PathSceneryRotIndex asm("D_801E4DEE");
+extern s16 g_PathSceneryPosSpan;
+extern s16 g_PathSceneryRotSpan;
+extern u16 g_PathSceneryPosRate;
+extern u16 g_PathSceneryRotRate;
+extern s16 g_PathSceneryPosIndex;
+extern s16 g_PathSceneryRotIndex;
 /* Slew state of the prop's positional sound: func_80040590 turns the distance
  * from g_PlayerCar to g_PathSceneryX into 100 - dist/1024, clamps it to
  * [0, 100] and walks this value at most 20 a frame towards it. */
-extern s32 g_PathSceneryVolume asm("D_801E4DF0");
+extern s32 g_PathSceneryVolume;
 /* Half of (next keyframe - this keyframe), i.e. the amplitude of the cosine
  * ease that carries the prop from one keyframe to the next. Two xyz triples,
  * each padded to 8 bytes: the rotation one at 0x801E4DD0, the position one at
  * 0x801E4DD8. */
-extern s16 g_PathSceneryRotHalfDelta[3] asm("D_801E4DD0");
-extern s16 g_PathSceneryHalfDelta[3] asm("D_801E4DD8");
+extern s16 g_PathSceneryRotHalfDelta[3];
+extern s16 g_PathSceneryHalfDelta[3];
 
 /* Unsigned view used when the rotation track advances its frame counter. */
-extern u16 g_PathSceneryRotFrameU asm("D_801E4DB2");
+extern u16 g_PathSceneryRotFrameU;
 
-extern s32 g_PathSceneryY asm("D_801E4DBC");
-extern s32 g_PathSceneryZ asm("D_801E4DC0");
-extern s16 g_PathSceneryRotY asm("D_801E4DCA");
-extern s16 g_PathSceneryRotZ asm("D_801E4DCC");
+extern s32 g_PathSceneryY;
+extern s32 g_PathSceneryZ;
+extern s16 g_PathSceneryRotY;
+extern s16 g_PathSceneryRotZ;
 extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_PlayerCarY asm("D_8009E6D8");
-extern s32 g_PlayerCarZ asm("D_8009E6DC");
+extern s32 g_PlayerCarZ;
 extern s16 g_RacePhase asm("D_801E6E74");
 
 /*

@@ -78,7 +78,7 @@ void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
     SetShadeTex(prim, 1);
 }
 
-extern s32 g_LapCount asm("D_801E4364");
+extern s32 g_LapCount;
 extern s32 g_BestLapThisRace asm("D_801E4BCC");
 extern GameRaceRanking g_PlayerLap asm("D_8009E83C");
 extern s16 D_8009E836;

@@ -12,8 +12,8 @@ extern s32 g_FmvStreamEnded asm("D_8009AF74");
 extern s32 g_FmvState asm("D_8009F094");
 extern s16 g_FmvStripWidth asm("D_8009AF50");
 extern s16 g_FmvStripHeight asm("D_8009AF52");
-extern s32 g_StreamSectorCount asm("D_8019CA1C");
-extern s32 g_StreamLoc asm("D_801E8A90");
+extern s32 g_StreamSectorCount;
+extern s32 g_StreamLoc;
 extern char g_MsgFmvSector[] asm("D_80010D30");
 
 void DecDCTin(volatile u32 *arg0, s32 arg1);
@@ -56,7 +56,7 @@ void DecodeFmvFrame(void) {
     }
 }
 
-extern s32 g_StreamReturnScene asm("D_8019C760");
+extern s32 g_StreamReturnScene;
 void DecDCToutCallback(s32 arg0);
 void StUnSetRing(void);
 void EndFmv(void);
@@ -71,11 +71,11 @@ extern volatile u32 g_FmvVlcBuffer0 asm("D_8009AF5C");
 extern volatile u32 g_FmvVlcBuffer1 asm("D_8009AF60");
 extern volatile u32 g_FmvStripBuffer0 asm("D_8009AF64");
 extern volatile u32 g_FmvStripBuffer1 asm("D_8009AF68");
-extern volatile u16 g_DispEnv0X asm("D_8019CE94");
-extern volatile u16 g_DispEnv0Y asm("D_8019CE96");
-extern volatile u16 g_DispEnv1X asm("D_801C067C");
-extern volatile u16 g_DispEnv1Y asm("D_801C067E");
-extern volatile u32 g_FrameParity asm("D_801E4B34");
+extern volatile u16 g_DispEnv0X;
+extern volatile u16 g_DispEnv0Y;
+extern volatile u16 g_DispEnv1X;
+extern volatile u16 g_DispEnv1Y;
+extern volatile u32 g_FrameParity;
 
 void InitFmvContext(void *arg0, s32 arg1, s32 arg2);
 void InitFmvContext(void *arg0, s32 arg1, s32 arg2) {

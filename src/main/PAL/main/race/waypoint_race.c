@@ -8,9 +8,9 @@
 #include "game/render.h"
 #include "game/cd.h"
 
-extern s16 g_PauseDebounce asm("D_8019C750");
+extern s16 g_PauseDebounce;
 
-extern s16 g_ReverbZoneDepth asm("D_8019C78C");
+extern s16 g_ReverbZoneDepth;
 
 
 extern u8 g_PlayerCar[] asm("D_8009E6D4");
@@ -19,7 +19,7 @@ extern s32 g_PlayerTrackProgress asm("D_8009E744");
 
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
-extern s32 g_CameraCarProgressA asm("D_801E3E7C");
+extern s32 g_CameraCarProgressA;
 
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
@@ -28,7 +28,7 @@ extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
 
 
-extern s32 g_RacePaused asm("D_801E4BAC");
+extern s32 g_RacePaused;
 
 
 
@@ -79,11 +79,11 @@ void func_800418D4(void);
 
 extern s16 g_PlayerLap asm("D_8009E83C");
 
-extern s32 g_WaypointSpawnCooldown asm("D_8019C700");
+extern s32 g_WaypointSpawnCooldown;
 
 extern TrackWaypointSeed g_WaypointSeeds[] asm("D_8007DFD4");
 
-extern TrackWaypointRuntime g_Waypoints[] asm("D_801E4DF4");
+extern TrackWaypointRuntime g_Waypoints[];
 
 /*
  * Initializes the 6 TrackWaypointRuntime slots for the current course. The

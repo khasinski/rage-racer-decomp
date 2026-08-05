@@ -3,13 +3,13 @@
 #include "common.h"
 #include "game/audio.h"
 
-extern u_char g_SndVoiceCount asm("D_801E42F8");
-extern u_char g_SndCurrentPriority asm("D_801E4BDF");
-extern u_char g_SndVoiceState[] asm("D_8009E0B8");
-extern u_char g_SndVoiceStateAge[] asm("D_8009E0BA");
-extern u_char g_SndVoiceStateEnvx[] asm("D_8009E0BE");
+extern u_char g_SndVoiceCount;
+extern u_char g_SndCurrentPriority;
+extern u_char g_SndVoiceState[];
+extern u_char g_SndVoiceStateAge[];
+extern u_char g_SndVoiceStateEnvx[];
 extern u_char D_8009E0D0[];
-extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
+extern u_char g_SndVoiceStateStatus[];
 
 u_long SpuSetNoiseVoice(long on_off, u_long voice_bit);
 
@@ -105,7 +105,7 @@ u_char SpuVmAlloc(long unused) {
     return (u_char)selected;
 }
 
-extern u_char *g_SndCurrentVabHeader asm("D_801E413C");
+extern u_char *g_SndCurrentVabHeader;
 extern u_char D_801E4BD4;
 extern u_char D_801E4BDA;
 extern u_char D_801E4BDD;
@@ -113,17 +113,17 @@ extern u_char D_801E4BDB;
 extern u_char D_801E4BD5;
 extern u_char D_801E4BDE;
 extern u_char D_801E4BE4;
-extern u_short g_SndCurrentSeqSep asm("D_801E4BE6");
-extern short g_SndCurrentVoice asm("D_801E4BEA");
-extern short g_SndMonoMode asm("D_801E3FB0");
+extern u_short g_SndCurrentSeqSep;
+extern short g_SndCurrentVoice;
+extern short g_SndMonoMode;
 extern u_char *g_SndSeqTable[] asm("D_801E79CC");
-extern u_char g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_char g_SndVoiceRegs[];
 /* Kept raw: this is game/audio.h's g_SndVoiceFlags, but that header is included
  * here and declares it volatile, and gcc 2.6.3 rejects a requalified array
  * redeclaration outright. */
 extern u_char D_8009E0A0[];
-extern u_short g_SndReverbOnLow asm("D_8009E680");
-extern u_short g_SndReverbOnHigh asm("D_8009E684");
+extern u_short g_SndReverbOnLow;
+extern u_short g_SndReverbOnHigh;
 extern u_short D_8009E670;
 extern u_short D_8009E674;
 extern u_short D_801F2A08;
@@ -231,12 +231,12 @@ void SpuVmScaleVabVolume(long arg0, long val) {
     (void)arg0;
 }
 
-extern u_long g_SndVoiceSilenceHistory[] asm("D_8009E59C");
-extern u_short g_SndDamper asm("D_8019CA68");
-extern u_long g_SndCurrentProgTable asm("D_801E4110");
-extern volatile u_long g_SndCurrentToneTable asm("D_801E416C");
-extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
-extern u_char g_SndCurrentTone asm("D_801E4BDC");
+extern u_long g_SndVoiceSilenceHistory[];
+extern u_short g_SndDamper;
+extern u_long g_SndCurrentProgTable;
+extern volatile u_long g_SndCurrentToneTable;
+extern u_char g_SndCurrentProgActual;
+extern u_char g_SndCurrentTone;
 extern u_short D_801E4BE8;
 extern short D_801E4BEC;
 extern short D_801E4BEE;

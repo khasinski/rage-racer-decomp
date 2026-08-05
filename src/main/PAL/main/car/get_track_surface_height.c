@@ -426,15 +426,15 @@ void ResetCarTrackState(GameCarRuntime *car) {
  * g_CarSpec +0x14C..+0x14F whenever the car changes. [corner][0] is x and
  * [corner][1] is y; DrawTachometer walks the same eight halfwords as an
  * (x, y) pair array. */
-extern s16 g_TachoNeedleQuad[4][2] asm("D_8019C7D4");
+extern s16 g_TachoNeedleQuad[4][2];
 extern GameSpriteDesc g_TachoNeedleSprite asm("D_8007DAE0");
 /* The needle SPRT in each of the two draw buffers, plus the two DR_TPAGE
  * prims that precede buffer 1's copy at -0x18 and -0x0C (buffer 0's are
  * reached as g_TachoNeedlePrim0 - 0x18 / - 0x0C). */
-extern u8 g_TachoNeedlePrim0[] asm("D_801C051C");
-extern u8 g_TachoNeedlePrim1[] asm("D_801E3D04");
-extern u8 g_TachoNeedlePrim1PageA[] asm("D_801E3CEC");
-extern u8 g_TachoNeedlePrim1PageB[] asm("D_801E3CF8");
+extern u8 g_TachoNeedlePrim0[];
+extern u8 g_TachoNeedlePrim1[];
+extern u8 g_TachoNeedlePrim1PageA[];
+extern u8 g_TachoNeedlePrim1PageB[];
 
 void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
 void func_80064EB8(u8 *arg0, s32 arg1);

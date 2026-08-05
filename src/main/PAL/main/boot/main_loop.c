@@ -24,9 +24,9 @@ void ResetReplayFrameCounts(void);
 void InitRecordTables(void);
 void InitRenderState(s32 arg0) asm("func_80017884");
 
-extern s32 g_ScreenOffsetY asm("D_801E4B9C");
-extern s32 g_ScreenOffsetX asm("D_801E4B8C");
-extern s32 g_PadErrorState asm("D_801E79C8");
+extern s32 g_ScreenOffsetY;
+extern s32 g_ScreenOffsetX;
+extern s32 g_PadErrorState;
 extern s32 D_801E4D14;
 extern s32 D_8019CB10;
 extern s32 g_MirrorMode asm("D_8019CACC");
@@ -34,12 +34,12 @@ extern s32 g_MirrorMode asm("D_8019CACC");
 extern u16 g_NegconSteerPlay asm("D_8019CAD0");
 extern u16 g_PadMappingIndex asm("D_8019CE08");
 extern u16 g_NegconMappingIndex asm("D_8019CB08");
-extern u16 g_NegconSteerNeutral asm("D_801E4BF0");
-extern u16 g_NegconNeutralI asm("D_8019CA08");
-extern u16 g_NegconNeutralII asm("D_8019CA0A");
-extern u16 g_NegconNeutralL asm("D_8019CA0C");
+extern u16 g_NegconSteerNeutral;
+extern u16 g_NegconNeutralI;
+extern u16 g_NegconNeutralII;
+extern u16 g_NegconNeutralL;
 extern u16 g_NegconMaxTwist asm("D_801E418C");
-extern u16 g_AdvancedSeriesUnlocked asm("D_8019CAC0");
+extern u16 g_AdvancedSeriesUnlocked;
 
 /*
  * One-shot boot chain called from MainLoop: sequencer, sound runtime, GPU
@@ -95,14 +95,14 @@ void PutDispEnv(u8 *arg0);
 void DrawOTag(u8 *ot);
 
 /* The two 0x237E8-byte frame contexts the loop ping-pongs between. */
-extern u8 g_FrameContexts[] asm("D_8019CE38");
+extern u8 g_FrameContexts[];
 /* Which of them is current, mirrored for everyone else to read. */
-extern s32 g_FrameParity asm("D_801E4B34");
+extern s32 g_FrameParity;
 /* Minimum VSync count per frame; 0x80 means "never wait", i.e. free-running. */
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
+extern s32 g_FrameSyncThreshold;
 /* Running VSync-derived clock and the raw frame counter. */
-extern s32 g_GameClock asm("D_8009E678");
-extern s32 g_FrameCounter asm("D_8009E690");
+extern s32 g_GameClock;
+extern s32 g_FrameCounter;
 /* Scene handlers, indexed by g_SceneId. */
 extern void (*g_SceneHandlers[])(void) asm("D_8007C268");
 

@@ -5,17 +5,17 @@
 extern short *g_SndSpuRegs asm("D_8009A588");
 /* One 16-byte block per voice, so voice n's left volume is
  * g_SndVoiceRegs[n * 8] and its right volume is g_SndVoiceRegs[n * 8 + 1]. */
-extern short g_SndVoiceRegs[] asm("D_8009DF20");
-extern volatile u_char g_SndVoiceRegsVolRight[] asm("D_8009DF22");
-extern volatile u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
+extern short g_SndVoiceRegs[];
+extern volatile u_char g_SndVoiceRegsVolRight[];
+extern volatile u_char g_SndVoiceRegsPitch[];
 extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern short g_SndVoiceStateNote[] asm("D_8009E0C4");
-extern short g_SndVoiceStateProg[] asm("D_8009E0CA");
-extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
-extern short g_SndVoiceStateVabId[] asm("D_8009E0CE");
-extern u_char g_SndCurrentTone asm("D_801E4BDC");
-extern short g_SndCurrentSeqSep asm("D_801E4BE6");
-extern short g_SndCurrentVoice asm("D_801E4BEA");
+extern short g_SndVoiceStateNote[];
+extern short g_SndVoiceStateProg[];
+extern u_char g_SndVoiceStateTone[];
+extern short g_SndVoiceStateVabId[];
+extern u_char g_SndCurrentTone;
+extern short g_SndCurrentSeqSep;
+extern short g_SndCurrentVoice;
 
 long SpuVmVSetUp(long arg0, long arg1);
 long SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3);

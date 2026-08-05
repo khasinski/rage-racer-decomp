@@ -2,15 +2,15 @@
 
 #include "common.h"
 
-extern u_char g_SndVoiceStateProgActual[] asm("D_8009E0C8");
-extern short g_SndVoiceStateNote[] asm("D_8009E0C4");
-extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
-extern volatile u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
+extern u_char g_SndVoiceStateProgActual[];
+extern short g_SndVoiceStateNote[];
+extern u_char g_SndVoiceStateTone[];
+extern volatile u_char g_SndVoiceRegsPitch[];
 extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
-extern u_char g_SndCurrentTone asm("D_801E4BDC");
-extern short g_SndCurrentVoice asm("D_801E4BEA");
-extern u_char *g_SndCurrentToneTable asm("D_801E416C");
+extern u_char g_SndCurrentProgActual;
+extern u_char g_SndCurrentTone;
+extern short g_SndCurrentVoice;
+extern u_char *g_SndCurrentToneTable;
 
 u_short SpuVmCalculateTonePitch(long arg0, long arg1);
 

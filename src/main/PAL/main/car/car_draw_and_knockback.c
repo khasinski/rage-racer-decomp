@@ -6,7 +6,7 @@
 
 void ClearCarMotionState(GameCarRuntime *arg0);
 
-extern s32 g_ClosestRivalRank asm("D_801E7740");
+extern s32 g_ClosestRivalRank;
 
 
 

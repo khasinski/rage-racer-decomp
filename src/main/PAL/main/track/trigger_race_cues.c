@@ -4,10 +4,10 @@
 #include "game/race.h"
 #include "game/track.h"
 
-extern s32 g_RaceCueFlags asm("D_801E7A50");
+extern s32 g_RaceCueFlags;
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 extern s16 g_PlayerLap asm("D_8009E83C");
-extern s32 g_LapCount asm("D_801E4364");
+extern s32 g_LapCount;
 
 void TriggerRaceCues(void);
 void TriggerRaceCues(void) {

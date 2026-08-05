@@ -7,7 +7,7 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-extern GearCurveRow g_GearTorqueCurve[] asm("D_801E8884");
+extern GearCurveRow g_GearTorqueCurve[];
 /* The player object shares GameCarRuntime's 0x19C-byte footprint, but several
  * fields have player-only meanings.  Keep this file-local view for the init
  * sequence while using the shared GameCarDrive view for the +0xBC block. */
@@ -446,7 +446,7 @@ typedef struct A {
 extern s16 D_8019C9AC;
 extern u8 g_PadType asm("D_801E4369");
 /* The live button mapping; masks 0 and 1 steer, g_MirrorMode swaps them. */
-extern s16 g_PadButtonMapping[] asm("D_801E4B60");
+extern s16 g_PadButtonMapping[];
 /* NeGcon steering: the raw twist minus the calibrated centre, minus the dead
  * zone indexed by the separate NEGCON STEER PLAY setting at D_8019CAD0 (a
  * word table at 0x8007C128), then clamped to
@@ -456,7 +456,7 @@ extern s16 g_PadButtonMapping[] asm("D_801E4B60");
  * needs more twist for full lock. This file used to spell D_801E418C
  * g_NegconSteerPlay, which is the name of that other setting -- see
  * docs/names.md 20. */
-extern s16 g_NegconSteer asm("D_801E437E");
+extern s16 g_NegconSteer;
 extern s16 g_NegconMaxTwist asm("D_801E418C");
 extern s16 g_NegconSteerRange[] asm("D_8007C020");
 

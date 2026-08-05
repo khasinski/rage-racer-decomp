@@ -13,23 +13,23 @@ typedef struct KF {
 } KF;
 
 extern volatile s32 g_RaceSeries asm("D_801E408C");
-extern u8 *g_RouteSceneryData asm("D_801E4128");
-extern s32 g_RouteSceneryClock asm("D_801E4330");
-extern volatile s32 g_RouteSceneryFrame asm("D_801E4338");
-extern s16 g_RouteSceneryKeyIndex asm("D_801E433E");
+extern u8 *g_RouteSceneryData;
+extern s32 g_RouteSceneryClock;
+extern volatile s32 g_RouteSceneryFrame;
+extern s16 g_RouteSceneryKeyIndex;
 /* One 4-word position vector at 0x801E4340 -- x, y, z and a fourth word
  * copied straight out of the series header -- followed by a 3-word orientation
  * at 0x801E4350 in 12-bit angle units (4096 to the turn: the yaw below is used
  * as 0x800 - yaw, i.e. reflected about half a turn). The block-copy below
  * writes all four position words through one cursor. */
-extern s32 g_RouteSceneryX asm("D_801E4340");
-extern s32 g_RouteSceneryY asm("D_801E4344");
-extern s32 g_RouteSceneryZ asm("D_801E4348");
+extern s32 g_RouteSceneryX;
+extern s32 g_RouteSceneryY;
+extern s32 g_RouteSceneryZ;
 extern s32 g_RouteSceneryW;
-extern s32 g_RouteSceneryRotX asm("D_801E4350");
-extern s32 g_RouteSceneryRotY asm("D_801E4354");
-extern s32 g_RouteSceneryRotZ asm("D_801E4358");
-extern KF *g_RouteSceneryKeyframe asm("D_801E6C88");
+extern s32 g_RouteSceneryRotX;
+extern s32 g_RouteSceneryRotY;
+extern s32 g_RouteSceneryRotZ;
+extern KF *g_RouteSceneryKeyframe;
 
 
 void UpdateRouteScenery(void);

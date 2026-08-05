@@ -319,7 +319,7 @@ void DrawTimeAttackPlate(s32 arg0) {
     }
 }
 
-extern Matrix g_SceneColorMatrix asm("D_8019CAD4");
+extern Matrix g_SceneColorMatrix;
 extern Matrix D_80082DFC;
 extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
 extern Matrix D_80082E1C;
@@ -341,8 +341,8 @@ void InitMenuLighting(void) {
     func_800686D4(0x4E20, 0x140);
 }
 
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
-extern s32 g_PlayerMoney asm("D_8019C908");
+extern s32 g_FrameSyncThreshold;
+extern s32 g_PlayerMoney;
 
 extern s32 D_80082568;
 extern Vec4 g_MenuViewScale asm("D_80082D6C");
@@ -355,33 +355,33 @@ extern void *D_8009F0B0;
 extern void *D_8019CB00;
 extern void *D_801E4188;
 
-extern s32 g_MenuHintBarProgress asm("D_8009B2FC");
-extern s32 g_MenuConfirmTimer asm("D_8009B300");
+extern s32 g_MenuHintBarProgress;
+extern s32 g_MenuConfirmTimer;
 extern s32 D_8009B304;
-extern s32 g_MenuHintBarStep asm("D_8009B30C");
+extern s32 g_MenuHintBarStep;
 extern s32 D_8009B310;
-extern s32 g_MenuHintButtonsVisible asm("D_8009B314");
-extern s32 g_CarNamePlateStep asm("D_8009B31C");
-extern s32 g_MenuPlateCarIndex asm("D_8009B320");
+extern s32 g_MenuHintButtonsVisible;
+extern s32 g_CarNamePlateStep;
+extern s32 g_MenuPlateCarIndex;
 extern s32 D_8009B324;
 extern s32 D_8009B328;
 extern s32 D_8009B32C;
 extern s32 D_8009B330;
-extern s32 g_TimeAttackPlateStep asm("D_8009B334");
+extern s32 g_TimeAttackPlateStep;
 extern s32 D_8009B33C;
-extern s32 g_CourseSwapDelay asm("D_8009B354");
+extern s32 g_CourseSwapDelay;
 extern s32 D_8009B360;
 extern s32 D_8009B364;
 extern s32 D_8009B368;
-extern s32 g_MenuCourseModelIndex asm("D_8009B36C");
-extern s32 g_MenuPendingCourseIndex asm("D_8009B370");
+extern s32 g_MenuCourseModelIndex;
+extern s32 g_MenuPendingCourseIndex;
 extern s32 g_CarSwapFromIndex asm("D_8009B374");
 extern s32 g_CarSwapToIndex asm("D_8009B378");
 
-extern s32 g_CourseSelectOption asm("D_8019C7AC");
+extern s32 g_CourseSelectOption;
 extern s32 D_801E4138;
-extern s32 g_RankingOption asm("D_8019C7C0");
-extern s32 g_DesignModeOption asm("D_8019C758");
+extern s32 g_RankingOption;
+extern s32 g_DesignModeOption;
 extern s32 D_801E4D74;
 
 void InitRenderState(s32) asm("func_80017884");

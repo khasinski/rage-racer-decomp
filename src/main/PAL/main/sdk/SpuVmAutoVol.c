@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-extern volatile u_char g_SndVoiceStateAutoVol[] asm("D_8009E0D4");
+extern volatile u_char g_SndVoiceStateAutoVol[];
 extern volatile u_char D_8009E0D6[];
 extern volatile u_char D_8009E0D8[];
 extern volatile u_char D_8009E0DA[];
@@ -82,12 +82,12 @@ void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     *(volatile short *)(D_8009E0D6 + offset) = quotient;
 }
 
-extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_short g_SndVoiceRegs[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
-extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
+extern SpuVoice g_SndVoiceState[];
+extern VabHdr *g_SndCurrentVabHeader;
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
-extern short g_SndMonoMode asm("D_801E3FB0");
+extern short g_SndMonoMode;
 
 void SpuVmAutoVolTick(short voice);
 void SpuVmAutoVolTick(short voice) {
@@ -186,12 +186,12 @@ void SpuVmAutoVolTick(short voice) {
  * both goes through an explicit (volatile short *) cast, so the plain form keeps
  * the accesses volatile and both members byte-exact.
  */
-extern u_char g_SndVoiceStateAutoPan[] asm("D_8009E0E0");
+extern u_char g_SndVoiceStateAutoPan[];
 extern u_char g_SndVoiceStatePanStep[] asm("D_8009E0E2");
 extern u_char g_SndVoiceStatePanCounter[] asm("D_8009E0E4");
 extern u_char g_SndVoiceStatePanCounterReload[] asm("D_8009E0E6");
 extern u_char g_SndVoiceStateStartPan[] asm("D_8009E0E8");
-extern u_char g_SndVoiceStateEndPan[] asm("D_8009E0EA");
+extern u_char g_SndVoiceStateEndPan[];
 
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3);
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
@@ -266,15 +266,15 @@ void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
 }
 
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
-extern u_short g_SndVoiceRegsVolRight[] asm("D_8009DF22");
+extern u_short g_SndVoiceRegs[];
+extern u_short g_SndVoiceRegsVolRight[];
 extern u_char D_801E4BD4;
 extern u_char D_801E4BD5;
 extern u_char D_801E4BDA;
 extern u_char D_801E4BDB;
 extern u_char D_801E4BDD;
 extern u_char D_801E4BDE;
-extern short g_SndMonoMode asm("D_801E3FB0");
+extern short g_SndMonoMode;
 
 void SpuVmAutoPanTick(long arg0);
 void SpuVmAutoPanTick(long arg0) {

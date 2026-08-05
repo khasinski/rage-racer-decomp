@@ -105,7 +105,7 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
 /* Which of the two frame buffers is being drawn, 0 or 1; the main loop sets
  * it beside g_DrawBuffer. Here it turns into the 240-line y bias of the
  * drawing-area rect. */
-extern s32 g_FrameParity asm("D_801E4B34");
+extern s32 g_FrameParity;
 
 void func_80066604(void *packet, void *rect);
 void AddPrim(void *ot, void *prim);
@@ -131,8 +131,8 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
 /* The two 12000-byte TILE strips BuildTileStrips builds, backed by
  * g_TileStripStorage. Nothing in the decompiled tree reads them back, so what
  * the strip renders is still unestablished -- see docs/names.md 15g. */
-extern u8 *g_TileStripBuffers[2] asm("D_8019C90C");
-extern u8 g_TileStripStorage[] asm("D_801EB9DC");
+extern u8 *g_TileStripBuffers[2];
+extern u8 g_TileStripStorage[];
 
 void func_800658FC(s32 mode);
 void func_80064FF8(u8 *prim);
@@ -209,7 +209,7 @@ void BuildTileStrips(void) {
     } while (bufferIndex < 2);
 }
 
-extern s32 g_RacePaused asm("D_801E4BAC");
+extern s32 g_RacePaused;
 extern s32 g_CountdownBoardOffset asm("D_8007DF18");
 extern u32 g_CountdownDigitPatterns[16] asm("D_8007DEC0");
 extern CVec g_CountdownCellColors[] asm("D_8007DF1C");

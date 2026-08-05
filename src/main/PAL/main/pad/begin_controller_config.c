@@ -8,10 +8,10 @@ extern u16 g_NegconMappingIndex asm("D_8019CB08");
 extern u16 g_PadMappingIndexSaved asm("D_8019C7A8");
 extern u16 g_NegconMappingIndexSaved asm("D_8019C76C");
 
-extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
-extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
-extern s32 g_PadConfigFlipTimer asm("D_801E7A4C");
-extern s32 g_PadConfigFlipPhase asm("D_801E6C7C");
+extern s32 g_ControllerSceneAngleY;
+extern s32 g_ControllerSceneAngleX;
+extern s32 g_PadConfigFlipTimer;
+extern s32 g_PadConfigFlipPhase;
 
 /* Entry hook for the controller-configuration screen: clears the four screen
  * animation counters and snapshots both button-mapping selections so a cancel

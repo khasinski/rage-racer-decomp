@@ -19,7 +19,7 @@ extern u16 g_PadButtonPresets[] asm("D_8007C028");
 extern u16 g_NegconButtonPresets[] asm("D_8007C0A8");
 /* The live mapping UpdatePadState reads: the pad's eight masks at +0,
  * the NeGcon's eight at +0x10. */
-extern u16 g_PadButtonMapping[] asm("D_801E4B60");
+extern u16 g_PadButtonMapping[];
 
 /*
  * Installs the two selected presets into the live mapping table. Both rows are
@@ -79,11 +79,11 @@ typedef struct PadState {
 
 extern PadState g_PadState asm("D_801E4368");
 extern u8 g_PadType asm("D_801E4369");
-extern u8 g_PadBufferType asm("D_801E403D");
-extern u8 g_PadBufferButtonsHigh asm("D_801E403E");
-extern u8 g_PadBufferButtonsLow asm("D_801E403F");
+extern u8 g_PadBufferType;
+extern u8 g_PadBufferButtonsHigh;
+extern u8 g_PadBufferButtonsLow;
 extern s32 D_801E4D14;
-extern s32 g_PadErrorState asm("D_801E79C8");
+extern s32 g_PadErrorState;
 extern s32 D_8019CB10;
 extern u16 g_PadPrevHeld asm("D_8007C138");
 extern u8 g_PadRepeatTimer[] asm("D_8009AEEC");
@@ -91,10 +91,10 @@ extern u16 D_8007C128[][2];
 extern s16 g_NegconSteerPlay asm("D_8019CAD0");
 extern s16 g_NegconSteerRange[] asm("D_8007C020");
 extern s16 g_NegconMaxTwist asm("D_801E418C");
-extern s16 g_NegconNeutralI asm("D_8019CA08");
-extern s16 g_NegconNeutralII asm("D_8019CA0A");
-extern s16 g_NegconNeutralL asm("D_8019CA0C");
-extern s16 g_NegconSteerNeutral asm("D_801E4BF0");
+extern s16 g_NegconNeutralI;
+extern s16 g_NegconNeutralII;
+extern s16 g_NegconNeutralL;
+extern s16 g_NegconSteerNeutral;
 
 void UpdatePadState(void);
 void UpdatePadState(void) {

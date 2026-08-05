@@ -4,16 +4,16 @@
 #include "psyq/snd_types.h"
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
-extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
-extern short g_SndVoiceRegs[] asm("D_8009DF20");
+extern SpuVoice g_SndVoiceState[];
+extern short g_SndVoiceRegs[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_char g_SndVoiceCount asm("D_801E42F8");
-extern short g_SndMonoMode asm("D_801E3FB0");
-extern short g_SndCurrentSeqSep asm("D_801E4BE6");
-extern ProgAtr *g_SndCurrentProgTable asm("D_801E4110");
-extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
-extern VagAtr *g_SndCurrentToneTable asm("D_801E416C");
-extern long g_SndUpdateLock asm("D_801E40AC");
+extern u_char g_SndVoiceCount;
+extern short g_SndMonoMode;
+extern short g_SndCurrentSeqSep;
+extern ProgAtr *g_SndCurrentProgTable;
+extern VabHdr *g_SndCurrentVabHeader;
+extern VagAtr *g_SndCurrentToneTable;
+extern long g_SndUpdateLock;
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 
 long SpuVmVSetUp(short vab_id, short program);

@@ -97,8 +97,8 @@ void LoadTrackDataAssets(void) {
     }
 }
 
-extern s32 *g_StreamLoc asm("D_801E8A90");
-extern s32 g_StreamSectorCount asm("D_8019CA1C");
+extern s32 *g_StreamLoc;
+extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
 void BeginFmv(void);

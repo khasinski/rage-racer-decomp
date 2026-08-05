@@ -5,7 +5,7 @@
 
 extern u_short g_VramWidth[] asm("D_800941EC");
 extern u_short g_VramHeight[] asm("D_800941EE");
-extern u_long g_ClearImagePacket[] asm("D_8009B9B0");
+extern u_long g_ClearImagePacket[];
 
 u_long _param(long arg0);
 void Gpu_StartDmaTransfer(void *arg0);

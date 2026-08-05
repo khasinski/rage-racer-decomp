@@ -12,18 +12,18 @@ extern s16 g_NegconMappingIndex asm("D_8019CB08");
 extern u16 g_PadMappingIndexSaved asm("D_8019C7A8");
 extern u16 g_NegconMappingIndexSaved asm("D_8019C76C");
 /* 0 while a controller is present, else the error code the banner reports. */
-extern s32 g_PadErrorState asm("D_801E79C8");
+extern s32 g_PadErrorState;
 extern s32 g_SetupArrowPulse asm("D_8007C13C");
-extern s32 g_PadConfigFlipDirection asm("D_801E8264");
-extern s32 g_ControllerSceneAngleY asm("D_801E8AA4");
-extern s32 g_PadConfigFlipTimer asm("D_801E7A4C");
-extern s32 g_PadConfigFlipPhase asm("D_801E6C7C");
+extern s32 g_PadConfigFlipDirection;
+extern s32 g_ControllerSceneAngleY;
+extern s32 g_PadConfigFlipTimer;
+extern s32 g_PadConfigFlipPhase;
 
 /* "INSERT CONTROLLER" / "CONTROLLER ERROR" */
 extern char D_80010000[];
 extern char D_80010014[];
 
-extern u8 *g_DrawBuffer asm("D_8019C900");
+extern u8 *g_DrawBuffer;
 
 void DrawProportionalTextWide(
     s32 x,
@@ -219,24 +219,24 @@ void DrawNegconNeutralScreen(void) {
  * The six live NeGcon settings. All of them are persisted to the memory card,
  * so they also appear as fields of GameSaveBlock (game/memcard.h).
  */
-extern u16 g_NegconSteerNeutral asm("D_801E4BF0");
-extern u16 g_NegconNeutralI asm("D_8019CA08");
-extern u16 g_NegconNeutralII asm("D_8019CA0A");
-extern u16 g_NegconNeutralL asm("D_8019CA0C");
+extern u16 g_NegconSteerNeutral;
+extern u16 g_NegconNeutralI;
+extern u16 g_NegconNeutralII;
+extern u16 g_NegconNeutralL;
 extern u16 g_NegconSteerPlay asm("D_8019CAD0");
 extern u16 g_NegconMaxTwist asm("D_801E418C");
 
 /* ...and where each of them is parked while the calibration screens run, so a
  * cancel can put every one of them back. */
-extern u16 g_NegconSteerNeutralSaved asm("D_801E41A0");
-extern u16 g_NegconNeutralISaved asm("D_8009F0A8");
-extern u16 g_NegconNeutralIISaved asm("D_8009F0AA");
-extern u16 g_NegconNeutralLSaved asm("D_8009F0AC");
-extern u16 g_NegconSteerPlaySaved asm("D_8019C75C");
-extern u16 g_NegconMaxTwistSaved asm("D_8019CB04");
+extern u16 g_NegconSteerNeutralSaved;
+extern u16 g_NegconNeutralISaved;
+extern u16 g_NegconNeutralIISaved;
+extern u16 g_NegconNeutralLSaved;
+extern u16 g_NegconSteerPlaySaved;
+extern u16 g_NegconMaxTwistSaved;
 
 /* The same four screen counters BeginControllerConfig clears. */
-extern s32 g_ControllerSceneAngleX asm("D_801E8A9C");
+extern s32 g_ControllerSceneAngleX;
 
 /*
  * Entry hook for the NeGcon calibration sequence: snapshots the six live
@@ -283,10 +283,10 @@ void BeginNegconCalibration(void) {
  * 0x80 the mechanical centre -- which is what the `- 128` below proves; the
  * three buttons keep their raw 0..255 and are re-centred by subtracting the
  * latched g_NegconNeutral* instead. */
-extern u8 g_NegconAxisSteer asm("D_801E4040");
-extern u8 g_NegconAxisI asm("D_801E4041");
-extern u8 g_NegconAxisII asm("D_801E4042");
-extern u8 g_NegconAxisL asm("D_801E4043");
+extern u8 g_NegconAxisSteer;
+extern u8 g_NegconAxisI;
+extern u8 g_NegconAxisII;
+extern u8 g_NegconAxisL;
 
 /*
  * Game mode 9: hold the NeGcon still and press start. Start latches the four

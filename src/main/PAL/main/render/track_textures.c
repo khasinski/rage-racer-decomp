@@ -2,9 +2,9 @@
 #include "psyq/gpu.h"
 #include "game/state.h"
 
-extern s32 g_TrackTextureSectionLo asm("D_801E4284");
-extern s32 g_TrackTextureSectionHi asm("D_801E4288");
-extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
+extern s32 g_TrackTextureSectionLo;
+extern s32 g_TrackTextureSectionHi;
+extern s32 g_TrackTexturePageWanted;
 /*
  * Old-style definition on purpose: SetTrackTexturePageNow and RequestTrackTexturePage call this
  * with no argument at all (the original relied on whatever was left in $4), so
@@ -35,8 +35,8 @@ s32 arg0;
 
 extern s16 D_8007C70A;
 extern u8 D_801E4BF8[];
-extern u8 *g_TrackTextureShadow asm("D_801E42D0");
-extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
+extern u8 *g_TrackTextureShadow;
+extern s32 g_TrackTexturePageWanted;
 void StoreImage(Rect *rect, void *data);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void DrawSync(long mode) asm("func_800658FC");
@@ -76,8 +76,8 @@ void SwapTrackTexturePageNow(void) {
     } while (page < 0x100);
 }
 
-extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
-extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
+extern s32 g_TrackTextureTargetRow;
+extern s32 g_TrackTextureCursorRow;
 void SwapTrackTexturePageNow(void);
 
 void SetTrackTexturePageNow(void);
@@ -91,9 +91,9 @@ void SetTrackTexturePageNow(void) {
 }
 
 extern u8 D_801E4CF7;
-extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
-extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
-extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
+extern s32 g_TrackTexturePageWanted;
+extern s32 g_TrackTextureTargetRow;
+extern s32 g_TrackTextureCursorRow;
 void ResetTrackTextureSwap(void);
 void ResetTrackTextureSwap(void) {
     s32 value = 1;
@@ -111,17 +111,17 @@ void ResetTrackTextureSwap(void) {
     g_TrackTextureCursorRow = 0;
 }
 
-extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
+extern s32 g_TrackTextureTargetRow;
 void RequestTrackTexturePage(void);
 void RequestTrackTexturePage(void) {
     g_TrackTextureTargetRow = SelectTrackTexturePage();
 }
 
 extern s16 D_8007C70A;
-extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
+extern s32 g_TrackTextureCursorRow;
 extern u8 D_801E4BF8[];
-extern s32 g_TrackTexturePageWanted asm("D_801E6F10");
-extern u8 *g_TrackTextureShadow asm("D_801E42D0");
+extern s32 g_TrackTexturePageWanted;
+extern u8 *g_TrackTextureShadow;
 void StoreImage(Rect *rect, void *data);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void DrawSync(long mode) asm("func_800658FC");
@@ -171,8 +171,8 @@ void SwapTrackTextureRow(void) {
     }
 }
 
-extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
-extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
+extern s32 g_TrackTextureCursorRow;
+extern s32 g_TrackTextureTargetRow;
 void SwapTrackTextureRow(void);
 s32 VSync(s32 mode);
 
@@ -193,8 +193,8 @@ void StepTrackTextureSwap(void) {
     }
 }
 
-extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
-extern u8 g_CarTrackSection[] asm("D_801F18CC");
+extern s32 g_TrackTextureCursorRow;
+extern u8 g_CarTrackSection[];
 
 s32 Random15(void);
 
@@ -223,8 +223,8 @@ s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
     return current;
 }
 
-extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
-extern u8 g_CarTrackSection[] asm("D_801F18CC");
+extern s32 g_TrackTextureCursorRow;
+extern u8 g_CarTrackSection[];
 
 s32 Random15(void);
 

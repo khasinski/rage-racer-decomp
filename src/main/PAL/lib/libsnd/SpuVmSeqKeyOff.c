@@ -3,13 +3,13 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-extern u_char g_SndVoiceCount asm("D_801E42F8");
-extern u_short g_SndCurrentVoice asm("D_801E4BEA");
+extern u_char g_SndVoiceCount;
+extern u_short g_SndCurrentVoice;
 extern u_short D_801F2A08;
 extern u_short D_801F2A0C;
 extern u_short D_8009E670;
 extern u_short D_8009E674;
-extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
+extern SpuVoice g_SndVoiceState[];
 
 void SpuVmSeqKeyOff(long arg0);
 

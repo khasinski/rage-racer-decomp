@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/cd.h"
 
-extern volatile u8 g_CdVolume asm("D_8009B194");
+extern volatile u8 g_CdVolume;
 
 
 void SetCdVolumeSetting(s32 arg0);

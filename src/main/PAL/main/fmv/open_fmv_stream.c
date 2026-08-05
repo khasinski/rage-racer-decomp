@@ -2,7 +2,7 @@
 #include "psyq/gpu.h"
 
 extern s32 g_FmvRingBuffer asm("D_8009AF58");
-extern s32 g_StreamLoc asm("D_801E8A90");
+extern s32 g_StreamLoc;
 void DecDCTReset(s32 arg0);
 void DecDCToutCallback(s32 arg0);
 void StSetRing(s32 arg0, s32 arg1);
@@ -31,7 +31,7 @@ extern volatile s16 g_FmvUploadRectY asm("D_8009AF4E");
 extern s16 g_FmvStripWidth asm("D_8009AF50");
 extern s16 g_FmvStripHeight asm("D_8009AF52");
 extern volatile s32 g_FmvStripDone asm("D_8009AF54");
-extern s32 g_StInterruptPending asm("D_8019CA00");
+extern s32 g_StInterruptPending;
 
 void DecDCTout(volatile u32 *arg0, s32 arg1);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");

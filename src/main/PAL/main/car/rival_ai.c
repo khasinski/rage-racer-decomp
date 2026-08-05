@@ -7,7 +7,7 @@
 void UpdateRivalRubberBand(void);
 
 extern u8 g_PlayerTrackProgress[] asm("D_8009E744");
-extern s32 g_PlayerSpeed asm("D_8009E778");
+extern s32 g_PlayerSpeed;
 
 /*
  * Inside the loop these two fields must NOT be reached as struct members.
@@ -214,8 +214,8 @@ void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
 
 /* Base of the per-car progress pair, walked at the 0x19C GameCarRuntime
  * stride: g_Cars[0].field_68 / .field_6C, whose sum is race progress. */
-extern s32 g_CarProgressA asm("D_801F18BC");
-extern s32 g_CarProgressB asm("D_801F18C0");
+extern s32 g_CarProgressA;
+extern s32 g_CarProgressB;
 
 /*
  * Ranks the first four cars by race progress (`field_68 + field_6C`) and
@@ -287,9 +287,9 @@ void RankContenders(void) {
 
 extern s32 g_PlayerProgressA asm("D_8009E73C");
 extern s32 g_PlayerProgressB asm("D_8009E740");
-extern s32 g_RivalCueFlags asm("D_801E4BB4");
-extern s32 g_ClosestRivalRank asm("D_801E7740");
-extern s16 g_RivalCueCooldown3 asm("D_801E6F26");
+extern s32 g_RivalCueFlags;
+extern s32 g_ClosestRivalRank;
+extern s16 g_RivalCueCooldown3;
 
 void PlaySoundCue(s32 cue);
 

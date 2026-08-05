@@ -56,10 +56,10 @@ typedef struct GameTrackArcCenter {
 
 /* Track centreline points of the loaded course, g_TrackPointCount of them;
  * walked cyclically. */
-extern GameTrackPoint *g_TrackPoints asm("D_8009E688");
+extern GameTrackPoint *g_TrackPoints;
 
 /* Valid entries in g_TrackPoints; every walker wraps with `% this`. */
-extern s32 g_TrackPointCount asm("D_8009E6A8");
+extern s32 g_TrackPointCount;
 
 /*
  * Animated course scenery (func_8003Dxxx / func_8003Fxxx). All four courses
@@ -114,7 +114,7 @@ typedef struct GameShuttleScenery {
 
 /* The two shuttle instances. Instance 1's fields also carry their own split
  * symbols D_801E4FEC..D_801E5014. */
-extern GameShuttleScenery g_ShuttleScenery[2] asm("D_801E4FB8");
+extern GameShuttleScenery g_ShuttleScenery[2];
 
 void UpdateShuttleScenery(s32 instance);
 void DrawShuttleScenery(s32 instance);
@@ -127,6 +127,6 @@ extern s32 g_TrackLength asm("D_801E40D8");
 /* Base of the course's event/marker block (InstallTrackEventData installs it). Starts
  * with the s32 track-walk start index; sub-table offsets are at +0xB64..+0xB78
  * and the per-series marker rows at + g_RaceSeries * 576 + 0x474. */
-extern u8 *g_TrackEventData asm("D_801E4150");
+extern u8 *g_TrackEventData;
 
 #endif

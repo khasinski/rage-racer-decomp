@@ -1,21 +1,21 @@
 #include "psyq/snd.h"
 
-extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
-extern volatile u_short g_SndCurrentVoice asm("D_801E4BEA");
+extern volatile u_char g_SndVoiceCount;
+extern volatile u_short g_SndCurrentVoice;
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
 extern u_short *g_SndSpuRegs asm("D_8009A588");
-extern u_char g_SndVoiceState[] asm("D_8009E0B8");
-extern u_char g_SndVoiceStateAge[] asm("D_8009E0BA");
-extern u_char g_SndVoiceStatePitch[] asm("D_8009E0BC");
-extern u_char g_SndVoiceStateEnvx[] asm("D_8009E0BE");
-extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
-extern u_char g_SndVoiceStateProgActual[] asm("D_8009E0C8");
-extern u_char g_SndVoiceStateProg[] asm("D_8009E0CA");
-extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
-extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
+extern u_char g_SndVoiceState[];
+extern u_char g_SndVoiceStateAge[];
+extern u_char g_SndVoiceStatePitch[];
+extern u_char g_SndVoiceStateEnvx[];
+extern u_char g_SndVoiceStateSeqSep[];
+extern u_char g_SndVoiceStateProgActual[];
+extern u_char g_SndVoiceStateProg[];
+extern u_char g_SndVoiceStateTone[];
+extern u_char g_SndVoiceStateStatus[];
 
 void _SsVmInit(void) {
     register long i asm("$8");

@@ -3,7 +3,7 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 
-extern s32 g_CourseModelCount asm("D_801E40E4");
+extern s32 g_CourseModelCount;
 extern u16 g_SpinningSceneryRate[] asm("D_8007E33C");
 extern u16 g_SpinningSceneryAngle[] asm("D_8007E334");
 extern u8 g_SpinningSceneryYaw[] asm("D_8007E300");

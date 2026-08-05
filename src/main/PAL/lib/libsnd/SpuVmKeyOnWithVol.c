@@ -2,11 +2,11 @@
 
 #include "common.h"
 
-extern u_char g_SndCurrentPriority asm("D_801E4BDF");
-extern u_char g_SndVoiceCount asm("D_801E42F8");
-extern u_char g_SndCurrentVoice asm("D_801E4BEA");
-extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
-extern u_char g_SndVoiceStatePitch[] asm("D_8009E0BC");
+extern u_char g_SndCurrentPriority;
+extern u_char g_SndVoiceCount;
+extern u_char g_SndCurrentVoice;
+extern u_char g_SndVoiceStateStatus[];
+extern u_char g_SndVoiceStatePitch[];
 extern u_char *g_SndSpuRegs asm("D_8009A588");
 
 u_char SpuVmAlloc(long arg0);

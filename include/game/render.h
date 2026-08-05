@@ -481,7 +481,7 @@ void DrawBitPatternOverlay(s32 pattern);
  * context, so the contexts are 0x237E8 apart. Those two runs are also the
  * busiest memory in a race frame.
  */
-extern u8 *g_DrawBuffer asm("D_8019C900");
+extern u8 *g_DrawBuffer;
 
 /*
  * Full-screen fade level, 0..0x100, passed straight to
@@ -489,10 +489,10 @@ extern u8 *g_DrawBuffer asm("D_8019C900");
  * owning scene adds g_FadeStep and clamps back into range, so a scene fades in
  * or out just by setting the step.
  */
-extern s32 g_FadeLevel asm("D_801E42E0");
+extern s32 g_FadeLevel;
 
 /* Per-frame delta added to g_FadeLevel; negative fades out, positive fades in. */
-extern s32 g_FadeStep asm("D_801E42A0");
+extern s32 g_FadeStep;
 
 /*
  * Timed draw script: a table of {time, type, arg0, arg1} entries replayed
@@ -514,7 +514,7 @@ s32 RunTimedDrawScript(
  * has finished". It is also fed to DrawFadingMenuSprites as the elapsed time of the
  * panel it is animating.
  */
-extern s32 g_UiScriptProgress asm("D_8019C9F0");
+extern s32 g_UiScriptProgress;
 
 /*
  * A second, independent RunTimedDrawScript progress counter. The menu
@@ -524,7 +524,7 @@ extern s32 g_UiScriptProgress asm("D_8019C9F0");
  * layer is "background" and which is "foreground" is not settled, hence the
  * neutral name (cf. g_PadEdge / g_PadEdge2).
  */
-extern s32 g_UiScriptProgress2 asm("D_8009B2F8");
+extern s32 g_UiScriptProgress2;
 void DrawScriptedSprite(
     s32 elapsed,
     u8 *style,
@@ -797,12 +797,12 @@ void DrawSkyBackground(void) asm("func_800418D4");
 /* Environment mode of the loaded course variant, from variant data +0x2C. Also
  * the index of the target 48-byte (16 x RGB) sky palette in g_EnvPaletteTable;
  * mode 2 alone gets clear fog (SetFogNear ramps to 0x7FFF, else to 0x1770). */
-extern s16 g_EnvironmentMode asm("D_801E4026");
+extern s16 g_EnvironmentMode;
 /* The mode the previous variant had; the sky-CLUT lerp's source palette. */
-extern s32 g_EnvironmentModePrev asm("D_801E4FB0");
+extern s32 g_EnvironmentModePrev;
 /* Sky palette records, 48 bytes each, indexed by environment mode. Installed
  * from the loaded environment block by SetEnvPaletteTable. */
-extern u8 *g_EnvPaletteTable asm("D_801E4140");
+extern u8 *g_EnvPaletteTable;
 /* g_EnvironmentMode == 4. Picks DrawStaticScenery's model 0x3B over 0x3A
  * and the `flags & 2` prop set over `flags & 1`; also forwarded to scratchpad
  * 0x1F800084 by every car/track renderer. */

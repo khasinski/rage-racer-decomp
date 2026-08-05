@@ -3,13 +3,13 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-extern long g_SndUpdateLock asm("D_801E40AC");
-extern u_short g_SndCurrentVoice asm("D_801E4BEA");
-extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
-extern short g_SndVoiceStateNote[] asm("D_8009E0C4");
-extern short g_SndVoiceStateProg[] asm("D_8009E0CA");
-extern short g_SndVoiceStateTone[] asm("D_8009E0CC");
-extern short g_SndVoiceStateVabId[] asm("D_8009E0CE");
+extern long g_SndUpdateLock;
+extern u_short g_SndCurrentVoice;
+extern SpuVoice g_SndVoiceState[];
+extern short g_SndVoiceStateNote[];
+extern short g_SndVoiceStateProg[];
+extern short g_SndVoiceStateTone[];
+extern short g_SndVoiceStateVabId[];
 extern u_short D_801F2A08;
 extern u_short D_801F2A0C;
 extern u_short D_8009E670;

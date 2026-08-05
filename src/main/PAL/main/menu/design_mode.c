@@ -89,8 +89,8 @@ s32 DrawDesignModeScreen(s32 arg0) {
     return D_8009B2D4;
 }
 
-extern s32 g_TeamNameCharModel asm("D_8009B37C");
-extern s32 g_DesignModeOption asm("D_8019C758");
+extern s32 g_TeamNameCharModel;
+extern s32 g_DesignModeOption;
 
 extern u8 D_800828EC;
 extern u8 g_UiChromeScript2 asm("D_80082790");

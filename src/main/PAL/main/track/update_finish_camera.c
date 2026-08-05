@@ -5,12 +5,12 @@
 #include "psyq/gte.h"
 
 extern GameRenderObject g_CameraCar asm("D_801E3E14");
-extern s32 g_CameraCarTrackPoint asm("D_801E3E44");
-extern s32 g_CameraCarZ asm("D_801E3E1C");
-extern s32 g_CameraCarHeading asm("D_801E3EB4");
-extern s32 g_CameraCarSpeed asm("D_801E3EB8");
-extern s32 g_CameraCarStepX asm("D_801E3ED8");
-extern s32 g_CameraCarStepZ asm("D_801E3EE0");
+extern s32 g_CameraCarTrackPoint;
+extern s32 g_CameraCarZ;
+extern s32 g_CameraCarHeading;
+extern s32 g_CameraCarSpeed;
+extern s32 g_CameraCarStepX;
+extern s32 g_CameraCarStepZ;
 
 void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 rsin(s32 arg0) asm("func_80068568");

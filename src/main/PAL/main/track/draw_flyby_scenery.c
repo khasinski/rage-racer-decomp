@@ -4,10 +4,10 @@
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
 extern s32 g_ModelBankCount asm("D_801E4168");
-extern s32 g_FlybySceneryRotX asm("D_801E431C");
-extern s32 g_FlybySceneryRotY asm("D_801E4320");
-extern s32 g_FlybySceneryRotZ asm("D_801E4324");
-extern s32 g_FlybyScenery[] asm("D_801E42FC");
+extern s32 g_FlybySceneryRotX;
+extern s32 g_FlybySceneryRotY;
+extern s32 g_FlybySceneryRotZ;
+extern s32 g_FlybyScenery[];
 
 
 void DrawFlybyScenery(void);
@@ -32,21 +32,21 @@ void DrawFlybyScenery(void) {
 }
 
 extern volatile s32 g_RaceSeries asm("D_801E408C");
-extern u8 *g_RouteSceneryData asm("D_801E4128");
+extern u8 *g_RouteSceneryData;
 /* 0 while the route prop is not running; the seeder sets it to 1 and
  * UpdateRouteScenery increments it every frame, so it is both the enable
  * and the frame count since the seed. */
-extern volatile s32 g_RouteSceneryClock asm("D_801E4330");
-extern volatile s32 g_RouteSceneryFrame asm("D_801E4338");
+extern volatile s32 g_RouteSceneryClock;
+extern volatile s32 g_RouteSceneryFrame;
 /* Deliberately raw: the seeder's `= 1` is its only appearance in the image;
  * nothing ever reads it. */
 extern volatile s16 D_801E433C;
-extern volatile s16 g_RouteSceneryKeyIndex asm("D_801E433E");
-extern s32 g_RouteSceneryX asm("D_801E4340");
-extern s32 g_RouteSceneryRotX asm("D_801E4350");
-extern s32 g_RouteSceneryRotY asm("D_801E4354");
-extern s32 g_RouteSceneryRotZ asm("D_801E4358");
-extern u8 *g_RouteSceneryKeyframe asm("D_801E6C88");
+extern volatile s16 g_RouteSceneryKeyIndex;
+extern s32 g_RouteSceneryX;
+extern s32 g_RouteSceneryRotX;
+extern s32 g_RouteSceneryRotY;
+extern s32 g_RouteSceneryRotZ;
+extern u8 *g_RouteSceneryKeyframe;
 
 void SeedRouteScenery(void);
 void SeedRouteScenery(void) {

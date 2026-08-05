@@ -10,7 +10,7 @@ typedef struct TextSprt8 {
     u16 clut;
 } TextSprt8;
 
-extern u8 *g_DrawBuffer asm("D_8019C900");
+extern u8 *g_DrawBuffer;
 extern u8 g_Font8x8Cells[] asm("D_8007C2F8");
 extern u8 g_DrawModeEnv[] asm("D_8007BED0");
 extern u8 g_PropFontU[] asm("D_8007C3B8");

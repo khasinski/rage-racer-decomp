@@ -11,14 +11,14 @@ extern s32 g_CdCommandPending asm("D_8007F604");
 extern s32 g_CdTrackStep asm("D_8007F608");
 extern s32 g_CdCommandStep asm("D_8007F60C");
 extern u8 g_CdTrackElapsedLoc[] asm("D_8009AFD0");
-extern u8 g_CdModeParam asm("D_8009B168");
-extern u8 g_CdLocResult asm("D_8009B16C");
-extern u8 g_CdLocMinute asm("D_8009B16E");
-extern u8 g_CdLocSecond asm("D_8009B16F");
-extern u8 g_CdVolume asm("D_8009B194");
-extern u8 g_CdCurrentTrack asm("D_8009B1B0");
-extern s32 g_CdFadeFrames asm("D_8009B1B4");
-extern s32 g_CdTrackEnded asm("D_8019C7BC");
+extern u8 g_CdModeParam;
+extern u8 g_CdLocResult;
+extern u8 g_CdLocMinute;
+extern u8 g_CdLocSecond;
+extern u8 g_CdVolume;
+extern u8 g_CdCurrentTrack;
+extern s32 g_CdFadeFrames;
+extern s32 g_CdTrackEnded;
 extern CdlLOC g_CdTrackLoopPoint[] asm("D_8007F5B0");
 
 long CdControl(long com, void *param, long result);
@@ -203,7 +203,7 @@ void TickCdAudio(void) {
     StepCdVolumeFade();
 }
 
-extern void *g_TrackCameras asm("D_8019C7CC");
+extern void *g_TrackCameras;
 
 void SelectTrackCameraTable(u8 *arg0, s32 arg1);
 void SelectTrackCameraTable(u8 *arg0, s32 arg1) {

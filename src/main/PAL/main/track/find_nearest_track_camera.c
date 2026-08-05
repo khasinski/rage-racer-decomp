@@ -5,8 +5,8 @@ typedef struct Func80043B18Entry {
     s16 value;
 } Func80043B18Entry;
 
-extern u16 g_TrackSectionCount asm("D_8019C9A4");
-extern Func80043B18Entry *g_TrackCameras asm("D_8019C7CC");
+extern u16 g_TrackSectionCount;
+extern Func80043B18Entry *g_TrackCameras;
 
 s32 FindNearestTrackCamera(u8 *arg0, u16 rawValue);
 s32 FindNearestTrackCamera(u8 *arg0, u16 rawValue) {

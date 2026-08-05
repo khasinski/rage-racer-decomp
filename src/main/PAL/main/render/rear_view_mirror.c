@@ -5,9 +5,9 @@
 void SetRotMatrix(void *arg0) asm("func_80069858");
 void SetDrawArea(u8 *packet, u8 *drawEnv) asm("func_80066604");
 
-extern s16 g_MirrorViewEnabled asm("D_8019CA10");
-extern s32 g_MirrorPanelY asm("D_801E4D18");
-extern s32 g_MirrorUnlocked asm("D_801E8A98");
+extern s16 g_MirrorViewEnabled;
+extern s32 g_MirrorPanelY;
+extern s32 g_MirrorUnlocked;
 void ResetMirrorState(void);
 void ResetMirrorState(void) {
     g_MirrorViewEnabled = 1;
@@ -15,9 +15,9 @@ void ResetMirrorState(void) {
     g_MirrorUnlocked = 0;
 }
 
-extern s32 g_MirrorUnlocked asm("D_801E8A98");
-extern s16 g_MirrorViewEnabled asm("D_8019CA10");
-extern s32 g_CameraViewMode asm("D_8009E870");
+extern s32 g_MirrorUnlocked;
+extern s16 g_MirrorViewEnabled;
+extern s32 g_CameraViewMode;
 extern Matrix D_8009AF00;
 extern Matrix D_8019CB18;
 extern s16 D_8019CEAA;
@@ -28,7 +28,7 @@ extern s32 g_VisibleCellMask asm("D_801E6828");
 extern s32 D_8019C7E4;
 extern s32 g_VisibleCellList asm("D_801E4BC8");
 extern s32 D_8009E888;
-extern s32 g_MirrorPanelY asm("D_801E4D18");
+extern s32 g_MirrorPanelY;
 void func_80069A58(s32 arg0, s32 arg1);
 void func_80069A78(s32 arg0);
 
@@ -159,7 +159,7 @@ void EndMirrorPass(void) {
     scratch->matrix = D_8009AF00;
 }
 
-extern s32 g_MirrorPanelY asm("D_801E4D18");
+extern s32 g_MirrorPanelY;
 extern u8 D_8007C728[];
 extern u8 D_8007C738[];
 extern u8 D_8007C739[];
@@ -208,9 +208,9 @@ u8 *DrawMirrorFrame(u8 *packet) {
     return (u8 *)func_80017390(ot, next, 9);
 }
 
-extern s32 g_MirrorUnlocked asm("D_801E8A98");
-extern s16 g_MirrorViewEnabled asm("D_8019CA10");
-extern s32 g_MirrorPanelY asm("D_801E4D18");
+extern s32 g_MirrorUnlocked;
+extern s16 g_MirrorViewEnabled;
+extern s32 g_MirrorPanelY;
 extern s32 g_VisibleCellList asm("D_801E4BC8");
 
 u8 *DrawMirrorFrame(u8 *packet);

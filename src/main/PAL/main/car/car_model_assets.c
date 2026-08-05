@@ -9,8 +9,8 @@ s32 LoadAsset(s32 arg0, void *arg1) asm("func_80017C78");
 
 extern u8 *g_CarModelAsset asm("D_8009E698");
 
-extern u32 g_CarModelSlot asm("D_8009E87C");
-extern u8 *g_CarModelBuffer asm("D_801E4090");
+extern u32 g_CarModelSlot;
+extern u8 *g_CarModelBuffer;
 s32 GetCarAssetIndex(s32 model, s32 grade);
 void SetCarModelSlot(void *arg0, s32 arg1);
 void RegisterModelBank(void *arg0, s32 arg1);
@@ -24,8 +24,8 @@ void ResetAssetLoader(void);
 /* Where asset 0x56 lands: g_ImageBlockBuffer advanced past the car texture
  * block just loaded. Its header words 1 and 2 are relocated into
  * g_AssetBlockPtr / g_AssetSubBlockPtr and word 0 is kept as-is. */
-extern s32 g_AssetBlockPtr2 asm("D_8019C754");
-extern s32 g_SharedAssetWord0 asm("D_801E4D70");
+extern s32 g_AssetBlockPtr2;
+extern s32 g_SharedAssetWord0;
 extern s32 g_AssetSubBlockPtr asm("D_801E8AB0");
 extern u32 g_AssetLoadCursor asm("D_8019CAFC");
 void UnrelocateModelBank(void *, s32);

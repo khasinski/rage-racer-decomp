@@ -9,7 +9,7 @@
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
 void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 
-extern s32 g_TitlePulse asm("D_801E429C");
+extern s32 g_TitlePulse;
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void DrawMainMenuRows(void);
@@ -59,7 +59,7 @@ void UpdateFrontend(void);
 void UpdateTitleAttract(void);
 
 extern s32 g_MainMenuSlide asm("D_801E6F1C");
-extern s32 g_ClassWinCount asm("D_801E4DA8");
+extern s32 g_ClassWinCount;
 
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
@@ -117,8 +117,8 @@ void UpdateTitleAttract(void) {
     next = func_80016F8C(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
     *(void **)scratch = func_800173F4(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
-extern s32 g_TitleAttractTimer asm("D_8019CB70");
-extern s32 g_TitleExitTimer asm("D_8009E880");
+extern s32 g_TitleAttractTimer;
+extern s32 g_TitleExitTimer;
 extern s32 g_FrontendState asm("D_8009F098");
 extern s32 D_8007C744;
 extern u32 D_801E8260;
@@ -217,12 +217,12 @@ void ResetFrameContext(int arg0);
 void ResetFrameContext(int arg0) {
 }
 
-extern volatile u8 g_FrameContexts[] asm("D_8019CE38");
+extern volatile u8 g_FrameContexts[];
 extern u8 D_801C0620[];
-extern u8 g_DispEnv1X[] asm("D_801C067C");
+extern u8 g_DispEnv1X[];
 extern u8 D_801C0690[];
-extern u16 g_ScreenOffsetX asm("D_801E4B8C");
-extern u16 g_ScreenOffsetY asm("D_801E4B9C");
+extern u16 g_ScreenOffsetX;
+extern u16 g_ScreenOffsetY;
 
 void func_80069A58(s32, s32);
 void func_80069A78(s32);

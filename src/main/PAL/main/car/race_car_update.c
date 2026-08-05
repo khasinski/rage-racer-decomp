@@ -12,7 +12,7 @@ s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 
 extern s32 g_AnimTimer asm("D_8009E694");
-extern s16 g_ClosestRivalRank asm("D_801E7740");
+extern s16 g_ClosestRivalRank;
 
 void RankContenders(void);
 void UpdateCarTrafficAvoidance();
@@ -672,8 +672,8 @@ typedef struct Obj {
     s32 f2C;
 } Obj;
 
-extern u8 *volatile g_RaceIntroCameraScript asm("D_8019CAF8");
-extern KE *g_RaceIntroCameraCursor asm("D_801E4038");
+extern u8 *volatile g_RaceIntroCameraScript;
+extern KE *g_RaceIntroCameraCursor;
 /* The pre-race fly-in: the timer counts down to 0 while the eye is eased
  * along the delta by cos(timer / keyframe->f12), and it also drives the
  * fade (timer * 26). */
@@ -784,11 +784,11 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
 }
 
 extern u32 g_CameraCar[] asm("D_801E3E14");
-extern s32 g_CameraCarY asm("D_801E3E18");
-extern s32 g_CameraCarZ asm("D_801E3E1C");
-extern s32 g_CameraCarAngleY asm("D_801E3E38");
-extern s32 g_CameraCarHeading asm("D_801E3EB4");
-extern s32 g_CameraCarSpeed asm("D_801E3EB8");
+extern s32 g_CameraCarY;
+extern s32 g_CameraCarZ;
+extern s32 g_CameraCarAngleY;
+extern s32 g_CameraCarHeading;
+extern s32 g_CameraCarSpeed;
 /* Deliberately raw: written here and in one other camera seeder, read
  * nowhere in the image. */
 extern s32 D_801E3F60;

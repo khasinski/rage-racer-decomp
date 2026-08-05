@@ -6,55 +6,55 @@ void _spu_setTransferCompletionFlag(long);
 void SpuInitMalloc(long, u_char *);
 void SsUtFlush(void);
 
-extern u_char g_SpuMallocArea[] asm("D_8009E5E0");
+extern u_char g_SpuMallocArea[];
 
 extern volatile u_short D_801E4B5C;
-extern volatile u_short g_SndDamper asm("D_8019CA68");
-extern volatile u_short g_SndVabOpenCount asm("D_801F17AC");
+extern volatile u_short g_SndDamper;
+extern volatile u_short g_SndVabOpenCount;
 
-extern u_short g_SndVoiceRegs[] asm("D_8009DF20");
+extern u_short g_SndVoiceRegs[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
-extern u_char g_SndVabStatus[] asm("D_801E4CFC");
+extern u_char g_SndVabStatus[];
 
-extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
-extern volatile u_short g_SndCurrentVoice asm("D_801E4BEA");
+extern volatile u_char g_SndVoiceCount;
+extern volatile u_short g_SndCurrentVoice;
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
 extern u_short *g_SndSpuRegs asm("D_8009A588");
 
-extern u_char g_SndVoiceState[] asm("D_8009E0B8");
-extern u_char g_SndVoiceStateAge[] asm("D_8009E0BA");
-extern u_char g_SndVoiceStatePitch[] asm("D_8009E0BC");
-extern u_char g_SndVoiceStateEnvx[] asm("D_8009E0BE");
+extern u_char g_SndVoiceState[];
+extern u_char g_SndVoiceStateAge[];
+extern u_char g_SndVoiceStatePitch[];
+extern u_char g_SndVoiceStateEnvx[];
 extern u_char D_8009E0C0[];
 extern u_char D_8009E0C2[];
-extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
-extern u_char g_SndVoiceStateProgActual[] asm("D_8009E0C8");
-extern u_char g_SndVoiceStateProg[] asm("D_8009E0CA");
-extern u_char g_SndVoiceStateTone[] asm("D_8009E0CC");
-extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
-extern u_char g_SndVoiceStateAutoVol[] asm("D_8009E0D4");
+extern u_char g_SndVoiceStateSeqSep[];
+extern u_char g_SndVoiceStateProgActual[];
+extern u_char g_SndVoiceStateProg[];
+extern u_char g_SndVoiceStateTone[];
+extern u_char g_SndVoiceStateStatus[];
+extern u_char g_SndVoiceStateAutoVol[];
 extern u_char D_8009E0D6[];
 extern u_char D_8009E0D8[];
 extern u_char D_8009E0DA[];
 extern u_char D_8009E0DC[];
-extern u_char g_SndVoiceStateAutoPan[] asm("D_8009E0E0");
+extern u_char g_SndVoiceStateAutoPan[];
 extern u_char D_8009E0E2[];
 extern u_char D_8009E0E4[];
 extern u_char D_8009E0E6[];
 extern u_char D_8009E0E8[];
 
-extern volatile u_short g_SndReverbAttrDepthLeft asm("D_8019C780");
-extern volatile u_short g_SndReverbAttrDepthRight asm("D_8019C782");
-extern volatile u_short g_SndReverbOnLow asm("D_8009E680");
-extern volatile u_short g_SndReverbOnHigh asm("D_8009E684");
-extern volatile u_long g_SndReverbAttr asm("D_8019C778");
-extern volatile u_long g_SndReverbAttrMode asm("D_8019C77C");
-extern volatile u_char g_SndReservedVoiceCount asm("D_801E4D88");
-extern volatile u_short g_SndMonoMode asm("D_801E3FB0");
-extern volatile u_short g_SndVabProgMax asm("D_801E40D0");
+extern volatile u_short g_SndReverbAttrDepthLeft;
+extern volatile u_short g_SndReverbAttrDepthRight;
+extern volatile u_short g_SndReverbOnLow;
+extern volatile u_short g_SndReverbOnHigh;
+extern volatile u_long g_SndReverbAttr;
+extern volatile u_long g_SndReverbAttrMode;
+extern volatile u_char g_SndReservedVoiceCount;
+extern volatile u_short g_SndMonoMode;
+extern volatile u_short g_SndVabProgMax;
 
 void SpuVmInit(long arg0);
 void SpuVmInit(long arg0) {

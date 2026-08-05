@@ -38,11 +38,11 @@ s32 rsin(s32 arg0) asm("func_80068568");
  * raw:  g_CarTrackProgress = .trackProgress  g_CarMarkerIndex = .field_138
  *       g_CarMarkerFlag = .field_13A
  */
-extern u8 g_CarTrackProgress[] asm("D_801F18C4");
+extern u8 g_CarTrackProgress[];
 
-extern u8 g_CarMarkerIndex[] asm("D_801F198C");
+extern u8 g_CarMarkerIndex[];
 
-extern u8 g_CarMarkerFlag[] asm("D_801F198E");
+extern u8 g_CarMarkerFlag[];
 
 void UpdateCarBodyKick(GameCarRuntime *car);
 void UpdateCarBodyKick(GameCarRuntime *car) {

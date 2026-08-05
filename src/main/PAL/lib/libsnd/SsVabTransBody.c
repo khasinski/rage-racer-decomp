@@ -1,9 +1,9 @@
 #include "psyq/snd.h"
 #include "psyq/spu.h"
 
-extern u_char g_SndVabStatus[] asm("D_801E4CFC");
-extern u_long g_SndVabBodySize[] asm("D_801E8AB8");
-extern u_long g_SndVabSpuAddr[] asm("D_801F17BC");
+extern u_char g_SndVabStatus[];
+extern u_long g_SndVabBodySize[];
+extern u_long g_SndVabSpuAddr[];
 
 short SsVabTransBody(u_char *addr, short vab_id) {
     short id;

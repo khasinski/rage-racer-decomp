@@ -4,26 +4,26 @@
 void StCdInterrupt(void);
 
 
-extern long g_StBackFrame asm("D_8009DF18");
-extern u_char g_StBackLoc[] asm("D_8009DF14");
+extern long g_StBackFrame;
+extern u_char g_StBackLoc[];
 extern long D_8009E69C;
 extern u_char *D_80099360;
 extern u_char *D_8009936C;
-extern long g_StNotStream2Mode asm("D_8019C7A0");
+extern long g_StNotStream2Mode;
 extern short D_8019C790;
-extern long g_StColorMode asm("D_8019C79C");
-extern StCallback g_StFrameCallback asm("D_8019C994");
+extern long g_StColorMode;
+extern StCallback g_StFrameCallback;
 extern long D_8019C9A0;
 extern long D_801E3E08;
 extern long D_801E4190;
-extern long g_StDmaBusy asm("D_801E42C8");
+extern long g_StDmaBusy;
 extern long D_801E6C74;
 extern long D_801E6C84;
-extern long g_StRingSlot asm("D_801E6C98");
+extern long g_StRingSlot;
 extern StStrHeader *g_StRingBase asm("D_801E8AAC");
 extern long D_801E8274;
-extern long g_StRingSize asm("D_801F1850");
-extern long g_StInterruptPending asm("D_8019CA00");
+extern long g_StRingSize;
+extern long g_StInterruptPending;
 
 long CdControl(long com, void *param, long result);
 void CdDataCallback(long arg0);

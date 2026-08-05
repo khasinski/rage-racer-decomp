@@ -22,9 +22,9 @@ s32 RequestTrackLoad(void);
 
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
-extern u8 *g_TrackTextureShadow asm("D_801E42D0");
-extern s32 g_SharedAssetWord0 asm("D_801E4D70");
-extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
+extern u8 *g_TrackTextureShadow;
+extern s32 g_SharedAssetWord0;
+extern u8 *g_AssetBlockPtr2;
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 PollAudioSlotLoad(void);
 s32 GetCarAssetIndex(s32 model, s32 grade);

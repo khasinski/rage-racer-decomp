@@ -8,11 +8,11 @@
 #include "game/memcard.h"
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 g_McMenuRowCursor asm("D_80082F54");
-extern s32 g_McMenuRowCount asm("D_8009B744");
+extern s32 g_McMenuRowCount;
 extern s32 g_McMenuPage asm("D_80082F50");
-extern s32 g_McFromLoadMenu asm("D_8009B730");
-extern s32 g_McFadeStep asm("D_8009B9A0");
-extern s32 g_McFadeLevel asm("D_8009B9A4");
+extern s32 g_McFromLoadMenu;
+extern s32 g_McFadeStep;
+extern s32 g_McFadeLevel;
 void UploadImageAsset(s32 arg0);
 void EnterMemoryCardMenuFromLoad(void);
 void EnterMemoryCardMenuFromLoad(void) {

@@ -3,7 +3,7 @@
 #include "common.h"
 #include "game/state.h"
 
-extern long g_PrologueStep asm("D_801E4178");
+extern long g_PrologueStep;
 extern void (*D_8007D778[])(void);
 
 void TickPrologueStep(void);

@@ -4,7 +4,7 @@
 
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
-extern u32 g_OptionMenuExitScene asm("D_8019C7B0");
+extern u32 g_OptionMenuExitScene;
 /* The 0x140x0x1E0 twin of DrawFullscreenFadeTile (DrawFullscreenFadeTile), for the 480-line setup scene. */
 void DrawFullscreenFadeTile480(s32 color, s32 arg1) asm("func_80023A60");
 void DrawFullscreenFadeTile480(s32 arg0, s32 arg1);

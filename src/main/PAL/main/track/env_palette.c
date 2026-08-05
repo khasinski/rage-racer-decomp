@@ -1,7 +1,7 @@
 #include "common.h"
 
 /* Local u32 view of g_EnvPaletteTable (render.h types it as u8 *). */
-extern u32 g_EnvPaletteTable asm("D_801E4140");
+extern u32 g_EnvPaletteTable;
 
 void SetEnvPaletteTable(u32 arg0);
 void SetEnvPaletteTable(u32 arg0) {

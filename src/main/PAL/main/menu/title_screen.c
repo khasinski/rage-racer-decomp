@@ -7,14 +7,14 @@
 #include "psyq/gpu.h"
 #include "game/cd.h"
 
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
+extern s32 g_FrameSyncThreshold;
 extern s32 D_801E8260;
 extern s32 D_801E6F28;
 extern s32 g_MainMenuSlide asm("D_801E6F1C");
-extern s32 g_TitlePulse asm("D_801E429C");
+extern s32 g_TitlePulse;
 extern s32 g_FrontendState asm("D_8009F098");
-extern s32 g_TitleExitTimer asm("D_8009E880");
-extern s32 g_TitleAttractTimer asm("D_8019CB70");
+extern s32 g_TitleExitTimer;
+extern s32 g_TitleAttractTimer;
 
 void CloseLoadedAudioSlots(void);
 void ResetTrackTextureSwap(void);
@@ -46,11 +46,11 @@ void EnterFrontend(void) {
     SetDefaultReverbDepth();
 }
 
-extern s32 g_StreamReturnScene asm("D_8019C760");
+extern s32 g_StreamReturnScene;
 extern s32 D_801E6F28;
 extern s32 g_TitleAttractTimer;
 extern s32 g_TitleExitTimer;
-extern s32 g_FrameSyncThreshold asm("D_8019C768");
+extern s32 g_FrameSyncThreshold;
 extern s32 D_801E8260;
 extern s32 g_MainMenuSlide;
 extern s32 g_FrontendState;
@@ -86,7 +86,7 @@ void EnterTitleScreen(void) {
 }
 
 
-extern u8 *g_DrawBuffer asm("D_8019C900");
+extern u8 *g_DrawBuffer;
 
 void *func_8001720C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
@@ -246,7 +246,7 @@ void UpdateMainMenuOpen(void) {
     DrawMainMenuRows();
 }
 
-extern s32 g_BgmTrackCount asm("D_801E40A8");
+extern s32 g_BgmTrackCount;
 extern volatile u8 g_BgmShuffleOrder[] asm("D_801E7734");
 extern u8 D_801E7733[];
 extern s32 g_BgmShuffleIndex asm("D_8009E6CC");
@@ -288,20 +288,20 @@ void ShuffleBgmOrder(void) {
     g_BgmShuffleIndex = 0;
 }
 
-extern volatile u16 g_PadEdge2 asm("D_801E436E");
+extern volatile u16 g_PadEdge2;
 extern s32 D_801E8260;
 
 extern s32 *g_CarTable asm("D_8019C7C8");
 extern s32 *g_CourseProgress asm("D_8009E67C");
-extern s32 g_ExtraGrandPrixSaveMaxClass asm("D_801E6E88");
+extern s32 g_ExtraGrandPrixSaveMaxClass;
 extern s32 g_FrontendState;
-extern s32 g_OptionMenuCursor asm("D_8019C7B4");
+extern s32 g_OptionMenuCursor;
 
-extern s32 g_GrandPrixCars asm("D_801E4F44");
+extern s32 g_GrandPrixCars;
 extern s32 g_GrandPrixCourseProgress asm("D_801E42EC");
-extern s32 g_ExtraGrandPrixCars asm("D_8019C914");
+extern s32 g_ExtraGrandPrixCars;
 extern s32 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
-extern s32 g_TimeAttackCars asm("D_801E4388");
+extern s32 g_TimeAttackCars;
 
 void PlaySoundCue(s32 cue);
 extern void ResetAssetLoader(void);

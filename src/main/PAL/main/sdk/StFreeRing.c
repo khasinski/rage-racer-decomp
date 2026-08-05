@@ -1,8 +1,8 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern long g_StRingSize asm("D_801F1850");
-extern long g_StRingSlot asm("D_801E6C98");
+extern long g_StRingSize;
+extern long g_StRingSlot;
 extern StStrHeader *g_StRingBase asm("D_801E8AAC");
 extern long D_801E8278;
 extern long D_801E8A94;

@@ -19,7 +19,7 @@ void StoreImage(Rect *rect, void *data);
 void DrawSync(long mode) asm("func_800658FC");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern GameSceneAssetHeader *g_AssetBase asm("D_8019C904");
-extern void *g_AssetBlockPtr2 asm("D_8019C754");
+extern void *g_AssetBlockPtr2;
 extern void *g_AssetSubBlockPtr asm("D_801E8AB0");
 void CloseLoadedAudioSlots(void);
 

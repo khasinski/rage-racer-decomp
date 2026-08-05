@@ -1,8 +1,8 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-extern SpuReverbAttr g_SndReverbAttr asm("D_8019C778");
-extern short g_SndReverbAttrMode asm("D_8019C77C");
+extern SpuReverbAttr g_SndReverbAttr;
+extern short g_SndReverbAttrMode;
 
 long SsUtSetReverbType(long type) asm("func_80073614");
 long SsUtSetReverbType(long type) {

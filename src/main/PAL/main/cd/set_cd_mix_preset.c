@@ -3,7 +3,7 @@
 #include "psyq/cd.h"
 
 extern s32 g_CdMixPreset asm("D_8007F5FC");
-extern u8 g_CdVolume asm("D_8009B194");
+extern u8 g_CdVolume;
 
 
 void SetCdMixPreset(s32 arg0);
@@ -15,8 +15,8 @@ void SetCdMixPreset(s32 arg0) {
 extern CdlLOC g_CdTrackLocs[] asm("D_8009AFD4");
 extern CdlLOC g_CdBgmTrackLocs[] asm("D_8009AFDC");
 extern void *g_CdAudioFileNames[] asm("D_8007F568");
-extern s32 g_CdTocEntryCount asm("D_801E6C80");
-extern u8 g_CdSearchFile[] asm("D_8009B198");
+extern s32 g_CdTocEntryCount;
+extern u8 g_CdSearchFile[];
 
 void BuildCdTrackTable(void);
 void BuildCdTrackTable(void) {

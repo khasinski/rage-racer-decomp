@@ -3,7 +3,7 @@
 #include "game/sound.h"
 #include "psyq/snd.h"
 
-extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
+extern s32 g_SoundSlotActive[];
 
 void SetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
     s32 *entry;
@@ -39,16 +39,16 @@ void SetEffectVoicesEnabled(s32 arg0) {
     SetSoundSlotVoicesEnabled(arg0);
 }
 
-extern s32 g_EngineSoundBank asm("D_801E6CBC");
+extern s32 g_EngineSoundBank;
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
-extern s32 g_SoundSlotActive5 asm("D_801E6CDC");
-extern s32 g_SoundSlotVolumeScale asm("D_801E6CE0");
-extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
-extern s32 g_PanVoiceVolumeR asm("D_801E6CE8");
-extern s32 g_PanVoiceActive asm("D_801E6CEC");
-extern s32 g_IndexedEffectIndex asm("D_801E6CF0");
-extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
-extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
+extern s32 g_SoundSlotActive5;
+extern s32 g_SoundSlotVolumeScale;
+extern s32 g_PanVoiceVolumeL;
+extern s32 g_PanVoiceVolumeR;
+extern s32 g_PanVoiceActive;
+extern s32 g_IndexedEffectIndex;
+extern s32 g_IndexedEffectIndexPrev;
+extern s32 g_IndexedEffectPitch;
 
 void ResetSoundState(void) {
     {
@@ -124,7 +124,7 @@ void ResetSoundState(void) {
     }
 }
 
-extern u8 g_SndTableArea[] asm("D_8009B3B8");
+extern u8 g_SndTableArea[];
 extern char g_MsgVabOpenHeadError[] asm("D_8001267C");
 extern char g_MsgVabTransBodyError[] asm("D_80012694");
 
@@ -210,13 +210,13 @@ void SsStopSoundTick(void);
 void SsQuit(void);
 
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
-extern s32 g_SoundCueBank asm("D_801E6CA0");
-extern s16 g_VabIds4 asm("D_801E6CB0");
-extern s16 g_VabIds5 asm("D_801E6CB2");
-extern s16 g_VabIds3 asm("D_801E6CAE");
-extern s32 g_ExtraVabLoaded asm("D_801E6CC0");
-extern s32 g_AudioLoadSlot asm("D_8009E68C");
-extern s32 g_VabTransferDone asm("D_801F17B4");
+extern s32 g_SoundCueBank;
+extern s16 g_VabIds4;
+extern s16 g_VabIds5;
+extern s16 g_VabIds3;
+extern s32 g_ExtraVabLoaded;
+extern s32 g_AudioLoadSlot;
+extern s32 g_VabTransferDone;
 extern s32 g_VabSpuAddress[] asm("D_800125EC");
 extern s32 g_VabSpuAddressExtra asm("D_800125F8");
 extern char g_MsgVabOpenHeadError[] asm("D_8001267C");
@@ -487,7 +487,7 @@ void SetEffectVolumeScale(s32 arg0) {
     g_SoundScale.scale = arg0;
 }
 
-extern s32 g_SoundSlotVolumeScale asm("D_801E6CE0");
+extern s32 g_SoundSlotVolumeScale;
 
 void SetLoadedTableVolumeScale(s32 arg0) {
     if (arg0 >= 0) {
@@ -549,7 +549,7 @@ void SsSetMono(void);
 void SetMonoOutput(void);
 void SetMonoOutput(void) { g_StereoOutput = 0; SetCdMixPreset(1); SsSetMono(); }
 
-extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
+extern s32 g_EngineSoundMaxRpm;
 
 u32 GetLoadedAudioStep(void) {
     return g_EngineSoundMaxRpm;
@@ -567,8 +567,8 @@ s32 GetActiveAudioSlots(void) {
 #include "game/sound.h"
 
 extern s32 g_StereoOutput asm("D_80082F40");
-extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
-extern s32 g_PanVoiceVolumeR asm("D_801E6CE8");
+extern s32 g_PanVoiceVolumeL;
+extern s32 g_PanVoiceVolumeR;
 
 void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
     if (arg0 >= 0) {
@@ -598,7 +598,7 @@ void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
     }
 }
 
-extern s32 g_PanVoiceActive asm("D_801E6CEC");
+extern s32 g_PanVoiceActive;
 
 long SsUtKeyOffV(long voice);
 
@@ -682,10 +682,10 @@ void ApplyPanVoiceVolume(void) {
     g_PanVoiceActive = changed;
 }
 
-extern s32 g_IndexedEffectIndex asm("D_801E6CF0");
-extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
-extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
-extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
+extern s32 g_IndexedEffectIndex;
+extern s32 g_IndexedEffectIndexPrev;
+extern s32 g_IndexedEffectPitch;
+extern s32 g_IndexedEffectVolume;
 
 void StartIndexedEffectVoice(s32 baseTone) {
     SsUtKeyOnV(0x14, g_VabIds[0], (s16)baseTone, 0, 0x3C, 0, 0, 0);
@@ -1132,9 +1132,9 @@ void UpdateBasicEffectVoices(void) {
 #include "psyq/snd.h"
 #include "game/sound.h"
 
-extern s32 g_EffectVoiceState[] asm("D_801E6D38");
-extern u8 g_EffectVoiceTone[] asm("D_801E6D34");
-extern u8 g_EffectVoiceVolume[] asm("D_801E6D40");
+extern s32 g_EffectVoiceState[];
+extern u8 g_EffectVoiceTone[];
+extern u8 g_EffectVoiceVolume[];
 extern s32 g_EffectVoicePitch[] asm("D_801E6D3C");
 
 extern const s32 g_EffectCueTable[] asm("D_80012730");
@@ -1429,9 +1429,9 @@ void UpdateEffectVoiceStates(void) {
     } while ((s32)statePtr < (s32)&g_EffectVoiceState[20]);
 }
 
-extern s32 g_SoundCueBank asm("D_801E6CA0");
-extern s32 g_SpecialCueVoiceA asm("D_801E4D90");
-extern s32 g_SpecialCueVoiceB asm("D_801E4D94");
+extern s32 g_SoundCueBank;
+extern s32 g_SpecialCueVoiceA;
+extern s32 g_SpecialCueVoiceB;
 extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
 extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
 extern const s32 g_SpecialVoiceBits[] asm("D_80011C74");
@@ -1541,8 +1541,8 @@ s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) {
 }
 
 extern s32 g_ActiveSpecialCue asm("D_80082F44");
-extern s32 g_SpecialCueVoiceA asm("D_801E4D90");
-extern s32 g_SpecialCueVoiceB asm("D_801E4D94");
+extern s32 g_SpecialCueVoiceA;
+extern s32 g_SpecialCueVoiceB;
 extern s32 D_80011C84;
 extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
 extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
@@ -1671,7 +1671,7 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
     return result;
 }
 
-extern s32 g_SoundCueBank asm("D_801E6CA0");
+extern s32 g_SoundCueBank;
 extern s32 g_LastSpecialCueRequest asm("D_80082F48");
 
 s32 StartSoundCueVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -1770,10 +1770,10 @@ void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
 #include "game/car.h"
 
 
-extern s32 g_EngineSoundPosition asm("D_801E6CB8");
-extern s32 g_EngineSoundBank asm("D_801E6CBC");
-extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
-extern s32 g_EngineSoundCurves[] asm("D_801E446C");
+extern s32 g_EngineSoundPosition;
+extern s32 g_EngineSoundBank;
+extern s32 g_SoundSlotActive[];
+extern s32 g_EngineSoundCurves[];
 
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vab_slot);
 void ApplyPanVoiceVolume(void);
@@ -1924,12 +1924,12 @@ void InitSequenceAudio(void) {
 }
 
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
-extern s32 g_PanVoiceVolumeL asm("D_801E6CE4");
-extern s32 g_PanVoiceVolumeR asm("D_801E6CE8");
-extern s32 g_PanVoiceActive asm("D_801E6CEC");
-extern s32 g_IndexedEffectIndex asm("D_801E6CF0");
-extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
-extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
+extern s32 g_PanVoiceVolumeL;
+extern s32 g_PanVoiceVolumeR;
+extern s32 g_PanVoiceActive;
+extern s32 g_IndexedEffectIndex;
+extern s32 g_IndexedEffectIndexPrev;
+extern s32 g_IndexedEffectPitch;
 extern s32 g_CarSoundVolumeScales[] asm("D_800125FC");
 
 s32 GetOwnedCarAssetIndex(s32 arg0);
@@ -1998,8 +1998,8 @@ void InitEffectVoiceRuntime(void) {
     SetLoadedTableVolumeScale(g_CarSoundVolumeScales[GetOwnedCarAssetIndex(g_PlayerCarIndex)]);
 }
 
-extern s32 g_ReverbDepthL asm("D_801E6D84");
-extern s32 g_ReverbDepthR asm("D_801E6D88");
+extern s32 g_ReverbDepthL;
+extern s32 g_ReverbDepthR;
 
 void RestoreReverbDepth(s32 arg0) {
     if (arg0 != 0) {
@@ -2090,9 +2090,9 @@ void ForcePanVoiceEnabled(s32 enabled) {
 #include "game/sound.h"
 #include "psyq/snd.h"
 
-extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
-extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
-extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
+extern s32 g_IndexedEffectIndexPrev;
+extern s32 g_IndexedEffectPitch;
+extern s32 g_IndexedEffectVolume;
 
 long SsUtKeyOffV(long voice);
 void StartIndexedEffectVoice(s32 arg0);
@@ -2329,7 +2329,7 @@ asm(".globl func_8005E078\n"
     ".globl func_8005E314\n"
     "func_8005E314 = ForcePitchEffectVoicesEnabled + 0x144");
 
-extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
+extern s32 g_SoundSlotActive[];
 
 void SetSoundSlotVoicesEnabledWithRegisterArg(void) asm("func_8005B40C");
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot);
@@ -2402,13 +2402,13 @@ void ForceAllEffectVoicesEnabled(s32 arg0) {
 
 /* Stride 4, i.e. two s16 per voice, but indexing it as [voice][0] costs an
  * instruction -- retail keeps voice * 4 in a register. */
-extern s16 g_VabSlotVoiceTone[] asm("D_8009B510");
+extern s16 g_VabSlotVoiceTone[];
 extern s32 g_VabSpuAddress[] asm("D_800125EC");
-extern s32 g_AudioLoadSlot asm("D_8009E68C");
+extern s32 g_AudioLoadSlot;
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
-extern s16 g_SeqHandle asm("D_801E6D90");
-extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
-extern s32 g_VabTransferDone asm("D_801F17B4");
+extern s16 g_SeqHandle;
+extern s32 g_SeqVolumeFadeStep;
+extern s32 g_VabTransferDone;
 extern char g_MsgSeqVabOpenHeadError[] asm("D_80012788");
 extern char g_MsgSeqVabTransBodyError[] asm("D_800127A0");
 
@@ -2422,7 +2422,7 @@ void func_8007865C(s32 arg0);
 void func_80071AC4(s32 arg0);
 void func_80072B3C(s32 arg0);
 
-extern s16 g_VabIds[] asm("D_801E6CA8");
+extern s16 g_VabIds[];
 
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {

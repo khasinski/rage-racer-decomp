@@ -2,15 +2,15 @@
 
 #include "common.h"
 
-extern volatile long g_SndUpdateLock asm("D_801E40AC");
-extern volatile u_short g_SndCurrentVoice asm("D_801E4BEA");
+extern volatile long g_SndUpdateLock;
+extern volatile u_short g_SndCurrentVoice;
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
-extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
-extern u_char g_SndVoiceStatePitch[] asm("D_8009E0BC");
-extern u_char g_SndVoiceState[] asm("D_8009E0B8");
+extern u_char g_SndVoiceStateStatus[];
+extern u_char g_SndVoiceStatePitch[];
+extern u_char g_SndVoiceState[];
 
 long SsUtKeyOffV(long voice);
 

@@ -1,17 +1,17 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndVabStatus[] asm("D_801E4CFC");
-extern short g_SndVabProgMax asm("D_801E40D0");
-extern u_char g_SndCurrentVabId asm("D_801E4BD1");
-extern u_char g_SndCurrentProg asm("D_801E4BD6");
-extern u_char g_SndCurrentProgActual asm("D_801E4BD7");
-extern u_char *g_SndCurrentToneTable asm("D_801E416C");
-extern volatile u_char *g_SndCurrentVabHeader asm("D_801E413C");
-extern u_char *g_SndCurrentProgTable asm("D_801E4110");
-extern u_char *g_SndVabHeader[] asm("D_8019CA20");
-extern u_char *g_SndVabProgTable[] asm("D_8019C9B0");
-extern u_char *g_SndVabToneTable[] asm("D_8019CA70");
+extern u_char g_SndVabStatus[];
+extern short g_SndVabProgMax;
+extern u_char g_SndCurrentVabId;
+extern u_char g_SndCurrentProg;
+extern u_char g_SndCurrentProgActual;
+extern u_char *g_SndCurrentToneTable;
+extern volatile u_char *g_SndCurrentVabHeader;
+extern u_char *g_SndCurrentProgTable;
+extern u_char *g_SndVabHeader[];
+extern u_char *g_SndVabProgTable[];
+extern u_char *g_SndVabToneTable[];
 
 long SpuVmVSetUp(long arg0, long arg1);
 long SsUtGetVagAtr(long arg0, long arg1, long arg2, VagAtr *out);

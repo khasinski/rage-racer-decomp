@@ -201,7 +201,7 @@ const CarSpecGraphColors g_CarSpecGraphColors = {{
     {0x2C, 0x12, 0x83, 0},
 }};
 extern s32 g_CarSpecGraphProgress asm("D_8007FB08");
-extern s32 g_CarSpecBars[4] asm("D_8009B270");
+extern s32 g_CarSpecBars[4];
 extern u8 *g_CarModelAsset asm("D_8009E698");
 
 void DrawCarSpecSprite(void *ot, s16 x, s16 y, s16 w, u16 h, u16 u, u16 v,

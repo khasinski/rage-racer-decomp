@@ -9,7 +9,7 @@ typedef struct Rec {
 extern long g_CdCachedShellOpenCount asm("D_8009934C");
 extern long g_CdShellOpenCount asm("D_80099054");
 extern long g_CdDebugLevel asm("D_80099048");
-extern Rec g_CdFileCache[64] asm("D_8009BB14");
+extern Rec g_CdFileCache[64];
 
 extern const char D_80013928[];
 extern const char D_80013944[];

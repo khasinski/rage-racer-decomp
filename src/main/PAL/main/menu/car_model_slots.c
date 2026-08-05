@@ -128,7 +128,7 @@ s32 GetOwnedCarAssetIndex(s32 arg0) {
     return -1;
 }
 
-extern void *g_CarModelSlot asm("D_8009E87C");
+extern void *g_CarModelSlot;
 
 /* Declared locally: this unit passes the slot as a pointer, which gcc 2.6.3
  * will not take against the s32 prototype in game/render.h. */

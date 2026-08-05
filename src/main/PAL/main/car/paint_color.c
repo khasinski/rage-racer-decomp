@@ -7,7 +7,7 @@
  */
 extern volatile u16 g_PaintBlendShade0 asm("D_8019CB38");
 extern volatile u16 g_PaintBlendShade1 asm("D_8019CB3A");
-extern volatile u16 g_PaintBlendShade2 asm("D_8019CB3C");
+extern volatile u16 g_PaintBlendShade2;
 
 
 /*
@@ -167,7 +167,7 @@ void ApplyBodyColor1(u32 arg0, u32 arg1) {
 }
 
 extern u32 g_CarModelAsset asm("D_8009E698");
-extern u32 g_CarModelSlot asm("D_8009E87C");
+extern u32 g_CarModelSlot;
 
 void ApplyBodyColor1(u32 arg0, u32 arg1);
 void UploadCarImage(u32 arg0);
@@ -237,7 +237,7 @@ void ApplyBodyColor2(u32 arg0, u32 arg1) {
 }
 
 extern u32 g_CarModelAsset asm("D_8009E698");
-extern u32 g_CarModelSlot asm("D_8009E87C");
+extern u32 g_CarModelSlot;
 
 void ApplyBodyColor2(u32 arg0, u32 arg1);
 void UploadCarImage(u32 arg0);

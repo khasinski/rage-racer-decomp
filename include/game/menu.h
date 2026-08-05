@@ -27,22 +27,22 @@ typedef struct S22 {
  */
 
 /* Grid-menu cursor (0..0x2B, a 4x11 grid; 0x2A/0x2B are the confirm buttons). */
-extern s32 GameMenuCursor asm("D_8009B2F4");
+extern s32 GameMenuCursor;
 /* Non-zero while a screen transition is in progress; gates re-entry. */
-extern s32 GameMenuBusy asm("D_8009B308");
+extern s32 GameMenuBusy;
 /* Cursor animation gate: input is only accepted while this is negative. */
-extern s32 GameMenuCursorAnim asm("D_8009B380");
+extern s32 GameMenuCursorAnim;
 /* Which g_MenuScreenDraw entry to run this frame, -1 for none; UpdateMenuMode
  * calls it with a step of 0x14. */
-extern s32 g_MenuHandlerIndex asm("D_8009B340");
+extern s32 g_MenuHandlerIndex;
 
 /* Second, independent g_MenuScreenDraw slot, run with a step of -10; the
  * result is kept in D_8009B348. */
-extern s32 g_MenuHandlerIndex2 asm("D_8009B344");
+extern s32 g_MenuHandlerIndex2;
 
 /* Which menu-mode screen is running; the id dispatched through
  * g_MenuScreenUpdate. Id -> screen map in docs/names.md section 3a. */
-extern s32 g_MenuScreen asm("D_8019C9F8");
+extern s32 g_MenuScreen;
 
 /*
  * The two parallel screen tables UpdateMenuMode dispatches through, both indexed
@@ -62,17 +62,17 @@ extern s32 (*g_MenuScreenDraw[])(s32 step) asm("D_80082EF0");
  * (g_GrandPrixMode 0), 3 starts the attract demo and 4 opens the options.
  * DrawMainMenuRows draws the row whose index equals it as selected.
  */
-extern s32 g_TitleMenuSelection asm("D_801E4184");
+extern s32 g_TitleMenuSelection;
 
 /*
  * Element mask handed to DrawBitPatternOverlay by
  * UpdateMenuMode, selecting which parts of the current menu overlay are drawn.
  * -1 while a screen is still opening; screens then set their own pattern.
  */
-extern s32 g_MenuOverlayPattern asm("D_8009B318");
+extern s32 g_MenuOverlayPattern;
 
 /* Debug/status phase code written through an asset-load state machine. */
-extern s32 GameMenuLoadPhase asm("D_8009B740");
+extern s32 GameMenuLoadPhase;
 
 /*
  * Alternate menu layout. The garage screens copy the setting into the live
@@ -82,7 +82,7 @@ extern s32 GameMenuLoadPhase asm("D_8009B740");
  * The setting is only ever written 0, so the layout is unreachable in retail.
  */
 extern s32 g_MenuAltLayout asm("D_8019CB0C");
-extern s32 g_MenuAltLayoutSetting asm("D_8009B338");
+extern s32 g_MenuAltLayoutSetting;
 
 /* The two S22[series][course][5] high-score tables kept in the save block:
  * race ranking (+0x9A4) and time ranking (+0x8DC). */
@@ -98,11 +98,11 @@ extern u8 g_TeamNameChars[] asm("D_8007F460");
  * last PollMemoryCardStatus result (0 no card yet, 1/2 card present,
  * -1/-2/-3 error), not a record pointer; the others are selection/phase words.
  */
-extern s32 g_McMenuState asm("D_8009B71C");
+extern s32 g_McMenuState;
 extern s32 g_McCardStatus asm("D_8009B720");
-extern s32 g_McMenuSelection asm("D_8009B724");
-extern s32 g_McMenuPhase asm("D_8009B728");
-extern s32 g_McMenuSubState asm("D_8009B72C");
+extern s32 g_McMenuSelection;
+extern s32 g_McMenuPhase;
+extern s32 g_McMenuSubState;
 
 /*
  * The pad word block at 0x801E4368, filled by UpdatePadState from the raw
@@ -114,17 +114,17 @@ extern s32 g_McMenuSubState asm("D_8009B72C");
  * 0x4000 down, 0x8000 left, 0x2000 right, 0x40 cross, 0x20 circle,
  * 0x10 triangle, 0x80 square, 0x800 start - so 0x860 confirms, 0x90 cancels.
  */
-extern u16 g_PadHeld asm("D_801E436A");
-extern u16 g_PadEdge asm("D_801E4370");
-extern u16 g_PadEdge2 asm("D_801E436E");
+extern u16 g_PadHeld;
+extern u16 g_PadEdge;
+extern u16 g_PadEdge2;
 
 /* The two eased current/target pairs of the 3D menu view, in 1/1000 units:
  * an angle (carousel wraps at 500000 per entry) and a translation. Screens set
  * only the *Target words. */
-extern s32 g_MenuViewAngle asm("D_8009B34C");
-extern s32 g_MenuViewAngleTarget asm("D_8009B350");
-extern s32 g_MenuViewOffset asm("D_8009B358");
-extern s32 g_MenuViewOffsetTarget asm("D_8009B35C");
+extern s32 g_MenuViewAngle;
+extern s32 g_MenuViewAngleTarget;
+extern s32 g_MenuViewOffset;
+extern s32 g_MenuViewOffsetTarget;
 
 void AdjustMenuSelectionHorizontal(
     s32 *value,

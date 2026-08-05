@@ -18,9 +18,9 @@ void ApplyDuckedSequenceAudio(void);
 
 s32 DrawLogoSampleScreen(s32 arg0);
 
-extern s32 g_MenuConfirmTimer asm("D_8009B300");
-extern s32 g_MenuHintButtonsVisible asm("D_8009B314");
-extern u8 g_MenuSubCursor asm("D_8009B2F0");
+extern s32 g_MenuConfirmTimer;
+extern s32 g_MenuHintButtonsVisible;
+extern u8 g_MenuSubCursor;
 extern s32 D_8019CAB8;
 extern void *D_801E8A44;
 extern s32 D_801F1804;
