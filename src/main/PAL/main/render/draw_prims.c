@@ -121,7 +121,6 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     prim->t.g0 = gLocal;
     prim->t.b0 = bLocal;
 
-    asm("" : "=r"(clutReg) : "0"(clutReg));
     div = (clutReg & 0xFFFF) / 20U;
     clutReg &= 0xFFFF;
     base = (div + 0x1E0) << 6;
