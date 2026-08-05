@@ -241,7 +241,7 @@ void DrawProportionalTextShadedWide(
     });
     register s32 shade asm("$23");
     register s32 t0 asm("$8");
-    register s32 s1 asm("$17");
+    s32 s1;
     u32 first;
     s32 v;
     s32 u;
