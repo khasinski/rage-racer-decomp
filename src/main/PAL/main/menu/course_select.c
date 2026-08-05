@@ -509,9 +509,6 @@ extern u8 g_MenuSubCursor asm("D_8009B2F0");
 extern u8 *D_8019C764;
 extern s32 g_CourseSelectOption asm("D_8019C7AC");
 extern s32 g_PlayerMoney asm("D_8019C908");
-/* u16 view of race.h's s16 g_GrandPrixSeries; the header is included here, so this
- * translation unit's deliberately different type needs its own spelling. */
-extern u16 g_GrandPrixSeriesU16 asm("D_8019CABC");
 extern u8 D_80081818;
 extern u8 D_800817A0;
 extern u8 g_UiChromeScript asm("D_80082460");
@@ -660,11 +657,11 @@ void UpdateCourseSelectScreen(void) {
                         PlaySoundCue(2);
                         hv = 0;
                         if (g_GrandPrixClass < 5) {
-                            hv = g_GrandPrixSeriesU16;
+                            hv = (u16)g_GrandPrixSeries;
                         }
                         D_8019C764 = &D_80082604;
                         GameMenuBusy = -1;
-                        g_GrandPrixSeriesU16 = hv;
+                        g_GrandPrixSeries = hv;
                         g_UiScriptProgress2 = 0;
                         g_MenuSubCursor = 1;
                     } else {
@@ -675,7 +672,7 @@ void UpdateCourseSelectScreen(void) {
                         g_MenuViewOffsetTarget = 0x3D090;
                         GameMenuBusy = sel;
                         D_8009B368 = 0;
-                        g_GrandPrixSeriesU16 = g_CourseIndex >> 2;
+                        g_GrandPrixSeries = g_CourseIndex >> 2;
                         D_8009B360 = (D_8009B360 - D_8009B364) + 0x1F4000;
                     }
                 } else {
@@ -882,7 +879,7 @@ void UpdateCourseSelectScreen(void) {
                     if (half != 0) {
                         p->money = g_PlayerMoney;
                     } else {
-                        p->money = (s16)g_GrandPrixSeriesU16;
+                        p->money = g_GrandPrixSeries;
                     }
                     g_UiScriptProgress = 0;
                     GameMenuBusy = 0;
@@ -912,7 +909,7 @@ void UpdateCourseSelectScreen(void) {
                         g_RaceProgress->money = g_PlayerMoney;
                     } else {
                         p = g_RaceProgress;
-                        p->money = (s16)g_GrandPrixSeriesU16;
+                        p->money = g_GrandPrixSeries;
                     }
                 clear:
                     g_UiScriptProgress = 0;

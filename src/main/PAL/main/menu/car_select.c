@@ -354,7 +354,6 @@ extern s32 D_8019C7B8;
 extern s32 g_PlayerMoney asm("D_8019C908");
 extern s32 D_801E4138;
 extern s32 g_SceneId asm("D_801E42E4");
-extern u16 g_GrandPrixSeriesU16 asm("D_8019CABC");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
 void RequestCarModel(s32 carIndex);
@@ -487,11 +486,11 @@ void UpdateCarSelectScreen(void) {
                                 if (g_GrandPrixMode != 0) {
                                     series = 0;
                                     if (g_GrandPrixClass < 5) {
-                                        series = g_GrandPrixSeriesU16;
+                                        series = (u16)g_GrandPrixSeries;
                                     }
-                                    g_GrandPrixSeriesU16 = series;
+                                    g_GrandPrixSeries = series;
                                 } else {
-                                    g_GrandPrixSeriesU16 = g_CourseIndex >> 2;
+                                    g_GrandPrixSeries = g_CourseIndex >> 2;
                                 }
                                 RequestRoundAssets();
                                 GameMenuBusy = 1;
@@ -629,7 +628,7 @@ void UpdateCarSelectScreen(void) {
             if (g_GrandPrixMode != 0) {
                 g_RaceProgress->money = g_PlayerMoney;
             } else {
-                g_RaceProgress->money = (s16)g_GrandPrixSeriesU16;
+                g_RaceProgress->money = g_GrandPrixSeries;
             }
             break;
         case 2:
