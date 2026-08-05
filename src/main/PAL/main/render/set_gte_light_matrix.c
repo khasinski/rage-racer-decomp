@@ -47,7 +47,6 @@ void func_80014618(s32 variant) {
     Matrix yRot;
     s32 position[3];
     s32 steer;
-    register s32 angle asm("$5");
     s32 model;
     u8 *scratchBase = (u8 *)0x1F800000;
 
@@ -100,8 +99,11 @@ void func_80014618(s32 variant) {
         steer = g_NegconSteer * 8;
     }
 
-    angle = g_ControllerSceneAngleX - 0x40;
-    BuildRotMatrixX(&xRot, steer + angle);
+    {
+        s32 angle = g_ControllerSceneAngleX - 0x40;
+
+        BuildRotMatrixX(&xRot, steer + angle);
+    }
     BuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
     MulMatrix2(&yRot, &xRot);
     MulMatrix2(scratchBase + 0x28, &xRot);
@@ -124,8 +126,11 @@ void func_80014618(s32 variant) {
         SubmitModel((void *)0x1F800000, model);
     }
 
-    angle = g_ControllerSceneAngleX - 0x40;
-    BuildRotMatrixX(&xRot, angle - steer);
+    {
+        s32 angle = g_ControllerSceneAngleX - 0x40;
+
+        BuildRotMatrixX(&xRot, angle - steer);
+    }
     BuildRotMatrixY(&yRot, g_ControllerSceneAngleY + 0x400);
     MulMatrix2(&yRot, &xRot);
     MulMatrix2(scratchBase + 0x28, &xRot);

@@ -213,13 +213,11 @@ void DrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
 void DrawSplitDelta(s32 arg0, s32 arg1) {
     u8 *base;
     register u8 *prim __asm("$17");
-    register s32 mode __asm("$18");
-    register s32 firstOffset __asm("$5");
+    s32 firstOffset;
     s32 value;
     s32 temp;
     u8 *ot;
 
-    mode = arg1;
     firstOffset = 0x237AC;
     temp = 0x237C0;
     value = arg0 * 8;
@@ -231,12 +229,12 @@ void DrawSplitDelta(s32 arg0, s32 arg1) {
     AddPrim(g_DrawBuffer + 0xCC, base + firstOffset);
     firstOffset = (s32)prim;
 
-    if (mode > 0) {
+    if (arg1 > 0) {
         *(volatile u8 *)(base + 0x237CC) = 0x88;
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot));
         temp = 0x7810;
-    } else if (mode < 0) {
+    } else if (arg1 < 0) {
         *(volatile u8 *)(base + 0x237CC) = 0x78;
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot));

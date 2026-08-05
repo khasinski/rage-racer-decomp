@@ -232,19 +232,18 @@ s32 SetGraphReverse(s32 arg0) {
 s32 SetGraphDebug(u8 arg0);
 
 s32 SetGraphDebug(u8 arg0) {
-    register volatile u8 *ptr asm("$3") = &g_GraphDebug;
-    register s32 old asm("$16") = *ptr;
+    u8 *ptr = &g_GraphDebug;
+    u8 old = *ptr;
 
     *ptr = arg0;
     if (arg0 != 0) {
         void (*func)(char *, ...) = GPU_printf;
-        register s32 a1 asm("$5");
+        s32 a1;
         s32 a2;
         s32 a3;
         char *fmt;
 
         a1 = *ptr;
-        asm volatile("" : "=r"(a1) : "0"(a1));
         a2 = g_GraphType[0];
         a3 = g_GraphReverse;
         fmt = D_800134C4;

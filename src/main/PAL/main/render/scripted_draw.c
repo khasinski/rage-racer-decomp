@@ -588,7 +588,7 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     s32 offset;
     s32 done;
     s32 timerValue;
-    register s32 fade asm("$3");
+    u32 fade;
     s32 drawX;
     s32 drawY;
     s32 drawW;
