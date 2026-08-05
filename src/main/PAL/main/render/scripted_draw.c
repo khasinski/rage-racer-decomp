@@ -403,9 +403,8 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
         velocityY = value & 0x7FFF;
     }
     value = posY + ((time * velocityY) >> 5);
-    asm("" : "=r"(value) : "0"(value));
     y = value;
-    asm("" : "=r"(y) : "0"(y) : "memory");
+    asm("" : "=r"(value), "=r"(y) : "0"(value), "1"(y) : "memory");
 
     posX2 = *(s16 *)((u8 *)ctx + 8);
     if (velocity1 & 0x8000) {
