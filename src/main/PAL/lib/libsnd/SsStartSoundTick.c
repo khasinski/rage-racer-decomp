@@ -4,13 +4,8 @@
 
 typedef void (*Callback)(void);
 
-extern long g_SndTickMode;
-extern long g_SndNoTickFlag;
 extern Callback g_SndTickCallback;
 extern Callback g_SndPrevVSyncCallback;
-extern u_char g_SndTickUsesVSync;
-extern u_char D_8009A569;
-extern u_char g_SndTickIrq;
 
 long KernelCallbackSlot2Wide(long arg0, Callback arg1) asm("KernelCallbackSlot2");
 void VSyncCallback(Callback arg0);

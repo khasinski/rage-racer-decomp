@@ -199,7 +199,6 @@ void BuildTileStrips(void) {
     } while (bufferIndex < 2);
 }
 
-extern s32 g_RacePaused;
 extern s32 g_CountdownBoardOffset;
 extern u32 g_CountdownDigitPatterns[16];
 extern CVec g_CountdownCellColors[];

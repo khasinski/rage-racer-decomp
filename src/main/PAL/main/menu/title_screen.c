@@ -9,19 +9,10 @@
 #include "game/random.h"
 #include "game/screens.h"
 
-extern s32 g_FrameSyncThreshold;
 extern s32 D_801E8260;
 extern s32 D_801E6F28;
-extern s32 g_MainMenuSlide;
-extern s32 g_TitlePulse;
-extern s32 g_FrontendState;
-extern s32 g_TitleExitTimer;
-extern s32 g_TitleAttractTimer;
 
 void CloseLoadedAudioSlots(void);
-void ResetTrackTextureSwap(void);
-void UploadLoadBufferImage(void);
-void UpdateBgmTrackCount(void);
 void SetDefaultReverbDepth(void);
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
@@ -49,14 +40,7 @@ void EnterFrontend(void) {
 
 extern s32 g_StreamReturnScene;
 extern s32 D_801E6F28;
-extern s32 g_TitleAttractTimer;
-extern s32 g_TitleExitTimer;
-extern s32 g_FrameSyncThreshold;
 extern s32 D_801E8260;
-extern s32 g_MainMenuSlide;
-extern s32 g_FrontendState;
-void UploadLoadBufferImage(void);
-void UpdateBgmTrackCount(void);
 void SetDefaultReverbDepth(void);
 
 void EnterTitleScreen(void) {
@@ -134,8 +118,6 @@ void DrawPressStartPrompt(void) {
     *scratch = GameQueueDrawModePrimWide(base, next, 0x39);
 }
 
-extern s32 g_TitleAttractTimer;
-extern s32 g_FrontendState;
 extern s32 D_801E8260;
 void PlaySoundCue(s32 cue);
 
@@ -152,10 +134,6 @@ void UpdateTitleScreen(void) {
     }
     DrawPressStartPrompt();
 }
-
-extern s32 g_FrontendState;
-extern s32 g_TitlePulse;
-extern s32 g_MainMenuSlide;
 
 /* This call site hands full words where GameQueueTexturedRect's parameters are
  * s16/u8; the alias names the routine, not its address, so the truncation the
@@ -223,9 +201,6 @@ void DrawMainMenuRows(void) {
     *(void **)0x1F800000 = scratch;
 }
 
-extern s32 g_FrontendState;
-extern s32 g_MainMenuSlide;
-
 void UpdateMainMenuOpen(void) {
     if (++g_MainMenuSlide == 0x30) {
         g_FrontendState = 2;
@@ -234,7 +209,6 @@ void UpdateMainMenuOpen(void) {
     DrawMainMenuRows();
 }
 
-extern s32 g_BgmTrackCount;
 extern volatile u8 g_BgmShuffleOrder[];
 extern u8 D_801E7733[];
 extern s32 g_BgmShuffleIndex;
@@ -279,8 +253,6 @@ extern s32 D_801E8260;
 extern s32 *g_CarTable;
 extern s32 *g_CourseProgress;
 extern s32 g_ExtraGrandPrixSaveMaxClass;
-extern s32 g_FrontendState;
-extern s32 g_OptionMenuCursor;
 
 extern s32 g_GrandPrixCars;
 extern s32 g_GrandPrixCourseProgress;
@@ -291,7 +263,6 @@ extern s32 g_TimeAttackCars;
 void PlaySoundCue(s32 cue);
 extern void ResetAssetLoader(void);
 extern void ShuffleBgmOrder(void);
-s32 RequestTrackLoad(void);
 extern void RequestSelectBgmAssetsNoReset(void);
 extern void RequestSaveScreenAssets(void);
 extern void RequestOptionScreenAssets(void);

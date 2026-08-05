@@ -3,8 +3,8 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/random.h"
+#include "game/track.h"
 
-extern s32 g_CourseModelCount;
 extern u16 g_SpinningSceneryRate[];
 extern u16 g_SpinningSceneryAngle[];
 extern u8 g_SpinningSceneryYaw[];

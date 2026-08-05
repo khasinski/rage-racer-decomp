@@ -795,5 +795,42 @@ extern s32 g_IsEnvironmentMode4;
  *                                  combined per object and set with gte_SetLightMatrix
  */
 
+/* Declared identically by 82 translation units before this
+ * header carried them. */
+
+extern char D_80013374[];
+extern s16 D_8007D380[][2];
+extern s16 D_80092B08[];
+extern s16 D_80093308[];
+extern s16 D_80093B08[];
+extern s16 D_8009E782;
+extern Matrix D_8019CB18;
+extern u8 D_801E8AFC;
+extern u8 g_CarModelByCourse[][11];
+extern u8 g_CarTrackSection[];
+extern s32 g_FmvFrameHeight;
+extern s32 g_FmvFrameWidth;
+extern s32 g_FmvState;
+extern s32 g_FmvStreamEnded;
+extern volatile u32 *g_FmvStripBuffers[];
+extern s16 g_FmvStripHeight;
+extern s16 g_FmvStripWidth;
+extern s16 g_MirrorViewEnabled;
+extern s32 g_ModelBankCount;
+extern s16 g_NegconSteer;
+extern s16 g_NegconSteerRange[];
+extern u8 *g_ReplayFramesTimeAttack;
+extern s32 g_SetupArrowPulse;
+extern s16 g_SinTable[];
+extern s32 g_StreamSectorCount;
+extern s32 g_TrackTextureSectionHi;
+extern s32 g_TrackTextureSectionLo;
+
+void ApplyZoneLighting(s32 arg0, Matrix *arg1);
+s32 BezierEase(s32 t, s32 control);
+void BuildVisibleCells(s32 arg0, s32 arg1);
+void EndMirrorPass(void);
+void RestoreColorMatrix(void);
+s32 rsinCore(s32 arg0);
 
 #endif

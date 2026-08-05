@@ -1,11 +1,5 @@
 #include "psyq/kernel.h"
 
-extern u_short g_IntrState[];
-extern u_short g_IntrSavedIrqMask;
-extern u_long g_IntrSavedDpcr;
-extern volatile u_short *g_IrqMask;
-extern volatile u_long *g_KernelDpcr;
-
 void *StartKernelInterrupts(void) {
     u_short *state;
 
@@ -28,10 +22,8 @@ void *StartKernelInterrupts(void) {
     return state;
 }
 
-
 extern void *g_VSyncCallbacks[];
 extern u_long *g_Timer1ModeReg;
-extern volatile long g_VSyncCount;
 extern volatile u_long *g_DmaIrqControl;
 extern u_long g_DmaCallbacks[];
 extern u_long *g_DmaChannelRegs;

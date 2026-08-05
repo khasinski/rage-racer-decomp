@@ -102,4 +102,13 @@ void InitSequenceAudio(void);
 void RestoreReverbDepth(s32 enabled);
 int CloseAudioSlot(s32 slot);
 
+/* Declared identically by 8 translation units before this
+ * header carried them. */
+
+extern s32 g_EngineSoundCurves[];
+extern s32 g_EngineSoundMaxRpm;
+extern s32 g_SoundSlotActive[];
+
+s32 GetOwnedCarAssetIndex(s32 arg0);
+
 #endif

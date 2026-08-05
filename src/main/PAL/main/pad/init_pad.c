@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/state.h"
+#include "game/render.h"
 
 extern u8 g_PadBuffers[];
 
@@ -82,14 +83,10 @@ extern u8 g_PadType;
 extern u8 g_PadBufferType;
 extern u8 g_PadBufferButtonsHigh;
 extern u8 g_PadBufferButtonsLow;
-extern s32 D_801E4D14;
-extern s32 g_PadErrorState;
-extern s32 D_8019CB10;
 extern u16 g_PadPrevHeld;
 extern u8 g_PadRepeatTimer[];
 extern u16 D_8007C128[][2];
 extern s16 g_NegconSteerPlay;
-extern s16 g_NegconSteerRange[];
 extern s16 g_NegconMaxTwist;
 extern s16 g_NegconNeutralI;
 extern s16 g_NegconNeutralII;

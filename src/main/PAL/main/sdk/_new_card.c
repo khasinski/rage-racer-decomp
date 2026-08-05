@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/kernel.h"
+#include "psyq/cd.h"
 
 u_long *DecDCTGetEnv(u_long *arg0);
 u_long *DecDCTPutEnv(u_long *arg0);
@@ -56,11 +57,6 @@ u_long *DecDCTGetEnv(u_long *arg0) {
 
     return arg0;
 }
-
-extern u_char g_MdecQuantCmd[];
-extern u_char g_MdecIdctCmd[];
-
-void MDEC_in(volatile u_long *arg0, long arg1);
 
 u_long * DecDCTPutEnv(u_long *arg0);
 u_long *DecDCTPutEnv(u_long *arg0) {

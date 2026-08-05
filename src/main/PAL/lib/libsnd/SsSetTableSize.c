@@ -1,10 +1,9 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 
 extern u_char *g_SndSeqTable[];
-extern short g_SndSeqTableSMax;
-extern short g_SndSeqTableTMax;
 
 void SsSetTableSize(u_char *arg0, long arg1, long arg2);
 

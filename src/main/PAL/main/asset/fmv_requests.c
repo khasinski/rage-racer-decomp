@@ -2,19 +2,12 @@
 #include "game/asset.h"
 #include "game/race.h"
 #include "game/state.h"
+#include "game/render.h"
 
 extern GameSceneAssetHeader *g_AssetLoadCursor;
 
 void SetTrackCameraTable(void *arg0);
-void SetEnvPaletteTable(void *arg0);
-void SetEnvironmentScript(void *arg0);
-void RegisterModelBank(void *arg0, s32 arg1);
-void InstallTrackPoints(void *arg0);
 void RegisterCourseModels(void *arg0);
-void InstallTerrainCellData(void *arg0);
-void SetCourseObjects(void *arg0);
-void InstallTrackEventData(void *arg0);
-void SelectTrackCameraTable(void *arg0, s32 arg1);
 
 void LoadTrackDataAssets(void) {
     GameSceneAssetHeader *header;
@@ -95,7 +88,6 @@ void LoadTrackDataAssets(void) {
 }
 
 extern s32 *g_StreamLoc;
-extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
 void BeginFmv(void);
@@ -114,7 +106,6 @@ void BeginIntroFmv(void) {
 }
 
 extern s32 *g_StreamLoc;
-extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
 void BeginFmv(void);
@@ -143,7 +134,6 @@ void BeginClassFmv(void) {
 }
 
 extern s32 *g_StreamLoc;
-extern s32 g_StreamSectorCount;
 extern s32 D_8019C708;
 
 void BeginFmv(void);
@@ -161,12 +151,8 @@ void BeginEndingFmv(void) {
     D_8019C708 = value * 4;
 }
 
-extern s32 g_PendingCarModelIndex;
-
 void LoadCarModel(s32);
 void LoadUpgradedCarModel(s32);
-void LoadGrandPrixScreen(void);
-void LoadCourseAssets(void);
 
 void ServiceAssetLoad(void) {
     if (g_AssetLoadState != 0) {

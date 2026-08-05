@@ -2,9 +2,9 @@
 
 #include "common.h"
 #include "game/audio.h"
+#include "psyq/snd.h"
 
 extern u_char g_SndVoiceRegs[];
-extern u_char g_SndVoiceStatePitch[];
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
 extern volatile u_short D_801F2A08;

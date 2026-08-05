@@ -3,6 +3,7 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/sound.h"
+#include "game/track.h"
 
 typedef struct Cmd {
     s32 id;
@@ -20,16 +21,13 @@ extern s32 g_EnvScriptLength;
 /* Next cue of g_EnvScriptCues due to fire; wraps back to the head when the
  * record it lands on has a negative id (the terminator). */
 extern Cmd *g_EnvScriptCursor;
-extern u32 *g_EnvScriptCues;
 
-extern s16 g_EnvFogEnabled;
 /* The three bytes of the packed slot-0 colour g_EnvColors[0].cur, addressed
  * individually because SetFarColor takes R, G and B separately. The cast is
  * what the byte view costs: render.h is included here, so this TU cannot
  * redeclare g_EnvColors as u8[] under a second name. g_EnvSpare is the fourth,
  * unused byte of the same word. */
 #define ENV_FOG_RGB ((u8 *)g_EnvColors)
-extern u8 g_EnvSpare;
 
 /* LerpEnvColor works in bytes, so the eight lerps below address the slots
  * of g_EnvColors through one byte cursor `pp` = &g_EnvColors[0].from. Slot
@@ -39,10 +37,6 @@ extern u8 g_EnvSpare;
 #define ENV_TO(k) (pp + 0x0C * (k) + 4)
 
 extern s16 g_EnvLerpFrame;
-extern s16 g_EnvLerpDuration;
-extern s16 g_EnvSpareLerp;
-extern s16 g_EnvSpareFrom;
-extern s16 g_EnvSpareTo;
 
 /* GTE fog-near distance, ramped +-0xFA a frame: up to 0x7FFF (clear) in
  * environment mode 2, down to 0x1770 (hazy) in every other mode. */

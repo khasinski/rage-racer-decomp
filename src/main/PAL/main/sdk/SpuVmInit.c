@@ -14,7 +14,6 @@ extern volatile u_short g_SndVabOpenCount;
 
 extern u_short g_SndVoiceRegs[];
 extern u_char g_SndVoiceFlags[];
-extern u_char g_SndVabStatus[];
 
 extern volatile u_char g_SndVoiceCount;
 extern volatile u_short g_SndCurrentVoice;
@@ -25,26 +24,15 @@ extern volatile u_short D_8009E674;
 extern u_short *g_SndSpuRegs;
 
 extern u_char g_SndVoiceState[];
-extern u_char g_SndVoiceStateAge[];
-extern u_char g_SndVoiceStatePitch[];
-extern u_char g_SndVoiceStateEnvx[];
 extern u_char D_8009E0C0[];
 extern u_char D_8009E0C2[];
-extern u_char g_SndVoiceStateSeqSep[];
-extern u_char g_SndVoiceStateProgActual[];
 extern u_char g_SndVoiceStateProg[];
 extern u_char g_SndVoiceStateTone[];
-extern u_char g_SndVoiceStateStatus[];
 extern u_char g_SndVoiceStateAutoVol[];
 extern u_char D_8009E0D6[];
 extern u_char D_8009E0D8[];
 extern u_char D_8009E0DA[];
 extern u_char D_8009E0DC[];
-extern u_char g_SndVoiceStateAutoPan[];
-extern u_char g_SndVoiceStatePanStep[];
-extern u_char g_SndVoiceStatePanCounter[];
-extern u_char g_SndVoiceStatePanCounterReload[];
-extern u_char g_SndVoiceStateStartPan[];
 
 extern volatile u_short g_SndReverbAttrDepthLeft;
 extern volatile u_short g_SndReverbAttrDepthRight;

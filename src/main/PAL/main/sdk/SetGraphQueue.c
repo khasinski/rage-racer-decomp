@@ -3,7 +3,6 @@
 #include "psyq/kernel.h"
 
 extern GpuCallbacks *g_GpuFuncs;
-extern void (*GPU_printf)(char *, ...);
 extern u_char g_GraphQueue;
 extern u_char g_GraphDebug;
 extern char D_800134F0[];
@@ -41,7 +40,6 @@ long GetGraphDebug(void) {
 }
 
 extern char D_80013504[];
-extern void (*GPU_printf)(char *, ...);
 extern u_long g_DrawSyncCallback;
 
 u_long DrawSyncCallback(u_long arg0) {

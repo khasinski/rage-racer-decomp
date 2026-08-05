@@ -1,6 +1,8 @@
 #include "common.h"
 #include "game/car.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/track.h"
 
 /* (model, owned grade) -> index of the CAR_xx asset pair, 0..31. */
 s32 GetCarAssetIndex(s32 model, s32 grade);
@@ -14,8 +16,6 @@ extern void *g_CarModelAsset;
 extern void *g_VisibleCellMask;
 extern void *g_VisibleCellList;
 extern void *g_ModelBanks[];
-extern s32 g_ModelBankCount;
-extern s32 g_CourseModelCount;
 extern void *g_TerrainCellGrid;
 extern void *g_CellVisibilityTable;
 extern s32 D_801E4144;

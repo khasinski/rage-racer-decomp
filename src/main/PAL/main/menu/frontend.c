@@ -12,8 +12,6 @@
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
 void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 
-extern s32 g_TitlePulse;
-
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 
 void UpdateMainMenuExit(void) {
@@ -58,7 +56,6 @@ void UpdateFrontend(void);
 
 void UpdateTitleAttract(void);
 
-extern s32 g_MainMenuSlide;
 extern s32 g_ClassWinCount;
 
 void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSprite");
@@ -117,16 +114,11 @@ void UpdateTitleAttract(void) {
     next = QueueShadedSpriteNine(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
     *(void **)scratch = GameQueueShadedTexturedRectWide(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
-extern s32 g_TitleAttractTimer;
-extern s32 g_TitleExitTimer;
-extern s32 g_FrontendState;
 extern s32 D_8007C744;
 extern u32 D_801E8260;
 extern void (*g_FrontendDrawHandlers[])(void);
 
 s32 CdControl(s32 com, void *param, s32 result);
-s32 RequestTrackLoad(void);
-s32 RequestRaceStart(void);
 void BeginIntroFmv(int);
 
 void UpdateFrontend(void) {

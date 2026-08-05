@@ -9,8 +9,6 @@ void AdvanceCarPosition();
 
 void UpdateCarAirborne(GameCarRuntime *car);
 
-void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
-s32 SmoothTrackAngle(s32 arg0, s32 arg1);
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
 
@@ -93,9 +91,6 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
  * tacho / world velocity, then sets route+0x38 = 0x14 and route+0x98 = 2 to hand
  * the car to the airborne handler UpdateCarAirborne. See docs/names.md 1.
  */
-
-extern s32 g_ShiftTargetRpm;
-extern s32 g_ShiftSoundLevel;
 
 s32 GetAngleDistance(s32 arg0, s32 arg1);
 s32 GetAngleDelta(s32 arg0, s32 arg1);
@@ -311,8 +306,6 @@ void UpdateCarLaunch(GameCarRuntime *arg0) {
     *(s32 *)(r + 0x10) = rcos(car->headingAngle) * car->field_A4 / 256;
 }
 
-extern s32 g_ShiftSoundLevel;
-
 /*
  * Car motion handler for state98 == 2 (airborne / jump): decays velocity and
  * spin, advances the car (AdvanceCarPosition), and lands it when it returns to the
@@ -385,8 +378,6 @@ void UpdateCarAirborne(GameCarRuntime *car) {
         *(s16 *)&r->unk3E = 0;
     }
 }
-
-extern s32 g_StandingStartSpin;
 
 /*
  * Car motion handler for state98 == 3 (crash / tumble): applies a random shake

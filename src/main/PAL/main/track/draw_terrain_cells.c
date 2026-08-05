@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/cd.h"
 void SetRotMatrix(s32 arg0);
 
 extern s32 g_VisibleCellList;
@@ -934,7 +935,3 @@ void GameDrawSkyBackground(void)
   return;
 }
 
-extern s32 g_CdTrackPending;
-extern s32 g_CdCommandPending;
-extern s32 g_CdTrackStep;
-extern s32 g_CdCommandStep;

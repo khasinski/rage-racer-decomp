@@ -1,13 +1,9 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long g_SpuRevWorkAreaAddr;
 extern SpuRevAttrState g_SpuRevAttr;
-extern long g_SpuTransferEvent;
 extern long g_SpuZeroBuf[];
 extern SpuCommonRegs *g_SpuRegBase;
-extern long g_SpuTransferByIo;
-extern long _spu_mem_mode_unitM;
 extern volatile long g_SpuTransferCallback;
 extern long g_SpuRevWorkAreaStartAddr[];
 extern SpuReverbRegAttr g_SpuRevAttrTable[];

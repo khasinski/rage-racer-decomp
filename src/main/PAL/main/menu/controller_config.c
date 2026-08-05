@@ -9,15 +9,7 @@ extern u8 g_PadType;
 /* The two 0..7 selections; g_PadType picks which one the screen edits. */
 extern s16 g_PadMappingIndex;
 extern s16 g_NegconMappingIndex;
-extern u16 g_PadMappingIndexSaved;
-extern u16 g_NegconMappingIndexSaved;
-/* 0 while a controller is present, else the error code the banner reports. */
-extern s32 g_PadErrorState;
-extern s32 g_SetupArrowPulse;
 extern s32 g_PadConfigFlipDirection;
-extern s32 g_ControllerSceneAngleY;
-extern s32 g_PadConfigFlipTimer;
-extern s32 g_PadConfigFlipPhase;
 
 /* "INSERT CONTROLLER" / "CONTROLLER ERROR" */
 extern char D_80010000[];
@@ -225,11 +217,6 @@ extern u16 g_NegconSteerNeutralSaved;
 extern u16 g_NegconNeutralISaved;
 extern u16 g_NegconNeutralIISaved;
 extern u16 g_NegconNeutralLSaved;
-extern u16 g_NegconSteerPlaySaved;
-extern u16 g_NegconMaxTwistSaved;
-
-/* The same four screen counters BeginControllerConfig clears. */
-extern s32 g_ControllerSceneAngleX;
 
 /*
  * Entry hook for the NeGcon calibration sequence: snapshots the six live

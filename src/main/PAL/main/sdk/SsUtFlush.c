@@ -1,18 +1,15 @@
 #include "common.h"
 #include "psyq/spu.h"
+#include "psyq/snd.h"
 
 extern long g_SndVoiceSilenceIndex;
-extern u_long g_SndVoiceSilenceHistory[];
 extern volatile u_short *g_SndSpuRegs;
 extern u_char g_SndVoiceRegs[];
 extern u_char g_SndVoiceRegsPitch[];
 extern u_char g_SndVoiceRegsAddr[];
 extern u_char g_SndVoiceFlags[];
 extern u_char g_SndVoiceState[];
-extern u_char g_SndVoiceStateEnvx[];
-extern u_char g_SndVoiceStateStatus[];
 extern u_char g_SndVoiceStateAutoVol[];
-extern u_char g_SndVoiceStateAutoPan[];
 /* The four pending key registers, flushed below into the SPU as
  * spu[0xC4]/[0xC5] = KON 0x1F801D88 and spu[0xC6]/[0xC7] = KOFF 0x1F801D8C.
  * So D_8009E670/74 are key-ON and D_801F2A08/0C key-OFF, not the other way

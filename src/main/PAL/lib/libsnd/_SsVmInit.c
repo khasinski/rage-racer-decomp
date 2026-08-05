@@ -8,14 +8,8 @@ extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
 extern u_short *g_SndSpuRegs;
 extern u_char g_SndVoiceState[];
-extern u_char g_SndVoiceStateAge[];
-extern u_char g_SndVoiceStatePitch[];
-extern u_char g_SndVoiceStateEnvx[];
-extern u_char g_SndVoiceStateSeqSep[];
-extern u_char g_SndVoiceStateProgActual[];
 extern u_char g_SndVoiceStateProg[];
 extern u_char g_SndVoiceStateTone[];
-extern u_char g_SndVoiceStateStatus[];
 
 void _SsVmInit(void) {
     register long i asm("$8");

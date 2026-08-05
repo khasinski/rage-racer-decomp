@@ -1,7 +1,6 @@
 #include "common.h"
+#include "psyq/snd.h"
 
-extern long g_SndTickMode;
-extern long g_SndNoTickFlag;
 extern long g_SndTickResolution;
 
 long GetDMAInterruptState(long arg);

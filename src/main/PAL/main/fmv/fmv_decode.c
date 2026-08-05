@@ -3,16 +3,11 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+#include "game/render.h"
 
 extern volatile u32 *g_FmvVlcBuffers[];
-extern volatile u32 *g_FmvStripBuffers[];
 extern s32 g_FmvVlcIndex;
 extern s32 g_FmvStripIndex;
-extern s32 g_FmvStreamEnded;
-extern s32 g_FmvState;
-extern s16 g_FmvStripWidth;
-extern s16 g_FmvStripHeight;
-extern s32 g_StreamSectorCount;
 extern s32 g_StreamLoc;
 extern char g_MsgFmvSector[];
 

@@ -10,7 +10,6 @@ void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
  * endpoint-to-endpoint lerp and the value travelStep counts up to. */
 extern u8 g_ShuttlePathPoints[];
 extern s16 g_ShuttlePathTravelMax[];
-extern s16 g_ShuttlePathDwellMax[];
 
 void UpdateShuttleScenery(s32 arg0);
 
@@ -78,8 +77,6 @@ void UpdateShuttleScenery(s32 arg0) {
 }
 
 extern u32 *g_VisibleCellMask;
-extern s32 g_CourseModelCount;
-
 
 void DrawShuttleScenery(s32 arg0);
 

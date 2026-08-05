@@ -13,17 +13,12 @@ typedef struct UnkEventPair {
     s16 carIndex;
 } UnkEventPair;
 
-extern s32 g_AttractDemoStep;
 extern u32 g_StreamReturnScene;
 extern void (*g_AttractDemoSteps[])(void);
-void ReturnToTitleScene(void);
-/* Deliberately raw: see docs/names.md 12d. */
-extern s32 g_FrameSyncThreshold;
 extern s32 g_PrologueStep;
 extern s32 g_PrologueCutIndex;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
-void InitTrackScene(void);
 void RequestTrackDataAssets(void);
 void UpdatePrologueLoad(void);
 /* Split symbols of the 14-entry prologue table: 8 bytes each, { s16 x,
@@ -34,9 +29,7 @@ extern s32 g_PrologueLineText[];
 void GameDrawText8x8Shaded(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
-void RequestSelectBgmAssets(void);
 extern u32 g_CameraViewMode;
-extern u8 g_CarTrackSection[];
 extern UnkEventPair g_PrologueCameraCuts[];
 void ExitPrologue(void);
 void DrawPrologueText(void);

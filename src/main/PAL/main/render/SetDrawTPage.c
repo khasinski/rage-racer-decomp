@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
+#include "game/render.h"
 
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
 s32 encoded;
@@ -69,7 +70,6 @@ s32 MargePrim(u8 *arg0, u8 *arg1) {
     return 0;
 }
 
-extern char D_80013374[];
 extern char D_8001339C[];
 extern char D_800133B4[];
 extern char D_800133C4[];
@@ -79,7 +79,6 @@ extern char D_800133F4[];
 extern char D_80013410[];
 extern char D_8001342C[];
 extern char D_80013438[];
-extern void (*GPU_printf)(char *, ...);
 
 void DumpDrawEnv(DrawEnv *arg0) {
     s32 mode;

@@ -7,6 +7,7 @@
 #include "game/audio.h"
 #include "game/random.h"
 #include "game/track.h"
+#include "game/menu.h"
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 extern Vec4 g_StaticSceneryPos;
@@ -14,7 +15,6 @@ extern Vec4 g_StaticSceneryPos;
  * g_HighClassSceneryYaw is the same field of the record at 0x8007E350. */
 extern s32 g_StaticSceneryYaw;
 extern u32 *g_VisibleCellMask;
-extern s32 g_CourseModelCount;
 
 static inline void ClearScratchRenderMode3DF68(void) {
     *(s32 *)0x1F800084 = 0;
@@ -225,7 +225,6 @@ void DrawCourseScenery2(s32 arg0, s32 arg1) {
 }
 
 extern u8 *g_FlybySceneryData;
-extern s32 g_LapCount;
 extern volatile s32 g_RaceSeries;
 extern u8 g_FlybyScenery[];
 extern s16 g_FlybySceneryLap;
@@ -296,21 +295,13 @@ void SeedFlybyScenery(void) {
  * volume to SetPitchedSoundCue. See docs/names.md 1.
  */
 extern s16 g_PlayerLap;
-extern s16 g_PlayerTrackSection;
 extern s32 g_FlybySceneryArmed;
 extern s32 g_FlybySceneryFrame;
 extern s16 g_FlybySceneryKeyIndex;
 extern Vec4 g_FlybySceneryPosRec;
-extern s32 g_FlybySceneryRotX;
-extern s32 g_FlybySceneryRotY;
-extern s32 g_FlybySceneryRotZ;
 extern s32 g_PlayerCar;
-extern s32 g_PlayerCarY;
-extern s32 g_PlayerCarZ;
 
 #define KFREC(off) (*(s16 *)(kf + *(s16 *)(state + 0xE) * 12 + (off)))
-
-void UpdateFlybyScenery(void);
 
 void UpdateFlybyScenery(void) {
     Matrix mtxY;

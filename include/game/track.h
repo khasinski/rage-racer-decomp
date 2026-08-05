@@ -129,4 +129,38 @@ extern s32 g_TrackLength;
  * and the per-series marker rows at + g_RaceSeries * 576 + 0x474. */
 extern u8 *g_TrackEventData;
 
+/* Declared identically by 73 translation units before this
+ * header carried them. */
+
+extern s32 D_801E3F60;
+extern s32 g_CameraCarAngleY;
+extern s32 g_CameraCarHeading;
+extern s32 g_CameraCarSpeed;
+extern s32 g_CameraCarStepX;
+extern s32 g_CameraCarStepZ;
+extern s32 g_CameraCarY;
+extern s32 g_CameraCarZ;
+extern s32 g_CourseModelCount;
+extern s16 g_EnvFogEnabled;
+extern s16 g_EnvLerpDuration;
+extern u32 *g_EnvScriptCues;
+extern u8 g_EnvSpare;
+extern s16 g_EnvSpareFrom;
+extern s16 g_EnvSpareLerp;
+extern s16 g_EnvSpareTo;
+extern s32 g_FlybySceneryRotX;
+extern s32 g_FlybySceneryRotY;
+extern s32 g_FlybySceneryRotZ;
+extern s32 g_PlayerSpeed;
+extern s32 g_PlayerTrackPoint;
+extern s16 g_RaceCueDelay;
+extern s32 g_RaceCueFlags;
+extern volatile s32 g_RouteSceneryFrame;
+extern s32 g_RouteSceneryRotX;
+extern s32 g_RouteSceneryRotZ;
+extern s32 g_RouteSceneryX;
+extern s16 g_ShuttlePathDwellMax[];
+
+void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
+
 #endif

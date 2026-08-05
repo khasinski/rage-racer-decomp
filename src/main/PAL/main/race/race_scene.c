@@ -25,20 +25,9 @@ extern u8 g_PlayerCar[];
 
 extern u8 *g_CourseProgress;
 
-extern s32 g_PlayerProgressA;
-
-extern s32 g_PlayerProgressB;
-
 extern s16 g_PlayerLap;
 
 extern s32 g_BestTotalTimes[][4][2];
-
-extern s32 g_SeriesCleared;
-
-/* Rear-view mirror on/off; render/DrawRearViewMirror.c owns it. */
-extern s16 g_MirrorViewEnabled;
-
-extern s32 g_LapCount;
 
 extern s32 g_BestLapTimes[][4][2];
 
@@ -46,13 +35,7 @@ extern s32 g_BestSectorTimes[][4][3];
 
 extern s32 g_RaceTotalTime;
 
-extern s32 g_BestLapThisRace;
-
-extern s16 g_RaceCueDelay;
-
 extern s32 g_RankingTimes[][4][20];
-
-extern s32 g_RaceCueFlags;
 
 void BeginReplay(void);
 
@@ -70,37 +53,15 @@ void UpdateRivalCueGate(void);
 
 void ForceAllEffectVoicesEnabled(s32 arg0);
 
-extern s16 g_PlayerTrackSection;
-
 extern s32 g_CameraViewMode;
 
-extern s16 g_PauseDebounce;
-
-/* Deliberately raw: see docs/names.md 12d. Written 0x80 / 0x180 on scene
- * entry, and its one reader is never reached in retail. */
-extern s32 g_FrameSyncThreshold;
-
 extern u8 *g_CamRow;
-
-/* Deliberately raw: the only two writes in the whole image store zero (here
- * and in the car-init routine func_8002CB30), so the one reader --
- * UpdateCarBodyRoll skipping the pad read when it is non-zero -- can
- * never fire. Naming it would invent a feature. */
-extern s16 D_8019C9AC;
-
-extern s32 g_TrackWalkStart;
-
-extern s32 g_BgmTrack;
 
 /* Deliberately raw: written zero at race init and read nowhere in the image. */
 extern s32 D_801E4248;
 
-extern s32 g_RivalCueFlags;
-
 /* Deliberately raw: written zero at race init and read nowhere in the image. */
 extern s16 D_801E4CF8;
-
-extern s32 g_SectorEndDistance[];
 
 extern s16 g_RivalCueCooldown0;
 
@@ -108,23 +69,15 @@ extern s16 g_RivalCueCooldown1;
 
 extern s16 g_RivalCueCooldown2;
 
-extern s16 g_RivalCueCooldown3;
-
 extern u8 g_MsgGame0Ok[];
 
 void InitRenderState(s32);
 
 void ResetReplayWriteCursor(void);
 
-void LoadTrackTexturePageRange(void);
-
-void InitTrackLighting(void);
-
 void InitPlayerCar(void *);
 
 void SetTrackTexturePageNow(s32);
-
-void BuildStartingGrid(void);
 
 void ResetMirrorState(void);
 
@@ -140,13 +93,9 @@ void SeedRouteScenery(void);
 
 void InitPathScenery(void);
 
-void DrawRoundScreen(void);
-
 extern u8 g_SceneLightMatrix[];
 
 extern s32 g_PlayerTrackProgress;
-
-extern s16 g_ReverbZoneDepth;
 
 extern s16 g_CameraCarTrackSection;
 
@@ -156,8 +105,6 @@ extern u8 g_PadType;
  * hence the eight-halfword stride. Holding it while paused, in the chase view
  * and mid-race, makes D-pad up/down turn the rear-view mirror on and off. */
 extern s16 g_PadMirrorMasks[];
-
-extern s32 g_RacePaused;
 
 s32 BeginMirrorPass(void);
 
@@ -185,13 +132,9 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1);
 
 void RequestTrackTexturePage(s32 arg0);
 
-void EndMirrorPass(void);
-
 void DrawRearViewMirror(s32 arg0);
 
 void RecordReplayFrame(void);
-
-void DrawLostRaceCaption(s32 arg0);
 
 void DrawRaceEndBanner(s32 arg0);
 
@@ -231,15 +174,9 @@ void DrawScriptedScenery(s32 arg0);
 
 void UpdateTrackEventSound(s32 arg0);
 
-void UpdatePointAmbience(s32 arg0);
-
-void UpdateZoneAmbience(s32 arg0);
-
 void TriggerRaceCues(void);
 
 void PlayCountdownCues(s32 arg0);
-
-void DrawTerrainCells(void);
 
 void UpdateCamera(s32 arg0, void *arg1);
 

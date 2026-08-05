@@ -143,4 +143,27 @@ void RelocateCarModel(void);
 void UnrelocateModelBank(void *base, s32 offset);
 void UploadCarImage(s32 slot);
 
+/* Declared identically by 42 translation units before this
+ * header carried them. */
+
+extern s32 g_PendingCarModelIndex;
+extern u8 *g_TrackTextureShadow;
+
+void InstallTerrainCellData(void *arg0);
+void InstallTrackEventData(void *arg0);
+void InstallTrackPoints(void *arg0);
+void LoadCourseAssets(void);
+void LoadGrandPrixScreen(void);
+s32 PollAudioSlotLoad(void);
+void RegisterModelBank(void *arg0, s32 arg1);
+s32 RequestRaceStart(void);
+void ResetTrackTextureSwap(void);
+void SelectTrackCameraTable(void *arg0, s32 arg1);
+void SetCourseObjects(void *arg0);
+void SetEnvPaletteTable(void *arg0);
+void SetEnvironmentScript(void *arg0);
+void StoreTeamLogoImage(void *arg0);
+void UploadImageBlock(void *arg0);
+void UploadLoadBufferImage(void);
+
 #endif

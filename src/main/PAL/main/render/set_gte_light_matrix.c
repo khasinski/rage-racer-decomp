@@ -17,14 +17,11 @@ void SetGteLightMatrix(Matrix *view) {
 extern s32 g_GameMode;
 extern s32 g_AnimTimer;
 extern u8 g_PadType;
-extern s16 g_NegconSteer;
 extern s16 g_NegconMaxTwist;
 extern s16 g_NegconSteerPlay;
-extern s16 g_NegconSteerRange[];
 extern s32 g_NegconPlayScale[];
 extern s32 g_ControllerSceneAngleX;
 extern s32 g_ControllerSceneAngleY;
-extern s32 g_ModelBankCount;
 extern s32 g_Scratch08 asm("0x1F800008");
 extern s32 g_Scratch0C asm("0x1F80000C");
 extern void *g_Scratch0CPointer asm("0x1F80000C");
@@ -157,9 +154,6 @@ void DrawControllerSetupScene(s32 variant) {
         SubmitModel((void *)0x1F800000, model);
     }
 }
-
-/* Free-running angle the controller-setup screens pulse their arrows with. */
-extern s32 g_SetupArrowPulse;
 
 /* Wide-parameter view of the packet builders; see GameQueueSprite.c. */
 s32 AddTilePrim(

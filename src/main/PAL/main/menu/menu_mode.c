@@ -330,47 +330,18 @@ void InitMenuLighting(void) {
     SetFogNear(0x4E20, 0x140);
 }
 
-extern s32 g_FrameSyncThreshold;
-extern s32 g_PlayerMoney;
-
 extern s32 D_80082568;
 extern Vec4 g_MenuViewScale;
 
 extern void *D_8019C764;
 extern void *D_801E40B4;
 extern void *D_8019C794;
-extern void *D_801E8A44;
-extern void *D_8009F0B0;
 extern void *D_8019CB00;
 extern void *D_801E4188;
 
-extern s32 g_MenuHintBarProgress;
-extern s32 g_MenuConfirmTimer;
 extern s32 D_8009B304;
-extern s32 g_MenuHintBarStep;
-extern s32 D_8009B310;
-extern s32 g_MenuHintButtonsVisible;
-extern s32 g_CarNamePlateStep;
-extern s32 g_MenuPlateCarIndex;
-extern s32 D_8009B324;
 extern s32 D_8009B328;
-extern s32 D_8009B32C;
-extern s32 D_8009B330;
-extern s32 g_TimeAttackPlateStep;
-extern s32 D_8009B33C;
-extern s32 g_CourseSwapDelay;
-extern s32 D_8009B360;
-extern s32 D_8009B364;
-extern s32 D_8009B368;
-extern s32 g_MenuCourseModelIndex;
-extern s32 g_MenuPendingCourseIndex;
-extern s32 g_CarSwapFromIndex;
-extern s32 g_CarSwapToIndex;
 
-extern s32 g_CourseSelectOption;
-extern s32 D_801E4138;
-extern s32 g_RankingOption;
-extern s32 g_DesignModeOption;
 extern s32 D_801E4D74;
 
 void InitRenderState(s32);

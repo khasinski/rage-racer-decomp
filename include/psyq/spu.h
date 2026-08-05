@@ -124,7 +124,6 @@ void _spu_setTransferCompletionFlag(long completed);
 u_long _spu_isTransferIdle(void);
 void SpuSetCommonAttr(SpuCommonAttr *attr);
 
-
 /* The SPU hardware register file at g_SpuRegBase, as a struct and as the raw
  * half-word window the transfer paths use. */
 typedef struct SpuVoiceRegs {
@@ -164,5 +163,26 @@ typedef union SpuRegisterMap {
     SpuCommonRegs regs;
     volatile u_short raw[0x100];
 } SpuRegisterMap;
+
+/* Declared identically by 50 translation units before this
+ * header carried them. */
+
+extern SpuMallocEntry *_spu_memList;
+extern long _spu_mem_mode_unitM;
+extern volatile u_long *g_SpuDelayReg;
+extern volatile u_long *g_SpuDmaBcr;
+extern volatile u_long *g_SpuDmaChcr;
+extern volatile u_long *g_SpuDmaMadr;
+extern long g_SpuIsStarted;
+extern long g_SpuMemMode;
+extern long g_SpuRevReserveWa;
+extern long g_SpuRevWorkAreaAddr;
+extern long g_SpuTransferByIo;
+extern long g_SpuTransferCompleted;
+extern long g_SpuTransferEvent;
+extern long g_SpuTransferIsRead;
+extern long g_SpuTransferMode;
+extern u_short g_SpuTransferStartAddr;
+extern long g_SpuWaitCount;
 
 #endif

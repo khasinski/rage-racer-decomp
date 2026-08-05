@@ -3,11 +3,6 @@
 /* SPU hardware, from the data segment: file base 0x1F801C00, DMA
  * channel 4 (SPU) MADR/BCR/CHCR 0x1F8010C0/C4/C8, SPU_DELAY 0x1F801014. */
 extern volatile u_short *g_SpuRegBase;
-extern volatile u_long *g_SpuDmaMadr;
-extern volatile u_long *g_SpuDmaBcr;
-extern volatile u_long *g_SpuDmaChcr;
-extern volatile u_long *g_SpuDelayReg;
-extern long g_SpuTransferIsRead;
 
 void _spu_startDmaTransfer(u_long arg0, u_short arg1, u_long arg2) {
     u_long addr = arg0;

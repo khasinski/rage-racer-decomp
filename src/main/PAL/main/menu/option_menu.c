@@ -8,44 +8,29 @@
 #include "game/random.h"
 
 typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
-extern s32 g_OptionMenuCursor;
 s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueSpriteTrans");
 s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 void DrawMenuCursorArrow(s32 arg0, s32 arg1);
-extern s32 g_SoundOptionCursor;
 extern s32 g_ClassRecordMenuCursor;
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
-extern s32 g_ScreenOffsetEditX;
 extern DVec D_8007D5A8[];
 extern Rgb D_8007D658[];
 extern GameScoreRecord g_ClassRecords[];
 extern Struct12 D_8007D5D4[];
-s32 RequestTrackLoad(void);
 void StartOptionMenuExit(s32 arg0);
-/* The six rows of the setup menu, plus the cursor when g_GameMode is 1. */
-void DrawOptionRootMenu(void);
-void DrawOptionRootMenu(void);
 /* The eleven class icons, tinted by g_ClassRecords[i].place. */
 void DrawClassRecordGrid(void);
 void DrawClassRecordGrid(void);
 /* One class record: class digit, grade sprite, clear count. */
 void DrawClassRecordDetail(void);
 void DrawClassRecordDetail(void);
-extern s32 g_ScreenOffsetEditX;
-extern s32 g_ScreenOffsetEditY;
 s32 AddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-extern s32 g_MonoOutput;
-extern s32 g_BgmVolumeSetting;
-extern s32 g_SfxVolumeSetting;
 void DrawOptionHintBar(s32 arg0);
 s32 GameQueueShadedSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSpriteTrans");
 /* One volume slider row: `level` filled 4x0x18 bars between two end glyphs. */
 void DrawVolumeBar(s32 arg0, s32 arg1);
 void DrawVolumeBar(s32 arg0, s32 arg1);
-/* The SOUND panel: stereo/mono, the two volume bars and the selection box. */
-void DrawSoundOptionScreen(void);
-void DrawSoundOptionScreen(void);
 
 void DrawOptionRootMenu(void) {
     u8 *base = g_DrawBuffer;

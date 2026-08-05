@@ -75,4 +75,17 @@ long BiosFormatDevice(void *device);
 void *BiosFirstFile(char *path, void *entry);
 void *BiosNextFile(void *entry);
 
+/* Declared identically by 26 translation units before this
+ * header carried them. */
+
+extern u_short g_IntrCallbackMask;
+extern u_short g_IntrInDispatch;
+extern u_long g_IntrSavedDpcr;
+extern u_short g_IntrSavedIrqMask;
+extern u_short g_IntrState[];
+extern volatile u_short *g_IrqMask;
+extern volatile u_short *g_IrqStatus;
+extern volatile u_long *g_KernelDpcr;
+extern volatile long g_VSyncCount;
+
 #endif

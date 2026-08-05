@@ -2,16 +2,10 @@
 #include "psyq/cd.h"
 long CD_sync(long arg0, u_char *arg1);
 
-extern volatile u_char *g_CdReg0;
-extern volatile u_char *g_CdReg1;
-extern volatile u_char *g_CdReg2;
-extern volatile u_char *g_CdReg3;
 extern long g_CdSyncCallback;
 extern long g_CdReadyCallback;
 extern long g_CdStatusByte;
 extern long g_CdErrorByte;
-extern u_char g_CdModeByte;
-extern u_char g_CdLastCommand;
 extern volatile u_long *g_ComDelayReg;
 extern CdRegisterMap *volatile g_CdSpuRegs;
 extern u_char D_80013904[];

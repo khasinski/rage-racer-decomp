@@ -1,16 +1,12 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern volatile u_char *g_CdReg0;
-extern volatile u_char *g_CdReg3;
 extern volatile u_long *g_ComDelayReg;
 extern volatile u_long *g_CdromDelayReg;
 extern volatile u_long *g_CdDpcr;
 extern volatile u_long *g_CdDmaMadr;
 extern volatile u_long *g_CdDmaBcr;
-extern volatile u_long *g_CdDmaChcr;
 extern long D_800992E4;
-
 
 extern CdCallback g_CdSyncCallback;
 extern CdCallback g_CdReadyCallback;
@@ -18,8 +14,6 @@ extern u_char g_CdSyncStatus;
 extern u_char g_CdReadyStatus;
 extern u_char g_CdSyncResult[];
 extern u_char g_CdReadyResult[];
-
-long CdReadInterruptStatus(void);
 
 long CD_getsector2(long arg0, u_long arg1) {
     volatile u_char *status;

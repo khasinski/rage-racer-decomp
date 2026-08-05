@@ -6,8 +6,6 @@
 typedef void (*Callback)(void);
 
 extern Callback g_IntrCallbacks[];
-extern u_short g_IntrCallbackMask;
-extern volatile u_short *g_IrqMask;
 
 Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     long index;

@@ -7,7 +7,6 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 
-extern s16 g_TrackZoneCode;
 extern Matrix g_SceneColorMatrix;
 extern Matrix D_8007C778;
 
@@ -61,11 +60,8 @@ void ApplyZoneLighting(s32 a0, Matrix *a1) {
 }
 
 extern Matrix g_SceneColorMatrix;
-/* Puts the unmodified colour matrix back after ApplyZoneLighting. */
-void RestoreColorMatrix(void);
 void RestoreColorMatrix(void) { SetColorMatrix(&g_SceneColorMatrix); }
 
-extern s32 g_FrameSyncThreshold;
 extern s32 g_ImageBlockBuffer;
 extern u8 *g_CourseProgress;
 
@@ -230,9 +226,7 @@ void DrawBgmSelector(void) {
 }
 
 extern s32 g_BgmShuffleIndex;
-extern s32 g_BgmTrackCount;
 extern u8 g_BgmShuffleOrder[];
-extern s32 g_BgmTrack;
 
 void PlaySoundCue(s32 cue);
 

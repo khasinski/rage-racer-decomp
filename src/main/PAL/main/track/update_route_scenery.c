@@ -2,6 +2,7 @@
 #include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/render.h"
+#include "game/track.h"
 
 typedef struct KF {
     s16 x;
@@ -15,22 +16,12 @@ typedef struct KF {
 extern volatile s32 g_RaceSeries;
 extern u8 *g_RouteSceneryData;
 extern s32 g_RouteSceneryClock;
-extern volatile s32 g_RouteSceneryFrame;
 extern s16 g_RouteSceneryKeyIndex;
-/* One 4-word position vector at 0x801E4340 -- x, y, z and a fourth word
- * copied straight out of the series header -- followed by a 3-word orientation
- * at 0x801E4350 in 12-bit angle units (4096 to the turn: the yaw below is used
- * as 0x800 - yaw, i.e. reflected about half a turn). The block-copy below
- * writes all four position words through one cursor. */
-extern s32 g_RouteSceneryX;
 extern s32 g_RouteSceneryY;
 extern s32 g_RouteSceneryZ;
 extern s32 g_RouteSceneryW;
-extern s32 g_RouteSceneryRotX;
 extern s32 g_RouteSceneryRotY;
-extern s32 g_RouteSceneryRotZ;
 extern KF *g_RouteSceneryKeyframe;
-
 
 void UpdateRouteScenery(void) {
     Matrix mtx0;

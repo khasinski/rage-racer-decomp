@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/render.h"
 #include "game/car.h"
-
-u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut);
+#include "game/race.h"
+#include "game/track.h"
 
 void SetSprt(u8 *arg0);
 void SetShadeTex(u8 *arg0, s32 arg1);
@@ -64,12 +64,7 @@ void DrawWrongWayWarning(void) {
 #define SCRATCH (*(u8 **)0x1F800000)
 
 extern u8 *volatile g_DrawBuffer;
-extern s32 g_PlayerSpeed;
 extern s16 g_PlayerGear;
-extern u16 g_HudGlyphClut;
-/* The needle corner table car/GetTrackSurfaceHeight.c rebuilds: four
- * (x, y) pairs. The loop below biases its cursor to the y of corner 0. */
-extern s16 g_TachoNeedleQuad[4][2];
 /* Tint of the tachometer face: the dial-mode branches set all three to the
  * same level and the tail of the function copies them into the face prim
  * already staged at g_DrawBuffer + 0x236E8. .data seeds them 0x80. */

@@ -65,18 +65,15 @@ typedef struct MenuSmallFrame {
 extern u16 g_ReplayPlayerModel;
 extern u16 g_ReplayRivalModel;
 extern MenuBigFrame *g_ReplayFramesGp;
-extern u8 *g_ReplayFramesTimeAttack;
 extern s32 g_ReplayWriteCursor;
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
 void StoreReplayCarFrame(s32 arg0, u8 *arg1, u8 *arg2);
 void StoreReplayTimeAttackFrame(s32 arg0, u8 *arg1);
-extern s32 g_ReplayReadCursor;
 extern u8 *g_EnvScriptClock;
 void SeekEnvironmentScript(void *arg0);
 void SeedReplayCars(void);
-extern s32 g_SeriesCleared;
 s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 
 void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {

@@ -8,22 +8,16 @@ extern u32 g_CarModelSlot;
 extern GameCarModelAsset *g_CarModelAsset;
 extern GameSceneAssetHeader *g_AssetLoadCursor;
 extern s32 g_TeamLogoSampleData;
-extern u8 *g_CarModelBuffer;
 extern u8 *g_ImageBlockBuffer;
 extern u8 *g_AssetBlockPtr2;
 extern u8 *g_AssetSubBlockPtr;
 s32 GetCarAssetIndex(s32 model, s32 grade);
-void RegisterModelBank(void *arg0, s32 arg1);
 void RegisterCourseModels(void);
-void SetCarImageSlot(void *arg0, s32 arg1);
-void SetCarModelSlot(void *arg0, s32 arg1);
 void SelectCarModelSlot(s32 arg0);
 void UploadImageAsset(void *arg0);
 void ApplyBodyColor1(s32 arg0, s32 arg1);
 void ApplyBodyColor2(s32 arg0, s32 arg1);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
-s32 PollAudioSlotLoad(void);
-extern s32 g_PendingCarModelIndex;
 
 s32 RequestCarSelectAssets(void) {
     if (g_AssetLoadState != 0) {

@@ -16,7 +16,6 @@ extern char g_CaptionTotalTime2[];
 extern char g_CaptionRanking2[];
 extern char g_FmtRecordName[];
 extern char g_FmtCarName[];
-extern s32 g_PlayerLapTimes[];
 extern s32 g_BestLapIndex;
 extern s32 g_TimeRecordInsertRow;
 extern s32 g_RankingInsertRow;
@@ -33,10 +32,7 @@ extern s32 g_RankingTimes;
  * car index, so g_RankingCars is g_RankingRecords[0][0][0].vC and
  * g_TimeRecordTimes / g_TimeRecordCars the same pair of g_TimeRecords. */
 extern u16 g_RankingCars[];
-extern s32 g_TimeRecordTimes;
 extern u16 g_TimeRecordCars[];
-/* Deliberately raw: see docs/names.md 12d. */
-extern s32 g_FrameSyncThreshold;
 extern s32 g_RecordEntryState;
 void InsertRaceRecords(void);
 extern u8 g_NameEntryCharset[];
@@ -45,7 +41,6 @@ extern s32 g_RecordPanelSlide;
 extern u8 g_RankingNameCodes[];
 extern s32 g_NameEntryChar;
 extern u8 g_TimeRecordNameCodes[];
-void RequestSelectBgmAssets(void);
 void DrawRankingPanel(u8 *arg0);
 void DrawTimeRecordPanel(u8 *arg0);
 void DrawNameEntryCursor(s32 arg0, s32 arg1);

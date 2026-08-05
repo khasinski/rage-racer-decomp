@@ -7,8 +7,6 @@
 #include "psyq/gte.h"
 #include "game/state.h"
 
-void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
-s32 SmoothTrackAngle(s32 arg0, s32 arg1);
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
 
@@ -19,7 +17,6 @@ void UpdateCarTrafficAvoidance();
 void UpdateCarAiTargetSpeed();
 void ApplyCarRacingLineHint();
 void ClampCarLateralOffset();
-void UpdateRivalRubberBand(void);
 void SlowRivalAhead();
 void AccumulateLapProgress();
 void ApplyCarKnockback();
@@ -668,7 +665,6 @@ typedef struct Obj {
     s32 f2C;
 } Obj;
 
-extern u8 *volatile g_RaceIntroCameraScript;
 extern KE *g_RaceIntroCameraCursor;
 /* The pre-race fly-in: the timer counts down to 0 while the eye is eased
  * along the delta by cos(timer / keyframe->f12), and it also drives the
@@ -779,14 +775,6 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
 }
 
 extern u32 g_CameraCar[];
-extern s32 g_CameraCarY;
-extern s32 g_CameraCarZ;
-extern s32 g_CameraCarAngleY;
-extern s32 g_CameraCarHeading;
-extern s32 g_CameraCarSpeed;
-/* Deliberately raw: written here and in one other camera seeder, read
- * nowhere in the image. */
-extern s32 D_801E3F60;
 
 void SeedFinishCamera(void *arg0) {
     register u32 word0 asm("$2");

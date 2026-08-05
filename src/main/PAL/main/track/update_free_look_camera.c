@@ -7,20 +7,12 @@
 #include "game/render.h"
 #include "game/random.h"
 
-extern s32 g_CameraCarHeading;
-extern s32 g_CameraCarSpeed;
 extern s32 g_CameraCarSpeedRamp;
-extern s32 g_CameraCarStepX;
-extern s32 g_CameraCarStepZ;
 extern s16 g_FreeCameraAngleOffset[];
-extern s16 g_PlayerTrackSection;
-extern s32 g_PlayerProgressA;
-extern s32 g_PlayerProgressB;
 extern s32 g_PlayerTrackProgress;
 
 extern GameRenderObject g_CameraCar;
 
-void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
 void AccumulateLapProgress(void *arg0);
@@ -157,7 +149,6 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     SetCameraRotMatrix();
 }
 
-extern s32 g_CourseModelCount;
 extern s32 g_StartGridSceneryAngle[];
 extern struct {
     s16 x;
@@ -226,7 +217,6 @@ void ResetFreeLookCamera(void) {
 extern Vec4 g_AnimSceneryPos[];
 extern u32 *g_VisibleCellMask;
 extern s16 g_AnimSceneryFrame;
-extern s32 g_RacePaused;
 extern s32 g_AnimSceneryTint;
 extern s16 g_AnimSceneryRacePosition;
 extern s16 g_AnimSceneryVariant;

@@ -113,12 +113,6 @@ void DrawNegconSteerPlayScreen(void) {
 }
 
 extern u8 g_PadType;
-/* Its backup, taken by BeginNegconCalibration. */
-extern u16 g_NegconSteerPlaySaved;
-/* The arrow pulse angle the setup screens advance every frame. */
-extern s32 g_SetupArrowPulse;
-/* One of the four controller-screen animation counters. */
-extern s32 g_ControllerSceneAngleX;
 
 void DrawOptionHintBar(s32 arg0);
 
@@ -202,9 +196,6 @@ void DrawNegconMaxTwistScreen(void) {
     *(s32 *)0x1F800000 = AddTilePrim(
         (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
 }
-
-/* Its backup, taken by BeginNegconCalibration. */
-extern u16 g_NegconMaxTwistSaved;
 
 /*
  * Game mode 11: pick the maximum twist range with left/right, confirm with

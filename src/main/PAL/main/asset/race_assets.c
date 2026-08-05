@@ -4,6 +4,7 @@
 #include "game/car.h"
 #include "game/race.h"
 #include "game/cd.h"
+#include "game/menu.h"
 s32 LoadAsset(s32 arg0, void *arg1);
 
 /*
@@ -12,37 +13,15 @@ s32 LoadAsset(s32 arg0, void *arg1);
  */
 #define ASSET_SUB(base, k) ((base) + ((GameSceneAssetHeader *)(base))->offsets[k])
 
-s32 RequestRaceStart(void);
-
-void LoadGrandPrixScreen(void);
-
-void LoadCourseAssets(void);
-
-s32 RequestTrackLoad(void);
-
 extern u8 *g_AssetLoadCursor;
 extern u8 *g_AssetSubBlockPtr;
-extern u8 *g_TrackTextureShadow;
-extern s32 g_SharedAssetWord0;
 extern u8 *g_AssetBlockPtr2;
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
-s32 PollAudioSlotLoad(void);
 s32 GetCarAssetIndex(s32 model, s32 grade);
 void SetCarSpec(void);
 void UploadImageAsset(void *arg0);
-void UploadImageBlock(void *arg0);
-void StoreTeamLogoImage(void *arg0);
-void ResetTrackTextureSwap(void);
 void SetTrackCameraTable(void *arg0);
-void SetEnvPaletteTable(void *arg0);
-void SetEnvironmentScript(void *arg0);
-void RegisterModelBank(void *arg0, s32 arg1);
-void InstallTrackPoints(void *arg0);
 void RegisterCourseModels(void *arg0);
-void InstallTerrainCellData(void *arg0);
-void SetCourseObjects(void *arg0);
-void InstallTrackEventData(void *arg0);
-void SelectTrackCameraTable(void *arg0, s32 arg1);
 extern s32 g_ImageBlockBuffer;
 extern s32 g_AssetBase;
 

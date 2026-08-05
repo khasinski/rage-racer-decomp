@@ -3,14 +3,11 @@
 #include "common.h"
 #include "game/audio.h"
 #include "psyq/spu.h"
+#include "psyq/snd.h"
 
 extern u_char g_SndVoiceCount;
-extern u_char g_SndCurrentPriority;
 extern u_char g_SndVoiceState[];
-extern u_char g_SndVoiceStateAge[];
-extern u_char g_SndVoiceStateEnvx[];
 extern u_char D_8009E0D0[];
-extern u_char g_SndVoiceStateStatus[];
 
 u_char SpuVmAlloc(long unused) {
     u_char candidates;
@@ -228,12 +225,9 @@ void SpuVmScaleVabVolume(long arg0, long val) {
     (void)arg0;
 }
 
-extern u_long g_SndVoiceSilenceHistory[];
 extern u_short g_SndDamper;
 extern u_long g_SndCurrentProgTable;
 extern volatile u_long g_SndCurrentToneTable;
-extern u_char g_SndCurrentProgActual;
-extern u_char g_SndCurrentTone;
 extern u_short D_801E4BE8;
 extern short D_801E4BEC;
 extern short D_801E4BEE;

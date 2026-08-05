@@ -8,11 +8,7 @@ extern volatile long g_GpuQueueWriteIdx;
 extern long g_GpuQueueReadIdx;
 extern long g_AddQueueIntrMask;
 extern u_char g_GpuLastCb[];
-extern long g_GpuLastCbArg;
-extern long g_GpuLastCbData;
-extern volatile u_long *g_GpuDmaChcr;
 extern volatile u_long *g_GpuGp1;
-extern u_char g_DrawSyncCbPending[];
 extern volatile u_char g_GraphQueue;
 extern long g_DrawSyncCallback;
 

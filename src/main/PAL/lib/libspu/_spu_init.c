@@ -7,21 +7,12 @@ extern long _spu_writeByIO(long addr, long size);
 
 extern char g_SpuTimeoutFmt[];
 extern char g_SpuTimeoutMsgReset[];
-extern long g_SpuWaitCount;
-extern u_short g_SpuTransferStartAddr;
 extern volatile SpuRegisterMap *g_SpuRegBase;
 extern volatile long *g_SpuDpcr;
-extern long g_SpuTransferByIo;
 /* Deliberately raw: written zero here and read nowhere in the image. */
 extern long D_8009AB98;
-/* psyq's _spu_mem_mode group, all four set together: the enable flag, the
- * unit size 8, its shift 3 and its mask 7. _spu_FsetRXXa rounds a byte
- * address up to a multiple of the unit before shifting it into a register. */
-extern long g_SpuMemMode;
-extern long _spu_mem_mode_unitM;
 extern long g_SpuMemModeUnit;
 extern long _spu_mem_mode_plus;
-extern long g_SpuTransferCompleted;
 extern void (*volatile g_SpuTransferCallback)(void);
 /* Deliberately raw: cleared beside g_SpuTransferCallback in _spu_init and
  * SpuQuit and never read. Shape says libspu's IRQ callback slot

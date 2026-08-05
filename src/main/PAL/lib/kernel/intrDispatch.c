@@ -3,15 +3,6 @@
 
 typedef void (*Callback)(void);
 
-/* The kernel interrupt block at 0x80099430: [0] installed flag,
- * [1] g_IntrInDispatch, [2..] g_IntrCallbacks (11 handler slots),
- * +0x30 g_IntrCallbackMask (which slots are filled), +0x38 the saved
- * frame HookEntryInt is pointed at. */
-extern u_short g_IntrState[];
-extern u_short g_IntrInDispatch;
-extern u_short g_IntrCallbackMask;
-extern volatile u_short *g_IrqStatus;
-extern volatile u_short *g_IrqMask;
 extern long g_IntrStuckCount;
 extern u_char D_80013B70[];
 extern u_char D_80013B8C[];

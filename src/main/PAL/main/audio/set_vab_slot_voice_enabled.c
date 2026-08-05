@@ -2,8 +2,6 @@
 #include "game/audio.h"
 #include "game/sound.h"
 
-extern s32 g_SoundSlotActive[];
-
 void SetVabSlotVoiceEnabled(s32 arg0, s32 arg1, s32 arg2) {
     s32 *state;
 

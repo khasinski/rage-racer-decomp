@@ -54,4 +54,16 @@ void InitCdAudio(void);
  * sectors in, then the file-backed entries found with DsSearchFile. */
 void BuildCdTrackTable(void);
 
+/* Declared identically by 27 translation units before this
+ * header carried them. */
+
+extern s32 g_CdCommandPending;
+extern s32 g_CdCommandStep;
+extern u8 g_CdCurrentTrack;
+extern s32 g_CdFadeFrames;
+extern s32 g_CdMixPreset;
+extern s32 g_CdRestartOnResume;
+extern s32 g_CdTrackPending;
+extern s32 g_CdTrackStep;
+
 #endif

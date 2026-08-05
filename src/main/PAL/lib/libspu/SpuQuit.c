@@ -1,8 +1,6 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long g_SpuTransferEvent;
-extern long g_SpuIsStarted;
 /* Transfer/IRQ callback slots, shared with the SPU interrupt handler; every
  * other unit that touches them declares them volatile as well. */
 extern void (*volatile g_SpuTransferCallback)(void);

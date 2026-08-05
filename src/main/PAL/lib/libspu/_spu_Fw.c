@@ -1,10 +1,6 @@
 #include "psyq/spu.h"
 
-extern u_short g_SpuTransferStartAddr;
 extern volatile u_short *g_SpuRegBase;
-extern long g_SpuTransferByIo;
-extern long g_SpuMemMode;
-extern long _spu_mem_mode_unitM;
 extern u_long g_SpuMemModeUnit;
 extern u_long _spu_mem_mode_plus;
 

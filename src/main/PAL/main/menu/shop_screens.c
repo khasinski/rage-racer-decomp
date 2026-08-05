@@ -8,28 +8,14 @@ u32 DrawEngineerShopScreen(s32 arg0);
 
 extern u8 *g_CarModelAsset;
 
-extern u8 g_MenuBlankCaption;
 extern u8 D_800820C4;
-extern u8 g_UiChromeScript;
-extern u8 g_UiChromeScript2;
 extern u8 D_800828B0;
 extern u8 D_80082904;
 extern u8 D_80082958;
 extern u8 D_800829AC;
 extern u8 D_80082A00;
 extern s32 g_CarPriceTable[];
-extern u8 g_MenuSubCursor;
-extern s32 g_MenuConfirmTimer;
-extern s32 g_CarNamePlateStep;
-extern s32 g_MenuPlateCarIndex;
-extern s32 D_8009B32C;
-extern s32 D_8009B330;
-extern s32 g_CarSwapFromIndex;
-extern s32 g_CarSwapToIndex;
-extern s32 g_PlayerMoney;
-extern s16 g_PrevOwnedCarIndex;
 extern u8 *D_8019CB00;
-extern s16 g_NextOwnedCarIndex;
 extern s32 D_801E4294;
 extern u8 D_801E438D[];
 
@@ -42,11 +28,7 @@ void GameDrawMenuButtonWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 
                    s32 a7, s32 a8, s32 a9, void *a10) asm("GameDrawMenuButton");
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void UploadTeamLogoClut(void);
 void DrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
-void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
-void DrawMenuAltPanel(s32 arg0, s32 arg1);
-s32 GetOwnedCarAssetIndex(s32 arg0);
 void UpdateCarListCursor(void);
 
 void UpdateCarShopScreen(void) {

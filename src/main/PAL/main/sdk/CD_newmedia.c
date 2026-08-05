@@ -15,8 +15,6 @@ typedef struct Entry {
 extern u_char g_CdSectorBuf[];
 extern W4 g_CdRootDirLba;
 extern Entry g_CdPathTable[];
-extern long g_CdDebugLevel;
-extern long g_CdCachedDir;
 
 extern const char D_800139B4[];
 extern const char D_800139E0[];

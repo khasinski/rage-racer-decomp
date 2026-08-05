@@ -10,7 +10,6 @@ typedef struct D8007Pair {
     s16 f2;
 } D8007Pair;
 
-extern s16 g_SteerHoldFrames;
 extern D8007Pair g_LaunchSpeedThresholds[];
 
 s32 rsin(s32 arg0);

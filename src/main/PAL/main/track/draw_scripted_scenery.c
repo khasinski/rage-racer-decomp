@@ -2,13 +2,7 @@
 #include "game/vector.h"
 #include "game/race.h"
 #include "game/audio.h"
-
-void UpdateFlybyScenery(void);
-void DrawFlybyScenery(void);
-void UpdateRouteScenery(void);
-void DrawRouteScenery(void);
-void UpdatePathScenerySound(void);
-void DrawPathScenery(void);
+#include "game/menu.h"
 
 void DrawScriptedScenery(s32 arg0) {
     switch (g_GrandPrixClass % 5) {
@@ -107,8 +101,6 @@ extern s32 g_PathSceneryZ;
 extern s16 g_PathSceneryRotY;
 extern s16 g_PathSceneryRotZ;
 extern s32 g_PlayerCar;
-extern s32 g_PlayerCarY;
-extern s32 g_PlayerCarZ;
 
 /*
  * The position and rotation cursors are the same interleaved eight-halfword

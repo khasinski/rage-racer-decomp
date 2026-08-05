@@ -1,10 +1,7 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long g_SpuTransferMode;
 extern long D_8009A718;
-extern long g_SpuRevReserveWa;
-extern long g_SpuRevWorkAreaAddr;
 extern long g_SpuRevAttr;
 extern short g_SpuRevAttrDepthLeft;
 extern short g_SpuRevAttrDepthRight;
@@ -14,14 +11,9 @@ extern u_short D_8009A766;
 /* Bit per voice; SpuGetKeyStatus turns it into the LibRef Table 15-1 values
  * (SPU_ON / SPU_ON_ENV_OFF / SPU_OFF / SPU_OFF_ENV_ON). */
 extern long g_SpuKeyStatus;
-extern long g_SpuIsStarted;
-extern long g_SpuTransferByIo;
 extern long g_SpuRevWorkAreaStartAddr;
 /* Deliberately raw: written zero by SpuStart and read nowhere in the image. */
 extern long D_8009A710;
-/* OpenEvent(0xF0000009 EvSpEND, 0x20) - the SPU DMA-completion event that
- * SpuIsTransferCompleted tests and SpuClearReverbWorkArea waits on. */
-extern long g_SpuTransferEvent;
 
 void SpuInit(void) {
     _SpuInit(0);

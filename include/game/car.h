@@ -197,8 +197,6 @@ extern u8 g_CarModelBaseIndex[];
  * this plus the grade being bought (GetCarUnlockLevel). */
 extern u8 g_CarModelUnlockBase[];
 
-
-
 /* One automatic-gearbox shift point; `spec->shiftPoints[gear - 1]`. */
 typedef struct GameCarSpecShiftPoint {
     s16 downshiftSpeed;
@@ -395,5 +393,33 @@ void UpdateCarLaunch();
  *   g_PlayerLap           g_PlayerLap  +0x168, also the lap-time record header
  */
 
+/* Declared identically by 58 translation units before this
+ * header carried them. */
+
+extern s32 D_8019C998;
+extern s32 D_801E4194;
+extern s32 g_AutoShiftCooldown;
+extern u8 *g_CarModelBuffer;
+extern s16 g_DragScale;
+extern s32 g_EngineRpm;
+extern s32 g_EngineRpmJitter;
+extern s16 g_GripLossTimer;
+extern u16 g_HudGlyphClut;
+extern s16 g_PeakOutputRpm;
+extern s16 g_PeakOutputValue;
+extern u8 *volatile g_RaceIntroCameraScript;
+extern s32 g_RoadGrade;
+extern s32 g_SharedAssetWord0;
+extern s32 g_ShiftSoundLevel;
+extern s32 g_ShiftTargetRpm;
+extern s32 g_StandingStartSpin;
+extern s16 g_SteerHoldFrames;
+extern s16 g_TachoNeedleQuad[4][2];
+extern s16 g_TrackZoneDark;
+
+void SetCarImageSlot(void *arg0, s32 arg1);
+void SetCarModelSlot(void *arg0, s32 arg1);
+s32 SmoothTrackAngle(s32 arg0, s32 arg1);
+void UpdateRivalRubberBand(void);
 
 #endif

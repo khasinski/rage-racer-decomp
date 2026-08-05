@@ -2,10 +2,7 @@
 #include "game/car.h"
 #include "game/race.h"
 
-extern s32 g_PlayerProgressA;
-extern s32 g_PlayerProgressB;
 extern GameRaceRanking g_PlayerLap;
-extern s32 g_LapCount;
 extern GameCarRuntimeProgressWindow g_CarProgressB[];
 
 /* Counts the cars whose lap progress is ahead of the player and publishes the

@@ -14,21 +14,17 @@ extern u8 *g_CarModelAsset;
 
 extern s32 D_8009B2CC;
 extern s32 D_8009B2C8;
-extern s32 g_TimeAttackPlateStep;
 extern s32 D_8019CDF8;
 extern u8 D_80082724;
 extern u8 D_80081890;
-extern u8 g_UiChromeScript;
 
 void DrawRectOutlineWide(void *buf, s32 xa, s32 ya, s32 w, s32 h, s32 r, s32 g, s32 b, s32 code) asm("DrawRectOutline");
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
 
-void DrawMenuCourseView(void);
 void DrawMenuLightBurst(s32 arg0);
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
 s32 DrawRankingTable(s32 *arg0, s32 arg1, s32 arg2);
-void DrawTimeAttackPlate(s32 arg0);
 
 void UpdateRankingScreen(void) {
     s32 state;
@@ -213,9 +209,6 @@ s32 DrawCarSelectScreen(s32 arg0) {
     return D_8009B2CC;
 }
 
-extern s16 g_PrevOwnedCarIndex;
-extern s16 g_NextOwnedCarIndex;
-
 void UpdateOwnedCarNeighbours(void) {
     s32 index;
     GameCarEntry *ptr;
@@ -253,7 +246,6 @@ void UpdateOwnedCarNeighbours(void) {
     }
 }
 
-extern s32 D_8009B33C;
 extern s32 D_8019C7B8;
 
 s32 GetCarUnlockLevel(s32 model);
@@ -311,12 +303,6 @@ do {
 
 }
 
-extern s32 g_CarNamePlateStep;
-extern s32 g_MenuPlateCarIndex;
-
-void InstallCarModelSlot(void);
-void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
-
 void EnterCarSelectScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     InstallCarModelSlot();
@@ -330,28 +316,13 @@ void EnterCarSelectScreen(void) {
 
 extern u8 D_800818CC;
 extern u8 D_800819A4;
-extern u8 g_UiChromeScript2;
 extern u8 D_8008285C;
 extern u8 D_80082874;
 extern u8 *D_801E40B4;
-extern s32 D_8009B324;
-extern s32 D_8009B32C;
-extern s32 D_8009B330;
-extern s32 D_8009B348;
-extern s32 g_MenuHintBarStep;
-extern s32 D_8009B360;
-extern s32 D_8009B368;
-extern s32 g_MenuCourseModelIndex;
-extern s32 g_MenuPendingCourseIndex;
-extern s32 g_CarSwapFromIndex;
-extern s32 g_CarSwapToIndex;
 extern s32 D_8019C7B8;
-extern s32 g_PlayerMoney;
-extern s32 D_801E4138;
 extern u8 *g_CourseProgress;
 
 void RequestCarModel(s32 carIndex);
-void ClearTeamNameTexture(void);
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight)
 ;
 void DrawCarShopPricePanel(s32 step, s32 money, s32 price)
@@ -359,9 +330,7 @@ void DrawCarShopPricePanel(s32 step, s32 money, s32 price)
 void DrawEngineerShopPricePanel(s32 step, s32 arg1, s32 arg2)
 ;
 s32 CountOwnedCars(void);
-void RestoreTeamLogoClut(void);
 void DrawOwnedCarCounter(s32 step, s32 count);
-void DrawMenuAltPanel(s32 arg0, s32 arg1);
 
 void UpdateCarSelectScreen(void) {
     s32 mode;
@@ -721,18 +690,10 @@ s32 DrawCustomizeScreen(s32 arg0) {
     return D_8009B2D0;
 }
 
-extern u8 g_MenuBlankCaption;
 extern u8 D_80081A34;
 extern u8 D_80081AD0;
-extern u8 D_80082574;
-extern u8 D_800825A4;
-extern u8 g_UiChromeScript2;
 extern u8 D_80082814;
-extern u8 g_MenuSubCursor;
-extern s32 g_MenuConfirmTimer;
-extern s32 D_8009B324;
 extern u8 *D_8019C794;
-extern s32 g_RankingOption;
 extern u8 D_801E4389[];
 extern u8 D_801E438A[];
 void DrawTireCompoundSlider(u8 x, s32 useFlag);

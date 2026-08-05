@@ -1,13 +1,13 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 
 extern u_char *g_SndSeqTable[];
 extern short g_SndCurrentSeqSep;
 extern volatile u_char g_SndVoiceCount;
 extern u_char g_SndVoiceRegs[];
 extern volatile u_char g_SndVoiceFlags[];
-extern u_char g_SndVoiceStateSeqSep[];
 
 short SpuVmSetSeqVol();
 long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2);

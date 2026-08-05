@@ -242,7 +242,6 @@ u_long _status(void) {
 extern volatile u_long *g_OtcDmaMadr;
 extern volatile u_long *g_OtcDmaBcr;
 extern volatile u_long *g_OtcDmaChcr;
-extern volatile u_long *g_GpuDpcr;
 
 void Gpu_ArmTimeout(void);
 long Gpu_CheckTimeout(void);

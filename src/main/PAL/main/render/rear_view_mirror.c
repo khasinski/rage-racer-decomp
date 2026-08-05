@@ -5,7 +5,6 @@
 void SetRotMatrix(void *arg0);
 void SetDrawArea(u8 *packet, u8 *drawEnv);
 
-extern s16 g_MirrorViewEnabled;
 extern s32 g_MirrorPanelY;
 extern s32 g_MirrorUnlocked;
 void ResetMirrorState(void) {
@@ -15,10 +14,8 @@ void ResetMirrorState(void) {
 }
 
 extern s32 g_MirrorUnlocked;
-extern s16 g_MirrorViewEnabled;
 extern s32 g_CameraViewMode;
 extern Matrix D_8009AF00;
-extern Matrix D_8019CB18;
 extern s16 D_8019CEAA;
 extern s16 D_801C0692;
 extern s16 D_8019CEAE;
@@ -199,15 +196,12 @@ u8 *DrawMirrorFrame(u8 *packet) {
 }
 
 extern s32 g_MirrorUnlocked;
-extern s16 g_MirrorViewEnabled;
 extern s32 g_MirrorPanelY;
 extern s32 g_VisibleCellList;
 
 u8 *DrawMirrorFrame(u8 *packet);
 void AddPrim(void *ot, void *prim);
-void BuildVisibleCells(s32 arg0, s32 arg1);
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2);
-void EndMirrorPass(void);
 
 void DrawRearViewMirror(s32 arg0) {
     u8 **scratch;

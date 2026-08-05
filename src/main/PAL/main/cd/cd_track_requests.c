@@ -2,13 +2,7 @@
 #include "psyq/cd.h"
 #include "game/cd.h"
 
-extern s32 g_CdTrackPending;
-extern s32 g_CdCommandPending;
-extern s32 g_CdTrackStep;
-extern s32 g_CdCommandStep;
 extern u8 g_CdVolume;
-extern u8 g_CdCurrentTrack;
-extern s32 g_CdFadeFrames;
 extern CdlLOC g_CdTrackLocs[];
 
 void StepCdTrackRequest(void) {

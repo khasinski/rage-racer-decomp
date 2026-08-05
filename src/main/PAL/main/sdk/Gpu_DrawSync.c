@@ -2,11 +2,11 @@
 
 #include "common.h"
 #include "psyq/kernel.h"
+#include "psyq/gpu.h"
 
 void Gpu_ArmTimeout(void);
 
 extern volatile u_long *g_GpuGp1;
-extern volatile u_long *g_GpuDmaChcr;
 extern long g_GpuQueueWriteIdx;
 extern long g_GpuQueueReadIdx;
 
@@ -73,6 +73,4 @@ waitReady:
     return pending;
 }
 
-extern long g_GpuTimeoutDeadline;
-extern long g_GpuTimeoutPolls;
 void Gpu_ArmTimeout(void) { g_GpuTimeoutDeadline = VSync(-1) + 240; g_GpuTimeoutPolls = 0; }

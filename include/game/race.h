@@ -184,4 +184,54 @@ extern s16 g_RaceOptionCursor;
  * g_WrongWayTimer passes 10. */
 void DrawWrongWayWarning(void);
 
+/* Declared identically by 126 translation units before this
+ * header carried them. */
+
+extern s16 D_8019C9AC;
+extern s32 g_AttractDemoStep;
+extern s32 g_BestLapThisRace;
+extern s32 g_BgmTrack;
+extern s32 g_BonusCountStep;
+extern s32 g_ClassClearFanfareTimer;
+extern s32 g_ClassCompleted;
+extern s32 g_ClassResultPlace;
+extern s32 g_LapCount;
+extern s16 g_PauseDebounce;
+extern s32 g_PlayerCarZ;
+extern s32 g_PlayerLapTimes[];
+extern s32 g_PlayerProgressA;
+extern s32 g_PlayerProgressB;
+extern s16 g_PlayerTrackSection;
+extern s32 g_PrizeAmount;
+extern s32 g_PrizeScreenState;
+extern s32 g_PromotionBonus;
+extern s32 g_RacePaused;
+extern s32 g_ReplayReadCursor;
+extern s16 g_ReverbZoneDepth;
+extern s16 g_RivalCueCooldown3;
+extern s32 g_RivalCueFlags;
+extern s32 g_SectorEndDistance[];
+extern s32 g_SeriesCleared;
+extern s32 g_TimeRecordTimes;
+extern s16 g_TrackZoneCode;
+extern s32 g_WaypointSpawnCooldown;
+
+void DrawFlybyScenery(void);
+u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut);
+void DrawLostRaceCaption(s32 arg0);
+void DrawPathScenery(void);
+void DrawRoundScreen(void);
+void DrawRouteScenery(void);
+void DrawSplitDelta(s32 arg0, s32 arg1);
+void DrawTerrainCells(void);
+void InitTrackScene(void);
+void RequestSelectBgmAssets(void);
+void ReturnToTitleScene(void);
+void UpdateBgmTrackCount(void);
+void UpdateFlybyScenery(void);
+void UpdatePathScenerySound(void);
+void UpdatePointAmbience(s32 arg0);
+void UpdateRouteScenery(void);
+void UpdateZoneAmbience(s32 arg0);
+
 #endif

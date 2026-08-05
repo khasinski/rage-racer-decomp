@@ -89,13 +89,8 @@ s32 DrawDesignModeScreen(s32 arg0) {
     return D_8009B2D4;
 }
 
-extern s32 g_TeamNameCharModel;
-extern s32 g_DesignModeOption;
-
 extern u8 D_800828EC;
-extern u8 g_UiChromeScript2;
 extern u8 D_80081B54;
-extern u8 g_UiChromeScript;
 
 void DrawFadingMenuSprites(s32 a, s32 b, s32 c);
 void RampTeamLogoCanvas(s32 a, s32 b);

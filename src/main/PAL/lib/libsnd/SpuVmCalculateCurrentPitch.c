@@ -4,8 +4,6 @@
 #include "psyq/snd.h"
 
 extern u_char g_SndCurrentNote;
-extern u_char g_SndCurrentProgActual;
-extern u_char g_SndCurrentTone;
 extern u_char g_SndCurrentToneCenter;
 extern u_char g_SndCurrentToneShift;
 extern u_char *g_SndCurrentToneTable;

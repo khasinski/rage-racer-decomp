@@ -158,7 +158,6 @@ void CardSeekParam(s32 param);
 s32 CardReadStatusPair(s32 high, s32 low);
 s32 FormatMemoryCard(s32 arg0, s32 arg1);
 
-
 /* Moved here from menu.h and audio.h: these belong to the card, not to
  * the menu or the mixer. */
 void StartMemoryCardEvents(void);
@@ -166,5 +165,16 @@ void StopMemoryCardEvents(void);
 void EnterMemoryCardMenu(void);
 void EnterMemoryCardMenuFromLoad(void);
 void UpdateMemoryCardMenu(void);
+
+/* Declared identically by 20 translation units before this
+ * header carried them. */
+
+extern s32 g_McFadeLevel;
+extern s32 g_McFadeStep;
+extern s32 g_McFreeBlocks;
+extern s32 g_McFromLoadMenu;
+extern s32 g_McMenuPage;
+extern s32 g_McMenuRowCount;
+extern s32 g_McMenuRowCursor;
 
 #endif

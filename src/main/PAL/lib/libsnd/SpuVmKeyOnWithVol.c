@@ -3,11 +3,8 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndCurrentPriority;
 extern u_char g_SndVoiceCount;
 extern u_char g_SndCurrentVoice;
-extern u_char g_SndVoiceStateStatus[];
-extern u_char g_SndVoiceStatePitch[];
 extern u_char *g_SndSpuRegs;
 
 u_char SpuVmAlloc(long arg0);

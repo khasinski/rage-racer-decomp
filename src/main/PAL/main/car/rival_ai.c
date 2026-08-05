@@ -5,10 +5,7 @@
 #include "game/race.h"
 #include "game/audio.h"
 
-void UpdateRivalRubberBand(void);
-
 extern u8 g_PlayerTrackProgress[];
-extern s32 g_PlayerSpeed;
 
 /*
  * Inside the loop these two fields must NOT be reached as struct members.
@@ -284,11 +281,7 @@ void RankContenders(void) {
     }
 }
 
-extern s32 g_PlayerProgressA;
-extern s32 g_PlayerProgressB;
-extern s32 g_RivalCueFlags;
 extern s32 g_ClosestRivalRank;
-extern s16 g_RivalCueCooldown3;
 
 void UpdateRivalRubberBand(void) {
     s32 s6;

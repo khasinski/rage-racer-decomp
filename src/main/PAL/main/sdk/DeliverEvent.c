@@ -16,8 +16,6 @@ long CdStatus(void) {
 }
 
 extern CdlLOC g_CdLastPos;
-extern u_char g_CdModeByte;
-extern u_char g_CdLastCommand;
 
 /* CdMode: returns the last CD mode byte. */
 u_char CdMode(void) {

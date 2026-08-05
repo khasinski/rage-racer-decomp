@@ -2,8 +2,6 @@
 #include "psyq/spu.h"
 
 extern volatile long D_8009A718;
-extern long g_SpuRevReserveWa;
-extern long g_SpuRevWorkAreaAddr;
 extern SpuCommonRegs *g_SpuRegBase;
 
 long SpuSetReverb(long on_off) {

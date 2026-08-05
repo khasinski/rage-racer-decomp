@@ -3,22 +3,14 @@
 #include "game/state.h"
 #include "game/cd.h"
 #include "game/race.h"
+#include "game/menu.h"
 
-extern s32 g_CdRestartOnResume;
-extern s32 g_CdMixPreset;
-extern s32 g_CdTrackPending;
-extern s32 g_CdCommandPending;
-extern s32 g_CdTrackStep;
-extern s32 g_CdCommandStep;
 extern u8 g_CdTrackElapsedLoc[];
 extern u8 g_CdModeParam;
 extern u8 g_CdLocResult;
 extern u8 g_CdLocMinute;
 extern u8 g_CdLocSecond;
 extern u8 g_CdVolume;
-extern u8 g_CdCurrentTrack;
-extern s32 g_CdFadeFrames;
-extern s32 g_CdTrackEnded;
 extern CdlLOC g_CdTrackLoopPoint[];
 
 long CdReady(long arg0, void *arg1);

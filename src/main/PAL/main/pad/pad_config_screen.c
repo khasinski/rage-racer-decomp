@@ -82,9 +82,6 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
 extern DVec g_PadCalloutLabelPoints[];
 extern DVec g_PadCalloutButtonPoints[];
 
-/* Screen animation counter; the callouts only draw while it is settled. */
-extern s32 g_ControllerSceneAngleY;
-
 /* Local wide-parameter view of GameQueueLine; see GameQueueSprite.c. */
 u8 *QueueLineWide(
     void *ot,

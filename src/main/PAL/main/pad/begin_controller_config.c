@@ -4,14 +4,6 @@
 /* The two live 0..7 selections: standard pad and NeGcon. */
 extern u16 g_PadMappingIndex;
 extern u16 g_NegconMappingIndex;
-/* Their backups, restored if the screen is cancelled. */
-extern u16 g_PadMappingIndexSaved;
-extern u16 g_NegconMappingIndexSaved;
-
-extern s32 g_ControllerSceneAngleY;
-extern s32 g_ControllerSceneAngleX;
-extern s32 g_PadConfigFlipTimer;
-extern s32 g_PadConfigFlipPhase;
 
 /* Entry hook for the controller-configuration screen: clears the four screen
  * animation counters and snapshots both button-mapping selections so a cancel

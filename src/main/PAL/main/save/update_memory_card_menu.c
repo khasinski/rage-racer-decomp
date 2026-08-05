@@ -22,15 +22,8 @@ extern s32 g_McSavedLoadPhase;
  * its own identifier. */
 extern volatile s32 g_McCardStatusV asm("g_McCardStatus");
 extern volatile s32 g_McMenuSubState;
-extern s32 g_McFromLoadMenu;
 extern s32 g_McSaveMode;
-extern s32 g_McFreeBlocks;
 extern volatile s32 GameMenuLoadPhase;
-extern s32 g_McMenuRowCount;
-extern s32 g_McFadeStep;
-extern s32 g_McFadeLevel;
-extern s32 g_McMenuPage;
-extern s32 g_McMenuRowCursor;
 extern s32 g_McSlotCursor;
 extern s32 g_McActionState;
 extern s32 g_McActionResult;

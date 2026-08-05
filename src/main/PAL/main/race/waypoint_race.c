@@ -8,21 +8,11 @@
 #include "game/render.h"
 #include "game/cd.h"
 
-extern s16 g_PauseDebounce;
-
-extern s16 g_ReverbZoneDepth;
-
 extern u8 g_PlayerCar[];
 
 extern s32 g_PlayerTrackProgress;
 
-extern s16 g_PlayerTrackSection;
-
 extern s32 g_CameraCarProgressA;
-
-extern s32 g_RacePaused;
-
-void DrawRoundScreen(void);
 
 void RequestTrackTexturePage(s32 arg0);
 
@@ -38,29 +28,9 @@ void UpdateFreeLookCamera(u8 *arg0, s32 arg1);
 
 void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
-void UpdateFlybyScenery(void);
-
-void DrawFlybyScenery(void);
-
-void UpdateRouteScenery(void);
-
-void DrawRouteScenery(void);
-
-void UpdatePathScenerySound(void);
-
-void DrawPathScenery(void);
-
 void UpdateTrackEventSound(s32 arg0);
 
-void UpdatePointAmbience(s32 arg0);
-
-void UpdateZoneAmbience(s32 arg0);
-
-void DrawTerrainCells(void);
-
 extern s16 g_PlayerLap;
-
-extern s32 g_WaypointSpawnCooldown;
 
 extern TrackWaypointSeed g_WaypointSeeds[];
 

@@ -7,10 +7,6 @@
 
 extern s32 g_PlayerCar;
 
-extern s32 g_PlayerTrackPoint;
-
-extern s32 g_ReplayReadCursor;
-
 extern s32 g_Car0TrackPoint;
 
 void ApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2);
@@ -21,8 +17,6 @@ void AccumulateLapProgress(void *arg0);
 
 s32 FindTrackSegment(void *arg0, s32 arg1);
 
-extern s16 g_PlayerTrackSection;
-
 void RequestTrackTexturePage(s32 arg0);
 
 typedef struct TrackZone {
@@ -32,35 +26,19 @@ typedef struct TrackZone {
     s16 value;
 } TrackZone;
 
-extern s16 g_TrackZoneCode;
-
-extern s16 g_ReverbZoneDepth;
-
-extern s16 g_TrackZoneDark;
-
 extern u8 g_MsgGameExit;
 
 void ForceAllEffectVoicesEnabled(s32 arg0);
 
 void SetReverbDepth(s32 arg0, s32 arg1);
 
-void RequestSelectBgmAssets(void);
-
 extern s16 g_PlayerLap;
-
-extern s32 g_LapCount;
-
-extern s32 g_BestLapThisRace;
-
-extern s32 g_SectorEndDistance[];
 
 extern s32 g_RefSectorTimes[];
 
 extern s32 g_BestSectorTimes[][4][3];
 
 extern s32 g_BestTotalTimes[][4][2];
-
-void DrawSplitDelta(s32 arg0, s32 arg1);
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 

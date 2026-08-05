@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/spu.h"
 
 #define VA_ROUNDED_SIZE(type) \
     (((sizeof(type) + sizeof(long) - 1) / sizeof(long)) * sizeof(long))
@@ -12,14 +13,7 @@
 
 typedef void *va_list;
 
-extern u_short g_SpuTransferStartAddr;
 extern volatile u_short *g_SpuRegBase;
-extern volatile u_long *g_SpuDmaMadr;
-extern volatile u_long *g_SpuDmaBcr;
-extern volatile u_long *g_SpuDmaChcr;
-extern volatile u_long *g_SpuDelayReg;
-extern long _spu_mem_mode_unitM;
-extern long g_SpuTransferIsRead;
 extern long g_SpuDmaTransferAddr;
 extern long g_SpuDmaBlockCount;
 

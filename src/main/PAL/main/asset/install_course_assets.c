@@ -4,12 +4,8 @@
 
 extern u8 *g_AssetBase;
 extern u8 *g_AssetSubBlockPtr;
-extern u8 *g_TrackTextureShadow;
 extern u8 *g_AssetLoadCursor;
 void UploadImageAsset(void *arg0);
-void UploadImageBlock(void *arg0);
-void StoreTeamLogoImage(void *arg0);
-void ResetTrackTextureSwap(void);
 
 void InstallCourseAssets(void) {
     u8 *base;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/render.h"
 
 /*
  * The scripted-camera path: a table of 0x20-byte keyframes, each holding six
@@ -29,7 +30,6 @@ extern CameraKey g_CameraPath[];
  * the compiler compute the base once and drops 20 instructions. */
 #define KEY(byteOffset) (*(CameraKey *)((u8 *)g_CameraPath + (byteOffset)))
 
-s32 BezierEase(s32 t, s32 control);
 s32 SetLookAtMatrix(s32 *obj);
 
 /* One frame of the scripted camera: eases the six values between the

@@ -1,8 +1,6 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndVabStatus[];
-extern u_char g_SndCurrentProgActual;
 extern volatile u_char *g_SndCurrentToneTable;
 
 long SpuVmVSetUp(long arg0, long arg1);

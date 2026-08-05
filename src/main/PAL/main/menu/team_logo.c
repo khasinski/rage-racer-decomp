@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/menu.h"
 
 typedef struct TeamLogoSample {
     u16 clut[2][16];
@@ -7,7 +8,6 @@ typedef struct TeamLogoSample {
 
 extern TeamLogoSample *g_TeamLogoSampleData;
 extern u16 g_TeamLogoClut[];
-extern u16 g_TeamLogoSwatches[];
 extern u16 g_TeamLogoCanvas[];
 
 static inline s32 TeamLogoParity(s32 value)
@@ -143,7 +143,6 @@ void ClearTeamNameTexture(void) {
 }
 
 extern u8 D_8007C7CC[];
-void ClearTeamNameTexture(void);
 void LoadImage(Rect *rect, void *data);
 
 void UploadTeamNameTexture(u8 *str, s32 len) {

@@ -1,8 +1,6 @@
 #include "psyq/snd.h"
 
 extern SeqStruct *g_SndSeqTable[];
-extern long g_SndSeqOpenMask;
-extern short g_SndSeqTableTMax;
 
 void SpuVmSetSeqVol(long seq_sep, u_short left, u_short right, long arg3);
 

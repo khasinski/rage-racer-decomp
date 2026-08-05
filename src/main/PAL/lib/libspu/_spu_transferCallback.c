@@ -2,7 +2,6 @@
 
 extern volatile u_short *g_SpuRegBase;
 extern volatile long g_SpuTransferCallback;
-extern long g_SpuTransferIsRead;
 
 void DeliverEvent(long arg0, long arg1);
 

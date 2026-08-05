@@ -8,20 +8,16 @@ extern char *g_CdCommandNames[];
 extern char *g_CdIntrNames[];
 extern CdCallback g_CdSyncCallback;
 extern CdCallback g_CdReadyCallback;
-extern u_char g_CdLastCommand;
-extern volatile u_char *g_CdReg0;
 extern volatile CdIntr g_CdSyncStatus;
 extern u_char g_CdSyncResult[];
 extern u_char g_CdReadyResult[];
 extern long g_CdTimeoutDeadline;
-extern long g_CdTimeoutCounter;
 extern char *D_8009BB10;
 extern char D_80013814[];
 extern char D_80013824[];
 extern char D_8001389C[];
 
 void LibcPutString(char *text);
-long CdReadInterruptStatus(void);
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
     register u_char *dstReg asm("$5");

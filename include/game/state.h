@@ -106,4 +106,22 @@ void InitSaveDefaults(void);
 /* Reset the current g_CourseProgress block (arg < 2 also marks slot 3 free). */
 void ResetCourseProgress(s32 mode);
 
+/* Declared identically by 42 translation units before this
+ * header carried them. */
+
+extern s32 D_8019CB10;
+extern s32 D_801E4D14;
+extern s32 g_ControllerSceneAngleX;
+extern s32 g_ControllerSceneAngleY;
+extern s32 g_FrameSyncThreshold;
+extern s32 g_GameClock;
+extern u16 g_NegconMappingIndexSaved;
+extern s32 g_OptionLetterboxHeight;
+extern s32 g_PadConfigFlipPhase;
+extern s32 g_PadConfigFlipTimer;
+extern s32 g_PadErrorState;
+extern u16 g_PadMappingIndexSaved;
+
+void RestartMemoryCard(void);
+
 #endif

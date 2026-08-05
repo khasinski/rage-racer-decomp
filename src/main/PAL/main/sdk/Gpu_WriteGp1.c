@@ -1,16 +1,12 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/gpu.h"
 
 /* The libgpu copy of the hardware pointers, initialised in the data
  * segment: GP0 0x1F801810, GP1 0x1F801814, DMA channel 2 (GPU) MADR/BCR/CHCR
  * 0x1F8010A0/A4/A8. See docs/names.md "Hardware mirrors". */
 extern volatile u_long *g_GpuGp1;
-extern volatile u_long *g_GpuGp0;
-extern volatile u_long *g_GpuDmaMadr;
-extern volatile u_long *g_GpuDmaBcr;
-extern volatile u_long *g_GpuDmaChcr;
-extern u_char g_GpuGp1Mirror[];
 
 void Gpu_WriteGp1(u_long arg0);
 long Gpu_WriteGp0Words(u_long *src, long count);

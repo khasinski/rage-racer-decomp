@@ -2,6 +2,7 @@
 #include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/render.h"
+#include "game/track.h"
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
@@ -660,7 +661,6 @@ block_52:
 /* Deliberately raw: the environment script header word 0 is stored here and
  * never read anywhere in the image (docs/names.md 15g). */
 extern u32 g_SkyRowBase;
-extern u32 *g_EnvScriptCues;
 extern u32 g_EnvScriptLength;
 
 void SetEnvironmentScript(u32 *arg0) {

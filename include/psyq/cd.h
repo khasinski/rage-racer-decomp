@@ -189,5 +189,31 @@ long CD_sync();
 long CD_ready();
 long CD_cw(u_char command, u_char *params, u_char *result, long async);
 
+/* Declared identically by 65 translation units before this
+ * header carried them. */
+
+extern long g_CdCachedDir;
+extern long g_CdDebugLevel;
+extern volatile u_long *g_CdDmaChcr;
+extern u_char g_CdLastCommand;
+extern u_char g_CdModeByte;
+extern volatile long g_CdReadBuffer;
+extern volatile long g_CdReadMode;
+extern volatile long g_CdReadSavedReadyCallback;
+extern volatile long g_CdReadSavedSyncCallback;
+extern volatile long g_CdReadSectorCount;
+extern volatile long g_CdReadSectorWords;
+extern volatile long g_CdReadStartVSync;
+extern volatile u_char *g_CdReg0;
+extern volatile u_char *g_CdReg1;
+extern volatile u_char *g_CdReg2;
+extern volatile u_char *g_CdReg3;
+extern long g_CdTimeoutCounter;
+extern u_char g_MdecIdctCmd[];
+extern u_char g_MdecQuantCmd[];
+extern long g_StRingSlot;
+
+long CdReadInterruptStatus(void);
+void MDEC_in(volatile u_long *arg0, long arg1);
 
 #endif

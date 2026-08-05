@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
+#include "game/render.h"
 
 void LoadImage(Rect *rect, void *data);
 long GetTPage(long arg0, long arg1, long arg2, long arg3);
@@ -152,10 +153,6 @@ long GetTPage(long arg0, long arg1, long arg2, long arg3) {
 long GetClut(long arg0, long arg1) {
     return ((arg1 << 6) | ((arg0 >> 4) & 0x3F)) & 0xFFFF;
 }
-
-extern char D_80013374[];
-/* libgpu's printf hook; every GPU trace string goes through it. */
-extern void (*GPU_printf)(char *, ...);
 
 void DumpTPage(long arg0) {
     long mode;

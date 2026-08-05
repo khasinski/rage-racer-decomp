@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
+#include "game/menu.h"
 extern void DrawRectOutline(
     s32 ot, s16 x, s16 y, s16 w, s32 h, u8 r, u8 g, u8 b, u8 alpha);
 extern void GameDrawTexturedQuad(
@@ -49,17 +50,10 @@ typedef union {
 
 extern TeamLogoClutPos g_TeamLogoClutRect;
 extern TeamLogoTexturePos g_TeamLogoRect;
-extern u8 D_8007F930;
 extern TeamLogoWord D_8007F934;
-extern s32 D_8007F938;
 extern TeamLogoWord D_8007F93C;
-extern s32 D_8007F940;
-extern s32 D_8007F944;
 extern s32 D_8007F948;
-extern s32 D_8007F94C;
 extern s32 D_8007F950;
-extern s32 D_8007F954;
-extern s32 D_8007F958;
 extern u16 D_8007F95C;
 extern s32 D_8007FB0C;
 extern s32 D_8007FB10;
@@ -68,7 +62,6 @@ extern s32 D_8009B298;
 extern s32 D_8009B29C;
 extern u16 D_8009B2A0[16];
 extern u16 g_TeamLogoClut[16];
-extern u16 g_TeamLogoSwatches[];
 extern u8 g_PadType;
 extern u16 D_801E6F2C asm("g_TeamLogoCanvas");
 

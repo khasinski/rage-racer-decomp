@@ -30,13 +30,10 @@ void *GameQueueTileTransWide(
     void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
 
 void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 arg2) asm("QueueDrawModePrim");
-extern s32 g_SeriesCleared;
 extern s32 g_EndingWashLevel;
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
-extern s32 g_ReplayReadCursor;
-extern s16 g_PlayerTrackSection;
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void DrawSeriesClearedWash(s32 arg0, s32 arg1);
 void UpdateReplayCars(void);
@@ -52,10 +49,7 @@ extern char *g_CourseNames[];
 void DrawText8x8Trans(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_RaceTotalTime;
-extern s32 g_ClassResultPlace;
-extern s32 g_PrizeScreenState;
 extern s32 g_BestTotalTimes[][4][2];
-extern s32 g_PlayerLapTimes[];
 /* Grand Prix result panel: the finishing-position graphic's per-place sprite
  * geometry and the two clut tables its two sprites pick from. */
 extern u16 g_ResultPlaceCluts[];

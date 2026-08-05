@@ -3,8 +3,6 @@
 #include "game/track.h"
 #include "game/audio.h"
 
-extern s16 g_RaceCueDelay;
-
 void PlayCountdownCues(s32 arg0) {
     if (arg0 < 0x110) {
         if (arg0 == 0x79) {

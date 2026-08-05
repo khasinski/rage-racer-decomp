@@ -13,11 +13,8 @@ extern s32 D_80082EA4;
 extern s32 D_80082EA8;
 extern s32 D_80082EB0;
 extern s32 D_8019C770;
-extern void *D_8009F0B0;
 extern u8 D_80082634;
-extern u8 D_80082664;
 extern u8 D_80081CA4;
-extern u8 g_UiChromeScript;
 
 extern void ComposeSampleTeamLogo(s32, s32);
 extern void DrawTeamLogoCanvas(s32, s32);
@@ -503,10 +500,6 @@ s32 DrawCarShopScreen(s32 arg0) {
 
     return D_8009B2E8;
 }
-
-extern s32 D_8009B33C;
-extern s16 g_PrevOwnedCarIndex;
-extern s16 g_NextOwnedCarIndex;
 
 s32 GetCarUnlockLevel(s32 model);
 

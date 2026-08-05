@@ -1,14 +1,12 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 
-extern u_char g_SndVoiceStateProgActual[];
 extern short g_SndVoiceStateNote[];
 extern u_char g_SndVoiceStateTone[];
 extern volatile u_char g_SndVoiceRegsPitch[];
 extern volatile u_char g_SndVoiceFlags[];
-extern u_char g_SndCurrentProgActual;
-extern u_char g_SndCurrentTone;
 extern short g_SndCurrentVoice;
 extern u_char *g_SndCurrentToneTable;
 

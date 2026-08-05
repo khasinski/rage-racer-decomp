@@ -7,21 +7,13 @@
 #include "game/cd.h"
 void UpdateAttractCars();
 
-extern s32 g_BgmSelectCursor;
 extern s32 g_BgmRandomLabelTimer;
-extern s32 g_BgmSelectTrack;
 s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 extern u32 g_BgmShuffleIndex;
-extern s32 g_BgmTrackCount;
 extern u8 g_BgmShuffleOrder[];
 void ShuffleBgmOrder(void);
-extern s32 g_BgmChangeDelay;
-extern s32 g_BgmSelectCdTrack;
-extern s32 g_CdTrackEnded;
-extern s32 g_BgmSelectStep;
 extern s32 g_BgmRandomPlay;
-extern s32 g_BgmSelectShowUi;
 extern s32 g_CameraViewMode;
 void AdvanceBgmShuffleBag();
 void DrawFullscreenFadeTile();

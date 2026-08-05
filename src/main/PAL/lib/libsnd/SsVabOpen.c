@@ -1,13 +1,11 @@
 #include "psyq/snd.h"
 #include "psyq/spu.h"
 
-extern u_char g_SndVabStatus[];
 extern u_short g_SndVabOpenCount;
 extern VabHdr *g_SndVabHeader[];
 extern short g_SndVabProgMax;
 extern ProgAtr *g_SndVabProgTable[];
 extern VagAtr *g_SndVabToneTable[];
-extern u_long g_SndVabSpuAddr[];
 extern u_short *g_SndVabBodyAddr[];
 extern long g_SndVabBodySize[];
 

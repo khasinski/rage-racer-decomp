@@ -4,11 +4,6 @@
 #include "game/render.h"
 #include "game/cd.h"
 
-extern s32 g_FmvFrameWidth;
-extern s32 g_FmvFrameHeight;
-extern s32 g_FmvStreamEnded;
-extern s32 g_FmvState;
-extern s32 g_GameClock;
 extern volatile u8 g_FmvVlcBuffers;
 extern u8 g_DrawEnv1Dither;
 extern u8 g_DrawEnv0Dither;

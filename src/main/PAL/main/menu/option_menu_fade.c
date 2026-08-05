@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/state.h"
 #include "game/render.h"
+#include "game/menu.h"
 
 s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
@@ -8,7 +9,6 @@ extern u32 g_OptionMenuExitScene;
 /* The 0x140x0x1E0 twin of DrawFullscreenFadeTile, for the 480-line setup scene. */
 void DrawFullscreenFadeTile480(s32 color, s32 arg1);
 void DrawFullscreenFadeTile480(s32 arg0, s32 arg1);
-void DrawOptionRootMenu(void);
 
 void DrawFullscreenFadeTile480(s32 color, s32 arg1) {
     u8 *base;

@@ -9,8 +9,6 @@ extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
-extern u_char g_SndVoiceStateStatus[];
-extern u_char g_SndVoiceStatePitch[];
 extern u_char g_SndVoiceState[];
 
 long SsUtKeyOffV(long arg0) {

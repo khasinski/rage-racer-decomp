@@ -2,9 +2,7 @@
 #include "game/cd.h"
 #include "psyq/cd.h"
 
-extern s32 g_CdMixPreset;
 extern u8 g_CdVolume;
-
 
 void SetCdMixPreset(s32 arg0) {
     g_CdMixPreset = arg0;

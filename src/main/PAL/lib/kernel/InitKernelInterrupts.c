@@ -1,12 +1,5 @@
 #include "psyq/kernel.h"
 
-extern u_short g_IntrState[];
-/* Interrupt hardware, from the data segment: I_STAT 0x1F801070, I_MASK
- * 0x1F801074, DPCR 0x1F8010F0 (the kernel's own pointer to it; libgpu and
- * libspu keep separate pointers to the same register). */
-extern volatile u_short *g_IrqStatus;
-extern volatile u_short *g_IrqMask;
-extern volatile u_long *g_KernelDpcr;
 extern u_long *g_IntrRpNode;
 extern u_short D_8009946C[];
 

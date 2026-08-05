@@ -6,8 +6,6 @@
 #include "psyq/snd.h"
 void DrawCarSpecGraph(s32, s32);
 
-extern s32 D_8009B348;
-extern s32 D_8009B324;
 extern s32 g_CarTable;
 extern s32 g_PlayerCarIndex;
 extern s32 g_CarListCursor;
@@ -17,10 +15,7 @@ struct Entry_5ACA0 {
     u8 f1;
     u8 pad[6];
 };
-extern s32 g_MenuHintBarStep;
 extern u8 g_MenuHintBarScript;
-extern s32 g_MenuHintBarProgress;
-extern s32 g_MenuHintButtonsVisible;
 extern u8 g_PadType;
 
 void GameDrawSolidRectWide(void *, s32, s32, s32, s32, s32, s32, s32, s32) asm("DrawSolidRect");
@@ -143,8 +138,6 @@ s32 SetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
 extern s32 g_ReverbDepthL;
 extern s32 g_ReverbDepthR;
 extern s32 D_801E6D80;
-extern s32 g_EngineSoundCurves[];
-extern s32 g_EngineSoundMaxRpm;
 
 void LoadAudioParameterTable(u16 *table) {
     u16 *tableReg = table;

@@ -1,8 +1,7 @@
 #include "common.h"
+#include "game/render.h"
 
 extern s32 g_CamRow;
-extern s32 g_TrackTextureSectionLo;
-extern s32 g_TrackTextureSectionHi;
 /*
  * Copies the first two words of the active camera row (g_CamRow holds a
  * pointer to the current CamRow) into the active view-param globals.

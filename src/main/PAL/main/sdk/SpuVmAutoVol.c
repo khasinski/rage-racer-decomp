@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/snd_types.h"
+#include "psyq/snd.h"
 
 extern volatile u_char g_SndVoiceStateAutoVol[];
 extern volatile u_char D_8009E0D6[];
@@ -179,16 +180,6 @@ void SpuVmAutoVolTick(short voice) {
     g_SndVoiceFlags[voice] |= 3;
 }
 
-/*
- * SpuVmAutoPan declared these volatile, SpuVmAutoPanTick plain; every access in
- * both goes through an explicit (volatile short *) cast, so the plain form keeps
- * the accesses volatile and both members byte-exact.
- */
-extern u_char g_SndVoiceStateAutoPan[];
-extern u_char g_SndVoiceStatePanStep[];
-extern u_char g_SndVoiceStatePanCounter[];
-extern u_char g_SndVoiceStatePanCounterReload[];
-extern u_char g_SndVoiceStateStartPan[];
 extern u_char g_SndVoiceStateEndPan[];
 
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {

@@ -1,13 +1,8 @@
 #include "common.h"
 #include "psyq/gte.h"
-
-extern s16 D_80092B08[];
-extern s16 D_80093308[];
-extern s16 D_80093B08[];
-extern s16 g_SinTable[];
+#include "game/render.h"
 
 s32 rsin(s32 arg0);
-s32 rsinCore(s32 arg0);
 s32 rcos(s32 arg0);
 
 /*

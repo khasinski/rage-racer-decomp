@@ -3,8 +3,6 @@
 #include "game/sound.h"
 #include "psyq/snd.h"
 
-extern s32 g_SoundSlotActive[];
-
 void SetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
     s32 *entry;
 
@@ -527,8 +525,6 @@ void SetCdMixPreset(s32 arg0);
 void SetStereoOutput(void) { g_StereoOutput = 1; SetCdMixPreset(0); SsSetStereo(); }
 
 void SetMonoOutput(void) { g_StereoOutput = 0; SetCdMixPreset(1); SsSetMono(); }
-
-extern s32 g_EngineSoundMaxRpm;
 
 u32 GetLoadedAudioStep(void) {
     return g_EngineSoundMaxRpm;
@@ -1733,8 +1729,6 @@ void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
 
 extern s32 g_EngineSoundPosition;
 extern s32 g_EngineSoundBank;
-extern s32 g_SoundSlotActive[];
-extern s32 g_EngineSoundCurves[];
 
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vab_slot);
 void UpdateBasicEffectVoices(void);
@@ -1884,8 +1878,6 @@ extern s32 g_IndexedEffectIndex;
 extern s32 g_IndexedEffectIndexPrev;
 extern s32 g_IndexedEffectPitch;
 extern s32 g_CarSoundVolumeScales[];
-
-s32 GetOwnedCarAssetIndex(s32 arg0);
 
 void InitEffectVoiceRuntime(void) {
     _SsVmInitWide(0);
@@ -2269,8 +2261,6 @@ asm(".globl func_8005E078\n"
     "func_8005E200 = ForcePitchEffectVoicesEnabled + 0x30\n"
     ".globl func_8005E314\n"
     "func_8005E314 = ForcePitchEffectVoicesEnabled + 0x144");
-
-extern s32 g_SoundSlotActive[];
 
 void SetSoundSlotVoicesEnabledWithRegisterArg(void) asm("SetSoundSlotVoicesEnabled");
 

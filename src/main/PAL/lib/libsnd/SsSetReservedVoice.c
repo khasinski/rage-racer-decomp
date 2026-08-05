@@ -4,9 +4,7 @@
 extern u_char g_SndReservedVoiceCount;
 extern short g_SndMonoMode;
 extern volatile u_char g_SndVoiceCount;
-extern u_char g_SndVabStatus[];
 extern u_short g_SndVabOpenCount;
-extern u_long g_SndVabSpuAddr[];
 
 void SsSetReservedVoice(u_char arg0);
 

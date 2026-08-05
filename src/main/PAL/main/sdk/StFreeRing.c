@@ -2,7 +2,6 @@
 #include "psyq/cd.h"
 
 extern long g_StRingSize;
-extern long g_StRingSlot;
 extern StStrHeader *g_StRingBase;
 extern long g_StEndFrame;
 extern long g_StStreamFlag;

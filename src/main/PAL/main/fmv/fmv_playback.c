@@ -17,10 +17,6 @@ typedef struct FmvDisplayState {
 
 void *GetFmvFrame(s32 *arg0);
 void MdecUnpackStatus(void *arg0, s32 arg1);
-extern s32 g_FmvFrameWidth;
-extern s32 g_FmvFrameHeight;
-extern s32 g_FmvStreamEnded;
-extern s32 g_StreamSectorCount;
 extern u16 g_DispEnv0Y;
 extern volatile u16 g_DispEnv0W;
 extern volatile u16 g_DispEnv0H;
@@ -32,13 +28,10 @@ void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3);
 extern char g_MsgFmvDecodeTimeout[];
 s32 VSync(s32 mode);
 s32 CdRead2(s32 arg0);
-extern u8 D_801E8AFC;
 extern u8 *g_ReplayFramesGp;
-extern u8 *g_ReplayFramesTimeAttack;
 extern u32 g_ReplayWriteCursor;
 extern u32 g_ReplayFrameCount;
 extern u32 g_ReplayBufferWrapped;
-extern s16 D_8009E782;
 extern s32 g_ReplayPlayerModel;
 extern s32 g_ReplayRivalModel;
 

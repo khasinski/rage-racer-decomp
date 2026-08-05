@@ -4,10 +4,7 @@
 #include "game/race.h"
 #include "game/track.h"
 
-extern s32 g_RaceCueFlags;
-extern s16 g_PlayerTrackSection;
 extern s16 g_PlayerLap;
-extern s32 g_LapCount;
 
 void TriggerRaceCues(void) {
     u8 *rawBase;

@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/cd.h"
 
 /*
  * LEFT RAW ON PURPOSE (docs/names.md 17i). This is libcd's interrupt decoder:
@@ -19,18 +20,12 @@
  * decision to leave it raw stands.
  */
 
-extern volatile u_char *g_CdReg0;
-extern volatile u_char *g_CdReg1;
-extern volatile u_char *g_CdReg2;
-extern volatile u_char *g_CdReg3;
-extern long g_CdDebugLevel;
 extern u_long g_CdStatusByte;
 extern u_long g_CdErrorByte;
 extern u_long g_CdShellOpenCount;
 extern u_long g_CdCommandNames[];
 extern u_long g_CdCommandHasComplete[];
 extern u_long g_CdCommandAckHasStatus[];
-extern u_char g_CdLastCommand;
 extern volatile u_char g_CdSyncStatus;
 extern volatile u_char g_CdReadyStatus;
 extern volatile u_char g_CdDataEndStatus;

@@ -11,9 +11,7 @@ void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
  * eight bytes as one Blk8. */
 extern s16 g_PathSceneryRot[3];
 extern s16 g_PathSceneryX;
-extern s32 g_ModelBankCount;
 extern s32 g_ScratchRenderMode;
-
 
 void DrawPathScenery(void) {
     Matrix mtx0;
@@ -80,8 +78,6 @@ void DrawPathScenery(void) {
  * its sign while the other user treats it as an unsigned 0..0x800 width
  * fraction, and docs/names.md 15g leaves that unreconciled. */
 extern s32 g_PlayerField3C;
-extern s32 g_PlayerSpeed;
-extern s32 g_PlayerTrackPoint;
 
 s32 rcos(s32 arg0);
 void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);

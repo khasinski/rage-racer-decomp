@@ -10,14 +10,10 @@
 
 extern s32 g_PlayerCar;
 
-extern s32 g_PlayerCarZ;
-
 /*
  * Waypoint proximity test: returns 1 if the waypoint's (x,y) lies within a
  * +/-0x40 box around the car centre (g_PlayerCar / g_PlayerCarZ), else 0.
  */
-
-extern s32 g_WaypointSpawnCooldown;
 
 extern TrackWaypointRuntime g_Waypoints[];
 
@@ -38,8 +34,6 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
  * state 2 once motion decays to zero. Register pins and raw tail-relative field
  * offsets are match-load-bearing.
  */
-
-extern s32 g_ModelBankCount;
 
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
@@ -62,15 +56,7 @@ void SetSprt(u8 *prim);
  * no effect at all -- and this whole scene is unreachable (names.md 15f). */
 extern s16 D_8009EC88;
 
-extern s32 g_PlayerProgressA;
-
-extern s32 g_PlayerProgressB;
-
 extern s32 g_PlayerTrackProgress;
-
-extern s16 g_ReverbZoneDepth;
-
-extern s16 g_PlayerTrackSection;
 
 extern u8 g_TextCongratulations;
 
@@ -95,8 +81,6 @@ void DrawLapNumber(void);
 void UpdateCamera(s32 a, void *b);
 
 void RequestTrackTexturePage(s32 a);
-
-void DrawTerrainCells(void);
 
 void DrawCourseScenery(s32 a, s32 b, s32 c);
 

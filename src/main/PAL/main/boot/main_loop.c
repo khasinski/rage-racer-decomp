@@ -15,16 +15,12 @@ void InitAssetSystem(void);
 void ResetGraph(s32 arg0);
 void SetGraphDebug(s32 arg0);
 void InitGeom(void);
-void RestartMemoryCard(void);
 void ResetReplayFrameCounts(void);
 void InitRecordTables(void);
 void InitRenderState(s32 arg0);
 
 extern s32 g_ScreenOffsetY;
 extern s32 g_ScreenOffsetX;
-extern s32 g_PadErrorState;
-extern s32 D_801E4D14;
-extern s32 D_8019CB10;
 extern s32 g_MirrorMode;
 
 extern u16 g_NegconSteerPlay;
@@ -94,10 +90,6 @@ void DrawOTag(u8 *ot);
 extern u8 g_FrameContexts[];
 /* Which of them is current, mirrored for everyone else to read. */
 extern s32 g_FrameParity;
-/* Minimum VSync count per frame; 0x80 means "never wait", i.e. free-running. */
-extern s32 g_FrameSyncThreshold;
-/* Running VSync-derived clock and the raw frame counter. */
-extern s32 g_GameClock;
 extern s32 g_FrameCounter;
 /* Scene handlers, indexed by g_SceneId. */
 extern void (*g_SceneHandlers[])(void);

@@ -6,11 +6,7 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-
 typedef SeqStruct SequenceState;
-
-
-
 
 #define SS_SEQUENCE_CHANNEL_COUNT 0x10
 
@@ -153,5 +149,34 @@ void SsSeqApplyControlChange(long seq, long sep, u_char value);
 void SsSeqSetChannelMode(long seq, long sep, u_char mode);
 void SsSeqSetChannelParam13(long seq, long sep, u_char value);
 void SsSeqSetChannelParam14(long seq, long sep, u_char value);
+
+/* Declared identically by 80 translation units before this
+ * header carried them. */
+
+extern u_char D_8009A569;
+extern u_char g_SndCurrentPriority;
+extern u_char g_SndCurrentProgActual;
+extern u_char g_SndCurrentTone;
+extern long g_SndNoTickFlag;
+extern long g_SndSeqOpenMask;
+extern short g_SndSeqTableSMax;
+extern short g_SndSeqTableTMax;
+extern u_char g_SndTickIrq;
+extern long g_SndTickMode;
+extern u_char g_SndTickUsesVSync;
+extern u_long g_SndVabSpuAddr[];
+extern u_char g_SndVabStatus[];
+extern u_long g_SndVoiceSilenceHistory[];
+extern u_char g_SndVoiceStateAge[];
+extern u_char g_SndVoiceStateAutoPan[];
+extern u_char g_SndVoiceStateEnvx[];
+extern u_char g_SndVoiceStatePanCounter[];
+extern u_char g_SndVoiceStatePanCounterReload[];
+extern u_char g_SndVoiceStatePanStep[];
+extern u_char g_SndVoiceStatePitch[];
+extern u_char g_SndVoiceStateProgActual[];
+extern u_char g_SndVoiceStateSeqSep[];
+extern u_char g_SndVoiceStateStartPan[];
+extern u_char g_SndVoiceStateStatus[];
 
 #endif

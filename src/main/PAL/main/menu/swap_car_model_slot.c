@@ -5,10 +5,10 @@
 #include "game/menu.h"
 #include "game/state.h"
 #include "game/asset.h"
+#include "game/race.h"
+#include "game/track.h"
 
 extern u32 g_CarModelSlot;
-
-void InstallCarModelSlot(void);
 
 /* Flips the double-buffered showroom slot and re-registers it. */
 void SwapCarModelSlot(void) {
@@ -36,20 +36,13 @@ typedef struct SwModelPose {
 
 extern Vec4 D_80011AB4;
 extern Vec4 g_MenuViewScale;
-extern s32 g_CarSwapFromIndex;
-extern s32 g_CarSwapToIndex;
 extern SwCarRec *g_CarTable;
 extern SwObj698 *g_CarModelAsset;
-extern s16 D_8009E782;
 extern s32 D_8009E7B8;
-extern s32 D_8009E718;
-extern s32 D_8009E71C;
 extern s16 D_8009E804;
-extern s32 g_MenuViewSpin;
 extern SwModelPose D_8009E6D4 asm("g_PlayerCar");
 extern Vec4 D_8009E724;
 extern s32 D_8009E734;
-extern s32 g_ModelBankCount;
 extern s32 D_1F800004;
 
 s32 GetCarAssetIndex(s32 arg0, s32 arg1);
@@ -219,16 +212,7 @@ void DrawMenuCarView(void) {
 }
 
 extern Vec4 g_MenuViewScale;
-extern s32 g_CourseSwapDelay;
-extern s32 g_MenuCourseModelIndex;
-extern s32 g_MenuPendingCourseIndex;
 extern s32 g_PlayerCar;
-extern s32 g_PlayerCarY;
-extern s32 g_PlayerCarZ;
-extern s32 D_8009E6F4;
-extern s32 D_8009E6F8;
-extern s32 g_ModelBankCount;
-extern s32 g_MenuViewSpin;
 
 void SetGteObjectMatrix(void *a, void *b, void *c);
 
@@ -337,8 +321,6 @@ void DrawMenuCourseView(void) {
 typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 
 extern Vec4 D_80011AC4;
-extern s32 g_TeamNameCharModel;
-extern s32 g_CourseModelCount;
 s32 rsin(s32 arg0);
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */

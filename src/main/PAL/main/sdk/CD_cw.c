@@ -6,19 +6,11 @@
 
 extern CdCallback g_CdSyncCallback;
 extern CdCallback g_CdReadyCallback;
-extern long g_CdDebugLevel;
 extern u_char g_CdLastPos[4];
-extern u_char g_CdModeByte;
-extern u_char g_CdLastCommand;
 extern char *g_CdCommandNames[];
 extern char *g_CdIntrNames[];
 extern long g_CdCommandClearsReady[];
 extern long g_CdCommandParamCount[];
-/* CD-ROM controller ports 0x1F801800..03, from the data segment. Port 0 is
- * the index/status register; 1..3 are bank-switched by the index it holds. */
-extern volatile u_char *g_CdReg0;
-extern volatile u_char *g_CdReg1;
-extern volatile u_char *g_CdReg2;
 extern volatile CdIntr g_CdSyncStatus;
 extern u_char g_CdSyncResult[8];
 extern u_char g_CdReadyResult[8];
@@ -30,7 +22,6 @@ extern char D_800138B8[];
 extern char D_800138C8[];
 
 void LibcPutString(char *text);
-long CdReadInterruptStatus(void);
 long CD_sync(long mode, u_char *result);
 
 static inline void setAlarm(char *name) {

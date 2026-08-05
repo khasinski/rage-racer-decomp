@@ -127,28 +127,11 @@ extern char D_800113F0[];
 extern char D_800113F8[];
 extern char D_80011400[];
 extern char D_80011408[];
-extern s32 g_AutoShiftCooldown;
-extern s16 g_TrackZoneDark;
-extern s32 g_ShiftSoundLevel;
-extern s32 g_RoadGrade;
-extern s32 g_ShiftTargetRpm;
-extern s16 g_PeakOutputRpm;
-extern s16 g_PeakOutputValue;
 extern s16 D_801E6F18;
 extern s16 D_801E6F1A;
 extern s16 g_TorqueBandEnd[];
 extern s16 g_TorqueLossBandEnd[];
 extern s16 D_8007DAD4[];
-extern s32 g_EngineRpmJitter;
-extern s32 g_EngineRpm;
-extern s32 D_801E4194;
-extern s32 g_StandingStartSpin;
-extern s32 D_8019C998;
-extern u16 g_HudGlyphClut;
-extern s16 g_DragScale;
-extern s16 g_SteerHoldFrames;
-extern s16 g_GripLossTimer;
-extern s16 D_8019C9AC;
 void BuildTachoNeedleQuad(void);
 void ClearCarMotionState(void *);
 s32 FindTrackSegment(void *, s32);
@@ -439,24 +422,10 @@ typedef struct A {
     SubB sub;
 } A;
 
-/* Deliberately raw: both writes in the image store zero, so this branch --
- * ignore the pad and freeze the steering -- is unreachable in retail. */
-extern s16 D_8019C9AC;
 extern u8 g_PadType;
 /* The live button mapping; masks 0 and 1 steer, g_MirrorMode swaps them. */
 extern s16 g_PadButtonMapping[];
-/* NeGcon steering: the raw twist minus the calibrated centre, minus the dead
- * zone indexed by the separate NEGCON STEER PLAY setting at g_NegconSteerPlay (a
- * word table at 0x8007C128), then clamped to
- * +-g_NegconSteerRange[g_NegconMaxTwist].
- * g_NegconMaxTwist is the 0..3 setting the MAXIMUM TWIST screen edits and the
- * save file keeps; the range table is { 25, 38, 75, 113 }, so a higher setting
- * needs more twist for full lock. This file used to spell g_NegconMaxTwist
- * g_NegconSteerPlay, which is the name of that other setting -- see
- * docs/names.md 20. */
-extern s16 g_NegconSteer;
 extern s16 g_NegconMaxTwist;
-extern s16 g_NegconSteerRange[];
 
 s32 rcos(s32);
 
@@ -672,8 +641,6 @@ extern u16 D_8007DA88[];
 extern u16 D_8007DA8A[];
 extern u16 D_8007DAA0[];
 extern u16 D_8007DAA2[];
-extern s16 g_DragScale;
-extern s16 g_GripLossTimer;
 s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void PlaySoundCue(s32 id);

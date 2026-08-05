@@ -1,8 +1,5 @@
 #include "psyq/spu.h"
 
-extern long _spu_mem_mode_unitM;
-extern SpuMallocEntry *_spu_memList;
-
 long _SpuIsInAllocateArea(u_long arg0);
 long _SpuIsInAllocateArea_(u_long arg0);
 

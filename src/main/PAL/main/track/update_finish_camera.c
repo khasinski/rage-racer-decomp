@@ -6,19 +6,12 @@
 
 extern GameRenderObject g_CameraCar;
 extern s32 g_CameraCarTrackPoint;
-extern s32 g_CameraCarZ;
-extern s32 g_CameraCarHeading;
-extern s32 g_CameraCarSpeed;
-extern s32 g_CameraCarStepX;
-extern s32 g_CameraCarStepZ;
 
-void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
 void AccumulateLapProgress(void *arg0);
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2);
 void DrawPlayerCarModel(GameRenderObject *obj);
-
 
 /*
  * Camera track-follower: advances a look-ahead track point, aims the eye object

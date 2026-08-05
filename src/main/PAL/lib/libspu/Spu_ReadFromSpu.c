@@ -1,11 +1,6 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long g_SpuTransferMode;
-extern long g_SpuTransferEvent;
-extern u_short g_SpuTransferStartAddr;
-extern long g_SpuTransferByIo;
-extern long g_SpuTransferCompleted;
 extern long g_SpuTransferCallback;
 
 u_long Spu_ReadFromSpu(long arg0, u_long arg1) {

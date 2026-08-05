@@ -82,11 +82,7 @@ long Gpu_ClearImage(short *env, u_long rgb) {
     return 0;
 }
 
-extern volatile u_long *g_GpuGp0;
 extern volatile u_long *g_GpuGp1;
-extern volatile u_long *g_GpuDmaMadr;
-extern volatile u_long *g_GpuDmaBcr;
-extern volatile u_long *g_GpuDmaChcr;
 
 void Gpu_ArmTimeout(void);
 long Gpu_CheckTimeout(void);
@@ -206,7 +202,6 @@ long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
     return 0;
 }
 
-extern volatile u_long *g_GpuGp0;
 extern volatile u_long *g_GpuGp1;
 
 /* Driver-table slot +0x1C: the worker StoreImage enqueues. The GP0(C0h)

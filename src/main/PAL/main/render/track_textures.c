@@ -2,9 +2,9 @@
 #include "psyq/gpu.h"
 #include "game/state.h"
 #include "game/random.h"
+#include "game/asset.h"
+#include "game/render.h"
 
-extern s32 g_TrackTextureSectionLo;
-extern s32 g_TrackTextureSectionHi;
 extern s32 g_TrackTexturePageWanted;
 /*
  * Old-style definition on purpose: SetTrackTexturePageNow and RequestTrackTexturePage call this
@@ -36,7 +36,6 @@ s32 arg0;
 
 extern s16 D_8007C70A;
 extern u8 D_801E4BF8[];
-extern u8 *g_TrackTextureShadow;
 extern s32 g_TrackTexturePageWanted;
 void LoadImage(Rect *rect, void *data);
 
@@ -116,7 +115,6 @@ extern s16 D_8007C70A;
 extern s32 g_TrackTextureCursorRow;
 extern u8 D_801E4BF8[];
 extern s32 g_TrackTexturePageWanted;
-extern u8 *g_TrackTextureShadow;
 void LoadImage(Rect *rect, void *data);
 
 void SwapTrackTextureRow(void) {
@@ -185,7 +183,6 @@ void StepTrackTextureSwap(void) {
 }
 
 extern s32 g_TrackTextureCursorRow;
-extern u8 g_CarTrackSection[];
 
 s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
     s32 random;
@@ -212,7 +209,6 @@ s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
 }
 
 extern s32 g_TrackTextureCursorRow;
-extern u8 g_CarTrackSection[];
 
 s32 CycleAttractCameraCar(s32 mask, s32 current) {
     s32 random;

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gpu.h"
+#include "game/render.h"
 
 extern s32 g_FmvRingBuffer;
 extern s32 g_StreamLoc;
@@ -16,7 +17,6 @@ void OpenFmvStream(s32 arg0) {
     StartStreamRead(g_StreamLoc);
 }
 
-extern volatile u32 *g_FmvStripBuffers[];
 extern Rect g_FmvStripRects[];
 extern volatile s32 g_FmvStripIndex;
 extern volatile s32 g_FmvStripRectIndex;
@@ -27,8 +27,6 @@ extern volatile s32 g_FmvStripRectIndex;
  * time; the LoadImage copy reads the same four halfwords back as a Rect. */
 extern volatile s16 g_FmvUploadRectX;
 extern volatile s16 g_FmvUploadRectY;
-extern s16 g_FmvStripWidth;
-extern s16 g_FmvStripHeight;
 extern volatile s32 g_FmvStripDone;
 extern s32 g_StInterruptPending;
 

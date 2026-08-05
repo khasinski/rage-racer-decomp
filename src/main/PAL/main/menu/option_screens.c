@@ -7,17 +7,11 @@
 #include "psyq/gpu.h"
 #include "game/audio.h"
 #include "game/car.h"
+#include "game/race.h"
 void SeekEnvironmentScript(s32 arg0);
 
-extern s32 g_SoundOptionCursor;
-extern s32 g_BgmVolumeSetting;
-extern s32 g_SfxVolumeSetting;
-extern s32 g_MonoOutput;
-extern s32 g_ScreenOffsetEditX;
-void DrawSoundOptionScreen(void);
 s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueSpriteTrans");
 void DrawOptionHintBar(s32 arg0);
-extern s32 g_ScreenOffsetEditY;
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
 extern u16 D_8019CE9C;
@@ -27,35 +21,17 @@ extern u16 D_801C0686;
 /* The four-arrow reticle of the screen-position panel. */
 void DrawScreenAdjustScreen(void);
 void DrawScreenAdjustScreen(void);
-extern s32 g_OptionLetterboxHeight;
-void DrawPadTypeHint(void);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 QueueLineWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueLine");
 /* The setup scene's per-frame overlay: pad hint, letterbox, and the alignment frame in mode 6. */
 void DrawOptionSceneOverlay(void);
 void DrawOptionSceneOverlay(void);
 extern s32 g_CameraViewMode;
-extern s32 g_TrackWalkStart;
-extern s32 g_FrameSyncThreshold;
-extern u8 g_CarTrackSection[];
 extern s32 *g_CamRow;
 void InitRenderState(s32 arg0);
-void LoadTrackTexturePageRange(void);
-void InitTrackLighting(void);
-void BuildStartingGrid(void);
 void SetTrackTexturePageNow(s32 arg0);
-extern s32 g_FrameSyncThreshold;
-extern s32 g_BgmSelectCursor;
-extern s32 g_BgmSelectShowUi;
-extern s32 g_BgmSelectCdTrack;
-extern s32 g_BgmSelectStep;
-extern s32 g_BgmSelectTrack;
-extern s32 g_BgmChangeDelay;
-extern s32 g_CdTrackEnded;
-extern s32 g_BgmSelectStep;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
-void InitTrackScene(void);
 void RequestTrackDataAssets(void);
 void UpdateOptionSceneFade(void);
 

@@ -65,8 +65,6 @@ long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) {
 }
 
 extern u_char g_GraphDebug;
-/* libgpu's printf hook; every GPU trace string goes through it. */
-extern void (*GPU_printf)(char *, ...);
 extern char D_8001359C[];
 extern char D_800135B4[];
 extern u_long g_OtagTerminator;

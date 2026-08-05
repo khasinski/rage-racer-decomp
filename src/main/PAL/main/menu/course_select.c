@@ -17,20 +17,9 @@ void DrawNowLoadingText(void) {
     }
 }
 
-extern s32 g_TimeAttackPlateStep;
-extern s32 D_8009B360;
-extern s32 D_8009B364;
-extern s32 D_8009B368;
-extern s32 g_MenuViewSpin;
 extern u8 *g_CourseProgress;
 extern s32 g_PlayerCar;
-extern s32 g_PlayerCarY;
-extern s32 g_PlayerCarZ;
-extern s32 D_8009E6F4;
-extern s32 D_8009E6F8;
 extern s32 D_8009E6FC;
-extern s32 D_8009E718;
-extern s32 D_8009E71C;
 extern s32 g_PlayerTrackProgress;
 extern u8 g_TeamLogoClutRect[];
 extern u8 g_TeamLogoRect[];
@@ -486,29 +475,11 @@ s32 CanSelectNextCourse(void) {
     return g_CourseIndex < limit;
 }
 
-extern s32 g_CarNamePlateStep;
-extern s32 g_MenuPlateCarIndex;
-extern s32 g_MenuHintBarStep;
-extern s32 g_MenuConfirmTimer;
-extern s32 D_8009B310;
-extern s32 D_8009B348;
-extern s32 g_CourseSwapDelay;
-extern s32 g_MenuCourseModelIndex;
-extern s32 g_MenuPendingCourseIndex;
-extern s32 g_CarSwapFromIndex;
-extern s32 g_CarSwapToIndex;
-extern u8 g_MenuSubCursor;
 extern u8 *D_8019C764;
-extern s32 g_CourseSelectOption;
-extern s32 g_PlayerMoney;
 extern u8 D_80081818;
 extern u8 D_800817A0;
-extern u8 g_UiChromeScript;
 extern u8 D_800827FC;
-extern u8 g_UiChromeScript2;
 extern u8 D_80082604;
-extern u8 D_800825A4;
-extern u8 g_MenuBlankCaption;
 void ResetCourseProgress(s32 arg0);
 void drawSprite(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
@@ -517,11 +488,8 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawBrowseArrows(s32, s32, s32, s32);
 void DrawMenuLightBurst(s32 arg0);
 void DrawOwnedCarCounter(s32 arg0, s32 arg1);
-void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
 s32 DrawClassChangeCurtain(s32 arg0);
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
-void DrawTimeAttackPlate(s32 arg0);
-void DrawMenuCourseView(void);
 void UpdateCourseSelectScreen(void) {
     void *ot;
     u8 *hdr;

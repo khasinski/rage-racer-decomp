@@ -6,12 +6,10 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+#include "game/menu.h"
 
-extern s32 g_BgmSelectStep;
 extern void (*g_BgmSelectSteps[])(void);
 extern s32 g_ImageBlockBuffer;
-extern s32 g_FrameSyncThreshold;
-extern s32 g_AttractDemoStep;
 void UploadImageAsset(void *arg0);
 s32 RequestTrackDataAssets(void);
 extern s16 g_AttractTitleDelays[];
@@ -35,14 +33,11 @@ void DrawCarSpecSprite(
 
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
-void InitTrackScene(void);
 void AdvanceBgmShuffleBag(s32 arg0);
 void DrawAttractTitle(void);
 extern u32 g_StreamReturnScene;
 extern u32 g_CameraViewMode;
-extern u8 g_CarTrackSection[];
 void DrawFullscreenFadeTile(s32 arg0, u32 arg1);
-void ReturnToTitleScene(void);
 s32 CycleAttractCameraCar(u32 arg0, s32 arg1);
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1);

@@ -14,10 +14,7 @@ extern volatile long *g_VSyncGpuStat;
 extern volatile long *g_Timer1CountReg;
 extern volatile long g_VSyncTimerBase;
 extern long g_VSyncCountBase;
-extern u_short g_IntrInDispatch;
-extern volatile u_short *g_IrqMask;
 extern KernelCallback *g_IntrRpNode;
-extern volatile long g_VSyncCount;
 extern char D_80013B2C[];
 
 void LibcPutString(char *arg0);

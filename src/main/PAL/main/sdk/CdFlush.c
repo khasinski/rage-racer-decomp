@@ -1,7 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern long g_CdDebugLevel;
 extern long g_CdSyncCallback;
 extern long g_CdReadyCallback;
 extern char *g_CdCommandNames[];

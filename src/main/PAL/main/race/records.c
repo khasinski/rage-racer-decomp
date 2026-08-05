@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/screens.h"
+#include "game/race.h"
 void DrawText8x8Trans(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 
 extern s32 g_DefaultLapTimes;
@@ -15,7 +16,6 @@ extern s32 g_RankingRecords;
 extern s32 g_RankingTimes;
 extern u16 g_RankingCars;
 extern s32 g_TimeRecords;
-extern s32 g_TimeRecordTimes;
 extern u16 g_TimeRecordCars;
 extern s32 g_BestSectorTimes;
 extern char g_FmtLapTime[];

@@ -17,7 +17,6 @@ extern long g_StCurrentChannel;
 extern long g_StDmaBusy;
 extern long g_StWriteCursor;
 extern long g_StReadCursor;
-extern long g_StRingSlot;
 extern StStrHeader *g_StRingBase;
 extern long g_StCopySource;
 extern long g_StRingSize;

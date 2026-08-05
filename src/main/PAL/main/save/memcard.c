@@ -526,9 +526,6 @@ extern s32 g_BestLapTimes[];
 extern s32 g_BestTotalTimes[];
 extern s32 g_BestSectorTimes[];
 
-extern s32 g_BgmVolumeSetting;
-extern s32 g_SfxVolumeSetting;
-extern s32 g_MonoOutput;
 extern u8 g_GrandPrixCourseProgress[];
 extern u8 g_ExtraGrandPrixCourseProgress[];
 
@@ -814,9 +811,6 @@ extern s32 g_BestLapTimes[];
 extern s32 g_BestTotalTimes[];
 extern s32 g_BestSectorTimes[];
 
-extern s32 g_BgmVolumeSetting;
-extern s32 g_SfxVolumeSetting;
-extern s32 g_MonoOutput;
 extern u8 g_GrandPrixCourseProgress[];
 extern u8 g_ExtraGrandPrixCourseProgress[];
 
@@ -1459,7 +1453,6 @@ s32 CalculateMemoryCardFreeBlocks(s32 port) {
 }
 
 extern s32 g_McCardFileCount;
-extern s32 g_McFreeBlocks;
 
 s32 RefreshMemoryCardSaveStatus(s32 slot, GameSaveHeaderRow *header) {
     s32 ret;
@@ -1519,9 +1512,6 @@ extern char g_FmtSaveRowEmpty[];
 extern char g_McSlotLabels[];
 extern char g_McSlotLabelNoFile[];
 extern char g_McSlotLabelError[];
-extern s32 g_McMenuPage;
-extern s32 g_McMenuRowCursor;
-extern s32 g_McFreeBlocks;
 
 /* DrawLargeText with word-wide parameters; the header spelling does not
  * match here. See DrawText8x8 above. */
@@ -1661,19 +1651,11 @@ void DrawMenuFadeOverlay(s32 level) {
     DrawFullscreenFadeTile(level, 0x40);
 }
 
-extern s32 g_McFadeStep;
-
 void StartMenuExitFade(void) {
     StopMemoryCardEvents();
     g_McFadeStep = 8;
 }
 
-extern s32 g_McMenuRowCount;
-extern s32 g_McMenuPage;
-extern s32 g_McMenuRowCursor;
-extern s32 g_McFromLoadMenu;
-extern s32 g_McFadeStep;
-extern s32 g_McFadeLevel;
 void EnterMemoryCardMenu(void) {
     SetDispMask(0);
     SetupDisplay480(0, 0, 0);

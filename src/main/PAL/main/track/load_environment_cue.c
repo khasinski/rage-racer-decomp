@@ -1,15 +1,6 @@
 #include "common.h"
 #include "game/render.h"
-
-extern s16 g_EnvFogEnabled;
-extern u8 g_EnvSpare;
-extern s16 g_EnvLerpDuration;
-/* Cue halfword +0x2E, bit 15 inverted. Its only effect anywhere is to enable
- * the g_EnvSpareFrom -> g_EnvSpareTo lerp of g_EnvSpare; the name states that
- * and nothing more, because no reader of g_EnvSpare survives in the image. */
-extern s16 g_EnvSpareLerp;
-extern s16 g_EnvSpareFrom;
-extern s16 g_EnvSpareTo;
+#include "game/track.h"
 
 void LoadEnvironmentCue(GameEnvColor *arg0) {
     GameEnvColor *src;

@@ -6,13 +6,6 @@
 #include "psyq/kernel.h"
 void SetShadeTex(u_char *prim, long enabled);
 
-extern volatile long g_CdReadSectorCount;
-extern volatile long g_CdReadBuffer;
-extern volatile long g_CdReadMode;
-extern volatile long g_CdReadSectorWords;
-extern volatile long g_CdReadStartVSync;
-extern volatile long g_CdReadSavedSyncCallback;
-extern volatile long g_CdReadSavedReadyCallback;
 long CdSyncCallback(long arg0);
 long CdReadyCallback(long arg0);
 long CdControlB(long arg0, void *arg1, long arg2);

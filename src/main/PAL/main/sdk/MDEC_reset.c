@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/cd.h"
 
 /* libmdec hardware, from the data segment: DMA channel 0 (MDEC in) and
  * channel 1 (MDEC out) MADR/BCR/CHCR at 0x1F801080.. and 0x1F801090..,
@@ -20,14 +21,10 @@ extern u_char D_800132F4[];
 extern u_char D_80013304[];
 extern u_char D_8001332C[];
 extern u_char D_80013364[];
-extern u_char g_MdecQuantCmd[];
-extern u_char g_MdecIdctCmd[];
 
 long MDEC_in_sync(void);
 long MDEC_out_sync(void);
 long MDEC_timeout(u_char *arg0);
-
-void MDEC_in(volatile u_long *arg0, long arg1);
 
 void MDEC_reset(long arg0) {
     register long option asm("$5") = arg0;
