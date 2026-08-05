@@ -208,7 +208,7 @@ void SetHudBlinkColor(s32 arg0) {
 void DrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
 void DrawSplitDelta(s32 arg0, s32 arg1) {
     u8 *base;
-    register u8 *prim __asm("$17");
+    register u8 *prim;
     s32 firstOffset;
     s32 value;
     s32 temp;
@@ -228,7 +228,7 @@ void DrawSplitDelta(s32 arg0, s32 arg1) {
     if (arg1 > 0) {
         *(volatile u8 *)(base + 0x237CC) = 0x88;
         ot = g_DrawBuffer;
-        __asm__ volatile("" : : "r"(ot));
+        __asm__ volatile("" : : "r"(ot), "r"(prim));
         temp = 0x7810;
     } else if (arg1 < 0) {
         *(volatile u8 *)(base + 0x237CC) = 0x78;
