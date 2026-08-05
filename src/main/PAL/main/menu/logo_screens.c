@@ -15,19 +15,13 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-s32 DrawLogoSampleScreen(s32 arg0);
-
 extern u16 g_TeamLogoClut[];
 extern Rect g_TeamLogoClutRect;
 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
-void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
-void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
-void DrawTeamLogoCanvas(s32 arg0, s32 arg1);
 void RampTeamLogoCanvas(s32 arg0, s32 arg1);
 void DrawLogoSamplePanel(s32 arg0, s32 arg1);
-void LoadImage(Rect *rect, void *data);
 
 void UpdateTeamLogoScreen(void)
 {

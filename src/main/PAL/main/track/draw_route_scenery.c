@@ -4,7 +4,6 @@
 #include "game/render.h"
 #include "game/race.h"
 #include "game/track.h"
-void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 extern volatile s32 g_RouteSceneryRotY;
 

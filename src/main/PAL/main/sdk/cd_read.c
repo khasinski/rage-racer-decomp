@@ -2,7 +2,6 @@
 #include "psyq/cd.h"
 
 void CdRead(long arg0, void *arg1, long arg2);
-long CdReadSync(long arg0, long arg1);
 
 /*
  * Reads one 0x80-word directory/data sector at logical sector `sectorInt` into

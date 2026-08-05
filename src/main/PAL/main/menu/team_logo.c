@@ -130,8 +130,6 @@ void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
 
 #include "psyq/gpu.h"
 
-void LoadImage(Rect *rect, void *data);
-
 void ClearTeamNameTexture(void) {
     s16 sp[4];
     sp[0] = 0x282;
@@ -140,8 +138,6 @@ void ClearTeamNameTexture(void) {
     sp[3] = 8;
     LoadImage((Rect *)sp, &D_8007D24C);
 }
-
-void LoadImage(Rect *rect, void *data);
 
 void UploadTeamNameTexture(u8 *str, s32 len) {
     s16 sp[4];

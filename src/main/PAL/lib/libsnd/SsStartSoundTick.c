@@ -8,9 +8,6 @@ extern Callback g_SndTickCallback;
 extern Callback g_SndPrevVSyncCallback;
 
 long KernelCallbackSlot2Wide(long arg0, Callback arg1) asm("KernelCallbackSlot2");
-void VSyncCallback(Callback arg0);
-
-void SsStartSoundTick(long arg0);
 
 void SsStartSoundTick(long arg0) {
     long size;

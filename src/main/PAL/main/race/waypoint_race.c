@@ -7,6 +7,7 @@
 #include "game/track.h"
 #include "game/render.h"
 #include "game/cd.h"
+#include "game/screens.h"
 
 extern u8 g_PlayerCar[];
 
@@ -16,15 +17,11 @@ void RequestTrackTexturePage(s32 arg0);
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 
-void DrawRaceOptionMenu(s32 arg0);
-
 void GetTrackZoneBlend(s32 arg0);
 
 void ExitRaceScene(s32 arg0);
 
 void UpdateFreeLookCamera(u8 *arg0, s32 arg1);
-
-void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateTrackEventSound(s32 arg0);
 

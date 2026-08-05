@@ -716,7 +716,6 @@ void UpdateTeamLogoCanvas(void) {
 
 extern s32 g_TeamLogoClutRect;
 extern s32 D_8007F964;
-void LoadImage(Rect *rect, void *data);
 
 void RestoreTeamLogoClut(void);
 void RestoreTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, &D_8007F964); }

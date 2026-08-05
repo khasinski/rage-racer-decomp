@@ -6,7 +6,6 @@
 #include "game/render.h"
 #include "game/cd.h"
 #include "game/random.h"
-s32 LoadAsset(s32 arg0, void *arg1);
 
 extern u8 *g_CarModelAsset;
 
@@ -22,7 +21,6 @@ extern s32 g_ImageBlockBuffer;
 extern s32 g_AssetBlockPtr2;
 extern s32 g_AssetSubBlockPtr;
 extern u32 g_AssetLoadCursor;
-void UnrelocateModelBank(void *, s32);
 void SelectCarModelSlot(s32);
 
 void LoadUpgradedCarModel(s32 arg0) {

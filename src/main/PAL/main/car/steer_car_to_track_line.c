@@ -92,8 +92,6 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
  * the car to the airborne handler UpdateCarAirborne. See docs/names.md 1.
  */
 
-s32 GetAngleDistance(s32 arg0, s32 arg1);
-s32 GetAngleDelta(s32 arg0, s32 arg1);
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
 

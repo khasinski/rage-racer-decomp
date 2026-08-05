@@ -2,6 +2,7 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 #include "game/render.h"
+#include "game/menu.h"
 
 void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
 s32 encoded;
@@ -156,7 +157,6 @@ void ResetGraph(s32 mode) {
     }
 }
 
-extern void (* volatile GPU_printf)(char *, ...);
 extern GpuCallbacks *g_GpuFuncs;
 extern u8 g_GraphDebug;
 extern u8 g_GraphReverse;

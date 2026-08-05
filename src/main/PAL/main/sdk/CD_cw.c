@@ -20,7 +20,6 @@ extern char D_800138B8[];
 extern char D_800138C8[];
 
 void LibcPutString(char *text);
-long CD_sync(long mode, u_char *result);
 
 static inline void setAlarm(char *name) {
     g_CdTimeoutDeadline.deadline = VSync(-1) + 0x3C0;

@@ -11,10 +11,8 @@ extern s32 g_McStatusResult;
 extern s32 g_McPollStatus;
 extern char g_FmtCardDevice[];
 
-void ClearMemoryCardHwEvents(void);
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf();
-void ClearMemoryCardSwEvents(void);
 void _card_info(s32 chan);
 void _card_load(s32 chan);
 
@@ -797,19 +795,6 @@ extern u8 g_ExtraGrandPrixCourseProgress[];
 extern u8 g_TeamLogoRect[];
 extern u8 g_TeamLogoClutRect[];
 
-void LoadPadButtonMapping(s32 a, s32 b);
-
-/*
- * Verifies the memory-card payload's checksum and scatters it back into the
- * live globals. The layout is GameSaveBlock in game/memcard.h - the offsets
- * below are its fields - but the block is read with raw offsets on purpose:
- * as GameSaveBlock member reads, gcc 2.6.3 stops treating them as aliasing the
- * plain global stores they feed and hoists every load ahead of the stores,
- * which costs two extra callee-saved registers and does not match retail.
- * (That is also why the header is not included here: its prototype takes a
- * void *, and gcc 2.6.3 rejects the u8 * signature this body needs.)
- */
-s32 LoadSaveStateBlock(u8 *rowBytes);
 s32 LoadSaveStateBlock(u8 *block) {
     register u8 *base asm("$17") = block;
     __asm__("" : "=r"(base) : "0"(base));
@@ -1281,8 +1266,6 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) {
     GameMenuLoadPhase = 0x190;
     return mask;
 }
-
-extern volatile s32 GameMenuLoadPhase;
 
 s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     u8 block[MC_BLOCK_SIZE];

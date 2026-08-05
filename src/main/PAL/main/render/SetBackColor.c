@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte_macros.h"
+#include "include_asm.h"
 
 /*
  * GTE COP2 leaf routines after reg03: the fog/colour control writers
@@ -12,21 +13,18 @@
  * out here.  See docs/names.md section 25.
  */
 
-__asm__(".align 4");
 void SetBackColor(s32 a, s32 b, s32 c) {
     s32 x = a * 16, y = b * 16, z = c * 16;
     gte_ctc2(x, 13);
     gte_ctc2(y, 14);
     gte_ctc2(z, 15);
 }
-__asm__(".align 4");
 void SetFarColor(s32 a, s32 b, s32 c) {
     s32 x = a * 16, y = b * 16, z = c * 16;
     gte_ctc2(x, 21);
     gte_ctc2(y, 22);
     gte_ctc2(z, 23);
 }
-__asm__(".align 4");
 void SetGeomOffset(s32 a, s32 b) {
     s32 x = a << 16, y = b << 16;
     gte_ctc2(x, 24);

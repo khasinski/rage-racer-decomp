@@ -1,8 +1,5 @@
 #include "common.h"
 #include "psyq/gpu.h"
-void SetTile(void *arg0);
-
-void SetDrawArea(void *packet, void *rect);
 
 void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     void *otReg;
@@ -63,7 +60,6 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     }
 }
 
-void SetSprt(void *arg0);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) {
@@ -134,7 +130,6 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     *(SPRT **)0x1F800000 = prim;
 }
 
-void SetPolyF3(void *arg0);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
@@ -186,7 +181,6 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     *(POLY_F3 **)0x1F800000 = prim;
 }
 
-void SetPolyF4(void *arg0);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
@@ -308,7 +302,6 @@ void GameDrawTexturedQuad(s32 ot, s16 x0, s16 y0, s16 x1,
     *(POLY_FT4 **)0x1F800000 = prim;
 }
 
-void SetSemiTrans(void *arg0, long enabled);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
@@ -359,8 +352,6 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
     *(TILE **)0x1F800000 = prim;
 }
 
-void SetLineF2(void *arg0);
-void SetSemiTrans(void *arg0, long enabled);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
@@ -411,7 +402,6 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
     *(LINE_F2 **)0x1F800000 = prim;
 }
 
-void SetLineF3(void *arg0);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
@@ -443,7 +433,6 @@ void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 
     *(LINE_F3 **)0x1F800000 = prim;
 }
 
-void SetLineG2(void *arg0);
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {

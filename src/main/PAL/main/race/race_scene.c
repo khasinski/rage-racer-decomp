@@ -8,9 +8,8 @@
 #include "game/car.h"
 #include "game/audio.h"
 #include "game/random.h"
-void SetLightMatrix(void *arg0);
-void DrawStartCountdown(s32 arg0);
-void SeekEnvironmentScript(s32);
+#include "psyq/gte.h"
+#include "game/screens.h"
 
 /* Elements 0, 1 and 2 of g_RefSectorTimes. They CANNOT be spelled
  * g_RefSectorTimes[k] here: with one array symbol GCC 2.6.3 CSEs the base
@@ -39,15 +38,11 @@ void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 
 void ExitRaceScene(s32 arg0);
 
-void ForceAllEffectVoicesEnabled(s32 arg0);
-
 extern s32 g_CameraViewMode;
 
 extern u8 *g_CamRow;
 
 void InitRenderState(s32);
-
-void InitPlayerCar(void *);
 
 void SetTrackTexturePageNow(s32);
 
@@ -87,27 +82,15 @@ void UpdatePlayerCar(void *arg0);
 
 void DrawPlayerTachometer(void);
 
-void DrawRaceOptionMenu(s32 arg0);
-
 void GetTrackZoneBlend(s32 arg0);
 
 void RunRaceIntroCamera(void *arg0, s32 arg1);
-
-void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateTrackEventSound(s32 arg0);
 
 void PlayCountdownCues(s32 arg0);
 
 void UpdateCamera(s32 arg0, void *arg1);
-
-void SetReverbDepth(s32 arg0, s32 arg1);
-
-void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
-
-void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
-
-void UpdateLoadedAudioVoices(s32 arg0, s32 arg1);
 
 s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
     s32 value;

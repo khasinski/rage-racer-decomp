@@ -6,6 +6,8 @@
 #include "game/render.h"
 #include "game/menu.h"
 #include "psyq/gpu.h"
+#include "game/audio.h"
+#include "game/screens.h"
 
 extern Matrix g_SceneColorMatrix;
 extern Matrix D_8007C778;
@@ -65,7 +67,6 @@ void RestoreColorMatrix(void) { SetColorMatrix(&g_SceneColorMatrix); }
 extern s32 g_ImageBlockBuffer;
 extern u8 *g_CourseProgress;
 
-void CloseLoadedAudioSlots(void);
 void UploadImageAsset(s32 arg0);
 
 /* Scene 9: finishes the asset load, relocates the car model and derives g_GrandPrixRound. */
@@ -141,7 +142,6 @@ extern s32 g_BestLapTimes[][4][2];
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
                    s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags) asm("DrawSprite");
 void LibcSprintf(void *dst, void *fmt, s32 v);
-void FormatLapTime(void *dst, s32 v);
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
 void DrawRoundScreen(void) {

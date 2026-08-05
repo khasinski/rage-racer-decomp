@@ -2,6 +2,8 @@
 #include "game/audio.h"
 #include "game/sound.h"
 #include "psyq/snd.h"
+#include "psyq/kernel.h"
+#include "game/cd.h"
 
 void SetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
     s32 *entry;
@@ -174,11 +176,7 @@ s32 InitSoundRuntime(void) {
 s32 SpuVmDamperStep(void);
 s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("SsVabTransBody");
 s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("SsVabOpenHeadSticky");
-s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
-s32 CloseAudioSlot(s32 arg0);
-s32 CloseVabOnlyAudioSlot(s32 arg0);
 void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
-s32 VSync(s32 mode);
 
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     register s32 slotReg asm("$16");
@@ -450,8 +448,6 @@ void SetLoadedTableVolumeScale(s32 arg0) {
     g_SoundSlotVolumeScale = arg0;
 }
 
-void SetCdVolumeSetting(s32 arg0);
-
 void SetSequenceVolumeSetting(s32 setting) {
     u32 adjusted;
     s32 value;
@@ -488,7 +484,6 @@ void SetEffectVolumeSetting(s32 level) {
     g_SoundScale.scale = (level << 7) / 15;
 }
 
-void SetCdMixPreset(s32 arg0);
 void SetStereoOutput(void) { g_StereoOutput = 1; SetCdMixPreset(0); SsSetStereo(); }
 
 void SetMonoOutput(void) { g_StereoOutput = 0; SetCdMixPreset(1); SsSetMono(); }
@@ -1640,7 +1635,6 @@ void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
 #include "psyq/snd.h"
 #include "game/car.h"
 
-void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vab_slot);
 s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 value = position;
     s32 index;
@@ -1769,7 +1763,6 @@ void SetDefaultReverbDepth(void) {
 }
 
 void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
-void SetReverbDepth(s32 arg0, s32 arg1);
 void InitSequenceAudio(void) {
     _SsVmInitWide(0);
     SsSetVoiceCount(0x12);
@@ -1926,8 +1919,6 @@ void ForcePanVoiceEnabled(s32 enabled) {
 #include "game/audio.h"
 #include "game/sound.h"
 #include "psyq/snd.h"
-
-void StartIndexedEffectVoice(s32 arg0);
 
 void ForceBasicEffectVoicesEnabled(s32 enabled) {
     s32 offset;

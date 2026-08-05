@@ -4,9 +4,6 @@
 #include "game/car.h"
 #include "game/audio.h"
 
-s32 DrawDesignModeScreen(s32 arg0);
-s32 DrawTeamLogoScreen(s32 arg0);
-
 typedef struct CellMask {
     u8 cells[6][6];
 } CellMask;
@@ -88,9 +85,7 @@ s32 DrawDesignModeScreen(s32 arg0) {
     return D_8009B2D4;
 }
 
-void DrawFadingMenuSprites(s32 a, s32 b, s32 c);
 void RampTeamLogoCanvas(s32 a, s32 b);
-void DrawTeamLogoCanvas(s32 a, s32 b);
 
 void UpdateDesignModeScreen(void) {
     s32 sel;

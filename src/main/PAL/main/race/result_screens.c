@@ -7,6 +7,7 @@
 #include "game/car.h"
 #include "game/cd.h"
 #include "game/audio.h"
+#include "game/track.h"
 
 typedef struct GrandPrixIntroPosition {
     u8 left;
@@ -36,10 +37,8 @@ extern u8 g_PlayerCar;
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void UpdateCamera(s32 arg0, void *arg1);
 void DrawTerrainCellsWide(void);
-void DrawCourseScenery2(s32 arg0, s32 arg1);
 void SetTrackTexturePageNow(s32 arg0);
 void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
-void DrawText8x8Trans(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_RaceTotalTime;
 extern s32 g_BestTotalTimes[][4][2];
@@ -47,7 +46,6 @@ extern GrandPrixIntroLayout g_ResultPlaceSprites[];
 extern GrandPrixIntroPosition g_ClassPlaceBarSizes[];
 
 void LibcSprintf(void *dst, void *fmt, ...);
-void *FormatLapTime(void *dst, s32 value);
 
 void DrawSeriesClearedWash(s32 x, s32 y) {
     void *ot;

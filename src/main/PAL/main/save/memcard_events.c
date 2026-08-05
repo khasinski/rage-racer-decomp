@@ -2,9 +2,9 @@
 #include "game/audio.h"
 #include "game/cd.h"
 #include "game/memcard.h"
+#include "game/sound.h"
 
 extern s16 g_SeqHandle;
-extern s16 g_SeqVolume;
 
 void StartMemoryCardEvents(void) {
     OpenMemoryCardEvents();
@@ -16,7 +16,6 @@ void StopMemoryCardEvents(void) {
     CloseMemoryCardEvents();
 }
 
-s32 _card_clear(s32 arg0);
 void _card_load(s32 arg0);
 void CardReadAndSetMode(s32 arg0) {
     ClearMemoryCardSwEvents(arg0);

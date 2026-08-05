@@ -12,8 +12,6 @@ typedef struct UnkCopyChunk {
 
 void DrawFullscreenFadeTile(s32, s32);
 void DrawPrizeMoneyPanel(s32);
-void SetSequenceVolumeSetting(s32 arg0);
-void SetEffectVolumeSetting(s32 arg0);
 extern UnkCopyChunk g_SaveDefaults[];
 extern u8 g_TimeAttackCars;
 extern s16 g_ClassRecords;
@@ -26,7 +24,6 @@ extern u8 g_GrandPrixCourseProgress;
 extern u8 *g_CourseProgress;
 extern s32 g_BgmSelection;
 void ResetProgressSlot(void *arg0, s32 *arg1);
-void ResetCourseProgress(s32 arg0);
 void ShuffleBgmOrder(void);
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */

@@ -3,9 +3,6 @@
 #include "psyq/kernel.h"
 #include "game/render.h"
 
-void LoadImage(Rect *rect, void *data);
-long GetTPage(long arg0, long arg1, long arg2, long arg3);
-
 long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) {
     Rect rect;
     long width;
@@ -37,8 +34,6 @@ long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, lo
     LoadImage(&rect, arg0);
     return GetTPage(arg1, arg2, arg3, arg4) & 0xFFFF;
 }
-
-long GetClut(long arg0, long arg1);
 
 long LoadClut2(void *arg0, long arg1, long arg2) {
     Rect rect;
@@ -107,8 +102,6 @@ void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) {
     return envReg;
 }
 
-/* Fills the 0x14-byte DISPENV. */
-u_char * SetDefDispEnv(u_char *arg0, long arg1, long arg2, long arg3, long arg4);
 u_char *SetDefDispEnv(u_char *arg0, long arg1, long arg2, long arg3, long arg4) {
     u_char *ret;
 

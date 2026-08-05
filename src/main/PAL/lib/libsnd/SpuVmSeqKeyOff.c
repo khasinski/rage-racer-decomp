@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/snd_types.h"
+#include "psyq/snd.h"
 
 extern u_char g_SndVoiceCount;
 extern u_short g_SndCurrentVoice;
@@ -10,8 +11,6 @@ extern u_short D_801F2A0C;
 extern u_short D_8009E670;
 extern u_short D_8009E674;
 extern SpuVoice g_SndVoiceState[];
-
-void SpuVmSeqKeyOff(long arg0);
 
 void SpuVmSeqKeyOff(long arg0) {
     u_short bits_upper;

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte.h"
+#include "game/render.h"
 
 /*
  * Names for this unit's hand-written GTE engine routines. The addresses live in
@@ -8,7 +9,6 @@
  * docs/names.md section 17.
  */
 void SubmitTerrainCells(void *ctx, void *cells, s32 count);
-void SubmitModel(void *ctx, s32 model);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -302,8 +302,6 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyF
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyFT4Raw);
 
-void SubmitCourseModel(void *ctx, s32 model);
-
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  *
@@ -543,10 +541,6 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCours
  */
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCourseSubdividedFT4Fog);
-
-/* Name for this unit's hand-written GTE engine routine. Declaration only -
- * the emitted symbol stays func_80029E50. */
-void SubmitCourseModel2(void *ctx, s32 model);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).

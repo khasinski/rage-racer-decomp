@@ -2,7 +2,8 @@
 #include "game/render.h"
 #include "game/race.h"
 #include "game/car.h"
-void SetRotMatrix(void *arg0);
+#include "psyq/gte.h"
+#include "psyq/gpu.h"
 void SetDrawArea(u8 *packet, u8 *drawEnv);
 
 void ResetMirrorState(void) {
@@ -136,7 +137,6 @@ void EndMirrorPass(void) {
     scratch->matrix = D_8009AF00;
 }
 
-void SetTile(u8 *arg0);
 void AddPrim(void *ot, void *prim);
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 

@@ -12,7 +12,6 @@
 #include "psyq/cd.h"
 
 s32 CdRead(s32 arg0, void *arg1, s32 arg2);
-long CdReadSync(long arg0, long arg1);
 s32 LoadAssetWide(s32 assetIndex, s32 dst) asm("LoadAsset");
 void UploadImageAsset(void *arg0);
 

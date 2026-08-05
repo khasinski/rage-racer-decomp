@@ -4,7 +4,7 @@
 #include "game/render.h"
 #include "game/track.h"
 #include "game/race.h"
-void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
+#include "game/audio.h"
 
 /* The looping prop's live orientation: three 12-bit angles copied wholesale out
  * of the current rotation keyframe by InitPathScenery, which sees the same
@@ -75,7 +75,6 @@ void DrawPathScenery(void) {
 }
 
 s32 rcos(s32 arg0);
-void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
 
 void UpdateTrackEventSound(s16 arg) {
     s32 base;
@@ -176,7 +175,6 @@ void UpdateTrackEventSound(s16 arg) {
 }
 
 s32 rsin(s32 arg0);
-void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
 
 typedef struct TrackSeg {
     s32 lo;    /* 0x00 */

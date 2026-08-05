@@ -2,11 +2,11 @@
 
 #include "common.h"
 #include "psyq/snd_types.h"
+#include "game/audio.h"
 
 extern SeqStruct *g_SndSeqTable[];
 extern SpuVoice g_SndVoiceState[];
 extern short g_SndVoiceRegs[];
-extern u_char g_SndVoiceFlags[];
 extern u_char g_SndVoiceCount;
 extern short g_SndMonoMode;
 extern short g_SndCurrentSeqSep;

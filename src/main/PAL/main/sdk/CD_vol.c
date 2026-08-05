@@ -1,6 +1,5 @@
 #include "common.h"
 #include "psyq/cd.h"
-long CD_sync(long arg0, u_char *arg1);
 
 extern long g_CdSyncCallback;
 extern long g_CdReadyCallback;

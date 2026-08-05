@@ -3,8 +3,6 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-extern long _spu_writeByIO(long addr, long size);
-
 extern char g_SpuTimeoutFmt[];
 extern volatile SpuRegisterMap *g_SpuRegBase;
 extern long g_SpuMemModeUnit;

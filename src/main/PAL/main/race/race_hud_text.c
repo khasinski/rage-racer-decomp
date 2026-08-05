@@ -93,8 +93,6 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
  * drawing-area rect. */
 extern s32 g_FrameParity;
 
-void SetDrawArea(void *packet, void *rect);
-
 void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     void *oldPacket;
     s16 rect[4];

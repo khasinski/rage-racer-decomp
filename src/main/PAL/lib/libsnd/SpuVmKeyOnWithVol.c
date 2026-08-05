@@ -7,12 +7,6 @@ extern u_char g_SndVoiceCount;
 extern u_char g_SndCurrentVoice;
 extern u_char *g_SndSpuRegs;
 
-u_char SpuVmAlloc(long arg0);
-void SpuVmKeyOnCore(long arg0, u_short arg1, u_short arg2, u_short arg3, u_short arg4);
-
-void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3);
-void SpuVmKeyOnWithDefaultVol(long arg0, long arg1);
-
 void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
     long ret;
 

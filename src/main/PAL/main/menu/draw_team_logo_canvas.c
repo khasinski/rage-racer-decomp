@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#include "psyq/gpu.h"
 extern void DrawRectOutline(
     s32 ot, s16 x, s16 y, s16 w, s32 h, u8 r, u8 g, u8 b, u8 alpha);
 extern void GameDrawTexturedQuad(
@@ -54,7 +55,6 @@ extern u16 g_TeamLogoClut[16];
 extern u8 g_PadType;
 extern u16 D_801E6F2C asm("g_TeamLogoCanvas");
 
-extern s32 GetClut(s16 x, s16 y);
 extern void LoadImage(void *rect, void *data);
 extern s32 rsin(s32 angle);
 extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h);

@@ -5,10 +5,6 @@
 #include "game/random.h"
 #include "game/track.h"
 
-void SetGteObjectMatrix(void *arg0, void *arg1, void *arg2);
-
-void DrawSpinningScenery(s32 arg0, s32 arg1);
-
 void DrawSpinningScenery(s32 arg0, s32 arg1) {
     s16 sp10[16];
     s16 sp30[16];

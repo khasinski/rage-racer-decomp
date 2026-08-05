@@ -5,8 +5,6 @@
 
 extern u_char *g_SndSeqTable[];
 
-void SsSetTableSize(u_char *arg0, long arg1, long arg2);
-
 void SsSetTableSize(u_char *arg0, long arg1, long arg2) {
     volatile long pad[5];
     long signedArg;

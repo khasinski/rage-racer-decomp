@@ -67,14 +67,11 @@ void UpdateCarBodyRoll(void *car);
 void AccumulateLapProgress(void *car);
 void ApplyCarKnockback(void *car);
 s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2);
-s32 CollidePlayerWithCars(void *car);
 void StartCarBodyKick(s32 arg0, void *car);
 void UpdateCarTiltCounter(void *car);
 void UpdateCarCrestHop(void *car);
 void UpdateCarBodyKick(void *car);
 s32 rsin(s32 angle);
-void SetIndexedEffectVoice(s32 arg0, s32 arg1, s32 arg2);
-void UpdateLoadedAudioVoices(s32 value, s32 bank);
 
 /*
  * Per-car physics / gear-shift driver (matched sibling of the ASM

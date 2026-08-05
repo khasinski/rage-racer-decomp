@@ -9,11 +9,6 @@ extern u_char *g_SndVabHeader[];
 extern u_char *g_SndVabProgTable[];
 extern u_char *g_SndVabToneTable[];
 
-long SpuVmVSetUp(long arg0, long arg1);
-long SsUtGetVagAtr(long arg0, long arg1, long arg2, VagAtr *out);
-
-long SsUtGetProgAtr(long arg0, long arg1, ProgAtr *out);
-
 long SsUtGetProgAtr(long arg0, long arg1, ProgAtr *out) {
     long chan = (short)arg0;
     long index;

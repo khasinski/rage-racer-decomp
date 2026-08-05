@@ -3,10 +3,6 @@
 
 extern volatile u_char *g_SndCurrentToneTable;
 
-long SpuVmVSetUp(long arg0, long arg1);
-
-long SsUtSetVagAtr(long arg0, long arg1, long arg2, VagAtr *arg3);
-
 long SsUtSetVagAtr(long arg0, long arg1, long arg2, VagAtr *arg3) {
     long index;
     long offset;

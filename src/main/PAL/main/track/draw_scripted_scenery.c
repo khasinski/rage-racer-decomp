@@ -4,6 +4,7 @@
 #include "game/audio.h"
 #include "game/menu.h"
 #include "game/track.h"
+#include "psyq/gte.h"
 
 void DrawScriptedScenery(s32 arg0) {
     switch (g_GrandPrixClass % 5) {
@@ -83,7 +84,6 @@ extern PathSceneryCursor g_PathSceneryRotCursor asm("g_PathSceneryRotPhase");
 
 s32 rsin(s32 angle);
 s32 rcos(s32 angle);
-s32 SquareRoot12(s32 value);
 
 void InitPathScenery(void) {
     s32 lev;

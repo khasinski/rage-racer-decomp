@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/snd.h"
+#include "game/audio.h"
 
 void _spu_setTransferCompletionFlag(long);
 void SpuInitMalloc(long, u_char *);
@@ -13,7 +14,6 @@ extern volatile u_short g_SndDamper;
 extern volatile u_short g_SndVabOpenCount;
 
 extern u_short g_SndVoiceRegs[];
-extern u_char g_SndVoiceFlags[];
 
 extern volatile u_char g_SndVoiceCount;
 extern volatile u_short g_SndCurrentVoice;

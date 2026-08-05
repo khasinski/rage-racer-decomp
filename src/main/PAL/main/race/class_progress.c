@@ -5,15 +5,14 @@
 #include "game/state.h"
 #include "game/audio.h"
 #include "game/sound.h"
+#include "game/render.h"
 
-void DrawProportionalText(s32 id, void *dst, void *src, s32 arg3);
 void LibcSprintf(void *dst, void *fmt, s32 val);
 extern s32 g_CourseProgress;
 extern GameScoreRecord g_ClassRecords[];
 extern GameScoreRecord g_ClassClears[];
 s32 GetCarUnlockLevel(s32 model);
 void ResetProgressSlot(s32 arg0, s32 arg1);
-void ResetCourseProgress(s32 arg0);
 void BeginEndingFmv(s32 arg0);
 void BeginClassFmv(s32 arg0);
 

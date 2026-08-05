@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/sound.h"
+#include "psyq/snd.h"
 
 void SetVabSlotVoiceEnabled(s32 arg0, s32 arg1, s32 arg2) {
     s32 *state;
@@ -24,7 +25,6 @@ void SetVabSlotVoiceEnabled(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
 void SetSequenceVolume(s32 volume) {
     g_SeqVolume = volume;
     SsSeqSetVol(g_SeqHandle, (s16)volume, (s16)volume);

@@ -7,6 +7,7 @@
 #include "psyq/gpu.h"
 #include "game/cd.h"
 #include "game/menu.h"
+#include "game/track.h"
 
 extern void (*g_BgmSelectSteps[])(void);
 extern s32 g_ImageBlockBuffer;
@@ -38,7 +39,6 @@ void DrawFullscreenFadeTile(s32 arg0, u32 arg1);
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
 void DrawTerrainCellsWide(void);
-void DrawCourseScenery2(u32 arg0, u32 arg1);
 
 void UpdateBgmSelectScene(void) {
     void (*func)(void);

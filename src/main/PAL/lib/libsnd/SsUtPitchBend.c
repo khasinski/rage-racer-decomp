@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "game/audio.h"
 
 extern short *g_SndSpuRegs;
 /* One 16-byte block per voice, so voice n's left volume is
@@ -8,7 +9,6 @@ extern short *g_SndSpuRegs;
 extern short g_SndVoiceRegs[];
 extern volatile u_char g_SndVoiceRegsVolRight[];
 extern volatile u_char g_SndVoiceRegsPitch[];
-extern volatile u_char g_SndVoiceFlags[];
 extern short g_SndVoiceStateNote[];
 extern short g_SndVoiceStateProg[];
 extern u_char g_SndVoiceStateTone[];

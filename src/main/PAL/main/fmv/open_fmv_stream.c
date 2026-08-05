@@ -21,7 +21,6 @@ extern volatile s32 g_FmvStripIndex;
 extern s32 g_StInterruptPending;
 
 void DecDCTout(volatile u32 *arg0, s32 arg1);
-void LoadImage(Rect *rect, void *data);
 void StCdInterrupt(void);
 
 void UploadFmvSlice(void) {

@@ -3,7 +3,6 @@
 
 extern u_char g_DispEnvCache;
 void MemCopy(long arg0, void *arg1, long arg2);
-long GetDispEnv(long arg0);
 long GetDispEnv(long arg0) { MemCopy(arg0, &g_DispEnvCache, 0x14); return arg0; }
 
 extern GpuCallbacks *g_GpuFuncs;
@@ -27,7 +26,6 @@ void SetTexWindow(DrawPacket *pkt, void *arg1) {
     pkt->x1y1 = 0;
 }
 
-void SetDrawArea(DrawPacket *prim, Rect *rect);
 void SetDrawArea(DrawPacket *pkt, Rect *rect) {
     pkt->code = 2;
     pkt->x0y0 = Gpu_BuildDrawAreaTopLeftCmd(rect->x, rect->y);

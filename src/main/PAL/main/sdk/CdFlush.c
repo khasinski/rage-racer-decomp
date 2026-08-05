@@ -7,9 +7,6 @@ extern char *g_CdCommandNames[];
 extern char *g_CdIntrNames[];
 extern u_char D_800136D0[];
 
-long CD_sync(long arg0, long arg1);
-long CD_ready(long arg0, long arg1);
-
 void CdFlush(void) {
     CD_flush();
 }

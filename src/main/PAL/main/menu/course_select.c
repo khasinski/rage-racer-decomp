@@ -6,8 +6,7 @@
 #include "game/car.h"
 #include "game/asset.h"
 #include "game/audio.h"
-
-s32 DrawRankingScreen(s32 arg0);
+#include "psyq/gpu.h"
 
 const u8 g_NowLoadingText[] = "NOW LOADING";
 /* Blinks the "NOW LOADING" string at g_NowLoadingText. */
@@ -25,7 +24,6 @@ extern u8 g_TeamLogoRect[];
 extern u8 g_TeamLogoClut[];
 extern u8 g_TeamLogoCanvas[];
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void LoadImage(void *rect, void *data);
 void UploadTeamNameTexture(void *arg0, s32 arg1);
 
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
@@ -475,11 +473,8 @@ s32 CanSelectNextCourse(void) {
 }
 
 extern u8 *D_8019C764;
-void ResetCourseProgress(s32 arg0);
 void drawSprite(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
-void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
-void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawBrowseArrows(s32, s32, s32, s32);
 void DrawMenuLightBurst(s32 arg0);
 void DrawOwnedCarCounter(s32 arg0, s32 arg1);

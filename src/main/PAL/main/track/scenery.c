@@ -8,7 +8,6 @@
 #include "game/random.h"
 #include "game/track.h"
 #include "game/menu.h"
-void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 extern Vec4 g_StaticSceneryPos;
 extern u32 *g_VisibleCellMask;
@@ -16,8 +15,6 @@ extern u32 *g_VisibleCellMask;
 static inline void ClearScratchRenderMode3DF68(void) {
     *(s32 *)0x1F800084 = 0;
 }
-
-void DrawStaticScenery(s32 arg0);
 
 void DrawStaticScenery(s32 arg0) {
     Matrix mtx;
@@ -113,13 +110,6 @@ void DrawHighClassScenery(void) {
     }
 }
 
-void DrawAnimatedScenery(s32 arg0, s32 arg1);
-void DrawSpinningScenery(s32 arg0, s32 arg1);
-void UpdateShuttleScenery(s32 arg0);
-void DrawShuttleScenery(s32 arg0);
-
-void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
-
 void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
     s32 mode = arg0;
     s32 value = arg1;
@@ -166,10 +156,6 @@ void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
         break;
     }
 }
-
-void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-
-void DrawCourseScenery2(s32 arg0, s32 arg1);
 
 void DrawCourseScenery2(s32 arg0, s32 arg1) {
     s32 value = arg0;

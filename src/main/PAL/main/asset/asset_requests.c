@@ -3,6 +3,7 @@
 #include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+#include "game/audio.h"
 
 extern u8 *g_AssetLoadCursor;
 extern Rect g_TeamLogoClutRect;
@@ -15,7 +16,6 @@ extern s32 g_ImageBlockBuffer;
 extern GameSceneAssetHeader *g_AssetBase;
 extern void *g_AssetBlockPtr2;
 extern void *g_AssetSubBlockPtr;
-void CloseLoadedAudioSlots(void);
 
 void LoadBootAssets(void) {
     u8 *loaded;

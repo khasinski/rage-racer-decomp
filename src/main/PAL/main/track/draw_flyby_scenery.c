@@ -2,7 +2,6 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/track.h"
-void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 extern s32 g_FlybyScenery[];
 

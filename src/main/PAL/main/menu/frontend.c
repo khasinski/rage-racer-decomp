@@ -8,9 +8,7 @@
 #include "game/audio.h"
 #include "game/random.h"
 #include "game/screens.h"
-
-void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
-void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
+#include "psyq/cd.h"
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 
@@ -113,7 +111,6 @@ void UpdateTitleAttract(void) {
 extern u32 D_801E8260;
 extern void (*g_FrontendDrawHandlers[])(void);
 
-s32 CdControl(s32 com, void *param, s32 result);
 void BeginIntroFmv(int);
 
 void UpdateFrontend(void) {

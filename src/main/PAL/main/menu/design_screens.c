@@ -5,15 +5,9 @@
 #include "game/car.h"
 #include "game/race.h"
 
-s32 DrawTeamNameScreen(s32 arg0);
-s32 DrawPaintColorScreen(s32 arg0);
-s32 DrawCarShopScreen(s32 arg0);
-
 extern void ComposeSampleTeamLogo(s32, s32);
-extern void DrawTeamLogoCanvas(s32, s32);
 extern void RampTeamLogoCanvas(s32, s32);
 extern void DrawLogoSamplePanel(s32, s32);
-extern void DrawFadingMenuSprites(s32, s32, s32);
 
 void UpdateLogoSampleScreen(void) {
     s32 v0;
@@ -311,7 +305,6 @@ s32 DrawPaintColorScreen(s32 arg0) {
 }
 
 void DrawBrowseArrows(s32, s32, s32, s32);
-void DrawFadingMenuSprites(s32, s32, s32);
 
 void UpdatePaintColorScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
@@ -433,8 +426,6 @@ void UpdatePaintColorScreen(void) {
         GameMenuBusy = 0;
     }
 }
-
-void DrawCarEngineSpec(s32 arg0, s32 arg1, s32 arg2);
 
 s32 DrawCarShopScreen(s32 arg0) {
     s32 value;

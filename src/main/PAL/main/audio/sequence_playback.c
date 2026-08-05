@@ -13,8 +13,6 @@ void StartSequenceFadeOut(void) {
     g_ReverbFadeStep = -3;
 }
 
-void SetReverbDepth(s32 arg0, s32 arg1);
-void SetSequenceVolume(s32 arg0);
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateSequenceFadeOut(void) {

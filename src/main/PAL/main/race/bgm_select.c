@@ -6,7 +6,7 @@
 #include "psyq/gpu.h"
 #include "game/cd.h"
 #include "game/race.h"
-void UpdateAttractCars();
+#include "game/track.h"
 
 s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
@@ -19,9 +19,7 @@ void DrawFullscreenFadeTile();
 void RequestOptionScreenAssets();
 void RequestTrackTexturePage();
 void UpdateCamera();
-void DrawSkyBackground();
 void DrawTerrainCellsWide();
-void DrawCourseScenery2();
 
 void DrawBgmSelectBar(void) {
     u8 *base;

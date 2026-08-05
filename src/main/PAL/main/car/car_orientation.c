@@ -6,6 +6,7 @@
 #include "game/menu.h"
 #include "game/render.h"
 #include "psyq/gte.h"
+#include "game/audio.h"
 
 /* The player object shares GameCarRuntime's 0x19C-byte footprint, but several
  * fields have player-only meanings.  Keep this file-local view for the init
@@ -617,13 +618,8 @@ typedef struct CollisionContext
   s32 opponentPolygonOffset;
   s32 trackDelta;
 } CollisionContext;
-/* GCC 2.6.3 lays the separately named geometry locals out as this context.
- * The typed view gives the three point-test passes one in-bounds coordinate
- * system and names the final collision-response delta at the same location. */
-extern GameCarRuntime g_Cars[];
 s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
-void PlaySoundCue(s32 id);
 s32 CollidePlayerWithCars(GameCarRuntime *car)
 {
   SVec rotation;

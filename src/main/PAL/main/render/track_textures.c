@@ -4,6 +4,7 @@
 #include "game/random.h"
 #include "game/asset.h"
 #include "game/render.h"
+#include "psyq/kernel.h"
 
 /*
  * Old-style definition on purpose: SetTrackTexturePageNow and RequestTrackTexturePage call this
@@ -32,8 +33,6 @@ s32 arg0;
     }
     return ret;
 }
-
-void LoadImage(Rect *rect, void *data);
 
 void SwapTrackTexturePageNow(void) {
     s32 buffer[0xE0];
@@ -98,8 +97,6 @@ void RequestTrackTexturePage(void) {
     g_TrackTextureTargetRow = SelectTrackTexturePage();
 }
 
-void LoadImage(Rect *rect, void *data);
-
 void SwapTrackTextureRow(void) {
     s32 buffer[0xE0];
     s16 *rectY;
@@ -143,8 +140,6 @@ void SwapTrackTextureRow(void) {
         D_801E4BF8[g_TrackTextureCursorRow] = value;
     }
 }
-
-s32 VSync(s32 mode);
 
 void StepTrackTextureSwap(void) {
     while (g_TrackTextureCursorRow != g_TrackTextureTargetRow) {

@@ -2,6 +2,7 @@
 #include "game/vector.h"
 #include "psyq/gte.h"
 #include "game/render.h"
+#include "game/track.h"
 
 typedef struct Car {
     u16 x;         /* 0x00 */
@@ -30,13 +31,6 @@ typedef struct TP {
     u16 segmentLength; /* 0x16 */
 } TP;
 
-/*
- * Same objects as game/track.h's g_TrackPoints / g_TrackPointCount; this TU
- * views the point record through the local TP typedef (it needs 0x0E, which
- * GameTrackPoint leaves unnamed, and an unsigned segmentLength), so it carries
- * its own aliased declarations instead of including the header.
- */
-extern TP *g_TrackPoints;
 extern s32 g_TrackPointCount;
 
 s32 FindTrackSegment(Car *car, s32 idx);

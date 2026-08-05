@@ -5,8 +5,6 @@
 
 extern u_char *g_SndCurrentToneTable;
 
-u_short SpuVmCalculateTonePitch(long arg0, long arg1);
-
 u_short SpuVmCalculateCurrentPitch(void) {
     register long delta asm("a0");
     register long nibble asm("a2");

@@ -7,12 +7,11 @@
 #include "game/cd.h"
 #include "game/audio.h"
 #include "game/screens.h"
+#include "game/car.h"
 
-void *FormatLapTime(void *dst, s32 value);
 void LibcSprintf();
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern volatile s32 g_RaceTotalTime;
-extern volatile u16 g_PlayerCarIndex;
 extern s32 g_RankingTimes;
 /* Split symbols of the two S22 record tables: +0x08 is the time and +0x0C the
  * car index, so g_RankingCars is g_RankingRecords[0][0][0].vC and

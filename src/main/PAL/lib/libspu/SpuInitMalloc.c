@@ -8,9 +8,6 @@ extern long _spu_mem_mode_plus;
 #define BLK_IS_FREE(i) (BLK(i)->addr & 0x80000000)
 #define BLK_IS_END(i) (BLK(i)->addr & 0x40000000)
 
-long SpuInitMalloc(long arg0, u_long *arg1);
-void SpuFree(u_long arg0);
-
 long SpuInitMalloc(long arg0, u_long *arg1) {
     long ret = arg0;
     u_long size;

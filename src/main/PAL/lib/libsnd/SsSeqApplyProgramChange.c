@@ -86,8 +86,6 @@ void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
 
 extern SeqStruct *g_SndSeqTable[];
 
-long SsSeqReadDeltaTime(long arg0, long arg1);
-
 long SsSeqReadDeltaTime(long arg0, long arg1) {
     SeqStruct *state;
     u_char *stream;
@@ -119,8 +117,6 @@ long SsSeqReadDeltaTime(long arg0, long arg1) {
     state->unk80 += ret;
     return ret;
 }
-
-void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out);
 
 void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out) {
     out[5] = arg0 & 0x8000;
@@ -178,8 +174,6 @@ void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
 }
 
 extern SeqStruct *g_SndSeqTable[];
-
-void SsSeqRestartPlayback(short arg0, short arg1);
 
 void SsSeqRestartPlayback(short arg0, short arg1) {
     SeqStruct *state;

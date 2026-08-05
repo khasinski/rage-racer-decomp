@@ -63,8 +63,6 @@ void DrawWrongWayWarning(void) {
 
 #define SCRATCH (*(u8 **)0x1F800000)
 
-extern u8 *volatile g_DrawBuffer;
-
 s32 rsin(s32 angle);
 s32 rcos(s32 angle);
 void SetPolyF4(void *prim);

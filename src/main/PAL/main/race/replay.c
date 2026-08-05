@@ -70,7 +70,6 @@ extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
 extern u8 *g_EnvScriptClock;
-void SeekEnvironmentScript(void *arg0);
 s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 
 void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {

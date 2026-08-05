@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/gpu.h"
+#include "psyq/kernel.h"
 
 typedef struct LastCb {
     void (*cb)(long, long);
@@ -18,7 +19,6 @@ extern volatile u_long *g_GpuGp1;
 extern volatile long g_DrawSyncCallback;
 
 extern long SetIntrMask(long);
-extern void DMACallback(long, void *);
 
 /* Driver-table slot +0x24, and the DMA2 completion callback: drains the
  * Gpu_AddQueue ring, then fires the DrawSyncCallback when it empties.

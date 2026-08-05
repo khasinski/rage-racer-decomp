@@ -1,8 +1,5 @@
 #include "psyq/spu.h"
 
-long _SpuIsInAllocateArea(u_long arg0);
-long _SpuIsInAllocateArea_(u_long arg0);
-
 long _SpuIsInAllocateArea(u_long arg0) {
     SpuMallocEntry *var_a1;
     u_long temp_v1;

@@ -1,11 +1,11 @@
 #include "common.h"
 #include "psyq/spu.h"
 #include "psyq/snd.h"
+#include "game/audio.h"
 
 extern volatile u_short *g_SndSpuRegs;
 extern u_char g_SndVoiceRegs[];
 extern u_char g_SndVoiceRegsPitch[];
-extern u_char g_SndVoiceFlags[];
 extern u_char g_SndVoiceState[];
 extern u_char g_SndVoiceStateAutoVol[];
 /* The four pending key registers, flushed below into the SPU as

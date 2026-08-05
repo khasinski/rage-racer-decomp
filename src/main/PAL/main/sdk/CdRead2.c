@@ -19,7 +19,6 @@ extern long g_StCopySource;
 extern long g_StRingSize;
 extern long g_StInterruptPending;
 
-void CdDataCallback(long arg0);
 void data_ready_callback(void);
 void StClearRingRange(long arg0, long arg1);
 void StSetRingParams(long arg0);

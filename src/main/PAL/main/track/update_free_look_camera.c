@@ -153,8 +153,6 @@ extern struct {
 } g_StartGridSceneryStep[];
 extern Vec4 g_StartGridSceneryPos[];
 
-void SetGteObjectMatrix(void *arg0, Vec4 *state, Matrix *mtx);
-
 void DrawStartGridScenery(s32 arg0) {
     Matrix mtx;
     Vec4 state;
@@ -213,8 +211,6 @@ void ResetFreeLookCamera(void) {
  */
 extern Vec4 g_AnimSceneryPos[];
 extern u32 *g_VisibleCellMask;
-
-void DrawAnimatedScenery(s32 arg0, s32 arg1);
 
 void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     Matrix mtx;
@@ -323,8 +319,6 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
         SubmitCourseModel((void *)0x1F800000, drawArg);
     }
 }
-
-void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Matrix mtx;

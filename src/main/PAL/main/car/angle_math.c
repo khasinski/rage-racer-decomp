@@ -1,6 +1,5 @@
 #include "common.h"
-
-s32 GetAngleDelta(s32 arg0, s32 arg1);
+#include "game/render.h"
 
 /*
  * Unsigned angular difference between two 12-bit angles, wrapped to [0, 0x800]

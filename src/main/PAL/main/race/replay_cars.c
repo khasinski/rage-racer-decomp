@@ -24,10 +24,6 @@ typedef struct TrackZone {
     s16 value;
 } TrackZone;
 
-void ForceAllEffectVoicesEnabled(s32 arg0);
-
-void SetReverbDepth(s32 arg0, s32 arg1);
-
 extern s16 g_PlayerLap;
 
 extern s32 g_RefSectorTimes[];

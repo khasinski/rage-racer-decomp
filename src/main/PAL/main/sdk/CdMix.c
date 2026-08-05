@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/kernel.h"
 
-void DMACallback(long arg0, long arg1);
 void CD_datasync(void);
 
 /* Both of these forward their own incoming arguments untouched, which is why

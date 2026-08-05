@@ -3,14 +3,11 @@
 #include "psyq/gte.h"
 #include "game/race.h"
 #include "game/render.h"
-void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 /* Per-path authored data; see DrawRouteScenery.c for the layout.
  * g_ShuttlePathTravelMax is the leg length in steps: the divisor of the
  * endpoint-to-endpoint lerp and the value travelStep counts up to. */
 extern u8 g_ShuttlePathPoints[];
-
-void UpdateShuttleScenery(s32 arg0);
 
 void UpdateShuttleScenery(s32 arg0) {
     GameShuttleScenery *entry;
@@ -76,8 +73,6 @@ void UpdateShuttleScenery(s32 arg0) {
 }
 
 extern u32 *g_VisibleCellMask;
-
-void DrawShuttleScenery(s32 arg0);
 
 void DrawShuttleScenery(s32 arg0) {
     s32 drawArg;

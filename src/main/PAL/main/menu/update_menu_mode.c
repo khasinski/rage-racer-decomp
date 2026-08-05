@@ -4,9 +4,9 @@
 #include "psyq/gpu.h"
 #include "game/audio.h"
 #include "psyq/snd.h"
-void DrawCarSpecGraph(s32, s32);
+#include "game/car.h"
+#include "game/sound.h"
 
-extern s32 g_CarTable;
 extern s32 g_PlayerCarIndex;
 extern s32 g_CarListCursor;
 
@@ -115,8 +115,6 @@ s32 IsSpuTransferDone(void) {
 
     return (value0 << 16) | (s16)value1;
 }
-
-extern s16 g_SoundSlotTone[];
 
 s32 SetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
     s16 *base = g_SoundSlotTone;

@@ -8,10 +8,10 @@
 #include "game/cd.h"
 #include "game/random.h"
 #include "game/screens.h"
+#include "game/audio.h"
 
 extern s32 D_801E8260;
 
-void CloseLoadedAudioSlots(void);
 void SetDefaultReverbDepth(void);
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
@@ -238,7 +238,6 @@ void ShuffleBgmOrder(void) {
     g_BgmShuffleIndex = 0;
 }
 
-extern volatile u16 g_PadEdge2;
 extern s32 D_801E8260;
 
 extern s32 *g_CarTable;
@@ -251,10 +250,8 @@ extern s32 g_ExtraGrandPrixCourseProgress;
 extern s32 g_TimeAttackCars;
 
 void PlaySoundCue(s32 cue);
-extern void ResetAssetLoader(void);
 extern void ShuffleBgmOrder(void);
 extern void RequestOptionScreenAssets(void);
-extern void DrawMainMenuRows(void);
 
 void UpdateMainMenuInput(void) {
     volatile u16 *flagp = &g_PadEdge2;

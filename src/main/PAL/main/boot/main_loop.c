@@ -8,8 +8,9 @@
 #include "game/memcard.h"
 #include "psyq/cd.h"
 #include "game/cd.h"
+#include "game/asset.h"
+#include "game/race.h"
 void ServiceAssetLoad(void);
-void RequestBootAssets(void);
 void InitAssetSystem(void);
 
 void SetGraphDebug(s32 arg0);
@@ -27,7 +28,6 @@ extern u16 g_NegconNeutralI;
 extern u16 g_NegconNeutralII;
 extern u16 g_NegconNeutralL;
 extern u16 g_NegconMaxTwist;
-extern u16 g_AdvancedSeriesUnlocked;
 
 /*
  * One-shot boot chain called from MainLoop: sequencer, sound runtime, GPU

@@ -29,8 +29,6 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
  * offsets are match-load-bearing.
  */
 
-void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
-
 extern u32 g_ScratchRenderMode;
 
 /* Counts how many of the 6 waypoint slots are active (active != 0). */
@@ -59,8 +57,6 @@ void RunRaceIntroCamera(void *a);
 
 void UpdatePlayerCar(void *a);
 
-void UpdateLoadedAudioVoices(s32 a, s32 b);
-
 void UpdateCamera(s32 a, void *b);
 
 void RequestTrackTexturePage(s32 a);
@@ -68,8 +64,6 @@ void RequestTrackTexturePage(s32 a);
 void DrawCourseScenery(s32 a, s32 b, s32 c);
 
 void GetTrackZoneBlend(s32 a);
-
-void SetReverbDepth(s32 a, s32 b);
 
 void DrawPlayerTachometer(void);
 

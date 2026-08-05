@@ -2,15 +2,13 @@
 
 #include "common.h"
 #include "psyq/snd.h"
+#include "game/audio.h"
 
 extern short g_SndVoiceStateNote[];
 extern u_char g_SndVoiceStateTone[];
 extern volatile u_char g_SndVoiceRegsPitch[];
-extern volatile u_char g_SndVoiceFlags[];
 extern short g_SndCurrentVoice;
 extern u_char *g_SndCurrentToneTable;
-
-u_short SpuVmCalculateTonePitch(long arg0, long arg1);
 
 void SpuVmPitchBendVoice(long arg0, long arg1) {
     long voice = arg0;

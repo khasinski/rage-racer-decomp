@@ -1,11 +1,11 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 
 extern volatile u_char g_SndVoiceCount;
 extern short g_SndCurrentSeqSep;
 
-void SpuVmVSetUp(long arg0, long arg1);
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg4);
 
 long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3);

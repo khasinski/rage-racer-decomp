@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 
 extern u_char g_SndVoiceStateNote[];
 extern u_char g_SndVoiceStateSeqSep[];
@@ -13,8 +14,6 @@ extern u_char g_SndCurrentProgActual;
 extern u_char *g_SndCurrentToneTable;
 extern u_short g_SndCurrentVoice;
 extern u_char g_SndCurrentTone;
-
-long SpuVmCalculateTonePitch(long arg0, long arg1);
 
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) {
     register long raw asm("$10") = arg0;

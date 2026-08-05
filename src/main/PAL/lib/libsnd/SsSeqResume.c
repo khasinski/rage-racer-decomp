@@ -2,8 +2,6 @@
 
 extern SeqStruct *g_SndSeqTable[];
 
-void SsSeqResume(long arg0, long arg1);
-
 void SsSeqResume(long arg0, long arg1) {
     long raw;
     SeqStruct **table;

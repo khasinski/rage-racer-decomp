@@ -3,6 +3,7 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/track.h"
+#include "game/race.h"
 
 typedef struct KF {
     s16 x;
@@ -13,7 +14,6 @@ typedef struct KF {
     s16 pad;
 } KF;
 
-extern volatile s32 g_RaceSeries;
 extern u8 *g_RouteSceneryData;
 extern s32 g_RouteSceneryClock;
 extern s16 g_RouteSceneryKeyIndex;

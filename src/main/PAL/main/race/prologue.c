@@ -7,6 +7,7 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+#include "game/track.h"
 
 typedef struct UnkEventPair {
     s16 timer;
@@ -19,7 +20,6 @@ extern s32 g_PrologueStep;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void RequestTrackDataAssets(void);
-void GameDrawText8x8Shaded(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 extern u32 g_CameraViewMode;
@@ -27,7 +27,6 @@ extern UnkEventPair g_PrologueCameraCuts[];
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
 void DrawTerrainCellsWide(void);
-void DrawCourseScenery2(s32 arg0, s32 arg1);
 
 void UpdateAttractDemoScene(void) {
     g_AttractDemoSteps[g_AttractDemoStep]();

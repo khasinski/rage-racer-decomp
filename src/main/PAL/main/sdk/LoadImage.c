@@ -1,10 +1,6 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-void LoadImage(Rect *arg0, void *arg1);
-void *ClearOTag(u_long *arg0, long count);
-void *ClearOTagR(u_long *arg0, long arg1);
-
 extern GpuCallbacks *g_GpuFuncs;
 extern GpuCallbacks *g_GpuFuncs;
 extern GpuCallbacks *g_GpuFuncs;
@@ -16,10 +12,6 @@ void CheckPrim(char *arg0, void *arg1);
 extern char D_80013578[];
 extern char D_80013584[];
 extern char D_80013590[];
-
-void LoadImage(Rect *rect, void *data);
-void StoreImage(Rect *arg0, void *arg1);
-long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2);
 
 void LoadImage(Rect *arg0, void *arg1) {
     CheckPrim(D_80013578, arg0);
@@ -71,7 +63,6 @@ extern u_long g_OtagTerminator;
 
 extern GpuCallbacks *g_GpuFuncs;
 
-void * ClearOTag(u_long *arg0, long count);
 void *ClearOTag(u_long *arg0, long count) {
     register u_long *ptr asm("$16") = arg0;
     long remaining = count;
@@ -108,7 +99,6 @@ void *ClearOTag(u_long *arg0, long count) {
     return ptr;
 }
 
-void * ClearOTagR(u_long *arg0, long arg1);
 void *ClearOTagR(u_long *arg0, long arg1) {
     if (g_GraphDebug >= 2) {
         GPU_printf(D_800135B4, arg0, arg1);

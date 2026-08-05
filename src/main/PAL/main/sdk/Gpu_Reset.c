@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/kernel.h"
+#include "psyq/gpu.h"
 
 extern volatile u_long *g_GpuGp1;
 extern volatile u_long *g_GpuDmaChcr;
@@ -10,7 +11,6 @@ extern long g_GpuResetIntrMask;
 extern u_char g_GpuGp1Mirror[];
 extern u_char g_GpuQueue[];
 
-void MemFill(u_char *dst, u_char value, long count);
 long Gpu_ProbeType(u_long arg0);
 
 /* Driver-table slot +0x34, the body of ResetGraph: empties the queue,

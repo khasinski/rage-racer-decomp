@@ -3,6 +3,7 @@
 #include "psyq/gpu.h"
 #include "game/render.h"
 #include "game/cd.h"
+#include "psyq/kernel.h"
 
 extern volatile u8 g_FmvVlcBuffers;
 extern s32 g_StreamLoc;
@@ -11,7 +12,6 @@ void InitFmvContext(volatile void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
 void OpenFmvStream(void (*arg0)(void));
 s32 PresentFmvFrame(volatile void *arg0);
 void StartStreamRead(s32 arg0);
-s32 VSync(s32 mode);
 
 void StartFmvPlayback(s32 arg0) {
     s32 fail;

@@ -2,6 +2,9 @@
 #include "game/render.h"
 #include "psyq/cd.h"
 #include "game/race.h"
+#include "game/state.h"
+#include "psyq/gpu.h"
+#include "psyq/kernel.h"
 
 typedef struct FmvDisplayState {
     u8 pad0[0x18];
@@ -15,12 +18,8 @@ typedef struct FmvDisplayState {
     s32 field_34;
 } FmvDisplayState;
 
-void *GetFmvFrame(s32 *arg0);
 extern u16 g_DispEnv0Y;
 extern u16 g_DispEnv1Y;
-long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1);
-void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3);
-s32 VSync(s32 mode);
 extern u8 *g_ReplayFramesGp;
 extern u32 g_ReplayWriteCursor;
 extern u32 g_ReplayFrameCount;
@@ -42,7 +41,6 @@ s32 PresentFmvFrame(s32 *arg0) {
     return -1;
 }
 
-void * GetFmvFrame(s32 *arg0);
 void *GetFmvFrame(s32 *arg0) {
     StRingEventRecord *slot[2];
     u16 rect[4];

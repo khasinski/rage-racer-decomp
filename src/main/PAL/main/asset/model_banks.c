@@ -3,6 +3,7 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/track.h"
+#include "psyq/gpu.h"
 
 /* (model, owned grade) -> index of the CAR_xx asset pair, 0..31. */
 s32 GetCarAssetIndex(s32 model, s32 grade);
@@ -21,7 +22,6 @@ extern void *g_CellVisibilityTable;
 extern s32 D_801E4144;
 extern void *g_CarImageSlots[];
 extern void *g_CarModelSlots[];
-void LoadImage(void *rect, void *data);
 
 s32 GetCarAssetIndex(s32 model, s32 grade) {
     return g_CarModelBaseIndex[model] + grade;

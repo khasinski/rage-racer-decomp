@@ -210,8 +210,6 @@ void DrawMenuCarView(void) {
 extern Vec4 g_MenuViewScale;
 extern s32 g_PlayerCar;
 
-void SetGteObjectMatrix(void *a, void *b, void *c);
-
 /* The course diorama behind COURSE SELECT and RANKING, with the carousel easing. */
 void DrawMenuCourseView(void) {
     Matrix mtxA;

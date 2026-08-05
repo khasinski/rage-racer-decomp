@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/race.h"
 #include "game/track.h"
-
+#include "game/audio.h"
 
 typedef struct UnkFunc80040DB4Entry {
     s32 start;
@@ -9,8 +9,6 @@ typedef struct UnkFunc80040DB4Entry {
     u16 unk8;
     u16 flags;
 } UnkFunc80040DB4Entry;
-
-void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateZoneAmbience(s32 arg0) {
     s32 position;

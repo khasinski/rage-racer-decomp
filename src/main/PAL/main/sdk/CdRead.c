@@ -6,11 +6,6 @@
 #include "psyq/kernel.h"
 void SetShadeTex(u_char *prim, long enabled);
 
-long CdSyncCallback(long arg0);
-long CdReadyCallback(long arg0);
-long CdControlB(long arg0, void *arg1, long arg2);
-long CdReadRetry(long arg0);
-long CdReady(long arg0, long arg1);
 extern long g_CdReadCallback;
 extern u_char D_8007D7BC[];
 extern u_char D_8007D7BD[];

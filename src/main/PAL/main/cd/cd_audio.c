@@ -8,7 +8,6 @@
 extern u8 g_CdVolume;
 extern CdlLOC g_CdTrackLoopPoint[];
 
-long CdReady(long arg0, void *arg1);
 void SsSetSpuInputAttr_Link(u8 source, u8 field, u8 value) asm("SsSetSpuInputAttr");
 void SsSetSerialVol_Link(u8 source, s16 left, s16 right) asm("SsSetSerialVol");
 

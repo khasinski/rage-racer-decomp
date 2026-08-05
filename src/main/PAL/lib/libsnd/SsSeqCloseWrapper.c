@@ -1,6 +1,5 @@
 #include "common.h"
-
-void SsSeqClose(short arg0);
+#include "psyq/snd.h"
 
 void SsSeqCloseWrapper(short arg0);
 

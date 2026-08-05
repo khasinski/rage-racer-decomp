@@ -8,8 +8,6 @@ extern ProgAtr *g_SndVabProgTable[];
 extern VagAtr *g_SndVabToneTable[];
 extern long g_SndVabBodySize[];
 
-extern void _spu_setTransferCompletionFlag(long value);
-
 short SsVabOpen(u_char *addr, VabHdr *header) {
     short vabId;
 
