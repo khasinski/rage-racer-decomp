@@ -24,9 +24,8 @@ extern volatile s32 g_FmvStripRectIndex asm("D_8009AF48");
 /* One 4-halfword Rect at 0x8009AF4C. g_FmvUploadRectX/Y are its x/y and
  * g_FmvStripWidth/Height are its w/h: an MDEC strip and the VRAM rect it is
  * uploaded to are the same object, which is why the four halfwords are
- * declared both as a whole Rect (for the LoadImage copy) and as scalars (the
- * x is bumped one strip at a time, so it has to be volatile). */
-extern Rect g_FmvUploadRect asm("D_8009AF4C");
+ * declared as scalars, the x volatile because it is bumped one strip at a
+ * time; the LoadImage copy reads the same four halfwords back as a Rect. */
 extern volatile s16 g_FmvUploadRectX asm("D_8009AF4C");
 extern volatile s16 g_FmvUploadRectY asm("D_8009AF4E");
 extern s16 g_FmvStripWidth asm("D_8009AF50");
@@ -59,7 +58,7 @@ s32 bufferAddr;
         g_StInterruptPending = 0;
     }
 
-    rect = g_FmvUploadRect;
+    rect = *(Rect *)&g_FmvUploadRectX;
 
     bufferPtr = &g_FmvStripIndex;
     oldBuffer = *bufferPtr;
