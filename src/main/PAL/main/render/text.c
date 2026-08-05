@@ -417,7 +417,7 @@ void DrawProportionalTextShadedWide(
 #undef OPAQUE_VALUE
 }
 
-void DrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex) asm("func_80016EA0");
+void DrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex);
 
 /* Opaque wrapper over GameDrawProportionalTextShaded: intensity 0x100 selects
  * the raw-texture (SetShadeTex) path instead of a modulated, semi-transparent

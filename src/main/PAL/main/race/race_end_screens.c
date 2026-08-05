@@ -20,7 +20,6 @@ extern char g_TextEndRace[];
 extern char g_TextChance[];
 extern char g_TextPressStart[];
 extern s16 g_ChanceDigits[];
-void DrawProportionalTextWide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016EA0");
 void DrawText8x8Wide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
 extern volatile u16 g_PadEdge2;
 void PlaySoundCue(s32 cue);
@@ -91,18 +90,18 @@ void DrawRaceEndPrompt(void) {
     if (g_LostRaceChoice == 0) {
         drawColor = color;
     }
-    DrawProportionalTextWide(0x6A, 0x68, g_TextTryAgain, drawColor);
+    DrawProportionalText(0x6A, 0x68, g_TextTryAgain, drawColor);
 
     drawColor = 0x7812;
     if (g_LostRaceChoice != 0) {
         drawColor = color;
     }
-    DrawProportionalTextWide(0x70, 0x78, g_TextEndRace, drawColor);
+    DrawProportionalText(0x70, 0x78, g_TextEndRace, drawColor);
 
-    DrawProportionalTextWide(0x76, 0xB8, g_TextChance, 0x7812);
+    DrawProportionalText(0x76, 0xB8, g_TextChance, 0x7812);
 
     index = *(s16 *)((u8 *)g_CourseProgress + 6);
-    DrawProportionalTextWide(0xBE, 0xB8, &g_ChanceDigits[index], 0x7812);
+    DrawProportionalText(0xBE, 0xB8, &g_ChanceDigits[index], 0x7812);
 
     DrawText8x8Wide(0x58, 0xD0, g_TextPressStart, 0x78CC);
     DrawLostRaceCaption(0xFF);

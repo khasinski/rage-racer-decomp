@@ -1166,3 +1166,4 @@ ChangeClearInterruptMaskStub = 0x8006DF24;
 SysEnqIntRPStub = 0x8006E644;
 SetGteObjectMatrix = 0x80017794; // type:func
 CollidePlayerWithCars = 0x8002D398; // type:func
+DrawProportionalText = 0x80016EA0; // type:func

@@ -25,11 +25,6 @@ extern char D_80010014[];
 
 extern u8 *g_DrawBuffer;
 
-void DrawProportionalTextWide(
-    s32 x,
-    s32 y,
-    char *str,
-    s32 clutIndex) asm("func_80016EA0");
 u8 *DrawLeftArrowWide(
     void *ot,
     u8 *prim,
@@ -87,9 +82,9 @@ void DrawControllerConfigScreen(void) {
     rightLit = selection != 0;
     if (g_PadErrorState != 0) {
         if (g_PadErrorState == 1) {
-            DrawProportionalTextWide(0x3A, 0xEA, D_80010000, 0x7812);
+            DrawProportionalText(0x3A, 0xEA, D_80010000, 0x7812);
         } else {
-            DrawProportionalTextWide(0x40, 0xEA, D_80010014, 0x7812);
+            DrawProportionalText(0x40, 0xEA, D_80010014, 0x7812);
         }
     } else {
         ot = g_DrawBuffer + 0xCC;

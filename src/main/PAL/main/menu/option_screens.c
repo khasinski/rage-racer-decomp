@@ -59,7 +59,6 @@ extern s32 g_BgmSelectStep;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void InitTrackScene(void);
-void DrawProportionalTextWide(s32 a0, s32 a1, void *a2, s32 a3) asm("func_80016EA0");
 void InstallCourseAssets(void);
 void RequestTrackDataAssets(void);
 void UpdateOptionSceneFade(void);
@@ -363,7 +362,7 @@ void UpdateOptionSceneFade(void) {
             g_BgmSelectStep = 2;
         }
     }
-    DrawProportionalTextWide(0x5E, 0x72, g_TextNowLoading, 0x7812);
+    DrawProportionalText(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
 void UpdateBgmSelectLoad(void);

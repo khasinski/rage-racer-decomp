@@ -50,7 +50,6 @@ void SetTrackTexturePageNow(s32 arg0);
 void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
 extern char g_TextResult[];
 extern char *g_CourseNames[];
-void DrawProportionalTextWide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016EA0");
 void DrawText8x8Trans(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_RaceTotalTime;
@@ -259,7 +258,7 @@ void DrawResultScreen(void) {
     s32 next;
 
     (void)pad;
-    DrawProportionalTextWide(0xDC, 0x1C, g_TextResult, 0x7812);
+    DrawProportionalText(0xDC, 0x1C, g_TextResult, 0x7812);
 
     if (g_GrandPrixMode != 0) {
         y = 0x3C;
@@ -379,7 +378,7 @@ void DrawGrandPrixResultPanel(void) {
         *scratch = next;
     }
 
-    DrawProportionalTextWide(0x10, 0x50, g_CaptionRanking, 0x7812);
+    DrawProportionalText(0x10, 0x50, g_CaptionRanking, 0x7812);
 }
 
 void DrawRaceTimePanel(s32 arg0);
@@ -399,7 +398,7 @@ void DrawRaceTimePanel(s32 arg0) {
     s32 color;
 
     base = arg0;
-    DrawProportionalTextWide(0x10, base + 0x80, g_CaptionTotalTime, 0x7812);
+    DrawProportionalText(0x10, base + 0x80, g_CaptionTotalTime, 0x7812);
 
     text[0] = 0x54;
     text[1] = 0x2F;
@@ -411,9 +410,9 @@ void DrawRaceTimePanel(s32 arg0) {
     }
     drawColor = color;
     count = base + 0x90;
-    DrawProportionalTextWide(0x14, count, text, drawColor);
+    DrawProportionalText(0x14, count, text, drawColor);
 
-    DrawProportionalTextWide(0x10, base + 0xA4, g_CaptionLapTime, 0x7812);
+    DrawProportionalText(0x10, base + 0xA4, g_CaptionLapTime, 0x7812);
 
     count = 6;
     if (g_CourseIndex != 3) {
@@ -439,7 +438,7 @@ void DrawRaceTimePanel(s32 arg0) {
             if (*(s16 *)((char *)selectedPtr - 0x22) == i) {
                 color = 0x784C;
             }
-            DrawProportionalTextWide(x, textPos, text, color);
+            DrawProportionalText(x, textPos, text, color);
             i++;
             times++;
         } while (i < count);

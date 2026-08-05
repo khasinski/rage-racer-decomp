@@ -26,7 +26,6 @@ extern s32 g_PrologueCutIndex;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void InitTrackScene(void);
-void DrawProportionalTextWide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016EA0");
 void InstallCourseAssets(void);
 void RequestTrackDataAssets(void);
 void UpdatePrologueLoad(void);
@@ -122,7 +121,7 @@ void UpdatePrologueLoad(void) {
         }
     }
 
-    DrawProportionalTextWide(0x5E, 0x72, g_TextNowLoading, 0x7812);
+    DrawProportionalText(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
 void UpdatePrologueLoadStep0(void);

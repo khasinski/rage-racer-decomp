@@ -741,11 +741,10 @@ void GameDrawProportionalTextShaded(
     u8 *str,
     u16 clutIndex,
     s32 intensity) asm("func_80016B7C");
-void DrawProportionalText(
-    s16 x,
-    s16 y,
-    u8 *str,
-    u16 clutIndex) asm("func_80016EA0");
+/* Body: (s32 x, s32 y, u8 *str, s32 clutIndex). The list stays empty because
+ * callers spell x as a packet pointer and str as char * / void *, and cc1
+ * 2.6.3 segfaults on both conversions. */
+void DrawProportionalText();
 
 /* Loads the GTE light matrix with g_SceneLightMatrix * `view`. */
 void SetGteLightMatrix(Matrix *view);

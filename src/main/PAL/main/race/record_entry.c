@@ -22,7 +22,6 @@ extern s32 g_RankingInsertRow;
 extern u8 *g_PlaceSuffixNames[];
 extern s32 g_CarClassNames[];
 extern s32 g_CarNames[];
-void DrawProportionalTextWide(void *dst, s32 len, void *src, s32 arg3) asm("func_80016EA0");
 void DrawText8x8Wide(void *dst, s32 x, void *src, s32 color) asm("func_80016754");
 void *FormatLapTime(void *dst, s32 value);
 void LibcSprintf() asm("func_800632F0");
@@ -73,7 +72,7 @@ void DrawRankingPanel(u8 *arg0) {
     s32 limit;
 
     panel = arg0;
-    DrawProportionalTextWide(panel + 0x10, 0x4C, g_CaptionLapTime2, 0x7852);
+    DrawProportionalText(panel + 0x10, 0x4C, g_CaptionLapTime2, 0x7852);
     mode = g_CourseIndex;
     text[1] = 0x2F;
     limit = 6;
@@ -110,7 +109,7 @@ void DrawRankingPanel(u8 *arg0) {
             scoreOrX += 4;
         } while (iter < limit);
     }
-    DrawProportionalTextWide(panel + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
+    DrawProportionalText(panel + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
     countOrIndex = 0;
     scoreOrX = 0x82;
     destination = 0x78;
@@ -143,14 +142,14 @@ void DrawTimeRecordPanel(u8 *s5) {
     s32 s4, s3;
     s32 s2, color, idx;
 
-    DrawProportionalTextWide(s5 + 0x10, 0x4C, g_CaptionTotalTime2, 0x7852);
+    DrawProportionalText(s5 + 0x10, 0x4C, g_CaptionTotalTime2, 0x7852);
 
     text[0] = 0x54;
     text[1] = 0x2F;
     FormatLapTime(&text[2], g_RaceTotalTime);
     DrawText8x8Wide(s5 + 0x14, 0x58, text, 0x78CC);
 
-    DrawProportionalTextWide(s5 + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
+    DrawProportionalText(s5 + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
 
     s2 = 0;
     s4 = 0x82;
