@@ -60,8 +60,8 @@ func_80063170:
 /* 80063174 01400008 */  jr $t2
 /* 80063178 24090039 */  addiu $t1, $zero, 0x39
 /* 8006317C 00000000 */  nop
-.globl func_80063180
-func_80063180:
+.globl BiosBuInit
+BiosBuInit:
 /* 80063180 240A00A0 */  addiu $t2, $zero, 0xA0
 /* 80063184 01400008 */  jr $t2
 /* 80063188 24090070 */  addiu $t1, $zero, 0x70
@@ -70,32 +70,32 @@ func_80063180:
 /* 80063194 01400008 */  jr $t2
 /* 80063198 2409009F */  addiu $t1, $zero, 0x9F
 /* 8006319C 00000000 */  nop
-.globl func_800631A0
-func_800631A0:
+.globl OpenEvent
+OpenEvent:
 /* 800631A0 240A00B0 */  addiu $t2, $zero, 0xB0
 /* 800631A4 01400008 */  jr $t2
 /* 800631A8 24090008 */  addiu $t1, $zero, 0x8
 /* 800631AC 00000000 */  nop
-.globl func_800631B0
-func_800631B0:
+.globl CloseEvent
+CloseEvent:
 /* 800631B0 240A00B0 */  addiu $t2, $zero, 0xB0
 /* 800631B4 01400008 */  jr $t2
 /* 800631B8 24090009 */  addiu $t1, $zero, 0x9
 /* 800631BC 00000000 */  nop
-.globl func_800631C0
-func_800631C0:
+.globl TestEvent
+TestEvent:
 /* 800631C0 240A00B0 */  addiu $t2, $zero, 0xB0
 /* 800631C4 01400008 */  jr $t2
 /* 800631C8 2409000B */  addiu $t1, $zero, 0xB
 /* 800631CC 00000000 */  nop
-.globl func_800631D0
-func_800631D0:
+.globl EnableEvent
+EnableEvent:
 /* 800631D0 240A00B0 */  addiu $t2, $zero, 0xB0
 /* 800631D4 01400008 */  jr $t2
 /* 800631D8 2409000C */  addiu $t1, $zero, 0xC
 /* 800631DC 00000000 */  nop
-.globl func_800631E0
-func_800631E0:
+.globl DisableEvent
+DisableEvent:
 /* 800631E0 240A00B0 */  addiu $t2, $zero, 0xB0
 /* 800631E4 01400008 */  jr $t2
 /* 800631E8 2409000D */  addiu $t1, $zero, 0xD
@@ -108,8 +108,8 @@ func_800631E0:
 /* 80063204 01400008 */  jr $t2
 /* 80063208 24090013 */  addiu $t1, $zero, 0x13
 /* 8006320C 00000000 */  nop
-.globl func_80063210
-func_80063210:
+.globl EnterCriticalSection
+EnterCriticalSection:
 /* 80063210 24040001 */  addiu $a0, $zero, 0x1
 /* 80063214 0000000C */  syscall 0
 /* 80063218 03E00008 */  jr $ra

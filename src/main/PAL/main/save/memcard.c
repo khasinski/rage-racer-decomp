@@ -373,7 +373,7 @@ s32 WaitMemoryCardSwEvent(void) {
 extern s32 g_SaveElapsedTicks;
 void InitCARD(s32 padEnable);
 void StartCARD(void);
-void BiosBuInit(void) asm("func_80063180");
+void BiosBuInit(void);
 void RestartMemoryCard(void);
 void RestartMemoryCard(void) { InitCARD(1); StartCARD(); BiosBuInit(); g_SaveElapsedTicks = 0; }
 
