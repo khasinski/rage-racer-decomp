@@ -47,7 +47,6 @@ void func_80014618(s32 variant) {
     Matrix yRot;
     s32 position[3];
     s32 steer;
-    register s32 product asm("$2");
     register s32 angle asm("$5");
     s32 model;
     u8 *scratchBase = (u8 *)0x1F800000;
@@ -92,21 +91,13 @@ void func_80014618(s32 variant) {
         return;
     }
     if (g_GameMode == 11) {
-        product = rsin(g_AnimTimer * 16) * g_NegconSteerRange[g_NegconMaxTwist];
-        if (product < 0) {
-            product += 0x1FF;
-        }
-        steer = product >> 9;
+        steer = (rsin(g_AnimTimer * 16) *
+                 g_NegconSteerRange[g_NegconMaxTwist]) / 512;
     } else if (g_GameMode == 10) {
-        product =
-            (rsin(g_AnimTimer * 16) << 4) * g_NegconPlayScale[g_NegconSteerPlay];
-        if (product < 0) {
-            product += 0xFFF;
-        }
-        steer = product >> 12;
+        steer = ((rsin(g_AnimTimer * 16) << 4) *
+                 g_NegconPlayScale[g_NegconSteerPlay]) / 4096;
     } else {
-        product = g_NegconSteer;
-        steer = product * 8;
+        steer = g_NegconSteer * 8;
     }
 
     angle = g_ControllerSceneAngleX - 0x40;

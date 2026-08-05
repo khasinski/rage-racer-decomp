@@ -746,7 +746,6 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
     s32 color;
     s32 white;
     s32 counter;
-    register s32 phaseBase asm("$4");
 
     ot = *(void **)0x1F800004;
     savedX0 = x0;
@@ -761,16 +760,8 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
         }
     } else {
         counter = D_8009B264;
-        phaseBase = counter;
-        if (counter < 0) {
-            phaseBase = counter + 0xFFF;
-        }
-        phaseBase = (phaseBase >> 12) << 12;
-        counter = rsin(counter - phaseBase);
-        if (counter < 0) {
-            counter += 0x3F;
-        }
-        color = (counter >> 6) - 0x41;
+        counter = rsin(counter % 4096);
+        color = (counter / 64) - 0x41;
     }
 
     white = 0xFF;
