@@ -24,7 +24,7 @@ extern volatile s32 g_McMenuSubStateV asm("D_8009B72C");
 extern s32 g_McFromLoadMenu asm("D_8009B730");
 extern s32 g_McSaveMode asm("D_8009B734");
 extern s32 g_McFreeBlocks asm("D_8009B73C");
-extern volatile s32 g_McMenuLoadPhaseV asm("D_8009B740");
+extern volatile s32 GameMenuLoadPhase asm("D_8009B740");
 extern s32 g_McMenuRowCount asm("D_8009B744");
 extern s32 g_McFadeStep asm("D_8009B9A0");
 extern s32 g_McFadeLevel asm("D_8009B9A4");
@@ -359,7 +359,7 @@ L_sw2:
         g_McActionOk = 0;
         }
         g_McMenuSubStateV = x;
-        dp = g_McMenuLoadPhaseV;
+        dp = GameMenuLoadPhase;
         g_McActionState = 0xF;
         g_McSavedLoadPhase = dp;
         break;
@@ -701,7 +701,7 @@ L_sw2:
                 x = 0xC;
             }
             g_McMenuSubStateV = x;
-            w = g_McMenuLoadPhaseV;
+            w = GameMenuLoadPhase;
             g_McActionState = 6;
             g_McSavedLoadPhase = w;
         }

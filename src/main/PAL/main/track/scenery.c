@@ -305,11 +305,11 @@ extern s32 g_FlybySceneryArmed asm("D_801E4300");
 extern s32 g_FlybySceneryFrame asm("D_801E4304");
 extern s16 g_FlybySceneryKeyIndex asm("D_801E430A");
 extern Vec4 g_FlybySceneryPosRec asm("D_801E430C");
-extern s32 g_FlybySceneryRotX2 asm("D_801E431C");
-extern s32 g_FlybySceneryRotY2 asm("D_801E4320");
-extern s32 g_FlybySceneryRotZ2 asm("D_801E4324");
-extern s32 g_RaceSeriesNV asm("D_801E408C");
-extern s32 g_PlayerCarX asm("D_8009E6D4");
+extern s32 g_FlybySceneryRotX asm("D_801E431C");
+extern s32 g_FlybySceneryRotY asm("D_801E4320");
+extern s32 g_FlybySceneryRotZ asm("D_801E4324");
+extern s32 g_RaceSeries asm("D_801E408C");
+extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_PlayerCarY asm("D_8009E6D8");
 extern s32 g_PlayerCarZ asm("D_8009E6DC");
 
@@ -355,10 +355,10 @@ void UpdateFlybyScenery(void) {
             g_FlybySceneryLap = 0;
             g_FlybySceneryKeyIndex = 0;
             g_FlybySceneryPosRec = *(Vec4 *)(src + 0x10);
-            g_FlybySceneryRotZ2 = 0;
-            g_FlybySceneryRotY2 = 0;
-            g_FlybySceneryRotX2 = 0;
-            recordIndex = *(s16 *)((g_RaceSeriesNV * 4) + (s32)base + 8);
+            g_FlybySceneryRotZ = 0;
+            g_FlybySceneryRotY = 0;
+            g_FlybySceneryRotX = 0;
+            recordIndex = *(s16 *)((g_RaceSeries * 4) + (s32)base + 8);
             index = recordIndex * 3;
             index <<= 2;
             index += 0x50;
@@ -402,7 +402,7 @@ void UpdateFlybyScenery(void) {
         *(s32 *)(state + 0x14) = step[1] / 4 + *(s32 *)(state + 0x14);
         *(s32 *)(state + 0x18) = step[2] / 4 + *(s32 *)(state + 0x18);
         if (*(s32 *)(state + 4) == 1) {
-            delta[0] = dx = g_PlayerCarX - *(s32 *)(state + 0x10);
+            delta[0] = dx = g_PlayerCar - *(s32 *)(state + 0x10);
             delta[1] = dy = g_PlayerCarY - *(s32 *)(state + 0x14);
             delta[2] = dz = g_PlayerCarZ - *(s32 *)(state + 0x18);
             dist = SquareRoot12(dx * dx / 8 + dy * dy / 16 + dz * dz / 8) >> 12;

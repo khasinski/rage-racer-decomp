@@ -146,8 +146,8 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
 }
 
 
-extern u8 *g_CamRow2 asm("D_8019C9A8");
-extern s32 g_CourseIdx asm("D_801E428C");
+extern u8 *g_CamRow asm("D_8019C9A8");
+extern s32 g_CourseIndex asm("D_801E428C");
 extern u8 g_CarModelByCourse[][11] asm("D_8007D3AC");
 extern s16 D_8007D380[][2];
 void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
@@ -172,10 +172,10 @@ void func_8001DFC0(GameRenderObject *obj) {
     s32 *cam = (s32 *)0x1F800000;
     s16 *lod;
 
-    model = g_CarModelByCourse[g_CourseIdx][((GameRenderSourcePoint *)obj)->field_AE];
+    model = g_CarModelByCourse[g_CourseIndex][((GameRenderSourcePoint *)obj)->field_AE];
     lod = D_8007D380[model];
-    obj->y -= ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
-    obj->field_60 -= ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
+    obj->y -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
+    obj->field_60 -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
 
     v_128[0] = obj->x - cam[2];
     v_128[1] = 0;
@@ -263,13 +263,13 @@ void func_8001DFC0(GameRenderObject *obj) {
                             (lod[0] + 3 < g_ModelBankCount) ? (lod[0] + 3) : 1);
 
             for (i = 0; i < 2; i++) {
-                s32 ax = ((CamRow *)(g_CamRow2 + (model << 3)))->axis0;
+                s32 ax = ((CamRow *)(g_CamRow + (model << 3)))->axis0;
                 if (i % 2) {
                     ax = -ax;
                 }
                 v_110[0] = ax;
-                v_110[1] = ((CamRow *)(g_CamRow2 + (model << 3)))->axis1;
-                v_110[2] = ((CamRow *)(g_CamRow2 + (model << 3)))->axis2;
+                v_110[1] = ((CamRow *)(g_CamRow + (model << 3)))->axis1;
+                v_110[2] = ((CamRow *)(g_CamRow + (model << 3)))->axis2;
                 ApplyMatrix((s32 *)&m_50, (s32 *)v_110, m_118);
                 m_118[0] += obj->x;
                 m_118[1] += obj->y;
@@ -301,8 +301,8 @@ void func_8001DFC0(GameRenderObject *obj) {
         }
     }
 
-    obj->y += ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
-    obj->field_60 += ((CamRow *)(g_CamRow2 + (model << 3)))->horizon;
+    obj->y += ((CamRow *)(g_CamRow + (model << 3)))->horizon;
+    obj->field_60 += ((CamRow *)(g_CamRow + (model << 3)))->horizon;
     if (clipHandle != 0) {
         RestoreColorMatrix();
     }

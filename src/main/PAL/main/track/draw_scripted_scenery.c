@@ -112,7 +112,7 @@ extern s32 g_PathSceneryY asm("D_801E4DBC");
 extern s32 g_PathSceneryZ asm("D_801E4DC0");
 extern s16 g_PathSceneryRotY asm("D_801E4DCA");
 extern s16 g_PathSceneryRotZ asm("D_801E4DCC");
-extern s32 g_PlayerCarX asm("D_8009E6D4");
+extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_PlayerCarY asm("D_8009E6D8");
 extern s32 g_PlayerCarZ asm("D_8009E6DC");
 extern s16 g_PathSceneryRacePhase asm("D_801E6E74");
@@ -480,7 +480,7 @@ void UpdatePathScenerySound(void) {
     posFrame = frames[0];
     rotFrame = g_PathSceneryRotFrameU;
     __asm__ volatile("" : "=r"(rotFrame) : "0"(rotFrame));
-    dx = g_PlayerCarX - g_PathSceneryX.w[0];
+    dx = g_PlayerCar - g_PathSceneryX.w[0];
     posFrame = posFrame + 1;
     frames[0] = posFrame;
     g_PathSceneryRotFrameU = rotFrame + 1;
