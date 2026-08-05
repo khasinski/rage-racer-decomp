@@ -3,6 +3,7 @@
 #include "game/car.h"
 #include "game/track.h"
 #include "game/render.h"
+void AdvanceCarPosition() asm("func_8002F4E4");
 
 void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
 
@@ -300,7 +301,7 @@ void func_80030030(GameCarRuntime *arg0) {
 
     {
         s32 saved = car->headingAngle;
-        func_8002F4E4(car);
+        AdvanceCarPosition(car);
         car->headingAngle = saved;
     }
 
@@ -312,12 +313,11 @@ void func_80030030(GameCarRuntime *arg0) {
 
 extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
 
-void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 void func_8005C104(s32 index, s32 phase, s32 volume);
 
 /*
  * Car motion handler for state98 == 2 (airborne / jump): decays velocity and
- * spin, advances the car (func_8002F4E4), and lands it when it returns to the
+ * spin, advances the car (AdvanceCarPosition), and lands it when it returns to the
  * ground. The drive sub-block is the GameCarDrive view of car->field_BC.
  */
 void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
@@ -345,7 +345,7 @@ void UpdateCarAirborne(GameCarRuntime *car) {
         s32 rr = GetAngleDelta(car->field_24, r->unk90);
         s32 base = car->field_24;
         car->field_24 = rr / 5 + base;
-        func_8002F4E4(car, base);
+        AdvanceCarPosition(car, base);
     }
 
     sinF24 = rsin(car->field_24);
@@ -395,7 +395,7 @@ s32 Random15(void) asm("func_800632B0");
 /*
  * Car motion handler for state98 == 3 (crash / tumble): applies a random shake
  * (Random15) scaled by the remaining shake budget g_StandingStartSpin, advances the
- * car (func_8002F4E4), and resets the car once the budget expires. field_15C /
+ * car (AdvanceCarPosition), and resets the car once the budget expires. field_15C /
  * field_15E hold the shake magnitude.
  */
 void UpdateCarStandingStart(GameCarRuntime *car) asm("func_80030BC4");
@@ -410,7 +410,7 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
     r = GetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
     base = car->field_24;
     car->field_24 = r / 5 + base;
-    func_8002F4E4(car, base);
+    AdvanceCarPosition(car, base);
 
     sinA = rsin(car->field_24);
     cosA = rcos(car->field_24);
