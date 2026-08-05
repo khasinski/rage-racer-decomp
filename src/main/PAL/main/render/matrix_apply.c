@@ -1,4 +1,47 @@
 #include "common.h"
+#include "psyq/gte.h"
+#include "game/render.h"
+
+/*
+ * Applies the 3x3 fixed-point matrix `mtx` to the vector (x,y,z), writing each
+ * component to *outX/*outY/*outZ (result >> 12). Each row has an identity
+ * fast-path: if the row is (1.0, 0, 0) etc. the matching input component is
+ * copied straight through without the multiply-accumulate.
+ */
+void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) {
+    s16 *m = mtx;
+
+    if (*(s32 *)&m[0] == 0x1000 && m[2] == 0) {
+        *outX = x;
+    } else {
+        s32 result = m[0] * x;
+
+        result += m[1] * y;
+        result += m[2] * z;
+        *outX = result >> 12;
+    }
+
+    if (m[3] == 0 && *(s32 *)&m[4] == 0x1000) {
+        *outY = y;
+    } else {
+        s32 result = m[3] * x;
+
+        result += m[4] * y;
+        result += m[5] * z;
+        *outY = result >> 12;
+    }
+
+    if (*(s32 *)&m[6] == 0 && m[8] == 0x1000) {
+        *outZ = z;
+    } else {
+        s32 result = m[6] * x;
+
+        result += m[7] * y;
+        result += m[8] * z;
+        *outZ = result >> 12;
+    }
+}
+
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 #define FAST_LOAD(offset)                              \
@@ -58,5 +101,36 @@ void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) {
         FAST_LOAD(8);
     } else {
         DOT_ROW(12, 2);
+    }
+}
+
+s32 rsin(s32 arg0);
+s32 rcos(s32 arg0);
+void MatrixApplyZRotation(Matrix *arg0, s32 arg1) {
+    Matrix sp10;
+    s32 angle;
+    s32 c;
+    s32 s;
+    s16 s_copy;
+
+    angle = arg1 / 360;
+    c = rcos(angle);
+    s = rsin(angle);
+    s_copy = s;
+
+    if (arg1 != 0) {
+        sp10.m[0][0] = c;
+        sp10.m[0][1] = -s;
+        sp10.m[0][2] = 0;
+        sp10.m[1][0] = s_copy;
+        sp10.m[1][1] = c;
+        sp10.m[1][2] = 0;
+        sp10.m[2][0] = 0;
+        sp10.m[2][1] = 0;
+        sp10.m[2][2] = 0x1000;
+        sp10.t[0] = 0;
+        sp10.t[1] = 0;
+        sp10.t[2] = 0;
+        MulMatrix(arg0, &sp10);
     }
 }

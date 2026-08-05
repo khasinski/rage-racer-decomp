@@ -1,5 +1,4 @@
 #include <sys/types.h>
-
 #include "common.h"
 #include "psyq/snd.h"
 
@@ -9,7 +8,7 @@ extern u_char g_SndVoiceStateTone[];
 extern u_char g_SndVoiceStateVabId[];
 extern u_char g_SndVoiceRegsPitch[];
 extern u_char g_SndVoiceFlags[];
-extern u_char *g_SndCurrentToneTable;
+extern u_char * g_SndCurrentToneTable;
 extern u_short g_SndCurrentVoice;
 
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) {
@@ -73,4 +72,48 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
         return 1;
     }
     return 0;
+}
+
+extern volatile u_char g_SndVoiceCount;
+extern short g_SndCurrentSeqSep;
+
+long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) {
+    long voice;
+    long x;
+    long y;
+    long extra;
+    long i;
+    long sum;
+    long bound;
+    register long tmp asm("$2");
+    long call_x;
+    long call_y;
+
+    voice = arg0;
+    tmp = arg1;
+    call_x = (short)tmp;
+    call_y = (short)arg2;
+    x = tmp;
+    y = arg2;
+    extra = arg3;
+
+    SpuVmVSetUp(call_x, call_y);
+    i = 0;
+    sum = 0;
+    bound = g_SndVoiceCount;
+    __asm__ volatile("");
+    tmp = voice;
+    g_SndCurrentSeqSep = tmp;
+
+    if ((short)i < bound) {
+        voice <<= 16;
+        do {
+            sum += (short)SpuVmApplyPitchBendToVoice((short)i, (short)(voice >> 16), (short)x, (short)y, (u_short)extra);
+            tmp = i + 1;
+            i = tmp;
+            __asm__("" : "=r"(i) : "0"(i));
+        } while ((short)tmp < (bound = g_SndVoiceCount));
+    }
+
+    return sum;
 }

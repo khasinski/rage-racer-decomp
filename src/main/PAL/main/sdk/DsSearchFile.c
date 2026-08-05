@@ -19,11 +19,9 @@ extern const char D_80013998[];
 extern const char D_800139A4[];
 
 extern long CD_newmedia(void);
-extern long DS_searchdir(long type, char *name);
+extern long DS_searchdir(long type,char * name);
 extern long CD_cachefile(long arg0);
-extern long CD_namecmp(char *a, char *b);
 
-Rec * DsSearchFile(Rec *out, char *path);
 Rec *DsSearchFile(Rec *out, char *path) {
     char buf[32];
     char *p;
@@ -112,4 +110,10 @@ Rec *DsSearchFile(Rec *out, char *path) {
         DebugPrintf(D_800139A4, buf);
     }
     return 0;
+}
+
+long LibcStrncmp(long arg0,long arg1,long arg2);
+
+long CD_namecmp(long arg0, long arg1) {
+    return LibcStrncmp(arg0, arg1, 0xC) == 0;
 }
