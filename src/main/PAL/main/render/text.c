@@ -328,11 +328,8 @@ void DrawProportionalTextShadedWide(
                 u8 *ot;
 
                 s1 = offset * 4;
-                asm(
-                    "" : "=r"(offset), "=r"(s1) :
-                    "0"(offset), "1"(s1));
                 text++;
-                asm("" : : "r"(ch));
+                asm("" : : "r"(ch), "r"(offset));
                 u = g_WordFontU[s1];
                 v = g_WordFontV[s1];
                 SetSprt(packet);
