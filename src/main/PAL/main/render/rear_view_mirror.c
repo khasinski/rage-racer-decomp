@@ -136,11 +136,14 @@ void EndMirrorPass(void) {
     func_80069A58(0xA0, 0x78);
     func_80069A78(0x140);
 
-    scratch->mode = 0xA;
-    scratch->x1 = 0x140;
-    scratch->y1 = 0xF0;
-    g_VisibleCellMask = (s32)&D_8019C86C;
-    __asm__("");
+    v0reg = 0xA;
+    scratch->mode = v0reg;
+    v0reg = 0x140;
+    scratch->x1 = v0reg;
+    v0reg = 0xF0;
+    scratch->y1 = v0reg;
+    v0reg = (s32)&D_8019C86C;
+    g_VisibleCellMask = v0reg;
     v0reg = (s32)g_DrawBuffer;
     g_VisibleCellList = (s32)&D_8009EC94;
     v1reg = scratch->depth;
