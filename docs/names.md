@@ -1506,6 +1506,18 @@ settles several names at once:
 | `CdDataCallback` | 0x8006A994 | `DMACallback(3, f)` — DMA3 is the CD-ROM; installed with libds's `data_ready_callback` |
 | `CdMix` | 0x8006A94C | wraps `CD_vol` and returns 1 |
 | `CdGetSector2` | 0x8006A970 | wraps `CD_getsector2`; used by `CdReadDataReadyCallback` |
+
+Both of these forward their own incoming arguments untouched, so m2c saw them
+as `(void)` calling a `(void)` callee: the values are already in a0/a1 when the
+tail call is made and no instruction moves them. The real signatures are
+recoverable from the independent callers — `cd/cd_audio_control.c` declares
+`CdMix(u8 *)` and `sdk/CdReadDataReadyCallback.c` declares
+`CdGetSector2(void *, long)`. Writing `CdMix(CdlATV *vol) { CD_vol(vol); … }`
+and `CdGetSector2(long madr, u_long size) { … CD_getsector2(madr, size) … }`
+keeps the build byte-identical (verified 2026-08-05) and removes the last two
+raw `func_` call sites in `sdk/CdMix.c`. A zero-argument view of a function
+that really takes arguments is the tell: look for a caller that names them.
+
 | `StGetNext` | 0x8006D0EC | two out-parameters, returns 0 after marking the ring entry state 4 — the classic `StGetNext(addr, header)` |
 | `StUnSetRing` | 0x8006CE20 | `EnterCriticalSection` → `CdDataCallback(0)` / `CdReadyCallback(0)` → clear both kernel callback slots → `ExitCriticalSection`, at stream teardown |
 
@@ -5869,6 +5881,29 @@ every reconciliation of the two dies in cc1. Nine of the drawing helpers
 `GameQueueShadedTexturedRect`, `DrawCarEngineSpec`, …) are the same story
 with `s16`/`u8` parameters instead of pointers, and cannot take the empty
 list either because their callers' own prototypes are promotable.
+
+**Resolved (2026-08-05) by not reconciling them at all.** The two signatures
+never had to agree: the caller keeps its own parameter types and pins the
+address itself, under the `<Name>Wide` convention that `GameQueueSpriteWide`,
+`SetDrawModeWide` and `DrawText8x8Wide` were already using. So
+`update_camera.c` declares
+
+    extern void *TransposeMatrixWide(void *, void *) asm("func_80069CC8");
+
+which reads as the function it is, generates the identical instruction (the
+asm label is what the linker sees, the C prototype only shapes the argument
+setup the unit was already doing), and never makes cc1 reconcile anything.
+Applied to all 15 addresses that were still reached by raw `func_` in
+`src/main/PAL/main/`, this closed every one of them in a single verified
+build: `TransposeMatrix`, `GameDrawMenuButton`, `GameQueueTileTrans`,
+`GameDrawTexturedQuad`, `GameQueueShadedSpriteTrans`, `GameQueueLine`,
+`DrawRectOutline`, `LoadAsset`, `_SsSndStop`, `_SsVmInit`, `SsVabTransBody`,
+`SsVabOpenHeadSticky`, `SsUtPitchBend`, plus `CD_vol` / `CD_getsector2`
+(which instead got their real signatures, see 13d). `KernelCallbackSlot2Wide`
+does the same for the two `lib/libsnd` tick units.
+
+The suffix is not only about width — the tree already used it for `void *` vs
+`u8 *` as well. It means "this unit's view of that address".
 
 ### 38d. Several names for one address
 
