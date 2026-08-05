@@ -119,8 +119,7 @@ typedef struct GamePlayerCarSpecInit
   u8 p120[0x3C];
   s32 f15C;
 } GamePlayerCarSpecInit;
-extern GamePlayerCarSpecInit *g_PlayerCarInitSpec asm("D_801E42D8");
-extern s32 g_GearTorqueCurve[] asm("D_801E8884");
+#define g_PlayerCarInitSpec ((GamePlayerCarSpecInit *)g_CarSpec)
 extern char D_800113B0[];
 extern char D_800113BC[];
 extern char D_800113C4[];
@@ -307,11 +306,11 @@ void InitPlayerCar(GameCarRuntime *car)
   j = 0;
   for (i = 0; i < 16; i++)
   {
-    g_GearTorqueCurve[i] = g_PlayerCarInitSpec->curve[i] / 20;
-    if (j < g_GearTorqueCurve[i])
+    gearRows[0].values[i] = g_PlayerCarInitSpec->curve[i] / 20;
+    if (j < gearRows[0].values[i])
     {
       D_8019C798 = i;
-      j = g_GearTorqueCurve[i];
+      j = gearRows[0].values[i];
     }
   }
 

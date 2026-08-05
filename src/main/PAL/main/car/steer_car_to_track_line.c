@@ -94,7 +94,6 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
  * the car to the airborne handler UpdateCarAirborne. See docs/names.md 1.
  */
 
-extern u8 *D_801E42D8;
 extern s32 D_801E4BF4;
 extern s32 D_801E8AA0;
 
@@ -244,7 +243,7 @@ void func_80030030(GameCarRuntime *arg0) {
 
             *(s32 *)(r + 0x50) = 0;
 
-            specBase = D_801E42D8;
+            specBase = (u8 *)g_CarSpec;
             lo = car->field_A4 * 0xA0 / 1168 * 10000 /
                  *(s32 *)((u8 *)specBase +
                           (*(s16 *)(r + 0x76) << 2) + 0xE4);
