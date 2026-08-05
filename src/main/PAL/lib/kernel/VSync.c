@@ -93,14 +93,14 @@ void waitVSync(long arg0, long arg1) {
     }
 }
 
-u_long ChangeClearRCntStub[4] asm("func_8006DF14") __attribute__((section(".text"))) = {
+u_long ChangeClearRCntStub[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x2409005B,
     0,
 };
 
-u_long ChangeClearInterruptMaskStub[4] asm("func_8006DF24") __attribute__((section(".text"))) = {
+u_long ChangeClearInterruptMaskStub[4] __attribute__((section(".text"))) = {
     0x240A00C0,
     0x01400008,
     0x2409000A,

@@ -56,7 +56,7 @@ void clearKernelInterruptState(u_long *dst, long count) {
     }
 }
 
-u_long SysEnqIntRPStub[31] asm("func_8006E644") __attribute__((section(".text"))) = {
+u_long SysEnqIntRPStub[31] __attribute__((section(".text"))) = {
     0x240A00A0,
     0x01400008,
     0x24090072,

@@ -131,7 +131,7 @@ extern char g_MsgVabTransBodyError[];
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
-void BiosExit(s32 arg0) asm("func_80063D9C");
+void BiosExit(s32 arg0);
 
 s32 InitSoundWithVab(s32 header, s32 body) {
     s32 headerReg = header;
@@ -198,7 +198,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
 s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table);
 s32 CloseAudioSlot(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0);
-void BiosExit(s32 arg0) asm("func_80063D9C");
+void BiosExit(s32 arg0);
 void SsUtReverbOff(void);
 void func_80073614(s32 arg0);
 void func_80073748(s32 arg0, s32 arg1);
@@ -2412,7 +2412,7 @@ extern s32 g_VabTransferDone;
 extern char g_MsgSeqVabOpenHeadError[];
 extern char g_MsgSeqVabTransBodyError[];
 
-void BiosExit(s32 arg0) asm("func_80063D9C");
+void BiosExit(s32 arg0);
 s32 func_8006F004(s32 arg0);
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);

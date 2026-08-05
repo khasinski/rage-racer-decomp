@@ -1160,3 +1160,7 @@ TestEvent = 0x800631C0; // type:func
 EnableEvent = 0x800631D0; // type:func
 DisableEvent = 0x800631E0; // type:func
 EnterCriticalSection = 0x80063210; // type:func
+g_BiosCallStubs = 0x80063D9C;
+ChangeClearRCntStub = 0x8006DF14;
+ChangeClearInterruptMaskStub = 0x8006DF24;
+SysEnqIntRPStub = 0x8006E644;

@@ -8,8 +8,8 @@ extern Callback g_IntrCallbacks[];
 extern u_short g_IntrCallbackMask;
 extern volatile u_short *g_IrqMask;
 
-void ChangeClearRCnt(long clear) asm("func_8006DF14");
-void ChangeClearInterruptMask(long index, long clear) asm("func_8006DF24");
+void ChangeClearRCnt(long clear);
+void ChangeClearInterruptMask(long index, long clear);
 Callback SetKernelInterruptCallback(long arg0, Callback arg1);
 Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     long index;
