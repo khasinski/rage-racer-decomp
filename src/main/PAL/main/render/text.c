@@ -298,9 +298,7 @@ void DrawProportionalTextShadedWide(
                 packet += 20;
                 sprt->y0 = yOffset + t0;
                 width = g_HighFontWidth[index];
-                asm volatile("" : "=r"(width) : "0"(width));
                 prim = (void *)sprt;
-                asm("" : "=r"(prim) : "0"(prim));
                 sprt->u0 = u;
                 sprt->v0 = v;
                 /* RAW() keeps this store ahead of the g_DrawBuffer load --
@@ -308,7 +306,6 @@ void DrawProportionalTextShadedWide(
                 RAW(sprt->h) = height;
                 ot = g_DrawBuffer;
                 t0 = (u16)home.clut;
-                asm("" : "=r"(ot), "=r"(t0) : "0"(ot), "1"(t0));
                 ot += 0xCC;
                 sprt->clut = t0;
                 sprt->w = width;
