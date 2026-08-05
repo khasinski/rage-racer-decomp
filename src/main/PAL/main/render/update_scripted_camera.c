@@ -79,26 +79,18 @@ void UpdateScriptedCamera(void) {
     SetLookAtMatrix(values);
 
     {
-        s32 tailCurrent;
-        register s32 tailTick asm("$2");
-        register s32 tailNext asm("$4");
+        s32 duration = KEY(g_CameraPathKey << 5).duration;
+        s32 nextTick = g_CameraPathTick + 1;
 
-        tailCurrent = g_CameraPathKey;
-        tailTick = g_CameraPathTick;
-        tailCurrent = KEY(tailCurrent << 5).duration;
-        tailTick++;
-        tailTick = (tailTick < tailCurrent) ? tailTick : 0;
-        g_CameraPathTick = tailTick;
-        if (tailTick == 0) {
-            tailNext = g_CameraPathNextKey;
-            tailCurrent = tailNext + 1;
-            tailTick = KEY(tailCurrent << 5).duration;
-            g_CameraPathKey = tailNext;
-            tailTick = ~tailTick;
-            tailTick = (tailTick != 0);
-            tailTick = -tailTick;
-            tailCurrent &= tailTick;
-            g_CameraPathNextKey = tailCurrent;
+        nextTick = (nextTick < duration) ? nextTick : 0;
+        g_CameraPathTick = nextTick;
+        if (nextTick == 0) {
+            s32 next = g_CameraPathNextKey;
+            s32 following = next + 1;
+
+            g_CameraPathKey = next;
+            g_CameraPathNextKey =
+                (KEY(following << 5).duration == -1) ? 0 : following;
         }
     }
 }
