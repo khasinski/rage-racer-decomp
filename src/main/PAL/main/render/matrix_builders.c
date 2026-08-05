@@ -59,7 +59,7 @@ void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32
 }
 
 void MatrixApplyZRotation(Matrix *arg0, s32 arg1);
-s32 SquareRoot0(s32 arg0) asm("func_800689A8");
+s32 SquareRoot0(s32 arg0);
 void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ);
 
 /*

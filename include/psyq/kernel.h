@@ -56,7 +56,7 @@ long StartRCnt(long spec);
 long StopRCnt(long spec);
 long ResetRCnt(long spec);
 void EnterCriticalSection(void) asm("func_80063210");
-void ExitCriticalSection(void) asm("func_80063220");
+void ExitCriticalSection(void);
 long OpenEvent(long desc, long spec, long mode, long func) asm("func_800631A0");
 void CloseEvent(long event) asm("func_800631B0");
 long TestEvent(long event) asm("func_800631C0");

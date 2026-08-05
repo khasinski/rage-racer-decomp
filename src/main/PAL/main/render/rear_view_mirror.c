@@ -217,7 +217,7 @@ u8 *DrawMirrorFrame(u8 *packet);
 void DrawSkyBackground(void);
 void AddPrim(void *ot, void *prim);
 void BuildVisibleCells(s32 arg0, s32 arg1);
-void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
+void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2);
 void EndMirrorPass(void);
 
 void DrawRearViewMirror(s32 arg0);

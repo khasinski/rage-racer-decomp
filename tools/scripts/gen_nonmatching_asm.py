@@ -38,7 +38,9 @@ C_NAMED_DEF_RE = re.compile(
 # assembly declares it with .globl inside a top-level asm() block, and a data
 # object can be placed in .text with __attribute__((section(".text"))). Both end
 # the preceding stub, so both must count as boundaries.
-ASM_GLOBL_RE = re.compile(r"\.globl\s+(?P<name>func_[0-9A-Fa-f]{8})")
+# The .globl may carry the routine's real name, in which case symbol_addrs says
+# where it is, exactly as it does for a named C function.
+ASM_GLOBL_RE = re.compile(r"\.globl\s+(?P<name>[A-Za-z_][A-Za-z0-9_]*)")
 FUNC_NAME_RE = re.compile(r"func_[0-9A-Fa-f]{8}")
 # The object may carry its real name rather than func_XXXXXXXX, in which case
 # the address comes from symbol_addrs like a named function's does.
@@ -100,11 +102,14 @@ def parse_subsegments(config: Path) -> list[tuple[int, str, str, int]]:
 
 def parse_wrappers(
     src_root: Path, version: str, aliases: dict[str, str] | None = None
-) -> tuple[dict[str, list[str]], dict[str, list[str]], dict[str, str]]:
+) -> tuple[dict[str, list[str]], dict[str, list[str]], dict[str, str], dict[str, str]]:
     aliases = aliases or {}
     asm_by_unit: dict[str, list[str]] = {}
     c_funcs_by_unit: dict[str, list[str]] = {}
     rodata_by_name: dict[str, str] = {}
+    #: symbol -> the real name a source `.globl` gives it, so the disassembler
+    #: spells references to it the way the definition does.
+    globl_names: dict[str, str] = {}
     for path in src_root.rglob("*.c"):
         text = strip_comments(path.read_text())
         rel = path.relative_to(src_root).with_suffix("").as_posix()
@@ -114,7 +119,15 @@ def parse_wrappers(
             symbol = aliases.get(match.group("name"))
             if symbol is not None:
                 names.append(symbol)
-        names.extend(match.group("name") for match in ASM_GLOBL_RE.finditer(text))
+        for match in ASM_GLOBL_RE.finditer(text):
+            label = match.group("name")
+            if FUNC_NAME_RE.fullmatch(label):
+                names.append(label)
+                continue
+            symbol = aliases.get(label)
+            if symbol is not None:
+                names.append(symbol)
+                globl_names[symbol] = label
         for match in TEXT_OBJECT_RE.finditer(text):
             symbol = aliases.get(match.group("name"))
             if symbol is None and FUNC_NAME_RE.fullmatch(match.group("name")):
@@ -124,7 +137,7 @@ def parse_wrappers(
         c_funcs_by_unit[f"{version}/{rel}"] = names
         for match in RODATA_WRAP_RE.finditer(text):
             rodata_by_name[match.group(1)] = rel
-    return asm_by_unit, c_funcs_by_unit, rodata_by_name
+    return asm_by_unit, c_funcs_by_unit, rodata_by_name, globl_names
 
 
 SUBSEGMENT_START_RE = re.compile(r"^\s*-\s*\[\s*0x([0-9A-Fa-f]+)")
@@ -283,10 +296,20 @@ def build_plan(root: Path, version: str, basename: str) -> Plan | None:
         return None
 
     aliases = collect_symbol_addrs(root / "configs" / version / f"sym.{basename}.txt")
-    asm_wrappers_by_unit, c_funcs_by_unit, rodata_wrappers = parse_wrappers(
+    asm_wrappers_by_unit, c_funcs_by_unit, rodata_wrappers, globl_names = parse_wrappers(
         src_root, version, aliases
     )
     label_addresses = parse_label_addresses(labels)
+    # An INCLUDE_ASM stub may be spelled with the routine's real name rather
+    # than func_XXXXXXXX, in which case nothing in the name says where it
+    # starts and symbol_addrs is the only thing that does.  Without this the
+    # lookup fell through to the start of the whole subsegment, which then
+    # looked like a boundary in front of every sibling stub and silently
+    # deleted them.
+    for symbol_name, symbol in aliases.items():
+        address = fallback_function_address(symbol)
+        if address is not None:
+            label_addresses.setdefault(symbol_name, address)
     target_bytes = target.read_bytes()
 
     # Two passes: the first works out which stub covers which address range, the
@@ -362,6 +385,12 @@ def build_plan(root: Path, version: str, basename: str) -> Plan | None:
         for address, names in stub_labels.items():
             for label in names:
                 stub_names.setdefault(address, label)
+    # A handwritten block that declares its own `.globl Name` defines only that
+    # name, so references to it have to be spelled the same way.
+    for symbol, label in globl_names.items():
+        address = fallback_function_address(symbol)
+        if address is not None:
+            stub_names.setdefault(address, label)
     # A unit that still spells a function `func_8004F3EC(...)` in C defines
     # exactly that symbol, so a call to it can use the name.
     for unit_funcs in c_funcs_by_unit.values():

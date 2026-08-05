@@ -3,7 +3,7 @@ void SetRotMatrix(s32 arg0);
 
 extern s32 g_VisibleCellList;
 void BuildVisibleCells(s32 arg0, s32 arg1);
-void SubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
+void SubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2);
 void DrawTerrainCells(void);
 void DrawTerrainCells(void) {
     BuildVisibleCells(-12288, 0x14000);

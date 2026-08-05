@@ -171,4 +171,4 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/MDEC_reset", D_80064554);
  * Revisit:  only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/MDEC_reset", func_80064588);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/MDEC_reset", MdecUnpackStatus);

@@ -73,8 +73,8 @@ Matrix *TransposeMatrix(Matrix *m0, Matrix *m1) asm("func_80069CC8");
  * rotation part is touched. They differ only in where the product lands:
  * MulMatrix  -> m0, MulMatrix2 -> m1, MulMatrix0 -> m2. Each returns it.
  */
-void *MulMatrix(void *m0, void *m1) asm("func_80069458");
-void *MulMatrix2(void *m0, void *m1) asm("func_80069568");
+void *MulMatrix(void *m0, void *m1);
+void *MulMatrix2(void *m0, void *m1);
 void *MulMatrix0(void *m0, void *m1, void *m2);
 /* v1 = m * v0 through the same MVMVA; v0 is a short vector, v1 gets MAC1..3. */
 void *ApplyMatrix(void *m, void *v0, void *v1);
@@ -83,10 +83,10 @@ short *ApplyMatrixSV(void *m, void *v0, short *v1);
 
 /* Matrix scaling. ScaleMatrix does m[i][j] *= v[j] (column j scaled by
  * v[j]); ScaleMatrixL does m[i][j] *= v[i]. LibRef47 8-150 / 8-151. */
-void *ScaleMatrix(void *m, void *v) asm("func_80069728");
-void *ScaleMatrixL(void *m, void *v) asm("func_80069110");
+void *ScaleMatrix(void *m, void *v);
+void *ScaleMatrixL(void *m, void *v);
 /* Rotation matrix from an SVECTOR of Z/Y/X Euler angles (raw asm sibling). */
-void *RotMatrix(void *r, void *m) asm("func_80069D18");
+void *RotMatrix(void *r, void *m);
 /* Square root in 12-bit fixed point: returns sqrt(a << 12), i.e. 64*sqrt(a).
  * Normalises with Lzc, then runs the hyperbolic CORDIC in CordicRotate. */
 long SquareRoot12(long a);

@@ -16,7 +16,7 @@ typedef struct FmvDisplayState {
 } FmvDisplayState;
 
 void *GetFmvFrame(s32 *arg0);
-void MdecUnpackStatus(void *arg0, s32 arg1) asm("func_80064588");
+void MdecUnpackStatus(void *arg0, s32 arg1);
 extern s32 g_FmvFrameWidth;
 extern s32 g_FmvFrameHeight;
 extern s32 g_FmvStreamEnded;

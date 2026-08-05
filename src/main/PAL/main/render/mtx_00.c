@@ -577,7 +577,7 @@ s32 TransformCollisionVector(s32 *arg0, s32 *arg1, s32 arg2) {
  *           obtained AND verified not to regress already-matched functions.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/mtx_00", func_80069110);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/mtx_00", ScaleMatrixL);
 
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 

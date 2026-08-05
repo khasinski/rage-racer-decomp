@@ -243,9 +243,9 @@ void SetupDisplay480(s32 r, s32 g, s32 b);
  * the scratchpad base 0x1F800000.
  */
 void SelectModelBank(s32 index);
-void SubmitModel(void *ctx, s32 index) asm("func_80028DEC");
-void SubmitCourseModel(void *ctx, s32 index) asm("func_800296B4");
-void SubmitCourseModel2(void *ctx, s32 index) asm("func_80029E50");
+void SubmitModel(void *ctx, s32 index);
+void SubmitCourseModel(void *ctx, s32 index);
+void SubmitCourseModel2(void *ctx, s32 index);
 
 /* Per-frame draw loop over the world object array g_CourseObjects: culls each entry
  * against the visibility bitmask, transforms it and submits its model. */

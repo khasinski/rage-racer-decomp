@@ -13,7 +13,7 @@ func_8005BDB0 = SetSequenceVolumeSetting + 0x2C;
 func_80028874 = func_80028120_mode_2 + 0x154;
 func_80028C54 = func_80028120_mode_2 + 0x534;
 func_80028D84 = func_80028120_mode_2 + 0x664;
-func_800296B4 = func_800295BC + 0xF8;
+func_800296B4 = EmitPolyGT4Fog + 0xF8;
 func_80053730 = CanSelectNextCourse + 0xA8;
 func_80054C84 = CanSelectNextCourse + 0x15FC;
 func_80054D10 = CanSelectNextCourse + 0x1688;
@@ -77,7 +77,7 @@ SaveKernelRegisters = func_8006E684;
 
 /* Branch targets inside a function, reached from a sibling function that
    is still hand-written assembly. */
-.L80028ED4 = func_80028E9C + 0x38;
+.L80028ED4 = SubmitModelFaces + 0x38;
 .L8002E3E4_main = func_8002DEFC + 0x4E8;
 .L800390D4_main = UpdateCarBodyKick + 0xE4;
 .L80040E20 = UpdateZoneAmbience + 0x6C;

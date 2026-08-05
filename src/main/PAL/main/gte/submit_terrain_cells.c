@@ -1,19 +1,20 @@
 #include "common.h"
 
 /*
- * Names for this unit's hand-written GTE engine routines. Declarations only -
- * the emitted symbols stay func_XXXXXXXX, so the ROM is unaffected. What each
- * routine emits is worked out in docs/names.md section 17.
+ * Names for this unit's hand-written GTE engine routines. The addresses live in
+ * configs/PAL/sym.main.txt, so the disassembly, the linker script and these
+ * declarations all agree on one name. What each routine emits is worked out in
+ * docs/names.md section 17.
  */
-void SubmitTerrainCells(void *ctx, void *cells, s32 count) asm("func_80027FF4");
-void SubmitTerrainCellFaces(void) asm("func_80028120");
-void EmitSubdividedTerrainQuad(void) asm("func_80028874");
-void InterpolateSubdivRow(void) asm("func_80028C54");
-void SubmitTerrainCellFacesFar(void) asm("func_80028D84");
-void SubmitModel(void *ctx, s32 model) asm("func_80028DEC");
-void SubmitModelFaces(void) asm("func_80028E9C");
-void EmitPolyF4(void) asm("func_80029064");
-void EmitPolyFT4Raw(void) asm("func_800290C8");
+void SubmitTerrainCells(void *ctx, void *cells, s32 count);
+void SubmitTerrainCellFaces(void);
+void EmitSubdividedTerrainQuad(void);
+void InterpolateSubdivRow(void);
+void SubmitTerrainCellFacesFar(void);
+void SubmitModel(void *ctx, s32 model);
+void SubmitModelFaces(void);
+void EmitPolyF4(void);
+void EmitPolyFT4Raw(void);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -35,7 +36,7 @@ void EmitPolyFT4Raw(void) asm("func_800290C8");
  * Revisit:  only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80027FF4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitTerrainCells);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -55,7 +56,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80028120);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitTerrainCellFaces);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -75,7 +76,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80028874);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitSubdividedTerrainQuad);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -95,7 +96,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80028C54);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", InterpolateSubdivRow);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -115,7 +116,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80028D84);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitTerrainCellFacesFar);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -135,7 +136,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80028DEC);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitModel);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -149,8 +150,8 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
 asm(
     ".set noreorder\n"
     ".set noat\n"
-    ".globl func_80028E9C\n"
-    "func_80028E9C:\n"
+    ".globl SubmitModelFaces\n"
+    "SubmitModelFaces:\n"
     ".word 0x30AFFFFF\n"
     ".word 0x000F78C0\n"
     ".word 0x3C0E8007\n"
@@ -285,7 +286,7 @@ asm(
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029064);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyF4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -305,22 +306,23 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_800290C8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyFT4Raw);
 
 
 /*
- * Names for this unit's hand-written GTE engine routines. Declarations only -
- * the emitted symbols stay func_XXXXXXXX, so the ROM is unaffected. What each
- * routine emits is worked out in docs/names.md section 17.
+ * Names for this unit's hand-written GTE engine routines. The addresses live in
+ * configs/PAL/sym.main.txt, so the disassembly, the linker script and these
+ * declarations all agree on one name. What each routine emits is worked out in
+ * docs/names.md section 17.
  */
-void EmitPolyG4(void) asm("func_80029158");
-void EmitPolyGT4(void) asm("func_80029230");
-void SubmitModel2(void *ctx, s32 model) asm("func_80029340");
-void EmitPolyF4Fog(void) asm("func_800293F0");
-void EmitPolyFT4Fog(void) asm("func_80029458");
-void EmitPolyG4Fog(void) asm("func_800294E4");
-void EmitPolyGT4Fog(void) asm("func_800295BC");
-void SubmitCourseModel(void *ctx, s32 model) asm("func_800296B4");
+void EmitPolyG4(void);
+void EmitPolyGT4(void);
+void SubmitModel2(void *ctx, s32 model);
+void EmitPolyF4Fog(void);
+void EmitPolyFT4Fog(void);
+void EmitPolyG4Fog(void);
+void EmitPolyGT4Fog(void);
+void SubmitCourseModel(void *ctx, s32 model);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -340,7 +342,7 @@ void SubmitCourseModel(void *ctx, s32 model) asm("func_800296B4");
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029158);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyG4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -360,7 +362,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029230);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyGT4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -380,7 +382,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029340);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitModel2);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -400,7 +402,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_800293F0);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyF4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -420,7 +422,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029458);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyFT4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -440,7 +442,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_800294E4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyG4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -460,7 +462,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_800295BC);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyGT4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -480,18 +482,19 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_800296B4);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitCourseModel);
 
 
 /*
- * Names for this unit's hand-written GTE engine routines. Declarations only -
- * the emitted symbols stay func_XXXXXXXX, so the ROM is unaffected. What each
- * routine emits is worked out in docs/names.md section 17.
+ * Names for this unit's hand-written GTE engine routines. The addresses live in
+ * configs/PAL/sym.main.txt, so the disassembly, the linker script and these
+ * declarations all agree on one name. What each routine emits is worked out in
+ * docs/names.md section 17.
  */
-void EmitCoursePolyF4(void) asm("func_8002970C");
-void EmitCoursePolyFT4(void) asm("func_80029788");
-void EmitCourseSubdividedFT4(void) asm("func_80029830");
-void EmitCourseSubdividedFT4Fog(void) asm("func_800298B0");
+void EmitCoursePolyF4(void);
+void EmitCoursePolyFT4(void);
+void EmitCourseSubdividedFT4(void);
+void EmitCourseSubdividedFT4Fog(void);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -511,7 +514,7 @@ void EmitCourseSubdividedFT4Fog(void) asm("func_800298B0");
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002970C);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCoursePolyF4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -531,7 +534,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029788);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCoursePolyFT4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -551,7 +554,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029830);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCourseSubdividedFT4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -571,12 +574,12 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_800298B0);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCourseSubdividedFT4Fog);
 
 
 /* Name for this unit's hand-written GTE engine routine. Declaration only -
  * the emitted symbol stays func_80029E50. */
-void SubmitCourseModel2(void *ctx, s32 model) asm("func_80029E50");
+void SubmitCourseModel2(void *ctx, s32 model);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -596,18 +599,19 @@ void SubmitCourseModel2(void *ctx, s32 model) asm("func_80029E50");
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029E50);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitCourseModel2);
 
 
 /*
- * Names for this unit's hand-written GTE engine routines. Declarations only -
- * the emitted symbols stay func_XXXXXXXX, so the ROM is unaffected. What each
- * routine emits is worked out in docs/names.md section 17.
+ * Names for this unit's hand-written GTE engine routines. The addresses live in
+ * configs/PAL/sym.main.txt, so the disassembly, the linker script and these
+ * declarations all agree on one name. What each routine emits is worked out in
+ * docs/names.md section 17.
  */
-void TransformCourseModel(void) asm("func_80029EA8");
-void EmitCoursePolyF4Fog(void) asm("func_80029FD8");
-void EmitCoursePolyFT4Fog(void) asm("func_8002A218");
-void SubmitCourseSubdividedFaces(void) asm("func_8002A2CC");
+void TransformCourseModel(void);
+void EmitCoursePolyF4Fog(void);
+void EmitCoursePolyFT4Fog(void);
+void SubmitCourseSubdividedFaces(void);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -627,7 +631,7 @@ void SubmitCourseSubdividedFaces(void) asm("func_8002A2CC");
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029EA8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", TransformCourseModel);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -647,7 +651,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_80029FD8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCoursePolyF4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -667,7 +671,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002A218);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCoursePolyFT4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -687,4 +691,4 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", func_8002A2CC);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitCourseSubdividedFaces);

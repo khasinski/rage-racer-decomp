@@ -11,4 +11,4 @@
  * irreducible handwritten-asm signature not reachable from compiler C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/mtx_04", func_80069568);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/mtx_04", MulMatrix2);

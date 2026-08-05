@@ -685,7 +685,6 @@ extern s32 g_MirrorMode;
 extern s16 g_GripLossTimer;
 extern s32 g_RaceSeries;
 extern s16 g_WrongWayTimer;
-void func_80069D18(void *rot, void *mtx);
 s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void PlaySoundCue(s32 id);
@@ -724,7 +723,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
   rotation.vx = *(u16 *)(((u8 *)car) + 0x20);
   rotation.vz = *(u16 *)(((u8 *)car) + 0x28);
   rotation.vy = *(u16 *)(((u8 *)car) + 0x24);
-  func_80069D18(&rotation, &rotationMatrix);
+  RotMatrix(&rotation, &rotationMatrix);
   index = 0;
   pointWalk = (u8 *)(&rotation);
   diagonalWalk = pointWalk;
@@ -795,7 +794,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
           rotation.vx = *(u16 *)(((u8 *)opponent) + 0x20);
           rotation.vz = *(u16 *)(((u8 *)opponent) + 0x28);
           rotation.vy = *(u16 *)(((u8 *)opponent) + 0x24);
-          func_80069D18(&rotation, &rotationMatrix);
+          RotMatrix(&rotation, &rotationMatrix);
           for (cornerOffset = 0; cornerOffset < 16; cornerOffset += 4)
           {
             rotation.vx = *(u16 *)(((u8 *)D_8007DAA0) + cornerOffset);
