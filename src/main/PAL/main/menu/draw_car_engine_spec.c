@@ -20,7 +20,7 @@ typedef struct EngineSpecData {
     s16 unk16;      /* 0x16 */
 } EngineSpecData;
 
-extern EngineSpecData *g_EngineSpec asm("D_8009E698");
+extern EngineSpecData *g_CarModelAsset asm("D_8009E698");
 extern u8 D_80011B5C[];
 
 void drawSprite(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r,
@@ -49,7 +49,7 @@ void func_80052158(s32 a0raw, s32 arg1) {
                (u8)arg1, 0x244, 0, 1, 0x3A);
     drawSprite(ot, 0xB2, 0xCC - arg0, 0x1C, 0xC, 0x10, 0xF4, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3A);
-    n = gsprintf(buf, D_80011B5C, g_EngineSpec->power);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->power);
     drawSmallText(0xD2, 0xCB - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     p = n * 6;
@@ -58,7 +58,7 @@ void func_80052158(s32 a0raw, s32 arg1) {
     drawSprite(ot, p + 0xDF, 0xCC - arg0, 6, 0xC, 0xD8, 0, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3B);
     q = p + 0xE6;
-    n = gsprintf(buf, D_80011B5C, g_EngineSpec->torque);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->torque);
     drawSmallText(q, 0xCB - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     torqueEnd = p + 0xE8;
@@ -69,14 +69,14 @@ void func_80052158(s32 a0raw, s32 arg1) {
                (u8)arg1, 0x244, 0, 1, 0x3A);
     drawSprite(ot, 0xB2, 0xDA - arg0, 0x20, 0xC, 0x2C, 0xF4, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3A);
-    n = gsprintf(buf, D_80011B5C, g_EngineSpec->unk15);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->unk15);
     drawSmallText(0xD2, 0xD9 - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     p = n * 6;
     drawSprite(ot, p + 0xD3, 0xDA - arg0, 3, 0xC, 0xE0, 0, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3B);
     q = p + 0xD5;
-    n = gsprintf(buf, D_80011B5C, g_EngineSpec->unk14);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->unk14);
     drawSmallText(q, 0xD9 - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     p += 0xD7;
@@ -90,7 +90,7 @@ void func_80052158(s32 a0raw, s32 arg1) {
     drawSprite(ot, q + 0x11, 0xDA - arg0, 6, 0xC, 0xD8, 0, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3B);
     q += 0x18;
-    n = gsprintf(buf, D_80011B5C, g_EngineSpec->unk16);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->unk16);
     drawSmallText(q, 0xD9 - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     r = q + 2;

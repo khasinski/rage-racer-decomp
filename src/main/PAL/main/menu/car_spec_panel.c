@@ -202,7 +202,7 @@ const CarSpecGraphColors g_CarSpecGraphColors asm("D_80011870") = {{
 }};
 extern s32 g_CarSpecGraphProgress asm("D_8007FB08");
 extern s32 g_CarSpecBars[4] asm("D_8009B270");
-extern u8 *g_CarSpecGraphAsset asm("D_8009E698");
+extern u8 *g_CarModelAsset asm("D_8009E698");
 
 void DrawCarSpecSprite(void *ot, s16 x, s16 y, s16 w, u16 h, u16 u, u16 v,
                        u8 r, u8 g, u8 b, u16 clut, s32 shadeTex,
@@ -280,27 +280,27 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
 
     {
         s32 *value = &g_CarSpecBars[0];
-        if ((*value < g_CarSpecGraphAsset[0xB]) && (*value < 0x60)) {
+        if ((*value < g_CarModelAsset[0xB]) && (*value < 0x60)) {
             (*value)++;
-        } else if ((g_CarSpecGraphAsset[0xB] < *value) && (*value > 0)) {
+        } else if ((g_CarModelAsset[0xB] < *value) && (*value > 0)) {
             (*value)--;
         }
     }
 
     {
         s32 *value = &g_CarSpecBars[1];
-        if ((*value < g_CarSpecGraphAsset[0xC]) && (*value < 0x60)) {
+        if ((*value < g_CarModelAsset[0xC]) && (*value < 0x60)) {
             (*value)++;
-        } else if ((g_CarSpecGraphAsset[0xC] < *value) && (*value > 0)) {
+        } else if ((g_CarModelAsset[0xC] < *value) && (*value > 0)) {
             (*value)--;
         }
     }
 
     {
         s32 *value = &g_CarSpecBars[2];
-        if ((*value < g_CarSpecGraphAsset[0xD]) && (*value < 0x60)) {
+        if ((*value < g_CarModelAsset[0xD]) && (*value < 0x60)) {
             (*value)++;
-        } else if ((g_CarSpecGraphAsset[0xD] < *value) && (*value > 0)) {
+        } else if ((g_CarModelAsset[0xD] < *value) && (*value > 0)) {
             (*value)--;
         }
     }

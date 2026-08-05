@@ -41,7 +41,7 @@ extern s32 D_8009B374;
 extern s32 D_8009B378;
 extern s32 D_8007BED8;
 extern SwCarRec *D_8019C7C8;
-extern SwObj698 *D_8009E698;
+extern SwObj698 *g_CarModelAsset asm("D_8009E698");
 extern s16 D_8009E782;
 extern s32 D_8009E7B8;
 extern s32 D_8009E718;
@@ -171,7 +171,7 @@ void func_8005131C(void) {
     p = &D_8009E6D4.rotation.y;
     *p = *p + D_801E8268;
     BuildRotMatrixY(&mtxA, *p);
-    vec.z = (s16)(-((s16)D_8009E698->unk4 / 2));
+    vec.z = (s16)(-((s16)g_CarModelAsset->unk4 / 2));
     ApplyMatrixLV(&mtxA, &vec, &out);
     BuildRotMatrixY(&mtxB, 0x800 - *p);
     BuildRotMatrixX(&mtxA, D_8009E6D4.rotation.x);
