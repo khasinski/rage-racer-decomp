@@ -73,12 +73,12 @@ extern s16 D_801E6DA4[]; /* +0x24 s16 table */
 /* Per-slot engine tone, one entry per bank; a slot is re-cued when its two
  * banks disagree. The old g_SoundSlotToneBank1 symbol (D_80082F2A) is [i][1]
  * of this table. Six slots. */
-extern s16 g_SoundSlotTone[][2] asm("D_80082F28");
+extern s16 g_SoundSlotTone[][2];
 
 /*
- * Indexed effect table in rodata at D_800126AC: three entries, twelve bytes
+ * Indexed effect table in rodata at g_IndexedEffects: three entries, twelve bytes
  * each, selected by SetIndexedEffectVoice (index clamped to 0..2). The old
- * g_IndexedEffectVolumes symbol (D_800126B4) is D_800126AC + 8, the third word
+ * g_IndexedEffectVolumes symbol (D_800126B4) is g_IndexedEffects + 8, the third word
  * of the same element, which is why both were indexed by the same i * 12.
  * Retail data: { 14, 0, 64 }, { 14, 0, 64 }, { 16, 0, 90 }.
  */
@@ -88,7 +88,7 @@ typedef struct IndexedEffect {
     s32 volume;
 } IndexedEffect; /* sizeof 0xC */
 
-extern IndexedEffect g_IndexedEffects[] asm("D_800126AC");
+extern IndexedEffect g_IndexedEffects[];
 
 /* Byte-offset view: the retail code keeps i * 12 in a register rather than
  * indexing, so the scaled offset is passed in directly. */

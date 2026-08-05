@@ -4,17 +4,17 @@
 #include "psyq/gpu.h"
 #include "game/cd.h"
 
-extern volatile u32 *g_FmvVlcBuffers[] asm("D_8009AF20");
-extern volatile u32 *g_FmvStripBuffers[] asm("D_8009AF2C");
-extern s32 g_FmvVlcIndex asm("D_8009AF28");
-extern s32 g_FmvStripIndex asm("D_8009AF34");
-extern s32 g_FmvStreamEnded asm("D_8009AF74");
+extern volatile u32 *g_FmvVlcBuffers[];
+extern volatile u32 *g_FmvStripBuffers[];
+extern s32 g_FmvVlcIndex;
+extern s32 g_FmvStripIndex;
+extern s32 g_FmvStreamEnded;
 extern s32 g_FmvState;
-extern s16 g_FmvStripWidth asm("D_8009AF50");
-extern s16 g_FmvStripHeight asm("D_8009AF52");
+extern s16 g_FmvStripWidth;
+extern s16 g_FmvStripHeight;
 extern s32 g_StreamSectorCount;
 extern s32 g_StreamLoc;
-extern char g_MsgFmvSector[] asm("D_80010D30");
+extern char g_MsgFmvSector[];
 
 void DecDCTin(volatile u32 *arg0, s32 arg1);
 void DecDCTout(volatile u32 *arg0, s32 arg1);
@@ -67,10 +67,10 @@ void EndFmv(void) {
     g_StreamReturnScene = g_FmvStreamEnded;
 }
 
-extern volatile u32 g_FmvVlcBuffer0 asm("D_8009AF5C");
-extern volatile u32 g_FmvVlcBuffer1 asm("D_8009AF60");
-extern volatile u32 g_FmvStripBuffer0 asm("D_8009AF64");
-extern volatile u32 g_FmvStripBuffer1 asm("D_8009AF68");
+extern volatile u32 g_FmvVlcBuffer0;
+extern volatile u32 g_FmvVlcBuffer1;
+extern volatile u32 g_FmvStripBuffer0;
+extern volatile u32 g_FmvStripBuffer1;
 extern volatile u16 g_DispEnv0X;
 extern volatile u16 g_DispEnv0Y;
 extern volatile u16 g_DispEnv1X;

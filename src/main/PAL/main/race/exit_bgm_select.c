@@ -3,7 +3,7 @@
 #include "game/render.h"
 #include "game/state.h"
 
-extern char g_TextNowLoading[] asm("D_80011010");
+extern char g_TextNowLoading[];
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);

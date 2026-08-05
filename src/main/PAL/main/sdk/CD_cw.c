@@ -5,23 +5,23 @@
 
 
 
-extern CdCallback g_CdSyncCallback asm("D_8009903C");
-extern CdCallback g_CdReadyCallback asm("D_80099040");
-extern long g_CdDebugLevel asm("D_80099048");
-extern u_char g_CdLastPos[4] asm("D_80099058");
-extern u_char g_CdModeByte asm("D_8009905C");
-extern u_char g_CdLastCommand asm("D_8009905D");
-extern char *g_CdCommandNames[] asm("D_80099060");
-extern char *g_CdIntrNames[] asm("D_800990E0");
-extern long g_CdCommandClearsReady[] asm("D_80099180");
-extern long g_CdCommandParamCount[] asm("D_80099280");
+extern CdCallback g_CdSyncCallback;
+extern CdCallback g_CdReadyCallback;
+extern long g_CdDebugLevel;
+extern u_char g_CdLastPos[4];
+extern u_char g_CdModeByte;
+extern u_char g_CdLastCommand;
+extern char *g_CdCommandNames[];
+extern char *g_CdIntrNames[];
+extern long g_CdCommandClearsReady[];
+extern long g_CdCommandParamCount[];
 /* CD-ROM controller ports 0x1F801800..03, from the data segment. Port 0 is
  * the index/status register; 1..3 are bank-switched by the index it holds. */
 extern volatile u_char *g_CdReg0 asm("D_80099300");
-extern volatile u_char *g_CdReg1 asm("D_80099304");
+extern volatile u_char *g_CdReg1;
 extern volatile u_char *g_CdReg2 asm("D_80099308");
-extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
-extern u_char g_CdSyncResult[8] asm("D_8009BAF0");
+extern volatile CdIntr g_CdSyncStatus;
+extern u_char g_CdSyncResult[8];
 extern u_char g_CdReadyResult[8];
 extern CdAlarm g_CdTimeoutDeadline;
 extern char D_80013814[];

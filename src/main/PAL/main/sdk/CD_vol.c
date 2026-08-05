@@ -3,22 +3,22 @@
 long CD_sync(long arg0, u_char *arg1) asm("func_8006B0D4");
 
 extern volatile u_char *g_CdReg0 asm("D_80099300");
-extern volatile u_char *g_CdReg1 asm("D_80099304");
+extern volatile u_char *g_CdReg1;
 extern volatile u_char *g_CdReg2 asm("D_80099308");
 extern volatile u_char *g_CdReg3 asm("D_8009930C");
-extern long g_CdSyncCallback asm("D_8009903C");
-extern long g_CdReadyCallback asm("D_80099040");
-extern long g_CdStatusByte asm("D_8009904C");
-extern long g_CdErrorByte asm("D_80099050");
-extern u_char g_CdModeByte asm("D_8009905C");
-extern u_char g_CdLastCommand asm("D_8009905D");
-extern volatile u_long *g_ComDelayReg asm("D_80099310");
-extern CdRegisterMap *volatile g_CdSpuRegs asm("D_80099314");
+extern long g_CdSyncCallback;
+extern long g_CdReadyCallback;
+extern long g_CdStatusByte;
+extern long g_CdErrorByte;
+extern u_char g_CdModeByte;
+extern u_char g_CdLastCommand;
+extern volatile u_long *g_ComDelayReg;
+extern CdRegisterMap *volatile g_CdSpuRegs;
 extern u_char D_80013904[];
 extern u_char D_80013910[];
-extern void *g_CdDebugInfo[] asm("D_8009931C");
+extern void *g_CdDebugInfo[];
 
-extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
+extern volatile CdIntr g_CdSyncStatus;
 
 void KernelCallbackSlot3(void);
 void CdDispatchInterrupts(void);

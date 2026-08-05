@@ -1,18 +1,18 @@
 #include "common.h"
 #include "psyq/kernel.h"
 
-extern volatile u_long *g_GpuGp1 asm("D_800942BC");
-extern volatile u_long *g_GpuDmaMadr asm("D_800942C0");
-extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
-extern volatile u_long *g_GpuDpcr asm("D_800942D8");
-extern long g_GpuLastCb[] asm("D_800942DC");
-extern long g_GpuLastCbArg asm("D_800942E0");
-extern long g_GpuLastCbData asm("D_800942E4");
-extern long g_GpuQueueWriteIdx asm("D_800942EC");
-extern volatile long g_GpuQueueReadIdx asm("D_800942F0");
-extern long g_GpuResetIntrMask asm("D_800942FC");
-extern long g_GpuTimeoutDeadline asm("D_80094300");
-extern long g_GpuTimeoutPolls asm("D_80094304");
+extern volatile u_long *g_GpuGp1;
+extern volatile u_long *g_GpuDmaMadr;
+extern volatile u_long *g_GpuDmaChcr;
+extern volatile u_long *g_GpuDpcr;
+extern long g_GpuLastCb[];
+extern long g_GpuLastCbArg;
+extern long g_GpuLastCbData;
+extern long g_GpuQueueWriteIdx;
+extern volatile long g_GpuQueueReadIdx;
+extern long g_GpuResetIntrMask;
+extern long g_GpuTimeoutDeadline;
+extern long g_GpuTimeoutPolls;
 extern char D_8001362C[];
 extern char D_80013660[];
 
@@ -65,8 +65,8 @@ long Gpu_CheckTimeout(void) {
     return result;
 }
 
-extern volatile u_long *g_GpuGp0 asm("D_800942B8");
-extern volatile u_long *g_GpuGp1 asm("D_800942BC");
+extern volatile u_long *g_GpuGp0;
+extern volatile u_long *g_GpuGp1;
 
 /* GPU-type probe: GP1(10h) info word 7, then a texture-window write-back
  * test. Returns 0..4; ResetGraph stores it as the graph type. */

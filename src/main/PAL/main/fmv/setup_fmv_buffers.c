@@ -1,10 +1,10 @@
 #include "common.h"
 
-extern u32 g_FmvRingBuffer asm("D_8009AF58");
-extern u32 g_FmvVlcBuffer0 asm("D_8009AF5C");
-extern u32 g_FmvVlcBuffer1 asm("D_8009AF60");
-extern u32 g_FmvStripBuffer0 asm("D_8009AF64");
-extern u32 g_FmvStripBuffer1 asm("D_8009AF68");
+extern u32 g_FmvRingBuffer;
+extern u32 g_FmvVlcBuffer0;
+extern u32 g_FmvVlcBuffer1;
+extern u32 g_FmvStripBuffer0;
+extern u32 g_FmvStripBuffer1;
 
 void SetupFmvBuffers(u32 arg0);
 void SetupFmvBuffers(u32 arg0) {

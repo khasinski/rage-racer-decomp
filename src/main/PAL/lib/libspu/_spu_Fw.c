@@ -1,12 +1,12 @@
 #include "psyq/spu.h"
 
-extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
-extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
-extern long g_SpuTransferByIo asm("D_8009AB94");
-extern long g_SpuMemMode asm("D_8009AB9C");
-extern long _spu_mem_mode_unitM asm("D_8009ABA0");
-extern u_long g_SpuMemModeUnit asm("D_8009ABA4");
-extern u_long _spu_mem_mode_plus asm("D_8009ABA8");
+extern u_short g_SpuTransferStartAddr;
+extern volatile u_short *g_SpuRegBase;
+extern long g_SpuTransferByIo;
+extern long g_SpuMemMode;
+extern long _spu_mem_mode_unitM;
+extern u_long g_SpuMemModeUnit;
+extern u_long _spu_mem_mode_plus;
 
 long _spu_Fw(long arg0, long arg1) {
     if (g_SpuTransferByIo == 0) {

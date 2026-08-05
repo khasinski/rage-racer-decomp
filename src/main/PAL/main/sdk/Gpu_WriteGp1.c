@@ -5,11 +5,11 @@
 /* The libgpu copy of the hardware pointers, initialised in the data
  * segment: GP0 0x1F801810, GP1 0x1F801814, DMA channel 2 (GPU) MADR/BCR/CHCR
  * 0x1F8010A0/A4/A8. See docs/names.md "Hardware mirrors". */
-extern volatile u_long *g_GpuGp1 asm("D_800942BC");
-extern volatile u_long *g_GpuGp0 asm("D_800942B8");
-extern volatile u_long *g_GpuDmaMadr asm("D_800942C0");
-extern volatile u_long *g_GpuDmaBcr asm("D_800942C4");
-extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
+extern volatile u_long *g_GpuGp1;
+extern volatile u_long *g_GpuGp0;
+extern volatile u_long *g_GpuDmaMadr;
+extern volatile u_long *g_GpuDmaBcr;
+extern volatile u_long *g_GpuDmaChcr;
 extern u_char g_GpuGp1Mirror[];
 
 void Gpu_WriteGp1(u_long arg0);

@@ -3,11 +3,11 @@
 
 typedef void (*Callback)(void);
 
-extern long g_SndNoTickFlag asm("D_8009A55C");
-extern Callback g_SndPrevVSyncCallback asm("D_8009A564");
-extern u_char g_SndTickUsesVSync asm("D_8009A568");
+extern long g_SndNoTickFlag;
+extern Callback g_SndPrevVSyncCallback;
+extern u_char g_SndTickUsesVSync;
 extern u_char D_8009A569;
-extern u_char g_SndTickIrq asm("D_8009A56A");
+extern u_char g_SndTickIrq;
 
 long func_8006DF64(long arg0, Callback arg1);
 void func_8006DFC4(long arg0);

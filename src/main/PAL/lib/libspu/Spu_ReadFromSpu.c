@@ -1,12 +1,12 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long g_SpuTransferMode asm("D_8009A714");
-extern long g_SpuTransferEvent asm("D_8009A768");
-extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
-extern long g_SpuTransferByIo asm("D_8009AB94");
-extern long g_SpuTransferCompleted asm("D_8009ABAC");
-extern long g_SpuTransferCallback asm("D_8009ABB0");
+extern long g_SpuTransferMode;
+extern long g_SpuTransferEvent;
+extern u_short g_SpuTransferStartAddr;
+extern long g_SpuTransferByIo;
+extern long g_SpuTransferCompleted;
+extern long g_SpuTransferCallback;
 
 u_long Spu_ReadFromSpu(long arg0, u_long arg1) {
     u_long size = arg1;

@@ -2,7 +2,7 @@
 
 
 
-extern SpuCommonRegs *g_SpuRegBase asm("D_8009AB7C");
+extern SpuCommonRegs *g_SpuRegBase;
 
 void SpuSetCommonAttr(SpuCommonAttr *attr);
 void SpuSetCommonAttr(SpuCommonAttr *attr) {

@@ -14,11 +14,11 @@ extern void *func_80069CC8(void *, void *);
 /* Chase-view (mode 1) distance preset, 0..2: eye height 0x3A / 0x59 / 0x97 and
  * pull-back 0x118 / 0x140 / 0x190, plus a -0x90 vs -0x60 pitch bias. Sits in
  * .data at 0, and nothing in the image ever writes it, so retail is always 0. */
-extern s32 g_ChaseCameraPreset asm("D_8007F610");
+extern s32 g_ChaseCameraPreset;
 /* Mode-5 orbit camera: a fixed yaw about the car and a fixed pull-back.
  * Both are .data constants with no writer anywhere: 0 and 330 (0x14A). */
-extern s32 g_OrbitCameraYaw asm("D_8007F614");
-extern s32 g_OrbitCameraDistance asm("D_8007F618");
+extern s32 g_OrbitCameraYaw;
+extern s32 g_OrbitCameraDistance;
 /* Mode-3 camera path: the eye is eased from one track-camera node to the next
  * over `node->duration` frames. Each of offset (a local xyz applied through the
  * car's matrix) and orientation (pitch/yaw/roll/distance) keeps a start value,

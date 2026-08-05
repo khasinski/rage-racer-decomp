@@ -5,13 +5,13 @@
 #include "game/render.h"
 
 void UpdateCarDriving();
-void func_80030030();
+void UpdateCarLaunch();
 void UpdateCarAirborne();
 void UpdateCarStandingStart();
 s32 rsin(s32) asm("func_80068568");
 s32 rcos() asm("func_80068634");
-extern s32 g_ShiftTargetSpeed asm("D_8007DA74");
-extern s32 g_RoadGrade asm("D_8007DA78");
+extern s32 g_ShiftTargetSpeed;
+extern s32 g_RoadGrade;
 extern u8 *g_TrackArcCenters;
 /* Deliberately raw: the only initialiser anywhere is InitPlayerCar writing
  * zero, and the only other write is this decrement, so the boost it would add
@@ -852,7 +852,7 @@ void UpdateCarDrivetrain(void *base) {
         break;
 
       case 1:
-        func_80030030(car, var_a1_7);
+        UpdateCarLaunch(car, var_a1_7);
         break;
 
       case 2:

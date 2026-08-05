@@ -36,10 +36,10 @@ typedef struct SwModelPose {
 } SwModelPose;
 
 extern Vec4 D_80011AB4;
-extern Vec4 D_80082D6C;
+extern Vec4 g_MenuViewScale;
 extern s32 g_CarSwapFromIndex;
 extern s32 g_CarSwapToIndex;
-extern s32 D_8007BED8;
+extern s32 g_AssetLoadState;
 extern SwCarRec *g_CarTable;
 extern SwObj698 *g_CarModelAsset;
 extern s16 D_8009E782;
@@ -85,7 +85,7 @@ void DrawMenuCarView(void) {
     *(s32 *)0x1F800020 = 0;
 
     SetCameraRotMatrix();
-    ScaleMatrix((void *)0x1F800028, &D_80082D6C);
+    ScaleMatrix((void *)0x1F800028, &g_MenuViewScale);
 
     if (249999 < g_MenuViewOffsetTarget) {
         if (g_MenuViewOffset < 2500) {
@@ -100,7 +100,7 @@ void DrawMenuCarView(void) {
         if (s3 < 0) {
             if (x <= 299999) {
                 if (g_CarSwapToIndex >= 0) {
-                    if (D_8007BED8 != 0) {
+                    if (g_AssetLoadState != 0) {
                         return;
                     }
                     SwapCarModelSlot();
@@ -114,7 +114,7 @@ void DrawMenuCarView(void) {
             }
         } else {
             if (x > 900000 && g_CarSwapToIndex >= 0) {
-                if (D_8007BED8 != 0) {
+                if (g_AssetLoadState != 0) {
                     return;
                 }
                 SwapCarModelSlot();
@@ -221,7 +221,7 @@ void DrawMenuCarView(void) {
 }
 
 
-extern Vec4 g_MenuViewScale asm("D_80082D6C");
+extern Vec4 g_MenuViewScale;
 extern s32 g_CourseSwapDelay;
 extern s32 g_MenuCourseModelIndex;
 extern s32 g_MenuPendingCourseIndex;

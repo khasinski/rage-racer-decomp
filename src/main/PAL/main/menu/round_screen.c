@@ -115,7 +115,7 @@ void EnterRoundScreen(void) {
     }
 }
 
-extern s16 g_RoundScreenFadeDelays[] asm("D_8007C798");
+extern s16 g_RoundScreenFadeDelays[];
 
 s32 UpdateRoundScreenFade(s32 arg0);
 s32 UpdateRoundScreenFade(s32 arg0) {
@@ -146,7 +146,7 @@ s32 UpdateRoundScreenFade(s32 arg0) {
 }
 
 extern s32 g_BgmSelection;
-extern char *g_BgmTrackNames[] asm("D_8007C7A0");
+extern char *g_BgmTrackNames[];
 extern char D_80010D2C[];
 
 extern char D_80010C30[];

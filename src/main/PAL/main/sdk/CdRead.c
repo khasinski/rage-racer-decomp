@@ -4,13 +4,13 @@
 #include "game/render.h"
 void SetShadeTex(u_char *prim, long enabled) asm("func_80064EB8");
 
-extern volatile long g_CdReadSectorCount asm("D_8007D790");
-extern volatile long g_CdReadBuffer asm("D_8007D794");
-extern volatile long g_CdReadMode asm("D_8007D79C");
-extern volatile long g_CdReadSectorWords asm("D_8007D7A0");
-extern volatile long g_CdReadStartVSync asm("D_8007D7AC");
-extern volatile long g_CdReadSavedSyncCallback asm("D_8007D7B4");
-extern volatile long g_CdReadSavedReadyCallback asm("D_8007D7B8");
+extern volatile long g_CdReadSectorCount;
+extern volatile long g_CdReadBuffer;
+extern volatile long g_CdReadMode;
+extern volatile long g_CdReadSectorWords;
+extern volatile long g_CdReadStartVSync;
+extern volatile long g_CdReadSavedSyncCallback;
+extern volatile long g_CdReadSavedReadyCallback;
 long CdSyncCallback(long arg0);
 long CdReadyCallback(long arg0) asm("func_8006A58C");
 long VSync(long mode);
@@ -18,11 +18,11 @@ long CdStatus(void);
 long CdControlB(long arg0, void *arg1, long arg2);
 long CdReadRetry(long arg0);
 void CdReady(long arg0, long arg1) asm("func_8006A554");
-extern long g_CdReadCallback asm("D_8007D78C");
+extern long g_CdReadCallback;
 extern u_char D_8007D7BC[];
 extern u_char D_8007D7BD[];
 extern u_char D_8007D87C[];
-extern u_char D_8007BED0[];
+extern u_char g_DrawModeEnv[];
 void SetSprt(u_char *prim);
 void AddPrim(void *ot, void *prim);
 void *func_800666F4(void *prim, long a, long b, long c, void *d);
@@ -180,7 +180,7 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
             x += D_8007D87C[idx];
         } while (*sr != 0);
     }
-    func_800666F4(next, 0, 1, 0x1D, D_8007BED0);
+    func_800666F4(next, 0, 1, 0x1D, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, next);
     *(u_char **)0x1F800000 = next + 0xC;
 }

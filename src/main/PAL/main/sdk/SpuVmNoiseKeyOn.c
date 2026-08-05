@@ -10,7 +10,7 @@ extern u_short g_SndVoiceRegs[];
 extern u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char g_SndVoiceCount;
 extern short g_SndMonoMode;
-extern volatile u_short *g_SndSpuRegs asm("D_8009A588");
+extern volatile u_short *g_SndSpuRegs;
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern u_short D_8009E670;

@@ -10,14 +10,14 @@ typedef struct LastCb {
 } LastCb;
 
 extern volatile QEntry g_GpuQueue[];
-extern volatile long g_GpuQueueWriteIdx asm("D_800942EC");
-extern volatile long g_GpuQueueReadIdx asm("D_800942F0");
-extern long g_ExecQueueIntrMask asm("D_800942F8");
-extern volatile LastCb g_GpuLastCb asm("D_800942DC");
-extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
-extern volatile u_long *g_GpuGp1 asm("D_800942BC");
-extern u_char g_DrawSyncCbPending[] asm("D_800941F0");
-extern volatile long g_DrawSyncCallback asm("D_800941F4");
+extern volatile long g_GpuQueueWriteIdx;
+extern volatile long g_GpuQueueReadIdx;
+extern long g_ExecQueueIntrMask;
+extern volatile LastCb g_GpuLastCb;
+extern volatile u_long *g_GpuDmaChcr;
+extern volatile u_long *g_GpuGp1;
+extern u_char g_DrawSyncCbPending[];
+extern volatile long g_DrawSyncCallback;
 
 extern long SetIntrMask(long);
 extern void DMACallback(long, void *);

@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/cd.h"
 
-extern s32 g_CdMixPreset asm("D_8007F5FC");
-extern u8 g_CdMixPresets[] asm("D_8007F5A8");
+extern s32 g_CdMixPreset;
+extern u8 g_CdMixPresets[];
 extern u8 g_CdVolume;
 extern s32 g_CdMixFullLL;
 extern s32 g_CdMixFullLR;

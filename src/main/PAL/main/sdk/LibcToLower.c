@@ -4,7 +4,7 @@
 #include "game/cd.h"
 #include "game/memcard.h"
 
-extern u_char g_LibcCtype[] asm("D_80082FD9");
+extern u_char g_LibcCtype[];
 
 long LibcToLower(long arg0);
 long LibcToLower(long arg0) {

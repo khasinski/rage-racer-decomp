@@ -4,17 +4,17 @@
 #include "psyq/gpu.h"
 
 extern QEntry g_GpuQueue[];
-extern volatile long g_GpuQueueWriteIdx asm("D_800942EC");
-extern long g_GpuQueueReadIdx asm("D_800942F0");
-extern long g_AddQueueIntrMask asm("D_800942F4");
-extern u_char g_GpuLastCb[] asm("D_800942DC");
-extern long g_GpuLastCbArg asm("D_800942E0");
-extern long g_GpuLastCbData asm("D_800942E4");
-extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
-extern volatile u_long *g_GpuGp1 asm("D_800942BC");
-extern u_char g_DrawSyncCbPending[] asm("D_800941F0");
-extern volatile u_char g_GraphQueue asm("D_800941E9");
-extern long g_DrawSyncCallback asm("D_800941F4");
+extern volatile long g_GpuQueueWriteIdx;
+extern long g_GpuQueueReadIdx;
+extern long g_AddQueueIntrMask;
+extern u_char g_GpuLastCb[];
+extern long g_GpuLastCbArg;
+extern long g_GpuLastCbData;
+extern volatile u_long *g_GpuDmaChcr;
+extern volatile u_long *g_GpuGp1;
+extern u_char g_DrawSyncCbPending[];
+extern volatile u_char g_GraphQueue;
+extern long g_DrawSyncCallback;
 
 extern void Gpu_ArmTimeout(void);
 extern long Gpu_CheckTimeout(void);

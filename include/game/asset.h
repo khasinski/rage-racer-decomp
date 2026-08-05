@@ -4,7 +4,7 @@
 #include "common.h"
 
 /* Asset-load state machine phase (0 idle; 1..6 drive LoadAsset loads). */
-extern s32 g_AssetLoadState asm("D_8007BED8");
+extern s32 g_AssetLoadState;
 
 /* The asset sub-block currently being installed: `assetBase + <header offset>`,
  * then handed to UploadImageAsset / UploadImageBlock. */
@@ -16,14 +16,14 @@ extern u8 *g_AssetBlockPtr;
  * [74..85] GP0..GP11.TMS, [86] VOICE.BIN, [87..134] the track packs
  * (index 0x57 + (course << 1) + (class << 3)).
  */
-extern char *g_AssetPaths[] asm("D_8007C48C");
+extern char *g_AssetPaths[];
 
 /* Load asset assetIndex into dst; returns loaded size/status. */
 s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
 
 /* Phase of LoadAsset's own CD state machine, 0..6 (seek, SetLoc, CdRead,
  * wait, success, failure). Sequences one transfer, unlike g_AssetLoadState. */
-extern s16 g_CdLoadPhase asm("D_8007C700");
+extern s16 g_CdLoadPhase;
 
 typedef struct GameCdLoadEntry {
     u32 position;
@@ -36,7 +36,7 @@ extern GameCdLoadEntry g_AssetCdEntries[];
 
 /* The same for the 11 streams in "\RAGE.STR;1"; BeginClassFmv picks
  * `1 + class` in the first series and `5 + class` in the advanced one. */
-extern GameCdLoadEntry g_StreamCdEntries[] asm("D_8007C6A8");
+extern GameCdLoadEntry g_StreamCdEntries[];
 
 /* Boot CD scratch buffer: the RAGE.BIN index first, then asset 0. */
 extern s32 g_LoadBuffer[];

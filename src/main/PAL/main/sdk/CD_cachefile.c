@@ -14,8 +14,8 @@ typedef struct
   long f0;
   u_char rest[40];
 } Rec44;
-extern long g_CdCachedDir asm("D_80099348");
-extern long g_CdDebugLevel asm("D_80099048");
+extern long g_CdCachedDir;
+extern long g_CdDebugLevel;
 extern Entry g_CdFileCache[64];
 extern Rec44 D_8009C0F0[];
 extern u_char g_CdSectorBuf[0x800];

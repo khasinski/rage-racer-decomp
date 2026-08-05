@@ -24,7 +24,7 @@ void ApplyBodyColor1(s32 arg0, s32 arg1);
 void ApplyBodyColor2(s32 arg0, s32 arg1);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 PollAudioSlotLoad(void);
-extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
+extern s32 g_PendingCarModelIndex;
 void ServiceAssetLoad(void);
 
 s32 RequestCarSelectAssets(void);

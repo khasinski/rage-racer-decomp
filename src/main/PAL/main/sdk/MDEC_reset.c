@@ -5,23 +5,23 @@
 /* libmdec hardware, from the data segment: DMA channel 0 (MDEC in) and
  * channel 1 (MDEC out) MADR/BCR/CHCR at 0x1F801080.. and 0x1F801090..,
  * the MDEC command port 0x1F801820 and control/status 0x1F801824. */
-extern volatile u_long *g_MdecInDmaMadr asm("D_80083164");
-extern volatile u_long *g_MdecInDmaBcr asm("D_80083168");
-extern volatile u_long *g_MdecInDmaChcr asm("D_8008316C");
-extern volatile u_long *g_MdecOutDmaMadr asm("D_80083170");
-extern volatile u_long *g_MdecOutDmaBcr asm("D_80083174");
-extern volatile u_long *g_MdecOutDmaChcr asm("D_80083178");
-extern volatile u_long *g_MdecCmdReg asm("D_80083194");
-extern volatile u_long *g_MdecCtrlReg asm("D_80083198");
-extern volatile u_long *g_MdecDpcr asm("D_8008319C");
+extern volatile u_long *g_MdecInDmaMadr;
+extern volatile u_long *g_MdecInDmaBcr;
+extern volatile u_long *g_MdecInDmaChcr;
+extern volatile u_long *g_MdecOutDmaMadr;
+extern volatile u_long *g_MdecOutDmaBcr;
+extern volatile u_long *g_MdecOutDmaChcr;
+extern volatile u_long *g_MdecCmdReg;
+extern volatile u_long *g_MdecCtrlReg;
+extern volatile u_long *g_MdecDpcr;
 extern u_char D_800132C8[];
 extern u_char D_800132E4[];
 extern u_char D_800132F4[];
 extern u_char D_80013304[];
 extern u_char D_8001332C[];
 extern u_char D_80013364[];
-extern u_char g_MdecQuantCmd[] asm("D_8008305C");
-extern u_char g_MdecIdctCmd[] asm("D_800830E0");
+extern u_char g_MdecQuantCmd[];
+extern u_char g_MdecIdctCmd[];
 
 long MDEC_in_sync(void);
 long MDEC_out_sync(void);

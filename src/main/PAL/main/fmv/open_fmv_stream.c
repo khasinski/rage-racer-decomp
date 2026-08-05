@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern s32 g_FmvRingBuffer asm("D_8009AF58");
+extern s32 g_FmvRingBuffer;
 extern s32 g_StreamLoc;
 void DecDCTReset(s32 arg0);
 void DecDCToutCallback(s32 arg0);
@@ -17,24 +17,24 @@ void OpenFmvStream(s32 arg0) {
     StartStreamRead(g_StreamLoc);
 }
 
-extern volatile u32 *g_FmvStripBuffers[] asm("D_8009AF2C");
-extern Rect g_FmvStripRects[] asm("D_8009AF38");
-extern volatile s32 g_FmvStripIndex asm("D_8009AF34");
-extern volatile s32 g_FmvStripRectIndex asm("D_8009AF48");
+extern volatile u32 *g_FmvStripBuffers[];
+extern Rect g_FmvStripRects[];
+extern volatile s32 g_FmvStripIndex;
+extern volatile s32 g_FmvStripRectIndex;
 /* One 4-halfword Rect at 0x8009AF4C. g_FmvUploadRectX/Y are its x/y and
  * g_FmvStripWidth/Height are its w/h: an MDEC strip and the VRAM rect it is
  * uploaded to are the same object, which is why the four halfwords are
  * declared as scalars, the x volatile because it is bumped one strip at a
  * time; the LoadImage copy reads the same four halfwords back as a Rect. */
-extern volatile s16 g_FmvUploadRectX asm("D_8009AF4C");
-extern volatile s16 g_FmvUploadRectY asm("D_8009AF4E");
-extern s16 g_FmvStripWidth asm("D_8009AF50");
-extern s16 g_FmvStripHeight asm("D_8009AF52");
-extern volatile s32 g_FmvStripDone asm("D_8009AF54");
+extern volatile s16 g_FmvUploadRectX;
+extern volatile s16 g_FmvUploadRectY;
+extern s16 g_FmvStripWidth;
+extern s16 g_FmvStripHeight;
+extern volatile s32 g_FmvStripDone;
 extern s32 g_StInterruptPending;
 
 void DecDCTout(volatile u32 *arg0, s32 arg1);
-void LoadImage(Rect *rect, void *data) asm("func_80065B24");
+void LoadImage(Rect *rect, void *data);
 void StCdInterrupt(void);
 
 void UploadFmvSlice(void);

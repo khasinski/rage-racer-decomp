@@ -60,7 +60,7 @@ void LoadEnvironmentCue();
 void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3);
 /* Deliberately unprototyped: the original passes only the rect and leaves
  * a1 live, so the psyq/gpu.h LoadImage prototype cannot be used here. */
-void func_80065B24();
+void LoadImage();
 void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_80069B14(void *arg0, s32 arg1, void *arg2);
 void func_800686D4(s32 arg0, s32 arg1);
@@ -250,7 +250,7 @@ void UpdateEnvironment(void) {
     rect.y = 0x1E6;
     rect.w = 0x10;
     rect.h = 0x1;
-    func_80065B24(&rect);
+    LoadImage(&rect);
 
     /* cur = lerp(from, to, frac) for slots 0..4, then one of the two alternate
      * pairs. Slot 0 is the fog colour SetFarColor gets three lines below. */

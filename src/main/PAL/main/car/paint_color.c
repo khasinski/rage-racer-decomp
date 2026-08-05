@@ -101,13 +101,13 @@ void BlendPaintColorQuarters(u32 arg0, u32 arg1) {
  * compiler into the jal delay slot; no hand-written asm is needed.
  */
 
-extern u16 g_BodyColorPrimary[] asm("D_8007D30C");
-extern u16 g_BodyColorSecondary[] asm("D_8007D330");
+extern u16 g_BodyColorPrimary[];
+extern u16 g_BodyColorSecondary[];
 /* Clut word offsets of each paint ramp inside the car texture's palette:
  * nine 3-stop ramps for body colour 1, eight for body colour 2, and four
  * 4-stop ramps shared by both. */
-extern volatile u16 g_PaintSlots3StopA[] asm("D_8007D354");
-extern volatile u16 g_PaintSlots4Stop[] asm("D_8007D378");
+extern volatile u16 g_PaintSlots3StopA[];
+extern volatile u16 g_PaintSlots4Stop[];
 
 void BlendPaintColor(u32 arg0, u32 arg1);
 void BlendPaintColorThirds(u32 arg0, u32 arg1);
@@ -178,10 +178,10 @@ void SetBodyColor1(u32 arg0) {
     UploadCarImage(g_CarModelSlot);
 }
 
-extern u16 g_BodyColorPrimary[] asm("D_8007D30C");
-extern u16 g_BodyColorSecondary[] asm("D_8007D330");
-extern volatile u16 g_PaintSlots3StopB[] asm("D_8007D368");
-extern volatile u16 g_PaintSlots4Stop[] asm("D_8007D378");
+extern u16 g_BodyColorPrimary[];
+extern u16 g_BodyColorSecondary[];
+extern volatile u16 g_PaintSlots3StopB[];
+extern volatile u16 g_PaintSlots4Stop[];
 
 void BlendPaintColor(u32 arg0, u32 arg1);
 void BlendPaintColorThirds(u32 arg0, u32 arg1);

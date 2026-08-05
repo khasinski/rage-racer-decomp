@@ -1,11 +1,11 @@
 #include "psyq/kernel.h"
 
-extern u_short g_IntrState[] asm("D_80099430");
-extern u_short g_IntrSavedIrqMask asm("D_80099462");
-extern u_long g_IntrSavedDpcr asm("D_80099464");
-extern volatile u_short *g_IrqStatus asm("D_8009A4BC");
-extern volatile u_short *g_IrqMask asm("D_8009A4C0");
-extern volatile u_long *g_KernelDpcr asm("D_8009A4C4");
+extern u_short g_IntrState[];
+extern u_short g_IntrSavedIrqMask;
+extern u_long g_IntrSavedDpcr;
+extern volatile u_short *g_IrqStatus;
+extern volatile u_short *g_IrqMask;
+extern volatile u_long *g_KernelDpcr;
 
 void *StopKernelInterrupts(void);
 void *StopKernelInterrupts(void) {

@@ -6,9 +6,9 @@
  * value at +0x1C. The player walks g_CameraPathKey -> g_CameraPathNextKey
  * over g_CameraPathTick frames and wraps to key 0 when a duration is -1.
  */
-extern volatile s32 g_CameraPathKey asm("D_8007F61C");
-extern s32 g_CameraPathNextKey asm("D_8007F620");
-extern s32 g_CameraPathTick asm("D_8007F624");
+extern volatile s32 g_CameraPathKey;
+extern s32 g_CameraPathNextKey;
+extern s32 g_CameraPathTick;
 /* One scripted-camera keyframe: eye position, look-at target, how long the
  * player dwells on it and the Bezier control value used to ease out of it. */
 typedef struct CameraKey {
@@ -22,7 +22,7 @@ typedef struct CameraKey {
     s32 control;
 } CameraKey;
 
-extern CameraKey g_CameraPath[] asm("D_8007F628");
+extern CameraKey g_CameraPath[];
 
 /* The retail code re-derives the keyframe address at every field access rather
  * than holding a pointer, so this stays a macro: a real pointer variable lets

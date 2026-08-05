@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
+extern volatile u_short *g_SpuRegBase;
 
 void _spu_startDmaTransfer(long arg0, long arg1, long arg2);
 

@@ -1,10 +1,10 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
-extern u8 g_GraphDebug asm("D_800941EA");
+extern GpuCallbacks *g_GpuFuncs;
+extern u8 g_GraphDebug;
 /* libgpu's printf hook; every GPU trace string goes through it. */
-extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
+extern void (*GPU_printf)(char *, ...);
 extern char D_800135CC[];
 extern char D_800135E0[];
 extern char D_800135F8[];

@@ -3,20 +3,20 @@
 
 extern volatile u_char *g_CdReg0 asm("D_80099300");
 extern volatile u_char *g_CdReg3 asm("D_8009930C");
-extern volatile u_long *g_ComDelayReg asm("D_80099310");
-extern volatile u_long *g_CdromDelayReg asm("D_80099334");
-extern volatile u_long *g_CdDpcr asm("D_80099338");
-extern volatile u_long *g_CdDmaMadr asm("D_8009933C");
-extern volatile u_long *g_CdDmaBcr asm("D_80099340");
-extern volatile u_long *g_CdDmaChcr asm("D_80099344");
+extern volatile u_long *g_ComDelayReg;
+extern volatile u_long *g_CdromDelayReg;
+extern volatile u_long *g_CdDpcr;
+extern volatile u_long *g_CdDmaMadr;
+extern volatile u_long *g_CdDmaBcr;
+extern volatile u_long *g_CdDmaChcr;
 extern long D_800992E4;
 
 
-extern CdCallback g_CdSyncCallback asm("D_8009903C");
-extern CdCallback g_CdReadyCallback asm("D_80099040");
-extern u_char g_CdSyncStatus asm("D_80099318");
-extern u_char g_CdReadyStatus asm("D_80099319");
-extern u_char g_CdSyncResult[] asm("D_8009BAF0");
+extern CdCallback g_CdSyncCallback;
+extern CdCallback g_CdReadyCallback;
+extern u_char g_CdSyncStatus;
+extern u_char g_CdReadyStatus;
+extern u_char g_CdSyncResult[];
 extern u_char g_CdReadyResult[];
 
 long CdReadInterruptStatus(void);

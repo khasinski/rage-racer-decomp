@@ -81,7 +81,7 @@ extern s16 g_PlayerLap;
 
 extern s32 g_WaypointSpawnCooldown;
 
-extern TrackWaypointSeed g_WaypointSeeds[] asm("D_8007DFD4");
+extern TrackWaypointSeed g_WaypointSeeds[];
 
 extern TrackWaypointRuntime g_Waypoints[];
 

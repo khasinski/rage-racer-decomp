@@ -167,7 +167,7 @@ void BeginEndingFmv(void) {
     D_8019C708 = value * 4;
 }
 
-extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
+extern s32 g_PendingCarModelIndex;
 
 void LoadBootAssets(void);
 void LoadSaveScreenAssets(void);

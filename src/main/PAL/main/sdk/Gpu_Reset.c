@@ -1,12 +1,12 @@
 #include "common.h"
 #include "psyq/kernel.h"
 
-extern volatile u_long *g_GpuGp1 asm("D_800942BC");
-extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
-extern volatile u_long *g_GpuDpcr asm("D_800942D8");
-extern long g_GpuQueueWriteIdx asm("D_800942EC");
-extern volatile long g_GpuQueueReadIdx asm("D_800942F0");
-extern long g_GpuResetIntrMask asm("D_800942FC");
+extern volatile u_long *g_GpuGp1;
+extern volatile u_long *g_GpuDmaChcr;
+extern volatile u_long *g_GpuDpcr;
+extern long g_GpuQueueWriteIdx;
+extern volatile long g_GpuQueueReadIdx;
+extern long g_GpuResetIntrMask;
 extern u_char g_GpuGp1Mirror[];
 extern u_char g_GpuQueue[];
 

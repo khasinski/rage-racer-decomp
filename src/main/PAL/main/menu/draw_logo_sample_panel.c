@@ -5,8 +5,8 @@ void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 col
 extern s32 D_8007FB24;
 extern s32 D_8007FB28;
 extern s32 D_8009B28C;
-extern u8 D_8007F45C;
-extern u8 D_8007F460[];
+extern u8 g_TeamNameLength;
+extern u8 g_TeamNameChars[];
 extern u16 g_TeamLogoSwatches[];
 
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
@@ -99,8 +99,8 @@ void func_8004E724(s32 arg0, s32 arg1) {
             D_8007FB28 = 0;
         }
     }
-    if ((D_8007FB28 >= 0x19) && ((u8)D_8007F45C < 6U)) {
-        DrawLogoSprite(temp_s7, (D_8007F45C * 0xC) + 0x53, 0x7D, 0xC, 0x18, 0xF4, 0x28, 0,
+    if ((D_8007FB28 >= 0x19) && ((u8)g_TeamNameLength < 6U)) {
+        DrawLogoSprite(temp_s7, (g_TeamNameLength * 0xC) + 0x53, 0x7D, 0xC, 0x18, 0xF4, 0x28, 0,
                        0, 0, 0x244, 1, 1, 0x39);
     }
     animationStep = D_8007FB28 - 0xE;
@@ -198,26 +198,26 @@ void func_8004E724(s32 arg0, s32 arg1) {
         }
         i = 0;
         var_a2 = ((u32)-(animationStep * 0x178) >> 5) + 0xF9;
-        if (i < (s32)D_8007F45C) {
+        if (i < (s32)g_TeamNameLength) {
             do {
-                temp_v1 = D_8007F460[i];
+                temp_v1 = g_TeamNameChars[i];
                 if (temp_v1 < 0xAU) {
                     xFirst = (i * 0xC) + 0x56;
                     DrawLogoSprite(temp_s7, (xFirst << 16) >> 16, var_a2, 8,
                                    (s32)(s16)(animationStep * 2),
-                                   (s32)(s16)((D_8007F460[i] & 0x1F) * 8),
-                                   (s32)(s16)((D_8007F460[i] >> 5) * 16 + 0x18), 0, 0, 0,
+                                   (s32)(s16)((g_TeamNameChars[i] & 0x1F) * 8),
+                                   (s32)(s16)((g_TeamNameChars[i] >> 5) * 16 + 0x18), 0, 0, 0,
                                    0x244, 1, 1, 0x3B);
                 } else if (temp_v1 >= 0xBU) {
                     xSecond = (i * 0xC) + 0x56;
                     DrawLogoSprite(temp_s7, (xSecond << 16) >> 16, var_a2, 8,
                                    (s32)(s16)(animationStep * 2),
-                                   (s32)(s16)(((D_8007F460[i] - 1) % 32) * 8),
-                                   (s32)(s16)(((D_8007F460[i] - 1) / 32) * 16 + 0x18), 0, 0, 0,
+                                   (s32)(s16)(((g_TeamNameChars[i] - 1) % 32) * 8),
+                                   (s32)(s16)(((g_TeamNameChars[i] - 1) / 32) * 16 + 0x18), 0, 0, 0,
                                    0x244, 1, 1, 0x3B);
                 }
                 i += 1;
-            } while (i < (s32)D_8007F45C);
+            } while (i < (s32)g_TeamNameLength);
         }
     }
     if (arg0 > 0) {

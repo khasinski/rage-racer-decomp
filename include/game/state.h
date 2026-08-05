@@ -5,12 +5,12 @@
 
 /* Top-level scene/state machine, dispatched by ServiceAssetLoad; 1 = the
  * asset-load driver, other values are individual screens. */
-extern s32 g_MainState asm("D_8007C704");
+extern s32 g_MainState;
 
 /* Current top-level game mode; indexes g_GameModeHandlers, dispatched each
  * frame by UpdateOptionScene. Distinct from g_MainState (the scene dispatcher). */
 extern s32 g_GameMode;
-extern void (*g_GameModeHandlers[])(void) asm("D_8007D67C");
+extern void (*g_GameModeHandlers[])(void);
 
 /* MainLoop is the PS-EXE `main` and never returns: init chain, then an
  * endless per-frame loop (CD audio, sequencer, asset loads, the current
@@ -70,7 +70,7 @@ extern s32 g_SceneTimer asm("D_801E40B8");
 
 /* Free-running animation phase counter: drives cyclic effects (sine offsets,
  * blink tests `& 2` / `& 8`, `% 6` cycles), never a deadline. */
-extern s32 g_AnimTimer asm("D_8009E694");
+extern s32 g_AnimTimer;
 
 /*
  * FMV playback ("\RAGE.STR;1" streams). One of the three GameBegin*Fmv wrappers

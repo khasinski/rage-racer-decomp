@@ -84,18 +84,18 @@ extern char D_800133F4[];
 extern char D_80013410[];
 extern char D_8001342C[];
 extern char D_80013438[];
-extern void (*D_800941E4)(char *, ...);
+extern void (*GPU_printf)(char *, ...);
 
 void DumpDrawEnv(DrawEnv *arg0);
 void DumpDrawEnv(DrawEnv *arg0) {
     s32 mode;
     u32 value;
 
-    D_800941E4(D_8001339C, arg0->clip.x, arg0->clip.y, arg0->clip.w, arg0->clip.h);
-    D_800941E4(D_800133B4, arg0->ofs[0], arg0->ofs[1]);
-    D_800941E4(D_800133C4, arg0->tw.x, arg0->tw.y, arg0->tw.w, arg0->tw.h);
-    D_800941E4(D_800133DC, arg0->dtd);
-    D_800941E4(D_800133E8, arg0->dfe);
+    GPU_printf(D_8001339C, arg0->clip.x, arg0->clip.y, arg0->clip.w, arg0->clip.h);
+    GPU_printf(D_800133B4, arg0->ofs[0], arg0->ofs[1]);
+    GPU_printf(D_800133C4, arg0->tw.x, arg0->tw.y, arg0->tw.w, arg0->tw.h);
+    GPU_printf(D_800133DC, arg0->dtd);
+    GPU_printf(D_800133E8, arg0->dfe);
 
     mode = func_800657E4();
     switch (0) { default:
@@ -109,33 +109,33 @@ void DumpDrawEnv(DrawEnv *arg0) {
 
     }
     value = arg0->tpage;
-    D_800941E4(D_80013374, (value >> 9) & 3, (value >> 7) & 3, (value * 64) & 0x7C0, (value * 8) & 0x300);
+    GPU_printf(D_80013374, (value >> 9) & 3, (value >> 7) & 3, (value * 64) & 0x7C0, (value * 8) & 0x300);
     return;
 
     }
     value = arg0->tpage;
-    D_800941E4(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
+    GPU_printf(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
 }
 
 void DumpDispEnv(DispEnv *arg0);
 void DumpDispEnv(DispEnv *arg0) {
-    D_800941E4(D_800133F4, arg0->disp.x, arg0->disp.y, arg0->disp.w, arg0->disp.h);
-    D_800941E4(D_80013410, arg0->screen.x, arg0->screen.y, arg0->screen.w, arg0->screen.h);
-    D_800941E4(D_8001342C, arg0->isinter);
-    D_800941E4(D_80013438, arg0->isrgb24);
+    GPU_printf(D_800133F4, arg0->disp.x, arg0->disp.y, arg0->disp.w, arg0->disp.h);
+    GPU_printf(D_80013410, arg0->screen.x, arg0->screen.y, arg0->screen.w, arg0->screen.h);
+    GPU_printf(D_8001342C, arg0->isinter);
+    GPU_printf(D_80013438, arg0->isrgb24);
 }
 
 extern char D_80013478[];
 extern char D_80013498[];
-extern u8 g_GpuJumpTable[] asm("D_800941A0");
-extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
-extern u8 g_GraphType[] asm("D_800941E8");
-extern u8 g_GraphQueue asm("D_800941E9");
-extern u8 g_GraphDebug asm("D_800941EA");
-extern u16 g_VramWidth asm("D_800941EC");
-extern u16 g_VramHeight asm("D_800941EE");
-extern u8 g_VramWidthTable[] asm("D_80094268");
-extern u8 g_VramHeightTable[] asm("D_8009427C");
+extern u8 g_GpuJumpTable[];
+extern GpuCallbacks *g_GpuFuncs;
+extern u8 g_GraphType[];
+extern u8 g_GraphQueue;
+extern u8 g_GraphDebug;
+extern u16 g_VramWidth;
+extern u16 g_VramHeight;
+extern u8 g_VramWidthTable[];
+extern u8 g_VramHeightTable[];
 
 void func_80068180(u8 *dst, s32 value, s32 count);
 void GPU_cw(void *arg0);
@@ -178,16 +178,16 @@ void ResetGraph(s32 mode) {
         graphType = *(volatile u8 *)graphState;
     } else {
         if (g_GraphDebug >= 2) {
-            D_800941E4(D_80013498, mode);
+            GPU_printf(D_80013498, mode);
         }
         g_GpuFuncs->resetGraph(1);
     }
 }
 
-extern void (* volatile GPU_printf)(char *, ...) asm("D_800941E4");
-extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
-extern u8 g_GraphDebug asm("D_800941EA");
-extern u8 g_GraphReverse asm("D_800941EB");
+extern void (* volatile GPU_printf)(char *, ...);
+extern GpuCallbacks *g_GpuFuncs;
+extern u8 g_GraphDebug;
+extern u8 g_GraphReverse;
 extern char D_800134AC[];
 extern char D_800134C4[];
 

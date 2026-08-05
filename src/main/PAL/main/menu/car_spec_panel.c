@@ -3,7 +3,7 @@
 #include "game/state.h"
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047460");
 
-extern s32 g_BrowseArrowsFade asm("D_8007FB04");
+extern s32 g_BrowseArrowsFade;
 extern s32 D_8009B268;
 extern s32 D_8009B26C;
 extern s32 g_MenuAltLayout;
@@ -200,7 +200,7 @@ const CarSpecGraphColors g_CarSpecGraphColors = {{
     {0x54, 0x1C, 0x94, 0},
     {0x2C, 0x12, 0x83, 0},
 }};
-extern s32 g_CarSpecGraphProgress asm("D_8007FB08");
+extern s32 g_CarSpecGraphProgress;
 extern s32 g_CarSpecBars[4];
 extern u8 *g_CarModelAsset;
 

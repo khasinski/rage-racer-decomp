@@ -14,7 +14,7 @@
 /* Static text buffers the two time drawers format into, seeded in .data with
  * "0'00\"000" and "00'00\"". The named split symbols are the digit positions
  * each writer touches; the separators are never rewritten. */
-extern u8 g_TimeTextBuffer[] asm("D_8007DF04");
+extern u8 g_TimeTextBuffer[];
 
 void func_80016754(s32 x, s32 y, void *str, s32 color);
 
@@ -68,10 +68,10 @@ void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     func_80016754(savedX, savedY, g_TimeTextBuffer, savedColor);
 }
 
-extern u8 g_ClockTextBuffer asm("D_8007DF10");
-extern u8 g_ClockTextMinUnits[] asm("D_8007DF11");
-extern u8 g_ClockTextSecTens asm("D_8007DF13");
-extern u8 g_ClockTextSecUnits asm("D_8007DF14");
+extern u8 g_ClockTextBuffer;
+extern u8 g_ClockTextMinUnits[];
+extern u8 g_ClockTextSecTens;
+extern u8 g_ClockTextSecUnits;
 
 void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color);
 void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
@@ -210,9 +210,9 @@ void BuildTileStrips(void) {
 }
 
 extern s32 g_RacePaused;
-extern s32 g_CountdownBoardOffset asm("D_8007DF18");
-extern u32 g_CountdownDigitPatterns[16] asm("D_8007DEC0");
-extern CVec g_CountdownCellColors[] asm("D_8007DF1C");
+extern s32 g_CountdownBoardOffset;
+extern u32 g_CountdownDigitPatterns[16];
+extern CVec g_CountdownCellColors[];
 
 s32 GameQueueDrawModePrimWide(
     s32 ot, s32 prim, s32 tpage) asm("func_80017390");
@@ -418,10 +418,10 @@ void DrawStartCountdown(s32 sceneTimer) {
     *(TILE **)0x1F800000 = tiles;
 }
 
-extern s16 g_RaceOptionScroll0 asm("D_8007DF30");
-extern s16 g_RaceOptionScroll1 asm("D_8007DF32");
-extern char g_RaceOptionMarquee[4][40] asm("D_8007DF34");
-extern s32 g_RaceOptionPulseAngle asm("D_8007DF2C");
+extern s16 g_RaceOptionScroll0;
+extern s16 g_RaceOptionScroll1;
+extern char g_RaceOptionMarquee[4][40];
+extern s32 g_RaceOptionPulseAngle;
 extern u8 *g_CourseProgress;
 
 s32 rcos(s32 angle) asm("func_80068634");

@@ -26,7 +26,7 @@ void SetPolyFT4(void *);
 void SetPolyG4(void *)asm("func_80064F58");
 s32 GameSin(s32) asm("func_80068568");
 s32 GameCos(s32) asm("func_80068634");
-extern s16 g_SkyTileMap[][16] asm("D_8007F470");
+extern s16 g_SkyTileMap[][16];
 extern s32 g_MirrorMode;
 extern s32 g_CourseIndex;
 extern s32 g_SkyRowBase;
@@ -132,7 +132,7 @@ typedef struct
   s16 x3;
   s16 y3;
 } POLY_G4;
-extern SkyTileUV g_SkyTileUV[] asm("D_8007F510");
+extern SkyTileUV g_SkyTileUV[];
 typedef struct
 {
   u8 r;
@@ -937,7 +937,7 @@ void GameDrawSkyBackground(void)
   return;
 }
 
-extern s32 g_CdTrackPending asm("D_8007F600");
-extern s32 g_CdCommandPending asm("D_8007F604");
-extern s32 g_CdTrackStep asm("D_8007F608");
-extern s32 g_CdCommandStep asm("D_8007F60C");
+extern s32 g_CdTrackPending;
+extern s32 g_CdCommandPending;
+extern s32 g_CdTrackStep;
+extern s32 g_CdCommandStep;

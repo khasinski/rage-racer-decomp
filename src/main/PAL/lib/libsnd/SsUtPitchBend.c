@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern short *g_SndSpuRegs asm("D_8009A588");
+extern short *g_SndSpuRegs;
 /* One 16-byte block per voice, so voice n's left volume is
  * g_SndVoiceRegs[n * 8] and its right volume is g_SndVoiceRegs[n * 8 + 1]. */
 extern short g_SndVoiceRegs[];

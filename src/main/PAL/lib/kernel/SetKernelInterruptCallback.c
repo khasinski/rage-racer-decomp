@@ -4,9 +4,9 @@
 
 typedef void (*Callback)(void);
 
-extern Callback g_IntrCallbacks[] asm("D_80099434");
-extern u_short g_IntrCallbackMask asm("D_80099460");
-extern volatile u_short *g_IrqMask asm("D_8009A4C0");
+extern Callback g_IntrCallbacks[];
+extern u_short g_IntrCallbackMask;
+extern volatile u_short *g_IrqMask;
 
 void ChangeClearRCnt(long clear) asm("func_8006DF14");
 void ChangeClearInterruptMask(long index, long clear) asm("func_8006DF24");

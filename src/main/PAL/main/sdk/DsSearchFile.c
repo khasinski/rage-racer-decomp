@@ -6,9 +6,9 @@ typedef struct Rec {
     char name[16];
 } Rec;
 
-extern long g_CdCachedShellOpenCount asm("D_8009934C");
-extern long g_CdShellOpenCount asm("D_80099054");
-extern long g_CdDebugLevel asm("D_80099048");
+extern long g_CdCachedShellOpenCount;
+extern long g_CdShellOpenCount;
+extern long g_CdDebugLevel;
 extern Rec g_CdFileCache[64];
 
 extern const char D_80013928[];

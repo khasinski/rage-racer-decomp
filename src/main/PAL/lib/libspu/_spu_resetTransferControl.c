@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
+extern volatile u_short *g_SpuRegBase;
 
 long _spu_resetTransferControl(void) {
     volatile long i;

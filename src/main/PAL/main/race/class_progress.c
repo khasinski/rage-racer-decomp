@@ -6,10 +6,10 @@
 
 extern s32 g_PrizeAmount;
 extern s32 g_PromotionBonus;
-extern u8 g_CaptionPrizeMoney[] asm("D_80010E30");
-extern u8 g_FmtMoney[] asm("D_80010E34");
-extern u8 g_CaptionTotalMoney[] asm("D_80010E38");
-extern u8 g_CaptionPromotionBonus[] asm("D_80010E40");
+extern u8 g_CaptionPrizeMoney[];
+extern u8 g_FmtMoney[];
+extern u8 g_CaptionTotalMoney[];
+extern u8 g_CaptionPromotionBonus[];
 void func_80016EA0(s32 id, void *dst, void *src, s32 arg3);
 void LibcSprintf(void *dst, void *fmt, s32 val) asm("func_800632F0");
 extern s32 g_CourseProgress;
@@ -44,8 +44,8 @@ extern s32 g_PrizeCountStep;
 extern s32 g_BonusCountStep;
 /* &g_PrizeMoney[0][0][2], i.e. the third-place column; the prize counter's
  * step is that figure divided by 80. */
-extern s32 g_PrizeMoney3rd[][6][3] asm("D_8007BEF4");
-extern s32 g_PromotionBonusTable[] asm("D_8007C00C");
+extern s32 g_PrizeMoney3rd[][6][3];
+extern s32 g_PromotionBonusTable[];
 void PlaySoundCue(s32 cue);
 
 void DrawPrizeMoneyPanel(u8 *s0);

@@ -13,7 +13,7 @@ extern u16 g_PadMappingIndexSaved;
 extern u16 g_NegconMappingIndexSaved;
 /* 0 while a controller is present, else the error code the banner reports. */
 extern s32 g_PadErrorState;
-extern s32 g_SetupArrowPulse asm("D_8007C13C");
+extern s32 g_SetupArrowPulse;
 extern s32 g_PadConfigFlipDirection;
 extern s32 g_ControllerSceneAngleY;
 extern s32 g_PadConfigFlipTimer;

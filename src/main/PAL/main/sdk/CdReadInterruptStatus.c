@@ -4,7 +4,7 @@
 
 /*
  * LEFT RAW ON PURPOSE (docs/names.md 17i). This is libcd's interrupt decoder:
- * it reads the 8-byte response FIFO, decodes intr codes 1..5 into D_80099318
+ * it reads the 8-byte response FIFO, decodes intr codes 1..5 into g_CdSyncStatus
  * and the two result buffers, and is drained in a while loop by CD_sync,
  * CD_ready, CD_cw and the IRQ2 handler. Every other libcd internal in this
  * image was pinned because it stores its own name into a trace slot; this one
@@ -20,21 +20,21 @@
  */
 
 extern volatile u_char *g_CdReg0 asm("D_80099300");
-extern volatile u_char *g_CdReg1 asm("D_80099304");
+extern volatile u_char *g_CdReg1;
 extern volatile u_char *g_CdReg2 asm("D_80099308");
 extern volatile u_char *g_CdReg3 asm("D_8009930C");
-extern long g_CdDebugLevel asm("D_80099048");
-extern u_long g_CdStatusByte asm("D_8009904C");
-extern u_long g_CdErrorByte asm("D_80099050");
-extern u_long g_CdShellOpenCount asm("D_80099054");
-extern u_long g_CdCommandNames[] asm("D_80099060");
-extern u_long g_CdCommandHasComplete[] asm("D_80099100");
-extern u_long g_CdCommandAckHasStatus[] asm("D_80099200");
-extern u_char g_CdLastCommand asm("D_8009905D");
-extern volatile u_char g_CdSyncStatus asm("D_80099318");
-extern volatile u_char g_CdReadyStatus asm("D_80099319");
-extern volatile u_char g_CdDataEndStatus asm("D_8009931A");
-extern u_char g_CdSyncResult asm("D_8009BAF0");
+extern long g_CdDebugLevel;
+extern u_long g_CdStatusByte;
+extern u_long g_CdErrorByte;
+extern u_long g_CdShellOpenCount;
+extern u_long g_CdCommandNames[];
+extern u_long g_CdCommandHasComplete[];
+extern u_long g_CdCommandAckHasStatus[];
+extern u_char g_CdLastCommand;
+extern volatile u_char g_CdSyncStatus;
+extern volatile u_char g_CdReadyStatus;
+extern volatile u_char g_CdDataEndStatus;
+extern u_char g_CdSyncResult;
 extern u_char g_CdReadyResult;
 extern u_char g_CdDataEndResult;
 extern u_char D_80013840;

@@ -7,9 +7,9 @@ s32 GetCarAssetIndex(s32 model, s32 grade);
 /* Progress level needed to buy this model's next grade. */
 s32 GetCarUnlockLevel(s32 model);
 
-extern u8 g_CarModelBaseIndex[] asm("D_8007C464");
-extern u8 g_CarModelUnlockBase[] asm("D_8007C474");
-extern u32 g_CarImageRect asm("D_8007C484");
+extern u8 g_CarModelBaseIndex[];
+extern u8 g_CarModelUnlockBase[];
+extern u32 g_CarImageRect;
 extern u8 D_8019C86C;
 extern u8 D_8009EC94;
 extern void *g_CarModelAsset;
@@ -23,7 +23,7 @@ extern void *g_CellVisibilityTable;
 extern s32 D_801E4144;
 extern void *g_CarImageSlots[];
 extern void *g_CarModelSlots[];
-void LoadImage(void *rect, void *data) asm("func_80065B24");
+void LoadImage(void *rect, void *data);
 
 s32 GetCarAssetIndex(s32 model, s32 grade) {
     return g_CarModelBaseIndex[model] + grade;
@@ -33,7 +33,7 @@ s32 GetCarUnlockLevel(s32 model) {
     return g_CarTable[model].modelVariant + g_CarModelUnlockBase[model];
 }
 
-void InitRenderState(s32 arg0) asm("func_80017884");
+void InitRenderState(s32 arg0);
 void InitRenderState(s32 arg0) {
     register s32 value asm("$2");
     register s32 ptr asm("$2");

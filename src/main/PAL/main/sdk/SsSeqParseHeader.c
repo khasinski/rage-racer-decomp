@@ -3,8 +3,8 @@
 
 extern u_char *g_SndSeqTable[];
 extern u_long g_SndTickResolution;
-extern char g_MsgSeqNotSeqData[] asm("D_80013BD4");
-extern char g_MsgSeqOldFormat[] asm("D_80013BEC");
+extern char g_MsgSeqNotSeqData[];
+extern char g_MsgSeqOldFormat[];
 
 long func_80070D70(short arg0, short arg1);
 

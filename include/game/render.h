@@ -5,7 +5,7 @@
 #include "psyq/gte.h"
 
 /* A ready-made SPRT description; BuildSpriteFromDesc expands it into a scratchpad
- * SPRT. D_8007DAE0 is the one instance. */
+ * SPRT. g_TachoNeedleSprite is the one instance. */
 typedef struct GameSpriteDesc {
     u16 x;
     u16 y;
@@ -212,7 +212,7 @@ void BuildRotMatrixX(void *mtx, s32 angle);
  */
 void SetCameraRotMatrix(void);
 /*
- * atan2 over the arctangent table D_8007B664, in 12-bit angle units
+ * atan2 over the arctangent table g_AtanTable, in 12-bit angle units
  * (0x400 = 90 degrees). Argument order is (x, y), the reverse of C's atan2:
  * Atan2(0, +y) is 0x400.
  */
@@ -222,7 +222,7 @@ s32 Atan2(s32 x, s32 y);
 s32 GetAngleDelta(s32 from, s32 to);
 /* (s32 a, s32 b); left unprototyped because UpdateCarDrivetrain calls it with two
  * extra arguments that the original left live in a2/a3. */
-s32 GetAngleDistance() asm("func_8002A788");
+s32 GetAngleDistance();
 
 /*
  * Sets up both environments for the frame and clears to (r, g, b):
@@ -705,7 +705,7 @@ static __inline__ u8 *GameQueueTexturePacketWide(
         ot, prim, x, y, w, h, u, v, uSpan, vSpan, clutIndex, tpage);
 }
 /*
- * DR_MODE, 12 bytes: SetDrawMode(prim, 0, 1, tpage, &D_8007BED0) + AddPrim.
+ * DR_MODE, 12 bytes: SetDrawMode(prim, 0, 1, tpage, &g_DrawModeEnv) + AddPrim.
  * This is the "blend packet" the GameDraw* emitters above append when their
  * alpha argument is not 0xFF. SetDrawModePacket only fills the packet in
  * place (no AddPrim, no cursor advance) and has no callers in the retail EXE.
@@ -716,7 +716,7 @@ void SetDrawModePacket(u8 *prim, s32 tpage);
 /*
  * A third font, separate from the small (6x12) / large (8x16) pair above:
  * fixed 8x8 SPRT_8 cells on tpage 9, uv from the two-byte-per-glyph table
- * D_8007C2F8 indexed by (ch - 0x20), 8 pixels of advance per character. Each
+ * g_Font8x8Cells indexed by (ch - 0x20), 8 pixels of advance per character. Each
  * variant closes the run with its own DR_MODE packet (tpage 9 / 0x29 / 0x49)
  * and stores the scratchpad cursor back itself.
  */
@@ -730,8 +730,8 @@ void GameDrawText8x8Shaded(
 void DrawText8x8Trans(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016A18");
 /*
  * The proportional font: 12-pixel-tall SPRT cells. Characters below 'a' use
- * the {u, v} pairs at D_8007C3B8 with fixed 12x12 cells; 'a'..'u' and 'v'+ use
- * the {u, v, width, advance} rows at D_8007C438 / D_8007C460, so lowercase is
+ * the {u, v} pairs at g_PropFontU with fixed 12x12 cells; 'a'..'u' and 'v'+ use
+ * the {u, v, width, advance} rows at g_WordFontU / g_HighFontU, so lowercase is
  * proportionally spaced. Space advances 12 and emits nothing.
  * `intensity` == 0x100 selects the opaque raw-texture path (SetShadeTex);
  * anything else is written to r = g = b with SetSemiTrans.

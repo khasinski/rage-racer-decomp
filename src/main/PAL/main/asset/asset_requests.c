@@ -6,8 +6,8 @@
 s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
 
 extern u8 *g_AssetLoadCursor;
-extern Rect g_TeamLogoClutRect asm("D_8007BEDC");
-extern Rect g_TeamLogoRect asm("D_8007BEE4");
+extern Rect g_TeamLogoClutRect;
+extern Rect g_TeamLogoRect;
 extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
 void UploadImageAsset(void *arg0);

@@ -15,8 +15,8 @@ void GameInitPad(void) {
 /* Eight selectable button-mapping presets per controller, one row of eight
  * button masks each: g_PadButtonPresets for the standard pad, g_NegconButtonPresets for the
  * NeGcon. */
-extern u16 g_PadButtonPresets[] asm("D_8007C028");
-extern u16 g_NegconButtonPresets[] asm("D_8007C0A8");
+extern u16 g_PadButtonPresets[];
+extern u16 g_NegconButtonPresets[];
 /* The live mapping UpdatePadState reads: the pad's eight masks at +0,
  * the NeGcon's eight at +0x10. */
 extern u16 g_PadButtonMapping[];
@@ -85,11 +85,11 @@ extern u8 g_PadBufferButtonsLow;
 extern s32 D_801E4D14;
 extern s32 g_PadErrorState;
 extern s32 D_8019CB10;
-extern u16 g_PadPrevHeld asm("D_8007C138");
-extern u8 g_PadRepeatTimer[] asm("D_8009AEEC");
+extern u16 g_PadPrevHeld;
+extern u8 g_PadRepeatTimer[];
 extern u16 D_8007C128[][2];
 extern s16 g_NegconSteerPlay;
-extern s16 g_NegconSteerRange[] asm("D_8007C020");
+extern s16 g_NegconSteerRange[];
 extern s16 g_NegconMaxTwist;
 extern s16 g_NegconNeutralI;
 extern s16 g_NegconNeutralII;

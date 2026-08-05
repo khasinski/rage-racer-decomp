@@ -6,7 +6,7 @@
 extern SpuVoice g_SndVoiceState[];
 extern u_short D_8009E670;
 extern u_short D_8009E674;
-extern u_short *g_SndSpuRegs asm("D_8009A588");
+extern u_short *g_SndSpuRegs;
 extern u_char g_SndVoiceCount;
 extern SvmCurrentAttr g_SndCurrentAttr;
 extern u_short D_801F2A08;

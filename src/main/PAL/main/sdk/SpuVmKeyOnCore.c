@@ -10,7 +10,7 @@ extern volatile u_short D_8009E674;
 extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern u_char g_SndVoiceCount;
-extern volatile u_char *g_SndSpuRegs asm("D_8009A588");
+extern volatile u_char *g_SndSpuRegs;
 
 void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_short right);
 void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_short right) {

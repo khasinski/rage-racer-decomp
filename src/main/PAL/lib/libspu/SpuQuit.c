@@ -1,11 +1,11 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long g_SpuTransferEvent asm("D_8009A768");
-extern long g_SpuIsStarted asm("D_8009AB70");
+extern long g_SpuTransferEvent;
+extern long g_SpuIsStarted;
 /* Transfer/IRQ callback slots, shared with the SPU interrupt handler; every
  * other unit that touches them declares them volatile as well. */
-extern void (*volatile g_SpuTransferCallback)(void) asm("D_8009ABB0");
+extern void (*volatile g_SpuTransferCallback)(void);
 extern void (*volatile D_8009ABB4)(void);
 
 void SpuQuit(void) {

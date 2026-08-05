@@ -4,7 +4,7 @@ extern SeqStruct *g_SndSeqTable[];
 
 long func_80070D70(long seq, short sep);
 void ContDataEntry(short seq, short sep, u_char value);
-void SsSeqIndexChannel(long channel, short vab, u_char prog, short volume, long pan) asm("func_800771AC");
+void SsSeqIndexChannel(long channel, short vab, u_char prog, short volume, long pan);
 void func_8007701C(short vab, u_char prog, u_char volume);
 void SpuVmDamperOff(void);
 void SpuVmDamperOn(void);

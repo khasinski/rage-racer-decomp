@@ -71,13 +71,13 @@ extern s32 g_Shuttle1AngleZ;
  * g_ShuttlePathDwellMax one s16 per path, the frames held at an endpoint.
  * g_ShuttlePath2Points is the split symbol for &g_ShuttlePathPoints[2].
  */
-extern s32 g_ShuttlePath2Points[] asm("D_8007E3A0");
+extern s32 g_ShuttlePath2Points[];
 typedef struct ShuttlePath {
     Vec4 endpoint[2];
 } ShuttlePath;
 
-extern ShuttlePath g_ShuttlePathPoints[] asm("D_8007E360");
-extern SVec g_ShuttlePathAngles[] asm("D_8007E3C0");
+extern ShuttlePath g_ShuttlePathPoints[];
+extern SVec g_ShuttlePathAngles[];
 
 /* Byte-offset views. These stay macros because the retail code keeps the
  * scaled index in a register and re-derives the address at every field; a
@@ -87,7 +87,7 @@ extern SVec g_ShuttlePathAngles[] asm("D_8007E3C0");
  * changes what the surrounding barriers do -- see common.h. */
 #define PATH(byteOffset) (*(ShuttlePath *)((u8 *)g_ShuttlePathPoints + (byteOffset)))
 #define ANGLES(byteOffset) (*(SVec *)((u8 *)g_ShuttlePathAngles + (byteOffset)))
-extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
+extern s16 g_ShuttlePathDwellMax[];
 
 void InitShuttleScenery(void);
 

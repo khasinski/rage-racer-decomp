@@ -75,17 +75,17 @@ extern s32 g_TrackPointCount;
 void DrawCourseScenery(s32 course, s32 timer, s32 animate);
 void DrawCourseScenery2(s32 timer, s32 animate);
 
-/* The two-part animated prop at D_8007E2C0[0..1]: a 16-phase model swap plus a
+/* The two-part animated prop at g_AnimSceneryPos[0..1]: a 16-phase model swap plus a
  * companion part. Grand Prix only, nothing drawn in class 5. */
 void DrawAnimatedScenery(s32 timer, s32 instance);
 void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate);
 
 /* The spinners: 1 on MYTHICAL COAST, 3 on OVER PASS CITY from class 2 up. A
- * 12-bit angle in D_8007E334[] spins about Z at a rate re-randomised every
+ * 12-bit angle in g_SpinningSceneryAngle[] spins about Z at a rate re-randomised every
  * 512 frames. */
 void DrawSpinningScenery(s32 timer, s32 animate);
 
-/* The static landmark at D_8007E340 (40594, 6002, 11940), on all four courses;
+/* The static landmark at g_StaticSceneryPos (40594, 6002, 11940), on all four courses;
  * pass 1 for THE EXTREME OVAL's +0x5000 z shift. Model 0x3A or 0x3B depending
  * on g_IsEnvironmentMode4. */
 void DrawStaticScenery(s32 shifted);
@@ -95,7 +95,7 @@ void DrawStaticScenery(s32 shifted);
 void DrawHighClassScenery(void);
 
 /* State of a shuttling prop: it runs between the two endpoints of its path in
- * D_8007E360, dwells, then reverses. Paths and timings in names.md 5b. */
+ * g_ShuttlePathPoints, dwells, then reverses. Paths and timings in names.md 5b. */
 typedef struct GameShuttleScenery {
     s32 dwellCounter;  /* +0x00 frames waited at the endpoint, capped at g_ShuttlePathDwellMax[path] */
     s32 unk04;

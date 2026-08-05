@@ -15,8 +15,8 @@ typedef struct Entry {
 extern u_char g_CdSectorBuf[];
 extern W4 g_CdRootDirLba;
 extern Entry g_CdPathTable[];
-extern long g_CdDebugLevel asm("D_80099048");
-extern long g_CdCachedDir asm("D_80099348");
+extern long g_CdDebugLevel;
+extern long g_CdCachedDir;
 
 extern const char D_800139B4[];
 extern const char D_800139E0[];
@@ -36,7 +36,7 @@ extern void LibcMemcpy(char *, u_char *, long);
  * signature, follows it to the path/directory sector, then walks the packed
  * variable-length records (record length in *p, name at p+8) copying each into
  * an Entry (index, header word, flags, name). Returns 1 on success, 0 on error.
- * D_80099048 is the debug-verbosity level gating the DebugPrintf logging.
+ * g_CdDebugLevel is the debug-verbosity level gating the DebugPrintf logging.
  */
 /* Rebuilds the ISO path-table cache after a disc change: reads the primary
  * volume descriptor at sector 16, checks "CD001", then parses up to 128

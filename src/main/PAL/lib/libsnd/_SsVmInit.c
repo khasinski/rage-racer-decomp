@@ -6,7 +6,7 @@ extern volatile u_short D_801F2A08;
 extern volatile u_short D_801F2A0C;
 extern volatile u_short D_8009E670;
 extern volatile u_short D_8009E674;
-extern u_short *g_SndSpuRegs asm("D_8009A588");
+extern u_short *g_SndSpuRegs;
 extern u_char g_SndVoiceState[];
 extern u_char g_SndVoiceStateAge[];
 extern u_char g_SndVoiceStatePitch[];

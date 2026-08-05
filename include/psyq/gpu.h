@@ -177,7 +177,7 @@ typedef struct DrawPacket {
 } DrawPacket;
 
 /*
- * The libgpu driver table at 0x800941A0 (D_800941E0 points at it), dumped in
+ * The libgpu driver table at 0x800941A0 (g_GpuFuncs points at it), dumped in
  * asm/PAL/main/data/main/6BE64.data.s. Slots holding a `u_long` are worker
  * function addresses passed to `send` rather than called directly:
  *   +0x04 _addque        +0x08 Gpu_AddQueue      +0x0C Gpu_ClearImage
@@ -206,7 +206,7 @@ typedef struct GpuCallbacks {
 } GpuCallbacks;
 
 /*
- * The libgpu global env head at D_800941E0. The same twelve bytes are spelled
+ * The libgpu global env head at g_GpuFuncs. The same twelve bytes are spelled
  * as separate globals elsewhere (g_GpuFuncs, the printf hook, g_GraphType,
  * g_GraphQueue, g_GraphDebug, g_GraphReverse, g_VramWidth, g_VramHeight);
  * both spellings are load-bearing, because gcc 2.6.3 treats a struct member
@@ -267,7 +267,9 @@ void *ClearOTagR(u_long *ot, long count);
  * Rect * or a GpuRectPacked *, and gcc 2.6.3 will not accept both against one
  * prototype. */
 void ClearImage(void *rect, u_char r, u_char g, u_char b);
-void LoadImage(Rect *rect, void *data) asm("func_80065B24");
+/* K&R: UpdateEnvironment calls this with the rect alone, leaving a1 live from
+ * the preceding code.  TUs that want the checked form redeclare it locally. */
+void LoadImage();
 void StoreImage(Rect *rect, void *data);
 long MoveImage(GpuRectPacked *rect, u_long x, u_long y) asm("func_80065BEC");
 /* LibRef47 6-33 returns long (queue length for mode 1); no caller here uses the
@@ -303,7 +305,7 @@ void SetDrawMode(
     void *tw) asm("func_800666F4");
 long LoadClut(void *clut, long x, long y);
 long LoadClut2(void *clut, long x, long y);
-/* D_800941E8 (mode) and D_800941EA (debug level) accessors. */
+/* g_GraphType (mode) and g_GraphDebug (debug level) accessors. */
 long GetGraphType(void) asm("func_800657E4");
 long GetGraphDebug(void);
 /* GP1(03h) display enable: 0 blanks the screen (and clears the cached

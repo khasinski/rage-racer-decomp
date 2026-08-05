@@ -4,7 +4,7 @@
 long GetGraphType(void) asm("func_800657E4");
 
 
-void LoadImage(Rect *rect, void *data) asm("func_80065B24");
+void LoadImage(Rect *rect, void *data);
 long GetTPage(long arg0, long arg1, long arg2, long arg3);
 
 long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6);
@@ -163,7 +163,7 @@ long GetClut(long arg0, long arg1) {
 
 extern char D_80013374[];
 /* libgpu's printf hook; every GPU trace string goes through it. */
-extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
+extern void (*GPU_printf)(char *, ...);
 
 void DumpTPage(long arg0);
 void DumpTPage(long arg0) {

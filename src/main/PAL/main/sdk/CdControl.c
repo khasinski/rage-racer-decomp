@@ -2,16 +2,16 @@
 
 #include "common.h"
 
-extern long g_CdCommandNeedsSetloc[] asm("D_80098FBC");
-extern long g_CdSyncCallback asm("D_8009903C");
-extern u_char g_CdStatusByte asm("D_8009904C");
+extern long g_CdCommandNeedsSetloc[];
+extern long g_CdSyncCallback;
+extern u_char g_CdStatusByte;
 
 long CD_cw(long arg0, void *arg1, long arg2, long arg3) asm("func_8006B620");
 
 /*
  * Core CD command sender with retry: issues command `arg0` (low byte) with the
  * parameter bytes at `arg1` and result flags `arg2`, retrying up to 3 times.
- * Saves/restores the CD mode D_8009903C around the call. Heavily register-
+ * Saves/restores the CD mode g_CdSyncCallback around the call. Heavily register-
  * pinned to match; the C identifiers may be renamed but the asm("$N") pins and
  * offsets must not change.
  */
@@ -120,9 +120,9 @@ done:
     return result + 1;
 }
 
-extern long g_CdCommandNeedsSetloc[] asm("D_80098FBC");
-extern long g_CdSyncCallback asm("D_8009903C");
-extern u_char g_CdStatusByte asm("D_8009904C");
+extern long g_CdCommandNeedsSetloc[];
+extern long g_CdSyncCallback;
+extern u_char g_CdStatusByte;
 
 long CD_cw(long arg0, void *arg1, long arg2, long arg3) asm("func_8006B620");
 long CD_sync(long arg0, long arg1) asm("func_8006B0D4");

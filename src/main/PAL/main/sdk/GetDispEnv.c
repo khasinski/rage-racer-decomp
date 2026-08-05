@@ -1,12 +1,12 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern u_char g_DispEnvCache asm("D_80094254");
+extern u_char g_DispEnvCache;
 void MemCopy(long arg0, void *arg1, long arg2);
 long GetDispEnv(long arg0);
 long GetDispEnv(long arg0) { MemCopy(arg0, &g_DispEnvCache, 0x14); return arg0; }
 
-extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncs;
 
 u_long GetODE(void);
 u_long GetODE(void) {
@@ -63,8 +63,8 @@ void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4
     pkt->x1y1 = func_80066C2C(arg4);
 }
 
-extern u_short g_VramWidth[] asm("D_800941EC");
-extern u_short g_VramHeight[] asm("D_800941EE");
+extern u_short g_VramWidth[];
+extern u_short g_VramHeight[];
 
 typedef struct DrawEnvPacketSource {
     Rect clip;

@@ -15,14 +15,14 @@ void SeekEnvironmentScript(s32) asm("func_800458CC");
 
 
 
-/* Elements 0, 1 and 2 of g_RefSectorTimes (D_8009AF90). They CANNOT be spelled
+/* Elements 0, 1 and 2 of g_RefSectorTimes (g_RefSectorTimes). They CANNOT be spelled
  * g_RefSectorTimes[k] here: with one array symbol GCC 2.6.3 CSEs the base
  * address into a and reschedules around it, which shifts the
  * allocation of the whole surrounding block. Three symbols keep three separate
  * %hi/%lo pairs, which is what the retail code has. */
-extern s32 g_RefSectorTimes asm("D_8009AF90");
-extern s32 g_RefSectorTime1 asm("D_8009AF94");
-extern s32 g_RefSectorTime2 asm("D_8009AF98");
+extern s32 g_RefSectorTimes;
+extern s32 g_RefSectorTime1;
+extern s32 g_RefSectorTime2;
 
 
 
@@ -140,10 +140,10 @@ extern s16 g_RivalCueCooldown2;
 
 extern s16 g_RivalCueCooldown3;
 
-extern u8 g_MsgGame0Ok[] asm("D_80011488");
+extern u8 g_MsgGame0Ok[];
 
 
-void InitRenderState(s32) asm("func_80017884");
+void InitRenderState(s32);
 
 void ResetReplayWriteCursor(void);
 

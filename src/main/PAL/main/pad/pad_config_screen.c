@@ -3,7 +3,7 @@
 #include "game/state.h"
 
 /* Six 4-byte {x, y} label slots; `labelRow` names one per action. */
-extern DVec g_PadLabelSlots[] asm("D_8007C150");
+extern DVec g_PadLabelSlots[];
 
 /* Local wide-parameter views; see GameQueueSprite.c. */
 u8 *QueueSpriteTransWide(
@@ -79,8 +79,8 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
 
 /* Screen positions, six 4-byte {x, y} rows each: where a label sits and where
  * the button it names sits. */
-extern DVec g_PadCalloutLabelPoints[] asm("D_8007C168");
-extern DVec g_PadCalloutButtonPoints[] asm("D_8007C180");
+extern DVec g_PadCalloutLabelPoints[];
+extern DVec g_PadCalloutButtonPoints[];
 
 /* Screen animation counter; the callouts only draw while it is settled. */
 extern s32 g_ControllerSceneAngleY;
@@ -125,8 +125,8 @@ u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
 
 /* Eight rows of five bytes: the label slot each action sits in, and the button
  * each label points at, for the standard pad. */
-extern u8 g_PadConfigLabelRows[] asm("D_8007C1C0");
-extern u8 g_PadConfigButtonRows[] asm("D_8007C1E8");
+extern u8 g_PadConfigLabelRows[];
+extern u8 g_PadConfigButtonRows[];
 
 extern s16 g_PadMappingIndex;
 
@@ -139,8 +139,8 @@ u8 *DrawPadConfigDiagram(void *ot, u8 *prim) {
 }
 
 /* The NeGcon counterparts of g_PadConfigLabelRows / g_PadConfigButtonRows. */
-extern u8 g_NegconConfigLabelRows[] asm("D_8007C210");
-extern u8 g_NegconConfigButtonRows[] asm("D_8007C238");
+extern u8 g_NegconConfigLabelRows[];
+extern u8 g_NegconConfigButtonRows[];
 
 extern s16 g_NegconMappingIndex;
 

@@ -12,16 +12,16 @@
 
 typedef void *va_list;
 
-extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
-extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
-extern volatile u_long *g_SpuDmaMadr asm("D_8009AB80");
-extern volatile u_long *g_SpuDmaBcr asm("D_8009AB84");
-extern volatile u_long *g_SpuDmaChcr asm("D_8009AB88");
-extern volatile u_long *g_SpuDelayReg asm("D_8009AB90");
-extern long _spu_mem_mode_unitM asm("D_8009ABA0");
-extern long g_SpuTransferIsRead asm("D_8009ABC8");
-extern long g_SpuDmaTransferAddr asm("D_8009ABCC");
-extern long g_SpuDmaBlockCount asm("D_8009ABD0");
+extern u_short g_SpuTransferStartAddr;
+extern volatile u_short *g_SpuRegBase;
+extern volatile u_long *g_SpuDmaMadr;
+extern volatile u_long *g_SpuDmaBcr;
+extern volatile u_long *g_SpuDmaChcr;
+extern volatile u_long *g_SpuDelayReg;
+extern long _spu_mem_mode_unitM;
+extern long g_SpuTransferIsRead;
+extern long g_SpuDmaTransferAddr;
+extern long g_SpuDmaBlockCount;
 
 long _spu_t(long op, ...);
 long _spu_t(long op, ...) {

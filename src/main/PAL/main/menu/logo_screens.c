@@ -25,14 +25,14 @@ extern s32 D_8019CAB8;
 extern void *D_801E8A44;
 extern s32 D_801F1804;
 extern u16 g_TeamLogoClut[];
-extern Rect g_TeamLogoClutRect asm("D_8007BEDC");
+extern Rect g_TeamLogoClutRect;
 extern u8 D_80082844;
-extern u8 g_UiChromeScript2 asm("D_80082790");
+extern u8 g_UiChromeScript2;
 extern u8 D_80081C14;
-extern u8 g_UiChromeScript asm("D_80082460");
+extern u8 g_UiChromeScript;
 extern u8 D_80082574;
 extern u8 D_80082664;
-extern u8 g_MenuBlankCaption asm("D_80011BA0");
+extern u8 g_MenuBlankCaption;
 
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
@@ -45,7 +45,7 @@ void RampTeamLogoCanvas(s32 arg0, s32 arg1);
 void UpdateTeamLogoCanvas(void);
 void DrawLogoSamplePanel(s32 arg0, s32 arg1);
 void PlaySoundCue(s32 cue);
-void LoadImage(Rect *rect, void *data) asm("func_80065B24");
+void LoadImage(Rect *rect, void *data);
 
 void UpdateTeamLogoScreen(void);
 void UpdateTeamLogoScreen(void)

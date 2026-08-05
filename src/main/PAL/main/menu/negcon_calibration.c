@@ -22,7 +22,7 @@ extern u8 *g_DrawBuffer;
 /* The 0..3 steering-play setting this screen edits. */
 extern s16 g_NegconSteerPlay;
 /* Play in hundredths of a degree per setting; the gauge marks scale from it. */
-extern s16 g_NegconPlayPercent[] asm("D_8007C260");
+extern s16 g_NegconPlayPercent[];
 
 void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex);
 
@@ -118,7 +118,7 @@ extern u8 g_PadType;
 /* Its backup, taken by BeginNegconCalibration. */
 extern u16 g_NegconSteerPlaySaved;
 /* The arrow pulse angle the setup screens advance every frame. */
-extern s32 g_SetupArrowPulse asm("D_8007C13C");
+extern s32 g_SetupArrowPulse;
 /* One of the four controller-screen animation counters. */
 extern s32 g_ControllerSceneAngleX;
 

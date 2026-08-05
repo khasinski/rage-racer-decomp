@@ -125,8 +125,8 @@ void ResetSoundState(void) {
 }
 
 extern u8 g_SndTableArea[];
-extern char g_MsgVabOpenHeadError[] asm("D_8001267C");
-extern char g_MsgVabTransBodyError[] asm("D_80012694");
+extern char g_MsgVabOpenHeadError[];
+extern char g_MsgVabTransBodyError[];
 
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
@@ -217,10 +217,10 @@ extern s16 g_VabIds3;
 extern s32 g_ExtraVabLoaded;
 extern s32 g_AudioLoadSlot;
 extern s32 g_VabTransferDone;
-extern s32 g_VabSpuAddress[] asm("D_800125EC");
-extern s32 g_VabSpuAddressExtra asm("D_800125F8");
-extern char g_MsgVabOpenHeadError[] asm("D_8001267C");
-extern char g_MsgVabTransBodyError[] asm("D_80012694");
+extern s32 g_VabSpuAddress[];
+extern s32 g_VabSpuAddressExtra;
+extern char g_MsgVabOpenHeadError[];
+extern char g_MsgVabTransBodyError[];
 
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table);
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
@@ -539,7 +539,7 @@ void SetEffectVolumeSetting(s32 level) {
     g_SoundScale.scale = (level << 7) / 15;
 }
 
-extern s32 g_StereoOutput asm("D_80082F40");
+extern s32 g_StereoOutput;
 void SetCdMixPreset(s32 arg0);
 void SsSetStereo(void);
 void SetStereoOutput(void);
@@ -566,7 +566,7 @@ s32 GetActiveAudioSlots(void) {
 #include "psyq/snd.h"
 #include "game/sound.h"
 
-extern s32 g_StereoOutput asm("D_80082F40");
+extern s32 g_StereoOutput;
 extern s32 g_PanVoiceVolumeL;
 extern s32 g_PanVoiceVolumeR;
 
@@ -1137,7 +1137,7 @@ extern u8 g_EffectVoiceTone[];
 extern u8 g_EffectVoiceVolume[];
 extern s32 g_EffectVoicePitch[];
 
-extern const s32 g_EffectCueTable[] asm("D_80012730");
+extern const s32 g_EffectCueTable[];
 extern s32 D_801E6D30;
 extern s32 D_801E6D44;
 extern s32 D_801E6D58;
@@ -1432,9 +1432,9 @@ void UpdateEffectVoiceStates(void) {
 extern s32 g_SoundCueBank;
 extern s32 g_SpecialCueVoiceA;
 extern s32 g_SpecialCueVoiceB;
-extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
-extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
-extern const s32 g_SpecialVoiceBits[] asm("D_80011C74");
+extern const s32 g_SoundCueParams[][6];
+extern const s32 g_SoundCueParams2[][6];
+extern const s32 g_SpecialVoiceBits[];
 extern const char D_80012778[];
 s32 SpuGetKeyStatus(s32 bit);
 
@@ -1540,12 +1540,12 @@ s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) {
     return result;
 }
 
-extern s32 g_ActiveSpecialCue asm("D_80082F44");
+extern s32 g_ActiveSpecialCue;
 extern s32 g_SpecialCueVoiceA;
 extern s32 g_SpecialCueVoiceB;
 extern s32 D_80011C84;
-extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
-extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
+extern const s32 g_SoundCueParams[][6];
+extern const s32 g_SoundCueParams2[][6];
 
 s32 SpuGetKeyStatus(s32 arg0);
 
@@ -1672,7 +1672,7 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
 }
 
 extern s32 g_SoundCueBank;
-extern s32 g_LastSpecialCueRequest asm("D_80082F48");
+extern s32 g_LastSpecialCueRequest;
 
 s32 StartSoundCueVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
@@ -1930,7 +1930,7 @@ extern s32 g_PanVoiceActive;
 extern s32 g_IndexedEffectIndex;
 extern s32 g_IndexedEffectIndexPrev;
 extern s32 g_IndexedEffectPitch;
-extern s32 g_CarSoundVolumeScales[] asm("D_800125FC");
+extern s32 g_CarSoundVolumeScales[];
 
 s32 GetOwnedCarAssetIndex(s32 arg0);
 
@@ -2403,14 +2403,14 @@ void ForceAllEffectVoicesEnabled(s32 arg0) {
 /* Stride 4, i.e. two s16 per voice, but indexing it as [voice][0] costs an
  * instruction -- retail keeps voice * 4 in a register. */
 extern s16 g_VabSlotVoiceTone[];
-extern s32 g_VabSpuAddress[] asm("D_800125EC");
+extern s32 g_VabSpuAddress[];
 extern s32 g_AudioLoadSlot;
 extern s32 g_AudioSlotMask;
 extern s16 g_SeqHandle;
 extern s32 g_SeqVolumeFadeStep;
 extern s32 g_VabTransferDone;
-extern char g_MsgSeqVabOpenHeadError[] asm("D_80012788");
-extern char g_MsgSeqVabTransBodyError[] asm("D_800127A0");
+extern char g_MsgSeqVabOpenHeadError[];
+extern char g_MsgSeqVabTransBodyError[];
 
 void BiosExit(s32 arg0) asm("func_80063D9C");
 s32 func_8006F004(s32 arg0);

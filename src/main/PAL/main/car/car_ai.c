@@ -13,7 +13,7 @@ typedef struct GameCollisionPointBytes {
     u8 bytes[4];
 } GameCollisionPointBytes;
 
-extern GameCollisionPoint g_CarCollisionCorners[4] asm("D_8007E23C");
+extern GameCollisionPoint g_CarCollisionCorners[4];
 
 void TransformCollisionVector(s32 *input, s32 *output);
 void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode)

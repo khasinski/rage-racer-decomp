@@ -122,7 +122,7 @@ extern s32 g_TitleExitTimer;
 extern s32 g_FrontendState;
 extern s32 D_8007C744;
 extern u32 D_801E8260;
-extern void (*g_FrontendDrawHandlers[])(void) asm("D_8007C748");
+extern void (*g_FrontendDrawHandlers[])(void);
 
 s32 Random15(void);
 s32 CdControl(s32 com, void *param, s32 result);

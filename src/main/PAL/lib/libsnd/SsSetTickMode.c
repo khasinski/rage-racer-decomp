@@ -1,7 +1,7 @@
 #include "common.h"
 
-extern long g_SndTickMode asm("D_8009A558");
-extern long g_SndNoTickFlag asm("D_8009A55C");
+extern long g_SndTickMode;
+extern long g_SndNoTickFlag;
 extern long g_SndTickResolution;
 
 long GetDMAInterruptState(long arg);

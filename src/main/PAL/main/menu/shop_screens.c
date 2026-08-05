@@ -7,16 +7,16 @@ u32 DrawEngineerShopScreen(s32 arg0);
 
 extern u8 *g_CarModelAsset;
 
-extern u8 g_MenuBlankCaption asm("D_80011BA0");
+extern u8 g_MenuBlankCaption;
 extern u8 D_800820C4;
-extern u8 g_UiChromeScript asm("D_80082460");
-extern u8 g_UiChromeScript2 asm("D_80082790");
+extern u8 g_UiChromeScript;
+extern u8 g_UiChromeScript2;
 extern u8 D_800828B0;
 extern u8 D_80082904;
 extern u8 D_80082958;
 extern u8 D_800829AC;
 extern u8 D_80082A00;
-extern s32 g_CarPriceTable[] asm("D_80082D7C");
+extern s32 g_CarPriceTable[];
 extern u8 g_MenuSubCursor;
 extern s32 g_MenuConfirmTimer;
 extern s32 g_CarNamePlateStep;

@@ -4,7 +4,7 @@
 extern s16 D_80092B08[];
 extern s16 D_80093308[];
 extern s16 D_80093B08[];
-extern s16 g_SinTable[] asm("D_80094308");
+extern s16 g_SinTable[];
 
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rsinCore(s32 arg0);

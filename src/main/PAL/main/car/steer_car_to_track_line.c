@@ -97,13 +97,13 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
 extern s32 g_ShiftTargetRpm;
 extern s32 g_ShiftSoundLevel;
 
-s32 func_8002A788(s32 arg0, s32 arg1);
+s32 GetAngleDistance(s32 arg0, s32 arg1);
 s32 GetAngleDelta(s32 arg0, s32 arg1);
 void SteerCarToTrackLine(GameCarRuntime *car);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 
-void func_80030030(GameCarRuntime *arg0) {
+void UpdateCarLaunch(GameCarRuntime *arg0) {
     register GameCarRuntime *car = arg0;
     register u8 *r;
     register s32 s4val;
@@ -124,7 +124,7 @@ void func_80030030(GameCarRuntime *arg0) {
         s4val = -s4val;
     }
 
-    res = func_8002A788(first24, firstHeading);
+    res = GetAngleDistance(first24, firstHeading);
     r = (u8 *)car + 188;
     if (res >= 0x600) {
         car->field_A4 = car->field_A4 * 990 / 1000;
@@ -174,7 +174,7 @@ void func_80030030(GameCarRuntime *arg0) {
         *(s32 *)(r + 0x50) += res * 16;
 
         if ((u32)(*(s32 *)(r + 0x1C) + 127) < 255) {
-            if (func_8002A788(car->field_24, car->headingAngle) < 0x200) {
+            if (GetAngleDistance(car->field_24, car->headingAngle) < 0x200) {
                 *(s32 *)(r + 0x50) = *(s32 *)(r + 0x50) * 31 / 32;
                 *(s32 *)(r + 0x50) =
                     GetAngleDelta(car->field_24, car->headingAngle) + *(s32 *)(r + 0x50);
@@ -193,7 +193,7 @@ void func_80030030(GameCarRuntime *arg0) {
         car->field_24 = *(s32 *)(r + 0x50) / 256 + car->field_24;
         *(s32 *)(r + 0x48) -= 64;
 
-        res = func_8002A788(car->field_24, car->headingAngle);
+        res = GetAngleDistance(car->field_24, car->headingAngle);
         *(s32 *)(r + 0x48) -= res * res / 65536;
         *(s32 *)(r + 0x48) -= (0x3600 - s4val) / 64;
 
@@ -283,7 +283,7 @@ void func_80030030(GameCarRuntime *arg0) {
     *(s32 *)(r + 0x90) = car->field_24;
     SteerCarToTrackLine(car);
 
-    res = func_8002A788(car->field_24, car->headingAngle);
+    res = GetAngleDistance(car->field_24, car->headingAngle);
     if (res >= 0x401) {
         s32 factor;
         s32 a8;

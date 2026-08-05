@@ -2,14 +2,14 @@
 #include "game/car.h"
 #include "psyq/kernel.h"
 
-extern s32 g_McLastCardStatus asm("D_80082F4C");
+extern s32 g_McLastCardStatus;
 extern s32 g_McStatusState;
 extern s32 g_McPollTicks;
 extern s32 g_McStatusResult;
 /* The poller's own working status word. Distinct from menu.h's
  * g_McPollStatus (D_8009B720), which is the code the menu reads. */
 extern s32 g_McPollStatus;
-extern char g_FmtCardDevice[] asm("D_800127CC");
+extern char g_FmtCardDevice[];
 
 void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
@@ -425,7 +425,7 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
     } while (i < 3);
 }
 
-extern char g_FmtString[] asm("D_80012F8C");
+extern char g_FmtString[];
 extern Rect g_SaveIconRect;
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
@@ -811,8 +811,8 @@ void StoreSaveStateBlock(u8 *block) {
 #include "game/menu.h"
 #include "psyq/gpu.h"
 
-extern char g_MsgSaveChecksumOk[] asm("D_80012F90");
-extern char g_FmtSaveChecksum[] asm("D_80012F98");
+extern char g_MsgSaveChecksumOk[];
+extern char g_FmtSaveChecksum[];
 
 extern s16 g_PadMappingIndex;
 extern s16 g_NegconMappingIndex;
@@ -839,8 +839,8 @@ extern s32 g_MonoOutput;
 extern u8 g_GrandPrixCourseProgress[];
 extern u8 g_ExtraGrandPrixCourseProgress[];
 
-extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
-extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
+extern u8 g_TeamLogoRect[];
+extern u8 g_TeamLogoClutRect[];
 
 void LoadPadButtonMapping(s32 a, s32 b);
 void ApplyAudioSettings(void);
@@ -1217,8 +1217,8 @@ s32 WriteMemoryCardSaveFile(
     return 1;
 }
 
-extern char g_SaveFilePath[] asm("D_800128AC");
-extern char g_SaveTitleSjis[] asm("D_800127D8");
+extern char g_SaveFilePath[];
+extern char g_SaveTitleSjis[];
 
 s32 WriteMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *header) {
     u8 block0[0x200];
@@ -1415,7 +1415,7 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     }
 }
 
-extern char g_FmtCardWildcard[] asm("D_80012FAC");
+extern char g_FmtCardWildcard[];
 extern char g_McDirEntries[];
 
 void LibcSprintf() asm("func_800632F0");
@@ -1495,7 +1495,7 @@ s32 RefreshMemoryCardSaveStatus(s32 slot, GameSaveHeaderRow *header) {
     return ret;
 }
 
-extern char g_FmtPlayTime[] asm("D_80012FB8");
+extern char g_FmtPlayTime[];
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf() asm("func_800632F0");
@@ -1509,7 +1509,7 @@ void *FormatSaveElapsedTime(void *dst, u32 seconds) {
     return (u8 *)dst + 2;
 }
 
-extern u8 g_McMessageText[] asm("D_800128FC");
+extern u8 g_McMessageText[];
 
 /* DrawText8x8 again, declared with word-wide parameters: the header
  * spelling with s16/u16 does not match here. Same convention as
@@ -1520,7 +1520,7 @@ void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) {
     DrawText8x8Wide(0x28, 0xB8, &g_McMessageText[messageIndex * 30], 0x78CC);
 }
 
-extern u8 g_McHelpText[] asm("D_80012ADC");
+extern u8 g_McHelpText[];
 
 
 void DrawMemoryCardHelpPrompt(s32 page) {
@@ -1539,15 +1539,15 @@ void DrawMemoryCardHelpPrompt(s32 page) {
 #include "psyq/gpu.h"
 #include "game/render.h"
 
-extern char g_FmtSaveRow[] asm("D_80012FC8");
-extern u8 g_SaveNameCharset[] asm("D_80012FD0");
-extern char g_FmtSaveRowTail[] asm("D_80012FFC");
-extern char g_FmtSaveRowEmpty[] asm("D_80013000");
-extern char g_McSlotLabels[] asm("D_80082F7C");
-extern char g_McSlotLabelNoFile[] asm("D_80082F86");
-extern char g_McSlotLabelError[] asm("D_80082F9A");
-extern s32 g_McMenuPage asm("D_80082F50");
-extern s32 g_McMenuRowCursor asm("D_80082F54");
+extern char g_FmtSaveRow[];
+extern u8 g_SaveNameCharset[];
+extern char g_FmtSaveRowTail[];
+extern char g_FmtSaveRowEmpty[];
+extern char g_McSlotLabels[];
+extern char g_McSlotLabelNoFile[];
+extern char g_McSlotLabelError[];
+extern s32 g_McMenuPage;
+extern s32 g_McMenuRowCursor;
 extern s32 g_McFreeBlocks;
 
 /* DrawLargeText with word-wide parameters; the header spelling does not

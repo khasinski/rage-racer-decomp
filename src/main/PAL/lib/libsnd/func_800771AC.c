@@ -23,7 +23,7 @@ void SpuVmNoiseKeyOn(long voice);
 long SpuVmCalculateTonePitch(u_short note, u_short fine);
 void SpuVmScaleVabVolume(long count, long pitch);
 
-long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {
+long SsSeqIndexChannel(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {
     SeqStruct *score =
         &g_SndSeqTable[seq_sep & 0xFF][(seq_sep & 0xFF00) >> 8];
     long voices_updated;

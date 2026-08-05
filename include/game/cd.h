@@ -4,10 +4,10 @@
 #include "common.h"
 /*
  * CD-DA (music) front end. Nothing here talks to the drive directly: each call
- * only posts a request into D_8007F600..D_8007F60C, which TickCdAudio pumps
+ * only posts a request into g_CdTrackPending..g_CdCommandStep, which TickCdAudio pumps
  * one CdControl at a time (CdlPlay 0x03, CdlPause 0x09, CdlGetlocP 0x11).
  */
-/* Queue track `track` from the D_8009AFD4 CdlLOC table. */
+/* Queue track `track` from the g_CdTrackLocs CdlLOC table. */
 void RequestCdTrack(s32 track);
 /* Issue CdlPlay for whatever is queued / paused. */
 void StartCdAudio(void);
@@ -19,7 +19,7 @@ void ResumeCdAudio(void);
 void ResetCdAudioState(void);
 
 /*
- * CD-DA attenuator. SetCdVolume scales the four D_8007F5A8 mix values by
+ * CD-DA attenuator. SetCdVolume scales the four g_CdMixPresets mix values by
  * `volume` (0..0x7F) into both the current and target levels and pushes them
  * with CdMix; StartCdVolumeFade sets the remaining frame count of the
  * fade StepCdVolumeFade runs each frame (positive fades out, negative fades
@@ -32,7 +32,7 @@ void StepCdVolumeFade(void);
 void ApplyCdVolume(void);
 /* Map the 0..15 option-screen level onto the 0..0x7F attenuator. */
 void SetCdVolumeSetting(s32 level);
-/* Select which 4-byte row of the D_8007F5A8 mix table SetCdVolume scales. */
+/* Select which 4-byte row of the g_CdMixPresets mix table SetCdVolume scales. */
 void SetCdMixPreset(s32 preset);
 
 /*
@@ -50,7 +50,7 @@ void StepCdResumeRequest(void);  /* CdlPlay 0x03 */
 /* Boot-time setup: SPU CD input on, drive into CD-DA mode, track table built,
  * every pending/step word cleared and the volume set to full. */
 void InitCdAudio(void);
-/* Build the D_8009AFD4 CdlLOC table: CdGetToc, each audio track pushed 0x3C
+/* Build the g_CdTrackLocs CdlLOC table: CdGetToc, each audio track pushed 0x3C
  * sectors in, then the file-backed entries found with DsSearchFile. */
 void BuildCdTrackTable(void);
 

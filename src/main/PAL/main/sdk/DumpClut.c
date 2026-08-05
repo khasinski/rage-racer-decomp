@@ -2,7 +2,7 @@
 
 extern char D_8001338C[];
 /* libgpu's printf hook; every GPU trace string goes through it. */
-extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
+extern void (*GPU_printf)(char *, ...);
 
 void DumpClut(long arg0);
 void DumpClut(long arg0) {

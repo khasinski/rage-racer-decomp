@@ -8,9 +8,9 @@ void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794"
 /* Per-path authored data; see DrawRouteScenery.c for the layout.
  * g_ShuttlePathTravelMax is the leg length in steps: the divisor of the
  * endpoint-to-endpoint lerp and the value travelStep counts up to. */
-extern u8 g_ShuttlePathPoints[] asm("D_8007E360");
-extern s16 g_ShuttlePathTravelMax[] asm("D_8007E3D8");
-extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
+extern u8 g_ShuttlePathPoints[];
+extern s16 g_ShuttlePathTravelMax[];
+extern s16 g_ShuttlePathDwellMax[];
 
 void UpdateShuttleScenery(s32 arg0);
 

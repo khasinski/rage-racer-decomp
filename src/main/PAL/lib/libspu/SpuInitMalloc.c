@@ -1,12 +1,12 @@
 #include "psyq/spu.h"
 
-extern long _spu_mem_mode_unitM asm("D_8009ABA0");
-extern long g_SpuRevReserveWa asm("D_8009A71C");
-extern long g_SpuRevWorkAreaAddr asm("D_8009A720");
-extern long _spu_mem_mode_plus asm("D_8009ABA8");
-extern long _spu_AllocBlockNum asm("D_8009ABD4");
-extern long _spu_AllocLastNum asm("D_8009ABD8");
-extern SpuMallocEntry *_spu_memList asm("D_8009ABDC");
+extern long _spu_mem_mode_unitM;
+extern long g_SpuRevReserveWa;
+extern long g_SpuRevWorkAreaAddr;
+extern long _spu_mem_mode_plus;
+extern long _spu_AllocBlockNum;
+extern long _spu_AllocLastNum;
+extern SpuMallocEntry *_spu_memList;
 
 #define BLK(i) (&_spu_memList[(i)])
 #define BLK_ADDR(i) (BLK(i)->addr & 0x0FFFFFFF)

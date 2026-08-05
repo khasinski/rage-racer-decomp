@@ -75,9 +75,9 @@ extern s16 g_TachoNeedleQuad[4][2];
 /* Tint of the tachometer face: the dial-mode branches set all three to the
  * same level and the tail of the function copies them into the face prim
  * already staged at g_DrawBuffer + 0x236E8. .data seeds them 0x80. */
-extern u8 g_TachoFaceR asm("D_8007DF00");
-extern u8 g_TachoFaceG asm("D_8007DF01");
-extern u8 g_TachoFaceB asm("D_8007DF02");
+extern u8 g_TachoFaceR;
+extern u8 g_TachoFaceG;
+extern u8 g_TachoFaceB;
 
 s32 rsin(s32 angle) asm("func_80068568");
 s32 rcos(s32 angle) asm("func_80068634");

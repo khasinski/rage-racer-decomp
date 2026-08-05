@@ -19,7 +19,7 @@ struct Entry_5ACA0 {
     u8 pad[6];
 };
 extern s32 g_MenuHintBarStep;
-extern u8 g_MenuHintBarScript asm("D_80082A90");
+extern u8 g_MenuHintBarScript;
 extern s32 g_MenuHintBarProgress;
 extern s32 g_MenuHintButtonsVisible;
 extern u8 g_PadType;
@@ -128,7 +128,7 @@ s32 IsSpuTransferDone(void) {
     return (value0 << 16) | (s16)value1;
 }
 
-extern s16 g_SoundSlotTone[] asm("D_80082F28");
+extern s16 g_SoundSlotTone[];
 
 s32 SetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
     s16 *base = g_SoundSlotTone;

@@ -14,7 +14,7 @@ extern u_short D_801F2A08;
 extern u_short D_801F2A0C;
 extern u_short D_8009E670;
 extern u_short D_8009E674;
-extern u_short *g_SndSpuRegs asm("D_8009A588");
+extern u_short *g_SndSpuRegs;
 
 long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note);
 long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) {

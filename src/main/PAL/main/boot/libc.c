@@ -14,7 +14,7 @@ void SeedRandom(s32 seed) {
 
 /*
  * PSY-Q libc sprintf: the whole formatter, with no vsprintf split. Identified by
- * its %X / %x digit tables at D_800131E4 / D_800131F8 and by its LibcMemchr /
+ * its %X / %x digit tables at g_LibcUpperDigits / g_LibcLowerDigits and by its LibcMemchr /
  * LibcMemmove / LibcStrlen callees.
  */
 typedef union LibcFormatHeader {
@@ -37,9 +37,9 @@ typedef struct LibcFormatWork {
     LibcFormatSpec spec;
 } LibcFormatWork;
 
-extern LibcFormatSpec g_LibcDefaultFormat asm("D_80082FCC");
-extern u8 g_LibcUpperDigits[] asm("D_800131E4");
-extern u8 g_LibcLowerDigits[] asm("D_800131F8");
+extern LibcFormatSpec g_LibcDefaultFormat;
+extern u8 g_LibcUpperDigits[];
+extern u8 g_LibcLowerDigits[];
 
 #define LIBC_LEFT       0x01
 #define LIBC_PLUS       0x02
@@ -436,7 +436,7 @@ s32 LibcStrlen(u8 *arg0) {
     return count;
 }
 
-extern u8 g_LibcNullText[] asm("D_800132C0");
+extern u8 g_LibcNullText[];
 
 void LibcPutChar(s32 arg0);
 
@@ -455,7 +455,7 @@ void LibcPutString(u8 *arg0) {
     }
 }
 
-extern u8 g_LibcCtype[] asm("D_80082FD9");
+extern u8 g_LibcCtype[];
 extern s32 g_LibcOutColumn;
 
 void LibcPutChar(s32 arg0);

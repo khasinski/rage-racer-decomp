@@ -93,9 +93,9 @@ extern s32 g_TeamNameCharModel;
 extern s32 g_DesignModeOption;
 
 extern u8 D_800828EC;
-extern u8 g_UiChromeScript2 asm("D_80082790");
+extern u8 g_UiChromeScript2;
 extern u8 D_80081B54;
-extern u8 g_UiChromeScript asm("D_80082460");
+extern u8 g_UiChromeScript;
 
 void DrawMenuCarView(void);
 void DrawFadingMenuSprites(s32 a, s32 b, s32 c);

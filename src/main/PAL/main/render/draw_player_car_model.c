@@ -148,7 +148,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
 
 extern u8 *g_CamRow;
 extern s32 g_CourseIndex;
-extern u8 g_CarModelByCourse[][11] asm("D_8007D3AC");
+extern u8 g_CarModelByCourse[][11];
 extern s16 D_8007D380[][2];
 void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 

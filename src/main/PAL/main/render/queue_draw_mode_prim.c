@@ -4,7 +4,7 @@
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
-extern u8 D_8007BED0[];
+extern u8 g_DrawModeEnv[];
 
 /* DR_MODE, 12 bytes: sets the texture page (and the blend mode packed into it)
  * for the primitives that follow, links it into the ordering table and returns
@@ -12,7 +12,7 @@ extern u8 D_8007BED0[];
 u8 *QueueDrawModePrim(void *ot, u8 *prim, u16 tpage) {
     u8 *pkt;
 
-    SetDrawMode((DrawPacket *)prim, 0, 1, tpage, D_8007BED0);
+    SetDrawMode((DrawPacket *)prim, 0, 1, tpage, g_DrawModeEnv);
     pkt = prim;
     prim += 12;
     AddPrim(ot, pkt);
@@ -134,7 +134,7 @@ void SetDrawModeWide(DrawPacket *pkt, s32 a, s32 b, s32 tpage, void *tw) asm("fu
 /* Fills a DR_MODE packet in place; unlike QueueDrawModePrim it neither
  * links the packet nor advances the scratchpad cursor. No callers in retail. */
 void SetDrawModePacket(u8 *prim, s32 tpage) {
-    SetDrawModeWide((DrawPacket *)prim, 0, 1, tpage, D_8007BED0);
+    SetDrawModeWide((DrawPacket *)prim, 0, 1, tpage, g_DrawModeEnv);
 }
 
 /* World position in full-precision components; the camera keeps one of these

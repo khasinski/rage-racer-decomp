@@ -6,14 +6,14 @@
 
 
 
-extern char *g_CdCommandNames[] asm("D_80099060");
-extern char *g_CdIntrNames[] asm("D_800990E0");
-extern CdCallback g_CdSyncCallback asm("D_8009903C");
-extern CdCallback g_CdReadyCallback asm("D_80099040");
-extern u_char g_CdLastCommand asm("D_8009905D");
+extern char *g_CdCommandNames[];
+extern char *g_CdIntrNames[];
+extern CdCallback g_CdSyncCallback;
+extern CdCallback g_CdReadyCallback;
+extern u_char g_CdLastCommand;
 extern volatile u_char *g_CdReg0 asm("D_80099300");
-extern volatile CdIntr g_CdSyncStatus asm("D_80099318");
-extern u_char g_CdSyncResult[] asm("D_8009BAF0");
+extern volatile CdIntr g_CdSyncStatus;
+extern u_char g_CdSyncResult[];
 extern u_char g_CdReadyResult[];
 extern u_char g_CdDataEndResult[];
 extern long g_CdTimeoutDeadline;

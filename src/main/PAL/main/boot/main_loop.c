@@ -22,7 +22,7 @@ void InitGeom(void);
 void RestartMemoryCard(void);
 void ResetReplayFrameCounts(void);
 void InitRecordTables(void);
-void InitRenderState(s32 arg0) asm("func_80017884");
+void InitRenderState(s32 arg0);
 
 extern s32 g_ScreenOffsetY;
 extern s32 g_ScreenOffsetX;
@@ -104,7 +104,7 @@ extern s32 g_FrameSyncThreshold;
 extern s32 g_GameClock;
 extern s32 g_FrameCounter;
 /* Scene handlers, indexed by g_SceneId. */
-extern void (*g_SceneHandlers[])(void) asm("D_8007C268");
+extern void (*g_SceneHandlers[])(void);
 
 /*
  * The PS-EXE `main`. Boots the subsystems, then never returns: each pass picks

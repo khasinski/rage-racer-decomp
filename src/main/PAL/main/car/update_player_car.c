@@ -97,8 +97,8 @@ extern u8 *g_TrackPoints;
  * towards by a half (clutch in) or a quarter (clutch out) of the gap. */
 extern s16 g_PlayerThrottle;
 extern s32 g_PlayerTargetRpm;
-extern u16 g_CarCornerOffsetX[] asm("D_8007DAB0");
-extern u16 g_CarCornerOffsetZ[] asm("D_8007DAB2");
+extern u16 g_CarCornerOffsetX[];
+extern u16 g_CarCornerOffsetZ[];
 
 s32 IsCarFacingBackwards(void *car);
 void UpdateCarBodyRoll(void *car);

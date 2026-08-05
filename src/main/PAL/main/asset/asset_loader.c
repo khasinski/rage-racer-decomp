@@ -14,19 +14,19 @@
 void CdReadBreak(void);
 s32 func_8006A534(s32 arg0, s32 arg1);
 long CdControl(long com, void *param, long result);
-extern char g_MsgNowLoading[] asm("D_80010ADC");
-extern char g_MsgReadBytes[] asm("D_80010AFC");
-extern char g_MsgFileReadError[] asm("D_80010B08");
+extern char g_MsgNowLoading[];
+extern char g_MsgReadBytes[];
+extern char g_MsgFileReadError[];
 s32 CdRead(s32 arg0, void *arg1, s32 arg2);
 long CdReadSync(long arg0, long arg1);
 void func_8006A6DC(s32 arg0, void *arg1);
 s32 func_80017C78(s32 arg0, s32 arg1);
-extern char g_PathRageBin[] asm("D_80010B38");
-extern char g_MsgFileNotFound[] asm("D_80010B44");
-extern char g_MsgReadSectors[] asm("D_80010B58");
-extern char g_MsgNowSearching[] asm("D_80010B68");
-extern char g_PathRageStr[] asm("D_80010B80");
-extern char g_MsgSearchOk[] asm("D_80010B8C");
+extern char g_PathRageBin[];
+extern char g_MsgFileNotFound[];
+extern char g_MsgReadSectors[];
+extern char g_MsgNowSearching[];
+extern char g_PathRageStr[];
+extern char g_MsgSearchOk[];
 void UploadImageAsset(void *arg0);
 
 void SetTrackCameraTable(u32 value);

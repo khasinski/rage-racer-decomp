@@ -1,9 +1,9 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern u_char g_GraphType[] asm("D_800941E8");
-extern u_short g_VramWidth[] asm("D_800941EC");
-extern u_short g_VramHeight[] asm("D_800941EE");
+extern u_char g_GraphType[];
+extern u_short g_VramWidth[];
+extern u_short g_VramHeight[];
 
 u_long _get_mode(long arg0, long arg1, u_long arg2) asm("func_800669F0");
 u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1);
@@ -209,7 +209,7 @@ u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {
     return 0;
 }
 
-extern u_char g_GraphReverse asm("D_800941EB");
+extern u_char g_GraphReverse;
 
 u_long get_dx(DispEnv *env);
 
@@ -233,17 +233,17 @@ u_long get_dx(DispEnv *env) {
     }
 }
 
-extern u_long *g_GpuGp1 asm("D_800942BC");
+extern u_long *g_GpuGp1;
 
 u_long _status(void);
 u_long _status(void) {
     return *g_GpuGp1;
 }
 
-extern volatile u_long *g_OtcDmaMadr asm("D_800942CC");
-extern volatile u_long *g_OtcDmaBcr asm("D_800942D0");
-extern volatile u_long *g_OtcDmaChcr asm("D_800942D4");
-extern volatile u_long *g_GpuDpcr asm("D_800942D8");
+extern volatile u_long *g_OtcDmaMadr;
+extern volatile u_long *g_OtcDmaBcr;
+extern volatile u_long *g_OtcDmaChcr;
+extern volatile u_long *g_GpuDpcr;
 
 void Gpu_ArmTimeout(void);
 long Gpu_CheckTimeout(void);

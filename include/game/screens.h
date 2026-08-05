@@ -22,7 +22,7 @@ void DrawRaceOptionMenu(s32 cursorRow);
 
 /*
  * Title screen and main menu. UpdateFrontend (UpdateFrontend) runs one of the
- * four handlers below each frame via the jump table at D_8007C748, indexed by
+ * four handlers below each frame via the jump table at g_FrontendDrawHandlers, indexed by
  * the sub-state g_FrontendState: 0 title -> 1 menu wipe-in -> 2 cursor/confirm ->
  * 3 fade out and request the selected scene. Details in names.md section 5.
  */

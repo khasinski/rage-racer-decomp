@@ -3,7 +3,7 @@
 #include "common.h"
 
 extern long g_SndSeqOpenMask;
-extern char g_MsgSeqTableFull[] asm("D_80013C10");
+extern char g_MsgSeqTableFull[];
 
 long SsSeqParseHeader(long arg0, long arg1, long arg2);
 

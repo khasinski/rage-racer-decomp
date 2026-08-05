@@ -1,10 +1,10 @@
 #include "psyq/kernel.h"
 
-extern u_short g_IntrState[] asm("D_80099430");
-extern u_short g_IntrSavedIrqMask asm("D_80099462");
-extern u_long g_IntrSavedDpcr asm("D_80099464");
-extern volatile u_short *g_IrqMask asm("D_8009A4C0");
-extern volatile u_long *g_KernelDpcr asm("D_8009A4C4");
+extern u_short g_IntrState[];
+extern u_short g_IntrSavedIrqMask;
+extern u_long g_IntrSavedDpcr;
+extern volatile u_short *g_IrqMask;
+extern volatile u_long *g_KernelDpcr;
 
 void *StartKernelInterrupts(void) {
     u_short *state;
@@ -29,12 +29,12 @@ void *StartKernelInterrupts(void) {
 }
 
 
-extern void *g_VSyncCallbacks[] asm("D_8009A4CC");
-extern u_long *g_Timer1ModeReg asm("D_8009A4F0");
-extern volatile long g_VSyncCount asm("D_8009A4EC");
-extern volatile u_long *g_DmaIrqControl asm("D_8009A4F4");
-extern u_long g_DmaCallbacks[] asm("D_8009A4F8");
-extern u_long *g_DmaChannelRegs asm("D_8009A518");
+extern void *g_VSyncCallbacks[];
+extern u_long *g_Timer1ModeReg;
+extern volatile long g_VSyncCount;
+extern volatile u_long *g_DmaIrqControl;
+extern u_long g_DmaCallbacks[];
+extern u_long *g_DmaChannelRegs;
 extern long D_8009A51C;
 extern u_char D_80013BA8[];
 extern u_char D_80013BC4[];

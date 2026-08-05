@@ -11,12 +11,12 @@ typedef struct StReadyStatus {
 extern volatile u8 *g_CdReg0 asm("D_800993D0");
 extern volatile u8 *g_CdReg2 asm("D_800993D8");
 extern volatile u8 *g_CdReg3 asm("D_800993DC");
-extern volatile u32 *g_InterruptStatus asm("D_800993E0");
-extern volatile u32 *g_InterruptMask asm("D_800993E4");
-extern volatile u32 *g_MdecOutDmaControl asm("D_800993F0");
-extern volatile u32 *g_CdDmaControl asm("D_80099400");
+extern volatile u32 *g_InterruptStatus;
+extern volatile u32 *g_InterruptMask;
+extern volatile u32 *g_MdecOutDmaControl;
+extern volatile u32 *g_CdDmaControl;
 
-extern s32 g_StInterruptState asm("D_80099418");
+extern s32 g_StInterruptState;
 extern volatile StStrHeader *g_StActiveHeader;
 extern s32 g_StCurrentFrameCount;
 extern s16 g_StCurrentSector;

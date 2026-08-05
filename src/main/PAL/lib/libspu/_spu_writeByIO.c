@@ -2,12 +2,12 @@
 
 #include "common.h"
 
-extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
-extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
-extern long g_SpuWaitCount asm("D_8009AB74");
-extern u_char g_SpuTimeoutFmt[] asm("D_80013EC0");
-extern u_char g_SpuTimeoutMsgWrdy[] asm("D_80013EE0");
-extern u_char g_SpuTimeoutMsgDmaf[] asm("D_80013EF4");
+extern volatile u_short *g_SpuRegBase;
+extern u_short g_SpuTransferStartAddr;
+extern long g_SpuWaitCount;
+extern u_char g_SpuTimeoutFmt[];
+extern u_char g_SpuTimeoutMsgWrdy[];
+extern u_char g_SpuTimeoutMsgDmaf[];
 
 
 void _spu_writeByIO(u_short *addr, u_long size);

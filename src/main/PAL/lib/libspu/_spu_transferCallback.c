@@ -1,8 +1,8 @@
 #include "psyq/spu.h"
 
-extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
-extern volatile long g_SpuTransferCallback asm("D_8009ABB0");
-extern long g_SpuTransferIsRead asm("D_8009ABC8");
+extern volatile u_short *g_SpuRegBase;
+extern volatile long g_SpuTransferCallback;
+extern long g_SpuTransferIsRead;
 
 void DeliverEvent(long arg0, long arg1);
 

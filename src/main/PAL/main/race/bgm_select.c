@@ -8,7 +8,7 @@
 void UpdateAttractCars();
 
 extern s32 g_BgmSelectCursor;
-extern s32 g_BgmRandomLabelTimer asm("D_8007D6B0");
+extern s32 g_BgmRandomLabelTimer;
 extern s32 g_BgmSelectTrack;
 s32 func_80016EC4(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -21,7 +21,7 @@ extern s32 g_BgmChangeDelay;
 extern s32 g_BgmSelectCdTrack;
 extern s32 g_CdTrackEnded;
 extern s32 g_BgmSelectStep;
-extern s32 g_BgmRandomPlay asm("D_8007D6B4");
+extern s32 g_BgmRandomPlay;
 extern s32 g_BgmSelectShowUi;
 extern s32 g_CameraViewMode;
 void AdvanceBgmShuffleBag();

@@ -11,9 +11,9 @@ extern s32 g_ClosestRivalRank;
 
 
 
-extern s32 g_RaceGridSlots[] asm("D_8007E074");
+extern s32 g_RaceGridSlots[];
 
-extern s32 g_AttractGridSlots[] asm("D_8007E0A4");
+extern s32 g_AttractGridSlots[];
 
 void InitRivalCar(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
 

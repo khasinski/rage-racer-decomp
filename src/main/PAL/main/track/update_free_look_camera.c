@@ -11,7 +11,7 @@ extern s32 g_CameraCarSpeed;
 extern s32 g_CameraCarSpeedRamp;
 extern s32 g_CameraCarStepX;
 extern s32 g_CameraCarStepZ;
-extern s16 g_FreeCameraAngleOffset[] asm("D_8007E288");
+extern s16 g_FreeCameraAngleOffset[];
 extern s16 g_PlayerTrackSection;
 extern s32 g_PlayerProgressA;
 extern s32 g_PlayerProgressB;
@@ -159,12 +159,12 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
 }
 
 extern s32 g_CourseModelCount;
-extern s32 g_StartGridSceneryAngle[] asm("D_8007E2B8");
+extern s32 g_StartGridSceneryAngle[];
 extern struct {
     s16 x;
     s16 y;
-} g_StartGridSceneryStep[] asm("D_8007E290");
-extern Vec4 g_StartGridSceneryPos[] asm("D_8007E298");
+} g_StartGridSceneryStep[];
+extern Vec4 g_StartGridSceneryPos[];
 
 void func_80017794(void *arg0, Vec4 *state, Matrix *mtx);
 
@@ -226,14 +226,14 @@ void ResetFreeLookCamera(void) {
  * position. Tint is (clock >> 3 % 4) << 16, written to the scratchpad render
  * mode word for the second of the two models each board draws.
  */
-extern Vec4 g_AnimSceneryPos[] asm("D_8007E2C0");
+extern Vec4 g_AnimSceneryPos[];
 extern u32 *g_VisibleCellMask;
-extern s16 g_AnimSceneryFrame asm("D_8007E2EA");
+extern s16 g_AnimSceneryFrame;
 extern s32 g_RacePaused;
-extern s32 g_AnimSceneryTint asm("D_8007E2E4");
-extern s16 g_AnimSceneryRacePosition asm("D_8007E2E8");
-extern s16 g_AnimSceneryVariant asm("D_8009AFCC");
-extern s16 g_AnimSceneryPitch[] asm("D_8007E2E0");
+extern s32 g_AnimSceneryTint;
+extern s16 g_AnimSceneryRacePosition;
+extern s16 g_AnimSceneryVariant;
+extern s16 g_AnimSceneryPitch[];
 s32 Random15(void);
 
 void DrawAnimatedScenery(s32 arg0, s32 arg1);
@@ -346,9 +346,9 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     }
 }
 
-extern s16 g_AnimScenery2Frame asm("D_8007E2F2");
-extern s32 g_AnimScenery2Tint asm("D_8007E2EC");
-extern s16 g_AnimScenery2Variant asm("D_8007E2F0");
+extern s16 g_AnimScenery2Frame;
+extern s32 g_AnimScenery2Tint;
+extern s16 g_AnimScenery2Variant;
 
 void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 

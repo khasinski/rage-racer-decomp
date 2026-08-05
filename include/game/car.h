@@ -191,11 +191,11 @@ extern s32 g_CarListCursor;
 
 /* Index of each car model's first grade in the 32-entry asset list; thirteen
  * entries, one per model. GetCarAssetIndex adds the owned grade to it. */
-extern u8 g_CarModelBaseIndex[] asm("D_8007C464");
+extern u8 g_CarModelBaseIndex[];
 
 /* Per-model base of the progress level a purchase requires; the level needed is
  * this plus the grade being bought (GetCarUnlockLevel). */
-extern u8 g_CarModelUnlockBase[] asm("D_8007C474");
+extern u8 g_CarModelUnlockBase[];
 
 
 
@@ -376,8 +376,10 @@ void DrawCar(void *car) asm("func_8001DFC0");
  * whose activeFlag != -1 and field_BC == 1. */
 void DrawCars(void);
 /* Car motion-state handler for state98 == 1: the one-frame jump takeoff, which
- * hands over to the airborne handler UpdateCarAirborne. */
-void UpdateCarLaunch(GameCarRuntime *car) asm("func_80030030");
+ * hands over to the airborne handler UpdateCarAirborne.  Declared K&R because
+ * the UpdateCarDrivetrain dispatch passes two arguments to every handler in
+ * the table and this one reads only the first. */
+void UpdateCarLaunch();
 
 /*
  * The player's own car object and the fields of it that retail addresses as

@@ -28,9 +28,9 @@ typedef struct Cache {
     u_long x10;
 } Cache;
 
-extern GfxState g_GpuFuncs asm("D_800941E0");
+extern GfxState g_GpuFuncs;
 extern char D_80013614[];
-extern Cache g_DispEnvCache asm("D_80094254");
+extern Cache g_DispEnvCache;
 
 long get_dx(void *arg0);
 long GetDMAInterruptState(void);

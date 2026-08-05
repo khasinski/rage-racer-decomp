@@ -11,7 +11,7 @@ s32 SmoothTrackAngle(s32 arg0, s32 arg1);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 
-extern s32 g_AnimTimer asm("D_8009E694");
+extern s32 g_AnimTimer;
 extern s16 g_ClosestRivalRank;
 
 void RankContenders(void);
@@ -677,10 +677,10 @@ extern KE *g_RaceIntroCameraCursor;
 /* The pre-race fly-in: the timer counts down to 0 while the eye is eased
  * along the delta by cos(timer / keyframe->f12), and it also drives the
  * fade (timer * 26). */
-extern s32 g_RaceIntroCameraTimer asm("D_8009AFB4");
-extern s16 g_RaceIntroCameraDeltaX asm("D_8009AFBC");
-extern s16 g_RaceIntroCameraDeltaY asm("D_8009AFBE");
-extern s16 g_RaceIntroCameraDeltaZ asm("D_8009AFC0");
+extern s32 g_RaceIntroCameraTimer;
+extern s16 g_RaceIntroCameraDeltaX;
+extern s16 g_RaceIntroCameraDeltaY;
+extern s16 g_RaceIntroCameraDeltaZ;
 
 s32 rcos(s32 angle) asm("func_80068634");
 s32 rsin(s32 angle) asm("func_80068568");

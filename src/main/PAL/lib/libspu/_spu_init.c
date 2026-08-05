@@ -5,29 +5,29 @@
 
 extern long _spu_writeByIO(long addr, long size);
 
-extern char g_SpuTimeoutFmt[] asm("D_80013EC0");
-extern char g_SpuTimeoutMsgReset[] asm("D_80013ED0");
-extern long g_SpuWaitCount asm("D_8009AB74");
-extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
-extern volatile SpuRegisterMap *g_SpuRegBase asm("D_8009AB7C");
-extern volatile long *g_SpuDpcr asm("D_8009AB8C");
-extern long g_SpuTransferByIo asm("D_8009AB94");
+extern char g_SpuTimeoutFmt[];
+extern char g_SpuTimeoutMsgReset[];
+extern long g_SpuWaitCount;
+extern u_short g_SpuTransferStartAddr;
+extern volatile SpuRegisterMap *g_SpuRegBase;
+extern volatile long *g_SpuDpcr;
+extern long g_SpuTransferByIo;
 /* Deliberately raw: written zero here and read nowhere in the image. */
 extern long D_8009AB98;
 /* psyq's _spu_mem_mode group, all four set together: the enable flag, the
  * unit size 8, its shift 3 and its mask 7. _spu_FsetRXXa rounds a byte
  * address up to a multiple of the unit before shifting it into a register. */
-extern long g_SpuMemMode asm("D_8009AB9C");
-extern long _spu_mem_mode_unitM asm("D_8009ABA0");
-extern long g_SpuMemModeUnit asm("D_8009ABA4");
-extern long _spu_mem_mode_plus asm("D_8009ABA8");
-extern long g_SpuTransferCompleted asm("D_8009ABAC");
-extern void (*volatile g_SpuTransferCallback)(void) asm("D_8009ABB0");
+extern long g_SpuMemMode;
+extern long _spu_mem_mode_unitM;
+extern long g_SpuMemModeUnit;
+extern long _spu_mem_mode_plus;
+extern long g_SpuTransferCompleted;
+extern void (*volatile g_SpuTransferCallback)(void);
 /* Deliberately raw: cleared beside g_SpuTransferCallback in _spu_init and
  * SpuQuit and never read. Shape says libspu's IRQ callback slot
  * (SpuSetIRQCallback), but this build has no call site to prove it. */
 extern void (*volatile D_8009ABB4)(void);
-extern long g_SpuDummyAdpcmBlock asm("D_8009ABB8");
+extern long g_SpuDummyAdpcmBlock;
 
 #define SPU_INIT_DELAY()                    \
     delayValue = 0xD;                       \

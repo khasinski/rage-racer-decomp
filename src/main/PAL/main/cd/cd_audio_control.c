@@ -4,10 +4,10 @@ extern s32 g_VisibleCellList;
 
 
 
-extern s32 g_CdTrackPending asm("D_8007F600");
-extern s32 g_CdCommandPending asm("D_8007F604");
-extern s32 g_CdTrackStep asm("D_8007F608");
-extern s32 g_CdCommandStep asm("D_8007F60C");
+extern s32 g_CdTrackPending;
+extern s32 g_CdCommandPending;
+extern s32 g_CdTrackStep;
+extern s32 g_CdCommandStep;
 
 void RequestCdTrack(s32 arg0);
 void RequestCdTrack(s32 arg0) {
@@ -32,7 +32,7 @@ void PauseCdAudio(void) {
 /* Set when the CD was stopped rather than paused, so a resume has to reissue
  * a play of g_CdCurrentTrack from the top instead of an unpause. g_CdCurrentTrack is the
  * track the CD-DA driver last selected; ResetCdAudioState parks it at 2. */
-extern s32 g_CdRestartOnResume asm("D_8007F5F8");
+extern s32 g_CdRestartOnResume;
 extern u8 g_CdCurrentTrack;
 
 void ResumeCdAudio(void);

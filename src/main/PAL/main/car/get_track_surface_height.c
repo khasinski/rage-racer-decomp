@@ -427,7 +427,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
  * [corner][1] is y; DrawTachometer walks the same eight halfwords as an
  * (x, y) pair array. */
 extern s16 g_TachoNeedleQuad[4][2];
-extern GameSpriteDesc g_TachoNeedleSprite asm("D_8007DAE0");
+extern GameSpriteDesc g_TachoNeedleSprite;
 /* The needle SPRT in each of the two draw buffers, plus the two DR_TPAGE
  * prims that precede buffer 1's copy at -0x18 and -0x0C (buffer 0's are
  * reached as g_TachoNeedlePrim0 - 0x18 / - 0x0C). */

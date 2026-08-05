@@ -131,7 +131,7 @@ extern char D_80011408[];
 extern s32 g_AutoShiftCooldown;
 extern s16 g_TrackZoneDark;
 extern s32 g_ShiftSoundLevel;
-extern s32 D_8007DA78;
+extern s32 g_RoadGrade;
 extern s32 g_ShiftTargetRpm;
 extern s16 g_PeakOutputRpm;
 extern s16 g_PeakOutputValue;
@@ -193,7 +193,7 @@ void InitPlayerCar(GameCarRuntime *car)
   g_AutoShiftCooldown = 0;
   g_TrackZoneDark = 0;
   g_ShiftSoundLevel = 0;
-  D_8007DA78 = 0;
+  g_RoadGrade = 0;
   player->field_AE = 0x17;
   player->field_CC = 0;
   player->field_C8 = 0;
@@ -458,7 +458,7 @@ extern s16 g_PadButtonMapping[];
  * docs/names.md 20. */
 extern s16 g_NegconSteer;
 extern s16 g_NegconMaxTwist;
-extern s16 g_NegconSteerRange[] asm("D_8007C020");
+extern s16 g_NegconSteerRange[];
 
 s32 rcos(s32) asm("func_80068634");
 

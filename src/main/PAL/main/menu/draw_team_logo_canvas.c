@@ -46,8 +46,8 @@ typedef union {
     s16 slo;
 } TeamLogoWord;
 
-extern TeamLogoClutPos D_8007BEDC;
-extern TeamLogoTexturePos D_8007BEE4;
+extern TeamLogoClutPos g_TeamLogoClutRect;
+extern TeamLogoTexturePos g_TeamLogoRect;
 extern u8 D_8007F930;
 extern TeamLogoWord D_8007F934;
 extern s32 D_8007F938;
@@ -72,7 +72,7 @@ extern u8 g_PadType;
 extern u16 D_801E6F2C;
 
 extern s32 GetClut(s16 x, s16 y);
-extern void LoadImage(void *rect, void *data) asm("func_80065B24");
+extern void LoadImage(void *rect, void *data);
 extern s32 rsin(s32 angle) asm("func_80068568");
 extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h);
 extern void func_80046A2C(
@@ -245,8 +245,8 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     }
 
   }
-  LoadImage(&D_8007BEE4, &D_801E6F2C);
-  LoadImage(&D_8007BEDC, g_TeamLogoClut);
+  LoadImage(&g_TeamLogoRect, &D_801E6F2C);
+  LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
   LoadImage(&D_8007F95C, D_8009B2A0);
   if (a0v < 0)
   {
@@ -333,19 +333,19 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     x88 = x2 + 0x88;
     delta = 0x220 - D_8007F948;
     scaleDelta = (delta * D_8007F93C.value) / 272;
-    gxBase = (D_8007BEE4.tx * 4) - 1;
+    gxBase = (g_TeamLogoRect.tx * 4) - 1;
     gxTemp = gxBase + scaleDelta;
     gx = gxTemp;
     scaleDelta = (delta * D_8007F940) / 272;
-    texY = (*(u8 *)(&D_8007BEE4.ty)) - 1;
+    texY = (*(u8 *)(&g_TeamLogoRect.ty)) - 1;
     gyTemp = texY + scaleDelta;
     gyRaw = gyTemp;
     gy = gyRaw;
     gx2 = gxTemp + (D_8007F948 / 8);
     asm("" : : "r"(scaleDelta));
     gy2 = gyRaw + (D_8007F948 / 8);
-    clut = (D_8007BEE4.ty >> 4) & 0x10;
-    clut |= (D_8007BEE4.tx & 0x3FF) >> 6;
+    clut = (g_TeamLogoRect.ty >> 4) & 0x10;
+    clut |= (g_TeamLogoRect.tx & 0x3FF) >> 6;
     SetDrawClipRect(ot, 0, 0, 0x140, 0x1E0);
     GameDrawTexturedQuad(ot, x2, sx, x88, sx, x2, w1, x88, w1, gx, gy, gx2, gy, gx, gy2, gx2, gy2, 0x7F, 0x7F, 0x7F, 0x27F, 1, 0, clut);
     SetDrawClipRect(ot, x0 + 1, kreg + 2, 0x80, 0x100);
@@ -414,15 +414,15 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
       }
       DrawRectOutline(ot, x1, y1, 0x20, 0x40, 0, clut, 0, 0xFF);
     }
-    gx = (D_8007BEE4.tx * 4) - 1;
-    gy = (*(u8 *)(&D_8007BEE4.ty)) - 1;
+    gx = (g_TeamLogoRect.tx * 4) - 1;
+    gy = (*(u8 *)(&g_TeamLogoRect.ty)) - 1;
     gx2 = gx;
     gx2 += 0x41;
     gy2 = gy;
     gy2 += 0x41;
-    pal = GetClut(D_8007BEDC.cx, D_8007BEDC.cy);
-    clut = (D_8007BEE4.ty >> 4) & 0x10;
-    clut |= (D_8007BEE4.tx & 0x3FF) >> 6;
+    pal = GetClut(g_TeamLogoClutRect.cx, g_TeamLogoClutRect.cy);
+    clut = (g_TeamLogoRect.ty >> 4) & 0x10;
+    clut |= (g_TeamLogoRect.tx & 0x3FF) >> 6;
     w1 = kreg + 0x83;
     xb = x0 + 0x41;
     SetDrawClipRect(ot, 0, 0, 0x140, 0x1E0);

@@ -9,14 +9,14 @@
 void UpdateAttractCars(void);
 
 extern s32 g_BgmSelectStep;
-extern void (*g_BgmSelectSteps[])(void) asm("D_8007D6B8");
+extern void (*g_BgmSelectSteps[])(void);
 extern s32 g_ImageBlockBuffer;
 extern s32 g_FrameSyncThreshold;
 extern s32 g_AttractDemoStep;
 void UploadImageAsset(void *arg0);
 void InstallCourseAssets(void);
 s32 RequestTrackDataAssets(void);
-extern s16 g_AttractTitleDelays[] asm("D_8007D6CC");
+extern s16 g_AttractTitleDelays[];
 s32 GetAttractTitleFade(s32 arg0);
 
 void func_80046A2C(

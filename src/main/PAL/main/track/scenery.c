@@ -6,10 +6,10 @@
 #include "game/state.h"
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
-extern Vec4 g_StaticSceneryPos asm("D_8007E340");
+extern Vec4 g_StaticSceneryPos;
 /* +0x0C of the same 4-word record, i.e. its w component used as a Y angle;
  * g_HighClassSceneryYaw is the same field of the record at 0x8007E350. */
-extern s32 g_StaticSceneryYaw asm("D_8007E34C");
+extern s32 g_StaticSceneryYaw;
 extern u32 *g_VisibleCellMask;
 extern s32 g_IsEnvironmentMode4;
 extern s32 g_CourseModelCount;
@@ -85,7 +85,7 @@ void DrawStaticScenery(s32 arg0) {
     }
 }
 
-extern s32 g_HighClassSceneryYaw asm("D_8007E35C");
+extern s32 g_HighClassSceneryYaw;
 
 void DrawHighClassScenery(void);
 

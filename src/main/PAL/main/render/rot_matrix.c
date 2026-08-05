@@ -85,7 +85,7 @@ void SetCameraRotMatrix(void) {
     func_80069858(scratch);
 }
 
-extern s16 g_AtanTable[] asm("D_8007B664");
+extern s16 g_AtanTable[];
 
 s32 Atan2(s32 arg0, s32 arg1) {
     if (arg0 == 0) {

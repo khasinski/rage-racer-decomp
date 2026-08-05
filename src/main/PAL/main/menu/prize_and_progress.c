@@ -30,7 +30,7 @@ extern s32 g_SfxVolumeSetting;
 extern s32 g_MonoOutput;
 void SetSequenceVolumeSetting(s32 arg0);
 void SetEffectVolumeSetting(s32 arg0);
-extern UnkCopyChunk g_SaveDefaults[] asm("D_8007BE68");
+extern UnkCopyChunk g_SaveDefaults[];
 extern u8 g_TimeAttackCars;
 extern s16 g_ClassRecords;
 extern s16 g_ClassClears;

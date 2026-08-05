@@ -86,7 +86,7 @@ extern s16 g_ReverbZoneDepth;
 
 extern s16 g_PlayerTrackSection;
 
-extern u8 g_TextCongratulations asm("D_80011494");
+extern u8 g_TextCongratulations;
 
 void DrawFullscreenFadeTile(s32 a, s32 b);
 
@@ -140,9 +140,9 @@ void DrawWaypoints(void);
 /* Two 8-byte { start, end } reverb spans per series (offset = series * 16):
  * inside one of them ApplyTrackReverbZone drives the reverb depth to 0x46,
  * outside it to 0. */
-extern s32 g_ReverbZoneStart asm("D_8007E054");
+extern s32 g_ReverbZoneStart;
 
-extern s32 g_ReverbZoneEnd asm("D_8007E058");
+extern s32 g_ReverbZoneEnd;
 
 /*
  * The tail's multiply feeds the discarded rounding path below. GCC 2.6.3

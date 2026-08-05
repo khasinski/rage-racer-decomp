@@ -3,7 +3,7 @@
 
 extern long g_SndVoiceSilenceIndex;
 extern u_long g_SndVoiceSilenceHistory[];
-extern volatile u_short *g_SndSpuRegs asm("D_8009A588");
+extern volatile u_short *g_SndSpuRegs;
 extern u_char g_SndVoiceRegs[];
 extern u_char g_SndVoiceRegsPitch[];
 extern u_char g_SndVoiceRegsAddr[];

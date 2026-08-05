@@ -2,7 +2,7 @@
 #include "game/cd.h"
 #include "psyq/cd.h"
 
-extern s32 g_CdMixPreset asm("D_8007F5FC");
+extern s32 g_CdMixPreset;
 extern u8 g_CdVolume;
 
 
@@ -12,9 +12,9 @@ void SetCdMixPreset(s32 arg0) {
     SetCdVolume(g_CdVolume);
 }
 
-extern CdlLOC g_CdTrackLocs[] asm("D_8009AFD4");
-extern CdlLOC g_CdBgmTrackLocs[] asm("D_8009AFDC");
-extern void *g_CdAudioFileNames[] asm("D_8007F568");
+extern CdlLOC g_CdTrackLocs[];
+extern CdlLOC g_CdBgmTrackLocs[];
+extern void *g_CdAudioFileNames[];
 extern s32 g_CdTocEntryCount;
 extern u8 g_CdSearchFile[];
 

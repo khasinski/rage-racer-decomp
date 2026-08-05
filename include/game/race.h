@@ -18,7 +18,7 @@ extern s16 g_GrandPrixSeries;
 
 /* Display names: [0..5] first-series classes, [6..10] advanced-series classes,
  * [11..13] course names. */
-extern char *g_GrandPrixNames[] asm("D_8007D3D8");
+extern char *g_GrandPrixNames[];
 
 /* Race position, 1 = leading; recomputed each frame from how many cars are
  * further along. At the finish it indexes g_PrizeMoney. */
@@ -118,22 +118,22 @@ extern s32 g_LapTimeMs;
 
 /* Grand Prix time limit, in frames; counts down while g_RacePhase >= 2 and
  * forces g_RacePhase = 5 when it reaches 0. Seeded to 15000. */
-extern s32 g_RaceTimeRemaining asm("D_8009AF9C");
+extern s32 g_RaceTimeRemaining;
 
 /* Sector being timed, 0..2; -2 before the first start-line crossing. */
 extern s32 g_SectorIndex;
 
 /* This lap's three sector times, filled in as each boundary is crossed. */
-extern s32 g_SectorTimes[3] asm("D_8009AF80");
+extern s32 g_SectorTimes[3];
 
 /* Total of the best lap the split is measured against; seeded from the save
  * records and written back when the race completes. */
-extern s32 g_RefLapTime asm("D_8009AF8C");
+extern s32 g_RefLapTime;
 
 /* Two 3-element arrays:
  *   g_SectorEndDistance[3]  g_SectorEndDistance/9C/A0  lap distance ending each sector
  *                                             (L/3, 2L/3, L)
- *   g_RefSectorTimes[3]     D_8009AF90/94/98  the best lap's sector times
+ *   g_RefSectorTimes[3]     g_RefSectorTimes/94/98  the best lap's sector times
  * g_RefSectorTimes is the one exception to one-address-one-name in this header:
  * race/UpdateLapAndFinish.c must spell its three elements as the separate
  * scalars g_RefSectorTimes/1/2 or gcc 2.6.3 CSEs the array base into a register
@@ -143,18 +143,18 @@ extern s32 g_RefLapTime asm("D_8009AF8C");
 
 /* Split readout: the sector time just recorded, the unsigned difference from
  * the reference, and its sign (+1 ahead, -1 behind, 0 no split). */
-extern s32 g_LastSectorTime asm("D_8009AF78");
-extern s32 g_SplitDelta asm("D_8009AF7C");
-extern s16 g_SplitSign asm("D_8009AFAC");
+extern s32 g_LastSectorTime;
+extern s32 g_SplitDelta;
+extern s16 g_SplitSign;
 
 /* Which sector's reference is on screen, the reference time itself, and the
  * 0..0x3C frame counter that ends the split display. */
-extern s16 g_SplitSector asm("D_8009AFA4");
-extern s32 g_SplitTargetTime asm("D_8009AFB0");
-extern s16 g_SplitTimer asm("D_8009AFA8");
+extern s16 g_SplitSector;
+extern s32 g_SplitTargetTime;
+extern s16 g_SplitTimer;
 
 /* Set when a lap time saturates at 0x927BF; write-only in retail. */
-extern s32 g_LapTimeSaturated asm("D_8009AFA0");
+extern s32 g_LapTimeSaturated;
 
 /* Frames the player has been driving the wrong way. Past 10 the warning shows
  * and rival cues are muted; in Time Attack 60 on lap 0 aborts the run. */

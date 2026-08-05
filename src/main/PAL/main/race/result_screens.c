@@ -48,8 +48,8 @@ void func_800418D4(void);
 void DrawReplayBadge(void);
 void SetTrackTexturePageNow(s32 arg0);
 void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
-extern char g_TextResult[] asm("D_80010DF0");
-extern char *g_CourseNames[] asm("D_8007D404");
+extern char g_TextResult[];
+extern char *g_CourseNames[];
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016A18(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -60,10 +60,10 @@ extern s32 g_BestTotalTimes[][4][2];
 extern s32 g_PlayerLapTimes[];
 /* Grand Prix result panel: the finishing-position graphic's per-place sprite
  * geometry and the two clut tables its two sprites pick from. */
-extern u16 g_ResultPlaceCluts[] asm("D_8007D41E");
-extern u16 g_ResultPanelCluts[] asm("D_8007D426");
-extern char g_FmtClassGrandPrix[] asm("D_80010DF8");
-extern char g_FmtRoundIn[] asm("D_80010E10");
+extern u16 g_ResultPlaceCluts[];
+extern u16 g_ResultPanelCluts[];
+extern char g_FmtClassGrandPrix[];
+extern char g_FmtRoundIn[];
 /*
  * Three captions drawn with the proportional font. Their bytes are lowercase
  * letters, which func_80016B7C routes through a separate word-sprite bank
@@ -72,11 +72,11 @@ extern char g_FmtRoundIn[] asm("D_80010E10");
  * sites prove: "hai" heads the ranking rows, "hegi" the total time ("T/…")
  * and "hfgi" the per-lap list.
  */
-extern char g_CaptionRanking[] asm("D_80010E1C");
-extern char g_CaptionTotalTime[] asm("D_80010E20");
-extern char g_CaptionLapTime[] asm("D_80010E28");
-extern GrandPrixIntroLayout g_ResultPlaceSprites[] asm("D_8007D414");
-extern GrandPrixIntroPosition g_ClassPlaceBarSizes[] asm("D_8007D430");
+extern char g_CaptionRanking[];
+extern char g_CaptionTotalTime[];
+extern char g_CaptionLapTime[];
+extern GrandPrixIntroLayout g_ResultPlaceSprites[];
+extern GrandPrixIntroPosition g_ClassPlaceBarSizes[];
 
 s32 func_80016EC4(
     void *arg0,

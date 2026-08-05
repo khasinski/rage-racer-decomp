@@ -8,7 +8,7 @@ extern u_char g_SndCurrentTone;
 extern u_char g_SndCurrentToneCenter;
 extern u_char g_SndCurrentToneShift;
 extern u_char *g_SndCurrentToneTable;
-extern u_short g_SndPitchTable[] asm("D_8009A58C");
+extern u_short g_SndPitchTable[];
 
 u_short SpuVmCalculateCurrentPitch(void);
 u_short SpuVmCalculateTonePitch(long arg0, long arg1);

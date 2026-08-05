@@ -10,18 +10,18 @@ void DrawCourseIntro(void);
 /* Second copies of the same three captions -- the ROM holds duplicate literals
  * at 0x80010E1C..0x80010E28 and here; see docs/names.md 18d for why the bytes
  * are lowercase and how each caption is identified. */
-extern char g_CaptionLapTime2[] asm("D_80010F90");
-extern char g_CaptionTotalTime2[] asm("D_80010FA8");
-extern char g_CaptionRanking2[] asm("D_80010F98");
-extern char g_FmtRecordName[] asm("D_80010F9C");
-extern char g_FmtCarName[] asm("D_80010FA4");
+extern char g_CaptionLapTime2[];
+extern char g_CaptionTotalTime2[];
+extern char g_CaptionRanking2[];
+extern char g_FmtRecordName[];
+extern char g_FmtCarName[];
 extern s32 g_PlayerLapTimes[];
 extern s32 g_BestLapIndex;
 extern s32 g_TimeRecordInsertRow;
 extern s32 g_RankingInsertRow;
-extern u8 *g_PlaceSuffixNames[] asm("D_8007D4C0");
-extern s32 g_CarClassNames[] asm("D_8007D508");
-extern s32 g_CarNames[] asm("D_8007D4D4");
+extern u8 *g_PlaceSuffixNames[];
+extern s32 g_CarClassNames[];
+extern s32 g_CarNames[];
 void func_80016EA0(void *dst, s32 len, void *src, s32 arg3);
 void func_80016754(void *dst, s32 x, void *src, s32 color);
 void *FormatLapTime(void *dst, s32 value);
@@ -40,7 +40,7 @@ extern u16 g_TimeRecordCars[];
 extern s32 g_FrameSyncThreshold;
 extern s32 g_RecordEntryState;
 void InsertRaceRecords(void);
-extern u8 g_NameEntryCharset[] asm("D_80010FB0");
+extern u8 g_NameEntryCharset[];
 extern s32 g_NameEntryCursor;
 extern s32 g_RecordPanelSlide;
 extern u8 g_RankingNameCodes[];

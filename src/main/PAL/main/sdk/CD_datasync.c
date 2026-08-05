@@ -4,14 +4,14 @@
 #include "psyq/cd.h"
 
 
-extern long g_CdCommandNames[] asm("D_80099060");
-extern volatile u_char g_CdSyncStatus[] asm("D_80099318");
-extern long g_CdIntrNames[] asm("D_800990E0");
-extern u_char g_CdLastCommand asm("D_8009905D");
+extern long g_CdCommandNames[];
+extern volatile u_char g_CdSyncStatus[];
+extern long g_CdIntrNames[];
+extern u_char g_CdLastCommand;
 extern long g_CdTimeoutDeadline;
 extern long g_CdTimeoutCounter;
 extern void *D_8009BB10;
-extern volatile u_long *g_CdDmaChcr asm("D_80099344");
+extern volatile u_long *g_CdDmaChcr;
 extern char D_8001391C[];
 extern char D_80013814[];
 extern char D_80013824[];

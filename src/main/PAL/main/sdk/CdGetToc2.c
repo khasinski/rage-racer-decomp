@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern long g_CdDebugLevel asm("D_80099048");
+extern long g_CdDebugLevel;
 extern u_char D_80013678[];
 extern u_char D_80013688[];
 extern u_char D_800136A4[];

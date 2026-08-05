@@ -13,7 +13,7 @@ u_long DeliverEvent[4] __attribute__((section(".text"))) = {
     0,
 };
 
-extern u_char g_CdStatusByte asm("D_8009904C");
+extern u_char g_CdStatusByte;
 
 /* CdStatus: returns the last cached CD drive status byte. */
 long CdStatus(void);
@@ -21,9 +21,9 @@ long CdStatus(void) {
     return g_CdStatusByte;
 }
 
-extern CdlLOC g_CdLastPos asm("D_80099058");
-extern u_char g_CdModeByte asm("D_8009905C");
-extern u_char g_CdLastCommand asm("D_8009905D");
+extern CdlLOC g_CdLastPos;
+extern u_char g_CdModeByte;
+extern u_char g_CdLastCommand;
 
 /* CdMode: returns the last CD mode byte. */
 u_char CdMode(void);

@@ -17,7 +17,7 @@ extern void *D_8009F0B0;
 extern u8 D_80082634;
 extern u8 D_80082664;
 extern u8 D_80081CA4;
-extern u8 g_UiChromeScript asm("D_80082460");
+extern u8 g_UiChromeScript;
 
 extern void ComposeSampleTeamLogo(s32, s32);
 extern void DrawTeamLogoCanvas(s32, s32);

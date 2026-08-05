@@ -4,14 +4,14 @@
 #include "game/render.h"
 
 extern s32 g_CourseModelCount;
-extern u16 g_SpinningSceneryRate[] asm("D_8007E33C");
-extern u16 g_SpinningSceneryAngle[] asm("D_8007E334");
-extern u8 g_SpinningSceneryYaw[] asm("D_8007E300");
+extern u16 g_SpinningSceneryRate[];
+extern u16 g_SpinningSceneryAngle[];
+extern u8 g_SpinningSceneryYaw[];
 /* One 16-byte { x, y, z, yaw } record per prop -- g_SpinningSceneryYaw is the
  * split symbol for that fourth word. g_SpinningSceneryAngle is the live Z spin
  * of each prop, advanced by g_SpinningSceneryRate[active], and the two rates
  * are re-rolled to rand & 0x1F / rand & 0x3F every 512 frames. */
-extern u8 g_SpinningSceneryPos[] asm("D_8007E2F4");
+extern u8 g_SpinningSceneryPos[];
 
 void func_80017794(void *arg0, void *arg1, void *arg2);
 s32 Random15(void);

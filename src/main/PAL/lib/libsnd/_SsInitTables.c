@@ -2,12 +2,12 @@
 
 #include "common.h"
 
-extern u_short g_SndVoiceRegDefaults[] asm("D_8009A528");
-extern u_short g_SndSpuCtrlDefaults[] asm("D_8009A538");
+extern u_short g_SndVoiceRegDefaults[];
+extern u_short g_SndSpuCtrlDefaults[];
 extern long g_SndTickResolution;
 extern long g_SndSeqOpenMask;
 extern long g_SndUpdateLock;
-extern long g_SndMarkCallbacks[][0x10] asm("D_801E7A58");
+extern long g_SndMarkCallbacks[][0x10];
 
 void SpuVmInit(long arg0);
 

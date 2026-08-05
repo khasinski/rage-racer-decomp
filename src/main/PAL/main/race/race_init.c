@@ -3,11 +3,11 @@
 #include "game/car.h"
 s32 InitSoundWithVab(void);
 
-extern u8 g_MsgResOk[] asm("D_80011438");
+extern u8 g_MsgResOk[];
 
 
 
-extern u8 g_MsgEventOk[] asm("D_80011440");
+extern u8 g_MsgEventOk[];
 
 extern u8 *volatile g_RaceIntroCameraScript;
 
@@ -20,12 +20,12 @@ extern u8 *volatile g_FlybySceneryData;
 
 extern u8 *volatile g_PathSceneryPosData;
 
-extern u8 g_MsgSoundError asm("D_8001144C");
+extern u8 g_MsgSoundError;
 
-extern u8 g_MsgInitSoundOk asm("D_8001145C");
+extern u8 g_MsgInitSoundOk;
 
 
-extern u8 g_MsgInitEngineOk asm("D_8001146C");
+extern u8 g_MsgInitEngineOk;
 
 void LoadExtraVabSlotWithTable(void);
 

@@ -16,14 +16,14 @@ typedef struct UnkEventPair {
 
 extern s32 g_AttractDemoStep;
 extern u32 g_StreamReturnScene;
-extern void (*g_AttractDemoSteps[])(void) asm("D_8007D6D0");
+extern void (*g_AttractDemoSteps[])(void);
 void ResetAssetLoader(void);
 void ReturnToTitleScene(void);
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold;
 extern s32 g_PrologueStep;
 extern s32 g_PrologueCutIndex;
-extern u8 g_TextNowLoading[] asm("D_80011010");
+extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void InitTrackScene(void);
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
@@ -32,16 +32,16 @@ void RequestTrackDataAssets(void);
 void UpdatePrologueLoad(void);
 /* Split symbols of the 14-entry prologue table: 8 bytes each, { s16 x,
  * s16 y, char *text }. The scroll drives y and the alpha ramp. */
-extern s16 g_PrologueLineX[] asm("D_8007D6DC");
-extern s16 g_PrologueLineY[] asm("D_8007D6DE");
-extern s32 g_PrologueLineText[] asm("D_8007D6E0");
+extern s16 g_PrologueLineX[];
+extern s16 g_PrologueLineY[];
+extern s32 g_PrologueLineText[];
 void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 void RequestSelectBgmAssets(void);
 extern u32 g_CameraViewMode;
 extern u8 g_CarTrackSection[];
-extern UnkEventPair g_PrologueCameraCuts[] asm("D_8007D74C");
+extern UnkEventPair g_PrologueCameraCuts[];
 void ExitPrologue(void);
 void DrawPrologueText(void);
 void RequestTrackTexturePage(s32 arg0);

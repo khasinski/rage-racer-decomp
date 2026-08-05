@@ -33,14 +33,14 @@ extern s32 D_8009E6FC;
 extern s32 D_8009E718;
 extern s32 D_8009E71C;
 extern s32 g_PlayerTrackProgress;
-extern u8 g_TeamLogoClutRect[] asm("D_8007BEDC");
-extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
+extern u8 g_TeamLogoClutRect[];
+extern u8 g_TeamLogoRect[];
 extern u8 g_TeamLogoClut[];
 extern u8 g_TeamLogoCanvas[] asm("D_801E6F2C");
 s32 RequestCarSelectAssets(void);
 void PlaySequence(void);
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void LoadImage(void *rect, void *data) asm("func_80065B24");
+void LoadImage(void *rect, void *data);
 void UploadTeamNameTexture(void *arg0, s32 arg1);
 
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
@@ -511,12 +511,12 @@ extern s32 g_CourseSelectOption;
 extern s32 g_PlayerMoney;
 extern u8 D_80081818;
 extern u8 D_800817A0;
-extern u8 g_UiChromeScript asm("D_80082460");
+extern u8 g_UiChromeScript;
 extern u8 D_800827FC;
-extern u8 g_UiChromeScript2 asm("D_80082790");
+extern u8 g_UiChromeScript2;
 extern u8 D_80082604;
 extern u8 D_800825A4;
-extern u8 g_MenuBlankCaption asm("D_80011BA0");
+extern u8 g_MenuBlankCaption;
 void ResetCourseProgress(s32 arg0);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);

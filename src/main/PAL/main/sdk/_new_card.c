@@ -27,9 +27,9 @@ void DecDCTReset(long arg0) {
  * g_MdecQuantCmd 0x40000001 (MDEC command 2, set quant tables, colour) with
  * the 64-byte luma and chroma tables, and g_MdecIdctCmd 0x60000000
  * (command 3, set scale table) with the 64-halfword IDCT cosine table. */
-extern u_long g_MdecQuantLuma[] asm("D_80083060");
-extern u_long g_MdecQuantChroma[] asm("D_800830A0");
-extern u_long g_MdecIdctTable[] asm("D_800830E4");
+extern u_long g_MdecQuantLuma[];
+extern u_long g_MdecQuantChroma[];
+extern u_long g_MdecIdctTable[];
 
 u_long * DecDCTGetEnv(u_long *arg0);
 u_long *DecDCTGetEnv(u_long *arg0) {
@@ -58,8 +58,8 @@ u_long *DecDCTGetEnv(u_long *arg0) {
     return arg0;
 }
 
-extern u_char g_MdecQuantCmd[] asm("D_8008305C");
-extern u_char g_MdecIdctCmd[] asm("D_800830E0");
+extern u_char g_MdecQuantCmd[];
+extern u_char g_MdecIdctCmd[];
 
 void MDEC_in(volatile u_long *arg0, long arg1);
 

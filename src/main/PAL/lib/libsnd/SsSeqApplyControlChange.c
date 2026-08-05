@@ -2,7 +2,7 @@
 #include "psyq/snd.h"
 
 extern SeqStruct *g_SndSeqTable[];
-extern void (*g_SndMarkCallbacks[][0x10])(long seq, long sep, u_char value) asm("D_801E7A58");
+extern void (*g_SndMarkCallbacks[][0x10])(long seq, long sep, u_char value);
 
 void SsSeqApplyControlChange(long seq, long sep, u_char value) asm("func_8006FDA8");
 

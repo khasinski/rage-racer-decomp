@@ -6,7 +6,7 @@
 /*
  * g_McMenuPhase picks the prompt drawn under the slot list; 0 draws none, and
  * DrawMemoryCardMessage is called with the value minus one. The names come
- * from the retail strings the index reaches through D_8007D99C, quoted here.
+ * from the retail strings the index reaches through g_McMessageRows, quoted here.
  */
 /* Geometry of the payload. The file around it is icon + header + this block
  * + header again; see the layout note above. */

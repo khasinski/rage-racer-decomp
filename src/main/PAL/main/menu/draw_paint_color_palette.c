@@ -8,7 +8,7 @@ typedef struct ColorTable {
     Rgb colors[18];
 } ColorTable;
 
-extern ColorTable g_PaintColorTable asm("D_800119A0");
+extern ColorTable g_PaintColorTable;
 extern s32 D_8009B290;
 extern s32 g_MenuAltLayout;
 

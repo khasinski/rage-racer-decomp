@@ -38,7 +38,7 @@ extern u8 D_801E4BF8[];
 extern u8 *g_TrackTextureShadow;
 extern s32 g_TrackTexturePageWanted;
 void StoreImage(Rect *rect, void *data);
-void LoadImage(Rect *rect, void *data) asm("func_80065B24");
+void LoadImage(Rect *rect, void *data);
 void DrawSync(long mode) asm("func_800658FC");
 
 void SwapTrackTexturePageNow(void);
@@ -123,7 +123,7 @@ extern u8 D_801E4BF8[];
 extern s32 g_TrackTexturePageWanted;
 extern u8 *g_TrackTextureShadow;
 void StoreImage(Rect *rect, void *data);
-void LoadImage(Rect *rect, void *data) asm("func_80065B24");
+void LoadImage(Rect *rect, void *data);
 void DrawSync(long mode) asm("func_800658FC");
 
 void SwapTrackTextureRow(void);

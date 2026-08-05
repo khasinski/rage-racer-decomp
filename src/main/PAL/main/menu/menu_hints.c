@@ -8,7 +8,7 @@ extern u8 D_8007D58A[];
 extern u8 D_8007D58B[];
 extern u8 * volatile g_DrawBuffer;
 extern volatile u8 g_PadType;
-extern u8 g_LastValidPadType asm("D_8007D5A4");
+extern u8 g_LastValidPadType;
 
 /* The 0xC x 0x18 selection arrow every setup-menu list draws at x = 0x14. */
 void DrawMenuCursorArrow(s32 arg0, s32 arg1);

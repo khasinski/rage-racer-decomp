@@ -7,9 +7,9 @@
 #include "game/render.h"
 #include "game/memcard.h"
 extern s32 g_ImageBlockBuffer;
-extern s32 g_McMenuRowCursor asm("D_80082F54");
+extern s32 g_McMenuRowCursor;
 extern s32 g_McMenuRowCount;
-extern s32 g_McMenuPage asm("D_80082F50");
+extern s32 g_McMenuPage;
 extern s32 g_McFromLoadMenu;
 extern s32 g_McFadeStep;
 extern s32 g_McFadeLevel;

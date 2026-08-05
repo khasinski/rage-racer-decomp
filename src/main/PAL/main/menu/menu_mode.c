@@ -345,7 +345,7 @@ extern s32 g_FrameSyncThreshold;
 extern s32 g_PlayerMoney;
 
 extern s32 D_80082568;
-extern Vec4 g_MenuViewScale asm("D_80082D6C");
+extern Vec4 g_MenuViewScale;
 
 extern void *D_8019C764;
 extern void *D_801E40B4;
@@ -384,7 +384,7 @@ extern s32 g_RankingOption;
 extern s32 g_DesignModeOption;
 extern s32 D_801E4D74;
 
-void InitRenderState(s32) asm("func_80017884");
+void InitRenderState(s32);
 void func_8005290C(s32);
 void func_80054C84(s32);
 void func_800551BC(s32);

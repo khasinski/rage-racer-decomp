@@ -51,8 +51,8 @@ extern s32 g_MenuScreen;
  * overlays (selected by g_MenuHandlerIndex / g_MenuHandlerIndex2). See the
  * screen-table block at the bottom of this header for the entries.
  */
-extern void (*g_MenuScreenUpdate[])(void) asm("D_80082EB8");
-extern s32 (*g_MenuScreenDraw[])(s32 step) asm("D_80082EF0");
+extern void (*g_MenuScreenUpdate[])(void);
+extern s32 (*g_MenuScreenDraw[])(s32 step);
 
 /*
  * Title-menu cursor, 0..4 (UpdateMainMenuInput wraps it with `(sel + 5) % 5` on the
@@ -91,8 +91,8 @@ extern S22 g_TimeRecords[][4][5];
 
 /* The team-name entry buffer and its length, capped at 6 characters. The pair is
  * also the first bytes of the memory-card save header row. */
-extern u8 g_TeamNameLength asm("D_8007F45C");
-extern u8 g_TeamNameChars[] asm("D_8007F460");
+extern u8 g_TeamNameLength;
+extern u8 g_TeamNameChars[];
 
 /* Memory-card menu sub-state, driven by UpdateMemoryCardMenu. g_McCardStatus is the
  * last PollMemoryCardStatus result (0 no card yet, 1/2 card present,
@@ -275,8 +275,8 @@ void RotateTeamLogoCw(void);
  * TEAM LOGO editor data, all per-file types; see docs/names.md 12c.
  *   g_TeamLogoCanvas   D_801E6F2C  2048 bytes = 64x64 4bpp
  *   g_TeamLogoClut     g_TeamLogoClut  16 x u16
- *   g_TeamLogoRect     D_8007BEE4  RECT{0x290,0x30,64,16} for the canvas
- *   g_TeamLogoClutRect D_8007BEDC  RECT{16,480,16,1} for the CLUT
+ *   g_TeamLogoRect     g_TeamLogoRect  RECT{0x290,0x30,64,16} for the canvas
+ *   g_TeamLogoClutRect g_TeamLogoClutRect  RECT{16,480,16,1} for the CLUT
  * g_ClassRecords g_ClassRecords is the 11 x {s16 grade, s16 clears} table.
  */
 

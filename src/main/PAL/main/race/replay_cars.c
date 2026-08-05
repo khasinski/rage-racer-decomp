@@ -47,7 +47,7 @@ extern s16 g_ReverbZoneDepth;
 extern s16 g_TrackZoneDark;
 
 
-extern u8 g_MsgGameExit asm("D_8001147C");
+extern u8 g_MsgGameExit;
 
 void ForceAllEffectVoicesEnabled(s32 arg0);
 
@@ -77,7 +77,7 @@ extern s32 g_BestLapThisRace;
 
 extern s32 g_SectorEndDistance[];
 
-extern s32 g_RefSectorTimes[] asm("D_8009AF90");
+extern s32 g_RefSectorTimes[];
 
 extern s32 g_BestSectorTimes[][4][3];
 

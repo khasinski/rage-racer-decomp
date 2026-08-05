@@ -16,7 +16,7 @@ extern s32 g_TimeAttackPlateStep;
 extern s32 D_8019CDF8;
 extern u8 D_80082724;
 extern u8 D_80081890;
-extern u8 g_UiChromeScript asm("D_80082460");
+extern u8 g_UiChromeScript;
 
 void func_80047460(void *buf, s32 xa, s32 ya, s32 w, s32 h, s32 r, s32 g, s32 b, s32 code);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
@@ -335,7 +335,7 @@ void EnterCarSelectScreen(void) {
 
 extern u8 D_800818CC;
 extern u8 D_800819A4;
-extern u8 g_UiChromeScript2 asm("D_80082790");
+extern u8 g_UiChromeScript2;
 extern u8 D_8008285C;
 extern u8 D_80082874;
 extern u8 *D_801E40B4;
@@ -733,12 +733,12 @@ s32 DrawCustomizeScreen(s32 arg0) {
     return D_8009B2D0;
 }
 
-extern u8 g_MenuBlankCaption asm("D_80011BA0");
+extern u8 g_MenuBlankCaption;
 extern u8 D_80081A34;
 extern u8 D_80081AD0;
 extern u8 D_80082574;
 extern u8 D_800825A4;
-extern u8 g_UiChromeScript2 asm("D_80082790");
+extern u8 g_UiChromeScript2;
 extern u8 D_80082814;
 extern u8 g_MenuSubCursor;
 extern s32 g_MenuConfirmTimer;

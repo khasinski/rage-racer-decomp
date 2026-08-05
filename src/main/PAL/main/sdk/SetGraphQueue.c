@@ -2,10 +2,10 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 
-extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
-extern void (*GPU_printf)(char *, ...) asm("D_800941E4");
-extern u_char g_GraphQueue asm("D_800941E9");
-extern u_char g_GraphDebug asm("D_800941EA");
+extern GpuCallbacks *g_GpuFuncs;
+extern void (*GPU_printf)(char *, ...);
+extern u_char g_GraphQueue;
+extern u_char g_GraphDebug;
 extern char D_800134F0[];
 
 /* GP1 queue mode; own trace string D_800134F0 is "SetGrapQue(%d)...". */
@@ -29,8 +29,8 @@ long SetGraphQueue(long arg0) {
     return oldQueue;
 }
 
-extern u_char g_GraphType asm("D_800941E8");
-extern u_char g_GraphDebug asm("D_800941EA");
+extern u_char g_GraphType;
+extern u_char g_GraphDebug;
 
 long GetGraphType(void) asm("func_800657E4");
 long GetGraphType(void) {
@@ -43,15 +43,15 @@ long GetGraphDebug(void) {
 }
 
 extern char D_80013504[];
-extern void (*D_800941E4)(char *, ...);
-extern u_long g_DrawSyncCallback asm("D_800941F4");
+extern void (*GPU_printf)(char *, ...);
+extern u_long g_DrawSyncCallback;
 
 u_long DrawSyncCallback(u_long arg0);
 u_long DrawSyncCallback(u_long arg0) {
     u_long ret;
 
     if (g_GraphDebug >= 2) {
-        D_800941E4(D_80013504, arg0);
+        GPU_printf(D_80013504, arg0);
     }
 
     ret = g_DrawSyncCallback;
@@ -92,19 +92,19 @@ void SetDispMask(long arg0) {
     gpu->submit(mask);
 }
 
-extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncs;
 extern char D_80013534[];
 
 void DrawSync(long arg0) asm("func_800658FC");
 void DrawSync(long arg0) {
     if (g_GraphDebug >= 2) {
-        D_800941E4(D_80013534, arg0);
+        GPU_printf(D_80013534, arg0);
     }
     g_GpuFuncs->drawSync(arg0);
 }
 
-extern short g_VramWidth asm("D_800941EC");
-extern short g_VramHeight asm("D_800941EE");
+extern short g_VramWidth;
+extern short g_VramHeight;
 extern char D_80013548[];
 extern char D_80013554[];
 extern char D_80013568[];
@@ -159,7 +159,7 @@ void CheckPrim(char *arg0, Rect *rect) {
     }
 }
 
-extern GpuCallbacks *g_GpuFuncs asm("D_800941E0");
+extern GpuCallbacks *g_GpuFuncs;
 extern char D_8001356C[];
 
 void func_80065968(char *arg0, void *arg1);

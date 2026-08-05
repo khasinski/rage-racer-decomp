@@ -4,10 +4,10 @@
 
 void Gpu_ArmTimeout(void);
 
-extern volatile u_long *g_GpuGp1 asm("D_800942BC");
-extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
-extern long g_GpuQueueWriteIdx asm("D_800942EC");
-extern long g_GpuQueueReadIdx asm("D_800942F0");
+extern volatile u_long *g_GpuGp1;
+extern volatile u_long *g_GpuDmaChcr;
+extern long g_GpuQueueWriteIdx;
+extern long g_GpuQueueReadIdx;
 
 void Gpu_ExecuteQueue(void);
 long Gpu_CheckTimeout(void);
@@ -72,7 +72,7 @@ waitReady:
     return pending;
 }
 
-extern long g_GpuTimeoutDeadline asm("D_80094300");
-extern long g_GpuTimeoutPolls asm("D_80094304");
+extern long g_GpuTimeoutDeadline;
+extern long g_GpuTimeoutPolls;
 long VSync(long mode);
 void Gpu_ArmTimeout(void) { g_GpuTimeoutDeadline = VSync(-1) + 240; g_GpuTimeoutPolls = 0; }

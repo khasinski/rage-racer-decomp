@@ -11,18 +11,18 @@ typedef struct TextSprt8 {
 } TextSprt8;
 
 extern u8 *g_DrawBuffer;
-extern u8 g_Font8x8Cells[] asm("D_8007C2F8");
-extern u8 g_DrawModeEnv[] asm("D_8007BED0");
-extern u8 g_PropFontU[] asm("D_8007C3B8");
-extern u8 g_PropFontV[] asm("D_8007C3B9");
-extern u8 g_WordFontU[] asm("D_8007C438");
-extern u8 g_WordFontV[] asm("D_8007C439");
-extern u8 g_WordFontWidth[] asm("D_8007C43A");
-extern u8 g_WordFontAdvance[] asm("D_8007C43B");
-extern u8 g_HighFontU[] asm("D_8007C460");
-extern u8 g_HighFontV[] asm("D_8007C461");
-extern u8 g_HighFontWidth[] asm("D_8007C462");
-extern u8 g_HighFontYOffset[] asm("D_8007C463");
+extern u8 g_Font8x8Cells[];
+extern u8 g_DrawModeEnv[];
+extern u8 g_PropFontU[];
+extern u8 g_PropFontV[];
+extern u8 g_WordFontU[];
+extern u8 g_WordFontV[];
+extern u8 g_WordFontWidth[];
+extern u8 g_WordFontAdvance[];
+extern u8 g_HighFontU[];
+extern u8 g_HighFontV[];
+extern u8 g_HighFontWidth[];
+extern u8 g_HighFontYOffset[];
 
 /*
  * Keep the first font base opaque after materialising it. This empty constraint

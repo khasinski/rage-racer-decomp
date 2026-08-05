@@ -1,16 +1,16 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long g_SpuRevWorkAreaAddr asm("D_8009A720");
-extern SpuRevAttrState g_SpuRevAttr asm("D_8009A728");
-extern long g_SpuTransferEvent asm("D_8009A768");
-extern long g_SpuZeroBuf[] asm("D_8009A770");
-extern SpuCommonRegs *g_SpuRegBase asm("D_8009AB7C");
-extern long g_SpuTransferByIo asm("D_8009AB94");
-extern long _spu_mem_mode_unitM asm("D_8009ABA0");
-extern volatile long g_SpuTransferCallback asm("D_8009ABB0");
-extern long g_SpuRevWorkAreaStartAddr[] asm("D_8009ABE0");
-extern SpuReverbRegAttr g_SpuRevAttrTable[] asm("D_8009AC30");
+extern long g_SpuRevWorkAreaAddr;
+extern SpuRevAttrState g_SpuRevAttr;
+extern long g_SpuTransferEvent;
+extern long g_SpuZeroBuf[];
+extern SpuCommonRegs *g_SpuRegBase;
+extern long g_SpuTransferByIo;
+extern long _spu_mem_mode_unitM;
+extern volatile long g_SpuTransferCallback;
+extern long g_SpuRevWorkAreaStartAddr[];
+extern SpuReverbRegAttr g_SpuRevAttrTable[];
 
 #define SPU_REG16 ((volatile u_short *)g_SpuRegBase)
 

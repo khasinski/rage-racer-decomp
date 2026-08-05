@@ -3,8 +3,8 @@
 #include "common.h"
 
 extern volatile u_char *D_800993D0;
-extern volatile u_long *g_DmaDpcr asm("D_800993E8");
-extern u_char *g_DmaDicr asm("D_800993EC");
+extern volatile u_long *g_DmaDpcr;
+extern u_char *g_DmaDicr;
 extern char D_80013B14[];
 
 

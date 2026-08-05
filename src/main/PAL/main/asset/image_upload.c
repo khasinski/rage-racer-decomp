@@ -3,7 +3,7 @@
 #include "game/race.h"
 #include "game/asset.h"
 
-void LoadImage(Rect *rect, void *data) asm("func_80065B24");
+void LoadImage(Rect *rect, void *data);
 void func_800658FC(s32 mode);
 
 void UploadImageBlock(void *arg0);
@@ -70,12 +70,12 @@ break;
 }
 }
 
-extern Rect g_TrackTextureRect asm("D_8007C710");
-extern Rect g_TeamLogoClutLoadRect asm("D_8007C718");
-extern GpuRectPacked g_TeamLogoClutMoveRect asm("D_8007C720");
+extern Rect g_TrackTextureRect;
+extern Rect g_TeamLogoClutLoadRect;
+extern GpuRectPacked g_TeamLogoClutMoveRect;
 extern u16 g_TeamLogoClut[];
 
-void LoadImage(Rect *rect, void *data) asm("func_80065B24");
+void LoadImage(Rect *rect, void *data);
 void StoreImage(Rect *rect, void *data);
 s32 func_80065BEC(GpuRectPacked *rect, u32 x, u32 y);
 void func_800658FC(s32 mode);

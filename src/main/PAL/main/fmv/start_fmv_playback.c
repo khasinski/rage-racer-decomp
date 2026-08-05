@@ -3,12 +3,12 @@
 #include "psyq/gpu.h"
 #include "game/render.h"
 
-extern s32 g_FmvFrameWidth asm("D_8009AF6C");
-extern s32 g_FmvFrameHeight asm("D_8009AF70");
-extern s32 g_FmvStreamEnded asm("D_8009AF74");
+extern s32 g_FmvFrameWidth;
+extern s32 g_FmvFrameHeight;
+extern s32 g_FmvStreamEnded;
 extern s32 g_FmvState;
 extern s32 g_GameClock;
-extern volatile u8 g_FmvVlcBuffers asm("D_8009AF20");
+extern volatile u8 g_FmvVlcBuffers;
 extern u8 g_DrawEnv1Dither;
 extern u8 g_DrawEnv0Dither;
 extern u8 g_DispEnv1Rgb24;

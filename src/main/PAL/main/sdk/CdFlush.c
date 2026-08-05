@@ -1,11 +1,11 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern long g_CdDebugLevel asm("D_80099048");
-extern long g_CdSyncCallback asm("D_8009903C");
-extern long g_CdReadyCallback asm("D_80099040");
-extern char *g_CdCommandNames[] asm("D_80099060");
-extern char *g_CdIntrNames[] asm("D_800990E0");
+extern long g_CdDebugLevel;
+extern long g_CdSyncCallback;
+extern long g_CdReadyCallback;
+extern char *g_CdCommandNames[];
+extern char *g_CdIntrNames[];
 extern u_char D_800136D0[];
 
 void CD_flush(void);

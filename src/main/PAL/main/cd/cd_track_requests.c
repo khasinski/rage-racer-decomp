@@ -2,14 +2,14 @@
 #include "psyq/cd.h"
 #include "game/cd.h"
 
-extern s32 g_CdTrackPending asm("D_8007F600");
-extern s32 g_CdCommandPending asm("D_8007F604");
-extern s32 g_CdTrackStep asm("D_8007F608");
-extern s32 g_CdCommandStep asm("D_8007F60C");
+extern s32 g_CdTrackPending;
+extern s32 g_CdCommandPending;
+extern s32 g_CdTrackStep;
+extern s32 g_CdCommandStep;
 extern u8 g_CdVolume;
 extern u8 g_CdCurrentTrack;
 extern s32 g_CdFadeFrames;
-extern CdlLOC g_CdTrackLocs[] asm("D_8009AFD4");
+extern CdlLOC g_CdTrackLocs[];
 
 s32 func_8006A534(s32 arg0, s32 arg1);
 long CdControl(long com, void *param, long result);

@@ -4,13 +4,13 @@
 #include "game/cd.h"
 #include "game/race.h"
 
-extern s32 g_CdRestartOnResume asm("D_8007F5F8");
-extern s32 g_CdMixPreset asm("D_8007F5FC");
-extern s32 g_CdTrackPending asm("D_8007F600");
-extern s32 g_CdCommandPending asm("D_8007F604");
-extern s32 g_CdTrackStep asm("D_8007F608");
-extern s32 g_CdCommandStep asm("D_8007F60C");
-extern u8 g_CdTrackElapsedLoc[] asm("D_8009AFD0");
+extern s32 g_CdRestartOnResume;
+extern s32 g_CdMixPreset;
+extern s32 g_CdTrackPending;
+extern s32 g_CdCommandPending;
+extern s32 g_CdTrackStep;
+extern s32 g_CdCommandStep;
+extern u8 g_CdTrackElapsedLoc[];
 extern u8 g_CdModeParam;
 extern u8 g_CdLocResult;
 extern u8 g_CdLocMinute;
@@ -19,7 +19,7 @@ extern u8 g_CdVolume;
 extern u8 g_CdCurrentTrack;
 extern s32 g_CdFadeFrames;
 extern s32 g_CdTrackEnded;
-extern CdlLOC g_CdTrackLoopPoint[] asm("D_8007F5B0");
+extern CdlLOC g_CdTrackLoopPoint[];
 
 long CdControl(long com, void *param, long result);
 s32 func_8006A534(s32 arg0, s32 arg1);

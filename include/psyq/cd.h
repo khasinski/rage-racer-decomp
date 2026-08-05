@@ -111,7 +111,7 @@ long StGetBackloc(CdlLOC *loc);
 void StSetRing(void *base, long size);
 void StSetStream(long mode, long start_frame, long end_frame, long callback, long user_data);
 u_long StFreeRing(u_long *base) asm("func_8006CFF0");
-/* The libds streaming state machine: advances D_80099418 through states 1..0xA,
+/* The libds streaming state machine: advances g_StInterruptState through states 1..0xA,
  * DMAs sector header then body, drives the StStrHeader ring. Installed via
  * CdReadyCallback behind the stub CdRead2Callback and also pumped directly from
  * UploadFmvSlice. */

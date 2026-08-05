@@ -7,12 +7,12 @@ typedef void (*Callback)(void);
  * [1] g_IntrInDispatch, [2..] g_IntrCallbacks (11 handler slots),
  * +0x30 g_IntrCallbackMask (which slots are filled), +0x38 the saved
  * frame HookEntryInt is pointed at. */
-extern u_short g_IntrState[] asm("D_80099430");
-extern u_short g_IntrInDispatch asm("D_80099432");
-extern u_short g_IntrCallbackMask asm("D_80099460");
-extern volatile u_short *g_IrqStatus asm("D_8009A4BC");
-extern volatile u_short *g_IrqMask asm("D_8009A4C0");
-extern long g_IntrStuckCount asm("D_8009A4C8");
+extern u_short g_IntrState[];
+extern u_short g_IntrInDispatch;
+extern u_short g_IntrCallbackMask;
+extern volatile u_short *g_IrqStatus;
+extern volatile u_short *g_IrqMask;
+extern long g_IntrStuckCount;
 extern u_char D_80013B70[];
 extern u_char D_80013B8C[];
 
