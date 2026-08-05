@@ -239,6 +239,14 @@ typedef struct GameCarSpec {
 
 extern GameCarSpec *g_CarSpec asm("D_801E42D8");
 
+/* Per-gear torque curve, one 16-entry row per gear: row 0 is the engine's own
+ * curve, rows 1..6 are it divided by each gear's ratio. */
+typedef struct GearCurveRow {
+    s32 values[16];
+} GearCurveRow;
+
+extern GearCurveRow g_GearTorqueCurve[] asm("D_801E8884");
+
 /* Drivetrain / input block at `car->field_BC`; the physics code addresses the
  * car's second half through this rather than through GameCarRuntime.
  *

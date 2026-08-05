@@ -40,7 +40,6 @@ extern s32 g_ShiftTargetRpm asm("D_801E4BF4");
  * NOTE: docs/names.md 15g listed this as written-but-never-read; that is
  * wrong, the read is right here. */
 extern s16 g_DragScale asm("D_801E4FB4");
-extern u8 g_GearTorqueCurve[] asm("D_801E8884");
 /*
  * AI target-speed / drivetrain physics driver (called by UpdatePlayerCar). Reads
  * the per-car spec block g_CarSpec to compute a target speed, applies steering
@@ -162,7 +161,7 @@ void UpdateCarDrivetrain(void *base) {
   void *car;
   u8 *config;
   car = base;
-  base = g_GearTorqueCurve;
+  base = (u8 *)g_GearTorqueCurve;
   config = (u8 *)g_CarSpec;
   temp_v1 = *(s16 *)(((u8 *)car) + 0x132);
   new_var3 = ((u8 *)(config + (temp_v1 * 4))) + 0xCC;

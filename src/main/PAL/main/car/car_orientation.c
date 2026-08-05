@@ -7,11 +7,7 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-typedef struct GearCurveRow
-{
-  s32 values[16];
-} GearCurveRow;
-extern GearCurveRow gearRows[] asm("D_801E8884");
+extern GearCurveRow g_GearTorqueCurve[] asm("D_801E8884");
 /* The player object shares GameCarRuntime's 0x19C-byte footprint, but several
  * fields have player-only meanings.  Keep this file-local view for the init
  * sequence while using the shared GameCarDrive view for the +0xBC block. */
@@ -306,11 +302,11 @@ void InitPlayerCar(GameCarRuntime *car)
   j = 0;
   for (i = 0; i < 16; i++)
   {
-    gearRows[0].values[i] = g_PlayerCarInitSpec->curve[i] / 20;
-    if (j < gearRows[0].values[i])
+    g_GearTorqueCurve[0].values[i] = g_PlayerCarInitSpec->curve[i] / 20;
+    if (j < g_GearTorqueCurve[0].values[i])
     {
       D_8019C798 = i;
-      j = gearRows[0].values[i];
+      j = g_GearTorqueCurve[0].values[i];
     }
   }
 
@@ -331,7 +327,7 @@ void InitPlayerCar(GameCarRuntime *car)
     divisor = (divisor > 0) ? (divisor) : (g_PlayerCarInitSpec->fE8[j]);
     for (i = 0; i < 16; i++)
     {
-      gearRows[j + 1].values[i] = g_PlayerCarInitSpec->curve[i] / divisor;
+      g_GearTorqueCurve[j + 1].values[i] = g_PlayerCarInitSpec->curve[i] / divisor;
     }
 
   }
