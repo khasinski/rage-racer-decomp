@@ -3,6 +3,8 @@
 #include "game/menu.h"
 #include "game/car.h"
 #include "game/state.h"
+#include "game/audio.h"
+#include "game/sound.h"
 
 extern s32 g_PrizeAmount;
 extern s32 g_PromotionBonus;
@@ -40,13 +42,11 @@ void BeginClassFmv(s32 arg0);
 extern s32 g_FrameSyncThreshold;
 extern s32 g_PrizeScreenState;
 extern s32 g_PrizeAmount;
-extern s32 g_PrizeCountStep;
 extern s32 g_BonusCountStep;
 /* &g_PrizeMoney[0][0][2], i.e. the third-place column; the prize counter's
  * step is that figure divided by 80. */
 extern s32 g_PrizeMoney3rd[][6][3];
 extern s32 g_PromotionBonusTable[];
-void PlaySoundCue(s32 cue);
 
 void DrawPrizeMoneyPanel(u8 *s0) {
     u8 sp[16];

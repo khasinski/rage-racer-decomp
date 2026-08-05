@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "game/audio.h"
+#include "psyq/spu.h"
 
 extern u_char g_SndVoiceCount;
 extern u_char g_SndCurrentPriority;
@@ -10,8 +11,6 @@ extern u_char g_SndVoiceStateAge[];
 extern u_char g_SndVoiceStateEnvx[];
 extern u_char D_8009E0D0[];
 extern u_char g_SndVoiceStateStatus[];
-
-u_long SpuSetNoiseVoice(long on_off, u_long voice_bit);
 
 u_char SpuVmAlloc(long unused) {
     u_char candidates;

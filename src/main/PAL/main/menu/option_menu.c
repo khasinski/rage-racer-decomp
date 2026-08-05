@@ -5,6 +5,7 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/menu.h"
+#include "game/random.h"
 
 typedef struct Struct12 { u8 b0, b1, b2, b3; u16 h4, h6, h8, h10; } Struct12;
 extern s32 g_OptionMenuCursor;
@@ -25,7 +26,6 @@ void StartOptionMenuExit(s32 arg0);
 /* The six rows of the setup menu, plus the cursor when g_GameMode is 1. */
 void DrawOptionRootMenu(void);
 void DrawOptionRootMenu(void);
-s32 Random15(void);
 /* The eleven class icons, tinted by g_ClassRecords[i].place. */
 void DrawClassRecordGrid(void);
 void DrawClassRecordGrid(void);

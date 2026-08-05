@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/kernel.h"
 
 u_long *DecDCTGetEnv(u_long *arg0);
 u_long *DecDCTPutEnv(u_long *arg0);
@@ -12,7 +13,6 @@ u_long _new_card[4] __attribute__((section(".text"))) = {
     0,
 };
 
-void KernelCallbackSlot3(void);
 void MDEC_reset(long arg0);
 
 void DecDCTReset(long arg0) {

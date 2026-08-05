@@ -6,6 +6,7 @@
 #include "game/menu.h"
 #include "game/car.h"
 #include "game/cd.h"
+#include "game/audio.h"
 
 typedef struct GrandPrixIntroPosition {
     u8 left;
@@ -36,7 +37,6 @@ extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
 extern s32 g_ReplayReadCursor;
 extern s16 g_PlayerTrackSection;
-void PlaySoundCue(s32 cue);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void DrawSeriesClearedWash(s32 arg0, s32 arg1);
 void UpdateReplayCars(void);

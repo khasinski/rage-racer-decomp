@@ -2,6 +2,7 @@
 #include "game/state.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#include "game/render.h"
 
 /*
  * Four {u, v} texel pairs copied into a local that is never read back; see
@@ -16,7 +17,6 @@ extern NegconUvTemplate D_80010070;
 /* "Steer play." */
 extern char D_80010078[];
 
-extern u8 *g_DrawBuffer;
 /* The 0..3 steering-play setting this screen edits. */
 extern s16 g_NegconSteerPlay;
 /* Play in hundredths of a degree per setting; the gauge marks scale from it. */

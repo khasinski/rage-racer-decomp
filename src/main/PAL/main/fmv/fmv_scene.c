@@ -3,6 +3,8 @@
 #include "game/render.h"
 #include "game/state.h"
 #include "game/cd.h"
+#include "game/audio.h"
+#include "game/race.h"
 extern GameRenderView *g_CarModelAsset;
 extern Matrix g_SceneLightMatrix;
 extern s32 g_ModelBankCount;
@@ -13,13 +15,11 @@ void SetGteObjectMatrix(void *a0, void *a1, void *a2);
 void RestoreColorMatrix(void);
 void DrawPlayerCarModel(GameRenderObject *obj);
 extern u8 *g_CamRow;
-extern s32 g_CourseIndex;
 extern u8 g_CarModelByCourse[][11];
 extern s16 D_8007D380[][2];
 void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 extern s32 g_FmvState;
 extern s32 g_StreamReturnScene;
-s32 CloseLoadedAudioSlots(void);
 void CdSync(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result);
 void BeginFmv(s32 arg0);

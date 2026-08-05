@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/kernel.h"
 
 extern CdCallback g_CdSyncCallback;
 extern CdCallback g_CdReadyCallback;
@@ -31,8 +32,6 @@ extern char D_800138C8[];
 void LibcPutString(char *text);
 long CdReadInterruptStatus(void);
 long CD_sync(long mode, u_char *result);
-long VSync(long mode);
-long GetKernelStatus(void);
 
 static inline void setAlarm(char *name) {
     g_CdTimeoutDeadline.deadline = VSync(-1) + 0x3C0;

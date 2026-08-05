@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gte_macros.h"
+#include "psyq/gte.h"
 
 /*
  * PSY-Q libgte low-level GTE (COP2) accessor routines.
@@ -15,11 +16,7 @@
 
 /* --- SetRotMatrix.s --- */
 
-void SetRotMatrix(void *m);
 void SetRotMatrix(void *m) { gte_SetRotMatrix(m); }
-void SetLightMatrix(void *m);
 void SetLightMatrix(void *m) { gte_SetLightMatrix(m); }
-void SetColorMatrix(void *m);
 void SetColorMatrix(void *m) { gte_SetColorMatrix(m); }
-void SetTransMatrix(void *m);
 void SetTransMatrix(void *m) { gte_SetTransMatrix(m); }

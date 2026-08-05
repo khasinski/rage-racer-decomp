@@ -5,7 +5,8 @@
 #include "game/render.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
-void DrawCourseIntro(void);
+#include "game/audio.h"
+#include "game/screens.h"
 
 /* Second copies of the same three captions -- the ROM holds duplicate literals
  * at 0x80010E1C..0x80010E28 and here; see docs/names.md 18d for why the bytes
@@ -49,7 +50,6 @@ void DrawRankingPanel(u8 *arg0);
 void DrawTimeRecordPanel(u8 *arg0);
 void DrawNameEntryCursor(s32 arg0, s32 arg1);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
-void PlaySoundCue(s32 cue);
 void CdSync(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result);
 

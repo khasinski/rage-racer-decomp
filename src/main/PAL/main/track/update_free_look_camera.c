@@ -5,6 +5,7 @@
 #include "game/track.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/random.h"
 
 extern s32 g_CameraCarHeading;
 extern s32 g_CameraCarSpeed;
@@ -24,7 +25,6 @@ s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
 void AccumulateLapProgress(void *arg0);
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2);
-
 
 /*
  * Fuller sibling of UpdateFinishCamera: camera track-follower with bob/shake. Aims
@@ -231,7 +231,6 @@ extern s32 g_AnimSceneryTint;
 extern s16 g_AnimSceneryRacePosition;
 extern s16 g_AnimSceneryVariant;
 extern s16 g_AnimSceneryPitch[];
-s32 Random15(void);
 
 void DrawAnimatedScenery(s32 arg0, s32 arg1);
 

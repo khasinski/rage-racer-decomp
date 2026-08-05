@@ -4,7 +4,8 @@
 #include "game/render.h"
 #include "game/menu.h"
 #include "game/car.h"
-void StartSequenceFadeOut(void);
+#include "game/asset.h"
+#include "game/audio.h"
 
 s32 DrawRankingScreen(s32 arg0);
 
@@ -35,8 +36,6 @@ extern u8 g_TeamLogoClutRect[];
 extern u8 g_TeamLogoRect[];
 extern u8 g_TeamLogoClut[];
 extern u8 g_TeamLogoCanvas[];
-s32 RequestCarSelectAssets(void);
-void PlaySequence(void);
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void LoadImage(void *rect, void *data);
 void UploadTeamNameTexture(void *arg0, s32 arg1);
@@ -523,7 +522,6 @@ s32 DrawClassChangeCurtain(s32 arg0);
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
 void DrawTimeAttackPlate(s32 arg0);
 void DrawMenuCourseView(void);
-void PlaySoundCue(s32 cue);
 void UpdateCourseSelectScreen(void) {
     void *ot;
     u8 *hdr;

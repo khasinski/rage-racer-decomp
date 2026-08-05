@@ -2,6 +2,7 @@
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/audio.h"
 void AdvanceCarPosition(GameCarRuntime *car, s32 arg1);
 
 typedef struct D8007Pair {
@@ -14,7 +15,6 @@ extern D8007Pair g_LaunchSpeedThresholds[];
 
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
-void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume);
 
 /*
  * Car motion handler for state98 == 0 (normal driving): turns steering into a

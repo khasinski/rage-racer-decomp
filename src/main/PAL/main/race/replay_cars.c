@@ -3,6 +3,7 @@
 #include "game/state.h"
 #include "game/track.h"
 #include "game/car.h"
+#include "game/audio.h"
 
 extern s32 g_PlayerCar;
 
@@ -62,8 +63,6 @@ extern s32 g_BestTotalTimes[][4][2];
 void DrawSplitDelta(s32 arg0, s32 arg1);
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
-
-void PlaySoundCue(s32 cue);
 
 void SeedReplayCars(void) {
     void *primary;

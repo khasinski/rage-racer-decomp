@@ -3,6 +3,9 @@
 #include "game/race.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/asset.h"
+#include "game/audio.h"
+#include "game/state.h"
 
 s32 DrawCarSelectScreen(s32 arg0);
 s32 DrawCustomizeScreen(s32 arg0);
@@ -24,7 +27,6 @@ void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0
 void DrawMenuCourseView(void);
 void DrawMenuLightBurst(s32 arg0);
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
-void PlaySoundCue(s32 cue);
 s32 DrawRankingTable(s32 *arg0, s32 arg1, s32 arg2);
 void DrawTimeAttackPlate(s32 arg0);
 
@@ -346,11 +348,9 @@ extern s32 g_CarSwapToIndex;
 extern s32 D_8019C7B8;
 extern s32 g_PlayerMoney;
 extern s32 D_801E4138;
-extern s32 g_SceneId;
 extern u8 *g_CourseProgress;
 
 void RequestCarModel(s32 carIndex);
-s32 RequestRoundAssets(void);
 void ClearTeamNameTexture(void);
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight)
 ;
@@ -359,7 +359,6 @@ void DrawCarShopPricePanel(s32 step, s32 money, s32 price)
 void DrawEngineerShopPricePanel(s32 step, s32 arg1, s32 arg2)
 ;
 s32 CountOwnedCars(void);
-void StartSequenceFadeOut(void);
 void RestoreTeamLogoClut(void);
 void DrawOwnedCarCounter(s32 step, s32 count);
 void DrawMenuAltPanel(s32 arg0, s32 arg1);

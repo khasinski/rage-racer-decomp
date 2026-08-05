@@ -3,6 +3,7 @@
 #include "game/state.h"
 #include "game/menu.h"
 #include "psyq/gpu.h"
+#include "game/audio.h"
 
 extern s32 g_McSlotUsedMask;
 extern GameSaveHeaderRow g_McSaveHeaders[];
@@ -46,7 +47,6 @@ extern s32 g_McDrawEnabled;
 s32 PollMemoryCardStatus(s32 a, s32 b);
 void DrawMemoryCardScreen(s32 a0, s32 a1, s32 a2, s32 a3);
 void DrawMemoryCardMessage(s32 a0);
-void PlaySoundCue(s32 cue);
 
 void UpdateMemoryCardMenu(void) {
     s32 fadeBusy = 0;

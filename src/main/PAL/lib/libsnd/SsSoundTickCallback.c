@@ -1,11 +1,10 @@
 #include "common.h"
+#include "psyq/snd.h"
 
 typedef void (*Callback)(void);
 
 extern Callback g_SndTickCallback;
 extern Callback g_SndPrevVSyncCallback;
-
-void SsSoundTickCallback(void);
 
 void SsSoundTickCallback(void) {
     if (g_SndPrevVSyncCallback != 0) {

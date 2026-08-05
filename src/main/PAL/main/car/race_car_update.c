@@ -5,13 +5,13 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "psyq/gte.h"
+#include "game/state.h"
 
 void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 SmoothTrackAngle(s32 arg0, s32 arg1);
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
 
-extern s32 g_AnimTimer;
 extern s16 g_ClosestRivalRank;
 
 void RankContenders(void);
@@ -401,7 +401,6 @@ void UpdateRaceCars(void) {
     }
 }
 
-
 /* Runs the corresponding all-cars pass for attract and replay scenes. */
 void UpdateAttractCars(void) {
     Vec4 vTmp;
@@ -641,8 +640,6 @@ void UpdateAttractCars(void) {
     } while (i < 11);
     }
 }
-
-
 
 typedef struct KE {
     u16 f0;

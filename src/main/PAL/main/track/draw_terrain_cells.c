@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/race.h"
 void SetRotMatrix(s32 arg0);
 
 extern s32 g_VisibleCellList;
@@ -25,8 +26,6 @@ void SetPolyG4(void *);
 s32 GameSin(s32) asm("rsin");
 s32 GameCos(s32) asm("rcos");
 extern s16 g_SkyTileMap[][16];
-extern s32 g_MirrorMode;
-extern s32 g_CourseIndex;
 extern s32 g_SkyRowBase;
 typedef struct
 {

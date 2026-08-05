@@ -2,6 +2,7 @@
 #include "game/car.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/audio.h"
 
 u32 DrawEngineerShopScreen(s32 arg0);
 
@@ -47,7 +48,6 @@ void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
 void DrawMenuAltPanel(s32 arg0, s32 arg1);
 s32 GetOwnedCarAssetIndex(s32 arg0);
 void UpdateCarListCursor(void);
-void PlaySoundCue(s32 cue);
 
 void UpdateCarShopScreen(void) {
     void *ot;

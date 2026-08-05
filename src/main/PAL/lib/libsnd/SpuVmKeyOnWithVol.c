@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 
 extern u_char g_SndCurrentPriority;
 extern u_char g_SndVoiceCount;
@@ -13,7 +14,6 @@ u_char SpuVmAlloc(long arg0);
 void SpuVmKeyOnCore(long arg0, u_short arg1, u_short arg2, u_short arg3, u_short arg4);
 
 void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3);
-void SpuVmClearFinishedVoices(void);
 void SpuVmKeyOnWithDefaultVol(long arg0, long arg1);
 
 void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {

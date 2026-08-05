@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/audio.h"
 /*
  * UpdateTeamLogoScreen: sound/menu state machine. The redundant
  * `if (g_PadEdge2) { ... } else { ... }` around the state>0 block is a
@@ -13,8 +14,6 @@
 #include "game/race.h"
 #include "game/menu.h"
 #include "game/render.h"
-void ApplyCurrentSequenceAudio(void);
-void ApplyDuckedSequenceAudio(void);
 
 s32 DrawLogoSampleScreen(s32 arg0);
 
@@ -41,7 +40,6 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawTeamLogoCanvas(s32 arg0, s32 arg1);
 void RampTeamLogoCanvas(s32 arg0, s32 arg1);
 void DrawLogoSamplePanel(s32 arg0, s32 arg1);
-void PlaySoundCue(s32 cue);
 void LoadImage(Rect *rect, void *data);
 
 void UpdateTeamLogoScreen(void)

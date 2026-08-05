@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 
 extern u_short g_SndVoiceRegDefaults[];
 extern u_short g_SndSpuCtrlDefaults[];
@@ -10,8 +11,6 @@ extern long g_SndUpdateLock;
 extern long g_SndMarkCallbacks[][0x10];
 
 void SpuVmInit(long arg0);
-
-void _SsInitTables(void);
 
 void _SsInitTables(void) {
     {

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/kernel.h"
+#include "psyq/snd.h"
 
 typedef void (*Callback)(void);
 
@@ -10,8 +11,6 @@ extern u_char D_8009A569;
 extern u_char g_SndTickIrq;
 
 long KernelCallbackSlot2Wide(long arg0, Callback arg1) asm("KernelCallbackSlot2");
-
-void SsStopSoundTick(void);
 
 void SsStopSoundTick(void) {
     if (g_SndNoTickFlag == 0) {

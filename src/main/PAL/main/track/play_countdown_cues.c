@@ -1,10 +1,9 @@
 #include "common.h"
 #include "game/race.h"
 #include "game/track.h"
+#include "game/audio.h"
 
 extern s16 g_RaceCueDelay;
-
-void PlaySoundCue(s32 cue);
 
 void PlayCountdownCues(s32 arg0) {
     if (arg0 < 0x110) {

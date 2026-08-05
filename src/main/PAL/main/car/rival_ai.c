@@ -3,6 +3,7 @@
 #include "game/state.h"
 #include "game/track.h"
 #include "game/race.h"
+#include "game/audio.h"
 
 void UpdateRivalRubberBand(void);
 
@@ -288,8 +289,6 @@ extern s32 g_PlayerProgressB;
 extern s32 g_RivalCueFlags;
 extern s32 g_ClosestRivalRank;
 extern s16 g_RivalCueCooldown3;
-
-void PlaySoundCue(s32 cue);
 
 void UpdateRivalRubberBand(void) {
     s32 s6;

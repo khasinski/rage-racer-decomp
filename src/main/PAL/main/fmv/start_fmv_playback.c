@@ -2,6 +2,7 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 #include "game/render.h"
+#include "game/cd.h"
 
 extern s32 g_FmvFrameWidth;
 extern s32 g_FmvFrameHeight;
@@ -15,7 +16,6 @@ extern u8 g_DispEnv1Rgb24;
 extern u8 g_DispEnv0Rgb24;
 extern s32 g_StreamLoc;
 
-void ApplyCdVolume(void);
 void SetupFmvBuffers(s32 arg0);
 void InitFmvContext(volatile void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void OpenFmvStream(void (*arg0)(void));

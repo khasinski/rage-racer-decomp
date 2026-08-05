@@ -5,6 +5,9 @@
 #include "game/asset.h"
 #include "game/menu.h"
 #include "psyq/gpu.h"
+#include "game/audio.h"
+#include "game/random.h"
+#include "game/screens.h"
 
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
 void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
@@ -12,9 +15,6 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 extern s32 g_TitlePulse;
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
-void DrawMainMenuRows(void);
-
-void UpdateMainMenuExit(void);
 
 void UpdateMainMenuExit(void) {
     s32 value;
@@ -124,9 +124,7 @@ extern s32 D_8007C744;
 extern u32 D_801E8260;
 extern void (*g_FrontendDrawHandlers[])(void);
 
-s32 Random15(void);
 s32 CdControl(s32 com, void *param, s32 result);
-void PlaySoundCue(s32 cue);
 s32 RequestTrackLoad(void);
 s32 RequestRaceStart(void);
 void BeginIntroFmv(int);

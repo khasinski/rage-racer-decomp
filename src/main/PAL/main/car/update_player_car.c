@@ -6,12 +6,13 @@
 #include "game/race.h"
 #include "game/car.h"
 #include "game/render.h"
+#include "game/audio.h"
+#include "game/random.h"
 
 typedef struct GearRange {
     s16 up;
     s16 down;
 } GearRange;
-
 
 typedef struct Car {
     s32 unk00;
@@ -112,8 +113,6 @@ void UpdateCarTiltCounter(void *car);
 void UpdateCarCrestHop(void *car);
 void UpdateCarBodyKick(void *car);
 s32 rsin(s32 angle);
-s32 Random15(void);
-void PlaySoundCue(s32 cue);
 void SetIndexedEffectVoice(s32 arg0, s32 arg1, s32 arg2);
 void UpdateLoadedAudioVoices(s32 value, s32 bank);
 

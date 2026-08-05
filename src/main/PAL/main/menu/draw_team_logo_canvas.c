@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/audio.h"
 extern void DrawRectOutline(
     s32 ot, s16 x, s16 y, s16 w, s32 h, u8 r, u8 g, u8 b, u8 alpha);
 extern void GameDrawTexturedQuad(
@@ -662,8 +663,6 @@ void RampTeamLogoCanvas(s32 arg0, s32 arg1) {
 }
 
 extern u32 g_TeamLogoCanvas[];
-
-void PlaySoundCue(s32 cue);
 
 void ScrollTeamLogoUp(void) {
     s32 i;

@@ -4,6 +4,9 @@
 #include "game/render.h"
 #include "game/race.h"
 #include "game/state.h"
+#include "game/audio.h"
+#include "game/random.h"
+#include "game/track.h"
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 extern Vec4 g_StaticSceneryPos;
@@ -84,8 +87,6 @@ void DrawStaticScenery(s32 arg0) {
 }
 
 extern s32 g_HighClassSceneryYaw;
-
-void DrawHighClassScenery(void);
 
 void DrawHighClassScenery(void) {
     Matrix mtx;
@@ -230,8 +231,6 @@ extern u8 g_FlybyScenery[];
 extern s16 g_FlybySceneryLap;
 extern u8 *g_FlybySceneryKeyframe;
 
-s32 Random15(void);
-
 void SeedFlybyScenery(void) {
     u8 *base;
     register u8 *out asm("s1");
@@ -308,8 +307,6 @@ extern s32 g_FlybySceneryRotZ;
 extern s32 g_PlayerCar;
 extern s32 g_PlayerCarY;
 extern s32 g_PlayerCarZ;
-
-void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);
 
 #define KFREC(off) (*(s16 *)(kf + *(s16 *)(state + 0xE) * 12 + (off)))
 

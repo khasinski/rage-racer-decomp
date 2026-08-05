@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/kernel.h"
 
 extern long g_CdCommandNames[];
 extern volatile u_char g_CdSyncStatus[];
@@ -15,7 +16,6 @@ extern char D_8001391C[];
 extern char D_80013814[];
 extern char D_80013824[];
 
-long VSync(long mode);
 void LibcPutString(char *);
 
 /* Waits for the CD data transfer to finish, with a 0x3C0-vblank / 0x3C0000-

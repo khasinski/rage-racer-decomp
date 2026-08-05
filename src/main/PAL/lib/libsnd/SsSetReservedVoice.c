@@ -1,4 +1,5 @@
 #include "psyq/spu.h"
+#include "psyq/snd.h"
 
 extern u_char g_SndReservedVoiceCount;
 extern short g_SndMonoMode;
@@ -13,19 +14,13 @@ void SsSetReservedVoice(u_char arg0) {
     g_SndReservedVoiceCount = arg0;
 }
 
-void SsSetMono(void);
-
 void SsSetMono(void) {
     g_SndMonoMode = 1;
 }
 
-void SsSetStereo(void);
-
 void SsSetStereo(void) {
     g_SndMonoMode = 0;
 }
-
-u_char SsSetVoiceCount(u_char voices);
 
 u_char SsSetVoiceCount(u_char voices) {
     if (voices >= 25 || voices == 0) {
@@ -35,8 +30,6 @@ u_char SsSetVoiceCount(u_char voices) {
     g_SndVoiceCount = voices;
     return g_SndVoiceCount;
 }
-
-void SsVabClose(short vab_id);
 
 void SsVabClose(short vab_id) {
     short id;

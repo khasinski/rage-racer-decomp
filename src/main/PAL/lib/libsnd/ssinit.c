@@ -1,9 +1,7 @@
 #include "common.h"
 #include "psyq/kernel.h"
-
-
-void SpuInit(void);
-void _SsInitTables(void);
+#include "psyq/snd.h"
+#include "psyq/spu.h"
 
 void ssinit(void) {
     KernelCallbackSlot3();

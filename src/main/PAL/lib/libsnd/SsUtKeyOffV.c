@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 
 extern volatile long g_SndUpdateLock;
 extern volatile u_short g_SndCurrentVoice;
@@ -11,8 +12,6 @@ extern volatile u_short D_8009E674;
 extern u_char g_SndVoiceStateStatus[];
 extern u_char g_SndVoiceStatePitch[];
 extern u_char g_SndVoiceState[];
-
-long SsUtKeyOffV(long voice);
 
 long SsUtKeyOffV(long arg0) {
     register long one asm("$5") = 1;

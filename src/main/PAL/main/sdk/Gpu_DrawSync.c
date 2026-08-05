@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/kernel.h"
 
 void Gpu_ArmTimeout(void);
 
@@ -74,5 +75,4 @@ waitReady:
 
 extern long g_GpuTimeoutDeadline;
 extern long g_GpuTimeoutPolls;
-long VSync(long mode);
 void Gpu_ArmTimeout(void) { g_GpuTimeoutDeadline = VSync(-1) + 240; g_GpuTimeoutPolls = 0; }

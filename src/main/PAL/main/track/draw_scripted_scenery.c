@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/vector.h"
 #include "game/race.h"
+#include "game/audio.h"
 
 void UpdateFlybyScenery(void);
 void DrawFlybyScenery(void);
@@ -130,7 +131,6 @@ extern PathSceneryCursor g_PathSceneryRotCursor asm("g_PathSceneryRotPhase");
 s32 rsin(s32 angle);
 s32 rcos(s32 angle);
 s32 SquareRoot12(s32 value);
-void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);
 
 void InitPathScenery(void) {
     s32 lev;

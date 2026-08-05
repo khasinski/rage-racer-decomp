@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/kernel.h"
 
 typedef void (*Callback)(void);
 
@@ -8,8 +9,6 @@ extern Callback g_IntrCallbacks[];
 extern u_short g_IntrCallbackMask;
 extern volatile u_short *g_IrqMask;
 
-void ChangeClearRCnt(long clear);
-void ChangeClearInterruptMask(long index, long clear);
 Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     long index;
     Callback callback;

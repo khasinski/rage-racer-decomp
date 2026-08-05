@@ -15,11 +15,8 @@ void ClearMemoryCardHwEvents(void);
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf();
 void ClearMemoryCardSwEvents(void);
-s32 PollMemoryCardHwEvent(void);
-s32 WaitMemoryCardSwEvent(void);
 void _card_info(s32 chan);
 void _card_load(s32 chan);
-s32 _card_clear(s32 chan);
 
 s32 PollMemoryCardStatus(s32 port, s32 slot) {
     s32 handle;
@@ -827,7 +824,6 @@ extern u8 g_TeamLogoRect[];
 extern u8 g_TeamLogoClutRect[];
 
 void LoadPadButtonMapping(s32 a, s32 b);
-void ApplyAudioSettings(void);
 
 /*
  * Verifies the memory-card payload's checksum and scatters it back into the
@@ -1493,9 +1489,6 @@ void *FormatSaveElapsedTime(void *dst, u32 seconds) {
 }
 
 extern u8 g_McMessageText[];
-
-/* game/render.h is not in scope yet at this point in the file. */
-void DrawText8x8();
 
 void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) {
     DrawText8x8(0x28, 0xB8, &g_McMessageText[messageIndex * 30], 0x78CC);

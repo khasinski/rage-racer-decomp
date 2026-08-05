@@ -2,6 +2,7 @@
 #include "game/race.h"
 #include "psyq/gte.h"
 #include "game/render.h"
+#include "game/random.h"
 
 extern s32 g_CourseModelCount;
 extern u16 g_SpinningSceneryRate[];
@@ -14,7 +15,6 @@ extern u8 g_SpinningSceneryYaw[];
 extern u8 g_SpinningSceneryPos[];
 
 void SetGteObjectMatrix(void *arg0, void *arg1, void *arg2);
-s32 Random15(void);
 
 void DrawSpinningScenery(s32 arg0, s32 arg1);
 

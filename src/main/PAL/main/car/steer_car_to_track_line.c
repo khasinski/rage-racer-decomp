@@ -3,7 +3,8 @@
 #include "game/car.h"
 #include "game/track.h"
 #include "game/render.h"
-void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume);
+#include "game/audio.h"
+#include "game/random.h"
 void AdvanceCarPosition();
 
 void UpdateCarAirborne(GameCarRuntime *car);
@@ -312,7 +313,6 @@ void UpdateCarLaunch(GameCarRuntime *arg0) {
 
 extern s32 g_ShiftSoundLevel;
 
-
 /*
  * Car motion handler for state98 == 2 (airborne / jump): decays velocity and
  * spin, advances the car (AdvanceCarPosition), and lands it when it returns to the
@@ -387,7 +387,6 @@ void UpdateCarAirborne(GameCarRuntime *car) {
 }
 
 extern s32 g_StandingStartSpin;
-s32 Random15(void);
 
 /*
  * Car motion handler for state98 == 3 (crash / tumble): applies a random shake
@@ -451,7 +450,6 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
         *(s32 *)&car->field_128 = 0;
     }
 }
-
 
 /*
  * Finds the track segment whose (rotated, half-width) quad currently contains

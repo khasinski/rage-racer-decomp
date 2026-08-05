@@ -1,10 +1,10 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 
 void _spu_setTransferCompletionFlag(long);
 void SpuInitMalloc(long, u_char *);
-void SsUtFlush(void);
 
 extern u_char g_SpuMallocArea[];
 

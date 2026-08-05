@@ -2,7 +2,7 @@
 #include "game/state.h"
 #include "game/asset.h"
 #include "game/car.h"
-void InitSequenceAudio(void);
+#include "game/audio.h"
 
 extern u32 g_CarModelSlot;
 extern GameCarModelAsset *g_CarModelAsset;

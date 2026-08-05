@@ -2,15 +2,15 @@
 #include "game/state.h"
 #include "game/menu.h"
 #include "game/race.h"
-void SetMonoOutput(void);
-void SetStereoOutput(void);
+#include "game/audio.h"
+#include "game/screens.h"
+#include "game/sound.h"
 
 typedef struct UnkCopyChunk {
     u8 raw[8];
 } UnkCopyChunk;
 
 extern s32 g_PrizeScreenState;
-extern s32 g_PrizeCountStep;
 extern s32 g_BonusCountStep;
 extern s32 g_PrizeAmount;
 extern s32 g_PromotionBonus;
@@ -20,11 +20,9 @@ extern s32 g_SeriesCleared;
 void DrawFullscreenFadeTile(s32, s32);
 void DrawRaceTimePanel(s32);
 void DrawPrizeMoneyPanel(s32);
-void PlaySoundCue(s32 cue);
 void TickClassClearFanfare(void);
 void RequestSelectBgmAssets(void);
 void AdvanceGrandPrixClass(void);
-void DrawGrandprixIntro(void);
 extern s32 g_BgmVolumeSetting;
 extern s32 g_SfxVolumeSetting;
 extern s32 g_MonoOutput;
@@ -42,7 +40,6 @@ extern u8 g_GrandPrixCourseProgress;
 extern u8 *g_CourseProgress;
 extern s32 g_BgmTrackCount;
 extern s32 g_BgmSelection;
-void ApplyAudioSettings(void);
 void ResetProgressSlot(void *arg0, s32 *arg1);
 void ResetCourseProgress(s32 arg0);
 void ShuffleBgmOrder(void);

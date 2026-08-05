@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
-
-extern s32 g_SeqVolumeSetting;
+#include "game/sound.h"
 
 void RefreshSequenceVolumeScale(void) {
     s32 temp = g_SeqVolumeSetting * 114;

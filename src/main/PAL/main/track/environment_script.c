@@ -2,6 +2,7 @@
 #include "psyq/gpu.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/sound.h"
 
 typedef struct Cmd {
     s32 id;
@@ -42,10 +43,6 @@ extern s16 g_EnvLerpDuration;
 extern s16 g_EnvSpareLerp;
 extern s16 g_EnvSpareFrom;
 extern s16 g_EnvSpareTo;
-/* The 16-entry sky CLUT staged here and uploaded through the (0xE0, 0x1E6)
- * 16x1 VRAM rect. It MUST keep the raw D_ spelling: LA_ORDERED stringifies the
- * symbol into an inline-asm `la`, which does not follow asm() labels. */
-extern s16 D_801E6DA4[];
 
 /* GTE fog-near distance, ramped +-0xFA a frame: up to 0x7FFF (clear) in
  * environment mode 2, down to 0x1770 (hazy) in every other mode. */

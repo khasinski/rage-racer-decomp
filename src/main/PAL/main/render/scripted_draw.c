@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/render.h"
 #include "game/state.h"
+#include "game/menu.h"
 
 void GameDrawSpriteWide(
     void *ot,
@@ -453,8 +454,6 @@ typedef struct TimedDrawCommand {
     s32 arg0;
     s32 arg1;
 } TimedDrawCommand;
-
-extern s32 g_MenuAltLayout;
 
 s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     TimedDrawCommand *base = commands;

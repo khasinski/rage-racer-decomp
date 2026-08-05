@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
+#include "game/sound.h"
 
 extern s32 g_SoundSlotActive[];
 
@@ -25,8 +26,6 @@ void SetVabSlotVoiceEnabled(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-extern s16 g_SeqHandle;
-extern s32 g_SeqVolume;
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
 void SetSequenceVolume(s32 volume) {
     g_SeqVolume = volume;

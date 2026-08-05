@@ -1,12 +1,11 @@
 #include "common.h"
+#include "game/menu.h"
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7,
                    s32 arg8);
 
 extern s32 D_8007FB24;
 extern s32 D_8007FB28;
 extern s32 D_8009B28C;
-extern u8 g_TeamNameLength;
-extern u8 g_TeamNameChars[];
 extern u16 g_TeamLogoSwatches[];
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,

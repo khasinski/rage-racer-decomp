@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "game/state.h"
+#include "game/random.h"
 
 extern s32 g_TrackTextureSectionLo;
 extern s32 g_TrackTextureSectionHi;
@@ -186,8 +187,6 @@ void StepTrackTextureSwap(void) {
 extern s32 g_TrackTextureCursorRow;
 extern u8 g_CarTrackSection[];
 
-s32 Random15(void);
-
 s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
     s32 random;
     s32 candidate;
@@ -214,8 +213,6 @@ s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
 
 extern s32 g_TrackTextureCursorRow;
 extern u8 g_CarTrackSection[];
-
-s32 Random15(void);
 
 s32 CycleAttractCameraCar(s32 mask, s32 current) {
     s32 random;

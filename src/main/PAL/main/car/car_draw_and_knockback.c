@@ -3,13 +3,11 @@
 #include "game/race.h"
 #include "game/state.h"
 #include "game/render.h"
+#include "game/random.h"
 
 void ClearCarMotionState(GameCarRuntime *arg0);
 
 extern s32 g_ClosestRivalRank;
-
-
-
 
 extern s32 g_RaceGridSlots[];
 
@@ -20,10 +18,6 @@ void InitRivalCar(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
 void InitRivalCarAi(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
 
 void SeedCarRouteMarkers(void);
-
-
-
-
 
 /*
  * Updates the car's skid/tilt counter (field_8C / field_8E), clamping it
@@ -240,8 +234,6 @@ s32 rcos(s32 angle);
  */
 
 s32 InterpolateTrackAngle(s32 arg0);
-
-s32 Random15(void);
 
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     GameCarRuntime *carReg;

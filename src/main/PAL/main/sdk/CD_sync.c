@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/kernel.h"
 
 extern char *g_CdCommandNames[];
 extern char *g_CdIntrNames[];
@@ -21,8 +22,6 @@ extern char D_8001389C[];
 
 void LibcPutString(char *text);
 long CdReadInterruptStatus(void);
-long VSync(long mode);
-long GetKernelStatus(void);
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
     register u_char *dstReg asm("$5");

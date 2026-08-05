@@ -6,9 +6,10 @@
 #include "game/render.h"
 #include "game/cd.h"
 #include "game/car.h"
+#include "game/audio.h"
+#include "game/random.h"
 void SetLightMatrix(void *arg0);
 void DrawStartCountdown(s32 arg0);
-void InitEffectVoiceRuntime(void);
 void SeekEnvironmentScript(s32);
 
 /* Elements 0, 1 and 2 of g_RefSectorTimes. They CANNOT be spelled
@@ -67,11 +68,7 @@ void SeedFinishCamera(void *arg0);
 
 void UpdateRivalCueGate(void);
 
-void PlaySoundCue(s32 cue);
-
 void ForceAllEffectVoicesEnabled(s32 arg0);
-
-s32 Random15(void);
 
 extern s16 g_PlayerTrackSection;
 

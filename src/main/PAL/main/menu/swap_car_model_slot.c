@@ -4,6 +4,7 @@
 #include "psyq/gte.h"
 #include "game/menu.h"
 #include "game/state.h"
+#include "game/asset.h"
 
 extern u32 g_CarModelSlot;
 
@@ -37,7 +38,6 @@ extern Vec4 D_80011AB4;
 extern Vec4 g_MenuViewScale;
 extern s32 g_CarSwapFromIndex;
 extern s32 g_CarSwapToIndex;
-extern s32 g_AssetLoadState;
 extern SwCarRec *g_CarTable;
 extern SwObj698 *g_CarModelAsset;
 extern s16 D_8009E782;
@@ -217,7 +217,6 @@ void DrawMenuCarView(void) {
     }
     D_1F800004 -= 120;
 }
-
 
 extern Vec4 g_MenuViewScale;
 extern s32 g_CourseSwapDelay;

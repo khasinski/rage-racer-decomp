@@ -2,6 +2,7 @@
 #include "game/menu.h"
 #include "game/render.h"
 #include "game/car.h"
+#include "game/audio.h"
 
 s32 DrawDesignModeScreen(s32 arg0);
 s32 DrawTeamLogoScreen(s32 arg0);
@@ -97,7 +98,6 @@ extern u8 D_80081B54;
 extern u8 g_UiChromeScript;
 
 void DrawFadingMenuSprites(s32 a, s32 b, s32 c);
-void PlaySoundCue(s32 cue);
 void RampTeamLogoCanvas(s32 a, s32 b);
 void DrawTeamLogoCanvas(s32 a, s32 b);
 

@@ -5,6 +5,7 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/cd.h"
+#include "game/random.h"
 s32 LoadAsset(s32 arg0, void *arg1);
 
 extern u8 *g_CarModelAsset;
@@ -19,7 +20,6 @@ void ApplyBodyColor1(s32 arg0, s32 arg1);
 void ApplyBodyColor2(s32 arg0, s32 arg1);
 extern s32 g_AssetBase;
 extern s32 g_ImageBlockBuffer;
-s32 Random15(void);
 /* Where asset 0x56 lands: g_ImageBlockBuffer advanced past the car texture
  * block just loaded. Its header words 1 and 2 are relocated into
  * g_AssetBlockPtr / g_AssetSubBlockPtr and word 0 is kept as-is. */

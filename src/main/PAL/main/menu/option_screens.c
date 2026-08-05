@@ -5,6 +5,8 @@
 #include "game/render.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
+#include "game/audio.h"
+#include "game/car.h"
 void SeekEnvironmentScript(s32 arg0);
 
 extern s32 g_SoundOptionCursor;
@@ -13,8 +15,6 @@ extern s32 g_SfxVolumeSetting;
 extern s32 g_MonoOutput;
 extern s32 g_ScreenOffsetEditX;
 void DrawSoundOptionScreen(void);
-void ApplyAudioSettings(void);
-void PlaySoundCue(s32 cue);
 s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueSpriteTrans");
 void DrawOptionHintBar(s32 arg0);
 extern s32 g_ScreenOffsetEditY;
@@ -36,7 +36,6 @@ void DrawOptionSceneOverlay(void);
 void DrawOptionSceneOverlay(void);
 extern s32 g_CameraViewMode;
 extern s32 g_TrackWalkStart;
-extern s32 g_CameraCarIndex;
 extern s32 g_FrameSyncThreshold;
 extern u8 g_CarTrackSection[];
 extern s32 *g_CamRow;
@@ -53,7 +52,6 @@ extern s32 g_BgmSelectStep;
 extern s32 g_BgmSelectTrack;
 extern s32 g_BgmChangeDelay;
 extern s32 g_CdTrackEnded;
-extern s32 g_CameraCarIndex;
 extern s32 g_BgmSelectStep;
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
