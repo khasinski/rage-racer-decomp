@@ -161,8 +161,8 @@ s32 FormatMemoryCard(s32 arg0, s32 arg1);
  * the menu or the mixer. */
 void StartMemoryCardEvents(void);
 void StopMemoryCardEvents(void);
-void EnterMemoryCardMenu(void) asm("func_800613B8");
-void EnterMemoryCardMenuFromLoad(void) asm("func_80061458");
-void UpdateMemoryCardMenu(void) asm("func_80061520");
+void EnterMemoryCardMenu(void);
+void EnterMemoryCardMenuFromLoad(void);
+void UpdateMemoryCardMenu(void);
 
 #endif

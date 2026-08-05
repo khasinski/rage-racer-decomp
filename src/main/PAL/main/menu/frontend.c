@@ -14,7 +14,7 @@ extern s32 g_TitlePulse asm("D_801E429C");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void DrawMainMenuRows(void);
 
-void UpdateMainMenuExit(void) asm("func_8001B884");
+void UpdateMainMenuExit(void);
 
 void UpdateMainMenuExit(void) {
     s32 value;

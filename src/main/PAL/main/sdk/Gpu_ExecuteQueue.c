@@ -25,7 +25,7 @@ extern void DMACallback(long, void *);
 /* Driver-table slot +0x24, and the DMA2 completion callback: drains the
  * Gpu_AddQueue ring, then fires the DrawSyncCallback when it empties.
  * Returns the number of entries still queued. */
-long Gpu_ExecuteQueue(void) asm("func_80067984");
+long Gpu_ExecuteQueue(void);
 long Gpu_ExecuteQueue(void) {
     if (*g_GpuDmaChcr & 0x01000000) {
         return 1;

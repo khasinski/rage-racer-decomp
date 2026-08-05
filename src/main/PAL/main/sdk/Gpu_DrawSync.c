@@ -9,13 +9,13 @@ extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
 extern long g_GpuQueueWriteIdx asm("D_800942EC");
 extern long g_GpuQueueReadIdx asm("D_800942F0");
 
-void Gpu_ExecuteQueue(void) asm("func_80067984");
+void Gpu_ExecuteQueue(void);
 long Gpu_CheckTimeout(void);
 
 /* Driver-table slot +0x3C, the body of DrawSync: mode 0 blocks until the
  * queue is empty and the GPU idle, any other mode returns the number of
  * queue entries still outstanding. */
-long Gpu_DrawSync(long mode) asm("func_80067DBC");
+long Gpu_DrawSync(long mode);
 long Gpu_DrawSync(long arg0) {
     long pending;
 

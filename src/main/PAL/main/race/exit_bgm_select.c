@@ -8,7 +8,7 @@ extern char g_TextNowLoading[] asm("D_80011010");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 
-void ExitBgmSelect(void) asm("func_80026484");
+void ExitBgmSelect(void);
 void ExitBgmSelect(void) {
     if (g_AssetLoadState == 0) {
         g_FadeStep = 4;

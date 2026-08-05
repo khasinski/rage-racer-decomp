@@ -399,7 +399,7 @@ void func_8005A2CC(s32);
 void func_800496F0(s32);
 void DrawMenuLightBurst(s32);
 
-void InitMenuMode(void) asm("func_80050C18");
+void InitMenuMode(void);
 void InitMenuMode(void) {
     GameRaceProgress *p;
     s32 *scratch;

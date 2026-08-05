@@ -28,7 +28,7 @@ extern u32 g_AssetBase asm("D_8019C904");
 void StartFmvPlayback(u32 arg0);
 void DecodeFmvFrame(void);
 void EndFmv(void);
-void UpdateFmv(void) asm("func_8001E71C");
+void UpdateFmv(void);
 
 void BeginFmv(s32 arg0);
 void BeginFmv(s32 arg0) {
@@ -47,7 +47,7 @@ void StartFmvPlayback(u32 arg0);
 void DecodeFmvFrame(void);
 void EndFmv(void);
 
-void UpdateFmv(void) asm("func_8001E71C");
+void UpdateFmv(void);
 void UpdateFmv(void) {
     switch (g_FmvState) {
     case 0:

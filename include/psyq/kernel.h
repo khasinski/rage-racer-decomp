@@ -25,10 +25,10 @@ long GetKernelStatus(void);
 long GetIntrMask(void);
 long SetIntrMask(long mask);
 
-void *InitKernelInterrupts(void) asm("func_8006E0CC");
+void *InitKernelInterrupts(void);
 void intrDispatch(void);
-KernelCallback SetKernelInterruptCallback(long index, KernelCallback callback) asm("func_8006E390");
-void *StartKernelInterrupts(void) asm("func_8006E590");
+KernelCallback SetKernelInterruptCallback(long index, KernelCallback callback);
+void *StartKernelInterrupts(void);
 void clearKernelInterruptState(u_long *dst, long count);
 void SysEnqIntRP(void *rp) asm("func_8006E644");
 void ReturnFromException(void) asm("func_8006E654");

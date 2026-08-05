@@ -14,7 +14,7 @@ extern s32 g_McFromLoadMenu asm("D_8009B730");
 extern s32 g_McFadeStep asm("D_8009B9A0");
 extern s32 g_McFadeLevel asm("D_8009B9A4");
 void UploadImageAsset(s32 arg0);
-void EnterMemoryCardMenuFromLoad(void) asm("func_80061458");
+void EnterMemoryCardMenuFromLoad(void);
 void EnterMemoryCardMenuFromLoad(void) {
     SetDispMask(0);
     SetupDisplay480(0, 0, 0);

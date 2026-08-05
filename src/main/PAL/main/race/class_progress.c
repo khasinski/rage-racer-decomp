@@ -219,7 +219,7 @@ void AdvanceGrandPrixClass(void) {
     }
 }
 
-void EnterPrizeScreen(void) asm("func_80020C24");
+void EnterPrizeScreen(void);
 void EnterPrizeScreen(void) {
     s32 mode;
     s32 car;

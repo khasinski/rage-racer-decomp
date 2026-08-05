@@ -356,7 +356,7 @@ void InsertRaceRecords(void) {
     g_TimeRecordInsertRow = i;
 }
 
-void EnterRecordEntry(void) asm("func_80022748");
+void EnterRecordEntry(void);
 void EnterRecordEntry(void) {
     g_SceneTimer = 0x100;
     g_FrameSyncThreshold = 0x80;
@@ -365,7 +365,7 @@ void EnterRecordEntry(void) {
     InsertRaceRecords();
 }
 
-void UpdateRecordEntry(void) asm("func_80022794");
+void UpdateRecordEntry(void);
 void UpdateRecordEntry(void) {
     u8 *name;
     s32 i;
@@ -555,7 +555,7 @@ void UpdateRecordEntry(void) {
     DrawCourseIntro();
 }
 
-void ReturnFromClassFmv(void) asm("func_80022EE4");
+void ReturnFromClassFmv(void);
 void ReturnFromClassFmv(void) {
     CdSync(0, 0);
     CdControl(9, 0, 0);
@@ -563,7 +563,7 @@ void ReturnFromClassFmv(void) {
     RequestSelectBgmAssets();
 }
 
-void ReturnFromEndingFmv(void) asm("func_80022F2C");
+void ReturnFromEndingFmv(void);
 void ReturnFromEndingFmv(void) {
     CdSync(0, 0);
     CdControl(9, 0, 0);

@@ -48,7 +48,7 @@ void ResetCourseProgress(s32 arg0);
 void ShuffleBgmOrder(void);
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
-void UpdatePrizeMoneyScreen(void) asm("func_80020DDC");
+void UpdatePrizeMoneyScreen(void);
 void UpdatePrizeMoneyScreen(void) {
     s32 lim1 = g_PrizeCountStep;
     s32 lim0 = g_BonusCountStep;

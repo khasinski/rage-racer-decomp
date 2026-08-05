@@ -28,14 +28,14 @@ void ApplyPadButtonMapping(void);
 
 /* Controller-config and NeGcon calibration screens: g_GameModeHandlers entries
  * 7..11, each drawing its own screen plus the shared 3D backdrop. */
-void UpdateControllerConfigScreen(void) asm("func_800155EC");
+void UpdateControllerConfigScreen(void);
 void DrawControllerConfigScreen(void);
-void BeginNegconCalibration(void) asm("func_800159F8");
-void UpdateNegconNeutralScreen(void) asm("func_80015AAC");
+void BeginNegconCalibration(void);
+void UpdateNegconNeutralScreen(void);
 void DrawNegconNeutralScreen(void);
-void UpdateNegconSteerPlayScreen(void) asm("func_80015EDC");
+void UpdateNegconSteerPlayScreen(void);
 void DrawNegconSteerPlayScreen(void);
-void UpdateNegconMaxTwistScreen(void) asm("func_80016250");
+void UpdateNegconMaxTwistScreen(void);
 void DrawNegconMaxTwistScreen(void);
 void DrawControllerSetupScene(s32 variant);
 
@@ -83,7 +83,7 @@ extern s32 g_AnimTimer asm("D_8009E694");
  * PresentFmvFrame, WaitFmvDecode, StartStreamRead - keep their
  * aliased declarations in each file; see docs/names.md 13.
  */
-void UpdateFmv(void) asm("func_8001E71C");
+void UpdateFmv(void);
 /* One decoded frame: DecDCTin the next bitstream chunk, DecDCTout the previous
  * one, then top the ring up from the drive. */
 void DecodeFmvFrame(void);

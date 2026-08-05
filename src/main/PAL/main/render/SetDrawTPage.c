@@ -139,7 +139,7 @@ extern u8 g_VramHeightTable[] asm("D_8009427C");
 
 void func_80068180(u8 *dst, s32 value, s32 count);
 void GPU_cw(void *arg0) asm("func_800681AC");
-s32 Gpu_Reset(s32 arg0) asm("func_80067C80");
+s32 Gpu_Reset(s32 arg0);
 
 /* libgpu ResetGraph. Own trace strings D_80013478 "ResetGraph:jtb=%08x,env=%08x"
  * and D_80013498 "ResetGraph(%d)..."; mode&7 of 0 or 3 does the full reset. */

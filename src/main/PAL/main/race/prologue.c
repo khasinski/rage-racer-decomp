@@ -50,7 +50,7 @@ void func_800418D4(void);
 void DrawTerrainCellsWide(void);
 void DrawCourseScenery2(s32 arg0, s32 arg1);
 
-void UpdateAttractDemoScene(void) asm("func_80026AE0");
+void UpdateAttractDemoScene(void);
 void UpdateAttractDemoScene(void) {
     g_AttractDemoSteps[g_AttractDemoStep]();
 
@@ -65,7 +65,7 @@ void UpdateAttractDemoScene(void) {
     }
 }
 
-void EnterPrologue(void) asm("func_80026B88");
+void EnterPrologue(void);
 void EnterPrologue(void) {
     SetDispMask(0);
     SetupDisplay240(0, 0, 0);
@@ -125,7 +125,7 @@ void UpdatePrologueLoad(void) {
     func_80016EA0(0x5E, 0x72, g_TextNowLoading, 0x7812);
 }
 
-void UpdatePrologueLoadStep0(void) asm("func_80026D30");
+void UpdatePrologueLoadStep0(void);
 void UpdatePrologueLoadStep0(void) {
     if (g_AssetLoadState == 0) {
         InstallCourseAssets();
@@ -136,7 +136,7 @@ void UpdatePrologueLoadStep0(void) {
     UpdatePrologueLoad();
 }
 
-void UpdatePrologueLoadStep1(void) asm("func_80026D78");
+void UpdatePrologueLoadStep1(void);
 void UpdatePrologueLoadStep1(void) {
     if (g_AssetLoadState == 0) {
         g_FadeStep = 4;
@@ -147,7 +147,7 @@ void UpdatePrologueLoadStep1(void) {
     UpdatePrologueLoad();
 }
 
-void UpdatePrologueLoadStep2(void) asm("func_80026DC4");
+void UpdatePrologueLoadStep2(void);
 void UpdatePrologueLoadStep2(void) {
     UpdatePrologueLoad();
 }
@@ -233,7 +233,7 @@ void ExitPrologue(void) {
     RequestSelectBgmAssets();
 }
 
-void UpdatePrologue(void) asm("func_80026F9C");
+void UpdatePrologue(void);
 void UpdatePrologue(void) {
     s32 timer;
     s32 active;

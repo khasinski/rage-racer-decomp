@@ -12,18 +12,18 @@ extern volatile u_long *g_GpuDmaBcr asm("D_800942C4");
 extern volatile u_long *g_GpuDmaChcr asm("D_800942C8");
 extern u_char g_GpuGp1Mirror[] asm("D_8009B9F0");
 
-void Gpu_WriteGp1(u_long arg0) asm("func_80067574");
-long Gpu_WriteGp0Words(u_long *src, long count) asm("func_800675B0");
-void Gpu_StartDmaTransfer(u_long arg0) asm("func_80067600");
-u_long _param(u_long arg0) asm("func_8006764C");
-extern long Gpu_AddQueue(void *callback, void *data, long size, long arg3) asm("func_800676A0");
+void Gpu_WriteGp1(u_long arg0);
+long Gpu_WriteGp0Words(u_long *src, long count);
+void Gpu_StartDmaTransfer(u_long arg0);
+u_long _param(u_long arg0);
+extern long Gpu_AddQueue(void *callback, void *data, long size, long arg3);
 
 void Gpu_WriteGp1(u_long arg0) {
     *g_GpuGp1 = arg0;
     g_GpuGp1Mirror[arg0 / 16777216] = arg0;
 }
 
-u_char Gpu_GetControlMirrorByte(long arg0) asm("func_8006759C");
+u_char Gpu_GetControlMirrorByte(long arg0);
 
 u_char Gpu_GetControlMirrorByte(long arg0) {
     return g_GpuGp1Mirror[arg0];
@@ -52,7 +52,7 @@ u_long _param(u_long arg0) {
     return *g_GpuGp0 & 0xFFFFFF;
 }
 
-long _addque(void *callback, void *data, long arg2) asm("func_8006767C");
+long _addque(void *callback, void *data, long arg2);
 long _addque(void *callback, void *data, long arg2) {
     return Gpu_AddQueue(callback, data, 0, arg2);
 }

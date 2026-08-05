@@ -96,7 +96,7 @@ void AdvanceBgmShuffleBag(u32 arg0) {
     }
 }
 
-void UpdateBgmSelect(void) asm("func_80025ED8");
+void UpdateBgmSelect(void);
 void UpdateBgmSelect(void) {
     s32 t;
     if (g_BgmChangeDelay > 0) {

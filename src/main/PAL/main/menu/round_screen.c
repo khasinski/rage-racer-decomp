@@ -77,7 +77,7 @@ void UploadImageAsset(s32 arg0);
 void RelocateCarModel(void);
 
 /* Scene 9: finishes the asset load, relocates the car model and derives g_GrandPrixRound. */
-void EnterRoundScreen(void) asm("func_8001C7BC");
+void EnterRoundScreen(void);
 void EnterRoundScreen(void) {
     s32 count;
     u8 *ptr;
@@ -249,7 +249,7 @@ void PlaySoundCue(s32 cue);
 s32 RequestRaceAssets(void);
 
 /* Scene 10: draws the ROUND screen, takes the BGM choice and starts the race at frame 121. */
-void UpdateRoundScreen(void) asm("func_8001CFB4");
+void UpdateRoundScreen(void);
 void UpdateRoundScreen(void) {
     if ((u32)g_SceneTimer < 10000) {
         g_SceneTimer = g_SceneTimer + 1;

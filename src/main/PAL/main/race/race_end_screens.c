@@ -68,7 +68,7 @@ void DrawLostRaceCaption(s32 arg0) {
     func_80016B7C(0x28, 0x40, &g_CaptionLostRace, 0x7812, arg0);
 }
 
-void EnterLostRaceScreen(void) asm("func_800215FC");
+void EnterLostRaceScreen(void);
 void EnterLostRaceScreen(void) {
     g_FrameSyncThreshold = 0x80;
     SetReverbDepth(0x28, 0x28);
@@ -108,7 +108,7 @@ void DrawRaceEndPrompt(void) {
     DrawLostRaceCaption(0xFF);
 }
 
-void UpdateLostRaceScreen(void) asm("func_80021748");
+void UpdateLostRaceScreen(void);
 void UpdateLostRaceScreen(void) {
     s32 timer;
     s32 old;
@@ -164,7 +164,7 @@ void DrawRaceEndBanner(s32 arg0) {
     func_80046A2C(g_DrawBuffer + 204, 0x50, 0x6C, 0xA0, 0x18, 0, 0x28, arg0, arg0, arg0, 0xC, 0, 1, 0x29);
 }
 
-void EnterRaceEndScreen(void) asm("func_80021920");
+void EnterRaceEndScreen(void);
 void EnterRaceEndScreen(void) {
     g_FrameSyncThreshold = 0x80;
     g_SceneId = 0x10;
@@ -172,7 +172,7 @@ void EnterRaceEndScreen(void) {
     DrawRaceEndBanner(0x22B);
 }
 
-void UpdateRaceEndScreen(void) asm("func_80021964");
+void UpdateRaceEndScreen(void);
 void UpdateRaceEndScreen(void) {
     s32 v = g_SceneTimer - 1;
     g_SceneTimer = v;

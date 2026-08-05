@@ -539,6 +539,6 @@ void UpdateEngineerShopScreen(void) {
     }
 }
 
-void ShopScreenNoOp(void) asm("func_8005AC98");
+void ShopScreenNoOp(void);
 void ShopScreenNoOp(void) {
 }

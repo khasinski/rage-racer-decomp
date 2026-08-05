@@ -26,7 +26,7 @@ extern u_char D_80013AF4[];
 extern u_short D_80013AD0;
 extern short D_80013AD4;
 extern signed char D_80013AD6;
-extern void DebugPrintf() asm("func_8001674C");
+extern void DebugPrintf();
 long cd_read(long arg0, long arg1, void *arg2);
 void CdIntToPos(u_long arg0, Entry *arg1);
 void LibcMemcpy(char *dst, u_char *src, long n);

@@ -24,7 +24,7 @@ void SetDefaultReverbDepth(void);
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
  * state words and hands over to scene 4, UpdateFrontend. */
-void EnterFrontend(void) asm("func_8001AF70");
+void EnterFrontend(void);
 void EnterFrontend(void) {
     SetDispMask(0);
     CloseLoadedAudioSlots();
@@ -59,7 +59,7 @@ void UpdateBgmTrackCount(void);
 void SetDefaultReverbDepth(void);
 void DrawPressStartPrompt(void);
 
-void EnterTitleScreen(void) asm("func_8001B014");
+void EnterTitleScreen(void);
 
 void EnterTitleScreen(void) {
     SetupDisplay240(0, 0, 0);
@@ -148,7 +148,7 @@ extern s32 D_801E8260;
 void PlaySoundCue(s32 cue);
 void DrawPressStartPrompt(void);
 
-void UpdateTitleScreen(void) asm("func_8001B260");
+void UpdateTitleScreen(void);
 
 void UpdateTitleScreen(void) {
     if (g_PadEdge2 & 0x800) {
@@ -236,7 +236,7 @@ extern s32 g_MainMenuSlide;
 
 void DrawMainMenuRows(void);
 
-void UpdateMainMenuOpen(void) asm("func_8001B440");
+void UpdateMainMenuOpen(void);
 
 void UpdateMainMenuOpen(void) {
     if (++g_MainMenuSlide == 0x30) {
@@ -312,7 +312,7 @@ extern void RequestSaveScreenAssets(void);
 extern void RequestOptionScreenAssets(void);
 extern void DrawMainMenuRows(void);
 
-void UpdateMainMenuInput(void) asm("func_8001B5DC");
+void UpdateMainMenuInput(void);
 
 void UpdateMainMenuInput(void) {
     volatile u16 *flagp = &g_PadEdge2;

@@ -49,6 +49,6 @@ typedef float f32;
  * the game alike, which is what labels most of the arguments in this repo.
  */
 /* Stubbed out: does nothing and returns 1. */
-s32 DebugPrintf() asm("func_8001674C");
+s32 DebugPrintf();
 
 #endif

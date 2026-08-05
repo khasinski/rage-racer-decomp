@@ -29,14 +29,14 @@ void DrawRaceOptionMenu(s32 cursorRow);
 
 /* Enters the title screen (g_GameModeHandlers slot 3, requested when an attract
  * or real race ends); EnterFrontend is its twin on slot 2. */
-void EnterTitleScreen(void) asm("func_8001B014");
+void EnterTitleScreen(void);
 
 /* The pulsing "PRESS START" sprite: a 112x16 cell at (0x68, 0xC8), brightness
  * from rsin(g_AnimTimer * 96). Also drains D_801E6F28. */
 void DrawPressStartPrompt(void);
 
 /* Frontend state 0: hold on the title screen until Start is pressed. */
-void UpdateTitleScreen(void) asm("func_8001B260");
+void UpdateTitleScreen(void);
 
 /* Draws the five main-menu rows (112x16 cells at x = 0x68, y = 0x64 + 0x18*row);
  * the cursor row uses CLUT 0x7E86 instead of 0x7E85 and entry 1 is skipped
@@ -44,15 +44,15 @@ void UpdateTitleScreen(void) asm("func_8001B260");
 void DrawMainMenuRows(void);
 
 /* Frontend state 1: the 48-frame menu wipe-in (counter D_801E6F1C to 0x30). */
-void UpdateMainMenuOpen(void) asm("func_8001B440");
+void UpdateMainMenuOpen(void);
 
 /* Frontend state 2: cursor (wrapped % 5, skipping the locked entry 1) and
  * confirm, which repoints g_CarTable / g_RaceProgress / D_8009E67C at the
  * chosen mode's records and then enters state 3. */
-void UpdateMainMenuInput(void) asm("func_8001B5DC");
+void UpdateMainMenuInput(void);
 
 /* Frontend state 3: fades out over 0x81 frames, then requests the scene for the
  * picked row (6 / 0x1F race, 0x19 SAVE&LOAD, 0x16 OPTION). */
-void UpdateMainMenuExit(void) asm("func_8001B884");
+void UpdateMainMenuExit(void);
 
 #endif

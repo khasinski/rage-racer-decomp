@@ -42,7 +42,7 @@ void StartOptionMenuExit(u32 arg0) {
 }
 
 /* g_GameModeHandlers[0]: integrates the fade, then enters mode 1 or leaves for g_OptionMenuExitScene. */
-void UpdateOptionMenuFade(void) asm("func_80023B2C");
+void UpdateOptionMenuFade(void);
 void UpdateOptionMenuFade(void) {
     g_FadeLevel += g_FadeStep;
 

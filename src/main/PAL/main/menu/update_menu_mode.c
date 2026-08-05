@@ -32,7 +32,7 @@ void DrawBitPatternOverlay(s32);
 
 /* Scene 8: the menu-mode per-frame dispatcher. Runs the two
  * g_MenuScreenDraw overlay slots and then g_MenuScreenUpdate[g_MenuScreen]. */
-void UpdateMenuMode(void) asm("func_8005ACA0");
+void UpdateMenuMode(void);
 void UpdateMenuMode(void) {
     void *scratch;
     s32 c0;
@@ -93,7 +93,7 @@ void UpdateMenuMode(void) {
 
 extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
 void SpuVmDamperStep(void);
-void SsSeqCalledTbyT(void) asm("func_80071018");
+void SsSeqCalledTbyT(void);
 void TickSequenceAudio(void);
 void TickSequenceAudio(void) {
     if (g_SceneId == 0xC) {

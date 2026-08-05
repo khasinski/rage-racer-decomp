@@ -235,7 +235,7 @@ u_long get_dx(DispEnv *env) {
 
 extern u_long *g_GpuGp1 asm("D_800942BC");
 
-u_long _status(void) asm("func_80066D6C");
+u_long _status(void);
 u_long _status(void) {
     return *g_GpuGp1;
 }
@@ -251,7 +251,7 @@ long Gpu_CheckTimeout(void);
 /* Driver-table slot +0x2C: clears an ordering table through the hardware
  * OTC DMA channel (chcr 0x11000002, walking backwards from the end).
  * ClearOTagR is its only caller. */
-long Gpu_ClearOTagDma(u_long *ot, long count) asm("func_80066D84");
+long Gpu_ClearOTagDma(u_long *ot, long count);
 long Gpu_ClearOTagDma(u_long *arg0, long arg1) {
     long size;
     u_long mask;

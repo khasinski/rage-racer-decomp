@@ -44,7 +44,7 @@ void LoadImage(void *rect, void *data) asm("func_80065B24");
 void UploadTeamNameTexture(void *arg0, s32 arg1);
 
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
-void EnterCourseSelectScreen(void) asm("func_80052778");
+void EnterCourseSelectScreen(void);
 void EnterCourseSelectScreen(void) {
     s32 one;
     register s32 initValue;

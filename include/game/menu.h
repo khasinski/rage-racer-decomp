@@ -165,7 +165,7 @@ void DrawFadingMenuSprites(
 /* Menu-mode entry: reloads the live globals from g_RaceProgress, seeds the
  * scratchpad render state, zeroes 0x8009B2F8..0x8009B378 and resets all
  * fourteen per-screen transition accumulators. */
-void InitMenuMode(void) asm("func_80050C18");
+void InitMenuMode(void);
 
 /*
  * The menu-mode screen table pair: everything the front end shows once

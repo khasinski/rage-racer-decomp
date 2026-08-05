@@ -157,7 +157,7 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
     *(void **)0x1F800000 = func_80017390(ot, prim, 0x49);
 }
 
-void UpdateReplayScene(void) asm("func_8001FD3C");
+void UpdateReplayScene(void);
 void UpdateReplayScene(void) {
     g_AnimTimer++;
     g_SceneTimer++;

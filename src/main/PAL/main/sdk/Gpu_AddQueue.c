@@ -18,7 +18,7 @@ extern long g_DrawSyncCallback asm("D_800941F4");
 
 extern void Gpu_ArmTimeout(void);
 extern long Gpu_CheckTimeout(void);
-extern void Gpu_ExecuteQueue(void) asm("func_80067984");
+extern void Gpu_ExecuteQueue(void);
 extern long SetIntrMask(long);
 extern void DMACallback(long, void *);
 
@@ -26,7 +26,7 @@ extern void DMACallback(long, void *);
  * runs the worker immediately when the queue is empty and the GPU idle,
  * otherwise copies `size` bytes of parameters into the 64-entry, 96-byte
  * queue at D_801E5024 and arms the DMA2 callback Gpu_ExecuteQueue. */
-long Gpu_AddQueue(void (*worker)(long, long), long param, long size, long data) asm("func_800676A0");
+long Gpu_AddQueue(void (*worker)(long, long), long param, long size, long data);
 long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     long i;
     long *src;

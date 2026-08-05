@@ -112,7 +112,7 @@ void SpuVmDamperOn(void);
 /* The tick entry point: interprets SEQ/SEP data and carries out playback
  * (LibRef47 14-32). It is the only caller of SsSeqAdvanceChannelTick.
  * Was bound to SpuVmDamperStep here; that was wrong (docs/names.md 17). */
-void SsSeqCalledTbyT(void) asm("func_80071018");
+void SsSeqCalledTbyT(void);
 long SsUtGetProgAtr(long vab_id, long program, ProgAtr *out);
 long SpuVmVSetUp(long vab_id, long program);
 long SsUtGetVagAtr(long vab_id, long program, long tone, VagAtr *out);

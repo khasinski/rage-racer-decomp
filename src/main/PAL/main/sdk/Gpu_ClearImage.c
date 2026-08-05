@@ -7,13 +7,13 @@ extern u_short g_VramWidth[] asm("D_800941EC");
 extern u_short g_VramHeight[] asm("D_800941EE");
 extern u_long g_ClearImagePacket[] asm("D_8009B9B0");
 
-u_long _param(long arg0) asm("func_8006764C");
-void Gpu_StartDmaTransfer(void *arg0) asm("func_80067600");
+u_long _param(long arg0);
+void Gpu_StartDmaTransfer(void *arg0);
 
 /* Driver-table slot +0x0C: the worker ClearImage enqueues. Fills the rect
  * with GP0(02h) when both x and w are 64-aligned, otherwise draws a flat
  * rectangle behind a saved draw-mode/area/offset block. */
-long Gpu_ClearImage(short *rect, u_long rgb) asm("func_80066E6C");
+long Gpu_ClearImage(short *rect, u_long rgb);
 long Gpu_ClearImage(short *env, u_long rgb) {
     {
         long x = env[2];
@@ -93,7 +93,7 @@ long Gpu_CheckTimeout(void);
 
 /* Driver-table slot +0x20: the worker LoadImage enqueues. Clips the rect,
  * issues GP0(A0h) and pushes the odd words by hand, the rest by DMA2. */
-long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) asm("func_80067084");
+long Gpu_LoadImage(GpuRectPacked *rect, u_long *src);
 long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
     GpuRectPacked *savedRect;
     u_long *current;
@@ -212,7 +212,7 @@ extern volatile u_long *g_GpuGp1 asm("D_800942BC");
 
 /* Driver-table slot +0x1C: the worker StoreImage enqueues. The GP0(C0h)
  * mirror image of Gpu_LoadImage. */
-long Gpu_StoreImage(GpuRectPacked *rect, u_long *dst) asm("func_800672D8");
+long Gpu_StoreImage(GpuRectPacked *rect, u_long *dst);
 long Gpu_StoreImage(GpuRectPacked *rect, u_long *dst) {
     short w;
     short h;

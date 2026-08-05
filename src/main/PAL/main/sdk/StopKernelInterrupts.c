@@ -7,7 +7,7 @@ extern volatile u_short *g_IrqStatus asm("D_8009A4BC");
 extern volatile u_short *g_IrqMask asm("D_8009A4C0");
 extern volatile u_long *g_KernelDpcr asm("D_8009A4C4");
 
-void *StopKernelInterrupts(void) asm("func_8006E4E4");
+void *StopKernelInterrupts(void);
 void *StopKernelInterrupts(void) {
     u_short *state;
     volatile u_short *initialMask;

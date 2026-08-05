@@ -1701,7 +1701,7 @@ extern s32 g_McMenuRowCursor;
 extern s32 g_McFromLoadMenu asm("D_8009B730");
 extern s32 g_McFadeStep;
 extern s32 g_McFadeLevel asm("D_8009B9A4");
-void EnterMemoryCardMenu(void) asm("func_800613B8");
+void EnterMemoryCardMenu(void);
 void EnterMemoryCardMenu(void) {
     SetDispMask(0);
     SetupDisplay480(0, 0, 0);

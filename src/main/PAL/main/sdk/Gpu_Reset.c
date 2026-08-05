@@ -16,7 +16,7 @@ long Gpu_ProbeType(u_long arg0);
 /* Driver-table slot +0x34, the body of ResetGraph: empties the queue,
  * re-arms DMA2, and issues GP1(00h) (mode 0) or GP1(02h)+GP1(01h)
  * (mode 1). Mode 0 also probes the GPU type through Gpu_ProbeType. */
-long Gpu_Reset(u_long mode) asm("func_80067C80");
+long Gpu_Reset(u_long mode);
 long Gpu_Reset(u_long mode) {
     long intrMask;
     long state;

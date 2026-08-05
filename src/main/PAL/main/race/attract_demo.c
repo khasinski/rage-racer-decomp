@@ -52,7 +52,7 @@ void func_800418D4(void);
 void DrawTerrainCellsWide(void);
 void DrawCourseScenery2(u32 arg0, u32 arg1);
 
-void UpdateBgmSelectScene(void) asm("func_80026570");
+void UpdateBgmSelectScene(void);
 void UpdateBgmSelectScene(void) {
     void (*func)(void);
 
@@ -61,7 +61,7 @@ void UpdateBgmSelectScene(void) {
     func();
 }
 
-void EnterAttractDemo(void) asm("func_800265BC");
+void EnterAttractDemo(void);
 void EnterAttractDemo(void) {
     s32 initialValue;
 
@@ -114,7 +114,7 @@ void DrawAttractTitle(void) {
     func_80046A2C(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, arg13);
 }
 
-void UpdateAttractDemoStart(void) asm("func_80026824");
+void UpdateAttractDemoStart(void);
 void UpdateAttractDemoStart(void) {
     s32 mode;
     u32 timer;
@@ -154,7 +154,7 @@ void ReturnToTitleScene(void) {
     ResetCdAudioState();
 }
 
-void UpdateAttractDemoRace(void) asm("func_80026920");
+void UpdateAttractDemoRace(void);
 void UpdateAttractDemoRace(void) {
     u32 value;
     u32 timer;

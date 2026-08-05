@@ -547,7 +547,7 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
     return returnValue;
 }
 
-void EnterRaceScene(void) asm("func_8003609C");
+void EnterRaceScene(void);
 void EnterRaceScene(void) {
     s32 pad[2];
     u8 *new_var;
@@ -657,7 +657,7 @@ void EnterRaceScene(void) {
     (void)pad;
 }
 
-void UpdateRaceScene(void) asm("func_800363D4");
+void UpdateRaceScene(void);
 void UpdateRaceScene(void) {
     s32 option;
     s32 value;

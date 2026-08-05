@@ -65,7 +65,7 @@ void DrawBootLogo(void) {
     *scratch = func_80017390(base, next, 5);
 }
 
-void UpdateBootLogoScene(void) asm("func_800232B4");
+void UpdateBootLogoScene(void);
 void UpdateBootLogoScene(void) {
     s32 state;
 
@@ -138,7 +138,7 @@ void InstallSceneLighting(void) {
     func_800686D4(0x4E20, 0x140);
 }
 
-void EnterAttractScene(void) asm("func_800235D8");
+void EnterAttractScene(void);
 void EnterAttractScene(void) {
     SetDispMask(0);
     g_FrameSyncThreshold = 0x80;
