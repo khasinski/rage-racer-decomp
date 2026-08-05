@@ -4101,7 +4101,8 @@ eight this section left behind. The extras are `D_8007D78C`, `D_8009A588`
 `D_801E408C` (`g_RaceSeries` / `g_RaceSeriesNV`) and
 `D_801E431C`/`20`/`24` (`g_FlybySceneryRot{X,Y,Z}` and their `2` siblings) —
 mostly non-volatile or differently-typed views added by conversions after this
-pass, i.e. the same sanctioned pattern, but nobody has checked them one by one.
+pass. A later pass took seventeen of these one by one (22b below); the two named
+here, `D_8009A588` and `D_8009DF20`, both fell.
 
 **Two unresolved name collisions this pass could not have caught**, because it
 only asked "does one address have two names" and not the reverse:
@@ -4145,13 +4146,61 @@ Each of these compiles fine under one name; it is the *object file* that changes
 
 | Address | Names | Forcing reason |
 |---|---|---|
-| `D_8009AF4C` | `g_FmvUploadRect` / `g_FmvUploadRectX` | Whole-`Rect` copy and a `volatile s16` x in the same function. `g_FmvUploadRect.x` does not match. |
 | `D_8009AF90` | `g_RefSectorTimes` / `g_RefSectorTime0` | Retested: `g_RefSectorTimes[k]` in `UpdateLapAndFinish` still shifts the whole surrounding allocation. |
-| `D_8009B538` | `g_McEvents` / `g_McHwEventIoe` | Retested: `g_McEvents[k]` in `clear_memory_card_hw_events.c` keeps the base live in a callee-saved register and grows the frame. |
-| `D_8009B720`, `D_8009B72C`, `D_8009B740` | `g_McCardStatus` / `g_McMenuSubState` / `GameMenuLoadPhase` plus a `…V` alias each | `save/update_memory_card_menu.c` reads each of the three **both** ways, and only the volatile spelling forces the reload retail has at those sites. A redeclaration cannot add the qualifier: gcc 2.6.3 keeps the first declaration's type (that is also why the `volatile` at `write_memory_card_save_file.c:196` is a no-op), so the alias needs its own identifier. Convention adopted: the volatile alias is the base name plus `V`. |
-| `D_8019CABC` | `g_GrandPrixSeries` / `g_GrandPrixSeriesU16` | `menu/course_select.c` includes `game/race.h`, and `u16` vs `s16` is a hard "conflicting types" error in gcc 2.6.3, not a warning. |
-| `D_801E6CA4` | `g_EffectVolumeScale` / `g_SoundScale` | `SoundScale` is just `{ g_EffectVolumeScale; g_VabIds[3] }`. Spelling the three reads in `set_pitched_sound_cue.c` as those two existing globals compiles but does not match, in either direction: a struct member reference is non-aliasing to gcc 2.6.3 (`MEM_IN_STRUCT_P`) and the volume arithmetic reorders. |
-| `D_8009AB7C` | `g_SpuRegBase` / `g_SpuRegBaseNv` | `_spu_FgetRXXa` reads the SPU register file through a non-volatile pointer; the volatile spelling does not match. |
+| `D_8009B720`, `D_8009B72C`, `D_8009B740` | `g_McCardStatus` / `g_McMenuSubState` / `GameMenuLoadPhase` plus a `…V` alias each (22b retested `D_8009B720` and it still holds) | `save/update_memory_card_menu.c` reads each of the three **both** ways, and only the volatile spelling forces the reload retail has at those sites. A redeclaration cannot add the qualifier: gcc 2.6.3 keeps the first declaration's type (that is also why the `volatile` at `write_memory_card_save_file.c:196` is a no-op), so the alias needs its own identifier. Convention adopted: the volatile alias is the base name plus `V`. |
+
+### 22b. Second pass: collapsing the remaining two-name addresses
+
+Seventeen addresses still carried two or three `asm("D_…")` names. Thirteen
+collapsed to one name, byte-exact; four did not. The useful part is *which cast
+shape reproduces the original code*, because that turned out to be a property of
+gcc 2.6.3 and not of any one variable.
+
+**A value cast is free; an address cast is not.** `(u16)g_Foo` where `g_Foo` is
+declared `s16` folds into the load: gcc emits one `lhu` from the symbol, exactly
+as a separate `u16` extern would. `*(u16 *)&g_Foo` does not fold — the compiler
+materialises the address with `la` first and then loads from a register, one
+instruction more. Same for the reverse direction, and same for `volatile`:
+`*(volatile s32 *)&g_Foo = 0` is `la`+`sw`, while a `volatile`-declared variable
+is a plain `sw $0,sym`. **Only a `VAR_DECL` gets direct-symbol addressing.**
+Struct members, unions with a `volatile` member, and any `*(T *)&x` all take the
+`la` path when the lvalue is used more than once in the statement (a single
+constant store to a member at offset 0 does still fold). That is why signedness
+and pointer-type duplicates all fell and the `volatile` duplicates did not.
+
+Corollaries used here: casting a *pointer value* (`(u_char *)g_SndSpuRegs`,
+`(GamePlayerCarSpecInit *)g_CarSpec`) is always free, because nothing is being
+addressed; and a store never cares about signedness, so an address whose reads
+all want one signedness can simply be declared that way.
+
+Also confirmed: gcc 2.6.3 does **not** forward a global store into the case
+bodies of a `switch` — each `case` is its own basic block and reloads. The
+`…V` aliases were not needed *for the reload*; what they still buy is register
+allocation and cross-jumping (below).
+
+Collapsed (all byte-exact):
+
+| Address | Now | Was | How |
+|---|---|---|---|
+| `D_8009A588` | `g_SndSpuRegs` | + `g_SndSpuRegsBytes` | `(u_char *)` on the loaded pointer. |
+| `D_8009AB7C` | `g_SpuRegBase` | + `g_SpuRegBaseNv` | Only the pointee is `volatile`; `((u_short *)g_SpuRegBase)[i]` is the same `lhu`. |
+| `D_8009AF4C` | `g_FmvUploadRectX` | + `g_FmvUploadRect` | The scalars win; the one whole-`Rect` copy reads `*(Rect *)&g_FmvUploadRectX`. |
+| `D_8009B538` | `g_McHwEventIoe` | + `g_McEvents` | The eight descriptors are the eight scalars the pollers already used; the open/enable/disable/close functions now use them too. Identical instructions, the relocation just moves from `D_8009B538+k*4` to the scalar at that address. |
+| `D_8009DF20` | `g_SndVoiceRegs` | + `g_SndVoiceRegs16` | The `u_char[]` declaration in `SsUtPitchBend.c` was never used; the halfword view took the name. |
+| `D_8019CABC` | `g_GrandPrixSeries` | + `g_GrandPrixSeriesU16` | `(u16)g_GrandPrixSeries` at the one unsigned read per file. |
+| `D_801E42D8` | `g_CarSpec` | + `g_PlayerCarInitSpec`, + bare `D_801E42D8` | Pointer-value casts; the init-time struct view is now a macro over `g_CarSpec`. |
+| `D_801E4DE4`, `D_801E4DE6` | `g_PathScenery{Pos,Rot}Span` | + `…SpanS` | Declared `s16` (what the reads want); the stores do not care. |
+| `D_801E4DEC`, `D_801E4DEE` | `g_PathScenery{Pos,Rot}Index` | + `…IndexU` | `(u16)` at the one unsigned read. |
+| `D_801E6CA4` | `g_SoundScale` | + `g_EffectVolumeScale` | The *struct* is the view that has to stay; the fourteen scalar sites became `g_SoundScale.scale`. The declaration moved to `game/sound.h` — putting it in `game/audio.h` needs `sound.h` included there, which collides with `update_menu_mode.c`'s own `g_SoundSlotTone`. |
+| `D_801E8884` | `g_GearTorqueCurve` (`GearCurveRow[]`, now in `game/car.h`) | + `gearRows` | Row type kept, the flat accesses became row 0. The reverse (casting the flat array to `GearCurveRow *`) loses four bytes. |
+
+Still split, with the measurement:
+
+| Address | Names | What breaks |
+|---|---|---|
+| `D_80082FAC` | `g_McConfirmChoice` / `g_McConfirmChoice_v` | Two blocks in `UpdateMemoryCardMenu` are `PlaySoundCue(2); store 0; nv = 0xA;` and retail does **not** merge them. Non-volatile lets cross-jumping merge them (the whole block disappears); `*(volatile s32 *)&…` blocks the merge but costs the `la`; declaring the one name `volatile` moves ~3000 lines of the object. |
+| `D_8009B720` | `g_McCardStatus` / `g_McCardStatusV` | The six `case` bodies do reload without `volatile` (see above), but the allocation flips: retail puts the loaded status in `v1` and the case constant in `v0`, non-volatile swaps them and adds a `move v1,v0` for the call result. Reordering the locals does not flip it back. Single `volatile` declaration is −12 bytes. |
+| `D_801E4DE0`, `D_801E4DE2` | `g_PathScenery{Pos,Rot}Phase` / `…Cursor` | The easing expressions need the `PathSceneryCursor` struct (spelling `.phase` as the scalar is +40 bytes: `MEM_IN_STRUCT_P` again), and the `phase + 1` counter step needs the scalar (`cursor.phase = (u16)cursor.phase + 1` is the `la` form). The `= 0` stores work either way. |
 
 ### Hardware register mirrors
 
