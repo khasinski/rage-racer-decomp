@@ -36,7 +36,7 @@ s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
         "swc2 $27,8($6)"
         :
         : "r"(m0), "r"(m1), "r"(m2), "r"(m3), "r"(m4), "r"(vec), "r"(out)
-        : "memory");
+        );
     asm volatile("move $2,$6");
 }
 
@@ -68,7 +68,7 @@ s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out) {
         "sh $10,4($6)"
         :
         : "r"(m0), "r"(m1), "r"(m2), "r"(m3), "r"(m4), "r"(vec), "r"(out)
-        : "memory");
+        );
     asm volatile("move $2,$6");
 }
 

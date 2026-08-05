@@ -131,7 +131,7 @@ void *CompMatrix(s32 *m0, void *m1, void *m2) {
         :
         : "r"(r0), "r"(r1), "r"(r2), "r"(r3), "r"(r4),
           "r"(m0), "r"(m1), "r"(m2)
-        : "memory");
+        );
     asm volatile("move $2,$6");
 }
 
@@ -209,7 +209,7 @@ void *MulMatrix0(s32 *matrix, void *src, void *dst) {
         "swc2 $11,16($6)"
         :
         : "r"(m0), "r"(m1), "r"(m2), "r"(m3), "r"(m4), "r"(src), "r"(dst)
-        : "memory");
+        );
     asm volatile("move $2,$6");
 }
 
@@ -275,7 +275,7 @@ void *MulRotMatrix0(void *arg0, void *arg1) {
         "swc2 $11,16($5)"
         :
         : "r"(arg0), "r"(arg1)
-        : "memory");
+        );
     asm volatile("move $2,$5");
 }
 
@@ -342,7 +342,7 @@ void *MulRotMatrix(void *arg0) {
         "swc2 $11,16($4)"
         :
         : "r"(arg0)
-        : "memory");
+        );
     asm volatile("move $2,$4");
 }
 
@@ -420,7 +420,7 @@ void *SetMulMatrix(s32 *matrix, void *src) {
         "ctc2 $10,$4"
         :
         : "r"(m0), "r"(m1), "r"(m2), "r"(m3), "r"(m4), "r"(src)
-        : "memory");
+        );
     asm volatile("move $2,$4");
 }
 
@@ -537,7 +537,7 @@ void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
         ".set\treorder\n"
         :
         : "r"(m), "r"(v), "r"(o)
-        : "memory", "$8", "$9", "$10", "$11", "$12", "$13");
+        : "$8", "$9", "$10", "$11", "$12", "$13");
     return o;
 }
 
@@ -560,7 +560,7 @@ s32 func_800690E0(s32 *arg0, s32 *arg1, s32 arg2) {
         "swc2 $11,8($5)"
         :
         : "r"(xy), "r"(z), "r"(arg1)
-        : "memory");
+        );
     asm volatile("move $2,$6");
 }
 
