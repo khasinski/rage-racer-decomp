@@ -7,6 +7,11 @@ func_8004BAC8 = ScrollTeamLogoDown + 0x78;
 func_8005B004 = IsSpuTransferDone + 0x30;
 func_8005BDB0 = SetSequenceVolumeSetting + 0x2C;
 
+/* Scratchpad (0x1F800000) locations the render code reaches by name.  They
+   sit outside every segment, so no object can define them. */
+g_FinalSkyOrderingTable = 0x1F800004;
+g_ScratchRenderMode = 0x1F800084;
+
 /* Mid-function entry points, as offsets from the function that contains
    them.  Written this way so .text can change size: an absolute address
    here would pin every function ahead of it. */

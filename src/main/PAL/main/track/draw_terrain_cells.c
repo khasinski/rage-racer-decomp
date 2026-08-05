@@ -18,7 +18,7 @@ void DrawTerrainCellsWide(void) {
     SubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
 }
 
-extern u32 *g_FinalSkyOrderingTable asm("D_1F800004");
+extern u32 *g_FinalSkyOrderingTable;
 void AddPrim(void *, void *);
 void SetShadeTex(void *, s32);
 void SetPolyF4(void *);

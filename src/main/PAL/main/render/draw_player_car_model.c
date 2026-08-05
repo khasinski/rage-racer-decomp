@@ -7,7 +7,7 @@
 extern GameRenderView *g_CarModelAsset;
 extern Matrix g_SceneLightMatrix;
 extern s32 g_ModelBankCount;
-extern s32 g_ScratchRenderMode asm("D_1F800084");
+extern s32 g_ScratchRenderMode;
 
 s32 GetTrackZoneBlend(s32 arg0);
 void ApplyZoneLighting(s32 arg0, Matrix *arg1);

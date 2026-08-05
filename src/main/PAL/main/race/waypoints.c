@@ -49,7 +49,7 @@ void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 
 
-extern u32 g_ScratchRenderMode asm("D_1F800084");
+extern u32 g_ScratchRenderMode;
 
 /* Counts how many of the 6 waypoint slots are active (active != 0). */
 

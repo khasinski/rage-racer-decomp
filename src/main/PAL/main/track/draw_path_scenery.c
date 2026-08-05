@@ -12,7 +12,7 @@ void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 extern s16 g_PathSceneryRot[3];
 extern s16 g_PathSceneryX;
 extern s32 g_ModelBankCount;
-extern s32 g_ScratchRenderMode asm("D_1F800084");
+extern s32 g_ScratchRenderMode;
 
 
 void DrawPathScenery(void);
