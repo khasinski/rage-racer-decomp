@@ -8,7 +8,7 @@ extern long g_SndSeqOpenMask;
 extern short g_SndSeqTableSMax;
 extern short g_SndSeqTableTMax;
 void _SsSndDecrescendo(short seq, short sep);
-void func_80072734(long seq, long sep);
+void _SsSndStopWide(long seq, long sep) asm("func_80072734");
 
 void SsSeqCalledTbyT(void);
 void SsSeqCalledTbyT(void) {
@@ -48,7 +48,7 @@ void SsSeqCalledTbyT(void) {
                 SsSeqResume((short)i, (short)j);
             }
             if (g_SndSeqTable[i][j].flags & 0x4) {
-                func_80072734(i, j);
+                _SsSndStopWide(i, j);
                 g_SndSeqTable[i][j].flags = 0;
             }
         }

@@ -18,7 +18,7 @@ extern char g_MsgReadBytes[];
 extern char g_MsgFileReadError[];
 s32 CdRead(s32 arg0, void *arg1, s32 arg2);
 long CdReadSync(long arg0, long arg1);
-s32 func_80017C78(s32 arg0, s32 arg1);
+s32 LoadAssetWide(s32 assetIndex, s32 dst) asm("func_80017C78");
 extern char g_PathRageBin[];
 extern char g_MsgFileNotFound[];
 extern char g_MsgReadSectors[];
@@ -112,7 +112,7 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
 
 void LoadAssetBlocking(s32 arg0, s32 arg1);
 void LoadAssetBlocking(s32 arg0, s32 arg1) {
-    while (func_80017C78(arg0, arg1) == 0) {
+    while (LoadAssetWide(arg0, arg1) == 0) {
     }
 }
 

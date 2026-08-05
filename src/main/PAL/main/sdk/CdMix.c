@@ -1,20 +1,22 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-void func_8006BA68(void);
-long func_8006C06C(void);
 void DMACallback(long arg0, long arg1);
 void CD_datasync(void);
 
-long CdMix(void);
-long CdMix(void) {
-    func_8006BA68();
+/* Both of these forward their own incoming arguments untouched, which is why
+ * m2c saw them as (void): the values are already in a0/a1 when the tail call
+ * is made. The signatures below are the ones the callers use -- CdMix from
+ * cd/cd_audio_control.c and CdGetSector2 from sdk/CdReadDataReadyCallback.c. */
+long CdMix(CdlATV *vol);
+long CdMix(CdlATV *vol) {
+    CD_vol(vol);
     return 1;
 }
 
-long CdGetSector2(void);
-long CdGetSector2(void) {
-    return func_8006C06C() == 0;
+long CdGetSector2(long madr, u_long size);
+long CdGetSector2(long madr, u_long size) {
+    return CD_getsector2(madr, size) == 0;
 }
 
 void CdDataCallback(long arg0);
