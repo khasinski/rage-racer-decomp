@@ -5810,3 +5810,84 @@ boundaries must therefore be proven from the anchors, not from a passing build.
 
 Directory reorg (into `lib/libgte/` etc.) and header restructuring were
 deliberately deferred; TUs stay in their current directories.
+
+## 38. The `asm("func_XXXXXXXX")` aliases that are left, and why each one is
+
+The aliases are not a to-do list of unfinished naming: 51 addresses still
+carry one, and every one of them is load-bearing for a specific reason.
+Naming an address means putting `Name = 0xADDRESS;` in `configs/PAL/sym.main.txt`
+(or `sym.bss.main.txt`, or `linkers/PAL/undefined_syms_manual.txt` when the
+address is outside every segment) and deleting the alias. The disassembler
+reads symbol_addrs, so a reference from generated asm follows the name. What
+stops the rest is C, not the tooling.
+
+### 38a. Two type views of one address inside one translation unit
+
+Every remaining `D_` alias is this. `audio.c` declares
+`extern SoundModeEntry g_SoundModes[] asm("D_800126D0")` *and*
+`extern s32 D_800126D0[]`, and uses both — a struct view for the field
+accesses and a word view for the byte-offset macro. Renaming the symbol
+collapses the two into one identifier with two types, which is a hard error.
+The same shape blocks `D_801E6D00` (`MusicChannel[]` vs `u8[]`),
+`D_801E6D30` (`EffectVoice[]` vs `s32`), `D_8009B2C0`, `D_8009E6D4`,
+`D_801E6F2C` and `D_801E40B8` (where `rival_ai.c` reads the address as
+`GameCarRuntime *[]` and a comment already says so). `D_8009E0A0` is the
+same class one step removed: `SpuVmAlloc.c` needs a non-`volatile`
+declaration and 2.6.3 rejects a requalified array redeclaration.
+`func_80017C78` (`LoadAsset`) is the function version — `asset_loader.c`
+holds both the definition's `void *` and a caller's `s32`.
+
+### 38b. Header and caller disagree about a width, and the caller is the evidence
+
+`audio.c` is the concentration: thirteen libsnd routines
+(`SsSeqOpen`, `SsSeqCloseWrapper`, `SsSetVoiceCount`, `SsVabClose`,
+`SsVabOpenHeadSticky`, `SsVabTransBody`, `SsVabTransCompleted`,
+`SsUtSetReverbType`, `SsUtSetReverbDepth`, `SsUtPitchBend`,
+`SsUtChangePitch`, `SsUtSetVVol`, `_SsVmInit`) are declared there with full
+words where `psyq/snd.h` gives the documented `short` / `u_char` / `u_short`
+signature. Both spellings were tried: deleting `audio.c`'s prototypes and
+respelling them to the header's each make cc1 segfault inside
+`InitSoundWithVab`. `_SsSndStop` is measurable rather than fatal —
+`SsSeqCalledTbyT` grows four bytes of truncation.
+
+Where a width difference is *not* fatal the fix that works is an empty
+parameter list on the header declaration, with the body's real signature in
+the comment above it: `SetDrawArea`, `VSyncCallback`, `CD_sync`, `CD_ready`,
+`CdReady`, `SeekEnvironmentScript`, `InitPlayerCar`, `SetGteObjectMatrix`,
+`CollidePlayerWithCars`, `DrawCarSpecGraph`, `GameDrawText8x8Shaded`,
+`DrawText8x8Trans`, `ClearMemoryCardHwEvents` and `ClearMemoryCardSwEvents`
+now read that way. It fails when the *definition* has a promotable
+parameter, which is what stops `CD_cw` (`u_char command`).
+
+### 38c. A pointer handed to a non-pointer parameter crashes cc1 outright
+
+Not a diagnostic — a segfault. `TransposeMatrix` is the clean case:
+`update_camera.c` passes `void *` where `psyq/gte.h` says `Matrix *`, and
+every reconciliation of the two dies in cc1. Nine of the drawing helpers
+(`DrawRectOutline`, `GameDrawTexturedQuad`, `GameDrawMenuButton`,
+`GameQueueTileTrans`, `GameQueueShadedSpriteTrans`,
+`GameQueueShadedTexturedRect`, `DrawCarEngineSpec`, …) are the same story
+with `s16`/`u8` parameters instead of pointers, and cannot take the empty
+list either because their callers' own prototypes are promotable.
+
+### 38d. Several names for one address
+
+`func_80046A2C` has six (`DrawSprite`, `DrawLogoSprite`, `GameDrawSpriteWide`,
+`DrawCarSpecSprite`, `drawSprite`, `func_80046A2C_prepared`); `func_80017390`,
+`func_800666F4`, `func_80016EC4`, `func_800632F0` and six more have two or
+three. symbol_addrs takes one name per address, so the true name has to be
+settled before any of these can move, and each other site then needs that
+name plus a corrected signature.
+
+### 38e. Two more places a name can live
+
+Not everything is named in C. A routine whose body is `INCLUDE_ASM` or a
+top-level `asm()` block is named by `configs/PAL/nonmatching_labels.main.txt`
+— the output-file column and the entry label both change, and
+`gen_nonmatching_asm.py` takes the address from symbol_addrs. That is how
+the 26 GTE engine routines, the seven BIOS A0/B0 event stubs and
+`MdecUnpackStatus` got their names. A block a C file emits as a
+`u_long[]` in `.text` keeps the *array's* name, and the routine at its first
+word becomes a linker alias for it in `undefined_syms_manual.txt`
+(`ChangeClearRCnt = ChangeClearRCntStub;`), the way the BIOS stubs already
+were.
