@@ -199,7 +199,7 @@ typedef struct GameRenderPairPoint {
 /*
  * Rotation-matrix builders. Each fills only the 3x3 part of `mtx` with a
  * rotation about one axis by a 12-bit angle (0x1000 = one turn), leaving the
- * translation alone; sin/cos come from rsin/rcos (func_80068568/func_80068634)
+ * translation alone; sin/cos come from rsin/rcos
  * and 1.0 is 0x1000.
  */
 void BuildRotMatrixZ(void *mtx, s32 angle);
@@ -294,7 +294,7 @@ void DrawFlatTriangle(
     u8 g,
     u8 b,
     s32 semiTrans,
-    u32 flags) asm("func_80046BA0");
+    u32 flags);
 
 /* The same routine seen through signed coordinates. Retail's two callers
  * disagree about these three parameters and the disagreement is load-bearing:
@@ -314,7 +314,7 @@ void DrawFlatTriangleSigned(
     u8 g,
     u8 b,
     s32 semiTrans,
-    u32 flags) asm("func_80046BA0");
+    u32 flags) asm("DrawFlatTriangle");
 void DrawFlatQuad(
     void *ot,
     s16 x0,
@@ -329,7 +329,7 @@ void DrawFlatQuad(
     u8 g,
     u8 b,
     s32 semiTrans,
-    u32 flags) asm("func_80046CBC");
+    u32 flags);
 /* POLY_FT4: four xy/uv pairs, flat rgb, tpage and a CLUT index as depth key. */
 void GameDrawTexturedQuad(
     s32 ot,
@@ -389,7 +389,7 @@ void DrawPolyLine3(
     u8 r,
     u8 g,
     u8 b,
-    u8 alpha) asm("func_80047214");
+    u8 alpha);
 /* LINE_G2: line interpolating rgb0 -> rgb1. */
 void DrawGradientLine(
     void *ot,
@@ -459,7 +459,7 @@ s32 GameDrawNumber(
     u8 g,
     u8 b,
     u16 clutIndex,
-    u8 primitiveCount) asm("func_80047BD4");
+    u8 primitiveCount);
 /* Blits an 8x6 bit pattern from D_8007F6E8 as 4x8 blocks; negative argument
  * animates through the table. */
 void DrawBitPatternOverlay(s32 pattern);
@@ -792,7 +792,7 @@ extern GameEnvColorSlot g_EnvColors[9];
 void SeekEnvironmentScript(s32 time) asm("func_800458CC");
 /* The backdrop: half a 16-segment panorama cylinder over gradient bands shaded
  * between successive colour slots. */
-void DrawSkyBackground(void) asm("func_800418D4");
+void DrawSkyBackground(void);
 
 /* Environment mode of the loaded course variant, from variant data +0x2C. Also
  * the index of the target 48-byte (16 x RGB) sky palette in g_EnvPaletteTable;

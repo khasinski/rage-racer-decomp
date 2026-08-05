@@ -13,15 +13,15 @@ void *FormatLapTime(void *dst, s32 timeMs);
 void DrawResultScreen(void);         /* "RESULT" */
 void DrawRaceEndPrompt(void);        /* "PRESS START BUTTON" */
 void DrawCourseIntro(void);          /* "COURSE IN" / "TIME ATTACK" */
-void DrawGrandprixIntro(void) asm("func_800201D4");       /* "CLASS%d %s GRANDPRIX" */
-void DrawEndingScreen(void) asm("func_80037D90");         /* "CONGRATULATIONS!!" */
+void DrawGrandprixIntro(void);       /* "CLASS%d %s GRANDPRIX" */
+void DrawEndingScreen(void);         /* "CONGRATULATIONS!!" */
 /* The in-race option/pause overlay; `cursorRow` is g_RaceOptionCursor. The
  * "RAGE RACER GE" string is one half of a scrolling marquee, not a title -
  * this is not the title screen. See docs/names.md 1. */
 void DrawRaceOptionMenu(s32 cursorRow);
 
 /*
- * Title screen and main menu. UpdateFrontend (UpdateFrontend) runs one of the
+ * Title screen and main menu. UpdateFrontend runs one of the
  * four handlers below each frame via the jump table at g_FrontendDrawHandlers, indexed by
  * the sub-state g_FrontendState: 0 title -> 1 menu wipe-in -> 2 cursor/confirm ->
  * 3 fade out and request the selected scene. Details in names.md section 5.

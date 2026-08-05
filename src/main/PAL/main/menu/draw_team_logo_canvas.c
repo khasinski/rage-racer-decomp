@@ -73,7 +73,7 @@ extern u16 D_801E6F2C;
 
 extern s32 GetClut(s16 x, s16 y);
 extern void LoadImage(void *rect, void *data);
-extern s32 rsin(s32 angle) asm("func_80068568");
+extern s32 rsin(s32 angle);
 extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h);
 extern void func_80046A2C(
     s32 ot,
@@ -108,7 +108,7 @@ extern void func_80046A2C_prepared(
 extern void func_8004711C(
     s32 ot, s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b, u8 alpha);
 extern void GameDrawNumber(
-    s16 x, s32 y, s16 flags, s32 value, u8 r, u8 g, u8 b, s32 clut, s32 primitiveCount) asm("func_80047BD4");
+    s16 x, s32 y, s16 flags, s32 value, u8 r, u8 g, u8 b, s32 clut, s32 primitiveCount);
 
 void func_80047024(
     void *arg0,

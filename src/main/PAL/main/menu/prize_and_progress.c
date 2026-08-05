@@ -24,7 +24,7 @@ void PlaySoundCue(s32 cue);
 void TickClassClearFanfare(void);
 void RequestSelectBgmAssets(void);
 void AdvanceGrandPrixClass(void);
-void func_800201D4(void);
+void DrawGrandprixIntro(void);
 extern s32 g_BgmVolumeSetting;
 extern s32 g_SfxVolumeSetting;
 extern s32 g_MonoOutput;
@@ -66,7 +66,7 @@ void UpdatePrizeMoneyScreen(void) {
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if (g_SceneTimer == 0) g_PrizeScreenState = 1;
         DrawRaceTimePanel(0);
-        func_800201D4();
+        DrawGrandprixIntro();
         return;
     case 1:
         DrawRaceTimePanel(0);
@@ -74,19 +74,19 @@ void UpdatePrizeMoneyScreen(void) {
             g_PrizeScreenState = 2;
             g_SceneTimer = 0;
         }
-        func_800201D4();
+        DrawGrandprixIntro();
         return;
     case 2:
         g_SceneTimer += 8;
         DrawRaceTimePanel(g_SceneTimer);
         if ((u32)g_SceneTimer >= 129) g_PrizeScreenState = 3;
-        func_800201D4();
+        DrawGrandprixIntro();
         return;
     case 3:
         g_SceneTimer -= 8;
         DrawPrizeMoneyPanel(g_SceneTimer);
         if (g_SceneTimer == 0) g_PrizeScreenState = 4;
-        func_800201D4();
+        DrawGrandprixIntro();
         return;
     case 4:
         g_SceneTimer += 1;
@@ -155,11 +155,11 @@ void UpdatePrizeMoneyScreen(void) {
         AdvanceGrandPrixClass();
         break;
     default:
-        func_800201D4();
+        DrawGrandprixIntro();
         return;
     }
     DrawPrizeMoneyPanel(0);
-    func_800201D4();
+    DrawGrandprixIntro();
 }
 
 void ApplyAudioSettings(void);

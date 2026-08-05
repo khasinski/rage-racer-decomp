@@ -6,9 +6,9 @@ extern s16 D_80093308[];
 extern s16 D_80093B08[];
 extern s16 g_SinTable[];
 
-s32 rsin(s32 arg0) asm("func_80068568");
+s32 rsin(s32 arg0);
 s32 rsinCore(s32 arg0);
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rcos(s32 arg0);
 void MatrixApplyZRotation(Matrix *arg0, s32 arg1);
 void MatrixApplyZRotation(Matrix *arg0, s32 arg1) {
     Matrix sp10;

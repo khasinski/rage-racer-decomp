@@ -235,9 +235,9 @@ void ApplyCarKnockback(GameCarRuntime *arg0) {
     }
 }
 
-s32 rsin(s32 angle) asm("func_80068568");
+s32 rsin(s32 angle);
 
-s32 rcos(s32 angle) asm("func_80068634");
+s32 rcos(s32 angle);
 
 /*
  * Collision / boundary response: sets the car's knock-back motion vector

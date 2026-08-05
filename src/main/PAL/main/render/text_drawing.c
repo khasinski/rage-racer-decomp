@@ -282,7 +282,7 @@ s32 GameDrawNumber(
     u8 g,
     u8 b,
     u16 clut,
-    u8 primitiveCount) asm("func_80047BD4");
+    u8 primitiveCount);
 s32 GameDrawNumber(
     s32 x,
     s16 y,

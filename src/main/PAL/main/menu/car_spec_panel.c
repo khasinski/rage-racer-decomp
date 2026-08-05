@@ -12,12 +12,12 @@ void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0,
                    u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans,
                    u32 flags);
 void DrawFlatTriangleSigned(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, s16 x2, u16 y2,
-                   u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("func_80046BA0");
+                   u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("DrawFlatTriangle");
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
                    u8 b, u8 alpha);
 void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
                    u8 b, u8 alpha);
-s32 rsin(s32 angle) asm("func_80068568");
+s32 rsin(s32 angle);
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */
 void DrawTireCompoundSlider(u8 x, s32 useFlag);
@@ -209,13 +209,13 @@ void DrawCarSpecSprite(void *ot, s16 x, s16 y, s16 w, u16 h, u16 u, u16 v,
                        s32 semiTrans, u32 flags) asm("func_80046A2C");
 void DrawCarSpecQuad(void *ot, s16 x0, s32 y0, s16 x1, s16 y1, s16 x2,
                      s16 y2, s16 x3, s16 y3, u8 r, u8 g, u8 b,
-                     s32 semiTrans, u32 flags) asm("func_80046CBC");
+                     s32 semiTrans, u32 flags) asm("DrawFlatQuad");
 void DrawCarSpecQuadSigned(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2,
                            s16 y2, s16 x3, s16 y3, u8 r, u8 g, u8 b,
-                           s32 semiTrans, u32 flags) asm("func_80046CBC");
+                           s32 semiTrans, u32 flags) asm("DrawFlatQuad");
 void DrawCarSpecPolyLine(void *ot, s32 x0, s16 y0, s16 x1, s16 y1, s32 x2,
                          s16 y2, s32 r, s32 g, s32 b,
-                         s32 alpha) asm("func_80047214");
+                         s32 alpha) asm("DrawPolyLine3");
 
 /* The four animated performance bars on the CUSTOMIZE car panel. */
 void DrawCarSpecGraph(s32 step, u32 tireGrade) asm("func_800496F0");

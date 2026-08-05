@@ -735,7 +735,7 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 
 extern s32 D_8009B264;
 
-s32 rsin(s32 arg0) asm("func_80068568");
+s32 rsin(s32 arg0);
 void func_80047460(
     void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7, s32 arg8);
 

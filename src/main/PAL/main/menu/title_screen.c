@@ -112,7 +112,7 @@ void DrawTitleFadeOverlay(s32 arg0) {
 
 extern s32 D_801E6F28;
 
-s32 rsin(s32 arg0) asm("func_80068568");
+s32 rsin(s32 arg0);
 void DrawTitleFadeOverlay(s32 brightness);
 void *func_80016F8C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);

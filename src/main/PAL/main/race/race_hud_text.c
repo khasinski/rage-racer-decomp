@@ -216,7 +216,7 @@ extern CVec g_CountdownCellColors[];
 
 s32 GameQueueDrawModePrimWide(
     s32 ot, s32 prim, s32 tpage) asm("func_80017390");
-void AddPrimsWide(void *ot, void *first, void *last) asm("func_80064E18");
+void AddPrimsWide(void *ot, void *first, void *last) asm("AddPrims");
 
 void DrawStartCountdown(s32 sceneTimer) {
     s32 timer;
@@ -424,7 +424,7 @@ extern char g_RaceOptionMarquee[4][40];
 extern s32 g_RaceOptionPulseAngle;
 extern u8 *g_CourseProgress;
 
-s32 rcos(s32 angle) asm("func_80068634");
+s32 rcos(s32 angle);
 u8 *AddTilePrim(
     void *ot,
     u8 *prim,

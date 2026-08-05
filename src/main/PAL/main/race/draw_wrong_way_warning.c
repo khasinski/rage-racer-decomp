@@ -79,8 +79,8 @@ extern u8 g_TachoFaceR;
 extern u8 g_TachoFaceG;
 extern u8 g_TachoFaceB;
 
-s32 rsin(s32 angle) asm("func_80068568");
-s32 rcos(s32 angle) asm("func_80068634");
+s32 rsin(s32 angle);
+s32 rcos(s32 angle);
 void SetPolyF4(void *prim);
 void func_80064FF8(void *prim);
 void DrawSpeedDigits(s32 x, s32 y, s32 speed);

@@ -214,7 +214,7 @@ extern s32 g_MirrorPanelY;
 extern s32 g_VisibleCellList;
 
 u8 *DrawMirrorFrame(u8 *packet);
-void func_800418D4(void);
+void DrawSkyBackground(void);
 void AddPrim(void *ot, void *prim);
 void BuildVisibleCells(s32 arg0, s32 arg1);
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
@@ -242,7 +242,7 @@ void DrawRearViewMirror(s32 arg0) {
         if (BeginMirrorPass() != 0) {
             scratch = (u8 **)0x1F800000;
 
-            func_800418D4();
+            DrawSkyBackground();
             packet = DrawMirrorFrame(*scratch);
             SetDrawArea(packet, g_DrawBuffer + 0x70);
             prim = packet;

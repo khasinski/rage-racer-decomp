@@ -19,10 +19,10 @@
  * decision to leave it raw stands.
  */
 
-extern volatile u_char *g_CdReg0 asm("D_80099300");
+extern volatile u_char *g_CdReg0;
 extern volatile u_char *g_CdReg1;
-extern volatile u_char *g_CdReg2 asm("D_80099308");
-extern volatile u_char *g_CdReg3 asm("D_8009930C");
+extern volatile u_char *g_CdReg2;
+extern volatile u_char *g_CdReg3;
 extern long g_CdDebugLevel;
 extern u_long g_CdStatusByte;
 extern u_long g_CdErrorByte;

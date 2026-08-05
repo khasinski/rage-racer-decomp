@@ -4,7 +4,7 @@ void GameDrawMenuButton(s32 a0, s16 a1, s32 a2, s32 a3, s32 s4, s32 s5, s32 s6, 
 extern s32 D_8007FB34;
 extern s32 g_MenuAltLayout;
 
-void GameDrawNumber(s32 a0, s16 a1, s32 a2, s32 a3, s32 s4, s32 s5, s32 s6, s32 s7, s32 s8) asm("func_80047BD4");
+void GameDrawNumber(s32 a0, s16 a1, s32 a2, s32 a3, s32 s4, s32 s5, s32 s6, s32 s7, s32 s8);
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
 
 void DrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2);

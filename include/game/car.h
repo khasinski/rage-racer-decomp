@@ -251,7 +251,7 @@ extern GearCurveRow g_GearTorqueCurve[];
  * car's second half through this rather than through GameCarRuntime.
  *
  * Calibrated on g_PlayerCar (D_8009E6D4), which is a different 0x19C object from
- * g_Cars (g_Cars): it shares the stride but not the meaning of every byte.
+ * g_Cars: it shares the stride but not the meaning of every byte.
  * +0x30, +0x38, +0x74 and +0x76 are 16-bit gearDisp/unk38/manual/gear on the
  * player object and 32-bit / AI-speed fields on the rival cars, so use
  * GameCarAiBlock for a g_Cars[] element. Evidence in names.md 30f. */

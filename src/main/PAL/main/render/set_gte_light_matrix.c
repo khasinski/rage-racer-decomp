@@ -35,7 +35,7 @@ extern s32 g_Scratch1C asm("0x1F80001C");
 extern s32 g_Scratch20 asm("0x1F800020");
 extern s32 g_Scratch84 asm("0x1F800084");
 
-s32 rsin(s32 angle) asm("func_80068568");
+s32 rsin(s32 angle);
 
 /* Builds and submits the controller models shown by the pad and NeGcon setup
  * screens. The read-only scratchpad base is retained for the three camera
@@ -182,7 +182,7 @@ s32 AddTilePrim(
     s32 r,
     s32 g,
     s32 b);
-u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) asm("func_80014A60");
+u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse);
 
 /* The 16x32 left arrow, plus - while `pulse` is set - a tile over it whose
  * green channel breathes with rsin of the shared arrow angle. */
@@ -198,7 +198,7 @@ u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     return prim;
 }
 
-u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) asm("func_80014B70");
+u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse);
 
 /* The 16x32 right arrow, plus - while `pulse` is set - a tile over it whose
  * green channel breathes with rsin of the shared arrow angle. */
@@ -253,7 +253,7 @@ u8 *DrawPadConfigSelector(
     u8 *prim,
     s16 x,
     s16 y,
-    s16 selection) asm("func_80014C80");
+    s16 selection);
 
 /*
  * The framed "CONFIG n" panel at (x, y): the caption strip, then the three

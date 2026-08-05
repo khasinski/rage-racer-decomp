@@ -40,8 +40,8 @@ extern u_char D_80013BA8[];
 extern u_char D_80013BC4[];
 
 void RegisterKernelCallback(long slot, void *callback) asm("func_8006DF64");
-void *setIntrVSyncAddress(void) asm("func_8006E7D4");
-void *setIntrDMAAddress(void) asm("func_8006EA00");
+void *setIntrVSyncAddress(void) asm("setIntrVSync");
+void *setIntrDMAAddress(void) asm("setIntrDMA");
 
 void clearKernelInterruptState(u_long *dst, long count) {
     volatile long unused;
@@ -90,7 +90,7 @@ u_long SysEnqIntRPStub[31] asm("func_8006E644") __attribute__((section(".text"))
     0,
 };
 
-u_long RestoreKernelRegistersStub[17] asm("func_8006E6C0") __attribute__((section(".text"))) = {
+u_long RestoreKernelRegistersStub[17] asm("RestoreKernelRegisters") __attribute__((section(".text"))) = {
     0x8C9F0000,
     0x8C9C002C,
     0x8C9D0004,

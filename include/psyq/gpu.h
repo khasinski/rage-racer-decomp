@@ -258,7 +258,7 @@ void SetPrimAddr(u_long *prim, u_long addr);
 void TermPrim(u_long *prim);
 long GetPrimAddr(u_long *prim);
 void AddPrim(void *ot, void *prim);
-void AddPrims(u_long *ot, u_long first, u_long *last) asm("func_80064E18");
+void AddPrims(u_long *ot, u_long first, u_long *last);
 void *ClearOTag(u_long *ot, long count);
 void *ClearOTagR(u_long *ot, long count);
 

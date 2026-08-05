@@ -32,13 +32,13 @@ u8 *DrawLeftArrowWide(
     u8 *prim,
     s32 x,
     s32 y,
-    s32 pulse) asm("func_80014A60");
+    s32 pulse) asm("DrawLeftArrow");
 u8 *DrawRightArrowWide(
     void *ot,
     u8 *prim,
     s32 x,
     s32 y,
-    s32 pulse) asm("func_80014B70");
+    s32 pulse) asm("DrawRightArrow");
 u8 *QueueSpriteTransWide(
     void *ot,
     u8 *prim,

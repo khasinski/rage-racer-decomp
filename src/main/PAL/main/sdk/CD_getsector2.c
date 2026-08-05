@@ -1,8 +1,8 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern volatile u_char *g_CdReg0 asm("D_80099300");
-extern volatile u_char *g_CdReg3 asm("D_8009930C");
+extern volatile u_char *g_CdReg0;
+extern volatile u_char *g_CdReg3;
 extern volatile u_long *g_ComDelayReg;
 extern volatile u_long *g_CdromDelayReg;
 extern volatile u_long *g_CdDpcr;

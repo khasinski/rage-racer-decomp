@@ -5,7 +5,7 @@ extern u_char g_GraphType[];
 extern u_short g_VramWidth[];
 extern u_short g_VramHeight[];
 
-u_long _get_mode(long arg0, long arg1, u_long arg2) asm("func_800669F0");
+u_long _get_mode(long arg0, long arg1, u_long arg2);
 u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1);
 u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) asm("func_80066BE4");

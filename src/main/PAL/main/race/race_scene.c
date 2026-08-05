@@ -15,7 +15,7 @@ void SeekEnvironmentScript(s32) asm("func_800458CC");
 
 
 
-/* Elements 0, 1 and 2 of g_RefSectorTimes (g_RefSectorTimes). They CANNOT be spelled
+/* Elements 0, 1 and 2 of g_RefSectorTimes. They CANNOT be spelled
  * g_RefSectorTimes[k] here: with one array symbol GCC 2.6.3 CSEs the base
  * address into a and reschedules around it, which shifts the
  * allocation of the whole surrounding block. Three symbols keep three separate
@@ -290,7 +290,7 @@ void PlayCountdownCues(s32 arg0);
 
 void DrawTerrainCells(void);
 
-void func_800418D4(void);
+void DrawSkyBackground(void);
 
 
 
@@ -800,7 +800,7 @@ void UpdateRaceScene(void) {
         if ((g_PlayerFacingBackwards != g_RaceSeries) && (g_WrongWayTimer >= 0xA)) {
             DrawWrongWayWarning();
         }
-        func_800418D4();
+        DrawSkyBackground();
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         DrawTerrainCells();
         DrawCourseObjects();
@@ -923,7 +923,7 @@ update_race:
             DrawCars();
         }
         UpdateEnvironment();
-        func_800418D4();
+        DrawSkyBackground();
 
         if ((g_PlayerFacingBackwards != g_RaceSeries) && (g_RacePhase < 4)) {
             s16 counter;

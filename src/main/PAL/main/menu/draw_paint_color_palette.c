@@ -12,7 +12,7 @@ extern ColorTable g_PaintColorTable;
 extern s32 D_8009B290;
 extern s32 g_MenuAltLayout;
 
-s32 rsin(s32 angle) asm("func_80068568");
+s32 rsin(s32 angle);
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 
 /* The 18-swatch PAINT COLOR strip with its selection frame and enlarged preview. */
@@ -115,7 +115,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
 
 extern s32 D_8007FB2C;
 
-void GameDrawNumber(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8) asm("func_80047BD4");
+void GameDrawNumber(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8);
 void func_80046A2C(void *a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7,
                    s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
 

@@ -8,8 +8,8 @@
 
 void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 SmoothTrackAngle(s32 arg0, s32 arg1);
-s32 rsin(s32 arg0) asm("func_80068568");
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rsin(s32 arg0);
+s32 rcos(s32 arg0);
 
 extern s32 g_AnimTimer;
 extern s16 g_ClosestRivalRank;
@@ -682,8 +682,8 @@ extern s16 g_RaceIntroCameraDeltaX;
 extern s16 g_RaceIntroCameraDeltaY;
 extern s16 g_RaceIntroCameraDeltaZ;
 
-s32 rcos(s32 angle) asm("func_80068634");
-s32 rsin(s32 angle) asm("func_80068568");
+s32 rcos(s32 angle);
+s32 rsin(s32 angle);
 void DrawPlayerCarModel(void *arg0);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void UpdateCamera(void *arg0, s32 arg1);

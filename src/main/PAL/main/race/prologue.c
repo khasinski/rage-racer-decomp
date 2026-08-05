@@ -46,7 +46,7 @@ void ExitPrologue(void);
 void DrawPrologueText(void);
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
-void func_800418D4(void);
+void DrawSkyBackground(void);
 void DrawTerrainCellsWide(void);
 void DrawCourseScenery2(s32 arg0, s32 arg1);
 
@@ -285,7 +285,7 @@ void UpdatePrologue(void) {
     }
 
     DrawCars();
-    func_800418D4();
+    DrawSkyBackground();
     *(u32 *)0x1F800084 = (u32)g_IsEnvironmentMode4;
     DrawTerrainCellsWide();
     DrawCourseObjects();

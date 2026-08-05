@@ -19,7 +19,7 @@ extern s32 g_McSavedLoadPhase;
  * reload the retail code has at those few sites. A redeclaration cannot add the
  * qualifier (gcc 2.6.3 keeps the first declaration's type), so the alias needs
  * its own identifier. */
-extern volatile s32 g_McCardStatusV asm("D_8009B720");
+extern volatile s32 g_McCardStatusV asm("g_McCardStatus");
 extern volatile s32 g_McMenuSubState;
 extern s32 g_McFromLoadMenu;
 extern s32 g_McSaveMode;
@@ -33,8 +33,8 @@ extern s32 g_McMenuRowCursor;
 extern s32 g_McSlotCursor;
 extern s32 g_McActionState;
 extern s32 g_McActionResult;
-extern s32 g_McConfirmChoice asm("D_80082FAC");
-extern volatile s32 g_McConfirmChoice_v asm("D_80082FAC");
+extern s32 g_McConfirmChoice;
+extern volatile s32 g_McConfirmChoice_v asm("g_McConfirmChoice");
 extern s32 g_McStateChangeCount;
 extern s32 g_McActionTimer;
 extern s32 g_McActionBusy;

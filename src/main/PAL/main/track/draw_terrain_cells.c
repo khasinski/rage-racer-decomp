@@ -24,8 +24,8 @@ void SetShadeTex(void *, s32) asm("func_80064EB8");
 void SetPolyF4(void *);
 void SetPolyFT4(void *);
 void SetPolyG4(void *)asm("func_80064F58");
-s32 GameSin(s32) asm("func_80068568");
-s32 GameCos(s32) asm("func_80068634");
+s32 GameSin(s32) asm("rsin");
+s32 GameCos(s32) asm("rcos");
 extern s16 g_SkyTileMap[][16];
 extern s32 g_MirrorMode;
 extern s32 g_CourseIndex;
@@ -207,7 +207,7 @@ enum SkyOrderingTableIndex
   SKY_OT_NEAR = 703
 };
 register u8 *stackPointer asm("$29");
-void GameDrawSkyBackground(void) asm("func_800418D4");
+void GameDrawSkyBackground(void) asm("DrawSkyBackground");
 void GameDrawSkyBackground(void)
 {
   SkyRenderScratchpad *scratch = (SkyRenderScratchpad *)0x1F800000;

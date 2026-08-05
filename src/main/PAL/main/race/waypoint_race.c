@@ -70,7 +70,7 @@ void UpdateZoneAmbience(s32 arg0);
 
 void DrawTerrainCells(void);
 
-void func_800418D4(void);
+void DrawSkyBackground(void);
 
 
 
@@ -163,7 +163,7 @@ void UpdateWaypointRaceScene(void) {
         UpdateFreeLookCamera(g_PlayerCar, 0);
         GetTrackZoneBlend(g_PlayerTrackProgress);
         RequestTrackTexturePage(g_PlayerTrackSection);
-        func_800418D4();
+        DrawSkyBackground();
         *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
         DrawTerrainCells();
         DrawCourseObjects();
@@ -193,7 +193,7 @@ void UpdateWaypointRaceScene(void) {
     UpdateFreeLookCamera(g_PlayerCar, 1);
     RequestTrackTexturePage(g_PlayerTrackSection);
     UpdateEnvironment();
-    func_800418D4();
+    DrawSkyBackground();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     DrawTerrainCells();
     DrawCourseObjects();

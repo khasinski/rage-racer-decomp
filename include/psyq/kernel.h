@@ -35,15 +35,15 @@ void ReturnFromException(void);
 void ResetEntryInt(void);
 void HookEntryInt(void *entry);
 long SaveKernelRegisters(void *state);
-void RestoreKernelRegisters(void *state, long ret) asm("func_8006E6C0");
+void RestoreKernelRegisters(void *state, long ret);
 
 void *startIntrVSync(void);
 void intrVSyncDispatcher(void);
-void setIntrVSync(long index, void *callback) asm("func_8006E7D4");
+void setIntrVSync(long index, void *callback);
 void clearIntrVSyncCallbacks(u_long *dst, long count);
 void *startIntrDMA(void);
 void intrDMADispatcher(void);
-u_long setIntrDMA(long index, u_long callback) asm("func_8006EA00");
+u_long setIntrDMA(long index, u_long callback);
 void clearIntrDMACallbacks(u_long *dst, long count);
 long SetDMAInterruptState(long value);
 long GetDMAInterruptState(void);

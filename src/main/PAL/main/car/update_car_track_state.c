@@ -6,15 +6,15 @@
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
 void SetCarKnockback(void *, s32, s32, s32);
-s32 rsin(s32) asm("func_80068568");
-s32 rcos(s32) asm("func_80068634");
+s32 rsin(s32);
+s32 rcos(s32);
 extern u8 g_PlayerCar asm("D_8009E6D4");
 
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the
  * GameTrackPoint at `trackPointIndex` (*(GameTrackPoint*)0x8009E688 + i*0x18)
  * and its successor: computes route angles/heights via atan2 (Atan2)
- * and rsin/rcos (rsin/rcos), builds the collision-boundary
+ * and rsin/rcos, builds the collision-boundary
  * offset, and writes the interpolated position/angle/height into the render
  * object `obj`. The scratchpad struct at 0x1F80011C ("spad") is the GTE
  * per-primitive transform scratch. `clampPair` supplies the s16 margin values

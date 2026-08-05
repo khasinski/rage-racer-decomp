@@ -16,7 +16,7 @@ u_long GetODE(void) {
     return ret >> 31;
 }
 
-u_long Gpu_BuildDisplayMode(long arg0, long arg1, u_long arg2) asm("func_800669F0");
+u_long Gpu_BuildDisplayMode(long arg0, long arg1, u_long arg2) asm("_get_mode");
 u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long func_80066BE4(short arg0, short arg1);
@@ -82,7 +82,7 @@ typedef struct DrawEnvPacketSource {
 u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y) asm("func_80066BE4");
-u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("func_800669F0");
+u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("_get_mode");
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) asm("func_80066C2C");
 
 void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env);

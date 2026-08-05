@@ -41,7 +41,7 @@ void SetReverbPreset(s32 type, s32 left, s32 right);
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot);
 void StopSoundSlotVoice(s32 slot);
 void SetSoundSlotVoiceEnabled(s32 slot, s32 enabled);
-void SetSoundSlotVoicesEnabled(s32 enabled) asm("func_8005B40C");
+void SetSoundSlotVoicesEnabled(s32 enabled);
 void SetEffectVoicesEnabled(s32 enabled);
 void ResetSoundState(void);
 int InitSoundWithVab(s32 header, s32 body);

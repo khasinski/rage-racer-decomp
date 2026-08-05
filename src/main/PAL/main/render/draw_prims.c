@@ -144,7 +144,7 @@ void SetPolyF3(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) asm("func_80046BA0");
+void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11);
 void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
@@ -199,7 +199,7 @@ void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("func_80046CBC");
+void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags);
 void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
     POLY_F4 *prim;
     register s32 semiReg asm("$17");
@@ -433,7 +433,7 @@ void func_80064E90(void *arg0, s32 enabled);
 void AddPrim(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) asm("func_80047214");
+void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10);
 void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
     LINE_F3 *prim;
     u8 *oldPrim;

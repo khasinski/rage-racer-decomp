@@ -23,7 +23,7 @@ s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
 
 s32 GetCarCrestTrigger(GameCarRuntime *arg0);
 
-s32 rsin(s32 arg0) asm("func_80068568");
+s32 rsin(s32 arg0);
 
 /*
  * Jump / launch setup: when GetCarCrestTrigger reports a marker crossing, seeds the

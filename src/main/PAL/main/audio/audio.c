@@ -2331,7 +2331,7 @@ asm(".globl func_8005E078\n"
 
 extern s32 g_SoundSlotActive[];
 
-void SetSoundSlotVoicesEnabledWithRegisterArg(void) asm("func_8005B40C");
+void SetSoundSlotVoicesEnabledWithRegisterArg(void) asm("SetSoundSlotVoicesEnabled");
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot);
 
 void ForceSoundSlotVoicePlayback(s32 arg0) {

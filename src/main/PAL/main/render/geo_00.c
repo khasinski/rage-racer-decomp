@@ -6,13 +6,13 @@ extern s16 D_80093308[];
 extern s16 D_80093B08[];
 extern s16 g_SinTable[];
 
-s32 rsin(s32 arg0) asm("func_80068568");
+s32 rsin(s32 arg0);
 s32 rsinCore(s32 arg0);
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rcos(s32 arg0);
 
 /*
  * PSY-Q 3.5 libgte object geo_00.o (LIBGTE.A): the fixed-point sine/cosine
- * helpers rsin (rsin), rsinCore (rsinCore) and rcos
+ * helpers rsin, rsinCore and rcos
  * (rcos) that read the 0x80094308 sine table.  Byte-matched against
  * geo_00.o (rsin anchor); see docs/names.md section 25.
  */

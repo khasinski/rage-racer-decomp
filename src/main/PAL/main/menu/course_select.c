@@ -116,7 +116,7 @@ typedef struct CourseSelectScrollState {
     s32 value;
 } CourseSelectScrollState;
 
-extern CourseSelectPrizeTable g_CourseSelectPrizeTable asm("D_8007BEEC");
+extern CourseSelectPrizeTable g_CourseSelectPrizeTable asm("g_PrizeMoney");
 extern CourseSelectScrollState g_CourseSelectScrollState asm("D_8009B2C0");
 extern s32 D_8009B2C0;
 
@@ -164,7 +164,7 @@ s32 GameDrawNumberWide(
     s32 g,
     s32 b,
     s32 clut,
-    s32 primitiveCount) asm("func_80047BD4");
+    s32 primitiveCount) asm("GameDrawNumber");
 
 /*
  * The menu lays out several two-sprite labels from the first sprite's sliding

@@ -84,7 +84,7 @@ extern s32 g_PlayerField3C;
 extern s32 g_PlayerSpeed;
 extern s32 g_PlayerTrackPoint;
 
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rcos(s32 arg0);
 void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
 
 void UpdateTrackEventSound(s16 arg);
@@ -186,7 +186,7 @@ void UpdateTrackEventSound(s16 arg) {
     SetPanVoiceTargetVolume(a0v, a1v);
 }
 
-s32 rsin(s32 arg0) asm("func_80068568");
+s32 rsin(s32 arg0);
 void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
 
 typedef struct TrackSeg {

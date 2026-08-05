@@ -343,7 +343,7 @@ typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 extern Vec4 D_80011AC4;
 extern s32 g_TeamNameCharModel;
 extern s32 g_CourseModelCount;
-s32 rsin(s32 arg0) asm("func_80068568");
+s32 rsin(s32 arg0);
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */
 void DrawTeamNameCharModel(void);

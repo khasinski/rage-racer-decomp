@@ -460,7 +460,7 @@ extern s16 g_NegconSteer;
 extern s16 g_NegconMaxTwist;
 extern s16 g_NegconSteerRange[];
 
-s32 rcos(s32) asm("func_80068634");
+s32 rcos(s32);
 
 /*
  * Steering-lean / body-roll state machine for the car `ctx`: drives the lean

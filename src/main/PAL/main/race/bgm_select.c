@@ -30,7 +30,7 @@ void RequestOptionScreenAssets();
 void DrawBgmSelectBar();
 void RequestTrackTexturePage();
 void UpdateCamera();
-void func_800418D4();
+void DrawSkyBackground();
 void DrawTerrainCellsWide();
 void DrawCourseScenery2();
 int CycleBgmSelectCameraCar();
@@ -212,7 +212,7 @@ void UpdateBgmSelect(void) {
     UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     DrawCars();
     UpdateEnvironment();
-    func_800418D4();
+    DrawSkyBackground();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     DrawTerrainCellsWide();
     DrawCourseObjects();

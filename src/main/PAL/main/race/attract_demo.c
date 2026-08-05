@@ -48,7 +48,7 @@ void ReturnToTitleScene(void);
 s32 CycleAttractCameraCar(u32 arg0, s32 arg1);
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
-void func_800418D4(void);
+void DrawSkyBackground(void);
 void DrawTerrainCellsWide(void);
 void DrawCourseScenery2(u32 arg0, u32 arg1);
 
@@ -195,7 +195,7 @@ void UpdateAttractDemoRace(void) {
     UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     DrawCars();
     UpdateEnvironment();
-    func_800418D4();
+    DrawSkyBackground();
     *(u32 *)0x1F800084 = (u32)g_IsEnvironmentMode4;
     DrawTerrainCellsWide();
     DrawCourseObjects();

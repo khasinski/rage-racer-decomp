@@ -19,7 +19,7 @@ void AddPrim(u32 *arg0, u32 *arg1) {
     *arg0 = (*arg0 & tag) | ((u32)arg1 & mask);
 }
 
-void AddPrims(u32 *arg0, u32 arg1, u32 *arg2) asm("func_80064E18");
+void AddPrims(u32 *arg0, u32 arg1, u32 *arg2);
 void AddPrims(u32 *arg0, u32 arg1, u32 *arg2) {
     register u32 mask asm("$7") = 0x00FFFFFF;
     u32 tag = 0xFF000000;

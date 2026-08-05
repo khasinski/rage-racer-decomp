@@ -7,7 +7,7 @@ extern s32 g_McStatusState;
 extern s32 g_McPollTicks;
 extern s32 g_McStatusResult;
 /* The poller's own working status word. Distinct from menu.h's
- * g_McPollStatus (D_8009B720), which is the code the menu reads. */
+ * g_McPollStatus (g_McCardStatus), which is the code the menu reads. */
 extern s32 g_McPollStatus;
 extern char g_FmtCardDevice[];
 

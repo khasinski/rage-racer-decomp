@@ -2,10 +2,10 @@
 #include "psyq/cd.h"
 long CD_sync(long arg0, u_char *arg1) asm("func_8006B0D4");
 
-extern volatile u_char *g_CdReg0 asm("D_80099300");
+extern volatile u_char *g_CdReg0;
 extern volatile u_char *g_CdReg1;
-extern volatile u_char *g_CdReg2 asm("D_80099308");
-extern volatile u_char *g_CdReg3 asm("D_8009930C");
+extern volatile u_char *g_CdReg2;
+extern volatile u_char *g_CdReg3;
 extern long g_CdSyncCallback;
 extern long g_CdReadyCallback;
 extern long g_CdStatusByte;
@@ -101,7 +101,7 @@ void CD_initintr(void) {
     KernelCallbackSlot2(2, (void *)CdDispatchInterrupts);
 }
 
-long CdResetState(void) asm("func_8006BD14");
+long CdResetState(void);
 long CdResetState(void) {
     LibcPutString(D_80013904);
     DebugPrintf(D_80013910, g_CdDebugInfo);

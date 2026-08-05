@@ -111,7 +111,7 @@ void StartCarBodyKick(s32 arg0, void *car);
 void UpdateCarTiltCounter(void *car);
 void UpdateCarCrestHop(void *car);
 void UpdateCarBodyKick(void *car);
-s32 rsin(s32 angle) asm("func_80068568");
+s32 rsin(s32 angle);
 s32 Random15(void);
 void PlaySoundCue(s32 cue);
 void SetIndexedEffectVoice(s32 arg0, s32 arg1, s32 arg2);

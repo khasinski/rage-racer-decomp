@@ -80,8 +80,8 @@ extern SVec g_PathSceneryRot;
  * and index are each a two-halfword pair with position first. Left as eight
  * scalars because nothing in the image indexes them by track. Phase is the
  * cosine-ease argument, 0..0x1000. */
-extern u16 g_PathSceneryPosPhase asm("D_801E4DE0");
-extern u16 g_PathSceneryRotPhase asm("D_801E4DE2");
+extern u16 g_PathSceneryPosPhase;
+extern u16 g_PathSceneryRotPhase;
 extern s16 g_PathSceneryPosSpan;
 extern s16 g_PathSceneryRotSpan;
 extern u16 g_PathSceneryPosRate;
@@ -126,11 +126,11 @@ typedef struct PathSceneryCursor {
     s16 otherIndex;
 } PathSceneryCursor;
 
-extern PathSceneryCursor g_PathSceneryPosCursor asm("D_801E4DE0");
-extern PathSceneryCursor g_PathSceneryRotCursor asm("D_801E4DE2");
+extern PathSceneryCursor g_PathSceneryPosCursor asm("g_PathSceneryPosPhase");
+extern PathSceneryCursor g_PathSceneryRotCursor asm("g_PathSceneryRotPhase");
 
-s32 rsin(s32 angle) asm("func_80068568");
-s32 rcos(s32 angle) asm("func_80068634");
+s32 rsin(s32 angle);
+s32 rcos(s32 angle);
 s32 SquareRoot12(s32 value);
 void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);
 

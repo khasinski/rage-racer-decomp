@@ -11,7 +11,7 @@ extern char *g_CdIntrNames[];
 extern CdCallback g_CdSyncCallback;
 extern CdCallback g_CdReadyCallback;
 extern u_char g_CdLastCommand;
-extern volatile u_char *g_CdReg0 asm("D_80099300");
+extern volatile u_char *g_CdReg0;
 extern volatile CdIntr g_CdSyncStatus;
 extern u_char g_CdSyncResult[];
 extern u_char g_CdReadyResult[];

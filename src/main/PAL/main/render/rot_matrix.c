@@ -1,8 +1,8 @@
 #include "common.h"
 #include "psyq/gte.h"
 
-s32 rsin(s32 arg0) asm("func_80068568");
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rsin(s32 arg0);
+s32 rcos(s32 arg0);
 
 void BuildRotMatrixZ(Matrix *mtx, s32 angle);
 void BuildRotMatrixY(Matrix *mtx, s32 angle);
@@ -27,8 +27,8 @@ void BuildRotMatrixZ(Matrix *mtx, s32 angle) {
     mtx->m[2][2] = 0x1000;
 }
 
-s32 rsin(s32 arg0) asm("func_80068568");
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rsin(s32 arg0);
+s32 rcos(s32 arg0);
 
 void BuildRotMatrixY(Matrix *mtx, s32 angle) {
     s32 s;
@@ -47,8 +47,8 @@ void BuildRotMatrixY(Matrix *mtx, s32 angle) {
     mtx->m[2][2] = c;
 }
 
-s32 rsin(s32 arg0) asm("func_80068568");
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rsin(s32 arg0);
+s32 rcos(s32 arg0);
 
 void BuildRotMatrixX(Matrix *mtx, s32 angle) {
     s32 s;

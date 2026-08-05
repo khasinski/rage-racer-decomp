@@ -4,8 +4,8 @@
 #include "game/render.h"
 #include "game/car.h"
 #include "psyq/gpu.h"
-s32 rcos() asm("func_80068634");
-s32 rsin() asm("func_80068568");
+s32 rcos();
+s32 rsin();
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 

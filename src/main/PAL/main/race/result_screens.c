@@ -44,7 +44,7 @@ void UpdateCamera(s32 arg0, void *arg1);
 void DrawTerrainCellsWide(void);
 void DrawPlayerCarOnly(void);
 void DrawCourseScenery2(s32 arg0, s32 arg1);
-void func_800418D4(void);
+void DrawSkyBackground(void);
 void DrawReplayBadge(void);
 void SetTrackTexturePageNow(s32 arg0);
 void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
@@ -243,7 +243,7 @@ void UpdateReplayScene(void) {
     DrawCourseObjects();
     DrawCourseScenery2(g_SceneTimer, 1);
     UpdateEnvironment();
-    func_800418D4();
+    DrawSkyBackground();
     DrawReplayBadge();
     if (g_SceneTimer == 1) {
         SetTrackTexturePageNow(g_PlayerTrackSection);
@@ -278,7 +278,7 @@ void DrawResultScreen(void) {
     *scratch = AddTilePrim(base, next, 0, 0x30, width, 0x18, 0xF0, 0xF0, 0xF0);
 }
 
-void DrawGrandPrixResultPanel(void) asm("func_800201D4");
+void DrawGrandPrixResultPanel(void) asm("DrawGrandprixIntro");
 void DrawGrandPrixResultPanel(void) {
     u8 *base;
     char text[0x30];

@@ -7,7 +7,7 @@
 
 extern void DrawPlayerCarModel(void *);
 extern s32 FindNearestTrackCamera();
-extern s32 rcos(s32) asm("func_80068634");
+extern s32 rcos(s32);
 extern s32 SquareRoot0(s32) asm("func_800689A8");
 extern void *ApplyMatrixLV(void *, void *, void *);
 extern void *func_80069CC8(void *, void *);

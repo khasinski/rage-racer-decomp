@@ -113,7 +113,7 @@ void UpdateCamera(s32 a, void *b);
 void RequestTrackTexturePage(s32 a);
 
 
-void func_800418D4(void);
+void DrawSkyBackground(void);
 
 void DrawTerrainCells(void);
 
@@ -152,7 +152,7 @@ extern s32 g_ReverbZoneEnd;
 
 
 
-s32 rsin(s32 arg0) asm("func_80068568");
+s32 rsin(s32 arg0);
 
 
 extern u8 *g_TrackPoints;
@@ -418,7 +418,7 @@ void DrawLapNumber(void) {
     }
 }
 
-void UpdateWaypointCollectScene(void) asm("func_80037D90");
+void UpdateWaypointCollectScene(void) asm("DrawEndingScreen");
 void UpdateWaypointCollectScene(void) {
     s16 *p;
     register u32 a asm("$5");
@@ -510,7 +510,7 @@ void UpdateWaypointCollectScene(void) {
     p = &g_PlayerTrackSection;
     RequestTrackTexturePage(*p);
     UpdateEnvironment();
-    func_800418D4();
+    DrawSkyBackground();
     *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
     DrawTerrainCells();
     DrawCourseObjects();

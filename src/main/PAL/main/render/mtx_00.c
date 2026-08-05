@@ -584,7 +584,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/mtx_00", func_80069110);
 
 /* libgte PushMatrix: cfc2 $0..$7 into the matrix stack at 0x80094CAC,
  * indexed by 0x80094CA8, then index += 32; errors once index reaches
- * 0x280 (20 levels). PopMatrix (PopMatrix) is the exact inverse. */
+ * 0x280 (20 levels). PopMatrix is the exact inverse. */
 void PushMatrix(void);
 void PushMatrix(void) {
     asm volatile(

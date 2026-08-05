@@ -43,9 +43,9 @@ CdlLOC *CdLastPos(void) {
     return &g_CdLastPos;
 }
 
-long func_8006BCC4_entry(void) asm("func_8006BCC4");
-long func_8006BD14_entry(void) asm("func_8006BD14");
-long func_8006BBD0_entry(void) asm("func_8006BBD0");
+long func_8006BCC4_entry(void) asm("CD_initintr");
+long func_8006BD14_entry(void) asm("CdResetState");
+long func_8006BBD0_entry(void) asm("CD_initvol");
 
 /*
  * CD reset/init sequence keyed by `mode`: mode 2 only (re)installs the CD

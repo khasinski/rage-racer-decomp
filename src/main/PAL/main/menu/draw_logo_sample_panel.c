@@ -12,7 +12,7 @@ extern u16 g_TeamLogoSwatches[];
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
                    u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
-s32 rsin(s32 angle) asm("func_80068568");
+s32 rsin(s32 angle);
 
 void DrawLogoSprite() asm("func_80046A2C");
 void DrawLogoRect() asm("func_80047024");

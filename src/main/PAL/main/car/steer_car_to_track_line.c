@@ -10,8 +10,8 @@ void UpdateCarAirborne(GameCarRuntime *car);
 
 void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 SmoothTrackAngle(s32 arg0, s32 arg1);
-s32 rsin(s32 arg0) asm("func_80068568");
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rsin(s32 arg0);
+s32 rcos(s32 arg0);
 
 /*
  * AI route steering: projects a target point ahead of (or behind, per the
@@ -100,8 +100,8 @@ extern s32 g_ShiftSoundLevel;
 s32 GetAngleDistance(s32 arg0, s32 arg1);
 s32 GetAngleDelta(s32 arg0, s32 arg1);
 void SteerCarToTrackLine(GameCarRuntime *car);
-s32 rsin(s32 arg0) asm("func_80068568");
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rsin(s32 arg0);
+s32 rcos(s32 arg0);
 
 void UpdateCarLaunch(GameCarRuntime *arg0) {
     register GameCarRuntime *car = arg0;

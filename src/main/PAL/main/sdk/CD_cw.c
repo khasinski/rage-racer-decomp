@@ -17,9 +17,9 @@ extern long g_CdCommandClearsReady[];
 extern long g_CdCommandParamCount[];
 /* CD-ROM controller ports 0x1F801800..03, from the data segment. Port 0 is
  * the index/status register; 1..3 are bank-switched by the index it holds. */
-extern volatile u_char *g_CdReg0 asm("D_80099300");
+extern volatile u_char *g_CdReg0;
 extern volatile u_char *g_CdReg1;
-extern volatile u_char *g_CdReg2 asm("D_80099308");
+extern volatile u_char *g_CdReg2;
 extern volatile CdIntr g_CdSyncStatus;
 extern u_char g_CdSyncResult[8];
 extern u_char g_CdReadyResult[8];

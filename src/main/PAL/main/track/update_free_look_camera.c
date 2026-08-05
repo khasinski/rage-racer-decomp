@@ -20,8 +20,8 @@ extern s32 g_PlayerTrackProgress;
 extern GameRenderObject g_CameraCar;
 
 void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
-s32 rsin(s32 arg0) asm("func_80068568");
-s32 rcos(s32 arg0) asm("func_80068634");
+s32 rsin(s32 arg0);
+s32 rcos(s32 arg0);
 void AccumulateLapProgress(void *arg0);
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2);
 

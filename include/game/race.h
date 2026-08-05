@@ -25,7 +25,7 @@ extern char *g_GrandPrixNames[];
 extern s16 g_RacePosition;
 
 /* Prize money per [course][class][place], place 0 = 1st. */
-extern s32 g_PrizeMoney[][6][3] asm("D_8007BEEC");
+extern s32 g_PrizeMoney[][6][3];
 
 /* Round number within the current class; drives the "R O U N D %d" overlay. */
 extern s32 g_GrandPrixRound;
@@ -176,7 +176,7 @@ extern s16 g_RaceFadeTimer;
 extern s16 g_RaceOptionCursor;
 
 /* Best lap of this race so far (g_BestLapThisRace), seeded from g_BestLapTimes at the
- * grid, and DrawTimeValue (DrawTimeValue), which prints one millisecond
+ * grid, and DrawTimeValue, which prints one millisecond
  * time as m'ss"fff. Both are also referenced from render/, so they are
  * declared per file rather than here. */
 
