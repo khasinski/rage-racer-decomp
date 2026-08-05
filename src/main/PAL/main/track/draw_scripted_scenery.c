@@ -80,10 +80,10 @@ extern SVec g_PathSceneryRot asm("D_801E4DC8");
  * and index are each a two-halfword pair with position first. Left as eight
  * scalars because nothing in the image indexes them by track. Phase is the
  * cosine-ease argument, 0..0x1000. */
-extern s16 g_PathSceneryPosPhase asm("D_801E4DE0");
-extern s16 g_PathSceneryRotPhase asm("D_801E4DE2");
-extern u16 g_PathSceneryPosSpan asm("D_801E4DE4");
-extern u16 g_PathSceneryRotSpan asm("D_801E4DE6");
+extern u16 g_PathSceneryPosPhase asm("D_801E4DE0");
+extern u16 g_PathSceneryRotPhase asm("D_801E4DE2");
+extern s16 g_PathSceneryPosSpan asm("D_801E4DE4");
+extern s16 g_PathSceneryRotSpan asm("D_801E4DE6");
 extern u16 g_PathSceneryPosRate asm("D_801E4DE8");
 extern u16 g_PathSceneryRotRate asm("D_801E4DEA");
 extern s16 g_PathSceneryPosIndex asm("D_801E4DEC");
@@ -99,13 +99,7 @@ extern s32 g_PathSceneryVolume asm("D_801E4DF0");
 extern s16 g_PathSceneryRotHalfDelta[3] asm("D_801E4DD0");
 extern s16 g_PathSceneryHalfDelta[3] asm("D_801E4DD8");
 
-/* Unsigned views used when the two tracks advance their counters. */
-extern u16 g_PathSceneryPosPhaseU asm("D_801E4DE0");
-extern u16 g_PathSceneryRotPhaseU asm("D_801E4DE2");
-extern s16 g_PathSceneryPosSpanS asm("D_801E4DE4");
-extern s16 g_PathSceneryRotSpanS asm("D_801E4DE6");
-extern u16 g_PathSceneryPosIndexU asm("D_801E4DEC");
-extern u16 g_PathSceneryRotIndexU asm("D_801E4DEE");
+/* Unsigned view used when the rotation track advances its frame counter. */
 extern u16 g_PathSceneryRotFrameU asm("D_801E4DB2");
 
 extern s32 g_PathSceneryY asm("D_801E4DBC");
@@ -255,19 +249,19 @@ void UpdatePathScenerySound(void) {
     register s32 oldVolume;
     u8 *stepRec;
 
-    if (g_PathSceneryClock.posFrame == g_PathSceneryPosSpanS) {
-        idx = g_PathSceneryPosIndexU;
+    if (g_PathSceneryClock.posFrame == g_PathSceneryPosSpan) {
+        idx = (u16)g_PathSceneryPosIndex;
         keys = g_PathSceneryPosKeys;
-        g_PathSceneryPosPhaseU = 0;
+        g_PathSceneryPosPhase = 0;
         idx = idx + 1;
-        g_PathSceneryPosIndexU = idx;
+        g_PathSceneryPosIndex = idx;
         /* Preserve the original address-calculation allocation. */
         __asm__ volatile("" : "=r"(idx) : "0"(idx));
         stepRec = (u8 *)(idx * 20 + (s32)keys);
         if (*(s16 *)(stepRec + 0x10) == -1) {
             idx = *(u16 *)(stepRec + 0xC);
             g_PathSceneryClock.posFrame = 0;
-            g_PathSceneryPosIndexU = idx;
+            g_PathSceneryPosIndex = idx;
             if (idx > 0) {
                 g_PathSceneryClock.posFrame = *(u16 *)(idx * 20 + keys - 4);
             }
@@ -293,7 +287,7 @@ void UpdatePathScenerySound(void) {
         g_PathSceneryHalfDelta[2] =
             (*(s32 *)(rec + 0x1C) - *(s32 *)(rec + 0x8)) / 2;
     } else {
-        g_PathSceneryPosPhaseU = g_PathSceneryPosPhaseU + 1;
+        g_PathSceneryPosPhase = g_PathSceneryPosPhase + 1;
     }
 
     if (g_PathSceneryPosCursor.phase <= (s16)g_PathSceneryPosCursor.rate) {
@@ -368,19 +362,19 @@ void UpdatePathScenerySound(void) {
                        g_PathSceneryPosCursor.index * 20 + 0x14);
     }
 
-    if (g_PathSceneryClock.rotFrame == g_PathSceneryRotSpanS) {
-        idx = g_PathSceneryRotIndexU;
+    if (g_PathSceneryClock.rotFrame == g_PathSceneryRotSpan) {
+        idx = (u16)g_PathSceneryRotIndex;
         keys = g_PathSceneryRotKeys;
-        g_PathSceneryRotPhaseU = 0;
+        g_PathSceneryRotPhase = 0;
         idx = idx + 1;
-        g_PathSceneryRotIndexU = idx;
+        g_PathSceneryRotIndex = idx;
         /* Preserve the original address-calculation allocation. */
         __asm__ volatile("" : "=r"(idx) : "0"(idx));
         stepRec = (u8 *)(idx * 12 + (s32)keys);
         if (*(s16 *)(stepRec + 0x8) == -1) {
             idx = *(u16 *)(stepRec + 0x6);
             g_PathSceneryClock.rotFrame = 0;
-            g_PathSceneryRotIndexU = idx;
+            g_PathSceneryRotIndex = idx;
             if (idx > 0) {
                 g_PathSceneryClock.rotFrame = *(u16 *)(idx * 12 + keys - 4);
             }
@@ -407,7 +401,7 @@ void UpdatePathScenerySound(void) {
         g_PathSceneryRotHalfDelta[2] =
             (*(s16 *)(rec + 0x10) - *(s16 *)(rec + 0x4)) / 2;
     } else {
-        g_PathSceneryRotPhaseU = g_PathSceneryRotPhaseU + 1;
+        g_PathSceneryRotPhase = g_PathSceneryRotPhase + 1;
     }
 
     if (g_PathSceneryRotCursor.phase <= (s16)g_PathSceneryRotCursor.rate) {
