@@ -123,7 +123,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     register s32 y1Reg asm("$2");
     register s32 x0 asm("$5");
     s32 y0Call;
-    register s32 x1Base asm("$3");
+    s32 x1Base;
     s32 x1;
     s32 y1;
     s32 otPtr;
@@ -181,11 +181,9 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
     y1 = *(s16 *)(record + 0xA);
     x1 = x1Base + interp;
     if (yPacked < 0) {
-        s32 mask;
-
         y1Reg = yPacked >> 16;
-        mask = 0xFFFF0000;
-        temp = y1Reg | mask;
+        x1Base = 0xFFFF0000;
+        temp = y1Reg | x1Base;
     } else {
         temp = (yPacked >> 16) & 0x7FFF;
     }
