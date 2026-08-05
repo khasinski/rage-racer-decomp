@@ -185,58 +185,72 @@ s32 FormatMemoryCard(s32 port, s32 slot) {
     return status;
 }
 
-extern s32 g_McEvents[] asm("D_8009B538");
+/* The eight libcard event descriptors: [0..3] are the hardware class
+ * 0xF4000001 and [4..7] the software class 0xF0000011, each in the order IOE,
+ * Error, Timeout, NewCard -- which is why every poller below returns
+ * index + 1. They are eight scalars rather than one array because with an
+ * array symbol gcc 2.6.3 keeps the base address live in a callee-saved
+ * register across the TestEvent calls, which grows PollMemoryCardHwEvent's
+ * frame from 24 to 32 bytes. */
+extern s32 g_McHwEventIoe asm("D_8009B538");
+extern s32 g_McHwEventError asm("D_8009B53C");
+extern s32 g_McHwEventTimeout asm("D_8009B540");
+extern s32 g_McHwEventNew asm("D_8009B544");
+extern s32 g_McSwEventIoe asm("D_8009B548");
+extern s32 g_McSwEventError asm("D_8009B54C");
+extern s32 g_McSwEventTimeout asm("D_8009B550");
+extern s32 g_McSwEventNew asm("D_8009B554");
 
 
 void OpenMemoryCardEvents(void) asm("func_8005EFAC");
 void OpenMemoryCardEvents(void) {
     EnterCriticalSection();
-    g_McEvents[0] = OpenEvent(0xF4000001, 0x0004, 0x2000, 0);
-    g_McEvents[1] = OpenEvent(0xF4000001, 0x8000, 0x2000, 0);
-    g_McEvents[2] = OpenEvent(0xF4000001, 0x0100, 0x2000, 0);
-    g_McEvents[3] = OpenEvent(0xF4000001, 0x2000, 0x2000, 0);
-    g_McEvents[4] = OpenEvent(0xF0000011, 0x0004, 0x2000, 0);
-    g_McEvents[5] = OpenEvent(0xF0000011, 0x8000, 0x2000, 0);
-    g_McEvents[6] = OpenEvent(0xF0000011, 0x0100, 0x2000, 0);
-    g_McEvents[7] = OpenEvent(0xF0000011, 0x2000, 0x2000, 0);
+    g_McHwEventIoe = OpenEvent(0xF4000001, 0x0004, 0x2000, 0);
+    g_McHwEventError = OpenEvent(0xF4000001, 0x8000, 0x2000, 0);
+    g_McHwEventTimeout = OpenEvent(0xF4000001, 0x0100, 0x2000, 0);
+    g_McHwEventNew = OpenEvent(0xF4000001, 0x2000, 0x2000, 0);
+    g_McSwEventIoe = OpenEvent(0xF0000011, 0x0004, 0x2000, 0);
+    g_McSwEventError = OpenEvent(0xF0000011, 0x8000, 0x2000, 0);
+    g_McSwEventTimeout = OpenEvent(0xF0000011, 0x0100, 0x2000, 0);
+    g_McSwEventNew = OpenEvent(0xF0000011, 0x2000, 0x2000, 0);
     ExitCriticalSection();
 }
 
 void EnableMemoryCardEvents(void) asm("func_8005F0D4");
 void EnableMemoryCardEvents(void) {
-    EnableEvent(g_McEvents[0]);
-    EnableEvent(g_McEvents[1]);
-    EnableEvent(g_McEvents[2]);
-    EnableEvent(g_McEvents[3]);
-    EnableEvent(g_McEvents[4]);
-    EnableEvent(g_McEvents[5]);
-    EnableEvent(g_McEvents[6]);
-    EnableEvent(g_McEvents[7]);
+    EnableEvent(g_McHwEventIoe);
+    EnableEvent(g_McHwEventError);
+    EnableEvent(g_McHwEventTimeout);
+    EnableEvent(g_McHwEventNew);
+    EnableEvent(g_McSwEventIoe);
+    EnableEvent(g_McSwEventError);
+    EnableEvent(g_McSwEventTimeout);
+    EnableEvent(g_McSwEventNew);
 }
 
 void DisableMemoryCardEvents(void) asm("func_8005F16C");
 void DisableMemoryCardEvents(void) {
-    DisableEvent(g_McEvents[0]);
-    DisableEvent(g_McEvents[1]);
-    DisableEvent(g_McEvents[2]);
-    DisableEvent(g_McEvents[3]);
-    DisableEvent(g_McEvents[4]);
-    DisableEvent(g_McEvents[5]);
-    DisableEvent(g_McEvents[6]);
-    DisableEvent(g_McEvents[7]);
+    DisableEvent(g_McHwEventIoe);
+    DisableEvent(g_McHwEventError);
+    DisableEvent(g_McHwEventTimeout);
+    DisableEvent(g_McHwEventNew);
+    DisableEvent(g_McSwEventIoe);
+    DisableEvent(g_McSwEventError);
+    DisableEvent(g_McSwEventTimeout);
+    DisableEvent(g_McSwEventNew);
 }
 
 void CloseMemoryCardEvents(void) asm("func_8005F204");
 void CloseMemoryCardEvents(void) {
     EnterCriticalSection();
-    CloseEvent(g_McEvents[0]);
-    CloseEvent(g_McEvents[1]);
-    CloseEvent(g_McEvents[2]);
-    CloseEvent(g_McEvents[3]);
-    CloseEvent(g_McEvents[4]);
-    CloseEvent(g_McEvents[5]);
-    CloseEvent(g_McEvents[6]);
-    CloseEvent(g_McEvents[7]);
+    CloseEvent(g_McHwEventIoe);
+    CloseEvent(g_McHwEventError);
+    CloseEvent(g_McHwEventTimeout);
+    CloseEvent(g_McHwEventNew);
+    CloseEvent(g_McSwEventIoe);
+    CloseEvent(g_McSwEventError);
+    CloseEvent(g_McSwEventTimeout);
+    CloseEvent(g_McSwEventNew);
     ExitCriticalSection();
 }
 
@@ -244,18 +258,6 @@ void CloseMemoryCardEvents(void) {
 #include "psyq/kernel.h"
 #include "game/memcard.h"
 
-/* Elements 0..3 and 4..7 of the eight-descriptor libcard event table
- * g_McEvents (D_8009B538), which save/PollMemoryCardStatus.c opens as an
- * array: [0..3] are the hardware class 0xF4000001 and [4..7] the software
- * class 0xF0000011, each in the order IOE, Error, Timeout, NewCard -- which is
- * why every poller below returns index + 1. They cannot be spelled
- * g_McEvents[k] in this file: with one array symbol GCC 2.6.3 keeps the base
- * address live in a callee-saved register across the TestEvent calls, which
- * grows PollMemoryCardHwEvent's frame from 24 to 32 bytes. */
-extern s32 g_McHwEventIoe asm("D_8009B538");
-extern s32 g_McHwEventError asm("D_8009B53C");
-extern s32 g_McHwEventTimeout asm("D_8009B540");
-extern s32 g_McHwEventNew asm("D_8009B544");
 void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
 void ClearMemoryCardHwEvents(void) {
     TestEvent(g_McHwEventIoe);
@@ -264,10 +266,6 @@ void ClearMemoryCardHwEvents(void) {
     TestEvent(g_McHwEventNew);
 }
 
-extern s32 g_McSwEventIoe asm("D_8009B548");
-extern s32 g_McSwEventError asm("D_8009B54C");
-extern s32 g_McSwEventTimeout asm("D_8009B550");
-extern s32 g_McSwEventNew asm("D_8009B554");
 void ClearMemoryCardSwEvents(void) asm("func_8005F304");
 void ClearMemoryCardSwEvents(void) {
     TestEvent(g_McSwEventIoe);
