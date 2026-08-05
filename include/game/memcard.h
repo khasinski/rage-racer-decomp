@@ -2,6 +2,7 @@
 #define GAME_MEMCARD_H
 
 #include "common.h"
+#include "psyq/gpu.h"
 
 /*
  * g_McMenuPhase picks the prompt drawn under the slot list; 0 draws none, and

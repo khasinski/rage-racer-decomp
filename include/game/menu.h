@@ -2,6 +2,8 @@
 #define GAME_MENU_H
 
 #include "common.h"
+#include "game/vector.h"
+#include "psyq/gte.h"
 
 /* One class row: the best finishing place, -1 until the class is unlocked
  * and 0 once it is, plus a clear counter capped at 99 and drawn as two

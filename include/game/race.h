@@ -2,6 +2,8 @@
 #define GAME_RACE_H
 
 #include "common.h"
+#include "game/waypoint.h"
+#include "game/vector.h"
 
 /* Grand Prix class index, 0-based; displayed as CLASS(n+1). Also the track
  * tier: course asset index = 0x57 + (course << 1) + (class << 3). OVAL is

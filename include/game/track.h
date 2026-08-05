@@ -2,6 +2,7 @@
 #define GAME_TRACK_H
 
 #include "common.h"
+#include "game/vector.h"
 
 /*
  * One centreline point, 0x18 bytes. `field_10` / `field_12` are the left and

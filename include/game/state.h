@@ -2,6 +2,8 @@
 #define GAME_STATE_H
 
 #include "common.h"
+#include "game/vector.h"
+#include "psyq/gte.h"
 
 /* Top-level scene/state machine, dispatched by ServiceAssetLoad; 1 = the
  * asset-load driver, other values are individual screens. */
