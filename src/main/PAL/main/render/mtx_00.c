@@ -41,13 +41,12 @@ u32 func_80068A2C[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  */
 void *CompMatrix(s32 *m0, void *m1, void *m2) asm("func_80068A38");
 void *CompMatrix(s32 *m0, void *m1, void *m2) {
-    register s32 r0 asm("$8") = m0[0];
-    register s32 r1 asm("$9") = m0[1];
-    register s32 r2 asm("$10") = m0[2];
-    register s32 r3 asm("$11") = m0[3];
-    register s32 r4 asm("$12") = m0[4];
-
     asm volatile(
+        "lw $8,0(%0)\n"
+        "lw $9,4(%0)\n"
+        "lw $10,8(%0)\n"
+        "lw $11,12(%0)\n"
+        "lw $12,16(%0)\n"
         "ctc2 $8,$0\n"
         "ctc2 $9,$1\n"
         "ctc2 $10,$2\n"
@@ -129,8 +128,7 @@ void *CompMatrix(s32 *m0, void *m1, void *m2) {
         "sw $9,24($6)\n"
         "sw $10,28($6)"
         :
-        : "r"(r0), "r"(r1), "r"(r2), "r"(r3), "r"(r4),
-          "r"(m0), "r"(m1), "r"(m2)
+        : "r"(m0), "r"(m1), "r"(m2)
         );
     asm volatile("move $2,$6");
 }
@@ -141,13 +139,12 @@ void *CompMatrix(s32 *m0, void *m1, void *m2) {
 
 void *MulMatrix0(s32 *matrix, void *src, void *dst) asm("func_80068B98");
 void *MulMatrix0(s32 *matrix, void *src, void *dst) {
-    register s32 m0 asm("$8") = matrix[0];
-    register s32 m1 asm("$9") = matrix[1];
-    register s32 m2 asm("$10") = matrix[2];
-    register s32 m3 asm("$11") = matrix[3];
-    register s32 m4 asm("$12") = matrix[4];
-
     asm volatile(
+        "lw $8,0(%0)\n"
+        "lw $9,4(%0)\n"
+        "lw $10,8(%0)\n"
+        "lw $11,12(%0)\n"
+        "lw $12,16(%0)\n"
         "ctc2 $8,$0\n"
         "ctc2 $9,$1\n"
         "ctc2 $10,$2\n"
@@ -208,7 +205,7 @@ void *MulMatrix0(s32 *matrix, void *src, void *dst) {
         "sw $9,8($6)\n"
         "swc2 $11,16($6)"
         :
-        : "r"(m0), "r"(m1), "r"(m2), "r"(m3), "r"(m4), "r"(src), "r"(dst)
+        : "r"(matrix), "r"(src), "r"(dst)
         );
     asm volatile("move $2,$6");
 }
@@ -351,13 +348,12 @@ void *MulRotMatrix(void *arg0) {
 
 void *SetMulMatrix(s32 *matrix, void *src) asm("func_80068E70");
 void *SetMulMatrix(s32 *matrix, void *src) {
-    register s32 m0 asm("$8") = matrix[0];
-    register s32 m1 asm("$9") = matrix[1];
-    register s32 m2 asm("$10") = matrix[2];
-    register s32 m3 asm("$11") = matrix[3];
-    register s32 m4 asm("$12") = matrix[4];
-
     asm volatile(
+        "lw $8,0(%0)\n"
+        "lw $9,4(%0)\n"
+        "lw $10,8(%0)\n"
+        "lw $11,12(%0)\n"
+        "lw $12,16(%0)\n"
         "ctc2 $8,$0\n"
         "ctc2 $9,$1\n"
         "ctc2 $10,$2\n"
@@ -419,7 +415,7 @@ void *SetMulMatrix(s32 *matrix, void *src) {
         "ctc2 $24,$3\n"
         "ctc2 $10,$4"
         :
-        : "r"(m0), "r"(m1), "r"(m2), "r"(m3), "r"(m4), "r"(src)
+        : "r"(matrix), "r"(src)
         );
     asm volatile("move $2,$4");
 }
@@ -545,12 +541,9 @@ void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
 
 
 s32 func_800690E0(s32 *arg0, s32 *arg1, s32 arg2) {
-    register s32 xy asm("$8");
-    register s32 z asm("$9");
-
-    xy = arg0[0];
-    z = arg0[1];
     asm volatile(
+        "lw $8,0(%0)\n"
+        "lw $9,4(%0)\n"
         "mtc2 $8,$0\n"
         "mtc2 $9,$1\n"
         "nop\n"
@@ -559,7 +552,7 @@ s32 func_800690E0(s32 *arg0, s32 *arg1, s32 arg2) {
         "swc2 $10,4($5)\n"
         "swc2 $11,8($5)"
         :
-        : "r"(xy), "r"(z), "r"(arg1)
+        : "r"(arg0), "r"(arg1)
         );
     asm volatile("move $2,$6");
 }
@@ -692,82 +685,76 @@ void PopMatrix(void) {
 /* Read GTE rotation matrix + translation (control regs $0..$7) into p[0..7]. */
 void ReadRotMatrix(volatile u32 *p) asm("func_80069374");
 void ReadRotMatrix(volatile u32 *p) {
-    register u32 t0 asm("$8");
-    register u32 t1 asm("$9");
-    register u32 t2 asm("$10");
-    register u32 t3 asm("$11");
-    register u32 t4 asm("$12");
-
-    gte_cfc2(t0, 0);
-    gte_cfc2(t1, 1);
-    gte_cfc2(t2, 2);
-    gte_cfc2(t3, 3);
-    gte_cfc2(t4, 4);
-    p[0] = t0;
-    p[1] = t1;
-    p[2] = t2;
-    p[3] = t3;
-    p[4] = t4;
-    gte_cfc2(t0, 5);
-    gte_cfc2(t1, 6);
-    gte_cfc2(t2, 7);
-    p[5] = t0;
-    p[6] = t1;
-    p[7] = t2;
+    asm volatile(
+        "cfc2 $8,$0\n"
+        "cfc2 $9,$1\n"
+        "cfc2 $10,$2\n"
+        "cfc2 $11,$3\n"
+        "cfc2 $12,$4\n"
+        "sw $8,0(%0)\n"
+        "sw $9,4(%0)\n"
+        "sw $10,8(%0)\n"
+        "sw $11,12(%0)\n"
+        "sw $12,16(%0)\n"
+        "cfc2 $8,$5\n"
+        "cfc2 $9,$6\n"
+        "cfc2 $10,$7\n"
+        "sw $8,20(%0)\n"
+        "sw $9,24(%0)\n"
+        "sw $10,28(%0)"
+        :
+        : "r"(p)
+        : "$8", "$9", "$10", "$11", "$12");
 }
 
 /* Read GTE light matrix + back-color (control regs $8..$15) into p[0..7]. */
 void ReadLightMatrix(volatile u32 *p) asm("func_800693BC");
 void ReadLightMatrix(volatile u32 *p) {
-    register u32 t0 asm("$8");
-    register u32 t1 asm("$9");
-    register u32 t2 asm("$10");
-    register u32 t3 asm("$11");
-    register u32 t4 asm("$12");
-
-    gte_cfc2(t0, 8);
-    gte_cfc2(t1, 9);
-    gte_cfc2(t2, 10);
-    gte_cfc2(t3, 11);
-    gte_cfc2(t4, 12);
-    p[0] = t0;
-    p[1] = t1;
-    p[2] = t2;
-    p[3] = t3;
-    p[4] = t4;
-    gte_cfc2(t0, 13);
-    gte_cfc2(t1, 14);
-    gte_cfc2(t2, 15);
-    p[5] = t0;
-    p[6] = t1;
-    p[7] = t2;
+    asm volatile(
+        "cfc2 $8,$8\n"
+        "cfc2 $9,$9\n"
+        "cfc2 $10,$10\n"
+        "cfc2 $11,$11\n"
+        "cfc2 $12,$12\n"
+        "sw $8,0(%0)\n"
+        "sw $9,4(%0)\n"
+        "sw $10,8(%0)\n"
+        "sw $11,12(%0)\n"
+        "sw $12,16(%0)\n"
+        "cfc2 $8,$13\n"
+        "cfc2 $9,$14\n"
+        "cfc2 $10,$15\n"
+        "sw $8,20(%0)\n"
+        "sw $9,24(%0)\n"
+        "sw $10,28(%0)"
+        :
+        : "r"(p)
+        : "$8", "$9", "$10", "$11", "$12");
 }
 
 /* Read GTE color matrix + far-color (control regs $16..$23) into p[0..7]. */
 void ReadColorMatrix(volatile u32 *p) asm("func_80069404");
 void ReadColorMatrix(volatile u32 *p) {
-    register u32 t0 asm("$8");
-    register u32 t1 asm("$9");
-    register u32 t2 asm("$10");
-    register u32 t3 asm("$11");
-    register u32 t4 asm("$12");
-
-    gte_cfc2(t0, 16);
-    gte_cfc2(t1, 17);
-    gte_cfc2(t2, 18);
-    gte_cfc2(t3, 19);
-    gte_cfc2(t4, 20);
-    p[0] = t0;
-    p[1] = t1;
-    p[2] = t2;
-    p[3] = t3;
-    p[4] = t4;
-    gte_cfc2(t0, 21);
-    gte_cfc2(t1, 22);
-    gte_cfc2(t2, 23);
-    p[5] = t0;
-    p[6] = t1;
-    p[7] = t2;
+    asm volatile(
+        "cfc2 $8,$16\n"
+        "cfc2 $9,$17\n"
+        "cfc2 $10,$18\n"
+        "cfc2 $11,$19\n"
+        "cfc2 $12,$20\n"
+        "sw $8,0(%0)\n"
+        "sw $9,4(%0)\n"
+        "sw $10,8(%0)\n"
+        "sw $11,12(%0)\n"
+        "sw $12,16(%0)\n"
+        "cfc2 $8,$21\n"
+        "cfc2 $9,$22\n"
+        "cfc2 $10,$23\n"
+        "sw $8,20(%0)\n"
+        "sw $9,24(%0)\n"
+        "sw $10,28(%0)"
+        :
+        : "r"(p)
+        : "$8", "$9", "$10", "$11", "$12");
 }
 
 /* trailing alignment padding (3 nops) that fills this TU to the next subsegment */
