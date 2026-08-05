@@ -18,7 +18,7 @@ extern void *g_CdAudioFileNames[] asm("D_8007F568");
 extern s32 g_CdTocEntryCount asm("D_801E6C80");
 extern u8 g_CdSearchFile[] asm("D_8009B198");
 
-void BuildCdTrackTable(void) asm("func_800431BC");
+void BuildCdTrackTable(void);
 void BuildCdTrackTable(void) {
     CdlLOC *toc;
     s32 i;

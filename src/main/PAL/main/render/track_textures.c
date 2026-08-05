@@ -41,7 +41,7 @@ void StoreImage(Rect *rect, void *data);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void DrawSync(long mode) asm("func_800658FC");
 
-void SwapTrackTexturePageNow(void) asm("func_80019D7C");
+void SwapTrackTexturePageNow(void);
 void SwapTrackTexturePageNow(void) {
     s32 buffer[0xE0];
     s32 page = 0;
@@ -78,7 +78,7 @@ void SwapTrackTexturePageNow(void) {
 
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
-void SwapTrackTexturePageNow(void) asm("func_80019D7C");
+void SwapTrackTexturePageNow(void);
 
 void SetTrackTexturePageNow(void);
 void SetTrackTexturePageNow(void) {
@@ -126,7 +126,7 @@ void StoreImage(Rect *rect, void *data);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void DrawSync(long mode) asm("func_800658FC");
 
-void SwapTrackTextureRow(void) asm("func_80019F24");
+void SwapTrackTextureRow(void);
 void SwapTrackTextureRow(void) {
     s32 buffer[0xE0];
     s16 *rectY;
@@ -173,10 +173,10 @@ void SwapTrackTextureRow(void) {
 
 extern s32 g_TrackTextureCursorRow asm("D_8019CA6C");
 extern s32 g_TrackTextureTargetRow asm("D_801E8AF8");
-void SwapTrackTextureRow(void) asm("func_80019F24");
+void SwapTrackTextureRow(void);
 s32 VSync(s32 mode);
 
-void StepTrackTextureSwap(void) asm("func_8001A030");
+void StepTrackTextureSwap(void);
 void StepTrackTextureSwap(void) {
     while (g_TrackTextureCursorRow != g_TrackTextureTargetRow) {
         if (VSync(1) >= 471) {
@@ -198,7 +198,7 @@ extern u8 g_CarTrackSection[] asm("D_801F18CC");
 
 s32 Random15(void) asm("func_800632B0");
 
-s32 CycleBgmSelectCameraCar(s32 mask, s32 current) asm("func_8001A0E4");
+s32 CycleBgmSelectCameraCar(s32 mask, s32 current);
 s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
     s32 random;
     s32 candidate;
@@ -228,7 +228,7 @@ extern u8 g_CarTrackSection[] asm("D_801F18CC");
 
 s32 Random15(void) asm("func_800632B0");
 
-s32 CycleAttractCameraCar(s32 mask, s32 current) asm("func_8001A1F0");
+s32 CycleAttractCameraCar(s32 mask, s32 current);
 s32 CycleAttractCameraCar(s32 mask, s32 current) {
     s32 random;
     s32 candidate;

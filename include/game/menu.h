@@ -156,11 +156,11 @@ void DrawMenuCursorBox(
     s32 y0,
     s32 x1,
     s32 y1,
-    s32 flash) asm("func_80048D64");
+    s32 flash);
 void DrawFadingMenuSprites(
     s32 progress,
     s32 count,
-    s32 slot) asm("func_800489AC");
+    s32 slot);
 
 /* Menu-mode entry: reloads the live globals from g_RaceProgress, seeds the
  * scratchpad render state, zeroes 0x8009B2F8..0x8009B378 and resets all
@@ -249,7 +249,7 @@ void DrawMenuCarView(void) asm("func_8005131C");
 /* Draw and input halves of the logo painter. The canvas D_801E6F2C is a 64x64
  * 4bpp bitmap with its own 16-entry CLUT at D_801E444C. */
 void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep) asm("func_8004A248");
-void UpdateTeamLogoCanvas(void) asm("func_8004C0D8");
+void UpdateTeamLogoCanvas(void);
 
 /*
  * The eight whole-canvas transforms UpdateTeamLogoCanvas offers, each
@@ -257,7 +257,7 @@ void UpdateTeamLogoCanvas(void) asm("func_8004C0D8");
  * The four scrolls wrap and play cue 1; the flips and rotations play cue 8.
  * Directions are derived from the arithmetic - see docs/names.md 13.
  */
-void ScrollTeamLogoUp(void) asm("func_8004B9B8");
+void ScrollTeamLogoUp(void);
 void ScrollTeamLogoDown(void) asm("func_8004BA50");
 void ScrollTeamLogoLeft(void) asm("func_8004BAE4");
 void ScrollTeamLogoRight(void) asm("func_8004BBA8");
@@ -265,11 +265,11 @@ void ScrollTeamLogoRight(void) asm("func_8004BBA8");
 void FlipTeamLogoVertical(void) asm("func_8004BC68");
 /* Mirror about the vertical axis: nibbles reversed inside each word and word
  * w swapped with word 7 - w. */
-void FlipTeamLogoHorizontal(void) asm("func_8004BCE4");
+void FlipTeamLogoHorizontal(void);
 /* dst(y, x) = src(x, 63 - y). func_8004BDEC is its silent second entry point. */
 void RotateTeamLogoCcw(void) asm("func_8004BDB4");
 /* dst(y, x) = src(63 - x, y). */
-void RotateTeamLogoCw(void) asm("func_8004BF48");
+void RotateTeamLogoCw(void);
 
 /*
  * TEAM LOGO editor data, all per-file types; see docs/names.md 12c.

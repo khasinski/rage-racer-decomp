@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-extern long _spu_writeByIO(long addr, long size) asm("func_80078F4C");
+extern long _spu_writeByIO(long addr, long size);
 
 extern char g_SpuTimeoutFmt[] asm("D_80013EC0");
 extern char g_SpuTimeoutMsgReset[] asm("D_80013ED0");
@@ -35,7 +35,7 @@ extern long g_SpuDummyAdpcmBlock asm("D_8009ABB8");
         delayValue *= 3;                    \
     }
 
-long _spu_init(long resetMode) asm("func_80078A30");
+long _spu_init(long resetMode);
 long _spu_init(long resetMode) {
     volatile long delay;
     volatile long delayValue;

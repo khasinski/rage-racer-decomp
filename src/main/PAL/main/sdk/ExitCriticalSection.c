@@ -38,42 +38,42 @@ u_long func_80063230[4] __attribute__((section(".text"))) = {
     0,
 };
 
-u_long BiosFileSeek[4] asm("func_80063240") __attribute__((section(".text"))) = {
+u_long BiosFileSeek[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090033,
     0,
 };
 
-u_long BiosFileRead[4] asm("func_80063250") __attribute__((section(".text"))) = {
+u_long BiosFileRead[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090034,
     0,
 };
 
-u_long BiosFileWrite[4] asm("func_80063260") __attribute__((section(".text"))) = {
+u_long BiosFileWrite[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090035,
     0,
 };
 
-u_long BiosFileClose[4] asm("func_80063270") __attribute__((section(".text"))) = {
+u_long BiosFileClose[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090036,
     0,
 };
 
-u_long BiosFormatDevice[4] asm("func_80063280") __attribute__((section(".text"))) = {
+u_long BiosFormatDevice[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090041,
     0,
 };
 
-u_long BiosFirstFile[4] asm("func_80063290") __attribute__((section(".text"))) = {
+u_long BiosFirstFile[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090042,

@@ -181,7 +181,7 @@ s32 AddTilePrim(
     s32 h,
     s32 r,
     s32 g,
-    s32 b) asm("func_80032F34");
+    s32 b);
 u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) asm("func_80014A60");
 
 /* The 16x32 left arrow, plus - while `pulse` is set - a tile over it whose

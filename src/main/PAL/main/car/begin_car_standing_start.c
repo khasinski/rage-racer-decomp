@@ -10,7 +10,7 @@ extern s16 g_GripLossTimer asm("D_801E4BA0");
 /* Deliberately raw: written here, read nowhere in the image (names.md 15g). */
 extern s16 D_801E8A4C;
 
-void BeginCarStandingStart(u8 *arg0) asm("func_8002BE18");
+void BeginCarStandingStart(u8 *arg0);
 void BeginCarStandingStart(u8 *arg0) {
     s32 value;
     s16 index;

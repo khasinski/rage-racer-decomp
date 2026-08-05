@@ -11,12 +11,12 @@ extern volatile long g_CdReadSectorWords asm("D_8007D7A0");
 extern volatile long g_CdReadStartVSync asm("D_8007D7AC");
 extern volatile long g_CdReadSavedSyncCallback asm("D_8007D7B4");
 extern volatile long g_CdReadSavedReadyCallback asm("D_8007D7B8");
-long CdSyncCallback(long arg0) asm("func_8006A574");
+long CdSyncCallback(long arg0);
 long CdReadyCallback(long arg0) asm("func_8006A58C");
 long VSync(long mode);
 long CdStatus(void) asm("func_8006A3E8");
-long CdControlB(long arg0, void *arg1, long arg2) asm("func_8006A808");
-long CdReadRetry(long arg0) asm("func_8002745C");
+long CdControlB(long arg0, void *arg1, long arg2);
+long CdReadRetry(long arg0);
 void CdReady(long arg0, long arg1) asm("func_8006A554");
 extern long g_CdReadCallback asm("D_8007D78C");
 extern u_char D_8007D7BC[];
@@ -24,11 +24,11 @@ extern u_char D_8007D7BD[];
 extern u_char D_8007D87C[];
 extern u_char D_8007BED0[];
 void SetSprt(u_char *prim);
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 void *func_800666F4(void *prim, long a, long b, long c, void *d);
-long AddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8) asm("func_80032F34");
+long AddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8);
 
-long CdRead(long arg0, long arg1, long arg2) asm("func_80027688");
+long CdRead(long arg0, long arg1, long arg2);
 long CdRead(long arg0, long arg1, long arg2) {
     long savedArg0;
     long mode;
@@ -73,7 +73,7 @@ long CdRead(long arg0, long arg1, long arg2) {
     return CdReadRetry(0) > 0;
 }
 
-long CdReadSync(long arg0, long arg1) asm("func_80027790");
+long CdReadSync(long arg0, long arg1);
 long CdReadSync(long arg0, long arg1) {
     long savedArg0;
     long savedArg1;
@@ -136,7 +136,7 @@ typedef struct CdReadSprite {
     volatile short h;
 } CdReadSprite;
 
-void DrawSpriteString(long x, long y, u_char *str, long arg3) asm("func_80027874");
+void DrawSpriteString(long x, long y, u_char *str, long arg3);
 void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     CdReadSprite *packet;
     long idx;

@@ -12,9 +12,9 @@ extern s32 g_CdFadeFrames asm("D_8009B1B4");
 extern CdlLOC g_CdTrackLocs[] asm("D_8009AFD4");
 
 s32 func_8006A534(s32 arg0, s32 arg1);
-long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+long CdControl(long com, void *param, long result);
 
-void StepCdTrackRequest(void) asm("func_800432A8");
+void StepCdTrackRequest(void);
 void StepCdTrackRequest(void) {
     s32 state;
     s32 status;
@@ -82,7 +82,7 @@ void StepCdTrackRequest(void) {
     }
 }
 
-void StepCdPlayRequest(void) asm("func_80043494");
+void StepCdPlayRequest(void);
 void StepCdPlayRequest(void) {
     s32 state;
     s32 status;

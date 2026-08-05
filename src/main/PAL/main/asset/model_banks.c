@@ -68,7 +68,7 @@ void InitRenderState(s32 arg0) {
     *(s32 *)0x1F800068 = tmp;
 }
 
-void RegisterModelBank(s32 *base, s32 index) asm("func_80017948");
+void RegisterModelBank(s32 *base, s32 index);
 void RegisterModelBank(s32 *base, s32 index) {
     s32 *ptr;
     s32 i;
@@ -99,7 +99,7 @@ void RegisterModelBank(s32 *base, s32 index) {
     }
 }
 
-void UnrelocateModelBank(s32 *base, s32 offset) asm("func_800179B4");
+void UnrelocateModelBank(s32 *base, s32 offset);
 void UnrelocateModelBank(s32 *base, s32 offset) {
     s32 *ptr;
     s32 i;
@@ -129,7 +129,7 @@ void UnrelocateModelBank(s32 *base, s32 offset) {
     }
 }
 
-void SelectModelBank(s32 index) asm("func_80017A10");
+void SelectModelBank(s32 index);
 void SelectModelBank(s32 index) {
     s32 *entry;
     s32 ptr;
@@ -148,7 +148,7 @@ void SelectModelBank(s32 index) {
     *(s32 *)0x1F800050 = ptr + 0xC;
 }
 
-void RegisterCourseModels(s32 *base) asm("func_80017A6C");
+void RegisterCourseModels(s32 *base);
 void RegisterCourseModels(s32 *base) {
     s32 *ptr;
     s32 count;
@@ -181,7 +181,7 @@ void RegisterCourseModels(s32 *base) {
     }
 }
 
-void InstallTerrainCellData(s32 *base) asm("func_80017AD0");
+void InstallTerrainCellData(s32 *base);
 void InstallTerrainCellData(s32 *base) {
     s32 *ptr;
     s32 count;
@@ -215,22 +215,22 @@ void InstallTerrainCellData(s32 *base) {
     }
 }
 
-void SetCarImageSlot(void *asset, s32 index) asm("func_80017B44");
+void SetCarImageSlot(void *asset, s32 index);
 void SetCarImageSlot(void *asset, s32 index) {
     g_CarImageSlots[index] = asset;
 }
 
-void UploadCarImage(s32 index) asm("func_80017B5C");
+void UploadCarImage(s32 index);
 void UploadCarImage(s32 index) {
     LoadImage(&g_CarImageRect, g_CarImageSlots[index]);
 }
 
-void SetCarModelSlot(void *asset, s32 index) asm("func_80017B94");
+void SetCarModelSlot(void *asset, s32 index);
 void SetCarModelSlot(void *asset, s32 index) {
     g_CarModelSlots[index] = asset;
 }
 
-void SelectCarModelSlot(s32 index) asm("func_80017BAC");
+void SelectCarModelSlot(s32 index);
 void SelectCarModelSlot(s32 index) {
     g_CarModelAsset = g_CarModelSlots[index];
 }

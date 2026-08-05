@@ -91,10 +91,10 @@ void DecodeFmvFrame(void);
 void EndFmv(void);
 /* Pull the next ready ring frame and resize the display when the stream's
  * frame size changes; returns 0 when nothing is ready. */
-void *GetFmvFrame(s32 *ctx) asm("func_8001EDC4");
+void *GetFmvFrame(s32 *ctx);
 /* The DMA1 (MDECout) callback: LoadImage one decoded strip into VRAM and queue
  * the next strip, or flip to the other frame buffer at the end of a frame. */
-void UploadFmvSlice(void) asm("func_8001EBC8");
+void UploadFmvSlice(void);
 
 /*
  * Boot-time defaults for everything the memory card persists: the three car
@@ -102,7 +102,7 @@ void UploadFmvSlice(void) asm("func_8001EBC8");
  * g_MaxClassReached, the BGM selection and the three audio settings. Called
  * once, from InitSubsystems.
  */
-void InitSaveDefaults(void) asm("func_80021338");
+void InitSaveDefaults(void);
 /* Reset the current g_CourseProgress block (arg < 2 also marks slot 3 free). */
 void ResetCourseProgress(s32 mode);
 

@@ -40,7 +40,7 @@ void func_80069A78(s32 arg0);
  * the pass behind the main scene (depth += 0x800). Returns 1 if the mirror pass
  * is active, else 0.
  */
-s32 BeginMirrorPass(void) asm("func_8001A9A8");
+s32 BeginMirrorPass(void);
 s32 BeginMirrorPass(void) {
     GameScratchpadRenderState *scratch;
     s32 mirrorEnabled;
@@ -127,7 +127,7 @@ void func_80069A78(s32 arg0);
  * flips the ordering flag back, pulls the depth back (-= 0x800) and restores the
  * saved main-view matrix from D_8009AF00.
  */
-void EndMirrorPass(void) asm("func_8001ABD8");
+void EndMirrorPass(void);
 void EndMirrorPass(void) {
     GameScratchpadRenderState *scratch;
     register s32 v0reg asm("$2");
@@ -166,11 +166,11 @@ extern u8 D_8007C739[];
 extern u8 D_8007C73A[];
 
 void SetTile(u8 *arg0) asm("func_80064FF8");
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 s32 func_80016EC4(u8 *arg0, u8 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 
-u8 *DrawMirrorFrame(u8 *packet) asm("func_8001ACE4");
+u8 *DrawMirrorFrame(u8 *packet);
 u8 *DrawMirrorFrame(u8 *packet) {
     u8 *otArg;
     u8 *prim;
@@ -213,14 +213,14 @@ extern s16 g_MirrorViewEnabled asm("D_8019CA10");
 extern s32 g_MirrorPanelY asm("D_801E4D18");
 extern s32 g_VisibleCellList asm("D_801E4BC8");
 
-u8 *DrawMirrorFrame(u8 *packet) asm("func_8001ACE4");
+u8 *DrawMirrorFrame(u8 *packet);
 void func_800418D4(void);
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
-void BuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
+void AddPrim(void *ot, void *prim);
+void BuildVisibleCells(s32 arg0, s32 arg1);
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
-void EndMirrorPass(void) asm("func_8001ABD8");
+void EndMirrorPass(void);
 
-void DrawRearViewMirror(s32 arg0) asm("func_8001ADF4");
+void DrawRearViewMirror(s32 arg0);
 void DrawRearViewMirror(s32 arg0) {
     u8 **scratch;
     u8 *packet;

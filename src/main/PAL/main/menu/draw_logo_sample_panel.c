@@ -17,7 +17,7 @@ s32 rsin(s32 angle) asm("func_80068568");
 void DrawLogoSprite() asm("func_80046A2C");
 void DrawLogoRect() asm("func_80047024");
 
-void DrawLogoSamplePanel(s32 arg0, s32 arg1) asm("func_8004E368");
+void DrawLogoSamplePanel(s32 arg0, s32 arg1);
 void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
     void *ot = *(void **)0x1F800004;
     s32 idx;

@@ -102,8 +102,8 @@ long CD_initvol(void) asm("func_8006BBD0");
 void CD_flush(void) asm("func_8006BAF0");
 long CD_getsector2(long madr, u_long size) asm("func_8006C06C");
 long CD_vol(CdlATV *vol) asm("func_8006BA68");
-long DsSearchFile(void *file, void *name) asm("func_8006C25C");
-long DS_searchdir(long type, u_char *name) asm("func_8006C83C");
+long DsSearchFile(void *file, void *name);
+long DS_searchdir(long type, u_char *name);
 void StClearRing(void);
 long StGetBackloc(CdlLOC *loc);
 /* LibRef47 spells these `u_long *ring_addr, u_long ring_size` and StSetStream's
@@ -115,20 +115,20 @@ u_long StFreeRing(u_long *base) asm("func_8006CFF0");
  * DMAs sector header then body, drives the StStrHeader ring. Installed via
  * CdReadyCallback behind the stub CdRead2Callback and also pumped directly from
  * UploadFmvSlice. */
-void StCdInterrupt(void) asm("func_8006D1D0");
+void StCdInterrupt(void);
 
 /*
  * libcd command interface. All three share the same retry-3 body over CD_cw;
  * CdControlB additionally waits on CD_sync (blocking), CdControlF sends the
  * command without collecting a result.
  */
-long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+long CdControl(long com, void *param, long result);
 long CdControlF(long com, void *param) asm("func_8006A6DC");
-long CdControlB(long com, void *param, long result) asm("func_8006A808");
+long CdControlB(long com, void *param, long result);
 long CdSync(long mode, long result) asm("func_8006A534");
 long CdReady(long mode, long result) asm("func_8006A554");
 /* Install a completion / data-ready callback; returns the previous one. */
-long CdSyncCallback(long callback) asm("func_8006A574");
+long CdSyncCallback(long callback);
 long CdReadyCallback(long callback) asm("func_8006A58C");
 
 /*
@@ -146,13 +146,13 @@ long CdReadyCallback(long callback) asm("func_8006A58C");
  * polls it (mode 0 blocks, non-zero returns the sectors still outstanding).
  * The two lower entries are cdread.c's own statics, named descriptively here.
  */
-long CdReadSync(long mode, long result) asm("func_80027790");
-void CdReadBreak(void) asm("func_80027634");
+long CdReadSync(long mode, long result);
+void CdReadBreak(void);
 /* cdread.c's `data_ready_callback`: drains one sector per CdReady interrupt. */
-void CdReadDataReadyCallback(u_char intr, long result) asm("func_80027238");
+void CdReadDataReadyCallback(u_char intr, long result);
 /* cdread.c's `read_retry`: re-issues CdlSetmode + CdlReadN after a shell open,
  * a seek error, or the 0x4B0-vblank watchdog in CdReadSync. */
-long CdReadRetry(long mode) asm("func_8002745C");
+long CdReadRetry(long mode);
 
 /* Install the DMA3 (CD-ROM) data callback; returns the previous one. */
 void CdDataCallback(long callback);
@@ -169,15 +169,15 @@ void StUnSetRing(void);
  * decoded macroblocks; the *Callback pair installs the DMA0 (MDECin) and DMA1
  * (MDECout) completion callbacks, which is how UploadFmvSlice is reached.
  */
-void DecDCTout(volatile u_long *buf, long size) asm("func_8006402C");
+void DecDCTout(volatile u_long *buf, long size);
 /* LibRef47 gives both as `long f(long mode)`; these two bodies take no argument
  * and return nothing, i.e. the blocking (mode 0) form only. */
-void DecDCTinSync(void) asm("func_8006404C");
-void DecDCToutSync(void) asm("func_8006406C");
-void DecDCTinCallback(long callback) asm("func_8006408C");
-void DecDCToutCallback(long callback) asm("func_800640B0");
+void DecDCTinSync(void);
+void DecDCToutSync(void);
+void DecDCTinCallback(long callback);
+void DecDCToutCallback(long callback);
 
-long CD_init(long mode) asm("func_8006A428");
+long CD_init(long mode);
 long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
 long CD_ready(long mode, u_char *result) asm("func_8006B354");
 long CD_cw(u_char command, u_char *params, u_char *result, long async) asm("func_8006B620");

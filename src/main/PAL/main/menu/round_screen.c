@@ -13,7 +13,7 @@ extern Matrix D_8007C778;
 void func_800698B8(Matrix *arg0);
 
 /* Darkens the scene colour matrix by GetTrackZoneBlend's 0..0x100 track-zone ramp; RestoreColorMatrix puts it back. */
-void ApplyZoneLighting(s32 a0, Matrix *a1) asm("func_8001C248");
+void ApplyZoneLighting(s32 a0, Matrix *a1);
 void ApplyZoneLighting(s32 a0, Matrix *a1) {
     Matrix out;
     s32 s1;
@@ -72,7 +72,7 @@ extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
-void CloseLoadedAudioSlots(void) asm("func_8005B9CC");
+void CloseLoadedAudioSlots(void);
 void UploadImageAsset(s32 arg0) asm("func_8001A3C0");
 void RelocateCarModel(void);
 
@@ -168,7 +168,7 @@ void func_80016B7C(u32 a0, u32 a1, void *a2, u32 a3, u32 a4);
 void FormatLapTime(void *dst, s32 v);
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
-void DrawRoundScreen(void) asm("func_8001C974");
+void DrawRoundScreen(void);
 void DrawRoundScreen(void) {
     char buf[88];
     s32 col;
@@ -210,11 +210,11 @@ void DrawRoundScreen(void) {
 
 s32 func_80016EC4(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
 s32 func_80017390(void *ot, s32 p, s32 a);
-s32 AddTilePrim(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g) asm("func_80032F34");
+s32 AddTilePrim(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
 void func_80016754(s32 x, s32 y, void *str, s32 col);
 
 /* The BGM row: the selection number and the track title from g_BgmTrackNames. */
-void DrawBgmSelector(void) asm("func_8001CD54");
+void DrawBgmSelector(void);
 void DrawBgmSelector(void) {
     s32 x;
     char buf[88];

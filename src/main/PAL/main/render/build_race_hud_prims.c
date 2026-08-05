@@ -6,7 +6,7 @@ extern u8 D_8007DBE4[];
 extern u8 D_801C0504[];
 extern u8 D_801C0618[];
 
-void BuildSpriteFromDesc(u8 *arg0, u8 *arg1) asm("func_80032FF0");
+void BuildSpriteFromDesc(u8 *arg0, u8 *arg1);
 
 void BuildRaceHudPrims(s32 arg0);
 void BuildRaceHudPrims(s32 arg0) {

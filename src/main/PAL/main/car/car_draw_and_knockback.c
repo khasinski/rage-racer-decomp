@@ -15,9 +15,9 @@ extern s32 g_RaceGridSlots[] asm("D_8007E074");
 
 extern s32 g_AttractGridSlots[] asm("D_8007E0A4");
 
-void InitRivalCar(GameCarRuntime *arg0, s32 arg1, s32 *arg2) asm("func_800383A8");
+void InitRivalCar(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
 
-void InitRivalCarAi(GameCarRuntime *arg0, s32 arg1, s32 *arg2) asm("func_800385FC");
+void InitRivalCarAi(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
 
 void SeedCarRouteMarkers(void);
 
@@ -250,7 +250,7 @@ s32 InterpolateTrackAngle(s32 arg0) asm("func_8002FB60");
 
 s32 Random15(void) asm("func_800632B0");
 
-void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) asm("func_80038CE8");
+void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     GameCarRuntime *carReg;
     s32 x;
@@ -375,7 +375,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     carReg->velocityZ = z;
 }
 
-void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1) asm("func_80038F0C");
+void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1);
 void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
     GameCarRuntime *obj;
     s32 value;

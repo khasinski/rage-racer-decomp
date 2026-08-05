@@ -4,10 +4,10 @@
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 
-void BuildRotMatrixZ(Matrix *mtx, s32 angle) asm("func_8001A4C0");
-void BuildRotMatrixY(Matrix *mtx, s32 angle) asm("func_8001A530");
-void BuildRotMatrixX(Matrix *mtx, s32 angle) asm("func_8001A5A0");
-void SetCameraRotMatrix(void) asm("func_8001A610");
+void BuildRotMatrixZ(Matrix *mtx, s32 angle);
+void BuildRotMatrixY(Matrix *mtx, s32 angle);
+void BuildRotMatrixX(Matrix *mtx, s32 angle);
+void SetCameraRotMatrix(void);
 s32 Atan2(s32 x, s32 y);
 
 void BuildRotMatrixZ(Matrix *mtx, s32 angle) {

@@ -27,7 +27,7 @@ void ResetCdAudioState(void);
  */
 void SetCdVolume(s32 volume);
 void StartCdVolumeFade(s32 frames);
-void StepCdVolumeFade(void) asm("func_80042D10");
+void StepCdVolumeFade(void);
 /* Re-push the current g_CdVolume (used after a mode change). */
 void ApplyCdVolume(void);
 /* Map the 0..15 option-screen level onto the 0..0x7F attenuator. */
@@ -42,16 +42,16 @@ void SetCdMixPreset(s32 preset);
  * function is a small state machine over g_CdTrackStep / g_CdCommandStep that
  * clears the pending value when it finishes. See docs/names.md 13.
  */
-void TickCdAudio(void) asm("func_80043974");
-void StepCdTrackRequest(void) asm("func_800432A8");   /* CdlSeekP 0x16 */
-void StepCdPlayRequest(void) asm("func_80043494");    /* CdlPlay 0x03 */
-void StepCdPauseRequest(void) asm("func_80043598");   /* CdlGetlocP + CdlPause */
-void StepCdResumeRequest(void) asm("func_800437B8");  /* CdlPlay 0x03 */
+void TickCdAudio(void);
+void StepCdTrackRequest(void);   /* CdlSeekP 0x16 */
+void StepCdPlayRequest(void);    /* CdlPlay 0x03 */
+void StepCdPauseRequest(void);   /* CdlGetlocP + CdlPause */
+void StepCdResumeRequest(void);  /* CdlPlay 0x03 */
 /* Boot-time setup: SPU CD input on, drive into CD-DA mode, track table built,
  * every pending/step word cleared and the volume set to full. */
-void InitCdAudio(void) asm("func_800438BC");
+void InitCdAudio(void);
 /* Build the D_8009AFD4 CdlLOC table: CdGetToc, each audio track pushed 0x3C
  * sectors in, then the file-backed entries found with DsSearchFile. */
-void BuildCdTrackTable(void) asm("func_800431BC");
+void BuildCdTrackTable(void);
 
 #endif

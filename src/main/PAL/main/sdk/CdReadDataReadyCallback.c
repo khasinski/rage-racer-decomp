@@ -34,17 +34,17 @@ void CdGetSector2(void *arg0, long arg1);
 long CdPosToInt_Local(void *arg0);
 void LibcPutString(void *arg0) asm("func_80063C38");
 long VSync(long mode);
-long CdControl(long com, long param, long result) asm("func_8006A5A4");
+long CdControl(long com, long param, long result);
 long CdStatus(void) asm("func_8006A3E8");
 long CdLastPos(void);
 long CdMode(void);
 void CdFlush(void);
 void CdControlF(long arg0, long arg1) asm("func_8006A6DC");
-long CdReadRetry(long arg0) asm("func_8002745C");
-void CdSyncCallback(long arg0) asm("func_8006A574");
+long CdReadRetry(long arg0);
+void CdSyncCallback(long arg0);
 void CdReadyCallback(long arg0) asm("func_8006A58C");
 
-void CdReadDataReadyCallback(u_char arg0, long arg1) asm("func_80027238");
+void CdReadDataReadyCallback(u_char arg0, long arg1);
 void CdReadDataReadyCallback(u_char arg0, long arg1) {
     volatile long *p;
     long dv;
@@ -149,7 +149,7 @@ long CdReadRetry(long arg0) {
     return g_CdReadRemaining;
 }
 
-void CdReadBreak(void) asm("func_80027634");
+void CdReadBreak(void);
 void CdReadBreak(void) {
     volatile long *ptr;
 

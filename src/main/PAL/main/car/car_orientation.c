@@ -150,9 +150,9 @@ extern s16 D_801E4FB4;
 extern s16 D_801F17A4;
 extern s16 D_801E4BA0;
 extern s16 D_8019C9AC;
-void BuildTachoNeedleQuad(void) asm("func_80032BD0");
+void BuildTachoNeedleQuad(void);
 void ClearCarMotionState(void *);
-s32 FindTrackSegment(void *, s32) asm("func_80030EB4");
+s32 FindTrackSegment(void *, s32);
 void SeedCarLapProgress(void *, s32);
 void UpdateCarTrackState(void *, s32, s16 *) asm("func_80031298");
 s32 IsCarFacingBackwards(GameCarTrackAngleWindow *);
@@ -469,7 +469,7 @@ s32 rcos(s32) asm("func_80068634");
  * typedefs are raw-offset overlays onto the car runtime (drive block at +0xBC)
  * shaped to match; retyping them to GameCarRuntime would break the match.
  */
-void UpdateCarBodyRoll(A *ctx) asm("func_8002CD4C");
+void UpdateCarBodyRoll(A *ctx);
 void UpdateCarBodyRoll(A *ctx) {
     SubB *p = &ctx->sub;
     s16 mode = g_RacePhase;
@@ -689,7 +689,7 @@ extern s16 D_801E8A8C;
 void func_80069D18(void *rot, void *mtx);
 s32 *func_80069678(void *mtx, void *vec, void *out);
 s32 func_8002D2E8(s32 a, s32 b, s32 c, s32 d, s32 e);
-void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) asm("func_80038CE8");
+void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void PlaySoundCue(s32 id) asm("func_8005D6EC");
 s32 CollidePlayerWithCars(GameCarRuntime *car)
 {

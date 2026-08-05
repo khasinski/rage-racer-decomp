@@ -8,7 +8,7 @@
  *   0/0x20 -> rotation about X, 1/0x21 -> about Y, 2/0x22 -> about Z.
  * sinTerm/cosTerm are the precomputed sin/cos of the rotation angle.
  */
-void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axis) asm("func_80046188");
+void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axis);
 void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axisMode) {
     s32 one;
 
@@ -71,7 +71,7 @@ void func_800698E8(s32 *matrix);
  * rotation (BuildAxisRotMatrix), the translation (MatrixApplyVectorComponents), then per-row
  * fixed-point projection scaling (<<1 / <<2). Returns 1 if eye==target, else 0.
  */
-s32 SetLookAtMatrix(GameRenderObject *obj) asm("func_80046248");
+s32 SetLookAtMatrix(GameRenderObject *obj);
 s32 SetLookAtMatrix(GameRenderObject *obj) {
     Matrix m;
     GameRenderAxisMatrix am;
@@ -146,7 +146,7 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
 // Fixed-point blend in 0..10000 scale.
 /* Quadratic Bezier ease over t in 0..10000 with control point `control`:
  * 2t(1-t)*control + t^2, all in the same 1/10000 scale. */
-s32 BezierEase(s32 t, s32 control) asm("func_80046598");
+s32 BezierEase(s32 t, s32 control);
 s32 BezierEase(s32 arg0, s32 arg1) {
     s32 initial;
     s32 value;

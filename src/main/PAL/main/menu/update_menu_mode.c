@@ -4,7 +4,7 @@
 #include "psyq/gpu.h"
 #include "game/audio.h"
 #include "psyq/snd.h"
-void UpdateSequenceFadeOut(void) asm("func_8005E900");
+void UpdateSequenceFadeOut(void);
 void DrawCarSpecGraph(s32, s32) asm("func_800496F0");
 
 extern s32 D_8009B348;
@@ -26,9 +26,9 @@ extern u8 g_PadType asm("D_801E4369");
 
 
 void func_80047024(void *, s32, s32, s32, s32, s32, s32, s32, s32);
-s32 RunTimedDrawScript(void *, void *) asm("func_800487D8");
+s32 RunTimedDrawScript(void *, void *);
 void func_80046A2C(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32);
-void DrawBitPatternOverlay(s32) asm("func_80047E60");
+void DrawBitPatternOverlay(s32);
 
 /* Scene 8: the menu-mode per-frame dispatcher. Runs the two
  * g_MenuScreenDraw overlay slots and then g_MenuScreenUpdate[g_MenuScreen]. */
@@ -154,7 +154,7 @@ extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
 
 void SetLoadedTableVolumeScale(s32 scale);
 s32 SetSoundToneTableEntry(s32 row, s32 bank, s32 value);
-void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
+void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot);
 
 void LoadAudioParameterTable(u16 *table);
 void LoadAudioParameterTable(u16 *table) {
@@ -233,7 +233,7 @@ void LoadAudioParameterTable(u16 *table) {
     }
 }
 
-void SetReverbDepth(s32 left, s32 right) asm("func_8005B190");
+void SetReverbDepth(s32 left, s32 right);
 void SetReverbDepth(s32 left, s32 right) {
     if (left >= 0) {
         if (left >= 0x80) {
@@ -256,7 +256,7 @@ void SetReverbDepth(s32 left, s32 right) {
     SsUtSetReverbDepth((s16)left, (s16)right);
 }
 
-void SetReverbPreset(s32 type, s32 left, s32 right) asm("func_8005B204");
+void SetReverbPreset(s32 type, s32 left, s32 right);
 void SetReverbPreset(s32 type, s32 left, s32 right) {
     s32 tempLeft;
     s32 tempRight;

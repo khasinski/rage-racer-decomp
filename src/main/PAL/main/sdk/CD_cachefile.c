@@ -32,7 +32,7 @@ void CdIntToPos(u_long arg0, Entry *arg1);
 void LibcMemcpy(char *dst, u_char *src, long n);
 /* Fills the 64-entry file cache from one ISO directory, converting each
  * record's extent to a CdlLOC. Owns its three "CD_cachefile: ..." messages. */
-long CD_cachefile(long dir) asm("func_8006C8E4");
+long CD_cachefile(long dir);
 long CD_cachefile(long arg0)
 {
   u_char *p;

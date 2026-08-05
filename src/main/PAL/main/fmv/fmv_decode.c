@@ -17,7 +17,7 @@ extern s32 g_StreamLoc asm("D_801E8A90");
 extern char g_MsgFmvSector[] asm("D_80010D30");
 
 void DecDCTin(volatile u32 *arg0, s32 arg1);
-void DecDCTout(volatile u32 *arg0, s32 arg1) asm("func_8006402C");
+void DecDCTout(volatile u32 *arg0, s32 arg1);
 s32 PresentFmvFrame(volatile void *arg0);
 s32 StGetBackloc(void *arg0);
 void StartStreamRead(void *arg0);
@@ -57,7 +57,7 @@ void DecodeFmvFrame(void) {
 }
 
 extern s32 g_StreamReturnScene asm("D_8019C760");
-void DecDCToutCallback(s32 arg0) asm("func_800640B0");
+void DecDCToutCallback(s32 arg0);
 void StUnSetRing(void);
 void EndFmv(void);
 void EndFmv(void) {

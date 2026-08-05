@@ -40,7 +40,7 @@ void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void DrawSeriesClearedWash(s32 arg0, s32 arg1);
 void UpdateReplayCars(void);
-void UpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
+void UpdateCamera(s32 arg0, void *arg1);
 void DrawTerrainCellsWide(void);
 void DrawPlayerCarOnly(void);
 void DrawCourseScenery2(s32 arg0, s32 arg1);
@@ -52,7 +52,7 @@ extern char g_TextResult[] asm("D_80010DF0");
 extern char *g_CourseNames[] asm("D_8007D404");
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016A18(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
+s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_RaceTotalTime asm("D_801E4BA8");
 extern s32 g_ClassResultPlace asm("D_8019C7C4");
 extern s32 g_PrizeScreenState asm("D_8019CB74");
@@ -382,7 +382,7 @@ void DrawGrandPrixResultPanel(void) {
     func_80016EA0(0x10, 0x50, g_CaptionRanking, 0x7812);
 }
 
-void DrawRaceTimePanel(s32 arg0) asm("func_800204F4");
+void DrawRaceTimePanel(s32 arg0);
 void DrawRaceTimePanel(s32 arg0) {
     s32 base;
     s32 i;

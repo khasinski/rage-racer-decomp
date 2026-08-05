@@ -1,13 +1,13 @@
 #include "psyq/snd.h"
 
-void _SsSndCrescendo(short seq, short sep) asm("func_8007128C");
+void _SsSndCrescendo(short seq, short sep);
 
 extern volatile long g_SndUpdateLock asm("D_801E40AC");
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern long g_SndSeqOpenMask asm("D_801E4B80");
 extern short g_SndSeqTableSMax asm("D_801E826C");
 extern short g_SndSeqTableTMax asm("D_801E8270");
-void _SsSndDecrescendo(short seq, short sep) asm("func_80071568");
+void _SsSndDecrescendo(short seq, short sep);
 void func_80072734(long seq, long sep);
 
 void SsSeqCalledTbyT(void) asm("func_80071018");
@@ -64,7 +64,7 @@ typedef union SeqVolume7128C {
 long SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices) asm("func_80076C58");
 long SpuVmGetSeqVol(short seq_sep, short *left, short *right) asm("func_80076DCC");
 
-void _SsSndCrescendo(short seq, short sep) asm("func_8007128C");
+void _SsSndCrescendo(short seq, short sep);
 void _SsSndCrescendo(short seq, short sep) {
     SeqStruct *score = &g_SndSeqTable[seq][sep];
     SeqVolume7128C left;

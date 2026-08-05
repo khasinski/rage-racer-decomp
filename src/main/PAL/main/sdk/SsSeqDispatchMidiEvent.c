@@ -2,10 +2,10 @@
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
-void SsSeqDispatchControlChange(long seq, long sep, long value) asm("func_8006F5F4");
+void SsSeqDispatchControlChange(long seq, long sep, long value);
 void SsSeqSetChannelProgram(long seq, long sep, long value) asm("func_80070A1C");
 
-void SsSeqDispatchMidiEvent(short seq, short sep) asm("func_8006F1E0");
+void SsSeqDispatchMidiEvent(short seq, short sep);
 void SsSeqDispatchMidiEvent(short seq, short sep) {
     SeqStruct *state = &g_SndSeqTable[seq][sep];
     u_char *p;

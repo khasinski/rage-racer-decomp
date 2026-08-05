@@ -10,7 +10,7 @@ s32 IsEndPrim(u32 *arg0) {
     return ((*arg0 & 0x00FFFFFF) == 0x00FFFFFF);
 }
 
-void AddPrim(u32 *arg0, u32 *arg1) asm("func_80064DDC");
+void AddPrim(u32 *arg0, u32 *arg1);
 void AddPrim(u32 *arg0, u32 *arg1) {
     register u32 mask asm("$6") = 0x00FFFFFF;
     u32 tag = 0xFF000000;
@@ -86,13 +86,13 @@ void SetPolyGT3(u8 *arg0) {
     arg0[7] = 0x34;
 }
 
-void SetPolyF4(u8 *arg0) asm("func_80064F30");
+void SetPolyF4(u8 *arg0);
 void SetPolyF4(u8 *arg0) {
     arg0[3] = 5;
     arg0[7] = 0x28;
 }
 
-void SetPolyFT4(u8 *arg0) asm("func_80064F44");
+void SetPolyFT4(u8 *arg0);
 void SetPolyFT4(u8 *arg0) {
     arg0[3] = 9;
     arg0[7] = 0x2C;

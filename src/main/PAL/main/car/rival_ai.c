@@ -4,7 +4,7 @@
 #include "game/track.h"
 #include "game/race.h"
 
-void UpdateRivalRubberBand(void) asm("func_8003A974");
+void UpdateRivalRubberBand(void);
 
 extern u8 g_PlayerTrackProgress[] asm("D_8009E744");
 extern s32 g_PlayerSpeed asm("D_8009E778");
@@ -19,7 +19,7 @@ extern s32 g_PlayerSpeed asm("D_8009E778");
 #define AVOID_BLOCKED(w) (*(s16 *)((u8 *)(w) + 0x48)) /* ->field_104 */
 #define AVOID_NEARBY(w) (*(u16 *)((u8 *)(w) + 0x50))  /* ->field_10C */
 
-void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) asm("func_8003A280");
+void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1);
 void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
     GameCarAiBlock *state = (GameCarAiBlock *)&car->field_BC;
     s32 acc8 = 0;
@@ -186,7 +186,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
  */
 extern GameCarRuntime *D_801E40B8[];
 
-void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) asm("func_8003A6A4");
+void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1);
 void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
     GameCarRuntime *entry;
     s32 offset;
@@ -223,7 +223,7 @@ extern s32 g_CarProgressB asm("D_801F18C0");
  * last of the four, slots 1/2 the middle pair in order. UpdateRivalRubberBand reads
  * the result to rubber-band the AI.
  */
-void RankContenders(void) asm("func_8003A728");
+void RankContenders(void);
 void RankContenders(void) {
     s32 i;
     s32 offset;
@@ -293,7 +293,7 @@ extern s16 g_RivalCueCooldown3 asm("D_801E6F26");
 
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void UpdateRivalRubberBand(void) asm("func_8003A974");
+void UpdateRivalRubberBand(void);
 void UpdateRivalRubberBand(void) {
     s32 s6;
     s32 s5;

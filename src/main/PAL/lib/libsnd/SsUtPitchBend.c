@@ -18,9 +18,9 @@ extern short g_SndCurrentSeqSep asm("D_801E4BE6");
 extern short g_SndCurrentVoice asm("D_801E4BEA");
 
 long SpuVmVSetUp(long arg0, long arg1);
-long SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) asm("func_80074D1C");
+long SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3);
 long SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3);
-long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg4) asm("func_80075CB0");
+long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg4);
 u_short SpuVmCalculateTonePitch(long arg0, long arg1);
 
 long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4) asm("func_80078130");

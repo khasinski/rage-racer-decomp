@@ -30,7 +30,7 @@ extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
  * 0x1F800084, then dispatches a prim builder (SubmitCourseModel2 / SubmitCourseModel)
  * on the scratchpad OT at 0x1F800000.
  */
-void DrawCourseObjects(void) asm("func_8004123C");
+void DrawCourseObjects(void);
 void DrawCourseObjects(void) {
     Matrix mtx;
     volatile s32 pad[10];
@@ -157,9 +157,9 @@ extern Vec4 *g_VisibleCellList asm("D_801E4BC8");
  * negating dx and/or dy. */
 extern s8 g_CellScanOffsetX[] asm("D_8007E45C");
 extern s8 g_CellScanOffsetY[] asm("D_8007E45D");
-void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
+void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 
-void BuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
+void BuildVisibleCells(s32 arg0, s32 arg1);
 void BuildVisibleCells(s32 arg0, s32 arg1) {
     Scr *s = (Scr *)0x1F800008;
     s32 i;

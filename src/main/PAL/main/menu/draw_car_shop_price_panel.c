@@ -9,7 +9,7 @@ void GameDrawNumber(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g,
                    u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
 
-void DrawCarShopPricePanel(s32 count, s32 arg1, s32 arg2) asm("func_8004F650");
+void DrawCarShopPricePanel(s32 count, s32 arg1, s32 arg2);
 void DrawCarShopPricePanel(s32 count, s32 arg1, s32 arg2) {
     void *ot;
     s32 v0, v1;

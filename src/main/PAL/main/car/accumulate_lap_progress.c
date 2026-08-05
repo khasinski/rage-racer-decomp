@@ -4,7 +4,7 @@
 #include "game/race.h"
 
 
-s32 FindTrackSegment(GameCarRuntime *car, s32 idx) asm("func_80030EB4");
+s32 FindTrackSegment(GameCarRuntime *car, s32 idx);
 
 /*
  * Lap-progress accumulator. Relocates the car's trackPointIndex to the segment

@@ -2,7 +2,7 @@
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
-void SsSeqSetPortamento(short seq, short sep, u_char value) asm("func_8006FB7C");
+void SsSeqSetPortamento(short seq, short sep, u_char value);
 void SsSeqSetPortamento(short seq, short sep, u_char value) {
     SeqStruct *state;
     u_char channel;

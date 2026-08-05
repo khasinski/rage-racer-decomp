@@ -42,12 +42,12 @@ long SsUtSetReverbType(long type) {
     return -1;
 }
 
-long SsUtGetReverbType(void) asm("func_800736B8");
+long SsUtGetReverbType(void);
 long SsUtGetReverbType(void) {
     return g_SndReverbAttrMode;
 }
 
-void SsUtReverbOn(void) asm("func_800736C8");
+void SsUtReverbOn(void);
 void SsUtReverbOn(void) {
     SpuSetReverb(1);
 }
@@ -58,7 +58,7 @@ void SsUtReverbOff(void) {
 }
 
 
-void SsUtSetReverbFeedback(long feedback) asm("func_80073708");
+void SsUtSetReverbFeedback(long feedback);
 void SsUtSetReverbFeedback(long feedback) {
     g_SndReverbAttr.mask = 0x10;
     g_SndReverbAttr.feedback = (short)feedback;
@@ -73,7 +73,7 @@ void SsUtSetReverbDepth(long left, long right) {
     SpuSetReverbModeParam(&g_SndReverbAttr);
 }
 
-void SsUtSetReverbDelay(long delay) asm("func_800737E0");
+void SsUtSetReverbDelay(long delay);
 void SsUtSetReverbDelay(long delay) {
     g_SndReverbAttr.mask = 0x8;
     g_SndReverbAttr.delay = (short)delay;

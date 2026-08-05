@@ -13,7 +13,7 @@ extern s32 g_CameraCarHeading asm("D_801E3EB4");
 extern s32 g_CameraCarSpeed asm("D_801E3EB8");
 extern s32 D_801E3F60;
 
-void SeedFinishCameraAlt(void *arg0) asm("func_8003CDF4");
+void SeedFinishCameraAlt(void *arg0);
 void SeedFinishCameraAlt(void *arg0) {
     register u32 word0 asm("$2");
     u32 word1;

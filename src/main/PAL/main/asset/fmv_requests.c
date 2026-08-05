@@ -6,19 +6,19 @@ s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
 
 extern GameSceneAssetHeader *g_AssetLoadCursor asm("D_8019CAFC");
 
-s32 EnableCdAudioMode(void) asm("func_80017C2C");
+s32 EnableCdAudioMode(void);
 void SetTrackCameraTable(void *arg0);
 void SetEnvPaletteTable(void *arg0);
 void SetEnvironmentScript(void *arg0);
-void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
-void InstallTrackPoints(void *arg0) asm("func_8002A6B0");
-void RegisterCourseModels(void *arg0) asm("func_80017A6C");
-void InstallTerrainCellData(void *arg0) asm("func_80017AD0");
+void RegisterModelBank(void *arg0, s32 arg1);
+void InstallTrackPoints(void *arg0);
+void RegisterCourseModels(void *arg0);
+void InstallTerrainCellData(void *arg0);
 void SetCourseObjects(void *arg0);
 void InstallTrackEventData(void *arg0);
 void SelectTrackCameraTable(void *arg0, s32 arg1);
 
-void LoadTrackDataAssets(void) asm("func_8001989C");
+void LoadTrackDataAssets(void);
 void LoadTrackDataAssets(void) {
     GameSceneAssetHeader *header;
     register void *dst asm("$5");
@@ -169,20 +169,20 @@ void BeginEndingFmv(void) {
 
 extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
 
-void LoadBootAssets(void) asm("func_800180CC");
+void LoadBootAssets(void);
 void LoadSaveScreenAssets(void);
-void LoadSelectBgmAssets(void) asm("func_80018484");
-void LoadCarSelectAssets(void) asm("func_80018588");
+void LoadSelectBgmAssets(void);
+void LoadCarSelectAssets(void);
 void LoadCarModel(s32);
 void LoadUpgradedCarModel(s32);
 void LoadOptionScreenAssets(void);
 void LoadRoundAssets(void);
-void LoadRaceAssets(void) asm("func_8001901C");
+void LoadRaceAssets(void);
 void LoadGrandPrixScreen(void);
 void LoadCourseAssets(void);
-void LoadTrackDataAssets(void) asm("func_8001989C");
+void LoadTrackDataAssets(void);
 
-void ServiceAssetLoad(void) asm("func_80019C04");
+void ServiceAssetLoad(void);
 void ServiceAssetLoad(void) {
     if (g_AssetLoadState != 0) {
         switch (g_MainState) {

@@ -5,7 +5,7 @@
 extern long g_SndSeqOpenMask asm("D_801E4B80");
 extern char g_MsgSeqTableFull[] asm("D_80013C10");
 
-long SsSeqParseHeader(long arg0, long arg1, long arg2) asm("func_8006ECDC");
+long SsSeqParseHeader(long arg0, long arg1, long arg2);
 
 long SsSeqOpen(long seq_data, long vab_id) asm("func_8006F004");
 

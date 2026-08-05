@@ -6,7 +6,7 @@ extern s16 g_RaceCueDelay asm("D_801E6C90");
 
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void PlayCountdownCues(s32 arg0) asm("func_800410BC");
+void PlayCountdownCues(s32 arg0);
 void PlayCountdownCues(s32 arg0) {
     if (arg0 < 0x110) {
         if (arg0 == 0x79) {

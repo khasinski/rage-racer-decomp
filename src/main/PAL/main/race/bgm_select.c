@@ -26,14 +26,14 @@ extern s32 g_BgmSelectShowUi asm("D_801E412C");
 extern s32 g_CameraViewMode asm("D_8009E870");
 void AdvanceBgmShuffleBag();
 void DrawFullscreenFadeTile() asm("func_80033AA0");
-void RequestOptionScreenAssets() asm("func_80018B98");
+void RequestOptionScreenAssets();
 void DrawBgmSelectBar();
 void RequestTrackTexturePage();
-void UpdateCamera() asm("func_80043BCC");
+void UpdateCamera();
 void func_800418D4();
 void DrawTerrainCellsWide();
 void DrawCourseScenery2();
-int CycleBgmSelectCameraCar() asm("func_8001A0E4");
+int CycleBgmSelectCameraCar();
 
 void DrawBgmSelectBar(void);
 void DrawBgmSelectBar(void) {

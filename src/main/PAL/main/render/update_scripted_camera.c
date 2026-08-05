@@ -29,8 +29,8 @@ extern CameraKey g_CameraPath[] asm("D_8007F628");
  * the compiler compute the base once and drops 20 instructions. */
 #define KEY(byteOffset) (*(CameraKey *)((u8 *)g_CameraPath + (byteOffset)))
 
-s32 BezierEase(s32 t, s32 control) asm("func_80046598");
-s32 SetLookAtMatrix(s32 *obj) asm("func_80046248");
+s32 BezierEase(s32 t, s32 control);
+s32 SetLookAtMatrix(s32 *obj);
 
 /* One frame of the scripted camera: eases the six values between the
  * current and next keyframe and installs the resulting view matrix. */

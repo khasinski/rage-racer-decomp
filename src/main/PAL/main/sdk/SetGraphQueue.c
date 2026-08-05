@@ -9,7 +9,7 @@ extern u_char g_GraphDebug asm("D_800941EA");
 extern char D_800134F0[];
 
 /* GP1 queue mode; own trace string D_800134F0 is "SetGrapQue(%d)...". */
-long SetGraphQueue(long mode) asm("func_80065738");
+long SetGraphQueue(long mode);
 long SetGraphQueue(long arg0) {
     u_char *queue = &g_GraphQueue;
     long newQueue = arg0;
@@ -63,7 +63,7 @@ extern char D_80013520[];
 
 void func_80068180(u_char *dst, long value, long count);
 
-void SetDispMask(long arg0) asm("func_80065860");
+void SetDispMask(long arg0);
 void SetDispMask(long arg0) {
     u_char *debug = &g_GraphDebug;
     long enable = arg0;

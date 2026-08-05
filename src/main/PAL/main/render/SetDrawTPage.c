@@ -143,7 +143,7 @@ s32 Gpu_Reset(s32 arg0) asm("func_80067C80");
 
 /* libgpu ResetGraph. Own trace strings D_80013478 "ResetGraph:jtb=%08x,env=%08x"
  * and D_80013498 "ResetGraph(%d)..."; mode&7 of 0 or 3 does the full reset. */
-void ResetGraph(s32 mode) asm("func_80065460");
+void ResetGraph(s32 mode);
 void ResetGraph(s32 mode) {
     s32 maskedMode;
     u8 *graphState;

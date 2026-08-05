@@ -231,8 +231,8 @@ void SetPolyF3(void *prim);   /* 0x20 */
 void SetPolyFT3(void *prim);  /* 0x24 */
 void SetPolyG3(void *prim);   /* 0x30 */
 void SetPolyGT3(void *prim);  /* 0x34 */
-void SetPolyF4(void *prim) asm("func_80064F30");   /* 0x28 */
-void SetPolyFT4(void *prim) asm("func_80064F44");  /* 0x2C */
+void SetPolyF4(void *prim);   /* 0x28 */
+void SetPolyFT4(void *prim);  /* 0x2C */
 void SetPolyG4(void *prim) asm("func_80064F58");   /* 0x38 */
 void SetPolyGT4(void *prim);  /* 0x3C */
 void SetSprt8(void *prim);    /* 0x74 */
@@ -257,7 +257,7 @@ void SetShadeTex(void *prim, long enabled) asm("func_80064EB8");
 void SetPrimAddr(u_long *prim, u_long addr);
 void TermPrim(u_long *prim);
 long GetPrimAddr(u_long *prim);
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 void AddPrims(u_long *ot, u_long first, u_long *last) asm("func_80064E18");
 void *ClearOTag(u_long *ot, long count);
 void *ClearOTagR(u_long *ot, long count);
@@ -287,7 +287,7 @@ long GetDrawEnv(long env);
 void DrawPrim(u_char *prim);
 /* Fills the 0x1C-byte DRAWENV head: clip, ofs, tw, tpage, dtd, dfe, isbg, rgb.
  * `dfe` comes from the buffer height and the DMA interrupt state. */
-void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) asm("func_80064AA8");
+void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h);
 /* Fills the 0x14-byte DISPENV: disp Rect, screen Rect, isinter, isrgb24.
  * Was bound to SetDefDrawEnv here; that was wrong (see docs/names.md 17). */
 u_char *SetDefDispEnv(u_char *env, long x, long y, long w, long h);
@@ -309,7 +309,7 @@ long GetGraphDebug(void);
 /* GP1(03h) display enable: 0 blanks the screen (and clears the cached
  * DISPENV), non-zero shows it. Named from its own "SetDispMask(%d)..." trace
  * string at D_80013520. */
-void SetDispMask(long mask) asm("func_80065860");
+void SetDispMask(long mask);
 
 /* libgpu-internal byte fill helper. */
 void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");

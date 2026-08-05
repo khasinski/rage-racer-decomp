@@ -9,9 +9,9 @@ extern long g_SndSeqOpenMask asm("D_801E4B80");
 extern long g_SndUpdateLock asm("D_801E40AC");
 extern long g_SndMarkCallbacks[][0x10] asm("D_801E7A58");
 
-void SpuVmInit(long arg0) asm("func_80075710");
+void SpuVmInit(long arg0);
 
-void _SsInitTables(void) asm("func_80071B0C");
+void _SsInitTables(void);
 
 void _SsInitTables(void) {
     {

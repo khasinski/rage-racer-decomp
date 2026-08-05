@@ -24,7 +24,7 @@ extern char D_80013824[];
 extern char D_800138A4[];
 
 void LibcPutString(char *text) asm("func_80063C38");
-long CdReadInterruptStatus(void) asm("func_8006AB5C");
+long CdReadInterruptStatus(void);
 void CD_flush(void) asm("func_8006BAF0");
 long VSync(long mode);
 long GetKernelStatus(void);

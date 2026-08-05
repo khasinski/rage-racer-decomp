@@ -3,10 +3,10 @@
 #include "game/car.h"
 #include "game/track.h"
 #include "game/render.h"
-void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104");
-void AdvanceCarPosition() asm("func_8002F4E4");
+void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume);
+void AdvanceCarPosition();
 
-void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
+void UpdateCarAirborne(GameCarRuntime *car);
 
 void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
 s32 SmoothTrackAngle(s32 arg0, s32 arg1);
@@ -319,7 +319,7 @@ extern s32 g_ShiftSoundLevel asm("D_801E8AA0");
  * spin, advances the car (AdvanceCarPosition), and lands it when it returns to the
  * ground. The drive sub-block is the GameCarDrive view of car->field_BC.
  */
-void UpdateCarAirborne(GameCarRuntime *car) asm("func_80030814");
+void UpdateCarAirborne(GameCarRuntime *car);
 void UpdateCarAirborne(GameCarRuntime *car) {
     GameCarDrive *r = (GameCarDrive *)&car->field_BC;
     s32 sinF24;
@@ -397,7 +397,7 @@ s32 Random15(void) asm("func_800632B0");
  * car (AdvanceCarPosition), and resets the car once the budget expires. field_15C /
  * field_15E hold the shake magnitude.
  */
-void UpdateCarStandingStart(GameCarRuntime *car) asm("func_80030BC4");
+void UpdateCarStandingStart(GameCarRuntime *car);
 void UpdateCarStandingStart(GameCarRuntime *car) {
     GameCarRuntime *route = (GameCarRuntime *)&car->field_BC;
     s32 sinA;
@@ -466,7 +466,7 @@ s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
  * containing segment index, or -1 (snapping the car onto the track) if none.
  * pts[0] is the car-relative point; pts[1..4] are the quad corners.
  */
-s32 FindTrackSegment(GameCarRuntime *car, s32 idx) asm("func_80030EB4");
+s32 FindTrackSegment(GameCarRuntime *car, s32 idx);
 s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
     DVec pts[5];
     s32 i;

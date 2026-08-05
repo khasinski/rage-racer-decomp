@@ -7,16 +7,16 @@
 #include "psyq/snd.h"
 #include "game/memcard.h"
 #include "psyq/cd.h"
-void ServiceAssetLoad(void) asm("func_80019C04");
-void TickCdAudio(void) asm("func_80043974");
-void RequestBootAssets(void) asm("func_80018078");
-void InitCdAudio(void) asm("func_800438BC");
-void InitAssetSystem(void) asm("func_80018038");
-void InitSaveDefaults(void) asm("func_80021338");
+void ServiceAssetLoad(void);
+void TickCdAudio(void);
+void RequestBootAssets(void);
+void InitCdAudio(void);
+void InitAssetSystem(void);
+void InitSaveDefaults(void);
 
 void MainLoop(void);
 
-void ResetGraph(s32 arg0) asm("func_80065460");
+void ResetGraph(s32 arg0);
 void SetGraphDebug(s32 arg0);
 void InitGeom(void);
 void RestartMemoryCard(void);
@@ -89,9 +89,9 @@ void InitSubsystems(void) {
 void __main(void);
 void BiosSetMemSize(s32 arg0) asm("func_80063190");
 void TickSequenceAudio(void);
-void StepTrackTextureSwap(void) asm("func_8001A030");
-void PutDrawEnv(u8 *env) asm("func_80065ED4");
-void PutDispEnv(u8 *arg0) asm("func_800660AC");
+void StepTrackTextureSwap(void);
+void PutDrawEnv(u8 *env);
+void PutDispEnv(u8 *arg0);
 void DrawOTag(u8 *ot);
 
 /* The two 0x237E8-byte frame contexts the loop ping-pongs between. */

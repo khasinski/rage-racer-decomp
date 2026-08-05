@@ -3,9 +3,9 @@
 void SetTile(void *arg0) asm("func_80064FF8");
 
 void func_80066604(void *packet, void *rect);
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 
-void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) asm("func_800468FC");
+void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h);
 void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     void *otReg;
     u8 **scratch;
@@ -68,7 +68,7 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
 void SetSprt(void *arg0);
 void func_80064EB8(void *arg0, s32 enabled);
 void func_80064E90(void *arg0, s32 enabled);
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) asm("func_80046A2C");
@@ -194,9 +194,9 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     *(POLY_F3 **)0x1F800000 = prim;
 }
 
-void SetPolyF4(void *arg0) asm("func_80064F30");
+void SetPolyF4(void *arg0);
 void func_80064E90(void *arg0, s32 enabled);
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("func_80046CBC");
@@ -262,7 +262,7 @@ void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 
     *(POLY_F4 **)0x1F800000 = prim;
 }
 
-void SetPolyFT4(void *prim) asm("func_80064F44");
+void SetPolyFT4(void *prim);
 void SetShadeTex(void *prim, long enabled) asm("func_80064EB8");
 void SetSemiTrans(void *prim, long enabled) asm("func_80064E90");
 
@@ -430,7 +430,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
 
 void SetLineF3(void *arg0);
 void func_80064E90(void *arg0, s32 enabled);
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) asm("func_80047214");
@@ -467,7 +467,7 @@ void SetLineG2(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
-void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) asm("func_80047330");
+void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {
     s16 x0Reg;
     s16 y0Reg;

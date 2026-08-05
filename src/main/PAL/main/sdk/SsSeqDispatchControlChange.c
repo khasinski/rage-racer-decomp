@@ -3,12 +3,12 @@
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 long func_80070D70(long seq, short sep);
-void ContDataEntry(short seq, short sep, u_char value) asm("func_8007010C");
+void ContDataEntry(short seq, short sep, u_char value);
 void SsSeqIndexChannel(long channel, short vab, u_char prog, short volume, long pan) asm("func_800771AC");
 void func_8007701C(short vab, u_char prog, u_char volume);
 void func_800731A8(void);
 void func_800731B8(void);
-void SsSeqSetPortamento(short seq, short sep, u_char value) asm("func_8006FB7C");
+void SsSeqSetPortamento(short seq, short sep, u_char value);
 void func_80073748(long left, long right);
 void func_8006FDA8(short seq, short sep, u_char value);
 void func_8006FED8(short seq, short sep, u_char value);
@@ -16,7 +16,7 @@ void func_8007001C(short seq, short sep, u_char value);
 void func_80070094(short seq, short sep, u_char value);
 void func_8006FCE0(short seq, short sep);
 
-void SsSeqDispatchControlChange(short seq, short sep, long arg2) asm("func_8006F5F4");
+void SsSeqDispatchControlChange(short seq, short sep, long arg2);
 void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
     u_long control;
     short value;

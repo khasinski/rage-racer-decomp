@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
-void StCdInterrupt(void) asm("func_8006D1D0");
+void StCdInterrupt(void);
 
 
 extern long g_StBackFrame asm("D_8009DF18");
@@ -25,7 +25,7 @@ extern long D_801E8274;
 extern long g_StRingSize asm("D_801F1850");
 extern long g_StInterruptPending asm("D_8019CA00");
 
-long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+long CdControl(long com, void *param, long result);
 void CdDataCallback(long arg0);
 void func_8006A58C(long arg0);
 void CdRead2Callback(void);

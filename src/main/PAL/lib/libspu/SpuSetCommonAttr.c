@@ -4,7 +4,7 @@
 
 extern SpuCommonRegs *g_SpuRegBase asm("D_8009AB7C");
 
-void SpuSetCommonAttr(SpuCommonAttr *attr) asm("func_8007B2D0");
+void SpuSetCommonAttr(SpuCommonAttr *attr);
 void SpuSetCommonAttr(SpuCommonAttr *attr) {
     u_short mainModeLeft;
     u_short mainModeRight;

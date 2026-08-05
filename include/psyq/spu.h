@@ -90,11 +90,11 @@ void SpuInit(void);
 void _SpuInit(long reset_voice_center_note);
 void SpuStart(void);
 long _spu_resetTransferControl(void);
-long _spu_init(long reset_mode) asm("func_80078A30");
-long _spu_writeByIO(long addr, long size) asm("func_80078F4C");
+long _spu_init(long reset_mode);
+long _spu_writeByIO(long addr, long size);
 void _spu_transferCallback(void);
 void _spu_startDmaTransfer(u_long addr, u_short mode, u_long size);
-long _spu_t(long op, ...) asm("func_80079600");
+long _spu_t(long op, ...);
 long _spu_Fw(long addr, long size);
 long _spu_Fr(long addr, long size);
 void _spu_FsetRXX(long reg, u_long value, long use_mem_shift);
@@ -110,7 +110,7 @@ long SpuMalloc(long size);
 void SpuFree(u_long addr);
 u_long SpuSetNoiseVoice(long on_off, u_long voice_bit);
 u_long _SpuSetAnyVoice(long on_off, u_long voice_bit, long reg_lo, long reg_hi);
-long SpuSetReverb(long on_off) asm("func_8007A2D0");
+long SpuSetReverb(long on_off);
 long SpuSetReverbModeParam(SpuReverbAttr *attr);
 void _spu_setReverbAttr(SpuReverbRegAttr *attr);
 long SpuClearReverbWorkArea(u_long mode);
@@ -122,7 +122,7 @@ void SpuSetTransferMode(long mode);
 long SpuIsTransferCompleted(long wait);
 void _spu_setTransferCompletionFlag(long completed) asm("func_8007B294");
 u_long _spu_isTransferIdle(void) asm("func_8007B2C0");
-void SpuSetCommonAttr(SpuCommonAttr *attr) asm("func_8007B2D0");
+void SpuSetCommonAttr(SpuCommonAttr *attr);
 
 
 /* The SPU hardware register file at g_SpuRegBase, as a struct and as the raw

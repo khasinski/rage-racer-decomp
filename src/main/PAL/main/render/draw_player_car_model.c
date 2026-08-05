@@ -9,8 +9,8 @@ extern Matrix g_SceneLightMatrix asm("D_8009E6AC");
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_ScratchRenderMode asm("D_1F800084");
 
-s32 GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
-void ApplyZoneLighting(s32 arg0, Matrix *arg1) asm("func_8001C248");
+s32 GetTrackZoneBlend(s32 arg0);
+void ApplyZoneLighting(s32 arg0, Matrix *arg1);
 void func_80069888(Matrix *arg0);
 void func_80017794(void *a0, void *a1, void *a2);
 void RestoreColorMatrix(void);
@@ -24,7 +24,7 @@ void RestoreColorMatrix(void);
  * m_B0[1] block build the mirrored copies (flip X/Z columns). otDepth is the
  * base OT bucket; clipHandle is the optional clip volume from GetTrackZoneBlend.
  */
-void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
+void DrawPlayerCarModel(GameRenderObject *obj);
 void DrawPlayerCarModel(GameRenderObject *obj) {
     GameRenderView *view = g_CarModelAsset;
     Matrix m_10;
@@ -150,7 +150,7 @@ extern u8 *g_CamRow asm("D_8019C9A8");
 extern s32 g_CourseIndex asm("D_801E428C");
 extern u8 g_CarModelByCourse[][11] asm("D_8007D3AC");
 extern s16 D_8007D380[][2];
-void *ApplyMatrixLV(void *mtx, void *vec, void *out) asm("func_80068F80");
+void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 
 void func_8001DFC0(GameRenderObject *obj) {
     Matrix m_10;
@@ -311,6 +311,6 @@ void func_8001DFC0(GameRenderObject *obj) {
 
 extern s32 g_FmvState asm("D_8009F094");
 extern s32 g_StreamReturnScene asm("D_8019C760");
-s32 CloseLoadedAudioSlots(void) asm("func_8005B9CC");
+s32 CloseLoadedAudioSlots(void);
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
-s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
+s32 CdControl(s32 com, void *param, s32 result);

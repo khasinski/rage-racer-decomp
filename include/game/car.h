@@ -361,14 +361,14 @@ void ResetCarTrackState(GameCarRuntime *car) asm("func_80032280");
 /* The two variants of the rival-car driver over GameCarRuntime[11]. Race runs
  * only while `g_RacePhase >= 2 && g_GrandPrixMode`, adds three race-only passes
  * and time-slices cars 4..10; attract has no player so every car runs. */
-void UpdateRaceCars(void) asm("func_8003B0D4");
+void UpdateRaceCars(void);
 void UpdateAttractCars(void) asm("func_8003BB50");
 /* Player-vs-field collision (detection, response and the crash cue), called
  * only from UpdatePlayerCar; returns the struck sub-quad 1..4 or 0. */
 s32 CollidePlayerWithCars(GameCarRuntime *car) asm("func_8002D398");
 /* One row of the AI pairwise sweep: car[index] against car[index + 1 .. 10],
  * push-apart only - no sound, no damage globals, no mode gate. */
-s32 CollideRivalCars(GameCarRuntime *car, s32 index) asm("func_80039980");
+s32 CollideRivalCars(GameCarRuntime *car, s32 index);
 /* Draws one car, from the DrawCars loop; two LOD tiers plus the mirrored
  * wheel pass, submitted through SubmitModel. */
 void DrawCar(void *car) asm("func_8001DFC0");

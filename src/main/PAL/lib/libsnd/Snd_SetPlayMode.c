@@ -4,7 +4,7 @@ extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void func_80076C58(long seq_sep, u_short left, u_short right, long mode);
 
-void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) asm("func_800724F0");
+void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount);
 void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
     short sepIndex;
     long sequenceBase;
@@ -42,34 +42,34 @@ void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
     }
 }
 
-void SsSeqPlay(long seq, long playMode, long loopCount) asm("func_800725F0");
+void SsSeqPlay(long seq, long playMode, long loopCount);
 void SsSeqPlay(long seq, long playMode, long loopCount) {
     Snd_SetPlayMode((short)seq, 0, (u8)playMode, (short)loopCount);
 }
 
-void SsSepPlay(long seq, long sep, long playMode, long loopCount) asm("func_80072628");
+void SsSepPlay(long seq, long sep, long playMode, long loopCount);
 void SsSepPlay(long seq, long sep, long playMode, long loopCount) {
     Snd_SetPlayMode((short)seq, (short)sep, (u8)playMode, (short)loopCount);
 }
 
-void _SsSndSetVol(long seq, long sep, long left, long right) asm("func_80072660");
+void _SsSndSetVol(long seq, long sep, long left, long right);
 void _SsSndSetVol(long seq, long sep, long left, long right) {
     func_80076C58((short)(seq | (sep << 8)), (u_short)left, (u_short)right, 0);
 }
 
-void SsSeqSetVol(long seq, long left, long right) asm("func_80072698");
+void SsSeqSetVol(long seq, long left, long right);
 void SsSeqSetVol(long seq, long left, long right) {
     func_80076C58((short)seq, (u_short)left, (u_short)right, 0);
 }
 
-void SsSepSetVol(long seq, long sep, long left, long right) asm("func_800726C8");
+void SsSepSetVol(long seq, long sep, long left, long right);
 void SsSepSetVol(long seq, long sep, long left, long right) {
     func_80076C58((short)(seq | (sep << 8)), (u_short)left, (u_short)right, 0);
 }
 
 long SpuVmGetSeqVol(long seq_sep, short *left, short *right) asm("func_80076DCC");
 
-long SsSepGetVol(long seq, long sep, short *voll, short *volr) asm("func_80072700");
+long SsSepGetVol(long seq, long sep, short *voll, short *volr);
 long SsSepGetVol(long seq, long sep, short *voll, short *volr) {
     return SpuVmGetSeqVol((short)(seq | (sep << 8)), voll, volr);
 }
@@ -118,12 +118,12 @@ void _SsSndStop(short seq, short sep) {
     score->unk7A = 0x7F;
 }
 
-void SsSeqStop(long seq) asm("func_800728A0");
+void SsSeqStop(long seq);
 void SsSeqStop(long seq) {
     _SsSndStop((short)seq, 0);
 }
 
-void SsSepStop(long seq, long sep) asm("func_800728C8");
+void SsSepStop(long seq, long sep);
 void SsSepStop(long seq, long sep) {
     _SsSndStop((short)seq, (short)sep);
 }

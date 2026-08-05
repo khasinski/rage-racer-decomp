@@ -1,9 +1,9 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-long CdControl(long com, void *param, long result) asm("func_8006A5A4");
-void CdRead(long arg0, void *arg1, long arg2) asm("func_80027688");
-long CdReadSync(long arg0, long arg1) asm("func_80027790");
+long CdControl(long com, void *param, long result);
+void CdRead(long arg0, void *arg1, long arg2);
+long CdReadSync(long arg0, long arg1);
 
 /*
  * Reads one 0x80-word directory/data sector at logical sector `sectorInt` into

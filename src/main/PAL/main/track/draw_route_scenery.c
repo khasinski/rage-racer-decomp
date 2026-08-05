@@ -14,7 +14,7 @@ extern s32 g_RouteSceneryRotZ asm("D_801E4358");
 
 
 
-void DrawRouteScenery(void) asm("func_8003F02C");
+void DrawRouteScenery(void);
 void DrawRouteScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
@@ -58,9 +58,9 @@ extern s32 g_Shuttle1TravelStep asm("D_801E4FF4");
 extern s16 g_Shuttle1StartEndpoint asm("D_801E4FF8");
 extern s16 g_Shuttle1PathIndex asm("D_801E4FFA");
 extern s32 g_Shuttle1X asm("D_801E4FFC");
-extern s32 g_Shuttle1Y asm("D_801E5000");
-extern s32 g_Shuttle1Z asm("D_801E5004");
-extern s32 g_Shuttle1Unk1C asm("D_801E5008");
+extern s32 g_Shuttle1Y;
+extern s32 g_Shuttle1Z;
+extern s32 g_Shuttle1Unk1C;
 extern s32 g_Shuttle1AngleX asm("D_801E500C");
 extern s32 g_Shuttle1AngleY asm("D_801E5010");
 extern s32 g_Shuttle1AngleZ asm("D_801E5014");

@@ -4,7 +4,7 @@
 extern s32 g_FmvRingBuffer asm("D_8009AF58");
 extern s32 g_StreamLoc asm("D_801E8A90");
 void DecDCTReset(s32 arg0) asm("func_80063E44");
-void DecDCToutCallback(s32 arg0) asm("func_800640B0");
+void DecDCToutCallback(s32 arg0);
 void StSetRing(s32 arg0, s32 arg1) asm("func_8006A058");
 void StSetStream(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 StartStreamRead(s32 arg0);
@@ -33,11 +33,11 @@ extern s16 g_FmvStripHeight asm("D_8009AF52");
 extern volatile s32 g_FmvStripDone asm("D_8009AF54");
 extern s32 g_StInterruptPending asm("D_8019CA00");
 
-void DecDCTout(volatile u32 *arg0, s32 arg1) asm("func_8006402C");
+void DecDCTout(volatile u32 *arg0, s32 arg1);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
-void StCdInterrupt(void) asm("func_8006D1D0");
+void StCdInterrupt(void);
 
-void UploadFmvSlice(void) asm("func_8001EBC8");
+void UploadFmvSlice(void);
 void UploadFmvSlice(void) {
     Rect rect;
     register volatile s32 *bufferPtr asm("$6");

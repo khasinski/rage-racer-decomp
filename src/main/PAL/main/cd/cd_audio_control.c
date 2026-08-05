@@ -91,7 +91,7 @@ extern u32 g_CdMixFullRL asm("D_8009B190");
 
 void CdMix(u8 *arg0);
 
-void StepCdVolumeFade(void) asm("func_80042D10");
+void StepCdVolumeFade(void);
 void StepCdVolumeFade(void) {
     u8 buf[4];
     s32 cnt;

@@ -73,7 +73,7 @@ extern u8 g_ClockTextMinUnits[] asm("D_8007DF11");
 extern u8 g_ClockTextSecTens asm("D_8007DF13");
 extern u8 g_ClockTextSecUnits asm("D_8007DF14");
 
-void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) asm("func_80033F30");
+void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color);
 void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
     s32 savedY;
     s32 sec;
@@ -108,9 +108,9 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
 extern s32 g_FrameParity asm("D_801E4B34");
 
 void func_80066604(void *packet, void *rect);
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 
-void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) asm("func_80034058");
+void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h);
 void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     void *oldPacket;
     s16 rect[4];
@@ -137,7 +137,7 @@ extern u8 g_TileStripStorage[] asm("D_801EB9DC");
 void func_800658FC(s32 mode);
 void func_80064FF8(u8 *prim);
 
-void BuildTileStrips(void) asm("func_800340D8");
+void BuildTileStrips(void);
 void BuildTileStrips(void) {
     u8 **initBuffers;
     u8 **buffers;
@@ -434,7 +434,7 @@ u8 *AddTilePrim(
     s32 h,
     s32 r,
     s32 g,
-    s32 b) asm("func_80032F34");
+    s32 b);
 
 void DrawRaceOptionMenu(s32 cursorRow) {
     register s32 selectedRow = cursorRow;

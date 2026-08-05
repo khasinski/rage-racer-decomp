@@ -14,7 +14,7 @@ extern s32 g_MenuAltLayout asm("D_8019CB0C");
 
 void func_80046E00();
 
-void DrawMenuAltPanel(s32 arg0, s32 arg1) asm("func_80050400");
+void DrawMenuAltPanel(s32 arg0, s32 arg1);
 void DrawMenuAltPanel(s32 arg0, s32 arg1) {
     s32 step0;
     s32 step1;
@@ -158,7 +158,7 @@ extern SVec D_80011A48[];
 extern s32 D_8007FB48;
 
 
-void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) asm("func_800506BC");
+void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     SVec verts[4];
     UVec out[4];
@@ -255,7 +255,7 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
 
 extern volatile s32 D_8007FB4C;
 
-void DrawTimeAttackPlate(s32 arg0) asm("func_800509C4");
+void DrawTimeAttackPlate(s32 arg0);
 void DrawTimeAttackPlate(s32 arg0) {
     void *scratch = *(void **)0x1F800004;
     s32 step = arg0;
@@ -330,7 +330,7 @@ void func_80069A38(s32 arg0, s32 arg1, s32 arg2);
 void func_800686D4(s32 arg0, s32 arg1);
 
 /* The menu-mode twin of InitTrackLighting. */
-void InitMenuLighting(void) asm("func_80050B1C");
+void InitMenuLighting(void);
 void InitMenuLighting(void) {
     g_SceneColorMatrix = D_80082DFC;
     g_SceneLightMatrix = D_80082E1C;
@@ -397,7 +397,7 @@ void func_80058B88(s32);
 void func_80059248(s32);
 void func_8005A2CC(s32);
 void func_800496F0(s32);
-void DrawMenuLightBurst(s32) asm("func_8004CF30");
+void DrawMenuLightBurst(s32);
 
 void InitMenuMode(void) asm("func_80050C18");
 void InitMenuMode(void) {

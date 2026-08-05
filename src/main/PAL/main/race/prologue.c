@@ -17,7 +17,7 @@ typedef struct UnkEventPair {
 extern s32 g_AttractDemoStep asm("D_801E682C");
 extern u32 g_StreamReturnScene asm("D_8019C760");
 extern void (*g_AttractDemoSteps[])(void) asm("D_8007D6D0");
-void ResetAssetLoader(void) asm("func_80017BE4");
+void ResetAssetLoader(void);
 void ReturnToTitleScene(void);
 /* Deliberately raw: see docs/names.md 12d. */
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
@@ -29,7 +29,7 @@ void InitTrackScene(void);
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void InstallCourseAssets(void);
 void RequestTrackDataAssets(void);
-void UpdatePrologueLoad(void) asm("func_80026C0C");
+void UpdatePrologueLoad(void);
 /* Split symbols of the 14-entry prologue table: 8 bytes each, { s16 x,
  * s16 y, char *text }. The scroll drives y and the alpha ramp. */
 extern s16 g_PrologueLineX[] asm("D_8007D6DC");
@@ -38,14 +38,14 @@ extern s32 g_PrologueLineText[] asm("D_8007D6E0");
 void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
-void RequestSelectBgmAssets(void) asm("func_80018410");
+void RequestSelectBgmAssets(void);
 extern u32 g_CameraViewMode asm("D_8009E870");
 extern u8 g_CarTrackSection[] asm("D_801F18CC");
 extern UnkEventPair g_PrologueCameraCuts[] asm("D_8007D74C");
 void ExitPrologue(void);
 void DrawPrologueText(void);
 void RequestTrackTexturePage(s32 arg0);
-void UpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
+void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
 void func_800418D4(void);
 void DrawTerrainCellsWide(void);
 void DrawCourseScenery2(s32 arg0, s32 arg1);
@@ -80,7 +80,7 @@ void EnterPrologue(void) {
     g_CameraCarIndex = 3;
 }
 
-void UpdatePrologueLoad(void) asm("func_80026C0C");
+void UpdatePrologueLoad(void);
 void UpdatePrologueLoad(void) {
     s32 delta;
 

@@ -9,7 +9,7 @@ extern char D_800135CC[];
 extern char D_800135E0[];
 extern char D_800135F8[];
 
-void Gpu_BuildDrawEnvCmds(void *arg0, void *arg1) asm("func_8006674C");
+void Gpu_BuildDrawEnvCmds(void *arg0, void *arg1);
 void *MemCopy(void *dst, void *src, s32 count) asm("func_800681BC");
 
 void DrawOTag(void *arg0);
@@ -22,7 +22,7 @@ void DrawOTag(void *arg0) {
 }
 
 /* Named from its own trace string D_800135E0, "PutDrawEnv(%08x)...". */
-void *PutDrawEnv(void *env) asm("func_80065ED4");
+void *PutDrawEnv(void *env);
 void *PutDrawEnv(void *arg0) {
     u8 *debug = &g_GraphDebug;
     void *prim = arg0;
@@ -50,7 +50,7 @@ void *PutDrawEnv(void *arg0) {
 }
 
 /* Named from its own trace string D_800135F8, "DrawOTagEnv(%08x,&08x)...". */
-void *DrawOTagEnv(void *ot, void *env) asm("func_80065F98");
+void *DrawOTagEnv(void *ot, void *env);
 void *DrawOTagEnv(void *arg0, void *arg1) {
     void *src = arg0;
     u8 *debug = &g_GraphDebug;

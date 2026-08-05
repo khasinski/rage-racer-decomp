@@ -58,7 +58,7 @@ extern s16 g_PlayerLap asm("D_8009E83C");
 
 void *func_80017390(void *ot, void *packet, s32 arg2);
 
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 
 void SetShadeTex(u8 *prim, s32 enabled) asm("func_80064EB8");
 
@@ -90,7 +90,7 @@ extern u8 g_TextCongratulations asm("D_80011494");
 
 void DrawFullscreenFadeTile(s32 a, s32 b) asm("func_80033AA0");
 
-void SeedWaypoints(void) asm("func_80037714");
+void SeedWaypoints(void);
 
 void DrawRaceEndBanner(s32 a);
 
@@ -98,17 +98,17 @@ void ExitRaceScene(s32 a);
 
 void func_80016754(s32 a, s32 b, void *c, s32 d);
 
-void BeginCarStandingStart(void *a) asm("func_8002BE18");
+void BeginCarStandingStart(void *a);
 
-void RunRaceIntroCamera(void *a) asm("func_8003C508");
+void RunRaceIntroCamera(void *a);
 
 void UpdatePlayerCar(void *a) asm("func_8002DEFC");
 
-void UpdateLoadedAudioVoices(s32 a, s32 b) asm("func_8005D9F8");
+void UpdateLoadedAudioVoices(s32 a, s32 b);
 
-void DrawLapNumber(void) asm("func_80037C04");
+void DrawLapNumber(void);
 
-void UpdateCamera(s32 a, void *b) asm("func_80043BCC");
+void UpdateCamera(s32 a, void *b);
 
 void RequestTrackTexturePage(s32 a);
 
@@ -120,21 +120,21 @@ void DrawTerrainCells(void);
 
 void DrawCourseScenery(s32 a, s32 b, s32 c);
 
-void GetTrackZoneBlend(s32 a) asm("func_800350B4");
+void GetTrackZoneBlend(s32 a);
 
-void SetReverbDepth(s32 a, s32 b) asm("func_8005B190");
+void SetReverbDepth(s32 a, s32 b);
 
 void DrawPlayerTachometer(void);
 
-void UpdateTrackEventSound(s32 a) asm("func_8004087C");
+void UpdateTrackEventSound(s32 a);
 
 void func_8003425C(u32 a);
 
-void PlayCountdownCues(u32 a) asm("func_800410BC");
+void PlayCountdownCues(u32 a);
 
-void UpdateWaypoints(void) asm("func_80037860");
+void UpdateWaypoints(void);
 
-void DrawWaypoints(void) asm("func_80037AAC");
+void DrawWaypoints(void);
 
 
 /* Two 8-byte { start, end } reverb spans per series (offset = series * 16):
@@ -159,7 +159,7 @@ extern u8 *g_TrackPoints asm("D_8009E688");
 extern s32 g_TrackLength asm("D_801E40D8");
 extern u8 *g_TrackEventData asm("D_801E4150");
 
-extern s32 FindTrackSegment(u8 *ent, s32 arg) asm("func_80030EB4");
+extern s32 FindTrackSegment(u8 *ent, s32 arg);
 
 extern void SeedCarLapProgress(u8 *ent, s32 arg);
 
@@ -199,7 +199,7 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0) {
     return ret;
 }
 
-void UpdateWaypoints(void) asm("func_80037860");
+void UpdateWaypoints(void);
 void UpdateWaypoints(void) {
     TrackWaypointRuntime *waypoint;
     s32 i;
@@ -291,7 +291,7 @@ static inline void ClearScratchRenderMode37AAC(void) {
  * TrackWaypointRuntime array g_Waypoints via raw offsets. Register pins are
  * match-load-bearing.
  */
-void DrawWaypoints(void) asm("func_80037AAC");
+void DrawWaypoints(void);
 void DrawWaypoints(void) {
     Matrix mtx0;
     Matrix mtx1;
@@ -353,7 +353,7 @@ s32 CountActiveWaypoints(void) {
     return count;
 }
 
-void DrawLapNumber(void) asm("func_80037C04");
+void DrawLapNumber(void);
 void DrawLapNumber(void) {
     u8 *scratch;
     s32 track;
@@ -525,7 +525,7 @@ void UpdateWaypointCollectScene(void) {
     }
 }
 
-void ApplyTrackReverbZone(s32 arg0) asm("func_800381EC");
+void ApplyTrackReverbZone(s32 arg0);
 void ApplyTrackReverbZone(s32 arg0) {
     s32 result;
     s32 i;
@@ -554,7 +554,7 @@ void ApplyTrackReverbZone(s32 arg0) {
     SetReverbDepth(arg, arg);
 }
 
-s32 GetWaypointAngle(s32 arg0) asm("func_80038288");
+s32 GetWaypointAngle(s32 arg0);
 s32 GetWaypointAngle(s32 arg0) {
     s32 trackLength;
     s32 value;
@@ -602,7 +602,7 @@ s32 GetWaypointAngle(s32 arg0) {
     }
 }
 
-void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) asm("func_800383A8");
+void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr);
 void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     u8 *base;
     s32 sub;
@@ -726,7 +726,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     }
 }
 
-void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) asm("func_800385FC");
+void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr);
 void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   s32 pos2_R10;
   s32 idx_R8;

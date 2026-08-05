@@ -38,7 +38,7 @@ void *MemCopy(void *dst, void *src, long count) asm("func_800681BC");
 
 /* libgpu PutDispEnv: GP1(05h/06h/07h/08h) from a 0x14-byte DISPENV.
  * Named from its own trace string D_80013614, "PutDispEnv(%08x)...". */
-Env *PutDispEnv(Env *env) asm("func_800660AC");
+Env *PutDispEnv(Env *env);
 Env *PutDispEnv(Env *arg0) {
     Env *s0 = arg0;
     long flags;

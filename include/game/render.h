@@ -202,15 +202,15 @@ typedef struct GameRenderPairPoint {
  * translation alone; sin/cos come from rsin/rcos (func_80068568/func_80068634)
  * and 1.0 is 0x1000.
  */
-void BuildRotMatrixZ(void *mtx, s32 angle) asm("func_8001A4C0");
-void BuildRotMatrixY(void *mtx, s32 angle) asm("func_8001A530");
-void BuildRotMatrixX(void *mtx, s32 angle) asm("func_8001A5A0");
+void BuildRotMatrixZ(void *mtx, s32 angle);
+void BuildRotMatrixY(void *mtx, s32 angle);
+void BuildRotMatrixX(void *mtx, s32 angle);
 /*
  * Composes Y*X*Z from the scratchpad camera angles (0x1F800018 / 0x1C / 0x20)
  * into the scratchpad matrix at 0x1F800028 and installs it with SetRotMatrix;
  * D_8019CB18 gets the same matrix pre-multiplied by a 180-degree Y turn.
  */
-void SetCameraRotMatrix(void) asm("func_8001A610");
+void SetCameraRotMatrix(void);
 /*
  * atan2 over the arctangent table D_8007B664, in 12-bit angle units
  * (0x400 = 90 degrees). Argument order is (x, y), the reverse of C's atan2:
@@ -242,14 +242,14 @@ void SetupDisplay480(s32 r, s32 g, s32 b);
  * All four are entry points of the hand-written GTE engine, so `ctx` is always
  * the scratchpad base 0x1F800000.
  */
-void SelectModelBank(s32 index) asm("func_80017A10");
+void SelectModelBank(s32 index);
 void SubmitModel(void *ctx, s32 index) asm("func_80028DEC");
 void SubmitCourseModel(void *ctx, s32 index) asm("func_800296B4");
 void SubmitCourseModel2(void *ctx, s32 index) asm("func_80029E50");
 
 /* Per-frame draw loop over the world object array D_801E4B2C: culls each entry
  * against the visibility bitmask, transforms it and submits its model. */
-void DrawCourseObjects(void) asm("func_8004123C");
+void DrawCourseObjects(void);
 
 /*
  * Per-frame environment step: advances the course's environment command script
@@ -257,7 +257,7 @@ void DrawCourseObjects(void) asm("func_8004123C");
  * g_EnvironmentModePrev and g_EnvironmentMode into VRAM at (0xE0, 0x1E6), and
  * updates the GTE far colour and fog distance. Does not draw anything.
  */
-void UpdateEnvironment(void) asm("func_80045CD4");
+void UpdateEnvironment(void);
 
 /*
  * 2D/HUD primitive emitters. All of them pack the primitive at the scratchpad
@@ -403,7 +403,7 @@ void DrawGradientLine(
     u8 r1,
     u8 g1,
     u8 b1,
-    u8 alpha) asm("func_80047330");
+    u8 alpha);
 /* Two-pixel-thick rectangle border, built from six DrawLine calls. */
 void DrawRectOutline(
     void *ot,
@@ -421,7 +421,7 @@ void SetDrawClipRect(
     s32 x,
     s32 y,
     s32 w,
-    s32 h) asm("func_800468FC");
+    s32 h);
 
 /*
  * Text and number output, both built on DrawSprite. The two fonts differ
@@ -462,7 +462,7 @@ s32 GameDrawNumber(
     u8 primitiveCount) asm("func_80047BD4");
 /* Blits an 8x6 bit pattern from D_8007F6E8 as 4x8 blocks; negative argument
  * animates through the table. */
-void DrawBitPatternOverlay(s32 pattern) asm("func_80047E60");
+void DrawBitPatternOverlay(s32 pattern);
 
 /*
  * Base of the draw work area for the frame being built. Almost every drawing
@@ -505,7 +505,7 @@ extern s32 g_FadeStep asm("D_801E42A0");
 s32 RunTimedDrawScript(
     void *commands,
     s32 *progress,
-    s32 step) asm("func_800487D8");
+    s32 step);
 
 /*
  * The progress counter the menu/UI screens hand to RunTimedDrawScript. Each
@@ -529,10 +529,10 @@ void DrawScriptedSprite(
     s32 elapsed,
     u8 *style,
     u8 *record,
-    s32 useAlpha) asm("func_80048078");
-void DrawScriptedLine(s32 elapsed, u8 *style, u8 *record) asm("func_80048210");
-void DrawScriptedTriangle(s32 elapsed, u8 *style, u8 *record) asm("func_800483D4");
-void DrawScriptedQuad(s32 elapsed, u8 *style, s32 *record) asm("func_80048580");
+    s32 useAlpha);
+void DrawScriptedLine(s32 elapsed, u8 *style, u8 *record);
+void DrawScriptedTriangle(s32 elapsed, u8 *style, u8 *record);
+void DrawScriptedQuad(s32 elapsed, u8 *style, s32 *record);
 
 /*
  * Low-level packet builders from the first 0x3900 bytes of .text (the boot /

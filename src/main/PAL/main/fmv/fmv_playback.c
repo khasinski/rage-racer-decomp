@@ -15,7 +15,7 @@ typedef struct FmvDisplayState {
     s32 field_34;
 } FmvDisplayState;
 
-void *GetFmvFrame(s32 *arg0) asm("func_8001EDC4");
+void *GetFmvFrame(s32 *arg0);
 void MdecUnpackStatus(void *arg0, s32 arg1) asm("func_80064588");
 s32 func_8006CFF0(void *arg0);
 extern s32 g_FmvFrameWidth asm("D_8009AF6C");
@@ -32,7 +32,7 @@ long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1);
 void ClearImage(void *arg0, u32 arg1, u32 arg2, u32 arg3);
 extern char g_MsgFmvDecodeTimeout[] asm("D_80010D34");
 s32 func_8006A534(s32 arg0, s32 arg1);
-long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+long CdControl(long com, void *param, long result);
 s32 VSync(s32 mode);
 s32 CdRead2(s32 arg0);
 extern u8 D_801E8AFC;
@@ -60,7 +60,7 @@ s32 PresentFmvFrame(s32 *arg0) {
     return -1;
 }
 
-void * GetFmvFrame(s32 *arg0) asm("func_8001EDC4");
+void * GetFmvFrame(s32 *arg0);
 void *GetFmvFrame(s32 *arg0) {
     StRingEventRecord *slot[2];
     u16 rect[4];

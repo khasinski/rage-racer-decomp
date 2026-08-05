@@ -1,6 +1,6 @@
 #include "common.h"
 
-void SetDQA(s32 arg0) asm("func_80069A00");
+void SetDQA(s32 arg0);
 void SetDQB(s32 arg0) asm("func_80069A0C");
 
 void SetFogNear(s32 arg0, s32 arg1) asm("func_800686D4");
@@ -9,7 +9,7 @@ void SetFogNear(s32 arg0, s32 arg1) {
     SetDQB(0x1400000);
 }
 
-s32 Lzc(s32 arg0) asm("func_80069C7C");
+s32 Lzc(s32 arg0);
 
 s32 CordicRotate(s32 arg0);
 s32 CordicRotate(s32 arg0) {

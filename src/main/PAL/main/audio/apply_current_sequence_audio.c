@@ -5,9 +5,9 @@
 
 extern s16 g_SeqHandle asm("D_801E6D90");
 extern s16 g_SeqVolume asm("D_801E6D94");
-void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2) asm("func_80072698");
-void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
-void ApplyCurrentSequenceAudio(void) asm("func_8005EA6C");
+void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
+void SetReverbDepth(s32 arg0, s32 arg1);
+void ApplyCurrentSequenceAudio(void);
 void ApplyCurrentSequenceAudio(void) {
     SsSeqSetVol(g_SeqHandle, g_SeqVolume, g_SeqVolume);
     SetReverbDepth(0x28, 0x28);

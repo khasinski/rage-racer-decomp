@@ -41,7 +41,7 @@ extern void LibcMemcpy(char *, u_char *, long);
 /* Rebuilds the ISO path-table cache after a disc change: reads the primary
  * volume descriptor at sector 16, checks "CD001", then parses up to 128
  * path-table records. Owns all four of its own "CD_newmedia: ..." messages. */
-long CD_newmedia(void) asm("func_8006C560");
+long CD_newmedia(void);
 long CD_newmedia(void) {
     u_char *p;
     long i;
@@ -112,7 +112,7 @@ extern CdSearchDirEntry g_CdDirEntryName[] asm("D_8009C120");
 
 long LibcStrcmp(u_char *arg0, u_char *arg1);
 
-long DS_searchdir(long type, u_char *name) asm("func_8006C83C");
+long DS_searchdir(long type, u_char *name);
 long DS_searchdir(long type, u_char *name) {
     long i = 0;
     u_char *entryName = (u_char *)g_CdDirEntryName;

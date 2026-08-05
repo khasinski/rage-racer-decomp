@@ -6,7 +6,7 @@ extern volatile u_char g_SndVoiceCount asm("D_801E42F8");
 extern short g_SndCurrentSeqSep asm("D_801E4BE6");
 
 void SpuVmVSetUp(long arg0, long arg1);
-long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg4) asm("func_80075CB0");
+long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg4);
 
 long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3);
 

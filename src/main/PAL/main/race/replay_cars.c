@@ -20,7 +20,7 @@ void SeedCarLapProgress(void *arg0, s32 arg1);
 
 void AccumulateLapProgress(void *arg0);
 
-s32 FindTrackSegment(void *arg0, s32 arg1) asm("func_80030EB4");
+s32 FindTrackSegment(void *arg0, s32 arg1);
 
 void func_80032280(void *arg0);
 
@@ -51,9 +51,9 @@ extern u8 g_MsgGameExit asm("D_8001147C");
 
 void ForceAllEffectVoicesEnabled(s32 arg0);
 
-void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
+void SetReverbDepth(s32 arg0, s32 arg1);
 
-void RequestSelectBgmAssets(void) asm("func_80018410");
+void RequestSelectBgmAssets(void);
 
 
 
@@ -83,7 +83,7 @@ extern s32 g_BestSectorTimes[][4][3] asm("D_801E41E8");
 
 extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 
-void DrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
+void DrawSplitDelta(s32 arg0, s32 arg1);
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
 
@@ -129,7 +129,7 @@ void UpdateReplayCars(void) {
     RequestTrackTexturePage(g_PlayerTrackSection);
 }
 
-s32 GetTrackZoneBlend(s32 position) asm("func_800350B4");
+s32 GetTrackZoneBlend(s32 position);
 s32 GetTrackZoneBlend(s32 position) {
     u8 *base;
     s32 scene;
@@ -242,7 +242,7 @@ void ExitRaceScene(s32 arg0) {
     DebugPrintf(&g_MsgGameExit);
 }
 
-void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) asm("func_800352B8");
+void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2);
 void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
     s32 slot;
     s32 nextSlot;

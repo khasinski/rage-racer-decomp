@@ -13,7 +13,7 @@ extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 long SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices) asm("func_80076C58");
 long SpuVmGetSeqVol(short seq_sep, short *left, short *right) asm("func_80076DCC");
 
-void _SsSndDecrescendo(short seq, short sep) asm("func_80071568");
+void _SsSndDecrescendo(short seq, short sep);
 void _SsSndDecrescendo(short seq, short sep) {
     SeqStruct *score = &g_SndSeqTable[seq][sep];
     SeqVolume71568 left;

@@ -15,7 +15,7 @@ long CD_cw(long arg0, void *arg1, long arg2, long arg3) asm("func_8006B620");
  * pinned to match; the C identifiers may be renamed but the asm("$N") pins and
  * offsets must not change.
  */
-long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+long CdControl(long com, void *param, long result);
 long CdControl(long arg0, void *arg1, long arg2) {
     void *arg;
     long arg2Reg;
@@ -127,7 +127,7 @@ extern u_char g_CdStatusByte asm("D_8009904C");
 long CD_cw(long arg0, void *arg1, long arg2, long arg3) asm("func_8006B620");
 long CD_sync(long arg0, long arg1) asm("func_8006B0D4");
 
-long CdControlB(long arg0, void *arg1, long arg2) asm("func_8006A808");
+long CdControlB(long arg0, void *arg1, long arg2);
 long CdControlB(long arg0, void *arg1, long arg2) {
     void *arg;
     long arg2Reg;

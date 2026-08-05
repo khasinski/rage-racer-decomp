@@ -15,13 +15,13 @@ void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf() asm("func_800632F0");
 void ClearMemoryCardSwEvents(void) asm("func_8005F304");
-s32 PollMemoryCardHwEvent(void) asm("func_8005F35C");
+s32 PollMemoryCardHwEvent(void);
 s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
 void _card_info(s32 chan) asm("func_80063DAC");
 void _card_load(s32 chan) asm("func_80063DBC");
 s32 _card_clear(s32 chan) asm("func_80063DEC");
 
-s32 PollMemoryCardStatus(s32 port, s32 slot) asm("func_8005ECE0");
+s32 PollMemoryCardStatus(s32 port, s32 slot);
 s32 PollMemoryCardStatus(s32 port, s32 slot) {
     s32 handle;
     s32 two;
@@ -164,7 +164,7 @@ case3_ready:
     return g_McStatusResult;
 }
 
-s32 FormatMemoryCard(s32 port, s32 slot) asm("func_8005EF44");
+s32 FormatMemoryCard(s32 port, s32 slot);
 s32 FormatMemoryCard(s32 port, s32 slot) {
     char device[8];
     s32 status;
@@ -202,7 +202,7 @@ extern s32 g_McSwEventTimeout asm("D_8009B550");
 extern s32 g_McSwEventNew asm("D_8009B554");
 
 
-void OpenMemoryCardEvents(void) asm("func_8005EFAC");
+void OpenMemoryCardEvents(void);
 void OpenMemoryCardEvents(void) {
     EnterCriticalSection();
     g_McHwEventIoe = OpenEvent(0xF4000001, 0x0004, 0x2000, 0);
@@ -216,7 +216,7 @@ void OpenMemoryCardEvents(void) {
     ExitCriticalSection();
 }
 
-void EnableMemoryCardEvents(void) asm("func_8005F0D4");
+void EnableMemoryCardEvents(void);
 void EnableMemoryCardEvents(void) {
     EnableEvent(g_McHwEventIoe);
     EnableEvent(g_McHwEventError);
@@ -228,7 +228,7 @@ void EnableMemoryCardEvents(void) {
     EnableEvent(g_McSwEventNew);
 }
 
-void DisableMemoryCardEvents(void) asm("func_8005F16C");
+void DisableMemoryCardEvents(void);
 void DisableMemoryCardEvents(void) {
     DisableEvent(g_McHwEventIoe);
     DisableEvent(g_McHwEventError);
@@ -240,7 +240,7 @@ void DisableMemoryCardEvents(void) {
     DisableEvent(g_McSwEventNew);
 }
 
-void CloseMemoryCardEvents(void) asm("func_8005F204");
+void CloseMemoryCardEvents(void);
 void CloseMemoryCardEvents(void) {
     EnterCriticalSection();
     CloseEvent(g_McHwEventIoe);
@@ -276,7 +276,7 @@ void ClearMemoryCardSwEvents(void) {
 
 extern s32 g_McPollTicks asm("D_8019C864");
 
-s32 PollMemoryCardHwEvent(void) asm("func_8005F35C");
+s32 PollMemoryCardHwEvent(void);
 s32 PollMemoryCardHwEvent(void) {
     s32 result;
     s32 ready;
@@ -305,7 +305,7 @@ s32 PollMemoryCardHwEvent(void) {
     return result;
 }
 
-s32 PollMemoryCardHwEventLimit(s32 limit) asm("func_8005F420");
+s32 PollMemoryCardHwEventLimit(s32 limit);
 s32 PollMemoryCardHwEventLimit(s32 limit) {
     s32 i;
     i = 0;
@@ -855,7 +855,7 @@ void ApplyAudioSettings(void);
  * (That is also why the header is not included here: its prototype takes a
  * void *, and gcc 2.6.3 rejects the u8 * signature this body needs.)
  */
-s32 LoadSaveStateBlock(u8 *rowBytes) asm("func_8005FED4");
+s32 LoadSaveStateBlock(u8 *rowBytes);
 s32 LoadSaveStateBlock(u8 *block) {
     register u8 *base asm("$17") = block;
     __asm__("" : "=r"(base) : "0"(base));

@@ -187,7 +187,7 @@ void UpdateControllerConfigScreen(void) {
 extern char D_80010028[];
 extern char D_8001004C[];
 
-void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex) asm("func_80027874");
+void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex);
 s32 AddTilePrim(
     s32 ot,
     s32 prim,
@@ -197,7 +197,7 @@ s32 AddTilePrim(
     s32 h,
     s32 r,
     s32 g,
-    s32 b) asm("func_80032F34");
+    s32 b);
 
 /* Game mode 9's own overlay: the two lines of instructions over a black panel
  * inside a white border, both drawn into the 0xD0 sub-buffer of the current

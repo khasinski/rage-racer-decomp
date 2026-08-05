@@ -6,7 +6,7 @@ extern s32 g_LapCount asm("D_801E4364");
 extern u8 g_BestTotalTimes[] asm("D_8019C70C");
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
-void DrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
+void DrawSplitDelta(s32 arg0, s32 arg1);
 
 void DrawSplitTimes(void);
 void DrawSplitTimes(void) {

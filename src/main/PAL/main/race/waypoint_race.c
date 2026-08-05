@@ -33,37 +33,37 @@ extern s32 g_RacePaused asm("D_801E4BAC");
 
 
 
-void DrawRoundScreen(void) asm("func_8001C974");
+void DrawRoundScreen(void);
 
 void RequestTrackTexturePage(s32 arg0);
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 
-void DrawRaceOptionMenu(s32 arg0) asm("func_8003479C");
+void DrawRaceOptionMenu(s32 arg0);
 
-void GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
+void GetTrackZoneBlend(s32 arg0);
 
 void ExitRaceScene(s32 arg0);
 
-void UpdateFreeLookCamera(u8 *arg0, s32 arg1) asm("func_8003CF14");
+void UpdateFreeLookCamera(u8 *arg0, s32 arg1);
 
 void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
-void UpdateFlybyScenery(void) asm("func_8003E590");
+void UpdateFlybyScenery(void);
 
-void DrawFlybyScenery(void) asm("func_8003EAF4");
+void DrawFlybyScenery(void);
 
-void UpdateRouteScenery(void) asm("func_8003EC98");
+void UpdateRouteScenery(void);
 
-void DrawRouteScenery(void) asm("func_8003F02C");
+void DrawRouteScenery(void);
 
-void UpdatePathScenerySound(void) asm("func_8003F9C4");
+void UpdatePathScenerySound(void);
 
-void DrawPathScenery(void) asm("func_80040730");
+void DrawPathScenery(void);
 
-void UpdateTrackEventSound(s32 arg0) asm("func_8004087C");
+void UpdateTrackEventSound(s32 arg0);
 
-void UpdatePointAmbience(s32 arg0) asm("func_80040ADC");
+void UpdatePointAmbience(s32 arg0);
 
 void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
 
@@ -94,7 +94,7 @@ extern TrackWaypointRuntime g_Waypoints[] asm("D_801E4DF4");
  * inactive. Register pins and the raw tail-offset writes are match-load-bearing.
  */
 
-void UpdateWaypointRaceScene(void) asm("func_80037200");
+void UpdateWaypointRaceScene(void);
 void UpdateWaypointRaceScene(void) {
     s32 value;
     s32 option;
@@ -211,7 +211,7 @@ void UpdateWaypointRaceScene(void) {
     UpdateTrackEventSound(g_PlayerTrackSection);
 }
 
-void SeedWaypoints(void) asm("func_80037714");
+void SeedWaypoints(void);
 void SeedWaypoints(void) {
     TrackWaypointRuntime *waypoint;
     s32 i;

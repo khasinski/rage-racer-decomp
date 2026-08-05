@@ -4,7 +4,7 @@
 
 extern u16 g_HudGlyphClut asm("D_801E4130");
 
-u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) asm("func_80033B7C");
+u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut);
 void *func_80017390(void *ot, void *packet, s32 arg2);
 
 void DrawSpeedDigits(s32 x, s32 y, s32 value);

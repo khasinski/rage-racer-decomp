@@ -12,15 +12,15 @@ extern u8 *g_CarModelAsset asm("D_8009E698");
 extern u32 g_CarModelSlot asm("D_8009E87C");
 extern u8 *g_CarModelBuffer asm("D_801E4090");
 s32 GetCarAssetIndex(s32 model, s32 grade);
-void SetCarModelSlot(void *arg0, s32 arg1) asm("func_80017B94");
-void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
-void SetCarImageSlot(void *arg0, s32 arg1) asm("func_80017B44");
+void SetCarModelSlot(void *arg0, s32 arg1);
+void RegisterModelBank(void *arg0, s32 arg1);
+void SetCarImageSlot(void *arg0, s32 arg1);
 void ApplyBodyColor1(s32 arg0, s32 arg1);
 void ApplyBodyColor2(s32 arg0, s32 arg1);
 extern s32 g_AssetBase asm("D_8019C904");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 s32 Random15(void) asm("func_800632B0");
-void ResetAssetLoader(void) asm("func_80017BE4");
+void ResetAssetLoader(void);
 /* Where asset 0x56 lands: g_ImageBlockBuffer advanced past the car texture
  * block just loaded. Its header words 1 and 2 are relocated into
  * g_AssetBlockPtr / g_AssetSubBlockPtr and word 0 is kept as-is. */
@@ -28,8 +28,8 @@ extern s32 g_AssetBlockPtr2 asm("D_8019C754");
 extern s32 g_SharedAssetWord0 asm("D_801E4D70");
 extern s32 g_AssetSubBlockPtr asm("D_801E8AB0");
 extern u32 g_AssetLoadCursor asm("D_8019CAFC");
-void UnrelocateModelBank(void *, s32) asm("func_800179B4");
-void SelectCarModelSlot(s32) asm("func_80017BAC");
+void UnrelocateModelBank(void *, s32);
+void SelectCarModelSlot(s32);
 
 void LoadUpgradedCarModel(s32 arg0);
 void LoadUpgradedCarModel(s32 arg0) {
@@ -69,7 +69,7 @@ void LoadUpgradedCarModel(s32 arg0) {
     }
 }
 
-s32 RequestOptionScreenAssets(void) asm("func_80018B98");
+s32 RequestOptionScreenAssets(void);
 s32 RequestOptionScreenAssets(void) {
     s32 state;
 
@@ -107,7 +107,7 @@ void LoadOptionScreenAssets(void) {
     }
 }
 
-s32 RequestRoundAssets(void) asm("func_80018C88");
+s32 RequestRoundAssets(void);
 s32 RequestRoundAssets(void) {
     s32 value;
 

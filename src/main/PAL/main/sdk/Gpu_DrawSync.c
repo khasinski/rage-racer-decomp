@@ -10,7 +10,7 @@ extern long g_GpuQueueWriteIdx asm("D_800942EC");
 extern long g_GpuQueueReadIdx asm("D_800942F0");
 
 void Gpu_ExecuteQueue(void) asm("func_80067984");
-long Gpu_CheckTimeout(void) asm("func_80067F38");
+long Gpu_CheckTimeout(void);
 
 /* Driver-table slot +0x3C, the body of DrawSync: mode 0 blocks until the
  * queue is empty and the GPU idle, any other mode returns the number of

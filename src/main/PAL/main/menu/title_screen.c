@@ -16,7 +16,7 @@ extern s32 g_FrontendState asm("D_8009F098");
 extern s32 g_TitleExitTimer asm("D_8009E880");
 extern s32 g_TitleAttractTimer asm("D_8019CB70");
 
-void CloseLoadedAudioSlots(void) asm("func_8005B9CC");
+void CloseLoadedAudioSlots(void);
 void ResetTrackTextureSwap(void);
 void UploadLoadBufferImage(void);
 void UpdateBgmTrackCount(void);
@@ -304,12 +304,12 @@ extern s32 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
 extern s32 g_TimeAttackCars asm("D_801E4388");
 
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-extern void ResetAssetLoader(void) asm("func_80017BE4");
+extern void ResetAssetLoader(void);
 extern void ShuffleBgmOrder(void) asm("func_8001B488");
 s32 RequestTrackLoad(void);
-extern void RequestSelectBgmAssetsNoReset(void) asm("func_8001839C");
-extern void RequestSaveScreenAssets(void) asm("func_800182D0");
-extern void RequestOptionScreenAssets(void) asm("func_80018B98");
+extern void RequestSelectBgmAssetsNoReset(void);
+extern void RequestSaveScreenAssets(void);
+extern void RequestOptionScreenAssets(void);
 extern void DrawMainMenuRows(void);
 
 void UpdateMainMenuInput(void) asm("func_8001B5DC");

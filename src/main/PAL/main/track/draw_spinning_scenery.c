@@ -16,7 +16,7 @@ extern u8 g_SpinningSceneryPos[] asm("D_8007E2F4");
 void func_80017794(void *arg0, void *arg1, void *arg2);
 s32 Random15(void) asm("func_800632B0");
 
-void DrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
+void DrawSpinningScenery(s32 arg0, s32 arg1);
 
 void DrawSpinningScenery(s32 arg0, s32 arg1) {
     s16 sp10[16];

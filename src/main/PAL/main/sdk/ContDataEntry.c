@@ -8,7 +8,7 @@
  * RPN (unk29 == 2) or NRPN (unk2a == 2) to the channel's VAB program by
  * rewriting the VagAtr of every tone. See docs/names.md 17.
  */
-void ContDataEntry(s16 seq, s16 sep, u8 value) asm("func_8007010C");
+void ContDataEntry(s16 seq, s16 sep, u8 value);
 
 typedef struct SeqStruct {
     u8 unk0;

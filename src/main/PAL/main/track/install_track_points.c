@@ -11,7 +11,7 @@ extern s16 g_TrackSectionCount asm("D_8019C9A4");
  * sums every point's segmentLength into the total track length g_TrackLength and
  * derives g_TrackSectionCount = (total >> 8) + 1.
  */
-void InstallTrackPoints(s32 *trackData) asm("func_8002A6B0");
+void InstallTrackPoints(s32 *trackData);
 void InstallTrackPoints(s32 *trackData) {
     s32 count;
     s32 limit;

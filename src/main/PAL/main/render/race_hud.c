@@ -3,10 +3,10 @@
 #include "psyq/gpu.h"
 #include "game/race.h"
 
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void DrawRaceHudLabels(s32 arg0) asm("func_80032E9C");
+void DrawRaceHudLabels(s32 arg0);
 void DrawRaceHudLabels(s32 arg0) {
     s32 count;
     s32 i;
@@ -42,7 +42,7 @@ void func_80064FF8(u8 *prim);
  * rather than in a header: callers disagree on whether `ot`/`prim` are pointers
  * or s32, and gcc 2.6.3 will not take both against one prototype.
  */
-u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("func_80032F34");
+u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) {
     u8 *oldPrim;
 
@@ -63,7 +63,7 @@ u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s3
 }
 
 /* Expands a GameSpriteDesc into a scratchpad SPRT. */
-void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) asm("func_80032FF0");
+void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
 void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
     SetSprt(prim);
 
@@ -86,7 +86,7 @@ void DrawTimeValue(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_8
 
 /* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
-void DrawLapTimes(void) asm("func_80033090");
+void DrawLapTimes(void);
 void DrawLapTimes(void) {
     s32 i;
     s32 visibleCount;
@@ -149,7 +149,7 @@ void DrawLapTimes(void) {
     DrawTimeValue(0xFA, 0x20, g_BestLapThisRace, 0x78CC, 0x3E8);
 }
 
-void DrawMinuteSecondTime(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80033F30");
+void DrawMinuteSecondTime(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void DrawTimeRemaining(s32 arg0);
 void DrawTimeRemaining(s32 arg0) {
@@ -205,7 +205,7 @@ void SetHudBlinkColor(s32 arg0) {
     *(u16 *)(g_DrawBuffer + 0x237A6) = arg0 ? 0x7811 : 0x7800;
 }
 
-void DrawSplitDelta(s32 arg0, s32 arg1) asm("func_80033308");
+void DrawSplitDelta(s32 arg0, s32 arg1);
 void DrawSplitDelta(s32 arg0, s32 arg1) {
     u8 *base;
     register u8 *prim;

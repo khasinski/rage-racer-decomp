@@ -12,7 +12,7 @@ extern u8 g_ShuttlePathPoints[] asm("D_8007E360");
 extern s16 g_ShuttlePathTravelMax[] asm("D_8007E3D8");
 extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
 
-void UpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
+void UpdateShuttleScenery(s32 arg0);
 
 void UpdateShuttleScenery(s32 arg0) {
     GameShuttleScenery *entry;
@@ -81,7 +81,7 @@ extern u32 *g_VisibleCellMask asm("D_801E6828");
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
 
-void DrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
+void DrawShuttleScenery(s32 arg0);
 
 void DrawShuttleScenery(s32 arg0) {
     s32 drawArg;

@@ -246,7 +246,7 @@ extern volatile u_long *g_OtcDmaChcr asm("D_800942D4");
 extern volatile u_long *g_GpuDpcr asm("D_800942D8");
 
 void Gpu_ArmTimeout(void);
-long Gpu_CheckTimeout(void) asm("func_80067F38");
+long Gpu_CheckTimeout(void);
 
 /* Driver-table slot +0x2C: clears an ordering table through the hardware
  * OTC DMA channel (chcr 0x11000002, walking backwards from the end).

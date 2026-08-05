@@ -2,7 +2,7 @@
 #include "game/state.h"
 #include "game/asset.h"
 #include "game/car.h"
-void InitSequenceAudio(void) asm("func_8005DBD8");
+void InitSequenceAudio(void);
 s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
@@ -14,18 +14,18 @@ extern u8 *g_ImageBlockBuffer asm("D_801E4B30");
 extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
 extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
 s32 GetCarAssetIndex(s32 model, s32 grade);
-void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
-void RegisterCourseModels(void) asm("func_80017A6C");
-void SetCarImageSlot(void *arg0, s32 arg1) asm("func_80017B44");
-void SetCarModelSlot(void *arg0, s32 arg1) asm("func_80017B94");
-void SelectCarModelSlot(s32 arg0) asm("func_80017BAC");
+void RegisterModelBank(void *arg0, s32 arg1);
+void RegisterCourseModels(void);
+void SetCarImageSlot(void *arg0, s32 arg1);
+void SetCarModelSlot(void *arg0, s32 arg1);
+void SelectCarModelSlot(s32 arg0);
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void ApplyBodyColor1(s32 arg0, s32 arg1);
 void ApplyBodyColor2(s32 arg0, s32 arg1);
-void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3) asm("func_8005B768");
-s32 PollAudioSlotLoad(void) asm("func_8005B89C");
+void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
+s32 PollAudioSlotLoad(void);
 extern s32 g_PendingCarModelIndex asm("D_8009AEFC");
-void ServiceAssetLoad(void) asm("func_80019C04");
+void ServiceAssetLoad(void);
 
 s32 RequestCarSelectAssets(void);
 s32 RequestCarSelectAssets(void) {
@@ -43,7 +43,7 @@ s32 RequestCarSelectAssets(void) {
     return 1;
 }
 
-void LoadCarSelectAssets(void) asm("func_80018588");
+void LoadCarSelectAssets(void);
 void LoadCarSelectAssets(void) {
     s32 state = g_AssetLoadState;
     s32 state2;

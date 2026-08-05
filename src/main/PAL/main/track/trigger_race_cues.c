@@ -9,7 +9,7 @@ extern s16 g_PlayerTrackSection asm("D_8009E74C");
 extern s16 g_PlayerLap asm("D_8009E83C");
 extern s32 g_LapCount asm("D_801E4364");
 
-void TriggerRaceCues(void) asm("func_80040F24");
+void TriggerRaceCues(void);
 void TriggerRaceCues(void) {
     u8 *rawBase;
     u8 *base;

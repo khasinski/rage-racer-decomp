@@ -27,10 +27,10 @@ extern volatile u_short g_SndReverbOnHigh asm("D_8009E684");
 extern u_char g_SndVoiceCount asm("D_801E42F8");
 extern volatile u_char g_SndReservedVoiceCount asm("D_801E4D88");
 
-void SpuVmAutoVolTick(long voice) asm("func_80074ECC");
-void SpuVmAutoPanTick(long voice) asm("func_800753CC");
+void SpuVmAutoVolTick(long voice);
+void SpuVmAutoPanTick(long voice);
 
-void SsUtFlush(void) asm("func_80075FA4");
+void SsUtFlush(void);
 void SsUtFlush(void) {
     volatile long stack[4];
     register long i asm("$16");

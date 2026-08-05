@@ -5,7 +5,7 @@ extern u32 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void FlipTeamLogoHorizontal(void) asm("func_8004BCE4");
+void FlipTeamLogoHorizontal(void);
 void FlipTeamLogoHorizontal(void) {
     u32 *base;
     s32 row;
@@ -148,7 +148,7 @@ void RotateTeamLogoCcw(void) {
     } while (i < 512);
 }
 
-void RotateTeamLogoCw(void) asm("func_8004BF48");
+void RotateTeamLogoCw(void);
 void RotateTeamLogoCw(void) {
     s32 i;
     s32 j;
@@ -241,7 +241,7 @@ typedef union {
     u16 lo;
 } TeamLogoColorSlot;
 
-void ScrollTeamLogoUp(s32 repeat) asm("func_8004B9B8");
+void ScrollTeamLogoUp(s32 repeat);
 void func_8004BA50(void);
 void func_8004BAE4(void);
 void func_8004BBA8(void);
@@ -265,7 +265,7 @@ extern s32 D_8007FB1C;
 extern s32 D_8019CAB8;
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 
-void UpdateTeamLogoCanvas(void) asm("func_8004C0D8");
+void UpdateTeamLogoCanvas(void);
 void UpdateTeamLogoCanvas(void) {
     s32 temp_a0;
     s32 temp_v0;
@@ -729,12 +729,12 @@ void UploadTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, g_TeamLog
 
 extern s32 D_8007FB20;
 
-void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) asm("func_800468FC");
-void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32 b0, u8 r1, u8 g1, u8 b1, u8 alpha) asm("func_80047330");
+void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h);
+void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r, u32 g, u32 b, u8 alpha);
 void func_80064F58(u8 *prim);
 void func_80064E90(u8 *prim, s32 arg1);
-void AddPrim(void *ot, void *prim) asm("func_80064DDC");
+void AddPrim(void *ot, void *prim);
 
 typedef struct Blob {
     s16 b[33];
@@ -747,7 +747,7 @@ extern const char D_80011924[4];
 extern const char D_80011928[4];
 extern const char D_8001192C[8];
 
-void DrawMenuLightBurst(s32 arg) asm("func_8004CF30");
+void DrawMenuLightBurst(s32 arg);
 void DrawMenuLightBurst(s32 arg) {
     void *s3;
     Blob l1;

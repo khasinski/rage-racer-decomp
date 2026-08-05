@@ -25,14 +25,14 @@ extern s16 g_RouteSceneryKeyIndex asm("D_801E433E");
 extern s32 g_RouteSceneryX asm("D_801E4340");
 extern s32 g_RouteSceneryY asm("D_801E4344");
 extern s32 g_RouteSceneryZ asm("D_801E4348");
-extern s32 g_RouteSceneryW asm("D_801E434C");
+extern s32 g_RouteSceneryW;
 extern s32 g_RouteSceneryRotX asm("D_801E4350");
 extern s32 g_RouteSceneryRotY asm("D_801E4354");
 extern s32 g_RouteSceneryRotZ asm("D_801E4358");
 extern KF *g_RouteSceneryKeyframe asm("D_801E6C88");
 
 
-void UpdateRouteScenery(void) asm("func_8003EC98");
+void UpdateRouteScenery(void);
 void UpdateRouteScenery(void) {
     Matrix mtx0;
     Matrix mtx1;

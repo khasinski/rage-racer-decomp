@@ -74,7 +74,7 @@ extern u16 D_801E6F2C;
 extern s32 GetClut(s16 x, s16 y);
 extern void LoadImage(void *rect, void *data) asm("func_80065B24");
 extern s32 rsin(s32 angle) asm("func_80068568");
-extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h) asm("func_800468FC");
+extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h);
 extern void func_80046A2C(
     s32 ot,
     s16 x,
@@ -131,7 +131,7 @@ void func_80047024_prepared(
     u8 arg7,
     u8 arg8) asm("func_80047024");
 
-void DrawTeamLogoCanvasFade(s32 delta) asm("func_8004A17C");
+void DrawTeamLogoCanvasFade(s32 delta);
 void DrawTeamLogoCanvasFade(s32 delta) {
     u8 *scratch;
     s32 value;
@@ -667,7 +667,7 @@ extern u32 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
-void ScrollTeamLogoUp(void) asm("func_8004B9B8");
+void ScrollTeamLogoUp(void);
 void ScrollTeamLogoUp(void) {
     s32 i;
     u32 *base;

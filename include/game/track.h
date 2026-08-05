@@ -77,22 +77,22 @@ void DrawCourseScenery2(s32 timer, s32 animate);
 
 /* The two-part animated prop at D_8007E2C0[0..1]: a 16-phase model swap plus a
  * companion part. Grand Prix only, nothing drawn in class 5. */
-void DrawAnimatedScenery(s32 timer, s32 instance) asm("func_8003D6F0");
-void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate) asm("func_8003DA90");
+void DrawAnimatedScenery(s32 timer, s32 instance);
+void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate);
 
 /* The spinners: 1 on MYTHICAL COAST, 3 on OVER PASS CITY from class 2 up. A
  * 12-bit angle in D_8007E334[] spins about Z at a rate re-randomised every
  * 512 frames. */
-void DrawSpinningScenery(s32 timer, s32 animate) asm("func_8003DDAC");
+void DrawSpinningScenery(s32 timer, s32 animate);
 
 /* The static landmark at D_8007E340 (40594, 6002, 11940), on all four courses;
  * pass 1 for THE EXTREME OVAL's +0x5000 z shift. Model 0x3A or 0x3B depending
  * on D_801E4030. */
-void DrawStaticScenery(s32 shifted) asm("func_8003DF68");
+void DrawStaticScenery(s32 shifted);
 
 /* A second static landmark at (29266, 6039, 45612): MYTHICAL COAST only, from
  * g_GrandPrixClass >= 4, and the one prop with no visibility cull. */
-void DrawHighClassScenery(void) asm("func_8003E0D0");
+void DrawHighClassScenery(void);
 
 /* State of a shuttling prop: it runs between the two endpoints of its path in
  * D_8007E360, dwells, then reverses. Paths and timings in names.md 5b. */
@@ -116,8 +116,8 @@ typedef struct GameShuttleScenery {
  * symbols D_801E4FEC..D_801E5014. */
 extern GameShuttleScenery g_ShuttleScenery[2] asm("D_801E4FB8");
 
-void UpdateShuttleScenery(s32 instance) asm("func_8003F2A4");
-void DrawShuttleScenery(s32 instance) asm("func_8003F4BC");
+void UpdateShuttleScenery(s32 instance);
+void DrawShuttleScenery(s32 instance);
 void InitShuttleScenery(void) asm("func_8003F0F8");
 
 /* Lap distance: the sum of every g_TrackPoints[].segmentLength. Cars' along-

@@ -11,14 +11,14 @@
 #include "game/asset.h"
 #include "psyq/cd.h"
 
-void CdReadBreak(void) asm("func_80027634");
+void CdReadBreak(void);
 s32 func_8006A534(s32 arg0, s32 arg1);
-long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+long CdControl(long com, void *param, long result);
 extern char g_MsgNowLoading[] asm("D_80010ADC");
 extern char g_MsgReadBytes[] asm("D_80010AFC");
 extern char g_MsgFileReadError[] asm("D_80010B08");
-s32 CdRead(s32 arg0, void *arg1, s32 arg2) asm("func_80027688");
-long CdReadSync(long arg0, long arg1) asm("func_80027790");
+s32 CdRead(s32 arg0, void *arg1, s32 arg2);
+long CdReadSync(long arg0, long arg1);
 void func_8006A6DC(s32 arg0, void *arg1);
 s32 func_80017C78(s32 arg0, s32 arg1);
 extern char g_PathRageBin[] asm("D_80010B38");
@@ -34,7 +34,7 @@ void SetTrackCameraTable(u32 value) {
     *(u32 *)0x8019C9A8 = value;
 }
 
-void ResetAssetLoader(void) asm("func_80017BE4");
+void ResetAssetLoader(void);
 void ResetAssetLoader(void) {
     if (g_CdLoadPhase == 4) {
         CdReadBreak();
@@ -45,7 +45,7 @@ void ResetAssetLoader(void) {
     g_MainState = 0;
 }
 
-s32 EnableCdAudioMode(void) asm("func_80017C2C");
+s32 EnableCdAudioMode(void);
 s32 EnableCdAudioMode(void) {
     u8 value;
 
@@ -118,7 +118,7 @@ void LoadAssetBlocking(s32 arg0, s32 arg1) {
     }
 }
 
-void LoadDiscArchiveIndex(void) asm("func_80017E8C");
+void LoadDiscArchiveIndex(void);
 void LoadDiscArchiveIndex(void) {
     struct {
         CdlLOC file;
@@ -172,7 +172,7 @@ void LoadDiscArchiveIndex(void) {
     }
 }
 
-void InitAssetSystem(void) asm("func_80018038");
+void InitAssetSystem(void);
 void InitAssetSystem(void) {
     void *ptr;
 
@@ -182,7 +182,7 @@ void InitAssetSystem(void) {
     UploadImageAsset(ptr);
 }
 
-s32 RequestBootAssets(void) asm("func_80018078");
+s32 RequestBootAssets(void);
 s32 RequestBootAssets(void) {
     if (g_AssetLoadState != 0) {
         return 1;

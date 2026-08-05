@@ -19,7 +19,7 @@ static inline void ClearScratchRenderMode3DF68(void) {
     *(s32 *)0x1F800084 = 0;
 }
 
-void DrawStaticScenery(s32 arg0) asm("func_8003DF68");
+void DrawStaticScenery(s32 arg0);
 
 void DrawStaticScenery(s32 arg0) {
     Matrix mtx;
@@ -87,7 +87,7 @@ void DrawStaticScenery(s32 arg0) {
 
 extern s32 g_HighClassSceneryYaw asm("D_8007E35C");
 
-void DrawHighClassScenery(void) asm("func_8003E0D0");
+void DrawHighClassScenery(void);
 
 void DrawHighClassScenery(void) {
     Matrix mtx;
@@ -119,10 +119,10 @@ void DrawHighClassScenery(void) {
     }
 }
 
-void DrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
-void DrawSpinningScenery(s32 arg0, s32 arg1) asm("func_8003DDAC");
-void UpdateShuttleScenery(s32 arg0) asm("func_8003F2A4");
-void DrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
+void DrawAnimatedScenery(s32 arg0, s32 arg1);
+void DrawSpinningScenery(s32 arg0, s32 arg1);
+void UpdateShuttleScenery(s32 arg0);
+void DrawShuttleScenery(s32 arg0);
 
 void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
@@ -173,7 +173,7 @@ void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
+void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void DrawCourseScenery2(s32 arg0, s32 arg1);
 
@@ -234,7 +234,7 @@ extern u8 *g_FlybySceneryKeyframe asm("D_801E43F4");
 
 s32 Random15(void) asm("func_800632B0");
 
-void SeedFlybyScenery(void) asm("func_8003E464");
+void SeedFlybyScenery(void);
 void SeedFlybyScenery(void) {
     u8 *base;
     register u8 *out asm("s1");
@@ -313,11 +313,11 @@ extern s32 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_PlayerCarY asm("D_8009E6D8");
 extern s32 g_PlayerCarZ asm("D_8009E6DC");
 
-void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume) asm("func_8005C914");
+void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);
 
 #define KFREC(off) (*(s16 *)(kf + *(s16 *)(state + 0xE) * 12 + (off)))
 
-void UpdateFlybyScenery(void) asm("func_8003E590");
+void UpdateFlybyScenery(void);
 
 void UpdateFlybyScenery(void) {
     Matrix mtxY;

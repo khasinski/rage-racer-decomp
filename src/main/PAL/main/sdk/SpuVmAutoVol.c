@@ -10,7 +10,7 @@ extern volatile u_char D_8009E0DA[];
 extern volatile u_char D_8009E0DC[];
 extern volatile u_char D_8009E0DE[];
 
-void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) asm("func_80074D1C");
+void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3);
 void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
     long voice;
     long start;
@@ -89,7 +89,7 @@ extern VabHdr *g_SndCurrentVabHeader asm("D_801E413C");
 extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 extern short g_SndMonoMode asm("D_801E3FB0");
 
-void SpuVmAutoVolTick(short voice) asm("func_80074ECC");
+void SpuVmAutoVolTick(short voice);
 void SpuVmAutoVolTick(short voice) {
     short currentVolume;
     u_long leftVolumeTemp;
@@ -276,7 +276,7 @@ extern u_char D_801E4BDD;
 extern u_char D_801E4BDE;
 extern short g_SndMonoMode asm("D_801E3FB0");
 
-void SpuVmAutoPanTick(long arg0) asm("func_800753CC");
+void SpuVmAutoPanTick(long arg0);
 void SpuVmAutoPanTick(long arg0) {
     long stack[6];
     long originalArg;

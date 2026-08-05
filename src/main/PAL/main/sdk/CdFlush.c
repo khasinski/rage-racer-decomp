@@ -56,7 +56,7 @@ long CdReady(long arg0, long arg1) {
     return func_8006B354(arg0, arg1);
 }
 
-long CdSyncCallback(long arg0) asm("func_8006A574");
+long CdSyncCallback(long arg0);
 long CdSyncCallback(long arg0) {
     long old = g_CdSyncCallback;
 

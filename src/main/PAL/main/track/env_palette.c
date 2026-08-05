@@ -11,7 +11,7 @@ void SetEnvPaletteTable(u32 arg0) {
 void SetFarColor(s32 arg0, s32 arg1, s32 arg2) asm("func_80069A38");
 void Intpl(void *arg0, s32 arg1, void *arg2) asm("func_80069B14");
 
-void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) asm("func_8004554C");
+void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3);
 void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) {
     s32 local[3];
     u8 result[4];

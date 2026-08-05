@@ -2,8 +2,8 @@
 
 #include "common.h"
 
-void SpuVmSeKeyOn(long arg0, short arg1, short arg2, u_short arg3, u_short arg4, u_short arg5) asm("func_80076350");
-void SpuVmSeKeyOff(long arg0, short arg1, short arg2, u_short arg3) asm("func_80076940");
+void SpuVmSeKeyOn(long arg0, short arg1, short arg2, u_short arg3, u_short arg4, u_short arg5);
+void SpuVmSeKeyOff(long arg0, short arg1, short arg2, u_short arg3);
 
 /* Empty two-word stub. Was misnamed SsUtKeyOnV, which is the eight
  * argument function at func_80077C7C in sdk/SsUtKeyOnV.c. */

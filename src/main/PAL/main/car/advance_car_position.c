@@ -12,7 +12,7 @@ s32 rcos(s32 arg0) asm("func_80068634");
  * state98 motion handlers. Register pins and the single-param/two-arg call
  * mismatch are deliberate to match; do not "fix".
  */
-void AdvanceCarPosition(GameCarRuntime *arg0) asm("func_8002F4E4");
+void AdvanceCarPosition(GameCarRuntime *arg0);
 void AdvanceCarPosition(GameCarRuntime *arg0) {
     volatile s32 coords[3];
 

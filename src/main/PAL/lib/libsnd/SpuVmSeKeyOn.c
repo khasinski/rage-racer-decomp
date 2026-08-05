@@ -45,10 +45,10 @@ extern SvmCurrentAttrKeyOn g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
 long SpuVmVSetUp(short vab_id, short program);
-long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) asm("func_80076940");
-u_char SpuVmAlloc(long priority) asm("func_800739E8");
+long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note);
+u_char SpuVmAlloc(long priority);
 void func_80074134(void);
-void SpuVmNoiseKeyOn(u_char voice) asm("func_80074348");
+void SpuVmNoiseKeyOn(u_char voice);
 u_short SpuVmCalculateCurrentPitch(void);
 void func_80073C50(u_char tone_count, u_short pitch);
 
@@ -78,7 +78,7 @@ long SpuVmSeKeyOn(
     short program,
     u_short note,
     u_short volume,
-    u_short pan) asm("func_80076350");
+    u_short pan);
 long SpuVmSeKeyOn(
     short seq_sep,
     short vab_id,

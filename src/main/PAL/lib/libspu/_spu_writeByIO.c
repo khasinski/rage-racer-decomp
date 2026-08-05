@@ -10,7 +10,7 @@ extern u_char g_SpuTimeoutMsgWrdy[] asm("D_80013EE0");
 extern u_char g_SpuTimeoutMsgDmaf[] asm("D_80013EF4");
 
 
-void _spu_writeByIO(u_short *addr, u_long size) asm("func_80078F4C");
+void _spu_writeByIO(u_short *addr, u_long size);
 void _spu_writeByIO(u_short *addr, u_long size) {
     volatile long di, dj;
     u_short stat0;

@@ -18,7 +18,7 @@ extern s32 g_StreamLoc asm("D_801E8A90");
 void ApplyCdVolume(void);
 void SetupFmvBuffers(s32 arg0);
 void InitFmvContext(volatile void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void UploadFmvSlice(void) asm("func_8001EBC8");
+void UploadFmvSlice(void);
 void OpenFmvStream(void (*arg0)(void));
 s32 PresentFmvFrame(volatile void *arg0);
 void StartStreamRead(s32 arg0);

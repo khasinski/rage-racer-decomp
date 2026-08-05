@@ -88,31 +88,31 @@ typedef struct GameSceneAssetHeader {
  * polls the same GameRequest* until it returns 0. Asset indices are documented
  * on g_AssetPaths above; see docs/names.md 13.
  */
-void ServiceAssetLoad(void) asm("func_80019C04");
+void ServiceAssetLoad(void);
 /* Cancel an in-flight load: aborts a running CdRead and clears all three
  * state words (g_CdLoadPhase / g_AssetLoadState / g_MainState). */
-void ResetAssetLoader(void) asm("func_80017BE4");
+void ResetAssetLoader(void);
 /* Spin on LoadAsset until the transfer completes. */
 void LoadAssetBlocking(s32 assetIndex, s32 dst);
 /* Boot: read the "\RAGE.BIN;1" first sector into g_AssetCdEntries (135 entries)
  * and rebase the 11 "\RAGE.STR;1" stream entries. Prints "Now Searching [%s]". */
-void LoadDiscArchiveIndex(void) asm("func_80017E8C");
+void LoadDiscArchiveIndex(void);
 /* LoadDiscArchiveIndex, then blocking-load asset 0 (LOGO.TMS) and upload it. */
-void InitAssetSystem(void) asm("func_80018038");
+void InitAssetSystem(void);
 /* Switch the drive to CD-DA mode (CdlSetmode 0x07 = report|autopause|CDDA);
  * the last step of every track load. */
-s32 EnableCdAudioMode(void) asm("func_80017C2C");
+s32 EnableCdAudioMode(void);
 
 /* Phase 1: TITLE.TMS, RG3.VH + RG3.VB (the main VAB), RES.DAT, CAR.TMS. */
-s32 RequestBootAssets(void) asm("func_80018078");
-void LoadBootAssets(void) asm("func_800180CC");
+s32 RequestBootAssets(void);
+void LoadBootAssets(void);
 /* Phase 2: SAVE.TMS (memory-card screen). */
 void LoadSaveScreenAssets(void);
 /* Phase 3: SELBGM.BIN, split into its SEQ / VH / VB sub-blocks. */
-void LoadSelectBgmAssets(void) asm("func_80018484");
+void LoadSelectBgmAssets(void);
 /* Phase 4: upload the SELBGM bank, load SELECT.BIN and the player's CAR_xx.1ST. */
 s32 RequestCarSelectAssets(void);
-void LoadCarSelectAssets(void) asm("func_80018588");
+void LoadCarSelectAssets(void);
 /* Phase 5/6: one car's CAR_xx.1ST pack into the double-buffered showroom slot;
  * the "Upgraded" pair asks for modelVariant + 1, i.e. the next grade's body.
  * The *Now wrappers request and then pump ServiceAssetLoad until idle. */
@@ -122,14 +122,14 @@ void LoadUpgradedCarModelNow(s32 carIndex);
 void LoadOptionScreenAssets(void);
 /* Phase 8: the GP*.TMS round screen (series * 6 + class + 0x4A) plus VOICE.BIN.
  * The request also rolls a random class when g_GrandPrixMode is 0. */
-s32 RequestRoundAssets(void) asm("func_80018C88");
+s32 RequestRoundAssets(void);
 void LoadRoundAssets(void);
 /* Phase 9: the whole race load - VOICE bank, the player's CAR_xx.2ND, then the
  * course's <COURSE>n.1ST and <COURSE>n.2ND packs. */
 s32 RequestRaceAssets(void);
-void LoadRaceAssets(void) asm("func_8001901C");
+void LoadRaceAssets(void);
 /* Phase 12: <COURSE>n.2ND, handing its 11 sub-blocks to the track subsystems. */
-void LoadTrackDataAssets(void) asm("func_8001989C");
+void LoadTrackDataAssets(void);
 /* Unpack the already-resident <COURSE>n.1ST pack out of g_AssetBase (the same
  * work LoadRaceAssets does in its step 5). */
 void InstallCourseAssets(void);
@@ -140,7 +140,7 @@ void RelocateCarModel(void);
  * rebase a pack's internal offsets to absolute addresses; UnrelocateModelBank
  * is the exact inverse (used before a bank is copied elsewhere). The Set*Slot
  * pair only records a pointer in a small registry that Select/Upload reads. */
-void UnrelocateModelBank(void *base, s32 offset) asm("func_800179B4");
-void UploadCarImage(s32 slot) asm("func_80017B5C");
+void UnrelocateModelBank(void *base, s32 offset);
+void UploadCarImage(s32 slot);
 
 #endif

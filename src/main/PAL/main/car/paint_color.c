@@ -170,7 +170,7 @@ extern u32 g_CarModelAsset asm("D_8009E698");
 extern u32 g_CarModelSlot asm("D_8009E87C");
 
 void ApplyBodyColor1(u32 arg0, u32 arg1);
-void UploadCarImage(u32 arg0) asm("func_80017B5C");
+void UploadCarImage(u32 arg0);
 
 void SetBodyColor1(u32 arg0);
 void SetBodyColor1(u32 arg0) {
@@ -240,7 +240,7 @@ extern u32 g_CarModelAsset asm("D_8009E698");
 extern u32 g_CarModelSlot asm("D_8009E87C");
 
 void ApplyBodyColor2(u32 arg0, u32 arg1);
-void UploadCarImage(u32 arg0) asm("func_80017B5C");
+void UploadCarImage(u32 arg0);
 
 void SetBodyColor2(u32 arg0);
 void SetBodyColor2(u32 arg0) {

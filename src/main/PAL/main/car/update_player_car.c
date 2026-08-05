@@ -101,21 +101,21 @@ extern u16 g_CarCornerOffsetX[] asm("D_8007DAB0");
 extern u16 g_CarCornerOffsetZ[] asm("D_8007DAB2");
 
 s32 IsCarFacingBackwards(void *car);
-void UpdateCarBodyRoll(void *car) asm("func_8002CD4C");
-void UpdateCarDrivetrain(void *car) asm("func_8002A810");
+void UpdateCarBodyRoll(void *car);
+void UpdateCarDrivetrain(void *car);
 void AccumulateLapProgress(void *car);
 void ApplyCarKnockback(void *car);
 s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2) asm("func_80031298");
 s32 func_8002D398(void *car);
-void StartCarBodyKick(s32 arg0, void *car) asm("func_80038F0C");
+void StartCarBodyKick(s32 arg0, void *car);
 void UpdateCarTiltCounter(void *car);
 void UpdateCarCrestHop(void *car);
 void UpdateCarBodyKick(void *car) asm("func_80038FF0");
 s32 rsin(s32 angle) asm("func_80068568");
 s32 Random15(void) asm("func_800632B0");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-void SetIndexedEffectVoice(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C104");
-void UpdateLoadedAudioVoices(s32 value, s32 bank) asm("func_8005D9F8");
+void SetIndexedEffectVoice(s32 arg0, s32 arg1, s32 arg2);
+void UpdateLoadedAudioVoices(s32 value, s32 bank);
 
 /*
  * Per-car physics / gear-shift driver (matched sibling of the ASM
@@ -614,7 +614,7 @@ void UpdatePlayerCar(Car *car) {
 extern s16 g_TrackZoneDark asm("D_8019CAB0");
 extern s32 g_EnvScriptClock asm("D_8019C8FC");
 
-s32 DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) asm("func_8003351C");
+s32 DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt);
 
 s32 DrawPlayerTachometer(void);
 s32 DrawPlayerTachometer(void) {

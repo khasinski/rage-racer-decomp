@@ -10,7 +10,7 @@ extern s32 g_FlybySceneryRotZ asm("D_801E4324");
 extern s32 g_FlybyScenery[] asm("D_801E42FC");
 
 
-void DrawFlybyScenery(void) asm("func_8003EAF4");
+void DrawFlybyScenery(void);
 void DrawFlybyScenery(void) {
     Matrix mtx0;
     Matrix mtx1;

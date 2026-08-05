@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/track.h"
 #include "game/car.h"
-s32 InitSoundWithVab(void) asm("func_8005B5C4");
+s32 InitSoundWithVab(void);
 
 extern u8 g_MsgResOk[] asm("D_80011438");
 
@@ -27,11 +27,11 @@ extern u8 g_MsgInitSoundOk asm("D_8001145C");
 
 extern u8 g_MsgInitEngineOk asm("D_8001146C");
 
-void LoadExtraVabSlotWithTable(void) asm("func_8005BB1C");
+void LoadExtraVabSlotWithTable(void);
 
 void SetEffectVoicesEnabled(s32 arg0);
 
-void SetReverbPreset(s32 arg0, s32 arg1, s32 arg2) asm("func_8005B204");
+void SetReverbPreset(s32 arg0, s32 arg1, s32 arg2);
 
 void InstallResourceData(void);
 void InstallResourceData(void) {

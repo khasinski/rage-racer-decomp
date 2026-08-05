@@ -2,7 +2,7 @@
 void SetRotMatrix(s32 arg0) asm("func_80069858");
 
 extern s32 g_VisibleCellList asm("D_801E4BC8");
-void BuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
+void BuildVisibleCells(s32 arg0, s32 arg1);
 void SubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
 void DrawTerrainCells(void);
 void DrawTerrainCells(void) {
@@ -19,10 +19,10 @@ void DrawTerrainCellsWide(void) {
 }
 
 extern u32 *g_FinalSkyOrderingTable asm("D_1F800004");
-void AddPrim(void *, void *) asm("func_80064DDC");
+void AddPrim(void *, void *);
 void SetShadeTex(void *, s32) asm("func_80064EB8");
-void SetPolyF4(void *)asm("func_80064F30");
-void SetPolyFT4(void *)asm("func_80064F44");
+void SetPolyF4(void *);
+void SetPolyFT4(void *);
 void SetPolyG4(void *)asm("func_80064F58");
 s32 GameSin(s32) asm("func_80068568");
 s32 GameCos(s32) asm("func_80068634");

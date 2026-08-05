@@ -12,7 +12,7 @@ extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
 extern s32 g_ScreenOffsetEditX asm("D_801E4D68");
-void DrawSoundOptionScreen(void) asm("func_80024B6C");
+void DrawSoundOptionScreen(void);
 void ApplyAudioSettings(void);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 func_80017138(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -29,7 +29,7 @@ void DrawScreenAdjustScreen(void);
 void DrawScreenAdjustScreen(void);
 extern s32 g_OptionLetterboxHeight asm("D_8009F0A0");
 void DrawPadTypeHint(void);
-s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
+s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_800172D4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 /* The setup scene's per-frame overlay: pad hint, letterbox, and the alignment frame in mode 6. */
 void DrawOptionSceneOverlay(void);

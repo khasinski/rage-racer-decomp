@@ -32,22 +32,22 @@ void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void DrawClassRecordGrid(void);
 void DrawClassRecordGrid(void);
 /* One class record: class digit, grade sprite, clear count. */
-void DrawClassRecordDetail(void) asm("func_80023FE8");
+void DrawClassRecordDetail(void);
 void DrawClassRecordDetail(void);
 extern s32 g_ScreenOffsetEditX;
 extern s32 g_ScreenOffsetEditY asm("D_801E4D6C");
 s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 AddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
+s32 AddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_MonoOutput asm("D_801E6C70");
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
 extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 void DrawOptionHintBar(s32 arg0);
 s32 func_8001705C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 /* One volume slider row: `level` filled 4x0x18 bars between two end glyphs. */
-void DrawVolumeBar(s32 arg0, s32 arg1) asm("func_800249A4");
+void DrawVolumeBar(s32 arg0, s32 arg1);
 void DrawVolumeBar(s32 arg0, s32 arg1);
 /* The SOUND panel: stereo/mono, the two volume bars and the selection box. */
-void DrawSoundOptionScreen(void) asm("func_80024B6C");
+void DrawSoundOptionScreen(void);
 void DrawSoundOptionScreen(void);
 
 void DrawOptionRootMenu(void) {

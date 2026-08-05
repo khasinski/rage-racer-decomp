@@ -5,7 +5,7 @@
 #include "game/render.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
-void DrawCourseIntro(void) asm("func_80021D68");
+void DrawCourseIntro(void);
 
 /* Second copies of the same three captions -- the ROM holds duplicate literals
  * at 0x80010E1C..0x80010E28 and here; see docs/names.md 18d for why the bytes
@@ -26,7 +26,7 @@ void func_80016EA0(void *dst, s32 len, void *src, s32 arg3);
 void func_80016754(void *dst, s32 x, void *src, s32 color);
 void *FormatLapTime(void *dst, s32 value);
 void LibcSprintf() asm("func_800632F0");
-s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80032F34");
+s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern volatile s32 g_RaceTotalTime asm("D_801E4BA8");
 extern volatile u16 g_PlayerCarIndex asm("D_801E40D4");
 extern s32 g_RankingTimes asm("D_801E774C");
@@ -46,14 +46,14 @@ extern s32 g_RecordPanelSlide asm("D_8019CA14");
 extern u8 g_RankingNameCodes[] asm("D_801E417C");
 extern s32 g_NameEntryChar asm("D_801E6830");
 extern u8 g_TimeRecordNameCodes[] asm("D_801F17FC");
-void RequestSelectBgmAssets(void) asm("func_80018410");
+void RequestSelectBgmAssets(void);
 void DrawRankingPanel(u8 *arg0) asm("func_80021DB8");
-void DrawTimeRecordPanel(u8 *arg0) asm("func_80022068");
+void DrawTimeRecordPanel(u8 *arg0);
 void DrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
-s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
+s32 CdControl(s32 com, void *param, s32 result);
 
 void DrawRankingPanel(u8 *arg0) asm("func_80021DB8");
 void DrawRankingPanel(u8 *arg0) {
@@ -137,7 +137,7 @@ void DrawRankingPanel(u8 *arg0) {
     } while (countOrIndex < 5);
 }
 
-void DrawTimeRecordPanel(u8 *s5) asm("func_80022068");
+void DrawTimeRecordPanel(u8 *s5);
 void DrawTimeRecordPanel(u8 *s5) {
     char text[48];
     s32 s4, s3;

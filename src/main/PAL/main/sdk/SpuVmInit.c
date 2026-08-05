@@ -4,7 +4,7 @@
 
 void _spu_setTransferCompletionFlag(long) asm("func_8007B294");
 void SpuInitMalloc(long, u_char *);
-void SsUtFlush(void) asm("func_80075FA4");
+void SsUtFlush(void);
 
 extern u_char g_SpuMallocArea[] asm("D_8009E5E0");
 
@@ -56,7 +56,7 @@ extern volatile u_char g_SndReservedVoiceCount asm("D_801E4D88");
 extern volatile u_short g_SndMonoMode asm("D_801E3FB0");
 extern volatile u_short g_SndVabProgMax asm("D_801E40D0");
 
-void SpuVmInit(long arg0) asm("func_80075710");
+void SpuVmInit(long arg0);
 void SpuVmInit(long arg0) {
     s16 i;
     long ff;

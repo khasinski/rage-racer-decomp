@@ -22,8 +22,8 @@ extern u8 g_UiChromeScript asm("D_80082460");
 extern void ComposeSampleTeamLogo(s32, s32);
 extern void DrawTeamLogoCanvas(s32, s32) asm("func_8004A248");
 extern void RampTeamLogoCanvas(s32, s32);
-extern void DrawLogoSamplePanel(s32, s32) asm("func_8004E368");
-extern void DrawFadingMenuSprites(s32, s32, s32) asm("func_800489AC");
+extern void DrawLogoSamplePanel(s32, s32);
+extern void DrawFadingMenuSprites(s32, s32, s32);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 
 void UpdateLogoSampleScreen(void) asm("func_800580C8");
@@ -205,7 +205,7 @@ s32 DrawTeamNameScreen(s32 arg0) {
 
 extern u32 D_80081D34;
 
-void DrawTeamNameCharModel(void) asm("func_80051D6C");
+void DrawTeamNameCharModel(void);
 s32 func_8004E724(s32 a, s32 b);
 void UploadTeamNameTexture(void *a, s32 b);
 
@@ -338,9 +338,9 @@ extern u8 D_80082010;
 extern s32 D_801F17A0;
 
 void func_8005131C(void);
-s32 DrawPaintColorPalette(void *, s32, s32) asm("func_8004F048");
-void DrawBrowseArrows(s32, s32, s32, s32) asm("func_80049418");
-void DrawFadingMenuSprites(s32, s32, s32) asm("func_800489AC");
+s32 DrawPaintColorPalette(void *, s32, s32);
+void DrawBrowseArrows(s32, s32, s32, s32);
+void DrawFadingMenuSprites(s32, s32, s32);
 void SetBodyColor1(s32);
 void SetBodyColor2(s32);
 

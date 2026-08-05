@@ -7,9 +7,9 @@
 #include "game/cd.h"
 #include "game/car.h"
 void SetLightMatrix(void *arg0) asm("func_80069888");
-void UpdateRaceCars(void) asm("func_8003B0D4");
+void UpdateRaceCars(void);
 void DrawStartCountdown(s32 arg0) asm("func_8003425C");
-void InitEffectVoiceRuntime(void) asm("func_8005DC1C");
+void InitEffectVoiceRuntime(void);
 void SeekEnvironmentScript(s32) asm("func_800458CC");
 
 
@@ -78,7 +78,7 @@ s32 FramesToMilliseconds(s32 arg0, s32 arg1);
 
 void ExitRaceScene(s32 arg0);
 
-void SeedFinishCamera(void *arg0) asm("func_8003CA14");
+void SeedFinishCamera(void *arg0);
 
 void UpdateRivalCueGate(void);
 
@@ -160,7 +160,7 @@ void BuildStartingGrid(void);
 void ResetMirrorState(void);
 
 
-void BuildTileStrips(void) asm("func_800340D8");
+void BuildTileStrips(void);
 
 void BuildRaceHudPrims(s32);
 
@@ -168,14 +168,14 @@ void ResetFreeLookCamera(void);
 
 void InitShuttleScenery(void) asm("func_8003F0F8");
 
-void SeedFlybyScenery(void) asm("func_8003E464");
+void SeedFlybyScenery(void);
 
 void SeedRouteScenery(void);
 
-void InitPathScenery(void) asm("func_8003F700");
+void InitPathScenery(void);
 
 
-void DrawRoundScreen(void) asm("func_8001C974");
+void DrawRoundScreen(void);
 
 
 
@@ -202,7 +202,7 @@ extern s16 g_PadMirrorMasks[] asm("D_801E4B6C");
 
 extern s32 g_RacePaused asm("D_801E4BAC");
 
-s32 BeginMirrorPass(void) asm("func_8001A9A8");
+s32 BeginMirrorPass(void);
 
 /*
  * Optional trace for the state returned by the lap/finish update. A null
@@ -224,13 +224,13 @@ static __inline__ void GameDebugLapResult(
     }
 }
 
-s32 UpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
+s32 UpdateLapAndFinish(void *arg0, s32 arg1);
 
 void RequestTrackTexturePage(s32 arg0);
 
-void EndMirrorPass(void) asm("func_8001ABD8");
+void EndMirrorPass(void);
 
-void DrawRearViewMirror(s32 arg0) asm("func_8001ADF4");
+void DrawRearViewMirror(s32 arg0);
 
 void RecordReplayFrame(void);
 
@@ -238,15 +238,15 @@ void DrawLostRaceCaption(s32 arg0);
 
 void DrawRaceEndBanner(s32 arg0);
 
-void BeginCarStandingStart(void *arg0, s32 arg1) asm("func_8002BE18");
+void BeginCarStandingStart(void *arg0, s32 arg1);
 
 void UpdatePlayerCar(void *arg0) asm("func_8002DEFC");
 
 void DrawPlayerTachometer(void);
 
-void DrawRaceHudLabels(s32 arg0) asm("func_80032E9C");
+void DrawRaceHudLabels(s32 arg0);
 
-void DrawLapTimes(void) asm("func_80033090");
+void DrawLapTimes(void);
 
 void DrawTimeRemaining(s32 arg0);
 
@@ -255,11 +255,11 @@ void DrawRacePosition(void);
 void DrawWrongWayWarning(void);
 
 
-void DrawRaceOptionMenu(s32 arg0) asm("func_8003479C");
+void DrawRaceOptionMenu(s32 arg0);
 
-void GetTrackZoneBlend(s32 arg0) asm("func_800350B4");
+void GetTrackZoneBlend(s32 arg0);
 
-void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) asm("func_800352B8");
+void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2);
 
 void DrawSplitTimes(void);
 
@@ -267,25 +267,25 @@ void DrawSplitTimes(void);
 void UpdateRacePosition(void);
 
 
-void RunRaceIntroCamera(void *arg0, s32 arg1) asm("func_8003C508");
+void RunRaceIntroCamera(void *arg0, s32 arg1);
 
-void UpdateFinishCamera(void *arg0) asm("func_8003CB3C");
+void UpdateFinishCamera(void *arg0);
 
-void DrawStartGridScenery(s32 arg0) asm("func_8003D458");
+void DrawStartGridScenery(s32 arg0);
 
 void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
-void DrawScriptedScenery(s32 arg0) asm("func_8003F608");
+void DrawScriptedScenery(s32 arg0);
 
-void UpdateTrackEventSound(s32 arg0) asm("func_8004087C");
+void UpdateTrackEventSound(s32 arg0);
 
-void UpdatePointAmbience(s32 arg0) asm("func_80040ADC");
+void UpdatePointAmbience(s32 arg0);
 
 void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
 
-void TriggerRaceCues(void) asm("func_80040F24");
+void TriggerRaceCues(void);
 
-void PlayCountdownCues(s32 arg0) asm("func_800410BC");
+void PlayCountdownCues(s32 arg0);
 
 
 void DrawTerrainCells(void);
@@ -294,19 +294,19 @@ void func_800418D4(void);
 
 
 
-void UpdateCamera(s32 arg0, void *arg1) asm("func_80043BCC");
+void UpdateCamera(s32 arg0, void *arg1);
 
 
-void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
+void SetReverbDepth(s32 arg0, s32 arg1);
 
 void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
 
 void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C31C");
 
-void UpdateLoadedAudioVoices(s32 arg0, s32 arg1) asm("func_8005D9F8");
+void UpdateLoadedAudioVoices(s32 arg0, s32 arg1);
 
 
-s32 UpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
+s32 UpdateLapAndFinish(void *arg0, s32 arg1);
 s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
     s32 value;
     s32 result;

@@ -17,7 +17,7 @@ extern char D_8001362C[];
 extern char D_80013660[];
 
 
-long Gpu_CheckTimeout(void) asm("func_80067F38");
+long Gpu_CheckTimeout(void);
 long Gpu_CheckTimeout(void) {
     long intrMask;
     long state;

@@ -17,7 +17,7 @@ extern GameCollisionPoint g_CarCollisionCorners[4] asm("D_8007E23C");
 
 void TransformCollisionVector(s32 *input, s32 *output) asm("func_800690E0");
 void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode)
-    asm("func_80038CE8");
+;
 s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
     asm("func_8002D2E8");
 
@@ -270,7 +270,7 @@ void UpdateCarCrestHop(GameCarRuntime *arg0) {
     obj->field_9E = value;
 }
 
-void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) asm("func_800393AC");
+void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1);
 void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
     GameCarRuntime *obj = arg0;
     s32 temp;
@@ -489,7 +489,7 @@ inner:
     }
 }
 
-void UpdateCarAiTargetSpeed(u8 *car, s32 gear) asm("func_800396FC");
+void UpdateCarAiTargetSpeed(u8 *car, s32 gear);
 void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   u8 *p[2];
   u16 lim[4];

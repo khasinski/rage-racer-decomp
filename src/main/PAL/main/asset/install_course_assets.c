@@ -7,8 +7,8 @@ extern u8 *g_AssetSubBlockPtr asm("D_801E8AB0");
 extern u8 *g_TrackTextureShadow asm("D_801E42D0");
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
-void UploadImageBlock(void *arg0) asm("func_8001A2E0");
-void StoreTeamLogoImage(void *arg0) asm("func_8001A40C");
+void UploadImageBlock(void *arg0);
+void StoreTeamLogoImage(void *arg0);
 void ResetTrackTextureSwap(void);
 
 void InstallCourseAssets(void);

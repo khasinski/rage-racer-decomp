@@ -2,7 +2,7 @@
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"
-void AdvanceCarPosition(GameCarRuntime *car, s32 arg1) asm("func_8002F4E4");
+void AdvanceCarPosition(GameCarRuntime *car, s32 arg1);
 
 typedef struct D8007Pair {
     s16 f0;
@@ -14,7 +14,7 @@ extern D8007Pair g_LaunchSpeedThresholds[] asm("D_8007DAC0");
 
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
-void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104");
+void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume);
 
 /*
  * Car motion handler for state98 == 0 (normal driving): turns steering into a
@@ -23,7 +23,7 @@ void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104"
  * (AdvanceCarPosition), and detects the jump/launch trigger. The drive sub-block is
  * the GameCarDrive view of car->field_BC.
  */
-void UpdateCarDriving(GameCarRuntime *car) asm("func_8002F690");
+void UpdateCarDriving(GameCarRuntime *car);
 void UpdateCarDriving(GameCarRuntime *car) {
     GameCarDrive *route = (GameCarDrive *)&car->field_BC;
     s32 sinA;

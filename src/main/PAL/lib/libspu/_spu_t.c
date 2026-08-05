@@ -23,7 +23,7 @@ extern long g_SpuTransferIsRead asm("D_8009ABC8");
 extern long g_SpuDmaTransferAddr asm("D_8009ABCC");
 extern long g_SpuDmaBlockCount asm("D_8009ABD0");
 
-long _spu_t(long op, ...) asm("func_80079600");
+long _spu_t(long op, ...);
 long _spu_t(long op, ...) {
     long dmaControl;
     long i;

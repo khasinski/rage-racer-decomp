@@ -8,7 +8,7 @@ extern char g_MsgSeqOldFormat[] asm("D_80013BEC");
 
 long func_80070D70(short arg0, short arg1);
 
-long SsSeqParseHeader(long arg0, long arg1, long arg2) asm("func_8006ECDC");
+long SsSeqParseHeader(long arg0, long arg1, long arg2);
 long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     SeqStruct *s;
     u_char *seq;

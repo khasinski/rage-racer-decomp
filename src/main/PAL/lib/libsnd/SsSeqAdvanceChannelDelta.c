@@ -2,7 +2,7 @@
 
 extern u_char *g_SndSeqTable[] asm("D_801E79CC");
 
-void SsSeqDispatchMidiEvent(long arg0, long arg1) asm("func_8006F1E0");
+void SsSeqDispatchMidiEvent(long arg0, long arg1);
 
 void SsSeqAdvanceChannelDelta(long seq, long channel);
 

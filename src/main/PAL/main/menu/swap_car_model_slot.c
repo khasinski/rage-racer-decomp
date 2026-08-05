@@ -55,8 +55,8 @@ extern s32 D_801E4168;
 extern s32 D_1F800004;
 
 s32 GetCarAssetIndex(s32 arg0, s32 arg1);
-void *ApplyMatrixLV(void *m, void *v0, void *v1) asm("func_80068F80");
-void DrawPlayerCarModel(void *obj) asm("func_8001DAB0");
+void *ApplyMatrixLV(void *m, void *v0, void *v1);
+void DrawPlayerCarModel(void *obj);
 
 void func_8005131C(void) {
     Matrix mtxA;
@@ -236,7 +236,7 @@ extern s32 g_MenuViewSpin asm("D_801E8268");
 void func_80017794(void *a, void *b, void *c);
 
 /* The course diorama behind COURSE SELECT and RANKING, with the carousel easing. */
-void DrawMenuCourseView(void) asm("func_8005194C");
+void DrawMenuCourseView(void);
 void DrawMenuCourseView(void) {
     Matrix mtxA;
     Matrix mtxB;
@@ -346,7 +346,7 @@ extern s32 g_CourseModelCount asm("D_801E40E4");
 s32 rsin(s32 arg0) asm("func_80068568");
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */
-void DrawTeamNameCharModel(void) asm("func_80051D6C");
+void DrawTeamNameCharModel(void);
 void DrawTeamNameCharModel(void) {
     Matrix mtxA;
     Matrix mtxB;

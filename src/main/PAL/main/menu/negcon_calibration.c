@@ -24,7 +24,7 @@ extern s16 g_NegconSteerPlay asm("D_8019CAD0");
 /* Play in hundredths of a degree per setting; the gauge marks scale from it. */
 extern s16 g_NegconPlayPercent[] asm("D_8007C260");
 
-void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex) asm("func_80027874");
+void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex);
 
 /* Local wide-parameter views; see GameQueueSprite.c / SetGteLightMatrix.c. */
 u8 *DrawLeftArrowWide(
@@ -69,7 +69,7 @@ s32 AddTilePrim(
     s32 h,
     s32 r,
     s32 g,
-    s32 b) asm("func_80032F34");
+    s32 b);
 
 /*
  * Game mode 10's overlay: the caption, the two nudge arrows, the three digit

@@ -104,15 +104,15 @@ void BuildSaveIconBlock(
     char *title,
     s32 iconTile,
     s32 imageX,
-    s32 imageY) asm("func_8005F6BC");
+    s32 imageY);
 void WriteSaveHeaderRow(GameSaveHeaderRow *row);
-s32 LoadSaveStateBlock(u8 *block) asm("func_8005FED4");
+s32 LoadSaveStateBlock(u8 *block);
 s32 WriteMemoryCardSaveFile(
     char *path,
     char *title,
     void *iconBlock,
     GameSaveHeaderRow *header,
-    void *saveBlock) asm("func_80060524");
+    void *saveBlock);
 s32 WriteMemoryCardSaveSlot(
     s32 slot,
     GameSaveHeaderRow *header);
@@ -143,18 +143,18 @@ void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
 void ClearMemoryCardSwEvents(void) asm("func_8005F304");
 s32 WaitMemoryCardHwEvent(void) asm("func_8005F4D8");
 s32 WaitMemoryCardSwEvent(void) asm("func_8005F55C");
-s32 PollMemoryCardHwEvent(void) asm("func_8005F35C");
-s32 PollMemoryCardHwEventLimit(s32 attempts) asm("func_8005F420");
-void OpenMemoryCardEvents(void) asm("func_8005EFAC");
-void EnableMemoryCardEvents(void) asm("func_8005F0D4");
-void DisableMemoryCardEvents(void) asm("func_8005F16C");
-void CloseMemoryCardEvents(void) asm("func_8005F204");
+s32 PollMemoryCardHwEvent(void);
+s32 PollMemoryCardHwEventLimit(s32 attempts);
+void OpenMemoryCardEvents(void);
+void EnableMemoryCardEvents(void);
+void DisableMemoryCardEvents(void);
+void CloseMemoryCardEvents(void);
 /* libcard _card_clear (see psyq/): _new_card() + _card_write(chan, 0x3F, 0). */
 s32 _card_clear(s32 chan) asm("func_80063DEC");
 void CardReadAndSetMode(s32 param);
 void CardSeekParam(s32 param);
-s32 CardReadStatusPair(s32 high, s32 low) asm("func_8005EBB0");
-s32 FormatMemoryCard(s32 arg0, s32 arg1) asm("func_8005EF44");
+s32 CardReadStatusPair(s32 high, s32 low);
+s32 FormatMemoryCard(s32 arg0, s32 arg1);
 
 
 /* Moved here from menu.h and audio.h: these belong to the card, not to

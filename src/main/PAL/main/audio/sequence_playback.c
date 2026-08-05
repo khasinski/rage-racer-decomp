@@ -2,11 +2,11 @@
 #include "game/audio.h"
 
 extern s16 g_SeqHandle asm("D_801E6D90");
-void SsSeqPlay(s32 arg0, s32 arg1, s32 arg2) asm("func_800725F0");
+void SsSeqPlay(s32 arg0, s32 arg1, s32 arg2);
 void PlaySequence(void) asm("func_8005E88C");
 void PlaySequence(void) { SsSeqPlay(g_SeqHandle, 1, 0); }
 
-void SsSeqStop(s32 arg0) asm("func_800728A0");
+void SsSeqStop(s32 arg0);
 void StopSequence(void) asm("func_8005E8B8");
 void StopSequence(void) { SsSeqStop(g_SeqHandle); }
 
@@ -22,13 +22,13 @@ extern s32 g_ReverbDepthL asm("D_801E6D84");
 extern s32 g_ReverbDepthR asm("D_801E6D88");
 extern s32 g_SeqVolume asm("D_801E6D94");
 
-void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
+void SetReverbDepth(s32 arg0, s32 arg1);
 void func_8005E600(s32 arg0);
 void SetSequenceVolume(s32 arg0);
 void func_8005E8B8(void);
-void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2) asm("func_80072698");
+void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
 
-void UpdateSequenceFadeOut(void) asm("func_8005E900");
+void UpdateSequenceFadeOut(void);
 void UpdateSequenceFadeOut(void) {
     register s32 *fadeStep asm("$4");
     s32 delta;
@@ -77,7 +77,7 @@ void UpdateSequenceFadeOut(void) {
     SetSequenceVolume(g_SeqVolume);
 }
 
-void ApplyDuckedSequenceAudio(void) asm("func_8005EA14");
+void ApplyDuckedSequenceAudio(void);
 void ApplyDuckedSequenceAudio(void) {
     s32 value;
     register s32 scaled asm("$2");

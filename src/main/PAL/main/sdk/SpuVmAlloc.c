@@ -13,7 +13,7 @@ extern u_char g_SndVoiceStateStatus[] asm("D_8009E0D3");
 
 u_long SpuSetNoiseVoice(long on_off, u_long voice_bit);
 
-u_char SpuVmAlloc(long unused) asm("func_800739E8");
+u_char SpuVmAlloc(long unused);
 u_char SpuVmAlloc(long unused) {
     u_char candidates;
     u_short bestAge;

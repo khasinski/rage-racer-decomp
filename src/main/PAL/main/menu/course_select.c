@@ -4,7 +4,7 @@
 #include "game/render.h"
 #include "game/menu.h"
 #include "game/car.h"
-void StartSequenceFadeOut(void) asm("func_8005E8E0");
+void StartSequenceFadeOut(void);
 
 s32 DrawRankingScreen(s32 arg0);
 
@@ -39,7 +39,7 @@ extern u8 g_TeamLogoClut[] asm("D_801E444C");
 extern u8 g_TeamLogoCanvas[] asm("D_801E6F2C");
 s32 RequestCarSelectAssets(void);
 void func_8005E88C(void);
-void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80049418");
+void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void LoadImage(void *rect, void *data) asm("func_80065B24");
 void UploadTeamNameTexture(void *arg0, s32 arg1);
 
@@ -520,18 +520,18 @@ extern u8 g_MenuBlankCaption asm("D_80011BA0");
 void ResetCourseProgress(s32 arg0);
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
-void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2) asm("func_800489AC");
+void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, s32 a10);
-void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
-void DrawBrowseArrows(s32, s32, s32, s32) asm("func_80049418");
-void DrawMenuLightBurst(s32 arg0) asm("func_8004CF30");
-void DrawOwnedCarCounter(s32 arg0, s32 arg1) asm("func_8004F3EC");
+void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
+void DrawBrowseArrows(s32, s32, s32, s32);
+void DrawMenuLightBurst(s32 arg0);
+void DrawOwnedCarCounter(s32 arg0, s32 arg1);
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
 s32 DrawClassChangeCurtain(s32 arg0);
-void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) asm("func_800506BC");
-void DrawTimeAttackPlate(s32 arg0) asm("func_800509C4");
-void DrawMenuCourseView(void) asm("func_8005194C");
+void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
+void DrawTimeAttackPlate(s32 arg0);
+void DrawMenuCourseView(void);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void UpdateCourseSelectScreen(void) asm("func_80053730");
 void UpdateCourseSelectScreen(void) {

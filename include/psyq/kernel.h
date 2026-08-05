@@ -26,7 +26,7 @@ long GetIntrMask(void);
 long SetIntrMask(long mask);
 
 void *InitKernelInterrupts(void) asm("func_8006E0CC");
-void intrDispatch(void) asm("func_8006E1A8");
+void intrDispatch(void);
 KernelCallback SetKernelInterruptCallback(long index, KernelCallback callback) asm("func_8006E390");
 void *StartKernelInterrupts(void) asm("func_8006E590");
 void clearKernelInterruptState(u_long *dst, long count);
@@ -65,12 +65,12 @@ void DisableEvent(long event) asm("func_800631E0");
 void WaitEvent(long event);
 
 long BiosFileOpen(void *path, long mode) asm("func_80063230");
-long BiosFileSeek(long fd, long offset, long whence) asm("func_80063240");
-long BiosFileRead(long fd, void *buf, long len) asm("func_80063250");
-long BiosFileWrite(long fd, void *buf, long len) asm("func_80063260");
-long BiosFileClose(long fd) asm("func_80063270");
-long BiosFormatDevice(void *device) asm("func_80063280");
-void *BiosFirstFile(char *path, void *entry) asm("func_80063290");
+long BiosFileSeek(long fd, long offset, long whence);
+long BiosFileRead(long fd, void *buf, long len);
+long BiosFileWrite(long fd, void *buf, long len);
+long BiosFileClose(long fd);
+long BiosFormatDevice(void *device);
+void *BiosFirstFile(char *path, void *entry);
 void *BiosNextFile(void *entry) asm("func_800632A0");
 
 #endif

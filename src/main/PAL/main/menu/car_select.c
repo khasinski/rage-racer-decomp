@@ -22,12 +22,12 @@ void func_80047460(void *buf, s32 xa, s32 ya, s32 w, s32 h, s32 r, s32 g, s32 b,
 void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags);
 
-void DrawMenuCourseView(void) asm("func_8005194C");
-void DrawMenuLightBurst(s32 arg0) asm("func_8004CF30");
-void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2) asm("func_800489AC");
+void DrawMenuCourseView(void);
+void DrawMenuLightBurst(s32 arg0);
+void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 DrawRankingTable(s32 *arg0, s32 arg1, s32 arg2) asm("func_8004D384");
-void DrawTimeAttackPlate(s32 arg0) asm("func_800509C4");
+void DrawTimeAttackPlate(s32 arg0);
 
 void UpdateRankingScreen(void) asm("func_80054D10");
 void UpdateRankingScreen(void) {
@@ -357,19 +357,19 @@ extern s32 g_SceneId asm("D_801E42E4");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
 void RequestCarModel(s32 carIndex);
-s32 RequestRoundAssets(void) asm("func_80018C88");
+s32 RequestRoundAssets(void);
 void ClearTeamNameTexture(void);
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight)
-    asm("func_80049418");
+;
 void DrawCarShopPricePanel(s32 step, s32 money, s32 price)
-    asm("func_8004F650");
+;
 void DrawEngineerShopPricePanel(s32 step, s32 arg1, s32 arg2)
-    asm("func_8004F99C");
+;
 s32 CountOwnedCars(void);
-void StartSequenceFadeOut(void) asm("func_8005E8E0");
+void StartSequenceFadeOut(void);
 void RestoreTeamLogoClut(void);
-void DrawOwnedCarCounter(s32 step, s32 count) asm("func_8004F3EC");
-void DrawMenuAltPanel(s32 arg0, s32 arg1) asm("func_80050400");
+void DrawOwnedCarCounter(s32 step, s32 count);
+void DrawMenuAltPanel(s32 arg0, s32 arg1);
 
 void UpdateCarSelectScreen(void) asm("func_8005568C");
 void UpdateCarSelectScreen(void) {
@@ -747,8 +747,8 @@ extern u8 *D_8019C794;
 extern s32 g_RankingOption asm("D_8019C7C0");
 extern u8 D_801E4389[];
 extern u8 D_801E438A[];
-void DrawTireCompoundSlider(u8 x, s32 useFlag) asm("func_80048ED8");
-void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) asm("func_80048D64");
+void DrawTireCompoundSlider(u8 x, s32 useFlag);
+void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, void *a10);
 

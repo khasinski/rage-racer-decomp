@@ -125,10 +125,10 @@ extern u32 D_801E8260;
 extern void (*g_FrontendDrawHandlers[])(void) asm("D_8007C748");
 
 s32 Random15(void) asm("func_800632B0");
-s32 CdControl(s32 com, void *param, s32 result) asm("func_8006A5A4");
+s32 CdControl(s32 com, void *param, s32 result);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 s32 RequestTrackLoad(void);
-s32 RequestRaceStart(void) asm("func_80019580");
+s32 RequestRaceStart(void);
 void BeginIntroFmv(int);
 
 void UpdateFrontend(void) {

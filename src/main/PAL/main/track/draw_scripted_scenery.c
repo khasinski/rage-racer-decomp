@@ -2,14 +2,14 @@
 #include "game/vector.h"
 #include "game/race.h"
 
-void UpdateFlybyScenery(void) asm("func_8003E590");
-void DrawFlybyScenery(void) asm("func_8003EAF4");
-void UpdateRouteScenery(void) asm("func_8003EC98");
-void DrawRouteScenery(void) asm("func_8003F02C");
-void UpdatePathScenerySound(void) asm("func_8003F9C4");
-void DrawPathScenery(void) asm("func_80040730");
+void UpdateFlybyScenery(void);
+void DrawFlybyScenery(void);
+void UpdateRouteScenery(void);
+void DrawRouteScenery(void);
+void UpdatePathScenerySound(void);
+void DrawPathScenery(void);
 
-void DrawScriptedScenery(s32 arg0) asm("func_8003F608");
+void DrawScriptedScenery(s32 arg0);
 void DrawScriptedScenery(s32 arg0) {
     switch (g_GrandPrixClass % 5) {
     case 0:
@@ -132,9 +132,9 @@ extern PathSceneryCursor g_PathSceneryRotCursor asm("D_801E4DE2");
 s32 rsin(s32 angle) asm("func_80068568");
 s32 rcos(s32 angle) asm("func_80068634");
 s32 SquareRoot12(s32 value);
-void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume) asm("func_8005C914");
+void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);
 
-void InitPathScenery(void) asm("func_8003F700");
+void InitPathScenery(void);
 void InitPathScenery(void) {
     s32 lev;
     u8 *tblA;
@@ -228,7 +228,7 @@ void InitPathScenery(void) {
  * g_PathSceneryRotKeys) are eased sinusoidally between waypoints. The sound is
  * cue zero with distance attenuation and a Doppler-like pitch shift.
  */
-void UpdatePathScenerySound(void) asm("func_8003F9C4");
+void UpdatePathScenerySound(void);
 void UpdatePathScenerySound(void) {
     s32 delta[3];
     u8 *keys;

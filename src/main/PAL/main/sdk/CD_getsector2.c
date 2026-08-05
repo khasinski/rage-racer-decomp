@@ -19,7 +19,7 @@ extern u_char g_CdReadyStatus asm("D_80099319");
 extern u_char g_CdSyncResult[] asm("D_8009BAF0");
 extern u_char g_CdReadyResult[] asm("D_8009BAF8");
 
-long CdReadInterruptStatus(void) asm("func_8006AB5C");
+long CdReadInterruptStatus(void);
 
 long CD_getsector2(long arg0, u_long arg1) {
     volatile u_char *status;

@@ -6,7 +6,7 @@ extern long g_SndTickResolution asm("D_801E6C6C");
 
 long GetDMAInterruptState(long arg);
 
-void SsSetTickMode(long spec) asm("func_800720F4");
+void SsSetTickMode(long spec);
 void SsSetTickMode(long spec) {
     long v;
     long m;

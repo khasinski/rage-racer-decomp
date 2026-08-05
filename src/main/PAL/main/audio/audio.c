@@ -194,10 +194,10 @@ s32 SpuVmDamperStep(void) asm("func_800731CC");
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
-s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E4EC");
-s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) asm("func_8005BA20");
+s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
+s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table);
 s32 func_8005E600(s32 arg0);
-s32 CloseVabOnlyAudioSlot(s32 arg0) asm("func_8005B948");
+s32 CloseVabOnlyAudioSlot(s32 arg0);
 void BiosExit(s32 arg0) asm("func_80063D9C");
 void func_800736E8(void);
 void func_80073614(s32 arg0);
@@ -222,7 +222,7 @@ extern s32 g_VabSpuAddressExtra asm("D_800125F8");
 extern char g_MsgVabOpenHeadError[] asm("D_8001267C");
 extern char g_MsgVabTransBodyError[] asm("D_80012694");
 
-s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) asm("func_8005B768");
+s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table);
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     register s32 slotReg asm("$16");
     register s32 bodyReg asm("$17");
@@ -283,7 +283,7 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     return (s16)ret;
 }
 
-s32 PollAudioSlotLoad(void) asm("func_8005B89C");
+s32 PollAudioSlotLoad(void);
 s32 PollAudioSlotLoad(void) {
     s32 completed;
     register s32 *flagsPtr asm("$4");
@@ -343,7 +343,7 @@ s32 CloseVabOnlyAudioSlot(s32 slot) {
     return ret;
 }
 
-s32 CloseLoadedAudioSlots(void) asm("func_8005B9CC");
+s32 CloseLoadedAudioSlots(void);
 s32 CloseLoadedAudioSlots(void) {
     SpuVmDamperStep();
     if (func_8005E600(1) == 0) {
@@ -394,7 +394,7 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     return g_VabTransferDone;
 }
 
-s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) asm("func_8005BB1C");
+s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table);
 s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     s32 bodyReg = body;
     s32 tableReg = table;
@@ -433,7 +433,7 @@ s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     return 0;
 }
 
-void CloseExtraVabSlot(void) asm("func_8005BC14");
+void CloseExtraVabSlot(void);
 void CloseExtraVabSlot(void) {
     s32 liveSlot;
     s32 *flagsPtr = &g_AudioSlotMask;
@@ -450,7 +450,7 @@ void CloseExtraVabSlot(void) {
     }
 }
 
-void ShutdownSoundSystem(void) asm("func_8005BC80");
+void ShutdownSoundSystem(void);
 void ShutdownSoundSystem(void) {
     s32 i;
     s32 *flag = &g_AudioSlotMask;
@@ -542,11 +542,11 @@ void SetEffectVolumeSetting(s32 level) {
 extern s32 g_StereoOutput asm("D_80082F40");
 void SetCdMixPreset(s32 arg0);
 void SsSetStereo(void);
-void SetStereoOutput(void) asm("func_8005BE24");
+void SetStereoOutput(void);
 void SetStereoOutput(void) { g_StereoOutput = 1; SetCdMixPreset(0); SsSetStereo(); }
 
 void SsSetMono(void);
-void SetMonoOutput(void) asm("func_8005BE58");
+void SetMonoOutput(void);
 void SetMonoOutput(void) { g_StereoOutput = 0; SetCdMixPreset(1); SsSetMono(); }
 
 extern s32 g_EngineSoundMaxRpm asm("D_801E6CC4");
@@ -1086,7 +1086,7 @@ void func_80078528(s32 voice, s16 left, s16 right);
     func_80078528((s16)voice, (s16)left, (s16)right);                  \
     *state = neg
 
-void UpdateBasicEffectVoices(void) asm("func_8005C6C0");
+void UpdateBasicEffectVoices(void);
 void UpdateBasicEffectVoices(void) {
     s32 offset;
     s32 *state;
@@ -1382,7 +1382,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                   (s16)(*pitchPtr >> 7), *(u16 *)pitchPtr & 0x7F);    \
     *statePtr = neg
 
-void UpdateEffectVoiceStates(void) asm("func_8005CDB0");
+void UpdateEffectVoiceStates(void);
 void UpdateEffectVoiceStates(void) {
     s32 *statePtr;
     s32 *pitchPtr;
@@ -1438,7 +1438,7 @@ extern const s32 g_SpecialVoiceBits[] asm("D_80011C74");
 extern const char D_80012778[];
 s32 SpuGetKeyStatus(s32 bit);
 
-s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) asm("func_8005D050");
+s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR);
 s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) {
     const s32 *voiceBits;
     s32 busy[6];
@@ -1549,7 +1549,7 @@ extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
 
 s32 SpuGetKeyStatus(s32 arg0);
 
-s32 StartSingleSpecialCue(s32 cue, s32 volume) asm("func_8005D414");
+s32 StartSingleSpecialCue(s32 cue, s32 volume);
 s32 StartSingleSpecialCue(s32 cue, s32 volume) {
     s32 result = -1;
     s32 *handle;
@@ -1602,7 +1602,7 @@ s32 StartSingleSpecialCue(s32 cue, s32 volume) {
     return result;
 }
 
-s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) asm("func_8005D530");
+s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight);
 s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
     s32 id;
     s32 pan;
@@ -1674,7 +1674,7 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
 extern s32 g_SoundCueBank asm("D_801E6CA0");
 extern s32 g_LastSpecialCueRequest asm("D_80082F48");
 
-s32 StartSoundCueVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8005D050");
+s32 StartSoundCueVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void PlaySoundCue(s32 arg0) {
     if (g_SoundCueBank == 1) {
@@ -1725,7 +1725,7 @@ void PlaySoundCue(s32 arg0) {
 void func_80078528(s32 voice, s16 left, s16 right);
 void func_80078130(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend);
 
-void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) asm("func_8005D7D4");
+void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
 void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     s32 voice;
     register s32 left asm("$5");
@@ -1775,12 +1775,12 @@ extern s32 g_EngineSoundBank asm("D_801E6CBC");
 extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 extern s32 g_EngineSoundCurves[] asm("D_801E446C");
 
-void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vab_slot) asm("func_8005B2F0");
+void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vab_slot);
 void func_8005BF30(void);
-void UpdateBasicEffectVoices(void) asm("func_8005C6C0");
+void UpdateBasicEffectVoices(void);
 void func_8005C168(void);
-void UpdateEffectVoiceStates(void) asm("func_8005CDB0");
-s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) asm("func_8005D8EC");
+void UpdateEffectVoiceStates(void);
+s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank);
 s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 value = position;
     s32 index;
@@ -1853,7 +1853,7 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     return result;
 }
 
-void UpdateLoadedAudioVoices(s32 value, s32 bank) asm("func_8005D9F8");
+void UpdateLoadedAudioVoices(s32 value, s32 bank);
 void UpdateLoadedAudioVoices(s32 value, s32 bank) {
     s32 odd_parameter;
     s32 index;
@@ -1912,9 +1912,9 @@ void SetDefaultReverbDepth(void) {
 extern s32 g_ReverbFadeStep asm("D_801E6D8C");
 void func_8007865C(s32 arg0);
 void func_80072B04(s32 arg0);
-void SetReverbDepth(s32 arg0, s32 arg1) asm("func_8005B190");
+void SetReverbDepth(s32 arg0, s32 arg1);
 void func_8005E7DC(void);
-void InitSequenceAudio(void) asm("func_8005DBD8");
+void InitSequenceAudio(void);
 void InitSequenceAudio(void) {
     func_8007865C(0);
     func_80072B04(0x12);
@@ -1932,9 +1932,9 @@ extern s32 g_IndexedEffectIndexPrev asm("D_801E6CF4");
 extern s32 g_IndexedEffectPitch asm("D_801E6CF8");
 extern s32 g_CarSoundVolumeScales[] asm("D_800125FC");
 
-s32 GetOwnedCarAssetIndex(s32 arg0) asm("func_80050FA8");
+s32 GetOwnedCarAssetIndex(s32 arg0);
 
-void InitEffectVoiceRuntime(void) asm("func_8005DC1C");
+void InitEffectVoiceRuntime(void);
 void InitEffectVoiceRuntime(void) {
     func_8007865C(0);
     SsSetVoiceCount(8);
@@ -2011,7 +2011,7 @@ void RestoreReverbDepth(s32 arg0) {
 
 long SsUtKeyOffV(long voice);
 
-void ForcePanVoiceEnabled(s32 enabled) asm("func_8005DDB8");
+void ForcePanVoiceEnabled(s32 enabled);
 void ForcePanVoiceEnabled(s32 enabled) {
     s32 values[2];
     s32 i;
@@ -2098,7 +2098,7 @@ long SsUtKeyOffV(long voice);
 void StartIndexedEffectVoice(s32 arg0);
 void func_8005C0E4(void);
 
-void ForceBasicEffectVoicesEnabled(s32 enabled) asm("func_8005DEF0");
+void ForceBasicEffectVoicesEnabled(s32 enabled);
 void ForceBasicEffectVoicesEnabled(s32 enabled) {
     s32 offset;
     s32 voicePacked;
@@ -2170,7 +2170,7 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
     } while (i < 2);
 }
 
-void ForceIndexedEffectVoiceEnabled(s32 enabled) asm("func_8005E058");
+void ForceIndexedEffectVoiceEnabled(s32 enabled);
 void ForceIndexedEffectVoiceEnabled(s32 enabled) {
     s32 base;
     register s32 center;
@@ -2241,7 +2241,7 @@ void ForceIndexedEffectVoiceEnabled(s32 enabled) {
     }
 }
 
-void ForcePitchEffectVoicesEnabled(s32 enabled) asm("func_8005E1D0");
+void ForcePitchEffectVoicesEnabled(s32 enabled);
 void ForcePitchEffectVoicesEnabled(s32 enabled) {
     s32 voicePacked;
     s32 voice;
@@ -2332,7 +2332,7 @@ asm(".globl func_8005E078\n"
 extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 
 void SetSoundSlotVoicesEnabledWithRegisterArg(void) asm("func_8005B40C");
-void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) asm("func_8005B2F0");
+void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot);
 
 void ForceSoundSlotVoicePlayback(s32 arg0) {
     s32 saved = arg0;
@@ -2424,7 +2424,7 @@ void func_80072B3C(s32 arg0);
 
 extern s16 g_VabIds[] asm("D_801E6CA8");
 
-s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) asm("func_8005E4EC");
+s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     s32 slotReg = slot;
     s32 bodyReg = body;
@@ -2491,7 +2491,7 @@ s32 CloseAudioSlot(s32 slot) {
     return ret;
 }
 
-void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) asm("func_8005E694");
+void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot);
 void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     s32 voiceOffset = voice * 4;
 

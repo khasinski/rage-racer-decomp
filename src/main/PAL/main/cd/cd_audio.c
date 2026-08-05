@@ -21,18 +21,18 @@ extern s32 g_CdFadeFrames asm("D_8009B1B4");
 extern s32 g_CdTrackEnded asm("D_8019C7BC");
 extern CdlLOC g_CdTrackLoopPoint[] asm("D_8007F5B0");
 
-long CdControl(long com, void *param, long result) asm("func_8006A5A4");
+long CdControl(long com, void *param, long result);
 s32 func_8006A534(s32 arg0, s32 arg1);
 s32 func_8006A554(s32 arg0, void *arg1);
 long CdPosToInt_Local(CdlLOC *loc);
-void StepCdTrackRequest(void) asm("func_800432A8");
-void StepCdPlayRequest(void) asm("func_80043494");
-void StepCdResumeRequest(void) asm("func_800437B8");
-void BuildCdTrackTable(void) asm("func_800431BC");
+void StepCdTrackRequest(void);
+void StepCdPlayRequest(void);
+void StepCdResumeRequest(void);
+void BuildCdTrackTable(void);
 void SsSetSpuInputAttr_Link(u8 source, u8 field, u8 value) asm("SsSetSpuInputAttr");
 void SsSetSerialVol_Link(u8 source, s16 left, s16 right) asm("SsSetSerialVol");
 
-void StepCdPauseRequest(void) asm("func_80043598");
+void StepCdPauseRequest(void);
 void StepCdPauseRequest(void) {
     s32 state;
     s32 result;
@@ -139,7 +139,7 @@ void StepCdResumeRequest(void) {
     }
 }
 
-void InitCdAudio(void) asm("func_800438BC");
+void InitCdAudio(void);
 void InitCdAudio(void) {
     u8 *status;
 
@@ -162,7 +162,7 @@ void InitCdAudio(void) {
     SetCdVolume(0x7F);
 }
 
-void TickCdAudio(void) asm("func_80043974");
+void TickCdAudio(void);
 void TickCdAudio(void) {
     s32 temp;
     s32 status;

@@ -182,6 +182,6 @@ extern s16 g_RaceOptionCursor asm("D_801E414C");
 
 /* The wrong-way warning: three sprites over a backing panel, drawn once
  * g_WrongWayTimer passes 10. */
-void DrawWrongWayWarning(void) asm("func_800333DC");
+void DrawWrongWayWarning(void);
 
 #endif

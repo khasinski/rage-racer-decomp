@@ -26,7 +26,7 @@ s32 AddTilePrim(
     s32 h,
     s32 r,
     s32 g,
-    s32 b) asm("func_80032F34");
+    s32 b);
 
 /*
  * The five action captions, each a strip of glyphs lifted from one texture row

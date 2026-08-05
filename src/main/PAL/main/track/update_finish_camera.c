@@ -17,7 +17,7 @@ s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 void AccumulateLapProgress(void *arg0);
 void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
-void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
+void DrawPlayerCarModel(GameRenderObject *obj);
 
 
 /*
@@ -28,7 +28,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) asm("func_8001DAB0");
  * eye object and submits the render object (DrawPlayerCarModel). markerClamp is the
  * zeroed clamp record passed to the track-marker builder UpdateCarTrackState.
  */
-void UpdateFinishCamera(GameRenderObject *obj) asm("func_8003CB3C");
+void UpdateFinishCamera(GameRenderObject *obj);
 void UpdateFinishCamera(GameRenderObject *obj) {
     s32 *view = (s32 *)0x1F800000;
     s32 delta[3];

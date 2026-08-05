@@ -31,9 +31,9 @@ typedef struct TrackSurfaceCell {
 } TrackSurfaceCell;
 
 
-s32 FindTrackSegment(TrackSurfaceCell *arg0, s32 arg1) asm("func_80030EB4");
+s32 FindTrackSegment(TrackSurfaceCell *arg0, s32 arg1);
 
-s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0) asm("func_80032098");
+s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0);
 s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
     s32 index;
     s32 nextIndex;
@@ -436,7 +436,7 @@ extern u8 g_TachoNeedlePrim1[] asm("D_801E3D04");
 extern u8 g_TachoNeedlePrim1PageA[] asm("D_801E3CEC");
 extern u8 g_TachoNeedlePrim1PageB[] asm("D_801E3CF8");
 
-void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) asm("func_80032FF0");
+void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
 void func_80064EB8(u8 *arg0, s32 arg1);
 void func_800666F4(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4);
 
@@ -449,7 +449,7 @@ void func_800666F4(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4);
  *   +0x138/+0x13A  spec->tachoNeedleX / Y
  *   +0x13C/+0x13E  spec->tachoFaceDX / DY
  */
-void BuildTachoNeedleQuad(void) asm("func_80032BD0");
+void BuildTachoNeedleQuad(void);
 void BuildTachoNeedleQuad(void) {
     u8 *data = (u8 *)g_CarSpec;
     u8 *prim0 = g_TachoNeedlePrim0;

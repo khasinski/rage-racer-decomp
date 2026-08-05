@@ -36,7 +36,7 @@ void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2) asm("func_80031298");
  * view[7]=yaw, view[8]=roll). markerClamp is the zeroed clamp record for the
  * track-marker builder UpdateCarTrackState.
  */
-void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) asm("func_8003CF14");
+void UpdateFreeLookCamera(s32 arg0, s32 updateMotion);
 void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
     s32 *view = (s32 *)0x1F800000;
     s32 delta[3];
@@ -168,7 +168,7 @@ extern Vec4 g_StartGridSceneryPos[] asm("D_8007E298");
 
 void func_80017794(void *arg0, Vec4 *state, Matrix *mtx);
 
-void DrawStartGridScenery(s32 arg0) asm("func_8003D458");
+void DrawStartGridScenery(s32 arg0);
 void DrawStartGridScenery(s32 arg0) {
     Matrix mtx;
     Vec4 state;
@@ -236,7 +236,7 @@ extern s16 g_AnimSceneryVariant asm("D_8009AFCC");
 extern s16 g_AnimSceneryPitch[] asm("D_8007E2E0");
 s32 Random15(void) asm("func_800632B0");
 
-void DrawAnimatedScenery(s32 arg0, s32 arg1) asm("func_8003D6F0");
+void DrawAnimatedScenery(s32 arg0, s32 arg1);
 
 void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     Matrix mtx;
@@ -350,7 +350,7 @@ extern s16 g_AnimScenery2Frame asm("D_8007E2F2");
 extern s32 g_AnimScenery2Tint asm("D_8007E2EC");
 extern s16 g_AnimScenery2Variant asm("D_8007E2F0");
 
-void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_8003DA90");
+void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Matrix mtx;

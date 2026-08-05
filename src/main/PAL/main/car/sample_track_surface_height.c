@@ -39,7 +39,7 @@ typedef struct TP {
 extern TP *g_TrackPoints asm("D_8009E688");
 extern s32 g_TrackPointCount asm("D_8009E6A8");
 
-s32 FindTrackSegment(Car *car, s32 idx) asm("func_80030EB4");
+s32 FindTrackSegment(Car *car, s32 idx);
 
 /*
  * Samples the track surface height under the car. Locates the containing
@@ -50,7 +50,7 @@ s32 FindTrackSegment(Car *car, s32 idx) asm("func_80030EB4");
  * f60 while f98 is idle). The local TP/Car/SVec/LVec structs mirror
  * GameTrackPoint / the render object by raw offset to stay byte-exact.
  */
-void SampleTrackSurfaceHeight(Car *car) asm("func_80031E98");
+void SampleTrackSurfaceHeight(Car *car);
 void SampleTrackSurfaceHeight(Car *car) {
     Matrix mtx;
     SVec v;

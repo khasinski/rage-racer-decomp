@@ -1,6 +1,6 @@
 #include "common.h"
 
-void SsSeqClose(short arg0) asm("func_80071948");
+void SsSeqClose(short arg0);
 
 void SsSeqCloseWrapper(short arg0) asm("func_80071AC4");
 

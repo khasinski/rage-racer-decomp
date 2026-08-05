@@ -20,7 +20,7 @@ void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
 s32 rsin(s32 angle) asm("func_80068568");
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */
-void DrawTireCompoundSlider(u8 x, s32 useFlag) asm("func_80048ED8");
+void DrawTireCompoundSlider(u8 x, s32 useFlag);
 void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     void *ot;
     void *scratch;
@@ -112,7 +112,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
 }
 
 /* The two side browse arrows, each lit only when that direction has somewhere to go. */
-void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) asm("func_80049418");
+void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight);
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
     void *ot;
     s32 halfWidth;
@@ -194,7 +194,7 @@ typedef struct CarSpecGraphColors {
     CVec colors[4];
 } CarSpecGraphColors;
 
-const CarSpecGraphColors g_CarSpecGraphColors asm("D_80011870") = {{
+const CarSpecGraphColors g_CarSpecGraphColors = {{
     {0xA6, 0x35, 0xAC, 0},
     {0x7D, 0x27, 0x96, 0},
     {0x54, 0x1C, 0x94, 0},

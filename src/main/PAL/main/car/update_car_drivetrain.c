@@ -4,10 +4,10 @@
 #include "game/car.h"
 #include "game/render.h"
 
-void UpdateCarDriving() asm("func_8002F690");
+void UpdateCarDriving();
 void func_80030030();
-void UpdateCarAirborne() asm("func_80030814");
-void UpdateCarStandingStart() asm("func_80030BC4");
+void UpdateCarAirborne();
+void UpdateCarStandingStart();
 s32 rsin(s32) asm("func_80068568");
 s32 rcos() asm("func_80068634");
 extern s32 g_ShiftTargetSpeed asm("D_8007DA74");
@@ -48,7 +48,7 @@ extern s16 g_DragScale asm("D_801E4FB4");
  * *(s16*)((u8*)base+0x132)) with the drive sub-block at base+0xBC; the raw
  * offsets are what make it match, so it is intentionally left as void*.
  */
-void UpdateCarDrivetrain(void *base) asm("func_8002A810");
+void UpdateCarDrivetrain(void *base);
 void UpdateCarDrivetrain(void *base) {
   u8 *var_a2;
   s16 temp_a0;

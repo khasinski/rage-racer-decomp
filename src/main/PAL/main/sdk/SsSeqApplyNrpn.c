@@ -33,10 +33,10 @@ void SsUnpackAdsr(u_short, u_short, u_short *);
 void SsPackAdsr(u_short *, u_short *, u_short *);
 void SsUtSetReverbType(long) asm("func_80073614");
 void SsUtSetReverbDepth(long, long) asm("func_80073748");
-void SsUtSetReverbFeedback(long) asm("func_80073708");
-void SsUtSetReverbDelay(long) asm("func_800737E0");
+void SsUtSetReverbFeedback(long);
+void SsUtSetReverbDelay(long);
 void SsUtReverbOff(void) asm("func_800736E8");
-void SsUtReverbOn(void) asm("func_800736C8");
+void SsUtReverbOn(void);
 
 void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val) asm("func_800706AC");
 void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val) {

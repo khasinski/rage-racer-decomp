@@ -4,7 +4,7 @@
 void func_8006BA68(void);
 long func_8006C06C(void);
 void DMACallback(long arg0, long arg1);
-void CD_datasync(void) asm("func_8006BF00");
+void CD_datasync(void);
 
 long CdMix(void);
 long CdMix(void) {

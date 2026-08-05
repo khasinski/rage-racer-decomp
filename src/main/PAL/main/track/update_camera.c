@@ -5,11 +5,11 @@
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
-extern void DrawPlayerCarModel(void *)asm("func_8001DAB0");
+extern void DrawPlayerCarModel(void *);
 extern s32 FindNearestTrackCamera();
 extern s32 rcos(s32) asm("func_80068634");
 extern s32 SquareRoot0(s32) asm("func_800689A8");
-extern void *ApplyMatrixLV(void *, void *, void *) asm("func_80068F80");
+extern void *ApplyMatrixLV(void *, void *, void *);
 extern void *func_80069CC8(void *, void *);
 /* Chase-view (mode 1) distance preset, 0..2: eye height 0x3A / 0x59 / 0x97 and
  * pull-back 0x118 / 0x140 / 0x190, plus a -0x90 vs -0x60 pitch bias. Sits in
@@ -78,7 +78,7 @@ extern u8 *g_TrackCameras asm("D_8019C7CC");
  * Field accesses use the FIELD(base,type,offset) raw-offset macro to stay
  * byte-exact, so params/locals are not retyped.
  */
-void UpdateCamera(s32 cameraModeSel, void *arg1) asm("func_80043BCC");
+void UpdateCamera(s32 cameraModeSel, void *arg1);
 void UpdateCamera(s32 cameraModeSel, void *arg1) {
     s16 sp10[4];
     s32 sp18[3];

@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/gte_macros.h"
 
-s32 Lzc(s32 data) asm("func_80069C7C");
+s32 Lzc(s32 data);
 s32 Lzc(s32 x) {
     s32 r;
     gte_lzc(r, x);

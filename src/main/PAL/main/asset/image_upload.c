@@ -6,7 +6,7 @@
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 void func_800658FC(s32 mode);
 
-void UploadImageBlock(void *arg0) asm("func_8001A2E0");
+void UploadImageBlock(void *arg0);
 void UploadImageBlock(void *arg0) {
     GameImageBlock *block;
     u16 rect[4];
@@ -40,7 +40,7 @@ void UploadImageBlock(void *arg0) {
     }
 }
 
-void UploadImageBlock(void *arg0) asm("func_8001A2E0");
+void UploadImageBlock(void *arg0);
 
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void UploadImageAsset(void *arg0) {
@@ -80,7 +80,7 @@ void StoreImage(Rect *rect, void *data);
 s32 func_80065BEC(GpuRectPacked *rect, u32 x, u32 y);
 void func_800658FC(s32 mode);
 
-void StoreTeamLogoImage(void *dst) asm("func_8001A40C");
+void StoreTeamLogoImage(void *dst);
 void StoreTeamLogoImage(void *dst) {
     g_TeamLogoClut[0] = 0x8000;
     LoadImage(&g_TeamLogoClutLoadRect, g_TeamLogoClut);

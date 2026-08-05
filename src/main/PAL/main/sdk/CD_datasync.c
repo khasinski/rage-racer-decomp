@@ -25,7 +25,7 @@ void CD_flush(void) asm("func_8006BAF0");
  * self-naming idiom as CD_sync / CD_ready / CD_cw: it stores its own name
  * string D_8001391C = "CD_datasync" into the D_8009BB10 slot the timeout
  * message prints as its first %s. arg 0 blocks, non-zero polls. */
-long CD_datasync(long mode) asm("func_8006BF00");
+long CD_datasync(long mode);
 long CD_datasync(long arg) {
     long *b60;
     volatile u_char *b318;

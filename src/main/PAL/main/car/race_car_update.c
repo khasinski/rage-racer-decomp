@@ -14,17 +14,17 @@ s32 rcos(s32 arg0) asm("func_80068634");
 extern s32 g_AnimTimer asm("D_8009E694");
 extern s16 g_ClosestRivalRank asm("D_801E7740");
 
-void RankContenders(void) asm("func_8003A728");
-void UpdateCarTrafficAvoidance() asm("func_8003A280");
-void UpdateCarAiTargetSpeed() asm("func_800396FC");
+void RankContenders(void);
+void UpdateCarTrafficAvoidance();
+void UpdateCarAiTargetSpeed();
 void ApplyCarRacingLineHint();
 void ClampCarLateralOffset();
-void UpdateRivalRubberBand(void) asm("func_8003A974");
-void SlowRivalAhead() asm("func_8003A6A4");
+void UpdateRivalRubberBand(void);
+void SlowRivalAhead();
 void AccumulateLapProgress();
 void ApplyCarKnockback();
 s32 UpdateCarTrackState() asm("func_80031298");
-void StartCarBodyKick() asm("func_80038F0C");
+void StartCarBodyKick();
 void UpdateCarBodyKick() asm("func_80038FF0");
 void UpdateCarCrestHop();
 
@@ -37,7 +37,7 @@ void UpdateCarCrestHop();
  * the steer value into field_44 and the route sub-block (field_BC).
  * Register-pinned locals are match-load-bearing.
  */
-void SteerCarAlongRoute(GameCarRuntime *car) asm("func_8003AEBC");
+void SteerCarAlongRoute(GameCarRuntime *car);
 void SteerCarAlongRoute(GameCarRuntime *car) {
     GameCarRuntime *route;
     GameTrackPoint *point;
@@ -684,11 +684,11 @@ extern s16 g_RaceIntroCameraDeltaZ asm("D_8009AFC0");
 
 s32 rcos(s32 angle) asm("func_80068634");
 s32 rsin(s32 angle) asm("func_80068568");
-void DrawPlayerCarModel(void *arg0) asm("func_8001DAB0");
+void DrawPlayerCarModel(void *arg0);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void UpdateCamera(void *arg0, s32 arg1) asm("func_80043BCC");
+void UpdateCamera(void *arg0, s32 arg1);
 
-void RunRaceIntroCamera(Obj *obj, s32 mode) asm("func_8003C508");
+void RunRaceIntroCamera(Obj *obj, s32 mode);
 void RunRaceIntroCamera(Obj *obj, s32 mode) {
     s32 *spad = (s32 *)0x1F800000;
     register s32 s0v asm("$16");
@@ -793,7 +793,7 @@ extern s32 g_CameraCarSpeed asm("D_801E3EB8");
  * nowhere in the image. */
 extern s32 D_801E3F60;
 
-void SeedFinishCamera(void *arg0) asm("func_8003CA14");
+void SeedFinishCamera(void *arg0);
 void SeedFinishCamera(void *arg0) {
     register u32 word0 asm("$2");
     u32 word1;

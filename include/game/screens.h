@@ -12,13 +12,13 @@ void *FormatLapTime(void *dst, s32 timeMs);
 
 void DrawResultScreen(void) asm("func_800200D0");         /* "RESULT" */
 void DrawRaceEndPrompt(void) asm("func_80021654");        /* "PRESS START BUTTON" */
-void DrawCourseIntro(void) asm("func_80021D68");          /* "COURSE IN" / "TIME ATTACK" */
+void DrawCourseIntro(void);          /* "COURSE IN" / "TIME ATTACK" */
 void DrawGrandprixIntro(void) asm("func_800201D4");       /* "CLASS%d %s GRANDPRIX" */
 void DrawEndingScreen(void) asm("func_80037D90");         /* "CONGRATULATIONS!!" */
 /* The in-race option/pause overlay; `cursorRow` is D_801E414C. The
  * "RAGE RACER GE" string is one half of a scrolling marquee, not a title -
  * this is not the title screen. See docs/names.md 1. */
-void DrawRaceOptionMenu(s32 cursorRow) asm("func_8003479C");
+void DrawRaceOptionMenu(s32 cursorRow);
 
 /*
  * Title screen and main menu. UpdateFrontend (func_8001BB58) runs one of the

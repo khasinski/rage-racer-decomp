@@ -2,8 +2,8 @@
 #include "game/state.h"
 #include "game/menu.h"
 #include "game/race.h"
-void SetMonoOutput(void) asm("func_8005BE58");
-void SetStereoOutput(void) asm("func_8005BE24");
+void SetMonoOutput(void);
+void SetStereoOutput(void);
 
 typedef struct UnkCopyChunk {
     u8 raw[8];
@@ -18,11 +18,11 @@ extern s32 g_ClassClearFanfareTimer asm("D_801E4D0C");
 extern s32 g_ClassCompleted asm("D_801E4B94");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
 void DrawFullscreenFadeTile(s32, s32) asm("func_80033AA0");
-void DrawRaceTimePanel(s32) asm("func_800204F4");
+void DrawRaceTimePanel(s32);
 void DrawPrizeMoneyPanel(s32);
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
 void TickClassClearFanfare(void);
-void RequestSelectBgmAssets(void) asm("func_80018410");
+void RequestSelectBgmAssets(void);
 void AdvanceGrandPrixClass(void);
 void func_800201D4(void);
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
@@ -212,7 +212,7 @@ void ResetCourseProgress(s32 arg0) {
     *(s16 *)(g_CourseProgress + 4) = 0;
 }
 
-void InitSaveDefaults(void) asm("func_80021338");
+void InitSaveDefaults(void);
 void InitSaveDefaults(void) {
     u8 *src;
     u8 *dst;

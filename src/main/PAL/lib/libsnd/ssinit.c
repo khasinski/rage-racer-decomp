@@ -3,9 +3,9 @@
 
 
 void SpuInit(void);
-void _SsInitTables(void) asm("func_80071B0C");
+void _SsInitTables(void);
 
-void ssinit(void) asm("func_80071BF4");
+void ssinit(void);
 void ssinit(void) {
     KernelCallbackSlot3();
     SpuInit();

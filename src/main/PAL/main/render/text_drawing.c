@@ -400,7 +400,7 @@ extern s32 D_8007FB00;
 
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void DrawBitPatternOverlay(s32 arg0) asm("func_80047E60");
+void DrawBitPatternOverlay(s32 arg0);
 void DrawBitPatternOverlay(s32 arg0) {
     void *ot = *(void **)0x1F800004;
     u8 *row = D_8007F6E8;
