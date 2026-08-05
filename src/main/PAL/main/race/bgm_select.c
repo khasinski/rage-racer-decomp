@@ -5,6 +5,7 @@
 #include "game/car.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+void UpdateAttractCars() asm("func_8003BB50");
 
 extern s32 g_BgmSelectCursor asm("D_801E4B84");
 extern s32 g_BgmRandomLabelTimer asm("D_8007D6B0");
@@ -27,7 +28,6 @@ void AdvanceBgmShuffleBag();
 void DrawFullscreenFadeTile() asm("func_80033AA0");
 void RequestOptionScreenAssets() asm("func_80018B98");
 void DrawBgmSelectBar();
-void func_8003BB50();
 void RequestTrackTexturePage();
 void UpdateCamera() asm("func_80043BCC");
 void func_800418D4();
@@ -207,7 +207,7 @@ void UpdateBgmSelect(void) {
     if (g_BgmSelectShowUi != 0) DrawBgmSelectBar();
     g_AnimTimer = g_AnimTimer + 1;
     g_CameraCarIndex = CycleBgmSelectCameraCar(0xff, g_CameraCarIndex);
-    func_8003BB50();
+    UpdateAttractCars();
     RequestTrackTexturePage(g_Cars[g_CameraCarIndex].field_78);
     UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     DrawCars();

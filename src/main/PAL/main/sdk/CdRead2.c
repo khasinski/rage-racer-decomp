@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
+void StCdInterrupt(void) asm("func_8006D1D0");
 
 
 extern long g_StBackFrame asm("D_8009DF18");
@@ -31,7 +32,6 @@ void CdRead2Callback(void);
 void data_ready_callback(void);
 void StClearRingRange(long arg0, long arg1) asm("func_8006D0AC");
 void StSetRingParams(long arg0);
-void func_8006D1D0(void);
 
 /*
  * Issues CD command 0xE (set mode) with the mode byte `arg0`, and when the
@@ -61,7 +61,7 @@ long CdRead2(long arg0) {
 
 void CdRead2Callback(void);
 void CdRead2Callback(void) {
-    func_8006D1D0();
+    StCdInterrupt();
 }
 
 void StClearRing(void) {

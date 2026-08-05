@@ -4,6 +4,7 @@
 #include "game/render.h"
 #include "game/menu.h"
 #include "game/car.h"
+void StartSequenceFadeOut(void) asm("func_8005E8E0");
 
 s32 DrawRankingScreen(s32 arg0);
 
@@ -535,7 +536,6 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) asm("func_800506BC");
 void DrawTimeAttackPlate(s32 arg0) asm("func_800509C4");
 void DrawMenuCourseView(void) asm("func_8005194C");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-void func_8005E8E0(void);
 void UpdateCourseSelectScreen(void) asm("func_80053730");
 void UpdateCourseSelectScreen(void) {
     void *ot;
@@ -669,7 +669,7 @@ void UpdateCourseSelectScreen(void) {
                         g_MenuSubCursor = 1;
                     } else {
                         PlaySoundCue(3);
-                        func_8005E8E0();
+                        StartSequenceFadeOut();
                         g_MenuHintBarStep = -1;
                         g_TimeAttackPlateStep = -1;
                         g_MenuViewOffsetTarget = 0x3D090;
@@ -764,7 +764,7 @@ void UpdateCourseSelectScreen(void) {
                 RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
                 RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 0);
                 if (g_UiScriptProgress2 <= 0) {
-                    func_8005E8E0();
+                    StartSequenceFadeOut();
                     GameMenuBusy = (g_MenuSubCursor != 0) ? 4 : 2;
                     g_MenuHintBarStep = -1;
                     g_MenuViewOffsetTarget = 0x3D090;

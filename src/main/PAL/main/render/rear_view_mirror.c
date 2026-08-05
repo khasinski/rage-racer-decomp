@@ -2,6 +2,8 @@
 #include "game/render.h"
 #include "game/race.h"
 #include "game/car.h"
+void SetRotMatrix(void *arg0) asm("func_80069858");
+void SetDrawArea(u8 *packet, u8 *drawEnv) asm("func_80066604");
 
 extern s16 g_MirrorViewEnabled asm("D_8019CA10");
 extern s32 g_MirrorPanelY asm("D_801E4D18");
@@ -213,10 +215,8 @@ extern s32 g_VisibleCellList asm("D_801E4BC8");
 
 u8 *DrawMirrorFrame(u8 *packet) asm("func_8001ACE4");
 void func_800418D4(void);
-void func_80066604(u8 *packet, u8 *drawEnv);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void BuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
-void func_80069858(void *arg0);
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
 void EndMirrorPass(void) asm("func_8001ABD8");
 
@@ -244,18 +244,18 @@ void DrawRearViewMirror(s32 arg0) {
 
             func_800418D4();
             packet = DrawMirrorFrame(*scratch);
-            func_80066604(packet, g_DrawBuffer + 0x70);
+            SetDrawArea(packet, g_DrawBuffer + 0x70);
             prim = packet;
             packet += 0xC;
             AddPrim((u32 *)(g_DrawBuffer + 0x16C8), (u32 *)prim);
             *scratch = packet;
             BuildVisibleCells(-0x3000, 0x6000);
-            func_80069858((void *)0x1F800028);
+            SetRotMatrix((void *)0x1F800028);
             *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
             SubmitTerrainCells((void *)0x1F800000, g_VisibleCellList, 0x40);
 
             packet = *scratch;
-            func_80066604(packet, g_DrawBuffer);
+            SetDrawArea(packet, g_DrawBuffer);
             prim = packet;
             packet += 0xC;
             AddPrim((u32 *)(g_DrawBuffer + 0xBD0), (u32 *)prim);

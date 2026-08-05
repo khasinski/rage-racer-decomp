@@ -6,6 +6,11 @@
 #include "game/render.h"
 #include "game/cd.h"
 #include "game/car.h"
+void SetLightMatrix(void *arg0) asm("func_80069888");
+void UpdateRaceCars(void) asm("func_8003B0D4");
+void DrawStartCountdown(s32 arg0) asm("func_8003425C");
+void InitEffectVoiceRuntime(void) asm("func_8005DC1C");
+void SeekEnvironmentScript(s32) asm("func_800458CC");
 
 
 
@@ -154,7 +159,6 @@ void BuildStartingGrid(void);
 
 void ResetMirrorState(void);
 
-void func_800458CC(s32);
 
 void BuildTileStrips(void) asm("func_800340D8");
 
@@ -170,7 +174,6 @@ void SeedRouteScenery(void);
 
 void InitPathScenery(void) asm("func_8003F700");
 
-void func_8005DC1C(void);
 
 void DrawRoundScreen(void) asm("func_8001C974");
 
@@ -251,7 +254,6 @@ void DrawRacePosition(void);
 
 void DrawWrongWayWarning(void);
 
-void func_8003425C(s32 arg0);
 
 void DrawRaceOptionMenu(s32 arg0) asm("func_8003479C");
 
@@ -264,7 +266,6 @@ void DrawSplitTimes(void);
 
 void UpdateRacePosition(void);
 
-void func_8003B0D4(void);
 
 void RunRaceIntroCamera(void *arg0, s32 arg1) asm("func_8003C508");
 
@@ -304,7 +305,6 @@ void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C31C");
 
 void UpdateLoadedAudioVoices(s32 arg0, s32 arg1) asm("func_8005D9F8");
 
-void func_80069888(void *arg0);
 
 s32 UpdateLapAndFinish(void *arg0, s32 arg1) asm("func_8003591C");
 s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
@@ -623,7 +623,7 @@ void EnterRaceScene(void) {
     }
     g_RaceTotalTime = 0;
     ResetMirrorState();
-    func_800458CC(*(s32 *)(g_CamRow + 8));
+    SeekEnvironmentScript(*(s32 *)(g_CamRow + 8));
     BuildTileStrips();
     BuildRaceHudPrims(g_GrandPrixMode);
     g_AnimTimer = 0;
@@ -644,7 +644,7 @@ void EnterRaceScene(void) {
     RequestCdTrack(g_BgmTrack + 3);
     g_PauseDebounce = 0;
     g_RaceFadeTimer = 0;
-    func_8005DC1C();
+    InitEffectVoiceRuntime();
     g_RivalCueEnabled = 1;
     D_801E4CF8 = (D_8019C9AC = (g_RaceCueDelay = 0));
     do {
@@ -771,7 +771,7 @@ void UpdateRaceScene(void) {
             DrawRacePosition();
         }
         DrawLapTimes();
-        func_8003425C(g_SceneTimer);
+        DrawStartCountdown(g_SceneTimer);
         GetTrackZoneBlend(g_PlayerTrackProgress);
         DrawPlayerTachometer();
 
@@ -808,7 +808,7 @@ void UpdateRaceScene(void) {
             if (g_GrandPrixClass != 5) {
                 DrawStartGridScenery(g_SceneTimer);
             }
-            func_80069888(g_SceneLightMatrix);
+            SetLightMatrix(g_SceneLightMatrix);
             DrawScriptedScenery(0);
             DrawRearViewMirror(g_SceneTimer);
         }
@@ -845,7 +845,7 @@ update_race:
         }
 
         if (g_RacePhase < 4) {
-            func_8003425C(g_SceneTimer);
+            DrawStartCountdown(g_SceneTimer);
             PlayCountdownCues(g_SceneTimer);
         }
 
@@ -890,7 +890,7 @@ update_race:
         }
 
         if ((g_RacePhase >= 2) && (g_GrandPrixMode != 0)) {
-            func_8003B0D4();
+            UpdateRaceCars();
         }
 
         {
@@ -950,7 +950,7 @@ update_race:
             if (g_GrandPrixClass != 5) {
                 DrawStartGridScenery(g_SceneTimer);
             }
-            func_80069888(g_SceneLightMatrix);
+            SetLightMatrix(g_SceneLightMatrix);
             DrawScriptedScenery(1);
             DrawRearViewMirror(g_SceneTimer);
         }

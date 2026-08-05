@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/gpu.h"
+void SetTile(void *arg0) asm("func_80064FF8");
 
 void func_80066604(void *packet, void *rect);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
@@ -322,7 +323,6 @@ void GameDrawTexturedQuad(s32 ot, s16 x0, s16 y0, s16 x1,
     *(POLY_FT4 **)0x1F800000 = prim;
 }
 
-void func_80064FF8(void *arg0);
 void SetSemiTrans(void *arg0, long enabled) asm("func_80064E90");
 void *func_80017390(void *ot, void *prim, s32 arg2);
 
@@ -352,7 +352,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
     x1Reg = x1;
     asm("" : : "r"(x0Reg), "r"(y0Reg), "r"(x1Reg));
 
-    func_80064FF8(prim);
+    SetTile(prim);
     a0Reg = (u8 *)prim;
     SetSemiTrans(a0Reg, alphaReg != 0xFF);
 

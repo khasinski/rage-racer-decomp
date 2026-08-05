@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
+long CD_sync(long arg0, u_char *arg1) asm("func_8006B0D4");
 
 extern volatile u_char *g_CdReg0 asm("D_80099300");
 extern volatile u_char *g_CdReg1 asm("D_80099304");
@@ -23,7 +24,6 @@ void KernelCallbackSlot3(void) asm("func_8006DF34");
 void CdDispatchInterrupts(void);
 void KernelCallbackSlot2(long arg0, void *arg1) asm("func_8006DF64");
 long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
-long func_8006B0D4(long arg0, u_char *arg1);
 void LibcPutString(u_char *text) asm("func_80063C38");
 
 long CD_vol(CdlATV *arg0) {
@@ -139,7 +139,7 @@ long CdResetState(void) {
     if (func_8006B620(0xC, 0, 0, 0) != 0) {
         return -1;
     }
-    if (func_8006B0D4(0, 0) != 2) {
+    if (CD_sync(0, 0) != 2) {
         return -1;
     }
     return 0;

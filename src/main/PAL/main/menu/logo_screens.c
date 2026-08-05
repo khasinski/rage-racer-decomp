@@ -13,6 +13,8 @@
 #include "game/race.h"
 #include "game/menu.h"
 #include "game/render.h"
+void ApplyCurrentSequenceAudio(void) asm("func_8005EA6C");
+void ApplyDuckedSequenceAudio(void) asm("func_8005EA14");
 
 s32 DrawLogoSampleScreen(s32 arg0);
 
@@ -43,8 +45,6 @@ void RampTeamLogoCanvas(s32 arg0, s32 arg1);
 void UpdateTeamLogoCanvas(void) asm("func_8004C0D8");
 void DrawLogoSamplePanel(s32 arg0, s32 arg1) asm("func_8004E368");
 void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-void func_8005EA14(void);
-void func_8005EA6C(void);
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
 
 void UpdateTeamLogoScreen(void) asm("func_80057748");
@@ -98,7 +98,7 @@ void UpdateTeamLogoScreen(void)
           if (sel == 1)
         {
           PlaySoundCue(2);
-          func_8005EA14();
+          ApplyDuckedSequenceAudio();
           GameMenuBusy = -3;
           D_8019CAB8 = 0;
           g_UiScriptProgress2 = 0;
@@ -214,7 +214,7 @@ void UpdateTeamLogoScreen(void)
         if (g_PadEdge2 & 0x800)
         {
           PlaySoundCue(3);
-          func_8005EA6C();
+          ApplyCurrentSequenceAudio();
           GameMenuBusy = -4;
         }
         UpdateTeamLogoCanvas();

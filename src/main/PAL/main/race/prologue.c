@@ -7,6 +7,7 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+void UpdateAttractCars(void) asm("func_8003BB50");
 
 typedef struct UnkEventPair {
     s16 timer;
@@ -43,7 +44,6 @@ extern u8 g_CarTrackSection[] asm("D_801F18CC");
 extern UnkEventPair g_PrologueCameraCuts[] asm("D_8007D74C");
 void ExitPrologue(void);
 void DrawPrologueText(void);
-void func_8003BB50(void);
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
@@ -276,7 +276,7 @@ void UpdatePrologue(void) {
             g_CameraCarIndex = g_PrologueCameraCuts[eventIndex].carIndex;
         }
 
-        func_8003BB50();
+        UpdateAttractCars();
 
         RequestTrackTexturePage(*(s16 *)&g_CarTrackSection[(((((g_CameraCarIndex * 3) * 4) + g_CameraCarIndex) * 8) - g_CameraCarIndex) * 4]);
 
