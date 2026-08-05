@@ -88,7 +88,6 @@ void EnterTitleScreen(void) {
 
 extern u8 *g_DrawBuffer;
 
-void *func_8001720C(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("func_80017390");
 
 /* Full-width grey box over the title screen at OT slot 0x29; the caller
@@ -106,7 +105,7 @@ void DrawTitleFadeOverlay(s32 arg0) {
     base += 0xCC;
     scratch = (void **)0x1F800000;
     current = *scratch;
-    next = func_8001720C(base, current, 0, 0x18, 0x140, 0xC0, color, color, color);
+    next = GameQueueTileTrans(base, current, 0, 0x18, 0x140, 0xC0, color, color, color);
     *scratch = GameQueueDrawModePrimWide(base, next, 0x29);
 }
 

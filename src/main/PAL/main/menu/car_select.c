@@ -696,8 +696,6 @@ void UpdateCarSelectScreen(void) {
 
 extern s32 D_8009B2D0;
 
-void func_80052158(s32 arg0, s32 arg1, s32 arg2);
-
 s32 DrawCustomizeScreen(s32 step);
 s32 DrawCustomizeScreen(s32 arg0) {
     s32 value;
@@ -729,7 +727,7 @@ s32 DrawCustomizeScreen(s32 arg0) {
         value = product / 2048;
     }
 
-    func_80052158((s16)value, ((u32)D_8009B2D0 / 4) & 0xFF, g_PlayerCarIndex);
+    DrawCarEngineSpec((s16)value, ((u32)D_8009B2D0 / 4) & 0xFF, g_PlayerCarIndex);
     return D_8009B2D0;
 }
 

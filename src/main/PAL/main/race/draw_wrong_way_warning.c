@@ -7,7 +7,6 @@ u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut);
 void SetSprt(u8 *arg0);
 void SetShadeTex(u8 *arg0, s32 arg1);
 void AddPrim(void *ot, void *prim);
-void *func_8001720C(void *ot, void *packet, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("func_80017390");
 
 void DrawWrongWayWarning(void);
@@ -58,7 +57,7 @@ void DrawWrongWayWarning(void) {
         AddPrim(ot + 0xCC, oldPacket);
     } while (i < 3);
 
-    ret = func_8001720C(g_DrawBuffer + 0xCC, next, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
+    ret = GameQueueTileTrans(g_DrawBuffer + 0xCC, next, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
     *(void **)0x1F800000 = ret;
     *(void **)0x1F800000 = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, ret, 9);
 }

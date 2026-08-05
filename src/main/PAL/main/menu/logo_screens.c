@@ -37,8 +37,6 @@ extern u8 g_MenuBlankCaption;
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("func_80046A2C");
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
-void func_80048B88(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
-                   s32 a7, s32 a8, s32 a9, s32 a10);
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawTeamLogoCanvas(s32 arg0, s32 arg1);
 void RampTeamLogoCanvas(s32 arg0, s32 arg1);
@@ -171,8 +169,8 @@ void UpdateTeamLogoScreen(void)
         GameDrawSpriteWide(ot, 0xC0, 0x4C, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
         GameDrawSpriteWide(ot, 0xE3, 0x4C, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
         new_var = 0x20;
-        func_80048B88(0xB8, 0x44, 0x20, new_var, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&g_MenuBlankCaption));
-        func_80048B88(0xDA, 0x44, 0x20, 0x20, 0x3A, 0x1E, 0x95, 0, 0, 0, (s32) (&g_MenuBlankCaption));
+        GameDrawMenuButton(0xB8, 0x44, 0x20, new_var, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&g_MenuBlankCaption));
+        GameDrawMenuButton(0xDA, 0x44, 0x20, 0x20, 0x3A, 0x1E, 0x95, 0, 0, 0, (s32) (&g_MenuBlankCaption));
       }
       DrawTeamLogoCanvas(1, 0);
     }
@@ -200,8 +198,8 @@ void UpdateTeamLogoScreen(void)
         DrawMenuCursorBox((g_MenuSubCursor != 0) ? (0xB8) : (0xDA), 0x44, 0x20, 0x20, 1);
         GameDrawSpriteWide(ot, 0xC0, 0x4C, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
         GameDrawSpriteWide(ot, 0xE3, 0x4C, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-        func_80048B88(0xB8, 0x44, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&g_MenuBlankCaption));
-        func_80048B88(0xDA, 0x44, 0x20, 0x20, 0x3A, 0x1E, 0x95, 0, 0, 0, (s32) (&g_MenuBlankCaption));
+        GameDrawMenuButton(0xB8, 0x44, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&g_MenuBlankCaption));
+        GameDrawMenuButton(0xDA, 0x44, 0x20, 0x20, 0x3A, 0x1E, 0x95, 0, 0, 0, (s32) (&g_MenuBlankCaption));
       }
       DrawTeamLogoCanvas(1, 0);
     }

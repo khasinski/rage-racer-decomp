@@ -335,8 +335,6 @@ void UpdateCarShopScreen(void) {
 
 extern u32 D_8009B2EC;
 
-void func_80052158(s32 arg0, s32 arg1, s32 arg2);
-
 u32 DrawEngineerShopScreen(s32 step);
 u32 DrawEngineerShopScreen(s32 arg0) {
     u32 value;
@@ -368,7 +366,7 @@ u32 DrawEngineerShopScreen(s32 arg0) {
         amount = (u32)product / 2048;
     }
 
-    func_80052158((s16)amount, (u8)(D_8009B2EC >> 2), g_PlayerCarIndex);
+    DrawCarEngineSpec((s16)amount, (u8)(D_8009B2EC >> 2), g_PlayerCarIndex);
     return D_8009B2EC;
 }
 

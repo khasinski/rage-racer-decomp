@@ -200,7 +200,6 @@ s32 CloseAudioSlot(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0);
 void BiosExit(s32 arg0);
 void SsUtReverbOff(void);
-void func_80073614(s32 arg0);
 void func_80073748(s32 arg0, s32 arg1);
 void func_8007865C(s32 arg0);
 long SsUtKeyOffV(long voice);
@@ -458,7 +457,7 @@ void ShutdownSoundSystem(void) {
     if (*flag != 0) {
         *flag = 0;
         SsUtReverbOff();
-        func_80073614(0);
+        SsUtSetReverbType(0);
         func_80073748(0, 0);
         i = 0;
         while (i < 24) {
@@ -1160,7 +1159,6 @@ typedef struct EffectCueRow {
 
 long SsUtKeyOffV(long voice);
 void func_80078528(s32, s16, s16);
-void func_800781C0(s32, s32, s32, s32, s32, s32, s32);
 
 void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     s32 count;
@@ -1378,8 +1376,8 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
         right = 0;                                                    \
     }                                                                 \
     func_80078528((s16)svArg, left, right);                           \
-    func_800781C0(voice >> 16, 0, *f0Ptr, 0x3C, 0,                    \
-                  (s16)(*pitchPtr >> 7), *(u16 *)pitchPtr & 0x7F);    \
+    SsUtChangePitch(voice >> 16, 0, *f0Ptr, 0x3C, 0,                  \
+                    (s16)(*pitchPtr >> 7), *(u16 *)pitchPtr & 0x7F);  \
     *statePtr = neg
 
 void UpdateEffectVoiceStates(void);
@@ -1911,13 +1909,12 @@ void SetDefaultReverbDepth(void) {
 
 extern s32 g_ReverbFadeStep;
 void func_8007865C(s32 arg0);
-void func_80072B04(s32 arg0);
 void SetReverbDepth(s32 arg0, s32 arg1);
 void RefreshSequenceVolumeScale(void);
 void InitSequenceAudio(void);
 void InitSequenceAudio(void) {
     func_8007865C(0);
-    func_80072B04(0x12);
+    SsSetVoiceCount(0x12);
     SetReverbDepth(0x28, 0x28);
     g_ReverbFadeStep = 0;
     RefreshSequenceVolumeScale();
@@ -2413,13 +2410,11 @@ extern char g_MsgSeqVabOpenHeadError[];
 extern char g_MsgSeqVabTransBodyError[];
 
 void BiosExit(s32 arg0);
-s32 func_8006F004(s32 arg0);
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 void func_80073748(s32 arg0, s32 arg1);
 void func_8007865C(s32 arg0);
-void func_80071AC4(s32 arg0);
 void func_80072B3C(s32 arg0);
 
 extern s16 g_VabIds[];
@@ -2459,7 +2454,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
         BiosExit(1);
     }
 
-    *(s32 *)&g_SeqHandle = (s16)func_8006F004(seqReg);
+    *(s32 *)&g_SeqHandle = (s16)SsSeqOpen(seqReg);
     g_SeqVolumeFadeStep = 0;
     ret = func_8007317C(0);
     g_VabTransferDone = (s16)ret;
@@ -2481,7 +2476,7 @@ s32 CloseAudioSlot(s32 slot) {
         *flagsPtr = bit ^ flags;
         func_80073748(0, 0);
         func_8007865C(0);
-        func_80071AC4(g_SeqHandle);
+        SsSeqCloseWrapper(g_SeqHandle);
         /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
            (rather than naming the symbol) is what the retail code does. */
         ids = (s16 *)((u8 *)flagsPtr + 0xC);
