@@ -30,43 +30,19 @@ void *GameQueueTileTransWide(
     void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
 
 void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 arg2) asm("QueueDrawModePrim");
-extern s32 g_EndingWashLevel;
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
-void DrawSeriesClearedWash(s32 arg0, s32 arg1);
-void UpdateReplayCars(void);
 void UpdateCamera(s32 arg0, void *arg1);
 void DrawTerrainCellsWide(void);
-void DrawPlayerCarOnly(void);
 void DrawCourseScenery2(s32 arg0, s32 arg1);
-void DrawReplayBadge(void);
 void SetTrackTexturePageNow(s32 arg0);
 void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
-extern char g_TextResult[];
-extern char *g_CourseNames[];
 void DrawText8x8Trans(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_RaceTotalTime;
 extern s32 g_BestTotalTimes[][4][2];
-/* Grand Prix result panel: the finishing-position graphic's per-place sprite
- * geometry and the two clut tables its two sprites pick from. */
-extern u16 g_ResultPlaceCluts[];
-extern u16 g_ResultPanelCluts[];
-extern char g_FmtClassGrandPrix[];
-extern char g_FmtRoundIn[];
-/*
- * Three captions drawn with the proportional font. Their bytes are lowercase
- * letters, which func_80016B7C routes through a separate word-sprite bank
- * (a..u index the 4-byte records at 0x8007C438), so the glyphs themselves are
- * on the disc. Each is named for the value it labels, which is what the call
- * sites prove: "hai" heads the ranking rows, "hegi" the total time ("T/…")
- * and "hfgi" the per-lap list.
- */
-extern char g_CaptionRanking[];
-extern char g_CaptionTotalTime[];
-extern char g_CaptionLapTime[];
 extern GrandPrixIntroLayout g_ResultPlaceSprites[];
 extern GrandPrixIntroPosition g_ClassPlaceBarSizes[];
 

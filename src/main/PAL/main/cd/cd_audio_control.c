@@ -69,8 +69,6 @@ extern u32 g_CdMixFullLR;
 extern u32 g_CdMixFullRR;
 extern u32 g_CdMixFullRL;
 
-void CdMix(u8 *arg0);
-
 void StepCdVolumeFade(void) {
     u8 buf[4];
     s32 cnt;

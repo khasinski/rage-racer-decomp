@@ -10,7 +10,6 @@ extern Rect g_TeamLogoRect;
 extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[];
 void UploadImageAsset(void *arg0);
-void InstallResourceData(void *arg0);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, s32 arg3);
 extern s32 g_ImageBlockBuffer;
 extern GameSceneAssetHeader *g_AssetBase;

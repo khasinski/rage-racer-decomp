@@ -9,11 +9,6 @@ extern u8 g_PadType;
 /* The two 0..7 selections; g_PadType picks which one the screen edits. */
 extern s16 g_PadMappingIndex;
 extern s16 g_NegconMappingIndex;
-extern s32 g_PadConfigFlipDirection;
-
-/* "INSERT CONTROLLER" / "CONTROLLER ERROR" */
-extern char D_80010000[];
-extern char D_80010014[];
 
 u8 *DrawLeftArrowWide(
     void *ot,
@@ -168,10 +163,6 @@ void UpdateControllerConfigScreen(void) {
     DrawControllerSetupScene(0);
 }
 
-/* "Hold the "NeGcon" in an untwisted" / "position and press start button." */
-extern char D_80010028[];
-extern char D_8001004C[];
-
 void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex);
 s32 AddTilePrim(
     s32 ot,
@@ -210,13 +201,6 @@ extern u16 g_NegconNeutralII;
 extern u16 g_NegconNeutralL;
 extern u16 g_NegconSteerPlay;
 extern u16 g_NegconMaxTwist;
-
-/* ...and where each of them is parked while the calibration screens run, so a
- * cancel can put every one of them back. */
-extern u16 g_NegconSteerNeutralSaved;
-extern u16 g_NegconNeutralISaved;
-extern u16 g_NegconNeutralIISaved;
-extern u16 g_NegconNeutralLSaved;
 
 /*
  * Entry hook for the NeGcon calibration sequence: snapshots the six live
@@ -257,16 +241,6 @@ void BeginNegconCalibration(void) {
     g_NegconSteerPlaySaved = twist;
     g_NegconMaxTwistSaved = mode;
 }
-
-/* The raw NeGcon axes in the BIOS pad buffer (g_PadBuffers + 4): steering,
- * then the three analog buttons. Four consecutive unsigned bytes, 0..255 with
- * 0x80 the mechanical centre -- which is what the `- 128` below proves; the
- * three buttons keep their raw 0..255 and are re-centred by subtracting the
- * latched g_NegconNeutral* instead. */
-extern u8 g_NegconAxisSteer;
-extern u8 g_NegconAxisI;
-extern u8 g_NegconAxisII;
-extern u8 g_NegconAxisL;
 
 /*
  * Game mode 9: hold the NeGcon still and press start. Start latches the four

@@ -5,13 +5,8 @@
 #include "game/cd.h"
 
 extern volatile u8 g_FmvVlcBuffers;
-extern u8 g_DrawEnv1Dither;
-extern u8 g_DrawEnv0Dither;
-extern u8 g_DispEnv1Rgb24;
-extern u8 g_DispEnv0Rgb24;
 extern s32 g_StreamLoc;
 
-void SetupFmvBuffers(s32 arg0);
 void InitFmvContext(volatile void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void OpenFmvStream(void (*arg0)(void));
 s32 PresentFmvFrame(volatile void *arg0);

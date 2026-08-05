@@ -17,12 +17,6 @@ extern s32 g_PlayerCar;
 
 extern TrackWaypointRuntime g_Waypoints[];
 
-extern s32 g_WaypointsCollected;
-
-/* g_PlayerCar + 0xC4: the four words a spawning waypoint copies as its own
- * starting velocity. */
-extern s32 g_PlayerVelocity[];
-
 s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
 
 /*
@@ -51,18 +45,9 @@ void SetShadeTex(u8 *prim, s32 enabled);
 
 void SetSprt(u8 *prim);
 
-/* Deliberately raw: set to 1 once g_SceneTimer passes 571 and cleared during
- * race phase 0, but its only reader is the guard on its own write, so it has
- * no effect at all -- and this whole scene is unreachable (names.md 15f). */
-extern s16 D_8009EC88;
-
 extern s32 g_PlayerTrackProgress;
 
-extern u8 g_TextCongratulations;
-
 void DrawFullscreenFadeTile(s32 a, s32 b);
-
-void SeedWaypoints(void);
 
 void DrawRaceEndBanner(s32 a);
 
@@ -75,8 +60,6 @@ void RunRaceIntroCamera(void *a);
 void UpdatePlayerCar(void *a);
 
 void UpdateLoadedAudioVoices(s32 a, s32 b);
-
-void DrawLapNumber(void);
 
 void UpdateCamera(s32 a, void *b);
 
@@ -93,17 +76,6 @@ void DrawPlayerTachometer(void);
 void UpdateTrackEventSound(s32 a);
 
 void PlayCountdownCues(u32 a);
-
-void UpdateWaypoints(void);
-
-void DrawWaypoints(void);
-
-/* Two 8-byte { start, end } reverb spans per series (offset = series * 16):
- * inside one of them ApplyTrackReverbZone drives the reverb depth to 0x46,
- * outside it to 0. */
-extern s32 g_ReverbZoneStart;
-
-extern s32 g_ReverbZoneEnd;
 
 /*
  * The tail's multiply feeds the discarded rounding path below. GCC 2.6.3

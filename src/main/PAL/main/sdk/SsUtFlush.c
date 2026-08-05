@@ -2,11 +2,9 @@
 #include "psyq/spu.h"
 #include "psyq/snd.h"
 
-extern long g_SndVoiceSilenceIndex;
 extern volatile u_short *g_SndSpuRegs;
 extern u_char g_SndVoiceRegs[];
 extern u_char g_SndVoiceRegsPitch[];
-extern u_char g_SndVoiceRegsAddr[];
 extern u_char g_SndVoiceFlags[];
 extern u_char g_SndVoiceState[];
 extern u_char g_SndVoiceStateAutoVol[];
@@ -25,7 +23,6 @@ extern u_char g_SndVoiceCount;
 extern volatile u_char g_SndReservedVoiceCount;
 
 void SpuVmAutoVolTick(long voice);
-void SpuVmAutoPanTick(long voice);
 
 void SsUtFlush(void) {
     volatile long stack[4];

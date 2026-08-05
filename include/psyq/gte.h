@@ -91,4 +91,30 @@ void *RotMatrix(void *r, void *m);
  * Normalises with Lzc, then runs the hyperbolic CORDIC in CordicRotate. */
 long SquareRoot12(long a);
 
+/* Declared identically by 22 translation units before this
+ * header carried them. */
+
+void EmitCoursePolyF4(void);
+void EmitCoursePolyF4Fog(void);
+void EmitCoursePolyFT4(void);
+void EmitCoursePolyFT4Fog(void);
+void EmitCourseSubdividedFT4(void);
+void EmitCourseSubdividedFT4Fog(void);
+void EmitPolyF4(void);
+void EmitPolyF4Fog(void);
+void EmitPolyFT4Fog(void);
+void EmitPolyFT4Raw(void);
+void EmitPolyG4(void);
+void EmitPolyG4Fog(void);
+void EmitPolyGT4(void);
+void EmitPolyGT4Fog(void);
+void EmitSubdividedTerrainQuad(void);
+void InterpolateSubdivRow(void);
+void SubmitCourseSubdividedFaces(void);
+void SubmitModel2(void *ctx, s32 model);
+void SubmitModelFaces(void);
+void SubmitTerrainCellFaces(void);
+void SubmitTerrainCellFacesFar(void);
+void TransformCourseModel(void);
+
 #endif

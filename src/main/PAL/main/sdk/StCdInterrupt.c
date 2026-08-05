@@ -8,19 +8,9 @@ typedef struct StReadyStatus {
     u16 cause;
 } StReadyStatus;
 
-/* The streaming-CD interrupt path keeps its own copy of the register-pointer
- * table; g_CdReg0..3 at 0x80099300 are the libcd copy and hold the same
- * 0x1F801800 base, but nothing here writes through those. */
-extern volatile u8 *g_StCdReg0;
-extern volatile u8 *g_StCdReg2;
-extern volatile u8 *g_StCdReg3;
 extern volatile u32 *g_InterruptStatus;
 extern volatile u32 *g_InterruptMask;
-extern volatile u32 *g_MdecOutDmaControl;
-extern volatile u32 *g_CdDmaControl;
 
-extern s32 g_StInterruptState;
-extern volatile StStrHeader *g_StActiveHeader;
 extern s32 g_StCurrentFrameCount;
 extern s16 g_StCurrentSector;
 extern s32 g_StColorMode;
@@ -31,26 +21,16 @@ extern s32 g_StNextChannel;
 extern s32 g_StStartFrame;
 extern s32 g_StCurrentChannel;
 extern s32 g_StDmaBusy;
-extern s32 g_StCopySector;
 extern s32 g_StWriteCursor;
 extern s32 g_StReadCursor;
 extern u8 *g_StCopySource;
 extern u32 g_StEndFrame;
 extern s32 g_StStreamFlag;
-extern u8 *g_StSectorData;
 extern volatile StStrHeader *g_StRingBase;
 extern s32 g_StRingSize;
 
 void StClearRingRange(s32 first, u32 count);
 void data_ready_callback(void);
-void CD_dmastart(
-    s32 channel,
-    u32 address,
-    u32 count,
-    u32 size,
-    u32 control,
-    u8 mode,
-    u32 unused);
 
 void StCdInterrupt(void) {
     StReadyStatus readyStatus;

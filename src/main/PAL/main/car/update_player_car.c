@@ -59,41 +59,11 @@ typedef struct Car {
 
 extern u8 g_PadType;
 extern volatile u16 g_PadHeld;
-/*
- * The NeGcon's three analog channels, already zeroed against the calibration
- * captured by the controller-config screen: button I, button II and the left
- * shoulder. Full scale is 106 (0x6A), which is why every use divides by 106 --
- * UpdatePadState feeds the digital pad through the same three slots by writing
- * a flat 0x6A when the mapped button is held.
- */
-extern s16 g_NegconAnalogI;
-extern s16 g_NegconAnalogII;
-extern s16 g_NegconAnalogL;
-/*
- * The live button mapping LoadPadButtonMapping installs: eight u16 masks
- * for the standard pad at 0x801E4B60 then eight for the NeGcon at 0x801E4B70.
- * These are masks 2 and 3 of each row; g_PadShiftMasks is the [pad/NeGcon][up,
- * down] view of masks 4 and 5, which is why its row stride is eight halfwords.
- */
-extern s16 g_PadAccelMask;
-extern s16 g_PadBrakeMask;
-extern s16 g_PadShiftMasks[2][8];
-extern s16 g_NegconAccelMask;
-extern s16 g_NegconBrakeMask;
-extern s32 g_TachoNeedleFlash;
 extern s16 g_NegconMappingIndex;
 extern u8 *g_TrackPoints;
-/* g_PlayerCar drive +0xA0 / +0xA4: the throttle the input layer produced this
- * frame (0..0x100) and the drivetrain's own rpm, which g_EngineRpm is slewed
- * towards by a half (clutch in) or a quarter (clutch out) of the gap. */
-extern s16 g_PlayerThrottle;
-extern s32 g_PlayerTargetRpm;
-extern u16 g_CarCornerOffsetX[];
-extern u16 g_CarCornerOffsetZ[];
 
 s32 IsCarFacingBackwards(void *car);
 void UpdateCarBodyRoll(void *car);
-void UpdateCarDrivetrain(void *car);
 void AccumulateLapProgress(void *car);
 void ApplyCarKnockback(void *car);
 s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2);

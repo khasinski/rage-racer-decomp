@@ -105,7 +105,6 @@ long CD_newmedia(void) {
 }
 
 extern volatile long D_8009C118[];
-extern CdSearchDirEntry g_CdDirEntryName[];
 
 long LibcStrcmp(u_char *arg0, u_char *arg1);
 

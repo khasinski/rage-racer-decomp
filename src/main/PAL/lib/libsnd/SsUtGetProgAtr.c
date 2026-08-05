@@ -2,8 +2,6 @@
 #include "psyq/snd.h"
 
 extern short g_SndVabProgMax;
-extern u_char g_SndCurrentVabId;
-extern u_char g_SndCurrentProg;
 extern u_char *g_SndCurrentToneTable;
 extern volatile u_char *g_SndCurrentVabHeader;
 extern u_char *g_SndCurrentProgTable;

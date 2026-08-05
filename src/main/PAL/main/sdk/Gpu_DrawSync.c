@@ -13,10 +13,6 @@ extern long g_GpuQueueReadIdx;
 void Gpu_ExecuteQueue(void);
 long Gpu_CheckTimeout(void);
 
-/* Driver-table slot +0x3C, the body of DrawSync: mode 0 blocks until the
- * queue is empty and the GPU idle, any other mode returns the number of
- * queue entries still outstanding. */
-long Gpu_DrawSync(long mode);
 long Gpu_DrawSync(long arg0) {
     long pending;
 

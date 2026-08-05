@@ -1,8 +1,6 @@
 #include "common.h"
 #include "game/menu.h"
 
-extern s32 D_8007FB3C;
-
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 
 s32 DrawClassChangeCurtain(s32 arg0) {

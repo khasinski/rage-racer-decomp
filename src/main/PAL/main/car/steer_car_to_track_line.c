@@ -94,7 +94,6 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
 
 s32 GetAngleDistance(s32 arg0, s32 arg1);
 s32 GetAngleDelta(s32 arg0, s32 arg1);
-void SteerCarToTrackLine(GameCarRuntime *car);
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
 

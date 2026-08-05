@@ -14,8 +14,6 @@
 typedef void *va_list;
 
 extern volatile u_short *g_SpuRegBase;
-extern long g_SpuDmaTransferAddr;
-extern long g_SpuDmaBlockCount;
 
 long _spu_t(long op, ...) {
     long dmaControl;

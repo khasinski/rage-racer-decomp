@@ -1,7 +1,6 @@
 #include "psyq/kernel.h"
 
 extern u_long *g_IntrRpNode;
-extern u_short D_8009946C[];
 
 void *InitKernelInterrupts(void) {
     register u_short *state asm("$16");

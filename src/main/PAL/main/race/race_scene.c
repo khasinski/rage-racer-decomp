@@ -18,8 +18,6 @@ void SeekEnvironmentScript(s32);
  * allocation of the whole surrounding block. Three symbols keep three separate
  * %hi/%lo pairs, which is what the retail code has. */
 extern s32 g_RefSectorTimes;
-extern s32 g_RefSectorTime1;
-extern s32 g_RefSectorTime2;
 
 extern u8 g_PlayerCar[];
 
@@ -37,19 +35,9 @@ extern s32 g_RaceTotalTime;
 
 extern s32 g_RankingTimes[][4][20];
 
-void BeginReplay(void);
-
-void CommitClassProgress(void);
-
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 
-s32 FramesToMilliseconds(s32 arg0, s32 arg1);
-
 void ExitRaceScene(s32 arg0);
-
-void SeedFinishCamera(void *arg0);
-
-void UpdateRivalCueGate(void);
 
 void ForceAllEffectVoicesEnabled(s32 arg0);
 
@@ -57,56 +45,17 @@ extern s32 g_CameraViewMode;
 
 extern u8 *g_CamRow;
 
-/* Deliberately raw: written zero at race init and read nowhere in the image. */
-extern s32 D_801E4248;
-
-/* Deliberately raw: written zero at race init and read nowhere in the image. */
-extern s16 D_801E4CF8;
-
-extern s16 g_RivalCueCooldown0;
-
-extern s16 g_RivalCueCooldown1;
-
-extern s16 g_RivalCueCooldown2;
-
-extern u8 g_MsgGame0Ok[];
-
 void InitRenderState(s32);
-
-void ResetReplayWriteCursor(void);
 
 void InitPlayerCar(void *);
 
 void SetTrackTexturePageNow(s32);
 
-void ResetMirrorState(void);
-
-void BuildTileStrips(void);
-
-void BuildRaceHudPrims(s32);
-
-void ResetFreeLookCamera(void);
-
-void SeedFlybyScenery(void);
-
-void SeedRouteScenery(void);
-
-void InitPathScenery(void);
-
 extern u8 g_SceneLightMatrix[];
 
 extern s32 g_PlayerTrackProgress;
 
-extern s16 g_CameraCarTrackSection;
-
 extern u8 g_PadType;
-
-/* Mask 6 of each row of the live button mapping (see UpdatePlayerCar.c),
- * hence the eight-halfword stride. Holding it while paused, in the chase view
- * and mid-race, makes D-pad up/down turn the rear-view mirror on and off. */
-extern s16 g_PadMirrorMasks[];
-
-s32 BeginMirrorPass(void);
 
 /*
  * Optional trace for the state returned by the lap/finish update. A null
@@ -128,13 +77,7 @@ static __inline__ void GameDebugLapResult(
     }
 }
 
-s32 UpdateLapAndFinish(void *arg0, s32 arg1);
-
 void RequestTrackTexturePage(s32 arg0);
-
-void DrawRearViewMirror(s32 arg0);
-
-void RecordReplayFrame(void);
 
 void DrawRaceEndBanner(s32 arg0);
 
@@ -144,37 +87,15 @@ void UpdatePlayerCar(void *arg0);
 
 void DrawPlayerTachometer(void);
 
-void DrawRaceHudLabels(s32 arg0);
-
-void DrawLapTimes(void);
-
-void DrawTimeRemaining(s32 arg0);
-
-void DrawRacePosition(void);
-
 void DrawRaceOptionMenu(s32 arg0);
 
 void GetTrackZoneBlend(s32 arg0);
 
-void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2);
-
-void DrawSplitTimes(void);
-
-void UpdateRacePosition(void);
-
 void RunRaceIntroCamera(void *arg0, s32 arg1);
-
-void UpdateFinishCamera(void *arg0);
-
-void DrawStartGridScenery(s32 arg0);
 
 void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2);
 
-void DrawScriptedScenery(s32 arg0);
-
 void UpdateTrackEventSound(s32 arg0);
-
-void TriggerRaceCues(void);
 
 void PlayCountdownCues(s32 arg0);
 

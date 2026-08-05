@@ -6,11 +6,7 @@
 extern long _spu_writeByIO(long addr, long size);
 
 extern char g_SpuTimeoutFmt[];
-extern char g_SpuTimeoutMsgReset[];
 extern volatile SpuRegisterMap *g_SpuRegBase;
-extern volatile long *g_SpuDpcr;
-/* Deliberately raw: written zero here and read nowhere in the image. */
-extern long D_8009AB98;
 extern long g_SpuMemModeUnit;
 extern long _spu_mem_mode_plus;
 extern void (*volatile g_SpuTransferCallback)(void);
@@ -18,7 +14,6 @@ extern void (*volatile g_SpuTransferCallback)(void);
  * SpuQuit and never read. Shape says libspu's IRQ callback slot
  * (SpuSetIRQCallback), but this build has no call site to prove it. */
 extern void (*volatile D_8009ABB4)(void);
-extern long g_SpuDummyAdpcmBlock;
 
 #define SPU_INIT_DELAY()                    \
     delayValue = 0xD;                       \

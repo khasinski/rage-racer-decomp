@@ -124,4 +124,47 @@ extern u16 g_PadMappingIndexSaved;
 
 void RestartMemoryCard(void);
 
+/* Declared identically by 38 translation units before this
+ * header carried them. */
+
+extern u16 D_8007C128[][2];
+extern s32 g_BootLogoHoldTimer;
+extern s32 g_BootLogoState;
+extern s32 g_BootLogoTimer;
+extern s32 g_FrameCounter;
+extern u8 g_LibcLowerDigits[];
+extern u8 g_LibcNullText[];
+extern s32 g_LibcOutColumn;
+extern u8 g_LibcUpperDigits[];
+extern u16 g_NegconButtonPresets[];
+extern u8 g_NegconConfigButtonRows[];
+extern u8 g_NegconConfigLabelRows[];
+extern u8 g_PadBufferButtonsHigh;
+extern u8 g_PadBufferButtonsLow;
+extern u8 g_PadBufferType;
+extern u8 g_PadBuffers[];
+extern u16 g_PadButtonPresets[];
+extern u8 g_PadConfigButtonRows[];
+extern u8 g_PadConfigLabelRows[];
+extern u16 g_PadPrevHeld;
+extern u8 g_PadRepeatTimer[];
+
+void BiosSetMemSize(s32 arg0);
+void DrawBootLogo(void);
+void DrawEndingStill(void);
+void InitGeom(void);
+void InitPad(void *buf0, s32 len0, void *buf1, s32 len1);
+void InitRecordTables(void);
+void InstallSceneLighting(void);
+u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2);
+void *LibcMemmove(u8 *dest, u8 *src, s32 count);
+void LibcPutChar(s32 arg0);
+s32 LibcStrlen(u8 *arg0);
+void ResetGraph(s32 arg0);
+void ResetReplayFrameCounts(void);
+void StartPad(void);
+void StepTrackTextureSwap(void);
+void TickSequenceAudio(void);
+void __main(void);
+
 #endif

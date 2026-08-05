@@ -563,7 +563,6 @@ loop_body:
     return 0;
 }
 extern TimedDrawCommand D_80082520[];
-extern s32 D_8009B250[];
 
 void GameDrawSpriteWide();
 
@@ -725,8 +724,6 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
     /* The second p3 use keeps it ahead of ot in global-alloc priority. */
     __asm__("" : : "r"(p0), "r"(p1), "r"(p2), "r"(p3), "r"(p3), "r"(f), "r"(ot));
 }
-
-extern s32 D_8009B264;
 
 s32 rsin(s32 arg0);
 

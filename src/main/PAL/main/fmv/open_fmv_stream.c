@@ -4,7 +4,6 @@
 
 extern s32 g_FmvRingBuffer;
 extern s32 g_StreamLoc;
-void DecDCTReset(s32 arg0);
 void DecDCToutCallback(s32 arg0);
 void StSetRing(s32 arg0, s32 arg1);
 void StSetStream(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
@@ -19,15 +18,6 @@ void OpenFmvStream(s32 arg0) {
 
 extern Rect g_FmvStripRects[];
 extern volatile s32 g_FmvStripIndex;
-extern volatile s32 g_FmvStripRectIndex;
-/* One 4-halfword Rect at 0x8009AF4C. g_FmvUploadRectX/Y are its x/y and
- * g_FmvStripWidth/Height are its w/h: an MDEC strip and the VRAM rect it is
- * uploaded to are the same object, which is why the four halfwords are
- * declared as scalars, the x volatile because it is bumped one strip at a
- * time; the LoadImage copy reads the same four halfwords back as a Rect. */
-extern volatile s16 g_FmvUploadRectX;
-extern volatile s16 g_FmvUploadRectY;
-extern volatile s32 g_FmvStripDone;
 extern s32 g_StInterruptPending;
 
 void DecDCTout(volatile u32 *arg0, s32 arg1);

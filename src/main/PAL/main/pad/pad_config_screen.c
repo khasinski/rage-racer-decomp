@@ -120,11 +120,6 @@ u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
     return prim;
 }
 
-/* Eight rows of five bytes: the label slot each action sits in, and the button
- * each label points at, for the standard pad. */
-extern u8 g_PadConfigLabelRows[];
-extern u8 g_PadConfigButtonRows[];
-
 extern s16 g_PadMappingIndex;
 
 /* One whole standard-pad diagram for the current selection: the five action
@@ -134,10 +129,6 @@ u8 *DrawPadConfigDiagram(void *ot, u8 *prim) {
     return DrawPadConfigCallouts(
         ot, prim, &g_PadConfigLabelRows[g_PadMappingIndex * 5], &g_PadConfigButtonRows[g_PadMappingIndex * 5]);
 }
-
-/* The NeGcon counterparts of g_PadConfigLabelRows / g_PadConfigButtonRows. */
-extern u8 g_NegconConfigLabelRows[];
-extern u8 g_NegconConfigButtonRows[];
 
 extern s16 g_NegconMappingIndex;
 

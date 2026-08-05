@@ -64,19 +64,11 @@ void DrawWrongWayWarning(void) {
 #define SCRATCH (*(u8 **)0x1F800000)
 
 extern u8 *volatile g_DrawBuffer;
-extern s16 g_PlayerGear;
-/* Tint of the tachometer face: the dial-mode branches set all three to the
- * same level and the tail of the function copies them into the face prim
- * already staged at g_DrawBuffer + 0x236E8. .data seeds them 0x80. */
-extern u8 g_TachoFaceR;
-extern u8 g_TachoFaceG;
-extern u8 g_TachoFaceB;
 
 s32 rsin(s32 angle);
 s32 rcos(s32 angle);
 void SetPolyF4(void *prim);
 void SetTile(void *prim);
-void DrawSpeedDigits(s32 x, s32 y, s32 speed);
 
 void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
     GameCarSpec *p = g_CarSpec;

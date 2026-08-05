@@ -73,7 +73,6 @@ void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
 }
 
 extern GameRaceRanking g_PlayerLap;
-extern s16 D_8009E836;
 void DrawTimeValue(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
@@ -139,8 +138,6 @@ void DrawLapTimes(void) {
 
     DrawTimeValue(0xFA, 0x20, g_BestLapThisRace, 0x78CC, 0x3E8);
 }
-
-void DrawMinuteSecondTime(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void DrawTimeRemaining(s32 arg0) {
     s32 arg3 = 0x78CC;

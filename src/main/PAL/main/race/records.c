@@ -3,13 +3,6 @@
 #include "game/race.h"
 void DrawText8x8Trans(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 
-extern s32 g_DefaultLapTimes;
-extern s32 g_DefaultTotalTimes;
-extern s32 g_DefaultRecordRows;
-/* Split symbols of g_DefaultRecordRows, whose records are 12 bytes: the name
- * at +0, the seed time at +4 and the car index at +8. */
-extern s32 g_DefaultRecordTimes;
-extern u16 g_DefaultRecordCars;
 extern s32 g_BestLapTimes;
 extern s32 g_BestTotalTimes;
 extern s32 g_RankingRecords;
@@ -18,10 +11,7 @@ extern u16 g_RankingCars;
 extern s32 g_TimeRecords;
 extern u16 g_TimeRecordCars;
 extern s32 g_BestSectorTimes;
-extern char g_FmtLapTime[];
 void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2);
-extern char g_TextTimeAttack[];
-extern char g_TextCourseIn[];
 void DrawProportionalText(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 
 void InitRecordTables(void) {

@@ -262,8 +262,6 @@ void ClearMemoryCardSwEvents(void) {
     TestEvent(g_McSwEventNew);
 }
 
-extern s32 g_McPollTicks;
-
 s32 PollMemoryCardHwEvent(void) {
     s32 result;
     s32 ready;
@@ -354,10 +352,6 @@ s32 WaitMemoryCardSwEvent(void) {
     }
 }
 
-extern s32 g_SaveElapsedTicks;
-void InitCARD(s32 padEnable);
-void StartCARD(void);
-void BiosBuInit(void);
 void RestartMemoryCard(void);
 void RestartMemoryCard(void) { InitCARD(1); StartCARD(); BiosBuInit(); g_SaveElapsedTicks = 0; }
 
@@ -409,7 +403,6 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
     } while (i < 3);
 }
 
-extern char g_FmtString[];
 extern Rect g_SaveIconRect;
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
@@ -476,8 +469,6 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
     } while (i <= 0);
 }
 
-extern s32 g_SaveElapsedTicks;
-
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     u8 *rowBytes = (u8 *)row;
     s32 i;
@@ -529,14 +520,6 @@ extern s32 g_BestSectorTimes[];
 extern u8 g_GrandPrixCourseProgress[];
 extern u8 g_ExtraGrandPrixCourseProgress[];
 
-/*
- * Serialises every live global into the 0x1000-byte memory-card payload. The
- * field layout is GameSaveBlock (game/memcard.h), but the block is addressed
- * with raw offsets on purpose: as GameSaveBlock member stores, gcc 2.6.3 stops
- * treating them as aliasing the plain global loads that feed them and hoists
- * every load to the top of the function, which retail does not do.
- */
-void StoreSaveStateBlock(u8 *rowBytes);
 void StoreSaveStateBlock(u8 *block) {
     {
         u16 padMappingIndex = g_PadMappingIndex;
@@ -789,9 +772,6 @@ void StoreSaveStateBlock(u8 *block) {
 #include "game/race.h"
 #include "game/menu.h"
 #include "psyq/gpu.h"
-
-extern char g_MsgSaveChecksumOk[];
-extern char g_FmtSaveChecksum[];
 
 extern s16 g_PadMappingIndex;
 extern s16 g_NegconMappingIndex;
@@ -1190,9 +1170,6 @@ s32 WriteMemoryCardSaveFile(
     return 1;
 }
 
-extern char g_SaveFilePath[];
-extern char g_SaveTitleSjis[];
-
 s32 WriteMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *header) {
     u8 block0[0x200];
     u8 block1[MC_BLOCK_SIZE];
@@ -1306,7 +1283,6 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) {
 }
 
 extern volatile s32 GameMenuLoadPhase;
-extern s32 g_SaveElapsedTicks;
 
 s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     u8 block[MC_BLOCK_SIZE];
@@ -1388,9 +1364,6 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     }
 }
 
-extern char g_FmtCardWildcard[];
-extern char g_McDirEntries[];
-
 void LibcSprintf();
 
 s32 CountMemoryCardFiles(s32 port, s32 slot) {
@@ -1417,8 +1390,6 @@ s32 CountMemoryCardFiles(s32 port, s32 slot) {
 #include "common.h"
 #include "game/memcard.h"
 #include "game/menu.h"
-
-extern char g_McDirEntries[];
 
 s32 CalculateMemoryCardFreeBlocks(s32 port) {
     u8 scratch[8];
@@ -1452,8 +1423,6 @@ s32 CalculateMemoryCardFreeBlocks(s32 port) {
     }
 }
 
-extern s32 g_McCardFileCount;
-
 s32 RefreshMemoryCardSaveStatus(s32 slot, GameSaveHeaderRow *header) {
     s32 ret;
 
@@ -1467,8 +1436,6 @@ s32 RefreshMemoryCardSaveStatus(s32 slot, GameSaveHeaderRow *header) {
     return ret;
 }
 
-extern char g_FmtPlayTime[];
-
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf();
 
@@ -1481,13 +1448,9 @@ void *FormatSaveElapsedTime(void *dst, u32 seconds) {
     return (u8 *)dst + 2;
 }
 
-extern u8 g_McMessageText[];
-
 void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) {
     DrawText8x8(0x28, 0xB8, &g_McMessageText[messageIndex * 30], 0x78CC);
 }
-
-extern u8 g_McHelpText[];
 
 void DrawMemoryCardHelpPrompt(s32 page) {
     s32 i;
@@ -1504,14 +1467,6 @@ void DrawMemoryCardHelpPrompt(s32 page) {
 #include "game/state.h"
 #include "psyq/gpu.h"
 #include "game/render.h"
-
-extern char g_FmtSaveRow[];
-extern u8 g_SaveNameCharset[];
-extern char g_FmtSaveRowTail[];
-extern char g_FmtSaveRowEmpty[];
-extern char g_McSlotLabels[];
-extern char g_McSlotLabelNoFile[];
-extern char g_McSlotLabelError[];
 
 /* DrawLargeText with word-wide parameters; the header spelling does not
  * match here. See DrawText8x8 above. */

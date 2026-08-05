@@ -5,7 +5,6 @@
 #include "game/asset.h"
 #include "game/render.h"
 
-extern s32 g_TrackTexturePageWanted;
 /*
  * Old-style definition on purpose: SetTrackTexturePageNow and RequestTrackTexturePage call this
  * with no argument at all (the original relied on whatever was left in $4), so
@@ -34,9 +33,6 @@ s32 arg0;
     return ret;
 }
 
-extern s16 D_8007C70A;
-extern u8 D_801E4BF8[];
-extern s32 g_TrackTexturePageWanted;
 void LoadImage(Rect *rect, void *data);
 
 void SwapTrackTexturePageNow(void) {
@@ -73,10 +69,6 @@ void SwapTrackTexturePageNow(void) {
     } while (page < 0x100);
 }
 
-extern s32 g_TrackTextureTargetRow;
-extern s32 g_TrackTextureCursorRow;
-void SwapTrackTexturePageNow(void);
-
 void SetTrackTexturePageNow(void) {
     s32 temp;
 
@@ -86,10 +78,6 @@ void SetTrackTexturePageNow(void) {
     SwapTrackTexturePageNow();
 }
 
-extern u8 D_801E4CF7;
-extern s32 g_TrackTexturePageWanted;
-extern s32 g_TrackTextureTargetRow;
-extern s32 g_TrackTextureCursorRow;
 void ResetTrackTextureSwap(void) {
     s32 value = 1;
     s32 i = 0xFF;
@@ -106,15 +94,10 @@ void ResetTrackTextureSwap(void) {
     g_TrackTextureCursorRow = 0;
 }
 
-extern s32 g_TrackTextureTargetRow;
 void RequestTrackTexturePage(void) {
     g_TrackTextureTargetRow = SelectTrackTexturePage();
 }
 
-extern s16 D_8007C70A;
-extern s32 g_TrackTextureCursorRow;
-extern u8 D_801E4BF8[];
-extern s32 g_TrackTexturePageWanted;
 void LoadImage(Rect *rect, void *data);
 
 void SwapTrackTextureRow(void) {
@@ -161,9 +144,6 @@ void SwapTrackTextureRow(void) {
     }
 }
 
-extern s32 g_TrackTextureCursorRow;
-extern s32 g_TrackTextureTargetRow;
-void SwapTrackTextureRow(void);
 s32 VSync(s32 mode);
 
 void StepTrackTextureSwap(void) {
@@ -181,8 +161,6 @@ void StepTrackTextureSwap(void) {
         }
     }
 }
-
-extern s32 g_TrackTextureCursorRow;
 
 s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
     s32 random;
@@ -207,8 +185,6 @@ s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
     }
     return current;
 }
-
-extern s32 g_TrackTextureCursorRow;
 
 s32 CycleAttractCameraCar(s32 mask, s32 current) {
     s32 random;

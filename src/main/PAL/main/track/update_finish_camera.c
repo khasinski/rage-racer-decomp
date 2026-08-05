@@ -5,7 +5,6 @@
 #include "psyq/gte.h"
 
 extern GameRenderObject g_CameraCar;
-extern s32 g_CameraCarTrackPoint;
 
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);

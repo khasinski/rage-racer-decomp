@@ -12,12 +12,6 @@ s32 rcos(s32 arg0);
 
 extern s16 g_ClosestRivalRank;
 
-void RankContenders(void);
-void UpdateCarTrafficAvoidance();
-void UpdateCarAiTargetSpeed();
-void ApplyCarRacingLineHint();
-void ClampCarLateralOffset();
-void SlowRivalAhead();
 void AccumulateLapProgress();
 void ApplyCarKnockback();
 s32 UpdateCarTrackState();
@@ -666,13 +660,6 @@ typedef struct Obj {
 } Obj;
 
 extern KE *g_RaceIntroCameraCursor;
-/* The pre-race fly-in: the timer counts down to 0 while the eye is eased
- * along the delta by cos(timer / keyframe->f12), and it also drives the
- * fade (timer * 26). */
-extern s32 g_RaceIntroCameraTimer;
-extern s16 g_RaceIntroCameraDeltaX;
-extern s16 g_RaceIntroCameraDeltaY;
-extern s16 g_RaceIntroCameraDeltaZ;
 
 s32 rcos(s32 angle);
 s32 rsin(s32 angle);

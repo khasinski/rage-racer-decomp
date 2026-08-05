@@ -32,9 +32,6 @@ extern u8 *g_RouteSceneryData;
  * UpdateRouteScenery increments it every frame, so it is both the enable
  * and the frame count since the seed. */
 extern volatile s32 g_RouteSceneryClock;
-/* Deliberately raw: the seeder's `= 1` is its only appearance in the image;
- * nothing ever reads it. */
-extern volatile s16 D_801E433C;
 extern volatile s16 g_RouteSceneryKeyIndex;
 extern s32 g_RouteSceneryRotY;
 extern u8 *g_RouteSceneryKeyframe;

@@ -4,25 +4,11 @@
 #include "game/car.h"
 #include "game/render.h"
 
-void UpdateCarDriving();
 void UpdateCarAirborne();
-void UpdateCarStandingStart();
 s32 rsin(s32);
 s32 rcos();
-extern s32 g_ShiftTargetSpeed;
 extern u8 *g_TrackArcCenters;
-/*
- * Rpm-band indexes into the car spec's two rpm->value curves, rebuilt per car
- * by InitPlayerCar: entry b holds how many curve points sit at or below rpm
- * band b, where band = drive->rpm / 1000. `Start` is the same table one
- * halfword earlier, i.e. band b - 1, so [Start[b], End[b]) is the range of
- * curve points this rpm can land in. The first curve (spec +0x40 / +0x44 x,
- * +0x00 / +0x04 y) yields the torque term; the second (spec +0xA8 / +0xAC x,
- * +0x80 / +0x84 y) a 0..100 percentage that is subtracted from it.
- */
-extern s16 g_TorqueBandStart;
 extern s16 g_TorqueBandEnd;
-extern s16 g_TorqueLossBandStart;
 extern s16 g_TorqueLossBandEnd;
 extern u8 g_PadType;
 /*

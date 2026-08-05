@@ -246,10 +246,6 @@ extern volatile u_long *g_OtcDmaChcr;
 void Gpu_ArmTimeout(void);
 long Gpu_CheckTimeout(void);
 
-/* Driver-table slot +0x2C: clears an ordering table through the hardware
- * OTC DMA channel (chcr 0x11000002, walking backwards from the end).
- * ClearOTagR is its only caller. */
-long Gpu_ClearOTagDma(u_long *ot, long count);
 long Gpu_ClearOTagDma(u_long *arg0, long arg1) {
     long size;
     u_long mask;

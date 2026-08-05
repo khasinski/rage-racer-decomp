@@ -8,8 +8,6 @@
  * 0x1F8010A0/A4/A8. See docs/names.md "Hardware mirrors". */
 extern volatile u_long *g_GpuGp1;
 
-void Gpu_WriteGp1(u_long arg0);
-long Gpu_WriteGp0Words(u_long *src, long count);
 void Gpu_StartDmaTransfer(u_long arg0);
 u_long _param(u_long arg0);
 extern long Gpu_AddQueue(void *callback, void *data, long size, long arg3);
@@ -18,8 +16,6 @@ void Gpu_WriteGp1(u_long arg0) {
     *g_GpuGp1 = arg0;
     g_GpuGp1Mirror[arg0 / 16777216] = arg0;
 }
-
-u_char Gpu_GetControlMirrorByte(long arg0);
 
 u_char Gpu_GetControlMirrorByte(long arg0) {
     return g_GpuGp1Mirror[arg0];

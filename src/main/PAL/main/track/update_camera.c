@@ -7,30 +7,16 @@
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
 extern void DrawPlayerCarModel(void *);
-extern s32 FindNearestTrackCamera();
 extern s32 rcos(s32);
 extern s32 SquareRoot0(s32);
 extern void *ApplyMatrixLV(void *, void *, void *);
 extern void *TransposeMatrixWide(void *, void *) asm("TransposeMatrix");
-/* Chase-view (mode 1) distance preset, 0..2: eye height 0x3A / 0x59 / 0x97 and
- * pull-back 0x118 / 0x140 / 0x190, plus a -0x90 vs -0x60 pitch bias. Sits in
- * .data at 0, and nothing in the image ever writes it, so retail is always 0. */
-extern s32 g_ChaseCameraPreset;
-/* Mode-5 orbit camera: a fixed yaw about the car and a fixed pull-back.
- * Both are .data constants with no writer anywhere: 0 and 330 (0x14A). */
-extern s32 g_OrbitCameraYaw;
-extern s32 g_OrbitCameraDistance;
 /* Mode-3 camera path: the eye is eased from one track-camera node to the next
  * over `node->duration` frames. Each of offset (a local xyz applied through the
  * car's matrix) and orientation (pitch/yaw/roll/distance) keeps a start value,
  * a delta to the destination and the current interpolated value. Mode-3 nodes
  * therefore store angles in the first four words where modes 2/4 store a world
  * position -- the record is a union keyed on `node->mode`. */
-/* The offset triples, each padded to 16 bytes: delta at 0x8009B1B8, start at
- * +0x10, current at +0x20. Indices 0/1/2 are x/y/z. */
-extern s32 g_CamPathOffsetDelta[3];
-extern s32 g_CamPathOffsetStart[3];
-extern s32 g_CamPathOffset[3];
 /* The orientation quads, same three-group shape as the offsets: delta at
  * 0x8009B1E8, start at +0x10, current at +0x20. Elements 0..2 are pitch, yaw
  * and roll -- 12-bit angles, wrapped to +-0x800 on load and masked with 0xFFF
@@ -39,35 +25,6 @@ extern s32 g_CamPathOffset[3];
 #define CAMPATH_YAW 1
 #define CAMPATH_ROLL 2
 #define CAMPATH_DIST 3
-extern s32 g_CamPathAngleDelta[4];
-extern s32 g_CamPathAngleStart[4];
-extern s32 g_CamPathAngle[4];
-/* Same word as g_CamPathAngleDelta[CAMPATH_YAW]. Mode 1 reuses it for the chase
- * camera's yaw carried over from the previous frame, which the quad name would
- * misdescribe, so the mode-1 code below keeps the raw spelling and only the
- * mode-3 half goes through the array. (Section 18d left the whole slot raw.) */
-extern s32 D_8009B1EC;
-/* Camera mode the previous frame ran (0..5); every case ends by writing it. */
-extern u8 g_CameraModePrev;
-/* Mode-1 chase smoothing. The target is the car heading; the camera walks
- * towards it by a quadratic ramp (ramp += 8 each frame, step = ramp^2/damping),
- * clamped to g_ChaseYawStepLimit. Damping falls from ~222 at rest to 1 at top
- * speed, i.e. the camera snaps to the car the faster it goes. */
-extern s32 g_ChaseTargetYaw;
-extern s32 g_ChaseYaw;
-extern s32 g_ChaseYawLag;
-extern s32 g_ChaseYawRampNeg;
-extern s32 g_ChaseYawRampPos;
-extern s32 g_ChaseYawStepLimit;
-extern s32 g_ChaseYawStep;
-extern s32 g_ChaseYawDamping;
-extern s32 g_ChaseCarSpeed;
-/* Track-camera node nearest the followed car this frame; a change arms the
- * mode-3 / mode-4 hand-over. g_CamPathNode is the node being eased towards and
- * g_CamPathFrame the elapsed frames of that ease. */
-extern s32 g_CameraNodeIndex;
-extern s32 g_CamPathFrame;
-extern s32 g_CamPathNode;
 extern s32 g_PlayerCar;
 extern u8 *g_TrackCameras;
 

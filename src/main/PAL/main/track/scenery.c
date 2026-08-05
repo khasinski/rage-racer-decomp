@@ -11,9 +11,6 @@
 void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
 
 extern Vec4 g_StaticSceneryPos;
-/* +0x0C of the same 4-word record, i.e. its w component used as a Y angle;
- * g_HighClassSceneryYaw is the same field of the record at 0x8007E350. */
-extern s32 g_StaticSceneryYaw;
 extern u32 *g_VisibleCellMask;
 
 static inline void ClearScratchRenderMode3DF68(void) {
@@ -85,8 +82,6 @@ void DrawStaticScenery(s32 arg0) {
         }
     }
 }
-
-extern s32 g_HighClassSceneryYaw;
 
 void DrawHighClassScenery(void) {
     Matrix mtx;
@@ -227,8 +222,6 @@ void DrawCourseScenery2(s32 arg0, s32 arg1) {
 extern u8 *g_FlybySceneryData;
 extern volatile s32 g_RaceSeries;
 extern u8 g_FlybyScenery[];
-extern s16 g_FlybySceneryLap;
-extern u8 *g_FlybySceneryKeyframe;
 
 void SeedFlybyScenery(void) {
     u8 *base;
@@ -295,9 +288,6 @@ void SeedFlybyScenery(void) {
  * volume to SetPitchedSoundCue. See docs/names.md 1.
  */
 extern s16 g_PlayerLap;
-extern s32 g_FlybySceneryArmed;
-extern s32 g_FlybySceneryFrame;
-extern s16 g_FlybySceneryKeyIndex;
 extern Vec4 g_FlybySceneryPosRec;
 extern s32 g_PlayerCar;
 

@@ -10,10 +10,6 @@ extern u_long g_ClearImagePacket[];
 u_long _param(long arg0);
 void Gpu_StartDmaTransfer(void *arg0);
 
-/* Driver-table slot +0x0C: the worker ClearImage enqueues. Fills the rect
- * with GP0(02h) when both x and w are 64-aligned, otherwise draws a flat
- * rectangle behind a saved draw-mode/area/offset block. */
-long Gpu_ClearImage(short *rect, u_long rgb);
 long Gpu_ClearImage(short *env, u_long rgb) {
     {
         long x = env[2];

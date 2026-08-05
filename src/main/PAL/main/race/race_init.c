@@ -1,11 +1,8 @@
 #include "common.h"
 #include "game/track.h"
 #include "game/car.h"
+#include "game/race.h"
 s32 InitSoundWithVab(void);
-
-extern u8 g_MsgResOk[];
-
-extern u8 g_MsgEventOk[];
 
 extern u8 *volatile g_RouteSceneryData;
 
@@ -14,12 +11,6 @@ extern u8 *volatile g_PathSceneryRotData;
 extern u8 *volatile g_FlybySceneryData;
 
 extern u8 *volatile g_PathSceneryPosData;
-
-extern u8 g_MsgSoundError;
-
-extern u8 g_MsgInitSoundOk;
-
-extern u8 g_MsgInitEngineOk;
 
 void LoadExtraVabSlotWithTable(void);
 

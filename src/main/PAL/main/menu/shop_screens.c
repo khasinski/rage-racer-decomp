@@ -8,16 +8,7 @@ u32 DrawEngineerShopScreen(s32 arg0);
 
 extern u8 *g_CarModelAsset;
 
-extern u8 D_800820C4;
-extern u8 D_800828B0;
-extern u8 D_80082904;
-extern u8 D_80082958;
-extern u8 D_800829AC;
-extern u8 D_80082A00;
-extern s32 g_CarPriceTable[];
 extern u8 *D_8019CB00;
-extern s32 D_801E4294;
-extern u8 D_801E438D[];
 
 void RequestCarModel(s32 arg0);
 void UploadTeamNameTexture(void *arg0, s32 arg1);
@@ -29,7 +20,6 @@ void GameDrawMenuButtonWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void DrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
-void UpdateCarListCursor(void);
 
 void UpdateCarShopScreen(void) {
     void *ot;
@@ -313,8 +303,6 @@ void UpdateCarShopScreen(void) {
     }
 }
 
-extern u32 D_8009B2EC;
-
 u32 DrawEngineerShopScreen(s32 arg0) {
     u32 value;
     s32 amount;
@@ -349,14 +337,8 @@ u32 DrawEngineerShopScreen(s32 arg0) {
     return D_8009B2EC;
 }
 
-extern u8 D_80082130;
-extern u8 D_80082898;
-extern u8 D_80082A54;
-extern s32 D_80082D80[];
 extern u8 *D_801E4188;
-extern s32 D_801E4290;
 
-void RequestUpgradedCarModel(s32 arg0);
 void DrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateEngineerShopScreen(void) {

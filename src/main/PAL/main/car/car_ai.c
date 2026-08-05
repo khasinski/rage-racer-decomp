@@ -15,13 +15,10 @@ typedef struct GameCollisionPointBytes {
 
 extern GameCollisionPoint g_CarCollisionCorners[4];
 
-void TransformCollisionVector(s32 *input, s32 *output);
 void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode)
 ;
 s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
 ;
-
-s32 GetCarCrestTrigger(GameCarRuntime *arg0);
 
 s32 rsin(s32 arg0);
 
@@ -31,18 +28,6 @@ s32 rsin(s32 arg0);
  * offsets (field_20/28 and y). field_98 holds the launch state (1 = jump). The
  * inline mult/mfhi block is the compiler's divide idiom; keep it verbatim.
  */
-
-/*
- * Fields of g_Cars[0] that retail reaches through their own split symbols
- * rather than by indexing the array, so the 0x19C-stride walks below keep them
- * raw:  g_CarTrackProgress = .trackProgress  g_CarMarkerIndex = .field_138
- *       g_CarMarkerFlag = .field_13A
- */
-extern u8 g_CarTrackProgress[];
-
-extern u8 g_CarMarkerIndex[];
-
-extern u8 g_CarMarkerFlag[];
 
 void UpdateCarBodyKick(GameCarRuntime *car) {
     s32 value;

@@ -9,12 +9,7 @@
 
 void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSprite");
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
-extern s32 g_BootLogoState;
-extern s32 g_BootLogoTimer;
-extern s32 g_BootLogoHoldTimer;
 void BeginIntroFmv(s32 arg0);
-void DrawEndingStill(void);
-void DrawBootLogo(void);
 extern Matrix g_SceneColorMatrix;
 extern Matrix g_DefaultColorMatrix;
 extern Matrix g_SceneLightMatrix;
@@ -22,7 +17,6 @@ extern Matrix g_DefaultLightMatrix;
 extern s32 g_ImageBlockBuffer;
 void UploadImageAsset(s32 arg0);
 void InitRenderState(s32 arg0);
-void InstallSceneLighting(void);
 
 void DrawBootLogo(void) {
     u8 *base;

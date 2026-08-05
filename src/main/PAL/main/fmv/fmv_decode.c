@@ -6,12 +6,9 @@
 #include "game/render.h"
 
 extern volatile u32 *g_FmvVlcBuffers[];
-extern s32 g_FmvVlcIndex;
 extern s32 g_FmvStripIndex;
 extern s32 g_StreamLoc;
-extern char g_MsgFmvSector[];
 
-void DecDCTin(volatile u32 *arg0, s32 arg1);
 void DecDCTout(volatile u32 *arg0, s32 arg1);
 s32 PresentFmvFrame(volatile void *arg0);
 s32 StGetBackloc(void *arg0);
@@ -64,7 +61,6 @@ extern volatile u32 g_FmvVlcBuffer0;
 extern volatile u32 g_FmvVlcBuffer1;
 extern volatile u32 g_FmvStripBuffer0;
 extern volatile u32 g_FmvStripBuffer1;
-extern volatile u16 g_DispEnv0X;
 extern volatile u16 g_DispEnv0Y;
 extern volatile u16 g_DispEnv1X;
 extern volatile u16 g_DispEnv1Y;

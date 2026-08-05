@@ -11,8 +11,6 @@ extern volatile u_char g_SndVoiceFlags[];
 
 short SpuVmSetSeqVol();
 long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2);
-short SpuVmGetSeqVolLeft(long arg0);
-short SpuVmGetSeqVolRight(long arg0);
 
 short SpuVmSetSeqVol(arg0, arg1, arg2, arg3)
 short arg0;

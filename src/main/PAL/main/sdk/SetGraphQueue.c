@@ -7,8 +7,6 @@ extern u_char g_GraphQueue;
 extern u_char g_GraphDebug;
 extern char D_800134F0[];
 
-/* GP1 queue mode; own trace string D_800134F0 is "SetGrapQue(%d)...". */
-long SetGraphQueue(long mode);
 long SetGraphQueue(long arg0) {
     u_char *queue = &g_GraphQueue;
     long newQueue = arg0;

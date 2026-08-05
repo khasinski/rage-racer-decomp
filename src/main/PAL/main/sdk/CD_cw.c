@@ -9,8 +9,6 @@ extern CdCallback g_CdReadyCallback;
 extern u_char g_CdLastPos[4];
 extern char *g_CdCommandNames[];
 extern char *g_CdIntrNames[];
-extern long g_CdCommandClearsReady[];
-extern long g_CdCommandParamCount[];
 extern volatile CdIntr g_CdSyncStatus;
 extern u_char g_CdSyncResult[8];
 extern u_char g_CdReadyResult[8];

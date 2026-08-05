@@ -18,7 +18,6 @@ extern u8 *g_AssetSubBlockPtr;
 extern u8 *g_AssetBlockPtr2;
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 GetCarAssetIndex(s32 model, s32 grade);
-void SetCarSpec(void);
 void UploadImageAsset(void *arg0);
 void SetTrackCameraTable(void *arg0);
 void RegisterCourseModels(void *arg0);

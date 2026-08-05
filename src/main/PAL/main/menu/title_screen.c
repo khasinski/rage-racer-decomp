@@ -10,7 +10,6 @@
 #include "game/screens.h"
 
 extern s32 D_801E8260;
-extern s32 D_801E6F28;
 
 void CloseLoadedAudioSlots(void);
 void SetDefaultReverbDepth(void);
@@ -39,7 +38,6 @@ void EnterFrontend(void) {
 }
 
 extern s32 g_StreamReturnScene;
-extern s32 D_801E6F28;
 extern s32 D_801E8260;
 void SetDefaultReverbDepth(void);
 
@@ -69,9 +67,6 @@ void EnterTitleScreen(void) {
 
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
 
-/* Full-width grey box over the title screen at OT slot 0x29; the caller
- * steps its brightness D_801E6F28 down by 2 a frame. */
-void DrawTitleFadeOverlay(s32 brightness);
 void DrawTitleFadeOverlay(s32 arg0) {
     void *current;
     void **scratch;
@@ -88,10 +83,7 @@ void DrawTitleFadeOverlay(s32 arg0) {
     *scratch = GameQueueDrawModePrimWide(base, next, 0x29);
 }
 
-extern s32 D_801E6F28;
-
 s32 rsin(s32 arg0);
-void DrawTitleFadeOverlay(s32 brightness);
 void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSprite");
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2);
 
@@ -210,7 +202,6 @@ void UpdateMainMenuOpen(void) {
 }
 
 extern volatile u8 g_BgmShuffleOrder[];
-extern u8 D_801E7733[];
 extern s32 g_BgmShuffleIndex;
 
 /* Refills g_BgmShuffleOrder with a random permutation of the
@@ -252,7 +243,6 @@ extern s32 D_801E8260;
 
 extern s32 *g_CarTable;
 extern s32 *g_CourseProgress;
-extern s32 g_ExtraGrandPrixSaveMaxClass;
 
 extern s32 g_GrandPrixCars;
 extern s32 g_GrandPrixCourseProgress;
@@ -263,8 +253,6 @@ extern s32 g_TimeAttackCars;
 void PlaySoundCue(s32 cue);
 extern void ResetAssetLoader(void);
 extern void ShuffleBgmOrder(void);
-extern void RequestSelectBgmAssetsNoReset(void);
-extern void RequestSaveScreenAssets(void);
 extern void RequestOptionScreenAssets(void);
 extern void DrawMainMenuRows(void);
 

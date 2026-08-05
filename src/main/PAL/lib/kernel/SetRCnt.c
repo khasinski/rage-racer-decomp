@@ -1,12 +1,5 @@
 #include "psyq/kernel.h"
 
-/* Root counters: g_RootCounterRegs is 0x1F801100, three 16-byte banks of
- * {count, mode, target}; g_IrqRegs is the I_STAT/I_MASK pair at 0x1F801070,
- * indexed [1] for the mask; g_RootCounterIrqBits is each counter's mask bit. */
-extern volatile u_short *g_RootCounterRegs;
-extern volatile u_long *g_IrqRegs;
-extern u_long g_RootCounterIrqBits[];
-
 long SetRCnt(long arg0, long arg1, long arg2) {
     register long index asm("$8") = arg0 & 0xFFFF;
     u_short flags = 0x48;

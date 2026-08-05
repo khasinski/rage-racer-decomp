@@ -7,15 +7,7 @@ typedef struct CallbackTable {
     void (*callback)(void);
 } CallbackTable;
 
-/* VSync bookkeeping. g_VSyncGpuStat is GP1/GPUSTAT 0x1F801814 (the field bit
- * is what the busy-wait watches) and g_Timer1CountReg is T1_COUNT 0x1F801110;
- * the two *Base words are the counter values sampled at the last VSync(). */
-extern volatile long *g_VSyncGpuStat;
-extern volatile long *g_Timer1CountReg;
-extern volatile long g_VSyncTimerBase;
-extern long g_VSyncCountBase;
 extern KernelCallback *g_IntrRpNode;
-extern char D_80013B2C[];
 
 void LibcPutString(char *arg0);
 

@@ -106,8 +106,6 @@ void EnterRoundScreen(void) {
     }
 }
 
-extern s16 g_RoundScreenFadeDelays[];
-
 s32 UpdateRoundScreenFade(s32 arg0) {
     s32 value;
     s32 ret;
@@ -136,21 +134,10 @@ s32 UpdateRoundScreenFade(s32 arg0) {
 }
 
 extern s32 g_BgmSelection;
-extern char *g_BgmTrackNames[];
-extern char D_80010D2C[];
-
-extern char D_80010C30[];
-extern char D_80010C40[];
-extern char D_80010C44[];
-extern char D_80010C50[];
-extern char D_80010C5C[];
-extern char D_80010C68[];
-extern char D_80010C70[];
 
 extern s32 g_BestTotalTimes[][4][2];
 extern s32 g_BestLapTimes[][4][2];
 
-s32 UpdateRoundScreenFade(s32 arg0);
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
                    s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags) asm("DrawSprite");
 void LibcSprintf(void *dst, void *fmt, s32 v);

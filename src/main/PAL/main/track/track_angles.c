@@ -31,9 +31,6 @@ s32 BlendAngle(s32 angleA, s32 angleB, s32 weight) {
 #include "common.h"
 #include "game/track.h"
 
-
-s32 BlendAngle(s32 arg0, s32 arg1, s32 arg2);
-
 /* Interpolates the track angle between point `pointIndex` and its successor by `weight`. */
 s32 InterpolateTrackAngle(s32 pointIndex, s32 weight) {
     s32 next = (pointIndex + 1) % g_TrackPointCount;
@@ -43,10 +40,6 @@ s32 InterpolateTrackAngle(s32 pointIndex, s32 weight) {
 
 #include "common.h"
 #include "game/track.h"
-
-extern s32 g_PlayerSegmentWeight;
-
-s32 BlendAngle(s32 arg0, s32 arg1, s32 arg2);
 
 /*
  * Track angle between point `pointIndex` and its successor (blend weight from
@@ -61,7 +54,6 @@ s32 GetReverseTrackAngle(s32 pointIndex) {
 
 #include "common.h"
 #include "game/track.h"
-
 
 /*
  * Linearly interpolates the centre-line XYZ between GameTrackPoint[pointIndex]
@@ -97,8 +89,6 @@ void InterpolateTrackPoint(s32 pointIndex, s32 *out, s32 weight) {
 #include "common.h"
 #include "game/track.h"
 
-
-s32 BlendAngle(s32 arg0, s32 arg1, s32 arg2);
 s32 InterpolateTrackAngle(s32 arg0, s32 arg1);
 
 /*

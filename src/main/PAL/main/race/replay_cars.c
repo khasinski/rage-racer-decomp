@@ -7,8 +7,6 @@
 
 extern s32 g_PlayerCar;
 
-extern s32 g_Car0TrackPoint;
-
 void ApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2);
 
 void SeedCarLapProgress(void *arg0, s32 arg1);
@@ -25,8 +23,6 @@ typedef struct TrackZone {
     s16 code;
     s16 value;
 } TrackZone;
-
-extern u8 g_MsgGameExit;
 
 void ForceAllEffectVoicesEnabled(s32 arg0);
 

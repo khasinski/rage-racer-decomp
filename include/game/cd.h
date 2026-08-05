@@ -66,4 +66,19 @@ extern s32 g_CdRestartOnResume;
 extern s32 g_CdTrackPending;
 extern s32 g_CdTrackStep;
 
+/* Declared identically by 10 translation units before this
+ * header carried them. */
+
+extern void *g_CdAudioFileNames[];
+extern u8 g_CdLocMinute;
+extern u8 g_CdLocResult;
+extern u8 g_CdLocSecond;
+extern u8 g_CdMixPresets[];
+extern u8 g_CdModeParam;
+extern u8 g_CdSearchFile[];
+extern s32 g_CdTocEntryCount;
+extern u8 g_CdTrackElapsedLoc[];
+
+void CdMix(u8 *arg0);
+
 #endif

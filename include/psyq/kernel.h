@@ -88,4 +88,28 @@ extern volatile u_short *g_IrqStatus;
 extern volatile u_long *g_KernelDpcr;
 extern volatile long g_VSyncCount;
 
+/* Declared identically by 20 translation units before this
+ * header carried them. */
+
+extern char D_80013B2C[];
+extern u_char D_80013B70[];
+extern u_char D_80013B8C[];
+extern u_char D_80013BA8[];
+extern u_char D_80013BC4[];
+extern u_short D_8009946C[];
+extern long D_8009A51C;
+extern u_long g_DmaCallbacks[];
+extern u_long *g_DmaChannelRegs;
+extern volatile u_long *g_DmaIrqControl;
+extern long g_IntrStuckCount;
+extern volatile u_long *g_IrqRegs;
+extern u_long g_RootCounterIrqBits[];
+extern volatile u_short *g_RootCounterRegs;
+extern volatile long *g_Timer1CountReg;
+extern u_long *g_Timer1ModeReg;
+extern void *g_VSyncCallbacks[];
+extern long g_VSyncCountBase;
+extern volatile long *g_VSyncGpuStat;
+extern volatile long g_VSyncTimerBase;
+
 #endif

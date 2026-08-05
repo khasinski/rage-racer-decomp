@@ -115,24 +115,8 @@ typedef struct GamePlayerCarSpecInit
   s32 f15C;
 } GamePlayerCarSpecInit;
 #define g_PlayerCarInitSpec ((GamePlayerCarSpecInit *)g_CarSpec)
-extern char D_800113B0[];
-extern char D_800113BC[];
-extern char D_800113C4[];
-extern char D_800113CC[];
-extern char D_800113D4[];
-extern char D_800113DC[];
-extern char D_800113E0[];
-extern char D_800113E8[];
-extern char D_800113F0[];
-extern char D_800113F8[];
-extern char D_80011400[];
-extern char D_80011408[];
-extern s16 D_801E6F18;
-extern s16 D_801E6F1A;
 extern s16 g_TorqueBandEnd[];
 extern s16 g_TorqueLossBandEnd[];
-extern s16 D_8007DAD4[];
-void BuildTachoNeedleQuad(void);
 void ClearCarMotionState(void *);
 s32 FindTrackSegment(void *, s32);
 void SeedCarLapProgress(void *, s32);
@@ -637,10 +621,6 @@ typedef struct CollisionContext
  * The typed view gives the three point-test passes one in-bounds coordinate
  * system and names the final collision-response delta at the same location. */
 extern GameCarRuntime g_Cars[];
-extern u16 D_8007DA88[];
-extern u16 D_8007DA8A[];
-extern u16 D_8007DAA0[];
-extern u16 D_8007DAA2[];
 s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
 void PlaySoundCue(s32 id);

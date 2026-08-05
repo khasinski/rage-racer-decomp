@@ -12,11 +12,7 @@ void ServiceAssetLoad(void);
 void RequestBootAssets(void);
 void InitAssetSystem(void);
 
-void ResetGraph(s32 arg0);
 void SetGraphDebug(s32 arg0);
-void InitGeom(void);
-void ResetReplayFrameCounts(void);
-void InitRecordTables(void);
 void InitRenderState(s32 arg0);
 
 extern s32 g_ScreenOffsetY;
@@ -78,10 +74,6 @@ void InitSubsystems(void) {
     SetCameraRotMatrix();
 }
 
-void __main(void);
-void BiosSetMemSize(s32 arg0);
-void TickSequenceAudio(void);
-void StepTrackTextureSwap(void);
 void PutDrawEnv(u8 *env);
 void PutDispEnv(u8 *arg0);
 void DrawOTag(u8 *ot);
@@ -90,7 +82,6 @@ void DrawOTag(u8 *ot);
 extern u8 g_FrameContexts[];
 /* Which of them is current, mirrored for everyone else to read. */
 extern s32 g_FrameParity;
-extern s32 g_FrameCounter;
 /* Scene handlers, indexed by g_SceneId. */
 extern void (*g_SceneHandlers[])(void);
 

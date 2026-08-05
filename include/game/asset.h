@@ -166,4 +166,28 @@ void StoreTeamLogoImage(void *arg0);
 void UploadImageBlock(void *arg0);
 void UploadLoadBufferImage(void);
 
+/* Declared identically by 19 translation units before this
+ * header carried them. */
+
+extern s32 D_8019C708;
+extern s32 D_801E4144;
+extern u32 g_CarImageRect;
+extern void *g_CarImageSlots[];
+extern void *g_CarModelSlots[];
+extern void *g_ModelBanks[];
+extern char g_MsgFileNotFound[];
+extern char g_MsgFileReadError[];
+extern char g_MsgNowLoading[];
+extern char g_MsgNowSearching[];
+extern char g_MsgReadBytes[];
+extern char g_MsgReadSectors[];
+extern char g_MsgSearchOk[];
+extern char g_PathRageBin[];
+extern char g_PathRageStr[];
+
+void InstallResourceData(void *arg0);
+void LoadCarModel(s32);
+void LoadUpgradedCarModel(s32);
+void SetCarSpec(void);
+
 #endif

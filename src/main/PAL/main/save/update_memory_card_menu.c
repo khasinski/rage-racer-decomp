@@ -5,16 +5,6 @@
 #include "psyq/gpu.h"
 #include "game/audio.h"
 
-extern s32 g_McSlotUsedMask;
-extern GameSaveHeaderRow g_McSaveHeaders[];
-extern s32 g_McNoCardTicks;
-extern s32 g_McErrorTicks;
-extern s32 g_McLastMenuState;
-extern s32 g_McActionOk;
-extern s32 g_McSettleTicks;
-extern s32 g_McCardOkFrames;
-extern s32 g_McActionElapsed;
-extern s32 g_McSavedLoadPhase;
 /* Volatile aliases of three game/menu.h globals, NOT extra objects: this file
  * reads each of them both ways, and only the volatile spelling forces the
  * reload the retail code has at those few sites. A redeclaration cannot add the
@@ -22,24 +12,10 @@ extern s32 g_McSavedLoadPhase;
  * its own identifier. */
 extern volatile s32 g_McCardStatusV asm("g_McCardStatus");
 extern volatile s32 g_McMenuSubState;
-extern s32 g_McSaveMode;
 extern volatile s32 GameMenuLoadPhase;
-extern s32 g_McSlotCursor;
-extern s32 g_McActionState;
-extern s32 g_McActionResult;
-extern s32 g_McConfirmChoice;
 extern volatile s32 g_McConfirmChoice_v asm("g_McConfirmChoice");
-extern s32 g_McStateChangeCount;
-extern s32 g_McActionTimer;
-extern s32 g_McActionBusy;
-extern s32 g_McErrorCountdown;
-extern s32 g_McErrorPending;
-extern s32 g_McLastSlot;
-extern s32 g_McDrawEnabled;
 
-s32 PollMemoryCardStatus(s32 a, s32 b);
 void DrawMemoryCardScreen(s32 a0, s32 a1, s32 a2, s32 a3);
-void DrawMemoryCardMessage(s32 a0);
 
 void UpdateMemoryCardMenu(void) {
     s32 fadeBusy = 0;

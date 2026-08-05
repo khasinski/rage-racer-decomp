@@ -11,10 +11,7 @@ typedef struct UnkCopyChunk {
 } UnkCopyChunk;
 
 void DrawFullscreenFadeTile(s32, s32);
-void DrawRaceTimePanel(s32);
 void DrawPrizeMoneyPanel(s32);
-void TickClassClearFanfare(void);
-void AdvanceGrandPrixClass(void);
 void SetSequenceVolumeSetting(s32 arg0);
 void SetEffectVolumeSetting(s32 arg0);
 extern UnkCopyChunk g_SaveDefaults[];

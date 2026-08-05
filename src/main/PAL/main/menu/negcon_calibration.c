@@ -14,13 +14,8 @@ typedef struct NegconUvTemplate {
 
 extern NegconUvTemplate D_80010070;
 
-/* "Steer play." */
-extern char D_80010078[];
-
 /* The 0..3 steering-play setting this screen edits. */
 extern s16 g_NegconSteerPlay;
-/* Play in hundredths of a degree per setting; the gauge marks scale from it. */
-extern s16 g_NegconPlayPercent[];
 
 void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex);
 
@@ -157,8 +152,6 @@ void UpdateNegconSteerPlayScreen(void) {
 
 extern NegconUvTemplate D_80010084;
 
-/* "Maximum twist." */
-extern char D_8001008C[];
 /* The 0..3 maximum-twist setting this screen edits. */
 extern s16 g_NegconMaxTwist;
 

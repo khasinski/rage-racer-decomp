@@ -5,11 +5,6 @@
 #include "game/race.h"
 #include "game/menu.h"
 
-extern u8 g_CdTrackElapsedLoc[];
-extern u8 g_CdModeParam;
-extern u8 g_CdLocResult;
-extern u8 g_CdLocMinute;
-extern u8 g_CdLocSecond;
 extern u8 g_CdVolume;
 extern CdlLOC g_CdTrackLoopPoint[];
 

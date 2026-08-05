@@ -179,4 +179,33 @@ extern u_char g_SndVoiceStateSeqSep[];
 extern u_char g_SndVoiceStateStartPan[];
 extern u_char g_SndVoiceStateStatus[];
 
+/* Declared identically by 24 translation units before this
+ * header carried them. */
+
+extern char g_MsgSeqTableFull[];
+extern u_char g_SndCurrentNote;
+extern u_char g_SndCurrentProg;
+extern u_char g_SndCurrentToneCenter;
+extern u_char g_SndCurrentToneShift;
+extern u_char g_SndCurrentVabId;
+extern u_short g_SndPitchTable[];
+extern volatile u_short g_SndReverbAttrDepthLeft;
+extern volatile u_short g_SndReverbAttrDepthRight;
+extern u_short g_SndSpuCtrlDefaults[];
+extern long g_SndTickVSyncToggle;
+extern u_short *g_SndVabBodyAddr[];
+extern u_short g_SndVoiceRegDefaults[];
+extern u_char g_SndVoiceRegsAddr[];
+extern long g_SndVoiceSilenceIndex;
+extern u_char g_SndVoiceStateEndPan[];
+
+void SpuVmAutoPanTick(long voice);
+short SpuVmGetSeqVolLeft(long arg0);
+short SpuVmGetSeqVolRight(long arg0);
+void SpuVmInit(long arg0);
+void SsSeqIndexChannel(long channel, short vab, u_char prog, short volume, long pan);
+long SsSeqParseHeader(long arg0, long arg1, long arg2);
+void SsSeqSetPortamento(short seq, short sep, u_char value);
+void func_80076C50(void);
+
 #endif

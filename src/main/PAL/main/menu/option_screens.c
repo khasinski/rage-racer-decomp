@@ -14,18 +14,8 @@ s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 a
 void DrawOptionHintBar(s32 arg0);
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
-extern u16 D_8019CE9C;
-extern u16 D_8019CE9E;
-extern u16 D_801C0684;
-extern u16 D_801C0686;
-/* The four-arrow reticle of the screen-position panel. */
-void DrawScreenAdjustScreen(void);
-void DrawScreenAdjustScreen(void);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 QueueLineWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueLine");
-/* The setup scene's per-frame overlay: pad hint, letterbox, and the alignment frame in mode 6. */
-void DrawOptionSceneOverlay(void);
-void DrawOptionSceneOverlay(void);
 extern s32 g_CameraViewMode;
 extern s32 *g_CamRow;
 void InitRenderState(s32 arg0);
@@ -33,7 +23,6 @@ void SetTrackTexturePageNow(s32 arg0);
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void RequestTrackDataAssets(void);
-void UpdateOptionSceneFade(void);
 
 /* g_GameModeHandlers[5]: left/right edits the selected audio setting, cancel restores it. */
 void UpdateSoundSettingAdjust(void) {

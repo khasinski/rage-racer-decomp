@@ -33,38 +33,6 @@ void DrawRouteScenery(void) {
     SubmitModel((void *)0x1F800000, drawId);
 }
 
-/*
- * g_ShuttleScenery[1]'s fields, at +0x34 of the array in game/track.h, which
- * documents what each one does: dwellCounter +0x00, travelStep +0x08,
- * startEndpoint +0x0C, pathIndex +0x0E, x/y/z +0x10..0x18, unk1C +0x1C and
- * angleX/Y/Z +0x20..0x28.
- *
- * They CANNOT be written as g_ShuttleScenery[1].field here. As struct member
- * references GCC 2.6.3 marks the loads and stores MEM_IN_STRUCT_P, stops
- * treating them as aliasing the g_ShuttlePath* table reads interleaved with
- * them, hoists one base register for the whole block and reorders the stores
- * (0x34-relative offsets 52/60/64/66/84/88/92 appear, and the branch layout
- * moves). Eleven separate symbols are what retail's codegen requires.
- */
-extern s32 g_Shuttle1DwellCounter;
-extern s32 g_Shuttle1TravelStep;
-extern s16 g_Shuttle1StartEndpoint;
-extern s16 g_Shuttle1PathIndex;
-extern s32 g_Shuttle1X;
-extern s32 g_Shuttle1Y;
-extern s32 g_Shuttle1Z;
-extern s32 g_Shuttle1Unk1C;
-extern s32 g_Shuttle1AngleX;
-extern s32 g_Shuttle1AngleY;
-extern s32 g_Shuttle1AngleZ;
-/*
- * The shuttle's authored paths, indexed by GameShuttleScenery.pathIndex:
- * g_ShuttlePathPoints is 0x20 bytes per path, two 16-byte { x, y, z, unk }
- * endpoints; g_ShuttlePathAngles 8 bytes per path, three s16 Euler angles;
- * g_ShuttlePathDwellMax one s16 per path, the frames held at an endpoint.
- * g_ShuttlePath2Points is the split symbol for &g_ShuttlePathPoints[2].
- */
-extern s32 g_ShuttlePath2Points[];
 typedef struct ShuttlePath {
     Vec4 endpoint[2];
 } ShuttlePath;

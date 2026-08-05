@@ -5,26 +5,15 @@
 void SetRotMatrix(void *arg0);
 void SetDrawArea(u8 *packet, u8 *drawEnv);
 
-extern s32 g_MirrorPanelY;
-extern s32 g_MirrorUnlocked;
 void ResetMirrorState(void) {
     g_MirrorViewEnabled = 1;
     g_MirrorPanelY = -0x2C;
     g_MirrorUnlocked = 0;
 }
 
-extern s32 g_MirrorUnlocked;
 extern s32 g_CameraViewMode;
-extern Matrix D_8009AF00;
-extern s16 D_8019CEAA;
-extern s16 D_801C0692;
-extern s16 D_8019CEAE;
-extern s16 D_801C0696;
 extern s32 g_VisibleCellMask;
-extern s32 D_8019C7E4;
 extern s32 g_VisibleCellList;
-extern s32 D_8009E888;
-extern s32 g_MirrorPanelY;
 
 /*
  * Sets up the scratchpad render state (0x1F800000) for the rear-view mirror
@@ -105,7 +94,6 @@ s32 BeginMirrorPass(void) {
     return mirrorEnabled;
 }
 
-extern Matrix D_8009AF00;
 extern s32 g_VisibleCellMask;
 extern s32 D_8019C86C;
 extern s32 g_VisibleCellList;
@@ -148,12 +136,6 @@ void EndMirrorPass(void) {
     scratch->matrix = D_8009AF00;
 }
 
-extern s32 g_MirrorPanelY;
-extern u8 D_8007C728[];
-extern u8 D_8007C738[];
-extern u8 D_8007C739[];
-extern u8 D_8007C73A[];
-
 void SetTile(u8 *arg0);
 void AddPrim(void *ot, void *prim);
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
@@ -195,11 +177,8 @@ u8 *DrawMirrorFrame(u8 *packet) {
     return (u8 *)GameQueueDrawModePrimWide(ot, next, 9);
 }
 
-extern s32 g_MirrorUnlocked;
-extern s32 g_MirrorPanelY;
 extern s32 g_VisibleCellList;
 
-u8 *DrawMirrorFrame(u8 *packet);
 void AddPrim(void *ot, void *prim);
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2);
 

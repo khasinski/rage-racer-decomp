@@ -74,11 +74,6 @@ void DrawPathScenery(void) {
     SubmitModel((void *)0x1F800000, drawId);
 }
 
-/* g_PlayerCar + 0x3C. Named for its identity only: this caller branches on
- * its sign while the other user treats it as an unsigned 0..0x800 width
- * fraction, and docs/names.md 15g leaves that unreconciled. */
-extern s32 g_PlayerField3C;
-
 s32 rcos(s32 arg0);
 void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
 

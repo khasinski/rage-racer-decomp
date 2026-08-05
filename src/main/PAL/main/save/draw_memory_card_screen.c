@@ -1,15 +1,13 @@
 #include "common.h"
 #include "game/state.h"
 #include "game/menu.h"
+#include "game/memcard.h"
 
 extern u8 *volatile g_DrawBuffer;
 s32 GameQueueSpriteTrans(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 color);
 s32 AddTilePrim(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 void DrawMenuCursorArrow(s32 a, s32 b);
 void DrawOptionHintBar(s32 a);
-s32 DrawShadowedTile(s32 base, s32 prim, s32 a, s32 b);
-extern s32 *g_McMessageRows[];
-extern s16 g_McMessageColumnX[];
 void DrawSpriteString(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 GameQueueSprite(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 QueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");

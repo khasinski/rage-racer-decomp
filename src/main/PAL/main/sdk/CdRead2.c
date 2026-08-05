@@ -2,15 +2,12 @@
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
 
-extern long g_StBackFrame;
-extern u_char g_StBackLoc[];
 extern long g_StCurrentFrameCount;
 extern u_char *D_80099360;
 extern u_char *D_8009936C;
 extern long g_StNotStream2Mode;
 extern short g_StCurrentSector;
 extern long g_StColorMode;
-extern StCallback g_StFrameCallback;
 extern long g_StEndCallback;
 extern long g_StNextChannel;
 extern long g_StCurrentChannel;
@@ -23,7 +20,6 @@ extern long g_StRingSize;
 extern long g_StInterruptPending;
 
 void CdDataCallback(long arg0);
-void CdRead2Callback(void);
 void data_ready_callback(void);
 void StClearRingRange(long arg0, long arg1);
 void StSetRingParams(long arg0);

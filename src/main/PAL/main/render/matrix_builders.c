@@ -2,13 +2,6 @@
 #include "game/render.h"
 #include "psyq/gte.h"
 
-/*
- * Builds a single-axis rotation matrix into `out` (0x1000 == 1.0 fixed-point).
- * axisMode selects the axis from ((u8)axisMode) - 0x58:
- *   0/0x20 -> rotation about X, 1/0x21 -> about Y, 2/0x22 -> about Z.
- * sinTerm/cosTerm are the precomputed sin/cos of the rotation angle.
- */
-void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axis);
 void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axisMode) {
     s32 one;
 
@@ -58,9 +51,7 @@ void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32
     }
 }
 
-void MatrixApplyZRotation(Matrix *arg0, s32 arg1);
 s32 SquareRoot0(s32 arg0);
-void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ);
 
 /*
  * Builds a billboard / look-at view Matrix for a GameRenderObject: the eye is

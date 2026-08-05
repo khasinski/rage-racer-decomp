@@ -12,8 +12,6 @@ extern void (*g_BgmSelectSteps[])(void);
 extern s32 g_ImageBlockBuffer;
 void UploadImageAsset(void *arg0);
 s32 RequestTrackDataAssets(void);
-extern s16 g_AttractTitleDelays[];
-s32 GetAttractTitleFade(s32 arg0);
 
 void DrawCarSpecSprite(
     u8 *arg0,
@@ -34,11 +32,9 @@ void DrawCarSpecSprite(
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
 void AdvanceBgmShuffleBag(s32 arg0);
-void DrawAttractTitle(void);
 extern u32 g_StreamReturnScene;
 extern u32 g_CameraViewMode;
 void DrawFullscreenFadeTile(s32 arg0, u32 arg1);
-s32 CycleAttractCameraCar(u32 arg0, s32 arg1);
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
 void DrawTerrainCellsWide(void);

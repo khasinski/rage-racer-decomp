@@ -34,8 +34,6 @@ extern u_char D_8009E0D8[];
 extern u_char D_8009E0DA[];
 extern u_char D_8009E0DC[];
 
-extern volatile u_short g_SndReverbAttrDepthLeft;
-extern volatile u_short g_SndReverbAttrDepthRight;
 extern volatile u_short g_SndReverbOnLow;
 extern volatile u_short g_SndReverbOnHigh;
 extern volatile u_long g_SndReverbAttr;

@@ -9,15 +9,8 @@
 
 extern s16 g_ClassRecords[];
 extern volatile s32 g_ClassWinCount;
-extern u8 g_CaptionLostRace;
-extern s32 g_LostRaceChoice;
 void SetReverbDepth(s32 arg0, s32 arg1);
 extern void *g_CourseProgress;
-extern char g_TextTryAgain[];
-extern char g_TextEndRace[];
-extern char g_TextChance[];
-extern char g_TextPressStart[];
-extern s16 g_ChanceDigits[];
 extern volatile u16 g_PadEdge2;
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void GameDrawSpriteWide(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13) asm("DrawSprite");

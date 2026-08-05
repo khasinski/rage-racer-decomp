@@ -11,18 +11,9 @@
 #include "game/asset.h"
 #include "psyq/cd.h"
 
-extern char g_MsgNowLoading[];
-extern char g_MsgReadBytes[];
-extern char g_MsgFileReadError[];
 s32 CdRead(s32 arg0, void *arg1, s32 arg2);
 long CdReadSync(long arg0, long arg1);
 s32 LoadAssetWide(s32 assetIndex, s32 dst) asm("LoadAsset");
-extern char g_PathRageBin[];
-extern char g_MsgFileNotFound[];
-extern char g_MsgReadSectors[];
-extern char g_MsgNowSearching[];
-extern char g_PathRageStr[];
-extern char g_MsgSearchOk[];
 void UploadImageAsset(void *arg0);
 
 void SetTrackCameraTable(u32 value) {

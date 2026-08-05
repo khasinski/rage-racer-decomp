@@ -29,9 +29,6 @@ extern void GameDrawTexturedQuad(
     s32 semiTrans,
     s32 tpage);
 
-extern s32 D_8009B280;
-extern u8 D_8009B284;
-
 typedef struct TeamLogoClutPos {
     s16 cx;
     s16 cy;
@@ -52,15 +49,7 @@ extern TeamLogoClutPos g_TeamLogoClutRect;
 extern TeamLogoTexturePos g_TeamLogoRect;
 extern TeamLogoWord D_8007F934;
 extern TeamLogoWord D_8007F93C;
-extern s32 D_8007F948;
 extern s32 D_8007F950;
-extern u16 D_8007F95C;
-extern s32 D_8007FB0C;
-extern s32 D_8007FB10;
-extern s32 D_8009B288;
-extern s32 D_8009B298;
-extern s32 D_8009B29C;
-extern u16 D_8009B2A0[16];
 extern u16 g_TeamLogoClut[16];
 extern u8 g_PadType;
 extern u16 D_801E6F2C asm("g_TeamLogoCanvas");
@@ -610,10 +599,6 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     }
   }
 }
-
-extern s32 D_8007F948;
-extern s32 D_8009B298;
-extern s32 D_8009B29C;
 
 void RampTeamLogoCanvas(s32 arg0, s32 arg1) {
     s32 temp;

@@ -6,7 +6,6 @@ extern VabHdr *g_SndVabHeader[];
 extern short g_SndVabProgMax;
 extern ProgAtr *g_SndVabProgTable[];
 extern VagAtr *g_SndVabToneTable[];
-extern u_short *g_SndVabBodyAddr[];
 extern long g_SndVabBodySize[];
 
 extern void _spu_setTransferCompletionFlag(long value);

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "psyq/gte.h"
 
 /*
  * Names for this unit's hand-written GTE engine routines. The addresses live in
@@ -7,14 +8,7 @@
  * docs/names.md section 17.
  */
 void SubmitTerrainCells(void *ctx, void *cells, s32 count);
-void SubmitTerrainCellFaces(void);
-void EmitSubdividedTerrainQuad(void);
-void InterpolateSubdivRow(void);
-void SubmitTerrainCellFacesFar(void);
 void SubmitModel(void *ctx, s32 model);
-void SubmitModelFaces(void);
-void EmitPolyF4(void);
-void EmitPolyFT4Raw(void);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -308,20 +302,6 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyF
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyFT4Raw);
 
-
-/*
- * Names for this unit's hand-written GTE engine routines. The addresses live in
- * configs/PAL/sym.main.txt, so the disassembly, the linker script and these
- * declarations all agree on one name. What each routine emits is worked out in
- * docs/names.md section 17.
- */
-void EmitPolyG4(void);
-void EmitPolyGT4(void);
-void SubmitModel2(void *ctx, s32 model);
-void EmitPolyF4Fog(void);
-void EmitPolyFT4Fog(void);
-void EmitPolyG4Fog(void);
-void EmitPolyGT4Fog(void);
 void SubmitCourseModel(void *ctx, s32 model);
 
 /*
@@ -484,18 +464,6 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitPolyG
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitCourseModel);
 
-
-/*
- * Names for this unit's hand-written GTE engine routines. The addresses live in
- * configs/PAL/sym.main.txt, so the disassembly, the linker script and these
- * declarations all agree on one name. What each routine emits is worked out in
- * docs/names.md section 17.
- */
-void EmitCoursePolyF4(void);
-void EmitCoursePolyFT4(void);
-void EmitCourseSubdividedFT4(void);
-void EmitCourseSubdividedFT4Fog(void);
-
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  *
@@ -576,7 +544,6 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCours
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", EmitCourseSubdividedFT4Fog);
 
-
 /* Name for this unit's hand-written GTE engine routine. Declaration only -
  * the emitted symbol stays func_80029E50. */
 void SubmitCourseModel2(void *ctx, s32 model);
@@ -600,18 +567,6 @@ void SubmitCourseModel2(void *ctx, s32 model);
  */
 
 INCLUDE_ASM("asm/PAL/main/nonmatchings/main/gte/submit_terrain_cells", SubmitCourseModel2);
-
-
-/*
- * Names for this unit's hand-written GTE engine routines. The addresses live in
- * configs/PAL/sym.main.txt, so the disassembly, the linker script and these
- * declarations all agree on one name. What each routine emits is worked out in
- * docs/names.md section 17.
- */
-void TransformCourseModel(void);
-void EmitCoursePolyF4Fog(void);
-void EmitCoursePolyFT4Fog(void);
-void SubmitCourseSubdividedFaces(void);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).

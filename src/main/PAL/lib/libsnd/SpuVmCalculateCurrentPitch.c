@@ -3,11 +3,7 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndCurrentNote;
-extern u_char g_SndCurrentToneCenter;
-extern u_char g_SndCurrentToneShift;
 extern u_char *g_SndCurrentToneTable;
-extern u_short g_SndPitchTable[];
 
 u_short SpuVmCalculateTonePitch(long arg0, long arg1);
 

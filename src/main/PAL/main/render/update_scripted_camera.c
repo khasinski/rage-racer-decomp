@@ -1,15 +1,6 @@
 #include "common.h"
 #include "game/render.h"
 
-/*
- * The scripted-camera path: a table of 0x20-byte keyframes, each holding six
- * s32 (eye xyz then look-at xyz), a duration at +0x18 and a Bezier control
- * value at +0x1C. The player walks g_CameraPathKey -> g_CameraPathNextKey
- * over g_CameraPathTick frames and wraps to key 0 when a duration is -1.
- */
-extern volatile s32 g_CameraPathKey;
-extern s32 g_CameraPathNextKey;
-extern s32 g_CameraPathTick;
 /* One scripted-camera keyframe: eye position, look-at target, how long the
  * player dwells on it and the Bezier control value used to ease out of it. */
 typedef struct CameraKey {

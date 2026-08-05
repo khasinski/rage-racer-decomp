@@ -1,13 +1,10 @@
 #include "common.h"
 #include "psyq/gpu.h"
+#include "game/render.h"
 
 extern GpuCallbacks *g_GpuFuncs;
 extern u8 g_GraphDebug;
-extern char D_800135CC[];
-extern char D_800135E0[];
-extern char D_800135F8[];
 
-void Gpu_BuildDrawEnvCmds(void *arg0, void *arg1);
 void *MemCopy(void *dst, void *src, s32 count);
 
 void DrawOTag(void *arg0);
@@ -47,8 +44,6 @@ void *PutDrawEnv(void *arg0) {
     return prim;
 }
 
-/* Named from its own trace string D_800135F8, "DrawOTagEnv(%08x,&08x)...". */
-void *DrawOTagEnv(void *ot, void *env);
 void *DrawOTagEnv(void *arg0, void *arg1) {
     void *src = arg0;
     u8 *debug = &g_GraphDebug;

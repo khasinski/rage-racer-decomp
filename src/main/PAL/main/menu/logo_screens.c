@@ -17,11 +17,8 @@
 
 s32 DrawLogoSampleScreen(s32 arg0);
 
-extern s32 D_801F1804;
 extern u16 g_TeamLogoClut[];
 extern Rect g_TeamLogoClutRect;
-extern u8 D_80082844;
-extern u8 D_80081C14;
 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
@@ -275,8 +272,6 @@ void UpdateTeamLogoScreen(void)
     }
   }
 }
-
-extern s32 D_8009B2DC;
 
 s32 DrawLogoSampleScreen(s32 arg0) {
     s32 value;

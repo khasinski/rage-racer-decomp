@@ -1,6 +1,5 @@
 #include "common.h"
-
-extern s32 g_CarNamePlateFade;
+#include "game/menu.h"
 
 void GameDrawSpriteWide(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r,
                    s32 g, s32 b, s32 clut, s32 shadeTex, s32 semiTrans,

@@ -111,4 +111,71 @@ extern s32 g_SoundSlotActive[];
 
 s32 GetOwnedCarAssetIndex(s32 arg0);
 
+/* Declared identically by 62 translation units before this
+ * header carried them. */
+
+extern s32 D_80011C84;
+extern const s32 D_80012734;
+extern const s32 D_80012738;
+extern const s32 D_80012740;
+extern const s32 D_80012750;
+extern const s32 D_80012758;
+extern const s32 D_80012768;
+extern const s32 D_80012770;
+extern const char D_80012778[];
+extern u8 D_801E6D04[];
+extern s32 D_801E6D08;
+extern u8 D_801E6D10[];
+extern u8 D_801E6D14[];
+extern s32 D_801E6D44;
+extern s32 D_801E6D58;
+extern s32 D_801E6D60;
+extern s32 D_801E6D6C;
+extern s32 g_ActiveSpecialCue;
+extern s32 g_AudioLoadSlot;
+extern s32 g_AudioSlotMask;
+extern s32 g_CarSoundVolumeScales[];
+extern const s32 g_EffectCueTable[];
+extern s32 g_EffectVoicePitch[];
+extern s32 g_EffectVoiceState[];
+extern u8 g_EffectVoiceTone[];
+extern u8 g_EffectVoiceVolume[];
+extern s32 g_EngineSoundBank;
+extern s32 g_EngineSoundPosition;
+extern s32 g_ExtraVabLoaded;
+extern s32 g_IndexedEffectIndex;
+extern s32 g_IndexedEffectIndexPrev;
+extern s32 g_IndexedEffectPitch;
+extern s32 g_IndexedEffectVolume;
+extern s32 g_LastSpecialCueRequest;
+extern char g_MsgSeqVabOpenHeadError[];
+extern char g_MsgSeqVabTransBodyError[];
+extern char g_MsgVabOpenHeadError[];
+extern char g_MsgVabTransBodyError[];
+extern s32 g_PanVoiceActive;
+extern s32 g_PanVoiceVolumeL;
+extern s32 g_PanVoiceVolumeR;
+extern u8 g_SndTableArea[];
+extern s32 g_SoundCueBank;
+extern const s32 g_SoundCueParams[][6];
+extern const s32 g_SoundCueParams2[][6];
+extern s32 g_SoundSlotActive5;
+extern s32 g_SoundSlotVolumeScale;
+extern s32 g_SpecialCueVoiceA;
+extern s32 g_SpecialCueVoiceB;
+extern const s32 g_SpecialVoiceBits[];
+extern s32 g_StereoOutput;
+extern s16 g_VabIds3;
+extern s16 g_VabIds4;
+extern s16 g_VabIds5;
+extern s16 g_VabSlotVoiceTone[];
+extern s32 g_VabSpuAddress[];
+extern s32 g_VabSpuAddressExtra;
+extern s32 g_VabTransferDone;
+
+void BiosExit(s32 arg0);
+s32 StartSoundCueVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void UpdateBasicEffectVoices(void);
+void UpdateEffectVoiceStates(void);
+
 #endif

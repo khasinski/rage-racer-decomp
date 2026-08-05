@@ -70,16 +70,6 @@ s32 MargePrim(u8 *arg0, u8 *arg1) {
     return 0;
 }
 
-extern char D_8001339C[];
-extern char D_800133B4[];
-extern char D_800133C4[];
-extern char D_800133DC[];
-extern char D_800133E8[];
-extern char D_800133F4[];
-extern char D_80013410[];
-extern char D_8001342C[];
-extern char D_80013438[];
-
 void DumpDrawEnv(DrawEnv *arg0) {
     s32 mode;
     u32 value;
@@ -117,20 +107,12 @@ void DumpDispEnv(DispEnv *arg0) {
     GPU_printf(D_80013438, arg0->isrgb24);
 }
 
-extern char D_80013478[];
-extern char D_80013498[];
-extern u8 g_GpuJumpTable[];
 extern GpuCallbacks *g_GpuFuncs;
 extern u8 g_GraphType[];
 extern u8 g_GraphQueue;
 extern u8 g_GraphDebug;
 extern u16 g_VramWidth;
 extern u16 g_VramHeight;
-extern u8 g_VramWidthTable[];
-extern u8 g_VramHeightTable[];
-
-void GPU_cw(void *arg0);
-s32 Gpu_Reset(s32 arg0);
 
 /* libgpu ResetGraph. Own trace strings D_80013478 "ResetGraph:jtb=%08x,env=%08x"
  * and D_80013498 "ResetGraph(%d)..."; mode&7 of 0 or 3 does the full reset. */
@@ -178,10 +160,6 @@ extern void (* volatile GPU_printf)(char *, ...);
 extern GpuCallbacks *g_GpuFuncs;
 extern u8 g_GraphDebug;
 extern u8 g_GraphReverse;
-extern char D_800134AC[];
-extern char D_800134C4[];
-
-s32 SetGraphReverse(s32 arg0);
 
 s32 SetGraphReverse(s32 arg0) {
     u8 *state = &g_GraphReverse;

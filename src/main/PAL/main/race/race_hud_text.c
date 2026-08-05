@@ -11,11 +11,6 @@
  * so the base is passed in rather than held in a pointer. */
 #define TILE_AT(base, byteOffset) (*(TILE *)((s32)(byteOffset) + (s32)(base)))
 
-/* Static text buffers the two time drawers format into, seeded in .data with
- * "0'00\"000" and "00'00\"". The named split symbols are the digit positions
- * each writer touches; the separators are never rewritten. */
-extern u8 g_TimeTextBuffer[];
-
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     s32 savedX;
     register s32 savedY asm("$10");
@@ -64,11 +59,6 @@ void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
 
     DrawText8x8(savedX, savedY, g_TimeTextBuffer, savedColor);
 }
-
-extern u8 g_ClockTextBuffer;
-extern u8 g_ClockTextMinUnits[];
-extern u8 g_ClockTextSecTens;
-extern u8 g_ClockTextSecUnits;
 
 void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
     s32 savedY;
@@ -121,12 +111,6 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     AddPrim(ot, oldPacket);
     return packet;
 }
-
-/* The two 12000-byte TILE strips BuildTileStrips builds, backed by
- * g_TileStripStorage. Nothing in the decompiled tree reads them back, so what
- * the strip renders is still unestablished -- see docs/names.md 15g. */
-extern u8 *g_TileStripBuffers[2];
-extern u8 g_TileStripStorage[];
 
 void BuildTileStrips(void) {
     u8 **initBuffers;
@@ -199,8 +183,6 @@ void BuildTileStrips(void) {
     } while (bufferIndex < 2);
 }
 
-extern s32 g_CountdownBoardOffset;
-extern u32 g_CountdownDigitPatterns[16];
 extern CVec g_CountdownCellColors[];
 
 s32 GameQueueDrawModePrimWide(
@@ -407,10 +389,6 @@ void DrawStartCountdown(s32 sceneTimer) {
     *(TILE **)0x1F800000 = tiles;
 }
 
-extern s16 g_RaceOptionScroll0;
-extern s16 g_RaceOptionScroll1;
-extern char g_RaceOptionMarquee[4][40];
-extern s32 g_RaceOptionPulseAngle;
 extern u8 *g_CourseProgress;
 
 s32 rcos(s32 angle);

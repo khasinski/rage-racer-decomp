@@ -12,12 +12,6 @@ s32 DrawCustomizeScreen(s32 arg0);
 
 extern u8 *g_CarModelAsset;
 
-extern s32 D_8009B2CC;
-extern s32 D_8009B2C8;
-extern s32 D_8019CDF8;
-extern u8 D_80082724;
-extern u8 D_80081890;
-
 void DrawRectOutlineWide(void *buf, s32 xa, s32 ya, s32 w, s32 h, s32 r, s32 g, s32 b, s32 code) asm("DrawRectOutline");
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
@@ -246,8 +240,6 @@ void UpdateOwnedCarNeighbours(void) {
     }
 }
 
-extern s32 D_8019C7B8;
-
 s32 GetCarUnlockLevel(s32 model);
 
 void RefreshCarUnlockState(void) {
@@ -314,12 +306,7 @@ void EnterCarSelectScreen(void) {
     DrawMenuLightBurst(-9);
 }
 
-extern u8 D_800818CC;
-extern u8 D_800819A4;
-extern u8 D_8008285C;
-extern u8 D_80082874;
 extern u8 *D_801E40B4;
-extern s32 D_8019C7B8;
 extern u8 *g_CourseProgress;
 
 void RequestCarModel(s32 carIndex);
@@ -329,7 +316,6 @@ void DrawCarShopPricePanel(s32 step, s32 money, s32 price)
 ;
 void DrawEngineerShopPricePanel(s32 step, s32 arg1, s32 arg2)
 ;
-s32 CountOwnedCars(void);
 void DrawOwnedCarCounter(s32 step, s32 count);
 
 void UpdateCarSelectScreen(void) {
@@ -654,8 +640,6 @@ void UpdateCarSelectScreen(void) {
     }
 }
 
-extern s32 D_8009B2D0;
-
 s32 DrawCustomizeScreen(s32 arg0) {
     s32 value;
 
@@ -690,13 +674,7 @@ s32 DrawCustomizeScreen(s32 arg0) {
     return D_8009B2D0;
 }
 
-extern u8 D_80081A34;
-extern u8 D_80081AD0;
-extern u8 D_80082814;
 extern u8 *D_8019C794;
-extern u8 D_801E4389[];
-extern u8 D_801E438A[];
-void DrawTireCompoundSlider(u8 x, s32 useFlag);
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void GameDrawMenuButtonWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, void *a10) asm("GameDrawMenuButton");

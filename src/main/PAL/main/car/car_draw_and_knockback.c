@@ -9,16 +9,6 @@ void ClearCarMotionState(GameCarRuntime *arg0);
 
 extern s32 g_ClosestRivalRank;
 
-extern s32 g_RaceGridSlots[];
-
-extern s32 g_AttractGridSlots[];
-
-void InitRivalCar(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
-
-void InitRivalCarAi(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
-
-void SeedCarRouteMarkers(void);
-
 /*
  * Updates the car's skid/tilt counter (field_8C / field_8E), clamping it
  * against the spec block's redline value (g_CarSpec + 0x106). Register-pinned,

@@ -2,22 +2,12 @@
 #include "game/state.h"
 #include "game/render.h"
 
-extern u8 g_PadBuffers[];
-
-void InitPad(void *buf0, s32 len0, void *buf1, s32 len1);
-void StartPad(void);
-
 /* BIOS InitPAD over the two 0x28-byte pad buffers, then StartPAD. */
 void GameInitPad(void) {
     InitPad(g_PadBuffers, 0x28, g_PadBuffers + 0x28, 0x28);
     StartPad();
 }
 
-/* Eight selectable button-mapping presets per controller, one row of eight
- * button masks each: g_PadButtonPresets for the standard pad, g_NegconButtonPresets for the
- * NeGcon. */
-extern u16 g_PadButtonPresets[];
-extern u16 g_NegconButtonPresets[];
 /* The live mapping UpdatePadState reads: the pad's eight masks at +0,
  * the NeGcon's eight at +0x10. */
 extern u16 g_PadButtonMapping[];
@@ -80,12 +70,6 @@ typedef struct PadState {
 
 extern PadState g_PadState;
 extern u8 g_PadType;
-extern u8 g_PadBufferType;
-extern u8 g_PadBufferButtonsHigh;
-extern u8 g_PadBufferButtonsLow;
-extern u16 g_PadPrevHeld;
-extern u8 g_PadRepeatTimer[];
-extern u16 D_8007C128[][2];
 extern s16 g_NegconSteerPlay;
 extern s16 g_NegconMaxTwist;
 extern s16 g_NegconNeutralI;

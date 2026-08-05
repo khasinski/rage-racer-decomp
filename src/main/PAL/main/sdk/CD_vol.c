@@ -7,15 +7,12 @@ extern long g_CdReadyCallback;
 extern long g_CdStatusByte;
 extern long g_CdErrorByte;
 extern volatile u_long *g_ComDelayReg;
-extern CdRegisterMap *volatile g_CdSpuRegs;
 extern u_char D_80013904[];
 extern u_char D_80013910[];
-extern void *g_CdDebugInfo[];
 
 extern volatile CdIntr g_CdSyncStatus;
 
 void KernelCallbackSlot3(void);
-void CdDispatchInterrupts(void);
 void KernelCallbackSlot2(long arg0, void *arg1);
 void LibcPutString(u_char *text);
 

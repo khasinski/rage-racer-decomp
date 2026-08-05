@@ -180,8 +180,6 @@ void SpuVmAutoVolTick(short voice) {
     g_SndVoiceFlags[voice] |= 3;
 }
 
-extern u_char g_SndVoiceStateEndPan[];
-
 void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
     long voice;
     long start;

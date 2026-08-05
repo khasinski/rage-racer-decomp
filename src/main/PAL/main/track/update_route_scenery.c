@@ -17,9 +17,6 @@ extern volatile s32 g_RaceSeries;
 extern u8 *g_RouteSceneryData;
 extern s32 g_RouteSceneryClock;
 extern s16 g_RouteSceneryKeyIndex;
-extern s32 g_RouteSceneryY;
-extern s32 g_RouteSceneryZ;
-extern s32 g_RouteSceneryW;
 extern s32 g_RouteSceneryRotY;
 extern KF *g_RouteSceneryKeyframe;
 

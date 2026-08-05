@@ -9,13 +9,6 @@ s32 DrawTeamNameScreen(s32 arg0);
 s32 DrawPaintColorScreen(s32 arg0);
 s32 DrawCarShopScreen(s32 arg0);
 
-extern s32 D_80082EA4;
-extern s32 D_80082EA8;
-extern s32 D_80082EB0;
-extern s32 D_8019C770;
-extern u8 D_80082634;
-extern u8 D_80081CA4;
-
 extern void ComposeSampleTeamLogo(s32, s32);
 extern void DrawTeamLogoCanvas(s32, s32);
 extern void RampTeamLogoCanvas(s32, s32);
@@ -170,8 +163,6 @@ void UpdateLogoSampleScreen(void) {
     }
 }
 
-extern s32 D_8009B2E0;
-
 s32 DrawTeamNameScreen(s32 arg0) {
     s32 value;
 
@@ -197,9 +188,6 @@ s32 DrawTeamNameScreen(s32 arg0) {
     return D_8009B2E0;
 }
 
-extern u32 D_80081D34;
-
-void DrawTeamNameCharModel(void);
 void UploadTeamNameTexture(void *a, s32 b);
 
 void UpdateTeamNameScreen(void) {
@@ -297,8 +285,6 @@ pop:
     }
 }
 
-extern s32 D_8009B2E4;
-
 s32 DrawPaintColorScreen(s32 arg0) {
     s32 value;
 
@@ -324,15 +310,8 @@ s32 DrawPaintColorScreen(s32 arg0) {
     return D_8009B2E4;
 }
 
-extern s32 D_80082EB4;
-extern u8 D_80082010;
-extern s32 D_801F17A0;
-
-s32 DrawPaintColorPalette(void *, s32, s32);
 void DrawBrowseArrows(s32, s32, s32, s32);
 void DrawFadingMenuSprites(s32, s32, s32);
-void SetBodyColor1(s32);
-void SetBodyColor2(s32);
 
 void UpdatePaintColorScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
@@ -454,8 +433,6 @@ void UpdatePaintColorScreen(void) {
         GameMenuBusy = 0;
     }
 }
-
-extern s32 D_8009B2E8;
 
 void DrawCarEngineSpec(s32 arg0, s32 arg1, s32 arg2);
 

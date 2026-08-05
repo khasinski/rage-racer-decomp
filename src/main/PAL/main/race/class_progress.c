@@ -6,35 +6,16 @@
 #include "game/audio.h"
 #include "game/sound.h"
 
-extern u8 g_CaptionPrizeMoney[];
-extern u8 g_FmtMoney[];
-extern u8 g_CaptionTotalMoney[];
-extern u8 g_CaptionPromotionBonus[];
 void DrawProportionalText(s32 id, void *dst, void *src, s32 arg3);
 void LibcSprintf(void *dst, void *fmt, s32 val);
 extern s32 g_CourseProgress;
-/*
- * Two split symbols of g_ClassRecords, unlocked out of sequence: finishing
- * class 4 of the first series opens entry 6 (the advanced series' first
- * class) instead of entry 5, and finishing entry 10 (the advanced series'
- * last class) is what finally opens entry 5, the first series' sixth class.
- * g_ClassClears is &g_ClassRecords[0].clears, the second halfword.
- */
-extern s16 g_ClassRecord6;
-extern s16 g_ClassRecord5;
 extern GameScoreRecord g_ClassRecords[];
 extern GameScoreRecord g_ClassClears[];
-extern s32 g_ClassPromoted;
 s32 GetCarUnlockLevel(s32 model);
-s32 ComputeClassGrade(void);
 void ResetProgressSlot(s32 arg0, s32 arg1);
 void ResetCourseProgress(s32 arg0);
 void BeginEndingFmv(s32 arg0);
 void BeginClassFmv(s32 arg0);
-/* &g_PrizeMoney[0][0][2], i.e. the third-place column; the prize counter's
- * step is that figure divided by 80. */
-extern s32 g_PrizeMoney3rd[][6][3];
-extern s32 g_PromotionBonusTable[];
 
 void DrawPrizeMoneyPanel(u8 *s0) {
     u8 sp[16];

@@ -1,14 +1,11 @@
 #include "common.h"
 #include "game/menu.h"
 
-extern s32 D_80082E70[];
-
 void DrawText8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void DrawEngineSpecLabel(s32 arg0, s32 arg1, s32 arg2) {
     DrawText8x8(arg0, arg1, D_80082E70[arg2], 0x78CC);
 }
-
 
 typedef struct EngineSpecData {
     u8 pad00[0x10];
@@ -20,7 +17,6 @@ typedef struct EngineSpecData {
 } EngineSpecData;
 
 extern EngineSpecData *g_CarModelAsset;
-extern u8 D_80011B5C[];
 
 void drawSprite(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r,
                 s32 g, s32 b, s32 clut, s32 shadeTex, s32 semiTrans,

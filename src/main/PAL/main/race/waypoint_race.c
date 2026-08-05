@@ -12,8 +12,6 @@ extern u8 g_PlayerCar[];
 
 extern s32 g_PlayerTrackProgress;
 
-extern s32 g_CameraCarProgressA;
-
 void RequestTrackTexturePage(s32 arg0);
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);

@@ -9,7 +9,6 @@ void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx);
  * g_ShuttlePathTravelMax is the leg length in steps: the divisor of the
  * endpoint-to-endpoint lerp and the value travelStep counts up to. */
 extern u8 g_ShuttlePathPoints[];
-extern s16 g_ShuttlePathTravelMax[];
 
 void UpdateShuttleScenery(s32 arg0);
 

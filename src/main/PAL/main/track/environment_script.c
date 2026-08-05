@@ -14,7 +14,6 @@ typedef struct Cmd {
     u16 unk2E;
 } Cmd;
 
-extern u8 g_EnvScriptEnabled;
 extern s32 g_EnvScriptClock;
 extern s32 g_EnvScriptLength;
 
@@ -35,17 +34,6 @@ extern Cmd *g_EnvScriptCursor;
 #define ENV_CUR(k) (pp + 0x0C * (k) - 4)
 #define ENV_FROM(k) (pp + 0x0C * (k))
 #define ENV_TO(k) (pp + 0x0C * (k) + 4)
-
-extern s16 g_EnvLerpFrame;
-
-/* GTE fog-near distance, ramped +-0xFA a frame: up to 0x7FFF (clear) in
- * environment mode 2, down to 0x1770 (hazy) in every other mode. */
-extern s32 g_FogNear;
-
-/* Deliberately unprototyped: the seek path also leaves the cue duration and
- * clamped frame in a1/a2, while the normal update path passes only the cue. */
-void LoadEnvironmentCue();
-void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3);
 
 void SeekEnvironmentScript(s32 targetTime) {
     s32 clock;

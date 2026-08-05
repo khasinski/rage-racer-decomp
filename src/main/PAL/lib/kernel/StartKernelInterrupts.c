@@ -22,15 +22,6 @@ void *StartKernelInterrupts(void) {
     return state;
 }
 
-extern void *g_VSyncCallbacks[];
-extern u_long *g_Timer1ModeReg;
-extern volatile u_long *g_DmaIrqControl;
-extern u_long g_DmaCallbacks[];
-extern u_long *g_DmaChannelRegs;
-extern long D_8009A51C;
-extern u_char D_80013BA8[];
-extern u_char D_80013BC4[];
-
 void RegisterKernelCallback(long slot, void *callback) asm("KernelCallbackSlot2");
 void *setIntrVSyncAddress(void) asm("setIntrVSync");
 void *setIntrDMAAddress(void) asm("setIntrDMA");

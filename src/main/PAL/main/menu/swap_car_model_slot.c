@@ -38,12 +38,8 @@ extern Vec4 D_80011AB4;
 extern Vec4 g_MenuViewScale;
 extern SwCarRec *g_CarTable;
 extern SwObj698 *g_CarModelAsset;
-extern s32 D_8009E7B8;
-extern s16 D_8009E804;
 extern SwModelPose D_8009E6D4 asm("g_PlayerCar");
 extern Vec4 D_8009E724;
-extern s32 D_8009E734;
-extern s32 D_1F800004;
 
 s32 GetCarAssetIndex(s32 arg0, s32 arg1);
 void *ApplyMatrixLV(void *m, void *v0, void *v1);
@@ -417,6 +413,4 @@ void DrawTeamNameCharModel(void) {
     }
 }
 
-extern s32 D_80082E3C[];
-void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2);
 void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2) { DrawText8x8(arg0, arg1, D_80082E3C[arg2]); }

@@ -19,7 +19,6 @@ extern s32 g_AnimTimer;
 extern u8 g_PadType;
 extern s16 g_NegconMaxTwist;
 extern s16 g_NegconSteerPlay;
-extern s32 g_NegconPlayScale[];
 extern s32 g_ControllerSceneAngleX;
 extern s32 g_ControllerSceneAngleY;
 extern s32 g_Scratch08 asm("0x1F800008");

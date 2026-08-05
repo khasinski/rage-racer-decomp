@@ -88,7 +88,6 @@ void LoadTrackDataAssets(void) {
 }
 
 extern s32 *g_StreamLoc;
-extern s32 D_8019C708;
 
 void BeginFmv(void);
 
@@ -106,7 +105,6 @@ void BeginIntroFmv(void) {
 }
 
 extern s32 *g_StreamLoc;
-extern s32 D_8019C708;
 
 void BeginFmv(void);
 
@@ -134,7 +132,6 @@ void BeginClassFmv(void) {
 }
 
 extern s32 *g_StreamLoc;
-extern s32 D_8019C708;
 
 void BeginFmv(void);
 
@@ -150,9 +147,6 @@ void BeginEndingFmv(void) {
     g_StreamSectorCount = value;
     D_8019C708 = value * 4;
 }
-
-void LoadCarModel(s32);
-void LoadUpgradedCarModel(s32);
 
 void ServiceAssetLoad(void) {
     if (g_AssetLoadState != 0) {

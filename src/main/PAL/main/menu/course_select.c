@@ -19,7 +19,6 @@ void DrawNowLoadingText(void) {
 
 extern u8 *g_CourseProgress;
 extern s32 g_PlayerCar;
-extern s32 D_8009E6FC;
 extern s32 g_PlayerTrackProgress;
 extern u8 g_TeamLogoClutRect[];
 extern u8 g_TeamLogoRect[];
@@ -476,10 +475,6 @@ s32 CanSelectNextCourse(void) {
 }
 
 extern u8 *D_8019C764;
-extern u8 D_80081818;
-extern u8 D_800817A0;
-extern u8 D_800827FC;
-extern u8 D_80082604;
 void ResetCourseProgress(s32 arg0);
 void drawSprite(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
@@ -488,8 +483,6 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawBrowseArrows(s32, s32, s32, s32);
 void DrawMenuLightBurst(s32 arg0);
 void DrawOwnedCarCounter(s32 arg0, s32 arg1);
-s32 DrawClassChangeCurtain(s32 arg0);
-void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
 void UpdateCourseSelectScreen(void) {
     void *ot;
     u8 *hdr;
@@ -879,8 +872,6 @@ void UpdateCourseSelectScreen(void) {
         }
     }
 }
-
-extern s32 D_8009B2C4;
 
 s32 DrawRankingScreen(s32 arg0) {
     s32 value;

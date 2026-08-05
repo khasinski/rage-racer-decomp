@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/race.h"
 #include "game/cd.h"
+#include "game/track.h"
 void SetRotMatrix(s32 arg0);
 
 extern s32 g_VisibleCellList;
@@ -18,7 +19,6 @@ void DrawTerrainCellsWide(void) {
     SubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
 }
 
-extern u32 *g_FinalSkyOrderingTable;
 void AddPrim(void *, void *);
 void SetShadeTex(void *, s32);
 void SetPolyF4(void *);
@@ -26,7 +26,6 @@ void SetPolyFT4(void *);
 void SetPolyG4(void *);
 s32 GameSin(s32) asm("rsin");
 s32 GameCos(s32) asm("rcos");
-extern s16 g_SkyTileMap[][16];
 extern s32 g_SkyRowBase;
 typedef struct
 {
@@ -161,25 +160,6 @@ extern GameEnvColor g_EnvColor2Red;
 extern GameEnvColor g_EnvColor4Red;
 extern GameEnvColor g_EnvColor5Red;
 extern GameEnvColor g_EnvColor7Red;
-extern u8 g_EnvColor1G;
-extern u8 g_EnvColor1B;
-extern u8 g_EnvColor2G;
-extern u8 g_EnvColor2B;
-extern u8 g_EnvColor3G;
-extern u8 g_EnvColor3B;
-extern u8 g_EnvColor4G;
-extern u8 g_EnvColor4B;
-extern u8 g_EnvColor5G;
-extern u8 g_EnvColor5B;
-extern u8 g_EnvColor6G;
-extern u8 g_EnvColor6B;
-extern u8 g_EnvColor7G;
-extern u8 g_EnvColor7B;
-extern u8 g_EnvColor8G;
-extern u8 g_EnvColor8B;
-extern u8 g_EnvColor3R;
-extern u8 g_EnvColor6R;
-extern u8 g_EnvColor8R;
 inline static s32 DivideSigned32(s32 value)
 {
   s32 adjustedValue = value;

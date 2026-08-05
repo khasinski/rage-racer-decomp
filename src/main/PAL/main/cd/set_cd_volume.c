@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/cd.h"
 
-extern u8 g_CdMixPresets[];
 extern u8 g_CdVolume;
 extern s32 g_CdMixFullLL;
 extern s32 g_CdMixFullLR;

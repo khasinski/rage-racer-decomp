@@ -8,20 +8,6 @@
 #include "game/audio.h"
 #include "game/screens.h"
 
-/* Second copies of the same three captions -- the ROM holds duplicate literals
- * at 0x80010E1C..0x80010E28 and here; see docs/names.md 18d for why the bytes
- * are lowercase and how each caption is identified. */
-extern char g_CaptionLapTime2[];
-extern char g_CaptionTotalTime2[];
-extern char g_CaptionRanking2[];
-extern char g_FmtRecordName[];
-extern char g_FmtCarName[];
-extern s32 g_BestLapIndex;
-extern s32 g_TimeRecordInsertRow;
-extern s32 g_RankingInsertRow;
-extern u8 *g_PlaceSuffixNames[];
-extern s32 g_CarClassNames[];
-extern s32 g_CarNames[];
 void *FormatLapTime(void *dst, s32 value);
 void LibcSprintf();
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -33,17 +19,6 @@ extern s32 g_RankingTimes;
  * g_TimeRecordTimes / g_TimeRecordCars the same pair of g_TimeRecords. */
 extern u16 g_RankingCars[];
 extern u16 g_TimeRecordCars[];
-extern s32 g_RecordEntryState;
-void InsertRaceRecords(void);
-extern u8 g_NameEntryCharset[];
-extern s32 g_NameEntryCursor;
-extern s32 g_RecordPanelSlide;
-extern u8 g_RankingNameCodes[];
-extern s32 g_NameEntryChar;
-extern u8 g_TimeRecordNameCodes[];
-void DrawRankingPanel(u8 *arg0);
-void DrawTimeRecordPanel(u8 *arg0);
-void DrawNameEntryCursor(s32 arg0, s32 arg1);
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void CdSync(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result);

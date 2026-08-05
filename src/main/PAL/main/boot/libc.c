@@ -1,10 +1,7 @@
 #include "common.h"
 #include "game/random.h"
 #include "psyq/kernel.h"
-
-u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2);
-void *LibcMemmove(u8 *dest, u8 *src, s32 count);
-s32 LibcStrlen(u8 *arg0);
+#include "game/state.h"
 
 extern s32 g_RandomSeed;
 
@@ -38,8 +35,6 @@ typedef struct LibcFormatWork {
 } LibcFormatWork;
 
 extern LibcFormatSpec g_LibcDefaultFormat;
-extern u8 g_LibcUpperDigits[];
-extern u8 g_LibcLowerDigits[];
 
 #define LIBC_LEFT       0x01
 #define LIBC_PLUS       0x02
@@ -372,7 +367,6 @@ finished:
 #undef args
 }
 
-u8 * LibcMemchr(u8 *arg0, s32 arg1, s32 arg2);
 u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) {
     switch (0) { default:
     if (arg0 == 0) {
@@ -405,7 +399,6 @@ found:
     return 0;
 }
 
-void * LibcMemmove(u8 *dest, u8 *src, s32 count);
 void *LibcMemmove(u8 *dest, u8 *src, s32 count) {
     if (dest >= src) {
         while (count-- > 0) {
@@ -434,10 +427,6 @@ s32 LibcStrlen(u8 *arg0) {
     return count;
 }
 
-extern u8 g_LibcNullText[];
-
-void LibcPutChar(s32 arg0);
-
 void LibcPutString(u8 *arg0) {
     u8 *ptr;
     s32 value;
@@ -453,7 +442,6 @@ void LibcPutString(u8 *arg0) {
 }
 
 extern u8 g_LibcCtype[];
-extern s32 g_LibcOutColumn;
 
 void LibcPutChar(s32 arg0) {
     u8 c;

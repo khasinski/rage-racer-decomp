@@ -1,10 +1,6 @@
 #include "common.h"
 #include "game/race.h"
-
-extern u8 D_8007DAF4[];
-extern u8 D_8007DBE4[];
-extern u8 D_801C0504[];
-extern u8 D_801C0618[];
+#include "game/render.h"
 
 void BuildSpriteFromDesc(u8 *arg0, u8 *arg1);
 

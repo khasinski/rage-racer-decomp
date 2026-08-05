@@ -3,18 +3,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-/* libmdec hardware, from the data segment: DMA channel 0 (MDEC in) and
- * channel 1 (MDEC out) MADR/BCR/CHCR at 0x1F801080.. and 0x1F801090..,
- * the MDEC command port 0x1F801820 and control/status 0x1F801824. */
-extern volatile u_long *g_MdecInDmaMadr;
-extern volatile u_long *g_MdecInDmaBcr;
-extern volatile u_long *g_MdecInDmaChcr;
-extern volatile u_long *g_MdecOutDmaMadr;
-extern volatile u_long *g_MdecOutDmaBcr;
-extern volatile u_long *g_MdecOutDmaChcr;
-extern volatile u_long *g_MdecCmdReg;
-extern volatile u_long *g_MdecCtrlReg;
-extern volatile u_long *g_MdecDpcr;
 extern u_char D_800132C8[];
 extern u_char D_800132E4[];
 extern u_char D_800132F4[];
@@ -24,7 +12,6 @@ extern u_char D_80013364[];
 
 long MDEC_in_sync(void);
 long MDEC_out_sync(void);
-long MDEC_timeout(u_char *arg0);
 
 void MDEC_reset(long arg0) {
     register long option asm("$5") = arg0;

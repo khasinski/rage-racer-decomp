@@ -177,4 +177,73 @@ extern s32 g_McMenuPage;
 extern s32 g_McMenuRowCount;
 extern s32 g_McMenuRowCursor;
 
+/* Declared identically by 64 translation units before this
+ * header carried them. */
+
+extern char g_FmtCardDevice[];
+extern char g_FmtCardWildcard[];
+extern char g_FmtPlayTime[];
+extern char g_FmtSaveChecksum[];
+extern char g_FmtSaveRow[];
+extern char g_FmtSaveRowEmpty[];
+extern char g_FmtSaveRowTail[];
+extern char g_FmtString[];
+extern s32 g_McActionBusy;
+extern s32 g_McActionElapsed;
+extern s32 g_McActionOk;
+extern s32 g_McActionResult;
+extern s32 g_McActionState;
+extern s32 g_McActionTimer;
+extern s32 g_McCardFileCount;
+extern s32 g_McCardOkFrames;
+extern s32 g_McConfirmChoice;
+extern char g_McDirEntries[];
+extern s32 g_McDrawEnabled;
+extern s32 g_McErrorCountdown;
+extern s32 g_McErrorPending;
+extern s32 g_McErrorTicks;
+extern u8 g_McHelpText[];
+extern s32 g_McHwEventError;
+extern s32 g_McHwEventIoe;
+extern s32 g_McHwEventNew;
+extern s32 g_McHwEventTimeout;
+extern s32 g_McLastCardStatus;
+extern s32 g_McLastMenuState;
+extern s32 g_McLastSlot;
+extern s16 g_McMessageColumnX[];
+extern s32 *g_McMessageRows[];
+extern u8 g_McMessageText[];
+extern s32 g_McNoCardTicks;
+extern s32 g_McPollStatus;
+extern s32 g_McPollTicks;
+extern GameSaveHeaderRow g_McSaveHeaders[];
+extern s32 g_McSaveMode;
+extern s32 g_McSavedLoadPhase;
+extern s32 g_McSettleTicks;
+extern s32 g_McSlotCursor;
+extern char g_McSlotLabelError[];
+extern char g_McSlotLabelNoFile[];
+extern char g_McSlotLabels[];
+extern s32 g_McSlotUsedMask;
+extern s32 g_McStateChangeCount;
+extern s32 g_McStatusResult;
+extern s32 g_McStatusState;
+extern s32 g_McSwEventError;
+extern s32 g_McSwEventIoe;
+extern s32 g_McSwEventNew;
+extern s32 g_McSwEventTimeout;
+extern char g_MsgSaveChecksumOk[];
+extern s32 g_SaveElapsedTicks;
+extern char g_SaveFilePath[];
+extern u8 g_SaveNameCharset[];
+extern char g_SaveTitleSjis[];
+
+void BiosBuInit(void);
+void DrawMemoryCardMessage(s32 a0);
+s32 DrawShadowedTile(s32 base, s32 prim, s32 a, s32 b);
+void InitCARD(s32 padEnable);
+s32 PollMemoryCardStatus(s32 a, s32 b);
+void StartCARD(void);
+void StoreSaveStateBlock(u8 *rowBytes);
+
 #endif

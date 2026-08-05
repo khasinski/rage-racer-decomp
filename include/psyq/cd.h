@@ -216,4 +216,70 @@ extern long g_StRingSlot;
 long CdReadInterruptStatus(void);
 void MDEC_in(volatile u_long *arg0, long arg1);
 
+/* Declared identically by 54 translation units before this
+ * header carried them. */
+
+extern long g_CdCachedShellOpenCount;
+extern u_long g_CdCommandAckHasStatus[];
+extern long g_CdCommandClearsReady[];
+extern u_long g_CdCommandHasComplete[];
+extern long g_CdCommandNeedsSetloc[];
+extern long g_CdCommandParamCount[];
+extern volatile u_char g_CdDataEndStatus;
+extern void *g_CdDebugInfo[];
+extern CdSearchDirEntry g_CdDirEntryName[];
+extern volatile u_long *g_CdDmaBcr;
+extern volatile u32 *g_CdDmaControl;
+extern volatile u_long *g_CdDmaMadr;
+extern volatile u_long *g_CdDpcr;
+extern volatile long g_CdReadExpectedSector;
+extern volatile long g_CdReadLastVSync;
+extern volatile long g_CdReadPtr;
+extern volatile long g_CdReadRemaining;
+extern CdRegisterMap *volatile g_CdSpuRegs;
+extern volatile u_long *g_CdromDelayReg;
+extern volatile u_long *g_MdecCmdReg;
+extern volatile u_long *g_MdecCtrlReg;
+extern volatile u_long *g_MdecDpcr;
+extern u_long g_MdecIdctTable[];
+extern volatile u_long *g_MdecInDmaBcr;
+extern volatile u_long *g_MdecInDmaChcr;
+extern volatile u_long *g_MdecInDmaMadr;
+extern volatile u_long *g_MdecOutDmaBcr;
+extern volatile u_long *g_MdecOutDmaChcr;
+extern volatile u32 *g_MdecOutDmaControl;
+extern volatile u_long *g_MdecOutDmaMadr;
+extern u_long g_MdecQuantChroma[];
+extern u_long g_MdecQuantLuma[];
+extern volatile StStrHeader *g_StActiveHeader;
+extern long g_StBackFrame;
+extern u_char g_StBackLoc[];
+extern volatile u8 *g_StCdReg0;
+extern volatile u8 *g_StCdReg2;
+extern volatile u8 *g_StCdReg3;
+extern s32 g_StCopySector;
+extern StCallback g_StFrameCallback;
+extern s32 g_StInterruptState;
+extern u8 *g_StSectorData;
+
+void CD_dmastart(
+    s32 channel,
+    u32 address,
+    u32 count,
+    u32 size,
+    u32 control,
+    u8 mode,
+    u32 unused);
+extern long CD_namecmp(char *a, char *b);
+extern long CD_newmedia(void);
+void CdDefaultReadCallback(void);
+void CdDefaultReadyCallback(void);
+void CdDefaultSyncCallback(void);
+void CdDispatchInterrupts(void);
+void CdRead2Callback(void);
+u_long *DecDCTGetEnv(u_long *arg0);
+u_long *DecDCTPutEnv(u_long *arg0);
+void MDEC_reset(long arg0);
+long MDEC_timeout(u_char *arg0);
+
 #endif

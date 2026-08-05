@@ -15,7 +15,6 @@ struct Entry_5ACA0 {
     u8 f1;
     u8 pad[6];
 };
-extern u8 g_MenuHintBarScript;
 extern u8 g_PadType;
 
 void GameDrawSolidRectWide(void *, s32, s32, s32, s32, s32, s32, s32, s32) asm("DrawSolidRect");

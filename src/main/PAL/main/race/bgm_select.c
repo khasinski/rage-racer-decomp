@@ -5,26 +5,23 @@
 #include "game/car.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+#include "game/race.h"
 void UpdateAttractCars();
 
-extern s32 g_BgmRandomLabelTimer;
 s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
 void ShuffleBgmOrder(void);
-extern s32 g_BgmRandomPlay;
 extern s32 g_CameraViewMode;
 void AdvanceBgmShuffleBag();
 void DrawFullscreenFadeTile();
 void RequestOptionScreenAssets();
-void DrawBgmSelectBar();
 void RequestTrackTexturePage();
 void UpdateCamera();
 void DrawSkyBackground();
 void DrawTerrainCellsWide();
 void DrawCourseScenery2();
-int CycleBgmSelectCameraCar();
 
 void DrawBgmSelectBar(void) {
     u8 *base;

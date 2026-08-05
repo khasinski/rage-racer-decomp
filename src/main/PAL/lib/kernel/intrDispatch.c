@@ -3,10 +3,6 @@
 
 typedef void (*Callback)(void);
 
-extern long g_IntrStuckCount;
-extern u_char D_80013B70[];
-extern u_char D_80013B8C[];
-
 void intrDispatch(void) {
     u_short *state;
     u_short s0;

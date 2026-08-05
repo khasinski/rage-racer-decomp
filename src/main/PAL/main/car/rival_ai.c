@@ -209,9 +209,6 @@ void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
     }
 }
 
-/* Base of the per-car progress pair, walked at the 0x19C GameCarRuntime
- * stride: g_Cars[0].field_68 / .field_6C, whose sum is race progress. */
-extern s32 g_CarProgressA;
 extern s32 g_CarProgressB;
 
 /*

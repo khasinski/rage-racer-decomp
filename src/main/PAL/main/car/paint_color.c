@@ -1,14 +1,5 @@
 #include "common.h"
-
-/*
- * Members declare these three halfwords as u16, s16 and volatile u16;
- * reconciled to the most specific form.  Only ApplyBodyColor1 and
- * ApplyBodyColor2 read them, the others just store.
- */
-extern volatile u16 g_PaintBlendShade0;
-extern volatile u16 g_PaintBlendShade1;
-extern volatile u16 g_PaintBlendShade2;
-
+#include "game/car.h"
 
 /*
  * g_PaintBlendShade0 / g_PaintBlendShade1 (the two blended shade words this routine emits)
@@ -62,7 +53,6 @@ void BlendPaintColorThirds(u32 arg0, u32 arg1) {
     g_PaintBlendShade1 = (b1 << 10) + (g1 * 32) + r1 + 0x8000;
 }
 
-
 void BlendPaintColorQuarters(u32 arg0, u32 arg1) {
     u32 a;
     u32 b;
@@ -97,18 +87,6 @@ void BlendPaintColorQuarters(u32 arg0, u32 arg1) {
  * The store to raw+0x7162 written just before the call is scheduled by the
  * compiler into the jal delay slot; no hand-written asm is needed.
  */
-
-extern u16 g_BodyColorPrimary[];
-extern u16 g_BodyColorSecondary[];
-/* Clut word offsets of each paint ramp inside the car texture's palette:
- * nine 3-stop ramps for body colour 1, eight for body colour 2, and four
- * 4-stop ramps shared by both. */
-extern volatile u16 g_PaintSlots3StopA[];
-extern volatile u16 g_PaintSlots4Stop[];
-
-void BlendPaintColor(u32 arg0, u32 arg1);
-void BlendPaintColorThirds(u32 arg0, u32 arg1);
-void BlendPaintColorQuarters(u32 arg0, u32 arg1);
 
 void ApplyBodyColor1(u32 arg0, u32 arg1) {
     u32 raw;
@@ -172,15 +150,6 @@ void SetBodyColor1(u32 arg0) {
     ApplyBodyColor1(arg0, *(u32 *)(g_CarModelAsset + 0x24));
     UploadCarImage(g_CarModelSlot);
 }
-
-extern u16 g_BodyColorPrimary[];
-extern u16 g_BodyColorSecondary[];
-extern volatile u16 g_PaintSlots3StopB[];
-extern volatile u16 g_PaintSlots4Stop[];
-
-void BlendPaintColor(u32 arg0, u32 arg1);
-void BlendPaintColorThirds(u32 arg0, u32 arg1);
-void BlendPaintColorQuarters(u32 arg0, u32 arg1);
 
 void ApplyBodyColor2(u32 arg0, u32 arg1) {
     u16 *base;

@@ -12,7 +12,6 @@ typedef struct CellMask {
 } CellMask;
 
 extern CellMask D_80011BD4;
-extern s32 D_8009B2D4;
 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex,
@@ -88,9 +87,6 @@ s32 DrawDesignModeScreen(s32 arg0) {
 
     return D_8009B2D4;
 }
-
-extern u8 D_800828EC;
-extern u8 D_80081B54;
 
 void DrawFadingMenuSprites(s32 a, s32 b, s32 c);
 void RampTeamLogoCanvas(s32 a, s32 b);
@@ -203,8 +199,6 @@ void UpdateDesignModeScreen(void) {
         }
     }
 }
-
-extern s32 D_8009B2D8;
 
 s32 DrawTeamLogoScreen(s32 arg0) {
     s32 value;

@@ -185,4 +185,27 @@ extern long g_SpuTransferMode;
 extern u_short g_SpuTransferStartAddr;
 extern long g_SpuWaitCount;
 
+/* Declared identically by 19 translation units before this
+ * header carried them. */
+
+extern long D_8009A710;
+extern u_short D_8009A766;
+extern long D_8009AB98;
+extern long _spu_AllocBlockNum;
+extern long _spu_AllocLastNum;
+extern long g_SpuDmaBlockCount;
+extern long g_SpuDmaTransferAddr;
+extern volatile long *g_SpuDpcr;
+extern long g_SpuDummyAdpcmBlock;
+extern u_char g_SpuMallocArea[];
+extern long g_SpuRevAttrDelay;
+extern short g_SpuRevAttrDepthLeft;
+extern short g_SpuRevAttrDepthRight;
+extern long g_SpuRevAttrFeedback;
+extern SpuReverbRegAttr g_SpuRevAttrTable[];
+extern u_char g_SpuTimeoutMsgDmaf[];
+extern char g_SpuTimeoutMsgReset[];
+extern u_char g_SpuTimeoutMsgWrdy[];
+extern long g_SpuZeroBuf[];
+
 #endif

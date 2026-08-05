@@ -3,6 +3,7 @@
 #include "game/race.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#include "game/track.h"
 
 void DrawScriptedScenery(s32 arg0) {
     switch (g_GrandPrixClass % 5) {
@@ -53,53 +54,13 @@ typedef struct PathSceneryClock {
 
 extern u8 *g_PathSceneryPosData;
 extern u8 *g_PathSceneryRotData;
-/*
- * The looping prop's two keyframe tracks for the running series: 20-byte
- * position records { s32 x, y, z; u16 loopTo @0x0C; u16 span @0x10;
- * s16 rate @0x12 } and 12-byte rotation records { s16 x, y, z; ...;
- * u16 span @0x08; s16 rate @0x0A }. `Data` is the whole table (a per-series
- * s16 offset header), `Keys` the record array this series starts at, and
- * g_PathSceneryPosIndex / …RotIndex the record currently being eased out of.
- * A span field of -1 terminates and sends the index back to `loopTo`.
- */
-extern u8 *g_PathSceneryPosKeys;
-extern u8 *g_PathSceneryRotKeys;
 extern PathSceneryClock g_PathSceneryClock;
 /* The three words are the scenery position: g_PathSceneryY and
  * g_PathSceneryZ alias +4 and +8. It stays a Block16 because respelling
  * w[0] as a named member of a Vec4 does not match. */
 extern Block16 g_PathSceneryX;
 extern SVec g_PathSceneryRot;
-/* The two tracks' cursors, interleaved pos/rot at 0x801E4DE0: phase, span, rate
- * and index are each a two-halfword pair with position first. Left as eight
- * scalars because nothing in the image indexes them by track. Phase is the
- * cosine-ease argument, 0..0x1000. */
-extern u16 g_PathSceneryPosPhase;
-extern u16 g_PathSceneryRotPhase;
-extern s16 g_PathSceneryPosSpan;
-extern s16 g_PathSceneryRotSpan;
-extern u16 g_PathSceneryPosRate;
-extern u16 g_PathSceneryRotRate;
-extern s16 g_PathSceneryPosIndex;
-extern s16 g_PathSceneryRotIndex;
-/* Slew state of the prop's positional sound: func_80040590 turns the distance
- * from g_PlayerCar to g_PathSceneryX into 100 - dist/1024, clamps it to
- * [0, 100] and walks this value at most 20 a frame towards it. */
-extern s32 g_PathSceneryVolume;
-/* Half of (next keyframe - this keyframe), i.e. the amplitude of the cosine
- * ease that carries the prop from one keyframe to the next. Two xyz triples,
- * each padded to 8 bytes: the rotation one at 0x801E4DD0, the position one at
- * 0x801E4DD8. */
-extern s16 g_PathSceneryRotHalfDelta[3];
-extern s16 g_PathSceneryHalfDelta[3];
 
-/* Unsigned view used when the rotation track advances its frame counter. */
-extern u16 g_PathSceneryRotFrameU;
-
-extern s32 g_PathSceneryY;
-extern s32 g_PathSceneryZ;
-extern s16 g_PathSceneryRotY;
-extern s16 g_PathSceneryRotZ;
 extern s32 g_PlayerCar;
 
 /*

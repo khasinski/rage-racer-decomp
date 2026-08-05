@@ -4,17 +4,12 @@
 #include "psyq/kernel.h"
 #include "psyq/cd.h"
 
-u_long *DecDCTGetEnv(u_long *arg0);
-u_long *DecDCTPutEnv(u_long *arg0);
-
 u_long _new_card[4] __attribute__((section(".text"))) = {
     0x240A00B0,
     0x01400008,
     0x24090050,
     0,
 };
-
-void MDEC_reset(long arg0);
 
 void DecDCTReset(long arg0) {
     if (arg0 == 0) {
@@ -23,15 +18,6 @@ void DecDCTReset(long arg0) {
     MDEC_reset(arg0);
 }
 
-/* The two MDEC parameter blocks, each a command word followed by its table:
- * g_MdecQuantCmd 0x40000001 (MDEC command 2, set quant tables, colour) with
- * the 64-byte luma and chroma tables, and g_MdecIdctCmd 0x60000000
- * (command 3, set scale table) with the 64-halfword IDCT cosine table. */
-extern u_long g_MdecQuantLuma[];
-extern u_long g_MdecQuantChroma[];
-extern u_long g_MdecIdctTable[];
-
-u_long * DecDCTGetEnv(u_long *arg0);
 u_long *DecDCTGetEnv(u_long *arg0) {
     u_long *dst;
     u_long *src;
@@ -58,7 +44,6 @@ u_long *DecDCTGetEnv(u_long *arg0) {
     return arg0;
 }
 
-u_long * DecDCTPutEnv(u_long *arg0);
 u_long *DecDCTPutEnv(u_long *arg0) {
     u_long *ret;
     u_long *dst;

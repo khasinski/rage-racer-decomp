@@ -2,10 +2,6 @@
 #include "psyq/cd.h"
 
 extern volatile u_long *g_ComDelayReg;
-extern volatile u_long *g_CdromDelayReg;
-extern volatile u_long *g_CdDpcr;
-extern volatile u_long *g_CdDmaMadr;
-extern volatile u_long *g_CdDmaBcr;
 extern long D_800992E4;
 
 extern CdCallback g_CdSyncCallback;

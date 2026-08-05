@@ -8,9 +8,6 @@
 #include "game/car.h"
 #include "psyq/gpu.h"
 
-extern s32 D_8007FB40;
-extern s32 D_8007FB44;
-
 void GameDrawTexturedQuadWide() asm("GameDrawTexturedQuad");
 
 void DrawMenuAltPanel(s32 arg0, s32 arg1) {
@@ -153,7 +150,6 @@ typedef struct UVec {
 } UVec;
 
 extern SVec D_80011A48[];
-extern s32 D_8007FB48;
 
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     SVec verts[4];
@@ -249,8 +245,6 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     }
 }
 
-extern volatile s32 D_8007FB4C;
-
 void DrawTimeAttackPlate(s32 arg0) {
     void *scratch = *(void **)0x1F800004;
     s32 step = arg0;
@@ -330,7 +324,6 @@ void InitMenuLighting(void) {
     SetFogNear(0x4E20, 0x140);
 }
 
-extern s32 D_80082568;
 extern Vec4 g_MenuViewScale;
 
 extern void *D_8019C764;
@@ -338,11 +331,6 @@ extern void *D_801E40B4;
 extern void *D_8019C794;
 extern void *D_8019CB00;
 extern void *D_801E4188;
-
-extern s32 D_8009B304;
-extern s32 D_8009B328;
-
-extern s32 D_801E4D74;
 
 void InitRenderState(s32);
 void DrawCarSpecGraph(s32);

@@ -3,6 +3,7 @@
 #include "psyq/gte.h"
 #include "game/state.h"
 #include "game/render.h"
+#include "game/track.h"
 void SetTransMatrix(void *a);
 void SetRotMatrix(void *a);
 
@@ -147,11 +148,6 @@ typedef struct Scr {
 } Scr;
 
 extern Vec4 *g_VisibleCellList;
-/* Interleaved { dx, dy } terrain-cell offsets, 64 pairs per octant and eight
- * octants; the four switch arms fold the full circle onto that one octant by
- * negating dx and/or dy. */
-extern s8 g_CellScanOffsetX[];
-extern s8 g_CellScanOffsetY[];
 void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 
 void BuildVisibleCells(s32 arg0, s32 arg1) {
