@@ -18,15 +18,6 @@
 extern volatile u8 g_SndVoiceFlags[] asm("D_8009E0A0");
 
 /*
- * Master scale applied to every sound-effect voice volume, 0..0x80.
- * SetEffectVolumeScale clamps into that range; the voice code multiplies a
- * cue's nominal volume by it before writing the SPU. This is the `.scale` word
- * of the SoundScale record at 0x801E6CA4 (see game/sound.h), which is the only
- * field addressed as a scalar.
- */
-extern s32 g_EffectVolumeScale asm("D_801E6CA4");
-
-/*
  * The libsnd VAB ids of the loaded banks, one per bank slot.
  * InitSoundWithVab fills it from SsVabOpenHead; every key-on passes an
  * element as the vabId argument of func_80077C7C / func_80078130
@@ -63,7 +54,7 @@ void SetEffectVolumeScale(s32 scale);
 void SetLoadedTableVolumeScale(s32 scale);
 void SetSequenceVolumeSetting(s32 setting) asm("func_8005BD84");
 /* The effect-side twin of SetSequenceVolumeSetting: clamps the 0..15
- * option-screen level and scales it onto g_EffectVolumeScale's 0..0x80 range. */
+ * option-screen level and scales it onto g_SoundScale.scale's 0..0x80 range. */
 void SetEffectVolumeSetting(s32 setting);
 void SetStereoOutput(void) asm("func_8005BE24");
 void SetMonoOutput(void) asm("func_8005BE58");

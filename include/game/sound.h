@@ -10,6 +10,14 @@ typedef struct SoundScale {
 } SoundScale;
 
 /*
+ * Volume-scale record at 0x801E6CA4. Its `.scale` word is the master scale
+ * applied to every sound-effect voice volume, 0..0x80: SetEffectVolumeScale
+ * clamps into that range and the voice code multiplies a cue's nominal volume
+ * by it before writing the SPU. `.values` is the VAB id table at 0x801E6CA8.
+ */
+extern SoundScale g_SoundScale asm("D_801E6CA4");
+
+/*
  * Shared sound work area at 0x801E6D00..0x801E6DA8, three contiguous regions:
  *   0x6D00  MusicChannel[2]  stride 0x18
  *   0x6D30  EffectVoice[4]   stride 0x14 (hardware voices 10..13)

@@ -117,7 +117,7 @@ void ResetSoundState(void) {
         value = 0x1E00;
         g_IndexedEffectPitch = value;
         value = 1;
-        g_EffectVolumeScale = eighty;
+        g_SoundScale.scale = eighty;
         g_PanVoiceActive = 0;
         g_SoundSlotVolumeScale = eighty;
         g_AudioSlotMask = value;
@@ -484,7 +484,7 @@ void SetEffectVolumeScale(s32 arg0) {
     } else {
         arg0 = 0;
     }
-    g_EffectVolumeScale = arg0;
+    g_SoundScale.scale = arg0;
 }
 
 extern s32 g_SoundSlotVolumeScale asm("D_801E6CE0");
@@ -524,7 +524,7 @@ void SetSequenceVolumeSetting(s32 setting) {
     SetSequenceVolumeScale(value);
 }
 
-/* Set the effect master volume scale (g_EffectVolumeScale = SoundScale.scale) from a
+/* Set the effect master volume scale (g_SoundScale.scale) from a
  * 0..15 level, mapping it onto the 0..0x80 fixed-point scale used by the
  * effect-voice volume math. */
 void SetEffectVolumeSetting(s32 level);
@@ -536,7 +536,7 @@ void SetEffectVolumeSetting(s32 level) {
     } else {
         level = 0;
     }
-    g_EffectVolumeScale = (level << 7) / 15;
+    g_SoundScale.scale = (level << 7) / 15;
 }
 
 extern s32 g_StereoOutput asm("D_80082F40");
@@ -636,7 +636,7 @@ void ApplyPanVoiceVolume(void) {
 
     if (changed != 0) {
         raw = values[0];
-        scale = g_EffectVolumeScale;
+        scale = g_SoundScale.scale;
         left = raw * scale;
         raw = values[1];
         if (left < 0) {
@@ -762,7 +762,7 @@ void UpdateIndexedEffectVoice(void) {
             product += 0x7F;
         }
         raw = product >> 7;
-        scale = g_EffectVolumeScale;
+        scale = g_SoundScale.scale;
         raw *= scale;
         left = raw;
         if (raw < 0) {
@@ -1022,7 +1022,7 @@ void func_80078528(s32 voice, s16 left, s16 right);
 
 #define UPDATE_BASIC_EFFECT_VOLUME()                                  \
     raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);                              \
-    scale = g_EffectVolumeScale;                                                \
+    scale = g_SoundScale.scale;                                                \
     left = raw * scale;                                                \
     raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);                              \
     voice = i + 8;                                                     \
@@ -1054,7 +1054,7 @@ void func_80078528(s32 voice, s16 left, s16 right);
 
 #define START_BASIC_EFFECT_VOLUME()                                   \
     raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);                              \
-    scale = g_EffectVolumeScale;                                                \
+    scale = g_SoundScale.scale;                                                \
     left = raw * scale;                                                \
     raw = i + 8;                                                       \
     asm("" : "=r"(raw) : "0"(raw));                                    \
@@ -1356,7 +1356,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
 #define VOLPITCH()                                                    \
     svArg = voiceCopy;                                                \
                                \
-    prod = *(s32 *)(g_EffectVoiceVolume + offset) * g_EffectVolumeScale;                \
+    prod = *(s32 *)(g_EffectVoiceVolume + offset) * g_SoundScale.scale;                \
     left = prod;                                                      \
     if (prod < 0) {                                                   \
         left = prod + 0x7F;                                           \
@@ -1430,7 +1430,6 @@ void UpdateEffectVoiceStates(void) {
 }
 
 extern s32 g_SoundCueBank asm("D_801E6CA0");
-extern SoundScale g_SoundScale asm("D_801E6CA4");
 extern s32 g_SpecialCueVoiceA asm("D_801E4D90");
 extern s32 g_SpecialCueVoiceB asm("D_801E4D94");
 extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
@@ -1544,12 +1543,6 @@ s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) {
 extern s32 g_ActiveSpecialCue asm("D_80082F44");
 extern s32 g_SpecialCueVoiceA asm("D_801E4D90");
 extern s32 g_SpecialCueVoiceB asm("D_801E4D94");
-/* Struct view of the same two objects audio.h names g_EffectVolumeScale
- * (D_801E6CA4) and g_VabIds (D_801E6CA8) -- not a third global. Spelling the
- * three reads below as those two scalars instead compiles but does not match:
- * gcc 2.6.3 treats a struct member reference as non-aliasing (MEM_IN_STRUCT_P)
- * and reorders the surrounding volume arithmetic. */
-extern SoundScale g_SoundScale asm("D_801E6CA4");
 extern s32 D_80011C84;
 extern const s32 g_SoundCueParams[][6] asm("D_80011C8C");
 extern const s32 g_SoundCueParams2[][6] asm("D_80011F5C");
@@ -1741,7 +1734,7 @@ void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     s32 bend;
     s32 voiceCopy;
 
-    prod = arg2 * g_EffectVolumeScale;
+    prod = arg2 * g_SoundScale.scale;
     voice = arg0 + 0xE;
     voiceCopy = voice;
     bend = arg4;
@@ -2048,7 +2041,7 @@ void ForcePanVoiceEnabled(s32 enabled) {
 
     if (enabled != 0) {
         raw = values[0];
-        scale = g_EffectVolumeScale;
+        scale = g_SoundScale.scale;
         left = raw * scale;
         raw = values[1];
         if (left < 0) {
@@ -2135,7 +2128,7 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
             asm volatile("" : : "r"(unused));
 
             raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);
-            scale = g_EffectVolumeScale;
+            scale = g_SoundScale.scale;
             left = raw * scale;
             raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);
             arg0 = voice;
@@ -2213,7 +2206,7 @@ void ForceIndexedEffectVoiceEnabled(s32 enabled) {
             product += 0x7F;
         }
         raw = product >> 7;
-        scale = g_EffectVolumeScale;
+        scale = g_SoundScale.scale;
         raw *= scale;
         left = raw;
         if (raw < 0) {
@@ -2280,7 +2273,7 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
 
             scale = *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset);
             asm volatile("" : : "r"(scale));
-            raw = g_EffectVolumeScale;
+            raw = g_SoundScale.scale;
             raw = scale * raw;
             arg0 = voice;
             left = raw;
