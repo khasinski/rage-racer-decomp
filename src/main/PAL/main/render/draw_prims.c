@@ -147,12 +147,12 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
 void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
-    register s32 y1Reg asm("$18");
-    register s32 x2Reg asm("$19");
-    register s32 y2Reg asm("$20");
-    register s32 rReg asm("$21");
-    register s32 gReg asm("$22");
-    register s32 bReg asm("$23");
+    s32 y1Reg;
+    s32 x2Reg;
+    s32 y2Reg;
+    s32 rReg;
+    s32 gReg;
+    s32 bReg;
     POLY_F3 *prim;
     u8 *oldPrim;
 
@@ -165,6 +165,7 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     rReg = r;
     gReg = g;
     bReg = b;
+    asm("" : : "r"(prim), "r"(semiReg), "r"(flagsReg), "r"(y1Reg), "r"(x2Reg), "r"(y2Reg), "r"(rReg), "r"(gReg), "r"(bReg) : "$4", "$5", "$6", "$7", "$31");
 
     SetPolyF3(prim);
     SetSemiTrans(prim, semiReg);
@@ -202,12 +203,12 @@ void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 
     POLY_F4 *prim;
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
-    register s32 y1Reg asm("$18");
-    register s32 x2Reg asm("$19");
-    register s32 y2Reg asm("$20");
-    register s32 x3Reg asm("$21");
-    register s32 y3Reg asm("$22");
-    register s32 rReg asm("$23");
+    s32 y1Reg;
+    s32 x2Reg;
+    s32 y2Reg;
+    s32 x3Reg;
+    s32 y3Reg;
+    s32 rReg;
     u8 *oldPrim;
     s16 x0Local;
     s16 y0Local;
@@ -229,7 +230,7 @@ void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 
     x1Local = x1;
     bLocal = b;
     /* Match note: keep stack color load after callee-save argument setup. */
-    asm("" : : "r"(prim), "r"(semiReg), "r"(flagsReg), "r"(y1Reg), "r"(x2Reg), "r"(y2Reg), "r"(x3Reg), "r"(y3Reg), "r"(rReg));
+    asm("" : : "r"(prim), "r"(semiReg), "r"(flagsReg), "r"(y1Reg), "r"(x2Reg), "r"(y2Reg), "r"(x3Reg), "r"(y3Reg), "r"(rReg) : "$4", "$5", "$6", "$7", "$31");
     gLocal = g;
 
     SetPolyF4(prim);
