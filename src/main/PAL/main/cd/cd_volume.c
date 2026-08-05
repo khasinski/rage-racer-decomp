@@ -46,3 +46,14 @@ void SetCdVolume(s32 arg0) {
 
     StepCdVolumeFade();
 }
+
+void ApplyCdVolume(void) {
+    SetCdVolume(g_CdVolume);
+}
+
+void SetCdVolumeSetting(s32 arg0) {
+    s32 product = (arg0 << 7) - arg0;
+
+    g_CdVolume = product / 15;
+    SetCdVolume(g_CdVolume);
+}
