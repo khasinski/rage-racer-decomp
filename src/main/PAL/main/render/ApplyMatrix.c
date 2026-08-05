@@ -15,13 +15,12 @@ s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out) asm("func_800696C8");
 
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) asm("func_80069678");
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
-    register s32 m0 asm("$8") = matrix[0];
-    register s32 m1 asm("$9") = matrix[1];
-    register s32 m2 asm("$10") = matrix[2];
-    register s32 m3 asm("$11") = matrix[3];
-    register s32 m4 asm("$12") = matrix[4];
-
     asm volatile(
+        "lw $8,0(%0)\n"
+        "lw $9,4(%0)\n"
+        "lw $10,8(%0)\n"
+        "lw $11,12(%0)\n"
+        "lw $12,16(%0)\n"
         "ctc2 $8,$0\n"
         "ctc2 $9,$1\n"
         "ctc2 $10,$2\n"
@@ -35,7 +34,7 @@ s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
         "swc2 $26,4($6)\n"
         "swc2 $27,8($6)"
         :
-        : "r"(m0), "r"(m1), "r"(m2), "r"(m3), "r"(m4), "r"(vec), "r"(out)
+        : "r"(matrix), "r"(vec), "r"(out)
         );
     asm volatile("move $2,$6");
 }
@@ -44,13 +43,12 @@ s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
 
 
 s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out) {
-    register s32 m0 asm("$8") = matrix[0];
-    register s32 m1 asm("$9") = matrix[1];
-    register s32 m2 asm("$10") = matrix[2];
-    register s32 m3 asm("$11") = matrix[3];
-    register s32 m4 asm("$12") = matrix[4];
-
     asm volatile(
+        "lw $8,0(%0)\n"
+        "lw $9,4(%0)\n"
+        "lw $10,8(%0)\n"
+        "lw $11,12(%0)\n"
+        "lw $12,16(%0)\n"
         "ctc2 $8,$0\n"
         "ctc2 $9,$1\n"
         "ctc2 $10,$2\n"
@@ -67,7 +65,7 @@ s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out) {
         "sh $9,2($6)\n"
         "sh $10,4($6)"
         :
-        : "r"(m0), "r"(m1), "r"(m2), "r"(m3), "r"(m4), "r"(vec), "r"(out)
+        : "r"(matrix), "r"(vec), "r"(out)
         );
     asm volatile("move $2,$6");
 }
