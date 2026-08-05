@@ -2,9 +2,6 @@
 
 extern u_short g_SpuTransferStartAddr asm("D_8009AB78");
 extern volatile u_short *g_SpuRegBase asm("D_8009AB7C");
-/* Non-volatile view of the same pointer: _spu_FgetRXXa reads the register file
- * through it and the volatile spelling does not match. Same object, one alias. */
-extern u_short *g_SpuRegBaseNv asm("D_8009AB7C");
 extern long g_SpuTransferByIo asm("D_8009AB94");
 extern long g_SpuMemMode asm("D_8009AB9C");
 extern long _spu_mem_mode_unitM asm("D_8009ABA0");
@@ -76,7 +73,7 @@ long _spu_FgetRXXa(long arg0, long arg1) {
     register long value asm("a0");
     long ret;
 
-    value = g_SpuRegBaseNv[arg0];
+    value = ((u_short *)g_SpuRegBase)[arg0];
     if (arg1 != -1) {
         ret = value << _spu_mem_mode_unitM;
     } else {
