@@ -55,7 +55,7 @@ extracted_assets/
 # Local toolchains and external helper clones. The build may populate
 # build/toolchain/, but source releases must not publish these.
 /sdk/
-tools/asm-differ/
+tools/asm-differ
 tools/decomp-permuter/
 tools/m2c/
 tools/maspsx/
@@ -91,3 +91,6 @@ debug_source.c
 *.greg
 *.d
 -.*
+
+# Scratch work from decompilation sessions.
+tools/decomp-wip/
