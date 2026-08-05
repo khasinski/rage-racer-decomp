@@ -139,8 +139,10 @@ void DrawMemoryCardSaveRows(
  * Memory card BIOS front end. These were labelled Cd until the event classes
  * were decoded: every one operates on SwCARD/HwCARD, never on the drive.
  */
-void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
-void ClearMemoryCardSwEvents(void) asm("func_8005F304");
+/* Both bodies take no argument, but two callers hand them the card slot;
+ * an empty parameter list lets that stand. */
+void ClearMemoryCardHwEvents();
+void ClearMemoryCardSwEvents();
 s32 WaitMemoryCardHwEvent(void);
 s32 WaitMemoryCardSwEvent(void);
 s32 PollMemoryCardHwEvent(void);

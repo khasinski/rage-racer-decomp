@@ -721,13 +721,11 @@ void SetDrawModePacket(u8 *prim, s32 tpage);
  * and stores the scratchpad cursor back itself.
  */
 void DrawText8x8(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016754");
-void GameDrawText8x8Shaded(
-    s16 x,
-    s16 y,
-    u8 *str,
-    u16 clutIndex,
-    u8 intensity) asm("func_800168AC");
-void DrawText8x8Trans(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016A18");
+/* The body reads (s32, s32, u8 *, s32, u8); its callers were compiled
+ * against a full word for every argument, so the list stays empty. */
+void GameDrawText8x8Shaded();
+/* The body reads (s32, s32, u8 *, s32); see GameDrawText8x8Shaded above. */
+void DrawText8x8Trans();
 /*
  * The proportional font: 12-pixel-tall SPRT cells. Characters below 'a' use
  * the {u, v} pairs at g_PropFontU with fixed 12x12 cells; 'a'..'u' and 'v'+ use
@@ -789,7 +787,9 @@ extern GameEnvColorSlot g_EnvColors[9];
 
 /* Jumps that timeline to `time` and applies one frame, then programs
  * SetFarColor + SetFogNear. */
-void SeekEnvironmentScript(s32 time) asm("func_800458CC");
+/* replay.c hands it a pointer difference, environment_script.c an s32;
+ * an empty parameter list lets both units keep their own spelling. */
+void SeekEnvironmentScript();
 /* The backdrop: half a 16-segment panorama cylinder over gradient bands shaded
  * between successive colour slots. */
 void DrawSkyBackground(void);

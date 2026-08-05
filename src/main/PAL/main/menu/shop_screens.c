@@ -337,7 +337,7 @@ extern u32 D_8009B2EC;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
-u32 DrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
+u32 DrawEngineerShopScreen(s32 step);
 u32 DrawEngineerShopScreen(s32 arg0) {
     u32 value;
     s32 amount;

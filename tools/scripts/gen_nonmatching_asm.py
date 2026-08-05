@@ -391,6 +391,14 @@ def build_plan(root: Path, version: str, basename: str) -> Plan | None:
         address = fallback_function_address(symbol)
         if address is not None:
             stub_names.setdefault(address, label)
+    # An address in symbol_addrs is defined under that name by whichever object
+    # holds it, so that is what a reference to it has to say.  Without this the
+    # disassembly falls back to func_XXXXXXXX for a function whose C source
+    # stopped spelling it that way, and nothing defines the fallback.
+    for symbol_name, symbol in aliases.items():
+        address = fallback_function_address(symbol)
+        if address is not None:
+            stub_names.setdefault(address, symbol_name)
     # A unit that still spells a function `func_8004F3EC(...)` in C defines
     # exactly that symbol, so a call to it can use the name.
     for unit_funcs in c_funcs_by_unit.values():

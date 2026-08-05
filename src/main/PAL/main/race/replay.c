@@ -74,7 +74,7 @@ void StoreReplayCarFrame(s32 arg0, u8 *arg1, u8 *arg2);
 void StoreReplayTimeAttackFrame(s32 arg0, u8 *arg1);
 extern s32 g_ReplayReadCursor;
 extern u8 *g_EnvScriptClock;
-void func_800458CC(void *arg0);
+void SeekEnvironmentScript(void *arg0);
 void SeedReplayCars(void);
 extern s32 g_SeriesCleared;
 s32 func_80016EC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -255,12 +255,12 @@ void BeginReplay(void) {
     if (g_GrandPrixMode != 0) {
         mode = g_GrandPrixClass;
         if (mode != 5) {
-            func_800458CC(g_EnvScriptClock - 1800);
+            SeekEnvironmentScript(g_EnvScriptClock - 1800);
         }
     } else {
         mode = g_GrandPrixClass;
         if (mode != 5) {
-            func_800458CC(g_EnvScriptClock - 3000);
+            SeekEnvironmentScript(g_EnvScriptClock - 3000);
         }
     }
 

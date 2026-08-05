@@ -381,17 +381,17 @@ extern s32 g_DesignModeOption;
 extern s32 D_801E4D74;
 
 void InitRenderState(s32);
-void func_8005290C(s32);
-void func_80054C84(s32);
-void func_800551BC(s32);
-void func_800562C8(s32);
-void func_80056E64(s32);
-void func_800576BC(s32);
-void func_8005803C(s32);
-void func_800586B0(s32);
-void func_80058B88(s32);
-void func_8005A2CC(s32);
-void func_800496F0(s32);
+s32 DrawCourseSelectScreen(s32 step);
+s32 DrawRankingScreen(s32 step);
+s32 DrawCarSelectScreen(s32 step);
+s32 DrawCustomizeScreen(s32 step);
+s32 DrawDesignModeScreen(s32 step);
+s32 DrawTeamLogoScreen(s32 step);
+s32 DrawLogoSampleScreen(s32 step);
+s32 DrawTeamNameScreen(s32 step);
+s32 DrawPaintColorScreen(s32 step);
+u32 DrawEngineerShopScreen(s32 step);
+void DrawCarSpecGraph(s32);
 void DrawMenuLightBurst(s32);
 
 void InitMenuMode(void);
@@ -483,18 +483,18 @@ void InitMenuMode(void) {
     g_DesignModeOption = 0;
     D_801E4D74 = 0;
 
-    func_8005290C(0);
-    func_80054C84(0);
-    func_800551BC(0);
-    func_800562C8(0);
-    func_80056E64(0);
-    func_800576BC(0);
-    func_8005803C(0);
-    func_800586B0(0);
-    func_80058B88(0);
+    DrawCourseSelectScreen(0);
+    DrawRankingScreen(0);
+    DrawCarSelectScreen(0);
+    DrawCustomizeScreen(0);
+    DrawDesignModeScreen(0);
+    DrawTeamLogoScreen(0);
+    DrawLogoSampleScreen(0);
+    DrawTeamNameScreen(0);
+    DrawPaintColorScreen(0);
     DrawCarShopScreen(0);
-    func_8005A2CC(0);
-    func_800496F0(0);
+    DrawEngineerShopScreen(0);
+    DrawCarSpecGraph(0);
     DrawMenuLightBurst(0);
     DrawTimeAttackPlate(0);
 }

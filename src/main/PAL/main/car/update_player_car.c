@@ -127,7 +127,7 @@ void UpdateLoadedAudioVoices(s32 value, s32 bank);
  * The local Car struct and the shared GameCarDrive are a distinct hand-rolled layout (drive block
  * at +0xBC) shaped to match; they are NOT GameCarRuntime.
  */
-void UpdatePlayerCar(Car *car) asm("func_8002DEFC");
+void UpdatePlayerCar(Car *car);
 void UpdatePlayerCar(Car *car) {
     Matrix m1;
     Matrix m2;

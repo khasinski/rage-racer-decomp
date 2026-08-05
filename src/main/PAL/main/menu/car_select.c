@@ -153,7 +153,7 @@ pos:
     }
 }
 
-s32 DrawCarSelectScreen(s32 step) asm("func_800551BC");
+s32 DrawCarSelectScreen(s32 step);
 s32 DrawCarSelectScreen(s32 arg0) {
     s32 p = (s32) *(void **)0x1F800004;
     u8 *buf = (u8 *)p + 4;
@@ -698,7 +698,7 @@ extern s32 D_8009B2D0;
 
 void func_80052158(s32 arg0, s32 arg1, s32 arg2);
 
-s32 DrawCustomizeScreen(s32 step) asm("func_800562C8");
+s32 DrawCustomizeScreen(s32 step);
 s32 DrawCustomizeScreen(s32 arg0) {
     s32 value;
 

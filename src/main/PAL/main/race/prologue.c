@@ -35,7 +35,7 @@ void UpdatePrologueLoad(void);
 extern s16 g_PrologueLineX[];
 extern s16 g_PrologueLineY[];
 extern s32 g_PrologueLineText[];
-void func_800168AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void GameDrawText8x8Shaded(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_8001720C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 void RequestSelectBgmAssets(void);
@@ -193,7 +193,7 @@ void DrawPrologueText(void) {
         value = 0x7F - clamped;
         i++;
         if (value != 0) {
-            func_800168AC(
+            GameDrawText8x8Shaded(
                 *(s16 *)((u8 *)g_PrologueLineX + offset),
                 delta,
                 *(s32 *)((u8 *)g_PrologueLineText + offset),

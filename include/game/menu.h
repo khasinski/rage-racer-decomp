@@ -179,11 +179,11 @@ void InitMenuMode(void);
 
 /* id 1 -- course + class picker; left/right change course, up/down the rows. */
 void UpdateCourseSelectScreen(void);
-s32 DrawCourseSelectScreen(s32 step) asm("func_8005290C");
+s32 DrawCourseSelectScreen(s32 step);
 
 /* id 2 -- "RANKING": total time / lap time tables, or exit back to id 1. */
 void UpdateRankingScreen(void);
-s32 DrawRankingScreen(s32 step) asm("func_80054C84");
+s32 DrawRankingScreen(s32 step);
 /* The five record rows: place number + suffix + holder + row background, from
  * the ranking table g_RankingRecords or the time table g_TimeRecords. */
 s32 DrawRankingTable(s32 *accumulator, s32 step, s32 table);
@@ -193,23 +193,23 @@ void EnterCarSelectScreen(void);
 
 /* id 4 -- "CAR SELECT"; the hub that starts a race or opens the shops. */
 void UpdateCarSelectScreen(void);
-s32 DrawCarSelectScreen(s32 step) asm("func_800551BC");
+s32 DrawCarSelectScreen(s32 step);
 
 /* id 5 -- "CUSTOMIZE": tire compound (5 settings) and transmission (AT/MT). */
 void UpdateCustomizeScreen(void);
-s32 DrawCustomizeScreen(s32 step) asm("func_800562C8");
+s32 DrawCustomizeScreen(s32 step);
 
 /* id 6 -- "DESIGN MODE": livery hub, branches to team logo / name / colour. */
 void UpdateDesignModeScreen(void);
-s32 DrawDesignModeScreen(s32 step) asm("func_80056E64");
+s32 DrawDesignModeScreen(s32 step);
 
 /* id 7 -- "TEAM LOGO": pick a sample logo (id 8) or hand-paint one. */
 void UpdateTeamLogoScreen(void);
-s32 DrawTeamLogoScreen(s32 step) asm("func_800576BC");
+s32 DrawTeamLogoScreen(s32 step);
 
 /* id 8 -- "TEAM LOGO" sample picker: character and background, 20 each. */
 void UpdateLogoSampleScreen(void);
-s32 DrawLogoSampleScreen(s32 step) asm("func_8005803C");
+s32 DrawLogoSampleScreen(s32 step);
 
 /*
  * id 9 -- "TEAM NAME": the 4x11 character grid driven by GameMenuCursor, with
@@ -217,11 +217,11 @@ s32 DrawLogoSampleScreen(s32 step) asm("func_8005803C");
  * g_TeamNameChars[g_TeamNameLength].
  */
 void UpdateTeamNameScreen(void);
-s32 DrawTeamNameScreen(s32 step) asm("func_800586B0");
+s32 DrawTeamNameScreen(s32 step);
 
 /* id 10 -- "PAINT COLOR": body colour 1 and 2, 18 choices each. */
 void UpdatePaintColorScreen(void);
-s32 DrawPaintColorScreen(s32 step) asm("func_80058B88");
+s32 DrawPaintColorScreen(s32 step);
 
 /* id 11 -- "SHOP" (car shop): browse every car and buy the selected one. */
 void UpdateCarShopScreen(void);
@@ -229,7 +229,7 @@ s32 DrawCarShopScreen(s32 step);
 
 /* id 12 -- "SHOP" (engineer shop): pay the tune-up fee to grade the car up. */
 void UpdateEngineerShopScreen(void);
-u32 DrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
+u32 DrawEngineerShopScreen(s32 step);
 
 /*
  * Menu widgets shared across those screens. Each keeps its own accumulator and
@@ -238,7 +238,9 @@ u32 DrawEngineerShopScreen(s32 step) asm("func_8005A2CC");
  * data layouts.
  */
 /* The four-bar car performance chart; only visible on CUSTOMIZE. */
-void DrawCarSpecGraph(s32 step, s32 tireGrade) asm("func_800496F0");
+/* menu_mode.c calls it with the step alone, so the parameter list stays
+ * empty; the body reads (s32 step, s32 tireGrade). */
+void DrawCarSpecGraph();
 /* "MAX POWER <n> ps / <n> rpm" and "MAX TORQUE <n>.<n> kgm / <n> rpm". */
 void DrawCarEngineSpec(s16 yOffset, u8 brightness, s32 unused) asm("func_80052158");
 /* The TEAM NAME 4x11 grid, its highlight and caret, and the typed name. */

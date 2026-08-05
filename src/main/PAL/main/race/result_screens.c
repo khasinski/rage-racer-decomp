@@ -51,7 +51,7 @@ void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
 extern char g_TextResult[];
 extern char *g_CourseNames[];
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-void func_80016A18(s32 arg0, s32 arg1, void *arg2, s32 arg3);
+void DrawText8x8Trans(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_RaceTotalTime;
 extern s32 g_ClassResultPlace;
@@ -266,7 +266,7 @@ void DrawResultScreen(void) {
     } else {
         y = 0x39;
     }
-    func_80016A18(0x60, y, g_CourseNames[g_CourseIndex], 0x78CC);
+    DrawText8x8Trans(0x60, y, g_CourseNames[g_CourseIndex], 0x78CC);
 
     width = 0x140;
     base = g_DrawBuffer;
@@ -337,10 +337,10 @@ void DrawGrandPrixResultPanel(void) {
         name = g_GrandPrixNames[g_GrandPrixSeries ? current + 6 : current];
         LibcSprintf(text, g_FmtClassGrandPrix, classNumber, name);
     }
-    func_80016A18(0x10, 0x34, text, 0x78CC);
+    DrawText8x8Trans(0x10, 0x34, text, 0x78CC);
 
     LibcSprintf(text, g_FmtRoundIn, g_GrandPrixRound);
-    func_80016A18(0x10, 0x3C, text, 0x78CC);
+    DrawText8x8Trans(0x10, 0x3C, text, 0x78CC);
 
     {
         s32 *scratch;

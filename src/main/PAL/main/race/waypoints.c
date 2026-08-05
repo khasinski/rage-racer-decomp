@@ -102,7 +102,7 @@ void BeginCarStandingStart(void *a);
 
 void RunRaceIntroCamera(void *a);
 
-void UpdatePlayerCar(void *a) asm("func_8002DEFC");
+void UpdatePlayerCar(void *a);
 
 void UpdateLoadedAudioVoices(s32 a, s32 b);
 

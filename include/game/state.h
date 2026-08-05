@@ -15,7 +15,7 @@ extern void (*g_GameModeHandlers[])(void);
 /* MainLoop is the PS-EXE `main` and never returns: init chain, then an
  * endless per-frame loop (CD audio, sequencer, asset loads, the current
  * g_GameModeHandlers entry, VSync, display swap, UpdatePadState). */
-void MainLoop(void) asm("func_80016510");
+void MainLoop(void);
 void InitSubsystems(void);
 
 /* Controller layer. GameInitPad hands the BIOS the two 0x28-byte buffers at

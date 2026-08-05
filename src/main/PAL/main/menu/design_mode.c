@@ -17,7 +17,7 @@ void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex,
                    s32 semiTrans, s32 flags);
 
-s32 DrawDesignModeScreen(s32 step) asm("func_80056E64");
+s32 DrawDesignModeScreen(s32 step);
 s32 DrawDesignModeScreen(s32 arg0) {
     CellMask mask;
     void *ot;
@@ -214,7 +214,7 @@ void UpdateDesignModeScreen(void) {
 
 extern s32 D_8009B2D8;
 
-s32 DrawTeamLogoScreen(s32 step) asm("func_800576BC");
+s32 DrawTeamLogoScreen(s32 step);
 s32 DrawTeamLogoScreen(s32 arg0) {
     s32 value;
 

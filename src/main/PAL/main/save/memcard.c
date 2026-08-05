@@ -11,10 +11,10 @@ extern s32 g_McStatusResult;
 extern s32 g_McPollStatus;
 extern char g_FmtCardDevice[];
 
-void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
+void ClearMemoryCardHwEvents(void);
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf() asm("func_800632F0");
-void ClearMemoryCardSwEvents(void) asm("func_8005F304");
+void ClearMemoryCardSwEvents(void);
 s32 PollMemoryCardHwEvent(void);
 s32 WaitMemoryCardSwEvent(void);
 void _card_info(s32 chan);
@@ -258,7 +258,7 @@ void CloseMemoryCardEvents(void) {
 #include "psyq/kernel.h"
 #include "game/memcard.h"
 
-void ClearMemoryCardHwEvents(void) asm("func_8005F2AC");
+void ClearMemoryCardHwEvents(void);
 void ClearMemoryCardHwEvents(void) {
     TestEvent(g_McHwEventIoe);
     TestEvent(g_McHwEventError);
@@ -266,7 +266,7 @@ void ClearMemoryCardHwEvents(void) {
     TestEvent(g_McHwEventNew);
 }
 
-void ClearMemoryCardSwEvents(void) asm("func_8005F304");
+void ClearMemoryCardSwEvents(void);
 void ClearMemoryCardSwEvents(void) {
     TestEvent(g_McSwEventIoe);
     TestEvent(g_McSwEventError);

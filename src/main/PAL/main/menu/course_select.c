@@ -206,7 +206,7 @@ static __inline__ s32 GameDrawSlidingSprite(
     return y;
 }
 
-s32 DrawCourseSelectScreen(s32 step) asm("func_8005290C");
+s32 DrawCourseSelectScreen(s32 step);
 s32 DrawCourseSelectScreen(s32 step)
 {
     void *otBase;
@@ -926,7 +926,7 @@ void UpdateCourseSelectScreen(void) {
 
 extern s32 D_8009B2C4;
 
-s32 DrawRankingScreen(s32 step) asm("func_80054C84");
+s32 DrawRankingScreen(s32 step);
 s32 DrawRankingScreen(s32 arg0) {
     s32 value;
 

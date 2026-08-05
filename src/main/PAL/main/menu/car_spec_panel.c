@@ -218,7 +218,7 @@ void DrawCarSpecPolyLine(void *ot, s32 x0, s16 y0, s16 x1, s16 y1, s32 x2,
                          s32 alpha) asm("DrawPolyLine3");
 
 /* The four animated performance bars on the CUSTOMIZE car panel. */
-void DrawCarSpecGraph(s32 step, u32 tireGrade) asm("func_800496F0");
+void DrawCarSpecGraph(s32 step, u32 tireGrade);
 void DrawCarSpecGraph(s32 step, u32 tireGrade) {
     s32 revealed[4];
     CarSpecGraphColors colors;

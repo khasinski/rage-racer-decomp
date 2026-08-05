@@ -45,7 +45,7 @@ D_800630B4:
 /* 80063148 3C1F800A */  lui $ra, %hi(g_SpuRevAttrTable + 0x2A8)
 /* 8006314C 8FFFAED8 */  lw $ra, %lo(g_SpuRevAttrTable + 0x2A8)($ra)
 /* 80063150 00000000 */  nop
-/* 80063154 0C005944 */  jal func_80016510
+/* 80063154 0C005944 */  jal MainLoop
 /* 80063158 00000000 */  nop
 /* 8006315C 0000004D */  break 0, 1
 .globl D_80063160

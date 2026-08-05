@@ -16,16 +16,16 @@ void StopMemoryCardEvents(void) {
     CloseMemoryCardEvents();
 }
 
-void func_8005F304(s32 arg0);
+void ClearMemoryCardSwEvents();
 s32 _card_clear(s32 arg0);
-void func_8005F2AC(void);
+void ClearMemoryCardHwEvents();
 void _card_load(s32 arg0);
 void CardReadAndSetMode(s32 arg0);
 void CardReadAndSetMode(s32 arg0) {
-    func_8005F304(arg0);
+    ClearMemoryCardSwEvents(arg0);
     while (_card_clear((u8)arg0) == 0) {}
     WaitMemoryCardSwEvent();
-    func_8005F2AC();
+    ClearMemoryCardHwEvents();
     _card_load((u8)arg0);
     WaitMemoryCardHwEvent();
 }

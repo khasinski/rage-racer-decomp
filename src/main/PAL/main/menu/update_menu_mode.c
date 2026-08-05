@@ -5,7 +5,7 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 void UpdateSequenceFadeOut(void);
-void DrawCarSpecGraph(s32, s32) asm("func_800496F0");
+void DrawCarSpecGraph(s32, s32);
 
 extern s32 D_8009B348;
 extern s32 D_8009B324;

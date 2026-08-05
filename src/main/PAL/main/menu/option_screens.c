@@ -5,7 +5,7 @@
 #include "game/render.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
-void SeekEnvironmentScript(s32 arg0) asm("func_800458CC");
+void SeekEnvironmentScript(s32 arg0);
 
 extern s32 g_SoundOptionCursor;
 extern s32 g_BgmVolumeSetting;

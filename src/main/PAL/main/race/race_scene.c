@@ -10,7 +10,7 @@ void SetLightMatrix(void *arg0);
 void UpdateRaceCars(void);
 void DrawStartCountdown(s32 arg0);
 void InitEffectVoiceRuntime(void);
-void SeekEnvironmentScript(s32) asm("func_800458CC");
+void SeekEnvironmentScript(s32);
 
 
 
@@ -151,7 +151,7 @@ void LoadTrackTexturePageRange(void);
 
 void InitTrackLighting(void);
 
-void func_8002C478(void *);
+void InitPlayerCar(void *);
 
 void SetTrackTexturePageNow(s32);
 
@@ -240,7 +240,7 @@ void DrawRaceEndBanner(s32 arg0);
 
 void BeginCarStandingStart(void *arg0, s32 arg1);
 
-void UpdatePlayerCar(void *arg0) asm("func_8002DEFC");
+void UpdatePlayerCar(void *arg0);
 
 void DrawPlayerTachometer(void);
 
@@ -575,7 +575,7 @@ void EnterRaceScene(void) {
         g_LapCount = 3;
     }
     base = g_PlayerCar;
-    func_8002C478(base);
+    InitPlayerCar(base);
     SetTrackTexturePageNow(g_PlayerTrackSection);
     BuildStartingGrid();
     trackLength = g_TrackLength;

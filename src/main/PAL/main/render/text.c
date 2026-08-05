@@ -42,12 +42,12 @@ void GameDrawText8x8Shaded(
     s32 y,
     u8 *str,
     s32 clutIndex,
-    u8 intensity) asm("func_800168AC");
+    u8 intensity);
 void DrawText8x8Trans(
     s32 x,
     s32 y,
     u8 *str,
-    s32 clutIndex) asm("func_80016A18");
+    s32 clutIndex);
 void SetDrawModeWide8x8(
     void *packet,
     s32 dither,

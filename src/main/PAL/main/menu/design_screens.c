@@ -177,7 +177,7 @@ void UpdateLogoSampleScreen(void) {
 
 extern s32 D_8009B2E0;
 
-s32 DrawTeamNameScreen(s32 step) asm("func_800586B0");
+s32 DrawTeamNameScreen(s32 step);
 s32 DrawTeamNameScreen(s32 arg0) {
     s32 value;
 
@@ -306,7 +306,7 @@ pop:
 
 extern s32 D_8009B2E4;
 
-s32 DrawPaintColorScreen(s32 step) asm("func_80058B88");
+s32 DrawPaintColorScreen(s32 step);
 s32 DrawPaintColorScreen(s32 arg0) {
     s32 value;
 
