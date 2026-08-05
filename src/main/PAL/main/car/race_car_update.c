@@ -23,7 +23,7 @@ void UpdateRivalRubberBand(void);
 void SlowRivalAhead();
 void AccumulateLapProgress();
 void ApplyCarKnockback();
-s32 UpdateCarTrackState() asm("func_80031298");
+s32 UpdateCarTrackState();
 void StartCarBodyKick();
 void UpdateCarBodyKick() asm("func_80038FF0");
 void UpdateCarCrestHop();
@@ -685,7 +685,7 @@ extern s16 g_RaceIntroCameraDeltaZ asm("D_8009AFC0");
 s32 rcos(s32 angle) asm("func_80068634");
 s32 rsin(s32 angle) asm("func_80068568");
 void DrawPlayerCarModel(void *arg0);
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void UpdateCamera(void *arg0, s32 arg1);
 
 void RunRaceIntroCamera(Obj *obj, s32 mode);

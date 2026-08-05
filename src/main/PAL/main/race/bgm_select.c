@@ -5,7 +5,7 @@
 #include "game/car.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
-void UpdateAttractCars() asm("func_8003BB50");
+void UpdateAttractCars();
 
 extern s32 g_BgmSelectCursor asm("D_801E4B84");
 extern s32 g_BgmRandomLabelTimer asm("D_8007D6B0");
@@ -16,7 +16,7 @@ s32 func_80017390(u8 *arg0, s32 arg1, s32 arg2);
 extern u32 g_BgmShuffleIndex asm("D_8009E6CC");
 extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
-void ShuffleBgmOrder(void) asm("func_8001B488");
+void ShuffleBgmOrder(void);
 extern s32 g_BgmChangeDelay asm("D_8019CAF4");
 extern s32 g_BgmSelectCdTrack asm("D_8019CE00");
 extern s32 g_CdTrackEnded asm("D_8019C7BC");
@@ -25,7 +25,7 @@ extern s32 g_BgmRandomPlay asm("D_8007D6B4");
 extern s32 g_BgmSelectShowUi asm("D_801E412C");
 extern s32 g_CameraViewMode asm("D_8009E870");
 void AdvanceBgmShuffleBag();
-void DrawFullscreenFadeTile() asm("func_80033AA0");
+void DrawFullscreenFadeTile();
 void RequestOptionScreenAssets();
 void DrawBgmSelectBar();
 void RequestTrackTexturePage();

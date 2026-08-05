@@ -19,7 +19,7 @@ void RegisterCourseModels(void);
 void SetCarImageSlot(void *arg0, s32 arg1);
 void SetCarModelSlot(void *arg0, s32 arg1);
 void SelectCarModelSlot(s32 arg0);
-void UploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0);
 void ApplyBodyColor1(s32 arg0, s32 arg1);
 void ApplyBodyColor2(s32 arg0, s32 arg1);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);

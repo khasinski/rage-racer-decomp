@@ -25,7 +25,7 @@ void func_80046A2C(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
 void DrawMenuCourseView(void);
 void DrawMenuLightBurst(s32 arg0);
 void DrawFadingMenuSprites(s32 arg0, s32 arg1, s32 arg2);
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 s32 DrawRankingTable(s32 *arg0, s32 arg1, s32 arg2) asm("func_8004D384");
 void DrawTimeAttackPlate(s32 arg0);
 
@@ -319,7 +319,7 @@ extern s32 g_MenuPlateCarIndex asm("D_8009B320");
 
 void InstallCarModelSlot(void);
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
-void func_8005131C(void);
+void DrawMenuCarView(void);
 
 void EnterCarSelectScreen(void) asm("func_80055618");
 void EnterCarSelectScreen(void) {
@@ -329,7 +329,7 @@ void EnterCarSelectScreen(void) {
     g_UiScriptProgress = 0;
     UpdateOwnedCarNeighbours();
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
-    func_8005131C();
+    DrawMenuCarView();
     DrawMenuLightBurst(-9);
 }
 
@@ -383,7 +383,7 @@ void UpdateCarSelectScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     mode = 2;
-    func_8005131C();
+    DrawMenuCarView();
     DrawMenuLightBurst(-9);
     if (g_GrandPrixMode != 0) {
         mode = 4;
@@ -765,7 +765,7 @@ void UpdateCustomizeScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     mode = 2;
-    func_8005131C();
+    DrawMenuCarView();
     if (g_GrandPrixMode != 0) {
         mode = 3;
     }
@@ -795,7 +795,7 @@ void UpdateCustomizeScreen(void) {
 
                 sel = g_RankingOption;
                 if (sel == 0) {
-                    func_8005D6EC(2);
+                    PlaySoundCue(2);
                     carByte = g_CarTable[g_PlayerCarIndex].tireCompound;
                     D_8019C794 = &D_80082574;
                     GameMenuBusy = -1;
@@ -805,7 +805,7 @@ void UpdateCustomizeScreen(void) {
                 }
                 if (sel == 1) {
                     if (g_CarModelAsset[8] != 0) {
-                        func_8005D6EC(2);
+                        PlaySoundCue(2);
                         carByte = g_CarTable[g_PlayerCarIndex].transmission;
                         D_8019C794 = &D_800825A4;
                         GameMenuBusy = -2;

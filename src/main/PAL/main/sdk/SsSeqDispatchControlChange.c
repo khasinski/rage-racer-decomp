@@ -6,8 +6,8 @@ long func_80070D70(long seq, short sep);
 void ContDataEntry(short seq, short sep, u_char value);
 void SsSeqIndexChannel(long channel, short vab, u_char prog, short volume, long pan) asm("func_800771AC");
 void func_8007701C(short vab, u_char prog, u_char volume);
-void func_800731A8(void);
-void func_800731B8(void);
+void SpuVmDamperOff(void);
+void SpuVmDamperOn(void);
 void SsSeqSetPortamento(short seq, short sep, u_char value);
 void func_80073748(long left, long right);
 void func_8006FDA8(short seq, short sep, u_char value);
@@ -62,9 +62,9 @@ void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
         return;
     case 64:
         if (value < 64U) {
-            func_800731A8();
+            SpuVmDamperOff();
         } else {
-            func_800731B8();
+            SpuVmDamperOn();
         }
         state->delta_value = func_80070D70(seq, sep);
         return;

@@ -20,7 +20,7 @@ extern KernelCallback *g_IntrRpNode asm("D_8009A4B8");
 extern volatile long g_VSyncCount asm("D_8009A4EC");
 extern char D_80013B2C[];
 
-void func_80063C38(char *arg0);
+void LibcPutString(char *arg0);
 
 long VSync(long arg0) {
     long oldTimer;
@@ -84,7 +84,7 @@ void waitVSync(long arg0, long arg1) {
     if (g_VSyncCount < arg0) {
         do {
             if (--timeout == -1) {
-                func_80063C38(D_80013B2C);
+                LibcPutString(D_80013B2C);
                 ChangeClearRCnt(0);
                 ChangeClearInterruptMask(3, 0);
                 break;

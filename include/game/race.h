@@ -176,7 +176,7 @@ extern s16 g_RaceFadeTimer asm("D_801E43FC");
 extern s16 g_RaceOptionCursor asm("D_801E414C");
 
 /* Best lap of this race so far (D_801E4BCC), seeded from g_BestLapTimes at the
- * grid, and DrawTimeValue (func_80033D50), which prints one millisecond
+ * grid, and DrawTimeValue (DrawTimeValue), which prints one millisecond
  * time as m'ss"fff. Both are also referenced from render/, so they are
  * declared per file rather than here. */
 

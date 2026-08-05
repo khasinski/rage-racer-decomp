@@ -13,10 +13,10 @@ extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
 extern long SpuVmVSetUp(short, short);
-extern void SpuVmRebuildVoiceTable(void) asm("func_80074134");
+extern void SpuVmRebuildVoiceTable(void);
 extern void SpuVmNoiseKeyOn(long);
 extern long SpuVmCalculateTonePitch(u_short, u_short);
-extern void SpuVmScaleVabVolume(long, u_short) asm("func_80073C50");
+extern void SpuVmScaleVabVolume(long, u_short);
 
 long SsUtKeyOnV(
     long voice,
@@ -26,7 +26,7 @@ long SsUtKeyOnV(
     u_short note,
     u_short fine,
     short left,
-    short right) asm("func_80077C7C");
+    short right);
 
 long SsUtKeyOnV(
     long voice,

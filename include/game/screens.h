@@ -10,8 +10,8 @@
 /* Formats a lap/race time into dst as %1d'%02d"%03d, returns the write cursor. */
 void *FormatLapTime(void *dst, s32 timeMs);
 
-void DrawResultScreen(void) asm("func_800200D0");         /* "RESULT" */
-void DrawRaceEndPrompt(void) asm("func_80021654");        /* "PRESS START BUTTON" */
+void DrawResultScreen(void);         /* "RESULT" */
+void DrawRaceEndPrompt(void);        /* "PRESS START BUTTON" */
 void DrawCourseIntro(void);          /* "COURSE IN" / "TIME ATTACK" */
 void DrawGrandprixIntro(void) asm("func_800201D4");       /* "CLASS%d %s GRANDPRIX" */
 void DrawEndingScreen(void) asm("func_80037D90");         /* "CONGRATULATIONS!!" */

@@ -36,8 +36,8 @@ extern s32 g_ReplayBufferWrapped asm("D_8009EC8C");
 extern u8 g_PlayerCar asm("D_8009E6D4");
 extern s32 g_ReplayReadCursor asm("D_801F179C");
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void PlaySoundCue(s32 cue);
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void DrawSeriesClearedWash(s32 arg0, s32 arg1);
 void UpdateReplayCars(void);
 void UpdateCamera(s32 arg0, void *arg1);
@@ -90,7 +90,7 @@ s32 func_80016EC4(
     s32 arg8);
 
 void LibcSprintf(void *dst, void *fmt, ...) asm("func_800632F0");
-void func_800200D0(void);
+void DrawResultScreen(void);
 void *FormatLapTime(void *dst, s32 value);
 
 void DrawSeriesClearedWash(s32 x, s32 y);
@@ -349,7 +349,7 @@ void DrawGrandPrixResultPanel(void) {
         s32 selectionIndex;
 
         scratch = (s32 *)0x1F800000;
-        func_800200D0();
+        DrawResultScreen();
 
         base = g_DrawBuffer + 0xCC;
         selection = (GrandPrixIntroSelection *)&g_RacePosition;

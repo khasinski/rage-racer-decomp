@@ -105,7 +105,7 @@ void UpdateCarBodyRoll(void *car);
 void UpdateCarDrivetrain(void *car);
 void AccumulateLapProgress(void *car);
 void ApplyCarKnockback(void *car);
-s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2) asm("func_80031298");
+s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2);
 s32 func_8002D398(void *car);
 void StartCarBodyKick(s32 arg0, void *car);
 void UpdateCarTiltCounter(void *car);
@@ -113,13 +113,13 @@ void UpdateCarCrestHop(void *car);
 void UpdateCarBodyKick(void *car) asm("func_80038FF0");
 s32 rsin(s32 angle) asm("func_80068568");
 s32 Random15(void) asm("func_800632B0");
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 void SetIndexedEffectVoice(s32 arg0, s32 arg1, s32 arg2);
 void UpdateLoadedAudioVoices(s32 value, s32 bank);
 
 /*
  * Per-car physics / gear-shift driver (matched sibling of the ASM
- * func_8003BB50). Samples input, builds the car's orientation matrices, runs
+ * UpdateAttractCars). Samples input, builds the car's orientation matrices, runs
  * the manual/auto gear-shift state machine (using the per-car spec block
  * g_CarSpec for top-gear/upshift/downshift-speed tables and the shift
  * cooldown timers g_SteerHoldFrames/g_AutoShiftCooldown), dispatches the engine audio and the

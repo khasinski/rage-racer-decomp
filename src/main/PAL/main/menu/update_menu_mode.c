@@ -92,7 +92,7 @@ void UpdateMenuMode(void) {
 }
 
 extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
-void SpuVmDamperStep(void) asm("func_800731CC");
+void SpuVmDamperStep(void);
 void SsSeqCalledTbyT(void) asm("func_80071018");
 void TickSequenceAudio(void);
 void TickSequenceAudio(void) {

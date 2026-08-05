@@ -12,7 +12,7 @@ extern u_short *g_SndVabBodyAddr[] asm("D_801F180C");
 extern long g_SndVabBodySize[] asm("D_801E8AB8");
 
 extern long func_8007B2C0(void);
-extern void func_8007B294(long value);
+extern void _spu_setTransferCompletionFlag(long value);
 
 short SsVabOpen(u_char *addr, VabHdr *header);
 short SsVabOpen(u_char *addr, VabHdr *header) {
@@ -56,9 +56,9 @@ short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAdd
     if (func_8007B2C0() == 1) {
         return -1;
     }
-    func_8007B294(1);
+    _spu_setTransferCompletionFlag(1);
     if (vabid >= 16) {
-        func_8007B294(0);
+        _spu_setTransferCompletionFlag(0);
         return -1;
     }
     if (vabid == -1) {
@@ -79,7 +79,7 @@ short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAdd
         }
     }
     if (vabId >= 16) {
-        func_8007B294(0);
+        _spu_setTransferCompletionFlag(0);
         return -1;
     }
 
@@ -90,7 +90,7 @@ short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAdd
     magic = header->form;
     if ((magic >> 8) != (('V' << 16) | ('A' << 8) | 'B')) {
         g_SndVabStatus[vabId] = 0;
-        func_8007B294(0);
+        _spu_setTransferCompletionFlag(0);
         g_SndVabOpenCount--;
         return -1;
     }
@@ -105,7 +105,7 @@ short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAdd
     }
     if (header->ps > g_SndVabProgMax) {
         g_SndVabStatus[vabId] = 0;
-        func_8007B294(0);
+        _spu_setTransferCompletionFlag(0);
         g_SndVabOpenCount--;
         return -1;
     }
@@ -144,14 +144,14 @@ short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAdd
         allocation = SpuMalloc(totalSize);
         if (allocation == -1) {
             g_SndVabStatus[vabId] = 0;
-            func_8007B294(0);
+            _spu_setTransferCompletionFlag(0);
             g_SndVabOpenCount--;
             return -1;
         }
     }
     if ((allocation + totalSize) > 0x80000U) {
         g_SndVabStatus[vabId] = 0;
-        func_8007B294(0);
+        _spu_setTransferCompletionFlag(0);
         g_SndVabOpenCount--;
         return -1;
     }

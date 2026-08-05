@@ -12,7 +12,7 @@ extern u_char g_SndTickIrq asm("D_8009A56A");
 long func_8006DF64(long arg0, Callback arg1);
 void func_8006DFC4(long arg0);
 
-void SsStopSoundTick(void) asm("func_80072260");
+void SsStopSoundTick(void);
 
 void SsStopSoundTick(void) {
     if (g_SndNoTickFlag == 0) {

@@ -27,7 +27,7 @@ extern char g_MsgReadSectors[] asm("D_80010B58");
 extern char g_MsgNowSearching[] asm("D_80010B68");
 extern char g_PathRageStr[] asm("D_80010B80");
 extern char g_MsgSearchOk[] asm("D_80010B8C");
-void UploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0);
 
 void SetTrackCameraTable(u32 value);
 void SetTrackCameraTable(u32 value) {

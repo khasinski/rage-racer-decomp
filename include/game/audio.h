@@ -20,17 +20,17 @@ extern volatile u8 g_SndVoiceFlags[] asm("D_8009E0A0");
 /*
  * The libsnd VAB ids of the loaded banks, one per bank slot.
  * InitSoundWithVab fills it from SsVabOpenHead; every key-on passes an
- * element as the vabId argument of func_80077C7C / func_80078130
+ * element as the vabId argument of SsUtKeyOnV / func_80078130
  * (`g_VabIds[slot]`), and the callers that only ever use the first bank read
  * `g_VabIds[0]`.
  */
 extern s16 g_VabIds[] asm("D_801E6CA8");
 
 void SetSequenceVolume(s32 volume);
-void RefreshSequenceVolumeScale(void) asm("func_8005E7DC");
+void RefreshSequenceVolumeScale(void);
 void SetSequenceVolumeScale(s32 scale);
-void PlaySequence(void) asm("func_8005E88C");
-void StopSequence(void) asm("func_8005E8B8");
+void PlaySequence(void);
+void StopSequence(void);
 void StartSequenceFadeOut(void);
 void UpdateSequenceFadeOut(void);
 void ApplyDuckedSequenceAudio(void);
@@ -68,11 +68,11 @@ void LoadAudioParameterTable(u16 *table);
 s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table);
 s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table);
 void SetPanVoiceTargetVolume(s32 left, s32 right);
-void ApplyPanVoiceVolume(void) asm("func_8005BF30");
+void ApplyPanVoiceVolume(void);
 void StartIndexedEffectVoice(s32 baseTone);
-void StopIndexedEffectVoice(void) asm("func_8005C0E4");
+void StopIndexedEffectVoice(void);
 void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume);
-void UpdateIndexedEffectVoice(void) asm("func_8005C168");
+void UpdateIndexedEffectVoice(void);
 /*
  * The two positional-cue setters. `cue` is an index into the shared 7-record
  * table at D_800126D0 (stride 0x18); each cue owns a fixed pair of voices, and a
@@ -81,9 +81,9 @@ void UpdateIndexedEffectVoice(void) asm("func_8005C168");
  * D_801E6D00[2] with independent volumes. See docs/names.md 1.
  */
 void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);
-void SetStereoSoundCue(s32 cue, s32 volLeft, s32 volRight) asm("func_8005C31C");
+void SetStereoSoundCue(s32 cue, s32 volLeft, s32 volRight);
 s32 StartSingleSpecialCue(s32 cue, s32 volume);
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 void ForcePanVoiceEnabled(s32 enabled);
 void ForceIndexedEffectVoiceEnabled(s32 enabled);
 s32 InterpolateAudioParameter(s32 param, s32 position, s32 bank);
@@ -97,7 +97,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 vabHeader, s32 vabBody, s32 seqData);
 void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot);
 void StopDirectVoice(s32 voice);
 void SetVabSlotVoiceEnabled(s32 voice, s32 enabled, s32 vabSlot);
-void SetDefaultReverbDepth(void) asm("func_8005DBB4");
+void SetDefaultReverbDepth(void);
 void InitSequenceAudio(void);
 void RestoreReverbDepth(s32 enabled);
 int CloseAudioSlot(s32 slot) asm("func_8005E600");

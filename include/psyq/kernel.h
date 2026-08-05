@@ -64,7 +64,7 @@ void EnableEvent(long event) asm("func_800631D0");
 void DisableEvent(long event) asm("func_800631E0");
 void WaitEvent(long event);
 
-long BiosFileOpen(void *path, long mode) asm("func_80063230");
+long BiosFileOpen(void *path, long mode);
 long BiosFileSeek(long fd, long offset, long whence);
 long BiosFileRead(long fd, void *buf, long len);
 long BiosFileWrite(long fd, void *buf, long len);

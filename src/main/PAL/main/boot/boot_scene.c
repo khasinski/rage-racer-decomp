@@ -27,7 +27,7 @@ void func_800686D4(s32 arg0, s32 arg1);
 extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern s32 g_OptionLetterboxHeight asm("D_8009F0A0");
-void UploadImageAsset(s32 arg0) asm("func_8001A3C0");
+void UploadImageAsset(s32 arg0);
 void InitRenderState(s32 arg0) asm("func_80017884");
 void InstallSceneLighting(void);
 

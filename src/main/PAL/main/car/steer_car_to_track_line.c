@@ -20,7 +20,7 @@ s32 rcos(s32 arg0) asm("func_80068634");
  * divided by the spec block's steerResponse. Register pins are
  * match-load-bearing.
  */
-void SteerCarToTrackLine(GameCarRuntime *car) asm("func_8002FE74");
+void SteerCarToTrackLine(GameCarRuntime *car);
 void SteerCarToTrackLine(GameCarRuntime *car) {
     GameCarSpec *spec;
     s32 timer;
@@ -99,7 +99,7 @@ extern s32 D_801E8AA0;
 
 s32 func_8002A788(s32 arg0, s32 arg1);
 s32 GetAngleDelta(s32 arg0, s32 arg1);
-void func_8002FE74(GameCarRuntime *car);
+void SteerCarToTrackLine(GameCarRuntime *car);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 
@@ -281,7 +281,7 @@ void func_80030030(GameCarRuntime *arg0) {
     }
 
     *(s32 *)(r + 0x90) = car->field_24;
-    func_8002FE74(car);
+    SteerCarToTrackLine(car);
 
     res = func_8002A788(car->field_24, car->headingAngle);
     if (res >= 0x401) {

@@ -20,11 +20,11 @@ void SetLightMatrix(void *m) asm("func_80069888");
 void SetColorMatrix(void *m) asm("func_800698B8");
 void SetTransMatrix(void *m) asm("func_800698E8");
 /* Direct GTE register writers (libgte REG03_1 through REG03_13). */
-void SetVertex0(void *v) asm("func_80069908");
+void SetVertex0(void *v);
 void SetVertex1(void *v);
 void SetVertex2(void *v);
 void SetVertexTri(void *v0, void *v1, void *v2);
-void SetRGBfifo(void *rgb0, void *rgb1, void *rgb2) asm("func_80069958");
+void SetRGBfifo(void *rgb0, void *rgb1, void *rgb2);
 void SetIR123(long ir1, long ir2, long ir3);
 void SetIR0(long ir0);
 void SetSZfifo3(long sz1, long sz2, long sz3);
@@ -35,7 +35,7 @@ void SetMAC123(long mac1, long mac2, long mac3);
 void SetData32(long data);
 /* Perspective divide constants (control regs 27 / 28). */
 void SetDQA(long dqa);
-void SetDQB(long dqb) asm("func_80069A0C");
+void SetDQB(long dqb);
 /* Fog: derives dqa from the near distance `a` and projection distance `h`. */
 void SetFogNear(long a, long h) asm("func_800686D4");
 /* Background / far colours; each component is shifted left by 4 on the way in. */
@@ -79,7 +79,7 @@ void *MulMatrix0(void *m0, void *m1, void *m2);
 /* v1 = m * v0 through the same MVMVA; v0 is a short vector, v1 gets MAC1..3. */
 void *ApplyMatrix(void *m, void *v0, void *v1) asm("func_80069678");
 /* SVECTOR in, SVECTOR out; returns v1. LibRef47 8-23. */
-short *ApplyMatrixSV(void *m, void *v0, short *v1) asm("func_800696C8");
+short *ApplyMatrixSV(void *m, void *v0, short *v1);
 
 /* Matrix scaling. ScaleMatrix does m[i][j] *= v[j] (column j scaled by
  * v[j]); ScaleMatrixL does m[i][j] *= v[i]. LibRef47 8-150 / 8-151. */

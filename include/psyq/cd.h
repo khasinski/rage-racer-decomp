@@ -99,7 +99,7 @@ long CdGetToc(CdlLOC *toc);
 long CdGetToc2(long n, CdlLOC *toc);
 void CD_initintr(void) asm("func_8006BCC4");
 long CD_initvol(void) asm("func_8006BBD0");
-void CD_flush(void) asm("func_8006BAF0");
+void CD_flush(void);
 long CD_getsector2(long madr, u_long size) asm("func_8006C06C");
 long CD_vol(CdlATV *vol) asm("func_8006BA68");
 long DsSearchFile(void *file, void *name);

@@ -47,10 +47,10 @@ extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 long SpuVmVSetUp(short vab_id, short program);
 long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note);
 u_char SpuVmAlloc(long priority);
-void func_80074134(void);
+void SpuVmRebuildVoiceTable(void);
 void SpuVmNoiseKeyOn(u_char voice);
 u_short SpuVmCalculateCurrentPitch(void);
-void func_80073C50(u_char tone_count, u_short pitch);
+void SpuVmScaleVabVolume(u_char tone_count, u_short pitch);
 
 static inline u_char func_80076350_select_tones(
     u_char *tone_indices, u_char *vag_indices) {
@@ -158,11 +158,11 @@ long SpuVmSeKeyOn(
                     g_SndCurrentAttr.priority;
                 g_SndVoiceState[g_SndCurrentAttr.voice].vag =
                     g_SndCurrentAttr.vag;
-                func_80074134();
+                SpuVmRebuildVoiceTable();
                 if (g_SndCurrentAttr.vag == 0xFF) {
                     SpuVmNoiseKeyOn(g_SndCurrentAttr.voice);
                 } else {
-                    func_80073C50(
+                    SpuVmScaleVabVolume(
                         tone_count, SpuVmCalculateCurrentPitch() & 0xFFFF);
                 }
                 result |= 1 << g_SndCurrentAttr.voice;

@@ -50,8 +50,8 @@ void RequestSelectBgmAssets(void);
 void DrawRankingPanel(u8 *arg0) asm("func_80021DB8");
 void DrawTimeRecordPanel(u8 *arg0);
 void DrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
+void PlaySoundCue(s32 cue);
 void CdSync(s32 arg0, s32 arg1) asm("func_8006A534");
 s32 CdControl(s32 com, void *param, s32 result);
 

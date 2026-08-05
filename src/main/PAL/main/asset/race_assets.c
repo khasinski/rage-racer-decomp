@@ -29,7 +29,7 @@ void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
 s32 PollAudioSlotLoad(void);
 s32 GetCarAssetIndex(s32 model, s32 grade);
 void SetCarSpec(void);
-void UploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0);
 void UploadImageBlock(void *arg0);
 void StoreTeamLogoImage(void *arg0);
 void ResetTrackTextureSwap(void);

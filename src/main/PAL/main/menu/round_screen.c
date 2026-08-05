@@ -73,7 +73,7 @@ extern s32 g_ImageBlockBuffer asm("D_801E4B30");
 extern u8 *g_CourseProgress asm("D_8009E67C");
 
 void CloseLoadedAudioSlots(void);
-void UploadImageAsset(s32 arg0) asm("func_8001A3C0");
+void UploadImageAsset(s32 arg0);
 void RelocateCarModel(void);
 
 /* Scene 9: finishes the asset load, relocates the car model and derives g_GrandPrixRound. */
@@ -245,7 +245,7 @@ extern s32 g_BgmTrackCount asm("D_801E40A8");
 extern u8 g_BgmShuffleOrder[] asm("D_801E7734");
 extern s32 g_BgmTrack asm("D_801E40E0");
 
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 s32 RequestRaceAssets(void);
 
 /* Scene 10: draws the ROUND screen, takes the BGM choice and starts the race at frame 121. */

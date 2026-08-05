@@ -190,7 +190,7 @@ s32 InitSoundRuntime(void) {
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-s32 SpuVmDamperStep(void) asm("func_800731CC");
+s32 SpuVmDamperStep(void);
 s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
@@ -199,15 +199,15 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table);
 s32 func_8005E600(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0);
 void BiosExit(s32 arg0) asm("func_80063D9C");
-void func_800736E8(void);
+void SsUtReverbOff(void);
 void func_80073614(s32 arg0);
 void func_80073748(s32 arg0, s32 arg1);
 void func_8007865C(s32 arg0);
 long SsUtKeyOffV(long voice);
 s32 VSync(s32 mode);
 void func_80072B3C(s32 arg0);
-void func_80072260(void);
-void func_80071C24(void);
+void SsStopSoundTick(void);
+void SsQuit(void);
 
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
 extern s32 g_SoundCueBank asm("D_801E6CA0");
@@ -443,7 +443,7 @@ void CloseExtraVabSlot(void) {
     if (flags & 0x20) {
         newFlags = flags ^ 0x20;
         *flagsPtr = newFlags;
-        func_800736E8();
+        SsUtReverbOff();
         func_80073748(0x28, 0x28);
         SsUtKeyOffV((s16)liveSlot);
         func_80072B3C(g_VabIds5);
@@ -457,7 +457,7 @@ void ShutdownSoundSystem(void) {
 
     if (*flag != 0) {
         *flag = 0;
-        func_800736E8();
+        SsUtReverbOff();
         func_80073614(0);
         func_80073748(0, 0);
         i = 0;
@@ -468,8 +468,8 @@ void ShutdownSoundSystem(void) {
         VSync(2);
         func_80072B3C(g_VabIds4);
         func_80072B3C(g_VabIds5);
-        func_80072260();
-        func_80071C24();
+        SsStopSoundTick();
+        SsQuit();
     }
 }
 
@@ -602,7 +602,7 @@ extern s32 g_PanVoiceActive asm("D_801E6CEC");
 
 long SsUtKeyOffV(long voice);
 
-void ApplyPanVoiceVolume(void) asm("func_8005BF30");
+void ApplyPanVoiceVolume(void);
 void ApplyPanVoiceVolume(void) {
     s32 values[2];
     s32 changed;
@@ -831,7 +831,7 @@ typedef struct SoundModeEntry {
 
 extern SoundModeEntry g_SoundModes[] asm("D_800126D0");
 
-void func_8005C31C(s32 arg0, s32 left, s32 right) {
+void SetStereoSoundCue(s32 arg0, s32 left, s32 right) {
     s32 offset;
     s32 count;
     s32 i;
@@ -1776,9 +1776,9 @@ extern s32 g_SoundSlotActive[] asm("D_801E6CC8");
 extern s32 g_EngineSoundCurves[] asm("D_801E446C");
 
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vab_slot);
-void func_8005BF30(void);
+void ApplyPanVoiceVolume(void);
 void UpdateBasicEffectVoices(void);
-void func_8005C168(void);
+void UpdateIndexedEffectVoice(void);
 void UpdateEffectVoiceStates(void);
 s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank);
 s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
@@ -1899,9 +1899,9 @@ void UpdateLoadedAudioVoices(s32 value, s32 bank) {
     } while (index < 6);
 
     g_EngineSoundPosition = value;
-    func_8005BF30();
+    ApplyPanVoiceVolume();
     UpdateBasicEffectVoices();
-    func_8005C168();
+    UpdateIndexedEffectVoice();
     UpdateEffectVoiceStates();
 }
 
@@ -1913,14 +1913,14 @@ extern s32 g_ReverbFadeStep asm("D_801E6D8C");
 void func_8007865C(s32 arg0);
 void func_80072B04(s32 arg0);
 void SetReverbDepth(s32 arg0, s32 arg1);
-void func_8005E7DC(void);
+void RefreshSequenceVolumeScale(void);
 void InitSequenceAudio(void);
 void InitSequenceAudio(void) {
     func_8007865C(0);
     func_80072B04(0x12);
     SetReverbDepth(0x28, 0x28);
     g_ReverbFadeStep = 0;
-    func_8005E7DC();
+    RefreshSequenceVolumeScale();
 }
 
 extern s32 g_AudioSlotMask asm("D_801E6C9C");
@@ -2096,7 +2096,7 @@ extern s32 g_IndexedEffectVolume asm("D_801E6CFC");
 
 long SsUtKeyOffV(long voice);
 void StartIndexedEffectVoice(s32 arg0);
-void func_8005C0E4(void);
+void StopIndexedEffectVoice(void);
 
 void ForceBasicEffectVoicesEnabled(s32 enabled);
 void ForceBasicEffectVoicesEnabled(s32 enabled) {
@@ -2191,7 +2191,7 @@ void ForceIndexedEffectVoiceEnabled(s32 enabled) {
         raw = (index * 3) << 2;
         StartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
     } else {
-        func_8005C0E4();
+        StopIndexedEffectVoice();
     }
 
     raw = g_IndexedEffectIndexPrev;

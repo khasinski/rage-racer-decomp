@@ -12,7 +12,7 @@ void SpuVmDamperOn(void) {
 }
 
 /* Re-entrancy-guarded wrapper around the internal flush; see psyq/snd.h. */
-void func_800731CC(void) {
+void SpuVmDamperStep(void) {
     if (g_SndUpdateLock != 1) {
         g_SndUpdateLock = 1;
         SsUtFlush();

@@ -24,7 +24,7 @@ s32 FindTrackSegment(void *arg0, s32 arg1);
 
 void func_80032280(void *arg0);
 
-void InitShuttleScenery(void) asm("func_8003F0F8");
+void InitShuttleScenery(void);
 
 extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
@@ -85,9 +85,9 @@ extern s32 g_BestTotalTimes[][4][2] asm("D_8019C70C");
 
 void DrawSplitDelta(s32 arg0, s32 arg1);
 
-void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
+void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void SeedReplayCars(void);
 void SeedReplayCars(void) {

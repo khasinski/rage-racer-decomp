@@ -10,7 +10,7 @@ typedef struct UnkFunc80040DB4Entry {
     u16 flags;
 } UnkFunc80040DB4Entry;
 
-void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C31C");
+void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateZoneAmbience(s32 arg0) asm("func_80040DB4");
 void UpdateZoneAmbience(s32 arg0) {

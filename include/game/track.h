@@ -40,7 +40,7 @@ typedef struct GameTrackPoint {
  * array, which InstallTrackPoints publishes at `g_TrackArcCenters`
  * (D_8019C7D0) immediately after the point table. The stride is 12, proven by
  * three independent `* 0xC` sites (UpdateCarDrivetrain, and 8003237C /
- * func_80031298); the third word is never read anywhere in the image.
+ * UpdateCarTrackState); the third word is never read anywhere in the image.
  *
  * D_8019C7D0 is declared per-file, and the two existing declarations disagree:
  * `u8 *` in car/UpdateCarDrivetrain.c (which does its own `* 0xC`) and
@@ -118,7 +118,7 @@ extern GameShuttleScenery g_ShuttleScenery[2] asm("D_801E4FB8");
 
 void UpdateShuttleScenery(s32 instance);
 void DrawShuttleScenery(s32 instance);
-void InitShuttleScenery(void) asm("func_8003F0F8");
+void InitShuttleScenery(void);
 
 /* Lap distance: the sum of every g_TrackPoints[].segmentLength. Cars' along-
  * track progress uses the same units. */

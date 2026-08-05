@@ -46,7 +46,7 @@ extern s32 g_BonusCountStep asm("D_801E6C78");
  * step is that figure divided by 80. */
 extern s32 g_PrizeMoney3rd[][6][3] asm("D_8007BEF4");
 extern s32 g_PromotionBonusTable[] asm("D_8007C00C");
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void DrawPrizeMoneyPanel(u8 *s0);
 void DrawPrizeMoneyPanel(u8 *s0) {

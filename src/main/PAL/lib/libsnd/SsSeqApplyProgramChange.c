@@ -16,9 +16,9 @@ void SsSeqApplyProgramChange(long seq, long sep) {
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern long g_SndTickResolution asm("D_801E6C6C");
 
-void func_80070A1C(short arg0, short arg1, u_char arg2);
+void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2);
 
-void func_80070A1C(short arg0, short arg1, u_char arg2) {
+void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
     SeqStruct *pSeq = &g_SndSeqTable[arg0][arg1];
 
     if (arg2 != 0x2f) {

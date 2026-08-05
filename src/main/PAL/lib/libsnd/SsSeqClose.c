@@ -4,7 +4,7 @@ extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 extern long g_SndSeqOpenMask asm("D_801E4B80");
 extern short g_SndSeqTableTMax asm("D_801E8270");
 
-void func_80076C58(long seq_sep, u_short left, u_short right, long arg3);
+void SpuVmSetSeqVol(long seq_sep, u_short left, u_short right, long arg3);
 
 void SsSeqClose(long seq) {
     volatile long pad[2];
@@ -20,7 +20,7 @@ void SsSeqClose(long seq) {
 
     seq <<= 16;
     seq_s = seq >> 16;
-    func_80076C58(seq_s, 0, 0, 1);
+    SpuVmSetSeqVol(seq_s, 0, 0, 1);
     SpuVmSeqKeyOff(seq_s);
 
     mask = ~(1 << seq_s);

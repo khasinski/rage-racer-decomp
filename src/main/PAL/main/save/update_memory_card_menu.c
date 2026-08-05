@@ -46,7 +46,7 @@ extern s32 g_McDrawEnabled asm("D_80082FC8");
 s32 PollMemoryCardStatus(s32 a, s32 b);
 void DrawMemoryCardScreen(s32 a0, s32 a1, s32 a2, s32 a3);
 void DrawMemoryCardMessage(s32 a0);
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void UpdateMemoryCardMenu(void) asm("func_80061520");
 void UpdateMemoryCardMenu(void) {

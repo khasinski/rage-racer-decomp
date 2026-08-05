@@ -72,7 +72,7 @@ void BeginReplay(void);
 
 void CommitClassProgress(void);
 
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 
 s32 FramesToMilliseconds(s32 arg0, s32 arg1);
 
@@ -85,7 +85,7 @@ void UpdateRivalCueGate(void);
 
 
 
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void ForceAllEffectVoicesEnabled(s32 arg0);
 
@@ -166,7 +166,7 @@ void BuildRaceHudPrims(s32);
 
 void ResetFreeLookCamera(void);
 
-void InitShuttleScenery(void) asm("func_8003F0F8");
+void InitShuttleScenery(void);
 
 void SeedFlybyScenery(void);
 
@@ -301,7 +301,7 @@ void SetReverbDepth(s32 arg0, s32 arg1);
 
 void SetPanVoiceTargetVolume(s32 arg0, s32 arg1);
 
-void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C31C");
+void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateLoadedAudioVoices(s32 arg0, s32 arg1);
 

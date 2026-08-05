@@ -8,13 +8,13 @@ extern char *g_CdCommandNames[] asm("D_80099060");
 extern char *g_CdIntrNames[] asm("D_800990E0");
 extern u_char D_800136D0[];
 
-void func_8006BAF0(void);
+void CD_flush(void);
 long func_8006B0D4(long arg0, long arg1);
 long func_8006B354(long arg0, long arg1);
 
 void CdFlush(void);
 void CdFlush(void) {
-    func_8006BAF0();
+    CD_flush();
 }
 
 /* CdSetDebug: sets the CD debug-verbosity `level`, returns the previous one. */

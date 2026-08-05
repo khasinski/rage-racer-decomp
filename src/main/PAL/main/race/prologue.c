@@ -7,7 +7,7 @@
 #include "game/menu.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
-void UpdateAttractCars(void) asm("func_8003BB50");
+void UpdateAttractCars(void);
 
 typedef struct UnkEventPair {
     s16 timer;
@@ -24,7 +24,7 @@ extern s32 g_FrameSyncThreshold asm("D_8019C768");
 extern s32 g_PrologueStep asm("D_801E4178");
 extern s32 g_PrologueCutIndex asm("D_801E6824");
 extern u8 g_TextNowLoading[] asm("D_80011010");
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void InitTrackScene(void);
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void InstallCourseAssets(void);

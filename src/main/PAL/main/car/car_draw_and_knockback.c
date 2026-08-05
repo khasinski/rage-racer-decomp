@@ -246,7 +246,7 @@ s32 rcos(s32 angle) asm("func_80068634");
  * arg1/arg2). Register-pinned, goto-structured decompilation; do not restructure.
  */
 
-s32 InterpolateTrackAngle(s32 arg0) asm("func_8002FB60");
+s32 InterpolateTrackAngle(s32 arg0);
 
 s32 Random15(void) asm("func_800632B0");
 

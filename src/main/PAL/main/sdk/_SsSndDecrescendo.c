@@ -10,8 +10,8 @@ typedef union SeqVolume71568 {
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
-long SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices) asm("func_80076C58");
-long SpuVmGetSeqVol(short seq_sep, short *left, short *right) asm("func_80076DCC");
+long SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices);
+long SpuVmGetSeqVol(short seq_sep, short *left, short *right);
 
 void _SsSndDecrescendo(short seq, short sep);
 void _SsSndDecrescendo(short seq, short sep) {

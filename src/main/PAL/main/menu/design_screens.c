@@ -20,11 +20,11 @@ extern u8 D_80081CA4;
 extern u8 g_UiChromeScript asm("D_80082460");
 
 extern void ComposeSampleTeamLogo(s32, s32);
-extern void DrawTeamLogoCanvas(s32, s32) asm("func_8004A248");
+extern void DrawTeamLogoCanvas(s32, s32);
 extern void RampTeamLogoCanvas(s32, s32);
 extern void DrawLogoSamplePanel(s32, s32);
 extern void DrawFadingMenuSprites(s32, s32, s32);
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void UpdateLogoSampleScreen(void) asm("func_800580C8");
 void UpdateLogoSampleScreen(void) {
@@ -337,7 +337,7 @@ extern s32 D_80082EB4;
 extern u8 D_80082010;
 extern s32 D_801F17A0;
 
-void func_8005131C(void);
+void DrawMenuCarView(void);
 s32 DrawPaintColorPalette(void *, s32, s32);
 void DrawBrowseArrows(s32, s32, s32, s32);
 void DrawFadingMenuSprites(s32, s32, s32);
@@ -347,7 +347,7 @@ void SetBodyColor2(s32);
 void UpdatePaintColorScreen(void) asm("func_80058C14");
 void UpdatePaintColorScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
-    func_8005131C();
+    DrawMenuCarView();
 
     if (GameMenuBusy == 0) {
         DrawPaintColorPalette(&g_UiScriptProgress2, -1, D_80082EB4);

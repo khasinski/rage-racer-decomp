@@ -52,7 +52,7 @@ void SsUtReverbOn(void) {
     SpuSetReverb(1);
 }
 
-void SsUtReverbOff(void) asm("func_800736E8");
+void SsUtReverbOff(void);
 void SsUtReverbOff(void) {
     SpuSetReverb(0);
 }

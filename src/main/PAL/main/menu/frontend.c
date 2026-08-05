@@ -11,7 +11,7 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2);
 
 extern s32 g_TitlePulse asm("D_801E429C");
 
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void DrawMainMenuRows(void);
 
 void UpdateMainMenuExit(void) asm("func_8001B884");
@@ -126,7 +126,7 @@ extern void (*g_FrontendDrawHandlers[])(void) asm("D_8007C748");
 
 s32 Random15(void) asm("func_800632B0");
 s32 CdControl(s32 com, void *param, s32 result);
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 s32 RequestTrackLoad(void);
 s32 RequestRaceStart(void);
 void BeginIntroFmv(int);

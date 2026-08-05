@@ -61,8 +61,8 @@ typedef union SeqVolume7128C {
     u_short value;
 } SeqVolume7128C;
 
-long SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices) asm("func_80076C58");
-long SpuVmGetSeqVol(short seq_sep, short *left, short *right) asm("func_80076DCC");
+long SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices);
+long SpuVmGetSeqVol(short seq_sep, short *left, short *right);
 
 void _SsSndCrescendo(short seq, short sep);
 void _SsSndCrescendo(short seq, short sep) {

@@ -440,7 +440,7 @@ extern u8 g_LibcNullText[] asm("D_800132C0");
 
 void LibcPutChar(s32 arg0);
 
-void LibcPutString(u8 *arg0) asm("func_80063C38");
+void LibcPutString(u8 *arg0);
 void LibcPutString(u8 *arg0) {
     u8 *ptr;
     s32 value;

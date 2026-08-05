@@ -3,7 +3,7 @@
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
 void SsSeqDispatchControlChange(long seq, long sep, long value);
-void SsSeqSetChannelProgram(long seq, long sep, long value) asm("func_80070A1C");
+void SsSeqSetChannelProgram(long seq, long sep, long value);
 
 void SsSeqDispatchMidiEvent(short seq, short sep);
 void SsSeqDispatchMidiEvent(short seq, short sep) {

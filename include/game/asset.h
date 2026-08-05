@@ -71,7 +71,7 @@ typedef struct GameSceneAssetHeader {
  *   g_AssetBase        D_8019C904  base of the resident block, base + base[n]
  *   g_AssetLoadCursor  D_8019CAFC  load destination, advanced by each load
  *   g_AssetSubBlockPtr D_801E8AB0  base + header->offsets[n + 1]
- *   g_ImageBlockBuffer D_801E4B30  buffer handed to func_8001A3C0
+ *   g_ImageBlockBuffer D_801E4B30  buffer handed to UploadImageAsset
  *   g_CarModelAsset    D_8009E698  registry entry selected by SelectCarModelSlot
  *
  * g_CarModelAsset is the one slot whose pointee type really does change with

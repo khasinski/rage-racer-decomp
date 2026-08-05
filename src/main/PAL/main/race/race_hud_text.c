@@ -18,7 +18,7 @@ extern u8 g_TimeTextBuffer[] asm("D_8007DF04");
 
 void func_80016754(s32 x, s32 y, void *str, s32 color);
 
-void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) asm("func_80033D50");
+void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     s32 savedX;
     register s32 savedY asm("$10");

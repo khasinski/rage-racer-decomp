@@ -42,7 +42,7 @@ void UploadImageBlock(void *arg0) {
 
 void UploadImageBlock(void *arg0);
 
-void UploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0);
 void UploadImageAsset(void *arg0) {
     union {
         s32 offset;

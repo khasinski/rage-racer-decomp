@@ -82,7 +82,7 @@ extern s32 g_LapCount asm("D_801E4364");
 extern s32 g_BestLapThisRace asm("D_801E4BCC");
 extern GameRaceRanking g_PlayerLap asm("D_8009E83C");
 extern s16 D_8009E836;
-void DrawTimeValue(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_80033D50");
+void DrawTimeValue(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */

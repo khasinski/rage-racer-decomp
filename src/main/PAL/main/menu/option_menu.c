@@ -27,7 +27,7 @@ void StartOptionMenuExit(s32 arg0);
 void DrawOptionRootMenu(void);
 void DrawOptionRootMenu(void);
 s32 Random15(void) asm("func_800632B0");
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 /* The eleven class icons, tinted by g_ClassRecords[i].place. */
 void DrawClassRecordGrid(void);
 void DrawClassRecordGrid(void);

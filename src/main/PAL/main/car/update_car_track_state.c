@@ -21,7 +21,7 @@ extern u8 g_PlayerCar asm("D_8009E6D4");
  * (offsets 0/2/4/6). Raw FIELD(base,type,offset) accesses preserve the match.
  * Returns the boundary/skid response code.
  */
-s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) asm("func_80031298");
+s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair);
 s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     s32 temp_a0;
     s32 secondResult;

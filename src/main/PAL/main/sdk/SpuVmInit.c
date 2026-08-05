@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-void _spu_setTransferCompletionFlag(long) asm("func_8007B294");
+void _spu_setTransferCompletionFlag(long);
 void SpuInitMalloc(long, u_char *);
 void SsUtFlush(void);
 

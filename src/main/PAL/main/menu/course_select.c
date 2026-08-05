@@ -8,9 +8,9 @@ void StartSequenceFadeOut(void);
 
 s32 DrawRankingScreen(s32 arg0);
 
-const u8 g_NowLoadingText[] asm("D_80011B60") = "NOW LOADING";
+const u8 g_NowLoadingText[] = "NOW LOADING";
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
-/* Blinks the "NOW LOADING" string at D_80011B60. */
+/* Blinks the "NOW LOADING" string at g_NowLoadingText. */
 void DrawNowLoadingText(void);
 void DrawNowLoadingText(void) {
     if (g_SceneTimer & 8) {
@@ -38,7 +38,7 @@ extern u8 g_TeamLogoRect[] asm("D_8007BEE4");
 extern u8 g_TeamLogoClut[] asm("D_801E444C");
 extern u8 g_TeamLogoCanvas[] asm("D_801E6F2C");
 s32 RequestCarSelectAssets(void);
-void func_8005E88C(void);
+void PlaySequence(void);
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void LoadImage(void *rect, void *data) asm("func_80065B24");
 void UploadTeamNameTexture(void *arg0, s32 arg1);
@@ -59,7 +59,7 @@ void EnterCourseSelectScreen(void) {
     }
 
     one = 1;
-    func_8005E88C();
+    PlaySequence();
     g_MenuHandlerIndex = one;
     g_MenuScreen = one;
     DrawBrowseArrows(0, 0, 0, 0);
@@ -532,7 +532,7 @@ s32 DrawClassChangeCurtain(s32 arg0);
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
 void DrawTimeAttackPlate(s32 arg0);
 void DrawMenuCourseView(void);
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 void UpdateCourseSelectScreen(void) asm("func_80053730");
 void UpdateCourseSelectScreen(void) {
     void *ot;

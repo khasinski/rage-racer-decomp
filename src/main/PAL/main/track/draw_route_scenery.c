@@ -89,7 +89,7 @@ extern SVec g_ShuttlePathAngles[] asm("D_8007E3C0");
 #define ANGLES(byteOffset) (*(SVec *)((u8 *)g_ShuttlePathAngles + (byteOffset)))
 extern s16 g_ShuttlePathDwellMax[] asm("D_8007E3E0");
 
-void InitShuttleScenery(void) asm("func_8003F0F8");
+void InitShuttleScenery(void);
 
 void InitShuttleScenery(void) {
     GameShuttleScenery *state;
@@ -118,7 +118,7 @@ void InitShuttleScenery(void) {
         dst[2] = value;
         dst[3] = v1;
 
-        asm(".globl func_8003F1D0\nfunc_8003F1D0 = func_8003F0F8 + 0xD8");
+        asm(".globl func_8003F1D0\nfunc_8003F1D0 = InitShuttleScenery + 0xD8");
         index = g_Shuttle1PathIndex;
         v1 = index * 8;
         g_Shuttle1AngleX = RAW(ANGLES(v1).vx);

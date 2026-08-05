@@ -17,10 +17,10 @@ extern s32 g_PromotionBonus asm("D_8019CE0C");
 extern s32 g_ClassClearFanfareTimer asm("D_801E4D0C");
 extern s32 g_ClassCompleted asm("D_801E4B94");
 extern s32 g_SeriesCleared asm("D_8019C8EC");
-void DrawFullscreenFadeTile(s32, s32) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32, s32);
 void DrawRaceTimePanel(s32);
 void DrawPrizeMoneyPanel(s32);
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 void TickClassClearFanfare(void);
 void RequestSelectBgmAssets(void);
 void AdvanceGrandPrixClass(void);
@@ -45,7 +45,7 @@ extern s32 g_BgmSelection asm("D_801E42CC");
 void ApplyAudioSettings(void);
 void ResetProgressSlot(void *arg0, s32 *arg1);
 void ResetCourseProgress(s32 arg0);
-void ShuffleBgmOrder(void) asm("func_8001B488");
+void ShuffleBgmOrder(void);
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
 void UpdatePrizeMoneyScreen(void) asm("func_80020DDC");

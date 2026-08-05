@@ -32,7 +32,7 @@ extern volatile long g_CdReadSavedSyncCallback asm("D_8007D7B4");
 extern volatile long g_CdReadSavedReadyCallback asm("D_8007D7B8");
 void CdGetSector2(void *arg0, long arg1);
 long CdPosToInt_Local(void *arg0);
-void LibcPutString(void *arg0) asm("func_80063C38");
+void LibcPutString(void *arg0);
 long VSync(long mode);
 long CdControl(long com, long param, long result);
 long CdStatus(void) asm("func_8006A3E8");

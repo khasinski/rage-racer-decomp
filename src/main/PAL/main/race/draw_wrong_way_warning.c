@@ -200,7 +200,7 @@ void SetSemiTrans(u8 *arg0, s32 arg1) asm("func_80064E90");
 void SetTile(u8 *arg0) asm("func_80064FF8");
 void *func_80017390(void *arg0, void *arg1, s32 arg2);
 
-void DrawFullscreenFadeTile(s32 color, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 color, s32 arg1);
 void DrawFullscreenFadeTile(s32 color, s32 arg1) {
     u8 *base = g_DrawBuffer;
     u8 *ot = base + 0xCC;

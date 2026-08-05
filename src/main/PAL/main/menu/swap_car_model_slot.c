@@ -58,7 +58,7 @@ s32 GetCarAssetIndex(s32 arg0, s32 arg1);
 void *ApplyMatrixLV(void *m, void *v0, void *v1);
 void DrawPlayerCarModel(void *obj);
 
-void func_8005131C(void) {
+void DrawMenuCarView(void) {
     Matrix mtxA;
     Matrix mtxB;
     Vec4 out;

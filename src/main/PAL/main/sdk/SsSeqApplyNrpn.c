@@ -35,7 +35,7 @@ void SsUtSetReverbType(long) asm("func_80073614");
 void SsUtSetReverbDepth(long, long) asm("func_80073748");
 void SsUtSetReverbFeedback(long);
 void SsUtSetReverbDelay(long);
-void SsUtReverbOff(void) asm("func_800736E8");
+void SsUtReverbOff(void);
 void SsUtReverbOn(void);
 
 void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val) asm("func_800706AC");

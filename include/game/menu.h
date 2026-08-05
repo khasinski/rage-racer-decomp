@@ -245,10 +245,10 @@ void DrawCarEngineSpec(s16 yOffset, u8 brightness, s32 unused) asm("func_8005215
 void DrawTeamNameEntry(s32 step, s32 cursorIndex) asm("func_8004E724");
 /* The 3D car view behind screens 3, 4, 5, 6, 10, 11, 12: eases
  * g_MenuViewAngle/Offset, then submits the car and the showroom floor. */
-void DrawMenuCarView(void) asm("func_8005131C");
+void DrawMenuCarView(void);
 /* Draw and input halves of the logo painter. The canvas D_801E6F2C is a 64x64
  * 4bpp bitmap with its own 16-entry CLUT at D_801E444C. */
-void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep) asm("func_8004A248");
+void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep);
 void UpdateTeamLogoCanvas(void);
 
 /*
@@ -259,15 +259,15 @@ void UpdateTeamLogoCanvas(void);
  */
 void ScrollTeamLogoUp(void);
 void ScrollTeamLogoDown(void) asm("func_8004BA50");
-void ScrollTeamLogoLeft(void) asm("func_8004BAE4");
-void ScrollTeamLogoRight(void) asm("func_8004BBA8");
+void ScrollTeamLogoLeft(void);
+void ScrollTeamLogoRight(void);
 /* Mirror about the horizontal axis: row r <-> row 63 - r. */
-void FlipTeamLogoVertical(void) asm("func_8004BC68");
+void FlipTeamLogoVertical(void);
 /* Mirror about the vertical axis: nibbles reversed inside each word and word
  * w swapped with word 7 - w. */
 void FlipTeamLogoHorizontal(void);
 /* dst(y, x) = src(x, 63 - y). func_8004BDEC is its silent second entry point. */
-void RotateTeamLogoCcw(void) asm("func_8004BDB4");
+void RotateTeamLogoCcw(void);
 /* dst(y, x) = src(63 - x, y). */
 void RotateTeamLogoCw(void);
 

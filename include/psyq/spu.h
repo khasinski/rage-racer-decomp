@@ -120,7 +120,7 @@ u_long Spu_ReadFromSpu(long addr, u_long size);
 long SpuSetTransferStartAddr(long addr);
 void SpuSetTransferMode(long mode);
 long SpuIsTransferCompleted(long wait);
-void _spu_setTransferCompletionFlag(long completed) asm("func_8007B294");
+void _spu_setTransferCompletionFlag(long completed);
 u_long _spu_isTransferIdle(void) asm("func_8007B2C0");
 void SpuSetCommonAttr(SpuCommonAttr *attr);
 

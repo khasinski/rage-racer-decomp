@@ -4,7 +4,7 @@
 
 extern s16 g_RaceCueDelay asm("D_801E6C90");
 
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void PlayCountdownCues(s32 arg0);
 void PlayCountdownCues(s32 arg0) {

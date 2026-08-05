@@ -5,7 +5,7 @@
 
 extern char g_TextNowLoading[] asm("D_80011010");
 
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
 
 void ExitBgmSelect(void) asm("func_80026484");

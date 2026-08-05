@@ -22,9 +22,9 @@ extern char D_80013814[];
 extern char D_80013824[];
 extern char D_8001389C[];
 
-void LibcPutString(char *text) asm("func_80063C38");
+void LibcPutString(char *text);
 long CdReadInterruptStatus(void);
-void CD_flush(void) asm("func_8006BAF0");
+void CD_flush(void);
 long VSync(long mode);
 long GetKernelStatus(void);
 

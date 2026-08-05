@@ -88,7 +88,7 @@ extern s16 g_PlayerTrackSection asm("D_8009E74C");
 
 extern u8 g_TextCongratulations asm("D_80011494");
 
-void DrawFullscreenFadeTile(s32 a, s32 b) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 a, s32 b);
 
 void SeedWaypoints(void);
 
@@ -163,7 +163,7 @@ extern s32 FindTrackSegment(u8 *ent, s32 arg);
 
 extern void SeedCarLapProgress(u8 *ent, s32 arg);
 
-extern void UpdateCarTrackState(u8 *ent, s32 arg, void *arg2) asm("func_80031298");
+extern void UpdateCarTrackState(u8 *ent, s32 arg, void *arg2);
 
 
 /*

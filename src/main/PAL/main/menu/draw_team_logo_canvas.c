@@ -164,7 +164,7 @@ void DrawTeamLogoCanvasFade(s32 delta) {
     func_80047024(scratch + 0x18, 0x48, 0, 0xF8, limit, alpha, alpha, alpha, 0x40);
 }
 
-void func_8004A248(s32 arg0, s32 arg1)
+void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
 {
   s32 kreg;
   s32 a0v;
@@ -665,7 +665,7 @@ void RampTeamLogoCanvas(s32 arg0, s32 arg1) {
 
 extern u32 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void ScrollTeamLogoUp(void);
 void ScrollTeamLogoUp(void) {
@@ -734,7 +734,7 @@ void ScrollTeamLogoDown(void) {
     } while (8 > i);
 }
 
-void ScrollTeamLogoLeft(void) asm("func_8004BAE4");
+void ScrollTeamLogoLeft(void);
 void ScrollTeamLogoLeft(void) {
     s32 row;
     u32 *savePtr;
@@ -796,7 +796,7 @@ void ScrollTeamLogoLeft(void) {
     } while (row < 0x40);
 }
 
-void ScrollTeamLogoRight(void) asm("func_8004BBA8");
+void ScrollTeamLogoRight(void);
 void ScrollTeamLogoRight(void) {
     s32 row;
     u32 *savePtr;
@@ -859,7 +859,7 @@ void ScrollTeamLogoRight(void) {
     } while (row < 0x40);
 }
 
-void FlipTeamLogoVertical(void) asm("func_8004BC68");
+void FlipTeamLogoVertical(void);
 void FlipTeamLogoVertical(void) {
     s32 i;
     s32 j;

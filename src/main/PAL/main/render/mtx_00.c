@@ -4,7 +4,7 @@
 /*
  * PSY-Q 3.5 libgte object mtx_00.o (LIBGTE.A) as one translation unit.
  * Exports, in link order: CompMatrix, MulMatrix0, MulRotMatrix0,
- * MulRotMatrix, SetMulMatrix, ApplyMatrixLV, ApplyRotMatrix (func_800690E0),
+ * MulRotMatrix, SetMulMatrix, ApplyMatrixLV, ApplyRotMatrix (TransformCollisionVector),
  * ScaleMatrixL, PushMatrix, PopMatrix, ReadRotMatrix, ReadLightMatrix,
  * ReadColorMatrix.  Boundaries and names byte-matched against mtx_00.o;
  * see docs/names.md section 25.  HANDWRITTEN_ASM (asm-in-C), excluded from
@@ -540,7 +540,7 @@ void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-s32 func_800690E0(s32 *arg0, s32 *arg1, s32 arg2) {
+s32 TransformCollisionVector(s32 *arg0, s32 *arg1, s32 arg2) {
     asm volatile(
         "lw $8,0(%0)\n"
         "lw $9,4(%0)\n"
@@ -584,7 +584,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/mtx_00", func_80069110);
 
 /* libgte PushMatrix: cfc2 $0..$7 into the matrix stack at 0x80094CAC,
  * indexed by 0x80094CA8, then index += 32; errors once index reaches
- * 0x280 (20 levels). PopMatrix (func_800692D4) is the exact inverse. */
+ * 0x280 (20 levels). PopMatrix (PopMatrix) is the exact inverse. */
 void PushMatrix(void);
 void PushMatrix(void) {
     asm volatile(
@@ -637,7 +637,7 @@ void PushMatrix(void) {
 
 /* libgte PopMatrix: index -= 32, then ctc2 $0..$7 back from the matrix
  * stack at 0x80094CAC; errors when the index is already 0. */
-void PopMatrix(void) asm("func_800692D4");
+void PopMatrix(void);
 void PopMatrix(void) {
     asm volatile(
         ".set noreorder\n"

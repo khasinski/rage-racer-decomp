@@ -187,7 +187,7 @@ void UpdateTrackEventSound(s16 arg) {
 }
 
 s32 rsin(s32 arg0) asm("func_80068568");
-void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2) asm("func_8005C31C");
+void SetStereoSoundCue(s32 arg0, s32 arg1, s32 arg2);
 
 typedef struct TrackSeg {
     s32 lo;    /* 0x00 */

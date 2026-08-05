@@ -38,7 +38,7 @@ extern u8 *g_StSectorData asm("D_801E8AA8");
 extern volatile StStrHeader *g_StRingBase asm("D_801E8AAC");
 extern s32 g_StRingSize asm("D_801F1850");
 
-void StClearRingRange(s32 first, u32 count) asm("func_8006D0AC");
+void StClearRingRange(s32 first, u32 count);
 void data_ready_callback(void);
 void CD_dmastart(
     s32 channel,

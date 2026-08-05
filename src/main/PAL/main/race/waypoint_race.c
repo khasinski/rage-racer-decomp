@@ -37,7 +37,7 @@ void DrawRoundScreen(void);
 
 void RequestTrackTexturePage(s32 arg0);
 
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 
 void DrawRaceOptionMenu(s32 arg0);
 

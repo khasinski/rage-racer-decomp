@@ -17,8 +17,8 @@ extern char D_80013814[];
 extern char D_80013824[];
 
 long VSync(long mode);
-void LibcPutString(char *)asm("func_80063C38");
-void CD_flush(void) asm("func_8006BAF0");
+void LibcPutString(char *);
+void CD_flush(void);
 
 /* Waits for the CD data transfer to finish, with a 0x3C0-vblank / 0x3C0000-
  * spin watchdog that prints "CD timeout: " and flushes. Named by the same

@@ -1,6 +1,6 @@
 #include "common.h"
 #include "game/screens.h"
-void DrawResultScreen(void) asm("func_800200D0");
+void DrawResultScreen(void);
 void DrawText8x8Trans(s32 arg0, s32 arg1, char *arg2, s32 arg3) asm("func_80016A18");
 
 extern s32 g_DefaultLapTimes asm("D_8007D444");

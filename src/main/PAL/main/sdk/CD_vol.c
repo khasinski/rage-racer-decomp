@@ -24,7 +24,7 @@ void KernelCallbackSlot3(void) asm("func_8006DF34");
 void CdDispatchInterrupts(void);
 void KernelCallbackSlot2(long arg0, void *arg1) asm("func_8006DF64");
 long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
-void LibcPutString(u_char *text) asm("func_80063C38");
+void LibcPutString(u_char *text);
 
 long CD_vol(CdlATV *arg0) {
     *g_CdReg0 = 2;

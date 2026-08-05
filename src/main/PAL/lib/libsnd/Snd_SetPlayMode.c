@@ -2,7 +2,7 @@
 
 extern SeqStruct *g_SndSeqTable[] asm("D_801E79CC");
 
-void func_80076C58(long seq_sep, u_short left, u_short right, long mode);
+void SpuVmSetSeqVol(long seq_sep, u_short left, u_short right, long mode);
 
 void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount);
 void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
@@ -35,7 +35,7 @@ void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
         playState->flags |= 1;
         state->unk48 = 0;
         state->unk2b = 1;
-        func_80076C58((short)(seq | (sep << 8)), state->left_volume, state->right_volume, 0);
+        SpuVmSetSeqVol((short)(seq | (sep << 8)), state->left_volume, state->right_volume, 0);
     } else if (mode == 0) {
         stopState = (SeqStruct *)(seqOffset + (long)*sequence);
         stopState->flags |= 2;
@@ -54,27 +54,27 @@ void SsSepPlay(long seq, long sep, long playMode, long loopCount) {
 
 void _SsSndSetVol(long seq, long sep, long left, long right);
 void _SsSndSetVol(long seq, long sep, long left, long right) {
-    func_80076C58((short)(seq | (sep << 8)), (u_short)left, (u_short)right, 0);
+    SpuVmSetSeqVol((short)(seq | (sep << 8)), (u_short)left, (u_short)right, 0);
 }
 
 void SsSeqSetVol(long seq, long left, long right);
 void SsSeqSetVol(long seq, long left, long right) {
-    func_80076C58((short)seq, (u_short)left, (u_short)right, 0);
+    SpuVmSetSeqVol((short)seq, (u_short)left, (u_short)right, 0);
 }
 
 void SsSepSetVol(long seq, long sep, long left, long right);
 void SsSepSetVol(long seq, long sep, long left, long right) {
-    func_80076C58((short)(seq | (sep << 8)), (u_short)left, (u_short)right, 0);
+    SpuVmSetSeqVol((short)(seq | (sep << 8)), (u_short)left, (u_short)right, 0);
 }
 
-long SpuVmGetSeqVol(long seq_sep, short *left, short *right) asm("func_80076DCC");
+long SpuVmGetSeqVol(long seq_sep, short *left, short *right);
 
 long SsSepGetVol(long seq, long sep, short *voll, short *volr);
 long SsSepGetVol(long seq, long sep, short *voll, short *volr) {
     return SpuVmGetSeqVol((short)(seq | (sep << 8)), voll, volr);
 }
 
-void func_80076ED8(long seqSep);
+void SpuVmSeqKeyOff(long seqSep);
 
 void _SsSndStop(short seq, short sep) {
     long i;
@@ -85,7 +85,7 @@ void _SsSndStop(short seq, short sep) {
     g_SndSeqTable[seq][sep].flags &= ~2;
     g_SndSeqTable[seq][sep].flags &= ~8;
     g_SndSeqTable[seq][sep].flags |= 4;
-    func_80076ED8((sep << 8) | seq);
+    SpuVmSeqKeyOff((sep << 8) | seq);
 
     score->delta_value = score->base_delta_value;
     score->tempo = score->base_unk84;

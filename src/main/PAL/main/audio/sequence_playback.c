@@ -3,11 +3,11 @@
 
 extern s16 g_SeqHandle asm("D_801E6D90");
 void SsSeqPlay(s32 arg0, s32 arg1, s32 arg2);
-void PlaySequence(void) asm("func_8005E88C");
+void PlaySequence(void);
 void PlaySequence(void) { SsSeqPlay(g_SeqHandle, 1, 0); }
 
 void SsSeqStop(s32 arg0);
-void StopSequence(void) asm("func_8005E8B8");
+void StopSequence(void);
 void StopSequence(void) { SsSeqStop(g_SeqHandle); }
 
 extern s32 g_ReverbFadeStep asm("D_801E6D8C");
@@ -25,7 +25,7 @@ extern s32 g_SeqVolume asm("D_801E6D94");
 void SetReverbDepth(s32 arg0, s32 arg1);
 void func_8005E600(s32 arg0);
 void SetSequenceVolume(s32 arg0);
-void func_8005E8B8(void);
+void StopSequence(void);
 void SsSeqSetVol(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateSequenceFadeOut(void);
@@ -67,7 +67,7 @@ void UpdateSequenceFadeOut(void) {
     if (value <= 0) {
         g_SeqVolume = 0;
         g_SeqVolumeFadeStep = 0;
-        func_8005E8B8();
+        StopSequence();
         func_8005E600(6);
         arg0 = 0x28;
         arg1 = 0x28;

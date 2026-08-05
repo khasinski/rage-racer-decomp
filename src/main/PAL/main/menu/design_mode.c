@@ -97,11 +97,11 @@ extern u8 g_UiChromeScript2 asm("D_80082790");
 extern u8 D_80081B54;
 extern u8 g_UiChromeScript asm("D_80082460");
 
-void func_8005131C(void);
+void DrawMenuCarView(void);
 void DrawFadingMenuSprites(s32 a, s32 b, s32 c);
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 void RampTeamLogoCanvas(s32 a, s32 b);
-void DrawTeamLogoCanvas(s32 a, s32 b) asm("func_8004A248");
+void DrawTeamLogoCanvas(s32 a, s32 b);
 s32 func_8004E724(s32 a, s32 b);
 
 void UpdateDesignModeScreen(void) asm("func_80057198");
@@ -110,7 +110,7 @@ void UpdateDesignModeScreen(void) {
     u16 edge;
 
     g_MenuAltLayout = g_MenuAltLayoutSetting;
-    func_8005131C();
+    DrawMenuCarView();
     if (GameMenuBusy == 0) {
         RunTimedDrawScript(&D_800828EC, &g_UiScriptProgress2, -1);
         RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);

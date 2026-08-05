@@ -362,7 +362,7 @@ void ResetCarTrackState(GameCarRuntime *car) asm("func_80032280");
  * only while `g_RacePhase >= 2 && g_GrandPrixMode`, adds three race-only passes
  * and time-slices cars 4..10; attract has no player so every car runs. */
 void UpdateRaceCars(void);
-void UpdateAttractCars(void) asm("func_8003BB50");
+void UpdateAttractCars(void);
 /* Player-vs-field collision (detection, response and the crash cue), called
  * only from UpdatePlayerCar; returns the struck sub-quad 1..4 or 0. */
 s32 CollidePlayerWithCars(GameCarRuntime *car) asm("func_8002D398");

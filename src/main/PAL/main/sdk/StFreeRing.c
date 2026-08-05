@@ -34,7 +34,7 @@ u_long StFreeRing(u_long *base) {
 
 /* Returns a value the callers ignore; declaring it void changes codegen.
  * RAW() on the store replaces the barrier that used to hold it in place. */
-s32 func_8006D0AC(long arg0, u_long arg1) {
+s32 StClearRingRange(long arg0, u_long arg1) {
     u_long i;
 
     for (i = 0; i < arg1; i++) {

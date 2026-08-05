@@ -30,7 +30,7 @@ void CdDataCallback(long arg0);
 void func_8006A58C(long arg0);
 void CdRead2Callback(void);
 void data_ready_callback(void);
-void StClearRingRange(long arg0, long arg1) asm("func_8006D0AC");
+void StClearRingRange(long arg0, long arg1);
 void StSetRingParams(long arg0);
 
 /*

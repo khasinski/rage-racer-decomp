@@ -1,7 +1,7 @@
 #include "common.h"
 
 void SetDQA(s32 arg0);
-void SetDQB(s32 arg0) asm("func_80069A0C");
+void SetDQB(s32 arg0);
 
 void SetFogNear(s32 arg0, s32 arg1) asm("func_800686D4");
 void SetFogNear(s32 arg0, s32 arg1) {

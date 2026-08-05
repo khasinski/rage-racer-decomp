@@ -291,7 +291,7 @@ extern s32 g_RivalCueFlags asm("D_801E4BB4");
 extern s32 g_ClosestRivalRank asm("D_801E7740");
 extern s16 g_RivalCueCooldown3 asm("D_801E6F26");
 
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void UpdateRivalRubberBand(void);
 void UpdateRivalRubberBand(void) {

@@ -11,7 +11,7 @@ extern u_short D_8009E670;
 extern u_short D_8009E674;
 extern SpuVoice g_SndVoiceState[] asm("D_8009E0B8");
 
-void SpuVmSeqKeyOff(long arg0) asm("func_80076ED8");
+void SpuVmSeqKeyOff(long arg0);
 
 void SpuVmSeqKeyOff(long arg0) {
     u_short bits_upper;

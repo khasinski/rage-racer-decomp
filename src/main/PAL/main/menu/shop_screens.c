@@ -46,9 +46,9 @@ void DrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
 void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) asm("func_8004FCE8");
 void DrawMenuAltPanel(s32 arg0, s32 arg1);
 s32 GetOwnedCarAssetIndex(s32 arg0);
-void func_8005131C(void);
+void DrawMenuCarView(void);
 void UpdateCarListCursor(void) asm("func_80059320");
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void UpdateCarShopScreen(void) asm("func_80059558");
 void UpdateCarShopScreen(void) {
@@ -63,7 +63,7 @@ void UpdateCarShopScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawMenuAltPanel(D_8009B32C, D_8009B330);
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
-    func_8005131C();
+    DrawMenuCarView();
     value = g_CarPriceTable[GetOwnedCarAssetIndex(g_CarListCursor)];
     if (GameMenuBusy == 0) {
         g_MenuPlateCarIndex = g_CarListCursor;
@@ -392,7 +392,7 @@ void UpdateEngineerShopScreen(void) {
     ot = *(void **)0x1F800004;
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
-    func_8005131C();
+    DrawMenuCarView();
     g_MenuPlateCarIndex = g_PlayerCarIndex;
     value = D_80082D80[GetOwnedCarAssetIndex(g_PlayerCarIndex)];
     if (GameMenuBusy == 0) {

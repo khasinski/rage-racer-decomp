@@ -3,7 +3,7 @@
 
 extern u32 g_TeamLogoCanvas[] asm("D_801E6F2C");
 
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 
 void FlipTeamLogoHorizontal(void);
 void FlipTeamLogoHorizontal(void) {
@@ -63,7 +63,7 @@ void FlipTeamLogoHorizontal(void) {
     } while (row < 0x40);
 }
 
-void RotateTeamLogoCcw(void) asm("func_8004BDB4");
+void RotateTeamLogoCcw(void);
 void RotateTeamLogoCcw(void) {
     s32 i;
     s32 j;
@@ -79,7 +79,7 @@ void RotateTeamLogoCcw(void) {
     u32 value2;
     u32 saved[512];
 
-    asm(".globl func_8004BDEC\nfunc_8004BDEC = func_8004BDB4 + 0x38");
+    asm(".globl func_8004BDEC\nfunc_8004BDEC = RotateTeamLogoCcw + 0x38");
 
     PlaySoundCue(8);
 
@@ -243,9 +243,9 @@ typedef union {
 
 void ScrollTeamLogoUp(s32 repeat);
 void func_8004BA50(void);
-void func_8004BAE4(void);
-void func_8004BBA8(void);
-void func_8004BC68(void);
+void ScrollTeamLogoLeft(void);
+void ScrollTeamLogoRight(void);
+void FlipTeamLogoVertical(void);
 extern u16 g_PadHeld asm("D_801E436A");
 extern u16 g_PadEdge asm("D_801E4370");
 extern u16 g_PadEdge2 asm("D_801E436E");
@@ -612,7 +612,7 @@ void UpdateTeamLogoCanvas(void) {
                     RotateTeamLogoCw();
                 }
                 if (g_PadEdge2 & 0x4000) {
-                    func_8004BC68();
+                    FlipTeamLogoVertical();
                 }
                 if (g_PadEdge2 & 0x8000) {
                     RotateTeamLogoCcw();
@@ -628,10 +628,10 @@ void UpdateTeamLogoCanvas(void) {
                     func_8004BA50();
                 }
                 if (*held & 0x8000) {
-                    func_8004BAE4();
+                    ScrollTeamLogoLeft();
                 }
                 if (*held & 0x2000) {
-                    func_8004BBA8();
+                    ScrollTeamLogoRight();
                 }
             }
         } else {

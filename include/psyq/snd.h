@@ -29,7 +29,7 @@ void SsUtSetReverbDepth(long left, long right) asm("func_80073748");
 long SsUtSetReverbType(long type) asm("func_80073614");
 long SsUtGetReverbType(void);
 void SsUtReverbOn(void);
-void SsUtReverbOff(void) asm("func_800736E8");
+void SsUtReverbOff(void);
 void SsUtSetReverbFeedback(long feedback);
 void SsUtSetReverbDelay(long delay);
 short SsUtGetVVol(short voice, short *left, short *right);
@@ -49,7 +49,7 @@ long SsUtKeyOnV(
     long note,
     long fine,
     long volL,
-    long volR) asm("func_80077C7C");
+    long volR);
 void _SsVmInit(void) asm("func_8007865C");
 
 void SsSetMVol(short left, short right) asm("func_8006EAFC");
@@ -76,14 +76,14 @@ void SsSeqCloseWrapper(short seq) asm("func_80071AC4");
 void SsSepCloseWrapper(short seq);
 void _SsInitTables(void);
 void ssinit(void);
-void SsQuit(void) asm("func_80071C24");
+void SsQuit(void);
 void SsStartSoundTick(long mode);
 void SsStartSoundTickMode1(void);
 void SsStartSoundTickMode0(void);
 void SsSoundTickCallback(void);
 void SsSoundTickVSyncCallback(void);
 void SsSetTickMode(long mode);
-void SsStopSoundTick(void) asm("func_80072260");
+void SsStopSoundTick(void);
 void SsSetTableSize(u_char *table, long seq_count, long sep_count);
 void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount);
 void SsSeqPlay(long seq, long play_mode, long loop_count);
@@ -91,7 +91,7 @@ void SsSepPlay(long seq, long sep, long play_mode, long loop_count);
 void _SsSndSetVol(long seq, long sep, long left, long right);
 void SsSeqSetVol(long seq, long left, long right);
 void SsSepSetVol(long seq, long sep, long left, long right);
-/* Recorded here as SsSepSetCrescendo, which the callee rules out: func_80076DCC
+/* Recorded here as SsSepSetCrescendo, which the callee rules out: SpuVmGetSeqVol
    (SpuVmGetSeqVol) reads the score's 0x74/0x76 volume pair through two
    out-pointers, and this is a one-line forwarder to it. */
 long SsSepGetVol(long seq, long sep, short *voll, short *volr);
@@ -107,11 +107,11 @@ short SsVabFakeHead(u_char *addr, short vab_id, u_long spu_addr);
 short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAddr);
 short SsVabTransBody(u_char *addr, short vab_id) asm("func_800730BC");
 short SsVabTransCompleted(short immediate_flag) asm("func_8007317C");
-void SpuVmDamperOff(void) asm("func_800731A8");
-void SpuVmDamperOn(void) asm("func_800731B8");
+void SpuVmDamperOff(void);
+void SpuVmDamperOn(void);
 /* The tick entry point: interprets SEQ/SEP data and carries out playback
  * (LibRef47 14-32). It is the only caller of SsSeqAdvanceChannelTick.
- * Was bound to func_800731CC here; that was wrong (docs/names.md 17). */
+ * Was bound to SpuVmDamperStep here; that was wrong (docs/names.md 17). */
 void SsSeqCalledTbyT(void) asm("func_80071018");
 long SsUtGetProgAtr(long vab_id, long program, ProgAtr *out);
 long SpuVmVSetUp(long vab_id, long program);
@@ -133,7 +133,7 @@ void SpuVmSeKeyOff(long seq, long vab_id, long program, long tone);
  * (3 args) cannot be these; they are left raw (docs/names.md 17). */
 short SsUtKeyOn(short vabId, short prog, short tone, short note, short fine, short volL, short volR);
 long SsUtKeyOff(long voice, long vabId, long prog, long tone, long note);
-void SpuVmSeqKeyOff(long seq_sep) asm("func_80076ED8");
+void SpuVmSeqKeyOff(long seq_sep);
 long SsUtSetProgVol(long vab_id, long program, long volume) asm("func_8007701C");
 long SsUtGetProgVol(long vab_id, long program);
 long SsUtSetProgPan(long vab_id, long program, long pan);

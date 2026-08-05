@@ -154,7 +154,7 @@ void BuildTachoNeedleQuad(void);
 void ClearCarMotionState(void *);
 s32 FindTrackSegment(void *, s32);
 void SeedCarLapProgress(void *, s32);
-void UpdateCarTrackState(void *, s32, s16 *) asm("func_80031298");
+void UpdateCarTrackState(void *, s32, s16 *);
 s32 IsCarFacingBackwards(GameCarTrackAngleWindow *);
 void InitPlayerCar(GameCarRuntime *car)
 {
@@ -617,7 +617,7 @@ s32 func_80069C98(s32 arg0, s32 arg1, s32 arg2);
  * Point-in-quad test: returns 1 if point `pt` is inside the quad with corners
  * p0,p1,p3,p2 (four chained half-plane sign checks via func_80069C98), else 0.
  */
-s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) asm("func_8002D2E8");
+s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt);
 s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 pt) {
     s32 result;
     s32 ret = 0;
@@ -688,9 +688,9 @@ extern s32 D_801E408C;
 extern s16 D_801E8A8C;
 void func_80069D18(void *rot, void *mtx);
 s32 *func_80069678(void *mtx, void *vec, void *out);
-s32 func_8002D2E8(s32 a, s32 b, s32 c, s32 d, s32 e);
+s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
 void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
-void PlaySoundCue(s32 id) asm("func_8005D6EC");
+void PlaySoundCue(s32 id);
 s32 CollidePlayerWithCars(GameCarRuntime *car)
 {
   SVec rotation;
@@ -830,7 +830,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
           {
             for (quadIndex = 0; quadIndex < 4; quadIndex++)
             {
-              collisionRegion = func_8002D2E8(
+              collisionRegion = IsPointInQuad(
                 *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 8 + (quadIndex * 16)),
                 *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 12 + (quadIndex * 16)),
                 *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + (quadIndex * 16)),
@@ -853,7 +853,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
           {
             for (quadIndex = 0; quadIndex < 4; quadIndex++)
             {
-              collisionRegion = func_8002D2E8(
+              collisionRegion = IsPointInQuad(
                 *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 8 + (quadIndex * 16)),
                 *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 12 + (quadIndex * 16)),
                 *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + (quadIndex * 16)),
@@ -876,7 +876,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
           {
             for (quadIndex = 0; quadIndex < 4; quadIndex++)
             {
-              collisionRegion = func_8002D2E8(
+              collisionRegion = IsPointInQuad(
                 *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 8 + (quadIndex * 16)),
                 *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 12 + (quadIndex * 16)),
                 *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + (quadIndex * 16)),

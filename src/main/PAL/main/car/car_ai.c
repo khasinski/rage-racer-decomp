@@ -15,11 +15,11 @@ typedef struct GameCollisionPointBytes {
 
 extern GameCollisionPoint g_CarCollisionCorners[4] asm("D_8007E23C");
 
-void TransformCollisionVector(s32 *input, s32 *output) asm("func_800690E0");
+void TransformCollisionVector(s32 *input, s32 *output);
 void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode)
 ;
 s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
-    asm("func_8002D2E8");
+;
 
 s32 GetCarCrestTrigger(GameCarRuntime *arg0);
 

@@ -41,7 +41,7 @@ s32 rsin(s32 angle) asm("func_80068568");
  * screens. The read-only scratchpad base is retained for the three camera
  * matrix multiplies; write-only scratch locations stay absolute so each store
  * is independently rematerialized. */
-void func_80014618(s32 variant) {
+void DrawControllerSetupScene(s32 variant) {
     s32 scale[3];
     Matrix xRot;
     Matrix yRot;

@@ -6,7 +6,7 @@
  * 0x1000 circle (the 0x801 test unwraps one operand by +0x1000). Returns the
  * blended angle masked to 12 bits.
  */
-s32 BlendAngle(s32 angleA, s32 angleB, s32 weight) asm("func_8002FAE8");
+s32 BlendAngle(s32 angleA, s32 angleB, s32 weight);
 s32 BlendAngle(s32 angleA, s32 angleB, s32 weight) {
     s32 lhs = angleA & 0xFFF;
     s32 rhs = angleB & 0xFFF;
@@ -33,14 +33,14 @@ s32 BlendAngle(s32 angleA, s32 angleB, s32 weight) {
 #include "game/track.h"
 
 
-s32 func_8002FAE8(s32 arg0, s32 arg1, s32 arg2);
+s32 BlendAngle(s32 arg0, s32 arg1, s32 arg2);
 
 /* Interpolates the track angle between point `pointIndex` and its successor by `weight`. */
-s32 InterpolateTrackAngle(s32 pointIndex, s32 weight) asm("func_8002FB60");
+s32 InterpolateTrackAngle(s32 pointIndex, s32 weight);
 s32 InterpolateTrackAngle(s32 pointIndex, s32 weight) {
     s32 next = (pointIndex + 1) % g_TrackPointCount;
 
-    return func_8002FAE8(g_TrackPoints[pointIndex].angle, g_TrackPoints[next].angle, weight);
+    return BlendAngle(g_TrackPoints[pointIndex].angle, g_TrackPoints[next].angle, weight);
 }
 
 #include "common.h"
@@ -48,7 +48,7 @@ s32 InterpolateTrackAngle(s32 pointIndex, s32 weight) {
 
 extern s32 g_PlayerSegmentWeight asm("D_8009E70C");
 
-s32 func_8002FAE8(s32 arg0, s32 arg1, s32 arg2);
+s32 BlendAngle(s32 arg0, s32 arg1, s32 arg2);
 
 /*
  * Track angle between point `pointIndex` and its successor (blend weight from
@@ -59,7 +59,7 @@ s32 GetReverseTrackAngle(s32 pointIndex);
 s32 GetReverseTrackAngle(s32 pointIndex) {
     s32 next = (pointIndex + 1) % g_TrackPointCount;
 
-    return 0x800 - func_8002FAE8(g_TrackPoints[pointIndex].angle, g_TrackPoints[next].angle, g_PlayerSegmentWeight);
+    return 0x800 - BlendAngle(g_TrackPoints[pointIndex].angle, g_TrackPoints[next].angle, g_PlayerSegmentWeight);
 }
 
 #include "common.h"
@@ -102,8 +102,8 @@ void InterpolateTrackPoint(s32 pointIndex, s32 *out, s32 weight) {
 #include "game/track.h"
 
 
-s32 func_8002FAE8(s32 arg0, s32 arg1, s32 arg2);
-s32 func_8002FB60(s32 arg0, s32 arg1);
+s32 BlendAngle(s32 arg0, s32 arg1, s32 arg2);
+s32 InterpolateTrackAngle(s32 arg0, s32 arg1);
 
 /*
  * Smooths the track angle at `pointIndex` by blending it (half weight, 0x200)
@@ -119,7 +119,7 @@ s32 SmoothTrackAngle(s32 pointIndex, s32 weight) {
     s32 next;
     s32 right;
 
-    center = func_8002FB60(pointIndex, weight);
+    center = InterpolateTrackAngle(pointIndex, weight);
 
     prev_index = pointIndex - 2;
     if (prev_index < 0) {
@@ -129,12 +129,12 @@ s32 SmoothTrackAngle(s32 pointIndex, s32 weight) {
         prev_index = tmp + pointIndex;
     }
 
-    prev = func_8002FB60(prev_index, weight);
-    left = func_8002FAE8(center, prev, 0x200);
+    prev = InterpolateTrackAngle(prev_index, weight);
+    left = BlendAngle(center, prev, 0x200);
 
     next_index = (pointIndex + 2) % g_TrackPointCount;
-    next = func_8002FB60(next_index, weight);
-    right = func_8002FAE8(center, next, 0x200);
+    next = InterpolateTrackAngle(next_index, weight);
+    right = BlendAngle(center, next, 0x200);
 
-    return func_8002FAE8(left, right, 0x200);
+    return BlendAngle(left, right, 0x200);
 }

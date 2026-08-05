@@ -9,8 +9,8 @@ extern u_char g_SndVoiceRegs[] asm("D_8009DF20");
 extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
 extern u_char g_SndVoiceStateSeqSep[] asm("D_8009E0C6");
 
-short SpuVmSetSeqVol() asm("func_80076C58");
-long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) asm("func_80076DCC");
+short SpuVmSetSeqVol();
+long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2);
 short SpuVmGetSeqVolLeft(long arg0);
 short SpuVmGetSeqVolRight(long arg0);
 

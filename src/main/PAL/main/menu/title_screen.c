@@ -20,7 +20,7 @@ void CloseLoadedAudioSlots(void);
 void ResetTrackTextureSwap(void);
 void UploadLoadBufferImage(void);
 void UpdateBgmTrackCount(void);
-void func_8005DBB4(void);
+void SetDefaultReverbDepth(void);
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
  * state words and hands over to scene 4, UpdateFrontend. */
@@ -43,7 +43,7 @@ void EnterFrontend(void) {
     g_TitleAttractTimer = -1;
 
     UpdateBgmTrackCount();
-    func_8005DBB4();
+    SetDefaultReverbDepth();
 }
 
 extern s32 g_StreamReturnScene asm("D_8019C760");
@@ -56,7 +56,7 @@ extern s32 g_MainMenuSlide;
 extern s32 g_FrontendState;
 void UploadLoadBufferImage(void);
 void UpdateBgmTrackCount(void);
-void func_8005DBB4(void);
+void SetDefaultReverbDepth(void);
 void DrawPressStartPrompt(void);
 
 void EnterTitleScreen(void) asm("func_8001B014");
@@ -81,7 +81,7 @@ void EnterTitleScreen(void) {
     g_MainMenuSlide = 0;
     g_FrontendState = 0;
     UpdateBgmTrackCount();
-    func_8005DBB4();
+    SetDefaultReverbDepth();
     DrawPressStartPrompt();
 }
 
@@ -145,7 +145,7 @@ void DrawPressStartPrompt(void) {
 extern s32 g_TitleAttractTimer;
 extern s32 g_FrontendState;
 extern s32 D_801E8260;
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 void DrawPressStartPrompt(void);
 
 void UpdateTitleScreen(void) asm("func_8001B260");
@@ -255,7 +255,7 @@ s32 Random15(void) asm("func_800632B0");
 
 /* Refills g_BgmShuffleOrder with a random permutation of the
  * g_BgmTrackCount tracks and rewinds g_BgmShuffleIndex. */
-void ShuffleBgmOrder(void) asm("func_8001B488");
+void ShuffleBgmOrder(void);
 void ShuffleBgmOrder(void) {
     s32 i;
     s32 count;
@@ -303,9 +303,9 @@ extern s32 g_ExtraGrandPrixCars asm("D_8019C914");
 extern s32 g_ExtraGrandPrixCourseProgress asm("D_8009E874");
 extern s32 g_TimeAttackCars asm("D_801E4388");
 
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 extern void ResetAssetLoader(void);
-extern void ShuffleBgmOrder(void) asm("func_8001B488");
+extern void ShuffleBgmOrder(void);
 s32 RequestTrackLoad(void);
 extern void RequestSelectBgmAssetsNoReset(void);
 extern void RequestSaveScreenAssets(void);
@@ -353,7 +353,7 @@ void UpdateMainMenuInput(void) {
         if (g_AssetLoadState != 0) {
             ResetAssetLoader();
         }
-        func_8001B488();
+        ShuffleBgmOrder();
         switch (g_TitleMenuSelection) {
         case 0:
             g_CarTable = &g_GrandPrixCars;

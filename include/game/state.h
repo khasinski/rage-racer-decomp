@@ -37,7 +37,7 @@ void UpdateNegconSteerPlayScreen(void) asm("func_80015EDC");
 void DrawNegconSteerPlayScreen(void);
 void UpdateNegconMaxTwistScreen(void) asm("func_80016250");
 void DrawNegconMaxTwistScreen(void);
-void DrawControllerSetupScene(s32 variant) asm("func_80014618");
+void DrawControllerSetupScene(s32 variant);
 
 /*
  * Controller-configuration screen widgets. Two independent 0..7 selections:

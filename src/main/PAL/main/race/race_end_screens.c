@@ -23,10 +23,10 @@ extern s16 g_ChanceDigits[] asm("D_8007D438");
 void func_80016EA0(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 void func_80016754(s32 arg0, s32 arg1, void *arg2, s32 arg3);
 extern volatile u16 g_PadEdge2 asm("D_801E436E");
-void PlaySoundCue(s32 cue) asm("func_8005D6EC");
+void PlaySoundCue(s32 cue);
 void RequestSelectBgmAssets(void);
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1) asm("func_80033AA0");
-void func_80021654(void);
+void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
+void DrawRaceEndPrompt(void);
 void func_80046A2C(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13);
 void DrawRaceEndBanner(s32 arg0);
 void ResetCourseProgress(s32 arg0);
@@ -152,7 +152,7 @@ void UpdateLostRaceScreen(void) {
         }
     }
 
-    func_80021654();
+    DrawRaceEndPrompt();
 }
 
 void DrawRaceEndBanner(s32 arg0);

@@ -10,7 +10,7 @@ extern Rect g_TeamLogoClutRect asm("D_8007BEDC");
 extern Rect g_TeamLogoRect asm("D_8007BEE4");
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
-void UploadImageAsset(void *arg0) asm("func_8001A3C0");
+void UploadImageAsset(void *arg0);
 void UploadLoadBufferImage(void);
 void InstallResourceData(void *arg0);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, s32 arg3);

@@ -18,10 +18,10 @@ extern SvmCurrentAttr g_SndCurrentAttr asm("D_801E4BD0");
 
 long SpuVmVSetUp(short vab_id, short program);
 u_char SpuVmAlloc(long priority);
-void func_80074134(void);
+void SpuVmRebuildVoiceTable(void);
 void SpuVmNoiseKeyOn(long voice);
 long SpuVmCalculateTonePitch(u_short note, u_short fine);
-void func_80073C50(long count, long pitch);
+void SpuVmScaleVabVolume(long count, long pitch);
 
 long func_800771AC(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {
     SeqStruct *score =
@@ -188,11 +188,11 @@ short SsUtKeyOn(
     g_SndVoiceState[voice_index].active = 1;
     g_SndVoiceState[voice_index].age = 0;
 
-    func_80074134();
+    SpuVmRebuildVoiceTable();
     if ((short)g_SndCurrentAttr.vag == 0xFF) {
         SpuVmNoiseKeyOn(voice);
     } else {
-        func_80073C50(1, SpuVmCalculateTonePitch(note, fine) & 0xFFFF);
+        SpuVmScaleVabVolume(1, SpuVmCalculateTonePitch(note, fine) & 0xFFFF);
     }
     g_SndUpdateLock = 0;
     return voice;
