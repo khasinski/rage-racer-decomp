@@ -89,7 +89,6 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     u8 bLocal;
     s32 div;
     s32 base;
-    u32 magic;
 
     prim = *(SPRT **)0x1F800000;
     shadeReg = shadeTex;
@@ -123,10 +122,8 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     prim->t.b0 = bLocal;
 
     asm("" : "=r"(clutReg) : "0"(clutReg));
-    magic = 0xCCCCCCCD;
-    asm("" : : "r"(magic));
+    div = (clutReg & 0xFFFF) / 20U;
     clutReg &= 0xFFFF;
-    div = clutReg / 20U;
     base = (div + 0x1E0) << 6;
     prim->clut = base + (clutReg - (div * 20));
 
