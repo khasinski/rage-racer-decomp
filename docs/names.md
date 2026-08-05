@@ -16,6 +16,41 @@ are `.word` instruction counts from `asm/nonmatchings/PAL/main/*.s` (bytes = wor
 
 ---
 
+## Where a name lives
+
+A function's name belongs in `configs/PAL/sym.main.txt` (splat's
+`symbol_addrs`) and a bss object's in `configs/PAL/bss.main.txt`. Splat then
+emits the name into `asm/` and the linker script, and the C declaration is
+plain: `void Foo(void);`, `extern u32 g_Bar;`.
+
+It used to live in an `asm("func_XXXXXXXX")` label on the declaration instead,
+and that made the labels load-bearing in a way nothing recorded:
+`gen_nonmatching_asm.py` learned every function's address by grepping those
+labels, so removing one silently widened the preceding `INCLUDE_ASM` stub until
+it swallowed the next function. Note that this only shows up after `make split`;
+`make check` against a stale `asm/` still passes. Re-split before believing a
+green check.
+
+A label is still the right answer in four cases, each of which cost a link
+failure to find:
+
+1. The symbol has no C definition (BIOS stubs, data-table entries). Splat
+   defines it; renaming it makes the definition vanish.
+2. The symbol is named in `INCLUDE_ASM(...)` — the macro argument is the
+   literal name.
+3. The symbol is named from inline asm, which does not follow `asm()` labels.
+4. The local prototype contradicts the header prototype for the same address.
+   Unifying the spelling makes the two declarations collide; that is a real
+   defect, but which signature is right is a per-function decision. Around 100
+   functions and 50 objects are waiting on exactly this.
+
+Data and rodata objects that the generated assembly names also still need a
+label: splat applies `symbol_addrs` names to functions and to
+`undefined_syms_auto`, but not to the `dlabel`s it writes into
+`asm/PAL/main/data/*.s`.
+
+---
+
 ## How to read this document
 
 **The code is the authority, not this file.** Where the two disagree, the code
