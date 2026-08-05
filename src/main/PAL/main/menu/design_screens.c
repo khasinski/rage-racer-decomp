@@ -467,7 +467,7 @@ void UpdatePaintColorScreen(void) {
 
 extern s32 D_8009B2E8;
 
-void func_80052158(s32 arg0, s32 arg1, s32 arg2);
+void DrawCarEngineSpec(s32 arg0, s32 arg1, s32 arg2);
 
 s32 DrawCarShopScreen(s32 step);
 s32 DrawCarShopScreen(s32 arg0) {
@@ -507,7 +507,7 @@ s32 DrawCarShopScreen(s32 arg0) {
     limit = g_PlayerCarIndex;
     phase = (u8)((u32)D_8009B2E8 / 4);
     channel = limit;
-    func_80052158(amount, phase, channel);
+    DrawCarEngineSpec(amount, phase, channel);
 
     return D_8009B2E8;
 }

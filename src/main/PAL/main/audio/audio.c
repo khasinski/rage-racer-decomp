@@ -128,7 +128,6 @@ extern u8 g_SndTableArea[];
 extern char g_MsgVabOpenHeadError[];
 extern char g_MsgVabTransBodyError[];
 
-s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 void BiosExit(s32 arg0);
@@ -166,7 +165,7 @@ s32 InitSoundWithVab(s32 header, s32 body) {
         BiosExit(1);
     }
 
-    func_8007317C(1);
+    SsVabTransCompleted(1);
     SsSetMVol(0x3FFF, 0x3FFF);
     SsSetReservedVoice(0);
     return 0;
@@ -191,7 +190,6 @@ s32 InitSoundRuntime(void) {
 #include "psyq/snd.h"
 
 s32 SpuVmDamperStep(void);
-s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq);
@@ -200,11 +198,9 @@ s32 CloseAudioSlot(s32 arg0);
 s32 CloseVabOnlyAudioSlot(s32 arg0);
 void BiosExit(s32 arg0);
 void SsUtReverbOff(void);
-void func_80073748(s32 arg0, s32 arg1);
 void func_8007865C(s32 arg0);
 long SsUtKeyOffV(long voice);
 s32 VSync(s32 mode);
-void func_80072B3C(s32 arg0);
 void SsStopSoundTick(void);
 void SsQuit(void);
 
@@ -277,7 +273,7 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
         }
     }
 
-    ret = func_8007317C(0);
+    ret = SsVabTransCompleted(0);
     g_VabTransferDone = (s16)ret;
     return (s16)ret;
 }
@@ -291,7 +287,7 @@ s32 PollAudioSlotLoad(void) {
     s32 value;
     s32 bit;
 
-    completed = func_8007317C(0);
+    completed = SsVabTransCompleted(0);
     g_VabTransferDone = (s16)completed;
 
     if ((s16)completed != 0) {
@@ -331,12 +327,12 @@ s32 CloseVabOnlyAudioSlot(s32 slot) {
     ret = 0;
     } else {
     *flagsPtr = bit ^ flags;
-    func_80073748(zeroArg, 0);
+    SsUtSetReverbDepth(zeroArg, 0);
     func_8007865C(0);
     /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
        (rather than naming the symbol) is what the retail code does. */
     ids = (s16 *)((u8 *)flagsPtr + 0xC);
-    func_80072B3C(ids[slot]);
+    SsVabClose(ids[slot]);
     ret = 1;
     }
     return ret;
@@ -388,7 +384,7 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     }
 
     g_ExtraVabLoaded = 1;
-    ret = func_8007317C(0);
+    ret = SsVabTransCompleted(0);
     g_VabTransferDone = (s16)ret;
     return g_VabTransferDone;
 }
@@ -421,7 +417,7 @@ s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
         BiosExit(1);
     }
 
-    func_8007317C(1);
+    SsVabTransCompleted(1);
     if (tableReg != 0) {
         LoadAudioParameterTable((u16 *)tableReg);
     }
@@ -443,9 +439,9 @@ void CloseExtraVabSlot(void) {
         newFlags = flags ^ 0x20;
         *flagsPtr = newFlags;
         SsUtReverbOff();
-        func_80073748(0x28, 0x28);
+        SsUtSetReverbDepth(0x28, 0x28);
         SsUtKeyOffV((s16)liveSlot);
-        func_80072B3C(g_VabIds5);
+        SsVabClose(g_VabIds5);
     }
 }
 
@@ -458,15 +454,15 @@ void ShutdownSoundSystem(void) {
         *flag = 0;
         SsUtReverbOff();
         SsUtSetReverbType(0);
-        func_80073748(0, 0);
+        SsUtSetReverbDepth(0, 0);
         i = 0;
         while (i < 24) {
             SsUtKeyOffV((s16)i);
             i++;
         }
         VSync(2);
-        func_80072B3C(g_VabIds4);
-        func_80072B3C(g_VabIds5);
+        SsVabClose(g_VabIds4);
+        SsVabClose(g_VabIds5);
         SsStopSoundTick();
         SsQuit();
     }
@@ -1017,8 +1013,6 @@ after_match:
     } while (i < count);
 }
 
-void func_80078528(s32 voice, s16 left, s16 right);
-
 #define UPDATE_BASIC_EFFECT_VOLUME()                                  \
     raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);                              \
     scale = g_SoundScale.scale;                                                \
@@ -1048,7 +1042,7 @@ void func_80078528(s32 voice, s16 left, s16 right);
     } else {                                                          \
         right = 0;                                                     \
     }                                                                 \
-    func_80078528((s16)voice, (s16)left, (s16)right);                  \
+    SsUtSetVVol((s16)voice, (s16)left, (s16)right);                   \
     *state = neg
 
 #define START_BASIC_EFFECT_VOLUME()                                   \
@@ -1082,7 +1076,7 @@ void func_80078528(s32 voice, s16 left, s16 right);
     } else {                                                          \
         right = 0;                                                     \
     }                                                                 \
-    func_80078528((s16)voice, (s16)left, (s16)right);                  \
+    SsUtSetVVol((s16)voice, (s16)left, (s16)right);                   \
     *state = neg
 
 void UpdateBasicEffectVoices(void);
@@ -1158,7 +1152,6 @@ typedef struct EffectCueRow {
 } EffectCueRow;
 
 long SsUtKeyOffV(long voice);
-void func_80078528(s32, s16, s16);
 
 void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     s32 count;
@@ -1375,7 +1368,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     } else {                                                          \
         right = 0;                                                    \
     }                                                                 \
-    func_80078528((s16)svArg, left, right);                           \
+    SsUtSetVVol((s16)svArg, left, right);                             \
     SsUtChangePitch(voice >> 16, 0, *f0Ptr, 0x3C, 0,                  \
                     (s16)(*pitchPtr >> 7), *(u16 *)pitchPtr & 0x7F);  \
     *statePtr = neg
@@ -1720,7 +1713,6 @@ void PlaySoundCue(s32 arg0) {
 }
 
 
-void func_80078528(s32 voice, s16 left, s16 right);
 void func_80078130(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend);
 
 void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
@@ -1756,7 +1748,7 @@ void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     } else {
         right = 0;
     }
-    func_80078528((s16)voiceCopy, left, right);
+    SsUtSetVVol((s16)voiceCopy, left, right);
     voice = arg0 + 0xE;
     func_80078130((s16)voice, g_VabIds[(s16)bend], g_SoundSlotTone[arg0][arg3], 0x3C, arg1);
 }
@@ -2410,12 +2402,9 @@ extern char g_MsgSeqVabOpenHeadError[];
 extern char g_MsgSeqVabTransBodyError[];
 
 void BiosExit(s32 arg0);
-s32 func_8007317C(s32 arg0);
 s32 func_800730BC(s32 arg0, s32 arg1);
 s32 func_80072C4C(s32 arg0, s32 arg1, s32 arg2);
-void func_80073748(s32 arg0, s32 arg1);
 void func_8007865C(s32 arg0);
-void func_80072B3C(s32 arg0);
 
 extern s16 g_VabIds[];
 
@@ -2456,7 +2445,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
 
     *(s32 *)&g_SeqHandle = (s16)SsSeqOpen(seqReg);
     g_SeqVolumeFadeStep = 0;
-    ret = func_8007317C(0);
+    ret = SsVabTransCompleted(0);
     g_VabTransferDone = (s16)ret;
     return g_VabTransferDone;
 }
@@ -2474,13 +2463,13 @@ s32 CloseAudioSlot(s32 slot) {
         ret = 0;
     } else {
         *flagsPtr = bit ^ flags;
-        func_80073748(0, 0);
+        SsUtSetReverbDepth(0, 0);
         func_8007865C(0);
         SsSeqCloseWrapper(g_SeqHandle);
         /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
            (rather than naming the symbol) is what the retail code does. */
         ids = (s16 *)((u8 *)flagsPtr + 0xC);
-        func_80072B3C(ids[slot]);
+        SsVabClose(ids[slot]);
         ret = 1;
     }
     return ret;

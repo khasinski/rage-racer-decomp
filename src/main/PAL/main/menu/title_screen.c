@@ -167,8 +167,6 @@ extern s32 g_FrontendState;
 extern s32 g_TitlePulse;
 extern s32 g_MainMenuSlide;
 
-void *func_800175A4(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11);
-
 void DrawMainMenuRows(void);
 
 void DrawMainMenuRows(void) {
@@ -221,7 +219,7 @@ void DrawMainMenuRows(void) {
             frame = 0;
         }
 
-        scratch = func_800175A4(base, scratch, 0x68, y, width, frame, 0, (i * 16) + 0xA0, width, 0x10, code, 0x39);
+        scratch = GameQueueTexturedRectWide(base, scratch, 0x68, y, width, frame, 0, (i * 16) + 0xA0, width, 0x10, code, 0x39);
         y += 0x18;
         i++;
         row++;

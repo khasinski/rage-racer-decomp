@@ -701,7 +701,6 @@ loop:
 void DrawLargeTextWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("func_80047958");
 void drawSmallText(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("func_80047634");
 void GameDrawSolidRectWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8) asm("func_80047024");
-void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8);
 
 void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                    u8 arg4, u8 arg5, u8 arg6,
@@ -725,8 +724,8 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                           0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
         }
     }
-    func_80047460(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
-                  0xb4, 0xb4, 0xb4, (f & 4) ? (f & 0x60) : 0xff);
+    DrawRectOutline(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
+                    0xb4, 0xb4, 0xb4, (f & 4) ? (f & 0x60) : 0xff);
     GameDrawSolidRectWide(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
                   arg4, arg5, arg6, (f & 2) ? (f & 0x60) : 0xff);
     /* The second p3 use keeps it ahead of ot in global-alloc priority. */
@@ -736,8 +735,6 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 extern s32 D_8009B264;
 
 s32 rsin(s32 arg0);
-void func_80047460(
-    void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7, s32 arg8);
 
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash);
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
@@ -768,7 +765,7 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
     }
 
     white = 0xFF;
-    func_80047460(
+    DrawRectOutline(
         ot,
         (s16)(savedX0 - 1),
         (s16)(savedY0 - 2),
@@ -778,7 +775,7 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
         (u8)color,
         0,
         white);
-    func_80047460(
+    DrawRectOutline(
         ot, (s16)savedX0, (s16)savedY0, (s16)savedX1, (s16)(savedY1 + 0), 0, (u8)color, 0, white);
     D_8009B264 += 0x60;
 }

@@ -30,7 +30,7 @@ void drawSmallText(s32 x, s32 y, u8 *str, s32 r, s32 g, s32 b, s32 clut,
                    s32 flags) asm("func_80047634");
 s32 gsprintf(u8 *buf, u8 *fmt, s32 val) asm("func_800632F0");
 
-void func_80052158(s32 a0raw, s32 arg1) {
+void DrawCarEngineSpec(s32 a0raw, s32 arg1) {
     void *ot;
     u8 buf[0x40];
     s32 arg0;
