@@ -359,13 +359,13 @@ void DrawProportionalTextShadedWide(
                 asm("" : "=r"(s1), "=r"(v) : "0"(s1));
                 text++;
                 if (s1 != 0) {
-                    register s32 index asm("$3") = s1 * 2;
+                    s32 index = s1 * 2;
                     u8 *uCell;
                     u8 *vCell;
                     void *prim;
                     u8 *ot;
 
-                    asm("" : "=r"(index) : "0"(index));
+                    asm volatile("" : "=r"(index) : "0"(index) : "$2");
                     t0 = (s32)g_PropFontU;
                     uCell = (u8 *)(index + t0);
                     t0 = (s32)g_PropFontV;
