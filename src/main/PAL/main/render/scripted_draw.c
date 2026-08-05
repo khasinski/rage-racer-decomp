@@ -268,11 +268,10 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     }
     productResult = time * product;
     product = productResult;
-    asm("" : "=r"(product), "=r"(record) : "0"(product), "1"(record));
     product = (u32)product / 32;
     productResult = limit + product;
     product = productResult;
-    asm("" : "=r"(product) : "0"(product));
+    asm("" : "=r"(product), "=r"(record) : "0"(product), "1"(record));
 
     y = *(s16 *)(record + 6);
     x = product;

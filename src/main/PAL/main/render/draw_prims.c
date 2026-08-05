@@ -327,9 +327,9 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047024");
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
-    register s32 x0Reg asm("$17");
-    register s32 y0Reg asm("$18");
-    register s32 x1Reg asm("$19");
+    s32 x0Reg;
+    s32 y0Reg;
+    s32 x1Reg;
     s32 y1Reg;
     s32 rReg;
     s32 gReg;
@@ -345,9 +345,11 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
     gReg = g;
     bReg = b;
     alphaReg = alpha;
+    asm("");
     x0Reg = x0;
     y0Reg = y0;
     x1Reg = x1;
+    asm("" : : "r"(x0Reg), "r"(y0Reg), "r"(x1Reg));
 
     func_80064FF8(prim);
     a0Reg = (u8 *)prim;
@@ -378,9 +380,9 @@ void *func_80017390(void *ot, void *prim, s32 arg2);
 
 void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_8004711C");
 void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
-    register s32 x0Reg asm("$17");
-    register s32 y0Reg asm("$18");
-    register s32 x1Reg asm("$19");
+    s32 x0Reg;
+    s32 y0Reg;
+    s32 x1Reg;
     s32 y1Reg;
     s32 rReg;
     s32 gReg;
@@ -396,9 +398,11 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
     gReg = g;
     bReg = b;
     alphaReg = alpha;
+    asm("");
     x0Reg = x0;
     y0Reg = y0;
     x1Reg = x1;
+    asm("" : : "r"(x0Reg), "r"(y0Reg), "r"(x1Reg));
 
     SetLineF2(prim);
     a0Reg = (u8 *)prim;
