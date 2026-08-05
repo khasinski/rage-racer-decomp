@@ -826,7 +826,7 @@ extern u16 g_NegconMaxTwist asm("D_801E418C");
 extern u16 g_NegconNeutralL asm("D_8019CA0C");
 /* The loader stores a whole word here; the saver reads only the low half
  * as g_BgmSelection. Same address, two widths, so two names. */
-extern s32 g_BgmSelectionW asm("D_801E42CC");
+
 
 extern u16 g_ClassRecords[] asm("D_8019CB40");
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
@@ -921,7 +921,7 @@ s32 LoadSaveStateBlock(u8 *block) {
             s32 maxClassReached1;
             g_MaxClassReached[0] = *(s32 *)(base + 0x50);
             maxClassReached1 = *(s32 *)(base + 0x54);
-            g_BgmSelectionW = bgmSelection;
+            *(s32 *)&g_BgmSelection = bgmSelection;
             g_AdvancedSeriesUnlocked = advancedUnlocked;
             g_MaxClassReached[1] = maxClassReached1;
         }
