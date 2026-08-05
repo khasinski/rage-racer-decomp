@@ -2,10 +2,10 @@
 #include "game/asset.h"
 #include "game/race.h"
 #include "game/state.h"
+s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
 
 extern GameSceneAssetHeader *g_AssetLoadCursor asm("D_8019CAFC");
 
-s32 func_80017C78(s32 assetIndex, void *dst);
 s32 EnableCdAudioMode(void) asm("func_80017C2C");
 void SetTrackCameraTable(void *arg0);
 void SetEnvPaletteTable(void *arg0);
@@ -30,7 +30,7 @@ void LoadTrackDataAssets(void) {
         offset = g_CourseIndex;
         __asm__ volatile("" : "=r"(offset) : "0"(offset));
         header = (GameSceneAssetHeader *)g_GrandPrixClass;
-        if (func_80017C78(((s32)header * 8) + (offset * 2) + 0x58, dst) != 0) {
+        if (LoadAsset(((s32)header * 8) + (offset * 2) + 0x58, dst) != 0) {
             header = g_AssetLoadCursor;
             offset = header->offsets[0];
             g_AssetBlockPtr = (u8 *)header + offset;

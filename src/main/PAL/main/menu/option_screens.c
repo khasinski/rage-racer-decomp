@@ -5,6 +5,7 @@
 #include "game/render.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
+void SeekEnvironmentScript(s32 arg0) asm("func_800458CC");
 
 extern s32 g_SoundOptionCursor asm("D_8019C868");
 extern s32 g_BgmVolumeSetting asm("D_8019C704");
@@ -44,7 +45,6 @@ void LoadTrackTexturePageRange(void);
 void InitTrackLighting(void);
 void BuildStartingGrid(void);
 void SetTrackTexturePageNow(s32 arg0);
-void func_800458CC(s32 arg0);
 void InitShuttleScenery(void) asm("func_8003F0F8");
 extern s32 g_FrameSyncThreshold;
 extern s32 g_BgmSelectCursor asm("D_801E4B84");
@@ -305,7 +305,7 @@ void InitTrackScene(void) {
     g_TrackWalkStart = *(s32 *)g_TrackEventData;
     BuildStartingGrid();
     SetTrackTexturePageNow(*(s16 *)&g_CarTrackSection[g_CameraCarIndex * 412]);
-    func_800458CC(g_CamRow[2]);
+    SeekEnvironmentScript(g_CamRow[2]);
     g_CameraViewMode = 2;
     g_AnimTimer = 0;
     g_SceneTimer = 0;

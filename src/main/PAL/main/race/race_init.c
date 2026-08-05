@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/track.h"
 #include "game/car.h"
+s32 InitSoundWithVab(void) asm("func_8005B5C4");
 
 extern u8 g_MsgResOk[] asm("D_80011438");
 
@@ -23,7 +24,6 @@ extern u8 g_MsgSoundError asm("D_8001144C");
 
 extern u8 g_MsgInitSoundOk asm("D_8001145C");
 
-s32 func_8005B5C4(void);
 
 extern u8 g_MsgInitEngineOk asm("D_8001146C");
 
@@ -70,7 +70,7 @@ void InstallTrackEventData(u8 *arg0) {
 
 void InitSoundSystem(void);
 void InitSoundSystem(void) {
-    if (func_8005B5C4() != 0) {
+    if (InitSoundWithVab() != 0) {
         DebugPrintf(&g_MsgSoundError);
     }
     DebugPrintf(&g_MsgInitSoundOk);

@@ -4,6 +4,7 @@
 #include "game/render.h"
 #include "game/race.h"
 #include "game/track.h"
+void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_RouteSceneryX asm("D_801E4340");
@@ -11,7 +12,6 @@ extern s32 g_RouteSceneryRotX asm("D_801E4350");
 extern volatile s32 g_RouteSceneryRotY asm("D_801E4354");
 extern s32 g_RouteSceneryRotZ asm("D_801E4358");
 
-void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
 
 void DrawRouteScenery(void) asm("func_8003F02C");
@@ -30,7 +30,7 @@ void DrawRouteScenery(void) {
     BuildRotMatrixZ(&mtx0, g_RouteSceneryRotZ);
     MulMatrix2(mtx1Ptr, &mtx0);
     SelectModelBank(1);
-    func_80017794((void *)0x1F80011C, &g_RouteSceneryX, &mtx0);
+    SetGteObjectMatrix((void *)0x1F80011C, &g_RouteSceneryX, &mtx0);
     frameValue = g_ModelBankCount;
     *(s32 *)0x1F800084 = 0;
     drawId = 1;

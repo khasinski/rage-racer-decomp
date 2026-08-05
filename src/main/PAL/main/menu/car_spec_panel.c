@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/vector.h"
 #include "game/state.h"
+void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha) asm("func_80047460");
 
 extern s32 g_BrowseArrowsFade asm("D_8007FB04");
 extern s32 D_8009B268;
@@ -16,7 +17,6 @@ void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
                    u8 b, u8 alpha);
 void func_8004711C(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
                    u8 b, u8 alpha);
-void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 s32 rsin(s32 angle) asm("func_80068568");
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */
@@ -98,7 +98,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
                       zero, green, zero, zero, 0x80);
     }
 
-    func_80047460(ot, 0xB8, 0x48, 0x40, 0x40, gray, gray, gray, 0xFF);
+    DrawRectOutline(ot, 0xB8, 0x48, 0x40, 0x40, gray, gray, gray, 0xFF);
     yLarge = 0x85;
     ySmall = 0x60;
     func_8004711C(ot, 0xC7, 0x4A, 0xC7, yLarge, gray, gray, gray, ySmall);

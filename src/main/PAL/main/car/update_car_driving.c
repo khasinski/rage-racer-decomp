@@ -2,6 +2,7 @@
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"
+void AdvanceCarPosition(GameCarRuntime *car, s32 arg1) asm("func_8002F4E4");
 
 typedef struct D8007Pair {
     s16 f0;
@@ -11,7 +12,6 @@ typedef struct D8007Pair {
 extern s16 g_SteerHoldFrames asm("D_801F17A4");
 extern D8007Pair g_LaunchSpeedThresholds[] asm("D_8007DAC0");
 
-void func_8002F4E4(GameCarRuntime *car, s32 arg1);
 s32 rsin(s32 arg0) asm("func_80068568");
 s32 rcos(s32 arg0) asm("func_80068634");
 void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104");
@@ -20,7 +20,7 @@ void SetIndexedEffectVoice(s32 index, s32 phase, s32 volume) asm("func_8005C104"
  * Car motion handler for state98 == 0 (normal driving): turns steering into a
  * world velocity, triggers over-rev / redline engine-audio cues (comparing
  * against the spec block's redline at +0x100 / +0x106), advances the car
- * (func_8002F4E4), and detects the jump/launch trigger. The drive sub-block is
+ * (AdvanceCarPosition), and detects the jump/launch trigger. The drive sub-block is
  * the GameCarDrive view of car->field_BC.
  */
 void UpdateCarDriving(GameCarRuntime *car) asm("func_8002F690");
@@ -39,7 +39,7 @@ void UpdateCarDriving(GameCarRuntime *car) {
     r = GetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
     base = car->field_24;
     car->field_24 = r / 5 + base;
-    func_8002F4E4(car, base);
+    AdvanceCarPosition(car, base);
 
     sinA = rsin(car->field_24);
     cosA = rcos(car->field_24);

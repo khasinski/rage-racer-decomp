@@ -1,4 +1,6 @@
 #include "common.h"
+void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7,
+                   s32 arg8) asm("func_80047460");
 
 extern s32 D_8007FB24;
 extern s32 D_8007FB28;
@@ -10,8 +12,6 @@ extern u16 g_TeamLogoSwatches[] asm("D_801E444E");
 void func_80046A2C(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
                    u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
 void func_80047024(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
-void func_80047460(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7,
-                   s32 arg8);
 s32 rsin(s32 angle) asm("func_80068568");
 
 void DrawLogoSprite() asm("func_80046A2C");
@@ -57,7 +57,7 @@ void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
             xoff += 8;
         }
 
-        func_80047460(ot, (s16)(xc - 24), (s16)((u16)y + 32), 0x7A, 0x14, 0xB4, 0xB4, 0xB4, 0xFF);
+        DrawRectOutline(ot, (s16)(xc - 24), (s16)((u16)y + 32), 0x7A, 0x14, 0xB4, 0xB4, 0xB4, 0xFF);
     }
     if (arg0 > 0) {
         D_8007FB24 += arg0;

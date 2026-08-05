@@ -3,6 +3,8 @@
 #include "psyq/gte.h"
 #include "game/state.h"
 #include "game/render.h"
+void SetTransMatrix(void *a) asm("func_800698E8");
+void SetRotMatrix(void *a) asm("func_80069858");
 
 typedef struct Obj {
     s16 id;    /* 0x0 */
@@ -18,8 +20,6 @@ extern s32 g_CourseObjectCount asm("D_801E4BBC");
 extern s32 *g_VisibleCellMask asm("D_801E6828");
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 
-void func_80069858(void *a);
-void func_800698E8(void *a);
 
 /*
  * Draw loop over the world-object array g_CourseObjects (g_CourseObjectCount entries). For
@@ -95,8 +95,8 @@ void DrawCourseObjects(void) {
             a <<= 2;
             *(s32 *)0x1F80014C = a;
         }
-        func_80069858(&mtx);
-        func_800698E8((void *)0x1F800134);
+        SetRotMatrix(&mtx);
+        SetTransMatrix((void *)0x1F800134);
 
         flags = obj->flags;
         if (flags & 8) {

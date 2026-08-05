@@ -6,6 +6,7 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+void UpdateAttractCars(void) asm("func_8003BB50");
 
 extern s32 g_BgmSelectStep asm("D_8019C99C");
 extern void (*g_BgmSelectSteps[])(void) asm("D_8007D6B8");
@@ -45,7 +46,6 @@ extern u8 g_CarTrackSection[] asm("D_801F18CC");
 void DrawFullscreenFadeTile(s32 arg0, u32 arg1) asm("func_80033AA0");
 void ReturnToTitleScene(void);
 s32 CycleAttractCameraCar(u32 arg0, s32 arg1) asm("func_8001A1F0");
-void func_8003BB50(void);
 void RequestTrackTexturePage(s32 arg0);
 void UpdateCamera(u32 arg0, GameCarRuntime *arg1) asm("func_80043BCC");
 void func_800418D4(void);
@@ -186,7 +186,7 @@ void UpdateAttractDemoRace(void) {
 
     g_AnimTimer++;
     g_CameraCarIndex = CycleAttractCameraCar(0xFF, g_CameraCarIndex);
-    func_8003BB50();
+    UpdateAttractCars();
 
     index = g_CameraCarIndex;
     offset = (((((index * 3) * 4) + index) * 8) - index) * 4;

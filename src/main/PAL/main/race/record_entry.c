@@ -5,6 +5,7 @@
 #include "game/render.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+void DrawCourseIntro(void) asm("func_80021D68");
 
 /* Second copies of the same three captions -- the ROM holds duplicate literals
  * at 0x80010E1C..0x80010E28 and here; see docs/names.md 18d for why the bytes
@@ -46,7 +47,6 @@ extern u8 g_RankingNameCodes[] asm("D_801E417C");
 extern s32 g_NameEntryChar asm("D_801E6830");
 extern u8 g_TimeRecordNameCodes[] asm("D_801F17FC");
 void RequestSelectBgmAssets(void) asm("func_80018410");
-void func_80021D68(void);
 void DrawRankingPanel(u8 *arg0) asm("func_80021DB8");
 void DrawTimeRecordPanel(u8 *arg0) asm("func_80022068");
 void DrawNameEntryCursor(s32 arg0, s32 arg1) asm("func_8002229C");
@@ -552,7 +552,7 @@ void UpdateRecordEntry(void) {
         break;
     }
 
-    func_80021D68();
+    DrawCourseIntro();
 }
 
 void ReturnFromClassFmv(void) asm("func_80022EE4");

@@ -4,6 +4,8 @@
 #include "psyq/gpu.h"
 #include "game/audio.h"
 #include "psyq/snd.h"
+void UpdateSequenceFadeOut(void) asm("func_8005E900");
+void DrawCarSpecGraph(s32, s32) asm("func_800496F0");
 
 extern s32 D_8009B348;
 extern s32 D_8009B324;
@@ -25,7 +27,6 @@ extern u8 g_PadType asm("D_801E4369");
 
 void func_80047024(void *, s32, s32, s32, s32, s32, s32, s32, s32);
 s32 RunTimedDrawScript(void *, void *) asm("func_800487D8");
-void func_800496F0(s32, s32);
 void func_80046A2C(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32);
 void DrawBitPatternOverlay(s32) asm("func_80047E60");
 
@@ -63,7 +64,7 @@ void UpdateMenuMode(void) {
     }
     g_MenuScreenUpdate[g_MenuScreen]();
 
-    func_800496F0(D_8009B324, ((struct Entry_5ACA0 *)g_CarTable)[(g_MenuScreen == 0xB) ? g_CarListCursor : g_PlayerCarIndex].f1);
+    DrawCarSpecGraph(D_8009B324, ((struct Entry_5ACA0 *)g_CarTable)[(g_MenuScreen == 0xB) ? g_CarListCursor : g_PlayerCarIndex].f1);
 
     {
         register s32 flag asm("$6");
@@ -93,7 +94,6 @@ void UpdateMenuMode(void) {
 extern s32 g_SeqVolumeFadeStep asm("D_801E6D9C");
 void SpuVmDamperStep(void) asm("func_800731CC");
 void SsSeqCalledTbyT(void) asm("func_80071018");
-void func_8005E900(void);
 void TickSequenceAudio(void);
 void TickSequenceAudio(void) {
     if (g_SceneId == 0xC) {
@@ -101,7 +101,7 @@ void TickSequenceAudio(void) {
     } else {
         SsSeqCalledTbyT();
         if (g_SeqVolumeFadeStep != 0) {
-            func_8005E900();
+            UpdateSequenceFadeOut();
         }
     }
 }

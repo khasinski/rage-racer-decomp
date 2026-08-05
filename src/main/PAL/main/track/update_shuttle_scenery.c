@@ -3,6 +3,7 @@
 #include "psyq/gte.h"
 #include "game/race.h"
 #include "game/render.h"
+void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
 /* Per-path authored data; see DrawRouteScenery.c for the layout.
  * g_ShuttlePathTravelMax is the leg length in steps: the divisor of the
@@ -79,7 +80,6 @@ void UpdateShuttleScenery(s32 arg0) {
 extern u32 *g_VisibleCellMask asm("D_801E6828");
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
-void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
 void DrawShuttleScenery(s32 arg0) asm("func_8003F4BC");
 
@@ -132,7 +132,7 @@ void DrawShuttleScenery(s32 arg0) {
         if ((g_CourseIndex & 3) >= 2) {
             drawArg = 0x3C;
         }
-        func_80017794((void *)0x1F80011C, &state->x, mtx1Ptr);
+        SetGteObjectMatrix((void *)0x1F80011C, &state->x, mtx1Ptr);
         frameValue = g_CourseModelCount;
         *(s32 *)0x1F800084 = 0;
         drawValue = 1;

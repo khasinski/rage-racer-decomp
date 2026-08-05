@@ -1,20 +1,20 @@
 #include "common.h"
+void SetRotMatrix(s32 arg0) asm("func_80069858");
 
 extern s32 g_VisibleCellList asm("D_801E4BC8");
 void BuildVisibleCells(s32 arg0, s32 arg1) asm("func_800414F0");
-void func_80069858(s32 arg0);
 void SubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2) asm("func_80027FF4");
 void DrawTerrainCells(void);
 void DrawTerrainCells(void) {
     BuildVisibleCells(-12288, 0x14000);
-    func_80069858(0x1F800028);
+    SetRotMatrix(0x1F800028);
     SubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
 }
 
 void DrawTerrainCellsWide(void);
 void DrawTerrainCellsWide(void) {
     BuildVisibleCells(0xFFFF6000, 0x14000);
-    func_80069858(0x1F800028);
+    SetRotMatrix(0x1F800028);
     SubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
 }
 

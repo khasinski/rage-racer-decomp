@@ -4,6 +4,7 @@
 #include "game/car.h"
 #include "game/race.h"
 #include "game/cd.h"
+s32 LoadAsset(s32 arg0, void *arg1) asm("func_80017C78");
 
 /*
  * Every `X + *(s32 *)(X + 4*k)` below is sub-block k of the loaded asset
@@ -27,7 +28,6 @@ extern u8 *g_AssetBlockPtr2 asm("D_8019C754");
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3) asm("func_8005B768");
 s32 PollAudioSlotLoad(void) asm("func_8005B89C");
 s32 GetCarAssetIndex(s32 model, s32 grade);
-s32 func_80017C78(s32 arg0, void *arg1);
 void SetCarSpec(void);
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void UploadImageBlock(void *arg0) asm("func_8001A2E0");
@@ -90,7 +90,7 @@ void LoadRaceAssets(void) {
     case 3: {
         s32 idx = g_PlayerCarIndex;
         s32 sz = GetCarAssetIndex(idx, g_CarTable[idx].modelVariant);
-        if (func_80017C78((sz * 2) + 11, g_AssetLoadCursor) != 0) {
+        if (LoadAsset((sz * 2) + 11, g_AssetLoadCursor) != 0) {
             register u8 *base_a0 asm("$4");
             u8 *base_a3;
             u8 *p1;
@@ -126,7 +126,7 @@ void LoadRaceAssets(void) {
         p = g_AssetLoadCursor;
         scaled = g_CourseIndex * 2;
         base_off = (g_GrandPrixClass * 8) + 0x57;
-        if (func_80017C78(scaled + base_off, p) != 0) {
+        if (LoadAsset(scaled + base_off, p) != 0) {
             register u8 *base_a0 asm("$4");
             u8 *base;
             s32 off0, off1;
@@ -161,7 +161,7 @@ void LoadRaceAssets(void) {
         p = g_AssetLoadCursor;
         scaled = g_CourseIndex * 2;
         result = (g_GrandPrixClass * 8) + scaled;
-        if (func_80017C78(result + 0x58, p) != 0) {
+        if (LoadAsset(result + 0x58, p) != 0) {
             register u8 *base_a0 asm("$4");
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 0); SetTrackCameraTable(g_AssetBlockPtr);
             base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 1); SetEnvPaletteTable(g_AssetBlockPtr);
@@ -213,7 +213,7 @@ void LoadGrandPrixScreen(void) {
     if (g_AssetLoadState == 1) {
         offset = g_GrandPrixSeries * 6;
         base = g_GrandPrixClass + 0x4A;
-        value = func_80017C78((s32)(offset + base), (void *)g_ImageBlockBuffer);
+        value = LoadAsset((s32)(offset + base), (void *)g_ImageBlockBuffer);
         if (value != 0) {
             g_AssetLoadState = 0;
         }
@@ -242,7 +242,7 @@ void LoadCourseAssets(void) {
         s32 left = g_CourseIndex * 2;
         s32 right = (g_GrandPrixClass * 8) + 0x57;
 
-        value = func_80017C78((s32)(left + right), (void *)g_AssetBase);
+        value = LoadAsset((s32)(left + right), (void *)g_AssetBase);
         if (value != 0) {
             g_AssetLoadState = 0;
             g_ImageBlockBuffer = value + g_AssetBase;

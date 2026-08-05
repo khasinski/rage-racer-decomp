@@ -3,13 +3,13 @@
 #include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+s32 LoadAsset(s32 assetIndex, void *dst) asm("func_80017C78");
 
 extern u8 *g_AssetLoadCursor asm("D_8019CAFC");
 extern Rect g_TeamLogoClutRect asm("D_8007BEDC");
 extern Rect g_TeamLogoRect asm("D_8007BEE4");
 extern u16 g_TeamLogoClut[] asm("D_801E444C");
 extern u16 g_TeamLogoCanvas[] asm("D_801E6F2C");
-s32 func_80017C78(s32 assetIndex, void *dst);
 void UploadImageAsset(void *arg0) asm("func_8001A3C0");
 void UploadLoadBufferImage(void);
 void InstallResourceData(void *arg0);
@@ -33,7 +33,7 @@ void LoadBootAssets(void) {
     switch (g_AssetLoadState) {
     case 1:
         base = (u8 *)g_LoadBuffer;
-        loaded = (u8 *)func_80017C78(1, base);
+        loaded = (u8 *)LoadAsset(1, base);
         if (loaded != 0) {
             UploadLoadBufferImage();
             next = loaded + (s32)base;
@@ -42,7 +42,7 @@ void LoadBootAssets(void) {
         }
         break;
     case 2:
-        loaded = (u8 *)func_80017C78(2, g_AssetBlockPtr);
+        loaded = (u8 *)LoadAsset(2, g_AssetBlockPtr);
         if (loaded != 0) {
             nextState = 3;
             next = g_AssetBlockPtr;
@@ -50,7 +50,7 @@ void LoadBootAssets(void) {
         }
         break;
     case 3:
-        if (func_80017C78(3, g_AssetLoadCursor) != 0) {
+        if (LoadAsset(3, g_AssetLoadCursor) != 0) {
             StartAudioSlotLoad(0, g_AssetBlockPtr, g_AssetLoadCursor, 0);
             g_AssetLoadState = 4;
         }
@@ -61,7 +61,7 @@ void LoadBootAssets(void) {
         }
         break;
     case 5:
-        loaded = (u8 *)func_80017C78(4, g_AssetLoadCursor);
+        loaded = (u8 *)LoadAsset(4, g_AssetLoadCursor);
         if (loaded != 0) {
             InstallResourceData(g_AssetLoadCursor);
             next = g_AssetLoadCursor;
@@ -75,7 +75,7 @@ setNextBuffer:
         }
         break;
     case 6:
-        if (func_80017C78(5, g_AssetLoadCursor) != 0) {
+        if (LoadAsset(5, g_AssetLoadCursor) != 0) {
             u8 *finalBase;
 
             UploadImageAsset(g_AssetLoadCursor);
@@ -114,7 +114,7 @@ s32 RequestSaveScreenAssets(void) {
 void LoadSaveScreenAssets(void);
 void LoadSaveScreenAssets(void) {
     if (g_AssetLoadState == 1) {
-        if (func_80017C78(6, g_AssetBase) != 0) {
+        if (LoadAsset(6, g_AssetBase) != 0) {
             g_AssetLoadState = 0;
             g_ImageBlockBuffer = (s32)g_AssetBase;
         }
@@ -173,7 +173,7 @@ void LoadSelectBgmAssets(void) {
         CloseLoadedAudioSlots();
         g_AssetLoadState = 2;
     case 2:
-        if (func_80017C78(7, g_AssetBase) != 0) {
+        if (LoadAsset(7, g_AssetBase) != 0) {
             header = g_AssetBase;
             firstOffset = *(volatile s32 *)&header->offsets[0];
             thirdOffset = *(volatile s32 *)&header->offsets[2];

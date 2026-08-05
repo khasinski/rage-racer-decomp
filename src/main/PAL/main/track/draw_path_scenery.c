@@ -4,6 +4,7 @@
 #include "game/render.h"
 #include "game/track.h"
 #include "game/race.h"
+void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
 /* The looping prop's live orientation: three 12-bit angles copied wholesale out
  * of the current rotation keyframe by InitPathScenery, which sees the same
@@ -13,7 +14,6 @@ extern s16 g_PathSceneryX asm("D_801E4DB8");
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_ScratchRenderMode asm("D_1F800084");
 
-void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
 void DrawPathScenery(void) asm("func_80040730");
 void DrawPathScenery(void) {
@@ -43,7 +43,7 @@ void DrawPathScenery(void) {
     scratchVec = (void *)0x1F80011C;
     __asm__("" : "=r"(scratchVec) : "0"(scratchVec));
     anglePtr = (s16 *)((u8 *)anglePtr - 0x12);
-    func_80017794(scratchVec, anglePtr, &mtx0);
+    SetGteObjectMatrix(scratchVec, anglePtr, &mtx0);
     frameValue = g_ModelBankCount;
     *(s32 *)0x1F800084 = 0;
     drawId = 1;
@@ -67,7 +67,7 @@ void DrawPathScenery(void) {
         BuildRotMatrixY(mtx1Ptr, acc & 0xFFF);
     }
     MulMatrix2(&mtx0, mtx1Ptr);
-    func_80017794((void *)0x1F80011C, anglePtr, mtx1Ptr);
+    SetGteObjectMatrix((void *)0x1F80011C, anglePtr, mtx1Ptr);
     frameValue = g_ModelBankCount;
     g_ScratchRenderMode = 0;
     drawId = 1;

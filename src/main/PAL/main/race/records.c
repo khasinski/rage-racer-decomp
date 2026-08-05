@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/screens.h"
+void DrawResultScreen(void) asm("func_800200D0");
+void DrawText8x8Trans(s32 arg0, s32 arg1, char *arg2, s32 arg3) asm("func_80016A18");
 
 extern s32 g_DefaultLapTimes asm("D_8007D444");
 extern s32 g_DefaultTotalTimes asm("D_8007D464");
@@ -22,8 +24,6 @@ void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2) asm("func_8
 extern char g_TextTimeAttack[] asm("D_80010EC4");
 extern char g_TextCourseIn[] asm("D_80010ED0");
 void func_80016EA0(s32 arg0, s32 arg1, char *arg2, s32 arg3);
-void func_80016A18(s32 arg0, s32 arg1, char *arg2, s32 arg3);
-void func_800200D0(void);
 
 void InitRecordTables(void);
 void InitRecordTables(void) {
@@ -205,6 +205,6 @@ void *FormatLapTime(void *dst, s32 value) {
 
 void DrawCourseIntro(void) {
     func_80016EA0(0x10, 0x1C, g_TextTimeAttack, 0x7812);
-    func_80016A18(0x10, 0x39, g_TextCourseIn, 0x78CC);
-    func_800200D0();
+    DrawText8x8Trans(0x10, 0x39, g_TextCourseIn, 0x78CC);
+    DrawResultScreen();
 }

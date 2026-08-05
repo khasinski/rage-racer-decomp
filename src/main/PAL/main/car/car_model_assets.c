@@ -5,13 +5,13 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/cd.h"
+s32 LoadAsset(s32 arg0, void *arg1) asm("func_80017C78");
 
 extern u8 *g_CarModelAsset asm("D_8009E698");
 
 extern u32 g_CarModelSlot asm("D_8009E87C");
 extern u8 *g_CarModelBuffer asm("D_801E4090");
 s32 GetCarAssetIndex(s32 model, s32 grade);
-s32 func_80017C78(s32 arg0, void *arg1);
 void SetCarModelSlot(void *arg0, s32 arg1) asm("func_80017B94");
 void RegisterModelBank(void *arg0, s32 arg1) asm("func_80017948");
 void SetCarImageSlot(void *arg0, s32 arg1) asm("func_80017B44");
@@ -49,7 +49,7 @@ void LoadUpgradedCarModel(s32 arg0) {
             ptr += 0x20000;
         }
 
-        if (func_80017C78(assetId, ptr) != 0) {
+        if (LoadAsset(assetId, ptr) != 0) {
             asset = (GameCarModelAsset *)ptr;
             SetCarModelSlot(ptr, g_CarModelSlot < 1);
 
@@ -95,7 +95,7 @@ void LoadOptionScreenAssets(void) {
     s32 offset;
 
     if (g_AssetLoadState == 1) {
-        if (func_80017C78(9, (void *)g_AssetBase) != 0) {
+        if (LoadAsset(9, (void *)g_AssetBase) != 0) {
             RegisterModelBank((void *)(g_AssetBase + 4), 0);
             SelectModelBank(0);
 
@@ -156,14 +156,14 @@ void LoadRoundAssets(void) {
             kind = scaled + base;
         }
 
-        result = func_80017C78((s32)kind, (void *)g_ImageBlockBuffer);
+        result = LoadAsset((s32)kind, (void *)g_ImageBlockBuffer);
         if (result != 0) {
             g_AssetLoadState = 2;
             g_AssetBlockPtr2 = result + g_ImageBlockBuffer;
         }
         break;
     case 2:
-        if (func_80017C78(0x56, (void *)g_AssetBlockPtr2) != 0) {
+        if (LoadAsset(0x56, (void *)g_AssetBlockPtr2) != 0) {
             s32 ptr = g_AssetBlockPtr2;
             register s32 first asm("$2");
             register s32 second asm("$3");

@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "game/render.h"
+void SetShadeTex(u_char *prim, long enabled) asm("func_80064EB8");
 
 extern volatile long g_CdReadSectorCount asm("D_8007D790");
 extern volatile long g_CdReadBuffer asm("D_8007D794");
@@ -23,7 +24,6 @@ extern u_char D_8007D7BD[];
 extern u_char D_8007D87C[];
 extern u_char D_8007BED0[];
 void SetSprt(u_char *prim);
-void func_80064EB8(u_char *prim, long enabled);
 void AddPrim(void *ot, void *prim) asm("func_80064DDC");
 void *func_800666F4(void *prim, long a, long b, long c, void *d);
 long AddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8) asm("func_80032F34");
@@ -162,7 +162,7 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
                 ga = tableA[idx * 2];
                 gb = tableB[idx * 2];
                 SetSprt(next);
-                func_80064EB8(next, 1);
+                SetShadeTex(next, 1);
                 next += 0x14;
                 oldPacket = packet;
                 packet->x = x;

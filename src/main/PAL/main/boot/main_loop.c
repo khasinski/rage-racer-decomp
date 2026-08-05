@@ -7,6 +7,12 @@
 #include "psyq/snd.h"
 #include "game/memcard.h"
 #include "psyq/cd.h"
+void ServiceAssetLoad(void) asm("func_80019C04");
+void TickCdAudio(void) asm("func_80043974");
+void RequestBootAssets(void) asm("func_80018078");
+void InitCdAudio(void) asm("func_800438BC");
+void InitAssetSystem(void) asm("func_80018038");
+void InitSaveDefaults(void) asm("func_80021338");
 
 void MainLoop(void);
 
@@ -17,7 +23,6 @@ void RestartMemoryCard(void);
 void ResetReplayFrameCounts(void);
 void InitRecordTables(void);
 void InitRenderState(s32 arg0) asm("func_80017884");
-void func_80021338(void);
 
 extern s32 g_ScreenOffsetY asm("D_801E4B9C");
 extern s32 g_ScreenOffsetX asm("D_801E4B8C");
@@ -70,7 +75,7 @@ void InitSubsystems(void) {
     ApplyPadButtonMapping();
     InitRecordTables();
     InitRenderState(5);
-    func_80021338();
+    InitSaveDefaults();
     *(s32 *)0x1F80000C = -64;
     *(s32 *)0x1F800010 = -256;
     g_AdvancedSeriesUnlocked = 0;
@@ -83,12 +88,7 @@ void InitSubsystems(void) {
 
 void __main(void);
 void BiosSetMemSize(s32 arg0) asm("func_80063190");
-void func_80018038(void);
-void func_800438BC(void);
-void func_80018078(void);
-void func_80043974(void);
 void TickSequenceAudio(void);
-void func_80019C04(void);
 void StepTrackTextureSwap(void) asm("func_8001A030");
 void PutDrawEnv(u8 *env) asm("func_80065ED4");
 void PutDispEnv(u8 *arg0) asm("func_800660AC");
@@ -123,15 +123,15 @@ void MainLoop(void) {
     BiosSetMemSize(2);
     CdInit();
     InitSubsystems();
-    func_80018038();
+    InitAssetSystem();
     ResetGraph(3);
-    func_800438BC();
+    InitCdAudio();
     g_FrameSyncThreshold = 0x80;
     SetDispMask(0);
     SetupDisplay240(0, 0, 0);
     g_SceneTimer = 0;
     g_SceneId = 1;
-    func_80018078();
+    RequestBootAssets();
     g_GameClock = 0;
     g_FrameCounter = 0;
     for (;;) {
@@ -144,9 +144,9 @@ void MainLoop(void) {
         *(s32 *)0x1F800000 = (s32)(frame + 0x16CC);
         ClearOTagR((u_long *)(frame + 0xCC), 0x2C0);
         ClearOTagR((u_long *)(g_DrawBuffer + 0xBCC), 0x2C0);
-        func_80043974();
+        TickCdAudio();
         TickSequenceAudio();
-        func_80019C04();
+        ServiceAssetLoad();
         AdvanceSaveHeaderCounter();
         g_SceneHandlers[g_SceneId]();
         DrawSync(0);

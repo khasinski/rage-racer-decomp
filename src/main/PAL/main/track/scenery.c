@@ -4,6 +4,7 @@
 #include "game/render.h"
 #include "game/race.h"
 #include "game/state.h"
+void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
 extern Vec4 g_StaticSceneryPos asm("D_8007E340");
 /* +0x0C of the same 4-word record, i.e. its w component used as a Y angle;
@@ -13,7 +14,6 @@ extern u32 *g_VisibleCellMask asm("D_801E6828");
 extern s32 g_IsEnvironmentMode4 asm("D_801E4030");
 extern s32 g_CourseModelCount asm("D_801E40E4");
 
-void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
 static inline void ClearScratchRenderMode3DF68(void) {
     *(s32 *)0x1F800084 = 0;
@@ -64,7 +64,7 @@ void DrawStaticScenery(s32 arg0) {
         MulMatrix2((Matrix *)0x1F800028, &mtx);
 
         if (g_IsEnvironmentMode4 != 0) {
-            func_80017794((void *)0x1F80011C, statePtr, &mtx);
+            SetGteObjectMatrix((void *)0x1F80011C, statePtr, &mtx);
             frameValue = g_CourseModelCount;
             ClearScratchRenderMode3DF68();
             drawArg = 1;
@@ -73,7 +73,7 @@ void DrawStaticScenery(s32 arg0) {
             }
             SubmitCourseModel((void *)0x1F800000, drawArg);
         } else {
-            func_80017794((void *)0x1F80011C, statePtr, &mtx);
+            SetGteObjectMatrix((void *)0x1F80011C, statePtr, &mtx);
             frameValue = g_CourseModelCount;
             ClearScratchRenderMode3DF68();
             drawArg = 1;
@@ -101,7 +101,7 @@ void DrawHighClassScenery(void) {
     MulMatrix2((Matrix *)0x1F800028, &mtx);
 
     if (g_IsEnvironmentMode4 != 0) {
-        func_80017794((void *)0x1F80011C, state - 3, &mtx);
+        SetGteObjectMatrix((void *)0x1F80011C, state - 3, &mtx);
         *(s32 *)0x1F800084 = 0x10000;
         drawArg = 1;
         if (g_CourseModelCount >= 0x40) {
@@ -109,7 +109,7 @@ void DrawHighClassScenery(void) {
         }
         SubmitCourseModel((void *)0x1F800000, drawArg);
     } else {
-        func_80017794((void *)0x1F80011C, state - 3, &mtx);
+        SetGteObjectMatrix((void *)0x1F80011C, state - 3, &mtx);
         *(s32 *)0x1F800084 = 0;
         drawArg = 1;
         if (g_CourseModelCount >= 0x40) {

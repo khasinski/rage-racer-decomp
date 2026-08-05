@@ -2,6 +2,8 @@
 #include "game/state.h"
 #include "game/menu.h"
 #include "game/race.h"
+void SetMonoOutput(void) asm("func_8005BE58");
+void SetStereoOutput(void) asm("func_8005BE24");
 
 typedef struct UnkCopyChunk {
     u8 raw[8];
@@ -28,8 +30,6 @@ extern s32 g_SfxVolumeSetting asm("D_801E8A50");
 extern s32 g_MonoOutput asm("D_801E6C70");
 void SetSequenceVolumeSetting(s32 arg0) asm("func_8005BD84");
 void SetEffectVolumeSetting(s32 arg0);
-void func_8005BE24(void);
-void func_8005BE58(void);
 extern UnkCopyChunk g_SaveDefaults[] asm("D_8007BE68");
 extern u8 g_TimeAttackCars asm("D_801E4388");
 extern s16 g_ClassRecords asm("D_8019CB40");
@@ -167,9 +167,9 @@ void ApplyAudioSettings(void) {
     SetSequenceVolumeSetting(g_BgmVolumeSetting);
     SetEffectVolumeSetting(g_SfxVolumeSetting);
     if (g_MonoOutput == 0) {
-        func_8005BE24();
+        SetStereoOutput();
     } else {
-        func_8005BE58();
+        SetMonoOutput();
     }
 }
 

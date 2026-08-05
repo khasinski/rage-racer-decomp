@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gte.h"
 #include "game/render.h"
+void SetGteObjectMatrix(void *arg0, void *arg1, Matrix *mtx) asm("func_80017794");
 
 extern s32 g_ModelBankCount asm("D_801E4168");
 extern s32 g_FlybySceneryRotX asm("D_801E431C");
@@ -8,7 +9,6 @@ extern s32 g_FlybySceneryRotY asm("D_801E4320");
 extern s32 g_FlybySceneryRotZ asm("D_801E4324");
 extern s32 g_FlybyScenery[] asm("D_801E42FC");
 
-void func_80017794(void *arg0, void *arg1, Matrix *mtx);
 
 void DrawFlybyScenery(void) asm("func_8003EAF4");
 void DrawFlybyScenery(void) {
@@ -25,7 +25,7 @@ void DrawFlybyScenery(void) {
         BuildRotMatrixZ(&mtx0, g_FlybySceneryRotZ);
         MulMatrix2(&mtx1, &mtx0);
         SelectModelBank(2);
-        func_80017794((void *)0x1F80011C, state + 4, &mtx0);
+        SetGteObjectMatrix((void *)0x1F80011C, state + 4, &mtx0);
         *(s32 *)0x1F800084 = 0;
         SubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
     }

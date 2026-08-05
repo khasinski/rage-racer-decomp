@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
+long GetGraphType(void) asm("func_800657E4");
 
 
 void LoadImage(Rect *rect, void *data) asm("func_80065B24");
@@ -67,7 +68,6 @@ long LoadClut(void *arg0, long arg1, long arg2) {
     return GetClut(arg1, arg2) & 0xFFFF;
 }
 
-long func_800657E4(void);
 
 /* Fills the 0x1C-byte DRAWENV head. */
 void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) {
@@ -102,9 +102,9 @@ void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) {
     *(short *)&envReg[0x8] = xReg;
     *(short *)&envReg[0xA] = yReg;
 
-    graphType = func_800657E4();
+    graphType = GetGraphType();
     if (graphType != 1) {
-        func_800657E4();
+        GetGraphType();
     }
 
     *(short *)&envReg[0x14] = 10;
@@ -138,11 +138,11 @@ long GetTPage(long arg0, long arg1, long arg2, long arg3) {
     long mode;
     long value;
 
-    mode = func_800657E4();
+    mode = GetGraphType();
     switch (0) { default:
     if (!(mode == 1)) {
 
-    mode = func_800657E4();
+    mode = GetGraphType();
     if (mode != 2) {
         break;
     }
@@ -170,12 +170,12 @@ void DumpTPage(long arg0) {
     long mode;
     u_long value;
 
-    mode = func_800657E4();
+    mode = GetGraphType();
     switch (0) { default:
     if (mode == 1) {
     } else {
 
-    mode = func_800657E4();
+    mode = GetGraphType();
     if (mode != 2) {
         break;
     }
