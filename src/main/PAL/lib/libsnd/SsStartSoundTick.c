@@ -11,7 +11,7 @@ extern u_char g_SndTickUsesVSync;
 extern u_char D_8009A569;
 extern u_char g_SndTickIrq;
 
-long func_8006DF64(long arg0, Callback arg1);
+long KernelCallbackSlot2Wide(long arg0, Callback arg1) asm("func_8006DF64");
 void VSyncCallback(Callback arg0);
 void SsSoundTickCallback(void);
 void SsSoundTickVSyncCallback(void);
@@ -100,7 +100,7 @@ void SsStartSoundTick(long arg0) {
 
         mode = g_SndTickIrq;
         if (mode == 0) {
-            g_SndPrevVSyncCallback = (Callback)func_8006DF64(0, 0);
+            g_SndPrevVSyncCallback = (Callback)KernelCallbackSlot2Wide(0, 0);
             mode = g_SndTickIrq;
             callback = SsSoundTickCallback;
         } else {
@@ -109,7 +109,7 @@ void SsStartSoundTick(long arg0) {
                 callback = g_SndTickCallback;
             }
         }
-        func_8006DF64(mode, callback);
+        KernelCallbackSlot2Wide(mode, callback);
     }
 
     }
