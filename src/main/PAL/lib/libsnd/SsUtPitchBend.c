@@ -3,14 +3,9 @@
 #include "common.h"
 
 extern short *g_SndSpuRegs asm("D_8009A588");
-/* Byte view of the same pointer, needed because this TU addresses the voice
- * register file both as halfwords and by byte offset. */
-extern u_char *g_SndSpuRegsBytes asm("D_8009A588");
-extern volatile u_char g_SndVoiceRegs[] asm("D_8009DF20");
-/* Halfword view of the same voice register file: one 16-byte block per voice,
- * so voice n's left volume is g_SndVoiceRegs16[n * 8] and its right volume is
- * g_SndVoiceRegs16[n * 8 + 1]. */
-extern short g_SndVoiceRegs16[] asm("D_8009DF20");
+/* One 16-byte block per voice, so voice n's left volume is
+ * g_SndVoiceRegs[n * 8] and its right volume is g_SndVoiceRegs[n * 8 + 1]. */
+extern short g_SndVoiceRegs[] asm("D_8009DF20");
 extern volatile u_char g_SndVoiceRegsVolRight[] asm("D_8009DF22");
 extern volatile u_char g_SndVoiceRegsPitch[] asm("D_8009DF24");
 extern volatile u_char g_SndVoiceFlags[] asm("D_8009E0A0");
@@ -150,8 +145,8 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     } else {
 
     volOffset = index << 3;
-    g_SndVoiceRegs16[volOffset + 4] = arg4;
-    g_SndVoiceRegs16[volOffset + 5] = arg5;
+    g_SndVoiceRegs[volOffset + 4] = arg4;
+    g_SndVoiceRegs[volOffset + 5] = arg5;
     field = g_SndVoiceFlags[index];
     field |= 0x30;
     /* RAW() keeps this store ahead of the return value -- see common.h. */
@@ -172,9 +167,9 @@ long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) {
 
     if ((u_short)arg0 < 0x18U) {
         offset = (arg0 << 16) >> 12;
-        base = g_SndSpuRegsBytes;
+        base = (u_char *)g_SndSpuRegs;
         *arg1 = *(u_short *)(offset + (long)base);
-        base = g_SndSpuRegsBytes;
+        base = (u_char *)g_SndSpuRegs;
         offset += (long)base;
         *arg2 = *(u_short *)(offset + 2);
         return 0;
@@ -200,9 +195,9 @@ long SsUtSetDetVVol(long arg0, short arg1, short arg2) {
         /* Indexing one shared halfword base at j and j+1 - rather than two
          * separate symbols - is what produces the retail 8-byte frame; see
          * docs/names.md 21a. */
-        g_SndVoiceRegs16[j + 1] = arg2;
+        g_SndVoiceRegs[j + 1] = arg2;
         flags = g_SndVoiceFlags[index];
-        g_SndVoiceRegs16[j] = valueX;
+        g_SndVoiceRegs[j] = valueX;
         flags |= 3;
         g_SndVoiceFlags[index] = flags;
         ret = 0;
@@ -247,10 +242,10 @@ long SsUtSetVVol(long arg0, long arg1, long arg2) {
         y = (ret << 7) + ret;
         index = (short)arg0;
         volOffset = index << 3;
-        g_SndVoiceRegs16[volOffset + 1] = y;
+        g_SndVoiceRegs[volOffset + 1] = y;
         flags = g_SndVoiceFlags[index];
         ret = 0;
-        g_SndVoiceRegs16[volOffset] = x;
+        g_SndVoiceRegs[volOffset] = x;
         flags |= 3;
         g_SndVoiceFlags[index] = flags;
     }
