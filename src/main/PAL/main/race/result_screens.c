@@ -77,17 +77,6 @@ extern char g_CaptionLapTime[];
 extern GrandPrixIntroLayout g_ResultPlaceSprites[];
 extern GrandPrixIntroPosition g_ClassPlaceBarSizes[];
 
-s32 QueueSpriteWide(
-    void *arg0,
-    s32 arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s32 arg5,
-    s32 arg6,
-    s32 arg7,
-    s32 arg8) asm("func_80016EC4");
-
 void LibcSprintf(void *dst, void *fmt, ...) asm("func_800632F0");
 void DrawResultScreen(void);
 void *FormatLapTime(void *dst, s32 value);
@@ -291,9 +280,9 @@ void DrawGrandPrixResultPanel(void) {
         base = g_DrawBuffer + 0xCC;
         height = 8;
         color = 0x78CB;
-        next = QueueSpriteWide(
+        next = (s32)GameQueueSprite(
             base, *scratch, 0x14, 0x1C, 0x38, height, 0, 0xE8, color);
-        next = QueueSpriteWide(
+        next = (s32)GameQueueSprite(
             base,
             next,
             0x4C,
@@ -303,7 +292,7 @@ void DrawGrandPrixResultPanel(void) {
             0x84,
             g_ClassPlaceBarSizes[g_ClassResultPlace - 1].left,
             color);
-        next = QueueSpriteWide(
+        next = (s32)GameQueueSprite(
             base,
             next,
             g_ClassPlaceBarSizes[g_ClassResultPlace - 1].right + 0x4E,
@@ -313,7 +302,7 @@ void DrawGrandPrixResultPanel(void) {
             0,
             0xF0,
             color);
-        next = QueueSpriteWide(
+        next = (s32)GameQueueSprite(
             base,
             next,
             g_ClassPlaceBarSizes[g_ClassResultPlace - 1].right + 0x7C,
@@ -352,7 +341,7 @@ void DrawGrandPrixResultPanel(void) {
 
         base = g_DrawBuffer + 0xCC;
         selection = (GrandPrixIntroSelection *)&g_RacePosition;
-        next = QueueSpriteWide(
+        next = (s32)GameQueueSprite(
             base,
             *scratch,
             0xB4,
@@ -365,7 +354,7 @@ void DrawGrandPrixResultPanel(void) {
 
         selectionIndex = selection->layout;
         selectionIndex -= 1;
-        next = QueueSpriteWide(
+        next = (s32)GameQueueSprite(
             base,
             next,
             g_ResultPlaceSprites[selectionIndex].x,

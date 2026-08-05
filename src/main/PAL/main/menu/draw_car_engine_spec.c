@@ -3,7 +3,7 @@
 
 extern s32 D_80082E70[];
 
-void DrawText8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) asm("func_80016754");
+void DrawText8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void DrawEngineSpecLabel(s32 arg0, s32 arg1, s32 arg2);
 void DrawEngineSpecLabel(s32 arg0, s32 arg1, s32 arg2) {

@@ -36,7 +36,7 @@ void DrawText8x8(
     s32 x,
     s32 y,
     u8 *str,
-    s32 clutIndex) asm("func_80016754");
+    s32 clutIndex);
 void GameDrawText8x8Shaded(
     s32 x,
     s32 y,
@@ -219,14 +219,14 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
  * insert sign-extends and a truncation here, so this TU declares both the
  * callee and this function with s32 parameters instead of including the header.
  */
-void DrawProportionalTextShadedWide(
+void GameDrawProportionalTextShaded(
     s32 x,
     s32 y,
     u8 *str,
     s32 clutIndex,
-    s32 intensity) asm("func_80016B7C");
+    s32 intensity);
 
-void DrawProportionalTextShadedWide(
+void GameDrawProportionalTextShaded(
     s32 x,
     s32 y,
     u8 *str,
@@ -423,7 +423,7 @@ void DrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex);
  * the raw-texture (SetShadeTex) path instead of a modulated, semi-transparent
  * one. */
 void DrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex) {
-    DrawProportionalTextShadedWide(x, y, str, clutIndex, 0x100);
+    GameDrawProportionalTextShaded(x, y, str, clutIndex, 0x100);
 }
 
 
@@ -441,7 +441,7 @@ u8 *GameQueueSprite(
     s32 h,
     s32 u,
     s32 v,
-    s32 clutIndex) asm("func_80016EC4");
+    s32 clutIndex);
 
 /* SPRT, 20 bytes: a raw (SetShadeTex) textured sprite linked into `ot`.
  * Returns the advanced packet cursor. */

@@ -16,7 +16,6 @@
  * each writer touches; the separators are never rewritten. */
 extern u8 g_TimeTextBuffer[];
 
-void DrawText8x8Wide(s32 x, s32 y, void *str, s32 color) asm("func_80016754");
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
@@ -65,7 +64,7 @@ void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
         g_TimeTextBuffer[7] = '-';
     }
 
-    DrawText8x8Wide(savedX, savedY, g_TimeTextBuffer, savedColor);
+    DrawText8x8(savedX, savedY, g_TimeTextBuffer, savedColor);
 }
 
 extern u8 g_ClockTextBuffer;
@@ -99,7 +98,7 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
     *p = min - tens * 10 + '0';
     g_ClockTextSecTens = tens2 + '0';
     g_ClockTextSecUnits = tmp - tens2 * 10 + '0';
-    DrawText8x8Wide(x, savedY, p - 1, color);
+    DrawText8x8(x, savedY, p - 1, color);
 }
 
 /* Which of the two frame buffers is being drawn, 0 or 1; the main loop sets
@@ -505,7 +504,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
             marqueeBase = &g_RaceOptionMarquee[0][0];
             *(u8 **)scratchPacket = firstNext;
             marquee = (g_SceneTimer & 3) * 40;
-            DrawText8x8Wide(
+            DrawText8x8(
                 (scroll0 >> 2) + 0xA0,
                 textY,
                 &marqueeBase[marquee],
@@ -518,7 +517,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 "" : "=r"(secondTextY) :
                 "0"(secondTextY));
             marqueeBase += 20;
-            DrawText8x8Wide(
+            DrawText8x8(
                 (g_RaceOptionScroll1 >> 2) + 0xA0,
                 secondTextY,
                 &marqueeBase[marquee],
@@ -529,14 +528,14 @@ void DrawRaceOptionMenu(s32 cursorRow) {
         drawPrim = QueueDrawAreaPrim(
             ot, scratchPacket, 0x72, 0x8A, 0x5C, 0xC);
         fontU = 0xD0;
-        prim = GameQueueSpriteWide(
+        prim = GameQueueSprite(
             ot, drawPrim, 0x88, 0x6A, 0x30, 8, fontU, 0x10, 0x7893);
         if (g_GrandPrixMode != 0) {
-            prim = GameQueueSpriteWide(
+            prim = GameQueueSprite(
                 ot, prim, 0x88, 0x74, 0x30, 8, 0xA0, 0x28, 0x7893);
-            prim = GameQueueSpriteWide(
+            prim = GameQueueSprite(
                 ot, prim, 0x84, 0x7E, 0x30, 8, fontU, 0x28, 0x7893);
-            prim = GameQueueSpriteWide(
+            prim = GameQueueSprite(
                 ot,
                 prim,
                 0xB8,
@@ -546,14 +545,14 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 *(s16 *)(g_CourseProgress + 6) * 8,
                 0,
                 0x78CC);
-            prim = GameQueueSpriteWide(
+            prim = GameQueueSprite(
                 ot, prim, 0x78, 0x7E, 8, 8, 0xD8, 8, 0x78CC);
-            prim = GameQueueSpriteWide(
+            prim = GameQueueSprite(
                 ot, prim, 0xC0, 0x7E, 8, 8, 0xE8, 8, 0x78CC);
         } else {
-            prim = GameQueueSpriteWide(
+            prim = GameQueueSprite(
                 ot, prim, 0x85, 0x74, 0x38, 8, 0xA0, 0x40, 0x7893);
-            prim = GameQueueSpriteWide(
+            prim = GameQueueSprite(
                 ot, prim, 0x90, 0x7E, 0x28, 8, 0xD8, 0x40, 0x7893);
         }
 

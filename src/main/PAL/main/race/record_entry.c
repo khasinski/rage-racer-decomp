@@ -22,7 +22,6 @@ extern s32 g_RankingInsertRow;
 extern u8 *g_PlaceSuffixNames[];
 extern s32 g_CarClassNames[];
 extern s32 g_CarNames[];
-void DrawText8x8Wide(void *dst, s32 x, void *src, s32 color) asm("func_80016754");
 void *FormatLapTime(void *dst, s32 value);
 void LibcSprintf() asm("func_800632F0");
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -104,7 +103,7 @@ void DrawRankingPanel(u8 *arg0) {
             if (g_BestLapIndex == iter) {
                 color = 0x780F;
             }
-            DrawText8x8Wide((void *)destination, xOrField, text, color);
+            DrawText8x8((void *)destination, xOrField, text, color);
             iter++;
             scoreOrX += 4;
         } while (iter < limit);
@@ -127,9 +126,9 @@ void DrawRankingPanel(u8 *arg0) {
         if (g_RankingInsertRow == countOrIndex) {
             color = 0x780F;
         }
-        DrawText8x8Wide(panel + 0x14, destination, text, color);
+        DrawText8x8(panel + 0x14, destination, text, color);
         LibcSprintf(text, g_FmtCarName, g_CarNames[xOrField]);
-        DrawText8x8Wide(panel + 0x2C, scoreOrX, text, color);
+        DrawText8x8(panel + 0x2C, scoreOrX, text, color);
         destination += 0x14;
         scoreOrX += 0x14;
         countOrIndex++;
@@ -147,7 +146,7 @@ void DrawTimeRecordPanel(u8 *s5) {
     text[0] = 0x54;
     text[1] = 0x2F;
     FormatLapTime(&text[2], g_RaceTotalTime);
-    DrawText8x8Wide(s5 + 0x14, 0x58, text, 0x78CC);
+    DrawText8x8(s5 + 0x14, 0x58, text, 0x78CC);
 
     DrawProportionalText(s5 + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
 
@@ -169,11 +168,11 @@ void DrawTimeRecordPanel(u8 *s5) {
         if (g_TimeRecordInsertRow == s2) {
             color = 0x780F;
         }
-        DrawText8x8Wide(s5 + 0x14, s3, text, color);
+        DrawText8x8(s5 + 0x14, s3, text, color);
 
         LibcSprintf(text, g_FmtCarName, g_CarNames[idx]);
 
-        DrawText8x8Wide(s5 + 0x2C, s4, text, color);
+        DrawText8x8(s5 + 0x2C, s4, text, color);
         s3 += 0x14;
         s4 += 0x14;
     }

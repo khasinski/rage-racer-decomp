@@ -77,7 +77,6 @@ extern u8 *g_EnvScriptClock;
 void SeekEnvironmentScript(void *arg0);
 void SeedReplayCars(void);
 extern s32 g_SeriesCleared;
-s32 QueueSpriteWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80016EC4");
 s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("func_80017390");
 
 void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2);
@@ -278,7 +277,7 @@ void DrawReplayBadge(void) {
         scratch = (volatile s32 *)0x1F800000;
         value = *scratch;
         base = (s32)g_DrawBuffer + 0xCC;
-        next = QueueSpriteWide(base, value, 0x10, 0x10, 0x48, 0x10, 0, 0x68, 0x780D);
+        next = (s32)GameQueueSprite(base, value, 0x10, 0x10, 0x48, 0x10, 0, 0x68, 0x780D);
         *scratch = GameQueueDrawModePrimWide(base, next, 9);
     }
 }

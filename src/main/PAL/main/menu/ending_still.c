@@ -5,7 +5,6 @@
 #include "psyq/gpu.h"
 
 void DrawRaceEndBanner(s32 arg0);
-s32 QueueSpriteWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80016EC4");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("func_80017390");
 
 /* Scene 34: the still shown after the ending FMV. Fades in, waits 300
@@ -50,8 +49,8 @@ void DrawEndingStill(void) {
     scratch = (volatile s32 *)0x1F800000;
 
     next = *scratch;
-    next = QueueSpriteWide(base, next, 0, 0, 0x100, height, 0, 0, clut);
+    next = (s32)GameQueueSprite(base, next, 0, 0, 0x100, height, 0, 0, clut);
     next = GameQueueDrawModePrimWide(base, next, 6);
-    next = QueueSpriteWide(base, next, 0x100, 0, 0x40, height, 0, 0, clut);
+    next = (s32)GameQueueSprite(base, next, 0x100, 0, 0x40, height, 0, 0, clut);
     *scratch = GameQueueDrawModePrimWide(base, next, 7);
 }

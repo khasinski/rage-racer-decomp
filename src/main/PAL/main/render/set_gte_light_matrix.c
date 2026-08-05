@@ -162,16 +162,6 @@ void DrawControllerSetupScene(s32 variant) {
 extern s32 g_SetupArrowPulse;
 
 /* Wide-parameter view of the packet builders; see GameQueueSprite.c. */
-u8 *QueueSpriteWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex) asm("func_80016EC4");
 s32 AddTilePrim(
     s32 ot,
     s32 prim,
@@ -187,7 +177,7 @@ u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse);
 /* The 16x32 left arrow, plus - while `pulse` is set - a tile over it whose
  * green channel breathes with rsin of the shared arrow angle. */
 u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
-    prim = QueueSpriteWide(ot, prim, x, y, 0x10, 0x20, 0x48, 0xB8, 0x7F82);
+    prim = GameQueueSprite(ot, prim, x, y, 0x10, 0x20, 0x48, 0xB8, 0x7F82);
     prim = QueueDrawModePrim(ot, prim, 0x39);
     if (pulse != 0) {
         u8 glow = rsin(g_SetupArrowPulse % 0x1000) / 64 - 65;
@@ -203,7 +193,7 @@ u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse);
 /* The 16x32 right arrow, plus - while `pulse` is set - a tile over it whose
  * green channel breathes with rsin of the shared arrow angle. */
 u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
-    prim = QueueSpriteWide(ot, prim, x, y, 0x10, 0x20, 0x58, 0xB8, 0x7F82);
+    prim = GameQueueSprite(ot, prim, x, y, 0x10, 0x20, 0x58, 0xB8, 0x7F82);
     prim = QueueDrawModePrim(ot, prim, 0x39);
     if (pulse != 0) {
         u8 glow = rsin(g_SetupArrowPulse % 0x1000) / 64 - 65;

@@ -35,7 +35,6 @@ void DrawClassRecordDetail(void);
 void DrawClassRecordDetail(void);
 extern s32 g_ScreenOffsetEditX;
 extern s32 g_ScreenOffsetEditY;
-s32 QueueSpriteWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80016EC4");
 s32 AddTilePrim(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s32 g_MonoOutput;
 extern s32 g_BgmVolumeSetting;
@@ -206,22 +205,22 @@ void DrawClassRecordGrid(void) {
         flag = g_ClassRecords[i].place;
         switch (flag) {
         case 1:
-            next = QueueSpriteWide(base, next, x, y, 0x20, 0x50,
+            next = (s32)GameQueueSprite(base, next, x, y, 0x20, 0x50,
                                  D_8007D5D4[i].b0, D_8007D5D4[i].b1, D_8007D5D4[i].h4);
             break;
         case 2:
-            next = QueueSpriteWide(base, next, x, y, 0x20, 0x50,
+            next = (s32)GameQueueSprite(base, next, x, y, 0x20, 0x50,
                                  D_8007D5D4[i].b2, D_8007D5D4[i].b3, D_8007D5D4[i].h6);
             break;
         case 3:
-            next = QueueSpriteWide(base, next, x, y, 0x20, 0x50,
+            next = (s32)GameQueueSprite(base, next, x, y, 0x20, 0x50,
                                  D_8007D5D4[i].b2, D_8007D5D4[i].b3, D_8007D5D4[i].h8);
             break;
         }
         if (g_ClassRecords[i].place <= 0) {
-            next = QueueSpriteWide(base + 4, next, x, y, 0x20, 0x50, 0x60, 0x70, 0x7E80);
+            next = (s32)GameQueueSprite(base + 4, next, x, y, 0x20, 0x50, 0x60, 0x70, 0x7E80);
         } else {
-            next = QueueSpriteWide(base + 4, next, x, y, 0x20, 0x50, 0x80, 0x70, 0x7E81);
+            next = (s32)GameQueueSprite(base + 4, next, x, y, 0x20, 0x50, 0x80, 0x70, 0x7E81);
         }
     }
 
@@ -329,7 +328,7 @@ void DrawVolumeBar(s32 arg0, s32 arg1) {
     if (i <= arg0) {
         do {
             y = 0x1C + (i * 8);
-            next = QueueSpriteWide(base, next, c + y, b + 4, 4, 0x18, 0xFC, 0x40, 0x7E82);
+            next = (s32)GameQueueSprite(base, next, c + y, b + 4, 4, 0x18, 0xFC, 0x40, 0x7E82);
             i++;
         } while (i <= arg0);
     }

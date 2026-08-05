@@ -9,7 +9,6 @@ extern s16 g_ClassRecords[];
 extern volatile s32 g_ClassWinCount;
 extern s32 g_BgmTrackCount;
 extern u8 g_CaptionLostRace;
-void DrawProportionalTextShadedWide(u32 arg0, u32 arg1, void *arg2, u32 arg3, u32 arg4) asm("func_80016B7C");
 extern s32 g_FrameSyncThreshold;
 extern s32 g_LostRaceChoice;
 void SetReverbDepth(s32 arg0, s32 arg1);
@@ -20,7 +19,6 @@ extern char g_TextEndRace[];
 extern char g_TextChance[];
 extern char g_TextPressStart[];
 extern s16 g_ChanceDigits[];
-void DrawText8x8Wide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
 extern volatile u16 g_PadEdge2;
 void PlaySoundCue(s32 cue);
 void RequestSelectBgmAssets(void);
@@ -64,7 +62,7 @@ void DrawLostRaceCaption(s32 arg0) {
         arg0 = 0xFF;
     }
     arg0 >>= 1;
-    DrawProportionalTextShadedWide(0x28, 0x40, &g_CaptionLostRace, 0x7812, arg0);
+    GameDrawProportionalTextShaded(0x28, 0x40, &g_CaptionLostRace, 0x7812, arg0);
 }
 
 void EnterLostRaceScreen(void);
@@ -103,7 +101,7 @@ void DrawRaceEndPrompt(void) {
     index = *(s16 *)((u8 *)g_CourseProgress + 6);
     DrawProportionalText(0xBE, 0xB8, &g_ChanceDigits[index], 0x7812);
 
-    DrawText8x8Wide(0x58, 0xD0, g_TextPressStart, 0x78CC);
+    DrawText8x8(0x58, 0xD0, g_TextPressStart, 0x78CC);
     DrawLostRaceCaption(0xFF);
 }
 

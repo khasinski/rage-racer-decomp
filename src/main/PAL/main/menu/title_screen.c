@@ -169,6 +169,13 @@ extern s32 g_MainMenuSlide;
 
 void DrawMainMenuRows(void);
 
+/* This call site hands full words where GameQueueTexturedRect's parameters are
+ * s16/u8; the alias names the routine, not its address, so the truncation the
+ * header would insert never happens here. */
+u8 *GameQueueTexturedRectWide(
+    void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v,
+    s32 uSpan, s32 vSpan, s32 clutIndex, s32 tpage) asm("GameQueueTexturedRect");
+
 void DrawMainMenuRows(void) {
     void *scratch;
     u8 *base;

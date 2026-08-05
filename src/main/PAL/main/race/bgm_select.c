@@ -10,7 +10,6 @@ void UpdateAttractCars();
 extern s32 g_BgmSelectCursor;
 extern s32 g_BgmRandomLabelTimer;
 extern s32 g_BgmSelectTrack;
-s32 QueueSpriteWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_80016EC4");
 s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("func_8001720C");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("func_80017390");
 extern u32 g_BgmShuffleIndex;
@@ -51,11 +50,11 @@ void DrawBgmSelectBar(void) {
     arg4 = 0x14;
     arg5 = 0x10;
 
-    next = QueueSpriteWide(base, next, 0x20, 0xC1, arg4, arg5, 0, 0, temp);
+    next = (s32)GameQueueSprite(base, next, 0x20, 0xC1, arg4, arg5, 0, 0, temp);
     temp = (g_BgmSelectCursor == 1) ? 0x3FEC : 0x3FEF;
-    next = QueueSpriteWide(base, next, 0x36, 0xC1, arg4, arg5, arg4, 0, temp);
+    next = (s32)GameQueueSprite(base, next, 0x36, 0xC1, arg4, arg5, arg4, 0, temp);
     temp = (g_BgmSelectCursor == 2) ? 0x3FEC : 0x3FEF;
-    next = QueueSpriteWide(base, next, 0x4C, 0xC1, arg4, arg5, 0x28, 0, temp);
+    next = (s32)GameQueueSprite(base, next, 0x4C, 0xC1, arg4, arg5, 0x28, 0, temp);
 
     if (g_BgmRandomLabelTimer != 0) {
         g_BgmRandomLabelTimer--;
@@ -68,8 +67,8 @@ void DrawBgmSelectBar(void) {
         temp = product + 0x1C;
     }
 
-    next = QueueSpriteWide(base, next, 0x64, 0xC2, 0xBA, 0xC, 0, temp, 0x3FED);
-    next = QueueSpriteWide(base, next, 0x62, 0xC0, 0xBE, 0x10, 0x3C, 0, 0x3FEE);
+    next = (s32)GameQueueSprite(base, next, 0x64, 0xC2, 0xBA, 0xC, 0, temp, 0x3FED);
+    next = (s32)GameQueueSprite(base, next, 0x62, 0xC0, 0xBE, 0x10, 0x3C, 0, 0x3FEE);
     next = GameQueueTileTransWide(base, next, 0x14, 0xB8, 0x118, 0x20, 0, 0, 0);
     *(s32 *)0x1F800000 = GameQueueDrawModePrimWide(base, next, 0xB);
 }

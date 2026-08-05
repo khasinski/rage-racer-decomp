@@ -9,12 +9,11 @@ void StartSequenceFadeOut(void);
 s32 DrawRankingScreen(s32 arg0);
 
 const u8 g_NowLoadingText[] = "NOW LOADING";
-void DrawText8x8Wide(s32 arg0, s32 arg1, void *arg2, s32 arg3) asm("func_80016754");
 /* Blinks the "NOW LOADING" string at g_NowLoadingText. */
 void DrawNowLoadingText(void);
 void DrawNowLoadingText(void) {
     if (g_SceneTimer & 8) {
-        DrawText8x8Wide(0x74, 0xEC, (void *)g_NowLoadingText, 0x78CC);
+        DrawText8x8(0x74, 0xEC, (void *)g_NowLoadingText, 0x78CC);
     }
 }
 

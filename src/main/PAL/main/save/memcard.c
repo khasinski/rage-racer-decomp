@@ -1511,13 +1511,11 @@ void *FormatSaveElapsedTime(void *dst, u32 seconds) {
 
 extern u8 g_McMessageText[];
 
-/* DrawText8x8 again, declared with word-wide parameters: the header
- * spelling with s16/u16 does not match here. Same convention as
- * GameQueueSprite vs GameQueueSpriteWide in game/render.h. */
-void DrawText8x8Wide(s32 x, s32 y, void *text, s32 color) asm("func_80016754");
+/* game/render.h is not in scope yet at this point in the file. */
+void DrawText8x8();
 
 void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) {
-    DrawText8x8Wide(0x28, 0xB8, &g_McMessageText[messageIndex * 30], 0x78CC);
+    DrawText8x8(0x28, 0xB8, &g_McMessageText[messageIndex * 30], 0x78CC);
 }
 
 extern u8 g_McHelpText[];
@@ -1527,8 +1525,8 @@ void DrawMemoryCardHelpPrompt(s32 page) {
     s32 i;
 
     i = page * 0x3C;
-    DrawText8x8Wide(0x50, 0x28, &g_McHelpText[i], 0x78CC);
-    DrawText8x8Wide(0x50, 0x40, &g_McHelpText[i + 0x1E], 0x78CC);
+    DrawText8x8(0x50, 0x28, &g_McHelpText[i], 0x78CC);
+    DrawText8x8(0x50, 0x40, &g_McHelpText[i + 0x1E], 0x78CC);
 }
 
 #include "common.h"
@@ -1551,7 +1549,7 @@ extern s32 g_McMenuRowCursor;
 extern s32 g_McFreeBlocks;
 
 /* DrawLargeText with word-wide parameters; the header spelling does not
- * match here. See DrawText8x8Wide above. */
+ * match here. See DrawText8x8 above. */
 void DrawLargeTextWide(s32, s32, void *, s32, s32, s32, s32, s32) asm("func_80047958");
 void LibcSprintf() asm("func_800632F0");
 

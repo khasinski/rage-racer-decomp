@@ -547,16 +547,6 @@ void DrawScriptedQuad(s32 elapsed, u8 *style, s32 *record);
  * the texture is drawn raw.
  */
 /* SPRT, 20 bytes. */
-u8 *GameQueueSprite(
-    void *ot,
-    u8 *prim,
-    s16 x,
-    s16 y,
-    s16 w,
-    s16 h,
-    u8 u,
-    u8 v,
-    u16 clutIndex) asm("func_80016EC4");
 u8 *GameQueueShadedSprite(
     void *ot,
     u8 *prim,
@@ -629,6 +619,22 @@ u8 *GameQueueShadedTexturedRect(
     u16 clutIndex,
     u16 tpage,
     u8 intensity) asm("func_800173F4");
+
+/*
+ * Wide forms used by callers whose packet fields are still represented as
+ * words at the call boundary.  The dispatcher selects the compact SPRT packet
+ * when no four-corner geometry is needed, or POLY_FT4 when texture span and
+ * geometry must remain independent.
+ *
+ * This must remain inline.  GCC 2.6.3 records the widest outgoing argument
+ * area before it folds the packet-kind branch; that accounts for the 48-byte
+ * argument area in DrawStartCountdown's retail stack frame.
+ */
+/* Body: (void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v,
+ * s32 clutIndex). The list stays empty because most callers hold the ordering
+ * table and the packet cursor in s32 locals, and cc1 2.6.3 dies on the
+ * int-to-pointer argument conversion rather than diagnosing it. */
+u8 *GameQueueSprite();
 u8 *GameQueueTexturedRect(
     void *ot,
     u8 *prim,
@@ -641,41 +647,7 @@ u8 *GameQueueTexturedRect(
     u8 uSpan,
     u8 vSpan,
     u16 clutIndex,
-    u16 tpage) asm("func_800175A4");
-
-/*
- * Wide forms used by callers whose packet fields are still represented as
- * words at the call boundary.  The dispatcher selects the compact SPRT packet
- * when no four-corner geometry is needed, or POLY_FT4 when texture span and
- * geometry must remain independent.
- *
- * This must remain inline.  GCC 2.6.3 records the widest outgoing argument
- * area before it folds the packet-kind branch; that accounts for the 48-byte
- * argument area in DrawStartCountdown's retail stack frame.
- */
-u8 *GameQueueSpriteWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex) asm("func_80016EC4");
-u8 *GameQueueTexturedRectWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 uSpan,
-    s32 vSpan,
-    s32 clutIndex,
-    s32 tpage) asm("func_800175A4");
+    u16 tpage);
 
 typedef enum GameTexturePacketKind {
     GAME_TEXTURE_PACKET_SPRT,
@@ -698,10 +670,10 @@ static __inline__ u8 *GameQueueTexturePacketWide(
     GameTexturePacketKind kind)
 {
     if (kind == GAME_TEXTURE_PACKET_SPRT) {
-        return GameQueueSpriteWide(
+        return GameQueueSprite(
             ot, prim, x, y, w, h, u, v, clutIndex);
     }
-    return GameQueueTexturedRectWide(
+    return GameQueueTexturedRect(
         ot, prim, x, y, w, h, u, v, uSpan, vSpan, clutIndex, tpage);
 }
 /*
@@ -720,7 +692,11 @@ void SetDrawModePacket(u8 *prim, s32 tpage);
  * variant closes the run with its own DR_MODE packet (tpage 9 / 0x29 / 0x49)
  * and stores the scratchpad cursor back itself.
  */
-void DrawText8x8(s16 x, s16 y, u8 *str, u16 clutIndex) asm("func_80016754");
+/* Body: (s32 x, s32 y, u8 *str, s32 clutIndex). The list stays empty because
+ * record_entry.c hands a packet pointer to x, several callers hand a char or
+ * void pointer to str, and swap_car_model_slot.c passes only three arguments;
+ * cc1 2.6.3 segfaults on those conversions rather than diagnosing them. */
+void DrawText8x8();
 /* The body reads (s32, s32, u8 *, s32, u8); its callers were compiled
  * against a full word for every argument, so the list stays empty. */
 void GameDrawText8x8Shaded();
@@ -736,11 +712,11 @@ void DrawText8x8Trans();
  * DrawProportionalText is the wrapper that passes 0x100.
  */
 void GameDrawProportionalTextShaded(
-    s16 x,
-    s16 y,
+    s32 x,
+    s32 y,
     u8 *str,
-    u16 clutIndex,
-    s32 intensity) asm("func_80016B7C");
+    s32 clutIndex,
+    s32 intensity);
 /* Body: (s32 x, s32 y, u8 *str, s32 clutIndex). The list stays empty because
  * callers spell x as a packet pointer and str as char * / void *, and cc1
  * 2.6.3 segfaults on both conversions. */

@@ -441,6 +441,5 @@ void DrawTeamNameCharModel(void) {
 }
 
 extern s32 D_80082E3C[];
-void DrawText8x8Wide(s32 arg0, s32 arg1, s32 arg2) asm("func_80016754");
 void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2);
-void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2) { DrawText8x8Wide(arg0, arg1, D_80082E3C[arg2]); }
+void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2) { DrawText8x8(arg0, arg1, D_80082E3C[arg2]); }

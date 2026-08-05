@@ -96,7 +96,6 @@ void DrawRaceEndBanner(s32 a);
 
 void ExitRaceScene(s32 a);
 
-void DrawText8x8Wide(s32 a, s32 b, void *c, s32 d) asm("func_80016754");
 
 void BeginCarStandingStart(void *a);
 
@@ -455,7 +454,7 @@ void UpdateWaypointCollectScene(void) {
         }
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
     } else if (g_RacePhase == 4) {
-        DrawText8x8Wide(0x5c, 0x78, &g_TextCongratulations, 0x7811);
+        DrawText8x8(0x5c, 0x78, &g_TextCongratulations, 0x7811);
         DrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
         g_RaceFadeTimer = g_RaceFadeTimer + 1;
         if (g_RaceFadeTimer < 201) {
