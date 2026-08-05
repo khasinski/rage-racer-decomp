@@ -88,7 +88,7 @@ void DrawTimeValue(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) asm("func_8
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
 void DrawLapTimes(void) asm("func_80033090");
 void DrawLapTimes(void) {
-    register s32 i __asm("$17");
+    s32 i;
     s32 visibleCount;
     s32 activeIndex;
     s32 tile;
@@ -135,7 +135,6 @@ void DrawLapTimes(void) {
             DrawTimeValue(0xFA, y, value, tile, 0x3E8);
             y += 0xA;
             valuePtr++;
-            asm volatile("" : "=r"(valuePtr) : "0"(valuePtr));
             base = g_DrawBuffer;
             ot = base + 0xCC;
             prim = (void *)(baseOffset + (s32)base);
@@ -171,7 +170,6 @@ void DrawRacePosition(void) {
     s32 value;
     u8 *left;
     u8 *right;
-    s16 tile;
 
     base = g_DrawBuffer;
     value = g_RacePosition;
@@ -194,14 +192,12 @@ void DrawRacePosition(void) {
     }
 
     if (value < 4) {
-        tile = 0x780B;
+        *(s16 *)(left + 0xE) = 0x780B;
+        *(s16 *)(right + 0xE) = 0x780B;
     } else {
-        asm volatile("");
-        tile = 0x780E;
+        *(s16 *)(left + 0xE) = 0x780E;
+        *(s16 *)(right + 0xE) = 0x780E;
     }
-
-    *(s16 *)(left + 0xE) = tile;
-    *(s16 *)(right + 0xE) = tile;
 }
 
 void SetHudBlinkColor(s32 arg0);
