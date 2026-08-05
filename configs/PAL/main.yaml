@@ -25,6 +25,7 @@ options:
 
   symbol_addrs_path:
     - configs/PAL/sym.main.txt
+    - configs/PAL/sym.bss.main.txt
   reloc_addrs_path:
     - configs/PAL/rel.main.txt
 
@@ -54,7 +55,7 @@ segments:
     vram: 0x80010000
     align: 4
     subalign: 4
-    bss_size: 0x0
+    bss_size: 0x157A10
     subsegments:
       - [0x800, rodata, main/000800_main]
       - [0x131C, .rodata, PAL/main/asset/asset_loader]
@@ -426,6 +427,10 @@ segments:
       - [0x6B91C, c, PAL/lib/libspu/Spu_ReadFromSpu]
       - [0x6BAD0, c, PAL/lib/libspu/SpuSetCommonAttr]
       - [0x6BE64, data, main/6BE64]
+      # bss starts where the image ends.  The objects are named and sized in
+      # configs/PAL/sym.bss.main.txt; bss_size has to be repeated here because
+      # nothing after this subsegment carries a vram address to infer it from.
+      - {start: 0x8B800, type: bss, vram: 0x8009B000, bss_size: 0x157A10, name: main/bss}
       - [0x8B800]
 
   - [0x8B800]

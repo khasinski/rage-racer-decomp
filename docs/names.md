@@ -19,9 +19,10 @@ are `.word` instruction counts from `asm/nonmatchings/PAL/main/*.s` (bytes = wor
 ## Where a name lives
 
 A function's name belongs in `configs/PAL/sym.main.txt` (splat's
-`symbol_addrs`) and a bss object's in `configs/PAL/bss.main.txt`. Splat then
-emits the name into `asm/` and the linker script, and the C declaration is
-plain: `void Foo(void);`, `extern u32 g_Bar;`.
+`symbol_addrs`) and a bss object's in `configs/PAL/sym.bss.main.txt`, which is
+the same format and is listed alongside it. Splat then emits the name into
+`asm/` and the linker script, and the C declaration is plain:
+`void Foo(void);`, `extern u32 g_Bar;`.
 
 It used to live in an `asm("func_XXXXXXXX")` label on the declaration instead,
 and that made the labels load-bearing in a way nothing recorded:
@@ -4448,10 +4449,16 @@ They are gone. One survives, and one is correct:
 
 ### The bss layout
 
-`configs/PAL/bss.main.txt` is the table, `tools/scripts/gen_bss.py` turns it
-into `asm/PAL/main/bss.s` and adds it to `.main_bss`. It covers
-`0x8009B000..0x801F2A10`, 1.34 MB, in one run: the image ends at `0x8009B000`
-and bss picks up 0x168 bytes later.
+`configs/PAL/sym.bss.main.txt` is the table and splat lays it out: `main.yaml`
+carries a `bss` subsegment over `0x8009B000..0x801F2A10`, 1.34 MB in one run,
+and splat writes `asm/PAL/main/data/main/bss.bss.s` and adds it to
+`.main_bss`. The image ends at `0x8009B000` and bss picks up 0x168 bytes
+later.
+
+The table has to be written out because bss occupies no room in the image:
+nothing in the file points at it, so the disassembler only ever sees the
+addresses .text and .data happen to reference. Left to itself splat finds 294
+of the 956 objects and swallows the rest into three enormous anonymous runs.
 
 Sizes come from the gap to the next referenced address, which makes them upper
 bounds on the true object size and never lower bounds, so an over-wide entry
