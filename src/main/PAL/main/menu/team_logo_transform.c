@@ -1,9 +1,10 @@
 #include "common.h"
 #include "psyq/gpu.h"
+#include "game/audio.h"
+#include "game/race.h"
+#include "game/screens.h"
 
 extern u32 g_TeamLogoCanvas[];
-
-void PlaySoundCue(s32 cue);
 
 void FlipTeamLogoHorizontal(void) {
     u32 *base;
@@ -845,8 +846,6 @@ void DrawMenuLightBurst(s32 arg) {
     }
 }
 
-extern s32 g_CourseIndex;
-
 typedef union {
     s32 value;
     struct {
@@ -865,7 +864,6 @@ typedef struct RaceRecord {
 extern RaceRecord g_RankingRecords[2][4][5];
 extern RaceRecord g_TimeRecords[2][4][5];
 
-void *FormatLapTime(void *dst, s32 timeMs);
 void DrawSprite(void *ot, s32 x, s16 y, s32 w, s32 h, s32 u, s32 v,
                     s32 r, s32 g, s32 b, s32 clut, s32 shadeTex,
                     s32 semiTrans, s32 flags);

@@ -7,10 +7,9 @@
 #include "psyq/snd.h"
 #include "game/memcard.h"
 #include "psyq/cd.h"
+#include "game/cd.h"
 void ServiceAssetLoad(void);
-void TickCdAudio(void);
 void RequestBootAssets(void);
-void InitCdAudio(void);
 void InitAssetSystem(void);
 
 void ResetGraph(s32 arg0);

@@ -1,12 +1,12 @@
 #include "common.h"
 #include "game/vector.h"
 #include "game/state.h"
+#include "game/menu.h"
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
 extern s32 g_BrowseArrowsFade;
 extern s32 D_8009B268;
 extern s32 D_8009B26C;
-extern s32 g_MenuAltLayout;
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0,
                    u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans,

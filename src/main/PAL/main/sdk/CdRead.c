@@ -2,6 +2,8 @@
 
 #include "common.h"
 #include "game/render.h"
+#include "psyq/cd.h"
+#include "psyq/kernel.h"
 void SetShadeTex(u_char *prim, long enabled);
 
 extern volatile long g_CdReadSectorCount;
@@ -13,8 +15,6 @@ extern volatile long g_CdReadSavedSyncCallback;
 extern volatile long g_CdReadSavedReadyCallback;
 long CdSyncCallback(long arg0);
 long CdReadyCallback(long arg0);
-long VSync(long mode);
-long CdStatus(void);
 long CdControlB(long arg0, void *arg1, long arg2);
 long CdReadRetry(long arg0);
 long CdReady(long arg0, long arg1);

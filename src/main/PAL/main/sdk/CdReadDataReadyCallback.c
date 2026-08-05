@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "game/state.h"
+#include "psyq/kernel.h"
 
 extern long g_PrologueStep;
 extern void (*D_8007D778[])(void);
@@ -32,7 +33,6 @@ extern volatile long g_CdReadSavedReadyCallback;
 void CdGetSector2(void *arg0, long arg1);
 long CdPosToInt_Local(void *arg0);
 void LibcPutString(void *arg0);
-long VSync(long mode);
 long CdControl(long com, long param, long result);
 long CdStatus(void);
 long CdLastPos(void);

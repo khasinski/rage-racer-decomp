@@ -6,6 +6,8 @@
 #include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
+#include "game/random.h"
+#include "game/screens.h"
 
 extern s32 g_FrameSyncThreshold;
 extern s32 D_801E8260;
@@ -56,9 +58,6 @@ extern s32 g_FrontendState;
 void UploadLoadBufferImage(void);
 void UpdateBgmTrackCount(void);
 void SetDefaultReverbDepth(void);
-void DrawPressStartPrompt(void);
-
-void EnterTitleScreen(void);
 
 void EnterTitleScreen(void) {
     SetupDisplay240(0, 0, 0);
@@ -112,8 +111,6 @@ void DrawTitleFadeOverlay(s32 brightness);
 void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSprite");
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2);
 
-void DrawPressStartPrompt(void);
-
 void DrawPressStartPrompt(void) {
     void **scratch;
     u8 *base;
@@ -141,9 +138,6 @@ extern s32 g_TitleAttractTimer;
 extern s32 g_FrontendState;
 extern s32 D_801E8260;
 void PlaySoundCue(s32 cue);
-void DrawPressStartPrompt(void);
-
-void UpdateTitleScreen(void);
 
 void UpdateTitleScreen(void) {
     if (g_PadEdge2 & 0x800) {
@@ -162,8 +156,6 @@ void UpdateTitleScreen(void) {
 extern s32 g_FrontendState;
 extern s32 g_TitlePulse;
 extern s32 g_MainMenuSlide;
-
-void DrawMainMenuRows(void);
 
 /* This call site hands full words where GameQueueTexturedRect's parameters are
  * s16/u8; the alias names the routine, not its address, so the truncation the
@@ -234,10 +226,6 @@ void DrawMainMenuRows(void) {
 extern s32 g_FrontendState;
 extern s32 g_MainMenuSlide;
 
-void DrawMainMenuRows(void);
-
-void UpdateMainMenuOpen(void);
-
 void UpdateMainMenuOpen(void) {
     if (++g_MainMenuSlide == 0x30) {
         g_FrontendState = 2;
@@ -250,8 +238,6 @@ extern s32 g_BgmTrackCount;
 extern volatile u8 g_BgmShuffleOrder[];
 extern u8 D_801E7733[];
 extern s32 g_BgmShuffleIndex;
-
-s32 Random15(void);
 
 /* Refills g_BgmShuffleOrder with a random permutation of the
  * g_BgmTrackCount tracks and rewinds g_BgmShuffleIndex. */
@@ -310,8 +296,6 @@ extern void RequestSelectBgmAssetsNoReset(void);
 extern void RequestSaveScreenAssets(void);
 extern void RequestOptionScreenAssets(void);
 extern void DrawMainMenuRows(void);
-
-void UpdateMainMenuInput(void);
 
 void UpdateMainMenuInput(void) {
     volatile u16 *flagp = &g_PadEdge2;
