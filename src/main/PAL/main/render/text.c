@@ -243,6 +243,7 @@ void DrawProportionalTextShadedWide(
     register s32 t0 asm("$8");
     register s32 s1 asm("$17");
     u32 first;
+    s32 v;
     s32 u;
     struct {
         s32 y;
@@ -267,14 +268,13 @@ void DrawProportionalTextShadedWide(
             if (ch >= 0x76) {
                 s32 offset = ch - 0x76;
                 s32 index = offset * 4;
-                s32 v;
                 s32 width;
                 void *prim;
                 u8 *ot;
                 s16 yOffset;
 
                 asm(
-                    "" : "=r"(offset), "=r"(index) :
+                    "" : "=r"(offset), "=r"(index), "=r"(v) :
                     "0"(offset), "1"(index));
                 text++;
                 u = g_HighFontU[index];
@@ -320,7 +320,6 @@ void DrawProportionalTextShadedWide(
             }
             if (ch >= 0x61) {
                 s32 offset = ch - 0x61;
-                s32 v;
                 s32 width;
                 void *prim;
                 u8 *ot;
@@ -365,13 +364,12 @@ void DrawProportionalTextShadedWide(
             {
                 s1 = ch - 0x20;
 
-                asm("" : "=r"(s1) : "0"(s1));
+                asm("" : "=r"(s1), "=r"(v) : "0"(s1));
                 text++;
                 if (s1 != 0) {
                     register s32 index asm("$3") = s1 * 2;
                     u8 *uCell;
                     u8 *vCell;
-                    register s32 v asm("$19");
                     void *prim;
                     u8 *ot;
 
