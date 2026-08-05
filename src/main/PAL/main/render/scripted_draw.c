@@ -707,7 +707,7 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                    s32 flags, s32 arg8, s32 arg9, s32 arg10) {
     register s32 f asm("$16") = flags;
     register s32 p0 asm("$18") = arg0;
-    register void *ot asm("$19") = *(void **)0x1F800004;
+    register void *ot = *(void **)0x1F800004;
     register s32 p1 asm("$20") = arg1;
     s32 p2 = arg2;
     s32 p3 = arg3;
@@ -725,7 +725,8 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                   0xb4, 0xb4, 0xb4, (f & 4) ? (f & 0x60) : 0xff);
     func_80047024(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
                   arg4, arg5, arg6, (f & 2) ? (f & 0x60) : 0xff);
-    __asm__("" : : "r"(p0), "r"(p1), "r"(p2), "r"(p3), "r"(f));
+    /* The second p3 use keeps it ahead of ot in global-alloc priority. */
+    __asm__("" : : "r"(p0), "r"(p1), "r"(p2), "r"(p3), "r"(p3), "r"(f), "r"(ot));
 }
 
 extern s32 D_8009B264;
