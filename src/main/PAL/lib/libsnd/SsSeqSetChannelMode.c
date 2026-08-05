@@ -3,7 +3,7 @@
 
 extern SeqStruct *g_SndSeqTable[];
 
-void SsSeqSetChannelMode(long seq, long sep, u_char mode) asm("func_8006FED8");
+void SsSeqSetChannelMode(long seq, long sep, u_char mode);
 
 void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     long seq_raw;

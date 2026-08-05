@@ -11,7 +11,6 @@ extern u_long g_SndVabSpuAddr[];
 extern u_short *g_SndVabBodyAddr[];
 extern long g_SndVabBodySize[];
 
-extern long func_8007B2C0(void);
 extern void _spu_setTransferCompletionFlag(long value);
 
 short SsVabOpen(u_char *addr, VabHdr *header);
@@ -53,7 +52,7 @@ short SsVabOpenHeadWithMode(u_char *addr, short vabid, short mode, u_long spuAdd
     VabHdr *header;
 
     vabId = 16;
-    if (func_8007B2C0() == 1) {
+    if (_spu_isTransferIdle() == 1) {
         return -1;
     }
     _spu_setTransferCompletionFlag(1);

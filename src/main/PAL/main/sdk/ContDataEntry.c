@@ -114,7 +114,7 @@ struct Unk {
 
 extern SeqStruct *g_SndSeqTable[];
 
-s32 SsSeqReadDeltaTime(s32 seq, s16 sep) asm("func_80070D70");
+s32 SsSeqReadDeltaTime(s32 seq, s16 sep);
 s16 SsUtGetProgAtr(s16 vab_id, s16 program, ProgAtr *out);
 s16 SsUtGetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *out);
 s16 SsUtSetVagAtr(s16 vab_id, s16 program, s16 tone, VagAtr *in);

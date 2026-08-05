@@ -4,7 +4,7 @@
 extern SeqStruct *g_SndSeqTable[];
 extern void (*g_SndMarkCallbacks[][0x10])(long seq, long sep, u_char value);
 
-void SsSeqApplyControlChange(long seq, long sep, u_char value) asm("func_8006FDA8");
+void SsSeqApplyControlChange(long seq, long sep, u_char value);
 
 void SsSeqApplyControlChange(long seq, long sep, u_char value) {
     long seq_raw;

@@ -6,7 +6,6 @@ extern u_long g_SndTickResolution;
 extern char g_MsgSeqNotSeqData[];
 extern char g_MsgSeqOldFormat[];
 
-long func_80070D70(short arg0, short arg1);
 
 long SsSeqParseHeader(long arg0, long arg1, long arg2);
 long SsSeqParseHeader(long arg0, long arg1, long arg2) {
@@ -91,7 +90,7 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
 
     s->tempo = s->base_unk84;
     s->read_pos = s->read_pos + 2;
-    ret = func_80070D70((short)slot, 0);
+    ret = SsSeqReadDeltaTime((short)slot, 0);
 
     s->next_sep_pos = s->read_pos;
     D = g_SndTickResolution;

@@ -89,7 +89,7 @@ void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
 
 extern SeqStruct *g_SndSeqTable[];
 
-long SsSeqReadDeltaTime(long arg0, long arg1) asm("func_80070D70");
+long SsSeqReadDeltaTime(long arg0, long arg1);
 
 long SsSeqReadDeltaTime(long arg0, long arg1) {
     SeqStruct *state;

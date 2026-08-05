@@ -6,7 +6,7 @@ extern u_char *g_SndCurrentProgTable;
 
 long SpuVmVSetUp(long arg0, long arg1);
 
-long SsUtSetProgVol(long arg0, long arg1, long arg2) asm("func_8007701C");
+long SsUtSetProgVol(long arg0, long arg1, long arg2);
 long SsUtGetProgVol(long arg0, long arg1);
 long SsUtSetProgPan(long arg0, long arg1, long arg2);
 long SsUtGetProgPan(long arg0, long arg1);
