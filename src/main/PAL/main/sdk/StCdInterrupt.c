@@ -8,9 +8,12 @@ typedef struct StReadyStatus {
     u16 cause;
 } StReadyStatus;
 
-extern volatile u8 *g_CdReg0 asm("D_800993D0");
-extern volatile u8 *g_CdReg2 asm("D_800993D8");
-extern volatile u8 *g_CdReg3 asm("D_800993DC");
+/* The streaming-CD interrupt path keeps its own copy of the register-pointer
+ * table; g_CdReg0..3 at 0x80099300 are the libcd copy and hold the same
+ * 0x1F801800 base, but nothing here writes through those. */
+extern volatile u8 *g_StCdReg0;
+extern volatile u8 *g_StCdReg2;
+extern volatile u8 *g_StCdReg3;
 extern volatile u32 *g_InterruptStatus;
 extern volatile u32 *g_InterruptMask;
 extern volatile u32 *g_MdecOutDmaControl;
@@ -97,22 +100,22 @@ void StCdInterrupt(void) {
         return;
     }
 
-    *g_CdReg0 = 0;
-    *g_CdReg3 = 0;
-    *g_CdReg0 = 0;
-    *g_CdReg3 = 0x80;
+    *g_StCdReg0 = 0;
+    *g_StCdReg3 = 0;
+    *g_StCdReg0 = 0;
+    *g_StCdReg3 = 0x80;
     *g_InterruptStatus = 0x20943;
     *g_InterruptMask = 0x1323;
 
     if (g_StNotStream2Mode == 0) {
         resultCursor = (u8 *)&location;
         do {
-            *resultCursor++ = *g_CdReg2;
+            *resultCursor++ = *g_StCdReg2;
         } while (resultCursor < (u8 *)(&location + 1));
 
         i = 0;
         do {
-            *g_CdReg2;
+            *g_StCdReg2;
             i++;
         } while (i < 8);
     }

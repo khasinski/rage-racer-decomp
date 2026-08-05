@@ -1077,3 +1077,6 @@ CdSync = 0x8006A534; // type:func
 CdReadyCallback = 0x8006A58C; // type:func
 CdControlF = 0x8006A6DC; // type:func
 StFreeRing = 0x8006CFF0; // type:func
+g_StCdReg0 = 0x800993D0;
+g_StCdReg2 = 0x800993D8;
+g_StCdReg3 = 0x800993DC;
