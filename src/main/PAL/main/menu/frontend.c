@@ -224,8 +224,8 @@ extern u8 D_801C0690[];
 extern u16 g_ScreenOffsetX;
 extern u16 g_ScreenOffsetY;
 
-void func_80069A58(s32, s32);
-void func_80069A78(s32);
+void SetGeomOffset(long ofx, long ofy);
+void SetGeomScreen(long h);
 
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2);
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
@@ -243,8 +243,8 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     register u16 value asm("$2");
 
     __asm__("" : : "r"(a0_save), "r"(a1_save), "r"(a2_save));
-    func_80069A58(0xA0, 0x78);
-    func_80069A78(0x140);
+    SetGeomOffset(0xA0, 0x78);
+    SetGeomScreen(0x140);
 
     base = (u8 *)g_FrameContexts;
     height = 0xF0;
@@ -317,8 +317,8 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     register u16 value asm("$2");
 
     __asm__("" : : "r"(a0_save), "r"(a1_save), "r"(a2_save));
-    func_80069A58(0xA0, 0xF0);
-    func_80069A78(0x140);
+    SetGeomOffset(0xA0, 0xF0);
+    SetGeomScreen(0x140);
 
     height = 0x1E0;
     SetDefDrawEnv(base, 0, 0, 0x140, height);

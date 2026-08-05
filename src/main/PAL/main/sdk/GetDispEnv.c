@@ -19,7 +19,7 @@ u_long GetODE(void) {
 u_long Gpu_BuildDisplayMode(long arg0, long arg1, u_long arg2) asm("_get_mode");
 u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
-u_long func_80066BE4(short arg0, short arg1);
+u_long Gpu_BuildDrawOffsetCmd(long x, long y);
 u_long Gpu_BuildTexWindowCmd(void *arg0);
 
 void SetTexWindow(DrawPacket *pkt, void *arg1);
@@ -29,7 +29,7 @@ void SetTexWindow(DrawPacket *pkt, void *arg1) {
     pkt->x1y1 = 0;
 }
 
-void SetDrawArea(DrawPacket *pkt, Rect *rect) asm("func_80066604");
+void SetDrawArea(DrawPacket *prim, Rect *rect);
 void SetDrawArea(DrawPacket *pkt, Rect *rect) {
     pkt->code = 2;
     pkt->x0y0 = Gpu_BuildDrawAreaTopLeftCmd(rect->x, rect->y);
@@ -39,7 +39,7 @@ void SetDrawArea(DrawPacket *pkt, Rect *rect) {
 void SetDrawOffset(DrawPacket *pkt, short *arg1);
 void SetDrawOffset(DrawPacket *pkt, short *arg1) {
     pkt->code = 2;
-    pkt->x0y0 = func_80066BE4(arg1[0], arg1[1]);
+    pkt->x0y0 = Gpu_BuildDrawOffsetCmd(arg1[0], arg1[1]);
     pkt->x1y1 = 0;
 }
 
@@ -81,7 +81,7 @@ typedef struct DrawEnvPacketSource {
 
 u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
-u_long Gpu_BuildDrawOffsetCmd(long x, long y) asm("func_80066BE4");
+u_long Gpu_BuildDrawOffsetCmd(long x, long y);
 u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("_get_mode");
 
 void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env);

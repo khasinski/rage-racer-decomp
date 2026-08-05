@@ -136,7 +136,7 @@ extern u16 g_VramHeight;
 extern u8 g_VramWidthTable[];
 extern u8 g_VramHeightTable[];
 
-void func_80068180(u8 *dst, s32 value, s32 count);
+void MemFill(u_char *dst, long value, long count);
 void GPU_cw(void *arg0);
 s32 Gpu_Reset(s32 arg0);
 
@@ -154,7 +154,7 @@ void ResetGraph(s32 mode) {
     if ((maskedMode == 0) || (maskedMode == 3)) {
         graphState = g_GraphType;
         DebugPrintf(D_80013478, g_GpuJumpTable, graphState);
-        func_80068180(graphState, 0, 0x80);
+        MemFill(graphState, 0, 0x80);
         KernelCallbackSlot3();
         GPU_cw((void *)((u32)g_GpuFuncs & 0xFFFFFF));
         graphType = Gpu_Reset(maskedMode != 0);
@@ -172,8 +172,8 @@ void ResetGraph(s32 mode) {
             g_VramWidth = v;
             g_VramHeight = *(u16 *)&g_VramHeightTable[st1 * 4];
         }
-        func_80068180(clearEnv, fillValue, 0x5C);
-        func_80068180(graphState + 0x6C, -1, 0x14);
+        MemFill(clearEnv, fillValue, 0x5C);
+        MemFill(graphState + 0x6C, -1, 0x14);
         graphType = *(volatile u8 *)graphState;
     } else {
         if (g_GraphDebug >= 2) {

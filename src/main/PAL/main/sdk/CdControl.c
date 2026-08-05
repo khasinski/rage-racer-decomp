@@ -6,7 +6,7 @@ extern long g_CdCommandNeedsSetloc[];
 extern long g_CdSyncCallback;
 extern u_char g_CdStatusByte;
 
-long CD_cw(long arg0, void *arg1, long arg2, long arg3) asm("func_8006B620");
+long CD_cw(long arg0, void *arg1, long arg2, long arg3);
 
 /*
  * Core CD command sender with retry: issues command `arg0` (low byte) with the
@@ -124,8 +124,8 @@ extern long g_CdCommandNeedsSetloc[];
 extern long g_CdSyncCallback;
 extern u_char g_CdStatusByte;
 
-long CD_cw(long arg0, void *arg1, long arg2, long arg3) asm("func_8006B620");
-long CD_sync(long arg0, long arg1) asm("func_8006B0D4");
+long CD_cw(long arg0, void *arg1, long arg2, long arg3);
+long CD_sync(long arg0, long arg1);
 
 long CdControlB(long arg0, void *arg1, long arg2);
 long CdControlB(long arg0, void *arg1, long arg2) {

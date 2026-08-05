@@ -61,7 +61,7 @@ u_long DrawSyncCallback(u_long arg0) {
 
 extern char D_80013520[];
 
-void func_80068180(u_char *dst, long value, long count);
+void MemFill(u_char *dst, long value, long count);
 
 void SetDispMask(long arg0);
 void SetDispMask(long arg0) {
@@ -77,7 +77,7 @@ void SetDispMask(long arg0) {
 
     clearPtr = debug + 0x6A;
     if (enable == 0) {
-        func_80068180(clearPtr, -1, 0x14);
+        MemFill(clearPtr, -1, 0x14);
     }
 
     mask = 0x3000000;
@@ -95,7 +95,7 @@ void SetDispMask(long arg0) {
 extern GpuCallbacks *g_GpuFuncs;
 extern char D_80013534[];
 
-void DrawSync(long arg0) asm("func_800658FC");
+void DrawSync(long mode);
 void DrawSync(long arg0) {
     if (g_GraphDebug >= 2) {
         GPU_printf(D_80013534, arg0);

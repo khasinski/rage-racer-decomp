@@ -323,14 +323,14 @@ extern Matrix g_SceneColorMatrix;
 extern Matrix D_80082DFC;
 extern Matrix g_SceneLightMatrix;
 extern Matrix D_80082E1C;
-void func_800698B8(Matrix *arg0);
+void SetColorMatrix(void *m);
 
 /* The menu-mode twin of InitTrackLighting. */
 void InitMenuLighting(void);
 void InitMenuLighting(void) {
     g_SceneColorMatrix = D_80082DFC;
     g_SceneLightMatrix = D_80082E1C;
-    func_800698B8(&g_SceneColorMatrix);
+    SetColorMatrix(&g_SceneColorMatrix);
     SetLightMatrix(&g_SceneLightMatrix);
     SetBackColor(0x20, 0x20, 0x20);
     SetFarColor(0, 0, 0);

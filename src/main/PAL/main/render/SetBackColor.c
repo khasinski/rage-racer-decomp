@@ -29,14 +29,14 @@ void SetFarColor(s32 a, s32 b, s32 c) {
     gte_ctc2(z, 23);
 }
 __asm__(".align 4");
-void SetGeomOffset(s32 a, s32 b) asm("func_80069A58");
+void SetGeomOffset(s32 a, s32 b);
 void SetGeomOffset(s32 a, s32 b) {
     s32 x = a << 16, y = b << 16;
     gte_ctc2(x, 24);
     gte_ctc2(y, 25);
 }
 __asm__(".align 4");
-void SetGeomScreen(s32 a) asm("func_80069A78");
+void SetGeomScreen(s32 a);
 void SetGeomScreen(s32 a) { gte_ctc2(a, 26); }
 
 /* --- LightColor.s .. OuterProduct0.s --- */

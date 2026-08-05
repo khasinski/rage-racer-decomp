@@ -1,6 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
-long CD_sync(long arg0, u_char *arg1) asm("func_8006B0D4");
+long CD_sync(long arg0, u_char *arg1);
 
 extern volatile u_char *g_CdReg0;
 extern volatile u_char *g_CdReg1;
@@ -23,7 +23,7 @@ extern volatile CdIntr g_CdSyncStatus;
 void KernelCallbackSlot3(void);
 void CdDispatchInterrupts(void);
 void KernelCallbackSlot2(long arg0, void *arg1) asm("func_8006DF64");
-long func_8006B620(long arg0, void *arg1, long arg2, long arg3);
+long CD_cw(u_char command, u_char *params, u_char *result, long async);
 void LibcPutString(u_char *text);
 
 long CD_vol(CdlATV *arg0) {
@@ -128,15 +128,15 @@ long CdResetState(void) {
     *g_CdReg3 = 0;
     *g_ComDelayReg = 0x1325;
 
-    func_8006B620(1, 0, 0, 0);
+    CD_cw(1, 0, 0, 0);
     if ((g_CdStatusByte & 0x10) != 0) {
-        func_8006B620(1, 0, 0, 0);
+        CD_cw(1, 0, 0, 0);
     }
 
-    if (func_8006B620(0xA, 0, 0, 0) != 0) {
+    if (CD_cw(0xA, 0, 0, 0) != 0) {
         return -1;
     }
-    if (func_8006B620(0xC, 0, 0, 0) != 0) {
+    if (CD_cw(0xC, 0, 0, 0) != 0) {
         return -1;
     }
     if (CD_sync(0, 0) != 2) {

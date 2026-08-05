@@ -10,7 +10,6 @@ extern u_char D_8009A569;
 extern u_char g_SndTickIrq;
 
 long func_8006DF64(long arg0, Callback arg1);
-void func_8006DFC4(long arg0);
 
 void SsStopSoundTick(void);
 
@@ -20,7 +19,7 @@ void SsStopSoundTick(void) {
         EnterCriticalSection();
 
         if (g_SndTickUsesVSync != 0) {
-            func_8006DFC4(0);
+            VSyncCallback(0);
             g_SndTickUsesVSync = 0;
         } else if (g_SndTickIrq == 0) {
             func_8006DF64(0, g_SndPrevVSyncCallback);

@@ -107,7 +107,7 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
  * drawing-area rect. */
 extern s32 g_FrameParity;
 
-void func_80066604(void *packet, void *rect);
+void SetDrawArea(void *packet, void *rect);
 void AddPrim(void *ot, void *prim);
 
 void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h);
@@ -121,7 +121,7 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     rect[1] = y + offset;
     rect[2] = w;
     rect[3] = h;
-    func_80066604(packet, rect);
+    SetDrawArea(packet, rect);
     oldPacket = packet;
     packet = (u8 *)packet + 12;
     AddPrim(ot, oldPacket);
@@ -134,7 +134,7 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
 extern u8 *g_TileStripBuffers[2];
 extern u8 g_TileStripStorage[];
 
-void func_800658FC(s32 mode);
+void DrawSync(long mode);
 
 void BuildTileStrips(void);
 void BuildTileStrips(void) {
@@ -160,7 +160,7 @@ void BuildTileStrips(void) {
     firstBuffer = g_TileStripStorage;
     initBuffers[0] = firstBuffer;
     g_TileStripBuffers[1] = firstBuffer + 12000;
-    func_800658FC(0);
+    DrawSync(0);
 
     color = 0x20;
     buffers = initBuffers;

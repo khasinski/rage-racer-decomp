@@ -16,7 +16,7 @@ void InstallResourceData(void *arg0);
 void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, s32 arg3);
 s32 PollAudioSlotLoad(void);
 void StoreImage(Rect *rect, void *data);
-void DrawSync(long mode) asm("func_800658FC");
+void DrawSync(long mode);
 extern s32 g_ImageBlockBuffer;
 extern GameSceneAssetHeader *g_AssetBase;
 extern void *g_AssetBlockPtr2;

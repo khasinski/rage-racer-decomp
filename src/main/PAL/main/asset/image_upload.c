@@ -4,7 +4,7 @@
 #include "game/asset.h"
 
 void LoadImage(Rect *rect, void *data);
-void func_800658FC(s32 mode);
+void DrawSync(long mode);
 
 void UploadImageBlock(void *arg0);
 void UploadImageBlock(void *arg0) {
@@ -25,7 +25,7 @@ void UploadImageBlock(void *arg0) {
         rect[2] = block->w;
         rect[3] = block->h;
         LoadImage((Rect *)rect, block->pixels);
-        func_800658FC(0);
+        DrawSync(0);
         arg0 = (u8 *)block + (((u32)block->size >> 2) << 2);
     }
 
@@ -36,7 +36,7 @@ void UploadImageBlock(void *arg0) {
     rect[3] = height = block->h;
     if (((s32)(width << 16) > 0) && ((s32)(height << 16) > 0)) {
         LoadImage((Rect *)rect, block->pixels);
-        func_800658FC(0);
+        DrawSync(0);
     }
 }
 
@@ -77,7 +77,7 @@ extern u16 g_TeamLogoClut[];
 
 void LoadImage(Rect *rect, void *data);
 void StoreImage(Rect *rect, void *data);
-void func_800658FC(s32 mode);
+void DrawSync(long mode);
 
 void StoreTeamLogoImage(void *dst);
 void StoreTeamLogoImage(void *dst) {
@@ -89,7 +89,7 @@ void StoreTeamLogoImage(void *dst) {
     }
 
     StoreImage(&g_TrackTextureRect, dst);
-    func_800658FC(0);
+    DrawSync(0);
     g_TeamLogoClut[0] = 0;
 }
 

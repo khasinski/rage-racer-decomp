@@ -2,7 +2,7 @@
 #include "psyq/gpu.h"
 void SetTile(void *arg0);
 
-void func_80066604(void *packet, void *rect);
+void SetDrawArea(void *packet, void *rect);
 void AddPrim(void *ot, void *prim);
 
 void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h);
@@ -54,7 +54,7 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
                     rect.y = yReg;
                     rect.w = wReg;
                     rect.h = hReg;
-                    func_80066604(packet, &rect);
+                    SetDrawArea(packet, &rect);
                     oldPacket = packet;
                     packet += 12;
                     AddPrim(otReg, oldPacket);

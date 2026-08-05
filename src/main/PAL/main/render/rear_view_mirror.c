@@ -3,7 +3,7 @@
 #include "game/race.h"
 #include "game/car.h"
 void SetRotMatrix(void *arg0);
-void SetDrawArea(u8 *packet, u8 *drawEnv) asm("func_80066604");
+void SetDrawArea(u8 *packet, u8 *drawEnv);
 
 extern s16 g_MirrorViewEnabled;
 extern s32 g_MirrorPanelY;
@@ -29,8 +29,8 @@ extern s32 D_8019C7E4;
 extern s32 g_VisibleCellList;
 extern s32 D_8009E888;
 extern s32 g_MirrorPanelY;
-void func_80069A58(s32 arg0, s32 arg1);
-void func_80069A78(s32 arg0);
+void SetGeomOffset(long ofx, long ofy);
+void SetGeomScreen(long h);
 
 /*
  * Sets up the scratchpad render state (0x1F800000) for the rear-view mirror
@@ -63,8 +63,8 @@ s32 BeginMirrorPass(void) {
         D_8009AF00 = scratch->matrix;
         scratch->matrix = D_8019CB18;
 
-        func_80069A58(0xA0, 0x24);
-        func_80069A78(0xC0);
+        SetGeomOffset(0xA0, 0x24);
+        SetGeomScreen(0xC0);
 
         v0reg = 9;
         scratch->mode = v0reg;
@@ -118,8 +118,8 @@ extern s32 D_8019C86C;
 extern s32 g_VisibleCellList;
 extern s32 D_8009EC94;
 
-void func_80069A58(s32 arg0, s32 arg1);
-void func_80069A78(s32 arg0);
+void SetGeomOffset(long ofx, long ofy);
+void SetGeomScreen(long h);
 
 /*
  * Sibling of BeginMirrorPass: closes the mirror pass and restores the full-screen
@@ -135,8 +135,8 @@ void EndMirrorPass(void) {
 
     scratch = (GameScratchpadRenderState *)0x1F800000;
 
-    func_80069A58(0xA0, 0x78);
-    func_80069A78(0x140);
+    SetGeomOffset(0xA0, 0x78);
+    SetGeomScreen(0x140);
 
     v0reg = 0xA;
     scratch->mode = v0reg;

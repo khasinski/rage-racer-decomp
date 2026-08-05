@@ -32,7 +32,7 @@ extern char D_800138C8[];
 
 void LibcPutString(char *text);
 long CdReadInterruptStatus(void);
-long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
+long CD_sync(long mode, u_char *result);
 void CD_flush(void);
 long VSync(long mode);
 long GetKernelStatus(void);
@@ -55,7 +55,7 @@ static inline long getAlarm(void) {
     return 0;
 }
 
-long CD_cw(u_char command, u_char *params, u_char *result, long async) asm("func_8006B620");
+long CD_cw(u_char command, u_char *params, u_char *result, long async);
 long CD_cw(u_char command, u_char *params, u_char *result, long async) {
     long i;
     long interrupt;

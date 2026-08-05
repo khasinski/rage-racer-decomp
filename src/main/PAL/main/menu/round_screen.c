@@ -10,7 +10,7 @@
 extern s16 g_TrackZoneCode;
 extern Matrix g_SceneColorMatrix;
 extern Matrix D_8007C778;
-void func_800698B8(Matrix *arg0);
+void SetColorMatrix(void *m);
 
 /* Darkens the scene colour matrix by GetTrackZoneBlend's 0..0x100 track-zone ramp; RestoreColorMatrix puts it back. */
 void ApplyZoneLighting(s32 a0, Matrix *a1);
@@ -29,7 +29,7 @@ void ApplyZoneLighting(s32 a0, Matrix *a1) {
         out.m[2][0] = g_SceneColorMatrix.m[2][0] * s1 / 256;
         out.m[2][1] = g_SceneColorMatrix.m[2][1] * s1 / 256;
         out.m[2][2] = g_SceneColorMatrix.m[2][2] * s1 / 256;
-        func_800698B8(&out);
+        SetColorMatrix(&out);
     } else {
         s32 k;
         s32 h;
@@ -47,7 +47,7 @@ void ApplyZoneLighting(s32 a0, Matrix *a1) {
         out.m[2][0] = g_SceneColorMatrix.m[2][0] * s1 / 256;
         out.m[2][1] = g_SceneColorMatrix.m[2][1] * s1 / 256;
         out.m[2][2] = g_SceneColorMatrix.m[2][2] * s1 / 256;
-        func_800698B8(&out);
+        SetColorMatrix(&out);
 
         kb = k - a0;
         a1->m[0][0] = a1->m[0][0] * kb / 256 + D_8007C778.m[0][0] * a0 / 256;
@@ -63,10 +63,10 @@ void ApplyZoneLighting(s32 a0, Matrix *a1) {
 }
 
 extern Matrix g_SceneColorMatrix;
-void func_800698B8(Matrix *arg0);
+void SetColorMatrix(void *m);
 /* Puts the unmodified colour matrix back after ApplyZoneLighting. */
 void RestoreColorMatrix(void);
-void RestoreColorMatrix(void) { func_800698B8(&g_SceneColorMatrix); }
+void RestoreColorMatrix(void) { SetColorMatrix(&g_SceneColorMatrix); }
 
 extern s32 g_FrameSyncThreshold;
 extern s32 g_ImageBlockBuffer;
@@ -306,13 +306,13 @@ extern Matrix g_SceneColorMatrix;
 extern Matrix D_8007C758;
 extern Matrix g_SceneLightMatrix;
 extern Matrix D_8007C778;
-void func_800698B8(Matrix *arg0);
+void SetColorMatrix(void *m);
 /* Installs the track colour/light matrices, back and far colours and the fog near distance. */
 void InitTrackLighting(void);
 void InitTrackLighting(void) {
     g_SceneColorMatrix = D_8007C758;
     g_SceneLightMatrix = D_8007C778;
-    func_800698B8(&g_SceneColorMatrix);
+    SetColorMatrix(&g_SceneColorMatrix);
     SetLightMatrix(&g_SceneLightMatrix);
     SetBackColor(0x20, 0x20, 0x20);
     SetFogNear(0x1770, 0x140);

@@ -103,7 +103,7 @@ long Gpu_ProbeType(u_long arg0) {
     return 4;
 }
 
-void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");
+void MemFill(u_char *dst, u_char value, long count);
 void MemFill(u_char *dst, u_char value, long count) {
     volatile long unused;
     long i = count - 1;

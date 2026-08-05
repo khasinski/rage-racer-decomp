@@ -9,8 +9,8 @@ extern char *g_CdIntrNames[];
 extern u_char D_800136D0[];
 
 void CD_flush(void);
-long func_8006B0D4(long arg0, long arg1);
-long func_8006B354(long arg0, long arg1);
+long CD_sync(long arg0, long arg1);
+long CD_ready(long arg0, long arg1);
 
 void CdFlush(void);
 void CdFlush(void) {
@@ -48,12 +48,12 @@ char *CdIntstr(long intr) {
 
 long CdSync(long arg0, long arg1);
 long CdSync(long arg0, long arg1) {
-    return func_8006B0D4(arg0, arg1);
+    return CD_sync(arg0, arg1);
 }
 
-long CdReady(long arg0, long arg1) asm("func_8006A554");
+long CdReady(long arg0, long arg1);
 long CdReady(long arg0, long arg1) {
-    return func_8006B354(arg0, arg1);
+    return CD_ready(arg0, arg1);
 }
 
 long CdSyncCallback(long arg0);

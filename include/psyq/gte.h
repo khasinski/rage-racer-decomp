@@ -17,7 +17,7 @@ typedef struct Matrix {
  */
 void SetRotMatrix(void *m);
 void SetLightMatrix(void *m);
-void SetColorMatrix(void *m) asm("func_800698B8");
+void SetColorMatrix(void *m);
 void SetTransMatrix(void *m);
 /* Direct GTE register writers (libgte REG03_1 through REG03_13). */
 void SetVertex0(void *v);
@@ -41,8 +41,8 @@ void SetFogNear(long a, long h);
 /* Background / far colours; each component is shifted left by 4 on the way in. */
 void SetBackColor(long rbk, long gbk, long bbk);
 void SetFarColor(long rfc, long gfc, long bfc);
-void SetGeomOffset(long ofx, long ofy) asm("func_80069A58");
-void SetGeomScreen(long h) asm("func_80069A78");
+void SetGeomOffset(long ofx, long ofy);
+void SetGeomScreen(long h);
 /* Single COP2 commands. */
 void LightColor(void *v0, void *v1);
 void DpqColor3(

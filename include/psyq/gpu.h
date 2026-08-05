@@ -274,7 +274,7 @@ void StoreImage(Rect *rect, void *data);
 long MoveImage(GpuRectPacked *rect, u_long x, u_long y);
 /* LibRef47 6-33 returns long (queue length for mode 1); no caller here uses the
  * result, so it is declared void. */
-void DrawSync(long mode) asm("func_800658FC");
+void DrawSync(long mode);
 u_long DrawSyncCallback(u_long callback);
 void DumpClut(long clut);
 void DumpTPage(long tpage);
@@ -295,7 +295,9 @@ void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h);
 u_char *SetDefDispEnv(u_char *env, long x, long y, long w, long h);
 void SetDrawTPage(u_char *prim, long dfe, long dtd, long tpage);
 void SetTexWindow(DrawPacket *prim, void *tw);
-void SetDrawArea(DrawPacket *prim, Rect *rect) asm("func_80066604");
+/* Its two callers hand it raw byte pointers; an empty parameter list lets
+ * each unit keep the spelling its own code was compiled with. */
+void SetDrawArea();
 void SetDrawOffset(DrawPacket *prim, short *ofs);
 void SetDrawMode(
     DrawPacket *prim,
@@ -314,6 +316,8 @@ long GetGraphDebug(void);
 void SetDispMask(long mask);
 
 /* libgpu-internal byte fill helper. */
-void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");
+/* The body narrows `value` to u_char, but both callers were compiled against
+ * a full word and pass -1; declaring it that way here keeps their code. */
+void MemFill(u_char *dst, long value, long count);
 
 #endif

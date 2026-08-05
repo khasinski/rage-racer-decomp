@@ -10,7 +10,7 @@ extern long g_GpuResetIntrMask;
 extern u_char g_GpuGp1Mirror[];
 extern u_char g_GpuQueue[];
 
-void MemFill(u_char *dst, u_char value, long count) asm("func_80068180");
+void MemFill(u_char *dst, u_char value, long count);
 long Gpu_ProbeType(u_long arg0);
 
 /* Driver-table slot +0x34, the body of ResetGraph: empties the queue,

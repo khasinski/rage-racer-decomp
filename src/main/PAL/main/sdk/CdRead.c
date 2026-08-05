@@ -17,7 +17,7 @@ long VSync(long mode);
 long CdStatus(void);
 long CdControlB(long arg0, void *arg1, long arg2);
 long CdReadRetry(long arg0);
-void CdReady(long arg0, long arg1) asm("func_8006A554");
+long CdReady(long arg0, long arg1);
 extern long g_CdReadCallback;
 extern u_char D_8007D7BC[];
 extern u_char D_8007D7BD[];

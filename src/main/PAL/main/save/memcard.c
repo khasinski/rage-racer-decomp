@@ -431,7 +431,7 @@ extern Rect g_SaveIconRect;
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf() asm("func_800632F0");
 void StoreImage(Rect *rect, void *data);
-void DrawSync(long mode) asm("func_800658FC");
+void DrawSync(long mode);
 
 void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 imageY) {
     u8 *blockReg;

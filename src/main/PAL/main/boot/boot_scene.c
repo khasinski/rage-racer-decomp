@@ -19,7 +19,7 @@ extern Matrix g_SceneColorMatrix;
 extern Matrix g_DefaultColorMatrix;
 extern Matrix g_SceneLightMatrix;
 extern Matrix g_DefaultLightMatrix;
-void func_800698B8(Matrix *arg0);
+void SetColorMatrix(void *m);
 extern s32 g_FrameSyncThreshold;
 extern s32 g_ImageBlockBuffer;
 extern s32 g_OptionLetterboxHeight;
@@ -127,7 +127,7 @@ void InstallSceneLighting(void);
 void InstallSceneLighting(void) {
     g_SceneColorMatrix = g_DefaultColorMatrix;
     g_SceneLightMatrix = g_DefaultLightMatrix;
-    func_800698B8(&g_SceneColorMatrix);
+    SetColorMatrix(&g_SceneColorMatrix);
     SetLightMatrix(&g_SceneLightMatrix);
     SetBackColor(0x20, 0x20, 0x20);
     SetFarColor(0, 0, 0);

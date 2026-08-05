@@ -22,7 +22,7 @@ extern s32 g_CdTrackEnded;
 extern CdlLOC g_CdTrackLoopPoint[];
 
 long CdControl(long com, void *param, long result);
-s32 func_8006A554(s32 arg0, void *arg1);
+long CdReady(long arg0, void *arg1);
 long CdPosToInt_Local(CdlLOC *loc);
 void StepCdTrackRequest(void);
 void StepCdPlayRequest(void);
@@ -183,7 +183,7 @@ void TickCdAudio(void) {
         StepCdTrackRequest();
     }
 
-    status = func_8006A554(1, &g_CdLocResult);
+    status = CdReady(1, &g_CdLocResult);
     if (status == 4) {
         if (g_SceneId == 0x1C) {
             g_CdTrackEnded = 1;

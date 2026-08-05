@@ -126,7 +126,8 @@ long CdControl(long com, void *param, long result);
 long CdControlF(long com, void *param);
 long CdControlB(long com, void *param, long result);
 long CdSync(long mode, long result);
-long CdReady(long mode, long result) asm("func_8006A554");
+/* PSY-Q: long CdReady(long mode, u_char *result); see CD_cw above. */
+long CdReady();
 /* Install a completion / data-ready callback; returns the previous one. */
 long CdSyncCallback(long callback);
 long CdReadyCallback(long callback);
@@ -178,9 +179,11 @@ void DecDCTinCallback(long callback);
 void DecDCToutCallback(long callback);
 
 long CD_init(long mode);
-long CD_sync(long mode, u_char *result) asm("func_8006B0D4");
-long CD_ready(long mode, u_char *result) asm("func_8006B354");
-long CD_cw(u_char command, u_char *params, u_char *result, long async) asm("func_8006B620");
+/* PSY-Q: long CD_sync(long mode, u_char *result); see CD_cw above. */
+long CD_sync();
+/* PSY-Q: long CD_ready(long mode, u_char *result); see CD_cw above. */
+long CD_ready();
+long CD_cw(u_char command, u_char *params, u_char *result, long async);
 
 
 #endif

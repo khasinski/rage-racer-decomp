@@ -19,7 +19,7 @@ void SetRotMatrix(void *m);
 void SetRotMatrix(void *m) { gte_SetRotMatrix(m); }
 void SetLightMatrix(void *m);
 void SetLightMatrix(void *m) { gte_SetLightMatrix(m); }
-void SetColorMatrix(void *m) asm("func_800698B8");
+void SetColorMatrix(void *m);
 void SetColorMatrix(void *m) { gte_SetColorMatrix(m); }
 void SetTransMatrix(void *m);
 void SetTransMatrix(void *m) { gte_SetTransMatrix(m); }
