@@ -3,8 +3,8 @@
 
 #define FAST_LOAD(offset)                              \
     do {                                               \
-        register s32 value;                  \
-        __asm__ volatile("lw $2, %1($8)"               \
+        s32 value;                                     \
+        __asm__ volatile("lw %0, %1(%2)"               \
                          : "=r"(value)                 \
                          : "i"(offset), "r"(v));       \
         out[(offset) / 4] = value;                     \
@@ -14,33 +14,33 @@
     do {                                               \
         register s32 value asm("$2");                  \
         __asm__ volatile(                              \
-            "lh    $3, %1($7)\n\t"                     \
-            "lw    $2, 0($8)\n\t"                      \
+            "lh    $3, %1(%5)\n\t"                     \
+            "lw    %0, 0(%4)\n\t"                      \
             "nop\n\t"                                  \
-            "mult  $3, $2\n\t"                         \
-            "lh    $4, %2($7)\n\t"                     \
-            "mflo  $2\n\t"                             \
-            "lw    $3, 4($8)\n\t"                      \
+            "mult  $3, %0\n\t"                         \
+            "lh    $4, %2(%5)\n\t"                     \
+            "mflo  %0\n\t"                             \
+            "lw    $3, 4(%4)\n\t"                      \
             "nop\n\t"                                  \
             "mult  $4, $3\n\t"                         \
-            "lh    $4, %3($7)\n\t"                     \
+            "lh    $4, %3(%5)\n\t"                     \
             "mflo  $5\n\t"                             \
-            "lw    $3, 8($8)\n\t"                      \
+            "lw    $3, 8(%4)\n\t"                      \
             "nop\n\t"                                  \
             "mult  $4, $3\n\t"                         \
-            "addu  $2, $2, $5\n\t"                     \
+            "addu  %0, %0, $5\n\t"                     \
             "mflo  $3\n\t"                             \
-            "addu  $2, $2, $3\n\t"                     \
-            "sra   $2, $2, 12"                         \
+            "addu  %0, %0, $3\n\t"                     \
+            "sra   %0, %0, 12"                         \
             : "=r"(value)                              \
-            : "i"((row) + 0), "i"((row) + 2), "i"((row) + 4), "r"(v) \
+            : "i"((row) + 0), "i"((row) + 2), "i"((row) + 4), "r"(v), "r"(m) \
             : "$3", "$4", "$5", "hi", "lo");         \
         out[(dst)] = value;                            \
     } while (0)
 
 void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out);
 void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) {
-    register s16 *m asm("$7") = mtx;
+    s16 *m = mtx;
     s32 *v = vec;
 
     if (*(s32 *)&m[0] == 0x1000 && m[2] == 0) {
