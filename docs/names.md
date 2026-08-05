@@ -5926,3 +5926,102 @@ the 26 GTE engine routines, the seven BIOS A0/B0 event stubs and
 word becomes a linker alias for it in `undefined_syms_manual.txt`
 (`ChangeClearRCnt = ChangeClearRCntStub;`), the way the BIOS stubs already
 were.
+
+## 39. The aliases are gone: what actually blocked them
+
+Section 38 is a snapshot of a state that no longer exists. When it was written
+51 addresses were still spelled in C, 31 of them under two or more names. As of
+this pass there are none: no `asm("func_XXXXXXXX")` and no `asm("D_XXXXXXXX")`
+anywhere in `src/` or `include/`, and every one of those 51 addresses is named
+exactly once, in `configs/PAL/sym.main.txt` or `configs/PAL/sym.bss.main.txt`.
+
+### 39a. The alias was never about the address
+
+The thing 38 kept calling "several names for one address" was really one
+question: what symbol does the *definition* emit? For all 43 function
+addresses the definition was in C, and it emitted `func_XXXXXXXX` because
+either its own prototype or a header's carried the alias. Every other
+declaration then had to name the address too, or the link would not resolve.
+
+Drop the alias from the definition and it emits its C name. Every other site
+can then say
+
+    void GameDrawSpriteWide(void *ot, s32 x, s32 y, ...) asm("DrawSprite");
+
+An `asm()` label may name any symbol; it does not have to be an address. The
+declared types at the call site are untouched, so the argument setup and the
+call are the same instructions — this is a symbol rename, and every object's
+`.text` stayed byte-identical through all 207 sites. The address is now free
+for symbol_addrs, which was the only thing the alias ever blocked.
+
+The same works for data: `extern s32 D_800126D0[] asm("g_SoundModes");` is the
+word view of a struct array, in the one unit that needs both views.
+
+### 39b. Where a real unification was possible, and how the header lies were found
+
+Four addresses did not need the alias trick at all, because the header's
+narrow signature was simply wrong. `DrawText8x8`, `DrawProportionalText`,
+`GameDrawProportionalTextShaded` and `GameQueueSprite` were declared in
+`game/render.h` with `s16`/`u8`/`u16` parameters while their definitions in
+`render/text.c` read four to nine full words. Nothing in the tree ever called
+them through the narrow declaration — every caller had invented a `<Name>Wide`
+sibling instead — so the narrow spelling was a guess that had never been
+tested. Widening the header to the body's real widths let eleven, eleven, four
+and twelve declarations collapse onto one name each.
+
+The test that separates the two cases is cheap and worth stating: **does any
+call site actually use the header's declaration?** If none does, the header is
+unconstrained and the definition decides. If some do, the header is load-bearing
+and the disagreeing sites need their own view.
+
+`GameQueueTexturedRect` is the counter-example that proves the rule the other
+way. Its definition in `queue_draw_mode_prim.c` really does take `s16`/`u8`,
+the header was right, and `race_hud_text.c` — reaching it through the inline
+`GameQueueTexturePacketWide` — builds byte-identically against the narrow
+declaration. Only `title_screen.c` hands it full words, and only that one site
+keeps a wide view.
+
+### 39c. cc1 2.6.3 dies on pointer/int at a call result, in both directions
+
+38c blamed the segfaults on "a pointer handed to a non-pointer parameter". That
+is not where they come from. Reduced to three lines:
+
+    u8 *F();
+    void g(void) { s32 next; next = F(); }        /* bus error in cc1 */
+
+and the mirror image, an `int`-returning declaration assigned to a pointer,
+dies the same way. Parameter conversions are fine. What crashes is the
+conversion on the *assignment of the call result*, and an explicit cast at that
+assignment avoids it and generates the identical instruction:
+
+    next = (s32)F();
+
+That is why `game/render.h` cannot declare one return type for
+`GameQueueSprite` and have every caller keep its own local: nine units hold the
+packet cursor in an `s32` and three hold it in a `u8 *`. Twenty call sites took
+the cast; the rest were already pointers.
+
+A separate and much dumber failure looks identical from the outside: a `*/`
+inside the text of a doc comment closes it early, and the declaration that
+follows lands inside the next comment. cc1 then segfaults at the header line
+rather than reporting a syntax error. If a header change makes cc1 die at the
+line you just edited, read the comment above it before believing the code.
+
+### 39d. Two names that were pointing at the wrong function
+
+`draw_memory_card_screen.c` declared `SetDrawMode` at `0x80017390`; that
+address is `QueueDrawModePrim` (`SetDrawMode` is `0x800666F4`). `frontend.c`
+declared `GameQueueLineWide` at `0x800173F4`, which is
+`GameQueueShadedTexturedRect`. Both are renamed. Neither was reachable as a bug
+— the alias made the link correct and the name wrong — which is exactly what a
+per-file alias hides and a single symbol_addrs entry cannot.
+
+### 39e. Two things the linker scripts had to follow
+
+`undefined_syms_manual.txt` defines two mid-function entry points relative to
+a symbol, and both symbols were address-spelled: they now read
+`.L800479F0_main = DrawLargeText + 0x98;` and
+`.L800635D0_main = LibcSprintf + 0x2E0;`. And a bss rename is not visible to
+the link until `make split` regenerates the bss labels — an incremental
+`make build` after renaming a `sym.bss.main.txt` entry fails with an undefined
+reference and says nothing about why.

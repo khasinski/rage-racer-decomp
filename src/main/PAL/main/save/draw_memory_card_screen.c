@@ -12,7 +12,7 @@ extern s32 *g_McMessageRows[];
 extern s16 g_McMessageColumnX[];
 void DrawSpriteString(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 GameQueueSprite(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 SetDrawMode(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
+s32 QueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 
 void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
@@ -101,9 +101,9 @@ void DrawMemoryCardMessage(s32 arg0) {
     delta = index - 0x10;
     if ((u32)delta < 2 || index == 0x12) {
         next = GameQueueSprite(base, next, x, y, 0x6C, 0x18, 0, delta * 0x18, 0x7F81);
-        next = SetDrawMode(base, next, 0x3F);
+        next = QueueDrawModePrimWide(base, next, 0x3F);
     } else {
-        next = SetDrawMode(base, next, 0x3D);
+        next = QueueDrawModePrimWide(base, next, 0x3D);
     }
     *(s32 *)0x1F800000 = next;
 }

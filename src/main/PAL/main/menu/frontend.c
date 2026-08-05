@@ -63,7 +63,7 @@ extern s32 g_ClassWinCount;
 
 void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSprite");
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
-void *GameQueueLineWide(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10) asm("GameQueueShadedTexturedRect");
+void *GameQueueShadedTexturedRectWide(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10) asm("GameQueueShadedTexturedRect");
 
 void UpdateTitleAttract(void) {
     s32 alpha;
@@ -115,7 +115,7 @@ void UpdateTitleAttract(void) {
     }
 
     next = QueueShadedSpriteNine(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
-    *(void **)scratch = GameQueueLineWide(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
+    *(void **)scratch = GameQueueShadedTexturedRectWide(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
 extern s32 g_TitleAttractTimer;
 extern s32 g_TitleExitTimer;
