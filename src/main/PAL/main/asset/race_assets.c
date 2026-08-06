@@ -7,8 +7,12 @@
 #include "game/menu.h"
 
 /*
- * Every `X + *(s32 *)(X + 4*k)` below is sub-block k of the loaded asset
- * pack's GameSceneAssetHeader offset table (game/asset.h).
+ * Sub-block k of the loaded asset pack, from its GameSceneAssetHeader offset
+ * table (game/asset.h). Only step 3's three audio sub-blocks use it: they are
+ * taken from one pointer that is then overwritten with the third of them, and
+ * spelling that out with a header pointer and three explicit offsets costs 42
+ * instructions. Everywhere else the header/offset spelling is used directly,
+ * which is what fmv_requests.c does for the same 11-entry track pack.
  */
 #define ASSET_SUB(base, k) ((base) + ((GameSceneAssetHeader *)(base))->offsets[k])
 

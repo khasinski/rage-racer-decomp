@@ -78,22 +78,29 @@ void UnrelocateModelBank(s32 *base, s32 offset) {
     }
 }
 
+/*
+ * Point the scratchpad model-bank cursor at one registered bank. The bank
+ * pointer is re-read from the table before each store because the stores go
+ * to the scratchpad, which cse has no reason to believe does not alias it.
+ * The two-step address (base into a local, then index it) is what gives
+ * retail's base-first addu; `&g_ModelBanks[index]` loses it.
+ */
 void SelectModelBank(s32 index) {
     s32 *entry;
-    s32 ptr;
-    s32 value;
+    s32 bank;
+    s32 count;
 
-    ptr = (s32)g_ModelBanks;
-    entry = (s32 *)((index * 4) + ptr);
-    value = *entry;
-    value = *(s32 *)value;
-    ptr = *entry;
-    SPAD_MODEL_TABLE1 = *(s32 *)(ptr + 4);
-    ptr = *entry;
-    SPAD_MODEL_NORMALS = *(s32 *)(ptr + 8);
-    ptr = *entry;
-    g_ModelBankCount = value;
-    SPAD_MODEL_MODELS = ptr + 0xC;
+    bank = (s32)g_ModelBanks;
+    entry = (s32 *)((index * 4) + bank);
+    count = *entry;
+    count = *(s32 *)count;
+    bank = *entry;
+    SPAD_MODEL_TABLE1 = *(s32 *)(bank + 4);
+    bank = *entry;
+    SPAD_MODEL_NORMALS = *(s32 *)(bank + 8);
+    bank = *entry;
+    g_ModelBankCount = count;
+    SPAD_MODEL_MODELS = bank + 0xC;
 }
 
 void RegisterCourseModels(s32 *base) {
