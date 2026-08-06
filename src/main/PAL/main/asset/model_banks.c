@@ -148,7 +148,6 @@ void RegisterCourseModels(s32 *base) {
     s32 i;
     s32 limit;
     s32 *item;
-    s32 value;
     s32 pad[2];
 
     (void)&pad;
@@ -161,15 +160,11 @@ void RegisterCourseModels(s32 *base) {
         limit = count;
         item = base + 3;
         do {
-            value = *ptr;
-            i++;
-            { s32 rel = value; value = (u8 *)base + rel; }
-            *ptr = value;
-            value = *item;
+            *ptr = (u8 *)base + *ptr;
+            *item = (u8 *)base + *item;
             ptr += 3;
-            { s32 rel = value; value = (u8 *)base + rel; }
-            *item = value;
             item += 3;
+            i++;
         } while (i < limit);
     }
 }

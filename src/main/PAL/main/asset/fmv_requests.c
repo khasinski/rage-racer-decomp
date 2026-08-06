@@ -93,23 +93,19 @@ void LoadTrackDataAssets(void) {
 }
 
 void BeginIntroFmv(void) {
-    s32 *ptr;
-    s32 value;
+    s32 sectors;
 
     BeginFmv();
 
-    ptr = (s32 *)&g_StreamCdEntries[0].size;
-    value = *ptr;
-    g_StreamLoc = ptr - 1;
-    g_StreamSectorCount = value;
-    D_8019C708 = value * 2;
+    sectors = g_StreamCdEntries[0].size;
+    g_StreamLoc = (s32 *)&g_StreamCdEntries[0];
+    g_StreamSectorCount = sectors;
+    D_8019C708 = sectors * 2;
 }
 
 void BeginClassFmv(void) {
-    s32 *base;
-    s32 offset;
     s32 index;
-    s32 value;
+    s32 sectors;
 
     BeginFmv();
 
@@ -119,26 +115,22 @@ void BeginClassFmv(void) {
         index = 1;
     }
 
-    base = (s32 *)g_StreamCdEntries;
     index += g_GrandPrixClass;
-    offset = index * 8;
-    value = g_StreamCdEntries[index].size;
-    g_StreamLoc = (s32 *)((u8 *)base + offset);
-    g_StreamSectorCount = value;
-    D_8019C708 = value * 2;
+    sectors = g_StreamCdEntries[index].size;
+    g_StreamLoc = (s32 *)&g_StreamCdEntries[index];
+    g_StreamSectorCount = sectors;
+    D_8019C708 = sectors * 2;
 }
 
 void BeginEndingFmv(void) {
-    s32 *ptr;
-    s32 value;
+    s32 sectors;
 
     BeginFmv();
 
-    ptr = (s32 *)&g_StreamCdEntries[10].size;
-    value = *ptr;
-    g_StreamLoc = ptr - 1;
-    g_StreamSectorCount = value;
-    D_8019C708 = value * 4;
+    sectors = g_StreamCdEntries[10].size;
+    g_StreamLoc = (s32 *)&g_StreamCdEntries[10];
+    g_StreamSectorCount = sectors;
+    D_8019C708 = sectors * 4;
 }
 
 void ServiceAssetLoad(void) {

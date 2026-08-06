@@ -42,13 +42,12 @@ void LoadCarSelectAssets(void) {
     GameSceneAssetHeader *header;
     GameSceneAssetHeader *imageHeader;
     GameCarModelAsset *model;
-    register GameCarEntry *entry asm("$2");
     s32 carIndex;
-    s32 indexOffset;
     s32 firstOffset;
     register s32 secondOffset asm("$4");
     s32 assetOffset;
     s32 modelPtr;
+    s32 relOffset;
 
     nextState = 2;
 
@@ -89,9 +88,7 @@ void LoadCarSelectAssets(void) {
         return;
     case 4:
             carIndex = g_PlayerCarIndex;
-            indexOffset = carIndex * 8;
-            entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-            assetOffset = GetCarAssetIndex(carIndex, entry->modelVariant) << 1;
+            assetOffset = GetCarAssetIndex(carIndex, g_CarTable[carIndex].modelVariant) << 1;
             carModelBase = g_CarModelBuffer;
 
             if (LoadAsset(assetOffset + 0xA, carModelBase) != 0) {
@@ -99,31 +96,21 @@ void LoadCarSelectAssets(void) {
                 SelectCarModelSlot(0);
 
                 model = g_CarModelAsset;
-                modelPtr = model->modelDataOffset;
-                {
-                    s32 rel = modelPtr;
-                    modelPtr = (s32)(carModelBase + rel);
-                }
+                relOffset = model->modelDataOffset;
+                modelPtr = (s32)(carModelBase + relOffset);
                 model->modelDataOffset = modelPtr;
                 RegisterModelBank((void *)modelPtr, 0);
 
                 model = g_CarModelAsset;
-                modelPtr = model->imageDataOffset;
-                {
-                    s32 rel = modelPtr;
-                    modelPtr = (s32)(carModelBase + rel);
-                }
+                relOffset = model->imageDataOffset;
+                modelPtr = (s32)(carModelBase + relOffset);
                 model->imageDataOffset = modelPtr;
                 SetCarImageSlot((void *)modelPtr, 0);
 
                 carIndex = g_PlayerCarIndex;
                 if (carIndex < 10) {
-                    indexOffset = carIndex * 8;
-                    entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-                    ApplyBodyColor1(entry->paintColor1, g_CarModelAsset->imageDataOffset);
-                    indexOffset = g_PlayerCarIndex * 8;
-                    entry = (GameCarEntry *)(indexOffset + (s32)g_CarTable);
-                    ApplyBodyColor2(entry->paintColor2, g_CarModelAsset->imageDataOffset);
+                    ApplyBodyColor1(g_CarTable[carIndex].paintColor1, g_CarModelAsset->imageDataOffset);
+                    ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2, g_CarModelAsset->imageDataOffset);
                 }
 
                 g_CarModelSlot = 0;
@@ -154,13 +141,11 @@ void LoadCarModelNow(s32 carIndex) {
 
 void LoadCarModel(s32 carIndex) {
     u8 *dst;
-    s32 carOffset;
     register s32 car asm("$17");
     s32 assetIndex;
 
     car = carIndex;
-    carOffset = car << 3;
-    assetIndex = (GetCarAssetIndex(car, ((GameCarEntry *)(carOffset + (s32)g_CarTable))->modelVariant) * 2) + 0xA;
+    assetIndex = (GetCarAssetIndex(car, g_CarTable[car].modelVariant) * 2) + 0xA;
 
     if (g_AssetLoadState == 1) {
         dst = g_CarModelBuffer;
@@ -170,36 +155,28 @@ void LoadCarModel(s32 carIndex) {
 
         if (LoadAsset(assetIndex, dst) != 0) {
             s32 addr;
+            s32 relOffset;
             u32 slot;
             register s32 paintable asm("$2");
-            u8 *carEntry;
 
             SetCarModelSlot(dst, g_CarModelSlot < 1);
-            addr = *(volatile s32 *)(dst + 0x20);
+            relOffset = *(volatile s32 *)(dst + 0x20);
             slot = g_CarModelSlot;
-            {
-                s32 rel = addr;
-                addr = (s32)dst + rel;
-            }
+            addr = (s32)dst + relOffset;
             slot = slot < 1;
             ((GameCarModelAsset *)dst)->modelDataOffset = addr;
             RegisterModelBank((void *)addr, slot);
-            addr = *(volatile s32 *)(dst + 0x24);
+            relOffset = *(volatile s32 *)(dst + 0x24);
             slot = g_CarModelSlot;
-            {
-                s32 rel = addr;
-                addr = (s32)dst + rel;
-            }
+            addr = (s32)dst + relOffset;
             slot = slot < 1;
             ((GameCarModelAsset *)dst)->imageDataOffset = addr;
             SetCarImageSlot((void *)addr, slot);
 
             paintable = car < 10;
             if (paintable != 0) {
-                carEntry = (u8 *)(carOffset + (s32)g_CarTable);
-                ApplyBodyColor1(((GameCarEntry *)carEntry)->paintColor1, ((GameCarModelAsset *)dst)->imageDataOffset);
-                carEntry = (u8 *)(carOffset + (s32)g_CarTable);
-                ApplyBodyColor2(((GameCarEntry *)carEntry)->paintColor2, ((GameCarModelAsset *)dst)->imageDataOffset);
+                ApplyBodyColor1(g_CarTable[car].paintColor1, ((GameCarModelAsset *)dst)->imageDataOffset);
+                ApplyBodyColor2(g_CarTable[car].paintColor2, ((GameCarModelAsset *)dst)->imageDataOffset);
             }
 
             g_AssetLoadState = 0;

@@ -38,31 +38,30 @@ void UploadImageBlock(void *asset) {
     }
 }
 
+/*
+ * Walk the chain of image blocks in an image asset. Each link is a word count
+ * followed by that many bytes of GameImageBlock records; a word <= 0 ends it.
+ *
+ * The jump into the loop is load-bearing, not decompiler residue: every plain
+ * `while` / `for (;;) { ...; if (x) break; }` spelling lets gcc 2.6.3's
+ * duplicate_loop_exit_test copy the test above the loop, which costs 12
+ * instructions retail does not have.
+ */
 void UploadImageAsset(void *asset) {
-    union {
-        s32 offset;
-        u8 *next;
-    } state;
     u8 *ptr;
+    s32 size;
 
     ptr = (u8 *)asset + 4;
     goto test;
 
-for (;;) {
-    state.offset = (u32)state.offset / 4;
-    state.offset <<= 2;
-    state.next = ptr + state.offset;
-    UploadImageBlock(ptr);
-    ptr = state.next;
-
-test:
-    state.offset = *(s32 *)ptr;
-    if (state.offset > 0) {
+    do {
+        u8 *next = ptr + (((u32)size >> 2) << 2);
+        UploadImageBlock(ptr);
+        ptr = next;
+    test:
+        size = *(s32 *)ptr;
         ptr += 4;
-        continue;
-    }
-break;
-}
+    } while (size > 0);
 }
 
 void StoreTeamLogoImage(void *dst) {

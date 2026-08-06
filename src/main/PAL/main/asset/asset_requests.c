@@ -22,8 +22,6 @@ extern void *g_AssetSubBlockPtr;
 void LoadBootAssets(void) {
     u8 *loaded;
     u8 *base;
-    register u8 *next asm("$2");
-    s32 nextState;
 
     switch (g_AssetLoadState) {
     case 1:
@@ -31,17 +29,15 @@ void LoadBootAssets(void) {
         loaded = (u8 *)LoadAsset(1, base);
         if (loaded != 0) {
             UploadLoadBufferImage();
-            next = loaded + (s32)base;
-            g_AssetBlockPtr = next;
+            g_AssetBlockPtr = loaded + (s32)base;
             g_AssetLoadState = 2;
         }
         break;
     case 2:
         loaded = (u8 *)LoadAsset(2, g_AssetBlockPtr);
         if (loaded != 0) {
-            nextState = 3;
-            next = g_AssetBlockPtr;
-            goto setNextBuffer;
+            g_AssetLoadState = 3;
+            g_AssetLoadCursor = loaded + (s32)g_AssetBlockPtr;
         }
         break;
     case 3:
@@ -59,14 +55,8 @@ void LoadBootAssets(void) {
         loaded = (u8 *)LoadAsset(4, g_AssetLoadCursor);
         if (loaded != 0) {
             InstallResourceData(g_AssetLoadCursor);
-            next = g_AssetLoadCursor;
-            __asm__ volatile("" : "=r"(next) : "0"(next));
-            nextState = 6;
-setNextBuffer:
-            g_AssetLoadState = nextState;
-            __asm__ volatile("" ::);
-            next = loaded + (s32)next;
-            g_AssetLoadCursor = next;
+            g_AssetLoadState = 6;
+            g_AssetLoadCursor = loaded + (s32)g_AssetLoadCursor;
         }
         break;
     case 6:
@@ -157,6 +147,7 @@ void LoadSelectBgmAssets(void) {
     s32 firstOffset;
     s32 secondOffset;
     s32 thirdOffset;
+    s32 relOffset;
 
     switch (g_AssetLoadState) {
     case 1:
@@ -168,12 +159,9 @@ void LoadSelectBgmAssets(void) {
             firstOffset = *(volatile s32 *)&header->offsets[0];
             thirdOffset = *(volatile s32 *)&header->offsets[2];
             g_AssetBlockPtr = (void *)((u8 *)header + firstOffset);
-            secondOffset = *(volatile s32 *)&header->offsets[1];
+            relOffset = *(volatile s32 *)&header->offsets[1];
             g_AssetLoadState = 0;
-            {
-                s32 rel = secondOffset;
-                secondOffset = (s32)header + rel;
-            }
+            secondOffset = (s32)header + relOffset;
             header = (GameSceneAssetHeader *)((u8 *)header + thirdOffset);
             g_AssetBlockPtr2 = (void *)secondOffset;
             g_AssetSubBlockPtr = header;
