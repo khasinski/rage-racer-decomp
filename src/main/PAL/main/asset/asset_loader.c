@@ -61,7 +61,7 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
         return 0;
 
     case 3:
-        if (CdRead((g_AssetCdEntries[assetIndex].size + 0x7FF) >> 11, dst, 0x80) != 0) {
+        if (CdRead((g_AssetCdEntries[assetIndex].size + CD_SECTOR_MASK) >> 11, dst, CdlModeSpeed) != 0) {
             g_CdLoadPhase = 4;
         }
         return 0;
@@ -121,7 +121,7 @@ void LoadDiscArchiveIndex(void) {
     sectors = 1;
     do {
         CdControl(2, &file.pos, 0);
-        CdRead(sectors, g_LoadBuffer, 0x80);
+        CdRead(sectors, g_LoadBuffer, CdlModeSpeed);
         do {
             status = CdReadSync(1, 0);
         } while (status > 0);

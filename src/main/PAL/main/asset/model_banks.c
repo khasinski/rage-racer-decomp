@@ -28,11 +28,11 @@ void InitRenderState(s32 otShift) {
     SPAD_FT4_B = 0x80;
     SPAD_FT4_G = 0x80;
     SPAD_FT4_R = 0x80;
-    SPAD_FT4_CODE = 0x2C;
+    SPAD_FT4_CODE = POLY_FT4_CODE;
     SPAD_GT4_B = 0xFF;
     SPAD_GT4_G = 0xFF;
     SPAD_GT4_R = 0xFF;
-    SPAD_GT4_CODE = 0x3C;
+    SPAD_GT4_CODE = POLY_GT4_CODE;
     SPAD_CLIP_X1 = 0x140;
     SPAD_CLIP_Y1 = 0xF0;
     g_VisibleCellMask = &D_8019C86C;

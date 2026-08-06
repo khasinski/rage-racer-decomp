@@ -65,7 +65,7 @@ void UploadImageAsset(void *asset) {
 }
 
 void StoreTeamLogoImage(void *dst) {
-    g_TeamLogoClut[0] = 0x8000;
+    g_TeamLogoClut[0] = CLUT_STP_BIT;
     LoadImage(&g_TeamLogoClutLoadRect, g_TeamLogoClut);
 
     if (g_GrandPrixSeries != 0) {

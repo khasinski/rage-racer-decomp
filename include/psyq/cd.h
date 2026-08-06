@@ -151,6 +151,23 @@ long CdReadyCallback(long callback);
  * polls it (mode 0 blocks, non-zero returns the sectors still outstanding).
  * The two lower entries are cdread.c's own statics, named descriptively here.
  */
+/*
+ * Sector geometry. A Mode 2 Form 1 data sector carries CD_SECTOR_SIZE bytes of
+ * user data, so a byte count becomes a sector count as
+ * `(n + CD_SECTOR_MASK) >> 11`, which is what LoadAsset does to the size it
+ * read out of the RAGE.BIN index.
+ */
+#define CD_SECTOR_SIZE 0x800
+#define CD_SECTOR_MASK 0x7FF
+
+/*
+ * CdlSetmode bit 7, double speed - the `mode` every CdRead call site in this
+ * tree passes. It is not a sector-length selector: CdRead itself decodes those
+ * with `mode & 0x30` (0x00 -> 0x200 words, 0x10 -> 0x246, 0x20 -> 0x249), and
+ * 0x80 leaves that field zero, i.e. plain 0x800-byte sectors at 2x.
+ */
+#define CdlModeSpeed 0x80
+
 long CdRead(long sectors, void *buf, long mode);
 long CdReadSync(long mode, long result);
 void CdReadBreak(void);

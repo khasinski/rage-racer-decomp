@@ -249,6 +249,26 @@ void SetLineG3(void *prim);   /* 0x58 */
 void SetLineF4(void *prim);   /* 0x4C */
 void SetLineG4(void *prim);   /* 0x5C */
 
+/*
+ * The same codes as constants, for the two the engine stamps itself rather than
+ * going through the Set* helper: InitRenderState seeds SPAD_FT4_CODE and
+ * SPAD_GT4_CODE, the fourth byte of the two packed GTE RGBC words the
+ * handwritten EmitPolyFT4Fog / EmitPolyGT4Fog emitters copy into each packet
+ * (see the SPAD_ block in game/render.h).
+ */
+#define POLY_FT4_CODE 0x2C
+#define POLY_GT4_CODE 0x3C
+
+/*
+ * Bit 15 of a 15-bit BGR555 pixel, i.e. of a CLUT entry: the STP / mask bit.
+ * The other fifteen bits are the colour, which is what the three field masks in
+ * menu/team_logo_transform.c isolate - 0xFFE0, 0xFC1F and 0x83FF each clear one
+ * 5-bit channel and each leave bit 15 alone. A CLUT entry of 0x0000 is fully
+ * transparent, so 0x8000 is the way to spell opaque black; StoreTeamLogoImage
+ * puts it in entry 0 for the duration of one StoreImage and clears it after.
+ */
+#define CLUT_STP_BIT 0x8000
+
 /* Primitive attribute bits (bit 1 = semi-transparency, bit 0 = shade-texture). */
 void SetSemiTrans(void *prim, long enabled);
 void SetShadeTex(void *prim, long enabled);
