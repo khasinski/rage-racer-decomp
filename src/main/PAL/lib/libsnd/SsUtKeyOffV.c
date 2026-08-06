@@ -19,10 +19,6 @@ long SsUtKeyOffV(long voice) {
     long offset;
     u_long activeLow;
     u_long activeHigh;
-    u_long maskLow;
-    u_long maskHigh;
-    u_long keyLow;
-    u_long keyHigh;
 
     if (g_SndUpdateLock != 1) {
         value = voice & 0xFFFF;
@@ -32,16 +28,7 @@ long SsUtKeyOffV(long voice) {
             channel = g_SndCurrentVoice;
             if ((channel & 0xFFFF) < 0x10) {
                 lowBits = 1 << (channel & 0xFFFF);
-                /* lowBits and highBits are both live across the join, both
-                 * referenced three times, and lowBits always dies first, so
-                 * on live length alone lowBits outranks highBits and takes
-                 * $6.  Retail has them the other way round.  The loop note
-                 * is the lever: gcc 2.6.3 counts a reference once per loop
-                 * depth, so wrapping this store takes highBits to four refs
-                 * and inverts the two global-allocno priorities. */
-                do {
-                    highBits = 0;
-                } while (0);
+                highBits = 0;
             } else {
                 lowBits = 0;
                 highBits = 1 << ((channel & 0xFFFF) - 0x10);
@@ -53,15 +40,17 @@ long SsUtKeyOffV(long voice) {
             activeHigh = D_801F2A0C;
             *(u_short *)&g_SndVoiceStatePitch[offset] = 0;
             *(u_short *)&g_SndVoiceState[offset] = 0;
-            maskLow = D_8009E670;
+            /* Both key registers first, then both key-on masks: the same
+             * four lines in the same order as SsUtKeyOff in sdk/, which is
+             * the other place this block is written out.  Interleaved per
+             * half instead, highBits' last reference lands nine insns past
+             * lowBits', its live length goes 19 -> 23, and the two swap
+             * registers. */
+            D_801F2A08 = lowBits | activeLow;
+            D_801F2A0C = highBits | activeHigh;
+            D_8009E670 &= ~D_801F2A08;
+            D_8009E674 &= ~D_801F2A0C;
             g_SndUpdateLock = 0;
-            keyLow = lowBits | activeLow;
-            D_801F2A08 = keyLow;
-            D_8009E670 = maskLow & ~keyLow;
-            maskHigh = D_8009E674;
-            keyHigh = highBits | activeHigh;
-            D_801F2A0C = keyHigh;
-            D_8009E674 = maskHigh & ~keyHigh;
             return 0;
         }
         g_SndUpdateLock = 0;
