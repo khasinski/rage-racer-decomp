@@ -6371,3 +6371,112 @@ The one case in this module that *is* blocked on the ban is
 from §42b's characterisation rather than re-derived here: `base[row * 8 + 7]`
 reaches all 52 instructions with the right registers, and the four remaining
 preheader instructions are only known to reorder under a backward `goto`.
+
+## 44. What the last `"memory"` barriers in `src/` are actually doing
+
+Sixteen `"memory"` clobbers survived the pass that emptied the other 28. They
+are not one thing; they fall into three families, and only the first has a
+source-level cure.
+
+### 44a. The alias family: `true_dependence`'s in-struct exemption
+
+gcc 2.6.3's `true_dependence`/`anti_dependence` end with
+
+    memrefs_conflict_p (...)
+    && ! (MEM_IN_STRUCT_P (mem) && rtx_addr_varies_p (mem)
+          && ! MEM_IN_STRUCT_P (x) && ! rtx_addr_varies_p (x))
+    && ! (MEM_IN_STRUCT_P (x) && rtx_addr_varies_p (x)
+          && ! MEM_IN_STRUCT_P (mem) && ! rtx_addr_varies_p (mem))
+
+so **a varying in-struct access never conflicts with a non-varying plain-global
+one**. That single clause is what every alias-family barrier was standing in
+for: a `g_Foo = ...` store (symbol address, no struct mark) followed by a
+`p->field` or `arr[i].field` read (register address, struct mark) is declared
+independent and the scheduler interleaves them.
+
+There are exactly two cures, and they work from opposite ends:
+
+**Give the store the struct mark.** In `MoveImage` (`sdk/LoadImage.c`) the
+three scalars `g_MoveImageSrc/Dst/Size` are the source xy, destination xy and
+packed size *fields of one five-word GPU move primitive* at 0x80094290 — which
+is why the code already sent `buf - 2`. Declared as one `GpuMovePacket`, the
+store to `.wh` is in-struct, the dependence against `gpu->sendList` is real,
+and the barrier goes. Same addresses, same bytes; only the relocation symbol
+changes.
+
+**Take the struct mark off the read.** In `UploadFmvSlice`
+(`fmv/open_fmv_stream.c`) the reads are `g_FmvStripRects[next].x/.y` and the
+stores are four plain globals, so there is no struct to unify them into.
+Reading both halves as `*(s16 *)((s32)g_FmvStripRects + rectOffset)` and
+`... + rectOffset + 2)` drops the mark on both and pins all four accesses in
+retail's order — and takes an existing `RAW()` with it. Note `RAW()` on both
+reads *also* works but leaves an unused 8-byte stack temp behind (`vars= 16`
+instead of 8); one shared offset expression does not.
+
+**`RAW()` is powerless when both sides are `symbol + register`.** In
+`func_80075420` (`sdk/SpuVmAutoVol.c`) the stores are
+`g_SndVoiceRegs[i]`-shaped and the read is `g_SndVoiceFlags[j]`. Two different
+global symbols with varying offsets never conflict in `memrefs_conflict_p` at
+all, so the exemption clause is not what is deciding anything and `RAW()` on
+either side changes nothing (measured: 21 either way). Likewise two
+`state->field` accesses off one register with different constant offsets are
+*provably* distinct, so no spelling of `state->pathIndex` can be made to depend
+on `state->x` (`track/draw_route_scenery.c`, measured 6 across nine spellings
+including a second pointer variable and fully raw stores).
+
+### 44b. The priority family: `sched.c` schedules by depth, deepest last
+
+`priority (insn)` in gcc 2.6.3's `sched.c` walks `LOG_LINKS`, i.e. the insn's
+*predecessors*: it is the depth from the top of the basic block, not the height
+to the bottom. `rank_for_schedule` sorts the ready list by descending priority
+and the block is emitted back to front, so **the deepest insn is placed last**,
+and equal priorities fall back to `INSN_LUID`, i.e. source order.
+
+Read it straight out of the compiler:
+
+    cc1 -quiet -mcpu=3000 -mgas -O2 -G0 -funsigned-char -dS mini.c -o /dev/null
+
+`mini.c.sched` prints `insn[N]: priority = P` per block in emitted order.
+
+Every remaining residue in this family is a one- or two-step priority gap that
+no source knob closes, because the gap is set by the *dependence chain that
+already exists*:
+
+| site | residue | what moves | priorities |
+|---|---|---|---|
+| `draw_route_scenery.c` barrier 2 | 6 | the `state->pathIndex` reload rises above four `state->` stores | reload 2, stores 3 |
+| `draw_route_scenery.c` barrier 3 | 8 | same shape, next field | — |
+| `SpuVmAutoVol.c` | 21 | the `g_SndVoiceFlags` read-modify-write rises above two register stores | load chain is `lbu`/`ori`/`sb`, stores have none |
+| `race_hud_text.c` | 2 | `move a1,sprite` (AddPrim's second argument) rises above three `sprite->t` stores | arg move is a true dep of the call (cost 1), the stores are only `REG_DEP_ANTI` on it (cost 0) |
+| `StCdInterrupt.c` barrier 2 | 2 | `andi v0,v0,0xffff` rises above the `g_StCurrentSector` clear | — |
+
+Statement order inside the block is inert for all of them, as §43b already
+found: `reg_live_length` and `INSN_LUID` only break exact priority ties, and
+these are not ties. Nine spellings were measured on `draw_route_scenery`, four
+on `SpuVmAutoVol`, three on `StCdInterrupt`; every one scored identically.
+
+### 44c. The delay-slot family: only `volatile` keeps a store out
+
+`StUnSetRing` (`sdk/CdRead2.c`) is four instructions out, and all four are one
+decision: `sb zero,0(v0)` is pulled into `jal ExitCriticalSection`'s delay
+slot, where retail has a `nop`.
+
+Two facts bound the search. First, a *symbol* store (`sb $0,g1`) is a two-word
+assembler macro and can never fill a delay slot, which is why the pattern looks
+rare; a *register-indirect* store is one word and always fills. Second, of the
+twenty places in retail where a one-word register-indirect store sits in front
+of a `jal` with an empty slot, every single one is a `volatile` store —
+`*g_OtcDmaChcr = 0x11000002` in `Gpu_ClearOTagDma`, `*g_ComDelayReg = 0x1325`
+in `CD_flush`, `*mask = pending` in `StartKernelInterrupts`. A five-variant
+`mini.c` sweep (constant vs loaded value, `p[0]` vs `*p`, reordered, extra
+trailing store) reproduces this exactly: only the `volatile` spelling leaves
+the slot empty.
+
+The two pointers involved, `D_80099360` and `D_8009936C`, are initialised in
+`.data` to 0x1F801800 and 0x1F801803 — the CD-ROM index and response registers,
+the same MMIO that `g_CdReg0` and `g_CdReg3` already point at, and those two
+are already declared `extern volatile u_char *` in `include/psyq/cd.h`. So the
+one known cure here is a `volatile` that is arguably a type correction rather
+than a crutch. It has not been applied: added `volatile` is on the ban list,
+and this is the one barrier in the set whose only known lever is a banned
+construct.
