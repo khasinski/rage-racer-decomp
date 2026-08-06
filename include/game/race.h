@@ -218,6 +218,14 @@ extern s32 g_TimeRecordTimes;
 extern s16 g_TrackZoneCode;
 extern s32 g_WaypointSpawnCooldown;
 
+/*
+ * None of the Draw* functions below draw. Each one packs primitives at the
+ * scratchpad cursor and links them into an ordering table; the GPU is not
+ * touched until boot/main_loop.c calls DrawOTag once per frame. That holds
+ * for the whole family, render.h's DrawSprite / DrawLine / DrawSolidRect
+ * included, which is why they are not spelled Queue* - the queueing is the
+ * convention, not the exception.
+ */
 void DrawFlybyScenery(void);
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut);
 void DrawLostRaceCaption(s32 level);
