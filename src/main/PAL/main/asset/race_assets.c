@@ -96,7 +96,7 @@ void LoadRaceAssets(void) {
         s32 classBase;
         dst = g_AssetLoadCursor;
         courseOffset = g_CourseIndex * 2;
-        classBase = (g_GrandPrixClass * 8) + 0x57;
+        classBase = (g_GrandPrixClass * 8) + ASSET_TRACK_1ST_BASE;
         if (LoadAsset(courseOffset + classBase, dst) != 0) {
             GameSceneAssetHeader *pack;
             s32 offset;
@@ -125,7 +125,7 @@ void LoadRaceAssets(void) {
             UploadImageAsset(g_AssetSubBlockPtr);
             ResetTrackTextureSwap();
             g_AssetLoadState = 6;
-            g_AssetLoadCursor = g_AssetLoadCursor + 0x38000;
+            g_AssetLoadCursor = g_AssetLoadCursor + TRACK_TEXTURE_SHADOW_SIZE;
         }
         break;
     }
@@ -133,7 +133,7 @@ void LoadRaceAssets(void) {
         u8 *dst;
         s32 courseOffset;
         /* The last crutch in this directory. Retail computes this sum in v0
-         * and adds the 0x58 into a0; gcc 2.6.3 ties the sum straight into a0,
+         * and adds the 0x58 (ASSET_TRACK_2ND_BASE) into a0; gcc 2.6.3 ties the sum straight into a0,
          * which is the same instructions in different registers, 16 of them.
          * Ten source shapes give the identical 16 (declaration order, dst
          * hoisted late, the constant folded into either term or added last,
@@ -144,7 +144,7 @@ void LoadRaceAssets(void) {
         dst = g_AssetLoadCursor;
         courseOffset = g_CourseIndex * 2;
         assetIndex = (g_GrandPrixClass * 8) + courseOffset;
-        if (LoadAsset(assetIndex + 0x58, dst) != 0) {
+        if (LoadAsset(assetIndex + ASSET_TRACK_2ND_BASE, dst) != 0) {
             GameSceneAssetHeader *header;
             s32 offset;
 
@@ -241,7 +241,7 @@ void LoadGrandPrixScreen(void) {
 
     if (g_AssetLoadState == 1) {
         offset = g_GrandPrixSeries * 6;
-        base = g_GrandPrixClass + 0x4A;
+        base = g_GrandPrixClass + ASSET_ROUND_SCREEN_BASE;
         loaded = LoadAsset((s32)(offset + base), g_ImageBlockBuffer);
         if (loaded != 0) {
             g_AssetLoadState = 0;
@@ -269,7 +269,7 @@ void LoadCourseAssets(void) {
 
     if (g_AssetLoadState == 1) {
         s32 courseOffset = g_CourseIndex * 2;
-        s32 classBase = (g_GrandPrixClass * 8) + 0x57;
+        s32 classBase = (g_GrandPrixClass * 8) + ASSET_TRACK_1ST_BASE;
 
         loaded = LoadAsset((s32)(courseOffset + classBase), g_AssetBase);
         if (loaded != 0) {

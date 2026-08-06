@@ -71,7 +71,7 @@ void LoadCarSelectAssets(void) {
 
                 g_AssetLoadState = 4;
                 g_CarModelBuffer = g_AssetBlockPtr;
-                g_ImageBlockBuffer = g_AssetBlockPtr + 0x40000;
+                g_ImageBlockBuffer = g_AssetBlockPtr + CAR_MODEL_BUFFER_SIZE;
             }
         return;
     case 4:
@@ -137,7 +137,7 @@ void LoadCarModel(s32 carIndex) {
     if (g_AssetLoadState == 1) {
         ptr = g_CarModelBuffer;
         if (g_CarModelSlot == 0) {
-            ptr += 0x20000;
+            ptr += CAR_MODEL_SLOT_SIZE;
         }
 
         if (LoadAsset(assetId, ptr) != 0) {

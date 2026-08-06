@@ -15,7 +15,7 @@ void LoadTrackDataAssets(void) {
     case 1:
         dst = g_AssetLoadCursor;
         offset = g_CourseIndex * 2;
-        if (LoadAsset((g_GrandPrixClass * 8) + offset + 0x58, dst) != 0) {
+        if (LoadAsset((g_GrandPrixClass * 8) + offset + ASSET_TRACK_2ND_BASE, dst) != 0) {
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[0];
             g_AssetBlockPtr = (u8 *)header + offset;

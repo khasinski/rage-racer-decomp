@@ -26,6 +26,24 @@ extern u8 *g_ImageBlockBuffer;
  */
 extern char *g_AssetPaths[];
 
+/*
+ * Index of the first entry of each variable-size family in that table. Read off
+ * g_AssetPaths itself (asm/PAL/main/data/main/6BE64.data.s, resolved against the
+ * string blob at D_8001008C) and cross-checked against the 135-entry RAGE.BIN
+ * index on the retail PAL disc; see docs/names.md 45.
+ *
+ * ROUND_SCREEN: [0x4A] = "\DATA\GP0.TMS". Six screens per series, the sixth
+ * being GP10 / GP11, so LoadGrandPrixScreen wants base + series * 6 + class.
+ *
+ * TRACK_1ST / TRACK_2ND: [0x57] = "\PACK\BIG1.1ST", [0x58] its ".2ND" sibling.
+ * Four courses (BIG, MID, HI, OVAL) x two packs = eight entries per class, so
+ * both are indexed base + class * 8 + course * 2. Six classes fill [0x57..0x86],
+ * which is exactly the end of the table.
+ */
+#define ASSET_ROUND_SCREEN_BASE 0x4A
+#define ASSET_TRACK_1ST_BASE    0x57
+#define ASSET_TRACK_2ND_BASE    0x58
+
 /* Load asset assetIndex into dst; returns loaded size/status. */
 s32 LoadAsset(s32 assetIndex, void *dst);
 
@@ -78,12 +96,33 @@ typedef struct GameSceneAssetHeader {
 
 /*
  * Asset-region pointers. All three address the load region in bytes: they are
- * advanced by byte counts (a load's returned size, 0x38000, g_SharedAssetWord0)
- * and by offsets read out of the pack that happens to sit there, so u8 * is the
- * type, not the decompiler's default. A pack header is a view taken of the
- * bytes at the pointer, spelled `(GameSceneAssetHeader *)cursor` where a file
- * wants one; that is a pointer-value cast and costs nothing.
+ * advanced by byte counts (a load's returned size, TRACK_TEXTURE_SHADOW_SIZE,
+ * g_SharedAssetWord0) and by offsets read out of the pack that happens to sit
+ * there, so u8 * is the type, not the decompiler's default. A pack header is a
+ * view taken of the bytes at the pointer, spelled `(GameSceneAssetHeader *)cursor`
+ * where a file wants one; that is a pointer-value cast and costs nothing.
  */
+
+/*
+ * Byte size of the track-texture shadow copy StoreTeamLogoImage leaves at the
+ * cursor, and hence what the cursor must skip before the .2ND pack is loaded
+ * behind the .1ST. It is g_TrackTextureRect measured out: that rect is
+ * {x 0x240, y 0x100, w 0x1C0, h 0x100} (asm/PAL/main/data/main/6BE64.data.s
+ * 8007C710), and 0x1C0 * 0x100 16-bit pixels * 2 bytes = 0x38000 exactly.
+ * Not a pack size - the largest .1ST on the disc is 0xB5830.
+ */
+#define TRACK_TEXTURE_SHADOW_SIZE 0x38000
+
+/*
+ * The showroom's double-buffered car-model slot. LoadCarModel /
+ * LoadUpgradedCarModel load into g_CarModelBuffer or that plus one stride, so
+ * the incoming model never lands on the one still being drawn; the buffer is
+ * therefore two strides long, which is where g_ImageBlockBuffer starts.
+ * The stride is generous rather than tight: the largest CAR_xx.1ST on the
+ * retail PAL disc is 0xD4A0 (see docs/names.md 45).
+ */
+#define CAR_MODEL_SLOT_SIZE   0x20000
+#define CAR_MODEL_BUFFER_SIZE 0x40000
 
 /* Base of the resident asset block; sub-block n is base + base->offsets[n]. */
 extern u8 *g_AssetBase;

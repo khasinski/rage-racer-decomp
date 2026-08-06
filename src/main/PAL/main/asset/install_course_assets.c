@@ -29,7 +29,7 @@ void InstallCourseAssets(void) {
     g_TrackTextureShadow = g_AssetBase;
     UploadImageAsset(g_AssetSubBlockPtr);
     ResetTrackTextureSwap();
-    g_AssetLoadCursor = g_AssetBase + 0x38000;
+    g_AssetLoadCursor = g_AssetBase + TRACK_TEXTURE_SHADOW_SIZE;
 }
 
 s32 RequestTrackDataAssets(void) {
