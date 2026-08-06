@@ -6601,3 +6601,153 @@ one known cure here is a `volatile` that is arguably a type correction rather
 than a crutch. It has not been applied: added `volatile` is on the ban list,
 and this is the one barrier in the set whose only known lever is a banned
 construct.
+
+## 45. The magic numbers in `src/main/PAL/main/asset/`
+
+`grep -rn '0x[0-9A-Fa-f]\{2,\}' src/main/PAL/main/asset/` returns 29 lines over
+20 distinct values. Twenty of those sites now carry names, covering 15 distinct
+values plus one literal that turned out to be an address rather than a constant.
+The other nine sites, four values, are deliberately still bare - see 45f.
+
+Substituting a `#define` of the same value cannot move codegen, so nothing here
+was a matching exercise; the whole risk is that a *name* is wrong, and a wrong
+name is worse than a bare number because it reads as settled and nothing later
+invites checking it. Each of the four commits was still put through the full
+`make split && rm -rf build/PAL && make check` and each came back with one
+`main.exe: OK` and no errors - which is what catches a mistyped value.
+
+### 45a. `g_AssetPaths` resolved, which settles every asset-index base
+
+The pointer table at `asm/PAL/main/data/main/6BE64.data.s` (`dlabel
+g_AssetPaths`, 135 words) is stored back-to-front: entry 0 is
+`D_8001008C + 0xA40` and entry 134 is `D_8001008C + 0x10`. Resolving each word
+against the string blob in `000800_main.rodata.s`, with `D_8001008C` at
+`0x8001008C`, gives the whole table:
+
+| index | contents |
+|---|---|
+| `0x00..0x09` | `LOGO.TMS`, `TITLE.TMS`, `RG3.VH`, `RG3.VB`, `RES.DAT`, `CAR.TMS`, `SAVE.TMS`, `SELBGM.BIN`, `SELECT.BIN`, `OPTION.BIN` |
+| `0x0A..0x49` | 32 cars x `CAR_xx.1ST` then `CAR_xx.2ND`, so car n is `0x0A + n * 2` |
+| `0x4A..0x55` | `GP0..GP4`, `GP10`, then `GP5..GP9`, `GP11` - six per series |
+| `0x56` | `VOICE.BIN` |
+| `0x57..0x86` | six classes x (`BIG`, `MID`, `HI`, `OVAL`) x (`.1ST`, `.2ND`) |
+
+That fixes the three bases the code adds to, and it also confirms the strides
+the call sites were already using without comment. `LoadGrandPrixScreen` wants
+`series * 6 + class + ASSET_ROUND_SCREEN_BASE` because there are six round
+screens per series and the sixth is the out-of-sequence `GP10` / `GP11`. The
+track loads want `class * 8 + course * 2 + ASSET_TRACK_1ST_BASE` because four
+courses at two packs each is eight entries per class; six classes of eight from
+`0x57` land on `0x86`, which is exactly the last entry of the table.
+
+The car-pack base `0x0A` and its `.2ND` sibling `0x0B` are the same family and
+the same evidence, but they are written `0xA` and `11` and so fall outside the
+grep above. They were left alone rather than named on their own, because naming
+them and not the fixed indices `1`..`9` in the same files would be the worse
+kind of half-consistency. `game/asset.h` documents both ranges in prose already.
+
+### 45b. The disc index, read directly
+
+The retail PAL disc parses as plain ISO 9660: `RAGE.BIN;1` at LBA 41749. Its
+first sector is the 135-entry `(position, size)` index `LoadDiscArchiveIndex`
+reads, so every asset's real size is available statically, without an emulator.
+Two constants are checked against it.
+
+The largest `CAR_xx.1ST` is `0xD4A0` and the largest `CAR_xx.2ND` is `0x13EF4`,
+both comfortably inside `CAR_MODEL_SLOT_SIZE` (`0x20000`). So the showroom's
+double-buffer stride is a generous round slot, not a tight fit - worth saying,
+because the natural assumption is that a stride like that was measured off the
+data and would break if an asset grew.
+
+The same read *disproves* the obvious reading of `0x38000`. It is not the size
+of a course `.1ST` pack: the smallest such pack on the disc is `0x9CCE0` and
+the largest `0xB5830`, three times `0x38000`. See 45c.
+
+### 45c. `0x38000` is a rectangle, not a pack
+
+`LoadRaceAssets` step 5 and `InstallCourseAssets` both end the same way - they
+call `StoreTeamLogoImage(cursor)`, set `g_TrackTextureShadow = cursor`, and then
+advance the cursor by `0x38000` before the `.2ND` pack is loaded behind it. The
+byte count is therefore whatever `StoreTeamLogoImage` leaves at the cursor, and
+that is one `StoreImage(&g_TrackTextureRect, dst)`.
+
+`g_TrackTextureRect` is at `0x8007C710` and reads `.word 0x01000240,
+0x010001C0`, i.e. `{x 0x240, y 0x100, w 0x1C0, h 0x100}`. A `StoreImage` moves
+16-bit pixels, so `0x1C0 * 0x100 * 2 = 0x38000` exactly. Hence
+`TRACK_TEXTURE_SHADOW_SIZE`, which says what the cursor is skipping over rather
+than implying a region budget.
+
+### 45d. The terrain sizes are read off the indexing, not the data
+
+`InstallTerrainCellData` steps its sub-block pointer by `0x800` and then
+`0x1000`. Both are settled by `track/visible_cells.c`:
+
+* `GetCellRegion` reads `g_TerrainCellGrid[y * 32 + x]`, a `u16` per cell over a
+  32x32 grid - `32 * 32 * 2 = 0x800`.
+* `IsCellVisibleFromRegion` reads `*(u32 *)(base + (y << 7) + (x << 2))` and
+  tests bit `region`. The `<< 7` row stride is 32 `u32` entries, so the table is
+  32 rows of 32 words - `32 * 32 * 4 = 0x1000`.
+
+The second also caps region ids at 32, even though the grid word carries the
+region in its top six bits and `GetCellRegion`'s `>> 10` could return 63.
+
+Note the trap this removes: `0x800` here is *not* the CD sector size, which is
+the first thing that value looks like in a file that also does disc work.
+
+### 45e. `0x8019C9A8` was never a constant
+
+`SetTrackCameraTable` was writing through a literal address.
+`configs/PAL/sym.bss.main.txt:386` gives `g_CamRow = 0x8019C9A8`, and four other
+files in `render/`, `menu/` and `race/` already `extern` that symbol - each with
+its own pointee type, which is why `asset_loader.c` declares its own `void *`
+view rather than a shared one (the pattern of 38a).
+
+### 45f. What was left bare, and why
+
+`0x3F0` and `0xE2`, the destination of
+`MoveImage(&g_TeamLogoClutMoveRect, 0x3F0, 0xE2)`. The source rect is
+`{x 0x3F0, y 0xEC, w 0x10, h 0x01}`, so this copies a 16-entry CLUT ten rows up
+inside the same 16-pixel column at the right edge of VRAM, and only when
+`g_GrandPrixSeries != 0`. That much is fact. What is *at* rows 0xE2 and 0xEC is
+not: no CLUT id built from either coordinate (`0x38BF`, `0x3B3F`) appears
+anywhere in code or data, because track CLUT ids are assembled at runtime from
+the low ten bits of the terrain grid word. Naming the pair on the strength of
+the surrounding function name alone would be inventing the fact that matters.
+
+`0x10` in `InstallCourseAssets`, in `*(s32 *)(base + 0x10)`. This is
+`GameSceneAssetHeader.offsets[4]`, and the honest fix is the struct member, not
+a constant - but its neighbour on the line above is `+ 0xC` for `offsets[3]`,
+which the grep does not even see. A `#define` for one of a pair of adjacent
+struct offsets would be noise.
+
+`0x80` and `0xFF` in `InitRenderState`, the RGB triples seeded into
+`SPAD_FT4_R/G/B` and `SPAD_GT4_R/G/B`. (`0x80` is the one value in this set that
+is named in one role and bare in another: as `CdRead`'s mode argument it is
+`CdlModeSpeed`, and here it is not.) The tempting name for `0x80` is
+"texture-modulation neutral", which is a real PS1 fact and the wrong one here:
+`game/render.h` records that these two packed words are loaded whole with
+`lwc2` into GTE register 6, so they are RGBC *inputs to the depth-cue*, not GPU
+vertex colours. `0x80` and `0xFF` are then just two base intensities picked per
+emitter, and nothing available says why. The fourth byte of each word is a
+different matter and is named - see `POLY_FT4_CODE` / `POLY_GT4_CODE`.
+
+### 45g. Where the names live
+
+| value | name | header |
+|---|---|---|
+| `0x4A` | `ASSET_ROUND_SCREEN_BASE` | `game/asset.h` |
+| `0x57` | `ASSET_TRACK_1ST_BASE` | `game/asset.h` |
+| `0x58` | `ASSET_TRACK_2ND_BASE` | `game/asset.h` |
+| `0x38000` | `TRACK_TEXTURE_SHADOW_SIZE` | `game/asset.h` |
+| `0x20000` | `CAR_MODEL_SLOT_SIZE` | `game/asset.h` |
+| `0x40000` | `CAR_MODEL_BUFFER_SIZE` | `game/asset.h` |
+| `0x7FF` | `CD_SECTOR_MASK` (with `CD_SECTOR_SIZE`) | `psyq/cd.h` |
+| `0x80` | `CdlModeSpeed` | `psyq/cd.h` |
+| `0x2C` | `POLY_FT4_CODE` | `psyq/gpu.h` |
+| `0x3C` | `POLY_GT4_CODE` | `psyq/gpu.h` |
+| `0x8000` | `CLUT_STP_BIT` | `psyq/gpu.h` |
+| `0x140` | `SCREEN_WIDTH` | `game/render.h` |
+| `0xF0` | `SCREEN_HEIGHT` | `game/render.h` |
+| `0x800` | `TERRAIN_CELL_GRID_SIZE` | `game/track.h` |
+| `0x1000` | `CELL_VISIBILITY_TABLE_SIZE` | `game/track.h` |
+| `0x8019C9A8` | `g_CamRow` (a symbol, not a constant) | `configs/PAL/sym.bss.main.txt` |
