@@ -41,16 +41,16 @@ extern ShuttlePath g_ShuttlePathPoints[];
 /* Byte-offset views. These stay macros because the retail code keeps the
  * scaled index in a register and re-derives the address at every field; a
  * pointer variable would let the compiler hold the base instead. RAW() is
- * required on each read: a plain member access is marked as living in an
- * aggregate, which stops it aliasing the neighbouring state-> loads and
- * changes what the surrounding barriers do -- see common.h. */
+ * required on the reads that feed the state-> block below: there both sides
+ * are in-aggregate and varying, so a plain member access stops the load
+ * aliasing the neighbouring state-> stores and changes what the surrounding
+ * barriers do -- see common.h. The reads that feed g_ShuttleScenery[1] need
+ * no RAW, because that store carries the aggregate mark itself. */
 #define PATH(byteOffset) (*(ShuttlePath *)((u8 *)g_ShuttlePathPoints + (byteOffset)))
 #define ANGLES(byteOffset) (*(SVec *)((u8 *)g_ShuttlePathAngles + (byteOffset)))
 
 void InitShuttleScenery(void) {
     GameShuttleScenery *state;
-    s32 *src;
-    register s32 *dst asm("$4");
     s32 index;
     register s32 value asm("$2");
     register s32 v1 asm("$3");
@@ -60,33 +60,22 @@ void InitShuttleScenery(void) {
 
     state = &g_ShuttleScenery[0];
     if ((g_CourseIndex & 3) == 2) {
-        g_Shuttle1PathIndex = 2;
-        asm("" ::: "memory");
-        src = g_ShuttlePath2Points;
-        dst = &g_Shuttle1X;
-        asm("" : "=r"(src), "=r"(dst) : "0"(src), "1"(dst));
-        value = src[0];
-        v1 = src[1];
-        dst[0] = value;
-        dst[1] = v1;
-        value = src[2];
-        v1 = src[3];
-        dst[2] = value;
-        dst[3] = v1;
+        g_ShuttleScenery[1].pathIndex = 2;
+        *(Vec4 *)&g_ShuttleScenery[1].x = *(Vec4 *)g_ShuttlePath2Points;
 
         asm(".globl func_8003F1D0\nfunc_8003F1D0 = InitShuttleScenery + 0xD8");
-        index = g_Shuttle1PathIndex;
+        index = g_ShuttleScenery[1].pathIndex;
         v1 = index * 8;
-        g_Shuttle1AngleX = RAW(ANGLES(v1).vx);
-        g_Shuttle1AngleY = RAW(ANGLES(v1).vy);
-        value = RAW(ANGLES(v1).vz);
+        g_ShuttleScenery[1].angleX = ANGLES(v1).vx;
+        g_ShuttleScenery[1].angleY = ANGLES(v1).vy;
+        value = ANGLES(v1).vz;
         index <<= 1;
-        g_Shuttle1StartEndpoint = 0;
-        g_Shuttle1TravelStep = 0;
-        g_Shuttle1AngleZ = value;
+        g_ShuttleScenery[1].startEndpoint = 0;
+        g_ShuttleScenery[1].travelStep = 0;
+        g_ShuttleScenery[1].angleZ = value;
         v1 = *(s16 *)((u8 *)g_ShuttlePathDwellMax + index);
         state->pathIndex = 1;
-        g_Shuttle1DwellCounter = v1;
+        g_ShuttleScenery[1].dwellCounter = v1;
     } else {
 
     state->pathIndex = 0;

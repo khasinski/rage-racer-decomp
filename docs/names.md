@@ -3325,18 +3325,82 @@ side by side with a comment saying so.
   `PollMemoryCardHwEvent`'s frame grows from 24 to 32 bytes. The eight
   scalars stay, with the array layout and the index-plus-one return convention
   written at the declaration.
-* **`g_Shuttle1*` cannot become `g_ShuttleScenery[1].field`** in
-  `track/draw_route_scenery.c`, although `GameShuttleScenery` is already
-  typed and `UpdateShuttleScenery` indexes the array happily. As member
-  references the loads and stores get `MEM_IN_STRUCT_P`, stop aliasing the
-  `g_ShuttlePath*` table reads interleaved with them, and gcc hoists one base
-  register for the block: 0x34-relative offsets (52, 60, 64, 66, 84, 88, 92)
-  appear where retail has separate `%hi`/`%lo` pairs, and the branch layout
-  moves with it. The eleven symbols stay, with their offsets documented.
+* ~~**`g_Shuttle1*` cannot become `g_ShuttleScenery[1].field`**~~ **-- wrong,
+  see 20d.** They can, and did. The base register that made this look
+  impossible was not caused by the member references at all; it was the
+  four-word copy at the top of the block, which retail writes as one vector
+  assignment.
 
-In all three cases the declarations now say, at the declaration, which object
-the scalars are fields of and at what offset, so a reader gets the structure
-even though the compiler would not take it.
+In the first two cases the declarations now say, at the declaration, which
+object the scalars are fields of and at what offset, so a reader gets the
+structure even though the compiler would not take it.
+
+### 20d. The base register was the vector copy, not the member references
+
+`la reg,sym` followed by stores at 0, 4, 8, 12 off it is not four global
+stores that happen to share a base. It is what gcc 2.6.3's `move_by_pieces`
+emits for a **whole-struct assignment**, and it comes out of `expand`, before
+any of the passes that a member reference could influence. Three places in
+`track/` had it faked with an explicit `dst = &g_Foo`, a register pin on
+`dst`, pins on the loaded words, and empty `asm volatile` fences on both
+sides:
+
+| site | retail | was faked with |
+|---|---|---|
+| `SeedRouteScenery` | `la t0,0x801E4340` + 4 stores | 3 pins, 2 fences |
+| `UpdateRouteScenery` | same block | 2 pins, 2 fences |
+| `InitShuttleScenery` | `la a1,g_ShuttlePath2Points`, `la a0,0x801E4FFC` | 2 pins, 1 fence |
+
+Spelled `*(Vec4 *)&dst = *(Vec4 *)src` all three are byte-exact with none of
+it, and the interleave falls out for free: with both sides aggregates the
+loads batch ahead of the stores exactly as retail has them.
+
+Once `InitShuttleScenery`'s copy is a vector assignment, the rest of 20b's
+objection evaporates. `g_Shuttle1DwellCounter`..`g_Shuttle1AngleZ` are now
+`g_ShuttleScenery[1].field`, the eight duplicate symbols are gone from
+`sym.bss.main.txt`, and **three `RAW()`s and a `"memory"` barrier went with
+them**: the seeds `g_ShuttleScenery[1].angleX/Y/Z = ANGLES(v1).v*` no longer
+need `RAW()` on the read, because the store now carries the aggregate mark
+itself and 44a's exemption no longer fires.
+
+The three `RAW()`s and two barriers in the *second* half of the function are
+untouched -- there both sides are in-aggregate and varying, which is a
+different mechanism (44b), and all five were re-measured after the change.
+
+#### What the rule actually is, and what it costs
+
+A repeated in-aggregate address gets a base register; a repeated plain-global
+address does not. Measured on 2.6.3 directly:
+
+    extern LVec V; extern s32 px, py, pz;
+    void fS(void){ V.x = h(); V.y = h(); V.z = h(); g(V.x); g(V.z); }
+    void fP(void){ px = h(); py = h(); pz = h(); g(px); g(pz); }
+
+`fS` emits `la $16,V` and `0($16)`; `fP` emits `lui`/`%lo` at every access.
+It is not about offset zero -- a struct with a leading pad word behaves the
+same at offset 4 -- and it is at most one such base per function: in `fS`,
+`V.z` is also touched twice and still gets `%hi`/`%lo`.
+
+So retail tells you which spelling it used. **If a global is touched more than
+once in one block and retail re-materialises `%hi`/`%lo` each time, that
+access was not a member reference.** Two runs failed this test, both after
+their layout had already been proved:
+
+* `g_FmvUploadRectX/Y` + `g_FmvStripWidth/Height` (0x8009AF4C) really are one
+  `Rect` -- `UploadFmvSlice` copies all eight bytes out of the first member's
+  address with `lwl`/`lwr`, i.e. at the struct's 2-byte alignment, and hands
+  them to `LoadImage`. But it also reads and writes `.x` around that copy,
+  and retail materialises the symbol separately every time. As one `Rect` the
+  `.x` accesses collapse onto the copy's base register: 52 instructions out,
+  and `volatile` does not prevent it.
+* `g_RouteSceneryX/Y/Z/W` (0x801E4340) is proved a four-word vector by the
+  assignment above, yet `UpdateRouteScenery`'s tail does
+  `g_RouteSceneryX += vout.x / 4` and friends with a fresh `%hi`/`%lo` pair
+  each time. Declared as one `Vec4` the seeders still match and the tail
+  costs 18. The four names stay; only the assignment is spelled as a vector.
+
+The object being one object and its components being spelled as members are
+therefore two separate questions, and retail answers the second one out loud.
 
 ### 20c. Runs deliberately left as scalars
 

@@ -113,8 +113,9 @@ typedef struct GameShuttleScenery {
     u8 pad2C[8];
 } GameShuttleScenery;
 
-/* The two shuttle instances. Instance 1's fields also carry their own split
- * symbols g_Shuttle1DwellCounter..g_Shuttle1AngleZ. */
+/* The two shuttle instances. Instance 1 used to carry eight split symbols of
+ * its own, g_Shuttle1DwellCounter..g_Shuttle1AngleZ; they were this array's
+ * second element all along and are addressed as g_ShuttleScenery[1] now. */
 extern GameShuttleScenery g_ShuttleScenery[2];
 
 void UpdateShuttleScenery(s32 instance);
@@ -269,17 +270,6 @@ extern s32 g_PlayerSegmentWeight;
 extern s32 g_RouteSceneryW;
 extern s32 g_RouteSceneryY;
 extern s32 g_RouteSceneryZ;
-extern s32 g_Shuttle1AngleX;
-extern s32 g_Shuttle1AngleY;
-extern s32 g_Shuttle1AngleZ;
-extern s32 g_Shuttle1DwellCounter;
-extern s16 g_Shuttle1PathIndex;
-extern s16 g_Shuttle1StartEndpoint;
-extern s32 g_Shuttle1TravelStep;
-extern s32 g_Shuttle1Unk1C;
-extern s32 g_Shuttle1X;
-extern s32 g_Shuttle1Y;
-extern s32 g_Shuttle1Z;
 extern s32 g_ShuttlePath2Points[];
 extern s16 g_ShuttlePathTravelMax[];
 extern s16 g_SkyTileMap[][16];
