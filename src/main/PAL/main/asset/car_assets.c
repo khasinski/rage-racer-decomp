@@ -8,11 +8,9 @@
  * pointee; game/asset.h explains why they are not one shared declaration. */
 extern u32 g_CarModelSlot;
 extern GameCarModelAsset *g_CarModelAsset;
-extern GameSceneAssetHeader *g_AssetLoadCursor;
 extern s32 g_TeamLogoSampleData;
 extern u8 *g_ImageBlockBuffer;
 extern u8 *g_AssetBlockPtr2;
-extern u8 *g_AssetSubBlockPtr;
 void RegisterCourseModels(void *base);
 void SelectCarModelSlot(s32 slot);
 void UploadImageAsset(void *asset);
@@ -58,14 +56,14 @@ void LoadCarSelectAssets(void) {
         if ((s16)PollAudioSlotLoad() != 0) {
             InitSequenceAudio();
             g_AssetLoadState = 3;
-            g_AssetLoadCursor = (GameSceneAssetHeader *)g_AssetSubBlockPtr;
+            g_AssetLoadCursor = g_AssetSubBlockPtr;
         }
         return;
     case 3:
             if (LoadAsset(8, g_AssetLoadCursor) != 0) {
-                RegisterModelBank((u8 *)g_AssetLoadCursor + 0xC, 0xE);
+                RegisterModelBank(g_AssetLoadCursor + 0xC, 0xE);
 
-                header = g_AssetLoadCursor;
+                header = (GameSceneAssetHeader *)g_AssetLoadCursor;
                 blockOffset = header->offsets[1];
                 firstOffset = header->offsets[0];
                 secondOffset = (s32)((u8 *)header + blockOffset);
@@ -74,7 +72,7 @@ void LoadCarSelectAssets(void) {
                 g_AssetBlockPtr = (u8 *)secondOffset;
                 RegisterCourseModels(g_AssetBlockPtr);
 
-                imageHeader = g_AssetLoadCursor;
+                imageHeader = (GameSceneAssetHeader *)g_AssetLoadCursor;
                 assetOffset = imageHeader->offsets[2];
                 g_AssetBlockPtr = (u8 *)imageHeader + assetOffset;
                 UploadImageAsset(g_AssetBlockPtr);

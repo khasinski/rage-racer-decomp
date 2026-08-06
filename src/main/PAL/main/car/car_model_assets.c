@@ -13,14 +13,11 @@ extern u32 g_CarModelSlot;
 s32 GetCarAssetIndex(s32 model, s32 grade);
 void ApplyBodyColor1(s32 arg0, s32 arg1);
 void ApplyBodyColor2(s32 arg0, s32 arg1);
-extern s32 g_AssetBase;
 extern s32 g_ImageBlockBuffer;
 /* Where asset 0x56 lands: g_ImageBlockBuffer advanced past the car texture
  * block just loaded. Its header words 1 and 2 are relocated into
  * g_AssetBlockPtr / g_AssetSubBlockPtr and word 0 is kept as-is. */
 extern s32 g_AssetBlockPtr2;
-extern s32 g_AssetSubBlockPtr;
-extern u32 g_AssetLoadCursor;
 void SelectCarModelSlot(s32);
 
 void LoadUpgradedCarModel(s32 arg0) {
@@ -84,11 +81,11 @@ void LoadOptionScreenAssets(void) {
     s32 offset;
 
     if (g_AssetLoadState == 1) {
-        if (LoadAsset(9, (void *)g_AssetBase) != 0) {
+        if (LoadAsset(9, g_AssetBase) != 0) {
             RegisterModelBank((void *)(g_AssetBase + 4), 0);
             SelectModelBank(0);
 
-            ptr = g_AssetBase;
+            ptr = (s32)g_AssetBase;
             offset = *(s32 *)ptr;
             g_AssetLoadState = 0;
             g_ImageBlockBuffer = ptr + offset;
@@ -161,7 +158,7 @@ void LoadRoundAssets(void) {
             first = ptr + first;
             second = ptr + second;
             g_AssetBlockPtr = (u8 *)first;
-            g_AssetSubBlockPtr = second;
+            g_AssetSubBlockPtr = (u8 *)second;
             third = *(s32 *)ptr;
             g_AssetLoadState = 0;
             g_SharedAssetWord0 = third;
@@ -183,7 +180,7 @@ void RelocateCarModel(void) {
         src = (u32 *)temp;
     }
     count = src[6];
-    temp = g_AssetBase;
+    temp = (u32)g_AssetBase;
     if (count != 0) {
         dst = (u32 *)temp;
     } else {
@@ -192,7 +189,7 @@ void RelocateCarModel(void) {
     count = count + 0x28;
     temp = count + (u32)dst;
     count >>= 2;
-    g_AssetLoadCursor = temp;
+    g_AssetLoadCursor = (u8 *)temp;
 
     while (count != 0) {
         *dst = *src;
@@ -201,10 +198,10 @@ void RelocateCarModel(void) {
         dst++;
     }
 
-    SetCarModelSlot((void *)g_AssetBase, 0);
+    SetCarModelSlot(g_AssetBase, 0);
     temp = *(s32 *)(g_CarModelAsset + 0x20);
     UnrelocateModelBank((void *)(g_AssetBase + 0x28), temp);
     SelectCarModelSlot(0);
-    *(u32 *)(g_CarModelAsset + 0x20) = g_AssetBase + 0x28;
+    *(u32 *)(g_CarModelAsset + 0x20) = (u32)(g_AssetBase + 0x28);
     RegisterModelBank((void *)(g_AssetBase + 0x28), 0);
 }

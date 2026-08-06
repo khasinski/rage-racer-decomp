@@ -7,7 +7,6 @@
 
 /* Asset-region pointers, each spelled with this file's own view of the
  * pointee; game/asset.h explains why they are not one shared declaration. */
-extern u8 *g_AssetLoadCursor;
 extern Rect g_TeamLogoClutRect;
 extern Rect g_TeamLogoRect;
 extern u16 g_TeamLogoClut[];
@@ -15,9 +14,7 @@ extern u16 g_TeamLogoCanvas[];
 void UploadImageAsset(void *asset);
 void StartAudioSlotLoad(s32 slot, void *header, void *body, s32 table);
 extern s32 g_ImageBlockBuffer;
-extern GameSceneAssetHeader *g_AssetBase;
 extern void *g_AssetBlockPtr2;
-extern void *g_AssetSubBlockPtr;
 
 void LoadBootAssets(void) {
     u8 *loaded;
@@ -70,7 +67,7 @@ void LoadBootAssets(void) {
             assetBase = g_AssetLoadCursor;
             g_TeamLogoClut[0] = 0;
             g_AssetLoadState = 0;
-            g_AssetBase = (GameSceneAssetHeader *)assetBase;
+            g_AssetBase = assetBase;
         }
         break;
     }
@@ -155,7 +152,7 @@ void LoadSelectBgmAssets(void) {
         g_AssetLoadState = 2;
     case 2:
         if (LoadAsset(7, g_AssetBase) != 0) {
-            header = g_AssetBase;
+            header = (GameSceneAssetHeader *)g_AssetBase;
             /* The three volatile reads are load-bearing: without them cse
              * folds the header pointer and the three offsets into one
              * addressing pattern and the block costs 19 instructions more. */
@@ -167,7 +164,7 @@ void LoadSelectBgmAssets(void) {
             secondOffset = (s32)header + relOffset;
             header = (GameSceneAssetHeader *)((u8 *)header + thirdOffset);
             g_AssetBlockPtr2 = (void *)secondOffset;
-            g_AssetSubBlockPtr = header;
+            g_AssetSubBlockPtr = (u8 *)header;
         }
         break;
     }

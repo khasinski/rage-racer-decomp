@@ -66,17 +66,24 @@ typedef struct GameSceneAssetHeader {
 } GameSceneAssetHeader;
 
 /*
- * Asset-region pointers. Spelled with a different type per translation unit
- * (u8 * / u32 / a typed header pointer), so each file carries its own aliased
- * extern rather than one declaration here; see docs/names.md 12c.
- *   g_AssetBase        g_AssetBase  base of the resident block, base + base[n]
- *   g_AssetLoadCursor  g_AssetLoadCursor  load destination, advanced by each load
- *   g_AssetSubBlockPtr g_AssetSubBlockPtr  base + header->offsets[n + 1]
- *   g_ImageBlockBuffer g_ImageBlockBuffer  buffer handed to UploadImageAsset
- *   g_CarModelAsset    g_CarModelAsset  registry entry selected by SelectCarModelSlot
- *
- * g_CarModelAsset is the one slot whose pointee type really does change with
- * the screen, so its several spellings are not a naming slip to unify: the
+ * Asset-region pointers. All three address the load region in bytes: they are
+ * advanced by byte counts (a load's returned size, 0x38000, g_SharedAssetWord0)
+ * and by offsets read out of the pack that happens to sit there, so u8 * is the
+ * type, not the decompiler's default. A pack header is a view taken of the
+ * bytes at the pointer, spelled `(GameSceneAssetHeader *)cursor` where a file
+ * wants one; that is a pointer-value cast and costs nothing.
+ */
+
+/* Base of the resident asset block; sub-block n is base + base->offsets[n]. */
+extern u8 *g_AssetBase;
+/* Load destination, advanced past each pack as it is loaded. */
+extern u8 *g_AssetLoadCursor;
+/* Second sub-block cursor: base + header->offsets[n + 1]. */
+extern u8 *g_AssetSubBlockPtr;
+
+/*
+ * g_CarModelAsset, by contrast, is a slot whose pointee type really does change
+ * with the screen, so its several spellings are not a naming slip to unify: the
  * model viewer reads a GameCarModelAsset header, the spec screen reads an
  * EngineSpecData block and the car-select camera reads a GameRenderView.
  */

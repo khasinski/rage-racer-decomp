@@ -18,15 +18,12 @@
 
 /* Asset-region pointers, each spelled with this file's own view of the
  * pointee; game/asset.h explains why they are not one shared declaration. */
-extern u8 *g_AssetLoadCursor;
-extern u8 *g_AssetSubBlockPtr;
 extern u8 *g_AssetBlockPtr2;
 void StartAudioSlotLoad(s32 slot, void *header, void *body, void *table);
 void UploadImageAsset(void *asset);
 void SetTrackCameraTable(void *table);
 void RegisterCourseModels(void *base);
 extern s32 g_ImageBlockBuffer;
-extern s32 g_AssetBase;
 
 s32 RequestRaceAssets(void) {
     if (g_AssetLoadState != 0) {
@@ -282,10 +279,10 @@ void LoadCourseAssets(void) {
         s32 courseOffset = g_CourseIndex * 2;
         s32 classBase = (g_GrandPrixClass * 8) + 0x57;
 
-        loaded = LoadAsset((s32)(courseOffset + classBase), (void *)g_AssetBase);
+        loaded = LoadAsset((s32)(courseOffset + classBase), g_AssetBase);
         if (loaded != 0) {
             g_AssetLoadState = 0;
-            g_ImageBlockBuffer = loaded + g_AssetBase;
+            g_ImageBlockBuffer = loaded + (s32)g_AssetBase;
         }
     }
 }
