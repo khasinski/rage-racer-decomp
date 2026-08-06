@@ -11,7 +11,7 @@ extern u16 g_RankingCars;
 extern s32 g_TimeRecords;
 extern u16 g_TimeRecordCars;
 extern s32 g_BestSectorTimes;
-void LibcSprintf(void *dst, void *fmt, s32 arg0, s32 arg1, s32 arg2);
+void LibcSprintf(void *dst, void *fmt, s32 minutes, s32 seconds, s32 millis);
 
 void InitRecordTables(void) {
     register s32 r2 asm("$2");

@@ -7,15 +7,15 @@
 
 extern s32 g_PlayerCar;
 
-void ApplyReplayFrameAndTilt(s32 arg0, void *arg1, void *arg2);
+void ApplyReplayFrameAndTilt(s32 subframe, void *playerObj, void *rivalObj);
 
-void SeedCarLapProgress(void *arg0, s32 arg1);
+void SeedCarLapProgress(void *car, s32 trackPointIndex);
 
-void AccumulateLapProgress(void *arg0);
+void AccumulateLapProgress(void *car);
 
-s32 FindTrackSegment(void *arg0, s32 arg1);
+s32 FindTrackSegment(void *car, s32 idx);
 
-void RequestTrackTexturePage(s32 arg0);
+void RequestTrackTexturePage(s32 trackSection);
 
 typedef struct TrackZone {
     s32 start;
@@ -173,8 +173,8 @@ done:
     }
 }
 
-void ExitRaceScene(s32 arg0) {
-    g_SceneId = arg0;
+void ExitRaceScene(s32 sceneId) {
+    g_SceneId = sceneId;
     ForceAllEffectVoicesEnabled(0);
     SetReverbDepth(0, 0);
     if (g_SceneId == 6) {
@@ -183,7 +183,7 @@ void ExitRaceScene(s32 arg0) {
     DebugPrintf(&g_MsgGameExit);
 }
 
-void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
+void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
     s32 slot;
     s32 nextSlot;
     s32 delta;
@@ -193,21 +193,21 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
     s32 threshold;
     u8 *route;
 
-    route = (u8 *)arg0 + 0xBC;
+    route = (u8 *)car + 0xBC;
 
-    if (arg2 == 2 || arg1 != 0) {
+    if (lapEvent == 2 || grandPrixMode != 0) {
         return;
     }
 
     slot = g_SectorIndex;
     switch (0) { default:
     if (slot >= 0) {
-        if ((*(s16 *)((u8 *)arg0 + 0x168) - 1) * g_TrackLength + g_SectorEndDistance[slot] <=
-                (*(s32 *)((u8 *)arg0 + 0x6C) + *(s32 *)((u8 *)arg0 + 0x68)) ||
-            arg2 != 0) {
+        if ((*(s16 *)((u8 *)car + 0x168) - 1) * g_TrackLength + g_SectorEndDistance[slot] <=
+                (*(s32 *)((u8 *)car + 0x6C) + *(s32 *)((u8 *)car + 0x68)) ||
+            lapEvent != 0) {
             g_SectorTimes[slot] = g_LapTimeMs;
             if (g_LapTimeMs <= 0x927BE) {
-                if (arg2 != 0) {
+                if (lapEvent != 0) {
                     delta = g_RefLapTime - g_LapTimeMs;
                 } else {
                     delta = g_RefSectorTimes[slot] - g_LapTimeMs;
@@ -217,10 +217,10 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
                 if (delta < 0) {
                     g_SplitSign = -1;
                     delta = -delta;
-                    if (arg2 == 0) {
+                    if (lapEvent == 0) {
                         PlaySoundCue(0x3F);
                     }
-                } else if (delta > 0 && arg2 == 0) {
+                } else if (delta > 0 && lapEvent == 0) {
                     PlaySoundCue(0x3E);
                 }
                 g_SplitDelta = delta;
@@ -234,7 +234,7 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
             nextSlot %= 3;
             g_SectorIndex = nextSlot;
 
-            if (arg2 != 0) {
+            if (lapEvent != 0) {
                 g_SplitSector = 2;
                 g_SplitTargetTime = g_RefLapTime;
                 g_RefLapTime = g_BestLapThisRace;
@@ -254,7 +254,7 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
         }
     }
 
-    if (g_SectorIndex == -2 && arg2 != 0) {
+    if (g_SectorIndex == -2 && lapEvent != 0) {
         g_SectorIndex = 0;
         g_SplitSign = 0;
         g_SplitTargetTime = g_BestSectorTimes[g_RaceSeries][g_CourseIndex][0];
@@ -318,7 +318,7 @@ void UpdateSplitTimes(void *arg0, s32 arg1, s32 arg2) {
     DrawTimeValue(
         0xFA,
         0x7C,
-        g_BestTotalTimes[g_RaceSeries][g_CourseIndex][arg1],
+        g_BestTotalTimes[g_RaceSeries][g_CourseIndex][grandPrixMode],
         0x78CC,
         timeout);
 }

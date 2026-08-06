@@ -30,16 +30,16 @@ typedef union {
 void *GameQueueTileTransWide(
     void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
 
-void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 arg2) asm("QueueDrawModePrim");
+void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 tpage) asm("QueueDrawModePrim");
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
-void UpdateCamera(s32 arg0, void *arg1);
+void DrawFullscreenFadeTile(s32 color, s32 tpage);
+void UpdateCamera(s32 cameraMode, void *car);
 void DrawTerrainCellsWide(void);
-void SetTrackTexturePageNow(s32 arg0);
-void ApplyReplayFrame(s32 arg0, void *arg1, void *arg2);
-s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+void SetTrackTexturePageNow(s32 trackSection);
+void ApplyReplayFrame(s32 subframe, void *playerObj, void *rivalObj);
+s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 extern s32 g_RaceTotalTime;
 extern s32 g_BestTotalTimes[][4][2];
 extern GrandPrixIntroLayout g_ResultPlaceSprites[];
@@ -334,7 +334,7 @@ void DrawGrandPrixResultPanel(void) {
     DrawProportionalText(0x10, 0x50, g_CaptionRanking, 0x7812);
 }
 
-void DrawRaceTimePanel(s32 arg0) {
+void DrawRaceTimePanel(s32 slideY) {
     s32 base;
     s32 i;
     s32 *times;
@@ -349,7 +349,7 @@ void DrawRaceTimePanel(s32 arg0) {
     char text[24];
     s32 color;
 
-    base = arg0;
+    base = slideY;
     DrawProportionalText(0x10, base + 0x80, g_CaptionTotalTime, 0x7812);
 
     text[0] = 0x54;

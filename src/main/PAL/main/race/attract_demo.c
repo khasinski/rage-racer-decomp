@@ -11,33 +11,33 @@
 
 extern void (*g_BgmSelectSteps[])(void);
 extern s32 g_ImageBlockBuffer;
-void UploadImageAsset(void *arg0);
+void UploadImageAsset(void *imageBlock);
 s32 RequestTrackDataAssets(void);
 
 void DrawCarSpecSprite(
-    u8 *arg0,
-    u32 arg1,
-    u32 arg2,
-    u32 arg3,
-    u32 arg4,
-    u32 arg5,
-    u32 arg6,
-    u32 arg7,
-    u32 arg8,
-    u32 arg9,
-    u32 arg10,
-    u32 arg11,
-    u32 arg12,
-    u32 arg13) asm("DrawSprite");
+    u8 *ot,
+    u32 x0,
+    u32 y0,
+    u32 w,
+    u32 h,
+    u32 u0,
+    u32 v0,
+    u32 r,
+    u32 g,
+    u32 b,
+    u32 clutIndex,
+    u32 shadeTex,
+    u32 semiTrans,
+    u32 flags) asm("DrawSprite");
 
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
-void AdvanceBgmShuffleBag(s32 arg0);
+void AdvanceBgmShuffleBag(s32 track);
 extern u32 g_StreamReturnScene;
 extern u32 g_CameraViewMode;
-void DrawFullscreenFadeTile(s32 arg0, u32 arg1);
-void RequestTrackTexturePage(s32 arg0);
-void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
+void DrawFullscreenFadeTile(s32 color, u32 tpage);
+void RequestTrackTexturePage(s32 trackSection);
+void UpdateCamera(u32 cameraMode, GameCarRuntime *car);
 void DrawTerrainCellsWide(void);
 
 void UpdateBgmSelectScene(void) {
@@ -67,11 +67,11 @@ void EnterAttractDemo(void) {
     g_CameraCarIndex = 0;
 }
 
-s32 GetAttractTitleFade(s32 arg0) {
+s32 GetAttractTitleFade(s32 element) {
     s32 value;
 
     if (g_AttractDemoStep == 0) {
-        value = (g_SceneTimer * 4) - g_AttractTitleDelays[arg0];
+        value = (g_SceneTimer * 4) - g_AttractTitleDelays[element];
     } else {
         if (g_FadeLevel > 0) {
             g_FadeLevel--;
@@ -86,16 +86,16 @@ void DrawAttractTitle(void) {
     u8 *ptr;
     s32 value;
     u32 one;
-    u32 arg13;
+    u32 flags;
 
     ptr = g_DrawBuffer + 0xCC;
     value = GetAttractTitleFade(0);
     one = 1;
-    arg13 = 0x29;
-    DrawCarSpecSprite(ptr, 0x74, 0x34, 0x58, 0x38, 0xA8, 0xA8, value, value, value, 0x1F, 0, one, arg13);
-    DrawCarSpecSprite(ptr, 0x44, 0x70, 0xB8, 0x14, 0x48, 0xE8, value, value, value, 0x80, 0, one, arg13);
+    flags = 0x29;
+    DrawCarSpecSprite(ptr, 0x74, 0x34, 0x58, 0x38, 0xA8, 0xA8, value, value, value, 0x1F, 0, one, flags);
+    DrawCarSpecSprite(ptr, 0x44, 0x70, 0xB8, 0x14, 0x48, 0xE8, value, value, value, 0x80, 0, one, flags);
     value = GetAttractTitleFade(1);
-    DrawCarSpecSprite(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, arg13);
+    DrawCarSpecSprite(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, flags);
 }
 
 void UpdateAttractDemoStart(void) {

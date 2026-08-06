@@ -10,7 +10,7 @@
 #include "game/car.h"
 
 void LibcSprintf();
-s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 extern volatile s32 g_RaceTotalTime;
 extern s32 g_RankingTimes;
 /* Split symbols of the two S22 record tables: +0x08 is the time and +0x0C the
@@ -18,11 +18,11 @@ extern s32 g_RankingTimes;
  * g_TimeRecordTimes / g_TimeRecordCars the same pair of g_TimeRecords. */
 extern u16 g_RankingCars[];
 extern u16 g_TimeRecordCars[];
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
-void CdSync(s32 arg0, s32 arg1);
+void DrawFullscreenFadeTile(s32 color, s32 tpage);
+void CdSync(s32 mode, s32 result);
 s32 CdControl(s32 com, void *param, s32 result);
 
-void DrawRankingPanel(u8 *arg0) {
+void DrawRankingPanel(u8 *slideX) {
     u8 *panel;
     s32 iter;
     s32 countOrIndex;
@@ -38,7 +38,7 @@ void DrawRankingPanel(u8 *arg0) {
     s32 scoreValue;
     s32 limit;
 
-    panel = arg0;
+    panel = slideX;
     DrawProportionalText(panel + 0x10, 0x4C, g_CaptionLapTime2, 0x7852);
     mode = g_CourseIndex;
     text[1] = 0x2F;
@@ -145,7 +145,7 @@ void DrawTimeRecordPanel(u8 *s5) {
     }
 }
 
-void DrawNameEntryCursor(s32 arg0, s32 arg1) {
+void DrawNameEntryCursor(s32 charIndex, s32 row) {
     s32 *scratch;
 
     if (g_AnimTimer & 8) {
@@ -153,8 +153,8 @@ void DrawNameEntryCursor(s32 arg0, s32 arg1) {
         *scratch = AddTilePrim(
             g_DrawBuffer + 0xCC,
             *scratch,
-            (arg0 * 8) + 0x7C,
-            ((arg1 * 5) << 2) + 0x7E,
+            (charIndex * 8) + 0x7C,
+            ((row * 5) << 2) + 0x7E,
             9,
             2,
             0xC0,

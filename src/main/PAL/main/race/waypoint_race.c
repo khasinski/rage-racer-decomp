@@ -13,17 +13,17 @@ extern u8 g_PlayerCar[];
 
 extern s32 g_PlayerTrackProgress;
 
-void RequestTrackTexturePage(s32 arg0);
+void RequestTrackTexturePage(s32 trackSection);
 
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
+void DrawFullscreenFadeTile(s32 color, s32 tpage);
 
-void GetTrackZoneBlend(s32 arg0);
+void GetTrackZoneBlend(s32 trackProgress);
 
-void ExitRaceScene(s32 arg0);
+void ExitRaceScene(s32 sceneId);
 
-void UpdateFreeLookCamera(u8 *arg0, s32 arg1);
+void UpdateFreeLookCamera(u8 *car, s32 updateMotion);
 
-void UpdateTrackEventSound(s32 arg0);
+void UpdateTrackEventSound(s32 trackSection);
 
 extern s16 g_PlayerLap;
 

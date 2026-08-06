@@ -10,9 +10,9 @@
 extern s16 g_ClassRecords[];
 extern volatile s32 g_ClassWinCount;
 extern void *g_CourseProgress;
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
-void GameDrawSpriteWide(void *arg0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13) asm("DrawSprite");
-void DrawRaceEndBanner(s32 arg0);
+void DrawFullscreenFadeTile(s32 color, s32 tpage);
+void GameDrawSpriteWide(void *ot, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13) asm("DrawSprite");
+void DrawRaceEndBanner(s32 level);
 
 void UpdateBgmTrackCount(void) {
     s32 offset;
@@ -41,12 +41,12 @@ void UpdateBgmTrackCount(void) {
     g_BgmTrackCount = value;
 }
 
-void DrawLostRaceCaption(s32 arg0) {
-    if (arg0 >= 0x100) {
-        arg0 = 0xFF;
+void DrawLostRaceCaption(s32 level) {
+    if (level >= 0x100) {
+        level = 0xFF;
     }
-    arg0 >>= 1;
-    GameDrawProportionalTextShaded(0x28, 0x40, &g_CaptionLostRace, 0x7812, arg0);
+    level >>= 1;
+    GameDrawProportionalTextShaded(0x28, 0x40, &g_CaptionLostRace, 0x7812, level);
 }
 
 void EnterLostRaceScreen(void) {
@@ -134,12 +134,12 @@ void UpdateLostRaceScreen(void) {
     DrawRaceEndPrompt();
 }
 
-void DrawRaceEndBanner(s32 arg0) {
-    if (arg0 >= 256) {
-        arg0 = 0xFF;
+void DrawRaceEndBanner(s32 level) {
+    if (level >= 256) {
+        level = 0xFF;
     }
-    arg0 >>= 1;
-    GameDrawSpriteWide(g_DrawBuffer + 204, 0x50, 0x6C, 0xA0, 0x18, 0, 0x28, arg0, arg0, arg0, 0xC, 0, 1, 0x29);
+    level >>= 1;
+    GameDrawSpriteWide(g_DrawBuffer + 204, 0x50, 0x6C, 0xA0, 0x18, 0, 0x28, level, level, level, 0xC, 0, 1, 0x29);
 }
 
 void EnterRaceEndScreen(void) {

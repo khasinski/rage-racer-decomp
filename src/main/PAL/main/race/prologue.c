@@ -18,14 +18,14 @@ extern u32 g_StreamReturnScene;
 extern void (*g_AttractDemoSteps[])(void);
 extern s32 g_PrologueStep;
 extern u8 g_TextNowLoading[];
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
+void DrawFullscreenFadeTile(s32 color, s32 tpage);
 void RequestTrackDataAssets(void);
-s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
-s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
+s32 GameQueueTileTransWide(u8 *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
+s32 GameQueueDrawModePrimWide(u8 *ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 extern u32 g_CameraViewMode;
 extern UnkEventPair g_PrologueCameraCuts[];
-void RequestTrackTexturePage(s32 arg0);
-void UpdateCamera(u32 arg0, GameCarRuntime *arg1);
+void RequestTrackTexturePage(s32 trackSection);
+void UpdateCamera(u32 cameraMode, GameCarRuntime *car);
 void DrawTerrainCellsWide(void);
 
 void UpdateAttractDemoScene(void) {
@@ -132,10 +132,10 @@ void DrawPrologueText(void) {
     s32 value;
     s32 clamped;
     s32 next;
-    s32 arg1;
-    s32 arg7;
-    s32 scale_b;
-    s32 arg8;
+    s32 prim;
+    s32 green;
+    s32 blueScale;
+    s32 blue;
 
     for (i = 0, offset = 0; i < 14; offset += 8) {
         s32 tableY;
@@ -174,25 +174,25 @@ void DrawPrologueText(void) {
     }
 
     {
-        s32 camera;
+        s32 fadeLevel;
         s32 *scratch;
         u8 *ptr;
-        s32 scale_a;
+        s32 greenScale;
         s32 tmp;
         u8 *base;
 
-        camera = g_FadeLevel;
+        fadeLevel = g_FadeLevel;
         scratch = (s32 *)0x1F800000;
-        tmp = camera * 7;
-        scale_a = tmp * 32;
+        tmp = fadeLevel * 7;
+        greenScale = tmp * 32;
         base = g_DrawBuffer;
-        arg1 = *scratch;
+        prim = *scratch;
         ptr = base + 0xD0;
-        arg7 = (scale_a / 0x100) + 0x20;
-        scale_b = (camera * 3) << 6;
-        arg8 = (scale_b / 0x100) + 0x40;
+        green = (greenScale / 0x100) + 0x20;
+        blueScale = (fadeLevel * 3) << 6;
+        blue = (blueScale / 0x100) + 0x40;
 
-        next = GameQueueTileTransWide(ptr, arg1, 0, 0, 0x140, 0xF0, camera, arg7, arg8);
+        next = GameQueueTileTransWide(ptr, prim, 0, 0, 0x140, 0xF0, fadeLevel, green, blue);
         *scratch = GameQueueDrawModePrimWide(ptr, next, 0x49);
     }
 }
