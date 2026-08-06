@@ -121,14 +121,9 @@ void GameDrawSpriteWide(void *a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6
 void DrawOwnedCarCounter(s32 arg0, s32 arg1) {
     s32 count;
     s32 a1v;
-    register s32 c17 asm("$17");
-    s32 c19;
-    register s32 c21 asm("$21");
-    register s32 r4 asm("$4");
-    register s32 r5 asm("$5");
-    register s32 r6 asm("$6");
     void *ot;
-    s32 v0, v1, t, y;
+    s32 v0, v1, t, t2;
+    s16 y;
 
     count = arg0;
     ot = *(void **)0x1F800004;
@@ -151,21 +146,14 @@ void DrawOwnedCarCounter(s32 arg0, s32 arg1) {
         if (v1 >= 11) {
             v1 = 10;
         }
-        r4 = 0x2C;
         t = ((u32)(v1 * -1120)) >> 5;
-        y = (s16)(t + 0x21B);
-        r5 = y;
-        r6 = 7;
-        c17 = 0x7F;
-        c21 = 0x259;
-        c19 = 0x20;
-        asm volatile("" : : "r"(r5), "r"(r6), "r"(c17), "r"(c21), "r"(c19));
-        t = t + 0x211;
-        GameDrawNumber(r4, r5, r6, a1v, c17, c17, c17, c21, c19);
-        GameDrawNumber(0x44, y, 7, 0xD, c17, c17, c17, c21, c19);
+        y = t + 0x21B;
+        t2 = t + 0x211;
+        GameDrawNumber(0x2C, y, 7, a1v, 0x7F, 0x7F, 0x7F, 0x259, 0x20);
+        GameDrawNumber(0x44, y, 7, 0xD, 0x7F, 0x7F, 0x7F, 0x259, 0x20);
         GameDrawSpriteWide(ot, 0x17, y, 0x34, 0x10, 0x8C, 0x8C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-        GameDrawSpriteWide(ot, 0x7C, y, 0x8, 0x10, 0x8C, 0xDC, 0, 0, 0, c21, 1, 1, 0x3B);
-        GameDrawMenuButton(0, (s16)t, 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
+        GameDrawSpriteWide(ot, 0x7C, y, 0x8, 0x10, 0x8C, 0xDC, 0, 0, 0, 0x259, 1, 1, 0x3B);
+        GameDrawMenuButton(0, (s16)t2, 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
     }
     if (count > 0) {
         v0 = count + D_8007FB2C;
