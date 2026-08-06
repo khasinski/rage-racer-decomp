@@ -1109,8 +1109,8 @@ names stay neutral.
 > `GameCdLoadEntry *`, `g_CarModelSlot` is `u32` in `game/car.h`,
 > `g_TeamLogoClut` is `u16[16]` in `game/menu.h`, and `g_TerrainCellGrid` /
 > `g_CellVisibilityTable` take their reader's type in `game/track.h`.
-> `src/main/PAL/main/asset/` went from 58 local declarations to 11 and the
-> whole tree from 1974 to 1890, with all 297 objects unchanged.
+> `src/main/PAL/main/asset/` went from 58 local declarations to 10 and the
+> whole tree from 1974 to 1888, with all 297 objects unchanged.
 >
 > What decides the canonical type is what the code *does* with the symbol, not
 > which spelling is commonest: all three asset pointers are advanced by byte
