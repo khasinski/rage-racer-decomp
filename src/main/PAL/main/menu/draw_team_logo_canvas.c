@@ -777,12 +777,8 @@ void ScrollTeamLogoRight(void) {
     s32 col;
     u32 *base;
     u32 *base2;
-    u32 *addr;
     u32 *cursor;
     u32 saved[64];
-    u32 savedNibble;
-    u32 value;
-    register u32 prev asm("$4");
 
     PlaySoundCue(1);
 
@@ -791,11 +787,11 @@ void ScrollTeamLogoRight(void) {
     base = g_TeamLogoCanvas;
     cursor = base;
     do {
-        savedNibble = cursor[7];
+        u32 last = cursor[7];
         cursor += 8;
         row++;
-        savedNibble >>= 28;
-        *savePtr = savedNibble;
+        last >>= 28;
+        *savePtr = last;
         savePtr++;
     } while (row < 0x40);
 
@@ -807,26 +803,31 @@ void ScrollTeamLogoRight(void) {
         col = 7;
         base2 = base + 7;
         do {
-            addr = (u32 *)(offset + (s32)base2);
+            u32 *word = (u32 *)(offset + (s32)base2);
+            u32 hi;
+            u32 lo;
             base2--;
             col--;
-            value = addr[0];
-            prev = addr[-1];
-            value <<= 4;
-            prev >>= 28;
-            value |= prev;
-            addr[0] = value;
+            hi = word[0];
+            lo = word[-1];
+            hi <<= 4;
+            lo >>= 28;
+            hi |= lo;
+            word[0] = hi;
         } while (col > 0);
 
-        savedNibble = *savePtr2;
-        savePtr2++;
-        offset += 0x20;
-        value = rowBase[0];
-        row++;
-        value <<= 4;
-        value |= savedNibble;
-        rowBase[0] = value;
-        rowBase += 8;
+        {
+            u32 wrap = *savePtr2;
+            u32 first;
+            savePtr2++;
+            offset += 0x20;
+            first = rowBase[0];
+            row++;
+            first <<= 4;
+            first |= wrap;
+            rowBase[0] = first;
+            rowBase += 8;
+        }
     } while (row < 0x40);
 }
 
