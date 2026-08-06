@@ -11,9 +11,9 @@
 #include "game/asset.h"
 #include "psyq/cd.h"
 
-s32 CdRead(s32 arg0, void *arg1, s32 arg2);
+s32 CdRead(s32 sectors, void *buf, s32 mode);
 s32 LoadAssetWide(s32 assetIndex, s32 dst) asm("LoadAsset");
-void UploadImageAsset(void *arg0);
+void UploadImageAsset(void *asset);
 
 void SetTrackCameraTable(u32 value) {
     *(u32 *)0x8019C9A8 = value;
@@ -95,40 +95,43 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
     return 0;
 }
 
-void LoadAssetBlocking(s32 arg0, s32 arg1) {
-    while (LoadAssetWide(arg0, arg1) == 0) {
+void LoadAssetBlocking(s32 assetIndex, s32 dst) {
+    while (LoadAssetWide(assetIndex, dst) == 0) {
     }
 }
 
 void LoadDiscArchiveIndex(void) {
+    /* PSY-Q's CdlFILE, which this tree has no typedef for: the 24-byte record
+     * DsSearchFile fills in (location, size, name). Only the location is read. */
     struct {
-        CdlLOC file;
-        u8 pad[20];
-    } stack;
-    s32 one;
+        CdlLOC pos;
+        u32 size;
+        char name[16];
+    } file;
+    s32 sectors;
     s32 base;
     s32 i;
     s32 status;
     s32 *src;
     GameCdLoadEntry *dst;
-    GameCdLoadEntry *smallSrc;
+    GameCdLoadEntry *stream;
 
     DebugPrintf(g_MsgNowLoading, g_PathRageBin, g_LoadBuffer);
-    if (DsSearchFile(&stack.file, g_PathRageBin) == 0) {
+    if (DsSearchFile(&file.pos, g_PathRageBin) == 0) {
         DebugPrintf(g_MsgFileNotFound, g_PathRageBin);
     }
 
-    one = 1;
+    sectors = 1;
     do {
-        CdControl(2, &stack.file, 0);
-        CdRead(one, g_LoadBuffer, 0x80);
+        CdControl(2, &file.pos, 0);
+        CdRead(sectors, g_LoadBuffer, 0x80);
         do {
             status = CdReadSync(1, 0);
         } while (status > 0);
     } while (status != 0);
 
-    DebugPrintf(g_MsgReadSectors, one);
-    base = CdPosToInt_Local(&stack.file);
+    DebugPrintf(g_MsgReadSectors, sectors);
+    base = CdPosToInt_Local(&file.pos);
     src = g_LoadBuffer;
     dst = g_AssetCdEntries;
     for (i = 0; i < 135; i++) {
@@ -139,17 +142,17 @@ void LoadDiscArchiveIndex(void) {
     }
 
     DebugPrintf(g_MsgNowSearching, g_PathRageStr);
-    if (DsSearchFile(&stack.file, g_PathRageStr) == 0) {
+    if (DsSearchFile(&file.pos, g_PathRageStr) == 0) {
         DebugPrintf(g_MsgFileNotFound, g_PathRageStr);
     } else {
         DebugPrintf(g_MsgSearchOk);
     }
 
-    base = CdPosToInt_Local(&stack.file);
-    smallSrc = g_StreamCdEntries;
+    base = CdPosToInt_Local(&file.pos);
+    stream = g_StreamCdEntries;
     for (i = 0; i < 11; i++) {
-        CdIntToPos(base + smallSrc->position, (CdlLOC *)smallSrc);
-        smallSrc++;
+        CdIntToPos(base + stream->position, (CdlLOC *)stream);
+        stream++;
     }
 }
 

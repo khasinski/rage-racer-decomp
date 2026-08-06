@@ -15,11 +15,11 @@
 extern u8 *g_AssetLoadCursor;
 extern u8 *g_AssetSubBlockPtr;
 extern u8 *g_AssetBlockPtr2;
-void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
+void StartAudioSlotLoad(s32 slot, void *header, void *body, void *table);
 s32 GetCarAssetIndex(s32 model, s32 grade);
-void UploadImageAsset(void *arg0);
-void SetTrackCameraTable(void *arg0);
-void RegisterCourseModels(void *arg0);
+void UploadImageAsset(void *asset);
+void SetTrackCameraTable(void *table);
+void RegisterCourseModels(void *base);
 extern s32 g_ImageBlockBuffer;
 extern s32 g_AssetBase;
 
@@ -42,9 +42,9 @@ void LoadRaceAssets(void) {
     switch (g_AssetLoadState) {
     case 1: {
         s32 *src = (s32 *)g_AssetBlockPtr;
-        s32 raw = g_SharedAssetWord0;
+        s32 size = g_SharedAssetWord0;
         s32 *dst = (s32 *)g_AssetLoadCursor;
-        s32 n = raw / 4;
+        s32 n = size / 4;
         while (n != 0) {
             *dst = *src;
             src++;
@@ -62,26 +62,26 @@ void LoadRaceAssets(void) {
         }
         break;
     case 3: {
-        s32 idx = g_PlayerCarIndex;
-        s32 sz = GetCarAssetIndex(idx, g_CarTable[idx].modelVariant);
-        if (LoadAsset((sz * 2) + 11, g_AssetLoadCursor) != 0) {
-            register u8 *base_a0 asm("$4");
-            u8 *base_a3;
-            u8 *p1;
-            u8 *p2;
-            base_a0 = g_AssetLoadCursor;
-            g_AssetBlockPtr = ASSET_SUB(base_a0, 0);
+        s32 carIndex = g_PlayerCarIndex;
+        s32 carAsset = GetCarAssetIndex(carIndex, g_CarTable[carIndex].modelVariant);
+        if (LoadAsset((carAsset * 2) + 11, g_AssetLoadCursor) != 0) {
+            register u8 *pack asm("$4");
+            u8 *table;
+            u8 *header;
+            u8 *body;
+            pack = g_AssetLoadCursor;
+            g_AssetBlockPtr = ASSET_SUB(pack, 0);
             SetCarSpec();
-            base_a3 = g_AssetLoadCursor;
-            p1 = ASSET_SUB(base_a3, 1);
-            p2 = ASSET_SUB(base_a3, 3);
-            base_a3 = ASSET_SUB(base_a3, 2);
-            g_AssetBlockPtr = p1;
-            g_AssetBlockPtr2 = base_a3;
-            g_AssetSubBlockPtr = p2;
-            StartAudioSlotLoad(3, p1, p2, base_a3);
-            base_a0 = g_AssetLoadCursor;
-            g_AssetBlockPtr = ASSET_SUB(base_a0, 4);
+            table = g_AssetLoadCursor;
+            header = ASSET_SUB(table, 1);
+            body = ASSET_SUB(table, 3);
+            table = ASSET_SUB(table, 2);
+            g_AssetBlockPtr = header;
+            g_AssetBlockPtr2 = table;
+            g_AssetSubBlockPtr = body;
+            StartAudioSlotLoad(3, header, body, table);
+            pack = g_AssetLoadCursor;
+            g_AssetBlockPtr = ASSET_SUB(pack, 4);
             UploadImageAsset(g_AssetBlockPtr);
             g_AssetLoadState = 4;
             g_AssetLoadCursor = g_AssetSubBlockPtr;
@@ -94,30 +94,30 @@ void LoadRaceAssets(void) {
         }
         break;
     case 5: {
-        u8 *p;
-        s32 scaled;
-        s32 base_off;
-        p = g_AssetLoadCursor;
-        scaled = g_CourseIndex * 2;
-        base_off = (g_GrandPrixClass * 8) + 0x57;
-        if (LoadAsset(scaled + base_off, p) != 0) {
-            register u8 *base_a0 asm("$4");
+        u8 *dst;
+        s32 courseOffset;
+        s32 classBase;
+        dst = g_AssetLoadCursor;
+        courseOffset = g_CourseIndex * 2;
+        classBase = (g_GrandPrixClass * 8) + 0x57;
+        if (LoadAsset(courseOffset + classBase, dst) != 0) {
+            register u8 *pack asm("$4");
             u8 *base;
-            s32 off0, off1;
-            base_a0 = g_AssetLoadCursor;
-            g_AssetBlockPtr = ASSET_SUB(base_a0, 0);
+            s32 logoOffset, shadowOffset;
+            pack = g_AssetLoadCursor;
+            g_AssetBlockPtr = ASSET_SUB(pack, 0);
             UploadImageAsset(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor;
-            g_AssetBlockPtr = ASSET_SUB(base_a0, 1);
+            pack = g_AssetLoadCursor;
+            g_AssetBlockPtr = ASSET_SUB(pack, 1);
             UploadImageAsset(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor;
-            g_AssetBlockPtr = ASSET_SUB(base_a0, 2);
+            pack = g_AssetLoadCursor;
+            g_AssetBlockPtr = ASSET_SUB(pack, 2);
             UploadImageBlock(g_AssetBlockPtr);
             base = g_AssetLoadCursor;
-            off0 = ((GameSceneAssetHeader *)base)->offsets[3];
-            off1 = ((GameSceneAssetHeader *)base)->offsets[4];
-            g_AssetBlockPtr = base + off0;
-            g_AssetSubBlockPtr = base + off1;
+            logoOffset = ((GameSceneAssetHeader *)base)->offsets[3];
+            shadowOffset = ((GameSceneAssetHeader *)base)->offsets[4];
+            g_AssetBlockPtr = base + logoOffset;
+            g_AssetSubBlockPtr = base + shadowOffset;
             UploadImageAsset(g_AssetBlockPtr);
             StoreTeamLogoImage(g_AssetLoadCursor);
             g_TrackTextureShadow = g_AssetLoadCursor;
@@ -129,25 +129,25 @@ void LoadRaceAssets(void) {
         break;
     }
     case 6: {
-        u8 *p;
-        s32 scaled;
-        register s32 result asm("$2");
-        p = g_AssetLoadCursor;
-        scaled = g_CourseIndex * 2;
-        result = (g_GrandPrixClass * 8) + scaled;
-        if (LoadAsset(result + 0x58, p) != 0) {
-            register u8 *base_a0 asm("$4");
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 0); SetTrackCameraTable(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 1); SetEnvPaletteTable(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 2); SetEnvironmentScript(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 3); RegisterModelBank(g_AssetBlockPtr, 1);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 4); InstallTrackPoints(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 5); RegisterCourseModels(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 6); RegisterModelBank(g_AssetBlockPtr, 2);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 7); InstallTerrainCellData(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 8); SetCourseObjects(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 9); InstallTrackEventData(g_AssetBlockPtr);
-            base_a0 = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(base_a0, 10); SelectTrackCameraTable(g_AssetBlockPtr, 1);
+        u8 *dst;
+        s32 courseOffset;
+        register s32 assetIndex asm("$2");
+        dst = g_AssetLoadCursor;
+        courseOffset = g_CourseIndex * 2;
+        assetIndex = (g_GrandPrixClass * 8) + courseOffset;
+        if (LoadAsset(assetIndex + 0x58, dst) != 0) {
+            register u8 *pack asm("$4");
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 0); SetTrackCameraTable(g_AssetBlockPtr);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 1); SetEnvPaletteTable(g_AssetBlockPtr);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 2); SetEnvironmentScript(g_AssetBlockPtr);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 3); RegisterModelBank(g_AssetBlockPtr, 1);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 4); InstallTrackPoints(g_AssetBlockPtr);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 5); RegisterCourseModels(g_AssetBlockPtr);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 6); RegisterModelBank(g_AssetBlockPtr, 2);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 7); InstallTerrainCellData(g_AssetBlockPtr);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 8); SetCourseObjects(g_AssetBlockPtr);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 9); InstallTrackEventData(g_AssetBlockPtr);
+            pack = g_AssetLoadCursor; g_AssetBlockPtr = ASSET_SUB(pack, 10); SelectTrackCameraTable(g_AssetBlockPtr, 1);
             g_AssetLoadState = 7;
         }
         break;
@@ -182,13 +182,13 @@ s32 RequestRaceStart(void) {
 void LoadGrandPrixScreen(void) {
     s32 base;
     s32 offset;
-    s32 value;
+    s32 loaded;
 
     if (g_AssetLoadState == 1) {
         offset = g_GrandPrixSeries * 6;
         base = g_GrandPrixClass + 0x4A;
-        value = LoadAsset((s32)(offset + base), (void *)g_ImageBlockBuffer);
-        if (value != 0) {
+        loaded = LoadAsset((s32)(offset + base), (void *)g_ImageBlockBuffer);
+        if (loaded != 0) {
             g_AssetLoadState = 0;
         }
     }
@@ -210,16 +210,16 @@ s32 RequestTrackLoad(void) {
 }
 
 void LoadCourseAssets(void) {
-    s32 value;
+    s32 loaded;
 
     if (g_AssetLoadState == 1) {
-        s32 left = g_CourseIndex * 2;
-        s32 right = (g_GrandPrixClass * 8) + 0x57;
+        s32 courseOffset = g_CourseIndex * 2;
+        s32 classBase = (g_GrandPrixClass * 8) + 0x57;
 
-        value = LoadAsset((s32)(left + right), (void *)g_AssetBase);
-        if (value != 0) {
+        loaded = LoadAsset((s32)(courseOffset + classBase), (void *)g_AssetBase);
+        if (loaded != 0) {
             g_AssetLoadState = 0;
-            g_ImageBlockBuffer = value + g_AssetBase;
+            g_ImageBlockBuffer = loaded + g_AssetBase;
         }
     }
 }

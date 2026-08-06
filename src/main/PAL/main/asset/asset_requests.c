@@ -10,8 +10,8 @@ extern Rect g_TeamLogoClutRect;
 extern Rect g_TeamLogoRect;
 extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[];
-void UploadImageAsset(void *arg0);
-void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, s32 arg3);
+void UploadImageAsset(void *asset);
+void StartAudioSlotLoad(s32 slot, void *header, void *body, s32 table);
 extern s32 g_ImageBlockBuffer;
 extern GameSceneAssetHeader *g_AssetBase;
 extern void *g_AssetBlockPtr2;
@@ -69,16 +69,16 @@ setNextBuffer:
         break;
     case 6:
         if (LoadAsset(5, g_AssetLoadCursor) != 0) {
-            u8 *finalBase;
+            u8 *assetBase;
 
             UploadImageAsset(g_AssetLoadCursor);
             StoreImage(&g_TeamLogoClutRect, g_TeamLogoClut);
             StoreImage(&g_TeamLogoRect, g_TeamLogoCanvas);
             DrawSync(0);
-            finalBase = g_AssetLoadCursor;
+            assetBase = g_AssetLoadCursor;
             g_TeamLogoClut[0] = 0;
             g_AssetLoadState = 0;
-            g_AssetBase = (GameSceneAssetHeader *)finalBase;
+            g_AssetBase = (GameSceneAssetHeader *)assetBase;
         }
         break;
     }

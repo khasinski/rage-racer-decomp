@@ -31,12 +31,12 @@ s32 GetCarUnlockLevel(s32 model) {
     return g_CarTable[model].modelVariant + g_CarModelUnlockBase[model];
 }
 
-void InitRenderState(s32 arg0) {
+void InitRenderState(s32 otShift) {
     register s32 value asm("$2");
     register s32 ptr asm("$2");
-    s32 tmp;
+    s32 mirror;
 
-    tmp = g_MirrorMode;
+    mirror = g_MirrorMode;
     value = 0xA;
     *(s32 *)0x1F80006C = value;
     value = 0x80;
@@ -58,11 +58,11 @@ void InitRenderState(s32 arg0) {
     ptr = (s32)&D_8019C86C;
     g_VisibleCellMask = (void *)ptr;
     ptr = (s32)&D_8009EC94;
-    *(s32 *)0x1F800064 = arg0;
+    *(s32 *)0x1F800064 = otShift;
     *(u16 *)0x1F800078 = 0;
     *(u16 *)0x1F80007A = 0;
     g_VisibleCellList = (void *)ptr;
-    *(s32 *)0x1F800068 = tmp;
+    *(s32 *)0x1F800068 = mirror;
 }
 
 void RegisterModelBank(s32 *base, s32 index) {

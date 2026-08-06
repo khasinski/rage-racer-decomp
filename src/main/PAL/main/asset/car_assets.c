@@ -13,11 +13,11 @@ extern u8 *g_AssetBlockPtr2;
 extern u8 *g_AssetSubBlockPtr;
 s32 GetCarAssetIndex(s32 model, s32 grade);
 void RegisterCourseModels(void);
-void SelectCarModelSlot(s32 arg0);
-void UploadImageAsset(void *arg0);
-void ApplyBodyColor1(s32 arg0, s32 arg1);
-void ApplyBodyColor2(s32 arg0, s32 arg1);
-void StartAudioSlotLoad(s32 arg0, void *arg1, void *arg2, void *arg3);
+void SelectCarModelSlot(s32 slot);
+void UploadImageAsset(void *asset);
+void ApplyBodyColor1(s32 colour, s32 imageData);
+void ApplyBodyColor2(s32 colour, s32 imageData);
+void StartAudioSlotLoad(s32 slot, void *header, void *body, void *table);
 
 s32 RequestCarSelectAssets(void) {
     if (g_AssetLoadState != 0) {
@@ -36,10 +36,10 @@ s32 RequestCarSelectAssets(void) {
 
 void LoadCarSelectAssets(void) {
     s32 state = g_AssetLoadState;
-    s32 state2;
+    s32 nextState;
     u8 *carModelBase;
     GameSceneAssetHeader *header;
-    GameSceneAssetHeader *headerArg;
+    GameSceneAssetHeader *imageHeader;
     GameCarModelAsset *model;
     register GameCarEntry *entry asm("$2");
     s32 carIndex;
@@ -49,12 +49,12 @@ void LoadCarSelectAssets(void) {
     s32 assetOffset;
     s32 modelPtr;
 
-    state2 = 2;
+    nextState = 2;
 
     switch (state) {
     case 1:
         StartAudioSlotLoad(1, g_AssetBlockPtr, g_AssetSubBlockPtr, g_AssetBlockPtr2);
-        g_AssetLoadState = state2;
+        g_AssetLoadState = nextState;
         return;
     case 2:
         if ((PollAudioSlotLoad() << 16) != 0) {
@@ -76,9 +76,9 @@ void LoadCarSelectAssets(void) {
                 g_AssetBlockPtr = (u8 *)secondOffset;
                 RegisterCourseModels();
 
-                headerArg = g_AssetLoadCursor;
-                assetOffset = headerArg->offsets[2];
-                g_AssetBlockPtr = (u8 *)headerArg + assetOffset;
+                imageHeader = g_AssetLoadCursor;
+                assetOffset = imageHeader->offsets[2];
+                g_AssetBlockPtr = (u8 *)imageHeader + assetOffset;
                 UploadImageAsset(g_AssetBlockPtr);
 
                 g_AssetLoadState = 4;
@@ -132,73 +132,73 @@ void LoadCarSelectAssets(void) {
     return;
 }
 
-s32 RequestCarModel(s32 arg0) {
+s32 RequestCarModel(s32 carIndex) {
     if (g_AssetLoadState != 0) {
         return 1;
     }
 
     g_MainState = 5;
-    g_PendingCarModelIndex = arg0;
+    g_PendingCarModelIndex = carIndex;
     g_AssetLoadState = 1;
     return 1;
 }
 
-void LoadCarModelNow(s32 arg0) {
-    RequestCarModel(arg0);
+void LoadCarModelNow(s32 carIndex) {
+    RequestCarModel(carIndex);
 
     while (g_AssetLoadState != 0) {
         ServiceAssetLoad();
     }
 }
 
-void LoadCarModel(s32 arg0) {
-    u8 *ptr;
-    s32 index;
-    register s32 arg asm("$17");
-    s32 offset;
+void LoadCarModel(s32 carIndex) {
+    u8 *dst;
+    s32 carOffset;
+    register s32 car asm("$17");
+    s32 assetIndex;
 
-    arg = arg0;
-    index = arg << 3;
-    offset = (GetCarAssetIndex(arg, ((GameCarEntry *)(index + (s32)g_CarTable))->modelVariant) * 2) + 0xA;
+    car = carIndex;
+    carOffset = car << 3;
+    assetIndex = (GetCarAssetIndex(car, ((GameCarEntry *)(carOffset + (s32)g_CarTable))->modelVariant) * 2) + 0xA;
 
     if (g_AssetLoadState == 1) {
-        ptr = g_CarModelBuffer;
+        dst = g_CarModelBuffer;
         if (g_CarModelSlot == 0) {
-            ptr += 0x20000;
+            dst += 0x20000;
         }
 
-        if (LoadAsset(offset, ptr) != 0) {
-            s32 fixed;
-            u32 flag;
-            register s32 test asm("$2");
-            u8 *entry;
+        if (LoadAsset(assetIndex, dst) != 0) {
+            s32 addr;
+            u32 slot;
+            register s32 paintable asm("$2");
+            u8 *carEntry;
 
-            SetCarModelSlot(ptr, g_CarModelSlot < 1);
-            fixed = *(volatile s32 *)(ptr + 0x20);
-            flag = g_CarModelSlot;
+            SetCarModelSlot(dst, g_CarModelSlot < 1);
+            addr = *(volatile s32 *)(dst + 0x20);
+            slot = g_CarModelSlot;
             {
-                s32 rel = fixed;
-                fixed = (s32)ptr + rel;
+                s32 rel = addr;
+                addr = (s32)dst + rel;
             }
-            flag = flag < 1;
-            ((GameCarModelAsset *)ptr)->modelDataOffset = fixed;
-            RegisterModelBank((void *)fixed, flag);
-            fixed = *(volatile s32 *)(ptr + 0x24);
-            flag = g_CarModelSlot;
+            slot = slot < 1;
+            ((GameCarModelAsset *)dst)->modelDataOffset = addr;
+            RegisterModelBank((void *)addr, slot);
+            addr = *(volatile s32 *)(dst + 0x24);
+            slot = g_CarModelSlot;
             {
-                s32 rel = fixed;
-                fixed = (s32)ptr + rel;
+                s32 rel = addr;
+                addr = (s32)dst + rel;
             }
-            flag = flag < 1;
-            ((GameCarModelAsset *)ptr)->imageDataOffset = fixed;
-            SetCarImageSlot((void *)fixed, flag);
+            slot = slot < 1;
+            ((GameCarModelAsset *)dst)->imageDataOffset = addr;
+            SetCarImageSlot((void *)addr, slot);
 
-            test = arg < 10;
-            if (test != 0) {
-                entry = (u8 *)(index + (s32)g_CarTable);
-                ApplyBodyColor1(((GameCarEntry *)entry)->paintColor1, ((GameCarModelAsset *)ptr)->imageDataOffset);
-                entry = (u8 *)(index + (s32)g_CarTable);
-                ApplyBodyColor2(((GameCarEntry *)entry)->paintColor2, ((GameCarModelAsset *)ptr)->imageDataOffset);
+            paintable = car < 10;
+            if (paintable != 0) {
+                carEntry = (u8 *)(carOffset + (s32)g_CarTable);
+                ApplyBodyColor1(((GameCarEntry *)carEntry)->paintColor1, ((GameCarModelAsset *)dst)->imageDataOffset);
+                carEntry = (u8 *)(carOffset + (s32)g_CarTable);
+                ApplyBodyColor2(((GameCarEntry *)carEntry)->paintColor2, ((GameCarModelAsset *)dst)->imageDataOffset);
             }
 
             g_AssetLoadState = 0;
@@ -206,19 +206,19 @@ void LoadCarModel(s32 arg0) {
     }
 }
 
-s32 RequestUpgradedCarModel(s32 arg0) {
+s32 RequestUpgradedCarModel(s32 carIndex) {
     if (g_AssetLoadState != 0) {
         return 1;
     }
 
     g_MainState = 6;
-    g_PendingCarModelIndex = arg0;
+    g_PendingCarModelIndex = carIndex;
     g_AssetLoadState = 1;
     return 1;
 }
 
-void LoadUpgradedCarModelNow(s32 arg0) {
-    RequestUpgradedCarModel(arg0);
+void LoadUpgradedCarModelNow(s32 carIndex) {
+    RequestUpgradedCarModel(carIndex);
 
     while (g_AssetLoadState != 0) {
         ServiceAssetLoad();

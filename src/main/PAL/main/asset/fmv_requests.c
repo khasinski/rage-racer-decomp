@@ -6,8 +6,8 @@
 
 extern GameSceneAssetHeader *g_AssetLoadCursor;
 
-void SetTrackCameraTable(void *arg0);
-void RegisterCourseModels(void *arg0);
+void SetTrackCameraTable(void *table);
+void RegisterCourseModels(void *base);
 
 void LoadTrackDataAssets(void) {
     GameSceneAssetHeader *header;

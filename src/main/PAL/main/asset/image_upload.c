@@ -3,29 +3,29 @@
 #include "game/race.h"
 #include "game/asset.h"
 
-void UploadImageBlock(void *arg0) {
+void UploadImageBlock(void *asset) {
     GameImageBlock *block;
     u16 rect[4];
     u32 width;
     u32 height;
     s32 flags;
 
-    arg0 = (u8 *)arg0 + 4;
-    flags = *(s32 *)arg0;
-    arg0 = (u8 *)arg0 + 4;
+    asset = (u8 *)asset + 4;
+    flags = *(s32 *)asset;
+    asset = (u8 *)asset + 4;
 
     if (flags & 8) {
-        block = arg0;
+        block = asset;
         rect[0] = block->x;
         rect[1] = block->y;
         rect[2] = block->w;
         rect[3] = block->h;
         LoadImage((Rect *)rect, block->pixels);
         DrawSync(0);
-        arg0 = (u8 *)block + (((u32)block->size >> 2) << 2);
+        asset = (u8 *)block + (((u32)block->size >> 2) << 2);
     }
 
-    block = arg0;
+    block = asset;
     rect[0] = block->x;
     rect[1] = block->y;
     width = rect[2] = block->w;
@@ -36,14 +36,14 @@ void UploadImageBlock(void *arg0) {
     }
 }
 
-void UploadImageAsset(void *arg0) {
+void UploadImageAsset(void *asset) {
     union {
         s32 offset;
         u8 *next;
     } state;
     u8 *ptr;
 
-    ptr = (u8 *)arg0 + 4;
+    ptr = (u8 *)asset + 4;
     goto test;
 
 for (;;) {
@@ -78,7 +78,7 @@ void StoreTeamLogoImage(void *dst) {
     g_TeamLogoClut[0] = 0;
 }
 
-void UploadImageAsset(void *arg0);
+void UploadImageAsset(void *asset);
 
 void UploadLoadBufferImage(void) {
     UploadImageAsset(g_LoadBuffer);

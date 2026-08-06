@@ -5,7 +5,7 @@
 extern u8 *g_AssetBase;
 extern u8 *g_AssetSubBlockPtr;
 extern u8 *g_AssetLoadCursor;
-void UploadImageAsset(void *arg0);
+void UploadImageAsset(void *asset);
 
 void InstallCourseAssets(void) {
     u8 *base;
