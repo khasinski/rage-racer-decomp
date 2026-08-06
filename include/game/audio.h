@@ -173,7 +173,13 @@ extern s32 g_VabSpuAddress[];
 extern s32 g_VabSpuAddressExtra;
 extern s32 g_VabTransferDone;
 
-void BiosExit(s32 arg0);
+/* The BIOS exit() stub (linkers/PAL/undefined_syms_manual.txt binds it to
+ * g_BiosCallStubs): it never comes back. Telling gcc so is not a hint for the
+ * allocator's sake, it is the truth, and it is what ends the live range of a
+ * value the failure path does not use. Without it gcc thinks control returns
+ * from BiosExit into the code after the check, so every value still needed
+ * there is live across two calls and has to sit in a callee-saved register. */
+void BiosExit(s32 arg0) __attribute__((noreturn));
 s32 StartSoundCueVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void UpdateBasicEffectVoices(void);
 void UpdateEffectVoiceStates(void);

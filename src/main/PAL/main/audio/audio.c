@@ -113,16 +113,9 @@ void ResetSoundState(void) {
     }
 }
 
-s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("SsVabTransBody");
-s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("SsVabOpenHeadSticky");
-
 s32 InitSoundWithVab(s32 header, s32 body) {
-    s32 headerReg = header;
-    s32 bodyReg = body;
-    s16 *vabIdPtr;
-    register s32 currentVabId asm("$5");
-    s32 fail;
-    s16 ret;
+    s16 *vabIdPtr = g_VabIds;
+    s16 vabId;
 
     SsSetTableSize(g_SndTableArea, 2, 1);
     SsSetTickMode(1);
@@ -132,19 +125,15 @@ s32 InitSoundWithVab(s32 header, s32 body) {
     SetReverbPreset(2, 0, 0);
     ResetSoundState();
 
-    ret = SsVabOpenHeadStickyWide(headerReg, -1, 0x1000);
-    vabIdPtr = g_VabIds;
-    *vabIdPtr = ret;
-    currentVabId = (s16)ret;
-    fail = -1;
-    if (currentVabId == fail) {
+    *vabIdPtr = SsVabOpenHeadSticky((u_char *)header, -1, 0x1000);
+    vabId = *vabIdPtr;
+    if (vabId == -1) {
         DebugPrintf(g_MsgVabOpenHeadError);
         BiosExit(1);
     }
 
-    ret = SsVabTransBodyWide(bodyReg, currentVabId);
-    *vabIdPtr = ret;
-    if ((s16)ret == fail) {
+    *vabIdPtr = SsVabTransBody((u_char *)body, vabId);
+    if (*vabIdPtr == -1) {
         DebugPrintf(g_MsgVabTransBodyError);
         BiosExit(1);
     }
@@ -174,68 +163,37 @@ s32 InitSoundRuntime(void) {
 #include "psyq/snd.h"
 
 s32 SpuVmDamperStep(void);
-s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("SsVabTransBody");
-s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("SsVabOpenHeadSticky");
 void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
 
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
-    register s32 slotReg asm("$16");
-    register s32 bodyReg asm("$17");
-    s16 *vabIdPtr;
-    register s32 currentVabId asm("$5");
-    register s32 ret asm("$2");
+    s16 vabId;
 
-    asm("" : "=r"(slotReg) : "0"(slot));
-    bodyReg = body;
-
-    if (slotReg == 3) {
-        ret = StartVabTransferWithTable(header, bodyReg, (u16 *)table);
-        return (s16)ret;
+    if (slot == 3) {
+        return (s16)StartVabTransferWithTable(header, body, (u16 *)table);
+    }
+    if (slot == 1 || slot == 6) {
+        return (s16)OpenVabSequenceSlot(slot, header, body, table);
     }
 
-    {
-        register s32 seqSlotArg asm("$4") = slotReg;
-
-        if (slotReg == 1 || slotReg == 6) {
-        {
-            asm volatile("" ::: "$6");
-            ret = OpenVabSequenceSlot(seqSlotArg, header, bodyReg, table);
-            return (s16)ret;
-        }
-        }
+    g_AudioLoadSlot = slot;
+    g_VabIds[slot] = SsVabOpenHeadSticky((u_char *)header, -1, g_VabSpuAddress[slot]);
+    /* Reading the slot back is what keeps the opened id in a register: the
+       store is a halfword, so the reload is folded into a sign-extend of the
+       call result and that value is still there to hand to SsVabTransBody. */
+    vabId = g_VabIds[slot];
+    if (vabId == -1) {
+        DebugPrintf(g_MsgVabOpenHeadError);
+        BiosExit(1);
     }
 
-    g_AudioLoadSlot = slotReg;
-    ret = SsVabOpenHeadStickyWide(header, -1, g_VabSpuAddress[slotReg]);
-    {
-        s16 *vabIdBase = g_VabIds;
-        register s32 offset asm("$3") = slotReg * 2;
-        vabIdPtr = (s16 *)((u8 *)vabIdBase + offset);
-    }
-    *vabIdPtr = ret;
-    asm volatile("" : "=r"(ret) : "0"(ret));
-
-    {
-        s32 fail;
-
-        currentVabId = (s16)ret;
-        fail = -1;
-        if (currentVabId == fail) {
-            DebugPrintf(g_MsgVabOpenHeadError);
-            BiosExit(1);
-        }
-
-        ret = SsVabTransBodyWide(bodyReg, currentVabId);
-        *vabIdPtr = ret;
-        if ((s16)ret == fail) {
-            DebugPrintf(g_MsgVabTransBodyError);
-            BiosExit(1);
-        }
+    g_VabIds[slot] = SsVabTransBody((u_char *)body, vabId);
+    if (g_VabIds[slot] == -1) {
+        DebugPrintf(g_MsgVabTransBodyError);
+        BiosExit(1);
     }
 
-    ret = SsVabTransCompleted(0);
-    g_VabTransferDone = (s16)ret;
-    return (s16)ret;
+    g_VabTransferDone = SsVabTransCompleted(0);
+    return g_VabTransferDone;
 }
 
 s32 PollAudioSlotLoad(void) {
@@ -311,72 +269,63 @@ s32 CloseLoadedAudioSlots(void) {
 }
 
 s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
-    register s32 ret asm("$2");
-    register s32 currentVabId asm("$5");
-    s16 *vabIdPtr;
-    s32 fail;
-    s32 tableReg = (s32)table;
+    /* $18 (s2) is the one thing this shape cannot reach on its own. The slot
+       pointer and `table` both want a callee-saved register, both have three
+       references, and gcc's priority is refs/live-length: 3/24 for the pointer
+       against 3/23 for `table`, so `table` is allocated first and takes s2.
+       Retail has the pointer in s2, which needs the pointer to win. Nothing in
+       the C decides that here -- the two live ranges are fixed by the call
+       sequence, and every shape tried (pointer vs array vs global, local copies
+       of every parameter, declaration order, the check reading the pointer or
+       the global or a second local) leaves 23 against 24 unchanged. */
+    register s16 *vabIdPtr asm("$18") = &g_VabIds3;
+    s16 vabId;
 
     g_AudioLoadSlot = 3;
-    ret = SsVabOpenHeadStickyWide(header, -1, g_VabSpuAddressExtra);
-    vabIdPtr = &g_VabIds3;
-    *vabIdPtr = ret;
-    asm volatile("" : "=r"(ret) : "0"(ret));
-
-    currentVabId = (s16)ret;
-    fail = -1;
-    if (currentVabId == fail) {
+    *vabIdPtr = SsVabOpenHeadSticky((u_char *)header, -1, g_VabSpuAddressExtra);
+    vabId = *vabIdPtr;
+    if (vabId == -1) {
         DebugPrintf(g_MsgVabOpenHeadError);
         BiosExit(1);
     }
 
-    ret = SsVabTransBodyWide(body, currentVabId);
-    *vabIdPtr = ret;
-    if ((s16)ret == fail) {
+    *vabIdPtr = SsVabTransBody((u_char *)body, vabId);
+    if (*vabIdPtr == -1) {
         DebugPrintf(g_MsgVabTransBodyError);
         BiosExit(1);
     }
 
-    if (tableReg != 0) {
-        LoadAudioParameterTable((u16 *)tableReg);
+    if (table != 0) {
+        LoadAudioParameterTable(table);
     }
 
     g_ExtraVabLoaded = 1;
-    ret = SsVabTransCompleted(0);
-    g_VabTransferDone = (s16)ret;
+    g_VabTransferDone = SsVabTransCompleted(0);
     return g_VabTransferDone;
 }
 
 s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
-    s32 bodyReg = body;
-    s32 tableReg = table;
-    s16 *vabIdPtr;
-    register s32 currentVabId asm("$5");
-    s32 fail;
-    register s32 ret asm("$2");
+    /* Same allocation tie as StartVabTransferWithTable: see the note there. */
+    register s16 *vabIdPtr asm("$18") = &g_VabIds3;
+    s16 vabId;
     s32 flags;
 
-    ret = SsVabOpenHeadStickyWide(header, -1, 0x6A000);
-    vabIdPtr = &g_VabIds3;
-    *vabIdPtr = ret;
-
-    currentVabId = (s16)ret;
-    fail = -1;
-    if (currentVabId == fail) {
+    *vabIdPtr = SsVabOpenHeadSticky((u_char *)header, -1, 0x6A000);
+    vabId = *vabIdPtr;
+    if (vabId == -1) {
         DebugPrintf(g_MsgVabOpenHeadError);
         BiosExit(1);
     }
 
-    ret = SsVabTransBodyWide(bodyReg, currentVabId);
-    *vabIdPtr = ret;
-    if ((s16)ret == fail) {
+    *vabIdPtr = SsVabTransBody((u_char *)body, vabId);
+    if (*vabIdPtr == -1) {
         DebugPrintf(g_MsgVabTransBodyError);
         BiosExit(1);
     }
 
     SsVabTransCompleted(1);
-    if (tableReg != 0) {
-        LoadAudioParameterTable((u16 *)tableReg);
+    if (table != 0) {
+        LoadAudioParameterTable((u16 *)table);
     }
 
     flags = g_AudioSlotMask;
@@ -2216,48 +2165,36 @@ void ForceAllEffectVoicesEnabled(s32 arg0) {
 #include "common.h"
 #include "psyq/snd.h"
 
-s32 SsVabTransBodyWide(s32 arg0, s32 arg1) asm("SsVabTransBody");
-s32 SsVabOpenHeadStickyWide(s32 arg0, s32 arg1, s32 arg2) asm("SsVabOpenHeadSticky");
 void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
 
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
-    s32 slotReg = slot;
-    s32 bodyReg = body;
-    s32 seqReg = seq;
-    s16 *vabIdPtr;
-    register s32 currentVabId asm("$5");
-    s32 fail;
-    register s32 ret asm("$2");
+    s16 vabId;
+    /* $5 only matters for this second read. The first one is a cross-block
+       value whose only use is SsVabTransBody's second argument, so it lands in
+       a1 on its own; this one lives and dies inside one block, has no argument
+       use to prefer a1, and local-alloc hands it v0. Retail keeps both in a1. */
+    register s32 vabIdAgain asm("$5");
 
-    g_AudioLoadSlot = slotReg;
-    ret = SsVabOpenHeadStickyWide(header, -1, g_VabSpuAddress[slotReg]);
-    {
-        s16 *vabIdBase = g_VabIds;
-        slotReg *= 2;
-        vabIdPtr = (s16 *)((u8 *)vabIdBase + slotReg);
-    }
-    *vabIdPtr = ret;
-    asm volatile("" : "=r"(ret) : "0"(ret));
-
-    currentVabId = (s16)ret;
-    fail = -1;
-    if (currentVabId == fail) {
+    g_AudioLoadSlot = slot;
+    g_VabIds[slot] = SsVabOpenHeadSticky((u_char *)header, -1, g_VabSpuAddress[slot]);
+    vabId = g_VabIds[slot];
+    if (vabId == -1) {
         DebugPrintf(g_MsgSeqVabOpenHeadError);
         BiosExit(1);
     }
 
-    ret = SsVabTransBodyWide(bodyReg, currentVabId);
-    *vabIdPtr = ret;
-    currentVabId = (s16)ret;
-    if (currentVabId == fail) {
+    g_VabIds[slot] = SsVabTransBody((u_char *)body, vabId);
+    vabIdAgain = g_VabIds[slot];
+    if (vabIdAgain == -1) {
         DebugPrintf(g_MsgSeqVabTransBodyError);
         BiosExit(1);
     }
 
-    *(s32 *)&g_SeqHandle = (s16)SsSeqOpen(seqReg);
+    /* g_SeqHandle is a word (sym.bss size 0x4); the header calls it s16
+       because every other reader wants the low half. */
+    *(s32 *)&g_SeqHandle = (s16)SsSeqOpen(seq);
     g_SeqVolumeFadeStep = 0;
-    ret = SsVabTransCompleted(0);
-    g_VabTransferDone = (s16)ret;
+    g_VabTransferDone = SsVabTransCompleted(0);
     return g_VabTransferDone;
 }
 

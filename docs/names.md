@@ -6025,3 +6025,64 @@ a symbol, and both symbols were address-spelled: they now read
 the link until `make split` regenerates the bss labels — an incremental
 `make build` after renaming a `sym.bss.main.txt` entry fails with an undefined
 reference and says nothing about why.
+
+## 40. `BiosExit` never returns, and that is worth ten register pins
+
+The five functions that load a VAB — `InitSoundWithVab`, `StartAudioSlotLoad`,
+`StartVabTransferWithTable`, `LoadExtraVabSlotWithTable` and
+`OpenVabSequenceSlot` in `audio/audio.c` — all repeat the same idiom:
+
+    g_VabIds[slot] = SsVabOpenHeadSticky(header, -1, g_VabSpuAddress[slot]);
+    vabId = g_VabIds[slot];
+    if (vabId == -1) { DebugPrintf(...); BiosExit(1); }
+    g_VabIds[slot] = SsVabTransBody(body, vabId);
+    if (g_VabIds[slot] == -1) { DebugPrintf(...); BiosExit(1); }
+
+Retail keeps `vabId` in `a1` across the failure block, so that the value is
+already in place as `SsVabTransBody`'s second argument. `a1` is call-clobbered,
+so gcc can only put it there if it believes the value is not live across
+`DebugPrintf` and `BiosExit`. It believes that exactly when `BiosExit` is
+declared `__attribute__((noreturn))`, which it is: the linker script binds it
+to `g_BiosCallStubs`, the BIOS `exit()`. Every reconstruction before this one
+had gcc thinking control came back from `BiosExit` and falling through into the
+code after the check, which makes the id live across two calls and forces a
+callee-saved register — the pins were paying for a lie about control flow.
+
+The other half of the idiom is the read-back. `g_VabIds[slot] = call()` stores
+a halfword, so reading the same slot straight back is folded by cse into a
+sign-extend of the call result rather than an `lh`; that is why retail stores
+first and sign-extends second, and why a local assigned *before* the store
+(`vabId = call(); g_VabIds[slot] = vabId;`) does not match — it extends first.
+
+With both facts, `StartAudioSlotLoad` (six `asm` register pins and two barriers)
+and `InitSoundWithVab` (one pin) drop to plain C. The family went from 13 pins
+and 4 barriers to 3 pins, and four `asm("SsVab...")` widening aliases became
+unnecessary.
+
+### 40a. The three pins that are left, and exactly what blocks them
+
+`StartVabTransferWithTable` and `LoadExtraVabSlotWithTable` keep one pin each,
+on `vabIdPtr`. Both functions need two callee-saved values: the pointer to the
+slot, and the `table` parameter. Both have three references. gcc 2.6.3's
+global-alloc priority is `floor_log2(refs) * refs / live_length`, and under
+`noreturn` the live lengths come out at 23 insns for `table` against 24 for the
+pointer — so `table` is allocated first and takes `s2`, while retail has the
+pointer there. The tie-break on equal priority is the allocno number, and a
+local can never precede a parameter, so the pointer has to win on priority
+outright; it needs to be at least two insns shorter, and it is one longer.
+
+The live lengths did not move under any of: pointer variable vs `&g_VabIds[3]`
+vs the bare global; local copies of every parameter, with and without a cast
+through `s32`; declaration order; the second check reading the pointer, the
+global, or a second local; `register` without a register number; the parameter
+declared `s32` instead of `u16 *`. Adding a real store into `table`'s range does
+move it (23 → 25) and flips the order, which confirms the mechanism — but the
+retail instruction sequence has nothing there to add.
+
+`OpenVabSequenceSlot` keeps a pin on the *second* read. The first read is a
+cross-block value whose only use is `SsVabTransBody`'s second argument, so
+global-alloc's preference puts it in `a1` on its own. The second read is born
+and dies inside one basic block with no argument use, so local-alloc gives it
+`v0`. Retail has `a1` for both, which needs the two reads to share one
+quantity; nothing in the C arranges that. Note this is the one function of the
+five where retail sign-extends the second result into `a1` rather than `v0`.
