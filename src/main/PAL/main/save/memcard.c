@@ -404,64 +404,47 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 void LibcSprintf();
 
+/* The icon strip is copied to VRAM in two passes: one 16x1 run of palette
+ * entries at block+0x60, then the 4x16 frame tiles from block+0x80 on.  The
+ * frame loop is written against the counter rather than against running
+ * offsets because that is what the retail code's induction variables are:
+ * `i * 0x80` and `i * 4` are strength-reduced back into the `addiu s4,s4,128`
+ * / `addiu s1,s1,4` pair, and doing it this way puts the two increments'
+ * initialisers after the loop-invariant `4` and `0x10` in the preheader,
+ * which is the order retail schedules them in. */
 void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 imageY) {
-    u8 *blockReg;
-    register char *titleReg asm("$3");
-    register s32 iconTileReg asm("$16");
-    register s32 imageXReg asm("$17");
-    register Rect *rectArg asm("$4");
-    register u8 *imageData asm("$5");
-    register Rect *rect asm("$19");
-    register s32 dataOffset asm("$20");
+    Rect *iconRect;
+    Rect *frameRect;
     s32 i;
-    register s32 rectW asm("$23");
-    s32 rectH;
     s32 tileRow;
     s32 tileX;
 
-    blockReg = block;
-    asm("" : "=r"(blockReg) : "0"(blockReg));
-    titleReg = title;
-    asm("" : "=r"(titleReg) : "0"(titleReg));
-    iconTileReg = iconTile;
-    asm("" : "=r"(iconTileReg) : "0"(iconTileReg));
-    imageXReg = imageX;
+    block[0] = 'S';
+    block[1] = 'C';
+    block[2] = 0x11;
+    block[3] = 1;
+    LibcSprintf(block + 4, g_FmtString, title);
 
-    blockReg[0] = 'S';
-    blockReg[1] = 'C';
-    blockReg[2] = 0x11;
-    blockReg[3] = 1;
-    LibcSprintf(blockReg + 4, g_FmtString, (s32)titleReg);
-
-    tileRow = iconTileReg / 20;
-    rectArg = &g_SaveIconRect;
-    imageData = blockReg + 0x60;
+    tileRow = iconTile / 20;
+    iconRect = &g_SaveIconRect;
     g_SaveIconRect.w = 0x10;
     g_SaveIconRect.h = 1;
-    tileX = iconTileReg % 20;
-    rectArg->x = tileX * 16;
+    tileX = iconTile % 20;
+    iconRect->x = tileX * 16;
     g_SaveIconRect.y = tileRow + 0x1E0;
-    i = 0;
-    rect = rectArg;
-    rectW = 4;
-    rectH = 0x10;
-    StoreImage(rectArg, imageData);
-    asm("" : "=r"(rect) : "0"(rect));
-    asm("" : "=r"(rectW) : "0"(rectW));
-    asm("" : "=r"(rectH) : "0"(rectH));
-    dataOffset = 0x80;
+    StoreImage(iconRect, block + 0x60);
     DrawSync(0);
 
+    i = 0;
+    frameRect = iconRect;
     do {
-        rect->x = imageXReg;
-        rect->y = imageY;
-        rect->w = rectW;
-        rect->h = rectH;
-        StoreImage(rect, blockReg + dataOffset);
+        frameRect->x = imageX + i * 4;
+        frameRect->y = imageY;
+        frameRect->w = 4;
+        frameRect->h = 0x10;
+        StoreImage(frameRect, block + 0x80 + i * 0x80);
         DrawSync(0);
-        dataOffset += 0x80;
         i++;
-        imageXReg += 4;
     } while (i <= 0);
 }
 
