@@ -334,7 +334,7 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
 
 void EnterRaceScene(void) {
     s32 pad[2];
-    u8 *new_var;
+    u8 *lapTableRow;
     u8 *base;
     s32 mode;
     s32 scene;
@@ -344,7 +344,7 @@ void EnterRaceScene(void) {
     s32 count;
     s32 i;
     s32 *first;
-    s32 new_var2;
+    s32 scratch;
     s32 *second;
 
     SetupDisplay240(0, 0, 0);
@@ -382,15 +382,19 @@ void EnterRaceScene(void) {
         do {
             g_SectorIndex = -2;
         } while (0);
-        new_var = (u8 *)g_BestLapTimes + scene;
-        count = mode + (s32)new_var;
-        new_var2 = g_GrandPrixMode * 4;
-        new_var2 += count;
-        entry = (s32 *)new_var2;
+        /* g_BestLapTimes[g_RaceSeries][g_CourseIndex][g_GrandPrixMode],
+         * which is how the same table is spelled four times elsewhere in
+         * this file. Written indexed here, or with the three offsets folded
+         * together, the schedule around these barriers changes. */
+        lapTableRow = (u8 *)g_BestLapTimes + scene;
+        count = mode + (s32)lapTableRow;
+        scratch = g_GrandPrixMode * 4;
+        scratch += count;
+        entry = (s32 *)scratch;
         g_RefSectorTime2 = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset + 8);
     } while (0);
     g_RefLapTime = *entry;
-    count = (new_var2 = g_LapCount);
+    count = (scratch = g_LapCount);
     g_RaceTimeRemaining = 0x3A98;
     g_BestLapThisRace = g_RefLapTime;
     if (count > 0) {

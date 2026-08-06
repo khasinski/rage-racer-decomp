@@ -9,7 +9,7 @@
 #include "game/screens.h"
 #include "game/car.h"
 
-void LibcSprintf();
+void LibcSprintf(void *dst, void *fmt, ...);
 s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 extern volatile s32 g_RaceTotalTime;
 extern s32 g_RankingTimes;
@@ -50,6 +50,10 @@ void DrawRankingPanel(u8 *slideX) {
     if (limit > 0) {
         scoreOrX = (s32)g_PlayerLapTimes;
         do {
+            /* row = iter / 2 and value = (iter % 2) * 8: two lap times per
+             * table row, the odd one 8 px to the right. This is gcc's own
+             * expansion of the signed divide; writing it back as `iter / 2`
+             * does not re-expand to the same code here, so it stays. */
             scoreValue = iter + (((u32)iter) >> 31);
             row = scoreValue >> 1;
             doubledRow = row * 2;
