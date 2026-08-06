@@ -67,10 +67,6 @@ void UpdateRouteScenery(void) {
         s32 off;
         s32 n;
         s32 value;
-        register s32 *dst asm("$6");
-        register s32 word0 asm("$2");
-        s32 word1;
-        s32 word2;
 
         idx = g_RaceSeries;
         g_RouteSceneryKeyIndex = 0;
@@ -85,17 +81,7 @@ void UpdateRouteScenery(void) {
         src = (u8 *)((idx * 32) + (s32)base);
         g_RouteSceneryKeyframe = r3;
         g_RouteSceneryRotZ = value;
-        __asm__ volatile("" ::);
-        dst = &g_RouteSceneryX;
-        __asm__ volatile("" : "=r"(dst) : "0"(dst), "r"(src));
-        word0 = *(s32 *)(src + 0x10);
-        word1 = *(s32 *)(src + 0x14);
-        word2 = *(s32 *)(src + 0x18);
-        dst[0] = word0;
-        dst[1] = word1;
-        dst[2] = word2;
-        word0 = *(s32 *)(src + 0x1C);
-        dst[3] = word0;
+        *(Vec4 *)&g_RouteSceneryX = *(Vec4 *)(src + 0x10);
         *cnt = 1;
         g_RouteSceneryFrame = 0;
     }

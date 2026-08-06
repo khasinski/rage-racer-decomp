@@ -39,10 +39,6 @@ void SeedRouteScenery(void) {
     register s32 index0 asm("$2");
     s32 index1;
     register u8 *base asm("$4");
-    register s32 *dst asm("$8");
-    s32 word0;
-    register s32 word1 asm("$6");
-    register s32 word2 asm("$7");
     register u8 *src asm("$2");
     register u8 *record asm("$4");
     s32 value;
@@ -54,19 +50,7 @@ void SeedRouteScenery(void) {
     base = g_RouteSceneryData;
     index1 = g_RaceSeries;
     src = (u8 *)((index0 * 32) + (s32)base);
-    __asm__ volatile("" ::);
-    dst = &g_RouteSceneryX;
-    __asm__ volatile("" : "=r"(dst) : "0"(dst), "r"(src));
-
-    word0 = *(s32 *)(src + 0x10);
-    word1 = *(s32 *)(src + 0x14);
-    word2 = *(s32 *)(src + 0x18);
-    dst[0] = word0;
-    dst[1] = word1;
-    dst[2] = word2;
-    word0 = *(s32 *)(src + 0x1C);
-    dst[3] = word0;
-    __asm__ volatile("" ::);
+    *(Vec4 *)&g_RouteSceneryX = *(Vec4 *)(src + 0x10);
 
     index1 = index1 << 2;
     index1 = index1 + (s32)base;
