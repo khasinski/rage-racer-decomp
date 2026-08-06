@@ -14,7 +14,7 @@ extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
 void ShuffleBgmOrder(void);
 extern s32 g_CameraViewMode;
-void AdvanceBgmShuffleBag();
+void AdvanceBgmShuffleBag(u32 track);
 void DrawFullscreenFadeTile();
 void RequestOptionScreenAssets();
 void RequestTrackTexturePage();
@@ -23,8 +23,8 @@ void DrawTerrainCellsWide();
 
 void DrawBgmSelectBar(void) {
     u8 *base;
-    s32 arg4;
-    s32 arg5;
+    s32 tileW;
+    s32 tileH;
     s32 temp;
     s32 product;
     s32 value;
@@ -33,24 +33,20 @@ void DrawBgmSelectBar(void) {
     base = g_DrawBuffer + 0xD0;
     next = *(s32 *)0x1F800000;
     temp = (g_BgmSelectCursor == 0) ? 0x3FEC : 0x3FEF;
-    arg4 = 0x14;
-    arg5 = 0x10;
+    tileW = 0x14;
+    tileH = 0x10;
 
-    next = (s32)GameQueueSprite(base, next, 0x20, 0xC1, arg4, arg5, 0, 0, temp);
+    next = (s32)GameQueueSprite(base, next, 0x20, 0xC1, tileW, tileH, 0, 0, temp);
     temp = (g_BgmSelectCursor == 1) ? 0x3FEC : 0x3FEF;
-    next = (s32)GameQueueSprite(base, next, 0x36, 0xC1, arg4, arg5, arg4, 0, temp);
+    next = (s32)GameQueueSprite(base, next, 0x36, 0xC1, tileW, tileH, tileW, 0, temp);
     temp = (g_BgmSelectCursor == 2) ? 0x3FEC : 0x3FEF;
-    next = (s32)GameQueueSprite(base, next, 0x4C, 0xC1, arg4, arg5, 0x28, 0, temp);
+    next = (s32)GameQueueSprite(base, next, 0x4C, 0xC1, tileW, tileH, 0x28, 0, temp);
 
     if (g_BgmRandomLabelTimer != 0) {
         g_BgmRandomLabelTimer--;
         temp = 0x10;
     } else {
-        value = g_BgmSelectTrack;
-        product = value * 2;
-        product += value;
-        product <<= 2;
-        temp = product + 0x1C;
+        temp = g_BgmSelectTrack * 12 + 0x1C;
     }
 
     next = (s32)GameQueueSprite(base, next, 0x64, 0xC2, 0xBA, 0xC, 0, temp, 0x3FED);
@@ -59,23 +55,15 @@ void DrawBgmSelectBar(void) {
     *(s32 *)0x1F800000 = GameQueueDrawModePrimWide(base, next, 0xB);
 }
 
-void AdvanceBgmShuffleBag(u32 arg0) {
-    u8 *first;
-    u8 *before;
-    u8 *other;
-    u8 value;
-
+void AdvanceBgmShuffleBag(u32 track) {
     g_BgmShuffleIndex++;
     if (g_BgmShuffleIndex == g_BgmTrackCount) {
         ShuffleBgmOrder();
 
-        first = g_BgmShuffleOrder;
-        before = first - 1;
-        if (arg0 == first[0]) {
-            other = g_BgmTrackCount + before;
-            value = *other;
-            first[0] = value;
-            *other = arg0;
+        if (track == g_BgmShuffleOrder[0]) {
+            u8 tmp = g_BgmShuffleOrder[g_BgmTrackCount - 1];
+            g_BgmShuffleOrder[0] = tmp;
+            g_BgmShuffleOrder[g_BgmTrackCount - 1] = track;
         }
     }
 }
@@ -114,7 +102,7 @@ void UpdateBgmSelect(void) {
     if (g_PadEdge2 & 0x2000) {
         if (g_BgmSelectCursor < 2) g_BgmSelectCursor = g_BgmSelectCursor + 1;
     }
-    if (g_PadEdge2 % 2) {
+    if (g_PadEdge2 & 1) {
         s32 p;
         s32 h0;
         ShuffleBgmOrder();
@@ -171,11 +159,8 @@ void UpdateBgmSelect(void) {
             g_FadeStep = 4;
         }
     }
-    {
-        u16 f = g_PadEdge2;
-        if (f & 4) g_BgmSelectShowUi = 1;
-        if (f & 8) g_BgmSelectShowUi = 0;
-    }
+    if (g_PadEdge2 & 4) g_BgmSelectShowUi = 1;
+    if (g_PadEdge2 & 8) g_BgmSelectShowUi = 0;
     } else {
     DrawFullscreenFadeTile(g_FadeLevel, 0x49);
     g_FadeLevel = g_FadeLevel + g_FadeStep;
