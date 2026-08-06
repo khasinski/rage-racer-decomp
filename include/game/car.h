@@ -424,6 +424,8 @@ s32 GetCarAssetIndex(s32 model, s32 grade);
 s32 GetCarUnlockLevel(s32 model);
 void SetCarImageSlot(void *arg0, s32 arg1);
 void SetCarModelSlot(void *arg0, s32 arg1);
+/* Which of the two showroom model slots is live, 0 or 1. */
+extern u32 g_CarModelSlot;
 /* Point g_CarModelAsset at g_CarModelSlots[index]. */
 void SelectCarModelSlot(s32 index);
 /* Repaint the loaded car's texture block in the two body colours. */

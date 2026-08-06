@@ -113,14 +113,12 @@ void DrawCourseObjects(void) {
     } while (i++, obj++, i < g_CourseObjectCount);
 }
 
-extern u16 *g_TerrainCellGrid;
 
 u32 GetCellRegion(s32 arg0, s32 arg1) {
     arg1 = (arg1 * 32) + arg0;
     return g_TerrainCellGrid[arg1] >> 10;
 }
 
-extern u8 *g_CellVisibilityTable;
 
 u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) {
     s32 x = arg0 << 2;

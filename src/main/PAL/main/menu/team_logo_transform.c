@@ -4,6 +4,10 @@
 #include "game/race.h"
 #include "game/screens.h"
 
+/* Identical to the declaration in game/menu.h; this unit cannot include that
+ * header yet because four of its own definitions still disagree with it
+ * (ScrollTeamLogoUp, GameDrawMenuButton, g_RankingRecords, g_TimeRecords). */
+extern u16 g_TeamLogoClut[16];
 extern u32 g_TeamLogoCanvas[];
 
 /* The logo canvas is 64 rows of eight words, and each word packs eight
@@ -273,7 +277,6 @@ extern s32 D_8007FB14;
 extern s32 D_8007FB18;
 extern s32 D_8007FB1C;
 extern s32 D_8019CAB8;
-extern u16 g_TeamLogoClut[];
 
 void UpdateTeamLogoCanvas(void) {
     s32 temp_a0;

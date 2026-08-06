@@ -1,15 +1,18 @@
 #include "common.h"
+#include "game/menu.h"
 #include "game/state.h"
 #include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/cd.h"
 #include "game/audio.h"
 
-/* Asset-region pointers, each spelled with this file's own view of the
- * pointee; game/asset.h explains why they are not one shared declaration. */
+/* The team-logo canvas and its two VRAM rects. Kept local: menu/ spells the
+ * canvas u32[] for the nibble transforms and u8[] where it only wants the
+ * address, and draw_team_logo_canvas.c reads the two rects through its own
+ * TeamLogoClutPos / TeamLogoTexturePos structs, so there is no single type
+ * to hoist without rewriting those indices. */
 extern Rect g_TeamLogoClutRect;
 extern Rect g_TeamLogoRect;
-extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[];
 
 void LoadBootAssets(void) {

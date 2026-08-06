@@ -16,8 +16,6 @@
  */
 #define ASSET_SUB(base, k) ((base) + ((GameSceneAssetHeader *)(base))->offsets[k])
 
-/* Asset-region pointers, each spelled with this file's own view of the
- * pointee; game/asset.h explains why they are not one shared declaration. */
 
 s32 RequestRaceAssets(void) {
     if (g_AssetLoadState != 0) {

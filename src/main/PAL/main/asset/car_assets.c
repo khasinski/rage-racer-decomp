@@ -4,9 +4,9 @@
 #include "game/car.h"
 #include "game/audio.h"
 
-/* Asset-region pointers, each spelled with this file's own view of the
- * pointee; game/asset.h explains why they are not one shared declaration. */
-extern u32 g_CarModelSlot;
+/* g_CarModelAsset really is per-screen typed; see game/asset.h.
+ * g_TeamLogoSampleData's other reader, menu/team_logo.c, walks it through a
+ * TeamLogoSample struct private to that file. */
 extern GameCarModelAsset *g_CarModelAsset;
 extern s32 g_TeamLogoSampleData;
 

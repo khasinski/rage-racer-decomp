@@ -21,7 +21,6 @@ extern s32 g_PlayerCar;
 extern s32 g_PlayerTrackProgress;
 extern u8 g_TeamLogoClutRect[];
 extern u8 g_TeamLogoRect[];
-extern u8 g_TeamLogoClut[];
 extern u8 g_TeamLogoCanvas[];
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void UploadTeamNameTexture(void *arg0, s32 arg1);

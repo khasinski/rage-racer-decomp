@@ -1,9 +1,9 @@
 #include "common.h"
+#include "game/menu.h"
 #include "psyq/gpu.h"
 #include "game/race.h"
 #include "game/asset.h"
 
-extern u16 g_TeamLogoClut[];
 
 void UploadImageBlock(void *asset) {
     GameImageBlock *block;

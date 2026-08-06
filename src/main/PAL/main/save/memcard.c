@@ -490,7 +490,6 @@ extern u16 g_NegconNeutralL;
 extern u16 g_BgmSelection;
 
 extern u16 g_ClassRecords[];
-extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[];
 extern s32 g_BestLapTimes[];
 extern s32 g_BestTotalTimes[];
@@ -764,7 +763,6 @@ extern u16 g_NegconNeutralL;
  * as g_BgmSelection. Same address, two widths, so two names. */
 
 extern u16 g_ClassRecords[];
-extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[];
 extern s32 g_BestLapTimes[];
 extern s32 g_BestTotalTimes[];

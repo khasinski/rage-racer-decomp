@@ -256,6 +256,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex);
 void DrawMenuCarView(void);
 /* Draw and input halves of the logo painter. The canvas D_801E6F2C is a 64x64
  * 4bpp bitmap with its own 16-entry CLUT at g_TeamLogoClut. */
+extern u16 g_TeamLogoClut[16];
 void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep);
 void UpdateTeamLogoCanvas(void);
 
@@ -555,9 +556,11 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag);
 void DrawTitleFadeOverlay(s32 brightness);
 void DrawVolumeBar(s32 arg0, s32 arg1);
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
-extern void RequestSaveScreenAssets(void);
-extern void RequestSelectBgmAssetsNoReset(void);
-void RequestUpgradedCarModel(s32 arg0);
+/* All three return 1 while the load is still running, as defined in
+ * asset/asset_requests.c and asset/car_assets.c; every caller drops it. */
+s32 RequestSaveScreenAssets(void);
+s32 RequestSelectBgmAssetsNoReset(void);
+s32 RequestUpgradedCarModel(s32 carIndex);
 void SetBodyColor1(s32);
 void SetBodyColor2(s32);
 void TickClassClearFanfare(void);

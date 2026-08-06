@@ -9,10 +9,11 @@
 extern u8 D_8019C86C;
 extern u8 D_8009EC94;
 extern void *g_CarModelAsset;
+/* Kept local: this unit only stores an address into them, while track/ and
+ * render/ read them as u32[] rows, Vec4[] entries and plain s32, four
+ * incompatible element types across seven files. */
 extern void *g_VisibleCellMask;
 extern void *g_VisibleCellList;
-extern void *g_TerrainCellGrid;
-extern void *g_CellVisibilityTable;
 
 s32 GetCarAssetIndex(s32 model, s32 grade) {
     return g_CarModelBaseIndex[model] + grade;
@@ -131,9 +132,9 @@ void InstallTerrainCellData(s32 *base) {
     s32 count;
     s32 i;
 
-    g_TerrainCellGrid = base;
+    g_TerrainCellGrid = (u16 *)base;
     base = (s32 *)((u8 *)base + 0x800);
-    g_CellVisibilityTable = base;
+    g_CellVisibilityTable = (u8 *)base;
     base = (s32 *)((u8 *)base + 0x1000);
     ptr = base + 2;
     count = base[0];

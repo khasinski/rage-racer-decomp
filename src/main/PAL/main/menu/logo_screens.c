@@ -15,7 +15,6 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-extern u16 g_TeamLogoClut[];
 extern Rect g_TeamLogoClutRect;
 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,

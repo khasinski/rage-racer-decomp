@@ -2,8 +2,6 @@
 #include "game/state.h"
 #include "game/asset.h"
 
-/* Asset-region pointers, each spelled with this file's own view of the
- * pointee; game/asset.h explains why they are not one shared declaration. */
 
 void InstallCourseAssets(void) {
     u8 *base;

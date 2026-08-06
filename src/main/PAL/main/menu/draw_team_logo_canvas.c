@@ -51,7 +51,6 @@ extern TeamLogoTexturePos g_TeamLogoRect;
 extern TeamLogoWord D_8007F934;
 extern TeamLogoWord D_8007F93C;
 extern s32 D_8007F950;
-extern u16 g_TeamLogoClut[16];
 extern u8 g_PadType;
 extern u16 D_801E6F2C asm("g_TeamLogoCanvas");
 
