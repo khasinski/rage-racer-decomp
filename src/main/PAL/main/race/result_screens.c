@@ -52,8 +52,7 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
     void *prim;
     s32 redStack;
     s32 green;
-    register s32 temp asm("$3");
-    register s32 quotient asm("$2");
+    s32 temp;
     s32 red;
     s32 blue;
     s32 width;
@@ -63,17 +62,8 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
     prim = *(void **)0x1F800000;
 
     redStack = y;
-    /* Match note: make GCC materialize the red clamp from a3 into a1. */
-    temp = x;
-    if (x < 0) {
-        temp = x + 7;
-    }
-    quotient = temp >> 3;
-    green = quotient + redStack;
-    if (x < 0) {
-        x += 3;
-    }
-    blue = (x >> 2) + redStack;
+    green = x / 8 + redStack;
+    blue = x / 4 + redStack;
 
     if (redStack >= 0) {
         red = redStack;
