@@ -204,9 +204,6 @@ extern u16 g_ScreenOffsetX;
 extern u16 g_ScreenOffsetY;
 
 void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
-    register s32 a0_save asm("$18") = arg0;
-    register s32 a1_save asm("$19") = arg1;
-    s32 a2_save = arg2;
     u8 *base;
     s32 height;
     u16 *src0;
@@ -215,9 +212,9 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
     s32 offset;
     s32 one;
     s32 stride;
-    register u16 value asm("$2");
+    u16 value;
+    u16 value2;
 
-    __asm__("" : : "r"(a0_save), "r"(a1_save), "r"(a2_save));
     SetGeomOffset(0xA0, 0x78);
     SetGeomScreen(0x140);
 
@@ -253,20 +250,20 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
         stride = 0x20000;
         g_FrameContexts[offset + 0x16] = one;
         g_FrameContexts[offset + 0x18] = one;
-        g_FrameContexts[offset + 0x19] = a0_save;
-        g_FrameContexts[offset + 0x1A] = a1_save;
-        g_FrameContexts[offset + 0x1B] = a2_save;
+        g_FrameContexts[offset + 0x19] = arg0;
+        g_FrameContexts[offset + 0x1A] = arg1;
+        g_FrameContexts[offset + 0x1B] = arg2;
         value = *src0;
         stride |= 0x37E8;
         *(volatile u16 *)(g_FrameContexts + offset + 0x64) = value;
-        value = *src1;
+        value2 = *src1;
         i++;
         g_FrameContexts[offset + 0x86] = one;
         g_FrameContexts[offset + 0x88] = 0;
-        g_FrameContexts[offset + 0x89] = a0_save;
-        g_FrameContexts[offset + 0x8A] = a1_save;
-        g_FrameContexts[offset + 0x8B] = a2_save;
-        *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value + 0x1D;
+        g_FrameContexts[offset + 0x89] = arg0;
+        g_FrameContexts[offset + 0x8A] = arg1;
+        g_FrameContexts[offset + 0x8B] = arg2;
+        *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value2 + 0x1D;
         offset += stride;
     } while (i < 2);
 
@@ -277,9 +274,6 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
-    register s32 a0_save asm("$18") = arg0;
-    register s32 a1_save asm("$19") = arg1;
-    s32 a2_save = arg2;
     u8 *base = (u8 *)g_FrameContexts;
     s32 height;
     u16 *src0;
@@ -288,9 +282,9 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     s32 offset;
     s32 one;
     s32 stride;
-    register u16 value asm("$2");
+    u16 value;
+    u16 value2;
 
-    __asm__("" : : "r"(a0_save), "r"(a1_save), "r"(a2_save));
     SetGeomOffset(0xA0, 0xF0);
     SetGeomScreen(0x140);
 
@@ -309,20 +303,20 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
         stride = 0x20000;
         g_FrameContexts[offset + 0x16] = one;
         g_FrameContexts[offset + 0x18] = one;
-        g_FrameContexts[offset + 0x19] = a0_save;
-        g_FrameContexts[offset + 0x1A] = a1_save;
-        g_FrameContexts[offset + 0x1B] = a2_save;
+        g_FrameContexts[offset + 0x19] = arg0;
+        g_FrameContexts[offset + 0x1A] = arg1;
+        g_FrameContexts[offset + 0x1B] = arg2;
         value = *src0;
         stride |= 0x37E8;
         *(volatile u16 *)(g_FrameContexts + offset + 0x64) = value;
-        value = *src1;
+        value2 = *src1;
         i++;
         g_FrameContexts[offset + 0x86] = one;
         g_FrameContexts[offset + 0x88] = 0;
-        g_FrameContexts[offset + 0x89] = a0_save;
-        g_FrameContexts[offset + 0x8A] = a1_save;
-        g_FrameContexts[offset + 0x8B] = a2_save;
-        *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value + 0x1D;
+        g_FrameContexts[offset + 0x89] = arg0;
+        g_FrameContexts[offset + 0x8A] = arg1;
+        g_FrameContexts[offset + 0x8B] = arg2;
+        *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value2 + 0x1D;
         offset += stride;
     } while (i < 2);
 
