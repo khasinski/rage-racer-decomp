@@ -6086,3 +6086,80 @@ and dies inside one basic block with no argument use, so local-alloc gives it
 `v0`. Retail has `a1` for both, which needs the two reads to share one
 quantity; nothing in the C arranges that. Note this is the one function of the
 five where retail sign-extends the second result into `a1` rather than `v0`.
+
+## 41. Loop shape decides register allocation in `save/memcard.c`
+
+Three functions in `save/memcard.c` lost every register pin they had once the
+loops were written the way gcc 2.6.3 wants to read them. The levers, in
+descending order of how often they applied:
+
+**Write the induction variable as `i * K`, not as a running accumulator.**
+`BuildSaveIconBlock` stepped a byte offset by `0x80` and an x position by `4`.
+Written that way the two initialisers precede the loop's hoisted invariants in
+the insn chain, and the pre-allocation scheduler emits them in that order.
+Written as `block + 0x80 + i * 0x80` and `imageX + i * 4` they are
+strength-reduced back into exactly the same `addiu s4,s4,128` /
+`addiu s1,s1,4` pair, but their initialisers are emitted by `loop.c` *after*
+`move_movables` has placed the invariants, which is retail's order. Same lever
+in `ReadVerifiedSaveHeader`: `sum += ptr[i]` gives retail's `move v1,zero` /
+`move a0,s2` order where `sum += *ptr++` gives the reverse.
+
+**Put a loop-constant in the loop as a literal, not in a local before it.**
+`rect->w = 4` inside the loop becomes a movable that `move_movables` hoists
+into the preheader ahead of everything else, so it is live across the two calls
+before the loop and gets its own callee-saved register — nine of them, which is
+what retail has. `rectW = 4;` before the calls does *not* do this: the
+scheduler sinks a `li` whose only consumer is in the next block, the value is
+born after `iconTile` dies, and it reuses `s0` for eight registers total.
+
+**Fold a complement into the accumulator.** `sum = ~sum;` writes `nor s0,zero,s0`
+over `sum`'s own register. `== ~sum` in the test needs a second register.
+
+**Split a pointer that does two jobs.** In `BuildSaveIconBlock` the pointer
+passed to the first `StoreImage` and the pointer the loop walks are two
+variables; that drops the loop pointer's reference count below `block`'s and
+swaps them into retail's `s3` / `s2`.
+
+**A backward `goto` is not a loop.** `LoadMemoryCardSaveSlot` rebuilds
+`g_SaveFilePath + nameOffset` on both attempts. Every spelling the front end
+treats as a loop (`do/while`, `while`, `for`) gets a `NOTE_INSN_LOOP_BEG`, and
+`loop.c` reports `regno 84 (life 2), consec 1, savings 2  moved` and hoists the
+`la`/`addu` pair into the preheader. A `goto retry:` never gets that note, so
+there is nowhere to hoist to. The pin on `$4` was doing the same job by making
+the destination a hard register, which is not a movable.
+
+### 41a. Why the serialiser pins are a fixpoint, and what the numbers are
+
+`StoreSaveStateBlock` and `LoadSaveStateBlock` still carry 41 pins between
+them. They are not crutches for anything local; they are a hand-written
+allocation order.
+
+MIPS gcc 2.6.3 allocates from ascending register number, so the pin numbers
+*are* the priority ranks. Measured on `StoreSaveStateBlock` with one pin
+removed (`-dl`/`-dg`), priority `floor_log2(refs) * refs / live_length` against
+the register it got:
+
+    1.75 -> $3   1.556 -> $4   1.40 -> $5   1.32 -> $8
+    0.82 -> $10  0.75 -> $13   0.12 -> $14  0.11 -> $15
+
+Every allocno has to land in its own band simultaneously. The clut-copy
+counter is the clearest case: it comes out at `refs 7 / len 10` = 1.40 and
+takes `$5`, where retail has `$13`; the band for `$13` is roughly
+0.75 to 0.78, i.e. a live length of 18 or 19 insns against the 10 it has.
+Lengthening it by moving the initialisation before the previous loop
+overshoots (measured 34 diffs, worse than the 6 the bare pin removal costs),
+and there is no eight-insn knob in between. Removing the pins one at a time
+costs between 4 and 162 instructions each; nothing in that set is free.
+
+Two other retail shapes in those functions have no C spelling yet: the
+destination pointer in the class-record loops keeps its base at `block` with
+offsets `400`/`402`, where every reconstruction lets `loop.c` rebias the giv to
+`block + 402` and use `-2`/`0`; and the two-step address sums keep the
+intermediate in its own register (`addu v0,t7,t9` / `addu t3,t2,v0`) where
+local-alloc otherwise ties the intermediate into the destination.
+
+**Harness warning.** `odiff.sh` inherits `set -e`, so a cc1 crash makes it exit
+with no output. A checker that only greps for the word `DIFF` reads that as a
+pass. Assert on the `(N checked)` line. The crash is real and reachable: a
+declaration placed after a statement (invalid C89, which cc1 accepts) makes
+cc1 bus-error while writing `-gcoff` debug info.
