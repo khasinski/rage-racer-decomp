@@ -4,9 +4,20 @@
 extern GpuCallbacks *g_GpuFuncs;
 extern GpuCallbacks *g_GpuFuncs;
 extern GpuCallbacks *g_GpuFuncs;
-extern u_long g_MoveImageSrc;
-extern u_long g_MoveImageDst;
-extern u_long g_MoveImageSize;
+/*
+ * The five words at 0x80094290 are one GPU "move image" primitive: tag, the
+ * 0xE1-class command word, then source xy, destination xy and the packed
+ * width/height.  MoveImage fills the last three and sends the whole packet.
+ */
+typedef struct {
+    u_long tag;
+    u_long code;
+    u_long src;
+    u_long dst;
+    u_long wh;
+} GpuMovePacket;
+
+extern GpuMovePacket g_MoveImagePacket;
 
 void CheckPrim(char *arg0, void *arg1);
 extern char D_80013578[];
@@ -41,16 +52,15 @@ long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) {
         packed = arg2 << 0x10;
         low = arg1 & 0xFFFF;
         packed |= low;
-        buf = &g_MoveImageSrc;
+        buf = &g_MoveImagePacket.src;
         xy = arg0->xy;
         gpu = g_GpuFuncs;
         size = 0x14;
-        g_MoveImageDst = packed;
+        g_MoveImagePacket.dst = packed;
         *buf = xy;
         wh = *(u_long *)&arg0->w;
         data = 0;
-        g_MoveImageSize = wh;
-        asm("" : : "r"(wh) : "memory");
+        g_MoveImagePacket.wh = wh;
         return gpu->send(gpu->sendList, buf - 2, size, data);
     }
     return -1;

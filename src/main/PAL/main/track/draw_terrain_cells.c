@@ -650,7 +650,6 @@ void GameDrawSkyBackground(void)
         u8 color;
         POLY_G4 *g4Cursor = (POLY_G4 *)packetCursor;
         u32 *orderingTableBase;
-        register POLY_G4 *primCursor asm("$5");
         xWork = panelXFixed - rowStepX;
         adjW = xWork;
         if (xWork < 0)
@@ -700,16 +699,11 @@ void GameDrawSkyBackground(void)
         g4Cursor->g3 = color;
         g4Cursor->g2 = color;
         color = g_EnvColor2B;
-        do
-        {
-          g4Cursor->b1 = color;
-          g4Cursor->t.b0 = color;
-        }
-        while (0);
+        g4Cursor->b1 = color;
+        g4Cursor->t.b0 = color;
         color = g_EnvColor1B;
-        primCursor = g4Cursor;
-        primCursor->b3 = color;
-        primCursor->b2 = color;
+        g4Cursor->b3 = color;
+        g4Cursor->b2 = color;
         orderingTableBase = scratch->orderingTable;
         AddPrim(&orderingTableBase[SKY_OT_NEAR], g4Cursor++);
         nextPacket = (u8 *)g4Cursor;
