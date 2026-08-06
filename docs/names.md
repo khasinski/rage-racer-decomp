@@ -6342,3 +6342,32 @@ own register and masks *back* into the source's register
 into `srl v0,v0,9 / andi v0,v0,0xff`. Writing the hand-expanded divide as plain
 `D_8007FB20 / 5` (§42a's lever) is right and changes nothing here, so the
 divide expansion was not what the pins were for.
+
+### 43c. None of the four residues is blocked on a banned construct
+
+`goto`, `do {} while (0)`, added `volatile`, register pins and empty `asm`
+barriers are all debt this project is removing, so a match bought with one of
+them is not a match. Each residue above was probed against the two that could
+plausibly reach it, and none moved the score:
+
+| function | residue | `asm("")` barrier | added `volatile` |
+|---|---|---|---|
+| `BeginNegconCalibration` | 2 | 2 (and 40 if placed after the loads, where it also breaks the register order) | 2 |
+| `UpdateMenuMode` | 6 | 6 | n/a |
+| `DrawMenuAltPanel` | 8 | 8 | n/a |
+| `DrawMenuLightBurst` | 40 | 40 | n/a |
+
+So all four are blocked on *mechanism*, not on the ban. Two are sched2
+placement decisions that no source-level knob reached (`BeginNegconCalibration`,
+`DrawMenuAltPanel`), and two are register choices that local-alloc makes
+against retail with nothing live to explain it (`UpdateMenuMode`,
+`DrawMenuLightBurst`). A `volatile` on the clear pointer in
+`BeginNegconCalibration` is the intuitive fix — it should stop the store
+moving — and it does not: the store still schedules four slots early, which
+says the reorder is not an aliasing decision at all.
+
+The one case in this module that *is* blocked on the ban is
+`ScrollTeamLogoLeft` (`draw_team_logo_canvas.c`, 3 pins), and that is inherited
+from §42b's characterisation rather than re-derived here: `base[row * 8 + 7]`
+reaches all 52 instructions with the right registers, and the four remaining
+preheader instructions are only known to reorder under a backward `goto`.
