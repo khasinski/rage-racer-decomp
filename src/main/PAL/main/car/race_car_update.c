@@ -761,7 +761,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
     }
 }
 
-extern u32 g_CameraCar[];
+extern GameRenderObject g_CameraCar;
 
 void SeedFinishCamera(void *arg0) {
     register u32 word0 asm("$2");
@@ -779,7 +779,7 @@ void SeedFinishCamera(void *arg0) {
 
     base = arg0;
     asm("" : "=r"(base) : "0"(base));
-    dst = (Block16 *)g_CameraCar;
+    dst = (Block16 *)&g_CameraCar;
     src = (Block16 *)base;
     end = (Block16 *)((u8 *)base + 0x190);
     do {
@@ -795,38 +795,35 @@ void SeedFinishCamera(void *arg0) {
     ((u32 *)dst)[1] = word1;
     ((u32 *)dst)[2] = word2;
 
-    /* RAW() on the index reads: as plain member accesses they stop aliasing the
-     * unqualified g_CameraCar* stores between them and a reload is folded away.
-     * See common.h. */
-    index = RAW(((GameCarRuntime *)base)->trackPointIndex);
+    index = ((GameCarRuntime *)base)->trackPointIndex;
     track = g_TrackPoints;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
-    g_CameraCar[0] = point->x;
+    g_CameraCar.x = point->x;
 
-    index = RAW(((GameCarRuntime *)base)->trackPointIndex);
+    index = ((GameCarRuntime *)base)->trackPointIndex;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
-    g_CameraCarZ = point->z;
+    g_CameraCar.z = point->z;
 
-    index = RAW(((GameCarRuntime *)base)->trackPointIndex);
+    index = ((GameCarRuntime *)base)->trackPointIndex;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
-    value = g_CameraCarSpeed;
+    value = g_CameraCar.speed;
     word0 = point->y;
     value += 0x40;
     word0 -= 0x40;
-    g_CameraCarSpeed = value;
-    g_CameraCarY = word0;
+    g_CameraCar.speed = value;
+    g_CameraCar.y = word0;
 
     value = *(s16 *)((u8 *)base + 0xB8);
-    lastIndex = RAW(((GameCarRuntime *)base)->trackPointIndex);
+    lastIndex = ((GameCarRuntime *)base)->trackPointIndex;
     value <<= 11;
     point = (GameTrackPoint *)((lastIndex * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
     value += 0xC00;
     value -= point->angle;
-    g_CameraCarHeading = value;
+    g_CameraCar.headingAngle = value;
     D_801E3F60 = value;
-    g_CameraCarAngleY = value;
+    g_CameraCar.angleY = value;
 }
