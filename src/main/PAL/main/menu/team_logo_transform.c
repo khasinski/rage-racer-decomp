@@ -6,59 +6,71 @@
 
 extern u32 g_TeamLogoCanvas[];
 
+/* The logo canvas is 64 rows of eight words, and each word packs eight
+ * four-bit pixels. Flipping a row therefore swaps word j with word 7 - j and
+ * reverses the nibble order inside both. */
 void FlipTeamLogoHorizontal(void) {
     u32 *base;
     s32 row;
-    s32 highStart;
+    s32 lastWord;
     s32 rowOffset;
-    register u32 *lowBase asm("$8");
-    s32 pairOffset;
-    register s32 highIndex asm("$7");
+    u32 *lowWordPtr;
+    s32 colOffset;
+    s32 highIndex;
     s32 nibble;
     u32 lowPacked;
-    register u32 highPacked asm("$6");
+    u32 highPacked;
     u32 lowWord;
     u32 highWord;
-    register u32 shift asm("$2");
-    u32 lowNibble;
+    u32 shift;
 
     PlaySoundCue(8);
 
     base = g_TeamLogoCanvas;
     row = 0;
-    highStart = 7;
+    lastWord = 7;
     do {
         rowOffset = row * 32;
-        lowBase = base;
-        pairOffset = 0;
-        highIndex = highStart;
+        lowWordPtr = base;
+        colOffset = 0;
+        highIndex = lastWord;
         do {
+            s32 addr;
+            s32 highOffset;
+
             nibble = 0;
             lowPacked = 0;
             highPacked = 0;
-            lowWord = *(u32 *)(rowOffset + (s32)lowBase);
-            highWord = *(u32 *)(rowOffset + (s32)&base[highIndex]);
+            addr = rowOffset + (s32)lowWordPtr;
+            lowWord = *(u32 *)addr;
+            addr = highIndex << 2;
+            highOffset = addr + (s32)base;
+            addr = rowOffset + highOffset;
+            highWord = *(u32 *)addr;
             do {
                 lowPacked <<= 4;
                 shift = nibble * 4;
-                lowNibble = (lowWord >> shift) & 0xF;
-                highPacked = (highPacked << 4) | ((highWord >> shift) & 0xF);
+                lowPacked |= (lowWord >> shift) & 0xF;
+                highPacked <<= 4;
+                highPacked |= (highWord >> shift) & 0xF;
                 nibble++;
-                lowPacked |= lowNibble;
             } while (nibble < 8);
-            shift = rowOffset + (s32)lowBase;
-            lowBase++;
-            pairOffset += 4;
-            lowNibble = highIndex * 4;
-            lowNibble += (s32)base;
             {
-                s32 rel = lowNibble;
-                lowNibble = rowOffset + rel;
+                s32 lowAddr;
+                s32 highAddr;
+
+                lowAddr = rowOffset + (s32)lowWordPtr;
+                lowWordPtr++;
+                colOffset += 4;
+                highAddr = highIndex << 2;
+                highAddr += (s32)base;
+                highOffset = highAddr;
+                highAddr = rowOffset + highOffset;
+                *(u32 *)highAddr = lowPacked;
+                *(u32 *)lowAddr = highPacked;
             }
-            *(u32 *)lowNibble = lowPacked;
-            *(u32 *)shift = highPacked;
             highIndex--;
-        } while (pairOffset < 0x10);
+        } while (colOffset < 0x10);
         row++;
     } while (row < 0x40);
 }
