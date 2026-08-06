@@ -5,9 +5,14 @@
 #include "game/render.h"
 
 extern GameSceneAssetHeader *g_AssetLoadCursor;
+/* The RAGE.STR entry the streaming player reads: BeginIntroFmv and friends
+ * point it at one of g_StreamCdEntries. */
+extern s32 *g_StreamLoc;
 
 void SetTrackCameraTable(void *table);
 void RegisterCourseModels(void *base);
+/* fmv/fmv_scene.c defines this taking an argument this file never passes. */
+void BeginFmv(void);
 
 void LoadTrackDataAssets(void) {
     GameSceneAssetHeader *header;
@@ -87,10 +92,6 @@ void LoadTrackDataAssets(void) {
     }
 }
 
-extern s32 *g_StreamLoc;
-
-void BeginFmv(void);
-
 void BeginIntroFmv(void) {
     s32 *ptr;
     s32 value;
@@ -103,10 +104,6 @@ void BeginIntroFmv(void) {
     g_StreamSectorCount = value;
     D_8019C708 = value * 2;
 }
-
-extern s32 *g_StreamLoc;
-
-void BeginFmv(void);
 
 void BeginClassFmv(void) {
     s32 *base;
@@ -130,10 +127,6 @@ void BeginClassFmv(void) {
     g_StreamSectorCount = value;
     D_8019C708 = value * 2;
 }
-
-extern s32 *g_StreamLoc;
-
-void BeginFmv(void);
 
 void BeginEndingFmv(void) {
     s32 *ptr;

@@ -418,6 +418,10 @@ extern s16 g_SteerHoldFrames;
 extern s16 g_TachoNeedleQuad[4][2];
 extern s16 g_TrackZoneDark;
 
+/* (model, owned grade) -> index of the CAR_xx asset pair, 0..31. */
+s32 GetCarAssetIndex(s32 model, s32 grade);
+/* Progress level needed to buy this model's next grade. */
+s32 GetCarUnlockLevel(s32 model);
 void SetCarImageSlot(void *arg0, s32 arg1);
 void SetCarModelSlot(void *arg0, s32 arg1);
 s32 SmoothTrackAngle(s32 arg0, s32 arg1);

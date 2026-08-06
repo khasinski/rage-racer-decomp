@@ -2,6 +2,8 @@
 #include "game/state.h"
 #include "game/asset.h"
 
+/* Asset-region pointers, each spelled with this file's own view of the
+ * pointee; game/asset.h explains why they are not one shared declaration. */
 extern u8 *g_AssetBase;
 extern u8 *g_AssetSubBlockPtr;
 extern u8 *g_AssetLoadCursor;

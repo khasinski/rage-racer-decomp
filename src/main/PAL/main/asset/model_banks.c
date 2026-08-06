@@ -5,11 +5,11 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-/* (model, owned grade) -> index of the CAR_xx asset pair, 0..31. */
-s32 GetCarAssetIndex(s32 model, s32 grade);
-/* Progress level needed to buy this model's next grade. */
-s32 GetCarUnlockLevel(s32 model);
-
+/* g_CarImageRect, g_ModelBanks, g_CarImageSlots, g_CarModelSlots and
+ * D_801E4144 are declared identically in game/asset.h, but this file cannot
+ * include it: asset.h's RegisterModelBank, UnrelocateModelBank and
+ * InstallTerrainCellData take void *, and the definitions below walk the
+ * bank as s32 *, which is a conflicting type rather than a wider view. */
 extern u32 g_CarImageRect;
 extern u8 D_8019C86C;
 extern u8 D_8009EC94;

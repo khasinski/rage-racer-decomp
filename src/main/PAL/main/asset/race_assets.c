@@ -12,11 +12,12 @@
  */
 #define ASSET_SUB(base, k) ((base) + ((GameSceneAssetHeader *)(base))->offsets[k])
 
+/* Asset-region pointers, each spelled with this file's own view of the
+ * pointee; game/asset.h explains why they are not one shared declaration. */
 extern u8 *g_AssetLoadCursor;
 extern u8 *g_AssetSubBlockPtr;
 extern u8 *g_AssetBlockPtr2;
 void StartAudioSlotLoad(s32 slot, void *header, void *body, void *table);
-s32 GetCarAssetIndex(s32 model, s32 grade);
 void UploadImageAsset(void *asset);
 void SetTrackCameraTable(void *table);
 void RegisterCourseModels(void *base);

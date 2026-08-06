@@ -5,6 +5,8 @@
 #include "game/cd.h"
 #include "game/audio.h"
 
+/* Asset-region pointers, each spelled with this file's own view of the
+ * pointee; game/asset.h explains why they are not one shared declaration. */
 extern u8 *g_AssetLoadCursor;
 extern Rect g_TeamLogoClutRect;
 extern Rect g_TeamLogoRect;

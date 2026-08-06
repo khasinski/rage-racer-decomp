@@ -3,6 +3,8 @@
 #include "game/race.h"
 #include "game/asset.h"
 
+extern u16 g_TeamLogoClut[];
+
 void UploadImageBlock(void *asset) {
     GameImageBlock *block;
     u16 rect[4];
@@ -63,8 +65,6 @@ break;
 }
 }
 
-extern u16 g_TeamLogoClut[];
-
 void StoreTeamLogoImage(void *dst) {
     g_TeamLogoClut[0] = 0x8000;
     LoadImage(&g_TeamLogoClutLoadRect, g_TeamLogoClut);
@@ -77,8 +77,6 @@ void StoreTeamLogoImage(void *dst) {
     DrawSync(0);
     g_TeamLogoClut[0] = 0;
 }
-
-void UploadImageAsset(void *asset);
 
 void UploadLoadBufferImage(void) {
     UploadImageAsset(g_LoadBuffer);

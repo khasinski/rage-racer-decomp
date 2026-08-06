@@ -4,6 +4,8 @@
 #include "game/car.h"
 #include "game/audio.h"
 
+/* Asset-region pointers, each spelled with this file's own view of the
+ * pointee; game/asset.h explains why they are not one shared declaration. */
 extern u32 g_CarModelSlot;
 extern GameCarModelAsset *g_CarModelAsset;
 extern GameSceneAssetHeader *g_AssetLoadCursor;
@@ -11,7 +13,6 @@ extern s32 g_TeamLogoSampleData;
 extern u8 *g_ImageBlockBuffer;
 extern u8 *g_AssetBlockPtr2;
 extern u8 *g_AssetSubBlockPtr;
-s32 GetCarAssetIndex(s32 model, s32 grade);
 void RegisterCourseModels(void);
 void SelectCarModelSlot(s32 slot);
 void UploadImageAsset(void *asset);
