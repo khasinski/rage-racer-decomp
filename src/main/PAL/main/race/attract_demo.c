@@ -10,7 +10,6 @@
 #include "game/track.h"
 
 extern void (*g_BgmSelectSteps[])(void);
-extern s32 g_ImageBlockBuffer;
 void UploadImageAsset(void *imageBlock);
 s32 RequestTrackDataAssets(void);
 
@@ -56,7 +55,7 @@ void EnterAttractDemo(void) {
 
     initialValue = 0x80;
     g_FrameSyncThreshold = initialValue;
-    UploadImageAsset((void *)g_ImageBlockBuffer);
+    UploadImageAsset(g_ImageBlockBuffer);
     InstallCourseAssets();
     RequestTrackDataAssets();
 

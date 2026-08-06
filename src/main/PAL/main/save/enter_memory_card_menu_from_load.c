@@ -6,12 +6,11 @@
 #include "psyq/gpu.h"
 #include "game/render.h"
 #include "game/memcard.h"
-extern s32 g_ImageBlockBuffer;
 void EnterMemoryCardMenuFromLoad(void) {
     SetDispMask(0);
     SetupDisplay480(0, 0, 0);
     if (g_AssetLoadState == 0) {
-        UploadImageAsset((void *)g_ImageBlockBuffer);
+        UploadImageAsset(g_ImageBlockBuffer);
         g_McMenuRowCursor = 2;
         g_McMenuRowCount = 3;
         g_McMenuState = -1;

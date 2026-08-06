@@ -143,7 +143,6 @@ void ApplyBodyColor1(u32 arg0, u32 arg1) {
 extern u32 g_CarModelAsset;
 extern u32 g_CarModelSlot;
 
-void ApplyBodyColor1(u32 arg0, u32 arg1);
 void UploadCarImage(u32 arg0);
 
 void SetBodyColor1(u32 arg0) {
@@ -202,7 +201,6 @@ void ApplyBodyColor2(u32 arg0, u32 arg1) {
 extern u32 g_CarModelAsset;
 extern u32 g_CarModelSlot;
 
-void ApplyBodyColor2(u32 arg0, u32 arg1);
 void UploadCarImage(u32 arg0);
 
 void SetBodyColor2(u32 arg0) {

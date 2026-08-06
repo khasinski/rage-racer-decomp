@@ -111,7 +111,6 @@ void UpdateTitleAttract(void) {
 extern u32 D_801E8260;
 extern void (*g_FrontendDrawHandlers[])(void);
 
-void BeginIntroFmv(int);
 
 void UpdateFrontend(void) {
     u32 state;

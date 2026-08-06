@@ -9,11 +9,6 @@
 extern u32 g_CarModelSlot;
 extern GameCarModelAsset *g_CarModelAsset;
 extern s32 g_TeamLogoSampleData;
-extern u8 *g_ImageBlockBuffer;
-extern u8 *g_AssetBlockPtr2;
-void SelectCarModelSlot(s32 slot);
-void ApplyBodyColor1(s32 colour, s32 imageData);
-void ApplyBodyColor2(s32 colour, s32 imageData);
 
 s32 RequestCarSelectAssets(void) {
     if (g_AssetLoadState != 0) {

@@ -151,6 +151,7 @@ long CdReadyCallback(long callback);
  * polls it (mode 0 blocks, non-zero returns the sectors still outstanding).
  * The two lower entries are cdread.c's own statics, named descriptively here.
  */
+long CdRead(long sectors, void *buf, long mode);
 long CdReadSync(long mode, long result);
 void CdReadBreak(void);
 /* cdread.c's `data_ready_callback`: drains one sector per CdReady interrupt. */

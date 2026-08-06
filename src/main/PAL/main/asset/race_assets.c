@@ -18,8 +18,6 @@
 
 /* Asset-region pointers, each spelled with this file's own view of the
  * pointee; game/asset.h explains why they are not one shared declaration. */
-extern u8 *g_AssetBlockPtr2;
-extern s32 g_ImageBlockBuffer;
 
 s32 RequestRaceAssets(void) {
     if (g_AssetLoadState != 0) {
@@ -246,7 +244,7 @@ void LoadGrandPrixScreen(void) {
     if (g_AssetLoadState == 1) {
         offset = g_GrandPrixSeries * 6;
         base = g_GrandPrixClass + 0x4A;
-        loaded = LoadAsset((s32)(offset + base), (void *)g_ImageBlockBuffer);
+        loaded = LoadAsset((s32)(offset + base), g_ImageBlockBuffer);
         if (loaded != 0) {
             g_AssetLoadState = 0;
         }
@@ -278,7 +276,7 @@ void LoadCourseAssets(void) {
         loaded = LoadAsset((s32)(courseOffset + classBase), g_AssetBase);
         if (loaded != 0) {
             g_AssetLoadState = 0;
-            g_ImageBlockBuffer = loaded + (s32)g_AssetBase;
+            g_ImageBlockBuffer = g_AssetBase + loaded;
         }
     }
 }

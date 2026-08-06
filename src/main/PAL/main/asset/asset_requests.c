@@ -11,8 +11,6 @@ extern Rect g_TeamLogoClutRect;
 extern Rect g_TeamLogoRect;
 extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[];
-extern s32 g_ImageBlockBuffer;
-extern void *g_AssetBlockPtr2;
 
 void LoadBootAssets(void) {
     u8 *loaded;
@@ -94,7 +92,7 @@ void LoadSaveScreenAssets(void) {
     if (g_AssetLoadState == 1) {
         if (LoadAsset(6, g_AssetBase) != 0) {
             g_AssetLoadState = 0;
-            g_ImageBlockBuffer = (s32)g_AssetBase;
+            g_ImageBlockBuffer = g_AssetBase;
         }
     }
 }
@@ -161,7 +159,7 @@ void LoadSelectBgmAssets(void) {
             g_AssetLoadState = 0;
             secondOffset = (s32)header + relOffset;
             header = (GameSceneAssetHeader *)((u8 *)header + thirdOffset);
-            g_AssetBlockPtr2 = (void *)secondOffset;
+            g_AssetBlockPtr2 = (u8 *)secondOffset;
             g_AssetSubBlockPtr = (u8 *)header;
         }
         break;

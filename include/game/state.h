@@ -85,6 +85,12 @@ extern s32 g_AnimTimer;
  * PresentFmvFrame, WaitFmvDecode, StartStreamRead - keep their
  * aliased declarations in each file; see docs/names.md 13.
  */
+/* Start one of the three streams; returnScene is the g_SceneId to come back
+ * to when it ends. Each is a thin wrapper that forwards its argument to
+ * BeginFmv and then picks the g_StreamCdEntries entry. */
+void BeginIntroFmv(s32 returnScene);
+void BeginClassFmv(s32 returnScene);
+void BeginEndingFmv(s32 returnScene);
 void UpdateFmv(void);
 /* One decoded frame: DecDCTin the next bitstream chunk, DecDCTout the previous
  * one, then top the ring up from the drive. */

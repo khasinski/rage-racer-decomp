@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/state.h"
 #include "game/menu.h"
 #include "psyq/gpu.h"
@@ -7,7 +8,6 @@
 
 extern volatile u32 *g_FmvVlcBuffers[];
 extern s32 g_FmvStripIndex;
-extern s32 g_StreamLoc;
 
 void DecDCTout(volatile u32 *arg0, s32 arg1);
 s32 PresentFmvFrame(volatile void *arg0);
@@ -31,7 +31,7 @@ void DecodeFmvFrame(void) {
         value = StGetBackloc(sp10);
         DebugPrintf(g_MsgFmvSector, value);
         if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
-            StartStreamRead((void *)g_StreamLoc);
+            StartStreamRead(g_StreamLoc);
         } else {
             StartStreamRead(sp10);
         }

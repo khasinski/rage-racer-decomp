@@ -10,15 +10,9 @@
 extern u8 *g_CarModelAsset;
 
 extern u32 g_CarModelSlot;
-s32 GetCarAssetIndex(s32 model, s32 grade);
-void ApplyBodyColor1(s32 arg0, s32 arg1);
-void ApplyBodyColor2(s32 arg0, s32 arg1);
-extern s32 g_ImageBlockBuffer;
 /* Where asset 0x56 lands: g_ImageBlockBuffer advanced past the car texture
  * block just loaded. Its header words 1 and 2 are relocated into
  * g_AssetBlockPtr / g_AssetSubBlockPtr and word 0 is kept as-is. */
-extern s32 g_AssetBlockPtr2;
-void SelectCarModelSlot(s32);
 
 void LoadUpgradedCarModel(s32 arg0) {
     u8 *ptr;
@@ -88,7 +82,7 @@ void LoadOptionScreenAssets(void) {
             ptr = (s32)g_AssetBase;
             offset = *(s32 *)ptr;
             g_AssetLoadState = 0;
-            g_ImageBlockBuffer = ptr + offset;
+            g_ImageBlockBuffer = (u8 *)(ptr + offset);
         }
     }
 }
@@ -140,15 +134,15 @@ void LoadRoundAssets(void) {
             kind = scaled + base;
         }
 
-        result = LoadAsset((s32)kind, (void *)g_ImageBlockBuffer);
+        result = LoadAsset((s32)kind, g_ImageBlockBuffer);
         if (result != 0) {
             g_AssetLoadState = 2;
-            g_AssetBlockPtr2 = result + g_ImageBlockBuffer;
+            g_AssetBlockPtr2 = g_ImageBlockBuffer + result;
         }
         break;
     case 2:
-        if (LoadAsset(0x56, (void *)g_AssetBlockPtr2) != 0) {
-            s32 ptr = g_AssetBlockPtr2;
+        if (LoadAsset(0x56, g_AssetBlockPtr2) != 0) {
+            s32 ptr = (s32)g_AssetBlockPtr2;
             register s32 first asm("$2");
             register s32 second asm("$3");
             s32 third;

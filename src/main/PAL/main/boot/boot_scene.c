@@ -9,9 +9,7 @@
 
 void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSprite");
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
-void BeginIntroFmv(s32 arg0);
 extern Matrix g_SceneLightMatrix;
-extern s32 g_ImageBlockBuffer;
 void InitRenderState(s32 arg0);
 
 void DrawBootLogo(void) {
@@ -122,7 +120,7 @@ void EnterAttractScene(void) {
     SetDispMask(0);
     g_FrameSyncThreshold = 0x80;
     if (g_AssetLoadState == 0) {
-        UploadImageAsset((void *)g_ImageBlockBuffer);
+        UploadImageAsset(g_ImageBlockBuffer);
         g_MirrorMode = 0;
         InitRenderState(5);
         SetupDisplay480(0, 0, 0);

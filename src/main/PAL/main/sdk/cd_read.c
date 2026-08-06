@@ -1,8 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-void CdRead(long arg0, void *arg1, long arg2);
-
 /*
  * Reads one 0x80-word directory/data sector at logical sector `sectorInt` into
  * `buf`: converts the sector index to a CdlLOC, issues CD command 2 (seek/read),

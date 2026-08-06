@@ -11,6 +11,13 @@ extern s32 g_AssetLoadState;
  * then handed to UploadImageAsset / UploadImageBlock. */
 extern u8 *g_AssetBlockPtr;
 
+/* Its companion, the third pointer of the sub-block triple. */
+extern u8 *g_AssetBlockPtr2;
+
+/* Scratch image buffer: whatever the last screen load left free, handed to
+ * LoadAsset and UploadImageAsset by the round / save / attract screens. */
+extern u8 *g_ImageBlockBuffer;
+
 /*
  * CD path of every loadable asset, 135 entries indexed by assetIndex:
  * [0..9] fixed assets, [10..73] the 32 car models in two halves,
@@ -38,6 +45,10 @@ extern GameCdLoadEntry g_AssetCdEntries[];
 /* The same for the 11 streams in "\RAGE.STR;1"; BeginClassFmv picks
  * `1 + class` in the first series and `5 + class` in the advanced one. */
 extern GameCdLoadEntry g_StreamCdEntries[];
+
+/* The one of them the streaming player is reading, set by BeginIntroFmv and
+ * friends and handed straight to StartStreamRead. */
+extern GameCdLoadEntry *g_StreamLoc;
 
 /* Boot CD scratch buffer: the RAGE.BIN index first, then asset 0. */
 extern s32 g_LoadBuffer[];
@@ -101,7 +112,7 @@ void ServiceAssetLoad(void);
  * state words (g_CdLoadPhase / g_AssetLoadState / g_MainState). */
 void ResetAssetLoader(void);
 /* Spin on LoadAsset until the transfer completes. */
-void LoadAssetBlocking(s32 assetIndex, s32 dst);
+void LoadAssetBlocking(s32 assetIndex, void *dst);
 /* Boot: read the "\RAGE.BIN;1" first sector into g_AssetCdEntries (135 entries)
  * and rebase the 11 "\RAGE.STR;1" stream entries. Prints "Now Searching [%s]". */
 void LoadDiscArchiveIndex(void);

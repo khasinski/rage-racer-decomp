@@ -13,8 +13,6 @@ extern GameScoreRecord g_ClassRecords[];
 extern GameScoreRecord g_ClassClears[];
 s32 GetCarUnlockLevel(s32 model);
 void ResetProgressSlot(s32 carTable, s32 progress);
-void BeginEndingFmv(s32 returnScene);
-void BeginClassFmv(s32 returnScene);
 
 void DrawPrizeMoneyPanel(u8 *s0) {
     u8 sp[16];

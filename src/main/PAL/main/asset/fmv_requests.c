@@ -4,12 +4,8 @@
 #include "game/state.h"
 #include "game/render.h"
 
-/* The RAGE.STR entry the streaming player reads: BeginIntroFmv and friends
- * point it at one of g_StreamCdEntries. */
-extern s32 *g_StreamLoc;
 
-/* fmv/fmv_scene.c defines this taking an argument this file never passes. */
-void BeginFmv(void);
+void BeginFmv(s32 returnScene);
 
 void LoadTrackDataAssets(void) {
     GameSceneAssetHeader *header;
@@ -87,22 +83,22 @@ void LoadTrackDataAssets(void) {
     }
 }
 
-void BeginIntroFmv(void) {
+void BeginIntroFmv(s32 returnScene) {
     s32 sectors;
 
-    BeginFmv();
+    BeginFmv(returnScene);
 
     sectors = g_StreamCdEntries[0].size;
-    g_StreamLoc = (s32 *)&g_StreamCdEntries[0];
+    g_StreamLoc = &g_StreamCdEntries[0];
     g_StreamSectorCount = sectors;
     D_8019C708 = sectors * 2;
 }
 
-void BeginClassFmv(void) {
+void BeginClassFmv(s32 returnScene) {
     s32 index;
     s32 sectors;
 
-    BeginFmv();
+    BeginFmv(returnScene);
 
     if (g_SeriesSelection != 0) {
         index = 5;
@@ -112,18 +108,18 @@ void BeginClassFmv(void) {
 
     index += g_GrandPrixClass;
     sectors = g_StreamCdEntries[index].size;
-    g_StreamLoc = (s32 *)&g_StreamCdEntries[index];
+    g_StreamLoc = &g_StreamCdEntries[index];
     g_StreamSectorCount = sectors;
     D_8019C708 = sectors * 2;
 }
 
-void BeginEndingFmv(void) {
+void BeginEndingFmv(s32 returnScene) {
     s32 sectors;
 
-    BeginFmv();
+    BeginFmv(returnScene);
 
     sectors = g_StreamCdEntries[10].size;
-    g_StreamLoc = (s32 *)&g_StreamCdEntries[10];
+    g_StreamLoc = &g_StreamCdEntries[10];
     g_StreamSectorCount = sectors;
     D_8019C708 = sectors * 4;
 }

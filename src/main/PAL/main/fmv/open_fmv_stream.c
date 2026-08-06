@@ -1,9 +1,9 @@
 #include "common.h"
+#include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/render.h"
 
 extern s32 g_FmvRingBuffer;
-extern s32 g_StreamLoc;
 void DecDCToutCallback(s32 arg0);
 void StSetRing(s32 arg0, s32 arg1);
 void StSetStream(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
@@ -13,7 +13,7 @@ void OpenFmvStream(s32 arg0) {
     DecDCToutCallback(arg0);
     StSetRing(g_FmvRingBuffer, 0x20);
     StSetStream(1, 1, -1, 0, 0);
-    StartStreamRead(g_StreamLoc);
+    StartStreamRead((s32)g_StreamLoc);
 }
 
 extern Rect g_FmvStripRects[];

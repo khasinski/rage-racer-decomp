@@ -16,13 +16,13 @@ void AddPrim(void *ot, void *prim);
 void *SetDrawMode(void *prim, long a, long b, long c, void *d);
 long AddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8);
 
-long CdRead(long arg0, long arg1, long arg2) {
+long CdRead(long sectors, void *buf, long readMode) {
     long savedArg0;
     long mode;
     long value;
 
     value = (long)&g_CdReadMode;
-    *(volatile long *)value = arg2;
+    *(volatile long *)value = readMode;
     value = *(volatile long *)value;
     mode = value & 0x30;
 
@@ -43,11 +43,11 @@ long CdRead(long arg0, long arg1, long arg2) {
     }
 
     mode = (long)&g_CdReadMode;
-    savedArg0 = arg0;
+    savedArg0 = sectors;
     value = *(volatile long *)mode;
     value |= 0x20;
     *(volatile long *)mode = value;
-    g_CdReadBuffer = arg1;
+    g_CdReadBuffer = (long)buf;
     g_CdReadSectorCount = savedArg0;
     g_CdReadSavedSyncCallback = CdSyncCallback(0);
     g_CdReadSavedReadyCallback = CdReadyCallback(0);

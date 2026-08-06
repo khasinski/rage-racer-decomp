@@ -60,7 +60,6 @@ void ApplyZoneLighting(s32 a0, Matrix *a1) {
 
 void RestoreColorMatrix(void) { SetColorMatrix(&g_SceneColorMatrix); }
 
-extern s32 g_ImageBlockBuffer;
 extern u8 *g_CourseProgress;
 
 
@@ -75,7 +74,7 @@ void EnterRoundScreen(void) {
 
     if (g_AssetLoadState != 1) {
         CloseLoadedAudioSlots();
-        UploadImageAsset((void *)g_ImageBlockBuffer);
+        UploadImageAsset(g_ImageBlockBuffer);
         RelocateCarModel();
 
         g_FrameSyncThreshold = 0x180;

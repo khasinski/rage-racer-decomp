@@ -11,8 +11,6 @@
 #include "game/asset.h"
 #include "psyq/cd.h"
 
-s32 CdRead(s32 sectors, void *buf, s32 mode);
-s32 LoadAssetWide(s32 assetIndex, s32 dst) asm("LoadAsset");
 
 void SetTrackCameraTable(void *table) {
     *(void **)0x8019C9A8 = table;
@@ -94,8 +92,8 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
     return 0;
 }
 
-void LoadAssetBlocking(s32 assetIndex, s32 dst) {
-    while (LoadAssetWide(assetIndex, dst) == 0) {
+void LoadAssetBlocking(s32 assetIndex, void *dst) {
+    while (LoadAsset(assetIndex, dst) == 0) {
     }
 }
 
@@ -160,7 +158,7 @@ void InitAssetSystem(void) {
 
     LoadDiscArchiveIndex();
     ptr = &g_LoadBuffer;
-    LoadAssetBlocking(0, (s32)ptr);
+    LoadAssetBlocking(0, ptr);
     UploadImageAsset(ptr);
 }
 

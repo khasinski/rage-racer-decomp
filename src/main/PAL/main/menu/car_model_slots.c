@@ -127,13 +127,11 @@ s32 GetOwnedCarAssetIndex(s32 arg0) {
     return -1;
 }
 
-extern void *g_CarModelSlot;
+extern u32 g_CarModelSlot;
 
-/* Declared locally: this unit passes the slot as a pointer, which gcc 2.6.3
- * will not take against the s32 prototype in game/render.h. */
-void SelectModelBank(void *index);
-void SelectCarModelSlot(void *arg0);
-void UploadCarImage(void *arg0);
+void SelectModelBank(s32 index);
+void SelectCarModelSlot(s32 index);
+void UploadCarImage(s32 index);
 
 /* Re-registers the showroom car after g_CarModelSlot changes. */
 void InstallCarModelSlot(void) {

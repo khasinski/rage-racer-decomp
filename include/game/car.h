@@ -424,6 +424,11 @@ s32 GetCarAssetIndex(s32 model, s32 grade);
 s32 GetCarUnlockLevel(s32 model);
 void SetCarImageSlot(void *arg0, s32 arg1);
 void SetCarModelSlot(void *arg0, s32 arg1);
+/* Point g_CarModelAsset at g_CarModelSlots[index]. */
+void SelectCarModelSlot(s32 index);
+/* Repaint the loaded car's texture block in the two body colours. */
+void ApplyBodyColor1(u32 colour, u32 imageData);
+void ApplyBodyColor2(u32 colour, u32 imageData);
 s32 SmoothTrackAngle(s32 arg0, s32 arg1);
 void UpdateRivalRubberBand(void);
 
