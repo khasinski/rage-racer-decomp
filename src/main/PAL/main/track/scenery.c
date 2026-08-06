@@ -257,7 +257,7 @@ void SeedFlybyScenery(void) {
     *(s32 *)(out + 0x18) = word2;
     *(s32 *)(out + 0x1C) = word3;
 
-    __asm__ volatile("" ::: "memory");
+    __asm__ volatile("" ::);
     recordIndex = *(s16 *)((scene1 * 4) + (s32)base + 8);
     *(s32 *)(out + 0x30) = 0;
     index = recordIndex * 3;

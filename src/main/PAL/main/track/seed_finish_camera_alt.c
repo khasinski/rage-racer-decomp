@@ -59,7 +59,7 @@ void SeedFinishCameraAlt(void *arg0) {
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
     word0 = point->y;
     course = g_GrandPrixSeries;
-    asm volatile("" ::: "memory");
+    asm volatile("" ::);
     g_CameraCarSpeed = 0;
     g_CameraCarY = word0 - 0x30;
 

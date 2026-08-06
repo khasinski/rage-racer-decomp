@@ -575,7 +575,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                     register s32 sample;
 
                     sample = rcos(g_RaceOptionPulseAngle);
-                    asm volatile("" ::: "memory");
+                    asm volatile("" ::);
                     sample * 0x2C;
                 });
                 drawModePrim = (u8 *)(quadBase + 1);

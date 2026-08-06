@@ -136,7 +136,7 @@ void DrawMenuAltPanel(s32 arg0, s32 arg1) {
         value = D_8007FB44 + step1;
         D_8007FB44 = value;
         if (value >= 0x11) {
-            __asm__ volatile("" ::: "memory");
+            __asm__ volatile("" ::);
             D_8007FB44 = 0x10;
         }
     }
@@ -300,7 +300,7 @@ void DrawTimeAttackPlate(s32 arg0) {
         value = D_8007FB4C + step;
         D_8007FB4C = value;
         if (value >= 0xD) {
-            __asm__ volatile("" ::: "memory");
+            __asm__ volatile("" ::);
             D_8007FB4C = 0xC;
         }
     }

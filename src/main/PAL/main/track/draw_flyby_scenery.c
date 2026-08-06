@@ -54,9 +54,9 @@ void SeedRouteScenery(void) {
     base = g_RouteSceneryData;
     index1 = g_RaceSeries;
     src = (u8 *)((index0 * 32) + (s32)base);
-    __asm__ volatile("" ::: "memory");
+    __asm__ volatile("" ::);
     dst = &g_RouteSceneryX;
-    __asm__ volatile("" : "=r"(dst) : "0"(dst), "r"(src) : "memory");
+    __asm__ volatile("" : "=r"(dst) : "0"(dst), "r"(src));
 
     word0 = *(s32 *)(src + 0x10);
     word1 = *(s32 *)(src + 0x14);
@@ -66,7 +66,7 @@ void SeedRouteScenery(void) {
     dst[2] = word2;
     word0 = *(s32 *)(src + 0x1C);
     dst[3] = word0;
-    __asm__ volatile("" ::: "memory");
+    __asm__ volatile("" ::);
 
     index1 = index1 << 2;
     index1 = index1 + (s32)base;

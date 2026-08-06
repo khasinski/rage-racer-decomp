@@ -398,7 +398,7 @@ void GameDrawProportionalTextShaded(
                     t0 = (u16)home.clut;
                     ot += 0xCC;
                     sprt->clut = t0;
-                    asm volatile("" ::: "memory");
+                    asm volatile("" ::);
                     sprt++;
                     AddPrim(ot, prim);
                 }

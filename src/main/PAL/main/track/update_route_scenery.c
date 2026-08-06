@@ -85,9 +85,9 @@ void UpdateRouteScenery(void) {
         src = (u8 *)((idx * 32) + (s32)base);
         g_RouteSceneryKeyframe = r3;
         g_RouteSceneryRotZ = value;
-        __asm__ volatile("" ::: "memory");
+        __asm__ volatile("" ::);
         dst = &g_RouteSceneryX;
-        __asm__ volatile("" : "=r"(dst) : "0"(dst), "r"(src) : "memory");
+        __asm__ volatile("" : "=r"(dst) : "0"(dst), "r"(src));
         word0 = *(s32 *)(src + 0x10);
         word1 = *(s32 *)(src + 0x14);
         word2 = *(s32 *)(src + 0x18);

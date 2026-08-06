@@ -55,7 +55,7 @@ long SsUtKeyOffV(long arg0) {
 
             maskLow = D_8009E670;
             g_SndUpdateLock = 0;
-            asm volatile("" ::: "memory");
+            asm volatile("" ::);
             activeLow = lowBits | activeLow;
             D_801F2A08 = activeLow;
             D_8009E670 = maskLow & ~activeLow;
@@ -65,7 +65,7 @@ long SsUtKeyOffV(long arg0) {
             activeHigh = highBits | activeHigh;
             D_801F2A0C = activeHigh;
             D_8009E674 = maskHigh & ~activeHigh;
-            asm volatile("" ::: "memory");
+            asm volatile("" ::);
             return 0;
         }
         g_SndUpdateLock = 0;

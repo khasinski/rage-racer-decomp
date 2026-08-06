@@ -62,7 +62,7 @@ void LoadBootAssets(void) {
             nextState = 6;
 setNextBuffer:
             g_AssetLoadState = nextState;
-            __asm__ volatile("" ::: "memory");
+            __asm__ volatile("" ::);
             next = loaded + (s32)next;
             g_AssetLoadCursor = next;
         }

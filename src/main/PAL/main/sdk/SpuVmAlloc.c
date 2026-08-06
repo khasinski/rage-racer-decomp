@@ -318,7 +318,7 @@ void SpuVmRebuildVoiceTable(void) {
         flags = D_8009E0A0[voiceIndex];
         flags |= 8;
         D_8009E0A0[voiceIndex] = flags;
-        asm volatile("" : : "r"(flags) : "memory");
+        asm volatile("" : : "r"(flags));
         voiceOffsetPtr = &D_801E4BEC;
         periodIndex = g_SndCurrentProgActual;
         tableIndex = g_SndCurrentTone;

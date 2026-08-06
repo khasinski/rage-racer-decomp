@@ -538,7 +538,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
       d = 5;
     }
     x0Calc = (((u32) (-(d * 0x140))) >> 5) + 0x140;
-    asm("" : : "r"(x0Calc) : "memory");
+    asm("" : : "r"(x0Calc));
     syBase = D_8007F958;
     x0 = (u16) x0Calc;
     sy = (syBase * 0x30) + 0xD9;

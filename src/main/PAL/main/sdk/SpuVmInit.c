@@ -65,7 +65,7 @@ void SpuVmInit(long arg0) {
         _spu_setTransferCompletionFlag(0);
         D_801E4B5C = 0;
         g_SndDamper = 0;
-        asm volatile("" ::: "memory");
+        asm volatile("" ::);
         SpuInitMalloc(0x20, p);
     }
 

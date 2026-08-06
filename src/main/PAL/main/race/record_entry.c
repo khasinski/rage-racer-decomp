@@ -242,7 +242,7 @@ void InsertRaceRecords(void) {
                     entry[1] = copy1;
                     entry[2] = copy2;
                     entry[3] = copy3;
-                    asm volatile("" : : : "memory");
+                    asm volatile("" : :);
                 } while (i < j);
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
@@ -296,7 +296,7 @@ void InsertRaceRecords(void) {
                     entry[1] = copy1;
                     entry[2] = copy2;
                     entry[3] = copy3;
-                    asm volatile("" : : : "memory");
+                    asm volatile("" : :);
                 } while (i < j);
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);

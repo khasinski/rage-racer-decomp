@@ -93,7 +93,7 @@ void *GetFmvFrame(s32 *arg0) {
     w32 = g_FmvFrameWidth;
     half = (0xF0 - h32) / 2;
     dst[0xD] = g_DispEnv0Y + half;
-    __asm__ __volatile__("" ::: "memory");
+    __asm__ __volatile__("" ::);
     {
         register u32 wsgn asm("$4");
         u32 wm = (u32)w32 * 3;

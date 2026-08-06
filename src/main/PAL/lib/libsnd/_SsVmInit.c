@@ -77,7 +77,7 @@ void _SsVmInit(void) {
             g_SndVoiceStateStatus[offset] = 0;
             lowBits = D_801F2A08;
             highBits = D_801F2A0C;
-            __asm__ volatile("" ::: "memory");
+            __asm__ volatile("" ::);
             next <<= 16;
             *(short *)&g_SndVoiceStatePitch[offset] = 0;
             *(short *)&g_SndVoiceState[offset] = 0;

@@ -76,7 +76,7 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
     asm("" : "=r"(count) : "0"(count));
     count = highMask | count;
     D_8009E670 = voiceIndex;
-    __asm__ volatile("" ::: "memory");
+    __asm__ volatile("" ::);
     index &= ~voiceIndex;
     D_8009E674 = count;
     count = ~count;

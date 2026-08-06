@@ -37,7 +37,7 @@ void DrawWrongWayWarning(void) {
 
         temp = 0x78;
         *(volatile s16 *)(packet + 0x0A) = temp;
-        __asm__ volatile("" : : : "memory");
+        __asm__ volatile("" : :);
         uvOffset = (((i & 2) << 3) - (i & 2)) << 2;
         temp = -0x10 - uvOffset;
         uvOffset += 0x10;
@@ -129,7 +129,6 @@ void DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         *(s32 *)(prim + 4) = *(s32 *)(base + 32);
     } else {
         s16 rv = 0x33A8;
-        asm("" : "=r"(rv) : "0"(rv));
         *(s16 *)(g_DrawBuffer + 0x236F2) = rv;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;

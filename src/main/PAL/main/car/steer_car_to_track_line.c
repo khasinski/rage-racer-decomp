@@ -247,7 +247,7 @@ void UpdateCarLaunch(GameCarRuntime *arg0) {
                 offset = *(s16 *)(r + 0x76);
                 phaseValue = *(u16 *)(r + 0x78);
                 offset <<= 2;
-                asm volatile("" : : : "memory");
+                asm volatile("" : :);
                 *(s16 *)(r + 0x38) = 0x14;
                 *(s32 *)(r + 0x98) = 2;
                 g_ShiftTargetRpm = lo;

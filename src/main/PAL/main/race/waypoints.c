@@ -152,7 +152,7 @@ void UpdateWaypoints(void) {
                 PlaySoundCue(0xA);
 
                 waypoint->active = activeState;
-                asm volatile("" ::: "memory");
+                asm volatile("" ::);
                 src = g_PlayerVelocity;
                 asm volatile("" : "=r"(src) : "0"(src));
                 src0 = src[0];
@@ -163,7 +163,7 @@ void UpdateWaypoints(void) {
                 *(s32 *)(tail - 0x8) = src2;
                 src0 = src[3];
                 *(s32 *)(tail - 0x4) = src0;
-                asm volatile("" ::: "memory");
+                asm volatile("" ::);
 
                 *(s32 *)(tail - 0x10) *= 2;
                 *(s32 *)(tail - 0x8) *= 2;

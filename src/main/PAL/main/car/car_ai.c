@@ -436,7 +436,7 @@ void SeedCarRouteMarkers(void) {
     baseOffset = product * 64;
 
 outer:
-    __asm__ volatile("" ::: "memory");
+    __asm__ volatile("" ::);
     index = 0;
     raw = *(s32 *)(g_CarTrackProgress + offset);
     tableOffset = baseOffset;
@@ -453,7 +453,7 @@ inner:
         *(s16 *)(g_CarMarkerIndex + offset) = 0;
         offset += 0x19C;
     } else {
-    __asm__ volatile("" ::: "memory");
+    __asm__ volatile("" ::);
     index++;
     if (index < 0x30) {
         tableOffset += 0xC;
