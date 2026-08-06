@@ -3402,6 +3402,33 @@ their layout had already been proved:
 The object being one object and its components being spelled as members are
 therefore two separate questions, and retail answers the second one out loud.
 
+#### The second signature: one base per row, or one base per field
+
+The same trick reads the other way for indexed tables. `lui at` + `addu
+at,at,idx` re-derived **for every field** is a structure-of-arrays access:
+four column symbols with a byte index already scaled by the row size. One
+`addu` with several `%lo(sym+k)(at)` hanging off it is an array of structs.
+
+`GameDrawProportionalTextShaded` re-derives the base for all four fields of
+each glyph, including for `.u` and `.v` one byte apart. So although the
+memory at 0x8007C438 really is ten 4-byte rows of `{u, v, width, advance}`
+and 0x8007C3B8 is sixty-four 2-byte `{u, v}` rows, the eight
+`g_WordFont*`/`g_HighFont*`/`g_PropFont*` symbols are the columns, and that
+is what retail's source named. Retyping the high-font rows as one glyph
+struct collapses the four re-derivations into one base: 130 instructions
+out, measured. This is the same shape that `track/draw_route_scenery.c`'s
+`PATH()` / `ANGLES()` macros already exist to preserve.
+
+#### What this pass moved
+
+Eleven `RAW()`s and one `"memory"` barrier fell to 44a's first cure, giving
+the store the aggregate mark by addressing the object it belongs to: five in
+`SeedFinishCamera`, six in `SeedFinishCameraAlt`, and the angle seeds plus
+the first barrier in `InitShuttleScenery`. Nine more crutches -- five
+register pins and four empty `asm volatile` fences -- fell to the vector
+assignment above. Thirteen `"memory"` barriers remain, all of them 44b or
+44c.
+
 ### 20c. Runs deliberately left as scalars
 
 * **`g_PathScenery{Pos,Rot}{Phase,Span,Rate,Index}`** (`D_801E4DE0`..`DEE`) are
