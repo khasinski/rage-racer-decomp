@@ -165,12 +165,13 @@ extern s32 g_SpecialCueVoiceA;
 extern s32 g_SpecialCueVoiceB;
 extern const s32 g_SpecialVoiceBits[];
 extern s32 g_StereoOutput;
-extern s16 g_VabIds3;
-extern s16 g_VabIds4;
-extern s16 g_VabIds5;
 extern s16 g_VabSlotVoiceTone[];
+/*
+ * SPU addresses for the four VAB slots.  Slots 0..2 are loaded with
+ * g_VabIds[slot] / g_VabSpuAddress[slot]; slot 3 is the extra bank, which had
+ * both of its entries split off under their own names.
+ */
 extern s32 g_VabSpuAddress[];
-extern s32 g_VabSpuAddressExtra;
 extern s32 g_VabTransferDone;
 
 /* The BIOS exit() stub (linkers/PAL/undefined_syms_manual.txt binds it to

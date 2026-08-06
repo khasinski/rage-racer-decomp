@@ -278,11 +278,11 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
        sequence, and every shape tried (pointer vs array vs global, local copies
        of every parameter, declaration order, the check reading the pointer or
        the global or a second local) leaves 23 against 24 unchanged. */
-    register s16 *vabIdPtr asm("$18") = &g_VabIds3;
+    register s16 *vabIdPtr asm("$18") = &g_VabIds[3];
     s16 vabId;
 
     g_AudioLoadSlot = 3;
-    *vabIdPtr = SsVabOpenHeadSticky((u_char *)header, -1, g_VabSpuAddressExtra);
+    *vabIdPtr = SsVabOpenHeadSticky((u_char *)header, -1, g_VabSpuAddress[3]);
     vabId = *vabIdPtr;
     if (vabId == -1) {
         DebugPrintf(g_MsgVabOpenHeadError);
@@ -306,7 +306,7 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
 
 s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     /* Same allocation tie as StartVabTransferWithTable: see the note there. */
-    register s16 *vabIdPtr asm("$18") = &g_VabIds3;
+    register s16 *vabIdPtr asm("$18") = &g_VabIds[3];
     s16 vabId;
     s32 flags;
 
@@ -346,7 +346,7 @@ void CloseExtraVabSlot(void) {
         SsUtReverbOff();
         SsUtSetReverbDepth(0x28, 0x28);
         SsUtKeyOffV((s16)liveSlot);
-        SsVabClose(g_VabIds5);
+        SsVabClose(g_VabIds[5]);
     }
 }
 
@@ -365,8 +365,8 @@ void ShutdownSoundSystem(void) {
             i++;
         }
         VSync(2);
-        SsVabClose(g_VabIds4);
-        SsVabClose(g_VabIds5);
+        SsVabClose(g_VabIds[4]);
+        SsVabClose(g_VabIds[5]);
         SsStopSoundTick();
         SsQuit();
     }

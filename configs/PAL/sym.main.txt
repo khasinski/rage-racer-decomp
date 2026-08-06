@@ -579,7 +579,6 @@ g_SpecialVoiceBits = 0x80011C74;
 g_SoundCueParams = 0x80011C8C;
 g_SoundCueParams2 = 0x80011F5C;
 g_VabSpuAddress = 0x800125EC;
-g_VabSpuAddressExtra = 0x800125F8;
 g_CarSoundVolumeScales = 0x800125FC;
 g_MsgVabOpenHeadError = 0x8001267C;
 g_MsgVabTransBodyError = 0x80012694;
