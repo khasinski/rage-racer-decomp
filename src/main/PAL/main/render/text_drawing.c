@@ -377,14 +377,16 @@ s32 GameDrawNumber(
             i++;
             digit = width;
             drawn++;
-            do {
-                nextX = x + digit;
-                if (nextX) {
-                    x = nextX;
-                } else {
-                    x = nextX;
-                }
-            } while (0);
+            /* The identical arms are what keeps nextX alive past the add:
+             * with a plain `x = nextX;` combine folds the pair into
+             * `addu s1,s1,s3` and retail has `addu v0,s1,s3` / `move s1,v0`.
+             * The loop note that used to wrap this bought nothing on top. */
+            nextX = x + digit;
+            if (nextX) {
+                x = nextX;
+            } else {
+                x = nextX;
+            }
         }
     }
 
