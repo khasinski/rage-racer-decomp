@@ -38,31 +38,31 @@ void InitRenderState(s32 otShift) {
 
     mirror = g_MirrorMode;
     value = 0xA;
-    *(s32 *)0x1F80006C = value;
+    SPAD_FACE_OT_SHIFT = value;
     value = 0x80;
-    *(u8 *)0x1F800072 = value;
-    *(u8 *)0x1F800071 = value;
-    *(u8 *)0x1F800070 = value;
+    SPAD_FT4_B = value;
+    SPAD_FT4_G = value;
+    SPAD_FT4_R = value;
     value = 0x2C;
-    *(u8 *)0x1F800073 = value;
+    SPAD_FT4_CODE = value;
     value = 0xFF;
-    *(u8 *)0x1F800076 = value;
-    *(u8 *)0x1F800075 = value;
-    *(u8 *)0x1F800074 = value;
+    SPAD_GT4_B = value;
+    SPAD_GT4_G = value;
+    SPAD_GT4_R = value;
     value = 0x3C;
-    *(u8 *)0x1F800077 = value;
+    SPAD_GT4_CODE = value;
     value = 0x140;
-    *(u16 *)0x1F80007C = value;
+    SPAD_CLIP_X1 = value;
     value = 0xF0;
-    *(u16 *)0x1F80007E = value;
+    SPAD_CLIP_Y1 = value;
     ptr = (s32)&D_8019C86C;
     g_VisibleCellMask = (void *)ptr;
     ptr = (s32)&D_8009EC94;
-    *(s32 *)0x1F800064 = otShift;
-    *(u16 *)0x1F800078 = 0;
-    *(u16 *)0x1F80007A = 0;
+    SPAD_OT_SHIFT = otShift;
+    SPAD_CLIP_X0 = 0;
+    SPAD_CLIP_Y0 = 0;
     g_VisibleCellList = (void *)ptr;
-    *(s32 *)0x1F800068 = mirror;
+    SPAD_MIRROR = mirror;
 }
 
 void RegisterModelBank(s32 *base, s32 index) {
@@ -134,12 +134,12 @@ void SelectModelBank(s32 index) {
     value = *(volatile s32 *)entry;
     value = *(s32 *)value;
     ptr = *entry;
-    *(s32 *)0x1F800054 = *(s32 *)(ptr + 4);
+    SPAD_MODEL_TABLE1 = *(s32 *)(ptr + 4);
     ptr = *entry;
-    *(s32 *)0x1F800058 = *(s32 *)(ptr + 8);
+    SPAD_MODEL_NORMALS = *(s32 *)(ptr + 8);
     ptr = *entry;
     g_ModelBankCount = value;
-    *(s32 *)0x1F800050 = ptr + 0xC;
+    SPAD_MODEL_MODELS = ptr + 0xC;
 }
 
 void RegisterCourseModels(s32 *base) {
@@ -153,7 +153,7 @@ void RegisterCourseModels(s32 *base) {
     (void)&pad;
     ptr = base + 1;
     count = base[0];
-    *(s32 *)0x1F800048 = (s32)ptr;
+    SPAD_COURSE_BANK = (s32)ptr;
     g_CourseModelCount = count;
     i = 0;
     if (count > 0) {
@@ -185,11 +185,11 @@ void InstallTerrainCellData(s32 *base) {
     count = base[0];
     asm volatile("" : "=r"(count) : "0"(count));
     value = base[1];
-    *(s32 *)0x1F80005C = (s32)ptr;
+    SPAD_CELL_TABLE = (s32)ptr;
     value = (u8 *)base + value;
     asm volatile("" : "=r"(value) : "0"(value));
     D_801E4144 = count;
-    *(s32 *)0x1F800060 = value;
+    SPAD_CELL_FACES = value;
     i = 0;
     if (count > 0) {
         do {

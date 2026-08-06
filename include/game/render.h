@@ -53,6 +53,71 @@ typedef struct GameScratchpadRenderState {
     s16 y1;
 } GameScratchpadRenderState;
 
+/*
+ * The same block, addressed the way the code that installs it addresses it.
+ * The hand-written GTE engine always runs with $a0 = 0x1F800000 and reads
+ * these words by offset, so each name below is what the engine does with the
+ * word, cited from the disassembly. `pad48` of the struct above covers
+ * 0x48..0x67; the struct has no field names for those yet.
+ *
+ * These are macros, not the `extern T x asm("0x1F8000NN")` spelling used in
+ * render/set_gte_light_matrix.c: that spelling is a const-CSE lever and moves
+ * the emitted code, a macro cannot.
+ */
+
+/* Course object bank. SubmitCourseModel / SubmitCourseModel2 (0x800296BC,
+ * 0x80029E58) load it and index by model id; size is g_CourseModelCount. */
+#define SPAD_COURSE_BANK    (*(s32 *)0x1F800048)
+
+/* Model bank cursor, pointed at one g_ModelBanks entry by SelectModelBank.
+ * MODELS is the model pointer array (bank + 0xC) that SubmitModel indexes by
+ * id << 2 (0x80028DEC); NORMALS is bank[2] rebased, the 8-byte SVECTORs the
+ * Emit*G4 / Emit*GT4 quad builders index by id << 3 and feed to ncct/nccs
+ * (0x80029168). TABLE1 is bank[1] rebased; nothing in the disassembled engine
+ * reads it, so it is named for where it comes from, not what it holds. */
+#define SPAD_MODEL_MODELS   (*(s32 *)0x1F800050)
+#define SPAD_MODEL_TABLE1   (*(s32 *)0x1F800054)
+#define SPAD_MODEL_NORMALS  (*(s32 *)0x1F800058)
+
+/* Terrain: the per-cell record array SubmitTerrainCells indexes by cell id
+ * (0x80028078) and the face array SubmitTerrainCellFaces walks (0x80028168). */
+#define SPAD_CELL_TABLE     (*(s32 *)0x1F80005C)
+#define SPAD_CELL_FACES     (*(s32 *)0x1F800060)
+
+/* The srav amount that turns a transformed Z into an ordering-table index:
+ * OT_SHIFT on the cell-face path (0x800283C0), FACE_OT_SHIFT on the mode-1
+ * path, where it is read as a halfword (0x80028474). InitRenderState sets
+ * OT_SHIFT from its parameter, 5 for the race scene and 1 for two menus. */
+#define SPAD_OT_SHIFT       (*(s32 *)0x1F800064)
+#define SPAD_FACE_OT_SHIFT  (*(s32 *)0x1F80006C)
+
+/* Mirror flag. Non-zero makes the engine negate the GTE rotation matrix
+ * (0x80028000, 0x80028E00); track/draw_terrain_cells.c compares it against
+ * g_MirrorMode. Same word as `orderingFlag` above. */
+#define SPAD_MIRROR         (*(s32 *)0x1F800068)
+
+/* Two packed GTE RGBC words, read whole with lwc2 into cop2 register 6:
+ * EmitPolyFT4Fog takes 0x70 (0x80029468), EmitPolyGT4Fog takes 0x74
+ * (0x80029620). The fourth byte is the GPU primitive code the emitter stamps
+ * into the packet, 0x2C for a 40-byte POLY_FT4 and 0x3C for a 52-byte
+ * POLY_GT4. */
+#define SPAD_FT4_R          (*(u8 *)0x1F800070)
+#define SPAD_FT4_G          (*(u8 *)0x1F800071)
+#define SPAD_FT4_B          (*(u8 *)0x1F800072)
+#define SPAD_FT4_CODE       (*(u8 *)0x1F800073)
+#define SPAD_GT4_R          (*(u8 *)0x1F800074)
+#define SPAD_GT4_G          (*(u8 *)0x1F800075)
+#define SPAD_GT4_B          (*(u8 *)0x1F800076)
+#define SPAD_GT4_CODE       (*(u8 *)0x1F800077)
+
+/* Screen clip rectangle every emitter rejects primitives against; the same
+ * four halfwords as x0/y0/x1/y1 above. menu/frontend.c raises Y1 to 0x1E0 for
+ * the 480-line modes. */
+#define SPAD_CLIP_X0        (*(u16 *)0x1F800078)
+#define SPAD_CLIP_Y0        (*(u16 *)0x1F80007A)
+#define SPAD_CLIP_X1        (*(u16 *)0x1F80007C)
+#define SPAD_CLIP_Y1        (*(u16 *)0x1F80007E)
+
 typedef struct GameRenderView {
     s16 angle_0;    /* 0x00 */
     s16 angle_2;    /* 0x02 */
