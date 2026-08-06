@@ -6163,3 +6163,89 @@ with no output. A checker that only greps for the word `DIFF` reads that as a
 pass. Assert on the `(N checked)` line. The crash is real and reachable: a
 declaration placed after a statement (invalid C89, which cc1 accepts) makes
 cc1 bus-error while writing `-gcoff` debug info.
+
+## 42. What decides whether `loop.c` strength-reduces an address
+
+`FlipTeamLogoHorizontal` in `menu/team_logo_transform.c` carried four register
+pins, and all sixteen subsets had been tested: only the full set matched. The
+pins were not allocating anything. They were hard registers, and a hard
+register cannot be an induction variable, so they were suppressing strength
+reduction. Retail recomputes both word addresses twice per iteration, which is
+what the code looks like when `loop.c` declines to reduce.
+
+Read the decision straight out of the compiler:
+
+    cc1 -quiet -mcpu=3000 -O2 -G0 -funsigned-char -dL mini.c -o /dev/null
+
+`mini.c.loop` lists every giv it found with a `benefit`, then prints
+`giv of insn N not worth while, X vs Y` for the ones it drops. The rule that
+falls out of the numbers is simple: **a giv is reduced only if its benefit
+survives the copy cost of 2.** A one-instruction address (`base + offset`,
+benefit 2) is always dropped; a two-instruction one (`base + index*4`,
+benefit 4) is always reduced. `combine_givs` is the trap in between — two
+identical one-instruction addresses, the load's and the store's, are combined
+into one giv whose benefits add to 4, and then both are reduced.
+
+Three source-level facts follow, and together they took all four pins out.
+
+**A giv must be the only assignment to its register.** `strength_reduce`
+requires `n_times_set[REGNO (dest)] == 1` inside the loop, so an address that
+lands in a variable assigned more than once in the same loop is not a giv at
+all, is never combined, and is never reduced. Two addresses assigned twice each
+is the natural shape anyway: the load computes it and the store recomputes it,
+because cse cannot carry a value across the inner loop that sits between them.
+
+**`x << 2` and `x * 4` are not the same thing here.** `expand_mult` on a
+constant power of two returns a fresh pseudo and copies it into the target;
+`expand_shift` writes the target directly. The fresh pseudo is single-set, so
+`highIndex * 4` reintroduces exactly the giv that routing through a
+multiply-assigned variable was meant to avoid, while `highIndex << 2` does not.
+This cost 21 instructions of difference on its own.
+
+**Keep the address block-local so `local_alloc` gets it.** Retail's two
+addresses live in `v0`/`v1`, which is what `local_alloc` hands out; a variable
+that also appears in the neighbouring loop becomes a global allocno and lands
+in the `a` range instead, pushing every later allocno up one register. Declare
+the address at the top of the block that uses it. Note this is *not* the same
+as C scope having any effect on its own — scope is still neutral. What matters
+is which basic blocks reference the pseudo.
+
+The residue after all that was one instruction of schedule, fixed by writing
+the two accumulators' shift-and-or in the order retail interleaves them.
+
+### 42a. cse1's copy canonicalisation, applied
+
+`DrawSeriesClearedWash` in `race/result_screens.c` lost both its pins to the
+rule in [[gcc263-cse-copy-canonical]]: after `A = B`, later uses of `B` are
+rewritten to `A` when `A` outlives `B`. The function hand-expanded the rounding
+half of a signed divide into a scratch variable that the clamp blocks further
+down reuse, which made the scratch outlive the parameter it was copied from, so
+the test and the add read the copy where retail reads the parameter. The two
+expressions are just `x / 8` and `x / 4`; spelling them that way removes the
+copy, two helper variables and both pins.
+
+### 42b. What is still pinned in these two files, and why
+
+`scripted_draw.c` keeps 20. None of its pinned functions except the two loop
+carriers are loop-shaped, so §42 does not reach them; the costs measured with
+every pin in one function removed are `DrawScriptedTriangle` 26,
+`RunTimedDrawScript` 27, `DrawScriptedQuad` 54, `DrawFadingMenuSprites` 60,
+`DrawScriptedLine` 103, `DrawScriptedSprite` 110, `GameDrawMenuButton` 124.
+
+`RunTimedDrawScript`'s `goto` is not decoration. Written as a `while`, the
+command pointer becomes a biv and every `cmd->argN` becomes a
+`dest address ... mult 1 add 4` giv; they combine in pairs and reduce, and the
+function moves 129 instructions away. §42's variable trick does not apply
+because the addresses never reach a variable at all — they are `DEST_ADDR`
+givs inside the `MEM`.
+
+In `team_logo_transform.c`, `RotateTeamLogoCcw`/`Cw` pin the `saved` array base
+so `move_movables` leaves `addiu t3,sp,16` inside the innermost loop, where
+retail has it; `DrawMenuLightBurst`'s nine pins are all the same shape, an
+intermediate that retail keeps in `$8` across a second division that the
+scheduler otherwise reorders around (22 instructions).
+
+Two whole-repo sweeps of "remove every pin in one function and diff the object"
+are recorded in `tools/decomp-wip/flip/`. Nothing is free. The one apparent
+zero was an audit bug: `__asm("$16")` matched the counting regex but not the
+substituting one, so nothing was removed and the unchanged file compared equal.
