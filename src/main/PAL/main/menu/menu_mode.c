@@ -206,14 +206,14 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     ApplyMatrixSV((s32 *)&mtx, &verts[3], (s16 *)&out[3]);
 
     {
-        register s32 x0 asm("$5");
-        register s32 y0 asm("$6");
-        register s32 x1 asm("$7");
-        register s32 y1 asm("$3");
-        register s32 x2 asm("$8");
-        register s32 y2 asm("$9");
-        register s32 x3 asm("$10");
-        register s32 y3 asm("$11");
+        s16 x0;
+        s16 y0;
+        s16 x1;
+        s16 y1;
+        s16 x2;
+        s16 y2;
+        s16 x3;
+        s16 y3;
 
         x0 = out[0].x;
         x1 = out[1].x;
@@ -224,14 +224,14 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
         y2 = out[2].y;
         y3 = out[3].y;
 
-        x0 = (s16)(x0 + 0xE4);
-        y0 = (s16)(y0 + 0x58);
-        y1 = (s16)(y1 + 0x58);
-        x2 = (s16)(x2 + 0xE4);
-        y2 = (s16)(y2 + 0x58);
-        x3 = (s16)(x3 + 0xE4);
-        y3 = (s16)(y3 + 0x58);
-        x1 = (s16)(x1 + 0xE4);
+        x0 += 0xE4;
+        y0 += 0x58;
+        y1 += 0x58;
+        x2 += 0xE4;
+        y2 += 0x58;
+        x3 += 0xE4;
+        y3 += 0x58;
+        x1 += 0xE4;
 
         GameDrawTexturedQuadWide(scratch2,
             x0, y0, x1, y1, x2, y2, x3, y3,
