@@ -1068,7 +1068,7 @@ what the flag is *for* is unrecoverable and any name would be a guess.
 | `D_8007BEDC` | `g_TeamLogoClutRect` | per-file | 6 | literal `RECT{16,480,16,1}` in `.data`, used only with `g_TeamLogoClut` |
 | `D_8019CB40` | `g_ClassRecords` | per-file | 6 | 0x2C bytes = 11 x `{s16 grade, s16 clears}`, index `series * 6 + class`; `-1` locked |
 | `D_801E4388` | `g_TimeAttackCars` (this row proposed `g_CarTable3`; the tree settled on `g_TimeAttackCars`, in 4 files, and that is the current name) | per-file | 6 | save block `+0x128`, the third 13 x `GameCarEntry`; `g_CarTable` is repointed at it |
-| `D_8019CAFC` | `g_AssetLoadCursor` | per-file | 6 | advanced by each `LoadAsset`'s returned size; its settled value becomes `g_AssetBase` |
+| `D_8019CAFC` | `g_AssetLoadCursor` | `u8 *` | 6 | advanced by each `LoadAsset`'s returned size; its settled value becomes `g_AssetBase` |
 | `D_801E6D90` | `g_SeqHandle` | `s16` | 6 | the `SsSeqOpen` return value, passed as `seq` to `SsSeqPlay/Stop/SetVol` (its old header comment said "sequence volume" and was wrong) |
 | `D_8007F600` | `g_CdTrackPending` | `s32` | 5 | indexes the per-track `CdlLOC` table `D_8009AFD4`; `-1` = none |
 | `D_8007F608` | `g_CdTrackStep` | `s32` | 5 | 0..7 sub-state of the track-change sequence in `func_800432A8` |
@@ -1077,10 +1077,10 @@ what the flag is *for* is unrecoverable and any name would be a guess.
 | `D_801E40A8` | `g_BgmTrackCount` | `s32` | 5 | `9`, or `10` once five class records are grade 1; bound of the `D_801E7734` shuffle bag |
 | `D_8019C8EC` | `g_SeriesCleared` | `s32` | 5 | set only when the series' final class is completed; wipes the save and starts the ending |
 | `D_8019C760` | `g_StreamReturnScene` | per-file | 5 | `g_SceneId` is restored from it when the stream ends; non-zero also skips title re-init |
-| `D_8009E87C` | `g_CarModelSlot` | per-file | 5 | `= (self < 1)`, a pure 0/1 flip selecting one of two 0x20000 model buffers |
+| `D_8009E87C` | `g_CarModelSlot` | `u32` | 5 | `= (self < 1)`, a pure 0/1 flip selecting one of two 0x20000 model buffers |
 | `D_8009E6AC` | `g_SceneLightMatrix` | `Matrix` | 5 | assigned wholesale from a per-scene constant matrix, then loaded into the GTE |
-| `D_8019C904` | `g_AssetBase` | per-file | 5 | base of the resident asset block; all sub-block pointers are `base + base[n]` |
-| `D_801E8AB0` | `g_AssetSubBlockPtr` | per-file | 5 | always `base + header->offsets[n + 1]`, the companion of `g_AssetBlockPtr` |
+| `D_8019C904` | `g_AssetBase` | `u8 *` | 5 | base of the resident asset block; all sub-block pointers are `base + base[n]` |
+| `D_801E8AB0` | `g_AssetSubBlockPtr` | `u8 *` | 5 | always `base + header->offsets[n + 1]`, the companion of `g_AssetBlockPtr` |
 | `D_80082F28` | `g_SoundSlotTone` | `s16[]` | 5 | `s16[6][2]`, SPU program per sound slot; slot n drives hardware voice n + 14 |
 | `D_801E6C9C` | `g_AudioSlotMask` | `s32` | 5 | `|= 1 << slot` on load, `^= bit` on close; returned by `GetActiveAudioSlots` |
 | `D_801E6CE4` | `g_PanVoiceVolumeL` | `s32` | 5 | left of an L/R pair clamped 0..0x80, `-1` idle, applied to voice `0x15` |
@@ -1098,6 +1098,36 @@ accumulated length and which the within-segment remainder is not settled, so the
 names stay neutral.
 
 ### 12c. Declared per file, not in one header
+
+> **PARTLY SUPERSEDED (2026-08-06).** "Different type per file" is usually our
+> debt, not a fact about the original, and the fix is not to pick one file's
+> spelling and force it on the others - that changes codegen - but to pick the
+> canonical type, declare it once, and cast at the sites that want another
+> view. The asset family went that way and stayed byte-exact: `g_AssetBase`,
+> `g_AssetLoadCursor`, `g_AssetSubBlockPtr`, `g_AssetBlockPtr2` and
+> `g_ImageBlockBuffer` are all `u8 *` in `game/asset.h` now, `g_StreamLoc` is a
+> `GameCdLoadEntry *`, `g_CarModelSlot` is `u32` in `game/car.h`,
+> `g_TeamLogoClut` is `u16[16]` in `game/menu.h`, and `g_TerrainCellGrid` /
+> `g_CellVisibilityTable` take their reader's type in `game/track.h`.
+> `src/main/PAL/main/asset/` went from 58 local declarations to 11 and the
+> whole tree from 1974 to 1890, with all 297 objects unchanged.
+>
+> What decides the canonical type is what the code *does* with the symbol, not
+> which spelling is commonest: all three asset pointers are advanced by byte
+> counts (a load's returned size, `0x38000`, `g_SharedAssetWord0`), so they are
+> byte pointers, and the `GameSceneAssetHeader` a file reads at one of them is
+> a view of those bytes. Two cast shapes are free and one is not: a value cast
+> (`(s32)g_AssetBase`) and a pointer-value cast
+> (`(GameSceneAssetHeader *)cursor`) fold away, an address cast
+> (`*(T *)&g_Foo`) costs an extra instruction because only a `VAR_DECL` gets
+> direct-symbol addressing.
+>
+> The entry still holds for the cases below it, and for the three that resisted
+> in that pass - `g_CarModelAsset`, `g_TeamLogoSampleData` and the team-logo
+> canvas/rect group, each read through a struct private to one `menu/` file,
+> and `g_VisibleCellMask` / `g_VisibleCellList`, four incompatible element
+> types over seven files. Each of those now carries the reason at its
+> declaration.
 
 Where a symbol is spelled with a different type in different translation units
 (`u8 *` / `u32` / `s32` / a typed struct pointer for the same pointer, or
