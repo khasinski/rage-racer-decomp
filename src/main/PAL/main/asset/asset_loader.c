@@ -13,10 +13,9 @@
 
 s32 CdRead(s32 sectors, void *buf, s32 mode);
 s32 LoadAssetWide(s32 assetIndex, s32 dst) asm("LoadAsset");
-void UploadImageAsset(void *asset);
 
-void SetTrackCameraTable(u32 value) {
-    *(u32 *)0x8019C9A8 = value;
+void SetTrackCameraTable(void *table) {
+    *(void **)0x8019C9A8 = table;
 }
 
 void ResetAssetLoader(void) {

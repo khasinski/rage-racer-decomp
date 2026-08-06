@@ -19,10 +19,6 @@
 /* Asset-region pointers, each spelled with this file's own view of the
  * pointee; game/asset.h explains why they are not one shared declaration. */
 extern u8 *g_AssetBlockPtr2;
-void StartAudioSlotLoad(s32 slot, void *header, void *body, void *table);
-void UploadImageAsset(void *asset);
-void SetTrackCameraTable(void *table);
-void RegisterCourseModels(void *base);
 extern s32 g_ImageBlockBuffer;
 
 s32 RequestRaceAssets(void) {
@@ -53,7 +49,7 @@ void LoadRaceAssets(void) {
             n--;
             dst++;
         }
-        StartAudioSlotLoad(2, g_AssetLoadCursor, g_AssetSubBlockPtr, 0);
+        StartAudioSlotLoad(2, (s32)g_AssetLoadCursor, (s32)g_AssetSubBlockPtr, 0);
         g_AssetLoadState = 2;
         g_AssetLoadCursor = g_AssetLoadCursor + g_SharedAssetWord0;
         break;
@@ -83,7 +79,7 @@ void LoadRaceAssets(void) {
             g_AssetBlockPtr = header;
             g_AssetBlockPtr2 = table;
             g_AssetSubBlockPtr = body;
-            StartAudioSlotLoad(3, header, body, table);
+            StartAudioSlotLoad(3, (s32)header, (s32)body, (s32)table);
             pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = pack->offsets[4];
             g_AssetBlockPtr = (u8 *)pack + offset;
@@ -174,7 +170,7 @@ void LoadRaceAssets(void) {
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[3];
             g_AssetBlockPtr = (u8 *)header + offset;
-            RegisterModelBank(g_AssetBlockPtr, 1);
+            RegisterModelBank((s32 *)g_AssetBlockPtr, 1);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[4];
@@ -184,17 +180,17 @@ void LoadRaceAssets(void) {
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[5];
             g_AssetBlockPtr = (u8 *)header + offset;
-            RegisterCourseModels(g_AssetBlockPtr);
+            RegisterCourseModels((s32 *)g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[6];
             g_AssetBlockPtr = (u8 *)header + offset;
-            RegisterModelBank(g_AssetBlockPtr, 2);
+            RegisterModelBank((s32 *)g_AssetBlockPtr, 2);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[7];
             g_AssetBlockPtr = (u8 *)header + offset;
-            InstallTerrainCellData(g_AssetBlockPtr);
+            InstallTerrainCellData((s32 *)g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[8];

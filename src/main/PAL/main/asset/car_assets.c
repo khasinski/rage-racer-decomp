@@ -11,12 +11,9 @@ extern GameCarModelAsset *g_CarModelAsset;
 extern s32 g_TeamLogoSampleData;
 extern u8 *g_ImageBlockBuffer;
 extern u8 *g_AssetBlockPtr2;
-void RegisterCourseModels(void *base);
 void SelectCarModelSlot(s32 slot);
-void UploadImageAsset(void *asset);
 void ApplyBodyColor1(s32 colour, s32 imageData);
 void ApplyBodyColor2(s32 colour, s32 imageData);
-void StartAudioSlotLoad(s32 slot, void *header, void *body, void *table);
 
 s32 RequestCarSelectAssets(void) {
     if (g_AssetLoadState != 0) {
@@ -49,7 +46,7 @@ void LoadCarSelectAssets(void) {
 
     switch (state) {
     case 1:
-        StartAudioSlotLoad(1, g_AssetBlockPtr, g_AssetSubBlockPtr, g_AssetBlockPtr2);
+        StartAudioSlotLoad(1, (s32)g_AssetBlockPtr, (s32)g_AssetSubBlockPtr, (s32)g_AssetBlockPtr2);
         g_AssetLoadState = 2;
         return;
     case 2:
@@ -61,7 +58,7 @@ void LoadCarSelectAssets(void) {
         return;
     case 3:
             if (LoadAsset(8, g_AssetLoadCursor) != 0) {
-                RegisterModelBank(g_AssetLoadCursor + 0xC, 0xE);
+                RegisterModelBank((s32 *)(g_AssetLoadCursor + 0xC), 0xE);
 
                 header = (GameSceneAssetHeader *)g_AssetLoadCursor;
                 blockOffset = header->offsets[1];
@@ -70,7 +67,7 @@ void LoadCarSelectAssets(void) {
                 header = (GameSceneAssetHeader *)((u8 *)header + firstOffset);
                 g_TeamLogoSampleData = (s32)header;
                 g_AssetBlockPtr = (u8 *)secondOffset;
-                RegisterCourseModels(g_AssetBlockPtr);
+                RegisterCourseModels((s32 *)g_AssetBlockPtr);
 
                 imageHeader = (GameSceneAssetHeader *)g_AssetLoadCursor;
                 assetOffset = imageHeader->offsets[2];
@@ -95,7 +92,7 @@ void LoadCarSelectAssets(void) {
                 relOffset = model->modelDataOffset;
                 modelPtr = (s32)(carModelBase + relOffset);
                 model->modelDataOffset = modelPtr;
-                RegisterModelBank((void *)modelPtr, 0);
+                RegisterModelBank((s32 *)modelPtr, 0);
 
                 model = g_CarModelAsset;
                 relOffset = model->imageDataOffset;
@@ -153,7 +150,7 @@ void LoadCarModel(s32 carIndex) {
             SetCarModelSlot(ptr, g_CarModelSlot < 1);
 
             asset->modelDataOffset = (s32)ptr + asset->modelDataOffset;
-            RegisterModelBank((void *)asset->modelDataOffset, g_CarModelSlot < 1);
+            RegisterModelBank((s32 *)asset->modelDataOffset, g_CarModelSlot < 1);
 
             asset->imageDataOffset = (s32)ptr + asset->imageDataOffset;
             SetCarImageSlot((void *)asset->imageDataOffset, g_CarModelSlot < 1);

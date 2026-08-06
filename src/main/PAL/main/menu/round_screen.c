@@ -63,7 +63,6 @@ void RestoreColorMatrix(void) { SetColorMatrix(&g_SceneColorMatrix); }
 extern s32 g_ImageBlockBuffer;
 extern u8 *g_CourseProgress;
 
-void UploadImageAsset(s32 arg0);
 
 /* Scene 9: finishes the asset load, relocates the car model and derives g_GrandPrixRound. */
 void EnterRoundScreen(void) {
@@ -76,7 +75,7 @@ void EnterRoundScreen(void) {
 
     if (g_AssetLoadState != 1) {
         CloseLoadedAudioSlots();
-        UploadImageAsset(g_ImageBlockBuffer);
+        UploadImageAsset((void *)g_ImageBlockBuffer);
         RelocateCarModel();
 
         g_FrameSyncThreshold = 0x180;

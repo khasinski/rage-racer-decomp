@@ -1,27 +1,18 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-/* g_CarImageRect, g_ModelBanks, g_CarImageSlots, g_CarModelSlots and
- * D_801E4144 are declared identically in game/asset.h, but this file cannot
- * include it: asset.h's RegisterModelBank, UnrelocateModelBank and
- * InstallTerrainCellData take void *, and the definitions below walk the
- * bank as s32 *, which is a conflicting type rather than a wider view. */
-extern u32 g_CarImageRect;
 extern u8 D_8019C86C;
 extern u8 D_8009EC94;
 extern void *g_CarModelAsset;
 extern void *g_VisibleCellMask;
 extern void *g_VisibleCellList;
-extern void *g_ModelBanks[];
 extern void *g_TerrainCellGrid;
 extern void *g_CellVisibilityTable;
-extern s32 D_801E4144;
-extern void *g_CarImageSlots[];
-extern void *g_CarModelSlots[];
 
 s32 GetCarAssetIndex(s32 model, s32 grade) {
     return g_CarModelBaseIndex[model] + grade;
@@ -57,10 +48,10 @@ void RegisterModelBank(s32 *base, s32 index) {
 
     ptr = base + 3;
     g_ModelBanks[index] = base;
-    base[1] = (u8 *)base + base[1];
-    base[2] = (u8 *)base + base[2];
+    base[1] = (s32)((u8 *)base + base[1]);
+    base[2] = (s32)((u8 *)base + base[2]);
     for (i = 0; (u32)i < (u32)base[0]; i++) {
-        *ptr = (u8 *)base + *ptr;
+        *ptr = (s32)((u8 *)base + *ptr);
         ptr++;
     }
 }
@@ -126,8 +117,8 @@ void RegisterCourseModels(s32 *base) {
         limit = count;
         item = base + 3;
         do {
-            *ptr = (u8 *)base + *ptr;
-            *item = (u8 *)base + *item;
+            *ptr = (s32)((u8 *)base + *ptr);
+            *item = (s32)((u8 *)base + *item);
             ptr += 3;
             item += 3;
             i++;
@@ -150,7 +141,7 @@ void InstallTerrainCellData(s32 *base) {
     D_801E4144 = count;
     SPAD_CELL_FACES = (s32)((u8 *)base + base[1]);
     for (i = 0; i < count; i++) {
-        *ptr = (u8 *)base + *ptr;
+        *ptr = (s32)((u8 *)base + *ptr);
         ptr++;
     }
 }

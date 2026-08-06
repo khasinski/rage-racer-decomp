@@ -12,7 +12,6 @@ void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDraw
 void BeginIntroFmv(s32 arg0);
 extern Matrix g_SceneLightMatrix;
 extern s32 g_ImageBlockBuffer;
-void UploadImageAsset(s32 arg0);
 void InitRenderState(s32 arg0);
 
 void DrawBootLogo(void) {
@@ -123,7 +122,7 @@ void EnterAttractScene(void) {
     SetDispMask(0);
     g_FrameSyncThreshold = 0x80;
     if (g_AssetLoadState == 0) {
-        UploadImageAsset(g_ImageBlockBuffer);
+        UploadImageAsset((void *)g_ImageBlockBuffer);
         g_MirrorMode = 0;
         InitRenderState(5);
         SetupDisplay480(0, 0, 0);

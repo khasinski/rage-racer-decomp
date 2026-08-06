@@ -7,12 +7,11 @@
 #include "game/render.h"
 #include "game/memcard.h"
 extern s32 g_ImageBlockBuffer;
-void UploadImageAsset(s32 arg0);
 void EnterMemoryCardMenuFromLoad(void) {
     SetDispMask(0);
     SetupDisplay480(0, 0, 0);
     if (g_AssetLoadState == 0) {
-        UploadImageAsset(g_ImageBlockBuffer);
+        UploadImageAsset((void *)g_ImageBlockBuffer);
         g_McMenuRowCursor = 2;
         g_McMenuRowCount = 3;
         g_McMenuState = -1;

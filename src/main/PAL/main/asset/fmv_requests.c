@@ -8,8 +8,6 @@
  * point it at one of g_StreamCdEntries. */
 extern s32 *g_StreamLoc;
 
-void SetTrackCameraTable(void *table);
-void RegisterCourseModels(void *base);
 /* fmv/fmv_scene.c defines this taking an argument this file never passes. */
 void BeginFmv(void);
 
@@ -41,7 +39,7 @@ void LoadTrackDataAssets(void) {
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[3];
             g_AssetBlockPtr = (u8 *)header + offset;
-            RegisterModelBank(g_AssetBlockPtr, 1);
+            RegisterModelBank((s32 *)g_AssetBlockPtr, 1);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[4];
@@ -51,17 +49,17 @@ void LoadTrackDataAssets(void) {
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[5];
             g_AssetBlockPtr = (u8 *)header + offset;
-            RegisterCourseModels(g_AssetBlockPtr);
+            RegisterCourseModels((s32 *)g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[6];
             g_AssetBlockPtr = (u8 *)header + offset;
-            RegisterModelBank(g_AssetBlockPtr, 2);
+            RegisterModelBank((s32 *)g_AssetBlockPtr, 2);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[7];
             g_AssetBlockPtr = (u8 *)header + offset;
-            InstallTerrainCellData(g_AssetBlockPtr);
+            InstallTerrainCellData((s32 *)g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[8];

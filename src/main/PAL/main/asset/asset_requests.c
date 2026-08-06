@@ -11,8 +11,6 @@ extern Rect g_TeamLogoClutRect;
 extern Rect g_TeamLogoRect;
 extern u16 g_TeamLogoClut[];
 extern u16 g_TeamLogoCanvas[];
-void UploadImageAsset(void *asset);
-void StartAudioSlotLoad(s32 slot, void *header, void *body, s32 table);
 extern s32 g_ImageBlockBuffer;
 extern void *g_AssetBlockPtr2;
 
@@ -39,7 +37,7 @@ void LoadBootAssets(void) {
         break;
     case 3:
         if (LoadAsset(3, g_AssetLoadCursor) != 0) {
-            StartAudioSlotLoad(0, g_AssetBlockPtr, g_AssetLoadCursor, 0);
+            StartAudioSlotLoad(0, (s32)g_AssetBlockPtr, (s32)g_AssetLoadCursor, 0);
             g_AssetLoadState = 4;
         }
         break;

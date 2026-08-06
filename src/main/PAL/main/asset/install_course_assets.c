@@ -4,7 +4,6 @@
 
 /* Asset-region pointers, each spelled with this file's own view of the
  * pointee; game/asset.h explains why they are not one shared declaration. */
-void UploadImageAsset(void *asset);
 
 void InstallCourseAssets(void) {
     u8 *base;
