@@ -377,8 +377,6 @@ void EnterRaceScene(void) {
     g_RefSectorTime1 = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset + 4);
     mode *= 8;
     do {
-    } while (0);
-    do {
         do {
             g_SectorIndex = -2;
         } while (0);
