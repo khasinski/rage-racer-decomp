@@ -226,19 +226,15 @@ void BuildVisibleCells(s32 arg0, s32 arg1) {
                 ApplyMatrixLV((void *)0x1F800028, vec, proj);
                 if (proj[2] >= arg0 && arg1 >= proj[2]) {
                     out->x = proj[0];
-                    do {
-                        do {
-                            do {
-                                do {
-                                    out->y = proj[1];
-                                } while (0);
-                            } while (0);
-                        } while (0);
-                    } while (0);
+                    out->y = proj[1];
                     out->z = proj[2];
                     continue;
                 }
+                out->w = invalid;
+                continue;
             }
+            out->w = invalid;
+            continue;
         }
         out->w = invalid;
     }
