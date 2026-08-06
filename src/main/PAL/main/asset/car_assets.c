@@ -37,7 +37,6 @@ s32 RequestCarSelectAssets(void) {
 
 void LoadCarSelectAssets(void) {
     s32 state = g_AssetLoadState;
-    s32 nextState;
     u8 *carModelBase;
     GameSceneAssetHeader *header;
     GameSceneAssetHeader *imageHeader;
@@ -50,15 +49,13 @@ void LoadCarSelectAssets(void) {
     s32 modelPtr;
     s32 relOffset;
 
-    nextState = 2;
-
     switch (state) {
     case 1:
         StartAudioSlotLoad(1, g_AssetBlockPtr, g_AssetSubBlockPtr, g_AssetBlockPtr2);
-        g_AssetLoadState = nextState;
+        g_AssetLoadState = 2;
         return;
     case 2:
-        if ((PollAudioSlotLoad() << 16) != 0) {
+        if ((s16)PollAudioSlotLoad() != 0) {
             InitSequenceAudio();
             g_AssetLoadState = 3;
             g_AssetLoadCursor = (GameSceneAssetHeader *)g_AssetSubBlockPtr;

@@ -58,7 +58,7 @@ void LoadRaceAssets(void) {
         break;
     }
     case 2:
-        if ((PollAudioSlotLoad() << 16) != 0) {
+        if ((s16)PollAudioSlotLoad() != 0) {
             g_AssetLoadState = 3;
         }
         break;
@@ -93,7 +93,7 @@ void LoadRaceAssets(void) {
         break;
     }
     case 4:
-        if ((PollAudioSlotLoad() << 16) != 0) {
+        if ((s16)PollAudioSlotLoad() != 0) {
             g_AssetLoadState = 5;
         }
         break;

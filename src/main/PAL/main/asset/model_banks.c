@@ -85,7 +85,7 @@ void SelectModelBank(s32 index) {
 
     ptr = (s32)g_ModelBanks;
     entry = (s32 *)((index * 4) + ptr);
-    value = *(volatile s32 *)entry;
+    value = *entry;
     value = *(s32 *)value;
     ptr = *entry;
     SPAD_MODEL_TABLE1 = *(s32 *)(ptr + 4);

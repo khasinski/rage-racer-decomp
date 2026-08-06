@@ -47,7 +47,7 @@ void LoadBootAssets(void) {
         }
         break;
     case 4:
-        if ((PollAudioSlotLoad() << 16) != 0) {
+        if ((s16)PollAudioSlotLoad() != 0) {
             g_AssetLoadState = 5;
         }
         break;
@@ -156,6 +156,9 @@ void LoadSelectBgmAssets(void) {
     case 2:
         if (LoadAsset(7, g_AssetBase) != 0) {
             header = g_AssetBase;
+            /* The three volatile reads are load-bearing: without them cse
+             * folds the header pointer and the three offsets into one
+             * addressing pattern and the block costs 19 instructions more. */
             firstOffset = *(volatile s32 *)&header->offsets[0];
             thirdOffset = *(volatile s32 *)&header->offsets[2];
             g_AssetBlockPtr = (void *)((u8 *)header + firstOffset);
