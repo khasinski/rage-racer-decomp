@@ -6249,3 +6249,96 @@ Two whole-repo sweeps of "remove every pin in one function and diff the object"
 are recorded in `tools/decomp-wip/flip/`. Nothing is free. The one apparent
 zero was an audit bug: `__asm("$16")` matched the counting regex but not the
 substituting one, so nothing was removed and the unchanged file compared equal.
+
+## 43. Four levers that took 21 pins out of `main/menu`
+
+`main/PAL/main/menu` carried 77 register pins. Twenty-one of them came out in
+four functions, and none of them needed a new crutch. The levers generalise.
+
+**A 16-bit coordinate is an `s16` local, and the arithmetic happens in place.**
+`FlipCourseCard` in `menu/menu_mode.c` had eight pins, one per vertex
+coordinate, holding `a1/a2/a3/v1/t0-t3`. The block reads eight `u16`s out of
+the transformed vertices and adds a screen offset to each. Written as `s32`
+with an explicit `(s16)` cast, `expand` puts the sum in a fresh temp and
+copies back: `addiu v0,t1,88 / sll v0,v0,16 / sra t1,v0,16`, so every one of
+the eight chains burns `v0` and the values land one register away from
+retail's. Declared `s16` and written `x0 += 0xE4;`, the truncating store is
+the same pseudo the add reads, and the whole chain is
+`addiu a1,a1,228 / sll a1,a1,16 / sra a1,a1,16` — retail exactly. All eight
+pins go. Same lever removed the `y` pin in `DrawOwnedCarCounter`.
+
+**A value that is copied is not the value that is updated.** In
+`DrawOwnedCarCounter` (`menu/draw_paint_color_palette.c`) two y coordinates
+come from one base: the number row's, and the button's 10 lower. Written as
+`y = t + 0x21B; t += 0x211;` the in-place update of `t` is scheduled directly
+after the first add, seven insns ahead of retail. Written as a second
+variable, `t2 = t + 0x211;`, it lands where retail has it. This is the same
+family as §41's "split a pointer that does two jobs", and it is what closed
+the last instruction in two separate functions here.
+
+**Local copies of parameters reorder the callee-saved registers.**
+`SetupDisplay240`/`480` in `menu/frontend.c` copied all three arguments into
+locals, two of them pinned to `$18`/`$19`. The three locals are born one insn
+apart in declaration order and all die at the same point inside the loop, so
+`reg_live_length` comes out 74 / 73 / 72 and global-alloc's priority
+(`floor_log2(refs)*refs/live_length`) is 0.162 / 0.164 / 0.167 — arg2 is
+allocated first and takes `s2`, which is where retail has arg0. Used directly,
+the parameters are allocated in parameter order into `s2/s3/s4`. Six pins and
+two barriers went with the copies. Read the numbers straight out of
+`cc1 -dl`: the `Register N used X times across Y insns` lines are the inputs
+to the formula.
+
+**One variable reused for two reads is not two variables.** The same two
+functions read `g_ScreenOffsetX` and `g_ScreenOffsetY` into one `u16 value`
+inside a loop. The second live range then wins the local-alloc priority order
+and takes `v0`, pushing the loop's `0x237E8` stride constant into `v1`. As two
+variables the stride keeps `v1` and both reads use `v0`, which is retail.
+
+### 43a. `volatile` on a byte global forges an `andi`
+
+`DrawPadTypeHint` in `menu/menu_hints.c` declared `extern volatile u8
+g_PadType`. A volatile QImode read cannot have its zero-extend folded into the
+`lbu`, so every read grew a redundant `andi`, and the `$2`/`$3` pins were
+holding the allocation together around the extra insn. Retail's `lbu` stands
+alone: the global is a plain `u8`. It is still reloaded in the cache branch,
+because that block has two predecessors and cse1 stops at the join — the
+reload is not evidence of volatility. Retail's one *real* `andi` is the byte
+cache: the raw value goes to `g_LastValidPadType` and the `(u8)` narrowing of
+it is what the rest of the function compares.
+
+### 43b. What is left in this module, and the measured residue
+
+Fifty-six pins remain. Costs below are the object-diff instruction count with
+every pin in that function removed and the body written as well as it could be
+written, not the naive strip.
+
+`BeginNegconCalibration` (`controller_config.c`, 2 pins) is **one instruction**
+away and every register is already correct without the pins: `sh zero,0(v0)`,
+the clear of `g_NegconNeutralI` through the read pointer, is scheduled four
+slots ahead of retail by *sched2*. Source order does not reach it — the store's
+position among the clears, the two trailing loads' position among the clears,
+the declaration position of the two locals, and whether the last two saves go
+through locals at all were all swept (9 + 9 + 5 + 2 variants) and every one
+scores 2. The pointer variable is required: with plain `g_NegconNeutralI` on
+both sides, cse does not keep the symbol address in a register and the
+function is 14 instructions out.
+
+`DrawOwnedCarCounter`'s sibling residues are gone; `DrawMenuAltPanel`
+(`menu_mode.c`, 3 pins) is at 8, entirely `move a0,s2` and `addiu a3,a3,28`
+trading places in sched2's output, and statement order in that block is inert
+across every permutation tried.
+
+`UpdateMenuMode` (`update_menu_mode.c`, 1 pin) is at 6: one value, born and
+dead inside one basic block with two references, lands in `v0` where retail has
+`a2`. `cc1 -dl` shows it as the only quantity in its block, and nothing is live
+in `$2`-`$5` there, so the `a2` cannot be explained by conflicts; five
+spellings of the test (direct global, local, short-circuit with the following
+call, reusing an existing local) all give `v0`.
+
+`DrawMenuLightBurst` (`team_logo_transform.c`, 9 pins) is at 40 and the shape
+is one thing repeated three times: retail computes an unsigned shift into its
+own register and masks *back* into the source's register
+(`srl t0,v0,9 / andi v0,t0,0xff`), where every pin-free spelling merges the two
+into `srl v0,v0,9 / andi v0,v0,0xff`. Writing the hand-expanded divide as plain
+`D_8007FB20 / 5` (§42a's lever) is right and changes nothing here, so the
+divide expansion was not what the pins were for.
