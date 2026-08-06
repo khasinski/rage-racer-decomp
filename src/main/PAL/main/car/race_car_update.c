@@ -683,9 +683,9 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             g_RaceIntroCameraCursor = p;
             *(Vec4 *)0x1F800008 = *(Vec4 *)p;
             q = g_RaceIntroCameraCursor;
-            g_RaceIntroCameraDeltaX = -q[0].f0 + q[1].f0;
-            g_RaceIntroCameraDeltaY = -q[0].f4 + q[1].f4;
-            g_RaceIntroCameraDeltaZ = -q[0].f8 + q[1].f8;
+            g_RaceIntroCameraDelta.vx = -q[0].f0 + q[1].f0;
+            g_RaceIntroCameraDelta.vy = -q[0].f4 + q[1].f4;
+            g_RaceIntroCameraDelta.vz = -q[0].f8 + q[1].f8;
             __asm__ volatile("");
             g_RaceIntroCameraTimer = q[0].f12;
         } else {
@@ -694,13 +694,13 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
                 g_RaceIntroCameraCursor = &a[1];
                 g_RaceIntroCameraTimer = a[1].f12;
                 if (a[1].fC == 1) {
-                    g_RaceIntroCameraDeltaX = -a[1].f0 + ((u16 *)obj)[0];
-                    g_RaceIntroCameraDeltaY = -a[1].f4 - 28 + ((u16 *)obj)[2];
-                    g_RaceIntroCameraDeltaZ = -a[1].f8 + ((u16 *)obj)[4];
+                    g_RaceIntroCameraDelta.vx = -a[1].f0 + ((u16 *)obj)[0];
+                    g_RaceIntroCameraDelta.vy = -a[1].f4 - 28 + ((u16 *)obj)[2];
+                    g_RaceIntroCameraDelta.vz = -a[1].f8 + ((u16 *)obj)[4];
                 } else {
-                    g_RaceIntroCameraDeltaX = -a[1].f0 + a[2].f0;
-                    g_RaceIntroCameraDeltaY = -a[1].f4 + a[2].f4;
-                    g_RaceIntroCameraDeltaZ = -a[1].f8 + a[2].f8;
+                    g_RaceIntroCameraDelta.vx = -a[1].f0 + a[2].f0;
+                    g_RaceIntroCameraDelta.vy = -a[1].f4 + a[2].f4;
+                    g_RaceIntroCameraDelta.vz = -a[1].f8 + a[2].f8;
                 }
             }
         }
@@ -712,11 +712,11 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
 
         if (g_RaceIntroCameraCursor->fC == 0) {
             spad[2] = ((s32 *)g_RaceIntroCameraCursor)[0]
-                      + ((s32) g_RaceIntroCameraDeltaX * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDelta.vx * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
             spad[3] = ((s32 *)g_RaceIntroCameraCursor)[1]
-                      + ((s32) g_RaceIntroCameraDeltaY * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDelta.vy * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
             spad[4] = ((s32 *)g_RaceIntroCameraCursor)[2]
-                      + ((s32) g_RaceIntroCameraDeltaZ * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDelta.vz * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
 
             delta[0] = rsin(obj->f24) / 128 + obj->x - spad[2];
             delta[1] = obj->y - s0v - spad[3];

@@ -2,6 +2,7 @@
 #define GAME_CAR_H
 
 #include "common.h"
+#include "game/vector.h"
 
 /*
  * Per-car entry. The two setup bytes are what the CUSTOMIZE screen edits and
@@ -471,9 +472,15 @@ extern volatile u16 g_PaintSlots4Stop[];
 extern s32 g_PlayerTargetRpm;
 extern s16 g_PlayerThrottle;
 extern s32 g_RaceGridSlots[];
-extern s16 g_RaceIntroCameraDeltaX;
-extern s16 g_RaceIntroCameraDeltaY;
-extern s16 g_RaceIntroCameraDeltaZ;
+/*
+ * The race-intro camera's offset from the keyframe it is easing away from:
+ * the three halfwords at 0x8009AFBC.  All three writers take them from one
+ * keyframe's f0/f4/f8 in x/y/z order and the easing reads them back in the
+ * same order, one per camera axis.  Retail's codegen does not discriminate
+ * here -- no component is touched twice in a block -- so this is a layout
+ * claim, not a proof.
+ */
+extern SVec g_RaceIntroCameraDelta;
 extern s32 g_RaceIntroCameraTimer;
 extern s32 g_ShiftTargetSpeed;
 extern s32 g_TachoNeedleFlash;
