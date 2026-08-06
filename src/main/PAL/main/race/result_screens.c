@@ -187,7 +187,7 @@ void UpdateReplayScene(void) {
     }
     UpdateReplayCars();
     UpdateCamera(2, &g_PlayerCar);
-    *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
+    SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
     DrawTerrainCellsWide();
     if (g_GrandPrixMode != 0) {
         DrawPlayerCarOnly();

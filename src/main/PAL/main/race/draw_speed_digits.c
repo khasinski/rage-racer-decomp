@@ -3,7 +3,7 @@
 #include "game/car.h"
 #include "game/race.h"
 
-void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("QueueDrawModePrim");
+void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 tpage) asm("QueueDrawModePrim");
 
 void DrawSpeedDigits(s32 x, s32 y, s32 value) {
     u8 **scratch;

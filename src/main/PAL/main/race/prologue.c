@@ -255,7 +255,7 @@ void UpdatePrologue(void) {
 
     DrawCars();
     DrawSkyBackground();
-    *(u32 *)0x1F800084 = (u32)g_IsEnvironmentMode4;
+    SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
     DrawTerrainCellsWide();
     DrawCourseObjects();
     DrawCourseScenery2(g_AnimTimer, active);

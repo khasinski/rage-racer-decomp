@@ -34,9 +34,9 @@ extern s32 g_RaceTotalTime;
 
 extern s32 g_RankingTimes[][4][20];
 
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
+void DrawFullscreenFadeTile(s32 color, s32 tpage);
 
-void ExitRaceScene(s32 arg0);
+void ExitRaceScene(s32 sceneId);
 
 extern s32 g_CameraViewMode;
 
@@ -72,27 +72,27 @@ static __inline__ void GameDebugLapResult(
     }
 }
 
-void RequestTrackTexturePage(s32 arg0);
+void RequestTrackTexturePage(s32 trackSection);
 
-void DrawRaceEndBanner(s32 arg0);
+void DrawRaceEndBanner(s32 fade);
 
-void BeginCarStandingStart(void *arg0, s32 arg1);
+void BeginCarStandingStart(void *car, s32 sceneTimer);
 
-void UpdatePlayerCar(void *arg0);
+void UpdatePlayerCar(void *car);
 
 void DrawPlayerTachometer(void);
 
-void GetTrackZoneBlend(s32 arg0);
+void GetTrackZoneBlend(s32 position);
 
-void RunRaceIntroCamera(void *arg0, s32 arg1);
+void RunRaceIntroCamera(void *car, s32 frame);
 
-void UpdateTrackEventSound(s32 arg0);
+void UpdateTrackEventSound(s32 trackSection);
 
-void PlayCountdownCues(s32 arg0);
+void PlayCountdownCues(s32 sceneTimer);
 
-void UpdateCamera(s32 arg0, void *arg1);
+void UpdateCamera(s32 cameraModeSel, void *car);
 
-s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
+s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
     s32 value;
     s32 result;
     s16 recordIndex;
@@ -123,40 +123,40 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
      * purpose; see the note in docs/names.md.
      */
     switch (0) { default:
-    route = (u8 *)arg0 + 0xBC;
-    if (*(s16 *)((u8 *)arg0 + 0x168) > 0) {
-        if (g_LapCount >= *(s16 *)((u8 *)arg0 + 0x168)) {
-            routeOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
+    route = (u8 *)car + 0xBC;
+    if (*(s16 *)((u8 *)car + 0x168) > 0) {
+        if (g_LapCount >= *(s16 *)((u8 *)car + 0x168)) {
+            routeOffset = *(s16 *)((u8 *)car + 0x168) * 4;
             *(s32 *)((u8 *)route + routeOffset + 0xAC) += 1;
-            routeOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
+            routeOffset = *(s16 *)((u8 *)car + 0x168) * 4;
             if (*(s32 *)((u8 *)route + routeOffset + 0xAC) > 0xFFFF) {
                 *(s32 *)(route + 0xAC +
-                         *(s16 *)((u8 *)arg0 + 0x168) * 4) = 0x10000;
+                         *(s16 *)((u8 *)car + 0x168) * 4) = 0x10000;
             }
             *(s32 *)((u8 *)route +
                      (routeStoreOffset =
-                          *(s16 *)((u8 *)arg0 + 0x168) * 4) +
+                          *(s16 *)((u8 *)car + 0x168) * 4) +
                      0xC4) = FramesToMilliseconds(
-                (routeCallOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4,
+                (routeCallOffset = *(s16 *)((u8 *)car + 0x168) * 4,
                  *(s32 *)((u8 *)route + routeCallOffset + 0xAC)),
                 Random15() % 40);
-            routeCompareOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
+            routeCompareOffset = *(s16 *)((u8 *)car + 0x168) * 4;
             if (*(s32 *)((u8 *)route + routeCompareOffset + 0xC4) > 0x927BE) {
                 *(s32 *)(route + 0xC4 +
-                         *(s16 *)((u8 *)arg0 + 0x168) * 4) = 0x927BF;
+                         *(s16 *)((u8 *)car + 0x168) * 4) = 0x927BF;
                 g_LapTimeSaturated = 1;
             }
-            routeFinalOffset = *(s16 *)((u8 *)arg0 + 0x168) * 4;
+            routeFinalOffset = *(s16 *)((u8 *)car + 0x168) * 4;
             g_LapTimeMs =
                 *(s32 *)((u8 *)route + routeFinalOffset + 0xC4);
             break;
         }
 
     }
-    if (g_LapCount < *(s16 *)((u8 *)arg0 + 0x168)) {
+    if (g_LapCount < *(s16 *)((u8 *)car + 0x168)) {
         if (g_RaceTotalTime <
-            g_BestTotalTimes[g_RaceSeries][g_CourseIndex][arg1]) {
-            g_BestTotalTimes[g_RaceSeries][g_CourseIndex][arg1] = g_RaceTotalTime;
+            g_BestTotalTimes[g_RaceSeries][g_CourseIndex][grandPrixMode]) {
+            g_BestTotalTimes[g_RaceSeries][g_CourseIndex][grandPrixMode] = g_RaceTotalTime;
         }
     }
 
@@ -191,7 +191,7 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
                 *(s32 *)((u8 *)route + resultOffset + 0xC0);
             g_BestLapThisRace = candidateTime;
             g_SectorTimes[2] = result;
-            if (arg1 == 0) {
+            if (grandPrixMode == 0) {
                 g_RefSectorTime2 = result;
                 g_RefSectorTimes = g_SectorTimes[0];
                 g_RefSectorTime1 = g_SectorTimes[1];
@@ -227,11 +227,11 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
                 if (g_RaceTotalTime > 0x927BE) {
                     g_RaceTotalTime = 0x927BF;
                 }
-                if (g_BestLapTimes[g_RaceSeries][g_CourseIndex][arg1] >
+                if (g_BestLapTimes[g_RaceSeries][g_CourseIndex][grandPrixMode] >
                     g_BestLapThisRace) {
-                    g_BestLapTimes[g_RaceSeries][g_CourseIndex][arg1] = g_BestLapThisRace;
+                    g_BestLapTimes[g_RaceSeries][g_CourseIndex][grandPrixMode] = g_BestLapThisRace;
                 }
-                if (arg1 == 0) {
+                if (grandPrixMode == 0) {
                     tableOffset = g_CourseIndex * 12 + g_RaceSeries * 48;
                     *(s32 *)((u8 *)g_BestSectorTimes + tableOffset) = g_RefSectorTimes;
                     *(s32 *)((u8 *)&g_BestSectorTimes[0][0][1] + tableOffset) =
@@ -292,8 +292,8 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
 
         }
     } else if ((g_GrandPrixMode == 0) &&
-               (((*(s32 *)((u8 *)arg0 + 0x6C) +
-                  *(s32 *)((u8 *)arg0 + 0x68)) <= -g_TrackLength) ||
+               (((*(s32 *)((u8 *)car + 0x6C) +
+                  *(s32 *)((u8 *)car + 0x68)) <= -g_TrackLength) ||
                 ((g_PlayerLap == 0) && (g_WrongWayTimer >= 0x3C)))) {
         g_RacePhase = 5;
         g_BestLapTimes[g_RaceSeries][g_CourseIndex][0] =
@@ -327,7 +327,7 @@ s32 UpdateLapAndFinish(void *arg0, s32 arg1) {
 
     UpdateRivalCueGate();
     GameDebugLapResult(
-        0, returnValue, progress, arg1, g_LapCount,
+        0, returnValue, progress, grandPrixMode, g_LapCount,
         g_RacePhase, g_RaceFadeTimer);
     return returnValue;
 }
@@ -584,7 +584,7 @@ void UpdateRaceScene(void) {
             DrawWrongWayWarning();
         }
         DrawSkyBackground();
-        *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
+        SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
         DrawTerrainCells();
         DrawCourseObjects();
         if (g_GrandPrixMode != 0) {
@@ -726,7 +726,7 @@ update_race:
             g_WrongWayTimer = 0;
         }
 
-        *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
+        SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
         DrawTerrainCells();
         DrawCourseObjects();
         if (g_GrandPrixMode != 0) {

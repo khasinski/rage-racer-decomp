@@ -4,10 +4,14 @@
 #include "game/race.h"
 #include "game/track.h"
 
-void SetSprt(u8 *arg0);
-void SetShadeTex(u8 *arg0, s32 arg1);
+/* The GPU packet cursor: scratchpad word 0. Every emitter here packs its
+ * primitive at this address and bumps it past what it wrote. */
+#define SCRATCH (*(u8 **)0x1F800000)
+
+void SetSprt(u8 *prim);
+void SetShadeTex(u8 *prim, s32 enabled);
 void AddPrim(void *ot, void *prim);
-void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("QueueDrawModePrim");
+void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 tpage) asm("QueueDrawModePrim");
 
 void DrawWrongWayWarning(void) {
     register u8 *packet __asm("$16");
@@ -21,7 +25,7 @@ void DrawWrongWayWarning(void) {
     s32 uvOffset;
     u8 *ret;
 
-    next = *(u8 **)0x1F800000;
+    next = SCRATCH;
     i = 0;
     u = 0x48;
     x = 0x6C;
@@ -57,18 +61,16 @@ void DrawWrongWayWarning(void) {
     } while (i < 3);
 
     ret = GameQueueTileTrans(g_DrawBuffer + 0xCC, next, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
-    *(void **)0x1F800000 = ret;
-    *(void **)0x1F800000 = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, ret, 9);
+    SCRATCH = ret;
+    SCRATCH = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, ret, 9);
 }
-
-#define SCRATCH (*(u8 **)0x1F800000)
 
 s32 rsin(s32 angle);
 s32 rcos(s32 angle);
 void SetPolyF4(void *prim);
 void SetTile(void *prim);
 
-void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
+void DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     GameCarSpec *p = g_CarSpec;
     s32 cx = p->tachoNeedleX;
     s32 cy = p->tachoNeedleY;
@@ -143,6 +145,9 @@ void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
     {
         s32 x = cx + *(s16 *)(base + 12);
         s32 y = cy + *(s16 *)(base + 14);
+        /* Not SCRATCH: this read has to stay volatile. Spelling it as the
+         * plain macro lets the cursor written above be reused instead of
+         * reloaded, which changes the output. */
         u8 *q = DrawHudDigit(*(u8 *volatile *)0x1F800000, x, y, g_PlayerGear, g_HudGlyphClut);
         SCRATCH = q;
         DrawSpeedDigits(cx, cy, g_PlayerSpeed * 160 / 1168);
@@ -167,7 +172,7 @@ void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
         v10 = cy + *(u16 *)(base + 18);
         *(s16 *)(q + 12) = 0x10;
         *(s16 *)(q + 14) = 0x10;
-        q[4] = arg1 * 223 + 32;
+        q[4] = flash * 223 + 32;
         q[5] = 0x20;
         q[6] = 0x20;
         g = g_DrawBuffer;
@@ -178,10 +183,10 @@ void DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt) {
     }
 }
 
-void SetSemiTrans(u8 *arg0, s32 arg1);
-void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2);
+void SetSemiTrans(u8 *prim, s32 enabled);
+void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 tpage);
 
-void DrawFullscreenFadeTile(s32 color, s32 arg1) {
+void DrawFullscreenFadeTile(s32 color, s32 tpage) {
     u8 *base = g_DrawBuffer;
     u8 *ot = base + 0xCC;
     u8 *packet;
@@ -194,7 +199,7 @@ void DrawFullscreenFadeTile(s32 color, s32 arg1) {
         color = 0xFF;
     }
 
-    packet = *(u8 **)0x1F800000;
+    packet = SCRATCH;
     SetTile(packet);
     SetSemiTrans(packet, 1);
 
@@ -210,7 +215,7 @@ void DrawFullscreenFadeTile(s32 color, s32 arg1) {
     prim = packet;
     packet += 0x10;
     AddPrim((u32 *)ot, (u32 *)prim);
-    *(void **)0x1F800000 = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, packet, arg1);
+    SCRATCH = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, packet, tpage);
 }
 
 void SetSprt8(u8 *prim);
@@ -221,11 +226,11 @@ u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
     s32 xReg = x;
     s32 yReg = y;
     register s32 codeReg asm("$17");
-    register s32 arg4Reg asm("$20");
+    register s32 clutReg asm("$20");
 
     asm("" : "=r"(xReg), "=r"(yReg) : "0"(xReg), "1"(yReg) : "$17");
     codeReg = digit;
-    arg4Reg = clut;
+    clutReg = clut;
     SetSprt8(out);
     SetShadeTex(out, 1);
 
@@ -239,7 +244,7 @@ u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
 
         *(s16 *)&out[0x8] = xReg;
         *(s16 *)&out[0xA] = yReg;
-        *(s16 *)&out[0xE] = arg4Reg;
+        *(s16 *)&out[0xE] = clutReg;
         out += 0x10;
         AddPrim(ot + 0xCC, oldPrim);
     }

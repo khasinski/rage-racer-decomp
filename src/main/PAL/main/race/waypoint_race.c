@@ -105,7 +105,7 @@ void UpdateWaypointRaceScene(void) {
         GetTrackZoneBlend(g_PlayerTrackProgress);
         RequestTrackTexturePage(g_PlayerTrackSection);
         DrawSkyBackground();
-        *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
+        SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
         DrawTerrainCells();
         DrawCourseObjects();
         DrawFlybyScenery();
@@ -135,7 +135,7 @@ void UpdateWaypointRaceScene(void) {
     RequestTrackTexturePage(g_PlayerTrackSection);
     UpdateEnvironment();
     DrawSkyBackground();
-    *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
+    SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
     DrawTerrainCells();
     DrawCourseObjects();
     UpdateFlybyScenery();

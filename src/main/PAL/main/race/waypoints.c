@@ -31,7 +31,7 @@ extern u32 g_ScratchRenderMode;
 
 extern s16 g_PlayerLap;
 
-void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 arg2) asm("QueueDrawModePrim");
+void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 tpage) asm("QueueDrawModePrim");
 
 void AddPrim(void *ot, void *prim);
 
@@ -73,17 +73,17 @@ void PlayCountdownCues(u32 a);
  * registers behind (docs/names.md 31f and 35c).
  */
 
-s32 rsin(s32 arg0);
+s32 rsin(s32 angle);
 
 extern u8 *g_TrackPoints;
 extern s32 g_TrackLength;
 extern u8 *g_TrackEventData;
 
-extern s32 FindTrackSegment(u8 *ent, s32 arg);
+extern s32 FindTrackSegment(u8 *ent, s32 trackPointIndex);
 
-extern void SeedCarLapProgress(u8 *ent, s32 arg);
+extern void SeedCarLapProgress(u8 *ent, s32 trackPointIndex);
 
-extern void UpdateCarTrackState(u8 *ent, s32 arg, void *arg2);
+extern void UpdateCarTrackState(u8 *ent, s32 trackPointIndex, void *clampPair);
 
 /*
  * Initializes/spawns a route render object `ent`: reads a start entry from the
@@ -94,9 +94,9 @@ extern void UpdateCarTrackState(u8 *ent, s32 arg, void *arg2);
  * accessed by raw byte offset (its first 0xE8 mirror GameRenderObject).
  */
 
-s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0) {
+s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) {
     s32 center_x = g_PlayerCar;
-    s32 x = arg0->x;
+    s32 x = waypoint->x;
     s32 ret = 0;
 
     if ((center_x - 0x40) < x) {
@@ -104,7 +104,7 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *arg0) {
 
         if (x < max_x) {
             s32 center_y = g_PlayerCarZ;
-            s32 y = arg0->y;
+            s32 y = waypoint->y;
 
             if ((center_y - 0x40) < y) {
                 s32 max_y = center_y + 0x40;
@@ -321,14 +321,14 @@ void DrawLapNumber(void) {
     {
         void *ot;
         u8 *finalScratch;
-        s32 arg2;
+        s32 tpage;
 
         finalScratch = scratch;
         packet = (u8 *)0x1F800000;
         ot = g_DrawBuffer + 0xCC;
-        arg2 = 9;
+        tpage = 9;
         *(u8 **)packet = finalScratch;
-        *(u8 **)packet = GameQueueDrawModePrimWide(ot, finalScratch, arg2);
+        *(u8 **)packet = GameQueueDrawModePrimWide(ot, finalScratch, tpage);
     }
 }
 
@@ -425,7 +425,7 @@ void UpdateWaypointCollectScene(void) {
     RequestTrackTexturePage(*p);
     UpdateEnvironment();
     DrawSkyBackground();
-    *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
+    SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
     DrawTerrainCells();
     DrawCourseObjects();
     DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
@@ -439,23 +439,23 @@ void UpdateWaypointCollectScene(void) {
     }
 }
 
-void ApplyTrackReverbZone(s32 arg0) {
+void ApplyTrackReverbZone(s32 position) {
     s32 result;
     s32 i;
     register s32 offset;
-    s32 arg;
+    s32 depth;
     register s32 scene;
 
     result = 0;
-    if (arg0 < 0) {
-        arg0 += g_TrackLength;
+    if (position < 0) {
+        position += g_TrackLength;
     }
 
     scene = g_RaceSeries;
     offset = scene * 16;
     for (i = 0; i < 2; i++) {
-        if (*(s32 *)((u8 *)&g_ReverbZoneStart + offset) < arg0) {
-            if (arg0 < *(s32 *)((u8 *)&g_ReverbZoneEnd + offset)) {
+        if (*(s32 *)((u8 *)&g_ReverbZoneStart + offset) < position) {
+            if (position < *(s32 *)((u8 *)&g_ReverbZoneEnd + offset)) {
                 result = 0x46;
                 break;
             }
@@ -463,11 +463,11 @@ void ApplyTrackReverbZone(s32 arg0) {
         offset += 8;
     }
 
-    arg = result;
-    SetReverbDepth(arg, arg);
+    depth = result;
+    SetReverbDepth(depth, depth);
 }
 
-s32 GetWaypointAngle(s32 arg0) {
+s32 GetWaypointAngle(s32 position) {
     s32 trackLength;
     s32 value;
     register s32 temp asm("v0");
@@ -478,7 +478,7 @@ s32 GetWaypointAngle(s32 arg0) {
     trackLength = g_TrackLength;
     temp = 0xB875;
     value = trackLength + temp;
-    value -= arg0;
+    value -= position;
     remainder = value % trackLength;
     value = remainder;
 

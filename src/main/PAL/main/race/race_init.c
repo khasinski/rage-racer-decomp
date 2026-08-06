@@ -14,34 +14,34 @@ extern u8 *volatile g_PathSceneryPosData;
 
 void LoadExtraVabSlotWithTable(void);
 
-void SetEffectVoicesEnabled(s32 arg0);
+void SetEffectVoicesEnabled(s32 enabled);
 
-void SetReverbPreset(s32 arg0, s32 arg1, s32 arg2);
+void SetReverbPreset(s32 type, s32 left, s32 right);
 
 void InstallResourceData(void) {
     DebugPrintf(g_MsgResOk);
 }
 
-void SetCarSpec(u32 arg0) {
-    g_CarSpec = (GameCarSpec *)arg0;
+void SetCarSpec(u32 spec) {
+    g_CarSpec = (GameCarSpec *)spec;
 }
 
-void InstallTrackEventData(u8 *arg0) {
+void InstallTrackEventData(u8 *eventData) {
     register s32 offset0 asm("$2");
     s32 offset1;
     u8 *callArg;
     u8 *base;
 
-    offset0 = *(s32 *)(arg0 + 0xB78);
-    offset1 = *(s32 *)(arg0 + 0xB68);
-    base = arg0 + 0xB64;
-    g_TrackEventData = arg0;
+    offset0 = *(s32 *)(eventData + 0xB78);
+    offset1 = *(s32 *)(eventData + 0xB68);
+    base = eventData + 0xB64;
+    g_TrackEventData = eventData;
     g_FlybySceneryData = base + offset0;
-    offset0 = *(s32 *)(arg0 + 0xB64);
+    offset0 = *(s32 *)(eventData + 0xB64);
     g_RaceIntroCameraScript = base + offset1;
-    offset1 = *(s32 *)(arg0 + 0xB70);
+    offset1 = *(s32 *)(eventData + 0xB70);
     g_RouteSceneryData = base + offset0;
-    offset0 = *(s32 *)(arg0 + 0xB6C);
+    offset0 = *(s32 *)(eventData + 0xB6C);
     callArg = g_MsgEventOk;
     offset0 = (s32)(base + offset0);
     base += offset1;
@@ -64,13 +64,17 @@ void InitEngineSound(void) {
     DebugPrintf(&g_MsgInitEngineOk);
 }
 
-s32 FramesToMilliseconds(s32 arg0, s32 arg1) {
-    s32 quotient;
-    s32 quotientPart;
+/* PAL runs at 25 fps, so a frame is 40 ms. `millis` is the sub-frame remainder
+ * the caller supplies. Folding this into one expression, or moving the * 1000
+ * back below the subtraction, both change the allocation - it has to sit
+ * directly under its own division. */
+s32 FramesToMilliseconds(s32 frames, s32 millis) {
+    s32 seconds;
+    s32 secondsMs;
 
-    quotient = arg0 / 25;
-    arg0 -= quotient * 25;
-    arg0 = (arg0 * 40) + arg1;
-    quotientPart = quotient * 1000;
-    return quotientPart + arg0;
+    seconds = frames / 25;
+    secondsMs = seconds * 1000;
+    frames -= seconds * 25;
+    frames = (frames * 40) + millis;
+    return secondsMs + frames;
 }

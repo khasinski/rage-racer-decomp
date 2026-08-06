@@ -5,7 +5,7 @@
 
 extern char g_TextNowLoading[];
 
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
+void DrawFullscreenFadeTile(s32 color, s32 tpage);
 
 void ExitBgmSelect(void) {
     if (g_AssetLoadState == 0) {

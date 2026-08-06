@@ -70,99 +70,99 @@ extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
 extern u8 *g_EnvScriptClock;
-s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
+s32 GameQueueDrawModePrimWide(s32 base, s32 next, s32 code) asm("QueueDrawModePrim");
 
-void ApplyReplayFrame(s32 arg0, MenuObj *arg1, MenuObj *arg2) {
+void ApplyReplayFrame(s32 subframe, MenuObj *playerObj, MenuObj *rivalObj) {
     s32 index;
     MenuBigFrame *big;
     MenuSmallFrame *small;
     if (g_GrandPrixMode != 0) {
-        arg1->variantAE = g_ReplayPlayerModel;
-        arg2->variantAE = g_ReplayRivalModel;
-        if ((arg0 % 2) == 0) {
-            index = arg0 >> 1;
+        playerObj->variantAE = g_ReplayPlayerModel;
+        rivalObj->variantAE = g_ReplayRivalModel;
+        if ((subframe & 1) == 0) {
+            index = subframe >> 1;
             big = &g_ReplayFramesGp[index];
-            arg1->x = big->x0;
-            arg1->y = big->y0;
-            arg1->z = big->z0;
-            arg1->z2 = big->z20;
-            arg1->rotX = big->rotX0;
-            arg1->rotY = big->rotY0;
-            arg1->rotZ = big->rotZ0;
-            arg1->flags48 = big->flags0;
-            arg1->field44 = big->field44_0;
-            arg2->x = big->x1;
-            arg2->y = big->y1;
-            arg2->z = big->z1;
-            arg2->z2 = big->z21;
-            arg2->rotX = big->rotX1;
-            arg2->rotY = big->rotY1;
-            arg2->rotZ = big->rotZ1;
-            arg2->flags48 = big->flags1;
-            arg2->field44 = big->field44_1;
+            playerObj->x = big->x0;
+            playerObj->y = big->y0;
+            playerObj->z = big->z0;
+            playerObj->z2 = big->z20;
+            playerObj->rotX = big->rotX0;
+            playerObj->rotY = big->rotY0;
+            playerObj->rotZ = big->rotZ0;
+            playerObj->flags48 = big->flags0;
+            playerObj->field44 = big->field44_0;
+            rivalObj->x = big->x1;
+            rivalObj->y = big->y1;
+            rivalObj->z = big->z1;
+            rivalObj->z2 = big->z21;
+            rivalObj->rotX = big->rotX1;
+            rivalObj->rotY = big->rotY1;
+            rivalObj->rotZ = big->rotZ1;
+            rivalObj->flags48 = big->flags1;
+            rivalObj->field44 = big->field44_1;
         } else {
-            arg0 = arg0 >> 1;
-            arg0 += 1;
-            if (arg0 == 0x2EE) {
-                arg0 = 0;
+            subframe = subframe >> 1;
+            subframe += 1;
+            if (subframe == 0x2EE) {
+                subframe = 0;
             }
-            big = &g_ReplayFramesGp[arg0];
-            arg1->x = AVG(big->x0, arg1->x);
-            arg1->y = AVG(big->y0, arg1->y);
-            arg1->z = AVG(big->z0, arg1->z);
-            arg1->z2 = AVG(big->z20, arg1->z2);
-            arg1->rotX = AVG(big->rotX0, arg1->rotX);
-            arg1->rotY = AVG(big->rotY0, arg1->rotY);
-            arg1->rotZ = AVG(big->rotZ0, arg1->rotZ);
-            arg1->flags48 = AVG(big->flags0, arg1->flags48);
-            arg1->field44 = AVG(big->field44_0, arg1->field44);
-            arg2->x = AVG(big->x1, arg2->x);
-            arg2->y = AVG(big->y1, arg2->y);
-            arg2->z = AVG(big->z1, arg2->z);
-            arg2->z2 = AVG(big->z21, arg2->z2);
-            arg2->rotX = AVG(big->rotX1, arg2->rotX);
-            arg2->rotY = AVG(big->rotY1, arg2->rotY);
-            arg2->rotZ = AVG(big->rotZ1, arg2->rotZ);
-            arg2->flags48 = AVG(big->flags1, arg2->flags48);
-            arg2->field44 = AVG(big->field44_1, arg2->field44);
+            big = &g_ReplayFramesGp[subframe];
+            playerObj->x = AVG(big->x0, playerObj->x);
+            playerObj->y = AVG(big->y0, playerObj->y);
+            playerObj->z = AVG(big->z0, playerObj->z);
+            playerObj->z2 = AVG(big->z20, playerObj->z2);
+            playerObj->rotX = AVG(big->rotX0, playerObj->rotX);
+            playerObj->rotY = AVG(big->rotY0, playerObj->rotY);
+            playerObj->rotZ = AVG(big->rotZ0, playerObj->rotZ);
+            playerObj->flags48 = AVG(big->flags0, playerObj->flags48);
+            playerObj->field44 = AVG(big->field44_0, playerObj->field44);
+            rivalObj->x = AVG(big->x1, rivalObj->x);
+            rivalObj->y = AVG(big->y1, rivalObj->y);
+            rivalObj->z = AVG(big->z1, rivalObj->z);
+            rivalObj->z2 = AVG(big->z21, rivalObj->z2);
+            rivalObj->rotX = AVG(big->rotX1, rivalObj->rotX);
+            rivalObj->rotY = AVG(big->rotY1, rivalObj->rotY);
+            rivalObj->rotZ = AVG(big->rotZ1, rivalObj->rotZ);
+            rivalObj->flags48 = AVG(big->flags1, rivalObj->flags48);
+            rivalObj->field44 = AVG(big->field44_1, rivalObj->field44);
         }
-        arg1->field8C = big->field20;
+        playerObj->field8C = big->field20;
     } else {
-        arg1->variantAE = g_ReplayPlayerModel;
-        if ((arg0 % 2) == 0) {
-            index = arg0 >> 1;
+        playerObj->variantAE = g_ReplayPlayerModel;
+        if ((subframe & 1) == 0) {
+            index = subframe >> 1;
             small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + ((index * 7) << 2));
-            arg1->x = small->x;
-            arg1->y = small->y;
-            arg1->z = small->z;
-            arg1->z2 = small->z2;
-            arg1->rotX = small->rotX;
-            arg1->rotY = small->rotY;
-            arg1->rotZ = small->rotZ;
-            arg1->flags48 = small->flags;
-            arg1->field44 = small->field44;
+            playerObj->x = small->x;
+            playerObj->y = small->y;
+            playerObj->z = small->z;
+            playerObj->z2 = small->z2;
+            playerObj->rotX = small->rotX;
+            playerObj->rotY = small->rotY;
+            playerObj->rotZ = small->rotZ;
+            playerObj->flags48 = small->flags;
+            playerObj->field44 = small->field44;
         } else {
-            arg0 = arg0 >> 1;
-            arg0 += 1;
-            if (arg0 == 0x505) {
-                arg0 = 0;
+            subframe = subframe >> 1;
+            subframe += 1;
+            if (subframe == 0x505) {
+                subframe = 0;
             }
-            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + ((arg0 * 7) << 2));
-            arg1->x = AVG(small->x, arg1->x);
-            arg1->y = AVG(small->y, arg1->y);
-            arg1->z = AVG(small->z, arg1->z);
-            arg1->z2 = AVG(small->z2, arg1->z2);
-            arg1->rotX = AVG(small->rotX, arg1->rotX);
-            arg1->rotY = AVG(small->rotY, arg1->rotY);
-            arg1->rotZ = AVG(small->rotZ, arg1->rotZ);
-            arg1->flags48 = AVG(small->flags, arg1->flags48);
-            arg1->field44 = AVG(small->field44, arg1->field44);
+            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + ((subframe * 7) << 2));
+            playerObj->x = AVG(small->x, playerObj->x);
+            playerObj->y = AVG(small->y, playerObj->y);
+            playerObj->z = AVG(small->z, playerObj->z);
+            playerObj->z2 = AVG(small->z2, playerObj->z2);
+            playerObj->rotX = AVG(small->rotX, playerObj->rotX);
+            playerObj->rotY = AVG(small->rotY, playerObj->rotY);
+            playerObj->rotZ = AVG(small->rotZ, playerObj->rotZ);
+            playerObj->flags48 = AVG(small->flags, playerObj->flags48);
+            playerObj->field44 = AVG(small->field44, playerObj->field44);
         }
-        arg1->field8C = small->field10;
+        playerObj->field8C = small->field10;
     }
 }
 
-void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
+void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
     register s32 index asm("s0");
     u8 *primary;
     u8 *secondary;
@@ -170,14 +170,14 @@ void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
     register s32 offset asm("v0");
     register u8 *base asm("v1");
 
-    index = arg0;
-    primary = arg1;
-    secondary = arg2;
+    index = subframe;
+    primary = playerObj;
+    secondary = rivalObj;
 
     ApplyReplayFrame(index, (MenuObj *)primary, (MenuObj *)secondary);
 
     if (g_GrandPrixMode != 0) {
-        if ((index % 2) == 0) {
+        if ((index & 1) == 0) {
             index >>= 1;
             offset = index * 3;
         } else {
@@ -192,7 +192,7 @@ void ApplyReplayFrameAndTilt(s32 arg0, u8 *arg1, u8 *arg2) {
         *(s32 *)(primary + 0x30) = *(s32 *)(base + 0x24);
         *(s32 *)(secondary + 0x30) = *(s32 *)(base + 0x28);
     } else {
-        if ((index % 2) == 0) {
+        if ((index & 1) == 0) {
             index >>= 1;
             offset = index * 7;
         } else {
