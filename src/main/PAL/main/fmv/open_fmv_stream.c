@@ -68,12 +68,16 @@ s32 bufferAddr;
         g_FmvStripDone = 1;
         next = index == 0;
         g_FmvStripRectIndex = next;
-        /* RAW() holds the X store ahead of the Y load -- see common.h. The
-         * remaining barrier is load-bearing: the pair cannot both go, and
-         * widening RAW() over the branch condition does not help either. */
-        g_FmvUploadRectX = RAW(g_FmvStripRects[next].x);
-        asm("" : : : "memory");
-        g_FmvUploadRectY = g_FmvStripRects[next].y;
+        {
+            /* Both halves are read out of the rect by hand.  Written as
+             * g_FmvStripRects[next].x/.y the loads carry the struct alias
+             * mark, so gcc 2.6.3 lets them float above the plain-global
+             * stores that surround them and the four accesses interleave
+             * the wrong way; addressed as offsets they stay put. */
+            s32 rectOffset = next * 8;
+            g_FmvUploadRectX = *(s16 *)((s32)g_FmvStripRects + rectOffset);
+            g_FmvUploadRectY = *(s16 *)((s32)g_FmvStripRects + rectOffset + 2);
+        }
     }
 
     oldOffset = oldBuffer * 4;
