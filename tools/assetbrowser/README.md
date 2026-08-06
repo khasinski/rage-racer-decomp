@@ -43,6 +43,8 @@ The file comments name the exact source. In short:
 | model faces | `SubmitModel` / `SubmitModelFaces` + `jtbl_8007DA14` |
 | course objects | `RegisterCourseModels` / `SubmitCourseModel` + `jtbl_8007DA54` |
 | terrain cells | `InstallTerrainCellData` / `SubmitTerrainCellFaces` + `jtbl_8007D9F4` |
+| cell placement | `BuildVisibleCells` in `track/visible_cells.c` |
+| texture window | the GP0 `0xE2` word each subdividing emitter puts in its packet |
 | images | `UploadImageAsset` / `UploadImageBlock` in `asset/image_upload.c` |
 | car texture page | `g_CarImageRect` = `{704, 0, 64, 256}` |
 | pack sub-blocks | `LoadRaceAssets`, `LoadCarSelectAssets`, `LoadSelectBgmAssets` |
@@ -50,12 +52,37 @@ The file comments name the exact source. In short:
 
 `models.py` carries the byte-level tables; read its module docstring first.
 
+## Coordinates
+
+The three conventions worth knowing before reading a rendered frame:
+
+* **Handedness.** PS1 camera space is (+X right, +Y down, +Z away); WebGL is
+  (+X right, +Y up, +Z toward the viewer). The conversion is `(x, -y, -z)`.
+  Negating only Y — which is what "PS1 +Y is down" seems to ask for — has
+  determinant −1, so it renders every model as its own mirror image no matter
+  where the camera is put. The quad winding flips with it: the PS1 order
+  `v0 v1 v2 / v1 v3 v2` is clockwise once converted, so the renderer emits the
+  reverse to keep face normals pointing out of the solid.
+* **Two unit scales.** The 32×32 terrain grid steps 2048 units per cell in the
+  units the camera and the track points use, but `BuildVisibleCells` shifts the
+  cell translation left by 2 before it reaches the GTE, so cells sit **8192**
+  apart in the units the vertex pool is stored in.
+* **The texture window is not optional.** Terrain and course quads emitted by
+  the subdividing paths carry a GP0 `0xE2` command in the four bytes their
+  stride adds; the packet sets it, draws the quad and resets it. It makes UVs
+  wrap inside a power-of-two tile, so a raw UV lookup reads a different texel
+  for 95% of the corners on BIG1.
+
 ## Confidence
 
 The parsers assert rather than assume: a model bank must tile its own extent, a
-terrain cell must end exactly where the next one begins, no face may index past
-its vertex pool. Those checks pass on all 135 assets of the retail PAL disc, so
-a silent misparse would have to be self-consistent 135 times over.
+terrain cell's face list must end at exactly the byte the next cell's begins, no
+face may index past its vertex pool. Those checks pass on all 135 assets of the
+retail PAL disc, so a silent misparse would have to be self-consistent 135 times
+over. Note what that buys and what it does not: they are checks on the *file*
+layout. They say nothing about where a cell is placed in the world, and a build
+in which every cell parsed perfectly still piled all 198 of them into a sixth of
+the track's footprint.
 
 What is *not* decoded, and is shown as raw bytes: `RES.DAT`, the SEQ sequence
 blocks inside `SELBGM.BIN` and the car packs, the track camera / environment /

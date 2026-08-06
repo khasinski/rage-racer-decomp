@@ -57,6 +57,11 @@ assert len(ASSET_NAMES) == ASSET_COUNT
 # reads {x 704, y 0, w 64, h 256} - one full 4bpp texture page, 0x8000 bytes.
 CAR_IMAGE_RECT = (704, 0, 64, 256)
 
+# Terrain cell pitch in the units the vertex pool is stored in. The grid itself
+# is 2048 world units per cell; BuildVisibleCells shifts the cell translation
+# left by 2 before handing it to the GTE, so a cell step is 2048 << 2 here.
+CELL_PITCH = 2048 << 2
+
 
 def names_from_exe(exe_path: Path) -> list[str]:
     """Re-derive the table from a real executable rather than trusting the copy above."""
@@ -150,14 +155,21 @@ class Extractor:
                     v.load(buf, blk)
                 src.append(f"{self.names[index]}[4]")
         elif kind == "track_data":
+            # LoadRaceAssets step 5 uploads the five sub-blocks strictly in
+            # order, and sub-block 2 goes through UploadImageBlock (one chunk)
+            # rather than UploadImageAsset (a chain). Order matters because 3
+            # and 4 are two alternative fills of the same VRAM rectangle,
+            # (576,256)-(1023,511): 3 is stored off to the side by
+            # StoreTeamLogoImage and 4 is what stays resident, which is the
+            # state a static browser should show.
             first = index - 1
             buf = self.data(first)
             hdr = struct.unpack_from("<5i", buf, 0)
-            for k in (0, 1, 3, 4):
-                for blk in images.parse_image_asset(buf, hdr[k]):
+            for k in range(5):
+                blocks = (images._parse_chunk(buf, hdr[k], len(buf)) if k == 2
+                          else images.parse_image_asset(buf, hdr[k]))
+                for blk in blocks:
                     v.load(buf, blk)
-            for blk in images._parse_chunk(buf, hdr[2], len(buf)):
-                v.load(buf, blk)
             src.append(self.names[first])
         elif kind in ("select_pack", "option_pack"):
             buf = self.data(index)
@@ -447,12 +459,27 @@ class Extractor:
     def emit_bank(self, bank, stem, grid=None):
         j = models.bank_to_json(bank)
         if grid is not None:
-            # A cell's world position is (sx << 11, 0, sy << 11); the grid word
-            # at (31 - sy) * 32 + sx holds its index in the low 10 bits, with
-            # 0x3FF meaning "no geometry here" (track/visible_cells.c:214-226).
-            j["cellSize"] = 2048
+            # track/visible_cells.c:214-226 is the authority. The grid word at
+            # (31 - sy) * 32 + sx holds the cell index in its low 10 bits, with
+            # 0x3FF meaning "no geometry here" (bits 10..15 are the region id;
+            # there is no rotation or mirror flag). The cell's translation is
+            #
+            #     vec[0] = ((sx << 11) - (camX - 1024)) << 2
+            #     vec[2] = ((sy << 11) - (camZ - 1024)) << 2
+            #
+            # and that vector is what the GTE adds to the cell's own vertices.
+            # The << 2 is the whole story: the grid pitch is 2048 in the world
+            # units the camera and the track points use, but the vertex pool is
+            # in GTE units, which are four times finer. Spacing cells 2048 apart
+            # in vertex units piles them six deep on top of each other.
+            # Confirmed against the data: every one of BIG1's 9065 terrain face
+            # centroids lies within +/-4095.5 of its cell origin, i.e. exactly
+            # half of 8192 - and only 25% of them fall inside +/-2048.
+            j["cellSize"] = CELL_PITCH
             j["placements"] = [
-                {"cell": grid[row * 32 + col] & 0x3FF, "x": col * 2048, "z": (31 - row) * 2048}
+                {"cell": grid[row * 32 + col] & 0x3FF,
+                 "x": col * CELL_PITCH + CELL_PITCH // 2,
+                 "z": (31 - row) * CELL_PITCH + CELL_PITCH // 2}
                 for row in range(32) for col in range(32)
                 if (grid[row * 32 + col] & 0x3FF) != 0x3FF
             ]

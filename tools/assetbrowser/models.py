@@ -53,6 +53,32 @@ class Face:
     clut: int = 0
     tpage: int = 0
     otbias: int = 0
+    # (widthU, widthV, offU, offV) of the GP0 0xE2 texture window, or None for
+    # the whole 256x256 page. See texture_window() for where it comes from.
+    texwin: tuple | None = None
+
+
+def texture_window(word: int) -> tuple | None:
+    """Decode a GP0 0xE2 command into (widthU, widthV, offU, offV) in texels.
+
+    The hardware rule is
+
+        texcoord = (texcoord & ~(mask * 8)) | ((offset & mask) * 8)
+
+    with mask/offset in 8-texel units at bits 0-4 / 5-9 / 10-14 / 15-19. Every
+    mask on this disc (0, 16, 24, 28, 30, 31 - all 104795 of them) is a run of
+    high bits, so `& ~(mask * 8)` is exactly `mod (256 - mask * 8)` and the
+    window is a power-of-two tile that the coordinate wraps inside. Returning
+    it as a width plus an origin lets the renderer do the wrap with a mod.
+    """
+    if (word >> 24) != 0xE2:
+        return None
+    w = word & 0xFFFFF
+    mu, mv = w & 0x1F, (w >> 5) & 0x1F
+    ou, ov = (w >> 10) & 0x1F, (w >> 15) & 0x1F
+    if mu == 0 and mv == 0:
+        return None
+    return (256 - mu * 8, 256 - mv * 8, (ou & mu) * 8, (ov & mv) * 8)
 
 
 @dataclass
@@ -197,11 +223,16 @@ def parse_bank(buf: bytes, base: int, limit: int | None = None) -> Bank:
 COURSE_STRIDE = {0: 0x10, 1: 0x1C, 2: 0x20, 3: 0x20}
 COURSE_OTBIAS = {0: 0x0D, 1: 0x19, 2: 0x19, 3: 0x19}
 COURSE_PRIM = {0: "F4", 1: "FT4", 2: "FT4-sub", 3: "FT4-scroll"}
+# The two subdividing course emitters carry the texture window in the word the
+# extra four bytes of stride buy them, exactly as the terrain ones do.
+COURSE_TEXWIN = {2: 0x1C, 3: 0x1C}
 
 
-def _uvface(prim, r, base_uv, base_rgb, otoff):
+def _uvface(prim, r, base_uv, base_rgb, otoff, winoff=None):
     f = Face(prim=prim, v=struct.unpack_from("<4H", r, 0),
              otbias=struct.unpack_from("<b", r, otoff)[0])
+    if winoff is not None:
+        f.texwin = texture_window(struct.unpack_from("<I", r, winoff)[0])
     if base_rgb is not None:
         f.rgb = (r[base_rgb], r[base_rgb + 1], r[base_rgb + 2])
     if base_uv is not None:
@@ -252,7 +283,8 @@ def parse_course_objects(buf: bytes, base: int, limit: int | None = None) -> Ban
         faces, batches, end = parse_batches(
             buf, base + foff, limit,
             COURSE_STRIDE,
-            lambda p, r: _uvface(p, r, None if p == 0 else 0x0C, 8, COURSE_OTBIAS[p]),
+            lambda p, r: _uvface(p, r, None if p == 0 else 0x0C, 8, COURSE_OTBIAS[p],
+                                 COURSE_TEXWIN.get(p)),
         )
         for f in faces:
             if max(f.v) >= vcount:
@@ -283,7 +315,21 @@ def parse_course_objects(buf: bytes, base: int, limit: int | None = None) -> Ban
 #   straight onto entries 0..3. Both members of each env-mode pair share a
 #   stride, which is what makes the record walkable offline. Types 4 and 5 do
 #   occur on the disc; entries 2 and 3 carry the extra GP0 0xE2 texture-window
-#   word at +0x20, which is exactly the four bytes their stride adds:
+#   word at +0x20, which is exactly the four bytes their stride adds.
+#
+#   That window is not decoration. SubmitTerrainCellFaces (0x80028624 and
+#   0x8002877C) emits each such quad as a three-link packet chain:
+#
+#       +0x34  len 2  ->  +0x0C     E2 <window>            set the window
+#       +0x0C  len 9  ->  +0x00     the POLY_FT4           draw
+#       +0x00  len 2  ->  OT next   E2 00000000 + NOP      put it back
+#
+#   so the window is live for exactly this one quad, and every 0x20-stride quad
+#   therefore draws through a full 256x256 window. Ignoring it moves 95% of the
+#   UV corners on BIG1 to a different texel - it is what makes the road look
+#   like masonry. The word is used as stored: the LOD path at 0x800283FC halves
+#   the window AND the four UV pairs together, but only when (flags & 1) and
+#   the quad is beyond z 0x800, so the stored pair is the near view.
 # --------------------------------------------------------------------------
 
 TERRAIN_STRIDE = {0: 0x20, 1: 0x24, 2: 0x20, 3: 0x20, 4: 0x24, 5: 0x24}
@@ -305,7 +351,8 @@ def parse_terrain(buf: bytes, base: int, limit: int | None = None):
     bank.vertices = _svectors(buf, vstart, limit)
 
     def mk(p, r):
-        f = _uvface(p, r, 0x08, 0x1C, 0x15)
+        f = _uvface(p, r, 0x08, 0x1C, 0x15,
+                    0x20 if TERRAIN_STRIDE[p] == 0x24 else None)
         f.flags = r[0x14]
         return f
 
@@ -353,6 +400,7 @@ def bank_to_json(bank: Bank) -> dict:
                             if f.uv
                             else {}
                         ),
+                        **({"tw": list(f.texwin)} if f.texwin else {}),
                     }
                     for f in m.faces
                 ],

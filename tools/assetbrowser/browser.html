@@ -135,10 +135,26 @@ const esc = s => String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt
 async function getJSON(p){ const r=await fetch(p); if(!r.ok) throw new Error(p+': '+r.status); return r.json(); }
 
 /* ------------------------------------------------------------------- WebGL */
+// aWin is the GP0 0xE2 texture window: xy = the tile size in texels, zw = the
+// tile origin. UVs are carried in texels (0..255) so the wrap can happen per
+// fragment, which is what the GPU does; converting to 0..1 in the vertex shader
+// would bake in the un-wrapped coordinate.
 const VS=`attribute vec3 aPos;attribute vec3 aNrm;attribute vec2 aUV;attribute vec3 aCol;
+attribute vec4 aWin;
 uniform mat4 uMVP;uniform mat3 uN;varying vec3 vN;varying vec2 vUV;varying vec3 vC;
-void main(){gl_Position=uMVP*vec4(aPos,1.0);vN=uN*aNrm;vUV=aUV;vC=aCol;}`;
-const FS=`precision mediump float;varying vec3 vN;varying vec2 vUV;varying vec3 vC;
+varying vec4 vWin;
+void main(){gl_Position=uMVP*vec4(aPos,1.0);vN=uN*aNrm;vUV=aUV;vC=aCol;vWin=aWin;}`;
+// highp where it exists: vUV is carried in texels, so mediump's ~10-bit
+// mantissa would quantise a 255-texel coordinate to a quarter of a texel and
+// make the window wrap shimmer.
+const FS=`
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+varying vec3 vN;varying vec2 vUV;varying vec3 vC;
+varying vec4 vWin;
 uniform sampler2D uTex;uniform float uUseTex;uniform float uFlat;
 void main(){
   vec3 n=normalize(vN);
@@ -147,7 +163,11 @@ void main(){
   // without washing out the cars, which do have real normals.
   float l=dot(n,normalize(vec3(0.35,0.75,0.55)))*0.5+0.5;
   float sh=0.30+0.85*l;
-  vec4 c = uUseTex>0.5 ? texture2D(uTex,vUV) : vec4(vC,1.0);
+  // texcoord = (texcoord & ~(mask*8)) | ((offset & mask)*8), i.e. wrap inside
+  // the window tile. Every mask on the disc is a run of high bits, so the AND
+  // is a mod by a power of two.
+  vec2 t=(mod(vUV,vWin.xy)+vWin.zw)*(1.0/256.0);
+  vec4 c = uUseTex>0.5 ? texture2D(uTex,t) : vec4(vC,1.0);
   if(c.a<0.35) discard;
   if(uFlat>0.5) sh=1.0;
   gl_FragColor=vec4(c.rgb*sh,1.0);
@@ -163,7 +183,7 @@ function initGL(){
   GL.attachShader(PROG,sh(GL.VERTEX_SHADER,VS));GL.attachShader(PROG,sh(GL.FRAGMENT_SHADER,FS));
   GL.linkProgram(PROG);GL.useProgram(PROG);
   LOC={};
-  for(const a of ['aPos','aNrm','aUV','aCol']){LOC[a]=GL.getAttribLocation(PROG,a);GL.enableVertexAttribArray(LOC[a]);}
+  for(const a of ['aPos','aNrm','aUV','aCol','aWin']){LOC[a]=GL.getAttribLocation(PROG,a);GL.enableVertexAttribArray(LOC[a]);}
   for(const u of ['uMVP','uN','uTex','uUseTex','uFlat'])LOC[u]=GL.getUniformLocation(PROG,u);
   GL.enable(GL.DEPTH_TEST);
   WHITE=GL.createTexture();GL.bindTexture(GL.TEXTURE_2D,WHITE);
@@ -192,9 +212,10 @@ function loadTex(url){
 let SCENE=null;   // {groups:[{tex,buf,n}], wire:{buf,n}, radius, center}
 function buildScene(mj, texList, which){
   const V=mj.vertices, N=mj.normals;
-  // "assembled" lays every cell out on the 32x32 grid the way the game does:
-  // a cell's world position is (sx << 11, 0, sy << 11), and the grid word at
-  // (31 - sy) * 32 + sx holds its index (track/visible_cells.c).
+  // "assembled" lays every cell out on the 32x32 grid the way the game does.
+  // The extractor already resolved the grid word at (31 - sy) * 32 + sx into a
+  // cell index and a translation (track/visible_cells.c); note that the pitch
+  // in these coordinates is 8192, not the grid's own 2048 - see extract.py.
   const placed = which==='@' && mj.placements
     ? mj.placements.map(p=>({m:mj.models[p.cell], dx:p.x, dz:p.z}))
     : (which==='*' ? mj.models : [mj.models[which]]).map(m=>({m, dx:0, dz:0}));
@@ -205,11 +226,16 @@ function buildScene(mj, texList, which){
   const wire=[];
   for(const {m,dx,dz} of list) for(const f of m.faces){
     const k=key(f);
-    if(!byTex.has(k)) byTex.set(k,{pos:[],nrm:[],uv:[],col:[],tp:f.tp,clut:f.clut,textured:!!f.uv});
+    if(!byTex.has(k)) byTex.set(k,{pos:[],nrm:[],uv:[],col:[],win:[],tp:f.tp,clut:f.clut,textured:!!f.uv});
     const g=byTex.get(k);
-    const P = i => { const j=f.v[i]; const p=[V[j*3]+dx, -V[j*3+1], V[j*3+2]+dz];
+    // PS1 is left-handed: +X right, +Y down, +Z away from the camera. WebGL is
+    // right-handed: +X right, +Y up, +Z toward the camera. The conversion is a
+    // 180 degree turn about X — negate BOTH Y and Z. Negating Y alone (which is
+    // the obvious-looking "PS1 +Y is down" fix) has determinant -1: it is a
+    // reflection, and every model comes out as its own mirror image.
+    const P = i => { const j=f.v[i]; const p=[V[j*3]+dx, -V[j*3+1], -(V[j*3+2]+dz)];
       for(let q=0;q<3;q++){ if(p[q]<lo[q])lo[q]=p[q]; if(p[q]>hi[q])hi[q]=p[q]; }
-      return p; };   // PS1 +Y is down
+      return p; };
     const p=[P(0),P(1),P(2),P(3)];
     // face normal, used when the record has none (F4 / FT4)
     const e1=[p[1][0]-p[0][0],p[1][1]-p[0][1],p[1][2]-p[0][2]];
@@ -217,12 +243,19 @@ function buildScene(mj, texList, which){
     let fn=[e1[1]*e2[2]-e1[2]*e2[1], e1[2]*e2[0]-e1[0]*e2[2], e1[0]*e2[1]-e1[1]*e2[0]];
     const L=Math.hypot(...fn)||1; fn=fn.map(c=>c/L);
     const NM = i => { if(!f.n) return fn; const j=f.n[i];
-      return [N[j*3]/4096, -N[j*3+1]/4096, N[j*3+2]/4096]; };
-    const UV = i => f.uv ? [f.uv[i*2]/256, f.uv[i*2+1]/256] : [0,0];
+      return [N[j*3]/4096, -N[j*3+1]/4096, -N[j*3+2]/4096]; };
+    const UV = i => f.uv ? [f.uv[i*2], f.uv[i*2+1]] : [0,0];   // in texels
     const CO = f.c ? f.c.map(c=>Math.min(1,c/128)) : [.72,.75,.82];
-    // PS1 quad order v0 v1 v2 / v1 v3 v2
-    for(const [a,b,c] of [[0,1,2],[1,3,2]]) for(const i of [a,b,c]){
+    const W = f.tw || [256,256,0,0];
+    // The PS1 quad is v0 v1 v2 / v1 v3 v2, but that order is clockwise once the
+    // vertices are in the right-handed frame, so the cross product would point
+    // into the solid: 104 of the 114 faces of CAR_00 model 0 and 2318 of the
+    // 2890 near-horizontal BIG1 terrain faces come out inward with it. Emit the
+    // reverse winding, which makes aNrm the outward normal for the untextured
+    // F4/FT4 faces and leaves GL's front-face rule agreeing with the data.
+    for(const [a,b,c] of [[0,2,1],[1,2,3]]) for(const i of [a,b,c]){
       g.pos.push(...p[i]); g.nrm.push(...NM(i)); g.uv.push(...UV(i)); g.col.push(...CO);
+      g.win.push(W[0],W[1],W[2],W[3]);
     }
     for(const [a,b] of [[0,1],[1,3],[3,2],[2,0]]) wire.push(...p[a],...p[b]);
   }
@@ -232,8 +265,8 @@ function buildScene(mj, texList, which){
   for(const [k,g] of byTex){
     const t = g.textured ? (texList.find(t=>t.tpage===g.tp&&t.clut===g.clut)) : null;
     groups.push({textured:g.textured, url:t?t.file:null,
-      pos:mk(g.pos), nrm:mk(g.nrm), uv:mk(g.uv), col:mk(g.col), n:g.pos.length/3,
-      tp:g.tp, clut:g.clut});
+      pos:mk(g.pos), nrm:mk(g.nrm), uv:mk(g.uv), col:mk(g.col), win:mk(g.win),
+      n:g.pos.length/3, tp:g.tp, clut:g.clut});
   }
   const center=[0,1,2].map(k=>(lo[k]+hi[k])/2);
   const radius=Math.max(1,Math.max(hi[0]-lo[0],hi[1]-lo[1],hi[2]-lo[2])/2);
@@ -268,16 +301,18 @@ function draw(){
       GL.uniform1f(LOC.uUseTex,(g.textured&&useTex&&g.url)?1:0);
       GL.uniform1f(LOC.uFlat,0);
       bind(LOC.aPos,g.pos,3);bind(LOC.aNrm,g.nrm,3);bind(LOC.aUV,g.uv,2);bind(LOC.aCol,g.col,3);
+      bind(LOC.aWin,g.win,4);
       GL.drawArrays(GL.TRIANGLES,0,g.n);
     }
   } else {
     GL.bindTexture(GL.TEXTURE_2D,WHITE);
     GL.uniform1f(LOC.uUseTex,0);GL.uniform1f(LOC.uFlat,1);
     GL.vertexAttrib3f(LOC.aNrm,0,1,0);GL.vertexAttrib2f(LOC.aUV,0,0);GL.vertexAttrib3f(LOC.aCol,1,.55,.24);
-    GL.disableVertexAttribArray(LOC.aNrm);GL.disableVertexAttribArray(LOC.aUV);GL.disableVertexAttribArray(LOC.aCol);
+    GL.vertexAttrib4f(LOC.aWin,256,256,0,0);
+    for(const a of ['aNrm','aUV','aCol','aWin']) GL.disableVertexAttribArray(LOC[a]);
     bind(LOC.aPos,SCENE.wire.buf,3);
     GL.drawArrays(GL.LINES,0,SCENE.wire.n);
-    GL.enableVertexAttribArray(LOC.aNrm);GL.enableVertexAttribArray(LOC.aUV);GL.enableVertexAttribArray(LOC.aCol);
+    for(const a of ['aNrm','aUV','aCol','aWin']) GL.enableVertexAttribArray(LOC[a]);
   }
 }
 function hookCanvas(){
