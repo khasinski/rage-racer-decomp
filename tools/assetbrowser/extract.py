@@ -1,0 +1,630 @@
+#!/usr/bin/env python3
+"""Rage Racer (PS1) asset extractor.
+
+    python3 tools/assetbrowser/extract.py <disc.bin> -o <output-dir>
+
+Reads the MODE2/2352 track 1 of a Rage Racer disc, pulls the 135-entry
+RAGE.BIN archive apart, decodes what it can, and writes a manifest.json plus
+decoded models, textures and raw blobs. Nothing is hardcoded to one machine:
+the image path is always an argument.
+
+Formats are decoded from the game's own code (see disc.py / models.py /
+images.py for the source references), not from header sniffing.
+
+Game data must never enter the repository. The default output directory is
+tools/decomp-wip/assets/, which .gitignore already covers.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import struct
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import audio  # noqa: E402
+import images  # noqa: E402
+import models  # noqa: E402
+import png  # noqa: E402
+from disc import Disc, find_file, read_archive_index, read_root_directory, volume_label  # noqa: E402
+
+ASSET_COUNT = 135
+STREAM_COUNT = 11
+
+# Resolved from g_AssetPaths in the PAL executable (see docs/names.md 45a).
+# --exe re-reads them from a real SCES_006.50 if you want to prove it again.
+ASSET_NAMES = (
+    ["LOGO.TMS", "TITLE.TMS", "RG3.VH", "RG3.VB", "RES.DAT", "CAR.TMS", "SAVE.TMS",
+     "SELBGM.BIN", "SELECT.BIN", "OPTION.BIN"]
+    + [f"CAR_{c}.{h}"
+       for c in ("00", "01", "02", "03", "10", "11", "12", "20", "21", "30", "31",
+                 "32", "33", "34", "40", "41", "42", "43", "50", "51", "52", "60",
+                 "61", "70", "71", "72", "80", "81", "90", "A0", "B0", "C0")
+       for h in ("1ST", "2ND")]
+    + [f"GP{n}.TMS" for n in (0, 1, 2, 3, 4, 10, 5, 6, 7, 8, 9, 11)]
+    + ["VOICE.BIN"]
+    + [f"{course}{cls}.{half}"
+       for cls in range(1, 7)
+       for course in ("BIG", "MID", "HI", "OVAL")
+       for half in ("1ST", "2ND")]
+)
+assert len(ASSET_NAMES) == ASSET_COUNT
+
+# The car texture page every CAR_xx.1ST uploads: g_CarImageRect at 0x8007C484
+# reads {x 704, y 0, w 64, h 256} - one full 4bpp texture page, 0x8000 bytes.
+CAR_IMAGE_RECT = (704, 0, 64, 256)
+
+
+def names_from_exe(exe_path: Path) -> list[str]:
+    """Re-derive the table from a real executable rather than trusting the copy above."""
+    d = exe_path.read_bytes()
+    if d[:8] != b"PS-X EXE":
+        raise ValueError("not a PS-X EXE")
+    text_vaddr = struct.unpack_from("<I", d, 0x18)[0]
+    base = text_vaddr - 0x800
+    ptrs = struct.unpack_from(f"<{ASSET_COUNT}I", d, 0x8007C48C - base)
+    out = []
+    for p in ptrs:
+        o = p - base
+        out.append(d[o : d.index(b"\0", o)].decode("ascii", "replace").rsplit("\\", 1)[-1])
+    return out
+
+
+# --------------------------------------------------------------------------
+
+
+def kind_of(index: int, name: str) -> str:
+    if name.endswith(".TMS"):
+        return "image"
+    if name.endswith(".1ST") and name.startswith("CAR_"):
+        return "car_model"
+    if name.endswith(".2ND") and name.startswith("CAR_"):
+        return "car_pack"
+    if name.endswith(".1ST"):
+        return "track_images"
+    if name.endswith(".2ND"):
+        return "track_data"
+    return {
+        "RG3.VH": "vab_header",
+        "RG3.VB": "vab_body",
+        "RES.DAT": "raw",
+        "SELBGM.BIN": "audio_pack",
+        "SELECT.BIN": "select_pack",
+        "OPTION.BIN": "option_pack",
+        "VOICE.BIN": "audio",
+    }.get(name, "raw")
+
+
+def image_blocks_json(blks):
+    return [
+        {"x": b.x, "y": b.y, "w": b.w, "h": b.h, "size": b.size, "clut": b.is_clut}
+        for b in blks
+    ]
+
+
+class Extractor:
+    def __init__(self, disc: Disc, entries, names, outdir: Path, opts):
+        self.disc = disc
+        self.entries = entries
+        self.names = names
+        self.out = outdir
+        self.opts = opts
+        self.cache: dict[int, bytes] = {}
+        self.notes: list[str] = []
+
+    def data(self, i: int) -> bytes:
+        if i not in self.cache:
+            e = self.entries[i]
+            self.cache[i] = self.disc.read(e.lba, e.size)
+            if len(self.cache) > 8:
+                self.cache.pop(next(iter(self.cache)))
+        return self.cache[i]
+
+    # -- VRAM contexts ---------------------------------------------------
+
+    def vram_for(self, index: int, kind: str) -> tuple[images.Vram, list[str]]:
+        """Rebuild the VRAM a model would be textured from.
+
+        Cars: CAR.TMS (the shared showroom/HUD upload) plus the car's own
+        0x8000-byte page. Tracks: the four image chains and the one bare block
+        of the matching .1ST pack, exactly the order LoadRaceAssets step 5 uses.
+        """
+        v = images.Vram()
+        src = []
+        if kind in ("car_model", "car_pack"):
+            for blk in images.parse_image_asset(self.data(5), 0):
+                v.load(self.data(5), blk)
+            src.append("CAR.TMS")
+            if kind == "car_model":
+                buf = self.data(index)
+                io = struct.unpack_from("<I", buf, 0x24)[0]
+                x, y, w, h = CAR_IMAGE_RECT
+                v.load(buf, images.ImageBlock(0x8000, x, y, w, h, io))
+                src.append(f"{self.names[index]} page")
+            else:
+                hdr = struct.unpack_from("<5i", buf := self.data(index), 0)
+                for blk in images.parse_image_asset(buf, hdr[4]):
+                    v.load(buf, blk)
+                src.append(f"{self.names[index]}[4]")
+        elif kind == "track_data":
+            first = index - 1
+            buf = self.data(first)
+            hdr = struct.unpack_from("<5i", buf, 0)
+            for k in (0, 1, 3, 4):
+                for blk in images.parse_image_asset(buf, hdr[k]):
+                    v.load(buf, blk)
+            for blk in images._parse_chunk(buf, hdr[2], len(buf)):
+                v.load(buf, blk)
+            src.append(self.names[first])
+        elif kind in ("select_pack", "option_pack"):
+            buf = self.data(index)
+            off = struct.unpack_from("<i", buf, 8 if kind == "select_pack" else 0)[0]
+            if kind == "select_pack":
+                for blk in images.parse_image_asset(buf, off):
+                    v.load(buf, blk)
+            src.append(self.names[index])
+        return v, src
+
+    # -- per-asset ------------------------------------------------------
+
+    def run(self):
+        (self.out / "raw").mkdir(parents=True, exist_ok=True)
+        (self.out / "models").mkdir(parents=True, exist_ok=True)
+        (self.out / "textures").mkdir(parents=True, exist_ok=True)
+        (self.out / "images").mkdir(parents=True, exist_ok=True)
+
+        manifest = []
+        for i in range(ASSET_COUNT):
+            rec = self.one(i)
+            manifest.append(rec)
+            print(f"[{i:3d}] {rec['name']:<16} {rec['kind']:<13} "
+                  f"{rec['size']:>9}  {rec.get('summary','')}", flush=True)
+        return manifest
+
+    def one(self, i: int) -> dict:
+        e = self.entries[i]
+        name = self.names[i]
+        kind = kind_of(i, name)
+        buf = self.data(i)
+        rec = {
+            "index": i,
+            "name": name,
+            "kind": kind,
+            "size": e.size,
+            "lba": e.lba,
+            "sectorOffset": e.sector_offset,
+            "confidence": "decoded",
+        }
+        stem = f"{i:03d}_{name.replace('.', '_')}"
+        if self.opts.raw:
+            (self.out / "raw" / f"{stem}.bin").write_bytes(buf)
+            rec["raw"] = f"raw/{stem}.bin"
+
+        try:
+            if kind == "image":
+                self.do_image(i, stem, buf, 0, rec)
+            elif kind == "car_model":
+                self.do_car_model(i, stem, buf, rec)
+            elif kind == "car_pack":
+                self.do_car_pack(i, stem, buf, rec)
+            elif kind == "track_images":
+                self.do_track_images(i, stem, buf, rec)
+            elif kind == "track_data":
+                self.do_track_data(i, stem, buf, rec)
+            elif kind == "select_pack":
+                self.do_select(i, stem, buf, rec)
+            elif kind == "option_pack":
+                self.do_option(i, stem, buf, rec)
+            elif kind == "vab_header":
+                # RG3.VH is the header; its body is the very next asset, RG3.VB.
+                self.do_vab(stem, buf, 0, self.data(i + 1), 0, rec)
+            elif kind == "vab_body":
+                rec["confidence"] = "decoded"
+                rec["summary"] = f"VAB body of {self.names[i - 1]}"
+                rec["vabBodyOf"] = i - 1
+            elif kind == "audio_pack":
+                # SELBGM.BIN: StartAudioSlotLoad(1, sub[0], sub[2], sub[1])
+                h = list(struct.unpack_from("<3i", buf, 0))
+                rec["subBlocks"] = [
+                    {"n": 0, "role": "VAB header (VH)", "offset": h[0]},
+                    {"n": 1, "role": "sequence data (SEQ)", "offset": h[1]},
+                    {"n": 2, "role": "VAB body (VB)", "offset": h[2]},
+                ]
+                rec["isSeq"] = audio.looks_like_seq(buf, h[1])
+                self.do_vab(stem, buf, h[0], buf, h[2], rec)
+            elif kind == "audio":
+                # VOICE.BIN: { u32 vhSize, u32 vhOffset, u32 vbOffset }
+                w = list(struct.unpack_from("<3I", buf, 0))
+                rec["subBlocks"] = [
+                    {"n": 0, "role": "VAB header size", "offset": w[0]},
+                    {"n": 1, "role": "VAB header (VH)", "offset": w[1]},
+                    {"n": 2, "role": "VAB body (VB)", "offset": w[2]},
+                ]
+                self.do_vab(stem, buf, w[1], buf, w[2], rec)
+            else:
+                rec["confidence"] = "raw"
+                rec["summary"] = "not decoded"
+        except Exception as exc:  # noqa: BLE001
+            rec["confidence"] = "failed"
+            rec["error"] = f"{type(exc).__name__}: {exc}"
+            rec["summary"] = f"FAILED {exc}"
+        return rec
+
+    # -- decoders --------------------------------------------------------
+
+    def do_image(self, i, stem, buf, off, rec, vram_key=None):
+        blks = images.parse_image_asset(buf, off)
+        v = images.Vram()
+        loaded = sum(1 for b in blks if v.load(buf, b))
+        rec["imageBlocks"] = image_blocks_json(blks)
+        rec["vram"] = self.emit_vram(v, stem)
+        rec["sprites"] = self.emit_sprites(buf, blks, stem)
+        rec["summary"] = f"{loaded}/{len(blks)} VRAM blocks, {len(rec['sprites'])} sprites"
+        if loaded == 0:
+            rec["confidence"] = "raw"
+
+    def emit_sprites(self, buf, blks, stem):
+        out = []
+        for n, (img, clut) in enumerate(images.pair_blocks(blks)):
+            got = images.decode_sprite(buf, img, clut)
+            if got is None:
+                continue
+            w, h, rgba, bpp = got
+            fn = f"{stem}_p{n:03d}.png"
+            png.write_rgba(self.out / "images" / fn, w, h, rgba)
+            out.append({"file": f"images/{fn}", "w": w, "h": h, "bpp": bpp,
+                        "vramX": img.x, "vramY": img.y})
+        return out
+
+    def do_car_model(self, i, stem, buf, rec):
+        mo, io = struct.unpack_from("<II", buf, 0x20)
+        bank = models.parse_bank(buf, mo, io)
+        rec["carFlags"] = {"automaticGearbox": buf[8] != 0, "gears": buf[9]}
+        rec["model"] = self.emit_bank(bank, stem)
+        v, src = self.vram_for(i, "car_model")
+        rec["vram"] = self.emit_vram(v, stem)
+        rec["vramSources"] = src
+        rec["textures"] = self.emit_textures(v, bank, stem)
+        rec["summary"] = (
+            f"{bank.count} models, {len(bank.vertices)} verts, "
+            f"{sum(len(m.faces) for m in bank.models)} faces, "
+            f"{len(rec['textures'])} texture pages"
+        )
+
+    def do_car_pack(self, i, stem, buf, rec):
+        # StartAudioSlotLoad(3, sub[1], sub[3], sub[2]) => VH, VB, table.
+        hdr = list(struct.unpack_from("<5i", buf, 0))
+        rec["subBlocks"] = [
+            {"n": 0, "role": "car spec (SetCarSpec)", "offset": hdr[0]},
+            {"n": 1, "role": "engine VAB header (VH)", "offset": hdr[1]},
+            {"n": 2, "role": "engine tone table", "offset": hdr[2]},
+            {"n": 3, "role": "engine VAB body (VB)", "offset": hdr[3]},
+            {"n": 4, "role": "image asset", "offset": hdr[4]},
+        ]
+        blks = images.parse_image_asset(buf, hdr[4])
+        v = images.Vram()
+        loaded = sum(1 for b in blks if v.load(buf, b))
+        rec["imageBlocks"] = image_blocks_json(blks)
+        rec["vram"] = self.emit_vram(v, stem)
+        self.do_vab(stem, buf, hdr[1], buf, hdr[3], rec)
+        rec["summary"] = (f"5 sub-blocks, {loaded} VRAM blocks, "
+                          f"{len(rec.get('sounds', []))} sounds")
+
+    def do_vab(self, stem, vhbuf, vhoff, vbbuf, vboff, rec):
+        h = audio.parse_vab_header(vhbuf, vhoff)
+        if h is None:
+            rec.setdefault("summary", "no VAB header found")
+            rec["confidence"] = "raw"
+            return
+        rec["vab"] = {k: v for k, v in h.items() if k not in ("vagSizes", "vagOffsets")}
+        rec["sounds"] = []
+        if not self.opts.audio:
+            rec.setdefault("summary", f"VAB: {h['vags']} sounds (not decoded)")
+            return
+        d = self.out / "audio"
+        d.mkdir(parents=True, exist_ok=True)
+        for k, (o, n) in enumerate(zip(h["vagOffsets"], h["vagSizes"])):
+            chunk = vbbuf[vboff + o : vboff + o + n]
+            if len(chunk) < 16:
+                continue
+            pcm = audio.decode_vag(chunk)
+            if not pcm:
+                continue
+            fn = f"{stem}_s{k:02d}.wav"
+            (d / fn).write_bytes(audio.wav(pcm))
+            rec["sounds"].append({"file": f"audio/{fn}", "bytes": n,
+                                  "samples": len(pcm) // 2})
+        rec.setdefault("summary", f"VAB: {h['programs']} programs, "
+                                  f"{len(rec['sounds'])}/{h['vags']} sounds decoded")
+
+    def do_track_images(self, i, stem, buf, rec):
+        hdr = list(struct.unpack_from("<5i", buf, 0))
+        v = images.Vram()
+        blks = []
+        roles = ["image asset", "image asset", "single image block",
+                 "image asset (team-logo)", "image asset (track texture)"]
+        subs = []
+        for k, off in enumerate(hdr):
+            b = (images._parse_chunk(buf, off, len(buf)) if k == 2
+                 else images.parse_image_asset(buf, off))
+            n = sum(1 for x in b if v.load(buf, x))
+            blks += b
+            subs.append({"n": k, "role": roles[k], "offset": off, "blocks": len(b), "loaded": n})
+        rec["subBlocks"] = subs
+        rec["imageBlocks"] = image_blocks_json(blks)
+        rec["vram"] = self.emit_vram(v, stem)
+        rec["sprites"] = self.emit_sprites(buf, blks, stem)
+        rec["summary"] = (f"{sum(s['loaded'] for s in subs)}/{len(blks)} VRAM blocks, "
+                          f"{len(rec['sprites'])} sprites")
+
+    def do_track_data(self, i, stem, buf, rec):
+        hdr = list(struct.unpack_from("<11i", buf, 0))
+        roles = ["camera table", "environment palette table", "environment script",
+                 "model bank 1", "track points", "course model bank",
+                 "model bank 2", "terrain cell data", "course objects",
+                 "track events", "camera table (selected)"]
+        rec["subBlocks"] = [{"n": k, "role": roles[k], "offset": o} for k, o in enumerate(hdr)]
+        v, src = self.vram_for(i, "track_data")
+        rec["vram"] = self.emit_vram(v, stem)
+        rec["vramSources"] = src
+
+        rec["banks"] = []
+        tex = {}
+        for k in (3, 6):
+            try:
+                bank = models.parse_bank(buf, hdr[k], len(buf))
+            except models.ParseError as exc:
+                rec["banks"].append({"sub": k, "error": str(exc)})
+                continue
+            b = self.emit_bank(bank, f"{stem}_b{k}")
+            b["sub"] = k
+            b["textures"] = self.emit_textures(v, bank, f"{stem}_b{k}")
+            rec["banks"].append(b)
+            tex[k] = len(b["textures"])
+        # Course objects (sub-block 5) and the terrain cells (sub-block 7) are
+        # the trackside scenery and the road surface itself.
+        try:
+            cb = models.parse_course_objects(buf, hdr[5], len(buf))
+            b = self.emit_bank(cb, f"{stem}_course")
+            b["sub"] = 5
+            b["label"] = "course objects"
+            b["textures"] = self.emit_textures(v, cb, f"{stem}_course")
+            rec["banks"].append(b)
+            rec["courseModelCount"] = cb.count
+        except models.ParseError as exc:
+            rec["courseModelCount"] = None
+            rec["banks"].append({"sub": 5, "error": str(exc)})
+        try:
+            tb, grid = models.parse_terrain(buf, hdr[7], hdr[8] if hdr[8] > hdr[7] else len(buf))
+            b = self.emit_bank(tb, f"{stem}_terrain", grid=grid)
+            b["sub"] = 7
+            b["label"] = "terrain cells"
+            b["textures"] = self.emit_textures(v, tb, f"{stem}_terrain")
+            rec["banks"].append(b)
+            rec["cellCount"] = tb.count
+        except (models.ParseError, struct.error) as exc:
+            rec["cellCount"] = None
+            rec["banks"].append({"sub": 7, "error": str(exc)})
+
+        rec["summary"] = (
+            "banks " + "+".join(str(b.get("modelCount", "?")) for b in rec["banks"])
+            + f", {rec['courseModelCount']} objects, {rec['cellCount']} cells"
+        )
+
+    def do_select(self, i, stem, buf, rec):
+        hdr = list(struct.unpack_from("<3i", buf, 0))
+        rec["subBlocks"] = [
+            {"n": 0, "role": "team-logo sample data", "offset": hdr[0]},
+            {"n": 1, "role": "course model bank", "offset": hdr[1]},
+            {"n": 2, "role": "image asset", "offset": hdr[2]},
+        ]
+        v = images.Vram()
+        blks = images.parse_image_asset(buf, hdr[2])
+        for b in blks:
+            v.load(buf, b)
+        rec["imageBlocks"] = image_blocks_json(blks)
+        rec["vram"] = self.emit_vram(v, stem)
+        bank = models.parse_bank(buf, 0xC, hdr[0])
+        rec["model"] = self.emit_bank(bank, stem)
+        rec["textures"] = self.emit_textures(v, bank, stem)
+        rec["summary"] = f"{bank.count} models, {len(blks)} VRAM blocks"
+
+    def do_option(self, i, stem, buf, rec):
+        imgoff = struct.unpack_from("<i", buf, 0)[0]
+        bank = models.parse_bank(buf, 4, imgoff)
+        rec["model"] = self.emit_bank(bank, stem)
+        rec["subBlocks"] = [{"n": 0, "role": "model bank (at +4)", "offset": 4},
+                            {"n": 1, "role": "free space / image buffer", "offset": imgoff}]
+        v = images.Vram()
+        rec["textures"] = self.emit_textures(v, bank, stem)
+        rec["summary"] = f"{bank.count} models, {len(bank.vertices)} verts"
+
+    # -- emitters --------------------------------------------------------
+
+    def emit_bank(self, bank, stem, grid=None):
+        j = models.bank_to_json(bank)
+        if grid is not None:
+            # A cell's world position is (sx << 11, 0, sy << 11); the grid word
+            # at (31 - sy) * 32 + sx holds its index in the low 10 bits, with
+            # 0x3FF meaning "no geometry here" (track/visible_cells.c:214-226).
+            j["cellSize"] = 2048
+            j["placements"] = [
+                {"cell": grid[row * 32 + col] & 0x3FF, "x": col * 2048, "z": (31 - row) * 2048}
+                for row in range(32) for col in range(32)
+                if (grid[row * 32 + col] & 0x3FF) != 0x3FF
+            ]
+            j["regions"] = [w >> 10 for w in grid]
+        p = self.out / "models" / f"{stem}.json"
+        p.write_text(json.dumps(j, separators=(",", ":")))
+        return {
+            "file": f"models/{stem}.json",
+            "modelCount": bank.count,
+            "vertexCount": len(bank.vertices),
+            "normalCount": len(bank.normals),
+            "faceCount": sum(len(m.faces) for m in bank.models),
+            "modelFaceCounts": [len(m.faces) for m in bank.models],
+        }
+
+    def emit_vram(self, v, stem):
+        if not v.dirty or not self.opts.vram:
+            return None
+        rgba = fast_vram_rgba(v)
+        p = self.out / "images" / f"{stem}_vram.png"
+        png.write_rgba(p, images.VRAM_W, images.VRAM_H, rgba)
+        return {"file": f"images/{stem}_vram.png", "rects": v.dirty}
+
+    def emit_textures(self, v, bank, stem):
+        pairs = sorted({(f.tpage, f.clut) for m in bank.models for f in m.faces if f.uv})
+        out = []
+        for n, (tp, cl) in enumerate(pairs):
+            rgba = images.decode_texpage(v, tp, cl)
+            fn = f"{stem}_t{n}.png"
+            png.write_rgba(self.out / "textures" / fn, 256, 256, rgba)
+            out.append({
+                "file": f"textures/{fn}",
+                "tpage": tp, "clut": cl,
+                "bpp": {0: 4, 1: 8, 2: 16, 3: 16}[(tp >> 7) & 3],
+                "pageX": (tp & 0xF) * 64, "pageY": ((tp >> 4) & 1) * 256,
+                "clutX": (cl & 0x3F) * 16, "clutY": (cl >> 6) & 0x1FF,
+            })
+        return out
+
+
+_LUT = None
+
+
+def fast_vram_rgba(v: images.Vram) -> bytes:
+    """Same as images.vram_to_rgba, table-driven so a full page is not a minute."""
+    global _LUT
+    if _LUT is None:
+        _LUT = bytearray(65536 * 4)
+        for w in range(65536):
+            r, g, b, a = images.rgb5551(w)
+            _LUT[w * 4 : w * 4 + 4] = bytes((r, g, b, 255 if a else 0))
+    lut = _LUT
+    src = v.buf
+    out = bytearray(len(src) * 2)
+    for i in range(0, len(src), 2):
+        w = (src[i] | (src[i + 1] << 8)) * 4
+        out[i * 2 : i * 2 + 4] = lut[w : w + 4]
+    return bytes(out)
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("image", type=Path, help="Track 01 .bin of the disc (MODE2/2352) or a .iso")
+    ap.add_argument("-o", "--out", type=Path, default=None,
+                    help="output directory (default tools/decomp-wip/assets)")
+    ap.add_argument("--exe", type=Path, default=None,
+                    help="SCES_006.50 / SLUS executable, to re-derive the name table")
+    ap.add_argument("--no-raw", dest="raw", action="store_false",
+                    help="skip the verbatim per-asset dumps (they feed the hex view)")
+    ap.add_argument("--no-audio", dest="audio", action="store_false",
+                    help="skip decoding VAG sounds to .wav")
+    ap.add_argument("--no-vram", dest="vram", action="store_false",
+                    help="skip the 1024x512 VRAM previews (much faster)")
+    ap.add_argument("--only", type=str, default=None,
+                    help="comma-separated asset indices or name substrings")
+    ap.add_argument("--serve", type=int, nargs="?", const=8000, default=None,
+                    metavar="PORT", help="serve the output directory when done")
+    args = ap.parse_args(argv)
+
+    if args.out is None:
+        args.out = Path(__file__).resolve().parents[2] / "tools" / "decomp-wip" / "assets"
+    args.out.mkdir(parents=True, exist_ok=True)
+
+    with Disc(args.image) as disc:
+        label = volume_label(disc)
+        files = read_root_directory(disc)
+        rage_bin = find_file(files, "RAGE.BIN")
+        rage_str = find_file(files, "RAGE.STR")
+        entries = read_archive_index(disc, rage_bin.lba, ASSET_COUNT)
+
+        names = ASSET_NAMES
+        if args.exe:
+            names = names_from_exe(args.exe)
+
+        # Self-check: the archive must tile its own file exactly.
+        end = max(e.sector_offset + (e.size + 2047) // 2048 for e in entries)
+        if end * 2048 != rage_bin.size:
+            print(f"warning: archive ends at sector {end}, file is "
+                  f"{rage_bin.size // 2048} sectors", file=sys.stderr)
+
+        ex = Extractor(disc, entries, names, args.out, args)
+        if args.only:
+            wanted = set()
+            for tok in args.only.split(","):
+                tok = tok.strip()
+                if tok.isdigit():
+                    wanted.add(int(tok))
+                else:
+                    wanted |= {i for i, n in enumerate(names) if tok.upper() in n.upper()}
+            manifest = []
+            for i in sorted(wanted):
+                (args.out / "raw").mkdir(parents=True, exist_ok=True)
+                (args.out / "models").mkdir(parents=True, exist_ok=True)
+                (args.out / "textures").mkdir(parents=True, exist_ok=True)
+                (args.out / "images").mkdir(parents=True, exist_ok=True)
+                r = ex.one(i)
+                manifest.append(r)
+                print(f"[{i:3d}] {r['name']:<16} {r['kind']:<13} {r['size']:>9}  "
+                      f"{r.get('summary','')}", flush=True)
+        else:
+            manifest = ex.run()
+
+        streams = read_archive_index(disc, rage_str.lba, STREAM_COUNT)
+        doc = {
+            "disc": {
+                "image": str(args.image),
+                "label": label,
+                "files": [{"name": f.name, "lba": f.lba, "size": f.size} for f in files
+                          if not f.name.startswith("\x00") and not f.name.startswith("\x01")],
+            },
+            "archive": {"name": "RAGE.BIN", "lba": rage_bin.lba, "size": rage_bin.size,
+                        "entries": ASSET_COUNT},
+            "streams": [{"index": i, "lba": s.lba, "sectorOffset": s.sector_offset,
+                         "size": s.size} for i, s in enumerate(streams)],
+            "assets": manifest,
+        }
+        out = args.out / "manifest.json"
+        out.write_text(json.dumps(doc, separators=(",", ":")))
+
+        # The page itself lives in the repo; only its copy sits next to the data.
+        page = Path(__file__).resolve().parent / "browser.html"
+        if page.exists():
+            (args.out / "index.html").write_text(page.read_text())
+
+        print(f"\nmanifest -> {out}")
+        by_kind = {}
+        for a in manifest:
+            by_kind.setdefault(f"{a['kind']}/{a['confidence']}", 0)
+            by_kind[f"{a['kind']}/{a['confidence']}"] += 1
+        for k in sorted(by_kind):
+            print(f"  {k:<30} {by_kind[k]}")
+
+    if args.serve is not None:
+        serve(args.out, args.serve)
+    return 0
+
+
+def serve(root: Path, port: int) -> None:
+    import functools
+    import http.server
+    import socketserver
+
+    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(root))
+    socketserver.TCPServer.allow_reuse_address = True
+    with socketserver.TCPServer(("127.0.0.1", port), handler) as httpd:
+        print(f"\nbrowser -> http://127.0.0.1:{port}/    (ctrl-c to stop)")
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

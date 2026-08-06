@@ -1,0 +1,473 @@
+<meta charset="utf-8">
+<title>Rage Racer asset browser</title>
+<style>
+:root{
+  --bg:#12131a; --panel:#191b24; --panel2:#20232f; --line:#2c3040;
+  --fg:#e6e8f0; --dim:#8f96ab; --accent:#ff8a3d; --ok:#57c98a; --warn:#e5b95c; --bad:#e0685f;
+  font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;gap:14px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex:none}
+header h1{font-size:14px;margin:0;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+header .meta{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
+main{flex:1;display:flex;min-height:0}
+#side{width:340px;flex:none;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+#filters{padding:10px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+#filters input,#filters select{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--fg);
+  border-radius:6px;padding:6px 8px;font-size:13px;font-family:inherit}
+#list{overflow-y:auto;flex:1}
+.row{display:flex;gap:8px;align-items:baseline;padding:6px 10px;cursor:pointer;border-bottom:1px solid #1d2029;font-size:13px}
+.row:hover{background:var(--panel2)}
+.row.sel{background:#2b2033;box-shadow:inset 3px 0 0 var(--accent)}
+.row .ix{color:var(--dim);font-size:11px;width:26px;text-align:right;font-variant-numeric:tabular-nums;flex:none}
+.row .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .kd{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+.dot{width:6px;height:6px;border-radius:50%;flex:none;align-self:center}
+.d-decoded{background:var(--ok)} .d-raw{background:var(--warn)} .d-failed{background:var(--bad)}
+#pane{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
+#tabs{display:flex;gap:2px;padding:8px 12px 0;background:var(--panel);border-bottom:1px solid var(--line);flex:none}
+.tab{padding:6px 14px;font-size:12px;border-radius:6px 6px 0 0;cursor:pointer;color:var(--dim);border:1px solid transparent;border-bottom:none}
+.tab.on{background:var(--bg);color:var(--fg);border-color:var(--line)}
+.tab.off{opacity:.35;pointer-events:none}
+#body{flex:1;overflow:auto;position:relative;min-height:0}
+.view{display:none;height:100%} .view.on{display:block}
+#gl{display:block;width:100%;height:100%;background:linear-gradient(#1b1d27,#0d0e13);cursor:grab}
+#gl:active{cursor:grabbing}
+#glwrap{position:relative;height:100%}
+#glhud{position:absolute;left:12px;top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  background:#12131ac9;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:12px}
+#glhud select,#glhud button{background:var(--panel2);color:var(--fg);border:1px solid var(--line);
+  border-radius:5px;padding:4px 8px;font-size:12px;font-family:inherit;cursor:pointer}
+#glinfo{position:absolute;right:12px;bottom:12px;font-size:11px;color:var(--dim);text-align:right;line-height:1.5}
+#glerr{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:var(--dim);font-size:13px}
+.pad{padding:16px}
+h2{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin:22px 0 8px}
+h2:first-child{margin-top:0}
+table{border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+td,th{padding:3px 12px 3px 0;text-align:left;vertical-align:top}
+th{color:var(--dim);font-weight:500;border-bottom:1px solid var(--line)}
+.tiles{display:flex;flex-wrap:wrap;gap:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px}
+.tile img{display:block;image-rendering:pixelated;background:
+  repeating-conic-gradient(#2a2d38 0 25%,#22242d 0 50%) 0 0/16px 16px;border-radius:4px}
+.tile .cap{font-size:10px;color:var(--dim);margin-top:6px;font-variant-numeric:tabular-nums}
+#vramimg{image-rendering:pixelated;max-width:100%;border:1px solid var(--line);border-radius:6px}
+pre.hex{font:12px/1.45 ui-monospace,Menlo,monospace;white-space:pre;color:#c8cddd;margin:0}
+pre.hex .off{color:var(--dim)}
+.note{font-size:12px;color:var(--dim);line-height:1.6;max-width:70ch}
+.pill{display:inline-block;font-size:10px;padding:1px 7px;border-radius:99px;border:1px solid var(--line);color:var(--dim);margin-left:6px}
+#boot{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9}
+#boot .box{max-width:640px;padding:28px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+#boot code{background:var(--panel2);padding:2px 6px;border-radius:4px;font:12px ui-monospace,Menlo,monospace;color:var(--accent)}
+</style>
+
+<header>
+  <h1>Rage Racer &middot; assets</h1>
+  <span class=meta id=hmeta></span>
+</header>
+<main>
+  <aside id=side>
+    <div id=filters>
+      <input id=q placeholder="filter by name…">
+      <select id=kind></select>
+    </div>
+    <div id=list></div>
+  </aside>
+  <section id=pane>
+    <div id=tabs></div>
+    <div id=body>
+      <div class="view" id=v-model><div id=glwrap>
+        <canvas id=gl></canvas>
+        <div id=glhud>
+          <select id=bankSel></select>
+          <select id=modelSel></select>
+          <label><input type=checkbox id=cbTex checked> textures</label>
+          <label><input type=checkbox id=cbWire> wireframe</label>
+          <button id=btnReset>reset view</button>
+        </div>
+        <div id=glinfo></div>
+        <div id=glerr></div>
+      </div></div>
+      <div class="view pad" id=v-tex></div>
+      <div class="view pad" id=v-audio></div>
+      <div class="view pad" id=v-vram></div>
+      <div class="view pad" id=v-info></div>
+      <div class="view pad" id=v-hex></div>
+    </div>
+  </section>
+</main>
+
+<div id=boot><div class=box>
+  <h1 style="color:var(--accent);font-size:15px;margin:0 0 12px">No manifest found</h1>
+  <p class=note>This page reads <code>manifest.json</code> from the directory it is served
+  from. Generate it, then serve that directory — game data never enters the repository.</p>
+  <p class=note style="margin-top:14px">
+    <code>python3 tools/assetbrowser/extract.py "&lt;disc&gt; (Track 01).bin"</code><br>
+    <code>python3 tools/assetbrowser/extract.py "&lt;disc&gt;" --serve 8000</code>
+  </p>
+  <p class=note id=booterr style="margin-top:14px;color:var(--bad)"></p>
+</div></div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+let MAN=null, ASSETS=[], CUR=null, MODELJSON={}, TEXCACHE={};
+
+/* ---------------------------------------------------------------- matrices */
+function mIdent(){return new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]);}
+function mMul(a,b){const o=new Float32Array(16);
+  for(let c=0;c<4;c++)for(let r=0;r<4;r++){let s=0;
+    for(let k=0;k<4;k++)s+=a[k*4+r]*b[c*4+k]; o[c*4+r]=s;} return o;}
+function mPersp(fov,asp,n,f){const t=1/Math.tan(fov/2),o=new Float32Array(16);
+  o[0]=t/asp;o[5]=t;o[10]=(f+n)/(n-f);o[11]=-1;o[14]=2*f*n/(n-f);return o;}
+function mTrans(x,y,z){const o=mIdent();o[12]=x;o[13]=y;o[14]=z;return o;}
+function mRotX(a){const c=Math.cos(a),s=Math.sin(a),o=mIdent();o[5]=c;o[6]=s;o[9]=-s;o[10]=c;return o;}
+function mRotY(a){const c=Math.cos(a),s=Math.sin(a),o=mIdent();o[0]=c;o[2]=-s;o[8]=s;o[10]=c;return o;}
+function mScale(s){const o=mIdent();o[0]=o[5]=o[10]=s;return o;}
+function m3of(m){return new Float32Array([m[0],m[1],m[2],m[4],m[5],m[6],m[8],m[9],m[10]]);}
+
+/* --------------------------------------------------------------- utilities */
+const fmt = n => n.toLocaleString('en-US').replace(/,/g,' ');
+const hex = (n,w=4) => '0x'+n.toString(16).toUpperCase().padStart(w,'0');
+const esc = s => String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+async function getJSON(p){ const r=await fetch(p); if(!r.ok) throw new Error(p+': '+r.status); return r.json(); }
+
+/* ------------------------------------------------------------------- WebGL */
+const VS=`attribute vec3 aPos;attribute vec3 aNrm;attribute vec2 aUV;attribute vec3 aCol;
+uniform mat4 uMVP;uniform mat3 uN;varying vec3 vN;varying vec2 vUV;varying vec3 vC;
+void main(){gl_Position=uMVP*vec4(aPos,1.0);vN=uN*aNrm;vUV=aUV;vC=aCol;}`;
+const FS=`precision mediump float;varying vec3 vN;varying vec2 vUV;varying vec3 vC;
+uniform sampler2D uTex;uniform float uUseTex;uniform float uFlat;
+void main(){
+  vec3 n=normalize(vN);
+  // Half-Lambert: terrain and course faces carry no per-vertex normals, so a
+  // hard cosine leaves half of every cell black. This keeps them readable
+  // without washing out the cars, which do have real normals.
+  float l=dot(n,normalize(vec3(0.35,0.75,0.55)))*0.5+0.5;
+  float sh=0.30+0.85*l;
+  vec4 c = uUseTex>0.5 ? texture2D(uTex,vUV) : vec4(vC,1.0);
+  if(c.a<0.35) discard;
+  if(uFlat>0.5) sh=1.0;
+  gl_FragColor=vec4(c.rgb*sh,1.0);
+}`;
+let GL=null, PROG=null, LOC=null, WHITE=null;
+function initGL(){
+  const cv=$('#gl');
+  GL=cv.getContext('webgl',{antialias:true,alpha:false});
+  if(!GL){$('#glerr').style.display='flex';$('#glerr').textContent='WebGL is not available in this browser.';return false;}
+  const sh=(t,src)=>{const s=GL.createShader(t);GL.shaderSource(s,src);GL.compileShader(s);
+    if(!GL.getShaderParameter(s,GL.COMPILE_STATUS))throw new Error(GL.getShaderInfoLog(s));return s;};
+  PROG=GL.createProgram();
+  GL.attachShader(PROG,sh(GL.VERTEX_SHADER,VS));GL.attachShader(PROG,sh(GL.FRAGMENT_SHADER,FS));
+  GL.linkProgram(PROG);GL.useProgram(PROG);
+  LOC={};
+  for(const a of ['aPos','aNrm','aUV','aCol']){LOC[a]=GL.getAttribLocation(PROG,a);GL.enableVertexAttribArray(LOC[a]);}
+  for(const u of ['uMVP','uN','uTex','uUseTex','uFlat'])LOC[u]=GL.getUniformLocation(PROG,u);
+  GL.enable(GL.DEPTH_TEST);
+  WHITE=GL.createTexture();GL.bindTexture(GL.TEXTURE_2D,WHITE);
+  GL.texImage2D(GL.TEXTURE_2D,0,GL.RGBA,1,1,0,GL.RGBA,GL.UNSIGNED_BYTE,new Uint8Array([255,255,255,255]));
+  return true;
+}
+function loadTex(url){
+  if(TEXCACHE[url])return TEXCACHE[url];
+  const t=GL.createTexture();
+  GL.bindTexture(GL.TEXTURE_2D,t);
+  GL.texImage2D(GL.TEXTURE_2D,0,GL.RGBA,1,1,0,GL.RGBA,GL.UNSIGNED_BYTE,new Uint8Array([90,90,110,255]));
+  const im=new Image();
+  im.onload=()=>{GL.bindTexture(GL.TEXTURE_2D,t);
+    GL.pixelStorei(GL.UNPACK_FLIP_Y_WEBGL,false);
+    GL.texImage2D(GL.TEXTURE_2D,0,GL.RGBA,GL.RGBA,GL.UNSIGNED_BYTE,im);
+    GL.texParameteri(GL.TEXTURE_2D,GL.TEXTURE_MIN_FILTER,GL.NEAREST);
+    GL.texParameteri(GL.TEXTURE_2D,GL.TEXTURE_MAG_FILTER,GL.NEAREST);
+    GL.texParameteri(GL.TEXTURE_2D,GL.TEXTURE_WRAP_S,GL.CLAMP_TO_EDGE);
+    GL.texParameteri(GL.TEXTURE_2D,GL.TEXTURE_WRAP_T,GL.CLAMP_TO_EDGE);
+    draw();};
+  im.src=url;
+  TEXCACHE[url]=t; return t;
+}
+
+/* ------------------------------------------------------- geometry building */
+let SCENE=null;   // {groups:[{tex,buf,n}], wire:{buf,n}, radius, center}
+function buildScene(mj, texList, which){
+  const V=mj.vertices, N=mj.normals;
+  // "assembled" lays every cell out on the 32x32 grid the way the game does:
+  // a cell's world position is (sx << 11, 0, sy << 11), and the grid word at
+  // (31 - sy) * 32 + sx holds its index (track/visible_cells.c).
+  const placed = which==='@' && mj.placements
+    ? mj.placements.map(p=>({m:mj.models[p.cell], dx:p.x, dz:p.z}))
+    : (which==='*' ? mj.models : [mj.models[which]]).map(m=>({m, dx:0, dz:0}));
+  const list = placed.filter(e=>e.m);
+  const key = f => (f.uv? (f.tp+'/'+f.clut) : '#');
+  const byTex = new Map();
+  let lo=[1e9,1e9,1e9], hi=[-1e9,-1e9,-1e9];
+  const wire=[];
+  for(const {m,dx,dz} of list) for(const f of m.faces){
+    const k=key(f);
+    if(!byTex.has(k)) byTex.set(k,{pos:[],nrm:[],uv:[],col:[],tp:f.tp,clut:f.clut,textured:!!f.uv});
+    const g=byTex.get(k);
+    const P = i => { const j=f.v[i]; const p=[V[j*3]+dx, -V[j*3+1], V[j*3+2]+dz];
+      for(let q=0;q<3;q++){ if(p[q]<lo[q])lo[q]=p[q]; if(p[q]>hi[q])hi[q]=p[q]; }
+      return p; };   // PS1 +Y is down
+    const p=[P(0),P(1),P(2),P(3)];
+    // face normal, used when the record has none (F4 / FT4)
+    const e1=[p[1][0]-p[0][0],p[1][1]-p[0][1],p[1][2]-p[0][2]];
+    const e2=[p[2][0]-p[0][0],p[2][1]-p[0][1],p[2][2]-p[0][2]];
+    let fn=[e1[1]*e2[2]-e1[2]*e2[1], e1[2]*e2[0]-e1[0]*e2[2], e1[0]*e2[1]-e1[1]*e2[0]];
+    const L=Math.hypot(...fn)||1; fn=fn.map(c=>c/L);
+    const NM = i => { if(!f.n) return fn; const j=f.n[i];
+      return [N[j*3]/4096, -N[j*3+1]/4096, N[j*3+2]/4096]; };
+    const UV = i => f.uv ? [f.uv[i*2]/256, f.uv[i*2+1]/256] : [0,0];
+    const CO = f.c ? f.c.map(c=>Math.min(1,c/128)) : [.72,.75,.82];
+    // PS1 quad order v0 v1 v2 / v1 v3 v2
+    for(const [a,b,c] of [[0,1,2],[1,3,2]]) for(const i of [a,b,c]){
+      g.pos.push(...p[i]); g.nrm.push(...NM(i)); g.uv.push(...UV(i)); g.col.push(...CO);
+    }
+    for(const [a,b] of [[0,1],[1,3],[3,2],[2,0]]) wire.push(...p[a],...p[b]);
+  }
+  const mk=(arr,size)=>{const b=GL.createBuffer();GL.bindBuffer(GL.ARRAY_BUFFER,b);
+    GL.bufferData(GL.ARRAY_BUFFER,new Float32Array(arr),GL.STATIC_DRAW);return b;};
+  const groups=[];
+  for(const [k,g] of byTex){
+    const t = g.textured ? (texList.find(t=>t.tpage===g.tp&&t.clut===g.clut)) : null;
+    groups.push({textured:g.textured, url:t?t.file:null,
+      pos:mk(g.pos), nrm:mk(g.nrm), uv:mk(g.uv), col:mk(g.col), n:g.pos.length/3,
+      tp:g.tp, clut:g.clut});
+  }
+  const center=[0,1,2].map(k=>(lo[k]+hi[k])/2);
+  const radius=Math.max(1,Math.max(hi[0]-lo[0],hi[1]-lo[1],hi[2]-lo[2])/2);
+  return {groups, wire:{buf:mk(wire), n:wire.length/3}, center, radius,
+          faces:list.reduce((a,e)=>a+e.m.faces.length,0), verts:mj.vertexCount};
+}
+
+/* ------------------------------------------------------------------ camera */
+let cam={yaw:2.5, pitch:0.32, dist:2.6, panx:0, pany:0};
+function draw(){
+  if(!GL||!SCENE)return;
+  const cv=$('#gl'), dpr=Math.min(devicePixelRatio||1,2);
+  const w=cv.clientWidth*dpr|0, h=cv.clientHeight*dpr|0;
+  if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}
+  GL.viewport(0,0,w,h);
+  GL.clearColor(0.055,0.06,0.075,1);GL.clear(GL.COLOR_BUFFER_BIT|GL.DEPTH_BUFFER_BIT);
+  const s=1/SCENE.radius;
+  const model=mMul(mMul(mRotY(cam.yaw),mRotX(cam.pitch)),
+                   mMul(mScale(s),mTrans(-SCENE.center[0],-SCENE.center[1],-SCENE.center[2])));
+  const view=mTrans(cam.panx,cam.pany,-cam.dist);
+  const proj=mPersp(0.9, (cv.clientWidth||1)/(cv.clientHeight||1), 0.01, 100);
+  const mvp=mMul(proj,mMul(view,model));
+  GL.uniformMatrix4fv(LOC.uMVP,false,mvp);
+  GL.uniformMatrix3fv(LOC.uN,false,m3of(mMul(mRotY(cam.yaw),mRotX(cam.pitch))));
+  const useTex=$('#cbTex').checked, wire=$('#cbWire').checked;
+  const bind=(loc,buf,size)=>{GL.bindBuffer(GL.ARRAY_BUFFER,buf);GL.vertexAttribPointer(loc,size,GL.FLOAT,false,0,0);};
+  if(!wire){
+    for(const g of SCENE.groups){
+      GL.activeTexture(GL.TEXTURE0);
+      GL.bindTexture(GL.TEXTURE_2D, (g.textured&&useTex&&g.url)?loadTex(g.url):WHITE);
+      GL.uniform1i(LOC.uTex,0);
+      GL.uniform1f(LOC.uUseTex,(g.textured&&useTex&&g.url)?1:0);
+      GL.uniform1f(LOC.uFlat,0);
+      bind(LOC.aPos,g.pos,3);bind(LOC.aNrm,g.nrm,3);bind(LOC.aUV,g.uv,2);bind(LOC.aCol,g.col,3);
+      GL.drawArrays(GL.TRIANGLES,0,g.n);
+    }
+  } else {
+    GL.bindTexture(GL.TEXTURE_2D,WHITE);
+    GL.uniform1f(LOC.uUseTex,0);GL.uniform1f(LOC.uFlat,1);
+    GL.vertexAttrib3f(LOC.aNrm,0,1,0);GL.vertexAttrib2f(LOC.aUV,0,0);GL.vertexAttrib3f(LOC.aCol,1,.55,.24);
+    GL.disableVertexAttribArray(LOC.aNrm);GL.disableVertexAttribArray(LOC.aUV);GL.disableVertexAttribArray(LOC.aCol);
+    bind(LOC.aPos,SCENE.wire.buf,3);
+    GL.drawArrays(GL.LINES,0,SCENE.wire.n);
+    GL.enableVertexAttribArray(LOC.aNrm);GL.enableVertexAttribArray(LOC.aUV);GL.enableVertexAttribArray(LOC.aCol);
+  }
+}
+function hookCanvas(){
+  const cv=$('#gl'); let down=false,lx=0,ly=0,btn=0;
+  cv.addEventListener('mousedown',e=>{down=true;lx=e.clientX;ly=e.clientY;btn=e.button;e.preventDefault();});
+  addEventListener('mouseup',()=>down=false);
+  addEventListener('mousemove',e=>{ if(!down)return;
+    const dx=e.clientX-lx, dy=e.clientY-ly; lx=e.clientX;ly=e.clientY;
+    if(btn===0){cam.yaw+=dx*0.008; cam.pitch=Math.max(-1.5,Math.min(1.5,cam.pitch+dy*0.008));}
+    else {cam.panx+=dx*0.004; cam.pany-=dy*0.004;}
+    draw();});
+  cv.addEventListener('contextmenu',e=>e.preventDefault());
+  cv.addEventListener('wheel',e=>{e.preventDefault();
+    cam.dist=Math.max(0.4,Math.min(30,cam.dist*Math.exp(e.deltaY*0.0012)));draw();},{passive:false});
+  addEventListener('resize',draw);
+  $('#cbTex').onchange=$('#cbWire').onchange=draw;
+  $('#btnReset').onclick=()=>{cam={yaw:2.5,pitch:0.32,dist:2.6,panx:0,pany:0};draw();};
+}
+
+/* -------------------------------------------------------------------- tabs */
+const TABS=[['model','3D model'],['tex','textures'],['audio','sounds'],['vram','VRAM'],['info','structure'],['hex','hex']];
+let tab='info';
+function setTab(t){ tab=t;
+  for(const [k] of TABS){ $('#v-'+k).classList.toggle('on',k===t); }
+  document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('on',e.dataset.t===t));
+  if(t==='model')draw();
+  if(t==='hex')loadHex();
+}
+function renderTabs(a){
+  const has={model:!!(a.model||(a.banks||[]).some(b=>b.file)), tex:!!((a.textures||[]).length||(a.banks||[]).some(b=>b.textures&&b.textures.length)),
+             audio:!!(a.sounds&&a.sounds.length), vram:!!a.vram, info:true, hex:!!a.raw};
+  has.tex = has.tex || !!(a.sprites&&a.sprites.length);
+  $('#tabs').innerHTML=TABS.map(([k,l])=>
+    `<div class="tab ${has[k]?'':'off'} ${k===tab?'on':''}" data-t="${k}">${l}</div>`).join('');
+  document.querySelectorAll('.tab').forEach(e=>e.onclick=()=>setTab(e.dataset.t));
+  if(!has[tab]) setTab(has.model?'model':(has.tex?'tex':'info'));
+}
+
+/* ------------------------------------------------------------------ panels */
+function banksOf(a){
+  const out=[];
+  if(a.model) out.push({label:'bank', ...a.model, textures:a.textures||[]});
+  for(const b of a.banks||[]) if(b.file) out.push({label:'sub-block '+b.sub, ...b});
+  return out;
+}
+async function showModel(a){
+  const banks=banksOf(a);
+  if(!banks.length)return;
+  $('#bankSel').innerHTML=banks.map((b,i)=>`<option value=${i}>${b.label} — ${b.modelCount} models</option>`).join('');
+  $('#bankSel').style.display=banks.length>1?'':'none';
+  const pick=async()=>{
+    const b=banks[+$('#bankSel').value];
+    if(!MODELJSON[b.file]) MODELJSON[b.file]=await getJSON(b.file);
+    const mj=MODELJSON[b.file];
+    $('#modelSel').innerHTML=
+      (mj.placements?`<option value="@">assembled track — ${mj.placements.length} placed cells</option>`:'')+
+      '<option value="*">all '+mj.modelCount+(mj.placements?' cells':' models')+' (overlaid)</option>'+
+      mj.models.map(m=>`<option value=${m.index}>${mj.placements?'cell':'model'} ${m.index} — ${m.faceCount} faces</option>`).join('');
+    const rebuild=()=>{ const w=$('#modelSel').value;
+      SCENE=buildScene(mj,b.textures||[], (w==='*'||w==='@')?w:+w);
+      $('#glinfo').innerHTML=`${fmt(SCENE.faces)} quads &middot; ${fmt(SCENE.verts)} shared vertices<br>`+
+        `${SCENE.groups.filter(g=>g.textured).length} texture pages &middot; drag rotate &middot; right-drag pan &middot; wheel zoom`;
+      draw(); };
+    $('#modelSel').onchange=rebuild; rebuild();
+  };
+  $('#bankSel').onchange=pick; await pick();
+}
+function showTex(a){
+  const groups=[];
+  if((a.textures||[]).length) groups.push(['textures',a.textures]);
+  for(const b of a.banks||[]) if((b.textures||[]).length) groups.push([b.label||('sub-block '+b.sub),b.textures]);
+  const sp=(a.sprites||[]).length? `<h2>image blocks decoded &mdash; ${a.sprites.length} sprites</h2>
+      <p class=note>Bit depth is <b>inferred</b>: a block preceded by a 16-entry CLUT is read
+      as 4&nbsp;bpp, 256 entries as 8&nbsp;bpp, no CLUT as 16&nbsp;bpp direct. The block header
+      itself only stores a VRAM rectangle in 16-bit words.</p>
+      <div class=tiles>`+a.sprites.map(t=>
+        `<div class=tile><img src="${t.file}" style="max-width:320px" loading=lazy>
+         <div class=cap>${t.w} &times; ${t.h} &middot; ${t.bpp}bpp &middot; VRAM ${t.vramX},${t.vramY}</div></div>`).join('')+`</div>`
+    : '';
+  $('#v-tex').innerHTML = sp + (groups.length? groups.map(([label,ts])=>
+    `<h2>${label} — ${ts.length} pages</h2><div class=tiles>`+ts.map(t=>
+      `<div class=tile><img src="${t.file}" width=192 height=192 loading=lazy>
+       <div class=cap>tpage ${hex(t.tpage)} &middot; ${t.bpp}bpp &middot; page ${t.pageX},${t.pageY}<br>
+       clut ${hex(t.clut)} @ ${t.clutX},${t.clutY}</div></div>`).join('')+`</div>`).join('')
+    : (sp?'':'<p class=note>No textured primitives in this asset.</p>'));
+}
+function showAudio(a){
+  if(!(a.sounds&&a.sounds.length)){$('#v-audio').innerHTML='<p class=note>No sampled audio in this asset.</p>';return;}
+  const v=a.vab||{};
+  $('#v-audio').innerHTML=`<h2>VAB &mdash; ${a.sounds.length} samples</h2>
+    <p class=note>${v.programs} programs, ${v.tones} tones, ${v.vags} VAGs, master volume ${v.masterVolume}.
+    Sony SPU&nbsp;ADPCM decoded to 16-bit PCM and played at a nominal 44.1&nbsp;kHz; the pitch the game
+    actually uses comes from the per-tone attributes, so these are samples, not notes.</p>
+    <table><tr><th>#<th>ADPCM bytes<th>samples<th>play</tr>`+
+    a.sounds.map((s,i)=>`<tr><td>${i}<td>${fmt(s.bytes)}<td>${fmt(s.samples)}
+      <td><audio controls preload=none src="${s.file}" style="height:28px"></audio></tr>`).join('')+`</table>`;
+}
+function showVram(a){
+  $('#v-vram').innerHTML = a.vram
+    ? `<h2>VRAM after this asset uploads — 1024 &times; 512, 16 bpp raw view</h2>
+       <p class=note>Indexed (4/8 bpp) regions look like noise here; that is what the raw
+       framebuffer contains. ${a.vramSources?'Built from: '+esc(a.vramSources.join(', '))+'.':''}
+       Decoded pages are on the <b>textures</b> tab.</p>
+       <img id=vramimg src="${a.vram.file}">
+       <h2>${a.vram.rects.length} uploaded rectangles</h2>
+       <table><tr><th>x<th>y<th>w<th>h</tr>${a.vram.rects.slice(0,400).map(r=>
+         `<tr><td>${r[0]}<td>${r[1]}<td>${r[2]}<td>${r[3]}</tr>`).join('')}</table>`
+    : '<p class=note>This asset uploads nothing to VRAM.</p>';
+}
+function showInfo(a){
+  let h=`<h2>${esc(a.name)} <span class=pill>${a.kind}</span><span class=pill>${a.confidence}</span></h2>
+  <table>
+   <tr><th>archive index<td>${a.index} (${hex(a.index,2)})</tr>
+   <tr><th>size<td>${fmt(a.size)} bytes</tr>
+   <tr><th>disc LBA<td>${a.lba} (RAGE.BIN + ${a.sectorOffset} sectors)</tr>
+   ${a.summary?`<tr><th>decoded<td>${esc(a.summary)}</tr>`:''}
+   ${a.error?`<tr><th>error<td style="color:var(--bad)">${esc(a.error)}</tr>`:''}
+  </table>`;
+  if(a.carFlags) h+=`<h2>car data block</h2><table>
+    <tr><th>gearbox<td>${a.carFlags.automaticGearbox?'automatic available':'manual only'}</tr>
+    <tr><th>gears<td>${a.carFlags.gears}</tr></table>`;
+  if(a.subBlocks) h+=`<h2>sub-blocks</h2><table><tr><th>#<th>offset<th>role</tr>`+
+    a.subBlocks.map(s=>`<tr><td>${s.n}<td>${hex(s.offset,6)}<td>${esc(s.role)}</tr>`).join('')+`</table>`;
+  const bs=banksOf(a);
+  if(bs.length) h+=`<h2>model banks</h2><table><tr><th><th>models<th>vertices<th>normals<th>faces</tr>`+
+    bs.map(b=>`<tr><td>${esc(b.label)}<td>${b.modelCount}<td>${fmt(b.vertexCount)}<td>${fmt(b.normalCount)}<td>${fmt(b.faceCount)}</tr>`).join('')+`</table>`;
+  if(a.vab) h+=`<h2>VAB header</h2><table>`+
+    Object.entries(a.vab).map(([k,v])=>`<tr><th>${esc(k)}<td>${typeof v==='number'?fmt(v):esc(v)}</tr>`).join('')+`</table>`;
+  if(a.vabBodyOf!=null) h+=`<p class=note>Raw VAB body; its header is asset ${a.vabBodyOf}, where the decoded samples are listed.</p>`;
+  if(a.courseModelCount!=null) h+=`<h2>course objects</h2><p class=note>${a.courseModelCount} registered course models (12-byte records; the
+    per-object geometry inside them is <b>not decoded</b>).</p>`;
+  if(a.imageBlocks&&a.imageBlocks.length) h+=`<h2>image blocks (${a.imageBlocks.length})</h2>
+    <table><tr><th>x<th>y<th>w<th>h<th>bytes<th></tr>`+a.imageBlocks.slice(0,300).map(b=>
+      `<tr><td>${b.x}<td>${b.y}<td>${b.w}<td>${b.h}<td>${fmt(b.size)}<td>${b.clut?'CLUT':''}</tr>`).join('')+`</table>`;
+  $('#v-info').innerHTML=h;
+}
+let HEXFOR=null;
+async function loadHex(){
+  const a=CUR; if(!a||!a.raw){$('#v-hex').innerHTML='<p class=note>Run the extractor without <code>--no-raw</code> to get a hex view.</p>';return;}
+  if(HEXFOR===a.index)return;
+  $('#v-hex').innerHTML='<p class=note>loading…</p>';
+  // Range is a hint; a plain static server ignores it, so cap on this side too.
+  const r=await fetch(a.raw,{headers:{Range:'bytes=0-16383'}});
+  const b=new Uint8Array(await r.arrayBuffer()).subarray(0,16384);
+  let out='';
+  for(let i=0;i<b.length;i+=16){
+    const row=b.subarray(i,i+16);
+    out+=`<span class=off>${i.toString(16).padStart(6,'0')}</span>  `
+      + [...row].map(x=>x.toString(16).padStart(2,'0')).join(' ').padEnd(48,' ')
+      + '  ' + [...row].map(x=>x>=32&&x<127?String.fromCharCode(x):'.').join('')
+        .replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])) + '\n';
+  }
+  $('#v-hex').innerHTML=`<h2>first ${fmt(b.length)} bytes of ${fmt(a.size)}</h2><pre class=hex>${out}</pre>`;
+  HEXFOR=a.index;
+}
+
+/* -------------------------------------------------------------------- list */
+function renderList(){
+  const q=$('#q').value.toLowerCase(), k=$('#kind').value;
+  const rows=ASSETS.filter(a=>(!q||a.name.toLowerCase().includes(q))&&(!k||a.kind===k));
+  $('#list').innerHTML=rows.map(a=>
+    `<div class="row ${CUR&&a.index===CUR.index?'sel':''}" data-i=${a.index}>
+      <span class=ix>${a.index}</span><span class="dot d-${a.confidence}"></span>
+      <span class=nm>${esc(a.name)}</span><span class=kd>${a.kind.replace(/_/g,' ')}</span></div>`).join('')
+    || '<div class=pad><span class=note>nothing matches</span></div>';
+  $('#list').querySelectorAll('.row').forEach(e=>e.onclick=()=>select(+e.dataset.i));
+}
+async function select(i){
+  CUR=ASSETS.find(a=>a.index===i); HEXFOR=null; SCENE=null;
+  renderList(); renderTabs(CUR);
+  showInfo(CUR); showTex(CUR); showVram(CUR); showAudio(CUR);
+  if(banksOf(CUR).length) await showModel(CUR);
+  if(tab==='hex')loadHex();
+  if(tab==='model')draw();
+}
+
+/* -------------------------------------------------------------------- boot */
+(async function(){
+  try{ MAN=await getJSON('manifest.json'); }
+  catch(e){ $('#booterr').textContent=e.message; return; }
+  $('#boot').remove();
+  ASSETS=MAN.assets;
+  $('#hmeta').textContent=`${MAN.disc.label} · RAGE.BIN LBA ${MAN.archive.lba} · `+
+    `${ASSETS.length} assets · ${fmt(MAN.archive.size)} bytes · ${MAN.streams.length} FMV streams`;
+  const kinds=[...new Set(ASSETS.map(a=>a.kind))].sort();
+  $('#kind').innerHTML='<option value="">all types ('+ASSETS.length+')</option>'+
+    kinds.map(k=>`<option value="${k}">${k.replace(/_/g,' ')} (${ASSETS.filter(a=>a.kind===k).length})</option>`).join('');
+  $('#q').oninput=$('#kind').onchange=renderList;
+  initGL(); hookCanvas(); renderList();
+  await select(ASSETS.find(a=>a.kind==='car_model')?.index ?? ASSETS[0].index);
+  setTab(banksOf(CUR).length?'model':'info');
+})();
+</script>
