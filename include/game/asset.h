@@ -189,7 +189,7 @@ extern char g_PathRageStr[];
 void InstallResourceData(void *arg0);
 void LoadCarModel(s32);
 void LoadUpgradedCarModel(s32);
-void SetCarSpec(void);
+void SetCarSpec(u32 spec);
 
 /* Declared identically by 3 translation units before this
  * header carried them. */

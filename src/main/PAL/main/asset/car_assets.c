@@ -13,7 +13,7 @@ extern s32 g_TeamLogoSampleData;
 extern u8 *g_ImageBlockBuffer;
 extern u8 *g_AssetBlockPtr2;
 extern u8 *g_AssetSubBlockPtr;
-void RegisterCourseModels(void);
+void RegisterCourseModels(void *base);
 void SelectCarModelSlot(s32 slot);
 void UploadImageAsset(void *asset);
 void ApplyBodyColor1(s32 colour, s32 imageData);
@@ -44,7 +44,8 @@ void LoadCarSelectAssets(void) {
     GameCarModelAsset *model;
     s32 carIndex;
     s32 firstOffset;
-    register s32 secondOffset asm("$4");
+    s32 secondOffset;
+    s32 blockOffset;
     s32 assetOffset;
     s32 modelPtr;
     s32 relOffset;
@@ -68,13 +69,13 @@ void LoadCarSelectAssets(void) {
                 RegisterModelBank((u8 *)g_AssetLoadCursor + 0xC, 0xE);
 
                 header = g_AssetLoadCursor;
-                secondOffset = header->offsets[1];
+                blockOffset = header->offsets[1];
                 firstOffset = header->offsets[0];
-                secondOffset = (s32)((u8 *)header + secondOffset);
+                secondOffset = (s32)((u8 *)header + blockOffset);
                 header = (GameSceneAssetHeader *)((u8 *)header + firstOffset);
                 g_TeamLogoSampleData = (s32)header;
                 g_AssetBlockPtr = (u8 *)secondOffset;
-                RegisterCourseModels();
+                RegisterCourseModels(g_AssetBlockPtr);
 
                 imageHeader = g_AssetLoadCursor;
                 assetOffset = imageHeader->offsets[2];

@@ -16,16 +16,14 @@ void BeginFmv(void);
 
 void LoadTrackDataAssets(void) {
     GameSceneAssetHeader *header;
-    register void *dst asm("$5");
+    void *dst;
     s32 offset;
 
     switch (g_AssetLoadState) {
     case 1:
         dst = g_AssetLoadCursor;
-        offset = g_CourseIndex;
-        __asm__ volatile("" : "=r"(offset) : "0"(offset));
-        header = (GameSceneAssetHeader *)g_GrandPrixClass;
-        if (LoadAsset(((s32)header * 8) + (offset * 2) + 0x58, dst) != 0) {
+        offset = g_CourseIndex * 2;
+        if (LoadAsset((g_GrandPrixClass * 8) + offset + 0x58, dst) != 0) {
             header = g_AssetLoadCursor;
             offset = header->offsets[0];
             g_AssetBlockPtr = (u8 *)header + offset;

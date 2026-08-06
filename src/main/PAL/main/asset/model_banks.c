@@ -32,95 +32,49 @@ s32 GetCarUnlockLevel(s32 model) {
 }
 
 void InitRenderState(s32 otShift) {
-    register s32 value asm("$2");
-    register s32 ptr asm("$2");
-    s32 mirror;
-
-    mirror = g_MirrorMode;
-    value = 0xA;
-    SPAD_FACE_OT_SHIFT = value;
-    value = 0x80;
-    SPAD_FT4_B = value;
-    SPAD_FT4_G = value;
-    SPAD_FT4_R = value;
-    value = 0x2C;
-    SPAD_FT4_CODE = value;
-    value = 0xFF;
-    SPAD_GT4_B = value;
-    SPAD_GT4_G = value;
-    SPAD_GT4_R = value;
-    value = 0x3C;
-    SPAD_GT4_CODE = value;
-    value = 0x140;
-    SPAD_CLIP_X1 = value;
-    value = 0xF0;
-    SPAD_CLIP_Y1 = value;
-    ptr = (s32)&D_8019C86C;
-    g_VisibleCellMask = (void *)ptr;
-    ptr = (s32)&D_8009EC94;
+    SPAD_FACE_OT_SHIFT = 0xA;
+    SPAD_FT4_B = 0x80;
+    SPAD_FT4_G = 0x80;
+    SPAD_FT4_R = 0x80;
+    SPAD_FT4_CODE = 0x2C;
+    SPAD_GT4_B = 0xFF;
+    SPAD_GT4_G = 0xFF;
+    SPAD_GT4_R = 0xFF;
+    SPAD_GT4_CODE = 0x3C;
+    SPAD_CLIP_X1 = 0x140;
+    SPAD_CLIP_Y1 = 0xF0;
+    g_VisibleCellMask = &D_8019C86C;
     SPAD_OT_SHIFT = otShift;
     SPAD_CLIP_X0 = 0;
     SPAD_CLIP_Y0 = 0;
-    g_VisibleCellList = (void *)ptr;
-    SPAD_MIRROR = mirror;
+    g_VisibleCellList = &D_8009EC94;
+    SPAD_MIRROR = g_MirrorMode;
 }
 
 void RegisterModelBank(s32 *base, s32 index) {
     s32 *ptr;
     s32 i;
-    register s32 value asm("$2");
-    s32 count;
-    s32 pad[2];
 
-    (void)&pad;
     ptr = base + 3;
     g_ModelBanks[index] = base;
-    value = base[1];
-    i = 0;
-    value = (u8 *)base + value;
-    base[1] = value;
-    value = base[2];
-    count = base[0];
-    value = (u8 *)base + value;
-    base[2] = value;
-    if (count != 0) {
-        do {
-            value = *ptr;
-            i++;
-            value = (u8 *)base + value;
-            *ptr = value;
-            value = base[0];
-            ptr++;
-        } while ((u32)i < (u32)value);
+    base[1] = (u8 *)base + base[1];
+    base[2] = (u8 *)base + base[2];
+    for (i = 0; (u32)i < (u32)base[0]; i++) {
+        *ptr = (u8 *)base + *ptr;
+        ptr++;
     }
 }
 
 void UnrelocateModelBank(s32 *base, s32 offset) {
     s32 *ptr;
     s32 i;
-    register s32 value asm("$2");
-    s32 count;
-    s32 pad[2];
 
-    (void)&pad;
     ptr = base + 3;
-    value = base[1];
-    i = 0;
-    value -= offset;
-    base[1] = value;
-    value = base[2];
-    count = base[0];
-    value -= offset;
-    base[2] = value;
-    if (count != 0) {
-        do {
-            value = *ptr;
-            i++;
-            value -= offset;
-            *ptr = value;
-            value = base[0];
-            ptr++;
-        } while ((u32)i < (u32)value);
+    base[1] -= offset;
+    base[2] -= offset;
+    for (i = 0; (u32)i < (u32)base[0]; i++) {
+        *ptr -= offset;
+        ptr++;
     }
 }
 
@@ -148,6 +102,11 @@ void RegisterCourseModels(s32 *base) {
     s32 i;
     s32 limit;
     s32 *item;
+    /* The 8-byte frame retail has. Its three sibling loops here get it from
+     * being pre-test loops (gcc 2.6.3 spills a dead ST_REGS pseudo after
+     * duplicate_loop_exit_test); this one cannot, because every pre-test
+     * spelling of a two-pointer loop costs 29 instructions of induction
+     * variables. So the frame is asked for directly. */
     s32 pad[2];
 
     (void)&pad;
@@ -173,32 +132,19 @@ void InstallTerrainCellData(s32 *base) {
     s32 *ptr;
     s32 count;
     s32 i;
-    register s32 value asm("$2");
-    s32 pad[2];
 
-    (void)&pad;
     g_TerrainCellGrid = base;
     base = (s32 *)((u8 *)base + 0x800);
     g_CellVisibilityTable = base;
     base = (s32 *)((u8 *)base + 0x1000);
     ptr = base + 2;
     count = base[0];
-    asm volatile("" : "=r"(count) : "0"(count));
-    value = base[1];
     SPAD_CELL_TABLE = (s32)ptr;
-    value = (u8 *)base + value;
-    asm volatile("" : "=r"(value) : "0"(value));
     D_801E4144 = count;
-    SPAD_CELL_FACES = value;
-    i = 0;
-    if (count > 0) {
-        do {
-            value = *ptr;
-            i++;
-            value = (u8 *)base + value;
-            *ptr = value;
-            ptr++;
-        } while (i < count);
+    SPAD_CELL_FACES = (s32)((u8 *)base + base[1]);
+    for (i = 0; i < count; i++) {
+        *ptr = (u8 *)base + *ptr;
+        ptr++;
     }
 }
 
