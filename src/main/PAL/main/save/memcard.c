@@ -1154,59 +1154,65 @@ s32 WriteMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *header) {
         block1);
 }
 
+/* The header is stored twice, at 0x1280 and at 0x200; the first copy whose
+ * 16-bit sum matches the complement stored in its last word wins.
+ *
+ * The scan is written as ptr[i] rather than *ptr++ so that gcc derives the
+ * walking pointer itself: a strength-reduced giv is initialised after the
+ * counter, which is the order retail emits the two moves in. */
 s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
-    s32 fd;
-    register void *buffer asm("$18");
-    register s32 sum asm("$16");
+    void *buffer;
+    s32 sum;
     s32 i;
-    register u16 *ptr asm("$4");
+    u16 *ptr;
 
-    fd = slot;
     buffer = header;
-    asm("" : "=r"(sum) : "r"(fd), "r"(buffer), "0"(0));
+    sum = 0;
 
     GameMenuLoadPhase = 0x120;
-    if (BiosFileSeek(fd, 0x1280, 0) < 0) {
+    if (BiosFileSeek(slot, 0x1280, 0) < 0) {
         return 0;
     }
 
     GameMenuLoadPhase = 0x130;
-    if (BiosFileRead(fd, buffer, 0x80) != 0x80) {
+    if (BiosFileRead(slot, buffer, 0x80) != 0x80) {
         return 0;
     }
 
     GameMenuLoadPhase = 0x140;
-    i = 0;
     ptr = buffer;
-    do {
-        sum += *ptr++;
-        i++;
-    } while ((u32)i < 0x3E);
+    for (i = 0; (u32)i < 0x3E; i++) {
+        sum += ptr[i];
+    }
+    /* Folding the complement back into sum is what puts it in sum's own
+     * register; a `== ~sum` in the test needs a second one. */
+    sum = ~sum;
 
-    if (*(s32 *)((u8 *)buffer + 0x7C) == ~sum) {
+    if (*(s32 *)((u8 *)buffer + 0x7C) == sum) {
         return 1;
     }
 
     GameMenuLoadPhase = 0x150;
-    if (BiosFileSeek(fd, 0x200, 0) < 0) {
+    if (BiosFileSeek(slot, 0x200, 0) < 0) {
         return 0;
     }
 
     GameMenuLoadPhase = 0x160;
-    if (BiosFileRead(fd, buffer, 0x80) != 0x80) {
+    if (BiosFileRead(slot, buffer, 0x80) != 0x80) {
         return 0;
     }
 
     GameMenuLoadPhase = 0x170;
     sum = 0;
-    i = 0;
     ptr = buffer;
-    do {
-        sum += *ptr++;
-        i++;
-    } while ((u32)i < 0x3E);
+    for (i = 0; (u32)i < 0x3E; i++) {
+        sum += ptr[i];
+    }
+    /* Folding the complement back into sum is what puts it in sum's own
+     * register; a `== ~sum` in the test needs a second one. */
+    sum = ~sum;
 
-    if (*(s32 *)((u8 *)buffer + 0x7C) == ~sum) {
+    if (*(s32 *)((u8 *)buffer + 0x7C) == sum) {
         return 1;
     }
 
@@ -1264,19 +1270,25 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     temp <<= 2;
     temp += slot;
 
+    /* Written as a goto rather than a do/while on purpose: retail recomputes
+     * g_SaveFilePath + nameOffset on both attempts, and any spelling the front
+     * end marks as a loop lets loop.c hoist that pair of insns into the
+     * preheader.  A backward goto never gets a NOTE_INSN_LOOP_BEG, so there is
+     * nowhere to hoist to and the address is rebuilt each time round. */
     {
         s32 nameOffset = temp * 2;
-        register char *name asm("$4");
+        char *name;
 
-        do {
-            name = g_SaveFilePath;
-            name = (char *)(nameOffset + (s32)name);
-            fd = BiosFileOpen(name, 1);
-            if (fd >= 0) {
-                break;
-            }
+    retry:
+        name = g_SaveFilePath;
+        name = (char *)(nameOffset + (s32)name);
+        fd = BiosFileOpen(name, 1);
+        if (fd < 0) {
             tries++;
-        } while (tries < 2);
+            if (tries < 2) {
+                goto retry;
+            }
+        }
     }
 
     GameMenuLoadPhase = tries | 0x3100;
