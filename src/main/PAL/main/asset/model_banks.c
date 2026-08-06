@@ -33,8 +33,8 @@ void InitRenderState(s32 otShift) {
     SPAD_GT4_G = 0xFF;
     SPAD_GT4_R = 0xFF;
     SPAD_GT4_CODE = POLY_GT4_CODE;
-    SPAD_CLIP_X1 = 0x140;
-    SPAD_CLIP_Y1 = 0xF0;
+    SPAD_CLIP_X1 = SCREEN_WIDTH;
+    SPAD_CLIP_Y1 = SCREEN_HEIGHT;
     g_VisibleCellMask = &D_8019C86C;
     SPAD_OT_SHIFT = otShift;
     SPAD_CLIP_X0 = 0;
@@ -133,9 +133,9 @@ void InstallTerrainCellData(s32 *base) {
     s32 i;
 
     g_TerrainCellGrid = (u16 *)base;
-    base = (s32 *)((u8 *)base + 0x800);
+    base = (s32 *)((u8 *)base + TERRAIN_CELL_GRID_SIZE);
     g_CellVisibilityTable = (u8 *)base;
-    base = (s32 *)((u8 *)base + 0x1000);
+    base = (s32 *)((u8 *)base + CELL_VISIBILITY_TABLE_SIZE);
     ptr = base + 2;
     count = base[0];
     SPAD_CELL_TABLE = (s32)ptr;

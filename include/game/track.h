@@ -300,4 +300,21 @@ extern Vec4 g_StaticSceneryPos;
 extern u16 *g_TerrainCellGrid;
 extern u8 *g_CellVisibilityTable;
 
+/*
+ * Their byte sizes, which is all InstallTerrainCellData needs them for - it
+ * steps the sub-block pointer past each in turn. Both fall straight out of how
+ * track/visible_cells.c indexes them, and both are fixed, not per-course:
+ *
+ *   grid       g_TerrainCellGrid[y * 32 + x], a u16 per cell
+ *              -> 32 * 32 * 2 = 0x800
+ *   visibility *(u32 *)(base + y * 0x80 + x * 4), bit = region id
+ *              -> a u32 per cell, 32 * 32 * 4 = 0x1000
+ *
+ * The row stride the code uses is the proof of the second: `arg1 << 7` is
+ * 32 u32 entries per row, and 32 such rows are 0x1000. It also caps region ids
+ * at 32, even though the grid word has room for 64 in its top six bits.
+ */
+#define TERRAIN_CELL_GRID_SIZE      0x800
+#define CELL_VISIBILITY_TABLE_SIZE  0x1000
+
 #endif

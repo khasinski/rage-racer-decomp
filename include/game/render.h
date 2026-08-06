@@ -118,6 +118,14 @@ typedef struct GameScratchpadRenderState {
 #define SPAD_CLIP_X1        (*(u16 *)0x1F80007C)
 #define SPAD_CLIP_Y1        (*(u16 *)0x1F80007E)
 
+/* One display buffer, which is what InitRenderState sets that rectangle to.
+ * See SetupDisplay240 below: the 240 mode is "two 320x240 buffers stacked at
+ * y=0 / y=0xF0" and sets the GTE projection with SetGeomScreen(0x140). The
+ * 480 mode is the pair treated as one, which is the SPAD_CLIP_Y1 = 0x1E0 that
+ * menu/frontend.c writes. */
+#define SCREEN_WIDTH   0x140
+#define SCREEN_HEIGHT  0xF0
+
 typedef struct GameRenderView {
     s16 angle_0;    /* 0x00 */
     s16 angle_2;    /* 0x02 */
