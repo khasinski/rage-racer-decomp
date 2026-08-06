@@ -11,75 +11,75 @@ extern volatile u_char D_8009E0DA[];
 extern volatile u_char D_8009E0DC[];
 extern volatile u_char D_8009E0DE[];
 
-void SpuVmAutoVol(long arg0, long arg1, long arg2, long arg3) {
+/* The three identity asms and the one on stepArg are load-bearing: each keeps
+ * the local copy a distinct pseudo from the parameter it was taken from, so
+ * the entry block reads the argument registers while the two join blocks read
+ * the copies.  Without them cse1 merges each pair into one register.  */
+void SpuVmAutoVol(long voiceArg, long startArg, long targetArg, long stepArg) {
     long voice;
     long start;
     long target;
-    register long step asm("$10");
-    register long offset asm("$2");
-    long delta;
-    register long smallDenom asm("$3");
-    long quotient;
+    long step;
     long start16;
     long target16;
-    register long stepForSmallDiv asm("$4");
     long step16;
 
-    voice = arg0;
+    voice = voiceArg;
     __asm__ volatile("" : "=r"(voice) : "0"(voice));
-    start = arg1;
-    target = arg2;
+    start = startArg;
     __asm__ volatile("" : "=r"(start) : "0"(start));
+    target = targetArg;
     __asm__ volatile("" : "=r"(target) : "0"(target));
-    step = arg3;
-    start16 = (short)arg1;
-    target16 = (short)arg2;
+    step = stepArg;
+
+    start16 = (short)startArg;
+    target16 = (short)targetArg;
 
     if (start16 == target16) {
         return;
     }
 
-    offset = (((((short)arg0 * 2) + (short)arg0) * 4) + (short)arg0) * 4;
+    {
+    long offset = (short)voiceArg * 52;
     *(volatile short *)(g_SndVoiceStateAutoVol + offset) = 1;
     *(volatile short *)(D_8009E0DC + offset) = start;
     *(volatile short *)(D_8009E0DE + offset) = target;
-
-    switch (0) { default:
-    step16 = (short)arg3;
-    delta = start16 - target16;
-    if (delta < 0) {
-        offset = target16 - start16;
-        if (offset >= step16) {
-            break;
-        }
-    } else if (delta >= step16) {
-        do {
-        } while (0);
-        break;
     }
 
-    stepForSmallDiv = (short)step;
-    smallDenom = (short)start;
-    offset = (short)target;
-    smallDenom -= offset;
-    quotient = stepForSmallDiv / smallDenom;
-    smallDenom = (short)voice;
-    offset = ((smallDenom * 3) * 4 + smallDenom) * 4;
+    __asm__ ("" : "=r"(stepArg) : "0"(stepArg));
+    step16 = (short)stepArg;
+    if (start16 - target16 >= 0) {
+        if (start16 - target16 < step16) {
+            goto small;
+        }
+    } else if (target16 - start16 < step16) {
+        goto small;
+    }
+    goto big;
+
+small:
+    {
+    long offset;
+    long quotient;
+    quotient = (short)step / ((short)start - (short)target);
+    offset = (short)voice * 52;
     *(volatile short *)(D_8009E0D6 + offset) = 1;
     *(volatile short *)(D_8009E0D8 + offset) = quotient;
     *(volatile short *)(D_8009E0DA + offset) = quotient;
     return;
-
     }
-    stepForSmallDiv = (short)start;
-    offset = (short)target;
-    stepForSmallDiv -= offset;
-    offset = (short)step;
-    quotient = stepForSmallDiv / offset;
-    smallDenom = (short)voice;
-    offset = ((smallDenom * 3) * 4 + smallDenom) * 4;
+
+big:
+    {
+    long offset;
+    long quotient;
+    quotient = (short)start;
+    quotient -= (short)target;
+    quotient /= (short)step;
+    offset = (short)voice * 52;
     *(volatile short *)(D_8009E0D8 + offset) = 0;
     *(volatile short *)(D_8009E0D6 + offset) = quotient;
+    }
 }
 
 extern u_short g_SndVoiceRegs[];
@@ -180,75 +180,72 @@ void SpuVmAutoVolTick(short voice) {
     g_SndVoiceFlags[voice] |= 3;
 }
 
-void SpuVmAutoPan(long arg0, long arg1, long arg2, long arg3) {
+/* Same shape as SpuVmAutoVol above; see the note there about the asms. */
+void SpuVmAutoPan(long voiceArg, long startArg, long targetArg, long stepArg) {
     long voice;
     long start;
     long target;
-    register long step asm("$10");
-    register long offset asm("$2");
-    long delta;
-    register long smallDenom asm("$3");
-    long quotient;
+    long step;
     long start16;
     long target16;
-    register long stepForSmallDiv asm("$4");
     long step16;
 
-    voice = arg0;
+    voice = voiceArg;
     __asm__ volatile("" : "=r"(voice) : "0"(voice));
-    start = arg1;
-    target = arg2;
+    start = startArg;
     __asm__ volatile("" : "=r"(start) : "0"(start));
+    target = targetArg;
     __asm__ volatile("" : "=r"(target) : "0"(target));
-    step = arg3;
-    start16 = (short)arg1;
-    target16 = (short)arg2;
+    step = stepArg;
+
+    start16 = (short)startArg;
+    target16 = (short)targetArg;
 
     if (start16 == target16) {
         return;
     }
 
-    offset = (((((short)arg0 * 2) + (short)arg0) * 4) + (short)arg0) * 4;
+    {
+    long offset = (short)voiceArg * 52;
     *(volatile short *)(g_SndVoiceStateAutoPan + offset) = 1;
     *(volatile short *)(g_SndVoiceStateStartPan + offset) = start;
     *(volatile short *)(g_SndVoiceStateEndPan + offset) = target;
-
-    switch (0) { default:
-    step16 = (short)arg3;
-    delta = start16 - target16;
-    if (delta < 0) {
-        offset = target16 - start16;
-        if (offset >= step16) {
-            break;
-        }
-    } else if (delta >= step16) {
-        do {
-        } while (0);
-        break;
     }
 
-    stepForSmallDiv = (short)step;
-    smallDenom = (short)start;
-    offset = (short)target;
-    smallDenom -= offset;
-    quotient = stepForSmallDiv / smallDenom;
-    smallDenom = (short)voice;
-    offset = ((smallDenom * 3) * 4 + smallDenom) * 4;
+    __asm__ ("" : "=r"(stepArg) : "0"(stepArg));
+    step16 = (short)stepArg;
+    if (start16 - target16 >= 0) {
+        if (start16 - target16 < step16) {
+            goto small;
+        }
+    } else if (target16 - start16 < step16) {
+        goto small;
+    }
+    goto big;
+
+small:
+    {
+    long offset;
+    long quotient;
+    quotient = (short)step / ((short)start - (short)target);
+    offset = (short)voice * 52;
     *(volatile short *)(g_SndVoiceStatePanStep + offset) = 1;
     *(volatile short *)(g_SndVoiceStatePanCounter + offset) = quotient;
     *(volatile short *)(g_SndVoiceStatePanCounterReload + offset) = quotient;
     return;
-
     }
-    stepForSmallDiv = (short)start;
-    offset = (short)target;
-    stepForSmallDiv -= offset;
-    offset = (short)step;
-    quotient = stepForSmallDiv / offset;
-    smallDenom = (short)voice;
-    offset = ((smallDenom * 3) * 4 + smallDenom) * 4;
+
+big:
+    {
+    long offset;
+    long quotient;
+    quotient = (short)start;
+    quotient -= (short)target;
+    quotient /= (short)step;
+    offset = (short)voice * 52;
     *(volatile short *)(g_SndVoiceStatePanCounter + offset) = 0;
     *(volatile short *)(g_SndVoiceStatePanStep + offset) = quotient;
+    }
 }
 
 extern u_char g_SndVoiceFlags[];
