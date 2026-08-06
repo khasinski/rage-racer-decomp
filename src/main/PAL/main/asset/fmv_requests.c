@@ -5,7 +5,6 @@
 #include "game/render.h"
 
 
-void BeginFmv(s32 returnScene);
 
 void LoadTrackDataAssets(void) {
     GameSceneAssetHeader *header;

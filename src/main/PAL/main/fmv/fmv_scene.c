@@ -15,7 +15,6 @@ void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 extern s32 g_StreamReturnScene;
 void CdSync(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result);
-void BeginFmv(s32 arg0);
 extern u32 g_AssetBase;
 void StartFmvPlayback(u32 arg0);
 

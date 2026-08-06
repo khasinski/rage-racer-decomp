@@ -80,7 +80,7 @@ extern s32 g_AnimTimer;
  * in g_StreamReturnScene and sets g_SceneId = 5; from then on UpdateFmv runs
  * per frame and walks g_FmvState through 0 (start) -> 1 (decode) -> 2 (finish).
  * Start (pad bit 0x800) or the end of the stream both move it to 2.
- * The per-TU-typed members of the family - BeginFmv, StartFmvPlayback,
+ * The per-TU-typed members of the family - StartFmvPlayback,
  * SetupFmvBuffers, InitFmvContext, OpenFmvStream,
  * PresentFmvFrame, WaitFmvDecode, StartStreamRead - keep their
  * aliased declarations in each file; see docs/names.md 13.
@@ -88,6 +88,9 @@ extern s32 g_AnimTimer;
 /* Start one of the three streams; returnScene is the g_SceneId to come back
  * to when it ends. Each is a thin wrapper that forwards its argument to
  * BeginFmv and then picks the g_StreamCdEntries entry. */
+/* Shared prologue of the three: close the audio slots, park g_SceneId at 5
+ * and record returnScene in g_StreamReturnScene. */
+void BeginFmv(s32 returnScene);
 void BeginIntroFmv(s32 returnScene);
 void BeginClassFmv(s32 returnScene);
 void BeginEndingFmv(s32 returnScene);
