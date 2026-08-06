@@ -4,7 +4,7 @@
 s32 GameQueueSpriteTrans(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 extern u8 * volatile g_DrawBuffer;
-extern volatile u8 g_PadType;
+extern u8 g_PadType;
 
 /* The 0xC x 0x18 selection arrow every setup-menu list draws at x = 0x14. */
 void DrawMenuCursorArrow(s32 arg0, s32 arg1) {
@@ -61,27 +61,25 @@ void DrawPadTypeHint(void) {
     s32 w;
     s32 y0;
     s32 base;
-    register s32 raw_base asm("$2");
-    register s32 value asm("$3");
+    s32 padType;
+    s32 rawPadType;
     s32 scratch;
     s32 next;
 
-    raw_base = (s32)g_DrawBuffer;
-    value = g_PadType;
+    base = (s32)g_DrawBuffer + 0xCC;
+    rawPadType = g_PadType;
     scratch = *(s32 *)0x1F800000;
     next = scratch;
-    base = raw_base + 0xCC;
 
-    if (value != 0x41 && value != 0x23) {
-        value = g_LastValidPadType;
+    if (rawPadType != 0x41 && rawPadType != 0x23) {
+        padType = g_LastValidPadType;
     } else {
-        raw_base = g_PadType;
-        asm("" : "=r"(raw_base) : "0"(raw_base));
-        value = (u8)raw_base;
-        g_LastValidPadType = raw_base;
+        rawPadType = g_PadType;
+        padType = (u8)rawPadType;
+        g_LastValidPadType = rawPadType;
     }
 
-    y0 = value == 0x23 ? 0xA0 : 0x90;
+    y0 = padType == 0x23 ? 0xA0 : 0x90;
     w = 8;
     h = 0x10;
     y2 = 0xB8;
