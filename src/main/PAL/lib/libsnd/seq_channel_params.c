@@ -85,10 +85,9 @@ void SsSeqApplyControlChange(long seq, long sep, u_char value) {
         long seq_cb;
         long sep_cb;
         void (*callback)(long, long, u_char);
-        register long raw_shift asm("$2");
+        long raw_shift = seq_raw << 16;
 
         seq_cb = seq_raw << 16;
-        raw_shift = seq_raw << 16;
         seq_cb = raw_shift >> 16;
         callback = g_SndMarkCallbacks[seq_cb][(short)sep_raw];
         if (callback != 0) {
