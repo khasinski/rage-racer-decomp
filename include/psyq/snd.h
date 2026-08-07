@@ -67,7 +67,7 @@ void SsSeqRestartPlayback(short seq, short sep);
 void SsSeqPause(long seq, long sep);
 void SsSeqAdvanceChannelTick(long seq, long sep);
 void SsSeqResume(long seq, long sep);
-void SsSeqClose(long seq);
+void SsSeqClose(short seq);
 void SsSeqCloseWrapper(short seq);
 void SsSepCloseWrapper(short seq);
 void _SsInitTables(void);
