@@ -135,6 +135,7 @@ void LoadAudioParameterTable(u16 *table) {
     s32 col;
     s32 step;
     s32 *leftPtr;
+    s32 tableValue;
 
     bank = 0;
     do {
@@ -154,26 +155,21 @@ void LoadAudioParameterTable(u16 *table) {
         bank++;
     } while (bank < 2);
 
-    {
-        register s32 scale asm("$6");
-
-        scale = *tableReg;
-        tableReg++;
-        bank = 0;
-        SetLoadedTableVolumeScale(scale);
-    }
+    tableValue = *tableReg;
+    tableReg++;
+    bank = 0;
+    SetLoadedTableVolumeScale(tableValue);
 
     do {
         row = 0;
         do {
             s32 rowArg;
-            s32 tone;
 
-            tone = *tableReg;
+            tableValue = *tableReg;
             tableReg++;
             rowArg = row;
             row++;
-            SetSoundToneTableEntry(rowArg, bank, tone);
+            SetSoundToneTableEntry(rowArg, bank, tableValue);
         } while (row < 6);
         bank++;
     } while (bank < 2);
