@@ -7,7 +7,7 @@ long SpuGetKeyStatus(u_long arg0) {
     long voice = -1;
     long i = 0;
     u_long mask = 1;
-    register u_long value asm("$3");
+    u_short value;
     long ret;
 
 do {
