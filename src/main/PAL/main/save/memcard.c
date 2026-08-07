@@ -893,29 +893,35 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     {
-        register s32 count asm("$13") = 0;
-        u16 *dst = g_TeamLogoClut;
-        u8 *src = base;
-        for (; count < 0x10; count++) {
-            *dst++ = *(u16 *)(src + 0x1BC);
-            src += 2;
-        }
-    }
-
-    {
-        register s32 count asm("$13") = 0;
-        u16 *dst = g_TeamLogoCanvas;
-        u8 *src = base;
-        for (; count < 0x400; count++) {
-            *dst++ = *(u16 *)(src + 0x1DC);
-            src += 2;
-        }
-    }
-
-    {
         register s32 i asm("$13");
         register s32 j asm("$12");
         register s32 k asm("$7");
+
+        {
+            u16 *dst;
+            u8 *src;
+
+            i = 0;
+            dst = g_TeamLogoClut;
+            src = base;
+            for (; i < 0x10; i++) {
+                *dst++ = *(u16 *)(src + 0x1BC);
+                src += 2;
+            }
+        }
+
+        {
+            u16 *dst;
+            u8 *src;
+
+            i = 0;
+            dst = g_TeamLogoCanvas;
+            src = base;
+            for (; i < 0x400; i++) {
+                *dst++ = *(u16 *)(src + 0x1DC);
+                src += 2;
+            }
+        }
 
         /* g_BestLapTimes / g_BestTotalTimes */
         {
