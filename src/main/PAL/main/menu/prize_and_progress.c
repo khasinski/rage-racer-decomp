@@ -5,20 +5,14 @@
 #include "game/audio.h"
 #include "game/screens.h"
 #include "game/sound.h"
-
-typedef struct UnkCopyChunk {
-    u8 raw[8];
-} UnkCopyChunk;
+#include "game/car.h"
 
 void DrawFullscreenFadeTile(s32, s32);
 void DrawPrizeMoneyPanel(s32);
-extern UnkCopyChunk g_SaveDefaults[];
-extern u8 g_TimeAttackCars;
+extern CarEntry g_SaveDefaults[];
 extern s16 g_ClassRecords;
 extern s16 g_ClassClears;
 extern s32 g_ClassWinCount;
-extern u8 g_GrandPrixCars;
-extern u8 g_ExtraGrandPrixCars;
 extern u8 g_ExtraGrandPrixCourseProgress;
 extern u8 g_GrandPrixCourseProgress;
 extern u8 *g_CourseProgress;
@@ -151,8 +145,8 @@ void ApplyAudioSettings(void) {
 }
 
 void ResetProgressSlot(void *arg0, s32 *arg1) {
-    UnkCopyChunk *dst;
-    UnkCopyChunk *src;
+    CarEntry *dst;
+    CarEntry *src;
     s32 i;
 
     i = 0;
@@ -198,10 +192,10 @@ void InitSaveDefaults(void) {
     dst = &g_TimeAttackCars;
     src = &g_SaveDefaults;
     do {
-        __builtin_memcpy(dst, src, sizeof(UnkCopyChunk));
-        dst += sizeof(UnkCopyChunk);
+        __builtin_memcpy(dst, src, sizeof(CarEntry));
+        dst += sizeof(CarEntry);
         i++;
-        src += sizeof(UnkCopyChunk);
+        src += sizeof(CarEntry);
     } while (i < 13);
 
     g_ClassRecords = 0;

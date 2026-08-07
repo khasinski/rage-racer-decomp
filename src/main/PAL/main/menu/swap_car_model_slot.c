@@ -5,6 +5,7 @@
 #include "game/menu.h"
 #include "game/state.h"
 #include "game/asset.h"
+#include "game/car.h"
 #include "game/race.h"
 #include "game/track.h"
 
@@ -27,14 +28,12 @@ void DrawCarSlotHighlight(s32 arg0) {
 }
 
 typedef struct SwObj698 { s32 unk0; u16 unk4; } SwObj698;
-typedef struct SwCarRec { u8 b0, b1, b2, b3, b4, b5, b6, b7; } SwCarRec;
 typedef struct SwModelPose {
     s32 position[4];
     s32 unk10[4];
     Vec4 rotation;
 } SwModelPose;
 
-extern SwCarRec *g_CarTable;
 extern SwObj698 *g_CarModelAsset;
 extern SwModelPose D_8009E6D4 asm("g_PlayerCar");
 
@@ -123,8 +122,8 @@ void DrawMenuCarView(void) {
 
     g_MenuViewOffset = s2 + g_MenuViewOffset;
     s2 = g_MenuViewOffset / 1000;
-    D_8009E782 = GetCarAssetIndex(s1, g_CarTable[s1].b0);
-    D_8009E7B8 = g_CarTable[s1].b1;
+    D_8009E782 = GetCarAssetIndex(s1, g_CarTable[s1].modelVariant);
+    D_8009E7B8 = g_CarTable[s1].tireCompound;
 
     if (g_PadHeld & 2) {
         if (D_8009E718 < 6144) {
@@ -138,7 +137,7 @@ void DrawMenuCarView(void) {
         }
     }
 
-    D_8009E804 = g_CarTable[s1].b2;
+    D_8009E804 = g_CarTable[s1].transmission;
     D_8009E71C = (D_8009E71C + 68) & 0xFFF;
 
     if (g_PadHeld & 4) {

@@ -3,68 +3,13 @@
 #include "game/state.h"
 #include "game/render.h"
 #include "game/car.h"
+#include "game/replay.h"
 
 #define AVG(a, b) (((a) + (b)) / 2)
 
-typedef struct MenuObj {
-    s32 x;
-    s32 y;
-    s32 z;
-    u8 pad0C[0x14];
-    s32 rotX;
-    s32 rotY;
-    s32 rotZ;
-    u8 pad2C[0x18];
-    s32 field44;
-    s32 flags48;
-    u8 pad4C[0x14];
-    s32 z2;
-    u8 pad64[0x28];
-    s16 field8C;
-    u8 pad8E[0x20];
-    s16 variantAE;
-} MenuObj;
-
-typedef struct MenuBigFrame {
-    u16 x0;
-    s16 y0;
-    u16 z0;
-    s16 z20;
-    s16 rotX0;
-    s16 rotY0;
-    s16 rotZ0;
-    s16 flags0;
-    u16 x1;
-    s16 y1;
-    u16 z1;
-    s16 z21;
-    s16 rotX1;
-    s16 rotY1;
-    s16 rotZ1;
-    s16 flags1;
-    u16 field20;
-    u8 pad22[0xA];
-    s16 field44_0;
-    s16 field44_1;
-} MenuBigFrame;
-
-typedef struct MenuSmallFrame {
-    u16 x;
-    s16 y;
-    u16 z;
-    s16 z2;
-    s16 rotX;
-    s16 rotY;
-    s16 rotZ;
-    s16 flags;
-    u16 field10;
-    u8 pad12[0x6];
-    s16 field44;
-} MenuSmallFrame;
-
 extern u16 g_ReplayPlayerModel;
 extern u16 g_ReplayRivalModel;
-extern MenuBigFrame *g_ReplayFramesGp;
+extern ReplayGrandPrixFrame *g_ReplayFramesGp;
 extern s32 g_ReplayWriteCursor;
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
@@ -72,10 +17,10 @@ extern u8 g_PlayerCar;
 extern u8 *g_EnvScriptClock;
 s32 GameQueueDrawModePrimWide(s32 base, s32 next, s32 code) asm("QueueDrawModePrim");
 
-void ApplyReplayFrame(s32 subframe, MenuObj *playerObj, MenuObj *rivalObj) {
+void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *rivalObj) {
     s32 index;
-    MenuBigFrame *big;
-    MenuSmallFrame *small;
+    ReplayGrandPrixFrame *big;
+    ReplayTimeAttackFrame *small;
     if (g_GrandPrixMode != 0) {
         playerObj->variantAE = g_ReplayPlayerModel;
         rivalObj->variantAE = g_ReplayRivalModel;
@@ -131,7 +76,7 @@ void ApplyReplayFrame(s32 subframe, MenuObj *playerObj, MenuObj *rivalObj) {
         playerObj->variantAE = g_ReplayPlayerModel;
         if ((subframe & 1) == 0) {
             index = subframe >> 1;
-            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + ((index * 7) << 2));
+            small = (ReplayTimeAttackFrame *)(g_ReplayFramesTimeAttack + ((index * 7) << 2));
             playerObj->x = small->x;
             playerObj->y = small->y;
             playerObj->z = small->z;
@@ -147,7 +92,7 @@ void ApplyReplayFrame(s32 subframe, MenuObj *playerObj, MenuObj *rivalObj) {
             if (subframe == 0x505) {
                 subframe = 0;
             }
-            small = (MenuSmallFrame *)(g_ReplayFramesTimeAttack + ((subframe * 7) << 2));
+            small = (ReplayTimeAttackFrame *)(g_ReplayFramesTimeAttack + ((subframe * 7) << 2));
             playerObj->x = AVG(small->x, playerObj->x);
             playerObj->y = AVG(small->y, playerObj->y);
             playerObj->z = AVG(small->z, playerObj->z);
@@ -174,7 +119,7 @@ void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
     primary = playerObj;
     secondary = rivalObj;
 
-    ApplyReplayFrame(index, (MenuObj *)primary, (MenuObj *)secondary);
+    ApplyReplayFrame(index, (ReplayCarState *)primary, (ReplayCarState *)secondary);
 
     if (g_GrandPrixMode != 0) {
         if ((index & 1) == 0) {

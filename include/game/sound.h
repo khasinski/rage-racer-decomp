@@ -88,6 +88,24 @@ typedef struct IndexedEffect {
     s32 volume;
 } IndexedEffect; /* sizeof 0xC */
 
+typedef struct SoundModeSlot {
+    s32 left;
+    s32 right;
+} SoundModeSlot;
+
+typedef struct SoundModeEntry {
+    s32 count;
+    s32 factor;
+    SoundModeSlot slots[2];
+} SoundModeEntry;
+
+typedef struct EffectCueRow {
+    s32 count;
+    s32 scale;
+    s32 cue;
+    s32 tone;
+} EffectCueRow;
+
 extern IndexedEffect g_IndexedEffects[];
 
 /* Byte-offset view: the retail code keeps i * 12 in a register rather than

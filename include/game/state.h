@@ -5,6 +5,22 @@
 #include "game/vector.h"
 #include "psyq/gte.h"
 
+typedef struct PadState {
+    u8 unk0;
+    u8 unk1;
+    u16 held;
+    u16 unk4;
+    s16 unk6;
+    s16 pressed;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s16 unk12;
+    s16 unk14;
+    s16 unk16;
+} PadState;
+
 /* Top-level scene/state machine, dispatched by ServiceAssetLoad; 1 = the
  * asset-load driver, other values are individual screens. */
 extern s32 g_MainState;
@@ -27,6 +43,7 @@ void GameInitPad(void);
 void UpdatePadState(void);
 void LoadPadButtonMapping(s32 mapping0, s32 mapping1);
 void ApplyPadButtonMapping(void);
+extern PadState g_PadState;
 
 /* Controller-config and NeGcon calibration screens: g_GameModeHandlers entries
  * 7..11, each drawing its own screen plus the shared 3D backdrop. */

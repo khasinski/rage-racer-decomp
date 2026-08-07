@@ -52,23 +52,6 @@ void ApplyPadButtonMapping(void) {
     LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
 }
 
-typedef struct PadState {
-    /* 0x00 */ u8  unk0;
-    /* 0x01 */ u8  unk1;
-    /* 0x02 */ u16 held;
-    /* 0x04 */ u16 unk4;
-    /* 0x06 */ s16 unk6;
-    /* 0x08 */ s16 pressed;
-    /* 0x0A */ s16 unkA;
-    /* 0x0C */ s16 unkC;
-    /* 0x0E */ s16 unkE;
-    /* 0x10 */ s16 unk10;
-    /* 0x12 */ s16 unk12;
-    /* 0x14 */ s16 unk14;
-    /* 0x16 */ s16 unk16;
-} PadState;
-
-extern PadState g_PadState;
 extern u8 g_PadType;
 extern s16 g_NegconSteerPlay;
 extern s16 g_NegconMaxTwist;

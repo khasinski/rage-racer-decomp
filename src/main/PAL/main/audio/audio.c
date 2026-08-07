@@ -683,17 +683,6 @@ extern u8 D_801E6D00[] asm("g_MusicChannels");
  * spelled as word offsets off a s32 * -- D_800126D0 + 14 is entry 2, slot 0. */
 #define MODE(byteOffset) (*(SoundModeEntry *)((u8 *)D_800126D0 + (byteOffset)))
 
-typedef struct SoundModeSlot {
-    s32 left;
-    s32 right;
-} SoundModeSlot;
-
-typedef struct SoundModeEntry {
-    s32 count;
-    s32 factor;
-    SoundModeSlot slots[2];
-} SoundModeEntry;
-
 extern SoundModeEntry g_SoundModes[];
 
 void SetStereoSoundCue(s32 arg0, s32 left, s32 right) {
@@ -995,13 +984,6 @@ void UpdateBasicEffectVoices(void) {
 #include "game/sound.h"
 
 extern s32 D_801E6D30 asm("g_EffectVoices");
-
-typedef struct EffectCueRow {
-    s32 count;
-    s32 scale;
-    s32 cue;
-    s32 tone;
-} EffectCueRow;
 
 void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     s32 count;
