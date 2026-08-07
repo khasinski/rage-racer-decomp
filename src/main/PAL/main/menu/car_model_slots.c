@@ -1,4 +1,6 @@
 #include "common.h"
+#include "game/asset.h"
+#include "game/render.h"
 
 /* Called here with no argument, so this declaration must stay un-prototyped. */
 s32 GetCarUnlockLevel();
@@ -128,11 +130,7 @@ s32 GetOwnedCarAssetIndex(s32 arg0) {
 }
 
 extern u32 g_CarModelSlot;
-
-void SelectModelBank(s32 index);
 void SelectCarModelSlot(s32 index);
-void UploadCarImage(s32 index);
-
 /* Re-registers the showroom car after g_CarModelSlot changes. */
 void InstallCarModelSlot(void) {
     SelectCarModelSlot(g_CarModelSlot);

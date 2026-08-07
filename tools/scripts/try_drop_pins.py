@@ -18,7 +18,7 @@ import re
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from objverify import compile_one, snapshot, try_edit
+from objverify import ROOT, compile_one, snapshot, try_edit
 
 PIN = re.compile(r'^(?P<indent>\s*)register\s+(?P<decl>.+?)\s+asm\("\$\d+"\)'
                  r'(?P<tail>\s*(?:=[^;]*)?;)\s*$', re.MULTILINE)
