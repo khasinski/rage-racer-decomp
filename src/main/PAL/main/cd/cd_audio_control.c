@@ -3,8 +3,8 @@
 
 extern s32 g_VisibleCellList;
 
-void RequestCdTrack(s32 arg0) {
-    g_CdTrackPending = (u8)arg0;
+void RequestCdTrack(s32 track) {
+    g_CdTrackPending = (u8)track;
     g_CdTrackStep = 0;
     g_CdCommandPending = -1;
     g_CdCommandStep = 0;
@@ -46,9 +46,9 @@ void ResetCdAudioState(void) {
 
 #include "common.h"
 
-void StartCdVolumeFade(s32 arg0) {
-    g_CdFadeFrames = arg0;
-    if (arg0 >= 0x1000) {
+void StartCdVolumeFade(s32 frames) {
+    g_CdFadeFrames = frames;
+    if (frames >= 0x1000) {
         g_CdFadeFrames = 0xFFF;
     }
     if (g_CdFadeFrames < -0xFFF) {

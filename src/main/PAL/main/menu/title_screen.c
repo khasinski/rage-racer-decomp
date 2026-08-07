@@ -65,14 +65,14 @@ void EnterTitleScreen(void) {
 
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
 
-void DrawTitleFadeOverlay(s32 arg0) {
+void DrawTitleFadeOverlay(s32 brightness) {
     void *current;
     void **scratch;
     u8 *base;
     void *next;
     s32 color;
 
-    color = (u8)arg0;
+    color = (u8)brightness;
     base = g_DrawBuffer;
     base += 0xCC;
     scratch = &SCRATCH_PRIM_CURSOR_AS(void);

@@ -17,10 +17,10 @@ void DecDCToutSync(void) {
     MDEC_out_sync();
 }
 
-void DecDCTinCallback(long arg0) {
-    DMACallback(0, arg0);
+void DecDCTinCallback(long callback) {
+    DMACallback(0, callback);
 }
 
-void DecDCToutCallback(long arg0) {
-    DMACallback(1, arg0);
+void DecDCToutCallback(long callback) {
+    DMACallback(1, callback);
 }

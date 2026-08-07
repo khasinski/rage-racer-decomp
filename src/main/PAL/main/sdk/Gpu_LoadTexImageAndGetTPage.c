@@ -95,13 +95,13 @@ DrawEnv *SetDefDrawEnv(DrawEnv *env, long x, long y, long w, long h) {
     return env;
 }
 
-u_char *SetDefDispEnv(u_char *arg0, long arg1, long arg2, long arg3, long arg4) {
+u_char *SetDefDispEnv(u_char *env, long x, long y, long w, long h) {
     u_char *ret;
 
-    ret = arg0;
-    *(short *)&ret[0] = arg1;
-    *(short *)&ret[2] = arg2;
-    *(short *)&ret[4] = arg3;
+    ret = env;
+    *(short *)&ret[0] = x;
+    *(short *)&ret[2] = y;
+    *(short *)&ret[4] = w;
     *(short *)&ret[8] = 0;
     *(short *)&ret[0xA] = 0;
     *(short *)&ret[0xC] = 0;
@@ -110,7 +110,7 @@ u_char *SetDefDispEnv(u_char *arg0, long arg1, long arg2, long arg3, long arg4) 
     ret[0x10] = 0;
     ret[0x13] = 0;
     ret[0x12] = 0;
-    *(short *)&ret[6] = arg4;
+    *(short *)&ret[6] = h;
     return ret;
 }
 
@@ -136,11 +136,11 @@ long GetTPage(long arg0, long arg1, long arg2, long arg3) {
     return value | ((arg3 & 0x200) << 2);
 }
 
-long GetClut(long arg0, long arg1) {
-    return ((arg1 << 6) | ((arg0 >> 4) & 0x3F)) & 0xFFFF;
+long GetClut(long tp, long abr) {
+    return ((abr << 6) | ((tp >> 4) & 0x3F)) & 0xFFFF;
 }
 
-void DumpTPage(long arg0) {
+void DumpTPage(long x) {
     long mode;
     u_long value;
 
@@ -155,10 +155,10 @@ void DumpTPage(long arg0) {
     }
 
     }
-    GPU_printf(D_80013374, (((u_long)arg0 & 0xFFFF) >> 9) & 3, (((u_long)arg0 & 0xFFFF) >> 7) & 3, (((u_long)arg0 & 0xFFFF) << 6) & 0x7C0, (((u_long)arg0 & 0xFFFF) << 3) & 0x300);
+    GPU_printf(D_80013374, (((u_long)x & 0xFFFF) >> 9) & 3, (((u_long)x & 0xFFFF) >> 7) & 3, (((u_long)x & 0xFFFF) << 6) & 0x7C0, (((u_long)x & 0xFFFF) << 3) & 0x300);
     return;
 
     }
-    value = arg0 & 0xFFFF;
+    value = x & 0xFFFF;
     GPU_printf(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
 }

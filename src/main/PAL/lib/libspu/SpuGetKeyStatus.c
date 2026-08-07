@@ -3,7 +3,7 @@
 extern volatile u_long g_SpuKeyStatus;
 extern volatile u_short *g_SpuRegBase;
 
-long SpuGetKeyStatus(u_long arg0) {
+long SpuGetKeyStatus(u_long voice_bit) {
     long voice = -1;
     long i = 0;
     u_long mask = 1;
@@ -11,7 +11,7 @@ long SpuGetKeyStatus(u_long arg0) {
     long ret;
 
 do {
-    if (arg0 & (mask << i)) {
+    if (voice_bit & (mask << i)) {
         goto found;
     }
     i++;

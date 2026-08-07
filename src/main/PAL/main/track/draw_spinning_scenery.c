@@ -6,11 +6,11 @@
 #include "game/track.h"
 #include "psyq/gte.h"
 
-void DrawSpinningScenery(s32 arg0, s32 arg1) {
+void DrawSpinningScenery(s32 timer, s32 animate) {
     s16 sp10[16];
     s16 sp30[16];
-    s32 frame = arg0;
-    s32 update = arg1;
+    s32 frame = timer;
+    s32 update = animate;
     u16 *dst;
     u16 *delta;
     u16 *deltaBase;

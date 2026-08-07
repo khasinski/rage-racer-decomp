@@ -11,8 +11,8 @@ extern u_char g_SndVoiceFlags[];
 extern u_char * g_SndCurrentToneTable;
 extern u_short g_SndCurrentVoice;
 
-long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) {
-    register long raw asm("$10") = arg0;
+long SpuVmApplyPitchBendToVoice(long voice, long note, long vab_id, long program, long bend) {
+    register long raw asm("$10") = voice;
     register long value asm("$2") = 0xFFC0;
     long a4;
     register long i asm("$4");
@@ -25,14 +25,14 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
     u_char c;
     long ret;
 
-    __asm__("" : "=r"(a4) : "0"(arg0), "r"(value));
+    __asm__("" : "=r"(a4) : "0"(voice), "r"(value));
     i = (short)a4;
-    t1 = arg5 + value;
+    t1 = bend + value;
     off = ((((i * 3) * 4) + i) * 4);
 
-    if (*(short *)&g_SndVoiceStateSeqSep[off] == (short)arg1 &&
-        *(short *)&g_SndVoiceStateVabId[off] == (short)arg2 &&
-        *(short *)&g_SndVoiceStateProg[off] == (short)arg3) {
+    if (*(short *)&g_SndVoiceStateSeqSep[off] == (short)note &&
+        *(short *)&g_SndVoiceStateVabId[off] == (short)vab_id &&
+        *(short *)&g_SndVoiceStateProg[off] == (short)program) {
 
         t = *(u_short *)&g_SndVoiceStateTone[off] + (g_SndCurrentProgActual * 16);
         f0 = *(u_short *)&g_SndVoiceStateNote[off];
@@ -72,7 +72,7 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
 extern volatile u_char g_SndVoiceCount;
 extern short g_SndCurrentSeqSep;
 
-long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) {
+long SpuVmApplyPitchBendByTone(long note, long vab_id, long program, long bend) {
     long voice;
     long x;
     long y;
@@ -84,13 +84,13 @@ long SpuVmApplyPitchBendByTone(long arg0, long arg1, long arg2, long arg3) {
     long call_x;
     long call_y;
 
-    voice = arg0;
-    tmp = arg1;
+    voice = note;
+    tmp = vab_id;
     call_x = (short)tmp;
-    call_y = (short)arg2;
+    call_y = (short)program;
     x = tmp;
-    y = arg2;
-    extra = arg3;
+    y = program;
+    extra = bend;
 
     SpuVmVSetUp(call_x, call_y);
     i = 0;

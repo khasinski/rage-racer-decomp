@@ -13,10 +13,10 @@ extern long g_GpuQueueReadIdx;
 void Gpu_ExecuteQueue(void);
 long Gpu_CheckTimeout(void);
 
-long Gpu_DrawSync(long arg0) {
+long Gpu_DrawSync(long mode) {
     long pending;
 
-    if (arg0 == 0) {
+    if (mode == 0) {
         Gpu_ArmTimeout();
         switch (0) { default:
         break;

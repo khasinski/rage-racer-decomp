@@ -132,14 +132,14 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
 }
 
 // Fixed-point blend in 0..10000 scale.
-s32 BezierEase(s32 arg0, s32 arg1) {
+s32 BezierEase(s32 t, s32 control) {
     s32 initial;
     s32 value;
     s32 doubled;
 
-    initial = 0x2710 - arg0;
+    initial = 0x2710 - t;
     value = initial;
-    doubled = arg0 * 2;
+    doubled = t * 2;
     value = (value * doubled) / 10000;
-    return ((value * arg1) + (arg0 * arg0)) / 10000;
+    return ((value * control) + (t * t)) / 10000;
 }

@@ -90,11 +90,11 @@ void data_ready_callback(void) {
     g_StDmaBusy = 0;
 }
 
-long StGetBackloc(CdlLOC *arg0) {
+long StGetBackloc(CdlLOC *loc) {
     if (g_StNotStream2Mode != 0) {
         return -1;
     }
-    CdIntToPos(CdPosToInt_Local((CdlLOC *)g_StBackLoc) + 1, arg0);
+    CdIntToPos(CdPosToInt_Local((CdlLOC *)g_StBackLoc) + 1, loc);
     return g_StBackFrame;
 }
 

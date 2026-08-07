@@ -88,7 +88,7 @@ void BlendPaintColorQuarters(u32 arg0, u32 arg1) {
  * compiler into the jal delay slot; no hand-written asm is needed.
  */
 
-void ApplyBodyColor1(u32 arg0, u32 arg1) {
+void ApplyBodyColor1(u32 colour, u32 imageData) {
     u32 raw;
     u16 *base;
     u16 s1;
@@ -98,11 +98,11 @@ void ApplyBodyColor1(u32 arg0, u32 arg1) {
     u16 c;
     s32 i;
 
-    raw = arg1;
-    arg0 <<= 1;
+    raw = imageData;
+    colour <<= 1;
     base = (u16 *)(raw + 0x7060);
-    s1 = *(u16 *)((u8 *)g_BodyColorPrimary + arg0);
-    s2 = *(u16 *)((u8 *)g_BodyColorSecondary + arg0);
+    s1 = *(u16 *)((u8 *)g_BodyColorPrimary + colour);
+    s2 = *(u16 *)((u8 *)g_BodyColorSecondary + colour);
 
     *(u16 *)(raw + 0x7162) = s1;
     BlendPaintColor(s1, s2);
@@ -149,7 +149,7 @@ void SetBodyColor1(u32 arg0) {
     UploadCarImage(g_CarModelSlot);
 }
 
-void ApplyBodyColor2(u32 arg0, u32 arg1) {
+void ApplyBodyColor2(u32 colour, u32 imageData) {
     u16 *base;
     u16 s1;
     u16 s2;
@@ -158,9 +158,9 @@ void ApplyBodyColor2(u32 arg0, u32 arg1) {
     u16 c;
     s32 i;
 
-    base = (u16 *)(arg1 + 0x7060);
-    s1 = g_BodyColorPrimary[arg0];
-    s2 = g_BodyColorSecondary[arg0];
+    base = (u16 *)(imageData + 0x7060);
+    s1 = g_BodyColorPrimary[colour];
+    s2 = g_BodyColorSecondary[colour];
 
     BlendPaintColor(s1, s2);
 

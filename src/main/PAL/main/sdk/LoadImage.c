@@ -29,20 +29,20 @@ void LoadImage(Rect *arg0, void *arg1) {
     g_GpuFuncs->send(g_GpuFuncs->loadImage, arg0, 8, (u_long)arg1);
 }
 
-void StoreImage(Rect *arg0, void *arg1) {
-    CheckPrim(D_80013584, arg0);
-    g_GpuFuncs->send(g_GpuFuncs->storeImage, arg0, 8, (u_long)arg1);
+void StoreImage(Rect *rect, void *data) {
+    CheckPrim(D_80013584, rect);
+    g_GpuFuncs->send(g_GpuFuncs->storeImage, rect, 8, (u_long)data);
 }
 
-long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) {
-    CheckPrim(D_80013590, arg0);
-    if (arg0->w == 0 || arg0->h == 0) {
+long MoveImage(GpuRectPacked *rect, u_long x, u_long y) {
+    CheckPrim(D_80013590, rect);
+    if (rect->w == 0 || rect->h == 0) {
         return -1;
     }
 
-    g_MoveImagePacket.src = arg0->xy;
-    g_MoveImagePacket.dst = (arg2 << 0x10) | (arg1 & 0xFFFF);
-    g_MoveImagePacket.wh = *(u_long *)&arg0->w;
+    g_MoveImagePacket.src = rect->xy;
+    g_MoveImagePacket.dst = (y << 0x10) | (x & 0xFFFF);
+    g_MoveImagePacket.wh = *(u_long *)&rect->w;
     return g_GpuFuncs->send(g_GpuFuncs->sendList, &g_MoveImagePacket,
                             sizeof(g_MoveImagePacket), 0);
 }
@@ -89,16 +89,16 @@ void *ClearOTag(u_long *arg0, long count) {
     return arg0;
 }
 
-void *ClearOTagR(u_long *arg0, long arg1) {
+void *ClearOTagR(u_long *ot, long arg1) {
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_800135B4, arg0, arg1);
+        GPU_printf(D_800135B4, ot, arg1);
     }
 
-    g_GpuFuncs->clearOTag(arg0, arg1);
+    g_GpuFuncs->clearOTag(ot, arg1);
 
     {
         u_long mask = 0xFFFFFF;
-        register u_long *ret asm("$2") = arg0;
+        register u_long *ret asm("$2") = ot;
         u_long next;
 
         asm("" : "=r"(ret), "=r"(mask) : "0"(ret), "1"(mask));
@@ -112,9 +112,9 @@ void *ClearOTagR(u_long *arg0, long arg1) {
 
 extern GpuCallbacks *g_GpuFuncs;
 
-void DrawPrim(u_char *arg0) {
-    u_long mode = arg0[3];
+void DrawPrim(u_char *ot) {
+    u_long mode = ot[3];
 
     g_GpuFuncs->drawSync(0);
-    g_GpuFuncs->writeGp0Words(arg0 + 4, mode);
+    g_GpuFuncs->writeGp0Words(ot + 4, mode);
 }

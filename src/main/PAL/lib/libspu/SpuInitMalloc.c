@@ -8,20 +8,20 @@ extern long _spu_mem_mode_plus;
 #define BLK_IS_FREE(i) (BLK(i)->addr & 0x80000000)
 #define BLK_IS_END(i) (BLK(i)->addr & 0x40000000)
 
-long SpuInitMalloc(long arg0, u_long *arg1) {
-    long ret = arg0;
+long SpuInitMalloc(long num, u_long *memlist) {
+    long ret = num;
     u_long size;
     long shift;
 
     if (ret > 0) {
         shift = _spu_mem_mode_unitM;
-        arg1[0] = 0x40001010;
-        _spu_memList = (SpuMallocEntry *)arg1;
+        memlist[0] = 0x40001010;
+        _spu_memList = (SpuMallocEntry *)memlist;
         _spu_AllocLastNum = 0;
         _spu_AllocBlockNum = ret;
         size = 0x10000 << shift;
         size -= 0x1010;
-        arg1[1] = size;
+        memlist[1] = size;
 
         return ret;
     }

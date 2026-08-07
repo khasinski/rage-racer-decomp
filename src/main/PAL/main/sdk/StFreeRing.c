@@ -41,9 +41,9 @@ s32 StClearRingRange(long arg0, u_long arg1) {
     }
 }
 
-long StGetNext(StRingEventRecord **arg0, StRingEventRecord **arg1) {
-    StRingEventRecord **out0 = arg0;
-    register StRingEventRecord **out1 asm("$8") = arg1;
+long StGetNext(StRingEventRecord **addr, StRingEventRecord **header) {
+    StRingEventRecord **out0 = addr;
+    register StRingEventRecord **out1 asm("$8") = header;
     StRingEventRecord *entry;
     long old_flag;
 

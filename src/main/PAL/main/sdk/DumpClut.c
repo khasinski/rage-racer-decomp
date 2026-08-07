@@ -3,6 +3,6 @@
 
 extern char D_8001338C[];
 
-void DumpClut(long arg0) {
-    GPU_printf(D_8001338C, (arg0 & 0x3F) << 4, (arg0 & 0xFFFF) >> 6);
+void DumpClut(long clut) {
+    GPU_printf(D_8001338C, (clut & 0x3F) << 4, (clut & 0xFFFF) >> 6);
 }

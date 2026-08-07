@@ -38,7 +38,7 @@ u_short SpuVmCalculateCurrentPitch(void) {
     }
 }
 
-u_short SpuVmCalculateTonePitch(long arg0, long arg1) {
+u_short SpuVmCalculateTonePitch(long center, long fine) {
     u_char *entry;
     long arg0_hold;
     long bank;
@@ -52,12 +52,12 @@ u_short SpuVmCalculateTonePitch(long arg0, long arg1) {
     long shift;
 
     entry = g_SndCurrentToneTable + (((g_SndCurrentTone + (g_SndCurrentProgActual << 4)) << 5));
-    sum = (u_short)arg1 + entry[5];
+    sum = (u_short)fine + entry[5];
     if (sum < 0) {
-        arg0_hold = arg0;
+        arg0_hold = center;
         sum += 7;
     } else {
-        arg0_hold = arg0;
+        arg0_hold = center;
     }
 
     quotient8 = sum >> 3;

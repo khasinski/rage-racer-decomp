@@ -11,7 +11,7 @@ extern KernelCallback *g_IntrRpNode;
 
 void LibcPutString(char *arg0);
 
-long VSync(long arg0) {
+long VSync(long mode) {
     long oldTimer;
     long delta;
     long waitTarget;
@@ -22,17 +22,17 @@ long VSync(long arg0) {
     oldTimer = *g_VSyncGpuStat;
     delta = (u_short)(*g_Timer1CountReg - g_VSyncTimerBase);
 
-    if (arg0 < 0) {
+    if (mode < 0) {
         return g_VSyncCount;
     }
 
-    if (arg0 == 1) {
+    if (mode == 1) {
         return delta;
     }
 
     one = 1;
-    waitTarget = arg0 > 0 ? g_VSyncCountBase - one + arg0 : g_VSyncCountBase;
-    waitCount = arg0 > 0 ? arg0 - one : 0;
+    waitTarget = mode > 0 ? g_VSyncCountBase - one + mode : g_VSyncCountBase;
+    waitCount = mode > 0 ? mode - one : 0;
     waitVSync(waitTarget, waitCount);
 
     {
@@ -58,11 +58,11 @@ long VSync(long arg0) {
     return delta;
 }
 
-void waitVSync(long arg0, long arg1) {
+void waitVSync(long target, long timeoutFrames) {
     volatile long timeout;
 
-    timeout = arg1 << 15;
-    if (g_VSyncCount < arg0) {
+    timeout = timeoutFrames << 15;
+    if (g_VSyncCount < target) {
         do {
             if (--timeout == -1) {
                 LibcPutString(D_80013B2C);
@@ -70,7 +70,7 @@ void waitVSync(long arg0, long arg1) {
                 ChangeClearInterruptMask(3, 0);
                 break;
             }
-        } while (g_VSyncCount < arg0);
+        } while (g_VSyncCount < target);
     }
 }
 
@@ -96,7 +96,7 @@ void KernelCallbackSlot2(void) {
     g_IntrRpNode[2]();
 }
 
-void DMACallback(long arg0, long arg1) {
+void DMACallback(long spec, long callback) {
     g_IntrRpNode[1]();
 }
 
@@ -124,12 +124,12 @@ long GetIntrMask(void) {
     return *g_IrqMask;
 }
 
-long SetIntrMask(long arg0) {
+long SetIntrMask(long mask) {
     u_short value;
     volatile u_short *ptr;
 
     ptr = g_IrqMask;
     value = *ptr;
-    *ptr = arg0;
+    *ptr = mask;
     return value;
 }

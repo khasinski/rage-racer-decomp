@@ -11,7 +11,7 @@ extern u_char g_CdReadyStatus;
 extern u_char g_CdSyncResult[];
 extern u_char g_CdReadyResult[];
 
-long CD_getsector2(long arg0, u_long arg1) {
+long CD_getsector2(long madr, u_long size) {
     volatile u_char *status;
     volatile u_long *cdDpcr;
     volatile u_long *cdDmaChcr;
@@ -24,8 +24,8 @@ long CD_getsector2(long arg0, u_long arg1) {
     cdDpcr = g_CdDpcr;
     *cdDpcr |= 0x8000;
 
-    *g_CdDmaMadr = arg0;
-    *g_CdDmaBcr = arg1 | 0x10000;
+    *g_CdDmaMadr = madr;
+    *g_CdDmaBcr = size | 0x10000;
 
     status = g_CdReg0;
     while ((*status & 0x40) == 0) {

@@ -259,7 +259,7 @@ extern u_char D_801E4BDD;
 extern u_char D_801E4BDE;
 extern short g_SndMonoMode;
 
-void SpuVmAutoPanTick(long arg0) {
+void SpuVmAutoPanTick(long voice) {
     long stack[6];
     long originalArg;
     long offset;
@@ -275,10 +275,10 @@ void SpuVmAutoPanTick(long arg0) {
     u_long envelope;
 
     asm(".globl func_80075420\nfunc_80075420 = SpuVmAutoPanTick + 0x54");
-    channel = (short)arg0;
+    channel = (short)voice;
     index8 = channel * 8;
     offset = channel * 52;
-    originalArg = arg0;
+    originalArg = voice;
     if (*(short *)&g_SndVoiceStatePanCounter[offset] != 0) {
         counter = *(u_short *)&g_SndVoiceStatePanCounterReload[offset];
         *(u_short *)&g_SndVoiceStatePanCounterReload[offset] = counter - 1;

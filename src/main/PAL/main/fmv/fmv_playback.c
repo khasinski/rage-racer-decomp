@@ -41,7 +41,7 @@ s32 PresentFmvFrame(s32 *arg0) {
     return -1;
 }
 
-void *GetFmvFrame(s32 *arg0) {
+void *GetFmvFrame(s32 *ctx) {
     StRingEventRecord *slot[2];
     u16 rect[4];
     s32 count;
@@ -87,7 +87,7 @@ void *GetFmvFrame(s32 *arg0) {
         ClearImage(rect, 0, 0, 0);
     }
 
-    dst = (u16 *)arg0;
+    dst = (u16 *)ctx;
     ret = slot[0];
     h32 = g_FmvFrameHeight;
     w32 = g_FmvFrameWidth;

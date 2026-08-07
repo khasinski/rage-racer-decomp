@@ -5,38 +5,38 @@
 #include "psyq/kernel.h"
 #include "game/cd.h"
 
-void SetSoundSlotVoiceEnabled(s32 arg0, s32 arg1) {
+void SetSoundSlotVoiceEnabled(s32 slot, s32 enabled) {
     s32 *entry;
 
-    if (arg1 != 0) {
+    if (enabled != 0) {
         s32 *base = g_SoundSlotActive;
-        entry = (s32 *)((arg0 * 4) + (u8 *)base);
+        entry = (s32 *)((slot * 4) + (u8 *)base);
         if (*entry == 0) {
-            PlaySoundSlotVoice(arg0, 0, 3);
+            PlaySoundSlotVoice(slot, 0, 3);
             *entry = 1;
         }
     } else {
         s32 *base = g_SoundSlotActive;
-        entry = (s32 *)((arg0 * 4) + (s32)base);
+        entry = (s32 *)((slot * 4) + (s32)base);
         if (*entry != 0) {
-            StopSoundSlotVoice(arg0);
+            StopSoundSlotVoice(slot);
             *entry = 0;
         }
     }
 }
 
-void SetSoundSlotVoicesEnabled(s32 arg0) {
+void SetSoundSlotVoicesEnabled(s32 enabled) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
         if (i != 5) {
-            SetSoundSlotVoiceEnabled(i, arg0);
+            SetSoundSlotVoiceEnabled(i, enabled);
         }
     }
 }
 
-void SetEffectVoicesEnabled(s32 arg0) {
-    SetSoundSlotVoicesEnabled(arg0);
+void SetEffectVoicesEnabled(s32 enabled) {
+    SetSoundSlotVoicesEnabled(enabled);
 }
 
 void ResetSoundState(void) {
@@ -388,15 +388,15 @@ void SetEffectVolumeScale(s32 arg0) {
     g_SoundScale.scale = arg0;
 }
 
-void SetLoadedTableVolumeScale(s32 arg0) {
-    if (arg0 >= 0) {
-        if (arg0 >= 0x81) {
-            arg0 = 0x80;
+void SetLoadedTableVolumeScale(s32 scale) {
+    if (scale >= 0) {
+        if (scale >= 0x81) {
+            scale = 0x80;
         }
     } else {
-        arg0 = 0;
+        scale = 0;
     }
-    g_SoundSlotVolumeScale = arg0;
+    g_SoundSlotVolumeScale = scale;
 }
 
 void SetSequenceVolumeSetting(s32 setting) {
@@ -452,28 +452,28 @@ s32 GetActiveAudioSlots(void) {
 #include "psyq/snd.h"
 #include "game/sound.h"
 
-void SetPanVoiceTargetVolume(s32 arg0, s32 arg1) {
-    if (arg0 >= 0) {
-        if (arg0 > 0x80) {
-            arg0 = 0x80;
+void SetPanVoiceTargetVolume(s32 left, s32 right) {
+    if (left >= 0) {
+        if (left > 0x80) {
+            left = 0x80;
         }
     } else {
-        arg0 = 0;
+        left = 0;
     }
 
-    if (arg1 >= 0) {
-        if (arg1 > 0x80) {
-            arg1 = 0x80;
+    if (right >= 0) {
+        if (right > 0x80) {
+            right = 0x80;
         }
     } else {
-        arg1 = 0;
+        right = 0;
     }
 
     if (g_StereoOutput != 0) {
-        g_PanVoiceVolumeL = arg0;
-        g_PanVoiceVolumeR = arg1;
+        g_PanVoiceVolumeL = left;
+        g_PanVoiceVolumeR = right;
     } else {
-        s32 temp = (arg0 + arg1) / 2;
+        s32 temp = (left + right) / 2;
 
         g_PanVoiceVolumeL = temp;
         g_PanVoiceVolumeR = temp;
@@ -687,7 +687,7 @@ extern u8 D_801E6D00[] asm("g_MusicChannels");
 
 extern SoundModeEntry g_SoundModes[];
 
-void SetStereoSoundCue(s32 arg0, s32 left, s32 right) {
+void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
     s32 offset;
     s32 count;
     s32 i;
@@ -705,12 +705,12 @@ void SetStereoSoundCue(s32 arg0, s32 left, s32 right) {
     s32 *base;
     SoundModeEntry *entry;
 
-    if (arg0 >= 0) {
-        if (arg0 >= 4) {
-            arg0 = 3;
+    if (cue >= 0) {
+        if (cue >= 4) {
+            cue = 3;
         }
     } else {
-        arg0 = 0;
+        cue = 0;
     }
 
     if (left >= 0) {
@@ -739,7 +739,7 @@ void SetStereoSoundCue(s32 arg0, s32 left, s32 right) {
             }
         }
 
-        if ((u32)arg0 < 2) {
+        if ((u32)cue < 2) {
             if (left == g_SoundModes[0].slots[0].left) {
                 currentB = g_MusicChannels[1].left;
                 if (currentB == g_SoundModes[0].slots[1].left) {
@@ -779,7 +779,7 @@ after_match:
             s32 inactiveValue;
             s32 activeValue;
 
-            resetLoad = MODE((arg0 * 3) << 3).count;
+            resetLoad = MODE((cue * 3) << 3).count;
             i = 0;
             if (resetLoad <= i) {
                 return;
@@ -802,9 +802,9 @@ after_match:
     }
 
     currentA = g_MusicChannels[0].left;
-    if (currentA == MODE((arg0 * 3) << 3).slots[0].left) {
+    if (currentA == MODE((cue * 3) << 3).slots[0].left) {
         currentB = g_MusicChannels[1].left;
-        if (currentB == MODE((arg0 * 3) << 3).slots[1].left) {
+        if (currentB == MODE((cue * 3) << 3).slots[1].left) {
             g_MusicChannels[0].mode = 2;
         } else {
             g_MusicChannels[0].mode = 0;
@@ -814,32 +814,32 @@ after_match:
     }
 
     i = 0;
-    loopTableOffset = (arg0 * 3) << 3;
-    arg0 = MODE(loopTableOffset).count;
-    if (arg0 <= i) {
+    loopTableOffset = (cue * 3) << 3;
+    cue = MODE(loopTableOffset).count;
+    if (cue <= i) {
         return;
     }
 
     average = (left + right) / 2;
-    count = arg0;
+    count = cue;
     /* Load-bearing: removal changes five linked preheader words. */
     asm("" : "=r"(count) : "0"(count));
     base = D_800126D0;
     entryOffset = loopTableOffset;
     entry = (SoundModeEntry *)((s32)base + entryOffset);
-    arg0 = 0;
+    cue = 0;
     do {
         if (i != 0) {
             /* Asymmetric on purpose: retail writes channel[i].mode through the
              * indexed form but reads channel[0].mode through its own symbol.
              * Spelling the read as g_MusicChannels[0].mode costs an
              * instruction, with or without RAW() on either side. */
-            CHANNEL(arg0).mode = D_801E6D08;
+            CHANNEL(cue).mode = D_801E6D08;
         }
 
         flag = g_StereoOutput;
-        CHANNEL(arg0).left = entry->slots[0].left;
-        CHANNEL(arg0).right = entry->slots[0].right;
+        CHANNEL(cue).left = entry->slots[0].left;
+        CHANNEL(cue).right = entry->slots[0].right;
         if (flag != 0) {
             currentB = MODE(entryOffset).factor;
             scaledLeft = left * currentB;
@@ -847,14 +847,14 @@ after_match:
                 scaledLeft += 0x7F;
             }
             scaledLeft >>= 7;
-            *(volatile s32 *)&CHANNEL(arg0).volLeft = scaledLeft;
+            *(volatile s32 *)&CHANNEL(cue).volLeft = scaledLeft;
             scaledRight = right * currentB;
             entry = (SoundModeEntry *)((u8 *)entry + 8);
             if (scaledRight < 0) {
                 scaledRight += 0x7F;
             }
             scaledRight >>= 7;
-            *(volatile s32 *)&CHANNEL(arg0).volRight = scaledRight;
+            *(volatile s32 *)&CHANNEL(cue).volRight = scaledRight;
             i++;
         } else {
             if ((scaledLeft = average * MODE(entryOffset).factor) < 0) {
@@ -863,14 +863,14 @@ after_match:
                 currentB = scaledLeft;
             }
             currentB >>= 7;
-            *(volatile s32 *)&CHANNEL(arg0).volLeft = currentB;
-            *(volatile s32 *)&CHANNEL(arg0).volRight = currentB;
+            *(volatile s32 *)&CHANNEL(cue).volLeft = currentB;
+            *(volatile s32 *)&CHANNEL(cue).volRight = currentB;
             /* Load-bearing: removal changes eight linked scheduler words. */
             asm volatile("");
             entry = (SoundModeEntry *)((s32)entry + 8);
             i++;
         }
-        arg0 += 0x18;
+        cue += 0x18;
     } while (i < count);
 }
 
@@ -1478,48 +1478,48 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
     return result;
 }
 
-void PlaySoundCue(s32 arg0) {
+void PlaySoundCue(s32 cue) {
     if (g_SoundCueBank == 1) {
-        if (arg0 >= 0) {
-            if (arg0 >= 0x1E) {
-                arg0 = 0x1D;
+        if (cue >= 0) {
+            if (cue >= 0x1E) {
+                cue = 0x1D;
             }
         } else {
-            arg0 = 0;
+            cue = 0;
         }
 
-        if ((u32)(arg0 - 0xF) < 3U) {
-            if (arg0 != g_LastSpecialCueRequest) {
-                g_LastSpecialCueRequest = arg0;
-                StartSingleSpecialCue(arg0, 0x80);
+        if ((u32)(cue - 0xF) < 3U) {
+            if (cue != g_LastSpecialCueRequest) {
+                g_LastSpecialCueRequest = cue;
+                StartSingleSpecialCue(cue, 0x80);
             }
             return;
         }
-        StartSoundCueVoice(arg0, 0x3C, 0x80, 0x80);
+        StartSoundCueVoice(cue, 0x3C, 0x80, 0x80);
         return;
     }
 
     if (g_SoundCueBank == 2) {
-        if (arg0 >= 0) {
-            if (arg0 >= 0x46) {
-                arg0 = 0x45;
+        if (cue >= 0) {
+            if (cue >= 0x46) {
+                cue = 0x45;
             }
         } else {
-            arg0 = 0;
+            cue = 0;
         }
 
-        if ((u32)(arg0 - 0xF) < 3U) {
-            if (arg0 != g_LastSpecialCueRequest) {
-                g_LastSpecialCueRequest = arg0;
-                StartSingleSpecialCue(arg0, 0x80);
+        if ((u32)(cue - 0xF) < 3U) {
+            if (cue != g_LastSpecialCueRequest) {
+                g_LastSpecialCueRequest = cue;
+                StartSingleSpecialCue(cue, 0x80);
             }
             return;
         }
-        if (arg0 < 0x19) {
-            StartSoundCueVoice(arg0, 0x3C, 0x80, 0x80);
+        if (cue < 0x19) {
+            StartSoundCueVoice(cue, 0x3C, 0x80, 0x80);
             return;
         }
-        StartSpecialCueVoice(arg0, 0x80, 0x80);
+        StartSpecialCueVoice(cue, 0x80, 0x80);
     }
 }
 
@@ -2138,12 +2138,12 @@ void ForceSoundSlotVoicePlayback(s32 arg0) {
     }
 }
 
-void ForceAllEffectVoicesEnabled(s32 arg0) {
-    ForcePanVoiceEnabled(arg0);
-    ForceBasicEffectVoicesEnabled(arg0);
-    ForceIndexedEffectVoiceEnabled(arg0);
-    ForcePitchEffectVoicesEnabled(arg0);
-    ForceSoundSlotVoicePlayback(arg0);
+void ForceAllEffectVoicesEnabled(s32 enabled) {
+    ForcePanVoiceEnabled(enabled);
+    ForceBasicEffectVoicesEnabled(enabled);
+    ForceIndexedEffectVoiceEnabled(enabled);
+    ForcePitchEffectVoicesEnabled(enabled);
+    ForceSoundSlotVoicePlayback(enabled);
 }
 
 #include "common.h"

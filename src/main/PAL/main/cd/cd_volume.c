@@ -11,7 +11,7 @@ extern s32 g_CdMixLR;
 extern s32 g_CdMixRR;
 extern s32 g_CdMixRL;
 
-void SetCdVolume(s32 arg0) {
+void SetCdVolume(s32 volume) {
     s32 offset;
     s32 scale;
     s32 magic;
@@ -19,7 +19,7 @@ void SetCdVolume(s32 arg0) {
     s32 value;
 
     offset = g_CdMixPreset;
-    g_CdVolume = arg0;
+    g_CdVolume = volume;
     scale = g_CdVolume;
     offset <<= 2;
 
@@ -51,8 +51,8 @@ void ApplyCdVolume(void) {
     SetCdVolume(g_CdVolume);
 }
 
-void SetCdVolumeSetting(s32 arg0) {
-    s32 product = (arg0 << 7) - arg0;
+void SetCdVolumeSetting(s32 level) {
+    s32 product = (level << 7) - level;
 
     g_CdVolume = product / 15;
     SetCdVolume(g_CdVolume);

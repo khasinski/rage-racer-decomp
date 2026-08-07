@@ -121,14 +121,14 @@ void intrVSyncDispatcher(void) {
     }
 }
 
-void setIntrVSync(long arg0, void *arg1) {
+void setIntrVSync(long index, void *callback) {
     void **base;
     void **slot;
 
     base = g_VSyncCallbacks;
-    slot = &base[arg0];
-    if (arg1 != *slot) {
-        *slot = arg1;
+    slot = &base[index];
+    if (callback != *slot) {
+        *slot = callback;
     }
 }
 

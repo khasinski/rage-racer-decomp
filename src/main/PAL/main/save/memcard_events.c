@@ -15,11 +15,11 @@ void StopMemoryCardEvents(void) {
 }
 
 void _card_load(s32 arg0);
-void CardReadAndSetMode(s32 arg0) {
-    ClearMemoryCardSwEvents(arg0);
-    while (_card_clear((u8)arg0) == 0) {}
+void CardReadAndSetMode(s32 param) {
+    ClearMemoryCardSwEvents(param);
+    while (_card_clear((u8)param) == 0) {}
     WaitMemoryCardSwEvent();
     ClearMemoryCardHwEvents();
-    _card_load((u8)arg0);
+    _card_load((u8)param);
     WaitMemoryCardHwEvent();
 }

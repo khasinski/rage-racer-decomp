@@ -133,7 +133,7 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
 
 void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
-void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 arg11) {
+void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
     s32 y1Reg;
@@ -147,7 +147,7 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
 
     prim = SCRATCH_PRIM_CURSOR_AS(POLY_F3);
     semiReg = semiTrans;
-    flagsReg = arg11;
+    flagsReg = flags;
     y1Reg = y1;
     x2Reg = x2;
     y2Reg = y2;

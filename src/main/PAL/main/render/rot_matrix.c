@@ -87,43 +87,43 @@ void SetCameraRotMatrix(void) {
 
 extern s16 g_AtanTable[];
 
-s32 Atan2(s32 arg0, s32 arg1) {
-    if (arg0 == 0) {
-        if (arg1 == 0) {
+s32 Atan2(s32 x, s32 y) {
+    if (x == 0) {
+        if (y == 0) {
             return 0;
         }
-        if (arg1 > 0) {
+        if (y > 0) {
             return 0x400;
         }
         return -0x400;
     }
 
-    if (arg0 > 0) {
-        if (arg1 >= 0) {
-            if (arg0 < arg1) {
-                return 0x400 - g_AtanTable[(arg0 << 10) / arg1];
+    if (x > 0) {
+        if (y >= 0) {
+            if (x < y) {
+                return 0x400 - g_AtanTable[(x << 10) / y];
             }
-            return g_AtanTable[(arg1 << 10) / arg0];
+            return g_AtanTable[(y << 10) / x];
         }
 
-        arg1 = -arg1;
-        if (arg0 < arg1) {
-            return g_AtanTable[(arg0 << 10) / arg1] - 0x400;
+        y = -y;
+        if (x < y) {
+            return g_AtanTable[(x << 10) / y] - 0x400;
         }
-        return -g_AtanTable[(arg1 << 10) / arg0];
+        return -g_AtanTable[(y << 10) / x];
     }
 
-    arg0 = -arg0;
-    if (arg1 >= 0) {
-        if (arg0 < arg1) {
-            return g_AtanTable[(arg0 << 10) / arg1] + 0x400;
+    x = -x;
+    if (y >= 0) {
+        if (x < y) {
+            return g_AtanTable[(x << 10) / y] + 0x400;
         }
-        return 0x800 - g_AtanTable[(arg1 << 10) / arg0];
+        return 0x800 - g_AtanTable[(y << 10) / x];
     }
 
-    arg1 = -arg1;
-    if (arg0 < arg1) {
-        return 0xC00 - g_AtanTable[(arg0 << 10) / arg1];
+    y = -y;
+    if (x < y) {
+        return 0xC00 - g_AtanTable[(x << 10) / y];
     }
-    return g_AtanTable[(arg1 << 10) / arg0] + 0x800;
+    return g_AtanTable[(y << 10) / x] + 0x800;
 }

@@ -203,7 +203,7 @@ void ResetFreeLookCamera(void) {
 
 extern u32 *g_VisibleCellMask;
 
-void DrawAnimatedScenery(s32 arg0, s32 arg1) {
+void DrawAnimatedScenery(s32 timer, s32 instance) {
     Matrix mtx;
     Matrix mtx2;
     Vec4 state;
@@ -219,7 +219,7 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     register s32 sv asm("$2");
     register s32 *scr asm("$8");
 
-    state = g_AnimSceneryPos[arg1];
+    state = g_AnimSceneryPos[instance];
 
     if ((g_CourseIndex & 3) == 3) {
         state.z += 0x5000;
@@ -248,8 +248,8 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
         return;
     }
 
-    g_AnimSceneryFrame = (arg0 / 4) % 16;
-    if (g_AnimSceneryFrame == 0 && (arg0 % 8) == 0 && g_RacePaused == 0) {
+    g_AnimSceneryFrame = (timer / 4) % 16;
+    if (g_AnimSceneryFrame == 0 && (timer % 8) == 0 && g_RacePaused == 0) {
         g_AnimSceneryTint = 0;
         g_AnimSceneryRacePosition = g_RacePosition;
         g_AnimSceneryVariant = (Random15() & 7) / 3;
@@ -259,7 +259,7 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     }
 
     BuildRotMatrixY(&mtx, state.w);
-    BuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
+    BuildRotMatrixX(&mtx2, g_AnimSceneryPitch[instance]);
     MulMatrix(&mtx, &mtx2);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
 
@@ -267,7 +267,7 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
         return;
     }
 
-    g_AnimSceneryTint = ((arg0 >> 3) & 3) << 16;
+    g_AnimSceneryTint = ((timer >> 3) & 3) << 16;
 
     if (g_AnimSceneryRacePosition != 0) {
         if (g_AnimSceneryFrame < 13) {
@@ -310,7 +310,7 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     }
 }
 
-void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate) {
     Matrix mtx;
     Matrix mtx2;
     Vec4 state;
@@ -333,7 +333,7 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         return;
     }
 
-    state = g_AnimSceneryPos[arg1];
+    state = g_AnimSceneryPos[instance];
     if ((g_CourseIndex & 3) == 3) {
         state.z += 0x5000;
     }
@@ -358,20 +358,20 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         return;
     }
 
-    g_AnimScenery2Frame = (arg0 / 4) % 16;
-    if (g_AnimScenery2Frame == 0 && (arg0 % 8) == 0 && arg3 == 1) {
+    g_AnimScenery2Frame = (timer / 4) % 16;
+    if (g_AnimScenery2Frame == 0 && (timer % 8) == 0 && animate == 1) {
         g_AnimScenery2Tint = 0;
         g_AnimScenery2Variant = (Random15() & 7) / 3;
     }
 
     BuildRotMatrixY(&mtx, state.w);
-    BuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
+    BuildRotMatrixX(&mtx2, g_AnimSceneryPitch[instance]);
     MulMatrix(&mtx, &mtx2);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
 
-    g_AnimScenery2Tint = ((arg0 >> 3) & 3) << 16;
+    g_AnimScenery2Tint = ((timer >> 3) & 3) << 16;
 
-    if (arg2 != 0) {
+    if (isReplay != 0) {
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         num = g_AnimScenery2Frame + 0xA;
         scr = &SCRATCH_ENV_MODE4;

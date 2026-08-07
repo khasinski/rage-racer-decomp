@@ -868,22 +868,22 @@ void UpdateCourseSelectScreen(void) {
     }
 }
 
-s32 DrawRankingScreen(s32 arg0) {
+s32 DrawRankingScreen(s32 step) {
     s32 value;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2C4 = 0;
         return;
     }
 
-    if (arg0 > 0) {
-        value = arg0 + D_8009B2C4;
+    if (step > 0) {
+        value = step + D_8009B2C4;
         D_8009B2C4 = value;
         if (value >= 0x1FD) {
             D_8009B2C4 = 0x1FC;
         }
     } else {
-        value = arg0 + D_8009B2C4;
+        value = step + D_8009B2C4;
         D_8009B2C4 = value;
         if (value < 0) {
             D_8009B2C4 = 0;

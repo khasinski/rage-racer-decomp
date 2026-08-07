@@ -3,23 +3,23 @@
 #include "game/sound.h"
 #include "psyq/snd.h"
 
-void SetVabSlotVoiceEnabled(s32 arg0, s32 arg1, s32 arg2) {
+void SetVabSlotVoiceEnabled(s32 voice, s32 enabled, s32 vabSlot) {
     s32 *state;
 
-    if (arg1 != 0) {
+    if (enabled != 0) {
         s32 *base = g_SoundSlotActive;
 
-        state = base + arg0;
+        state = base + voice;
         if (*state == 0) {
-            StartVabSlotVoice(arg0, 0, (s16)arg2);
+            StartVabSlotVoice(voice, 0, (s16)vabSlot);
             *state = 1;
         }
     } else {
         s32 *base = g_SoundSlotActive;
 
-        state = base + arg0;
+        state = base + voice;
         if (*state != 0) {
-            StopDirectVoice(arg0);
+            StopDirectVoice(voice);
             *state = 0;
         }
     }

@@ -165,7 +165,7 @@ void ResetProgressSlot(void *arg0, s32 *arg1) {
     arg1[4] = 0;
 }
 
-void ResetCourseProgress(s32 arg0) {
+void ResetCourseProgress(s32 mode) {
     u8 *ptr = g_CourseProgress;
 
     *(s16 *)(ptr + 6) = 5;
@@ -174,7 +174,7 @@ void ResetCourseProgress(s32 arg0) {
     ptr[1] = 0;
     ptr[0] = 0;
 
-    if (arg0 < 2) {
+    if (mode < 2) {
         g_CourseProgress[3] = 0xFF;
     }
 

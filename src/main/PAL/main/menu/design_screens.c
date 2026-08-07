@@ -158,22 +158,22 @@ void UpdateLogoSampleScreen(void) {
     }
 }
 
-s32 DrawTeamNameScreen(s32 arg0) {
+s32 DrawTeamNameScreen(s32 step) {
     s32 value;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2E0 = 0;
         return;
     }
 
-    if (arg0 > 0) {
-        value = arg0 + D_8009B2E0;
+    if (step > 0) {
+        value = step + D_8009B2E0;
         D_8009B2E0 = value;
         if (value >= 0x1FD) {
             D_8009B2E0 = 0x1FC;
         }
     } else {
-        value = arg0 + D_8009B2E0;
+        value = step + D_8009B2E0;
         D_8009B2E0 = value;
         if (value < 0) {
             D_8009B2E0 = 0;
@@ -278,22 +278,22 @@ pop:
     }
 }
 
-s32 DrawPaintColorScreen(s32 arg0) {
+s32 DrawPaintColorScreen(s32 step) {
     s32 value;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2E4 = 0;
         return;
     }
 
-    if (arg0 > 0) {
-        value = arg0 + D_8009B2E4;
+    if (step > 0) {
+        value = step + D_8009B2E4;
         D_8009B2E4 = value;
         if (value >= 0x1FD) {
             D_8009B2E4 = 0x1FC;
         }
     } else {
-        value = arg0 + D_8009B2E4;
+        value = step + D_8009B2E4;
         D_8009B2E4 = value;
         if (value < 0) {
             D_8009B2E4 = 0;
@@ -426,27 +426,27 @@ void UpdatePaintColorScreen(void) {
     }
 }
 
-s32 DrawCarShopScreen(s32 arg0) {
+s32 DrawCarShopScreen(s32 step) {
     s32 value;
     s32 limit;
     s32 amount;
     s32 phase;
     s32 channel;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2E8 = 0;
         return;
     }
 
-    if (arg0 > 0) {
-        value = D_8009B2E8 + arg0;
+    if (step > 0) {
+        value = D_8009B2E8 + step;
         D_8009B2E8 = value;
         if (value >= 0x1FD) {
             D_8009B2E8 = 0x1FC;
         }
         value = 0;
     } else {
-        value = D_8009B2E8 + arg0;
+        value = D_8009B2E8 + step;
         D_8009B2E8 = value;
         if (value < 0) {
             D_8009B2E8 = 0;

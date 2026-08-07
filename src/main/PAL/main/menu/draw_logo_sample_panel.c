@@ -61,7 +61,7 @@ void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
     }
 }
 
-void DrawTeamNameEntry(s32 arg0, s32 arg1) {
+void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
     s16 temp_a2;
     s16 temp_s2;
     s16 var_a2;
@@ -82,12 +82,12 @@ void DrawTeamNameEntry(s32 arg0, s32 arg1) {
     u8 temp_v1;
 
     temp_s7 = SCRATCH_OT_BASE_WORD;
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8007FB28 = 0;
         return;
     }
-    if (arg0 < 0) {
-        temp_v0 = arg0 + D_8007FB28;
+    if (step < 0) {
+        temp_v0 = step + D_8007FB28;
         D_8007FB28 = temp_v0;
         if (temp_v0 < 0) {
             D_8007FB28 = 0;
@@ -114,8 +114,8 @@ void DrawTeamNameEntry(s32 arg0, s32 arg1) {
         colour = var_v0;
         colour >>= 6;
         colour -= 0x41;
-        DrawLogoRect(temp_s7 + 4, (s16)(((arg1 % 11) * 0xC) + 0x54),
-                     (s16)(var_s1 + ((arg1 / 11) * 0x18)), 0xB,
+        DrawLogoRect(temp_s7 + 4, (s16)(((cursorIndex % 11) * 0xC) + 0x54),
+                     (s16)(var_s1 + ((cursorIndex / 11) * 0x18)), 0xB,
                      (s32)(s16)(animationStep * 2), 0, colour & 0xFF, 0, 0xFF);
         D_8009B28C += 0x60;
     }
@@ -125,17 +125,17 @@ void DrawTeamNameEntry(s32 arg0, s32 arg1) {
             animationStep = 8;
         }
         temp_a2 = ((u32)-(animationStep * 64) >> 5) + 0xF9;
-        if (arg1 < 0xA) {
-            DrawLogoSprite(temp_s7, (s16)(((arg1 % 11) * 0xC) + 0x56),
-                           (s16)(temp_a2 + ((arg1 / 11) * 0x18)), 8,
-                           (s32)(s16)(animationStep * 2), (s32)(s16)((arg1 % 32) * 8),
-                           (s32)(s16)((arg1 / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1, 0x5B);
-        } else if (arg1 >= 0xB) {
-            DrawLogoSprite(temp_s7, (s16)(((arg1 % 11) * 0xC) + 0x56),
-                           (s16)(temp_a2 + ((arg1 / 11) * 0x18)), 8,
+        if (cursorIndex < 0xA) {
+            DrawLogoSprite(temp_s7, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
+                           (s16)(temp_a2 + ((cursorIndex / 11) * 0x18)), 8,
+                           (s32)(s16)(animationStep * 2), (s32)(s16)((cursorIndex % 32) * 8),
+                           (s32)(s16)((cursorIndex / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1, 0x5B);
+        } else if (cursorIndex >= 0xB) {
+            DrawLogoSprite(temp_s7, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
+                           (s16)(temp_a2 + ((cursorIndex / 11) * 0x18)), 8,
                            (s32)(s16)(animationStep * 2),
-                           (s32)(s16)(((arg1 - 1) % 32) * 8),
-                           (s32)(s16)(((arg1 - 1) / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1,
+                           (s32)(s16)(((cursorIndex - 1) % 32) * 8),
+                           (s32)(s16)(((cursorIndex - 1) / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1,
                            0x5B);
         }
         rowI = 0;
@@ -214,8 +214,8 @@ void DrawTeamNameEntry(s32 arg0, s32 arg1) {
             } while (i < (s32)g_TeamNameLength);
         }
     }
-    if (arg0 > 0) {
-        temp_v0_2 = arg0 + D_8007FB28;
+    if (step > 0) {
+        temp_v0_2 = step + D_8007FB28;
         D_8007FB28 = temp_v0_2;
         if (temp_v0_2 >= 0x1A) {
             D_8007FB28 = 0x19;

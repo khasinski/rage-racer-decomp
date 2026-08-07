@@ -300,17 +300,17 @@ void UpdateCarShopScreen(void) {
     }
 }
 
-u32 DrawEngineerShopScreen(s32 arg0) {
+u32 DrawEngineerShopScreen(s32 step) {
     u32 value;
     s32 amount;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2EC = 0;
         return;
     }
 
-    if (arg0 > 0) {
-        value = arg0 + D_8009B2EC;
+    if (step > 0) {
+        value = step + D_8009B2EC;
         D_8009B2EC = value;
         if ((s32)value >= 0x1FD) {
             D_8009B2EC = 0x1FC;
@@ -320,7 +320,7 @@ u32 DrawEngineerShopScreen(s32 arg0) {
         s32 diff = 0x1FC;
         s32 product;
 
-        value = arg0 + D_8009B2EC;
+        value = step + D_8009B2EC;
         D_8009B2EC = value;
         if ((s32)value < 0) {
             D_8009B2EC = 0;

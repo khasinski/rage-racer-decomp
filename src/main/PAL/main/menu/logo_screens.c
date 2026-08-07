@@ -268,22 +268,22 @@ void UpdateTeamLogoScreen(void)
   }
 }
 
-s32 DrawLogoSampleScreen(s32 arg0) {
+s32 DrawLogoSampleScreen(s32 step) {
     s32 value;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2DC = 0;
         return;
     }
 
-    if (arg0 > 0) {
-        value = arg0 + D_8009B2DC;
+    if (step > 0) {
+        value = step + D_8009B2DC;
         D_8009B2DC = value;
         if (value >= MENU_FADE_COMPLETE) {
             D_8009B2DC = MENU_FADE_MAX;
         }
     } else {
-        value = arg0 + D_8009B2DC;
+        value = step + D_8009B2DC;
         D_8009B2DC = value;
         if (value < 0) {
             D_8009B2DC = 0;

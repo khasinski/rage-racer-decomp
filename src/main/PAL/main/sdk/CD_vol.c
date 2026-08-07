@@ -15,13 +15,13 @@ void KernelCallbackSlot3(void);
 void KernelCallbackSlot2(long arg0, void *arg1);
 void LibcPutString(u_char *text);
 
-long CD_vol(CdlATV *arg0) {
+long CD_vol(CdlATV *vol) {
     *g_CdReg0 = 2;
-    *g_CdReg2 = arg0->val0;
-    *g_CdReg3 = arg0->val1;
+    *g_CdReg2 = vol->val0;
+    *g_CdReg3 = vol->val1;
     *g_CdReg0 = 3;
-    *g_CdReg1 = arg0->val2;
-    *g_CdReg2 = arg0->val3;
+    *g_CdReg1 = vol->val2;
+    *g_CdReg2 = vol->val3;
     *g_CdReg3 = 0x20;
     return 0;
 }

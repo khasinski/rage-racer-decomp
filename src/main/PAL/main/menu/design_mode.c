@@ -11,7 +11,7 @@ void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0
                    s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex,
                    s32 semiTrans, s32 flags) asm("DrawSprite");
 
-s32 DrawDesignModeScreen(s32 arg0) {
+s32 DrawDesignModeScreen(s32 step) {
     DesignModeCellMask mask;
     void *ot;
     s32 limit;
@@ -24,15 +24,15 @@ s32 DrawDesignModeScreen(s32 arg0) {
     ot = (void *)(*(u32 *)0x1F800004 + 4);
     mask = D_80011BD4;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2D4 = 0;
         return;
     }
 
-    if (arg0 > 0) {
+    if (step > 0) {
         s32 updated;
 
-        updated = D_8009B2D4 + arg0;
+        updated = D_8009B2D4 + step;
         D_8009B2D4 = updated;
         if (updated >= MENU_FADE_COMPLETE) {
             D_8009B2D4 = MENU_FADE_MAX;
@@ -41,7 +41,7 @@ s32 DrawDesignModeScreen(s32 arg0) {
     } else {
         s32 updated;
 
-        updated = D_8009B2D4 + arg0;
+        updated = D_8009B2D4 + step;
         D_8009B2D4 = updated;
         if (updated < 0) {
             D_8009B2D4 = 0;
@@ -192,22 +192,22 @@ void UpdateDesignModeScreen(void) {
     }
 }
 
-s32 DrawTeamLogoScreen(s32 arg0) {
+s32 DrawTeamLogoScreen(s32 step) {
     s32 value;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2D8 = 0;
         return;
     }
 
-    if (arg0 > 0) {
-        value = arg0 + D_8009B2D8;
+    if (step > 0) {
+        value = step + D_8009B2D8;
         D_8009B2D8 = value;
         if (value >= MENU_FADE_COMPLETE) {
             D_8009B2D8 = MENU_FADE_MAX;
         }
     } else {
-        value = arg0 + D_8009B2D8;
+        value = step + D_8009B2D8;
         D_8009B2D8 = value;
         if (value < 0) {
             D_8009B2D8 = 0;

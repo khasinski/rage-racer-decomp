@@ -44,10 +44,10 @@ void *PutDrawEnv(void *arg0) {
     return prim;
 }
 
-void *DrawOTagEnv(void *arg0, void *arg1) {
-    void *src = arg0;
+void *DrawOTagEnv(void *ot, void *env) {
+    void *src = ot;
     u8 *debug = &g_GraphDebug;
-    void *prim = arg1;
+    void *prim = env;
     void *tag;
 
     if (*debug >= 2) {

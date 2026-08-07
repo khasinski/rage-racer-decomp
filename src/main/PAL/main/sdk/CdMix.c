@@ -17,8 +17,8 @@ long CdGetSector2(long madr, u_long size) {
     return CD_getsector2(madr, size) == 0;
 }
 
-void CdDataCallback(long arg0) {
-    DMACallback(3, arg0);
+void CdDataCallback(long callback) {
+    DMACallback(3, callback);
 }
 
 void CdMixDataSync(void) {
@@ -35,10 +35,10 @@ CdlLOC *CdIntToPos(long i, CdlLOC *p) {
     return p;
 }
 
-long CdPosToInt_Local(CdlLOC *arg0) {
-    u_char sector = arg0->sector;
-    u_char second = arg0->second;
-    u_char minute = arg0->minute;
+long CdPosToInt_Local(CdlLOC *loc) {
+    u_char sector = loc->sector;
+    u_char second = loc->second;
+    u_char minute = loc->minute;
 
 #define DECODE_BCD(x) (((x) >> 4) * 10 + ((x) & 0xF))
     return (DECODE_BCD(minute) * 60 + DECODE_BCD(second)) * 75 +

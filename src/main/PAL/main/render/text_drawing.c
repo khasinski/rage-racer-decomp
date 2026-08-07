@@ -401,7 +401,7 @@ extern s32 D_8007FB00;
 
 void *QueueDrawModePrim(void *arg0, void *arg1, s32 arg2);
 
-void DrawBitPatternOverlay(s32 arg0) {
+void DrawBitPatternOverlay(s32 pattern) {
     void *ot = SCRATCH_OT_BASE_AS(void);
     u8 *row = D_8007F6E8;
     s32 y;
@@ -411,11 +411,11 @@ void DrawBitPatternOverlay(s32 arg0) {
     s32 bit;
     s32 offset;
 
-    if (arg0 == 0) {
+    if (pattern == 0) {
         return;
     }
 
-    if (arg0 < 0) {
+    if (pattern < 0) {
         if ((g_AnimTimer % 6U) == 0) {
             D_8007FB00 += 8;
         }
@@ -427,7 +427,7 @@ void DrawBitPatternOverlay(s32 arg0) {
         }
         row = (u8 *)(D_8007FB00 + (s32)D_8007F6E8);
     } else {
-        row += (arg0 - 1) * 8;
+        row += (pattern - 1) * 8;
     }
 
     y = 0x150;

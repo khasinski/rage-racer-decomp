@@ -203,7 +203,7 @@ extern u8 g_DispEnv1X[];
 extern u16 g_ScreenOffsetX;
 extern u16 g_ScreenOffsetY;
 
-void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
+void SetupDisplay240(s32 r, s32 g, s32 b) {
     u8 *base;
     s32 height;
     u16 *src0;
@@ -227,17 +227,17 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
 
     {
         register void *ptr;
-        register s32 arg1;
-        register s32 arg2;
+        register s32 g;
+        register s32 b;
         register s32 arg3;
         s32 small_height;
 
         ptr = base + 0x70;
-        arg1 = 0x56;
-        arg2 = 0x12;
+        g = 0x56;
+        b = 0x12;
         arg3 = 0x94;
         small_height = 0x24;
-        SetDefDrawEnv((DrawEnv *)ptr, arg1, arg2, arg3, small_height);
+        SetDefDrawEnv((DrawEnv *)ptr, g, b, arg3, small_height);
         SetDefDrawEnv((DrawEnv *)D_801C0690, 0x56, 0x102, 0x94, small_height);
     }
 
@@ -250,9 +250,9 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
         stride = 0x20000;
         g_FrameContexts[offset + 0x16] = one;
         g_FrameContexts[offset + 0x18] = one;
-        g_FrameContexts[offset + 0x19] = arg0;
-        g_FrameContexts[offset + 0x1A] = arg1;
-        g_FrameContexts[offset + 0x1B] = arg2;
+        g_FrameContexts[offset + 0x19] = r;
+        g_FrameContexts[offset + 0x1A] = g;
+        g_FrameContexts[offset + 0x1B] = b;
         value = *src0;
         stride |= 0x37E8;
         *(volatile u16 *)(g_FrameContexts + offset + 0x64) = value;
@@ -260,9 +260,9 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
         i++;
         g_FrameContexts[offset + 0x86] = one;
         g_FrameContexts[offset + 0x88] = 0;
-        g_FrameContexts[offset + 0x89] = arg0;
-        g_FrameContexts[offset + 0x8A] = arg1;
-        g_FrameContexts[offset + 0x8B] = arg2;
+        g_FrameContexts[offset + 0x89] = r;
+        g_FrameContexts[offset + 0x8A] = g;
+        g_FrameContexts[offset + 0x8B] = b;
         *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value2 + 0x1D;
         offset += stride;
     } while (i < 2);

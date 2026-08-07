@@ -7,9 +7,9 @@ extern u_char g_GraphQueue;
 extern u_char g_GraphDebug;
 extern char D_800134F0[];
 
-long SetGraphQueue(long arg0) {
+long SetGraphQueue(long mode) {
     u_char *queue = &g_GraphQueue;
-    long newQueue = arg0;
+    long newQueue = mode;
     long oldQueue;
 
     oldQueue = *queue;
@@ -40,23 +40,23 @@ long GetGraphDebug(void) {
 extern char D_80013504[];
 extern u_long g_DrawSyncCallback;
 
-u_long DrawSyncCallback(u_long arg0) {
+u_long DrawSyncCallback(u_long callback) {
     u_long ret;
 
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_80013504, arg0);
+        GPU_printf(D_80013504, callback);
     }
 
     ret = g_DrawSyncCallback;
-    g_DrawSyncCallback = arg0;
+    g_DrawSyncCallback = callback;
     return ret;
 }
 
 extern char D_80013520[];
 
-void SetDispMask(long arg0) {
+void SetDispMask(long mask) {
     u_char *debug = &g_GraphDebug;
-    long enable = arg0;
+    long enable = mask;
     u_char *clearPtr;
     GpuCallbacks *gpu;
 
@@ -76,11 +76,11 @@ void SetDispMask(long arg0) {
 extern GpuCallbacks *g_GpuFuncs;
 extern char D_80013534[];
 
-void DrawSync(long arg0) {
+void DrawSync(long mode) {
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_80013534, arg0);
+        GPU_printf(D_80013534, mode);
     }
-    g_GpuFuncs->drawSync(arg0);
+    g_GpuFuncs->drawSync(mode);
 }
 
 extern short g_VramWidth;

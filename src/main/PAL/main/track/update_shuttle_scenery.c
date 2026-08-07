@@ -5,7 +5,7 @@
 #include "game/track.h"
 #include "psyq/gte.h"
 
-void UpdateShuttleScenery(s32 arg0) {
+void UpdateShuttleScenery(s32 instance) {
     GameShuttleScenery *entry;
     s32 phase;
     s32 side;
@@ -18,7 +18,7 @@ void UpdateShuttleScenery(s32 arg0) {
     s16 *tailLimitPtr;
     s16 denom;
 
-    entry = &g_ShuttleScenery[arg0];
+    entry = &g_ShuttleScenery[instance];
     asm("" : "=r"(entry) : "0"(entry));
     limitPtr = g_ShuttlePathTravelMax;
     side = entry->startEndpoint;
@@ -62,7 +62,7 @@ void UpdateShuttleScenery(s32 arg0) {
 
 extern u32 *g_VisibleCellMask;
 
-void DrawShuttleScenery(s32 arg0) {
+void DrawShuttleScenery(s32 instance) {
     s32 drawArg;
     Matrix mtx0;
     Matrix mtx1;
@@ -81,7 +81,7 @@ void DrawShuttleScenery(s32 arg0) {
     s32 visible;
     s32 frameValue;
 
-    offset = (((arg0 * 3) << 2) + arg0) << 2;
+    offset = (((instance * 3) << 2) + instance) << 2;
     base = g_ShuttleScenery;
     state = (GameShuttleScenery *)((u8 *)base + offset);
     firstValue = state->z;

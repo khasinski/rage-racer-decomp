@@ -4,8 +4,8 @@
 
 extern u8 g_CdVolume;
 
-void SetCdMixPreset(s32 arg0) {
-    g_CdMixPreset = arg0;
+void SetCdMixPreset(s32 preset) {
+    g_CdMixPreset = preset;
     SetCdVolume(g_CdVolume);
 }
 

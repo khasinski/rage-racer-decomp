@@ -139,7 +139,7 @@ pos:
     }
 }
 
-s32 DrawCarSelectScreen(s32 arg0) {
+s32 DrawCarSelectScreen(s32 step) {
     s32 p = (s32) SCRATCH_OT_BASE_AS(void);
     u8 *buf = (u8 *)p + 4;
     s32 v;
@@ -148,18 +148,18 @@ s32 DrawCarSelectScreen(s32 arg0) {
     s32 mode;
     u8 tex;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2CC = 0;
         return p;
     }
 
-    if (arg0 > 0) {
-        D_8009B2CC += arg0;
+    if (step > 0) {
+        D_8009B2CC += step;
         if (D_8009B2CC >= 509) {
             D_8009B2CC = 508;
         }
     } else {
-        D_8009B2CC += arg0;
+        D_8009B2CC += step;
         if (D_8009B2CC < 0) {
             D_8009B2CC = 0;
         }
@@ -629,16 +629,16 @@ void UpdateCarSelectScreen(void) {
     }
 }
 
-s32 DrawCustomizeScreen(s32 arg0) {
+s32 DrawCustomizeScreen(s32 step) {
     s32 value;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8009B2D0 = 0;
         return;
     }
 
-    if (arg0 > 0) {
-        value = arg0 + D_8009B2D0;
+    if (step > 0) {
+        value = step + D_8009B2D0;
         D_8009B2D0 = value;
         if (value >= 0x1FD) {
             D_8009B2D0 = 0x1FC;
@@ -648,7 +648,7 @@ s32 DrawCustomizeScreen(s32 arg0) {
         s32 limit;
         u32 product;
 
-        value = arg0 + D_8009B2D0;
+        value = step + D_8009B2D0;
         D_8009B2D0 = value;
         limit = 0x1FC;
         if (value < 0) {

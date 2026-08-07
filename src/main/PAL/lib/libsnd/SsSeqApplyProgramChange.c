@@ -86,14 +86,14 @@ void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
 
 extern SeqStruct *g_SndSeqTable[];
 
-long SsSeqReadDeltaTime(long arg0, long arg1) {
+long SsSeqReadDeltaTime(long seq, long channel) {
     SeqStruct *state;
     u_char *stream;
     long value;
     long byte;
     long ret;
 
-    state = &g_SndSeqTable[(short)arg0][(short)arg1];
+    state = &g_SndSeqTable[(short)seq][(short)channel];
 
     stream = state->read_pos;
     state->read_pos = stream + 1;
@@ -118,16 +118,16 @@ long SsSeqReadDeltaTime(long arg0, long arg1) {
     return ret;
 }
 
-void SsUnpackAdsr(u_long arg0, u_long arg1, u_short *out) {
-    out[5] = arg0 & 0x8000;
-    out[6] = arg1 & 0x8000;
-    out[8] = arg1 & 0x4000;
-    out[7] = arg1 & 0x20;
-    out[0] = ((arg0 & 0xFFFF) >> 8) & 0x7F;
-    out[1] = ((arg0 & 0xFFFF) >> 4) & 0xF;
-    out[2] = arg0 & 0xF;
-    out[3] = (arg1 >> 6) & 0x7F;
-    out[4] = arg1 & 0x1F;
+void SsUnpackAdsr(u_long adsr1, u_long adsr2, u_short *out) {
+    out[5] = adsr1 & 0x8000;
+    out[6] = adsr2 & 0x8000;
+    out[8] = adsr2 & 0x4000;
+    out[7] = adsr2 & 0x20;
+    out[0] = ((adsr1 & 0xFFFF) >> 8) & 0x7F;
+    out[1] = ((adsr1 & 0xFFFF) >> 4) & 0xF;
+    out[2] = adsr1 & 0xF;
+    out[3] = (adsr2 >> 6) & 0x7F;
+    out[4] = adsr2 & 0x1F;
 }
 
 void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
@@ -174,20 +174,20 @@ void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
 
 extern SeqStruct *g_SndSeqTable[];
 
-void SsSeqRestartPlayback(short arg0, short arg1) {
+void SsSeqRestartPlayback(short seq, short sep) {
     SeqStruct *state;
 
-    state = &g_SndSeqTable[arg0][arg1];
+    state = &g_SndSeqTable[seq][sep];
     state->unk46 = 1;
     state->unk48 = 0;
 
-    g_SndSeqTable[arg0][arg1].flags &= ~0x100;
-    g_SndSeqTable[arg0][arg1].flags &= ~0x8;
-    g_SndSeqTable[arg0][arg1].flags &= ~0x2;
-    g_SndSeqTable[arg0][arg1].flags &= ~0x4;
-    g_SndSeqTable[arg0][arg1].flags &= ~0x200;
+    g_SndSeqTable[seq][sep].flags &= ~0x100;
+    g_SndSeqTable[seq][sep].flags &= ~0x8;
+    g_SndSeqTable[seq][sep].flags &= ~0x2;
+    g_SndSeqTable[seq][sep].flags &= ~0x4;
+    g_SndSeqTable[seq][sep].flags &= ~0x200;
 
     state->read_pos = state->next_sep_pos;
     state->unk2b = 1;
-    g_SndSeqTable[arg0][arg1].flags |= 1;
+    g_SndSeqTable[seq][sep].flags |= 1;
 }

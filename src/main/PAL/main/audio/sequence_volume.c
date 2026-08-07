@@ -8,9 +8,9 @@ void RefreshSequenceVolumeScale(void) {
     SetSequenceVolume(temp / 15);
 }
 
-void SetSequenceVolumeScale(s32 arg0) {
-    s32 temp = arg0 * 114;
+void SetSequenceVolumeScale(s32 scale) {
+    s32 temp = scale * 114;
 
-    g_SeqVolumeSetting = arg0;
+    g_SeqVolumeSetting = scale;
     SetSequenceVolume(temp / 15);
 }

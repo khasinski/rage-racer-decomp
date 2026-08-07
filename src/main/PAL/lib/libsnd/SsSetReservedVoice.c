@@ -6,8 +6,8 @@ extern short g_SndMonoMode;
 extern volatile u_char g_SndVoiceCount;
 extern u_short g_SndVabOpenCount;
 
-void SsSetReservedVoice(u_char arg0) {
-    g_SndReservedVoiceCount = arg0;
+void SsSetReservedVoice(u_char voices) {
+    g_SndReservedVoiceCount = voices;
 }
 
 void SsSetMono(void) {

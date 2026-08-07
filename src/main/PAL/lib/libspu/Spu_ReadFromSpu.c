@@ -19,9 +19,9 @@ u_long Spu_ReadFromSpu(long arg0, u_long arg1) {
     return size;
 }
 
-long SpuSetTransferStartAddr(long arg0) {
-    g_SpuTransferStartAddr = _spu_FsetRXXa(-1, arg0);
-    return arg0;
+long SpuSetTransferStartAddr(long addr) {
+    g_SpuTransferStartAddr = _spu_FsetRXXa(-1, addr);
+    return addr;
 }
 
 long SpuSetTransferMode(long mode) {
@@ -44,12 +44,12 @@ long SpuSetTransferMode(long mode) {
     return transferByIo;
 }
 
-long SpuIsTransferCompleted(long arg0) {
+long SpuIsTransferCompleted(long wait) {
     long one;
     long saved_arg;
     long ret;
 
-    saved_arg = arg0;
+    saved_arg = wait;
     one = 1;
 
     if (g_SpuTransferMode == one) {
@@ -76,8 +76,8 @@ long SpuIsTransferCompleted(long arg0) {
     return ret;
 }
 
-void _spu_setTransferCompletionFlag(long arg0) {
-    if (arg0 == 1) {
+void _spu_setTransferCompletionFlag(long completed) {
+    if (completed == 1) {
         g_SpuTransferCompleted = 0;
     } else {
         g_SpuTransferCompleted = 1;

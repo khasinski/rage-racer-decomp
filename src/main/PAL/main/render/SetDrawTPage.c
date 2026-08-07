@@ -4,28 +4,28 @@
 #include "game/render.h"
 #include "game/menu.h"
 
-void SetDrawTPage(u_char *arg0, long arg1, long arg2, long arg3) {
+void SetDrawTPage(u_char *prim, long dfe, long dtd, long tpage) {
 s32 encoded;
     s32 mode;
 
-    arg0[3] = 1;
+    prim[3] = 1;
     mode = GetGraphType();
     if ((mode == 1) || (GetGraphType() == 2)) {
         s32 value = 0xE1000000;
 
-        if (arg2 != 0) {
+        if (dtd != 0) {
             value = 0xE1000800;
         }
-        encoded = arg3 & 0x27FF;
-        if (arg1 != 0) {
+        encoded = tpage & 0x27FF;
+        if (dfe != 0) {
             encoded |= 0x1000;
         }
         { s32 rel = encoded; encoded = value | rel; }
     } else {
-        encoded = 0xE1000000 | (arg2 ? 0x200 : 0) |
-                  (arg1 ? 0x400 : 0) | (arg3 & 0x9FF);
+        encoded = 0xE1000000 | (dtd ? 0x200 : 0) |
+                  (dfe ? 0x400 : 0) | (tpage & 0x9FF);
     }
-    *(u32 *)&arg0[4] = encoded;
+    *(u32 *)&prim[4] = encoded;
 }
 
 void SetDrawLoad(u8 *arg0, u8 *arg1) {
@@ -93,11 +93,11 @@ void DumpDrawEnv(DrawEnv *arg0) {
     GPU_printf(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
 }
 
-void DumpDispEnv(DispEnv *arg0) {
-    GPU_printf(D_800133F4, arg0->disp.x, arg0->disp.y, arg0->disp.w, arg0->disp.h);
-    GPU_printf(D_80013410, arg0->screen.x, arg0->screen.y, arg0->screen.w, arg0->screen.h);
-    GPU_printf(D_8001342C, arg0->isinter);
-    GPU_printf(D_80013438, arg0->isrgb24);
+void DumpDispEnv(DispEnv *env) {
+    GPU_printf(D_800133F4, env->disp.x, env->disp.y, env->disp.w, env->disp.h);
+    GPU_printf(D_80013410, env->screen.x, env->screen.y, env->screen.w, env->screen.h);
+    GPU_printf(D_8001342C, env->isinter);
+    GPU_printf(D_80013438, env->isrgb24);
 }
 
 extern GpuCallbacks *g_GpuFuncs;

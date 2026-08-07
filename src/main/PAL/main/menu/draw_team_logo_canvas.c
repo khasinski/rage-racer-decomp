@@ -146,7 +146,7 @@ void DrawTeamLogoCanvasFade(s32 delta) {
     GameDrawSolidRectWide(scratch + 0x18, 0x48, 0, 0xF8, limit, alpha, alpha, alpha, 0x40);
 }
 
-void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
+void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
 {
   s32 kreg;
   s32 a0v;
@@ -173,10 +173,10 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
   register s32 phaseValue asm("$2");
   register s32 secondaryValue asm("$3");
   register s32 drawValue asm("$4");
-  a0v = arg0;
-  a1v = arg1;
+  a0v = panelStep;
+  a1v = editorStep;
   ot = SCRATCH_OT_BASE_WORD;
-  if (arg0 == 0)
+  if (panelStep == 0)
   {
     D_8007FB0C = 0;
     D_8007FB10 = 0;

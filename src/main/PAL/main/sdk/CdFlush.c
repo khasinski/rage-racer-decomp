@@ -34,24 +34,24 @@ char *CdIntstr(long intr) {
     return g_CdIntrNames[intr];
 }
 
-long CdSync(long arg0, long arg1) {
-    return CD_sync(arg0, arg1);
+long CdSync(long mode, long result) {
+    return CD_sync(mode, result);
 }
 
 long CdReady(long arg0, long arg1) {
     return CD_ready(arg0, arg1);
 }
 
-long CdSyncCallback(long arg0) {
+long CdSyncCallback(long callback) {
     long old = g_CdSyncCallback;
 
-    g_CdSyncCallback = arg0;
+    g_CdSyncCallback = callback;
     return old;
 }
 
-long CdReadyCallback(long arg0) {
+long CdReadyCallback(long callback) {
     long old = g_CdReadyCallback;
 
-    g_CdReadyCallback = arg0;
+    g_CdReadyCallback = callback;
     return old;
 }

@@ -7,7 +7,7 @@ extern u_char g_SndVoiceCount;
 extern u_char g_SndCurrentVoice;
 extern u_char *g_SndSpuRegs;
 
-void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
+void SpuVmKeyOnWithVol(long note, long fine, long left, long right) {
     long ret;
 
     g_SndCurrentPriority = 0x7F;
@@ -15,7 +15,7 @@ void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
     *(u_short *)&g_SndCurrentVoice = ret;
 
     if (ret < g_SndVoiceCount) {
-        SpuVmKeyOnCore(g_SndCurrentVoice, arg0, arg1, arg2, arg3);
+        SpuVmKeyOnCore(g_SndCurrentVoice, note, fine, left, right);
     }
 }
 
@@ -37,7 +37,7 @@ void SpuVmClearFinishedVoices(void) {
     }
 }
 
-void SpuVmKeyOnWithDefaultVol(long arg0, long arg1) {
+void SpuVmKeyOnWithDefaultVol(long note, long fine) {
     long ret;
 
     g_SndCurrentPriority = 0x7F;
@@ -45,6 +45,6 @@ void SpuVmKeyOnWithDefaultVol(long arg0, long arg1) {
     *(u_short *)&g_SndCurrentVoice = ret;
 
     if (ret < g_SndVoiceCount) {
-        SpuVmKeyOnCore(g_SndCurrentVoice, arg0, arg1, 0x80FF, 0x5FC8);
+        SpuVmKeyOnCore(g_SndCurrentVoice, note, fine, 0x80FF, 0x5FC8);
     }
 }

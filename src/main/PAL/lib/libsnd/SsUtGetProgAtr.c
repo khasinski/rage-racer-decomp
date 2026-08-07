@@ -9,13 +9,13 @@ extern u_char *g_SndVabHeader[];
 extern u_char *g_SndVabProgTable[];
 extern u_char *g_SndVabToneTable[];
 
-long SsUtGetProgAtr(long arg0, long arg1, ProgAtr *out) {
-    long chan = (short)arg0;
+long SsUtGetProgAtr(long vab_id, long program, ProgAtr *out) {
+    long chan = (short)vab_id;
     long index;
     long offset;
 
     if (g_SndVabStatus[chan] == 1) {
-        index = (short)arg1;
+        index = (short)program;
         SpuVmVSetUp(chan, index);
         offset = index * 0x10;
 
@@ -33,9 +33,9 @@ long SsUtGetProgAtr(long arg0, long arg1, ProgAtr *out) {
     return 0;
 }
 
-long SpuVmVSetUp(long arg0, long arg1) {
-    register long raw0 asm("$6") = arg0;
-    register long raw1 asm("$7") = arg1;
+long SpuVmVSetUp(long vab_id, long program) {
+    register long raw0 asm("$6") = vab_id;
+    register long raw1 asm("$7") = program;
     long chan;
     long index;
     u_char *data;
@@ -43,11 +43,11 @@ long SpuVmVSetUp(long arg0, long arg1) {
 
     switch (0) { default:
     if ((u_short)raw0 < 0x10) {
-        chan = (short)arg0;
+        chan = (short)vab_id;
         if (g_SndVabStatus[chan] != 1) {
             return -1;
         }
-        index = (short)arg1;
+        index = (short)program;
         if (index < g_SndVabProgMax) {
             break;
         }
@@ -72,15 +72,15 @@ long SpuVmVSetUp(long arg0, long arg1) {
     return 0;
 }
 
-long SsUtGetVagAtr(long arg0, long arg1, long arg2, VagAtr *out) {
+long SsUtGetVagAtr(long vab_id, long program, long tone, VagAtr *out) {
     long chan;
     long offset;
 
-    chan = (short)arg0;
+    chan = (short)vab_id;
     if (g_SndVabStatus[chan] == 1) {
-        SpuVmVSetUp(chan, (short)arg1);
+        SpuVmVSetUp(chan, (short)program);
 
-        offset = (long)(short)(arg2 + (g_SndCurrentProgActual << 4)) << 5;
+        offset = (long)(short)(tone + (g_SndCurrentProgActual << 4)) << 5;
 
         out->prior = *(u_char *)(offset + (long)g_SndCurrentToneTable);
         out->mode = g_SndCurrentToneTable[offset + 1];

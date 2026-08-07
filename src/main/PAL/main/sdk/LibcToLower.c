@@ -43,7 +43,7 @@ void _card_write(long arg0, long arg1, long arg2);
 void _new_card(long arg0);
 
 /* libcard, but declared in game/memcard.h, so it keeps common.h's typedefs. */
-s32 _card_clear(s32 arg0) {
-    _new_card(arg0);
-    _card_write(arg0, 0x3F, 0);
+s32 _card_clear(s32 chan) {
+    _new_card(chan);
+    _card_write(chan, 0x3F, 0);
 }

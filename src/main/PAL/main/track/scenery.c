@@ -16,7 +16,7 @@ static inline void ClearScratchRenderMode3DF68(void) {
     SCRATCH_ENV_MODE4 = 0;
 }
 
-void DrawStaticScenery(s32 arg0) {
+void DrawStaticScenery(s32 shifted) {
     Matrix mtx;
     Vec4 state;
     s32 *statePtr;
@@ -33,7 +33,7 @@ void DrawStaticScenery(s32 arg0) {
     state = g_StaticSceneryPos;
     statePtr = (s32 *)&state;
 
-    if (arg0 != 0) {
+    if (shifted != 0) {
         state.z += 0x5000;
     }
 
@@ -110,10 +110,10 @@ void DrawHighClassScenery(void) {
     }
 }
 
-void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
-    s32 mode = arg0;
-    s32 value = arg1;
-    s32 flag = arg2;
+void DrawCourseScenery(s32 course, s32 timer, s32 animate) {
+    s32 mode = course;
+    s32 value = timer;
+    s32 flag = animate;
 
     DrawAnimatedScenery(value, 0);
 
@@ -157,9 +157,9 @@ void DrawCourseScenery(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void DrawCourseScenery2(s32 arg0, s32 arg1) {
-    s32 value = arg0;
-    s32 flag = arg1;
+void DrawCourseScenery2(s32 timer, s32 animate) {
+    s32 value = timer;
+    s32 flag = animate;
     s32 mode;
 
     if (g_GrandPrixClass == 5) {

@@ -233,19 +233,19 @@ extern volatile u_long *g_OtcDmaChcr;
 void Gpu_ArmTimeout(void);
 long Gpu_CheckTimeout(void);
 
-long Gpu_ClearOTagDma(u_long *arg0, long arg1) {
+long Gpu_ClearOTagDma(u_long *ot, long count) {
     long size;
     u_long mask;
     volatile u_long *status;
     long offset;
 
-    size = arg1;
+    size = count;
     status = g_GpuDpcr;
     *status |= 0x08000000;
     *g_OtcDmaChcr = 0;
     offset = (size * 4) - 4;
-    arg0 = (u_long *)((u_char *)arg0 + offset);
-    *g_OtcDmaMadr = (u_long)arg0;
+    ot = (u_long *)((u_char *)ot + offset);
+    *g_OtcDmaMadr = (u_long)ot;
     *g_OtcDmaBcr = size;
     *g_OtcDmaChcr = 0x11000002;
     Gpu_ArmTimeout();

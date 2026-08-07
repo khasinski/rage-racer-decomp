@@ -68,7 +68,7 @@ done:
     return result + 1;
 }
 
-long CdControlF(long arg0, void *arg1) {
+long CdControlF(long com, void *param) {
     void *arg;
     long cmd;
     long retries;
@@ -79,8 +79,8 @@ long CdControlF(long arg0, void *arg1) {
     long *commandState;
     long result;
 
-    arg = arg1;
-    cmd = arg0;
+    arg = param;
+    cmd = com;
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
     command = (u8)cmd;

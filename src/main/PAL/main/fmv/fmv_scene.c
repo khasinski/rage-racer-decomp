@@ -18,11 +18,11 @@ s32 CdControl(s32 com, void *param, s32 result);
 extern u32 g_AssetBase;
 void StartFmvPlayback(u32 arg0);
 
-void BeginFmv(s32 arg0) {
+void BeginFmv(s32 returnScene) {
     CloseLoadedAudioSlots();
     ResetCdAudioState();
     g_FmvState = 0;
-    g_StreamReturnScene = arg0;
+    g_StreamReturnScene = returnScene;
     g_SceneId = 5;
     CdSync(0, 0);
     CdControl(9, 0, 0);

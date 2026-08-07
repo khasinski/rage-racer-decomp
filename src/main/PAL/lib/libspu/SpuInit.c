@@ -12,13 +12,13 @@ void SpuInit(void) {
     _SpuInit(0);
 }
 
-void _SpuInit(long arg0) {
+void _SpuInit(long reset_voice_center_note) {
     long temp;
 
     KernelCallbackSlot3();
-    _spu_init(arg0);
+    _spu_init(reset_voice_center_note);
 
-    if (arg0 == 0) {
+    if (reset_voice_center_note == 0) {
         u_short *ptr;
         long i;
         u_short value;

@@ -32,36 +32,36 @@ long SetRCnt(long arg0, long arg1, long arg2) {
     return 1;
 }
 
-long GetRCnt(long arg0) {
+long GetRCnt(long spec) {
     long index;
 
-    index = arg0 & 0xFFFF;
+    index = spec & 0xFFFF;
     if (index >= 3) {
         return 0;
     }
     return g_RootCounterRegs[index].count;
 }
 
-long StartRCnt(long arg0) {
+long StartRCnt(long spec) {
     long index;
 
-    index = arg0 & 0xFFFF;
+    index = spec & 0xFFFF;
     g_IrqRegs[1] |= g_RootCounterIrqBits[index];
     return index < 3;
 }
 
-long StopRCnt(long arg0) {
+long StopRCnt(long spec) {
     long index;
 
-    index = arg0 & 0xFFFF;
+    index = spec & 0xFFFF;
     g_IrqRegs[1] = ~g_RootCounterIrqBits[index] & g_IrqRegs[1];
     return 1;
 }
 
-long ResetRCnt(long arg0) {
+long ResetRCnt(long spec) {
     long index;
 
-    index = arg0 & 0xFFFF;
+    index = spec & 0xFFFF;
     if (index >= 3) {
         return 0;
     }

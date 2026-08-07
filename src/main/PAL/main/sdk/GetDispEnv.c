@@ -3,7 +3,7 @@
 
 extern u_char g_DispEnvCache;
 void MemCopy(long arg0, void *arg1, long arg2);
-long GetDispEnv(long arg0) { MemCopy(arg0, &g_DispEnvCache, 0x14); return arg0; }
+long GetDispEnv(long env) { MemCopy(env, &g_DispEnvCache, 0x14); return env; }
 
 extern GpuCallbacks *g_GpuFuncs;
 
@@ -38,12 +38,12 @@ void SetDrawOffset(DrawPacket *pkt, short *arg1) {
     pkt->x1y1 = 0;
 }
 
-void SetDrawStp(DrawPacket *pkt, long arg1, u_long arg2) {
+void SetDrawStp(DrawPacket *pkt, long ofs, u_long arg2) {
     u_long cmd;
 
     pkt->code = 2;
     cmd = 0xE6000000;
-    if (arg1 != 0) {
+    if (ofs != 0) {
         cmd = 0xE6000002;
     }
     pkt->x0y0 = cmd | (arg2 != 0);

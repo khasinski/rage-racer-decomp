@@ -3,8 +3,8 @@
 extern SeqStruct *g_SndSeqTable[];
 extern long g_SndTickResolution;
 
-void _SsSndTempo(short arg0, short arg1) {
-    SeqStruct *pSeq = &g_SndSeqTable[arg0][arg1];
+void _SsSndTempo(short seq, short sep) {
+    SeqStruct *pSeq = &g_SndSeqTable[seq][sep];
 
     pSeq->tempo_countdown--;
 
@@ -22,8 +22,8 @@ void _SsSndTempo(short arg0, short arg1) {
                 pSeq->tick_period = 1;
             }
             if ((pSeq->tempo_countdown == 0) || (pSeq->tempo == pSeq->target_tempo)) {
-                g_SndSeqTable[arg0][arg1].flags &= ~0x40;
-                g_SndSeqTable[arg0][arg1].flags &= ~0x80;
+                g_SndSeqTable[seq][sep].flags &= ~0x40;
+                g_SndSeqTable[seq][sep].flags &= ~0x80;
             }
         }
     } else {
@@ -45,8 +45,8 @@ void _SsSndTempo(short arg0, short arg1) {
             pSeq->tick_period = 1;
         }
         if ((pSeq->tempo_countdown == 0) || (pSeq->tempo == pSeq->target_tempo)) {
-            g_SndSeqTable[arg0][arg1].flags &= ~0x40;
-            g_SndSeqTable[arg0][arg1].flags &= ~0x80;
+            g_SndSeqTable[seq][sep].flags &= ~0x40;
+            g_SndSeqTable[seq][sep].flags &= ~0x80;
         }
     }
 }

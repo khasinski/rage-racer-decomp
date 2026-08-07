@@ -32,17 +32,17 @@ short SsUtSetVVol(short arg0, short arg1, short arg2);
 long SsUtAutoVol(long arg0, long arg1, long arg2, long arg3);
 long SsUtAutoPan(long arg0, long arg1, long arg2, long arg3);
 
-long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4) {
+long SsUtPitchBend(long voice, long vab_id, long program, long note, u_short pbend) {
     long id;
     u_short extra;
     long x;
     long y;
     long ret;
 
-    id = arg0;
-    extra = arg4;
-    x = (short)arg1;
-    y = (short)arg2;
+    id = voice;
+    extra = pbend;
+    x = (short)vab_id;
+    y = (short)program;
 
     SpuVmVSetUp(x, y);
     g_SndCurrentSeqSep = 0x21;
@@ -50,7 +50,7 @@ long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4) {
     return -(((u_long)(ret << 16)) < 1U);
 }
 
-long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) {
+long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long old_fine, long new_note, long new_fine) {
     long id;
     long index;
     long voiceOffset;
@@ -62,13 +62,13 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     long y;
     long flags;
 
-    id = arg0;
-    stackA = (u_short)arg5;
-    stackB = (u_short)arg6;
+    id = voice;
+    stackA = (u_short)new_note;
+    stackB = (u_short)new_fine;
 
     if (!((u_short)id >= 0x18U)) {
 
-    tmp = arg0 << 16;
+    tmp = voice << 16;
     index = tmp >> 16;
     tmp = index << 1;
     tmp += index;
@@ -77,18 +77,18 @@ long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long
     voiceOffset = tmp << 2;
 
     x = *(short *)((u_char *)g_SndVoiceStateVabId + voiceOffset);
-    if (x != (short)arg1) {
+    if (x != (short)vab_id) {
         ret = -1;
         return ret;
     }
 
     y = *(short *)((u_char *)g_SndVoiceStateProg + voiceOffset);
-    if (y != (short)arg2) {
+    if (y != (short)program) {
         ret = -1;
         return ret;
     }
 
-    if (!(*(short *)((u_char *)g_SndVoiceStateNote + voiceOffset) != (short)arg3)) {
+    if (!(*(short *)((u_char *)g_SndVoiceStateNote + voiceOffset) != (short)old_note)) {
 
     SpuVmVSetUp(x, y);
     g_SndCurrentSeqSep = 0x21;
@@ -213,18 +213,18 @@ short SsUtSetVVol(short voice, short left, short right) {
     return -1;
 }
 
-long SsUtAutoVol(long arg0, long arg1, long arg2, long arg3) {
-    if ((u_short)arg0 < 0x18U) {
-        SpuVmAutoVol((short)arg0, (short)arg1, (short)arg2, (short)arg3);
+long SsUtAutoVol(long voice, long start_vol, long end_vol, long delta_time) {
+    if ((u_short)voice < 0x18U) {
+        SpuVmAutoVol((short)voice, (short)start_vol, (short)end_vol, (short)delta_time);
         return 0;
     }
 
     return -1;
 }
 
-long SsUtAutoPan(long arg0, long arg1, long arg2, long arg3) {
-    if ((u_short)arg0 < 0x18U) {
-        SpuVmAutoPan((short)arg0, (short)arg1, (short)arg2, (short)arg3);
+long SsUtAutoPan(long voice, long start_pan, long end_pan, long delta_time) {
+    if ((u_short)voice < 0x18U) {
+        SpuVmAutoPan((short)voice, (short)start_pan, (short)end_pan, (short)delta_time);
         return 0;
     }
 

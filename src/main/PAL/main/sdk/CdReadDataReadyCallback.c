@@ -43,12 +43,12 @@ long CdReadRetry(long arg0);
 void CdSyncCallback(long arg0);
 void CdReadyCallback(long arg0);
 
-void CdReadDataReadyCallback(u_char arg0, long arg1) {
+void CdReadDataReadyCallback(u_char intr, long result) {
     volatile long *p;
     long dv;
     long buf[4];
 
-    if (arg0 == 1) {
+    if (intr == 1) {
         p = &g_CdReadRemaining;
         if (*p > 0) {
             if (g_CdReadSectorWords == 0x200) {
@@ -90,11 +90,11 @@ void CdReadDataReadyCallback(u_char arg0, long arg1) {
         CdReadyCallback(g_CdReadSavedReadyCallback);
         CdControl(9, 0, 0);
         if (g_CdReadCallback != 0) {
-            g_CdReadCallback((g_CdReadRemaining == 0) ? 2 : 5, arg1);
+            g_CdReadCallback((g_CdReadRemaining == 0) ? 2 : 5, result);
         }
     }
 }
-long CdReadRetry(long arg0) {
+long CdReadRetry(long mode) {
     u_char buf[8];
     long t;
 
@@ -112,7 +112,7 @@ long CdReadRetry(long arg0) {
         g_CdReadRemaining = -1;
         return g_CdReadRemaining;
     }
-    if (arg0 != 0) {
+    if (mode != 0) {
         LibcPutString(&D_800111F4);
         CdControl(9, 0, 0);
         if (CdControl(2, CdLastPos(), 0) == 0) {
@@ -129,7 +129,7 @@ long CdReadRetry(long arg0) {
         t = *q;
     }
     buf[0] = t;
-    if (((u8)t) != CdMode() || arg0 != 0) {
+    if (((u8)t) != CdMode() || mode != 0) {
         if (CdControl(0xE, (long)buf, 0) == 0) {
             g_CdReadRemaining = -1;
             return g_CdReadRemaining;
