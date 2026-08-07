@@ -141,7 +141,6 @@ void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
     u_long word0High;
     u_long word0;
     register u_long tmp asm("$2");
-    register u_long tmp2 asm("$3");
 
     pred = has8000 != 0;
     pred = -pred;
@@ -159,17 +158,17 @@ void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
     word0 = word0High | ((in[0] << 8) & 0x7F00);
     tmp = (in[1] << 4) & 0xF0;
     word0 = word0 | tmp;
-    tmp2 = in[2] & 0xF;
-    word0 = word0 | tmp2;
+    has4000 = in[2] & 0xF;
+    word0 = word0 | has4000;
 
     tmp = in[3];
-    tmp2 = in[4];
+    has4000 = in[4];
     *out0 = word0;
 
     tmp = (tmp << 6) & 0x1FC0;
     tmp = word1 | tmp;
-    tmp2 = tmp2 & 0x1F;
-    word1 = tmp | tmp2;
+    has4000 = has4000 & 0x1F;
+    word1 = tmp | has4000;
     *out1 = word1;
 }
 
