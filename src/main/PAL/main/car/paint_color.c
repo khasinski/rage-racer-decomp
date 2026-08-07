@@ -2,24 +2,38 @@
 #include "game/car.h"
 
 /*
+ * Body paint is 15-bit RGB with the semi-transparency bit on top. HALVED_MASK
+ * is what a channel-wise halving needs after the shift: `>> 1` drags the low
+ * bit of each channel into the one below it, and this clears those three bits
+ * again.
+ */
+enum PaintColor {
+    PAINT_STP = 0x8000,
+    PAINT_CHANNEL_MASK = 0x1F,
+    PAINT_GREEN_SHIFT = 5,
+    PAINT_BLUE_SHIFT = 10,
+    PAINT_HALVED_MASK = 0x3DEF
+};
+
+/*
  * g_PaintBlendShade0 / g_PaintBlendShade1 (the two blended shade words this routine emits)
  * MUST keep the raw D_ spelling: they are referenced from the %hi/%lo pairs in
  * the inline asm below, which does not follow asm() labels. See names.md 12c.
  */
-void BlendPaintColor(u32 arg0, u32 arg1) {
+void BlendPaintColor(u32 color0, u32 color1) {
     u32 a;
     u32 b;
 
-    a = arg0 / 2;
-    b = arg1 / 2;
-    a &= 0x3DEF;
-    b &= 0x3DEF;
-    g_PaintBlendShade0 = (a + b) | 0x8000;
+    a = color0 / 2;
+    b = color1 / 2;
+    a &= PAINT_HALVED_MASK;
+    b &= PAINT_HALVED_MASK;
+    g_PaintBlendShade0 = (a + b) | PAINT_STP;
 }
 
-void BlendPaintColorThirds(u32 arg0, u32 arg1) {
-    u16 color0;
-    u16 color1;
+void BlendPaintColorThirds(u32 color0, u32 color1) {
+    u16 low0;
+    u16 low1;
     s32 r0;
     s32 r1;
     s32 g0;
@@ -30,16 +44,16 @@ void BlendPaintColorThirds(u32 arg0, u32 arg1) {
     s32 g;
     s32 b;
 
-    r0 = arg0 & 0x1F;
-    r1 = arg1 & 0x1F;
+    r0 = color0 & PAINT_CHANNEL_MASK;
+    r1 = color1 & PAINT_CHANNEL_MASK;
     r = r0 + r1;
-    color0 = arg0;
-    g0 = (color0 >> 5) & 0x1F;
-    color1 = arg1;
-    g1 = (color1 >> 5) & 0x1F;
+    low0 = color0;
+    g0 = (low0 >> PAINT_GREEN_SHIFT) & PAINT_CHANNEL_MASK;
+    low1 = color1;
+    g1 = (low1 >> PAINT_GREEN_SHIFT) & PAINT_CHANNEL_MASK;
     g = g0 + g1;
-    b0 = (color0 >> 10) & 0x1F;
-    b1 = (color1 >> 10) & 0x1F;
+    b0 = (low0 >> PAINT_BLUE_SHIFT) & PAINT_CHANNEL_MASK;
+    b1 = (low1 >> PAINT_BLUE_SHIFT) & PAINT_CHANNEL_MASK;
     b = b0 + b1;
 
     r0 = r * 2 / 3;
@@ -49,27 +63,27 @@ void BlendPaintColorThirds(u32 arg0, u32 arg1) {
     g1 = g / 3;
     b1 = b / 3;
 
-    g_PaintBlendShade0 = (b0 << 10) + (g0 * 32) + r0 + 0x8000;
-    g_PaintBlendShade1 = (b1 << 10) + (g1 * 32) + r1 + 0x8000;
+    g_PaintBlendShade0 = (b0 << PAINT_BLUE_SHIFT) + (g0 * 32) + r0 + PAINT_STP;
+    g_PaintBlendShade1 = (b1 << PAINT_BLUE_SHIFT) + (g1 * 32) + r1 + PAINT_STP;
 }
 
-void BlendPaintColorQuarters(u32 arg0, u32 arg1) {
+void BlendPaintColorQuarters(u32 color0, u32 color1) {
     u32 a;
     u32 b;
     u32 c;
     u32 high;
     s32 bias;
 
-    a = arg0 / 2;
-    b = arg1 / 2;
-    a &= 0x3DEF;
-    b &= 0x3DEF;
+    a = color0 / 2;
+    b = color1 / 2;
+    a &= PAINT_HALVED_MASK;
+    b &= PAINT_HALVED_MASK;
     c = a + b;
     high = c;
-    bias = 0x8000;
+    bias = PAINT_STP;
     high += bias;
     c >>= 1;
-    c &= 0x3DEF;
+    c &= PAINT_HALVED_MASK;
     a += c;
     /* Preserve the bias while keeping its two GCC live ranges separate. */
     a -= bias++;
@@ -142,10 +156,10 @@ void ApplyBodyColor1(u32 colour, u32 imageData) {
 
 extern u32 g_CarModelAsset;
 
-void UploadCarImage(u32 arg0);
+void UploadCarImage(u32 slot);
 
-void SetBodyColor1(u32 arg0) {
-    ApplyBodyColor1(arg0, *(u32 *)(g_CarModelAsset + 0x24));
+void SetBodyColor1(u32 colour) {
+    ApplyBodyColor1(colour, *(u32 *)(g_CarModelAsset + 0x24));
     UploadCarImage(g_CarModelSlot);
 }
 
@@ -199,7 +213,7 @@ void ApplyBodyColor2(u32 colour, u32 imageData) {
 
 
 
-void SetBodyColor2(u32 arg0) {
-    ApplyBodyColor2(arg0, *(u32 *)(g_CarModelAsset + 0x24));
+void SetBodyColor2(u32 colour) {
+    ApplyBodyColor2(colour, *(u32 *)(g_CarModelAsset + 0x24));
     UploadCarImage(g_CarModelSlot);
 }
