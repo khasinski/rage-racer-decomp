@@ -74,13 +74,12 @@ extern u_long g_OtagTerminator;
 extern GpuCallbacks *g_GpuFuncs;
 
 void *ClearOTag(u_long *arg0, long count) {
-    register u_long *ptr asm("$16") = arg0;
     long remaining = count;
 
     if (g_GraphDebug >= 2) {
         void (*debug)(char *, ...) = GPU_printf;
 
-        debug(D_8001359C, ptr, remaining);
+        debug(D_8001359C, arg0, remaining);
     }
 
     remaining--;
@@ -94,19 +93,19 @@ void *ClearOTag(u_long *arg0, long count) {
             u_long low;
 
             remaining--;
-            next = ptr + 1;
-            ((u_char *)ptr)[3] = 0;
-            tag = *ptr;
+            next = arg0 + 1;
+            ((u_char *)arg0)[3] = 0;
+            tag = *arg0;
             low = (u_long)next & mask;
             tag &= hiMask;
             tag |= low;
-            *ptr = tag;
-            ptr = next;
+            *arg0 = tag;
+            arg0 = next;
         } while (remaining != 0);
     }
 
-    *ptr = (u_long)&g_OtagTerminator & 0xFFFFFF;
-    return ptr;
+    *arg0 = (u_long)&g_OtagTerminator & 0xFFFFFF;
+    return arg0;
 }
 
 void *ClearOTagR(u_long *arg0, long arg1) {
