@@ -271,7 +271,6 @@ void SpuVmAutoPanTick(long arg0) {
     register long limit asm("$3");
     long current;
     register long positiveCompare asm("$2");
-    register long negativeCompare asm("$3");
     register long clampValue asm("$4");
     u_long envelope;
 
@@ -311,8 +310,8 @@ void SpuVmAutoPanTick(long arg0) {
     limit = *(short *)&g_SndVoiceStateEndPan[offset];
     current >>= 16;
     clampValue = limit;
-    negativeCompare = limit < current;
-    if (negativeCompare) {
+    limit = limit < current;
+    if (limit) {
         break;
     }
 
@@ -327,24 +326,21 @@ void SpuVmAutoPanTick(long arg0) {
     long level;
     long scaledLevel;
     long masterVolume;
-    register long dividend asm("$3");
-    register u_long volume asm("$3");
+    register long volume asm("$3");
     u_long pan;
     u_long left;
     u_long right;
     long mixed;
     register long outputOffset asm("$4");
     register u_long compareLeft asm("$2");
-    register u_long compareRight asm("$3");
-    register long flagIndex asm("$3");
 
     base = (u_char *)g_SndCurrentVabHeader;
     D_801E4BD5 = envelope;
     level = base[0x18];
     masterVolume = D_801E4BD4;
     scaledLevel = level * 16383;
-    dividend = masterVolume * scaledLevel;
-    volume = dividend / 16129;
+    volume = masterVolume * scaledLevel;
+    volume = volume / 16129;
     volume = volume * D_801E4BDA;
     volume = volume * D_801E4BDD;
     volume = (u_long)volume / 16129U;
@@ -391,9 +387,9 @@ void SpuVmAutoPanTick(long arg0) {
     }
 
     if (g_SndMonoMode == 1) {
-        compareRight = (u_short)right;
+        volume = (u_short)right;
         compareLeft = (u_short)left;
-        if (compareLeft < compareRight) {
+        if (compareLeft < volume) {
             left = right;
         } else {
             right = left;
@@ -401,10 +397,10 @@ void SpuVmAutoPanTick(long arg0) {
     }
 
     outputOffset = (short)index8 * 2;
-    flagIndex = (short)originalArg;
+    volume = (short)originalArg;
     *(u_short *)((u_char *)g_SndVoiceRegsVolRight + outputOffset) = right;
     asm("" : : : "memory");
     *(u_short *)((u_char *)g_SndVoiceRegs + outputOffset) = left;
-    g_SndVoiceFlags[flagIndex] |= 3;
+    g_SndVoiceFlags[volume] |= 3;
     }
 }
