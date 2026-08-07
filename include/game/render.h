@@ -707,6 +707,10 @@ void DrawText8x8Trans();
  * the {u, v} pairs at g_PropFontU with fixed 12x12 cells; 'a'..'u' and 'v'+ use
  * the {u, v, width, advance} rows at g_WordFontU / g_HighFontU, so lowercase is
  * proportionally spaced. Space advances 12 and emits nothing.
+ *
+ * Those rows are four-byte records and read like one, but they stay four
+ * parallel u8 arrays indexed at stride 4: folding them into a struct changes
+ * what gcc 2.6.3 may alias (MEM_IN_STRUCT_P) and moves the emitted code.
  * `intensity` == 0x100 selects the opaque raw-texture path (SetShadeTex);
  * anything else is written to r = g = b with SetSemiTrans.
  * DrawProportionalText is the wrapper that passes 0x100.
