@@ -1,27 +1,27 @@
 #include "psyq/spu.h"
 
-long _SpuIsInAllocateArea(u_long arg0) {
-    SpuMallocEntry *var_a1;
-    u_long temp_v1;
-    u_long bits1;
-    u_long bits2;
-    u_long mask;
+long _SpuIsInAllocateArea(u_long addr) {
+    SpuMallocEntry *entry;
+    u_long header;
+    u_long freeBit;
+    u_long endBit;
+    u_long addrMask;
 
-    bits1 = 0x80000000;
-    bits2 = 0x40000000;
-    mask = 0x0FFFFFFF;
+    freeBit = SPU_BLOCK_FREE;
+    endBit = SPU_BLOCK_END;
+    addrMask = SPU_BLOCK_ADDR;
 
-    var_a1 = _spu_memList;
+    entry = _spu_memList;
     while (1) {
-        temp_v1 = var_a1->addr;
-        if (temp_v1 & bits1) {
-            var_a1 += 1;
+        header = entry->addr;
+        if (header & freeBit) {
+            entry += 1;
             continue;
         }
-        if (!(temp_v1 & bits2)) {
-            if ((temp_v1 & mask) < arg0) {
-                if (arg0 >= (u_long)((temp_v1 & mask) + var_a1->size)) {
-                    var_a1 += 1;
+        if (!(header & endBit)) {
+            if ((header & addrMask) < addr) {
+                if (addr >= (u_long)((header & addrMask) + entry->size)) {
+                    entry += 1;
                     continue;
                 }
                 return 1;
@@ -34,29 +34,29 @@ long _SpuIsInAllocateArea(u_long arg0) {
     return 0;
 }
 
-long _SpuIsInAllocateArea_(u_long arg0) {
-    SpuMallocEntry *var_a1;
-    u_long temp_v1;
-    u_long bits1;
-    u_long bits2;
-    u_long mask;
+long _SpuIsInAllocateArea_(u_long addr) {
+    SpuMallocEntry *entry;
+    u_long header;
+    u_long freeBit;
+    u_long endBit;
+    u_long addrMask;
 
-    bits1 = 0x80000000;
-    bits2 = 0x40000000;
-    mask = 0x0FFFFFFF;
+    freeBit = SPU_BLOCK_FREE;
+    endBit = SPU_BLOCK_END;
+    addrMask = SPU_BLOCK_ADDR;
 
-    var_a1 = _spu_memList;
-    arg0 <<= _spu_mem_mode_unitM;
+    entry = _spu_memList;
+    addr <<= _spu_mem_mode_unitM;
     while (1) {
-        temp_v1 = var_a1->addr;
-        if (temp_v1 & bits1) {
-            var_a1 += 1;
+        header = entry->addr;
+        if (header & freeBit) {
+            entry += 1;
             continue;
         }
-        if (!(temp_v1 & bits2)) {
-            if ((temp_v1 & mask) < arg0) {
-                if (arg0 >= (u_long)((temp_v1 & mask) + var_a1->size)) {
-                    var_a1 += 1;
+        if (!(header & endBit)) {
+            if ((header & addrMask) < addr) {
+                if (addr >= (u_long)((header & addrMask) + entry->size)) {
+                    entry += 1;
                     continue;
                 }
                 return 1;

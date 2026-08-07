@@ -5,10 +5,21 @@
 
 #include "common.h"
 
+/*
+ * One block of the SPU heap. The two top bits of `addr` are flags, not
+ * address: FREE marks a released block that _spu_gcSPU may coalesce, END
+ * marks the block that closes the list. EMPTY is the whole word written over
+ * a block that has been merged away.
+ */
 typedef struct SpuMallocEntry {
     u_long addr;
     u_long size;
 } SpuMallocEntry;
+
+#define SPU_BLOCK_FREE  0x80000000
+#define SPU_BLOCK_END   0x40000000
+#define SPU_BLOCK_ADDR  0x0FFFFFFF
+#define SPU_BLOCK_EMPTY 0x2FFFFFFF
 
 typedef struct SpuVolume {
     short left;

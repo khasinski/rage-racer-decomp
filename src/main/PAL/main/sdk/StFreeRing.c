@@ -8,36 +8,36 @@ extern long g_StStreamFlag;
 extern long g_StStartFrame;
 
 u_long StFreeRing(u_long *base) {
-    long temp_a1;
+    long slot;
     long i;
     short nSectors;
-    StStrHeader *temp_v0;
-    StStrHeader *temp_v0_2;
+    StStrHeader *frame;
+    StStrHeader *sector;
 
-    temp_a1 = (base - (u_long *)&g_StRingBase[g_StRingSize]) / 504;
-    temp_v0 = &g_StRingBase[temp_a1];
-    nSectors = g_StRingBase[temp_a1].nSectors;
-    if ((short)temp_v0->state != 4) {
+    slot = (base - (u_long *)&g_StRingBase[g_StRingSize]) / 504;
+    frame = &g_StRingBase[slot];
+    nSectors = g_StRingBase[slot].nSectors;
+    if ((short)frame->state != 4) {
         return 1;
     }
 
     for (i = 0; i < nSectors;) {
-        temp_v0_2 = &g_StRingBase[i + temp_a1];
+        sector = &g_StRingBase[i + slot];
         i++;
-        *(short *)temp_v0_2 = 0;
+        *(short *)sector = 0;
     }
 
-    g_StRingSlot = i + temp_a1;
+    g_StRingSlot = i + slot;
     return 0;
 }
 
 /* Returns a value the callers ignore; declaring it void changes codegen.
  * RAW() on the store replaces the barrier that used to hold it in place. */
-s32 StClearRingRange(long arg0, u_long arg1) {
+s32 StClearRingRange(long first, u_long count) {
     u_long i;
 
-    for (i = 0; i < arg1; i++) {
-        RAW(((StRingClearRecord *)g_StRingBase)[i + arg0].value) = 0;
+    for (i = 0; i < count; i++) {
+        RAW(((StRingClearRecord *)g_StRingBase)[i + first].value) = 0;
     }
 }
 
@@ -84,8 +84,8 @@ long StGetNext(StRingEventRecord **addr, StRingEventRecord **header) {
     return 1;
 }
 
-void StSetRingParams(long arg0, long arg1, long arg2) {
-    g_StStreamFlag = arg0;
-    g_StStartFrame = arg1;
-    g_StEndFrame = arg2;
+void StSetRingParams(long streamFlag, long startFrame, long endFrame) {
+    g_StStreamFlag = streamFlag;
+    g_StStartFrame = startFrame;
+    g_StEndFrame = endFrame;
 }

@@ -3,10 +3,10 @@
 extern long _spu_mem_mode_plus;
 
 #define BLK(i) (&_spu_memList[(i)])
-#define BLK_ADDR(i) (BLK(i)->addr & 0x0FFFFFFF)
-#define BLK_END(i) ((BLK(i)->addr & 0x0FFFFFFF) + BLK(i)->size)
-#define BLK_IS_FREE(i) (BLK(i)->addr & 0x80000000)
-#define BLK_IS_END(i) (BLK(i)->addr & 0x40000000)
+#define BLK_ADDR(i) (BLK(i)->addr & SPU_BLOCK_ADDR)
+#define BLK_END(i) ((BLK(i)->addr & SPU_BLOCK_ADDR) + BLK(i)->size)
+#define BLK_IS_FREE(i) (BLK(i)->addr & SPU_BLOCK_FREE)
+#define BLK_IS_END(i) (BLK(i)->addr & SPU_BLOCK_END)
 
 long SpuInitMalloc(long num, u_long *memlist) {
     long ret = num;
@@ -30,74 +30,72 @@ long SpuInitMalloc(long num, u_long *memlist) {
 }
 
 long SpuMalloc(long size) {
-    long var_a0;
-    long var_s2;
-    long var_s3;
-    long var_v0;
-    long temp_s1;
+    long aligned;
+    long block;
+    long reverbReserve;
     long i;
 
     i = 0;
-    var_s2 = -1;
+    block = -1;
 
     if (g_SpuRevReserveWa == 0) {
-        var_s3 = 0;
+        reverbReserve = 0;
     } else {
-        var_s3 = (0x10000 - g_SpuRevWorkAreaAddr) << _spu_mem_mode_unitM;
+        reverbReserve = (0x10000 - g_SpuRevWorkAreaAddr) << _spu_mem_mode_unitM;
     }
 
-    var_a0 = size;
+    aligned = size;
     if (size & ~_spu_mem_mode_plus) {
-        var_a0 += _spu_mem_mode_plus;
+        aligned += _spu_mem_mode_plus;
     }
 
-    size = var_a0;
+    size = aligned;
     size >>= _spu_mem_mode_unitM;
     size <<= _spu_mem_mode_unitM;
 
-    if (BLK(0)->addr & 0x40000000) {
-        var_s2 = 0;
+    if (BLK(0)->addr & SPU_BLOCK_END) {
+        block = 0;
     } else {
         _spu_gcSPU();
 
         for (; i < _spu_AllocBlockNum; i++) {
-            if ((BLK(i)->addr & 0x40000000) || ((BLK(i)->addr & 0x80000000) && (BLK(i)->size >= size))) {
-                var_s2 = i;
+            if ((BLK(i)->addr & SPU_BLOCK_END) || ((BLK(i)->addr & SPU_BLOCK_FREE) && (BLK(i)->size >= size))) {
+                block = i;
                 break;
             }
         }
     }
 
-    if (var_s2 == -1) {
+    if (block == -1) {
         return -1;
     }
 
-    if (BLK(var_s2)->addr & 0x40000000) {
-        if ((var_s2 < _spu_AllocBlockNum) && ((BLK(var_s2)->size - var_s3) >= size)) {
-            long next = var_s2 + 1;
+    if (BLK(block)->addr & SPU_BLOCK_END) {
+        if ((block < _spu_AllocBlockNum) && ((BLK(block)->size - reverbReserve) >= size)) {
+            long next = block + 1;
 
-            BLK(next)->addr = ((*(volatile long *)&BLK(var_s2)->addr & 0x0FFFFFFF) + size) | 0x40000000;
-            BLK(next)->size = BLK(var_s2)->size - size;
+            BLK(next)->addr = ((*(volatile long *)&BLK(block)->addr & SPU_BLOCK_ADDR) + size) | SPU_BLOCK_END;
+            BLK(next)->size = BLK(block)->size - size;
 
-            BLK(var_s2)->addr &= 0x0FFFFFFF;
-            BLK(var_s2)->size = size;
+            BLK(block)->addr &= SPU_BLOCK_ADDR;
+            BLK(block)->size = size;
 
             _spu_AllocLastNum = next;
             _spu_gcSPU();
 
-            return BLK(var_s2)->addr;
+            return BLK(block)->addr;
         }
     } else {
-        if ((size < BLK(var_s2)->size) && (_spu_AllocLastNum < _spu_AllocBlockNum)) {
+        if ((size < BLK(block)->size) && (_spu_AllocLastNum < _spu_AllocBlockNum)) {
             long t_addr;
             long t_size;
-            long addr = BLK(var_s2)->addr + size;
-            long split_size = BLK(var_s2)->size - size;
+            long addr = BLK(block)->addr + size;
+            long split_size = BLK(block)->size - size;
 
             t_addr = BLK(_spu_AllocLastNum)->addr;
             t_size = BLK(_spu_AllocLastNum)->size;
 
-            BLK(_spu_AllocLastNum)->addr = addr | 0x80000000;
+            BLK(_spu_AllocLastNum)->addr = addr | SPU_BLOCK_FREE;
             BLK(_spu_AllocLastNum)->size = split_size;
 
             BLK(_spu_AllocLastNum + 1)->addr = t_addr;
@@ -106,11 +104,11 @@ long SpuMalloc(long size) {
             _spu_AllocLastNum++;
         }
 
-        BLK(var_s2)->size = size;
-        BLK(var_s2)->addr = BLK_ADDR(var_s2);
+        BLK(block)->size = size;
+        BLK(block)->addr = BLK_ADDR(block);
         _spu_gcSPU();
 
-        return BLK(var_s2)->addr;
+        return BLK(block)->addr;
     }
 
     return -1;
@@ -127,7 +125,7 @@ void _spu_gcSPU(void) {
             j = i + 1;
             scan = BLK(j);
             while (1) {
-                long is_not_empty = scan->addr != 0x2FFFFFFF;
+                long is_not_empty = scan->addr != SPU_BLOCK_EMPTY;
                 scan++;
                 if (is_not_empty) {
                     break;
@@ -136,7 +134,7 @@ void _spu_gcSPU(void) {
             }
 
             if (BLK_IS_FREE(j) && (BLK_ADDR(j) == BLK_END(i))) {
-                BLK(j)->addr = 0x2FFFFFFF;
+                BLK(j)->addr = SPU_BLOCK_EMPTY;
                 BLK(i)->size += BLK(j)->size;
                 continue;
             }
@@ -146,7 +144,7 @@ void _spu_gcSPU(void) {
 
     for (i = 0; i <= _spu_AllocLastNum; i++) {
         if (BLK(i)->size == 0) {
-            BLK(i)->addr = 0x2FFFFFFF;
+            BLK(i)->addr = SPU_BLOCK_EMPTY;
         }
     }
 
@@ -176,7 +174,7 @@ void _spu_gcSPU(void) {
             break;
         }
 
-        if (BLK(i)->addr == 0x2FFFFFFF) {
+        if (BLK(i)->addr == SPU_BLOCK_EMPTY) {
             BLK(i)->addr = BLK(_spu_AllocLastNum)->addr;
             BLK(i)->size = BLK(_spu_AllocLastNum)->size;
             _spu_AllocLastNum = i;
@@ -188,33 +186,33 @@ void _spu_gcSPU(void) {
         if (!BLK_IS_FREE(i)) {
             break;
         }
-        BLK(i)->addr = BLK_ADDR(i) | 0x40000000;
+        BLK(i)->addr = BLK_ADDR(i) | SPU_BLOCK_END;
         BLK(i)->size += BLK(_spu_AllocLastNum)->size;
         _spu_AllocLastNum = i;
     }
 }
 
-void SpuFree(u_long arg0) {
+void SpuFree(u_long addr) {
     long cur_block_num;
     SpuMallocEntry *cur_mem;
     u_long temp;
     u_long cur_addr;
-    long mask4;
+    long endBit;
     long block_num;
     u_char pad[2];
 
     cur_block_num = 0;
     if (_spu_AllocBlockNum > 0) {
-        mask4 = 0x40000000;
-        temp = arg0 | 0x80000000;
+        endBit = SPU_BLOCK_END;
+        temp = addr | SPU_BLOCK_FREE;
         block_num = _spu_AllocBlockNum;
         cur_mem = _spu_memList;
         while (1) {
             cur_addr = cur_mem->addr;
-            if (cur_addr & mask4) {
+            if (cur_addr & endBit) {
                 break;
             }
-            if (cur_addr == arg0) {
+            if (cur_addr == addr) {
                 cur_mem->addr = temp;
                 break;
             }
