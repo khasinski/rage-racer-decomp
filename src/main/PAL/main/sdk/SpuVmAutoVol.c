@@ -331,8 +331,6 @@ void SpuVmAutoPanTick(long arg0) {
     u_long left;
     u_long right;
     long mixed;
-    register long outputOffset asm("$4");
-    register u_long compareLeft asm("$2");
 
     base = (u_char *)g_SndCurrentVabHeader;
     D_801E4BD5 = envelope;
@@ -388,19 +386,19 @@ void SpuVmAutoPanTick(long arg0) {
 
     if (g_SndMonoMode == 1) {
         volume = (u_short)right;
-        compareLeft = (u_short)left;
-        if (compareLeft < volume) {
+        positiveCompare = (u_short)left;
+        if ((u_long)positiveCompare < (u_long)volume) {
             left = right;
         } else {
             right = left;
         }
     }
 
-    outputOffset = (short)index8 * 2;
+    clampValue = (short)index8 * 2;
     volume = (short)originalArg;
-    *(u_short *)((u_char *)g_SndVoiceRegsVolRight + outputOffset) = right;
+    *(u_short *)((u_char *)g_SndVoiceRegsVolRight + clampValue) = right;
     asm("" : : : "memory");
-    *(u_short *)((u_char *)g_SndVoiceRegs + outputOffset) = left;
+    *(u_short *)((u_char *)g_SndVoiceRegs + clampValue) = left;
     g_SndVoiceFlags[volume] |= 3;
     }
 }
