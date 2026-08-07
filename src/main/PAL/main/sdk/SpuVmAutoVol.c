@@ -326,7 +326,6 @@ void SpuVmAutoPanTick(long arg0) {
     long level;
     long scaledLevel;
     long masterVolume;
-    register long volume asm("$3");
     u_long pan;
     u_long left;
     u_long right;
@@ -337,18 +336,18 @@ void SpuVmAutoPanTick(long arg0) {
     level = base[0x18];
     masterVolume = D_801E4BD4;
     scaledLevel = level * 16383;
-    volume = masterVolume * scaledLevel;
-    volume = volume / 16129;
-    volume = volume * D_801E4BDA;
-    volume = volume * D_801E4BDD;
-    volume = (u_long)volume / 16129U;
+    limit = masterVolume * scaledLevel;
+    limit = limit / 16129;
+    limit = limit * D_801E4BDA;
+    limit = limit * D_801E4BDD;
+    limit = (u_long)limit / 16129U;
 
     pan = D_801E4BDE;
-    left = volume;
+    left = limit;
     if (pan < 0x40) {
-        asm("" : "=r"(volume) : "0"(volume));
-        left = volume;
-        right = ((u_long)(volume * pan)) >> 6;
+        asm("" : "=r"(limit) : "0"(limit));
+        left = limit;
+        right = ((u_long)(limit * pan)) >> 6;
     } else {
         asm("" : "=r"(left) : "0"(left));
         right = left;
@@ -385,9 +384,9 @@ void SpuVmAutoPanTick(long arg0) {
     }
 
     if (g_SndMonoMode == 1) {
-        volume = (u_short)right;
+        limit = (u_short)right;
         positiveCompare = (u_short)left;
-        if ((u_long)positiveCompare < (u_long)volume) {
+        if ((u_long)positiveCompare < (u_long)limit) {
             left = right;
         } else {
             right = left;
@@ -395,10 +394,10 @@ void SpuVmAutoPanTick(long arg0) {
     }
 
     clampValue = (short)index8 * 2;
-    volume = (short)originalArg;
+    limit = (short)originalArg;
     *(u_short *)((u_char *)g_SndVoiceRegsVolRight + clampValue) = right;
     asm("" : : : "memory");
     *(u_short *)((u_char *)g_SndVoiceRegs + clampValue) = left;
-    g_SndVoiceFlags[volume] |= 3;
+    g_SndVoiceFlags[limit] |= 3;
     }
 }
