@@ -104,9 +104,8 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     register long seq_s asm("$4");
     register long sep_s asm("$5");
     SeqStruct *state;
-    register long seq_offset asm("$3");
+    register long seq_address asm("$3");
     long sep_offset;
-    register SeqStruct *base asm("$3");
     long mode8;
 
     seq_raw = seq;
@@ -115,12 +114,12 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     sep_s = sep;
     asm("" : "=r"(seq_raw), "=r"(sep_raw) : "0"(seq_raw), "1"(sep_raw));
     seq_s = (short)seq_s;
-    seq_offset = seq_s * 4;
+    seq_address = seq_s * 4;
     sep_s = (short)sep_s;
     sep_offset = (((((sep_s * 2) + sep_s) * 4) - sep_s) * 4) - sep_s;
-    base = *(SeqStruct **)((u_char *)g_SndSeqTable + seq_offset);
+    seq_address = *(long *)((u_char *)g_SndSeqTable + seq_address);
     sep_offset = sep_offset * 4;
-    state = (SeqStruct *)(sep_offset + (long)base);
+    state = (SeqStruct *)(sep_offset + seq_address);
     mode8 = (u_char)mode;
 
     switch (mode8) {
