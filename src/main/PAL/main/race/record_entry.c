@@ -177,7 +177,6 @@ void InsertRaceRecords(void) {
     s32 *score_ptr;
     register s32 entry_addr asm("$5");
     s32 fill_offset;
-    register s32 fill_addr asm("$3");
     s32 copy0;
     s32 copy1;
     s32 copy2;
@@ -187,7 +186,6 @@ void InsertRaceRecords(void) {
     s32 *entry;
     s32 mode;
     register s32 base_addr asm("$2");
-    register s32 course_addr asm("$3");
     u8 *name_base;
     u8 *name_base2;
     s32 letter;
@@ -229,8 +227,8 @@ void InsertRaceRecords(void) {
                     entry_addr = j * 0x10;
                     j--;
                     mode = g_CourseIndex;
-                    course_addr = (g_GrandPrixSeries * 0x140) + (s32)name_base;
-                    base_addr = (mode * 0x50) + course_addr;
+                    score_offset = (g_GrandPrixSeries * 0x140) + (s32)name_base;
+                    base_addr = (mode * 0x50) + score_offset;
                     entry_addr += base_addr;
                     entry = (s32 *)entry_addr;
                     asm volatile("" : : "r"(j));
@@ -251,9 +249,9 @@ void InsertRaceRecords(void) {
             j = 0;
             fill_offset = row_offset;
             for (; j < 6; j++) {
-                fill_addr = fill_offset + (g_CourseIndex * 0x50);
-                fill_addr += g_GrandPrixSeries * 0x140;
-                *((volatile u8 *)((fill_addr + (s32)name_base) + j)) = letter;
+                score_offset = fill_offset + (g_CourseIndex * 0x50);
+                score_offset += g_GrandPrixSeries * 0x140;
+                *((volatile u8 *)((score_offset + (s32)name_base) + j)) = letter;
                 g_RankingNameCodes[j] = code;
             }
 
@@ -283,8 +281,8 @@ void InsertRaceRecords(void) {
                     entry_addr = j * 0x10;
                     j--;
                     mode = g_CourseIndex;
-                    course_addr = (g_GrandPrixSeries * 0x140) + (s32)name_base2;
-                    base_addr = (mode * 0x50) + course_addr;
+                    score_offset = (g_GrandPrixSeries * 0x140) + (s32)name_base2;
+                    base_addr = (mode * 0x50) + score_offset;
                     entry_addr += base_addr;
                     entry = (s32 *)entry_addr;
                     asm volatile("" : : "r"(j));
@@ -305,9 +303,9 @@ void InsertRaceRecords(void) {
             j = 0;
             fill_offset = row_offset;
             for (; j < 6; j++) {
-                fill_addr = fill_offset + (g_CourseIndex * 0x50);
-                fill_addr += g_GrandPrixSeries * 0x140;
-                *((volatile u8 *)((fill_addr + (s32)name_base2) + j)) = letter2;
+                score_offset = fill_offset + (g_CourseIndex * 0x50);
+                score_offset += g_GrandPrixSeries * 0x140;
+                *((volatile u8 *)((score_offset + (s32)name_base2) + j)) = letter2;
                 g_TimeRecordNameCodes[j] = code2;
             }
 
