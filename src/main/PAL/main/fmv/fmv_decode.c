@@ -18,7 +18,7 @@ void WaitFmvDecode(volatile void *arg0, s32 arg1);
 
 void DecodeFmvFrame(void) {
     s32 value;
-    u8 sp10[16];
+    u8 streamLoc[16];
 
     g_SceneTimer++;
     if (g_SceneTimer == 4) {
@@ -29,12 +29,12 @@ void DecodeFmvFrame(void) {
     DecDCTout(g_FmvStripBuffers[g_FmvStripIndex], (g_FmvStripWidth * g_FmvStripHeight) / 2);
 
     while (PresentFmvFrame(g_FmvVlcBuffers) == -1) {
-        value = StGetBackloc(sp10);
+        value = StGetBackloc(streamLoc);
         DebugPrintf(g_MsgFmvSector, value);
         if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
             StartStreamRead(g_StreamLoc);
         } else {
-            StartStreamRead(sp10);
+            StartStreamRead(streamLoc);
         }
     }
 

@@ -21,7 +21,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
     s32 progress;
     s32 wideOffset;
     s32 phase;
-    PaintColorTable *new_var;
+    PaintColorTable *tableSource;
     s32 yBase;
     s32 xBase;
     u8 sineByte;
@@ -40,8 +40,8 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
 
     ot = SCRATCH_OT_BASE;
     srcTable = &g_PaintColorTable;
-    new_var = srcTable;
-    localTable = *new_var;
+    tableSource = srcTable;
+    localTable = *tableSource;
 
     if (step < 0) {
         *counter += step;

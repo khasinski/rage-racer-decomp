@@ -31,7 +31,7 @@ void UpdateTeamLogoScreen(void)
   s32 sel;
   s32 edge;
   s32 cnt;
-  int new_var;
+  int buttonHeight;
   ot = SCRATCH_OT_BASE;
   g_MenuAltLayout = 0;
   state = GameMenuBusy;
@@ -146,8 +146,8 @@ void UpdateTeamLogoScreen(void)
         DrawMenuCursorBox((g_MenuSubCursor != 0) ? (0xB8) : (0xDA), 0x44, 0x20, 0x20, 0);
         GameDrawSpriteWide(ot, 0xC0, 0x4C, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
         GameDrawSpriteWide(ot, 0xE3, 0x4C, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-        new_var = 0x20;
-        GameDrawMenuButton(0xB8, 0x44, 0x20, new_var, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&g_MenuBlankCaption));
+        buttonHeight = 0x20;
+        GameDrawMenuButton(0xB8, 0x44, 0x20, buttonHeight, 0x95, 0x25, 0x1E, 0, 0, 0, (s32) (&g_MenuBlankCaption));
         GameDrawMenuButton(0xDA, 0x44, 0x20, 0x20, 0x3A, 0x1E, 0x95, 0, 0, 0, (s32) (&g_MenuBlankCaption));
       }
       DrawTeamLogoCanvas(1, 0);

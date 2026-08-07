@@ -7,14 +7,14 @@
 #include "psyq/gte.h"
 
 void DrawSpinningScenery(s32 timer, s32 animate) {
-    s16 sp10[16];
-    s16 sp30[16];
+    s16 yawMatrix[16];
+    s16 objectMatrix[16];
     s32 frame = timer;
     s32 update = animate;
     u16 *dst;
     u16 *delta;
     u16 *deltaBase;
-    s16 *work = sp30;
+    s16 *work = objectMatrix;
     register u16 *base asm("$21");
     s32 offset;
     s32 end;
@@ -42,7 +42,7 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
     if (loopIndex < end) {
         deltaBase = g_SpinningSceneryRate;
         delta = &deltaBase[active];
-        work = sp30;
+        work = objectMatrix;
         base = g_SpinningSceneryAngle;
         dstOffset = loopIndex * 2;
         dst = (u16 *)(dstOffset + (s32)base);
@@ -54,10 +54,10 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
             }
             *dst &= 0xFFF;
 
-            BuildRotMatrixY(sp10, *(s32 *)(g_SpinningSceneryYaw + offset));
-            MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, sp10);
+            BuildRotMatrixY(yawMatrix, *(s32 *)(g_SpinningSceneryYaw + offset));
+            MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, yawMatrix);
             BuildRotMatrixZ(work, *(s16 *)dst);
-            MulMatrix2(sp10, work);
+            MulMatrix2(yawMatrix, work);
             SetGteObjectMatrix((void *)0x1F80011C, g_SpinningSceneryPos + offset, work);
 
             SCRATCH_ENV_MODE4 = 0;

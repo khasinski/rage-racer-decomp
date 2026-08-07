@@ -16,10 +16,12 @@ extern u_short g_SndKeyOnLow;
 extern u_short g_SndKeyOnHigh;
 extern u_short *g_SndSpuRegs;
 
+/* `voice` arrives as the voice index and is reused as its byte offset into
+ * the 52-byte g_SndVoiceState* columns; voiceSlot keeps the plain index. */
 long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) {
     short original_voice;
     long index;
-    u_char new_var;
+    u_char voiceSlot;
     u_short bits_upper;
     u_short bits_lower;
     u_short current_voice;
@@ -38,9 +40,9 @@ long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) {
             *(short *)((u_char *)g_SndVoiceStateTone + voice) == (short)tone &&
             *(short *)((u_char *)g_SndVoiceStateNote + voice) == (short)note) {
             if (*(short *)((u_char *)g_SndVoiceState + voice) == 0xFF) {
-                new_var = original_voice;
-                g_SndVoiceState[new_var].active = 0;
-                g_SndVoiceState[new_var].pitch = 0;
+                voiceSlot = original_voice;
+                g_SndVoiceState[voiceSlot].active = 0;
+                g_SndVoiceState[voiceSlot].pitch = 0;
                 g_SndSpuRegs[202] = 0;
                 g_SndSpuRegs[203] = 0;
             } else {

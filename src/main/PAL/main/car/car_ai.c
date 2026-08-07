@@ -484,7 +484,7 @@ void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   s32 v20_R4;
   s32 cnt;
   s32 one;
-  int new_var;
+  int lowValue;
   raw = *(s32 *)(car + 0x70);
   rpm = raw >> 4;
   g0 = *(s16 *)(car + 0x138);
@@ -532,9 +532,9 @@ void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
     range = 1;
   }
   d_R3 = rpm - lo_R7;
-  v20_R4 = (new_var = *(s16 *)(&val[0]));
-  q = (((*(s16 *)(&val[1])) - new_var) * d_R3) / range;
-  *(s16 *)(sub_R9 + 0x74) = ((((new_var + q) * 1168) / 160) * 6) / 100;
+  v20_R4 = (lowValue = *(s16 *)(&val[0]));
+  q = (((*(s16 *)(&val[1])) - lowValue) * d_R3) / range;
+  *(s16 *)(sub_R9 + 0x74) = ((((lowValue + q) * 1168) / 160) * 6) / 100;
   break;
   }
   if ((*(s16 *)(&lim[1])) < rpm)
