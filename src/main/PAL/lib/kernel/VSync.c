@@ -14,8 +14,9 @@ void LibcPutString(char *arg0);
 long VSync(long arg0) {
     long oldTimer;
     long delta;
-    register long waitTarget asm("$2");
+    long waitTarget;
     long waitCount;
+    long one;
     volatile long *timer;
 
     oldTimer = *g_VSyncGpuStat;
@@ -29,18 +30,9 @@ long VSync(long arg0) {
         return delta;
     }
 
-    if (arg0 > 0) {
-        waitTarget = g_VSyncCountBase - 1;
-        waitTarget += arg0;
-    } else {
-        waitTarget = g_VSyncCountBase;
-    }
-
-    if (arg0 > 0) {
-        waitCount = arg0 - 1;
-    } else {
-        waitCount = 0;
-    }
+    one = 1;
+    waitTarget = arg0 > 0 ? g_VSyncCountBase - one + arg0 : g_VSyncCountBase;
+    waitCount = arg0 > 0 ? arg0 - one : 0;
     waitVSync(waitTarget, waitCount);
 
     {
