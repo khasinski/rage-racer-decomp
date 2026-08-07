@@ -36,34 +36,15 @@ void StoreImage(Rect *arg0, void *arg1) {
 
 long MoveImage(GpuRectPacked *arg0, u_long arg1, u_long arg2) {
     CheckPrim(D_80013590, arg0);
-    if (arg0->w == 0) {
+    if (arg0->w == 0 || arg0->h == 0) {
         return -1;
     }
-    if (arg0->h != 0) {
-        u_long *buf;
-        register GpuCallbacks *gpu asm("$3");
-        register u_long xy asm("$4");
-        long size;
-        long data;
-        u_long packed;
-        register u_long low asm("$3");
-        u_long wh;
 
-        packed = arg2 << 0x10;
-        low = arg1 & 0xFFFF;
-        packed |= low;
-        buf = &g_MoveImagePacket.src;
-        xy = arg0->xy;
-        gpu = g_GpuFuncs;
-        size = 0x14;
-        g_MoveImagePacket.dst = packed;
-        *buf = xy;
-        wh = *(u_long *)&arg0->w;
-        data = 0;
-        g_MoveImagePacket.wh = wh;
-        return gpu->send(gpu->sendList, buf - 2, size, data);
-    }
-    return -1;
+    g_MoveImagePacket.src = arg0->xy;
+    g_MoveImagePacket.dst = (arg2 << 0x10) | (arg1 & 0xFFFF);
+    g_MoveImagePacket.wh = *(u_long *)&arg0->w;
+    return g_GpuFuncs->send(g_GpuFuncs->sendList, &g_MoveImagePacket,
+                            sizeof(g_MoveImagePacket), 0);
 }
 
 extern u_char g_GraphDebug;
