@@ -36,7 +36,6 @@ break;
 
         offset += (u_long)base;
         flag = (1 << voice) & flags;
-        asm("" : "=r"(flag) : "0"(flag));
         value = *(volatile u_short *)(offset + 0xC);
         if (flag != 0) {
             ret = 3;
