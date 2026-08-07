@@ -37,24 +37,11 @@ long CdGetToc2(long arg0, u_char *arg1) {
     } else {
 
     {
-        register u_long firstBcd asm("$4");
-        u_long lastBcd;
-        register u_long high asm("$3");
+        u_char firstBcd = response[1];
+        u_char lastBcd = response[2];
 
-        firstBcd = response[1];
-        lastBcd = response[2];
-        high = firstBcd / 16;
-        value = high << 2;
-        value += high;
-        value <<= 1;
-        firstBcd &= 0xF;
-        firstTrack = value + firstBcd;
-        value = lastBcd / 16;
-        high = value * 4;
-        high += value;
-        high <<= 1;
-        lastBcd &= 0xF;
-        lastTrack = high + lastBcd;
+        firstTrack = (firstBcd >> 4) * 10 + (firstBcd & 0xF);
+        lastTrack = (lastBcd >> 4) * 10 + (lastBcd & 0xF);
     }
 
     if (g_CdDebugLevel >= 2) {
