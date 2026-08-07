@@ -5,10 +5,10 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     void *otReg;
     u8 **scratch;
     u8 *packet;
-    register s32 xReg asm("$9");
-    register s32 yReg asm("$10");
-    register s32 wReg asm("$11");
-    register s32 hReg asm("$8");
+    s16 xReg;
+    s16 yReg;
+    s16 wReg;
+    s16 hReg;
     u8 *oldPacket;
     s32 tmp;
     Rect rect;
