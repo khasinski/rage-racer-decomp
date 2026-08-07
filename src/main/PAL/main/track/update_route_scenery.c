@@ -26,7 +26,7 @@ void UpdateRouteScenery(void) {
     SVec vin;
     LVec vout;
     volatile s32 pad[6];
-    register s32 *cnt asm("$7");
+    volatile s32 *cnt;
     u8 *base;
     register KF *kp asm("$5");
     register s32 i asm("$4");
