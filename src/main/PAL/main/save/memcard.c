@@ -593,24 +593,32 @@ void StoreSaveStateBlock(u8 *block) {
     }
 
     {
-        register s32 count asm("$13") = 0;
-        u16 *src = g_TeamLogoClut;
-        u8 *dst = block;
+        register s32 count asm("$13");
 
-        for (; count < 0x10; count++) {
-            *(u16 *)(dst + 0x1BC) = *src++;
-            dst += 2;
+        {
+            u16 *src;
+            u8 *dst;
+
+            count = 0;
+            src = g_TeamLogoClut;
+            dst = block;
+            for (; count < 0x10; count++) {
+                *(u16 *)(dst + 0x1BC) = *src++;
+                dst += 2;
+            }
         }
-    }
 
-    {
-        register s32 count asm("$13") = 0;
-        u16 *src = g_TeamLogoCanvas;
-        u8 *dst = block;
+        {
+            u16 *src;
+            u8 *dst;
 
-        for (; count < 0x400; count++) {
-            *(u16 *)(dst + 0x1DC) = *src++;
-            dst += 2;
+            count = 0;
+            src = g_TeamLogoCanvas;
+            dst = block;
+            for (; count < 0x400; count++) {
+                *(u16 *)(dst + 0x1DC) = *src++;
+                dst += 2;
+            }
         }
     }
 
