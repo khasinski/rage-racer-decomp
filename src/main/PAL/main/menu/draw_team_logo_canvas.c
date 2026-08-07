@@ -262,7 +262,6 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     s32 texY;
     s32 gyTemp;
     register s32 gxTemp asm("$4");
-    register s32 gyRaw asm("$2");
     if (d >= 0xC)
     {
       d = 0xB;
@@ -320,11 +319,11 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     scaleDelta = (delta * D_8007F940) / 272;
     texY = (*(u8 *)(&g_TeamLogoRect.ty)) - 1;
     gyTemp = texY + scaleDelta;
-    gyRaw = gyTemp;
-    gy = gyRaw;
+    gxBase = gyTemp;
+    gy = gxBase;
     gx2 = gxTemp + (D_8007F948 / 8);
     asm("" : : "r"(scaleDelta));
-    gy2 = gyRaw + (D_8007F948 / 8);
+    gy2 = gxBase + (D_8007F948 / 8);
     clut = (g_TeamLogoRect.ty >> 4) & 0x10;
     clut |= (g_TeamLogoRect.tx & 0x3FF) >> 6;
     SetDrawClipRect(ot, 0, 0, 0x140, 0x1E0);
