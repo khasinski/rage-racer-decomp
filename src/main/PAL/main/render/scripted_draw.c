@@ -448,13 +448,6 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
                   flags & 4, entry[0xE]);
 }
 
-typedef struct TimedDrawCommand {
-    s16 time;
-    s16 type;
-    s32 arg0;
-    s32 arg1;
-} TimedDrawCommand;
-
 s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     TimedDrawCommand *base = commands;
     register s32 *progressPtr asm("$18") = progress;

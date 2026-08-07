@@ -4,6 +4,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/cd_types.h"
 
 /* libcd's polling deadline: a wall-clock limit, the retries left, and the name
  * the timeout message prints. Was duplicated in four CD_*.c files. */
@@ -25,13 +26,6 @@ typedef struct CdIntr {
     u_char ready;
     u_char command;
 } CdIntr;
-
-typedef struct CdlLOC {
-    u_char minute;
-    u_char second;
-    u_char sector;
-    u_char track;
-} CdlLOC;
 
 typedef struct CdlATV {
     u_char val0;

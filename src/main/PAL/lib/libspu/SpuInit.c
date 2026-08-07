@@ -21,7 +21,7 @@ void _SpuInit(long arg0) {
     if (arg0 == 0) {
         u_short *ptr;
         long i;
-        register long value asm("$4");
+        u_short value;
 
         value = 0xC000;
         i = 0x17;

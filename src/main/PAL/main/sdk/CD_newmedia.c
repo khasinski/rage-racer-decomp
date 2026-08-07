@@ -5,16 +5,9 @@ typedef struct W4 {
     u_char b[4];
 } W4;
 
-typedef struct Entry {
-    long index;    /* +0  */
-    long field6;   /* +4  */
-    long word2;    /* +8  */
-    char name[32];/* +12 */
-} Entry;
-
 extern u_char g_CdSectorBuf[];
 extern W4 g_CdRootDirLba;
-extern Entry g_CdPathTable[];
+extern CdlDIR g_CdPathTable[];
 
 extern const char D_800139B4[];
 extern const char D_800139E0[];
@@ -76,17 +69,17 @@ long CD_newmedia(void) {
         if (*p == 0) {
             break;
         }
-        *(W4 *)&g_CdPathTable[i].word2 = *(W4 *)(p + 2);
-        g_CdPathTable[i].field6 = *(u_char *)(p + 6);
-        g_CdPathTable[i].index = i + 1;
+        *(W4 *)&g_CdPathTable[i].lba = *(W4 *)(p + 2);
+        g_CdPathTable[i].parent_number = *(u_char *)(p + 6);
+        g_CdPathTable[i].number = i + 1;
         LibcMemcpy(g_CdPathTable[i].name, p + 8, *p);
         g_CdPathTable[i].name[*p] = 0;
         n = *p;
         d = (n & 1) + 8;
         p += n + d;
         if (g_CdDebugLevel >= 2) {
-            DebugPrintf(D_80013A5C, g_CdPathTable[i].word2,
-                          g_CdPathTable[i].index, g_CdPathTable[i].field6,
+            DebugPrintf(D_80013A5C, g_CdPathTable[i].lba.sector,
+                          g_CdPathTable[i].number, g_CdPathTable[i].parent_number,
                           g_CdPathTable[i].name);
         }
         i++;
@@ -95,7 +88,7 @@ long CD_newmedia(void) {
         }
     }
     if (i < 128) {
-        g_CdPathTable[i].field6 = 0;
+        g_CdPathTable[i].parent_number = 0;
     }
     g_CdCachedDir = 0;
     if (g_CdDebugLevel >= 2) {

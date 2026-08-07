@@ -27,8 +27,8 @@ long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4);
 long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6);
 long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5);
 long SsUtGetDetVVol(long arg0, short *arg1, short *arg2);
-long SsUtSetDetVVol(long arg0, short arg1, short arg2);
-long SsUtSetVVol(long arg0, long arg1, long arg2);
+short SsUtSetDetVVol(short arg0, short arg1, short arg2);
+short SsUtSetVVol(short arg0, short arg1, short arg2);
 long SsUtAutoVol(long arg0, long arg1, long arg2, long arg3);
 long SsUtAutoPan(long arg0, long arg1, long arg2, long arg3);
 
@@ -178,32 +178,14 @@ long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) {
     return -1;
 }
 
-long SsUtSetDetVVol(long arg0, short arg1, short arg2) {
-    register long ret asm("$2");
-    long index;
-    long j;
-    short valueX;
-    u_char flags;
-
-    valueX = arg1;
-
-    if ((u_short)arg0 >= 0x18U) {
-        ret = -1;
-    } else {
-        index = (short)arg0;
-        j = index * 8;
-        /* Indexing one shared halfword base at j and j+1 - rather than two
-         * separate symbols - is what produces the retail 8-byte frame; see
-         * docs/names.md 21a. */
-        g_SndVoiceRegs[j + 1] = arg2;
-        flags = g_SndVoiceFlags[index];
-        g_SndVoiceRegs[j] = valueX;
-        flags |= 3;
-        g_SndVoiceFlags[index] = flags;
-        ret = 0;
+short SsUtSetDetVVol(short voice, short left, short right) {
+    if (voice >= 0 && voice < 24) {
+        g_SndVoiceRegs[voice * 8 + 1] = right;
+        g_SndVoiceRegs[voice * 8] = left;
+        g_SndVoiceFlags[voice] |= 3;
+        return 0;
     }
-
-    return ret;
+    return -1;
 }
 
 short SsUtGetVVol(short arg0, short *arg1, short *arg2) {
@@ -223,34 +205,19 @@ short SsUtGetVVol(short arg0, short *arg1, short *arg2) {
     return -1;
 }
 
-long SsUtSetVVol(long arg0, long arg1, long arg2) {
-    /* This pin is load-bearing after the other pins are removed. */
-    register long ret asm("$2");
-    long x;
-    long y;
-    long index;
-    long volOffset;
-    u_char flags;
+short SsUtSetVVol(short voice, short left, short right) {
+    u_short scaledLeft;
+    u_short scaledRight;
 
-    y = arg2;
-    if ((u_short)arg0 >= 0x18U) {
-        ret = -1;
-    } else {
-        ret = (short)arg1;
-        x = (ret << 7) + ret;
-        ret = (short)y;
-        y = (ret << 7) + ret;
-        index = (short)arg0;
-        volOffset = index << 3;
-        g_SndVoiceRegs[volOffset + 1] = y;
-        flags = g_SndVoiceFlags[index];
-        ret = 0;
-        g_SndVoiceRegs[volOffset] = x;
-        flags |= 3;
-        g_SndVoiceFlags[index] = flags;
+    if (voice >= 0 && voice < 24) {
+        scaledLeft = left * 0x81;
+        scaledRight = right * 0x81;
+        g_SndVoiceRegs[voice * 8 + 1] = scaledRight;
+        g_SndVoiceRegs[voice * 8] = scaledLeft;
+        g_SndVoiceFlags[voice] |= 3;
+        return 0;
     }
-
-    return ret;
+    return -1;
 }
 
 long SsUtAutoVol(long arg0, long arg1, long arg2, long arg3) {

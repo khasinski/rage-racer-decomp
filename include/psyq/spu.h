@@ -118,7 +118,7 @@ long SpuTransferStatus(long addr, long mode);
 long SpuGetKeyStatus(u_long voice_bit);
 u_long Spu_ReadFromSpu(long addr, u_long size);
 long SpuSetTransferStartAddr(long addr);
-void SpuSetTransferMode(long mode);
+long SpuSetTransferMode(long mode);
 long SpuIsTransferCompleted(long wait);
 void _spu_setTransferCompletionFlag(long completed);
 u_long _spu_isTransferIdle(void);

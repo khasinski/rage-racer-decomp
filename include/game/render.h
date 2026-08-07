@@ -4,6 +4,13 @@
 #include "common.h"
 #include "psyq/gte.h"
 
+typedef struct TimedDrawCommand {
+    s16 time;
+    s16 type;
+    s32 arg0;
+    s32 arg1;
+} TimedDrawCommand;
+
 /* A ready-made SPRT description; BuildSpriteFromDesc expands it into a scratchpad
  * SPRT. g_TachoNeedleSprite is the one instance. */
 typedef struct GameSpriteDesc {

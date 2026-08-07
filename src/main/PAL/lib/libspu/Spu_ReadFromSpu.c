@@ -24,22 +24,24 @@ long SpuSetTransferStartAddr(long arg0) {
     return arg0;
 }
 
-void SpuSetTransferMode(long arg0) {
-    register long value asm("$2");
+long SpuSetTransferMode(long mode) {
+    long transferByIo;
 
-    value = 1;
-    if (arg0 == 0) {
-        value = 0;
-    } else {
-        if (arg0 == value) {
-            value = 1;
-        } else {
-            value = 0;
-        }
+    switch (mode) {
+    case 0:
+        transferByIo = 0;
+        break;
+    case 1:
+        transferByIo = 1;
+        break;
+    default:
+        transferByIo = 0;
+        break;
     }
 
-    g_SpuTransferMode = arg0;
-    g_SpuTransferByIo = value;
+    g_SpuTransferMode = mode;
+    g_SpuTransferByIo = transferByIo;
+    return transferByIo;
 }
 
 long SpuIsTransferCompleted(long arg0) {
