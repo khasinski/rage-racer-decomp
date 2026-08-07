@@ -51,10 +51,8 @@ void UpdateRouteScenery(void) {
 
         g_RouteSceneryFrame = counter;
         if (RAW(rec0->dur) == counter) {
-            register s32 ni asm("$2");
-
-            ni = i + 1;
-            g_RouteSceneryKeyIndex = ni;
+            c = i + 1;
+            g_RouteSceneryKeyIndex = c;
             g_RouteSceneryFrame = 0;
         }
     }
