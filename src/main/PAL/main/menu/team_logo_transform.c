@@ -791,11 +791,10 @@ void DrawMenuLightBurst(s32 arg) {
             register s32 m11 asm("$2") = cnt * 11;
             register u32 u0 asm("$8");
             u8 c1;
-            register u32 c0 asm("$2");
             u0 = (u32)m11 / 256;
             c1 = (u32)(cnt * 75) / 256;
-            c0 = (u8)u0;
-            DrawGradientLine(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, c0, c0, c0, c1, c1, c1, 0x60);
+            m11 = (u8)u0;
+            DrawGradientLine(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, m11, m11, m11, c1, c1, c1, 0x60);
             s2 += 0x000A0000;
             s1 += 0x00070000;
             s0++;
@@ -809,10 +808,9 @@ void DrawMenuLightBurst(s32 arg) {
             s32 v = (((s32)((u16)l2.b[s0] - 0xAA) << 7) / 309 + 0x16) * D_8007FB20;
             register s32 vv asm("$2") = v;
             register u32 sh asm("$8");
-            register u32 col asm("$2");
             sh = (u32)vv / 512;
-            col = (u8)sh;
-            DrawLogoRect(s3, x0, y0, x1, 2, col, col, col, 0x60);
+            vv = (u8)sh;
+            DrawLogoRect(s3, x0, y0, x1, 2, vv, vv, vv, 0x60);
             s0++;
         } while (s0 < 0x21);
 
