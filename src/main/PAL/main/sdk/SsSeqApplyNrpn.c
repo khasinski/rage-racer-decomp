@@ -31,7 +31,7 @@ void SsUtGetVagAtr(short, short, short, Arg *);
 void SsUtSetVagAtr(short, short, short, Arg *);
 void SsUnpackAdsr(u_short, u_short, u_short *);
 void SsPackAdsr(u_short *, u_short *, u_short *);
-void SsUtSetReverbType(long);
+short SsUtSetReverbType(short);
 void SsUtSetReverbDepth(long, long);
 void SsUtSetReverbFeedback(long);
 void SsUtSetReverbDelay(long);

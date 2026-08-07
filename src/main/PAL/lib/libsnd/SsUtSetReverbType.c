@@ -2,47 +2,36 @@
 #include "psyq/spu.h"
 
 extern SpuReverbAttr g_SndReverbAttr;
-extern short g_SndReverbAttrMode;
 
-long SsUtSetReverbType(long type) {
-    register long normalized asm("v1");
+short SsUtSetReverbType(short type) {
+    short normalized;
     long negative;
-    long mode;
-    long result;
 
     negative = 0;
     normalized = type;
-    if ((long)(type << 16) < 0) {
+    if (type < 0) {
         negative = 1;
         normalized = -type;
     }
 
-    if ((u_long)(normalized & 0xFFFF) >= 10) {
-    } else {
-
-    g_SndReverbAttr.mask = 1;
-    if (negative != 0) {
-        mode = (normalized | 0x100) << 16;
-    } else {
-        mode = normalized << 16;
-    }
-    mode >>= 16;
-    *(long *)&g_SndReverbAttrMode = mode;
-    mode = normalized << 16;
-    result = mode >> 16;
-
-    if (result == 0) {
-        SpuSetReverb(0);
-    }
-    SpuSetReverbModeParam(&g_SndReverbAttr);
-    return result;
-
+    if (normalized >= 0 && normalized < 10) {
+        g_SndReverbAttr.mask = 1;
+        if (negative != 0) {
+            g_SndReverbAttr.mode = normalized | 0x100;
+        } else {
+            g_SndReverbAttr.mode = normalized;
+        }
+        if (normalized == 0) {
+            SpuSetReverb(0);
+        }
+        SpuSetReverbModeParam(&g_SndReverbAttr);
+        return normalized;
     }
     return -1;
 }
 
-long SsUtGetReverbType(void) {
-    return g_SndReverbAttrMode;
+short SsUtGetReverbType(void) {
+    return g_SndReverbAttr.mode;
 }
 
 void SsUtReverbOn(void) {
