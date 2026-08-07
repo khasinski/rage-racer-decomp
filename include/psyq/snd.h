@@ -80,7 +80,7 @@ void SsSoundTickCallback(void);
 void SsSoundTickVSyncCallback(void);
 void SsSetTickMode(long mode);
 void SsStopSoundTick(void);
-void SsSetTableSize(u_char *table, long seq_count, long sep_count);
+void SsSetTableSize(u_char *table, short seq_count, short sep_count);
 void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount);
 void SsSeqPlay(long seq, long play_mode, long loop_count);
 void SsSepPlay(long seq, long sep, long play_mode, long loop_count);
