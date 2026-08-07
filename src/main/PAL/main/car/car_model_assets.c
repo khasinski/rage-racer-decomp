@@ -123,14 +123,13 @@ void LoadRoundAssets(void) {
         if (g_GrandPrixMode != 0) {
             register s32 index asm("$2") = g_GrandPrixSeries;
             s32 scaled;
-            register s32 base asm("$2");
 
             scaled = index << 1;
             scaled += index;
-            base = g_GrandPrixClass;
+            index = g_GrandPrixClass;
             scaled <<= 1;
-            base += 0x4A;
-            kind = scaled + base;
+            index += 0x4A;
+            kind = scaled + index;
         }
 
         result = LoadAsset((s32)kind, g_ImageBlockBuffer);
