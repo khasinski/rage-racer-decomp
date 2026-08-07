@@ -16,7 +16,7 @@ s32 DrawClassChangeCurtain(s32 arg0) {
     register void *callScratch asm("$4");
     s32 yArg;
 
-    scratch = *(void **)0x1F800004;
+    scratch = SCRATCH_OT_BASE;
     delta = arg0;
 
     if (delta == 0) {

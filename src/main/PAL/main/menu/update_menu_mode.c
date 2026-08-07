@@ -28,7 +28,7 @@ void UpdateMenuMode(void) {
 
     c0 = g_AnimTimer;
     c1 = g_SceneTimer;
-    scratch = *(void **)0x1F800004;
+    scratch = SCRATCH_OT_BASE;
     c0 += 1;
     c1 += 1;
     g_AnimTimer = c0;
@@ -39,9 +39,9 @@ void UpdateMenuMode(void) {
     GameDrawSolidRectWide(scratch, 0, 0, 0x140, 2, 0, 0, 0, 0xFF);
 
     if ((u32)(g_MenuScreen - 1) < 2) {
-        *(s32 *)0x1F800064 = 1;
+        SPAD_OT_SHIFT = 1;
     } else {
-        *(s32 *)0x1F800064 = 5;
+        SPAD_OT_SHIFT = 5;
     }
 
     if (g_MenuHandlerIndex > 0) {

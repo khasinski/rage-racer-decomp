@@ -37,7 +37,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
     PaintColorTable *srcTable;
     Rgb *color;
 
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE;
     srcTable = &g_PaintColorTable;
     new_var = srcTable;
     localTable = *new_var;
@@ -95,7 +95,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
             i += 3;
             colorIndex += 8;
             xOffset++;
-        } while (xOffset < 18);
+        } while (xOffset < MENU_PAINT_COLOR_COUNT);
     }
 
     if (step >= 0) {
@@ -123,7 +123,7 @@ void DrawOwnedCarCounter(s32 arg0, s32 arg1) {
     s16 y;
 
     count = arg0;
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE;
     a1v = arg1;
 
     if (count == 0) {

@@ -4,18 +4,14 @@
 #include "game/car.h"
 #include "game/audio.h"
 
-typedef struct CellMask {
-    u8 cells[6][6];
-} CellMask;
-
-extern CellMask D_80011BD4;
+extern DesignModeCellMask D_80011BD4;
 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex,
                    s32 semiTrans, s32 flags) asm("DrawSprite");
 
 s32 DrawDesignModeScreen(s32 arg0) {
-    CellMask mask;
+    DesignModeCellMask mask;
     void *ot;
     s32 limit;
     s32 offset;
@@ -37,8 +33,8 @@ s32 DrawDesignModeScreen(s32 arg0) {
 
         updated = D_8009B2D4 + arg0;
         D_8009B2D4 = updated;
-        if (updated >= 0x1FD) {
-            D_8009B2D4 = 0x1FC;
+        if (updated >= MENU_FADE_COMPLETE) {
+            D_8009B2D4 = MENU_FADE_MAX;
         }
         offset = 0;
     } else {
@@ -49,12 +45,12 @@ s32 DrawDesignModeScreen(s32 arg0) {
         if (updated < 0) {
             D_8009B2D4 = 0;
         }
-        limit = 0x1FC - D_8009B2D4;
+        limit = MENU_FADE_MAX - D_8009B2D4;
         offset = (u32)(limit * limit) / 2048;
     }
 
     y = 0xB0 - (s16)offset;
-    intensity = (u32)D_8009B2D4 / 4;
+    intensity = (u32)D_8009B2D4 / MENU_FADE_INTENSITY_DIVISOR;
 
     GameDrawSpriteWide(ot, 0xB4, y, 0x18, 0xC, 0x94, 0xDC,
                   (u8)intensity, (u8)intensity, (u8)intensity,
@@ -100,15 +96,15 @@ void UpdateDesignModeScreen(void) {
         RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, 0);
         if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) {
             g_MenuOverlayPattern = -1;
-            if (g_PadEdge2 & 0x1000) {
+            if (PAD_PRESSED(PAD_BUTTON_UP)) {
                 PlaySoundCue(1);
                 g_DesignModeOption = (g_DesignModeOption > 0) ? g_DesignModeOption - 1 : 3;
             }
-            if (g_PadEdge2 & 0x4000) {
+            if (PAD_PRESSED(PAD_BUTTON_DOWN)) {
                 PlaySoundCue(1);
                 g_DesignModeOption = (g_DesignModeOption < 3) ? g_DesignModeOption + 1 : 0;
             }
-            if (g_PadEdge2 & 0x860) {
+            if (PAD_PRESSED(PAD_BUTTON_CONFIRM)) {
                 sel = g_DesignModeOption;
                 if (sel == 0) {
                     PlaySoundCue(2);
@@ -134,7 +130,7 @@ void UpdateDesignModeScreen(void) {
                     GameMenuBusy = 4;
                     g_MenuOverlayPattern = 2;
                 }
-            } else if (g_PadEdge2 & 0x90) {
+            } else if (PAD_PRESSED(PAD_BUTTON_CANCEL)) {
                 PlaySoundCue(3);
                 GameMenuBusy = 4;
                 g_MenuOverlayPattern = 2;
@@ -144,8 +140,8 @@ void UpdateDesignModeScreen(void) {
         RunTimedDrawScript(&D_800828EC, &g_UiScriptProgress2, 0);
         if (RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
             edge = g_PadEdge2;
-            if (edge & 0x860) GameMenuBusy = 0;
-            if (edge & 0x90) GameMenuBusy = 0;
+            if (edge & PAD_BUTTON_CONFIRM) GameMenuBusy = 0;
+            if (edge & PAD_BUTTON_CANCEL) GameMenuBusy = 0;
         }
         DrawFadingMenuSprites(g_UiScriptProgress, 3, g_DesignModeOption);
         RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, 0);
@@ -159,31 +155,31 @@ void UpdateDesignModeScreen(void) {
         if (g_UiScriptProgress <= 0) {
             switch (GameMenuBusy) {
             case 1:
-                g_MenuScreen = 7;
-                g_MenuHandlerIndex = 7;
+                g_MenuScreen = MENU_SCREEN_TEAM_LOGO;
+                g_MenuHandlerIndex = MENU_SCREEN_TEAM_LOGO;
                 DrawTeamLogoCanvas(0, 0);
                 break;
             case 2:
-                g_MenuScreen = 9;
-                g_MenuHandlerIndex = 9;
+                g_MenuScreen = MENU_SCREEN_TEAM_NAME;
+                g_MenuHandlerIndex = MENU_SCREEN_TEAM_NAME;
                 DrawTeamNameEntry(0, 0);
                 g_MenuViewOffset = 0x3D090;
                 g_MenuViewOffsetTarget = 0;
                 g_MenuViewAngleTarget = 0;
                 g_MenuViewAngle = 0;
-                GameMenuCursor = (g_TeamNameLength >= 6) ? 0x2B : 0;
+                GameMenuCursor = (g_TeamNameLength >= MENU_TEAM_NAME_MAX_LENGTH) ? 0x2B : 0;
                 g_TeamNameCharModel = GameMenuCursor;
                 break;
             case 3:
-                g_MenuScreen = 10;
-                g_MenuHandlerIndex = 10;
+                g_MenuScreen = MENU_SCREEN_PAINT_COLOR;
+                g_MenuHandlerIndex = MENU_SCREEN_PAINT_COLOR;
                 g_UiScriptProgress2 = 0;
                 g_MenuViewOffset = 0x3D090;
                 g_MenuViewOffsetTarget = 0;
                 break;
             case 4:
-                g_MenuScreen = 5;
-                g_MenuHandlerIndex = 5;
+                g_MenuScreen = MENU_SCREEN_CUSTOMIZE;
+                g_MenuHandlerIndex = MENU_SCREEN_CUSTOMIZE;
                 g_DesignModeOption = 0;
                 g_MenuViewOffset = 0x3D090;
                 g_MenuViewOffsetTarget = 0;
@@ -206,8 +202,8 @@ s32 DrawTeamLogoScreen(s32 arg0) {
     if (arg0 > 0) {
         value = arg0 + D_8009B2D8;
         D_8009B2D8 = value;
-        if (value >= 0x1FD) {
-            D_8009B2D8 = 0x1FC;
+        if (value >= MENU_FADE_COMPLETE) {
+            D_8009B2D8 = MENU_FADE_MAX;
         }
     } else {
         value = arg0 + D_8009B2D8;

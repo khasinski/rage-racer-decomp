@@ -322,6 +322,6 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     ResetFrameContext(0);
     ResetFrameContext(1);
 
-    *(u16 *)0x1F80007E = 0x1E0;
+    SPAD_CLIP_Y1 = 0x1E0;
     asm(".globl func_8001C218\nfunc_8001C218 = func_8001C088 + 0x190");
 }

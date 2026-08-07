@@ -3,6 +3,8 @@
 
 #include "common.h"
 #include "game/menu_types.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
 
@@ -100,10 +102,6 @@ extern s32 g_McMenuSubState;
  * 0x4000 down, 0x8000 left, 0x2000 right, 0x40 cross, 0x20 circle,
  * 0x10 triangle, 0x80 square, 0x800 start - so 0x860 confirms, 0x90 cancels.
  */
-extern u16 g_PadHeld;
-extern u16 g_PadEdge;
-extern u16 g_PadEdge2;
-
 /* The two eased current/target pairs of the 3D menu view, in 1/1000 units:
  * an angle (carousel wraps at 500000 per entry) and a translation. Screens set
  * only the *Target words. */
@@ -111,6 +109,29 @@ extern s32 g_MenuViewAngle;
 extern s32 g_MenuViewAngleTarget;
 extern s32 g_MenuViewOffset;
 extern s32 g_MenuViewOffsetTarget;
+
+enum MenuScreenId {
+    MENU_SCREEN_COURSE_SELECT = 1,
+    MENU_SCREEN_RANKING,
+    MENU_SCREEN_ENTER_CAR_SELECT,
+    MENU_SCREEN_CAR_SELECT,
+    MENU_SCREEN_CUSTOMIZE,
+    MENU_SCREEN_DESIGN_MODE,
+    MENU_SCREEN_TEAM_LOGO,
+    MENU_SCREEN_LOGO_SAMPLE,
+    MENU_SCREEN_TEAM_NAME,
+    MENU_SCREEN_PAINT_COLOR,
+    MENU_SCREEN_CAR_SHOP,
+    MENU_SCREEN_ENGINEER_SHOP
+};
+
+enum MenuLayout {
+    MENU_FADE_MAX = 0x1FC,
+    MENU_FADE_COMPLETE = MENU_FADE_MAX + 1,
+    MENU_FADE_INTENSITY_DIVISOR = 4,
+    MENU_TEAM_NAME_MAX_LENGTH = 6,
+    MENU_TEAM_NAME_GRID_COLUMNS = 11
+};
 
 void AdjustMenuSelectionHorizontal(
     s32 *value,

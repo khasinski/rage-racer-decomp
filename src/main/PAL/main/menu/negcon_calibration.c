@@ -4,14 +4,7 @@
 #include "game/menu.h"
 #include "game/render.h"
 
-/*
- * Four {u, v} texel pairs copied into a local that is never read back; see
- * DrawNegconMaxTwistScreen for why this is spelled as a struct copy.
- */
-typedef struct NegconUvTemplate {
-    u8 uv[8];
-} NegconUvTemplate;
-
+/* Copied into a local solely to preserve the retail code shape. */
 extern NegconUvTemplate D_80010070;
 
 /* The 0..3 steering-play setting this screen edits. */
@@ -120,11 +113,11 @@ void DrawOptionHintBar(s32 arg0);
 void UpdateNegconSteerPlayScreen(void) {
     g_AnimTimer++;
     g_SetupArrowPulse += 96;
-    if (g_PadEdge2 & 0x90) {
+    if (PAD_PRESSED(PAD_BUTTON_CANCEL)) {
         PlaySoundCue(3);
         g_GameMode = 1;
         g_NegconSteerPlay = g_NegconSteerPlaySaved;
-    } else if (g_PadEdge2 & 0x860) {
+    } else if (PAD_PRESSED(PAD_BUTTON_CONFIRM)) {
         PlaySoundCue(2);
         g_GameMode = 11;
     }
@@ -197,11 +190,11 @@ void DrawNegconMaxTwistScreen(void) {
  */
 void UpdateNegconMaxTwistScreen(void) {
     g_AnimTimer++;
-    if (g_PadEdge2 & 0x90) {
+    if (PAD_PRESSED(PAD_BUTTON_CANCEL)) {
         PlaySoundCue(3);
         g_GameMode = 1;
         g_NegconMaxTwist = g_NegconMaxTwistSaved;
-    } else if (g_PadEdge2 & 0x860) {
+    } else if (PAD_PRESSED(PAD_BUTTON_CONFIRM)) {
         PlaySoundCue(2);
         g_GameMode = 1;
     }

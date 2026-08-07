@@ -60,15 +60,15 @@ void DrawMenuCarView(void) {
     s32 *q;
 
     vec = D_80011AB4;
-    *(s32 *)0x1F80000C = -64;
-    *(s32 *)0x1F800010 = -256;
-    *(s32 *)0x1F800008 = 0;
-    *(s32 *)0x1F800018 = 0x100;
-    *(s32 *)0x1F80001C = 0;
-    *(s32 *)0x1F800020 = 0;
+    SCRATCH_VIEW_Y = -64;
+    SCRATCH_VIEW_Z = -256;
+    SCRATCH_VIEW_X = 0;
+    SCRATCH_VIEW_ANGLE_X = 0x100;
+    SCRATCH_VIEW_ANGLE_Y = 0;
+    SCRATCH_VIEW_ANGLE_Z = 0;
 
     SetCameraRotMatrix();
-    ScaleMatrix((void *)0x1F800028, &g_MenuViewScale);
+    ScaleMatrix(SCRATCH_VIEW_MATRIX_GTE, &g_MenuViewScale);
 
     if (249999 < g_MenuViewOffsetTarget) {
         if (g_MenuViewOffset < 2500) {
@@ -159,7 +159,7 @@ void DrawMenuCarView(void) {
     BuildRotMatrixY(&mtxB, 0x800 - *p);
     BuildRotMatrixX(&mtxA, D_8009E6D4.rotation.x);
     MulMatrix2(&mtxB, &mtxA);
-    MulMatrix2((void *)0x1F800028, &mtxA);
+    MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
 
     altLayout = g_MenuAltLayout;
     outX = out.x;
@@ -192,7 +192,7 @@ void DrawMenuCarView(void) {
     SelectModelBank(14);
     D_1F800004 += 120;
     SetGteObjectMatrix((void *)0x1F80011C, &D_8009E6D4.position[0], &mtxA);
-    *(s32 *)0x1F800084 = 0;
+    SCRATCH_ENV_MODE4 = 0;
     {
         s32 a1 = 1;
         if (g_ModelBankCount >= 6) {
@@ -214,15 +214,15 @@ void DrawMenuCourseView(void) {
     s32 s2;
     s32 *p;
 
-    *(s32 *)0x1F80000C = -64;
-    *(s32 *)0x1F800010 = -256;
-    *(s32 *)0x1F800008 = 0;
-    *(s32 *)0x1F800018 = 0x100;
-    *(s32 *)0x1F80001C = 0;
-    *(s32 *)0x1F800020 = 0;
+    SCRATCH_VIEW_Y = -64;
+    SCRATCH_VIEW_Z = -256;
+    SCRATCH_VIEW_X = 0;
+    SCRATCH_VIEW_ANGLE_X = 0x100;
+    SCRATCH_VIEW_ANGLE_Y = 0;
+    SCRATCH_VIEW_ANGLE_Z = 0;
 
     SetCameraRotMatrix();
-    ScaleMatrix((Matrix *)0x1F800028, &g_MenuViewScale);
+    ScaleMatrix(SCRATCH_VIEW_MATRIX_GTE, &g_MenuViewScale);
 
     if (249999 < g_MenuViewOffsetTarget) {
         if (g_MenuViewOffset < 2500) {
@@ -294,10 +294,10 @@ void DrawMenuCourseView(void) {
     BuildRotMatrixY(&mtxB, 0x800 - *p);
     BuildRotMatrixX(&mtxA, D_8009E6F4);
     MulMatrix2(&mtxB, &mtxA);
-    MulMatrix2((Matrix *)0x1F800028, &mtxA);
+    MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
     SelectModelBank(14);
     SetGteObjectMatrix((void *)0x1F80011C, p - 9, &mtxA);
-    *(s32 *)0x1F800084 = 0;
+    SCRATCH_ENV_MODE4 = 0;
     {
         s32 a1 = 1;
         if ((s2 & 3) < g_ModelBankCount) {
@@ -323,15 +323,15 @@ void DrawTeamNameCharModel(void) {
 
     vcopy = D_80011AC4;
 
-    *(s32 *)0x1F80000C = -64;
-    *(s32 *)0x1F800010 = -256;
-    *(s32 *)0x1F800008 = 0;
-    *(s32 *)0x1F800018 = 0;
-    *(s32 *)0x1F80001C = -104;
-    *(s32 *)0x1F800020 = 0;
+    SCRATCH_VIEW_Y = -64;
+    SCRATCH_VIEW_Z = -256;
+    SCRATCH_VIEW_X = 0;
+    SCRATCH_VIEW_ANGLE_X = 0;
+    SCRATCH_VIEW_ANGLE_Y = -104;
+    SCRATCH_VIEW_ANGLE_Z = 0;
 
     SetCameraRotMatrix();
-    ScaleMatrix((Matrix *)0x1F800028, &g_MenuViewScale);
+    ScaleMatrix(SCRATCH_VIEW_MATRIX_GTE, &g_MenuViewScale);
 
     if (249999 < g_MenuViewOffsetTarget) {
         if (g_MenuViewOffset < 2500) {
@@ -390,13 +390,13 @@ void DrawTeamNameCharModel(void) {
     BuildRotMatrixY(&mtxB, 0x800 - poly.f5);
     BuildRotMatrixZ(&mtxA, poly.f6);
     MulMatrix2(&mtxB, &mtxA);
-    MulMatrix2((Matrix *)0x1F800028, &mtxA);
+    MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
     ScaleMatrix(&mtxA, &vcopy);
 
     if (g_TeamNameCharModel != 10 && (u32)(g_TeamNameCharModel - 42) >= 2) {
         s32 a1;
         SetGteObjectMatrix((void *)0x1F80011C, &poly, &mtxA);
-        *(s32 *)0x1F800084 = 0;
+        SCRATCH_ENV_MODE4 = 0;
         a1 = 1;
         if (g_TeamNameCharModel < g_CourseModelCount) {
             a1 = g_TeamNameCharModel;

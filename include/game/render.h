@@ -2,6 +2,7 @@
 #define GAME_RENDER_H
 
 #include "common.h"
+#include "game/scratchpad.h"
 #include "psyq/gte.h"
 
 typedef struct TimedDrawCommand {
@@ -72,6 +73,17 @@ typedef struct GameScratchpadRenderState {
  * the emitted code, a macro cannot.
  */
 
+/* View transform consumed by the model render path. SetCameraRotMatrix builds
+ * the matrix at 0x28 from the three angles; the position words are the camera
+ * translation passed to SetGteObjectMatrix. */
+#define SCRATCH_VIEW_X       (*(s32 *)0x1F800008)
+#define SCRATCH_VIEW_Y       (*(s32 *)0x1F80000C)
+#define SCRATCH_VIEW_Z       (*(s32 *)0x1F800010)
+#define SCRATCH_VIEW_ANGLE_X (*(s32 *)0x1F800018)
+#define SCRATCH_VIEW_ANGLE_Y (*(s32 *)0x1F80001C)
+#define SCRATCH_VIEW_ANGLE_Z (*(s32 *)0x1F800020)
+#define SCRATCH_VIEW_MATRIX_GTE ((Matrix *)0x1F800028)
+
 /* Course object bank. SubmitCourseModel / SubmitCourseModel2 (0x800296BC,
  * 0x80029E58) load it and index by model id; size is g_CourseModelCount. */
 #define SPAD_COURSE_BANK    (*(s32 *)0x1F800048)
@@ -95,7 +107,6 @@ typedef struct GameScratchpadRenderState {
  * OT_SHIFT on the cell-face path (0x800283C0), FACE_OT_SHIFT on the mode-1
  * path, where it is read as a halfword (0x80028474). InitRenderState sets
  * OT_SHIFT from its parameter, 5 for the race scene and 1 for two menus. */
-#define SPAD_OT_SHIFT       (*(s32 *)0x1F800064)
 #define SPAD_FACE_OT_SHIFT  (*(s32 *)0x1F80006C)
 
 /* Mirror flag. Non-zero makes the engine negate the GTE rotation matrix

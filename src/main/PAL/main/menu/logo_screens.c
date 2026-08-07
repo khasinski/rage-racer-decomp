@@ -30,7 +30,7 @@ void UpdateTeamLogoScreen(void)
   s32 edge;
   s32 cnt;
   int new_var;
-  ot = *(void **)0x1F800004;
+  ot = SCRATCH_OT_BASE;
   g_MenuAltLayout = 0;
   state = GameMenuBusy;
   if (state == 0)
@@ -46,18 +46,18 @@ void UpdateTeamLogoScreen(void)
     {
       g_MenuHintButtonsVisible = 1;
       g_MenuOverlayPattern = -1;
-      if (g_PadEdge2 & 0x1000)
+      if (PAD_PRESSED(PAD_BUTTON_UP))
       {
         PlaySoundCue(1);
         D_801F1804 = (D_801F1804 > 0) ? (D_801F1804 - 1) : (2);
       }
-      if (g_PadEdge2 & 0x4000)
+      if (PAD_PRESSED(PAD_BUTTON_DOWN))
       {
         PlaySoundCue(1);
         D_801F1804 = (D_801F1804 < 2) ? (D_801F1804 + 1) : (0);
       }
       edge = g_PadEdge2;
-      if (edge & 0x860)
+      if (edge & PAD_BUTTON_CONFIRM)
       {
         sel = D_801F1804;
         if (sel == 0)
@@ -87,7 +87,7 @@ void UpdateTeamLogoScreen(void)
         }
       }
       else
-        if (edge & 0x90)
+        if (edge & PAD_BUTTON_CANCEL)
       {
         PlaySoundCue(3);
         GameMenuBusy = 2;
@@ -105,7 +105,7 @@ void UpdateTeamLogoScreen(void)
       RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
       if (RunTimedDrawScript(D_801E8A44, &g_UiScriptProgress2, 1) != 0)
       {
-        if (g_PadEdge2 & 0x860)
+        if (PAD_PRESSED(PAD_BUTTON_CONFIRM))
         {
           if (g_MenuSubCursor != 0)
           {
@@ -120,12 +120,12 @@ void UpdateTeamLogoScreen(void)
           }
         }
         pad = (u16 *)(&g_PadEdge2);
-        if ((*pad) & 0x90)
+        if ((*pad) & PAD_BUTTON_CANCEL)
         {
           PlaySoundCue(3);
           GameMenuBusy = 0;
         }
-        if ((*pad) & 0x8000)
+        if ((*pad) & PAD_BUTTON_LEFT)
         {
           if (g_MenuSubCursor == 0)
           {
@@ -133,7 +133,7 @@ void UpdateTeamLogoScreen(void)
             g_MenuSubCursor = 1;
           }
         }
-        if (g_PadEdge2 & 0x2000)
+        if (PAD_PRESSED(PAD_BUTTON_RIGHT))
         {
           if (g_MenuSubCursor != 0)
           {
@@ -242,14 +242,14 @@ void UpdateTeamLogoScreen(void)
       switch (GameMenuBusy)
       {
         case 1:
-          g_MenuScreen = 8;
-          g_MenuHandlerIndex = 8;
+          g_MenuScreen = MENU_SCREEN_LOGO_SAMPLE;
+          g_MenuHandlerIndex = MENU_SCREEN_LOGO_SAMPLE;
           DrawLogoSamplePanel(0, 0);
           break;
 
         case 2:
-          g_MenuScreen = 6;
-          g_MenuHandlerIndex = 6;
+          g_MenuScreen = MENU_SCREEN_DESIGN_MODE;
+          g_MenuHandlerIndex = MENU_SCREEN_DESIGN_MODE;
           D_801F1804 = 0;
           g_TeamLogoClut[0] = 0;
           LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
@@ -277,8 +277,8 @@ s32 DrawLogoSampleScreen(s32 arg0) {
     if (arg0 > 0) {
         value = arg0 + D_8009B2DC;
         D_8009B2DC = value;
-        if (value >= 0x1FD) {
-            D_8009B2DC = 0x1FC;
+        if (value >= MENU_FADE_COMPLETE) {
+            D_8009B2DC = MENU_FADE_MAX;
         }
     } else {
         value = arg0 + D_8009B2DC;

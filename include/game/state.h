@@ -21,6 +21,17 @@ typedef struct PadState {
     s16 unk16;
 } PadState;
 
+/* Game-facing button bits after UpdatePadState has inverted the BIOS packet. */
+enum PadButton {
+    PAD_BUTTON_START = 0x800,
+    PAD_BUTTON_CONFIRM = 0x860,
+    PAD_BUTTON_CANCEL = 0x90,
+    PAD_BUTTON_UP = 0x1000,
+    PAD_BUTTON_DOWN = 0x4000,
+    PAD_BUTTON_LEFT = 0x8000,
+    PAD_BUTTON_RIGHT = 0x2000
+};
+
 /* Top-level scene/state machine, dispatched by ServiceAssetLoad; 1 = the
  * asset-load driver, other values are individual screens. */
 extern s32 g_MainState;
@@ -44,6 +55,10 @@ void UpdatePadState(void);
 void LoadPadButtonMapping(s32 mapping0, s32 mapping1);
 void ApplyPadButtonMapping(void);
 extern PadState g_PadState;
+
+/* These expand to the original bit tests, preserving call-site code shape. */
+#define PAD_HELD(buttons) (g_PadHeld & (buttons))
+#define PAD_PRESSED(buttons) (g_PadEdge2 & (buttons))
 
 /* Controller-config and NeGcon calibration screens: g_GameModeHandlers entries
  * 7..11, each drawing its own screen plus the shared 3D backdrop. */
@@ -175,6 +190,9 @@ extern u16 g_PadButtonPresets[];
 extern u8 g_PadConfigButtonRows[];
 extern u8 g_PadConfigLabelRows[];
 extern u16 g_PadPrevHeld;
+extern u16 g_PadHeld;
+extern u16 g_PadEdge;
+extern u16 g_PadEdge2;
 extern u8 g_PadRepeatTimer[];
 
 void BiosSetMemSize(s32 arg0);

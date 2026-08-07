@@ -23,7 +23,7 @@ void DrawMenuAltPanel(s32 arg0, s32 arg1) {
     register void *callScratch asm("$4");
     s32 callX;
 
-    scratch = *(void **)0x1F800004;
+    scratch = SCRATCH_OT_BASE;
     step0 = arg0;
     step1 = arg1;
 
@@ -141,16 +141,9 @@ void DrawMenuAltPanel(s32 arg0, s32 arg1) {
     }
 }
 
-typedef struct UVec {
-    u16 x;
-    u16 y;
-    u16 z;
-    u16 pad;
-} UVec;
-
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     SVec verts[4];
-    UVec out[4];
+    MenuProjectedVertex out[4];
     Matrix mtx;
     s32 scratch2;
     s32 n;
@@ -162,7 +155,7 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     verts[2] = D_80011A48[2];
     verts[3] = D_80011A48[3];
 
-    scratch2 = *(s32 *)0x1F800004 + 4;
+    scratch2 = (s32)SCRATCH_OT_BASE + 4;
 
     n = *p0 - *p1;
     if (n != 0) {
@@ -243,7 +236,7 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
 }
 
 void DrawTimeAttackPlate(s32 arg0) {
-    void *scratch = *(void **)0x1F800004;
+    void *scratch = SCRATCH_OT_BASE;
     s32 step = arg0;
     s32 value;
     s32 renderValue;
@@ -366,7 +359,7 @@ void InitMenuMode(void) {
     scratch[7] = 0;
     scratch[8] = 0;
     SetCameraRotMatrix();
-    ScaleMatrix((void *)0x1F800028, &g_MenuViewScale);
+    ScaleMatrix(SCRATCH_VIEW_MATRIX_GTE, &g_MenuViewScale);
 
     D_8019C764 = &D_80082568;
     D_801E40B4 = &D_80082568;

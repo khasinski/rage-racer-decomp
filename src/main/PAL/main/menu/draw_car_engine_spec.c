@@ -6,16 +6,7 @@ void DrawEngineSpecLabel(s32 arg0, s32 arg1, s32 arg2) {
     DrawText8x8(arg0, arg1, D_80082E70[arg2], 0x78CC);
 }
 
-typedef struct EngineSpecData {
-    u8 pad00[0x10];
-    s16 power;      /* 0x10 */
-    s16 torque;     /* 0x12 */
-    u8 unk14;       /* 0x14 */
-    u8 unk15;       /* 0x15 */
-    s16 unk16;      /* 0x16 */
-} EngineSpecData;
-
-extern EngineSpecData *g_CarModelAsset;
+extern CarEngineSpec *g_CarModelAsset;
 
 void drawSprite(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r,
                 s32 g, s32 b, s32 clut, s32 shadeTex, s32 semiTrans,
@@ -43,7 +34,7 @@ void DrawCarEngineSpec(s32 a0raw, s32 arg1) {
                (u8)arg1, 0x244, 0, 1, 0x3A);
     drawSprite(ot, 0xB2, 0xCC - arg0, 0x1C, 0xC, 0x10, 0xF4, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3A);
-    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->power);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->maxPower);
     drawSmallText(0xD2, 0xCB - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     p = n * 6;
@@ -52,7 +43,7 @@ void DrawCarEngineSpec(s32 a0raw, s32 arg1) {
     drawSprite(ot, p + 0xDF, 0xCC - arg0, 6, 0xC, 0xD8, 0, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3B);
     q = p + 0xE6;
-    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->torque);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->maxPowerRpm);
     drawSmallText(q, 0xCB - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     torqueEnd = p + 0xE8;
@@ -63,14 +54,14 @@ void DrawCarEngineSpec(s32 a0raw, s32 arg1) {
                (u8)arg1, 0x244, 0, 1, 0x3A);
     drawSprite(ot, 0xB2, 0xDA - arg0, 0x20, 0xC, 0x2C, 0xF4, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3A);
-    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->unk15);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->maxTorqueWhole);
     drawSmallText(0xD2, 0xD9 - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     p = n * 6;
     drawSprite(ot, p + 0xD3, 0xDA - arg0, 3, 0xC, 0xE0, 0, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3B);
     q = p + 0xD5;
-    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->unk14);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->maxTorqueFraction);
     drawSmallText(q, 0xD9 - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     p += 0xD7;
@@ -84,7 +75,7 @@ void DrawCarEngineSpec(s32 a0raw, s32 arg1) {
     drawSprite(ot, q + 0x11, 0xDA - arg0, 6, 0xC, 0xD8, 0, (u8)arg1, (u8)arg1,
                (u8)arg1, 0x244, 0, 1, 0x3B);
     q += 0x18;
-    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->unk16);
+    n = gsprintf(buf, D_80011B5C, g_CarModelAsset->maxTorqueRpm);
     drawSmallText(q, 0xD9 - arg0, buf, (u8)arg1, (u8)arg1, (u8)arg1, 0x244,
                   0x20);
     r = q + 2;
