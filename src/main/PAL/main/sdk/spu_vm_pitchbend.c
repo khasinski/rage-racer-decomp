@@ -13,23 +13,21 @@ extern u_short g_SndCurrentVoice;
 
 long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long arg5) {
     register long raw asm("$10") = arg0;
-    register long cst asm("$2") = 0xFFC0;
+    register long value asm("$2") = 0xFFC0;
     long a4;
     register long i asm("$4");
     long t1;
     long off;
     long w, t, rem, f0;
-    register long prod asm("$4");
-    register long q asm("$2");
     long bal;
     long base;
     long j, off2;
     u_char c;
     long ret;
 
-    __asm__("" : "=r"(a4) : "0"(arg0), "r"(cst));
+    __asm__("" : "=r"(a4) : "0"(arg0), "r"(value));
     i = (short)a4;
-    t1 = arg5 + cst;
+    t1 = arg5 + value;
     off = ((((i * 3) * 4) + i) * 4);
 
     if (*(short *)&g_SndVoiceStateSeqSep[off] == (short)arg1 &&
@@ -41,21 +39,18 @@ long SpuVmApplyPitchBendToVoice(long arg0, long arg1, long arg2, long arg3, long
         w = (short)t1;
 
         if (w > 0) {
-            prod = w * (u_char)g_SndCurrentToneTable[(((u_short)t) << 5) + 0xD];
-            q = prod / 63;
-            base = f0 + q;
-            bal = (prod - q * 63) << 1;
+            i = w * (u_char)g_SndCurrentToneTable[(((u_short)t) << 5) + 0xD];
+            value = i / 63;
+            base = f0 + value;
+            bal = (i - value * 63) << 1;
         } else if (w < 0) {
-            prod = w * (u_char)g_SndCurrentToneTable[(((u_short)t) << 5) + 0xC];
-            q = prod;
-            if (prod < 0) q = prod + 0x3F;
-            q = q >> 6;
-            base = f0 + q - 1;
-            {
-                register long r asm("$2");
-                r = prod - q * 64;
-                bal = (r << 1) + 0x7F;
-            }
+            i = w * (u_char)g_SndCurrentToneTable[(((u_short)t) << 5) + 0xC];
+            value = i;
+            if (i < 0) value = i + 0x3F;
+            value = value >> 6;
+            base = f0 + value - 1;
+            value = i - value * 64;
+            bal = (value << 1) + 0x7F;
         } else {
             base = f0;
             bal = 0;
