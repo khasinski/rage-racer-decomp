@@ -780,7 +780,7 @@ void DrawMenuLightBurst(s32 arg) {
         s32 s1;
         s32 s2;
         u8 *prim;
-        register s32 value asm("$2");
+        s32 value;
         register u32 scaled asm("$8");
 
         SetDrawClipRect(s3, 0, 0, 0x140, 0x1E0);
