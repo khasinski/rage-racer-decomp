@@ -789,10 +789,10 @@ extern u8 g_TeamLogoClutRect[];
 
 s32 LoadSaveStateBlock(u8 *block) {
     register u8 *base asm("$17") = block;
+    register s32 i asm("$13");
     __asm__("" : "=r"(base) : "0"(base));
     {
         u32 sum;
-        register u32 i asm("$13");
         u16 *p;
 
         i = 0;
@@ -802,7 +802,7 @@ s32 LoadSaveStateBlock(u8 *block) {
         do {
             sum += *p++;
             i++;
-        } while (i < 0x7FE);
+        } while ((u32)i < 0x7FE);
         DebugPrintf(g_MsgSaveChecksumOk);
         sum = ~sum;
         DebugPrintf(g_FmtSaveChecksum, *(s32 *)(base + MC_BLOCK_CHECKSUM_OFS), sum);
@@ -893,7 +893,6 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     {
-        register s32 i asm("$13");
         register s32 j asm("$12");
         register s32 k asm("$7");
 
