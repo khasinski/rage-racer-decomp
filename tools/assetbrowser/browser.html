@@ -89,6 +89,7 @@ pre.hex .off{color:var(--dim)}
         <div id=glinfo></div>
         <div id=glerr></div>
       </div></div>
+      <div class="view pad" id=v-fmv></div>
       <div class="view pad" id=v-tex></div>
       <div class="view pad" id=v-audio></div>
       <div class="view pad" id=v-vram></div>
@@ -333,7 +334,7 @@ function hookCanvas(){
 }
 
 /* -------------------------------------------------------------------- tabs */
-const TABS=[['model','3D model'],['tex','textures'],['audio','sounds'],['vram','VRAM'],['info','structure'],['hex','hex']];
+const TABS=[['model','3D model'],['fmv','video'],['tex','textures'],['audio','sounds'],['vram','VRAM'],['info','structure'],['hex','hex']];
 let tab='info';
 function setTab(t){ tab=t;
   for(const [k] of TABS){ $('#v-'+k).classList.toggle('on',k===t); }
@@ -343,12 +344,13 @@ function setTab(t){ tab=t;
 }
 function renderTabs(a){
   const has={model:!!(a.model||(a.banks||[]).some(b=>b.file)), tex:!!((a.textures||[]).length||(a.banks||[]).some(b=>b.textures&&b.textures.length)),
-             audio:!!(a.sounds&&a.sounds.length), vram:!!a.vram, info:true, hex:!!a.raw};
+             audio:!!(a.sounds&&a.sounds.length), vram:!!a.vram, info:true, hex:!!a.raw,
+             fmv:!!a.fmv};
   has.tex = has.tex || !!(a.sprites&&a.sprites.length);
   $('#tabs').innerHTML=TABS.map(([k,l])=>
     `<div class="tab ${has[k]?'':'off'} ${k===tab?'on':''}" data-t="${k}">${l}</div>`).join('');
   document.querySelectorAll('.tab').forEach(e=>e.onclick=()=>setTab(e.dataset.t));
-  if(!has[tab]) setTab(has.model?'model':(has.tex?'tex':'info'));
+  if(!has[tab]) setTab(has.model?'model':(has.fmv?'fmv':(has.tex?'tex':'info')));
 }
 
 /* ------------------------------------------------------------------ panels */
@@ -404,11 +406,35 @@ function showAudio(a){
   const v=a.vab||{};
   $('#v-audio').innerHTML=`<h2>VAB &mdash; ${a.sounds.length} samples</h2>
     <p class=note>${v.programs} programs, ${v.tones} tones, ${v.vags} VAGs, master volume ${v.masterVolume}.
-    Sony SPU&nbsp;ADPCM decoded to 16-bit PCM and played at a nominal 44.1&nbsp;kHz; the pitch the game
-    actually uses comes from the per-tone attributes, so these are samples, not notes.</p>
-    <table><tr><th>#<th>ADPCM bytes<th>samples<th>play</tr>`+
+    Sony SPU&nbsp;ADPCM decoded to 16-bit PCM. A VAG stores no sample rate &mdash; the SPU
+    resamples it &mdash; so the rate below is derived from the tone attributes. ${
+      a.rateNote==='center'
+        ? 'A SEQ drives this bank at whatever notes the music calls for, so there is no one '
+          +'correct rate; these play at each tone&rsquo;s own centre note, i.e. the pitch the '
+          +'sample was recorded at.'
+        : 'audio.c keys this bank at note 0x3C, so the rate is the one its tone asks for there.'
+    }</p>
+    <table><tr><th>#<th>ADPCM bytes<th>samples<th>rate<th>length<th>play</tr>`+
     a.sounds.map((s,i)=>`<tr><td>${i}<td>${fmt(s.bytes)}<td>${fmt(s.samples)}
+      <td>${fmt(s.rate)} Hz${s.rateAssumed?' <span class=pill>assumed</span>':''}${
+        s.altRates?` <span class=pill>also ${s.altRates.map(fmt).join(', ')} Hz</span>`:''}
+      <td>${s.seconds!=null?s.seconds.toFixed(2)+' s':''}
       <td><audio controls preload=none src="${s.file}" style="height:28px"></audio></tr>`).join('')+`</table>`;
+}
+function showFmv(a){
+  const f=a.fmv;
+  if(!f){$('#v-fmv').innerHTML='';return;}
+  $('#v-fmv').innerHTML=`<h2>RAGE.STR movie ${f.index}</h2>
+    <p class=note>${f.width}&times;${f.height}, ${fmt(f.frames)} frames, ${f.seconds}&nbsp;s.
+    Sector ${fmt(f.sectorOffset)} of RAGE.STR (disc LBA ${fmt(f.lba)}), ${fmt(f.sectors)} sectors
+    interleaved 7 video : 1 XA&nbsp;audio. RAGE.STR carries no table of contents; the movie
+    boundaries come from walking the STR frame headers.</p>`
+    + (f.video
+       ? `<video controls preload=none ${f.poster?`poster="${f.poster}"`:''} src="${f.video}"
+            style="max-width:100%;width:640px;image-rendering:pixelated;border:1px solid var(--line);border-radius:6px"></video>
+          <p class=note style="margin-top:10px">MDEC video and XA ADPCM audio, transcoded on
+          extraction so a browser can play them. ${f.poster?'The poster frame is taken a fifth of the way in, because these mostly fade in from black.':''}</p>`
+       : `<p class=note style="color:var(--warn)">Not decoded. ${esc(f.note||'Re-run the extractor without --no-fmv.')}</p>`);
 }
 function showVram(a){
   $('#v-vram').innerHTML = a.vram
@@ -427,7 +453,7 @@ function showInfo(a){
   <table>
    <tr><th>archive index<td>${a.index} (${hex(a.index,2)})</tr>
    <tr><th>size<td>${fmt(a.size)} bytes</tr>
-   <tr><th>disc LBA<td>${a.lba} (RAGE.BIN + ${a.sectorOffset} sectors)</tr>
+   <tr><th>disc LBA<td>${a.lba} (${a.fmv?'RAGE.STR':'RAGE.BIN'} + ${a.sectorOffset} sectors)</tr>
    ${a.summary?`<tr><th>decoded<td>${esc(a.summary)}</tr>`:''}
    ${a.error?`<tr><th>error<td style="color:var(--bad)">${esc(a.error)}</tr>`:''}
   </table>`;
@@ -483,7 +509,7 @@ function renderList(){
 async function select(i){
   CUR=ASSETS.find(a=>a.index===i); HEXFOR=null; SCENE=null;
   renderList(); renderTabs(CUR);
-  showInfo(CUR); showTex(CUR); showVram(CUR); showAudio(CUR);
+  showInfo(CUR); showTex(CUR); showVram(CUR); showAudio(CUR); showFmv(CUR);
   if(banksOf(CUR).length) await showModel(CUR);
   if(tab==='hex')loadHex();
   if(tab==='model')draw();
@@ -495,8 +521,10 @@ async function select(i){
   catch(e){ $('#booterr').textContent=e.message; return; }
   $('#boot').remove();
   ASSETS=MAN.assets;
+  const fmvSecs=(MAN.streams||[]).reduce((a,s)=>a+(s.seconds||0),0);
   $('#hmeta').textContent=`${MAN.disc.label} · RAGE.BIN LBA ${MAN.archive.lba} · `+
-    `${ASSETS.length} assets · ${fmt(MAN.archive.size)} bytes · ${MAN.streams.length} FMV streams`;
+    `${ASSETS.length} entries · ${fmt(MAN.archive.size)} bytes · `+
+    `${(MAN.streams||[]).length} FMV streams (${Math.round(fmvSecs)} s, in the list below)`;
   const kinds=[...new Set(ASSETS.map(a=>a.kind))].sort();
   $('#kind').innerHTML='<option value="">all types ('+ASSETS.length+')</option>'+
     kinds.map(k=>`<option value="${k}">${k.replace(/_/g,' ')} (${ASSETS.filter(a=>a.kind===k).length})</option>`).join('');

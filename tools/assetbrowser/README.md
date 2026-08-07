@@ -24,11 +24,16 @@ MODE2/2352 rip is expected, but a cooked 2048-byte-per-sector `.iso` also works.
 
 Flags: `-o/--out`, `--only` (indices or name substrings), `--serve [PORT]`,
 `--exe` (re-derive the asset name table from a real `SCES_006.50`),
-`--no-raw`, `--no-vram`, `--no-audio`.
+`--no-raw`, `--no-vram`, `--no-audio`, `--no-fmv`.
 
 Output: `manifest.json`, `index.html`, `models/*.json`, `textures/*.png`,
-`images/*_vram.png`, `audio/*.wav`, `raw/*.bin`. A full run takes a few minutes
-and produces roughly 370 MB.
+`images/*_vram.png`, `audio/*.wav`, `fmv/*.mp4`, `raw/*.bin`. A full run takes a
+few minutes and produces roughly 400 MB.
+
+The 11 `RAGE.STR` movies are indexed here but decoded by **ffmpeg**, which is
+the one external dependency and an optional one: without it on the `PATH` (or
+with `--no-fmv`) the movies are still listed, just not playable. Everything else
+is pure Python.
 
 ## Where the formats come from
 
@@ -49,6 +54,8 @@ The file comments name the exact source. In short:
 | car texture page | `g_CarImageRect` = `{704, 0, 64, 256}` |
 | pack sub-blocks | `LoadRaceAssets`, `LoadCarSelectAssets`, `LoadSelectBgmAssets` |
 | VAB / VAG | `StartAudioSlotLoad` hands them to `SsVabOpenHeadSticky` |
+| sample rate | tone `center`/`shift` vs the note `audio/audio.c` keys (0x3C) |
+| FMV index | the STR frame headers in `RAGE.STR`; it has no table of contents |
 
 `models.py` carries the byte-level tables; read its module docstring first.
 
@@ -67,6 +74,10 @@ The three conventions worth knowing before reading a rendered frame:
   units the camera and the track points use, but `BuildVisibleCells` shifts the
   cell translation left by 2 before it reaches the GTE, so cells sit **8192**
   apart in the units the vertex pool is stored in.
+* **A VAG has no sample rate.** The SPU resamples, so a sample's rate is a
+  property of the note it is keyed at. Key-on banks are always keyed at 0x3C by
+  `audio/audio.c`; the sequenced bank has no single note and previews at its
+  tones' centres. See `audio.py`'s docstring.
 * **The texture window is not optional.** Terrain and course quads emitted by
   the subdividing paths carry a GP0 `0xE2` command in the four bytes their
   stride adds; the packet sets it, draws the quad and resets it. It makes UVs
@@ -85,6 +96,5 @@ in which every cell parsed perfectly still piled all 198 of them into a sixth of
 the track's footprint.
 
 What is *not* decoded, and is shown as raw bytes: `RES.DAT`, the SEQ sequence
-blocks inside `SELBGM.BIN` and the car packs, the track camera / environment /
-waypoint / event sub-blocks of a `.2ND` pack, and the 11 FMV streams in
-`RAGE.STR` (indexed in the manifest, not extracted).
+blocks inside `SELBGM.BIN` and the car packs, and the track camera / environment
+/ waypoint / event sub-blocks of a `.2ND` pack.

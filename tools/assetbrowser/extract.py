@@ -29,10 +29,12 @@ import audio  # noqa: E402
 import images  # noqa: E402
 import models  # noqa: E402
 import png  # noqa: E402
-from disc import Disc, find_file, read_archive_index, read_root_directory, volume_label  # noqa: E402
+from disc import (Disc, find_file, read_archive_index, read_root_directory,  # noqa: E402
+                  read_stream_index, volume_label)
 
 ASSET_COUNT = 135
-STREAM_COUNT = 11
+STR_FPS = 15          # the rate the STR header's sectorsInFrame implies, and
+                      # what ffmpeg's psxstr demuxer reports for these streams
 
 # Resolved from g_AssetPaths in the PAL executable (see docs/names.md 45a).
 # --exe re-reads them from a real SCES_006.50 if you want to prove it again.
@@ -246,7 +248,10 @@ class Extractor:
                     {"n": 2, "role": "VAB body (VB)", "offset": h[2]},
                 ]
                 rec["isSeq"] = audio.looks_like_seq(buf, h[1])
-                self.do_vab(stem, buf, h[0], buf, h[2], rec)
+                # A SEQ plays these samples at whatever notes the music calls
+                # for, so the 0x3C key-on rule does not apply to this bank.
+                self.do_vab(stem, buf, h[0], buf, h[2], rec,
+                            sequenced=rec["isSeq"])
             elif kind == "audio":
                 # VOICE.BIN: { u32 vhSize, u32 vhOffset, u32 vbOffset }
                 w = list(struct.unpack_from("<3I", buf, 0))
@@ -325,7 +330,7 @@ class Extractor:
         rec["summary"] = (f"5 sub-blocks, {loaded} VRAM blocks, "
                           f"{len(rec.get('sounds', []))} sounds")
 
-    def do_vab(self, stem, vhbuf, vhoff, vbbuf, vboff, rec):
+    def do_vab(self, stem, vhbuf, vhoff, vbbuf, vboff, rec, sequenced=False):
         h = audio.parse_vab_header(vhbuf, vhoff)
         if h is None:
             rec.setdefault("summary", "no VAB header found")
@@ -336,6 +341,13 @@ class Extractor:
         if not self.opts.audio:
             rec.setdefault("summary", f"VAB: {h['vags']} sounds (not decoded)")
             return
+        # A VAG carries no sample rate of its own; it comes from the tone that
+        # references it, keyed at the note audio.c always uses. Writing every
+        # .wav at 44100 played the 11025 Hz speech four times too fast.
+        tones = audio.parse_tones(vhbuf, vhoff, h)
+        rates = audio.vag_rates(tones, len(h["vagOffsets"]),
+                                None if sequenced else audio.NOTE_KEY_ON)
+        rec["rateNote"] = "center" if sequenced else audio.NOTE_KEY_ON
         d = self.out / "audio"
         d.mkdir(parents=True, exist_ok=True)
         for k, (o, n) in enumerate(zip(h["vagOffsets"], h["vagSizes"])):
@@ -345,10 +357,17 @@ class Extractor:
             pcm = audio.decode_vag(chunk)
             if not pcm:
                 continue
+            rate, alts = rates[k] if k < len(rates) else (None, [])
             fn = f"{stem}_s{k:02d}.wav"
-            (d / fn).write_bytes(audio.wav(pcm))
-            rec["sounds"].append({"file": f"audio/{fn}", "bytes": n,
-                                  "samples": len(pcm) // 2})
+            (d / fn).write_bytes(audio.wav(pcm, rate or audio.SPU_BASE_RATE))
+            snd = {"file": f"audio/{fn}", "bytes": n, "samples": len(pcm) // 2,
+                   "rate": rate or audio.SPU_BASE_RATE,
+                   "seconds": round((len(pcm) // 2) / float(rate or audio.SPU_BASE_RATE), 3)}
+            if rate is None:
+                snd["rateAssumed"] = True
+            if alts:
+                snd["altRates"] = alts
+            rec["sounds"].append(snd)
         rec.setdefault("summary", f"VAB: {h['programs']} programs, "
                                   f"{len(rec['sounds'])}/{h['vags']} sounds decoded")
 
@@ -520,6 +539,94 @@ class Extractor:
         return out
 
 
+def have_ffmpeg() -> bool:
+    import shutil
+    return bool(shutil.which("ffmpeg"))
+
+
+def extract_movies(disc, str_file, movies, out: Path, want_video: bool) -> list:
+    """Index every RAGE.STR movie, and decode it if ffmpeg is on the PATH.
+
+    The index is derived here (see disc.read_stream_index); only the pixels are
+    handed off. MDEC video plus XA ADPCM audio is a commodity decode that
+    ffmpeg's psxstr demuxer already does correctly, and it wants the verbatim
+    2352-byte sectors, which is why the .str carve is raw.
+    """
+    recs = []
+    ff = have_ffmpeg()
+    d = out / "fmv"
+    if want_video and ff:
+        d.mkdir(parents=True, exist_ok=True)
+    for m in movies:
+        rec = {
+            "index": m.index,
+            "lba": str_file.lba + m.sector_offset,
+            "sectorOffset": m.sector_offset,
+            "sectors": m.sectors,
+            "frames": m.frames,
+            "width": m.width,
+            "height": m.height,
+            "seconds": round(m.frames / float(STR_FPS), 1),
+            "bytes": m.sectors * 2352,
+        }
+        if want_video and ff and disc.raw:
+            stem = f"fmv{m.index:02d}"
+            tmp = d / f"{stem}.str"
+            tmp.write_bytes(disc.raw_sectors(str_file.lba + m.sector_offset, m.sectors))
+            # Frame 1 of most of these is a fade in from black, so the poster
+            # comes from a fifth of the way in.
+            poster = d / f"{stem}.png"
+            seek = max(0.0, m.frames / float(STR_FPS) / 5.0)
+            _run(["ffmpeg", "-v", "error", "-y", "-ss", f"{seek:.2f}", "-i", str(tmp),
+                  "-frames:v", "1", str(poster)])
+            mp4 = d / f"{stem}.mp4"
+            # +faststart moves the moov atom to the front. Without it a browser
+            # has to fetch the whole file before the first frame appears.
+            _run(["ffmpeg", "-v", "error", "-y", "-i", str(tmp),
+                  "-c:v", "libx264", "-preset", "veryfast", "-crf", "24",
+                  "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "96k",
+                  "-movflags", "+faststart", str(mp4)])
+            tmp.unlink(missing_ok=True)
+            if mp4.exists():
+                rec["video"] = f"fmv/{mp4.name}"
+            if poster.exists():
+                rec["poster"] = f"fmv/{poster.name}"
+        elif want_video and not ff:
+            rec["note"] = "ffmpeg not on PATH, so only the index was built"
+        print(f"[str{m.index:2d}] {m.width}x{m.height} {m.frames:5d} frames "
+              f"{rec['seconds']:6.1f}s  {'decoded' if 'video' in rec else 'indexed'}",
+              flush=True)
+        recs.append(rec)
+    return recs
+
+
+def _run(cmd) -> bool:
+    import subprocess
+    try:
+        return subprocess.run(cmd, capture_output=True).returncode == 0
+    except OSError:
+        return False
+
+
+class _Slice:
+    """A read-only window onto an open file, for a 206 response body."""
+
+    def __init__(self, fh, length):
+        self.fh, self.left = fh, length
+
+    def read(self, n=-1):
+        if self.left <= 0:
+            return b""
+        if n is None or n < 0 or n > self.left:
+            n = self.left
+        data = self.fh.read(n)
+        self.left -= len(data)
+        return data
+
+    def close(self):
+        self.fh.close()
+
+
 _LUT = None
 
 
@@ -554,6 +661,9 @@ def main(argv=None):
                     help="skip decoding VAG sounds to .wav")
     ap.add_argument("--no-vram", dest="vram", action="store_false",
                     help="skip the 1024x512 VRAM previews (much faster)")
+    ap.add_argument("--no-fmv", dest="fmv", action="store_false",
+                    help="index the RAGE.STR movies but do not decode them "
+                         "(decoding needs ffmpeg on the PATH)")
     ap.add_argument("--only", type=str, default=None,
                     help="comma-separated asset indices or name substrings")
     ap.add_argument("--serve", type=int, nargs="?", const=8000, default=None,
@@ -603,7 +713,28 @@ def main(argv=None):
         else:
             manifest = ex.run()
 
-        streams = read_archive_index(disc, rage_str.lba, STREAM_COUNT)
+        movies = read_stream_index(disc, rage_str.lba, (rage_str.size + 2047) // 2048)
+        # --only is the fast iteration path; decoding 4.5 minutes of video does
+        # not belong in it.
+        streams = extract_movies(disc, rage_str, movies, args.out,
+                                 args.fmv and not args.only)
+        # The movies are not RAGE.BIN assets, but the browser's list is the only
+        # place a user can get at anything, so they join it as pseudo-assets
+        # rather than being named in the header and then existing nowhere.
+        for s in streams:
+            manifest.append({
+                "index": 1000 + s["index"],
+                "name": f"RAGE.STR movie {s['index']}",
+                "kind": "fmv",
+                "size": s["bytes"],
+                "lba": s["lba"],
+                "sectorOffset": s["sectorOffset"],
+                "confidence": "decoded" if s.get("video") else "raw",
+                "summary": (f"{s['width']}x{s['height']}, {s['frames']} frames, "
+                            f"{s['seconds']}s at {STR_FPS} fps"
+                            + ("" if s.get("video") else " (not decoded)")),
+                "fmv": s,
+            })
         doc = {
             "disc": {
                 "image": str(args.image),
@@ -613,8 +744,7 @@ def main(argv=None):
             },
             "archive": {"name": "RAGE.BIN", "lba": rage_bin.lba, "size": rage_bin.size,
                         "entries": ASSET_COUNT},
-            "streams": [{"index": i, "lba": s.lba, "sectorOffset": s.sector_offset,
-                         "size": s.size} for i, s in enumerate(streams)],
+            "streams": streams,
             "assets": manifest,
         }
         out = args.out / "manifest.json"
@@ -641,11 +771,66 @@ def main(argv=None):
 def serve(root: Path, port: int) -> None:
     import functools
     import http.server
+    import os
+    import re
     import socketserver
 
-    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(root))
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("127.0.0.1", port), handler) as httpd:
+    class RangeHandler(http.server.SimpleHTTPRequestHandler):
+        """SimpleHTTPRequestHandler plus byte ranges.
+
+        The stock handler answers 200 with the whole body to every request, so
+        a <video> cannot seek and the hex view's Range hint is ignored. It is
+        also single-threaded, which stalls the page whenever a movie is
+        streaming; ThreadingTCPServer below fixes that half.
+        """
+
+        protocol_version = "HTTP/1.1"
+
+        def send_head(self):
+            rng = self.headers.get("Range")
+            m = re.fullmatch(r"bytes=(\d*)-(\d*)", rng.strip()) if rng else None
+            if not m:
+                return super().send_head()
+            path = self.translate_path(self.path)
+            if os.path.isdir(path):
+                return super().send_head()
+            try:
+                f = open(path, "rb")
+            except OSError:
+                self.send_error(404, "File not found")
+                return None
+            size = os.fstat(f.fileno()).st_size
+            start, end = m.group(1), m.group(2)
+            if start:
+                first = int(start)
+                last = int(end) if end else size - 1
+            else:                       # "bytes=-N" is the last N bytes
+                first = max(0, size - int(end or 0))
+                last = size - 1
+            last = min(last, size - 1)
+            if first > last or first >= size:
+                f.close()
+                self.send_response(416)
+                self.send_header("Content-Range", f"bytes */{size}")
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+                return None
+            f.seek(first)
+            self.send_response(206)
+            self.send_header("Content-type", self.guess_type(path))
+            self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Content-Range", f"bytes {first}-{last}/{size}")
+            self.send_header("Content-Length", str(last - first + 1))
+            self.end_headers()
+            return _Slice(f, last - first + 1)
+
+        def log_message(self, *a):
+            pass
+
+    handler = functools.partial(RangeHandler, directory=str(root))
+    socketserver.ThreadingTCPServer.allow_reuse_address = True
+    socketserver.ThreadingTCPServer.daemon_threads = True
+    with socketserver.ThreadingTCPServer(("127.0.0.1", port), handler) as httpd:
         print(f"\nbrowser -> http://127.0.0.1:{port}/    (ctrl-c to stop)")
         try:
             httpd.serve_forever()
