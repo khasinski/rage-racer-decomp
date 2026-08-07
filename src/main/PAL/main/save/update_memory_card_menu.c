@@ -434,14 +434,16 @@ L_sw2:
         break;
     }
 
+    {
+        register s32 stateValue asm("$3");
+
     case 0x20: {
         register s32 f asm("$2");
-        register s32 one asm("$3");
         f = 0xF;
-        one = 1;
+        stateValue = 1;
         g_McMenuPhase = f;
         g_McActionTimer = f;
-        g_McActionBusy = one;
+        g_McActionBusy = stateValue;
         g_McActionState = 0x21;
         break;
     }
@@ -457,14 +459,13 @@ L_sw2:
     case 0x22: {
         s32 *s0 = &g_McSlotCursor;
         s32 a0 = *s0;
-        register s32 v1x asm("$3");
         s32 dp;
         g_McActionResult = LoadMemoryCardSaveSlot(a0, &g_McSaveHeaders[a0]);
         if (!(g_McActionResult == 0)) {
-        v1x = *s0;
+        stateValue = *s0;
         g_McActionOk = 1;
         g_McMenuSubState = 8;
-        g_McLastSlot = v1x;
+        g_McLastSlot = stateValue;
         } else {
         g_McActionOk = 1;
         g_McMenuSubState = 0xF;
@@ -474,6 +475,7 @@ L_sw2:
         g_McActionState = 0x23;
         g_McSavedLoadPhase = dp;
         break;
+    }
     }
 
     case 0x23:
