@@ -14,7 +14,6 @@ void DrawMenuAltPanel(s32 arg0, s32 arg1) {
     s32 step0;
     s32 step1;
     void *scratch;
-    register s32 zero asm("$0");
     s32 value;
     s32 offset;
     s32 x0;
@@ -29,8 +28,8 @@ void DrawMenuAltPanel(s32 arg0, s32 arg1) {
     step1 = arg1;
 
     if (step0 == 0 && step1 == 0) {
-        D_8007FB40 = zero;
-        D_8007FB44 = zero;
+        D_8007FB40 = step0;
+        D_8007FB44 = step1;
         return;
     }
 
