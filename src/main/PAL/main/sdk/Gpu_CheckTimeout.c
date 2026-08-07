@@ -65,7 +65,6 @@ long Gpu_CheckTimeout(void) {
 }
 
 extern volatile u_long *g_GpuGp0;
-extern volatile u_long *g_GpuGp1;
 
 /* GPU-type probe: GP1(10h) info word 7, then a texture-window write-back
  * test. Returns 0..4; ResetGraph stores it as the graph type. */

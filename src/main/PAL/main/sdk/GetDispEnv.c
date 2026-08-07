@@ -72,9 +72,6 @@ typedef struct DrawEnvPacketSource {
     u_char b0;
 } DrawEnvPacketSource;
 
-u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
-u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
-u_long Gpu_BuildDrawOffsetCmd(long x, long y);
 u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("_get_mode");
 
 void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {

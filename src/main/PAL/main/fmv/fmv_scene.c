@@ -21,9 +21,7 @@ void BeginFmv(s32 returnScene) {
     CdControl(9, 0, 0);
 }
 
-extern u32 g_AssetBase;
 
-void StartFmvPlayback(u32 arg0);
 
 void UpdateFmv(void) {
     switch (g_FmvState) {

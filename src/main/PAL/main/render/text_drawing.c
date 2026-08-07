@@ -153,7 +153,6 @@ void GameDrawSpriteWide(
     s32 sh,
     s32 st,
     s32 flags);
-void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
     u8 *str;

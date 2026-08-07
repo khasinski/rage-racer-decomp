@@ -131,7 +131,6 @@ void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, 
     SCRATCH_PRIM_CURSOR_AS(SPRT) = prim;
 }
 
-void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
     register s32 semiReg asm("$17");
@@ -182,7 +181,6 @@ void DrawFlatTriangle(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, 
     SCRATCH_PRIM_CURSOR_AS(POLY_F3) = prim;
 }
 
-void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawFlatQuad(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) {
     POLY_F4 *prim;
@@ -303,7 +301,6 @@ void GameDrawTexturedQuad(s32 ot, s16 x0, s16 y0, s16 x1,
     SCRATCH_PRIM_CURSOR_AS(POLY_FT4) = prim;
 }
 
-void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
     s32 x0Reg;
@@ -353,7 +350,6 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
     SCRATCH_PRIM_CURSOR_AS(TILE) = prim;
 }
 
-void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
     s32 x0Reg;
@@ -403,7 +399,6 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
     SCRATCH_PRIM_CURSOR_AS(LINE_F2) = prim;
 }
 
-void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
     LINE_F3 *prim;
@@ -434,7 +429,6 @@ void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 
     SCRATCH_PRIM_CURSOR_AS(LINE_F3) = prim;
 }
 
-void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
 
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {
     s16 x0Reg;

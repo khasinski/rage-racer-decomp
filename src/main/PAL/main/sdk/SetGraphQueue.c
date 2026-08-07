@@ -27,7 +27,6 @@ long SetGraphQueue(long mode) {
 }
 
 extern u_char g_GraphType;
-extern u_char g_GraphDebug;
 
 long GetGraphType(void) {
     return g_GraphType;
@@ -73,7 +72,6 @@ void SetDispMask(long mask) {
     gpu->submit(enable ? 0x3000000 : 0x3000001);
 }
 
-extern GpuCallbacks *g_GpuFuncs;
 extern char D_80013534[];
 
 void DrawSync(long mode) {
@@ -138,7 +136,6 @@ void CheckPrim(char *arg0, Rect *rect) {
     }
 }
 
-extern GpuCallbacks *g_GpuFuncs;
 extern char D_8001356C[];
 
 void ClearImage(void *rect, u_char r, u_char g, u_char b) {

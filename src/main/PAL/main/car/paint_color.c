@@ -197,9 +197,7 @@ void ApplyBodyColor2(u32 colour, u32 imageData) {
     ((volatile u16 *)base)[0x2C9] = c;
 }
 
-extern u32 g_CarModelAsset;
 
-void UploadCarImage(u32 arg0);
 
 void SetBodyColor2(u32 arg0) {
     ApplyBodyColor2(arg0, *(u32 *)(g_CarModelAsset + 0x24));

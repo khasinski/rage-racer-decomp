@@ -400,7 +400,6 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
 }
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
-void LibcSprintf();
 
 /* The icon strip is copied to VRAM in two passes: one 16x1 run of palette
  * entries at block+0x60, then the 4x16 frame tiles from block+0x80 on.  The
@@ -761,25 +760,10 @@ void StoreSaveStateBlock(u8 *block) {
 #include "game/menu.h"
 #include "psyq/gpu.h"
 
-extern s16 g_PadMappingIndex;
-extern s16 g_NegconMappingIndex;
-extern u16 g_NegconSteerNeutral;
-extern u16 g_NegconSteerPlay;
-extern u16 g_NegconNeutralI;
-extern u16 g_NegconNeutralII;
-extern u16 g_NegconMaxTwist;
-extern u16 g_NegconNeutralL;
 /* The loader stores a whole word here; the saver reads only the low half
  * as g_BgmSelection. Same address, two widths, so two names. */
 
-extern u16 g_ClassRecords[];
-extern u16 g_TeamLogoCanvas[];
-extern s32 g_BestLapTimes[];
-extern s32 g_BestTotalTimes[];
-extern s32 g_BestSectorTimes[];
 
-extern u8 g_GrandPrixCourseProgress[];
-extern u8 g_ExtraGrandPrixCourseProgress[];
 
 extern u8 g_TeamLogoRect[];
 extern u8 g_TeamLogoClutRect[];
@@ -1359,7 +1343,6 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     }
 }
 
-void LibcSprintf();
 
 s32 CountMemoryCardFiles(s32 port, s32 slot) {
     char path[0x20];
@@ -1432,7 +1415,6 @@ s32 RefreshMemoryCardSaveStatus(s32 slot, GameSaveHeaderRow *header) {
 }
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
-void LibcSprintf();
 
 void *FormatSaveElapsedTime(void *dst, u32 seconds) {
     u32 hours = seconds / 216000;
@@ -1466,7 +1448,6 @@ void DrawMemoryCardHelpPrompt(s32 page) {
 /* DrawLargeText with word-wide parameters; the header spelling does not
  * match here. See DrawText8x8 above. */
 void DrawLargeTextWide(s32, s32, void *, s32, s32, s32, s32, s32) asm("DrawLargeText");
-void LibcSprintf();
 
 void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     char text[16];

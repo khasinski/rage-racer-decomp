@@ -149,8 +149,6 @@ void ResetGraph(s32 mode) {
     }
 }
 
-extern GpuCallbacks *g_GpuFuncs;
-extern u8 g_GraphDebug;
 extern u8 g_GraphReverse;
 
 s32 SetGraphReverse(s32 arg0) {

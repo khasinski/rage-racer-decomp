@@ -219,7 +219,6 @@ void DrawFullscreenFadeTile(s32 color, s32 tpage) {
 }
 
 void SetSprt8(u8 *prim);
-void SetShadeTex(u8 *prim, s32 enabled);
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
     register u8 *out asm("$16") = prim;

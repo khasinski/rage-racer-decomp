@@ -2,8 +2,6 @@
 #include "psyq/gpu.h"
 
 extern GpuCallbacks *g_GpuFuncs;
-extern GpuCallbacks *g_GpuFuncs;
-extern GpuCallbacks *g_GpuFuncs;
 /*
  * The five words at 0x80094290 are one GPU "move image" primitive: tag, the
  * 0xE1-class command word, then source xy, destination xy and the packed
@@ -52,7 +50,6 @@ extern char D_8001359C[];
 extern char D_800135B4[];
 extern u_long g_OtagTerminator;
 
-extern GpuCallbacks *g_GpuFuncs;
 
 void *ClearOTag(u_long *arg0, long count) {
     long remaining = count;
@@ -110,7 +107,6 @@ void *ClearOTagR(u_long *ot, long arg1) {
     }
 }
 
-extern GpuCallbacks *g_GpuFuncs;
 
 void DrawPrim(u_char *ot) {
     u_long mode = ot[3];

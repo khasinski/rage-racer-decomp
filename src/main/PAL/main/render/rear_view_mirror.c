@@ -96,9 +96,7 @@ s32 BeginMirrorPass(void) {
     return mirrorEnabled;
 }
 
-extern s32 g_VisibleCellMask;
 extern s32 D_8019C86C;
-extern s32 g_VisibleCellList;
 extern s32 D_8009EC94;
 
 /*
@@ -177,7 +175,6 @@ u8 *DrawMirrorFrame(u8 *packet) {
     return (u8 *)GameQueueDrawModePrimWide(ot, next, 9);
 }
 
-extern s32 g_VisibleCellList;
 
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2);
 

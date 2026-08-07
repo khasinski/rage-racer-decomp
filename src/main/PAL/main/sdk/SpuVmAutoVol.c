@@ -248,8 +248,6 @@ big:
     }
 }
 
-extern u_char g_SndVoiceFlags[];
-extern u_short g_SndVoiceRegs[];
 extern u_short g_SndVoiceRegsVolRight[];
 extern u_char D_801E4BD4;
 extern u_char D_801E4BD5;
@@ -257,7 +255,6 @@ extern u_char D_801E4BDA;
 extern u_char D_801E4BDB;
 extern u_char D_801E4BDD;
 extern u_char D_801E4BDE;
-extern short g_SndMonoMode;
 
 void SpuVmAutoPanTick(long voice) {
     long stack[6];

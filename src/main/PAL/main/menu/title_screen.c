@@ -37,7 +37,6 @@ void EnterFrontend(void) {
 }
 
 extern s32 g_StreamReturnScene;
-extern s32 D_801E8260;
 
 void EnterTitleScreen(void) {
     SetupDisplay240(0, 0, 0);
@@ -108,7 +107,6 @@ void DrawPressStartPrompt(void) {
     *scratch = GameQueueDrawModePrimWide(base, next, 0x39);
 }
 
-extern s32 D_801E8260;
 
 void UpdateTitleScreen(void) {
     if (g_PadPressed & PAD_START) {
@@ -235,7 +233,6 @@ void ShuffleBgmOrder(void) {
     g_BgmShuffleIndex = 0;
 }
 
-extern s32 D_801E8260;
 
 extern s32 *g_CarTable;
 extern s32 *g_CourseProgress;

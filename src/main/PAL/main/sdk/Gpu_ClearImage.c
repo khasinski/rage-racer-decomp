@@ -196,7 +196,6 @@ long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
     return 0;
 }
 
-extern volatile u_long *g_GpuGp1;
 
 /* Driver-table slot +0x1C: the worker StoreImage enqueues. The GP0(C0h)
  * mirror image of Gpu_LoadImage. */

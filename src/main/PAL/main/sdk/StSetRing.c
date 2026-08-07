@@ -29,7 +29,6 @@ extern long g_StRingSize;
 void StClearRing(void);
 
 /* StSetRing: installs the stream ring buffer (`base`, `size`) then clears it. */
-void StSetRing(long base, long size);
 void StSetRing(long base, long size) { g_StRingBase = base; g_StRingSize = size; StClearRing(); }
 
 long CdGetToc2(long arg0, long arg1);

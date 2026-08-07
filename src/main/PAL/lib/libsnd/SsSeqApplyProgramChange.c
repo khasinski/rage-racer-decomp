@@ -11,7 +11,6 @@ void SsSeqApplyProgramChange(long seq, long sep) {
     state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
 }
 
-extern SeqStruct *g_SndSeqTable[];
 extern long g_SndTickResolution;
 
 void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2);
@@ -84,7 +83,6 @@ void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
     }
 }
 
-extern SeqStruct *g_SndSeqTable[];
 
 long SsSeqReadDeltaTime(long seq, long channel) {
     SeqStruct *state;
@@ -172,7 +170,6 @@ void SsPackAdsr(u_short *in, u_short *out0, u_short *out1) {
     *out1 = word1;
 }
 
-extern SeqStruct *g_SndSeqTable[];
 
 void SsSeqRestartPlayback(short seq, short sep) {
     SeqStruct *state;

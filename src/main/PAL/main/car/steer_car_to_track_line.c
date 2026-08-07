@@ -92,8 +92,6 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
  * the car to the airborne handler UpdateCarAirborne. See docs/names.md 1.
  */
 
-s32 rsin(s32 arg0);
-s32 rcos(s32 arg0);
 
 void UpdateCarLaunch(GameCarRuntime *arg0) {
     register GameCarRuntime *car = arg0;

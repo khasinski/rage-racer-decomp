@@ -28,8 +28,6 @@ void BuildRotMatrixZ(Matrix *mtx, s32 angle) {
     mtx->m[2][2] = 0x1000;
 }
 
-s32 rsin(s32 arg0);
-s32 rcos(s32 arg0);
 
 void BuildRotMatrixY(Matrix *mtx, s32 angle) {
     s32 s;
@@ -48,8 +46,6 @@ void BuildRotMatrixY(Matrix *mtx, s32 angle) {
     mtx->m[2][2] = c;
 }
 
-s32 rsin(s32 arg0);
-s32 rcos(s32 arg0);
 
 void BuildRotMatrixX(Matrix *mtx, s32 angle) {
     s32 s;
