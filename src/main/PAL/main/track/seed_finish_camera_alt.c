@@ -19,7 +19,6 @@ void SeedFinishCameraAlt(void *arg0) {
     GameTrackPoint *point;
     register s32 index asm("$3");
     s32 lastIndex;
-    register s32 course asm("$3");
 
     /* arg0 is a car runtime block: the copy below moves 0x19C bytes of it into
      * g_CameraCar, which is a GameRenderObject -- every one of the eleven
@@ -59,17 +58,17 @@ void SeedFinishCameraAlt(void *arg0) {
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
     word0 = point->y;
-    course = g_GrandPrixSeries;
+    index = g_GrandPrixSeries;
     g_CameraCar.speed = 0;
     g_CameraCar.y = word0 - 0x30;
 
     lastIndex = ((GameCarRuntime *)base)->trackPointIndex;
-    course <<= 11;
+    index <<= 11;
     point = (GameTrackPoint *)((lastIndex * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
-    course += 0xC00;
-    course -= point->angle;
-    g_CameraCar.headingAngle = course;
-    D_801E3F60 = course;
-    g_CameraCar.angleY = course;
+    index += 0xC00;
+    index -= point->angle;
+    g_CameraCar.headingAngle = index;
+    D_801E3F60 = index;
+    g_CameraCar.angleY = index;
 }
