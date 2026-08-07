@@ -764,9 +764,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
 extern GameRenderObject g_CameraCar;
 
 void SeedFinishCamera(void *arg0) {
-    register u32 word0 asm("$2");
-    u32 word1;
-    u32 word2;
+    register u32 word0;
     Block16 *src;
     Block16 *dst;
     Block16 *end;
@@ -788,12 +786,7 @@ void SeedFinishCamera(void *arg0) {
         dst++;
     } while (src != end);
 
-    word0 = ((u32 *)src)[0];
-    word1 = ((u32 *)src)[1];
-    word2 = ((u32 *)src)[2];
-    ((u32 *)dst)[0] = word0;
-    ((u32 *)dst)[1] = word1;
-    ((u32 *)dst)[2] = word2;
+    *(LVec *)dst = *(LVec *)src;
 
     index = ((GameCarRuntime *)base)->trackPointIndex;
     track = g_TrackPoints;
