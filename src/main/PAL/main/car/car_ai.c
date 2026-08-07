@@ -336,7 +336,6 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     s32 advanceOffset;
     s32 scene;
     register s32 offset asm("$3");
-    register u8 *base asm("$2");
     s16 *entry;
     s32 value;
     s32 valueRaw;
@@ -351,9 +350,9 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     raw = scene * 3;
     offset = (raw << 4) - raw;
     offset <<= 3;
-    base = g_TrackEventData;
+    raw = (s32)g_TrackEventData;
     offset += 0x84;
-    entry = (s16 *)(offset + (s32)base);
+    entry = (s16 *)(offset + raw);
     raw = index * 3;
     raw <<= 2;
     entry = (s16 *)((u8 *)entry + raw);
@@ -404,9 +403,9 @@ advance:
     raw = scene * 3;
     offset = (raw << 4) - raw;
     offset <<= 3;
-    base = g_TrackEventData;
+    raw = (s32)g_TrackEventData;
     advanceOffset += offset;
-    raw = (s32)(base + advanceOffset);
+    raw += advanceOffset;
     if (*(s16 *)(raw + 0x84) == -1) {
         *(s32 *)(state + 0x44) = 0;
     }
