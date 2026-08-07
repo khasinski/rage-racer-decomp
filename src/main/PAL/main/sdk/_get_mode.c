@@ -205,12 +205,9 @@ u_long get_dx(DispEnv *env);
 
 u_long get_dx(DispEnv *env) {
     volatile u_char *modep = g_GraphType;
-    register long value asm("$2");
     long mode;
 
-    value = *modep;
-    asm("" : "=r"(value) : "0"(value));
-    mode = value & 0xFF;
+    mode = *modep & 0xFF;
 
     switch (mode) {
     case 1:
