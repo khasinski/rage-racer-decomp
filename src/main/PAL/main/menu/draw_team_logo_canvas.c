@@ -169,6 +169,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
   s16 yA8;
   s16 yB8;
   s16 yC8;
+  register s32 drawValue asm("$4");
   a0v = arg0;
   a1v = arg1;
   ot = *(s32 *)0x1F800004;
@@ -191,7 +192,6 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
   }
   {
     u16 *dst;
-    register s32 acc asm("$4");
     register s32 red asm("$2");
     s32 mul;
     u16 k8;
@@ -206,17 +206,17 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
       u16 *src = &g_TeamLogoClut[i];
       *dst = k8;
       red = (((*src) & 0x1F) * mul) / 256;
-      acc = red | ((u16) 0x8000);
-      *dst = acc;
-      acc |= (((((*src) >> 5) & 0x1F) * mul) / 256) << 5;
-      *dst = acc;
+      drawValue = red | ((u16) 0x8000);
+      *dst = drawValue;
+      drawValue |= (((((*src) >> 5) & 0x1F) * mul) / 256) << 5;
+      *dst = drawValue;
       v = (((*src) >> 10) & 0x1F) * mul;
       if (v < 0)
       {
         v += 0xFF;
       }
       i++;
-      red = acc | ((v >> 8) << 10);
+      red = drawValue | ((v >> 8) << 10);
       *dst = red;
       dst++;
       if (i < 16)
@@ -261,7 +261,6 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     register s32 gxBase asm("$2");
     s32 texY;
     s32 gyTemp;
-    register s32 drawValue asm("$4");
     if (d >= 0xC)
     {
       d = 0xB;
@@ -465,7 +464,6 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
       register s32 shade asm("$21");
       register s32 shadeArg asm("$3");
       register s32 swatchWidth asm("$7");
-      register s32 otArg asm("$4");
       s32 gxArg;
       s32 gyArg;
       register s32 clutArg asm("$20");
@@ -493,11 +491,11 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
       asm("" : : "r"(swatchWidth));
       shade = (u8) (i * 0x24);
       asm("" : : "r"(shade));
-      otArg = ot;
-      asm("" : : "r"(otArg));
+      drawValue = ot;
+      asm("" : : "r"(drawValue));
       asm("" : : "r"(x1));
       asm("" : "=r"(clutArg) : "0"(clut));
-      func_80046A2C_prepared(otArg, x1 + 0x13, yA0 >> 16, swatchWidth, 0x18,
+      func_80046A2C_prepared(drawValue, x1 + 0x13, yA0 >> 16, swatchWidth, 0x18,
                             gxArg, gyArg, 0, 0, 0, (u16) pal, 1, 0, clutArg);
       asm("" : "=r"(shade) : "0"(shade));
       shadeArg = (u8) shade;
