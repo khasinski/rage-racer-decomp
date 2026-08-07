@@ -8,55 +8,27 @@ extern long g_SndUpdateLock;
 extern long g_SndMarkCallbacks[][0x10];
 
 void _SsInitTables(void) {
-    {
-        long i;
-        register long j asm("$5");
-        register u_short *dst asm("$6");
-        u_short *table;
-        u_short *src;
+    short *ptr;
+    long i;
+    long j;
 
-        dst = (u_short *)0x1F801C00;
-        i = 0;
-        table = g_SndVoiceRegDefaults;
-        for (i = 0; i < 0x18; i++) {
-            j = 0;
-            src = table;
-            for (j = 0; j < 8; j++) {
-                *dst++ = *src++;
-            }
+    ptr = (short *)0x1F801C00;
+    for (i = 0; i < 0x18; i++) {
+        for (j = 0; j < 8; j++) {
+            *ptr++ = g_SndVoiceRegDefaults[j];
         }
     }
 
-    {
-        long i;
-        register u_short *dst asm("$6");
-        u_short *src;
-
-        dst = (u_short *)0x1F801D80;
-        i = 0;
-        src = g_SndSpuCtrlDefaults;
-        for (i = 0; i < 0x10; i++) {
-            *dst++ = *src++;
-        }
+    ptr = (short *)0x1F801D80;
+    for (i = 0; i < 0x10; i++) {
+        *ptr++ = g_SndSpuCtrlDefaults[i];
     }
 
     SpuVmInit(0x18);
 
-    {
-        register long i asm("$5");
-        long j;
-        register long *row asm("$3");
-        long *clear;
-
-        i = 0;
-        row = (long *)g_SndMarkCallbacks;
-        for (i = 0; i < 0x20; i++) {
-            j = 0xF;
-            clear = row + 0xF;
-            for (j = 0xF; j >= 0; j--) {
-                *clear-- = 0;
-            }
-            row += 0x10;
+    for (j = 0; j < 0x20; j++) {
+        for (i = 0; i < 0x10; i++) {
+            g_SndMarkCallbacks[j][i] = 0;
         }
     }
 
