@@ -9,10 +9,8 @@ extern u_char g_SndVoiceRegsPitch[];
 extern u_char g_SndVoiceState[];
 extern u_char g_SndVoiceStateAutoVol[];
 /* The four pending key registers, flushed below into the SPU as
- * spu[0xC4]/[0xC5] = KON 0x1F801D88 and spu[0xC6]/[0xC7] = KOFF 0x1F801D8C.
- * So g_SndKeyOnLow/74 are key-ON and g_SndKeyOffLow/0C key-OFF, not the other way
- * round. All four MUST keep the raw D_ spelling: %hi/%lo pairs in inline asm
- * elsewhere stringify them. */
+ * spu[0xC4]/[0xC5] = KON 0x1F801D88 and spu[0xC6]/[0xC7] = KOFF 0x1F801D8C,
+ * which is what settles which pair is which. */
 extern volatile u_short g_SndKeyOffLow;
 extern volatile u_short g_SndKeyOffHigh;
 extern volatile u_short g_SndKeyOnLow;
