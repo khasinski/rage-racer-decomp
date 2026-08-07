@@ -1,13 +1,14 @@
 #include "common.h"
-#include "game/vector.h"
-#include "game/render.h"
-#include "psyq/gte.h"
-#include "game/menu.h"
-#include "game/state.h"
 #include "game/asset.h"
 #include "game/car.h"
+#include "game/menu.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 #include "game/track.h"
+#include "game/vector.h"
+#include "psyq/gte.h"
 
 extern u32 g_CarModelSlot;
 
@@ -20,7 +21,7 @@ void SwapCarModelSlot(void) {
 s32 GameQueueTileTransWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
 
 void DrawCarSlotHighlight(s32 arg0) {
-    s32 *scratch = (s32 *)0x1F800000;
+    s32 *scratch = &SCRATCH_PRIM_CURSOR_WORD;
     u8 *base = g_DrawBuffer;
     s32 value = *scratch;
 
@@ -198,7 +199,7 @@ void DrawMenuCarView(void) {
         if (g_ModelBankCount >= 6) {
             a1 = 5;
         }
-        SubmitModel((void *)0x1F800000, a1);
+        SubmitModel((void *)SCRATCHPAD_ADDR, a1);
     }
     D_1F800004 -= 120;
 }
@@ -303,7 +304,7 @@ void DrawMenuCourseView(void) {
         if ((s2 & 3) < g_ModelBankCount) {
             a1 = s2 & 3;
         }
-        SubmitModel((void *)0x1F800000, a1);
+        SubmitModel((void *)SCRATCHPAD_ADDR, a1);
     }
 }
 
@@ -401,7 +402,7 @@ void DrawTeamNameCharModel(void) {
         if (g_TeamNameCharModel < g_CourseModelCount) {
             a1 = g_TeamNameCharModel;
         }
-        SubmitCourseModel((void *)0x1F800000, a1);
+        SubmitCourseModel((void *)SCRATCHPAD_ADDR, a1);
     }
 }
 

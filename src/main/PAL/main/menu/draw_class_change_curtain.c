@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
 
 s32 DrawClassChangeCurtain(s32 arg0) {
     void *scratch;

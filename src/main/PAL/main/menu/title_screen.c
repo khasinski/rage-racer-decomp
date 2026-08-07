@@ -1,14 +1,15 @@
 #include "common.h"
-#include "game/state.h"
-#include "game/render.h"
+#include "game/asset.h"
+#include "game/audio.h"
+#include "game/cd.h"
 #include "game/menu.h"
 #include "game/race.h"
-#include "game/asset.h"
-#include "psyq/gpu.h"
-#include "game/cd.h"
 #include "game/random.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/screens.h"
-#include "game/audio.h"
+#include "game/state.h"
+#include "psyq/gpu.h"
 
 extern s32 D_801E8260;
 
@@ -74,7 +75,7 @@ void DrawTitleFadeOverlay(s32 arg0) {
     color = (u8)arg0;
     base = g_DrawBuffer;
     base += 0xCC;
-    scratch = (void **)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_AS(void);
     current = *scratch;
     next = GameQueueTileTrans(base, current, 0, 0x18, 0x140, 0xC0, color, color, color);
     *scratch = GameQueueDrawModePrimWide(base, next, 0x29);
@@ -99,7 +100,7 @@ void DrawPressStartPrompt(void) {
     sinValue = rsin(((g_AnimTimer * 3) << 5) & 0xFE0);
     frame = (sinValue / 64) + 0x80;
 
-    scratch = (void **)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_AS(void);
     base = g_DrawBuffer;
     base += 0xCC;
     next = *scratch;
@@ -140,7 +141,7 @@ void DrawMainMenuRows(void) {
     s32 y;
 
     base = g_DrawBuffer + 0xCC;
-    scratch = *(void **)0x1F800000;
+    scratch = SCRATCH_PRIM_CURSOR_AS(void);
     row = 0;
     i = 0;
     one = 1;
@@ -186,7 +187,7 @@ void DrawMainMenuRows(void) {
         row++;
     }
 
-    *(void **)0x1F800000 = scratch;
+    SCRATCH_PRIM_CURSOR_AS(void) = scratch;
 }
 
 void UpdateMainMenuOpen(void) {

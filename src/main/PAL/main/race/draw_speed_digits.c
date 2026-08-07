@@ -1,7 +1,8 @@
 #include "common.h"
-#include "game/render.h"
 #include "game/car.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
 
 void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 tpage) asm("QueueDrawModePrim");
 
@@ -22,7 +23,7 @@ void DrawSpeedDigits(s32 x, s32 y, s32 value) {
     rawX = g_CarSpec->tachoDigitsX + x;
     rawY = g_CarSpec->tachoDigitsY + y;
     color = g_HudGlyphClut;
-    scratch = (u8 **)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     prim = *scratch;
 
     tenths = value / 10;

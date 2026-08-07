@@ -1,15 +1,16 @@
 #include "common.h"
-#include "game/render.h"
+#include "game/asset.h"
 #include "game/audio.h"
+#include "game/cd.h"
+#include "game/memcard.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/state.h"
+#include "psyq/cd.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 #include "psyq/snd.h"
-#include "game/memcard.h"
-#include "psyq/cd.h"
-#include "game/cd.h"
-#include "game/asset.h"
-#include "game/race.h"
 
 void SetGraphDebug(s32 arg0);
 void InitRenderState(s32 arg0);
@@ -61,13 +62,13 @@ void InitSubsystems(void) {
     InitRecordTables();
     InitRenderState(5);
     InitSaveDefaults();
-    *(s32 *)0x1F80000C = -64;
-    *(s32 *)0x1F800010 = -256;
+    SCRATCH_VIEW_Y = -64;
+    SCRATCH_VIEW_Z = -256;
     g_AdvancedSeriesUnlocked = 0;
-    *(s32 *)0x1F800008 = 0;
-    *(s32 *)0x1F800018 = 0x100;
-    *(s32 *)0x1F80001C = 0;
-    *(s32 *)0x1F800020 = 0;
+    SCRATCH_VIEW_X = 0;
+    SCRATCH_VIEW_ANGLE_X = 0x100;
+    SCRATCH_VIEW_ANGLE_Y = 0;
+    SCRATCH_VIEW_ANGLE_Z = 0;
     SetCameraRotMatrix();
 }
 
@@ -116,8 +117,8 @@ void MainLoop(void) {
 
         g_DrawBuffer = frame;
         g_FrameParity = parity;
-        *(s32 *)0x1F800004 = (s32)(frame + 0xCC);
-        *(s32 *)0x1F800000 = (s32)(frame + 0x16CC);
+        SCRATCH_OT_BASE_WORD = (s32)(frame + 0xCC);
+        SCRATCH_PRIM_CURSOR_WORD = (s32)(frame + 0x16CC);
         ClearOTagR((u_long *)(frame + 0xCC), 0x2C0);
         ClearOTagR((u_long *)(g_DrawBuffer + 0xBCC), 0x2C0);
         TickCdAudio();

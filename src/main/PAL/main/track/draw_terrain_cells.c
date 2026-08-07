@@ -1,22 +1,24 @@
 #include "common.h"
-#include "game/race.h"
 #include "game/cd.h"
+#include "game/race.h"
+#include "game/scratchpad.h"
 #include "game/track.h"
-void SetRotMatrix(s32 arg0);
+#include "psyq/gte.h"
 
 extern s32 g_VisibleCellList;
 void BuildVisibleCells(s32 arg0, s32 arg1);
 void SubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2);
+
 void DrawTerrainCells(void) {
     BuildVisibleCells(-12288, 0x14000);
-    SetRotMatrix(0x1F800028);
-    SubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
+    SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
+    SubmitTerrainCells(SCRATCHPAD_ADDR, g_VisibleCellList, 0x40);
 }
 
 void DrawTerrainCellsWide(void) {
     BuildVisibleCells(0xFFFF6000, 0x14000);
-    SetRotMatrix(0x1F800028);
-    SubmitTerrainCells(0x1F800000, g_VisibleCellList, 0x40);
+    SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
+    SubmitTerrainCells(SCRATCHPAD_ADDR, g_VisibleCellList, 0x40);
 }
 
 void AddPrim(void *, void *);
@@ -188,7 +190,7 @@ register u8 *stackPointer asm("$29");
 void GameDrawSkyBackground(void) asm("DrawSkyBackground");
 void GameDrawSkyBackground(void)
 {
-  SkyRenderScratchpad *scratch = (SkyRenderScratchpad *)0x1F800000;
+  SkyRenderScratchpad *scratch = (SkyRenderScratchpad *)SCRATCHPAD_ADDR;
   s32 panelXFixed;
   s32 panelYFixed;
   s32 columnStepX;
@@ -331,7 +333,7 @@ void GameDrawSkyBackground(void)
     }
     leftViewAngle = temp_lo_117 >> 0xC;
     coordinateAccumulator = leftViewAngle + 0x7800;
-    if (g_MirrorMode != *(s32 *)0x1F800068)
+    if (g_MirrorMode != SCRATCH_MIRROR)
     {
       panelYFixed = 0x2400;
       panelYFixed = var_a3_184 + panelYFixed;

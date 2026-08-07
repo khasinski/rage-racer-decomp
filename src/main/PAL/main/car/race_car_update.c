@@ -1,11 +1,12 @@
 #include "common.h"
-#include "game/vector.h"
 #include "game/car.h"
-#include "game/track.h"
 #include "game/race.h"
 #include "game/render.h"
-#include "psyq/gte.h"
+#include "game/scratchpad.h"
 #include "game/state.h"
+#include "game/track.h"
+#include "game/vector.h"
+#include "psyq/gte.h"
 
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
@@ -668,7 +669,7 @@ void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 void UpdateCamera(void *arg0, s32 arg1);
 
 void RunRaceIntroCamera(Obj *obj, s32 mode) {
-    s32 *spad = (s32 *)0x1F800000;
+    s32 *spad = &SCRATCH_PRIM_CURSOR_WORD;
     register s32 s0v asm("$16");
     s32 delta[3];
 
@@ -681,7 +682,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             KE *p = (KE *)(off + (s32) base);
             KE *q;
             g_RaceIntroCameraCursor = p;
-            *(Vec4 *)0x1F800008 = *(Vec4 *)p;
+            *(Vec4 *)&SCRATCH_VIEW_X = *(Vec4 *)p;
             q = g_RaceIntroCameraCursor;
             g_RaceIntroCameraDelta.vx = -q[0].f0 + q[1].f0;
             g_RaceIntroCameraDelta.vy = -q[0].f4 + q[1].f4;

@@ -1,13 +1,14 @@
 #include "common.h"
+#include "game/audio.h"
+#include "game/car.h"
+#include "game/cd.h"
 #include "game/menu.h"
 #include "game/race.h"
-#include "game/state.h"
 #include "game/render.h"
-#include "psyq/gpu.h"
-#include "game/cd.h"
-#include "game/audio.h"
+#include "game/scratchpad.h"
 #include "game/screens.h"
-#include "game/car.h"
+#include "game/state.h"
+#include "psyq/gpu.h"
 
 void LibcSprintf(void *dst, void *fmt, ...);
 s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
@@ -153,7 +154,7 @@ void DrawNameEntryCursor(s32 charIndex, s32 row) {
     s32 *scratch;
 
     if (g_AnimTimer & 8) {
-        scratch = (s32 *)0x1F800000;
+        scratch = &SCRATCH_PRIM_CURSOR_WORD;
         *scratch = AddTilePrim(
             g_DrawBuffer + 0xCC,
             *scratch,

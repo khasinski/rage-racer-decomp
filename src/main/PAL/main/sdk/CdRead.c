@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
 void SetShadeTex(u_char *prim, long enabled);
@@ -135,7 +136,7 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     u_char *tableB;
 
     sr = str;
-    next = *(u_char **)0x1F800000;
+    next = SCRATCH_PRIM_CURSOR_AS(u_char);
     if (*sr != 0) {
         tableA = D_8007D7BC;
         tableB = D_8007D7BD;
@@ -166,7 +167,7 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     }
     SetDrawMode(next, 0, 1, 0x1D, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, next);
-    *(u_char **)0x1F800000 = next + 0xC;
+    SCRATCH_PRIM_CURSOR_AS(u_char) = next + 0xC;
 }
 
 void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3) {

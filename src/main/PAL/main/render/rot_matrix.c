@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/scratchpad.h"
 #include "psyq/gte.h"
 
 s32 rsin(s32 arg0);
@@ -72,12 +73,12 @@ extern Matrix D_8019CB18;
 
 void SetCameraRotMatrix(void) {
     Matrix mtx;
-    Matrix *scratch = (Matrix *)0x1F800028;
+    Matrix *scratch = SCRATCH_VIEW_MATRIX_GTE;
 
-    BuildRotMatrixY(scratch, *(s32 *)0x1F80001C);
-    BuildRotMatrixX(&mtx, *(s32 *)0x1F800018);
+    BuildRotMatrixY(scratch, SCRATCH_VIEW_ANGLE_Y);
+    BuildRotMatrixX(&mtx, SCRATCH_VIEW_ANGLE_X);
     MulMatrix2(&mtx, scratch);
-    BuildRotMatrixZ(&mtx, *(s32 *)0x1F800020);
+    BuildRotMatrixZ(&mtx, SCRATCH_VIEW_ANGLE_Z);
     MulMatrix2(&mtx, scratch);
     BuildRotMatrixY(&mtx, 0x800);
     MulMatrix0(&mtx, scratch, &D_8019CB18);

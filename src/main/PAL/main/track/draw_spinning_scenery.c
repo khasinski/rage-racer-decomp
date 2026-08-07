@@ -1,9 +1,10 @@
 #include "common.h"
 #include "game/race.h"
-#include "psyq/gte.h"
-#include "game/render.h"
 #include "game/random.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/track.h"
+#include "psyq/gte.h"
 
 void DrawSpinningScenery(s32 arg0, s32 arg1) {
     s16 sp10[16];
@@ -54,17 +55,17 @@ void DrawSpinningScenery(s32 arg0, s32 arg1) {
             *dst &= 0xFFF;
 
             BuildRotMatrixY(sp10, *(s32 *)(g_SpinningSceneryYaw + offset));
-            MulMatrix2((void *)0x1F800028, sp10);
+            MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, sp10);
             BuildRotMatrixZ(work, *(s16 *)dst);
             MulMatrix2(sp10, work);
             SetGteObjectMatrix((void *)0x1F80011C, g_SpinningSceneryPos + offset, work);
 
-            *(s32 *)0x1F800084 = 0;
+            SCRATCH_ENV_MODE4 = 0;
             limit = 1;
             if (g_CourseModelCount >= 0x3F) {
                 limit = 0x3E;
             }
-            SubmitCourseModel2((void *)0x1F800000, limit);
+            SubmitCourseModel2((void *)SCRATCHPAD_ADDR, limit);
 
             dst++;
             offset += 0x10;

@@ -1,7 +1,8 @@
 #include "common.h"
-#include "game/vector.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/track.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 
 extern GameRenderObject g_CameraCar;
@@ -21,7 +22,7 @@ void DrawPlayerCarModel(GameRenderObject *obj);
  * zeroed clamp record passed to the track-marker builder UpdateCarTrackState.
  */
 void UpdateFinishCamera(GameRenderObject *obj) {
-    s32 *view = (s32 *)0x1F800000;
+    s32 *view = &SCRATCH_PRIM_CURSOR_WORD;
     s32 delta[3];
     s32 coords[3];
     s16 markerClamp[2];

@@ -1,6 +1,7 @@
 #include "common.h"
-#include "game/vector.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/vector.h"
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
@@ -151,8 +152,8 @@ typedef struct ObjectMatrixWork {
 } ObjectMatrixWork;
 
 /* The per-frame scratchpad block: camera position at +8, view matrix at +0x28. */
-#define SCRATCH_CAMERA_POS ((LVec *)0x1F800008)
-#define SCRATCH_VIEW_MATRIX ((void *)0x1F800028)
+#define SCRATCH_CAMERA_POS ((LVec *)&SCRATCH_VIEW_X)
+#define SCRATCH_VIEW_MATRIX (SCRATCH_VIEW_MATRIX_GTE)
 
 /*
  * Per-object GTE setup: takes the object's offset from the camera through the

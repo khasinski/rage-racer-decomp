@@ -1,14 +1,15 @@
 #include "common.h"
-#include "game/race.h"
-#include "game/state.h"
-#include "game/render.h"
 #include "game/asset.h"
-#include "game/menu.h"
-#include "psyq/gpu.h"
 #include "game/audio.h"
+#include "game/menu.h"
+#include "game/race.h"
 #include "game/random.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/screens.h"
+#include "game/state.h"
 #include "psyq/cd.h"
+#include "psyq/gpu.h"
 
 void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
 

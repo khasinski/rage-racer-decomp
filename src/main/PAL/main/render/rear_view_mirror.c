@@ -1,9 +1,10 @@
 #include "common.h"
-#include "game/render.h"
-#include "game/race.h"
 #include "game/car.h"
-#include "psyq/gte.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
 #include "psyq/gpu.h"
+#include "psyq/gte.h"
 void SetDrawArea(u8 *packet, u8 *drawEnv);
 
 void ResetMirrorState(void) {
@@ -32,7 +33,7 @@ s32 BeginMirrorPass(void) {
     s32 y0;
 
     mirrorEnabled = 0;
-    scratch = (GameScratchpadRenderState *)0x1F800000;
+    scratch = SCRATCHPAD;
 
     if ((g_MirrorUnlocked != 0) &&
         (g_MirrorViewEnabled != 0) &&
@@ -111,7 +112,7 @@ void EndMirrorPass(void) {
     register s32 v0reg asm("$2");
     s32 v1reg;
 
-    scratch = (GameScratchpadRenderState *)0x1F800000;
+    scratch = SCRATCHPAD;
 
     SetGeomOffset(0xA0, 0x78);
     SetGeomScreen(0x140);
@@ -199,7 +200,7 @@ void DrawRearViewMirror(s32 arg0) {
         }
 
         if (BeginMirrorPass() != 0) {
-            scratch = (u8 **)0x1F800000;
+            scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
 
             DrawSkyBackground();
             packet = DrawMirrorFrame(*scratch);
@@ -209,9 +210,9 @@ void DrawRearViewMirror(s32 arg0) {
             AddPrim((u32 *)(g_DrawBuffer + 0x16C8), (u32 *)prim);
             *scratch = packet;
             BuildVisibleCells(-0x3000, 0x6000);
-            SetRotMatrix((void *)0x1F800028);
-            *(s32 *)0x1F800084 = g_IsEnvironmentMode4;
-            SubmitTerrainCells((void *)0x1F800000, g_VisibleCellList, 0x40);
+            SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
+            SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
+            SubmitTerrainCells((void *)SCRATCHPAD_ADDR, g_VisibleCellList, 0x40);
 
             packet = *scratch;
             SetDrawArea(packet, g_DrawBuffer);

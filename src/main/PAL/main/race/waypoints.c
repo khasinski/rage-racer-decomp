@@ -1,12 +1,13 @@
 #include "common.h"
-#include "game/vector.h"
-#include "game/car.h"
 #include "game/audio.h"
+#include "game/car.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
+#include "game/vector.h"
 #include "game/waypoint.h"
 #include "psyq/gte.h"
-#include "game/race.h"
-#include "game/state.h"
-#include "game/render.h"
 
 extern s32 g_PlayerCar;
 
@@ -210,7 +211,7 @@ void DrawWaypoints(void) {
 
     do {
         BuildRotMatrixY(&mtx0, *(s32 *)(point + 0x14));
-        MulMatrix2((Matrix *)0x1F800028, &mtx0);
+        MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx0);
         BuildRotMatrixZ(mtx1Ptr, *(s32 *)(point + 0x10));
         MulMatrix(&mtx0, mtx1Ptr);
         SetGteObjectMatrix((void *)0x1F80011C, point, &mtx0);
@@ -220,7 +221,7 @@ void DrawWaypoints(void) {
         if (drawId < frameValue) {
             drawArg = drawId;
         }
-        SubmitModel((void *)0x1F800000, drawArg);
+        SubmitModel((void *)SCRATCHPAD_ADDR, drawArg);
 
         BuildRotMatrixY(mtx1Ptr, 0x800);
         MulMatrix2(&mtx0, mtx1Ptr);
@@ -231,7 +232,7 @@ void DrawWaypoints(void) {
         if (drawId < frameValue) {
             drawArg = drawId;
         }
-        SubmitModel((void *)0x1F800000, drawArg);
+        SubmitModel((void *)SCRATCHPAD_ADDR, drawArg);
 
         i++;
         point += sizeof(TrackWaypointRuntime);
@@ -261,7 +262,7 @@ void DrawLapNumber(void) {
     s32 quotient;
     register u8 *packet asm("$16");
 
-    scratch = *(u8 **)0x1F800000;
+    scratch = SCRATCH_PRIM_CURSOR_AS(u8);
     track = g_PlayerLap;
     divisor = 1;
     digitsDrawn = 0;
@@ -308,7 +309,7 @@ void DrawLapNumber(void) {
         s32 tpage;
 
         finalScratch = scratch;
-        packet = (u8 *)0x1F800000;
+        packet = (u8 *)SCRATCHPAD_ADDR;
         ot = g_DrawBuffer + 0xCC;
         tpage = 9;
         *(u8 **)packet = finalScratch;
@@ -480,9 +481,9 @@ s32 GetWaypointAngle(s32 position) {
     }
 
     if (value != 0) {
-        temp = Atan2(0x29DD - *(s32 *)0x1F800008, 0x6EF3 - *(s32 *)0x1F800010);
+        temp = Atan2(0x29DD - SCRATCH_VIEW_X, 0x6EF3 - SCRATCH_VIEW_Z);
         value = 0xC00 - temp;
-        temp = *(s32 *)0x1F80001C;
+        temp = SCRATCH_VIEW_ANGLE_Y;
         value &= 0xFFF;
         temp -= value;
         angle = temp & 0xFFF;

@@ -1,10 +1,11 @@
 #include "common.h"
-#include "game/car.h"
-#include "game/race.h"
-#include "game/menu.h"
-#include "game/render.h"
 #include "game/asset.h"
 #include "game/audio.h"
+#include "game/car.h"
+#include "game/menu.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/state.h"
 
 extern u8 *g_CarModelAsset;
@@ -139,7 +140,7 @@ pos:
 }
 
 s32 DrawCarSelectScreen(s32 arg0) {
-    s32 p = (s32) *(void **)0x1F800004;
+    s32 p = (s32) SCRATCH_OT_BASE_AS(void);
     u8 *buf = (u8 *)p + 4;
     s32 v;
     s32 col;
@@ -677,7 +678,7 @@ void UpdateCustomizeScreen(void) {
     u16 *pad;
     s32 sel;
 
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     mode = 2;

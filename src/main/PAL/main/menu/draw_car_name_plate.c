@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/menu.h"
+#include "game/scratchpad.h"
 
 void GameDrawSpriteWide(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 r,
                    s32 g, s32 b, s32 clut, s32 shadeTex, s32 semiTrans,
@@ -12,7 +13,7 @@ void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
     u32 idx;
     u32 shade;
 
-    ot = (u8 *)*(void **)0x1F800004 + 4;
+    ot = (u8 *)SCRATCH_OT_BASE_AS(void) + 4;
     if (arg0 == 0) {
         g_CarNamePlateFade = 0;
         return;

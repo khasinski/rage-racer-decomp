@@ -1,13 +1,14 @@
 #include "common.h"
 #include "game/asset.h"
 #include "game/car.h"
-#include "game/race.h"
-#include "game/state.h"
-#include "game/render.h"
-#include "game/menu.h"
-#include "psyq/gpu.h"
 #include "game/cd.h"
+#include "game/menu.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 #include "game/track.h"
+#include "psyq/gpu.h"
 
 typedef struct UnkEventPair {
     s16 timer;
@@ -182,7 +183,7 @@ void DrawPrologueText(void) {
         u8 *base;
 
         fadeLevel = g_FadeLevel;
-        scratch = (s32 *)0x1F800000;
+        scratch = &SCRATCH_PRIM_CURSOR_WORD;
         tmp = fadeLevel * 7;
         greenScale = tmp * 32;
         base = g_DrawBuffer;

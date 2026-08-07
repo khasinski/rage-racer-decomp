@@ -1,12 +1,13 @@
 #include "common.h"
-#include "game/vector.h"
-#include "psyq/gte.h"
-#include "game/render.h"
-#include "game/race.h"
-#include "game/state.h"
-#include "game/menu.h"
 #include "game/car.h"
+#include "game/menu.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
+#include "game/vector.h"
 #include "psyq/gpu.h"
+#include "psyq/gte.h"
 
 void GameDrawTexturedQuadWide() asm("GameDrawTexturedQuad");
 
@@ -351,7 +352,7 @@ void InitMenuMode(void) {
     g_CourseIndex = ((s32)g_GrandPrixSeries << 2) | g_CourseIndex;
     InitMenuLighting();
 
-    scratch = (s32 *)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_WORD;
     scratch[3] = -64;
     scratch[4] = -256;
     scratch[2] = 0;

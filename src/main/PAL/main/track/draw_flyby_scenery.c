@@ -1,7 +1,8 @@
 #include "common.h"
-#include "psyq/gte.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/track.h"
+#include "psyq/gte.h"
 
 extern s32 g_FlybyScenery[];
 
@@ -15,13 +16,13 @@ void DrawFlybyScenery(void) {
         BuildRotMatrixY(&mtx0, 0x800 - g_FlybySceneryRotY);
         BuildRotMatrixX(&mtx1, g_FlybySceneryRotX);
         MulMatrix2(&mtx0, &mtx1);
-        MulMatrix2((Matrix *)0x1F800028, &mtx1);
+        MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx1);
         BuildRotMatrixZ(&mtx0, g_FlybySceneryRotZ);
         MulMatrix2(&mtx1, &mtx0);
         SelectModelBank(2);
         SetGteObjectMatrix((void *)0x1F80011C, state + 4, &mtx0);
-        *(s32 *)0x1F800084 = 0;
-        SubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
+        SCRATCH_ENV_MODE4 = 0;
+        SubmitModel((void *)SCRATCHPAD_ADDR, g_ModelBankCount < 1);
     }
 }
 

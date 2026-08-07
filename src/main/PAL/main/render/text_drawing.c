@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/scratchpad.h"
 #include "game/state.h"
 
 typedef struct Glyph {
@@ -41,7 +42,7 @@ void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
 
     str = str0;
     x = x0;
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
 
     while (*str) {
         fixed = flags & 0x80;
@@ -131,8 +132,8 @@ void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
         }
     }
 
-    *(void **)0x1F800000 =
-        QueueDrawModePrim((u8 *)ot + 4, *(void **)0x1F800000, (fl & 0x7f) + 27);
+    SCRATCH_PRIM_CURSOR_AS(void) =
+        QueueDrawModePrim((u8 *)ot + 4, SCRATCH_PRIM_CURSOR_AS(void), (fl & 0x7f) + 27);
 }
 
 extern Glyph D_8007FA3C[];
@@ -168,7 +169,7 @@ void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
 
     str = str0;
     x = x0;
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
 
     while (*str) {
         fixed = flags & 0x80;
@@ -250,8 +251,8 @@ void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
         }
     }
 
-    *(void **)0x1F800000 =
-        QueueDrawModePrim((u8 *)ot + 4, *(void **)0x1F800000, (fl & 0x7f) + 27);
+    SCRATCH_PRIM_CURSOR_AS(void) =
+        QueueDrawModePrim((u8 *)ot + 4, SCRATCH_PRIM_CURSOR_AS(void), (fl & 0x7f) + 27);
 }
 
 void GameDrawSpriteWide(
@@ -309,9 +310,9 @@ s32 GameDrawNumber(
 
     i = 9;
     if (flags & 8) {
-        ot = (u8 *)*(void **)0x1F800004 + 4;
+        ot = (u8 *)SCRATCH_OT_BASE_AS(void) + 4;
     } else {
-        ot = *(void **)0x1F800004;
+        ot = SCRATCH_OT_BASE_AS(void);
     }
 
     height = 16;
@@ -390,8 +391,8 @@ s32 GameDrawNumber(
         }
     }
 
-    *(void **)0x1F800000 =
-        QueueDrawModePrim(ot, *(void **)0x1F800000, primitiveCount + 27);
+    SCRATCH_PRIM_CURSOR_AS(void) =
+        QueueDrawModePrim(ot, SCRATCH_PRIM_CURSOR_AS(void), primitiveCount + 27);
     return drawn;
 }
 
@@ -401,7 +402,7 @@ extern s32 D_8007FB00;
 void *QueueDrawModePrim(void *arg0, void *arg1, s32 arg2);
 
 void DrawBitPatternOverlay(s32 arg0) {
-    void *ot = *(void **)0x1F800004;
+    void *ot = SCRATCH_OT_BASE_AS(void);
     u8 *row = D_8007F6E8;
     s32 y;
     s32 outer;
@@ -484,5 +485,5 @@ void DrawBitPatternOverlay(s32 arg0) {
         outer++;
     } while (outer < 0x10);
 
-    *(void **)0x1F800000 = QueueDrawModePrim((u8 *)ot + 4, *(void **)0x1F800000, 0x39);
+    SCRATCH_PRIM_CURSOR_AS(void) = QueueDrawModePrim((u8 *)ot + 4, SCRATCH_PRIM_CURSOR_AS(void), 0x39);
 }

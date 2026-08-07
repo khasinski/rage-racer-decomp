@@ -1,8 +1,9 @@
 #include "common.h"
-#include "game/track.h"
-#include "psyq/gte.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/track.h"
+#include "psyq/gte.h"
 
 void UpdateShuttleScenery(s32 arg0) {
     GameShuttleScenery *entry;
@@ -106,17 +107,17 @@ void DrawShuttleScenery(s32 arg0) {
         mtx1Ptr = &mtx1;
         BuildRotMatrixZ(mtx1Ptr, state->angleZ);
         MulMatrix2(&mtx0, mtx1Ptr);
-        MulMatrix2((Matrix *)0x1F800028, mtx1Ptr);
+        MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, mtx1Ptr);
         if ((g_CourseIndex & 3) >= 2) {
             drawArg = 0x3C;
         }
         SetGteObjectMatrix((void *)0x1F80011C, &state->x, mtx1Ptr);
         frameValue = g_CourseModelCount;
-        *(s32 *)0x1F800084 = 0;
+        SCRATCH_ENV_MODE4 = 0;
         drawValue = 1;
         if (drawArg < frameValue) {
             drawValue = drawArg;
         }
-        SubmitCourseModel((void *)0x1F800000, drawValue);
+        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawValue);
     }
 }

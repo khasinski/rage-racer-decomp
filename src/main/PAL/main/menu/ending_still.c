@@ -1,7 +1,8 @@
 #include "common.h"
-#include "game/state.h"
-#include "game/render.h"
 #include "game/menu.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 #include "psyq/gpu.h"
 
 void DrawRaceEndBanner(s32 arg0);
@@ -44,7 +45,7 @@ void DrawEndingStill(void) {
     base = g_DrawBuffer + 0xCC;
     height = 0xF0;
     clut = 0x3FDB;
-    scratch = (volatile s32 *)0x1F800000;
+    scratch = (volatile s32 *)SCRATCHPAD_ADDR;
 
     next = *scratch;
     next = (s32)GameQueueSprite(base, next, 0, 0, 0x100, height, 0, 0, clut);

@@ -1,9 +1,10 @@
 #include "common.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
+#include "game/track.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
-#include "game/state.h"
-#include "game/render.h"
-#include "game/track.h"
 
 typedef struct Obj {
     s16 id;    /* 0x0 */
@@ -52,25 +53,25 @@ void DrawCourseObjects(void) {
         }
 
         BuildRotMatrixY(&mtx, obj->f2);
-        MulMatrix2((void *)0x1F800028, &mtx);
+        MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
         {
             s32 transformed;
             s32 camera;
 
             transformed = (u16)obj->f4;
-            camera = *(u16 *)0x1F800008;
+            camera = *(u16 *)&SCRATCH_VIEW_X;
             transformed -= camera;
             *(s16 *)0x1F80011C = transformed;
             transformed = (u16)obj->f8;
-            camera = *(u16 *)0x1F80000C;
+            camera = *(u16 *)&SCRATCH_VIEW_Y;
             transformed -= camera;
             *(s16 *)0x1F80011E = transformed;
             transformed = (u16)obj->fC;
-            camera = *(u16 *)0x1F800010;
+            camera = *(u16 *)&SCRATCH_VIEW_Z;
             transformed -= camera;
             *(s16 *)0x1F800120 = transformed;
 
-            ApplyMatrix((void *)0x1F800028, (void *)0x1F80011C, (void *)0x1F800124);
+            ApplyMatrix(SCRATCH_VIEW_MATRIX_GTE, (void *)0x1F80011C, (void *)0x1F800124);
             transformed = *(s32 *)0x1F800124;
             camera = *(s32 *)0x1F80012C;
             transformed <<= 2;
@@ -86,17 +87,17 @@ void DrawCourseObjects(void) {
 
         flags = obj->flags;
         if (flags & 8) {
-            *(s32 *)0x1F800084 = ((g_AnimTimer & 0x10) == 0) << 16;
+            SCRATCH_ENV_MODE4 = ((g_AnimTimer & 0x10) == 0) << 16;
         } else if (flags & 4) {
-            *(s32 *)0x1F800084 = 0x10000;
+            SCRATCH_ENV_MODE4 = 0x10000;
         } else {
-            *(s32 *)0x1F800084 = 0;
+            SCRATCH_ENV_MODE4 = 0;
         }
 
         if (g_IsEnvironmentMode4 ? (obj->flags & 2) : (obj->flags % 2)) {
-            SubmitCourseModel2((void *)0x1F800000, obj->id);
+            SubmitCourseModel2((void *)SCRATCHPAD_ADDR, obj->id);
         } else {
-            SubmitCourseModel((void *)0x1F800000, obj->id);
+            SubmitCourseModel((void *)SCRATCHPAD_ADDR, obj->id);
         }
 
         }
@@ -137,7 +138,7 @@ extern Vec4 *g_VisibleCellList;
 void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 
 void BuildVisibleCells(s32 arg0, s32 arg1) {
-    Scr *s = (Scr *)0x1F800008;
+    Scr *s = (Scr *)&SCRATCH_VIEW_X;
     s32 i;
     s32 j;
     s32 oct;
@@ -211,7 +212,7 @@ void BuildVisibleCells(s32 arg0, s32 arg1) {
                 vec[0] = ((sx << 11) - (s->f0 - center)) << 2;
                 vec[1] = (-s->f4) << 2;
                 vec[2] = ((sy << 11) - (s->f8 - center)) << 2;
-                ApplyMatrixLV((void *)0x1F800028, vec, proj);
+                ApplyMatrixLV(SCRATCH_VIEW_MATRIX_GTE, vec, proj);
                 if (proj[2] >= arg0 && arg1 >= proj[2]) {
                     out->x = proj[0];
                     out->y = proj[1];

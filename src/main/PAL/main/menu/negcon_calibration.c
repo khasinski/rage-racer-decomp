@@ -1,8 +1,9 @@
 #include "common.h"
-#include "game/state.h"
 #include "game/audio.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 
 /* Copied into a local solely to preserve the retail code shape. */
 extern NegconUvTemplate D_80010070;
@@ -73,7 +74,7 @@ void DrawNegconSteerPlayScreen(void) {
     unused = D_80010070;
     DrawSpriteString(0x18, 0x30, D_80010078, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
-    prim = *(u8 **)0x1F800000;
+    prim = SCRATCH_PRIM_CURSOR_AS(u8);
     prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, g_NegconSteerPlay != 0);
     prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, g_NegconSteerPlay != 3);
     prim = QueueSpriteTransWide(
@@ -96,7 +97,7 @@ void DrawNegconSteerPlayScreen(void) {
     span = span + 231;
     prim = QueueLineWide(ot, prim, 0x94, span, 0xA8, span, 0x20, 0x40, 0xFF);
     prim = QueueLineWide(ot, prim, 0x94, 0xE6, 0xA8, 0xE6, 0, 0, 0);
-    *(u8 **)0x1F800000 =
+    SCRATCH_PRIM_CURSOR_AS(u8) =
         QueueLineWide(ot, prim, 0x94, 0xE7, 0xA8, 0xE7, 0, 0, 0);
 }
 
@@ -163,7 +164,7 @@ void DrawNegconMaxTwistScreen(void) {
     unused = D_80010084;
     DrawSpriteString(0x18, 0x30, D_8001008C, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
-    prim = *(u8 **)0x1F800000;
+    prim = SCRATCH_PRIM_CURSOR_AS(u8);
     prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, g_NegconMaxTwist != 0);
     prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, g_NegconMaxTwist != 3);
     if (g_NegconMaxTwist == 3) {
@@ -179,7 +180,7 @@ void DrawNegconMaxTwistScreen(void) {
     prim = QueueDrawModePrimWide(ot, prim, 0x3F);
     prim = (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    *(s32 *)0x1F800000 = AddTilePrim(
+    SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(
         (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
 }
 

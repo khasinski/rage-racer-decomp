@@ -1,11 +1,12 @@
 #include "common.h"
-#include "game/state.h"
-#include "game/menu.h"
-#include "psyq/gpu.h"
 #include "game/audio.h"
-#include "psyq/snd.h"
 #include "game/car.h"
+#include "game/menu.h"
+#include "game/scratchpad.h"
 #include "game/sound.h"
+#include "game/state.h"
+#include "psyq/gpu.h"
+#include "psyq/snd.h"
 
 struct Entry_5ACA0 {
     u8 f0;

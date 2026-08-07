@@ -1,18 +1,19 @@
 #include "common.h"
+#include "game/audio.h"
+#include "game/menu.h"
+#include "game/race.h"
+#include "game/random.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
+#include "game/track.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
-#include "game/render.h"
-#include "game/race.h"
-#include "game/state.h"
-#include "game/audio.h"
-#include "game/random.h"
-#include "game/track.h"
-#include "game/menu.h"
 
 extern u32 *g_VisibleCellMask;
 
 static inline void ClearScratchRenderMode3DF68(void) {
-    *(s32 *)0x1F800084 = 0;
+    SCRATCH_ENV_MODE4 = 0;
 }
 
 void DrawStaticScenery(s32 arg0) {
@@ -55,7 +56,7 @@ void DrawStaticScenery(s32 arg0) {
 
     if (visible != 0) {
         BuildRotMatrixY(&mtx, g_StaticSceneryYaw);
-        MulMatrix2((Matrix *)0x1F800028, &mtx);
+        MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
 
         if (g_IsEnvironmentMode4 != 0) {
             SetGteObjectMatrix((void *)0x1F80011C, statePtr, &mtx);
@@ -65,7 +66,7 @@ void DrawStaticScenery(s32 arg0) {
             if (frameValue >= 0x3B) {
                 drawArg = 0x3A;
             }
-            SubmitCourseModel((void *)0x1F800000, drawArg);
+            SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
         } else {
             SetGteObjectMatrix((void *)0x1F80011C, statePtr, &mtx);
             frameValue = g_CourseModelCount;
@@ -74,7 +75,7 @@ void DrawStaticScenery(s32 arg0) {
             if (frameValue >= 0x3A) {
                 drawArg = 0x39;
             }
-            SubmitCourseModel2((void *)0x1F800000, drawArg);
+            SubmitCourseModel2((void *)SCRATCHPAD_ADDR, drawArg);
         }
     }
 }
@@ -88,24 +89,24 @@ void DrawHighClassScenery(void) {
     (void)pad;
     state = &g_HighClassSceneryYaw;
     BuildRotMatrixY(&mtx, state[0]);
-    MulMatrix2((Matrix *)0x1F800028, &mtx);
+    MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
 
     if (g_IsEnvironmentMode4 != 0) {
         SetGteObjectMatrix((void *)0x1F80011C, state - 3, &mtx);
-        *(s32 *)0x1F800084 = 0x10000;
+        SCRATCH_ENV_MODE4 = 0x10000;
         drawArg = 1;
         if (g_CourseModelCount >= 0x40) {
             drawArg = 0x3F;
         }
-        SubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
     } else {
         SetGteObjectMatrix((void *)0x1F80011C, state - 3, &mtx);
-        *(s32 *)0x1F800084 = 0;
+        SCRATCH_ENV_MODE4 = 0;
         drawArg = 1;
         if (g_CourseModelCount >= 0x40) {
             drawArg = 0x3F;
         }
-        SubmitCourseModel2((void *)0x1F800000, drawArg);
+        SubmitCourseModel2((void *)SCRATCHPAD_ADDR, drawArg);
     }
 }
 

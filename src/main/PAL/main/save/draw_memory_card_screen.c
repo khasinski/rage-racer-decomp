@@ -1,7 +1,8 @@
 #include "common.h"
-#include "game/state.h"
-#include "game/menu.h"
 #include "game/memcard.h"
+#include "game/menu.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 
 extern u8 *volatile g_DrawBuffer;
 s32 GameQueueSpriteTrans(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 color);
@@ -16,7 +17,7 @@ void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 {
     s32 base = ((s32) g_DrawBuffer) + 0xCC;
-    s32 *scratch = (s32 *)0x1F800000;
+    s32 *scratch = &SCRATCH_PRIM_CURSOR_WORD;
     s32 next;
     s32 i;
     s32 y;
@@ -50,7 +51,7 @@ void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
         next = AddTilePrim(base, next, 0x3C, ((arg3 * 3) << 4) + 0xCC, 0xC8, 0x28, 0x89, 0xFF, 0x76);
     }
     next = AddTilePrim(base, next, 0, 0, 0x140, 0xF0, 0x85, 0x15, 0xE);
-    *(s32 *)0x1F800000 = next;
+    SCRATCH_PRIM_CURSOR_WORD = next;
 }
 
 void DrawMemoryCardMessage(s32 arg0) {
@@ -85,7 +86,7 @@ void DrawMemoryCardMessage(s32 arg0) {
     }
 
     base = (s32)g_DrawBuffer + 0xCC;
-    next = *(s32 *)0x1F800000;
+    next = SCRATCH_PRIM_CURSOR_WORD;
     if (index == 6 || index == 8 || index == 0xA || index == 0xC) {
         next = GameQueueSprite(base, next, 0xDE, 0x60, 0xC, 0x18, 0x84, 0x48, 0x7F81);
     }
@@ -102,5 +103,5 @@ void DrawMemoryCardMessage(s32 arg0) {
     } else {
         next = QueueDrawModePrimWide(base, next, 0x3D);
     }
-    *(s32 *)0x1F800000 = next;
+    SCRATCH_PRIM_CURSOR_WORD = next;
 }

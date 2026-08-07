@@ -1,11 +1,12 @@
 #include "common.h"
-#include "game/state.h"
-#include "game/race.h"
-#include "game/render.h"
-#include "game/menu.h"
-#include "game/car.h"
 #include "game/asset.h"
 #include "game/audio.h"
+#include "game/car.h"
+#include "game/menu.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 #include "psyq/gpu.h"
 
 const u8 g_NowLoadingText[] = "NOW LOADING";
@@ -211,7 +212,7 @@ s32 DrawCourseSelectScreen(s32 step)
     s32 gpSlide;
     s32 gpFade;
 
-    otBase = *(void **)0x1F800004;
+    otBase = SCRATCH_OT_BASE_AS(void);
     ot = (u8 *)otBase + 4;
     if (step == 0) {
         D_8009B2C0 = 0;
@@ -490,7 +491,7 @@ void UpdateCourseSelectScreen(void) {
     s32 lap;
     s32 i;
     GameRaceProgress *p;
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     if (g_GrandPrixMode != 0) {
         FlipCourseCard(&D_8009B364, &D_8009B360, &D_8009B368);

@@ -1,13 +1,14 @@
 #include "common.h"
 #include "game/asset.h"
 #include "game/car.h"
-#include "game/race.h"
-#include "game/render.h"
-#include "game/state.h"
-#include "psyq/gpu.h"
 #include "game/cd.h"
 #include "game/menu.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 #include "game/track.h"
+#include "psyq/gpu.h"
 
 extern void (*g_BgmSelectSteps[])(void);
 void UploadImageAsset(void *imageBlock);

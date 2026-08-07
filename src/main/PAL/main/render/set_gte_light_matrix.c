@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
 #include "psyq/gte.h"
 
 extern Matrix g_SceneLightMatrix;
@@ -44,7 +45,7 @@ void DrawControllerSetupScene(s32 variant) {
     s32 position[3];
     s32 steer;
     s32 model;
-    u8 *scratchBase = (u8 *)0x1F800000;
+    u8 *scratchBase = (u8 *)SCRATCHPAD_ADDR;
 
     g_Scratch10Volatile = 0;
     g_Scratch10Pointer = (void *)-0x1080;
@@ -78,7 +79,7 @@ void DrawControllerSetupScene(s32 variant) {
         SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
         g_Scratch84 = 0;
         model = g_ModelBankCount < 1;
-        SubmitModel((void *)0x1F800000, model);
+        SubmitModel((void *)SCRATCHPAD_ADDR, model);
         return;
     }
 
@@ -111,7 +112,7 @@ void DrawControllerSetupScene(s32 variant) {
     SetGteLightMatrix(&xRot);
     SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
     g_Scratch84 = 0;
-    SubmitModel((void *)0x1F800000, 1);
+    SubmitModel((void *)SCRATCHPAD_ADDR, 1);
     if (variant != 0) {
         SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
         g_Scratch84 = 0;
@@ -119,7 +120,7 @@ void DrawControllerSetupScene(s32 variant) {
         if (g_ModelBankCount >= 4) {
             model = 3;
         }
-        SubmitModel((void *)0x1F800000, model);
+        SubmitModel((void *)SCRATCHPAD_ADDR, model);
     }
 
     {
@@ -142,7 +143,7 @@ void DrawControllerSetupScene(s32 variant) {
     if (g_ModelBankCount >= 3) {
         model = 2;
     }
-    SubmitModel((void *)0x1F800000, model);
+    SubmitModel((void *)SCRATCHPAD_ADDR, model);
     if (variant != 0) {
         SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
         g_Scratch84 = 0;
@@ -150,7 +151,7 @@ void DrawControllerSetupScene(s32 variant) {
         if (g_ModelBankCount >= 5) {
             model = 4;
         }
-        SubmitModel((void *)0x1F800000, model);
+        SubmitModel((void *)SCRATCHPAD_ADDR, model);
     }
 }
 

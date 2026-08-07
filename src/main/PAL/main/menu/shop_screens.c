@@ -1,8 +1,9 @@
 #include "common.h"
+#include "game/audio.h"
 #include "game/car.h"
 #include "game/menu.h"
 #include "game/render.h"
-#include "game/audio.h"
+#include "game/scratchpad.h"
 
 extern u8 *g_CarModelAsset;
 
@@ -24,7 +25,7 @@ void UpdateCarShopScreen(void) {
     s32 t;
     s32 u;
 
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawMenuAltPanel(D_8009B32C, D_8009B330);
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
@@ -340,7 +341,7 @@ void UpdateEngineerShopScreen(void) {
     s32 res;
     s32 sel;
 
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     DrawMenuCarView();

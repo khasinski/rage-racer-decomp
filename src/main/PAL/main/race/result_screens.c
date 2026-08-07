@@ -1,12 +1,13 @@
 #include "common.h"
-#include "game/screens.h"
-#include "game/race.h"
-#include "game/state.h"
-#include "game/render.h"
-#include "game/menu.h"
+#include "game/audio.h"
 #include "game/car.h"
 #include "game/cd.h"
-#include "game/audio.h"
+#include "game/menu.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/screens.h"
+#include "game/state.h"
 #include "game/track.h"
 
 typedef struct GrandPrixIntroPosition {
@@ -59,7 +60,7 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
     s32 height;
 
     ot = *(u8 **)((u8 *)0x801A0000 - 0x3700) + 0xCC;
-    prim = *(void **)0x1F800000;
+    prim = SCRATCH_PRIM_CURSOR_AS(void);
 
     redStack = y;
     green = x / 8 + redStack;
@@ -97,7 +98,7 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
     width = 0x140;
     height = 0xF0;
     prim = GameQueueTileTransWide(ot, prim, 0, 0, width, height, redStack, green, temp);
-    *(void **)0x1F800000 = GameQueueDrawModePrimWide(ot, prim, 0x49);
+    SCRATCH_PRIM_CURSOR_AS(void) = GameQueueDrawModePrimWide(ot, prim, 0x49);
 }
 
 void UpdateReplayScene(void) {
@@ -212,7 +213,7 @@ void DrawResultScreen(void) {
 
     width = 0x140;
     base = g_DrawBuffer;
-    scratch = (s32 *)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_WORD;
     base += 0xCC;
 
     next = *scratch;
@@ -230,7 +231,7 @@ void DrawGrandPrixResultPanel(void) {
         s32 height;
         s32 color;
 
-        scratch = (s32 *)0x1F800000;
+        scratch = &SCRATCH_PRIM_CURSOR_WORD;
         base = g_DrawBuffer + 0xCC;
         height = 8;
         color = 0x78CB;
@@ -290,7 +291,7 @@ void DrawGrandPrixResultPanel(void) {
         s32 next;
         s32 selectionIndex;
 
-        scratch = (s32 *)0x1F800000;
+        scratch = &SCRATCH_PRIM_CURSOR_WORD;
         DrawResultScreen();
 
         base = g_DrawBuffer + 0xCC;

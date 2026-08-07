@@ -1,8 +1,9 @@
 #include "common.h"
-#include "game/state.h"
-#include "game/render.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 
 extern u8 g_PadType;
 
@@ -73,7 +74,7 @@ void DrawControllerConfigScreen(void) {
         }
     } else {
         ot = g_DrawBuffer + 0xCC;
-        prim = *(u8 **)0x1F800000;
+        prim = SCRATCH_PRIM_CURSOR_AS(u8);
         prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, leftLit);
         prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, rightLit);
         if (g_PadType == 0x23) {
@@ -86,7 +87,7 @@ void DrawControllerConfigScreen(void) {
             prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, g_PadMappingIndex);
             prim = DrawPadConfigDiagram(ot, prim);
         }
-        *(u8 **)0x1F800000 = prim;
+        SCRATCH_PRIM_CURSOR_AS(u8) = prim;
     }
 }
 
@@ -179,7 +180,7 @@ s32 AddTilePrim(
  * inside a white border, both drawn into the 0xD0 sub-buffer of the current
  * draw buffer from the shared scratchpad packet cursor. */
 void DrawNegconNeutralScreen(void) {
-    s32 *cursor = (s32 *)0x1F800000;
+    s32 *cursor = &SCRATCH_PRIM_CURSOR_WORD;
     s32 ot;
     s32 prim;
 

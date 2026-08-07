@@ -1,7 +1,8 @@
 #include "common.h"
-#include "game/render.h"
-#include "psyq/gpu.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "psyq/gpu.h"
 
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
 
@@ -28,7 +29,7 @@ void DrawRaceHudLabels(s32 arg0) {
         } while (i < count);
     }
 
-    scratch = (void **)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_AS(void);
     *scratch = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, *scratch, 9);
 }
 

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
 typedef struct TextSprt8 {
@@ -56,7 +57,7 @@ void SetDrawModeWide8x8(
     void *textureWindow) asm("SetDrawMode");
 
 void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
-    u8 **scratch = (u8 **)0x1F800000;
+    u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     u8 *packet;
 
     packet = *scratch;
@@ -108,7 +109,7 @@ void GameDrawText8x8Shaded(
     u8 *str,
     s32 clutIndex,
     u8 intensity) {
-    u8 **scratch = (u8 **)0x1F800000;
+    u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     u8 *packet;
     u8 *prim;
 
@@ -164,7 +165,7 @@ void GameDrawText8x8Shaded(
 }
 
 void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
-    u8 **scratch = (u8 **)0x1F800000;
+    u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     u8 *packet;
 
     packet = *scratch;
@@ -234,7 +235,7 @@ void GameDrawProportionalTextShaded(
     s32 intensity) {
 #define OPAQUE_VALUE (t0 = 0x100)
     s32 xPos = x;
-    u8 *packet = *(u8 **)0x1F800000;
+    u8 *packet = SCRATCH_PRIM_CURSOR_AS(u8);
     u8 *text = str;
     register s32 shade asm("$23");
     register s32 t0 asm("$8");
@@ -409,7 +410,7 @@ void GameDrawProportionalTextShaded(
     }
     SetDrawModeWide8x8(packet, 0, 1, 0x29, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, packet);
-    *(u8 **)0x1F800000 = ({
+    SCRATCH_PRIM_CURSOR_AS(u8) = ({
         u8 *next = packet + 12;
 
         next;

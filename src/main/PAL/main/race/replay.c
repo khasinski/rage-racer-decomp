@@ -1,9 +1,10 @@
 #include "common.h"
-#include "game/race.h"
-#include "game/state.h"
-#include "game/render.h"
 #include "game/car.h"
+#include "game/race.h"
+#include "game/render.h"
 #include "game/replay.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 
 #define AVG(a, b) (((a) + (b)) / 2)
 
@@ -207,7 +208,7 @@ void DrawReplayBadge(void) {
     s32 value;
 
     if ((g_SceneTimer & 0x10) && (g_SeriesCleared == 0)) {
-        scratch = (volatile s32 *)0x1F800000;
+        scratch = (volatile s32 *)SCRATCHPAD_ADDR;
         value = *scratch;
         base = (s32)g_DrawBuffer + 0xCC;
         next = (s32)GameQueueSprite(base, value, 0x10, 0x10, 0x48, 0x10, 0, 0x68, 0x780D);

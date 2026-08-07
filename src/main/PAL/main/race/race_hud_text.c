@@ -1,9 +1,10 @@
 #include "common.h"
-#include "game/vector.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/screens.h"
 #include "game/state.h"
+#include "game/vector.h"
 #include "psyq/gpu.h"
 
 /* The strip buffers hold back-to-back 0x10-byte TILEs; SetTile is
@@ -289,12 +290,12 @@ void DrawStartCountdown(s32 sceneTimer) {
         g_CountdownBoardOffset = 0;
     }
 
-    cursor = *(s32 *)0x1F800000;
+    cursor = SCRATCH_PRIM_CURSOR_WORD;
     backdrop =
         (u8 *)GameQueueDrawModePrimWide(
             (s32)(g_DrawBuffer + 0xD0), cursor, 9);
     pattern = g_CountdownBoardOffset;
-    *(u8 **)0x1F800000 = backdrop;
+    SCRATCH_PRIM_CURSOR_AS(u8) = backdrop;
     cursor = (s32)GameQueueTexturePacketWide(
         orderingTable,
         GameQueueTexturePacketWide(
@@ -360,10 +361,10 @@ void DrawStartCountdown(s32 sceneTimer) {
         }
     }
 
-    *(s32 *)0x1F800000 = cursor;
+    SCRATCH_PRIM_CURSOR_WORD = cursor;
     cursor = GameQueueDrawModePrimWide(
         (s32)(g_DrawBuffer + 0xD0), cursor, 0xC);
-    *(s32 *)0x1F800000 = cursor;
+    SCRATCH_PRIM_CURSOR_WORD = cursor;
 
     if (phase > 0) {
         if (g_RacePaused == 0) {
@@ -371,7 +372,7 @@ void DrawStartCountdown(s32 sceneTimer) {
         }
     }
 
-    tiles = *(TILE **)0x1F800000;
+    tiles = SCRATCH_PRIM_CURSOR_AS(TILE);
     SetTile(tiles);
     rangeTimer = (u16)g_CountdownBoardOffset + 88;
     tiles->w = 0x64;
@@ -382,7 +383,7 @@ void DrawStartCountdown(s32 sceneTimer) {
     tiles->t.b0 = 5;
     tiles->y0 = rangeTimer;
     AddPrim(orderingTable, tiles++);
-    *(TILE **)0x1F800000 = tiles;
+    SCRATCH_PRIM_CURSOR_AS(TILE) = tiles;
 }
 
 extern u8 *g_CourseProgress;
@@ -411,7 +412,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
     {
         register void *drawPrim;
 
-        prim = (u8 *)0x1F800000;
+        prim = (u8 *)SCRATCHPAD_ADDR;
         prim = *(u8 **)prim;
         SetSprt((SPRT *)prim);
         SetShadeTex((SPRT *)prim, 0);
@@ -463,7 +464,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
             asm(
                 "" : "=r"(textY), "=r"(textColor) :
                 "0"(textY), "1"(textColor));
-            scratchPacket = (u8 *)0x1F800000;
+            scratchPacket = (u8 *)SCRATCHPAD_ADDR;
             scroll0 = g_RaceOptionScroll0;
             marqueeBase = &g_RaceOptionMarquee[0][0];
             *(u8 **)scratchPacket = firstNext;
@@ -599,7 +600,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 drawPrim->tpage = 9;
                 AddPrim(g_DrawBuffer + 0xCC, drawPrim);
 
-                *(u8 **)0x1F800000 = QueueDrawModePrim(
+                SCRATCH_PRIM_CURSOR_AS(u8) = QueueDrawModePrim(
                     g_DrawBuffer + 0xCC, (u8 *)quad, 9);
             }
         }

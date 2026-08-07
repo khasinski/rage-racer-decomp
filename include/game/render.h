@@ -785,11 +785,7 @@ extern u8 *g_EnvPaletteTable;
  * and the `flags & 2` prop set over `flags & 1`; also forwarded to scratchpad
  * 0x1F800084 by every car/track renderer. */
 extern s32 g_IsEnvironmentMode4;
-/* That forwarding slot. Spelled as a macro rather than an `extern ... asm()`
- * symbol on purpose: the extern form lets gcc 2.6.3 hold the address in a
- * register across calls, which changes the output. This expands to the same
- * literal, so it is free. */
-#define SCRATCH_ENV_MODE4 (*(s32 *)0x1F800084)
+/* That forwarding slot is SCRATCH_ENV_MODE4 in game/scratchpad.h. */
 
 /*
  * Per-view cell culling, rebuilt every frame by BuildVisibleCells and swapped in

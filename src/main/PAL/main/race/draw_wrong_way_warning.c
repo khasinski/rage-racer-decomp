@@ -1,12 +1,13 @@
 #include "common.h"
-#include "game/render.h"
 #include "game/car.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/track.h"
 
 /* The GPU packet cursor: scratchpad word 0. Every emitter here packs its
  * primitive at this address and bumps it past what it wrote. */
-#define SCRATCH (*(u8 **)0x1F800000)
+#define SCRATCH (SCRATCH_PRIM_CURSOR_AS(u8))
 
 void SetSprt(u8 *prim);
 void SetShadeTex(u8 *prim, s32 enabled);

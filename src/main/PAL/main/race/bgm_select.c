@@ -1,12 +1,13 @@
 #include "common.h"
-#include "game/state.h"
-#include "game/render.h"
-#include "game/menu.h"
 #include "game/car.h"
-#include "psyq/gpu.h"
 #include "game/cd.h"
+#include "game/menu.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 #include "game/track.h"
+#include "psyq/gpu.h"
 
 s32 GameQueueTileTransWide(u8 *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
 s32 GameQueueDrawModePrimWide(u8 *ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
@@ -31,7 +32,7 @@ void DrawBgmSelectBar(void) {
     s32 next;
 
     base = g_DrawBuffer + 0xD0;
-    next = *(s32 *)0x1F800000;
+    next = SCRATCH_PRIM_CURSOR_WORD;
     temp = (g_BgmSelectCursor == 0) ? 0x3FEC : 0x3FEF;
     tileW = 0x14;
     tileH = 0x10;
@@ -52,7 +53,7 @@ void DrawBgmSelectBar(void) {
     next = (s32)GameQueueSprite(base, next, 0x64, 0xC2, 0xBA, 0xC, 0, temp, 0x3FED);
     next = (s32)GameQueueSprite(base, next, 0x62, 0xC0, 0xBE, 0x10, 0x3C, 0, 0x3FEE);
     next = GameQueueTileTransWide(base, next, 0x14, 0xB8, 0x118, 0x20, 0, 0, 0);
-    *(s32 *)0x1F800000 = GameQueueDrawModePrimWide(base, next, 0xB);
+    SCRATCH_PRIM_CURSOR_WORD = GameQueueDrawModePrimWide(base, next, 0xB);
 }
 
 void AdvanceBgmShuffleBag(u32 track) {

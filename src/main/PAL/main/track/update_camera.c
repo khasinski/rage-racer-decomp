@@ -1,8 +1,9 @@
 #include "common.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/track.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
-#include "game/render.h"
-#include "game/track.h"
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
@@ -116,7 +117,7 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
     u32 temp_v1_1373;
 
     cameraNodeIndex = FindNearestTrackCamera(arg1);
-    scratch = (s32 *)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_WORD;
     temp_v1_35 = g_CameraNodeIndex;
     g_CameraNodeIndex = cameraNodeIndex;
     temp_v1_40 = cameraNodeIndex != temp_v1_35;

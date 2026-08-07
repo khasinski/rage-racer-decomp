@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/menu.h"
+#include "game/scratchpad.h"
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7,
                    s32 arg8);
 
@@ -12,7 +13,7 @@ void DrawLogoSprite() asm("DrawSprite");
 void DrawLogoRect() asm("DrawSolidRect");
 
 void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
-    void *ot = *(void **)0x1F800004;
+    void *ot = SCRATCH_OT_BASE_AS(void);
     s32 idx;
     u32 t;
     s16 y;
@@ -80,7 +81,7 @@ void DrawTeamNameEntry(s32 arg0, s32 arg1) {
     u32 temp_s0;
     u8 temp_v1;
 
-    temp_s7 = *(s32 *)0x1F800004;
+    temp_s7 = SCRATCH_OT_BASE_WORD;
     if (arg0 == 0) {
         D_8007FB28 = 0;
         return;

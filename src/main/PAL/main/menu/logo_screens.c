@@ -10,10 +10,11 @@
  * unchanged. This is the accepted resolution while the legal-only permuter
  * searches for a cleaner shape.
  */
-#include "psyq/gpu.h"
-#include "game/race.h"
 #include "game/menu.h"
+#include "game/race.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
+#include "psyq/gpu.h"
 
 extern Rect g_TeamLogoClutRect;
 

@@ -1,9 +1,10 @@
 #include "common.h"
-#include "game/menu_types.h"
-#include "psyq/gpu.h"
 #include "game/audio.h"
+#include "game/menu_types.h"
 #include "game/race.h"
+#include "game/scratchpad.h"
 #include "game/screens.h"
+#include "psyq/gpu.h"
 
 /* Identical to the declaration in game/menu.h; this unit cannot include that
  * header yet because four of its own definitions still disagree with it
@@ -761,7 +762,7 @@ void DrawMenuLightBurst(s32 arg) {
     Blob l1;
     Blob l2;
 
-    s3 = (void *)(*(s32 *)0x1F800004 + 0xAFC);
+    s3 = (void *)(SCRATCH_OT_BASE_WORD + 0xAFC);
     l1 = D_80011898;
     l2 = D_800118DC;
 
@@ -814,7 +815,7 @@ void DrawMenuLightBurst(s32 arg) {
             s0++;
         } while (s0 < 0x21);
 
-        prim = *(u8 **)0x1F800000;
+        prim = SCRATCH_PRIM_CURSOR_AS(u8);
         SetPolyG4(prim);
         SetSemiTrans(prim, 0);
         {
@@ -847,7 +848,7 @@ void DrawMenuLightBurst(s32 arg) {
             prim += 0x24;
             AddPrim(s3, oldPrim);
         }
-        *(u8 **)0x1F800000 = prim;
+        SCRATCH_PRIM_CURSOR_AS(u8) = prim;
         SetDrawClipRect(s3, 0x48, 0, 0x140, 0x1E0);
     }
     if (arg > 0) {
@@ -908,7 +909,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
     s32 badgeXWord;
     s16 rectLeft;
 
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
     if (step == 0) {
         *progress = 0;
         /* Initialization-only call; its caller ignores the return value. */

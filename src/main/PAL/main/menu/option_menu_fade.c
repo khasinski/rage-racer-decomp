@@ -1,7 +1,8 @@
 #include "common.h"
-#include "game/state.h"
-#include "game/render.h"
 #include "game/menu.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 
 s32 GameQueueTileTransWide(u8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
@@ -26,7 +27,7 @@ void DrawFullscreenFadeTile480(s32 color, s32 arg1) {
 
     width = 0x140;
     height = 0x1E0;
-    scratch = (s32 *)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_WORD;
     scratchValue = *scratch;
     next = GameQueueTileTransWide(base, scratchValue, 0, 0, width, height, color, color, color);
     *scratch = GameQueueDrawModePrimWide(base, next, arg1);

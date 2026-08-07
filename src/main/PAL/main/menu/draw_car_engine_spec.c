@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
 
 void DrawEngineSpecLabel(s32 arg0, s32 arg1, s32 arg2) {
     DrawText8x8(arg0, arg1, D_80082E70[arg2], 0x78CC);
@@ -25,7 +26,7 @@ void DrawCarEngineSpec(s32 a0raw, s32 arg1) {
     s32 r;
     s32 torqueEnd;
 
-    ot = (u8 *)*(void **)0x1F800004 + 4;
+    ot = (u8 *)SCRATCH_OT_BASE_AS(void) + 4;
     if (g_MenuAltLayout != 0) {
         return;
     }

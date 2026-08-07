@@ -35,12 +35,27 @@ typedef struct GameScratchpadRenderState {
     s16 y1;
 } GameScratchpadRenderState;
 
-#define SCRATCHPAD ((GameScratchpadRenderState *)0x1F800000)
+#define SCRATCHPAD_ADDR 0x1F800000
+#define SCRATCHPAD ((GameScratchpadRenderState *)SCRATCHPAD_ADDR)
 
-/* Primitive-packing cursor and the ordering table the emitters link into. */
-#define SCRATCH_PRIMITIVE_CURSOR (*(void **)0x1F800000)
-#define SCRATCH_OT_BASE          (*(void **)0x1F800004)
-#define SCRATCH_OT_SHIFT            (*(s32 *)0x1F800064)
+/*
+ * The primitive-packing cursor. Every emitter packs a GPU packet at it, bumps
+ * it past the packet and stores it back, so each one spells the slot with the
+ * packet type it is building. SCRATCH_PRIM_CURSOR_AS gives that type without
+ * repeating the address; _WORD is the same slot where the retail code carried
+ * the cursor in an integer instead.
+ */
+#define SCRATCH_PRIM_CURSOR_AS(type) (*(type **)0x1F800000)
+#define SCRATCH_PRIM_CURSOR          SCRATCH_PRIM_CURSOR_AS(void)
+#define SCRATCH_PRIM_CURSOR_WORD     (*(s32 *)0x1F800000)
+
+/* Ordering table the emitters link finished packets into. */
+#define SCRATCH_OT_BASE_AS(type)     (*(type **)0x1F800004)
+#define SCRATCH_OT_BASE              SCRATCH_OT_BASE_AS(void)
+#define SCRATCH_OT_BASE_WORD         (*(s32 *)0x1F800004)
+
+/* The srav amount InitRenderState installs; see SCRATCH_FACE_OT_SHIFT below. */
+#define SCRATCH_OT_SHIFT             (*(s32 *)0x1F800064)
 
 /* View transform consumed by the model render path. SetCameraRotMatrix builds
  * the matrix at 0x28 from the three angles; the position words are the camera
@@ -104,5 +119,11 @@ typedef struct GameScratchpadRenderState {
 #define SCRATCH_CLIP_Y0        (*(u16 *)0x1F80007A)
 #define SCRATCH_CLIP_X1        (*(u16 *)0x1F80007C)
 #define SCRATCH_CLIP_Y1        (*(u16 *)0x1F80007E)
+
+/* g_IsEnvironmentMode4, forwarded here by every car and track renderer for the
+ * GTE engine to read. Spelled as a macro rather than an `extern ... asm()`
+ * symbol on purpose: the extern form lets gcc 2.6.3 hold the address in a
+ * register across calls, which changes the output. */
+#define SCRATCH_ENV_MODE4   (*(s32 *)0x1F800084)
 
 #endif

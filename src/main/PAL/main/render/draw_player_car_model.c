@@ -1,10 +1,11 @@
 #include "common.h"
-#include "psyq/gte.h"
-#include "game/render.h"
-#include "game/state.h"
-#include "game/cd.h"
 #include "game/audio.h"
+#include "game/cd.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
+#include "psyq/gte.h"
 
 extern GameRenderView *g_CarModelAsset;
 extern Matrix g_SceneLightMatrix;
@@ -61,12 +62,12 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     m_90.m[2][2] = -m_90.m[2][2];
 
     m_50 = m_30;
-    MulMatrix2((Matrix *)0x1F800028, &m_30);
+    MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &m_30);
 
     BuildRotMatrixY(&m_10, 0x800 - obj->angle_54);
     BuildRotMatrixX(&m_70, obj->angle_50);
     MulMatrix2(&m_10, &m_70);
-    MulMatrix2((Matrix *)0x1F800028, &m_70);
+    MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &m_70);
     BuildRotMatrixZ(&m_10, obj->angle_58);
     MulMatrix2(&m_70, &m_10);
 
@@ -75,17 +76,17 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     v_138[1] = obj->field_60;
     SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
     g_ScratchRenderMode = 0;
-    SubmitModel((void *)0x1F800000, 1);
+    SubmitModel((void *)SCRATCHPAD_ADDR, 1);
 
     SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
     g_ScratchRenderMode = 0;
-    SubmitModel((void *)0x1F800000, 1);
+    SubmitModel((void *)SCRATCHPAD_ADDR, 1);
 
     BuildRotMatrixZ(&m_70, obj->angleZ);
     MulMatrix2(&m_30, &m_70);
     SetGteObjectMatrix((void *)0x1F80011C, obj, &m_70);
     g_ScratchRenderMode = 0;
-    SubmitModel((void *)0x1F800000, g_ModelBankCount < 1);
+    SubmitModel((void *)SCRATCHPAD_ADDR, g_ModelBankCount < 1);
 
     otDepth = obj->field_E4 * 2;
     if (obj->flags_48 & 0x1000) {
@@ -113,7 +114,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     m_B0[1].m[2][2] = -m_B0[0].m[2][2];
     SetGteObjectMatrix((void *)0x1F80011C, obj, &m_F0);
     g_ScratchRenderMode = 0;
-    SubmitModel((void *)0x1F800000, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
+    SubmitModel((void *)SCRATCHPAD_ADDR, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
 
     for (i = 0; i < 2; i++) {
         GameRenderView *v = g_CarModelAsset;
@@ -130,7 +131,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
         m_118[2] += obj->z;
         SetGteObjectMatrix((void *)0x1F80011C, m_118, &m_B0[i]);
         g_ScratchRenderMode = 0;
-        SubmitModel((void *)0x1F800000, (otDepth + 2 < g_ModelBankCount) ? (otDepth + 2) : 1);
+        SubmitModel((void *)SCRATCHPAD_ADDR, (otDepth + 2 < g_ModelBankCount) ? (otDepth + 2) : 1);
         SetLightMatrix(&m_90);
     }
 
@@ -161,7 +162,7 @@ void DrawCar(GameRenderObject *obj) {
     s32 otDepth;
     s32 i;
     s32 model;
-    s32 *cam = (s32 *)0x1F800000;
+    s32 *cam = &SCRATCH_PRIM_CURSOR_WORD;
     s16 *lod;
 
     model = g_CarModelByCourse[g_CourseIndex][((GameRenderSourcePoint *)obj)->field_AE];
@@ -172,7 +173,7 @@ void DrawCar(GameRenderObject *obj) {
     v_128[0] = obj->x - cam[2];
     v_128[1] = 0;
     v_128[2] = obj->z - cam[4];
-    ApplyMatrixLV((void *)0x1F800028, v_128, v_148);
+    ApplyMatrixLV(SCRATCH_VIEW_MATRIX_GTE, v_128, v_148);
     if (v_128[0] < 0) {
         v_128[0] = -v_128[0];
     }
@@ -200,12 +201,12 @@ void DrawCar(GameRenderObject *obj) {
             m_90.m[2][2] = -m_90.m[2][2];
 
             m_50 = m_30;
-            MulMatrix2((Matrix *)0x1F800028, &m_30);
+            MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &m_30);
 
             BuildRotMatrixY(&m_10, 0x800 - obj->angle_54);
             BuildRotMatrixX(&m_70, obj->angle_50);
             MulMatrix2(&m_10, &m_70);
-            MulMatrix2((Matrix *)0x1F800028, &m_70);
+            MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &m_70);
             BuildRotMatrixZ(&m_10, obj->angle_58);
             MulMatrix2(&m_70, &m_10);
 
@@ -214,19 +215,19 @@ void DrawCar(GameRenderObject *obj) {
             v_138[1] = obj->field_60;
             SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
             g_ScratchRenderMode = 0;
-            SubmitModel((void *)0x1F800000,
+            SubmitModel((void *)SCRATCHPAD_ADDR,
                             (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
 
             SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
             g_ScratchRenderMode = 0;
-            SubmitModel((void *)0x1F800000,
+            SubmitModel((void *)SCRATCHPAD_ADDR,
                             (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
 
             BuildRotMatrixZ(&m_70, obj->angleZ);
             MulMatrix2(&m_30, &m_70);
             SetGteObjectMatrix((void *)0x1F80011C, obj, &m_70);
             g_ScratchRenderMode = lod[1] << 16;
-            SubmitModel((void *)0x1F800000,
+            SubmitModel((void *)SCRATCHPAD_ADDR,
                             (lod[0] < g_ModelBankCount) ? lod[0] : 1);
 
             BuildRotMatrixZ(&m_10, obj->angleZ - obj->field_64);
@@ -251,7 +252,7 @@ void DrawCar(GameRenderObject *obj) {
             m_B0[1].m[2][2] = -m_B0[0].m[2][2];
             SetGteObjectMatrix((void *)0x1F80011C, obj, &m_F0);
             g_ScratchRenderMode = 0;
-            SubmitModel((void *)0x1F800000,
+            SubmitModel((void *)SCRATCHPAD_ADDR,
                             (lod[0] + 3 < g_ModelBankCount) ? (lod[0] + 3) : 1);
 
             for (i = 0; i < 2; i++) {
@@ -268,7 +269,7 @@ void DrawCar(GameRenderObject *obj) {
                 m_118[2] += obj->z;
                 SetGteObjectMatrix((void *)0x1F80011C, m_118, &m_B0[i]);
                 g_ScratchRenderMode = 0;
-                SubmitModel((void *)0x1F800000,
+                SubmitModel((void *)SCRATCHPAD_ADDR,
                                 (lod[0] + 2 < g_ModelBankCount) ? (lod[0] + 2) : 1);
                 SetLightMatrix(&m_90);
             }
@@ -285,10 +286,10 @@ void DrawCar(GameRenderObject *obj) {
 
             BuildRotMatrixZ(&m_10, obj->angleZ);
             MulMatrix2(&m_50, &m_10);
-            MulMatrix2((Matrix *)0x1F800028, &m_10);
+            MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &m_10);
             SetGteObjectMatrix((void *)0x1F80011C, obj, &m_10);
             g_ScratchRenderMode = lod[1] << 16;
-            SubmitModel((void *)0x1F800000,
+            SubmitModel((void *)SCRATCHPAD_ADDR,
                             (lod[0] + 4 < g_ModelBankCount) ? (lod[0] + 4) : 1);
         }
     }

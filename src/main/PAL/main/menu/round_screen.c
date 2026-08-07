@@ -1,13 +1,14 @@
 #include "common.h"
-#include "psyq/gte.h"
 #include "game/asset.h"
-#include "game/race.h"
-#include "game/state.h"
-#include "game/render.h"
-#include "game/menu.h"
-#include "psyq/gpu.h"
 #include "game/audio.h"
+#include "game/menu.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
 #include "game/screens.h"
+#include "game/state.h"
+#include "psyq/gpu.h"
+#include "psyq/gte.h"
 
 /* Darkens the scene colour matrix by GetTrackZoneBlend's 0..0x100 track-zone ramp; RestoreColorMatrix puts it back. */
 void ApplyZoneLighting(s32 a0, Matrix *a1) {
@@ -184,7 +185,7 @@ s32 AddTilePrim(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g
 void DrawBgmSelector(void) {
     s32 x;
     char buf[88];
-    s32 *scr = (s32 *)0x1F800000;
+    s32 *scr = &SCRATCH_PRIM_CURSOR_WORD;
     s32 p;
     void *ot = g_DrawBuffer + 208;
 

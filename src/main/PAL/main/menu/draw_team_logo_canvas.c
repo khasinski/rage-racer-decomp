@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#include "game/scratchpad.h"
 #include "psyq/gpu.h"
 extern void DrawRectOutline(
     s32 ot, s16 x, s16 y, s16 w, s32 h, u8 r, u8 g, u8 b, u8 alpha);
@@ -120,7 +121,7 @@ void DrawTeamLogoCanvasFade(s32 delta) {
     s32 limit;
     s32 alpha;
 
-    scratch = *(u8 **)0x1F800004;
+    scratch = SCRATCH_OT_BASE_AS(u8);
     if (delta > 0) {
         value = D_8009B280;
         sum = delta + value;
@@ -174,7 +175,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
   register s32 drawValue asm("$4");
   a0v = arg0;
   a1v = arg1;
-  ot = *(s32 *)0x1F800004;
+  ot = SCRATCH_OT_BASE_WORD;
   if (arg0 == 0)
   {
     D_8007FB0C = 0;

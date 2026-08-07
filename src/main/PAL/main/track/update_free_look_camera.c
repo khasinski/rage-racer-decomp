@@ -1,11 +1,12 @@
 #include "common.h"
+#include "game/menu.h"
+#include "game/race.h"
+#include "game/random.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/track.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
-#include "game/race.h"
-#include "game/track.h"
-#include "game/menu.h"
-#include "game/render.h"
-#include "game/random.h"
 
 extern s32 g_PlayerTrackProgress;
 
@@ -27,7 +28,7 @@ void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2);
  * track-marker builder UpdateCarTrackState.
  */
 void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
-    s32 *view = (s32 *)0x1F800000;
+    s32 *view = &SCRATCH_PRIM_CURSOR_WORD;
     s32 delta[3];
     s32 coords[3];
     s16 markerClamp[2];
@@ -164,7 +165,7 @@ void DrawStartGridScenery(s32 arg0) {
 
     if (g_RacePhase < 2 && arg0 >= 0x51) {
         BuildRotMatrixY(&mtx, g_StartGridSceneryAngle[g_RaceSeries]);
-        MulMatrix2((Matrix *)0x1F800028, &mtx);
+        MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
         if (arg0 - 90 > 0) {
             state = g_StartGridSceneryPos[g_RaceSeries];
             s1 = (arg0 - 90) / 3;
@@ -178,7 +179,7 @@ void DrawStartGridScenery(s32 arg0) {
             lim = g_CourseModelCount;
             __asm__ __volatile__("");
             value = rem + 0x28;
-            *(s32 *)0x1F800084 = 0;
+            SCRATCH_ENV_MODE4 = 0;
             drawArg = (value < lim) ? value : 1;
         } else {
             state = g_StartGridSceneryPos[g_RaceSeries];
@@ -189,10 +190,10 @@ void DrawStartGridScenery(s32 arg0) {
             lim = g_CourseModelCount;
             __asm__ __volatile__("");
             value = 0x28;
-            *(s32 *)0x1F800084 = 0;
+            SCRATCH_ENV_MODE4 = 0;
             drawArg = (value < lim) ? value : 1;
         }
-        SubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
     }
 }
 
@@ -259,7 +260,7 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     BuildRotMatrixY(&mtx, state.w);
     BuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
     MulMatrix(&mtx, &mtx2);
-    MulMatrix2((Matrix *)0x1F800028, &mtx);
+    MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
 
     if (g_GrandPrixMode == 0) {
         return;
@@ -271,40 +272,40 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
         if (g_AnimSceneryFrame < 13) {
             SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
             num = g_AnimSceneryFrame + 10;
-            *(s32 *)0x1F800084 = 0;
+            SCRATCH_ENV_MODE4 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
-            SubmitCourseModel((void *)0x1F800000, drawArg);
+            SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
         } else {
             SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
             num = g_AnimSceneryRacePosition;
-            *(s32 *)0x1F800084 = 0;
+            SCRATCH_ENV_MODE4 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
-            SubmitCourseModel((void *)0x1F800000, drawArg);
+            SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
         }
 
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimSceneryTint;
-        *(s32 *)0x1F800084 = sv;
+        SCRATCH_ENV_MODE4 = sv;
         num = g_AnimSceneryVariant + 4;
         sv = g_CourseModelCount;
         drawArg = (num < sv) ? num : 1;
-        SubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
     } else {
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         num = g_AnimSceneryFrame + 0x18;
-        scr = (s32 *)0x1F800084;
+        scr = &SCRATCH_ENV_MODE4;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        SubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
 
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimSceneryTint;
-        scr = (s32 *)0x1F800084;
+        scr = &SCRATCH_ENV_MODE4;
         *scr = sv;
         num = g_AnimSceneryVariant + 7;
         sv = g_CourseModelCount;
         drawArg = (num < sv) ? num : 1;
-        SubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
     }
 }
 
@@ -365,22 +366,22 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     BuildRotMatrixY(&mtx, state.w);
     BuildRotMatrixX(&mtx2, g_AnimSceneryPitch[arg1]);
     MulMatrix(&mtx, &mtx2);
-    MulMatrix2((Matrix *)0x1F800028, &mtx);
+    MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
 
     g_AnimScenery2Tint = ((arg0 >> 3) & 3) << 16;
 
     if (arg2 != 0) {
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         num = g_AnimScenery2Frame + 0xA;
-        scr = (s32 *)0x1F800084;
+        scr = &SCRATCH_ENV_MODE4;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        SubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
 
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimScenery2Tint;
         drawArg = 1;
-        scr = (s32 *)0x1F800084;
+        scr = &SCRATCH_ENV_MODE4;
         *scr = sv;
         sv = g_CourseModelCount;
         num = g_AnimScenery2Variant;
@@ -389,15 +390,15 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     } else {
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         num = g_AnimScenery2Frame + 0x18;
-        scr = (s32 *)0x1F800084;
+        scr = &SCRATCH_ENV_MODE4;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        SubmitCourseModel((void *)0x1F800000, drawArg);
+        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
 
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
         sv = g_AnimScenery2Tint;
         drawArg = 1;
-        scr = (s32 *)0x1F800084;
+        scr = &SCRATCH_ENV_MODE4;
         *scr = sv;
         sv = g_CourseModelCount;
         num = g_AnimScenery2Variant;
@@ -408,5 +409,5 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     if (num < sv) {
         drawArg = num;
     }
-    SubmitCourseModel((void *)0x1F800000, drawArg);
+    SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
 }

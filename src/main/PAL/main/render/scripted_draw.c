@@ -1,7 +1,8 @@
 #include "common.h"
-#include "game/render.h"
-#include "game/state.h"
 #include "game/menu.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 
 void GameDrawSpriteWide(
     void *ot,
@@ -37,7 +38,7 @@ void DrawScriptedSprite(s32 arg0, u8 *arg1, u8 *arg2, s32 arg3) {
 
     /* Match note: materialize record in $t2 before the first load. */
     limit = *(s32 *)record;
-    otBase = *(void **)0x1F800004;
+    otBase = SCRATCH_OT_BASE_AS(void);
     packed = *(s32 *)(record + 0x10);
     style = arg1;
     if (limit < arg0) {
@@ -135,7 +136,7 @@ void DrawScriptedLine(s32 arg0, u8 *arg1, u8 *arg2) {
 
     /* Match note: materialize record in $t0 before the first load. */
     limit = *(s32 *)record;
-    otBase = *(void **)0x1F800004;
+    otBase = SCRATCH_OT_BASE_AS(void);
     xPacked = *(s32 *)(record + 0xC);
     yPacked = *(s32 *)(record + 0x10);
     style = arg1;
@@ -251,7 +252,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     /* The barrier is load-bearing: without it the scheduler sinks the
      * scratchpad load past the second record load. */
     limit = *(s32 *)record;
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
     asm volatile("");
     packedSpeed = *(s32 *)(record + 8);
     if (limit < time) {
@@ -372,7 +373,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     s32 flags;
 
     duration = ctx[0];
-    table = *(u8 **)0x1F800004;
+    table = SCRATCH_OT_BASE_AS(u8);
     velocity0 = ctx[3];
     velocity1 = ctx[4];
     entry = desc;
@@ -587,7 +588,7 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     arg0Ptr = (u8 *)D_80082520[0].arg0;
     elapsed = progress - D_80082520[0].time;
     arg1Ptr = (u8 *)D_80082520[0].arg1;
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
     countReg = count;
     packed = *(s32 *)(arg1Ptr + 0x10);
     i = 0;
@@ -696,7 +697,7 @@ void GameDrawMenuButton(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
                    s32 flags, s32 arg8, s32 arg9, s32 arg10) {
     register s32 f asm("$16") = flags;
     register s32 p0 asm("$18") = arg0;
-    register void *ot = *(void **)0x1F800004;
+    register void *ot = SCRATCH_OT_BASE_AS(void);
     register s32 p1 asm("$20") = arg1;
     s32 p2 = arg2;
     s32 p3 = arg3;
@@ -730,7 +731,7 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
     s32 white;
     s32 counter;
 
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
     savedX0 = x0;
     savedY0 = y0;
     savedX1 = x1;

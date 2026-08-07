@@ -1,7 +1,8 @@
 #include "common.h"
-#include "game/vector.h"
-#include "game/state.h"
 #include "game/menu.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
+#include "game/vector.h"
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0,
@@ -28,7 +29,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     s32 yLarge;
     s32 ySmall;
 
-    scratch = *(void **)0x1F800004;
+    scratch = SCRATCH_OT_BASE_AS(void);
 
     switch ((u8)x) {
     case 4:
@@ -121,7 +122,7 @@ void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
     s16 rightEdge;
     u8 intensity;
 
-    ot = *(void **)0x1F800004;
+    ot = SCRATCH_OT_BASE_AS(void);
     if (step == 0) {
         g_BrowseArrowsFade = 0;
         return;
@@ -264,7 +265,7 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
     s32 shadowX;
     s32 shadowY;
 
-    ot = (u8 *)*(void **)0x1F800004 + 0xC;
+    ot = (u8 *)SCRATCH_OT_BASE_AS(void) + 0xC;
     sourceColors = &g_CarSpecGraphColors;
     colors = *sourceColors;
     markerClut = 0x26C;

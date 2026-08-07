@@ -1,7 +1,8 @@
 #include "common.h"
 #include "game/menu_types.h"
-#include "game/vector.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/vector.h"
 void GameDrawMenuButton(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7,
                    s32 a8, s32 a9, s32 a10);
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);

@@ -1,13 +1,14 @@
 #include "common.h"
-#include "game/state.h"
-#include "game/menu.h"
 #include "game/asset.h"
-#include "game/render.h"
-#include "game/track.h"
-#include "psyq/gpu.h"
 #include "game/audio.h"
 #include "game/car.h"
+#include "game/menu.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
+#include "game/track.h"
+#include "psyq/gpu.h"
 
 s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueSpriteTrans");
 void DrawOptionHintBar(s32 arg0);
@@ -116,7 +117,7 @@ void DrawScreenAdjustScreen(void) {
     s32 y48 = 0x48;
     s32 h18 = 0x18;
     s32 w0c = 0xC;
-    s32 *scratch = (s32 *)0x1F800000;
+    s32 *scratch = &SCRATCH_PRIM_CURSOR_WORD;
     s32 next;
 
     base += 0xCC;
@@ -222,7 +223,7 @@ void DrawOptionSceneOverlay(void) {
         g_OptionLetterboxHeight = value - 4;
     }
 
-    scratch = (s32 *)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_WORD;
     rawBase = g_DrawBuffer;
     base = rawBase + 0xBC8;
     pkt = *scratch;
@@ -243,7 +244,7 @@ void DrawOptionSceneOverlay(void) {
 
 /* Scene 23: the setup / OPTION scene, dispatching g_GameModeHandlers[g_GameMode]. */
 void UpdateOptionScene(void) {
-    *(s32 *)0x1F800000 = AddTilePrim(g_DrawBuffer + 204, *(s32 *)0x1F800000, 0, 0, 0x140, 2, 0, 0, 0);
+    SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(g_DrawBuffer + 204, SCRATCH_PRIM_CURSOR_WORD, 0, 0, 0x140, 2, 0, 0, 0);
     g_AnimTimer = g_AnimTimer + 1;
     g_SceneTimer = g_SceneTimer + 1;
     if (g_SceneTimer == 2) {

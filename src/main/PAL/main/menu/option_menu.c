@@ -1,11 +1,12 @@
 #include "common.h"
-#include "game/vector.h"
-#include "game/state.h"
 #include "game/audio.h"
-#include "game/race.h"
-#include "game/render.h"
 #include "game/menu.h"
+#include "game/race.h"
 #include "game/random.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
+#include "game/vector.h"
 
 s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueSpriteTrans");
 s32 GameQueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
@@ -24,7 +25,7 @@ void DrawOptionRootMenu(void) {
     s32 h18 = 0x18;
     s32 h48 = 0x48;
     s32 color = 0x7F40;
-    register s32 *scratch asm("$21") = (s32 *)0x1F800000;
+    register s32 *scratch asm("$21") = &SCRATCH_PRIM_CURSOR_WORD;
     s32 tmp;
     s32 state;
 
@@ -117,7 +118,7 @@ void UpdateOptionRootMenu(void) {
 void DrawClassRecordDetail(void) {
     s32 raw = (s32)g_DrawBuffer;
     s32 base = raw + 0xCC;
-    s32 next = *(s32 *)0x1F800000;
+    s32 next = SCRATCH_PRIM_CURSOR_WORD;
     s32 idx = g_ScreenOffsetEditY * 6 + g_ScreenOffsetEditX;
     s32 x;
     s32 y = 0x38;
@@ -151,7 +152,7 @@ void DrawClassRecordDetail(void) {
     next = AddTilePrim(base, next, x + 78, y + 47, 0x14, 2, 0xFF, 0xFF, 0xFF);
     next = AddTilePrim(base, next, x, y, 0x7C, 0x1E, 0, 0, 0);
     next = AddTilePrim(base, next, x, y + 32, 0x7C, 0x1E, 0, 0, 0);
-    *(s32 *)0x1F800000 = AddTilePrim(base, next, x - 1, y - 2, 0x7E, 0x42, 0xFF, 0xFF, 0xFF);
+    SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(base, next, x - 1, y - 2, 0x7E, 0x42, 0xFF, 0xFF, 0xFF);
 }
 
 void DrawClassRecordGrid(void) {
@@ -162,12 +163,12 @@ void DrawClassRecordGrid(void) {
     s32 flag;
 
     base = (s32)g_DrawBuffer + 0xCC;
-    next = *(s32 *)0x1F800000;
+    next = SCRATCH_PRIM_CURSOR_WORD;
     next = QueueSpriteTransWide(base, next, 0x24, 0x38, 0x24, 0x18, 0x38, 0x90, 0x7F40);
     next = QueueSpriteTransWide(base, next, 0x24, 0x58, 0x1C, 0x18, 0xD0, 0x60, 0x7F40);
-    *(s32 *)0x1F800000 = next;
+    SCRATCH_PRIM_CURSOR_WORD = next;
     DrawMenuCursorArrow(0x14, (g_ClassRecordMenuCursor * 32) + 56);
-    next = *(s32 *)0x1F800000;
+    next = SCRATCH_PRIM_CURSOR_WORD;
 
     for (i = 0; i < 11; i++) {
         x = D_8007D5A8[i].vx;
@@ -196,7 +197,7 @@ void DrawClassRecordGrid(void) {
 
     next = GameQueueDrawModePrimWide(base, next, 0x3E);
     next = GameQueueDrawModePrimWide(base + 4, next, 0x3C);
-    *(s32 *)0x1F800000 = next;
+    SCRATCH_PRIM_CURSOR_WORD = next;
     DrawOptionHintBar(0);
 }
 
@@ -288,7 +289,7 @@ void DrawVolumeBar(s32 arg0, s32 arg1) {
     s32 y;
     s32 c;
 
-    next = QueueSpriteTransWide(base, *(s32 *)0x1F800000, 0x4E, b + 0xA, 0x10, 0xC, 0xB4, 0xC4, 0x7F40);
+    next = QueueSpriteTransWide(base, SCRATCH_PRIM_CURSOR_WORD, 0x4E, b + 0xA, 0x10, 0xC, 0xB4, 0xC4, 0x7F40);
     next = QueueSpriteTransWide(base, next, 0xE4, b + 0xA, 0x10, 0xC, 0xC4, 0xC4, 0x7F40);
     next = GameQueueDrawModePrimWide(base, next, 0x3A);
     c = 0x46;
@@ -302,7 +303,7 @@ void DrawVolumeBar(s32 arg0, s32 arg1) {
     }
     next = GameQueueDrawModePrimWide(base, next, 0x39);
     next = AddTilePrim(base, next, c | 1, b + 2, 0xB2, 0x1C, 0, 0, 0);
-    *(s32 *)0x1F800000 = AddTilePrim(base, next, c, b, 0xB4, 0x20, 0xFF, 0xFF, 0xFF);
+    SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(base, next, c, b, 0xB4, 0x20, 0xFF, 0xFF, 0xFF);
 }
 
 void DrawSoundOptionScreen(void) {
@@ -316,7 +317,7 @@ void DrawSoundOptionScreen(void) {
     DrawMenuCursorArrow(0x14, (g_SoundOptionCursor * 32) + 56);
     color = 0x7F;
 
-    scratch = (s32 *)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_WORD;
     s3 = 0x18;
     s0 = 0x78;
     base = (s32)g_DrawBuffer + 0xCC;
@@ -370,7 +371,7 @@ void DrawSoundOptionScreen(void) {
         n = AddTilePrim(base, n, (g_MonoOutput != 0) ? 0xA0 : 0x44, 0x11C, 0x5C, 0x28, 0x89, 0xFF, 0x76);
         break;
     }
-    *(s32 *)0x1F800000 = n;
+    SCRATCH_PRIM_CURSOR_WORD = n;
 }
 
 /* g_GameModeHandlers[4]: the four-row sound menu; confirm backs the setting up and enters mode 5. */

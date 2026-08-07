@@ -1,11 +1,12 @@
 #include "common.h"
 #include "game/asset.h"
-#include "game/state.h"
-#include "psyq/gte.h"
-#include "game/render.h"
 #include "game/menu.h"
 #include "game/race.h"
+#include "game/render.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
 #include "psyq/gpu.h"
+#include "psyq/gte.h"
 
 void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSprite");
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
@@ -33,7 +34,7 @@ void DrawBootLogo(void) {
     fade = value;
 
     base = g_DrawBuffer + 0xCC;
-    scratch = (void **)0x1F800000;
+    scratch = &SCRATCH_PRIM_CURSOR_AS(void);
 
     next = *scratch;
     next = QueueShadedSpriteNine(base, next, 0x64, 0xEC, 0x7C, 0x18, 0x80, 0, 0x3F97, fade);
@@ -127,12 +128,12 @@ void EnterAttractScene(void) {
         g_SceneId = 0x17;
         g_SceneTimer = 0;
         InstallSceneLighting();
-        *(s32 *)0x1F800008 = 0;
-        *(s32 *)0x1F80000C = 0;
-        *(s32 *)0x1F800010 = -3520;
-        *(s32 *)0x1F800018 = 0;
-        *(s32 *)0x1F80001C = 0;
-        *(s32 *)0x1F800020 = 0;
+        SCRATCH_VIEW_X = 0;
+        SCRATCH_VIEW_Y = 0;
+        SCRATCH_VIEW_Z = -3520;
+        SCRATCH_VIEW_ANGLE_X = 0;
+        SCRATCH_VIEW_ANGLE_Y = 0;
+        SCRATCH_VIEW_ANGLE_Z = 0;
         SetCameraRotMatrix();
         g_OptionLetterboxHeight = 0xF0;
         g_FadeLevel = 0x100;
