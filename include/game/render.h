@@ -28,6 +28,15 @@ typedef struct GameSpriteDesc {
     s32 semiTrans;
 } GameSpriteDesc;
 
+/* Angles are 12 bits throughout: 0x1000 is one full turn, and any angle that
+ * has to survive arithmetic is masked back down with ANGLE_MASK. */
+enum Angle {
+    ANGLE_MASK = 0xFFF,
+    ANGLE_QUARTER_TURN = 0x400,
+    ANGLE_HALF_TURN = 0x800,
+    ANGLE_FULL_TURN = 0x1000
+};
+
 typedef struct GameRenderAxisMatrix {
     s16 m[3][3];
 } GameRenderAxisMatrix;

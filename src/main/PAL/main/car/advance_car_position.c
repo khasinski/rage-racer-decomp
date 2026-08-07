@@ -2,8 +2,8 @@
 #include "game/car.h"
 #include "game/render.h"
 
-s32 rsin(s32 arg0);
-s32 rcos(s32 arg0);
+s32 rsin(s32 angle);
+s32 rcos(s32 angle);
 
 /*
  * Shared "advance car position/heading" helper. Integrates the car's speed
@@ -12,25 +12,25 @@ s32 rcos(s32 arg0);
  * state98 motion handlers. Register pins and the single-param/two-arg call
  * mismatch are deliberate to match; do not "fix".
  */
-void AdvanceCarPosition(GameCarRuntime *arg0) {
+void AdvanceCarPosition(GameCarRuntime *car) {
     volatile s32 coords[3];
 
     {
         s32 angleSin;
         s32 otherSin;
 
-        angleSin = rsin(arg0->headingAngle);
-        otherSin = rsin(arg0->field_24);
-        coords[0] = (((angleSin * arg0->field_A4) / 4) + (otherSin * arg0->field_A8)) / 100;
+        angleSin = rsin(car->headingAngle);
+        otherSin = rsin(car->field_24);
+        coords[0] = (((angleSin * car->field_A4) / 4) + (otherSin * car->field_A8)) / 100;
     }
 
     {
         s32 angleCos;
         s32 otherCos;
 
-        angleCos = rcos(arg0->headingAngle);
-        otherCos = rcos(arg0->field_24);
-        coords[2] = (((angleCos * arg0->field_A4) / 4) + (otherCos * arg0->field_A8)) / 100;
+        angleCos = rcos(car->headingAngle);
+        otherCos = rcos(car->field_24);
+        coords[2] = (((angleCos * car->field_A4) / 4) + (otherCos * car->field_A8)) / 100;
     }
 
     {
@@ -39,12 +39,12 @@ void AdvanceCarPosition(GameCarRuntime *arg0) {
         s32 angleCos;
         s32 otherCos;
 
-        angleSin = rsin(arg0->headingAngle);
-        otherSin = rsin(arg0->field_24);
-        angleCos = rcos(arg0->headingAngle);
-        otherCos = rcos(arg0->field_24);
+        angleSin = rsin(car->headingAngle);
+        otherSin = rsin(car->field_24);
+        angleCos = rcos(car->headingAngle);
+        otherCos = rcos(car->field_24);
 
-        arg0->field_A4 += ((((angleSin * otherSin) + (angleCos * otherCos)) / 4096) * arg0->field_A8) / 4096;
+        car->field_A4 += ((((angleSin * otherSin) + (angleCos * otherCos)) / 4096) * car->field_A8) / 4096;
     }
-    arg0->headingAngle = 0x400 - Atan2(coords[0], coords[2]);
+    car->headingAngle = ANGLE_QUARTER_TURN - Atan2(coords[0], coords[2]);
 }
