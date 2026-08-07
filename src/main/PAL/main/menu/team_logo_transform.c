@@ -780,6 +780,8 @@ void DrawMenuLightBurst(s32 arg) {
         s32 s1;
         s32 s2;
         u8 *prim;
+        register s32 value asm("$2");
+        register u32 scaled asm("$8");
 
         SetDrawClipRect(s3, 0, 0, 0x140, 0x1E0);
 
@@ -788,13 +790,12 @@ void DrawMenuLightBurst(s32 arg) {
         s1 = 0x00300000;
         do {
             s32 cnt = D_8007FB20;
-            register s32 m11 asm("$2") = cnt * 11;
-            register u32 u0 asm("$8");
             u8 c1;
-            u0 = (u32)m11 / 256;
+            value = cnt * 11;
+            scaled = (u32)value / 256;
             c1 = (u32)(cnt * 75) / 256;
-            m11 = (u8)u0;
-            DrawGradientLine(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, m11, m11, m11, c1, c1, c1, 0x60);
+            value = (u8)scaled;
+            DrawGradientLine(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, value, value, value, c1, c1, c1, 0x60);
             s2 += 0x000A0000;
             s1 += 0x00070000;
             s0++;
@@ -806,11 +807,10 @@ void DrawMenuLightBurst(s32 arg) {
             s32 y0 = l2.b[s0];
             s16 x1 = (0xA0 - (u16)l1.b[s0]) * 2;
             s32 v = (((s32)((u16)l2.b[s0] - 0xAA) << 7) / 309 + 0x16) * D_8007FB20;
-            register s32 vv asm("$2") = v;
-            register u32 sh asm("$8");
-            sh = (u32)vv / 512;
-            vv = (u8)sh;
-            DrawLogoRect(s3, x0, y0, x1, 2, vv, vv, vv, 0x60);
+            value = v;
+            scaled = (u32)value / 512;
+            value = (u8)scaled;
+            DrawLogoRect(s3, x0, y0, x1, 2, value, value, value, 0x60);
             s0++;
         } while (s0 < 0x21);
 
@@ -819,9 +819,8 @@ void DrawMenuLightBurst(s32 arg) {
         SetSemiTrans(prim, 0);
         {
             register s32 x asm("$3") = D_8007FB20;
-            register s32 q0 asm("$2") = x / 5 + (x >> 31);
-            register u8 col asm("$8");
-            col = q0 - (x >> 31);
+            value = x / 5 + (x >> 31);
+            scaled = value - (x >> 31);
             *(s16 *)(prim + 0x20) = 0x13F;
             *(s16 *)(prim + 0x10) = 0x13F;
             *(s16 *)(prim + 0x12) = 0x28;
@@ -836,12 +835,12 @@ void DrawMenuLightBurst(s32 arg) {
             prim[0x05] = 0;
             prim[0x0E] = 0;
             prim[0x06] = 0;
-            prim[0x1C] = col;
-            prim[0x14] = col;
-            prim[0x1D] = col;
-            prim[0x15] = col;
-            prim[0x1E] = col;
-            prim[0x16] = col;
+            prim[0x1C] = scaled;
+            prim[0x14] = scaled;
+            prim[0x1D] = scaled;
+            prim[0x15] = scaled;
+            prim[0x1E] = scaled;
+            prim[0x16] = scaled;
         }
         {
             u8 *oldPrim = prim;
