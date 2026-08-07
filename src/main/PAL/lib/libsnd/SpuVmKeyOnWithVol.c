@@ -20,46 +20,21 @@ void SpuVmKeyOnWithVol(long arg0, long arg1, long arg2, long arg3) {
 }
 
 void SpuVmClearFinishedVoices(void) {
-    long i;
-    register long next asm("$2");
-    long flag;
+    short i;
     long offset;
-    long bound;
     u_char *ptr;
 
-    i = 0;
-    if (g_SndVoiceCount == 0) {
-        return;
+    for (i = 0; i < g_SndVoiceCount; i++) {
+        offset = i * 0x34;
+        if (g_SndVoiceStateStatus[offset] == 2) {
+            offset = ((u_char)i) * 0x34;
+            g_SndVoiceStateStatus[offset] = 0;
+            ptr = g_SndSpuRegs;
+            *(u_short *)(g_SndVoiceStatePitch + offset) = 0;
+            *(u_short *)(ptr + 0x194) = 0;
+            *(u_short *)(ptr + 0x196) = 0;
+        }
     }
-
-    flag = 2;
-    __asm__ volatile("" : "=r"(i) : "0"(i));
-    next = i << 16;
-
-for (;;) {
-    next >>= 16;
-    offset = next * 0x34;
-    if (g_SndVoiceStateStatus[offset] == flag) {
-        offset = ((u_char)i) * 0x34;
-        g_SndVoiceStateStatus[offset] = 0;
-        ptr = g_SndSpuRegs;
-        *(u_short *)(g_SndVoiceStatePitch + offset) = 0;
-        *(u_short *)(ptr + 0x194) = 0;
-        *(u_short *)(ptr + 0x196) = 0;
-    }
-
-    next = i + 1;
-    i = next;
-    next <<= 16;
-    bound = g_SndVoiceCount;
-    next >>= 16;
-    next = next < bound;
-    if (next) {
-        next = i << 16;
-        continue;
-    }
-break;
-}
 }
 
 void SpuVmKeyOnWithDefaultVol(long arg0, long arg1) {
