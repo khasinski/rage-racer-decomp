@@ -438,11 +438,10 @@ L_sw2:
         register s32 stateValue asm("$3");
 
     case 0x20: {
-        register s32 f asm("$2");
-        f = 0xF;
+        tmp = 0xF;
         stateValue = 1;
-        g_McMenuPhase = f;
-        g_McActionTimer = f;
+        g_McMenuPhase = tmp;
+        g_McActionTimer = tmp;
         g_McActionBusy = stateValue;
         g_McActionState = 0x21;
         break;
