@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/menu_types.h"
 #include "psyq/gpu.h"
 #include "game/audio.h"
 #include "game/race.h"
@@ -868,13 +869,7 @@ typedef union {
     } parts;
 } PackedCoordinate;
 
-typedef struct RaceRecord {
-    u8 name[8];
-    s32 time;
-    u16 car;
-    u16 unused;
-} RaceRecord;
-
+/* GCC 2.6.3 needs the concrete outer bound for the indexed view below. */
 extern RaceRecord g_RankingRecords[2][4][5];
 extern RaceRecord g_TimeRecords[2][4][5];
 
@@ -1033,27 +1028,27 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                 FormatLapTime(
                     text,
                     g_RankingRecords[((g_CourseIndex & 4) >> 2)]
-                                    [(g_CourseIndex & 3)][row].time);
+                                    [(g_CourseIndex & 3)][row].raceTime);
                 rowY = panelY + rowYStep;
                 DrawLargeText(0x36, rowY, text, 0x7F, 0x7F, 0x7F,
                                   0x244, 0x20);
                 DrawLargeText(
                     0x77, rowY,
                     g_RankingRecords[((g_CourseIndex & 4) >> 2)]
-                                    [(g_CourseIndex & 3)][row].name,
+                                    [(g_CourseIndex & 3)][row].driverName,
                     0x7F, 0x7F, 0x7F, 0x244, 0xA0);
             } else {
                 FormatLapTime(
                     text,
                     g_TimeRecords[((g_CourseIndex & 4) >> 2)]
-                                 [(g_CourseIndex & 3)][row].time);
+                                 [(g_CourseIndex & 3)][row].raceTime);
                 rowY = panelY + rowYStep;
                 DrawLargeText(0x36, rowY, text, 0x7F, 0x7F, 0x7F,
                                   0x244, 0x20);
                 DrawLargeText(
                     0x77, rowY,
                     g_TimeRecords[((g_CourseIndex & 4) >> 2)]
-                                 [(g_CourseIndex & 3)][row].name,
+                                 [(g_CourseIndex & 3)][row].driverName,
                     0x7F, 0x7F, 0x7F, 0x244, 0xA0);
             }
 
@@ -1068,11 +1063,11 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                              spriteOne, spriteOne, 0x3B);
 
             if (ranking != 0) {
-                car = g_RankingRecords[((g_CourseIndex & 4) >> 2)]
-                                      [(g_CourseIndex & 3)][row].car;
+                car = (u16)g_RankingRecords[((g_CourseIndex & 4) >> 2)]
+                                             [(g_CourseIndex & 3)][row].carIndex;
             } else {
-                car = g_TimeRecords[((g_CourseIndex & 4) >> 2)]
-                                   [(g_CourseIndex & 3)][row].car;
+                car = (u16)g_TimeRecords[((g_CourseIndex & 4) >> 2)]
+                                          [(g_CourseIndex & 3)][row].carIndex;
             }
             switch (car) {
                 case 0:

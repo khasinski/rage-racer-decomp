@@ -13,8 +13,8 @@ void LibcSprintf(void *dst, void *fmt, ...);
 s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 extern volatile s32 g_RaceTotalTime;
 extern s32 g_RankingTimes;
-/* Split symbols of the two S22 record tables: +0x08 is the time and +0x0C the
- * car index, so g_RankingCars is g_RankingRecords[0][0][0].vC and
+/* Split symbols of the two RaceRecord tables: +0x08 is the time and +0x0C the
+ * car index, so g_RankingCars is g_RankingRecords[0][0][0].carIndex and
  * g_TimeRecordTimes / g_TimeRecordCars the same pair of g_TimeRecords. */
 extern u16 g_RankingCars[];
 extern u16 g_TimeRecordCars[];
@@ -89,8 +89,8 @@ void DrawRankingPanel(u8 *slideX) {
         text[1] = g_PlaceSuffixNames[countOrIndex][1];
         text[2] = g_PlaceSuffixNames[countOrIndex][2];
         text[3] = 0x2F;
-        FormatLapTime(&text[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].v8);
-        xOrField = g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].vC;
+        FormatLapTime(&text[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].raceTime);
+        xOrField = g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].carIndex;
         LibcSprintf(&text[0xC], g_FmtRecordName,
                       &g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex],
                       g_CarClassNames[xOrField]);
@@ -129,9 +129,9 @@ void DrawTimeRecordPanel(u8 *s5) {
         text[1] = g_PlaceSuffixNames[s2][1];
         text[2] = g_PlaceSuffixNames[s2][2];
         text[3] = 0x2F;
-        FormatLapTime(&text[4], g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].v8);
+        FormatLapTime(&text[4], g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].raceTime);
 
-        idx = g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].vC;
+        idx = g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].carIndex;
         LibcSprintf(&text[0xC], g_FmtRecordName,
                       &g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2], g_CarClassNames[idx]);
 

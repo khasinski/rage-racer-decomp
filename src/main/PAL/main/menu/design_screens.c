@@ -473,7 +473,7 @@ s32 GetCarUnlockLevel(s32 model);
 
 void UpdateCarListCursor(void) {
     s32 index;
-    GameCarEntry *entry;
+    CarEntry *entry;
 
     switch (0) { default:
     if (D_8009B33C != 0) {

@@ -9,8 +9,8 @@
 
 void LibcSprintf(void *dst, void *fmt, s32 val);
 extern s32 g_CourseProgress;
-extern GameScoreRecord g_ClassRecords[];
-extern GameScoreRecord g_ClassClears[];
+extern ScoreRecord g_ClassRecords[];
+extern ScoreRecord g_ClassClears[];
 s32 GetCarUnlockLevel(s32 model);
 void ResetProgressSlot(s32 carTable, s32 progress);
 

@@ -1,11 +1,6 @@
 #include "common.h"
 #include "game/menu.h"
 
-typedef struct TeamLogoSample {
-    u16 clut[2][16];
-    u16 canvas[64][16];
-} TeamLogoSample;
-
 extern TeamLogoSample *g_TeamLogoSampleData;
 extern u16 g_TeamLogoCanvas[];
 

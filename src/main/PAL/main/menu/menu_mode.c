@@ -436,7 +436,7 @@ void InitMenuMode(void) {
 s32 CountOwnedCars(void) {
     s32 count = 0;
     s32 i = 0;
-    GameCarEntry *entries = g_CarTable;
+    CarEntry *entries = g_CarTable;
     s32 flag;
 
     do {

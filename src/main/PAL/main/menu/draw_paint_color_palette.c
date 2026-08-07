@@ -1,15 +1,12 @@
 #include "common.h"
+#include "game/menu_types.h"
 #include "game/vector.h"
 #include "game/render.h"
 void GameDrawMenuButton(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7,
                    s32 a8, s32 a9, s32 a10);
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
-typedef struct ColorTable {
-    Rgb colors[18];
-} ColorTable;
-
-extern ColorTable g_PaintColorTable;
+extern PaintColorTable g_PaintColorTable;
 extern s32 D_8009B290;
 extern s32 g_MenuAltLayout;
 
@@ -18,12 +15,12 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
 
 /* The 18-swatch PAINT COLOR strip with its selection frame and enlarged preview. */
 s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
-    ColorTable localTable;
+    PaintColorTable localTable;
     void *ot;
     s32 progress;
     s32 wideOffset;
     s32 phase;
-    ColorTable *new_var;
+    PaintColorTable *new_var;
     s32 yBase;
     s32 xBase;
     u8 sineByte;
@@ -37,7 +34,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
     s32 i;
     s32 colorIndex;
     s32 next;
-    ColorTable *srcTable;
+    PaintColorTable *srcTable;
     Rgb *color;
 
     ot = *(void **)0x1F800004;

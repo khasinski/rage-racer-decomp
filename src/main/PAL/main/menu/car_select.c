@@ -200,14 +200,14 @@ s32 DrawCarSelectScreen(s32 arg0) {
 
 void UpdateOwnedCarNeighbours(void) {
     s32 index;
-    GameCarEntry *ptr;
+    CarEntry *ptr;
 
     g_PrevOwnedCarIndex = -1;
     index = g_PlayerCarIndex - 1;
     if (index >= 0) {
         s32 one = 1;
         s32 offset = index * 8;
-        ptr = (GameCarEntry *)(offset + (s32)g_CarTable);
+        ptr = (CarEntry *)(offset + (s32)g_CarTable);
         while (index >= 0) {
             if (ptr->enabled == one) {
                 g_PrevOwnedCarIndex = index;
@@ -223,7 +223,7 @@ void UpdateOwnedCarNeighbours(void) {
     if (index < 13) {
         s32 one = 1;
         s32 offset = index * 8;
-        ptr = (GameCarEntry *)(offset + (s32)g_CarTable);
+        ptr = (CarEntry *)(offset + (s32)g_CarTable);
         while (index < 13) {
             if (ptr->enabled == one) {
                 g_NextOwnedCarIndex = index;
@@ -240,8 +240,8 @@ s32 GetCarUnlockLevel(s32 model);
 void RefreshCarUnlockState(void) {
     s32 index;
     s32 value;
-    GameCarEntry *ptr;
-    GameCarEntry *enabledPtr;
+    CarEntry *ptr;
+    CarEntry *enabledPtr;
     s32 byte;
     s32 enabledBase;
 
@@ -250,7 +250,7 @@ void RefreshCarUnlockState(void) {
     if (D_8009B33C != 0) {
         index = 12;
         enabledBase = (s32)g_CarTable;
-        enabledPtr = (GameCarEntry *)(enabledBase + 0x60);
+        enabledPtr = (CarEntry *)(enabledBase + 0x60);
 while (1) {
         byte = enabledPtr->enabled;
         enabledPtr--;
@@ -270,7 +270,7 @@ do {
         value = GetCarUnlockLevel(index);
         {
             s32 offset = index * 8;
-            ptr = (GameCarEntry *)(offset + (s32)g_CarTable);
+            ptr = (CarEntry *)(offset + (s32)g_CarTable);
         }
         if (ptr->enabled == 0) {
             if (g_RaceProgress->maxClassReached < 4) {

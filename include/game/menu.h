@@ -2,25 +2,9 @@
 #define GAME_MENU_H
 
 #include "common.h"
+#include "game/menu_types.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
-
-/* One class row: the best finishing place, -1 until the class is unlocked
- * and 0 once it is, plus a clear counter capped at 99 and drawn as two
- * digits. The two halfwords are also reached as separate strided arrays. */
-typedef struct GameScoreRecord {
-    s16 place;
-    u16 clears;
-} GameScoreRecord;
-
-/* Ranking / time high-score record row; tables g_RankingRecords (ranking) and
- * g_TimeRecords (time), both [][4][5]. */
-typedef struct S22 {
-    s8 pad[8];   /* 0x00 name[8] */
-    s32 v8;      /* 0x08 */
-    s16 vC;      /* 0x0C */
-    s16 vE;      /* 0x0E */
-} S22;
 
 /*
  * Menu / UI state block at 0x8009B200 (~0x550 bytes). Retail addresses it field
@@ -86,10 +70,10 @@ extern s32 GameMenuLoadPhase;
 extern s32 g_MenuAltLayout;
 extern s32 g_MenuAltLayoutSetting;
 
-/* The two S22[series][course][5] high-score tables kept in the save block:
+/* The two RaceRecord[series][course][5] high-score tables kept in the save block:
  * race ranking (+0x9A4) and time ranking (+0x8DC). */
-extern S22 g_RankingRecords[][4][5];
-extern S22 g_TimeRecords[][4][5];
+extern RaceRecord g_RankingRecords[][4][5];
+extern RaceRecord g_TimeRecords[][4][5];
 
 /* The team-name entry buffer and its length, capped at 6 characters. The pair is
  * also the first bytes of the memory-card save header row. */

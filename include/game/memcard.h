@@ -11,7 +11,7 @@
  */
 /* Geometry of the payload. The file around it is icon + header + this block
  * + header again; see the layout note above. */
-/* The three GameCarEntry tables inside the block: grand prix, extra grand
+/* The three CarEntry tables inside the block: grand prix, extra grand
  * prix and time attack, 13 rows of 8 bytes each. */
 #define MC_GP_CARS_OFS    0x58
 #define MC_EXTRA_CARS_OFS 0xC0
@@ -80,7 +80,7 @@ typedef struct GameSaveBlock {
     u16 bgmSelection;             /* +0x4C g_BgmSelection */
     u16 advancedUnlocked;  /* +0x4E g_AdvancedSeriesUnlocked */
     s32 maxClassReached[2];/* +0x50 g_MaxClassReached */
-    u8 carTables[3][0x68]; /* +0x58 the three GameCarEntry tables, 13 rows of 8 */
+    u8 carTables[3][0x68]; /* +0x58 the three CarEntry tables, 13 rows of 8 */
     u16 classRecords[0x16];      /* +0x190 g_ClassRecords */
     u16 unlockFlags[0x10];      /* +0x1BC g_TeamLogoClut */
     u16 teamLogoCanvas[0x400];     /* +0x1DC g_TeamLogoCanvas, the 0x800-byte scroll/VRAM buffer */

@@ -9,7 +9,7 @@
  * the save file keeps; whether the transmission row can be opened at all is a
  * property of the car's own loaded data (byte 8 of it), not of this entry.
  */
-typedef struct GameCarEntry {
+typedef struct CarEntry {
     u8 modelVariant;
     u8 tireCompound;  /* +0x01 CUSTOMIZE row 0, five settings */
     u8 transmission;  /* +0x02 CUSTOMIZE row 1, 0 automatic, 1 manual */
@@ -17,7 +17,7 @@ typedef struct GameCarEntry {
     u8 paintColor2;
     u8 enabled;
     u8 pad6[2];
-} GameCarEntry;
+} CarEntry;
 
 typedef struct GameCarRuntime {
     s32 x;
@@ -170,14 +170,14 @@ extern GameCarRuntime *g_RankedCars[4];
 
 /* Active car-entry table; repointed at one of the three 13-entry tables below
  * per title-menu row, so it is a pointer rather than a fixed array. */
-extern GameCarEntry *g_CarTable;
+extern CarEntry *g_CarTable;
 
 /* The three saved car-entry tables, one per title-menu race row (0 GRAND PRIX,
  * 1 EXTRA GRAND PRIX, 2 TIME ATTACK); save block +0x50 / +0xC0 / +0x128. The
  * shops raise the Time Attack row to the best spec reached in either GP file. */
-extern GameCarEntry g_GrandPrixCars[];
-extern GameCarEntry g_ExtraGrandPrixCars[];
-extern GameCarEntry g_TimeAttackCars[];
+extern CarEntry g_GrandPrixCars[];
+extern CarEntry g_ExtraGrandPrixCars[];
+extern CarEntry g_TimeAttackCars[];
 
 /* g_Cars index the replay / attract camera is following. */
 extern s32 g_CameraCarIndex;
