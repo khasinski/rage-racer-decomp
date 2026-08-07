@@ -70,7 +70,8 @@ void DrawShuttleScenery(s32 arg0) {
     Matrix *mtx1Ptr;
     s32 drawValue;
     s32 offset;
-    register s32 bucket asm("$2");
+    s32 wordIndex;
+    s32 bitIndex;
     s32 bit;
     s32 firstValue;
     s32 value;
@@ -83,21 +84,20 @@ void DrawShuttleScenery(s32 arg0) {
     base = g_ShuttleScenery;
     state = (GameShuttleScenery *)((u8 *)base + offset);
     firstValue = state->z;
-    bucket = firstValue + 0x400;
-    if (bucket < 0) {
-        bucket = firstValue + 0xBFF;
+    wordIndex = firstValue + 0x400;
+    if (wordIndex < 0) {
+        wordIndex = firstValue + 0xBFF;
     }
-    bucket >>= 11;
-    bucket <<= 2;
+    wordIndex >>= 11;
     value = state->x;
     visibility = g_VisibleCellMask;
     bit = value + 0x400;
-    wordPtr = (u32 *)(bucket + (s32)visibility);
+    wordPtr = (u32 *)((wordIndex << 2) + (s32)visibility);
     if (bit < 0) {
         bit = value + 0xBFF;
     }
-    bucket = bit >> 11;
-    visible = 1 << bucket;
+    bitIndex = bit >> 11;
+    visible = 1 << bitIndex;
     visible &= *wordPtr;
 
     if ((visible != 0) || (g_CourseIndex == 2)) {
