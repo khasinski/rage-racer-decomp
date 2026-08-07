@@ -3,7 +3,7 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 
-s32 DrawClassChangeCurtain(s32 arg0) {
+s32 DrawClassChangeCurtain(s32 step) {
     void *scratch;
     s32 delta;
     register s32 value asm("$16");
@@ -18,22 +18,22 @@ s32 DrawClassChangeCurtain(s32 arg0) {
     s32 yArg;
 
     scratch = SCRATCH_OT_BASE;
-    delta = arg0;
+    delta = step;
 
     if (delta == 0) {
-        D_8007FB3C = 0;
+        g_ClassChangeCurtainSlide = 0;
         return temp;
     } else {
         if (delta < 0) {
-            temp = D_8007FB3C;
+            temp = g_ClassChangeCurtainSlide;
             { s32 rel = temp; temp = delta + rel; }
-            D_8007FB3C = temp;
+            g_ClassChangeCurtainSlide = temp;
             if (temp < 0) {
-                D_8007FB3C = 0;
+                g_ClassChangeCurtainSlide = 0;
             }
         }
 
-        value = D_8007FB3C;
+        value = g_ClassChangeCurtainSlide;
         if (value >= 0 && g_MenuAltLayout == 0) {
             if (value >= 0x10) {
                 value = 0xF;
@@ -59,15 +59,15 @@ s32 DrawClassChangeCurtain(s32 arg0) {
         }
 
         if (delta > 0) {
-            temp = D_8007FB3C;
+            temp = g_ClassChangeCurtainSlide;
             { s32 rel = temp; temp = delta + rel; }
-            D_8007FB3C = temp;
+            g_ClassChangeCurtainSlide = temp;
             if (temp >= 0x1A) {
-                D_8007FB3C = 0x19;
+                g_ClassChangeCurtainSlide = 0x19;
             }
         }
     }
 
-    value = D_8007FB3C;
+    value = g_ClassChangeCurtainSlide;
     return value;
 }

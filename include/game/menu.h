@@ -439,7 +439,8 @@ extern const char D_80011920[4];
 extern const char D_80011924[4];
 extern const char D_80011928[4];
 extern const char D_8001192C[8];
-extern u8 D_80011B5C[];
+/* "%d": the only format string the menu code passes to LibcSprintf. */
+extern u8 g_FormatDecimal[];
 extern s32 D_8007C744;
 extern u8 D_8007C7CC[];
 extern u8 D_8007D24C;
@@ -455,7 +456,7 @@ extern s32 D_8007FB20;
 extern s32 D_8007FB24;
 extern s32 D_8007FB28;
 extern s32 D_8007FB2C;
-extern s32 D_8007FB3C;
+extern s32 g_ClassChangeCurtainSlide;
 extern s32 D_8007FB40;
 extern s32 D_8007FB44;
 extern s32 D_8007FB48;
@@ -493,7 +494,8 @@ extern u8 D_80082A00;
 extern u8 D_80082A54;
 extern s32 D_80082D80[];
 extern s32 D_80082E3C[];
-extern s32 D_80082E70[];
+/* The eight PS / rpm / kgm captions DrawEngineSpecLabel picks between. */
+extern s32 g_EngineSpecLabels[];
 extern s32 D_80082EA4;
 extern s32 D_80082EA8;
 extern s32 D_80082EB0;

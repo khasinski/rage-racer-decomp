@@ -8,11 +8,6 @@
 #include "psyq/gpu.h"
 #include "psyq/snd.h"
 
-struct Entry_5ACA0 {
-    u8 f0;
-    u8 f1;
-    u8 pad[6];
-};
 extern u8 g_PadType;
 
 void GameDrawSolidRectWide(void *, s32, s32, s32, s32, s32, s32, s32, s32) asm("DrawSolidRect");
@@ -53,7 +48,7 @@ void UpdateMenuMode(void) {
     }
     g_MenuScreenUpdate[g_MenuScreen]();
 
-    DrawCarSpecGraph(D_8009B324, ((struct Entry_5ACA0 *)g_CarTable)[(g_MenuScreen == 0xB) ? g_CarListCursor : g_PlayerCarIndex].f1);
+    DrawCarSpecGraph(D_8009B324, g_CarTable[(g_MenuScreen == MENU_SCREEN_CAR_SHOP) ? g_CarListCursor : g_PlayerCarIndex].tireCompound);
 
     {
         register s32 flag asm("$6");
@@ -94,7 +89,7 @@ void TickSequenceAudio(void) {
 
 extern u8 D_801E8AFC;
 
-s32 SpuTransferStatus(void *arg0, s32 arg1);
+s32 SpuTransferStatus(void *buffer, s32 mode);
 
 s32 IsSpuTransferDone(void) {
     u8 *base;
@@ -113,18 +108,20 @@ s32 IsSpuTransferDone(void) {
     return (value0 << 16) | (s16)value1;
 }
 
-s32 SetSoundToneTableEntry(s32 arg0, s32 arg1, s32 arg2) {
+/* Reads one tone out of the 2x6 g_SoundSlotTone grid, and writes it too when
+ * `tone` is not negative. Returns what was there before. */
+s32 SetSoundToneTableEntry(s32 slot, s32 vabSlot, s32 tone) {
     s16 *base = g_SoundSlotTone;
     s16 *row;
     s16 *entry;
     s32 old;
 
-    row = (s16 *)((s32)base + (arg0 * 4));
-    entry = (s16 *)((arg1 * 2) + (s32)row);
+    row = (s16 *)((s32)base + (slot * 4));
+    entry = (s16 *)((vabSlot * 2) + (s32)row);
     old = *entry;
 
-    if (arg2 >= 0) {
-        *entry = arg2;
+    if (tone >= 0) {
+        *entry = tone;
     }
     return old;
 }
