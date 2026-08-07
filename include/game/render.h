@@ -44,102 +44,11 @@ typedef struct CamRow {
     s16 horizon; /* 0x12 */
 } CamRow;
 
-typedef struct GameScratchpadRenderState {
-    s32 pad0;
-    void *primData;
-    u8 pad8[0x14];
-    s32 depth;
-    u8 pad20[8];
-    Matrix matrix;
-    u8 pad48[0x20];
-    s32 orderingFlag;
-    s32 mode;
-    u8 pad70[8];
-    s16 x0;
-    s16 y0;
-    s16 x1;
-    s16 y1;
-} GameScratchpadRenderState;
-
-/*
- * The same block, addressed the way the code that installs it addresses it.
- * The hand-written GTE engine always runs with $a0 = 0x1F800000 and reads
- * these words by offset, so each name below is what the engine does with the
- * word, cited from the disassembly. `pad48` of the struct above covers
- * 0x48..0x67; the struct has no field names for those yet.
- *
- * These are macros, not the `extern T x asm("0x1F8000NN")` spelling used in
- * render/set_gte_light_matrix.c: that spelling is a const-CSE lever and moves
- * the emitted code, a macro cannot.
- */
-
-/* View transform consumed by the model render path. SetCameraRotMatrix builds
- * the matrix at 0x28 from the three angles; the position words are the camera
- * translation passed to SetGteObjectMatrix. */
-#define SCRATCH_VIEW_X       (*(s32 *)0x1F800008)
-#define SCRATCH_VIEW_Y       (*(s32 *)0x1F80000C)
-#define SCRATCH_VIEW_Z       (*(s32 *)0x1F800010)
-#define SCRATCH_VIEW_ANGLE_X (*(s32 *)0x1F800018)
-#define SCRATCH_VIEW_ANGLE_Y (*(s32 *)0x1F80001C)
-#define SCRATCH_VIEW_ANGLE_Z (*(s32 *)0x1F800020)
-#define SCRATCH_VIEW_MATRIX_GTE ((Matrix *)0x1F800028)
-
-/* Course object bank. SubmitCourseModel / SubmitCourseModel2 (0x800296BC,
- * 0x80029E58) load it and index by model id; size is g_CourseModelCount. */
-#define SPAD_COURSE_BANK    (*(s32 *)0x1F800048)
-
-/* Model bank cursor, pointed at one g_ModelBanks entry by SelectModelBank.
- * MODELS is the model pointer array (bank + 0xC) that SubmitModel indexes by
- * id << 2 (0x80028DEC); NORMALS is bank[2] rebased, the 8-byte SVECTORs the
- * Emit*G4 / Emit*GT4 quad builders index by id << 3 and feed to ncct/nccs
- * (0x80029168). TABLE1 is bank[1] rebased; nothing in the disassembled engine
- * reads it, so it is named for where it comes from, not what it holds. */
-#define SPAD_MODEL_MODELS   (*(s32 *)0x1F800050)
-#define SPAD_MODEL_TABLE1   (*(s32 *)0x1F800054)
-#define SPAD_MODEL_NORMALS  (*(s32 *)0x1F800058)
-
-/* Terrain: the per-cell record array SubmitTerrainCells indexes by cell id
- * (0x80028078) and the face array SubmitTerrainCellFaces walks (0x80028168). */
-#define SPAD_CELL_TABLE     (*(s32 *)0x1F80005C)
-#define SPAD_CELL_FACES     (*(s32 *)0x1F800060)
-
-/* The srav amount that turns a transformed Z into an ordering-table index:
- * OT_SHIFT on the cell-face path (0x800283C0), FACE_OT_SHIFT on the mode-1
- * path, where it is read as a halfword (0x80028474). InitRenderState sets
- * OT_SHIFT from its parameter, 5 for the race scene and 1 for two menus. */
-#define SPAD_FACE_OT_SHIFT  (*(s32 *)0x1F80006C)
-
-/* Mirror flag. Non-zero makes the engine negate the GTE rotation matrix
- * (0x80028000, 0x80028E00); track/draw_terrain_cells.c compares it against
- * g_MirrorMode. Same word as `orderingFlag` above. */
-#define SPAD_MIRROR         (*(s32 *)0x1F800068)
-
-/* Two packed GTE RGBC words, read whole with lwc2 into cop2 register 6:
- * EmitPolyFT4Fog takes 0x70 (0x80029468), EmitPolyGT4Fog takes 0x74
- * (0x80029620). The fourth byte is the GPU primitive code the emitter stamps
- * into the packet, 0x2C for a 40-byte POLY_FT4 and 0x3C for a 52-byte
- * POLY_GT4. */
-#define SPAD_FT4_R          (*(u8 *)0x1F800070)
-#define SPAD_FT4_G          (*(u8 *)0x1F800071)
-#define SPAD_FT4_B          (*(u8 *)0x1F800072)
-#define SPAD_FT4_CODE       (*(u8 *)0x1F800073)
-#define SPAD_GT4_R          (*(u8 *)0x1F800074)
-#define SPAD_GT4_G          (*(u8 *)0x1F800075)
-#define SPAD_GT4_B          (*(u8 *)0x1F800076)
-#define SPAD_GT4_CODE       (*(u8 *)0x1F800077)
-
-/* Screen clip rectangle every emitter rejects primitives against; the same
- * four halfwords as x0/y0/x1/y1 above. menu/frontend.c raises Y1 to 0x1E0 for
- * the 480-line modes. */
-#define SPAD_CLIP_X0        (*(u16 *)0x1F800078)
-#define SPAD_CLIP_Y0        (*(u16 *)0x1F80007A)
-#define SPAD_CLIP_X1        (*(u16 *)0x1F80007C)
-#define SPAD_CLIP_Y1        (*(u16 *)0x1F80007E)
 
 /* One display buffer, which is what InitRenderState sets that rectangle to.
  * See SetupDisplay240 below: the 240 mode is "two 320x240 buffers stacked at
  * y=0 / y=0xF0" and sets the GTE projection with SetGeomScreen(0x140). The
- * 480 mode is the pair treated as one, which is the SPAD_CLIP_Y1 = 0x1E0 that
+ * 480 mode is the pair treated as one, which is the SCRATCH_CLIP_Y1 = 0x1E0 that
  * menu/frontend.c writes. */
 #define SCREEN_WIDTH   0x140
 #define SCREEN_HEIGHT  0xF0

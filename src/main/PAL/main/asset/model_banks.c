@@ -24,23 +24,23 @@ s32 GetCarUnlockLevel(s32 model) {
 }
 
 void InitRenderState(s32 otShift) {
-    SPAD_FACE_OT_SHIFT = 0xA;
-    SPAD_FT4_B = 0x80;
-    SPAD_FT4_G = 0x80;
-    SPAD_FT4_R = 0x80;
-    SPAD_FT4_CODE = POLY_FT4_CODE;
-    SPAD_GT4_B = 0xFF;
-    SPAD_GT4_G = 0xFF;
-    SPAD_GT4_R = 0xFF;
-    SPAD_GT4_CODE = POLY_GT4_CODE;
-    SPAD_CLIP_X1 = SCREEN_WIDTH;
-    SPAD_CLIP_Y1 = SCREEN_HEIGHT;
+    SCRATCH_FACE_OT_SHIFT = 0xA;
+    SCRATCH_FT4_B = 0x80;
+    SCRATCH_FT4_G = 0x80;
+    SCRATCH_FT4_R = 0x80;
+    SCRATCH_FT4_CODE = POLY_FT4_CODE;
+    SCRATCH_GT4_B = 0xFF;
+    SCRATCH_GT4_G = 0xFF;
+    SCRATCH_GT4_R = 0xFF;
+    SCRATCH_GT4_CODE = POLY_GT4_CODE;
+    SCRATCH_CLIP_X1 = SCREEN_WIDTH;
+    SCRATCH_CLIP_Y1 = SCREEN_HEIGHT;
     g_VisibleCellMask = &D_8019C86C;
-    SPAD_OT_SHIFT = otShift;
-    SPAD_CLIP_X0 = 0;
-    SPAD_CLIP_Y0 = 0;
+    SCRATCH_OT_SHIFT = otShift;
+    SCRATCH_CLIP_X0 = 0;
+    SCRATCH_CLIP_Y0 = 0;
     g_VisibleCellList = &D_8009EC94;
-    SPAD_MIRROR = g_MirrorMode;
+    SCRATCH_MIRROR = g_MirrorMode;
 }
 
 void RegisterModelBank(s32 *base, s32 index) {
@@ -87,12 +87,12 @@ void SelectModelBank(s32 index) {
     count = *entry;
     count = *(s32 *)count;
     bank = *entry;
-    SPAD_MODEL_TABLE1 = *(s32 *)(bank + 4);
+    SCRATCH_MODEL_TABLE1 = *(s32 *)(bank + 4);
     bank = *entry;
-    SPAD_MODEL_NORMALS = *(s32 *)(bank + 8);
+    SCRATCH_MODEL_NORMALS = *(s32 *)(bank + 8);
     bank = *entry;
     g_ModelBankCount = count;
-    SPAD_MODEL_MODELS = bank + 0xC;
+    SCRATCH_MODEL_MODELS = bank + 0xC;
 }
 
 void RegisterCourseModels(s32 *base) {
@@ -111,7 +111,7 @@ void RegisterCourseModels(s32 *base) {
     (void)&pad;
     ptr = base + 1;
     count = base[0];
-    SPAD_COURSE_BANK = (s32)ptr;
+    SCRATCH_COURSE_BANK = (s32)ptr;
     g_CourseModelCount = count;
     i = 0;
     if (count > 0) {
@@ -138,9 +138,9 @@ void InstallTerrainCellData(s32 *base) {
     base = (s32 *)((u8 *)base + CELL_VISIBILITY_TABLE_SIZE);
     ptr = base + 2;
     count = base[0];
-    SPAD_CELL_TABLE = (s32)ptr;
+    SCRATCH_CELL_TABLE = (s32)ptr;
     D_801E4144 = count;
-    SPAD_CELL_FACES = (s32)((u8 *)base + base[1]);
+    SCRATCH_CELL_FACES = (s32)((u8 *)base + base[1]);
     for (i = 0; i < count; i++) {
         *ptr = (s32)((u8 *)base + *ptr);
         ptr++;

@@ -6721,7 +6721,7 @@ which the grep does not even see. A `#define` for one of a pair of adjacent
 struct offsets would be noise.
 
 `0x80` and `0xFF` in `InitRenderState`, the RGB triples seeded into
-`SPAD_FT4_R/G/B` and `SPAD_GT4_R/G/B`. (`0x80` is the one value in this set that
+`SCRATCH_FT4_R/G/B` and `SCRATCH_GT4_R/G/B`. (`0x80` is the one value in this set that
 is named in one role and bare in another: as `CdRead`'s mode argument it is
 `CdlModeSpeed`, and here it is not.) The tempting name for `0x80` is
 "texture-modulation neutral", which is a real PS1 fact and the wrong one here:

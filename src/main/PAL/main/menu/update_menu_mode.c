@@ -39,9 +39,9 @@ void UpdateMenuMode(void) {
     GameDrawSolidRectWide(scratch, 0, 0, 0x140, 2, 0, 0, 0, 0xFF);
 
     if ((u32)(g_MenuScreen - 1) < 2) {
-        SPAD_OT_SHIFT = 1;
+        SCRATCH_OT_SHIFT = 1;
     } else {
-        SPAD_OT_SHIFT = 5;
+        SCRATCH_OT_SHIFT = 5;
     }
 
     if (g_MenuHandlerIndex > 0) {
