@@ -22,16 +22,8 @@ s32 encoded;
         }
         { s32 rel = encoded; encoded = value | rel; }
     } else {
-        register s32 value asm("$7") = 0xE1000000;
-
-        if (arg2 != 0) {
-            value = 0xE1000200;
-        }
-        encoded = arg3 & 0x9FF;
-        if (arg1 != 0) {
-            encoded |= 0x400;
-        }
-        { s32 rel = encoded; encoded = value | rel; }
+        encoded = 0xE1000000 | (arg2 ? 0x200 : 0) |
+                  (arg1 ? 0x400 : 0) | (arg3 & 0x9FF);
     }
     *(u32 *)&arg0[4] = encoded;
 }
