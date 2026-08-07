@@ -261,7 +261,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     register s32 gxBase asm("$2");
     s32 texY;
     s32 gyTemp;
-    register s32 gxTemp asm("$4");
+    register s32 drawValue asm("$4");
     if (d >= 0xC)
     {
       d = 0xB;
@@ -281,11 +281,10 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
         s32 syOffset;
         register s32 angleSource;
         register s32 angleValue;
-        register s32 modInput asm("$4");
         angleSource = D_8009B288;
         sy2Value = D_8007F934.value;
         angleValue = angleSource * 2;
-        modInput = angleValue;
+        drawValue = angleValue;
         sy2Value *= 4;
         sy2 = sy2Value + 0x88;
         sy2Arg = sy2;
@@ -294,12 +293,12 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
         sy += syOffset;
         if (angleValue < 0)
         {
-          modInput = angleValue + 0xFFF;
+          drawValue = angleValue + 0xFFF;
         }
-        modInput >>= 12;
-        modInput *= 0x1000;
-        modInput = angleValue - modInput;
-        clut = (rsin(modInput) / 64) - 0x41;
+        drawValue >>= 12;
+        drawValue *= 0x1000;
+        drawValue = angleValue - drawValue;
+        clut = (rsin(drawValue) / 64) - 0x41;
         DrawRectOutline(ot, sy2Arg, sy, D_8007F94C * 4, (s16) (D_8007F94C * 8), 0, clut, 0, ff);
       }
     }
@@ -314,14 +313,14 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     delta = 0x220 - D_8007F948;
     scaleDelta = (delta * D_8007F93C.value) / 272;
     gxBase = (g_TeamLogoRect.tx * 4) - 1;
-    gxTemp = gxBase + scaleDelta;
-    gx = gxTemp;
+    drawValue = gxBase + scaleDelta;
+    gx = drawValue;
     scaleDelta = (delta * D_8007F940) / 272;
     texY = (*(u8 *)(&g_TeamLogoRect.ty)) - 1;
     gyTemp = texY + scaleDelta;
     gxBase = gyTemp;
     gy = gxBase;
-    gx2 = gxTemp + (D_8007F948 / 8);
+    gx2 = drawValue + (D_8007F948 / 8);
     asm("" : : "r"(scaleDelta));
     gy2 = gxBase + (D_8007F948 / 8);
     clut = (g_TeamLogoRect.ty >> 4) & 0x10;
