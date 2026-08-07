@@ -60,46 +60,39 @@ long LoadClut(void *arg0, long arg1, long arg2) {
 }
 
 /* Fills the 0x1C-byte DRAWENV head. */
-void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h) {
-    u_char *envReg = env;
-    long xReg = x;
-    long yReg = y;
-    register long wReg asm("$16") = w;
-    long hReg = h;
-    long cmp;
+DrawEnv *SetDefDrawEnv(DrawEnv *env, long x, long y, long w, long h) {
     long dmaState;
     long graphType;
 
     dmaState = GetDMAInterruptState();
-    *(short *)&envReg[0x0] = xReg;
-    *(short *)&envReg[0x2] = yReg;
-    *(short *)&envReg[0x4] = wReg;
-    *(short *)&envReg[0xC] = 0;
-    *(short *)&envReg[0xE] = 0;
-    *(short *)&envReg[0x10] = 0;
-    *(short *)&envReg[0x12] = 0;
-    envReg[0x19] = 0;
-    envReg[0x1A] = 0;
-    envReg[0x1B] = 0;
-    envReg[0x16] = 1;
-    *(short *)&envReg[0x6] = hReg;
+    env->clip.x = x;
+    env->clip.y = y;
+    env->clip.w = w;
+    env->tw.x = 0;
+    env->tw.y = 0;
+    env->tw.w = 0;
+    env->tw.h = 0;
+    env->r0 = 0;
+    env->g0 = 0;
+    env->b0 = 0;
+    env->dtd = 1;
+    env->clip.h = h;
     if (dmaState != 0) {
-        cmp = hReg < 0x121;
+        env->dfe = h < 0x121;
     } else {
-        cmp = hReg < 0x101;
+        env->dfe = h < 0x101;
     }
-    envReg[0x17] = cmp;
-    *(short *)&envReg[0x8] = xReg;
-    *(short *)&envReg[0xA] = yReg;
+    env->ofs[0] = x;
+    env->ofs[1] = y;
 
     graphType = GetGraphType();
     if (graphType != 1) {
         GetGraphType();
     }
 
-    *(short *)&envReg[0x14] = 10;
-    envReg[0x18] = 0;
-    return envReg;
+    env->tpage = 10;
+    env->isbg = 0;
+    return env;
 }
 
 u_char *SetDefDispEnv(u_char *arg0, long arg1, long arg2, long arg3, long arg4) {

@@ -41,6 +41,10 @@ typedef struct DrawEnv {
     u_short tpage;
     u_char dtd;
     u_char dfe;
+    u_char isbg;
+    u_char r0;
+    u_char g0;
+    u_char b0;
 } DrawEnv;
 
 /*
@@ -309,7 +313,7 @@ long GetDrawEnv(long env);
 void DrawPrim(u_char *prim);
 /* Fills the 0x1C-byte DRAWENV head: clip, ofs, tw, tpage, dtd, dfe, isbg, rgb.
  * `dfe` comes from the buffer height and the DMA interrupt state. */
-void *SetDefDrawEnv(u_char *env, long x, long y, long w, long h);
+DrawEnv *SetDefDrawEnv(DrawEnv *env, long x, long y, long w, long h);
 /* Fills the 0x14-byte DISPENV: disp Rect, screen Rect, isinter, isrgb24.
  * Was bound to SetDefDrawEnv here; that was wrong (see docs/names.md 17). */
 u_char *SetDefDispEnv(u_char *env, long x, long y, long w, long h);

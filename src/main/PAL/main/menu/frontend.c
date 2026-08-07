@@ -219,8 +219,8 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
 
     base = (u8 *)g_FrameContexts;
     height = 0xF0;
-    SetDefDrawEnv(base, 0, 0, 0x140, height);
-    SetDefDrawEnv(D_801C0620, 0, 0xF0, 0x140, height);
+    SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
+    SetDefDrawEnv((DrawEnv *)D_801C0620, 0, 0xF0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0xF0, 0x140, height);
     SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
 
@@ -236,8 +236,8 @@ void SetupDisplay240(s32 arg0, s32 arg1, s32 arg2) {
         arg2 = 0x12;
         arg3 = 0x94;
         small_height = 0x24;
-        SetDefDrawEnv(ptr, arg1, arg2, arg3, small_height);
-        SetDefDrawEnv(D_801C0690, 0x56, 0x102, 0x94, small_height);
+        SetDefDrawEnv((DrawEnv *)ptr, arg1, arg2, arg3, small_height);
+        SetDefDrawEnv((DrawEnv *)D_801C0690, 0x56, 0x102, 0x94, small_height);
     }
 
     i = 0;
@@ -288,8 +288,8 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
     SetGeomScreen(0x140);
 
     height = 0x1E0;
-    SetDefDrawEnv(base, 0, 0, 0x140, height);
-    SetDefDrawEnv(D_801C0620, 0, 0, 0x140, height);
+    SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
+    SetDefDrawEnv((DrawEnv *)D_801C0620, 0, 0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0, 0x140, height);
     SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
 
