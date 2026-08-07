@@ -7,7 +7,6 @@ extern short *g_SndSpuRegs;
 /* One 16-byte block per voice, so voice n's left volume is
  * g_SndVoiceRegs[n * 8] and its right volume is g_SndVoiceRegs[n * 8 + 1]. */
 extern short g_SndVoiceRegs[];
-extern volatile u_char g_SndVoiceRegsVolRight[];
 extern volatile u_char g_SndVoiceRegsPitch[];
 extern short g_SndVoiceStateNote[];
 extern short g_SndVoiceStateProg[];

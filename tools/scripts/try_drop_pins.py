@@ -7,51 +7,31 @@ surrounding code settled, but nothing tells you which - so this tries each one
 in turn and keeps only the removals that leave the object file bit-identical.
 
 Verification is per object, not per link: it rebuilds the single .o and
-compares it with the baseline copy taken before the edit, which is both faster
-and stricter than `make check` (a stale .o cannot fake a pass).
+compares its code and data sections with a baseline taken before the edit,
+which is faster than `make check` and immune to the stale-object trap.
 
 Usage: try_drop_pins.py <file.c>...
 """
 
 import pathlib
 import re
-import shutil
-import subprocess
 import sys
 
-ROOT = pathlib.Path(__file__).resolve().parents[2]
-BUILD = ROOT / 'build' / 'PAL'
-CC = ROOT / 'tools' / 'scripts' / 'cc.sh'
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from objverify import compile_one, snapshot, try_edit
 
 PIN = re.compile(r'^(?P<indent>\s*)register\s+(?P<decl>.+?)\s+asm\("\$\d+"\)'
                  r'(?P<tail>\s*(?:=[^;]*)?;)\s*$', re.MULTILINE)
-
-
-def object_for(src):
-    return BUILD / (str(src.relative_to(ROOT)) + '.o')
-
-
-def compile_one(src):
-    obj = object_for(src)
-    obj.parent.mkdir(parents=True, exist_ok=True)
-    if obj.exists():
-        obj.unlink()  # never let a stale object answer the question
-    result = subprocess.run([str(CC), str(src.relative_to(ROOT)), str(obj.relative_to(ROOT))],
-                            cwd=ROOT, capture_output=True, text=True,
-                            errors='replace')
-    return result.returncode == 0 and obj.exists()
 
 
 def main(argv):
     dropped = kept = 0
     for name in argv:
         src = (ROOT / name).resolve()
-        obj = object_for(src)
-        if not compile_one(src):
+        baseline = snapshot(src)
+        if baseline is None:
             print('%s: baseline build failed, skipping' % name)
             continue
-        baseline = obj.with_suffix('.o.baseline')
-        shutil.copy(obj, baseline)
         original = src.read_text()
 
         pins = list(PIN.finditer(original))
@@ -64,8 +44,7 @@ def main(argv):
             m = attempt[index]
             replacement = '%s%s%s' % (m.group('indent'), m.group('decl'), m.group('tail'))
             candidate = text[:m.start()] + replacement + text[m.end():]
-            src.write_text(candidate)
-            if compile_one(src) and obj.read_bytes() == baseline.read_bytes():
+            if try_edit(src, text, candidate, baseline):
                 text = candidate
                 dropped += 1
                 print('  dropped: %s' % m.group(0).strip())

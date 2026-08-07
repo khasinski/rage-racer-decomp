@@ -5,13 +5,6 @@
 #include "game/cd.h"
 #include "game/audio.h"
 #include "game/race.h"
-extern GameRenderView *g_CarModelAsset;
-extern Matrix g_SceneLightMatrix;
-extern s32 g_ScratchRenderMode;
-s32 GetTrackZoneBlend(s32 arg0);
-void DrawPlayerCarModel(GameRenderObject *obj);
-extern u8 *g_CamRow;
-void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 extern s32 g_StreamReturnScene;
 void CdSync(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result);

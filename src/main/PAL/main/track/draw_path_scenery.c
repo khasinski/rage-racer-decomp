@@ -11,7 +11,6 @@
  * of the current rotation keyframe by InitPathScenery, which sees the same
  * eight bytes as one Blk8. */
 extern s16 g_PathSceneryRot[3];
-extern s16 g_PathSceneryX;
 extern s32 g_ScratchRenderMode;
 
 void DrawPathScenery(void) {

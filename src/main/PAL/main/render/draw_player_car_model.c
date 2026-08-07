@@ -300,7 +300,4 @@ void DrawCar(GameRenderObject *obj) {
         RestoreColorMatrix();
     }
 }
-
-extern s32 g_StreamReturnScene;
-void CdSync(s32 arg0, s32 arg1);
 s32 CdControl(s32 com, void *param, s32 result);

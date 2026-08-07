@@ -156,7 +156,6 @@ typedef struct
   GameEnvColor from;
   GameEnvColor to;
 } GameEnvColorSlot;
-extern GameEnvColorSlot g_EnvColors[];
 extern GameEnvColor g_EnvColor1Red;
 extern GameEnvColor g_EnvColor2Red;
 extern GameEnvColor g_EnvColor4Red;

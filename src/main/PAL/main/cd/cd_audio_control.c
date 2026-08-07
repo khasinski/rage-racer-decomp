@@ -1,8 +1,5 @@
 #include "common.h"
 #include "game/cd.h"
-
-extern s32 g_VisibleCellList;
-
 void RequestCdTrack(s32 track) {
     g_CdTrackPending = (u8)track;
     g_CdTrackStep = 0;
