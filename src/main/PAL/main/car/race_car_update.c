@@ -773,7 +773,6 @@ void SeedFinishCamera(void *arg0) {
     GameTrackPoint *point;
     register s32 index asm("$3");
     s32 lastIndex;
-    register s32 value asm("$3");
 
     base = arg0;
     asm("" : "=r"(base) : "0"(base));
@@ -802,21 +801,21 @@ void SeedFinishCamera(void *arg0) {
     index = ((GameCarRuntime *)base)->trackPointIndex;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
-    value = g_CameraCar.speed;
+    index = g_CameraCar.speed;
     word0 = point->y;
-    value += 0x40;
+    index += 0x40;
     word0 -= 0x40;
-    g_CameraCar.speed = value;
+    g_CameraCar.speed = index;
     g_CameraCar.y = word0;
 
-    value = *(s16 *)((u8 *)base + 0xB8);
+    index = *(s16 *)((u8 *)base + 0xB8);
     lastIndex = ((GameCarRuntime *)base)->trackPointIndex;
-    value <<= 11;
+    index <<= 11;
     point = (GameTrackPoint *)((lastIndex * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
-    value += 0xC00;
-    value -= point->angle;
-    g_CameraCar.headingAngle = value;
-    D_801E3F60 = value;
-    g_CameraCar.angleY = value;
+    index += 0xC00;
+    index -= point->angle;
+    g_CameraCar.headingAngle = index;
+    D_801E3F60 = index;
+    g_CameraCar.angleY = index;
 }
