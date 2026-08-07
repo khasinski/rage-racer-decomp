@@ -172,26 +172,16 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
 }
 
 u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) {
-    register u_long x asm("$2");
-    register u_long y asm("$3");
     volatile u_char *modep = g_GraphType;
+    u_long mode;
 
-    x = *modep;
-    x = x - 1;
-    x = x < 2U;
-    y = arg1 & 0xFFF;
-
-    if (x == 0) {
-        y = arg1 & 0x7FF;
-        y <<= 11;
-        x = arg0 & 0x7FF;
-    } else {
-        y <<= 12;
-        x = arg0 & 0xFFF;
+    mode = *modep;
+    mode = mode - 1;
+    mode = mode < 2U;
+    if (mode != 0) {
+        return 0xE5000000 | ((arg1 & 0xFFF) << 12) | (arg0 & 0xFFF);
     }
-
-    x |= 0xE5000000;
-    return y | x;
+    return 0xE5000000 | ((arg1 & 0x7FF) << 11) | (arg0 & 0x7FF);
 }
 
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {
