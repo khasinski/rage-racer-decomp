@@ -56,13 +56,12 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
             *(u_short *)(base + 11) = value;
         }
     } else {
-        register Callback zero asm("$0");
         u_long bit;
         register u_long activeMask asm("$3");
 
         bit = 1 << index;
         bit = ~bit;
-        *slot = zero;
+        *slot = callback;
         activeMask = g_IntrCallbackMask;
         pendingMask &= bit;
         activeMask &= bit;
