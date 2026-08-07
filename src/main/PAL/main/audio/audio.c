@@ -40,8 +40,9 @@ void SetEffectVoicesEnabled(s32 arg0) {
 }
 
 void ResetSoundState(void) {
+    register s32 i asm("$4");
+
     {
-        register s32 i asm("$4");
         s32 *ptr;
 
         i = 5;
@@ -52,7 +53,6 @@ void ResetSoundState(void) {
     }
 
     {
-        register s32 i asm("$4");
         s32 neg;
         s32 *ptr;
         s32 offset;
@@ -73,43 +73,45 @@ void ResetSoundState(void) {
     }
 
     {
-        s32 i;
-        s32 neg;
-        s32 value;
         register s32 offset asm("$3");
 
-        i = 0;
-        neg = -1;
-        value = 0x1E00;
-        offset = 0;
-        for (; i < 4; i++) {
-            *(s32 *)((u8 *)&g_EffectVoices[0].state + offset) = neg;
-            *(s32 *)((u8 *)&g_EffectVoices[0].note + offset) = neg;
-            *(s32 *)((u8 *)&g_EffectVoices[0].tone + offset) = neg;
-            *(s32 *)((u8 *)&g_EffectVoices[0].pitch + offset) = value;
-            *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset) = 0;
-            offset += 0x14;
+        {
+            s32 i;
+            s32 neg;
+            s32 value;
+
+            i = 0;
+            neg = -1;
+            value = 0x1E00;
+            offset = 0;
+            for (; i < 4; i++) {
+                *(s32 *)((u8 *)&g_EffectVoices[0].state + offset) = neg;
+                *(s32 *)((u8 *)&g_EffectVoices[0].note + offset) = neg;
+                *(s32 *)((u8 *)&g_EffectVoices[0].tone + offset) = neg;
+                *(s32 *)((u8 *)&g_EffectVoices[0].pitch + offset) = value;
+                *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset) = 0;
+                offset += 0x14;
+            }
         }
-    }
 
-    {
-        register s32 eighty asm("$3");
-        s32 value;
+        {
+            s32 value;
 
-        eighty = 0x80;
-        value = -1;
-        g_EngineSoundBank = value;
-        g_PanVoiceVolumeR = value;
-        g_PanVoiceVolumeL = value;
-        g_IndexedEffectIndexPrev = value;
-        g_IndexedEffectIndex = value;
-        value = 0x1E00;
-        g_IndexedEffectPitch = value;
-        value = 1;
-        g_SoundScale.scale = eighty;
-        g_PanVoiceActive = 0;
-        g_SoundSlotVolumeScale = eighty;
-        g_AudioSlotMask = value;
+            offset = 0x80;
+            value = -1;
+            g_EngineSoundBank = value;
+            g_PanVoiceVolumeR = value;
+            g_PanVoiceVolumeL = value;
+            g_IndexedEffectIndexPrev = value;
+            g_IndexedEffectIndex = value;
+            value = 0x1E00;
+            g_IndexedEffectPitch = value;
+            value = 1;
+            g_SoundScale.scale = offset;
+            g_PanVoiceActive = 0;
+            g_SoundSlotVolumeScale = offset;
+            g_AudioSlotMask = value;
+        }
     }
 }
 
