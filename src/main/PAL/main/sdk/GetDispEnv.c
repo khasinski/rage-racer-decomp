@@ -78,15 +78,14 @@ u_long Gpu_BuildDrawOffsetCmd(long x, long y);
 u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("_get_mode");
 
 void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {
-    u_long *out = packet;
     DrawEnvPacketSource *src = env;
+    u_long *out = packet;
     long count;
     long value;
     long coord;
     long limit;
     Rect clipped;
 
-    asm("" : "=r"(src) : "0"(src));
     out[1] = Gpu_BuildDrawAreaTopLeftCmd(src->clip.x, src->clip.y);
     out[2] = Gpu_BuildDrawAreaBottomRightCmd(
         (short)(src->clip.w + src->clip.x - 1),
