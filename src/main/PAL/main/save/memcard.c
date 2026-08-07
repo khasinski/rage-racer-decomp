@@ -912,118 +912,124 @@ s32 LoadSaveStateBlock(u8 *block) {
         }
     }
 
-    /* g_BestLapTimes / g_BestTotalTimes */
     {
-        register s32 i asm("$13") = 0;
-        register s32 j asm("$12");
-        s32 off;
-        for (; i < 2; i++) {
-            j = 0;
-            off = i * 32;
-            for (; j < 4; j++) {
-                *(s32 *)((u8 *)g_BestLapTimes + off) = *(s32 *)(base + off + 0x9DC);
-                *(s32 *)((u8 *)g_BestTotalTimes + off) = *(s32 *)(base + off + 0xA1C);
-                off += 8;
-            }
-        }
-    }
-
-    /* g_RankingRecords / g_TimeRecords */
-    {
-        s32 i = 0;
-        s32 j;
-        register s32 k asm("$7");
-        s32 *cb78 = (s32 *)g_TimeRecords;
-        register s32 *d1base asm("$24") = (s32 *)g_RankingRecords;
-        register s32 ioff asm("$16") = 0;
-        for (; i < 2; i++) {
-            register s32 iofc asm("$15");
-            register s32 *d1 asm("$14");
-            s32 joff;
-            j = 0;
-            iofc = ioff;
-            d1 = d1base;
-            joff = 0;
-            for (; j < 4; j++) {
-                register s32 dc asm("$2");
-                register s32 *dst2 asm("$11");
-                register s32 sb asm("$3");
-                s32 s2;
-                s32 *src2;
-                s32 *dst1;
-                register s32 *src1 asm("$6");
-                s32 s1;
-                k = 0;
-                dc = iofc + (s32)cb78;
-                dst2 = (s32 *)(joff + dc);
-                sb = iofc + (s32)base;
-                s2 = sb + 0xCDC;
-                src2 = (s32 *)(joff + s2);
-                dst1 = d1;
-                s1 = sb + 0xA5C;
-                src1 = (s32 *)(joff + s1);
-                do {
-                    s32 a0 = src1[0], a1 = src1[1], a2 = src1[2], a3 = src1[3];
-                    dst1[0] = a0;
-                    dst1[1] = a1;
-                    dst1[2] = a2;
-                    dst1[3] = a3;
-                    {
-                        s32 b0 = src2[0], b1 = src2[1], b2 = src2[2], b3 = src2[3];
-                        dst2[0] = b0;
-                        dst2[1] = b1;
-                        dst2[2] = b2;
-                        dst2[3] = b3;
-                    }
-                    dst2 += 4;
-                    __asm__("" : "=r"(src2) : "0"(src2), "r"(dst2));
-                    src2 += 4;
-                    __asm__("" : "=r"(dst1) : "0"(dst1), "r"(src2));
-                    dst1 += 4;
-                    __asm__("" : "=r"(k) : "0"(k), "r"(dst1));
-                    k++;
-                    __asm__("" : "=r"(src1) : "0"(src1), "r"(k));
-                    src1 += 4;
-                } while (k < 5);
-                d1 = (s32 *)((u8 *)d1 + 0x50);
-                joff += 0x50;
-            }
-            d1base = (s32 *)((u8 *)d1base + 0x140);
-            ioff += 0x140;
-        }
-    }
-
-    /* g_BestSectorTimes */
-    {
-        register s32 i asm("$13") = 0;
+        register s32 i asm("$13");
         register s32 j asm("$12");
         register s32 k asm("$7");
-        register s32 *e41e8 asm("$10") = g_BestSectorTimes;
-        s32 ioff = 0;
-        for (; i < 2; i++) {
-            s32 iofc;
-            s32 *dbase;
-            s32 joff;
-            j = 0;
-            iofc = ioff;
-            dbase = e41e8;
-            joff = 0;
-            for (; j < 4; j++) {
-                s32 *dst;
-                s32 sb;
-                s32 *src;
-                k = 0;
-                dst = dbase;
-                sb = iofc + (s32)base + 0xF5C;
-                src = (s32 *)(joff + sb);
-                for (; k < 3; k++) {
-                    *dst++ = *src++;
+
+        /* g_BestLapTimes / g_BestTotalTimes */
+        {
+            s32 off;
+            i = 0;
+            for (; i < 2; i++) {
+                j = 0;
+                off = i * 32;
+                for (; j < 4; j++) {
+                    *(s32 *)((u8 *)g_BestLapTimes + off) = *(s32 *)(base + off + 0x9DC);
+                    *(s32 *)((u8 *)g_BestTotalTimes + off) = *(s32 *)(base + off + 0xA1C);
+                    off += 8;
                 }
-                dbase = (s32 *)((u8 *)dbase + 0xC);
-                joff += 0xC;
             }
-            e41e8 = (s32 *)((u8 *)e41e8 + 0x30);
-            ioff += 0x30;
+        }
+
+        /* g_RankingRecords / g_TimeRecords */
+        {
+            s32 *cb78;
+            register s32 *d1base asm("$24");
+            register s32 ioff asm("$16");
+            i = 0;
+            cb78 = (s32 *)g_TimeRecords;
+            d1base = (s32 *)g_RankingRecords;
+            ioff = 0;
+            for (; i < 2; i++) {
+                register s32 iofc asm("$15");
+                register s32 *d1 asm("$14");
+                s32 joff;
+                j = 0;
+                iofc = ioff;
+                d1 = d1base;
+                joff = 0;
+                for (; j < 4; j++) {
+                    register s32 dc asm("$2");
+                    register s32 *dst2 asm("$11");
+                    register s32 sb asm("$3");
+                    s32 s2;
+                    s32 *src2;
+                    s32 *dst1;
+                    register s32 *src1 asm("$6");
+                    s32 s1;
+                    k = 0;
+                    dc = iofc + (s32)cb78;
+                    dst2 = (s32 *)(joff + dc);
+                    sb = iofc + (s32)base;
+                    s2 = sb + 0xCDC;
+                    src2 = (s32 *)(joff + s2);
+                    dst1 = d1;
+                    s1 = sb + 0xA5C;
+                    src1 = (s32 *)(joff + s1);
+                    do {
+                        s32 a0 = src1[0], a1 = src1[1], a2 = src1[2], a3 = src1[3];
+                        dst1[0] = a0;
+                        dst1[1] = a1;
+                        dst1[2] = a2;
+                        dst1[3] = a3;
+                        {
+                            s32 b0 = src2[0], b1 = src2[1], b2 = src2[2], b3 = src2[3];
+                            dst2[0] = b0;
+                            dst2[1] = b1;
+                            dst2[2] = b2;
+                            dst2[3] = b3;
+                        }
+                        dst2 += 4;
+                        __asm__("" : "=r"(src2) : "0"(src2), "r"(dst2));
+                        src2 += 4;
+                        __asm__("" : "=r"(dst1) : "0"(dst1), "r"(src2));
+                        dst1 += 4;
+                        __asm__("" : "=r"(k) : "0"(k), "r"(dst1));
+                        k++;
+                        __asm__("" : "=r"(src1) : "0"(src1), "r"(k));
+                        src1 += 4;
+                    } while (k < 5);
+                    d1 = (s32 *)((u8 *)d1 + 0x50);
+                    joff += 0x50;
+                }
+                d1base = (s32 *)((u8 *)d1base + 0x140);
+                ioff += 0x140;
+            }
+        }
+
+        /* g_BestSectorTimes */
+        {
+            register s32 *e41e8 asm("$10");
+            s32 ioff;
+            i = 0;
+            e41e8 = g_BestSectorTimes;
+            ioff = 0;
+            for (; i < 2; i++) {
+                s32 iofc;
+                s32 *dbase;
+                s32 joff;
+                j = 0;
+                iofc = ioff;
+                dbase = e41e8;
+                joff = 0;
+                for (; j < 4; j++) {
+                    s32 *dst;
+                    s32 sb;
+                    s32 *src;
+                    k = 0;
+                    dst = dbase;
+                    sb = iofc + (s32)base + 0xF5C;
+                    src = (s32 *)(joff + sb);
+                    for (; k < 3; k++) {
+                        *dst++ = *src++;
+                    }
+                    dbase = (s32 *)((u8 *)dbase + 0xC);
+                    joff += 0xC;
+                }
+                e41e8 = (s32 *)((u8 *)e41e8 + 0x30);
+                ioff += 0x30;
+            }
         }
     }
 
