@@ -38,14 +38,6 @@ typedef struct ShuttlePath {
 
 extern ShuttlePath g_ShuttlePathPoints[];
 
-/* Byte-offset views. These stay macros because the retail code keeps the
- * scaled index in a register and re-derives the address at every field; a
- * pointer variable would let the compiler hold the base instead. RAW() is
- * required on the reads that feed the state-> block below: there both sides
- * are in-aggregate and varying, so a plain member access stops the load
- * aliasing the neighbouring state-> stores and changes what the surrounding
- * barriers do -- see common.h. The reads that feed g_ShuttleScenery[1] need
- * no RAW, because that store carries the aggregate mark itself. */
 #define PATH(byteOffset) (*(ShuttlePath *)((u8 *)g_ShuttlePathPoints + (byteOffset)))
 #define ANGLES(byteOffset) (*(SVec *)((u8 *)g_ShuttlePathAngles + (byteOffset)))
 
@@ -54,9 +46,6 @@ void InitShuttleScenery(void) {
     s32 index;
     register s32 value asm("$2");
     register s32 v1 asm("$3");
-    s32 a4;
-    s32 a5;
-    register s32 a6 asm("$6");
 
     state = &g_ShuttleScenery[0];
     if ((g_CourseIndex & 3) == 2) {
@@ -82,15 +71,7 @@ void InitShuttleScenery(void) {
     }
     value = state->pathIndex;
     value <<= 5;
-    v1 = RAW(PATH(value).endpoint[0].x);
-    a4 = RAW(PATH(value).endpoint[0].y);
-    a5 = RAW(PATH(value).endpoint[0].z);
-    a6 = RAW(PATH(value).endpoint[0].w);
-    state->x = v1;
-    state->y = a4;
-    state->z = a5;
-    state->unk1C = a6;
-    asm("" ::: "memory");
+    *(Vec4 *)&state->x = PATH(value).endpoint[0];
     value = state->pathIndex;
     value <<= 3;
     v1 = RAW(ANGLES(value).vx);
