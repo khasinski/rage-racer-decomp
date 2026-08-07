@@ -20,6 +20,7 @@ void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal
     volatile u_long *p;
     u_char *dptr;
     volatile u_long *dp;
+    register long bv asm("$4");
 
     i = 0;
     while (*(volatile u_long *)(0x1F801088 + (ch << 4)) & 0x01000000) {
@@ -31,12 +32,10 @@ void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal
     }
 
     if (mode == 1) {
-        register long bv asm("$4");
         dptr = g_DmaDicr;
         bv = dptr[2];
         dptr[2] = bv | (1 << ch);
     } else {
-        register long bv asm("$4");
         dptr = g_DmaDicr;
         bv = dptr[2];
         dptr[2] = bv & ~(1 << ch);
