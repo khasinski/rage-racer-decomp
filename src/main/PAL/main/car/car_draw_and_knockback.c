@@ -234,7 +234,6 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     register s32 adjustedReg asm("$2");
     s32 raw;
     register s32 rawArg asm("$4");
-    register s32 field34 asm("$2");
     s32 adjusted;
     s32 fieldA4;
     s32 tmp;
@@ -253,9 +252,9 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     raw -= adjustedReg;
     rawArg = raw;
     raw <<= 16;
-    field34 = carReg->field_34;
+    adjustedReg = carReg->field_34;
     raw >>= 16;
-    if (field34 < 0) {
+    if (adjustedReg < 0) {
         adjusted = raw - 0x400;
     } else {
         adjusted = raw + 0x400;
@@ -312,9 +311,9 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     raw = 0xC00;
     raw -= adjustedReg;
     raw <<= 16;
-    field34 = carReg->field_34;
+    adjustedReg = carReg->field_34;
     raw >>= 16;
-    if (field34 < 0) {
+    if (adjustedReg < 0) {
         adjusted = raw - 0x400;
     } else {
         adjusted = raw + 0x400;
