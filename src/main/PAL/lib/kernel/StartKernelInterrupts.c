@@ -246,9 +246,8 @@ u_long setIntrDMA(long arg0, u_long arg1) {
             u_long value;
             long shift;
             register u_long mask asm("$2") = 0xFFFFFF;
-            register u_long zero asm("$0");
 
-            *slot = zero;
+            *slot = callback;
             value = *bits;
             shift = index + 0x10;
             value &= mask;
