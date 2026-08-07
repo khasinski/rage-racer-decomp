@@ -391,14 +391,12 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     } else {
 advance:
     {
-        register s32 next asm("$2");
-
-        next = *(s32 *)(state + 0x44);
+        raw = *(s32 *)(state + 0x44);
         scene = g_RaceSeries;
-        next++;
-        advanceOffset = next * 3;
+        raw++;
+        advanceOffset = raw * 3;
         advanceOffset <<= 2;
-        *(s32 *)(state + 0x44) = next;
+        *(s32 *)(state + 0x44) = raw;
     }
     raw = scene * 3;
     offset = (raw << 4) - raw;
