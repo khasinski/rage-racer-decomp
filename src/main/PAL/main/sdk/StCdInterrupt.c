@@ -38,7 +38,7 @@ void StCdInterrupt(void) {
     u8 readyResult[8];
     u8 *resultCursor;
     u32 i;
-    u32 frameCount;
+    u16 frameCount;
     u32 dmaControl;
     u16 headerState;
     u32 expectedState;
@@ -172,15 +172,9 @@ void StCdInterrupt(void) {
     }
 
     if (g_StActiveHeader->frame == 0) {
-        /* Retain the SDK's explicit unsigned normalization of nFrames. */
-        asm volatile(
-            "" : "=r"(frameCount)
-               : "0"(((volatile StStrHeader *)g_StActiveHeader)->nFrames));
+        frameCount = g_StActiveHeader->nFrames;
         endFrame = g_StEndFrame;
         g_StCurrentSector = 0;
-        /* Keep the sector reset ahead of the nFrames normalization. */
-        asm("" ::: "memory");
-        frameCount &= 0xFFFF;
         g_StCurrentFrameCount = frameCount;
 
         if (endFrame != 0 && frameCount >= endFrame) {
