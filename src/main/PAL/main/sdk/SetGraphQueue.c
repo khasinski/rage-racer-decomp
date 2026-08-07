@@ -59,7 +59,6 @@ void SetDispMask(long arg0) {
     long enable = arg0;
     u_char *clearPtr;
     GpuCallbacks *gpu;
-    long mask;
 
     if (*debug >= 2) {
         GPU_printf(D_80013520, enable);
@@ -70,16 +69,8 @@ void SetDispMask(long arg0) {
         MemFill(clearPtr, -1, 0x14);
     }
 
-    mask = 0x3000000;
-    asm("" : "=r"(mask) : "0"(mask));
     gpu = g_GpuFuncs;
-    if (enable == 0) {
-        mask |= 1;
-    } else {
-        mask = 0x3000000;
-    }
-
-    gpu->submit(mask);
+    gpu->submit(enable ? 0x3000000 : 0x3000001);
 }
 
 extern GpuCallbacks *g_GpuFuncs;
