@@ -170,6 +170,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
   s16 yB8;
   s16 yC8;
   register s32 phaseValue asm("$2");
+  register s32 secondaryValue asm("$3");
   register s32 drawValue asm("$4");
   a0v = arg0;
   a1v = arg1;
@@ -275,16 +276,15 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     {
       if (D_8007F954 == 0)
       {
-        register s32 sy2Value asm("$3");
         s32 syOffset;
         register s32 angleSource;
         register s32 angleValue;
         angleSource = D_8009B288;
-        sy2Value = D_8007F934.value;
+        secondaryValue = D_8007F934.value;
         angleValue = angleSource * 2;
         drawValue = angleValue;
-        sy2Value *= 4;
-        sy2 = sy2Value + 0x88;
+        secondaryValue *= 4;
+        sy2 = secondaryValue + 0x88;
         sy2Arg = sy2;
         syOffset = (D_8007F938 * 8) + 2;
         asm("" : "=r"(sy) : "0"(sy));
@@ -461,7 +461,6 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     for (; i < 4; i++)
     {
       register s32 shade asm("$21");
-      register s32 shadeArg asm("$3");
       register s32 swatchWidth asm("$7");
       s32 gxArg;
       s32 gyArg;
@@ -497,8 +496,8 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
       func_80046A2C_prepared(drawValue, x1 + 0x13, yA0 >> 16, swatchWidth, 0x18,
                             gxArg, gyArg, 0, 0, 0, (u16) pal, 1, 0, clutArg);
       asm("" : "=r"(shade) : "0"(shade));
-      shadeArg = (u8) shade;
-      DrawSprite(ot, x1, y1, 0x22, 0x32, shadeArg, 0xC0,
+      secondaryValue = (u8) shade;
+      DrawSprite(ot, x1, y1, 0x22, 0x32, secondaryValue, 0xC0,
                     0, 0, 0, 0x1F5, 1, 0, 0x1D);
       kreg += 0xC;
       vs7 += 0xC;
