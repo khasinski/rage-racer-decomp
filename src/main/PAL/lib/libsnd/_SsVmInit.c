@@ -18,7 +18,6 @@ void _SsVmInit(void) {
     register long index asm("$4");
     long offset;
     long shifted;
-    register long eighteen asm("$3");
     u_long lowMask;
     register u_long highMask asm("$6");
     register u_long lowBits asm("$3");
@@ -34,9 +33,9 @@ void _SsVmInit(void) {
         do {
             index = (short)i;
             offset = index * 0x34;
-            eighteen = 0x18;
+            lowBits = 0x18;
             shifted = index << 19;
-            *(short *)&g_SndVoiceStateAge[offset] = eighteen;
+            *(short *)&g_SndVoiceStateAge[offset] = lowBits;
             *(short *)&g_SndVoiceState[offset] = ff;
             g_SndVoiceStateStatus[offset] = 0;
             *(short *)&g_SndVoiceStatePitch[offset] = 0;
