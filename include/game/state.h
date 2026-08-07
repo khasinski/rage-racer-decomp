@@ -5,6 +5,13 @@
 #include "game/vector.h"
 #include "psyq/gte.h"
 
+/*
+ * The pad word block at 0x801E4368, filled by UpdatePadState from the raw
+ * BIOS buffer at g_PadBuffers:
+ *   +0x00 status, +0x01 pad type (0x41 digital, 0x23 NeGcon),
+ *   +0x02 g_PadHeld = ~(raw[0] << 8 | raw[1]), +0x04 previous frame,
+ *   +0x06 g_PadEdge2 = held & ~previous, +0x08 g_PadEdge, +0x0A.. analog axes.
+ */
 typedef struct PadState {
     u8 unk0;
     u8 unk1;
@@ -21,7 +28,11 @@ typedef struct PadState {
     s16 unk16;
 } PadState;
 
-/* Game-facing button bits after UpdatePadState has inverted the BIOS packet. */
+/*
+ * Game-facing button bits after UpdatePadState has inverted the BIOS packet.
+ * The bit order is the game's own remap, not the hardware one, so CONFIRM is
+ * cross|circle|start and CANCEL is triangle|square.
+ */
 enum PadButton {
     PAD_BUTTON_START = 0x800,
     PAD_BUTTON_CONFIRM = 0x860,

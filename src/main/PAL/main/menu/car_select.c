@@ -307,10 +307,6 @@ extern u8 *g_CourseProgress;
 void RequestCarModel(s32 carIndex);
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight)
 ;
-void DrawCarShopPricePanel(s32 step, s32 money, s32 price)
-;
-void DrawEngineerShopPricePanel(s32 step, s32 arg1, s32 arg2)
-;
 void DrawOwnedCarCounter(s32 step, s32 count);
 
 void UpdateCarSelectScreen(void) {

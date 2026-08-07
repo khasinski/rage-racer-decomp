@@ -1,49 +1,52 @@
 #include "common.h"
 #include "game/menu.h"
 #include "game/render.h"
+#include "game/scratchpad.h"
 
-void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
+/*
+ * The ENGINEER SHOP twin of DrawCarShopPricePanel: same slide geometry, its
+ * own counter, and a wider caption sprite on the lower row.
+ */
+void DrawEngineerShopPricePanel(s32 step, s32 money, s32 price) {
+    void *ot = SCRATCH_OT_BASE;
+    s32 slide;
+    s32 risenFrames;
+    u32 rise;
+    s16 moneyY;
+    s16 priceY;
 
-void DrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2) {
-    void *ot = *(void **)0x1F800004;
-    s32 v0;
-    s32 v1;
-    u32 base;
-    s16 s2;
-    s16 s3;
-
-    if (arg0 == 0) {
-        D_8007FB34 = 0;
+    if (step == 0) {
+        g_EngineerShopPanelSlide = 0;
     } else {
-        if (arg0 < 0) {
-            D_8007FB34 += arg0;
-            if (D_8007FB34 < 0) {
-                D_8007FB34 = 0;
+        if (step < 0) {
+            g_EngineerShopPanelSlide += step;
+            if (g_EngineerShopPanelSlide < 0) {
+                g_EngineerShopPanelSlide = 0;
             }
         }
-        v0 = D_8007FB34;
-        v1 = v0 - 11;
-        if (v1 >= 0 && g_MenuAltLayout == 0) {
-            if (v1 >= 11) {
-                v1 = 10;
+        slide = g_EngineerShopPanelSlide;
+        risenFrames = slide - SHOP_PANEL_VISIBLE_AT;
+        if (risenFrames >= 0 && g_MenuAltLayout == 0) {
+            if (risenFrames >= SHOP_PANEL_RISE_FRAMES) {
+                risenFrames = SHOP_PANEL_RISE_FRAMES - 1;
             }
-            base = (u32)-(v1 * 1120) >> 5;
-            s2 = base + 502;
-            GameDrawNumber(0x39, s2, 7, arg1, 0x7f, 0x7f, 0x7f, 0x259, 0x20);
-            s3 = base + 542;
-            GameDrawNumber(0x39, s3, 7, arg2, 0x7f, 0x7f, 0x7f, 0x259, 0x20);
-            DrawSprite(ot, 0x17, s2, 0x1d, 0x10, 0x1b, 0x8c, 0, 0, 0, 0x244, 1, 1, 0x3b);
-            DrawSprite(ot, 0x18, s3, 0x34, 0x10, 0x54, 0x8c, 0, 0, 0, 0x244, 1, 1, 0x3b);
-            DrawSprite(ot, 0x89, s2, 0xc, 0x10, 0x50, 0xdc, 0, 0, 0, 0x259, 1, 1, 0x3b);
-            DrawSprite(ot, 0x89, s3, 0xc, 0x10, 0x50, 0xdc, 0, 0, 0, 0x259, 1, 1, 0x3b);
-            GameDrawMenuButton(0, (s16)(base + 492), 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
-            GameDrawMenuButton(0, (s16)(base + 532), 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
+            rise = (u32)-(risenFrames * SHOP_PANEL_RISE_PER_FRAME) >> SHOP_PANEL_RISE_SHIFT;
+            moneyY = rise + SHOP_PANEL_MONEY_TEXT_Y;
+            GameDrawNumber(0x39, moneyY, 7, money, 0x7F, 0x7F, 0x7F, 0x259, 0x20);
+            priceY = rise + SHOP_PANEL_PRICE_TEXT_Y;
+            GameDrawNumber(0x39, priceY, 7, price, 0x7F, 0x7F, 0x7F, 0x259, 0x20);
+            DrawSprite(ot, 0x17, moneyY, 0x1D, 0x10, 0x1B, 0x8C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+            DrawSprite(ot, 0x18, priceY, 0x34, 0x10, 0x54, 0x8C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+            DrawSprite(ot, 0x89, moneyY, 0xC, 0x10, 0x50, 0xDC, 0, 0, 0, 0x259, 1, 1, 0x3B);
+            DrawSprite(ot, 0x89, priceY, 0xC, 0x10, 0x50, 0xDC, 0, 0, 0, 0x259, 1, 1, 0x3B);
+            GameDrawMenuButton(0, (s16)(rise + SHOP_PANEL_MONEY_BOX_Y), 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
+            GameDrawMenuButton(0, (s16)(rise + SHOP_PANEL_PRICE_BOX_Y), 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
         }
 
-        if (arg0 > 0) {
-            D_8007FB34 += arg0;
-            if (D_8007FB34 >= 26) {
-                D_8007FB34 = 25;
+        if (step > 0) {
+            g_EngineerShopPanelSlide += step;
+            if (g_EngineerShopPanelSlide > SHOP_PANEL_SLIDE_MAX) {
+                g_EngineerShopPanelSlide = SHOP_PANEL_SLIDE_MAX;
             }
         }
     }

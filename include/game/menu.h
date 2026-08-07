@@ -92,16 +92,6 @@ extern s32 g_McMenuSelection;
 extern s32 g_McMenuPhase;
 extern s32 g_McMenuSubState;
 
-/*
- * The pad word block at 0x801E4368, filled by UpdatePadState from the raw
- * BIOS buffer at g_PadBuffers:
- *   +0x00 status, +0x01 pad type (0x41 digital, 0x23 NeGcon),
- *   +0x02 g_PadHeld = ~(raw[0] << 8 | raw[1]), +0x04 previous frame,
- *   +0x06 g_PadEdge2 = held & ~previous, +0x08 g_PadEdge, +0x0A.. analog axes.
- * The bit order is the game's own remap, not the hardware one: 0x1000 up,
- * 0x4000 down, 0x8000 left, 0x2000 right, 0x40 cross, 0x20 circle,
- * 0x10 triangle, 0x80 square, 0x800 start - so 0x860 confirms, 0x90 cancels.
- */
 /* The two eased current/target pairs of the 3D menu view, in 1/1000 units:
  * an angle (carousel wraps at 500000 per entry) and a translation. Screens set
  * only the *Target words. */
@@ -132,6 +122,30 @@ enum MenuLayout {
     MENU_TEAM_NAME_MAX_LENGTH = 6,
     MENU_TEAM_NAME_GRID_COLUMNS = 11
 };
+
+/*
+ * Slide geometry shared by the CAR SHOP and ENGINEER SHOP money panels. Both
+ * count 0..25; the panel appears at 11 and rises 35 lines a frame for the next
+ * eleven frames. The rise is carried in 1/32 line units because the retail
+ * code multiplies then shifts rather than multiplying by 35.
+ */
+enum ShopPricePanelLayout {
+    SHOP_PANEL_SLIDE_MAX = 25,
+    SHOP_PANEL_VISIBLE_AT = 11,
+    SHOP_PANEL_RISE_FRAMES = 11,
+    SHOP_PANEL_RISE_PER_FRAME = 1120,
+    SHOP_PANEL_RISE_SHIFT = 5,
+    SHOP_PANEL_MONEY_BOX_Y = 492,
+    SHOP_PANEL_MONEY_TEXT_Y = 502,
+    SHOP_PANEL_PRICE_BOX_Y = 532,
+    SHOP_PANEL_PRICE_TEXT_Y = 542
+};
+
+/* Slide counters for the two shop money panels. */
+extern s32 g_CarShopPanelSlide;
+extern s32 g_EngineerShopPanelSlide;
+void DrawCarShopPricePanel(s32 step, s32 money, s32 price);
+void DrawEngineerShopPricePanel(s32 step, s32 money, s32 price);
 
 void AdjustMenuSelectionHorizontal(
     s32 *value,
@@ -432,8 +446,6 @@ extern s32 D_8007FB20;
 extern s32 D_8007FB24;
 extern s32 D_8007FB28;
 extern s32 D_8007FB2C;
-extern s32 D_8007FB30;
-extern s32 D_8007FB34;
 extern s32 D_8007FB3C;
 extern s32 D_8007FB40;
 extern s32 D_8007FB44;

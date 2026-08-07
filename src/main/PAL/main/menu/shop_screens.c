@@ -15,7 +15,6 @@ void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0
 void GameDrawMenuButtonWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                    s32 a7, s32 a8, s32 a9, void *a10) asm("GameDrawMenuButton");
 void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void DrawCarShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateCarShopScreen(void) {
     void *ot;
@@ -334,8 +333,6 @@ u32 DrawEngineerShopScreen(s32 arg0) {
 }
 
 extern u8 *D_801E4188;
-
-void DrawEngineerShopPricePanel(s32 arg0, s32 arg1, s32 arg2);
 
 void UpdateEngineerShopScreen(void) {
     void *ot;
