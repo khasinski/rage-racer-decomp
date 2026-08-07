@@ -92,21 +92,20 @@ while (1) {
         } else {
             s32 count;
             u8 *table;
-            register s32 wrapped asm("$5");
             s32 mod;
 
             count = g_TrackPointCount;
             table = (u8 *)g_TrackPoints;
             do {
                 if (index < 0) {
-                    wrapped = index + count;
+                    arg1 = index + count;
                 } else {
-                    wrapped = index;
+                    arg1 = index;
                 }
-                if (cur == wrapped) {
+                if (cur == arg1) {
                     break;
                 }
-                mod = wrapped % count;
+                mod = arg1 % count;
                 total += ((GameTrackPoint *)table)[mod].segmentLength;
                 index--;
             } while (1);
