@@ -219,10 +219,6 @@ void SeedFlybyScenery(void) {
     register s32 scene1 asm("v0");
     u8 *src;
     s32 recordIndex;
-    s32 word0;
-    s32 word1;
-    s32 word2;
-    register s32 word3 asm("a3");
 
     base = g_FlybySceneryData;
     index = Random15();
@@ -248,16 +244,7 @@ void SeedFlybyScenery(void) {
     *(s32 *)(out + 0) = 0;
 
     src = (u8 *)((scene0 * 32) + (s32)base);
-    word0 = *(s32 *)(src + 0x10);
-    word1 = *(s32 *)(src + 0x14);
-    word2 = *(s32 *)(src + 0x18);
-    word3 = *(s32 *)(src + 0x1C);
-    *(s32 *)(out + 0x10) = word0;
-    *(s32 *)(out + 0x14) = word1;
-    *(s32 *)(out + 0x18) = word2;
-    *(s32 *)(out + 0x1C) = word3;
-
-    __asm__ volatile("" ::);
+    *(Vec4 *)(out + 0x10) = *(Vec4 *)(src + 0x10);
     recordIndex = *(s16 *)((scene1 * 4) + (s32)base + 8);
     *(s32 *)(out + 0x30) = 0;
     index = recordIndex * 3;
