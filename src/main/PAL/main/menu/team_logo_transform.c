@@ -899,7 +899,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
     s16 rowY;
     s32 row;
     s16 rowYStep;
-    register s32 loopClut asm("$21");
+    s32 loopClut;
     s32 spriteHeight;
     s32 spriteOne;
     s32 badgeMask;
@@ -1009,7 +1009,6 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
 
         rectLeft = 0;
         loopClut = 0x244;
-        asm("" : : "r"(loopClut));
         spriteHeight = 0x10;
         spriteOne = 1;
         badgeX.value = 0;
@@ -1028,12 +1027,12 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                                     [(g_CourseIndex & 3)][row].raceTime);
                 rowY = panelY + rowYStep;
                 DrawLargeText(0x36, rowY, text, 0x7F, 0x7F, 0x7F,
-                                  0x244, 0x20);
+                                  loopClut, 0x20);
                 DrawLargeText(
                     0x77, rowY,
                     g_RankingRecords[((g_CourseIndex & 4) >> 2)]
                                     [(g_CourseIndex & 3)][row].driverName,
-                    0x7F, 0x7F, 0x7F, 0x244, 0xA0);
+                    0x7F, 0x7F, 0x7F, loopClut, 0xA0);
             } else {
                 FormatLapTime(
                     text,
@@ -1041,22 +1040,22 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                                  [(g_CourseIndex & 3)][row].raceTime);
                 rowY = panelY + rowYStep;
                 DrawLargeText(0x36, rowY, text, 0x7F, 0x7F, 0x7F,
-                                  0x244, 0x20);
+                                  loopClut, 0x20);
                 DrawLargeText(
                     0x77, rowY,
                     g_TimeRecords[((g_CourseIndex & 4) >> 2)]
                                  [(g_CourseIndex & 3)][row].driverName,
-                    0x7F, 0x7F, 0x7F, 0x244, 0xA0);
+                    0x7F, 0x7F, 0x7F, loopClut, 0xA0);
             }
 
             DrawSprite(ot, 0x17, (s16)(panelY + rowYStep), 8,
                              spriteHeight, (s16)(row * 8 + 8), 0x18,
-                             0, 0, 0, 0x244, spriteOne, spriteOne, 0x3B);
+                             0, 0, 0, loopClut, spriteOne, spriteOne, 0x3B);
             DrawSprite(ot, 0xA7, (s16)(panelY + rowYStep), 8,
-                             spriteHeight, 0x58, 0x28, 0, 0, 0, 0x244,
+                             spriteHeight, 0x58, 0x28, 0, 0, 0, loopClut,
                              spriteOne, spriteOne, 0x3B);
             DrawSprite(ot, 0xDF, (s16)(panelY + rowYStep), 8,
-                             spriteHeight, 0x58, 0x28, 0, 0, 0, 0x244,
+                             spriteHeight, 0x58, 0x28, 0, 0, 0, loopClut,
                              spriteOne, spriteOne, 0x3B);
 
             if (ranking != 0) {
@@ -1073,13 +1072,13 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                 case 10:
                     DrawSprite(ot, 0xAE, (s16)(panelY + rowYStep),
                                      0x14, spriteHeight, 0x50,
-                                     0xBC, 0, 0, 0, 0x244,
+                                     0xBC, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3B);
                     break;
                 case 3:
                     DrawSprite(ot, 0xAF, (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0,
-                                     0xBC, 0, 0, 0, 0x244,
+                                     0xBC, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3B);
                     break;
                 case 4:
@@ -1088,7 +1087,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                 case 11:
                     DrawSprite(ot, 0xAF, (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0x64,
-                                     0xBC, 0, 0, 0, 0x244,
+                                     0xBC, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3B);
                     break;
                 case 7:
@@ -1097,7 +1096,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                 case 12:
                     DrawSprite(ot, 0xAF, (s16)(panelY + rowYStep),
                                      0x30, spriteHeight, 0x22,
-                                     0xBC, 0, 0, 0, 0x244,
+                                     0xBC, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3B);
                     break;
             }
@@ -1108,7 +1107,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x2A, spriteHeight, 0x16,
-                                     0x30, 0, 0, 0, 0x244,
+                                     0x30, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 1:
@@ -1116,38 +1115,38 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0x48,
-                                     0x30, 0, 0, 0, 0x244,
+                                     0x30, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 2:
                     DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0x7C,
-                                     0x30, 0, 0, 0, 0x244,
+                                     0x30, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 10:
                     DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x2C, spriteHeight, 0xA4,
-                                     0x30, 0, 0, 0, 0x244,
+                                     0x30, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 3:
                     DrawSprite(ot, 0xE7, (s16)(panelY + rowYStep),
                                      0x34, spriteHeight, 0,
-                                     0x40, 0, 0, 0, 0x244,
+                                     0x40, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 4:
                     DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x28, spriteHeight, 0x74,
-                                     0x50, 0, 0, 0, 0x244,
+                                     0x50, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 5:
                     DrawSprite(ot, badgeX.value >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x2A, spriteHeight, 0x3E,
-                                     0x50, 0, 0, 0, 0x244,
+                                     0x50, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 6:
@@ -1155,7 +1154,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x20, spriteHeight, 0xB0,
-                                     0x50, 0, 0, 0, 0x244,
+                                     0x50, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 11:
@@ -1163,7 +1162,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x2A, spriteHeight, 0x0A,
-                                     0x60, 0, 0, 0, 0x244,
+                                     0x60, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 7:
@@ -1171,19 +1170,19 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x28, spriteHeight, 0x40,
-                                     0x40, 0, 0, 0, 0x244,
+                                     0x40, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 8:
                     DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x22, spriteHeight, 0x7A,
-                                     0x40, 0, 0, 0, 0x244,
+                                     0x40, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 9:
                     DrawSprite(ot, 0xE9, (s16)(panelY + rowYStep),
                                      0x30, spriteHeight, 0xA0,
-                                     0x40, 0, 0, 0, 0x244,
+                                     0x40, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
                 case 12:
@@ -1191,7 +1190,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
                     DrawSprite(ot, badgeXWord >> 16,
                                      (s16)(panelY + rowYStep),
                                      0x30, spriteHeight, 0x04,
-                                     0x50, 0, 0, 0, 0x244,
+                                     0x50, 0, 0, 0, loopClut,
                                      spriteOne, spriteOne, 0x3E);
                     break;
             }
