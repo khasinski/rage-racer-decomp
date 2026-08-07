@@ -54,34 +54,32 @@ void DrawCourseObjects(void) {
         BuildRotMatrixY(&mtx, obj->f2);
         MulMatrix2((void *)0x1F800028, &mtx);
         {
-            s32 ov;
-            s32 cv;
-            ov = (u16)obj->f4;
-            cv = *(u16 *)0x1F800008;
-            ov -= cv;
-            *(s16 *)0x1F80011C = ov;
-            ov = (u16)obj->f8;
-            cv = *(u16 *)0x1F80000C;
-            ov -= cv;
-            *(s16 *)0x1F80011E = ov;
-            ov = (u16)obj->fC;
-            cv = *(u16 *)0x1F800010;
-            ov -= cv;
-            *(s16 *)0x1F800120 = ov;
-        }
-        ApplyMatrix((void *)0x1F800028, (void *)0x1F80011C, (void *)0x1F800124);
-        {
-            s32 a;
-            register s32 b asm("$3");
-            a = *(s32 *)0x1F800124;
-            b = *(s32 *)0x1F80012C;
-            a <<= 2;
-            *(s32 *)0x1F800148 = a;
-            a = *(s32 *)0x1F800128;
-            b <<= 2;
-            *(s32 *)0x1F800150 = b;
-            a <<= 2;
-            *(s32 *)0x1F80014C = a;
+            s32 transformed;
+            s32 camera;
+
+            transformed = (u16)obj->f4;
+            camera = *(u16 *)0x1F800008;
+            transformed -= camera;
+            *(s16 *)0x1F80011C = transformed;
+            transformed = (u16)obj->f8;
+            camera = *(u16 *)0x1F80000C;
+            transformed -= camera;
+            *(s16 *)0x1F80011E = transformed;
+            transformed = (u16)obj->fC;
+            camera = *(u16 *)0x1F800010;
+            transformed -= camera;
+            *(s16 *)0x1F800120 = transformed;
+
+            ApplyMatrix((void *)0x1F800028, (void *)0x1F80011C, (void *)0x1F800124);
+            transformed = *(s32 *)0x1F800124;
+            camera = *(s32 *)0x1F80012C;
+            transformed <<= 2;
+            *(s32 *)0x1F800148 = transformed;
+            transformed = *(s32 *)0x1F800128;
+            camera <<= 2;
+            *(s32 *)0x1F800150 = camera;
+            transformed <<= 2;
+            *(s32 *)0x1F80014C = transformed;
         }
         SetRotMatrix(&mtx);
         SetTransMatrix((void *)0x1F800134);
