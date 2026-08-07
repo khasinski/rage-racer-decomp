@@ -59,14 +59,13 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     DMACallback(2, (void *)Gpu_ExecuteQueue);
 
     if (size != 0) {
-        u_char *pbase = (u_char *)g_GpuQueue + 12;
+        volatile long *pbase = (volatile long *)((u_char *)g_GpuQueue + 12);
         i = 0;
         src = (long *)arg;
         while (i < size / 4) {
-            *(long *)(pbase + g_GpuQueueWriteIdx * 96 + i * 4) = *src;
+            *(volatile long *)((u_char *)pbase + g_GpuQueueWriteIdx * 96 + i * 4) = *src;
             src++;
             i++;
-            asm("");
         }
         g_GpuQueue[g_GpuQueueWriteIdx].arg = (long)g_GpuQueue[g_GpuQueueWriteIdx].params;
     } else {
