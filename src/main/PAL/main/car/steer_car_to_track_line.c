@@ -240,19 +240,18 @@ void UpdateCarLaunch(GameCarRuntime *arg0) {
                  *(s32 *)((u8 *)specBase +
                           (*(s16 *)(r + 0x76) << 2) + 0xE4);
             {
-                register s32 phaseValue asm("$5");
                 s32 offset;
 
                 asm volatile("" : : : "memory");
                 offset = *(s16 *)(r + 0x76);
-                phaseValue = *(u16 *)(r + 0x78);
+                firstHeading = *(u16 *)(r + 0x78);
                 offset <<= 2;
                 asm volatile("" : :);
                 *(s16 *)(r + 0x38) = 0x14;
                 *(s32 *)(r + 0x98) = 2;
                 g_ShiftTargetRpm = lo;
                 *(s16 *)(r + 0x3C) =
-                    *(u16 *)&g_ShiftTargetRpm - phaseValue;
+                    *(u16 *)&g_ShiftTargetRpm - firstHeading;
                 specBase += offset;
             }
             {
