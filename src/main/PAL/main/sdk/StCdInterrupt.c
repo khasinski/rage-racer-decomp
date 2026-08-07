@@ -41,7 +41,7 @@ void StCdInterrupt(void) {
     u16 frameCount;
     u32 dmaControl;
     u16 headerState;
-    u32 expectedState;
+    u16 expectedState;
     u32 endFrame;
 
     if (g_StDmaBusy == 1) {
@@ -135,14 +135,8 @@ void StCdInterrupt(void) {
     }
 
     headerState = *(volatile u16 *)g_StActiveHeader;
-    /*
-     * Keep the volatile load and its explicit 16-bit normalization separate,
-     * and keep v1 available for the expected state.
-     */
-    asm volatile(
-        "" : "=r"(headerState) : "0"(headerState) : "$3");
     expectedState = 0x160;
-    if ((headerState & 0xFFFF) != expectedState ||
+    if (headerState != expectedState ||
         ((g_StActiveHeader->mode >> 10) & 0x1F) != g_StCurrentChannel) {
         if (g_StCopySource != 0) {
             g_StCopySector = 0;
