@@ -169,6 +169,7 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
   s16 yA8;
   s16 yB8;
   s16 yC8;
+  register s32 phaseValue asm("$2");
   register s32 drawValue asm("$4");
   a0v = arg0;
   a1v = arg1;
@@ -192,7 +193,6 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
   }
   {
     u16 *dst;
-    register s32 red asm("$2");
     s32 mul;
     u16 k8;
     k8 = 0x8000;
@@ -205,8 +205,8 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     {
       u16 *src = &g_TeamLogoClut[i];
       *dst = k8;
-      red = (((*src) & 0x1F) * mul) / 256;
-      drawValue = red | ((u16) 0x8000);
+      phaseValue = (((*src) & 0x1F) * mul) / 256;
+      drawValue = phaseValue | ((u16) 0x8000);
       *dst = drawValue;
       drawValue |= (((((*src) >> 5) & 0x1F) * mul) / 256) << 5;
       *dst = drawValue;
@@ -216,8 +216,8 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
         v += 0xFF;
       }
       i++;
-      red = drawValue | ((v >> 8) << 10);
-      *dst = red;
+      phaseValue = drawValue | ((v >> 8) << 10);
+      *dst = phaseValue;
       dst++;
       if (i < 16)
       {
@@ -258,7 +258,6 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     s32 w1;
     s32 delta;
     s32 scaleDelta;
-    register s32 gxBase asm("$2");
     s32 texY;
     s32 gyTemp;
     if (d >= 0xC)
@@ -311,17 +310,17 @@ void DrawTeamLogoCanvas(s32 arg0, s32 arg1)
     x88 = x2 + 0x88;
     delta = 0x220 - D_8007F948;
     scaleDelta = (delta * D_8007F93C.value) / 272;
-    gxBase = (g_TeamLogoRect.tx * 4) - 1;
-    drawValue = gxBase + scaleDelta;
+    phaseValue = (g_TeamLogoRect.tx * 4) - 1;
+    drawValue = phaseValue + scaleDelta;
     gx = drawValue;
     scaleDelta = (delta * D_8007F940) / 272;
     texY = (*(u8 *)(&g_TeamLogoRect.ty)) - 1;
     gyTemp = texY + scaleDelta;
-    gxBase = gyTemp;
-    gy = gxBase;
+    phaseValue = gyTemp;
+    gy = phaseValue;
     gx2 = drawValue + (D_8007F948 / 8);
     asm("" : : "r"(scaleDelta));
-    gy2 = gxBase + (D_8007F948 / 8);
+    gy2 = phaseValue + (D_8007F948 / 8);
     clut = (g_TeamLogoRect.ty >> 4) & 0x10;
     clut |= (g_TeamLogoRect.tx & 0x3FF) >> 6;
     SetDrawClipRect(ot, 0, 0, 0x140, 0x1E0);
