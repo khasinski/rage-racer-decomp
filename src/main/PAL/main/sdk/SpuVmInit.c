@@ -17,10 +17,10 @@ extern u_short g_SndVoiceRegs[];
 
 extern volatile u_char g_SndVoiceCount;
 extern volatile u_short g_SndCurrentVoice;
-extern volatile u_short D_801F2A08;
-extern volatile u_short D_801F2A0C;
-extern volatile u_short D_8009E670;
-extern volatile u_short D_8009E674;
+extern volatile u_short g_SndKeyOffLow;
+extern volatile u_short g_SndKeyOffHigh;
+extern volatile u_short g_SndKeyOnLow;
+extern volatile u_short g_SndKeyOnHigh;
 extern u_short *g_SndSpuRegs;
 
 extern u_char g_SndVoiceState[];
@@ -136,13 +136,13 @@ void SpuVmInit(long arg0) {
                 lowBits &= 0xFFFF;
                 offset = lowBits * 0x34;
                 g_SndVoiceStateStatus[offset] = 0;
-                lowBits = D_801F2A08;
-                highBits = D_801F2A0C;
+                lowBits = g_SndKeyOffLow;
+                highBits = g_SndKeyOffHigh;
                 i++;
                 *(short *)&g_SndVoiceStatePitch[offset] = 0;
                 *(short *)&g_SndVoiceState[offset] = 0;
 
-                bits = D_8009E670;
+                bits = g_SndKeyOnLow;
                 __asm__ volatile("");
                 /* These barriers are load-bearing. Without them `combine` folds
                  * the single-use `zero_extend(mem)` that defines the second
@@ -153,21 +153,21 @@ void SpuVmInit(long arg0) {
                 lowBits = lowMask | lowBits;
                 asm("" : "=r"(highBits) : "0"(highBits));
                 highBits = highMask | highBits;
-                D_801F2A08 = lowBits;
+                g_SndKeyOffLow = lowBits;
                 bits = bits & ~lowBits;
-                D_801F2A0C = highBits;
-                D_8009E670 = bits;
-                bits = D_8009E674;
+                g_SndKeyOffHigh = highBits;
+                g_SndKeyOnLow = bits;
+                bits = g_SndKeyOnHigh;
                 cond = g_SndVoiceCount;
-                D_8009E674 = bits & ~highBits;
+                g_SndKeyOnHigh = bits & ~highBits;
             } while ((u_short)i < cond);
     }
 
     g_SndReverbAttrDepthLeft = 0x3FFF;
     g_SndReverbAttrDepthRight = 0x3FFF;
-    D_8009E670 = 0;
-    D_8009E674 = 0;
-    D_801F2A08 = 0;
+    g_SndKeyOnLow = 0;
+    g_SndKeyOnHigh = 0;
+    g_SndKeyOffLow = 0;
     g_SndReverbOnLow = 0;
     g_SndReverbOnHigh = 0;
     g_SndReverbAttr = 0;

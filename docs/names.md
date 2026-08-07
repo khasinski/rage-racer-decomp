@@ -545,7 +545,7 @@ what was actually known — naming these would have been a guess:
   Sony sources. All of these are named now except `D_801E42F8`:
   `D_800941E0` → `g_GpuFuncs`, `D_800942BC` → `g_GpuGp1`,
   `D_801E79CC` → `g_SndSeqTable`, `D_8009AB7C` → `g_SpuRegBase`,
-  `D_801E416C` → `g_SndCurrentToneTable`. `D_8009E674` is referenced *only* from
+  `D_801E416C` → `g_SndCurrentToneTable`. `g_SndKeyOnHigh` is referenced *only* from
   0x80074xxx–0x80078xxx, i.e. purely from library code, and is still raw.
 
 ---
@@ -1217,7 +1217,7 @@ Two mechanical traps worth recording for the next pass:
 > `g_SndVoiceRegs`, `g_SndVoiceState`, `g_SndCurrentAttr`, `g_SndTickResolution`,
 > `g_SndUpdateLock`, `g_SndMonoMode`, `g_SndCurrentProgTable` /
 > `g_SndCurrentVabHeader`, `g_SndVabStatus`, …); the exception is
-> `D_801F2A08` / `D_801F2A0C`, kept raw because inline-asm `%hi`/`%lo` pairs
+> `g_SndKeyOffLow` / `g_SndKeyOffHigh`, kept raw because inline-asm `%hi`/`%lo` pairs
 > stringify them (23, "libsnd"). **The identifications below are still good** —
 > that is what the table was for, and it is why the naming was possible at all.
 > What is stale is only the "left raw" verdict.
@@ -1242,7 +1242,7 @@ not lost.
 | `D_8009DF20` | 10 | 24 x 16-byte SPU voice register shadow | `SsUtFlush` copies it to the SPU 16 bytes per voice; zeroed as 192 `u16` |
 | `D_8009E0B8` +0x04/0x0E/0x12/0x14/0x1B | 14/6/5/5/6/7 | one 24 x 0x34 libsnd voice-state table, and its `pitch`/`seq_sep`/`program`/`tone`/`status` fields | stride 0x34 in four places; count 24 from `SsUtFlush`'s terminator `< D_8009E0B8` |
 | `D_801E4BD0` +0x07/0x0C/0x16/0x1A | 6/6/5/5/11 | one 0x20-byte libsnd current-key-on record and its `program_index`/`tone`/`seq_sep`/`voice` fields | six offset-compatible local typedefs |
-| `D_801F2A08` / `D_801F2A0C` | 10 each | pending SPU KEY-OFF masks, voices 0-15 / 16-23 | `SsUtFlush` writes them to SPU halfword `0xC6/0xC7` |
+| `g_SndKeyOffLow` / `g_SndKeyOffHigh` | 10 each | pending SPU KEY-OFF masks, voices 0-15 / 16-23 | `SsUtFlush` writes them to SPU halfword `0xC6/0xC7` |
 | `D_801E6C6C` | 5 | libsnd tick rate (50/60/120/240) | `SsSetTickMode` sets it; it is the tempo divisor |
 | `D_801E40AC` | 7 | libsnd voice-manager re-entrancy guard | the same `if (x != 1) { x = 1; ...; x = 0; }` in five API bodies |
 | `D_801E3FB0` | 6 | libsnd mono/stereo flag | `SsSetMono` sets 1, `SsSetStereo` sets 0 |
@@ -4508,8 +4508,8 @@ table indexed `[semitone * 16 + fine/8]`.
 Two corrections this pass produced:
 
 - `sdk/SsUtFlush.c` had its four key-register locals swapped. `spu[0xC4]/[0xC5]`
-  is KON (0x1F801D88) and `spu[0xC6]/[0xC7]` is KOFF, so `D_8009E670/74` are
-  key-**on** and `D_801F2A08/0C` key-**off**, and `spu[0xCC]/[0xCD]` is EON, not
+  is KON (0x1F801D88) and `spu[0xC6]/[0xC7]` is KOFF, so `g_SndKeyOnLow/74` are
+  key-**on** and `g_SndKeyOffLow/0C` key-**off**, and `spu[0xCC]/[0xCD]` is EON, not
   noise. All four key words keep their raw `D_` spelling — inline-asm `%hi`/`%lo`
   pairs elsewhere stringify them.
 - `include/game/audio.h` described the 0x8009DF20 block as "note at +0, fine
@@ -5580,8 +5580,8 @@ no assembly**, from a starting position of eight pins, seven `asm` blocks carryi
 instructions, a hand-written `1:` label and a `bnez $2,1b` closing the loop by hand.
 
 What it needed was `volatile` **removed** from all six globals the unit declared with it:
-`D_801E42F8`, `g_SndCurrentVoice`, and the four key-on/key-off mask words `D_801F2A08`,
-`D_801F2A0C`, `D_8009E670`, `D_8009E674`. So this is 32's corollary confirmed from the
+`D_801E42F8`, `g_SndCurrentVoice`, and the four key-on/key-off mask words `g_SndKeyOffLow`,
+`g_SndKeyOffHigh`, `g_SndKeyOnLow`, `g_SndKeyOnHigh`. So this is 32's corollary confirmed from the
 opposite direction: in 32 a missing `volatile` was blocking the frame carrier, here a
 spurious `volatile` was blocking ordinary codegen, and in both cases the fix was to match
 retail's own inconsistent volatility rather than to reason about what the hardware

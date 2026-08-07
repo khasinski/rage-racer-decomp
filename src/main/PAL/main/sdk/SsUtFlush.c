@@ -10,13 +10,13 @@ extern u_char g_SndVoiceState[];
 extern u_char g_SndVoiceStateAutoVol[];
 /* The four pending key registers, flushed below into the SPU as
  * spu[0xC4]/[0xC5] = KON 0x1F801D88 and spu[0xC6]/[0xC7] = KOFF 0x1F801D8C.
- * So D_8009E670/74 are key-ON and D_801F2A08/0C key-OFF, not the other way
+ * So g_SndKeyOnLow/74 are key-ON and g_SndKeyOffLow/0C key-OFF, not the other way
  * round. All four MUST keep the raw D_ spelling: %hi/%lo pairs in inline asm
  * elsewhere stringify them. */
-extern volatile u_short D_801F2A08;
-extern volatile u_short D_801F2A0C;
-extern volatile u_short D_8009E670;
-extern volatile u_short D_8009E674;
+extern volatile u_short g_SndKeyOffLow;
+extern volatile u_short g_SndKeyOffHigh;
+extern volatile u_short g_SndKeyOnLow;
+extern volatile u_short g_SndKeyOnHigh;
 extern volatile u_short g_SndReverbOnLow;
 extern volatile u_short g_SndReverbOnHigh;
 extern u_char g_SndVoiceCount;
@@ -121,18 +121,18 @@ break;
 
         i = 0;
         voiceIndex = 0;
-        mask = D_801F2A08;
-        activeMask = D_8009E670;
+        mask = g_SndKeyOffLow;
+        activeMask = g_SndKeyOnLow;
         mask = ~mask;
         activeMask &= mask;
-        mask = D_801F2A0C;
+        mask = g_SndKeyOffHigh;
         asm("" : "=r"(mask) : "0"(mask) : "$17");
         voiceOffset = 0;
-        D_8009E670 = activeMask;
-        activeMask = D_8009E674;
+        g_SndKeyOnLow = activeMask;
+        activeMask = g_SndKeyOnHigh;
         mask = ~mask;
         activeMask &= mask;
-        D_8009E674 = activeMask;
+        g_SndKeyOnHigh = activeMask;
     }
     do {
         if (*(short *)&g_SndVoiceStateAutoVol[voiceOffset] != 0) {
@@ -201,16 +201,16 @@ break;
 
     {
     volatile u_short *spu = g_SndSpuRegs;
-    keyOffLow = D_801F2A08;
-    keyOffHigh = D_801F2A0C;
-    keyOnLow = D_8009E670;
-    keyOnHigh = D_8009E674;
+    keyOffLow = g_SndKeyOffLow;
+    keyOffHigh = g_SndKeyOffHigh;
+    keyOnLow = g_SndKeyOnLow;
+    keyOnHigh = g_SndKeyOnHigh;
     reverbOnLow = g_SndReverbOnLow;
     reverbOnHigh = g_SndReverbOnHigh;
-    D_801F2A08 = 0;
-    D_801F2A0C = 0;
-    D_8009E670 = 0;
-    D_8009E674 = 0;
+    g_SndKeyOffLow = 0;
+    g_SndKeyOffHigh = 0;
+    g_SndKeyOnLow = 0;
+    g_SndKeyOnHigh = 0;
     spu[0xC6] = keyOffLow;
     spu[0xC7] = keyOffHigh;
     spu[0xC4] = keyOnLow;

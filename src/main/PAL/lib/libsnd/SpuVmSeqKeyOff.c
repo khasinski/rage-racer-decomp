@@ -6,10 +6,10 @@
 
 extern u_char g_SndVoiceCount;
 extern u_short g_SndCurrentVoice;
-extern u_short D_801F2A08;
-extern u_short D_801F2A0C;
-extern u_short D_8009E670;
-extern u_short D_8009E674;
+extern u_short g_SndKeyOffLow;
+extern u_short g_SndKeyOffHigh;
+extern u_short g_SndKeyOnLow;
+extern u_short g_SndKeyOnHigh;
 extern SpuVoice g_SndVoiceState[];
 
 void SpuVmSeqKeyOff(long arg0) {
@@ -42,11 +42,11 @@ void SpuVmSeqKeyOff(long arg0) {
                 g_SndVoiceState[selected_voice].pitch = 0;
                 g_SndVoiceState[selected_voice].vag = 0;
 
-                D_801F2A08 = bits_lower | D_801F2A08;
-                D_801F2A0C = bits_upper | D_801F2A0C;
+                g_SndKeyOffLow = bits_lower | g_SndKeyOffLow;
+                g_SndKeyOffHigh = bits_upper | g_SndKeyOffHigh;
 
-                D_8009E670 &= ~D_801F2A08;
-                D_8009E674 &= ~D_801F2A0C;
+                g_SndKeyOnLow &= ~g_SndKeyOffLow;
+                g_SndKeyOnHigh &= ~g_SndKeyOffHigh;
             }
             voice++;
         } while (voice < g_SndVoiceCount);

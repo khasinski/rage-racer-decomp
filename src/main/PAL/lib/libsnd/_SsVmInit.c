@@ -2,10 +2,10 @@
 
 extern volatile u_char g_SndVoiceCount;
 extern volatile u_short g_SndCurrentVoice;
-extern volatile u_short D_801F2A08;
-extern volatile u_short D_801F2A0C;
-extern volatile u_short D_8009E670;
-extern volatile u_short D_8009E674;
+extern volatile u_short g_SndKeyOffLow;
+extern volatile u_short g_SndKeyOffHigh;
+extern volatile u_short g_SndKeyOnLow;
+extern volatile u_short g_SndKeyOnHigh;
 extern u_short *g_SndSpuRegs;
 extern u_char g_SndVoiceState[];
 extern u_char g_SndVoiceStateProg[];
@@ -73,25 +73,25 @@ void _SsVmInit(void) {
             lowBits &= 0xFFFF;
             offset = lowBits * 0x34;
             g_SndVoiceStateStatus[offset] = 0;
-            lowBits = D_801F2A08;
-            index = D_801F2A0C;
+            lowBits = g_SndKeyOffLow;
+            index = g_SndKeyOffHigh;
             __asm__ volatile("" ::);
             next <<= 16;
             *(short *)&g_SndVoiceStatePitch[offset] = 0;
             *(short *)&g_SndVoiceState[offset] = 0;
 
-            bits = D_8009E670;
+            bits = g_SndKeyOnLow;
             /* These barriers are load-bearing. Without them `combine` folds the
              * single-use `zero_extend(mem)` that defines the second operand into
              * the `ior`, tripping its "complex expression first" rule and
              * swapping the operands; retail keeps the written mask-first order. */
             lowBits = lowMask | lowBits;
-            D_801F2A08 = lowBits;
-            D_8009E670 = bits & ~lowBits;
-            bits = D_8009E674;
+            g_SndKeyOffLow = lowBits;
+            g_SndKeyOnLow = bits & ~lowBits;
+            bits = g_SndKeyOnHigh;
             index = highMask | index;
-            D_801F2A0C = index;
-            D_8009E674 = bits & ~index;
+            g_SndKeyOffHigh = index;
+            g_SndKeyOnHigh = bits & ~index;
         } while ((next >> 16) < g_SndVoiceCount);
     }
 }

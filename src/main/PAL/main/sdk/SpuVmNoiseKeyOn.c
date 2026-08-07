@@ -11,10 +11,10 @@ extern u_short g_SndVoiceRegs[];
 extern u_char g_SndVoiceCount;
 extern short g_SndMonoMode;
 extern volatile u_short *g_SndSpuRegs;
-extern volatile u_short D_801F2A08;
-extern volatile u_short D_801F2A0C;
-extern u_short D_8009E670;
-extern u_short D_8009E674;
+extern volatile u_short g_SndKeyOffLow;
+extern volatile u_short g_SndKeyOffHigh;
+extern u_short g_SndKeyOnLow;
+extern u_short g_SndKeyOnHigh;
 extern u_short g_SndReverbOnLow;
 extern u_short g_SndReverbOnHigh;
 
@@ -96,10 +96,10 @@ void SpuVmNoiseKeyOn(u_char voice) {
     }
     g_SndVoiceState[voice].active = 2;
 
-    D_8009E670 |= bits_lower;
-    D_8009E674 |= bits_upper;
-    D_801F2A08 &= ~D_8009E670;
-    D_801F2A0C &= ~D_8009E674;
+    g_SndKeyOnLow |= bits_lower;
+    g_SndKeyOnHigh |= bits_upper;
+    g_SndKeyOffLow &= ~g_SndKeyOnLow;
+    g_SndKeyOffHigh &= ~g_SndKeyOnHigh;
 
     if (g_SndCurrentAttr.mode & 4) {
         g_SndReverbOnLow |= bits_lower;

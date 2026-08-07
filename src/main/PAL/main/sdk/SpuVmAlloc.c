@@ -119,10 +119,10 @@ extern u_char g_SndVoiceRegs[];
 extern u_char D_8009E0A0[] asm("g_SndVoiceFlags");
 extern u_short g_SndReverbOnLow;
 extern u_short g_SndReverbOnHigh;
-extern u_short D_8009E670;
-extern u_short D_8009E674;
-extern u_short D_801F2A08;
-extern u_short D_801F2A0C;
+extern u_short g_SndKeyOnLow;
+extern u_short g_SndKeyOnHigh;
+extern u_short g_SndKeyOffLow;
+extern u_short g_SndKeyOffHigh;
 
 void SpuVmScaleVabVolume(long arg0, long val) {
     u_long a1v, a2v, a3v;
@@ -217,10 +217,10 @@ void SpuVmScaleVabVolume(long arg0, long val) {
         g_SndReverbOnHigh &= ~a1v;
     }
 
-    D_8009E670 = a2v | D_8009E670;
-    D_8009E674 = a1v | D_8009E674;
-    D_801F2A08 &= ~D_8009E670;
-    D_801F2A0C &= ~D_8009E674;
+    g_SndKeyOnLow = a2v | g_SndKeyOnLow;
+    g_SndKeyOnHigh = a1v | g_SndKeyOnHigh;
+    g_SndKeyOffLow &= ~g_SndKeyOnLow;
+    g_SndKeyOffHigh &= ~g_SndKeyOnHigh;
 
     (void)arg0;
 }

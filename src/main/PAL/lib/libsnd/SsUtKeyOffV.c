@@ -5,10 +5,10 @@
 
 extern long g_SndUpdateLock;
 extern u_short g_SndCurrentVoice;
-extern u_short D_801F2A08;
-extern u_short D_801F2A0C;
-extern u_short D_8009E670;
-extern u_short D_8009E674;
+extern u_short g_SndKeyOffLow;
+extern u_short g_SndKeyOffHigh;
+extern u_short g_SndKeyOnLow;
+extern u_short g_SndKeyOnHigh;
 extern u_char g_SndVoiceState[];
 
 long SsUtKeyOffV(long voice) {
@@ -36,8 +36,8 @@ long SsUtKeyOffV(long voice) {
             channel &= 0xFFFF;
             offset = channel * 52;
             g_SndVoiceStateStatus[offset] = 0;
-            activeLow = D_801F2A08;
-            activeHigh = D_801F2A0C;
+            activeLow = g_SndKeyOffLow;
+            activeHigh = g_SndKeyOffHigh;
             *(u_short *)&g_SndVoiceStatePitch[offset] = 0;
             *(u_short *)&g_SndVoiceState[offset] = 0;
             /* Both key registers first, then both key-on masks: the same
@@ -46,10 +46,10 @@ long SsUtKeyOffV(long voice) {
              * half instead, highBits' last reference lands nine insns past
              * lowBits', its live length goes 19 -> 23, and the two swap
              * registers. */
-            D_801F2A08 = lowBits | activeLow;
-            D_801F2A0C = highBits | activeHigh;
-            D_8009E670 &= ~D_801F2A08;
-            D_8009E674 &= ~D_801F2A0C;
+            g_SndKeyOffLow = lowBits | activeLow;
+            g_SndKeyOffHigh = highBits | activeHigh;
+            g_SndKeyOnLow &= ~g_SndKeyOffLow;
+            g_SndKeyOnHigh &= ~g_SndKeyOffHigh;
             g_SndUpdateLock = 0;
             return 0;
         }

@@ -5,10 +5,10 @@
 #include "psyq/snd.h"
 
 extern u_char g_SndVoiceRegs[];
-extern volatile u_short D_8009E670;
-extern volatile u_short D_8009E674;
-extern volatile u_short D_801F2A08;
-extern volatile u_short D_801F2A0C;
+extern volatile u_short g_SndKeyOnLow;
+extern volatile u_short g_SndKeyOnHigh;
+extern volatile u_short g_SndKeyOffLow;
+extern volatile u_short g_SndKeyOffHigh;
 extern u_char g_SndVoiceCount;
 extern volatile u_char *g_SndSpuRegs;
 
@@ -62,10 +62,10 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
     index = ((voiceIndex * 3) << 2) + voiceIndex;
     index <<= 2;
     g_SndVoiceStatePitch[index + 0x17] = 2;
-    voiceIndex = D_8009E670;
-    count = D_8009E674;
+    voiceIndex = g_SndKeyOnLow;
+    count = g_SndKeyOnHigh;
     *(u_short *)&g_SndVoiceStatePitch[index - 2] = 0;
-    index = D_801F2A08;
+    index = g_SndKeyOffLow;
     /* These barriers are load-bearing. Without them `combine` substitutes the
      * single-use `zero_extend(mem)` that defines the second operand into the
      * `ior`, which trips its "put the complex expression first" rule and swaps
@@ -75,16 +75,16 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
     voiceIndex = lowMask | voiceIndex;
     asm("" : "=r"(count) : "0"(count));
     count = highMask | count;
-    D_8009E670 = voiceIndex;
+    g_SndKeyOnLow = voiceIndex;
     __asm__ volatile("" ::);
     index &= ~voiceIndex;
-    D_8009E674 = count;
+    g_SndKeyOnHigh = count;
     count = ~count;
-    D_801F2A08 = index;
-    index = D_801F2A0C;
+    g_SndKeyOffLow = index;
+    index = g_SndKeyOffHigh;
     voiceIndex = (long)g_SndSpuRegs;
     index &= count;
-    D_801F2A0C = index;
+    g_SndKeyOffHigh = index;
     *(u_short *)(voiceIndex + 0x194) = lowMask;
     *(u_short *)(voiceIndex + 0x196) = highMask;
 

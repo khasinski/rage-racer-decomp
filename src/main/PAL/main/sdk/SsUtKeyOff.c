@@ -10,10 +10,10 @@ extern short g_SndVoiceStateNote[];
 extern short g_SndVoiceStateProg[];
 extern short g_SndVoiceStateTone[];
 extern short g_SndVoiceStateVabId[];
-extern u_short D_801F2A08;
-extern u_short D_801F2A0C;
-extern u_short D_8009E670;
-extern u_short D_8009E674;
+extern u_short g_SndKeyOffLow;
+extern u_short g_SndKeyOffHigh;
+extern u_short g_SndKeyOnLow;
+extern u_short g_SndKeyOnHigh;
 extern u_short *g_SndSpuRegs;
 
 long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) {
@@ -56,10 +56,10 @@ long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) {
                 g_SndVoiceState[current_voice].active = 0;
                 g_SndVoiceState[current_voice].pitch = 0;
                 g_SndVoiceState[current_voice].vag = 0;
-                D_801F2A08 = bits_lower | D_801F2A08;
-                D_801F2A0C = bits_upper | D_801F2A0C;
-                D_8009E670 &= ~D_801F2A08;
-                D_8009E674 &= ~D_801F2A0C;
+                g_SndKeyOffLow = bits_lower | g_SndKeyOffLow;
+                g_SndKeyOffHigh = bits_upper | g_SndKeyOffHigh;
+                g_SndKeyOnLow &= ~g_SndKeyOffLow;
+                g_SndKeyOnHigh &= ~g_SndKeyOffHigh;
             }
             g_SndUpdateLock = 0;
             return 0;
