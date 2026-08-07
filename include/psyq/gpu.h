@@ -62,7 +62,8 @@ typedef struct QEntry {
 } QEntry;
 
 typedef struct P_TAG {
-    u_long tag;
+    unsigned addr : 24;
+    unsigned len : 8;
     u_char r0;
     u_char g0;
     u_char b0;

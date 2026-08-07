@@ -1,5 +1,10 @@
 #include "common.h"
 
+typedef struct PrimTag {
+    unsigned addr : 24;
+    unsigned len : 8;
+} PrimTag;
+
 s32 GetPrimAddr(u32 *arg0) {
     return (*arg0 & 0x00FFFFFF) | 0x80000000;
 }
@@ -9,19 +14,20 @@ s32 IsEndPrim(u32 *arg0) {
 }
 
 void AddPrim(u32 *arg0, u32 *arg1) {
-    register u32 mask asm("$6") = 0x00FFFFFF;
-    u32 tag = 0xFF000000;
+    PrimTag *ot = (PrimTag *)arg0;
+    PrimTag *prim = (PrimTag *)arg1;
 
-    *arg1 = (*arg1 & tag) | (*arg0 & mask);
-    *arg0 = (*arg0 & tag) | ((u32)arg1 & mask);
+    prim->addr = ot->addr;
+    ot->addr = (u32)prim;
 }
 
 void AddPrims(u32 *arg0, u32 arg1, u32 *arg2) {
-    register u32 mask asm("$7") = 0x00FFFFFF;
-    u32 tag = 0xFF000000;
+    PrimTag *ot = (PrimTag *)arg0;
+    PrimTag *first = (PrimTag *)arg1;
+    PrimTag *last = (PrimTag *)arg2;
 
-    *arg2 = (*arg2 & tag) | (*arg0 & mask);
-    *arg0 = (*arg0 & tag) | (arg1 & mask);
+    last->addr = ot->addr;
+    ot->addr = (u32)first;
 }
 
 void SetPrimAddr(u32 *arg0, u32 arg1) {
