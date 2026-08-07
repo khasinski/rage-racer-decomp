@@ -133,42 +133,25 @@ void LoadAudioParameterTable(u16 *table) {
     s32 bank;
     s32 row;
     s32 col;
-    s32 bankOffset;
-    s32 rowOffset;
-    s32 rowBaseOffset;
-    s32 colOffset;
-    register s32 *base asm("$10") = g_EngineSoundCurves;
-    s32 *secondBase;
-    s32 *leftPtr;
-    s32 *rightPtr;
     s32 step;
+    s32 *leftPtr;
 
     bank = 0;
-    secondBase = base + 9;
-    bankOffset = 0;
     do {
         row = 0;
-        rowOffset = bankOffset;
         do {
             col = 0;
-            rowBaseOffset = rowOffset;
-            rightPtr = (s32 *)((u8 *)rowOffset + (s32)secondBase);
             do {
                 s32 leftValue;
 
                 leftValue = *tableReg++;
-                colOffset = col * 4;
+                g_EngineSoundCurves[bank][row].left[col] = leftValue;
+                g_EngineSoundCurves[bank][row].right[col] = *tableReg++;
                 col++;
-                leftPtr = (s32 *)(colOffset + (rowBaseOffset + (s32)base));
-                *leftPtr = leftValue;
-                *rightPtr = *tableReg++;
-                rightPtr++;
             } while (col < 9);
             row++;
-            rowOffset += 0x48;
         } while (row < 12);
         bank++;
-        bankOffset += 0x360;
     } while (bank < 2);
 
     {
