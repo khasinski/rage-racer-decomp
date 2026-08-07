@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
-extern QEntry g_GpuQueue[];
+extern volatile QEntry g_GpuQueue[];
 extern volatile long g_GpuQueueWriteIdx;
 extern long g_GpuQueueReadIdx;
 extern long g_AddQueueIntrMask;
@@ -74,9 +74,7 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     }
 
     g_GpuQueue[g_GpuQueueWriteIdx].tag = tag;
-    asm("");
     g_GpuQueue[g_GpuQueueWriteIdx].cb = cb;
-    asm("");
 
     g_GpuQueueWriteIdx = (g_GpuQueueWriteIdx + 1) & 0x3f;
     SetIntrMask(g_AddQueueIntrMask);
