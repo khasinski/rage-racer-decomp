@@ -32,12 +32,6 @@ void DrawRouteScenery(void) {
     SubmitModel((void *)0x1F800000, drawId);
 }
 
-typedef struct ShuttlePath {
-    Vec4 endpoint[2];
-} ShuttlePath;
-
-extern ShuttlePath g_ShuttlePathPoints[];
-
 #define PATH(byteOffset) (*(ShuttlePath *)((u8 *)g_ShuttlePathPoints + (byteOffset)))
 #define ANGLES(byteOffset) (*(SVec *)((u8 *)g_ShuttlePathAngles + (byteOffset)))
 

@@ -4,11 +4,6 @@
 #include "game/race.h"
 #include "game/render.h"
 
-/* Per-path authored data; see DrawRouteScenery.c for the layout.
- * g_ShuttlePathTravelMax is the leg length in steps: the divisor of the
- * endpoint-to-endpoint lerp and the value travelStep counts up to. */
-extern u8 g_ShuttlePathPoints[];
-
 void UpdateShuttleScenery(s32 arg0) {
     GameShuttleScenery *entry;
     s32 phase;
@@ -21,8 +16,6 @@ void UpdateShuttleScenery(s32 arg0) {
     s16 *limitPtr;
     s16 *tailLimitPtr;
     s16 denom;
-    register s32 temp asm("$3");
-    register s32 value asm("$2");
 
     entry = &g_ShuttleScenery[arg0];
     asm("" : "=r"(entry) : "0"(entry));
@@ -36,24 +29,18 @@ void UpdateShuttleScenery(s32 arg0) {
     phaseOffset = phase << 1;
     limitPtr = (s16 *)((u8 *)limitPtr + phaseOffset);
     denom = *limitPtr;
-    temp = *(s32 *)(g_ShuttlePathPoints + baseIndex);
-    value = (denom - step) * temp;
     altIndex = (1 - side) << 4;
     altIndex += phaseShift;
-    value = (value + (step * *(s32 *)(g_ShuttlePathPoints + altIndex))) / denom;
-    entry->x = value;
+    entry->x = ((denom - step) * ((Vec4 *)((u8 *)g_ShuttlePathPoints + baseIndex))->x +
+                step * ((Vec4 *)((u8 *)g_ShuttlePathPoints + altIndex))->x) / denom;
 
     denom = *limitPtr;
-    temp = *(s32 *)(g_ShuttlePathPoints + baseIndex + 4);
-    value = (denom - step) * temp;
-    value = (value + (step * *(s32 *)(g_ShuttlePathPoints + altIndex + 4))) / denom;
-    entry->y = value;
+    entry->y = ((denom - step) * ((Vec4 *)((u8 *)g_ShuttlePathPoints + baseIndex))->y +
+                step * ((Vec4 *)((u8 *)g_ShuttlePathPoints + altIndex))->y) / denom;
 
     denom = *limitPtr;
-    temp = *(s32 *)(g_ShuttlePathPoints + baseIndex + 8);
-    value = (denom - step) * temp;
-    value = (value + (step * *(s32 *)(g_ShuttlePathPoints + altIndex + 8))) / denom;
-    entry->z = value;
+    entry->z = ((denom - step) * ((Vec4 *)((u8 *)g_ShuttlePathPoints + baseIndex))->z +
+                step * ((Vec4 *)((u8 *)g_ShuttlePathPoints + altIndex))->z) / denom;
 
     if (entry->travelStep >= *limitPtr) {
         entry->travelStep = 0;

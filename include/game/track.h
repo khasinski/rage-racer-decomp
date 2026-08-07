@@ -95,6 +95,12 @@ void DrawStaticScenery(s32 shifted);
  * g_GrandPrixClass >= 4, and the one prop with no visibility cull. */
 void DrawHighClassScenery(void);
 
+typedef struct ShuttlePath {
+    Vec4 endpoint[2];
+} ShuttlePath;
+
+extern ShuttlePath g_ShuttlePathPoints[];
+
 /* State of a shuttling prop: it runs between the two endpoints of its path in
  * g_ShuttlePathPoints, dwells, then reverses. Paths and timings in names.md 5b. */
 typedef struct GameShuttleScenery {
