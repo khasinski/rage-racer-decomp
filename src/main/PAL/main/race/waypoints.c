@@ -143,27 +143,11 @@ void UpdateWaypoints(void) {
     do {
         if (waypoint->active == 0) {
             if (IsCarNearWaypoint(waypoint) != 0) {
-                register volatile s32 *src asm("$5");
-                register s32 src0 asm("$2");
-                s32 src1;
-                s32 src2;
-
                 g_WaypointsCollected++;
                 PlaySoundCue(0xA);
 
                 waypoint->active = activeState;
-                asm volatile("" ::);
-                src = g_PlayerVelocity;
-                asm volatile("" : "=r"(src) : "0"(src));
-                src0 = src[0];
-                src1 = src[1];
-                src2 = src[2];
-                *(s32 *)(tail - 0x10) = src0;
-                *(s32 *)(tail - 0xC) = src1;
-                *(s32 *)(tail - 0x8) = src2;
-                src0 = src[3];
-                *(s32 *)(tail - 0x4) = src0;
-                asm volatile("" ::);
+                *(Block16 *)(tail - 0x10) = *(Block16 *)g_PlayerVelocity;
 
                 *(s32 *)(tail - 0x10) *= 2;
                 *(s32 *)(tail - 0x8) *= 2;
