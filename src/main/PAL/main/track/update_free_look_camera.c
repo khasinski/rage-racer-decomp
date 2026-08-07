@@ -215,7 +215,6 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
     s32 num;
     s32 drawArg;
     register s32 sv asm("$2");
-    register s32 lim2 asm("$2");
     register s32 *scr asm("$8");
 
     state = g_AnimSceneryPos[arg1];
@@ -287,8 +286,8 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
         sv = g_AnimSceneryTint;
         *(s32 *)0x1F800084 = sv;
         num = g_AnimSceneryVariant + 4;
-        lim2 = g_CourseModelCount;
-        drawArg = (num < lim2) ? num : 1;
+        sv = g_CourseModelCount;
+        drawArg = (num < sv) ? num : 1;
         SubmitCourseModel((void *)0x1F800000, drawArg);
     } else {
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
@@ -303,8 +302,8 @@ void DrawAnimatedScenery(s32 arg0, s32 arg1) {
         scr = (s32 *)0x1F800084;
         *scr = sv;
         num = g_AnimSceneryVariant + 7;
-        lim2 = g_CourseModelCount;
-        drawArg = (num < lim2) ? num : 1;
+        sv = g_CourseModelCount;
+        drawArg = (num < sv) ? num : 1;
         SubmitCourseModel((void *)0x1F800000, drawArg);
     }
 }
@@ -323,7 +322,6 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 num;
     s32 drawArg;
     register s32 sv asm("$2");
-    register s32 lim2 asm("$2");
     register s32 *scr asm("$8");
 
     if (g_GrandPrixMode == 0) {
@@ -384,9 +382,9 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         drawArg = 1;
         scr = (s32 *)0x1F800084;
         *scr = sv;
-        lim2 = g_CourseModelCount;
+        sv = g_CourseModelCount;
         num = g_AnimScenery2Variant;
-        __asm__("" : "=r"(num) : "0"(num), "r"(lim2));
+        __asm__("" : "=r"(num) : "0"(num), "r"(sv));
         num = num + 4;
     } else {
         SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
@@ -401,13 +399,13 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         drawArg = 1;
         scr = (s32 *)0x1F800084;
         *scr = sv;
-        lim2 = g_CourseModelCount;
+        sv = g_CourseModelCount;
         num = g_AnimScenery2Variant;
-        __asm__("" : "=r"(num) : "0"(num), "r"(lim2));
+        __asm__("" : "=r"(num) : "0"(num), "r"(sv));
         num = num + 7;
     }
 
-    if (num < lim2) {
+    if (num < sv) {
         drawArg = num;
     }
     SubmitCourseModel((void *)0x1F800000, drawArg);
