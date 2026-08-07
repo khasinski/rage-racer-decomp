@@ -21,7 +21,6 @@ void _SsVmInit(void) {
     u_long lowMask;
     register u_long highMask asm("$6");
     register u_long lowBits asm("$3");
-    register u_long highBits asm("$4");
     long next;
     volatile u_short *spu;
     u_long bits;
@@ -75,7 +74,7 @@ void _SsVmInit(void) {
             offset = lowBits * 0x34;
             g_SndVoiceStateStatus[offset] = 0;
             lowBits = D_801F2A08;
-            highBits = D_801F2A0C;
+            index = D_801F2A0C;
             __asm__ volatile("" ::);
             next <<= 16;
             *(short *)&g_SndVoiceStatePitch[offset] = 0;
@@ -90,9 +89,9 @@ void _SsVmInit(void) {
             D_801F2A08 = lowBits;
             D_8009E670 = bits & ~lowBits;
             bits = D_8009E674;
-            highBits = highMask | highBits;
-            D_801F2A0C = highBits;
-            D_8009E674 = bits & ~highBits;
+            index = highMask | index;
+            D_801F2A0C = index;
+            D_8009E674 = bits & ~index;
         } while ((next >> 16) < g_SndVoiceCount);
     }
 }
