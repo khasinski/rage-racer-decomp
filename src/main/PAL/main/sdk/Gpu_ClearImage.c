@@ -99,7 +99,6 @@ long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
     register long quotient asm("$3");
     u_long status;
     u_long gpCommand;
-    register u_long dmaSize asm("$2");
     register volatile u_long *dmaReg asm("$2");
     volatile u_long *dmaSizeReg;
     short h;
@@ -187,10 +186,10 @@ long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
         dmaReg = g_GpuDmaMadr;
         dmaCommand = 0x01000000;
         *dmaReg = (u_long)current;
-        dmaSize = blocks << 16;
+        adjustedWords = blocks << 16;
         dmaSizeReg = g_GpuDmaBcr;
-        dmaSize |= 0x10;
-        *dmaSizeReg = dmaSize;
+        adjustedWords |= 0x10;
+        *dmaSizeReg = adjustedWords;
         dmaReg = g_GpuDmaChcr;
         dmaCommand |= 0x201;
         *dmaReg = dmaCommand;
