@@ -186,7 +186,7 @@ void UploadTeamNameTexture(void *a, s32 b);
 
 void UpdateTeamNameScreen(void) {
     u16 pad;
-    s32 newdepth;
+    register s32 newdepth asm("$2");
 
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawTeamNameCharModel();
@@ -203,12 +203,11 @@ void UpdateTeamNameScreen(void) {
             if (g_PadEdge & 0x8000) { s32 l = GameMenuCursor; GameMenuCursor = (l % 11 != 0) ? l - 1 : l + 0xA; }
             if (g_PadEdge & 0x2000) {
                 s32 r;
-                register s32 res asm("$2");
                 s32 rn;
                 r = GameMenuCursor;
                 rn = r + 1;
-                if (rn % 11 == 0) res = r - 0xA; else res = rn;
-                GameMenuCursor = res;
+                if (rn % 11 == 0) newdepth = r - 0xA; else newdepth = rn;
+                GameMenuCursor = newdepth;
             }
             g_MenuViewAngleTarget = 0;
             g_MenuViewAngle = 0x3E8000;
@@ -255,9 +254,8 @@ pop:
     if (g_TeamNameLength == 0) return;
     PlaySoundCue(4);
     {
-        register s32 tv asm("$2");
-        tv = 0xA;
-        g_TeamNameChars[g_TeamNameLength] = tv;
+        newdepth = 0xA;
+        g_TeamNameChars[g_TeamNameLength] = newdepth;
     }
     newdepth = g_TeamNameLength - 1;
     }
