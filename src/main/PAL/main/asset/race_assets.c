@@ -132,21 +132,12 @@ void LoadRaceAssets(void) {
     case 6: {
         u8 *dst;
         s32 courseOffset;
-        /* The last crutch in this directory. Retail computes this sum in v0
-         * and adds the 0x58 (ASSET_TRACK_2ND_BASE) into a0; gcc 2.6.3 ties the sum straight into a0,
-         * which is the same instructions in different registers, 16 of them.
-         * Ten source shapes give the identical 16 (declaration order, dst
-         * hoisted late, the constant folded into either term or added last,
-         * the two shifts split into their own locals, << instead of *,
-         * operands reversed, the globals read inline) - it is a register
-         * allocation fixpoint, not a spelling. */
-        register s32 assetIndex asm("$2");
+        s32 offset;
         dst = g_AssetLoadCursor;
         courseOffset = g_CourseIndex * 2;
-        assetIndex = (g_GrandPrixClass * 8) + courseOffset;
-        if (LoadAsset(assetIndex + ASSET_TRACK_2ND_BASE, dst) != 0) {
+        offset = (g_GrandPrixClass * 8) + courseOffset;
+        if (LoadAsset(offset + ASSET_TRACK_2ND_BASE, dst) != 0) {
             GameSceneAssetHeader *header;
-            s32 offset;
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[0];
