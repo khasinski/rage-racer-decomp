@@ -20,25 +20,14 @@ long cd_read(long arg0, long sectorInt, void *buf) {
 }
 
 void LibcMemcpy(u_char *dst, u_char *src, long count) {
-    u_char scratch[8];
-    register long i asm("$3");
-    long end;
+    long i;
 
-    /* Forces the target's otherwise unused 8-byte leaf frame. */
-    asm volatile("" : "=m"(scratch));
-
-    if (count == 0) {
-        return;
-    }
-
-    i = count - 1;
-    end = -1;
-    do {
+    i = count;
+    while (i--) {
         *dst = *src;
         src++;
-        i--;
         dst++;
-    } while (i != end);
+    }
 }
 
 long LibcStrcmp(u_char *arg0, u_char *arg1) {
