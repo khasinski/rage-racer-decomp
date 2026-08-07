@@ -1,27 +1,17 @@
 #include "psyq/kernel.h"
 
 long SetRCnt(long arg0, long arg1, long arg2) {
-    register long index asm("$8") = arg0 & 0xFFFF;
-    u_short flags = 0x48;
-    long offset;
-    volatile u_short *entry;
-    long base_v0;
-    long ret;
-    register long base asm("$4");
-    long small;
+    long index = arg0 & 0xFFFF;
+    long flags = 0x48;
 
     if (index >= 3) {
         return 0;
     }
 
-    base_v0 = (long)g_RootCounterRegs;
-    offset = index << 4;
-    entry = (volatile u_short *)(offset + base_v0);
-    small = (u_long)index < 2U;
-    entry[2] = 0;
-    entry[4] = arg1;
+    g_RootCounterRegs[index].mode = 0;
+    g_RootCounterRegs[index].target = arg1;
 
-    if (small) {
+    if ((u_long)index < 2U) {
         if (arg2 & 0x10) {
             flags = 0x49;
         }
@@ -34,17 +24,12 @@ long SetRCnt(long arg0, long arg1, long arg2) {
         }
     }
 
-    offset = index << 4;
     if (arg2 & 0x1000) {
         flags |= 0x10;
     }
 
-    ret = 1;
-    asm("" : "=r"(ret) : "0"(ret));
-    base = (long)g_RootCounterRegs;
-    entry = (volatile u_short *)(offset + base);
-    entry[2] = flags;
-    return ret;
+    g_RootCounterRegs[index].mode = flags;
+    return 1;
 }
 
 long GetRCnt(long arg0) {
@@ -54,7 +39,7 @@ long GetRCnt(long arg0) {
     if (index >= 3) {
         return 0;
     }
-    return g_RootCounterRegs[index * 8];
+    return g_RootCounterRegs[index].count;
 }
 
 long StartRCnt(long arg0) {
@@ -80,6 +65,6 @@ long ResetRCnt(long arg0) {
     if (index >= 3) {
         return 0;
     }
-    g_RootCounterRegs[index * 8] = 0;
+    g_RootCounterRegs[index].count = 0;
     return 1;
 }

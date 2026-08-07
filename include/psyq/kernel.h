@@ -7,6 +7,15 @@
 
 typedef void (*KernelCallback)(void);
 
+typedef struct RootCounter {
+    u_short count;
+    short pad2;
+    short mode;
+    short pad6;
+    short target;
+    long padC;
+} RootCounter;
+
 void copyKernelWords(u_long *dst, u_long *src, u_long count, long unused);
 long VSync(long mode);
 void waitVSync(long target, long timeoutFrames);
@@ -104,7 +113,7 @@ extern volatile u_long *g_DmaIrqControl;
 extern long g_IntrStuckCount;
 extern volatile u_long *g_IrqRegs;
 extern u_long g_RootCounterIrqBits[];
-extern volatile u_short *g_RootCounterRegs;
+extern volatile RootCounter *g_RootCounterRegs;
 extern volatile long *g_Timer1CountReg;
 extern u_long *g_Timer1ModeReg;
 extern void *g_VSyncCallbacks[];
