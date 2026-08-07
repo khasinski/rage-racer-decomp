@@ -3,8 +3,8 @@
 #include "psyq/kernel.h"
 
 extern long g_StCurrentFrameCount;
-extern u_char *D_80099360;
-extern u_char *D_8009936C;
+extern volatile u_char *D_80099360;
+extern volatile u_char *D_8009936C;
 extern long g_StNotStream2Mode;
 extern short g_StCurrentSector;
 extern long g_StColorMode;
@@ -69,7 +69,6 @@ void StUnSetRing(void) {
     CdReadyCallback(0);
     *D_80099360 = 0;
     *D_8009936C = 0;
-    asm("" ::: "memory");
     ExitCriticalSection();
 }
 
