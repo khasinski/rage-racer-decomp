@@ -124,6 +124,19 @@ enum MenuLayout {
 };
 
 /*
+ * One caption of the setup-screen hint bar. `width` both sizes the sprite and
+ * centres it, and `advance` is how far down the bar the next element starts.
+ * Seven records, indexed by the DrawOptionHintBar argument.
+ */
+typedef struct OptionHintCaption {
+    u8 u;
+    u8 v;
+    u8 width;
+    u8 advance;
+} OptionHintCaption;
+extern OptionHintCaption g_OptionHintCaptions[];
+
+/*
  * Slide geometry shared by the CAR SHOP and ENGINEER SHOP money panels. Both
  * count 0..25; the panel appears at 11 and rises 35 lines a frame for the next
  * eleven frames. The rise is carried in 1/32 line units because the retail
@@ -430,10 +443,6 @@ extern u8 D_80011B5C[];
 extern s32 D_8007C744;
 extern u8 D_8007C7CC[];
 extern u8 D_8007D24C;
-extern u8 D_8007D588[];
-extern u8 D_8007D589[];
-extern u8 D_8007D58A[];
-extern u8 D_8007D58B[];
 extern s32 D_8007F948;
 extern u16 D_8007F95C;
 extern s32 D_8007F964;

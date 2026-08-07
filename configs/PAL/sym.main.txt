@@ -687,6 +687,7 @@ g_BootLogoTimer = 0x8007D540;
 g_BootLogoHoldTimer = 0x8007D544;
 g_DefaultColorMatrix = 0x8007D548;
 g_DefaultLightMatrix = 0x8007D568;
+g_OptionHintCaptions = 0x8007D588;
 g_LastValidPadType = 0x8007D5A4;
 g_GameModeHandlers = 0x8007D67C;
 g_BgmRandomLabelTimer = 0x8007D6B0;
