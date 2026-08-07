@@ -10,7 +10,7 @@ extern GameRenderObject g_CameraCar;
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
 void AccumulateLapProgress(void *arg0);
-void UpdateCarTrackState(void *arg0, s32 arg1, void *arg2);
+void UpdateCarTrackState(void* obj, s32 trackPointIndex, void* clampPair);
 void DrawPlayerCarModel(GameRenderObject *obj);
 
 /*

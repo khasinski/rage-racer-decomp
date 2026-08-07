@@ -3,7 +3,9 @@
 #include "game/track.h"
 #include "game/race.h"
 
-void BeginCarStandingStart(u8 *arg0) {
+/* Seeds the launch-spin value from how far the revs sit above the power peak;
+ * a car already in gear 2 or higher also starts losing grip. */
+void BeginCarStandingStart(u8 *car) {
     s32 value;
     s16 index;
 
@@ -16,10 +18,10 @@ void BeginCarStandingStart(u8 *arg0) {
             value = 0;
         }
     } else {
-        index = *(s16 *)(arg0 + 0x132);
+        index = *(s16 *)(car + 0x132);
         value *= g_PeakOutputValue / ((index * 200) + 300);
-        *(s32 *)(arg0 + 0x150) = *(s32 *)(arg0 + 0x150) / index;
-        if (*(s16 *)(arg0 + 0x132) >= 2) {
+        *(s32 *)(car + 0x150) = *(s32 *)(car + 0x150) / index;
+        if (*(s16 *)(car + 0x132) >= 2) {
             g_GripLossTimer = 200;
         }
     }
@@ -27,8 +29,13 @@ void BeginCarStandingStart(u8 *arg0) {
     g_StandingStartSpin = value;
 }
 
-void SeedCarLapProgress(u8 *arg0, s32 arg1) {
-    GameCarRuntime *obj = (GameCarRuntime *)arg0;
+/*
+ * Walks the track-point ring from the event's start point to the car's current
+ * point, summing segment lengths into field_68. `mode` picks which way round
+ * to walk; the backwards arm then reuses the parameter as its own cursor.
+ */
+void SeedCarLapProgress(u8 *car, s32 mode) {
+    GameCarRuntime *obj = (GameCarRuntime *)car;
     s32 state = g_RaceSeries;
     s32 cur = obj->trackPointIndex;
     s32 total = 0;
@@ -37,7 +44,7 @@ void SeedCarLapProgress(u8 *arg0, s32 arg1) {
     obj->field_68 = 0;
     if (state != 0) {
         index = *(s32 *)g_TrackEventData;
-        if (arg1 == 1) {
+        if (mode == 1) {
             s32 count;
             u8 *table;
             s32 wrapped;
@@ -76,7 +83,7 @@ while (1) {
         }
     } else {
         index = *(s32 *)g_TrackEventData;
-        if (arg1 == 0) {
+        if (mode == 0) {
             s32 count;
             u8 *table;
             s32 wrapped;
@@ -98,14 +105,14 @@ while (1) {
             table = (u8 *)g_TrackPoints;
             do {
                 if (index < 0) {
-                    arg1 = index + count;
+                    mode = index + count;
                 } else {
-                    arg1 = index;
+                    mode = index;
                 }
-                if (cur == arg1) {
+                if (cur == mode) {
                     break;
                 }
-                mod = arg1 % count;
+                mod = mode % count;
                 total += ((GameTrackPoint *)table)[mod].segmentLength;
                 index--;
             } while (1);

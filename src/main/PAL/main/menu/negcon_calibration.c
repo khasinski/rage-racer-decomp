@@ -103,7 +103,7 @@ void DrawNegconSteerPlayScreen(void) {
 
 extern u8 g_PadType;
 
-void DrawOptionHintBar(s32 arg0);
+void DrawOptionHintBar(s32 variant);
 
 /*
  * Game mode 10: pick the steering play with left/right, confirm with

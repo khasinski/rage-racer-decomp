@@ -13,7 +13,7 @@ extern u8 *g_CarModelAsset;
  * block just loaded. Its header words 1 and 2 are relocated into
  * g_AssetBlockPtr / g_AssetSubBlockPtr and word 0 is kept as-is. */
 
-void LoadUpgradedCarModel(s32 arg0) {
+void LoadUpgradedCarModel(s32 carIndex) {
     u8 *ptr;
     GameCarModelAsset *asset;
     s32 offset;
@@ -21,7 +21,7 @@ void LoadUpgradedCarModel(s32 arg0) {
     u32 mode;
 
     if (g_AssetLoadState == 1) {
-        offset = GetCarAssetIndex(arg0, g_CarTable[arg0].modelVariant + 1) << 1;
+        offset = GetCarAssetIndex(carIndex, g_CarTable[carIndex].modelVariant + 1) << 1;
         mode = g_CarModelSlot;
         ptr = g_CarModelBuffer;
         assetId = offset + 0xA;
@@ -41,8 +41,8 @@ void LoadUpgradedCarModel(s32 arg0) {
             SetCarImageSlot((void *)asset->imageDataOffset, g_CarModelSlot < 1);
 
             if (g_PlayerCarIndex < 10) {
-                ApplyBodyColor1(g_CarTable[arg0].paintColor1, asset->imageDataOffset);
-                ApplyBodyColor2(g_CarTable[arg0].paintColor2, asset->imageDataOffset);
+                ApplyBodyColor1(g_CarTable[carIndex].paintColor1, asset->imageDataOffset);
+                ApplyBodyColor2(g_CarTable[carIndex].paintColor2, asset->imageDataOffset);
             }
 
             g_AssetLoadState = 0;

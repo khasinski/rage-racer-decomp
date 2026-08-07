@@ -5,7 +5,7 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-void DrawRaceEndBanner(s32 arg0);
+void DrawRaceEndBanner(s32 level);
 s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
 
 /* Scene 34: the still shown after the ending FMV. Fades in, waits 300

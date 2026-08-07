@@ -66,7 +66,7 @@ s32 IsCarFacingBackwards(void *car);
 void UpdateCarBodyRoll(void *car);
 void AccumulateLapProgress(void *car);
 void ApplyCarKnockback(void *car);
-s32 UpdateCarTrackState(void *car, s32 arg1, void *arg2);
+s32 UpdateCarTrackState(void* obj, s32 trackPointIndex, void* clampPair);
 void StartCarBodyKick(s32 arg0, void *car);
 void UpdateCarTiltCounter(void *car);
 void UpdateCarCrestHop(void *car);
@@ -568,7 +568,7 @@ void UpdatePlayerCar(Car *car) {
 
 extern s32 g_EnvScriptClock;
 
-s32 DrawTachometer(s32 rpm, s32 arg1, s32 type, s32 amt);
+s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt);
 
 s32 DrawPlayerTachometer(void) {
     s32 value;

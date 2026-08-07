@@ -1,14 +1,14 @@
 #include "common.h"
 
-void SetDQA(s32 arg0);
-void SetDQB(s32 arg0);
+void SetDQA(s32 a);
+void SetDQB(s32 a);
 
 void SetFogNear(s32 arg0, s32 arg1) {
     SetDQA(-((arg0 * 5) << 6) / arg1);
     SetDQB(0x1400000);
 }
 
-s32 Lzc(s32 arg0);
+s32 Lzc(s32 x);
 
 s32 CordicRotate(s32 arg0) {
     s32 data[16];

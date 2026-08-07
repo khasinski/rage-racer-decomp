@@ -23,7 +23,7 @@ extern s32 g_PlayerTrackProgress;
 extern u8 g_TeamLogoClutRect[];
 extern u8 g_TeamLogoRect[];
 extern u8 g_TeamLogoCanvas[];
-void DrawBrowseArrows(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight);
 void UploadTeamNameTexture(void *arg0, s32 arg1);
 
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
@@ -476,7 +476,7 @@ extern u8 *D_8019C764;
 void drawSprite(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
 void DrawBrowseArrows(s32, s32, s32, s32);
-void DrawMenuLightBurst(s32 arg0);
+void DrawMenuLightBurst(s32 arg);
 void DrawOwnedCarCounter(s32 arg0, s32 arg1);
 void UpdateCourseSelectScreen(void) {
     void *ot;

@@ -6,7 +6,7 @@ extern volatile u_short *g_SpuRegBase;
 
 void _spu_startDmaTransfer(long arg0, long arg1, long arg2);
 
-long SpuTransferStatus(long arg0, long arg1);
+long SpuTransferStatus(long addr, long mode);
 
 long SpuTransferStatus(long addr, long mode) {
     long size;

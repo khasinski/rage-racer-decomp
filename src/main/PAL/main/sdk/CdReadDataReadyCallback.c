@@ -39,9 +39,9 @@ long CdLastPos(void);
 long CdMode(void);
 void CdFlush(void);
 void CdControlF(long arg0, long arg1);
-long CdReadRetry(long arg0);
-void CdSyncCallback(long arg0);
-void CdReadyCallback(long arg0);
+long CdReadRetry(long mode);
+void CdSyncCallback(long callback);
+void CdReadyCallback(long callback);
 
 void CdReadDataReadyCallback(u_char intr, long result) {
     volatile long *p;

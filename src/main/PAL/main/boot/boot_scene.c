@@ -11,7 +11,7 @@
 void *QueueShadedSpriteNine(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) asm("GameQueueShadedSprite");
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
 extern Matrix g_SceneLightMatrix;
-void InitRenderState(s32 arg0);
+void InitRenderState(s32 otShift);
 
 void DrawBootLogo(void) {
     u8 *base;

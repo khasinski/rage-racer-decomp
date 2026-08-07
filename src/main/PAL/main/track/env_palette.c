@@ -7,8 +7,8 @@ void SetEnvPaletteTable(u32 arg0) {
     g_EnvPaletteTable = arg0;
 }
 
-void SetFarColor(s32 arg0, s32 arg1, s32 arg2);
-void Intpl(void *arg0, s32 arg1, void *arg2);
+void SetFarColor(s32 a, s32 b, s32 c);
+void Intpl(void* in, s32 ir0, void* out);
 
 void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) {
     s32 local[3];

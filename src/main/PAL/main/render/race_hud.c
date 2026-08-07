@@ -74,7 +74,7 @@ void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
 }
 
 extern GameRaceRanking g_PlayerLap;
-void DrawTimeValue(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 
 /* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */

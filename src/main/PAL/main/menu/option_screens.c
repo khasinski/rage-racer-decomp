@@ -11,17 +11,17 @@
 #include "psyq/gpu.h"
 
 s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueSpriteTrans");
-void DrawOptionHintBar(s32 arg0);
+void DrawOptionHintBar(s32 variant);
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 s32 QueueLineWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueLine");
 extern s32 g_CameraViewMode;
 extern s32 *g_CamRow;
-void InitRenderState(s32 arg0);
+void InitRenderState(s32 otShift);
 void SetTrackTexturePageNow(s32 arg0);
 extern u8 g_TextNowLoading[];
-void DrawFullscreenFadeTile(s32 arg0, s32 arg1);
+void DrawFullscreenFadeTile(s32 color, s32 tpage);
 void RequestTrackDataAssets(void);
 
 /* g_GameModeHandlers[5]: left/right edits the selected audio setting, cancel restores it. */

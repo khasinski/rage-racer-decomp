@@ -14,7 +14,7 @@ void DrawRectOutlineWide(void *buf, s32 xa, s32 ya, s32 w, s32 h, s32 r, s32 g, 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
 
-void DrawMenuLightBurst(s32 arg0);
+void DrawMenuLightBurst(s32 arg);
 
 void UpdateRankingScreen(void) {
     s32 state;

@@ -89,7 +89,7 @@ void InterpolateTrackPoint(s32 pointIndex, s32 *out, s32 weight) {
 #include "common.h"
 #include "game/track.h"
 
-s32 InterpolateTrackAngle(s32 arg0, s32 arg1);
+s32 InterpolateTrackAngle(s32 pointIndex, s32 weight);
 
 /*
  * Smooths the track angle at `pointIndex` by blending it (half weight, 0x200)

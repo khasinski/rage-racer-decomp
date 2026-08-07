@@ -40,7 +40,7 @@ u8 *QueueSpriteTransWide(
     s32 v,
     s32 clutIndex) asm("GameQueueSpriteTrans");
 u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("QueueDrawModePrim");
-void DrawOptionHintBar(s32 arg0);
+void DrawOptionHintBar(s32 variant);
 
 /*
  * Game mode 7's screen: either the "no controller" banner, or the two nudge

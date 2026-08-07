@@ -8,9 +8,9 @@ extern u_char D_80013688[];
 extern u_char D_800136A4[];
 extern u_char D_800136B8[];
 
-long CD_init(long arg0);
-long CdSyncCallback(long arg0);
-long CdReadyCallback(long arg0);
+long CD_init(long mode);
+long CdSyncCallback(long callback);
+long CdReadyCallback(long callback);
 long CdControlB(long arg0, u_char *arg1, u_char *arg2);
 void CdDefaultSyncCallback(void);
 void CdDefaultReadyCallback(void);
