@@ -6,11 +6,11 @@ typedef struct PrimTag {
 } PrimTag;
 
 s32 GetPrimAddr(u32 *arg0) {
-    return (*arg0 & 0x00FFFFFF) | 0x80000000;
+    return ((PrimTag *)arg0)->addr | 0x80000000;
 }
 
 s32 IsEndPrim(u32 *arg0) {
-    return ((*arg0 & 0x00FFFFFF) == 0x00FFFFFF);
+    return ((PrimTag *)arg0)->addr == 0x00FFFFFF;
 }
 
 void AddPrim(u32 *arg0, u32 *arg1) {
@@ -31,11 +31,11 @@ void AddPrims(u32 *arg0, u32 arg1, u32 *arg2) {
 }
 
 void SetPrimAddr(u32 *arg0, u32 arg1) {
-    *arg0 = (*arg0 & 0xFF000000) | (arg1 & 0x00FFFFFF);
+    ((PrimTag *)arg0)->addr = arg1;
 }
 
 void TermPrim(u32 *arg0) {
-    *arg0 |= 0x00FFFFFF;
+    ((PrimTag *)arg0)->addr = 0x00FFFFFF;
 }
 
 void SetSemiTrans(u8 *arg0, s32 arg1) {
