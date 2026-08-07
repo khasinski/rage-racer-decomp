@@ -26,7 +26,7 @@ u_short SpuVmCalculateTonePitch(long arg0, long arg1);
 long SsUtPitchBend(long arg0, long arg1, long arg2, long arg3, u_short arg4);
 long SsUtChangePitch(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6);
 long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5);
-long SsUtGetDetVVol(long arg0, short *arg1, short *arg2);
+short SsUtGetDetVVol(short arg0, short *arg1, short *arg2);
 short SsUtSetDetVVol(short arg0, short arg1, short arg2);
 short SsUtSetVVol(short arg0, short arg1, short arg2);
 long SsUtAutoVol(long arg0, long arg1, long arg2, long arg3);
@@ -161,17 +161,10 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     return ret;
 }
 
-long SsUtGetDetVVol(long arg0, short *arg1, short *arg2) {
-    register long offset asm("$3");
-    u_char *base;
-
-    if ((u_short)arg0 < 0x18U) {
-        offset = (arg0 << 16) >> 12;
-        base = (u_char *)g_SndSpuRegs;
-        *arg1 = *(u_short *)(offset + (long)base);
-        base = (u_char *)g_SndSpuRegs;
-        offset += (long)base;
-        *arg2 = *(u_short *)(offset + 2);
+short SsUtGetDetVVol(short voice, short *left, short *right) {
+    if (voice >= 0 && voice < 24) {
+        *left = g_SndSpuRegs[voice * 8];
+        *right = g_SndSpuRegs[voice * 8 + 1];
         return 0;
     }
 

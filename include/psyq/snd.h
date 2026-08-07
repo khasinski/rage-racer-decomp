@@ -138,7 +138,7 @@ long SsUtKeyOffV(long voice);
 long SsUtPitchBend(long voice, long vab_id, long program, long note, u_short pbend);
 long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long old_fine, long new_note, long new_fine);
 long SsUtChangeADSR(long voice, long vab_id, long program, long old_note, long adsr1, long adsr2);
-long SsUtGetDetVVol(long voice, short *left, short *right);
+short SsUtGetDetVVol(short voice, short *left, short *right);
 short SsUtSetDetVVol(short voice, short left, short right);
 short SsUtSetVVol(short voice, short left, short right);
 long SsUtAutoVol(long voice, long start_vol, long end_vol, long delta_time);
