@@ -235,9 +235,6 @@ void UpdateOwnedCarNeighbours(void) {
         }
     }
 }
-
-s32 GetCarUnlockLevel(s32 model);
-
 void RefreshCarUnlockState(void) {
     s32 index;
     s32 value;

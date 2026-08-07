@@ -17,9 +17,6 @@ extern long g_ExecQueueIntrMask;
 extern volatile LastCb g_GpuLastCb;
 extern volatile u_long *g_GpuGp1;
 extern volatile long g_DrawSyncCallback;
-
-extern long SetIntrMask(long);
-
 /* Driver-table slot +0x24, and the DMA2 completion callback: drains the
  * Gpu_AddQueue ring, then fires the DrawSyncCallback when it empties.
  * Returns the number of entries still queued. */

@@ -349,8 +349,6 @@ s32 WaitMemoryCardSwEvent(void) {
         }
     }
 }
-
-void RestartMemoryCard(void);
 void RestartMemoryCard(void) { InitCARD(1); StartCARD(); BiosBuInit(); g_SaveElapsedTicks = 0; }
 
 extern s32 g_FrameSyncThreshold;

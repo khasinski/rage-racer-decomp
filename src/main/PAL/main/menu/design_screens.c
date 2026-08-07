@@ -467,9 +467,6 @@ s32 DrawCarShopScreen(s32 arg0) {
 
     return D_8009B2E8;
 }
-
-s32 GetCarUnlockLevel(s32 model);
-
 void UpdateCarListCursor(void) {
     s32 index;
     CarEntry *entry;
