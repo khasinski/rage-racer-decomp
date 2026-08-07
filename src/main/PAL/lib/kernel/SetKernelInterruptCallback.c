@@ -57,15 +57,14 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
         }
     } else {
         u_long bit;
-        register u_long activeMask asm("$3");
 
         bit = 1 << index;
         bit = ~bit;
         *slot = callback;
-        activeMask = g_IntrCallbackMask;
+        pendingValue = g_IntrCallbackMask;
         pendingMask &= bit;
-        activeMask &= bit;
-        g_IntrCallbackMask = activeMask;
+        pendingValue &= bit;
+        g_IntrCallbackMask = pendingValue;
     }
 
     if (index == 0) {
