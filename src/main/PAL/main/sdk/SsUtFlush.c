@@ -28,6 +28,7 @@ void SsUtFlush(void) {
     volatile long stack[4];
     register long i asm("$16");
     register long voiceOffset asm("$17");
+    register long voiceValue asm("$2");
     long voiceIndex;
     long two;
     long oneSaved;
@@ -134,8 +135,6 @@ break;
         D_8009E674 = activeMask;
     }
     do {
-        register long voiceStep asm("$2");
-
         if (*(short *)&g_SndVoiceStateAutoVol[voiceOffset] != 0) {
             SpuVmAutoVolTick(voiceIndex >> 16);
         }
@@ -143,8 +142,8 @@ break;
             SpuVmAutoPanTick(voiceIndex >> 16);
         }
         voiceOffset += 0x34;
-        voiceStep = 0x10000;
-        voiceIndex += voiceStep;
+        voiceValue = 0x10000;
+        voiceIndex += voiceValue;
         i++;
     } while (i < 24);
 
@@ -155,7 +154,6 @@ break;
         u_char *src8;
         u_char *src10;
         long spuOffset;
-        register volatile u_short *spu asm("$2");
         u_short value;
         u_char *srcBase;
 
@@ -168,28 +166,28 @@ break;
         src0 = srcBase;
         do {
         if (*flagsPtr % 2) {
-            spu = (volatile u_short *)((u_char *)g_SndSpuRegs + spuOffset);
+            voiceValue = (long)((u_char *)g_SndSpuRegs + spuOffset);
             value = *(u_short *)src0;
-            spu[0] = value;
+            ((volatile u_short *)voiceValue)[0] = value;
             value = *(u_short *)src2;
-            spu[1] = value;
+            ((volatile u_short *)voiceValue)[1] = value;
         }
         if (*flagsPtr & 4) {
-            spu = (volatile u_short *)((u_char *)g_SndSpuRegs + spuOffset);
+            voiceValue = (long)((u_char *)g_SndSpuRegs + spuOffset);
             value = *(u_short *)&g_SndVoiceRegsPitch[spuOffset];
-            spu[2] = value;
+            ((volatile u_short *)voiceValue)[2] = value;
         }
         if (*flagsPtr & 8) {
-            spu = (volatile u_short *)((u_char *)g_SndSpuRegs + spuOffset);
+            voiceValue = (long)((u_char *)g_SndSpuRegs + spuOffset);
             value = *(u_short *)&g_SndVoiceRegsAddr[spuOffset];
-            spu[3] = value;
+            ((volatile u_short *)voiceValue)[3] = value;
         }
         if (*flagsPtr & 0x10) {
-            spu = (volatile u_short *)((u_char *)g_SndSpuRegs + spuOffset);
+            voiceValue = (long)((u_char *)g_SndSpuRegs + spuOffset);
             value = *(u_short *)src8;
-            spu[4] = value;
+            ((volatile u_short *)voiceValue)[4] = value;
             value = *(u_short *)src10;
-            spu[5] = value;
+            ((volatile u_short *)voiceValue)[5] = value;
         }
         *flagsPtr = 0;
         flagsPtr++;
