@@ -39,8 +39,6 @@ void SeedRouteScenery(void) {
     register s32 index0 asm("$2");
     s32 index1;
     register u8 *base asm("$4");
-    register u8 *src asm("$2");
-    register u8 *record asm("$4");
     s32 value;
 
     D_801E433C = 1;
@@ -49,8 +47,8 @@ void SeedRouteScenery(void) {
     index0 = g_RaceSeries;
     base = g_RouteSceneryData;
     index1 = g_RaceSeries;
-    src = (u8 *)((index0 * 32) + (s32)base);
-    *(Vec4 *)&g_RouteSceneryX = *(Vec4 *)(src + 0x10);
+    index0 = (index0 * 32) + (s32)base;
+    *(Vec4 *)&g_RouteSceneryX = *(Vec4 *)((u8 *)index0 + 0x10);
 
     index1 = index1 << 2;
     index1 = index1 + (s32)base;
@@ -59,11 +57,11 @@ void SeedRouteScenery(void) {
 
     index1 = *(s16 *)(index1 + 8);
     value = ((index1 * 3) << 2) + 0x50;
-    record = base + value;
+    base += value;
 
-    g_RouteSceneryRotX = *(s16 *)(record + 0);
-    g_RouteSceneryRotY = *(s16 *)(record + 2);
-    value = *(s16 *)(record + 4);
-    g_RouteSceneryKeyframe = record;
+    g_RouteSceneryRotX = *(s16 *)(base + 0);
+    g_RouteSceneryRotY = *(s16 *)(base + 2);
+    value = *(s16 *)(base + 4);
+    g_RouteSceneryKeyframe = base;
     g_RouteSceneryRotZ = value;
 }
