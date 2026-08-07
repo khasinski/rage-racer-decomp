@@ -11,7 +11,7 @@
 #include "psyq/gte.h"
 
 /* Darkens the scene colour matrix by GetTrackZoneBlend's 0..0x100 track-zone ramp; RestoreColorMatrix puts it back. */
-void ApplyZoneLighting(s32 a0, Matrix *a1) {
+void ApplyZoneLighting(s32 a0, Matrix *mtx) {
     Matrix out;
     s32 s1;
 
@@ -47,15 +47,15 @@ void ApplyZoneLighting(s32 a0, Matrix *a1) {
         SetColorMatrix(&out);
 
         kb = k - a0;
-        a1->m[0][0] = a1->m[0][0] * kb / 256 + D_8007C778.m[0][0] * a0 / 256;
-        a1->m[0][1] = a1->m[0][1] * kb / 256 + D_8007C778.m[0][1] * a0 / 256;
-        a1->m[0][2] = a1->m[0][2] * kb / 256 + D_8007C778.m[0][2] * a0 / 256;
-        a1->m[1][0] = a1->m[1][0] * kb / 256 + D_8007C778.m[1][0] * a0 / 256;
-        a1->m[1][1] = a1->m[1][1] * kb / 256 + D_8007C778.m[1][1] * a0 / 256;
-        a1->m[1][2] = a1->m[1][2] * kb / 256 + D_8007C778.m[1][2] * a0 / 256;
-        a1->m[2][0] = a1->m[2][0] * kb / 256 + D_8007C778.m[2][0] * a0 / 256;
-        a1->m[2][1] = a1->m[2][1] * kb / 256 + D_8007C778.m[2][1] * a0 / 256;
-        a1->m[2][2] = a1->m[2][2] * kb / 256 + D_8007C778.m[2][2] * a0 / 256;
+        mtx->m[0][0] = mtx->m[0][0] * kb / 256 + D_8007C778.m[0][0] * a0 / 256;
+        mtx->m[0][1] = mtx->m[0][1] * kb / 256 + D_8007C778.m[0][1] * a0 / 256;
+        mtx->m[0][2] = mtx->m[0][2] * kb / 256 + D_8007C778.m[0][2] * a0 / 256;
+        mtx->m[1][0] = mtx->m[1][0] * kb / 256 + D_8007C778.m[1][0] * a0 / 256;
+        mtx->m[1][1] = mtx->m[1][1] * kb / 256 + D_8007C778.m[1][1] * a0 / 256;
+        mtx->m[1][2] = mtx->m[1][2] * kb / 256 + D_8007C778.m[1][2] * a0 / 256;
+        mtx->m[2][0] = mtx->m[2][0] * kb / 256 + D_8007C778.m[2][0] * a0 / 256;
+        mtx->m[2][1] = mtx->m[2][1] * kb / 256 + D_8007C778.m[2][1] * a0 / 256;
+        mtx->m[2][2] = mtx->m[2][2] * kb / 256 + D_8007C778.m[2][2] * a0 / 256;
     }
 }
 

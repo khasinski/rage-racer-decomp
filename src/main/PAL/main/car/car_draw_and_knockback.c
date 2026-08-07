@@ -120,25 +120,25 @@ void DrawPlayerCarOnly(void) {
     DrawCar(g_Cars);
 }
 
-void ClearCarMotionState(GameCarRuntime *arg0) {
-    arg0->field_8A = 0;
-    arg0->motionMode = 0;
-    arg0->motionModeTimer = 0;
-    arg0->motionValue = 0;
-    arg0->motionActive = 0;
-    arg0->motionTimer = 0;
-    arg0->velocityX = 0;
-    arg0->velocityZ = 0;
-    arg0->field_8C = 0;
-    arg0->field_8E = 0;
-    arg0->field_90 = 0;
-    arg0->field_92 = 0;
-    arg0->field_94 = 0;
-    arg0->field_96 = 0;
-    arg0->field_98 = 0;
-    arg0->field_9A = 0;
-    arg0->field_9C = 0;
-    arg0->field_9E = 0;
+void ClearCarMotionState(GameCarRuntime *car) {
+    car->field_8A = 0;
+    car->motionMode = 0;
+    car->motionModeTimer = 0;
+    car->motionValue = 0;
+    car->motionActive = 0;
+    car->motionTimer = 0;
+    car->velocityX = 0;
+    car->velocityZ = 0;
+    car->field_8C = 0;
+    car->field_8E = 0;
+    car->field_90 = 0;
+    car->field_92 = 0;
+    car->field_94 = 0;
+    car->field_96 = 0;
+    car->field_98 = 0;
+    car->field_9A = 0;
+    car->field_9C = 0;
+    car->field_9E = 0;
 }
 
 void UpdateCarTiltCounter(GameCarRuntime *arg0) {
@@ -194,21 +194,21 @@ void UpdateCarTiltCounter(GameCarRuntime *arg0) {
     obj->field_8C = value;
 }
 
-void ApplyCarKnockback(GameCarRuntime *arg0) {
+void ApplyCarKnockback(GameCarRuntime *car) {
     u32 timer;
 
-    if (arg0->motionActive != 0) {
-        timer = arg0->motionTimer - 1;
-        arg0->motionTimer = timer;
+    if (car->motionActive != 0) {
+        timer = car->motionTimer - 1;
+        car->motionTimer = timer;
         if ((s32)(timer << 16) <= 0) {
-            arg0->motionActive = 0;
-            arg0->motionTimer = 0;
+            car->motionActive = 0;
+            car->motionTimer = 0;
         }
 
-        arg0->x -= arg0->velocityX;
-        arg0->z -= arg0->velocityZ;
-        arg0->velocityX = arg0->velocityX * 7 / 8;
-        arg0->velocityZ = arg0->velocityZ * 7 / 8;
+        car->x -= car->velocityX;
+        car->z -= car->velocityZ;
+        car->velocityX = car->velocityX * 7 / 8;
+        car->velocityZ = car->velocityZ * 7 / 8;
     }
 }
 

@@ -89,7 +89,7 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
     }
 }
 
-s32 GetCarCrestTrigger(GameCarRuntime *arg0) {
+s32 GetCarCrestTrigger(GameCarRuntime *car) {
     u8 *base;
     s32 pos0;
     s32 pos1;
@@ -106,13 +106,13 @@ s32 GetCarCrestTrigger(GameCarRuntime *arg0) {
     register s32 resultOffset asm("v0");
 
     base = g_TrackEventData;
-    if (arg0->field_A4 < 0x320) {
+    if (car->field_A4 < 0x320) {
         return 0;
     }
 
-    pos0 = arg0->trackProgress;
-    pos1 = arg0->previousTrackProgress;
-    row = arg0->facingBackwards;
+    pos0 = car->trackProgress;
+    pos1 = car->previousTrackProgress;
+    row = car->facingBackwards;
 
     if (g_RaceSeries != 0) {
         pos0 = g_TrackLength - pos0;
@@ -252,8 +252,8 @@ void UpdateCarCrestHop(GameCarRuntime *arg0) {
     obj->field_9E = value;
 }
 
-void UpdateCarSlideAngle(GameCarRuntime *arg0, s32 arg1) {
-    GameCarRuntime *obj = arg0;
+void UpdateCarSlideAngle(GameCarRuntime *car, s32 arg1) {
+    GameCarRuntime *obj = car;
     s32 temp;
     s32 value;
     u8 *base;

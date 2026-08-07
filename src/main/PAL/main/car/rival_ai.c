@@ -184,7 +184,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
  */
 extern GameCarRuntime *D_801E40B8[] asm("g_SceneTimer");
 
-void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
+void SlowRivalAhead(GameCarRuntime *car, s32 arg1) {
     GameCarRuntime *entry;
     s32 offset;
     s32 pos0Base;
@@ -193,9 +193,9 @@ void SlowRivalAhead(GameCarRuntime *arg0, s32 arg1) {
     s32 value;
 
     offset = arg1 * 4;
-    pos0Base = arg0->field_68;
+    pos0Base = car->field_68;
     entry = *(GameCarRuntime **)((u8 *)D_801E40B8 + offset);
-    pos0 = pos0Base + arg0->field_6C;
+    pos0 = pos0Base + car->field_6C;
     pos1 = entry->field_68 + entry->field_6C;
 
     if ((pos1 - pos0) < 0x2800) {
