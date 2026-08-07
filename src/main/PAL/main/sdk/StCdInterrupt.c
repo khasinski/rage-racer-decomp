@@ -33,7 +33,7 @@ void StClearRingRange(s32 first, u32 count);
 void data_ready_callback(void);
 
 void StCdInterrupt(void) {
-    StReadyStatus readyStatus;
+    volatile StReadyStatus readyStatus;
     CdlLOC location;
     u8 readyResult[8];
     u8 *resultCursor;
@@ -63,8 +63,6 @@ void StCdInterrupt(void) {
 
     readyStatus.status = readyResult[0];
     readyStatus.cause = readyResult[1];
-    /* Keep both short status fields materialized before testing the first. */
-    asm("" ::: "memory");
     if (readyStatus.status & 4) {
         g_StInterruptState = 3;
         return;
