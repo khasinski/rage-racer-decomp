@@ -623,21 +623,23 @@ void StoreSaveStateBlock(u8 *block) {
     }
 
     {
-        /* The remaining register hints in these loops are load-bearing. */
-        s32 outer = 0;
-        s32 *lapBase = g_BestLapTimes;
-        s32 *totalBase = g_BestTotalTimes;
-        u8 *outerDst = block;
+        register s32 inner asm("$6");
+        register s32 middle asm("$12");
 
-        for (; outer < 2; outer++) {
-            register s32 middle asm("$12") = 0;
-            register s32 outerOffset asm("$9") = outer * 32;
-            register u8 *middleDst asm("$11") = outerDst;
-            u8 *lapDst = outerDst + 0x9DC;
+        {
+            /* The remaining register hints in these loops are load-bearing. */
+            s32 outer = 0;
+            s32 *lapBase = g_BestLapTimes;
+            s32 *totalBase = g_BestTotalTimes;
+            u8 *outerDst = block;
+
+            for (; outer < 2; outer++) {
+                register s32 outerOffset asm("$9") = (middle = 0, outer * 32);
+                register u8 *middleDst asm("$11") = outerDst;
+                u8 *lapDst = outerDst + 0x9DC;
 
             for (; middle < 4; middle++) {
-                register s32 inner asm("$6") = 0;
-                s32 middleOffset = middle * 8;
+                s32 middleOffset = (inner = 0, middle * 8);
                 s32 *totalOutBase = (s32 *)(middleDst + 0xA1C);
                 s32 *totalOut =
                     (s32 *)(middleOffset + (s32)totalOutBase);
@@ -656,11 +658,11 @@ void StoreSaveStateBlock(u8 *block) {
                 }
                 lapDst += 8;
             }
-            outerDst += 0x20;
+                outerDst += 0x20;
+            }
         }
-    }
 
-    {
+        {
         /* The remaining register hints in these loops are load-bearing. */
         s32 outer = 0;
         /* Serialised as a flat run of words, hence the cast. */
@@ -677,8 +679,7 @@ void StoreSaveStateBlock(u8 *block) {
             s32 middleOffset = 0;
 
             for (; middle < 4; middle++) {
-                register s32 inner asm("$6") = 0;
-                s32 *timeDstBase = (s32 *)(middleDst + 0xCDC);
+                s32 *timeDstBase = (inner = 0, (s32 *)(middleDst + 0xCDC));
                 s32 *timeDst =
                     (s32 *)(middleOffset + (s32)timeDstBase);
                 s32 *timeIn =
@@ -703,9 +704,9 @@ void StoreSaveStateBlock(u8 *block) {
             outerDst += 0x140;
             outerOffset += 0x140;
         }
-    }
+        }
 
-    {
+        {
         /* The remaining register hints in these loops are load-bearing. */
         s32 outer = 0;
         register s32 *sectorBase asm("$11") = g_BestSectorTimes;
@@ -713,14 +714,12 @@ void StoreSaveStateBlock(u8 *block) {
         s32 outerOffset = 0;
 
         for (; outer < 2; outer++) {
-            register s32 middle asm("$12") = 0;
-            s32 currentOuterOffset = outerOffset;
+            s32 currentOuterOffset = (middle = 0, outerOffset);
             u8 *sectorDst = outerDst + 0xF5C;
             s32 middleOffset = 0;
 
             for (; middle < 4; middle++) {
-                register s32 inner asm("$6") = 0;
-                s32 *sectorOut = (s32 *)sectorDst;
+                s32 *sectorOut = (inner = 0, (s32 *)sectorDst);
                 s32 *sectorIn =
                     (s32 *)(middleOffset +
                             (currentOuterOffset + (s32)sectorBase));
@@ -734,6 +733,7 @@ void StoreSaveStateBlock(u8 *block) {
             }
             outerDst += 0x30;
             outerOffset += 0x30;
+        }
         }
     }
 
