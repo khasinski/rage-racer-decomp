@@ -15,8 +15,7 @@ void _spu_writeByIO(u_short *addr, u_long size) {
     u_short stat0;
     u_short *paddr = addr;
     u_short saved;
-    register u_short ctrl asm("$4");
-    register u_short cmasked asm("$2");
+    u_short ctrl;
     long chunk;
     long k;
 
@@ -37,9 +36,8 @@ void _spu_writeByIO(u_short *addr, u_long size) {
                 g_SpuRegBase[0xD4] = *paddr++;
             }
             ctrl = g_SpuRegBase[0xD5];
-            cmasked = ctrl & 0xffcf;
-            asm("" : "=r"(cmasked) : "0"(cmasked));
-            ctrl = cmasked | 0x10;
+            ctrl &= 0xffcf;
+            ctrl |= 0x10;
             g_SpuRegBase[0xD5] = ctrl;
 
             SPU_DELAY();
@@ -60,7 +58,8 @@ void _spu_writeByIO(u_short *addr, u_long size) {
     }
 
     ctrl = g_SpuRegBase[0xD5];
-    g_SpuRegBase[0xD5] = ctrl & 0xffcf;
+    ctrl &= 0xffcf;
+    g_SpuRegBase[0xD5] = ctrl;
     g_SpuWaitCount = 0;
     while ((g_SpuRegBase[0xD7] & 0x7ff) != saved) {
         if (++g_SpuWaitCount >= 5001) {
