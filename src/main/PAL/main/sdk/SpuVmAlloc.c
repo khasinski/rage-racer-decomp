@@ -262,14 +262,13 @@ void SpuVmRebuildVoiceTable(void) {
 
     {
         u_long periodRaw;
+        register long voiceOffset asm("$3");
 
         periodRaw = D_801E4BE8;
         periodIndex = periodRaw % 2;
         if (periodIndex > 0) {
             periodIndex = periodRaw << 16;
         {
-        register long voiceOffset asm("$3");
-
         periodIndex = periodIndex >> 16;
         periodIndex = (periodIndex - 1) / 2;
         periodIndex <<= 4;
@@ -285,8 +284,6 @@ void SpuVmRebuildVoiceTable(void) {
     } else {
         periodIndex = periodRaw << 16;
         {
-            register long voiceOffset asm("$3");
-
             periodIndex = periodIndex >> 16;
             periodIndex = (periodIndex - 1) / 2;
             periodIndex <<= 4;
