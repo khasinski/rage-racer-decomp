@@ -46,17 +46,9 @@ void DrawCourseObjects(void) {
         if (obj->id == -1) {
         } else {
         visShift = obj->f4 / 2048;  /* per-sector visibility bit index */
-        {
-            register s32 r2 asm("$2");
-            s32 r3;
-            r3 = obj->fC / 2048;
-            r2 = (s32)g_VisibleCellMask;
-            r3 = ((s32 *)r2)[r3];
-            r2 = 1 << visShift;
-            r2 &= r3;
-            if (r2 == 0) {
-                continue;
-            }
+        vis = g_VisibleCellMask[obj->fC / 2048] & (1 << visShift);
+        if (vis == 0) {
+            continue;
         }
 
         BuildRotMatrixY(&mtx, obj->f2);
