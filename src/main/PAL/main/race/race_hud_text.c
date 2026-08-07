@@ -540,14 +540,15 @@ void DrawRaceOptionMenu(s32 cursorRow) {
 
         {
             POLY_FT4 *quadBase;
+            register POLY_FT4 *quad asm("$17");
 
             quadBase = (POLY_FT4 *)GameQueueTileTrans(
                 ot, prim, 0x70, 0x50, 0x60, 0x48, 8, 8, 8);
             {
-                register POLY_FT4 *quad asm("$17") = quadBase;
                 register s32 leftTrig;
                 s16 left;
 
+                quad = quadBase;
                 g_RaceOptionPulseAngle += 0x20;
                 SetPolyFT4(quad);
                 quad->t.r0 = 0x60;
@@ -565,7 +566,6 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 quad->y0 = 0x58;
             }
             {
-                register u8 *drawModePrim asm("$17");
                 register POLY_FT4 *drawPrim;
                 s32 rightTrig;
                 s16 right;
@@ -578,7 +578,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                     asm volatile("" ::);
                     sample * 0x2C;
                 });
-                drawModePrim = (u8 *)(quadBase + 1);
+                quad = quadBase + 1;
                 if (rightTrig < 0) {
                     rightTrig += 0xFFF;
                 }
@@ -601,7 +601,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 AddPrim(g_DrawBuffer + 0xCC, drawPrim);
 
                 *(u8 **)0x1F800000 = QueueDrawModePrim(
-                    g_DrawBuffer + 0xCC, drawModePrim, 9);
+                    g_DrawBuffer + 0xCC, (u8 *)quad, 9);
             }
         }
     }
