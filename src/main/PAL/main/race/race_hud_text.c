@@ -405,35 +405,35 @@ void DrawRaceOptionMenu(s32 cursorRow) {
     u8 *firstNext;
     register s32 brightness;
     s32 marquee;
+    register u8 *prim asm("$18");
 
     ot = g_DrawBuffer + 0xCC;
     {
-        register SPRT *sprite asm("$18");
         register void *drawPrim;
 
-        sprite = (SPRT *)0x1F800000;
-        sprite = *(SPRT **)sprite;
-        SetSprt(sprite);
-        SetShadeTex(sprite, 0);
-        sprite->x0 = 0x8C;
-        sprite->y0 = 0x5A;
-        sprite->w = 0x28;
-        sprite->h = 8;
-        sprite->u0 = 0xD8;
-        sprite->v0 = 0x38;
-        sprite->clut = 0x7893;
+        prim = (u8 *)0x1F800000;
+        prim = *(u8 **)prim;
+        SetSprt((SPRT *)prim);
+        SetShadeTex((SPRT *)prim, 0);
+        ((SPRT *)prim)->x0 = 0x8C;
+        ((SPRT *)prim)->y0 = 0x5A;
+        ((SPRT *)prim)->w = 0x28;
+        ((SPRT *)prim)->h = 8;
+        ((SPRT *)prim)->u0 = 0xD8;
+        ((SPRT *)prim)->v0 = 0x38;
+        ((SPRT *)prim)->clut = 0x7893;
         if (g_RaceOptionScroll0 & 0x10) {
-            asm("" : : "r"(sprite));
+            asm("" : : "r"(prim));
             brightness = 0x80;
         } else {
             brightness = 0x40;
         }
-        sprite->t.r0 = brightness;
-        sprite->t.g0 = brightness;
-        sprite->t.b0 = brightness;
+        ((SPRT *)prim)->t.r0 = brightness;
+        ((SPRT *)prim)->t.g0 = brightness;
+        ((SPRT *)prim)->t.b0 = brightness;
         asm("" ::: "memory");
-        drawPrim = sprite;
-        sprite++;
+        drawPrim = prim;
+        prim += sizeof(SPRT);
         AddPrim(ot, drawPrim);
 
         g_RaceOptionScroll0 -= 4;
@@ -446,7 +446,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
         }
 
         firstNext =
-            QueueDrawAreaPrim(ot, sprite, 0, 0, 0x140, 0xF0);
+            QueueDrawAreaPrim(ot, prim, 0, 0, 0x140, 0xF0);
     }
 
     {
@@ -454,7 +454,6 @@ void DrawRaceOptionMenu(s32 cursorRow) {
         register s32 fontU;
         register s16 scroll0;
         register char *marqueeBase asm("$16");
-        register u8 *prim asm("$18");
         u8 *drawPrim;
 
         {
