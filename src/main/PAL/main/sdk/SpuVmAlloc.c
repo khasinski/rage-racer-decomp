@@ -273,12 +273,8 @@ void SpuVmRebuildVoiceTable(void) {
         periodIndex = periodIndex >> 16;
         periodIndex = (periodIndex - 1) / 2;
         periodIndex <<= 4;
-        {
-            register long periodBase asm("$3");
-
-            periodBase = g_SndCurrentProgTable;
-            periodIndex += periodBase;
-        }
+        voiceOffset = g_SndCurrentProgTable;
+        periodIndex += voiceOffset;
         {
             voiceOffset = D_801E4BEC;
         }
@@ -294,12 +290,8 @@ void SpuVmRebuildVoiceTable(void) {
             periodIndex = periodIndex >> 16;
             periodIndex = (periodIndex - 1) / 2;
             periodIndex <<= 4;
-            {
-                register long periodBase asm("$3");
-
-                periodBase = g_SndCurrentProgTable;
-                periodIndex += periodBase;
-            }
+            voiceOffset = g_SndCurrentProgTable;
+            periodIndex += voiceOffset;
             voiceOffset = D_801E4BEC;
             periodIndex = *(u_short *)(periodIndex + 0xE);
             voiceOffset <<= 1;
