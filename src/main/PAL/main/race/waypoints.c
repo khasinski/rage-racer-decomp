@@ -709,10 +709,8 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   if (pos2_R10 >= 4)
   {
     s32 d_R5;
-    register s32 pm4_R3 asm("$3");
     d_R5 = g_TrackLength;
-    pm4_R3 = pos2_R10 - 4;
-    sub_R6->field_118 = (d_R5 / 12) + ((d_R5 / 40) * pm4_R3);
+    sub_R6->field_118 = (d_R5 / 12) + ((d_R5 / 40) * (pos2_R10 - 4));
   }
   else
   {
