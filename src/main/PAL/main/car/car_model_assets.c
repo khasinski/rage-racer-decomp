@@ -141,20 +141,19 @@ void LoadRoundAssets(void) {
         break;
     case 2:
         if (LoadAsset(0x56, g_AssetBlockPtr2) != 0) {
-            s32 ptr = (s32)g_AssetBlockPtr2;
-            register s32 first asm("$2");
-            register s32 second asm("$3");
-            s32 third;
+            u8 *header;
+            u8 *first;
+            u8 *second;
+            s32 shared;
 
-            first = *(s32 *)(ptr + 4);
-            second = *(s32 *)(ptr + 8);
-            first = ptr + first;
-            second = ptr + second;
-            g_AssetBlockPtr = (u8 *)first;
-            g_AssetSubBlockPtr = (u8 *)second;
-            third = *(s32 *)ptr;
+            header = g_AssetBlockPtr2;
+            first = header + *(s32 *)(header + 4);
+            second = header + *(s32 *)(header + 8);
+            g_AssetBlockPtr = first;
+            g_AssetSubBlockPtr = second;
+            shared = *(s32 *)header;
             g_AssetLoadState = 0;
-            g_SharedAssetWord0 = third;
+            g_SharedAssetWord0 = shared;
         }
         break;
     }
