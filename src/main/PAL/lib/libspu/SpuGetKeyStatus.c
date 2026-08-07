@@ -8,7 +8,7 @@ long SpuGetKeyStatus(u_long arg0) {
     long i = 0;
     u_long mask = 1;
     register u_long value asm("$3");
-    register long ret asm("$2");
+    long ret;
 
 do {
     if (arg0 & (mask << i)) {
@@ -40,18 +40,15 @@ break;
         value = *(volatile u_short *)(offset + 0xC);
         if (flag != 0) {
             ret = 3;
-            if (value == 0) {
-                return ret;
+            if (value != 0) {
+                ret = 1;
             }
-            ret = 1;
             return ret;
         }
 
-        ret = value != 0 ? 2 : 0;
-        return ret;
+        return value != 0 ? 2 : 0;
     }
 
     return -1;
 
-    return ret;
 }
