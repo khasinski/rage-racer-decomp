@@ -9,25 +9,22 @@ void SpuVmSeKeyOff(long arg0, short arg1, short arg2, u_short arg3);
  * argument function at SsUtKeyOnV in sdk/SsUtKeyOnV.c. */
 void func_80076C50(void);
 
-void func_80076B30(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5) {
-    u_short base;
-    long balance;
-    register long quotient asm("$2");
+void func_80076B30(short vabId, short prog, u_short note, long arg3, u_short voll, u_short volr) {
+    u_short volume;
+    u_short pan;
 
-    if (arg4 == arg5) {
-        balance = 0x40;
-        base = arg4;
-    } else if (arg5 < arg4) {
-        quotient = (arg5 << 6) / arg4;
-        base = arg4;
-        balance = quotient;
+    if (voll == volr) {
+        pan = 0x40;
+        volume = voll;
+    } else if (volr < voll) {
+        volume = voll;
+        pan = (volr * 0x40) / voll;
     } else {
-        quotient = (arg4 << 6) / arg5;
-        base = arg5;
-        balance = 0x7F - quotient;
+        volume = volr;
+        pan = 0x7F - ((voll * 0x40) / volr);
     }
 
-    SpuVmSeKeyOn(0x21, (short)arg0, (short)arg1, (u_short)arg2, base, (u_short)balance);
+    SpuVmSeKeyOn(0x21, vabId, prog, note, volume, pan);
 }
 
 void func_80076C1C(long arg0, long arg1, long arg2) {
