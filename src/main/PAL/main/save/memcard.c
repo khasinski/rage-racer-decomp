@@ -622,7 +622,7 @@ void StoreSaveStateBlock(u8 *block) {
     }
 
     {
-        register s32 inner asm("$6");
+        s32 inner;
         register s32 middle asm("$12");
 
         {
@@ -788,7 +788,7 @@ extern u8 g_TeamLogoClutRect[];
 
 s32 LoadSaveStateBlock(u8 *block) {
     register u8 *base asm("$17") = block;
-    register s32 i asm("$13");
+    s32 i;
     __asm__("" : "=r"(base) : "0"(base));
     {
         u32 sum;
@@ -892,7 +892,7 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     {
-        register s32 j asm("$12");
+        s32 j;
         register s32 k asm("$7");
 
         {
@@ -940,7 +940,7 @@ s32 LoadSaveStateBlock(u8 *block) {
         {
             s32 *cb78;
             register s32 *d1base asm("$24");
-            register s32 ioff asm("$16");
+            s32 ioff;
             i = 0;
             cb78 = (s32 *)g_TimeRecords;
             d1base = (s32 *)g_RankingRecords;

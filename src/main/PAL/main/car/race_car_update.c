@@ -686,7 +686,6 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             g_RaceIntroCameraDelta.vx = -q[0].f0 + q[1].f0;
             g_RaceIntroCameraDelta.vy = -q[0].f4 + q[1].f4;
             g_RaceIntroCameraDelta.vz = -q[0].f8 + q[1].f8;
-            __asm__ volatile("");
             g_RaceIntroCameraTimer = q[0].f12;
         } else {
             KE *a = g_RaceIntroCameraCursor;
@@ -775,7 +774,6 @@ void SeedFinishCamera(void *arg0) {
     s32 lastIndex;
 
     base = arg0;
-    asm("" : "=r"(base) : "0"(base));
     dst = (Block16 *)&g_CameraCar;
     src = (Block16 *)base;
     end = (Block16 *)((u8 *)base + 0x190);

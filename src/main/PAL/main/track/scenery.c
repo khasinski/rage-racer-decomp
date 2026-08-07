@@ -216,7 +216,7 @@ void SeedFlybyScenery(void) {
     s32 index;
     s32 cmp;
     s32 scene0;
-    register s32 scene1 asm("v0");
+    s32 scene1;
     u8 *src;
     s32 recordIndex;
 

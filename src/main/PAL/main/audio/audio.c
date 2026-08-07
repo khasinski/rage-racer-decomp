@@ -40,7 +40,7 @@ void SetEffectVoicesEnabled(s32 arg0) {
 }
 
 void ResetSoundState(void) {
-    register s32 i asm("$4");
+    s32 i;
 
     {
         s32 *ptr;
@@ -73,7 +73,7 @@ void ResetSoundState(void) {
     }
 
     {
-        register s32 offset asm("$3");
+        s32 offset;
 
         {
             s32 i;
