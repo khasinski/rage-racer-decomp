@@ -95,10 +95,9 @@ void *GetFmvFrame(s32 *arg0) {
     dst[0xD] = g_DispEnv0Y + half;
     __asm__ __volatile__("" ::);
     {
-        register u32 wsgn asm("$4");
         u32 wm = (u32)w32 * 3;
-        wsgn = wm >> 31;
-        wdraw = (u16)((wm + wsgn) >> 1);
+        hgt16 = wm >> 31;
+        wdraw = (u16)((wm + hgt16) >> 1);
     }
     dst[0x12] = wdraw;
     dst[0xE] = wdraw;
