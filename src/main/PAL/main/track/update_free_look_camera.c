@@ -323,7 +323,7 @@ void DrawAnimatedScenery2(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 visible;
     s32 num;
     s32 drawArg;
-    register s32 sv asm("$2");
+    s32 sv;
     register s32 *scr asm("$8");
 
     if (g_GrandPrixMode == 0) {

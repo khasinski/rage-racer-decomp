@@ -39,7 +39,7 @@ extern u8 *g_RouteSceneryKeyframe;
 void SeedRouteScenery(void) {
     register s32 index0 asm("$2");
     s32 index1;
-    register u8 *base asm("$4");
+    u8 *base;
     s32 value;
 
     D_801E433C = 1;

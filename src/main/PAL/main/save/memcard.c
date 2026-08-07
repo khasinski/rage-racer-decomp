@@ -939,7 +939,7 @@ s32 LoadSaveStateBlock(u8 *block) {
         /* g_RankingRecords / g_TimeRecords */
         {
             s32 *cb78;
-            register s32 *d1base asm("$24");
+            s32 *d1base;
             s32 ioff;
             i = 0;
             cb78 = (s32 *)g_TimeRecords;
@@ -947,7 +947,7 @@ s32 LoadSaveStateBlock(u8 *block) {
             ioff = 0;
             for (; i < 2; i++) {
                 register s32 iofc asm("$15");
-                register s32 *d1 asm("$14");
+                s32 *d1;
                 s32 joff;
                 j = 0;
                 iofc = ioff;
