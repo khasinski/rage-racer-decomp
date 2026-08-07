@@ -54,9 +54,9 @@ void UpdateOptionRootMenu(void) {
     DrawOptionRootMenu();
 
     old = g_OptionMenuCursor;
-    if (g_PadEdge2 & 0x1000) {
+    if (g_PadPressed & PAD_UP) {
         g_OptionMenuCursor = old - 1;
-    } else if (g_PadEdge2 & 0x4000) {
+    } else if (g_PadPressed & PAD_DOWN) {
         g_OptionMenuCursor = old + 1;
     }
 
@@ -65,7 +65,7 @@ void UpdateOptionRootMenu(void) {
         PlaySoundCue(1);
     }
 
-    buttons = g_PadEdge2;
+    buttons = g_PadPressed;
     if (buttons & 0x860) {
         PlaySoundCue(2);
         switch (g_OptionMenuCursor) {
@@ -209,7 +209,7 @@ void UpdateClassRecordMenu(void) {
 
     DrawClassRecordGrid();
 
-    buttonPtr = &g_PadEdge2;
+    buttonPtr = &g_PadPressed;
     oldCursor = g_ClassRecordMenuCursor;
     buttons = *buttonPtr;
     if (buttons & 0x1000) {
@@ -248,13 +248,13 @@ void UpdateClassRecordBrowse(void) {
     DrawClassRecordGrid();
     oldCursor = g_ScreenOffsetEditX;
     oldFlag = g_ScreenOffsetEditY;
-    if ((g_PadEdge2 & 0x1000) && oldFlag == 1) {
+    if ((g_PadPressed & PAD_UP) && oldFlag == 1) {
         g_ScreenOffsetEditY = 0;
     }
-    if ((g_PadEdge2 & 0x4000) && g_ScreenOffsetEditY == 0) {
+    if ((g_PadPressed & PAD_DOWN) && g_ScreenOffsetEditY == 0) {
         g_ScreenOffsetEditY = 1;
     }
-    b = g_PadEdge2;
+    b = g_PadPressed;
     if (b & 0x8000) {
         g_ScreenOffsetEditX = g_ScreenOffsetEditX - 1;
     }
@@ -274,7 +274,7 @@ void UpdateClassRecordBrowse(void) {
             PlaySoundCue(1);
         }
     }
-    if (g_PadEdge2 & 0x8F0) {
+    if (g_PadPressed & (PAD_START | PAD_SQUARE | PAD_CROSS | PAD_CIRCLE | PAD_TRIANGLE)) {
         PlaySoundCue(2);
         g_GameMode = 2;
     }
@@ -382,7 +382,7 @@ void UpdateSoundOptionMenu(void) {
     s32 index;
 
     DrawSoundOptionScreen();
-    buttonsPtr = &g_PadEdge2;
+    buttonsPtr = &g_PadPressed;
     buttons = *buttonsPtr;
     old = g_SoundOptionCursor;
     if (buttons & 0x1000) {

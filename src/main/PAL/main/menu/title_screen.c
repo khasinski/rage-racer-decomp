@@ -111,7 +111,7 @@ void DrawPressStartPrompt(void) {
 extern s32 D_801E8260;
 
 void UpdateTitleScreen(void) {
-    if (g_PadEdge2 & 0x800) {
+    if (g_PadPressed & PAD_START) {
         PlaySoundCue(2);
         g_FrontendState = 1;
         D_801E8260 = 0;
@@ -250,7 +250,7 @@ extern void ShuffleBgmOrder(void);
 extern void RequestOptionScreenAssets(void);
 
 void UpdateMainMenuInput(void) {
-    volatile u16 *flagp = &g_PadEdge2;
+    volatile u16 *flagp = &g_PadPressed;
     s32 idx;
     u16 flags;
 
@@ -283,7 +283,7 @@ void UpdateMainMenuInput(void) {
         }
     }
 
-    if (g_PadEdge2 & 0x860) {
+    if (g_PadPressed & PAD_CONFIRM) {
         PlaySoundCue(2);
         if (g_AssetLoadState != 0) {
             ResetAssetLoader();

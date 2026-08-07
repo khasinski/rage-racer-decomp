@@ -53,7 +53,7 @@ void UpdateWaypointRaceScene(void) {
         g_PauseDebounce--;
     }
 
-    if ((u32)((u16)g_RacePhase - 1) < 2 && (g_PadEdge2 & 0x800) && g_PauseDebounce <= 0) {
+    if ((u32)((u16)g_RacePhase - 1) < 2 && (g_PadPressed & PAD_START) && g_PauseDebounce <= 0) {
         g_PauseDebounce = 0;
         g_RacePaused = (u32)g_RacePaused < 1;
 
@@ -90,12 +90,12 @@ void UpdateWaypointRaceScene(void) {
     }
 
     if (g_RacePaused != 0) {
-        if ((g_PadEdge2 & 0x1000) && g_RaceOptionCursor > 0) {
+        if ((g_PadPressed & PAD_UP) && g_RaceOptionCursor > 0) {
             g_RaceOptionCursor--;
             PlaySoundCue(1);
         }
 
-        if ((g_PadEdge2 & 0x4000) && g_RaceOptionCursor < (2 - g_GrandPrixMode)) {
+        if ((g_PadPressed & PAD_DOWN) && g_RaceOptionCursor < (2 - g_GrandPrixMode)) {
             g_RaceOptionCursor++;
             PlaySoundCue(1);
         }

@@ -34,10 +34,10 @@ void UpdateSoundSettingAdjust(void) {
     switch (g_SoundOptionCursor) {
     case 0:
         old = g_BgmVolumeSetting;
-        if ((g_PadEdge2 & 0x8000) && old > 0) {
+        if ((g_PadPressed & PAD_LEFT) && old > 0) {
             g_BgmVolumeSetting = old - 1;
         }
-        if (g_PadEdge2 & 0x2000) {
+        if (g_PadPressed & PAD_RIGHT) {
             s32 value = g_BgmVolumeSetting;
             if (value < 15) {
                 g_BgmVolumeSetting = value + 1;
@@ -46,7 +46,7 @@ void UpdateSoundSettingAdjust(void) {
         if (old != g_BgmVolumeSetting) {
             PlaySoundCue(1);
         }
-        pad = g_PadEdge2;
+        pad = g_PadPressed;
         if (pad & 0x860) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
@@ -57,10 +57,10 @@ void UpdateSoundSettingAdjust(void) {
 
     case 1:
         old = g_SfxVolumeSetting;
-        if ((g_PadEdge2 & 0x8000) && old > 0) {
+        if ((g_PadPressed & PAD_LEFT) && old > 0) {
             g_SfxVolumeSetting = old - 1;
         }
-        if (g_PadEdge2 & 0x2000) {
+        if (g_PadPressed & PAD_RIGHT) {
             s32 value = g_SfxVolumeSetting;
             if (value < 15) {
                 g_SfxVolumeSetting = value + 1;
@@ -69,7 +69,7 @@ void UpdateSoundSettingAdjust(void) {
         if (old != g_SfxVolumeSetting) {
             PlaySoundCue(1);
         }
-        pad = g_PadEdge2;
+        pad = g_PadPressed;
         if (pad & 0x860) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
@@ -80,10 +80,10 @@ void UpdateSoundSettingAdjust(void) {
 
     case 2:
         old = g_MonoOutput;
-        if ((g_PadEdge2 & 0x8000) && old > 0) {
+        if ((g_PadPressed & PAD_LEFT) && old > 0) {
             g_MonoOutput = old - 1;
         }
-        if (g_PadEdge2 & 0x2000) {
+        if (g_PadPressed & PAD_RIGHT) {
             s32 value = g_MonoOutput;
             if (value <= 0) {
                 g_MonoOutput = value + 1;
@@ -92,7 +92,7 @@ void UpdateSoundSettingAdjust(void) {
         if (old != g_MonoOutput) {
             PlaySoundCue(1);
         }
-        pad = g_PadEdge2;
+        pad = g_PadPressed;
         if (pad & 0x860) {
             g_GameMode = 4;
         } else if (pad & 0x90) {
@@ -103,7 +103,7 @@ void UpdateSoundSettingAdjust(void) {
     }
 
     ApplyAudioSettings();
-    pad = g_PadEdge2;
+    pad = g_PadPressed;
     if (pad & 0x860) {
         PlaySoundCue(2);
     } else if (pad & 0x90) {
@@ -140,7 +140,7 @@ void UpdateScreenAdjustScreen(void) {
 
     DrawScreenAdjustScreen();
 
-    input = g_PadEdge;
+    input = g_PadPressedRepeat;
     oldX = g_ScreenOffsetEditX;
     oldY = g_ScreenOffsetEditY;
 
@@ -148,21 +148,21 @@ void UpdateScreenAdjustScreen(void) {
         g_ScreenOffsetEditY = oldY - 1;
     }
 
-    if (g_PadEdge & 0x4000) {
+    if (g_PadPressedRepeat & PAD_DOWN) {
         value = g_ScreenOffsetEditY;
         if (value < 23) {
             g_ScreenOffsetEditY = value + 1;
         }
     }
 
-    if (g_PadEdge & 0x8000) {
+    if (g_PadPressedRepeat & PAD_LEFT) {
         value = g_ScreenOffsetEditX;
         if (value >= -10) {
             g_ScreenOffsetEditX = value - 1;
         }
     }
 
-    if (g_PadEdge & 0x2000) {
+    if (g_PadPressedRepeat & PAD_RIGHT) {
         value = g_ScreenOffsetEditX;
         if (value < 32) {
             g_ScreenOffsetEditX = value + 1;
@@ -173,7 +173,7 @@ void UpdateScreenAdjustScreen(void) {
         PlaySoundCue(1);
     }
 
-    confirm = g_PadEdge2;
+    confirm = g_PadPressed;
     if (confirm & 0x860) {
         PlaySoundCue(2);
         g_GameMode = 1;

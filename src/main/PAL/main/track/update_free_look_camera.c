@@ -4,6 +4,7 @@
 #include "game/random.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
+#include "game/state.h"
 #include "game/track.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
@@ -82,14 +83,14 @@ void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
         g_CameraCar.x = g_CameraCarStepX / 256 + g_CameraCar.x;
         g_CameraCar.z = g_CameraCarStepZ / 256 + g_CameraCar.z;
 
-        if (g_PadHeld & 0x1000) {
+        if (g_PadHeld & PAD_UP) {
             g_FreeCameraAngleOffset[0] -= 8;
-        } else if (g_PadHeld & 0x4000) {
+        } else if (g_PadHeld & PAD_DOWN) {
             g_FreeCameraAngleOffset[0] += 8;
         }
-        if (g_PadHeld & 0x8000) {
+        if (g_PadHeld & PAD_LEFT) {
             g_FreeCameraAngleOffset[1] -= 16;
-        } else if (g_PadHeld & 0x2000) {
+        } else if (g_PadHeld & PAD_RIGHT) {
             g_FreeCameraAngleOffset[1] += 16;
         }
     }

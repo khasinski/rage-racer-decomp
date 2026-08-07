@@ -231,7 +231,7 @@ void UpdateRoundScreen(void) {
         }
     } else if ((u32)g_SceneTimer >= 121) {
         g_SceneId = 0xb;
-        if ((g_PadHeld & 0x80c) == 0x80c) {
+        if ((g_PadHeld & (PAD_START | PAD_R1 | PAD_L1)) == 0x80c) {
             g_MirrorMode = 1;
         } else {
             g_MirrorMode = 0;
@@ -252,7 +252,7 @@ void UpdateRoundScreen(void) {
         }
     }
     if (g_SceneId == 0xa) {
-        u16 flags = g_PadEdge2;
+        u16 flags = g_PadPressed;
         if (flags & 0x8000) {
             g_BgmSelection = g_BgmSelection - 1;
         } else if (flags & 0x2000) {

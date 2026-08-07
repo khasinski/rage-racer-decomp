@@ -42,7 +42,7 @@ void DecodeFmvFrame(void) {
     if (g_FmvStreamEnded == 1) {
         g_FmvState = 2;
     }
-    if (g_PadEdge2 & 0x800) {
+    if (g_PadPressed & PAD_START) {
         StartCdVolumeFade(1);
         g_FmvState = 2;
     }

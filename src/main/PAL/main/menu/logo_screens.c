@@ -2,7 +2,7 @@
 #include "game/audio.h"
 /*
  * UpdateTeamLogoScreen: sound/menu state machine. The redundant
- * `if (g_PadEdge2) { ... } else { ... }` around the state>0 block is a
+ * `if (g_PadPressed) { ... } else { ... }` around the state>0 block is a
  * deliberate no-op guard (both arms identical): its presence forces GCC 2.6.3
  * to rematerialize the literal 2 at both the direction ternary and the switch
  * case instead of CSE-ing it into a saved register, reproducing retail codegen.
@@ -14,6 +14,7 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
+#include "game/state.h"
 #include "psyq/gpu.h"
 
 extern Rect g_TeamLogoClutRect;
@@ -47,18 +48,18 @@ void UpdateTeamLogoScreen(void)
     {
       g_MenuHintButtonsVisible = 1;
       g_MenuOverlayPattern = -1;
-      if (PAD_PRESSED(PAD_BUTTON_UP))
+      if (g_PadPressed & PAD_UP)
       {
         PlaySoundCue(1);
         D_801F1804 = (D_801F1804 > 0) ? (D_801F1804 - 1) : (2);
       }
-      if (PAD_PRESSED(PAD_BUTTON_DOWN))
+      if (g_PadPressed & PAD_DOWN)
       {
         PlaySoundCue(1);
         D_801F1804 = (D_801F1804 < 2) ? (D_801F1804 + 1) : (0);
       }
-      edge = g_PadEdge2;
-      if (edge & PAD_BUTTON_CONFIRM)
+      edge = g_PadPressed;
+      if (edge & PAD_CONFIRM)
       {
         sel = D_801F1804;
         if (sel == 0)
@@ -88,7 +89,7 @@ void UpdateTeamLogoScreen(void)
         }
       }
       else
-        if (edge & PAD_BUTTON_CANCEL)
+        if (edge & PAD_CANCEL)
       {
         PlaySoundCue(3);
         GameMenuBusy = 2;
@@ -106,7 +107,7 @@ void UpdateTeamLogoScreen(void)
       RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
       if (RunTimedDrawScript(D_801E8A44, &g_UiScriptProgress2, 1) != 0)
       {
-        if (PAD_PRESSED(PAD_BUTTON_CONFIRM))
+        if (g_PadPressed & PAD_CONFIRM)
         {
           if (g_MenuSubCursor != 0)
           {
@@ -120,13 +121,13 @@ void UpdateTeamLogoScreen(void)
             GameMenuBusy = 0;
           }
         }
-        pad = (u16 *)(&g_PadEdge2);
-        if ((*pad) & PAD_BUTTON_CANCEL)
+        pad = (u16 *)(&g_PadPressed);
+        if ((*pad) & PAD_CANCEL)
         {
           PlaySoundCue(3);
           GameMenuBusy = 0;
         }
-        if ((*pad) & PAD_BUTTON_LEFT)
+        if ((*pad) & PAD_LEFT)
         {
           if (g_MenuSubCursor == 0)
           {
@@ -134,7 +135,7 @@ void UpdateTeamLogoScreen(void)
             g_MenuSubCursor = 1;
           }
         }
-        if (PAD_PRESSED(PAD_BUTTON_RIGHT))
+        if (g_PadPressed & PAD_RIGHT)
         {
           if (g_MenuSubCursor != 0)
           {
@@ -186,7 +187,7 @@ void UpdateTeamLogoScreen(void)
       RampTeamLogoCanvas(9, 0x15);
       if (RunTimedDrawScript(D_801E8A44, &g_UiScriptProgress2, 1) != 0)
       {
-        if (g_PadEdge2 & 0x800)
+        if (g_PadPressed & PAD_START)
         {
           PlaySoundCue(3);
           ApplyCurrentSequenceAudio();
@@ -220,7 +221,7 @@ void UpdateTeamLogoScreen(void)
   }
   else
   {
-    if (g_PadEdge2)
+    if (g_PadPressed)
     {
       g_MenuHandlerIndex = -1;
       g_MenuHandlerIndex2 = 7;

@@ -522,7 +522,7 @@ extern s32 g_UiScriptProgress;
  * UpdateCourseSelectScreen, which drives &g_UiScriptProgress against one command table and
  * &g_UiScriptProgress2 against the screen's own tables in the same frame. Which
  * layer is "background" and which is "foreground" is not settled, hence the
- * neutral name (cf. g_PadEdge / g_PadEdge2).
+ * neutral name (cf. g_PadPressedRepeat / g_PadPressed).
  */
 extern s32 g_UiScriptProgress2;
 void DrawScriptedSprite(

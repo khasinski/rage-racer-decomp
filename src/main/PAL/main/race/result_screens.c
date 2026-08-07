@@ -142,7 +142,7 @@ void UpdateReplayScene(void) {
         }
 
         if (g_FadeStep == 0) {
-            if ((g_PadEdge2 & 0x860) != 0) {
+            if ((g_PadPressed & PAD_CONFIRM) != 0) {
                 g_FadeStep = 4;
                 StartCdVolumeFade(0x3C);
             } else if (g_SceneTimer == g_ReplayFrameCount - 68) {

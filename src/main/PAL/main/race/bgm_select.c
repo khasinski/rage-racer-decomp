@@ -97,13 +97,13 @@ void UpdateBgmSelect(void) {
 
     if (g_SceneTimer == 2) SetDispMask(1);
     if (g_FadeStep == 0) {
-    if (g_PadEdge2 & 0x8000) {
+    if (g_PadPressed & PAD_LEFT) {
         if (g_BgmSelectCursor > 0) g_BgmSelectCursor = g_BgmSelectCursor - 1;
     }
-    if (g_PadEdge2 & 0x2000) {
+    if (g_PadPressed & PAD_RIGHT) {
         if (g_BgmSelectCursor < 2) g_BgmSelectCursor = g_BgmSelectCursor + 1;
     }
-    if (g_PadEdge2 & 1) {
+    if (g_PadPressed & 1) {
         s32 p;
         s32 h0;
         ShuffleBgmOrder();
@@ -118,7 +118,7 @@ void UpdateBgmSelect(void) {
         g_BgmRandomLabelTimer = 60;
     }
     {
-        u16 f = g_PadEdge2;
+        u16 f = g_PadPressed;
         if (f & 2) {
             g_BgmRandomPlay = 0;
             g_BgmRandomLabelTimer = 0;
@@ -160,8 +160,8 @@ void UpdateBgmSelect(void) {
             g_FadeStep = 4;
         }
     }
-    if (g_PadEdge2 & 4) g_BgmSelectShowUi = 1;
-    if (g_PadEdge2 & 8) g_BgmSelectShowUi = 0;
+    if (g_PadPressed & 4) g_BgmSelectShowUi = 1;
+    if (g_PadPressed & 8) g_BgmSelectShowUi = 0;
     } else {
     DrawFullscreenFadeTile(g_FadeLevel, 0x49);
     g_FadeLevel = g_FadeLevel + g_FadeStep;

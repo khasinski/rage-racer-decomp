@@ -464,7 +464,7 @@ void UpdateRaceScene(void) {
     }
 
     mode = g_RacePhase;
-    if ((u32)(mode - 1) < 2 && (g_PadEdge2 & 0x800) && g_PauseDebounce <= 0) {
+    if ((u32)(mode - 1) < 2 && (g_PadPressed & PAD_START) && g_PauseDebounce <= 0) {
         g_PauseDebounce = 5;
         value = (u32)g_RacePaused < 1;
         g_RacePaused = value;
@@ -534,11 +534,11 @@ void UpdateRaceScene(void) {
 
     if (g_RacePaused != 0) {
         SetReverbDepth(0x28, 0x28);
-        if ((g_PadEdge2 & 0x1000) && g_RaceOptionCursor > 0) {
+        if ((g_PadPressed & PAD_UP) && g_RaceOptionCursor > 0) {
             g_RaceOptionCursor--;
             PlaySoundCue(1);
         }
-        if (g_PadEdge2 & 0x4000) {
+        if (g_PadPressed & PAD_DOWN) {
             selection = g_RaceOptionCursor;
             if (selection < (2 - g_GrandPrixMode)) {
                 g_RaceOptionCursor = selection + 1;
@@ -570,9 +570,9 @@ void UpdateRaceScene(void) {
             selectorMask = (u32)(selectorMask ^ 0x23) < 1;
             if ((inputMask & g_PadMirrorMasks[selectorMask * 8]) &&
                 g_CameraViewMode == 0 && g_RacePhase == 2) {
-                if (g_PadEdge2 & 8) {
+                if (g_PadPressed & 8) {
                     g_MirrorViewEnabled = 1;
-                } else if (g_PadEdge2 & 4) {
+                } else if (g_PadPressed & 4) {
                     g_MirrorViewEnabled = 0;
                 }
             }
@@ -684,7 +684,7 @@ update_race:
             u16 inputMask;
 
             selectorMask = g_PadType;
-            inputMask = g_PadEdge2;
+            inputMask = g_PadPressed;
             selectorMask = (u32)(selectorMask ^ 0x23) < 1;
             if ((inputMask & g_PadMirrorMasks[selectorMask * 8]) &&
                 (u32)((u16)g_RacePhase - 2) < 2) {

@@ -4,6 +4,7 @@
 #include "game/menu.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
+#include "game/state.h"
 
 extern u8 *g_CarModelAsset;
 
@@ -46,17 +47,17 @@ void UpdateCarShopScreen(void) {
         res = RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         if ((res != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = initial;
-            if (g_PadEdge2 & 0x1000) {
+            if (g_PadPressed & PAD_UP) {
                 PlaySoundCue(1);
                 D_801E4294 = (D_801E4294 > 0) ? D_801E4294 - 1 : 1;
             }
-            if (g_PadEdge2 & 0x4000) {
+            if (g_PadPressed & PAD_DOWN) {
                 PlaySoundCue(1);
                 D_801E4294 = (D_801E4294 <= 0) ? D_801E4294 + 1 : 0;
             }
             UpdateCarListCursor();
             sel = g_CarListCursor;
-            if ((g_PadHeld & 0x8000) && (g_PrevOwnedCarIndex != -1)) {
+            if ((g_PadHeld & PAD_LEFT) && (g_PrevOwnedCarIndex != -1)) {
                 t = g_MenuViewAngleTarget;
                 u = g_MenuViewAngle;
                 if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
@@ -75,7 +76,7 @@ void UpdateCarShopScreen(void) {
                     }
                 }
             }
-            if ((g_PadHeld & 0x2000) && (g_NextOwnedCarIndex != -1)) {
+            if ((g_PadHeld & PAD_RIGHT) && (g_NextOwnedCarIndex != -1)) {
                 t = g_MenuViewAngleTarget;
                 u = g_MenuViewAngle;
                 if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
@@ -105,7 +106,7 @@ void UpdateCarShopScreen(void) {
             u = g_MenuViewAngle;
             if (t < u ? (u - t <= 0x493DF) : (t - u <= 0x493DF)) {
                 if (g_CarSwapToIndex < 0) {
-                    if (g_PadEdge2 & 0x860) {
+                    if (g_PadPressed & PAD_CONFIRM) {
                         sel = D_801E4294;
                         if (sel == 1) {
                             if (g_PlayerCarIndex != g_CarListCursor) {
@@ -166,7 +167,7 @@ void UpdateCarShopScreen(void) {
                             }
                         }
                         return;
-                    } else if (g_PadEdge2 & 0x90) {
+                    } else if (g_PadPressed & PAD_CANCEL) {
                         if (g_PlayerCarIndex != g_CarListCursor) {
                             s32 base;
                             s32 current;
@@ -203,7 +204,7 @@ void UpdateCarShopScreen(void) {
                 RunTimedDrawScript(D_8019CB00, &g_UiScriptProgress2, 0);
                 if (RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
                     if (GameMenuBusy == -1) {
-                        if (g_PadEdge2 & 0x860) {
+                        if (g_PadPressed & PAD_CONFIRM) {
                             if (g_MenuSubCursor != 0) {
                                 if (g_PlayerMoney >= value) {
                                     PlaySoundCue(2);
@@ -219,7 +220,7 @@ void UpdateCarShopScreen(void) {
                                 GameMenuBusy = 0;
                             }
                         }
-                        pad = &g_PadEdge2;
+                        pad = &g_PadPressed;
                         if (*pad & 0x90) {
                             PlaySoundCue(3);
                             GameMenuBusy = 0;
@@ -228,17 +229,17 @@ void UpdateCarShopScreen(void) {
                             PlaySoundCue(1);
                             g_MenuSubCursor = 1;
                         }
-                        if (g_PadEdge2 & 0x2000) {
+                        if (g_PadPressed & PAD_RIGHT) {
                             if (g_MenuSubCursor != 0) {
                                 PlaySoundCue(1);
                                 g_MenuSubCursor = 0;
                             }
                         }
                     } else {
-                        if (g_PadEdge2 & 0x860) {
+                        if (g_PadPressed & PAD_CONFIRM) {
                             GameMenuBusy = 0;
                         }
-                        if (g_PadEdge2 & 0x90) {
+                        if (g_PadPressed & PAD_CANCEL) {
                             GameMenuBusy = 0;
                         }
                     }
@@ -356,15 +357,15 @@ void UpdateEngineerShopScreen(void) {
         res = RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         if ((res != 0) && (g_UiScriptProgress2 <= 0)) {
             g_MenuOverlayPattern = -1;
-            if (g_PadEdge2 & 0x1000) {
+            if (g_PadPressed & PAD_UP) {
                 PlaySoundCue(1);
                 D_801E4290 = (D_801E4290 > 0) ? D_801E4290 - 1 : 1;
             }
-            if (g_PadEdge2 & 0x4000) {
+            if (g_PadPressed & PAD_DOWN) {
                 PlaySoundCue(1);
                 D_801E4290 = (D_801E4290 <= 0) ? D_801E4290 + 1 : 0;
             }
-            if (g_PadEdge2 & 0x860) {
+            if (g_PadPressed & PAD_CONFIRM) {
                 sel = D_801E4290;
                 if (sel == 0) {
                     if (g_PlayerMoney >= value) {
@@ -384,7 +385,7 @@ void UpdateEngineerShopScreen(void) {
                     GameMenuBusy = sel;
                     g_MenuOverlayPattern = 2;
                 }
-            } else if (g_PadEdge2 & 0x90) {
+            } else if (g_PadPressed & PAD_CANCEL) {
                 PlaySoundCue(3);
                 GameMenuBusy = 1;
                 g_MenuOverlayPattern = 2;
@@ -397,7 +398,7 @@ void UpdateEngineerShopScreen(void) {
 
                 RunTimedDrawScript(D_801E4188, &g_UiScriptProgress2, 0);
                 if (RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
-                    if (g_PadEdge2 & 0x860) {
+                    if (g_PadPressed & PAD_CONFIRM) {
                         if (g_MenuSubCursor != 0) {
                             PlaySoundCue(2);
                             GameMenuBusy = -2;
@@ -408,7 +409,7 @@ void UpdateEngineerShopScreen(void) {
                             GameMenuBusy = 0;
                         }
                     }
-                    pad = &g_PadEdge2;
+                    pad = &g_PadPressed;
                     if (*pad & 0x90) {
                         PlaySoundCue(3);
                         GameMenuBusy = 0;
@@ -417,7 +418,7 @@ void UpdateEngineerShopScreen(void) {
                         PlaySoundCue(1);
                         g_MenuSubCursor = 1;
                     }
-                    if (g_PadEdge2 & 0x2000) {
+                    if (g_PadPressed & PAD_RIGHT) {
                         if (g_MenuSubCursor != 0) {
                             PlaySoundCue(1);
                             g_MenuSubCursor = 0;
@@ -454,10 +455,10 @@ void UpdateEngineerShopScreen(void) {
             } else {
                 RunTimedDrawScript(D_801E4188, &g_UiScriptProgress2, 0);
                 if (RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
-                    if (g_PadEdge2 & 0x860) {
+                    if (g_PadPressed & PAD_CONFIRM) {
                         GameMenuBusy = 0;
                     }
-                    if (g_PadEdge2 & 0x90) {
+                    if (g_PadPressed & PAD_CANCEL) {
                         GameMenuBusy = 0;
                     }
                 }

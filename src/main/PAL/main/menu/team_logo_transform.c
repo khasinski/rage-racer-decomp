@@ -4,6 +4,7 @@
 #include "game/race.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
+#include "game/state.h"
 #include "psyq/gpu.h"
 
 /* Identical to the declaration in game/menu.h; this unit cannot include that
@@ -263,8 +264,8 @@ void ScrollTeamLogoLeft(void);
 void ScrollTeamLogoRight(void);
 void FlipTeamLogoVertical(void);
 extern u16 g_PadHeld;
-extern u16 g_PadEdge;
-extern u16 g_PadEdge2;
+extern u16 g_PadPressedRepeat;
+extern u16 g_PadPressed;
 extern u8 D_8007F930;
 extern s32 D_8007F934;
 extern s32 D_8007F938;
@@ -338,7 +339,7 @@ void UpdateTeamLogoCanvas(void) {
         }
     }
     if (D_8007F930 != 0) {
-        if (g_PadEdge2 & 0x100) {
+        if (g_PadPressed & PAD_SELECT) {
             D_8007FB1C = D_8007F944;
             var_a0_2 = 0;
             if (D_8007F944 < 2) {
@@ -350,7 +351,7 @@ void UpdateTeamLogoCanvas(void) {
         D_8007F944 = 1;
     }
     if (D_8007F954 == 1) {
-        u16 *input = &g_PadEdge2;
+        u16 *input = &g_PadPressed;
 
         if (*input & 0x60) {
             PlaySoundCue(2);
@@ -367,7 +368,7 @@ void UpdateTeamLogoCanvas(void) {
             }
         }
         if ((D_8007FB14 == 0x14) || (D_8007FB14 == 1)) {
-            if (g_PadHeld & 0x8000) {
+            if (g_PadHeld & PAD_LEFT) {
                 TeamLogoColorSlot output;
                 s32 selected;
 
@@ -380,7 +381,7 @@ void UpdateTeamLogoCanvas(void) {
                 output.value = var_v1;
                 D_8007F950 = output;
             }
-            if (g_PadHeld & 0x2000) {
+            if (g_PadHeld & PAD_RIGHT) {
                 TeamLogoColorSlot output;
                 s32 selected;
 
@@ -395,8 +396,8 @@ void UpdateTeamLogoCanvas(void) {
             }
         }
         if (D_8007F930 != 0) {
-            if (g_PadHeld & 0xA) {
-                if (g_PadEdge & 0x1000) {
+            if (g_PadHeld & (PAD_R1 | PAD_R2)) {
+                if (g_PadPressedRepeat & PAD_UP) {
                     PlaySoundCue(4);
                     temp_v1_4 = D_8007F950.value;
                     temp_v1 = g_TeamLogoClut + temp_v1_4;
@@ -441,7 +442,7 @@ void UpdateTeamLogoCanvas(void) {
                         break;
                     }
                 }
-                if (g_PadEdge & 0x4000) {
+                if (g_PadPressedRepeat & PAD_DOWN) {
                     PlaySoundCue(4);
                     temp_v1_4 = D_8007F950.value;
                     temp_v1 = g_TeamLogoClut + temp_v1_4;
@@ -487,7 +488,7 @@ void UpdateTeamLogoCanvas(void) {
                     }
                 }
             } else {
-                if (g_PadEdge2 & 0x1000) {
+                if (g_PadPressed & PAD_UP) {
                     PlaySoundCue(1);
                     var_v0_3 = 2;
                     if (D_8007F958 > 0) {
@@ -495,7 +496,7 @@ void UpdateTeamLogoCanvas(void) {
                     }
                     D_8007F958 = var_v0_3;
                 }
-                if (g_PadEdge2 & 0x4000) {
+                if (g_PadPressed & PAD_DOWN) {
                     PlaySoundCue(1);
                     var_v1_5 = 0;
                     if (D_8007F958 < 2) {
@@ -506,8 +507,8 @@ void UpdateTeamLogoCanvas(void) {
             }
         }
     } else {
-        if ((g_PadHeld & 0x20) && (D_8019CAB8 != 0)) {
-            if (g_PadEdge2 & 0x20) {
+        if ((g_PadHeld & PAD_CIRCLE) && (D_8019CAB8 != 0)) {
+            if (g_PadPressed & PAD_CIRCLE) {
                 PlaySoundCue(4);
             }
             for (var_t0 = 0; var_t0 < D_8007F94C; var_t0++) {
@@ -546,8 +547,8 @@ void UpdateTeamLogoCanvas(void) {
                     }
             }
         }
-        if (g_PadHeld & 0x80) {
-            if (g_PadEdge2 & 0x80) {
+        if (g_PadHeld & PAD_SQUARE) {
+            if (g_PadPressed & PAD_SQUARE) {
                 PlaySoundCue(4);
             }
             for (var_t0_2 = 0; var_t0_2 < D_8007F94C; var_t0_2++) {
@@ -589,7 +590,7 @@ void UpdateTeamLogoCanvas(void) {
             }
         }
         {
-            u16 *input = &g_PadEdge2;
+            u16 *input = &g_PadPressed;
 
         if (*input & 0x40) {
             PlaySoundCue(2);
@@ -622,16 +623,16 @@ void UpdateTeamLogoCanvas(void) {
 
         if ((heldValue & 8) && (D_8007F930 != 0)) {
             if (heldValue & 4) {
-                if (g_PadEdge2 & 0x1000) {
+                if (g_PadPressed & PAD_UP) {
                     RotateTeamLogoCw();
                 }
-                if (g_PadEdge2 & 0x4000) {
+                if (g_PadPressed & PAD_DOWN) {
                     FlipTeamLogoVertical();
                 }
-                if (g_PadEdge2 & 0x8000) {
+                if (g_PadPressed & PAD_LEFT) {
                     RotateTeamLogoCcw();
                 }
-                if (g_PadEdge2 & 0x2000) {
+                if (g_PadPressed & PAD_RIGHT) {
                     FlipTeamLogoHorizontal();
                 }
             } else if ((D_8007FB14 == 0x14) || (D_8007FB14 == 1)) {
@@ -652,7 +653,7 @@ void UpdateTeamLogoCanvas(void) {
             var_a1 = 0;
             if ((D_8007FB14 == 0x14) || (D_8007FB14 == 1) || (g_PadHeld & 5)) {
                 var_a0_7 = 0;
-                if (g_PadHeld & 0x1000) {
+                if (g_PadHeld & PAD_UP) {
                     if (D_8007F938 > 0) {
                         D_8007F938 -= 1;
                         var_a0_7 = 1;
@@ -661,7 +662,7 @@ void UpdateTeamLogoCanvas(void) {
                         var_a0_7 = 1;
                     }
                 }
-                if (g_PadHeld & 0x4000) {
+                if (g_PadHeld & PAD_DOWN) {
                     if ((D_8007F938 + D_8007F94C) < 0x20) {
                         D_8007F938 += 1;
                         var_a0_7 = 1;
@@ -670,7 +671,7 @@ void UpdateTeamLogoCanvas(void) {
                         var_a0_7 = 1;
                     }
                 }
-                if (g_PadHeld & 0x8000) {
+                if (g_PadHeld & PAD_LEFT) {
                     if (D_8007F934 > 0) {
                         D_8007F934 -= 1;
                         var_a1 = 1;
@@ -679,7 +680,7 @@ void UpdateTeamLogoCanvas(void) {
                         var_a1 = 1;
                     }
                 }
-                if (g_PadHeld & 0x2000) {
+                if (g_PadHeld & PAD_RIGHT) {
                     if ((D_8007F934 + D_8007F94C) < 0x20) {
                         D_8007F934 += 1;
                         var_a1 = 1;
@@ -688,13 +689,13 @@ void UpdateTeamLogoCanvas(void) {
                         var_a1 = 1;
                     }
                 }
-                if ((g_PadHeld & 0xA0) && ((var_a1 != 0) || (var_a0_7 != 0))) {
+                if ((g_PadHeld & (PAD_SQUARE | PAD_CIRCLE)) && ((var_a1 != 0) || (var_a0_7 != 0))) {
                     PlaySoundCue(4);
                 }
             }
         }
         }
-        if ((g_PadEdge2 & 2) && (D_8007F930 != 0)) {
+        if ((g_PadPressed & 2) && (D_8007F930 != 0)) {
             PlaySoundCue(4);
             temp_a1_5 = (u16 *)g_TeamLogoCanvas;
             temp_a0 = D_8007F93C + D_8007F934;

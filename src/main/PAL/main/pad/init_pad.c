@@ -77,7 +77,7 @@ void UpdatePadState(void) {
     raw = g_PadBuffers;
     pad = &g_PadState;
 
-    pad->unk0 = raw[0];
+    pad->status = raw[0];
     g_PadType = g_PadBufferType;
     if (raw[0] != 0) {
         v = 1;
@@ -102,72 +102,72 @@ void UpdatePadState(void) {
     D_8019CB10 = D_8019CB10 >> 1;
     if (D_8019CB10 != 0) {
         raw[1] = 0;
-        pad->unk1 = 0;
+        pad->type = 0;
     } else {
         g_PadErrorState = 0;
     }
     if (raw[1] == 0x41) {
-        pad->unk4 = pad->held;
+        pad->prevHeld = pad->held;
         pad->held = ~((raw[2] << 8) | raw[3]);
-        pad->unk6 = pad->held & ~pad->unk4;
+        pad->pressed = pad->held & ~pad->prevHeld;
         t = (pad->held >> 13) & 1;
         n = t;
         c = g_NegconSteerRange[g_NegconMaxTwist];
-        pad->unkA = ((pad->held & 0x8000) ? ((n - 1) * c) : (n * c)) + 0x80;
-        pad->unkC = (pad->held & 0x40) ? 0x6A : 0;
-        pad->unkE = (pad->held & 0x80) ? 0x6A : 0;
-        pad->unk10 = (pad->held & 0x4) ? 0x6A : 0;
+        pad->twist = ((pad->held & PAD_LEFT) ? ((n - 1) * c) : (n * c)) + 0x80;
+        pad->buttonI = (pad->held & PAD_CROSS) ? 0x6A : 0;
+        pad->buttonII = (pad->held & PAD_SQUARE) ? 0x6A : 0;
+        pad->buttonL = (pad->held & PAD_L1) ? 0x6A : 0;
     } else if (raw[1] == 0x23) {
-        pad->unk4 = pad->held;
+        pad->prevHeld = pad->held;
         pad->held = ~((raw[2] << 8) | raw[3]);
-        pad->unkA = raw[4];
+        pad->twist = raw[4];
         asm("");
-        pad->unkC = raw[5] - g_NegconNeutralI;
-        pad->unkE = raw[6] - g_NegconNeutralII;
-        pad->unk10 = raw[7] - g_NegconNeutralL;
-        if (pad->unkC < 0) {
-            pad->unkC = 0;
+        pad->buttonI = raw[5] - g_NegconNeutralI;
+        pad->buttonII = raw[6] - g_NegconNeutralII;
+        pad->buttonL = raw[7] - g_NegconNeutralL;
+        if (pad->buttonI < 0) {
+            pad->buttonI = 0;
         }
-        if (pad->unkE < 0) {
-            pad->unkE = 0;
+        if (pad->buttonII < 0) {
+            pad->buttonII = 0;
         }
-        if (pad->unk10 < 0) {
-            pad->unk10 = 0;
+        if (pad->buttonL < 0) {
+            pad->buttonL = 0;
         }
-        if (pad->unkA >= 0xA3) {
-            pad->held |= 0x2000;
+        if (pad->twist >= 0xA3) {
+            pad->held |= PAD_RIGHT;
         }
-        if (pad->unkA < 0x5E) {
-            pad->held |= 0x8000;
+        if (pad->twist < 0x5E) {
+            pad->held |= PAD_LEFT;
         }
-        if (pad->unkC >= 0x36) {
-            pad->held |= 0x40;
+        if (pad->buttonI >= 0x36) {
+            pad->held |= PAD_CROSS;
         }
-        if (pad->unkE >= 0x36) {
-            pad->held |= 0x80;
+        if (pad->buttonII >= 0x36) {
+            pad->held |= PAD_SQUARE;
         }
-        if (pad->unk10 >= 0x36) {
-            pad->held |= 0x4;
+        if (pad->buttonL >= 0x36) {
+            pad->held |= PAD_L1;
         }
-        pad->unk6 = pad->held & ~pad->unk4;
+        pad->pressed = pad->held & ~pad->prevHeld;
     } else {
         if (g_PadErrorState == 0) {
             g_PadErrorState = 2;
         }
-        pad->unk0 = 1;
+        pad->status = 1;
         pad->held = 0;
-        pad->unk6 = 0;
         pad->pressed = 0;
-        pad->unkA = 0x80;
-        pad->unkC = 0;
-        pad->unkE = 0;
-        pad->unk10 = 0;
+        pad->pressedRepeat = 0;
+        pad->twist = 0x80;
+        pad->buttonI = 0;
+        pad->buttonII = 0;
+        pad->buttonL = 0;
     }
-    pad->pressed = 0;
-    pad->pressed = pad->held & ~g_PadPrevHeld;
+    pad->pressedRepeat = 0;
+    pad->pressedRepeat = pad->held & ~g_PadPrevHeld;
     if (pad->held != 0 && pad->held == g_PadPrevHeld) {
         if (g_PadRepeatTimer[0] == 0x1E) {
-            pad->pressed = pad->pressed | pad->held;
+            pad->pressedRepeat = pad->pressedRepeat | pad->held;
         }
         g_PadRepeatTimer[0] = (g_PadRepeatTimer[0] < 0x24) ? (g_PadRepeatTimer[0] + 1) : 0x1E;
     } else {
@@ -175,7 +175,7 @@ void UpdatePadState(void) {
     }
     g_PadPrevHeld = pad->held;
     neutral = g_NegconSteerNeutral + 0x80;
-    d = pad->unkA - neutral;
+    d = pad->twist - neutral;
     if (d > 0) {
         r = d - D_8007C128[g_NegconSteerPlay][0];
         if (r < 0) {
@@ -195,14 +195,14 @@ void UpdatePadState(void) {
             r = -c2;
         }
     }
-    pad->unk16 = r;
-    if (pad->unkC >= 0x6B) {
-        pad->unkC = 0x6A;
+    pad->steer = r;
+    if (pad->buttonI >= 0x6B) {
+        pad->buttonI = 0x6A;
     }
-    if (pad->unkE >= 0x6B) {
-        pad->unkE = 0x6A;
+    if (pad->buttonII >= 0x6B) {
+        pad->buttonII = 0x6A;
     }
-    if (pad->unk10 >= 0x6B) {
-        pad->unk10 = 0x6A;
+    if (pad->buttonL >= 0x6B) {
+        pad->buttonL = 0x6A;
     }
 }

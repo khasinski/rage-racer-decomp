@@ -1,8 +1,9 @@
 #include "common.h"
+#include "game/audio.h"
+#include "game/car.h"
 #include "game/menu.h"
 #include "game/render.h"
-#include "game/car.h"
-#include "game/audio.h"
+#include "game/state.h"
 
 extern DesignModeCellMask D_80011BD4;
 
@@ -96,15 +97,15 @@ void UpdateDesignModeScreen(void) {
         RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, 0);
         if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) {
             g_MenuOverlayPattern = -1;
-            if (PAD_PRESSED(PAD_BUTTON_UP)) {
+            if (g_PadPressed & PAD_UP) {
                 PlaySoundCue(1);
                 g_DesignModeOption = (g_DesignModeOption > 0) ? g_DesignModeOption - 1 : 3;
             }
-            if (PAD_PRESSED(PAD_BUTTON_DOWN)) {
+            if (g_PadPressed & PAD_DOWN) {
                 PlaySoundCue(1);
                 g_DesignModeOption = (g_DesignModeOption < 3) ? g_DesignModeOption + 1 : 0;
             }
-            if (PAD_PRESSED(PAD_BUTTON_CONFIRM)) {
+            if (g_PadPressed & PAD_CONFIRM) {
                 sel = g_DesignModeOption;
                 if (sel == 0) {
                     PlaySoundCue(2);
@@ -130,7 +131,7 @@ void UpdateDesignModeScreen(void) {
                     GameMenuBusy = 4;
                     g_MenuOverlayPattern = 2;
                 }
-            } else if (PAD_PRESSED(PAD_BUTTON_CANCEL)) {
+            } else if (g_PadPressed & PAD_CANCEL) {
                 PlaySoundCue(3);
                 GameMenuBusy = 4;
                 g_MenuOverlayPattern = 2;
@@ -139,9 +140,9 @@ void UpdateDesignModeScreen(void) {
     } else if (GameMenuBusy < 0) {
         RunTimedDrawScript(&D_800828EC, &g_UiScriptProgress2, 0);
         if (RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
-            edge = g_PadEdge2;
-            if (edge & PAD_BUTTON_CONFIRM) GameMenuBusy = 0;
-            if (edge & PAD_BUTTON_CANCEL) GameMenuBusy = 0;
+            edge = g_PadPressed;
+            if (edge & PAD_CONFIRM) GameMenuBusy = 0;
+            if (edge & PAD_CANCEL) GameMenuBusy = 0;
         }
         DrawFadingMenuSprites(g_UiScriptProgress, 3, g_DesignModeOption);
         RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, 0);

@@ -109,7 +109,7 @@ void UpdatePlayerCar(Car *car) {
     car->unkB8 = IsCarFacingBackwards(car);
 
     if (car->drive.manual != 0) {
-        if (g_PadEdge2 & g_PadShiftMasks[mode23][0]) {
+        if (g_PadPressed & g_PadShiftMasks[mode23][0]) {
             s32 g = car->drive.gear;
 
             if (g < g_CarSpec->topGear && car->drive.clutch == 0) {
@@ -117,7 +117,7 @@ void UpdatePlayerCar(Car *car) {
                 g_SteerHoldFrames = 0;
             }
         }
-        if (g_PadEdge2 & g_PadShiftMasks[mode23][1]) {
+        if (g_PadPressed & g_PadShiftMasks[mode23][1]) {
             s32 g = p->gear;
 
             if (g >= 2) {

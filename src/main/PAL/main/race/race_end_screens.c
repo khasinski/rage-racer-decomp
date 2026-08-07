@@ -98,17 +98,17 @@ void UpdateLostRaceScreen(void) {
     timer = g_SceneTimer;
     if (timer == -1) {
         old = g_LostRaceChoice;
-        if ((g_PadEdge2 & 0x1000) && (old == 1)) {
+        if ((g_PadPressed & PAD_UP) && (old == 1)) {
             g_LostRaceChoice = 0;
         }
-        if ((g_PadEdge2 & 0x4000) && (g_LostRaceChoice == 0)) {
+        if ((g_PadPressed & PAD_DOWN) && (g_LostRaceChoice == 0)) {
             g_LostRaceChoice = 1;
         }
         current = g_LostRaceChoice;
         if (old != current) {
             PlaySoundCue(1);
         }
-        if (g_PadEdge2 & 0x800) {
+        if (g_PadPressed & PAD_START) {
             PlaySoundCue(2);
             if (g_LostRaceChoice != 0) {
                 RequestSelectBgmAssets();
@@ -152,7 +152,7 @@ void EnterRaceEndScreen(void) {
 void UpdateRaceEndScreen(void) {
     s32 v = g_SceneTimer - 1;
     g_SceneTimer = v;
-    if ((g_PadEdge2 & 0x860) && (u32)v >= 261) {
+    if ((g_PadPressed & PAD_CONFIRM) && (u32)v >= 261) {
         StartCdVolumeFade(0xFA);
         g_SceneTimer = 0xFF;
     }

@@ -6,41 +6,57 @@
 #include "psyq/gte.h"
 
 /*
- * The pad word block at 0x801E4368, filled by UpdatePadState from the raw
- * BIOS buffer at g_PadBuffers:
- *   +0x00 status, +0x01 pad type (0x41 digital, 0x23 NeGcon),
- *   +0x02 g_PadHeld = ~(raw[0] << 8 | raw[1]), +0x04 previous frame,
- *   +0x06 g_PadEdge2 = held & ~previous, +0x08 g_PadEdge, +0x0A.. analog axes.
+ * The pad block at 0x801E4368, filled by UpdatePadState from the raw BIOS
+ * buffer at g_PadBuffers. `held` is the inverted button halfword; the two
+ * edge words differ only in auto-repeat, which UpdatePadState folds into
+ * `pressedRepeat` once a button has been held for 30 frames.
+ *
+ * Three of the fields are also declared as standalone globals, which is where
+ * their names come from: held is g_PadHeld, pressed is g_PadPressed and
+ * pressedRepeat is g_PadPressedRepeat.
  */
 typedef struct PadState {
-    u8 unk0;
-    u8 unk1;
+    u8 status;
+    u8 type; /* 0x41 digital pad, 0x23 NeGcon */
     u16 held;
-    u16 unk4;
-    s16 unk6;
+    u16 prevHeld;
     s16 pressed;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
+    s16 pressedRepeat;
+    s16 twist;   /* NeGcon twist axis, 0x80 centred */
+    s16 buttonI;
+    s16 buttonII;
+    s16 buttonL;
     s16 unk12;
     s16 unk14;
-    s16 unk16;
+    s16 steer;   /* twist after the neutral offset, play deadzone and clamp */
 } PadState;
 
 /*
- * Game-facing button bits after UpdatePadState has inverted the BIOS packet.
- * The bit order is the game's own remap, not the hardware one, so CONFIRM is
- * cross|circle|start and CANCEL is triangle|square.
+ * Button bits after UpdatePadState has inverted the BIOS packet. CONFIRM and
+ * CANCEL are the composites the menus test: any of start, cross or circle
+ * confirms, either of square or triangle backs out.
  */
 enum PadButton {
-    PAD_BUTTON_START = 0x800,
-    PAD_BUTTON_CONFIRM = 0x860,
-    PAD_BUTTON_CANCEL = 0x90,
-    PAD_BUTTON_UP = 0x1000,
-    PAD_BUTTON_DOWN = 0x4000,
-    PAD_BUTTON_LEFT = 0x8000,
-    PAD_BUTTON_RIGHT = 0x2000
+    PAD_L2 = 0x1,
+    PAD_R2 = 0x2,
+    PAD_L1 = 0x4,
+    PAD_R1 = 0x8,
+    PAD_TRIANGLE = 0x10,
+    PAD_CIRCLE = 0x20,
+    PAD_CROSS = 0x40,
+    PAD_SQUARE = 0x80,
+    PAD_SELECT = 0x100,
+    PAD_L3 = 0x200,
+    PAD_R3 = 0x400,
+    PAD_START = 0x800,
+    PAD_UP = 0x1000,
+    PAD_RIGHT = 0x2000,
+    PAD_DOWN = 0x4000,
+    PAD_LEFT = 0x8000,
+
+    PAD_CONFIRM = PAD_START | PAD_CROSS | PAD_CIRCLE,
+    PAD_CANCEL = PAD_SQUARE | PAD_TRIANGLE,
+    PAD_DPAD = PAD_UP | PAD_DOWN | PAD_LEFT | PAD_RIGHT
 };
 
 /* Top-level scene/state machine, dispatched by ServiceAssetLoad; 1 = the
@@ -60,16 +76,12 @@ void InitSubsystems(void);
 
 /* Controller layer. GameInitPad hands the BIOS the two 0x28-byte buffers at
  * g_PadBuffers / D_801E4064. UpdatePadState maintains the held / previous /
- * newly-pressed halfwords in the block at g_PadState (see menu.h). */
+ * newly-pressed halfwords in the block at g_PadState. */
 void GameInitPad(void);
 void UpdatePadState(void);
 void LoadPadButtonMapping(s32 mapping0, s32 mapping1);
 void ApplyPadButtonMapping(void);
 extern PadState g_PadState;
-
-/* These expand to the original bit tests, preserving call-site code shape. */
-#define PAD_HELD(buttons) (g_PadHeld & (buttons))
-#define PAD_PRESSED(buttons) (g_PadEdge2 & (buttons))
 
 /* Controller-config and NeGcon calibration screens: g_GameModeHandlers entries
  * 7..11, each drawing its own screen plus the shared 3D backdrop. */
@@ -202,8 +214,8 @@ extern u8 g_PadConfigButtonRows[];
 extern u8 g_PadConfigLabelRows[];
 extern u16 g_PadPrevHeld;
 extern u16 g_PadHeld;
-extern u16 g_PadEdge;
-extern u16 g_PadEdge2;
+extern u16 g_PadPressedRepeat;
+extern u16 g_PadPressed;
 extern u8 g_PadRepeatTimer[];
 
 void BiosSetMemSize(s32 arg0);

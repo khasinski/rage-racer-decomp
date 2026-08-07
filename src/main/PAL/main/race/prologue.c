@@ -32,7 +32,7 @@ void DrawTerrainCellsWide(void);
 void UpdateAttractDemoScene(void) {
     g_AttractDemoSteps[g_AttractDemoStep]();
 
-    if ((g_SceneId == 0x1E) && ((g_PadEdge2 & 0x860) != 0)) {
+    if ((g_SceneId == 0x1E) && ((g_PadPressed & PAD_CONFIRM) != 0)) {
         if (g_AssetLoadState != 0) {
             ResetAssetLoader();
             g_SceneId = 3;
@@ -213,7 +213,7 @@ void UpdatePrologue(void) {
         SetDispMask(1);
     }
 
-    if ((u32)g_SceneTimer >= 0x79 && (g_PadEdge2 & 0x860)) {
+    if ((u32)g_SceneTimer >= 0x79 && (g_PadPressed & PAD_CONFIRM)) {
         ExitPrologue();
     }
 

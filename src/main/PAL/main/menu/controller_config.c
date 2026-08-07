@@ -101,7 +101,7 @@ typedef struct PadEdgeView {
 } PadEdgeView;
 
 void UpdateControllerConfigScreen(void) {
-    PadEdgeView *pad = (PadEdgeView *)&g_PadEdge2;
+    PadEdgeView *pad = (PadEdgeView *)&g_PadPressed;
 
     g_AnimTimer++;
     g_SetupArrowPulse += 96;
@@ -120,7 +120,7 @@ void UpdateControllerConfigScreen(void) {
             g_GameMode = 1;
         }
     }
-    if (g_PadEdge2 & 0x8000) {
+    if (g_PadPressed & PAD_LEFT) {
         if (g_PadType == 0x23) {
             if (g_NegconMappingIndex > 0) {
                 PlaySoundCue(8);
@@ -137,7 +137,7 @@ void UpdateControllerConfigScreen(void) {
             g_ControllerSceneAngleY += 2048;
         }
     }
-    if (g_PadEdge2 & 0x2000) {
+    if (g_PadPressed & PAD_RIGHT) {
         if (g_PadType == 0x23) {
             if (g_NegconMappingIndex < 7) {
                 PlaySoundCue(8);
@@ -250,7 +250,7 @@ void BeginNegconCalibration(void) {
  */
 void UpdateNegconNeutralScreen(void) {
     g_AnimTimer++;
-    if (g_PadEdge2 & 0x800) {
+    if (g_PadPressed & PAD_START) {
         PlaySoundCue(2);
         g_GameMode = 10;
         g_NegconSteerNeutral = g_NegconAxisSteer - 128;

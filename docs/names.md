@@ -464,7 +464,7 @@ Second naming pass (race / car / menu / CD state, all still byte-neutral):
 | 0x80082EF0 | `g_MenuScreenDraw[]` | menu.h | The parallel fade/overlay table, dispatched with `g_MenuHandlerIndex` / `g_MenuHandlerIndex2`. |
 | 0x8009B344 | `g_MenuHandlerIndex2` | menu.h | Second slot into `g_MenuScreenDraw`, run with `-10`; result kept in `D_8009B348`. |
 | 0x801E4184 | `g_TitleMenuSelection` | menu.h | Title-menu cursor 0..4 (two Grand Prix files, Time Attack, attract demo, options); entry 1 is skipped until `g_AdvancedSeriesUnlocked`. |
-| 0x801E436A | `g_PadHeld` | menu.h | Buttons held this frame — `+0x02` of the pad block at 0x801E4368, computed as `~(raw[0] << 8 \| raw[1])`, with `+0x04` the previous frame and `g_PadEdge2` = `held & ~previous`. |
+| 0x801E436A | `g_PadHeld` | menu.h | Buttons held this frame — `+0x02` of the pad block at 0x801E4368, computed as `~(raw[0] << 8 \| raw[1])`, with `+0x04` the previous frame and `g_PadPressed` = `held & ~previous`. |
 | 0x8009B34C / 0x8009B350 | `g_MenuViewAngle` / `…Target` | menu.h | Eased current/target rotation angle of the 3D menu view, in 1/1000 units; the carousel wraps at 500000 per entry. |
 | 0x8009B358 / 0x8009B35C | `g_MenuViewOffset` / `…Target` | menu.h | The second eased current/target pair, a translation component of the same view. |
 | 0x8007F45C / 0x8007F460 | `g_TeamNameLength` / `g_TeamNameChars[]` | menu.h | Renamed from `GameMenuStackDepth` / `GameMenuStack`: the team-name entry buffer written by screen 9, not a screen stack. |
@@ -488,7 +488,7 @@ the name identical everywhere without moving a byte:
 
 Between them these retired the eight translation units that the first pass had to
 revert (`g_TrackPoints`, `g_SceneTimer`, `g_AnimTimer`, `g_FadeStep`,
-`g_DrawBuffer`, `g_PadEdge2`, `g_AssetBlockPtr`, `g_RacePosition`), so no file is
+`g_DrawBuffer`, `g_PadPressed`, `g_AssetBlockPtr`, `g_RacePosition`), so no file is
 left on a raw `D_` symbol for a name that exists.
 
 #### Deliberately still unnamed
@@ -594,7 +594,7 @@ Ids 6..12 are the GRAND PRIX-only design/shop subtree; TIME ATTACK only reaches
 0..5. **SAVE&LOAD and OPTION are not in this table** — they are separate
 `g_MainState` scenes (2 and 7, entered from func_800182D0 / func_80018B98).
 
-The game's internal pad bit layout (`g_PadHeld` = `D_801E436A`, `g_PadEdge2` =
+The game's internal pad bit layout (`g_PadHeld` = `D_801E436A`, `g_PadPressed` =
 `D_801E436E`) is *not* the SIO0 order; measured by holding
 each button in turn:
 
@@ -775,7 +775,7 @@ frontend sub-state `D_8009F098`:
 
 | `D_8009F098` | handler | hand-off |
 |---:|---|---|
-| 0 | `UpdateTitleScreen` | waits for Start (`g_PadEdge2 & 0x800`) |
+| 0 | `UpdateTitleScreen` | waits for Start (`g_PadPressed & 0x800`) |
 | 1 | `UpdateMainMenuOpen` | 48-frame row wipe-in (`D_801E6F1C` to 0x30) |
 | 2 | `UpdateMainMenuInput` | cursor `% 5` skipping the locked entry 1; move plays cue 1, confirm cue 2, reseeds the opponent order (`func_8001B488`) |
 | 3 | `UpdateMainMenuExit` | fades out over 0x81 frames (`func_80033AA0(2*t, 0x59)`), then requests scene 6 / 0x1F (race), 0x19 (SAVE&LOAD) or 0x16 (OPTION) |
@@ -916,7 +916,7 @@ cluster: its entries are exactly `0x8001B260, 0x8001B440, 0x8001B5DC,
 | vaddr | name | role |
 |---|---|---|
 | `0x8001B014` | `EnterTitleScreen` | frame-mode slot 3 — the scene the 3D scene requests when the attract race or a race ends. `func_8001AF70` is its slot-2 twin, entered from the menu/story screens |
-| `0x8001B260` | `UpdateTitleScreen` | state 0: wait for Start (`g_PadEdge2 & 0x800`), then state = 1 |
+| `0x8001B260` | `UpdateTitleScreen` | state 0: wait for Start (`g_PadPressed & 0x800`), then state = 1 |
 | `0x8001B440` | `UpdateMainMenuOpen` | state 1: the row wipe-in. Advances `D_801E6F1C` and hands over the frame it hits `0x30`, so it runs for exactly 48 frames |
 | `0x8001B5DC` | `UpdateMainMenuInput` | state 2: Up `0x1000` / Down `0x4000` on the cursor `D_801E4184` (`% 5`), confirm `0x860` |
 | `0x8001B884` | `UpdateMainMenuExit` | state 3: fade over `0x81` frames, then request the scene for the chosen row |
@@ -1489,7 +1489,7 @@ class is cleared) and `BeginEndingFmv` (0x80019BB8, stream 10, return scene
 `StartFmvPlayback` (0x8001E79C, display setup + `SetupFmvBuffers`
 0x8001EB14 + `InitFmvContext` 0x8001EA7C + `OpenFmvStream` 0x8001EB5C),
 1 → `DecodeFmvFrame` (0x8001E8A4), 2 → `EndFmv` (0x8001EA34).
-`DecodeFmvFrame` is also the abort path: `g_PadEdge2 & 0x800` (Start) jumps
+`DecodeFmvFrame` is also the abort path: `g_PadPressed & 0x800` (Start) jumps
 straight to state 2. `WaitFmvDecode` (0x8001EF54) is named by its own
 timeout message `time out in decoding !`; `UploadFmvSlice` (0x8001EBC8) is
 the DMA1 callback that `LoadImage`s one decoded strip; `PresentFmvFrame` /
@@ -2627,7 +2627,7 @@ picked by car model through `D_8007C728[13]` into four styles. `DrawRearViewMirr
 after the countdown), slide `g_MirrorPanelY`, then sky, frame, terrain, course
 objects and cars into the mirror viewport. `ResetMirrorState` (func_8001A980)
 seeds it at race entry. `g_MirrorViewEnabled` is the player's toggle — the only
-other writer is `UpdateRaceScene`, where a shoulder button plus `g_PadEdge2`
+other writer is `UpdateRaceScene`, where a shoulder button plus `g_PadPressed`
 sets it.
 
 Also in `render/`: **`DrawPlayerCarModel`** (func_8001DAB0) is the hero car,
@@ -4195,9 +4195,9 @@ same function with one extra argument.
 (The "8 words / 199 of 207" figures below are pre-`0568a8af` harness numbers and
 understate; the scheduling tie they describe is the durable part.)
 
-Retail keeps `&g_PadEdge2` in `$16` for the first three of the five reads and
+Retail keeps `&g_PadPressed` in `$16` for the first three of the five reads and
 rematerialises `lui/lhu` for the last two. That is reproduced by
-`u16 *edge = &g_PadEdge2;` used for the `0x90`, `0x860` and `0x800` tests and the
+`u16 *edge = &g_PadPressed;` used for the `0x90`, `0x860` and `0x800` tests and the
 plain global for the `0x8000` and `0x2000` tests; with that, 199 of the 207 words
 match, and the instruction count is right (using `*edge` for all five loses two
 words, using none loses the `la` entirely).

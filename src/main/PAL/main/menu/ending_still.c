@@ -24,7 +24,7 @@ void UpdateEndingStill(void) {
             g_FadeStep = 0;
         }
     } else if (v1 == 0) {
-        if (g_SceneTimer == 0x12C || (g_PadEdge2 & 0x860)) {
+        if (g_SceneTimer == 0x12C || (g_PadPressed & PAD_CONFIRM)) {
             g_FadeLevel = 0x100;
             g_FadeStep = -4;
         }

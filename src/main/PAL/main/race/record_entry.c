@@ -365,9 +365,9 @@ void UpdateRecordEntry(void) {
         u16 buttons;
 
         previous = g_NameEntryChar;
-        if (g_PadEdge & 0x8000) {
+        if (g_PadPressedRepeat & PAD_LEFT) {
             g_NameEntryChar = previous - 1;
-        } else if (g_PadEdge & 0x2000) {
+        } else if (g_PadPressedRepeat & PAD_RIGHT) {
             g_NameEntryChar = previous + 1;
         }
         g_NameEntryChar = (g_NameEntryChar + 42) % 42;
@@ -376,7 +376,7 @@ void UpdateRecordEntry(void) {
         }
 
         g_RankingNameCodes[g_NameEntryCursor] = g_NameEntryChar;
-        buttons = g_PadEdge2;
+        buttons = g_PadPressed;
         name = (u8 *)g_RankingNameCodes;
         if (buttons & 0x860) {
             PlaySoundCue(2);
@@ -423,7 +423,7 @@ void UpdateRecordEntry(void) {
     }
 
     case 2:
-        if (g_PadEdge2 & 0x860) {
+        if (g_PadPressed & PAD_CONFIRM) {
             g_RecordEntryState = 3;
             g_RecordPanelSlide = 0;
         }
@@ -452,9 +452,9 @@ void UpdateRecordEntry(void) {
         u16 buttons;
 
         previous = g_NameEntryChar;
-        if (g_PadEdge & 0x8000) {
+        if (g_PadPressedRepeat & PAD_LEFT) {
             g_NameEntryChar = previous - 1;
-        } else if (g_PadEdge & 0x2000) {
+        } else if (g_PadPressedRepeat & PAD_RIGHT) {
             g_NameEntryChar = previous + 1;
         }
         g_NameEntryChar = (g_NameEntryChar + 42) % 42;
@@ -463,7 +463,7 @@ void UpdateRecordEntry(void) {
         }
 
         g_TimeRecordNameCodes[g_NameEntryCursor] = g_NameEntryChar;
-        buttons = g_PadEdge2;
+        buttons = g_PadPressed;
         name = (u8 *)g_TimeRecordNameCodes;
         if (buttons & 0x860) {
             PlaySoundCue(2);
@@ -494,7 +494,7 @@ void UpdateRecordEntry(void) {
     }
 
     case 5:
-        if (g_PadEdge2 & 0x860) {
+        if (g_PadPressed & PAD_CONFIRM) {
             if (g_RankingInsertRow < 5 || g_TimeRecordInsertRow < 5) {
                 StartCdVolumeFade(0x78);
                 StartCdAudio();

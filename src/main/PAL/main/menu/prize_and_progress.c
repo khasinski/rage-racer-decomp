@@ -27,7 +27,7 @@ void UpdatePrizeMoneyScreen(void) {
     s32 st;
     s32 t;
 
-    if (g_PadHeld & 0x860) {
+    if (g_PadHeld & PAD_CONFIRM) {
         lim1 <<= 2;
         lim0 <<= 2;
     }
@@ -42,7 +42,7 @@ void UpdatePrizeMoneyScreen(void) {
         return;
     case 1:
         DrawRaceTimePanel(0);
-        if (g_PadEdge2 & 0x860) {
+        if (g_PadPressed & PAD_CONFIRM) {
             g_PrizeScreenState = 2;
             g_SceneTimer = 0;
         }
@@ -69,7 +69,7 @@ void UpdatePrizeMoneyScreen(void) {
         st = 5;
         goto Lstore;
         }
-        PlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
+        PlaySoundCue((g_PadHeld & PAD_CONFIRM) ? 0x10 : 0xf);
         t = g_PrizeAmount;
         if (t >= lim1) {
             g_PrizeAmount = t - lim1;
@@ -87,7 +87,7 @@ void UpdatePrizeMoneyScreen(void) {
         goto Lstore;
     case 5:
         PlaySoundCue(0x11);
-        if (!(g_PadEdge2 & 0x860)) break;
+        if (!(g_PadPressed & PAD_CONFIRM)) break;
         st = 6;
     Lstore:
         g_PrizeScreenState = st;
@@ -95,7 +95,7 @@ void UpdatePrizeMoneyScreen(void) {
     case 6:
         TickClassClearFanfare();
         if (g_PromotionBonus == 0) { st = 7; goto Lstore; }
-        PlaySoundCue((g_PadHeld & 0x860) ? 0x10 : 0xf);
+        PlaySoundCue((g_PadHeld & PAD_CONFIRM) ? 0x10 : 0xf);
         t = g_PromotionBonus;
         if (t >= lim0) {
             g_PromotionBonus = t - lim0;
@@ -112,7 +112,7 @@ void UpdatePrizeMoneyScreen(void) {
     case 7:
         TickClassClearFanfare();
         PlaySoundCue(0x11);
-        if (!(g_PadEdge2 & 0x860)) break;
+        if (!(g_PadPressed & PAD_CONFIRM)) break;
         if (g_ClassClearFanfareTimer != 0) break;
         if (g_ClassCompleted == 0) { RequestSelectBgmAssets(); }
         st = 8;

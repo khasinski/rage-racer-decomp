@@ -127,7 +127,7 @@ L_sw2:
 
     case 3:
     {
-    u16 lpad = g_PadEdge2;
+    u16 lpad = g_PadPressed;
     g_McMenuPhase = MC_PROMPT_ACCESSING;
     g_McActionBusy = 0;
     if ((lpad & 0x90) && !fadeBusy) {
@@ -176,7 +176,7 @@ L_sw2:
         s32 *p = &g_McMenuRowCursor;
         g_McMenuPhase = MC_PROMPT_NONE;
         AdjustMenuSelectionHorizontal(p, 0, g_McMenuRowCount - 1);
-        pad = g_PadEdge2;
+        pad = g_PadPressed;
         if (!((pad & 0x860) == 0)) {
         if (*p < g_McMenuRowCount - 1) {
             PlaySoundCue(2);
@@ -210,7 +210,7 @@ L_sw2:
         a0 = g_McSlotUsedMask;
         if (!((a0 % 8) == 0)) {
         g_McMenuPhase = MC_PROMPT_SELECT_LOAD;
-        if ((g_PadEdge2 & 0x860) == 0) break;
+        if ((g_PadPressed & PAD_CONFIRM) == 0) break;
         if (!(((a0 >> *s0) & 1) == 0)) {
         PlaySoundCue(2);
         g_McConfirmChoice = 0;
@@ -222,13 +222,13 @@ L_sw2:
         goto L_b475;
         }
         g_McMenuPhase = MC_PROMPT_NO_DATA;
-        if ((g_PadEdge2 & 0x860) == 0) break;
+        if ((g_PadPressed & PAD_CONFIRM) == 0) break;
         } else {
         if (g_McFreeBlocks != 0) goto L_b448;
         a0 = g_McSlotUsedMask;
         if (!((a0 % 8) == 0)) {
         g_McMenuPhase = MC_PROMPT_SELECT_SAVE;
-        if ((g_PadEdge2 & 0x860) == 0) break;
+        if ((g_PadPressed & PAD_CONFIRM) == 0) break;
         if (!(((a0 >> *s0) & 1) == 0)) {
         PlaySoundCue(2);
         g_McConfirmChoice = 0;
@@ -240,7 +240,7 @@ L_sw2:
         goto L_b475;
         }
         g_McMenuPhase = MC_PROMPT_CARD_FULL;
-        if ((g_PadEdge2 & 0x860) == 0) goto L_b439;
+        if ((g_PadPressed & PAD_CONFIRM) == 0) goto L_b439;
         }
         PlaySoundCue(5);
         g_McMenuPage = 0;
@@ -251,7 +251,7 @@ L_sw2:
         break;
     L_b448:
         g_McMenuPhase = MC_PROMPT_SELECT_SAVE;
-        if (!((g_PadEdge2 & 0x860) == 0)) {
+        if (!((g_PadPressed & PAD_CONFIRM) == 0)) {
         if (!(((g_McSlotUsedMask >> *s0) & 1) == 0)) {
         PlaySoundCue(2);
         g_McConfirmChoice_v = 0;
@@ -622,7 +622,7 @@ L_sw2:
         {
             s32 t = g_McActionElapsed + 1;
             g_McActionElapsed = t;
-            if (!((g_PadEdge2 & 0x90) == 0)) {
+            if (!((g_PadPressed & PAD_CANCEL) == 0)) {
             if (!(t < 0x79)) {
         g_McCardOkFrames = 0;
         g_McActionElapsed = 0;
@@ -787,7 +787,7 @@ L_sw2:
         }
     }
 
-    if (!((g_PadEdge2 & 0x90) == 0)) {
+    if (!((g_PadPressed & PAD_CANCEL) == 0)) {
     if (!(fadeBusy != 0)) {
     g_McActionState = 0;
     PlaySoundCue(3);
@@ -795,7 +795,7 @@ L_sw2:
     break;
 
 L_b1280:
-    if (!((g_PadEdge2 & 0x90) == 0)) {
+    if (!((g_PadPressed & PAD_CANCEL) == 0)) {
     if (!(fadeBusy != 0)) {
     PlaySoundCue(3);
     StartMenuExitFade();
@@ -849,7 +849,7 @@ L_b1280:
         g_McMenuSubState = 0xB;
         g_McMenuPhase = MC_PROMPT_NONE;
         AdjustMenuSelectionHorizontal(p, 0, g_McMenuRowCount - 1);
-        pad = g_PadEdge2;
+        pad = g_PadPressed;
         if (!((pad & 0x860) == 0)) {
         if (!(*p != 0)) {
         PlaySoundCue(2);
@@ -937,7 +937,7 @@ L_b1280:
         break;
     case 8:
         {
-        u16 lpad = g_PadEdge2;
+        u16 lpad = g_PadPressed;
         g_McMenuPhase = MC_PROMPT_FORMAT_OK;
         if ((lpad & 0x90) == 0) break;
         }
@@ -1008,7 +1008,7 @@ L_b1280:
     default:
     g_McMenuSubState = 0x11;
     {
-    u16 lpad = g_PadEdge2;
+    u16 lpad = g_PadPressed;
     g_McMenuPhase = MC_PROMPT_CARD_ERROR;
     if ((lpad & 0x90) && !fadeBusy) {
         PlaySoundCue(3);
