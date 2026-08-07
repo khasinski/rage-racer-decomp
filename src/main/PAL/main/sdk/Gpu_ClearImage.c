@@ -94,12 +94,11 @@ long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
     u_long readyMask;
     u_long dmaCommand;
     register long w asm("$4");
-    register long adjustedWords asm("$2");
+    register long transferValue asm("$2");
     long halfWords;
     register long quotient asm("$3");
     u_long status;
     u_long gpCommand;
-    register volatile u_long *dmaReg asm("$2");
     volatile u_long *dmaSizeReg;
     short h;
     short clippedW;
@@ -137,19 +136,19 @@ long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
     } else {
         clippedH = 0;
     }
-    adjustedWords = savedRect->w * clippedH;
+    transferValue = savedRect->w * clippedH;
     savedRect->h = clippedH;
-    adjustedWords++;
-    adjustedWords += (u_long)adjustedWords >> 31;
-    halfWords = adjustedWords >> 1;
+    transferValue++;
+    transferValue += (u_long)transferValue >> 31;
+    halfWords = transferValue >> 1;
     if (halfWords <= 0) {
         return -1;
     }
-    rem = adjustedWords >> 5;
+    rem = transferValue >> 5;
     asm("" : "=r"(rem) : "0"(rem));
     quotient = rem;
-    adjustedWords = quotient << 4;
-    rem = halfWords - adjustedWords;
+    transferValue = quotient << 4;
+    rem = halfWords - transferValue;
     blocks = quotient;
 
     if ((*g_GpuGp1 & 0x04000000) == 0) {
@@ -180,19 +179,19 @@ long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
 
     if (blocks != 0) {
         gpCommand = 0x04000000;
-        dmaReg = g_GpuGp1;
+        transferValue = (u_long)g_GpuGp1;
         gpCommand |= 2;
-        *dmaReg = gpCommand;
-        dmaReg = g_GpuDmaMadr;
+        *(volatile u_long *)transferValue = gpCommand;
+        transferValue = (u_long)g_GpuDmaMadr;
         dmaCommand = 0x01000000;
-        *dmaReg = (u_long)current;
-        adjustedWords = blocks << 16;
+        *(volatile u_long *)transferValue = (u_long)current;
+        transferValue = blocks << 16;
         dmaSizeReg = g_GpuDmaBcr;
-        adjustedWords |= 0x10;
-        *dmaSizeReg = adjustedWords;
-        dmaReg = g_GpuDmaChcr;
+        transferValue |= 0x10;
+        *dmaSizeReg = transferValue;
+        transferValue = (u_long)g_GpuDmaChcr;
         dmaCommand |= 0x201;
-        *dmaReg = dmaCommand;
+        *(volatile u_long *)transferValue = dmaCommand;
     }
     return 0;
 }
