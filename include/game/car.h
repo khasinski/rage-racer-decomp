@@ -206,10 +206,12 @@ typedef struct GameCarSpecShiftPoint {
     s16 upshiftSpeed;
 } GameCarSpecShiftPoint;
 
-/* The loaded car's spec block (`g_CarSpec`), from its asset pack. Nothing below
- * 0xCC is read yet; the gear tables are indexed by the 1-based gear number. */
+/* The loaded car's spec block (`g_CarSpec`), from its asset pack. */
 typedef struct GameCarSpec {
-    u8 unk00[0xCC];
+    u8 unk00[0x40];
+    s32 torqueBandRpm[16];    /* +0x40 interpolation boundaries */
+    s32 torqueLossValue[10];  /* +0x80 loss curve samples */
+    s32 torqueLossRpm[9];     /* +0xA8 loss interpolation boundaries */
     s32 gearLoad[6];      /* +0xCC engine-load divisor per gear */
     s32 gearRatio[7];     /* +0xE4 final-drive ratio per gear (rpm divisor) */
     s16 revLimit;         /* +0x100 rev ceiling; the tacho and cut-out use it */
