@@ -94,6 +94,10 @@ typedef struct GameSceneAssetHeader {
     s32 offsets[11];
 } GameSceneAssetHeader;
 
+static __inline__ void *GetSceneAssetAddress(GameSceneAssetHeader *header, s32 offset) {
+    return (u8 *)header + offset;
+}
+
 /*
  * Asset-region pointers. All three address the load region in bytes: they are
  * advanced by byte counts (a load's returned size, TRACK_TEXTURE_SHADOW_SIZE,

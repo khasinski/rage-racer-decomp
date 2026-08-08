@@ -66,7 +66,7 @@ void LoadRaceAssets(void) {
             u8 *body;
             pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = pack->offsets[0];
-            g_AssetBlockPtr = (u8 *)pack + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             SetCarSpec((u32)g_AssetBlockPtr);
             table = g_AssetLoadCursor;
             header = ASSET_SUB(table, 1);
@@ -78,7 +78,7 @@ void LoadRaceAssets(void) {
             StartAudioSlotLoad(3, (s32)header, (s32)body, (s32)table);
             pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = pack->offsets[4];
-            g_AssetBlockPtr = (u8 *)pack + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             UploadImageAsset(g_AssetBlockPtr);
             g_AssetLoadState = 4;
             g_AssetLoadCursor = g_AssetSubBlockPtr;
@@ -104,15 +104,15 @@ void LoadRaceAssets(void) {
             s32 logoOffset, shadowOffset;
             pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = pack->offsets[0];
-            g_AssetBlockPtr = (u8 *)pack + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             UploadImageAsset(g_AssetBlockPtr);
             pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = pack->offsets[1];
-            g_AssetBlockPtr = (u8 *)pack + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             UploadImageAsset(g_AssetBlockPtr);
             pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = pack->offsets[2];
-            g_AssetBlockPtr = (u8 *)pack + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             UploadImageBlock(g_AssetBlockPtr);
             base = g_AssetLoadCursor;
             logoOffset = ((GameSceneAssetHeader *)base)->offsets[3];
@@ -141,57 +141,57 @@ void LoadRaceAssets(void) {
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[0];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SetTrackCameraTable(g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[1];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SetEnvPaletteTable(g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[2];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SetEnvironmentScript(g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[3];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             RegisterModelBank((s32 *)g_AssetBlockPtr, 1);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[4];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             InstallTrackPoints(g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[5];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             RegisterCourseModels((s32 *)g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[6];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             RegisterModelBank((s32 *)g_AssetBlockPtr, 2);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[7];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             InstallTerrainCellData((s32 *)g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[8];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SetCourseObjects(g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[9];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             InstallTrackEventData(g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[10];
-            g_AssetBlockPtr = (u8 *)header + offset;
+            g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SelectTrackCameraTable(g_AssetBlockPtr, 1);
 
             g_AssetLoadState = 7;
