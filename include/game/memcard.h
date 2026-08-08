@@ -46,6 +46,12 @@ typedef struct GameSaveHeaderRow {
     u32 checksum;
 } GameSaveHeaderRow;
 
+typedef struct MemoryCardMessageRow {
+    s32 text;
+    u8 column;
+    u8 reserved[3];
+} MemoryCardMessageRow;
+
 typedef struct SavedCarSetup {
     u8 modelVariant;
     u8 tireCompound;
@@ -229,7 +235,7 @@ extern s32 g_McLastCardStatus;
 extern s32 g_McLastMenuState;
 extern s32 g_McLastSlot;
 extern s16 g_McMessageColumnX[];
-extern s32 *g_McMessageRows[];
+extern MemoryCardMessageRow *g_McMessageRows[];
 extern u8 g_McMessageText[];
 extern s32 g_McNoCardTicks;
 extern s32 g_McPollStatus;

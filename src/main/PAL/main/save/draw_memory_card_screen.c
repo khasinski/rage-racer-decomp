@@ -49,7 +49,7 @@ void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow)
 
 void DrawMemoryCardMessage(s32 message) {
     s32 index;
-    s32 *entry;
+    MemoryCardMessageRow *entry;
     s32 x;
     s32 y;
     s16 *table;
@@ -72,9 +72,9 @@ void DrawMemoryCardMessage(s32 message) {
                 x = table[code];
                 y = 0x60;
             }
-            DrawSpriteString(x, y, entry[0], 0x7F81);
-            code = ((u8 *)entry)[4];
-            entry += 2;
+            DrawSpriteString(x, y, entry->text, 0x7F81);
+            code = entry->column;
+            entry++;
         } while (code != 0);
     }
 
