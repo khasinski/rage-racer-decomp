@@ -472,7 +472,6 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     targetGearAgain = drive->gear;
     if (drive->gearDisp != targetGearAgain)
     {
-      switch (0) { default:
       gearCurve = (u8 *)((car->speed * 0x2710) /
                          (*(s32 *)((u8 *)(config - (-(targetGearAgain * 4))) + 0xE4) * 0x490 / 160));
       wheelSpeed = (u16)car->field_A8;
@@ -487,7 +486,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
         {
           if (targetGearCheck < 4)
           {
-            break;
+            goto grade_adjust_done;
           }
           if (targetGearCheck == 4)
           {
@@ -511,14 +510,14 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
           }
           else
           {
-            break;
+            goto grade_adjust_done;
           }
           gradeScale = 0x64 - gradePenalty;
           drive->unk2C = (u16)((wheelSpeedScaled * gradeScale) / 100);
           g_ShiftTargetSpeed = (gradeScale * ((s32) gearCurve)) / 100;
         }
       }
-      }
+grade_adjust_done:
       shiftTargetSpeed = g_ShiftTargetSpeed;
 
       accel = 0;
@@ -553,13 +552,12 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       else
       {
         shiftRemaining = drive->unk36 * (s16)countdown;
-        switch (0) { default:
         lossBase = shiftRemaining / 10;
         drive->unk78 = g_ShiftTargetSpeed - lossBase;
-        break;
+        goto shift_interpolation_done;
         block_129:
         drive->unk78 = shiftedSpeed;
-        }
+shift_interpolation_done:
 
       }
       }
