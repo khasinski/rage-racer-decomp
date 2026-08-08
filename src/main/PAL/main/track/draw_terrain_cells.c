@@ -25,8 +25,6 @@ void SetShadeTex(void *, s32);
 void SetPolyF4(void *);
 void SetPolyFT4(void *);
 void SetPolyG4(void *);
-s32 GameSin(s32) asm("rsin");
-s32 GameCos(s32) asm("rcos");
 extern s32 g_SkyRowBase;
 typedef struct
 {
@@ -185,8 +183,7 @@ enum SkyOrderingTableIndex
   SKY_OT_NEAR = 703
 };
 register u8 *stackPointer asm("$29");
-void GameDrawSkyBackground(void) asm("DrawSkyBackground");
-void GameDrawSkyBackground(void)
+void DrawSkyBackground(void)
 {
   SkyRenderScratchpad *scratch = (SkyRenderScratchpad *)SCRATCHPAD_ADDR;
   s32 panelXFixed;
@@ -294,8 +291,8 @@ void GameDrawSkyBackground(void)
     {
       rollAngle = -rollAngle;
     }
-    sinRoll = GameSin(rollAngle);
-    cosRoll = GameCos(rollAngle);
+    sinRoll = rsin(rollAngle);
+    cosRoll = rcos(rollAngle);
     coordinateAccumulator = cosRoll * horizontalFixed;
     rotatedX = coordinateAccumulator + (sinRoll * nearVerticalFixed);
     unroundedX = rotatedX;
@@ -908,4 +905,3 @@ void GameDrawSkyBackground(void)
   }
   return;
 }
-

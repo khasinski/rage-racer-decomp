@@ -221,8 +221,7 @@ void DrawResultScreen(void) {
     *scratch = AddTilePrim(base, next, 0, 0x30, width, 0x18, 0xF0, 0xF0, 0xF0);
 }
 
-void DrawGrandPrixResultPanel(void) asm("DrawGrandprixIntro");
-void DrawGrandPrixResultPanel(void) {
+void DrawGrandprixIntro(void) {
     u8 *base;
     char text[0x30];
     if ((g_ClassResultPlace != 0) && (g_PrizeScreenState >= 5)) {

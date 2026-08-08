@@ -4,12 +4,10 @@
 #include "game/cd.h"
 #include "game/race.h"
 #include "game/menu.h"
+#include "psyq/snd.h"
 
 extern u8 g_CdVolume;
 extern CdlLOC g_CdTrackLoopPoint[];
-
-void SsSetSpuInputAttr_Link(u8 source, u8 field, u8 value) asm("SsSetSpuInputAttr");
-void SsSetSerialVol_Link(u8 source, s16 left, s16 right) asm("SsSetSerialVol");
 
 void StepCdPauseRequest(void) {
     s32 state;
@@ -120,8 +118,8 @@ void StepCdResumeRequest(void) {
 void InitCdAudio(void) {
     u8 *status;
 
-    SsSetSpuInputAttr_Link(0, 0, 1);
-    SsSetSerialVol_Link(0, 0x7FFF, 0x7FFF);
+    SsSetSpuInputAttr(0, 0, 1);
+    SsSetSerialVol(0, 0x7FFF, 0x7FFF);
     status = &g_CdModeParam;
     *status = 7;
     CdControl(0xE, status, 0);

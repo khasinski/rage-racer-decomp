@@ -317,8 +317,7 @@ void DrawLapNumber(void) {
     }
 }
 
-void UpdateWaypointCollectScene(void) asm("DrawEndingScreen");
-void UpdateWaypointCollectScene(void) {
+void DrawEndingScreen(void) {
     s16 *p;
     register u32 a asm("$5");
     s32 x = 0;
