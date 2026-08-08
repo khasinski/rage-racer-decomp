@@ -1,17 +1,11 @@
 #include "common.h"
 
-typedef struct Func80043B18Entry {
-    u8 pad[0x22];
-    s16 value;
-} Func80043B18Entry;
-
 #define GAME_TRACK_SECTION_COUNT_TYPE u16
-#define GAME_TRACK_CAMERA_TYPE Func80043B18Entry
 #include "game/track_camera_internal.h"
 
 s32 FindNearestTrackCamera(u8 *car, u16 rawValue) {
     s32 best;
-    Func80043B18Entry *entry;
+    GameTrackCameraNode *entry;
     s32 index;
     s32 selected;
     s32 span;
@@ -23,8 +17,8 @@ s32 FindNearestTrackCamera(u8 *car, u16 rawValue) {
 
     entry = g_TrackCameras;
     best = 0x7FFFFFFF;
-    rawValue = *(u16 *)&entry[0].value;
-    dist = entry[0].value;
+    rawValue = *(u16 *)&entry[0].trackSection;
+    dist = entry[0].trackSection;
     index = 0;
 
     if (dist != -1) {
@@ -60,8 +54,8 @@ s32 FindNearestTrackCamera(u8 *car, u16 rawValue) {
 
             tmp = -1;
             index++;
-            rawValue = *(u16 *)&entry[index].value;
-            dist = entry[index].value;
+            rawValue = *(u16 *)&entry[index].trackSection;
+            dist = entry[index].trackSection;
         } while (dist != tmp);
     }
 

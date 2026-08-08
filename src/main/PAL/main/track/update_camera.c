@@ -2,11 +2,10 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
-#define GAME_TRACK_CAMERA_TYPE u8
 #define GAME_SKY_ROW_BASE_TYPE u32
 #define GAME_ENV_SCRIPT_LENGTH_TYPE u32
 #include "game/track_internal.h"
-#define GAME_PLAYER_CAR_DECL extern s32 g_PlayerCar
+#define GAME_PLAYER_CAR_DECL extern GameRenderObject g_PlayerCar
 #include "game/player_car_internal.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
@@ -28,15 +27,7 @@
 #define CAMPATH_ROLL 2
 #define CAMPATH_DIST 3
 
-/*
- * Camera-mode state machine: `cameraModeSel` selects among the camera behaviours
- * (chase / bumper / replay-orbit / intro-pan, etc.); `car` is the followed
- * render/target object. Positions the eye and fills the scratchpad view state
- * (view[2..8]) with matrix/atan2/sqrt math, then submits via DrawPlayerCarModel.
- * Field accesses use the FIELD(base,type,offset) raw-offset macro to stay
- * byte-exact, so params/locals are not retyped.
- */
-void UpdateCamera(s32 cameraModeSel, void *car) {
+void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     s16 sp10[4];
     s32 sp18[3];
     s32 sp28[3];
@@ -107,12 +98,12 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
     s32 negatedAccel;
     s32 wrappedLag;
     u8 nextPrevMode;
-    void *pathNode;
-    void *orbitNode;
-    void *chaseNodeAgain;
-    void *chaseNode;
-    void *chaseNodeOffsets;
-    void *prevNode;
+    GameTrackCameraNode *pathNode;
+    GameTrackCameraNode *orbitNode;
+    GameTrackCameraNode *chaseNodeAgain;
+    GameTrackCameraNode *chaseNode;
+    GameTrackCameraNode *chaseNodeOffsets;
+    GameTrackCameraNode *prevNode;
     u32 introNode;
 
     cameraNodeIndex = FindNearestTrackCamera(car);
@@ -123,12 +114,12 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
     if (cameraModeSel < 2) {
         cameraMode = cameraModeSel;
     } else {
-        cameraMode = FIELD(((cameraNodeIndex * 0x24) + g_TrackCameras), s16 *, 0x20);
+        cameraMode = g_TrackCameras[cameraNodeIndex].mode;
     }
     switch (cameraMode) {
     case 0:
         *(Block16 *)&scratch[2] = *(Block16 *)car;
-        *(Block16 *)&scratch[6] = *(Block16 *)((u8 *)car + 0x20);
+        *(Block16 *)&scratch[6] = *(Block16 *)&car->angleX;
         BuildRotMatrixY(&sp48[0], scratch[7]);
         BuildRotMatrixX(&sp68[0], scratch[6]);
         MulMatrix2(&sp68[0], &sp48[0]);
@@ -150,14 +141,14 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
         scratch[2] += sp38[0] >> 4;
         scratch[3] += sp38[1] >> 4;
         scratch[4] += sp38[2] >> 4;
-        scratch[6] += FIELD(car, s16 *, 0x8C);
+        scratch[6] += (s16)car->field_8C;
         g_CameraModePrev = 0;
         break;
     case 1:
         *(Block16 *)&scratch[2] = *(Block16 *)car;
-        chaseYawDamping = FIELD(car, s32 *, 0x24);
+        chaseYawDamping = car->angleY;
         chaseTargetYaw = chaseYawDamping & 0xFFF;
-        chaseCarSpeed = FIELD(car, s32 *, 0xA4);
+        chaseCarSpeed = car->speed;
         g_ChaseCarSpeed = chaseCarSpeed;
         previousMode = g_CameraModePrev;
         g_ChaseTargetYaw = chaseTargetYaw;
@@ -295,9 +286,9 @@ block_36:
         MulMatrix2(&sp68[0], &sp88[0]);
         g_ChaseYawPrev = g_ChaseYaw;
         BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
+        BuildRotMatrixX(&sp68[0], car->angleX);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], car->angleZ);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         MulMatrix2(angleState, &sp48[0]);
@@ -334,7 +325,7 @@ block_52:
         sp38[3] = chaseDistance;
         scratch[6] = 0x400 - (Atan2(sp38[1] + 0x28, chaseDistance) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
-        scratch[8] = FIELD(car, s32 *, 0x28) - FIELD(car, s32 *, 0x64);
+        scratch[8] = car->angleZ - car->field_64;
         if (g_ChaseCameraPreset == 0) {
             negatedAccel = scratch[6] - 0x90;
         } else {
@@ -345,32 +336,32 @@ block_52:
         break;
     case 2:
         chaseNodeOffset = cameraNodeIndex * 0x24;
-        chaseNode = chaseNodeOffset + g_TrackCameras;
+        chaseNode = &g_TrackCameras[cameraNodeIndex];
         *(Block16 *)&scratch[2] = *(Block16 *)chaseNode;
-        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], car->angleY);
+        BuildRotMatrixX(&sp68[0], car->angleX);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], car->angleZ);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
-        chaseNodeOffsets = chaseNodeOffset + g_TrackCameras;
-        sp18[0] = FIELD(chaseNodeOffsets, s32 *, 0x10);
-        sp18[1] = FIELD(chaseNodeOffsets, s32 *, 0x14);
-        sp18[2] = FIELD(chaseNodeOffsets, s32 *, 0x18) + 0x32;
+        chaseNodeOffsets = &g_TrackCameras[cameraNodeIndex];
+        sp18[0] = chaseNodeOffsets->offset[0];
+        sp18[1] = chaseNodeOffsets->offset[1];
+        sp18[2] = chaseNodeOffsets->offset[2] + 0x32;
         ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);
-        toCarX = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
+        toCarX = scratch[2] - (car->x + sp28[0]);
         sp38[0] = toCarX;
-        sp38[1] = scratch[3] - (FIELD(car, s32 *, 4) + sp28[1]);
-        chaseNodeAgain = chaseNodeOffset + g_TrackCameras;
-        sp38[2] = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
-        scratch[2] -= (toCarX * FIELD(chaseNodeAgain, s32 *, 0xC)) / 10000;
-        scratch[3] -= (sp38[1] * FIELD(chaseNodeAgain, s32 *, 0xC)) / 10000;
-        scratch[4] -= (sp38[2] * FIELD(chaseNodeAgain, s32 *, 0xC)) / 10000;
-        chaseDx = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
+        sp38[1] = scratch[3] - (car->y + sp28[1]);
+        chaseNodeAgain = &g_TrackCameras[cameraNodeIndex];
+        sp38[2] = scratch[4] - (car->z + sp28[2]);
+        scratch[2] -= (toCarX * chaseNodeAgain->data.world.blend) / 10000;
+        scratch[3] -= (sp38[1] * chaseNodeAgain->data.world.blend) / 10000;
+        scratch[4] -= (sp38[2] * chaseNodeAgain->data.world.blend) / 10000;
+        chaseDx = scratch[2] - (car->x + sp28[0]);
         squaredX = chaseDx * chaseDx;
         sp38[0] = chaseDx;
-        sp38[1] = scratch[3] - (FIELD(car, s32 *, 4) + sp28[1]);
-        chaseDz = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
+        sp38[1] = scratch[3] - (car->y + sp28[1]);
+        chaseDz = scratch[4] - (car->z + sp28[2]);
         sp38[2] = chaseDz;
         squaredZ = chaseDz * chaseDz;
         scratch[6] = 0x400 - (Atan2(0 - sp38[1], SquareRoot0(squaredX + squaredZ)) & 0xFFF);
@@ -394,25 +385,25 @@ block_52:
                 g_CamPathAngleStart[CAMPATH_ROLL] = g_CamPathAngle[CAMPATH_ROLL];
                 g_CamPathAngleStart[CAMPATH_DIST] = g_CamPathAngle[CAMPATH_DIST];
             } else {
-                prevNode = (cameraNodeIndex * 0x24) + g_TrackCameras;
-                g_CamPathOffsetStart[0] = FIELD(prevNode, s32 *, 0x10);
-                g_CamPathOffsetStart[1] = FIELD(prevNode, s32 *, 0x14);
-                g_CamPathOffsetStart[2] = FIELD(prevNode, s32 *, 0x18);
-                g_CamPathAngleStart[CAMPATH_PITCH] = FIELD(prevNode, s32 *, 0);
-                g_CamPathAngleStart[CAMPATH_YAW] = FIELD(prevNode, s32 *, 4);
-                g_CamPathAngleStart[CAMPATH_ROLL] = FIELD(prevNode, s32 *, 8);
-                g_CamPathAngleStart[CAMPATH_DIST] = FIELD(prevNode, s32 *, 0xC);
+                prevNode = &g_TrackCameras[cameraNodeIndex];
+                g_CamPathOffsetStart[0] = prevNode->offset[0];
+                g_CamPathOffsetStart[1] = prevNode->offset[1];
+                g_CamPathOffsetStart[2] = prevNode->offset[2];
+                g_CamPathAngleStart[CAMPATH_PITCH] = prevNode->data.orientation.pitch;
+                g_CamPathAngleStart[CAMPATH_YAW] = prevNode->data.orientation.yaw;
+                g_CamPathAngleStart[CAMPATH_ROLL] = prevNode->data.orientation.roll;
+                g_CamPathAngleStart[CAMPATH_DIST] = prevNode->data.orientation.distance;
             }
-            pathNode = (g_CamPathNode * 0x24) + g_TrackCameras;
-            g_CamPathOffsetDelta[0] = FIELD(pathNode, s32 *, 0x10) - g_CamPathOffsetStart[0];
-            g_CamPathOffsetDelta[1] = FIELD(pathNode, s32 *, 0x14) - g_CamPathOffsetStart[1];
-            g_CamPathOffsetDelta[2] = FIELD(pathNode, s32 *, 0x18) - g_CamPathOffsetStart[2];
-            pitchDelta = FIELD(pathNode, s32 *, 0) - g_CamPathAngleStart[CAMPATH_PITCH];
+            pathNode = &g_TrackCameras[g_CamPathNode];
+            g_CamPathOffsetDelta[0] = pathNode->offset[0] - g_CamPathOffsetStart[0];
+            g_CamPathOffsetDelta[1] = pathNode->offset[1] - g_CamPathOffsetStart[1];
+            g_CamPathOffsetDelta[2] = pathNode->offset[2] - g_CamPathOffsetStart[2];
+            pitchDelta = pathNode->data.orientation.pitch - g_CamPathAngleStart[CAMPATH_PITCH];
             pathYaw = (s32)&g_CamPathAngleDelta[CAMPATH_PITCH];
             *(s32 *)pathYaw = pitchDelta;
-            g_CamPathAngleDelta[CAMPATH_YAW] = FIELD(pathNode, s32 *, 4) - g_CamPathAngleStart[CAMPATH_YAW];
-            g_CamPathAngleDelta[CAMPATH_ROLL] = FIELD(pathNode, s32 *, 8) - g_CamPathAngleStart[CAMPATH_ROLL];
-            g_CamPathAngleDelta[CAMPATH_DIST] = FIELD(pathNode, s32 *, 0xC) - g_CamPathAngleStart[CAMPATH_DIST];
+            g_CamPathAngleDelta[CAMPATH_YAW] = pathNode->data.orientation.yaw - g_CamPathAngleStart[CAMPATH_YAW];
+            g_CamPathAngleDelta[CAMPATH_ROLL] = pathNode->data.orientation.roll - g_CamPathAngleStart[CAMPATH_ROLL];
+            g_CamPathAngleDelta[CAMPATH_DIST] = pathNode->data.orientation.distance - g_CamPathAngleStart[CAMPATH_DIST];
             if (pitchDelta > 0) {
                 if (pitchDelta >= 0x800) {
                     *(s32 *)pathYaw = pitchDelta - 0x1000;
@@ -436,10 +427,10 @@ block_52:
             } else if (*case3Angle < -0x7FF) {
                 *case3Angle += 0x1000;
             }
-        } else if (g_CamPathFrame < FIELD(((g_CamPathNode * 0x24) + g_TrackCameras), s32 *, 0x1C)) {
+        } else if (g_CamPathFrame < g_TrackCameras[g_CamPathNode].duration) {
             g_CamPathFrame += 1;
         }
-        pathBlend = 0x1000 - rcos((s32) (g_CamPathFrame << 0xB) / (s32) FIELD(((g_CamPathNode * 0x24) + g_TrackCameras), s32 *, 0x1C));
+        pathBlend = 0x1000 - rcos((s32) (g_CamPathFrame << 0xB) / g_TrackCameras[g_CamPathNode].duration);
         offsetXProduct = pathBlend * g_CamPathOffsetDelta[0];
         if (offsetXProduct < 0) {
             offsetXProduct += 0x1FFF;
@@ -489,17 +480,17 @@ block_52:
         camPathAngle = (distProduct >> 0xD) + g_CamPathAngleStart[CAMPATH_DIST];
         sp38[3] = camPathAngle;
         g_CamPathAngle[CAMPATH_DIST] = camPathAngle;
-        pathYawRelative = pathYaw - FIELD(car, s32 *, 0x24);
+        pathYawRelative = pathYaw - car->angleY;
         sp38[1] = pathYawRelative;
         BuildRotMatrixY(&sp88[0], pathYawRelative);
         BuildRotMatrixX(&sp68[0], sp38[0]);
         MulMatrix2(&sp68[0], &sp88[0]);
         BuildRotMatrixZ(&sp68[0], sp38[2]);
         MulMatrix2(&sp68[0], &sp88[0]);
-        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], car->angleY);
+        BuildRotMatrixX(&sp68[0], car->angleX);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], car->angleZ);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
@@ -538,35 +529,35 @@ block_52:
         *(Block16 *)&scratch[2] = *(Block16 *)introNode;
         if (((u8)nodeChanged) || (g_CameraModePrev != 4)) {
             g_CamPathFrame = 0;
-        } else if (g_CamPathFrame < FIELD((introNodeOffset + (u32)g_TrackCameras), s32 *, 0x1C)) {
+        } else if (g_CamPathFrame < g_TrackCameras[cameraNodeIndex].duration) {
             g_CamPathFrame += 1;
         }
-        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], car->angleY);
+        BuildRotMatrixX(&sp68[0], car->angleX);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], car->angleZ);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         sp18[0] = 0;
         orbitNodeOffset = cameraNodeIndex * 0x24;
-        sp18[1] = FIELD((orbitNodeOffset + (u32)g_TrackCameras), s32 *, 0xC);
+        sp18[1] = g_TrackCameras[cameraNodeIndex].data.orientation.distance;
         sp18[2] = 0x32;
         ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);
-        orbitNode = orbitNodeOffset + g_TrackCameras;
-        orbitToCarX = FIELD(orbitNode, s32 *, 0x10) - scratch[2];
+        orbitNode = &g_TrackCameras[cameraNodeIndex];
+        orbitToCarX = orbitNode->offset[0] - scratch[2];
         sp38[0] = orbitToCarX;
-        orbitToCarY = FIELD(orbitNode, s32 *, 0x14) - scratch[3];
+        orbitToCarY = orbitNode->offset[1] - scratch[3];
         sp38[1] = orbitToCarY;
-        orbitToCarZ = FIELD(orbitNode, s32 *, 0x18) - scratch[4];
+        orbitToCarZ = orbitNode->offset[2] - scratch[4];
         sp38[2] = orbitToCarZ;
-        scratch[2] += (s32) (orbitToCarX * g_CamPathFrame) / (s32) FIELD(orbitNode, s32 *, 0x1C);
-        scratch[3] += (s32) (sp38[1] * g_CamPathFrame) / (s32) FIELD(orbitNode, s32 *, 0x1C);
-        scratch[4] += (s32) (sp38[2] * g_CamPathFrame) / (s32) FIELD(orbitNode, s32 *, 0x1C);
-        orbitDx = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
+        scratch[2] += (s32) (orbitToCarX * g_CamPathFrame) / orbitNode->duration;
+        scratch[3] += (s32) (sp38[1] * g_CamPathFrame) / orbitNode->duration;
+        scratch[4] += (s32) (sp38[2] * g_CamPathFrame) / orbitNode->duration;
+        orbitDx = scratch[2] - (car->x + sp28[0]);
         squaredX = orbitDx * orbitDx;
         sp38[0] = orbitDx;
-        sp38[1] = scratch[3] - (FIELD(car, s32 *, 4) + sp28[1]);
-        orbitDz = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
+        sp38[1] = scratch[3] - (car->y + sp28[1]);
+        orbitDz = scratch[4] - (car->z + sp28[2]);
         sp38[2] = orbitDz;
         squaredZ = orbitDz * orbitDz;
         scratch[6] = 0x400 - (Atan2(0 - sp38[1], SquareRoot0(squaredX + squaredZ)) & 0xFFF);
@@ -579,10 +570,10 @@ block_52:
     case 5:
         *(Block16 *)&scratch[2] = *(Block16 *)car;
         BuildRotMatrixY(&sp88[0], 0 - g_OrbitCameraYaw);
-        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], car->angleY);
+        BuildRotMatrixX(&sp68[0], car->angleX);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], car->angleZ);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
@@ -600,7 +591,7 @@ block_52:
         ApplyMatrixLV(&sp68[0], &sp18[0], &sp38[0]);
         scratch[6] = 0x400 - (Atan2(sp38[1], g_OrbitCameraDistance) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
-        scratch[8] = FIELD(car, s32 *, 0x28);
+        scratch[8] = car->angleZ;
         g_CameraModePrev = 5;
         scratch[2] -= sp38[0];
         adjustedY = scratch[3] - 0x28;
