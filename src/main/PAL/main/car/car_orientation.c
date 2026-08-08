@@ -14,122 +14,14 @@
 #include "psyq/gte.h"
 #include "game/audio.h"
 
-/* The player object shares GameCarRuntime's 0x19C-byte footprint, but several
- * fields have player-only meanings.  Keep this file-local view for the init
- * sequence while using the shared GameCarDrive view for the +0xBC block. */
-typedef struct GamePlayerCarInit
-{
-  s32 x;
-  s32 y;
-  s32 z;
-  u8 p0C[4];
-  s32 motionX;
-  s32 motionY;
-  s32 motionZ;
-  u8 p1C[4];
-  s32 field_20;
-  s32 field_24;
-  s32 field_28;
-  s32 field_2C;
-  s32 trackPointIndex;
-  u8 p34[0xC];
-  s32 field_40;
-  s32 field_44;
-  s32 field_48;
-  u8 p4C[4];
-  s32 field_50;
-  s32 field_54;
-  s32 field_58;
-  s32 field_5C;
-  s32 field_60;
-  s32 field_64;
-  s32 field_68;
-  s32 field_6C;
-  s32 trackProgress;
-  s32 previousTrackProgress;
-  u8 p78[0x20];
-  s16 field_98;
-  u8 p9A[6];
-  s32 headingAngle;
-  s32 field_A4;
-  s32 field_A8;
-  u8 pAC[2];
-  s16 field_AE;
-  u8 pB0[8];
-  s16 facingBackwards;
-  u8 pBA[0xA];
-  s32 field_C4;
-  s32 field_C8;
-  s32 field_CC;
-  u8 pD0[4];
-  s32 field_D4;
-  s32 field_D8;
-  s32 field_DC;
-  u8 pE0[8];
-  s16 fE8;
-  s16 fEA;
-  s16 fEC;
-  s16 fEE;
-  s16 field_F0;
-  s16 field_F2;
-  s16 fF4;
-  u8 pF6[2];
-  s16 fF8;
-  u16 fFA;
-  s16 fFC;
-  s16 fFE;
-  s32 routeIndex;
-  s32 f104;
-  u8 p108[0x1C];
-  s32 f124;
-  s32 f128;
-  u8 p12C[6];
-  s16 field_132;
-  s32 field_134;
-  s32 f138;
-  s32 f13C;
-  u8 p140[0xC];
-  s32 f14C;
-  s32 f150;
-  s32 f154;
-  u8 p158[8];
-  s16 f160;
-  s16 f162;
-  s32 f164;
-  s16 f168;
-} GamePlayerCarInit;
-typedef struct GamePlayerCarSpecInit
-{
-  s32 curve[16];
-  union
-  {
-    s32 w[16];
-    u16 h[32];
-  } f40;
-  u8 p80[0x28];
-  s32 fA8[10];
-  s32 fD0[6];
-  s32 fE8[6];
-  s16 revLimit;
-  s16 f102;
-  s16 topGear;
-  s16 redline;
-  s16 f108;
-  u8 p10A[8];
-  s16 f112;
-  s16 f114[6];
-  u8 p120[0x3C];
-  s32 f15C;
-} GamePlayerCarSpecInit;
-#define g_PlayerCarInitSpec ((GamePlayerCarSpecInit *)g_CarSpec)
-void InitPlayerCar(GameCarRuntime *car)
+void InitPlayerCar(PlayerCarRuntime *car)
 {
   s16 trackState[2];
   int scaledGearRatio;
   Matrix rotationMatrix;
   Matrix axisMatrix;
   SVec rotationOffset;
-  GamePlayerCarInit *player;
+  PlayerCarRuntime *player;
   GameCarDrive *drive;
   u8 *startData;
   s32 speedBandOffset;
@@ -142,13 +34,13 @@ void InitPlayerCar(GameCarRuntime *car)
   s32 value;
   s32 j;
   s32 k;
-  GamePlayerCarSpecInit *carSpec;
-  GamePlayerCarSpecInit *curveSpec;
+  GameCarSpec *carSpec;
+  GameCarSpec *curveSpec;
   s16 *torqueBand;
   s16 *accelBand;
   s16 *accelBandOut;
   s32 bandSpeed;
-  player = (GamePlayerCarInit *)car;
+  player = car;
   startData = g_TrackEventData;
   printf((u8 *)g_MsgInitCar);
   value = g_GrandPrixSeries;
@@ -161,24 +53,24 @@ void InitPlayerCar(GameCarRuntime *car)
   g_ShiftSoundLevel = 0;
   g_RoadGrade = 0;
   player->field_AE = 0x17;
-  player->field_CC = 0;
-  player->field_C8 = 0;
-  player->field_C4 = 0;
-  player->field_DC = 0;
-  player->field_D8 = 0;
-  player->field_D4 = 0;
+  player->drive.brakePos = 0;
+  player->drive.unk0C = 0;
+  player->drive.accelPos = 0;
+  player->drive.unk20 = 0;
+  player->drive.steerPos = 0;
+  player->drive.unk18 = 0;
   player->motionZ = 0;
   player->motionY = 0;
   player->motionX = 0;
   player->field_48 = 0;
   player->field_44 = 0;
   player->field_40 = 0;
-  player->field_A4 = 0;
+  player->speed = 0;
   player->field_A8 = 0;
-  player->f168 = 0;
-  player->fFA = 0;
-  player->field_68 = 0;
-  player->field_6C = 0;
+  player->lap = 0;
+  player->drive.unk3E = 0;
+  player->progressA = 0;
+  player->progressB = 0;
   player->trackProgress = 0;
   printf((u8 *)g_MsgHTbl);
   startData += g_RaceSeries * 0x90;
@@ -192,10 +84,10 @@ void InitPlayerCar(GameCarRuntime *car)
   player->field_24 = (headingBase - g_TrackPoints[player->trackPointIndex].angle) & 0xFFF;
   player->field_28 = 0;
   player->field_64 = 0;
-  player->f164 = player->trackPointIndex;
+  player->field_164 = player->trackPointIndex;
   player->headingAngle = player->field_24;
-  player->f14C = player->headingAngle;
-  SeedCarLapProgress(car, 0);
+  player->drive.unk90 = player->headingAngle;
+  SeedCarLapProgress((GameCarRuntime *)car, 0);
   trackState[0] = 0;
   trackState[1] = 0;
   UpdateCarTrackState(car, player->trackPointIndex, trackState);
@@ -218,40 +110,40 @@ void InitPlayerCar(GameCarRuntime *car)
   axisMatrix.m[2][0] = rotationMatrix.m[0][2];
   axisMatrix.m[2][1] = rotationMatrix.m[1][2];
   axisMatrix.m[2][2] = rotationMatrix.m[2][2];
-  rotationOffset.vz = (-player->fFA) - 0x32;
+  rotationOffset.vz = -player->drive.unk3E - 0x32;
   ApplyMatrix(&axisMatrix, &rotationOffset, &player->motionX);
-  player->f162 = -1;
-  player->f154 = 3;
-  player->fE8 = 0;
-  player->fEA = 1;
-  player->field_F2 = 0;
-  player->fEE = 0;
-  player->fFE = 0;
-  player->fFC = 0;
-  player->fF4 = 0;
-  player->field_F0 = 0;
-  player->routeIndex = 0;
-  player->f104 = 0;
-  player->f124 = 0;
-  player->f128 = 0;
-  player->field_132 = 1;
-  player->field_134 = 0;
-  player->f13C = 0;
-  player->f150 = 0;
-  player->f138 = 0;
-  player->fFA = 0;
-  player->f160 = 1;
+  player->drive.unkA6 = -1;
+  player->drive.state98 = 3;
+  player->drive.unk2C = 0;
+  player->drive.unk2E = 1;
+  player->drive.unk36 = 0;
+  player->drive.unk32 = 0;
+  player->drive.unk42 = 0;
+  player->drive.unk40 = 0;
+  player->drive.unk38 = 0;
+  player->drive.clutch = 0;
+  player->drive.unk44 = 0;
+  player->drive.unk48 = 0;
+  player->drive.unk68 = 0;
+  *(s32 *)&player->drive.unk6C = 0;
+  player->drive.gear = 1;
+  player->drive.unk78 = 0;
+  player->drive.unk80 = 0;
+  player->drive.unk94 = 0;
+  player->drive.unk7C = 0;
+  player->drive.unk3E = 0;
+  player->drive.unkA4 = 1;
   player->x = player->x + player->motionX;
   player->z = player->z + player->motionZ;
   player->facingBackwards = IsCarFacingBackwards((GameCarTrackAngleWindow *)car);
-  player->fF4 = 0;
-  player->field_F0 = 0;
-  player->fEC = 1;
-  player->fF8 = 0;
+  player->drive.unk38 = 0;
+  player->drive.clutch = 0;
+  player->drive.gearDisp = 1;
+  player->drive.unk3C = 0;
   g_ShiftTargetRpm = 0;
   drive = (GameCarDrive *)(((u8 *)car) + (divisor = 0xBC));
   printf((u8 *)g_MsgInit0);
-  carSpec = g_PlayerCarInitSpec;
+  carSpec = g_CarSpec;
   if (carSpec->topGear < 6)
   {
     if (carSpec->topGear <= 0)
@@ -263,12 +155,12 @@ void InitPlayerCar(GameCarRuntime *car)
   {
     carSpec->topGear = 6;
   }
-  drive->unk8C = (g_PlayerCarInitSpec->f15C * 0x490) / 160;
+  drive->unk8C = (g_CarSpec->speedScale * 0x490) / 160;
   printf((u8 *)g_MsgInit1);
   j = 0;
   for (i = 0; i < 16; i++)
   {
-    g_GearTorqueCurve[0].values[i] = g_PlayerCarInitSpec->curve[i] / 20;
+    g_GearTorqueCurve[0].values[i] = g_CarSpec->torqueCurve[i] / 20;
     if (j < g_GearTorqueCurve[0].values[i])
     {
       g_PeakOutputRpm = i;
@@ -277,33 +169,33 @@ void InitPlayerCar(GameCarRuntime *car)
   }
 
   g_PeakOutputValue = j;
-  peakRpm = g_PlayerCarInitSpec->f40.h[g_PeakOutputRpm * 2];
-  g_RedlineToPeakRpmHalf = (((s16) peakRpm) - g_PlayerCarInitSpec->redline) / 2;
-  revLimitPtr = &g_PlayerCarInitSpec->revLimit;
+  peakRpm = g_CarSpec->torqueBand.halves[g_PeakOutputRpm * 2];
+  g_RedlineToPeakRpmHalf = (((s16) peakRpm) - g_CarSpec->redline) / 2;
+  revLimitPtr = &g_CarSpec->revLimit;
   g_PeakToRevLimitRpmHalf = ((*revLimitPtr) - ((s16) peakRpm)) / 2;
   g_PeakOutputRpm = peakRpm;
   printf((u8 *)g_MsgInit1b);
-  printf((u8 *)g_FmtDecimalLine, g_PlayerCarInitSpec->topGear);
+  printf((u8 *)g_FmtDecimalLine, g_CarSpec->topGear);
   for (j = 0; j < 6; j++)
   {
-    scaledGearRatio = (g_PlayerCarInitSpec->fE8[j] * 0x490) / 160;
-    g_PlayerCarInitSpec->fD0[j] = (((scaledGearRatio * 6) / 100) << 17) / 10000;
-    value = (g_PlayerCarInitSpec->f114[j] * g_PlayerCarInitSpec->fE8[j]) / 100;
+    scaledGearRatio = (g_CarSpec->gearRatio[j + 1] * 0x490) / 160;
+    g_CarSpec->gearLoad[j + 1] = (((scaledGearRatio * 6) / 100) << 17) / 10000;
+    value = (g_CarSpec->torqueScale[j] * g_CarSpec->gearRatio[j + 1]) / 100;
     divisor = value;
-    divisor = (divisor > 0) ? (divisor) : (g_PlayerCarInitSpec->fE8[j]);
+    divisor = (divisor > 0) ? divisor : g_CarSpec->gearRatio[j + 1];
     for (i = 0; i < 16; i++)
     {
-      g_GearTorqueCurve[j + 1].values[i] = g_PlayerCarInitSpec->curve[i] / divisor;
+      g_GearTorqueCurve[j + 1].values[i] = g_CarSpec->torqueCurve[i] / divisor;
     }
 
   }
 
-  if (g_PlayerCarInitSpec->f112 < 2)
+  if (g_CarSpec->unk112 < 2)
   {
-    g_PlayerCarInitSpec->f112 = 1;
+    g_CarSpec->unk112 = 1;
   }
   printf((u8 *)g_MsgInit2);
-  curveSpec = g_PlayerCarInitSpec;
+  curveSpec = g_CarSpec;
   accelBand = g_TorqueLossBandEnd;
   speedBandOffset = 0;
   speedThreshold = 0x3E8;
@@ -312,7 +204,7 @@ void InitPlayerCar(GameCarRuntime *car)
   {
     for (i = 0; i < 16; i++)
     {
-      if ((curveSpec->f40.w[i] / speedThreshold) > 0)
+      if ((curveSpec->torqueBand.values[i] / speedThreshold) > 0)
       {
         *torqueBand = i;
         break;
@@ -324,7 +216,7 @@ void InitPlayerCar(GameCarRuntime *car)
     accelBandOut = accelBand;
     while (i < 10)
     {
-      if ((curveSpec->fA8[i] / bandSpeed) > 0)
+      if ((((s32 *)curveSpec->torqueLossRpm)[i] / bandSpeed) > 0)
       {
         *accelBandOut = i;
         break;
@@ -340,9 +232,9 @@ void InitPlayerCar(GameCarRuntime *car)
   while (speedBandOffset < 20);
   printf((u8 *)g_MsgInit4);
   drive->unk84 = g_LaunchEnergyThresholds[drive->unk28 % 5] * 0xE;
-  drive->unk88 = g_PlayerCarInitSpec->f108;
+  drive->unk88 = g_CarSpec->unk108;
   printf((u8 *)g_MsgInit5);
-  player->field_98 = 0;
+  player->shiftState = 0;
   drive->unk9E = 0;
   drive->unk9C = 0;
   g_EngineRpmJitter = 0;
@@ -364,7 +256,7 @@ void InitPlayerCar(GameCarRuntime *car)
   g_WrongWayTimer = 0;
   g_PlayerAutoSteer = 0;
   printf((u8 *)g_MsgInit6);
-  printf((u8 *)g_FmtLongLine, player->field_68);
+  printf((u8 *)g_FmtLongLine, player->progressA);
   printf((u8 *)g_MsgInitOk);
 }
 

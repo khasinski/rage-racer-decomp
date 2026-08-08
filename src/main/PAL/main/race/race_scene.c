@@ -322,7 +322,7 @@ void EnterRaceScene(void) {
         g_LapCount = 3;
     }
     base = (u8 *)&g_PlayerCar;
-    InitPlayerCar(base);
+    InitPlayerCar((PlayerCarRuntime *)base);
     SetTrackTexturePageNow(g_PlayerTrackSection);
     BuildStartingGrid();
     trackLength = g_TrackLength;

@@ -206,10 +206,15 @@ typedef struct GameCarSpecShiftPoint {
     s16 upshiftSpeed;
 } GameCarSpecShiftPoint;
 
+typedef union CarTorqueBand {
+    s32 values[16];
+    u16 halves[32];
+} CarTorqueBand;
+
 /* The loaded car's spec block (`g_CarSpec`), from its asset pack. */
 typedef struct GameCarSpec {
-    u8 unk00[0x40];
-    s32 torqueBandRpm[16];    /* +0x40 interpolation boundaries */
+    s32 torqueCurve[16];      /* +0x00 engine torque samples */
+    CarTorqueBand torqueBand; /* +0x40 interpolation boundaries */
     s32 torqueLossValue[10];  /* +0x80 loss curve samples */
     s32 torqueLossRpm[9];     /* +0xA8 loss interpolation boundaries */
     s32 gearLoad[6];      /* +0xCC engine-load divisor per gear */
@@ -218,13 +223,13 @@ typedef struct GameCarSpec {
     s16 unk102;           /* +0x102 scale applied to car->field_A8 */
     s16 topGear;          /* +0x104 highest selectable gear */
     s16 redline;          /* +0x106 redline warning rpm */
-    u8 unk108[2];
+    s16 unk108;
     u16 steerResponse;    /* +0x10A divisor of the AI heading correction */
     s16 unk10C;           /* +0x10C */
     s16 unk10E;           /* +0x10E */
     s16 unk110;           /* +0x110 */
     s16 unk112;           /* +0x112 */
-    u8 unk114[0xC];
+    s16 torqueScale[6];
     GameCarSpecShiftPoint shiftPoints[6]; /* +0x120, index = gear - 1 */
     s16 tachoNeedleX;     /* +0x138 tachometer needle pivot */
     s16 tachoNeedleY;     /* +0x13A */
@@ -238,6 +243,7 @@ typedef struct GameCarSpec {
     s16 needleAngleMax;   /* +0x152 */
     u8 needleColor[4];    /* +0x154 rgb + primitive code */
     u8 needleColorAlt[4]; /* +0x158 */
+    s32 speedScale;       /* +0x15C player speed scale */
 } GameCarSpec;
 
 extern GameCarSpec *g_CarSpec;
@@ -299,7 +305,8 @@ typedef struct GameCarDrive {
     s16 manual;      /* +0x74 */
     s16 gear;        /* +0x76 */
     s32 unk78;       /* +0x78 engine rpm */
-    u8 pad7C[8];
+    s32 unk7C;
+    s32 unk80;
     s32 unk84;       /* +0x84 launch-energy threshold */
     s32 unk88;       /* +0x88 */
     s32 unk8C;       /* +0x8C player-car speed scale seeded from the loaded spec */
@@ -310,7 +317,8 @@ typedef struct GameCarDrive {
     s16 unk9E;
     s16 accelBtn;    /* +0xA0 */
     s16 brakeBtn;    /* +0xA2 */
-    u8 padA4[4];
+    s16 unkA4;
+    s16 unkA6;
 } GameCarDrive;
 
 /* The player's 0x19C-byte race object. Its prefix shares the world/track
@@ -428,7 +436,7 @@ typedef struct GameCarTrackAngleWindow {
  * tables g_GearTorqueCurve / g_TorqueBandEnd / g_TorqueLossBandEnd. Logs "init_car" .. "init_ok". */
 /* race_scene.c passes a bare void *; an empty parameter list keeps both
  * units' spellings.  The body reads a GameCarRuntime *. */
-void InitPlayerCar();
+void InitPlayerCar(PlayerCarRuntime *car);
 /* Non-clamping twin of UpdateCarTrackState: recomputes the track-relative placement
  * and writes the reference triple at +0x50, for the init/reset paths only. */
 void ResetCarTrackState(GameCarRuntime *car);
