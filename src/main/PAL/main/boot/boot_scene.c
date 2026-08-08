@@ -9,7 +9,6 @@
 #include "psyq/gte.h"
 
 void *QueueShadedSpriteNine(void* ot, void* prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex, s32 intensity) asm("GameQueueShadedSprite");
-void *GameQueueDrawModePrimWide(void* ot, void* prim, s32 tpage) asm("QueueDrawModePrim");
 extern Matrix g_SceneLightMatrix;
 void InitRenderState(s32 otShift);
 
@@ -43,7 +42,7 @@ void DrawBootLogo(void) {
     clut = 0x3FD7;
     next = QueueShadedSpriteNine(base, next, 0xDC, 0xC4, 8, 0x10, 0, height, clut, fade);
     next = QueueShadedSpriteNine(base, next, 0x64, 0xC4, 0x78, height, 0, 0, clut, fade);
-    *scratch = GameQueueDrawModePrimWide(base, next, 5);
+    *scratch = QueueDrawModePrim(base, next, 5);
 }
 
 void UpdateBootLogoScene(void) {
