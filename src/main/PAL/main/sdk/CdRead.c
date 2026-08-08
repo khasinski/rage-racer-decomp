@@ -4,17 +4,14 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "psyq/cd.h"
+#include "psyq/gpu.h"
 #include "psyq/kernel.h"
-void SetShadeTex(u_char *prim, long enabled);
 
 extern long g_CdReadCallback;
 extern u_char D_8007D7BC[];
 extern u_char D_8007D7BD[];
 extern u_char D_8007D87C[];
 extern u_char g_DrawModeEnv[];
-void SetSprt(u_char *prim);
-void AddPrim(void *ot, void *prim);
-void *SetDrawMode(void *prim, long a, long b, long c, void *d);
 long AddTilePrim(long ot, long prim, long x, long y, long w, long h, long r, long g, long b);
 
 long CdRead(long sectors, void *buf, long readMode) {
@@ -146,7 +143,7 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
             if (idx != 0) {
                 ga = tableA[idx * 2];
                 gb = tableB[idx * 2];
-                SetSprt(next);
+                SetSprt((SPRT *)next);
                 SetShadeTex(next, 1);
                 next += 0x14;
                 oldPacket = packet;
@@ -165,7 +162,7 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
             x += D_8007D87C[idx];
         } while (*sr != 0);
     }
-    SetDrawMode(next, 0, 1, 0x1D, g_DrawModeEnv);
+    SetDrawMode((DrawPacket *)next, 0, 1, 0x1D, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, next);
     SCRATCH_PRIM_CURSOR_AS(u_char) = next + 0xC;
 }

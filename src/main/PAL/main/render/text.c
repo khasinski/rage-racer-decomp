@@ -49,13 +49,6 @@ void DrawText8x8Trans(
     s32 y,
     u8 *str,
     s32 clutIndex);
-void SetDrawModeWide8x8(
-    void *packet,
-    s32 dither,
-    s32 drawToDisplay,
-    s32 tpage,
-    void *textureWindow) asm("SetDrawMode");
-
 void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
     u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     u8 *packet;
@@ -159,7 +152,7 @@ void GameDrawText8x8Shaded(
             x += 8;
         } while (*str != 0);
     }
-    SetDrawModeWide8x8(packet, 0, 1, 0x29, g_DrawModeEnv);
+    SetDrawMode((DrawPacket *)packet, 0, 1, 0x29, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, packet);
     *scratch = packet + sizeof(DrawPacket);
 }
@@ -207,7 +200,7 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
             x += 8;
         } while (*str != 0);
     }
-    SetDrawModeWide8x8(packet, 0, 1, 0x49, g_DrawModeEnv);
+    SetDrawMode((DrawPacket *)packet, 0, 1, 0x49, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, packet);
     *scratch = packet + sizeof(DrawPacket);
 }
@@ -408,7 +401,7 @@ void GameDrawProportionalTextShaded(
             ;
         } while (*text != 0);
     }
-    SetDrawModeWide8x8(packet, 0, 1, 0x29, g_DrawModeEnv);
+    SetDrawMode((DrawPacket *)packet, 0, 1, 0x29, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, packet);
     SCRATCH_PRIM_CURSOR_AS(u8) = ({
         u8 *next = packet + 12;

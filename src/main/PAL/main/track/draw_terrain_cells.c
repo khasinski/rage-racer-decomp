@@ -2,6 +2,7 @@
 #include "game/race.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
+#include "psyq/gpu.h"
 #include "psyq/gte.h"
 
 extern s32 g_VisibleCellList;
@@ -20,32 +21,7 @@ void DrawTerrainCellsWide(void) {
     SubmitTerrainCells(SCRATCHPAD_ADDR, g_VisibleCellList, 0x40);
 }
 
-void AddPrim(void *, void *);
-void SetShadeTex(void *, s32);
-void SetPolyF4(void *);
-void SetPolyFT4(void *);
-void SetPolyG4(void *);
 extern s32 g_SkyRowBase;
-typedef struct
-{
-  u32 tag;
-  u8 r0;
-  u8 g0;
-  u8 b0;
-  u8 code;
-} P_TAG;
-typedef struct
-{
-  P_TAG t;
-  s16 x0;
-  s16 y0;
-  s16 x1;
-  s16 y1;
-  s16 x2;
-  s16 y2;
-  s16 x3;
-  s16 y3;
-} POLY_F4;
 typedef union
 {
   struct
@@ -84,50 +60,6 @@ typedef struct
   s16 yEdge2;
   s16 yEdge3;
 } SkyClipBounds;
-typedef struct
-{
-  P_TAG t;
-  s16 x0;
-  s16 y0;
-  SkyUV uv0;
-  u16 clut;
-  s16 x1;
-  s16 y1;
-  SkyUV uv1;
-  u16 tpage;
-  s16 x2;
-  s16 y2;
-  SkyUV uv2;
-  u16 pad1E;
-  s16 x3;
-  s16 y3;
-  SkyUV uv3;
-  u16 pad26;
-} POLY_FT4;
-typedef struct
-{
-  P_TAG t;
-  s16 x0;
-  s16 y0;
-  u8 r1;
-  u8 g1;
-  u8 b1;
-  u8 pad0;
-  s16 x1;
-  s16 y1;
-  u8 r2;
-  u8 g2;
-  u8 b2;
-  u8 pad1;
-  s16 x2;
-  s16 y2;
-  u8 r3;
-  u8 g3;
-  u8 b3;
-  u8 pad2;
-  s16 x3;
-  s16 y3;
-} POLY_G4;
 extern SkyTileUV g_SkyTileUV[];
 typedef struct
 {
@@ -399,11 +331,11 @@ void DrawSkyBackground(void)
             SetPolyFT4(packetCursor);
             SetShadeTex(packetCursor, 0);
             quad->tpage = 0x18;
-            quad->uv0.packed = tileUv->corner[0].packed;
+            *(u16 *)&quad->u0 = tileUv->corner[0].packed;
             packetCursor += 0x28;
-            quad->uv1.packed = tileUv->corner[1].packed;
-            quad->uv2.packed = tileUv->corner[2].packed;
-            quad->uv3.packed = tileUv->corner[3].packed;
+            *(u16 *)&quad->u1 = tileUv->corner[1].packed;
+            *(u16 *)&quad->u2 = tileUv->corner[2].packed;
+            *(u16 *)&quad->u3 = tileUv->corner[3].packed;
             quad->x0 = screenX0;
             quad->x1 = screenX1;
             quad->x2 = screenX2;
@@ -565,11 +497,11 @@ void DrawSkyBackground(void)
             SetPolyFT4(packetCursor);
             SetShadeTex(packetCursor, 0);
             quad->tpage = 0x18;
-            quad->uv0.packed = tileUv->corner[0].packed;
+            *(u16 *)&quad->u0 = tileUv->corner[0].packed;
             packetCursor += 0x28;
-            quad->uv1.packed = tileUv->corner[1].packed;
-            quad->uv2.packed = tileUv->corner[2].packed;
-            quad->uv3.packed = tileUv->corner[3].packed;
+            *(u16 *)&quad->u1 = tileUv->corner[1].packed;
+            *(u16 *)&quad->u2 = tileUv->corner[2].packed;
+            *(u16 *)&quad->u3 = tileUv->corner[3].packed;
             quad->x0 = screenX0;
             quad->x1 = screenX1;
             quad->x2 = screenX2;

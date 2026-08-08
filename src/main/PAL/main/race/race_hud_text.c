@@ -182,8 +182,6 @@ void BuildTileStrips(void) {
     } while (bufferIndex < 2);
 }
 
-void AddPrimsWide(void *ot, void *first, void *last) asm("AddPrims");
-
 void DrawStartCountdown(s32 sceneTimer) {
     s32 timer;
     s32 phase;
@@ -365,7 +363,7 @@ void DrawStartCountdown(s32 sceneTimer) {
 
     if (phase > 0) {
         if (g_RacePaused == 0) {
-            AddPrimsWide(orderingTable, tiles, (u8 *)tiles + 8176);
+            AddPrims(orderingTable, tiles, (u8 *)tiles + 8176);
         }
     }
 

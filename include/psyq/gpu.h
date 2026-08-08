@@ -94,6 +94,30 @@ typedef struct POLY_F4 {
     short y3;
 } POLY_F4;
 
+typedef struct POLY_G4 {
+    P_TAG t;
+    short x0;
+    short y0;
+    u_char r1;
+    u_char g1;
+    u_char b1;
+    u_char pad0;
+    short x1;
+    short y1;
+    u_char r2;
+    u_char g2;
+    u_char b2;
+    u_char pad1;
+    short x2;
+    short y2;
+    u_char r3;
+    u_char g3;
+    u_char b3;
+    u_char pad2;
+    short x3;
+    short y3;
+} POLY_G4;
+
 /* Textured quad, 0x28 bytes. Built by SetPolyFT4. */
 typedef struct POLY_FT4 {
     P_TAG t;
@@ -283,7 +307,7 @@ void SetPrimAddr(u_long *prim, u_long addr);
 void TermPrim(u_long *prim);
 long GetPrimAddr(u_long *prim);
 void AddPrim(void *ot, void *prim);
-void AddPrims(u_long *ot, u_long first, u_long *last);
+void AddPrims(void *ot, void *first, void *last);
 void *ClearOTag(u_long *ot, long count);
 void *ClearOTagR(u_long *ot, long count);
 
@@ -328,7 +352,7 @@ void SetDrawMode(
     DrawPacket *prim,
     long dfe,
     long dtd,
-    u_short tpage,
+    long tpage,
     void *tw);
 long LoadClut(void *clut, long x, long y);
 long LoadClut2(void *clut, long x, long y);

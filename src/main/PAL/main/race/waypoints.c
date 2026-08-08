@@ -7,6 +7,7 @@
 #include "game/state.h"
 #include "game/vector.h"
 #include "game/waypoint.h"
+#include "psyq/gpu.h"
 #include "psyq/gte.h"
 
 extern s32 g_PlayerCar;
@@ -31,13 +32,6 @@ extern u32 g_ScratchRenderMode;
 /* Counts how many of the 6 waypoint slots are active (active != 0). */
 
 extern s16 g_PlayerLap;
-
-
-void AddPrim(void *ot, void *prim);
-
-void SetShadeTex(u8 *prim, s32 enabled);
-
-void SetSprt(u8 *prim);
 
 extern s32 g_PlayerTrackProgress;
 

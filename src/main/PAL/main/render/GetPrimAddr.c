@@ -13,7 +13,7 @@ s32 IsEndPrim(u32 *p) {
     return ((PrimTag *)p)->addr == 0x00FFFFFF;
 }
 
-void AddPrim(u32 *ot, u32 *p) {
+void AddPrim(void *ot, void *p) {
     PrimTag *otTag = (PrimTag *)ot;
     PrimTag *primTag = (PrimTag *)p;
 
@@ -21,7 +21,7 @@ void AddPrim(u32 *ot, u32 *p) {
     otTag->addr = (u32)primTag;
 }
 
-void AddPrims(u32 *ot, u32 first, u32 *last) {
+void AddPrims(void *ot, void *first, void *last) {
     PrimTag *otTag = (PrimTag *)ot;
     PrimTag *firstTag = (PrimTag *)first;
     PrimTag *lastTag = (PrimTag *)last;

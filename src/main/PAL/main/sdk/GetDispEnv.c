@@ -50,9 +50,9 @@ void SetDrawStp(DrawPacket *pkt, long ofs, u_long stp) {
     pkt->x1y1 = 0;
 }
 
-void SetDrawMode(DrawPacket *pkt, long dfe, long dtd, u_short tpage, void *window) {
+void SetDrawMode(DrawPacket *pkt, long dfe, long dtd, long tpage, void *window) {
     pkt->code = 2;
-    pkt->x0y0 = _get_mode(dfe, dtd, tpage);
+    pkt->x0y0 = _get_mode(dfe, dtd, (u_short)tpage);
     pkt->x1y1 = Gpu_BuildTexWindowCmd(window);
 }
 

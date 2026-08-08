@@ -4,14 +4,11 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
+#include "psyq/gpu.h"
 
 /* The GPU packet cursor: scratchpad word 0. Every emitter here packs its
  * primitive at this address and bumps it past what it wrote. */
 #define SCRATCH (SCRATCH_PRIM_CURSOR_AS(u8))
-
-void SetSprt(u8 *prim);
-void SetShadeTex(u8 *prim, s32 enabled);
-void AddPrim(void *ot, void *prim);
 
 void DrawWrongWayWarning(void) {
     register u8 *packet __asm("$16");
@@ -182,8 +179,6 @@ void DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     }
 }
 
-void SetSemiTrans(u8 *prim, s32 enabled);
-
 void DrawFullscreenFadeTile(s32 color, s32 tpage) {
     u8 *base = g_DrawBuffer;
     u8 *ot = base + 0xCC;
@@ -215,8 +210,6 @@ void DrawFullscreenFadeTile(s32 color, s32 tpage) {
     AddPrim((u32 *)ot, (u32 *)prim);
     SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, packet, tpage);
 }
-
-void SetSprt8(u8 *prim);
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
     register u8 *out asm("$16") = prim;
