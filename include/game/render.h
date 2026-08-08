@@ -5,11 +5,18 @@
 #include "game/scratchpad.h"
 #include "psyq/gte.h"
 
+/*
+ * One entry of a timed draw script. `type` picks the primitive and `time` is
+ * when it starts; the two pointers split the description in two, which is what
+ * lets several entries share one of them: `shape` is the static side (size,
+ * texel origin, draw flags) and `motion` the animated side (the interpolation
+ * limit, start position, per-step delta, colour and CLUT).
+ */
 typedef struct TimedDrawCommand {
     s16 time;
     s16 type;
-    s32 arg0;
-    s32 arg1;
+    s32 shape;
+    s32 motion;
 } TimedDrawCommand;
 
 /* A ready-made SPRT description; BuildSpriteFromDesc expands it into a scratchpad
