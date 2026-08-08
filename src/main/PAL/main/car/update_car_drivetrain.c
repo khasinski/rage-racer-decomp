@@ -20,7 +20,7 @@
  * out as the per-gear torque curve pointer and is later reused to carry the
  * shift target speed. Splitting it changes the register assignment.
  */
-void UpdateCarDrivetrain(void *base) {
+void UpdateCarDrivetrain(void *carArg) {
   u8 *gearCurve;
   s16 curveModeNow;
   s16 revLimit;
@@ -115,77 +115,78 @@ void UpdateCarDrivetrain(void *base) {
   u16 arcFlags;
   u16 currentSpeed;
   u16 steerBiasNext;
-  void *drive;
+  GameCarDrive *drive;
   void *arcCentre;
   void *trackPoint;
   void *curveSlot;
   void *specSlot;
-  void *car;
+  GameCarRuntime *car;
   u8 *config;
-  car = base;
+  void *base;
+  car = (GameCarRuntime *)carArg;
   base = (u8 *)g_GearTorqueCurve;
   config = (u8 *)g_CarSpec;
-  gear = *(s16 *)(((u8 *)car) + 0x132);
+  gear = car->field_132;
   gearRatioSlot = ((u8 *)(config + (gear * 4))) + 0xCC;
   gearCurve = (gear * 64) + ((u8 *)base);
   gearRatio = *(s32 *)gearRatioSlot;
-  drive = car + 0xBC;
+  drive = (GameCarDrive *)&car->field_BC;
   if (g_RacePhase < 2)
   {
-    *(s16 *)(((u8 *)car) + 0xEC) = gear;
+    *(s16 *)&car->field_EC = gear;
     gearRatio = *(s32 *)(((u8 *)config) + 0xD0);
     gearCurve = base;
   }
   else
-    if (((*(s32 *)(((u8 *)car) + 0x154)) == 3) && (((*(s16 *)(((u8 *)car) + 0x15C)) < 0x40) || ((*(s16 *)(((u8 *)car) + 0x15E)) >= 0x80)))
+    if ((car->field_154 == 3) && ((car->field_15C < 0x40) || (car->field_15E >= 0x80)))
   {
     gearCurve = base;
   }
-  leftWheelState = *(s16 *)(((u8 *)drive) + 0x9C);
+  leftWheelState = drive->unk9C;
   if (leftWheelState == 0)
   {
-    if ((*(s16 *)(((u8 *)drive) + 0xA0)) >= 0x85)
+    if (drive->accelBtn >= 0x85)
     {
-      *(s16 *)(((u8 *)drive) + 0x9C) = 1;
+      drive->unk9C = 1;
     }
   }
   else
     if (leftWheelState == 1)
   {
-    *(s16 *)(((u8 *)drive) + 0x9C) = 2;
+    drive->unk9C = 2;
   }
   else
-    if ((*(s16 *)(((u8 *)drive) + 0xA0)) < 0x7C)
+    if (drive->accelBtn < 0x7C)
   {
-    *(s16 *)(((u8 *)drive) + 0x9C) = 0;
+    drive->unk9C = 0;
   }
-  rightWheelState = *(s16 *)(((u8 *)drive) + 0x9E);
+  rightWheelState = drive->unk9E;
   if (rightWheelState == 0)
   {
-    if ((*(s16 *)(((u8 *)drive) + 0xA2)) >= 0x85)
+    if (drive->brakeBtn >= 0x85)
     {
-      *(s16 *)(((u8 *)drive) + 0x9E) = 1;
+      drive->unk9E = 1;
     }
   }
   else
     if (rightWheelState == 1)
   {
-    *(s16 *)(((u8 *)drive) + 0x9E) = 2;
+    drive->unk9E = 2;
   }
   else
-    if ((*(s16 *)(((u8 *)drive) + 0xA2)) < 0x7C)
+    if (drive->brakeBtn < 0x7C)
   {
-    *(s16 *)(((u8 *)drive) + 0x9E) = 0;
+    drive->unk9E = 0;
   }
-  frontLoad = (*(s16 *)(((u8 *)drive) + 0xA0)) * 0x64;
+  frontLoad = drive->accelBtn * 0x64;
   frontLoadScaled = frontLoad >> 8;
   if (frontLoad < 0)
   {
     frontLoadScaled = ((s32) (frontLoad + 0xFF)) >> 8;
   }
   gripBudget = 0x17C - frontLoadScaled;
-  gripBudget += ((s32) ((*(s16 *)(((u8 *)drive) + 0xA2)) * 0x64)) / 256;
-  if ((*(s32 *)(((u8 *)drive) + 0x98)) == 1)
+  gripBudget += ((s32) (drive->brakeBtn * 0x64)) / 256;
+  if (drive->state98 == 1)
   {
     driveCurveMode = *(s16 *)(((u8 *)drive) + 0x40);
     pointCurveMode = (*(u16 *)(((u8 *)((((*((s32 *)(((u8 *)car) + 0x30))) * 3) * 8) + ((u8 *)g_TrackPoints))) + 0x14)) & 3;
