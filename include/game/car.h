@@ -149,8 +149,8 @@ typedef struct GameCarRuntime {
     s16 field_130;
     s16 field_132;   /* +0x132 current gear */
     s32 field_134;
-    s16 field_138;
-    s16 field_13A;
+    s16 routeMarkerIndex;
+    s16 routeMarkerActive;
     s32 field_13C;
     u8 pad140[0xC];
     u8 field_14C;
@@ -621,10 +621,7 @@ extern s16 g_StandingStartState;
 extern s32 g_AttractGridSlots[];
 extern u16 g_BodyColorPrimary[];
 extern u16 g_BodyColorSecondary[];
-extern u8 g_CarMarkerFlag[];
-extern u8 g_CarMarkerIndex[];
 extern s32 g_CarProgressA;
-extern u8 g_CarTrackProgress[];
 extern s16 g_NegconAccelMask;
 extern s16 g_NegconAnalogI;
 extern s16 g_NegconAnalogII;

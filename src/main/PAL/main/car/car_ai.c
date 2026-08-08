@@ -422,19 +422,19 @@ void SeedCarRouteMarkers(void) {
 outer:
     __asm__ volatile("" ::);
     index = 0;
-    raw = *(s32 *)(g_CarTrackProgress + offset);
+    raw = ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackProgress;
     tableOffset = baseOffset;
-    *(s16 *)(g_CarMarkerFlag + offset) = one;
+    ((GameCarRuntime *)((u8 *)g_Cars + offset))->routeMarkerActive = one;
     target = raw >> 4;
 
 inner:
     value = *(s16 *)(base + tableOffset + 0x474);
     if (target >= value) {
-        *(s16 *)(g_CarMarkerIndex + offset) = index;
+        ((GameCarRuntime *)((u8 *)g_Cars + offset))->routeMarkerIndex = index;
         offset += 0x19C;
     } else {
     if (value == -1) {
-        *(s16 *)(g_CarMarkerIndex + offset) = 0;
+        ((GameCarRuntime *)((u8 *)g_Cars + offset))->routeMarkerIndex = 0;
         offset += 0x19C;
     } else {
     __asm__ volatile("" ::);
@@ -474,15 +474,15 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
   int lowValue;
   raw = car->trackProgress;
   rpm = raw >> 4;
-  g0 = car->field_138;
+  g0 = car->routeMarkerIndex;
   sub_R9 = (GameCarAiBlock *)&car->field_BC;
   if (rpm < 0x20)
   {
-    car->field_138 = 0;
+    car->routeMarkerIndex = 0;
   }
   if (g0 < 0)
   {
-    car->field_138 = 0;
+    car->routeMarkerIndex = 0;
   }
   tbl = (CarAiSpeedKey *)(g_TrackEventData + ((g_RaceSeries * 576) + 0x474));
   p[0] = &tbl[g0];

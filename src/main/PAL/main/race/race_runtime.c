@@ -535,7 +535,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         ent->field_116 = 0;
         ent->field_110 = 0;
         ent->field_F4 = 0;
-        ent->field_13A = 0;
+        ent->routeMarkerActive = 0;
         ent->slideInput.value = 0;
         ent->field_108 = ent->field_24;
         p = base + (sub + lev * 144);
@@ -544,7 +544,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         ent->field_F8 = 0;
         ent->field_104 = 0;
         ent->field_C4 = 0;
-        ent->field_138 = 0;
+        ent->routeMarkerIndex = 0;
         SeedCarLapProgress(ent, ((RivalStartEntry *)(p + 0x354))->modelId);
     }
 
