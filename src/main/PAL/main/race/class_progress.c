@@ -7,10 +7,7 @@
 #include "game/audio.h"
 #include "game/sound.h"
 #include "game/render.h"
-
-extern s32 g_CourseProgress;
-extern ScoreRecord g_ClassRecords[];
-extern ScoreRecord g_ClassClears[];
+#include "game/save_internal.h"
 
 void DrawPrizeMoneyPanel(s32 s0) {
     u8 sp[16];

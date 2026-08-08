@@ -1,8 +1,6 @@
 #include "common.h"
 #include "game/random.h"
 
-extern u32 g_RandomSeed;
-
 s32 Random15(void) {
     u32 value = g_RandomSeed;
 

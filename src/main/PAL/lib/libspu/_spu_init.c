@@ -3,11 +3,8 @@
 
 #include "common.h"
 #include "psyq/spu.h"
+#include "psyq/spu_internal.h"
 
-extern char g_SpuTimeoutFmt[];
-extern volatile SpuRegisterMap *g_SpuRegBase;
-extern long g_SpuMemModeUnit;
-extern long _spu_mem_mode_plus;
 /* Deliberately raw: cleared beside g_SpuTransferCallback in _spu_init and
  * SpuQuit and never read. Shape says libspu's IRQ callback slot
  * (SpuSetIRQCallback), but this build has no call site to prove it. */

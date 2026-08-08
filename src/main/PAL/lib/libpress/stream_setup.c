@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/press_internal.h"
 
 u_long func_8006A018[16] __attribute__((section(".text"))) = {
     0x241A0100,
@@ -22,10 +23,8 @@ u_long func_8006A018[16] __attribute__((section(".text"))) = {
     0x00000000,
 };
 
-extern long g_StRingBase;
-extern long g_StRingSize;
 /* StSetRing: installs the stream ring buffer (`base`, `size`) then clears it. */
-void StSetRing(void *base, long size) { g_StRingBase = (long)base; g_StRingSize = size; StClearRing(); }
+void StSetRing(void *base, long size) { g_StRingBase = base; g_StRingSize = size; StClearRing(); }
 
 /* CdGetToc: reads the disc table of contents into `toc` (thin wrapper over
  * CdGetToc2 / CdGetToc2 with track count 1). */

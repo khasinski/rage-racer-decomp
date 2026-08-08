@@ -5,8 +5,9 @@ typedef struct Func80043B18Entry {
     s16 value;
 } Func80043B18Entry;
 
-extern u16 g_TrackSectionCount;
-extern Func80043B18Entry *g_TrackCameras;
+#define GAME_TRACK_SECTION_COUNT_TYPE u16
+#define GAME_TRACK_CAMERA_TYPE Func80043B18Entry
+#include "game/track_camera_internal.h"
 
 s32 FindNearestTrackCamera(u8 *car, u16 rawValue) {
     s32 best;

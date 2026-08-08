@@ -1,8 +1,7 @@
 #include "common.h"
 #include "game/track.h"
-
-extern GameTrackPoint *g_TrackArcCenters;
-extern s16 g_TrackSectionCount;
+#include "game/track_internal.h"
+#include "game/track_camera_internal.h"
 
 /*
  * Installs the track-point table from a loaded blob: word 0 is the point count,
@@ -26,7 +25,7 @@ void InstallTrackPoints(s32 *trackData) {
     g_TrackPoints = points;
     g_TrackLength = 0;
     g_TrackPointCount = count;
-    g_TrackArcCenters = (GameTrackPoint *)((count * sizeof(GameTrackPoint)) + (s32)points);
+    g_TrackArcCenters = (GameTrackArcCenter *)((count * sizeof(GameTrackPoint)) + (s32)points);
 
     i = 0;
     if (count > 0) {

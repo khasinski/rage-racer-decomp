@@ -2,10 +2,10 @@
 #include "game/audio.h"
 #include "game/car.h"
 #include "game/menu.h"
+#include "game/menu_internal.h"
 #include "game/render.h"
 #include "game/state.h"
 
-extern DesignModeCellMask g_DesignModeCellMask;
 
 
 s32 DrawDesignModeScreen(s32 step) {

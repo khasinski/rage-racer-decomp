@@ -1,10 +1,8 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/cd_internal.h"
 
-extern long g_CdCommandNeedsSetloc[];
-extern long g_CdSyncCallback;
-extern u_char g_CdStatusByte;
 
 /*
  * Core CD command sender with retry: issues command `com` (low byte) with the
@@ -20,7 +18,7 @@ long CdControl(long com, void *param, long result) {
     long retries;
     long command;
     long *base;
-    long savedMode;
+    CdCallback savedMode;
     long offset;
     long *commandState;
     long status;
@@ -70,7 +68,7 @@ long CdControlF(long com, void *param) {
     long cmd;
     long retries;
     long command;
-    long savedMode;
+    CdCallback savedMode;
     long *base;
     long offset;
     long *commandState;
@@ -123,7 +121,7 @@ long CdControlB(long com, void *param, void *result) {
     register long cmd asm("$20");
     long retries;
     long command;
-    long savedMode;
+    CdCallback savedMode;
     long *base;
     long offset;
     long *commandState;

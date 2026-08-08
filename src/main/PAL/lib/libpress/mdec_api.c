@@ -3,6 +3,7 @@
 #include "common.h"
 #include "psyq/kernel.h"
 #include "psyq/cd.h"
+#include "psyq/press_internal.h"
 
 void DecDCTReset(long mode) {
     if (mode == 0) {

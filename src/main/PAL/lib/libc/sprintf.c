@@ -2,33 +2,17 @@
 #include <stdio.h>
 #include <string.h>
 #include "game/state.h"
+#include "psyq/libc_internal.h"
 
 /*
  * PSY-Q libc sprintf: the whole formatter, with no vsprintf split. Identified by
  * its %X / %x digit tables at g_LibcUpperDigits / g_LibcLowerDigits and by its memchr /
  * memmove / strlen callees.
  */
-typedef union LibcFormatHeader {
-    u32 flags;
-    struct {
-        u8 flags;
-        u8 prefix;
-        u16 unused;
-    } bytes;
-} LibcFormatHeader;
-
-typedef struct LibcFormatSpec {
-    LibcFormatHeader header;
-    s32 width;
-    s32 precision;
-} LibcFormatSpec;
-
 typedef struct LibcFormatWork {
     u8 number[0x200];
     LibcFormatSpec spec;
 } LibcFormatWork;
-
-extern LibcFormatSpec g_LibcDefaultFormat;
 
 #define LIBC_LEFT       0x01
 #define LIBC_PLUS       0x02

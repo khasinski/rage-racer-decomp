@@ -1,9 +1,8 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "game/render.h"
+#include "psyq/gpu_internal.h"
 
-extern GpuCallbacks *g_GpuFuncs;
-extern u8 g_GraphDebug;
 
 
 

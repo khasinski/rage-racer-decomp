@@ -2,11 +2,8 @@
 #include <stdio.h>
 
 #include "common.h"
+#include "psyq/cd_internal.h"
 
-extern volatile u_char *D_800993D0;
-extern volatile u_long *g_DmaDpcr;
-extern u_char *g_DmaDicr;
-extern char g_MsgDmaStatusError[];
 
 
 /*
@@ -15,7 +12,14 @@ extern char g_MsgDmaStatusError[];
  * then programs MADR/BCR/CHCR to start a transfer of `count` blocks of `size`
  * words. `mode` selects between the block-mode / linked-list setups.
  */
-void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal, u_char mode) {
+void CD_dmastart(
+    s32 ch,
+    u32 madr,
+    u32 count,
+    u32 size,
+    u32 chcrVal,
+    u8 mode,
+    u32 unused) {
     volatile long dummy;
     long i;
     volatile u_long *p;

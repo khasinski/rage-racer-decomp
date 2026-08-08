@@ -1,16 +1,9 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/car_internal.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/audio.h"
-
-typedef struct D8007Pair {
-    s16 f0;
-    s16 f2;
-} D8007Pair;
-
-extern D8007Pair g_LaunchSpeedThresholds[];
-
 
 /*
  * Car motion handler for state98 == 0 (normal driving): turns steering into a
@@ -75,7 +68,7 @@ void UpdateCarDriving(GameCarRuntime *car) {
     if (route->unk9C == 1) {
         route->unk48 = car->field_A4 * route->unk44;
         route->unk44 = 0;
-        if ((s32) g_LaunchSpeedThresholds[route->unk28].f0 < car->field_A4 &&
+        if ((s32) g_LaunchSpeedThresholds[route->unk28].initial < car->field_A4 &&
             route->unk48 > route->unk84) {
             route->state98 = 1;
             *(s16 *)&route->unk3E = 0;
@@ -94,7 +87,7 @@ void UpdateCarDriving(GameCarRuntime *car) {
                 s32 av = coords[0] < 0 ? -coords[0] : coords[0];
                 s32 aval = av * car->field_A4 / 64;
                 route->unk48 = aval;
-                if ((s32) g_LaunchSpeedThresholds[route->unk28].f2 < car->field_A4 &&
+                if ((s32) g_LaunchSpeedThresholds[route->unk28].sustain < car->field_A4 &&
                     route->unk84 < aval) {
                     route->state98 = m9e;
                     *(s16 *)&route->unk3E = 0;

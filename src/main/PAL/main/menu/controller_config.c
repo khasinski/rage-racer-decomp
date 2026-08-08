@@ -5,12 +5,11 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
+#define GAME_INPUT_MAPPING_TYPE s16
+#include "game/input_internal.h"
 
-extern u8 g_PadType;
 
 /* The two 0..7 selections; g_PadType picks which one the screen edits. */
-extern s16 g_PadMappingIndex;
-extern s16 g_NegconMappingIndex;
 
 
 /*
@@ -156,12 +155,6 @@ void DrawNegconNeutralScreen(void) {
  * The six live NeGcon settings. All of them are persisted to the memory card,
  * so they also appear as fields of GameSaveBlock (game/memcard.h).
  */
-extern u16 g_NegconSteerNeutral;
-extern u16 g_NegconNeutralI;
-extern u16 g_NegconNeutralII;
-extern u16 g_NegconNeutralL;
-extern u16 g_NegconSteerPlay;
-extern u16 g_NegconMaxTwist;
 
 /*
  * Entry hook for the NeGcon calibration sequence: snapshots the six live

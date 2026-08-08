@@ -2,6 +2,8 @@
 #define GAME_RENDER_H
 
 #include "common.h"
+#include "game/vector.h"
+
 #include "game/scratchpad.h"
 #include "psyq/gte.h"
 
@@ -34,6 +36,9 @@ typedef struct GameSpriteDesc {
     u8 padE[2];
     s32 semiTrans;
 } GameSpriteDesc;
+
+extern GameSpriteDesc g_TachoNeedleSprite;
+extern TimedDrawCommand g_MenuRowScript[];
 
 /* Angles are 12 bits throughout: 0x1000 is one full turn, and any angle that
  * has to survive arithmetic is masked back down with ANGLE_MASK. */
@@ -868,8 +873,8 @@ extern Matrix g_CameraMatrixSaved;
 extern s32 g_MenuRowFlashLevels[];
 extern s32 g_MenuCursorPulsePhase;
 extern s16 g_HudLapHighlightRow;
-extern s32 g_MirrorVisibleCellList;
-extern s32 g_MirrorVisibleCellMask;
+extern Vec4 g_MirrorVisibleCellList[];
+extern u32 g_MirrorVisibleCellMask[];
 extern s16 g_MirrorDrawEnv0ClipY;
 extern s16 g_MirrorDrawEnv0ClipH;
 extern u8 g_TachoNeedlePrim0PageA[];

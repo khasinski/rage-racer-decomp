@@ -4,13 +4,9 @@
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndVoiceRegs[];
-extern volatile u_short g_SndKeyOnLow;
-extern volatile u_short g_SndKeyOnHigh;
-extern volatile u_short g_SndKeyOffLow;
-extern volatile u_short g_SndKeyOffHigh;
-extern u_char g_SndVoiceCount;
-extern volatile u_char *g_SndSpuRegs;
+#define SND_KEY_ON_QUALIFIER volatile
+#define SND_KEY_OFF_QUALIFIER volatile
+#include "psyq/snd_internal.h"
 
 void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_short right) {
     u_long rawVoice;
@@ -25,9 +21,9 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
     rawVoice = voice;
     voice = (u8)rawVoice;
     index = voice * 16;
-    *(u_short *)&g_SndVoiceRegs[index + 2] = fine;
+    *(u_short *)((u_char *)g_SndVoiceRegs + index + 2) = fine;
     g_SndVoiceFlags[voice] |= 3;
-    *(u_short *)&g_SndVoiceRegs[index] = note;
+    *(u_short *)((u_char *)g_SndVoiceRegs + index) = note;
 
     if ((u_long)voice < 16) {
         index = 1;
@@ -45,14 +41,14 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
     index <<= 2;
     count = g_SndVoiceCount;
     i = 0;
-    *(u_short *)&g_SndVoiceStatePitch[index] = 10;
+    *(u_short *)&((u_char *)g_SndVoiceState + 4)[index] = 10;
 
     if (count != 0) {
         do {
             voiceIndex = (u_short)i;
             index = ((voiceIndex * 3) << 2) + voiceIndex;
             index <<= 2;
-            g_SndVoiceStatePitch[index + 0x17] &= 1;
+            ((u_char *)g_SndVoiceState + 4)[index + 0x17] &= 1;
             i++;
             voiceIndex = g_SndVoiceCount;
         } while ((u_short)i < voiceIndex);
@@ -61,10 +57,10 @@ void SpuVmKeyOnCore(long voice, u_short note, u_short fine, u_short left, u_shor
     voiceIndex = (u8)rawVoice;
     index = ((voiceIndex * 3) << 2) + voiceIndex;
     index <<= 2;
-    g_SndVoiceStatePitch[index + 0x17] = 2;
+    ((u_char *)g_SndVoiceState + 4)[index + 0x17] = 2;
     voiceIndex = g_SndKeyOnLow;
     count = g_SndKeyOnHigh;
-    *(u_short *)&g_SndVoiceStatePitch[index - 2] = 0;
+    *(u_short *)&((u_char *)g_SndVoiceState + 4)[index - 2] = 0;
     index = g_SndKeyOffLow;
     /* These barriers are load-bearing. Without them `combine` substitutes the
      * single-use `zero_extend(mem)` that defines the second operand into the

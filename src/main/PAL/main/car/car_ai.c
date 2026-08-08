@@ -1,19 +1,13 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/car_internal.h"
 #include "game/track.h"
 #include "game/race.h"
 #include "psyq/gte.h"
 
-typedef struct GameCollisionPoint {
-    s16 x;
-    s16 z;
-} GameCollisionPoint;
-
 typedef struct GameCollisionPointBytes {
     u8 bytes[4];
 } GameCollisionPointBytes;
-
-extern GameCollisionPoint g_CarCollisionCorners[4];
 
 /*
  * Jump / launch setup: when GetCarCrestTrigger reports a marker crossing, seeds the
@@ -567,9 +561,9 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
     Matrix matrix;
     s16 velocityDelta[2];
     GameCollisionPointBytes quads[4][4];
-    GameCollisionPoint samples[5];
-    GameCollisionPoint carCorners[4];
-    GameCollisionPoint otherCorners[4];
+    CarCollisionPoint samples[5];
+    CarCollisionPoint carCorners[4];
+    CarCollisionPoint otherCorners[4];
     GameCarRuntime *other;
     s32 nextIndex;
     s32 carProgress;
@@ -658,30 +652,30 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                 centerZ += centerZ >> 31;
                 centerZ >>= 1;
 
-                ((GameCollisionPoint *)&quads[1][0])->x = average01X;
-                ((GameCollisionPoint *)&quads[0][1])->x = average01X;
-                ((GameCollisionPoint *)&quads[1][0])->z = average01Z;
-                ((GameCollisionPoint *)&quads[0][1])->z = average01Z;
-                ((GameCollisionPoint *)&quads[2][0])->x = average02X;
-                ((GameCollisionPoint *)&quads[0][2])->x = average02X;
-                ((GameCollisionPoint *)&quads[2][0])->z = average02Z;
-                ((GameCollisionPoint *)&quads[0][2])->z = average02Z;
-                ((GameCollisionPoint *)&quads[3][1])->x = average13X;
-                ((GameCollisionPoint *)&quads[1][3])->x = average13X;
-                ((GameCollisionPoint *)&quads[3][1])->z = average13Z;
-                ((GameCollisionPoint *)&quads[1][3])->z = average13Z;
-                ((GameCollisionPoint *)&quads[3][2])->x = average23X;
-                ((GameCollisionPoint *)&quads[2][3])->x = average23X;
-                ((GameCollisionPoint *)&quads[3][2])->z = average23Z;
-                ((GameCollisionPoint *)&quads[2][3])->z = average23Z;
-                ((GameCollisionPoint *)&quads[3][0])->x = centerX;
-                ((GameCollisionPoint *)&quads[2][1])->x = centerX;
-                ((GameCollisionPoint *)&quads[1][2])->x = centerX;
-                ((GameCollisionPoint *)&quads[0][3])->x = centerX;
-                ((GameCollisionPoint *)&quads[3][0])->z = centerZ;
-                ((GameCollisionPoint *)&quads[2][1])->z = centerZ;
-                ((GameCollisionPoint *)&quads[1][2])->z = centerZ;
-                ((GameCollisionPoint *)&quads[0][3])->z = centerZ;
+                ((CarCollisionPoint *)&quads[1][0])->x = average01X;
+                ((CarCollisionPoint *)&quads[0][1])->x = average01X;
+                ((CarCollisionPoint *)&quads[1][0])->z = average01Z;
+                ((CarCollisionPoint *)&quads[0][1])->z = average01Z;
+                ((CarCollisionPoint *)&quads[2][0])->x = average02X;
+                ((CarCollisionPoint *)&quads[0][2])->x = average02X;
+                ((CarCollisionPoint *)&quads[2][0])->z = average02Z;
+                ((CarCollisionPoint *)&quads[0][2])->z = average02Z;
+                ((CarCollisionPoint *)&quads[3][1])->x = average13X;
+                ((CarCollisionPoint *)&quads[1][3])->x = average13X;
+                ((CarCollisionPoint *)&quads[3][1])->z = average13Z;
+                ((CarCollisionPoint *)&quads[1][3])->z = average13Z;
+                ((CarCollisionPoint *)&quads[3][2])->x = average23X;
+                ((CarCollisionPoint *)&quads[2][3])->x = average23X;
+                ((CarCollisionPoint *)&quads[3][2])->z = average23Z;
+                ((CarCollisionPoint *)&quads[2][3])->z = average23Z;
+                ((CarCollisionPoint *)&quads[3][0])->x = centerX;
+                ((CarCollisionPoint *)&quads[2][1])->x = centerX;
+                ((CarCollisionPoint *)&quads[1][2])->x = centerX;
+                ((CarCollisionPoint *)&quads[0][3])->x = centerX;
+                ((CarCollisionPoint *)&quads[3][0])->z = centerZ;
+                ((CarCollisionPoint *)&quads[2][1])->z = centerZ;
+                ((CarCollisionPoint *)&quads[1][2])->z = centerZ;
+                ((CarCollisionPoint *)&quads[0][3])->z = centerZ;
 
                 rotation[0] = (u16)other->field_20;
                 rotation[2] = (u16)other->field_28;

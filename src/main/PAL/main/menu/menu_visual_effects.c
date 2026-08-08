@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/menu_internal.h"
 #include "game/audio.h"
 #include "game/menu_types.h"
 #include "game/race.h"
@@ -10,8 +11,6 @@
 /* Identical to the declaration in game/menu.h; this unit cannot include that
  * header yet because four of its own definitions still disagree with it
  * (ScrollTeamLogoUp, GameDrawMenuButton, g_RankingRecords, g_TimeRecords). */
-extern u16 g_TeamLogoClut[16];
-extern u32 g_TeamLogoCanvas[];
 
 /* The logo canvas is 64 rows of eight words, and each word packs eight
  * four-bit pixels. Flipping a row therefore swaps word j with word 7 - j and
@@ -253,28 +252,6 @@ void RotateTeamLogoCw(void) {
     } while (i < 512);
 }
 
-typedef union {
-    s32 value;
-    u16 lo;
-} TeamLogoColorSlot;
-
-extern u16 g_PadHeld;
-extern u16 g_PadPressedRepeat;
-extern u16 g_PadPressed;
-extern u8 g_TeamLogoExpertMode;
-extern s32 g_TeamLogoCursorX;
-extern s32 g_TeamLogoCursorY;
-extern s32 g_TeamLogoViewX;
-extern s32 g_TeamLogoViewY;
-extern s32 g_TeamLogoGuideMode;
-extern s32 g_TeamLogoBrushSize;
-extern TeamLogoColorSlot g_TeamLogoPenColor;
-extern s32 g_TeamLogoPaletteMode;
-extern s32 g_TeamLogoColorChannel;
-extern s32 g_TeamLogoDpadRepeatTimer;
-extern s32 g_TeamLogoDpadRepeatMask;
-extern s32 g_TeamLogoGuideModePrev;
-extern s32 g_TeamLogoPaintArmed;
 
 void UpdateTeamLogoCanvas(void) {
     s32 cursorX;
@@ -527,16 +504,16 @@ void UpdateTeamLogoCanvas(void) {
                             rem = sum - (q * 4);
                             switch (rem) {
                             case 0:
-                                *p = (*p & 0xFFF0) | g_TeamLogoPenColor.lo;
+                                *p = (*p & 0xFFF0) | g_TeamLogoPenColor.low;
                                 break;
                             case 1:
-                                *p = (*p & 0xFF0F) | (g_TeamLogoPenColor.lo << 4);
+                                *p = (*p & 0xFF0F) | (g_TeamLogoPenColor.low << 4);
                                 break;
                             case 2:
-                                *p = (*p & 0xF0FF) | (g_TeamLogoPenColor.lo << 8);
+                                *p = (*p & 0xF0FF) | (g_TeamLogoPenColor.low << 8);
                                 break;
                             case 3:
-                                *p = (*p & 0xFFF) | (g_TeamLogoPenColor.lo << 0xC);
+                                *p = (*p & 0xFFF) | (g_TeamLogoPenColor.low << 0xC);
                                 break;
                             }
                     }
@@ -727,31 +704,18 @@ void UpdateTeamLogoCanvas(void) {
     }
 }
 
-extern s32 g_TeamLogoClutRect;
-extern s32 g_TeamLogoBlankClut;
 
 void RestoreTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, &g_TeamLogoBlankClut); }
 
 void UploadTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, g_TeamLogoClut); }
 
-extern s32 g_MenuLightBurstLevel;
 
 
-typedef struct Blob {
-    s16 b[33];
-} Blob;
-
-extern const Blob g_MenuLightBurstBandX;
-extern const Blob g_MenuLightBurstBandY;
-extern const char g_MsgOrdinalSt[4];
-extern const char g_MsgOrdinalNd[4];
-extern const char g_MsgOrdinalRd[4];
-extern const char g_MsgOrdinalTh[8];
 
 void DrawMenuLightBurst(s32 arg) {
     void *s3;
-    Blob l1;
-    Blob l2;
+    MenuLightBurstBand l1;
+    MenuLightBurstBand l2;
 
     s3 = (void *)(SCRATCH_OT_BASE_WORD + 0xAFC);
     l1 = g_MenuLightBurstBandX;
@@ -795,10 +759,10 @@ void DrawMenuLightBurst(s32 arg) {
 
         s0 = 0;
         do {
-            s32 x0 = l1.b[s0];
-            s32 y0 = l2.b[s0];
-            s16 x1 = (0xA0 - (u16)l1.b[s0]) * 2;
-            s32 v = (((s32)((u16)l2.b[s0] - 0xAA) << 7) / 309 + 0x16) * g_MenuLightBurstLevel;
+            s32 x0 = l1.values[s0];
+            s32 y0 = l2.values[s0];
+            s16 x1 = (0xA0 - (u16)l1.values[s0]) * 2;
+            s32 v = (((s32)((u16)l2.values[s0] - 0xAA) << 7) / 309 + 0x16) * g_MenuLightBurstLevel;
             value = v;
             scaled = (u32)value / 512;
             value = (u8)scaled;
@@ -859,8 +823,6 @@ typedef union {
 } PackedCoordinate;
 
 /* GCC 2.6.3 needs the concrete outer bound for the indexed view below. */
-extern RaceRecord g_RankingRecords[2][4][5];
-extern RaceRecord g_TimeRecords[2][4][5];
 
 /* The animated five-row ranking/time-record panel. */
 asm(".globl func_8004E07C\nfunc_8004E07C = DrawRankingTable + 0xCF8");

@@ -1,6 +1,6 @@
 #include "psyq/spu.h"
+#include "psyq/spu_internal.h"
 
-extern long _spu_mem_mode_plus;
 
 #define BLK(i) (&_spu_memList[(i)])
 #define BLK_ADDR(i) (BLK(i)->addr & SPU_BLOCK_ADDR)

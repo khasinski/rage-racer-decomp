@@ -3,9 +3,13 @@
 #include "game/prim.h"
 #include "game/asset.h"
 #include "game/audio.h"
+#define GAME_BGM_SHUFFLE_INDEX_TYPE s32
+#include "game/audio_internal.h"
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
+#include "game/save_internal.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
 #include "game/state.h"
@@ -63,7 +67,6 @@ void ApplyZoneLighting(s32 a0, Matrix *mtx) {
 
 void RestoreColorMatrix(void) { SetColorMatrix(&g_SceneColorMatrix); }
 
-extern u8 *g_CourseProgress;
 
 
 /* Scene 9: finishes the asset load, relocates the car model and derives g_GrandPrixRound. */
@@ -131,10 +134,6 @@ s32 UpdateRoundScreenFade(s32 stage) {
     return ret;
 }
 
-extern s32 g_BgmSelection;
-
-extern s32 g_BestTotalTimes[][4][2];
-extern s32 g_BestLapTimes[][4][2];
 
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
@@ -204,8 +203,6 @@ void DrawBgmSelector(void) {
     DrawText8x8(0x90, 0xce, g_BgmTrackNames[g_BgmSelection], 0x78cc);
 }
 
-extern s32 g_BgmShuffleIndex;
-extern u8 g_BgmShuffleOrder[];
 
 /* Scene 10: draws the ROUND screen, takes the BGM choice and starts the race at frame 121. */
 void UpdateRoundScreen(void) {
@@ -260,7 +257,6 @@ void UpdateRoundScreen(void) {
     }
 }
 
-extern Matrix g_SceneLightMatrix;
 /* Installs the track colour/light matrices, back and far colours and the fog near distance. */
 void InitTrackLighting(void) {
     g_SceneColorMatrix = g_TrackColorMatrix;

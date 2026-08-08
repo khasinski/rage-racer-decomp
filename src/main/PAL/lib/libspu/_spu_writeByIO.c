@@ -2,14 +2,7 @@
 #include <stdio.h>
 
 #include "common.h"
-
-extern volatile u_short *g_SpuRegBase;
-extern u_short g_SpuTransferStartAddr;
-extern long g_SpuWaitCount;
-extern u_char g_SpuTimeoutFmt[];
-extern u_char g_SpuTimeoutMsgWrdy[];
-extern u_char g_SpuTimeoutMsgDmaf[];
-
+#include "psyq/spu_internal.h"
 
 void _spu_writeByIO(u_short *addr, u_long size) {
     volatile long di, dj;
@@ -25,8 +18,8 @@ void _spu_writeByIO(u_short *addr, u_long size) {
         dj = dj * 3;                          \
     }
 
-    stat0 = g_SpuRegBase[0xD7];
-    g_SpuRegBase[0xD3] = g_SpuTransferStartAddr;
+    stat0 = g_SpuRegBase->raw[0xD7];
+    g_SpuRegBase->raw[0xD3] = g_SpuTransferStartAddr;
     saved = stat0 & 0x7ff;
     SPU_DELAY();
 
@@ -34,17 +27,17 @@ void _spu_writeByIO(u_short *addr, u_long size) {
         do {
             chunk = (size < 65) ? size : 64;
             for (k = 0; k < chunk; k += 2) {
-                g_SpuRegBase[0xD4] = *paddr++;
+                g_SpuRegBase->raw[0xD4] = *paddr++;
             }
-            ctrl = g_SpuRegBase[0xD5];
+            ctrl = g_SpuRegBase->raw[0xD5];
             ctrl &= 0xffcf;
             ctrl |= 0x10;
-            g_SpuRegBase[0xD5] = ctrl;
+            g_SpuRegBase->raw[0xD5] = ctrl;
 
             SPU_DELAY();
 
             g_SpuWaitCount = 0;
-            while (g_SpuRegBase[0xD7] & 0x400) {
+            while (g_SpuRegBase->raw[0xD7] & 0x400) {
                 if (++g_SpuWaitCount >= 5001) {
                     printf((u8 *)g_SpuTimeoutFmt, g_SpuTimeoutMsgWrdy);
                     break;
@@ -58,11 +51,11 @@ void _spu_writeByIO(u_short *addr, u_long size) {
         } while (size != 0);
     }
 
-    ctrl = g_SpuRegBase[0xD5];
+    ctrl = g_SpuRegBase->raw[0xD5];
     ctrl &= 0xffcf;
-    g_SpuRegBase[0xD5] = ctrl;
+    g_SpuRegBase->raw[0xD5] = ctrl;
     g_SpuWaitCount = 0;
-    while ((g_SpuRegBase[0xD7] & 0x7ff) != saved) {
+    while ((g_SpuRegBase->raw[0xD7] & 0x7ff) != saved) {
         if (++g_SpuWaitCount >= 5001) {
             printf((u8 *)g_SpuTimeoutFmt, g_SpuTimeoutMsgDmaf);
             break;

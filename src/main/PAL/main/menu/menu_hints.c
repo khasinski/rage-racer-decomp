@@ -4,8 +4,6 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 
-extern u8 * volatile g_DrawBuffer;
-extern u8 g_PadType;
 
 /* The 0xC x 0x18 selection arrow every setup-menu list draws beside its rows. */
 void DrawMenuCursorArrow(s32 x, s32 y) {

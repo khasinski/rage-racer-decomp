@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/audio.h"
+#include "game/audio_internal.h"
+#include "game/render.h"
 #include "game/car.h"
 #include "game/menu.h"
 #include "game/scratchpad.h"
@@ -19,7 +21,6 @@ void TickSequenceAudio(void) {
     }
 }
 
-extern u8 g_ReplayFrameBuffer;
 
 
 s32 IsSpuTransferDone(void) {

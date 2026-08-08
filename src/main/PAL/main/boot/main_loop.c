@@ -6,26 +6,15 @@
 #include "game/memcard.h"
 #include "game/race.h"
 #include "game/render.h"
+#define GAME_FRAME_PARITY_TYPE s32
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
+#include "game/input_internal.h"
 #include "psyq/cd.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 #include "psyq/snd.h"
-
-
-extern s32 g_ScreenOffsetY;
-extern s32 g_ScreenOffsetX;
-
-extern u16 g_NegconSteerPlay;
-extern u16 g_PadMappingIndex;
-extern u16 g_NegconMappingIndex;
-extern u16 g_NegconSteerNeutral;
-extern u16 g_NegconNeutralI;
-extern u16 g_NegconNeutralII;
-extern u16 g_NegconNeutralL;
-extern u16 g_NegconMaxTwist;
-
 /*
  * One-shot boot chain called from MainLoop: sequencer, sound runtime, GPU
  * and DMA, the pad, then the persistent settings block reset to its defaults
@@ -72,10 +61,6 @@ void InitSubsystems(void) {
 }
 
 
-/* The two 0x237E8-byte frame contexts the loop ping-pongs between. */
-extern u8 g_FrameContexts[];
-/* Which of them is current, mirrored for everyone else to read. */
-extern s32 g_FrameParity;
 /* Scene handlers, indexed by g_SceneId. */
 
 /*

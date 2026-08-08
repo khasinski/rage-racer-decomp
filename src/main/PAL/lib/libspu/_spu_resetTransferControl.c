@@ -1,16 +1,16 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/spu_internal.h"
 
-extern volatile u_short *g_SpuRegBase;
 
 long _spu_resetTransferControl(void) {
     volatile long i;
     volatile long delay;
     u_short cnt;
 
-    cnt = g_SpuRegBase[0xD5];
-    g_SpuRegBase[0xD5] = cnt & 0x7FCF;
+    cnt = g_SpuRegBase->raw[0xD5];
+    g_SpuRegBase->raw[0xD5] = cnt & 0x7FCF;
 
     delay = 0xD;
     i = 0;

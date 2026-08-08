@@ -6,6 +6,7 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
+#include "game/fmv_internal.h"
 
 typedef struct FmvDisplayState {
     u8 pad0[0x18];
@@ -19,8 +20,6 @@ typedef struct FmvDisplayState {
     s32 field_34;
 } FmvDisplayState;
 
-extern u16 g_DispEnv0Y;
-extern u16 g_DispEnv1Y;
 s32 PresentFmvFrame(s32 *ctx) {
     void *p;
     s32 retry;

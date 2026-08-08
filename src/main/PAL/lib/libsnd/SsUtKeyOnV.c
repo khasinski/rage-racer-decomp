@@ -4,14 +4,10 @@
 #include "psyq/snd_types.h"
 
 
+#include "psyq/snd_internal.h"
 /* The key-on path's view of the same block psyq/snd_types.h calls
  * SvmCurrentAttr, but four bytes longer and reading vag unsigned, so the two
  * are not interchangeable. One of them is wrong. */
-extern long g_SndUpdateLock;
-extern ProgAtr *g_SndCurrentProgTable;
-extern VagAtr *g_SndCurrentToneTable;
-extern SvmCurrentAttr g_SndCurrentAttr;
-extern SpuVoice g_SndVoiceState[];
 
 long SsUtKeyOnV(
     long voice,

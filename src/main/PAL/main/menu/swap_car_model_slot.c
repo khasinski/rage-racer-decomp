@@ -1,6 +1,9 @@
 #include "common.h"
 #include "game/asset.h"
 #include "game/car.h"
+#define GAME_CAR_MODEL_ASSET_TYPE ShowroomCarModel
+#include "game/showroom_internal.h"
+#include "game/asset_internal.h"
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/render.h"
@@ -10,7 +13,6 @@
 #include "game/vector.h"
 #include "psyq/gte.h"
 
-extern u32 g_CarModelSlot;
 
 /* Flips the double-buffered showroom slot and re-registers it. */
 void SwapCarModelSlot(void) {
@@ -26,17 +28,6 @@ void DrawCarSlotHighlight(s32 slot) {
 
     *scratch = (s32)GameQueueTileTrans(base + 0xCC, (u8 *)value, 0x24, (slot * 16) + 0x24, 0x50, 0x10, 0, 0, 0xFF);
 }
-
-typedef struct SwObj698 { s32 unk0; u16 unk4; } SwObj698;
-typedef struct SwModelPose {
-    s32 position[4];
-    s32 unk10[4];
-    Vec4 rotation;
-} SwModelPose;
-
-extern SwObj698 *g_CarModelAsset;
-extern SwModelPose D_8009E6D4 asm("g_PlayerCar");
-
 
 void DrawMenuCarView(void) {
     Matrix mtxA;
@@ -148,20 +139,20 @@ void DrawMenuCarView(void) {
         }
     }
 
-    p = &D_8009E6D4.rotation.y;
+    p = &g_PlayerCar.pose.rotation.y;
     *p = *p + g_MenuViewSpin;
     BuildRotMatrixY(&mtxA, *p);
-    vec.z = (s16)(-((s16)g_CarModelAsset->unk4 / 2));
+    vec.z = (s16)(-((s16)g_CarModelAsset->height / 2));
     ApplyMatrixLV(&mtxA, &vec, &out);
     BuildRotMatrixY(&mtxB, 0x800 - *p);
-    BuildRotMatrixX(&mtxA, D_8009E6D4.rotation.x);
+    BuildRotMatrixX(&mtxA, g_PlayerCar.pose.rotation.x);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
 
     altLayout = g_MenuAltLayout;
     outX = out.x;
     asm volatile("" : "=r"(altLayout), "=r"(outX) : "0"(altLayout), "1"(outX));
-    p = &D_8009E6D4.position[0];
+    p = &g_PlayerCar.pose.position[0];
     if (altLayout != 0) {
         offset = s3 - 23;
     } else {
@@ -170,25 +161,25 @@ void DrawMenuCarView(void) {
     result = outX - offset;
     modelSlot = g_CarModelSlot;
     asm volatile("" : "=r"(result), "=r"(modelSlot) : "0"(result), "1"(modelSlot));
-    q = &D_8009E6D4.position[1];
+    q = &g_PlayerCar.pose.position[1];
     *p = result;
     outZ = out.z;
     qValue = s2 + 30;
     *q = qValue;
-    D_8009E6D4.position[2] = -outZ;
-    g_PlayerRenderRotation = D_8009E6D4.rotation;
+    g_PlayerCar.pose.position[2] = -outZ;
+    g_PlayerRenderRotation = g_PlayerCar.pose.rotation;
     g_PlayerRenderY = *q;
     SelectModelBank(modelSlot);
     q--;
     DrawPlayerCarModel(q);
 
     *q = (g_MenuAltLayout != 0 ? 23 : 52) - s3;
-    q = &D_8009E6D4.position[1];
+    q = &g_PlayerCar.pose.position[1];
     *q = s2 + 30;
-    D_8009E6D4.position[2] = 0;
+    g_PlayerCar.pose.position[2] = 0;
     SelectModelBank(14);
     D_1F800004 += 120;
-    SetGteObjectMatrix((void *)0x1F80011C, &D_8009E6D4.position[0], &mtxA);
+    SetGteObjectMatrix((void *)0x1F80011C, &g_PlayerCar.pose.position[0], &mtxA);
     SCRATCH_ENV_MODE4 = 0;
     {
         s32 a1 = 1;
@@ -199,8 +190,6 @@ void DrawMenuCarView(void) {
     }
     D_1F800004 -= 120;
 }
-
-extern s32 g_PlayerCar;
 
 /* The course diorama behind COURSE SELECT and RANKING, with the carousel easing. */
 void DrawMenuCourseView(void) {
@@ -269,7 +258,7 @@ void DrawMenuCourseView(void) {
         }
     }
 
-    g_PlayerCar = 23 - s1;
+    g_PlayerCar.courseViewX = 23 - s1;
     g_MenuViewOffset = s0 + g_MenuViewOffset;
     g_PlayerCarZ = -20;
     s0 = g_MenuViewOffset / 1000;

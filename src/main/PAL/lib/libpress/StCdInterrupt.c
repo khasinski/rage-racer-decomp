@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
+#include "psyq/press_internal.h"
 
 typedef struct StReadyStatus {
     u16 reserved;
@@ -8,26 +9,7 @@ typedef struct StReadyStatus {
     u16 cause;
 } StReadyStatus;
 
-extern volatile u32 *g_InterruptStatus;
-extern volatile u32 *g_InterruptMask;
 
-extern s32 g_StCurrentFrameCount;
-extern s16 g_StCurrentSector;
-extern s32 g_StColorMode;
-extern s32 g_StNotStream2Mode;
-extern StCallback g_StEndCallback;
-extern s32 g_StInterruptPending;
-extern s32 g_StNextChannel;
-extern s32 g_StStartFrame;
-extern s32 g_StCurrentChannel;
-extern s32 g_StDmaBusy;
-extern s32 g_StWriteCursor;
-extern s32 g_StReadCursor;
-extern u8 *g_StCopySource;
-extern u32 g_StEndFrame;
-extern s32 g_StStreamFlag;
-extern volatile StStrHeader *g_StRingBase;
-extern s32 g_StRingSize;
 
 void StCdInterrupt(void) {
     volatile StReadyStatus readyStatus;

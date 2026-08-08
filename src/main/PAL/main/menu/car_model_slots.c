@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/car_internal.h"
 #include "game/asset.h"
 #include "game/render.h"
 
@@ -128,7 +129,6 @@ s32 GetOwnedCarAssetIndex(s32 model) {
     return -1;
 }
 
-extern u32 g_CarModelSlot;
 /* Re-registers the showroom car after g_CarModelSlot changes. */
 void InstallCarModelSlot(void) {
     SelectCarModelSlot(g_CarModelSlot);

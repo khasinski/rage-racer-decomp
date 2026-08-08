@@ -1,12 +1,10 @@
 #include "common.h"
 #include "psyq/gpu.h"
+#include "psyq/gpu_internal.h"
 
-extern u_char g_GraphType[];
-extern u_short g_VramWidth[];
-extern u_short g_VramHeight[];
 
 u_long _get_mode(long dfe, long dtd, u_long tpage) {
-    volatile u_char *modep = g_GraphType;
+    volatile u_char *modep = &g_GraphType;
     u_long value;
     u_long cmd;
 
@@ -48,7 +46,7 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long left, long top) {
     if (x < 0) {
         value = 0;
     } else {
-        volatile u_short *widthp = g_VramWidth;
+        volatile u_short *widthp = &g_VramWidth;
         register long maxX asm("$6");
 
         value = *widthp;
@@ -66,7 +64,7 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long left, long top) {
     y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
-        volatile u_short *heightp = g_VramHeight;
+        volatile u_short *heightp = &g_VramHeight;
         long maxY;
 
         value = *heightp;
@@ -80,7 +78,7 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long left, long top) {
     }
 
     {
-        volatile u_char *modep = g_GraphType;
+        volatile u_char *modep = &g_GraphType;
 
         value = *modep;
     }
@@ -112,7 +110,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long right, long bottom) {
     if (x < 0) {
         value = 0;
     } else {
-        volatile u_short *widthp = g_VramWidth;
+        volatile u_short *widthp = &g_VramWidth;
         register long maxX asm("$6");
 
         value = *widthp;
@@ -130,7 +128,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long right, long bottom) {
     y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
-        volatile u_short *heightp = g_VramHeight;
+        volatile u_short *heightp = &g_VramHeight;
         long maxY;
 
         value = *heightp;
@@ -144,7 +142,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long right, long bottom) {
     }
 
     {
-        volatile u_char *modep = g_GraphType;
+        volatile u_char *modep = &g_GraphType;
 
         value = *modep;
     }
@@ -166,7 +164,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long right, long bottom) {
 }
 
 u_long Gpu_BuildDrawOffsetCmd(long x, long y) {
-    volatile u_char *modep = g_GraphType;
+    volatile u_char *modep = &g_GraphType;
     u_long mode;
 
     mode = *modep;
@@ -193,10 +191,9 @@ u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {
     return 0;
 }
 
-extern u_char g_GraphReverse;
 
 u_long get_dx(DispEnv *env) {
-    volatile u_char *modep = g_GraphType;
+    volatile u_char *modep = &g_GraphType;
     long mode;
 
     mode = *modep & 0xFF;
@@ -212,15 +209,11 @@ u_long get_dx(DispEnv *env) {
     }
 }
 
-extern u_long *g_GpuGp1;
 
 u_long _status(void) {
     return *g_GpuGp1;
 }
 
-extern volatile u_long *g_OtcDmaMadr;
-extern volatile u_long *g_OtcDmaBcr;
-extern volatile u_long *g_OtcDmaChcr;
 
 long Gpu_ClearOTagDma(u_long *ot, long count) {
     long size;

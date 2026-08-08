@@ -1,15 +1,7 @@
 #include "common.h"
 #include "game/cd.h"
+#include "game/cd_internal.h"
 
-extern u8 g_CdVolume;
-extern s32 g_CdMixFullLL;
-extern s32 g_CdMixFullLR;
-extern s32 g_CdMixFullRR;
-extern s32 g_CdMixFullRL;
-extern s32 g_CdMixLL;
-extern s32 g_CdMixLR;
-extern s32 g_CdMixRR;
-extern s32 g_CdMixRL;
 
 void SetCdVolume(s32 volume) {
     s32 offset;

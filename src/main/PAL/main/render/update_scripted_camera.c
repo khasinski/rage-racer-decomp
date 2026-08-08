@@ -1,20 +1,9 @@
 #include "common.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 
 /* One scripted-camera keyframe: eye position, look-at target, how long the
  * player dwells on it and the Bezier control value used to ease out of it. */
-typedef struct CameraKey {
-    s32 eyeX;
-    s32 eyeY;
-    s32 eyeZ;
-    s32 atX;
-    s32 atY;
-    s32 atZ;
-    s32 duration;
-    s32 control;
-} CameraKey;
-
-extern CameraKey g_CameraPath[];
 
 /* The retail code re-derives the keyframe address at every field access rather
  * than holding a pointer, so this stays a macro: a real pointer variable lets

@@ -3,9 +3,16 @@
 #include "game/asset.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#include "game/menu_internal.h"
+#define GAME_FRONTEND_IDLE_TYPE u32
+#define GAME_DISP_ENV1_X_DECL extern u8 g_DispEnv1X[]
+#include "game/frontend_internal.h"
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"
+#define GAME_FRAME_CONTEXT_QUALIFIER volatile
+#define GAME_SCREEN_OFFSET_TYPE u16
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
 #include "game/state.h"
@@ -51,7 +58,6 @@ void UpdateMainMenuExit(void) {
     DrawMainMenuRows();
 }
 
-extern s32 g_ClassWinCount;
 
 
 void UpdateTitleAttract(void) {
@@ -106,7 +112,6 @@ void UpdateTitleAttract(void) {
     next = GameQueueShadedSprite(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
     *(void **)scratch = GameQueueShadedTexturedRect(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
-extern u32 g_FrontendIdleTimer;
 
 
 void UpdateFrontend(void) {
@@ -194,10 +199,6 @@ void UpdateFrontend(void) {
 void ResetFrameContext(int buffer) {
 }
 
-extern volatile u8 g_FrameContexts[];
-extern u8 g_DispEnv1X[];
-extern u16 g_ScreenOffsetX;
-extern u16 g_ScreenOffsetY;
 
 void SetupDisplay240(s32 r, s32 g, s32 b) {
     u8 *base;

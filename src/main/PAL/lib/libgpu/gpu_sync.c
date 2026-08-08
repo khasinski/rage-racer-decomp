@@ -3,10 +3,8 @@
 #include "common.h"
 #include "psyq/kernel.h"
 #include "psyq/gpu.h"
+#include "psyq/gpu_internal.h"
 
-extern volatile u_long *g_GpuGp1;
-extern long g_GpuQueueWriteIdx;
-extern long g_GpuQueueReadIdx;
 
 long Gpu_DrawSync(long mode) {
     long pending;

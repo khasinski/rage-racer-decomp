@@ -1,0 +1,94 @@
+#ifndef GAME_RENDER_INTERNAL_H
+#define GAME_RENDER_INTERNAL_H
+
+#include "common.h"
+#include "game/vector.h"
+#include "psyq/gte.h"
+
+typedef struct FontGlyph {
+    u8 u;
+    u8 v;
+    u16 width;
+} FontGlyph;
+
+typedef struct CameraKey {
+    s32 eyeX;
+    s32 eyeY;
+    s32 eyeZ;
+    s32 atX;
+    s32 atY;
+    s32 atZ;
+    s32 duration;
+    s32 control;
+} CameraKey;
+
+extern Matrix g_MirrorViewMatrix;
+extern struct GameRenderObject g_CameraCar;
+extern Matrix g_SceneLightMatrix;
+extern u32 g_ScratchRenderMode;
+#ifndef GAME_CAM_ROW_TYPE
+#define GAME_CAM_ROW_TYPE u8
+#endif
+extern GAME_CAM_ROW_TYPE *g_CamRow;
+#undef GAME_CAM_ROW_TYPE
+extern FontGlyph g_SmallFontGlyphs[];
+extern FontGlyph g_LargeFontGlyphs[];
+extern CameraKey g_CameraPath[];
+extern u32 g_MainVisibleCellMask[];
+extern Vec4 g_MainVisibleCellList[];
+#ifndef GAME_VISIBLE_CELL_MASK_TYPE
+#define GAME_VISIBLE_CELL_MASK_TYPE u32
+#endif
+extern GAME_VISIBLE_CELL_MASK_TYPE *g_VisibleCellMask;
+#undef GAME_VISIBLE_CELL_MASK_TYPE
+#ifndef GAME_VISIBLE_CELL_LIST_DECL
+#define GAME_VISIBLE_CELL_LIST_DECL extern Vec4 *g_VisibleCellList
+#endif
+GAME_VISIBLE_CELL_LIST_DECL;
+#undef GAME_VISIBLE_CELL_LIST_DECL
+#ifndef GAME_CAMERA_VIEW_MODE_TYPE
+#define GAME_CAMERA_VIEW_MODE_TYPE s32
+#endif
+extern GAME_CAMERA_VIEW_MODE_TYPE g_CameraViewMode;
+#undef GAME_CAMERA_VIEW_MODE_TYPE
+extern s16 g_AtanTable[];
+#ifndef GAME_DRAW_BUFFER_QUALIFIER
+#define GAME_DRAW_BUFFER_QUALIFIER
+#endif
+extern u8 *GAME_DRAW_BUFFER_QUALIFIER g_DrawBuffer;
+#undef GAME_DRAW_BUFFER_QUALIFIER
+#ifndef GAME_FRAME_CONTEXT_QUALIFIER
+#define GAME_FRAME_CONTEXT_QUALIFIER
+#endif
+extern GAME_FRAME_CONTEXT_QUALIFIER u8 g_FrameContexts[];
+#undef GAME_FRAME_CONTEXT_QUALIFIER
+#ifndef GAME_SCREEN_OFFSET_TYPE
+#define GAME_SCREEN_OFFSET_TYPE s32
+#endif
+extern GAME_SCREEN_OFFSET_TYPE g_ScreenOffsetX;
+extern GAME_SCREEN_OFFSET_TYPE g_ScreenOffsetY;
+#undef GAME_SCREEN_OFFSET_TYPE
+#ifndef GAME_FRAME_PARITY_TYPE
+#define GAME_FRAME_PARITY_TYPE u32
+#endif
+extern GAME_FRAME_PARITY_TYPE g_FrameParity;
+#undef GAME_FRAME_PARITY_TYPE
+extern u8 g_Font8x8Cells[];
+extern u8 g_DrawModeEnv[];
+extern u8 g_PropFontU[];
+extern u8 g_PropFontV[];
+extern u8 g_WordFontU[];
+extern u8 g_WordFontV[];
+extern u8 g_WordFontWidth[];
+extern u8 g_WordFontAdvance[];
+extern u8 g_HighFontU[];
+extern u8 g_HighFontV[];
+extern u8 g_HighFontWidth[];
+extern u8 g_HighFontYOffset[];
+extern s32 g_MenuOverlayPatternAnimOffset;
+extern u8 g_MenuOverlayPatternTable[];
+extern u8 g_SpriteFontU[];
+extern u8 g_SpriteFontV[];
+extern u8 g_SpriteFontWidth[];
+
+#endif

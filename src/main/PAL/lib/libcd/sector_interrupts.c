@@ -1,15 +1,8 @@
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/cd_internal.h"
 
-extern volatile u_long *g_ComDelayReg;
-extern long g_CdTestParamCount;
 
-extern CdCallback g_CdSyncCallback;
-extern CdCallback g_CdReadyCallback;
-extern u_char g_CdSyncStatus;
-extern u_char g_CdReadyStatus;
-extern u_char g_CdSyncResult[];
-extern u_char g_CdReadyResult[];
 
 long CD_getsector2(long madr, u_long size) {
     volatile u_char *status;
@@ -54,7 +47,7 @@ void CdDispatchInterrupts(void) {
     long saved;
 
     saved = *g_CdReg0 % 4;
-    statusByte = &g_CdReadyStatus;
+    statusByte = &g_CdSyncStatus.ready;
 
     while ((status = CdReadInterruptStatus()) != 0) {
         if ((status & 4) != 0) {

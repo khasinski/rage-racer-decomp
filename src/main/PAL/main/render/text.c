@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
@@ -11,19 +12,6 @@ typedef struct TextSprt8 {
     u16 clut;
 } TextSprt8;
 
-extern u8 *g_DrawBuffer;
-extern u8 g_Font8x8Cells[];
-extern u8 g_DrawModeEnv[];
-extern u8 g_PropFontU[];
-extern u8 g_PropFontV[];
-extern u8 g_WordFontU[];
-extern u8 g_WordFontV[];
-extern u8 g_WordFontWidth[];
-extern u8 g_WordFontAdvance[];
-extern u8 g_HighFontU[];
-extern u8 g_HighFontV[];
-extern u8 g_HighFontWidth[];
-extern u8 g_HighFontYOffset[];
 
 /*
  * Keep the first font base opaque after materialising it. This empty constraint

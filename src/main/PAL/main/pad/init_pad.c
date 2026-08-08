@@ -1,5 +1,8 @@
 #include "common.h"
 #include "game/state.h"
+#define GAME_INPUT_MAPPING_TYPE s16
+#define GAME_INPUT_CALIBRATION_TYPE s16
+#include "game/input_internal.h"
 #include "game/render.h"
 
 /* BIOS InitPAD over the two 0x28-byte pad buffers, then StartPAD. */
@@ -10,7 +13,6 @@ void GameInitPad(void) {
 
 /* The live mapping UpdatePadState reads: the pad's eight masks at +0,
  * the NeGcon's eight at +0x10. */
-extern u16 g_PadButtonMapping[];
 
 /*
  * Installs the two selected presets into the live mapping table. Both rows are
@@ -44,21 +46,12 @@ void LoadPadButtonMapping(s32 mapping0, s32 mapping1) {
     } while (i < 8);
 }
 
-extern s16 g_PadMappingIndex;
-extern s16 g_NegconMappingIndex;
 
 /* Re-applies the button mapping from the two saved selections. */
 void ApplyPadButtonMapping(void) {
     LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
 }
 
-extern u8 g_PadType;
-extern s16 g_NegconSteerPlay;
-extern s16 g_NegconMaxTwist;
-extern s16 g_NegconNeutralI;
-extern s16 g_NegconNeutralII;
-extern s16 g_NegconNeutralL;
-extern s16 g_NegconSteerNeutral;
 
 void UpdatePadState(void) {
     s32 mask;

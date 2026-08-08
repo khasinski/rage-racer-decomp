@@ -2,18 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "psyq/cd.h"
+#include "psyq/cd_internal.h"
 
-extern long g_CdCachedShellOpenCount;
-extern long g_CdShellOpenCount;
-extern long g_CdDebugLevel;
-extern CdlFILE g_CdFileCache[64];
 
-extern const char g_FmtCdPathLevelError[];
-extern const char g_FmtCdDirNotFound[];
-extern const char g_MsgCdDiscError[];
-extern const char g_FmtCdSearching[];
-extern const char g_FmtCdFileFound[];
-extern const char g_FmtCdFileNotFound[];
 
 CdlFILE *DsSearchFile(CdlFILE *out, char *path) {
     char buf[32];

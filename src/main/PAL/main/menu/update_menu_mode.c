@@ -5,8 +5,6 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-extern u8 g_PadType;
-
 void UpdateMenuMode(void) {
     void *scratch;
     s32 c0;

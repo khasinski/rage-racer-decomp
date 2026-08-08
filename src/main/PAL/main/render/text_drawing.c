@@ -2,14 +2,8 @@
 #include "game/prim.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
+#include "game/render_internal.h"
 
-typedef struct Glyph {
-    u8 u;
-    u8 v;
-    u16 w;
-} Glyph;
-
-extern Glyph g_SmallFontGlyphs[];
 
 
 void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
@@ -99,7 +93,7 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
             }
         }
 
-        w = fixed ? 6 : g_SmallFontGlyphs[idx].w;
+        w = fixed ? 6 : g_SmallFontGlyphs[idx].width;
         u0 = fixed ? (idx % 42) * 6 : g_SmallFontGlyphs[idx].u;
         v0 = fixed ? (idx / 42) * 12 : g_SmallFontGlyphs[idx].v;
 
@@ -133,7 +127,6 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
     }
 }
 
-extern Glyph g_LargeFontGlyphs[];
 
 
 void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
@@ -214,7 +207,7 @@ void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
             }
         }
 
-        w = fixed ? 8 : g_LargeFontGlyphs[idx].w;
+        w = fixed ? 8 : g_LargeFontGlyphs[idx].width;
         u0 = fixed ? (idx % 32) * 8 : g_LargeFontGlyphs[idx].u;
         v0 = fixed ? (idx / 32) * 16 + 24 : g_LargeFontGlyphs[idx].v;
 
@@ -361,8 +354,6 @@ s32 GameDrawNumber(x, y, flags, value, r, g, b, clut, primitiveCount)
     return drawn;
 }
 
-extern u8 g_MenuOverlayPatternTable[];
-extern s32 g_MenuOverlayPatternAnimOffset;
 
 
 void DrawBitPatternOverlay(s32 pattern) {

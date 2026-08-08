@@ -1,21 +1,21 @@
 #include "common.h"
 #include "game/asset.h"
+#include "game/audio_internal.h"
+#define GAME_STREAM_RETURN_TYPE u32
+#include "game/fmv_internal.h"
 #include "game/car.h"
 #include "game/cd.h"
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/render.h"
+#define GAME_CAMERA_VIEW_MODE_TYPE u32
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
 
 
-
-extern u32 g_BgmShuffleIndex;
-extern u8 g_BgmShuffleOrder[];
-extern u32 g_StreamReturnScene;
-extern u32 g_CameraViewMode;
 
 void UpdateBgmSelectScene(void) {
     void (*func)(void);

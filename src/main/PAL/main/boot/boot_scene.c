@@ -4,12 +4,12 @@
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
-extern Matrix g_SceneLightMatrix;
 
 void DrawBootLogo(void) {
     u8 *base;

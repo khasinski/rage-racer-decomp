@@ -4,19 +4,8 @@
 #include "psyq/snd_types.h"
 #include "game/audio.h"
 
-extern SeqStruct *g_SndSeqTable[];
-extern SpuVoice g_SndVoiceState[];
-extern SvmCurrentAttr g_SndCurrentAttr;
-extern u_short g_SndVoiceRegs[];
-extern u_char g_SndVoiceCount;
-extern short g_SndMonoMode;
-extern volatile u_short *g_SndSpuRegs;
-extern volatile u_short g_SndKeyOffLow;
-extern volatile u_short g_SndKeyOffHigh;
-extern u_short g_SndKeyOnLow;
-extern u_short g_SndKeyOnHigh;
-extern u_short g_SndReverbOnLow;
-extern u_short g_SndReverbOnHigh;
+#define SND_KEY_OFF_QUALIFIER volatile
+#include "psyq/snd_internal.h"
 
 void SpuVmNoiseKeyOn(u_char voice) {
     SeqStruct *score =
@@ -32,7 +21,7 @@ void SpuVmNoiseKeyOn(u_char voice) {
     u_short control;
     u_long pan;
 
-    control = g_SndSpuRegs[0x1AA / 2];
+    control = ((u_short *)g_SndSpuRegs)[0x1AA / 2];
 
     left_temp = score->left_volume * 0x81;
     right_temp = score->right_volume * 0x81;
@@ -76,10 +65,10 @@ void SpuVmNoiseKeyOn(u_char voice) {
 
     control &= ~0x3F00;
     control |= ((g_SndCurrentAttr.note - g_SndCurrentAttr.center) & 0x3F) << 8;
-    g_SndSpuRegs[0x1AA / 2] = control;
+    ((u_short *)g_SndSpuRegs)[0x1AA / 2] = control;
 
-    g_SndVoiceRegs[voice * 8] = left;
-    g_SndVoiceRegs[voice * 8 + 1] = right;
+    ((u_short *)g_SndVoiceRegs)[voice * 8] = left;
+    ((u_short *)g_SndVoiceRegs)[voice * 8 + 1] = right;
     g_SndVoiceFlags[voice] |= 3;
 
     if (voice < 0x10) {
@@ -109,6 +98,6 @@ void SpuVmNoiseKeyOn(u_char voice) {
         g_SndReverbOnHigh &= ~bits_upper;
     }
 
-    g_SndSpuRegs[0x194 / 2] = bits_lower;
-    g_SndSpuRegs[0x196 / 2] = bits_upper;
+    ((u_short *)g_SndSpuRegs)[0x194 / 2] = bits_lower;
+    ((u_short *)g_SndSpuRegs)[0x196 / 2] = bits_upper;
 }

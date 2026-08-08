@@ -5,6 +5,8 @@ extern void (*g_SceneHandlers[])(void);
 extern void (*g_PrologueSteps[])(void);
 
 #include "common.h"
+
+extern u8 g_PadType;
 #include "game/vector.h"
 #include "psyq/gte.h"
 
@@ -216,7 +218,11 @@ extern u16 g_PadButtonPresets[];
 extern u8 g_PadConfigButtonRows[];
 extern u8 g_PadConfigLabelRows[];
 extern u16 g_PadPrevHeld;
-extern u16 g_PadHeld;
+#ifndef GAME_PAD_HELD_QUALIFIER
+#define GAME_PAD_HELD_QUALIFIER
+#endif
+extern GAME_PAD_HELD_QUALIFIER u16 g_PadHeld;
+#undef GAME_PAD_HELD_QUALIFIER
 extern u16 g_PadPressedRepeat;
 extern u16 g_PadPressed;
 extern u8 g_PadRepeatTimer[];

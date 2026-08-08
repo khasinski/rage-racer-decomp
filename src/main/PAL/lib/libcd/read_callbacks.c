@@ -5,20 +5,6 @@
 #include "psyq/cd_internal.h"
 #include "psyq/kernel.h"
 
-extern u_char g_MsgCdReadSectorError;
-extern u_char g_MsgCdReadShellOpen;
-extern u_char g_MsgCdReadRetry;
-extern volatile long g_CdReadSectorCount;
-extern volatile long g_CdReadBuffer;
-extern volatile long g_CdReadMode;
-extern volatile long g_CdReadPtr;
-extern volatile long g_CdReadSectorWords;
-extern volatile long g_CdReadRemaining;
-extern volatile long g_CdReadLastVSync;
-extern volatile long g_CdReadStartVSync;
-extern volatile long g_CdReadExpectedSector;
-extern volatile long g_CdReadSavedSyncCallback;
-extern volatile long g_CdReadSavedReadyCallback;
 void CdReadDataReadyCallback(u_char intr, long result) {
     volatile long *p;
     long dv;

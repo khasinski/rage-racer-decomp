@@ -110,6 +110,8 @@ extern u_char g_MsgIntrTimeout[];
 extern u_char g_MsgDmaBusError[];
 extern u_char g_FmtDmaMadr[];
 extern u_short g_IntrJmpBufSp[];
+extern KernelCallback g_IntrCallbacks[];
+extern KernelCallback *g_IntrRpNode;
 extern long g_DmaInterruptState;
 extern u_long g_DmaCallbacks[];
 extern u_long *g_DmaChannelRegs;

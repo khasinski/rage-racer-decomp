@@ -1,6 +1,8 @@
 #include "common.h"
 #include <stdio.h>
 #include "game/menu.h"
+#define GAME_CAR_MODEL_ASSET_TYPE CarEngineSpec
+#include "game/asset_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 
@@ -8,7 +10,6 @@ void DrawEngineSpecLabel(s32 x, s32 y, s32 label) {
     DrawText8x8(x, y, g_EngineSpecLabels[label], 0x78CC);
 }
 
-extern CarEngineSpec *g_CarModelAsset;
 
 
 void DrawCarEngineSpec(s32 slideRaw, s32 brightness) {

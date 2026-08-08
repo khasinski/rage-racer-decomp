@@ -1,10 +1,8 @@
 #include "common.h"
 #include "game/state.h"
+#include "game/input_internal.h"
 
 /* The two live 0..7 selections: standard pad and NeGcon. */
-extern u16 g_PadMappingIndex;
-extern u16 g_NegconMappingIndex;
-
 /* Entry hook for the controller-configuration screen: clears the four screen
  * animation counters and snapshots both button-mapping selections so a cancel
  * can put them back. */

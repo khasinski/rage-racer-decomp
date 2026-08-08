@@ -3,18 +3,8 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-extern long g_SndUpdateLock;
-extern u_short g_SndCurrentVoice;
-extern SpuVoice g_SndVoiceState[];
-extern short g_SndVoiceStateNote[];
-extern short g_SndVoiceStateProg[];
-extern short g_SndVoiceStateTone[];
-extern short g_SndVoiceStateVabId[];
-extern u_short g_SndKeyOffLow;
-extern u_short g_SndKeyOffHigh;
-extern u_short g_SndKeyOnLow;
-extern u_short g_SndKeyOnHigh;
-extern u_short *g_SndSpuRegs;
+#define SND_CURRENT_VOICE_QUALIFIER volatile
+#include "psyq/snd_internal.h"
 
 /* `voice` arrives as the voice index and is reused as its byte offset into
  * the 52-byte g_SndVoiceState* columns; voiceSlot keeps the plain index. */
@@ -35,16 +25,16 @@ long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) {
     if ((u_short)original_voice < 24) {
         index = (short)voice;
         voice = (((index * 3) << 2) + index) << 2;
-        if (*(short *)((u_char *)g_SndVoiceStateVabId + voice) == (short)vab_id &&
-            *(short *)((u_char *)g_SndVoiceStateProg + voice) == (short)program &&
-            *(short *)((u_char *)g_SndVoiceStateTone + voice) == (short)tone &&
-            *(short *)((u_char *)g_SndVoiceStateNote + voice) == (short)note) {
+        if (*(short *)((u_char *)((u_char *)g_SndVoiceState + 22) + voice) == (short)vab_id &&
+            *(short *)((u_char *)((u_char *)g_SndVoiceState + 18) + voice) == (short)program &&
+            *(short *)((u_char *)((u_char *)g_SndVoiceState + 20) + voice) == (short)tone &&
+            *(short *)((u_char *)((u_char *)g_SndVoiceState + 12) + voice) == (short)note) {
             if (*(short *)((u_char *)g_SndVoiceState + voice) == 0xFF) {
                 voiceSlot = original_voice;
                 g_SndVoiceState[voiceSlot].active = 0;
                 g_SndVoiceState[voiceSlot].pitch = 0;
-                g_SndSpuRegs[202] = 0;
-                g_SndSpuRegs[203] = 0;
+                ((u_short *)g_SndSpuRegs)[202] = 0;
+                ((u_short *)g_SndSpuRegs)[203] = 0;
             } else {
                 *(short *)&g_SndCurrentVoice = original_voice;
                 current_voice = g_SndCurrentVoice;

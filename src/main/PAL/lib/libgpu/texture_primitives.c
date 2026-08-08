@@ -2,6 +2,7 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 #include "game/render.h"
+#include "psyq/gpu_internal.h"
 
 long Gpu_LoadTexImageAndGetTPage(void *pixels, long mode, long x, long y, long w, long h, long abr) {
     Rect rect;

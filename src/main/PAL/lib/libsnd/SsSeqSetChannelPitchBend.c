@@ -1,7 +1,7 @@
 #include "psyq/snd.h"
 
 
-extern SeqStruct *g_SndSeqTable[];
+#include "psyq/snd_internal.h"
 
 void SsSeqSetChannelPitchBend(long seq, long sep, long pitch, long amount) {
     long seq_raw = seq;

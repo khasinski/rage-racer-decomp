@@ -2,11 +2,17 @@
 #include <stdio.h>
 #include "game/audio.h"
 #include "game/car.h"
+#include "game/player_car_internal.h"
 #include "game/cd.h"
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/random.h"
+#include "game/records_internal.h"
 #include "game/render.h"
+#include "game/render_internal.h"
+#include "game/save_internal.h"
+#define GAME_REF_SECTOR_DECL extern s32 g_RefSectorTimes
+#include "game/race_internal.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
 #include "game/state.h"
@@ -18,37 +24,6 @@
  * address into a and reschedules around it, which shifts the
  * allocation of the whole surrounding block. Three symbols keep three separate
  * %hi/%lo pairs, which is what the retail code has. */
-extern s32 g_RefSectorTimes;
-
-extern u8 g_PlayerCar[];
-
-extern u8 *g_CourseProgress;
-
-extern s16 g_PlayerLap;
-
-extern s32 g_BestTotalTimes[][4][2];
-
-extern s32 g_BestLapTimes[][4][2];
-
-extern s32 g_BestSectorTimes[][4][3];
-
-extern s32 g_RaceTotalTime;
-
-extern s32 g_RankingTimes[][4][20];
-
-
-
-extern s32 g_CameraViewMode;
-
-extern u8 *g_CamRow;
-
-
-
-extern u8 g_SceneLightMatrix[];
-
-extern s32 g_PlayerTrackProgress;
-
-extern u8 g_PadType;
 
 /*
  * Optional trace for the state returned by the lap/finish update. A null
@@ -346,7 +321,7 @@ void EnterRaceScene(void) {
     } else {
         g_LapCount = 3;
     }
-    base = g_PlayerCar;
+    base = (u8 *)&g_PlayerCar;
     InitPlayerCar(base);
     SetTrackTexturePageNow(g_PlayerTrackSection);
     BuildStartingGrid();
@@ -476,7 +451,7 @@ void UpdateRaceScene(void) {
                     PlaySoundCue(0x3D);
                 }
             }
-            SeedFinishCamera(g_PlayerCar);
+            SeedFinishCamera(&g_PlayerCar);
             StartCdVolumeFade(8);
         } else if (g_RaceOptionCursor == 1 && g_GrandPrixMode == 0) {
             ExitRaceScene(0xB);
@@ -565,7 +540,7 @@ void UpdateRaceScene(void) {
             }
         }
 
-        UpdateCamera(g_CameraViewMode, g_PlayerCar);
+        UpdateCamera(g_CameraViewMode, &g_PlayerCar);
         RequestTrackTexturePage(g_PlayerTrackSection);
         if (g_GrandPrixMode != 0) {
             DrawCars();
@@ -581,7 +556,7 @@ void UpdateRaceScene(void) {
             if (g_GrandPrixClass != 5) {
                 DrawStartGridScenery(g_SceneTimer);
             }
-            SetLightMatrix(g_SceneLightMatrix);
+            SetLightMatrix(&g_SceneLightMatrix);
             DrawScriptedScenery(0);
             DrawRearViewMirror(g_SceneTimer);
         }
@@ -606,11 +581,11 @@ void UpdateRaceScene(void) {
                 goto update_race;
             }
         } else if (g_RacePhase == 0) {
-            RunRaceIntroCamera((struct Obj *)g_PlayerCar, frameValue);
+            RunRaceIntroCamera((struct Obj *)&g_PlayerCar, frameValue);
         } else {
 update_race:
             if ((g_RacePhase == 1) && ((u32)g_SceneTimer >= 0xD3)) {
-                BeginCarStandingStart(g_PlayerCar, frameValue);
+                BeginCarStandingStart((u8 *)&g_PlayerCar, frameValue);
                 StartCdAudio();
                 g_RacePhase = 2;
                 g_PauseDebounce = 0x1E;
@@ -623,8 +598,8 @@ update_race:
         }
 
         if (g_RacePhase < 5) {
-            option = UpdateLapAndFinish((void *)g_PlayerCar, g_GrandPrixMode);
-            UpdateSplitTimes(g_PlayerCar, g_GrandPrixMode, option);
+            option = UpdateLapAndFinish((void *)&g_PlayerCar, g_GrandPrixMode);
+            UpdateSplitTimes(&g_PlayerCar, g_GrandPrixMode, option);
             if (option < 2) {
                 DrawLapTimes();
             }
@@ -641,7 +616,7 @@ update_race:
                 ForceAllEffectVoicesEnabled(0);
                 g_RacePhase = 5;
                 g_RaceFadeTimer = 0;
-                SeedFinishCamera(g_PlayerCar);
+                SeedFinishCamera(&g_PlayerCar);
                 StartCdVolumeFade(8);
             }
         }
@@ -657,7 +632,7 @@ update_race:
         }
 
         if (g_RacePhase > 0) {
-            UpdatePlayerCar((struct Car *)g_PlayerCar);
+            UpdatePlayerCar((struct Car *)&g_PlayerCar);
         } else if (g_RacePhase == 0) {
             UpdateLoadedAudioVoices(0, 0);
         }
@@ -680,9 +655,9 @@ update_race:
         }
 
         if (g_RacePhase == 5) {
-            UpdateFinishCamera(g_PlayerCar);
+            UpdateFinishCamera(&g_PlayerCar);
         } else if (g_RacePhase > 0) {
-            UpdateCamera(g_CameraViewMode, g_PlayerCar);
+            UpdateCamera(g_CameraViewMode, &g_PlayerCar);
         }
 
         if (g_RacePhase != 5) {
@@ -723,7 +698,7 @@ update_race:
             if (g_GrandPrixClass != 5) {
                 DrawStartGridScenery(g_SceneTimer);
             }
-            SetLightMatrix(g_SceneLightMatrix);
+            SetLightMatrix(&g_SceneLightMatrix);
             DrawScriptedScenery(1);
             DrawRearViewMirror(g_SceneTimer);
         }

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "psyq/kernel.h"
+#include "psyq/press_internal.h"
 
 void DecDCTout(void) {
     MDEC_out();

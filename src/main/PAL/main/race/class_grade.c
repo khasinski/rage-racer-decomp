@@ -1,6 +1,6 @@
 #include "common.h"
+#include "game/save_internal.h"
 
-extern u8 *g_CourseProgress;
 
 s32 ComputeClassGrade(void) {
     u8 *ptr;

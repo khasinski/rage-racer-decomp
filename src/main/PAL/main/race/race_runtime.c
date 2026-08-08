@@ -1,9 +1,12 @@
 #include "common.h"
+#include "game/track_internal.h"
 #include "game/prim.h"
 #include "game/audio.h"
 #include "game/car.h"
+#include "game/player_car_internal.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/vector.h"
@@ -11,7 +14,6 @@
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
-extern s32 g_PlayerCar;
 
 /*
  * Waypoint proximity test: returns 1 if the waypoint's (x,y) lies within a
@@ -28,13 +30,9 @@ extern s32 g_PlayerCar;
  * offsets are match-load-bearing.
  */
 
-extern u32 g_ScratchRenderMode;
-
 /* Counts how many of the 6 waypoint slots are active (active != 0). */
 
-extern s16 g_PlayerLap;
 
-extern s32 g_PlayerTrackProgress;
 
 
 
@@ -56,10 +54,6 @@ extern s32 g_PlayerTrackProgress;
  */
 
 
-extern u8 *g_TrackPoints;
-extern s32 g_TrackLength;
-extern u8 *g_TrackEventData;
-
 
 
 
@@ -73,7 +67,7 @@ extern u8 *g_TrackEventData;
  */
 
 s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) {
-    s32 center_x = g_PlayerCar;
+    s32 center_x = g_PlayerCar.x;
     s32 x = waypoint->x;
     s32 ret = 0;
 
@@ -296,7 +290,7 @@ void DrawLapNumber(void) {
 
 void DrawEndingScreen(void) {
     s16 *p;
-    register u32 a asm("$5");
+    u32 sceneTimer;
     s32 x = 0;
 
     g_SceneTimer = g_SceneTimer + 1;
@@ -342,17 +336,16 @@ void DrawEndingScreen(void) {
     }
 
     switch (0) { default:
-    a = g_SceneTimer;
+    sceneTimer = g_SceneTimer;
     g_AnimTimer = g_AnimTimer + 1;
-    if (a >= 90) {
-        asm volatile("" :: "r"(a));
+    if (sceneTimer >= 90) {
         if (g_RacePhase == 0) {
             g_RacePhase = 1;
             break;
         }
     } else {
         if (g_RacePhase == 0) {
-            RunRaceIntroCamera((struct Obj *)&g_PlayerCar, a);
+            RunRaceIntroCamera((struct Obj *)&g_PlayerCar, sceneTimer);
             g_EndingSceneLatch = 0;
             g_WaypointsCollected = 0;
             break;
@@ -360,7 +353,7 @@ void DrawEndingScreen(void) {
     }
     if (g_RacePhase == 1) {
         if ((u32)g_SceneTimer >= 211) {
-            BeginCarStandingStart((u8 *)&g_PlayerCar, a);
+            BeginCarStandingStart((u8 *)&g_PlayerCar, sceneTimer);
             g_RacePhase = 2;
         }
     }
@@ -518,7 +511,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         idx = ent->trackPointIndex;
         acc = 0xC00;
         levShift = lev << 11;
-        angle = *(s16 *)(g_TrackPoints + idx * 24 + 0xA);
+        angle = *(s16 *)((u8 *)g_TrackPoints + idx * 24 + 0xA);
         acc -= levShift;
         ent->field_24 = (acc - angle) & 0xFFF;
 

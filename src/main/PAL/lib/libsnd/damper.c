@@ -1,7 +1,6 @@
 #include "psyq/snd.h"
 
-extern short g_SndDamper;
-extern volatile long g_SndUpdateLock;
+#include "psyq/snd_internal.h"
 
 void SpuVmDamperOff(void) {
     g_SndDamper = 0;

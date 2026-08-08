@@ -1,14 +1,15 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/car.h"
+#define GAME_CAR_MODEL_ASSET_TYPE u8
+#include "game/asset_internal.h"
 #include "game/menu.h"
+#define GAME_MENU_SCRIPT_TYPE u8
+#include "game/menu_scripts_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 
-extern u8 *g_CarModelAsset;
-
-extern u8 *g_CarShopModalScript;
 
 
 void UpdateCarShopScreen(void) {
@@ -327,7 +328,6 @@ u32 DrawEngineerShopScreen(s32 step) {
     return g_EngineSpecStep;
 }
 
-extern u8 *g_EngineerShopModalScript;
 
 void UpdateEngineerShopScreen(void) {
     void *ot;

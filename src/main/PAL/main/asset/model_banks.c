@@ -1,20 +1,17 @@
 #include "common.h"
 #include "game/asset.h"
+#include "game/asset_internal.h"
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-extern u8 g_MainVisibleCellMask;
-extern u8 g_MainVisibleCellList;
-extern void *g_CarModelAsset;
 /* Kept local: this unit only stores an address into them, while track/ and
  * render/ read them as u32[] rows, Vec4[] entries and plain s32, four
  * incompatible element types across seven files. */
-extern void *g_VisibleCellMask;
-extern void *g_VisibleCellList;
 
 s32 GetCarAssetIndex(s32 model, s32 grade) {
     return g_CarModelBaseIndex[model] + grade;
@@ -36,11 +33,11 @@ void InitRenderState(s32 otShift) {
     SCRATCH_GT4_CODE = POLY_GT4_CODE;
     SCRATCH_CLIP_X1 = SCREEN_WIDTH;
     SCRATCH_CLIP_Y1 = SCREEN_HEIGHT;
-    g_VisibleCellMask = &g_MainVisibleCellMask;
+    g_VisibleCellMask = g_MainVisibleCellMask;
     SCRATCH_OT_SHIFT = otShift;
     SCRATCH_CLIP_X0 = 0;
     SCRATCH_CLIP_Y0 = 0;
-    g_VisibleCellList = &g_MainVisibleCellList;
+    g_VisibleCellList = g_MainVisibleCellList;
     SCRATCH_MIRROR = g_MirrorMode;
 }
 

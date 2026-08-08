@@ -4,8 +4,6 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-extern GameSpriteDesc g_TachoNeedleSprite;
-
 void BuildTachoNeedleQuad(void) {
     u8 *data = (u8 *)g_CarSpec;
     u8 *prim0 = g_TachoNeedlePrim0;

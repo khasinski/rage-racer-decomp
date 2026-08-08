@@ -1,14 +1,13 @@
 #include "common.h"
 #include "game/state.h"
 #include "game/asset.h"
+#include "game/asset_internal.h"
 #include "game/car.h"
 #include "game/audio.h"
 
 /* g_CarModelAsset really is per-screen typed; see game/asset.h.
  * g_TeamLogoSampleData's other reader, menu/team_logo.c, walks it through a
  * TeamLogoSample struct private to that file. */
-extern GameCarModelAsset *g_CarModelAsset;
-extern s32 g_TeamLogoSampleData;
 
 s32 RequestCarSelectAssets(void) {
     if (g_AssetLoadState != 0) {
@@ -60,7 +59,7 @@ void LoadCarSelectAssets(void) {
                 firstOffset = header->offsets[0];
                 secondOffset = (s32)((u8 *)header + blockOffset);
                 header = (GameSceneAssetHeader *)((u8 *)header + firstOffset);
-                g_TeamLogoSampleData = (s32)header;
+                g_TeamLogoSampleData = (TeamLogoSample *)header;
                 g_AssetBlockPtr = (u8 *)secondOffset;
                 RegisterCourseModels((s32 *)g_AssetBlockPtr);
 
@@ -83,13 +82,13 @@ void LoadCarSelectAssets(void) {
                 SetCarModelSlot(carModelBase, 0);
                 SelectCarModelSlot(0);
 
-                model = g_CarModelAsset;
+                model = (GameCarModelAsset *)g_CarModelAsset;
                 relOffset = model->modelDataOffset;
                 modelPtr = (s32)(carModelBase + relOffset);
                 model->modelDataOffset = modelPtr;
                 RegisterModelBank((s32 *)modelPtr, 0);
 
-                model = g_CarModelAsset;
+                model = (GameCarModelAsset *)g_CarModelAsset;
                 relOffset = model->imageDataOffset;
                 modelPtr = (s32)(carModelBase + relOffset);
                 model->imageDataOffset = modelPtr;
@@ -97,8 +96,8 @@ void LoadCarSelectAssets(void) {
 
                 carIndex = g_PlayerCarIndex;
                 if (carIndex < 10) {
-                    ApplyBodyColor1(g_CarTable[carIndex].paintColor1, g_CarModelAsset->imageDataOffset);
-                    ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2, g_CarModelAsset->imageDataOffset);
+                    ApplyBodyColor1(g_CarTable[carIndex].paintColor1, ((GameCarModelAsset *)g_CarModelAsset)->imageDataOffset);
+                    ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2, ((GameCarModelAsset *)g_CarModelAsset)->imageDataOffset);
                 }
 
                 g_CarModelSlot = 0;

@@ -1,0 +1,18 @@
+#ifndef GAME_FRONTEND_INTERNAL_H
+#define GAME_FRONTEND_INTERNAL_H
+
+#include "common.h"
+
+#ifndef GAME_FRONTEND_IDLE_TYPE
+#define GAME_FRONTEND_IDLE_TYPE s32
+#endif
+extern GAME_FRONTEND_IDLE_TYPE g_FrontendIdleTimer;
+#undef GAME_FRONTEND_IDLE_TYPE
+
+#ifndef GAME_DISP_ENV1_X_DECL
+#define GAME_DISP_ENV1_X_DECL extern u16 g_DispEnv1X
+#endif
+GAME_DISP_ENV1_X_DECL;
+#undef GAME_DISP_ENV1_X_DECL
+
+#endif

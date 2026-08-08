@@ -1,8 +1,8 @@
 #include "psyq/spu.h"
+#include "psyq/spu_internal.h"
 
 
 
-extern SpuCommonRegs *g_SpuRegBase;
 
 void SpuSetCommonAttr(SpuCommonAttr *attr) {
     u_short mainModeLeft;
@@ -66,7 +66,7 @@ void SpuSetCommonAttr(SpuCommonAttr *attr) {
             }
         }
         totalLeft &= 0x7FFF;
-        g_SpuRegBase->mainVol.left = totalLeft | mainModeLeft;
+        g_SpuRegBase->regs.mainVol.left = totalLeft | mainModeLeft;
     }
 
     if (setAll != 0 || mask & 2) {
@@ -117,70 +117,70 @@ void SpuSetCommonAttr(SpuCommonAttr *attr) {
             }
         }
         totalRight &= 0x7FFF;
-        g_SpuRegBase->mainVol.right = totalRight | mainModeRight;
+        g_SpuRegBase->regs.mainVol.right = totalRight | mainModeRight;
     }
 
     if (setAll != 0 || mask & 0x40) {
-        g_SpuRegBase->cdVol.left = attr->cd.volume.left;
+        g_SpuRegBase->regs.cdVol.left = attr->cd.volume.left;
     }
 
     if (setAll != 0 || mask & 0x80) {
-        g_SpuRegBase->cdVol.right = attr->cd.volume.right;
+        g_SpuRegBase->regs.cdVol.right = attr->cd.volume.right;
     }
 
     if (setAll != 0 || mask & 0x100) {
         if (attr->cd.reverb == 0) {
-            control = g_SpuRegBase->spuCnt;
+            control = g_SpuRegBase->regs.spuCnt;
             control &= ~4;
-            g_SpuRegBase->spuCnt = control;
+            g_SpuRegBase->regs.spuCnt = control;
         } else {
-            control = g_SpuRegBase->spuCnt;
+            control = g_SpuRegBase->regs.spuCnt;
             control |= 4;
-            g_SpuRegBase->spuCnt = control;
+            g_SpuRegBase->regs.spuCnt = control;
         }
     }
 
     if (setAll != 0 || mask & 0x200) {
         if (attr->cd.mix == 0) {
-            control = g_SpuRegBase->spuCnt;
+            control = g_SpuRegBase->regs.spuCnt;
             control &= ~1;
-            g_SpuRegBase->spuCnt = control;
+            g_SpuRegBase->regs.spuCnt = control;
         } else {
-            control = g_SpuRegBase->spuCnt;
+            control = g_SpuRegBase->regs.spuCnt;
             control |= 1;
-            g_SpuRegBase->spuCnt = control;
+            g_SpuRegBase->regs.spuCnt = control;
         }
     }
 
     if (setAll != 0 || mask & 0x400) {
-        g_SpuRegBase->extVol.left = attr->ext.volume.left;
+        g_SpuRegBase->regs.extVol.left = attr->ext.volume.left;
     }
 
     if (setAll != 0 || mask & 0x800) {
-        g_SpuRegBase->extVol.right = attr->ext.volume.right;
+        g_SpuRegBase->regs.extVol.right = attr->ext.volume.right;
     }
 
     if (setAll != 0 || mask & 0x1000) {
         if (attr->ext.reverb == 0) {
-            control = g_SpuRegBase->spuCnt;
+            control = g_SpuRegBase->regs.spuCnt;
             control &= ~8;
-            g_SpuRegBase->spuCnt = control;
+            g_SpuRegBase->regs.spuCnt = control;
         } else {
-            control = g_SpuRegBase->spuCnt;
+            control = g_SpuRegBase->regs.spuCnt;
             control |= 8;
-            g_SpuRegBase->spuCnt = control;
+            g_SpuRegBase->regs.spuCnt = control;
         }
     }
 
     if (setAll != 0 || mask & 0x2000) {
         if (attr->ext.mix == 0) {
-            control = g_SpuRegBase->spuCnt;
+            control = g_SpuRegBase->regs.spuCnt;
             control &= ~2;
-            g_SpuRegBase->spuCnt = control;
+            g_SpuRegBase->regs.spuCnt = control;
         } else {
-            control = g_SpuRegBase->spuCnt;
+            control = g_SpuRegBase->regs.spuCnt;
             control |= 2;
-            g_SpuRegBase->spuCnt = control;
+            g_SpuRegBase->regs.spuCnt = control;
         }
     }
 }

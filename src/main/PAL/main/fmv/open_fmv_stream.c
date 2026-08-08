@@ -3,8 +3,12 @@
 #include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/render.h"
+#define GAME_FMV_STRIP_INDEX_QUALIFIER volatile
+#include "game/fmv_decode_internal.h"
+#define GAME_FMV_STATE_QUALIFIER volatile
+#include "game/fmv_internal.h"
+#include "psyq/press_internal.h"
 
-extern s32 g_FmvRingBuffer;
 void OpenFmvStream(s32 callback) {
     DecDCTReset(0);
     DecDCToutCallback(callback);
@@ -12,11 +16,6 @@ void OpenFmvStream(s32 callback) {
     StSetStream(1, 1, -1, 0, 0);
     StartStreamRead((s32)g_StreamLoc);
 }
-
-extern Rect g_FmvStripRects[];
-extern volatile s32 g_FmvStripIndex;
-extern s32 g_StInterruptPending;
-
 
 void UploadFmvSlice(void) {
     Rect rect;

@@ -1,13 +1,7 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern short g_SndVabProgMax;
-extern u_char *g_SndCurrentToneTable;
-extern volatile u_char *g_SndCurrentVabHeader;
-extern u_char *g_SndCurrentProgTable;
-extern u_char *g_SndVabHeader[];
-extern u_char *g_SndVabProgTable[];
-extern u_char *g_SndVabToneTable[];
+#include "psyq/snd_internal.h"
 
 long SsUtGetProgAtr(long vab_id, long program, ProgAtr *out) {
     long chan = (short)vab_id;
@@ -20,11 +14,11 @@ long SsUtGetProgAtr(long vab_id, long program, ProgAtr *out) {
         offset = index * 0x10;
 
         out->tones = *(u_char *)(offset + (long)g_SndCurrentProgTable);
-        out->mvol = g_SndCurrentProgTable[offset + 1];
-        out->prior = g_SndCurrentProgTable[offset + 2];
-        out->mode = g_SndCurrentProgTable[offset + 3];
-        out->mpan = g_SndCurrentProgTable[offset + 4];
-        offset = (long)(g_SndCurrentProgTable + offset);
+        out->mvol = ((u_char *)g_SndCurrentProgTable)[offset + 1];
+        out->prior = ((u_char *)g_SndCurrentProgTable)[offset + 2];
+        out->mode = ((u_char *)g_SndCurrentProgTable)[offset + 3];
+        out->mpan = ((u_char *)g_SndCurrentProgTable)[offset + 4];
+        offset = (long)((u_char *)g_SndCurrentProgTable + offset);
         out->attr = *(u_short *)(offset + 6);
     } else {
         return -1;
@@ -57,16 +51,16 @@ long SpuVmVSetUp(long vab_id, long program) {
 
     }
     {
-        u_char *meta = g_SndVabHeader[chan];
-        register u_char *base asm("$4") = g_SndVabProgTable[chan];
+        u_char *meta = (u_char *)g_SndVabHeader[chan];
+        register u_char *base asm("$4") = (u_char *)g_SndVabProgTable[chan];
 
-        data = g_SndVabToneTable[chan];
+        data = (u_char *)g_SndVabToneTable[chan];
         g_SndCurrentVabId = raw0;
         g_SndCurrentProg = raw1;
-        g_SndCurrentToneTable = data;
+        g_SndCurrentToneTable = (VagAtr *)data;
         entry = (u_char *)((index << 4) + (long)base);
-        g_SndCurrentVabHeader = meta;
-        g_SndCurrentProgTable = base;
+        g_SndCurrentVabHeader = (VabHdr *)meta;
+        g_SndCurrentProgTable = (ProgAtr *)base;
         g_SndCurrentProgActual = entry[8];
     }
     return 0;
@@ -83,19 +77,19 @@ long SsUtGetVagAtr(long vab_id, long program, long tone, VagAtr *out) {
         offset = (long)(short)(tone + (g_SndCurrentProgActual << 4)) << 5;
 
         out->prior = *(u_char *)(offset + (long)g_SndCurrentToneTable);
-        out->mode = g_SndCurrentToneTable[offset + 1];
-        out->vol = g_SndCurrentToneTable[offset + 2];
-        out->pan = g_SndCurrentToneTable[offset + 3];
-        out->center = g_SndCurrentToneTable[offset + 4];
-        out->shift = g_SndCurrentToneTable[offset + 5];
-        out->max = g_SndCurrentToneTable[offset + 7];
-        out->min = g_SndCurrentToneTable[offset + 6];
-        out->vibW = g_SndCurrentToneTable[offset + 8];
-        out->vibT = g_SndCurrentToneTable[offset + 9];
-        out->porW = g_SndCurrentToneTable[offset + 10];
-        out->porT = g_SndCurrentToneTable[offset + 11];
-        out->pbmin = g_SndCurrentToneTable[offset + 12];
-        out->pbmax = g_SndCurrentToneTable[offset + 13];
+        out->mode = ((u_char *)g_SndCurrentToneTable)[offset + 1];
+        out->vol = ((u_char *)g_SndCurrentToneTable)[offset + 2];
+        out->pan = ((u_char *)g_SndCurrentToneTable)[offset + 3];
+        out->center = ((u_char *)g_SndCurrentToneTable)[offset + 4];
+        out->shift = ((u_char *)g_SndCurrentToneTable)[offset + 5];
+        out->max = ((u_char *)g_SndCurrentToneTable)[offset + 7];
+        out->min = ((u_char *)g_SndCurrentToneTable)[offset + 6];
+        out->vibW = ((u_char *)g_SndCurrentToneTable)[offset + 8];
+        out->vibT = ((u_char *)g_SndCurrentToneTable)[offset + 9];
+        out->porW = ((u_char *)g_SndCurrentToneTable)[offset + 10];
+        out->porT = ((u_char *)g_SndCurrentToneTable)[offset + 11];
+        out->pbmin = ((u_char *)g_SndCurrentToneTable)[offset + 12];
+        out->pbmax = ((u_char *)g_SndCurrentToneTable)[offset + 13];
 
         offset = offset + (long)g_SndCurrentToneTable;
         out->adsr1 = *(u_short *)(offset + 0x10);

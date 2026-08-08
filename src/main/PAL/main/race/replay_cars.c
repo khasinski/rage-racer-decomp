@@ -5,8 +5,9 @@
 #include "game/track.h"
 #include "game/car.h"
 #include "game/audio.h"
-
-extern s32 g_PlayerCar;
+#include "game/save_internal.h"
+#include "game/race_internal.h"
+#include "game/player_car_internal.h"
 
 
 
@@ -20,13 +21,6 @@ typedef struct TrackZone {
     s16 value;
 } TrackZone;
 
-extern s16 g_PlayerLap;
-
-extern s32 g_RefSectorTimes[];
-
-extern s32 g_BestSectorTimes[][4][3];
-
-extern s32 g_BestTotalTimes[][4][2];
 
 
 void SeedReplayCars(void) {

@@ -1,11 +1,14 @@
 #include "common.h"
 #include "game/race.h"
+#define GAME_VISIBLE_CELL_LIST_DECL extern s32 g_VisibleCellList
+#include "game/render_internal.h"
+#include "game/track_internal.h"
+#include "game/terrain_internal.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
-extern s32 g_VisibleCellList;
 
 void DrawTerrainCells(void) {
     BuildVisibleCells(-12288, 0x14000);
@@ -19,75 +22,6 @@ void DrawTerrainCellsWide(void) {
     SubmitTerrainCells((void *)SCRATCHPAD_ADDR, (void *)g_VisibleCellList, 0x40);
 }
 
-extern s32 g_SkyRowBase;
-typedef union
-{
-  struct
-  {
-    u8 u;
-    u8 v;
-  } bytes;
-  u16 packed;
-} SkyUV;
-typedef struct
-{
-  SkyUV corner[4];
-} SkyTileUV;
-typedef struct
-{
-  u8 *packetCursor;
-  u32 *orderingTable;
-  s32 cameraX;
-  s32 cameraY;
-  s32 cameraZ;
-  s32 pad14;
-  s32 pitch;
-  s32 yaw;
-  s32 roll;
-  s32 pad24[17];
-  s32 mirrorFlag;
-} SkyRenderScratchpad;
-typedef struct
-{
-  s16 xMinTop;
-  s16 xMaxTop;
-  s16 xMinBottom;
-  s16 xMaxBottom;
-  s16 yEdge0;
-  s16 yEdge1;
-  s16 yEdge2;
-  s16 yEdge3;
-} SkyClipBounds;
-extern SkyTileUV g_SkyTileUV[];
-typedef struct
-{
-  u8 r;
-  u8 g;
-  u8 b;
-  u8 cd;
-} SkyCVec;
-typedef union
-{
-  u32 rgb;
-  struct
-  {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 unused;
-  } bytes;
-} GameEnvColor;
-typedef struct
-{
-  GameEnvColor cur;
-  GameEnvColor from;
-  GameEnvColor to;
-} GameEnvColorSlot;
-extern GameEnvColor g_EnvColor1Red;
-extern GameEnvColor g_EnvColor2Red;
-extern GameEnvColor g_EnvColor4Red;
-extern GameEnvColor g_EnvColor5Red;
-extern GameEnvColor g_EnvColor7Red;
 inline static s32 DivideSigned32(s32 value)
 {
   s32 adjustedValue = value;

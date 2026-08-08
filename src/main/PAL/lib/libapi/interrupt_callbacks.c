@@ -3,9 +3,7 @@
 #include "common.h"
 #include "psyq/kernel.h"
 
-typedef void (*Callback)(void);
-
-extern Callback g_IntrCallbacks[];
+typedef KernelCallback Callback;
 
 Callback SetKernelInterruptCallback(long slot, Callback handler) {
     long index;

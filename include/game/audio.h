@@ -3,6 +3,7 @@
 
 #include "common.h"
 
+
 /*
  * Sound voice work buffer, two regions keyed by hardware voice (0..23).
  * g_SndVoiceRegs at 0x8009DF20, stride 0x10, is a straight shadow of the SPU
@@ -15,7 +16,6 @@
  * the mislabelled SpuVmKeyOnCore prototype whose 2nd/3rd arguments are really
  * the left and right volumes.)
  */
-extern volatile u8 g_SndVoiceFlags[];
 
 /*
  * The libsnd VAB ids of the loaded banks, one per bank slot.

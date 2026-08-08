@@ -4,20 +4,8 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
+#include "psyq/cd_internal.h"
 
-extern char *g_CdCommandNames[];
-extern char *g_CdIntrNames[];
-extern CdCallback g_CdSyncCallback;
-extern CdCallback g_CdReadyCallback;
-extern volatile CdIntr g_CdSyncStatus;
-extern u_char g_CdSyncResult[];
-extern u_char g_CdReadyResult[];
-extern u_char g_CdDataEndResult[];
-extern long g_CdTimeoutDeadline;
-extern char *g_CdTimeoutName;
-extern char g_MsgCdTimeout[];
-extern char g_FmtCdTimeoutState[];
-extern char g_MsgCdReadyName[];
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
     long count;

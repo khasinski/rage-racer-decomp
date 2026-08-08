@@ -2,53 +2,13 @@
 
 #include "common.h"
 #include "psyq/snd_types.h"
+#include "psyq/snd_internal.h"
 #define SpuVmSeKeyOn SpuVmSeKeyOnDeclaration
 #define SpuVmSeKeyOff SpuVmSeKeyOffDeclaration
 #include "psyq/snd.h"
 #undef SpuVmSeKeyOn
 #undef SpuVmSeKeyOff
 
-
-/* Not SvmCurrentAttr from psyq/snd_types.h, though the layout is identical:
- * this TU loads seq_sep, vag and voice signed, and folding it onto the
- * shared u_short spelling turns lh into lhu and stops matching. */
-typedef struct SvmCurrentAttrKeyOn {
-    u_char tone_count;
-    u_char vab_id;
-    u_char note;
-    u_char unk3;
-    u_char volume;
-    u_char pan;
-    u_char program;
-    u_char program_index;
-    u_char unk8;
-    u_char unk9;
-    u_char master_volume;
-    u_char master_pan;
-    u_char tone;
-    u_char tone_volume;
-    u_char tone_pan;
-    u_char priority;
-    u_char center;
-    u_char shift;
-    u_char min;
-    u_char max;
-    u_char mode;
-    u_char pad15;
-    short seq_sep;
-    short vag;
-    short voice;
-    short register_offset;
-    short tone_index;
-} SvmCurrentAttrKeyOn;
-
-extern SeqStruct *g_SndSeqTable[];
-extern ProgAtr *g_SndCurrentProgTable;
-extern VabHdr *g_SndCurrentVabHeader;
-extern VagAtr *g_SndCurrentToneTable;
-extern u_char g_SndVoiceCount;
-extern SvmCurrentAttrKeyOn g_SndCurrentAttr;
-extern SpuVoice g_SndVoiceState[];
 
 static inline u_char func_80076350_select_tones(
     u_char *tone_indices, u_char *vag_indices) {
@@ -57,7 +17,7 @@ static inline u_char func_80076350_select_tones(
     VagAtr *attr;
 
     count = 0;
-    for (tone = 0; tone < g_SndCurrentAttr.tone_count; tone++) {
+    for (tone = 0; tone < g_SndCurrentAttr.tones; tone++) {
         attr =
             &g_SndCurrentToneTable[(g_SndCurrentAttr.program_index * 0x10) + tone];
         if (attr->min > g_SndCurrentAttr.note ||
@@ -92,7 +52,7 @@ long SpuVmSeKeyOn(
     }
     g_SndCurrentAttr.seq_sep = seq_sep;
     g_SndCurrentAttr.note = note;
-    g_SndCurrentAttr.unk3 = 0;
+    g_SndCurrentAttr.fine = 0;
     if (seq_sep == 0x21) {
         g_SndCurrentAttr.volume = volume;
     } else {
@@ -103,7 +63,7 @@ long SpuVmSeKeyOn(
     g_SndCurrentAttr.pan = pan;
     g_SndCurrentAttr.master_volume = g_SndCurrentProgTable[program].mvol;
     g_SndCurrentAttr.master_pan = g_SndCurrentProgTable[program].mpan;
-    g_SndCurrentAttr.tone_count = g_SndCurrentProgTable[program].tones;
+    g_SndCurrentAttr.tones = g_SndCurrentProgTable[program].tones;
     if (g_SndCurrentAttr.program_index >= g_SndCurrentVabHeader->ps) {
         return -1;
     }

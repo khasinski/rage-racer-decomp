@@ -2,16 +2,14 @@
 #include "game/prim.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#include "game/menu_internal.h"
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 
-extern s32 g_ScreenOffsetX;
-extern s32 g_ScreenOffsetY;
-extern ScoreRecord g_ClassRecords[];
-extern ClassRecordSprite g_ClassRecordCellSprites[];
 
 void DrawOptionRootMenu(void) {
     u8 *base = g_DrawBuffer;

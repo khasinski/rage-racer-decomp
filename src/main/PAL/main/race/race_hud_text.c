@@ -1,6 +1,9 @@
 #include "common.h"
 #include "game/prim.h"
 #include "game/race.h"
+#include "game/save_internal.h"
+#define GAME_FRAME_PARITY_TYPE s32
+#include "game/fmv_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
@@ -93,7 +96,6 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
 /* Which of the two frame buffers is being drawn, 0 or 1; the main loop sets
  * it beside g_DrawBuffer. Here it turns into the 240-line y bias of the
  * drawing-area rect. */
-extern s32 g_FrameParity;
 
 void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     void *oldPacket;
@@ -382,7 +384,6 @@ void DrawStartCountdown(s32 sceneTimer) {
     SCRATCH_PRIM_CURSOR_AS(TILE) = tiles;
 }
 
-extern u8 *g_CourseProgress;
 
 void DrawRaceOptionMenu(s32 cursorRow) {
     register s32 selectedRow = cursorRow;

@@ -1,12 +1,12 @@
 #include "common.h"
+#include "game/car.h"
+#include "game/player_car_internal.h"
 #include "game/track.h"
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/vector.h"
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
-
-extern u8 g_PlayerCar;
 
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the

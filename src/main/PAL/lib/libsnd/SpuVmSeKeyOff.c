@@ -3,14 +3,7 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
-extern SpuVoice g_SndVoiceState[];
-extern u_short g_SndKeyOnLow;
-extern u_short g_SndKeyOnHigh;
-extern u_short *g_SndSpuRegs;
-extern u_char g_SndVoiceCount;
-extern SvmCurrentAttr g_SndCurrentAttr;
-extern u_short g_SndKeyOffLow;
-extern u_short g_SndKeyOffHigh;
+#include "psyq/snd_internal.h"
 
 static inline u_short get_selected_voice(void) {
     return g_SndCurrentAttr.voice;
@@ -33,8 +26,8 @@ long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note) {
             if (g_SndVoiceState[voice].vag == 0xFF) {
                 g_SndVoiceState[voice].active = 0;
                 g_SndVoiceState[voice].pitch = 0;
-                g_SndSpuRegs[202] = 0;
-                g_SndSpuRegs[203] = 0;
+                ((u_short *)g_SndSpuRegs)[202] = 0;
+                ((u_short *)g_SndSpuRegs)[203] = 0;
             } else {
                 g_SndCurrentAttr.voice = voice;
                 selected_voice = get_selected_voice();

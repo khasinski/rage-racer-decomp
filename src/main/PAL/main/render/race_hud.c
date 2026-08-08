@@ -73,7 +73,6 @@ void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
     SetShadeTex(prim, 1);
 }
 
-extern GameRaceRanking g_PlayerLap;
 
 /* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
@@ -93,7 +92,7 @@ void DrawLapTimes(void) {
     s32 framePad[2];
     s32 value;
 
-    list = &g_PlayerLap;
+    list = (GameRaceRanking *)&g_PlayerLap;
     visibleCount = list->count;
     if (visibleCount > g_LapCount) {
         visibleCount = g_LapCount;

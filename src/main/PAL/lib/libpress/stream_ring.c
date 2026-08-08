@@ -1,11 +1,7 @@
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/press_internal.h"
 
-extern long g_StRingSize;
-extern StStrHeader *g_StRingBase;
-extern long g_StEndFrame;
-extern long g_StStreamFlag;
-extern long g_StStartFrame;
 
 u_long StFreeRing(u_long *base) {
     long slot;

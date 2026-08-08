@@ -370,7 +370,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b
     s32 rReg;
     s32 gReg;
     s32 bReg;
-    register u8 alphaReg asm("$16");
+    u8 alphaValue;
     u8 *a0Reg;
     TILE *prim;
     u8 *oldPrim;
@@ -380,7 +380,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b
     rReg = (u8)r;
     gReg = (u8)g;
     bReg = (u8)b;
-    alphaReg = (u8)alpha;
+    alphaValue = (u8)alpha;
     asm("");
     x0Reg = x0;
     y0Reg = y0;
@@ -389,7 +389,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b
 
     SetTile(prim);
     a0Reg = (u8 *)prim;
-    SetSemiTrans(a0Reg, alphaReg != 0xFF);
+    SetSemiTrans(a0Reg, alphaValue != 0xFF);
 
     prim->x0 = x0Reg;
     prim->y0 = y0Reg;
@@ -403,8 +403,8 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b
     prim++;
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
-    if (alphaReg != 0xFF) {
-        prim = (TILE *)QueueDrawModePrim(ot, (u8 *)prim, alphaReg);
+    if (alphaValue != 0xFF) {
+        prim = (TILE *)QueueDrawModePrim(ot, (u8 *)prim, alphaValue);
     }
 
     SCRATCH_PRIM_CURSOR_AS(TILE) = prim;
@@ -419,7 +419,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32
     s32 rReg;
     s32 gReg;
     s32 bReg;
-    register u8 alphaReg asm("$16");
+    u8 alphaValue;
     u8 *a0Reg;
     LINE_F2 *prim;
     u8 *oldPrim;
@@ -429,7 +429,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32
     rReg = (u8)r;
     gReg = (u8)g;
     bReg = (u8)b;
-    alphaReg = (u8)alpha;
+    alphaValue = (u8)alpha;
     asm("");
     x0Reg = x0;
     y0Reg = y0;
@@ -438,7 +438,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32
 
     SetLineF2(prim);
     a0Reg = (u8 *)prim;
-    SetSemiTrans(a0Reg, alphaReg != 0xFF);
+    SetSemiTrans(a0Reg, alphaValue != 0xFF);
 
     prim->x0 = x0Reg;
     prim->y0 = y0Reg;
@@ -452,8 +452,8 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32
     prim++;
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
-    if (alphaReg != 0xFF) {
-        prim = (LINE_F2 *)QueueDrawModePrim(ot, (u8 *)prim, alphaReg);
+    if (alphaValue != 0xFF) {
+        prim = (LINE_F2 *)QueueDrawModePrim(ot, (u8 *)prim, alphaValue);
     }
 
     SCRATCH_PRIM_CURSOR_AS(LINE_F2) = prim;

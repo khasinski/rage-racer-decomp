@@ -2,6 +2,7 @@
 #define GAME_MENU_H
 
 #include "common.h"
+
 #include "game/menu_types.h"
 #include "game/scratchpad.h"
 #include "game/state.h"

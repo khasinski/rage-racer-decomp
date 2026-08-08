@@ -4,40 +4,16 @@
 #include "psyq/snd.h"
 #include "game/audio.h"
 
-extern u_char g_SpuMallocArea[];
+#define SND_CURRENT_VOICE_QUALIFIER volatile
+#define SND_KEY_ON_QUALIFIER volatile
+#define SND_KEY_OFF_QUALIFIER volatile
+#define SND_VOICE_COUNT_QUALIFIER volatile
+#include "psyq/snd_internal.h"
+#include "psyq/spu_internal.h"
 
-extern volatile u_short D_801E4B5C;
-extern volatile u_short g_SndDamper;
-extern volatile u_short g_SndVabOpenCount;
 
-extern u_short g_SndVoiceRegs[];
 
-extern volatile u_char g_SndVoiceCount;
-extern volatile u_short g_SndCurrentVoice;
-extern volatile u_short g_SndKeyOffLow;
-extern volatile u_short g_SndKeyOffHigh;
-extern volatile u_short g_SndKeyOnLow;
-extern volatile u_short g_SndKeyOnHigh;
-extern u_short *g_SndSpuRegs;
 
-extern u_char g_SndVoiceState[];
-extern u_char g_SndVoiceStateVolume[];
-extern u_char g_SndVoiceStatePan[];
-extern u_char g_SndVoiceStateProg[];
-extern u_char g_SndVoiceStateTone[];
-extern u_char g_SndVoiceStateAutoVol[];
-extern u_char g_SndVoiceStateVolStep[];
-extern u_char g_SndVoiceStateVolCounter[];
-extern u_char g_SndVoiceStateVolCounterReload[];
-extern u_char g_SndVoiceStateStartVol[];
-
-extern volatile u_short g_SndReverbOnLow;
-extern volatile u_short g_SndReverbOnHigh;
-extern volatile u_long g_SndReverbAttr;
-extern volatile u_long g_SndReverbAttrMode;
-extern volatile u_char g_SndReservedVoiceCount;
-extern volatile u_short g_SndMonoMode;
-extern volatile u_short g_SndVabProgMax;
 
 void SpuVmInit(long voices) {
     s16 i;
@@ -66,7 +42,7 @@ void SpuVmInit(long voices) {
         SpuInitMalloc(0x20, p);
     }
 
-    for (i = 0; (u_short)i < 192; i++) g_SndVoiceRegs[(u_short)i] = 0;
+    for (i = 0; (u_short)i < 192; i++) ((u_short *)g_SndVoiceRegs)[(u_short)i] = 0;
     for (i = 0; (u_short)i < 24; i++) g_SndVoiceFlags[(u_short)i] = 0;
     g_SndVabOpenCount = 0;
     for (i = 0; (u_short)i < 16; i++) g_SndVabStatus[(u_short)i] = 0;
@@ -85,29 +61,29 @@ void SpuVmInit(long voices) {
                 index = (u_short)i;
                 shifted = index * 8;
                 offset = index * 0x34;
-                eighteen = 0x18;   *(short *)&g_SndVoiceStateAge[offset] = eighteen;
-                eighteen = -1;     *(short *)&g_SndVoiceStateSeqSep[offset] = eighteen;
-                *(short *)&g_SndVoiceState[offset] = ff;
-                g_SndVoiceStateStatus[offset] = 0;
-                *(short *)&g_SndVoiceStatePitch[offset] = 0;
-                *(short *)&g_SndVoiceStateEnvx[offset] = 0;
-                *(short *)&g_SndVoiceStateProgActual[offset] = 0;
-                *(short *)&g_SndVoiceStateProg[offset] = 0;
-                *(short *)&g_SndVoiceStateTone[offset] = ff;
-                *(short *)&g_SndVoiceStateVolume[offset] = 0;
-                eighteen = 0x40;   g_SndVoiceStatePan[offset] = eighteen;
-                *(short *)&g_SndVoiceStateAutoVol[offset] = 0;
-                *(short *)&g_SndVoiceStateVolStep[offset] = 0;
-                *(short *)&g_SndVoiceStateVolCounter[offset] = 0;
-                *(short *)&g_SndVoiceStateVolCounterReload[offset] = 0;
-                *(short *)&g_SndVoiceStateAutoPan[offset] = 0;
-                *(short *)&g_SndVoiceStatePanStep[offset] = 0;
-                *(short *)&g_SndVoiceStatePanCounter[offset] = 0;
-                *(short *)&g_SndVoiceStatePanCounterReload[offset] = 0;
-                *(short *)&g_SndVoiceStateStartPan[offset] = 0;
-                *(short *)&g_SndVoiceStateStartVol[offset] = 0;
+                eighteen = 0x18;   *(short *)&((u_char *)g_SndVoiceState + 2)[offset] = eighteen;
+                eighteen = -1;     *(short *)&((u_char *)g_SndVoiceState + 14)[offset] = eighteen;
+                *(short *)((u_char *)g_SndVoiceState + offset) = ff;
+                ((u_char *)g_SndVoiceState + 27)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 4)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 6)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 16)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 18)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 20)[offset] = ff;
+                *(short *)&((u_char *)g_SndVoiceState + 8)[offset] = 0;
+                eighteen = 0x40;   ((u_char *)g_SndVoiceState + 10)[offset] = eighteen;
+                *(short *)&((u_char *)g_SndVoiceState + 28)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 30)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 32)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 34)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 40)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 42)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 44)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 46)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 48)[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 36)[offset] = 0;
 
-                spu = (volatile u_short *)&g_SndSpuRegs[(u_short)shifted];
+                spu = (volatile u_short *)&((u_short *)g_SndSpuRegs)[(u_short)shifted];
                 spu[3] = 0x200;
                 spu[2] = 0x1000;
                 spu[4] = 0x80FF;
@@ -116,7 +92,7 @@ void SpuVmInit(long voices) {
                 spu[5] = 0x4000;
 
                 g_SndCurrentVoice = i;
-                lowBits = g_SndCurrentVoice;
+                lowBits = (u_short)g_SndCurrentVoice;
                 /* This barrier is load-bearing: it hides the halfword load,
                  * whose known-zero high bits would otherwise let gcc drop the
                  * mask. */
@@ -132,12 +108,12 @@ void SpuVmInit(long voices) {
 
                 lowBits &= 0xFFFF;
                 offset = lowBits * 0x34;
-                g_SndVoiceStateStatus[offset] = 0;
+                ((u_char *)g_SndVoiceState + 27)[offset] = 0;
                 lowBits = g_SndKeyOffLow;
                 highBits = g_SndKeyOffHigh;
                 i++;
-                *(short *)&g_SndVoiceStatePitch[offset] = 0;
-                *(short *)&g_SndVoiceState[offset] = 0;
+                *(short *)&((u_char *)g_SndVoiceState + 4)[offset] = 0;
+                *(short *)((u_char *)g_SndVoiceState + offset) = 0;
 
                 bits = g_SndKeyOnLow;
                 __asm__ volatile("");
@@ -160,15 +136,15 @@ void SpuVmInit(long voices) {
             } while ((u_short)i < cond);
     }
 
-    g_SndReverbAttrDepthLeft = 0x3FFF;
-    g_SndReverbAttrDepthRight = 0x3FFF;
+    g_SndReverbAttr.depth.left = 0x3FFF;
+    g_SndReverbAttr.depth.right = 0x3FFF;
     g_SndKeyOnLow = 0;
     g_SndKeyOnHigh = 0;
     g_SndKeyOffLow = 0;
     g_SndReverbOnLow = 0;
     g_SndReverbOnHigh = 0;
-    g_SndReverbAttr = 0;
-    g_SndReverbAttrMode = 0;
+    g_SndReverbAttr.mask = 0;
+    g_SndReverbAttr.mode = 0;
     g_SndReservedVoiceCount = 0;
     g_SndMonoMode = 0;
     g_SndVabProgMax = 0x80;

@@ -4,11 +4,7 @@
 #include "psyq/snd.h"
 #include "game/audio.h"
 
-extern short g_SndVoiceStateNote[];
-extern u_char g_SndVoiceStateTone[];
-extern volatile u_char g_SndVoiceRegsPitch[];
-extern short g_SndCurrentVoice;
-extern u_char *g_SndCurrentToneTable;
+#include "psyq/snd_internal.h"
 
 void SpuVmPitchBendVoice(long voice, long bend) {
     long voiceCopy = voice;
@@ -29,8 +25,8 @@ void SpuVmPitchBendVoice(long voice, long bend) {
 
     voiceOffset = ((((voiceByte * 3) << 2) + voiceByte) << 2);
     pBd7 = &g_SndCurrentProgActual;
-    *pBd7 = g_SndVoiceStateProgActual[voiceOffset];
-    g_SndCurrentTone = g_SndVoiceStateTone[voiceOffset];
+    *pBd7 = ((u_char *)g_SndVoiceState + 16)[voiceOffset];
+    g_SndCurrentTone = ((u_char *)g_SndVoiceState + 20)[voiceOffset];
     beaVal = voiceCopy & 0xFF;
     g_SndCurrentVoice = beaVal;
 
@@ -41,17 +37,17 @@ void SpuVmPitchBendVoice(long voice, long bend) {
         u_char *e = g_SndCurrentToneTable;
         long prodA = x * e[(seg * 32) + 0xD];
         long qA = prodA / 127;
-        note = *(u_short *)((u_char *)g_SndVoiceStateNote + voiceOffset) + qA;
+        note = *(u_short *)((u_char *)((u_char *)g_SndVoiceState + 12) + voiceOffset) + qA;
         pitch = prodA - qA * 127;
     } else {
         u_char *e = g_SndCurrentToneTable;
         long prodB = x * e[(seg * 32) + 0xC];
         long qB = prodB / 127;
-        note = *(u_short *)((u_char *)g_SndVoiceStateNote + voiceOffset) + qB - 1;
+        note = *(u_short *)((u_char *)((u_char *)g_SndVoiceState + 12) + voiceOffset) + qB - 1;
         pitch = qB + 127;
     }
 
-    *(volatile short *)(g_SndVoiceRegsPitch + (dfIndex << 1)) = SpuVmCalculateTonePitch(note, pitch);
+    *(volatile short *)(((u_char *)g_SndVoiceRegs + 4) + (dfIndex << 1)) = SpuVmCalculateTonePitch(note, pitch);
     g_SndVoiceFlags[voiceCopy & 0xFF] |= 4;
 }
 

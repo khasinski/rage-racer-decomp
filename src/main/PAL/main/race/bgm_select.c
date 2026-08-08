@@ -1,18 +1,16 @@
 #include "common.h"
 #include "game/prim.h"
+#include "game/audio_internal.h"
 #include "game/car.h"
 #include "game/cd.h"
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
-
-extern u32 g_BgmShuffleIndex;
-extern u8 g_BgmShuffleOrder[];
-extern s32 g_CameraViewMode;
 
 void DrawBgmSelectBar(void) {
     u8 *base;

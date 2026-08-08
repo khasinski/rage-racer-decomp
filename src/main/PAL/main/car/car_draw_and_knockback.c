@@ -6,7 +6,6 @@
 #include "game/random.h"
 
 
-extern s32 g_ClosestRivalRank;
 
 /*
  * Updates the car's skid/tilt counter (field_8C / field_8E), clamping it

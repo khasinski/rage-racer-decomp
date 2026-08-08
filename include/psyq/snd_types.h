@@ -190,11 +190,12 @@ typedef struct SvmCurrentAttr {
     u_char max;
     u_char mode;
     u_char pad15;
-    u_short seq_sep;
+    short seq_sep;
     short vag;
-    u_short voice;
-    u_short register_offset;
-    u_short tone_index;
+    short voice;
+    short register_offset;
+    short tone_index;
 } SvmCurrentAttr;
+
 
 #endif

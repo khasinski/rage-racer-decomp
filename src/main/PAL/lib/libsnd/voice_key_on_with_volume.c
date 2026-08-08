@@ -3,9 +3,8 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndVoiceCount;
-extern u_char g_SndCurrentVoice;
-extern u_char *g_SndSpuRegs;
+#define SND_CURRENT_VOICE_TYPE u_char
+#include "psyq/snd_internal.h"
 
 void SpuVmKeyOnWithVol(long note, long fine, long left, long right) {
     long ret;
@@ -26,11 +25,11 @@ void SpuVmClearFinishedVoices(void) {
 
     for (i = 0; i < g_SndVoiceCount; i++) {
         offset = i * 0x34;
-        if (g_SndVoiceStateStatus[offset] == 2) {
+        if (((u_char *)g_SndVoiceState + 27)[offset] == 2) {
             offset = ((u_char)i) * 0x34;
-            g_SndVoiceStateStatus[offset] = 0;
+            ((u_char *)g_SndVoiceState + 27)[offset] = 0;
             ptr = g_SndSpuRegs;
-            *(u_short *)(g_SndVoiceStatePitch + offset) = 0;
+            *(u_short *)(((u_char *)g_SndVoiceState + 4) + offset) = 0;
             *(u_short *)(ptr + 0x194) = 0;
             *(u_short *)(ptr + 0x196) = 0;
         }

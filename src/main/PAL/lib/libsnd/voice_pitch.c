@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char *g_SndCurrentToneTable;
+#include "psyq/snd_internal.h"
 
 u_short SpuVmCalculateCurrentPitch(void) {
     register long delta asm("a0");
@@ -51,7 +51,8 @@ u_short SpuVmCalculateTonePitch(long center, long fine) {
     long table_index;
     long shift;
 
-    entry = g_SndCurrentToneTable + (((g_SndCurrentTone + (g_SndCurrentProgActual << 4)) << 5));
+    entry = (u_char *)g_SndCurrentToneTable +
+            (((g_SndCurrentTone + (g_SndCurrentProgActual << 4)) << 5));
     sum = (u_short)fine + entry[5];
     if (sum < 0) {
         centerHold = center;

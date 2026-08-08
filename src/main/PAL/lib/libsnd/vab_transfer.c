@@ -1,7 +1,7 @@
 #include "psyq/snd.h"
 #include "psyq/spu.h"
 
-extern u_long g_SndVabBodySize[];
+#include "psyq/snd_internal.h"
 
 short SsVabTransBody(u_char *addr, short vab_id) {
     short id;

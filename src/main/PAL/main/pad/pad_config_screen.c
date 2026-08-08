@@ -3,6 +3,8 @@
 #include "game/vector.h"
 #include "game/render.h"
 #include "game/state.h"
+#define GAME_INPUT_MAPPING_TYPE s16
+#include "game/input_internal.h"
 
 
 /*
@@ -81,7 +83,6 @@ u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
     return prim;
 }
 
-extern s16 g_PadMappingIndex;
 
 /* One whole standard-pad diagram for the current selection: the five action
  * labels, then the five callout lines from each label to its button. */
@@ -91,7 +92,6 @@ u8 *DrawPadConfigDiagram(void *ot, u8 *prim) {
         ot, prim, &g_PadConfigLabelRows[g_PadMappingIndex * 5], &g_PadConfigButtonRows[g_PadMappingIndex * 5]);
 }
 
-extern s16 g_NegconMappingIndex;
 
 /* One whole NeGcon diagram for the current selection: labels, then callouts. */
 u8 *DrawNegconConfigDiagram(void *ot, u8 *prim) {

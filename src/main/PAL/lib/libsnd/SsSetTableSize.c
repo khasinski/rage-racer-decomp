@@ -3,7 +3,7 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[];
+#include "psyq/snd_internal.h"
 
 void SsSetTableSize(u_char *table, short seq_count, short sep_count) {
     long i;

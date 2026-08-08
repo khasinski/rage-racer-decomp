@@ -10,13 +10,13 @@
 #include <stdio.h>
 #include "game/state.h"
 #include "game/asset.h"
+#include "game/render_internal.h"
 #include "psyq/cd.h"
 
 
 /* One more type view of 0x8019C9A8: render/, menu/ and race/ read the same
  * word back as u8 *, s32 * and s32 in four other files, so this unit declares
  * the view it wants rather than a shared one (docs/names.md 38a). */
-extern void *g_CamRow;
 
 void SetTrackCameraTable(void *table) {
     g_CamRow = table;

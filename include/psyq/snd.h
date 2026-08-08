@@ -172,17 +172,6 @@ extern u_char g_SndTickUsesVSync;
 extern u_long g_SndVabSpuAddr[];
 extern u_char g_SndVabStatus[];
 extern u_long g_SndVoiceSilenceHistory[];
-extern u_char g_SndVoiceStateAge[];
-extern u_char g_SndVoiceStateAutoPan[];
-extern u_char g_SndVoiceStateEnvx[];
-extern u_char g_SndVoiceStatePanCounter[];
-extern u_char g_SndVoiceStatePanCounterReload[];
-extern u_char g_SndVoiceStatePanStep[];
-extern u_char g_SndVoiceStatePitch[];
-extern u_char g_SndVoiceStateProgActual[];
-extern u_char g_SndVoiceStateSeqSep[];
-extern u_char g_SndVoiceStateStartPan[];
-extern u_char g_SndVoiceStateStatus[];
 
 /* Declared identically by 24 translation units before this
  * header carried them. */
@@ -194,15 +183,11 @@ extern u_char g_SndCurrentToneCenter;
 extern u_char g_SndCurrentToneShift;
 extern u_char g_SndCurrentVabId;
 extern u_short g_SndPitchTable[];
-extern volatile u_short g_SndReverbAttrDepthLeft;
-extern volatile u_short g_SndReverbAttrDepthRight;
 extern u_short g_SndSpuCtrlDefaults[];
 extern long g_SndTickVSyncToggle;
 extern u_short *g_SndVabBodyAddr[];
 extern u_short g_SndVoiceRegDefaults[];
-extern u_char g_SndVoiceRegsAddr[];
 extern long g_SndVoiceSilenceIndex;
-extern u_char g_SndVoiceStateEndPan[];
 extern void (*g_SndMarkCallbacks[][0x10])(long seq, long sep, u_char value);
 
 void SpuVmAutoPanTick(long voice);

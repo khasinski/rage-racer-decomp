@@ -6,10 +6,8 @@
 #include "game/cd.h"
 #include "game/audio.h"
 #include "game/menu.h"
-
-extern s16 g_ClassRecords[];
-extern volatile s32 g_ClassWinCount;
-extern void *g_CourseProgress;
+#define GAME_CLASS_WIN_COUNT_QUALIFIER volatile
+#include "game/save_internal.h"
 
 void UpdateBgmTrackCount(void) {
     s32 offset;

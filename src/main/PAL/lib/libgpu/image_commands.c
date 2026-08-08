@@ -2,17 +2,15 @@
 
 #include "common.h"
 #include "psyq/gpu.h"
+#include "psyq/gpu_internal.h"
 
-extern u_short g_VramWidth[];
-extern u_short g_VramHeight[];
-extern u_long g_ClearImagePacket[];
 
 long Gpu_ClearImage(short *env, u_long rgb) {
     {
         long x = env[2];
         long value;
         if (x >= 0) {
-            volatile u_short *p = g_VramWidth;
+            volatile u_short *p = &g_VramWidth;
             long mm;
             value = *p;
             value = (short)value;
@@ -31,7 +29,7 @@ long Gpu_ClearImage(short *env, u_long rgb) {
     {
         long x = env[3];
         if (x >= 0) {
-            volatile u_short *p = g_VramHeight;
+            volatile u_short *p = &g_VramHeight;
             long mm;
             long c;
             c = *p;
@@ -75,7 +73,6 @@ long Gpu_ClearImage(short *env, u_long rgb) {
     return 0;
 }
 
-extern volatile u_long *g_GpuGp1;
 
 /* Driver-table slot +0x20: the worker LoadImage enqueues. Clips the rect,
  * issues GP0(A0h) and pushes the odd words by hand, the rest by DMA2. */
@@ -108,7 +105,7 @@ long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
     mode = 0;
     clippedW = w;
     if (w >= 0) {
-        volatile u_short *width = g_VramWidth;
+        volatile u_short *width = &g_VramWidth;
 
         if ((short)*width < w) {
             clippedW = *width;
@@ -120,7 +117,7 @@ long Gpu_LoadImage(GpuRectPacked *rect, u_long *src) {
 
     h = savedRect->h;
     if (h >= 0) {
-        volatile u_short *height = g_VramHeight;
+        volatile u_short *height = &g_VramHeight;
 
         if ((short)*height < h) {
             clippedH = *height;
@@ -206,7 +203,7 @@ long Gpu_StoreImage(GpuRectPacked *rect, u_long *dst) {
 
     w = rect->w;
     if (w >= 0) {
-        volatile u_short *p = g_VramWidth;
+        volatile u_short *p = &g_VramWidth;
         if ((short)*p < w) {
             cw = *p;
         } else {
@@ -219,7 +216,7 @@ long Gpu_StoreImage(GpuRectPacked *rect, u_long *dst) {
 
     h = rect->h;
     if (h >= 0) {
-        volatile u_short *q = g_VramHeight;
+        volatile u_short *q = &g_VramHeight;
         if ((short)*q < h) {
             ch = *q;
         } else {

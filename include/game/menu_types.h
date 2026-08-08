@@ -25,6 +25,31 @@ typedef struct PaintColorTable {
     Rgb colors[18];
 } PaintColorTable;
 
+typedef union TeamLogoColorSlot {
+    s32 value;
+    u16 low;
+} TeamLogoColorSlot;
+
+typedef struct TeamLogoClutPos {
+    s16 x;
+    s16 y;
+} TeamLogoClutPos;
+
+typedef struct TeamLogoTexturePos {
+    s16 x;
+    u16 y;
+} TeamLogoTexturePos;
+
+typedef union TeamLogoWord {
+    s32 value;
+    u16 low;
+    s16 signedLow;
+} TeamLogoWord;
+
+typedef struct MenuLightBurstBand {
+    s16 values[33];
+} MenuLightBurstBand;
+
 enum MenuPalette {
     MENU_PAINT_COLOR_COUNT = 18
 };

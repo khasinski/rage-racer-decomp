@@ -1,7 +1,8 @@
 #include "common.h"
+#define GAME_ENV_PALETTE_DECL extern u32 g_EnvPaletteTable
+#include "game/track_internal.h"
 
 /* Local u32 view of g_EnvPaletteTable (render.h types it as u8 *). */
-extern u32 g_EnvPaletteTable;
 
 void SetEnvPaletteTable(u32 table) {
     g_EnvPaletteTable = table;

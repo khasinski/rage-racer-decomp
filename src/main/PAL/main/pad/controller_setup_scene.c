@@ -1,10 +1,12 @@
 #include "common.h"
+#include "game/state.h"
+#define GAME_INPUT_CALIBRATION_TYPE s16
+#include "game/input_internal.h"
 #include "game/prim.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gte.h"
-
-extern Matrix g_SceneLightMatrix;
 
 /* Loads the GTE light matrix with g_SceneLightMatrix * `view`, working on a
  * local copy so the caller's view matrix is left alone. */
@@ -15,24 +17,6 @@ void SetGteLightMatrix(Matrix *view) {
     MulMatrix2(&g_SceneLightMatrix, &m);
     SetLightMatrix(&m);
 }
-
-extern s32 g_GameMode;
-extern s32 g_AnimTimer;
-extern u8 g_PadType;
-extern s16 g_NegconMaxTwist;
-extern s16 g_NegconSteerPlay;
-extern s32 g_ControllerSceneAngleX;
-extern s32 g_ControllerSceneAngleY;
-extern s32 g_ScratchViewX asm("0x1F800008");
-extern s32 g_ScratchViewY asm("0x1F80000C");
-extern void *g_ScratchViewYPointer asm("0x1F80000C");
-extern volatile s32 g_ScratchViewZVolatile asm("0x1F800010");
-extern void *volatile g_ScratchViewZPointer asm("0x1F800010");
-extern s32 g_ScratchViewAngleX asm("0x1F800018");
-extern s32 g_ScratchViewAngleY asm("0x1F80001C");
-extern s32 g_ScratchViewAngleZ asm("0x1F800020");
-extern s32 g_ScratchEnvMode4 asm("0x1F800084");
-
 
 /* Builds and submits the controller models shown by the pad and NeGcon setup
  * screens. The read-only scratchpad base is retained for the three camera

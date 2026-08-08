@@ -2,10 +2,7 @@
 #include <stdio.h>
 #include "psyq/snd.h"
 
-extern u_char *g_SndSeqTable[];
-extern u_long g_SndTickResolution;
-extern char g_MsgSeqNotSeqData[];
-extern char g_MsgSeqOldFormat[];
+#include "psyq/snd_internal.h"
 
 
 long SsSeqParseHeader(long slot, long vabId, long data) {

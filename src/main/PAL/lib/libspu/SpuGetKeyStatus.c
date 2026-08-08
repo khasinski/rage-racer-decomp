@@ -1,7 +1,6 @@
 #include "psyq/spu.h"
+#include "psyq/spu_internal.h"
 
-extern volatile u_long g_SpuKeyStatus;
-extern volatile u_short *g_SpuRegBase;
 
 long SpuGetKeyStatus(u_long voice_bit) {
     long voice = -1;

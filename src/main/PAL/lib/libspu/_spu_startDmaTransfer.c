@@ -1,8 +1,8 @@
 #include "psyq/spu.h"
+#include "psyq/spu_internal.h"
 
 /* SPU hardware, from the data segment: file base 0x1F801C00, DMA
  * channel 4 (SPU) MADR/BCR/CHCR 0x1F8010C0/C4/C8, SPU_DELAY 0x1F801014. */
-extern volatile u_short *g_SpuRegBase;
 
 void _spu_startDmaTransfer(u_long ramAddr, u_short spuAddr, u_long words) {
     u_long addr = ramAddr;
@@ -11,7 +11,7 @@ void _spu_startDmaTransfer(u_long ramAddr, u_short spuAddr, u_long words) {
     u_short cnt;
     u_long value;
 
-    g_SpuRegBase[0xD3] = spuAddr;
+    g_SpuRegBase->raw[0xD3] = spuAddr;
 
     delay = 0xD;
     i = 0;
@@ -27,8 +27,8 @@ void _spu_startDmaTransfer(u_long ramAddr, u_short spuAddr, u_long words) {
         i++;
     }
 
-    cnt = g_SpuRegBase[0xD5];
-    g_SpuRegBase[0xD5] = cnt | 0x30;
+    cnt = g_SpuRegBase->raw[0xD5];
+    g_SpuRegBase->raw[0xD5] = cnt | 0x30;
 
     delay = 0xD;
     i = 0;

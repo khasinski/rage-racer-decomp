@@ -1,7 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[];
-extern long g_SndTickResolution;
+#include "psyq/snd_internal.h"
 
 void _SsSndTempo(short seq, short sep) {
     SeqStruct *pSeq = &g_SndSeqTable[seq][sep];

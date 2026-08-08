@@ -1,8 +1,13 @@
 #include "common.h"
+#include "game/state.h"
 #include <stdio.h>
 #include "game/vector.h"
 #include "game/track.h"
 #include "game/car.h"
+#include "game/car_internal.h"
+#define GAME_INPUT_BUTTON_TYPE s16
+#define GAME_INPUT_CALIBRATION_TYPE s16
+#include "game/input_internal.h"
 #include "game/race.h"
 #include "game/menu.h"
 #include "game/render.h"
@@ -117,8 +122,6 @@ typedef struct GamePlayerCarSpecInit
   s32 f15C;
 } GamePlayerCarSpecInit;
 #define g_PlayerCarInitSpec ((GamePlayerCarSpecInit *)g_CarSpec)
-extern s16 g_TorqueBandEnd[];
-extern s16 g_TorqueLossBandEnd[];
 void InitPlayerCar(GameCarRuntime *car)
 {
   s16 trackState[2];
@@ -403,10 +406,7 @@ typedef struct A {
     SubB sub;
 } A;
 
-extern u8 g_PadType;
 /* The live button mapping; masks 0 and 1 steer, g_MirrorMode swaps them. */
-extern s16 g_PadButtonMapping[];
-extern s16 g_NegconMaxTwist;
 
 
 /*

@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern long g_SndTickResolution;
+#include "psyq/snd_internal.h"
 
 void SsSetTickMode(long spec) {
     long v;

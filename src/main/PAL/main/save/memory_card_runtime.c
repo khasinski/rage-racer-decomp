@@ -1,16 +1,11 @@
 #include "common.h"
+#include "game/memcard.h"
 #include <stdio.h>
 #include "game/car.h"
 #include "psyq/kernel.h"
 
-extern s32 g_McLastCardStatus;
-extern s32 g_McStatusState;
-extern s32 g_McPollTicks;
-extern s32 g_McStatusResult;
 /* The poller's own working status word. Distinct from menu.h's
  * g_McPollStatus (g_McCardStatus), which is the code the menu reads. */
-extern s32 g_McPollStatus;
-extern char g_FmtCardDevice[];
 
 
 s32 PollMemoryCardStatus(s32 port, s32 slot) {
@@ -182,14 +177,6 @@ s32 FormatMemoryCard(s32 port, s32 slot) {
  * array symbol gcc 2.6.3 keeps the base address live in a callee-saved
  * register across the TestEvent calls, which grows PollMemoryCardHwEvent's
  * frame from 24 to 32 bytes. */
-extern s32 g_McHwEventIoe;
-extern s32 g_McHwEventError;
-extern s32 g_McHwEventTimeout;
-extern s32 g_McHwEventNew;
-extern s32 g_McSwEventIoe;
-extern s32 g_McSwEventError;
-extern s32 g_McSwEventTimeout;
-extern s32 g_McSwEventNew;
 
 void OpenMemoryCardEvents(void) {
     EnterCriticalSection();
@@ -238,4 +225,3 @@ void CloseMemoryCardEvents(void) {
     CloseEvent(g_McSwEventNew);
     ExitCriticalSection();
 }
-

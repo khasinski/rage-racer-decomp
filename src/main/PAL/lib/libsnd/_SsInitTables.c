@@ -3,8 +3,7 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern long g_SndTickResolution;
-extern long g_SndUpdateLock;
+#include "psyq/snd_internal.h"
 void _SsInitTables(void) {
     short *ptr;
     long i;

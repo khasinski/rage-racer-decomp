@@ -4,30 +4,15 @@
 #include "game/race.h"
 #include "game/menu.h"
 #include "psyq/gpu.h"
+#define GAME_INPUT_MAPPING_TYPE s16
+#include "game/input_internal.h"
+#define GAME_SAVE_BGM_TYPE u16
+#include "game/save_internal.h"
 
 /* The loader stores a whole word here; the saver reads only the low half
  * as g_BgmSelection. Same address, two widths, so two names. */
 
 
-
-extern u8 g_TeamLogoRect[];
-extern u8 g_TeamLogoClutRect[];
-extern s16 g_PadMappingIndex;
-extern s16 g_NegconMappingIndex;
-extern u16 g_NegconSteerNeutral;
-extern u16 g_NegconSteerPlay;
-extern u16 g_NegconNeutralI;
-extern u16 g_NegconNeutralII;
-extern u16 g_NegconMaxTwist;
-extern u16 g_NegconNeutralL;
-extern u16 g_BgmSelection;
-extern u16 g_ClassRecords[];
-extern u16 g_TeamLogoCanvas[];
-extern s32 g_BestLapTimes[];
-extern s32 g_BestTotalTimes[];
-extern s32 g_BestSectorTimes[];
-extern u8 g_GrandPrixCourseProgress[];
-extern u8 g_ExtraGrandPrixCourseProgress[];
 
 s32 LoadSaveStateBlock(u8 *block) {
     register u8 *base asm("$17") = block;
@@ -250,7 +235,7 @@ s32 LoadSaveStateBlock(u8 *block) {
             register s32 *e41e8 asm("$10");
             s32 ioff;
             i = 0;
-            e41e8 = g_BestSectorTimes;
+            e41e8 = &g_BestSectorTimes[0][0][0];
             ioff = 0;
             for (; i < 2; i++) {
                 s32 iofc;
@@ -318,7 +303,7 @@ s32 LoadSaveStateBlock(u8 *block) {
 
     LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
     ApplyAudioSettings();
-    LoadImage((Rect *)g_TeamLogoRect, g_TeamLogoCanvas);
-    LoadImage((Rect *)g_TeamLogoClutRect, g_TeamLogoClut);
+    LoadImage(&g_TeamLogoRect, g_TeamLogoCanvas);
+    LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
     return 1;
 }

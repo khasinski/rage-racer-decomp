@@ -1,9 +1,14 @@
 #include "common.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
+#define GAME_PAD_HELD_QUALIFIER volatile
 #include "game/state.h"
 #include "game/race.h"
 #include "game/car.h"
+#define GAME_INPUT_MAPPING_TYPE s16
+#include "game/input_internal.h"
+#include "game/track.h"
+#include "game/track_internal.h"
 #include "game/render.h"
 #include "game/audio.h"
 #include "game/random.h"
@@ -55,12 +60,6 @@ typedef struct Car {
     u8 padBA[2];
     GameCarDrive drive;  /* 0xBC */
 } Car;
-
-extern u8 g_PadType;
-extern volatile u16 g_PadHeld;
-extern s16 g_NegconMappingIndex;
-extern u8 *g_TrackPoints;
-
 
 /*
  * Per-car physics / gear-shift driver (matched sibling of the ASM
@@ -292,7 +291,7 @@ void UpdatePlayerCar(Car *car) {
     {
         s32 base = car->unk24 - 0xC00;
 
-        slip = (base + *(s16 *)(g_TrackPoints + car->trackPointIndex * 24 + 10)) & 0xFFF;
+        slip = (base + *(s16 *)((u8 *)g_TrackPoints + car->trackPointIndex * 24 + 10)) & 0xFFF;
     }
     sv2.vx = 0;
     sv2.vz = 0;
@@ -426,7 +425,7 @@ void UpdatePlayerCar(Car *car) {
         car->unk04 += p->unk68;
         UpdateCarBodyKick(car);
     } else {
-        slip = GetAngleDistance(0xC00 - *(s16 *)(g_TrackPoints + car->trackPointIndex * 24 + 10),
+        slip = GetAngleDistance(0xC00 - *(s16 *)((u8 *)g_TrackPoints + car->trackPointIndex * 24 + 10),
                              car->unkA0);
         if (crash != 0) {
             p->unk48 -= 1000;
@@ -554,9 +553,6 @@ void UpdatePlayerCar(Car *car) {
 
     p->gearDisp = p->gear;
 }
-
-extern s32 g_EnvScriptClock;
-
 
 s32 DrawPlayerTachometer(void) {
     s32 value;

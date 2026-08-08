@@ -1,16 +1,10 @@
 #include "common.h"
 #include <stdio.h>
 #include "game/track.h"
+#define GAME_SCENERY_DATA_QUALIFIER volatile
+#include "game/track_internal.h"
 #include "game/car.h"
 #include "game/race.h"
-
-extern u8 *volatile g_RouteSceneryData;
-
-extern u8 *volatile g_PathSceneryRotData;
-
-extern u8 *volatile g_FlybySceneryData;
-
-extern u8 *volatile g_PathSceneryPosData;
 
 
 

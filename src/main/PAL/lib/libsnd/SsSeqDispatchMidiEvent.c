@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[];
+#include "psyq/snd_internal.h"
 
 void SsSeqDispatchMidiEvent(long seq_arg, long sep_arg) {
     short seq = seq_arg;

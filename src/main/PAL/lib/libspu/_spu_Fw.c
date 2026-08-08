@@ -1,8 +1,6 @@
 #include "psyq/spu.h"
+#include "psyq/spu_internal.h"
 
-extern volatile u_short *g_SpuRegBase;
-extern u_long g_SpuMemModeUnit;
-extern u_long _spu_mem_mode_plus;
 
 long _spu_Fw(long addr, long size) {
     if (g_SpuTransferByIo == 0) {
@@ -26,9 +24,9 @@ long _spu_Fr(long addr, long size) {
 
 void _spu_FsetRXX(long reg, u_long value, long use_mem_shift) {
     if (use_mem_shift == 0) {
-        g_SpuRegBase[reg] = value;
+        g_SpuRegBase->raw[reg] = value;
     } else {
-        g_SpuRegBase[reg] = value >> _spu_mem_mode_unitM;
+        g_SpuRegBase->raw[reg] = value >> _spu_mem_mode_unitM;
     }
 }
 

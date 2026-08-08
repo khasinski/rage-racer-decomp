@@ -2,6 +2,7 @@
 #define GAME_TRACK_H
 
 #include "common.h"
+
 #include "game/vector.h"
 
 /*
@@ -255,6 +256,16 @@ extern s32 g_OrbitCameraYaw;
 extern s16 g_PathSceneryHalfDelta[3];
 extern s16 g_PathSceneryPosIndex;
 extern u8 *g_PathSceneryPosKeys;
+typedef struct PathSceneryCursor {
+    s16 phase;
+    s16 otherPhase;
+    u16 span;
+    u16 otherSpan;
+    u16 rate;
+    u16 otherRate;
+    s16 index;
+    s16 otherIndex;
+} PathSceneryCursor;
 extern u16 g_PathSceneryPosPhase;
 extern u16 g_PathSceneryPosRate;
 extern s16 g_PathSceneryPosSpan;

@@ -2,14 +2,8 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndVoiceStateNote[];
-extern u_char g_SndVoiceStateProg[];
-extern u_char g_SndVoiceStateTone[];
-extern u_char g_SndVoiceStateVabId[];
-extern u_char g_SndVoiceRegsPitch[];
-extern u_char g_SndVoiceFlags[];
-extern u_char * g_SndCurrentToneTable;
-extern u_short g_SndCurrentVoice;
+#define SND_VOICE_COUNT_QUALIFIER volatile
+#include "psyq/snd_internal.h"
 
 long SpuVmApplyPitchBendToVoice(long voice, long note, long vab_id, long program, long bend) {
     register long raw asm("$10") = voice;
@@ -30,21 +24,21 @@ long SpuVmApplyPitchBendToVoice(long voice, long note, long vab_id, long program
     t1 = bend + value;
     off = ((((i * 3) * 4) + i) * 4);
 
-    if (*(short *)&g_SndVoiceStateSeqSep[off] == (short)note &&
-        *(short *)&g_SndVoiceStateVabId[off] == (short)vab_id &&
-        *(short *)&g_SndVoiceStateProg[off] == (short)program) {
+    if (*(short *)&((u_char *)g_SndVoiceState + 14)[off] == (short)note &&
+        *(short *)&((u_char *)g_SndVoiceState + 22)[off] == (short)vab_id &&
+        *(short *)&((u_char *)g_SndVoiceState + 18)[off] == (short)program) {
 
-        t = *(u_short *)&g_SndVoiceStateTone[off] + (g_SndCurrentProgActual * 16);
-        f0 = *(u_short *)&g_SndVoiceStateNote[off];
+        t = *(u_short *)&((u_char *)g_SndVoiceState + 20)[off] + (g_SndCurrentProgActual * 16);
+        f0 = *(u_short *)&((u_char *)g_SndVoiceState + 12)[off];
         w = (short)t1;
 
         if (w > 0) {
-            i = w * (u_char)g_SndCurrentToneTable[(((u_short)t) << 5) + 0xD];
+            i = w * ((u_char *)g_SndCurrentToneTable)[(((u_short)t) << 5) + 0xD];
             value = i / 63;
             base = f0 + value;
             bal = (i - value * 63) << 1;
         } else if (w < 0) {
-            i = w * (u_char)g_SndCurrentToneTable[(((u_short)t) << 5) + 0xC];
+            i = w * ((u_char *)g_SndCurrentToneTable)[(((u_short)t) << 5) + 0xC];
             value = i;
             if (i < 0) value = i + 0x3F;
             value = value >> 6;
@@ -58,19 +52,17 @@ long SpuVmApplyPitchBendToVoice(long voice, long note, long vab_id, long program
 
         j = (short)raw;
         off2 = ((((j * 3) * 4) + j) * 4);
-        c = *(u_char *)&g_SndVoiceStateTone[off2];
-        g_SndCurrentVoice = raw;
+        c = *(u_char *)&((u_char *)g_SndVoiceState + 20)[off2];
+        (*(u_short *)&g_SndCurrentVoice) = raw;
         g_SndCurrentTone = c;
         ret = SpuVmCalculateTonePitch((u_short)base, (u_short)bal);
-        *(short *)&g_SndVoiceRegsPitch[j * 16] = ret;
+        *(short *)&((u_char *)g_SndVoiceRegs + 4)[j * 16] = ret;
         g_SndVoiceFlags[j] |= 4;
         return 1;
     }
     return 0;
 }
 
-extern volatile u_char g_SndVoiceCount;
-extern short g_SndCurrentSeqSep;
 
 long SpuVmApplyPitchBendByTone(long note, long vab_id, long program, long bend) {
     long voice;

@@ -1,11 +1,8 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
+#include "psyq/gpu_internal.h"
 
-extern GpuCallbacks *g_GpuFuncs;
-extern u_char g_GraphQueue;
-extern u_char g_GraphDebug;
-extern char g_MsgGpuSetGraphQueue[];
 
 long SetGraphQueue(long mode) {
     u_char *queue = &g_GraphQueue;
@@ -26,7 +23,6 @@ long SetGraphQueue(long mode) {
     return oldQueue;
 }
 
-extern u_char g_GraphType;
 
 long GetGraphType(void) {
     return g_GraphType;
@@ -36,8 +32,6 @@ long GetGraphDebug(void) {
     return g_GraphDebug;
 }
 
-extern char g_MsgGpuDrawSyncCallback[];
-extern u_long g_DrawSyncCallback;
 
 u_long DrawSyncCallback(u_long callback) {
     u_long ret;
@@ -51,7 +45,6 @@ u_long DrawSyncCallback(u_long callback) {
     return ret;
 }
 
-extern char g_MsgGpuSetDispMask[];
 
 void SetDispMask(long mask) {
     u_char *debug = &g_GraphDebug;
@@ -72,7 +65,6 @@ void SetDispMask(long mask) {
     gpu->submit(enable ? 0x3000000 : 0x3000001);
 }
 
-extern char g_MsgGpuDrawSync[];
 
 void DrawSync(long mode) {
     if (g_GraphDebug >= 2) {
@@ -81,11 +73,6 @@ void DrawSync(long mode) {
     g_GpuFuncs->drawSync(mode);
 }
 
-extern short g_VramWidth;
-extern short g_VramHeight;
-extern char g_MsgGpuBadRect[];
-extern char g_FmtGpuRect[];
-extern char g_FmtGpuPrimName[];
 
 void CheckPrim(char *name, Rect *rect) {
     switch (g_GraphDebug) {
@@ -136,7 +123,6 @@ void CheckPrim(char *name, Rect *rect) {
     }
 }
 
-extern char g_GpuNameClearImage[];
 
 void ClearImage(void *rect, u_char r, u_char g, u_char b) {
     CheckPrim(g_GpuNameClearImage, rect);

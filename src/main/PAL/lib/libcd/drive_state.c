@@ -1,14 +1,13 @@
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/cd_internal.h"
 
-extern u_char g_CdStatusByte;
 
 /* CdStatus: returns the last cached CD drive status byte. */
 long CdStatus(void) {
     return g_CdStatusByte;
 }
 
-extern CdlLOC g_CdLastPos;
 
 /* CdMode: returns the last CD mode byte. */
 u_char CdMode(void) {

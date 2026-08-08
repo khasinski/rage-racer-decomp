@@ -6,19 +6,15 @@
 #include "game/cd.h"
 #include "game/menu.h"
 #include "game/race.h"
+#define GAME_RANKING_TIMES_DECL extern s32 g_RankingTimes
+#include "game/records_internal.h"
+#define GAME_RACE_TOTAL_TIME_QUALIFIER volatile
+#include "game/race_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
 #include "game/state.h"
 #include "psyq/gpu.h"
-
-extern volatile s32 g_RaceTotalTime;
-extern s32 g_RankingTimes;
-/* Split symbols of the two RaceRecord tables: +0x08 is the time and +0x0C the
- * car index, so g_RankingCars is g_RankingRecords[0][0][0].carIndex and
- * g_TimeRecordTimes / g_TimeRecordCars the same pair of g_TimeRecords. */
-extern u16 g_RankingCars[];
-extern u16 g_TimeRecordCars[];
 
 void DrawRankingPanel(u8 *slideX) {
     u8 *panel;

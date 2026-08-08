@@ -8,81 +8,6 @@
 
 /* libcd's polling deadline: a wall-clock limit, the retries left, and the name
  * the timeout message prints. Was duplicated in four CD_*.c files. */
-/* libcd sync/ready completion callback: status byte plus the 8-byte result. */
-typedef void (*CdCallback)(u_char status, u_char *result);
-
-/* libcd streaming per-frame callback: takes no arguments. */
-typedef void (*StCallback)(void);
-
-typedef struct CdAlarm {
-    long deadline;
-    long count;
-    char *name;
-} CdAlarm;
-
-/* The three status bytes CD_ready/CD_sync poll. Was duplicated in two files. */
-typedef struct CdIntr {
-    u_char sync;
-    u_char ready;
-    u_char command;
-} CdIntr;
-
-typedef struct CdlATV {
-    u_char val0;
-    u_char val1;
-    u_char val2;
-    u_char val3;
-} CdlATV;
-
-typedef struct CdRegisterMap {
-    u_char pad0[0x180];
-    u_short cd_left_volume;
-    u_short cd_right_volume;
-    u_char pad184[0x1AA - 0x184];
-    u_short audio_control;
-    u_char pad1AC[0x1B0 - 0x1AC];
-    u_short output_left_volume;
-    u_short output_right_volume;
-    u_char pad1B4[0x1B8 - 0x1B4];
-    u_short status_mode_a;
-    u_short status_mode_b;
-} CdRegisterMap;
-
-typedef struct StRingEventRecord {
-    volatile u_short state;
-    u_char pad02[6];
-    u_long frame;
-    u_char pad0C[4];
-    u_short width;
-    u_short height;
-    u_char pad14[0xC];
-} StRingEventRecord;
-
-typedef struct StRingClearRecord {
-    long value;
-    u_char pad4[0x1C];
-} StRingClearRecord;
-
-/*
- * CD stream ring header (Rage Racer streaming). Ring pointer g_StActiveHeader, ring
- * base g_StRingBase. `.state` is read as u_short (lhu). See StCdInterrupt.
- */
-typedef struct StStrHeader {
-    u_short state;        /* 0x00 */
-    u_short mode;         /* 0x02 */
-    u_short frame;        /* 0x04 */
-    u_short nSectors;     /* 0x06 */
-    u_short nFrames;      /* 0x08 */
-    u_char pad0A[0x12];   /* 0x0A */
-    CdlLOC loc;       /* 0x1C */
-} StStrHeader;
-
-typedef struct CdSearchDirEntry {
-    long type;
-    u_char pad4[4];
-    u_char name[0x24];
-} CdSearchDirEntry;
-
 /* Returns the human-readable name for CD command `cmd`, or a default string if
  * out of range. */
 char *CdComstr(long cmd);
@@ -226,9 +151,6 @@ extern volatile u_char *g_CdReg1;
 extern volatile u_char *g_CdReg2;
 extern volatile u_char *g_CdReg3;
 extern long g_CdTimeoutCounter;
-extern u_char g_MdecIdctCmd[];
-extern u_char g_MdecQuantCmd[];
-extern long g_StRingSlot;
 
 long CdReadInterruptStatus(void);
 void MDEC_in(volatile u_long* buf, long words);
@@ -255,29 +177,6 @@ extern volatile long g_CdReadPtr;
 extern volatile long g_CdReadRemaining;
 extern CdRegisterMap *volatile g_CdSpuRegs;
 extern volatile u_long *g_CdromDelayReg;
-extern volatile u_long *g_MdecCmdReg;
-extern volatile u_long *g_MdecCtrlReg;
-extern volatile u_long *g_MdecDpcr;
-extern u_long g_MdecIdctTable[];
-extern volatile u_long *g_MdecInDmaBcr;
-extern volatile u_long *g_MdecInDmaChcr;
-extern volatile u_long *g_MdecInDmaMadr;
-extern volatile u_long *g_MdecOutDmaBcr;
-extern volatile u_long *g_MdecOutDmaChcr;
-extern volatile u32 *g_MdecOutDmaControl;
-extern volatile u_long *g_MdecOutDmaMadr;
-extern u_long g_MdecQuantChroma[];
-extern u_long g_MdecQuantLuma[];
-extern volatile StStrHeader *g_StActiveHeader;
-extern long g_StBackFrame;
-extern u_char g_StBackLoc[];
-extern volatile u8 *g_StCdReg0;
-extern volatile u8 *g_StCdReg2;
-extern volatile u8 *g_StCdReg3;
-extern s32 g_StCopySector;
-extern StCallback g_StFrameCallback;
-extern s32 g_StInterruptState;
-extern u8 *g_StSectorData;
 
 void CD_dmastart(
     s32 channel,

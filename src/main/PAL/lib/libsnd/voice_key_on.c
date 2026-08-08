@@ -2,22 +2,12 @@
 
 #include "common.h"
 #include "psyq/snd_types.h"
+#include "psyq/snd_internal.h"
 #define SsSeqIndexChannel SsSeqIndexChannelDeclaration
 #include "psyq/snd.h"
 #undef SsSeqIndexChannel
 #include "game/audio.h"
 
-extern SeqStruct *g_SndSeqTable[];
-extern SpuVoice g_SndVoiceState[];
-extern short g_SndVoiceRegs[];
-extern u_char g_SndVoiceCount;
-extern short g_SndMonoMode;
-extern short g_SndCurrentSeqSep;
-extern ProgAtr *g_SndCurrentProgTable;
-extern VabHdr *g_SndCurrentVabHeader;
-extern VagAtr *g_SndCurrentToneTable;
-extern long g_SndUpdateLock;
-extern SvmCurrentAttr g_SndCurrentAttr;
 
 long SsSeqIndexChannel(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {
     SeqStruct *score =
@@ -93,8 +83,8 @@ long SsSeqIndexChannel(short seq_sep, short vab_id, short program, u_short volum
             }
             left = (left * left) / 0x3FFF;
             right = (right * right) / 0x3FFF;
-            g_SndVoiceRegs[voice * 8] = left;
-            g_SndVoiceRegs[voice * 8 + 1] = right;
+            ((u_short *)g_SndVoiceRegs)[voice * 8] = left;
+            ((u_short *)g_SndVoiceRegs)[voice * 8 + 1] = right;
             g_SndVoiceFlags[voice] |= 3;
             voices_updated++;
         }
@@ -126,7 +116,7 @@ short SsUtKeyOn(
         g_SndUpdateLock = 0;
         return -1;
     }
-    g_SndCurrentAttr.seq_sep = 0x21;
+    g_SndCurrentSeqSep = 0x21;
     g_SndCurrentAttr.note = note;
     g_SndCurrentAttr.fine = fine;
     g_SndCurrentAttr.tone = tone;

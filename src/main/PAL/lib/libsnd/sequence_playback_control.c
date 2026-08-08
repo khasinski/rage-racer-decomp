@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[];
+#include "psyq/snd_internal.h"
 
 void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
     short sepIndex;

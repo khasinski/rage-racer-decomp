@@ -1,11 +1,8 @@
 #include "common.h"
 #include "psyq/kernel.h"
 #include "psyq/gpu.h"
+#include "psyq/gpu_internal.h"
 
-extern volatile u_long *g_GpuGp1;
-extern long g_GpuQueueWriteIdx;
-extern volatile long g_GpuQueueReadIdx;
-extern u_char g_GpuQueue[];
 
 /* Driver-table slot +0x34, the body of ResetGraph: empties the queue,
  * re-arms DMA2, and issues GP1(00h) (mode 0) or GP1(02h)+GP1(01h)
@@ -26,7 +23,7 @@ long Gpu_Reset(u_long mode) {
         *g_GpuDpcr |= 0x800;
         *g_GpuGp1 = 0;
         MemFill(g_GpuGp1Mirror, 0, 0x100);
-        MemFill(g_GpuQueue, 0, 0x1800);
+        MemFill((u_char *)g_GpuQueue, 0, 0x1800);
         break;
     case 1:
         *g_GpuDmaChcr = 0x401;

@@ -3,6 +3,7 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 #include "game/render.h"
+#include "psyq/gpu_internal.h"
 
 void SetDrawTPage(u_char *prim, long dfe, long dtd, long tpage) {
 s32 encoded;
@@ -100,12 +101,6 @@ void DumpDispEnv(DispEnv *env) {
     GPU_printf(g_FmtGpuIsRgb24, env->isrgb24);
 }
 
-extern GpuCallbacks *g_GpuFuncs;
-extern u8 g_GraphType[];
-extern u8 g_GraphQueue;
-extern u8 g_GraphDebug;
-extern u16 g_VramWidth;
-extern u16 g_VramHeight;
 
 /* libgpu ResetGraph. Own trace strings g_FmtGpuResetGraphTrace "ResetGraph:jtb=%08x,env=%08x"
  * and g_FmtGpuResetGraph "ResetGraph(%d)..."; mode&7 of 0 or 3 does the full reset. */
@@ -118,7 +113,7 @@ void ResetGraph(s32 mode) {
 
     maskedMode = mode & 7;
     if ((maskedMode == 0) || (maskedMode == 3)) {
-        graphState = g_GraphType;
+        graphState = &g_GraphType;
         printf((u8 *)g_FmtGpuResetGraphTrace, g_GpuJumpTable, graphState);
         MemFill(graphState, 0, 0x80);
         KernelCallbackSlot3();
@@ -149,7 +144,6 @@ void ResetGraph(s32 mode) {
     }
 }
 
-extern u8 g_GraphReverse;
 
 s32 SetGraphReverse(s32 mode) {
     u8 *state = &g_GraphReverse;
@@ -174,7 +168,7 @@ s32 SetGraphReverse(s32 mode) {
     }
     g_GpuFuncs->submit(command);
 
-    if (g_GraphType[0] == 2) {
+    if (g_GraphType == 2) {
         callbacks2 = g_GpuFuncs;
         if (g_GraphReverse != 0) {
             command = 0x20000501;
@@ -201,7 +195,7 @@ s32 SetGraphDebug(u8 level) {
         char *fmt;
 
         a1 = *ptr;
-        a2 = g_GraphType[0];
+        a2 = g_GraphType;
         a3 = g_GraphReverse;
         fmt = g_FmtGpuSetGraphDebug;
         func(fmt, a1, a2, a3);

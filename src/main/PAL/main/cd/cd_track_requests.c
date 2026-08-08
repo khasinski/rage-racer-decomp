@@ -1,9 +1,8 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "game/cd.h"
+#include "game/cd_internal.h"
 
-extern u8 g_CdVolume;
-extern CdlLOC g_CdTrackLocs[];
 
 void StepCdTrackRequest(void) {
     s32 state;

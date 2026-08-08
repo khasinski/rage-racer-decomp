@@ -1,7 +1,6 @@
 #include "psyq/snd.h"
 
-extern volatile long g_SndUpdateLock;
-extern SeqStruct *g_SndSeqTable[];
+#include "psyq/snd_internal.h"
 void SsSeqCalledTbyT(void) {
     long i;
     long j;

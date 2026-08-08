@@ -8,10 +8,7 @@
 #include "game/state.h"
 #include "game/track.h"
 #include "game/waypoint.h"
-
-extern u8 g_PlayerCar[];
-
-extern s32 g_PlayerTrackProgress;
+#include "game/player_car_internal.h"
 
 
 
@@ -19,7 +16,7 @@ extern s32 g_PlayerTrackProgress;
 
 
 
-extern s16 g_PlayerLap;
+
 
 /*
  * Initializes the 6 TrackWaypointRuntime slots for the current course. The
@@ -95,7 +92,7 @@ void UpdateWaypointRaceScene(void) {
 
         g_SceneTimer--;
         DrawRaceOptionMenu(g_RaceOptionCursor);
-        UpdateFreeLookCamera(g_PlayerCar, 0);
+        UpdateFreeLookCamera(&g_PlayerCar, 0);
         GetTrackZoneBlend(g_PlayerTrackProgress);
         RequestTrackTexturePage(g_PlayerTrackSection);
         DrawSkyBackground();
@@ -125,7 +122,7 @@ void UpdateWaypointRaceScene(void) {
     }
 
     UpdateLoadedAudioVoices(0, 1);
-    UpdateFreeLookCamera(g_PlayerCar, 1);
+    UpdateFreeLookCamera(&g_PlayerCar, 1);
     RequestTrackTexturePage(g_PlayerTrackSection);
     UpdateEnvironment();
     DrawSkyBackground();

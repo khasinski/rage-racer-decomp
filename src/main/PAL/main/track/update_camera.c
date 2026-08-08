@@ -2,6 +2,12 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
+#define GAME_TRACK_CAMERA_TYPE u8
+#define GAME_SKY_ROW_BASE_TYPE u32
+#define GAME_ENV_SCRIPT_LENGTH_TYPE u32
+#include "game/track_internal.h"
+#define GAME_PLAYER_CAR_DECL extern s32 g_PlayerCar
+#include "game/player_car_internal.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
 
@@ -21,8 +27,6 @@
 #define CAMPATH_YAW 1
 #define CAMPATH_ROLL 2
 #define CAMPATH_DIST 3
-extern s32 g_PlayerCar;
-extern u8 *g_TrackCameras;
 
 /*
  * Camera-mode state machine: `cameraModeSel` selects among the camera behaviours
@@ -613,8 +617,6 @@ block_52:
 
 /* Deliberately raw: the environment script header word 0 is stored here and
  * never read anywhere in the image (docs/names.md 15g). */
-extern u32 g_SkyRowBase;
-extern u32 g_EnvScriptLength;
 
 void SetEnvironmentScript(u32 *script) {
     u32 value0;

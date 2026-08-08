@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include "game/state.h"
 #include "psyq/kernel.h"
-
-extern u8 g_LibcCtype[];
+#include "psyq/libc_internal.h"
 
 void putchar(s32 ch) {
     u8 c;

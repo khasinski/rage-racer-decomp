@@ -2,9 +2,8 @@
 #include "psyq/kernel.h"
 #include "psyq/snd.h"
 
-typedef void (*Callback)(void);
+#include "psyq/snd_internal.h"
 
-extern Callback g_SndPrevVSyncCallback;
 
 
 void SsStopSoundTick(void) {

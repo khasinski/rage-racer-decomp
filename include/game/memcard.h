@@ -2,6 +2,7 @@
 #define GAME_MEMCARD_H
 
 #include "common.h"
+
 #include "psyq/gpu.h"
 
 /*

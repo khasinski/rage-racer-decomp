@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/menu.h"
+#define GAME_TEAM_LOGO_CLUT_POS_TYPE Rect
+#include "game/menu_internal.h"
 #include "game/state.h"
 #include "game/asset.h"
 #include "psyq/gpu.h"
@@ -11,10 +13,6 @@
  * address, and draw_team_logo_canvas.c reads the two rects through its own
  * TeamLogoClutPos / TeamLogoTexturePos structs, so there is no single type
  * to hoist without rewriting those indices. */
-extern Rect g_TeamLogoClutRect;
-extern Rect g_TeamLogoRect;
-extern u16 g_TeamLogoCanvas[];
-
 void LoadBootAssets(void) {
     u8 *loaded;
     u8 *base;

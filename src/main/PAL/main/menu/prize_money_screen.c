@@ -7,14 +7,6 @@
 #include "game/sound.h"
 #include "game/car.h"
 
-extern CarEntry g_SaveDefaults[];
-extern s16 g_ClassRecords;
-extern s16 g_ClassClears;
-extern s32 g_ClassWinCount;
-extern u8 g_ExtraGrandPrixCourseProgress;
-extern u8 g_GrandPrixCourseProgress;
-extern u8 *g_CourseProgress;
-extern s32 g_BgmSelection;
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
 void UpdatePrizeMoneyScreen(void) {

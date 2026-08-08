@@ -6,10 +6,9 @@
 #include "psyq/gpu.h"
 #include "game/cd.h"
 #include "game/render.h"
-
-extern volatile u32 *g_FmvVlcBuffers[];
-extern s32 g_FmvStripIndex;
-
+#include "game/fmv_decode_internal.h"
+#define GAME_FMV_STATE_QUALIFIER volatile
+#include "game/fmv_internal.h"
 
 void DecodeFmvFrame(void) {
     s32 value;
@@ -43,22 +42,12 @@ void DecodeFmvFrame(void) {
     }
 }
 
-extern s32 g_StreamReturnScene;
 void EndFmv(void) {
     DecDCToutCallback(0);
     StUnSetRing();
     g_SceneId = g_StreamReturnScene;
     g_StreamReturnScene = g_FmvStreamEnded;
 }
-
-extern volatile u32 g_FmvVlcBuffer0;
-extern volatile u32 g_FmvVlcBuffer1;
-extern volatile u32 g_FmvStripBuffer0;
-extern volatile u32 g_FmvStripBuffer1;
-extern volatile u16 g_DispEnv0Y;
-extern volatile u16 g_DispEnv1X;
-extern volatile u16 g_DispEnv1Y;
-extern volatile u32 g_FrameParity;
 
 void InitFmvContext(void *ctx, s32 width, s32 height) {
     volatile u32 *words;
@@ -75,10 +64,10 @@ void InitFmvContext(void *ctx, s32 width, s32 height) {
 
     words = ctx;
     halves = ctx;
-    word0 = g_FmvVlcBuffer0;
-    word1 = g_FmvVlcBuffer1;
-    word3 = g_FmvStripBuffer0;
-    word4 = g_FmvStripBuffer1;
+    word0 = (u32)g_FmvVlcBuffer0;
+    word1 = (u32)g_FmvVlcBuffer1;
+    word3 = (u32)g_FmvStripBuffer0;
+    word4 = (u32)g_FmvStripBuffer1;
     words[2] = 0;
     words[5] = 0;
     words[0] = word0;

@@ -3,8 +3,7 @@
 
 #include "common.h"
 
-extern long g_SndSeqOpenMask;
-extern char g_MsgSeqTableFull[];
+#include "psyq/snd_internal.h"
 
 long SsSeqOpen(long seq_data, long vab_id) {
     long used;

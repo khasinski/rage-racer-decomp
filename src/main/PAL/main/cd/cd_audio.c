@@ -2,12 +2,12 @@
 #include "psyq/cd.h"
 #include "game/state.h"
 #include "game/cd.h"
+#include "game/cd_internal.h"
+#include "game/track_internal.h"
 #include "game/race.h"
 #include "game/menu.h"
 #include "psyq/snd.h"
 
-extern u8 g_CdVolume;
-extern CdlLOC g_CdTrackLoopPoint[];
 
 void StepCdPauseRequest(void) {
     s32 state;
@@ -177,7 +177,6 @@ void TickCdAudio(void) {
     StepCdVolumeFade();
 }
 
-extern void *g_TrackCameras;
 
 void SelectTrackCameraTable(u8 *block, s32 variant) {
     void *ptr;

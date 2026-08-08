@@ -1,22 +1,8 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
+#include "psyq/gpu_environment_internal.h"
 
-typedef struct Cache {
-    volatile u_short x0;
-    volatile u_short x2;
-    volatile u_short x4;
-    volatile u_short x6;
-    volatile u_short x8;
-    volatile u_short xA;
-    volatile u_short xC;
-    volatile u_short xE;
-    u_long x10;
-} Cache;
-
-extern GfxState g_GpuFuncs;
-extern char g_FmtGpuPutDispEnv[];
-extern Cache g_DispEnvCache;
 
 /* libgpu PutDispEnv: GP1(05h/06h/07h/08h) from a 0x14-byte DISPENV.
  * Named from its own trace string g_FmtGpuPutDispEnv, "PutDispEnv(%08x)...". */

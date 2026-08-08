@@ -4,6 +4,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/spu_internal_types.h"
 
 /*
  * One block of the SPU heap. The two top bits of `addr` are flags, not
@@ -20,11 +21,6 @@ typedef struct SpuMallocEntry {
 #define SPU_BLOCK_END   0x40000000
 #define SPU_BLOCK_ADDR  0x0FFFFFFF
 #define SPU_BLOCK_EMPTY 0x2FFFFFFF
-
-typedef struct SpuVolume {
-    short left;
-    short right;
-} SpuVolume;
 
 typedef struct SpuCommonAttr {
     u_long mask;
@@ -81,22 +77,6 @@ typedef struct SpuReverbRegAttr {
     short vRIN;
 } SpuReverbRegAttr;
 
-typedef struct SpuReverbAttr {
-    u_long mask;
-    long mode;
-    SpuVolume depth;
-    long delay;
-    long feedback;
-} SpuReverbAttr;
-
-typedef struct SpuRevAttrState {
-    long mode;
-    short depth_left;
-    short depth_right;
-    long delay;
-    long feedback;
-} SpuRevAttrState;
-
 void SpuInit(void);
 void _SpuInit(long reset_voice_center_note);
 void SpuStart(void);
@@ -137,44 +117,6 @@ void SpuSetCommonAttr(SpuCommonAttr *attr);
 
 /* The SPU hardware register file at g_SpuRegBase, as a struct and as the raw
  * half-word window the transfer paths use. */
-typedef struct SpuVoiceRegs {
-    SpuVolume volume;
-    u_short pitch;
-    u_short addr;
-    u_short adsr[2];
-    u_short volumex;
-    u_short loopAddr;
-} SpuVoiceRegs;
-
-typedef struct SpuCommonRegs {
-    SpuVoiceRegs voice[24];
-    SpuVolume mainVol;
-    SpuVolume revVol;
-    u_short keyOn[2];
-    u_short keyOff[2];
-    u_short chanFm[2];
-    u_short noiseMode[2];
-    u_short revMode[2];
-    u_long chanOn;
-    u_short unknown;
-    u_short revWorkAddr;
-    u_short irqAddr;
-    u_short transAddr;
-    u_short transFifo;
-    volatile u_short spuCnt;
-    u_short dataTrans;
-    u_short spuStat;
-    SpuVolume cdVol;
-    SpuVolume extVol;
-    SpuVolume mainVolCurrent;
-    SpuVolume unknownVol;
-} SpuCommonRegs;
-
-typedef union SpuRegisterMap {
-    SpuCommonRegs regs;
-    volatile u_short raw[0x100];
-} SpuRegisterMap;
-
 /* Declared identically by 50 translation units before this
  * header carried them. */
 

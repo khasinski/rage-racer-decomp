@@ -4,19 +4,15 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/replay.h"
+#define GAME_REPLAY_MODEL_TYPE u16
+#include "game/replay_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
+#include "game/player_car_internal.h"
+#include "game/track_internal.h"
 
 #define AVG(a, b) (((a) + (b)) / 2)
 
-extern u16 g_ReplayPlayerModel;
-extern u16 g_ReplayRivalModel;
-extern ReplayGrandPrixFrame *g_ReplayFramesGp;
-extern s32 g_ReplayWriteCursor;
-extern s32 g_ReplayFrameCount;
-extern s32 g_ReplayBufferWrapped;
-extern u8 g_PlayerCar;
-extern u8 *g_EnvScriptClock;
 
 void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *rivalObj) {
     s32 index;
@@ -156,9 +152,9 @@ void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
 
 void RecordReplayFrame(void) {
     if (g_GrandPrixMode != 0) {
-        StoreReplayCarFrame(g_ReplayWriteCursor, &g_PlayerCar, (u8 *)g_Cars);
+        StoreReplayCarFrame(g_ReplayWriteCursor, (u8 *)&g_PlayerCar, (u8 *)g_Cars);
     } else {
-        StoreReplayTimeAttackFrame(g_ReplayWriteCursor, &g_PlayerCar);
+        StoreReplayTimeAttackFrame(g_ReplayWriteCursor, (u8 *)&g_PlayerCar);
     }
 
     g_ReplayWriteCursor++;

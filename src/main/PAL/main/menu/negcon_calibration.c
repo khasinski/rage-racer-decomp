@@ -2,15 +2,16 @@
 #include "game/prim.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#include "game/menu_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
+#define GAME_INPUT_CALIBRATION_TYPE s16
+#include "game/input_internal.h"
 
 /* Copied into a local solely to preserve the retail code shape. */
-extern NegconUvTemplate g_NegconSteerPlayUvQuad;
 
 /* The 0..3 steering-play setting this screen edits. */
-extern s16 g_NegconSteerPlay;
 
 
 /* Local wide-parameter views; see GameQueueSprite.c / SetGteLightMatrix.c. */
@@ -58,7 +59,6 @@ void DrawNegconSteerPlayScreen(void) {
         GameQueueLine(ot, prim, 0x94, 0xE7, 0xA8, 0xE7, 0, 0, 0);
 }
 
-extern u8 g_PadType;
 
 
 /*
@@ -100,10 +100,8 @@ void UpdateNegconSteerPlayScreen(void) {
     DrawControllerSetupScene(1);
 }
 
-extern NegconUvTemplate g_NegconMaxTwistUvQuad;
 
 /* The 0..3 maximum-twist setting this screen edits. */
-extern s16 g_NegconMaxTwist;
 
 /*
  * Game mode 11's overlay: the caption, the two nudge arrows (lit only while

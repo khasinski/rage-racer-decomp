@@ -1,25 +1,20 @@
 #include "common.h"
 #include "game/prim.h"
 #include "game/asset.h"
+#include "game/asset_internal.h"
+#define GAME_STREAM_RETURN_TYPE u32
+#include "game/fmv_internal.h"
 #include "game/car.h"
 #include "game/cd.h"
 #include "game/race.h"
 #include "game/render.h"
+#define GAME_CAMERA_VIEW_MODE_TYPE u32
+#include "game/render_internal.h"
+#include "game/race_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
-
-typedef struct UnkEventPair {
-    s16 timer;
-    s16 carIndex;
-} UnkEventPair;
-
-extern u32 g_StreamReturnScene;
-extern s32 g_PrologueStep;
-extern u8 g_TextNowLoading[];
-extern u32 g_CameraViewMode;
-extern UnkEventPair g_PrologueCameraCuts[];
 
 void UpdateAttractDemoScene(void) {
     g_AttractDemoSteps[g_AttractDemoStep]();

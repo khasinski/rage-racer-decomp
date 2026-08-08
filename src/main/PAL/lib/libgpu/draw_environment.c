@@ -1,10 +1,9 @@
 #include "common.h"
 #include "psyq/gpu.h"
+#include "psyq/gpu_internal.h"
 
-extern u_char g_DispEnvCache;
-long GetDispEnv(long env) { MemCopy((u_char *)env, &g_DispEnvCache, 0x14); return env; }
+long GetDispEnv(long env) { MemCopy((u_char *)env, (u_char *)&g_DispEnvCache, 0x14); return env; }
 
-extern GpuCallbacks *g_GpuFuncs;
 
 u_long GetODE(void) {
     u_long ret;
@@ -49,8 +48,6 @@ void SetDrawMode(DrawPacket *pkt, long dfe, long dtd, long tpage, void *window) 
     pkt->x1y1 = Gpu_BuildTexWindowCmd(window);
 }
 
-extern u_short g_VramWidth[];
-extern u_short g_VramHeight[];
 
 typedef struct DrawEnvPacketSource {
     Rect clip;
@@ -98,7 +95,7 @@ void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {
         coord = value >> 16;
 
         if (coord >= 0) {
-            volatile u_short *width = g_VramWidth;
+            volatile u_short *width = &g_VramWidth;
 
             value = *width;
             value = (short)value;
@@ -115,7 +112,7 @@ void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {
 
         coord = clipped.h;
         if (coord >= 0) {
-            volatile u_short *height = g_VramHeight;
+            volatile u_short *height = &g_VramHeight;
 
             value = *height;
             value = (short)value;

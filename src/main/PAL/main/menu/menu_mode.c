@@ -1,8 +1,11 @@
 #include "common.h"
 #include "game/car.h"
 #include "game/menu.h"
+#include "game/menu_internal.h"
+#include "game/menu_scripts_internal.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/vector.h"
@@ -298,8 +301,6 @@ void DrawTimeAttackPlate(s32 stepArg) {
     }
 }
 
-extern Matrix g_SceneLightMatrix;
-
 /* The menu-mode twin of InitTrackLighting. */
 void InitMenuLighting(void) {
     g_SceneColorMatrix = g_MenuColorMatrix;
@@ -310,13 +311,6 @@ void InitMenuLighting(void) {
     SetFarColor(0, 0, 0);
     SetFogNear(0x4E20, 0x140);
 }
-
-extern void *g_CourseSelectModalScript;
-extern void *g_CarSelectPopupScript;
-extern void *g_CustomizePopupScript;
-extern void *g_CarShopModalScript;
-extern void *g_EngineerShopModalScript;
-
 
 void InitMenuMode(void) {
     GameRaceProgress *p;

@@ -1,9 +1,8 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-typedef void (*Callback)(void);
+#include "psyq/snd_internal.h"
 
-extern Callback g_SndTickCallback;
 
 void SsSoundTickVSyncCallback(void) {
     if (g_SndTickVSyncToggle == 0) {

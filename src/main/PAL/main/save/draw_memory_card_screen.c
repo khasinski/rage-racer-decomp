@@ -1,11 +1,11 @@
 #include "common.h"
 #include "game/prim.h"
+#define GAME_DRAW_BUFFER_QUALIFIER volatile
+#include "game/render_internal.h"
 #include "game/memcard.h"
 #include "game/menu.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
-
-extern u8 *volatile g_DrawBuffer;
 
 void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow)
 {

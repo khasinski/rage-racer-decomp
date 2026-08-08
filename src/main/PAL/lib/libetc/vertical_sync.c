@@ -8,8 +8,6 @@ typedef struct CallbackTable {
     void (*callback)(void);
 } CallbackTable;
 
-extern KernelCallback *g_IntrRpNode;
-
 long VSync(long mode) {
     long oldTimer;
     long delta;

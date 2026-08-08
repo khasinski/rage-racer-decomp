@@ -1,22 +1,7 @@
 #include "common.h"
 #include <stdio.h>
 #include "psyq/kernel.h"
-
-extern volatile u_long *g_GpuGp1;
-extern volatile u_long *g_GpuDmaMadr;
-extern volatile u_long *g_GpuDmaChcr;
-extern volatile u_long *g_GpuDpcr;
-extern long g_GpuLastCb[];
-extern long g_GpuLastCbArg;
-extern long g_GpuLastCbData;
-extern long g_GpuQueueWriteIdx;
-extern volatile long g_GpuQueueReadIdx;
-extern long g_GpuResetIntrMask;
-extern long g_GpuTimeoutDeadline;
-extern long g_GpuTimeoutPolls;
-extern char g_MsgGpuTimeout[];
-extern char g_MsgGpuTimeoutCallback[];
-
+#include "psyq/gpu_internal.h"
 
 long Gpu_CheckTimeout(void) {
     long intrMask;
@@ -41,7 +26,7 @@ long Gpu_CheckTimeout(void) {
     pending = g_GpuQueueWriteIdx;
     gpuTail = g_GpuQueueReadIdx;
     printf((u8 *)g_MsgGpuTimeout, (pending - gpuTail) & 0x3F, *gp1ForLog, *g_GpuDmaChcr, *g_GpuDmaMadr);
-    dc = g_GpuLastCb;
+    dc = (long *)&g_GpuLastCb;
     asm("" : "=r"(dc) : "0"(dc));
     printf((u8 *)g_MsgGpuTimeoutCallback, *dc, g_GpuLastCbArg, g_GpuLastCbData);
 
@@ -64,8 +49,6 @@ long Gpu_CheckTimeout(void) {
 
     return result;
 }
-
-extern volatile u_long *g_GpuGp0;
 
 /* GPU-type probe: GP1(10h) info word 7, then a texture-window write-back
  * test. Returns 0..4; ResetGraph stores it as the graph type. */
@@ -101,7 +84,7 @@ long Gpu_ProbeType(u_long probe) {
     return 4;
 }
 
-void MemFill(u_char *dst, u_char value, long count) {
+void MemFill(u_char *dst, long value, long count) {
     volatile long unused;
     long i = count - 1;
 

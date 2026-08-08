@@ -1,9 +1,8 @@
 #include "common.h"
 #include "game/asset.h"
+#include "game/asset_internal.h"
 #include "game/render.h"
 #include "game/state.h"
-
-extern char g_TextNowLoading[];
 
 
 void ExitBgmSelect(void) {

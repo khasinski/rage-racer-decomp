@@ -1,13 +1,12 @@
 #include "common.h"
+#include "game/state.h"
 #include "game/track.h"
 #include "game/race.h"
 #include "game/car.h"
+#include "game/car_internal.h"
+#include "game/track_internal.h"
 #include "game/render.h"
 
-extern u8 *g_TrackArcCenters;
-extern s16 g_TorqueBandEnd;
-extern s16 g_TorqueLossBandEnd;
-extern u8 g_PadType;
 /*
  * AI target-speed / drivetrain physics driver (called by UpdatePlayerCar). Reads
  * the per-car spec block g_CarSpec to compute a target speed, applies steering
@@ -322,7 +321,7 @@ void UpdateCarDrivetrain(void *base) {
         bandBase = bandStart - 1;
       }
     }
-    bandEnd = *((&g_TorqueBandEnd) + bandIndex);
+    bandEnd = g_TorqueBandEnd[bandIndex];
     bandSlot = bandBase;
     if (bandSlot < bandEnd)
     {
@@ -371,7 +370,7 @@ void UpdateCarDrivetrain(void *base) {
         lossBase = lossStart - 1;
       }
     }
-    bandEnd = *((&g_TorqueLossBandEnd) + bandIndex);
+    bandEnd = g_TorqueLossBandEnd[bandIndex];
     assistStep = lossBase;
     bandScale = 0;
     if (assistStep < bandEnd)
@@ -716,7 +715,7 @@ void UpdateCarDrivetrain(void *base) {
     dragBase = arcFlags % 4;
     if (dragBase > 0)
     {
-      arcCentre = (((((s32) (arcFlags << 0x10)) >> 13) >> 7) * 0xC) + g_TrackArcCenters;
+      arcCentre = (((((s32) (arcFlags << 0x10)) >> 13) >> 7) * 0xC) + (u8 *)g_TrackArcCenters;
       toCentreX = (*(s32 *)(((u8 *)car) + 0)) - (*(s32 *)(((u8 *)arcCentre) + 0));
       toCentreZ = (*(s32 *)(((u8 *)car) + 8)) - (*(s32 *)(((u8 *)arcCentre) + 4));
       centreAngle = Atan2(toCentreX, toCentreZ);

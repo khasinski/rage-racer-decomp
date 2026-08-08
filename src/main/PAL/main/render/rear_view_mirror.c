@@ -3,6 +3,7 @@
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
@@ -13,9 +14,6 @@ void ResetMirrorState(void) {
     g_MirrorUnlocked = 0;
 }
 
-extern s32 g_CameraViewMode;
-extern s32 g_VisibleCellMask;
-extern s32 g_VisibleCellList;
 
 /*
  * Sets up the scratchpad render state (0x1F800000) for the rear-view mirror
@@ -88,16 +86,13 @@ s32 BeginMirrorPass(void) {
             g_MirrorDrawEnv1ClipH = 0;
         }
 
-        g_VisibleCellMask = (s32)&g_MirrorVisibleCellMask;
-        g_VisibleCellList = (s32)&g_MirrorVisibleCellList;
+        g_VisibleCellMask = g_MirrorVisibleCellMask;
+        g_VisibleCellList = g_MirrorVisibleCellList;
         scratch->depth += 0x800;
     }
 
     return mirrorEnabled;
 }
-
-extern s32 g_MainVisibleCellMask;
-extern s32 g_MainVisibleCellList;
 
 /*
  * Sibling of BeginMirrorPass: closes the mirror pass and restores the full-screen
@@ -121,10 +116,10 @@ void EndMirrorPass(void) {
     scratch->x1 = v0reg;
     v0reg = 0xF0;
     scratch->y1 = v0reg;
-    v0reg = (s32)&g_MainVisibleCellMask;
-    g_VisibleCellMask = v0reg;
+    v0reg = (s32)g_MainVisibleCellMask;
+    g_VisibleCellMask = (u32 *)v0reg;
     v0reg = (s32)g_DrawBuffer;
-    g_VisibleCellList = (s32)&g_MainVisibleCellList;
+    g_VisibleCellList = g_MainVisibleCellList;
     v1reg = scratch->depth;
     scratch->x0 = 0;
     scratch->y0 = 0;

@@ -3,13 +3,8 @@
 
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/press_internal.h"
 
-extern u_char g_FmtMdecBadOption[];
-extern u_char g_MsgMdecInSync[];
-extern u_char g_MsgMdecOutSync[];
-extern u_char g_FmtMdecTimeoutDma[];
-extern u_char g_FmtMdecTimeoutStatus[];
-extern u_char g_FmtMdecTimeout[];
 
 void MDEC_reset(long mode) {
     register long option asm("$5") = mode;

@@ -4,10 +4,8 @@
 #include "psyq/snd.h"
 #include "game/audio.h"
 
-extern u_char *g_SndSeqTable[];
-extern short g_SndCurrentSeqSep;
-extern volatile u_char g_SndVoiceCount;
-extern u_char g_SndVoiceRegs[];
+#define SND_VOICE_COUNT_QUALIFIER volatile
+#include "psyq/snd_internal.h"
 
 short SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short mode) {
     short i;
@@ -44,7 +42,7 @@ short SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short mode) {
     if (mode == 1) {
         for (i = 0; i < g_SndVoiceCount; i++) {
             offset = (i * 12 + i) * 4;
-            if (*(u_short *)&g_SndVoiceStateSeqSep[offset] == (u_short)temp) {
+            if (*(u_short *)&((u_char *)g_SndVoiceState + 14)[offset] == (u_short)temp) {
                 pos = i * 8;
                 ((u_short *)g_SndVoiceRegs)[pos] = x;
                 ((u_short *)g_SndVoiceRegs)[pos + 1] = y;

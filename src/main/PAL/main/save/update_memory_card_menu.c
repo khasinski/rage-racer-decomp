@@ -1,20 +1,10 @@
 #include "common.h"
 #include "game/memcard.h"
+#include "game/memcard_internal.h"
 #include "game/state.h"
 #include "game/menu.h"
 #include "psyq/gpu.h"
 #include "game/audio.h"
-
-/* Volatile aliases of three game/menu.h globals, NOT extra objects: this file
- * reads each of them both ways, and only the volatile spelling forces the
- * reload the retail code has at those few sites. A redeclaration cannot add the
- * qualifier (gcc 2.6.3 keeps the first declaration's type), so the alias needs
- * its own identifier. */
-extern volatile s32 g_McCardStatusV asm("g_McCardStatus");
-extern volatile s32 g_McMenuSubState;
-extern volatile s32 GameMenuLoadPhase;
-extern volatile s32 g_McConfirmChoice_v asm("g_McConfirmChoice");
-
 
 void UpdateMemoryCardMenu(void) {
     s32 fadeBusy = 0;

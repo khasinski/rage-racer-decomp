@@ -1,13 +1,12 @@
 #include "common.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
+#include "game/asset_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "psyq/gte.h"
 
-extern GameRenderView *g_CarModelAsset;
-extern Matrix g_SceneLightMatrix;
-extern s32 g_ScratchRenderMode;
 
 
 /*
@@ -20,7 +19,7 @@ extern s32 g_ScratchRenderMode;
  * base OT bucket; clipHandle is the optional clip volume from GetTrackZoneBlend.
  */
 void DrawPlayerCarModel(GameRenderObject *obj) {
-    GameRenderView *view = g_CarModelAsset;
+    GameRenderView *view = (GameRenderView *)g_CarModelAsset;
     Matrix m_10;
     Matrix m_30;
     Matrix m_50;
@@ -114,7 +113,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     SubmitModel((void *)SCRATCHPAD_ADDR, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
 
     for (i = 0; i < 2; i++) {
-        GameRenderView *v = g_CarModelAsset;
+        GameRenderView *v = (GameRenderView *)g_CarModelAsset;
         s32 ax = v->angle_0;
         if (i % 2) {
             ax = -ax;
@@ -132,14 +131,13 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
         SetLightMatrix(&m_90);
     }
 
-    obj->y += g_CarModelAsset->horizon_6;
-    obj->field_60 += g_CarModelAsset->horizon_6;
+    obj->y += ((GameRenderView *)g_CarModelAsset)->horizon_6;
+    obj->field_60 += ((GameRenderView *)g_CarModelAsset)->horizon_6;
     if (clipHandle != 0) {
         RestoreColorMatrix();
     }
 }
 
-extern u8 *g_CamRow;
 
 void DrawCar(GameRenderObject *obj) {
     Matrix m_10;

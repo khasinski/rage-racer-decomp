@@ -1,23 +1,8 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
+#include "psyq/press_internal.h"
 
-extern long g_StCurrentFrameCount;
-extern volatile u_char *g_StreamCdReg0;
-extern volatile u_char *g_StreamCdReg3;
-extern long g_StNotStream2Mode;
-extern short g_StCurrentSector;
-extern long g_StColorMode;
-extern long g_StEndCallback;
-extern long g_StNextChannel;
-extern long g_StCurrentChannel;
-extern long g_StDmaBusy;
-extern long g_StWriteCursor;
-extern long g_StReadCursor;
-extern StStrHeader *g_StRingBase;
-extern long g_StCopySource;
-extern long g_StRingSize;
-extern long g_StInterruptPending;
 
 /*
  * Issues CD command 0xE (set mode) with the mode byte `mode`, and when the
@@ -105,5 +90,5 @@ void StSetStream(long mode, long start_frame, long end_frame, long callback, lon
     g_StNextChannel = 0;
     g_StCurrentSector = 0;
     g_StCurrentFrameCount = 0;
-    g_StEndCallback = user_data;
+    g_StEndCallback = (StCallback)user_data;
 }

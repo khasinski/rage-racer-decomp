@@ -2,8 +2,8 @@
 
 #include "common.h"
 #include "psyq/spu.h"
+#include "psyq/spu_internal.h"
 
-extern volatile u_short *g_SpuRegBase;
 
 u_long _SpuSetAnyVoice(long mode, u_long voiceBits, long regLow, long regHigh) {
     volatile u_short *reg_hi;

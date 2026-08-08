@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/state.h"
-
-extern long g_PrologueStep;
+#include "game/race_internal.h"
 
 void TickPrologueStep(void) {
     void (*func)(void);

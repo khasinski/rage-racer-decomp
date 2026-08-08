@@ -4,12 +4,7 @@
 #include "psyq/snd_types.h"
 #include "psyq/snd.h"
 
-extern volatile u_char g_SndVoiceStateAutoVol[];
-extern volatile u_char g_SndVoiceStateVolStep[];
-extern volatile u_char g_SndVoiceStateVolCounter[];
-extern volatile u_char g_SndVoiceStateVolCounterReload[];
-extern volatile u_char g_SndVoiceStateStartVol[];
-extern volatile u_char g_SndVoiceStateEndVol[];
+#include "psyq/snd_internal.h"
 
 /* The three identity asms and the one on stepArg are load-bearing: each keeps
  * the local copy a distinct pseudo from the parameter it was taken from, so
@@ -41,9 +36,9 @@ void SpuVmAutoVol(long voiceArg, long startArg, long targetArg, long stepArg) {
 
     {
     long offset = (short)voiceArg * 52;
-    *(volatile short *)(g_SndVoiceStateAutoVol + offset) = 1;
-    *(volatile short *)(g_SndVoiceStateStartVol + offset) = start;
-    *(volatile short *)(g_SndVoiceStateEndVol + offset) = target;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 28) + offset) = 1;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 36) + offset) = start;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 38) + offset) = target;
     }
 
     __asm__ ("" : "=r"(stepArg) : "0"(stepArg));
@@ -63,9 +58,9 @@ small:
     long quotient;
     quotient = (short)step / ((short)start - (short)target);
     offset = (short)voice * 52;
-    *(volatile short *)(g_SndVoiceStateVolStep + offset) = 1;
-    *(volatile short *)(g_SndVoiceStateVolCounter + offset) = quotient;
-    *(volatile short *)(g_SndVoiceStateVolCounterReload + offset) = quotient;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 30) + offset) = 1;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 32) + offset) = quotient;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 34) + offset) = quotient;
     return;
     }
 
@@ -77,17 +72,11 @@ big:
     quotient -= (short)target;
     quotient /= (short)step;
     offset = (short)voice * 52;
-    *(volatile short *)(g_SndVoiceStateVolCounter + offset) = 0;
-    *(volatile short *)(g_SndVoiceStateVolStep + offset) = quotient;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 32) + offset) = 0;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 30) + offset) = quotient;
     }
 }
 
-extern u_short g_SndVoiceRegs[];
-extern u_char g_SndVoiceFlags[];
-extern SpuVoice g_SndVoiceState[];
-extern VabHdr *g_SndCurrentVabHeader;
-extern SvmCurrentAttr g_SndCurrentAttr;
-extern short g_SndMonoMode;
 
 void SpuVmAutoVolTick(short voice) {
     short currentVolume;
@@ -175,8 +164,8 @@ void SpuVmAutoVolTick(short voice) {
         }
     }
 
-    g_SndVoiceRegs[registerOffset] = leftVolume;
-    g_SndVoiceRegs[registerOffset + 1] = rightVolume;
+    ((u_short *)g_SndVoiceRegs)[registerOffset] = leftVolume;
+    ((u_short *)g_SndVoiceRegs)[registerOffset + 1] = rightVolume;
     g_SndVoiceFlags[voice] |= 3;
 }
 
@@ -207,9 +196,9 @@ void SpuVmAutoPan(long voiceArg, long startArg, long targetArg, long stepArg) {
 
     {
     long offset = (short)voiceArg * 52;
-    *(volatile short *)(g_SndVoiceStateAutoPan + offset) = 1;
-    *(volatile short *)(g_SndVoiceStateStartPan + offset) = start;
-    *(volatile short *)(g_SndVoiceStateEndPan + offset) = target;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 40) + offset) = 1;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 48) + offset) = start;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 50) + offset) = target;
     }
 
     __asm__ ("" : "=r"(stepArg) : "0"(stepArg));
@@ -229,9 +218,9 @@ small:
     long quotient;
     quotient = (short)step / ((short)start - (short)target);
     offset = (short)voice * 52;
-    *(volatile short *)(g_SndVoiceStatePanStep + offset) = 1;
-    *(volatile short *)(g_SndVoiceStatePanCounter + offset) = quotient;
-    *(volatile short *)(g_SndVoiceStatePanCounterReload + offset) = quotient;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 42) + offset) = 1;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 44) + offset) = quotient;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 46) + offset) = quotient;
     return;
     }
 
@@ -243,18 +232,11 @@ big:
     quotient -= (short)target;
     quotient /= (short)step;
     offset = (short)voice * 52;
-    *(volatile short *)(g_SndVoiceStatePanCounter + offset) = 0;
-    *(volatile short *)(g_SndVoiceStatePanStep + offset) = quotient;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 44) + offset) = 0;
+    *(volatile short *)(((u_char *)g_SndVoiceState + 42) + offset) = quotient;
     }
 }
 
-extern u_short g_SndVoiceRegsVolRight[];
-extern u_char g_SndCurrentVolume;
-extern u_char g_SndCurrentPan;
-extern u_char g_SndCurrentMasterVolume;
-extern u_char g_SndCurrentMasterPan;
-extern u_char g_SndCurrentToneVolume;
-extern u_char g_SndCurrentTonePan;
 
 void SpuVmAutoPanTick(long voice) {
     long stack[6];
@@ -276,22 +258,22 @@ void SpuVmAutoPanTick(long voice) {
     index8 = channel * 8;
     offset = channel * 52;
     originalArg = voice;
-    if (*(short *)&g_SndVoiceStatePanCounter[offset] != 0) {
-        counter = *(u_short *)&g_SndVoiceStatePanCounterReload[offset];
-        *(u_short *)&g_SndVoiceStatePanCounterReload[offset] = counter - 1;
+    if (*(short *)&((u_char *)g_SndVoiceState + 44)[offset] != 0) {
+        counter = *(u_short *)&((u_char *)g_SndVoiceState + 46)[offset];
+        *(u_short *)&((u_char *)g_SndVoiceState + 46)[offset] = counter - 1;
         if ((short)counter > 0) {
             return;
         }
-        *(u_short *)&g_SndVoiceStatePanCounterReload[offset] = *(u_short *)&g_SndVoiceStatePanCounter[offset];
+        *(u_short *)&((u_char *)g_SndVoiceState + 46)[offset] = *(u_short *)&((u_char *)g_SndVoiceState + 44)[offset];
     }
 
-    step = *(short *)&g_SndVoiceStatePanStep[offset];
-    sum = *(u_short *)&g_SndVoiceStateStartPan[offset] + *(u_short *)&g_SndVoiceStatePanStep[offset];
-    *(u_short *)&g_SndVoiceStateStartPan[offset] = sum;
+    step = *(short *)&((u_char *)g_SndVoiceState + 42)[offset];
+    sum = *(u_short *)&((u_char *)g_SndVoiceState + 48)[offset] + *(u_short *)&((u_char *)g_SndVoiceState + 42)[offset];
+    *(u_short *)&((u_char *)g_SndVoiceState + 48)[offset] = sum;
     switch (0) { default:
     if (!(step <= 0)) {
     current = (u_long)sum << 16;
-    limit = *(short *)&g_SndVoiceStateEndPan[offset];
+    limit = *(short *)&((u_char *)g_SndVoiceState + 50)[offset];
     current >>= 16;
     positiveCompare = current < limit;
     clampValue = limit;
@@ -304,7 +286,7 @@ void SpuVmAutoPanTick(long voice) {
         break;
     }
     current = (u_long)sum << 16;
-    limit = *(short *)&g_SndVoiceStateEndPan[offset];
+    limit = *(short *)&((u_char *)g_SndVoiceState + 50)[offset];
     current >>= 16;
     clampValue = limit;
     limit = limit < current;
@@ -313,11 +295,11 @@ void SpuVmAutoPanTick(long voice) {
     }
 
     }
-    *(u_short *)&g_SndVoiceStateStartPan[offset] = clampValue;
-    *(u_short *)&g_SndVoiceStateAutoPan[offset] = 0;
+    *(u_short *)&((u_char *)g_SndVoiceState + 48)[offset] = clampValue;
+    *(u_short *)&((u_char *)g_SndVoiceState + 40)[offset] = 0;
 
     }
-    envelope = g_SndVoiceStateStartPan[(short)originalArg * 52];
+    envelope = ((u_char *)g_SndVoiceState + 48)[(short)originalArg * 52];
     {
     u_char *base;
     long level;
@@ -392,7 +374,7 @@ void SpuVmAutoPanTick(long voice) {
 
     clampValue = (short)index8 * 2;
     limit = (short)originalArg;
-    *(u_short *)((u_char *)g_SndVoiceRegsVolRight + clampValue) = right;
+    *(u_short *)((u_char *)((u_char *)g_SndVoiceRegs + 2) + clampValue) = right;
     asm("" : : : "memory");
     *(u_short *)((u_char *)g_SndVoiceRegs + clampValue) = left;
     g_SndVoiceFlags[limit] |= 3;

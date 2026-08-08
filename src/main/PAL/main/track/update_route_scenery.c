@@ -14,11 +14,8 @@ typedef struct KF {
     s16 pad;
 } KF;
 
-extern u8 *g_RouteSceneryData;
-extern s32 g_RouteSceneryClock;
-extern s16 g_RouteSceneryKeyIndex;
-extern s32 g_RouteSceneryRotY;
-extern KF *g_RouteSceneryKeyframe;
+#define GAME_ROUTE_KEYFRAME_TYPE KF
+#include "game/track_internal.h"
 
 void UpdateRouteScenery(void) {
     Matrix mtx0;

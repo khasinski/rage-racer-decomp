@@ -1,8 +1,7 @@
 #include "common.h"
 #include "game/menu.h"
-
-extern TeamLogoSample *g_TeamLogoSampleData;
-extern u16 g_TeamLogoCanvas[];
+#include "game/asset_internal.h"
+#include "game/save_internal.h"
 
 static inline s32 TeamLogoParity(s32 value)
 {

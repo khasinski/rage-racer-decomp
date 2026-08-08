@@ -68,6 +68,16 @@ typedef struct GameScratchpadRenderState {
 #define SCRATCH_VIEW_ANGLE_Z (*(s32 *)0x1F800020)
 #define SCRATCH_VIEW_MATRIX_GTE ((Matrix *)0x1F800028)
 
+extern s32 g_ScratchViewX asm("0x1F800008");
+extern s32 g_ScratchViewY asm("0x1F80000C");
+extern void *g_ScratchViewYPointer asm("0x1F80000C");
+extern volatile s32 g_ScratchViewZVolatile asm("0x1F800010");
+extern void *volatile g_ScratchViewZPointer asm("0x1F800010");
+extern s32 g_ScratchViewAngleX asm("0x1F800018");
+extern s32 g_ScratchViewAngleY asm("0x1F80001C");
+extern s32 g_ScratchViewAngleZ asm("0x1F800020");
+extern s32 g_ScratchEnvMode4 asm("0x1F800084");
+
 /* Course object bank. SubmitCourseModel / SubmitCourseModel2 (0x800296BC,
  * 0x80029E58) load it and index by model id; size is g_CourseModelCount. */
 #define SCRATCH_COURSE_BANK    (*(s32 *)0x1F800048)

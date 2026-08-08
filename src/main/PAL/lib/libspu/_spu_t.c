@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "psyq/spu.h"
+#include "psyq/spu_internal.h"
 
 #define VA_ROUNDED_SIZE(type) \
     (((sizeof(type) + sizeof(long) - 1) / sizeof(long)) * sizeof(long))
@@ -13,7 +14,6 @@
 
 typedef void *va_list;
 
-extern volatile u_short *g_SpuRegBase;
 
 long _spu_t(long op, ...) {
     long dmaControl;
@@ -29,37 +29,37 @@ long _spu_t(long op, ...) {
     case 2:
         count = va_arg(args, u_long);
         g_SpuTransferStartAddr = count >> _spu_mem_mode_unitM;
-        g_SpuRegBase[0xD3] = g_SpuTransferStartAddr;
+        g_SpuRegBase->raw[0xD3] = g_SpuTransferStartAddr;
         break;
 
     case 1:
         g_SpuTransferIsRead = 0;
         i = 0;
-        while (g_SpuRegBase[0xD3] != g_SpuTransferStartAddr) {
+        while (g_SpuRegBase->raw[0xD3] != g_SpuTransferStartAddr) {
             if (++i > 0xF00) {
                 return -2;
             }
         }
 
-        control = g_SpuRegBase[0xD5];
+        control = g_SpuRegBase->raw[0xD5];
         control &= ~0x30;
         control |= 0x20;
-        g_SpuRegBase[0xD5] = control;
+        g_SpuRegBase->raw[0xD5] = control;
         break;
 
     case 0:
         g_SpuTransferIsRead = 1;
         i = 0;
-        while (g_SpuRegBase[0xD3] != g_SpuTransferStartAddr) {
+        while (g_SpuRegBase->raw[0xD3] != g_SpuTransferStartAddr) {
             if (++i > 0xF00) {
                 return -2;
             }
         }
 
-        control = g_SpuRegBase[0xD5];
+        control = g_SpuRegBase->raw[0xD5];
         control &= ~0x30;
         control |= 0x30;
-        g_SpuRegBase[0xD5] = control;
+        g_SpuRegBase->raw[0xD5] = control;
         break;
 
     case 3:
@@ -70,7 +70,7 @@ long _spu_t(long op, ...) {
         }
 
         i = 0;
-        while ((g_SpuRegBase[0xD5] & 0x30) != transferMode) {
+        while ((g_SpuRegBase->raw[0xD5] & 0x30) != transferMode) {
             if (++i > 0xF00) {
                 return -2;
             }

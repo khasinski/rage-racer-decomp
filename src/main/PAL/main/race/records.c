@@ -3,15 +3,16 @@
 #include "game/screens.h"
 #include "game/race.h"
 #include "game/render.h"
-
-extern s32 g_BestLapTimes;
-extern s32 g_BestTotalTimes;
-extern s32 g_RankingRecords;
-extern s32 g_RankingTimes;
-extern u16 g_RankingCars;
-extern s32 g_TimeRecords;
-extern u16 g_TimeRecordCars;
-extern s32 g_BestSectorTimes;
+#define GAME_BEST_LAP_DECL extern s32 g_BestLapTimes
+#define GAME_BEST_TOTAL_DECL extern s32 g_BestTotalTimes
+#define GAME_BEST_SECTOR_DECL extern s32 g_BestSectorTimes
+#include "game/save_internal.h"
+#define GAME_RANKING_RECORDS_DECL extern s32 g_RankingRecords
+#define GAME_RANKING_TIMES_DECL extern s32 g_RankingTimes
+#define GAME_RANKING_CARS_DECL extern u16 g_RankingCars
+#define GAME_TIME_RECORDS_DECL extern s32 g_TimeRecords
+#define GAME_TIME_RECORD_CARS_DECL extern u16 g_TimeRecordCars
+#include "game/records_internal.h"
 
 void InitRecordTables(void) {
     register s32 r2 asm("$2");

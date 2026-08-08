@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern SeqStruct *g_SndSeqTable[];
+#include "psyq/snd_internal.h"
 
 void SsSeqApplyProgramChange(long seq, long sep) {
     SeqStruct *state = &g_SndSeqTable[(short)seq][(short)sep];
@@ -11,7 +11,6 @@ void SsSeqApplyProgramChange(long seq, long sep) {
     state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
 }
 
-extern long g_SndTickResolution;
 
 void SsSeqSetChannelProgram(short seq, short channel, u_char program) {
     SeqStruct *pSeq = &g_SndSeqTable[seq][channel];

@@ -2,7 +2,16 @@
 #include "game/asset.h"
 #include "game/audio.h"
 #include "game/car.h"
+#include "game/course_select_internal.h"
 #include "game/menu.h"
+#define GAME_MENU_SCRIPT_TYPE u8
+#include "game/menu_scripts_internal.h"
+#define GAME_PLAYER_CAR_DECL extern s32 g_PlayerCar
+#include "game/player_car_internal.h"
+#define GAME_TEAM_LOGO_CANVAS_DECL extern u8 g_TeamLogoCanvas[]
+#define GAME_TEAM_LOGO_RECT_DECL extern u8 g_TeamLogoRect[]
+#define GAME_TEAM_LOGO_CLUT_RECT_DECL extern u8 g_TeamLogoClutRect[]
+#include "game/save_internal.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
@@ -17,12 +26,6 @@ void DrawNowLoadingText(void) {
     }
 }
 
-extern u8 *g_CourseProgress;
-extern s32 g_PlayerCar;
-extern s32 g_PlayerTrackProgress;
-extern u8 g_TeamLogoClutRect[];
-extern u8 g_TeamLogoRect[];
-extern u8 g_TeamLogoCanvas[];
 
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
 void EnterCourseSelectScreen(void) {
@@ -88,17 +91,6 @@ typedef struct CourseSelectSpriteBounds {
     s32 h;
 } CourseSelectSpriteBounds;
 
-typedef struct CourseSelectPrizeTable {
-    s32 values[4][6][3];
-} CourseSelectPrizeTable;
-
-typedef struct CourseSelectScrollState {
-    s32 value;
-} CourseSelectScrollState;
-
-extern CourseSelectPrizeTable g_CourseSelectPrizeTable asm("g_PrizeMoney");
-extern CourseSelectScrollState g_CourseSelectScrollState;
-extern s32 D_8009B2C0 asm("g_CourseSelectScrollState");
 
 /*
  * The menu lays out several two-sprite labels from the first sprite's sliding
@@ -167,22 +159,22 @@ s32 DrawCourseSelectScreen(s32 step)
     otBase = SCRATCH_OT_BASE_AS(void);
     ot = (u8 *)otBase + 4;
     if (step == 0) {
-        D_8009B2C0 = 0;
+        g_CourseSelectScrollValue = 0;
         return (s32)otBase;
     }
 
     if (step > 0) {
-        D_8009B2C0 += step;
-        if (D_8009B2C0 >= 0x1FD) {
-            D_8009B2C0 = 0x1FC;
+        g_CourseSelectScrollValue += step;
+        if (g_CourseSelectScrollValue >= 0x1FD) {
+            g_CourseSelectScrollValue = 0x1FC;
         }
         slide = 0;
     } else {
-        D_8009B2C0 += step;
-        if (D_8009B2C0 < 0) {
-            D_8009B2C0 = 0;
+        g_CourseSelectScrollValue += step;
+        if (g_CourseSelectScrollValue < 0) {
+            g_CourseSelectScrollValue = 0;
         }
-        deltaY = 0x1FC - D_8009B2C0;
+        deltaY = 0x1FC - g_CourseSelectScrollValue;
         slide = (u16)((u32)(deltaY * deltaY) / 2048);
     }
 
@@ -191,7 +183,7 @@ s32 DrawCourseSelectScreen(s32 step)
     }
 
     slide -= 0x28;
-    fade = (u8)((u32)D_8009B2C0 / 4);
+    fade = (u8)((u32)g_CourseSelectScrollValue / 4);
 
     if (g_GrandPrixMode != 0) {
         if (g_SeriesSelection == 0) {
@@ -377,7 +369,7 @@ s32 DrawCourseSelectScreen(s32 step)
 
         row = 0;
         prizeOffset = (s16)slide - 0x140;
-        prizeTable = &g_CourseSelectPrizeTable;
+        prizeTable = (CourseSelectPrizeTable *)&g_PrizeMoney;
         prizeFade = fade;
         prizeClut = 0x244;
         do {
@@ -394,7 +386,7 @@ s32 DrawCourseSelectScreen(s32 step)
         } while (row < 3);
     }
 
-    return D_8009B2C0;
+    return g_CourseSelectScrollValue;
 }
 
 /* The mirror of CanSelectNextCourse. */
@@ -424,7 +416,6 @@ s32 CanSelectNextCourse(void) {
     return g_CourseIndex < limit;
 }
 
-extern u8 *g_CourseSelectModalScript;
 void UpdateCourseSelectScreen(void) {
     void *ot;
     u8 *hdr;

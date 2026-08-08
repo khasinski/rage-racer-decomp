@@ -3,13 +3,10 @@
 #include "common.h"
 #include "game/prim.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
-extern u_char g_SpriteFontU[];
-extern u_char g_SpriteFontV[];
-extern u_char g_SpriteFontWidth[];
-extern u_char g_DrawModeEnv[];
 
 typedef struct CdReadSprite {
     u_char tag[8];

@@ -1,7 +1,6 @@
 #include "common.h"
 #include "psyq/spu.h"
-
-extern SpuReverbAttr g_SndReverbAttr;
+#include "psyq/snd_internal.h"
 
 short SsUtSetReverbType(short type) {
     short normalized;

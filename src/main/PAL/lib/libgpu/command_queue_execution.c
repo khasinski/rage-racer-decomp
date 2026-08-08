@@ -3,20 +3,8 @@
 #include "common.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
+#include "psyq/gpu_internal.h"
 
-typedef struct LastCb {
-    void (*cb)(long, long);
-    long arg;
-    long tag;
-} LastCb;
-
-extern volatile QEntry g_GpuQueue[];
-extern volatile long g_GpuQueueWriteIdx;
-extern volatile long g_GpuQueueReadIdx;
-extern long g_ExecQueueIntrMask;
-extern volatile LastCb g_GpuLastCb;
-extern volatile u_long *g_GpuGp1;
-extern volatile long g_DrawSyncCallback;
 /* Driver-table slot +0x24, and the DMA2 completion callback: drains the
  * Gpu_AddQueue ring, then fires the DrawSyncCallback when it empties.
  * Returns the number of entries still queued. */

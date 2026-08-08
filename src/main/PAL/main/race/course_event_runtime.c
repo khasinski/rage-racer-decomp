@@ -2,6 +2,8 @@
 #include "game/race.h"
 #include "game/track.h"
 #include "game/audio.h"
+#include "game/player_car_internal.h"
+#include "game/track_internal.h"
 
 void PlayCountdownCues(s32 timer) {
     if (timer < 0x110) {
@@ -20,7 +22,6 @@ void PlayCountdownCues(s32 timer) {
     }
 }
 
-extern s32 g_PlayerTrackProgress;
 
 void UpdateRivalCueGate(void) {
     s32 value;
@@ -37,13 +38,10 @@ void UpdateRivalCueGate(void) {
     }
 }
 
-extern u32 *g_CourseObjects;
-extern u32 g_CourseObjectCount;
-
 void SetCourseObjects(u32 *table) {
     u32 value;
 
     value = *table;
-    g_CourseObjects = table + 1;
+    g_CourseObjects = (CourseObject *)(table + 1);
     g_CourseObjectCount = value;
 }

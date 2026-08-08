@@ -223,9 +223,6 @@ void UpdateIndexedEffectVoice(void) {
     g_IndexedEffectIndexPrev = g_IndexedEffectIndex;
 }
 
-extern s32 D_800126D0[] asm("g_SoundModes");
-extern u8 D_801E6D00[] asm("g_MusicChannels");
-
 /* Byte-offset view of g_MusicChannels (see game/sound.h): the retail code
  * keeps i * 0x18 in a register rather than indexing. */
 #define CHANNEL(byteOffset) (*(MusicChannel *)((u8 *)g_MusicChannels + (byteOffset)))
@@ -234,9 +231,7 @@ extern u8 D_801E6D00[] asm("g_MusicChannels");
  * (mode * 3) << 3 in a register rather than indexing, so the scaled offset is
  * passed in. The comparison sites below index normally and were previously
  * spelled as word offsets off a s32 * -- D_800126D0 + 14 is entry 2, slot 0. */
-#define MODE(byteOffset) (*(SoundModeEntry *)((u8 *)D_800126D0 + (byteOffset)))
-
-extern SoundModeEntry g_SoundModes[];
+#define MODE(byteOffset) (*(SoundModeEntry *)((u8 *)g_SoundModes + (byteOffset)))
 
 void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
     s32 offset;
@@ -375,7 +370,7 @@ after_match:
     count = cue;
     /* Load-bearing: removal changes five linked preheader words. */
     asm("" : "=r"(count) : "0"(count));
-    base = D_800126D0;
+    base = (s32 *)g_SoundModes;
     entryOffset = loopTableOffset;
     entry = (SoundModeEntry *)((s32)base + entryOffset);
     cue = 0;
@@ -530,4 +525,3 @@ void UpdateBasicEffectVoices(void) {
         offset += 0x18;
     } while (i < 2);
 }
-

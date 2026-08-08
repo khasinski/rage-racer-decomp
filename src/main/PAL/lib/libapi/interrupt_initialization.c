@@ -1,7 +1,5 @@
 #include "psyq/kernel.h"
 
-extern u_long *g_IntrRpNode;
-
 void *InitKernelInterrupts(void) {
     register u_short *state asm("$16");
     volatile u_short *clearMask;
@@ -31,8 +29,8 @@ void *InitKernelInterrupts(void) {
     HookEntryInt(state - 2);
     *(state - 0x1E) = 1;
 
-    g_IntrRpNode[5] = (u_long)startIntrVSync();
-    g_IntrRpNode[1] = (u_long)startIntrDMA();
+    g_IntrRpNode[5] = (KernelCallback)startIntrVSync();
+    g_IntrRpNode[1] = (KernelCallback)startIntrDMA();
     SysEnqIntRP(g_IntrRpNode);
     state -= 0x1E;
     ExitCriticalSection();

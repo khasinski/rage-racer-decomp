@@ -1,5 +1,6 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
+#include "psyq/spu_internal.h"
 
 u_long Spu_ReadFromSpu(long addr, u_long requested) {
     u_long size = requested;

@@ -1,7 +1,6 @@
 #include "common.h"
 #include <ctype.h>
-
-extern u8 g_LibcCtype[];
+#include "psyq/libc_internal.h"
 
 s32 toupper(s32 ch) {
     u8 value = ch;

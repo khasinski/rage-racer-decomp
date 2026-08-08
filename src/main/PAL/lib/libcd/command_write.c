@@ -4,33 +4,20 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
+#include "psyq/cd_internal.h"
 
-extern CdCallback g_CdSyncCallback;
-extern CdCallback g_CdReadyCallback;
-extern u_char g_CdLastPos[4];
-extern char *g_CdCommandNames[];
-extern char *g_CdIntrNames[];
-extern volatile CdIntr g_CdSyncStatus;
-extern u_char g_CdSyncResult[8];
-extern u_char g_CdReadyResult[8];
-extern CdAlarm g_CdTimeoutDeadline;
-extern char g_MsgCdTimeout[];
-extern char g_FmtCdTimeoutState[];
-extern char g_FmtCdCommand[];
-extern char g_FmtCdNoParam[];
-extern char g_CdAlarmNameCw[];
 
 static inline void setAlarm(char *name) {
-    g_CdTimeoutDeadline.deadline = VSync(-1) + 0x3C0;
-    g_CdTimeoutDeadline.count = 0;
-    g_CdTimeoutDeadline.name = name;
+    g_CdTimeoutDeadline = VSync(-1) + 0x3C0;
+    g_CdTimeoutCounter = 0;
+    g_CdTimeoutName = name;
 }
 
 static inline long getAlarm(void) {
-    if (g_CdTimeoutDeadline.deadline < VSync(-1) ||
-        g_CdTimeoutDeadline.count++ > 0x3C0000) {
+    if (g_CdTimeoutDeadline < VSync(-1) ||
+        g_CdTimeoutCounter++ > 0x3C0000) {
         puts(g_MsgCdTimeout);
-        printf((u8 *)g_FmtCdTimeoutState, g_CdTimeoutDeadline.name, g_CdCommandNames[g_CdLastCommand],
+        printf((u8 *)g_FmtCdTimeoutState, ((CdAlarm *)&g_CdTimeoutDeadline)->name, g_CdCommandNames[g_CdLastCommand],
                       g_CdIntrNames[g_CdSyncStatus.sync], g_CdIntrNames[g_CdSyncStatus.ready]);
         CD_flush();
         return -1;
@@ -61,7 +48,7 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
 
     if (command == 2) {
         for (i = 0; i < 4; i++) {
-            g_CdLastPos[i] = params[i];
+            ((u_char *)&g_CdLastPos)[i] = params[i];
         }
     }
 

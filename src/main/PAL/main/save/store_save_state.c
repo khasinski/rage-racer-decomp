@@ -3,25 +3,10 @@
 #include "game/race.h"
 #include "game/memcard.h"
 #include "game/menu.h"
-
-extern s16 g_PadMappingIndex;
-extern s16 g_NegconMappingIndex;
-extern u16 g_NegconSteerNeutral;
-extern u16 g_NegconSteerPlay;
-extern u16 g_NegconNeutralI;
-extern u16 g_NegconNeutralII;
-extern u16 g_NegconMaxTwist;
-extern u16 g_NegconNeutralL;
-extern u16 g_BgmSelection;
-
-extern u16 g_ClassRecords[];
-extern u16 g_TeamLogoCanvas[];
-extern s32 g_BestLapTimes[];
-extern s32 g_BestTotalTimes[];
-extern s32 g_BestSectorTimes[];
-
-extern u8 g_GrandPrixCourseProgress[];
-extern u8 g_ExtraGrandPrixCourseProgress[];
+#define GAME_INPUT_MAPPING_TYPE s16
+#include "game/input_internal.h"
+#define GAME_SAVE_BGM_TYPE u16
+#include "game/save_internal.h"
 
 void StoreSaveStateBlock(u8 *block) {
     register long saveValue asm("$4");
@@ -153,8 +138,8 @@ void StoreSaveStateBlock(u8 *block) {
         {
             /* The remaining register hints in these loops are load-bearing. */
             s32 outer = 0;
-            s32 *lapBase = g_BestLapTimes;
-            s32 *totalBase = g_BestTotalTimes;
+            s32 *lapBase = &g_BestLapTimes[0][0][0];
+            s32 *totalBase = &g_BestTotalTimes[0][0][0];
             u8 *outerDst = block;
 
             for (; outer < 2; outer++) {
@@ -233,7 +218,7 @@ void StoreSaveStateBlock(u8 *block) {
         {
         /* The remaining register hints in these loops are load-bearing. */
         s32 outer = 0;
-        register s32 *sectorBase asm("$11") = g_BestSectorTimes;
+        register s32 *sectorBase asm("$11") = &g_BestSectorTimes[0][0][0];
         u8 *outerDst = block;
         s32 outerOffset = 0;
 

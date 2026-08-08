@@ -3,6 +3,10 @@
 
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/cd_internal.h"
+
+#define CD_STATUS_WORD (*(u_long *)(void *)&g_CdStatusByte)
+#define CD_ERROR_WORD (*(u_long *)(void *)&g_CdErrorByte)
 
 /*
  * LEFT RAW ON PURPOSE (docs/names.md 17i). This is libcd's interrupt decoder:
@@ -15,25 +19,12 @@
  * unfalsifiable here, so no name is asserted.
  *
  * Confirmed under emulation 2026-08-03: across a boot-to-race trace it is the
- * only writer of g_CdSyncStatus, g_CdSyncResult, g_CdReadyStatus and
+ * only writer of g_CdSyncStatus, g_CdSyncResult, g_CdSyncStatus.ready and
  * g_CdReadyResult, and reads no global at all. That matches the decoder
  * reading above exactly -- but it still does not pin a Sony name, so the
  * decision to leave it raw stands.
  */
 
-extern u_long g_CdStatusByte;
-extern u_long g_CdErrorByte;
-extern u_long g_CdShellOpenCount;
-extern u_long g_CdCommandNames[];
-extern volatile u_char g_CdSyncStatus;
-extern volatile u_char g_CdReadyStatus;
-extern u_char g_CdSyncResult;
-extern u_char g_CdReadyResult;
-extern u_char g_CdDataEndResult;
-extern u_char g_MsgCdDiskError;
-extern u_char g_MsgCdErrorCommandCode;
-extern u_char g_MsgCdUnknownIntr;
-extern u_char g_MsgCdUnknownIntrCode;
 
 static __inline__ void copy8(u_char *d, u_char *s) {
     long n;
@@ -86,45 +77,45 @@ long CdReadInterruptStatus(void) {
     *g_CdReg2 = 7;
 
     if (!(mode == 3 && g_CdCommandAckHasStatus[g_CdLastCommand] == 0)) {
-        if (!(g_CdStatusByte & 0x10) && (buf[0] & 0x10)) {
+        if (!(CD_STATUS_WORD & 0x10) && (buf[0] & 0x10)) {
             g_CdShellOpenCount++;
         }
         v = buf[0];
         flag = v & 0x1d;
-        g_CdStatusByte = v;
-        g_CdErrorByte = buf[1];
+        CD_STATUS_WORD = v;
+        CD_ERROR_WORD = buf[1];
     }
 
     if (mode == 5) {
         puts(&g_MsgCdDiskError);
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)&g_MsgCdErrorCommandCode, g_CdCommandNames[g_CdLastCommand], g_CdStatusByte, g_CdErrorByte);
+            printf((u8 *)&g_MsgCdErrorCommandCode, g_CdCommandNames[g_CdLastCommand], CD_STATUS_WORD, CD_ERROR_WORD);
         }
     }
 
     switch (mode) {
     case 3:
         if (flag) {
-            volatile u_char *sp = &g_CdSyncStatus;
+            volatile u_char *sp = &g_CdSyncStatus.sync;
             *sp = 5;
-            copy8(&g_CdSyncResult, (u_char *)buf);
+            copy8(g_CdSyncResult, (u_char *)buf);
             return 2;
         }
         if (g_CdCommandHasComplete[g_CdLastCommand] != 0) {
-            volatile u_char *sp = &g_CdSyncStatus;
+            volatile u_char *sp = &g_CdSyncStatus.sync;
             *sp = 3;
-            copy8(&g_CdSyncResult, (u_char *)buf);
+            copy8(g_CdSyncResult, (u_char *)buf);
             return 1;
         }
         {
-            volatile u_char *sp = &g_CdSyncStatus;
+            volatile u_char *sp = &g_CdSyncStatus.sync;
             *sp = 2;
         }
-        copy8(&g_CdSyncResult, (u_char *)buf);
+        copy8(g_CdSyncResult, (u_char *)buf);
         return 2;
     case 2:
-        g_CdSyncStatus = flag ? 5 : 2;
-        copy8(&g_CdSyncResult, (u_char *)buf);
+        g_CdSyncStatus.sync = flag ? 5 : 2;
+        copy8(g_CdSyncResult, (u_char *)buf);
         return 2;
     case 1:
         if (flag) {
@@ -132,25 +123,25 @@ long CdReadInterruptStatus(void) {
                 flag = 0;
             }
         }
-        g_CdReadyStatus = flag ? 5 : 1;
-        copy8(&g_CdReadyResult, (u_char *)buf);
+        g_CdSyncStatus.ready = flag ? 5 : 1;
+        copy8(g_CdReadyResult, (u_char *)buf);
         *g_CdReg0 = 0;
         *g_CdReg3 = 0;
         return 4;
     case 4: {
-        volatile u_char *sp = &g_CdReadyStatus;
+        volatile u_char *sp = &g_CdSyncStatus.ready;
         g_CdDataEndStatus = 4;
         *sp = g_CdDataEndStatus;
-        copy8(&g_CdDataEndResult, (u_char *)buf);
-        copy8(&g_CdReadyResult, (u_char *)buf);
+        copy8(g_CdDataEndResult, (u_char *)buf);
+        copy8(g_CdReadyResult, (u_char *)buf);
         return 4;
     }
     case 5: {
-        volatile u_char *sp = &g_CdSyncStatus;
-        g_CdReadyStatus = 5;
-        *sp = g_CdReadyStatus;
-        copy8(&g_CdSyncResult, (u_char *)buf);
-        copy8(&g_CdReadyResult, (u_char *)buf);
+        volatile u_char *sp = &g_CdSyncStatus.sync;
+        g_CdSyncStatus.ready = 5;
+        *sp = g_CdSyncStatus.ready;
+        copy8(g_CdSyncResult, (u_char *)buf);
+        copy8(g_CdReadyResult, (u_char *)buf);
         return 6;
     }
     default:

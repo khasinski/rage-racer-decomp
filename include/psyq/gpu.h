@@ -393,21 +393,6 @@ void MemFill(u_char *dst, long value, long count);
 /* Declared identically by 38 translation units before this
  * header carried them. */
 
-extern u_char g_DrawSyncCbPending[];
-extern volatile u_long *g_GpuDmaBcr;
-extern volatile u_long *g_GpuDmaChcr;
-extern volatile u_long *g_GpuDmaMadr;
-extern volatile u_long *g_GpuDpcr;
-extern volatile u_long *g_GpuGp0;
-extern u_char g_GpuGp1Mirror[];
-extern long g_GpuLastCbArg;
-extern long g_GpuLastCbData;
-extern long g_GpuResetIntrMask;
-extern long g_GpuTimeoutDeadline;
-extern long g_GpuTimeoutPolls;
-
-extern void (*GPU_printf)(char *, ...);
-
 /* Declared identically by 7 translation units before this
  * header carried them. */
 

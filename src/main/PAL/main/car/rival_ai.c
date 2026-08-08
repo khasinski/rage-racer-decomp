@@ -1,11 +1,11 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/car_internal.h"
+#include "game/player_car_internal.h"
 #include "game/state.h"
 #include "game/track.h"
 #include "game/race.h"
 #include "game/audio.h"
-
-extern u8 g_PlayerTrackProgress[];
 
 /*
  * Inside the loop these two fields must NOT be reached as struct members.
@@ -23,7 +23,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     s32 acc9 = 0;
     register s32 i asm("$10") = 0;
     s32 k11 = 0xB;
-    u8 *base = g_PlayerTrackProgress;
+    u8 *base = (u8 *)&g_PlayerCar.trackProgress;
     s32 carProgress;
     s32 carField34;
     s32 carA4low;
@@ -175,15 +175,6 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     state->field_11C = state->field_11C + state->field_120;
 }
 
-/*
- * g_RankedCars - 1: this walker is indexed from the slot before the leader,
- * so the byte at 0x801E40B8 itself is never loaded. The identifier stays raw
- * because what lives at that address is g_SceneTimer (game/state.h) and calling
- * this array by that name would be misleading; the alias names the symbol so
- * the address itself never appears in C.
- */
-extern GameCarRuntime *D_801E40B8[] asm("g_SceneTimer");
-
 void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
     GameCarRuntime *entry;
     s32 offset;
@@ -194,7 +185,7 @@ void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
 
     offset = carIndex * 4;
     pos0Base = car->field_68;
-    entry = *(GameCarRuntime **)((u8 *)D_801E40B8 + offset);
+    entry = g_RankedCars[carIndex - 1];
     pos0 = pos0Base + car->field_6C;
     pos1 = entry->field_68 + entry->field_6C;
 
@@ -208,8 +199,6 @@ void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
         entry->field_130 = value;
     }
 }
-
-extern s32 g_CarProgressB;
 
 /*
  * Ranks the first four cars by race progress (`field_68 + field_6C`) and
@@ -231,7 +220,7 @@ void RankContenders(void) {
     sumPtr = sums;
     offset = 0;
     do {
-        *sumPtr = *(s32 *)((u8 *)&g_CarProgressA + offset) + *(s32 *)((u8 *)&g_CarProgressB + offset);
+        *sumPtr = g_Cars[i].field_68 + g_Cars[i].field_6C;
         offset += sizeof(GameCarRuntime);
         i++;
         sumPtr++;
@@ -278,7 +267,6 @@ void RankContenders(void) {
     }
 }
 
-extern s32 g_ClosestRivalRank;
 
 void UpdateRivalRubberBand(void) {
     s32 s6;

@@ -2,15 +2,15 @@
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"
+#include "game/render_internal.h"
+#include "game/player_car_internal.h"
+#include "game/track_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
 
-extern s32 g_PlayerTrackProgress;
-
-extern GameRenderObject g_CameraCar;
 
 
 /*
@@ -144,11 +144,6 @@ void UpdateFreeLookCamera(void *car, s32 updateMotion) {
     SetCameraRotMatrix();
 }
 
-extern struct {
-    s16 x;
-    s16 y;
-} g_StartGridSceneryStep[];
-
 void DrawStartGridScenery(s32 flags) {
     Matrix mtx;
     Vec4 state;
@@ -195,8 +190,6 @@ void DrawStartGridScenery(s32 flags) {
 
 void ResetFreeLookCamera(void) {
 }
-
-extern u32 *g_VisibleCellMask;
 
 void DrawAnimatedScenery(s32 timer, s32 instance) {
     Matrix mtx;

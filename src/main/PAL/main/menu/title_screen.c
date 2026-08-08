@@ -2,17 +2,26 @@
 #include "game/prim.h"
 #include "game/asset.h"
 #include "game/audio.h"
+#define GAME_BGM_SHUFFLE_INDEX_TYPE s32
+#define GAME_BGM_SHUFFLE_QUALIFIER volatile
+#include "game/audio_internal.h"
 #include "game/cd.h"
+#include "game/car.h"
+#include "game/frontend_internal.h"
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"
+#include "game/fmv_internal.h"
+#define GAME_COURSE_PROGRESS_TYPE s32
+#define GAME_GRAND_PRIX_PROGRESS_DECL extern s32 g_GrandPrixCourseProgress
+#define GAME_EXTRA_GRAND_PRIX_PROGRESS_DECL extern s32 g_ExtraGrandPrixCourseProgress
+#include "game/save_internal.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-extern s32 g_FrontendIdleTimer;
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
  * state words and hands over to scene 4, UpdateFrontend. */
@@ -37,7 +46,6 @@ void EnterFrontend(void) {
     SetDefaultReverbDepth();
 }
 
-extern s32 g_StreamReturnScene;
 
 void EnterTitleScreen(void) {
     SetupDisplay240(0, 0, 0);
@@ -187,8 +195,6 @@ void UpdateMainMenuOpen(void) {
     DrawMainMenuRows();
 }
 
-extern volatile u8 g_BgmShuffleOrder[];
-extern s32 g_BgmShuffleIndex;
 
 /* Refills g_BgmShuffleOrder with a random permutation of the
  * g_BgmTrackCount tracks and rewinds g_BgmShuffleIndex. */
@@ -225,14 +231,6 @@ void ShuffleBgmOrder(void) {
 }
 
 
-extern s32 *g_CarTable;
-extern s32 *g_CourseProgress;
-
-extern s32 g_GrandPrixCars;
-extern s32 g_GrandPrixCourseProgress;
-extern s32 g_ExtraGrandPrixCars;
-extern s32 g_ExtraGrandPrixCourseProgress;
-extern s32 g_TimeAttackCars;
 
 
 void UpdateMainMenuInput(void) {
@@ -277,7 +275,7 @@ void UpdateMainMenuInput(void) {
         ShuffleBgmOrder();
         switch (g_TitleMenuSelection) {
         case 0:
-            g_CarTable = &g_GrandPrixCars;
+            g_CarTable = g_GrandPrixCars;
             g_RaceProgress = &g_GrandPrixSave;
             g_CourseProgress = &g_GrandPrixCourseProgress;
             g_SeriesSelection = 0;
@@ -290,7 +288,7 @@ void UpdateMainMenuInput(void) {
             }
             break;
         case 1:
-            g_CarTable = &g_ExtraGrandPrixCars;
+            g_CarTable = g_ExtraGrandPrixCars;
             g_RaceProgress = &g_ExtraGrandPrixSave;
             g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
             g_SeriesSelection = 1;
@@ -303,7 +301,7 @@ void UpdateMainMenuInput(void) {
             }
             break;
         case 2:
-            g_CarTable = &g_TimeAttackCars;
+            g_CarTable = g_TimeAttackCars;
             g_RaceProgress = &g_TimeAttackSave;
             g_SeriesSelection = 0;
             RequestSelectBgmAssetsNoReset();

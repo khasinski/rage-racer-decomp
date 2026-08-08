@@ -1,8 +1,8 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/spu_internal.h"
 
-extern volatile u_short *g_SpuRegBase;
 
 long SpuTransferStatus(long addr, long mode) {
     long size;
@@ -25,6 +25,6 @@ long SpuTransferStatus(long addr, long mode) {
     }
 
     _spu_startDmaTransfer(addr, mode, size);
-    status = g_SpuRegBase[0xD7] & 0x800;
+    status = g_SpuRegBase->raw[0xD7] & 0x800;
     return status > 0;
 }

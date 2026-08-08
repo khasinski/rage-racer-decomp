@@ -1,0 +1,35 @@
+#ifndef GAME_RECORDS_INTERNAL_H
+#define GAME_RECORDS_INTERNAL_H
+
+#include "common.h"
+#include "game/menu_types.h"
+
+#ifndef GAME_RANKING_RECORDS_DECL
+#define GAME_RANKING_RECORDS_DECL extern RaceRecord g_RankingRecords[2][4][5]
+#endif
+#ifndef GAME_RANKING_TIMES_DECL
+#define GAME_RANKING_TIMES_DECL extern s32 g_RankingTimes[2][4][20]
+#endif
+#ifndef GAME_RANKING_CARS_DECL
+#define GAME_RANKING_CARS_DECL extern u16 g_RankingCars[]
+#endif
+#ifndef GAME_TIME_RECORDS_DECL
+#define GAME_TIME_RECORDS_DECL extern RaceRecord g_TimeRecords[2][4][5]
+#endif
+#ifndef GAME_TIME_RECORD_CARS_DECL
+#define GAME_TIME_RECORD_CARS_DECL extern u16 g_TimeRecordCars[]
+#endif
+
+GAME_RANKING_RECORDS_DECL;
+GAME_RANKING_TIMES_DECL;
+GAME_RANKING_CARS_DECL;
+GAME_TIME_RECORDS_DECL;
+GAME_TIME_RECORD_CARS_DECL;
+
+#undef GAME_RANKING_RECORDS_DECL
+#undef GAME_RANKING_TIMES_DECL
+#undef GAME_RANKING_CARS_DECL
+#undef GAME_TIME_RECORDS_DECL
+#undef GAME_TIME_RECORD_CARS_DECL
+
+#endif

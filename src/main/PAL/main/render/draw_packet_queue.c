@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/render_internal.h"
 #include "game/prim.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
@@ -6,7 +7,6 @@
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
-extern u8 g_DrawModeEnv[];
 
 /* DR_MODE, 12 bytes: sets the texture page (and the blend mode packed into it)
  * for the primitives that follow, links it into the ordering table and returns

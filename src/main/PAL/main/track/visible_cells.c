@@ -3,21 +3,12 @@
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
+#define GAME_VISIBLE_CELL_MASK_TYPE s32
+#include "game/render_internal.h"
+#include "game/track_internal.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
 
-typedef struct Obj {
-    s16 id;    /* 0x0 */
-    s16 f2;    /* 0x2 */
-    s32 f4;    /* 0x4 */
-    s32 f8;    /* 0x8 */
-    s32 fC;    /* 0xC */
-    s32 flags; /* 0x10 */
-} Obj;
-
-extern Obj *g_CourseObjects;
-extern s32 g_CourseObjectCount;
-extern s32 *g_VisibleCellMask;
 
 /*
  * Draw loop over the world-object array g_CourseObjects (g_CourseObjectCount entries). For
@@ -31,7 +22,7 @@ extern s32 *g_VisibleCellMask;
 void DrawCourseObjects(void) {
     Matrix mtx;
     volatile s32 pad[10];
-    Obj *obj;
+    CourseObject *obj;
     s32 i;
     s32 visShift;
     s32 vis;
@@ -44,29 +35,29 @@ void DrawCourseObjects(void) {
     }
 
     do {
-        if (obj->id == -1) {
+        if (obj->modelId == -1) {
         } else {
-        visShift = obj->f4 / 2048;  /* per-sector visibility bit index */
-        vis = g_VisibleCellMask[obj->fC / 2048] & (1 << visShift);
+        visShift = obj->x / 2048;  /* per-sector visibility bit index */
+        vis = g_VisibleCellMask[obj->z / 2048] & (1 << visShift);
         if (vis == 0) {
             continue;
         }
 
-        BuildRotMatrixY(&mtx, obj->f2);
+        BuildRotMatrixY(&mtx, obj->field2);
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
         {
             s32 transformed;
             s32 camera;
 
-            transformed = (u16)obj->f4;
+            transformed = (u16)obj->x;
             camera = *(u16 *)&SCRATCH_VIEW_X;
             transformed -= camera;
             *(s16 *)0x1F80011C = transformed;
-            transformed = (u16)obj->f8;
+            transformed = (u16)obj->y;
             camera = *(u16 *)&SCRATCH_VIEW_Y;
             transformed -= camera;
             *(s16 *)0x1F80011E = transformed;
-            transformed = (u16)obj->fC;
+            transformed = (u16)obj->z;
             camera = *(u16 *)&SCRATCH_VIEW_Z;
             transformed -= camera;
             *(s16 *)0x1F800120 = transformed;
@@ -95,9 +86,9 @@ void DrawCourseObjects(void) {
         }
 
         if (g_IsEnvironmentMode4 ? (obj->flags & 2) : (obj->flags % 2)) {
-            SubmitCourseModel2((void *)SCRATCHPAD_ADDR, obj->id);
+            SubmitCourseModel2((void *)SCRATCHPAD_ADDR, obj->modelId);
         } else {
-            SubmitCourseModel((void *)SCRATCHPAD_ADDR, obj->id);
+            SubmitCourseModel((void *)SCRATCHPAD_ADDR, obj->modelId);
         }
 
         }
@@ -134,7 +125,6 @@ typedef struct Scr {
     s32 f14;
 } Scr;
 
-extern Vec4 *g_VisibleCellList;
 
 void BuildVisibleCells(s32 near, s32 far) {
     Scr *s = (Scr *)&SCRATCH_VIEW_X;

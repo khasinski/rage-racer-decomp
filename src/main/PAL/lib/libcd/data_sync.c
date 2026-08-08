@@ -4,15 +4,8 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
+#include "psyq/cd_internal.h"
 
-extern long g_CdCommandNames[];
-extern volatile u_char g_CdSyncStatus[];
-extern long g_CdIntrNames[];
-extern long g_CdTimeoutDeadline;
-extern void *g_CdTimeoutName;
-extern char g_MsgCdDataSync[];
-extern char g_MsgCdTimeout[];
-extern char g_FmtCdTimeoutState[];
 
 /* Waits for the CD data transfer to finish, with a 0x3C0-vblank / 0x3C0000-
  * spin watchdog that prints "CD timeout: " and flushes. Named by the same
@@ -26,9 +19,9 @@ long CD_datasync(long arg) {
     long result;
 
     g_CdTimeoutDeadline = VSync(-1) + 0x3C0;
-    b60 = g_CdCommandNames;
-    b318 = g_CdSyncStatus;
-    bE0 = g_CdIntrNames;
+    b60 = (long *)g_CdCommandNames;
+    b318 = &g_CdSyncStatus.sync;
+    bE0 = (long *)g_CdIntrNames;
     g_CdTimeoutCounter = 0;
     g_CdTimeoutName = g_MsgCdDataSync;
     do {

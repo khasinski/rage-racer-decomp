@@ -1,16 +1,12 @@
 #include "common.h"
 #include <stdio.h>
 #include "psyq/cd.h"
+#include "psyq/cd_internal.h"
 
-extern long g_CdSyncCallback;
-extern long g_CdReadyCallback;
-extern long g_CdStatusByte;
-extern long g_CdErrorByte;
-extern volatile u_long *g_ComDelayReg;
-extern u_char g_MsgCdInit[];
-extern u_char g_MsgCdInitAddr[];
+#define CD_STATUS_WORD (*(long *)(void *)&g_CdStatusByte)
+#define CD_ERROR_WORD (*(long *)(void *)&g_CdErrorByte)
 
-extern volatile CdIntr g_CdSyncStatus;
+
 
 long CD_vol(CdlATV *vol) {
     *g_CdReg0 = 2;
@@ -81,8 +77,8 @@ long CD_initvol(void) {
 void CD_initintr(void) {
     g_CdReadyCallback = 0;
     g_CdSyncCallback = 0;
-    g_CdErrorByte = 0;
-    g_CdStatusByte = 0;
+    CD_ERROR_WORD = 0;
+    CD_STATUS_WORD = 0;
     KernelCallbackSlot3();
     KernelCallbackSlot2(2, (void *)CdDispatchInterrupts);
 }
@@ -95,8 +91,8 @@ long CdResetState(void) {
     g_CdModeByte = 0;
     g_CdReadyCallback = 0;
     g_CdSyncCallback = 0;
-    g_CdErrorByte = 0;
-    g_CdStatusByte = 0;
+    CD_ERROR_WORD = 0;
+    CD_STATUS_WORD = 0;
     KernelCallbackSlot3();
     KernelCallbackSlot2(2, CdDispatchInterrupts);
 
@@ -114,7 +110,7 @@ long CdResetState(void) {
     *g_ComDelayReg = 0x1325;
 
     CD_cw(1, 0, 0, 0);
-    if ((g_CdStatusByte & 0x10) != 0) {
+    if ((CD_STATUS_WORD & 0x10) != 0) {
         CD_cw(1, 0, 0, 0);
     }
 

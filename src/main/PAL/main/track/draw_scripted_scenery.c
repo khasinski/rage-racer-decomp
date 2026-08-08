@@ -4,6 +4,9 @@
 #include "game/audio.h"
 #include "game/menu.h"
 #include "game/track.h"
+#include "game/track_internal.h"
+#define GAME_PLAYER_CAR_DECL extern s32 g_PlayerCar
+#include "game/player_car_internal.h"
 #include "psyq/gte.h"
 
 void DrawScriptedScenery(s32 flags) {
@@ -46,43 +49,14 @@ void DrawScriptedScenery(s32 flags) {
  * posRateNeg / rotRateNeg record that the keyframe's rate field was negative
  * (the rate itself is stored as a magnitude).
  */
-typedef struct PathSceneryClock {
-    s16 posFrame;
-    s16 rotFrame;
-    s16 posRateNeg;
-    s16 rotRateNeg;
-} PathSceneryClock;
-
-extern u8 *g_PathSceneryPosData;
-extern u8 *g_PathSceneryRotData;
-extern PathSceneryClock g_PathSceneryClock;
 /* The three words are the scenery position: g_PathSceneryY and
  * g_PathSceneryZ alias +4 and +8. It stays a Block16 because respelling
  * w[0] as a named member of a Vec4 does not match. */
-extern Block16 g_PathSceneryX;
-extern SVec g_PathSceneryRot;
-
-extern s32 g_PlayerCar;
 
 /*
  * The position and rotation cursors are the same interleaved eight-halfword
  * object viewed from offsets zero and two.
  */
-typedef struct PathSceneryCursor {
-    s16 phase;
-    s16 otherPhase;
-    u16 span;
-    u16 otherSpan;
-    u16 rate;
-    u16 otherRate;
-    s16 index;
-    s16 otherIndex;
-} PathSceneryCursor;
-
-extern PathSceneryCursor g_PathSceneryPosCursor asm("g_PathSceneryPosPhase");
-extern PathSceneryCursor g_PathSceneryRotCursor asm("g_PathSceneryRotPhase");
-
-
 void InitPathScenery(void) {
     s32 lev;
     u8 *tblA;

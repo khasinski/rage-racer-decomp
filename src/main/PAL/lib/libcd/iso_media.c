@@ -2,22 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "psyq/cd.h"
+#include "psyq/cd_internal.h"
 
-typedef struct W4 {
-    u_char b[4];
-} W4;
-
-extern u_char g_CdSectorBuf[];
-extern W4 g_CdRootDirLba;
-extern CdlDIR g_CdPathTable[];
-
-extern const char g_MsgCdPvdReadError[];
-extern const char g_CdVolumeSignature[];
-extern const char g_MsgCdPvdFormatError[];
-extern const char g_MsgCdPathTableReadError[];
-extern const char g_MsgCdSearchingDir[];
-extern const char g_FmtCdPathEntry[];
-extern const char g_MsgCdDirEntriesFound[];
 
 /*
  * Reads and parses the disc's directory into the Entry table g_CdPathTable[128].
@@ -34,7 +20,7 @@ long CD_newmedia(void) {
     u_char *p;
     long i;
     long r;
-    W4 hdr;
+    CdRawWord hdr;
 
     r = cd_read(1, 16, g_CdSectorBuf);
     if (r != 1) {
@@ -67,7 +53,7 @@ long CD_newmedia(void) {
         if (*p == 0) {
             break;
         }
-        *(W4 *)&g_CdPathTable[i].lba = *(W4 *)(p + 2);
+        *(CdRawWord *)&g_CdPathTable[i].lba = *(CdRawWord *)(p + 2);
         g_CdPathTable[i].parent_number = *(u_char *)(p + 6);
         g_CdPathTable[i].number = i + 1;
         memcpy(g_CdPathTable[i].name, p + 8, *p);
@@ -95,7 +81,6 @@ long CD_newmedia(void) {
     return 1;
 }
 
-extern volatile long g_CdPathEntryParentDir[];
 
 long DS_searchdir(long type, u_char *name) {
     long i = 0;

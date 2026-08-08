@@ -1,5 +1,7 @@
 #include "common.h"
 #include "game/menu.h"
+#define GAME_CAR_MODEL_ASSET_TYPE u8
+#include "game/asset_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/vector.h"
@@ -184,7 +186,6 @@ const CarSpecGraphColors g_CarSpecGraphColors = {{
     {0x54, 0x1C, 0x94, 0},
     {0x2C, 0x12, 0x83, 0},
 }};
-extern u8 *g_CarModelAsset;
 
 /* The four animated performance bars on the CUSTOMIZE car panel. */
 void DrawCarSpecGraph(s32 step, u32 tireGrade) {

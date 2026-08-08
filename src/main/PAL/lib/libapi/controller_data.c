@@ -1,4 +1,5 @@
 #include "psyq/snd.h"
+#include "psyq/snd_internal.h"
 
 /*
  * ContDataEntry - the real libsnd name, recovered from Runtime Library 2.6's
@@ -8,8 +9,6 @@
  * RPN (unk29 == 2) or NRPN (unk2a == 2) to the channel's VAB program by
  * rewriting the VagAtr of every tone. See docs/names.md 17.
  */
-extern SeqStruct *g_SndSeqTable[];
-
 static inline s32 SsSeqCheckDataEntryValue(s32 data_entry_value) {
     switch (data_entry_value) {
     case 0:

@@ -1,12 +1,7 @@
 #include "psyq/snd.h"
 #include "psyq/spu.h"
 
-extern u_short g_SndVabOpenCount;
-extern VabHdr *g_SndVabHeader[];
-extern short g_SndVabProgMax;
-extern ProgAtr *g_SndVabProgTable[];
-extern VagAtr *g_SndVabToneTable[];
-extern long g_SndVabBodySize[];
+#include "psyq/snd_internal.h"
 
 short SsVabOpen(u_char *addr, VabHdr *header) {
     short vabId;

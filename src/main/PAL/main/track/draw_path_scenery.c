@@ -2,17 +2,17 @@
 #include "game/audio.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
+#define GAME_PATH_SCENERY_ROT_DECL extern s16 g_PathSceneryRot[3]
+#include "game/track_internal.h"
 #include "psyq/gte.h"
 
 /* The looping prop's live orientation: three 12-bit angles copied wholesale out
  * of the current rotation keyframe by InitPathScenery, which sees the same
  * eight bytes as one Blk8. */
-extern s16 g_PathSceneryRot[3];
-extern s32 g_ScratchRenderMode;
-
 void DrawPathScenery(void) {
     Matrix mtx0;
     Matrix mtx1;

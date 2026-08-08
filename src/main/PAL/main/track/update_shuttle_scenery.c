@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
 #include "psyq/gte.h"
@@ -60,7 +61,6 @@ void UpdateShuttleScenery(s32 instance) {
     entry->dwellCounter = entry->dwellCounter + 1;
 }
 
-extern u32 *g_VisibleCellMask;
 
 void DrawShuttleScenery(s32 instance) {
     s32 drawArg;

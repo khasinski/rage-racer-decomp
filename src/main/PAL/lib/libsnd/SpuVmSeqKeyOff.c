@@ -4,13 +4,7 @@
 #include "psyq/snd_types.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndVoiceCount;
-extern u_short g_SndCurrentVoice;
-extern u_short g_SndKeyOffLow;
-extern u_short g_SndKeyOffHigh;
-extern u_short g_SndKeyOnLow;
-extern u_short g_SndKeyOnHigh;
-extern SpuVoice g_SndVoiceState[];
+#include "psyq/snd_internal.h"
 
 void SpuVmSeqKeyOff(long wanted) {
     u_short bits_upper;
@@ -24,11 +18,11 @@ void SpuVmSeqKeyOff(long wanted) {
     voice = 0;
     if (g_SndVoiceCount != 0) {
         seq_sep = (short)wanted;
-        current = &g_SndCurrentVoice;
+        current = &(*(u_short *)&g_SndCurrentVoice);
         do {
             if (g_SndVoiceState[voice].seq_sep == seq_sep) {
                 *current = voice;
-                selected_voice = g_SndCurrentVoice;
+                selected_voice = (*(u_short *)&g_SndCurrentVoice);
                 selected_index = selected_voice;
                 if (selected_index < 0x10) {
                     bits_lower = 1 << selected_index;

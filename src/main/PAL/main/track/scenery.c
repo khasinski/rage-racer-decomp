@@ -1,16 +1,20 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#define GAME_RACE_SERIES_QUALIFIER volatile
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
+#include "game/track_internal.h"
+#define GAME_PLAYER_CAR_DECL extern s32 g_PlayerCar
+#include "game/player_car_internal.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
 
-extern u32 *g_VisibleCellMask;
 
 static inline void ClearScratchRenderMode3DF68(void) {
     SCRATCH_ENV_MODE4 = 0;
@@ -205,9 +209,6 @@ void DrawCourseScenery2(s32 timer, s32 animate) {
     }
 }
 
-extern u8 *g_FlybySceneryData;
-extern volatile s32 g_RaceSeries;
-extern u8 g_FlybyScenery[];
 
 void SeedFlybyScenery(void) {
     u8 *base;
@@ -260,9 +261,6 @@ void SeedFlybyScenery(void) {
  * integrating position from a keyframed heading and feeding a distance-attenuated
  * volume to SetPitchedSoundCue. See docs/names.md 1.
  */
-extern s16 g_PlayerLap;
-extern s32 g_PlayerCar;
-
 #define KFREC(off) (*(s16 *)(kf + *(s16 *)(state + 0xE) * 12 + (off)))
 
 void UpdateFlybyScenery(void) {

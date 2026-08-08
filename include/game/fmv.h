@@ -11,6 +11,7 @@ typedef struct FmvDecodeContext {
 } FmvDecodeContext;
 
 extern FmvDecodeContext g_FmvDecodeContext asm("g_FmvVlcBuffers");
+extern u32 g_FmvRingBuffer;
 
 void StartFmvPlayback();
 void InitFmvContext();

@@ -1,7 +1,9 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/car_internal.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
@@ -9,7 +11,6 @@
 #include "psyq/gte.h"
 
 
-extern s16 g_ClosestRivalRank;
 
 
 /*
@@ -165,7 +166,7 @@ void UpdateRaceCars(void) {
         base++;
     } while ((s16)i < 11);
     UpdateRivalRubberBand();
-    i = g_ClosestRivalRank;
+    i = (s16)g_ClosestRivalRank;
     if (i > 0) {
         do {
             s32 j = (s16)i;
@@ -625,18 +626,6 @@ void UpdateAttractCars(void) {
     }
 }
 
-typedef struct KE {
-    u16 f0;
-    u16 f2;
-    u16 f4;
-    u16 f6;
-    u16 f8;
-    u16 fA;
-    s32 fC;
-    s16 f10;
-    s16 f12;
-} KE;
-
 typedef struct Obj {
     s32 x;
     s32 y;
@@ -652,9 +641,6 @@ typedef struct Obj {
     s32 f2C;
 } Obj;
 
-extern KE *g_RaceIntroCameraCursor;
-
-
 void RunRaceIntroCamera(Obj *obj, s32 mode) {
     s32 *spad = &SCRATCH_PRIM_CURSOR_WORD;
     register s32 s0v asm("$16");
@@ -666,28 +652,28 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             u8 *base = g_RaceIntroCameraScript;
             s16 n = *(s16 *)(base + 2 * g_RaceSeries);
             s32 off = n * 20 + 4;
-            KE *p = (KE *)(off + (s32) base);
-            KE *q;
+            RaceIntroCameraKey *p = (RaceIntroCameraKey *)(off + (s32) base);
+            RaceIntroCameraKey *q;
             g_RaceIntroCameraCursor = p;
             *(Vec4 *)&SCRATCH_VIEW_X = *(Vec4 *)p;
             q = g_RaceIntroCameraCursor;
-            g_RaceIntroCameraDelta.vx = -q[0].f0 + q[1].f0;
-            g_RaceIntroCameraDelta.vy = -q[0].f4 + q[1].f4;
-            g_RaceIntroCameraDelta.vz = -q[0].f8 + q[1].f8;
-            g_RaceIntroCameraTimer = q[0].f12;
+            g_RaceIntroCameraDelta.vx = -q[0].x + q[1].x;
+            g_RaceIntroCameraDelta.vy = -q[0].y + q[1].y;
+            g_RaceIntroCameraDelta.vz = -q[0].z + q[1].z;
+            g_RaceIntroCameraTimer = q[0].duration;
         } else {
-            KE *a = g_RaceIntroCameraCursor;
-            if (mode == a->f10) {
+            RaceIntroCameraKey *a = g_RaceIntroCameraCursor;
+            if (mode == a->startFrame) {
                 g_RaceIntroCameraCursor = &a[1];
-                g_RaceIntroCameraTimer = a[1].f12;
-                if (a[1].fC == 1) {
-                    g_RaceIntroCameraDelta.vx = -a[1].f0 + ((u16 *)obj)[0];
-                    g_RaceIntroCameraDelta.vy = -a[1].f4 - 28 + ((u16 *)obj)[2];
-                    g_RaceIntroCameraDelta.vz = -a[1].f8 + ((u16 *)obj)[4];
+                g_RaceIntroCameraTimer = a[1].duration;
+                if (a[1].mode == 1) {
+                    g_RaceIntroCameraDelta.vx = -a[1].x + ((u16 *)obj)[0];
+                    g_RaceIntroCameraDelta.vy = -a[1].y - 28 + ((u16 *)obj)[2];
+                    g_RaceIntroCameraDelta.vz = -a[1].z + ((u16 *)obj)[4];
                 } else {
-                    g_RaceIntroCameraDelta.vx = -a[1].f0 + a[2].f0;
-                    g_RaceIntroCameraDelta.vy = -a[1].f4 + a[2].f4;
-                    g_RaceIntroCameraDelta.vz = -a[1].f8 + a[2].f8;
+                    g_RaceIntroCameraDelta.vx = -a[1].x + a[2].x;
+                    g_RaceIntroCameraDelta.vy = -a[1].y + a[2].y;
+                    g_RaceIntroCameraDelta.vz = -a[1].z + a[2].z;
                 }
             }
         }
@@ -697,13 +683,13 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             g_RaceIntroCameraTimer = 0;
         }
 
-        if (g_RaceIntroCameraCursor->fC == 0) {
+        if (g_RaceIntroCameraCursor->mode == 0) {
             spad[2] = ((s32 *)g_RaceIntroCameraCursor)[0]
-                      + ((s32) g_RaceIntroCameraDelta.vx * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDelta.vx * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
             spad[3] = ((s32 *)g_RaceIntroCameraCursor)[1]
-                      + ((s32) g_RaceIntroCameraDelta.vy * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDelta.vy * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
             spad[4] = ((s32 *)g_RaceIntroCameraCursor)[2]
-                      + ((s32) g_RaceIntroCameraDelta.vz * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->f12)) / 4096;
+                      + ((s32) g_RaceIntroCameraDelta.vz * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
 
             delta[0] = rsin(obj->f24) / 128 + obj->x - spad[2];
             delta[1] = obj->y - s0v - spad[3];
@@ -747,8 +733,6 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
         UpdateCamera(obj, 0);
     }
 }
-
-extern GameRenderObject g_CameraCar;
 
 void SeedFinishCamera(void *car) {
     register u32 word0;

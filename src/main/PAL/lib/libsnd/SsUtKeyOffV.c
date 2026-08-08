@@ -3,13 +3,8 @@
 #include "common.h"
 #include "psyq/snd.h"
 
-extern long g_SndUpdateLock;
-extern u_short g_SndCurrentVoice;
-extern u_short g_SndKeyOffLow;
-extern u_short g_SndKeyOffHigh;
-extern u_short g_SndKeyOnLow;
-extern u_short g_SndKeyOnHigh;
-extern u_char g_SndVoiceState[];
+#define SND_CURRENT_VOICE_TYPE u_short
+#include "psyq/snd_internal.h"
 
 long SsUtKeyOffV(long voice) {
     u_long value;
@@ -35,11 +30,11 @@ long SsUtKeyOffV(long voice) {
             }
             channel &= 0xFFFF;
             offset = channel * 52;
-            g_SndVoiceStateStatus[offset] = 0;
+            ((u_char *)g_SndVoiceState + 27)[offset] = 0;
             activeLow = g_SndKeyOffLow;
             activeHigh = g_SndKeyOffHigh;
-            *(u_short *)&g_SndVoiceStatePitch[offset] = 0;
-            *(u_short *)&g_SndVoiceState[offset] = 0;
+            *(u_short *)&((u_char *)g_SndVoiceState + 4)[offset] = 0;
+            *(u_short *)((u_char *)g_SndVoiceState + offset) = 0;
             /* Both key registers first, then both key-on masks: the same
              * four lines in the same order as SsUtKeyOff in sdk/, which is
              * the other place this block is written out.  Interleaved per

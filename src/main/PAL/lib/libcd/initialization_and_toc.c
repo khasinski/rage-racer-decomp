@@ -4,12 +4,8 @@
 #include "common.h"
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
+#include "psyq/cd_internal.h"
 
-extern long g_CdDebugLevel;
-extern u_char g_MsgCdTrackRange[];
-extern u_char g_MsgCdGetToc2Entry[];
-extern u_char g_MsgCdGetToc2Error[];
-extern u_char g_MsgCdInitFailed[];
 
 long CdGetToc2(long maxTracks, u_char *out) {
     u_char *fmt;

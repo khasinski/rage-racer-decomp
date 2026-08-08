@@ -535,7 +535,6 @@ loop_body:
 
     return 0;
 }
-extern TimedDrawCommand g_MenuRowScript[];
 
 
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {

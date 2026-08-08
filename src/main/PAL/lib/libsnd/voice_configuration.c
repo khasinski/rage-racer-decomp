@@ -1,10 +1,8 @@
 #include "psyq/spu.h"
 #include "psyq/snd.h"
 
-extern u_char g_SndReservedVoiceCount;
-extern short g_SndMonoMode;
-extern volatile u_char g_SndVoiceCount;
-extern u_short g_SndVabOpenCount;
+#define SND_VOICE_COUNT_QUALIFIER volatile
+#include "psyq/snd_internal.h"
 
 void SsSetReservedVoice(u_char voices) {
     g_SndReservedVoiceCount = voices;

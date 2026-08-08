@@ -1,15 +1,10 @@
 #include "psyq/snd.h"
 
-extern volatile u_char g_SndVoiceCount;
-extern volatile u_short g_SndCurrentVoice;
-extern volatile u_short g_SndKeyOffLow;
-extern volatile u_short g_SndKeyOffHigh;
-extern volatile u_short g_SndKeyOnLow;
-extern volatile u_short g_SndKeyOnHigh;
-extern u_short *g_SndSpuRegs;
-extern u_char g_SndVoiceState[];
-extern u_char g_SndVoiceStateProg[];
-extern u_char g_SndVoiceStateTone[];
+#define SND_CURRENT_VOICE_QUALIFIER volatile
+#define SND_KEY_ON_QUALIFIER volatile
+#define SND_KEY_OFF_QUALIFIER volatile
+#define SND_VOICE_COUNT_QUALIFIER volatile
+#include "psyq/snd_internal.h"
 
 void _SsVmInit(int voices) {
     register long i asm("$8");
@@ -34,15 +29,15 @@ void _SsVmInit(int voices) {
             offset = index * 0x34;
             lowBits = 0x18;
             shifted = index << 19;
-            *(short *)&g_SndVoiceStateAge[offset] = lowBits;
-            *(short *)&g_SndVoiceState[offset] = ff;
-            g_SndVoiceStateStatus[offset] = 0;
-            *(short *)&g_SndVoiceStatePitch[offset] = 0;
-            *(short *)&g_SndVoiceStateEnvx[offset] = 0;
-            *(short *)&g_SndVoiceStateSeqSep[offset] = ff;
-            *(short *)&g_SndVoiceStateProgActual[offset] = 0;
-            *(short *)&g_SndVoiceStateProg[offset] = 0;
-            *(short *)&g_SndVoiceStateTone[offset] = ff;
+            *(short *)&((u_char *)g_SndVoiceState + 2)[offset] = lowBits;
+            *(short *)((u_char *)g_SndVoiceState + offset) = ff;
+            ((u_char *)g_SndVoiceState + 27)[offset] = 0;
+            *(short *)&((u_char *)g_SndVoiceState + 4)[offset] = 0;
+            *(short *)&((u_char *)g_SndVoiceState + 6)[offset] = 0;
+            *(short *)&((u_char *)g_SndVoiceState + 14)[offset] = ff;
+            *(short *)&((u_char *)g_SndVoiceState + 16)[offset] = 0;
+            *(short *)&((u_char *)g_SndVoiceState + 18)[offset] = 0;
+            *(short *)&((u_char *)g_SndVoiceState + 20)[offset] = ff;
 
             shifted = shifted >> 15;
             spu = (volatile u_short *)(shifted + (long)g_SndSpuRegs);
@@ -54,7 +49,7 @@ void _SsVmInit(int voices) {
             spu[5] = 0x4000;
 
             g_SndCurrentVoice = i;
-            lowBits = g_SndCurrentVoice;
+            lowBits = (u_short)g_SndCurrentVoice;
             /* This barrier is load-bearing: it hides the halfword load, whose
              * known-zero high bits would otherwise let gcc drop the mask. */
             asm("" : "=r"(lowBits) : "0"(lowBits));
@@ -72,13 +67,13 @@ void _SsVmInit(int voices) {
             i = next;
             lowBits &= 0xFFFF;
             offset = lowBits * 0x34;
-            g_SndVoiceStateStatus[offset] = 0;
+            ((u_char *)g_SndVoiceState + 27)[offset] = 0;
             lowBits = g_SndKeyOffLow;
             index = g_SndKeyOffHigh;
             __asm__ volatile("" ::);
             next <<= 16;
-            *(short *)&g_SndVoiceStatePitch[offset] = 0;
-            *(short *)&g_SndVoiceState[offset] = 0;
+            *(short *)&((u_char *)g_SndVoiceState + 4)[offset] = 0;
+            *(short *)((u_char *)g_SndVoiceState + offset) = 0;
 
             bits = g_SndKeyOnLow;
             /* These barriers are load-bearing. Without them `combine` folds the

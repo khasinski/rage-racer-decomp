@@ -1,8 +1,8 @@
 #include "common.h"
+#define GAME_BEST_TOTAL_DECL extern u8 g_BestTotalTimes[]
+#include "game/save_internal.h"
 #include "game/race.h"
 
-extern s16 g_PlayerLap;
-extern u8 g_BestTotalTimes[];
 
 
 void DrawSplitTimes(void) {

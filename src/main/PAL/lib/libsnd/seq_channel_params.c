@@ -1,7 +1,7 @@
 #include "psyq/snd.h"
 #include "common.h"
 
-extern SeqStruct * g_SndSeqTable[];
+#include "psyq/snd_internal.h"
 
 void SsSeqSetPortamento(short seq, short sep, u_char value) {
     SeqStruct *state;

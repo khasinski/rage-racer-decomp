@@ -10,18 +10,11 @@
 #include "game/scratchpad.h"
 #include "game/screens.h"
 #include "game/state.h"
+#include "game/replay_internal.h"
+#include "game/save_internal.h"
+#include "game/race_internal.h"
+#include "game/player_car_internal.h"
 #include "game/track.h"
-
-typedef struct GrandPrixIntroPosition {
-    u8 left;
-    u8 right;
-} GrandPrixIntroPosition;
-
-typedef struct GrandPrixIntroLayout {
-    u8 x;
-    u8 y;
-    u8 width;
-} GrandPrixIntroLayout;
 
 typedef union {
     s16 palette;
@@ -30,14 +23,6 @@ typedef union {
     s16 color;
 } GrandPrixIntroSelection;
 
-
-extern s32 g_ReplayFrameCount;
-extern s32 g_ReplayBufferWrapped;
-extern u8 g_PlayerCar;
-extern s32 g_RaceTotalTime;
-extern s32 g_BestTotalTimes[][4][2];
-extern GrandPrixIntroLayout g_ResultPlaceSprites[];
-extern GrandPrixIntroPosition g_ClassPlaceBarSizes[];
 
 
 void DrawSeriesClearedWash(s32 x, s32 y) {

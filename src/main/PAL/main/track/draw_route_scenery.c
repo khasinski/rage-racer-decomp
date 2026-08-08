@@ -3,10 +3,10 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
+#define GAME_ROUTE_SCENERY_QUALIFIER volatile
+#include "game/track_internal.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
-
-extern volatile s32 g_RouteSceneryRotY;
 
 void DrawRouteScenery(void) {
     Matrix mtx0;

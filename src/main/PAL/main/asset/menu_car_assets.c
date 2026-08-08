@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/asset.h"
+#include "game/asset_internal.h"
 #include "game/car.h"
 #include "game/state.h"
 #include "game/race.h"
@@ -7,7 +8,6 @@
 #include "game/cd.h"
 #include "game/random.h"
 
-extern u8 *g_CarModelAsset;
 
 /* Where asset 0x56 lands: g_ImageBlockBuffer advanced past the car texture
  * block just loaded. Its header words 1 and 2 are relocated into
@@ -190,9 +190,9 @@ void RelocateCarModel(void) {
     }
 
     SetCarModelSlot(g_AssetBase, 0);
-    temp = *(s32 *)(g_CarModelAsset + 0x20);
+    temp = *(s32 *)((u8 *)g_CarModelAsset + 0x20);
     UnrelocateModelBank((s32 *)(g_AssetBase + 0x28), temp);
     SelectCarModelSlot(0);
-    *(u32 *)(g_CarModelAsset + 0x20) = (u32)(g_AssetBase + 0x28);
+    *(u32 *)((u8 *)g_CarModelAsset + 0x20) = (u32)(g_AssetBase + 0x28);
     RegisterModelBank((s32 *)(g_AssetBase + 0x28), 0);
 }

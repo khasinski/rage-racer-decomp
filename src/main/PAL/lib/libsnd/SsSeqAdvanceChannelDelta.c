@@ -1,6 +1,6 @@
 #include "psyq/snd.h"
 
-extern u_char *g_SndSeqTable[];
+#include "psyq/snd_internal.h"
 
 void SsSeqAdvanceChannelDelta(long seq, long channel) {
     long raw0;

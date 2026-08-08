@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/asset_internal.h"
 
 /*
  * Body paint is 15-bit RGB with the semi-transparency bit on top. HALVED_MASK
@@ -154,11 +155,10 @@ void ApplyBodyColor1(u32 colour, u32 imageData) {
     ((volatile u16 *)base)[0x2C4] = c;
 }
 
-extern u32 g_CarModelAsset;
 
 
 void SetBodyColor1(u32 colour) {
-    ApplyBodyColor1(colour, *(u32 *)(g_CarModelAsset + 0x24));
+    ApplyBodyColor1(colour, *(u32 *)((u8 *)g_CarModelAsset + 0x24));
     UploadCarImage(g_CarModelSlot);
 }
 
@@ -213,6 +213,6 @@ void ApplyBodyColor2(u32 colour, u32 imageData) {
 
 
 void SetBodyColor2(u32 colour) {
-    ApplyBodyColor2(colour, *(u32 *)(g_CarModelAsset + 0x24));
+    ApplyBodyColor2(colour, *(u32 *)((u8 *)g_CarModelAsset + 0x24));
     UploadCarImage(g_CarModelSlot);
 }

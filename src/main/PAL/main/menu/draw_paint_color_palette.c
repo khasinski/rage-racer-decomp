@@ -1,11 +1,9 @@
 #include "common.h"
+#include "game/menu_internal.h"
 #include "game/menu_types.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/vector.h"
-extern PaintColorTable g_PaintColorTable;
-extern s32 g_PaintPalettePulsePhase;
-extern s32 g_MenuAltLayout;
 
 
 /* The 18-swatch PAINT COLOR strip with its selection frame and enlarged preview. */
@@ -106,7 +104,6 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
     return 0;
 }
 
-extern s32 g_OwnedCarCounterSlide;
 
 
 void DrawOwnedCarCounter(s32 owned, s32 step) {

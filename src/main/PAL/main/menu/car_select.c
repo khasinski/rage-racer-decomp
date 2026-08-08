@@ -2,13 +2,17 @@
 #include "game/asset.h"
 #include "game/audio.h"
 #include "game/car.h"
+#define GAME_CAR_MODEL_ASSET_TYPE u8
+#include "game/asset_internal.h"
 #include "game/menu.h"
+#define GAME_MENU_SCRIPT_TYPE u8
+#include "game/menu_scripts_internal.h"
+#include "game/save_internal.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 
-extern u8 *g_CarModelAsset;
 
 
 
@@ -295,8 +299,6 @@ void EnterCarSelectScreen(void) {
     DrawMenuLightBurst(-9);
 }
 
-extern u8 *g_CarSelectPopupScript;
-extern u8 *g_CourseProgress;
 
 void UpdateCarSelectScreen(void) {
     s32 mode;
@@ -654,7 +656,6 @@ s32 DrawCustomizeScreen(s32 step) {
     return g_CustomizeFadeAccum;
 }
 
-extern u8 *g_CustomizePopupScript;
 
 void UpdateCustomizeScreen(void) {
     void *ot;

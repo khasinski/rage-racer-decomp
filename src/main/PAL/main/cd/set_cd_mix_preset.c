@@ -1,16 +1,14 @@
 #include "common.h"
 #include "game/cd.h"
+#include "game/cd_internal.h"
 #include "psyq/cd.h"
 
-extern u8 g_CdVolume;
 
 void SetCdMixPreset(s32 preset) {
     g_CdMixPreset = preset;
     SetCdVolume(g_CdVolume);
 }
 
-extern CdlLOC g_CdTrackLocs[];
-extern CdlLOC g_CdBgmTrackLocs[];
 
 void BuildCdTrackTable(void) {
     CdlLOC *toc;

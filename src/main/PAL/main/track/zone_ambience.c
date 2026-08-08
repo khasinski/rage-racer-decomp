@@ -94,7 +94,6 @@ void UpdateZoneAmbience(s32 zone) {
     SetStereoSoundCue(mode, finalValue, finalValue);
 }
 
-extern s16 g_PlayerLap;
 
 void TriggerRaceCues(void) {
     u8 *rawBase;

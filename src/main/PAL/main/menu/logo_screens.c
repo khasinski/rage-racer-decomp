@@ -11,12 +11,12 @@
  * searches for a cleaner shape.
  */
 #include "game/menu.h"
+#include "game/save_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-extern Rect g_TeamLogoClutRect;
 
 
 void UpdateTeamLogoScreen(void)

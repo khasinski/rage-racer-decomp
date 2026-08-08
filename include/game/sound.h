@@ -101,6 +101,8 @@ typedef struct SoundModeEntry {
     SoundModeSlot slots[2];
 } SoundModeEntry;
 
+extern SoundModeEntry g_SoundModes[];
+
 typedef struct EffectCueRow {
     s32 count;
     s32 scale;

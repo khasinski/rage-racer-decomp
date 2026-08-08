@@ -2,6 +2,8 @@
 #define GAME_CD_H
 
 #include "common.h"
+
+extern u8 g_CdVolume;
 /*
  * CD-DA (music) front end. Nothing here talks to the drive directly: each call
  * only posts a request into g_CdTrackPending..g_CdCommandStep, which TickCdAudio pumps

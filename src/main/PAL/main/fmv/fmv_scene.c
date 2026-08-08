@@ -1,11 +1,11 @@
 #include "common.h"
 #include "game/fmv.h"
+#include "game/asset.h"
 #include "game/render.h"
 #include "game/state.h"
+#include "game/fmv_internal.h"
 #include "game/cd.h"
 #include "game/audio.h"
-extern s32 g_StreamReturnScene;
-extern u32 g_AssetBase;
 
 void BeginFmv(s32 returnScene) {
     CloseLoadedAudioSlots();

@@ -3,23 +3,7 @@
 #include <string.h>
 #include "common.h"
 #include "psyq/cd.h"
-typedef struct 
-{
-  long f0;
-  u_char rest[40];
-} Rec44;
-extern long g_CdCachedDir;
-extern long g_CdDebugLevel;
-extern CdlFILE g_CdFileCache[64];
-extern Rec44 g_CdPathEntryLbaByDirNum[];
-extern u_char g_CdSectorBuf[0x800];
-extern u_char g_MsgCdDirNotFound[];
-extern u_char g_MsgCdSearchingFiles[];
-extern u_char g_FmtCdFileEntry[];
-extern u_char g_MsgCdFilesFound[];
-extern u_short g_CdDotName;
-extern short g_CdDotDotName;
-extern signed char g_CdDotDotNameNul;
+#include "psyq/cd_internal.h"
 /* Fills the 64-entry file cache from one ISO directory, converting each
  * record's extent to a CdlLOC. Owns its three "CD_cachefile: ..." messages. */
 long CD_cachefile(long dir)
@@ -31,7 +15,7 @@ long CD_cachefile(long dir)
   {
     return 1;
   }
-  if (cd_read(1, g_CdPathEntryLbaByDirNum[dir].f0, g_CdSectorBuf) != 1)
+  if (cd_read(1, g_CdPathEntryLbaByDirNum[dir].lba, g_CdSectorBuf) != 1)
   {
     if (g_CdDebugLevel > 0)
     {

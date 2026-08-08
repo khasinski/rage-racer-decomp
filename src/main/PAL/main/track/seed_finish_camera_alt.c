@@ -4,8 +4,7 @@
 #include "game/race.h"
 #include "game/car.h"
 #include "game/render.h"
-
-extern GameRenderObject g_CameraCar;
+#include "game/render_internal.h"
 
 void SeedFinishCameraAlt(void *car) {
     register u32 word0 asm("$2");

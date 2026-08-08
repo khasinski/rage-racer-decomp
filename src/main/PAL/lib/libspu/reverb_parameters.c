@@ -1,9 +1,7 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
+#include "psyq/spu_internal.h"
 
-extern SpuRevAttrState g_SpuRevAttr;
-extern SpuCommonRegs *g_SpuRegBase;
-extern long g_SpuRevWorkAreaStartAddr[];
 
 #define SPU_REG16 ((volatile u_short *)g_SpuRegBase)
 
@@ -120,26 +118,26 @@ long SpuSetReverbModeParam(SpuReverbAttr *attr) {
     }
 
     if (mode_changed) {
-        reenable = (g_SpuRegBase->spuCnt >> 7) & 1;
+        reenable = (g_SpuRegBase->regs.spuCnt >> 7) & 1;
         if (reenable) {
-            cnt = g_SpuRegBase->spuCnt;
+            cnt = g_SpuRegBase->regs.spuCnt;
             cnt &= ~0x80;
-            g_SpuRegBase->spuCnt = cnt;
+            g_SpuRegBase->regs.spuCnt = cnt;
         }
     }
 
     if (!mode_changed) {
         if (set_all || (mask & 0x2)) {
-            g_SpuRegBase->revVol.left = attr->depth.left;
+            g_SpuRegBase->regs.revVol.left = attr->depth.left;
             g_SpuRevAttr.depth_left = attr->depth.left;
         }
         if (set_all || (mask & 0x4)) {
-            g_SpuRegBase->revVol.right = attr->depth.right;
+            g_SpuRegBase->regs.revVol.right = attr->depth.right;
             g_SpuRevAttr.depth_right = attr->depth.right;
         }
     } else {
-        g_SpuRegBase->revVol.left = 0;
-        g_SpuRegBase->revVol.right = 0;
+        g_SpuRegBase->regs.revVol.left = 0;
+        g_SpuRegBase->regs.revVol.right = 0;
         g_SpuRevAttr.depth_left = 0;
         g_SpuRevAttr.depth_right = 0;
     }
@@ -153,9 +151,9 @@ long SpuSetReverbModeParam(SpuReverbAttr *attr) {
     if (mode_changed) {
         _spu_FsetRXX(0xD1, g_SpuRevWorkAreaAddr, 0);
         if (reenable) {
-            cnt = g_SpuRegBase->spuCnt;
+            cnt = g_SpuRegBase->regs.spuCnt;
             cnt |= 0x80;
-            g_SpuRegBase->spuCnt = cnt;
+            g_SpuRegBase->regs.spuCnt = cnt;
         }
     }
     return 0;

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/cd.h"
+#include "game/cd_internal.h"
 
 void StartCdVolumeFade(s32 frames) {
     g_CdFadeFrames = frames;
@@ -15,14 +16,6 @@ void StartCdVolumeFade(s32 frames) {
  * right 12 to make the 0..0x7F bytes CdMix wants, so 0x7F000 is full. The
  * matching g_CdMixFull* four at +0x10 are the target the fade ramps toward.
  * Channel order is CdlATV's: L->L, L->R, R->R, R->L. */
-extern u32 g_CdMixLL;
-extern u32 g_CdMixLR;
-extern u32 g_CdMixRR;
-extern u32 g_CdMixRL;
-extern u32 g_CdMixFullLL;
-extern u32 g_CdMixFullLR;
-extern u32 g_CdMixFullRR;
-extern u32 g_CdMixFullRL;
 
 void StepCdVolumeFade(void) {
     u8 buf[4];

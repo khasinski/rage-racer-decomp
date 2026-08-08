@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gte.h"
 
@@ -57,7 +58,6 @@ void BuildRotMatrixX(Matrix *mtx, s32 angle) {
     mtx->m[2][2] = c;
 }
 
-extern Matrix g_MirrorViewMatrix;
 
 
 void SetCameraRotMatrix(void) {
@@ -74,7 +74,6 @@ void SetCameraRotMatrix(void) {
     SetRotMatrix(scratch);
 }
 
-extern s16 g_AtanTable[];
 
 s32 Atan2(s32 x, s32 y) {
     if (x == 0) {

@@ -1,25 +1,13 @@
 #include "common.h"
 #include "psyq/gpu.h"
+#include "psyq/gpu_internal.h"
 
-extern GpuCallbacks *g_GpuFuncs;
 /*
  * The five words at 0x80094290 are one GPU "move image" primitive: tag, the
  * 0xE1-class command word, then source xy, destination xy and the packed
  * width/height.  MoveImage fills the last three and sends the whole packet.
  */
-typedef struct {
-    u_long tag;
-    u_long code;
-    u_long src;
-    u_long dst;
-    u_long wh;
-} GpuMovePacket;
 
-extern GpuMovePacket g_MoveImagePacket;
-
-extern char g_GpuNameLoadImage[];
-extern char g_GpuNameStoreImage[];
-extern char g_GpuNameMoveImage[];
 
 void LoadImage(Rect *rect, void *pixels) {
     CheckPrim(g_GpuNameLoadImage, rect);
@@ -44,10 +32,6 @@ long MoveImage(GpuRectPacked *rect, u_long x, u_long y) {
                             sizeof(g_MoveImagePacket), 0);
 }
 
-extern u_char g_GraphDebug;
-extern char g_FmtGpuClearOTag[];
-extern char g_FmtGpuClearOTagR[];
-extern u_long g_OtagTerminator;
 
 
 void *ClearOTag(u_long *ot, long count) {

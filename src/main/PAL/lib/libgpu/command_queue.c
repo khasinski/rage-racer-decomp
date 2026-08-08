@@ -2,15 +2,8 @@
 
 #include "common.h"
 #include "psyq/gpu.h"
+#include "psyq/gpu_internal.h"
 
-extern volatile QEntry g_GpuQueue[];
-extern volatile long g_GpuQueueWriteIdx;
-extern long g_GpuQueueReadIdx;
-extern long g_AddQueueIntrMask;
-extern u_char g_GpuLastCb[];
-extern volatile u_long *g_GpuGp1;
-extern volatile u_char g_GraphQueue;
-extern long g_DrawSyncCallback;
 
 /* Driver-table slot +0x08, the `send` entry every libgpu call goes through:
  * runs the worker immediately when the queue is empty and the GPU idle,
@@ -42,7 +35,7 @@ long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     } while ((*g_GpuGp1 & 0x04000000) == 0);
 
     cb(arg, tag);
-    *(void (*volatile *)(long, long))g_GpuLastCb = cb;
+    g_GpuLastCb.cb = cb;
     g_GpuLastCbArg = arg;
     g_GpuLastCbData = tag;
     SetIntrMask(g_AddQueueIntrMask);

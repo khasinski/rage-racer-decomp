@@ -1,10 +1,15 @@
 #include "common.h"
 #include "game/render.h"
+#define GAME_FLYBY_SCENERY_DECL extern s32 g_FlybyScenery[]
+#define GAME_ROUTE_SCENERY_QUALIFIER volatile
+#define GAME_ROUTE_KEYFRAME_TYPE u8
+#include "game/track_internal.h"
+#define GAME_RACE_SERIES_QUALIFIER volatile
+#include "game/race.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
 #include "psyq/gte.h"
 
-extern s32 g_FlybyScenery[];
 
 void DrawFlybyScenery(void) {
     Matrix mtx0;
@@ -26,15 +31,9 @@ void DrawFlybyScenery(void) {
     }
 }
 
-extern volatile s32 g_RaceSeries;
-extern u8 *g_RouteSceneryData;
 /* 0 while the route prop is not running; the seeder sets it to 1 and
  * UpdateRouteScenery increments it every frame, so it is both the enable
  * and the frame count since the seed. */
-extern volatile s32 g_RouteSceneryClock;
-extern volatile s16 g_RouteSceneryKeyIndex;
-extern s32 g_RouteSceneryRotY;
-extern u8 *g_RouteSceneryKeyframe;
 
 void SeedRouteScenery(void) {
     register s32 index0 asm("$2");

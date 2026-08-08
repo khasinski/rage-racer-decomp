@@ -2,8 +2,7 @@
 #include <ctype.h>
 
 #include "common.h"
-
-extern u_char g_LibcCtype[];
+#include "psyq/libc_internal.h"
 
 long tolower(long ch) {
     u_char value = ch;

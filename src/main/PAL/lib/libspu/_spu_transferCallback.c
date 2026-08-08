@@ -1,6 +1,6 @@
 #include "psyq/spu.h"
+#include "psyq/spu_internal.h"
 
-extern volatile u_short *g_SpuRegBase;
 void _spu_transferCallback(void) {
     volatile long i;
     volatile long delay;
@@ -31,17 +31,17 @@ void _spu_transferCallback(void) {
         }
     }
 
-    cnt = g_SpuRegBase[0xD5];
-    g_SpuRegBase[0xD5] = cnt & 0xFFCF;
+    cnt = g_SpuRegBase->raw[0xD5];
+    g_SpuRegBase->raw[0xD5] = cnt & 0xFFCF;
 
     wait = 0;
-    if ((g_SpuRegBase[0xD5] & 0x30) != 0) {
+    if ((g_SpuRegBase->raw[0xD5] & 0x30) != 0) {
         while (1) {
             wait++;
             if (wait >= 0xF01) {
                 break;
             }
-            if ((g_SpuRegBase[0xD5] & 0x30) == 0) {
+            if ((g_SpuRegBase->raw[0xD5] & 0x30) == 0) {
                 wait--;
                 break;
             }

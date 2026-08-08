@@ -1,6 +1,7 @@
 #include "common.h"
 #include "psyq/kernel.h"
 #include "game/memcard.h"
+#include "game/memcard_internal.h"
 
 void ClearMemoryCardHwEvents(void) {
     TestEvent(g_McHwEventIoe);
@@ -107,7 +108,6 @@ s32 WaitMemoryCardSwEvent(void) {
 }
 void RestartMemoryCard(void) { InitCARD(1); StartCARD(); BiosBuInit(); g_SaveElapsedTicks = 0; }
 
-extern s32 g_FrameSyncThreshold;
 
 void AdvanceSaveHeaderCounter(void) {
     if (g_FrameSyncThreshold == 0x80) {
@@ -116,4 +116,3 @@ void AdvanceSaveHeaderCounter(void) {
         g_SaveElapsedTicks += 2;
     }
 }
-

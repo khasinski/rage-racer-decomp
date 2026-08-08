@@ -1,31 +1,12 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/menu.h"
+#define GAME_TEAM_LOGO_WORD_TYPE TeamLogoWord
+#define GAME_TEAM_LOGO_PEN_TYPE s32
+#define GAME_TEAM_LOGO_CLUT_POS_TYPE Rect
+#include "game/menu_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
-typedef struct TeamLogoClutPos {
-    s16 cx;
-    s16 cy;
-} TeamLogoClutPos;
-
-typedef struct TeamLogoTexturePos {
-    s16 tx;
-    u16 ty;
-} TeamLogoTexturePos;
-
-typedef union {
-    s32 value;
-    u16 lo;
-    s16 slo;
-} TeamLogoWord;
-
-extern TeamLogoClutPos g_TeamLogoClutRect;
-extern TeamLogoTexturePos g_TeamLogoRect;
-extern TeamLogoWord g_TeamLogoCursorX;
-extern TeamLogoWord g_TeamLogoViewX;
-extern s32 g_TeamLogoPenColor;
-extern u8 g_PadType;
-extern u32 g_TeamLogoCanvas[];
 
 void DrawTeamLogoCanvasFade(s32 delta) {
     u8 *scratch;
@@ -224,19 +205,19 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     x88 = x2 + 0x88;
     delta = 0x220 - g_TeamLogoZoomSpan;
     scaleDelta = (delta * g_TeamLogoViewX.value) / 272;
-    phaseValue = (g_TeamLogoRect.tx * 4) - 1;
+    phaseValue = (g_TeamLogoRect.x * 4) - 1;
     drawValue = phaseValue + scaleDelta;
     gx = drawValue;
     scaleDelta = (delta * g_TeamLogoViewY) / 272;
-    texY = (*(u8 *)(&g_TeamLogoRect.ty)) - 1;
+    texY = (*(u8 *)(&g_TeamLogoRect.y)) - 1;
     gyTemp = texY + scaleDelta;
     phaseValue = gyTemp;
     gy = phaseValue;
     gx2 = drawValue + (g_TeamLogoZoomSpan / 8);
     asm("" : : "r"(scaleDelta));
     gy2 = phaseValue + (g_TeamLogoZoomSpan / 8);
-    clut = (g_TeamLogoRect.ty >> 4) & 0x10;
-    clut |= (g_TeamLogoRect.tx & 0x3FF) >> 6;
+    clut = (g_TeamLogoRect.y >> 4) & 0x10;
+    clut |= (g_TeamLogoRect.x & 0x3FF) >> 6;
     SetDrawClipRect((void *)ot, (s16)0, (s16)0, (s16)0x140, (s16)0x1E0);
     GameDrawTexturedQuad(ot, (s16)x2, (s16)sx, (s16)x88, (s16)sx,
                          (s16)x2, (s16)w1, (s16)x88, (s16)w1,
@@ -265,7 +246,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     kreg = sy;
     if ((g_TeamLogoZoomLevel >= 0x100) && (g_TeamLogoGuideMode != 0))
     {
-      x1 = g_TeamLogoViewX.lo + 0x30;
+      x1 = g_TeamLogoViewX.low + 0x30;
       y1 = sy + ((g_TeamLogoViewY * 2) + 2);
       clut = (rsin((g_TeamLogoColorCycleAngle * 2) % 0x1000) / 64) - 0x41;
       if (g_TeamLogoGuideMode == 2)
@@ -275,9 +256,9 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
         s16 xa;
         ya = su + 0x1FD;
         yb = su + 0x27D;
-        xa = x1 + g_TeamLogoCursorX.lo;
+        xa = x1 + g_TeamLogoCursorX.low;
         DrawLine((void *)ot, (s16)xa, (s16)ya, (s16)xa, (s16)yb, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
-        xa = ((x1 + g_TeamLogoCursorX.lo) + ((u16) g_TeamLogoBrushSize)) - 1;
+        xa = ((x1 + g_TeamLogoCursorX.low) + ((u16) g_TeamLogoBrushSize)) - 1;
         DrawLine((void *)ot, (s16)xa, (s16)ya, (s16)xa, (s16)yb, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
         xa = y1 + (g_TeamLogoCursorY * 2);
         DrawLine((void *)ot, (s16)0x30, (s16)xa, (s16)0x70, (s16)xa, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
@@ -299,25 +280,25 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       else
         if (g_TeamLogoBrushSize == 1)
       {
-        s16 xa = x1 + g_TeamLogoCursorX.lo;
+        s16 xa = x1 + g_TeamLogoCursorX.low;
         s16 ya = y1 + (g_TeamLogoCursorY * 2);
         DrawLine((void *)ot, (s16)xa, (s16)ya, (s16)xa, (s16)(ya + 1), (u8)clut, (u8)clut, (u8)clut, (u8)ff);
       }
       else
       {
-        DrawRectOutline((void *)ot, (s16)(x1 + g_TeamLogoCursorX.lo), (s16)(y1 + g_TeamLogoCursorY * 2), (s16)g_TeamLogoBrushSize, (s16)(g_TeamLogoBrushSize * 2), (u8)clut, (u8)clut, (u8)clut, (u8)0xFF);
+        DrawRectOutline((void *)ot, (s16)(x1 + g_TeamLogoCursorX.low), (s16)(y1 + g_TeamLogoCursorY * 2), (s16)g_TeamLogoBrushSize, (s16)(g_TeamLogoBrushSize * 2), (u8)clut, (u8)clut, (u8)clut, (u8)0xFF);
       }
       DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0x20, 0x40, 0, (u8)clut, 0, (u8)0xFF);
     }
-    gx = (g_TeamLogoRect.tx * 4) - 1;
-    gy = (*(u8 *)(&g_TeamLogoRect.ty)) - 1;
+    gx = (g_TeamLogoRect.x * 4) - 1;
+    gy = (*(u8 *)(&g_TeamLogoRect.y)) - 1;
     gx2 = gx;
     gx2 += 0x41;
     gy2 = gy;
     gy2 += 0x41;
-    pal = GetClut(g_TeamLogoClutRect.cx, g_TeamLogoClutRect.cy);
-    clut = (g_TeamLogoRect.ty >> 4) & 0x10;
-    clut |= (g_TeamLogoRect.tx & 0x3FF) >> 6;
+    pal = GetClut(g_TeamLogoClutRect.x, g_TeamLogoClutRect.y);
+    clut = (g_TeamLogoRect.y >> 4) & 0x10;
+    clut |= (g_TeamLogoRect.x & 0x3FF) >> 6;
     w1 = kreg + 0x83;
     xb = x0 + 0x41;
     SetDrawClipRect((void *)ot, (s16)0, (s16)0, (s16)0x140, (s16)0x1E0);

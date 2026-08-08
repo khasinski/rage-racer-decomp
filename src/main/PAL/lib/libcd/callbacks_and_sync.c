@@ -1,11 +1,7 @@
 #include "common.h"
 #include "psyq/cd.h"
+#include "psyq/cd_internal.h"
 
-extern long g_CdSyncCallback;
-extern long g_CdReadyCallback;
-extern char *g_CdCommandNames[];
-extern char *g_CdIntrNames[];
-extern u_char g_MsgCdNone[];
 
 void CdFlush(void) {
     CD_flush();

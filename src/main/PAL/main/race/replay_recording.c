@@ -1,16 +1,11 @@
 #include "common.h"
 #include "game/race.h"
 #include "game/render.h"
-
-extern u8 *g_ReplayFramesGp;
-extern u32 g_ReplayWriteCursor;
-extern u32 g_ReplayFrameCount;
-extern u32 g_ReplayBufferWrapped;
-extern s32 g_ReplayPlayerModel;
-extern s32 g_ReplayRivalModel;
+#define GAME_REPLAY_COUNTER_TYPE u32
+#include "game/replay_internal.h"
 
 void ResetReplayFrameCounts(void) {
-    g_ReplayFramesGp = &g_ReplayFrameBuffer;
+    g_ReplayFramesGp = (ReplayGrandPrixFrame *)&g_ReplayFrameBuffer;
     g_ReplayFramesTimeAttack = &g_ReplayFrameBuffer;
 }
 
@@ -50,7 +45,7 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
 
     pairIndex >>= 1;
     dst = (GameRenderPairPoint *)((pairIndex * 3) << 4);
-    base = g_ReplayFramesGp;
+    base = (u8 *)g_ReplayFramesGp;
     src1 = (GameRenderSourcePoint *)srcA;
     first = src1->field_0;
     dst = (GameRenderPairPoint *)((u8 *)dst + (s32)base);

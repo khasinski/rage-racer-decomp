@@ -14,12 +14,8 @@ typedef struct Cmd {
     u16 unk2E;
 } Cmd;
 
-extern s32 g_EnvScriptClock;
-extern s32 g_EnvScriptLength;
-
-/* Next cue of g_EnvScriptCues due to fire; wraps back to the head when the
- * record it lands on has a negative id (the terminator). */
-extern Cmd *g_EnvScriptCursor;
+#define GAME_ENV_SCRIPT_CURSOR_TYPE Cmd
+#include "game/track_internal.h"
 
 /* The three bytes of the packed slot-0 colour g_EnvColors[0].cur, addressed
  * individually because SetFarColor takes R, G and B separately. The cast is
