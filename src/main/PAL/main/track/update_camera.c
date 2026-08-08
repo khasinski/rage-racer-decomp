@@ -283,7 +283,7 @@ block_36:
         BuildRotMatrixX(&sp68[0], -0x80);
         MulMatrix2(&sp68[0], &sp88[0]);
         g_ChaseYawPrev = g_ChaseYaw;
-        BuildRotMatrixY(&sp48[0], *(s32 *)((u8 *)car + 0x24));
+        BuildRotMatrixY(&sp48[0], RAW(car->angleY));
         BuildRotMatrixX(&sp68[0], car->angleX);
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], car->angleZ);
