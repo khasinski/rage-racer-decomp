@@ -100,7 +100,7 @@ s32 WriteMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *header) {
  * walking pointer itself: a strength-reduced giv is initialised after the
  * counter, which is the order retail emits the two moves in. */
 s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
-    void *buffer;
+    GameSaveHeaderRow *buffer;
     s32 sum;
     s32 i;
     u16 *ptr;
@@ -127,7 +127,7 @@ s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
      * register; a `== ~sum` in the test needs a second one. */
     sum = ~sum;
 
-    if (*(s32 *)((u8 *)buffer + 0x7C) == sum) {
+    if (buffer->checksum == sum) {
         return 1;
     }
 
@@ -151,7 +151,7 @@ s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
      * register; a `== ~sum` in the test needs a second one. */
     sum = ~sum;
 
-    if (*(s32 *)((u8 *)buffer + 0x7C) == sum) {
+    if (buffer->checksum == sum) {
         return 1;
     }
 
@@ -164,7 +164,7 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) {
     s32 i;
     s32 mask;
     s32 nameOffset;
-    void *buffer;
+    GameSaveHeaderRow *buffer;
 
     mask = 0;
     GameMenuLoadPhase = 0x110;
@@ -184,7 +184,7 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) {
             }
         }
 
-        buffer = (void *)((u8 *)buffer + 0x80);
+        buffer++;
         i++;
         nameOffset += 0x1A;
     } while (i < 3);
@@ -195,7 +195,7 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) {
 
 s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     u8 block[MC_BLOCK_SIZE];
-    void *header;
+    GameSaveHeaderRow *header;
     s32 tries;
     s32 fd;
     s32 temp;
@@ -220,7 +220,7 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
 
     retry:
         name = g_SaveFilePath;
-        name = (char *)(nameOffset + (s32)name);
+        name += nameOffset;
         fd = BiosFileOpen(name, 1);
         if (fd < 0) {
             tries++;
@@ -258,11 +258,10 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     }
 
     GameMenuLoadPhase = 0x3800;
-    g_TeamNameLength = *(u8 *)header;
+    g_TeamNameLength = header->nameLength;
     i = 0;
     do {
-        u8 *copy_src = (u8 *)header + i;
-        g_TeamNameChars[i] = copy_src[1];
+        g_TeamNameChars[i] = header->name[i];
         i++;
     } while (i < 7);
 
@@ -271,7 +270,7 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
         s32 word;
         s32 status;
 
-        word = *(s32 *)((u8 *)header + 8);
+        word = header->saveCounter;
         status = tries | 0x3900;
         GameMenuLoadPhase = status;
         g_SaveElapsedTicks = word;
