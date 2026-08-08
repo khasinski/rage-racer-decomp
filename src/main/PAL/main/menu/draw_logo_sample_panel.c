@@ -4,12 +4,9 @@
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b,
                    s32 alpha);
 
-void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
-                   u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 s32 rsin(s32 angle);
 
-void DrawLogoSprite() asm("DrawSprite");
 void DrawLogoRect() asm("DrawSolidRect");
 
 void DrawLogoSamplePanel(s32 step, s32 sample) {
@@ -38,8 +35,8 @@ void DrawLogoSamplePanel(s32 step, s32 sample) {
         }
         t = (u32) - (idx * 960) >> 5;
         y = t + 494;
-        DrawSprite(ot, 0xDA, y, 8, 0x10, (sample / 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
-        DrawSprite(ot, 0xE2, y, 8, 0x10, (sample % 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+        DrawSprite(ot, 0xDA, y, 8, 0x10, (u8)((sample / 10) << 3), 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+        DrawSprite(ot, 0xE2, y, 8, 0x10, (u8)((sample % 10) << 3), 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
         DrawSprite(ot, 0xA2, y, 4, 0x10, 0x78, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
         DrawSprite(ot, 0xA8, y, 0x34, 0x10, 0x7C, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
         DrawSprite(ot, 0xEA, y, 4, 0x10, 0xB0, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
@@ -94,7 +91,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         }
     }
     if ((g_TeamNameEntrySlide >= 0x19) && ((u8)g_TeamNameLength < 6U)) {
-        DrawLogoSprite(ot, (g_TeamNameLength * 0xC) + 0x53, 0x7D, 0xC, 0x18, 0xF4, 0x28, 0,
+        DrawSprite(ot, (g_TeamNameLength * 0xC) + 0x53, 0x7D, 0xC, 0x18, 0xF4, 0x28, 0,
                        0, 0, 0x244, 1, 1, 0x39);
     }
     animationStep = g_TeamNameEntrySlide - 0xE;
@@ -126,12 +123,12 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         }
         gridY = ((u32)-(animationStep * 64) >> 5) + 0xF9;
         if (cursorIndex < 0xA) {
-            DrawLogoSprite(ot, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
+            DrawSprite(ot, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
                            (s16)(gridY + ((cursorIndex / 11) * 0x18)), 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)((cursorIndex % 32) * 8),
                            (s32)(s16)((cursorIndex / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1, 0x5B);
         } else if (cursorIndex >= 0xB) {
-            DrawLogoSprite(ot, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
+            DrawSprite(ot, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
                            (s16)(gridY + ((cursorIndex / 11) * 0x18)), 8,
                            (s32)(s16)(animationStep * 2),
                            (s32)(s16)(((cursorIndex - 1) % 32) * 8),
@@ -141,7 +138,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         rowI = 0;
         do {
             rowX = (rowI * 0xC) + 0x56;
-            DrawLogoSprite(ot + 4, (rowX << 16) >> 16, gridY, 8,
+            DrawSprite(ot + 4, (rowX << 16) >> 16, gridY, 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)(rowI * 8), 0x18, 0, 0, 0,
                            0x244, 1, 1, 0x3B);
             rowI += 1;
@@ -149,7 +146,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         i = 0;
         do {
             rowX = (i * 0xC) + 0x56;
-            DrawLogoSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x18), 8,
+            DrawSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x18), 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)((i * 8) + 0x50), 0x18, 0,
                            0, 0, 0x244, 1, 1, 0x3B);
             i += 1;
@@ -157,7 +154,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         i = 0;
         do {
             rowX = (i * 0xC) + 0x56;
-            DrawLogoSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x30), 8,
+            DrawSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x30), 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)((i * 8) + 0xA8), 0x18, 0,
                            0, 0, 0x244, 1, 1, 0x3B);
             i += 1;
@@ -165,7 +162,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         i = 0;
         do {
             rowX = (i * 0xC) + 0x56;
-            DrawLogoSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x48), 8,
+            DrawSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x48), 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)(i * 8), 0x28, 0, 0, 0,
                            0x244, 1, 1, 0x3B);
             i += 1;
@@ -178,11 +175,11 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         }
         rise = (u32)-(animationStep * 64) >> 5;
         height = animationStep * 2;
-        DrawLogoSprite(ot + 4, 0xDA, (s16)(rise + 0xF4), 0x1E, (s32)height, 0xAC,
+        DrawSprite(ot + 4, 0xDA, (s16)(rise + 0xF4), 0x1E, (s32)height, 0xAC,
                        0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
-        DrawLogoSprite(ot + 4, 0xDA, (s16)(rise + 0x10B), 0x20, (s32)height, 0xAC,
+        DrawSprite(ot + 4, 0xDA, (s16)(rise + 0x10B), 0x20, (s32)height, 0xAC,
                        0xF4, 0, 0, 0, 0x244, 1, 1, 0x3A);
-        DrawLogoSprite(ot + 4, 0xDA, (s16)(rise + 0x117), 0x14, (s32)height, 0xCC,
+        DrawSprite(ot + 4, 0xDA, (s16)(rise + 0x117), 0x14, (s32)height, 0xCC,
                        0xF4, 0, 0, 0, 0x244, 1, 1, 0x3A);
     }
     animationStep = g_TeamNameEntrySlide - 0x11;
@@ -197,14 +194,14 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
                 ch = g_TeamNameChars[i];
                 if (ch < 0xAU) {
                     xFirst = (i * 0xC) + 0x56;
-                    DrawLogoSprite(ot, (xFirst << 16) >> 16, nameY, 8,
+                    DrawSprite(ot, (xFirst << 16) >> 16, nameY, 8,
                                    (s32)(s16)(animationStep * 2),
                                    (s32)(s16)((g_TeamNameChars[i] & 0x1F) * 8),
                                    (s32)(s16)((g_TeamNameChars[i] >> 5) * 16 + 0x18), 0, 0, 0,
                                    0x244, 1, 1, 0x3B);
                 } else if (ch >= 0xBU) {
                     xSecond = (i * 0xC) + 0x56;
-                    DrawLogoSprite(ot, (xSecond << 16) >> 16, nameY, 8,
+                    DrawSprite(ot, (xSecond << 16) >> 16, nameY, 8,
                                    (s32)(s16)(animationStep * 2),
                                    (s32)(s16)(((g_TeamNameChars[i] - 1) % 32) * 8),
                                    (s32)(s16)(((g_TeamNameChars[i] - 1) / 32) * 16 + 0x18), 0, 0, 0,

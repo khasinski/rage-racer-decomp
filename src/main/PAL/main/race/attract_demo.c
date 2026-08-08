@@ -14,21 +14,6 @@ extern void (*g_BgmSelectSteps[])(void);
 void UploadImageAsset(void *imageBlock);
 s32 RequestTrackDataAssets(void);
 
-void DrawCarSpecSprite(
-    u8 *ot,
-    u32 x0,
-    u32 y0,
-    u32 w,
-    u32 h,
-    u32 u0,
-    u32 v0,
-    u32 r,
-    u32 g,
-    u32 b,
-    u32 clutIndex,
-    u32 shadeTex,
-    u32 semiTrans,
-    u32 flags) asm("DrawSprite");
 
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
@@ -92,10 +77,10 @@ void DrawAttractTitle(void) {
     value = GetAttractTitleFade(0);
     one = 1;
     flags = 0x29;
-    DrawCarSpecSprite(ptr, 0x74, 0x34, 0x58, 0x38, 0xA8, 0xA8, value, value, value, 0x1F, 0, one, flags);
-    DrawCarSpecSprite(ptr, 0x44, 0x70, 0xB8, 0x14, 0x48, 0xE8, value, value, value, 0x80, 0, one, flags);
+    DrawSprite(ptr, 0x74, 0x34, 0x58, 0x38, 0xA8, 0xA8, value, value, value, 0x1F, 0, one, flags);
+    DrawSprite(ptr, 0x44, 0x70, 0xB8, 0x14, 0x48, 0xE8, value, value, value, 0x80, 0, one, flags);
     value = GetAttractTitleFade(1);
-    DrawCarSpecSprite(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, flags);
+    DrawSprite(ptr, 0x5E, 0x90, 0x84, 0xC, 0, (g_CourseIndex * 12) + 0x9C, value, value, value, 0x12, 0, one, flags);
 }
 
 void UpdateAttractDemoStart(void) {

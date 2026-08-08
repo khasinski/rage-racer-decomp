@@ -7,9 +7,6 @@
 
 extern DesignModeCellMask D_80011BD4;
 
-void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
-                   s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex,
-                   s32 semiTrans, s32 flags) asm("DrawSprite");
 
 s32 DrawDesignModeScreen(s32 step) {
     DesignModeCellMask mask;
@@ -53,10 +50,10 @@ s32 DrawDesignModeScreen(s32 step) {
     y = 0xB0 - (s16)offset;
     intensity = (u32)D_8009B2D4 / MENU_FADE_INTENSITY_DIVISOR;
 
-    GameDrawSpriteWide(ot, 0xB4, y, 0x18, 0xC, 0x94, 0xDC,
+    DrawSprite(ot, 0xB4, y, 0x18, 0xC, 0x94, 0xDC,
                   (u8)intensity, (u8)intensity, (u8)intensity,
                   0x244, 0, 1, 0x3B);
-    GameDrawSpriteWide(ot, 0xCE, y, 0x14, 0xC, 0xE0, 0xDC,
+    DrawSprite(ot, 0xCE, y, 0x14, 0xC, 0xE0, 0xDC,
                   (u8)intensity, (u8)intensity, (u8)intensity,
                   0x244, 0, 1, 0x3B);
 
@@ -70,7 +67,7 @@ s32 DrawDesignModeScreen(s32 step) {
                 clutX = 0x244;
             }
 
-            GameDrawSpriteWide(ot, 0xB4 + column * 0x10,
+            DrawSprite(ot, 0xB4 + column * 0x10,
                           0xC0 + row * 0x20 - (s16)offset,
                           0xC, 0x18, 0xF4, 0x60,
                           (u8)intensity, (u8)intensity,

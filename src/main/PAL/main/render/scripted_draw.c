@@ -4,21 +4,6 @@
 #include "game/scratchpad.h"
 #include "game/state.h"
 
-void GameDrawSpriteWide(
-    void *ot,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 clutIndex,
-    s32 shadeTex,
-    s32 semiTrans,
-    s32 flags) asm("DrawSprite");
 
 void DrawScriptedSprite(s32 elapsed, u8 *shape, u8 *motion, s32 type) {
     register u8 *motionReg asm("$10") = motion;
@@ -96,7 +81,7 @@ void DrawScriptedSprite(s32 elapsed, u8 *shape, u8 *motion, s32 type) {
         alpha = 0x80;
     }
 
-    GameDrawSpriteWide(
+    DrawSprite(
         (u8 *)otBase + (mode * 4),
         (s16)x,
         (s16)y,
@@ -558,7 +543,6 @@ loop_body:
 }
 extern TimedDrawCommand D_80082520[];
 
-void GameDrawSpriteWide();
 
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     u8 *shapePtr;
@@ -654,7 +638,7 @@ loop:
     drawX >>= 16;
     drawY >>= 16;
 
-    GameDrawSpriteWide((u8 *)ot + 8,
+    DrawSprite((u8 *)ot + 8,
                   drawX,
                   drawY,
                   drawW,

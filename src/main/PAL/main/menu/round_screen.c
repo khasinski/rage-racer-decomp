@@ -134,8 +134,6 @@ extern s32 g_BgmSelection;
 extern s32 g_BestTotalTimes[][4][2];
 extern s32 g_BestLapTimes[][4][2];
 
-void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
-                   s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags) asm("DrawSprite");
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
 void DrawRoundScreen(void) {
@@ -145,8 +143,8 @@ void DrawRoundScreen(void) {
     void *ot = g_DrawBuffer + 204;
 
     col = UpdateRoundScreenFade(0);
-    GameDrawSpriteWide(ot, 0x74, 0x14, 0x58, 0x38, 0xa8, 0xa8, col, col, col, 0x1f, 0, 1, 0x29);
-    GameDrawSpriteWide(ot, 0x44, 0x50, 0xb8, 0x14, 0x48, 0xe8, col, col, col, 0x80, 0, 1, 0x29);
+    DrawSprite(ot, 0x74, 0x14, 0x58, 0x38, 0xa8, 0xa8, col, col, col, 0x1f, 0, 1, 0x29);
+    DrawSprite(ot, 0x44, 0x50, 0xb8, 0x14, 0x48, 0xe8, col, col, col, 0x80, 0, 1, 0x29);
 
     col = UpdateRoundScreenFade(1);
     if (g_GrandPrixMode != 0) {
@@ -156,7 +154,7 @@ void DrawRoundScreen(void) {
     } else {
         y0 = 0x68;
     }
-    GameDrawSpriteWide(ot, 0x5e, y0, 0x84, 0xc, 0, g_CourseIndex * 12 + 156, col, col, col, 0x12, 0, 1, 0x29);
+    DrawSprite(ot, 0x5e, y0, 0x84, 0xc, 0, g_CourseIndex * 12 + 156, col, col, col, 0x12, 0, 1, 0x29);
 
     col = UpdateRoundScreenFade(2);
     if (g_GrandPrixMode != 0) {

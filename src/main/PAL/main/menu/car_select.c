@@ -11,8 +11,6 @@
 extern u8 *g_CarModelAsset;
 
 void DrawRectOutlineWide(void *buf, s32 xa, s32 ya, s32 w, s32 h, s32 r, s32 g, s32 b, s32 code) asm("DrawRectOutline");
-void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
-                   s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
 
 void DrawMenuLightBurst(s32 arg);
 
@@ -171,11 +169,11 @@ s32 DrawCarSelectScreen(s32 step) {
 
     tex = g_CarTable[g_PlayerCarIndex].transmission;
     if (tex != 0) {
-        GameDrawSpriteWide(buf, 0xad, 0x185, 0x10, 0x10, 0x6c, 0x7c, col, col, col,
+        DrawSprite(buf, 0xad, 0x185, 0x10, 0x10, 0x6c, 0x7c, col, col, col,
                       0x244, 0, 1, 0x3b);
         xpos = 0xa5;
     } else {
-        GameDrawSpriteWide(buf, 0xae, 0x185, 0xc, 0x10, 0x60, 0x7c, col, col, col,
+        DrawSprite(buf, 0xae, 0x185, 0xc, 0x10, 0x60, 0x7c, col, col, col,
                       0x244, 0, 1, 0x3b);
         xpos = 0xa6;
     }
@@ -183,15 +181,15 @@ s32 DrawCarSelectScreen(s32 step) {
     mode = g_CarModelAsset[9];
     switch (mode) {
     case 4:
-        GameDrawSpriteWide(buf, xpos, 0x185, 8, 0x10, 0x20, 0x18, v & 0xff, v & 0xff,
+        DrawSprite(buf, xpos, 0x185, 8, 0x10, 0x20, 0x18, v & 0xff, v & 0xff,
                       v & 0xff, 0x244, 0, 1, 0x3b);
         break;
     case 5:
-        GameDrawSpriteWide(buf, xpos, 0x185, 8, 0x10, 0x28, 0x18, v & 0xff, v & 0xff,
+        DrawSprite(buf, xpos, 0x185, 8, 0x10, 0x28, 0x18, v & 0xff, v & 0xff,
                       v & 0xff, 0x244, 0, 1, 0x3b);
         break;
     case 6:
-        GameDrawSpriteWide(buf, xpos, 0x185, 8, 0x10, 0x30, 0x18, v & 0xff, v & 0xff,
+        DrawSprite(buf, xpos, 0x185, 8, 0x10, 0x30, 0x18, v & 0xff, v & 0xff,
                       v & 0xff, 0x244, 0, 1, 0x3b);
         break;
     }
@@ -804,8 +802,8 @@ void UpdateCustomizeScreen(void) {
                     }
                 }
                 DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xDA : 0xB8, 0x68, 0x20, 0x20, 0);
-                GameDrawSpriteWide(ot, 0xC2, 0x70, 0xC, 0x10, 0x60, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                GameDrawSpriteWide(ot, 0xE3, 0x70, 0x10, 0x10, 0x6C, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                DrawSprite(ot, 0xC2, 0x70, 0xC, 0x10, 0x60, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                DrawSprite(ot, 0xE3, 0x70, 0x10, 0x10, 0x6C, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 GameDrawMenuButtonWide(0xB8, 0x68, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, &g_MenuBlankCaption);
                 GameDrawMenuButtonWide(0xDA, 0x68, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, &g_MenuBlankCaption);
             }
@@ -848,8 +846,8 @@ void UpdateCustomizeScreen(void) {
                 g_MenuConfirmTimer -= 1;
                 RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 1);
                 DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xDA : 0xB8, 0x68, 0x20, 0x20, 1);
-                GameDrawSpriteWide(ot, 0xC2, 0x70, 0xC, 0x10, 0x60, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                GameDrawSpriteWide(ot, 0xE3, 0x70, 0x10, 0x10, 0x6C, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                DrawSprite(ot, 0xC2, 0x70, 0xC, 0x10, 0x60, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                DrawSprite(ot, 0xE3, 0x70, 0x10, 0x10, 0x6C, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 GameDrawMenuButtonWide(0xB8, 0x68, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, &g_MenuBlankCaption);
                 GameDrawMenuButtonWide(0xDA, 0x68, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, &g_MenuBlankCaption);
             }

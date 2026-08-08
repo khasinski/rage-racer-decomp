@@ -102,21 +102,6 @@ extern CourseSelectPrizeTable g_CourseSelectPrizeTable asm("g_PrizeMoney");
 extern CourseSelectScrollState g_CourseSelectScrollState;
 extern s32 D_8009B2C0 asm("g_CourseSelectScrollState");
 
-void GameDrawSpriteWide(
-    void *ot,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 clut,
-    s32 shadeTex,
-    s32 semiTrans,
-    s32 flags) asm("DrawSprite");
 void GameDrawSolidRectWide(
     void *ot,
     s32 x,
@@ -182,7 +167,7 @@ static __inline__ s32 GameDrawSlidingSprite(
         result.h = h;
         *bounds = result;
     }
-    GameDrawSpriteWide(
+    DrawSprite(
         ot, x, y, w, h, u, v, r, g, b, clut,
         shadeTex, semiTrans, flags);
     return y;
@@ -246,31 +231,31 @@ s32 DrawCourseSelectScreen(s32 step)
             switch (g_GrandPrixClass) {
             case 0:
                 headerWidth = 0x24;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x24, 0x10,
                     0, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
             case 1:
                 headerWidth = 0x20;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x20, 0x10,
                     0x24, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
             case 2:
                 headerWidth = 0x28;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x28, 0x10,
                     0x44, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
             case 3:
                 headerWidth = 0x30;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x30, 0x10,
                     0x6C, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
             case 4:
                 headerWidth = 0x30;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x30, 0x10,
                     0x9C, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
@@ -279,37 +264,37 @@ s32 DrawCourseSelectScreen(s32 step)
             switch (g_GrandPrixClass) {
             case 0:
                 headerWidth = 0x30;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x30, 0x10,
                     0xCC, 0x38, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
             case 1:
                 headerWidth = 0x40;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x40, 0x10,
                     0, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
             case 2:
                 headerWidth = 0x3C;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x3C, 0x10,
                     0x40, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
             case 3:
                 headerWidth = 0x28;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x28, 0x10,
                     0x7C, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
             case 4:
                 headerWidth = 0x20;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x20, 0x10,
                     0xA4, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
             case 5:
                 headerWidth = 0x28;
-                GameDrawSpriteWide(
+                DrawSprite(
                     ot, 0x50, 0xB0 - (s16)slide, 0x28, 0x10,
                     0xC4, 0x48, fade, fade, fade, 0x244, 0, 1, 0x5B);
                 break;
@@ -322,7 +307,7 @@ s32 DrawCourseSelectScreen(s32 step)
         gpSlide = (s16)slide;
         gpFade = fade;
         gpFlags = 0x5B;
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, headerWidth + 0x50, 0xB0 - gpSlide, 0x10,
             gpHeight, 0xEC, 0x48, gpFade, gpFade, gpFade,
             gpClut, 0, gpSemiTrans, gpFlags);
@@ -330,7 +315,7 @@ s32 DrawCourseSelectScreen(s32 step)
         coordinateY = GameDrawSlidingSprite(
             ot, 0x50, 0x97, gpSlide, 0x1A, gpHeight, 0x60, 0xCC,
             gpFade, gpFade, gpFade, gpClut, 0, gpSemiTrans, gpFlags, 0);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x6C, coordinateY, 8, 0x10,
             g_GrandPrixClass * 8 + 8, 0x18,
             gpFade, gpFade, gpFade, gpClut, 0, gpSemiTrans, gpFlags);
@@ -346,7 +331,7 @@ s32 DrawCourseSelectScreen(s32 step)
             ot, 0x48, 0x94 - gpSlide, 0x68, 0x30,
             lineColor, lineColor, lineColor,
             (u32)gpFade < 0x7F ? 0x20 : 0xFF);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0xB0, 0x94 - (s16)slide, 0x20, 0x30,
             0x60, 0x88, fade, fade, fade, 0x25B, 0, 1, 0x39);
     }
@@ -354,14 +339,14 @@ s32 DrawCourseSelectScreen(s32 step)
     coordinateY = GameDrawSlidingSprite(
         ot, 0x4C, 0xD0, (s16)slide, 0x18, 0xC, 0x18, 0xDC,
         fade, fade, fade, 0x244, 0, 1, 0x3A, 0);
-    GameDrawSpriteWide(
+    DrawSprite(
         ot, 0x68, coordinateY, 0x12, 0xC,
         0x32, 0xDC, fade, fade, fade, 0x244, 0, 1, 0x3A);
 
     coordinateY = GameDrawSlidingSprite(
         ot, 0x4C, 0xF8, (s16)slide, 0x18, 0xC, 0x18, 0xDC,
         fade, fade, fade, 0x244, 0, 1, 0x3A, 0);
-    GameDrawSpriteWide(
+    DrawSprite(
         ot, 0x68, coordinateY, 0x1A, 0xC,
         0x46, 0xDC, fade, fade, fade, 0x244, 0, 1, 0x3A);
 
@@ -370,10 +355,10 @@ s32 DrawCourseSelectScreen(s32 step)
         coordinateY = GameDrawSlidingSprite(
             ot, 0x4C, 0xE0, (s16)slide, 8, 0x10, 8, 0x18,
             fade, fade, fade, 0x244, 0, 1, 0x3B, 0);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x54, coordinateY, 0x54, 0x10,
             0, 0x9C, fade, fade, fade, 0x244, 0, 1, 0x3B);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x4C, 0x108 - (s16)slide, 0x20, 0x10,
             0x44, 0xB4, fade, fade, fade, 0x244, 0, 1, 0x3A);
         break;
@@ -381,10 +366,10 @@ s32 DrawCourseSelectScreen(s32 step)
         coordinateY = GameDrawSlidingSprite(
             ot, 0x4C, 0xE0, (s16)slide, 8, 0x10, 0x10, 0x18,
             fade, fade, fade, 0x244, 0, 1, 0x3B, 0);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x54, coordinateY, 0x4C, 0x10,
             0x54, 0x9C, fade, fade, fade, 0x244, 0, 1, 0x3B);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x4C, 0x108 - (s16)slide, 0x20, 0x10,
             0x64, 0xB4, fade, fade, fade, 0x244, 0, 1, 0x3A);
         break;
@@ -392,10 +377,10 @@ s32 DrawCourseSelectScreen(s32 step)
         coordinateY = GameDrawSlidingSprite(
             ot, 0x4C, 0xE0, (s16)slide, 8, 0x10, 0x18, 0x18,
             fade, fade, fade, 0x244, 0, 1, 0x3B, 0);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x54, coordinateY, 0x48, 0x10,
             0, 0xAC, fade, fade, fade, 0x244, 0, 1, 0x3B);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x4C, 0x108 - (s16)slide, 0x20, 0x10,
             0x84, 0xB4, fade, fade, fade, 0x244, 0, 1, 0x3A);
         break;
@@ -403,23 +388,23 @@ s32 DrawCourseSelectScreen(s32 step)
         coordinateY = GameDrawSlidingSprite(
             ot, 0x4C, 0xE0, (s16)slide, 8, 0x10, 0x20, 0x18,
             fade, fade, fade, 0x244, 0, 1, 0x3B, 0);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x54, coordinateY, 0x5C, 0x10,
             0xA4, 0x9C, fade, fade, fade, 0x244, 0, 1, 0x3B);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x4C, 0x108 - (s16)slide, 0x1E, 0x10,
             0xA4, 0xB4, fade, fade, fade, 0x244, 0, 1, 0x3A);
         break;
     }
 
     if (g_GrandPrixMode != 0) {
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x4C, 0x140 - (s16)slide, 0x18, 0x10,
             0xB4, 0xCC, fade, fade, fade, 0x244, 0, 1, 0x3A);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x4C, 0x150 - (s16)slide, 0x18, 0x10,
             0xCC, 0xCC, fade, fade, fade, 0x244, 0, 1, 0x3A);
-        GameDrawSpriteWide(
+        DrawSprite(
             ot, 0x4C, 0x160 - (s16)slide, 0x18, 0x10,
             0xE4, 0xCC, fade, fade, fade, 0x244, 0, 1, 0x3A);
 
@@ -435,7 +420,7 @@ s32 DrawCourseSelectScreen(s32 step)
                 prizeTable->values[g_CourseIndex & 3][g_GrandPrixClass][row],
                 prizeFade, prizeFade, prizeFade, prizeClut, 0x20);
             row++;
-            GameDrawSpriteWide(
+            DrawSprite(
                 ot, digitCount * 8 + 0x65, coordinateY, 0xC, 0x10,
                 0xF4, 0x28, prizeFade, prizeFade, prizeFade,
                 prizeClut, 0, 1, 0x3B);
@@ -473,8 +458,6 @@ s32 CanSelectNextCourse(void) {
 }
 
 extern u8 *D_8019C764;
-void drawSprite(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
-                   s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
 void DrawBrowseArrows(s32, s32, s32, s32);
 void DrawMenuLightBurst(s32 arg);
 void DrawOwnedCarCounter(s32 count, s32 step);
@@ -659,8 +642,8 @@ void UpdateCourseSelectScreen(void) {
                     g_MenuSubCursor = 0;
                 }
                 DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 0);
-                drawSprite(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                drawSprite(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                DrawSprite(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                DrawSprite(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 GameDrawMenuButton(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 GameDrawMenuButton(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&g_MenuBlankCaption);
             }
@@ -693,8 +676,8 @@ void UpdateCourseSelectScreen(void) {
                 }
                 DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 0);
                 for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
-                    drawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                    drawSprite(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                    DrawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                    DrawSprite(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     GameDrawMenuButton(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 }
             }
@@ -718,8 +701,8 @@ void UpdateCourseSelectScreen(void) {
                 RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
                 RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
                 DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 1);
-                drawSprite(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                drawSprite(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                DrawSprite(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                DrawSprite(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 GameDrawMenuButton(0xB8, 0x8C, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 GameDrawMenuButton(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&g_MenuBlankCaption);
             }
@@ -755,8 +738,8 @@ void UpdateCourseSelectScreen(void) {
                     RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
                     DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                     for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
-                        drawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                        drawSprite(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                        DrawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                        DrawSprite(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
                         GameDrawMenuButton(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                     }
                 }
@@ -765,8 +748,8 @@ void UpdateCourseSelectScreen(void) {
                 RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
                 DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                 for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
-                    drawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                    drawSprite(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                    DrawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
+                    DrawSprite(ot, 0xE0, i * 0x1E + 0x74, 8, 0x10, i * 8 + 8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
                     GameDrawMenuButton(0xB8, i * 0x1E + 0x6C, 0x38, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
                 }
             }

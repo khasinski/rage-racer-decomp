@@ -58,36 +58,6 @@ extern u32 g_TeamLogoCanvas[];
 extern void LoadImage(void *rect, void *data);
 extern s32 rsin(s32 angle);
 extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h);
-extern void DrawSprite(
-    s32 ot,
-    s16 x,
-    s16 y,
-    s16 w,
-    s16 h,
-    u8 u,
-    u8 v,
-    u8 r,
-    u8 g,
-    u8 b,
-    u16 clut,
-    s32 shadeTex,
-    s32 semiTrans,
-    s32 flags);
-extern void func_80046A2C_prepared(
-    s32 ot,
-    s16 x,
-    s16 y,
-    s16 w,
-    s16 h,
-    s32 u,
-    s32 v,
-    u8 r,
-    u8 g,
-    u8 b,
-    u16 clut,
-    s32 shadeTex,
-    s32 semiTrans,
-    s32 flags) asm("DrawSprite");
 extern void DrawLine(
     s32 ot, s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b, u8 alpha);
 extern void GameDrawNumber(
@@ -476,11 +446,11 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       asm("" : : "r"(drawValue));
       asm("" : : "r"(x1));
       asm("" : "=r"(clutArg) : "0"(clut));
-      func_80046A2C_prepared(drawValue, x1 + 0x13, yA0 >> 16, swatchWidth, 0x18,
+      DrawSprite((void *)drawValue, (s16)(x1 + 0x13), (s16)(yA0 >> 16), (s16)swatchWidth, (s16)0x18,
                             gxArg, gyArg, 0, 0, 0, (u16) pal, 1, 0, clutArg);
       asm("" : "=r"(shade) : "0"(shade));
       secondaryValue = (u8) shade;
-      DrawSprite(ot, x1, y1, 0x22, 0x32, secondaryValue, 0xC0,
+      DrawSprite((void *)ot, (s16)x1, (s16)y1, (s16)0x22, (s16)0x32, secondaryValue, (u8)0xC0,
                     0, 0, 0, 0x1F5, 1, 0, 0x1D);
       kreg += 0xC;
       vs7 += 0xC;
@@ -495,7 +465,8 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     {
       d = 6;
     }
-    DrawSprite(ot, (((u32) (d * 0x250)) >> 5) + 0xFFA1, 0xC0, 0x61, 0x32, 0x90, 0xC0, 0, 0, 0, 0x1F5, 1, 0, 0x1D);
+    DrawSprite((void *)ot, (s16)((((u32)(d * 0x250)) >> 5) + 0xFFA1), (s16)0xC0, (s16)0x61, (s16)0x32,
+               (u8)0x90, (u8)0xC0, 0, 0, 0, 0x1F5, 1, 0, 0x1D);
   }
   d = D_8007FB10 - 8;
   if ((d >= 0) && (D_8007F930 != 0))
@@ -548,9 +519,12 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     DrawLine(ot, xa, kreg + 0x72, xb, kreg + 0x72, 0xB4, 0xB4, 0xB4, 0xFF);
     xc = x0 + 5;
     tileSize = 0x10;
-    DrawSprite(ot, xc, kreg + 2, 8, tileSize, 0xD8, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
-    DrawSprite(ot, xc, kreg + 0x32, 8, tileSize, 0x80, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
-    DrawSprite(ot, xc, kreg + 0x62, 8, tileSize, 0x58, 0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
+    DrawSprite((void *)ot, (s16)xc, (s16)(kreg + 2), (s16)8, (s16)tileSize,
+               (u8)0xD8, (u8)0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
+    DrawSprite((void *)ot, (s16)xc, (s16)(kreg + 0x32), (s16)8, (s16)tileSize,
+               (u8)0x80, (u8)0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
+    DrawSprite((void *)ot, (s16)xc, (s16)(kreg + 0x62), (s16)8, (s16)tileSize,
+               (u8)0x58, (u8)0x18, 0, 0, 0, 0x244, 1, 1, 0x5B);
     func_80047024_prepared(ot, xa, kreg + 2, 0x10, tileSize, 0xC0, 0, 0, 0xFF);
     func_80047024_prepared(ot, xa, yA8, 0x10, tileSize, 0, 0, 0, 0xFF);
     func_80047024_prepared(ot, xa, kreg + 0x32, 0x10, tileSize, 0, 0xC0, 0, 0xFF);

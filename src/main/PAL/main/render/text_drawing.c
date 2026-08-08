@@ -10,21 +10,6 @@ typedef struct Glyph {
 
 extern Glyph D_8007F984[];
 
-void GameDrawSpriteWide(
-    void *ot,
-    s32 x0,
-    s32 y0,
-    s32 x1,
-    s32 y1,
-    s32 u0,
-    s32 v0,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 clut,
-    s32 sh,
-    s32 st,
-    s32 flags) asm("DrawSprite");
 void *QueueDrawModePrim(void *ot, void *prim, s32 tpage);
 
 void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
@@ -109,7 +94,7 @@ void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
         u0 = fixed ? (idx % 42) * 6 : D_8007F984[idx].u;
         v0 = fixed ? (idx / 42) * 12 : D_8007F984[idx].v;
 
-        GameDrawSpriteWide(
+        DrawSprite(
             (u8 *)ot + 4,
             (s16)x,
             (s16)y,
@@ -138,21 +123,6 @@ void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
 
 extern Glyph D_8007FA3C[];
 
-void GameDrawSpriteWide(
-    void *ot,
-    s32 x0,
-    s32 y0,
-    s32 x1,
-    s32 y1,
-    s32 u0,
-    s32 v0,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 clut,
-    s32 sh,
-    s32 st,
-    s32 flags);
 
 void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
     u8 *str;
@@ -227,7 +197,7 @@ void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
         u0 = fixed ? (idx % 32) * 8 : D_8007FA3C[idx].u;
         v0 = fixed ? (idx / 32) * 16 + 24 : D_8007FA3C[idx].v;
 
-        GameDrawSpriteWide(
+        DrawSprite(
             (u8 *)ot + 4,
             (s16)x,
             (s16)y,
@@ -254,21 +224,6 @@ void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
         QueueDrawModePrim((u8 *)ot + 4, SCRATCH_PRIM_CURSOR_AS(void), (fl & 0x7f) + 27);
 }
 
-void GameDrawSpriteWide(
-    void *ot,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 clut,
-    s32 shadeTex,
-    s32 semiTrans,
-    s32 flags);
 
 s32 GameDrawNumber(
     s32 x,
@@ -358,7 +313,7 @@ s32 GameDrawNumber(
                 continue;
             }
 
-            GameDrawSpriteWide(
+            DrawSprite(
                 ot,
                 (s16)x,
                 y,
@@ -435,7 +390,7 @@ void DrawBitPatternOverlay(s32 pattern) {
         bit = 0;
         do {
             if (((*row << bit) & 0x80) != 0) {
-                GameDrawSpriteWide(
+                DrawSprite(
                     (u8 *)ot + 4,
                     (s16)x,
                     (s16)y,
@@ -463,7 +418,7 @@ void DrawBitPatternOverlay(s32 pattern) {
     x = 1;
     bit = 0x4C0000;
     do {
-        GameDrawSpriteWide(
+        DrawSprite(
             (u8 *)ot + 4,
             (s16)(bit >> 16),
             0x33,

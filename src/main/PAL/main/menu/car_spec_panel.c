@@ -5,9 +5,6 @@
 #include "game/vector.h"
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
-void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0,
-                   u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans,
-                   u32 flags);
 void DrawFlatTriangleSigned(void* ot, s16 x0, s16 y0, s16 x1, u16 y1, s16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("DrawFlatTriangle");
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
                    u8 b, u8 alpha);
@@ -196,9 +193,6 @@ const CarSpecGraphColors g_CarSpecGraphColors = {{
 }};
 extern u8 *g_CarModelAsset;
 
-void DrawCarSpecSprite(void *ot, s16 x, s16 y, s16 w, u16 h, u16 u, u16 v,
-                       u8 r, u8 g, u8 b, u16 clut, s32 shadeTex,
-                       s32 semiTrans, u32 flags) asm("DrawSprite");
 void DrawCarSpecQuad(void *ot, s16 x0, s32 y0, s16 x1, s16 y1, s16 x2,
                      s16 y2, s16 x3, s16 y3, u8 r, u8 g, u8 b,
                      s32 semiTrans, u32 flags) asm("DrawFlatQuad");
@@ -372,15 +366,15 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
         return;
     }
 
-    DrawCarSpecSprite(ot, 0x4A, 0x166, 4, 8, 0xF0, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
-    DrawCarSpecSprite(ot, 0x4A, 0x173, 4, 8, 0xF4, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
-    DrawCarSpecSprite(ot, 0x4A, 0x180, 4, 8, 0xF8, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
-    DrawCarSpecSprite(ot, 0x4A, 0x18D, 4, 8, 0xFC, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
+    DrawSprite(ot, 0x4A, 0x166, 4, 8, 0xF0, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
+    DrawSprite(ot, 0x4A, 0x173, 4, 8, 0xF4, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
+    DrawSprite(ot, 0x4A, 0x180, 4, 8, 0xF8, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
+    DrawSprite(ot, 0x4A, 0x18D, 4, 8, 0xFC, 8, 0, 0, 0, markerClut, 1, 0, 0x19);
 
-    DrawCarSpecSprite(ot, 0x50, 0x165, 0x34, 0xC, 0, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
-    DrawCarSpecSprite(ot, 0x50, 0x172, 0x38, 0xC, 0x38, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
-    DrawCarSpecSprite(ot, 0x50, 0x17F, 0x24, 0xC, 0x70, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
-    DrawCarSpecSprite(ot, 0x50, 0x18C, 0x10, 0xC, 0x98, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
+    DrawSprite(ot, 0x50, 0x165, 0x34, 0xC, 0, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
+    DrawSprite(ot, 0x50, 0x172, 0x38, 0xC, 0x38, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
+    DrawSprite(ot, 0x50, 0x17F, 0x24, 0xC, 0x70, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
+    DrawSprite(ot, 0x50, 0x18C, 0x10, 0xC, 0x98, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
 
     if (floorProgress > 0) {
         s32 loopLineColor;
