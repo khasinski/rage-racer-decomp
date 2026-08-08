@@ -44,20 +44,19 @@ void ResetCourseProgress(s32 mode) {
 }
 
 void InitSaveDefaults(void) {
-    u8 *src;
-    u8 *dst;
+    CarEntry *src;
+    CarEntry *dst;
     s32 i;
-    s32 offset;
     s32 emptySlot;
 
     i = 0;
-    dst = (u8 *)g_TimeAttackCars;
-    src = (u8 *)g_SaveDefaults;
+    dst = g_TimeAttackCars;
+    src = g_SaveDefaults;
     do {
-        __builtin_memcpy(dst, src, sizeof(CarEntry));
-        dst += sizeof(CarEntry);
+        __builtin_memcpy(dst, src, sizeof(*dst));
+        dst++;
         i++;
-        src += sizeof(CarEntry);
+        src++;
     } while (i < 13);
 
     g_ClassRecords[0].place = 0;
@@ -65,9 +64,9 @@ void InitSaveDefaults(void) {
     g_ClassWinCount = 0;
 
     emptySlot = -1;
-    for (offset = 4; offset < 0x2C; offset += 4) {
-        *(s16 *)((u8 *)g_ClassRecords + offset) = emptySlot;
-        *(s16 *)((u8 *)g_ClassRecords + offset + 2) = 0;
+    for (i = 1; i < 11; i++) {
+        g_ClassRecords[i].place = emptySlot;
+        g_ClassRecords[i].clears = 0;
     }
 
     g_TimeAttackSave.course = 0;
