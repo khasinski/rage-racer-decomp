@@ -61,14 +61,14 @@ long CdRead(long sectors, void *buf, long readMode) {
     return CdReadRetry(0) > 0;
 }
 
-long CdReadSync(long arg0, long arg1) {
-    long savedArg0;
-    long savedArg1;
+long CdReadSync(long mode, long result) {
+    long savedMode;
+    long savedResult;
     volatile long *state;
-    long result;
+    long status;
 
-    savedArg0 = arg0;
-    savedArg1 = arg1;
+    savedMode = mode;
+    savedResult = result;
     state = &g_CdReadStartVSync;
 
     do {
@@ -76,38 +76,38 @@ long CdReadSync(long arg0, long arg1) {
 
         now = VSync(-1);
         if (state[0] + 0x4B0 < now) {
-            result = -1;
+            status = -1;
         } else {
 
         if (state[-2] < 0) {
             CdReadRetry(1);
-            result = state[-7];
+            status = state[-7];
         } else {
 
         now = VSync(-1);
         if (state[-1] + 0x3C < now) {
             CdReadRetry(1);
-            result = state[-7];
+            status = state[-7];
         } else {
 
-        result = state[-2];
+        status = state[-2];
 
         }
         }
         }
-        if (savedArg0 != 0) {
+        if (savedMode != 0) {
             break;
         }
-    } while (result > 0);
+    } while (status > 0);
 
-    CdReady(1, savedArg1);
-    return result;
+    CdReady(1, savedResult);
+    return status;
 }
 
-long CdReadCallback(long arg0) {
+long CdReadCallback(long callback) {
     long old = g_CdReadCallback;
 
-    g_CdReadCallback = arg0;
+    g_CdReadCallback = callback;
     return old;
 }
 
@@ -170,9 +170,9 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
     SCRATCH_PRIM_CURSOR_AS(u_char) = next + 0xC;
 }
 
-void DrawShadowedTile(long arg0, long arg1, long arg2, long arg3) {
+void DrawShadowedTile(long x, long y, long w, long h) {
     long temp;
 
-    temp = AddTilePrim(arg0, arg1, arg2 + 1, arg3 + 2, 0xC2, 0x1C, 0, 0, 0);
-    AddTilePrim(arg0, temp, arg2, arg3, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
+    temp = AddTilePrim(x, y, w + 1, h + 2, 0xC2, 0x1C, 0, 0, 0);
+    AddTilePrim(x, temp, w, h, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
 }

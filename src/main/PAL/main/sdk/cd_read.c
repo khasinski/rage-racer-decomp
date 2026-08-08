@@ -10,12 +10,12 @@
  * "Read error in cd_read(PVD)"; CD_newmedia and CD_cachefile are its
  * only callers. */
 long cd_read(long count, long sectorInt, void *buf);
-long cd_read(long arg0, long sectorInt, void *buf) {
+long cd_read(long sectors, long sectorInt, void *buf) {
     long scratch[2];
 
     CdIntToPos(sectorInt, (CdlLOC *)scratch);
     CdControl(2, scratch, 0);
-    CdRead(arg0, buf, 0x80);
+    CdRead(sectors, buf, 0x80);
     return CdReadSync(0, 0) < 1U;
 }
 
@@ -30,67 +30,67 @@ void LibcMemcpy(u_char *dst, u_char *src, long count) {
     }
 }
 
-long LibcStrcmp(u_char *arg0, u_char *arg1) {
+long LibcStrcmp(u_char *lhs, u_char *rhs) {
     long left;
 
-    if ((arg0 == 0) || (arg1 == 0)) {
-        if (arg0 == arg1) {
+    if ((lhs == 0) || (rhs == 0)) {
+        if (lhs == rhs) {
             return 0;
         }
-        if (arg0 == 0) {
+        if (lhs == 0) {
             return -1;
         }
         return 1;
     }
 
-    while ((left = *arg0) == *arg1++) {
+    while ((left = *lhs) == *rhs++) {
         if (left == 0) {
             return 0;
         }
-        arg0++;
+        lhs++;
     }
 
-    return *arg0 - arg1[-1];
+    return *lhs - rhs[-1];
 }
 
-long LibcStrncmp(u_char *arg0, u_char *arg1, long arg2) {
+long LibcStrncmp(u_char *lhs, u_char *rhs, long len) {
     long left;
     long right;
 
-    if ((arg0 == 0) || (arg1 == 0)) {
-        if (arg0 == arg1) {
+    if ((lhs == 0) || (rhs == 0)) {
+        if (lhs == rhs) {
             return 0;
         }
-        if (arg0 == 0) {
+        if (lhs == 0) {
             return -1;
         }
         return 1;
     }
 
-    arg2--;
-    if (arg2 < 0) {
+    len--;
+    if (len < 0) {
         return 0;
     }
 
 for (;;) {
-    left = *arg0;
-    right = *arg1++;
+    left = *lhs;
+    right = *rhs++;
     if (left != right) {
     } else {
-    arg0++;
+    lhs++;
     if (left == 0) {
         return 0;
     }
-    arg2--;
-    if (arg2 >= 0) {
+    len--;
+    if (len >= 0) {
         continue;
     }
 
     }
 break;
 }
-    if (arg2 < 0) {
+    if (len < 0) {
         return 0;
     }
-    return *arg0 - arg1[-1];
+    return *lhs - rhs[-1];
 }

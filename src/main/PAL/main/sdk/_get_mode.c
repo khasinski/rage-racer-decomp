@@ -11,7 +11,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y);
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw);
 
-u_long _get_mode(long arg0, long arg1, u_long arg2) {
+u_long _get_mode(long dfe, long dtd, u_long tpage) {
     volatile u_char *modep = g_GraphType;
     u_long value;
     u_long cmd;
@@ -22,20 +22,20 @@ u_long _get_mode(long arg0, long arg1, u_long arg2) {
 
     if (value != 0) {
         cmd = 0xE1000000;
-        if (arg1 != 0) {
+        if (dtd != 0) {
             cmd = 0xE1000800;
         }
-        value = arg2 & 0x27FF;
-        if (arg0 != 0) {
+        value = tpage & 0x27FF;
+        if (dfe != 0) {
             value |= 0x1000;
         }
     } else {
         cmd = 0xE1000000;
-        if (arg1 != 0) {
+        if (dtd != 0) {
             cmd = 0xE1000200;
         }
-        value = arg2 & 0x9FF;
-        if (arg0 != 0) {
+        value = tpage & 0x9FF;
+        if (dfe != 0) {
             value |= 0x400;
         }
     }
@@ -43,8 +43,8 @@ u_long _get_mode(long arg0, long arg1, u_long arg2) {
     return cmd | value;
 }
 
-u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
-    long x = arg0;
+u_long Gpu_BuildDrawAreaTopLeftCmd(long left, long top) {
+    long x = left;
     long y;
     long outY;
     register u_long value asm("$2");
@@ -68,7 +68,7 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
     }
     x = value;
 
-    value = arg1 << 16;
+    value = top << 16;
     y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
@@ -107,8 +107,8 @@ u_long Gpu_BuildDrawAreaTopLeftCmd(long arg0, long arg1) {
     return shiftedY | value;
 }
 
-u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
-    long x = arg0;
+u_long Gpu_BuildDrawAreaBottomRightCmd(long right, long bottom) {
+    long x = right;
     long y;
     long outY;
     register u_long value asm("$2");
@@ -132,7 +132,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
     }
     x = value;
 
-    value = arg1 << 16;
+    value = bottom << 16;
     y = (long)value >> 16;
     outY = 0;
     if (y >= 0) {
@@ -171,7 +171,7 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long arg0, long arg1) {
     return shiftedY | value;
 }
 
-u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) {
+u_long Gpu_BuildDrawOffsetCmd(long x, long y) {
     volatile u_char *modep = g_GraphType;
     u_long mode;
 
@@ -179,9 +179,9 @@ u_long Gpu_BuildDrawOffsetCmd(long arg0, long arg1) {
     mode = mode - 1;
     mode = mode < 2U;
     if (mode != 0) {
-        return 0xE5000000 | ((arg1 & 0xFFF) << 12) | (arg0 & 0xFFF);
+        return 0xE5000000 | ((y & 0xFFF) << 12) | (x & 0xFFF);
     }
-    return 0xE5000000 | ((arg1 & 0x7FF) << 11) | (arg0 & 0x7FF);
+    return 0xE5000000 | ((y & 0x7FF) << 11) | (x & 0x7FF);
 }
 
 u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {

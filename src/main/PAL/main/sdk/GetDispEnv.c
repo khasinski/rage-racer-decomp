@@ -20,9 +20,9 @@ u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y);
 u_long Gpu_BuildTexWindowCmd(void *window);
 
-void SetTexWindow(DrawPacket *pkt, void *arg1) {
+void SetTexWindow(DrawPacket *pkt, void *window) {
     pkt->code = 2;
-    pkt->x0y0 = Gpu_BuildTexWindowCmd(arg1);
+    pkt->x0y0 = Gpu_BuildTexWindowCmd(window);
     pkt->x1y1 = 0;
 }
 
@@ -32,13 +32,13 @@ void SetDrawArea(DrawPacket *pkt, Rect *rect) {
     pkt->x1y1 = Gpu_BuildDrawAreaBottomRightCmd((short)(rect->x + rect->w - 1), (short)(rect->y + rect->h - 1));
 }
 
-void SetDrawOffset(DrawPacket *pkt, short *arg1) {
+void SetDrawOffset(DrawPacket *pkt, short *offset) {
     pkt->code = 2;
-    pkt->x0y0 = Gpu_BuildDrawOffsetCmd(arg1[0], arg1[1]);
+    pkt->x0y0 = Gpu_BuildDrawOffsetCmd(offset[0], offset[1]);
     pkt->x1y1 = 0;
 }
 
-void SetDrawStp(DrawPacket *pkt, long ofs, u_long arg2) {
+void SetDrawStp(DrawPacket *pkt, long ofs, u_long stp) {
     u_long cmd;
 
     pkt->code = 2;
@@ -46,14 +46,14 @@ void SetDrawStp(DrawPacket *pkt, long ofs, u_long arg2) {
     if (ofs != 0) {
         cmd = 0xE6000002;
     }
-    pkt->x0y0 = cmd | (arg2 != 0);
+    pkt->x0y0 = cmd | (stp != 0);
     pkt->x1y1 = 0;
 }
 
-void SetDrawMode(DrawPacket *pkt, long arg1, long arg2, u_short arg3, void *arg4) {
+void SetDrawMode(DrawPacket *pkt, long dfe, long dtd, u_short tpage, void *window) {
     pkt->code = 2;
-    pkt->x0y0 = Gpu_BuildDisplayMode(arg1, arg2, arg3);
-    pkt->x1y1 = Gpu_BuildTexWindowCmd(arg4);
+    pkt->x0y0 = Gpu_BuildDisplayMode(dfe, dtd, tpage);
+    pkt->x1y1 = Gpu_BuildTexWindowCmd(window);
 }
 
 extern u_short g_VramWidth[];

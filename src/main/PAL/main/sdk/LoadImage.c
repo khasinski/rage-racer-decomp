@@ -22,9 +22,9 @@ extern char D_80013578[];
 extern char D_80013584[];
 extern char D_80013590[];
 
-void LoadImage(Rect *arg0, void *arg1) {
-    CheckPrim(D_80013578, arg0);
-    g_GpuFuncs->send(g_GpuFuncs->loadImage, arg0, 8, (u_long)arg1);
+void LoadImage(Rect *rect, void *pixels) {
+    CheckPrim(D_80013578, rect);
+    g_GpuFuncs->send(g_GpuFuncs->loadImage, rect, 8, (u_long)pixels);
 }
 
 void StoreImage(Rect *rect, void *data) {
@@ -51,13 +51,13 @@ extern char D_800135B4[];
 extern u_long g_OtagTerminator;
 
 
-void *ClearOTag(u_long *arg0, long count) {
+void *ClearOTag(u_long *ot, long count) {
     long remaining = count;
 
     if (g_GraphDebug >= 2) {
         void (*debug)(char *, ...) = GPU_printf;
 
-        debug(D_8001359C, arg0, remaining);
+        debug(D_8001359C, ot, remaining);
     }
 
     remaining--;
@@ -71,27 +71,27 @@ void *ClearOTag(u_long *arg0, long count) {
             u_long low;
 
             remaining--;
-            next = arg0 + 1;
-            ((u_char *)arg0)[3] = 0;
-            tag = *arg0;
+            next = ot + 1;
+            ((u_char *)ot)[3] = 0;
+            tag = *ot;
             low = (u_long)next & mask;
             tag &= hiMask;
             tag |= low;
-            *arg0 = tag;
-            arg0 = next;
+            *ot = tag;
+            ot = next;
         } while (remaining != 0);
     }
 
-    *arg0 = (u_long)&g_OtagTerminator & 0xFFFFFF;
-    return arg0;
+    *ot = (u_long)&g_OtagTerminator & 0xFFFFFF;
+    return ot;
 }
 
-void *ClearOTagR(u_long *ot, long arg1) {
+void *ClearOTagR(u_long *ot, long count) {
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_800135B4, ot, arg1);
+        GPU_printf(D_800135B4, ot, count);
     }
 
-    g_GpuFuncs->clearOTag(ot, arg1);
+    g_GpuFuncs->clearOTag(ot, count);
 
     {
         u_long mask = 0xFFFFFF;

@@ -11,54 +11,54 @@ u_long _new_card[4] __attribute__((section(".text"))) = {
     0,
 };
 
-void DecDCTReset(long arg0) {
-    if (arg0 == 0) {
+void DecDCTReset(long mode) {
+    if (mode == 0) {
         KernelCallbackSlot3();
     }
-    MDEC_reset(arg0);
+    MDEC_reset(mode);
 }
 
-u_long *DecDCTGetEnv(u_long *arg0) {
+u_long *DecDCTGetEnv(u_long *env) {
     u_long *dst;
     u_long *src;
     long i;
 
-    dst = arg0;
+    dst = env;
     src = g_MdecQuantLuma;
     for (i = 0xF; i != -1; i--) {
         *dst++ = *src++;
     }
 
-    dst = arg0 + 0x10;
+    dst = env + 0x10;
     src = g_MdecQuantChroma;
     for (i = 0xF; i != -1; i--) {
         *dst++ = *src++;
     }
 
-    dst = arg0 + 0x20;
+    dst = env + 0x20;
     src = g_MdecIdctTable;
     for (i = 0x1F; i != -1; i--) {
         *dst++ = *src++;
     }
 
-    return arg0;
+    return env;
 }
 
-u_long *DecDCTPutEnv(u_long *arg0) {
+u_long *DecDCTPutEnv(u_long *env) {
     u_long *ret;
     u_long *dst;
     long i;
 
-    ret = arg0;
+    ret = env;
     dst = g_MdecQuantLuma;
     for (i = 0xF; i != -1; i--) {
-        *dst++ = *arg0++;
+        *dst++ = *env++;
     }
 
     dst = g_MdecQuantChroma;
-    arg0 = ret + 0x10;
+    env = ret + 0x10;
     for (i = 0xF; i != -1; i--) {
-        *dst++ = *arg0++;
+        *dst++ = *env++;
     }
 
     MDEC_in((volatile u_long *)g_MdecQuantCmd, 0x20);
@@ -67,25 +67,25 @@ u_long *DecDCTPutEnv(u_long *arg0) {
     return ret;
 }
 
-long DecDCTBufSize(u_short *arg0) {
-    return *arg0;
+long DecDCTBufSize(u_short *bitstream) {
+    return *bitstream;
 }
 
-void DecDCTin(volatile u_long *arg0, long arg1) {
+void DecDCTin(volatile u_long *bitstream, long mode) {
     u_long mask;
 
-    if (arg1 % 2) {
-        arg0[0] &= 0xF7FFFFFF;
+    if (mode % 2) {
+        bitstream[0] &= 0xF7FFFFFF;
     } else {
-        arg0[0] |= 0x08000000;
+        bitstream[0] |= 0x08000000;
     }
 
     mask = 0x02000000;
-    if (arg1 & 2) {
-        arg0[0] |= mask;
+    if (mode & 2) {
+        bitstream[0] |= mask;
     } else {
-        arg0[0] &= 0xFDFFFFFF;
+        bitstream[0] &= 0xFDFFFFFF;
     }
 
-    MDEC_in(arg0, *(u_short *)arg0);
+    MDEC_in(bitstream, *(u_short *)bitstream);
 }

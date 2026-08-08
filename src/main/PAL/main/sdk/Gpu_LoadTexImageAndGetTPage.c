@@ -3,17 +3,17 @@
 #include "psyq/kernel.h"
 #include "game/render.h"
 
-long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) {
+long Gpu_LoadTexImageAndGetTPage(void *pixels, long mode, long x, long y, long w, long h, long abr) {
     Rect rect;
     long width;
 
-    rect.x = arg3;
-    rect.y = arg4;
-    rect.h = arg6;
+    rect.x = y;
+    rect.y = w;
+    rect.h = abr;
 
-    switch (arg1) {
+    switch (mode) {
     case 0:
-    width = arg5;
+    width = h;
     if (width < 0) {
         width += 3;
     }
@@ -21,42 +21,42 @@ long Gpu_LoadTexImageAndGetTPage(void *arg0, long arg1, long arg2, long arg3, lo
     break;
 
     case 1:
-    width = arg5;
-    width += (u_long)arg5 >> 31;
+    width = h;
+    width += (u_long)h >> 31;
     rect.w = width >> 1;
     break;
 
     case 2:
-    rect.w = arg5;
+    rect.w = h;
     break;
     }
 
-    LoadImage(&rect, arg0);
-    return GetTPage(arg1, arg2, arg3, arg4) & 0xFFFF;
+    LoadImage(&rect, pixels);
+    return GetTPage(mode, x, y, w) & 0xFFFF;
 }
 
-long LoadClut2(void *arg0, long arg1, long arg2) {
+long LoadClut2(void *clut, long x, long y) {
     Rect rect;
 
-    rect.x = arg1;
-    rect.y = arg2;
+    rect.x = x;
+    rect.y = y;
     rect.w = 0x100;
     rect.h = 1;
 
-    LoadImage(&rect, arg0);
-    return GetClut(arg1, arg2) & 0xFFFF;
+    LoadImage(&rect, clut);
+    return GetClut(x, y) & 0xFFFF;
 }
 
-long LoadClut(void *arg0, long arg1, long arg2) {
+long LoadClut(void *clut, long x, long y) {
     Rect rect;
 
-    rect.x = arg1;
-    rect.y = arg2;
+    rect.x = x;
+    rect.y = y;
     rect.w = 0x10;
     rect.h = 1;
 
-    LoadImage(&rect, arg0);
-    return GetClut(arg1, arg2) & 0xFFFF;
+    LoadImage(&rect, clut);
+    return GetClut(x, y) & 0xFFFF;
 }
 
 /* Fills the 0x1C-byte DRAWENV head. */
@@ -114,7 +114,7 @@ u_char *SetDefDispEnv(u_char *env, long x, long y, long w, long h) {
     return ret;
 }
 
-long GetTPage(long arg0, long arg1, long arg2, long arg3) {
+long GetTPage(long tp, long abr, long x, long y) {
     long mode;
     long value;
 
@@ -128,12 +128,12 @@ long GetTPage(long arg0, long arg1, long arg2, long arg3) {
     }
     }
 
-    value = ((arg0 & 3) << 9) | ((arg1 & 3) << 7) | ((arg3 & 0x300) >> 3);
-    return value | ((arg2 & 0x3FF) >> 6);
+    value = ((tp & 3) << 9) | ((abr & 3) << 7) | ((y & 0x300) >> 3);
+    return value | ((x & 0x3FF) >> 6);
 
     }
-    value = ((arg0 & 3) << 7) | ((arg1 & 3) << 5) | ((arg3 & 0x100) >> 4) | ((arg2 & 0x3FF) >> 6);
-    return value | ((arg3 & 0x200) << 2);
+    value = ((tp & 3) << 7) | ((abr & 3) << 5) | ((y & 0x100) >> 4) | ((x & 0x3FF) >> 6);
+    return value | ((y & 0x200) << 2);
 }
 
 long GetClut(long tp, long abr) {
