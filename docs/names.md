@@ -247,8 +247,8 @@ Note that `EffectVoice`/`MusicChannel` +0x00/+0x04 are the VAB **program** and
 |---|---|---:|---|
 | `DrawSkyBackground` | 0x800418D4 | 1211 | The sky/horizon backdrop, drawn by every scene that has a horizon. A 4 × 8 sweep emits the visible half of a 16-segment panorama cylinder as POLY_FT4s, uv rows from `D_8007F510 + 8 * D_8007F470[…]` indexed by `(yaw >> 7) + j`, linked at OT + 0xAFC; the gradient bands underneath are shaded between successive colour slots with the same `g_CourseIndex == 2 ? slots 5,6 : slots 7,8` split func_80045CD4 uses. Yaw and roll are negated when `g_MirrorMode` disagrees with the scratchpad flag at 0x1F800068. **Was described here as a "HUD/billboard primitive builder".** |
 | `DrawTeamLogoCanvas` | 0x8004A248 | 1435 | Draw half of the logo painter (largest non-SDK function). `(0, 0)` resets both panel accumulators `D_8007FB0C` / `D_8007FB10`; otherwise they ramp and gate the outer panel (12 slide steps) and the paint sub-panel. Uploads the 64×64 4bpp canvas `D_801E6F2C`, its raw CLUT `D_801E444C`, and a copy scaled by the fade level `D_8009B298` whose entry 0 is three phase-shifted sines of `D_8009B288` (the colour-cycling cursor), then emits the frame, the zoomed canvas, the 1:1 preview, the swatch boxes and the crosshair. |
-| `UpdateTeamLogoCanvas` | 0x8004C0D8 | 894 | Input half of the same widget, called from the PAINT branch of `UpdateTeamLogoScreen`. Plots with Circle held — replaces the nibble at `(u16 *)D_801E6F2C + (y << 4) + (x >> 2)` over a `D_8007F94C`-sized brush — and maps the d-pad through the auto-repeat timer `D_8007FB14` onto the scroll/flip/rotate helpers func_8004B9B8..func_8004BF48. Holding all four shoulder buttons and pressing Select toggles `D_8007F930`, a hidden palette editor over the 5-bit channels of the selected CLUT entry. **Was described here as a "4bpp texture / palette editor debug tool"** — it is the shipped feature. |
-| `DrawRankingTable` | 0x8004D384 | 1017 | The five record rows, called three times from `UpdateRankingScreen` as `(accumulator, step, table)`. Reads the `S22` records from `D_801E7744` (ranking) or `D_8019CB78` (time) and draws the place number, its suffix from the `"ST"/"ND"/"RD"/"TH"` table at `D_80011920`, the holder's name and the row background. Sole caller of `FormatLapTime` in the image. |
+| `UpdateTeamLogoCanvas` | 0x8004C0D8 | 894 | Input half of the same widget, called from the PAINT branch of `UpdateTeamLogoScreen`. Plots with Circle held — replaces the nibble at `(u16 *)D_801E6F2C + (y << 4) + (x >> 2)` over a `g_TeamLogoBrushSize`-sized brush — and maps the d-pad through the auto-repeat timer `g_TeamLogoDpadRepeatTimer` onto the scroll/flip/rotate helpers func_8004B9B8..func_8004BF48. Holding all four shoulder buttons and pressing Select toggles `g_TeamLogoExpertMode`, a hidden palette editor over the 5-bit channels of the selected CLUT entry. **Was described here as a "4bpp texture / palette editor debug tool"** — it is the shipped feature. |
+| `DrawRankingTable` | 0x8004D384 | 1017 | The five record rows, called three times from `UpdateRankingScreen` as `(accumulator, step, table)`. Reads the `S22` records from `D_801E7744` (ranking) or `D_8019CB78` (time) and draws the place number, its suffix from the `"ST"/"ND"/"RD"/"TH"` table at `g_MsgOrdinalSt`, the holder's name and the row background. Sole caller of `FormatLapTime` in the image. |
 | `DrawCourseSelectScreen` | 0x8005290C | 849 | Slot 1 of the overlay table `g_MenuScreenDraw`, i.e. the fade/transition overlay of the **COURSE SELECT** screen: scroll accumulator `D_8009B2C0`, wave/colour offsets, sprite/number draws. |
 | `UpdateCarSelectScreen` | 0x8005568C | 783 | Slot 4 of `g_MenuScreenUpdate`, the **CAR SELECT** hub (race start / customize / car shop / engineer shop / course select); a jump-table switch on `GameMenuBusy` picks the exit — a race, or screens 5 / 11 / 12 / 1. |
 | `DrawCarSpecGraph` | 0x800496F0 | 675 | The car performance bar chart, drawn obliquely: 45°-recession floor lines plus four bars at `x = 0x66 + 12i`, each a front face with a lightened top (+0x40) and darkened right (−0x40) face and a semi-transparent drop shadow, over the four violet colours at `D_80011870`. Bars 0..2 ease towards the car asset's spec bytes +0x0B/0x0C/0x0D, bar 3 towards one of 10/30/50/70/90 selected by the tire grade. func_8005ACA0 calls it every menu frame, but its `step` argument `D_8009B324` only leaves 0 on entry to and exit from CUSTOMIZE, so it is only visible there. **Was described here as a "debug palette/gradient UI renderer".** |
@@ -1991,7 +1991,7 @@ The names are kept: the code is in the ROM and has to be read by someone.
 - **`func_8003D6E8`** has an empty body. Positionally it is the first of the
   five scenery seeders `EnterRaceScene` calls in a row, but there is no
   side effect to name it from.
-- **`D_801E4194`, `D_801E8A4C`, `D_8019C998`, `D_801E4D84`** are each written but
+- **`g_EngineRpmSnapshot`, `D_801E8A4C`, `D_8019C998`, `D_801E4D84`** are each written but
   never read anywhere in the image (`D_8019C998` is read but only ever written
   zero). Naming them would be inventing a feature. **`D_801E4FB4` was in this
   list and should not have been:** it is read at `0x8002B840` inside
@@ -2056,7 +2056,7 @@ so the descriptive name was used.
 | Name | Addr | String |
 |---|---|---|
 | `SetGraphQueue` | 0x80065738 | `D_800134F0` = `"SetGrapQue(%d)...\n"` (the SDK's own typo) |
-| `ResetGraph` | 0x80065460 | `D_80013478` `"ResetGraph:jtb=%08x,env=%08x\n"` + `D_80013498` `"ResetGraph(%d)...\n"` |
+| `ResetGraph` | 0x80065460 | `g_FmtGpuResetGraphTrace` `"ResetGraph:jtb=%08x,env=%08x\n"` + `g_FmtGpuResetGraph` `"ResetGraph(%d)...\n"` |
 | `PutDispEnv` | 0x800660AC | `D_80013614` = `"PutDispEnv(%08x)...\n"` |
 | `PutDrawEnv` | 0x80065ED4 | `D_800135E0` = `"PutDrawEnv(%08x)...\n"` |
 | `DrawOTagEnv` | 0x80065F98 | `D_800135F8` = `"DrawOTagEnv(%08x,&08x)...\n"` |
@@ -3006,9 +3006,9 @@ alias-collision check 19a asks for (one name per address, one address per name).
 | `D_801E40B8` | already named `g_SceneTimer`; used only as `g_RankedCars - 1` |
 | `D_8019CB38` / `D_8019CB3A` | referenced from `%hi`/`%lo` inline asm (12c). Since named `g_PaintBlendShade0` / `…1` for the *C* uses in the same file; the inline-asm references still spell them raw, which is the point of the entry. |
 | `D_801E6DA4` | referenced from a `LA_ORDERED` inline asm — see 18e |
-| `D_8019C9AC` | both writes in the image store zero, so the one reader (skip the pad, freeze the steering) can never fire |
+| `g_PlayerAutoSteer` | both writes in the image store zero, so the one reader (skip the pad, freeze the steering) can never fire |
 | `D_8019C998` | same shape: initialised to zero, only ever decremented |
-| `D_801E4194`, `D_801E4248`, `D_801E4CF8`, `D_801E4D84`, `D_801E433C`, `D_801E3F60`, `D_801E8A4C` | written, never read anywhere in the image |
+| `g_EngineRpmSnapshot`, `D_801E4248`, `D_801E4CF8`, `D_801E4D84`, `D_801E433C`, `D_801E3F60`, `D_801E8A4C` | written, never read anywhere in the image |
 | `D_8009EC88` | its only reader is the guard on its own write, so it has no effect — and it lives in the unreachable waypoint mode (15f) |
 
 ## 19. Front-end globals pass (`menu/ save/ asset/ cd/ fmv/ audio/ pad/ boot/`)
@@ -6208,9 +6208,9 @@ and dies inside one basic block with no argument use, so local-alloc gives it
 quantity; nothing in the C arranges that. Note this is the one function of the
 five where retail sign-extends the second result into `a1` rather than `v0`.
 
-## 41. Loop shape decides register allocation in `save/memcard.c`
+## 41. Loop shape decides register allocation in `save/memory_card_runtime.c`
 
-Three functions in `save/memcard.c` lost every register pin they had once the
+Three functions in `save/memory_card_runtime.c` lost every register pin they had once the
 loops were written the way gcc 2.6.3 wants to read them. The levers, in
 descending order of how often they applied:
 
@@ -6287,7 +6287,7 @@ cc1 bus-error while writing `-gcoff` debug info.
 
 ## 42. What decides whether `loop.c` strength-reduces an address
 
-`FlipTeamLogoHorizontal` in `menu/team_logo_transform.c` carried four register
+`FlipTeamLogoHorizontal` in `menu/menu_visual_effects.c` carried four register
 pins, and all sixteen subsets had been tested: only the full set matched. The
 pins were not allocating anything. They were hard registers, and a hard
 register cannot be an induction variable, so they were suppressing strength
@@ -6461,7 +6461,7 @@ is one thing repeated three times: retail computes an unsigned shift into its
 own register and masks *back* into the source's register
 (`srl t0,v0,9 / andi v0,t0,0xff`), where every pin-free spelling merges the two
 into `srl v0,v0,9 / andi v0,v0,0xff`. Writing the hand-expanded divide as plain
-`D_8007FB20 / 5` (§42a's lever) is right and changes nothing here, so the
+`g_MenuLightBurstLevel / 5` (§42a's lever) is right and changes nothing here, so the
 divide expansion was not what the pins were for.
 
 ### 43c. None of the four residues is blocked on a banned construct

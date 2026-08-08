@@ -21,9 +21,9 @@ typedef union {
 
 extern TeamLogoClutPos g_TeamLogoClutRect;
 extern TeamLogoTexturePos g_TeamLogoRect;
-extern TeamLogoWord D_8007F934;
-extern TeamLogoWord D_8007F93C;
-extern s32 D_8007F950;
+extern TeamLogoWord g_TeamLogoCursorX;
+extern TeamLogoWord g_TeamLogoViewX;
+extern s32 g_TeamLogoPenColor;
 extern u8 g_PadType;
 extern u32 g_TeamLogoCanvas[];
 
@@ -188,19 +188,19 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     kreg = sy;
     if (D_8009B29C >= 0x100)
     {
-      if (D_8007F954 == 0)
+      if (g_TeamLogoPaletteMode == 0)
       {
         s32 syOffset;
         register s32 angleSource;
         register s32 angleValue;
         angleSource = D_8009B288;
-        secondaryValue = D_8007F934.value;
+        secondaryValue = g_TeamLogoCursorX.value;
         angleValue = angleSource * 2;
         drawValue = angleValue;
         secondaryValue *= 4;
         sy2 = secondaryValue + 0x88;
         sy2Arg = sy2;
-        syOffset = (D_8007F938 * 8) + 2;
+        syOffset = (g_TeamLogoCursorY * 8) + 2;
         asm("" : "=r"(sy) : "0"(sy));
         sy += syOffset;
         if (angleValue < 0)
@@ -211,7 +211,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
         drawValue *= 0x1000;
         drawValue = angleValue - drawValue;
         clut = (rsin(drawValue) / 64) - 0x41;
-        DrawRectOutline((void *)ot, (s16)sy2Arg, (s16)sy, (s16)(D_8007F94C * 4), (s16)(D_8007F94C * 8), 0, (u8)clut, 0, (u8)ff);
+        DrawRectOutline((void *)ot, (s16)sy2Arg, (s16)sy, (s16)(g_TeamLogoBrushSize * 4), (s16)(g_TeamLogoBrushSize * 8), 0, (u8)clut, 0, (u8)ff);
       }
     }
     sx = (s16) kreg;
@@ -223,11 +223,11 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     w1 = sx + 0x110;
     x88 = x2 + 0x88;
     delta = 0x220 - D_8007F948;
-    scaleDelta = (delta * D_8007F93C.value) / 272;
+    scaleDelta = (delta * g_TeamLogoViewX.value) / 272;
     phaseValue = (g_TeamLogoRect.tx * 4) - 1;
     drawValue = phaseValue + scaleDelta;
     gx = drawValue;
-    scaleDelta = (delta * D_8007F940) / 272;
+    scaleDelta = (delta * g_TeamLogoViewY) / 272;
     texY = (*(u8 *)(&g_TeamLogoRect.ty)) - 1;
     gyTemp = texY + scaleDelta;
     phaseValue = gyTemp;
@@ -263,49 +263,49 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     ff = 0xFF;
     DrawRectOutline((void *)ot, (s16)0x2F, (s16)sy, (s16)0x42, 0x84, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)ff);
     kreg = sy;
-    if ((D_8009B29C >= 0x100) && (D_8007F944 != 0))
+    if ((D_8009B29C >= 0x100) && (g_TeamLogoGuideMode != 0))
     {
-      x1 = D_8007F93C.lo + 0x30;
-      y1 = sy + ((D_8007F940 * 2) + 2);
+      x1 = g_TeamLogoViewX.lo + 0x30;
+      y1 = sy + ((g_TeamLogoViewY * 2) + 2);
       clut = (rsin((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
-      if (D_8007F944 == 2)
+      if (g_TeamLogoGuideMode == 2)
       {
         s16 ya;
         s16 yb;
         s16 xa;
         ya = su + 0x1FD;
         yb = su + 0x27D;
-        xa = x1 + D_8007F934.lo;
+        xa = x1 + g_TeamLogoCursorX.lo;
         DrawLine((void *)ot, (s16)xa, (s16)ya, (s16)xa, (s16)yb, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
-        xa = ((x1 + D_8007F934.lo) + ((u16) D_8007F94C)) - 1;
+        xa = ((x1 + g_TeamLogoCursorX.lo) + ((u16) g_TeamLogoBrushSize)) - 1;
         DrawLine((void *)ot, (s16)xa, (s16)ya, (s16)xa, (s16)yb, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
-        xa = y1 + (D_8007F938 * 2);
+        xa = y1 + (g_TeamLogoCursorY * 2);
         DrawLine((void *)ot, (s16)0x30, (s16)xa, (s16)0x70, (s16)xa, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
         {
           s32 odd;
-          odd = D_8007F938 * 2 + 1;
+          odd = g_TeamLogoCursorY * 2 + 1;
           xa = y1 + odd;
         }
         DrawLine((void *)ot, (s16)0x30, (s16)xa, (s16)0x70, (s16)xa, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
-        xa = y1 + (((D_8007F938 + D_8007F94C) - 1) * 2);
+        xa = y1 + (((g_TeamLogoCursorY + g_TeamLogoBrushSize) - 1) * 2);
         DrawLine((void *)ot, (s16)0x30, (s16)xa, (s16)0x70, (s16)xa, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
         {
           s32 odd;
-          odd = ((D_8007F938 + D_8007F94C) - 1) * 2 + 1;
+          odd = ((g_TeamLogoCursorY + g_TeamLogoBrushSize) - 1) * 2 + 1;
           xa = y1 + odd;
         }
         DrawLine((void *)ot, (s16)0x30, (s16)xa, (s16)0x70, (s16)xa, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
       }
       else
-        if (D_8007F94C == 1)
+        if (g_TeamLogoBrushSize == 1)
       {
-        s16 xa = x1 + D_8007F934.lo;
-        s16 ya = y1 + (D_8007F938 * 2);
+        s16 xa = x1 + g_TeamLogoCursorX.lo;
+        s16 ya = y1 + (g_TeamLogoCursorY * 2);
         DrawLine((void *)ot, (s16)xa, (s16)ya, (s16)xa, (s16)(ya + 1), (u8)clut, (u8)clut, (u8)clut, (u8)ff);
       }
       else
       {
-        DrawRectOutline((void *)ot, (s16)(x1 + D_8007F934.lo), (s16)(y1 + D_8007F938 * 2), (s16)D_8007F94C, (s16)(D_8007F94C * 2), (u8)clut, (u8)clut, (u8)clut, (u8)0xFF);
+        DrawRectOutline((void *)ot, (s16)(x1 + g_TeamLogoCursorX.lo), (s16)(y1 + g_TeamLogoCursorY * 2), (s16)g_TeamLogoBrushSize, (s16)(g_TeamLogoBrushSize * 2), (u8)clut, (u8)clut, (u8)clut, (u8)0xFF);
       }
       DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0x20, 0x40, 0, (u8)clut, 0, (u8)0xFF);
     }
@@ -345,8 +345,8 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     panelY = ((u32) (-(d * 0x3C0))) >> 5;
     kreg = panelY + 0x1EA;
     y1 = panelY + 0x1E7;
-    x1 = (D_8007F950 * 8) + 0x80;
-    if (D_8007F954 == 1)
+    x1 = (g_TeamLogoPenColor * 8) + 0x80;
+    if (g_TeamLogoPaletteMode == 1)
     {
       s32 panelAng;
       panelAng = D_8009B288 * 2;
@@ -357,7 +357,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     {
       DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0xD, 0x1A, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)0xFF);
     }
-    DrawSolidRect((void *)ot, (s16)(x1 + 1), (s16)(y1 + 2), (s16)0xB, (s16)0x16, (u8)(*(u8 *)(&g_TeamLogoClut[D_8007F950]) * 8), (u8)((g_TeamLogoClut[D_8007F950] >> 2) & 0xF8), (u8)((g_TeamLogoClut[D_8007F950] >> 7) & 0xF8), (u8)0xFF);
+    DrawSolidRect((void *)ot, (s16)(x1 + 1), (s16)(y1 + 2), (s16)0xB, (s16)0x16, (u8)(*(u8 *)(&g_TeamLogoClut[g_TeamLogoPenColor]) * 8), (u8)((g_TeamLogoClut[g_TeamLogoPenColor] >> 2) & 0xF8), (u8)((g_TeamLogoClut[g_TeamLogoPenColor] >> 7) & 0xF8), (u8)0xFF);
     {
       s32 fy2 = (kreg + 2) << 16;
       i = 0;
@@ -439,7 +439,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
                (u8)0x90, (u8)0xC0, 0, 0, 0, 0x1F5, 1, 0, 0x1D);
   }
   d = D_8007FB10 - 8;
-  if ((d >= 0) && (D_8007F930 != 0))
+  if ((d >= 0) && (g_TeamLogoExpertMode != 0))
   {
     s16 sy;
     s16 sx;
@@ -456,10 +456,10 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     }
     x0Calc = (((u32) (-(d * 0x140))) >> 5) + 0x140;
     asm("" : : "r"(x0Calc));
-    syBase = D_8007F958;
+    syBase = g_TeamLogoColorChannel;
     x0 = (u16) x0Calc;
     sy = (syBase * 0x30) + 0xD9;
-    if (D_8007F954 == 1)
+    if (g_TeamLogoPaletteMode == 1)
     {
       clut = (rsin((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
       DrawRectOutline((void *)ot, (s16)x0, (s16)sy, (s16)0x12, 0x15, 0, (u8)clut, 0, (u8)0xFF);
@@ -467,15 +467,15 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     yA8 = (s16) (kreg + 0x14);
     sx = 0x3F;
     sx = x0 - sx;
-    GameDrawNumber((s16)sx, yA8, (s16)3, g_TeamLogoClut[D_8007F950] & 0x1F,
+    GameDrawNumber((s16)sx, yA8, (s16)3, g_TeamLogoClut[g_TeamLogoPenColor] & 0x1F,
                    (u8)0x7F, (u8)0x7F, (u8)0x7F, 0x244, 0x20);
     yB8 = (s16) (kreg + 0x44);
     GameDrawNumber((s16)sx, yB8, (s16)3,
-                   (g_TeamLogoClut[D_8007F950] >> 5) & 0x1F,
+                   (g_TeamLogoClut[g_TeamLogoPenColor] >> 5) & 0x1F,
                    (u8)0x7F, (u8)0x7F, (u8)0x7F, 0x244, 0x20);
     yC8 = (s16) (kreg + 0x74);
     GameDrawNumber((s16)sx, yC8, (s16)3,
-                   (g_TeamLogoClut[D_8007F950] >> 10) & 0x1F,
+                   (g_TeamLogoClut[g_TeamLogoPenColor] >> 10) & 0x1F,
                    (u8)0x7F, (u8)0x7F, (u8)0x7F, 0x244, 0x20);
     {
       s32 alpha;

@@ -17,8 +17,10 @@ SYMBOL = re.compile(r'\bD_8[0-9A-F]{7}\b')
 
 # Which subsystem a source path belongs to; the dossiers are split this way so
 # one agent sees one coherent area.
-AREAS = {'menu', 'car', 'track', 'race', 'render', 'sdk', 'libsnd', 'libspu',
-         'kernel', 'asset', 'save', 'fmv', 'audio', 'cd', 'boot', 'gte', 'pad'}
+AREAS = {'menu', 'car', 'track', 'race', 'render', 'asset', 'save', 'fmv',
+         'audio', 'cd', 'boot', 'pad', 'random',
+         'libsnd', 'libspu', 'libcd', 'libgpu', 'libgte', 'libapi', 'libc',
+         'libpress', 'libetc', 'libcard', 'libds'}
 
 
 def subsystem(path):

@@ -147,7 +147,7 @@ void InitPlayerCar(GameCarRuntime *car)
   s32 bandSpeed;
   player = (GamePlayerCarInit *)car;
   startData = g_TrackEventData;
-  printf((u8 *)D_800113B0);
+  printf((u8 *)g_MsgInitCar);
   value = g_GrandPrixSeries;
   g_RacePhase = 2;
   g_RaceSeries = value & 1;
@@ -177,7 +177,7 @@ void InitPlayerCar(GameCarRuntime *car)
   player->field_68 = 0;
   player->field_6C = 0;
   player->trackProgress = 0;
-  printf((u8 *)D_800113BC);
+  printf((u8 *)g_MsgHTbl);
   startData += g_RaceSeries * 0x90;
   player->trackPointIndex = *(s16 *)(startData + 0x35C);
   player->x = *(s32 *)(startData + 0x354);
@@ -247,7 +247,7 @@ void InitPlayerCar(GameCarRuntime *car)
   player->fF8 = 0;
   g_ShiftTargetRpm = 0;
   drive = (GameCarDrive *)(((u8 *)car) + (divisor = 0xBC));
-  printf((u8 *)D_800113C4);
+  printf((u8 *)g_MsgInit0);
   carSpec = g_PlayerCarInitSpec;
   if (carSpec->topGear < 6)
   {
@@ -261,7 +261,7 @@ void InitPlayerCar(GameCarRuntime *car)
     carSpec->topGear = 6;
   }
   drive->unk8C = (g_PlayerCarInitSpec->f15C * 0x490) / 160;
-  printf((u8 *)D_800113CC);
+  printf((u8 *)g_MsgInit1);
   j = 0;
   for (i = 0; i < 16; i++)
   {
@@ -275,12 +275,12 @@ void InitPlayerCar(GameCarRuntime *car)
 
   g_PeakOutputValue = j;
   peakRpm = g_PlayerCarInitSpec->f40.h[g_PeakOutputRpm * 2];
-  D_801E6F18 = (((s16) peakRpm) - g_PlayerCarInitSpec->redline) / 2;
+  g_RedlineToPeakRpmHalf = (((s16) peakRpm) - g_PlayerCarInitSpec->redline) / 2;
   revLimitPtr = &g_PlayerCarInitSpec->revLimit;
-  D_801E6F1A = ((*revLimitPtr) - ((s16) peakRpm)) / 2;
+  g_PeakToRevLimitRpmHalf = ((*revLimitPtr) - ((s16) peakRpm)) / 2;
   g_PeakOutputRpm = peakRpm;
-  printf((u8 *)D_800113D4);
-  printf((u8 *)D_800113DC, g_PlayerCarInitSpec->topGear);
+  printf((u8 *)g_MsgInit1b);
+  printf((u8 *)g_FmtDecimalLine, g_PlayerCarInitSpec->topGear);
   for (j = 0; j < 6; j++)
   {
     scaledGearRatio = (g_PlayerCarInitSpec->fE8[j] * 0x490) / 160;
@@ -299,7 +299,7 @@ void InitPlayerCar(GameCarRuntime *car)
   {
     g_PlayerCarInitSpec->f112 = 1;
   }
-  printf((u8 *)D_800113E0);
+  printf((u8 *)g_MsgInit2);
   curveSpec = g_PlayerCarInitSpec;
   accelBand = g_TorqueLossBandEnd;
   speedBandOffset = 0;
@@ -335,16 +335,16 @@ void InitPlayerCar(GameCarRuntime *car)
     torqueBand++;
   }
   while (speedBandOffset < 20);
-  printf((u8 *)D_800113E8);
-  drive->unk84 = D_8007DAD4[drive->unk28 % 5] * 0xE;
+  printf((u8 *)g_MsgInit4);
+  drive->unk84 = g_LaunchEnergyThresholds[drive->unk28 % 5] * 0xE;
   drive->unk88 = g_PlayerCarInitSpec->f108;
-  printf((u8 *)D_800113F0);
+  printf((u8 *)g_MsgInit5);
   player->field_98 = 0;
   drive->unk9E = 0;
   drive->unk9C = 0;
   g_EngineRpmJitter = 0;
   g_EngineRpm = 0;
-  D_801E4194 = 0;
+  g_EngineRpmSnapshot = 0;
   g_StandingStartSpin = 0;
   D_8019C998 = 0;
   if (drive->manual != 0)
@@ -359,10 +359,10 @@ void InitPlayerCar(GameCarRuntime *car)
   g_SteerHoldFrames = 0;
   g_GripLossTimer = 0;
   g_WrongWayTimer = 0;
-  D_8019C9AC = 0;
-  printf((u8 *)D_800113F8);
-  printf((u8 *)D_80011400, player->field_68);
-  printf((u8 *)D_80011408);
+  g_PlayerAutoSteer = 0;
+  printf((u8 *)g_MsgInit6);
+  printf((u8 *)g_FmtLongLine, player->field_68);
+  printf((u8 *)g_MsgInitOk);
 }
 
 /*
@@ -425,7 +425,7 @@ void UpdateCarBodyRoll(A *ctx) {
     if (mode < 2) {
         ctx->sub.x1C = 0;
         ctx->f44 = 0;
-    } else if ((mode < 4) && (D_8019C9AC == 0)) {
+    } else if ((mode < 4) && (g_PlayerAutoSteer == 0)) {
     if (g_PadType == 0x41) {
 
     if (g_MirrorMode != 0) {
@@ -655,8 +655,8 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
   pointOffset = 0;
   do
   {
-    rotation.vx = *(u16 *)(((u8 *)D_8007DA88) + pointOffset);
-    rotation.vz = *(u16 *)(((u8 *)D_8007DA8A) + pointOffset);
+    rotation.vx = *(u16 *)(((u8 *)g_PlayerHullPointsX) + pointOffset);
+    rotation.vz = *(u16 *)(((u8 *)g_PlayerHullPointsZ) + pointOffset);
     rotation.vy = 0;
     ApplyMatrix(&rotationMatrix, &rotation, &transformed);
     (*(CPt *)(((u8 *)playerOutline) + pointOffset)).x = transformed.x >> 1;
@@ -722,8 +722,8 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
           RotMatrix(&rotation, &rotationMatrix);
           for (cornerOffset = 0; cornerOffset < 16; cornerOffset += 4)
           {
-            rotation.vx = *(u16 *)(((u8 *)D_8007DAA0) + cornerOffset);
-            rotation.vz = *(u16 *)(((u8 *)D_8007DAA2) + cornerOffset);
+            rotation.vx = *(u16 *)(((u8 *)g_OpponentHullCornersX) + cornerOffset);
+            rotation.vz = *(u16 *)(((u8 *)g_OpponentHullCornersZ) + cornerOffset);
             rotation.vy = 0;
             ApplyMatrix(&rotationMatrix, &rotation, &transformed);
             ((CPt *)(((u8 *)(&opponentCorners[0])) + cornerOffset))->x = (transformed.x >> 1) + (velocityDelta.x / 2);

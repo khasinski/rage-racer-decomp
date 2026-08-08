@@ -796,7 +796,7 @@ extern s32 g_IsEnvironmentMode4;
 /* Declared identically by 82 translation units before this
  * header carried them. */
 
-extern char D_80013374[];
+extern char g_FmtGpuTPage[];
 extern s16 D_8007D380[][2];
 extern s16 D_80092B08[];
 extern s16 D_80093308[];
@@ -841,19 +841,19 @@ void SetTrackTexturePageNow(s32 trackSection);
 /* Declared identically by 95 translation units before this
  * header carried them. */
 
-extern char D_8001339C[];
-extern char D_800133B4[];
-extern char D_800133C4[];
-extern char D_800133DC[];
-extern char D_800133E8[];
-extern char D_800133F4[];
-extern char D_80013410[];
-extern char D_8001342C[];
-extern char D_80013438[];
-extern char D_80013478[];
-extern char D_80013498[];
-extern char D_800134AC[];
-extern char D_800134C4[];
+extern char g_FmtGpuDrawClip[];
+extern char g_FmtGpuDrawOffset[];
+extern char g_FmtGpuTextureWindow[];
+extern char g_FmtGpuDither[];
+extern char g_FmtGpuDrawOnDisplay[];
+extern char g_FmtGpuDispArea[];
+extern char g_FmtGpuScreenArea[];
+extern char g_FmtGpuIsInterlace[];
+extern char g_FmtGpuIsRgb24[];
+extern char g_FmtGpuResetGraphTrace[];
+extern char g_FmtGpuResetGraph[];
+extern char g_FmtGpuSetGraphReverse[];
+extern char g_FmtGpuSetGraphDebug[];
 extern char D_800135CC[];
 extern char D_800135E0[];
 extern char D_800135F8[];

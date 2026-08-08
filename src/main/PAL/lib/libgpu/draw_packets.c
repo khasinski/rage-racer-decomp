@@ -67,11 +67,11 @@ void DumpDrawEnv(DrawEnv *env) {
     s32 mode;
     u32 value;
 
-    GPU_printf(D_8001339C, env->clip.x, env->clip.y, env->clip.w, env->clip.h);
-    GPU_printf(D_800133B4, env->ofs[0], env->ofs[1]);
-    GPU_printf(D_800133C4, env->tw.x, env->tw.y, env->tw.w, env->tw.h);
-    GPU_printf(D_800133DC, env->dtd);
-    GPU_printf(D_800133E8, env->dfe);
+    GPU_printf(g_FmtGpuDrawClip, env->clip.x, env->clip.y, env->clip.w, env->clip.h);
+    GPU_printf(g_FmtGpuDrawOffset, env->ofs[0], env->ofs[1]);
+    GPU_printf(g_FmtGpuTextureWindow, env->tw.x, env->tw.y, env->tw.w, env->tw.h);
+    GPU_printf(g_FmtGpuDither, env->dtd);
+    GPU_printf(g_FmtGpuDrawOnDisplay, env->dfe);
 
     mode = GetGraphType();
     switch (0) { default:
@@ -85,19 +85,19 @@ void DumpDrawEnv(DrawEnv *env) {
 
     }
     value = env->tpage;
-    GPU_printf(D_80013374, (value >> 9) & 3, (value >> 7) & 3, (value * 64) & 0x7C0, (value * 8) & 0x300);
+    GPU_printf(g_FmtGpuTPage, (value >> 9) & 3, (value >> 7) & 3, (value * 64) & 0x7C0, (value * 8) & 0x300);
     return;
 
     }
     value = env->tpage;
-    GPU_printf(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
+    GPU_printf(g_FmtGpuTPage, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
 }
 
 void DumpDispEnv(DispEnv *env) {
-    GPU_printf(D_800133F4, env->disp.x, env->disp.y, env->disp.w, env->disp.h);
-    GPU_printf(D_80013410, env->screen.x, env->screen.y, env->screen.w, env->screen.h);
-    GPU_printf(D_8001342C, env->isinter);
-    GPU_printf(D_80013438, env->isrgb24);
+    GPU_printf(g_FmtGpuDispArea, env->disp.x, env->disp.y, env->disp.w, env->disp.h);
+    GPU_printf(g_FmtGpuScreenArea, env->screen.x, env->screen.y, env->screen.w, env->screen.h);
+    GPU_printf(g_FmtGpuIsInterlace, env->isinter);
+    GPU_printf(g_FmtGpuIsRgb24, env->isrgb24);
 }
 
 extern GpuCallbacks *g_GpuFuncs;
@@ -107,8 +107,8 @@ extern u8 g_GraphDebug;
 extern u16 g_VramWidth;
 extern u16 g_VramHeight;
 
-/* libgpu ResetGraph. Own trace strings D_80013478 "ResetGraph:jtb=%08x,env=%08x"
- * and D_80013498 "ResetGraph(%d)..."; mode&7 of 0 or 3 does the full reset. */
+/* libgpu ResetGraph. Own trace strings g_FmtGpuResetGraphTrace "ResetGraph:jtb=%08x,env=%08x"
+ * and g_FmtGpuResetGraph "ResetGraph(%d)..."; mode&7 of 0 or 3 does the full reset. */
 void ResetGraph(s32 mode) {
     s32 maskedMode;
     u8 *graphState;
@@ -119,7 +119,7 @@ void ResetGraph(s32 mode) {
     maskedMode = mode & 7;
     if ((maskedMode == 0) || (maskedMode == 3)) {
         graphState = g_GraphType;
-        printf((u8 *)D_80013478, g_GpuJumpTable, graphState);
+        printf((u8 *)g_FmtGpuResetGraphTrace, g_GpuJumpTable, graphState);
         MemFill(graphState, 0, 0x80);
         KernelCallbackSlot3();
         GPU_cw((void *)((u32)g_GpuFuncs & 0xFFFFFF));
@@ -143,7 +143,7 @@ void ResetGraph(s32 mode) {
         graphType = *(volatile u8 *)graphState;
     } else {
         if (g_GraphDebug >= 2) {
-            GPU_printf(D_80013498, mode);
+            GPU_printf(g_FmtGpuResetGraph, mode);
         }
         g_GpuFuncs->resetGraph(1);
     }
@@ -161,7 +161,7 @@ s32 SetGraphReverse(s32 mode) {
     s32 command;
 
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_800134AC, newValue);
+        GPU_printf(g_FmtGpuSetGraphReverse, newValue);
     }
 
     callbacks = g_GpuFuncs;
@@ -203,7 +203,7 @@ s32 SetGraphDebug(u8 level) {
         a1 = *ptr;
         a2 = g_GraphType[0];
         a3 = g_GraphReverse;
-        fmt = D_800134C4;
+        fmt = g_FmtGpuSetGraphDebug;
         func(fmt, a1, a2, a3);
     }
     return old;

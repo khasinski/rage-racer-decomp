@@ -312,7 +312,7 @@ void SetLineG4(void *prim);   /* 0x5C */
 /*
  * Bit 15 of a 15-bit BGR555 pixel, i.e. of a CLUT entry: the STP / mask bit.
  * The other fifteen bits are the colour, which is what the three field masks in
- * menu/team_logo_transform.c isolate - 0xFFE0, 0xFC1F and 0x83FF each clear one
+ * menu/menu_visual_effects.c isolate - 0xFFE0, 0xFC1F and 0x83FF each clear one
  * 5-bit channel and each leave bit 15 alone. A CLUT entry of 0x0000 is fully
  * transparent, so 0x8000 is the way to spell opaque black; StoreTeamLogoImage
  * puts it in entry 0 for the duration of one StoreImage and clears it after.

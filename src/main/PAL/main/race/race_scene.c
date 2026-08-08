@@ -420,7 +420,7 @@ void EnterRaceScene(void) {
     g_RaceFadeTimer = 0;
     InitEffectVoiceRuntime();
     g_RivalCueEnabled = 1;
-    D_801E4CF8 = (D_8019C9AC = (g_RaceCueDelay = 0));
+    D_801E4CF8 = (g_PlayerAutoSteer = (g_RaceCueDelay = 0));
     do {
     } while (0);
     g_SceneId = 12;

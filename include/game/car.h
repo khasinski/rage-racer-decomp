@@ -401,7 +401,7 @@ void UpdateCarLaunch();
  * header carried them. */
 
 extern s32 D_8019C998;
-extern s32 D_801E4194;
+extern s32 g_EngineRpmSnapshot;
 extern s32 g_AutoShiftCooldown;
 extern u8 *g_CarModelBuffer;
 extern s16 g_DragScale;
@@ -440,25 +440,25 @@ void UpdateRivalRubberBand(void);
 /* Declared identically by 77 translation units before this
  * header carried them. */
 
-extern char D_800113B0[];
-extern char D_800113BC[];
-extern char D_800113C4[];
-extern char D_800113CC[];
-extern char D_800113D4[];
-extern char D_800113DC[];
-extern char D_800113E0[];
-extern char D_800113E8[];
-extern char D_800113F0[];
-extern char D_800113F8[];
-extern char D_80011400[];
-extern char D_80011408[];
-extern u16 D_8007DA88[];
-extern u16 D_8007DA8A[];
-extern u16 D_8007DAA0[];
-extern u16 D_8007DAA2[];
-extern s16 D_8007DAD4[];
-extern s16 D_801E6F18;
-extern s16 D_801E6F1A;
+extern char g_MsgInitCar[];
+extern char g_MsgHTbl[];
+extern char g_MsgInit0[];
+extern char g_MsgInit1[];
+extern char g_MsgInit1b[];
+extern char g_FmtDecimalLine[];
+extern char g_MsgInit2[];
+extern char g_MsgInit4[];
+extern char g_MsgInit5[];
+extern char g_MsgInit6[];
+extern char g_FmtLongLine[];
+extern char g_MsgInitOk[];
+extern u16 g_PlayerHullPointsX[];
+extern u16 g_PlayerHullPointsZ[];
+extern u16 g_OpponentHullCornersX[];
+extern u16 g_OpponentHullCornersZ[];
+extern s16 g_LaunchEnergyThresholds[];
+extern s16 g_RedlineToPeakRpmHalf;
+extern s16 g_PeakToRevLimitRpmHalf;
 extern s16 D_801E8A4C;
 extern s32 g_AttractGridSlots[];
 extern u16 g_BodyColorPrimary[];

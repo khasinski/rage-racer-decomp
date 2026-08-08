@@ -19,4 +19,4 @@
  *           obtained AND verified not to regress already-matched functions.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/ScaleMatrix", ScaleMatrix);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libgte/scale_matrix", ScaleMatrix);

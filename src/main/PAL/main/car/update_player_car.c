@@ -520,7 +520,7 @@ void UpdatePlayerCar(Car *car) {
         }
     }
 
-    D_801E4194 = g_EngineRpm;
+    g_EngineRpmSnapshot = g_EngineRpm;
     if (p->unk78 != 0) {
         if (p->gear != 1) {
             revFlag = 0;

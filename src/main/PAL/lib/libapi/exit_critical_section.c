@@ -1,3 +1,3 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/ExitCriticalSection", ExitCriticalSection);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libapi/exit_critical_section", ExitCriticalSection);

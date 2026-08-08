@@ -155,10 +155,10 @@ void DumpTPage(long x) {
     }
 
     }
-    GPU_printf(D_80013374, (((u_long)x & 0xFFFF) >> 9) & 3, (((u_long)x & 0xFFFF) >> 7) & 3, (((u_long)x & 0xFFFF) << 6) & 0x7C0, (((u_long)x & 0xFFFF) << 3) & 0x300);
+    GPU_printf(g_FmtGpuTPage, (((u_long)x & 0xFFFF) >> 9) & 3, (((u_long)x & 0xFFFF) >> 7) & 3, (((u_long)x & 0xFFFF) << 6) & 0x7C0, (((u_long)x & 0xFFFF) << 3) & 0x300);
     return;
 
     }
     value = x & 0xFFFF;
-    GPU_printf(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
+    GPU_printf(g_FmtGpuTPage, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
 }

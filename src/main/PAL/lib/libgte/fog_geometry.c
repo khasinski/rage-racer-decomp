@@ -179,4 +179,4 @@ void InitGeom(void) {
  *   available to the build, or the routine is confirmed as a shippable
  *   library .s.
  */
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/SetFogNear", SquareRoot0);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libgte/fog_geometry", SquareRoot0);

@@ -71,7 +71,7 @@ void UpdateTeamLogoScreen(void)
           PlaySoundCue(2);
           ApplyDuckedSequenceAudio();
           GameMenuBusy = -3;
-          D_8019CAB8 = 0;
+          g_TeamLogoPaintArmed = 0;
           g_UiScriptProgress2 = 0;
           D_801E8A44 = &D_80082664;
         }

@@ -22,4 +22,4 @@
  *           follows the image when code size changes; see docs/names.md on
  *           shiftability. Decompiling it would undo that.
  */
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/Gte_PatchExceptionHandler", func_80069FA8);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libgte/exception_patch", func_80069FA8);

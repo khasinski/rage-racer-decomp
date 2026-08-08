@@ -131,7 +131,7 @@ long MDEC_timeout(u_char *name) {
  * Revisit:  only if a linker/section arrangement can reproduce the exact layout.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/MDEC_reset", D_80064554);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libpress/mdec_runtime", D_80064554);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -151,4 +151,4 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/MDEC_reset", D_80064554);
  * Revisit:  only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/sdk/MDEC_reset", MdecUnpackStatus);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libpress/mdec_runtime", MdecUnpackStatus);

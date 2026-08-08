@@ -261,20 +261,20 @@ typedef union {
 extern u16 g_PadHeld;
 extern u16 g_PadPressedRepeat;
 extern u16 g_PadPressed;
-extern u8 D_8007F930;
-extern s32 D_8007F934;
-extern s32 D_8007F938;
-extern s32 D_8007F93C;
-extern s32 D_8007F940;
-extern s32 D_8007F944;
-extern s32 D_8007F94C;
-extern TeamLogoColorSlot D_8007F950;
-extern s32 D_8007F954;
-extern s32 D_8007F958;
-extern s32 D_8007FB14;
-extern s32 D_8007FB18;
-extern s32 D_8007FB1C;
-extern s32 D_8019CAB8;
+extern u8 g_TeamLogoExpertMode;
+extern s32 g_TeamLogoCursorX;
+extern s32 g_TeamLogoCursorY;
+extern s32 g_TeamLogoViewX;
+extern s32 g_TeamLogoViewY;
+extern s32 g_TeamLogoGuideMode;
+extern s32 g_TeamLogoBrushSize;
+extern TeamLogoColorSlot g_TeamLogoPenColor;
+extern s32 g_TeamLogoPaletteMode;
+extern s32 g_TeamLogoColorChannel;
+extern s32 g_TeamLogoDpadRepeatTimer;
+extern s32 g_TeamLogoDpadRepeatMask;
+extern s32 g_TeamLogoGuideModePrev;
+extern s32 g_TeamLogoPaintArmed;
 
 void UpdateTeamLogoCanvas(void) {
     s32 cursorX;
@@ -314,92 +314,92 @@ void UpdateTeamLogoCanvas(void) {
         u16 *state = &g_PadHeld;
 
         input = (*state & 5) ? 0 : 3;
-        if (*state & D_8007FB18) {
-            held = D_8007FB14;
+        if (*state & g_TeamLogoDpadRepeatMask) {
+            held = g_TeamLogoDpadRepeatTimer;
             repeat = 0x14;
             if (held < input + repeat) {
                 repeat = held + 1;
             }
-            D_8007FB14 = repeat;
+            g_TeamLogoDpadRepeatTimer = repeat;
         } else {
-            D_8007FB14 = 0;
+            g_TeamLogoDpadRepeatTimer = 0;
         }
     }
     {
         u16 held = g_PadHeld;
 
-        D_8007FB18 = held & 0xF000;
+        g_TeamLogoDpadRepeatMask = held & 0xF000;
         if (!(held & 0x20)) {
-            D_8019CAB8 = 1;
+            g_TeamLogoPaintArmed = 1;
         }
     }
-    if (D_8007F930 != 0) {
+    if (g_TeamLogoExpertMode != 0) {
         if (g_PadPressed & PAD_SELECT) {
-            D_8007FB1C = D_8007F944;
+            g_TeamLogoGuideModePrev = g_TeamLogoGuideMode;
             nextTool = 0;
-            if (D_8007F944 < 2) {
-                nextTool = D_8007F944 + 1;
+            if (g_TeamLogoGuideMode < 2) {
+                nextTool = g_TeamLogoGuideMode + 1;
             }
-            D_8007F944 = nextTool;
+            g_TeamLogoGuideMode = nextTool;
         }
     } else {
-        D_8007F944 = 1;
+        g_TeamLogoGuideMode = 1;
     }
-    if (D_8007F954 == 1) {
+    if (g_TeamLogoPaletteMode == 1) {
         u16 *input = &g_PadPressed;
 
         if (*input & 0x60) {
             PlaySoundCue(2);
-            D_8007F954 = 0;
-            D_8019CAB8 = 0;
+            g_TeamLogoPaletteMode = 0;
+            g_TeamLogoPaintArmed = 0;
         }
         {
             s32 mask = 0xF;
 
             if ((*input & 0x100) &&
                 ((g_PadHeld & mask) == mask)) {
-                D_8007F930 = D_8007F930 == 0;
-                D_8007F944 = D_8007FB1C;
+                g_TeamLogoExpertMode = g_TeamLogoExpertMode == 0;
+                g_TeamLogoGuideMode = g_TeamLogoGuideModePrev;
             }
         }
-        if ((D_8007FB14 == 0x14) || (D_8007FB14 == 1)) {
+        if ((g_TeamLogoDpadRepeatTimer == 0x14) || (g_TeamLogoDpadRepeatTimer == 1)) {
             if (g_PadHeld & PAD_LEFT) {
                 TeamLogoColorSlot output;
                 s32 selected;
 
                 PlaySoundCue(1);
-                selected = D_8007F950.value;
+                selected = g_TeamLogoPenColor.value;
                 prevSlot = 0xF;
                 if (selected >= 2) {
                     prevSlot = selected - 1;
                 }
                 output.value = prevSlot;
-                D_8007F950 = output;
+                g_TeamLogoPenColor = output;
             }
             if (g_PadHeld & PAD_RIGHT) {
                 TeamLogoColorSlot output;
                 s32 selected;
 
                 PlaySoundCue(1);
-                selected = D_8007F950.value;
+                selected = g_TeamLogoPenColor.value;
                 nextSlot = 1;
                 if (selected < 0xF) {
                     nextSlot = selected + 1;
                 }
                 output.value = nextSlot;
-                D_8007F950 = output;
+                g_TeamLogoPenColor = output;
             }
         }
-        if (D_8007F930 != 0) {
+        if (g_TeamLogoExpertMode != 0) {
             if (g_PadHeld & (PAD_R1 | PAD_R2)) {
                 if (g_PadPressedRepeat & PAD_UP) {
                     PlaySoundCue(4);
-                    slotValue = D_8007F950.value;
+                    slotValue = g_TeamLogoPenColor.value;
                     clutEntry = g_TeamLogoClut + slotValue;
                     opaqueColour = *clutEntry | 0x8000;
                     *clutEntry = opaqueColour;
                     colour = opaqueColour;
-                    switch (D_8007F958) {
+                    switch (g_TeamLogoColorChannel) {
                     case 0:
                         redUp = opaqueColour & 0x1F;
                         if (redUp == 0) {
@@ -407,9 +407,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             darker = redUp - 1;
                         }
-                        g_TeamLogoClut[D_8007F950.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
                             darker |
-                            (g_TeamLogoClut[D_8007F950.value] & 0xFFE0);
+                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0xFFE0);
                         break;
                     case 1:
                         greenUp = (colour >> 5) & 0x1F;
@@ -418,9 +418,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             darker = 0x3E0;
                         }
-                        g_TeamLogoClut[D_8007F950.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
                             darker |
-                            (g_TeamLogoClut[D_8007F950.value] & 0xFC1F);
+                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0xFC1F);
                         break;
                     case 2:
                         blueUp = (colour >> 0xA) & 0x1F;
@@ -429,9 +429,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             darker = 0x7C00;
                         }
-                        g_TeamLogoClut[D_8007F950.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
                             darker |
-                            (g_TeamLogoClut[D_8007F950.value] & 0x83FF);
+                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0x83FF);
                         break;
                     default:
                         break;
@@ -439,12 +439,12 @@ void UpdateTeamLogoCanvas(void) {
                 }
                 if (g_PadPressedRepeat & PAD_DOWN) {
                     PlaySoundCue(4);
-                    slotValue = D_8007F950.value;
+                    slotValue = g_TeamLogoPenColor.value;
                     clutEntry = g_TeamLogoClut + slotValue;
                     opaqueColour = *clutEntry | 0x8000;
                     *clutEntry = opaqueColour;
                     colour = opaqueColour;
-                    switch (D_8007F958) {
+                    switch (g_TeamLogoColorChannel) {
                     case 0:
                         redDown = opaqueColour & 0x1F;
                         if (redDown >= 0x1FU) {
@@ -452,9 +452,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             brighter = redDown + 1;
                         }
-                        g_TeamLogoClut[D_8007F950.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
                             brighter |
-                            (g_TeamLogoClut[D_8007F950.value] & 0xFFE0);
+                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0xFFE0);
                         return;
                     case 1:
                         slotValue = (colour >> 5) & 0x1F;
@@ -463,9 +463,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             brighter = 0;
                         }
-                        g_TeamLogoClut[D_8007F950.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
                             brighter |
-                            (g_TeamLogoClut[D_8007F950.value] & 0xFC1F);
+                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0xFC1F);
                         return;
                     case 2:
                         blueDown = (colour >> 0xA) & 0x1F;
@@ -474,9 +474,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             brighter = 0;
                         }
-                        g_TeamLogoClut[D_8007F950.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
                             brighter |
-                            (g_TeamLogoClut[D_8007F950.value] & 0x83FF);
+                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0x83FF);
                         return;
                     default:
                         return;
@@ -486,28 +486,28 @@ void UpdateTeamLogoCanvas(void) {
                 if (g_PadPressed & PAD_UP) {
                     PlaySoundCue(1);
                     prevChannel = 2;
-                    if (D_8007F958 > 0) {
-                        prevChannel = D_8007F958 - 1;
+                    if (g_TeamLogoColorChannel > 0) {
+                        prevChannel = g_TeamLogoColorChannel - 1;
                     }
-                    D_8007F958 = prevChannel;
+                    g_TeamLogoColorChannel = prevChannel;
                 }
                 if (g_PadPressed & PAD_DOWN) {
                     PlaySoundCue(1);
                     nextChannel = 0;
-                    if (D_8007F958 < 2) {
-                        nextChannel = D_8007F958 + 1;
+                    if (g_TeamLogoColorChannel < 2) {
+                        nextChannel = g_TeamLogoColorChannel + 1;
                     }
-                    D_8007F958 = nextChannel;
+                    g_TeamLogoColorChannel = nextChannel;
                 }
             }
         }
     } else {
-        if ((g_PadHeld & PAD_CIRCLE) && (D_8019CAB8 != 0)) {
+        if ((g_PadHeld & PAD_CIRCLE) && (g_TeamLogoPaintArmed != 0)) {
             if (g_PadPressed & PAD_CIRCLE) {
                 PlaySoundCue(4);
             }
-            for (plotRow = 0; plotRow < D_8007F94C; plotRow++) {
-                    for (plotColumn = 0; plotColumn < D_8007F94C; plotColumn++) {
+            for (plotRow = 0; plotRow < g_TeamLogoBrushSize; plotRow++) {
+                    for (plotColumn = 0; plotColumn < g_TeamLogoBrushSize; plotColumn++) {
                             u16 *p;
                             s32 sum;
                             s32 adj;
@@ -516,9 +516,9 @@ void UpdateTeamLogoCanvas(void) {
                             s32 rem;
 
                             p = (u16 *)g_TeamLogoCanvas;
-                            sum = D_8007F93C + D_8007F934 + plotColumn;
+                            sum = g_TeamLogoViewX + g_TeamLogoCursorX + plotColumn;
                             adj = sum;
-                            row = (D_8007F940 + D_8007F938 + plotRow) * 0x10;
+                            row = (g_TeamLogoViewY + g_TeamLogoCursorY + plotRow) * 0x10;
                             if (sum < 0) {
                                 adj = sum + 3;
                             }
@@ -527,16 +527,16 @@ void UpdateTeamLogoCanvas(void) {
                             rem = sum - (q * 4);
                             switch (rem) {
                             case 0:
-                                *p = (*p & 0xFFF0) | D_8007F950.lo;
+                                *p = (*p & 0xFFF0) | g_TeamLogoPenColor.lo;
                                 break;
                             case 1:
-                                *p = (*p & 0xFF0F) | (D_8007F950.lo << 4);
+                                *p = (*p & 0xFF0F) | (g_TeamLogoPenColor.lo << 4);
                                 break;
                             case 2:
-                                *p = (*p & 0xF0FF) | (D_8007F950.lo << 8);
+                                *p = (*p & 0xF0FF) | (g_TeamLogoPenColor.lo << 8);
                                 break;
                             case 3:
-                                *p = (*p & 0xFFF) | (D_8007F950.lo << 0xC);
+                                *p = (*p & 0xFFF) | (g_TeamLogoPenColor.lo << 0xC);
                                 break;
                             }
                     }
@@ -546,8 +546,8 @@ void UpdateTeamLogoCanvas(void) {
             if (g_PadPressed & PAD_SQUARE) {
                 PlaySoundCue(4);
             }
-            for (eraseRow = 0; eraseRow < D_8007F94C; eraseRow++) {
-                    for (eraseColumn = 0; eraseColumn < D_8007F94C; eraseColumn++) {
+            for (eraseRow = 0; eraseRow < g_TeamLogoBrushSize; eraseRow++) {
+                    for (eraseColumn = 0; eraseColumn < g_TeamLogoBrushSize; eraseColumn++) {
                             u16 *p;
                             s32 sum;
                             s32 adj;
@@ -555,10 +555,10 @@ void UpdateTeamLogoCanvas(void) {
                             s32 q;
                             s32 rem;
 
-                            sum = D_8007F93C + D_8007F934 + eraseColumn;
+                            sum = g_TeamLogoViewX + g_TeamLogoCursorX + eraseColumn;
                             p = (u16 *)g_TeamLogoCanvas;
                             adj = sum;
-                            row = D_8007F940 + D_8007F938 + eraseRow;
+                            row = g_TeamLogoViewY + g_TeamLogoCursorY + eraseRow;
                             row *= 0x10;
                             if (sum < 0) {
                                 adj = sum + 3;
@@ -589,26 +589,26 @@ void UpdateTeamLogoCanvas(void) {
 
         if (*input & 0x40) {
             PlaySoundCue(2);
-            D_8007F954 = 1;
+            g_TeamLogoPaletteMode = 1;
         }
         if (*input & 0x10) {
             PlaySoundCue(2);
-            switch (D_8007F94C) {
+            switch (g_TeamLogoBrushSize) {
             case 1:
-                D_8007F94C = 2;
+                g_TeamLogoBrushSize = 2;
                 break;
             case 2:
-                D_8007F94C = 4;
+                g_TeamLogoBrushSize = 4;
                 break;
             case 4:
-                D_8007F94C = 1;
+                g_TeamLogoBrushSize = 1;
                 break;
             }
-            if ((D_8007F934 + D_8007F94C) >= 0x20) {
-                D_8007F934 = 0x20 - D_8007F94C;
+            if ((g_TeamLogoCursorX + g_TeamLogoBrushSize) >= 0x20) {
+                g_TeamLogoCursorX = 0x20 - g_TeamLogoBrushSize;
             }
-            if ((D_8007F938 + D_8007F94C) >= 0x20) {
-                D_8007F938 = 0x20 - D_8007F94C;
+            if ((g_TeamLogoCursorY + g_TeamLogoBrushSize) >= 0x20) {
+                g_TeamLogoCursorY = 0x20 - g_TeamLogoBrushSize;
             }
         }
         }
@@ -616,7 +616,7 @@ void UpdateTeamLogoCanvas(void) {
             u16 *held = &g_PadHeld;
             u16 heldValue = *held;
 
-        if ((heldValue & 8) && (D_8007F930 != 0)) {
+        if ((heldValue & 8) && (g_TeamLogoExpertMode != 0)) {
             if (heldValue & 4) {
                 if (g_PadPressed & PAD_UP) {
                     RotateTeamLogoCw();
@@ -630,9 +630,9 @@ void UpdateTeamLogoCanvas(void) {
                 if (g_PadPressed & PAD_RIGHT) {
                     FlipTeamLogoHorizontal();
                 }
-            } else if ((D_8007FB14 == 0x14) || (D_8007FB14 == 1)) {
+            } else if ((g_TeamLogoDpadRepeatTimer == 0x14) || (g_TeamLogoDpadRepeatTimer == 1)) {
                 if (heldValue & 0x1000) {
-                    ScrollTeamLogoUp(D_8007FB14);
+                    ScrollTeamLogoUp(g_TeamLogoDpadRepeatTimer);
                 }
                 if (*held & 0x4000) {
                     ScrollTeamLogoDown();
@@ -646,41 +646,41 @@ void UpdateTeamLogoCanvas(void) {
             }
         } else {
             eraseStamp = 0;
-            if ((D_8007FB14 == 0x14) || (D_8007FB14 == 1) || (g_PadHeld & 5)) {
+            if ((g_TeamLogoDpadRepeatTimer == 0x14) || (g_TeamLogoDpadRepeatTimer == 1) || (g_PadHeld & 5)) {
                 plotStamp = 0;
                 if (g_PadHeld & PAD_UP) {
-                    if (D_8007F938 > 0) {
-                        D_8007F938 -= 1;
+                    if (g_TeamLogoCursorY > 0) {
+                        g_TeamLogoCursorY -= 1;
                         plotStamp = 1;
-                    } else if (D_8007F940 > 0) {
-                        D_8007F940 -= 1;
+                    } else if (g_TeamLogoViewY > 0) {
+                        g_TeamLogoViewY -= 1;
                         plotStamp = 1;
                     }
                 }
                 if (g_PadHeld & PAD_DOWN) {
-                    if ((D_8007F938 + D_8007F94C) < 0x20) {
-                        D_8007F938 += 1;
+                    if ((g_TeamLogoCursorY + g_TeamLogoBrushSize) < 0x20) {
+                        g_TeamLogoCursorY += 1;
                         plotStamp = 1;
-                    } else if (D_8007F940 < 0x20) {
-                        D_8007F940 += 1;
+                    } else if (g_TeamLogoViewY < 0x20) {
+                        g_TeamLogoViewY += 1;
                         plotStamp = 1;
                     }
                 }
                 if (g_PadHeld & PAD_LEFT) {
-                    if (D_8007F934 > 0) {
-                        D_8007F934 -= 1;
+                    if (g_TeamLogoCursorX > 0) {
+                        g_TeamLogoCursorX -= 1;
                         eraseStamp = 1;
-                    } else if (D_8007F93C > 0) {
-                        D_8007F93C -= 1;
+                    } else if (g_TeamLogoViewX > 0) {
+                        g_TeamLogoViewX -= 1;
                         eraseStamp = 1;
                     }
                 }
                 if (g_PadHeld & PAD_RIGHT) {
-                    if ((D_8007F934 + D_8007F94C) < 0x20) {
-                        D_8007F934 += 1;
+                    if ((g_TeamLogoCursorX + g_TeamLogoBrushSize) < 0x20) {
+                        g_TeamLogoCursorX += 1;
                         eraseStamp = 1;
-                    } else if (D_8007F93C < 0x20) {
-                        D_8007F93C += 1;
+                    } else if (g_TeamLogoViewX < 0x20) {
+                        g_TeamLogoViewX += 1;
                         eraseStamp = 1;
                     }
                 }
@@ -690,12 +690,12 @@ void UpdateTeamLogoCanvas(void) {
             }
         }
         }
-        if ((g_PadPressed & 2) && (D_8007F930 != 0)) {
+        if ((g_PadPressed & 2) && (g_TeamLogoExpertMode != 0)) {
             PlaySoundCue(4);
             canvasWord = (u16 *)g_TeamLogoCanvas;
-            cursorX = D_8007F93C + D_8007F934;
+            cursorX = g_TeamLogoViewX + g_TeamLogoCursorX;
             pixelX = cursorX;
-            rowWords = (D_8007F940 + D_8007F938) * 0x10;
+            rowWords = (g_TeamLogoViewY + g_TeamLogoCursorY) * 0x10;
             if (cursorX < 0) {
                 pixelX = cursorX + 3;
             }
@@ -720,33 +720,33 @@ void UpdateTeamLogoCanvas(void) {
                 return;
             }
             if (pixelValue == 0) {
-                pixelValue = (u32)D_8007F950.value;
+                pixelValue = (u32)g_TeamLogoPenColor.value;
             }
-            D_8007F950.value = (s32)pixelValue;
+            g_TeamLogoPenColor.value = (s32)pixelValue;
         }
     }
 }
 
 extern s32 g_TeamLogoClutRect;
-extern s32 D_8007F964;
+extern s32 g_TeamLogoBlankClut;
 
-void RestoreTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, &D_8007F964); }
+void RestoreTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, &g_TeamLogoBlankClut); }
 
 void UploadTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, g_TeamLogoClut); }
 
-extern s32 D_8007FB20;
+extern s32 g_MenuLightBurstLevel;
 
 
 typedef struct Blob {
     s16 b[33];
 } Blob;
 
-extern const Blob D_80011898;
-extern const Blob D_800118DC;
-extern const char D_80011920[4];
-extern const char D_80011924[4];
-extern const char D_80011928[4];
-extern const char D_8001192C[8];
+extern const Blob g_MenuLightBurstBandX;
+extern const Blob g_MenuLightBurstBandY;
+extern const char g_MsgOrdinalSt[4];
+extern const char g_MsgOrdinalNd[4];
+extern const char g_MsgOrdinalRd[4];
+extern const char g_MsgOrdinalTh[8];
 
 void DrawMenuLightBurst(s32 arg) {
     void *s3;
@@ -754,20 +754,20 @@ void DrawMenuLightBurst(s32 arg) {
     Blob l2;
 
     s3 = (void *)(SCRATCH_OT_BASE_WORD + 0xAFC);
-    l1 = D_80011898;
-    l2 = D_800118DC;
+    l1 = g_MenuLightBurstBandX;
+    l2 = g_MenuLightBurstBandY;
 
     if (arg == 0) {
-        D_8007FB20 = 0;
+        g_MenuLightBurstLevel = 0;
         return;
     }
     if (arg < 0) {
-        D_8007FB20 += arg;
-        if (D_8007FB20 < 0) {
-            D_8007FB20 = 0;
+        g_MenuLightBurstLevel += arg;
+        if (g_MenuLightBurstLevel < 0) {
+            g_MenuLightBurstLevel = 0;
         }
     }
-    if (D_8007FB20 > 0) {
+    if (g_MenuLightBurstLevel > 0) {
         s32 s0;
         s32 s1;
         s32 s2;
@@ -781,7 +781,7 @@ void DrawMenuLightBurst(s32 arg) {
         s2 = 0;
         s1 = 0x00300000;
         do {
-            s32 cnt = D_8007FB20;
+            s32 cnt = g_MenuLightBurstLevel;
             u8 c1;
             value = cnt * 11;
             scaled = (u32)value / 256;
@@ -798,7 +798,7 @@ void DrawMenuLightBurst(s32 arg) {
             s32 x0 = l1.b[s0];
             s32 y0 = l2.b[s0];
             s16 x1 = (0xA0 - (u16)l1.b[s0]) * 2;
-            s32 v = (((s32)((u16)l2.b[s0] - 0xAA) << 7) / 309 + 0x16) * D_8007FB20;
+            s32 v = (((s32)((u16)l2.b[s0] - 0xAA) << 7) / 309 + 0x16) * g_MenuLightBurstLevel;
             value = v;
             scaled = (u32)value / 512;
             value = (u8)scaled;
@@ -810,7 +810,7 @@ void DrawMenuLightBurst(s32 arg) {
         SetPolyG4(prim);
         SetSemiTrans(prim, 0);
         {
-            register s32 x asm("$3") = D_8007FB20;
+            register s32 x asm("$3") = g_MenuLightBurstLevel;
             value = x / 5 + (x >> 31);
             scaled = value - (x >> 31);
             *(s16 *)(prim + 0x20) = 0x13F;
@@ -843,9 +843,9 @@ void DrawMenuLightBurst(s32 arg) {
         SetDrawClipRect(s3, 0x48, 0, 0x140, 0x1E0);
     }
     if (arg > 0) {
-        D_8007FB20 += arg;
-        if (D_8007FB20 >= 0x201) {
-            D_8007FB20 = 0x200;
+        g_MenuLightBurstLevel += arg;
+        if (g_MenuLightBurstLevel >= 0x201) {
+            g_MenuLightBurstLevel = 0x200;
         }
     }
 }
@@ -1189,15 +1189,15 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
             textClut = 0x244;
             textFlags = 0x20;
             DrawLargeText(suffixX, (s16)(panelY + 0x82),
-                              (u8 *)D_80011920, textShade, textShade,
+                              (u8 *)g_MsgOrdinalSt, textShade, textShade,
                               textShade, textClut, textFlags);
             DrawLargeText(suffixX, (s16)(panelY + 0xA2),
-                              (u8 *)D_80011924, textShade, textShade,
+                              (u8 *)g_MsgOrdinalNd, textShade, textShade,
                               textShade, textClut, textFlags);
             DrawLargeText(0x1F, (s16)(panelY + 0xC2),
-                              (u8 *)D_80011928, textShade, textShade,
+                              (u8 *)g_MsgOrdinalRd, textShade, textShade,
                               textShade, textClut, textFlags);
-            lastSuffix = (u8 *)D_8001192C;
+            lastSuffix = (u8 *)g_MsgOrdinalTh;
             DrawLargeText(suffixX, (s16)(panelY + 0xE2), lastSuffix,
                               textShade, textShade, textShade, textClut,
                               textFlags);

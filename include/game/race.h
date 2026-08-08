@@ -191,7 +191,7 @@ void DrawWrongWayWarning(void);
 /* Declared identically by 126 translation units before this
  * header carried them. */
 
-extern s16 D_8019C9AC;
+extern s16 g_PlayerAutoSteer;
 extern s32 g_AttractDemoStep;
 extern s32 g_BestLapThisRace;
 extern s32 g_BgmTrack;

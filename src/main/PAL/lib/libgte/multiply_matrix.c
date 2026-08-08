@@ -11,4 +11,4 @@
  * irreducible handwritten-asm signature GCC 2.6.3 will not reproduce from C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/mtx_03", MulMatrix);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libgte/multiply_matrix", MulMatrix);
