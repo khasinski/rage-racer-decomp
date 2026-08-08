@@ -169,7 +169,7 @@ s32 DrawCarSelectScreen(s32 step) {
     col = v & 0xff;
     DrawRectOutlineWide(buf, 0xa3, 0x180, 0x1a, 0x19, col, col, col, 0x20);
 
-    tex = ((u8 *)g_CarTable)[g_PlayerCarIndex * 8 + 2];
+    tex = g_CarTable[g_PlayerCarIndex].transmission;
     if (tex != 0) {
         GameDrawSpriteWide(buf, 0xad, 0x185, 0x10, 0x10, 0x6c, 0x7c, col, col, col,
                       0x244, 0, 1, 0x3b);
