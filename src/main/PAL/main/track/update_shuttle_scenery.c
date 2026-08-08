@@ -29,7 +29,7 @@ void UpdateShuttleScenery(s32 instance) {
     phaseShift = phase * 32;
     baseIndex += phaseShift;
     phaseOffset = phase << 1;
-    limitPtr = (s16 *)((u8 *)limitPtr + phaseOffset);
+    limitPtr = &limitPtr[phase];
     denom = *limitPtr;
     altIndex = (1 - side) << 4;
     altIndex += phaseShift;
