@@ -14,11 +14,101 @@
  * texel origin, draw flags) and `motion` the animated side (the interpolation
  * limit, start position, per-step delta, colour and CLUT).
  */
+typedef union TimedDrawArgument {
+    s32 value;
+    void *pointer;
+    u8 *bytes;
+    s32 *words;
+} TimedDrawArgument;
+
+typedef struct ScriptedSpriteShape {
+    s16 width;
+    s16 height;
+    u8 u;
+    u8 v;
+    u8 flags;
+    u8 alpha;
+} ScriptedSpriteShape;
+
+typedef struct ScriptedSpriteMotion {
+    s32 limit;
+    s16 x;
+    s16 y;
+    u16 clut;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 padD[3];
+    s32 packedVelocity;
+} ScriptedSpriteMotion;
+
+typedef struct ScriptedLineShape {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 flags;
+} ScriptedLineShape;
+
+typedef struct ScriptedLineMotion {
+    s32 limit;
+    s16 x0;
+    s16 y0;
+    s16 x1;
+    s16 y1;
+    s32 packedVelocity0;
+    s32 packedVelocity1;
+} ScriptedLineMotion;
+
+typedef struct ScriptedTriangleShape {
+    u16 x1;
+    u16 y1;
+    u16 x2;
+    u16 y2;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 flags;
+} ScriptedTriangleShape;
+
+typedef struct ScriptedTriangleMotion {
+    s32 limit;
+    s16 x;
+    s16 y;
+    s32 packedVelocity;
+} ScriptedTriangleMotion;
+
+typedef struct ScriptedQuadShape {
+    u8 u0;
+    u8 v0;
+    u8 u1;
+    u8 v1;
+    u8 u2;
+    u8 v2;
+    u8 u3;
+    u8 v3;
+    u16 clut;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 flags;
+    u8 alpha;
+} ScriptedQuadShape;
+
+typedef struct ScriptedQuadMotion {
+    s32 limit;
+    s16 x;
+    s16 y;
+    s16 width;
+    s16 height;
+    s32 packedVelocity;
+    s32 packedSizeVelocity;
+} ScriptedQuadMotion;
+
 typedef struct TimedDrawCommand {
     s16 time;
     s16 type;
-    s32 shape;
-    s32 motion;
+    TimedDrawArgument shape;
+    TimedDrawArgument motion;
 } TimedDrawCommand;
 
 /* A ready-made SPRT description; BuildSpriteFromDesc expands it into a scratchpad
@@ -537,12 +627,12 @@ extern s32 g_UiScriptProgress;
 extern s32 g_UiScriptProgress2;
 void DrawScriptedSprite(
     s32 elapsed,
-    u8 *style,
-    u8 *record,
+    ScriptedSpriteShape *style,
+    ScriptedSpriteMotion *record,
     s32 useAlpha);
-void DrawScriptedLine(s32 elapsed, u8 *style, u8 *record);
-void DrawScriptedTriangle(s32 elapsed, u8 *style, u8 *record);
-void DrawScriptedQuad(s32 elapsed, u8 *style, s32 *record);
+void DrawScriptedLine(s32 elapsed, ScriptedLineShape *style, ScriptedLineMotion *record);
+void DrawScriptedTriangle(s32 elapsed, ScriptedTriangleShape *shape, ScriptedTriangleMotion *motion);
+void DrawScriptedQuad(s32 elapsed, u8 *shape, ScriptedQuadMotion *motion);
 
 /*
  * Low-level packet builders from the first 0x3900 bytes of .text (the boot /

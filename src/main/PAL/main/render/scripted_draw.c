@@ -5,9 +5,9 @@
 #include "game/state.h"
 
 
-void DrawScriptedSprite(s32 elapsed, u8 *shape, u8 *motion, s32 type) {
-    register u8 *motionReg asm("$10") = motion;
-    register u8 *shapeReg asm("$9");
+void DrawScriptedSprite(s32 elapsed, ScriptedSpriteShape *shape, ScriptedSpriteMotion *motion, s32 type) {
+    register ScriptedSpriteMotion *motionReg asm("$10") = motion;
+    register ScriptedSpriteShape *shapeReg asm("$9");
     s32 flags8;
     void *otBase;
     s32 mode;
@@ -22,15 +22,15 @@ void DrawScriptedSprite(s32 elapsed, u8 *shape, u8 *motion, s32 type) {
     s32 alpha;
 
     /* Match note: materialize motionReg in $t2 before the first load. */
-    limit = *(s32 *)motionReg;
+    limit = motionReg->limit;
     otBase = SCRATCH_OT_BASE_AS(void);
-    packed = *(s32 *)(motionReg + 0x10);
+    packed = motionReg->packedVelocity;
     shapeReg = shape;
     if (limit < elapsed) {
         elapsed = limit;
     }
 
-    x = *(s16 *)(motionReg + 4);
+    x = motionReg->x;
     if (packed & 0x8000) {
         temp = packed | 0xFFFF0000;
     } else {
@@ -39,7 +39,7 @@ void DrawScriptedSprite(s32 elapsed, u8 *shape, u8 *motion, s32 type) {
     interp = (u32)(elapsed * temp) / 32;
 
     asm volatile("");
-    y = *(s16 *)(motionReg + 6);
+    y = motionReg->y;
     x += interp;
     if (packed < 0) {
         s32 hi;
@@ -55,7 +55,7 @@ void DrawScriptedSprite(s32 elapsed, u8 *shape, u8 *motion, s32 type) {
     y += interp;
     asm("" : "=r"(y) : "0"(y));
 
-    switch (shapeReg[6] & 3) {
+    switch (shapeReg->flags & 3) {
     case 0:
         mode = 0;
         break;
@@ -70,11 +70,11 @@ void DrawScriptedSprite(s32 elapsed, u8 *shape, u8 *motion, s32 type) {
         break;
     }
 
-    flagByte = shapeReg[6];
+    flagByte = shapeReg->flags;
     flags8 = flagByte & 8;
     flags4 = flagByte & 4;
     if (type != 0) {
-        temp = shapeReg[7] & 0x7F;
+        temp = shapeReg->alpha & 0x7F;
         asm("" : "=r"(temp) : "0"(temp));
         alpha = (u8)temp;
     } else {
@@ -85,22 +85,22 @@ void DrawScriptedSprite(s32 elapsed, u8 *shape, u8 *motion, s32 type) {
         (u8 *)otBase + (mode * 4),
         (s16)x,
         (s16)y,
-        *(s16 *)(shapeReg + 0),
-        *(s16 *)(shapeReg + 2),
-        shapeReg[4],
-        shapeReg[5],
-        motionReg[0xA],
-        motionReg[0xB],
-        motionReg[0xC],
-        *(u16 *)(motionReg + 8),
+        shapeReg->width,
+        shapeReg->height,
+        shapeReg->u,
+        shapeReg->v,
+        motionReg->r,
+        motionReg->g,
+        motionReg->b,
+        motionReg->clut,
         flags8,
         flags4,
         alpha);
 }
 
-void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
-    register u8 *motionReg asm("$8") = motion;
-    u8 *shapeReg;
+void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion *motion) {
+    register ScriptedLineMotion *motionReg asm("$8") = motion;
+    ScriptedLineShape *shapeReg;
     void *otBase;
     s32 mode;
     register s32 y1Reg asm("$2");
@@ -118,16 +118,16 @@ void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
     s32 alpha;
 
     /* Match note: materialize motionReg in $t0 before the first load. */
-    limit = *(s32 *)motionReg;
+    limit = motionReg->limit;
     otBase = SCRATCH_OT_BASE_AS(void);
-    xPacked = *(s32 *)(motionReg + 0xC);
-    yPacked = *(s32 *)(motionReg + 0x10);
+    xPacked = motionReg->packedVelocity0;
+    yPacked = motionReg->packedVelocity1;
     shapeReg = shape;
     if (limit < elapsed) {
         elapsed = limit;
     }
 
-    y1 = *(s16 *)(motionReg + 4);
+    y1 = motionReg->x0;
     if (xPacked & 0x8000) {
         temp = xPacked | 0xFFFF0000;
     } else {
@@ -136,7 +136,7 @@ void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
     interp = (u32)(elapsed * temp) / 32;
     x0 = y1 + interp;
 
-    y1 = *(s16 *)(motionReg + 6);
+    y1 = motionReg->y0;
     if (xPacked < 0) {
         s32 mask;
 
@@ -150,7 +150,7 @@ void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
     y1 += interp;
 
     asm volatile("");
-    x1Base = *(s16 *)(motionReg + 8);
+    x1Base = motionReg->x1;
     if (yPacked & 0x8000) {
         y0Call = y1;
         temp = yPacked | 0xFFFF0000;
@@ -161,7 +161,7 @@ void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
     interp = (u32)(elapsed * temp) / 32;
 
     asm volatile("");
-    y1 = *(s16 *)(motionReg + 0xA);
+    y1 = motionReg->y1;
     x1 = x1Base + interp;
     if (yPacked < 0) {
         y1Reg = yPacked >> 16;
@@ -174,7 +174,7 @@ void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
     y1 += interp;
     asm("" : "=r"(y1) : "0"(y1));
 
-    switch (shapeReg[3] & 3) {
+    switch (shapeReg->flags & 3) {
     case 0:
         mode = 0;
         break;
@@ -189,8 +189,8 @@ void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
         break;
     }
 
-    if (shapeReg[3] & 4) {
-        alpha = shapeReg[3] & 0x60;
+    if (shapeReg->flags & 4) {
+        alpha = shapeReg->flags & 0x60;
     } else {
         alpha = 0xFF;
     }
@@ -208,15 +208,15 @@ void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
         y1 >> 0x10,
         x1 >> 0x10,
         y1Reg,
-        (u8)shapeReg[0],
-        (u8)shapeReg[1],
-        (u8)shapeReg[2],
+        shapeReg->r,
+        shapeReg->g,
+        shapeReg->b,
         alpha);
 }
 
-void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
-    u8 *style;
-    u8 *record;
+void DrawScriptedTriangle(s32 time, ScriptedTriangleShape *styleArg, ScriptedTriangleMotion *recordArg) {
+    ScriptedTriangleShape *style;
+    ScriptedTriangleMotion *record;
     void *ot;
     s32 limit;
     register s32 packedSpeed asm("$3");
@@ -234,15 +234,15 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     record = recordArg;
     /* The barrier is load-bearing: without it the scheduler sinks the
      * scratchpad load past the second record load. */
-    limit = *(s32 *)record;
+    limit = record->limit;
     ot = SCRATCH_OT_BASE_AS(void);
     asm volatile("");
-    packedSpeed = *(s32 *)(record + 8);
+    packedSpeed = record->packedVelocity;
     if (limit < time) {
         time = limit;
     }
 
-    limit = *(s16 *)(record + 4);
+    limit = record->x;
     if (packedSpeed & 0x8000) {
         product = packedSpeed | 0xFFFF0000;
     } else {
@@ -255,7 +255,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     product = productResult;
     asm("" : "=r"(product), "=r"(record) : "0"(product), "1"(record));
 
-    y = *(s16 *)(record + 6);
+    y = record->y;
     x = product;
     if (packedSpeed < 0) {
         product = packedSpeed >> 16;
@@ -271,19 +271,19 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     product = (u32)product / 32;
     y += product;
 
-    product = *(u16 *)(style + 2);
-    packedSpeed = *(u16 *)(style + 6);
+    product = style->y1;
+    packedSpeed = style->y2;
     y0 = product + y;
     y1 = packedSpeed + y;
-    product = *(u16 *)style;
-    packedSpeed = *(u16 *)(style + 4);
+    product = style->x1;
+    packedSpeed = style->x2;
     productResult = x + product;
     product = productResult;
     asm("" : "=r"(product) : "0"(product));
     limit = product;
     packedSpeed = x + packedSpeed;
 
-    switch (style[0xB] & 3) {
+    switch (style->flags & 3) {
     case 0:
         mode = 0;
         break;
@@ -301,7 +301,7 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     {
         s32 alpha;
 
-        alpha = style[0xB];
+        alpha = style->flags;
         semiTrans = alpha & 4;
         if (semiTrans != 0) {
             alpha &= 0x60;
@@ -321,14 +321,14 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
         (s16)y0,
         (s16)packedSpeed,
         (s16)y1,
-        style[8],
-        style[9],
-        style[10],
+        style->r,
+        style->g,
+        style->b,
         semiTrans,
         flags);
 }
 
-void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
+void DrawScriptedQuad(s32 time, u8 *desc, ScriptedQuadMotion *ctx) {
     s32 duration;
     u8 *table;
     u8 *entry;
@@ -350,16 +350,16 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     register s32 value asm("$2");
     s32 flags;
 
-    duration = ctx[0];
+    duration = ctx->limit;
     table = SCRATCH_OT_BASE_AS(u8);
-    velocity0 = ctx[3];
-    velocity1 = ctx[4];
+    velocity0 = ctx->packedVelocity;
+    velocity1 = ctx->packedSizeVelocity;
     entry = desc;
     if (duration < time) {
         time = duration;
     }
 
-    posX = *(s16 *)((u8 *)ctx + 4);
+    posX = ctx->x;
     if (velocity0 & 0x8000) {
         velocityX = velocity0 | 0xFFFF0000;
     } else {
@@ -369,7 +369,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     asm("" : "=r"(posX) : "0"(posX));
     x = posX;
 
-    posY = *(s16 *)((u8 *)ctx + 6);
+    posY = ctx->y;
     if (velocity0 < 0) {
         value = velocity0 >> 16;
         velocityY = value | 0xFFFF0000;
@@ -381,7 +381,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     y = value;
     asm("" : "=r"(value), "=r"(y) : "0"(value), "1"(y) : "memory");
 
-    posX2 = *(s16 *)((u8 *)ctx + 8);
+    posX2 = ctx->width;
     if (velocity1 & 0x8000) {
         velocityX2 = velocity1 | 0xFFFF0000;
     } else {
@@ -391,7 +391,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     asm("" : "=r"(value) : "0"(value) : "memory");
     dx = value;
 
-    posY2 = *(s16 *)((u8 *)ctx + 0xA);
+    posY2 = ctx->height;
     if (velocity1 < 0) {
         value = velocity1 >> 16;
         velocityY2 = value | 0xFFFF0000;
@@ -403,7 +403,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     asm("" : "=r"(posY2) : "0"(posY2));
     dy = posY2;
 
-    switch (entry[0xD] & 3) {
+    switch (((ScriptedQuadShape *)entry)->flags & 3) {
     case 0:
         asm(".globl func_800486C0\nfunc_800486C0 = . + 4");
         index = 0;
@@ -419,13 +419,14 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
         break;
     }
 
-    flags = entry[0xD];
+    flags = ((ScriptedQuadShape *)entry)->flags;
     GameDrawTexturedQuad((s32)(table + index * 4), (s16)x, (s16)y,
                   (s16)(x + dx), (s16)y, (s16)x, (s16)(y + dy),
                   (s16)(x + dx), (s16)(y + dy), entry[0], entry[1], entry[2], entry[3],
-                  entry[4], entry[5], entry[6], entry[7], entry[0xA],
-                  entry[0xB], entry[0xC], *(u16 *)(entry + 8), flags & 8,
-                  flags & 4, entry[0xE]);
+                  entry[4], entry[5], entry[6], entry[7], ((ScriptedQuadShape *)entry)->r,
+                  ((ScriptedQuadShape *)entry)->g, ((ScriptedQuadShape *)entry)->b,
+                  ((ScriptedQuadShape *)entry)->clut, flags & 8,
+                  flags & 4, ((ScriptedQuadShape *)entry)->alpha);
 }
 
 s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
@@ -469,45 +470,45 @@ loop_body:
                     break;
                 }
                 DrawScriptedSprite(
-                    remaining, (u8 *)cmd->shape, (u8 *)cmd->motion, type);
+                    remaining, cmd->shape.pointer, cmd->motion.pointer, type);
                 break;
             case 0:
             case 1:
                 DrawScriptedSprite(
-                    remaining, (u8 *)cmd->shape, (u8 *)cmd->motion, type);
+                    remaining, cmd->shape.pointer, cmd->motion.pointer, type);
                 break;
             case 19:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
                 DrawScriptedLine(
-                    remaining, (u8 *)cmd->shape, (u8 *)cmd->motion);
+                    remaining, cmd->shape.pointer, cmd->motion.pointer);
                 break;
             case 10:
                 DrawScriptedLine(
-                    remaining, (u8 *)cmd->shape, (u8 *)cmd->motion);
+                    remaining, cmd->shape.pointer, cmd->motion.pointer);
                 break;
             case 29:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
                 DrawScriptedTriangle(
-                    remaining, (u8 *)cmd->shape, (u8 *)cmd->motion);
+                    remaining, cmd->shape.pointer, cmd->motion.pointer);
                 break;
             case 20:
                 DrawScriptedTriangle(
-                    remaining, (u8 *)cmd->shape, (u8 *)cmd->motion);
+                    remaining, cmd->shape.pointer, cmd->motion.pointer);
                 break;
             case 39:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
                 DrawScriptedQuad(
-                    remaining, (u8 *)cmd->shape, (s32 *)cmd->motion);
+                    remaining, cmd->shape.bytes, cmd->motion.pointer);
                 break;
             case 30:
                 DrawScriptedQuad(
-                    remaining, (u8 *)cmd->shape, (s32 *)cmd->motion);
+                    remaining, cmd->shape.bytes, cmd->motion.pointer);
                 break;
             default:
                 break;
@@ -524,7 +525,7 @@ loop_body:
     if (stepReg >= 0) {
         cmdTmp = (TimedDrawCommand *)*progressPtr;
         updatedProgress = stepReg + (s32)cmdTmp;
-        limit = base[index].motion;
+        limit = base[index].motion.value;
         if (updatedProgress < limit) {
             *progressPtr = updatedProgress;
         } else {
@@ -538,8 +539,8 @@ loop_body:
 
 
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
-    u8 *shapePtr;
-    register u8 *motionPtr asm("$9");
+    ScriptedSpriteShape *shapePtr;
+    register ScriptedSpriteMotion *motionPtr asm("$9");
     void *ot;
     register s32 countReg asm("$21");
     register s32 i asm("$18");
@@ -562,19 +563,19 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     s32 limit;
     s32 packed;
 
-    shapePtr = (u8 *)g_MenuRowScript[0].shape;
+    shapePtr = g_MenuRowScript[0].shape.pointer;
     elapsed = progress - g_MenuRowScript[0].time;
-    motionPtr = (u8 *)g_MenuRowScript[0].motion;
+    motionPtr = g_MenuRowScript[0].motion.pointer;
     ot = SCRATCH_OT_BASE_AS(void);
     countReg = count;
-    packed = *(s32 *)(motionPtr + 0x10);
+    packed = motionPtr->packedVelocity;
     i = 0;
 
     if (elapsed < 0) {
         return;
     }
 
-    limit = *(s32 *)motionPtr;
+    limit = motionPtr->limit;
     if (limit < elapsed) {
         elapsed = limit;
     }
@@ -620,10 +621,10 @@ loop:
     *timer = fade;
     fade >>= 2;
 
-    value = *(s16 *)(shapePtr + 2);
-    drawX = *(u16 *)(motionPtr + 4);
-    drawY = *(u16 *)(motionPtr + 6);
-    drawW = *(s16 *)shapePtr;
+    value = shapePtr->height;
+    drawX = (u16)motionPtr->x;
+    drawY = (u16)motionPtr->y;
+    drawW = shapePtr->width;
     drawX = drawX + xOffset;
     drawX <<= 0x10;
     drawY = drawY + yOffset;
@@ -636,15 +637,15 @@ loop:
                   drawY,
                   drawW,
                   value,
-                  shapePtr[4],
-                  shapePtr[5],
+                  shapePtr->u,
+                  shapePtr->v,
                   fade,
                   fade,
                   fade,
-                  *(u16 *)(motionPtr + 8),
+                  motionPtr->clut,
                   0,
                   1,
-                  shapePtr[7]);
+                  shapePtr->alpha);
 
     timerValue = *timer;
     nextTimer = 0;
@@ -655,8 +656,8 @@ loop:
     i++;
     done = countReg < i;
     *timer = nextTimer;
-    shapePtr = (u8 *)cmd->shape;
-    motionPtr = (u8 *)cmd->motion;
+    shapePtr = cmd->shape.pointer;
+    motionPtr = cmd->motion.pointer;
     if (!done) {
         goto loop;
     }
