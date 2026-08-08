@@ -466,7 +466,6 @@ void UpdateCarListCursor(void) {
     s32 index;
     CarEntry *entry;
 
-    switch (0) { default:
     if (g_CarShopUnlockAll != 0) {
         g_PrevOwnedCarIndex = -1;
         index = g_CarListCursor - 1;
@@ -496,11 +495,11 @@ void UpdateCarListCursor(void) {
                             goto backward_check;
                         }
                         g_PrevOwnedCarIndex = index;
-                        break;
+                        goto previous_car_done;
                     }
                     if (progression >= value) {
                         g_PrevOwnedCarIndex = index;
-                        break;
+                        goto previous_car_done;
                     }
                 }
                 index--;
@@ -512,7 +511,7 @@ void UpdateCarListCursor(void) {
         }
     }
 
-    }
+previous_car_done:
     if (g_CarShopUnlockAll != 0) {
         g_NextOwnedCarIndex = -1;
         index = g_CarListCursor + 1;
@@ -532,7 +531,6 @@ void UpdateCarListCursor(void) {
         index = g_CarListCursor + 1;
         if (index < 13) {
         forward_loop:
-            switch (0) { default:
             {
                 s32 value = GetCarUnlockLevel(index);
                 if (g_CarTable[index].enabled == 0) {
@@ -540,7 +538,7 @@ void UpdateCarListCursor(void) {
                     if (progression < 4) {
                         if ((progression + 1) < value) {
                             index++;
-                            break;
+                            goto forward_check;
                         }
                         g_NextOwnedCarIndex = index;
                         return;
@@ -552,7 +550,7 @@ void UpdateCarListCursor(void) {
                 }
                 index++;
             }
-            }
+forward_check:
             if (index < 13) {
                 goto forward_loop;
             }
