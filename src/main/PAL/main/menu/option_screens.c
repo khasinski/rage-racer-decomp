@@ -103,20 +103,20 @@ void UpdateSoundSettingAdjust(void) {
 }
 
 void DrawScreenAdjustScreen(void) {
-    s32 base = (s32)g_DrawBuffer;
+    u8 *base = g_DrawBuffer;
     s32 color = 0x7F40;
     s32 y48 = 0x48;
     s32 h18 = 0x18;
     s32 w0c = 0xC;
-    s32 *scratch = &SCRATCH_PRIM_CURSOR_WORD;
-    s32 next;
+    u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
+    u8 *next;
 
     base += 0xCC;
     next = *scratch;
-    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x9A, 0x88, w0c, h18, 0xC8, y48, color);
-    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x9A, 0xB8, w0c, h18, 0xD4, y48, color);
-    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0xA6, 0xA0, w0c, h18, 0xE0, y48, color);
-    *scratch = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x8E, 0xA0, w0c, h18, 0xEC, y48, color);
+    next = GameQueueSpriteTrans(base, next, 0x9A, 0x88, w0c, h18, 0xC8, y48, color);
+    next = GameQueueSpriteTrans(base, next, 0x9A, 0xB8, w0c, h18, 0xD4, y48, color);
+    next = GameQueueSpriteTrans(base, next, 0xA6, 0xA0, w0c, h18, 0xE0, y48, color);
+    *scratch = GameQueueSpriteTrans(base, next, 0x8E, 0xA0, w0c, h18, 0xEC, y48, color);
     DrawOptionHintBar(3);
 }
 
@@ -187,9 +187,9 @@ void UpdateScreenAdjustScreen(void) {
 }
 
 void DrawOptionSceneOverlay(void) {
-    s32 *scratch;
+    u8 **scratch;
     void *base;
-    s32 pkt;
+    u8 *pkt;
     s32 target;
     s32 value;
     s32 w120;
@@ -214,7 +214,7 @@ void DrawOptionSceneOverlay(void) {
         g_OptionLetterboxHeight = value - 4;
     }
 
-    scratch = &SCRATCH_PRIM_CURSOR_WORD;
+    scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     rawBase = g_DrawBuffer;
     base = rawBase + 0xBC8;
     pkt = *scratch;
@@ -223,19 +223,20 @@ void DrawOptionSceneOverlay(void) {
         w120 = 0x120;
         two = 2;
         white = 0xFF;
-        pkt = (s32)AddTilePrim(base, (void *)pkt, 0x10, 0x20, w120, two, white, white, white);
-        pkt = (s32)AddTilePrim(base, (void *)pkt, 0x10, 0x1C0, w120, two, white, white, white);
+        pkt = AddTilePrim(base, pkt, 0x10, 0x20, w120, two, white, white, white);
+        pkt = AddTilePrim(base, pkt, 0x10, 0x1C0, w120, two, white, white, white);
         h1c0 = 0x1C0;
-        pkt = (s32)GameQueueLine(base, (u8 *)pkt, 0x10, 0x20, 0x10, h1c0, white, white, white);
-        pkt = (s32)GameQueueLine(base, (u8 *)pkt, 0x130, 0x20, 0x130, h1c0, white, white, white);
+        pkt = GameQueueLine(base, pkt, 0x10, 0x20, 0x10, h1c0, white, white, white);
+        pkt = GameQueueLine(base, pkt, 0x130, 0x20, 0x130, h1c0, white, white, white);
     }
 
-    *scratch = (s32)AddTilePrim(base, (void *)pkt, 0, 0, 0x140, g_OptionLetterboxHeight, 0x85, 0x15, 0xE);
+    *scratch = AddTilePrim(base, pkt, 0, 0, 0x140, g_OptionLetterboxHeight, 0x85, 0x15, 0xE);
 }
 
 /* Scene 23: the setup / OPTION scene, dispatching g_GameModeHandlers[g_GameMode]. */
 void UpdateOptionScene(void) {
-    SCRATCH_PRIM_CURSOR_WORD = (s32)AddTilePrim(g_DrawBuffer + 204, (void *)SCRATCH_PRIM_CURSOR_WORD, 0, 0, 0x140, 2, 0, 0, 0);
+    SCRATCH_PRIM_CURSOR_AS(u8) = AddTilePrim(
+        g_DrawBuffer + 204, SCRATCH_PRIM_CURSOR_AS(u8), 0, 0, 0x140, 2, 0, 0, 0);
     g_AnimTimer = g_AnimTimer + 1;
     g_SceneTimer = g_SceneTimer + 1;
     if (g_SceneTimer == 2) {

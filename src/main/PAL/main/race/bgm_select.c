@@ -19,19 +19,19 @@ void DrawBgmSelectBar(void) {
     s32 temp;
     s32 product;
     s32 value;
-    s32 next;
+    u8 *next;
 
     base = g_DrawBuffer + 0xD0;
-    next = SCRATCH_PRIM_CURSOR_WORD;
+    next = SCRATCH_PRIM_CURSOR_AS(u8);
     temp = (g_BgmSelectCursor == 0) ? 0x3FEC : 0x3FEF;
     tileW = 0x14;
     tileH = 0x10;
 
-    next = (s32)GameQueueSprite(base, next, 0x20, 0xC1, tileW, tileH, 0, 0, temp);
+    next = GameQueueSprite(base, next, 0x20, 0xC1, tileW, tileH, 0, 0, temp);
     temp = (g_BgmSelectCursor == 1) ? 0x3FEC : 0x3FEF;
-    next = (s32)GameQueueSprite(base, next, 0x36, 0xC1, tileW, tileH, tileW, 0, temp);
+    next = GameQueueSprite(base, next, 0x36, 0xC1, tileW, tileH, tileW, 0, temp);
     temp = (g_BgmSelectCursor == 2) ? 0x3FEC : 0x3FEF;
-    next = (s32)GameQueueSprite(base, next, 0x4C, 0xC1, tileW, tileH, 0x28, 0, temp);
+    next = GameQueueSprite(base, next, 0x4C, 0xC1, tileW, tileH, 0x28, 0, temp);
 
     if (g_BgmRandomLabelTimer != 0) {
         g_BgmRandomLabelTimer--;
@@ -40,10 +40,10 @@ void DrawBgmSelectBar(void) {
         temp = g_BgmSelectTrack * 12 + 0x1C;
     }
 
-    next = (s32)GameQueueSprite(base, next, 0x64, 0xC2, 0xBA, 0xC, 0, temp, 0x3FED);
-    next = (s32)GameQueueSprite(base, next, 0x62, 0xC0, 0xBE, 0x10, 0x3C, 0, 0x3FEE);
-    next = (s32)GameQueueTileTrans(base, (u8 *)next, 0x14, 0xB8, 0x118, 0x20, 0, 0, 0);
-    SCRATCH_PRIM_CURSOR_WORD = (s32)QueueDrawModePrim(base, (u8 *)next, 0xB);
+    next = GameQueueSprite(base, next, 0x64, 0xC2, 0xBA, 0xC, 0, temp, 0x3FED);
+    next = GameQueueSprite(base, next, 0x62, 0xC0, 0xBE, 0x10, 0x3C, 0, 0x3FEE);
+    next = GameQueueTileTrans(base, next, 0x14, 0xB8, 0x118, 0x20, 0, 0, 0);
+    SCRATCH_PRIM_CURSOR_AS(u8) = QueueDrawModePrim(base, next, 0xB);
 }
 
 void AdvanceBgmShuffleBag(u32 track) {
