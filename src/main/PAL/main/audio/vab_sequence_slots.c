@@ -1,6 +1,7 @@
 #include "common.h"
 #include <stdio.h>
 #include "game/audio.h"
+#include "game/audio_internal.h"
 #include "game/sound.h"
 #include "psyq/kernel.h"
 #include "psyq/snd.h"
@@ -38,7 +39,8 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
 }
 
 s32 CloseAudioSlot(s32 slot) {
-    s32 *flagsPtr = &g_AudioSlotMask;
+    AudioBankRuntime *banks = (AudioBankRuntime *)&g_AudioSlotMask;
+    s32 *flagsPtr = &banks->loadedMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;
     s32 ret;
@@ -52,9 +54,7 @@ s32 CloseAudioSlot(s32 slot) {
         SsUtSetReverbDepth(0, 0);
         _SsVmInit(0);
         SsSeqCloseWrapper(g_SeqHandle);
-        /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
-           (rather than naming the symbol) is what the retail code does. */
-        ids = (s16 *)((u8 *)flagsPtr + 0xC);
+        ids = banks->vabIds;
         SsVabClose(ids[slot]);
         ret = 1;
     }

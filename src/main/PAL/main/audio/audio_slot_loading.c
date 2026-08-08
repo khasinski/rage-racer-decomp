@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
+#include "game/audio_internal.h"
 #include "psyq/snd.h"
 
 
@@ -69,7 +70,8 @@ s32 PollAudioSlotLoad(void) {
 }
 
 s32 CloseVabOnlyAudioSlot(s32 slot) {
-    s32 *flagsPtr = &g_AudioSlotMask;
+    AudioBankRuntime *banks = (AudioBankRuntime *)&g_AudioSlotMask;
+    s32 *flagsPtr = &banks->loadedMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;
     s32 zeroArg = 0;
@@ -84,9 +86,7 @@ s32 CloseVabOnlyAudioSlot(s32 slot) {
     *flagsPtr = bit ^ flags;
     SsUtSetReverbDepth(zeroArg, 0);
     _SsVmInit(0);
-    /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
-       (rather than naming the symbol) is what the retail code does. */
-    ids = (s16 *)((u8 *)flagsPtr + 0xC);
+    ids = banks->vabIds;
     SsVabClose(ids[slot]);
     ret = 1;
     }
