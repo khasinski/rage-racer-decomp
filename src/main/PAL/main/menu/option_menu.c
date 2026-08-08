@@ -285,7 +285,7 @@ void DrawVolumeBar(s32 level, s32 y) {
     s32 base = (s32)g_DrawBuffer + 0xCC;
     s32 next;
     s32 i;
-    s32 y;
+    s32 segmentOffset;
     s32 c;
 
     next = QueueSpriteTransWide(base, SCRATCH_PRIM_CURSOR_WORD, 0x4E, b + 0xA, 0x10, 0xC, 0xB4, 0xC4, 0x7F40);
@@ -295,8 +295,8 @@ void DrawVolumeBar(s32 level, s32 y) {
     i = 0;
     if (i <= level) {
         do {
-            y = 0x1C + (i * 8);
-            next = (s32)GameQueueSprite(base, next, c + y, b + 4, 4, 0x18, 0xFC, 0x40, 0x7E82);
+            segmentOffset = 0x1C + (i * 8);
+            next = (s32)GameQueueSprite(base, next, c + segmentOffset, b + 4, 4, 0x18, 0xFC, 0x40, 0x7E82);
             i++;
         } while (i <= level);
     }

@@ -189,8 +189,8 @@ void InitSaveDefaults(void) {
     s32 emptySlot;
 
     i = 0;
-    dst = &g_TimeAttackCars;
-    src = &g_SaveDefaults;
+    dst = (u8 *)g_TimeAttackCars;
+    src = (u8 *)g_SaveDefaults;
     do {
         __builtin_memcpy(dst, src, sizeof(CarEntry));
         dst += sizeof(CarEntry);

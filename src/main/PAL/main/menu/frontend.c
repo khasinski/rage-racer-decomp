@@ -270,7 +270,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     ResetFrameContext(0);
     ResetFrameContext(1);
 
-    asm(".globl func_8001C05C\nfunc_8001C05C = func_8001BE9C + 0x1C0");
+    asm(".globl func_8001C05C\nfunc_8001C05C = SetupDisplay240 + 0x1C0");
 }
 
 void SetupDisplay480(s32 mode, s32 x, s32 y) {
@@ -324,5 +324,5 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
     ResetFrameContext(1);
 
     SCRATCH_CLIP_Y1 = 0x1E0;
-    asm(".globl func_8001C218\nfunc_8001C218 = func_8001C088 + 0x190");
+    asm(".globl func_8001C218\nfunc_8001C218 = SetupDisplay480 + 0x190");
 }

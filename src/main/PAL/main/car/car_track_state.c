@@ -422,8 +422,8 @@ void SampleTrackSurfaceHeight(Car *car) {
     s32 v8;
 
     idx = FindTrackSegment(car, car->f30);
-    p2 = &g_TrackPoints[(idx + 1) % g_TrackPointCount];
-    p1 = &g_TrackPoints[idx];
+    p2 = (TP *)&g_TrackPoints[(idx + 1) % g_TrackPointCount];
+    p1 = (TP *)&g_TrackPoints[idx];
 
     seg = p1->segmentLength;
     v.vx = car->x - p1->x;

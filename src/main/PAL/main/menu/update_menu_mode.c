@@ -98,7 +98,7 @@ s32 IsSpuTransferDone(void) {
 
     base = &D_801E8AFC;
     value1 = SpuTransferStatus(base, 0);
-    value1 = (value1 << 9) + (u8 *)base;
+    value1 = (value1 << 9) + (s32)base;
     value0 = *(s16 *)(value1 + 0x800);
     value1 = *(s16 *)(value1 + 0xC00);
 
@@ -111,7 +111,7 @@ s32 IsSpuTransferDone(void) {
 /* Reads one tone out of the 2x6 g_SoundSlotTone grid, and writes it too when
  * `tone` is not negative. Returns what was there before. */
 s32 SetSoundToneTableEntry(s32 slot, s32 vabSlot, s32 tone) {
-    s16 *base = g_SoundSlotTone;
+    s16 *base = &g_SoundSlotTone[0][0];
     s16 *row;
     s16 *entry;
     s32 old;
@@ -243,7 +243,7 @@ void SetReverbPreset(s32 type, s32 left, s32 right) {
 }
 
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
-    s16 *base = g_SoundSlotTone;
+    s16 *base = &g_SoundSlotTone[0][0];
     s16 *row;
     s16 *entry;
 

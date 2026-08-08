@@ -4,7 +4,7 @@
 
 /*
  * Applies the 3x3 fixed-point matrix `mtx` to the vector (x,y,z), writing each
- * component to *outX/*outY/*outZ (result >> 12). Each row has an identity
+ * component to the three output pointers (result >> 12). Each row has an identity
  * fast-path: if the row is (1.0, 0, 0) etc. the matching input component is
  * copied straight through without the multiply-accumulate.
  */

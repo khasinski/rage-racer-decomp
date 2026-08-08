@@ -385,7 +385,7 @@ void UpdateRecordEntry(void) {
                 g_RecordEntryState = 2;
                 i = 0;
                 if (g_TimeRecordInsertRow < 5) {
-                    timeRecordBase = g_TimeRecords;
+                    timeRecordBase = (u8 *)g_TimeRecords;
                     timeName = g_TimeRecordNameCodes;
                     do {
                         *timeName = g_RankingNameCodes[i];
@@ -410,7 +410,7 @@ void UpdateRecordEntry(void) {
             DrawNameEntryCursor(g_NameEntryCursor, g_RankingInsertRow);
         }
         i = 0;
-        rankingRecordBase = g_RankingRecords;
+        rankingRecordBase = (u8 *)g_RankingRecords;
         do {
             record = (u8 *)((((g_CourseIndex * 5) + g_RankingInsertRow) * 0x10) +
                             (g_GrandPrixSeries * 0x140) +
@@ -482,7 +482,7 @@ void UpdateRecordEntry(void) {
             DrawNameEntryCursor(g_NameEntryCursor, g_TimeRecordInsertRow);
         }
         i = 0;
-        recordBase = g_TimeRecords;
+        recordBase = (u8 *)g_TimeRecords;
         do {
             record = (u8 *)((((g_CourseIndex * 5) + g_TimeRecordInsertRow) * 0x10) +
                             (g_GrandPrixSeries * 0x140) + (s32)recordBase + i);

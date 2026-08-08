@@ -164,7 +164,7 @@ void RelocateCarModel(void) {
     u32 *src;
     u32 count;
 
-    temp = g_CarModelAsset;
+    temp = (u32)g_CarModelAsset;
     if (temp != 0) {
         src = (u32 *)temp;
     } else {
